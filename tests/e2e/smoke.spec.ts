@@ -1,0 +1,136 @@
+import { expect, test, type Page } from '@playwright/test';
+import { INDICATIONS } from '../../src/data/indications';
+
+/** Fail on any request that leaves the local server (no external runtime requests allowed). */
+function guard(page: Page) {
+  const external: string[] = [];
+  const errors: string[] = [];
+  page.on('request', (r) => { const u = new URL(r.url()); if (!['localhost', '127.0.0.1'].includes(u.hostname) && u.protocol !== 'data:' && u.protocol !== 'blob:') external.push(r.url()); });
+  page.on('pageerror', (e) => errors.push(String(e)));
+  page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+  return { external, errors };
+}
+
+async function settle(page: Page) {
+  await page.waitForSelector('body[data-ready="1"]', { timeout: 30_000 });
+  await page.waitForFunction(() => {
+    const a = (window as unknown as { __atlas: { viewer: { isIdle(): boolean } } }).__atlas;
+    return a.viewer.isIdle();
+  }, null, { timeout: 30_000 });
+  await page.waitForTimeout(400);
+  // render the final frame synchronously so the screenshot never catches a half-animated camera
+  await page.evaluate(() => {
+    const v = (window as unknown as { __atlas: { viewer: { snapshot(): string } } }).__atlas.viewer;
+    v.snapshot();
+  });
+}
+
+/** Distinct colours in a downsampled copy of the WebGL canvas: a blank or broken render has very few. */
+async function canvasColours(page: Page): Promise<number> {
+  return page.evaluate(() => {
+    const src = document.querySelector('.viewer-host canvas') as HTMLCanvasElement;
+    const c = document.createElement('canvas');
+    c.width = 96; c.height = 64;
+    const g = c.getContext('2d')!;
+    g.drawImage(src, 0, 0, c.width, c.height);
+    const d = g.getImageData(0, 0, c.width, c.height).data;
+    const set = new Set<number>();
+    for (let i = 0; i < d.length; i += 4) set.add(((d[i] >> 3) << 10) | ((d[i + 1] >> 3) << 5) | (d[i + 2] >> 3));
+    return set.size;
+  });
+}
+
+for (const ind of INDICATIONS) {
+  test(`indication ${ind.id}: renders and matches the visual baseline`, async ({ page }) => {
+    const g = guard(page);
+    await page.goto(`./#/atlas?i=${ind.id}`);
+    await settle(page);
+    await expect(page.locator('.card h2').first()).toHaveText(ind.name);
+    expect(await canvasColours(page)).toBeGreaterThan(40);
+    await expect(page.locator('.stage')).toHaveScreenshot(`atlas-${ind.id}.png`);
+    expect(g.external).toEqual([]);
+    expect(g.errors).toEqual([]);
+  });
+}
+
+test('symptom view, slices, lead and stimulation sphere', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./#/atlas?i=pd&s=pd-tremor&co=-12c&ax=-6&lead=0.5,0,60,15&stim=1,2');
+  await settle(page);
+  await expect(page.locator('.card h2').first()).toHaveText('Tremor');
+  await expect(page.locator('.card').first()).toContainText('derived stand-in');
+  await page.locator('#ptab-lead').click();
+  await expect(page.locator('.lead-info table tbody tr')).toHaveCount(8);
+  await expect(page.locator('.warn').filter({ hasText: 'not a volume-of-tissue-activated model' })).toBeVisible();
+  await expect(page.locator('.stage')).toHaveScreenshot('atlas-pd-tremor-tools.png');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('measure, hover tooltip and dragging the lead along its axis', async ({ page }) => {
+  await page.goto('./#/atlas?i=pd&c=anterior&ly=n1,t0,c0,g1,e1&lead=0.5,0,60,15');
+  await settle(page);
+  // screen position of the right lead's contact array (patient right appears on the viewer's left in the anterior view)
+  const pt = await page.evaluate(() => {
+    const v = (window as any).__atlas.viewer;
+    const lead = v.leads.R.group.children[2];
+    const p = lead.getWorldPosition(lead.position.clone()).project(v.camera);
+    const r = v.renderer.domElement.getBoundingClientRect();
+    return { x: r.left + (p.x + 1) / 2 * r.width, y: r.top + (1 - p.y) / 2 * r.height };
+  });
+  // hover shows a tooltip
+  await page.mouse.move(pt.x, pt.y);
+  await expect(page.locator('.tip')).toBeVisible();
+  // drag along the lead: depth changes and is written to the URL
+  await page.mouse.down();
+  await page.mouse.move(pt.x, pt.y + 40, { steps: 6 });
+  await page.mouse.up();
+  await expect.poll(() => new URL(page.url()).hash).not.toContain('lead=0.5%2C0%2C60');
+  // measurement between two picked points
+  await page.keyboard.press('m');
+  await page.mouse.click(pt.x - 60, pt.y + 30);
+  await page.mouse.click(pt.x + 60, pt.y + 30);
+  await expect(page.locator('.measure-out')).toContainText(/Distance \d/);
+});
+
+test('state survives a reload through the URL hash', async ({ page }) => {
+  await page.goto('./#/atlas?i=ts&s=ts-tics&h=L&sel=cm');
+  await settle(page);
+  await page.reload();
+  await settle(page);
+  await expect(page.locator('.card.sel h2')).toContainText('Centromedian');
+  await expect(page.locator('[data-hemi="L"]')).toHaveAttribute('aria-pressed', 'true');
+  expect(new URL(page.url()).hash).toContain('s=ts-tics');
+});
+
+test('other pages render without external requests', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./#/imaging?t=vim');
+  await expect(page.locator('.page:not([hidden]) .card h2')).toHaveText('Ventral intermediate nucleus');
+  await page.goto('./#/coords');
+  await expect(page.locator('.coord h3')).toHaveText(['STN', 'GPi', 'Vim']);
+  await page.fill('#acpc', '10');
+  await expect(page.locator('.err')).toBeVisible();
+  await page.goto('./#/refs');
+  await page.fill('#ref-q', 'Horn');
+  await expect(page.locator('.count')).toContainText('references');
+  await page.goto('./#/credits');
+  await expect(page.locator('.page:not([hidden]) h1')).toHaveText('Credits and licences');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('mobile layout: viewer above a bottom sheet @mobile', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./#/atlas?i=et');
+  await settle(page);
+  const stage = await page.locator('.stage').boundingBox();
+  const panel = await page.locator('.panel').boundingBox();
+  expect(stage!.height).toBeGreaterThan(250);
+  expect(panel!.y).toBeGreaterThan(stage!.y + stage!.height - 40);
+  await page.locator('.sheet-handle').click();
+  await expect(page.locator('.panel')).toHaveAttribute('data-sheet', 'full');
+  await expect(page).toHaveScreenshot('mobile-et.png');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

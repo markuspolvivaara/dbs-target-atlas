@@ -1,0 +1,35 @@
+{
+  "name": "dbs-target-atlas",
+  "version": "0.1.0",
+  "description": "Interactive 3D atlas of DBS targets for movement disorders (MNI ICBM 2009b). Teaching tool, not for planning.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 4173 --strictPort",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "pipeline": "bash pipeline/run_all.sh",
+    "check:palette": "vite-node scripts/check-palette.ts"
+  },
+  "license": "GPL-3.0-only",
+  "devDependencies": {
+    "@gltf-transform/core": "^4.5.1",
+    "@gltf-transform/extensions": "^4.5.1",
+    "@gltf-transform/functions": "^4.5.1",
+    "@playwright/test": "1.48",
+    "@types/node": "^22.20.5",
+    "@types/three": "^0.169.0",
+    "meshoptimizer": "^0.21.0",
+    "typescript": "5.6",
+    "vite": "^6.4.4",
+    "vitest": "^2.1.9"
+  },
+  "dependencies": {
+    "@fontsource/atkinson-hyperlegible": "^5.3.0",
+    "three": "^0.169.0",
+    "zod": "3.23"
+  },
+  "private": true,
+  "type": "module"
+}

@@ -1,0 +1,87 @@
+{
+ "leaddbs3": {
+  "citation": "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862.",
+  "doi": "10.1016/j.neuroimage.2023.119862",
+  "url": "https://doi.org/10.1016/j.neuroimage.2023.119862"
+ },
+ "ewert2018": {
+  "citation": "Ewert S, Plettig P, Li N, Chakravarty MM, Collins DL, Herrington TM, et al. Toward defining deep brain stimulation targets in MNI space: A subcortical atlas based on multimodal MRI, histology and structural connectivity. NeuroImage. 2018;170:271-282. doi:10.1016/j.neuroimage.2017.05.015.",
+  "doi": "10.1016/j.neuroimage.2017.05.015",
+  "url": "https://doi.org/10.1016/j.neuroimage.2017.05.015"
+ },
+ "pauli2018": {
+  "citation": "Pauli WM, Nili AN, Tyszka JM. A high-resolution probabilistic in vivo atlas of human subcortical brain nuclei. Sci Data. 2018;5(1). doi:10.1038/sdata.2018.63.",
+  "doi": "10.1038/sdata.2018.63",
+  "url": "https://doi.org/10.1038/sdata.2018.63"
+ },
+ "lau2020": {
+  "citation": "Lau JC, Xiao Y, Haast RAM, Gilmore G, Uludağ K, MacDougall KW, et al. Direct visualization and characterization of the human zona incerta and surrounding structures. Human Brain Mapping. 2020;41(16):4500-4517. doi:10.1002/hbm.25137.",
+  "doi": "10.1002/hbm.25137",
+  "url": "https://doi.org/10.1002/hbm.25137"
+ },
+ "snijders2016": {
+  "citation": "Snijders AH, Takakusaki K, Debu B, Lozano AM, Krishna V, Fasano A, et al. Physiology of freezing of gait. Annals of Neurology. 2016;80(5):644-659. doi:10.1002/ana.24778.",
+  "doi": "10.1002/ana.24778",
+  "url": "https://doi.org/10.1002/ana.24778"
+ },
+ "middlebrooks2020": {
+  "citation": "Middlebrooks EH, Domingo RA, Vivas-Buitrago T, Okromelidze L, Tsuboi T, Wong JK, et al. Neuroimaging Advances in Deep Brain Stimulation: Review of Indications, Anatomy, and Brain Connectomics. AJNR Am J\n                Neuroradiol. 2020;41(9):1558-1568. doi:10.3174/ajnr.a6693.",
+  "doi": "10.3174/ajnr.a6693",
+  "url": "https://doi.org/10.3174/ajnr.a6693"
+ },
+ "meola2016": {
+  "citation": "Meola A, Yeh FC, Fellows-Mayle W, Weed J, Fernandez-Miranda JC. Human Connectome-Based Tractographic Atlas of the Brainstem Connections and Surgical Approaches. Neurosurgery. 2016;79(3):437-455. doi:10.1227/neu.0000000000001224.",
+  "doi": "10.1227/neu.0000000000001224",
+  "url": "https://doi.org/10.1227/neu.0000000000001224"
+ },
+ "elias2021": {
+  "citation": "Elias GJB, Boutet A, Joel SE, Germann J, Gwun D, Neudorfer C, et al. Probabilistic Mapping of Deep Brain Stimulation: Insights from 15 Years of Therapy. Annals of Neurology. 2021;89(3):426-443. doi:10.1002/ana.25975.",
+  "doi": "10.1002/ana.25975",
+  "url": "https://doi.org/10.1002/ana.25975"
+ },
+ "mayka2006": {
+  "citation": "Mayka MA, Corcos DM, Leurgans SE, Vaillancourt DE. Three-dimensional locations and boundaries of motor and premotor cortices as defined by functional brain imaging: A meta-analysis. NeuroImage. 2006;31(4):1453-1474. doi:10.1016/j.neuroimage.2006.02.004.",
+  "doi": "10.1016/j.neuroimage.2006.02.004",
+  "url": "https://doi.org/10.1016/j.neuroimage.2006.02.004"
+ },
+ "diedrichsen2006": {
+  "citation": "Diedrichsen J. A spatially unbiased atlas template of the human cerebellum. NeuroImage. 2006;33(1):127-138. doi:10.1016/j.neuroimage.2006.05.056.",
+  "doi": "10.1016/j.neuroimage.2006.05.056",
+  "url": "https://doi.org/10.1016/j.neuroimage.2006.05.056"
+ },
+ "klein2012": {
+  "citation": "Klein A, Tourville J. 101 Labeled Brain Images and a Consistent Human Cortical Labeling Protocol. Front. Neurosci.. 2012;6. doi:10.3389/fnins.2012.00171.",
+  "doi": "10.3389/fnins.2012.00171",
+  "url": "https://doi.org/10.3389/fnins.2012.00171"
+ },
+ "desikan2006": {
+  "citation": "Desikan RS, Ségonne F, Fischl B, Quinn BT, Dickerson BC, Blacker D, et al. An automated labeling system for subdividing the human cerebral cortex on MRI scans into gyral based regions of interest. NeuroImage. 2006;31(3):968-980. doi:10.1016/j.neuroimage.2006.01.021.",
+  "doi": "10.1016/j.neuroimage.2006.01.021",
+  "url": "https://doi.org/10.1016/j.neuroimage.2006.01.021"
+ },
+ "fonov2011": {
+  "citation": "Fonov V, Evans AC, Botteron K, Almli CR, McKinstry RC, Collins DL. Unbiased average age-appropriate atlases for pediatric studies. NeuroImage. 2011;54(1):313-327. doi:10.1016/j.neuroimage.2010.07.033.",
+  "doi": "10.1016/j.neuroimage.2010.07.033",
+  "url": "https://doi.org/10.1016/j.neuroimage.2010.07.033"
+ },
+ "petersen2019": {
+  "citation": "Petersen MV, Mlakar J, Haber SN, Parent M, Smith Y, Strick PL, et al. Holographic Reconstruction of Axonal Pathways in the Human Brain. Neuron. 2019;104(6):1056-1064.e3. doi:10.1016/j.neuron.2019.09.030.",
+  "doi": "10.1016/j.neuron.2019.09.030",
+  "url": "https://doi.org/10.1016/j.neuron.2019.09.030"
+ },
+ "krauth2010": {
+  "citation": "Krauth A, Blanc R, Poveda A, Jeanmonod D, Morel A, Székely G. A mean three-dimensional atlas of the human thalamus: Generation from multiple histological data. NeuroImage. 2010;49(3):2053-2062. doi:10.1016/j.neuroimage.2009.10.042.",
+  "doi": "10.1016/j.neuroimage.2009.10.042",
+  "url": "https://doi.org/10.1016/j.neuroimage.2009.10.042"
+ },
+ "diedrichsen2009": {
+  "citation": "Diedrichsen J, Balsters JH, Flavell J, Cussans E, Ramnani N. A probabilistic MR atlas of the human cerebellum. NeuroImage. 2009;46(1):39-46. doi:10.1016/j.neuroimage.2009.01.045.",
+  "doi": "10.1016/j.neuroimage.2009.01.045",
+  "url": "https://doi.org/10.1016/j.neuroimage.2009.01.045"
+ },
+ "morel1997": {
+  "citation": "Morel A, Magnin M, Jeanmonod D. Multiarchitectonic and stereotactic atlas of the human thalamus. J. Comp. Neurol.. 1997;387(4):588-630. doi:10.1002/(sici)1096-9861(19971103)387:4<588::aid-cne8>3.0.co;2-z.",
+  "doi": "10.1002/(sici)1096-9861(19971103)387:4<588::aid-cne8>3.0.co;2-z",
+  "url": "https://doi.org/10.1002/(sici)1096-9861(19971103)387:4<588::aid-cne8>3.0.co;2-z"
+ }
+}

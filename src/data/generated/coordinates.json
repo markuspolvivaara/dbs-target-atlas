@@ -1,0 +1,399 @@
+{
+ "_acpc": {
+  "AC": [
+   0.25,
+   1.298,
+   -5.003
+  ],
+  "PC": [
+   -0.188,
+   -24.756,
+   -2.376
+  ],
+  "MSP": [
+   0.25,
+   1.298,
+   55.0
+  ],
+  "source": "Lead-DBS tools/acpc2mni/ea_mni2acpc.m (netstim/leaddbs, GPL-3.0)",
+  "url": "https://github.com/netstim/leaddbs/blob/master/tools/acpc2mni/ea_mni2acpc.m"
+ },
+ "atlas:caudate": {
+  "L": [
+   -14.24,
+   7.856,
+   8.922
+  ],
+  "R": [
+   13.956,
+   8.964,
+   9.391
+  ],
+  "method": "Centroid of CIT168 subcortical atlas (Pauli 2018), Lead-DBS import label 'Caudate nucleus' (voxels >= 0.5).",
+  "dataset": "cit168"
+ },
+ "atlas:cm": {
+  "L": [
+   -10.498,
+   -20.046,
+   0.963
+  ],
+  "R": [
+   10.806,
+   -20.08,
+   0.898
+  ],
+  "method": "Centroid of Morel thalamus atlas in MNI space (Lead-DBS: 'Morel Atlas (Jakab 2008)') label 'Centromedian nucleus (CM)' (voxels >= 0.5).",
+  "dataset": "morel"
+ },
+ "atlas:dentate": {
+  "L": [
+   -14.415,
+   -59.397,
+   -35.053
+  ],
+  "R": [
+   16.439,
+   -59.408,
+   -35.022
+  ],
+  "method": "Centroid of SUIT cerebellar atlas, dentate labels (Diedrichsen) label 'Dentate nucleus' (voxels >= 0.5).",
+  "dataset": "suit"
+ },
+ "atlas:gpe": {
+  "L": [
+   -19.693,
+   -2.524,
+   -0.604
+  ],
+  "R": [
+   19.452,
+   -1.633,
+   -0.542
+  ],
+  "method": "Centroid of DISTAL Medium (Ewert 2017) label 'Globus pallidus externus' (voxels >= 0.5).",
+  "dataset": "distal"
+ },
+ "atlas:gpi": {
+  "L": [
+   -17.885,
+   -5.142,
+   -3.932
+  ],
+  "R": [
+   17.687,
+   -4.329,
+   -3.934
+  ],
+  "method": "Centroid of DISTAL Medium (Ewert 2017) label 'Globus pallidus internus' (voxels >= 0.5).",
+  "dataset": "distal"
+ },
+ "atlas:gpi_sm": {
+  "L": [
+   -20.159,
+   -7.206,
+   -3.567
+  ],
+  "R": [
+   19.589,
+   -6.643,
+   -3.343
+  ],
+  "method": "Centroid of DISTAL Medium (Ewert 2017) label 'GPi, sensorimotor zone' (voxels >= 0.5).",
+  "dataset": "distal"
+ },
+ "atlas:nacc": {
+  "L": [
+   -10.243,
+   8.057,
+   -9.936
+  ],
+  "R": [
+   9.578,
+   8.871,
+   -9.568
+  ],
+  "method": "Centroid of CIT168 subcortical atlas (Pauli 2018), Lead-DBS import label 'Nucleus accumbens' (voxels >= 0.5).",
+  "dataset": "cit168"
+ },
+ "atlas:pf": {
+  "L": [
+   -6.413,
+   -18.737,
+   -1.755
+  ],
+  "R": [
+   6.657,
+   -18.671,
+   -1.913
+  ],
+  "method": "Centroid of Morel thalamus atlas in MNI space (Lead-DBS: 'Morel Atlas (Jakab 2008)') label 'Parafascicular nucleus (Pf)' (voxels >= 0.5).",
+  "dataset": "morel"
+ },
+ "atlas:ppn": {
+  "L": [
+   -5.559,
+   -33.06,
+   -19.945
+  ],
+  "R": [
+   6.033,
+   -33.06,
+   -19.955
+  ],
+  "method": "Centroid of PPN (Snijders 2016) label 'Pedunculopontine nucleus' (voxels >= 0.5).",
+  "dataset": "snijders2016"
+ },
+ "atlas:psa": {
+  "L": [
+   -13.649,
+   -21.389,
+   -6.944
+  ],
+  "R": [
+   13.895,
+   -20.977,
+   -6.709
+  ],
+  "method": "Centroid of Zona incerta atlas (Lau 2020) label 'Caudal zona incerta (PSA)' (voxels >= 0.5).",
+  "dataset": "lau2020"
+ },
+ "atlas:putamen": {
+  "L": [
+   -25.817,
+   0.603,
+   0.716
+  ],
+  "R": [
+   25.462,
+   1.988,
+   0.313
+  ],
+  "method": "Centroid of CIT168 subcortical atlas (Pauli 2018), Lead-DBS import label 'Putamen' (voxels >= 0.5).",
+  "dataset": "cit168"
+ },
+ "atlas:rn": {
+  "L": [
+   -5.239,
+   -19.206,
+   -8.958
+  ],
+  "R": [
+   5.116,
+   -18.908,
+   -8.969
+  ],
+  "method": "Centroid of DISTAL Medium (Ewert 2017) label 'Red nucleus' (voxels >= 0.5).",
+  "dataset": "distal"
+ },
+ "atlas:snc": {
+  "L": [
+   -8.41,
+   -19.11,
+   -13.51
+  ],
+  "R": [
+   8.104,
+   -18.796,
+   -13.567
+  ],
+  "method": "Centroid of CIT168 subcortical atlas (Pauli 2018), Lead-DBS import label 'Substantia nigra pars compacta' (voxels >= 0.5).",
+  "dataset": "cit168"
+ },
+ "atlas:snr": {
+  "L": [
+   -10.003,
+   -16.689,
+   -13.079
+  ],
+  "R": [
+   9.81,
+   -16.22,
+   -13.045
+  ],
+  "method": "Centroid of CIT168 subcortical atlas (Pauli 2018), Lead-DBS import label 'Substantia nigra pars reticulata' (voxels >= 0.5).",
+  "dataset": "cit168"
+ },
+ "atlas:stn": {
+  "L": [
+   -11.445,
+   -13.143,
+   -7.644
+  ],
+  "R": [
+   11.315,
+   -12.492,
+   -7.614
+  ],
+  "method": "Centroid of DISTAL Medium (Ewert 2017) label 'Subthalamic nucleus' (voxels >= 0.5).",
+  "dataset": "distal"
+ },
+ "atlas:stn_assoc": {
+  "L": [
+   -10.479,
+   -11.614,
+   -7.54
+  ],
+  "R": [
+   10.799,
+   -11.266,
+   -6.778
+  ],
+  "method": "Centroid of DISTAL Medium (Ewert 2017) label 'STN, associative zone' (voxels >= 0.5).",
+  "dataset": "distal"
+ },
+ "atlas:stn_limbic": {
+  "L": [
+   -9.847,
+   -11.513,
+   -8.941
+  ],
+  "R": [
+   9.844,
+   -11.151,
+   -9.21
+  ],
+  "method": "Centroid of DISTAL Medium (Ewert 2017) label 'STN, limbic zone' (voxels >= 0.5).",
+  "dataset": "distal"
+ },
+ "atlas:stn_motor": {
+  "L": [
+   -12.77,
+   -14.993,
+   -7.041
+  ],
+  "R": [
+   13.084,
+   -14.583,
+   -7.045
+  ],
+  "method": "Centroid of DISTAL Medium (Ewert 2017) label 'STN, sensorimotor zone' (voxels >= 0.5).",
+  "dataset": "distal"
+ },
+ "atlas:thal": {
+  "L": [
+   -11.698,
+   -17.101,
+   6.674
+  ],
+  "R": [
+   11.967,
+   -18.764,
+   6.632
+  ],
+  "method": "Centroid of DISTAL Medium (Ewert 2017) label 'Thalamus' (voxels >= 0.5).",
+  "dataset": "distal"
+ },
+ "atlas:vim": {
+  "L": [
+   -13.921,
+   -14.51,
+   2.255
+  ],
+  "R": [
+   13.954,
+   -15.636,
+   2.44
+  ],
+  "method": "Centroid of DISTAL Medium (Ewert 2017) label 'Ventral intermediate nucleus (Vim)' (voxels >= 0.5).",
+  "dataset": "distal"
+ },
+ "atlas:vo": {
+  "L": [
+   -14.599,
+   -10.355,
+   5.309
+  ],
+  "R": [
+   15.044,
+   -10.36,
+   5.154
+  ],
+  "method": "Centroid of Morel thalamus atlas in MNI space (Lead-DBS: 'Morel Atlas (Jakab 2008)') label 'Ventral oral complex (Vo)' (voxels >= 0.5).",
+  "dataset": "morel"
+ },
+ "ss_cerv": {
+  "L": [
+   -21.58,
+   -10.614,
+   -3.791
+  ],
+  "R": [
+   20.989,
+   -10.16,
+   -4.318
+  ],
+  "method": "Value-weighted centroid of the connected region >= 50% of the positive maximum in the published map (Dystonia Response Tract Atlas (Horn 2022), built on the Petersen 2019 pathway atlas).",
+  "dataset": "horn2022"
+ },
+ "ss_dyt": {
+  "L": [
+   -17.043,
+   -9.266,
+   -2.255
+  ],
+  "R": [
+   17.265,
+   -8.29,
+   -2.238
+  ],
+  "method": "Value-weighted centroid of the connected region >= 50% of the positive maximum in the published map (Human Dysfunctome Atlas (Hollunder 2024)).",
+  "dataset": "hollunder2024"
+ },
+ "ss_gen": {
+  "L": [
+   -21.363,
+   -9.906,
+   -0.909
+  ],
+  "R": [
+   21.051,
+   -8.841,
+   -1.094
+  ],
+  "method": "Value-weighted centroid of the connected region >= 50% of the positive maximum in the published map (Dystonia Response Tract Atlas (Horn 2022), built on the Petersen 2019 pathway atlas).",
+  "dataset": "horn2022"
+ },
+ "ss_pd": {
+  "L": [
+   -13.944,
+   -12.066,
+   -2.874
+  ],
+  "R": [
+   13.852,
+   -10.908,
+   -2.954
+  ],
+  "method": "Value-weighted centroid of the connected region >= 50% of the positive maximum in the published map (Human Dysfunctome Atlas (Hollunder 2024)).",
+  "dataset": "hollunder2024"
+ },
+ "ss_tremor": {
+  "L": [
+   -17.319,
+   -13.259,
+   3.444
+  ],
+  "R": [
+   16.799,
+   -12.083,
+   3.116
+  ],
+  "method": "Value-weighted centroid of the connected region >= 50% of the positive maximum in the published map (TOR-PSM probabilistic stimulation maps (Elias 2021)).",
+  "dataset": "elias2021"
+ },
+ "ss_ts": {
+  "L": [
+   -12.465,
+   -15.062,
+   -4.86
+  ],
+  "R": [
+   12.407,
+   -14.005,
+   -4.771
+  ],
+  "method": "Value-weighted centroid of the connected region >= 50% of the positive maximum in the published map (Human Dysfunctome Atlas (Hollunder 2024)).",
+  "dataset": "hollunder2024"
+ }
+}

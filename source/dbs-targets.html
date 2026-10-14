@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DBS targets in movement disorders</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E9EDF0; --surface:#FFFFFF; --ink:#14253A; --muted:#566879; --line:#C8D1D9; --soft:#DEE4E9;
+  --link:#1F55A8; --on:#FFFFFF;
+  --stn:#946609; --gpi:#1F7F5A; --vim:#2D5FB0; --psa:#7448AD; --snr:#AD385D; --cm:#127C94;
+  --vo:#647514; --str:#8E5A84; --den:#4A6E7E; --ppn:#6F675B; --ctx:#14253A;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101A23; --surface:#18242F; --ink:#E2E8EE; --muted:#9AAAB9; --line:#2D3C4A; --soft:#22303C;
+    --link:#8FB5F2; --on:#0E1720;
+    --stn:#E3AC3A; --gpi:#52B98E; --vim:#7BA4EA; --psa:#B18DE4; --snr:#E57A98; --cm:#4FB8D1;
+    --vo:#B4C64A; --str:#C99ABF; --den:#8BAFBE; --ppn:#B3AA9B; --ctx:#E2E8EE;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101A23; --surface:#18242F; --ink:#E2E8EE; --muted:#9AAAB9; --line:#2D3C4A; --soft:#22303C;
+  --link:#8FB5F2; --on:#0E1720;
+  --stn:#E3AC3A; --gpi:#52B98E; --vim:#7BA4EA; --psa:#B18DE4; --snr:#E57A98; --cm:#4FB8D1;
+  --vo:#B4C64A; --str:#C99ABF; --den:#8BAFBE; --ppn:#B3AA9B; --ctx:#E2E8EE;
+  color-scheme: dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:17px; line-height:1.5; -webkit-text-size-adjust:100%;
+  font-variant-numeric:tabular-nums;
+}
+a{color:var(--link); text-underline-offset:2px}
+.wrap{max-width:760px; margin:0 auto; padding:0 18px}
+.masthead{padding-top:22px; padding-bottom:10px}
+h1{font-size:1.85rem; line-height:1.12; margin:0 0 8px; letter-spacing:-0.012em}
+.lede{color:var(--muted); margin:0; max-width:34em}
+
+.tabs{
+  position:sticky; top:env(safe-area-inset-top,0px); z-index:5;
+  background:var(--bg); border-bottom:1px solid var(--line);
+}
+.tabs .row{display:flex; gap:2px; overflow-x:auto; scrollbar-width:none; max-width:760px; margin:0 auto; padding:0 12px}
+.tabs .row::-webkit-scrollbar{display:none}
+.tab{
+  flex:none; font:inherit; font-size:16px; background:none; border:0; color:var(--muted);
+  padding:12px 8px 10px; border-bottom:3px solid transparent; cursor:pointer; min-height:44px;
+}
+.tab[aria-selected="true"]{color:var(--ink); font-weight:700; border-bottom-color:var(--ink)}
+
+section[role="tabpanel"]{padding-top:14px; padding-bottom:28px}
+.chips{display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; margin:0 -18px; padding:2px 18px 12px}
+.chips::-webkit-scrollbar{display:none}
+.chip{
+  flex:none; font:inherit; font-size:15px; padding:8px 14px; min-height:40px;
+  border-radius:999px; border:1px solid var(--line); background:var(--surface); color:var(--ink); cursor:pointer;
+}
+.chip[aria-pressed="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink); font-weight:700}
+:focus-visible{outline:3px solid var(--link); outline-offset:2px}
+
+.map{margin:0; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:10px 10px 12px}
+.map svg{display:block; width:100%; height:auto; max-height:64vh; margin:0 auto}
+.map figcaption{font-size:.85rem; color:var(--muted); margin:6px 4px 0}
+.legend{list-style:none; padding:0; margin:10px 4px 0; display:grid; gap:6px; font-size:.93rem}
+.legend li{display:flex; align-items:center; gap:10px}
+.legend .none{color:var(--muted)}
+.sw{flex:none; width:28px; height:0; border-top:4px solid var(--c)}
+.sw.alt{border-top-style:dashed; border-top-width:3px}
+
+.node rect{fill:var(--soft); stroke:var(--line); stroke-width:1.2; transition:fill .25s, stroke .25s}
+.node text{fill:var(--muted); font-size:13px; font-weight:700; text-anchor:middle; transition:fill .25s; font-family:inherit}
+.node.primary rect{fill:var(--c); stroke:var(--c)}
+.node.primary text{fill:var(--on)}
+.node.alt rect{fill:var(--surface); stroke:var(--c); stroke-width:2.2; stroke-dasharray:5 3}
+.node.alt text{fill:var(--c)}
+.node.context rect{fill:var(--surface); stroke:var(--ink); stroke-width:1.4}
+.node.context text{fill:var(--ink)}
+.tract path{fill:none; stroke:var(--line); stroke-width:1.4; transition:stroke .25s, stroke-width .25s}
+.tract.on path{stroke:var(--c); stroke-width:3.6}
+.tract.alt path{stroke:var(--c); stroke-width:2.4; stroke-dasharray:6 4}
+.thal{fill:var(--bg); stroke:var(--line); stroke-dasharray:3 3}
+.thal-label{fill:var(--muted); font-size:12px; text-anchor:middle; font-family:inherit}
+
+.panel{
+  background:var(--surface); border:1px solid var(--line); border-left:5px solid var(--accent,var(--ink));
+  border-radius:6px 14px 14px 6px; padding:16px 18px 6px; margin:16px 0 8px;
+}
+.panel h2{font-size:1.4rem; line-height:1.2; margin:0 0 2px}
+.panel dl{margin:0}
+.panel dt{font-weight:700; font-size:.92rem; color:var(--muted); margin-top:14px}
+.panel dd{margin:3px 0 0; max-width:38em}
+.evidence{padding-left:1.1em; margin:2px 0 0}
+.evidence li{margin:6px 0}
+.src{white-space:nowrap}
+.caveat{background:var(--soft); border-radius:10px; padding:10px 12px; margin:16px 0 12px}
+.seq{list-style:none; padding:0; margin:4px 0 0; display:grid; gap:8px}
+.seq li{display:grid; grid-template-columns:7.2em 1fr; gap:10px; align-items:baseline}
+.seq strong{color:var(--accent,var(--ink))}
+.aside{font-size:.95rem; color:var(--muted); margin:14px 2px 0; max-width:38em}
+
+.form{display:grid; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin:12px 0}
+.form label{display:grid; gap:4px; font-weight:700; font-size:.95rem}
+.form input{
+  font:inherit; font-weight:400; font-size:17px; padding:9px 12px; min-height:44px; width:100%; max-width:12em;
+  border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--ink);
+}
+.side{border:0; padding:0; margin:0; display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+.side legend{font-weight:700; font-size:.95rem; padding:0; margin-bottom:4px; width:100%}
+.err{color:var(--snr); font-weight:700}
+.coord{background:var(--surface); border:1px solid var(--line); border-left:5px solid var(--c); border-radius:6px 14px 14px 6px; padding:12px 16px; margin:10px 0}
+.coord h3{margin:0 0 8px; font-size:1.15rem}
+.xyz{display:grid; grid-template-columns:repeat(3,1fr); gap:8px}
+.xyz div{display:grid; gap:1px}
+.xyz .k{font-size:.85rem; color:var(--muted)}
+.xyz .v{font-size:1.45rem; font-weight:700; line-height:1.15}
+.xyz .r{font-size:.8rem; color:var(--muted); line-height:1.3}
+.words{margin:10px 0 0; font-size:.95rem}
+.signed{margin:4px 0 0; font-size:.88rem; color:var(--muted)}
+
+.search{display:grid; gap:4px; font-weight:700; font-size:.95rem; margin-bottom:10px}
+.search input{
+  font:inherit; font-weight:400; font-size:17px; padding:9px 12px; min-height:44px; width:100%;
+  border:1px solid var(--line); border-radius:10px; background:var(--surface); color:var(--ink);
+}
+.refs{list-style:none; padding:0; margin:4px 0 0; display:grid; gap:0}
+.refs li{padding:12px 0; border-top:1px solid var(--line); font-size:.95rem}
+.refs li:first-child{border-top:0}
+.refs a{display:inline-block; margin-top:2px; font-size:.92rem}
+.count{color:var(--muted); font-size:.9rem; margin:0 0 4px}
+
+footer{color:var(--muted); font-size:.88rem; padding-top:4px; padding-bottom:28px}
+@media (min-width:720px){
+  h1{font-size:2.3rem}
+  .form{grid-template-columns:1fr 1fr 1fr; align-items:end}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+
+<header class="masthead wrap">
+  <h1>DBS targets in movement disorders</h1>
+  <p class="lede">Pick an indication to see where the lead goes, which tract carries the benefit, and how to image it. Every claim links to its source. Compiled October 2026.</p>
+</header>
+
+<nav class="tabs" aria-label="Sections">
+  <div class="row" role="tablist">
+    <button class="tab" role="tab" id="tab-targets" aria-controls="view-targets" aria-selected="true">Targets</button>
+    <button class="tab" role="tab" id="tab-imaging" aria-controls="view-imaging" aria-selected="false" tabindex="-1">Imaging</button>
+    <button class="tab" role="tab" id="tab-coords" aria-controls="view-coords" aria-selected="false" tabindex="-1">Coordinates</button>
+    <button class="tab" role="tab" id="tab-refs" aria-controls="view-refs" aria-selected="false" tabindex="-1">References</button>
+  </div>
+</nav>
+
+<main class="wrap">
+  <section id="view-targets" role="tabpanel" aria-labelledby="tab-targets">
+    <div class="chips" id="ind-chips" role="group" aria-label="Indication"></div>
+    <figure class="map">
+      <svg id="circuit" viewBox="0 0 360 430" role="img" aria-label="Schematic motor circuit"></svg>
+      <figcaption>Schematic circuit, not to anatomical scale. Filled boxes are primary targets, dashed boxes alternatives, outlined boxes the connected regions.</figcaption>
+      <ul class="legend" id="legend"></ul>
+    </figure>
+    <article class="panel" id="ind-panel" aria-live="polite"></article>
+  </section>
+
+  <section id="view-imaging" role="tabpanel" aria-labelledby="tab-imaging" hidden>
+    <div class="chips" id="img-chips" role="group" aria-label="Target structure"></div>
+    <article class="panel" id="img-panel" aria-live="polite"></article>
+    <p class="aside" id="img-aside"></p>
+  </section>
+
+  <section id="view-coords" role="tabpanel" aria-labelledby="tab-coords" hidden>
+    <p class="lede">Atlas starting points relative to the mid-commissural point. Use them to check a plan, not to make one.</p>
+    <div class="form">
+      <label>AC–PC length (mm)
+        <input type="number" id="acpc" inputmode="decimal" value="25" min="18" max="35" step="0.5">
+      </label>
+      <label>Third-ventricle width (mm)
+        <input type="number" id="v3" inputmode="decimal" value="6" min="0" max="20" step="0.5">
+      </label>
+      <fieldset class="side">
+        <legend>Side</legend>
+        <button type="button" class="chip" data-side="Left" aria-pressed="true">Left</button>
+        <button type="button" class="chip" data-side="Right" aria-pressed="false">Right</button>
+      </fieldset>
+    </div>
+    <div id="coord-out" aria-live="polite"></div>
+    <p class="aside" id="coord-note"></p>
+  </section>
+
+  <section id="view-refs" role="tabpanel" aria-labelledby="tab-refs" hidden>
+    <label class="search">Search references
+      <input type="search" id="ref-q" placeholder="Author, title or topic">
+    </label>
+    <div class="chips" id="ref-chips" role="group" aria-label="Topic"></div>
+    <p class="count" id="ref-count"></p>
+    <ul class="refs" id="ref-list"></ul>
+    <p id="ref-empty" hidden>No references match. Clear the search or pick another topic.</p>
+  </section>
+</main>
+
+<footer class="wrap">Teaching reference, not planning software. Confirm every target with direct imaging and physiology.</footer>
+
+<script>
+(function(){
+"use strict";
+var C = function(k){ return "var(--" + k + ")"; };
+
+/* ---------- References ---------- */
+var R = {
+  hollunder2024:{g:"net", s:"Hollunder 2024", t:"Hollunder B, Ostrem JL, Sahin IA, Rajamani N, et al., Li N, Horn A. Mapping dysfunctional circuits in the frontal cortex using deep brain stimulation. Nat Neurosci. 2024;27(3):573–586. doi:10.1038/s41593-024-01570-1.", u:"https://sfb-retune.de/?p=48139"},
+  goede2025:{g:"net", s:"Goede 2025", t:"Goede LL, Al-Fatly B, Li N, et al., Joutsa J, et al., Horn A. Convergent mapping of a tremor treatment network. Nat Commun. 2025;16:4772. doi:10.1038/s41467-025-60089-6.", u:"https://sfb-retune.de/?p=48639"},
+  cns2018:{g:"pd", s:"CNS guideline 2018", t:"Congress of Neurological Surgeons. Systematic review and evidence-based guideline on STN and GPi DBS for Parkinson's disease: executive summary. Neurosurgery. 2018;82(6):753–756.", u:"https://scholarlycommons.henryford.com/neurosurgery_articles/106"},
+  meta2014:{g:"pd", s:"Meta-analysis 2014", t:"Globus pallidus vs subthalamic nucleus deep brain stimulation for Parkinson's disease: a meta-analysis. Neurology. 2014.", u:"https://www.epistemonikos.org/en/documents/a511b15399aa5fbcf4e07d7fcc4e907d26913388"},
+  review2013:{g:"pd", s:"Review 2013", t:"Review of STN and GPi deep brain stimulation for Parkinson's disease. 2013. PMID 24210797.", u:"https://pubmed.ncbi.nlm.nih.gov/24210797"},
+  wong:{g:"pd", s:"Wong et al.", t:"Wong JK, Cauraugh JH, Ho KWD, et al., Okun MS. STN vs. GPi deep brain stimulation for tremor suppression in Parkinson disease: a systematic review and meta-analysis.", u:"https://experts.umn.edu/en/publications/stn-vs-gpi-deep-brain-stimulation-for-tremor-suppression-in-parki/"},
+  williams2014:{g:"pd", s:"Williams 2014", t:"Williams NR, et al. Subthalamic nucleus versus globus pallidus internus deep brain stimulation: translating the rematch into clinical practice. Mov Disord Clin Pract. 2014.", u:"https://aemreview.stanfordhealthcare.org/publications/406/406050.html"},
+  akram2017:{g:"pd", s:"Akram 2017", t:"Akram H, Sotiropoulos SN, Jbabdi S, Georgiev D, Mahlknecht P, et al. Subthalamic deep brain stimulation sweet spots and hyperdirect cortical connectivity in Parkinson's disease. NeuroImage. 2017.", u:"https://www.sciencedirect.com/science/article/abs/pii/S1053811917305803"},
+  rajamani2024:{g:"pd", s:"Rajamani 2024", t:"Rajamani N, Friedrich H, Butenko K, Dembek T, et al., Horn A. Deep brain stimulation of symptom-specific networks in Parkinson's disease. Nat Commun. 2024;15:4662. doi:10.1038/s41467-024-48731-1. Author correction: doi:10.1038/s41467-024-51394-7.", u:"https://pmc.ncbi.nlm.nih.gov/articles/PMC11143329"},
+  npj2026:{g:"pd", s:"npj Parkinson's Dis 2026", t:"Targeting based on patient-specific 7 Tesla MRI connectivity analysis improves deep brain stimulation for Parkinson's disease. npj Parkinsons Dis. 2026.", u:"https://www.nature.com/articles/s41531-026-01414-8"},
+  peeters2024:{g:"pd", s:"Peeters 2024", t:"Peeters J, et al. Electrophysiological sweet spot mapping in deep brain stimulation for Parkinson's disease patients. Brain Stimul. 2024;17(4):794–801. doi:10.1016/j.brs.2024.05.013.", u:"https://pubmed.ncbi.nlm.nih.gov/38821395"},
+  weiss2013:{g:"pd", s:"Weiss 2013", t:"Weiss D, et al. Combined subthalamic and nigral stimulation for axial symptoms in Parkinson's disease: a randomized controlled trial. Brain. 2013;136(7):2098.", u:"https://pmc.ncbi.nlm.nih.gov/articles/PMC3692032"},
+  artusi2025:{g:"pd", s:"Artusi 2025", t:"Artusi CA, et al. Subthalamic and nigral stimulation for freezing of gait in Parkinson's disease: randomized pilot trial. 2025.", u:"https://iris.unito.it/handle/2318/2089950"},
+  mds2024:{g:"pd", s:"Crossover study 2024", t:"Short-term effects of combined STN–SNr DBS on gait. International Congress of Parkinson's Disease and Movement Disorders, 2024 (abstract).", u:"https://www.mdsabstracts.org/?p=23325"},
+  brainsci2025:{g:"pd", s:"Brain Sci 2025", t:"Functional and structural connectivity correlates of axial symptom outcomes after pallidal deep brain stimulation in Parkinson's disease. Brain Sci. 2025;15(11):1245.", u:"https://www.mdpi.com/2076-3425/15/11/1245"},
+  sid:{g:"pd", s:"MDS abstract", t:"The subthalamic fasciculus and connectivity profiling of stimulation-induced dyskinesia following pallidal DBS in Parkinson's disease (abstract).", u:"https://www.mdsabstracts.org/abstract/the-subthalamic-fasciculus-and-connectivity-profiling-of-stimulation-induced-dyskinesia-following-pallidal-dbs-in-parkinsons-disease/"},
+  adapt:{g:"pd", s:"ADAPT-PD 2025", t:"ADAPT-PD trial results, JAMA Neurol. 2025 (Medtronic announcement).", u:"https://news.medtronic.com/Groundbreaking-study-published-in-the-Journal-of-the-American-Medical-Association-JAMA-Neurology-demonstrates-effectiveness-of-Medtronic-BrainSense-TM-Adaptive-deep-brain-stimulation-for-people-with-Parkinsons"},
+  fda2025:{g:"pd", s:"FDA approval 2025", t:"FDA approval of BrainSense adaptive DBS, February 2025.", u:"https://www.massdevice.com/medtronic-fda-nod-adaptive-dbs-parkinsons/"},
+  fmri2026:{g:"pd", s:"fMRI study 2026", t:"The pattern of fMRI activation with STN DBS reveals symptom-specific networks. 2026.", u:"https://pubmed.ncbi.nlm.nih.gov/42049768/"},
+  akram2018:{g:"tremor", s:"Akram 2018", t:"Akram H, et al. Connectivity derived thalamic segmentation in deep brain stimulation for tremor. NeuroImage Clin. 2018.", u:"https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5790021/"},
+  jns2021:{g:"tremor", s:"J Neurosurg 2021", t:"DBS targeting for essential tremor using intersectional dentato-rubro-thalamic tractography and direct proton density visualization of the VIM: technical note on 2 cases. J Neurosurg. 2021;135(3):806.", u:"https://pubmed.ncbi.nlm.nih.gov/33450737/"},
+  nma2025:{g:"tremor", s:"Network meta-analysis 2025", t:"Comparative efficacy of PSA and VIM deep brain stimulation in essential tremor: a network and multilevel meta-analysis. Neurosurg Rev. 2025.", u:"https://link.springer.com/article/10.1007/s10143-025-03898-z"},
+  barbe2018:{g:"tremor", s:"Barbe 2018", t:"Barbe MT, et al. DBS of the PSA and the VIM in essential tremor: a randomized, double-blind, crossover trial. Neurology. 2018.", u:"https://www.researchgate.net/publication/326180808_DBS_of_the_PSA_and_the_VIM_in_essential_tremor_A_randomized_double-blind_crossover_trial"},
+  poster:{g:"tremor", s:"DRTT distance poster", t:"PSA and VIM DBS efficiency in essential tremor depends on distance to the dentatorubrothalamic tract (poster).", u:"https://www.researchgate.net/publication/335568247_PSA_and_VIM_DBS_efficieny_in_essential_tremor_depends_on_distance_to_the_dentatorubrothalamic_tract"},
+  barrow:{g:"tremor", s:"Barrow series", t:"Direct versus indirect VIM targeting in 230 patients. Barrow Neurological Institute.", u:"https://scholar.barrowneuro.org/neurosurgery/2054"},
+  mrgfus2025:{g:"tremor", s:"MRgFUS preprint 2025", t:"Direct targeting for focused ultrasound thalamotomy in the treatment of movement disorders: a retrospective cohort study. medRxiv preprint, 2025.", u:"https://www.medrxiv.org/content/10.1101/2025.09.03.25335065.full.pdf"},
+  vimma2026:{g:"tremor", s:"Vim meta-analysis 2026", t:"Tremor improvement despite heterogeneous ventral intermediate nucleus targeting in deep brain stimulation: a systematic review and meta-analysis. medRxiv preprint, 2026.", u:"https://www.medrxiv.org/content/10.64898/2026.04.07.26350347.full.pdf"},
+  nct:{g:"tremor", s:"NCT05968976", t:"Multicentre RCT of awake versus asleep tractography-based DBS for essential tremor. NCT05968976.", u:"https://clinicaltrials.gov/study/NCT05968976"},
+  wang2020:{g:"tremor", s:"Wang 2020", t:"Wang KL, Wong JK, Eisinger RS, et al., Ramirez-Zamora A. Therapeutic advances in the treatment of Holmes tremor: systematic review. Neuromodulation. 2020.", u:"https://neurology.ufl.edu/2020/07/31/therapeutic-advances-in-the-treatment-of-holmes-tremor-systematic-review/"},
+  kamo2023:{g:"tremor", s:"Kamo 2023", t:"Kamo H, Oyama G, Ito M, Iwamuro H, Umemura A, Hattori N. Deep brain stimulation in posterior subthalamic area for Holmes tremor: case reports with review of the literature. Front Neurol. 2023. doi:10.3389/fneur.2023.1139477.", u:"https://www.frontiersin.org/journals/neurology/articles/10.3389/fneur.2023.1139477/full"},
+  holmesgpi:{g:"tremor", s:"Pallidal DBS case series", t:"Clinical outcome and characterization of local field potentials in Holmes tremor treated with pallidal deep brain stimulation.", u:"https://pmc.ncbi.nlm.nih.gov/articles/PMC4929492"},
+  reich2019:{g:"dyst", s:"Reich 2019", t:"Reich MM, Horn A, Lange F, et al. Probabilistic mapping of the antidystonic effect of pallidal neurostimulation: a multicentre imaging study. Brain. 2019;142(5):1386–1398. doi:10.1093/brain/awz046.", u:"https://davidmarsdenaward.org/assets/papers/2021_reich.pdf"},
+  horn2022:{g:"dyst", s:"Horn 2022", t:"Horn A, et al. Optimal deep brain stimulation sites and networks for cervical vs. generalized dystonia. Proc Natl Acad Sci U S A. 2022;119(14):e2114985119. doi:10.1073/pnas.2114985119.", u:"https://pmc.ncbi.nlm.nih.gov/articles/PMC9168456"},
+  thieme2021:{g:"dyst", s:"Somatotopy study 2021", t:"Somatotopy of the posteroventral GPi in dystonia DBS. Thieme, 2021. doi:10.1055/s-0041-1735856.", u:"https://www.thieme-connect.com/products/ejournals/pdf/10.1055/s-0041-1735856.pdf"},
+  cd2025:{g:"dyst", s:"Cervical dystonia study 2025", t:"Optimal stimulation sites and connectomes for GPi- and STN-DBS in cervical dystonia. 2025.", u:"https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12358681/"},
+  horisawa2019:{g:"dyst", s:"Horisawa 2019", t:"Horisawa S, Ochiai T, Goto S, et al., Taira T. Safety and long-term efficacy of ventro-oral thalamotomy for focal hand dystonia. Neurology. 2019.", u:"https://pmc.ncbi.nlm.nih.gov/articles/PMC6345121"},
+  shimizu2018:{g:"dyst", s:"Shimizu 2018", t:"Shimizu T, Maruo T, Miura S, Kishima H, Ushio Y, Goto S. Stereotactic lesioning of the thalamic Vo nucleus for the treatment of writer's cramp (focal hand dystonia). Front Neurol. 2018;9:1008. doi:10.3389/fneur.2018.01008.", u:"https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6275197/"},
+  bmjno:{g:"dyst", s:"BMJ Neurology Open", t:"MRgFUS thalamotomy for focal hand dystonia. BMJ Neurology Open.", u:"https://neurologyopen.bmj.com/content/5/2/e000522"},
+  vocoords:{g:"dyst", s:"Task-specific dystonia series", t:"Surgical interventions for task-specific dystonia (writer's dystonia).", u:"https://pmc.ncbi.nlm.nih.gov/articles/PMC5586136"},
+  hyper2015:{g:"dyst", s:"Hyperkinetic review 2015", t:"Uncommon applications of deep brain stimulation in hyperkinetic movement disorders. Tremor Other Hyperkinet Mov. 2015.", u:"https://tremorjournal.org/articles/265"},
+  tardiveov:{g:"dyst", s:"Tardive overview", t:"Deep brain stimulation for intractable tardive dystonia: literature overview. Neurol Neurochir Pol.", u:"https://journals.viamedica.pl/neurologia_neurochirurgia_polska/article/view/61123"},
+  macerollo2018:{g:"dyst", s:"Macerollo 2018", t:"Macerollo A, Deuschl G. Deep brain stimulation for tardive syndromes: systematic review and meta-analysis. J Neurol Sci. 2018;389:55–60.", u:"https://livrepository.liverpool.ac.uk/id/eprint/3089197"},
+  johnson2019:{g:"ts", s:"Johnson 2019", t:"Johnson KA, Fletcher PT, Servello D, Bona A, Porta M, et al. Image-based analysis and long-term clinical outcomes of deep brain stimulation for Tourette syndrome: a multisite study. J Neurol Neurosurg Psychiatry. 2019;90:1078.", u:"https://escholarship.org/uc/item/12j695d1"},
+  johnson2020:{g:"ts", s:"Johnson 2020", t:"Johnson KA, Duffley G, et al. Structural connectivity predicts clinical outcomes of deep brain stimulation for Tourette syndrome. Brain. 2020. doi:10.1093/brain/awaa188.", u:"https://www.omicsdi.org/dataset/biostudies-literature/S-EPMC7447520"},
+  johnson2021:{g:"ts", s:"Johnson, pallidal pathways", t:"Johnson KA, Duffley G, Foltynie T, Hariz M, Zrinzo L, et al. Basal ganglia pathways associated with therapeutic pallidal deep brain stimulation for Tourette syndrome. Biol Psychiatry Cogn Neurosci Neuroimaging.", u:"https://discovery-pp.ucl.ac.uk/10121391/1/1-s2.0-S2451902220303475-main.pdf"},
+  protocol2025:{g:"img", s:"MRI protocol study 2025", t:"Toward a standard preoperative MRI protocol for functional neurosurgery. Imaging Neurosci. 2025. doi:10.1162/IMAG.a.52.", u:"https://pmc.ncbi.nlm.nih.gov/articles/PMC12319828/"},
+  sudhyadhom2009:{g:"img", s:"Sudhyadhom 2009", t:"Sudhyadhom A, et al. A high resolution and high contrast MRI for differentiation of subcortical structures for DBS targeting: the Fast Gray Matter Acquisition T1 Inversion Recovery (FGATIR). NeuroImage. 2009.", u:"https://www.researchgate.net/publication/24273989_A_high_resolution_and_high_contrast_MRI_for_differentiation_of_subcortical_structures_for_DBS_targeting_The_Fast_Gray_Matter_Acquisition_T1_Inversion_Recovery_FGATIR"},
+  fgatir7t:{g:"img", s:"NeuroImage 2022", t:"Optimization of fast gray matter acquisition T1 inversion recovery (FGATIR) on 7T MRI for deep brain stimulation targeting. NeuroImage. 2022.", u:"https://www.sciencedirect.com/science/article/pii/S1053811922001720"},
+  mdeft:{g:"img", s:"MDEFT study", t:"Using MDEFT MRI sequences to target the GPi in DBS surgery.", u:"https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4569189/"},
+  imgreview2025:{g:"img", s:"Imaging review 2025", t:"Neuroimaging in deep brain stimulation: bridging technical progress with clinical practice. 2025.", u:"https://www.sciencedirect.com/science/article/pii/S2949669125000077"},
+  calgary:{g:"img", s:"Calgary teaching slides", t:"University of Calgary. Surgery for movement disorders (teaching slides).", u:"https://cumming.ucalgary.ca/sites/default/files/teams/122/education/neurosurgery/fn2-pd-surgery-for-movement-disorders.pdf"},
+  stnanat2025:{g:"img", s:"STN anatomy study 2025", t:"Anatomical factors influencing STN localization in Parkinson's disease patients undergoing DBS. 2025.", u:"https://pmc.ncbi.nlm.nih.gov/articles/PMC12021997"}
+};
+function srcLinks(ids){
+  return "(" + ids.map(function(id){
+    var r = R[id];
+    return '<a class="src" href="' + r.u + '" target="_blank" rel="noopener">' + r.s + '</a>';
+  }).join(", ") + ")";
+}
+
+/* ---------- Circuit diagram ---------- */
+var NODES = {
+  premotor:{x:8,y:16,w:80,h:34,l:"Premotor",c:"ctx"},
+  sma:{x:96,y:16,w:80,h:34,l:"SMA",c:"ctx"},
+  m1:{x:184,y:16,w:80,h:34,l:"M1",c:"ctx"},
+  s1:{x:272,y:16,w:80,h:34,l:"Sensorimotor",c:"ctx",fs:12},
+  str:{x:8,y:112,w:84,h:34,l:"Striatum",c:"str"},
+  gpi:{x:8,y:196,w:84,h:34,l:"GPi",c:"gpi"},
+  stn:{x:108,y:268,w:72,h:34,l:"STN",c:"stn"},
+  snr:{x:108,y:330,w:72,h:34,l:"SNr",c:"snr"},
+  ppn:{x:100,y:388,w:92,h:34,l:"Brainstem",c:"ppn"},
+  vo:{x:204,y:132,w:44,h:32,l:"Vo",c:"vo"},
+  vim:{x:252,y:132,w:44,h:32,l:"Vim",c:"vim"},
+  cm:{x:300,y:132,w:44,h:32,l:"CM",c:"cm"},
+  psa:{x:236,y:262,w:100,h:34,l:"PSA / cZi",c:"psa"},
+  den:{x:252,y:384,w:100,h:34,l:"Dentate",c:"den"}
+};
+var TRACTS = {
+  hyper:{c:"stn", n:"Hyperdirect pathway, SMA and M1 to STN", d:["M136,50 C136,150 150,200 144,268","M224,50 C214,140 165,210 152,268"]},
+  stngpi:{c:"stn", n:"STN output to GPi and SNr", d:["M108,285 C80,282 58,262 50,230","M144,302 L144,330"]},
+  strpall:{c:"str", n:"Striatopallidofugal axis", d:["M50,146 L50,196","M50,230 C50,292 78,336 108,347"]},
+  pallthal:{c:"gpi", n:"Pallidothalamic bundles (ansa and lenticular fasciculus) to Vo", d:["M92,213 C150,205 185,175 204,148"]},
+  nigral:{c:"snr", n:"Nigral output to brainstem", d:["M144,364 L146,388"]},
+  drtt:{c:"vim", n:"Dentato-rubro-thalamic tract (DRTT)", d:["M302,384 C312,340 290,318 286,296","M286,262 C286,228 276,192 274,164"]},
+  vimm1:{c:"vim", n:"Thalamocortical projection, Vim to M1", d:["M274,132 C272,100 236,82 224,50"]},
+  vosma:{c:"vo", n:"Thalamocortical projection, Vo to SMA", d:["M226,132 C222,96 150,84 136,50"]},
+  cmstr:{c:"cm", n:"CM to striatum", d:["M322,132 C322,86 140,86 92,129"]},
+  cmctx:{c:"cm", n:"CM to sensorimotor cortex", d:["M322,132 C326,100 314,80 312,50"]}
+};
+
+var NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs){
+  var e = document.createElementNS(NS, tag);
+  for (var k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+var svg = document.getElementById("circuit");
+svg.appendChild(el("rect",{x:196,y:100,width:156,height:80,rx:12,"class":"thal"}));
+var tl = el("text",{x:274,y:118,"class":"thal-label"}); tl.textContent = "Thalamus"; svg.appendChild(tl);
+var tractLayer = el("g",{}), nodeLayer = el("g",{});
+svg.appendChild(tractLayer); svg.appendChild(nodeLayer);
+var tractEls = {}, nodeEls = {};
+Object.keys(TRACTS).forEach(function(k){
+  var t = TRACTS[k], g = el("g",{"class":"tract"});
+  g.style.setProperty("--c", C(t.c));
+  t.d.forEach(function(d){ g.appendChild(el("path",{d:d})); });
+  tractLayer.appendChild(g); tractEls[k] = g;
+});
+Object.keys(NODES).forEach(function(k){
+  var n = NODES[k], g = el("g",{"class":"node"});
+  g.style.setProperty("--c", C(n.c));
+  g.appendChild(el("rect",{x:n.x,y:n.y,width:n.w,height:n.h,rx:8}));
+  var t = el("text",{x:n.x + n.w/2, y:n.y + n.h/2, dy:"0.35em"});
+  if (n.fs) t.style.fontSize = n.fs + "px";
+  t.textContent = n.l; g.appendChild(t);
+  nodeLayer.appendChild(g); nodeEls[k] = g;
+});
+
+/* ---------- Indications ---------- */
+var IND = [
+  {id:"pd", label:"Parkinson's", title:"Parkinson's disease", accent:"stn",
+   nodes:{primary:["stn"], alt:["gpi","snr"], context:["sma","m1","premotor","ppn"]},
+   tracts:{on:["hyper","stngpi"], alt:["pallthal","nigral"]},
+   target:"Dorsolateral (motor) STN.",
+   alt:"Posterolateral GPi. For freezing of gait, deep contacts at the STN/SNr border.",
+   why:"Benefit follows the hyperdirect pathway from SMA and M1 into the supero-lateral STN. Each cardinal sign maps to its own tracts: tremor to M1 and cerebellum, bradykinesia to SMA, rigidity to premotor cortex, axial signs to SMA and brainstem.",
+   choose:"STN and GPi give similar motor benefit. STN allows more levodopa reduction and longer battery life; GPi carries less risk to speech and mood and is favoured when only one side will be implanted.",
+   imaging:"STN on T2w, SWI, QSM or T2-FLAIR; GPi on FGATIR or PDw. Patient-specific 7T tractography of the motor STN improved outcomes in a prospective study.",
+   ev:[["Supero-lateral STN was the most effective site; hyperdirect connectivity predicted improvement","akram2017"],
+       ["Symptom-specific tracts mapped in 237 patients from five centres","rajamani2024"],
+       ["Leads placed by patient-specific 7T tractography gave better motor outcomes","npj2026"],
+       ["The P3 evoked-potential hotspot matches hyperdirect-pathway stimulation","peeters2024"],
+       ["Bilateral STN is at least as effective as GPi on UPDRS-III","cns2018"],
+       ["GPi improved ON-medication disability more; STN allowed larger levodopa reduction","meta2014"],
+       ["STN carries more risk to speech and mood","review2013"],
+       ["Tremor responds whichever target is used","wong"],
+       ["Stimulation-induced dyskinesia from GPi linked to lenticular-fasciculus connectivity","sid"],
+       ["Combined STN plus SNr may help freezing, with mixed results","weiss2013","artusi2025","mds2024"],
+       ["Adaptive DBS approved in 2025; ADAPT-PD met its primary endpoint","adapt","fda2025"]],
+   caveat:"The tremor tract did not survive 10-fold cross-validation, and most of this mapping is retrospective.", cref:["rajamani2024"]},
+  {id:"et", label:"Essential tremor", title:"Essential tremor", accent:"vim",
+   nodes:{primary:["vim"], alt:["psa"], context:["m1","den"]},
+   tracts:{on:["drtt","vimm1"], alt:[]},
+   target:"Ventral intermediate nucleus (Vim) of the thalamus.",
+   alt:"PSA / caudal zona incerta, often reached by the same trajectory.",
+   why:"The Vim relays the DRTT from the contralateral dentate nucleus to M1. Efficacy at both Vim and PSA tracks how close the active contact is to the DRTT.",
+   choose:"Limb tremor control is similar. PSA is better for head tremor, causes less dysarthria and works at lower amplitude; pooled data showed no significant advantage of bilateral over unilateral implantation.",
+   imaging:"FGATIR is the only sequence rated well for Vim. Add DRTT tractography, or intersect it with PD-weighted images.",
+   ev:[["PSA superior for head tremor, with less dysarthria","nma2025"],
+       ["PSA effective at lower stimulation intensity in a randomized crossover trial","barbe2018"],
+       ["Efficiency tracks distance to the DRTT","poster"],
+       ["The dentate-connected zone lies ventrolateral within the M1-connected thalamus","akram2018"],
+       ["Intersectional Vim targeting with PD-weighted MRI and DRTT tractography","jns2021"],
+       ["Direct MRgFUS targeting on FGATIR with dentate, lemniscal and capsular tracts","mrgfus2025"],
+       ["Heterogeneous targeting methods, consistent tremor reduction","vimma2026"],
+       ["A shared tremor network in M1 and motor cerebellum predicts outcome across targets","goede2025"],
+       ["Awake versus asleep tractography-based DBS: RCT under way","nct"]],
+   caveat:"Directly targeted Vim leads had more symptomatic haemorrhages in one 230-patient series.", cref:["barrow"]},
+  {id:"holmes", label:"Holmes tremor", title:"Holmes tremor", accent:"psa",
+   nodes:{primary:["vim","psa"], alt:["gpi","vo"], context:["den","m1"]},
+   tracts:{on:["drtt"], alt:["pallthal"]},
+   target:"Vim plus PSA, or GPi.",
+   alt:"Dual leads in Vo and Vim.",
+   why:"Holmes tremor involves both cerebellothalamic and pallidothalamic circuits, so dual targets aim to cover both.",
+   choose:"No consensus. In pooled cases GPi did better for rest tremor and overall; PSA plus Vim did better than PSA alone in small numbers.",
+   imaging:"As for essential tremor, plus FGATIR or PDw for GPi. Check that the causative lesion has not distorted the target anatomy.",
+   ev:[["Systematic review of 64 DBS cases: GPi better for rest and overall tremor","wang2020"],
+       ["About 57% improvement with PSA alone versus 78% with PSA plus Vim","kamo2023"],
+       ["Dual thalamic targets cover pallidothalamic and cerebellothalamic circuits","holmesgpi"]],
+   caveat:"Evidence is limited to case reports and small series.", cref:[]},
+  {id:"gdys", label:"Generalized dystonia", title:"Generalized dystonia", accent:"gpi",
+   nodes:{primary:["gpi"], alt:["stn"], context:["s1","vo"]},
+   tracts:{on:["pallthal"], alt:[]},
+   target:"Posteroventral GPi, including the subpallidal white matter below it.",
+   alt:"STN.",
+   why:"The best stimulation volume sits in posteroventral GPi and extends into subpallidal white matter, implicating the ansa lenticularis. In generalized dystonia, benefit followed the pallidothalamic bundles.",
+   choose:"Up to 25% of selected patients do not respond. Where the active volume sits mattered more than how much current is delivered.",
+   imaging:"FGATIR or PDw; MDEFT also delineates GPi well.",
+   ev:[["Sweet spot in posteroventral GPi bordering subpallidal white matter predicted individual outcome","reich2019"],
+       ["Generalized dystonia responded to the pallidothalamic bundles","horn2022"],
+       ["Dystonia response maps to sensorimotor-connected circuits","hollunder2024"]],
+   caveat:"Sweet-spot maps come from retrospective cohorts in normative space.", cref:[]},
+  {id:"cdys", label:"Cervical dystonia", title:"Cervical dystonia", accent:"gpi",
+   nodes:{primary:["gpi"], alt:["stn"], context:["str","s1"]},
+   tracts:{on:["strpall"], alt:[]},
+   target:"Ventral, lateral and posterior GPi, where face and neck are represented.",
+   alt:"STN.",
+   why:"Cervical dystonia responded best to modulation of the striatopallidofugal axis. Its optimal site diverges from generalized dystonia inside the pallidum, then converges at thalamocortical level.",
+   choose:"GPi is the default. A 2025 study mapped sweet spots and connectomes for both GPi and STN in cervical dystonia.",
+   imaging:"FGATIR or PDw for the GPi borders.",
+   ev:[["Striatopallidofugal axis linked to optimal cervical outcomes in 80 patients","horn2022"],
+       ["Ventral, lateral and posterior GPi represent face and neck","thieme2021"],
+       ["Sweet spots and connectomes for GPi and STN in cervical dystonia","cd2025"]],
+   caveat:"Somatotopic sub-targeting rests on group maps, not prospective trials.", cref:[]},
+  {id:"fhd", label:"Focal hand dystonia", title:"Focal hand dystonia", accent:"vo",
+   nodes:{primary:["vo"], alt:["gpi"], context:["s1","sma"]},
+   tracts:{on:["pallthal","vosma"], alt:[]},
+   target:"Vo complex of the thalamus (Voa and Vop).",
+   alt:"GPi.",
+   why:"Vo is the main pallidal-receiving thalamus. Lesioning or stimulating it can give long-term remission of task-specific hand dystonia.",
+   choose:"Most experience is with Vo thalamotomy, including MRgFUS; Vo DBS is reported in smaller numbers.",
+   imaging:"Often planned from published coordinates at the junction of Voa and Vop.",
+   ev:[["171 consecutive Vo thalamotomies for task-specific hand dystonia","horisawa2019"],
+       ["Long-term remission after Vo lesioning","shimizu2018"],
+       ["MRgFUS Vo thalamotomy is feasible","bmjno"],
+       ["Vo targeted at the Voa/Vop junction from published coordinates","vocoords"]],
+   caveat:"Evidence is Class IV and comes mostly from lesioning rather than DBS.", cref:["horisawa2019"]},
+  {id:"md", label:"Myoclonus-dystonia", title:"Myoclonus-dystonia", accent:"gpi",
+   nodes:{primary:["gpi"], alt:["vim"], context:[]},
+   tracts:{on:[], alt:[]},
+   target:"GPi.",
+   alt:"Vim, or GPi plus Vim.",
+   why:"GPi improved dystonia more than Vim and myoclonus about as much, with fewer stimulation side effects.",
+   choose:"Combined GPi and Vim stimulation outperformed Vim alone but not GPi alone.",
+   imaging:"FGATIR or PDw for GPi; FGATIR for Vim.",
+   ev:[["GPi favoured over Vim for the dystonic component","hyper2015"]],
+   caveat:"Small series only; no large imaging studies yet.", cref:[]},
+  {id:"tard", label:"Tardive syndromes", title:"Tardive syndromes", accent:"gpi",
+   nodes:{primary:["gpi"], alt:["stn"], context:[]},
+   tracts:{on:[], alt:[]},
+   target:"Bilateral GPi.",
+   alt:"STN.",
+   why:"Tardive dystonia responds to pallidal stimulation much like primary generalized dystonia.",
+   choose:"Most series report BFMDRS motor improvement above 80%, sometimes within days.",
+   imaging:"FGATIR or PDw for GPi.",
+   ev:[["Bilateral GPi effective, often within days","tardiveov"],
+       ["117 patients reviewed, 109 treated with GPi DBS","macerollo2018"]],
+   caveat:"No level I studies exist.", cref:["macerollo2018"]},
+  {id:"ts", label:"Tourette", title:"Tourette syndrome", accent:"cm",
+   nodes:{primary:["cm"], alt:["gpi"], context:["str","s1","m1","den"]},
+   tracts:{on:["cmstr","cmctx"], alt:[]},
+   target:"Centromedian–parafascicular (CM-Pf) thalamus.",
+   alt:"Anteromedial GPi, posteroventral GPi, or ALIC/nucleus accumbens.",
+   why:"Response follows the connectivity of the stimulated tissue. CM connectivity to sensorimotor cortex, putamen and cerebellum predicted tic improvement.",
+   choose:"No target proved superior in 110 patients. Contacts within, above or medial to the GPi helped obsessive-compulsive behaviour more.",
+   imaging:"Not covered by the 2025 sequence survey. Tractography can check the connectivity of the planned volume.",
+   ev:[["No difference between targets in 110 patients; benefit builds over months","johnson2019"],
+       ["CM connectivity predicted tic improvement under cross-validation","johnson2020"],
+       ["Pathway modelling of pallidal DBS in 35 patients","johnson2021"],
+       ["Tourette response maps to M1-connected circuits","hollunder2024"]],
+   caveat:"Overlap with the best-connected CM region did not predict response by itself.", cref:["johnson2020"]},
+  {id:"chorea", label:"Chorea", title:"Chorea (Huntington's disease)", accent:"gpi",
+   nodes:{primary:["gpi"], alt:[], context:[]},
+   tracts:{on:[], alt:[]},
+   target:"Bilateral GPi.",
+   alt:"None established.",
+   why:"GPi is the most frequent target for Huntington's disease and chorea-acanthocytosis.",
+   choose:"",
+   imaging:"FGATIR or PDw for GPi.",
+   ev:[["Bilateral GPi most used across hyperkinetic disorders","hyper2015"]],
+   caveat:"Evidence comes from small, uncontrolled series.", cref:[]}
+];
+
+var legend = document.getElementById("legend");
+var indPanel = document.getElementById("ind-panel");
+
+function renderDiagram(d){
+  Object.keys(nodeEls).forEach(function(k){ nodeEls[k].classList.remove("primary","alt","context"); });
+  ["primary","alt","context"].forEach(function(state){
+    (d.nodes[state] || []).forEach(function(k){ nodeEls[k].classList.add(state); });
+  });
+  Object.keys(tractEls).forEach(function(k){ tractEls[k].classList.remove("on","alt"); });
+  d.tracts.alt.forEach(function(k){ tractEls[k].classList.add("alt"); tractLayer.appendChild(tractEls[k]); });
+  d.tracts.on.forEach(function(k){ tractEls[k].classList.add("on"); tractLayer.appendChild(tractEls[k]); });
+  var items = d.tracts.on.map(function(k){ return [k,false]; }).concat(d.tracts.alt.map(function(k){ return [k,true]; }));
+  legend.innerHTML = items.length ? items.map(function(p){
+    var t = TRACTS[p[0]];
+    return '<li><span class="sw' + (p[1] ? ' alt' : '') + '" style="--c:' + C(t.c) + '"></span><span>' + t.n + (p[1] ? ', for the alternative target' : '') + '</span></li>';
+  }).join("") : '<li class="none">No tract has been mapped at scale for this indication yet.</li>';
+  var label = d.title + ". Primary target: " + d.nodes.primary.map(function(k){ return NODES[k].l; }).join(" and ") +
+    (d.nodes.alt.length ? ". Alternatives: " + d.nodes.alt.map(function(k){ return NODES[k].l; }).join(", ") : "") +
+    (items.length ? ". Tracts: " + items.map(function(p){ return TRACTS[p[0]].n; }).join("; ") : "") + ".";
+  svg.setAttribute("aria-label", label);
+}
+
+function renderInd(id){
+  var d = IND.filter(function(x){ return x.id === id; })[0];
+  indPanel.style.setProperty("--accent", C(d.accent));
+  indPanel.innerHTML =
+    '<h2>' + d.title + '</h2><dl>' +
+    '<dt>Target</dt><dd>' + d.target + '</dd>' +
+    '<dt>Alternatives</dt><dd>' + d.alt + '</dd>' +
+    '<dt>Why here</dt><dd>' + d.why + '</dd>' +
+    (d.choose ? '<dt>How to choose</dt><dd>' + d.choose + '</dd>' : '') +
+    '<dt>Imaging</dt><dd>' + d.imaging + '</dd>' +
+    '<dt>Evidence</dt><dd><ul class="evidence">' + d.ev.map(function(e){
+      return '<li>' + e[0] + ' ' + srcLinks(e.slice(1)) + '</li>';
+    }).join("") + '</ul></dd></dl>' +
+    '<p class="caveat"><strong>Watch out.</strong> ' + d.caveat + (d.cref.length ? ' ' + srcLinks(d.cref) : '') + '</p>';
+  renderDiagram(d);
+}
+
+function chips(container, items, initial, onPick){
+  container.innerHTML = "";
+  items.forEach(function(it){
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "chip"; b.textContent = it[1];
+    b.setAttribute("aria-pressed", it[0] === initial ? "true" : "false");
+    b.addEventListener("click", function(){
+      container.querySelectorAll(".chip").forEach(function(c){ c.setAttribute("aria-pressed", c === b ? "true" : "false"); });
+      onPick(it[0]);
+    });
+    container.appendChild(b);
+  });
+}
+chips(document.getElementById("ind-chips"), IND.map(function(d){ return [d.id, d.label]; }), "pd", renderInd);
+renderInd("pd");
+
+/* ---------- Imaging ---------- */
+var IMG = [
+  {id:"stn", label:"STN", title:"Subthalamic nucleus", accent:"stn",
+   seq:[["T2w","Rated highest for STN"],["SWI","Highest STN contrast; runs on most scanners"],["QSM","Rated highest for STN"],["T2-FLAIR","Rated highest for STN"]],
+   tract:"The hyperdirect pathway to M1 and SMA defines the motor STN. Patient-specific 7T tractography of it improved outcomes prospectively.",
+   note:"Atrophy, ventricle size and AC–PC length shift where the STN lies, so check indirect coordinates against the images.",
+   refs:["protocol2025","imgreview2025","akram2017","npj2026","stnanat2025"]},
+  {id:"gpi", label:"GPi", title:"Globus pallidus internus", accent:"gpi",
+   seq:[["FGATIR","Rated best for GPi"],["PDw","Next best; higher pallidal contrast"],["MDEFT","Delineates GPi well in most patients"]],
+   tract:"Pallidothalamic bundles for generalized dystonia; the striatopallidofugal axis for cervical dystonia.",
+   note:"Face and neck lie in the ventral, lateral and posterior GPi.",
+   refs:["protocol2025","imgreview2025","mdeft","horn2022","thieme2021"]},
+  {id:"vim", label:"Vim", title:"Ventral intermediate nucleus", accent:"vim",
+   seq:[["FGATIR","The only sequence all raters preferred"],["PD-weighted","Combined with DRTT tractography for intersectional targeting"]],
+   tract:"DRTT, with the pyramidal tract and medial lemniscus as borders in dual-tract models.",
+   note:"Directly targeted leads sat more lateral and anterior and needed lower amplitudes, but had more symptomatic haemorrhages in one series.",
+   refs:["protocol2025","jns2021","vimma2026","barrow"]},
+  {id:"psa", label:"PSA / cZi", title:"Posterior subthalamic area", accent:"psa",
+   seq:[],
+   noseq:"Not rated separately in the 2025 sequence survey.",
+   tract:"DRTT. Efficacy tracks how close the active contact is to the tract.",
+   note:"Often reached by extending a Vim trajectory, so one lead can cover both.",
+   refs:["poster","nma2025","nct"]},
+  {id:"cm", label:"CM", title:"Centromedian thalamus", accent:"cm",
+   seq:[],
+   noseq:"Not covered by the 2025 sequence survey.",
+   tract:"Connectivity to sensorimotor cortex, putamen and cerebellum predicted tic improvement in Tourette syndrome.",
+   note:"Overlap with the best-connected region did not predict response on its own.",
+   refs:["johnson2020"]},
+  {id:"vo", label:"Vo", title:"Ventral oral thalamus", accent:"vo",
+   seq:[],
+   noseq:"Not covered by the 2025 sequence survey.",
+   tract:"Receives pallidal output through the pallidothalamic bundles.",
+   note:"Often planned from published coordinates at the junction of Voa and Vop.",
+   refs:["vocoords","bmjno"]}
+];
+var imgPanel = document.getElementById("img-panel");
+function renderImg(id){
+  var d = IMG.filter(function(x){ return x.id === id; })[0];
+  imgPanel.style.setProperty("--accent", C(d.accent));
+  imgPanel.innerHTML = '<h2>' + d.title + '</h2><dl>' +
+    '<dt>Sequences</dt><dd>' + (d.seq.length ? '<ul class="seq">' + d.seq.map(function(s){
+      return '<li><strong>' + s[0] + '</strong><span>' + s[1] + '</span></li>';
+    }).join("") + '</ul>' : d.noseq) + '</dd>' +
+    '<dt>Tractography</dt><dd>' + d.tract + '</dd>' +
+    '<dt>Planning note</dt><dd>' + d.note + '</dd>' +
+    '<dt>Sources</dt><dd>' + srcLinks(d.refs).replace(/^\(|\)$/g, "") + '</dd></dl>';
+}
+chips(document.getElementById("img-chips"), IMG.map(function(d){ return [d.id, d.label]; }), "stn", renderImg);
+renderImg("stn");
+document.getElementById("img-aside").innerHTML =
+  "Ratings come from 12 surgeons at 11 centres scoring 22 sequences " + srcLinks(["protocol2025"]) +
+  ". At 7T, transmit-field inhomogeneity degrades contrast; optimized FGATIR or synthetic FGATIR from MP2RAGE helps " +
+  srcLinks(["fgatir7t"]) + ". FGATIR itself dates from 2009 " + srcLinks(["sudhyadhom2009"]) + ".";
+
+/* ---------- Coordinates ---------- */
+var acpc = document.getElementById("acpc"), v3 = document.getElementById("v3"), out = document.getElementById("coord-out");
+var side = "Left";
+function fmt(n){ var s = (Math.round(n*10)/10).toFixed(1); return s.replace("-", "−"); }
+function renderCoords(){
+  var L = parseFloat(acpc.value), w = parseFloat(v3.value);
+  if (!(L >= 18 && L <= 35)) { out.innerHTML = '<p class="err">Enter an AC–PC length between 18 and 35 mm.</p>'; return; }
+  if (!(w >= 0 && w <= 20)) { out.innerHTML = '<p class="err">Enter a third-ventricle width between 0 and 20 mm.</p>'; return; }
+  var sgn = side === "Right" ? 1 : -1, half = w/2;
+  var T = [
+    {k:"STN", c:"stn", lat:12, latR:"11–13 from midline", ap:-3.5, apR:"3–4 posterior", z:-4.5, zR:"4–5 below"},
+    {k:"GPi", c:"gpi", lat:20, latR:"19–21 from midline", ap:2.5, apR:"2–3 anterior", z:-4.5, zR:"4–5 below"},
+    {k:"Vim", c:"vim", lat:half + 11.5, latR:"11–12 from ventricle wall", ap:-0.25*L, apR:fmt(0.25*L) + " anterior to PC", z:0, zR:"AC–PC plane"}
+  ];
+  out.innerHTML = T.map(function(t){
+    var words = fmt(t.lat) + " mm " + side.toLowerCase() + " of midline, " +
+      fmt(Math.abs(t.ap)) + " mm " + (t.ap >= 0 ? "in front of" : "behind") + " the MCP, " +
+      (t.z === 0 ? "in the AC–PC plane." : fmt(Math.abs(t.z)) + " mm below the AC–PC plane.");
+    return '<div class="coord" style="--c:' + C(t.c) + '"><h3>' + t.k + '</h3><div class="xyz">' +
+      '<div><span class="k">Lateral (mm)</span><span class="v">' + fmt(t.lat) + '</span><span class="r">' + t.latR + '</span></div>' +
+      '<div><span class="k">AP (mm)</span><span class="v">' + fmt(t.ap) + '</span><span class="r">' + t.apR + '</span></div>' +
+      '<div><span class="k">Vertical (mm)</span><span class="v">' + fmt(t.z) + '</span><span class="r">' + t.zR + '</span></div>' +
+      '</div><p class="words">' + words + '</p>' +
+      '<p class="signed">Signed, right/anterior/superior positive: x ' + fmt(sgn*t.lat) + ', y ' + fmt(t.ap) + ', z ' + fmt(t.z) + '</p></div>';
+  }).join("");
+}
+acpc.addEventListener("input", renderCoords);
+v3.addEventListener("input", renderCoords);
+document.querySelectorAll("[data-side]").forEach(function(b){
+  b.addEventListener("click", function(){
+    side = b.getAttribute("data-side");
+    document.querySelectorAll("[data-side]").forEach(function(o){ o.setAttribute("aria-pressed", o === b ? "true" : "false"); });
+    renderCoords();
+  });
+});
+renderCoords();
+document.getElementById("coord-note").innerHTML =
+  "Ranges follow standard teaching coordinates " + srcLinks(["calgary"]) +
+  ". The Vim anteroposterior fraction is approximate. Atrophy, ventricle size and AC–PC length shift where the STN really lies " +
+  srcLinks(["stnanat2025"]) + ", so confirm every target on direct imaging and with physiology.";
+
+/* ---------- References ---------- */
+var GROUPS = [["all","All"],["net","Networks"],["pd","Parkinson's"],["tremor","Tremor"],["dyst","Dystonia"],["ts","Tourette"],["img","Imaging"]];
+var grp = "all", refQ = document.getElementById("ref-q"), refList = document.getElementById("ref-list"),
+    refEmpty = document.getElementById("ref-empty"), refCount = document.getElementById("ref-count");
+var order = ["net","pd","tremor","dyst","ts","img"];
+function renderRefs(){
+  var q = refQ.value.trim().toLowerCase();
+  var items = Object.keys(R).map(function(k){ return R[k]; }).filter(function(r){
+    return (grp === "all" || r.g === grp) && (!q || r.t.toLowerCase().indexOf(q) !== -1);
+  }).sort(function(a,b){ return order.indexOf(a.g) - order.indexOf(b.g); });
+  refList.innerHTML = items.map(function(r){
+    return '<li><span>' + r.t + '</span><br><a href="' + r.u + '" target="_blank" rel="noopener">View source</a></li>';
+  }).join("");
+  refEmpty.hidden = items.length > 0;
+  refCount.textContent = items.length ? items.length + (items.length === 1 ? " reference" : " references") : "";
+}
+chips(document.getElementById("ref-chips"), GROUPS, "all", function(g){ grp = g; renderRefs(); });
+refQ.addEventListener("input", renderRefs);
+renderRefs();
+
+/* ---------- Tabs ---------- */
+var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+function selectTab(tab){
+  tabs.forEach(function(t){
+    var on = t === tab;
+    t.setAttribute("aria-selected", on ? "true" : "false");
+    t.tabIndex = on ? 0 : -1;
+    document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+  });
+}
+tabs.forEach(function(t, i){
+  t.addEventListener("click", function(){ selectTab(t); });
+  t.addEventListener("keydown", function(e){
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+      e.preventDefault();
+      var n = tabs[(i + (e.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length];
+      selectTab(n); n.focus();
+    }
+  });
+});
+})();
+</script>
+</body>
+</html>

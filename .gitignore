@@ -1,0 +1,11 @@
+.tools/
+node_modules/
+pipeline/.venv/
+pipeline/data/
+__pycache__/
+*.pyc
+.DS_Store
+test-results/
+playwright-report/
+.claude/
+dist-test/
