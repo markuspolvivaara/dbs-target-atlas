@@ -137,33 +137,46 @@ test('mobile layout: viewer above a bottom sheet @mobile', async ({ page }) => {
 
 test('settings: hidden indications are remembered, links to them still work', async ({ page }) => {
   const g = guard(page);
-  await page.goto('./#/settings');
-  await page.locator('input[data-ind="holmes"]').uncheck();
-  await page.locator('input[data-ind="md"]').uncheck();
-  await expect(page.locator('.page:not([hidden]) [aria-live="polite"]').last()).toContainText('9 of 11 indications shown');
-  // remembered across a reload
-  await page.reload();
-  await expect(page.locator('input[data-ind="holmes"]')).not.toBeChecked();
+  // default: the less common indications start hidden
   await page.goto('./#/atlas?i=pd');
   await settle(page);
   const chips = page.locator('.ind-chips .chip');
-  await expect(chips).toHaveCount(9);
-  await expect(chips.filter({ hasText: 'Holmes' })).toHaveCount(0);
+  await expect(chips).toHaveCount(6);
+  for (const name of ["Parkinson's", 'Essential tremor', 'Generalized dystonia', 'Cervical dystonia', 'Focal hand dystonia', 'Epilepsy'])
+    await expect(chips.filter({ hasText: name })).toHaveCount(1);
+  await page.goto('./#/settings');
+  await expect(page.locator('.page:not([hidden]) [aria-live="polite"]').last()).toContainText('6 of 11 indications shown');
+  // change: show Tourette, hide focal hand dystonia
+  await page.locator('input[data-ind="ts"]').check();
+  await page.locator('input[data-ind="fhd"]').uncheck();
+  // remembered across a reload
+  await page.reload();
+  await expect(page.locator('input[data-ind="ts"]')).toBeChecked();
+  await expect(page.locator('input[data-ind="fhd"]')).not.toBeChecked();
+  await page.goto('./#/atlas?i=pd');
+  await settle(page);
+  await expect(chips).toHaveCount(6);
+  await expect(chips.filter({ hasText: 'Tourette' })).toHaveCount(1);
+  await expect(chips.filter({ hasText: 'Focal hand' })).toHaveCount(0);
   // a shared link to a hidden indication still opens it, marked as hidden
   await page.goto('./#/atlas?i=holmes');
   await settle(page);
   await expect(page.locator('.card h2').first()).toHaveText('Holmes tremor');
   await expect(chips.filter({ hasText: 'Holmes tremor (hidden)' })).toHaveCount(1);
   // hiding the indication currently shown switches the atlas to the first visible one
+  await page.goto('./#/atlas?i=pd');
+  await settle(page);
   await page.goto('./#/settings');
   await page.locator('input[data-ind="pd"]').uncheck();
   await page.goto('./#/atlas');
   await settle(page);
   await expect(page.locator('.ind-chips .chip[aria-pressed="true"]')).not.toHaveText("Parkinson's");
-  // show all again
+  // show all, then back to the default set
   await page.goto('./#/settings');
   await page.getByRole('button', { name: 'Show all' }).click();
   await expect(page.locator('input[data-ind]:checked')).toHaveCount(11);
+  await page.getByRole('button', { name: 'Reset to default' }).click();
+  await expect(page.locator('input[data-ind]:checked')).toHaveCount(6);
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
@@ -233,8 +246,33 @@ test('legend: show/hide and highlight structures', async ({ page }) => {
   expect((await item('cst')).visible).toBe(true);
   // hidden items reset when the view changes
   await row('Corticospinal').locator('.eye').click();
-  await page.locator('.ind-chips .chip', { hasText: 'Holmes tremor' }).click();
+  await page.locator('.ind-chips .chip', { hasText: "Parkinson's" }).click();
   expect(new URL(page.url()).hash).not.toContain('hid=');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('slices: one clear cut choice per plane', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./#/atlas?i=pd&co=-13');
+  await settle(page);
+  await page.locator('#ptab-slices').click();
+  const sel = page.locator('[data-axis="coronal"] select[data-k="cut"]');
+  const planes = () => page.evaluate(() => (window as any).__atlas.viewer.clipPlanes.map((p: any) => [Math.round(p.normal.z), p.constant]));
+  // world z = -RAS y: removing the anterior part keeps y <= -13, i.e. z >= 13
+  await sel.selectOption('pos');
+  await expect.poll(planes).toEqual([[1, -13]]);
+  expect(new URL(page.url()).hash).toContain('co=-13c');
+  await sel.selectOption('neg');
+  await expect.poll(planes).toEqual([[-1, 13]]);
+  expect(new URL(page.url()).hash).toContain('co=-13cf');
+  await sel.selectOption('none');
+  await expect.poll(planes).toEqual([]);
+  // links made with the old checkboxes still open with the same cut
+  await page.goto('./#/atlas?i=pd&co=-13cf');
+  await settle(page);
+  await page.locator('#ptab-slices').click();
+  await expect(sel).toHaveValue('neg');
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });

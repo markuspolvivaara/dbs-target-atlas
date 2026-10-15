@@ -6,7 +6,7 @@ import { TOPICS } from '../data/references';
 import type { Topic } from '../data/schema';
 import type { AppState } from '../state';
 import { chips, clear, fmtMm, h, refLinks } from './dom';
-import { getPrefs, onPrefsChange, setHidden, storageAvailable, visibleIndications } from './prefs';
+import { DEFAULT_HIDDEN, getPrefs, onPrefsChange, setHidden, storageAvailable, visibleIndications } from './prefs';
 
 type Update = (fn: (s: AppState) => void) => void;
 
@@ -186,8 +186,9 @@ export function settingsPage(update: Update, theme: { get(): 'system' | 'light' 
     h('p', { class: 'lede' }, 'Choose which indications appear in the atlas. Settings are saved in this browser on this device.'),
     h('section', { class: 'card' },
       h('h2', { id: 'set-ind-title' }, 'Indications'),
-      h('p', { class: 'aside' }, 'Hidden indications disappear from the indication chips and from keyboard cycling. A shared link to a hidden indication still opens it. At least one indication stays visible.'),
+      h('p', { class: 'aside' }, 'Hidden indications disappear from the indication chips and from keyboard cycling. A shared link to a hidden indication still opens it. At least one indication stays visible. By default the less common ones (Holmes tremor, myoclonus-dystonia, tardive syndromes, Tourette syndrome, chorea) are hidden.'),
       h('div', { class: 'set-actions' },
+        h('button', { type: 'button', class: 'btn', onclick: () => { setHidden(DEFAULT_HIDDEN); leaveHidden(); } }, 'Reset to default'),
         h('button', { type: 'button', class: 'btn', onclick: () => setHidden([]) }, 'Show all'),
         h('button', { type: 'button', class: 'btn', onclick: () => {
           // hide all but the first indication (at least one stays visible)

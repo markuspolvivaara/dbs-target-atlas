@@ -19,10 +19,14 @@ const PRESETS: [CameraPreset, string, string, string][] = [
   ['posteriorOblique', 'Post-oblique', '4', 'Obl'], ['surgeon', "Surgeon's view", '5', 'Surg'],
 ];
 const LAYERS: [LayerKey, string][] = [['nuclei', 'Nuclei'], ['tracts', 'Tracts'], ['cortex', 'Cortex'], ['targets', 'Targets'], ['electrode', 'Electrode']];
-const AXES: [Axis, string, [number, number], string, string][] = [
-  ['axial', 'Axial', [-60, 85], 'z', 'superior part'],
-  ['coronal', 'Coronal', [-115, 75], 'y', 'anterior part'],
-  ['sagittal', 'Sagittal', [-75, 75], 'x', 'right part'],
+/**
+ * Per plane: what the cut removes. 'pos' = the superior / anterior / patient-right side of
+ * the plane (state: cut, !flip); 'neg' = the inferior / posterior / patient-left side (cut, flip).
+ */
+const AXES: [Axis, string, [number, number], string, { pos: string; neg: string }][] = [
+  ['axial', 'Axial', [-60, 85], 'z', { pos: 'Everything above the slice', neg: 'Everything below the slice' }],
+  ['coronal', 'Coronal', [-115, 75], 'y', { pos: 'Everything in front of the slice', neg: 'Everything behind the slice' }],
+  ['sagittal', 'Sagittal', [-75, 75], 'x', { pos: 'Everything to the patient’s right of the slice', neg: 'Everything to the patient’s left of the slice' }],
 ];
 
 const ANCHOR_LABEL: Record<LeadAnchor, string> = {
@@ -551,7 +555,8 @@ export class AtlasPage {
     const pane = this.tabs.slices;
     const s = this.s;
     if (!pane.childElementCount) {
-      pane.append(h('h3', {}, 'Clip planes with T1 slices'));
+      pane.append(h('h3', {}, 'Clip planes with T1 slices'),
+        h('p', { class: 'aside' }, 'A cut removes structures on one side of the slice plane, in both hemispheres. To show one hemisphere only, use Left / Right in the toolbar.'));
       for (const [axis, label, [lo, hi], coord, removed] of AXES) {
         const out = h('output', { class: 'mm' });
         pane.append(h('fieldset', { class: 'slice', 'data-axis': axis },
@@ -559,8 +564,14 @@ export class AtlasPage {
           h('label', { class: 'check' }, h('input', { type: 'checkbox', 'data-k': 'on', onchange: (e: Event) => this.update((st) => { st.clip[axis].on = (e.target as HTMLInputElement).checked; }) }), `Show ${label.toLowerCase()} slice`),
           h('label', { class: 'range wide' }, h('span', {}, `${coord} = `, out),
             h('input', { type: 'range', min: lo, max: hi, step: 0.5, 'data-k': 'mm', oninput: (e: Event) => this.update((st) => { st.clip[axis].mm = parseFloat((e.target as HTMLInputElement).value); }) })),
-          h('label', { class: 'check' }, h('input', { type: 'checkbox', 'data-k': 'cut', onchange: (e: Event) => this.update((st) => { st.clip[axis].cut = (e.target as HTMLInputElement).checked; }) }), 'Cut away structures on one side'),
-          h('label', { class: 'check' }, h('input', { type: 'checkbox', 'data-k': 'flip', onchange: (e: Event) => this.update((st) => { st.clip[axis].flip = (e.target as HTMLInputElement).checked; }) }), `Remove the ${removed.replace(/^\w+/, (w) => ({ superior: 'inferior', anterior: 'posterior', right: 'left' } as Record<string, string>)[w] ?? w)} instead of the ${removed}`),
+          h('label', { class: 'select' }, 'Cut away: ', h('select', {
+            'data-k': 'cut',
+            onchange: (e: Event) => this.update((st) => {
+              const v = (e.target as HTMLSelectElement).value;
+              st.clip[axis].cut = v !== 'none';
+              st.clip[axis].flip = v === 'neg';
+            }),
+          }, h('option', { value: 'none' }, 'Nothing'), h('option', { value: 'pos' }, removed.pos), h('option', { value: 'neg' }, removed.neg))),
         ));
       }
       pane.append(h('p', { class: 'aside' }, 'Slices show the ICBM 2009b nonlinear asymmetric T1 template: 0.5 mm inside a subcortical box, 1.5 mm elsewhere. Loaded on first use (about 3.5 MB).'),
@@ -571,10 +582,9 @@ export class AtlasPage {
       const c = s.clip[axis];
       (f.querySelector('[data-k=on]') as HTMLInputElement).checked = c.on;
       (f.querySelector('[data-k=mm]') as HTMLInputElement).value = String(c.mm);
-      (f.querySelector('[data-k=cut]') as HTMLInputElement).checked = c.cut;
-      (f.querySelector('[data-k=flip]') as HTMLInputElement).checked = c.flip;
+      (f.querySelector('[data-k=cut]') as HTMLSelectElement).value = !c.cut ? 'none' : c.flip ? 'neg' : 'pos';
       (f.querySelector('output') as HTMLOutputElement).textContent = `${fmtMm(c.mm)} mm`;
-      f.querySelectorAll<HTMLInputElement>('[data-k=mm],[data-k=cut],[data-k=flip]').forEach((i) => { i.disabled = !c.on; });
+      f.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-k=mm],[data-k=cut]').forEach((i) => { i.disabled = !c.on; });
     }
   }
 

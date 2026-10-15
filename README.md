@@ -77,7 +77,9 @@ time they are needed; T1 slices (3.4 MB) load only when a slice is switched on.
   labels; landmarks (CST and medial lemniscus around Vim/PSA targets, the optic tract beneath GPi
   targets, the red nucleus beside STN targets); an index of every structure.
 - **Slices** tab: axial, coronal and sagittal planes with the ICBM 2009b T1 drawn on them, an mm
-  slider, and an optional cut-away of structures on one side.
+  slider, and a per-plane "Cut away" choice (nothing, or everything on one side of the plane:
+  above/below, in front/behind, patient right/left). Cuts span both hemispheres; use the
+  Left/Right toolbar buttons to show one hemisphere.
 - **Lead** tab: generic quadripolar lead (1.27 mm diameter, 1.5 mm contacts, 0.5 or 1.5 mm
   spacing) on the primary target, with a depth offset (drag the lead along its axis) and an
   illustrative stimulation sphere. The sphere is not a VTA model. Contact coordinates are listed.
@@ -94,7 +96,9 @@ time they are needed; T1 slices (3.4 MB) load only when a slice is switched on.
 - **Measure**: pick two points for a distance in mm.
 - **Settings** page: show or hide individual indications (for example to keep only the common
   ones for a teaching session) and pick the colour theme. Saved in the browser's local storage on
-  that device; a shared link to a hidden indication still opens it.
+  that device; a shared link to a hidden indication still opens it. By default Holmes tremor,
+  myoclonus-dystonia, tardive syndromes, Tourette syndrome and chorea are hidden ("Reset to
+  default" restores this).
 - **Copy link**: the URL hash holds indication, symptom, hemisphere, camera, layers, slices, lead
   and the open card, so teaching links reopen the exact view.
 

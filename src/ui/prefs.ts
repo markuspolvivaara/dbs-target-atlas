@@ -13,6 +13,13 @@ const KEY = 'dbs-atlas-prefs';
 export interface LeadPref { anchor: LeadAnchor; depth: number; spacing: 0.5 | 1.5 }
 export interface Prefs { hiddenIndications: string[]; leadByTarget: Record<string, LeadPref>; leadDefault: LeadPref | null }
 
+/**
+ * Indications hidden until the user changes the setting: the less common ones.
+ * Shown by default: Parkinson's, essential tremor, generalized, cervical and focal hand
+ * dystonia, epilepsy. A saved choice (including "show all") always wins.
+ */
+export const DEFAULT_HIDDEN = ['holmes', 'md', 'tard', 'ts', 'chorea'];
+
 export const BUILTIN_LEAD: LeadPref = { anchor: 'centre', depth: 0, spacing: 0.5 };
 
 function cleanLead(v: unknown): LeadPref | null {
@@ -32,13 +39,14 @@ function load(): Prefs {
   try {
     const raw = JSON.parse(localStorage.getItem(KEY) ?? '{}');
     const known = new Set(CONTENT.indications.map((i) => i.id));
-    const hidden = Array.isArray(raw.hiddenIndications) ? raw.hiddenIndications.filter((x: unknown) => typeof x === 'string' && known.has(x)) : [];
+    const saved = Array.isArray(raw.hiddenIndications);
+    const hidden = (saved ? raw.hiddenIndications : DEFAULT_HIDDEN).filter((x: unknown) => typeof x === 'string' && known.has(x as string));
     const leadByTarget: Record<string, LeadPref> = {};
     for (const [k, v] of Object.entries(raw.leadByTarget ?? {})) { const c = cleanLead(v); if (c) leadByTarget[k] = c; }
     // never hide everything
     return { hiddenIndications: hidden.length >= known.size ? [] : hidden, leadByTarget, leadDefault: cleanLead(raw.leadDefault) };
   } catch {
-    return { hiddenIndications: [], leadByTarget: {}, leadDefault: null };
+    return { hiddenIndications: [...DEFAULT_HIDDEN], leadByTarget: {}, leadDefault: null };
   }
 }
 
