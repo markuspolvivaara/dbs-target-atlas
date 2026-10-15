@@ -69,6 +69,12 @@ export function plan(indId: string, symId: string | null, borders: boolean): Pla
   for (const id of context) if (MAN.get(id)?.type === 'nucleus') looks.set(id, 'context');
   for (const id of alts) looks.set(id, 'alt');
   for (const id of primary) looks.set(id, 'primary');
+  // When the motor STN is the highlighted target, also show the rest of the nucleus as context:
+  // the DISTAL associative and limbic zones lie anterior and medial to it (the part a lead
+  // aimed at the dorsolateral STN should not drift into).
+  if (looks.get('stn_motor') === 'primary') {
+    for (const z of ['stn_assoc', 'stn_limbic']) if (looks.get(z) === 'hidden') looks.set(z, 'context');
+  }
   // parents of highlighted children become shells
   for (const [child, parent] of Object.entries(PARENT)) {
     const l = looks.get(child);

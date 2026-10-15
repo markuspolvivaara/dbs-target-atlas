@@ -249,3 +249,23 @@ describe('red nucleus (STN landmark, researched addition)', () => {
     }
   });
 });
+
+describe('STN non-motor zones', () => {
+  it('are shown as context whenever the motor STN is the target', () => {
+    for (const [ind, sym] of [['pd', null], ['pd', 'pd-tremor'], ['pd', 'pd-axial']] as const) {
+      const p = plan(ind, sym, true);
+      expect(p.looks.get('stn_motor')).toBe('primary');
+      expect(p.looks.get('stn_assoc')).toBe('context');
+      expect(p.looks.get('stn_limbic')).toBe('context');
+    }
+    // not in views where the STN is only an alternative
+    expect(plan('gdys', null, true).looks.get('stn_assoc')).toBe('hidden');
+  });
+  it('lie anterior and medial to the motor zone (DISTAL)', () => {
+    const c = (id: string) => MANIFEST.structures.find((s) => s.id === id)!.centroid!;
+    for (const side of ['L', 'R'] as const) for (const z of ['stn_assoc', 'stn_limbic']) {
+      expect(c(z)[side][1]).toBeGreaterThan(c('stn_motor')[side][1]);
+      expect(Math.abs(c(z)[side][0])).toBeLessThan(Math.abs(c('stn_motor')[side][0]));
+    }
+  });
+});

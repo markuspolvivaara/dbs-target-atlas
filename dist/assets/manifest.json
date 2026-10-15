@@ -112,8 +112,8 @@
    "bytes": 30660,
    "colour": {
     "token": "stnAssoc",
-    "light": "#B58A2E",
-    "dark": "#D9B260"
+    "light": "#E2C77E",
+    "dark": "#8A6A1E"
    },
    "dataset": "distal",
    "source": "DISTAL Medium (Ewert 2017)",
@@ -160,8 +160,8 @@
    "bytes": 29836,
    "colour": {
     "token": "stnLimbic",
-    "light": "#C9A86A",
-    "dark": "#E6CF9C"
+    "light": "#F1E3BC",
+    "dark": "#5C4614"
    },
    "dataset": "distal",
    "source": "DISTAL Medium (Ewert 2017)",
