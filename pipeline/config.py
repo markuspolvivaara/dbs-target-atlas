@@ -32,11 +32,11 @@ DATASETS: dict[str, dict] = {
         "note": "Distribution channel for every atlas below; files fetched from the official data archive.",
     },
     "icbm2009b": {
-        "name": "ICBM 2009b nonlinear asymmetric T1 template (0.5 mm)",
+        "name": "ICBM 2009b nonlinear asymmetric T1, T2 and PD templates (0.5 mm)",
         "cite": ["fonov2011"],
         "licence": ICBM_LICENCE,
         "url": "https://nist.mni.mcgill.ca/icbm-152-nonlinear-atlases-2009/",
-        "note": "Shipped as templates/space/MNI152NLin2009bAsym/t1.nii in Lead-DBS. Resampled to 1 mm and a 0.5 mm subcortical crop for slice display.",
+        "note": "Shipped as templates/space/MNI152NLin2009bAsym/t1.nii, t2.nii and pd.nii in Lead-DBS; the Lead-DBS LICENSE.md lists them under the McGill/MNI terms. Resampled to 1.5 mm plus a 0.5 mm subcortical crop for slice display.",
     },
     "distal": {
         "name": "DISTAL Medium (Ewert 2017)",
@@ -343,6 +343,8 @@ RANDOM_SEED = 20261014
 
 # T1 slice textures
 T1_FILE = "t1.nii"
+# Slice images: ICBM 2009b templates shipped with Lead-DBS (same grid, same McGill/MNI licence)
+TEMPLATES = {"t1": "t1.nii", "t2": "t2.nii", "pd": "pd.nii"}
 T1_CROP_MM = {"x": (-36.0, 36.0), "y": (-48.0, 24.0), "z": (-30.0, 30.0)}  # 0.5 mm subcortical crop
 
 # Template AC/PC/mid-sagittal fiducials in MNI ICBM 2009b, as hard-coded in

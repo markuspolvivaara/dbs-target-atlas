@@ -441,7 +441,14 @@ export class Viewer {
     // cut at the midline (x = 0): clipPlane(flip=false) keeps x <= 0, i.e. removes the patient's right half.
     // Only structures are cut; the slice images stay whole so that half shows the slice unobstructed.
     if (s.cutSide !== 'none') planes.push(this.slices.clipPlane('sagittal', 0, s.cutSide === 'L'));
-    if (anyOn && this.slices.status === 'idle') { this.ev.status('Loading T1 slices…'); this.slices.ensureLoaded().catch(() => this.ev.status('Could not load the T1 template.')); }
+    const seqName = { t1: 'T1', t2: 'T2', pd: 'PD' }[s.sliceSeq];
+    if (anyOn && this.slices.current !== s.sliceSeq && this.slices.status !== 'loading') {
+      this.ev.status(`Loading ${seqName} slices…`);
+      this.slices.ensureLoaded(s.sliceSeq).catch(() => this.ev.status(`Could not load the ${seqName} template.`));
+    } else if (anyOn && this.slices.status === 'loading') {
+      // a different sequence was picked while one was loading: queue it
+      this.slices.ensureLoaded(s.sliceSeq).catch(() => this.ev.status(`Could not load the ${seqName} template.`));
+    }
     this.clipPlanes = planes;
     this.leads.L.setClipping(planes); this.leads.R.setClipping(planes);
   }

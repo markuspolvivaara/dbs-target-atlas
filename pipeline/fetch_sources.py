@@ -34,6 +34,8 @@ def both(atlas: str, names: list[str], ext: str = ".nii.gz") -> list[str]:
 SOURCES: list[str] = [
     # Template (ICBM 2009b nonlinear asymmetric T1, 0.5 mm)
     SPACE + "t1.nii",
+    SPACE + "t2.nii",  # ICBM 2009b T2 (Lead-DBS "mni_hires" t2 template)
+    SPACE + "pd.nii",  # ICBM 2009b proton density
     # Cortex surface + DKT annotation (Lead-DBS template surfaces)
     SPACE + "cortex/CortexHiRes.mat",
     SPACE + "cortex/CortexLowRes_15000V.mat",

@@ -5,6 +5,8 @@ export type Hemi = 'L' | 'R' | 'both';
 export type LayerKey = 'nuclei' | 'tracts' | 'cortex' | 'targets' | 'electrode';
 export type Axis = 'axial' | 'coronal' | 'sagittal';
 export type V3 = [number, number, number];
+/** MRI sequence drawn on the slice planes (ICBM 2009b templates). */
+export type SliceSeq = 't1' | 't2' | 'pd';
 /** Which part of the lead sits on the target marker. */
 export type LeadAnchor = 'centre' | 'tip' | 'c0' | 'c1' | 'c2' | 'c3';
 export const LEAD_ANCHORS: LeadAnchor[] = ['centre', 'c0', 'c1', 'c2', 'c3', 'tip'];
@@ -26,6 +28,7 @@ export interface AppState {
   clip: Record<Axis, Clip>;
   /** Cut away the patient's left or right half of everything (structures, tracts, cortex, lead, slices) at the midline. */
   cutSide: 'none' | 'L' | 'R';
+  sliceSeq: SliceSeq;
   lead: { spacing: 0.5 | 1.5; anchor: LeadAnchor; depth: number; ring: number; tilt: number; stim: boolean; contact: number; radius: number };
   /** Selected structure or marker: its card opens and it is highlighted in 3D. */
   sel: string | null;
@@ -56,6 +59,7 @@ export function defaultState(): AppState {
       sagittal: { on: false, mm: -12 },
     },
     cutSide: 'none',
+    sliceSeq: 't1',
     lead: { ...DEFAULT_LEAD },
     sel: null, hidden: [], img: 'stn', theme: 'system',
   };
@@ -89,6 +93,7 @@ export function encode(s: AppState): string {
       if (c.on) p.set(code, `${r1(c.mm)}`);
     }
     if (s.cutSide !== 'none') p.set('cut', s.cutSide);
+    if (s.sliceSeq !== 't1') p.set('seq', s.sliceSeq);
     if (s.layers.electrode.on) {
       const l = s.lead;
       p.set('lead', [l.spacing, r1(l.depth), l.ring, l.tilt, ...(l.anchor !== 'centre' ? [l.anchor] : [])].join(','));
@@ -131,6 +136,8 @@ export function decode(hash: string, base: AppState = defaultState()): AppState 
   s.borders = p.get('b') !== '0';
   const cut = p.get('cut');
   s.cutSide = cut === 'L' || cut === 'R' ? cut : 'none';
+  const seq = p.get('seq');
+  s.sliceSeq = seq === 't2' || seq === 'pd' ? seq : 't1';
   const lb = p.get('lb');
   s.labels = lb === 'a' ? 'all' : lb === '0' ? 'off' : 'hover';
   for (const [a, code] of AXES) {

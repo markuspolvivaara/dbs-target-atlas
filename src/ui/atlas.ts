@@ -613,7 +613,11 @@ export class AtlasPage {
         h('fieldset', { class: 'seg-field', 'data-k': 'cutside' }, h('legend', {}, 'Cut away'),
           ...([['none', 'Nothing'], ['L', 'Patient’s left half'], ['R', 'Patient’s right half']] as const).map(([v, label]) =>
             h('label', { class: 'radio' }, h('input', { type: 'radio', name: 'cutside', value: v, onchange: () => this.update((st) => { st.cutSide = v; }) }), label))),
-        h('p', { class: 'aside' }, 'Removes all structures on that side of the midline (x = 0): nuclei, tracts, cortex, markers and the lead. The slices stay whole, so one half shows the T1 slice unobstructed and the other half slice plus anatomy.'));
+        h('p', { class: 'aside' }, 'Removes all structures on that side of the midline (x = 0): nuclei, tracts, cortex, markers and the lead. The slices stay whole, so one half shows the slice unobstructed and the other half slice plus anatomy.'),
+        h('fieldset', { class: 'seg-field', 'data-k': 'seq' }, h('legend', {}, 'Image'),
+          ...([['t1', 'T1'], ['t2', 'T2'], ['pd', 'PD']] as const).map(([v, label]) =>
+            h('label', { class: 'radio' }, h('input', { type: 'radio', name: 'sliceseq', value: v, onchange: () => this.update((st) => { st.sliceSeq = v; }) }), label))),
+        h('p', { class: 'aside' }, 'ICBM 2009b templates, all in the same space. On T2 the STN appears as a hypointense structure; proton-density images give higher pallidal contrast (see Imaging). Each sequence loads on first use (about 3 MB).'));
       for (const [axis, label, [lo, hi], coord] of AXES) {
         const out = h('output', { class: 'mm' });
         pane.append(h('fieldset', { class: 'slice', 'data-axis': axis },
@@ -623,10 +627,11 @@ export class AtlasPage {
             h('input', { type: 'range', min: lo, max: hi, step: 0.5, 'data-k': 'mm', oninput: (e: Event) => this.update((st) => { st.clip[axis].mm = parseFloat((e.target as HTMLInputElement).value); }) })),
         ));
       }
-      pane.append(h('p', { class: 'aside' }, 'Slices show the ICBM 2009b nonlinear asymmetric T1 template: 0.5 mm inside a subcortical box, 1.5 mm elsewhere. Loaded on first use (about 3.5 MB).'),
+      pane.append(h('p', { class: 'aside' }, 'Slices show the ICBM 2009b nonlinear asymmetric templates: 0.5 mm inside a subcortical box, 1.5 mm elsewhere.'),
         h('p', { class: 'aside slice-status' }));
     }
     pane.querySelectorAll<HTMLInputElement>('input[name=cutside]').forEach((r) => { r.checked = r.value === s.cutSide; });
+    pane.querySelectorAll<HTMLInputElement>('input[name=sliceseq]').forEach((r) => { r.checked = r.value === s.sliceSeq; });
     for (const [axis] of AXES) {
       const f = pane.querySelector(`[data-axis="${axis}"]`)!;
       const c = s.clip[axis];

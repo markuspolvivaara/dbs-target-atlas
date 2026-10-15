@@ -30,8 +30,9 @@ What is covered by which terms
    atlas files from the official Lead-DBS data archive.
    Per-dataset citations and notes: ATTRIBUTION.md.
 
-3. T1 slice volumes (public/assets/t1/), derived from the ICBM 2009b nonlinear
-   asymmetric template, are not GPL-licensed; they carry the McGill/MNI terms:
+3. MRI slice volumes (public/assets/mri/: T1, T2 and PD), derived from the ICBM
+   2009b nonlinear asymmetric templates, are not GPL-licensed; they carry the
+   McGill/MNI terms:
 
      Copyright (C) 1993-2004 Louis Collins, McConnell Brain Imaging Centre,
      Montreal Neurological Institute, McGill University. Permission to use, copy,

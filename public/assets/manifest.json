@@ -2751,7 +2751,7 @@
  ],
  "volumes": {
   "t1_15mm": {
-   "file": "assets/t1/t1_15mm.u8.gz",
+   "file": "assets/mri/t1_15mm.u8.gz",
    "dims": [
     131,
     155,
@@ -2766,7 +2766,7 @@
    "bytes": 1686282
   },
   "t1_crop_05mm": {
-   "file": "assets/t1/t1_crop_05mm.u8.gz",
+   "file": "assets/mri/t1_crop_05mm.u8.gz",
    "dims": [
     145,
     145,
@@ -2779,11 +2779,75 @@
    ],
    "spacing": 0.5,
    "bytes": 1758678
+  },
+  "t2_15mm": {
+   "file": "assets/mri/t2_15mm.u8.gz",
+   "dims": [
+    131,
+    155,
+    126
+   ],
+   "origin": [
+    -97.5,
+    -133.5,
+    -71.5
+   ],
+   "spacing": 1.5,
+   "bytes": 1614521
+  },
+  "t2_crop_05mm": {
+   "file": "assets/mri/t2_crop_05mm.u8.gz",
+   "dims": [
+    145,
+    145,
+    121
+   ],
+   "origin": [
+    -36.0,
+    -48.0,
+    -30.0
+   ],
+   "spacing": 0.5,
+   "bytes": 1518979
+  },
+  "pd_15mm": {
+   "file": "assets/mri/pd_15mm.u8.gz",
+   "dims": [
+    131,
+    155,
+    126
+   ],
+   "origin": [
+    -97.5,
+    -133.5,
+    -71.5
+   ],
+   "spacing": 1.5,
+   "bytes": 1536528
+  },
+  "pd_crop_05mm": {
+   "file": "assets/mri/pd_crop_05mm.u8.gz",
+   "dims": [
+    145,
+    145,
+    121
+   ],
+   "origin": [
+    -36.0,
+    -48.0,
+    -30.0
+   ],
+   "spacing": 0.5,
+   "bytes": 1242304
   }
  },
  "volumeSource": {
-  "source": "ICBM 2009b nonlinear asymmetric T1 template (0.5 mm)",
-  "scaling": "linear 0..82.98 -> 0..255",
+  "source": "ICBM 2009b nonlinear asymmetric T1, T2 and PD templates (0.5 mm)",
+  "scaling": {
+   "t1": "linear 0..82.98 -> 0..255",
+   "t2": "linear 0..99.75 -> 0..255",
+   "pd": "linear 0..84.96 -> 0..255"
+  },
   "licence": "MNI/McGill permissive licence: use, copy, modify and distribute with the copyright notice retained (Copyright (C) 1993-2004 Louis Collins, McConnell Brain Imaging Centre, Montreal Neurological Institute, McGill University)",
   "citation": [
    "Fonov V, Evans AC, Botteron K, Almli CR, McKinstry RC, Collins DL. Unbiased average age-appropriate atlases for pediatric studies. NeuroImage. 2011;54(1):313-327. doi:10.1016/j.neuroimage.2010.07.033."
@@ -2807,10 +2871,10 @@
    ]
   },
   "icbm2009b": {
-   "name": "ICBM 2009b nonlinear asymmetric T1 template (0.5 mm)",
+   "name": "ICBM 2009b nonlinear asymmetric T1, T2 and PD templates (0.5 mm)",
    "licence": "MNI/McGill permissive licence: use, copy, modify and distribute with the copyright notice retained (Copyright (C) 1993-2004 Louis Collins, McConnell Brain Imaging Centre, Montreal Neurological Institute, McGill University)",
    "url": "https://nist.mni.mcgill.ca/icbm-152-nonlinear-atlases-2009/",
-   "note": "Shipped as templates/space/MNI152NLin2009bAsym/t1.nii in Lead-DBS. Resampled to 1 mm and a 0.5 mm subcortical crop for slice display.",
+   "note": "Shipped as templates/space/MNI152NLin2009bAsym/t1.nii, t2.nii and pd.nii in Lead-DBS; the Lead-DBS LICENSE.md lists them under the McGill/MNI terms. Resampled to 1.5 mm plus a 0.5 mm subcortical crop for slice display.",
    "citation": [
     "Fonov V, Evans AC, Botteron K, Almli CR, McKinstry RC, Collins DL. Unbiased average age-appropriate atlases for pediatric studies. NeuroImage. 2011;54(1):313-327. doi:10.1016/j.neuroimage.2010.07.033."
    ],

@@ -64,7 +64,8 @@ Server notes:
 
 Load budget (mobile): about 2.6 MB for the first view (app 0.23 MB gzip, fonts, all nuclei,
 and the cortex and tracts of the default Parkinson's view). Tracts and cortex load the first
-time they are needed; T1 slices (3.4 MB) load only when a slice is switched on.
+time they are needed; slice images (about 3 MB per sequence) load only when a slice is switched
+on or another sequence is picked.
 
 ## Using it
 
@@ -79,7 +80,8 @@ time they are needed; T1 slices (3.4 MB) load only when a slice is switched on.
 - **Layers** tab: nuclei, tracts, cortex, targets and electrode, each with an opacity slider; name
   labels; landmarks (CST and medial lemniscus around Vim/PSA targets, the optic tract beneath GPi
   targets, the red nucleus beside STN targets); an index of every structure.
-- **Slices** tab: axial, coronal and sagittal planes with the ICBM 2009b T1 drawn on them, an mm
+- **Slices** tab: axial, coronal and sagittal planes with an ICBM 2009b template drawn on them
+  (choose **T1, T2 or PD**; each loads on first use), an mm
   slider, and a "Cut away" choice (nothing / patient's left half / patient's right half) that removes
   all structures on that side of the midline while the slices stay whole: one half shows the T1
   slice unobstructed, the other slice plus anatomy.
@@ -166,7 +168,7 @@ npm run pipeline
      PMv) and Desikan-Killiany (ACC; medial orbitofrontal as a vmPFC proxy)
    - streamlines → filtered → resampled to 2 mm → fixed-seed subsample of up to 300 per
      hemisphere → line geometry
-   - T1 → 1.5 mm whole head plus a 0.5 mm subcortical crop (uint8, gzip)
+   - T1, T2 and PD templates → 1.5 mm whole head plus a 0.5 mm subcortical crop each (uint8, gzip)
 3. `compress.mjs`: quantization plus meshopt compression (glTF-Transform).
 4. `manifest.py`: `manifest.json` (id, name, type, file, colour, source, licence, citation,
    derivation, centroids) and `ATTRIBUTION.md`.

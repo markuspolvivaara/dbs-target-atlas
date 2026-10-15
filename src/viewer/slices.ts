@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import type { VolumeInfo } from '../data/schema';
-import type { Axis } from '../state';
+import type { Axis, SliceSeq } from '../state';
 import { loadVolume } from './assets';
 
 /**
@@ -41,7 +41,6 @@ export class Slices {
   readonly group = new THREE.Group();
   private planes = new Map<Axis, THREE.Mesh>();
   private material: THREE.ShaderMaterial | null = null;
-  private loading: Promise<void> | null = null;
   readonly clipPlanes = new Map<Axis, THREE.Plane>();
   status: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
 
@@ -49,35 +48,51 @@ export class Slices {
     this.group.name = 'slices';
   }
 
-  ensureLoaded(): Promise<void> {
-    if (this.loading) return this.loading;
+  private textures = new Map<SliceSeq, Promise<[THREE.Data3DTexture, THREE.Data3DTexture | null]>>();
+  private shown: SliceSeq | null = null;
+  private wanted: SliceSeq = 't1';
+
+  /** Show the given sequence on all planes; volumes load on first use and are kept. */
+  ensureLoaded(seq: SliceSeq = this.wanted): Promise<void> {
+    this.wanted = seq;
+    if (this.shown === seq && this.material) return Promise.resolve();
+    const lo = this.volumes[`${seq}_15mm`];
+    const hi = this.volumes[`${seq}_crop_05mm`];
+    if (!lo) return Promise.reject(new Error(`no ${seq} volume in the manifest`));
+    let p = this.textures.get(seq);
+    if (!p) {
+      p = Promise.all([loadVolume(lo), hi ? loadVolume(hi) : Promise.resolve(null)]);
+      this.textures.set(seq, p);
+    }
     this.status = 'loading';
-    const lo = this.volumes['t1_15mm'];
-    const hi = this.volumes['t1_crop_05mm'];
-    this.loading = Promise.all([loadVolume(lo), hi ? loadVolume(hi) : Promise.resolve(null)])
-      .then(([tl, th]) => {
-        const size = (v: VolumeInfo) => new THREE.Vector3(...v.dims).multiplyScalar(v.spacing);
-        const vox = (v: VolumeInfo) => new THREE.Vector3(v.spacing, v.spacing, v.spacing);
-        this.root.updateMatrixWorld(true);
+    return p.then(([tl, th]) => {
+      if (this.wanted !== seq) return; // a newer choice superseded this one
+      const size = (v: VolumeInfo) => new THREE.Vector3(...v.dims).multiplyScalar(v.spacing);
+      const vox = (v: VolumeInfo) => new THREE.Vector3(v.spacing, v.spacing, v.spacing);
+      this.root.updateMatrixWorld(true);
+      const u = {
+        uLo: { value: tl }, uLoOrigin: { value: new THREE.Vector3(...lo.origin) }, uLoSize: { value: size(lo) }, uLoVox: { value: vox(lo) },
+        uHi: { value: th ?? tl }, uHiOrigin: { value: new THREE.Vector3(...(hi ?? lo).origin) }, uHiSize: { value: size(hi ?? lo) }, uHiVox: { value: vox(hi ?? lo) },
+        uHasHi: { value: th ? 1 : 0 }, uOpacity: { value: 1 }, uContrast: { value: 1.0 }, uBrightness: { value: -0.06 },
+        uRootInv: { value: new THREE.Matrix4().copy(this.root.matrixWorld).invert() },
+      };
+      if (!this.material) {
         this.material = new THREE.ShaderMaterial({
-          uniforms: {
-            uLo: { value: tl }, uLoOrigin: { value: new THREE.Vector3(...lo.origin) }, uLoSize: { value: size(lo) }, uLoVox: { value: vox(lo) },
-            uHi: { value: th ?? tl }, uHiOrigin: { value: new THREE.Vector3(...(hi ?? lo).origin) }, uHiSize: { value: size(hi ?? lo) }, uHiVox: { value: vox(hi ?? lo) },
-            uHasHi: { value: th ? 1 : 0 }, uOpacity: { value: 1 }, uContrast: { value: 1.0 }, uBrightness: { value: -0.06 },
-            uRootInv: { value: new THREE.Matrix4().copy(this.root.matrixWorld).invert() },
-          },
-          vertexShader: 'uniform mat4 uRootInv;\n' + vert,
-          fragmentShader: frag,
-          side: THREE.DoubleSide,
-          transparent: false,
+          uniforms: u, vertexShader: 'uniform mat4 uRootInv;\n' + vert, fragmentShader: frag,
+          side: THREE.DoubleSide, transparent: false,
         });
-        for (const p of this.planes.values()) p.material = this.material;
-        this.status = 'ready';
-        this.onReady();
-      })
-      .catch((e) => { this.status = 'error'; console.error(e); throw e; });
-    return this.loading;
+      } else {
+        for (const [k, v] of Object.entries(u)) this.material.uniforms[k].value = v.value;
+      }
+      for (const pl of this.planes.values()) pl.material = this.material;
+      this.shown = seq;
+      this.status = 'ready';
+      this.onReady();
+    }).catch((e) => { this.textures.delete(seq); this.status = 'error'; console.error(e); throw e; });
   }
+
+  /** Sequence currently drawn on the planes (null before the first load). */
+  get current(): SliceSeq | null { return this.shown; }
 
   /** Create/position/hide planes. */
   update(axis: Axis, on: boolean, mm: number): void {

@@ -395,34 +395,37 @@ def build_tracts(report: dict) -> None:
 # ---------------------------------------------------------------- T1
 def write_volume(name: str, data: np.ndarray, origin: np.ndarray, spacing: float, meta: dict) -> None:
     u8 = np.ascontiguousarray(data.transpose(2, 1, 0))  # z, y, x -> x fastest in memory
-    out = PUBLIC / "t1" / f"{name}.u8.gz"
+    out = PUBLIC / "mri" / f"{name}.u8.gz"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_bytes(gzip.compress(u8.tobytes(), 9))
-    meta[name] = {"file": f"assets/t1/{name}.u8.gz", "dims": list(data.shape),
+    meta[name] = {"file": f"assets/mri/{name}.u8.gz", "dims": list(data.shape),
                   "origin": [round(float(o), 3) for o in origin], "spacing": spacing, "bytes": out.stat().st_size}
     print(f"t1 {name}: dims {data.shape} -> {out.stat().st_size / 1e6:.2f} MB")
 
 
 def build_t1() -> dict:
-    img = nib.load(RAW / C.T1_FILE)
-    aff = img.affine
-    assert np.allclose(np.abs(np.diag(aff)[:3]), 0.5) and np.all(np.diag(aff)[:3] > 0), "expected 0.5 mm RAS template"
-    d = np.asanyarray(img.dataobj).astype(np.float32)
-    hi = np.percentile(d[d > 5], 99.7)
-    meta: dict = {"source": "ICBM 2009b nonlinear asymmetric T1 (Lead-DBS templates/space/MNI152NLin2009bAsym/t1.nii)",
-                  "scaling": f"linear 0..{hi:.2f} -> 0..255"}
-    # whole head at 1.5 mm (exact 3x3x3 block mean of the 0.5 mm template)
-    f = 3
-    s = [x - x % f for x in d.shape]
-    lo = d[:s[0], :s[1], :s[2]].reshape(s[0] // f, f, s[1] // f, f, s[2] // f, f).mean(axis=(1, 3, 5))
-    to8 = lambda a: np.clip(a / hi * 255.0, 0, 255).astype(np.uint8)  # noqa: E731
-    origin = nib.affines.apply_affine(aff, [(f - 1) / 2] * 3)  # centre of first block
-    write_volume("t1_15mm", to8(lo), origin, 0.5 * f, meta)
-    inv = np.linalg.inv(aff)
-    b0 = np.rint(nib.affines.apply_affine(inv, [C.T1_CROP_MM[k][0] for k in "xyz"])).astype(int)
-    b1 = np.rint(nib.affines.apply_affine(inv, [C.T1_CROP_MM[k][1] for k in "xyz"])).astype(int)
-    crop = d[b0[0]:b1[0] + 1, b0[1]:b1[1] + 1, b0[2]:b1[2] + 1]
-    write_volume("t1_crop_05mm", to8(crop), nib.affines.apply_affine(aff, b0), 0.5, meta)
+    """T1, T2 and PD slice volumes: 1.5 mm whole head + 0.5 mm subcortical crop each."""
+    meta: dict = {"source": "ICBM 2009b nonlinear asymmetric T1, T2 and PD templates "
+                            "(Lead-DBS templates/space/MNI152NLin2009bAsym/t1.nii, t2.nii, pd.nii)", "scaling": {}}
+    for seq, fname in C.TEMPLATES.items():
+        img = nib.load(RAW / fname)
+        aff = img.affine
+        assert np.allclose(np.abs(np.diag(aff)[:3]), 0.5) and np.all(np.diag(aff)[:3] > 0), f"{fname}: expected 0.5 mm RAS template"
+        d = np.asanyarray(img.dataobj).astype(np.float32)
+        hi = np.percentile(d[d > 5], 99.7)
+        meta["scaling"][seq] = f"linear 0..{hi:.2f} -> 0..255"
+        # whole head at 1.5 mm (exact 3x3x3 block mean of the 0.5 mm template)
+        f = 3
+        s = [x - x % f for x in d.shape]
+        lo = d[:s[0], :s[1], :s[2]].reshape(s[0] // f, f, s[1] // f, f, s[2] // f, f).mean(axis=(1, 3, 5))
+        to8 = lambda a: np.clip(a / hi * 255.0, 0, 255).astype(np.uint8)  # noqa: E731
+        origin = nib.affines.apply_affine(aff, [(f - 1) / 2] * 3)  # centre of first block
+        write_volume(f"{seq}_15mm", to8(lo), origin, 0.5 * f, meta)
+        inv = np.linalg.inv(aff)
+        b0 = np.rint(nib.affines.apply_affine(inv, [C.T1_CROP_MM[k][0] for k in "xyz"])).astype(int)
+        b1 = np.rint(nib.affines.apply_affine(inv, [C.T1_CROP_MM[k][1] for k in "xyz"])).astype(int)
+        crop = d[b0[0]:b1[0] + 1, b0[1]:b1[1] + 1, b0[2]:b1[2] + 1]
+        write_volume(f"{seq}_crop_05mm", to8(crop), nib.affines.apply_affine(aff, b0), 0.5, meta)
     return meta
 
 

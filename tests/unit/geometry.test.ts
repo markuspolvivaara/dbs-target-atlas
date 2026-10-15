@@ -108,6 +108,7 @@ describe('URL state', () => {
     s.layers.electrode.on = true; s.lead = { ...s.lead, spacing: 1.5, depth: 2, stim: true, contact: 2, radius: 2.5 };
     s.sel = 'drtt';
     s.labels = 'all';
+    s.sliceSeq = 't2';
     s.hidden = ['cst', 't-ss-tremor', 'ss_tremor'];
     const back = decode(encode(s));
     expect(back.ind).toBe('et'); expect(back.sym).toBe('et-head'); expect(back.hemi).toBe('L');
@@ -121,6 +122,8 @@ describe('URL state', () => {
     expect(back.lead).toMatchObject({ spacing: 1.5, depth: 2, stim: true, contact: 2, radius: 2.5 });
     expect(back.sel).toBe('drtt');
     expect(back.labels).toBe('all');
+    expect(back.sliceSeq).toBe('t2');
+    expect(decode('#/atlas?i=pd').sliceSeq).toBe('t1');
     expect(decode('#/atlas?i=pd&lb=0').labels).toBe('off'); // older links with labels switched off
     expect(decode('#/atlas?i=pd').labels).toBe('hover');
     expect(back.hidden).toEqual(['cst', 't-ss-tremor', 'ss_tremor']);

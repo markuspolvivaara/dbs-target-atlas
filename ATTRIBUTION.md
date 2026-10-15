@@ -14,7 +14,7 @@ they are distributed under **GPL-3.0, non-commercial**. The complete correspondi
 pipeline in `pipeline/`, which fetches the original files from the official Lead-DBS archive) is
 part of this repository.
 
-The ICBM 2009b T1 template slices carry the McGill/MNI notice:
+The ICBM 2009b T1, T2 and PD template slices carry the McGill/MNI notice:
 
 > Copyright (C) 1993-2004 Louis Collins, McConnell Brain Imaging Centre, Montreal Neurological
 > Institute, McGill University. Permission to use, copy, modify, and distribute this software and its
@@ -31,11 +31,11 @@ The ICBM 2009b T1 template slices carry the McGill/MNI notice:
 - Note: Distribution channel for every atlas below; files fetched from the official data archive.
 - Cite: Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862.
 
-### ICBM 2009b nonlinear asymmetric T1 template (0.5 mm)
+### ICBM 2009b nonlinear asymmetric T1, T2 and PD templates (0.5 mm)
 
 - Licence: MNI/McGill permissive licence: use, copy, modify and distribute with the copyright notice retained (Copyright (C) 1993-2004 Louis Collins, McConnell Brain Imaging Centre, Montreal Neurological Institute, McGill University)
 - Source: https://nist.mni.mcgill.ca/icbm-152-nonlinear-atlases-2009/
-- Note: Shipped as templates/space/MNI152NLin2009bAsym/t1.nii in Lead-DBS. Resampled to 1 mm and a 0.5 mm subcortical crop for slice display.
+- Note: Shipped as templates/space/MNI152NLin2009bAsym/t1.nii, t2.nii and pd.nii in Lead-DBS; the Lead-DBS LICENSE.md lists them under the McGill/MNI terms. Resampled to 1.5 mm plus a 0.5 mm subcortical crop for slice display.
 - Cite: Fonov V, Evans AC, Botteron K, Almli CR, McKinstry RC, Collins DL. Unbiased average age-appropriate atlases for pediatric studies. NeuroImage. 2011;54(1):313-327. doi:10.1016/j.neuroimage.2010.07.033.
 
 ### DISTAL Medium (Ewert 2017)

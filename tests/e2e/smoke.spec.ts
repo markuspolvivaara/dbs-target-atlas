@@ -327,3 +327,39 @@ test('labels: all / hover / off, legend hover, fade while moving', async ({ page
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+test('slices: switch between T1, T2 and PD', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./#/atlas?i=pd&co=-13');
+  await settle(page);
+  const cur = () => page.evaluate(() => (window as any).__atlas.viewer.slices.current);
+  // mean grey value of the coronal slice texture near the lateral ventricles (CSF): dark on T1, bright on T2
+  const csf = () => page.evaluate(() => {
+    const t = (window as any).__atlas.viewer.slices.material.uniforms.uHi.value;
+    const [nx, ny] = [t.image.width, t.image.height];
+    const d = t.image.data as Uint8Array;
+    // crop origin is at (-36, -48, -30) mm, 0.5 mm voxels: ventricle body near x = -4, y = 0, z = 12
+    const i = Math.round((-4 + 36) / 0.5), j = Math.round((0 + 48) / 0.5), k = Math.round((12 + 30) / 0.5);
+    let s = 0, n = 0;
+    for (let dk = -2; dk <= 2; dk++) for (let dj = -2; dj <= 2; dj++) for (let di = -2; di <= 2; di++) { s += d[(k + dk) * nx * ny + (j + dj) * nx + (i + di)]; n++; }
+    return s / n;
+  });
+  await expect.poll(cur).toBe('t1');
+  const t1 = await csf();
+  await page.locator('#ptab-slices').click();
+  await page.locator('input[name="sliceseq"][value="t2"]').check();
+  await expect.poll(cur).toBe('t2');
+  const t2 = await csf();
+  expect(t2).toBeGreaterThan(t1 + 40); // CSF bright on T2, dark on T1
+  expect(new URL(page.url()).hash).toContain('seq=t2');
+  await page.locator('input[name="sliceseq"][value="pd"]').check();
+  await expect.poll(cur).toBe('pd');
+  await page.locator('input[name="sliceseq"][value="t1"]').check();
+  await expect.poll(cur).toBe('t1');
+  // a link opens with its sequence
+  await page.goto('./#/atlas?i=pd&co=-13&seq=pd');
+  await settle(page);
+  await expect.poll(cur).toBe('pd');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

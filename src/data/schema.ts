@@ -159,7 +159,7 @@ export const ManifestSchema = z.object({
   generatedBy: z.string(),
   structures: z.array(ManifestStructureSchema),
   volumes: z.record(VolumeSchema),
-  volumeSource: z.object({ source: z.string(), scaling: z.string(), licence: z.string(), citation: z.array(z.string()) }).passthrough(),
+  volumeSource: z.object({ source: z.string(), scaling: z.union([z.string(), z.record(z.string())]), licence: z.string(), citation: z.array(z.string()) }).passthrough(),
   datasets: z.record(z.object({
     name: z.string(), licence: z.string(), url: z.string(), citation: z.array(z.string()),
     citationUrls: z.array(z.string()), note: z.string().optional(), todo: z.string().optional(),
