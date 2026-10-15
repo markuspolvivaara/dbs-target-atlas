@@ -168,7 +168,7 @@ export function creditsPage() {
     h('section', { class: 'card' },
       h('h2', {}, 'Software'),
       h('p', {}, 'three.js, zod, Vite and glTF-Transform (MIT), meshoptimizer (MIT). Pipeline: nibabel, scikit-image, trimesh, fast-simplification, SciPy, NumPy, h5py. Font: Atkinson Hyperlegible, SIL Open Font License 1.1, self-hosted.'),
-      h('p', {}, 'Full details: ATTRIBUTION.md in the source repository.')),
+      h('p', {}, h('a', { href: 'THIRD_PARTY_LICENSES.txt', target: '_blank', rel: 'noopener' }, 'Third-party licence texts'), '. Full details: LICENSE, NOTICE and ATTRIBUTION.md in the source repository.')),
   );
   return { el, render() { /* stateless */ } };
 }

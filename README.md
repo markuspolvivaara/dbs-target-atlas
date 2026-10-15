@@ -200,6 +200,13 @@ npm run check:palette
   Baselines were recorded on macOS with SwiftShader. On another platform, regenerate them with
   `npx playwright test --update-snapshots`.
 
+## Licence
+
+GPL-3.0-only (see `LICENSE`). `NOTICE` explains which files fall under which terms: the
+code and the Lead-DBS-derived anatomy are GPL-3.0, and the atlas owners ask that the anatomy
+not be used commercially; the T1 slices carry the McGill/MNI notice; bundled third-party
+software licences are in `public/THIRD_PARTY_LICENSES.txt` (also published with the site).
+
 ## Data, licences, attribution
 
 See `ATTRIBUTION.md` and the in-app Credits page. In short: the Lead-DBS licence states that

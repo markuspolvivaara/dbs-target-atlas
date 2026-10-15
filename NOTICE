@@ -1,0 +1,51 @@
+DBS target atlas
+Copyright (C) 2026 Markus Polvivaara
+
+This program is free software: you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation, version 3 (GPL-3.0-only). It is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the file LICENSE for the
+full licence text.
+
+Teaching tool only. The anatomy is group-level atlas data in MNI ICBM 2009b space;
+individual anatomy varies. Not for surgical planning, diagnosis or treatment.
+
+
+What is covered by which terms
+------------------------------
+
+1. Source code (src/, pipeline/, scripts/, tests/) and the app build: GPL-3.0-only,
+   see LICENSE.
+
+2. Anatomical assets derived from atlases distributed with Lead-DBS
+   (public/assets/meshes/, public/assets/tracts/, public/assets/manifest.json,
+   src/data/generated/): GPL-3.0, as stated for these atlases in the Lead-DBS
+   LICENSE.md. The same file records that the atlases are released under the GPL
+   at the request of their owners and "should not be used for commercial
+   purposes; for such purposes please contact the primary co-ordinator for the
+   relevant atlas". Please respect that request: use these assets for
+   non-commercial teaching and research only. The complete corresponding source
+   for these assets is the pipeline in pipeline/, which fetches the original
+   atlas files from the official Lead-DBS data archive.
+   Per-dataset citations and notes: ATTRIBUTION.md.
+
+3. T1 slice volumes (public/assets/t1/), derived from the ICBM 2009b nonlinear
+   asymmetric template, are not GPL-licensed; they carry the McGill/MNI terms:
+
+     Copyright (C) 1993-2004 Louis Collins, McConnell Brain Imaging Centre,
+     Montreal Neurological Institute, McGill University. Permission to use, copy,
+     modify, and distribute this software and its documentation for any purpose
+     and without fee is hereby granted, provided that the above copyright notice
+     appear in all copies. The authors and McGill University make no
+     representations about the suitability of this software for any purpose. It
+     is provided "as is" without express or implied warranty.
+
+4. Teaching content in source/dbs-targets.html and the text ported from it in
+   src/data/ is the author's own, released under the same GPL-3.0 terms as the
+   code. Cited publications remain the property of their authors and publishers;
+   the app links to them and quotes short claims for teaching.
+
+5. Bundled third-party software (three.js and zod, MIT licence; Atkinson
+   Hyperlegible font, SIL Open Font Licence 1.1): see
+   public/THIRD_PARTY_LICENSES.txt, which is also published with the site.
