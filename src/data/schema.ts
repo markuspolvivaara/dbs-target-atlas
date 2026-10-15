@@ -4,7 +4,7 @@ import { z } from 'zod';
 const Id = z.string().regex(/^[a-z0-9_:-]+$/);
 const Vec3 = z.tuple([z.number(), z.number(), z.number()]);
 
-export const TopicSchema = z.enum(['net', 'pd', 'tremor', 'dyst', 'ts', 'img', 'atlas']);
+export const TopicSchema = z.enum(['net', 'pd', 'tremor', 'dyst', 'ts', 'epi', 'img', 'atlas']);
 export type Topic = z.infer<typeof TopicSchema>;
 
 export const ReferenceSchema = z.object({
@@ -22,7 +22,7 @@ export const EvidenceSchema = z.object({
 });
 export type Evidence = z.infer<typeof EvidenceSchema>;
 
-export const CameraPresetSchema = z.enum(['anterior', 'lateral', 'superior', 'posteriorOblique', 'surgeon']);
+export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon']);
 export type CameraPreset = z.infer<typeof CameraPresetSchema>;
 
 /** A rendered structure: nucleus, cortical area, tract or sweet-spot volume. */
@@ -61,6 +61,8 @@ export const SymptomSchema = z.object({
   summary: z.string(),
   structures: z.array(Id),
   alternativeStructures: z.array(Id).default([]),
+  /** Shown translucent for orientation; neither target nor alternative. */
+  contextStructures: z.array(Id).default([]),
   tracts: z.array(Id),
   corticalAreas: z.array(Id),
   targetId: Id.nullable(),
@@ -68,7 +70,7 @@ export const SymptomSchema = z.object({
   /** Plain statement shown on the card when the shown geometry is a stand-in. */
   note: z.string().optional(),
   noteRefIds: z.array(z.string()).default([]),
-  camera: CameraPresetSchema.default('anterior'),
+  camera: CameraPresetSchema.default('coronal'),
 });
 export type Symptom = z.infer<typeof SymptomSchema>;
 export type SymptomInput = z.input<typeof SymptomSchema>;
@@ -87,6 +89,8 @@ export const IndicationSchema = z.object({
   corticalAreas: z.array(Id),
   targetMarkers: z.array(Id),
   alternativeMarkers: z.array(Id),
+  /** Published sweet-spot volumes shown as context without a point marker (their largest region is not in the named target). */
+  extraVolumes: z.array(Id).default([]),
   target: z.string(),
   alternatives: z.string(),
   why: z.string(),
@@ -97,7 +101,7 @@ export const IndicationSchema = z.object({
   evidence: z.array(EvidenceSchema).min(1),
   /** Circuit elements named in the content that have no distributed tract file. */
   missingTracts: z.array(z.string()).default([]),
-  camera: CameraPresetSchema.default('anterior'),
+  camera: CameraPresetSchema.default('coronal'),
 });
 export type Indication = z.infer<typeof IndicationSchema>;
 export type IndicationInput = z.input<typeof IndicationSchema>;
@@ -133,6 +137,7 @@ export const ManifestStructureSchema = z.object({
   citationUrls: z.array(z.string()),
   refIds: z.array(z.string()),
   derivation: z.string(),
+  category: z.string().optional(),
   centroid: z.object({ L: Vec3, R: Vec3 }).nullable(),
   surfaceCentroid: z.object({ L: Vec3, R: Vec3 }).optional(),
   streamlines: z.object({ L: z.number(), R: z.number() }).optional(),

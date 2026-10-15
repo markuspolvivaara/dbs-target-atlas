@@ -6,6 +6,7 @@ import { TOPICS } from '../data/references';
 import type { Topic } from '../data/schema';
 import type { AppState } from '../state';
 import { chips, clear, fmtMm, h, refLinks } from './dom';
+import { getPrefs, onPrefsChange, setHidden, storageAvailable, visibleIndications } from './prefs';
 
 type Update = (fn: (s: AppState) => void) => void;
 
@@ -105,7 +106,7 @@ export function refsPage() {
   const list = h('ul', { class: 'refs' });
   const count = h('p', { class: 'count', 'aria-live': 'polite' });
   const empty = h('p', { hidden: true }, 'No references match. Clear the search or pick another topic.');
-  const order: Topic[] = ['net', 'pd', 'tremor', 'dyst', 'ts', 'img', 'atlas'];
+  const order: Topic[] = ['net', 'pd', 'tremor', 'dyst', 'ts', 'epi', 'img', 'atlas'];
   const topicName = Object.fromEntries(TOPICS) as Record<string, string>;
   const chipRow = chips(TOPICS, topic, (v) => {
     topic = v;
@@ -113,7 +114,7 @@ export function refsPage() {
     render();
   }, { label: 'Topic' });
   el.append(h('h1', {}, 'References'), h('label', { class: 'search' }, 'Search references', q), chipRow, count, list, empty,
-    h('p', { class: 'aside' }, '"Atlases and datasets" lists the sources of the 3D geometry; their citations are Crossref records for each DOI. All other references come from the original teaching page.'));
+    h('p', { class: 'aside' }, '"Atlases and datasets" lists the sources of the 3D geometry; their citations are Crossref records for each DOI. "Epilepsy" references were added after the original teaching page (checked against PubMed). All other references come from the original teaching page.'));
   function render() {
     const s = q.value.trim().toLowerCase();
     const items = CONTENT.references
@@ -170,4 +171,61 @@ export function creditsPage() {
       h('p', {}, 'Full details: ATTRIBUTION.md in the source repository.')),
   );
   return { el, render() { /* stateless */ } };
+}
+
+// ---------------------------------------------------------------- settings
+export function settingsPage(update: Update, theme: { get(): 'system' | 'light' | 'dark'; set(t: 'system' | 'light' | 'dark'): void }) {
+  const el = h('div', { class: 'page wrap' });
+  const list = h('div', { class: 'settings-list', role: 'group', 'aria-labelledby': 'set-ind-title' });
+  const status = h('p', { class: 'aside', 'aria-live': 'polite' });
+  const themeBox = h('fieldset', { class: 'seg-field' }, h('legend', {}, 'Colour theme'),
+    ...([['system', 'Follow the device'], ['light', 'Light'], ['dark', 'Dark']] as const).map(([v, label]) =>
+      h('label', { class: 'radio' }, h('input', { type: 'radio', name: 'theme', value: v, onchange: () => theme.set(v) }), label)));
+  el.append(
+    h('h1', {}, 'Settings'),
+    h('p', { class: 'lede' }, 'Choose which indications appear in the atlas. Settings are saved in this browser on this device.'),
+    h('section', { class: 'card' },
+      h('h2', { id: 'set-ind-title' }, 'Indications'),
+      h('p', { class: 'aside' }, 'Hidden indications disappear from the indication chips and from keyboard cycling. A shared link to a hidden indication still opens it. At least one indication stays visible.'),
+      h('div', { class: 'set-actions' },
+        h('button', { type: 'button', class: 'btn', onclick: () => setHidden([]) }, 'Show all'),
+        h('button', { type: 'button', class: 'btn', onclick: () => {
+          // hide all but the first indication (at least one stays visible)
+          setHidden(CONTENT.indications.slice(1).map((i) => i.id));
+          leaveHidden();
+        } }, 'Hide all but the first')),
+      list, status),
+    h('section', { class: 'card' }, themeBox),
+  );
+  /** If the atlas currently shows an indication that is now hidden, switch to the first visible one. */
+  function leaveHidden() {
+    const hidden = new Set(getPrefs().hiddenIndications);
+    update((st) => { if (hidden.has(st.ind)) { st.ind = visibleIndications()[0].id; st.sym = null; st.sel = null; st.cam = { preset: null }; } });
+  }
+  function render() {
+    clear(list);
+    const hidden = new Set(getPrefs().hiddenIndications);
+    const visibleCount = CONTENT.indications.length - hidden.size;
+    for (const ind of CONTENT.indications) {
+      const shown = !hidden.has(ind.id);
+      list.append(h('label', { class: 'check set-row', style: `--accent: var(--c-${ind.accent})` },
+        h('input', {
+          type: 'checkbox', 'data-ind': ind.id, checked: shown,
+          disabled: shown && visibleCount === 1,
+          onchange: (e: Event) => {
+            const on = (e.target as HTMLInputElement).checked;
+            const next = new Set(getPrefs().hiddenIndications);
+            if (on) next.delete(ind.id); else next.add(ind.id);
+            setHidden([...next]);
+            leaveHidden();
+          },
+        }),
+        h('span', { class: 'set-swatch' }), h('span', {}, ind.name, ind.symptomIds.length ? h('span', { class: 'set-sub' }, ` · ${ind.symptomIds.length} symptom views`) : null)));
+    }
+    status.textContent = `${visibleCount} of ${CONTENT.indications.length} indications shown.` + (storageAvailable() ? '' : ' This browser blocks storage, so the choice will not be remembered.');
+    el.querySelectorAll<HTMLInputElement>('input[name=theme]').forEach((r) => { r.checked = r.value === theme.get(); });
+  }
+  onPrefsChange(render);
+  render();
+  return { el, render };
 }

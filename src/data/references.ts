@@ -1,5 +1,7 @@
 import type { Reference, Topic } from './schema';
 import citations from '../../pipeline/sources/citations.json';
+import { ADDITION_REFERENCES } from './additions';
+import { EPILEPSY_REFERENCES } from './epilepsy';
 
 /**
  * Literature references, ported verbatim from the `R` object of the attached
@@ -83,16 +85,19 @@ const DATASET_LABELS: Record<string, string> = {
   elias2021: 'Elias 2021 (TOR-PSM maps)',
   petersen2019: 'Petersen 2019 (pathway atlas)',
   fonov2011: 'Fonov 2011 (ICBM 2009 templates)',
+  neudorfer2020: 'Neudorfer 2020 (hypothalamus atlas)',
+  xiao2017: 'Xiao 2017 (PD25 atlas)',
 };
 
 const DATASET_REFS: Reference[] = Object.entries(citations as Record<string, { citation: string; url: string }>).map(
   ([id, c]) => ({ id, topic: 'atlas' as Topic, shortLabel: DATASET_LABELS[id] ?? id, citation: c.citation, url: c.url }),
 );
 
-export const REFERENCES: Reference[] = [...CONTENT, ...DATASET_REFS];
+/** Researched additions (epilepsy) are kept apart from the verbatim port. */
+export const REFERENCES: Reference[] = [...CONTENT, ...ADDITION_REFERENCES, ...EPILEPSY_REFERENCES, ...DATASET_REFS];
 export const CONTENT_REFERENCE_IDS = CONTENT.map((r) => r.id);
 
 export const TOPICS: [Topic | 'all', string][] = [
   ['all', 'All'], ['net', 'Networks'], ['pd', "Parkinson's"], ['tremor', 'Tremor'], ['dyst', 'Dystonia'],
-  ['ts', 'Tourette'], ['img', 'Imaging'], ['atlas', 'Atlases and datasets'],
+  ['ts', 'Tourette'], ['epi', 'Epilepsy'], ['img', 'Imaging'], ['atlas', 'Atlases and datasets'],
 ];

@@ -1,3 +1,4 @@
+import { EPILEPSY_IMAGING } from './epilepsy';
 import type { Imaging } from './schema';
 
 /** Imaging per target structure, ported verbatim from the `IMG` array of the attached file. */
@@ -56,6 +57,8 @@ export const IMAGING: Imaging[] = [
     note: 'Often planned from published coordinates at the junction of Voa and Vop.',
     refIds: ['vocoords', 'bmjno'],
   },
+  // researched addition (epilepsy)
+  EPILEPSY_IMAGING,
 ];
 
 /** Aside paragraph under the imaging cards (verbatim, with its reference ids). */

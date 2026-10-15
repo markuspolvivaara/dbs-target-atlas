@@ -53,9 +53,12 @@ def main() -> int:
             "colour": colour(v.colour), "dataset": v.dataset, **dataset_block(v.dataset),
             "derivation": v.derivation or (
                 f"Isosurface at {v.threshold} of the source label volume." if v.type == "nucleus" else
-                f"Isosurface at {int(C.SWEETSPOT_FRACTION * 100)}% of the positive maximum of the published map."),
+                f"Isosurface at {int(C.SWEETSPOT_FRACTION * 100)}% of the positive maximum of the published map: "
+                f"{rep[v.id]['L']['regionsShown']} (L) / {rep[v.id]['R']['regionsShown']} (R) separate regions shown; "
+                f"the largest holds {rep[v.id]['L']['dominantFraction']:.0%} (L) / {rep[v.id]['R']['dominantFraction']:.0%} (R) of the supra-threshold map."),
             "centroid": {s: rep[v.id][s]["sourceCentroid"] for s in ("L", "R")},
             "surfaceCentroid": {s: rep[v.id][s]["surfaceCentroid"] for s in ("L", "R")},
+            **({"category": v.category} if v.category else {}),
         })
     f = "assets/meshes/cortex.glb"
     items.append({

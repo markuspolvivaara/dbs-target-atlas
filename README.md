@@ -11,6 +11,10 @@ in MNI ICBM 2009b nonlinear asymmetric space. Individual anatomy varies.
 - Static site: Vite + TypeScript + three.js. No backend, no runtime requests to other hosts.
 - Content (targets, rationale, evidence, imaging, calculator, references) is ported verbatim
   from the original teaching page (`source/dbs-targets.html`); tests check it is word-for-word.
+- **Epilepsy** is a researched addition (`src/data/epilepsy.ts`), not part of the original page:
+  ANT for focal seizures, CM for generalized seizures, hippocampus for temporal lobe seizures.
+  Each sentence is checked against the cited paper's PubMed abstract; its 14 references sit under
+  their own "Epilepsy" topic, and tests keep them separate from the original content.
 - Geometry comes from published atlases distributed with Lead-DBS through an offline Python
   pipeline (`pipeline/`). Nothing is hand-modelled and no coordinate is typed by hand.
 
@@ -58,20 +62,32 @@ time they are needed; T1 slices (3.4 MB) load only when a slice is switched on.
 ## Using it
 
 - **Indication / symptom chips** in the side panel (bottom sheet on phones).
-- **Camera presets**: anterior, lateral, superior, posterior-oblique, surgeon's view (along the
+- **Camera presets**: coronal (from the front), sagittal (anterior on the left), axial (from above,
+  anterior up), posterior-oblique, surgeon's view (along the
   lead trajectory). The orientation disc shows R/L, A/P and S/I.
 - **Hemisphere**: left, both, right.
 - **Layers** tab: nuclei, tracts, cortex, targets and electrode, each with an opacity slider; name
-  labels; CST and medial lemniscus as borders around Vim/PSA targets; an index of every structure.
+  labels; landmarks (CST and medial lemniscus around Vim/PSA targets, the optic tract beneath GPi
+  targets, the red nucleus beside STN targets); an index of every structure.
 - **Slices** tab: axial, coronal and sagittal planes with the ICBM 2009b T1 drawn on them, an mm
   slider, and an optional cut-away of structures on one side.
 - **Lead** tab: generic quadripolar lead (1.27 mm diameter, 1.5 mm contacts, 0.5 or 1.5 mm
   spacing) on the primary target, with a depth offset (drag the lead along its axis) and an
   illustrative stimulation sphere. The sphere is not a VTA model. Contact coordinates are listed.
+  Choose which part of the lead sits on the target (array centre, C0–C3 centre or tip) plus an
+  offset; anchor, offset and spacing are remembered per target marker in this browser, with an
+  optional default for other targets. Links carrying their own lead position override this.
+- **Legend** (bottom left): the dot button shows or hides each structure, tract, cortical area or
+  marker in the current view; clicking a name highlights it (tracts become opaque and thicker,
+  structures solid and glowing, everything else fades back) and opens its card. Click again or
+  press Esc to clear. Hidden items and the highlight are part of the shareable link.
 - **Click or tap** any structure, tract or marker for its card: role in the source content,
   indications that use it, imaging, data source, licence, centroid.
 - **Readout**: MNI coordinates under the pointer plus approximate AC–PC coordinates (see below).
 - **Measure**: pick two points for a distance in mm.
+- **Settings** page: show or hide individual indications (for example to keep only the common
+  ones for a teaching session) and pick the colour theme. Saved in the browser's local storage on
+  that device; a shared link to a hidden indication still opens it.
 - **Copy link**: the URL hash holds indication, symptom, hemisphere, camera, layers, slices, lead
   and the open card, so teaching links reopen the exact view.
 
@@ -129,8 +145,9 @@ npm run pipeline
 2. `build.py`:
    - label volumes → Gaussian pre-smoothing → marching cubes → affine to MNI mm → Taubin
      smoothing → quadric decimation (one GLB per structure, nodes `L` and `R`)
-   - sweet-spot maps → isosurface at 50% of the positive maximum; marker = value-weighted
-     centroid of that region
+   - sweet-spot maps → isosurface of every region at ≥ 50% of the positive maximum; marker =
+     value-weighted centroid of the region with the largest summed value (validate.py checks the
+     marker lies in its own region and reports how much of the map that region holds)
    - cortex: Lead-DBS template surface, decimated; parcels from HMAT (M1, S1, SMA, pre-SMA, PMd,
      PMv) and Desikan-Killiany (ACC; medial orbitofrontal as a vmPFC proxy)
    - streamlines → filtered → resampled to 2 mm → fixed-seed subsample of up to 300 per
@@ -192,6 +209,20 @@ Tracked here and in the final report:
 - **vmPFC.** Shown with the Desikan-Killiany medial orbitofrontal label as a proxy.
 - **Morel atlas citation.** Confirm the "Jakab 2008" publication Lead-DBS credits for the MNI
   version.
+- **Fragmented sweet-spot maps.** The Hollunder 2024 dystonia and Tourette maps split into many
+  regions, and their largest region is not in the target the content names (thalamus/ZI for
+  dystonia, white matter for Tourette). They are shown as volumes without a point marker. The
+  Horn 2022 generalized-dystonia marker comes from a region holding 38% of its map.
+- **Red nucleus** as an STN landmark is a researched addition (card text and references in
+  `src/data/additions.ts`, including Danish 2006, which found the RN–STN relationship inconsistent
+  on conventional MRI). The geometry is the existing DISTAL red nucleus.
+- **Optic tract** (GPi landmark) is a researched addition (`src/data/additions.ts`, PD25 histology
+  label). The Ilinsky optic-tract files in the Lead-DBS archive were not used: both lie in the right
+  hemisphere.
+- **Epilepsy targets.** No ANT, CM or hippocampal outcome map is distributed as a file. The ANT
+  marker is an atlas-derived ANT–MTT junction (Morel labels), the CM and hippocampus markers are
+  label centroids. No sourced indirect ANT coordinates were added to the calculator. NAUTILUS
+  tested responsive neurostimulation, not continuous DBS.
 - **Colour vision.** GPi/SNr/PPN, Vim/PSA and STN/Vo from the original palette are hard to tell
   apart under deuteranopia. They are separated by look (solid, outline, line) and by labels, not
   by colour.

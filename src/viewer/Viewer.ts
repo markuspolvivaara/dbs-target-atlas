@@ -8,7 +8,7 @@ import type { AppState, Axis, Hemi, LayerKey } from '../state';
 import { loadStructure, type LineAsset, type MeshAsset } from './assets';
 import { Lead, contactCentres, trajectoryDir } from './lead';
 import { applyLook, lineMaterial, rimMaterial, solidMaterial, type Look, type MeshMaterials } from './materials';
-import { plan as makePlan, type Plan, type TractRole } from './selection';
+import { LANDMARKS, plan as makePlan, type Plan, type TractRole } from './selection';
 import { Slices } from './slices';
 
 type Side = 'L' | 'R';
@@ -143,6 +143,7 @@ export class Viewer {
     this.scene.background = new THREE.Color(background);
     this.ghost.set(ghost);
     this.leads.L.shaftMat.color.set(palette.electrode); this.leads.R.shaftMat.color.set(palette.electrode);
+    if (this.plan) this.updateMarkers();
     this.restyle();
   }
 
@@ -221,8 +222,11 @@ export class Viewer {
     const planChanged = !prev || prev.ind !== s.ind || prev.sym !== s.sym || prev.borders !== s.borders;
     if (planChanged) this.plan = makePlan(s.ind, s.sym, s.borders);
     const p = this.plan!;
+    const focusMeta = s.sel ? MAN.get(s.sel) : undefined;
     const needed = [
       ...[...p.tracts.keys()],
+      // a structure selected from the index or legend is shown even if the view does not include it
+      ...(focusMeta && (focusMeta.type === 'tract' || focusMeta.type === 'cortex') ? [focusMeta.id] : []),
       ...(s.layers.cortex.on && p.parcels.size ? ['cortex', ...p.parcels.keys()] : []),
       ...(s.layers.cortex.on && !p.parcels.size && this.items.has('cortex') ? ['cortex'] : []),
     ];
@@ -250,6 +254,9 @@ export class Viewer {
   private restyle(): void {
     if (!this.state || !this.plan) return;
     const s = this.state, p = this.plan;
+    const hidden = new Set(s.hidden);
+    // focus: a selected structure (not a marker) is emphasised and everything else fades back
+    const focus = s.sel && MAN.has(s.sel) && s.sel !== 'cortex' ? s.sel : null;
     for (const it of this.items.values()) {
       if (it.kind === 'mesh') {
         let look: Look = 'hidden';
@@ -258,8 +265,14 @@ export class Viewer {
         else if (it.meta.type === 'cortex') look = p.parcels.has(it.meta.id) ? 'context' : 'hidden';
         const layer = s.layers[it.layer];
         let op = layer.on ? layer.opacity : 0;
+        const focused = focus === it.meta.id;
+        if (focused) { look = 'primary'; op = 1; }
+        if (hidden.has(it.meta.id)) look = 'hidden';
         if (it.meta.id === 'cortex') op *= 1.1;
+        // landmark volumes (optic tract) must read clearly next to the target
+        if (LANDMARKS.has(it.meta.id) && look === 'context') op = Math.min(1, op * 2.2);
         if (it.meta.type === 'cortex' && it.meta.id !== 'cortex' && look === 'context') op = Math.min(1, op * 1.6);
+        if (focus && !focused && look !== 'ghost' && look !== 'hidden') op *= 0.3;
         const c = this.colour(it.meta);
         for (const side of ['L', 'R'] as Side[]) {
           const m = it.nodes[side];
@@ -268,17 +281,21 @@ export class Viewer {
           if (!this.sideVisible(side)) m.visible = false;
         }
         it.look = look;
+        it.mats.solid.emissive.copy(focused ? c.clone().multiplyScalar(0.45) : new THREE.Color(0x000000));
         it.mats.solid.clippingPlanes = this.clipPlanes;
         it.mats.rim.clippingPlanes = this.clipPlanes;
       } else {
-        const role = p.tracts.get(it.meta.id) ?? null;
+        const focused = focus === it.meta.id;
+        const role = p.tracts.get(it.meta.id) ?? (focused ? 'key' : null);
         it.role = role;
         const layer = s.layers.tracts;
-        const on = !!role && layer.on && layer.opacity > 0.001;
+        const on = !hidden.has(it.meta.id) && !!role && ((layer.on && layer.opacity > 0.001) || focused);
         it.mat.color.set(this.colour(it.meta));
         const response = it.meta.role === 'response';
         it.mat.opacity = (role === 'border' ? 0.22 : role === 'alt' ? 0.6 : response ? 0.32 : 0.62) * layer.opacity;
         it.mat.linewidth = role === 'border' ? 1 : role === 'alt' ? 1.2 : response ? 1 : 1.4;
+        if (focused) { it.mat.opacity = 1; it.mat.linewidth = 3; }
+        else if (focus) it.mat.opacity *= 0.25;
         const dashed = role === 'alt';
         if (it.mat.dashed !== dashed) { it.mat.dashed = dashed; it.mat.needsUpdate = true; }
         it.mat.clippingPlanes = this.clipPlanes;
@@ -294,7 +311,8 @@ export class Viewer {
     this.markerGroup.visible = s.layers.targets.on;
     for (const m of this.markerGroup.children) {
       const side = m.userData.side as Side;
-      m.visible = this.sideVisible(side);
+      m.visible = this.sideVisible(side) && !hidden.has(m.userData.marker);
+      m.scale.setScalar(s.sel === m.userData.marker ? 1.8 : 1);
       const mat = (m as THREE.Mesh).material as THREE.Material;
       mat.opacity = (m.userData.primary ? 1 : 0.9) * s.layers.targets.opacity;
       mat.transparent = mat.opacity < 1 || !m.userData.primary;
@@ -316,8 +334,12 @@ export class Viewer {
         const pos = new THREE.Vector3(...(side === 'L' ? t.mni.left : t.mni.right));
         const geo = new THREE.SphereGeometry(m.primary ? 0.9 : 0.8, 24, 16);
         const mat = m.primary
-          ? new THREE.MeshStandardMaterial({ color: colour, roughness: 0.35, emissive: colour.clone().multiplyScalar(0.25) })
+          // primary markers use the ink colour so they stand out against their (same-coloured) target
+          ? new THREE.MeshBasicMaterial({ color: new THREE.Color(this.palette.ctx ?? '#14253a') })
           : rimMaterial(colour);
+        // markers often sit inside a solid target: draw them on top so they stay visible
+        mat.depthTest = false;
+        mat.depthWrite = false;
         const mesh = new THREE.Mesh(geo, mat);
         mesh.position.copy(pos);
         mesh.userData = { marker: t.id, side, primary: m.primary };
@@ -325,7 +347,8 @@ export class Viewer {
         this.markerGroup.add(mesh);
         if (m.primary && !this.markerTargets.has(side)) this.markerTargets.set(side, pos);
         if (!m.primary) {
-          const ring = new THREE.Mesh(new THREE.TorusGeometry(1.3, 0.12, 8, 32), new THREE.MeshBasicMaterial({ color: colour, transparent: true }));
+          const ring = new THREE.Mesh(new THREE.TorusGeometry(1.3, 0.12, 8, 32), new THREE.MeshBasicMaterial({ color: colour, transparent: true, depthTest: false }));
+          ring.renderOrder = 6;
           ring.position.copy(pos);
           ring.userData = { marker: t.id, side, primary: false, ring: true };
           this.markerGroup.add(ring);
@@ -346,6 +369,7 @@ export class Viewer {
     const w = this.host.clientWidth, h = this.host.clientHeight;
     for (const [id, look] of this.plan.looks) {
       if (look !== 'primary' && look !== 'alt') continue;
+      if (this.state.hidden.includes(id)) continue;
       const m = MAN.get(id);
       if (!m || m.type !== 'nucleus' || !m.centroid) continue;
       const side: Side = this.sideVisible('R') ? 'R' : 'L';
@@ -433,9 +457,12 @@ export class Viewer {
     const sideSign = hemi === 'L' ? -1 : 1;
     let dir: THREE.Vector3;
     switch (preset) {
-      case 'anterior': dir = new THREE.Vector3(0, 1, 0.12); break;
-      case 'lateral': dir = new THREE.Vector3(sideSign, 0, 0.08); break;
-      case 'superior': dir = new THREE.Vector3(0, 0.05, 1); break;
+      // coronal: seen from the front (patient's right on screen left)
+      case 'coronal': dir = new THREE.Vector3(0, 1, 0.12); break;
+      // sagittal: seen from the patient's left, so anterior is on screen left
+      case 'sagittal': dir = new THREE.Vector3(-1, 0, 0.08); break;
+      // axial: seen from above with anterior up (camera nudged posterior so the orbit keeps anterior at the top)
+      case 'axial': dir = new THREE.Vector3(0, -0.05, 1); break;
       case 'posteriorOblique': dir = new THREE.Vector3(0.65 * sideSign, -0.8, 0.55); break;
       case 'surgeon': {
         const side: Side = hemi === 'L' ? 'L' : 'R';

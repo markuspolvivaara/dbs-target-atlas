@@ -360,8 +360,8 @@
    "bytes": 56536,
    "colour": {
     "token": "rn",
-    "light": "#A44A3A",
-    "dark": "#E08A78"
+    "light": "#6B2E22",
+    "dark": "#F2B8A8"
    },
    "dataset": "distal",
    "source": "DISTAL Medium (Ewert 2017)",
@@ -1002,6 +1002,308 @@
    }
   },
   {
+   "id": "ant",
+   "name": "Anterior nucleus of the thalamus (ANT)",
+   "aliases": [
+    "ANT",
+    "AV/AM/AD"
+   ],
+   "type": "nucleus",
+   "file": "assets/meshes/ant.glb",
+   "bytes": 43088,
+   "colour": {
+    "token": "ant",
+    "light": "#C0461A",
+    "dark": "#F2875C"
+   },
+   "dataset": "morel",
+   "source": "Morel thalamus atlas in MNI space (Lead-DBS: 'Morel Atlas (Jakab 2008)')",
+   "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
+   "citation": [
+    "Morel A, Magnin M, Jeanmonod D. Multiarchitectonic and stereotactic atlas of the human thalamus. J. Comp. Neurol.. 1997;387(4):588-630. doi:10.1002/(sici)1096-9861(19971103)387:4<588::aid-cne8>3.0.co;2-z.",
+    "Krauth A, Blanc R, Poveda A, Jeanmonod D, Morel A, Székely G. A mean three-dimensional atlas of the human thalamus: Generation from multiple histological data. NeuroImage. 2010;49(3):2053-2062. doi:10.1016/j.neuroimage.2009.10.042."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1002/(sici)1096-9861(19971103)387:4<588::aid-cne8>3.0.co;2-z",
+    "https://doi.org/10.1016/j.neuroimage.2009.10.042"
+   ],
+   "refIds": [],
+   "derivation": "Union of the Morel anteroventral (AV), anteromedial (AM) and anterodorsal (AD) labels.",
+   "centroid": {
+    "L": [
+     -4.539,
+     -5.441,
+     10.666
+    ],
+    "R": [
+     5.019,
+     -5.379,
+     10.609
+    ]
+   },
+   "surfaceCentroid": {
+    "L": [
+     -4.558,
+     -5.701,
+     10.593
+    ],
+    "R": [
+     5.012,
+     -5.666,
+     10.546
+    ]
+   }
+  },
+  {
+   "id": "mtt",
+   "name": "Mammillothalamic tract",
+   "aliases": [
+    "MTT"
+   ],
+   "type": "nucleus",
+   "file": "assets/meshes/mtt.glb",
+   "bytes": 22668,
+   "colour": {
+    "token": "mtt",
+    "light": "#2B4C9B",
+    "dark": "#8FA8F0"
+   },
+   "dataset": "morel",
+   "source": "Morel thalamus atlas in MNI space (Lead-DBS: 'Morel Atlas (Jakab 2008)')",
+   "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
+   "citation": [
+    "Morel A, Magnin M, Jeanmonod D. Multiarchitectonic and stereotactic atlas of the human thalamus. J. Comp. Neurol.. 1997;387(4):588-630. doi:10.1002/(sici)1096-9861(19971103)387:4<588::aid-cne8>3.0.co;2-z.",
+    "Krauth A, Blanc R, Poveda A, Jeanmonod D, Morel A, Székely G. A mean three-dimensional atlas of the human thalamus: Generation from multiple histological data. NeuroImage. 2010;49(3):2053-2062. doi:10.1016/j.neuroimage.2009.10.042."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1002/(sici)1096-9861(19971103)387:4<588::aid-cne8>3.0.co;2-z",
+    "https://doi.org/10.1016/j.neuroimage.2009.10.042"
+   ],
+   "refIds": [],
+   "derivation": "Isosurface at 0.5 of the source label volume.",
+   "centroid": {
+    "L": [
+     -6.039,
+     -8.636,
+     -2.663
+    ],
+    "R": [
+     6.524,
+     -8.511,
+     -2.67
+    ]
+   },
+   "surfaceCentroid": {
+    "L": [
+     -6.115,
+     -8.434,
+     -2.296
+    ],
+    "R": [
+     6.604,
+     -8.325,
+     -2.263
+    ]
+   },
+   "category": "Fibre bundle (atlas label)"
+  },
+  {
+   "id": "mamm",
+   "name": "Mammillary body",
+   "aliases": [],
+   "type": "nucleus",
+   "file": "assets/meshes/mamm.glb",
+   "bytes": 24144,
+   "colour": {
+    "token": "mb",
+    "light": "#8C7A5A",
+    "dark": "#C9B892"
+   },
+   "dataset": "neudorfer2020",
+   "source": "Atlas of the human hypothalamic region (Neudorfer 2020)",
+   "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
+   "citation": [
+    "Neudorfer C, Germann J, Elias GJB, Gramer R, Boutet A, Lozano AM. A high-resolution in vivo magnetic resonance imaging atlas of the human hypothalamic region. Sci Data. 2020;7(1). doi:10.1038/s41597-020-00644-6."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41597-020-00644-6"
+   ],
+   "refIds": [],
+   "derivation": "Isosurface at 0.5 of the source label volume.",
+   "centroid": {
+    "L": [
+     -2.628,
+     -8.32,
+     -14.413
+    ],
+    "R": [
+     2.49,
+     -8.176,
+     -14.558
+    ]
+   },
+   "surfaceCentroid": {
+    "L": [
+     -2.71,
+     -8.337,
+     -14.274
+    ],
+    "R": [
+     2.578,
+     -8.157,
+     -14.421
+    ]
+   }
+  },
+  {
+   "id": "fornix",
+   "name": "Fornix",
+   "aliases": [],
+   "type": "nucleus",
+   "file": "assets/meshes/fornix.glb",
+   "bytes": 29364,
+   "colour": {
+    "token": "fx",
+    "light": "#6E8888",
+    "dark": "#A3C2C2"
+   },
+   "dataset": "neudorfer2020",
+   "source": "Atlas of the human hypothalamic region (Neudorfer 2020)",
+   "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
+   "citation": [
+    "Neudorfer C, Germann J, Elias GJB, Gramer R, Boutet A, Lozano AM. A high-resolution in vivo magnetic resonance imaging atlas of the human hypothalamic region. Sci Data. 2020;7(1). doi:10.1038/s41597-020-00644-6."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41597-020-00644-6"
+   ],
+   "refIds": [],
+   "derivation": "Isosurface at 0.5 of the source label volume.",
+   "centroid": {
+    "L": [
+     -3.111,
+     -0.245,
+     -1.557
+    ],
+    "R": [
+     2.577,
+     -0.226,
+     -1.812
+    ]
+   },
+   "surfaceCentroid": {
+    "L": [
+     -3.081,
+     -0.399,
+     -1.28
+    ],
+    "R": [
+     2.522,
+     -0.407,
+     -1.474
+    ]
+   },
+   "category": "Fibre bundle (atlas label)"
+  },
+  {
+   "id": "hippocampus",
+   "name": "Hippocampus",
+   "aliases": [],
+   "type": "nucleus",
+   "file": "assets/meshes/hippocampus.glb",
+   "bytes": 69356,
+   "colour": {
+    "token": "hip",
+    "light": "#B88A12",
+    "dark": "#E9C55E"
+   },
+   "dataset": "xiao2017",
+   "source": "MNI PD25 subcortical atlas (Xiao 2017)",
+   "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
+   "citation": [
+    "Xiao Y, Fonov V, Chakravarty MM, Beriault S, Al Subaie F, Sadikot A, et al. A dataset of multi-contrast population-averaged brain MRI atlases of a Parkinson's disease cohort. Data in Brief. 2017;12:370-379. doi:10.1016/j.dib.2017.04.013."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.dib.2017.04.013"
+   ],
+   "refIds": [],
+   "derivation": "Isosurface at 0.5 of the source label volume.",
+   "centroid": {
+    "L": [
+     -24.796,
+     -24.454,
+     -13.766
+    ],
+    "R": [
+     25.78,
+     -22.44,
+     -14.489
+    ]
+   },
+   "surfaceCentroid": {
+    "L": [
+     -23.604,
+     -25.54,
+     -12.675
+    ],
+    "R": [
+     24.627,
+     -23.66,
+     -13.217
+    ]
+   }
+  },
+  {
+   "id": "optic_tract",
+   "name": "Optic tract",
+   "aliases": [
+    "OT"
+   ],
+   "type": "nucleus",
+   "file": "assets/meshes/optic_tract.glb",
+   "bytes": 36052,
+   "colour": {
+    "token": "ot",
+    "light": "#B9E3E8",
+    "dark": "#2E5A63"
+   },
+   "dataset": "pd25hist",
+   "source": "MNI PD25 histology atlas (Xiao 2017), Lead-DBS import",
+   "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
+   "citation": [
+    "Xiao Y, Fonov V, Chakravarty MM, Beriault S, Al Subaie F, Sadikot A, et al. A dataset of multi-contrast population-averaged brain MRI atlases of a Parkinson's disease cohort. Data in Brief. 2017;12:370-379. doi:10.1016/j.dib.2017.04.013."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.dib.2017.04.013"
+   ],
+   "refIds": [],
+   "derivation": "Isosurface at 0.5 of the source label volume.",
+   "centroid": {
+    "L": [
+     -13.84,
+     -5.097,
+     -15.269
+    ],
+    "R": [
+     13.297,
+     -4.216,
+     -15.305
+    ]
+   },
+   "surfaceCentroid": {
+    "L": [
+     -14.737,
+     -6.501,
+     -14.677
+    ],
+    "R": [
+     14.305,
+     -5.651,
+     -14.663
+    ]
+   },
+   "category": "Fibre bundle (atlas label)"
+  },
+  {
    "id": "dentate",
    "name": "Dentate nucleus",
    "aliases": [],
@@ -1057,7 +1359,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/meshes/ss_pd.glb",
-   "bytes": 4192,
+   "bytes": 20632,
    "colour": {
     "token": "stn",
     "light": "#946609",
@@ -1071,29 +1373,29 @@
    "refIds": [
     "hollunder2024"
    ],
-   "derivation": "Isosurface at 50% of the positive maximum of the published map.",
+   "derivation": "Isosurface at 50% of the positive maximum of the published map: 4 (L) / 4 (R) separate regions shown; the largest holds 71% (L) / 72% (R) of the supra-threshold map.",
    "centroid": {
     "L": [
-     -13.944,
-     -12.066,
-     -2.874
+     -12.108,
+     -14.057,
+     -6.722
     ],
     "R": [
-     13.852,
-     -10.908,
-     -2.954
+     11.83,
+     -13.42,
+     -6.726
     ]
    },
    "surfaceCentroid": {
     "L": [
-     -14.093,
-     -11.958,
-     -2.787
+     -12.146,
+     -13.966,
+     -6.577
     ],
     "R": [
-     13.843,
-     -10.948,
-     -2.905
+     11.931,
+     -13.203,
+     -6.624
     ]
    }
   },
@@ -1103,7 +1405,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/meshes/ss_dyt.glb",
-   "bytes": 3484,
+   "bytes": 23668,
    "colour": {
     "token": "gpi",
     "light": "#1F7F5A",
@@ -1117,29 +1419,29 @@
    "refIds": [
     "hollunder2024"
    ],
-   "derivation": "Isosurface at 50% of the positive maximum of the published map.",
+   "derivation": "Isosurface at 50% of the positive maximum of the published map: 3 (L) / 5 (R) separate regions shown; the largest holds 76% (L) / 76% (R) of the supra-threshold map.",
    "centroid": {
     "L": [
-     -17.043,
-     -9.266,
-     -2.255
+     -15.075,
+     -14.841,
+     -2.234
     ],
     "R": [
-     17.265,
-     -8.29,
-     -2.238
+     15.14,
+     -13.893,
+     -2.248
     ]
    },
    "surfaceCentroid": {
     "L": [
-     -16.874,
-     -9.129,
-     -2.198
+     -15.17,
+     -14.779,
+     -2.177
     ],
     "R": [
-     17.002,
-     -8.108,
-     -2.408
+     15.229,
+     -13.854,
+     -2.186
     ]
    }
   },
@@ -1149,7 +1451,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/meshes/ss_ts.glb",
-   "bytes": 9952,
+   "bytes": 24008,
    "colour": {
     "token": "cm",
     "light": "#127C94",
@@ -1163,29 +1465,29 @@
    "refIds": [
     "hollunder2024"
    ],
-   "derivation": "Isosurface at 50% of the positive maximum of the published map.",
+   "derivation": "Isosurface at 50% of the positive maximum of the published map: 6 (L) / 5 (R) separate regions shown; the largest holds 50% (L) / 52% (R) of the supra-threshold map.",
    "centroid": {
     "L": [
-     -12.465,
-     -15.062,
-     -4.86
+     -14.857,
+     -9.159,
+     -4.421
     ],
     "R": [
-     12.407,
-     -14.005,
-     -4.771
+     14.863,
+     -8.013,
+     -4.412
     ]
    },
    "surfaceCentroid": {
     "L": [
-     -12.452,
-     -15.063,
-     -4.864
+     -15.373,
+     -10.491,
+     -2.957
     ],
     "R": [
-     12.392,
-     -14.01,
-     -4.787
+     15.217,
+     -9.205,
+     -3.107
     ]
    }
   },
@@ -1195,7 +1497,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/meshes/ss_gen.glb",
-   "bytes": 10292,
+   "bytes": 22952,
    "colour": {
     "token": "gpi",
     "light": "#1F7F5A",
@@ -1213,29 +1515,29 @@
    "refIds": [
     "horn2022"
    ],
-   "derivation": "Isosurface at 50% of the positive maximum of the published map.",
+   "derivation": "Isosurface at 50% of the positive maximum of the published map: 6 (L) / 5 (R) separate regions shown; the largest holds 38% (L) / 31% (R) of the supra-threshold map.",
    "centroid": {
     "L": [
-     -21.363,
-     -9.906,
-     -0.909
+     -19.548,
+     -6.578,
+     -2.828
     ],
     "R": [
-     21.051,
-     -8.841,
-     -1.094
+     19.161,
+     -5.602,
+     -2.844
     ]
    },
    "surfaceCentroid": {
     "L": [
-     -21.362,
-     -9.912,
-     -0.904
+     -20.861,
+     -9.015,
+     -4.842
     ],
     "R": [
-     21.054,
-     -8.844,
-     -1.086
+     20.63,
+     -8.16,
+     -5.019
     ]
    }
   },
@@ -1245,7 +1547,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/meshes/ss_cerv.glb",
-   "bytes": 23792,
+   "bytes": 23848,
    "colour": {
     "token": "gpi",
     "light": "#1F7F5A",
@@ -1263,7 +1565,7 @@
    "refIds": [
     "horn2022"
    ],
-   "derivation": "Isosurface at 50% of the positive maximum of the published map.",
+   "derivation": "Isosurface at 50% of the positive maximum of the published map: 2 (L) / 4 (R) separate regions shown; the largest holds 80% (L) / 68% (R) of the supra-threshold map.",
    "centroid": {
     "L": [
      -21.58,
@@ -1278,14 +1580,14 @@
    },
    "surfaceCentroid": {
     "L": [
-     -21.294,
-     -11.152,
-     -4.151
+     -20.921,
+     -9.908,
+     -4.41
     ],
     "R": [
-     21.041,
-     -10.225,
-     -4.495
+     20.36,
+     -9.069,
+     -4.787
     ]
    }
   },
@@ -1295,7 +1597,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/meshes/ss_tremor.glb",
-   "bytes": 14672,
+   "bytes": 16188,
    "colour": {
     "token": "vim",
     "light": "#2D5FB0",
@@ -1311,7 +1613,7 @@
     "https://doi.org/10.1002/ana.25975"
    ],
    "refIds": [],
-   "derivation": "Isosurface at 50% of the positive maximum of the published map.",
+   "derivation": "Isosurface at 50% of the positive maximum of the published map: 4 (L) / 10 (R) separate regions shown; the largest holds 96% (L) / 82% (R) of the supra-threshold map.",
    "centroid": {
     "L": [
      -17.319,
@@ -1326,14 +1628,14 @@
    },
    "surfaceCentroid": {
     "L": [
-     -17.292,
-     -13.373,
-     3.424
+     -17.253,
+     -13.399,
+     3.422
     ],
     "R": [
-     16.78,
-     -12.122,
-     3.157
+     16.83,
+     -12.083,
+     3.219
     ]
    }
   },
@@ -2657,6 +2959,40 @@
    "url": "https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/",
    "citation": [],
    "citationUrls": []
+  },
+  "neudorfer2020": {
+   "name": "Atlas of the human hypothalamic region (Neudorfer 2020)",
+   "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
+   "url": "https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/",
+   "citation": [
+    "Neudorfer C, Germann J, Elias GJB, Gramer R, Boutet A, Lozano AM. A high-resolution in vivo magnetic resonance imaging atlas of the human hypothalamic region. Sci Data. 2020;7(1). doi:10.1038/s41597-020-00644-6."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41597-020-00644-6"
+   ]
+  },
+  "xiao2017": {
+   "name": "MNI PD25 subcortical atlas (Xiao 2017)",
+   "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
+   "url": "https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/",
+   "citation": [
+    "Xiao Y, Fonov V, Chakravarty MM, Beriault S, Al Subaie F, Sadikot A, et al. A dataset of multi-contrast population-averaged brain MRI atlases of a Parkinson's disease cohort. Data in Brief. 2017;12:370-379. doi:10.1016/j.dib.2017.04.013."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.dib.2017.04.013"
+   ]
+  },
+  "pd25hist": {
+   "name": "MNI PD25 histology atlas (Xiao 2017), Lead-DBS import",
+   "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
+   "url": "https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/",
+   "note": "Optic tract label. The Human Motor Thalamus (Ilinsky) optic-tract files were not used: both the lh and rh files lie in the right hemisphere (x > 0).",
+   "citation": [
+    "Xiao Y, Fonov V, Chakravarty MM, Beriault S, Al Subaie F, Sadikot A, et al. A dataset of multi-contrast population-averaged brain MRI atlases of a Parkinson's disease cohort. Data in Brief. 2017;12:370-379. doi:10.1016/j.dib.2017.04.013."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.dib.2017.04.013"
+   ]
   },
   "elias2021": {
    "name": "TOR-PSM probabilistic stimulation maps (Elias 2021)",

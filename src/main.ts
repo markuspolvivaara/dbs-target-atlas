@@ -5,7 +5,9 @@ import { IND, SYM } from './data';
 import { decode, defaultState, encode, type AppState, type Page } from './state';
 import { AtlasPage } from './ui/atlas';
 import { h } from './ui/dom';
-import { coordsPage, creditsPage, imagingPage, refsPage } from './ui/pages';
+import { coordsPage, creditsPage, imagingPage, refsPage, settingsPage } from './ui/pages';
+import { leadPrefFor, onPrefsChange, visibleIndications } from './ui/prefs';
+import { primaryTargetId } from './viewer/selection';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
 
 injectPaletteCss();
@@ -13,15 +15,23 @@ let theme: ThemePref = storedTheme();
 let resolved = applyTheme(theme);
 
 let state: AppState = sanitize(decode(location.hash, defaultState()));
+// a link without an explicit lead position uses the remembered placement for its target
+if (!new URLSearchParams(location.hash.split('?')[1] ?? '').has('lead')) applyLeadPref(state);
+
+/** Put the remembered anchor / depth / spacing for the view's target into the state. */
+function applyLeadPref(s: AppState): void {
+  const { pref } = leadPrefFor(primaryTargetId(s.ind, s.sym));
+  s.lead = { ...s.lead, anchor: pref.anchor, depth: pref.depth, spacing: pref.spacing };
+}
 
 function sanitize(s: AppState): AppState {
-  if (!IND.has(s.ind)) s.ind = 'pd';
+  if (!IND.has(s.ind)) s.ind = visibleIndications()[0].id;
   if (s.sym && SYM.get(s.sym)?.indicationId !== s.ind) s.sym = null;
   return s;
 }
 
 // ---------------------------------------------------------------- shell
-const NAV: [Page, string][] = [['atlas', 'Atlas'], ['imaging', 'Imaging'], ['coords', 'Coordinates'], ['refs', 'References'], ['credits', 'Credits']];
+const NAV: [Page, string][] = [['atlas', 'Atlas'], ['imaging', 'Imaging'], ['coords', 'Coordinates'], ['refs', 'References'], ['credits', 'Credits'], ['settings', 'Settings']];
 const app = document.getElementById('app')!;
 const navLinks = NAV.map(([p, label]) => h('a', { href: `#/${p}`, class: 'navlink', 'data-page': p }, label));
 const themeBtn = h('button', { type: 'button', class: 'theme-btn', onclick: () => cycleTheme() });
@@ -37,6 +47,10 @@ const pages: Record<Page, { el: HTMLElement; render(s: AppState): void }> = {} a
 const update = (fn: (s: AppState) => void, opts: { camera?: boolean } = {}) => {
   const next = structuredClone(state);
   fn(next);
+  // moving to a view with a different target marker restores that target's remembered lead placement
+  if (primaryTargetId(next.ind, next.sym) !== primaryTargetId(state.ind, state.sym)) applyLeadPref(next);
+  // structures hidden from the legend belong to one view
+  if (next.ind !== state.ind || next.sym !== state.sym) next.hidden = [];
   setState(sanitize(next), { camera: opts.camera ?? false, fromCamera: opts.camera === false });
 };
 const atlas = new AtlasPage(update);
@@ -45,6 +59,7 @@ pages.imaging = imagingPage(update);
 pages.coords = coordsPage();
 pages.refs = refsPage();
 pages.credits = creditsPage();
+pages.settings = settingsPage(update, { get: () => theme, set: (t) => setThemePref(t) });
 
 const main = h('main', { id: 'main' }, ...Object.values(pages).map((p) => p.el));
 // the stage height depends on the (wrapping) disclaimer height
@@ -75,7 +90,7 @@ function render(pageChanged = false): void {
   document.body.dataset.page = state.page;
   pages[state.page].render(state);
   if (state.page === 'atlas') atlas.onShow();
-  const titles: Record<Page, string> = { atlas: IND.get(state.ind)!.name, imaging: 'Imaging', coords: 'Coordinates', refs: 'References', credits: 'Credits' };
+  const titles: Record<Page, string> = { atlas: IND.get(state.ind)!.name, imaging: 'Imaging', coords: 'Coordinates', refs: 'References', credits: 'Credits', settings: 'Settings' };
   document.title = `${titles[state.page]} · DBS target atlas`;
   if (pageChanged) window.scrollTo(0, 0);
 }
@@ -85,15 +100,23 @@ window.addEventListener('hashchange', () => {
   // A link with parameters is a complete view description; a bare page link (#/atlas) keeps the current view.
   const bare = !location.hash.includes('?');
   const next = sanitize(bare ? { ...structuredClone(state), page: decode(location.hash).page } : decode(location.hash, defaultState()));
+  if (!bare && !new URLSearchParams(location.hash.split('?')[1] ?? '').has('lead')) applyLeadPref(next);
   setState(next, { camera: !bare || next.page !== state.page });
 });
 
+// a change of visible indications refreshes the atlas chips
+onPrefsChange((kind) => { if (kind === 'indications') atlas.refreshChips(); else atlas.refreshLead(); });
+
 // ---------------------------------------------------------------- theme
 function cycleTheme(): void {
-  theme = theme === 'system' ? (resolved === 'dark' ? 'light' : 'dark') : theme === 'light' ? 'dark' : 'system';
+  setThemePref(theme === 'system' ? (resolved === 'dark' ? 'light' : 'dark') : theme === 'light' ? 'dark' : 'system');
+}
+function setThemePref(t: ThemePref): void {
+  theme = t;
   storeTheme(theme);
   resolved = applyTheme(theme);
   syncTheme();
+  if (state.page === 'settings') pages.settings.render(state);
 }
 function syncTheme(): void {
   themeBtn.textContent = theme === 'system' ? 'Theme: auto' : theme === 'light' ? 'Theme: light' : 'Theme: dark';
@@ -105,7 +128,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () 
 // ---------------------------------------------------------------- keyboard
 function buildHelp(): HTMLDialogElement {
   const rows: [string, string][] = [
-    ['1 – 5', 'Camera: anterior, lateral, superior, posterior-oblique, surgeon’s view'],
+    ['1 – 5', 'Camera: coronal (from the front), sagittal (anterior left), axial (anterior up), posterior-oblique, surgeon’s view'],
     ['H', 'Hemisphere: both → left → right'], ['[ / ]', 'Previous / next indication'], [', / .', 'Previous / next symptom'],
     ['L', 'Show or hide the lead'], ['S', 'Toggle axial slice'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
   ];

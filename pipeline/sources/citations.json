@@ -83,5 +83,15 @@
   "citation": "Morel A, Magnin M, Jeanmonod D. Multiarchitectonic and stereotactic atlas of the human thalamus. J. Comp. Neurol.. 1997;387(4):588-630. doi:10.1002/(sici)1096-9861(19971103)387:4<588::aid-cne8>3.0.co;2-z.",
   "doi": "10.1002/(sici)1096-9861(19971103)387:4<588::aid-cne8>3.0.co;2-z",
   "url": "https://doi.org/10.1002/(sici)1096-9861(19971103)387:4<588::aid-cne8>3.0.co;2-z"
+ },
+ "xiao2017": {
+  "citation": "Xiao Y, Fonov V, Chakravarty MM, Beriault S, Al Subaie F, Sadikot A, et al. A dataset of multi-contrast population-averaged brain MRI atlases of a Parkinson's disease cohort. Data in Brief. 2017;12:370-379. doi:10.1016/j.dib.2017.04.013.",
+  "doi": "10.1016/j.dib.2017.04.013",
+  "url": "https://doi.org/10.1016/j.dib.2017.04.013"
+ },
+ "neudorfer2020": {
+  "citation": "Neudorfer C, Germann J, Elias GJB, Gramer R, Boutet A, Lozano AM. A high-resolution in vivo magnetic resonance imaging atlas of the human hypothalamic region. Sci Data. 2020;7(1). doi:10.1038/s41597-020-00644-6.",
+  "doi": "10.1038/s41597-020-00644-6",
+  "url": "https://doi.org/10.1038/s41597-020-00644-6"
  }
 }

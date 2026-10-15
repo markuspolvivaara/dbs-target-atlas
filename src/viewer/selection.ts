@@ -5,7 +5,7 @@ import type { Look } from './materials';
 /** Nested structures: when a child is highlighted its parent becomes a translucent shell. */
 export const PARENT: Record<string, string> = {
   stn_motor: 'stn', stn_assoc: 'stn', stn_limbic: 'stn', gpi_sm: 'gpi',
-  vim: 'thal', vo: 'thal', cm: 'thal', pf: 'thal',
+  vim: 'thal', vo: 'thal', cm: 'thal', pf: 'thal', ant: 'thal',
 };
 
 /** Shown only when referenced; never ghosted (they overlap their parent). */
@@ -17,6 +17,15 @@ const SUBREGIONS = new Set(['stn_motor', 'stn_assoc', 'stn_limbic', 'gpi_sm']);
  * borders in dual-tract models"). Border tracts are shown when these are targets.
  */
 const BORDER_TRIGGERS = new Set(['vim', 'psa']);
+
+/**
+ * Landmark volumes shown when borders are on: the optic tract beneath the
+ * posteroventral GPi, the red nucleus beside the STN (sources in additions.ts).
+ */
+const GPI_TRIGGERS = new Set(['gpi', 'gpi_sm']);
+/** The red nucleus as a landmark around STN targets (sources in additions.ts). */
+const STN_TRIGGERS = new Set(['stn', 'stn_motor']);
+export const LANDMARKS = new Set(['optic_tract', 'rn']);
 
 export type TractRole = 'key' | 'alt' | 'border';
 
@@ -34,6 +43,15 @@ export interface Plan {
   symptom: Symptom | null;
 }
 
+/** The target marker the lead is placed on: the first primary marker of the view. */
+export function primaryTargetId(indId: string, symId: string | null): string | null {
+  const ind = IND.get(indId);
+  if (!ind) return null;
+  const sym = symId ? SYM.get(symId) : null;
+  if (sym) return sym.targetId;
+  return ind.targetMarkers[0] ?? null;
+}
+
 export function plan(indId: string, symId: string | null, borders: boolean): Plan {
   const ind = IND.get(indId) ?? IND.get('pd')!;
   const sym = symId ? SYM.get(symId) ?? null : null;
@@ -47,7 +65,7 @@ export function plan(indId: string, symId: string | null, borders: boolean): Pla
 
   const primary = sym ? sym.structures : ind.primaryTargets;
   const alts = sym ? sym.alternativeStructures : ind.alternativeTargets;
-  const context = sym ? [] : ind.contextStructures;
+  const context = sym ? sym.contextStructures : ind.contextStructures;
   for (const id of context) if (MAN.get(id)?.type === 'nucleus') looks.set(id, 'context');
   for (const id of alts) looks.set(id, 'alt');
   for (const id of primary) looks.set(id, 'primary');
@@ -67,6 +85,8 @@ export function plan(indId: string, symId: string | null, borders: boolean): Pla
   if (borders && triggers.some((id) => BORDER_TRIGGERS.has(id))) {
     for (const t of ['cst', 'ml']) if (!tracts.has(t)) tracts.set(t, 'border');
   }
+  if (borders && triggers.some((id) => GPI_TRIGGERS.has(id))) looks.set('optic_tract', 'context');
+  if (borders && triggers.some((id) => STN_TRIGGERS.has(id)) && looks.get('rn') === 'ghost') looks.set('rn', 'context');
 
   for (const a of sym ? sym.corticalAreas : ind.corticalAreas) parcels.set(a, 'key');
 
@@ -77,6 +97,7 @@ export function plan(indId: string, symId: string | null, borders: boolean): Pla
     ind.targetMarkers.forEach((t) => markers.push({ targetId: t, primary: true }));
     ind.alternativeMarkers.forEach((t) => markers.push({ targetId: t, primary: false }));
   }
+  if (!sym) for (const v of ind.extraVolumes) looks.set(v, 'context');
   for (const m of markers) {
     const tg = TGT.get(m.targetId);
     // translucent so the marker sphere at its centroid stays visible

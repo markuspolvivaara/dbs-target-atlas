@@ -56,7 +56,33 @@ def world_x(shape: tuple, affine: np.ndarray) -> np.ndarray:
     return affine[0, 0] * ijk[0] + affine[0, 1] * ijk[1] + affine[0, 2] * ijk[2] + affine[0, 3]
 
 
+def union_volumes(paths: list[str]) -> tuple[np.ndarray, np.ndarray]:
+    """Max of several label volumes with equal voxel size, on a grid covering all of them."""
+    from nibabel.processing import resample_from_to
+    imgs = [nib.load(RAW / p) for p in paths]
+    base = imgs[0].affine
+    inv = np.linalg.inv(base)
+    corners = []
+    for im in imgs:
+        s = np.array(im.shape[:3]) - 1
+        for c in np.array(np.meshgrid([0, s[0]], [0, s[1]], [0, s[2]])).T.reshape(-1, 3):
+            corners.append(nib.affines.apply_affine(inv, nib.affines.apply_affine(im.affine, c)))
+    corners = np.array(corners)
+    lo, hi = np.floor(corners.min(0)).astype(int), np.ceil(corners.max(0)).astype(int)
+    aff = base.copy()
+    aff[:3, 3] = nib.affines.apply_affine(base, lo)
+    shape = tuple((hi - lo + 1).tolist())
+    out = np.zeros(shape)
+    for im in imgs:
+        d = np.nan_to_num(np.asanyarray(im.dataobj).astype(np.float64))
+        r = resample_from_to(nib.Nifti1Image(d, im.affine), (shape, aff), order=1)
+        out = np.maximum(out, np.asanyarray(r.dataobj))
+    return out, aff
+
+
 def volume_for(v: C.Volume, side: str) -> tuple[np.ndarray, np.ndarray]:
+    if v.union:
+        return union_volumes([v.files[side]] + [u[side] for u in v.union])
     if side in v.files:
         data, aff = load_volume(v.files[side])
     else:
@@ -77,7 +103,7 @@ def source_centroid(mask: np.ndarray, aff: np.ndarray, weights: np.ndarray | Non
 
 
 def isosurface(data: np.ndarray, aff: np.ndarray, level: float, sigma: float, faces: int,
-               keep_point: np.ndarray | None = None) -> trimesh.Trimesh:
+               keep_point: np.ndarray | None = None, min_area_frac: float = 0.03) -> trimesh.Trimesh:
     vol = ndimage.gaussian_filter(data, sigma) if sigma > 0 else data
     vol = np.pad(vol, 2)
     verts, tris, _, _ = measure.marching_cubes(vol, level=level)
@@ -91,7 +117,7 @@ def isosurface(data: np.ndarray, aff: np.ndarray, level: float, sigma: float, fa
         m = parts[int(np.argmin(d))]
     elif len(parts) > 1:
         total = sum(p.area for p in parts)
-        m = trimesh.util.concatenate([p for p in parts if p.area >= 0.03 * total])
+        m = trimesh.util.concatenate([p for p in parts if p.area >= min_area_frac * total])
     trimesh.smoothing.filter_taubin(m, lamb=0.5, nu=0.53, iterations=12)
     if len(m.faces) > faces:
         m = m.simplify_quadric_decimation(face_count=faces)
@@ -131,6 +157,38 @@ def build_nuclei(report: dict, coords: dict) -> None:
             "dataset": v.dataset,
         }
         print(f"nucleus {v.id:10s} L{rep['L']['sourceCentroid']} R{rep['R']['sourceCentroid']} faces {rep['L']['faces']}/{rep['R']['faces']}")
+    ant_mtt_junction(coords)
+
+
+def ant_mtt_junction(coords: dict) -> None:
+    """Centroid of ANT voxels within ANT_MTT_JUNCTION_MM of the MTT label (both Morel, same grid)."""
+    ant = next(v for v in C.NUCLEI if v.id == "ant")
+    mtt = next(v for v in C.NUCLEI if v.id == "mtt")
+    out = {}
+    for side in ("L", "R"):
+        # common grid covering ANT and MTT, then each mask resampled onto it
+        from nibabel.processing import resample_from_to
+        d, aff = union_volumes([ant.files[side]] + [u[side] for u in ant.union] + [mtt.files[side]])
+        def on_grid(paths):
+            m = np.zeros(d.shape)
+            for p in paths:
+                im = nib.load(RAW / p)
+                r = resample_from_to(nib.Nifti1Image(np.nan_to_num(np.asanyarray(im.dataobj).astype(float)), im.affine), (d.shape, aff), order=1)
+                m = np.maximum(m, np.asanyarray(r.dataobj))
+            return m >= 0.5
+        ant_m = on_grid([ant.files[side]] + [u[side] for u in ant.union])
+        mtt_m = on_grid([mtt.files[side]])
+        dist = ndimage.distance_transform_edt(~mtt_m, sampling=np.abs(np.diag(aff)[:3]))
+        j = ant_m & (dist <= C.ANT_MTT_JUNCTION_MM)
+        if not j.any():
+            raise SystemExit(f"ANT-MTT junction empty on {side}")
+        out[side] = source_centroid(j, aff)
+    coords["atlas:ant_mtt"] = {
+        "L": out["L"], "R": out["R"], "dataset": "morel",
+        "method": (f"Centroid of Morel ANT (AV/AM/AD) voxels within {C.ANT_MTT_JUNCTION_MM:g} mm of the Morel "
+                   "mammillothalamic tract label: an atlas-derived ANT-MTT junction, not a published sweet spot."),
+    }
+    print(f"junction ant_mtt L{out['L']} R{out['R']}")
 
 
 def build_sweetspots(report: dict, coords: dict) -> None:
@@ -141,26 +199,37 @@ def build_sweetspots(report: dict, coords: dict) -> None:
             pos = np.clip(data, 0, None)
             peak = pos.max()
             level = C.SWEETSPOT_FRACTION * peak
-            # keep the connected region that contains the peak
-            lab, _ = ndimage.label(pos >= level)
-            pidx = np.unravel_index(np.argmax(pos), pos.shape)
-            region = lab == lab[pidx]
+            # Connected regions >= level. The marker is the value-weighted centroid of the region
+            # with the largest summed value (not the region around the single highest voxel: in the
+            # Hollunder PD map that is an isolated 2-voxel blip above the STN). The mesh shows every
+            # region holding >= 1% of the supra-threshold mass, i.e. the published map as a whole.
+            lab, n = ndimage.label(pos >= level)
+            sums = ndimage.sum(pos, lab, index=np.arange(1, n + 1))
+            order = np.argsort(sums)[::-1]
+            region = lab == (int(order[0]) + 1)
+            keep = np.isin(lab, [int(i) + 1 for i in order if sums[i] >= 0.01 * sums.sum()])
+            pidx = np.unravel_index(np.argmax(np.where(region, pos, 0)), pos.shape)
             peak_mm = nib.affines.apply_affine(aff, np.array(pidx, float))
-            m = isosurface(np.where(region, pos, 0), aff, level, 0.0 if v.dataset == "elias2021" else 0.5,
-                           v.faces, keep_point=peak_mm)
+            m = isosurface(np.where(keep, pos, 0), aff, level, 0.0 if v.dataset == "elias2021" else 0.5,
+                           v.faces, min_area_frac=0.0)
             rep[side] = {
                 "sourceCentroid": source_centroid(region, aff, pos),
+                "mapCentroid": source_centroid(keep, aff, pos),
                 "peak": peak_mm.round(3).tolist(), "peakValue": round(float(peak), 4),
                 "meshCentroid": m.centroid.round(3).tolist(), "surfaceCentroid": m.centroid.round(3).tolist(),
                 "faces": int(len(m.faces)), "regionVoxels": int(region.sum()),
+                "regions": int(n), "regionsShown": int(len(np.unique(lab[keep]))),
+                "dominantFraction": round(float(sums[order[0]] / sums.sum()), 3),
             }
             nodes.append(mesh_node(m, side))
         write_glb(BUILD / "meshes" / f"{v.id}.glb", nodes, {"id": v.id})
         report[v.id] = rep
         coords[v.id] = {
             "L": rep["L"]["sourceCentroid"], "R": rep["R"]["sourceCentroid"],
-            "method": (f"Value-weighted centroid of the connected region >= {int(C.SWEETSPOT_FRACTION * 100)}% "
-                       f"of the positive maximum in the published map ({C.DATASETS[v.dataset]['name']})."),
+            "method": (f"Value-weighted centroid of the largest connected region >= {int(C.SWEETSPOT_FRACTION * 100)}% "
+                       f"of the positive maximum in the published map ({C.DATASETS[v.dataset]['name']}). "
+                       f"That region holds {rep['L']['dominantFraction']:.0%} (left) / {rep['R']['dominantFraction']:.0%} (right) "
+                       f"of the supra-threshold map; the 3D volume shows all regions."),
             "dataset": v.dataset,
         }
         print(f"sweetspot {v.id:10s} L{rep['L']['sourceCentroid']} R{rep['R']['sourceCentroid']}")

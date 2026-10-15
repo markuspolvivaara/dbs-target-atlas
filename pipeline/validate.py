@@ -75,14 +75,30 @@ def main() -> int:
             check("orientation", (c[0] < 0) == (side == "L"), f"{v.id}/{side} x={c[0]:.1f}")
             check("in-brain", in_head(c), f"{v.id}/{side} {c.round(1).tolist()}")
             mc = np.array(s["meshCentroid"])
-            d = float(np.linalg.norm(mc - c))
+            ref = np.array(s.get("mapCentroid", c))  # sweet-spot meshes show the whole map
+            d = float(np.linalg.norm(mc - ref))
             # watertight nuclei: volume centroid should match closely; open or
             # sweet-spot meshes use the surface centroid, so allow 2 mm
-            tol_c = CENTROID_MM if s.get("watertight") else 2.0
+            tol_c = CENTROID_MM if s.get("watertight") else 2.0 if "mapCentroid" not in s else 3.0
             check("centroid", d <= tol_c, f"{v.id}/{side} mesh-source distance {d:.2f} mm (tol {tol_c})")
             if "sourceVolumeMl" in s and s.get("meshVolumeMl"):
                 ratio = s["meshVolumeMl"] / s["sourceVolumeMl"]
                 check("volume", 0.75 <= ratio <= 1.33, f"{v.id}/{side} mesh/source volume {ratio:.2f}")
+
+    # sweet-spot markers must lie inside (or within 1 mm of) their own >=50% region
+    for v in C.SWEETSPOTS:
+        for side in ("L", "R"):
+            img_rel = v.files[side]
+            img = nib.load(RAW / img_rel)
+            d = np.nan_to_num(np.asanyarray(img.dataobj).astype(float))
+            region = d >= C.SWEETSPOT_FRACTION * np.clip(d, 0, None).max()
+            dist = ndimage.distance_transform_edt(~region, sampling=np.abs(np.diag(img.affine)[:3]))
+            ijk = np.rint(nib.affines.apply_affine(np.linalg.inv(img.affine), rep[v.id][side]["sourceCentroid"])).astype(int)
+            inside = np.all(ijk >= 0) and np.all(ijk < d.shape)
+            check("sweetspot", inside and dist[tuple(ijk)] <= 1.0,
+                  f"{v.id}/{side} marker {np.round(rep[v.id][side]['sourceCentroid'], 1).tolist()} "
+                  f"{'in' if inside and dist[tuple(ijk)] == 0 else 'near'} its map region "
+                  f"(largest of {rep[v.id][side]['regions']}, {rep[v.id][side]['dominantFraction']:.0%} of mass)")
 
     # tracts: hemisphere of the superior end must match the node side
     crossing = {"drtt"}  # decussating: dentate end contralateral, thalamic/cortical end ipsilateral

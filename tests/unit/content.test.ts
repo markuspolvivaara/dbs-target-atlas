@@ -5,6 +5,9 @@ import { CONTENT_REFERENCE_IDS } from '../../src/data/references';
 import { IMAGING_ASIDE } from '../../src/data/imaging';
 import { rows, words, signed, validate, fmt, CALC_NOTE, CALC_LEDE } from '../../src/data/calculator';
 import { loadSource } from './source';
+import { EPILEPSY_INDICATION, EPILEPSY_REFERENCES } from '../../src/data/epilepsy';
+import { ADDITION_REFERENCES } from '../../src/data/additions';
+import { plan } from '../../src/viewer/selection';
 
 const src = loadSource();
 
@@ -47,7 +50,8 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
     }
   });
   it('keeps every indication text and evidence claim', () => {
-    expect(CONTENT.indications.map((i) => i.id)).toEqual(src.IND.map((i) => i.id));
+    // the original indications, in order, plus the researched epilepsy addition
+    expect(CONTENT.indications.map((i) => i.id)).toEqual([...src.IND.map((i) => i.id), 'epi']);
     for (const o of src.IND) {
       const n = CONTENT.indications.find((i) => i.id === o.id)!;
       expect(n.label).toBe(o.label);
@@ -79,7 +83,7 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
     }
   });
   it('keeps imaging cards verbatim', () => {
-    expect(CONTENT.imaging.map((m) => m.id)).toEqual(src.IMG.map((m) => m.id));
+    expect(CONTENT.imaging.map((m) => m.id)).toEqual([...src.IMG.map((m) => m.id), 'ant']);
     for (const o of src.IMG) {
       const n = CONTENT.imaging.find((m) => m.id === o.id)!;
       expect([n.label, n.title, n.accent, n.tract, n.note]).toEqual([o.label, o.title, o.accent, o.tract, o.note]);
@@ -90,7 +94,11 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
   });
   it('symptom summaries, notes and claims quote existing content or are labelled stand-ins', () => {
     const corpus = src.html;
-    for (const s of CONTENT.symptoms) for (const e of s.evidence) expect(corpus.includes(e.claim), `${s.id}: ${e.claim}`).toBe(true);
+    const epiClaims = new Set(EPILEPSY_INDICATION.evidence.map((e) => e.claim));
+    for (const s of CONTENT.symptoms) for (const e of s.evidence) {
+      const ok = s.indicationId === 'epi' ? epiClaims.has(e.claim) : corpus.includes(e.claim);
+      expect(ok, `${s.id}: ${e.claim}`).toBe(true);
+    }
   });
   it('keeps the calculator logic and text', () => {
     expect(src.html).toContain(CALC_LEDE);
@@ -113,7 +121,7 @@ describe('manifest', () => {
     const ids = new Set(MANIFEST.structures.map((s) => s.id));
     const refd = [
       ...CONTENT.indications.flatMap((i) => [...i.primaryTargets, ...i.alternativeTargets, ...i.contextStructures, ...i.keyTracts, ...i.alternativeTracts, ...i.corticalAreas]),
-      ...CONTENT.symptoms.flatMap((s) => [...s.structures, ...s.alternativeStructures, ...s.tracts, ...s.corticalAreas]),
+      ...CONTENT.symptoms.flatMap((s) => [...s.structures, ...s.alternativeStructures, ...s.contextStructures, ...s.tracts, ...s.corticalAreas]),
       ...CONTENT.targets.map((t) => t.structureId),
     ];
     expect(refd.filter((r) => !ids.has(r))).toEqual([]);
@@ -154,6 +162,90 @@ describe('targets', () => {
       const m = MANIFEST.structures.find((s) => s.id === t.structureId)!;
       const d = Math.hypot(...t.mni.left.map((v, i) => v - m.centroid!.L[i]));
       expect(d, t.id).toBeLessThan(0.01); // marker = centroid of the same map
+    }
+  });
+});
+
+describe('epilepsy (researched addition)', () => {
+  const epiIds = new Set(EPILEPSY_REFERENCES.map((r) => r.id));
+  it('is cited only with its own verified references and dataset citations', () => {
+    const ind = CONTENT.indications.find((i) => i.id === 'epi')!;
+    const used = [
+      ...ind.evidence.flatMap((e) => e.refIds), ...ind.caveatRefIds,
+      ...CONTENT.symptoms.filter((s) => s.indicationId === 'epi').flatMap((s) => [...s.evidence.flatMap((e) => e.refIds), ...s.noteRefIds]),
+      ...CONTENT.imaging.filter((m) => m.id === 'ant').flatMap((m) => m.refIds),
+    ];
+    expect(used.filter((r) => !epiIds.has(r))).toEqual([]);
+    for (const r of EPILEPSY_REFERENCES) {
+      expect(r.topic).toBe('epi');
+      expect(r.url).toMatch(/^https:\/\/doi\.org\/10\./);
+      expect(r.citation).toContain(r.url.replace('https://doi.org/', 'doi:'));
+    }
+  });
+  it('does not change any reference from the original page', () => {
+    for (const k of Object.keys(src.R)) expect(epiIds.has(k), k).toBe(false);
+  });
+  it('places the ANT, its MTT junction and the CM where independent atlases put them', () => {
+    const m = (id: string) => MANIFEST.structures.find((s) => s.id === id)!;
+    const ant = m('ant').centroid!, cm = m('cm').centroid!, hip = m('hippocampus').centroid!;
+    // ANT anterior and superior to CM; hippocampus far lateral and inferior (RAS)
+    for (const side of ['L', 'R'] as const) {
+      expect(ant[side][1]).toBeGreaterThan(cm[side][1]);
+      expect(ant[side][2]).toBeGreaterThan(cm[side][2]);
+      expect(Math.abs(hip[side][0])).toBeGreaterThan(Math.abs(ant[side][0]) + 10);
+      expect(hip[side][2]).toBeLessThan(ant[side][2]);
+    }
+    const j = CONTENT.targets.find((t) => t.id === 't-ant-mtt')!;
+    expect(j.kind).toBe('atlasCoordinate');
+    // junction lies below the ANT centroid (the tract enters the ANT from below)
+    expect(j.mni.left[2]).toBeLessThan(ant.L[2]);
+  });
+});
+
+describe('optic tract (GPi landmark, researched addition)', () => {
+  it('sits beneath the GPi on both sides', () => {
+    const m = (id: string) => MANIFEST.structures.find((s) => s.id === id)!;
+    for (const side of ['L', 'R'] as const) {
+      expect(m('optic_tract').centroid![side][2]).toBeLessThan(m('gpi').centroid![side][2] - 5);
+      expect(Math.sign(m('optic_tract').centroid![side][0])).toBe(side === 'L' ? -1 : 1);
+    }
+  });
+  it('appears as a landmark whenever GPi is a target or alternative, and only then', () => {
+    for (const ind of CONTENT.indications) {
+      const p = plan(ind.id, null, true);
+      const gpi = [...ind.primaryTargets, ...ind.alternativeTargets].some((t) => t === 'gpi' || t === 'gpi_sm');
+      expect(p.looks.get('optic_tract') === 'context', ind.id).toBe(gpi);
+      expect(plan(ind.id, null, false).looks.get('optic_tract'), ind.id).not.toBe('context');
+    }
+  });
+  it('uses only its own verified references, distinct from the original ones', () => {
+    const ids = ADDITION_REFERENCES.map((r) => r.id);
+    for (const id of ids) expect(Object.keys(src.R)).not.toContain(id);
+    const desc = CONTENT.structures.find((s) => s.id === 'optic_tract')!;
+    expect(desc.description).toMatch(/optic tract/i);
+    for (const r of desc.refIds.filter((r) => CONTENT.references.find((x) => x.id === r)?.topic !== 'atlas')) expect(ids).toContain(r);
+  });
+});
+
+describe('red nucleus (STN landmark, researched addition)', () => {
+  it('appears as a landmark whenever STN is a target or alternative, and only then', () => {
+    for (const ind of CONTENT.indications) {
+      const stn = [...ind.primaryTargets, ...ind.alternativeTargets].some((t) => t === 'stn' || t === 'stn_motor');
+      expect(plan(ind.id, null, true).looks.get('rn') === 'context', ind.id).toBe(stn);
+      expect(plan(ind.id, null, false).looks.get('rn'), ind.id).not.toBe('context');
+    }
+  });
+  it('card cites only verified addition references, including the dissenting study', () => {
+    const d = CONTENT.structures.find((s) => s.id === 'rn')!;
+    const ids = ADDITION_REFERENCES.map((r) => r.id);
+    expect(d.refIds).toEqual(expect.arrayContaining(['bejjani2000', 'andradesouza2005', 'danish2006']));
+    for (const r of d.refIds.filter((r) => CONTENT.references.find((x) => x.id === r)?.topic !== 'atlas')) expect(ids).toContain(r);
+  });
+  it('lies posteromedial to the STN (RAS), as in the sources', () => {
+    const m = (id: string) => MANIFEST.structures.find((s) => s.id === id)!.centroid!;
+    for (const side of ['L', 'R'] as const) {
+      expect(Math.abs(m('rn')[side][0])).toBeLessThan(Math.abs(m('stn')[side][0]));
+      expect(m('rn')[side][1]).toBeLessThan(m('stn')[side][1]);
     }
   });
 });

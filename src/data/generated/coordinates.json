@@ -18,6 +18,34 @@
   "source": "Lead-DBS tools/acpc2mni/ea_mni2acpc.m (netstim/leaddbs, GPL-3.0)",
   "url": "https://github.com/netstim/leaddbs/blob/master/tools/acpc2mni/ea_mni2acpc.m"
  },
+ "atlas:ant": {
+  "L": [
+   -4.539,
+   -5.441,
+   10.666
+  ],
+  "R": [
+   5.019,
+   -5.379,
+   10.609
+  ],
+  "method": "Centroid of Morel thalamus atlas in MNI space (Lead-DBS: 'Morel Atlas (Jakab 2008)') label 'Anterior nucleus of the thalamus (ANT)' (voxels >= 0.5).",
+  "dataset": "morel"
+ },
+ "atlas:ant_mtt": {
+  "L": [
+   -5.59,
+   -4.292,
+   8.014
+  ],
+  "R": [
+   6.106,
+   -4.268,
+   7.904
+  ],
+  "dataset": "morel",
+  "method": "Centroid of Morel ANT (AV/AM/AD) voxels within 1 mm of the Morel mammillothalamic tract label: an atlas-derived ANT-MTT junction, not a published sweet spot."
+ },
  "atlas:caudate": {
   "L": [
    -14.24,
@@ -59,6 +87,20 @@
   ],
   "method": "Centroid of SUIT cerebellar atlas, dentate labels (Diedrichsen) label 'Dentate nucleus' (voxels >= 0.5).",
   "dataset": "suit"
+ },
+ "atlas:fornix": {
+  "L": [
+   -3.111,
+   -0.245,
+   -1.557
+  ],
+  "R": [
+   2.577,
+   -0.226,
+   -1.812
+  ],
+  "method": "Centroid of Atlas of the human hypothalamic region (Neudorfer 2020) label 'Fornix' (voxels >= 0.5).",
+  "dataset": "neudorfer2020"
  },
  "atlas:gpe": {
   "L": [
@@ -102,6 +144,48 @@
   "method": "Centroid of DISTAL Medium (Ewert 2017) label 'GPi, sensorimotor zone' (voxels >= 0.5).",
   "dataset": "distal"
  },
+ "atlas:hippocampus": {
+  "L": [
+   -24.796,
+   -24.454,
+   -13.766
+  ],
+  "R": [
+   25.78,
+   -22.44,
+   -14.489
+  ],
+  "method": "Centroid of MNI PD25 subcortical atlas (Xiao 2017) label 'Hippocampus' (voxels >= 0.5).",
+  "dataset": "xiao2017"
+ },
+ "atlas:mamm": {
+  "L": [
+   -2.628,
+   -8.32,
+   -14.413
+  ],
+  "R": [
+   2.49,
+   -8.176,
+   -14.558
+  ],
+  "method": "Centroid of Atlas of the human hypothalamic region (Neudorfer 2020) label 'Mammillary body' (voxels >= 0.5).",
+  "dataset": "neudorfer2020"
+ },
+ "atlas:mtt": {
+  "L": [
+   -6.039,
+   -8.636,
+   -2.663
+  ],
+  "R": [
+   6.524,
+   -8.511,
+   -2.67
+  ],
+  "method": "Centroid of Morel thalamus atlas in MNI space (Lead-DBS: 'Morel Atlas (Jakab 2008)') label 'Mammillothalamic tract' (voxels >= 0.5).",
+  "dataset": "morel"
+ },
  "atlas:nacc": {
   "L": [
    -10.243,
@@ -115,6 +199,20 @@
   ],
   "method": "Centroid of CIT168 subcortical atlas (Pauli 2018), Lead-DBS import label 'Nucleus accumbens' (voxels >= 0.5).",
   "dataset": "cit168"
+ },
+ "atlas:optic_tract": {
+  "L": [
+   -13.84,
+   -5.097,
+   -15.269
+  ],
+  "R": [
+   13.297,
+   -4.216,
+   -15.305
+  ],
+  "method": "Centroid of MNI PD25 histology atlas (Xiao 2017), Lead-DBS import label 'Optic tract' (voxels >= 0.5).",
+  "dataset": "pd25hist"
  },
  "atlas:pf": {
   "L": [
@@ -323,49 +421,49 @@
    -10.16,
    -4.318
   ],
-  "method": "Value-weighted centroid of the connected region >= 50% of the positive maximum in the published map (Dystonia Response Tract Atlas (Horn 2022), built on the Petersen 2019 pathway atlas).",
+  "method": "Value-weighted centroid of the largest connected region >= 50% of the positive maximum in the published map (Dystonia Response Tract Atlas (Horn 2022), built on the Petersen 2019 pathway atlas). That region holds 80% (left) / 68% (right) of the supra-threshold map; the 3D volume shows all regions.",
   "dataset": "horn2022"
  },
  "ss_dyt": {
   "L": [
-   -17.043,
-   -9.266,
-   -2.255
+   -15.075,
+   -14.841,
+   -2.234
   ],
   "R": [
-   17.265,
-   -8.29,
-   -2.238
+   15.14,
+   -13.893,
+   -2.248
   ],
-  "method": "Value-weighted centroid of the connected region >= 50% of the positive maximum in the published map (Human Dysfunctome Atlas (Hollunder 2024)).",
+  "method": "Value-weighted centroid of the largest connected region >= 50% of the positive maximum in the published map (Human Dysfunctome Atlas (Hollunder 2024)). That region holds 76% (left) / 76% (right) of the supra-threshold map; the 3D volume shows all regions.",
   "dataset": "hollunder2024"
  },
  "ss_gen": {
   "L": [
-   -21.363,
-   -9.906,
-   -0.909
+   -19.548,
+   -6.578,
+   -2.828
   ],
   "R": [
-   21.051,
-   -8.841,
-   -1.094
+   19.161,
+   -5.602,
+   -2.844
   ],
-  "method": "Value-weighted centroid of the connected region >= 50% of the positive maximum in the published map (Dystonia Response Tract Atlas (Horn 2022), built on the Petersen 2019 pathway atlas).",
+  "method": "Value-weighted centroid of the largest connected region >= 50% of the positive maximum in the published map (Dystonia Response Tract Atlas (Horn 2022), built on the Petersen 2019 pathway atlas). That region holds 38% (left) / 31% (right) of the supra-threshold map; the 3D volume shows all regions.",
   "dataset": "horn2022"
  },
  "ss_pd": {
   "L": [
-   -13.944,
-   -12.066,
-   -2.874
+   -12.108,
+   -14.057,
+   -6.722
   ],
   "R": [
-   13.852,
-   -10.908,
-   -2.954
+   11.83,
+   -13.42,
+   -6.726
   ],
-  "method": "Value-weighted centroid of the connected region >= 50% of the positive maximum in the published map (Human Dysfunctome Atlas (Hollunder 2024)).",
+  "method": "Value-weighted centroid of the largest connected region >= 50% of the positive maximum in the published map (Human Dysfunctome Atlas (Hollunder 2024)). That region holds 71% (left) / 72% (right) of the supra-threshold map; the 3D volume shows all regions.",
   "dataset": "hollunder2024"
  },
  "ss_tremor": {
@@ -379,21 +477,21 @@
    -12.083,
    3.116
   ],
-  "method": "Value-weighted centroid of the connected region >= 50% of the positive maximum in the published map (TOR-PSM probabilistic stimulation maps (Elias 2021)).",
+  "method": "Value-weighted centroid of the largest connected region >= 50% of the positive maximum in the published map (TOR-PSM probabilistic stimulation maps (Elias 2021)). That region holds 96% (left) / 82% (right) of the supra-threshold map; the 3D volume shows all regions.",
   "dataset": "elias2021"
  },
  "ss_ts": {
   "L": [
-   -12.465,
-   -15.062,
-   -4.86
+   -14.857,
+   -9.159,
+   -4.421
   ],
   "R": [
-   12.407,
-   -14.005,
-   -4.771
+   14.863,
+   -8.013,
+   -4.412
   ],
-  "method": "Value-weighted centroid of the connected region >= 50% of the positive maximum in the published map (Human Dysfunctome Atlas (Hollunder 2024)).",
+  "method": "Value-weighted centroid of the largest connected region >= 50% of the positive maximum in the published map (Human Dysfunctome Atlas (Hollunder 2024)). That region holds 50% (left) / 52% (right) of the supra-threshold map; the 3D volume shows all regions.",
   "dataset": "hollunder2024"
  }
 }

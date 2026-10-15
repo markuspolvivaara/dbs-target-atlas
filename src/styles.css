@@ -127,6 +127,14 @@ code { font-size: 0.92em; }
 .gizmo text { font: 700 11px "Atkinson Hyperlegible", system-ui, sans-serif; fill: var(--ink); text-anchor: middle; }
 .gizmo text.gz-lr { fill: var(--link); font-size: 12.5px; }
 .gizmo text.gz-c { font-size: 13px; }
+.legend3d li.off .lg-item, .legend3d li.off .sw { opacity: 0.4; }
+.legend3d li.off .lg-item { text-decoration: line-through; }
+.legend3d li.on { background: var(--soft); border-radius: 6px; margin: 0 -4px; padding: 1px 4px; }
+.legend3d li.on .lg-item { font-weight: 700; text-decoration: none; }
+.legend3d .eye { font: inherit; font-size: 11px; line-height: 1; width: 22px; height: 22px; flex: none; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; padding: 0; }
+.legend3d .eye[aria-pressed="false"] { color: var(--muted); }
+.legend3d .lg-actions { gap: 14px; padding-top: 4px; border-top: 1px solid var(--line); }
+@media (pointer: coarse) { .legend3d .eye { width: 32px; height: 32px; font-size: 13px; } }
 .lg-item { font: inherit; background: none; border: 0; padding: 0; color: inherit; text-align: left; cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px; }
 .legend3d .info { font: inherit; font-size: 11px; font-weight: 700; width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; flex: none; padding: 0; }
 .sw { flex: none; width: 22px; height: 12px; border-radius: 3px; }
@@ -244,6 +252,11 @@ legend { font-weight: 700; padding: 0 4px; }
 .count { color: var(--muted); font-size: 0.9rem; margin: 0 0 4px; }
 .cite { font-size: 0.95rem; }
 .dataset h3 { margin-top: 0; }
+.settings-list { display: grid; gap: 2px; margin: 8px 0; }
+.set-row { border-bottom: 1px solid var(--line); padding: 4px 0; }
+.set-swatch { width: 12px; height: 12px; border-radius: 3px; background: var(--accent); flex: none; }
+.set-sub { color: var(--muted); font-size: 0.9rem; }
+.set-actions { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
 @media (min-width: 720px) { .form { grid-template-columns: 1fr 1fr 1fr; align-items: end; } h1 { font-size: 2rem; } }
 
 /* ---------------------------------------------------------------- help dialog */

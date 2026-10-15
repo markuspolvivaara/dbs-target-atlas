@@ -1,10 +1,13 @@
 import type { CameraPreset } from './data/schema';
 
-export type Page = 'atlas' | 'imaging' | 'coords' | 'refs' | 'credits';
+export type Page = 'atlas' | 'imaging' | 'coords' | 'refs' | 'credits' | 'settings';
 export type Hemi = 'L' | 'R' | 'both';
 export type LayerKey = 'nuclei' | 'tracts' | 'cortex' | 'targets' | 'electrode';
 export type Axis = 'axial' | 'coronal' | 'sagittal';
 export type V3 = [number, number, number];
+/** Which part of the lead sits on the target marker. */
+export type LeadAnchor = 'centre' | 'tip' | 'c0' | 'c1' | 'c2' | 'c3';
+export const LEAD_ANCHORS: LeadAnchor[] = ['centre', 'c0', 'c1', 'c2', 'c3', 'tip'];
 
 export interface Layer { on: boolean; opacity: number }
 export interface Clip { on: boolean; mm: number; cut: boolean; flip: boolean }
@@ -20,13 +23,16 @@ export interface AppState {
   borders: boolean;
   labels: boolean;
   clip: Record<Axis, Clip>;
-  lead: { spacing: 0.5 | 1.5; depth: number; ring: number; tilt: number; stim: boolean; contact: number; radius: number };
+  lead: { spacing: 0.5 | 1.5; anchor: LeadAnchor; depth: number; ring: number; tilt: number; stim: boolean; contact: number; radius: number };
+  /** Selected structure or marker: its card opens and it is highlighted in 3D. */
   sel: string | null;
+  /** Structures / markers switched off from the legend for the current view. */
+  hidden: string[];
   img: string;
   theme: 'system' | 'light' | 'dark';
 }
 
-export const DEFAULT_LEAD = { spacing: 0.5 as const, depth: 0, ring: 60, tilt: 15, stim: false, contact: 1, radius: 2 };
+export const DEFAULT_LEAD = { spacing: 0.5 as const, anchor: 'centre' as LeadAnchor, depth: 0, ring: 60, tilt: 15, stim: false, contact: 1, radius: 2 };
 
 export function defaultState(): AppState {
   return {
@@ -47,13 +53,15 @@ export function defaultState(): AppState {
       sagittal: { on: false, mm: -12, cut: false, flip: false },
     },
     lead: { ...DEFAULT_LEAD },
-    sel: null, img: 'stn', theme: 'system',
+    sel: null, hidden: [], img: 'stn', theme: 'system',
   };
 }
 
 // ---------------------------------------------------------------- URL hash
-// #/atlas?i=pd&s=pd-tremor&h=L&c=anterior&ly=n1.00,t1.00,c0.50,g1.00,e0&ax=-4.0c ...
-const PAGES: Page[] = ['atlas', 'imaging', 'coords', 'refs', 'credits'];
+// #/atlas?i=pd&s=pd-tremor&h=L&c=coronal&ly=n1.00,t1.00,c0.50,g1.00,e0&ax=-4.0c ...
+/** Preset names used before 'anterior/lateral/superior' became 'coronal/sagittal/axial'. */
+const LEGACY_PRESETS: Record<string, CameraPreset> = { anterior: 'coronal', lateral: 'sagittal', superior: 'axial' };
+const PAGES: Page[] = ['atlas', 'imaging', 'coords', 'refs', 'credits', 'settings'];
 const LAYER_CODES: [LayerKey, string][] = [['nuclei', 'n'], ['tracts', 't'], ['cortex', 'c'], ['targets', 'g'], ['electrode', 'e']];
 const AXES: [Axis, string][] = [['axial', 'ax'], ['coronal', 'co'], ['sagittal', 'sa']];
 const r1 = (n: number) => Math.round(n * 10) / 10;
@@ -78,10 +86,11 @@ export function encode(s: AppState): string {
     }
     if (s.layers.electrode.on) {
       const l = s.lead;
-      p.set('lead', [l.spacing, r1(l.depth), l.ring, l.tilt].join(','));
+      p.set('lead', [l.spacing, r1(l.depth), l.ring, l.tilt, ...(l.anchor !== 'centre' ? [l.anchor] : [])].join(','));
       if (l.stim) p.set('stim', [l.contact, r1(l.radius)].join(','));
     }
     if (s.sel) p.set('sel', s.sel);
+    if (s.hidden.length) p.set('hid', s.hidden.join(','));
   } else if (s.page === 'imaging') {
     p.set('t', s.img);
   }
@@ -104,7 +113,8 @@ export function decode(hash: string, base: AppState = defaultState()): AppState 
   if (c) {
     const parts = c.split(',').map(Number);
     if (parts.length === 6 && parts.every(Number.isFinite)) s.cam = { preset: null, pos: parts.slice(0, 3) as V3, tgt: parts.slice(3) as V3 };
-    else if (['anterior', 'lateral', 'superior', 'posteriorOblique', 'surgeon'].includes(c)) s.cam = { preset: c as CameraPreset };
+    else if (['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon'].includes(c)) s.cam = { preset: c as CameraPreset };
+    else if (c in LEGACY_PRESETS) s.cam = { preset: LEGACY_PRESETS[c] }; // links shared before the rename
   }
   const ly = p.get('ly');
   if (ly) for (const tok of ly.split(',')) {
@@ -121,9 +131,11 @@ export function decode(hash: string, base: AppState = defaultState()): AppState 
   }
   const lead = p.get('lead');
   if (lead) {
-    const [sp, d, ring, tilt] = lead.split(',').map(Number);
+    const parts = lead.split(',');
+    const [sp, d, ring, tilt] = parts.map(Number);
+    const anchor = (LEAD_ANCHORS as string[]).includes(parts[4]) ? (parts[4] as LeadAnchor) : 'centre';
     s.layers.electrode.on = true;
-    s.lead = { ...s.lead, spacing: sp === 1.5 ? 1.5 : 0.5, depth: num(String(d), 0), ring: num(String(ring), 60), tilt: num(String(tilt), 15) };
+    s.lead = { ...s.lead, spacing: sp === 1.5 ? 1.5 : 0.5, anchor, depth: num(String(d), 0), ring: num(String(ring), 60), tilt: num(String(tilt), 15) };
   }
   const stim = p.get('stim');
   if (stim) {
@@ -133,6 +145,7 @@ export function decode(hash: string, base: AppState = defaultState()): AppState 
     s.lead.radius = Math.min(6, Math.max(0.5, num(String(r), 2)));
   }
   s.sel = p.get('sel');
+  s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
   if (p.has('t')) s.img = p.get('t')!;
   return s;
 }

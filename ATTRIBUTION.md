@@ -59,7 +59,7 @@ The ICBM 2009b T1 template slices carry the McGill/MNI notice:
 - Cite: Morel A, Magnin M, Jeanmonod D. Multiarchitectonic and stereotactic atlas of the human thalamus. J. Comp. Neurol.. 1997;387(4):588-630. doi:10.1002/(sici)1096-9861(19971103)387:4<588::aid-cne8>3.0.co;2-z.
 - Cite: Krauth A, Blanc R, Poveda A, Jeanmonod D, Morel A, Székely G. A mean three-dimensional atlas of the human thalamus: Generation from multiple histological data. NeuroImage. 2010;49(3):2053-2062. doi:10.1016/j.neuroimage.2009.10.042.
 - TODO: Confirm the exact 'Jakab 2008' publication that Lead-DBS credits for the MNI version.
-- Assets: vo, cm, pf
+- Assets: vo, cm, pf, ant, mtt
 
 ### Zona incerta atlas (Lau 2020)
 
@@ -128,6 +128,28 @@ The ICBM 2009b T1 template slices carry the McGill/MNI notice:
 - Source: https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/
 - Cite: see in-app reference(s) hollunder2024
 - Assets: ss_pd, ss_dyt, ss_ts, sw_pd, sw_dyt, sw_ts, sw_pd_m1, sw_pd_sma, sw_pd_pm
+
+### Atlas of the human hypothalamic region (Neudorfer 2020)
+
+- Licence: GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md
+- Source: https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/
+- Cite: Neudorfer C, Germann J, Elias GJB, Gramer R, Boutet A, Lozano AM. A high-resolution in vivo magnetic resonance imaging atlas of the human hypothalamic region. Sci Data. 2020;7(1). doi:10.1038/s41597-020-00644-6.
+- Assets: mamm, fornix
+
+### MNI PD25 subcortical atlas (Xiao 2017)
+
+- Licence: GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md
+- Source: https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/
+- Cite: Xiao Y, Fonov V, Chakravarty MM, Beriault S, Al Subaie F, Sadikot A, et al. A dataset of multi-contrast population-averaged brain MRI atlases of a Parkinson's disease cohort. Data in Brief. 2017;12:370-379. doi:10.1016/j.dib.2017.04.013.
+- Assets: hippocampus
+
+### MNI PD25 histology atlas (Xiao 2017), Lead-DBS import
+
+- Licence: GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md
+- Source: https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/
+- Note: Optic tract label. The Human Motor Thalamus (Ilinsky) optic-tract files were not used: both the lh and rh files lie in the right hemisphere (x > 0).
+- Cite: Xiao Y, Fonov V, Chakravarty MM, Beriault S, Al Subaie F, Sadikot A, et al. A dataset of multi-contrast population-averaged brain MRI atlases of a Parkinson's disease cohort. Data in Brief. 2017;12:370-379. doi:10.1016/j.dib.2017.04.013.
+- Assets: optic_tract
 
 ### TOR-PSM probabilistic stimulation maps (Elias 2021)
 

@@ -6,6 +6,8 @@ import { describe, expect, it } from 'vitest';
 import { MANIFEST } from '../../src/data';
 import { ACPC, MCP, acpcToMni, mniToAcpc } from '../../src/data/acpc';
 import { decode, defaultState, encode } from '../../src/state';
+import * as THREE from 'three';
+import { anchorOffset, contactCentres, LEAD } from '../../src/viewer/lead';
 
 /**
  * Decode the shipped (quantized, meshopt-compressed) GLBs and check them
@@ -89,6 +91,12 @@ describe('AC-PC conversion (Lead-DBS ea_mni2acpc frame, template space)', () => 
 });
 
 describe('URL state', () => {
+  it('maps camera preset names from links shared before the rename', () => {
+    expect(decode('#/atlas?i=pd&c=anterior').cam.preset).toBe('coronal');
+    expect(decode('#/atlas?i=pd&c=lateral').cam.preset).toBe('sagittal');
+    expect(decode('#/atlas?i=pd&c=superior').cam.preset).toBe('axial');
+    expect(decode('#/atlas?i=pd&c=axial').cam.preset).toBe('axial');
+  });
   it('round-trips a teaching link', () => {
     const s = defaultState();
     s.ind = 'et'; s.sym = 'et-head'; s.hemi = 'L';
@@ -98,6 +106,7 @@ describe('URL state', () => {
     s.clip.axial = { on: true, mm: -4.5, cut: true, flip: false };
     s.layers.electrode.on = true; s.lead = { ...s.lead, spacing: 1.5, depth: 2, stim: true, contact: 2, radius: 2.5 };
     s.sel = 'drtt';
+    s.hidden = ['cst', 't-ss-tremor', 'ss_tremor'];
     const back = decode(encode(s));
     expect(back.ind).toBe('et'); expect(back.sym).toBe('et-head'); expect(back.hemi).toBe('L');
     expect(back.cam.pos).toEqual([10, 120, 30]);
@@ -105,5 +114,33 @@ describe('URL state', () => {
     expect(back.clip.axial).toEqual({ on: true, mm: -4.5, cut: true, flip: false });
     expect(back.lead).toMatchObject({ spacing: 1.5, depth: 2, stim: true, contact: 2, radius: 2.5 });
     expect(back.sel).toBe('drtt');
+    expect(back.hidden).toEqual(['cst', 't-ss-tremor', 'ss_tremor']);
+  });
+});
+
+describe('lead anchor', () => {
+  const target = new THREE.Vector3(-12, -14, -7);
+  const base = { spacing: 0.5, depth: 0, ring: 60, tilt: 15, stim: false, contact: 0, radius: 2 };
+  it.each([['c0', 0], ['c1', 1], ['c2', 2], ['c3', 3]] as const)('%s: that contact centre sits on the target', (anchor, k) => {
+    for (const spacing of [0.5, 1.5]) {
+      const g = contactCentres(target, { ...base, spacing, anchor }, 'L');
+      expect(g.centres[k].distanceTo(target)).toBeLessThan(1e-9);
+    }
+  });
+  it('tip and array centre anchors, and depth moves the lead deeper along its axis', () => {
+    expect(contactCentres(target, { ...base, anchor: 'tip' }, 'L').tip.distanceTo(target)).toBeLessThan(1e-9);
+    const c = contactCentres(target, { ...base, anchor: 'centre' }, 'L');
+    expect(c.centres[1].clone().add(c.centres[2]).multiplyScalar(0.5).distanceTo(target)).toBeLessThan(1e-9);
+    const deeper = contactCentres(target, { ...base, anchor: 'c1', depth: 2 }, 'L');
+    // +2 mm deeper: contact 1 lies 2 mm from the target, on the far (deep) side of the trajectory
+    expect(deeper.centres[1].distanceTo(target)).toBeCloseTo(2, 9);
+    expect(deeper.centres[1].clone().sub(target).dot(deeper.dir)).toBeLessThan(0);
+    expect(anchorOffset('c3', 1.5)).toBeCloseTo(3 * (LEAD.contactLength + 1.5) + LEAD.contactLength / 2, 9);
+  });
+  it('round-trips through the URL, and old links default to the array centre', () => {
+    const s = defaultState();
+    s.layers.electrode.on = true; s.lead = { ...s.lead, anchor: 'c1', depth: -1.5 };
+    expect(decode(encode(s)).lead).toMatchObject({ anchor: 'c1', depth: -1.5 });
+    expect(decode('#/atlas?i=pd&lead=0.5,0,60,15').lead.anchor).toBe('centre');
   });
 });

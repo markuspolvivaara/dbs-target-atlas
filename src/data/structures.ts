@@ -1,4 +1,6 @@
 import manifestJson from './generated/manifest.json';
+import { ADDITION_DESCRIPTIONS } from './additions';
+import { EPILEPSY_DESCRIPTIONS } from './epilepsy';
 import { ManifestSchema, type Structure } from './schema';
 
 export const MANIFEST = ManifestSchema.parse(manifestJson);
@@ -47,6 +49,8 @@ const DESCRIPTIONS: Record<string, { text: string; refIds: string[] }> = {
   ss_dyt: { text: 'Dystonia response maps to sensorimotor-connected circuits.', refIds: ['hollunder2024'] },
   ss_ts: { text: 'Tourette response maps to M1-connected circuits.', refIds: ['hollunder2024'] },
 };
+
+Object.assign(DESCRIPTIONS, EPILEPSY_DESCRIPTIONS, ADDITION_DESCRIPTIONS);
 
 export const STRUCTURES: Structure[] = MANIFEST.structures.map((m) => ({
   id: m.id,

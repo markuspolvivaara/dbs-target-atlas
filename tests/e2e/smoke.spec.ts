@@ -68,7 +68,7 @@ test('symptom view, slices, lead and stimulation sphere', async ({ page }) => {
 });
 
 test('measure, hover tooltip and dragging the lead along its axis', async ({ page }) => {
-  await page.goto('./#/atlas?i=pd&c=anterior&ly=n1,t0,c0,g1,e1&lead=0.5,0,60,15');
+  await page.goto('./#/atlas?i=pd&c=coronal&ly=n1,t0,c0,g1,e1&lead=0.5,0,60,15');
   await settle(page);
   // screen position of the right lead's contact array (patient right appears on the viewer's left in the anterior view)
   const pt = await page.evaluate(() => {
@@ -131,6 +131,110 @@ test('mobile layout: viewer above a bottom sheet @mobile', async ({ page }) => {
   await page.locator('.sheet-handle').click();
   await expect(page.locator('.panel')).toHaveAttribute('data-sheet', 'full');
   await expect(page).toHaveScreenshot('mobile-et.png');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('settings: hidden indications are remembered, links to them still work', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./#/settings');
+  await page.locator('input[data-ind="holmes"]').uncheck();
+  await page.locator('input[data-ind="md"]').uncheck();
+  await expect(page.locator('.page:not([hidden]) [aria-live="polite"]').last()).toContainText('9 of 11 indications shown');
+  // remembered across a reload
+  await page.reload();
+  await expect(page.locator('input[data-ind="holmes"]')).not.toBeChecked();
+  await page.goto('./#/atlas?i=pd');
+  await settle(page);
+  const chips = page.locator('.ind-chips .chip');
+  await expect(chips).toHaveCount(9);
+  await expect(chips.filter({ hasText: 'Holmes' })).toHaveCount(0);
+  // a shared link to a hidden indication still opens it, marked as hidden
+  await page.goto('./#/atlas?i=holmes');
+  await settle(page);
+  await expect(page.locator('.card h2').first()).toHaveText('Holmes tremor');
+  await expect(chips.filter({ hasText: 'Holmes tremor (hidden)' })).toHaveCount(1);
+  // hiding the indication currently shown switches the atlas to the first visible one
+  await page.goto('./#/settings');
+  await page.locator('input[data-ind="pd"]').uncheck();
+  await page.goto('./#/atlas');
+  await settle(page);
+  await expect(page.locator('.ind-chips .chip[aria-pressed="true"]')).not.toHaveText("Parkinson's");
+  // show all again
+  await page.goto('./#/settings');
+  await page.getByRole('button', { name: 'Show all' }).click();
+  await expect(page.locator('input[data-ind]:checked')).toHaveCount(11);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('lead placement is remembered per target', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./#/atlas?i=pd&ly=n1,t0,c0,g1,e1');
+  await settle(page);
+  await page.locator('#ptab-lead').click();
+  await page.locator('select[data-k="anchor"]').selectOption('c1');
+  await page.locator('input[data-k="depth"]').fill('-1');
+  await expect(page.locator('.lead-pref')).toContainText('Remembered for PD sweet spot');
+  // another target gets its own (built-in) placement ...
+  await page.locator('#ptab-overview').click();
+  await page.locator('.ind-chips .chip', { hasText: 'Essential tremor' }).click();
+  await page.locator('#ptab-lead').click();
+  await expect(page.locator('select[data-k="anchor"]')).toHaveValue('centre');
+  // ... and coming back restores PD's, also after a reload
+  await page.locator('#ptab-overview').click();
+  await page.locator('.ind-chips .chip', { hasText: "Parkinson's" }).click();
+  await page.locator('#ptab-lead').click();
+  await expect(page.locator('select[data-k="anchor"]')).toHaveValue('c1');
+  await expect(page.locator('input[data-k="depth"]')).toHaveValue('-1');
+  await page.goto('./#/atlas?i=pd&ly=n1,t0,c0,g1,e1');
+  await settle(page);
+  await page.locator('#ptab-lead').click();
+  await expect(page.locator('select[data-k="anchor"]')).toHaveValue('c1');
+  // a link that carries its own lead position wins over the remembered one
+  await page.goto('./#/atlas?i=pd&lead=0.5,2,60,15,tip');
+  await settle(page);
+  await page.locator('#ptab-lead').click();
+  await expect(page.locator('select[data-k="anchor"]')).toHaveValue('tip');
+  await expect(page.locator('.lead-pref')).toContainText('From the link');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('legend: show/hide and highlight structures', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./#/atlas?i=et');
+  await settle(page);
+  await page.evaluate(() => { (document.querySelector('.legend-box') as HTMLDetailsElement).open = true; });
+  const row = (text: string) => page.locator('.legend3d li', { hasText: text }).first();
+  const item = (id: string) => page.evaluate((i) => {
+    const it = (window as any).__atlas.viewer.items.get(i);
+    const n = it.nodes.L;
+    return { visible: n.visible, opacity: it.kind === 'lines' ? it.mat.opacity : n.material.opacity ?? 1, width: it.kind === 'lines' ? it.mat.linewidth : null };
+  }, id);
+  // hide the corticospinal tract
+  await row('Corticospinal').locator('.eye').click();
+  await expect(row('Corticospinal')).toHaveClass(/off/);
+  expect((await item('cst')).visible).toBe(false);
+  expect(new URL(page.url()).hash).toContain('hid=cst');
+  // highlight the DRTT: brighter and thicker, others fade back, card opens
+  const before = await item('ndrtt');
+  await row('Dentato-rubro').locator('.lg-item').click();
+  await expect(row('Dentato-rubro')).toHaveClass(/on/);
+  const drtt = await item('drtt');
+  expect(drtt.opacity).toBe(1);
+  expect(drtt.width).toBeGreaterThan(2);
+  expect((await item('ndrtt')).opacity).toBeLessThan(before.opacity);
+  await expect(page.locator('.card.sel h2')).toContainText('Dentato-rubro-thalamic');
+  // clicking again clears the highlight; "Show all" brings the hidden tract back
+  await row('Dentato-rubro').locator('.lg-item').click();
+  await expect(row('Dentato-rubro')).not.toHaveClass(/on/);
+  await page.getByRole('button', { name: /Show all/ }).click();
+  expect((await item('cst')).visible).toBe(true);
+  // hidden items reset when the view changes
+  await row('Corticospinal').locator('.eye').click();
+  await page.locator('.ind-chips .chip', { hasText: 'Holmes tremor' }).click();
+  expect(new URL(page.url()).hash).not.toContain('hid=');
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });

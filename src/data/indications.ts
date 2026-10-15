@@ -1,3 +1,4 @@
+import { EPILEPSY_INDICATION } from './epilepsy';
 import type { IndicationInput } from './schema';
 
 /**
@@ -41,7 +42,7 @@ export const INDICATIONS: IndicationInput[] = [
     caveat: 'The tremor tract did not survive 10-fold cross-validation, and most of this mapping is retrospective.',
     caveatRefIds: ['rajamani2024'],
     missingTracts: ['STN output to GPi and SNr', 'Nigral output to brainstem'],
-    camera: 'anterior',
+    camera: 'coronal',
   },
   {
     id: 'et', label: 'Essential tremor', name: 'Essential tremor', accent: 'vim',
@@ -69,7 +70,7 @@ export const INDICATIONS: IndicationInput[] = [
     caveat: 'Directly targeted Vim leads had more symptomatic haemorrhages in one 230-patient series.',
     caveatRefIds: ['barrow'],
     missingTracts: ['Thalamocortical projection, Vim to M1'],
-    camera: 'anterior',
+    camera: 'coronal',
   },
   {
     id: 'holmes', label: 'Holmes tremor', name: 'Holmes tremor', accent: 'psa',
@@ -90,7 +91,7 @@ export const INDICATIONS: IndicationInput[] = [
     ],
     caveat: 'Evidence is limited to case reports and small series.',
     caveatRefIds: [],
-    camera: 'anterior',
+    camera: 'coronal',
   },
   {
     id: 'gdys', label: 'Generalized dystonia', name: 'Generalized dystonia', accent: 'gpi',
@@ -98,7 +99,8 @@ export const INDICATIONS: IndicationInput[] = [
     primaryTargets: ['gpi', 'gpi_sm'], alternativeTargets: ['stn'], contextStructures: ['vo'],
     keyTracts: ['rt_gen', 'al', 'lf', 'sw_dyt'], alternativeTracts: [],
     corticalAreas: ['s1'],
-    targetMarkers: ['t-ss-gen'], alternativeMarkers: ['t-atlas-stn', 't-ss-dyt'],
+    targetMarkers: ['t-ss-gen'], alternativeMarkers: ['t-atlas-stn'],
+    extraVolumes: ['ss_dyt'],
     target: 'Posteroventral GPi, including the subpallidal white matter below it.',
     alternatives: 'STN.',
     why: 'The best stimulation volume sits in posteroventral GPi and extends into subpallidal white matter, implicating the ansa lenticularis. In generalized dystonia, benefit followed the pallidothalamic bundles.',
@@ -111,7 +113,7 @@ export const INDICATIONS: IndicationInput[] = [
     ],
     caveat: 'Sweet-spot maps come from retrospective cohorts in normative space.',
     caveatRefIds: [],
-    camera: 'anterior',
+    camera: 'coronal',
   },
   {
     id: 'cdys', label: 'Cervical dystonia', name: 'Cervical dystonia', accent: 'gpi',
@@ -132,7 +134,7 @@ export const INDICATIONS: IndicationInput[] = [
     ],
     caveat: 'Somatotopic sub-targeting rests on group maps, not prospective trials.',
     caveatRefIds: [],
-    camera: 'anterior',
+    camera: 'coronal',
   },
   {
     id: 'fhd', label: 'Focal hand dystonia', name: 'Focal hand dystonia', accent: 'vo',
@@ -155,7 +157,7 @@ export const INDICATIONS: IndicationInput[] = [
     caveat: 'Evidence is Class IV and comes mostly from lesioning rather than DBS.',
     caveatRefIds: ['horisawa2019'],
     missingTracts: ['Thalamocortical projection, Vo to SMA'],
-    camera: 'lateral',
+    camera: 'sagittal',
   },
   {
     id: 'md', label: 'Myoclonus-dystonia', name: 'Myoclonus-dystonia', accent: 'gpi',
@@ -171,7 +173,7 @@ export const INDICATIONS: IndicationInput[] = [
     evidence: [{ claim: 'GPi favoured over Vim for the dystonic component', refIds: ['hyper2015'] }],
     caveat: 'Small series only; no large imaging studies yet.',
     caveatRefIds: [],
-    camera: 'anterior',
+    camera: 'coronal',
   },
   {
     id: 'tard', label: 'Tardive syndromes', name: 'Tardive syndromes', accent: 'gpi',
@@ -190,7 +192,7 @@ export const INDICATIONS: IndicationInput[] = [
     ],
     caveat: 'No level I studies exist.',
     caveatRefIds: ['macerollo2018'],
-    camera: 'anterior',
+    camera: 'coronal',
   },
   {
     id: 'ts', label: 'Tourette', name: 'Tourette syndrome', accent: 'cm',
@@ -198,7 +200,8 @@ export const INDICATIONS: IndicationInput[] = [
     primaryTargets: ['cm', 'pf'], alternativeTargets: ['gpi'], contextStructures: ['putamen', 'caudate', 'dentate'],
     keyTracts: ['sw_ts'], alternativeTracts: [],
     corticalAreas: ['s1', 'm1'],
-    targetMarkers: ['t-atlas-cm', 't-ss-ts'], alternativeMarkers: ['t-atlas-gpi'],
+    targetMarkers: ['t-atlas-cm'], alternativeMarkers: ['t-atlas-gpi'],
+    extraVolumes: ['ss_ts'],
     target: 'Centromedian–parafascicular (CM-Pf) thalamus.',
     alternatives: 'Anteromedial GPi, posteroventral GPi, or ALIC/nucleus accumbens.',
     why: 'Response follows the connectivity of the stimulated tissue. CM connectivity to sensorimotor cortex, putamen and cerebellum predicted tic improvement.',
@@ -213,7 +216,7 @@ export const INDICATIONS: IndicationInput[] = [
     caveat: 'Overlap with the best-connected CM region did not predict response by itself.',
     caveatRefIds: ['johnson2020'],
     missingTracts: ['CM to striatum', 'CM to sensorimotor cortex'],
-    camera: 'anterior',
+    camera: 'coronal',
   },
   {
     id: 'chorea', label: 'Chorea', name: "Chorea (Huntington's disease)", accent: 'gpi',
@@ -229,6 +232,8 @@ export const INDICATIONS: IndicationInput[] = [
     evidence: [{ claim: 'Bilateral GPi most used across hyperkinetic disorders', refIds: ['hyper2015'] }],
     caveat: 'Evidence comes from small, uncontrolled series.',
     caveatRefIds: [],
-    camera: 'anterior',
+    camera: 'coronal',
   },
+  // researched addition, see epilepsy.ts
+  EPILEPSY_INDICATION,
 ];

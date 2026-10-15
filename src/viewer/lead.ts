@@ -3,8 +3,9 @@ import { ACPC_AXES } from '../data/acpc';
 
 /**
  * Generic quadripolar lead: 1.27 mm diameter, four 1.5 mm ring contacts,
- * 0.5 or 1.5 mm spacing, contact 0 at the tip. Placed so the centre of the
- * contact array sits on the target, then offset along its own axis (depth).
+ * 0.5 or 1.5 mm spacing, contact 0 at the tip. Placed so the chosen anchor (array
+ * centre, one contact's centre, or the tip) sits on the target, then offset along
+ * its own axis (depth, positive = deeper).
  *
  * Trajectory angles are in the template AC-PC frame:
  *   ring = angle above the AC-PC line in the sagittal plane, tilted anteriorly (90 = vertical)
@@ -13,7 +14,7 @@ import { ACPC_AXES } from '../data/acpc';
  */
 export const LEAD = { diameter: 1.27, contactLength: 1.5, contacts: 4, shaftLength: 70 };
 
-export interface LeadParams { spacing: number; depth: number; ring: number; tilt: number; stim: boolean; contact: number; radius: number }
+export interface LeadParams { spacing: number; anchor?: string; depth: number; ring: number; tilt: number; stim: boolean; contact: number; radius: number }
 
 const rad = THREE.MathUtils.degToRad;
 
@@ -33,9 +34,17 @@ export function arrayLength(spacing: number): number {
   return LEAD.contacts * LEAD.contactLength + (LEAD.contacts - 1) * spacing;
 }
 
+/** Distance from the tip to the point of the lead that is placed on the target. */
+export function anchorOffset(anchor: string | undefined, spacing: number): number {
+  if (anchor === 'tip') return 0;
+  const m = /^c([0-3])$/.exec(anchor ?? '');
+  if (m) return Number(m[1]) * (LEAD.contactLength + spacing) + LEAD.contactLength / 2;
+  return arrayLength(spacing) / 2; // centre of the contact array
+}
+
 export function contactCentres(target: THREE.Vector3, p: LeadParams, side: 'L' | 'R'): { tip: THREE.Vector3; dir: THREE.Vector3; centres: THREE.Vector3[] } {
   const dir = trajectoryDir(p.ring, p.tilt, side);
-  const tip = target.clone().addScaledVector(dir, -(arrayLength(p.spacing) / 2 + p.depth));
+  const tip = target.clone().addScaledVector(dir, -(anchorOffset(p.anchor, p.spacing) + p.depth));
   const centres = Array.from({ length: LEAD.contacts }, (_, k) =>
     tip.clone().addScaledVector(dir, k * (LEAD.contactLength + p.spacing) + LEAD.contactLength / 2));
   return { tip, dir, centres };

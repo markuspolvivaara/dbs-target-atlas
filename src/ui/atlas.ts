@@ -4,16 +4,18 @@ import { mniToAcpc } from '../data/acpc';
 import type { CameraPreset, Evidence } from '../data/schema';
 import { IMAGING } from '../data/imaging';
 import type { AppState, Axis, Hemi, LayerKey } from '../state';
-import { DEFAULT_LEAD } from '../state';
+import { DEFAULT_LEAD, LEAD_ANCHORS, type LeadAnchor } from '../state';
 import { LEAD } from '../viewer/lead';
-import type { Plan } from '../viewer/selection';
+import { LANDMARKS, type Plan } from '../viewer/selection';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { chips, clear, fmtMm, h, refLinks } from './dom';
+import { clearAllLeadPrefs, clearLeadPref, isHidden, leadPrefFor, saveLeadDefault, saveLeadPref, visibleIndications } from './prefs';
+import { primaryTargetId } from '../viewer/selection';
 
 type Update = (fn: (s: AppState) => void, opts?: { camera?: boolean }) => void;
 
 const PRESETS: [CameraPreset, string, string, string][] = [
-  ['anterior', 'Anterior', '1', 'Ant'], ['lateral', 'Lateral', '2', 'Lat'], ['superior', 'Superior', '3', 'Sup'],
+  ['coronal', 'Coronal', '1', 'Cor'], ['sagittal', 'Sagittal', '2', 'Sag'], ['axial', 'Axial', '3', 'Ax'],
   ['posteriorOblique', 'Post-oblique', '4', 'Obl'], ['surgeon', "Surgeon's view", '5', 'Surg'],
 ];
 const LAYERS: [LayerKey, string][] = [['nuclei', 'Nuclei'], ['tracts', 'Tracts'], ['cortex', 'Cortex'], ['targets', 'Targets'], ['electrode', 'Electrode']];
@@ -22,6 +24,11 @@ const AXES: [Axis, string, [number, number], string, string][] = [
   ['coronal', 'Coronal', [-115, 75], 'y', 'anterior part'],
   ['sagittal', 'Sagittal', [-75, 75], 'x', 'right part'],
 ];
+
+const ANCHOR_LABEL: Record<LeadAnchor, string> = {
+  centre: 'Centre of the contact array', c0: 'Centre of C0 (deepest contact)', c1: 'Centre of C1', c2: 'Centre of C2',
+  c3: 'Centre of C3 (shallowest contact)', tip: 'Lead tip',
+};
 
 export class AtlasPage {
   readonly el: HTMLElement;
@@ -94,7 +101,7 @@ export class AtlasPage {
       cameraChanged: (pos, tgt) => this.update((s) => {
         s.cam = { preset: s.cam.preset, pos: [pos.x, pos.y, pos.z], tgt: [tgt.x, tgt.y, tgt.z] };
       }, { camera: false }),
-      leadMoved: (d) => this.update((s) => { s.lead.depth = d; }),
+      leadMoved: (d) => this.editLead((s) => { s.lead.depth = d; }),
       status: (t) => { this.status.hidden = !t; this.status.textContent = t ?? ''; },
       lead: (c) => this.showLead(c),
     });
@@ -132,13 +139,13 @@ export class AtlasPage {
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
   }
 
-  private selectTab(id: string): void {
+  private selectTab(id: string, expand = true): void {
     for (const [k, b] of Object.entries(this.tabBtns)) {
       b.setAttribute('aria-selected', String(k === id));
       b.tabIndex = k === id ? 0 : -1;
       this.tabs[k].hidden = k !== id;
     }
-    if (this.sheetState === 'peek' && window.matchMedia('(max-width: 899px)').matches) this.setSheet('full');
+    if (expand && this.sheetState === 'peek' && window.matchMedia('(max-width: 899px)').matches) this.setSheet('full');
   }
 
   private setSheet(st: 'peek' | 'full'): void {
@@ -171,7 +178,7 @@ export class AtlasPage {
     this.renderLayers();
     this.renderSlices();
     this.renderLead();
-    if (prev && prev.sel !== s.sel && s.sel) this.selectTab('overview');
+    if (prev && prev.sel !== s.sel && s.sel) this.selectTab('overview', false);
   }
 
   private renderOverview(): void {
@@ -179,7 +186,7 @@ export class AtlasPage {
     const pane = this.tabs.overview;
     clear(pane);
     const ind = IND.get(s.ind)!;
-    pane.append(chips(CONTENT.indications.map((i) => [i.id, i.label]), ind.id, (v) => this.update((st) => {
+    pane.append(chips(visibleIndications(ind.id).map((i) => [i.id, isHidden(i.id) ? `${i.label} (hidden)` : i.label]), ind.id, (v) => this.update((st) => {
       st.ind = v; st.sym = null; st.sel = null; st.cam = { preset: null };
     }, { camera: true }), { label: 'Indication', cls: 'ind-chips' }));
     if (ind.symptomIds.length) {
@@ -311,7 +318,7 @@ export class AtlasPage {
     const img = IMAGING.find((x) => x.structureId === id);
     const stream = m.streamlines ? `${m.streamlines.L + m.streamlines.R} of ${m.sourceStreamlines!.L + m.sourceStreamlines!.R} source streamlines shown.` : '';
     return h('article', { class: 'card sel', style: `--accent: var(--c-${m.colour.token})` }, close,
-      h('p', { class: 'eyebrow' }, { nucleus: 'Nucleus', cortex: 'Cortical area', tract: 'Tract', target: 'Sweet-spot volume' }[m.type]),
+      h('p', { class: 'eyebrow' }, m.category ?? { nucleus: 'Nucleus', cortex: 'Cortical area', tract: 'Tract', target: 'Sweet-spot volume' }[m.type]),
       h('h2', {}, h('span', { class: 'swatch', style: `--c: var(--c-${m.colour.token})` }), m.name),
       m.aliases.length ? h('p', { class: 'aside' }, 'Also: ', m.aliases.join(', ')) : null,
       h('dl', {},
@@ -336,9 +343,31 @@ export class AtlasPage {
     const p: Plan | null = this.viewer.currentPlan();
     clear(this.legend);
     if (!p) return;
-    const li = (cls: string, token: string, text: string, id?: string) => h('li', {},
-      h('span', { class: `sw ${cls}`, style: `--c: var(--c-${token})` }),
-      id ? h('button', { type: 'button', class: 'lg-item', title: 'Open card', onclick: () => this.update((s) => { s.sel = id; }) }, text) : text);
+    const hidden = new Set(this.s.hidden);
+    /** One legend row: eye toggle (show/hide), swatch, and the name (click = highlight + card). */
+    const li = (cls: string, token: string, text: string, id: string, also: string[] = []) => {
+      const ids = [id, ...also];
+      const off = hidden.has(id);
+      const on = this.s.sel === id;
+      return h('li', { class: `${off ? 'off' : ''} ${on ? 'on' : ''}` },
+        h('button', {
+          type: 'button', class: 'eye', 'aria-pressed': String(!off), title: off ? 'Show' : 'Hide', 'aria-label': `${off ? 'Show' : 'Hide'} ${text}`,
+          onclick: () => this.update((s) => {
+            const set = new Set(s.hidden);
+            ids.forEach((x) => (off ? set.delete(x) : set.add(x)));
+            s.hidden = [...set];
+            if (!off && s.sel && ids.includes(s.sel)) s.sel = null;
+          }),
+        }, h('span', { 'aria-hidden': 'true' }, off ? '○' : '●')),
+        h('span', { class: `sw ${cls}`, style: `--c: var(--c-${token})` }),
+        h('button', {
+          type: 'button', class: 'lg-item', 'aria-pressed': String(on), title: on ? 'Remove highlight' : 'Highlight and open card',
+          onclick: () => this.update((s) => {
+            s.sel = s.sel === id ? null : id;
+            if (s.sel) s.hidden = s.hidden.filter((x) => !ids.includes(x)); // highlighting a hidden item shows it again
+          }),
+        }, text));
+    };
     for (const [id, look] of p.looks) {
       const m = MAN.get(id);
       if (!m || m.type !== 'nucleus') continue;
@@ -348,9 +377,20 @@ export class AtlasPage {
       const m = MAN.get(id);
       if (m && m.type === 'nucleus' && look === 'alt') this.legend.append(li('outline', m.colour.token, `${m.name} (alternative)`, id));
     }
+    for (const [id, look] of p.looks) {
+      const m = MAN.get(id);
+      if (m && m.type === 'nucleus' && look === 'context') this.legend.append(li('patch', m.colour.token, `${m.name} (${LANDMARKS.has(id) ? 'landmark' : 'context'})`, id));
+    }
     for (const mk of p.markers) {
       const t = TGT.get(mk.targetId)!;
-      this.legend.append(li(mk.primary ? 'dot' : 'ring', MAN.get(t.structureId)?.colour.token ?? p.accent, `${t.label}${mk.primary ? '' : ' (alternative)'}`, t.id));
+      // hiding a sweet-spot marker also hides its published map volume
+      const also = t.kind === 'sweetSpot' ? [t.structureId] : [];
+      this.legend.append(li(mk.primary ? 'dot' : 'ring', mk.primary ? 'ctx' : MAN.get(t.structureId)?.colour.token ?? p.accent, `${t.label}${mk.primary ? '' : ' (alternative)'}`, t.id, also));
+    }
+    for (const [id, look] of p.looks) {
+      const m = MAN.get(id);
+      if (m?.type === 'target' && look === 'context' && !p.markers.some((mk) => TGT.get(mk.targetId)?.structureId === id))
+        this.legend.append(li('patch', m.colour.token, `${m.name} (published map, no single target point)`, id));
     }
     if (this.s.layers.tracts.on) for (const [id, role] of p.tracts) {
       const m = MAN.get(id)!;
@@ -361,6 +401,11 @@ export class AtlasPage {
       this.legend.append(li('patch', m.colour.token, m.name, id));
     }
     if (!p.tracts.size) this.legend.append(h('li', { class: 'none' }, 'No tract has been mapped at scale for this indication yet.'));
+    if (this.s.hidden.length || this.s.sel) {
+      this.legend.append(h('li', { class: 'lg-actions' },
+        this.s.hidden.length ? h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.hidden = []; }) }, `Show all (${this.s.hidden.length} hidden)`) : null,
+        this.s.sel ? h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.sel = null; }) }, 'Clear highlight') : null));
+    }
   }
 
   private drawGizmo(): void {
@@ -476,7 +521,7 @@ export class AtlasPage {
         h('label', { class: 'check' }, h('input', { type: 'checkbox', 'data-labels': '1', onchange: (e: Event) => this.update((st) => { st.labels = (e.target as HTMLInputElement).checked; }) }),
           'Show name labels on highlighted structures and target markers'),
         h('label', { class: 'check' }, h('input', { type: 'checkbox', 'data-borders': '1', onchange: (e: Event) => this.update((st) => { st.borders = (e.target as HTMLInputElement).checked; }) }),
-          'Show corticospinal tract and medial lemniscus as borders around Vim/PSA targets'),
+          'Show landmarks: corticospinal tract and medial lemniscus around Vim/PSA targets, optic tract beneath GPi targets, red nucleus beside STN targets'),
         h('p', { class: 'aside' }, 'Unselected nuclei stay as faint ghosts for orientation. Tracts and cortex load when first needed.'),
         h('h3', {}, 'All structures'), this.structureIndex());
     }
@@ -540,14 +585,17 @@ export class AtlasPage {
     if (!pane.childElementCount) {
       const num = (k: 'depth' | 'ring' | 'tilt' | 'radius', min: number, max: number, step: number, label: string) =>
         h('label', { class: 'range wide' }, h('span', {}, label, ' ', h('output', { 'data-out': k })),
-          h('input', { type: 'range', min, max, step, 'data-k': k, oninput: (e: Event) => this.update((st) => { st.lead[k] = parseFloat((e.target as HTMLInputElement).value); }) }));
+          h('input', { type: 'range', min, max, step, 'data-k': k, oninput: (e: Event) => (k === 'depth' ? this.editLead.bind(this) : this.update)((st) => { st.lead[k] = parseFloat((e.target as HTMLInputElement).value); }) }));
       pane.append(
         h('h3', {}, 'Generic quadripolar lead'),
         h('label', { class: 'check' }, h('input', { type: 'checkbox', 'data-k': 'on', onchange: (e: Event) => this.update((st) => { st.layers.electrode.on = (e.target as HTMLInputElement).checked; }) }), 'Show lead at the selected target'),
-        h('p', { class: 'aside' }, `${LEAD.diameter} mm diameter, four ${LEAD.contactLength} mm contacts, contact 0 at the tip. The centre of the contact array starts on the primary target marker. Drag the lead along its axis in the viewer, or use the depth slider.`),
+        h('p', { class: 'aside' }, `${LEAD.diameter} mm diameter, four ${LEAD.contactLength} mm contacts, contact 0 at the tip. Choose which part of the lead sits on the primary target marker, then fine-tune with the offset or by dragging the lead along its axis in the viewer.`),
         h('fieldset', { class: 'seg-field' }, h('legend', {}, 'Contact spacing'),
-          ...([0.5, 1.5] as const).map((v) => h('label', { class: 'radio' }, h('input', { type: 'radio', name: 'spacing', value: v, onchange: () => this.update((st) => { st.lead.spacing = v; }) }), `${v} mm`))),
-        num('depth', -15, 15, 0.5, 'Depth offset (+ deeper)'),
+          ...([0.5, 1.5] as const).map((v) => h('label', { class: 'radio' }, h('input', { type: 'radio', name: 'spacing', value: v, onchange: () => this.editLead((st) => { st.lead.spacing = v; }) }), `${v} mm`))),
+        h('label', { class: 'select' }, 'On the target: ', h('select', { 'data-k': 'anchor', onchange: (e: Event) => this.editLead((st) => { st.lead.anchor = (e.target as HTMLSelectElement).value as LeadAnchor; }) },
+          ...LEAD_ANCHORS.map((a) => h('option', { value: a }, ANCHOR_LABEL[a])))),
+        num('depth', -15, 15, 0.5, 'Offset from that point (+ deeper)'),
+        h('div', { class: 'lead-pref', 'aria-live': 'polite' }),
         h('fieldset', { class: 'traj' }, h('legend', {}, 'Trajectory (illustrative)'),
           num('ring', 30, 90, 1, 'Angle above AC–PC line'),
           num('tilt', 0, 40, 1, 'Lateral tilt from midline'),
@@ -568,8 +616,42 @@ export class AtlasPage {
       (pane.querySelector(`[data-k=${k}]`) as HTMLInputElement).value = String(s.lead[k]);
       (pane.querySelector(`[data-out=${k}]`) as HTMLOutputElement).textContent = k === 'ring' || k === 'tilt' ? `${s.lead[k]}°` : `${fmtMm(s.lead[k])} mm`;
     }
+    (pane.querySelector('[data-k=anchor]') as HTMLSelectElement).value = s.lead.anchor;
+    this.renderLeadPref();
     (pane.querySelector('[data-k=stim]') as HTMLInputElement).checked = s.lead.stim;
     (pane.querySelector('[data-k=contact]') as HTMLSelectElement).value = String(s.lead.contact);
+  }
+
+  /** Lead edits that define placement (anchor, offset, spacing) are remembered for the current target. */
+  private editLead(fn: (s: AppState) => void): void {
+    this.update(fn);
+    const t = primaryTargetId(this.s.ind, this.s.sym);
+    if (t) saveLeadPref(t, { anchor: this.s.lead.anchor, depth: this.s.lead.depth, spacing: this.s.lead.spacing });
+  }
+
+  /** Called when stored preferences change (e.g. after saving). */
+  refreshLead(): void { if (this.s) this.renderLeadPref(); }
+
+  private renderLeadPref(): void {
+    const box = this.tabs.lead.querySelector('.lead-pref');
+    if (!box || !this.s) return;
+    clear(box);
+    const t = primaryTargetId(this.s.ind, this.s.sym);
+    const label = t ? TGT.get(t)?.label ?? t : null;
+    const { pref, source } = leadPrefFor(t);
+    const l = this.s.lead;
+    const matches = pref.anchor === l.anchor && pref.depth === l.depth && pref.spacing === l.spacing;
+    const what = `${ANCHOR_LABEL[l.anchor]} on the target${l.depth ? `, ${fmtMm(Math.abs(l.depth))} mm ${l.depth > 0 ? 'deeper' : 'shallower'}` : ''}, ${l.spacing} mm spacing`;
+    box.append(h('p', { class: 'aside' },
+      !t ? 'This view has no primary target, so nothing is remembered here.' :
+        matches && source === 'target' ? `Remembered for ${label} in this browser: ${what}.` :
+          matches && source === 'default' ? `Using your default placement (nothing saved for ${label} yet): ${what}.` :
+            matches ? `Built-in placement (array centre on ${label}). Change it and it is remembered for this target.` :
+              `From the link: ${what}. Change it here to remember it for ${label}.`));
+    box.append(h('div', { class: 'set-actions' },
+      h('button', { type: 'button', class: 'btn', onclick: () => saveLeadDefault({ anchor: l.anchor, depth: l.depth, spacing: l.spacing }) }, 'Use as default for other targets'),
+      t && source === 'target' ? h('button', { type: 'button', class: 'btn', onclick: () => { clearLeadPref(t); const p = leadPrefFor(t).pref; this.update((st) => { st.lead = { ...st.lead, ...p }; }); } }, `Forget for ${label}`) : null,
+      h('button', { type: 'button', class: 'btn', onclick: () => { if (confirm('Forget all remembered lead placements in this browser?')) { clearAllLeadPrefs(); this.update((st) => { st.lead = { ...st.lead, anchor: 'centre', depth: 0, spacing: 0.5 }; }); } } }, 'Forget all')));
   }
 
   private showLead(c: Record<'L' | 'R', THREE.Vector3[]> | null): void {
@@ -602,7 +684,7 @@ export class AtlasPage {
     if (k === 'm' || k === 'M') { this.toggleMeasure(); return true; }
     if (k === 's' || k === 'S') { this.update((s) => { s.clip.axial.on = !s.clip.axial.on; }); return true; }
     if (k === ']' || k === '[') {
-      const list = CONTENT.indications;
+      const list = visibleIndications(this.s.ind);
       const i = list.findIndex((x) => x.id === this.s.ind);
       const n = list[(i + (k === ']' ? 1 : -1) + list.length) % list.length];
       this.update((s) => { s.ind = n.id; s.sym = null; s.sel = null; s.cam = { preset: null }; }, { camera: true });
@@ -624,5 +706,8 @@ export class AtlasPage {
   }
 
   onShow(): void { this.viewer.invalidate(); }
+
+  /** Re-render the indication chips after the visible-indication setting changes. */
+  refreshChips(): void { if (this.s) { this.lastPlanKey = ''; this.renderOverview(); } }
 }
 

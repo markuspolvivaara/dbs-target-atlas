@@ -79,6 +79,14 @@ SOURCES: list[str] = [
         "Sweet_Spot_PD", "Sweet_Spot_DYT", "Sweet_Spot_TS"]),
     *[f"{A}Human Dysfunctome Atlas (Hollunder 2024)/midline/Sweet_Streamline_{k}.mat"
       for k in ("PD", "DYT", "TS")],
+    # Epilepsy: anterior thalamic nuclei + mammillothalamic tract (Morel), mammillary bodies,
+    # fornix and MTT (Neudorfer 2020 hypothalamus atlas), hippocampus (PD25, Xiao 2017)
+    *both("Morel Atlas (Jakab 2008)", ["AV", "AM", "AD", "mtt"]),
+    *both("Atlas of the Human Hypothalamus (Neudorfer & Germann 2020)", ["mammillary_bodies", "fornix", "mammillothalamic_tract"]),
+    *both("MNI PD25 subcortical (Xiao 2017)", ["hippocampus"]),
+    # Optic tract (GPi landmark): Human Motor Thalamus atlas (Ilinsky 2018) and PD25 histology (Xiao 2017)
+    *both("Human Motor Thalamus (Ilinsky 2017)", ["ot"]),
+    f"{A}MNI PD25 histology (Xiao 2017) - imported from PD25_MNI/mixed/Optic_Tract_(II).nii.gz",
     # Tremor sweet spot: TOR-PSM (Elias 2020)
     *both("TOR-PSM (Elias 2020)", ["tremor_vim_n39_hotspot"]),
 ]

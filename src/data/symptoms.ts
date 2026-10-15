@@ -1,3 +1,4 @@
+import { EPILEPSY_SYMPTOMS } from './epilepsy';
 import type { SymptomInput } from './schema';
 
 /**
@@ -13,7 +14,7 @@ export const SYMPTOMS: SymptomInput[] = [
   {
     id: 'pd-tremor', indicationId: 'pd', name: 'Tremor',
     summary: 'Tremor maps to tracts to M1 and cerebellum.',
-    structures: ['stn', 'stn_motor'], alternativeStructures: ['dentate'],
+    structures: ['stn', 'stn_motor'], contextStructures: ['dentate'],
     tracts: ['sw_pd_m1', 'drtt'], corticalAreas: ['m1'], targetId: 't-ss-pd',
     evidence: [
       { claim: 'Symptom-specific tracts mapped in 237 patients from five centres', refIds: ['rajamani2024'] },
@@ -21,7 +22,7 @@ export const SYMPTOMS: SymptomInput[] = [
     ],
     note: `${RAJAMANI_NOTE} Cerebellar side shown with the DRTT (Middlebrooks 2020). The tremor tract did not survive 10-fold cross-validation, and most of this mapping is retrospective.`,
     noteRefIds: ['rajamani2024'],
-    camera: 'lateral',
+    camera: 'sagittal',
   },
   {
     id: 'pd-bradykinesia', indicationId: 'pd', name: 'Bradykinesia',
@@ -29,7 +30,7 @@ export const SYMPTOMS: SymptomInput[] = [
     structures: ['stn', 'stn_motor'], tracts: ['sw_pd_sma'], corticalAreas: ['sma'], targetId: 't-ss-pd',
     evidence: [{ claim: 'Symptom-specific tracts mapped in 237 patients from five centres', refIds: ['rajamani2024'] }],
     note: RAJAMANI_NOTE, noteRefIds: ['rajamani2024'],
-    camera: 'lateral',
+    camera: 'sagittal',
   },
   {
     id: 'pd-rigidity', indicationId: 'pd', name: 'Rigidity',
@@ -37,7 +38,7 @@ export const SYMPTOMS: SymptomInput[] = [
     structures: ['stn', 'stn_motor'], tracts: ['sw_pd_pm'], corticalAreas: ['pmd', 'pmv'], targetId: 't-ss-pd',
     evidence: [{ claim: 'Symptom-specific tracts mapped in 237 patients from five centres', refIds: ['rajamani2024'] }],
     note: RAJAMANI_NOTE, noteRefIds: ['rajamani2024'],
-    camera: 'lateral',
+    camera: 'sagittal',
   },
   {
     id: 'pd-axial', indicationId: 'pd', name: 'Axial signs and gait',
@@ -50,7 +51,7 @@ export const SYMPTOMS: SymptomInput[] = [
     ],
     note: `${RAJAMANI_NOTE} No brainstem-connected tract is distributed as a file; the brainstem side is represented by the PPN (Snijders 2016) only.`,
     noteRefIds: ['rajamani2024'],
-    camera: 'anterior',
+    camera: 'coronal',
   },
   {
     id: 'pd-dyskinesia', indicationId: 'pd', name: 'Dyskinesia',
@@ -58,7 +59,7 @@ export const SYMPTOMS: SymptomInput[] = [
     structures: ['gpi', 'gpi_sm'], tracts: ['lf', 'al'], corticalAreas: [], targetId: 't-atlas-gpi-sm',
     evidence: [{ claim: 'Stimulation-induced dyskinesia from GPi linked to lenticular-fasciculus connectivity', refIds: ['sid'] }],
     note: 'Pallidofugal fibres shown with the ansa lenticularis and lenticular fasciculus of the DBS Tractography Atlas (Middlebrooks 2020). The marker is the DISTAL sensorimotor GPi centroid (atlas coordinate).',
-    camera: 'anterior',
+    camera: 'coronal',
   },
   {
     id: 'et-limb', indicationId: 'et', name: 'Limb tremor',
@@ -71,7 +72,7 @@ export const SYMPTOMS: SymptomInput[] = [
       { claim: 'A shared tremor network in M1 and motor cerebellum predicts outcome across targets', refIds: ['goede2025'] },
     ],
     note: 'Marker: tremor hotspot of thalamic DBS from the TOR-PSM probabilistic maps (Elias 2021).',
-    camera: 'anterior',
+    camera: 'coronal',
   },
   {
     id: 'et-head', indicationId: 'et', name: 'Head tremor',
@@ -82,7 +83,7 @@ export const SYMPTOMS: SymptomInput[] = [
       { claim: 'PSA effective at lower stimulation intensity in a randomized crossover trial', refIds: ['barbe2018'] },
     ],
     note: 'Marker: centroid of the caudal zona incerta label (Lau 2020), an atlas coordinate, not a sweet spot.',
-    camera: 'anterior',
+    camera: 'coronal',
   },
   {
     id: 'gdys-generalized', indicationId: 'gdys', name: 'Generalized dystonia',
@@ -92,18 +93,18 @@ export const SYMPTOMS: SymptomInput[] = [
       { claim: 'Sweet spot in posteroventral GPi bordering subpallidal white matter predicted individual outcome', refIds: ['reich2019'] },
       { claim: 'Generalized dystonia responded to the pallidothalamic bundles', refIds: ['horn2022'] },
     ],
-    camera: 'anterior',
+    camera: 'coronal',
   },
   {
     id: 'cdys-cervical', indicationId: 'cdys', name: 'Cervical dystonia',
     summary: 'Cervical dystonia responded best to modulation of the striatopallidofugal axis. Face and neck lie in the ventral, lateral and posterior GPi.',
-    structures: ['gpi'], alternativeStructures: ['putamen'], tracts: ['rt_cerv'], corticalAreas: ['s1'], targetId: 't-ss-cerv',
+    structures: ['gpi'], contextStructures: ['putamen'], tracts: ['rt_cerv'], corticalAreas: ['s1'], targetId: 't-ss-cerv',
     evidence: [
       { claim: 'Striatopallidofugal axis linked to optimal cervical outcomes in 80 patients', refIds: ['horn2022'] },
       { claim: 'Ventral, lateral and posterior GPi represent face and neck', refIds: ['thieme2021'] },
     ],
     note: 'The thresholded cervical tract file contains six positively weighted streamlines per hemisphere; all are shown.',
-    camera: 'anterior',
+    camera: 'coronal',
   },
   {
     id: 'fhd-hand', indicationId: 'fhd', name: 'Focal hand dystonia',
@@ -114,19 +115,19 @@ export const SYMPTOMS: SymptomInput[] = [
       { claim: 'Vo targeted at the Voa/Vop junction from published coordinates', refIds: ['vocoords'] },
     ],
     note: 'Marker: centroid of the Morel VLa label shown as Vo (atlas coordinate). The published Voa/Vop junction coordinates are not included; see the referenced series.',
-    camera: 'lateral',
+    camera: 'sagittal',
   },
   {
     id: 'ts-tics', indicationId: 'ts', name: 'Tics',
     summary: 'CM connectivity to sensorimotor cortex, putamen and cerebellum predicted tic improvement.',
-    structures: ['cm', 'pf'], alternativeStructures: ['putamen'], tracts: ['sw_ts'], corticalAreas: ['m1', 's1'], targetId: 't-atlas-cm',
+    structures: ['cm', 'pf'], contextStructures: ['putamen'], tracts: ['sw_ts'], corticalAreas: ['m1', 's1'], targetId: 't-atlas-cm',
     evidence: [
       { claim: 'CM connectivity predicted tic improvement under cross-validation', refIds: ['johnson2020'] },
       { claim: 'Tourette response maps to M1-connected circuits', refIds: ['hollunder2024'] },
     ],
     note: 'Streamlines: Tourette sweet streamlines (Hollunder 2024). The CM-specific connectivity of Johnson 2020 is not distributed as a file. Overlap with the best-connected CM region did not predict response by itself.',
     noteRefIds: ['johnson2020'],
-    camera: 'anterior',
+    camera: 'coronal',
   },
   {
     id: 'ts-ocb', indicationId: 'ts', name: 'Obsessive-compulsive behaviour',
@@ -134,6 +135,7 @@ export const SYMPTOMS: SymptomInput[] = [
     structures: ['gpi'], tracts: [], corticalAreas: [], targetId: 't-atlas-gpi',
     evidence: [{ claim: 'No difference between targets in 110 patients; benefit builds over months', refIds: ['johnson2019'] }],
     note: 'No region map for this finding is distributed as a file. The marker is the DISTAL GPi centroid for orientation only.',
-    camera: 'anterior',
+    camera: 'coronal',
   },
+  ...EPILEPSY_SYMPTOMS,
 ];

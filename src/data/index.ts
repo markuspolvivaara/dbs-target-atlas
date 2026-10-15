@@ -39,6 +39,7 @@ export function crossCheck(c: Content): string[] {
   const targets = new Set(c.targets.map((t) => t.id));
   const inds = new Set(c.indications.map((i) => i.id));
   const syms = new Set(c.symptoms.map((s) => s.id));
+  const MAN = new Map(MANIFEST.structures.map((s) => [s.id, s]));
   const ref = (where: string, id: string) => { if (!refs.has(id)) errs.push(`${where}: unknown refId '${id}'`); };
   const has = (where: string, id: string, set: Set<string>, what: string) => {
     if (!set.has(id)) errs.push(`${where}: ${what} '${id}' not in manifest/content`);
@@ -59,6 +60,7 @@ export function crossCheck(c: Content): string[] {
     i.corticalAreas.forEach((a) => has(w, a, cortex, 'cortical area'));
     [...i.targetMarkers, ...i.alternativeMarkers].forEach((t) => has(w, t, targets, 'target'));
     i.symptomIds.forEach((s) => has(w, s, syms, 'symptom'));
+    i.extraVolumes.forEach((v) => { if (MAN.get(v)?.type !== 'target') errs.push(`${w}: extra volume '${v}' is not a sweet-spot volume`); });
   }
   for (const s of c.symptoms) {
     const w = `symptom ${s.id}`;
@@ -66,7 +68,7 @@ export function crossCheck(c: Content): string[] {
     if (!c.indications.find((i) => i.id === s.indicationId)?.symptomIds.includes(s.id)) errs.push(`${w}: not listed by its indication`);
     s.evidence.forEach((e) => e.refIds.forEach((r) => ref(w, r)));
     s.noteRefIds.forEach((r) => ref(w, r));
-    [...s.structures, ...s.alternativeStructures].forEach((x) => has(w, x, ids, 'structure'));
+    [...s.structures, ...s.alternativeStructures, ...s.contextStructures].forEach((x) => has(w, x, ids, 'structure'));
     s.tracts.forEach((t) => has(w, t, tracts, 'tract'));
     s.corticalAreas.forEach((a) => has(w, a, cortex, 'cortical area'));
     if (s.targetId) has(w, s.targetId, targets, 'target');

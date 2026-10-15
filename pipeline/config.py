@@ -114,6 +114,25 @@ DATASETS: dict[str, dict] = {
         "licence": LEADDBS_LICENCE,
         "url": "https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/",
     },
+    "neudorfer2020": {
+        "name": "Atlas of the human hypothalamic region (Neudorfer 2020)",
+        "cite": ["neudorfer2020"],
+        "licence": LEADDBS_LICENCE,
+        "url": "https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/",
+    },
+    "xiao2017": {
+        "name": "MNI PD25 subcortical atlas (Xiao 2017)",
+        "cite": ["xiao2017"],
+        "licence": LEADDBS_LICENCE,
+        "url": "https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/",
+    },
+    "pd25hist": {
+        "name": "MNI PD25 histology atlas (Xiao 2017), Lead-DBS import",
+        "cite": ["xiao2017"],
+        "licence": LEADDBS_LICENCE,
+        "url": "https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/",
+        "note": "Optic tract label. The Human Motor Thalamus (Ilinsky) optic-tract files were not used: both the lh and rh files lie in the right hemisphere (x > 0).",
+    },
     "elias2021": {
         "name": "TOR-PSM probabilistic stimulation maps (Elias 2021)",
         "cite": ["elias2021"],
@@ -137,11 +156,12 @@ class Volume:
     files: dict[str, str] = field(default_factory=dict)  # side -> path; side "mixed" = both
     threshold: float = 0.5
     label: dict[str, int] | None = None  # side -> integer label in a label volume
-    union: list[str] | None = None  # extra mixed files to OR into the mask
+    union: list[dict[str, str]] | None = None  # more per-side label files OR-ed into the mask (resampled to a common grid)
     faces: int = 4000  # target faces per hemisphere after decimation
     sigma: float = 0.6  # pre-isosurface Gaussian, in voxels
     aliases: list[str] = field(default_factory=list)
     derivation: str = ""
+    category: str | None = None  # card eyebrow when "Nucleus" would be wrong
 
 
 def lr(atlas: str, name: str, ext: str = ".nii.gz") -> dict[str, str]:
@@ -181,6 +201,23 @@ NUCLEI: list[Volume] = [
     Volume("nacc", "Nucleus accumbens", "nucleus", "str", "cit168", {"mixed": f"{A}{CIT}/mixed/NAC.nii.gz"}, faces=2000),
     Volume("ppn", "Pedunculopontine nucleus", "nucleus", "ppn", "snijders2016", lr("PPN (Snijders 2016)", "PPN", ".nii"),
            faces=1500, sigma=0.8, aliases=["PPN"]),
+    # ---- epilepsy (researched addition, not part of the original teaching page)
+    Volume("ant", "Anterior nucleus of the thalamus (ANT)", "nucleus", "ant", "morel", lr(MOREL, "AV"),
+           union=[lr(MOREL, "AM"), lr(MOREL, "AD")], faces=3000, aliases=["ANT", "AV/AM/AD"],
+           derivation="Union of the Morel anteroventral (AV), anteromedial (AM) and anterodorsal (AD) labels."),
+    Volume("mtt", "Mammillothalamic tract", "nucleus", "mtt", "morel", lr(MOREL, "mtt"), faces=1500, sigma=0.4,
+           aliases=["MTT"], category="Fibre bundle (atlas label)"),
+    Volume("mamm", "Mammillary body", "nucleus", "mb", "neudorfer2020",
+           lr("Atlas of the Human Hypothalamus (Neudorfer & Germann 2020)", "mammillary_bodies"), faces=1500, sigma=0.8),
+    Volume("fornix", "Fornix", "nucleus", "fx", "neudorfer2020",
+           lr("Atlas of the Human Hypothalamus (Neudorfer & Germann 2020)", "fornix"), faces=2000, sigma=0.8,
+           category="Fibre bundle (atlas label)"),
+    Volume("hippocampus", "Hippocampus", "nucleus", "hip", "xiao2017",
+           lr("MNI PD25 subcortical (Xiao 2017)", "hippocampus"), faces=5000),
+    # GPi landmark (researched addition)
+    Volume("optic_tract", "Optic tract", "nucleus", "ot", "pd25hist",
+           {"mixed": f"{A}MNI PD25 histology (Xiao 2017) - imported from PD25_MNI/mixed/Optic_Tract_(II).nii.gz"},
+           faces=2500, sigma=0.5, aliases=["OT"], category="Fibre bundle (atlas label)"),
     Volume("dentate", "Dentate nucleus", "nucleus", "den", "suit",
            {"mixed": "labeling/Cerebellum_SUIT (Diedrichsen 2006).nii"},
            label={"L": 29, "R": 30}, sigma=0.8, faces=3000),
@@ -203,6 +240,10 @@ SWEETSPOTS: list[Volume] = [
            lr("TOR-PSM (Elias 2020)", "tremor_vim_n39_hotspot"), faces=1500),
 ]
 SWEETSPOT_FRACTION = 0.5
+
+# Derived atlas coordinate: ANT voxels within this distance of the MTT label (both Morel).
+# Studies relate ANT-DBS outcome to the ANT-MTT junction (Schaper 2020, Ilyas 2022, Grewal 2018).
+ANT_MTT_JUNCTION_MM = 1.0
 
 
 @dataclass
