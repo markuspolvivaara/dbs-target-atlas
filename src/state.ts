@@ -10,7 +10,7 @@ export type LeadAnchor = 'centre' | 'tip' | 'c0' | 'c1' | 'c2' | 'c3';
 export const LEAD_ANCHORS: LeadAnchor[] = ['centre', 'c0', 'c1', 'c2', 'c3', 'tip'];
 
 export interface Layer { on: boolean; opacity: number }
-export interface Clip { on: boolean; mm: number; cut: boolean; flip: boolean }
+export interface Clip { on: boolean; mm: number }
 
 export interface AppState {
   page: Page;
@@ -21,8 +21,11 @@ export interface AppState {
   cam: { preset: CameraPreset | null; pos?: V3; tgt?: V3 };
   layers: Record<LayerKey, Layer>;
   borders: boolean;
-  labels: boolean;
+  /** Name labels in 3D: always, only for the hovered / selected item, or never. */
+  labels: 'all' | 'hover' | 'off';
   clip: Record<Axis, Clip>;
+  /** Cut away the patient's left or right half of everything (structures, tracts, cortex, lead, slices) at the midline. */
+  cutSide: 'none' | 'L' | 'R';
   lead: { spacing: 0.5 | 1.5; anchor: LeadAnchor; depth: number; ring: number; tilt: number; stim: boolean; contact: number; radius: number };
   /** Selected structure or marker: its card opens and it is highlighted in 3D. */
   sel: string | null;
@@ -46,12 +49,13 @@ export function defaultState(): AppState {
       electrode: { on: false, opacity: 1 },
     },
     borders: true,
-    labels: true,
+    labels: 'hover',
     clip: {
-      axial: { on: false, mm: -4, cut: false, flip: false },
-      coronal: { on: false, mm: -13, cut: false, flip: false },
-      sagittal: { on: false, mm: -12, cut: false, flip: false },
+      axial: { on: false, mm: -4 },
+      coronal: { on: false, mm: -13 },
+      sagittal: { on: false, mm: -12 },
     },
+    cutSide: 'none',
     lead: { ...DEFAULT_LEAD },
     sel: null, hidden: [], img: 'stn', theme: 'system',
   };
@@ -79,11 +83,12 @@ export function encode(s: AppState): string {
     const dly = LAYER_CODES.map(([k, c]) => `${c}${d.layers[k].on ? 1 : 0}`).join(',');
     if (ly !== dly) p.set('ly', ly);
     if (!s.borders) p.set('b', '0');
-    if (!s.labels) p.set('lb', '0');
+    if (s.labels !== 'hover') p.set('lb', s.labels === 'all' ? 'a' : '0');
     for (const [a, code] of AXES) {
       const c = s.clip[a];
-      if (c.on) p.set(code, `${r1(c.mm)}${c.cut ? 'c' : ''}${c.flip ? 'f' : ''}`);
+      if (c.on) p.set(code, `${r1(c.mm)}`);
     }
+    if (s.cutSide !== 'none') p.set('cut', s.cutSide);
     if (s.layers.electrode.on) {
       const l = s.lead;
       p.set('lead', [l.spacing, r1(l.depth), l.ring, l.tilt, ...(l.anchor !== 'centre' ? [l.anchor] : [])].join(','));
@@ -124,10 +129,14 @@ export function decode(hash: string, base: AppState = defaultState()): AppState 
     s.layers[e[0]] = { on: on === '1', opacity: Math.min(1, Math.max(0, num(op ?? null, 1))) };
   }
   s.borders = p.get('b') !== '0';
-  s.labels = p.get('lb') !== '0';
+  const cut = p.get('cut');
+  s.cutSide = cut === 'L' || cut === 'R' ? cut : 'none';
+  const lb = p.get('lb');
+  s.labels = lb === 'a' ? 'all' : lb === '0' ? 'off' : 'hover';
   for (const [a, code] of AXES) {
     const v = p.get(code);
-    if (v !== null) s.clip[a] = { on: true, mm: num(v, s.clip[a].mm), cut: v.includes('c'), flip: v.includes('f') };
+    // older links may carry per-plane cut flags ('c', 'f'); those cuts are no longer offered and are ignored
+    if (v !== null) s.clip[a] = { on: true, mm: num(v, s.clip[a].mm) };
   }
   const lead = p.get('lead');
   if (lead) {

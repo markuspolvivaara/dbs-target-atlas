@@ -29,6 +29,8 @@ export interface ViewerEvents {
   leadMoved(depth: number): void;
   status(text: string | null): void;
   lead(contacts: Record<Side, THREE.Vector3[]> | null): void;
+  /** The camera starts / stops moving (orbit, pan, zoom or preset animation). */
+  moving(active: boolean): void;
 }
 
 const DEG = Math.PI / 180;
@@ -65,6 +67,7 @@ export class Viewer {
   private disposed = false;
   private loadingCount = 0;
   private applySeq = 0;
+  private moveTimer = 0;
 
   constructor(private host: HTMLElement, private ev: ViewerEvents) {
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance', preserveDrawingBuffer: true });
@@ -81,7 +84,13 @@ export class Viewer {
     this.controls.minDistance = 15;
     this.controls.maxDistance = 900;
     this.controls.addEventListener('change', () => this.invalidate());
-    this.controls.addEventListener('end', () => this.ev.cameraChanged(this.toRas(this.camera.position), this.toRas(this.controls.target)));
+    this.controls.addEventListener('end', () => {
+      this.ev.cameraChanged(this.toRas(this.camera.position), this.toRas(this.controls.target));
+      // damping keeps the view drifting briefly after release
+      clearTimeout(this.moveTimer);
+      this.moveTimer = window.setTimeout(() => this.ev.moving(false), 300);
+    });
+    this.controls.addEventListener('start', () => { clearTimeout(this.moveTimer); this.ev.moving(true); });
 
     this.root.matrixAutoUpdate = false;
     this.root.matrix.copy(RAS_TO_WORLD);
@@ -115,7 +124,7 @@ export class Viewer {
       const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
       this.camera.position.lerpVectors(this.anim.p0, this.anim.p1, e);
       this.controls.target.lerpVectors(this.anim.t0v, this.anim.t1v, e);
-      if (k >= 1) { this.anim = null; this.ev.cameraChanged(this.toRas(this.camera.position), this.toRas(this.controls.target)); }
+      if (k >= 1) { this.anim = null; this.ev.cameraChanged(this.toRas(this.camera.position), this.toRas(this.controls.target)); this.ev.moving(false); }
       this.needsRender = true;
     }
     if (this.controls.update()) this.needsRender = true;
@@ -251,6 +260,11 @@ export class Viewer {
     return h === 'both' || h === side;
   }
 
+  /** Visible and not on the half removed by the left/right cut (markers and labels are not clipped by geometry). */
+  private sideShown(side: Side): boolean {
+    return this.sideVisible(side) && this.state?.cutSide !== side;
+  }
+
   private restyle(): void {
     if (!this.state || !this.plan) return;
     const s = this.state, p = this.plan;
@@ -311,7 +325,7 @@ export class Viewer {
     this.markerGroup.visible = s.layers.targets.on;
     for (const m of this.markerGroup.children) {
       const side = m.userData.side as Side;
-      m.visible = this.sideVisible(side) && !hidden.has(m.userData.marker);
+      m.visible = this.sideShown(side) && !hidden.has(m.userData.marker);
       m.scale.setScalar(s.sel === m.userData.marker ? 1.8 : 1);
       const mat = (m as THREE.Mesh).material as THREE.Material;
       mat.opacity = (m.userData.primary ? 1 : 0.9) * s.layers.targets.opacity;
@@ -372,12 +386,33 @@ export class Viewer {
       if (this.state.hidden.includes(id)) continue;
       const m = MAN.get(id);
       if (!m || m.type !== 'nucleus' || !m.centroid) continue;
-      const side: Side = this.sideVisible('R') ? 'R' : 'L';
+      const side: Side = this.sideShown('R') ? 'R' : 'L';
+      if (!this.sideShown(side)) continue;
       const v = this.toWorld(new THREE.Vector3(...m.centroid[side])).project(this.camera);
       if (v.z > 1 || Math.abs(v.x) > 1.1 || Math.abs(v.y) > 1.1) continue;
       out.push({ id, x: (v.x + 1) / 2 * w, y: (1 - v.y) / 2 * h, look });
     }
     return out;
+  }
+
+  /** Screen anchor for a label: a marker's position, or a structure's centroid on a shown side. */
+  anchorFor(id: string): { x: number; y: number } | null {
+    const w = this.host.clientWidth, h = this.host.clientHeight;
+    const proj = (world: THREE.Vector3) => {
+      const v = world.project(this.camera);
+      if (v.z > 1 || Math.abs(v.x) > 1.05 || Math.abs(v.y) > 1.05) return null;
+      return { x: (v.x + 1) / 2 * w, y: (1 - v.y) / 2 * h };
+    };
+    const marks = this.markerGroup.children.filter((m) => m.userData.marker === id && !m.userData.ring && m.visible);
+    if (marks.length) {
+      const m = marks.find((x) => x.userData.side === 'R') ?? marks[0];
+      return proj(m.getWorldPosition(new THREE.Vector3()));
+    }
+    const meta = MAN.get(id);
+    if (!meta?.centroid) return null;
+    const side: Side = this.sideShown('R') ? 'R' : 'L';
+    if (!this.sideShown(side)) return null;
+    return proj(this.toWorld(new THREE.Vector3(...meta.centroid[side])));
   }
 
   markerScreen(): { id: string; side: Side; x: number; y: number; primary: boolean }[] {
@@ -402,8 +437,10 @@ export class Viewer {
       const c = s.clip[axis];
       this.slices.update(axis, c.on, c.mm);
       if (c.on) anyOn = true;
-      if (c.on && c.cut) planes.push(this.slices.clipPlane(axis, c.mm, c.flip));
     }
+    // cut at the midline (x = 0): clipPlane(flip=false) keeps x <= 0, i.e. removes the patient's right half.
+    // Only structures are cut; the slice images stay whole so that half shows the slice unobstructed.
+    if (s.cutSide !== 'none') planes.push(this.slices.clipPlane('sagittal', 0, s.cutSide === 'L'));
     if (anyOn && this.slices.status === 'idle') { this.ev.status('Loading T1 slices…'); this.slices.ensureLoaded().catch(() => this.ev.status('Could not load the T1 template.')); }
     this.clipPlanes = planes;
     this.leads.L.setClipping(planes); this.leads.R.setClipping(planes);
@@ -493,6 +530,7 @@ export class Viewer {
       this.ev.cameraChanged(posRas, tgtRas);
     } else {
       this.anim = { t0: performance.now(), dur: 700, p0: this.camera.position.clone(), p1, t0v: this.controls.target.clone(), t1v: t1 };
+      this.ev.moving(true);
     }
     this.invalidate();
   }

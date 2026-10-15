@@ -73,13 +73,16 @@ time they are needed; T1 slices (3.4 MB) load only when a slice is switched on.
   anterior up), posterior-oblique, surgeon's view (along the
   lead trajectory). The orientation disc shows R/L, A/P and S/I.
 - **Hemisphere**: left, both, right.
+- **Labels** (toolbar): *All* labels highlighted structures and markers with leader lines; *Hover*
+  (default) labels only what you hover in the legend or select; *Off* gives clean images. Labels
+  fade while the view moves.
 - **Layers** tab: nuclei, tracts, cortex, targets and electrode, each with an opacity slider; name
   labels; landmarks (CST and medial lemniscus around Vim/PSA targets, the optic tract beneath GPi
   targets, the red nucleus beside STN targets); an index of every structure.
 - **Slices** tab: axial, coronal and sagittal planes with the ICBM 2009b T1 drawn on them, an mm
-  slider, and a per-plane "Cut away" choice (nothing, or everything on one side of the plane:
-  above/below, in front/behind, patient right/left). Cuts span both hemispheres; use the
-  Left/Right toolbar buttons to show one hemisphere.
+  slider, and a "Cut away" choice (nothing / patient's left half / patient's right half) that removes
+  all structures on that side of the midline while the slices stay whole: one half shows the T1
+  slice unobstructed, the other slice plus anatomy.
 - **Lead** tab: generic quadripolar lead (1.27 mm diameter, 1.5 mm contacts, 0.5 or 1.5 mm
   spacing) on the primary target, with a depth offset (drag the lead along its axis) and an
   illustrative stimulation sphere. The sphere is not a VTA model. Contact coordinates are listed.
@@ -103,7 +106,7 @@ time they are needed; T1 slices (3.4 MB) load only when a slice is switched on.
   and the open card, so teaching links reopen the exact view.
 
 Keyboard: `1`–`5` camera presets, `H` hemisphere, `[` `]` indication, `,` `.` symptom,
-`L` lead, `S` axial slice, `M` measure, `Esc` close, `?` help.
+`N` name labels, `L` lead, `S` axial slice, `M` measure, `Esc` close, `?` help.
 
 ### AC–PC coordinates (approximate)
 

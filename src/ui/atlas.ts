@@ -19,14 +19,10 @@ const PRESETS: [CameraPreset, string, string, string][] = [
   ['posteriorOblique', 'Post-oblique', '4', 'Obl'], ['surgeon', "Surgeon's view", '5', 'Surg'],
 ];
 const LAYERS: [LayerKey, string][] = [['nuclei', 'Nuclei'], ['tracts', 'Tracts'], ['cortex', 'Cortex'], ['targets', 'Targets'], ['electrode', 'Electrode']];
-/**
- * Per plane: what the cut removes. 'pos' = the superior / anterior / patient-right side of
- * the plane (state: cut, !flip); 'neg' = the inferior / posterior / patient-left side (cut, flip).
- */
-const AXES: [Axis, string, [number, number], string, { pos: string; neg: string }][] = [
-  ['axial', 'Axial', [-60, 85], 'z', { pos: 'Everything above the slice', neg: 'Everything below the slice' }],
-  ['coronal', 'Coronal', [-115, 75], 'y', { pos: 'Everything in front of the slice', neg: 'Everything behind the slice' }],
-  ['sagittal', 'Sagittal', [-75, 75], 'x', { pos: 'Everything to the patient’s right of the slice', neg: 'Everything to the patient’s left of the slice' }],
+const AXES: [Axis, string, [number, number], string][] = [
+  ['axial', 'Axial', [-60, 85], 'z'],
+  ['coronal', 'Coronal', [-115, 75], 'y'],
+  ['sagittal', 'Sagittal', [-75, 75], 'x'],
 ];
 
 const ANCHOR_LABEL: Record<LeadAnchor, string> = {
@@ -47,6 +43,9 @@ export class AtlasPage {
   private measureOut = h('div', { class: 'measure-out', 'aria-live': 'polite', hidden: true });
   private legend = h('ul', { class: 'legend3d' });
   private labels = h('div', { class: 'labels', 'aria-hidden': 'true' });
+  private leaders = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  /** Structure / marker whose legend row the pointer is over: labelled in 3D in "hover" mode. */
+  private legendHover: string | null = null;
   private gizmo = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   private status = h('div', { class: 'status', role: 'status', 'aria-live': 'polite', hidden: true });
   private measureBtn!: HTMLButtonElement;
@@ -86,7 +85,11 @@ export class AtlasPage {
       onclick: () => this.toggleMeasure(),
     }, 'Measure');
     const share = h('button', { type: 'button', class: 'tbtn', title: 'Copy a link to this exact view', onclick: () => this.copyLink(share) }, 'Copy link');
-    toolbar.append(presetGroup, hemiGroup, h('div', { class: 'tgroup' }, this.measureBtn, share));
+    const labelGroup = h('div', { class: 'tgroup seg', role: 'group', 'aria-label': 'Name labels' },
+      h('span', { class: 'tlabel' }, 'Labels'),
+      ...([['all', 'All', 'Always show name labels'], ['hover', 'Hover', 'Label only what you point at, select or hover in the legend'], ['off', 'Off', 'No name labels (clean images)']] as const)
+        .map(([v, label, title]) => h('button', { type: 'button', class: 'tbtn', 'data-labels': v, 'aria-pressed': 'false', title: `${title} (N cycles)`, onclick: () => this.update((s) => { s.labels = v; }) }, label)));
+    toolbar.append(presetGroup, hemiGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share));
     this.gizmo.setAttribute('viewBox', '-40 -40 80 80');
     this.gizmo.setAttribute('class', 'gizmo');
     this.gizmo.setAttribute('aria-hidden', 'true');
@@ -94,7 +97,9 @@ export class AtlasPage {
     const bottom = h('div', { class: 'stage-bottom' },
       h('details', { class: 'legend-box', open: legendOpen }, h('summary', {}, 'Legend'), this.legend),
       h('div', { class: 'readout-box' }, this.measureOut, this.readout));
-    this.stage.append(host, toolbar, this.labels, this.gizmo, bottom, this.tip, this.status);
+    this.leaders.setAttribute('class', 'leaders');
+    this.leaders.setAttribute('aria-hidden', 'true');
+    this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status);
     this.readout.textContent = 'Point at a structure for MNI coordinates';
 
     this.viewer = new Viewer(host, {
@@ -108,6 +113,7 @@ export class AtlasPage {
       leadMoved: (d) => this.editLead((s) => { s.lead.depth = d; }),
       status: (t) => { this.status.hidden = !t; this.status.textContent = t ?? ''; },
       lead: (c) => this.showLead(c),
+      moving: (on) => this.stage.classList.toggle('moving', on),
     });
     const origRender = this.viewer.renderer.render.bind(this.viewer.renderer);
     this.viewer.renderer.render = (sc, cam) => { origRender(sc, cam); this.placeLabels(); };
@@ -176,6 +182,7 @@ export class AtlasPage {
     this.s = s;
     this.viewer.apply(s, { animateCamera: opts.camera }).then(() => this.renderLegend());
     this.stage.querySelectorAll<HTMLButtonElement>('[data-hemi]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.hemi === s.hemi)));
+    this.stage.querySelectorAll<HTMLButtonElement>('.toolbar [data-labels]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.labels === s.labels)));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((b) => b.toggleAttribute('data-active', b.dataset.preset === s.cam.preset));
     const key = `${s.ind}|${s.sym}|${s.sel}`;
     if (key !== this.lastPlanKey || !prev) { this.lastPlanKey = key; this.renderOverview(); }
@@ -353,7 +360,8 @@ export class AtlasPage {
       const ids = [id, ...also];
       const off = hidden.has(id);
       const on = this.s.sel === id;
-      return h('li', { class: `${off ? 'off' : ''} ${on ? 'on' : ''}` },
+      const hover = (v: string | null) => () => { this.legendHover = v; this.viewer.invalidate(); };
+      return h('li', { class: `${off ? 'off' : ''} ${on ? 'on' : ''}`, onmouseenter: hover(id), onmouseleave: hover(null), onfocusin: hover(id), onfocusout: hover(null) },
         h('button', {
           type: 'button', class: 'eye', 'aria-pressed': String(!off), title: off ? 'Show' : 'Hide', 'aria-label': `${off ? 'Show' : 'Hide'} ${text}`,
           onclick: () => this.update((s) => {
@@ -445,26 +453,75 @@ export class AtlasPage {
     }
   }
 
+  /**
+   * Name labels with leader lines. "all": every highlighted structure and primary marker;
+   * "hover": only the item hovered in the legend and the selected one; "off": none.
+   * Labels sit a little away from their anchor, pushed outwards from the view centre, and are
+   * nudged apart so they do not overlap. They fade while the camera moves (CSS .moving).
+   */
   private placeLabels(): void {
     this.drawGizmo();
-    const pts = this.viewer.markerScreen();
-    const seen = new Set<string>();
-    const markers = pts.filter((p) => p.primary && !seen.has(p.id) && (seen.add(p.id), true))
-      .map((p) => ({ text: TGT.get(p.id)?.label ?? '', x: p.x + 10, y: p.y - 10, cls: 'mlabel' }));
-    const structs = this.s?.labels === false ? [] : this.viewer.structureScreen().map((p) => {
-      const m = MAN.get(p.id)!;
-      return { text: (m.aliases[0] ?? m.name) + (p.look === 'alt' ? ' (alt.)' : ''), x: p.x - 12, y: p.y + 8, cls: `slabel ${p.look}` };
-    });
-    const want = this.s?.labels === false ? [] : [...markers, ...structs];
-    while (this.labels.children.length < want.length) this.labels.append(h('span', {}));
+    const mode = this.s?.labels ?? 'hover';
+    type L = { id: string; text: string; ax: number; ay: number; cls: string };
+    const items: L[] = [];
+    const have = new Set<string>();
+    const add = (id: string, text: string, ax: number, ay: number, cls: string) => { if (!have.has(id)) { have.add(id); items.push({ id, text, ax, ay, cls }); } };
+    if (mode === 'all') {
+      for (const p of this.viewer.markerScreen()) if (p.primary) add(p.id, TGT.get(p.id)?.label ?? '', p.x, p.y, 'mlabel');
+      for (const p of this.viewer.structureScreen()) {
+        const m = MAN.get(p.id)!;
+        add(p.id, (m.aliases[0] ?? m.name) + (p.look === 'alt' ? ' (alt.)' : ''), p.x, p.y, `slabel ${p.look}`);
+      }
+    }
+    if (mode !== 'off') {
+      for (const id of [this.legendHover, this.s?.sel]) {
+        if (!id || have.has(id)) continue;
+        const a = this.viewer.anchorFor(id);
+        const name = TGT.get(id)?.label ?? MAN.get(id)?.name;
+        if (a && name) add(id, name, a.x, a.y, TGT.has(id) ? 'mlabel' : 'slabel primary');
+      }
+    }
+    // layout: offset outwards from the centre, then nudge vertically to avoid overlaps
+    const W = this.stage.clientWidth, H = this.stage.clientHeight;
+    const placed: { x: number; y: number; w: number; h: number; left: boolean; ax: number; ay: number }[] = [];
+    for (const it of items) {
+      let dx = it.ax - W / 2, dy = it.ay - H / 2;
+      const len = Math.hypot(dx, dy);
+      if (len < 24) { dx = 0.7; dy = -0.7; } else { dx /= len; dy /= len; }
+      const w = Math.min(220, it.text.length * 6.6 + 14), hgt = 20;
+      const left = dx < 0; // label extends leftwards from its attach point
+      let x = it.ax + dx * 44, y = it.ay + dy * 34 - hgt / 2;
+      const box = () => ({ x0: left ? x - w : x, x1: left ? x : x + w, y0: y, y1: y + hgt });
+      for (let guard = 0; guard < 12; guard++) {
+        const b = box();
+        const hit = placed.find((q) => b.x0 < q.x + q.w && b.x1 > q.x && b.y0 < q.y + q.h && b.y1 > q.y);
+        if (!hit) break;
+        y = dy >= 0 ? hit.y + hit.h + 4 : hit.y - hgt - 4;
+      }
+      y = Math.max(46, Math.min(H - hgt - 4, y));
+      const b = box();
+      placed.push({ x: b.x0, y: b.y0, w, h: hgt, left, ax: it.ax, ay: it.ay });
+    }
+    while (this.labels.children.length < items.length) this.labels.append(h('span', {}));
     [...this.labels.children].forEach((el, i) => {
-      const p = want[i];
       const e = el as HTMLElement;
-      if (!p) { e.hidden = true; return; }
+      const it = items[i], q = placed[i];
+      if (!it) { e.hidden = true; return; }
       e.hidden = false;
-      e.className = p.cls;
-      e.textContent = p.text;
-      e.style.transform = `translate(${Math.round(p.x)}px, ${Math.round(p.y)}px)`;
+      e.className = it.cls;
+      e.textContent = it.text;
+      e.style.transform = `translate(${Math.round(q.x)}px, ${Math.round(q.y)}px)`;
+      e.style.maxWidth = `${q.w + 20}px`;
+    });
+    const NS = 'http://www.w3.org/2000/svg';
+    while (this.leaders.firstChild) this.leaders.removeChild(this.leaders.firstChild);
+    placed.forEach((q) => {
+      const l = document.createElementNS(NS, 'line');
+      l.setAttribute('x1', String(q.ax)); l.setAttribute('y1', String(q.ay));
+      l.setAttribute('x2', String(q.left ? q.x + q.w : q.x)); l.setAttribute('y2', String(q.y + q.h / 2));
+      const c = document.createElementNS(NS, 'circle');
+      c.setAttribute('cx', String(q.ax)); c.setAttribute('cy', String(q.ay)); c.setAttribute('r', '2');
+      this.leaders.append(l, c);
     });
     if (this.measurePts.length === 2) {
       const q = this.viewer.measureScreen();
@@ -522,8 +579,6 @@ export class AtlasPage {
         h('label', { class: 'range' }, h('span', { class: 'vh' }, `${label} opacity`),
           h('input', { type: 'range', min: 0, max: 1, step: 0.05, oninput: (e: Event) => this.update((st) => { st.layers[k].opacity = parseFloat((e.target as HTMLInputElement).value); }) }))));
       pane.append(h('h3', {}, 'Layers'), ...rows,
-        h('label', { class: 'check' }, h('input', { type: 'checkbox', 'data-labels': '1', onchange: (e: Event) => this.update((st) => { st.labels = (e.target as HTMLInputElement).checked; }) }),
-          'Show name labels on highlighted structures and target markers'),
         h('label', { class: 'check' }, h('input', { type: 'checkbox', 'data-borders': '1', onchange: (e: Event) => this.update((st) => { st.borders = (e.target as HTMLInputElement).checked; }) }),
           'Show landmarks: corticospinal tract and medial lemniscus around Vim/PSA targets, optic tract beneath GPi targets, red nucleus beside STN targets'),
         h('p', { class: 'aside' }, 'Unselected nuclei stay as faint ghosts for orientation. Tracts and cortex load when first needed.'),
@@ -535,7 +590,6 @@ export class AtlasPage {
       (row.querySelector('input[type=range]') as HTMLInputElement).value = String(s.layers[k].opacity);
     }
     (pane.querySelector('[data-borders]') as HTMLInputElement).checked = s.borders;
-    (pane.querySelector('[data-labels]') as HTMLInputElement).checked = s.labels;
   }
 
   private structureIndex(): HTMLElement {
@@ -556,35 +610,30 @@ export class AtlasPage {
     const s = this.s;
     if (!pane.childElementCount) {
       pane.append(h('h3', {}, 'Clip planes with T1 slices'),
-        h('p', { class: 'aside' }, 'A cut removes structures on one side of the slice plane, in both hemispheres. To show one hemisphere only, use Left / Right in the toolbar.'));
-      for (const [axis, label, [lo, hi], coord, removed] of AXES) {
+        h('fieldset', { class: 'seg-field', 'data-k': 'cutside' }, h('legend', {}, 'Cut away'),
+          ...([['none', 'Nothing'], ['L', 'Patient’s left half'], ['R', 'Patient’s right half']] as const).map(([v, label]) =>
+            h('label', { class: 'radio' }, h('input', { type: 'radio', name: 'cutside', value: v, onchange: () => this.update((st) => { st.cutSide = v; }) }), label))),
+        h('p', { class: 'aside' }, 'Removes all structures on that side of the midline (x = 0): nuclei, tracts, cortex, markers and the lead. The slices stay whole, so one half shows the T1 slice unobstructed and the other half slice plus anatomy.'));
+      for (const [axis, label, [lo, hi], coord] of AXES) {
         const out = h('output', { class: 'mm' });
         pane.append(h('fieldset', { class: 'slice', 'data-axis': axis },
           h('legend', {}, label),
           h('label', { class: 'check' }, h('input', { type: 'checkbox', 'data-k': 'on', onchange: (e: Event) => this.update((st) => { st.clip[axis].on = (e.target as HTMLInputElement).checked; }) }), `Show ${label.toLowerCase()} slice`),
           h('label', { class: 'range wide' }, h('span', {}, `${coord} = `, out),
             h('input', { type: 'range', min: lo, max: hi, step: 0.5, 'data-k': 'mm', oninput: (e: Event) => this.update((st) => { st.clip[axis].mm = parseFloat((e.target as HTMLInputElement).value); }) })),
-          h('label', { class: 'select' }, 'Cut away: ', h('select', {
-            'data-k': 'cut',
-            onchange: (e: Event) => this.update((st) => {
-              const v = (e.target as HTMLSelectElement).value;
-              st.clip[axis].cut = v !== 'none';
-              st.clip[axis].flip = v === 'neg';
-            }),
-          }, h('option', { value: 'none' }, 'Nothing'), h('option', { value: 'pos' }, removed.pos), h('option', { value: 'neg' }, removed.neg))),
         ));
       }
       pane.append(h('p', { class: 'aside' }, 'Slices show the ICBM 2009b nonlinear asymmetric T1 template: 0.5 mm inside a subcortical box, 1.5 mm elsewhere. Loaded on first use (about 3.5 MB).'),
         h('p', { class: 'aside slice-status' }));
     }
+    pane.querySelectorAll<HTMLInputElement>('input[name=cutside]').forEach((r) => { r.checked = r.value === s.cutSide; });
     for (const [axis] of AXES) {
       const f = pane.querySelector(`[data-axis="${axis}"]`)!;
       const c = s.clip[axis];
       (f.querySelector('[data-k=on]') as HTMLInputElement).checked = c.on;
       (f.querySelector('[data-k=mm]') as HTMLInputElement).value = String(c.mm);
-      (f.querySelector('[data-k=cut]') as HTMLSelectElement).value = !c.cut ? 'none' : c.flip ? 'neg' : 'pos';
       (f.querySelector('output') as HTMLOutputElement).textContent = `${fmtMm(c.mm)} mm`;
-      f.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-k=mm],[data-k=cut]').forEach((i) => { i.disabled = !c.on; });
+      (f.querySelector('[data-k=mm]') as HTMLInputElement).disabled = !c.on;
     }
   }
 
@@ -692,6 +741,7 @@ export class AtlasPage {
     if (k === 'h' || k === 'H') { this.update((s) => { s.hemi = s.hemi === 'both' ? 'L' : s.hemi === 'L' ? 'R' : 'both'; }); return true; }
     if (k === 'l' || k === 'L') { this.update((s) => { s.layers.electrode.on = !s.layers.electrode.on; }); return true; }
     if (k === 'm' || k === 'M') { this.toggleMeasure(); return true; }
+    if (k === 'n' || k === 'N') { this.update((s) => { s.labels = s.labels === 'hover' ? 'all' : s.labels === 'all' ? 'off' : 'hover'; }); return true; }
     if (k === 's' || k === 'S') { this.update((s) => { s.clip.axial.on = !s.clip.axial.on; }); return true; }
     if (k === ']' || k === '[') {
       const list = visibleIndications(this.s.ind);

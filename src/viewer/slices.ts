@@ -16,7 +16,7 @@ const vert = /* glsl */ `
   void main() {
     vRas = (modelMatrix * vec4(position, 1.0)).xyz; // world
     vRas = (uRootInv * vec4(vRas, 1.0)).xyz;        // back to RAS
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
   }`;
 
 const frag = /* glsl */ `

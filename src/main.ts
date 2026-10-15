@@ -130,7 +130,7 @@ function buildHelp(): HTMLDialogElement {
   const rows: [string, string][] = [
     ['1 – 5', 'Camera: coronal (from the front), sagittal (anterior left), axial (anterior up), posterior-oblique, surgeon’s view'],
     ['H', 'Hemisphere: both → left → right'], ['[ / ]', 'Previous / next indication'], [', / .', 'Previous / next symptom'],
-    ['L', 'Show or hide the lead'], ['S', 'Toggle axial slice'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
+    ['L', 'Show or hide the lead'], ['N', 'Name labels: hover → all → off'], ['S', 'Toggle axial slice'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
   ];
   const d = h('dialog', { class: 'help', 'aria-labelledby': 'help-title' },
     h('h2', { id: 'help-title' }, 'Keyboard shortcuts'),

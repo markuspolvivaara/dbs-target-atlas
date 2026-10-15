@@ -252,27 +252,78 @@ test('legend: show/hide and highlight structures', async ({ page }) => {
   expect(g.errors).toEqual([]);
 });
 
-test('slices: one clear cut choice per plane', async ({ page }) => {
+test('slices: cut away the structures on the patient\'s left or right half, slices stay whole', async ({ page }) => {
   const g = guard(page);
-  await page.goto('./#/atlas?i=pd&co=-13');
+  await page.goto('./#/atlas?i=pd&c=coronal&co=-13&ax=-6');
   await settle(page);
   await page.locator('#ptab-slices').click();
-  const sel = page.locator('[data-axis="coronal"] select[data-k="cut"]');
-  const planes = () => page.evaluate(() => (window as any).__atlas.viewer.clipPlanes.map((p: any) => [Math.round(p.normal.z), p.constant]));
-  // world z = -RAS y: removing the anterior part keeps y <= -13, i.e. z >= 13
-  await sel.selectOption('pos');
-  await expect.poll(planes).toEqual([[1, -13]]);
-  expect(new URL(page.url()).hash).toContain('co=-13c');
-  await sel.selectOption('neg');
-  await expect.poll(planes).toEqual([[-1, 13]]);
-  expect(new URL(page.url()).hash).toContain('co=-13cf');
-  await sel.selectOption('none');
-  await expect.poll(planes).toEqual([]);
-  // links made with the old checkboxes still open with the same cut
-  await page.goto('./#/atlas?i=pd&co=-13cf');
+  const state = () => page.evaluate(() => {
+    const v = (window as any).__atlas.viewer;
+    const p = v.clipPlanes.map((q: any) => [Math.round(q.normal.x) + 0, Math.round(q.constant) + 0]);
+    const m = v.slices.material;
+    return { planes: p, slicePlanes: m ? (m.clippingPlanes?.length ?? 0) : -1, stnMat: v.items.get('stn').mats.solid.clippingPlanes.length };
+  });
+  expect((await state()).planes).toEqual([]);
+  // patient's right half removed: keep x <= 0 (world normal -x)
+  await page.locator('input[name="cutside"][value="R"]').check();
+  await expect.poll(async () => (await state()).planes).toEqual([[-1, 0]]);
+  // structures are cut, the slice image is not
+  expect(await state()).toMatchObject({ slicePlanes: 0, stnMat: 1 });
+  expect(new URL(page.url()).hash).toContain('cut=R');
+  await page.locator('input[name="cutside"][value="L"]').check();
+  await expect.poll(async () => (await state()).planes).toEqual([[1, 0]]);
+  // markers on the removed half are hidden too
+  const markers = await page.evaluate(() => (window as any).__atlas.viewer.markerGroup.children.filter((m: any) => m.visible).map((m: any) => m.userData.side));
+  expect(markers.length).toBeGreaterThan(0);
+  expect(markers).not.toContain('L');
+  await expect(page.locator('.stage')).toHaveScreenshot('atlas-pd-cut-left.png');
+  await page.locator('input[name="cutside"][value="none"]').check();
+  await expect.poll(async () => (await state()).planes).toEqual([]);
+  expect(await state()).toMatchObject({ slicePlanes: 0 });
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('labels: all / hover / off, legend hover, fade while moving', async ({ page }) => {
+  const g = guard(page);
+  // re-render, then read the visible labels (labels are laid out on every render)
+  const shown = () => page.evaluate(() => {
+    const v = (window as any).__atlas.viewer; v.renderer.render(v.scene, v.camera);
+    return [...document.querySelectorAll('.labels > span')].filter((e) => !(e as HTMLElement).hidden).map((e) => e.textContent);
+  });
+  const lines = () => page.evaluate(() => document.querySelectorAll('.leaders line').length);
+  // default: hover mode, nothing drawn over the anatomy
+  await page.goto('./#/atlas?i=pd');
   await settle(page);
-  await page.locator('#ptab-slices').click();
-  await expect(sel).toHaveValue('neg');
+  await expect.poll(shown).toEqual([]);
+  await expect(page.locator('.toolbar [data-labels="hover"]')).toHaveAttribute('aria-pressed', 'true');
+  // hovering a legend row labels that structure in 3D, with a leader line
+  await page.evaluate(() => { (document.querySelector('.legend-box') as HTMLDetailsElement).open = true; });
+  await page.locator('.legend3d li', { hasText: 'Red nucleus' }).hover();
+  await expect.poll(shown).toEqual(['Red nucleus']);
+  expect(await lines()).toBe(1);
+  await page.mouse.move(5, 5);
+  await expect.poll(shown).toEqual([]);
+  // the selected structure keeps its label
+  await page.locator('.legend3d li', { hasText: 'Substantia nigra' }).locator('.lg-item').click();
+  await expect.poll(shown).toEqual(['Substantia nigra pars reticulata']);
+  // all: every highlighted structure and primary marker, one leader line each
+  await page.locator('.toolbar [data-labels="all"]').click();
+  await expect.poll(async () => (await shown()).length).toBeGreaterThan(2);
+  const all = await shown();
+  expect(all).toEqual(expect.arrayContaining(['PD sweet spot', 'dorsolateral STN']));
+  expect(await lines()).toBe(all.length);
+  expect(new URL(page.url()).hash).toContain('lb=a');
+  // fade while the camera moves
+  await page.evaluate(() => (window as any).__atlas.viewer.controls.dispatchEvent({ type: 'start' }));
+  await expect(page.locator('.stage')).toHaveClass(/moving/);
+  await page.evaluate(() => (window as any).__atlas.viewer.controls.dispatchEvent({ type: 'end' }));
+  await expect(page.locator('.stage')).not.toHaveClass(/moving/);
+  // off: clean images, even with a selection
+  await page.locator('.toolbar [data-labels="off"]').click();
+  await expect.poll(shown).toEqual([]);
+  expect(await lines()).toBe(0);
+  expect(new URL(page.url()).hash).toContain('lb=0');
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
