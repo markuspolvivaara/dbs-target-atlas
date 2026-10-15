@@ -46,6 +46,13 @@ subfolder; the app uses hash routing, so no rewrite rules are needed. Check loca
 npm run preview
 ```
 
+### GitHub Pages
+
+`.github/workflows/pages.yml` runs the unit tests, builds the site and publishes `dist/` to
+GitHub Pages on every push to `main` (live at https://markuspolvivaara.github.io/DBS-target-atlas/).
+One-time setup: repository Settings → Pages → Source: **GitHub Actions**. A run can also be started
+by hand from the Actions tab ("Run workflow").
+
 Server notes:
 
 - Serve `.glb` as `model/gltf-binary` (most servers default to `application/octet-stream`,
