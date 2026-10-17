@@ -37,7 +37,11 @@ SYM_X_MM = 3.0      # |xL + xR|
 SYM_YZ_MM = 3.0     # |yL - yR|, |zL - zR|
 CENTROID_MM = 1.0   # mesh vs source centroid (watertight nuclei)
 CORTEX_AGREE = 0.6
-WM_SYM_X_MM = 6.0   # white-matter tracts: association tracts are not symmetric (e.g. arcuate)  # minimum fraction of vertices agreeing with the volume labels
+WM_SYM_X_MM = 6.0   # white-matter tracts: association tracts are not symmetric (e.g. arcuate)
+# The fornix is a thin tract along the lateral ventricles, so T1 samples along it include CSF and
+# the white-matter brightness test does not apply. It is instead compared with the independent
+# fornix label of the Neudorfer 2020 atlas (DBS section) inside that label's bounding box.
+WM_FORNIX_MEDIAN_MM = 4.0  # minimum fraction of vertices agreeing with the volume labels
 
 # Structures whose source atlases are not symmetric by construction may differ
 # more; widen tolerance only where the source itself differs (recorded here).
@@ -117,6 +121,27 @@ def main() -> int:
             check("symmetry", abs(a[0] + b[0]) <= 4.0, f"tract {t.id}: centroid x L {a[0]} R {b[0]}")
 
     # white-matter section (HCP-1065, 2009a space): sides, symmetry and alignment with the 2009b T1
+    report_fx: dict = {}
+
+    def fornix_offset(side: str, hemi: str) -> tuple[float, list[int]]:
+        sls = build_mod.read_trk_gz(RAW / "hcp1065" / "tracts" / f"projection/F_{side}.trk.gz")
+        pts = np.vstack(sls[::max(1, len(sls) // 300)])
+        m = nib.load(RAW / f"atlases/Atlas of the Human Hypothalamus (Neudorfer & Germann 2020)/{hemi}/fornix.nii.gz")
+        md = np.asanyarray(m.dataobj) > 0.5
+        dist = ndimage.distance_transform_edt(~md, sampling=np.abs(np.diag(m.affine)[:3]))
+        minv = np.linalg.inv(m.affine)
+        ijk = np.array(np.nonzero(md))
+        a, b = nib.affines.apply_affine(m.affine, ijk.min(1)), nib.affines.apply_affine(m.affine, ijk.max(1))
+        pts = pts[np.all((pts >= np.minimum(a, b) - 2) & (pts <= np.maximum(a, b) + 2), axis=1)]
+
+        def med(off):
+            q = np.rint(nib.affines.apply_affine(minv, pts + off)).astype(int)
+            q = q[np.all((q >= 0) & (q < md.shape), axis=1)]
+            dd = dist[tuple(q.T)]
+            return float(np.median(dd[dd < 15]))
+        offs = [np.array(v, float) - 2 for v in np.ndindex(5, 5, 5)]
+        best = min(offs, key=med)
+        return med(np.zeros(3)), [int(v) for v in best]
     t1d = np.asanyarray(t1.dataobj).astype(np.float32)
     wm_ref = float(np.percentile(t1d[head], 75))
     shifts = [np.array(v, float) for v in np.ndindex(3, 3, 3)]
@@ -137,6 +162,14 @@ def main() -> int:
             return float(ndimage.map_coordinates(t1d, ijk.T, order=1).mean())
         base = mean_t1(np.zeros(3))
         best = max(mean_t1((s - 1) * 2.0) for s in shifts)
+        if t.id == "wm_fx":
+            check("alignment", best <= base * 1.05, f"wm {t.id}: best 2 mm shift raises T1 from {base:.0f} to {best:.0f} (thin, CSF-bordered; brightness test not applied)")
+            for side, hemi in (("L", "lh"), ("R", "rh")):
+                med, shift = fornix_offset(side, hemi)
+                check("alignment", med <= WM_FORNIX_MEDIAN_MM,
+                      f"wm_fx/{side}: median distance to the Neudorfer 2020 fornix {med:.1f} mm (tol {WM_FORNIX_MEDIAN_MM}); best shift {shift} mm")
+                report_fx[side] = {"medianMm": round(med, 2), "bestShiftMm": shift}
+            continue
         check("alignment", base >= wm_ref and best <= base * 1.05,
               f"wm {t.id}: mean T1 along tract {base:.0f} (head p75 {wm_ref:.0f}); best 2 mm shift {best:.0f}")
 
@@ -171,6 +204,7 @@ def main() -> int:
     check("orientation", bool(np.all(np.diag(aff)[:3] > 0)), f"T1 affine diagonal {np.diag(aff)[:3].tolist()} (RAS)")
 
     (BUILD / "validation.json").write_text(json.dumps(results, indent=1))
+    (BUILD / "fornix-offset.json").write_text(json.dumps(report_fx, indent=1))
     n = sum(len(v) for v in results.values())
     print(f"{n - len(failures)}/{n} checks passed")
     for k, v in results.items():

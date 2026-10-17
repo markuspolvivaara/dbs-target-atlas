@@ -125,7 +125,7 @@ def write_wm_manifest(rep: dict) -> dict:
             "derivation": ("Streamlines of the commissural file cut at x = 0 so each hemisphere can be shown alone. " if "midline" in t.files else "")
                           + f"Up to {C.WM_BUDGET} streamlines per hemisphere (fixed seed, the same number on both sides, so on-screen "
                           f"density says nothing about tract size or asymmetry), resampled to {C.STREAMLINE_STEP_MM:g} mm.",
-            "hcp": "confirmed", "category": t.group,
+            "hcp": "confirmed", "category": t.group, "tier": t.tier,
             "streamlines": {s: r[s]["streamlines"] for s in ("L", "R")},
             "sourceStreamlines": {s: r[s]["sourceStreamlines"] for s in ("L", "R")},
             "centroid": {s: r[s]["centroid"] for s in ("L", "R")},

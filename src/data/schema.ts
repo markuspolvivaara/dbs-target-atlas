@@ -140,6 +140,8 @@ export const ManifestStructureSchema = z.object({
   derivation: z.string(),
   category: z.string().optional(),
   hcp: z.enum(['confirmed', 'likely']).optional(),
+  /** white-matter section: core (surgical essentials) or extended */
+  tier: z.enum(['core', 'extended']).optional(),
   centroid: z.object({ L: Vec3, R: Vec3 }).nullable(),
   surfaceCentroid: z.object({ L: Vec3, R: Vec3 }).optional(),
   streamlines: z.object({ L: z.number(), R: z.number() }).optional(),

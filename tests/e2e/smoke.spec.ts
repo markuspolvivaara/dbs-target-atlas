@@ -465,3 +465,26 @@ test('tracts on a phone: viewer above the bottom sheet @mobile', async ({ page }
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+test('core and extended tracts stay separate; the switch moves between them', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./tracts/#/atlas?g=language');
+  await settle(page);
+  await expect(page.locator('.tier-btn[data-tier="core"]')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('.tier-btn[data-tier="extended"]').click();
+  await settle(page);
+  expect(new URL(page.url()).hash).toContain('g=ext_language');
+  await expect(page.locator('.tract-btn')).toHaveCount(4);
+  // only extended groups are offered while the extended set is open
+  await expect(page.locator('.grp-chips .chip', { hasText: 'Vision' })).toHaveCount(0);
+  await page.locator('.tract-btn[data-tract="wm_mdlf"]').click();
+  await expect(page.locator('.card.sel .eyebrow')).toHaveText('Association tract · Extended');
+  await page.locator('.tier-btn[data-tier="core"]').click();
+  expect(new URL(page.url()).hash).toContain('g=language');
+  // the fornix is a core tract, with the pipeline's own alignment note
+  await page.goto('./tracts/#/atlas?g=limbic&sel=wm_fx');
+  await settle(page);
+  await expect(page.locator('.card.sel dt', { hasText: 'Checked by this project’s pipeline' })).toBeVisible();
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

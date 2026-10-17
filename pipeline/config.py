@@ -388,6 +388,7 @@ class WmTract:
     group: str  # association | projection | commissural (the atlas folder)
     files: dict[str, str]  # side -> path inside the zip, or {"midline": path} (split at x = 0)
     connectome: str | None = None  # column in the tract-to-region table (Brodmann sheet)
+    tier: str = "core"  # core | extended (shown separately in the app)
 
 
 def _lr(folder: str, stem: str) -> dict[str, str]:
@@ -409,6 +410,17 @@ WM_TRACTS: list[WmTract] = [
     WmTract("wm_cst", "Corticospinal tract", "CST", "wmCST", "projection", _lr("projection", "CST"), "CST"),
     WmTract("wm_cbt", "Corticobulbar tract", "CBT", "wmCBT", "projection", _lr("projection", "CBT"), "CBT"),
     WmTract("wm_cc", "Corpus callosum", "CC", "wmCC", "commissural", {"midline": "commissural/CC.trk.gz"}),
+    WmTract("wm_fx", "Fornix", "Fornix", "wmFX", "projection", _lr("projection", "F"), "F"),
+    # extended tier
+    WmTract("wm_mdlf", "Middle longitudinal fasciculus", "MdLF", "wmMdLF", "association", _lr("association", "MdLF"), "MdLF", "extended"),
+    WmTract("wm_tpat", "Temporo-parietal aslant tract", "TPAT", "wmTPAT", "association", _lr("association", "PAT"), "PTAT", "extended"),
+    WmTract("wm_vof", "Vertical occipital fasciculus", "VOF", "wmVOF", "association", _lr("association", "VOF"), "VOF", "extended"),
+    WmTract("wm_emc", "Extreme capsule fasciculus", "EmC", "wmEMC", "association", _lr("association", "EMC"), None, "extended"),
+    WmTract("wm_ac", "Anterior commissure", "AC", "wmAC", "commissural", {"midline": "commissural/AC.trk.gz"}, None, "extended"),
+    WmTract("wm_atr", "Anterior thalamic radiation", "ATR", "wmATR", "projection", _lr("projection", "TR_A"), "CTh_A", "extended"),
+    WmTract("wm_str", "Superior thalamic radiation", "STR", "wmSTR", "projection", _lr("projection", "TR_S"), "CTh_S", "extended"),
+    WmTract("wm_ptr", "Posterior thalamic radiation", "PTR", "wmPTR", "projection", _lr("projection", "TR_P"), "CTh_P", "extended"),
+    WmTract("wm_ar", "Acoustic radiation", "AR", "wmAR", "projection", _lr("projection", "AR"), None, "extended"),
 ]
 # a connectome entry counts as a connection of the tract when at least this fraction of the
 # 1065 individuals showed it (Yeh 2022: ~85% of entries are >95% or <5%)

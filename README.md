@@ -30,14 +30,24 @@ in MNI ICBM 2009b nonlinear asymmetric space. Individual anatomy varies.
 
 ## White-matter tracts
 
-Fourteen tracts that matter most in tumour and epilepsy surgery, from the HCP-1065
-population-averaged tractography atlas (Yeh 2022): arcuate fasciculus, SLF I–III, IFOF, ILF,
-uncinate fasciculus, frontal aslant tract, cingulum (dorsal and parahippocampal), optic radiation,
-corticospinal and corticobulbar tracts, and corpus callosum.
+Tracts from the HCP-1065 population-averaged tractography atlas (Yeh 2022), in two separate sets:
 
-- Browse **by function** (language, vision, motor and speech initiation, memory/emotion/social
-  cognition) or **by anatomy** (SLF–arcuate complex, association, projection, commissural, all).
-  Each group opens on its own hemisphere and view (language: left lateral; SLF complex: right).
+- **Core** (15): the tracts that matter most in tumour and epilepsy surgery: arcuate fasciculus,
+  SLF I–III, IFOF, ILF, uncinate fasciculus, frontal aslant tract, cingulum (dorsal and
+  parahippocampal), fornix, optic radiation, corticospinal and corticobulbar tracts, corpus callosum.
+- **Extended** (9): middle longitudinal fasciculus, temporo-parietal aslant tract, vertical
+  occipital fasciculus, extreme capsule fasciculus, anterior commissure, anterior / superior /
+  posterior thalamic radiations, acoustic radiation. Their cards are shorter where the literature
+  is thin.
+
+- A switch at the top of the panel picks Core or Extended; each set has its own groups **by
+  function** (core: language, vision, motor and speech initiation, memory/emotion/social cognition;
+  extended: language and hearing) and **by anatomy** (core: SLF–arcuate complex, association,
+  projection, commissural; extended: posterior ventral system, thalamic radiations, anterior
+  commissure; plus "all" for each). Each group opens on its own hemisphere and view (language:
+  left lateral; SLF complex: right).
+- The fornix card also reports a pipeline check: near the hypothalamus this atlas's fornix lies
+  about 3 mm from the independent fornix label used in the DBS section.
 - Each **tract card** gives course, connections, function, effects of damage and stimulation,
   surgical relevance and notes on the atlas version of the tract. Every sentence cites a paper
   retrieved from PubMed and was checked against its abstract or open-access full text
@@ -196,7 +206,7 @@ npm run pipeline
 1. `fetch_sources.py`: pulls only the needed files from the official Lead-DBS data archive
    (an 8.5 GB zip) with HTTP range requests into `pipeline/data/raw/` (git-ignored), and records
    SHA-256 hashes in `sources.lock.json`. For the white-matter section it downloads the HCP-1065
-   tract archive once (590 MB, checked against a pinned SHA-256), extracts the 27 needed files
+   tract archive once (590 MB, checked against a pinned SHA-256), extracts the 47 needed files
    and fetches the tract-to-region table.
 2. `build.py`:
    - label volumes → Gaussian pre-smoothing → marching cubes → affine to MNI mm → Taubin
@@ -219,7 +229,8 @@ npm run pipeline
    orientation (left nodes at x < 0, tract terminals on the labelled side, cortex labels against
    an independent volumetric parcellation); everything inside the head; white-matter tracts lie
    in white matter on the 2009b T1 and no 2 mm shift improves that (the atlas is built in ICBM
-   2009a space). Exits 1 on any failure.
+   2009a space); the thin fornix, whose T1 samples include CSF, is instead compared with the
+   Neudorfer 2020 fornix label (median distance under 4 mm). Exits 1 on any failure.
 
 What goes in is declared in `pipeline/config.py`. Dataset citations in
 `pipeline/sources/citations.json` are Crossref records looked up by DOI.

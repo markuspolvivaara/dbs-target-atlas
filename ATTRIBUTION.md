@@ -201,7 +201,7 @@ licence) with attribution.
 - Note: Files from the 'hcp1065' release of github.com/data-others/atlas (hcp1065_avg_tracts_trk.zip; tract_to_region_connectome_BM_KL.xlsx). Space: ICBM 2009a nonlinear asymmetric (atlas page), shown here on the 2009b templates after an alignment check: along every tract the 2009b T1 is white-matter bright, and no shift of up to 2 mm in any direction raises it by more than 5% (pipeline/validate.py).
 - Cite: Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.
 - Cite: Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027.
-- Assets: wm_af, wm_slf1, wm_slf2, wm_slf3, wm_ifof, wm_ilf, wm_uf, wm_fat, wm_cing_fp, wm_cing_ph, wm_or, wm_cst, wm_cbt, wm_cc
+- Assets: wm_af, wm_slf1, wm_slf2, wm_slf3, wm_ifof, wm_ilf, wm_uf, wm_fat, wm_cing_fp, wm_cing_ph, wm_or, wm_cst, wm_cbt, wm_cc, wm_fx, wm_mdlf, wm_tpat, wm_vof, wm_emc, wm_ac, wm_atr, wm_str, wm_ptr, wm_ar
 - Changes made: streamlines subsampled and resampled, the corpus callosum cut at the midline, files
   converted to compressed glTF; connection probabilities kept as published (Brodmann block).
 - HCP acknowledgement (required, as above):

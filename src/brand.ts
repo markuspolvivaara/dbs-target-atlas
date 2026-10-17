@@ -24,7 +24,7 @@ export const SECTIONS: Section[] = [
   },
   {
     id: 'tracts', name: 'White-matter tracts', path: 'tracts/', status: 'live',
-    summary: 'Language, visual, motor and limbic tracts in 3D with their course, connections, function and surgical relevance, for tumour and epilepsy surgery teaching.',
+    summary: 'Core and extended white-matter tracts in 3D (language, visual, motor, limbic and more) with their course, connections, function and surgical relevance, for tumour and epilepsy surgery teaching.',
   },
 ];
 

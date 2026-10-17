@@ -19,6 +19,8 @@ const PRESETS: [CameraPreset, string, string, string][] = [
 ];
 const LAYERS: [LayerKey, string][] = [['tracts', 'Tracts'], ['cortex', 'Cortex'], ['nuclei', 'Deep nuclei (orientation)']];
 const TYPE_LABEL = { association: 'Association tract', projection: 'Projection tract', commissural: 'Commissural tract' } as const;
+const TIER_LABEL = { core: 'Core', extended: 'Extended' } as const;
+const TIER_NOTE = { core: 'the tracts that matter most in surgery', extended: 'further tracts, less often decisive' } as const;
 const CONTEXT = new Map(CONTEXT_STRUCTURES.map((m) => [m.id, m]));
 
 const refs = (ids: string[]) => refLinksFrom(WM_REF, ids);
@@ -184,10 +186,17 @@ export class TractsAtlasPage {
       st.grp = v; st.hemi = ng.hemi; st.cam = { preset: null }; st.hidden = [];
       if (st.sel && !ng.tractIds.includes(st.sel)) st.sel = null;
     }, { camera: true });
-    pane.append(h('p', { class: 'chips-label' }, 'By function'),
-      chips(WM.groups.filter((x) => x.kind === 'function').map((x) => [x.id, x.name]), g.id, pick, { label: 'Tracts by function', cls: 'grp-chips' }),
+    const inTier = WM.groups.filter((x) => x.tier === g.tier);
+    pane.append(
+      h('div', { class: 'tier-switch', role: 'group', 'aria-label': 'Tract set' },
+        ...(['core', 'extended'] as const).map((t) => h('button', {
+          type: 'button', class: 'tier-btn', 'aria-pressed': String(g.tier === t), 'data-tier': t,
+          onclick: () => { if (g.tier !== t) pick(WM.groups.find((x) => x.tier === t)!.id); },
+        }, h('strong', {}, TIER_LABEL[t]), h('span', {}, TIER_NOTE[t])))),
+      h('p', { class: 'chips-label' }, 'By function'),
+      chips(inTier.filter((x) => x.kind === 'function').map((x) => [x.id, x.name]), g.id, pick, { label: 'Tracts by function', cls: 'grp-chips' }),
       h('p', { class: 'chips-label' }, 'By anatomy'),
-      chips(WM.groups.filter((x) => x.kind !== 'function').map((x) => [x.id, x.name]), g.id, pick, { label: 'Tracts by anatomy', cls: 'grp-chips' }));
+      chips(inTier.filter((x) => x.kind !== 'function').map((x) => [x.id, x.name]), g.id, pick, { label: 'Tracts by anatomy', cls: 'grp-chips' }));
     pane.append(h('ul', { class: 'tract-list', 'aria-label': `Tracts in ${g.name}` }, ...g.tractIds.map((id) => h('li', {},
       h('button', {
         type: 'button', class: 'tract-btn', 'aria-pressed': String(s.sel === id), 'data-tract': id,
@@ -195,9 +204,9 @@ export class TractsAtlasPage {
       }, h('span', { class: 'swatch', style: `--c: var(--c-${tokenOf(id)})` }), TOPIC.get(id)!.abbr, h('span', { class: 'tract-full' }, ` ${nameOf(id)}`))))));
     if (s.sel && TOPIC.has(s.sel)) pane.append(this.tractCard(TOPIC.get(s.sel)!));
     const groupCard = h('article', { class: 'card' },
-      h('p', { class: 'eyebrow' }, g.kind === 'function' ? 'Tracts by function' : g.kind === 'anatomy' ? 'Tracts by anatomy' : 'Overview'),
+      h('p', { class: 'eyebrow' }, `${TIER_LABEL[g.tier]} · ${g.kind === 'function' ? 'by function' : g.kind === 'anatomy' ? 'by anatomy' : 'overview'}`),
       h('h2', {}, g.name),
-      g.rationale.length ? claimList(g.rationale) : h('p', {}, 'Every tract in this section. Pick a tract above for its card.'),
+      g.rationale.length ? claimList(g.rationale) : h('p', {}, `Every ${TIER_LABEL[g.tier].toLowerCase()} tract. Pick a tract above for its card.`),
       h('details', { class: 'more' }, h('summary', {}, 'How far to trust a group-average atlas'), claimList(WM.general)));
     if (s.sel) pane.append(h('details', { class: 'more' }, h('summary', {}, `About ${g.name}`), groupCard));
     else pane.append(groupCard);
@@ -216,7 +225,7 @@ export class TractsAtlasPage {
       : null;
     const groups = WM.groups.filter((g) => g.kind !== 'all' && g.tractIds.includes(t.id));
     return h('article', { class: 'card sel', style: `--accent: var(--c-${m.colour.token})` }, close,
-      h('p', { class: 'eyebrow' }, TYPE_LABEL[t.type]),
+      h('p', { class: 'eyebrow' }, `${TYPE_LABEL[t.type]} · ${TIER_LABEL[t.tier]}`),
       h('h2', {}, h('span', { class: 'swatch', style: `--c: var(--c-${m.colour.token})` }), `${t.name} (${t.abbr})`),
       t.aliases.length ? h('p', { class: 'aside' }, 'Also: ', t.aliases.join(', ')) : null,
       h('p', { class: 'lead-text' }, t.summary),
@@ -228,6 +237,7 @@ export class TractsAtlasPage {
         section('Damage and stimulation', t.deficits),
         section('Surgical relevance', t.surgery),
         section('This atlas’s tract', t.atlas),
+        t.measured.length ? [h('dt', {}, 'Checked by this project’s pipeline'), h('dd', {}, ...t.measured.map((m) => h('p', {}, m)))] : null,
         t.parcels.length ? [h('dt', {}, 'Cortex highlighted'), h('dd', {}, t.parcels.map(nameOf).join(', '), ' (HMAT, Mayka 2006; ', h('a', { href: '#/credits' }, 'credits'), ').')] : null,
         h('dt', {}, 'Geometry'),
         h('dd', {}, `${m.source}. ${m.derivation} Shown: ${m.streamlines!.L} of ${m.sourceStreamlines!.L} streamlines (left), ${m.streamlines!.R} of ${m.sourceStreamlines!.R} (right). `,
@@ -336,9 +346,9 @@ export class TractsAtlasPage {
           h('input', { type: 'range', min: 0, max: 1, step: 0.05, oninput: (e: Event) => this.update((st) => { st.layers[k].opacity = parseFloat((e.target as HTMLInputElement).value); }) }))));
       pane.append(h('h3', {}, 'Layers'), ...rows,
         h('p', { class: 'aside' }, `Deep nuclei shown faintly for orientation: ${ORIENTATION_NUCLEI.map(nameOf).join(', ')} (from the DBS section’s atlases). Tracts load when first needed.`),
-        h('h3', {}, 'All tracts'),
-        h('ul', { class: 'index-flat' }, ...WM.topics.map((t) => h('li', {}, h('span', { class: 'swatch', style: `--c: var(--c-${tokenOf(t.id)})` }),
-          h('button', { type: 'button', class: 'linklike', onclick: () => this.update((st) => { st.sel = t.id; }) }, `${t.name} (${t.abbr})`)))));
+        ...(['core', 'extended'] as const).flatMap((tier) => [h('h3', {}, `${TIER_LABEL[tier]} tracts`),
+          h('ul', { class: 'index-flat' }, ...WM.topics.filter((t) => t.tier === tier).map((t) => h('li', {}, h('span', { class: 'swatch', style: `--c: var(--c-${tokenOf(t.id)})` }),
+            h('button', { type: 'button', class: 'linklike', onclick: () => this.update((st) => { st.sel = t.id; }) }, `${t.name} (${t.abbr})`))))]));
     }
     for (const [k] of LAYERS) {
       const row = pane.querySelector(`[data-layer="${k}"]`)!;

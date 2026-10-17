@@ -299,3 +299,8 @@ kbd { font: inherit; font-size: 0.9em; border: 1px solid var(--line); border-bot
 .tract-btn:hover { background: var(--soft); }
 .index-flat { list-style: none; padding: 0; margin: 4px 0 8px; display: grid; gap: 4px; }
 .areas { margin: 0 0 4px; font-variant-numeric: tabular-nums; }
+.tier-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 0 0 8px; }
+.tier-btn { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; font: inherit; padding: 8px 12px; min-height: 44px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); cursor: pointer; }
+.tier-btn span { font-size: 0.8rem; color: var(--muted); }
+.tier-btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.tier-btn[aria-pressed="true"] span { color: var(--bg); opacity: 0.85; }

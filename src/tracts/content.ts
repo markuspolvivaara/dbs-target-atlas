@@ -14,7 +14,7 @@ const c = (text: string, ...refIds: string[]): Claim => ({ text, refIds });
 
 export const TOPICS: TractTopicInput[] = [
   {
-    id: 'wm_af', name: 'Arcuate fasciculus', abbr: 'AF', aliases: ['arcuate fascicle'], type: 'association',
+    id: 'wm_af', name: 'Arcuate fasciculus', abbr: 'AF', aliases: ['arcuate fascicle'], type: 'association', tier: 'core',
     summary: 'Dorsal perisylvian language tract arching around the end of the Sylvian fissure; the classic subcortical site of phonemic paraphasia during awake mapping.',
     course: [
       c('Arises from the caudal superior temporal gyrus, arches around the caudal end of the Sylvian fissure and runs to the lateral prefrontal cortex together with SLF II fibres; it is counted as the fourth subdivision of the SLF.', 'makris2005'),
@@ -43,7 +43,7 @@ export const TOPICS: TractTopicInput[] = [
     ],
   },
   {
-    id: 'wm_slf1', name: 'Superior longitudinal fasciculus I', abbr: 'SLF I', aliases: ['dorsal SLF'], type: 'association',
+    id: 'wm_slf1', name: 'Superior longitudinal fasciculus I', abbr: 'SLF I', aliases: ['dorsal SLF'], type: 'association', tier: 'core',
     summary: 'The most dorsal SLF branch, in the superior parietal and superior frontal white matter next to the cingulum.',
     course: [
       c('Lies in the white matter of the superior parietal and superior frontal lobes and extends to the dorsal premotor and dorsolateral prefrontal regions.', 'makris2005'),
@@ -61,7 +61,7 @@ export const TOPICS: TractTopicInput[] = [
     atlas: [],
   },
   {
-    id: 'wm_slf2', name: 'Superior longitudinal fasciculus II', abbr: 'SLF II', aliases: [], type: 'association',
+    id: 'wm_slf2', name: 'Superior longitudinal fasciculus II', abbr: 'SLF II', aliases: [], type: 'association', tier: 'core',
     summary: 'Central SLF branch from the angular gyrus to caudal-lateral prefrontal cortex; its damage best predicts left spatial neglect after right-hemisphere stroke.',
     course: [
       c('Occupies the central core of the white matter above the insula, from the angular gyrus to the caudal-lateral prefrontal regions.', 'makris2005'),
@@ -83,7 +83,7 @@ export const TOPICS: TractTopicInput[] = [
     atlas: [],
   },
   {
-    id: 'wm_slf3', name: 'Superior longitudinal fasciculus III', abbr: 'SLF III', aliases: ['ventral SLF', 'lateral SLF'], type: 'association',
+    id: 'wm_slf3', name: 'Superior longitudinal fasciculus III', abbr: 'SLF III', aliases: ['ventral SLF', 'lateral SLF'], type: 'association', tier: 'core',
     summary: 'Opercular SLF branch from the supramarginal gyrus to ventral premotor cortex; stimulating it disturbs articulation.',
     course: [
       c('Lies in the white matter of the parietal and frontal opercula, from the supramarginal gyrus to the ventral premotor and prefrontal regions.', 'makris2005'),
@@ -105,7 +105,7 @@ export const TOPICS: TractTopicInput[] = [
     atlas: [],
   },
   {
-    id: 'wm_ifof', name: 'Inferior fronto-occipital fasciculus', abbr: 'IFOF', aliases: ['inferior occipitofrontal fasciculus'], type: 'association',
+    id: 'wm_ifof', name: 'Inferior fronto-occipital fasciculus', abbr: 'IFOF', aliases: ['inferior occipitofrontal fasciculus'], type: 'association', tier: 'core',
     summary: 'Long ventral tract from the frontal lobe to occipital and posterior temporal cortex through the floor of the external capsule; the subcortical site of semantic paraphasia.',
     course: [
       c('Passes from the temporal lobe through the temporal stem into the extreme and external capsules, together with the uncinate fasciculus.', 'kier2004'),
@@ -129,7 +129,7 @@ export const TOPICS: TractTopicInput[] = [
     ],
   },
   {
-    id: 'wm_ilf', name: 'Inferior longitudinal fasciculus', abbr: 'ILF', aliases: [], type: 'association',
+    id: 'wm_ilf', name: 'Inferior longitudinal fasciculus', abbr: 'ILF', aliases: [], type: 'association', tier: 'core',
     summary: 'Occipito-temporal tract for visual cognition; in the left temporal lobe it can be resected in part without lasting language loss.',
     course: [
       c('A long-range, multilayered and bidirectional association tract from occipital and temporo-occipital areas to the anterior temporal lobe.', 'herbet2018'),
@@ -150,7 +150,7 @@ export const TOPICS: TractTopicInput[] = [
     atlas: [],
   },
   {
-    id: 'wm_uf', name: 'Uncinate fasciculus', abbr: 'UF', aliases: [], type: 'association',
+    id: 'wm_uf', name: 'Uncinate fasciculus', abbr: 'UF', aliases: [], type: 'association', tier: 'core',
     summary: 'Hook-shaped tract between the anterior temporal lobe and orbitofrontal cortex through the temporal stem; its resection impairs proper-name retrieval.',
     course: [
       c('Runs from the temporal lobe through the temporal stem into the extreme and external capsules; Meyer’s loop of the optic radiation lies next to it at the level of the amygdala.', 'kier2004'),
@@ -170,7 +170,7 @@ export const TOPICS: TractTopicInput[] = [
     atlas: [],
   },
   {
-    id: 'wm_fat', name: 'Frontal aslant tract', abbr: 'FAT', aliases: ['aslant tract'], type: 'association', parcels: ['sma', 'presma'],
+    id: 'wm_fat', name: 'Frontal aslant tract', abbr: 'FAT', aliases: ['aslant tract'], type: 'association', tier: 'core', parcels: ['sma', 'presma'],
     summary: 'Short frontal tract from the inferior frontal gyrus up to SMA and pre-SMA; on the left it supports speech initiation.',
     course: [
       c('An intralobar frontal tract identified by spherical deconvolution tractography and confirmed by post-mortem dissection.', 'catani2012'),
@@ -194,7 +194,7 @@ export const TOPICS: TractTopicInput[] = [
     ],
   },
   {
-    id: 'wm_cing_fp', name: 'Cingulum, dorsal (frontal–parietal) segment', abbr: 'Cingulum (dorsal)', aliases: ['cingulum bundle'], type: 'association',
+    id: 'wm_cing_fp', name: 'Cingulum, dorsal (frontal–parietal) segment', abbr: 'Cingulum (dorsal)', aliases: ['cingulum bundle'], type: 'association', tier: 'core',
     summary: 'Medial association bundle in the cingulate white matter linking frontal and parietal cortex; lesions usually cause only mild deficits.',
     course: [
       c('Its composition changes along its length as fibres join and leave, despite its apparent continuity.', 'bubb2018'),
@@ -216,7 +216,7 @@ export const TOPICS: TractTopicInput[] = [
     ],
   },
   {
-    id: 'wm_cing_ph', name: 'Cingulum, parahippocampal segment', abbr: 'Cingulum (parahippocampal)', aliases: ['parahippocampal cingulum'], type: 'association',
+    id: 'wm_cing_ph', name: 'Cingulum, parahippocampal segment', abbr: 'Cingulum (parahippocampal)', aliases: ['parahippocampal cingulum'], type: 'association', tier: 'core',
     summary: 'Ventral, temporal part of the cingulum bundle, implicated in episodic memory.',
     course: [
       c('The cingulum bundle reaches the medial temporal lobe; this segment is its parahippocampal part.', 'bubb2018'),
@@ -234,7 +234,7 @@ export const TOPICS: TractTopicInput[] = [
     atlas: [],
   },
   {
-    id: 'wm_or', name: 'Optic radiation', abbr: 'OR', aliases: ['geniculocalcarine tract', 'Meyer’s loop'], type: 'projection',
+    id: 'wm_or', name: 'Optic radiation', abbr: 'OR', aliases: ['geniculocalcarine tract', 'Meyer’s loop'], type: 'projection', tier: 'core',
     summary: 'Visual projection from the lateral geniculate nucleus to the calcarine cortex; its anterior Meyer’s loop is at risk in temporal lobe surgery.',
     course: [
       c('Runs from the lateral geniculate nucleus to the calcarine sulcus in three bundles, named by their direction on leaving the nucleus: Meyer’s loop, central and direct.', 'sherbondy2008'),
@@ -258,7 +258,7 @@ export const TOPICS: TractTopicInput[] = [
     atlas: [],
   },
   {
-    id: 'wm_cst', name: 'Corticospinal tract', abbr: 'CST', aliases: ['pyramidal tract'], type: 'projection', parcels: ['m1'],
+    id: 'wm_cst', name: 'Corticospinal tract', abbr: 'CST', aliases: ['pyramidal tract'], type: 'projection', tier: 'core', parcels: ['m1'],
     summary: 'The principal pathway for voluntary movement, fanning from the motor cortex through the internal capsule to the spinal cord.',
     course: [
       c('Fans out from the precentral (motor) cortex along the cortical surface; its lateral fanning parts cross the corpus callosum and are missed by traditional low-angular-resolution tractography.', 'yeh2018'),
@@ -282,7 +282,7 @@ export const TOPICS: TractTopicInput[] = [
     ],
   },
   {
-    id: 'wm_cbt', name: 'Corticobulbar tract', abbr: 'CBT', aliases: [], type: 'projection', parcels: ['m1'],
+    id: 'wm_cbt', name: 'Corticobulbar tract', abbr: 'CBT', aliases: [], type: 'projection', tier: 'core', parcels: ['m1'],
     summary: 'Motor projection fanning from the precentral cortex alongside the CST; relevant to facial motor function and swallowing.',
     course: [
       c('Like the CST, fans out from the precentral (motor) cortex along the cortical surface.', 'yeh2018'),
@@ -306,7 +306,7 @@ export const TOPICS: TractTopicInput[] = [
     ],
   },
   {
-    id: 'wm_cc', name: 'Corpus callosum', abbr: 'CC', aliases: [], type: 'commissural',
+    id: 'wm_cc', name: 'Corpus callosum', abbr: 'CC', aliases: [], type: 'commissural', tier: 'core',
     summary: 'The great commissure between the hemispheres, arranged front to back by the cortex it connects.',
     course: [
       c('Tractography divides its midsagittal section into five vertical segments, front to back: fibres to prefrontal, premotor and supplementary motor, primary motor, and primary sensory cortex, then parietal, temporal and occipital cortex.', 'hofer2006'),
@@ -325,8 +325,204 @@ export const TOPICS: TractTopicInput[] = [
     ],
     atlas: [],
   },
+  {
+    id: 'wm_fx', name: 'Fornix', abbr: 'Fornix', aliases: [], type: 'projection', tier: 'core',
+    summary: 'Limbic tract on the mesial side of the hemisphere, part of the Papez circuit; bilateral injury, as after third-ventricle colloid cyst surgery, causes anterograde amnesia.',
+    course: [
+      c('A white matter bundle in the mesial aspect of each hemisphere that connects nodes of a limbic circuit.', 'senova2020'),
+      c('As a midline structure it is exposed to the shearing forces of diffuse axonal injury.', 'thomas2011'),
+    ],
+    connections: [
+      c('Part of the Papez circuit.', 'thomas2011'),
+      c('Preclinical work divides it into two functional axes: a septohippocampal pathway and a subiculothalamic pathway.', 'senova2020'),
+      c('Mammillary body volume falls after fornix damage, so it serves as an indirect marker of fornix integrity.', 'tsivilis2008'),
+    ],
+    functions: [
+      c('Believed to play a key role in cognition and episodic memory recall.', 'senova2020'),
+      c('In 38 people after colloid cyst removal, mammillary body volume correlated with 13 of 14 tests of episodic recall but poorly with recognition memory.', 'tsivilis2008'),
+    ],
+    deficits: [
+      c('Damage causes anterograde amnesia. Midline gliomas and lymphoma can infiltrate it; herpes simplex encephalitis, multiple sclerosis and Wernicke encephalopathy can involve it; infarction is rare but can cause an acute amnesic syndrome.', 'thomas2011'),
+      c('Forniceal atrophy can help in the assessment of mesial temporal sclerosis.', 'thomas2011'),
+    ],
+    surgery: [
+      c('After removal of third-ventricle colloid cysts, bilateral interruption of the fornix was the only consistent MRI predictor of poor memory; learning and recall suffered more than recognition.', 'aggleton2000'),
+      c('Fornix/hypothalamus DBS was tested in a phase I trial in six patients with mild Alzheimer’s disease: it drove activity in the memory circuit and reversed impaired temporal and parietal glucose metabolism on PET, with no serious adverse events.', 'laxton2010'),
+      c('Optimal targets and stimulation parameters for forniceal DBS for memory have yet to be determined.', 'senova2020'),
+    ],
+    atlas: [],
+    measured: [
+      'Near the hypothalamus this atlas’s fornix lies a median 2.8 mm (left) and 3.7 mm (right) from the fornix label of the Neudorfer 2020 hypothalamus atlas shown in the DBS section; a 2 mm anterior and 2 mm superior shift brings them closest. No other tract showed such an offset. The T1 sampled along it is darker than along the other tracts (cerebrospinal fluid next to a thin tract). For millimetre questions near the fornix columns, use the DBS section’s fornix.',
+    ],
+  },
+  // ---------------------------------------------------------------- extended tier
+  {
+    id: 'wm_mdlf', name: 'Middle longitudinal fasciculus', abbr: 'MdLF', aliases: ['middle longitudinal fascicle'], type: 'association', tier: 'extended',
+    summary: 'Long association tract from the superior temporal gyrus and temporal pole to the parietal lobe; resected in part without permanent language loss.',
+    course: [
+      c('Runs principally between the superior temporal gyrus and the parietal lobe. Its two connections travel together through the dorsal temporal pole and superior temporal gyrus, then split towards the parietal lobe: one ventrolateral to the angular gyrus, one dorsomedial to the superior parietal lobule.', 'makris2013'),
+      c('The extreme capsule fibres lie medial and rostral to it, partly flanking the medial wall of the insula.', 'makris2009'),
+    ],
+    connections: [
+      c('In combined tractography and fibre microdissection, the human MdLF connects the superior temporal gyrus with the superior parietal lobule and parieto-occipital region, with only minor connections to the angular gyrus, unlike the monkey tract.', 'wang2013'),
+    ],
+    functions: [
+      c('Suggested roles: language and attention for the superior temporal–angular connection; visuospatial and audiovisual integration for the superior temporal–superior parietal connection.', 'makris2013'),
+      c('An alternative proposal: rather than a language tract, the MdLF may belong to the dorsal “where” pathway of the auditory system.', 'wang2013'),
+    ],
+    deficits: [
+      c('Proposed clinical relevance in primary progressive aphasia, frontotemporal dementia, posterior cortical atrophy, Alzheimer’s disease, ADHD and schizophrenia.', 'makris2013'),
+    ],
+    surgery: [
+      c('In eight left superior temporal glioma resections that removed a large part of the MdLF, its stimulation never disturbed picture naming and no new permanent language deficit followed; the IFOF (semantic paraphasia) formed the functional boundary. The MdLF may participate in, but is not essential for, language.', 'dewitthamer2011'),
+    ],
+    atlas: [],
+  },
+  {
+    id: 'wm_tpat', name: 'Temporo-parietal aslant tract', abbr: 'TPAT', aliases: ['vertical arcuate fasciculus', 'posterior arcuate fasciculus', 'posterior SLF'], type: 'association', tier: 'extended',
+    summary: 'Vertical tract between ventral parietal and temporal cortex, earlier described as the vertical (posterior) segment of the arcuate fasciculus.',
+    course: [
+      c('A bipartite system with dorsal and ventral subdivisions, running vertically between the ventral parietal and temporal regions; spatially separate from the vertical occipital fasciculus.', 'panesar2019'),
+    ],
+    connections: [
+      c('Connects ventral parietal with temporal regions, with variable connections and no volumetric lateralization.', 'panesar2019'),
+    ],
+    functions: [
+      c('Because it shows no overall connective or volumetric lateralization, it was proposed to be distinct from the arcuate system and renamed.', 'panesar2019'),
+      c('In the atlas’s tract-to-region clustering it groups with the MdLF, VOF and ILF in a posterior ventral system.', 'yeh2022'),
+    ],
+    deficits: [],
+    surgery: [],
+    atlas: [],
+  },
+  {
+    id: 'wm_vof', name: 'Vertical occipital fasciculus', abbr: 'VOF', aliases: [], type: 'association', tier: 'extended',
+    summary: 'The only major bundle linking dorsolateral and ventrolateral visual cortex; rediscovered a century after its first description.',
+    course: [
+      c('A short, vertical fascicle of the posterior hemisphere.', 'panesar2019'),
+      c('Found in every one of 74 hemispheres with a dedicated tractography algorithm; its tissue properties (such as myelination) differ from neighbouring tracts.', 'yeatman2014'),
+      c('A non-lateralized, non-segmented system connecting lateral occipital areas with basal temporal regions.', 'panesar2019'),
+    ],
+    connections: [
+      c('The only major fibre bundle connecting dorsolateral and ventrolateral visual cortex; its terminations sit in consistent positions relative to the cortical folding of the dorsal and ventral visual streams.', 'yeatman2014'),
+    ],
+    functions: [
+      c('Likely carries signals between ventral regions for the perception of visual categories (words, faces, bodies) and dorsal regions for eye movements, attention and motion perception.', 'yeatman2014'),
+    ],
+    deficits: [],
+    surgery: [],
+    atlas: [],
+  },
+  {
+    id: 'wm_emc', name: 'Extreme capsule fasciculus', abbr: 'EmC', aliases: ['extreme capsule'], type: 'association', tier: 'extended',
+    summary: 'Ventral fronto-temporal fibre system linking pars triangularis with the superior temporal gyrus, medial to the MdLF along the insula.',
+    course: [
+      c('A long association pathway from the inferior frontal region to the superior temporal gyrus, extending into the inferior parietal lobule; medial and rostral to the MdLF, partly flanking the medial wall of the insula.', 'makris2009'),
+      c('Distinguishable from the external capsule, uncinate fascicle, arcuate fascicle, SLF II and III and the ILF.', 'makris2009'),
+    ],
+    connections: [
+      c('Pars triangularis (area 45) connects with the superior temporal gyrus, anterior to Heschl’s gyrus, through the extreme capsule fibre system; pars opercularis (area 44) instead connects with the rostral inferior parietal lobule through SLF III.', 'frey2008'),
+    ],
+    functions: [
+      c('Its course through Broca’s and Wernicke’s territories suggests a role in language.', 'makris2009'),
+      c('Among the pathways proposed to support language; its role is still debated.', 'dick2012'),
+    ],
+    deficits: [],
+    surgery: [],
+    atlas: [],
+  },
+  {
+    id: 'wm_ac', name: 'Anterior commissure', abbr: 'AC', aliases: [], type: 'commissural', tier: 'extended',
+    summary: 'Small commissure in front of the fornix columns whose temporal limbs reach the temporal stem.',
+    course: [
+      c('In dissection its fibres curve laterally within the basal forebrain; the anterior (olfactory) limb was sometimes absent, and the tip of the temporal limb intermingled with other fasciculi in a dense network.', 'peltier2011'),
+      c('In the temporal stem, Meyer’s loop of the optic radiation lies next to the uncinate fasciculus and anterior commissure.', 'kier2004'),
+    ],
+    connections: [
+      c('A commissural pathway between the hemispheres; its olfactory and occipital connections had to be tracked separately to complete it in the atlas.', 'yeh2018'),
+    ],
+    functions: [],
+    deficits: [
+      c('Can be involved in diffuse axonal injury, schizophrenia and tumour dissemination.', 'peltier2011'),
+    ],
+    surgery: [],
+    atlas: [],
+  },
+  {
+    id: 'wm_atr', name: 'Anterior thalamic radiation', abbr: 'ATR', aliases: ['anterior corticothalamic tract'], type: 'projection', tier: 'extended',
+    summary: 'Thalamo-frontal projection through the anterior limb of the internal capsule; the shared territory of historical lesion surgery for depression.',
+    course: [
+      c('Converges with the superolateral branch of the medial forebrain bundle in the anterior limb of the internal capsule and in medial prefrontal cortex.', 'coenen2012'),
+      c('Visualized directly with 7 T track-density imaging.', 'cho2015'),
+    ],
+    connections: [
+      c('Thalamus to frontal cortex: diffusion tractography segments the thalamus by cortical connectivity into subregions matching histological nuclei.', 'behrens2003'),
+    ],
+    functions: [
+      c('Proposed, with the medial forebrain bundle, to balance negative and positive affect (punishment and reward seeking).', 'coenen2012'),
+    ],
+    deficits: [],
+    surgery: [
+      c('Anterior capsulotomy, anterior cingulotomy, subcaudate tractotomy and limbic leucotomy for depression share connectivity in mediobasal frontal fibres, including the anterior thalamic radiations; lesions of the anterior capsule and subcaudate white matter gave better long-term remission than cingulate lesions.', 'schoenebake2010'),
+    ],
+    atlas: [],
+  },
+  {
+    id: 'wm_str', name: 'Superior thalamic radiation', abbr: 'STR', aliases: ['superior corticothalamic tract'], type: 'projection', tier: 'extended',
+    summary: 'Thalamocortical projection; somatosensory responses from thalamocortical fibres mark a resection limit in parietal awake mapping.',
+    course: [
+      c('A periventricular white matter bundle, studied together with the corticospinal and dentatorubrothalamic tracts in hydrocephalus.', 'younes2019'),
+    ],
+    connections: [
+      c('Thalamus to cortex; thalamic subregions defined by their cortical connections correspond to histological nuclei.', 'behrens2003'),
+    ],
+    functions: [
+      c('Carries somatosensory input: subcortical stimulation of thalamocortical pathways gave somatosensory responses during inferior parietal glioma surgery.', 'maldonado2011a'),
+    ],
+    deficits: [
+      c('Its increased mean diffusivity, together with ventricular volume, separated normal pressure hydrocephalus from Alzheimer’s disease and healthy elderly people.', 'younes2019'),
+    ],
+    surgery: [
+      c('In left inferior parietal gliomas, thalamocortical somatosensory responses were among the subcortical limits of resection.', 'maldonado2011a'),
+    ],
+    atlas: [],
+  },
+  {
+    id: 'wm_ptr', name: 'Posterior thalamic radiation', abbr: 'PTR', aliases: ['posterior corticothalamic tract'], type: 'projection', tier: 'extended',
+    summary: 'Posterior thalamocortical projection; see the measured cortical connections below.',
+    course: [
+      c('One of the thalamocortical connections that diffusion tractography maps reproducibly between individuals.', 'behrens2003'),
+    ],
+    connections: [
+      c('A cortico-thalamic connection; its integrity was used as a proxy for cortico-thalamic connectivity in a study of attention.', 'menegaux2017'),
+    ],
+    functions: [
+      c('In full-term-born adults, higher fractional anisotropy in the right posterior thalamic radiation went with higher visual short-term memory capacity; in preterm-born adults the relation was reversed.', 'menegaux2017'),
+    ],
+    deficits: [],
+    surgery: [],
+    atlas: [],
+    measured: ['The atlas file holds only 84 (left) and 94 (right) streamlines, all shown; its shape is less certain than that of the other tracts.'],
+  },
+  {
+    id: 'wm_ar', name: 'Acoustic radiation', abbr: 'AR', aliases: ['auditory radiation'], type: 'projection', tier: 'extended',
+    summary: 'Auditory thalamocortical projection from the medial geniculate nucleus to Heschl’s gyrus, running transversely across the temporal lobe.',
+    course: [
+      c('A compact bundle running transversely from the midline to the lateral convexity of the posterior temporal lobe; dissection divides it into a genu, stem and fan, each closely related to neighbouring association and projection pathways.', 'maffei2018'),
+    ],
+    connections: [
+      c('Medial geniculate nucleus of the thalamus to the transverse temporal (Heschl’s) gyrus.', 'maffei2019'),
+    ],
+    functions: [
+      c('The thalamocortical projection of the auditory system, relevant to audition and language perception.', 'maffei2019'),
+    ],
+    deficits: [],
+    surgery: [],
+    atlas: [
+      c('Hard to reconstruct with tractography because of the crossings around it; the atlas authors noted it had not been reported in tractography before.', 'maffei2019', 'yeh2018'),
+    ],
+  },
 ];
-
 /** Notes shown for every tract: how far a group-average atlas can be trusted. */
 export const GENERAL: Claim[] = [
   c('The tracts are a population average of 1065 healthy young adults (Human Connectome Project). About 85% of tract-to-region entries are the same (connected, or not) in more than 95% of people; about 15% vary substantially between individuals and need individual mapping.', 'yeh2022'),
@@ -338,7 +534,7 @@ export const GENERAL: Claim[] = [
 
 export const GROUPS: TractGroup[] = [
   {
-    id: 'language', kind: 'function', name: 'Language', hemi: 'L', camera: 'lateral',
+    id: 'language', kind: 'function', tier: 'core', name: 'Language', hemi: 'L', camera: 'lateral',
     tractIds: ['wm_af', 'wm_slf3', 'wm_slf2', 'wm_fat', 'wm_ifof', 'wm_ilf', 'wm_uf'],
     rationale: [
       c('Seven pathways have been proposed to support language: the SLF and arcuate fasciculus, uncinate fasciculus, extreme capsule, middle longitudinal fasciculus, ILF and IFOF. Their roles are still debated.', 'dick2012'),
@@ -348,7 +544,7 @@ export const GROUPS: TractGroup[] = [
     ],
   },
   {
-    id: 'visual', kind: 'function', name: 'Vision', hemi: 'L', camera: 'lateral',
+    id: 'visual', kind: 'function', tier: 'core', name: 'Vision', hemi: 'L', camera: 'lateral',
     tractIds: ['wm_or', 'wm_ilf', 'wm_ifof'],
     rationale: [
       c('The optic radiation carries the geniculo-calcarine visual pathway.', 'sherbondy2008'),
@@ -357,7 +553,7 @@ export const GROUPS: TractGroup[] = [
     ],
   },
   {
-    id: 'motor', kind: 'function', name: 'Motor and speech initiation', hemi: 'both', camera: 'coronal',
+    id: 'motor', kind: 'function', tier: 'core', name: 'Motor and speech initiation', hemi: 'both', camera: 'coronal',
     tractIds: ['wm_cst', 'wm_cbt', 'wm_fat'],
     rationale: [
       c('The corticospinal tract is the principal pathway for voluntary movement.', 'welniarz2017'),
@@ -366,15 +562,16 @@ export const GROUPS: TractGroup[] = [
     ],
   },
   {
-    id: 'limbic', kind: 'function', name: 'Memory, emotion and social cognition', hemi: 'L', camera: 'medial',
-    tractIds: ['wm_uf', 'wm_cing_fp', 'wm_cing_ph'],
+    id: 'limbic', kind: 'function', tier: 'core', name: 'Memory, emotion and social cognition', hemi: 'L', camera: 'medial',
+    tractIds: ['wm_uf', 'wm_cing_fp', 'wm_cing_ph', 'wm_fx'],
     rationale: [
       c('The uncinate fasciculus has proposed roles in episodic memory, language and social-emotional processing.', 'vonderheide2013'),
       c('The dorsal cingulum is linked to executive control, emotion and pain, the parahippocampal cingulum to episodic memory.', 'bubb2018'),
+      c('The fornix, part of the Papez circuit, is critical for memory formation.', 'thomas2011'),
     ],
   },
   {
-    id: 'slf', kind: 'anatomy', name: 'SLF–arcuate complex', hemi: 'R', camera: 'lateral',
+    id: 'slf', kind: 'anatomy', tier: 'core', name: 'SLF–arcuate complex', hemi: 'R', camera: 'lateral',
     tractIds: ['wm_slf1', 'wm_slf2', 'wm_slf3', 'wm_af'],
     rationale: [
       c('Diffusion imaging separates the SLF into four subcomponents, as in non-human primates: SLF I, II and III, and the arcuate fascicle.', 'makris2005'),
@@ -382,23 +579,59 @@ export const GROUPS: TractGroup[] = [
     ],
   },
   {
-    id: 'association', kind: 'anatomy', name: 'Association tracts', hemi: 'L', camera: 'lateral',
+    id: 'association', kind: 'anatomy', tier: 'core', name: 'Association tracts', hemi: 'L', camera: 'lateral',
     tractIds: ['wm_af', 'wm_slf1', 'wm_slf2', 'wm_slf3', 'wm_ifof', 'wm_ilf', 'wm_uf', 'wm_fat', 'wm_cing_fp', 'wm_cing_ph'],
     rationale: [c('Association pathways connect disparate cortical areas; tractography atlases group tracts into association, projection and commissural pathways.', 'yeh2018', 'catani2008')],
   },
   {
-    id: 'projection', kind: 'anatomy', name: 'Projection tracts', hemi: 'both', camera: 'coronal',
-    tractIds: ['wm_cst', 'wm_cbt', 'wm_or'],
+    id: 'projection', kind: 'anatomy', tier: 'core', name: 'Projection tracts', hemi: 'both', camera: 'coronal',
+    tractIds: ['wm_cst', 'wm_cbt', 'wm_or', 'wm_fx'],
     rationale: [c('Projection pathways connect cortical areas with subcortical nuclei and the brainstem; in the atlas network they form hubs at the thalamus, putamen and brainstem.', 'yeh2018')],
   },
   {
-    id: 'commissural', kind: 'anatomy', name: 'Commissural tracts', hemi: 'both', camera: 'axial',
+    id: 'commissural', kind: 'anatomy', tier: 'core', name: 'Commissural tracts', hemi: 'both', camera: 'axial',
     tractIds: ['wm_cc'],
     rationale: [c('Commissural pathways connect the two hemispheres; the corpus callosum is the one shown here.', 'yeh2018')],
   },
   {
-    id: 'all', kind: 'all', name: 'All tracts', hemi: 'L', camera: 'lateral',
-    tractIds: ['wm_af', 'wm_slf1', 'wm_slf2', 'wm_slf3', 'wm_ifof', 'wm_ilf', 'wm_uf', 'wm_fat', 'wm_cing_fp', 'wm_cing_ph', 'wm_or', 'wm_cst', 'wm_cbt', 'wm_cc'],
+    id: 'all', kind: 'all', tier: 'core', name: 'All core tracts', hemi: 'L', camera: 'lateral',
+    tractIds: ['wm_af', 'wm_slf1', 'wm_slf2', 'wm_slf3', 'wm_ifof', 'wm_ilf', 'wm_uf', 'wm_fat', 'wm_cing_fp', 'wm_cing_ph', 'wm_fx', 'wm_or', 'wm_cst', 'wm_cbt', 'wm_cc'],
+    rationale: [],
+  },
+  // ---------------------------------------------------------------- extended tier
+  {
+    id: 'ext_language', kind: 'function', tier: 'extended', name: 'Language and hearing', hemi: 'L', camera: 'lateral',
+    tractIds: ['wm_emc', 'wm_mdlf', 'wm_tpat', 'wm_ar'],
+    rationale: [
+      c('The extreme capsule and middle longitudinal fasciculus are among the pathways proposed to support language; their roles are debated.', 'dick2012'),
+      c('Stimulating and resecting the left MdLF did not disturb language, so it is not essential for it.', 'dewitthamer2011'),
+      c('The acoustic radiation carries auditory signals to Heschl’s gyrus; the MdLF may belong to the auditory “where” pathway.', 'maffei2019', 'wang2013'),
+    ],
+  },
+  {
+    id: 'ext_posterior', kind: 'anatomy', tier: 'extended', name: 'Posterior ventral system', hemi: 'L', camera: 'lateral',
+    tractIds: ['wm_mdlf', 'wm_tpat', 'wm_vof'],
+    rationale: [
+      c('By their cortical connections the MdLF, TPAT, VOF and ILF form a posterior ventral system (the ILF is a core tract, shown under Vision).', 'yeh2022'),
+      c('The TPAT and VOF are spatially separate vertical tracts in the posterior hemisphere.', 'panesar2019'),
+    ],
+  },
+  {
+    id: 'ext_thalamic', kind: 'anatomy', tier: 'extended', name: 'Thalamic radiations', hemi: 'L', camera: 'lateral',
+    tractIds: ['wm_atr', 'wm_str', 'wm_ptr', 'wm_ar'],
+    rationale: [
+      c('Diffusion tractography maps the connections between thalamus and cortex, reproducibly between individuals.', 'behrens2003'),
+      c('The acoustic radiation is the auditory thalamocortical projection, from the medial geniculate nucleus.', 'maffei2019'),
+    ],
+  },
+  {
+    id: 'ext_commissural', kind: 'anatomy', tier: 'extended', name: 'Anterior commissure', hemi: 'both', camera: 'axial',
+    tractIds: ['wm_ac'],
+    rationale: [c('The commissural pathways comprise the corpus callosum (core) and the anterior and posterior commissures.', 'yeh2018')],
+  },
+  {
+    id: 'ext_all', kind: 'all', tier: 'extended', name: 'All extended tracts', hemi: 'L', camera: 'lateral',
+    tractIds: ['wm_mdlf', 'wm_tpat', 'wm_vof', 'wm_emc', 'wm_ac', 'wm_atr', 'wm_str', 'wm_ptr', 'wm_ar'],
     rationale: [],
   },
 ];

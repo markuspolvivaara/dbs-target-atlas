@@ -60,8 +60,16 @@ export function crossCheckWm(c: WmContent): string[] {
     g.tractIds.forEach((id) => { if (!topics.has(id)) errs.push(`group ${g.id}: unknown tract '${id}'`); });
     g.rationale.forEach((cl) => ref(`group ${g.id}`, cl));
   }
-  const all = c.groups.find((g) => g.kind === 'all');
-  if (!all || all.tractIds.length !== topics.size) errs.push('the "all" group must list every tract');
+  for (const tier of ['core', 'extended'] as const) {
+    const ids = new Set(c.topics.filter((t) => t.tier === tier).map((t) => t.id));
+    const all = c.groups.find((g) => g.kind === 'all' && g.tier === tier);
+    if (!all || all.tractIds.length !== ids.size || !all.tractIds.every((id) => ids.has(id))) errs.push(`the "all" group of the ${tier} tier must list exactly its tracts`);
+    for (const g of c.groups.filter((x) => x.tier === tier)) for (const id of g.tractIds) if (!ids.has(id)) errs.push(`group ${g.id} (${tier}) lists ${id} from the other tier`);
+  }
+  for (const t of c.topics) {
+    const m = WM_MANIFEST.structures.find((s) => s.id === t.id);
+    if (m && m.tier !== t.tier) errs.push(`topic ${t.id}: tier ${t.tier} but the pipeline built it as ${m.tier}`);
+  }
   c.general.forEach((cl) => ref('general', cl));
   for (const r of c.references) if (!used.has(r.id)) errs.push(`reference ${r.id} is never cited`);
   for (const id of Object.keys(CONNECTOME.tracts)) if (!topics.has(id)) errs.push(`connectome: unknown tract '${id}'`);
