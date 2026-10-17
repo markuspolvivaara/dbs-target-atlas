@@ -133,6 +133,13 @@ DATASETS: dict[str, dict] = {
         "url": "https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/",
         "note": "Optic tract label. The Human Motor Thalamus (Ilinsky) optic-tract files were not used: both the lh and rh files lie in the right hemisphere (x > 0).",
     },
+    "hcp": {
+        "name": "Human Connectome Project (WU-Minn), Open Access data",
+        "cite": ["vanessen2013", "glasser2013", "sotiropoulos2013"],
+        "licence": "WU-Minn HCP Open Access Data Use Terms (2013): redistribution of original and derived data is allowed under these same terms; acknowledgement required; no attempt to identify or contact participants",
+        "url": "https://www.humanconnectome.org/study/hcp-young-adult/document/wu-minn-hcp-consortium-open-access-data-use-terms",
+        "note": "Some tracts in this atlas were generated from HCP diffusion data (see the assets listed). Required acknowledgement: Data were provided [in part] by the Human Connectome Project, WU-Minn Consortium (Principal Investigators: David Van Essen and Kamil Ugurbil; 1U54MH091657) funded by the 16 NIH Institutes and Centers that support the NIH Blueprint for Neuroscience Research; and by the McDonnell Center for Systems Neuroscience at Washington University.",
+    },
     "elias2021": {
         "name": "TOR-PSM probabilistic stimulation maps (Elias 2021)",
         "cite": ["elias2021"],
@@ -287,6 +294,9 @@ class Tract:
     positive_only: bool = False
     terminal: list[int] | None = None  # keep streamlines whose superior end lies in these HMAT labels
     role: str = "tract"  # tract | border | response
+    # derived from Human Connectome Project data: "confirmed" (stated in the file or paper),
+    # "likely" (the atlas family is built on HCP templates; not stated for this version)
+    hcp: str | None = None
     aliases: list[str] = field(default_factory=list)
     derivation: str = ""
 
@@ -296,21 +306,21 @@ HOL = f"{A}Human Dysfunctome Atlas (Hollunder 2024)/midline/"
 TRACTS: list[Tract] = [
     Tract("hdp", "Hyperdirect pathway, motor STN tract", "stn", "middlebrooks2020", lr(MB, "STN_motor_tract", ".mat"),
           aliases=["hyperdirect pathway"],
-          derivation="Middlebrooks motor-STN tract; its cortical terminals fall mostly in pre-SMA/SMA (HMAT)."),
+          derivation="Middlebrooks motor-STN tract; its cortical terminals fall mostly in pre-SMA/SMA (HMAT).", hcp="likely"),
     Tract("al", "Ansa lenticularis", "gpi", "middlebrooks2020", lr(MB, "Ansa_Lenticularis", ".mat"),
-          aliases=["pallidofugal", "pallidothalamic"]),
+          aliases=["pallidofugal", "pallidothalamic"], hcp="likely"),
     Tract("lf", "Lenticular fasciculus", "gpi", "middlebrooks2020", lr(MB, "Fasciculus_Lenticularis", ".mat"),
-          aliases=["H2 field", "pallidofugal", "pallidothalamic"]),
+          aliases=["H2 field", "pallidofugal", "pallidothalamic"], hcp="likely"),
     Tract("drtt", "Dentato-rubro-thalamic tract (decussating)", "vim", "middlebrooks2020", lr(MB, "DRTT", ".mat"),
-          aliases=["DRTT"]),
+          aliases=["DRTT"], hcp="likely"),
     Tract("ndrtt", "Non-decussating DRTT", "vim", "middlebrooks2020", lr(MB, "NDRTT", ".mat"),
-          aliases=["nDRTT"]),
+          aliases=["nDRTT"], hcp="likely"),
     Tract("cst", "Corticospinal tract", "border", "meola2016",
           {"L": f"{A}Brainstem Connectome (Meola 2016)/lh/CST.mat", "R": f"{A}Brainstem Connectome (Meola 2016)/rh/CST.mat"},
-          role="border", aliases=["pyramidal tract", "internal capsule"]),
+          role="border", aliases=["pyramidal tract", "internal capsule"], hcp="confirmed"),
     Tract("ml", "Medial lemniscus", "borderML", "meola2016",
           {"L": f"{A}Brainstem Connectome (Meola 2016)/lh/ML.mat", "R": f"{A}Brainstem Connectome (Meola 2016)/rh/ML.mat"},
-          role="border"),
+          role="border", hcp="confirmed"),
     Tract("rt_gen", "Generalized dystonia response tract (Horn 2022)", "gpi", "horn2022",
           {"midline": f"{A}Dystonia Response Tract Atlas (Horn 2022)/midline/Generalized_Thresh.mat"},
           positive_only=True, role="response",
@@ -320,23 +330,23 @@ TRACTS: list[Tract] = [
           positive_only=True, role="response",
           derivation="Positively weighted streamlines of the thresholded tract file."),
     Tract("sw_pd", "PD sweet streamlines (Hollunder 2024)", "stn", "hollunder2024",
-          {"midline": HOL + "Sweet_Streamline_PD.mat"}, positive_only=True, role="response"),
+          {"midline": HOL + "Sweet_Streamline_PD.mat"}, positive_only=True, role="response", hcp="confirmed"),
     Tract("sw_dyt", "Dystonia sweet streamlines (Hollunder 2024)", "gpi", "hollunder2024",
-          {"midline": HOL + "Sweet_Streamline_DYT.mat"}, positive_only=True, role="response"),
+          {"midline": HOL + "Sweet_Streamline_DYT.mat"}, positive_only=True, role="response", hcp="confirmed"),
     Tract("sw_ts", "Tourette sweet streamlines (Hollunder 2024)", "cm", "hollunder2024",
-          {"midline": HOL + "Sweet_Streamline_TS.mat"}, positive_only=True, role="response"),
+          {"midline": HOL + "Sweet_Streamline_TS.mat"}, positive_only=True, role="response", hcp="confirmed"),
     # Derived subsets for the PD symptom view. The Rajamani 2024 symptom tracts
     # are not distributed as files; these partitions only show where the
     # published PD sweet streamlines terminate.
     Tract("sw_pd_m1", "PD sweet streamlines ending in M1 (derived)", "ctxM1", "hollunder2024",
           {"midline": HOL + "Sweet_Streamline_PD.mat"}, positive_only=True, terminal=[1, 2], role="response",
-          derivation="Subset of Hollunder 2024 PD sweet streamlines whose superior terminal lies within 3 mm of HMAT M1. Not the Rajamani 2024 tremor tract."),
+          derivation="Subset of Hollunder 2024 PD sweet streamlines whose superior terminal lies within 3 mm of HMAT M1. Not the Rajamani 2024 tremor tract.", hcp="confirmed"),
     Tract("sw_pd_sma", "PD sweet streamlines ending in SMA (derived)", "ctxSMA", "hollunder2024",
           {"midline": HOL + "Sweet_Streamline_PD.mat"}, positive_only=True, terminal=[5, 6], role="response",
-          derivation="Subset of Hollunder 2024 PD sweet streamlines whose superior terminal lies within 3 mm of HMAT SMA. Not the Rajamani 2024 bradykinesia/axial tract."),
+          derivation="Subset of Hollunder 2024 PD sweet streamlines whose superior terminal lies within 3 mm of HMAT SMA. Not the Rajamani 2024 bradykinesia/axial tract.", hcp="confirmed"),
     Tract("sw_pd_pm", "PD sweet streamlines ending in premotor cortex (derived)", "ctxPM", "hollunder2024",
           {"midline": HOL + "Sweet_Streamline_PD.mat"}, positive_only=True, terminal=[9, 10, 11, 12], role="response",
-          derivation="Subset of Hollunder 2024 PD sweet streamlines whose superior terminal lies within 3 mm of HMAT PMd/PMv. Not the Rajamani 2024 rigidity tract."),
+          derivation="Subset of Hollunder 2024 PD sweet streamlines whose superior terminal lies within 3 mm of HMAT PMd/PMv. Not the Rajamani 2024 rigidity tract.", hcp="confirmed"),
 ]
 STREAMLINE_STEP_MM = 2.0
 RANDOM_SEED = 20261014

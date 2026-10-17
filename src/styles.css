@@ -257,6 +257,7 @@ legend { font-weight: 700; padding: 0 4px; }
 .refs .tag { font-size: 0.78rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
 .count { color: var(--muted); font-size: 0.9rem; margin: 0 0 4px; }
 .cite { font-size: 0.95rem; }
+.ack { margin: 10px 0; padding: 8px 12px; border-left: 3px solid var(--line); color: var(--ink); font-size: 0.95rem; }
 .dataset h3 { margin-top: 0; }
 .settings-list { display: grid; gap: 2px; margin: 8px 0; }
 .set-row { border-bottom: 1px solid var(--line); padding: 4px 0; }

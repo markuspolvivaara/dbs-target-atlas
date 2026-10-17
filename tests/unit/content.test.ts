@@ -269,3 +269,17 @@ describe('STN non-motor zones', () => {
     }
   });
 });
+
+describe('Human Connectome Project terms', () => {
+  it('flags the HCP-derived tracts and carries the required acknowledgement', () => {
+    const conf = MANIFEST.structures.filter((s) => s.hcp === 'confirmed').map((s) => s.id).sort();
+    expect(conf).toEqual(['cst', 'ml', 'sw_dyt', 'sw_pd', 'sw_pd_m1', 'sw_pd_pm', 'sw_pd_sma', 'sw_ts']);
+    expect(MANIFEST.hcpAcknowledgement).toMatch(/^Data were provided \[in part\] by the Human Connectome Project, WU-Minn Consortium \(Principal Investigators: David Van Essen and Kamil Ugurbil; 1U54MH091657\)/);
+    expect(MANIFEST.datasets.hcp.citation.length).toBe(3);
+  });
+  it('NOTICE and ATTRIBUTION.md include the acknowledgement', async () => {
+    const { readFileSync } = await import('node:fs');
+    for (const f of ['../../NOTICE', '../../ATTRIBUTION.md'])
+      expect(readFileSync(new URL(f, import.meta.url), 'utf8').replace(/\s+/g, ' ')).toContain(MANIFEST.hcpAcknowledgement);
+  });
+});

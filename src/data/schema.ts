@@ -138,6 +138,7 @@ export const ManifestStructureSchema = z.object({
   refIds: z.array(z.string()),
   derivation: z.string(),
   category: z.string().optional(),
+  hcp: z.enum(['confirmed', 'likely']).optional(),
   centroid: z.object({ L: Vec3, R: Vec3 }).nullable(),
   surfaceCentroid: z.object({ L: Vec3, R: Vec3 }).optional(),
   streamlines: z.object({ L: z.number(), R: z.number() }).optional(),
@@ -159,6 +160,7 @@ export const ManifestSchema = z.object({
   generatedBy: z.string(),
   structures: z.array(ManifestStructureSchema),
   volumes: z.record(VolumeSchema),
+  hcpAcknowledgement: z.string(),
   volumeSource: z.object({ source: z.string(), scaling: z.union([z.string(), z.record(z.string())]), licence: z.string(), citation: z.array(z.string()) }).passthrough(),
   datasets: z.record(z.object({
     name: z.string(), licence: z.string(), url: z.string(), citation: z.array(z.string()),

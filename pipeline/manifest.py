@@ -19,6 +19,8 @@ BUILD = ROOT / "data" / "build"
 PUBLIC = REPO / "public" / "assets"
 GEN = REPO / "src" / "data" / "generated"
 
+HCP_ACK = "Data were provided [in part] by the Human Connectome Project, WU-Minn Consortium (Principal Investigators: David Van Essen and Kamil Ugurbil; 1U54MH091657) funded by the 16 NIH Institutes and Centers that support the NIH Blueprint for Neuroscience Research; and by the McDonnell Center for Systems Neuroscience at Washington University."
+
 CITES = json.loads((ROOT / "sources" / "citations.json").read_text())
 PALETTE = json.loads((REPO / "src" / "data" / "palette.json").read_text())
 
@@ -84,6 +86,7 @@ def main() -> int:
             "bytes": size(f), "colour": colour(t.colour), "dataset": t.dataset, **dataset_block(t.dataset),
             "derivation": (t.derivation + " " if t.derivation else "") +
                           f"Up to {t.budget} streamlines per hemisphere (fixed seed), resampled to {C.STREAMLINE_STEP_MM:g} mm.",
+            **({"hcp": t.hcp} if t.hcp else {}),
             "streamlines": {s: rep[t.id][s]["streamlines"] for s in ("L", "R")},
             "sourceStreamlines": {s: rep[t.id][s]["sourceStreamlines"] for s in ("L", "R")},
             "centroid": {s: rep[t.id][s]["centroid"] for s in ("L", "R")},
@@ -94,6 +97,7 @@ def main() -> int:
         "generatedBy": "pipeline/build.py + pipeline/compress.mjs + pipeline/manifest.py",
         "structures": items,
         "volumes": {k: v for k, v in t1.items() if isinstance(v, dict) and "file" in v},
+        "hcpAcknowledgement": HCP_ACK,
         "volumeSource": {"source": t1["source"], "scaling": t1["scaling"], **dataset_block("icbm2009b")},
         "datasets": {k: {**{kk: vv for kk, vv in d.items() if kk not in ("cite",)},
                          "citation": [CITES[c]["citation"] for c in d["cite"]],
@@ -137,7 +141,7 @@ def write_attribution(m: dict) -> None:
         "## Datasets used",
         "",
     ]
-    used = {s["dataset"] for s in m["structures"]} | {"leaddbs", "icbm2009b"}
+    used = {s["dataset"] for s in m["structures"]} | {"leaddbs", "icbm2009b", "hcp"}
     for k, d in m["datasets"].items():
         if k not in used:
             continue
@@ -155,6 +159,27 @@ def write_attribution(m: dict) -> None:
             lines.append(f"- Assets: {', '.join(ids)}")
         lines.append("")
     lines += [
+        "## Human Connectome Project data",
+        "",
+        "Some tracts were generated from Human Connectome Project diffusion data and are therefore also",
+        "subject to the WU-Minn HCP Open Access Data Use Terms",
+        "(https://www.humanconnectome.org/study/hcp-young-adult/document/wu-minn-hcp-consortium-open-access-data-use-terms):",
+        "redistribution only under the same terms, acknowledgement when presenting results, and no attempt to",
+        "identify or contact participants.",
+        "",
+        "- Confirmed HCP-derived: " + ", ".join(s["id"] for s in m["structures"] if s.get("hcp") == "confirmed")
+        + " (Hollunder 2024 sweet streamlines: connectome 'HCP 985 (Li 2020)' stated in the files; Meola 2016: HCP-488 data).",
+        "- Likely HCP-derived: " + ", ".join(s["id"] for s in m["structures"] if s.get("hcp") == "likely")
+        + " (DBS Tractography Atlas family, whose later version is built on the HCP-1065 template; not stated for this version).",
+        "",
+        "Required acknowledgement:",
+        "",
+        "> " + HCP_ACK,
+        "",
+        "HCP methods to cite:",
+        "",
+        *[f"- {c}" for c in m["datasets"]["hcp"]["citation"]],
+        "",
         "## Datasets considered and not used",
         "",
         "- **Basal Ganglia Pathway Atlas, original files (Petersen 2019, OSF mhd4z).** The OSF terms limit use to",

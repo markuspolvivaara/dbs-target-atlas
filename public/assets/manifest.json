@@ -2091,6 +2091,7 @@
    ],
    "refIds": [],
    "derivation": "Middlebrooks motor-STN tract; its cortical terminals fall mostly in pre-SMA/SMA (HMAT). Up to 300 streamlines per hemisphere (fixed seed), resampled to 2 mm.",
+   "hcp": "likely",
    "streamlines": {
     "L": 300,
     "R": 300
@@ -2139,6 +2140,7 @@
    ],
    "refIds": [],
    "derivation": "Up to 300 streamlines per hemisphere (fixed seed), resampled to 2 mm.",
+   "hcp": "likely",
    "streamlines": {
     "L": 165,
     "R": 165
@@ -2188,6 +2190,7 @@
    ],
    "refIds": [],
    "derivation": "Up to 300 streamlines per hemisphere (fixed seed), resampled to 2 mm.",
+   "hcp": "likely",
    "streamlines": {
     "L": 97,
     "R": 97
@@ -2235,6 +2238,7 @@
    ],
    "refIds": [],
    "derivation": "Up to 300 streamlines per hemisphere (fixed seed), resampled to 2 mm.",
+   "hcp": "likely",
    "streamlines": {
     "L": 300,
     "R": 300
@@ -2282,6 +2286,7 @@
    ],
    "refIds": [],
    "derivation": "Up to 300 streamlines per hemisphere (fixed seed), resampled to 2 mm.",
+   "hcp": "likely",
    "streamlines": {
     "L": 300,
     "R": 300
@@ -2330,6 +2335,7 @@
    ],
    "refIds": [],
    "derivation": "Up to 300 streamlines per hemisphere (fixed seed), resampled to 2 mm.",
+   "hcp": "confirmed",
    "streamlines": {
     "L": 300,
     "R": 300
@@ -2375,6 +2381,7 @@
    ],
    "refIds": [],
    "derivation": "Up to 300 streamlines per hemisphere (fixed seed), resampled to 2 mm.",
+   "hcp": "confirmed",
    "streamlines": {
     "L": 116,
     "R": 141
@@ -2512,6 +2519,7 @@
     "hollunder2024"
    ],
    "derivation": "Up to 300 streamlines per hemisphere (fixed seed), resampled to 2 mm.",
+   "hcp": "confirmed",
    "streamlines": {
     "L": 300,
     "R": 300
@@ -2555,6 +2563,7 @@
     "hollunder2024"
    ],
    "derivation": "Up to 300 streamlines per hemisphere (fixed seed), resampled to 2 mm.",
+   "hcp": "confirmed",
    "streamlines": {
     "L": 300,
     "R": 300
@@ -2598,6 +2607,7 @@
     "hollunder2024"
    ],
    "derivation": "Up to 300 streamlines per hemisphere (fixed seed), resampled to 2 mm.",
+   "hcp": "confirmed",
    "streamlines": {
     "L": 300,
     "R": 300
@@ -2641,6 +2651,7 @@
     "hollunder2024"
    ],
    "derivation": "Subset of Hollunder 2024 PD sweet streamlines whose superior terminal lies within 3 mm of HMAT M1. Not the Rajamani 2024 tremor tract. Up to 300 streamlines per hemisphere (fixed seed), resampled to 2 mm.",
+   "hcp": "confirmed",
    "streamlines": {
     "L": 81,
     "R": 149
@@ -2684,6 +2695,7 @@
     "hollunder2024"
    ],
    "derivation": "Subset of Hollunder 2024 PD sweet streamlines whose superior terminal lies within 3 mm of HMAT SMA. Not the Rajamani 2024 bradykinesia/axial tract. Up to 300 streamlines per hemisphere (fixed seed), resampled to 2 mm.",
+   "hcp": "confirmed",
    "streamlines": {
     "L": 300,
     "R": 300
@@ -2727,6 +2739,7 @@
     "hollunder2024"
    ],
    "derivation": "Subset of Hollunder 2024 PD sweet streamlines whose superior terminal lies within 3 mm of HMAT PMd/PMv. Not the Rajamani 2024 rigidity tract. Up to 300 streamlines per hemisphere (fixed seed), resampled to 2 mm.",
+   "hcp": "confirmed",
    "streamlines": {
     "L": 300,
     "R": 300
@@ -2841,6 +2854,7 @@
    "bytes": 1242304
   }
  },
+ "hcpAcknowledgement": "Data were provided [in part] by the Human Connectome Project, WU-Minn Consortium (Principal Investigators: David Van Essen and Kamil Ugurbil; 1U54MH091657) funded by the 16 NIH Institutes and Centers that support the NIH Blueprint for Neuroscience Research; and by the McDonnell Center for Systems Neuroscience at Washington University.",
  "volumeSource": {
   "source": "ICBM 2009b nonlinear asymmetric T1, T2 and PD templates (0.5 mm)",
   "scaling": {
@@ -3056,6 +3070,22 @@
    ],
    "citationUrls": [
     "https://doi.org/10.1016/j.dib.2017.04.013"
+   ]
+  },
+  "hcp": {
+   "name": "Human Connectome Project (WU-Minn), Open Access data",
+   "licence": "WU-Minn HCP Open Access Data Use Terms (2013): redistribution of original and derived data is allowed under these same terms; acknowledgement required; no attempt to identify or contact participants",
+   "url": "https://www.humanconnectome.org/study/hcp-young-adult/document/wu-minn-hcp-consortium-open-access-data-use-terms",
+   "note": "Some tracts in this atlas were generated from HCP diffusion data (see the assets listed). Required acknowledgement: Data were provided [in part] by the Human Connectome Project, WU-Minn Consortium (Principal Investigators: David Van Essen and Kamil Ugurbil; 1U54MH091657) funded by the 16 NIH Institutes and Centers that support the NIH Blueprint for Neuroscience Research; and by the McDonnell Center for Systems Neuroscience at Washington University.",
+   "citation": [
+    "Van Essen DC, Smith SM, Barch DM, Behrens TEJ, Yacoub E, Ugurbil K. The WU-Minn Human Connectome Project: An overview. NeuroImage. 2013;80:62-79. doi:10.1016/j.neuroimage.2013.05.041.",
+    "Glasser MF, Sotiropoulos SN, Wilson JA, Coalson TS, Fischl B, Andersson JL, et al. The minimal preprocessing pipelines for the Human Connectome Project. NeuroImage. 2013;80:105-124. doi:10.1016/j.neuroimage.2013.04.127.",
+    "Sotiropoulos SN, Jbabdi S, Xu J, Andersson JL, Moeller S, Auerbach EJ, et al. Advances in diffusion MRI acquisition and processing in the Human Connectome Project. NeuroImage. 2013;80:125-143. doi:10.1016/j.neuroimage.2013.05.057."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2013.05.041",
+    "https://doi.org/10.1016/j.neuroimage.2013.04.127",
+    "https://doi.org/10.1016/j.neuroimage.2013.05.057"
    ]
   },
   "elias2021": {

@@ -47,6 +47,18 @@ What is covered by which terms
    code. Cited publications remain the property of their authors and publishers;
    the app links to them and quotes short claims for teaching.
 
-5. Bundled third-party software (three.js and zod, MIT licence; Atkinson
+5. Human Connectome Project data. Some tract files were generated from HCP
+   diffusion data (listed in ATTRIBUTION.md under "Human Connectome Project data":
+   confirmed for the Hollunder 2024 sweet streamlines and the Meola 2016
+   corticospinal tract and medial lemniscus, likely for the DBS Tractography Atlas
+   tracts). In addition to the terms above, these files are subject to the WU-Minn
+   HCP Open Access Data Use Terms: they may be redistributed only under the same
+   terms, use must be acknowledged, and no attempt may be made to identify or
+   contact participants.
+   https://www.humanconnectome.org/study/hcp-young-adult/document/wu-minn-hcp-consortium-open-access-data-use-terms
+
+   Data were provided [in part] by the Human Connectome Project, WU-Minn Consortium (Principal Investigators: David Van Essen and Kamil Ugurbil; 1U54MH091657) funded by the 16 NIH Institutes and Centers that support the NIH Blueprint for Neuroscience Research; and by the McDonnell Center for Systems Neuroscience at Washington University.
+
+6. Bundled third-party software (three.js and zod, MIT licence; Atkinson
    Hyperlegible font, SIL Open Font Licence 1.1): see
    public/THIRD_PARTY_LICENSES.txt, which is also published with the site.

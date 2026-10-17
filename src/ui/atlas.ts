@@ -339,6 +339,10 @@ export class AtlasPage {
         img ? [h('dt', {}, 'Imaging'), h('dd', {}, h('a', { href: `#/imaging?t=${img.id}` }, `Sequences and tractography for ${img.label}`))] : null,
         h('dt', {}, 'Geometry'),
         h('dd', {}, m.source, '. ', m.derivation, ' ', stream, ' ', h('a', { href: '#/credits' }, 'Licence and citation')),
+        m.hcp ? [h('dt', {}, 'Human Connectome Project'), h('dd', {}, m.hcp === 'confirmed'
+          ? 'Generated from HCP diffusion data; also subject to the HCP Open Access Data Use Terms. '
+          : 'Probably generated from HCP data (the atlas family is built on HCP templates); treated as subject to the HCP Open Access Data Use Terms. ',
+          h('a', { href: '#/credits' }, 'Acknowledgement'))] : null,
         m.centroid ? [h('dt', {}, 'Centroid, MNI (mm)'), h('dd', {}, `L ${m.centroid.L.map(fmtMm).join(', ')} · R ${m.centroid.R.map(fmtMm).join(', ')}`)] : null,
       ),
     );

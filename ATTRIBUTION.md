@@ -151,12 +151,42 @@ The ICBM 2009b T1, T2 and PD template slices carry the McGill/MNI notice:
 - Cite: Xiao Y, Fonov V, Chakravarty MM, Beriault S, Al Subaie F, Sadikot A, et al. A dataset of multi-contrast population-averaged brain MRI atlases of a Parkinson's disease cohort. Data in Brief. 2017;12:370-379. doi:10.1016/j.dib.2017.04.013.
 - Assets: optic_tract
 
+### Human Connectome Project (WU-Minn), Open Access data
+
+- Licence: WU-Minn HCP Open Access Data Use Terms (2013): redistribution of original and derived data is allowed under these same terms; acknowledgement required; no attempt to identify or contact participants
+- Source: https://www.humanconnectome.org/study/hcp-young-adult/document/wu-minn-hcp-consortium-open-access-data-use-terms
+- Note: Some tracts in this atlas were generated from HCP diffusion data (see the assets listed). Required acknowledgement: Data were provided [in part] by the Human Connectome Project, WU-Minn Consortium (Principal Investigators: David Van Essen and Kamil Ugurbil; 1U54MH091657) funded by the 16 NIH Institutes and Centers that support the NIH Blueprint for Neuroscience Research; and by the McDonnell Center for Systems Neuroscience at Washington University.
+- Cite: Van Essen DC, Smith SM, Barch DM, Behrens TEJ, Yacoub E, Ugurbil K. The WU-Minn Human Connectome Project: An overview. NeuroImage. 2013;80:62-79. doi:10.1016/j.neuroimage.2013.05.041.
+- Cite: Glasser MF, Sotiropoulos SN, Wilson JA, Coalson TS, Fischl B, Andersson JL, et al. The minimal preprocessing pipelines for the Human Connectome Project. NeuroImage. 2013;80:105-124. doi:10.1016/j.neuroimage.2013.04.127.
+- Cite: Sotiropoulos SN, Jbabdi S, Xu J, Andersson JL, Moeller S, Auerbach EJ, et al. Advances in diffusion MRI acquisition and processing in the Human Connectome Project. NeuroImage. 2013;80:125-143. doi:10.1016/j.neuroimage.2013.05.057.
+
 ### TOR-PSM probabilistic stimulation maps (Elias 2021)
 
 - Licence: GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md
 - Source: https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/
 - Cite: Elias GJB, Boutet A, Joel SE, Germann J, Gwun D, Neudorfer C, et al. Probabilistic Mapping of Deep Brain Stimulation: Insights from 15 Years of Therapy. Annals of Neurology. 2021;89(3):426-443. doi:10.1002/ana.25975.
 - Assets: ss_tremor
+
+## Human Connectome Project data
+
+Some tracts were generated from Human Connectome Project diffusion data and are therefore also
+subject to the WU-Minn HCP Open Access Data Use Terms
+(https://www.humanconnectome.org/study/hcp-young-adult/document/wu-minn-hcp-consortium-open-access-data-use-terms):
+redistribution only under the same terms, acknowledgement when presenting results, and no attempt to
+identify or contact participants.
+
+- Confirmed HCP-derived: cst, ml, sw_pd, sw_dyt, sw_ts, sw_pd_m1, sw_pd_sma, sw_pd_pm (Hollunder 2024 sweet streamlines: connectome 'HCP 985 (Li 2020)' stated in the files; Meola 2016: HCP-488 data).
+- Likely HCP-derived: hdp, al, lf, drtt, ndrtt (DBS Tractography Atlas family, whose later version is built on the HCP-1065 template; not stated for this version).
+
+Required acknowledgement:
+
+> Data were provided [in part] by the Human Connectome Project, WU-Minn Consortium (Principal Investigators: David Van Essen and Kamil Ugurbil; 1U54MH091657) funded by the 16 NIH Institutes and Centers that support the NIH Blueprint for Neuroscience Research; and by the McDonnell Center for Systems Neuroscience at Washington University.
+
+HCP methods to cite:
+
+- Van Essen DC, Smith SM, Barch DM, Behrens TEJ, Yacoub E, Ugurbil K. The WU-Minn Human Connectome Project: An overview. NeuroImage. 2013;80:62-79. doi:10.1016/j.neuroimage.2013.05.041.
+- Glasser MF, Sotiropoulos SN, Wilson JA, Coalson TS, Fischl B, Andersson JL, et al. The minimal preprocessing pipelines for the Human Connectome Project. NeuroImage. 2013;80:105-124. doi:10.1016/j.neuroimage.2013.04.127.
+- Sotiropoulos SN, Jbabdi S, Xu J, Andersson JL, Moeller S, Auerbach EJ, et al. Advances in diffusion MRI acquisition and processing in the Human Connectome Project. NeuroImage. 2013;80:125-143. doi:10.1016/j.neuroimage.2013.05.057.
 
 ## Datasets considered and not used
 

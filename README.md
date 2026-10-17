@@ -208,6 +208,9 @@ GPL-3.0-only (see `LICENSE`). `NOTICE` explains which files fall under which ter
 code and the Lead-DBS-derived anatomy are GPL-3.0, and the atlas owners ask that the anatomy
 not be used commercially; the T1 slices carry the McGill/MNI notice; bundled third-party
 software licences are in `public/THIRD_PARTY_LICENSES.txt` (also published with the site).
+Tracts generated from Human Connectome Project data are additionally subject to the WU-Minn HCP
+Open Access Data Use Terms; the required acknowledgement is in `NOTICE`, `ATTRIBUTION.md` and on
+the Credits page.
 
 ## Data, licences, attribution
 

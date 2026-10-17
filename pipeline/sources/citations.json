@@ -93,5 +93,20 @@
   "citation": "Neudorfer C, Germann J, Elias GJB, Gramer R, Boutet A, Lozano AM. A high-resolution in vivo magnetic resonance imaging atlas of the human hypothalamic region. Sci Data. 2020;7(1). doi:10.1038/s41597-020-00644-6.",
   "doi": "10.1038/s41597-020-00644-6",
   "url": "https://doi.org/10.1038/s41597-020-00644-6"
+ },
+ "vanessen2013": {
+  "citation": "Van Essen DC, Smith SM, Barch DM, Behrens TEJ, Yacoub E, Ugurbil K. The WU-Minn Human Connectome Project: An overview. NeuroImage. 2013;80:62-79. doi:10.1016/j.neuroimage.2013.05.041.",
+  "doi": "10.1016/j.neuroimage.2013.05.041",
+  "url": "https://doi.org/10.1016/j.neuroimage.2013.05.041"
+ },
+ "glasser2013": {
+  "citation": "Glasser MF, Sotiropoulos SN, Wilson JA, Coalson TS, Fischl B, Andersson JL, et al. The minimal preprocessing pipelines for the Human Connectome Project. NeuroImage. 2013;80:105-124. doi:10.1016/j.neuroimage.2013.04.127.",
+  "doi": "10.1016/j.neuroimage.2013.04.127",
+  "url": "https://doi.org/10.1016/j.neuroimage.2013.04.127"
+ },
+ "sotiropoulos2013": {
+  "citation": "Sotiropoulos SN, Jbabdi S, Xu J, Andersson JL, Moeller S, Auerbach EJ, et al. Advances in diffusion MRI acquisition and processing in the Human Connectome Project. NeuroImage. 2013;80:125-143. doi:10.1016/j.neuroimage.2013.05.057.",
+  "doi": "10.1016/j.neuroimage.2013.05.057",
+  "url": "https://doi.org/10.1016/j.neuroimage.2013.05.057"
  }
 }

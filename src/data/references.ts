@@ -87,6 +87,9 @@ const DATASET_LABELS: Record<string, string> = {
   fonov2011: 'Fonov 2011 (ICBM 2009 templates)',
   neudorfer2020: 'Neudorfer 2020 (hypothalamus atlas)',
   xiao2017: 'Xiao 2017 (PD25 atlas)',
+  vanessen2013: 'Van Essen 2013 (HCP overview)',
+  glasser2013: 'Glasser 2013 (HCP preprocessing)',
+  sotiropoulos2013: 'Sotiropoulos 2013 (HCP diffusion MRI)',
 };
 
 const DATASET_REFS: Reference[] = Object.entries(citations as Record<string, { citation: string; url: string }>).map(
