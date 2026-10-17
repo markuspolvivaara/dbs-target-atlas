@@ -3,12 +3,14 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry.js';
 import type { VolumeInfo } from '../data/schema';
+import { SITE_ROOT } from '../brand';
 
 const loader = new GLTFLoader();
 loader.setMeshoptDecoder(MeshoptDecoder);
 
-const base = import.meta.env.BASE_URL;
-export const assetUrl = (rel: string) => base + rel;
+
+/** Shared assets live at the site root (public/assets), whichever section page loads them. */
+export const assetUrl = (rel: string) => SITE_ROOT + rel;
 
 export interface MeshAsset { kind: 'mesh'; sides: Partial<Record<'L' | 'R', THREE.Mesh>> }
 export interface LineAsset { kind: 'lines'; sides: Partial<Record<'L' | 'R', LineSegmentsGeometry>>; centroid: Partial<Record<'L' | 'R', THREE.Vector3>> }

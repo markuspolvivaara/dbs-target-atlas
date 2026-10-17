@@ -1,7 +1,7 @@
 Third-party software included in the built site (dist/)
 =======================================================
 
-The DBS target atlas bundles the following third-party components. Their licence
+The Open Neuroanatomy Atlas bundles the following third-party components. Their licence
 texts are reproduced below as their licences require. See NOTICE and
 ATTRIBUTION.md in the source repository for the anatomical data.
 

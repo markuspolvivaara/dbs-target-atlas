@@ -43,7 +43,7 @@ async function canvasColours(page: Page): Promise<number> {
 for (const ind of INDICATIONS) {
   test(`indication ${ind.id}: renders and matches the visual baseline`, async ({ page }) => {
     const g = guard(page);
-    await page.goto(`./#/atlas?i=${ind.id}`);
+    await page.goto(`./dbs/#/atlas?i=${ind.id}`);
     await settle(page);
     await expect(page.locator('.card h2').first()).toHaveText(ind.name);
     expect(await canvasColours(page)).toBeGreaterThan(40);
@@ -55,7 +55,7 @@ for (const ind of INDICATIONS) {
 
 test('symptom view, slices, lead and stimulation sphere', async ({ page }) => {
   const g = guard(page);
-  await page.goto('./#/atlas?i=pd&s=pd-tremor&co=-12c&ax=-6&lead=0.5,0,60,15&stim=1,2');
+  await page.goto('./dbs/#/atlas?i=pd&s=pd-tremor&co=-12c&ax=-6&lead=0.5,0,60,15&stim=1,2');
   await settle(page);
   await expect(page.locator('.card h2').first()).toHaveText('Tremor');
   await expect(page.locator('.card').first()).toContainText('derived stand-in');
@@ -68,7 +68,7 @@ test('symptom view, slices, lead and stimulation sphere', async ({ page }) => {
 });
 
 test('measure, hover tooltip and dragging the lead along its axis', async ({ page }) => {
-  await page.goto('./#/atlas?i=pd&c=coronal&ly=n1,t0,c0,g1,e1&lead=0.5,0,60,15');
+  await page.goto('./dbs/#/atlas?i=pd&c=coronal&ly=n1,t0,c0,g1,e1&lead=0.5,0,60,15');
   await settle(page);
   // screen position of the right lead's contact array (patient right appears on the viewer's left in the anterior view)
   const pt = await page.evaluate(() => {
@@ -94,7 +94,7 @@ test('measure, hover tooltip and dragging the lead along its axis', async ({ pag
 });
 
 test('state survives a reload through the URL hash', async ({ page }) => {
-  await page.goto('./#/atlas?i=ts&s=ts-tics&h=L&sel=cm');
+  await page.goto('./dbs/#/atlas?i=ts&s=ts-tics&h=L&sel=cm');
   await settle(page);
   await page.reload();
   await settle(page);
@@ -105,16 +105,16 @@ test('state survives a reload through the URL hash', async ({ page }) => {
 
 test('other pages render without external requests', async ({ page }) => {
   const g = guard(page);
-  await page.goto('./#/imaging?t=vim');
+  await page.goto('./dbs/#/imaging?t=vim');
   await expect(page.locator('.page:not([hidden]) .card h2')).toHaveText('Ventral intermediate nucleus');
-  await page.goto('./#/coords');
+  await page.goto('./dbs/#/coords');
   await expect(page.locator('.coord h3')).toHaveText(['STN', 'GPi', 'Vim']);
   await page.fill('#acpc', '10');
   await expect(page.locator('.err')).toBeVisible();
-  await page.goto('./#/refs');
+  await page.goto('./dbs/#/refs');
   await page.fill('#ref-q', 'Horn');
   await expect(page.locator('.count')).toContainText('references');
-  await page.goto('./#/credits');
+  await page.goto('./dbs/#/credits');
   await expect(page.locator('.page:not([hidden]) h1')).toHaveText('Credits and licences');
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
@@ -122,7 +122,7 @@ test('other pages render without external requests', async ({ page }) => {
 
 test('mobile layout: viewer above a bottom sheet @mobile', async ({ page }) => {
   const g = guard(page);
-  await page.goto('./#/atlas?i=et');
+  await page.goto('./dbs/#/atlas?i=et');
   await settle(page);
   const stage = await page.locator('.stage').boundingBox();
   const panel = await page.locator('.panel').boundingBox();
@@ -138,13 +138,13 @@ test('mobile layout: viewer above a bottom sheet @mobile', async ({ page }) => {
 test('settings: hidden indications are remembered, links to them still work', async ({ page }) => {
   const g = guard(page);
   // default: the less common indications start hidden
-  await page.goto('./#/atlas?i=pd');
+  await page.goto('./dbs/#/atlas?i=pd');
   await settle(page);
   const chips = page.locator('.ind-chips .chip');
   await expect(chips).toHaveCount(6);
   for (const name of ["Parkinson's", 'Essential tremor', 'Generalized dystonia', 'Cervical dystonia', 'Focal hand dystonia', 'Epilepsy'])
     await expect(chips.filter({ hasText: name })).toHaveCount(1);
-  await page.goto('./#/settings');
+  await page.goto('./dbs/#/settings');
   await expect(page.locator('.page:not([hidden]) [aria-live="polite"]').last()).toContainText('6 of 11 indications shown');
   // change: show Tourette, hide focal hand dystonia
   await page.locator('input[data-ind="ts"]').check();
@@ -153,26 +153,26 @@ test('settings: hidden indications are remembered, links to them still work', as
   await page.reload();
   await expect(page.locator('input[data-ind="ts"]')).toBeChecked();
   await expect(page.locator('input[data-ind="fhd"]')).not.toBeChecked();
-  await page.goto('./#/atlas?i=pd');
+  await page.goto('./dbs/#/atlas?i=pd');
   await settle(page);
   await expect(chips).toHaveCount(6);
   await expect(chips.filter({ hasText: 'Tourette' })).toHaveCount(1);
   await expect(chips.filter({ hasText: 'Focal hand' })).toHaveCount(0);
   // a shared link to a hidden indication still opens it, marked as hidden
-  await page.goto('./#/atlas?i=holmes');
+  await page.goto('./dbs/#/atlas?i=holmes');
   await settle(page);
   await expect(page.locator('.card h2').first()).toHaveText('Holmes tremor');
   await expect(chips.filter({ hasText: 'Holmes tremor (hidden)' })).toHaveCount(1);
   // hiding the indication currently shown switches the atlas to the first visible one
-  await page.goto('./#/atlas?i=pd');
+  await page.goto('./dbs/#/atlas?i=pd');
   await settle(page);
-  await page.goto('./#/settings');
+  await page.goto('./dbs/#/settings');
   await page.locator('input[data-ind="pd"]').uncheck();
-  await page.goto('./#/atlas');
+  await page.goto('./dbs/#/atlas');
   await settle(page);
   await expect(page.locator('.ind-chips .chip[aria-pressed="true"]')).not.toHaveText("Parkinson's");
   // show all, then back to the default set
-  await page.goto('./#/settings');
+  await page.goto('./dbs/#/settings');
   await page.getByRole('button', { name: 'Show all' }).click();
   await expect(page.locator('input[data-ind]:checked')).toHaveCount(11);
   await page.getByRole('button', { name: 'Reset to default' }).click();
@@ -183,7 +183,7 @@ test('settings: hidden indications are remembered, links to them still work', as
 
 test('lead placement is remembered per target', async ({ page }) => {
   const g = guard(page);
-  await page.goto('./#/atlas?i=pd&ly=n1,t0,c0,g1,e1');
+  await page.goto('./dbs/#/atlas?i=pd&ly=n1,t0,c0,g1,e1');
   await settle(page);
   await page.locator('#ptab-lead').click();
   await page.locator('select[data-k="anchor"]').selectOption('c1');
@@ -200,12 +200,12 @@ test('lead placement is remembered per target', async ({ page }) => {
   await page.locator('#ptab-lead').click();
   await expect(page.locator('select[data-k="anchor"]')).toHaveValue('c1');
   await expect(page.locator('input[data-k="depth"]')).toHaveValue('-1');
-  await page.goto('./#/atlas?i=pd&ly=n1,t0,c0,g1,e1');
+  await page.goto('./dbs/#/atlas?i=pd&ly=n1,t0,c0,g1,e1');
   await settle(page);
   await page.locator('#ptab-lead').click();
   await expect(page.locator('select[data-k="anchor"]')).toHaveValue('c1');
   // a link that carries its own lead position wins over the remembered one
-  await page.goto('./#/atlas?i=pd&lead=0.5,2,60,15,tip');
+  await page.goto('./dbs/#/atlas?i=pd&lead=0.5,2,60,15,tip');
   await settle(page);
   await page.locator('#ptab-lead').click();
   await expect(page.locator('select[data-k="anchor"]')).toHaveValue('tip');
@@ -216,7 +216,7 @@ test('lead placement is remembered per target', async ({ page }) => {
 
 test('legend: show/hide and highlight structures', async ({ page }) => {
   const g = guard(page);
-  await page.goto('./#/atlas?i=et');
+  await page.goto('./dbs/#/atlas?i=et');
   await settle(page);
   await page.evaluate(() => { (document.querySelector('.legend-box') as HTMLDetailsElement).open = true; });
   const row = (text: string) => page.locator('.legend3d li', { hasText: text }).first();
@@ -254,7 +254,7 @@ test('legend: show/hide and highlight structures', async ({ page }) => {
 
 test('slices: cut away the structures on the patient\'s left or right half, slices stay whole', async ({ page }) => {
   const g = guard(page);
-  await page.goto('./#/atlas?i=pd&c=coronal&co=-13&ax=-6');
+  await page.goto('./dbs/#/atlas?i=pd&c=coronal&co=-13&ax=-6');
   await settle(page);
   await page.locator('#ptab-slices').click();
   const state = () => page.evaluate(() => {
@@ -293,7 +293,7 @@ test('labels: all / hover / off, legend hover, fade while moving', async ({ page
   });
   const lines = () => page.evaluate(() => document.querySelectorAll('.leaders line').length);
   // default: hover mode, nothing drawn over the anatomy
-  await page.goto('./#/atlas?i=pd');
+  await page.goto('./dbs/#/atlas?i=pd');
   await settle(page);
   await expect.poll(shown).toEqual([]);
   await expect(page.locator('.toolbar [data-labels="hover"]')).toHaveAttribute('aria-pressed', 'true');
@@ -330,7 +330,7 @@ test('labels: all / hover / off, legend hover, fade while moving', async ({ page
 
 test('slices: switch between T1, T2 and PD', async ({ page }) => {
   const g = guard(page);
-  await page.goto('./#/atlas?i=pd&co=-13');
+  await page.goto('./dbs/#/atlas?i=pd&co=-13');
   await settle(page);
   const cur = () => page.evaluate(() => (window as any).__atlas.viewer.slices.current);
   // mean grey value of the coronal slice texture near the lateral ventricles (CSF): dark on T1, bright on T2
@@ -357,9 +357,34 @@ test('slices: switch between T1, T2 and PD', async ({ page }) => {
   await page.locator('input[name="sliceseq"][value="t1"]').check();
   await expect.poll(cur).toBe('t1');
   // a link opens with its sequence
-  await page.goto('./#/atlas?i=pd&co=-13&seq=pd');
+  await page.goto('./dbs/#/atlas?i=pd&co=-13&seq=pd');
   await settle(page);
   await expect.poll(cur).toBe('pd');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('home page: sections, light load, and old links forward to the DBS section', async ({ page }) => {
+  const g = guard(page);
+  const scripts: string[] = [];
+  page.on('request', (r) => { if (r.resourceType() === 'script') scripts.push(r.url()); });
+  await page.goto('./');
+  await expect(page.locator('h1')).toHaveText('Open Neuroanatomy Atlas');
+  await expect(page.locator('.section-card[data-section="dbs"] a.btn')).toHaveAttribute('href', './dbs/');
+  await expect(page.locator('.section-card[data-section="tracts"]')).toContainText('Coming soon');
+  expect(scripts.some((u) => /three-/.test(u))).toBe(false); // no 3D engine on the home page
+  // open the DBS section from the home page; the header leads back
+  await page.locator('.section-card[data-section="dbs"] a.btn').click();
+  await settle(page);
+  await expect(page.locator('.section-chip')).toHaveText('DBS targets');
+  await expect(page).toHaveTitle(/· DBS targets · Open Neuroanatomy Atlas$/);
+  await page.locator('a.brand').click();
+  await expect(page.locator('h1')).toHaveText('Open Neuroanatomy Atlas');
+  // a link shared before the restructure still opens the same view
+  await page.goto('./#/atlas?i=et&s=et-head');
+  await page.waitForURL(/\/dbs\/#\/atlas\?i=et&s=et-head/);
+  await settle(page);
+  await expect(page.locator('.card h2').first()).toHaveText('Head tremor');
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });

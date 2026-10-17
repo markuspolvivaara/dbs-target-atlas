@@ -9,6 +9,10 @@ import { coordsPage, creditsPage, imagingPage, refsPage, settingsPage } from './
 import { leadPrefFor, onPrefsChange, visibleIndications } from './ui/prefs';
 import { primaryTargetId } from './viewer/selection';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
+import { BRAND, SECTIONS } from './brand';
+import { disclaimerNote, siteHeader } from './ui/shell';
+
+const SECTION = SECTIONS.find((s) => s.id === 'dbs')!;
 
 injectPaletteCss();
 let theme: ThemePref = storedTheme();
@@ -35,13 +39,8 @@ const NAV: [Page, string][] = [['atlas', 'Atlas'], ['imaging', 'Imaging'], ['coo
 const app = document.getElementById('app')!;
 const navLinks = NAV.map(([p, label]) => h('a', { href: `#/${p}`, class: 'navlink', 'data-page': p }, label));
 const themeBtn = h('button', { type: 'button', class: 'theme-btn', onclick: () => cycleTheme() });
-const header = h('header', { class: 'top' },
-  h('a', { class: 'brand', href: '#/atlas' }, h('span', { class: 'brand-mark', 'aria-hidden': 'true' }), 'DBS target atlas'),
-  h('nav', { class: 'nav', 'aria-label': 'Sections' }, ...navLinks),
-  themeBtn,
-);
-const disclaimer = h('p', { class: 'disclaimer', role: 'note' },
-  h('strong', {}, 'Teaching tool. '), 'Atlas-based (MNI 2009b) group anatomy; individual anatomy varies. Not for surgical planning.');
+const header = siteHeader({ section: SECTION, nav: navLinks, themeBtn });
+const disclaimer = disclaimerNote();
 
 const pages: Record<Page, { el: HTMLElement; render(s: AppState): void }> = {} as never;
 const update = (fn: (s: AppState) => void, opts: { camera?: boolean } = {}) => {
@@ -91,7 +90,7 @@ function render(pageChanged = false): void {
   pages[state.page].render(state);
   if (state.page === 'atlas') atlas.onShow();
   const titles: Record<Page, string> = { atlas: IND.get(state.ind)!.name, imaging: 'Imaging', coords: 'Coordinates', refs: 'References', credits: 'Credits', settings: 'Settings' };
-  document.title = `${titles[state.page]} · DBS target atlas`;
+  document.title = `${titles[state.page]} · ${SECTION.name} · ${BRAND.name}`;
   if (pageChanged) window.scrollTo(0, 0);
 }
 

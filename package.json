@@ -1,7 +1,7 @@
 {
-  "name": "dbs-target-atlas",
+  "name": "open-neuroanatomy-atlas",
   "version": "0.1.0",
-  "description": "Interactive 3D atlas of DBS targets for movement disorders (MNI ICBM 2009b). Teaching tool, not for planning.",
+  "description": "Open Neuroanatomy Atlas: interactive 3D neuroanatomy for teaching (DBS targets; white-matter tracts in development). MNI ICBM 2009b. Not for planning.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

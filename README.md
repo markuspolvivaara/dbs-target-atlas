@@ -1,4 +1,14 @@
-# DBS target atlas
+# Open Neuroanatomy Atlas
+
+Interactive 3D neuroanatomy for teaching, built from published atlases in MNI space. Sections:
+
+- **DBS targets** (`dbs/`): described below.
+- **White-matter tracts** (`tracts/`): in development.
+
+The home page (`index.html`) links the sections; they share the viewer, the anatomy pipeline,
+the design and the Settings. The project name and section list live in `src/brand.ts`.
+
+## DBS targets
 
 An interactive 3D atlas of deep brain stimulation targets for movement disorders. Pick an
 indication or a symptom: the involved nuclei light up, unrelated nuclei ghost, the tracts
@@ -39,7 +49,8 @@ without running the pipeline.
 npm run build
 ```
 
-`dist/` is a self-contained static site with a relative base path. Copy it to any web server or
+`dist/` is a self-contained static site with a relative base path: `index.html` is the home page,
+`dbs/index.html` the DBS section; shared assets are under `assets/`. Copy it to any web server or
 subfolder; the app uses hash routing, so no rewrite rules are needed. Check locally with:
 
 ```bash
@@ -49,7 +60,7 @@ npm run preview
 ### GitHub Pages
 
 `.github/workflows/pages.yml` runs the unit tests, builds the site and publishes `dist/` to
-GitHub Pages on every push to `main` (live at https://markuspolvivaara.github.io/dbs-target-atlas/).
+GitHub Pages on every push to `main` (live at https://markuspolvivaara.github.io/dbs-target-atlas/, DBS section under `dbs/`).
 One-time setup: repository Settings → Pages → Source: **GitHub Actions**. A run can also be started
 by hand from the Actions tab ("Run workflow").
 
