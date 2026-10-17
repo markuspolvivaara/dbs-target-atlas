@@ -50,6 +50,25 @@ DATASET = {
 # regions of the page: the model's structures that come within REGION_MM of these landmarks
 REGION_LANDMARKS = {"Hypophysial fossa": 15.0, "Optic canal": 15.0, "Apex of petrous part": 15.0, "Foramen ovale": 15.0,
                     "Foramen magnum": 25.0}  # the foramen magnum point is the centre of the opening
+# Arteries kept for skull-base teaching, by system (editorial selection, in the order the legend lists them).
+# Names as normalised by split_pair. Every other artery of the model (other external carotid branches to the face,
+# scalp, jaw and nose; distal cortical branches; small orbital branches) is left out.
+ARTERY_SYSTEMS: dict[str, list[str]] = {
+    "Internal carotid artery": ["Internal carotid artery", "Ophthalmic artery", "Posterior communicating artery"],
+    "Anterior cerebral artery": ["Anterior cerebral artery"],
+    "Middle cerebral artery": ["Middle cerebral artery (M1 segment)", "Insular branches of middle cerebral artery (M2 segment)",
+                               "Proximal lateral striate branches", "Distal lateral striate branches"],
+    "Vertebral artery": ["Vertebral artery", "Posterior inferior cerebellar artery", "Anterior spinal artery"],
+    "Basilar artery": ["Basilar artery", "Anterior inferior cerebellar artery", "Superior cerebellar artery",
+                       "Medial pontine branches of basilar artery", "Lateral pontine branches of basilar artery"],
+    "Posterior cerebral artery": ["Posterior cerebral artery"],
+    "Middle meningeal artery": ["Middle meningeal artery", "Accessory branch of middle meningeal artery"],
+    "Ethmoidal arteries": ["Anterior ethmoidal artery", "Posterior ethmoidal artery"],
+    # endoscopic endonasal landmarks: the sphenopalatine branches (nasoseptal flap pedicle) and the vidian artery
+    "Maxillary artery": ["Maxillary artery", "Posterior septal branches of sphenopalatine artery",
+                         "Posterior lateral nasal branches of sphenopalatine artery", "Artery of pterygoid canal"],
+}
+ARTERY_SYSTEM = {a: sys_ for sys_, members in ARTERY_SYSTEMS.items() for a in members}
 AO_FLOOR = 0.45  # fully enclosed bone surface is drawn at this share of its colour
 KIND_TOKEN = {"bone": "sbBone", "soft": "sbSoft", "artery": "sbArtery", "vein": "sbVein", "nerve": "sbNerve"}
 
@@ -68,7 +87,7 @@ def split_pair(name: str) -> tuple[str, str | None]:
             name, side = name[: -len(suf)], sd
             break
     name = re.sub(r"\((M\d)(?:[- ]segment)?\)", r"(\1 segment)", name)
-    return name, side
+    return name.rstrip("."), side  # one Z-Anatomy name ends in a stray full stop
 
 
 def colour(token: str) -> dict:
@@ -209,8 +228,14 @@ def main() -> int:
         base, side = split_pair(n)
         add(n, "soft", "soft", side, (np.array(b["verts"]), np.array(b["tris"]), np.ones(len(b["verts"]))))
     cn: dict[str, int] = {}
+    arteries = {split_pair(n)[0] for n, ln in ex["lines"].items() if ln["kind"] == "artery"}
+    missing = set(ARTERY_SYSTEM) - arteries
+    if missing:
+        raise SystemExit(f"ARTERY_SYSTEMS names not in the model: {sorted(missing)}")
     for n, ln in ex["lines"].items():
         base, side = split_pair(n)
+        if ln["kind"] == "artery" and base not in ARTERY_SYSTEM:
+            continue  # not among the arteries kept for skull-base teaching
         add(n, ln["kind"], "tube", side, [np.array(r) for r in ln["runs"]])
         if ln["kind"] == "nerve" and cranial_nerve(base, ln.get("path")):
             cn[base] = cranial_nerve(base, ln.get("path"))
@@ -272,6 +297,7 @@ def main() -> int:
                                   f"(its curve bevel: modelled, not measured), at least {TUBE_MIN_RADIUS_MM} mm; cropped to the head."),
             "centroid": {"L": cent["L"], "R": cent["R"]},
             **({"cranialNerve": cn[base]} if base in cn else {}),
+            **({"system": ARTERY_SYSTEM[base]} if g["kind"] == "artery" else {}),
         })
         report[sid] = {"sides": sorted(k for k in ("L", "R") if any(n["name"] == k for n in nodes)), "kind": g["kind"]}
     for it in items:
@@ -321,15 +347,18 @@ def main() -> int:
                         "structures": sorted(near, key=lambda x: x["distanceMm"]), "landmarks": lmn})
 
     defs = {}
+    shown = {it["name"] for it in items} | {lm["name"].strip() for lm in landmarks}
     for n, raw in ex["texts"].items():
         d = definition(raw)
-        if d:
-            defs[n.strip()] = d
+        key = split_pair(n.strip())[0]  # structures by their normalised name ('(M1 segment)'), as the cards look them up
+        if d and key in shown:
+            defs[key] = d
 
     manifest = {
         "space": "RAS millimetres from the hypophysial fossa landmark of the Z-Anatomy model (not MNI)",
         "generatedBy": "pipeline/skullbase_export.py (Blender) + pipeline/skullbase_build.py + pipeline/compress.mjs",
         "structures": items,
+        "arterySystems": list(ARTERY_SYSTEMS),
         "dataset": {"name": DATASET["name"], "licence": DATASET["licence"], "url": DATASET["url"], "note": DATASET["note"],
                     "attribution": DATASET["attribution"],
                     "citation": [CITES[c]["citation"] for c in DATASET["cite"]], "citationUrls": [CITES[c]["url"] for c in DATASET["cite"]]},
@@ -376,6 +405,9 @@ def validate() -> int:
     cns = {it.get("cranialNerve") for it in m["structures"] if it.get("category") == "nerve"}
     check(set(range(1, 13)) <= cns, f"cranial nerves present: {sorted(c for c in cns if c)}")
     check(None not in cns, "a nerve without a cranial nerve number")
+    arts = [it for it in m["structures"] if it.get("category") == "artery"]
+    check(all(it.get("system") in ARTERY_SYSTEMS for it in arts), "an artery without a system")
+    check({it["system"] for it in arts} == set(ARTERY_SYSTEMS), "every artery system has a structure")
     print(f"skull base validation: {n - len(fails)}/{n} checks passed")
     for f in fails:
         print("FAIL", f)

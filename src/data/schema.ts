@@ -149,6 +149,8 @@ export const ManifestStructureSchema = z.object({
   intracranialFraction: z.number().optional(),
   /** skull-base section: the cranial nerve (1-12) a nerve or nerve branch belongs to */
   cranialNerve: z.number().int().min(1).max(12).optional(),
+  /** skull-base section: the arterial system an artery is listed under (its trunk's name) */
+  system: z.string().optional(),
   /** white-matter section: core (surgical essentials), extended, or posterior fossa */
   tier: z.enum(['core', 'extended', 'fossa']).optional(),
   centroid: z.object({ L: Vec3, R: Vec3 }).nullable(),
@@ -200,6 +202,8 @@ export const SbManifestSchema = z.object({
   space: z.string(),
   generatedBy: z.string(),
   structures: z.array(ManifestStructureSchema),
+  /** artery systems in the order the page lists them */
+  arterySystems: z.array(z.string()),
   dataset: z.object({
     name: z.string(), licence: z.string(), url: z.string().url(), note: z.string(), attribution: z.array(z.string()),
     citation: z.array(z.string()), citationUrls: z.array(z.string()),

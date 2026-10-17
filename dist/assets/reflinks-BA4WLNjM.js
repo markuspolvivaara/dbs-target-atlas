@@ -1,0 +1,1 @@
+import{h as f}from"./theme-C99XgOWy.js";function i(o,t,n=!0){const e=document.createDocumentFragment();return t.length&&(n&&e.append("("),t.forEach((a,p)=>{const r=o.get(a);if(p&&e.append(", "),!r){e.append(a);return}e.append(f("a",{class:"src",href:r.url,target:"_blank",rel:"noopener",title:r.citation},r.shortLabel))}),n&&e.append(")")),e}export{i as r};

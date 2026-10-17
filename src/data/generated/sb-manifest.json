@@ -3,44 +3,6 @@
  "generatedBy": "pipeline/skullbase_export.py (Blender) + pipeline/skullbase_build.py + pipeline/compress.mjs",
  "structures": [
   {
-   "id": "sb_x",
-   "name": "?x",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_x.glb",
-   "bytes": 13668,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -2.23,
-     38.01,
-     -22.3
-    ],
-    "R": [
-     2.23,
-     38.01,
-     -22.3
-    ]
-   },
-   "intracranialFraction": 0.68
-  },
-  {
    "id": "sb_abducens_nerve_vi",
    "name": "Abducens nerve (VI)",
    "aliases": [],
@@ -115,6 +77,7 @@
      -17.64
     ]
    },
+   "system": "Middle meningeal artery",
    "intracranialFraction": 1.0
   },
   {
@@ -194,44 +157,6 @@
    }
   },
   {
-   "id": "sb_angular_artery",
-   "name": "Angular artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_angular_artery.glb",
-   "bytes": 39884,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -7.6,
-     66.1,
-     23.15
-    ],
-    "R": [
-     7.6,
-     66.1,
-     23.15
-    ]
-   },
-   "intracranialFraction": 0.09
-  },
-  {
    "id": "sb_angular_vein",
    "name": "Angular vein",
    "aliases": [],
@@ -305,44 +230,7 @@
      15.59
     ]
    },
-   "intracranialFraction": 1.0
-  },
-  {
-   "id": "sb_anterior_deep_temporal_artery",
-   "name": "Anterior deep temporal artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_anterior_deep_temporal_artery.glb",
-   "bytes": 17080,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -48.99,
-     18.03,
-     4.32
-    ],
-    "R": [
-     48.99,
-     18.03,
-     4.32
-    ]
-   },
+   "system": "Anterior cerebral artery",
    "intracranialFraction": 1.0
   },
   {
@@ -458,6 +346,7 @@
      1.56
     ]
    },
+   "system": "Ethmoidal arteries",
    "intracranialFraction": 0.86
   },
   {
@@ -496,6 +385,7 @@
      -13.83
     ]
    },
+   "system": "Basilar artery",
    "intracranialFraction": 1.0
   },
   {
@@ -537,44 +427,6 @@
    "intracranialFraction": 1.0
   },
   {
-   "id": "sb_anterior_septal_branches_of_anterior_ethmoidal_artery",
-   "name": "Anterior septal branches of anterior ethmoidal artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_anterior_septal_branches_of_anterior_ethmoidal_artery.glb",
-   "bytes": 10936,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -2.1,
-     39.95,
-     -11.0
-    ],
-    "R": [
-     2.1,
-     39.95,
-     -11.0
-    ]
-   },
-   "intracranialFraction": 1.0
-  },
-  {
    "id": "sb_anterior_spinal_artery",
    "name": "Anterior spinal artery",
    "aliases": [],
@@ -610,121 +462,8 @@
      -37.73
     ]
    },
+   "system": "Vertebral artery",
    "intracranialFraction": 0.74
-  },
-  {
-   "id": "sb_anterior_temporal_branch",
-   "name": "Anterior temporal branch",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_anterior_temporal_branch.glb",
-   "bytes": 44696,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -59.76,
-     -4.85,
-     20.47
-    ],
-    "R": [
-     59.76,
-     -4.85,
-     20.47
-    ]
-   },
-   "intracranialFraction": 1.0
-  },
-  {
-   "id": "sb_artery_of_central_sulcus",
-   "name": "Artery of central sulcus",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_artery_of_central_sulcus.glb",
-   "bytes": 29800,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -48.9,
-     -23.53,
-     70.95
-    ],
-    "R": [
-     48.9,
-     -23.53,
-     70.95
-    ]
-   },
-   "intracranialFraction": 1.0
-  },
-  {
-   "id": "sb_artery_of_precentral_sulcus",
-   "name": "Artery of precentral sulcus",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_artery_of_precentral_sulcus.glb",
-   "bytes": 48080,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -44.67,
-     0.59,
-     74.3
-    ],
-    "R": [
-     44.67,
-     0.59,
-     74.3
-    ]
-   },
-   "intracranialFraction": 1.0
   },
   {
    "id": "sb_artery_of_pterygoid_canal",
@@ -762,45 +501,8 @@
      -19.64
     ]
    },
+   "system": "Maxillary artery",
    "intracranialFraction": 1.0
-  },
-  {
-   "id": "sb_ascending_pharyngeal_artery",
-   "name": "Ascending pharyngeal artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_ascending_pharyngeal_artery.glb",
-   "bytes": 32292,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -24.63,
-     9.54,
-     -49.4
-    ],
-    "R": [
-     24.63,
-     9.54,
-     -49.4
-    ]
-   },
-   "intracranialFraction": 0.0
   },
   {
    "id": "sb_basilar_artery",
@@ -838,83 +540,8 @@
      -3.55
     ]
    },
+   "system": "Basilar artery",
    "intracranialFraction": 1.0
-  },
-  {
-   "id": "sb_branch_to_angular_gyrus",
-   "name": "Branch to angular gyrus",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_branch_to_angular_gyrus.glb",
-   "bytes": 6152,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -60.29,
-     -78.34,
-     35.37
-    ],
-    "R": [
-     60.29,
-     -78.34,
-     35.37
-    ]
-   },
-   "intracranialFraction": 1.0
-  },
-  {
-   "id": "sb_buccal_artery",
-   "name": "Buccal artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_buccal_artery.glb",
-   "bytes": 9304,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -31.95,
-     30.28,
-     -37.96
-    ],
-    "R": [
-     31.95,
-     30.28,
-     -37.96
-    ]
-   },
-   "intracranialFraction": 0.28
   },
   {
    "id": "sb_buccal_nerve",
@@ -956,44 +583,6 @@
    "intracranialFraction": 0.08
   },
   {
-   "id": "sb_callosomarginal_artery",
-   "name": "Callosomarginal artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_callosomarginal_artery.glb",
-   "bytes": 44540,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -3.38,
-     21.79,
-     75.16
-    ],
-    "R": [
-     3.38,
-     21.79,
-     75.16
-    ]
-   },
-   "intracranialFraction": 1.0
-  },
-  {
    "id": "sb_cavernous_sinus",
    "name": "Cavernous sinus",
    "aliases": [],
@@ -1029,44 +618,6 @@
      7.72
     ]
    }
-  },
-  {
-   "id": "sb_central_retinal_artery",
-   "name": "Central retinal artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_central_retinal_artery.glb",
-   "bytes": 192012,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -29.0,
-     41.0,
-     -4.09
-    ],
-    "R": [
-     29.0,
-     41.0,
-     -4.09
-    ]
-   },
-   "intracranialFraction": 0.88
   },
   {
    "id": "sb_chorda_tympani",
@@ -1147,44 +698,6 @@
    "intracranialFraction": 1.0
   },
   {
-   "id": "sb_descending_palatine_artery",
-   "name": "Descending palatine artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_descending_palatine_artery.glb",
-   "bytes": 10028,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -19.51,
-     24.54,
-     -25.6
-    ],
-    "R": [
-     19.51,
-     24.54,
-     -25.6
-    ]
-   },
-   "intracranialFraction": 0.86
-  },
-  {
    "id": "sb_distal_lateral_striate_branches",
    "name": "Distal lateral striate branches",
    "aliases": [],
@@ -1220,6 +733,7 @@
      23.81
     ]
    },
+   "system": "Middle cerebral artery",
    "intracranialFraction": 1.0
   },
   {
@@ -1260,44 +774,6 @@
    }
   },
   {
-   "id": "sb_external_carotid_artery",
-   "name": "External carotid artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_external_carotid_artery.glb",
-   "bytes": 7944,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -37.32,
-     -12.36,
-     -66.59
-    ],
-    "R": [
-     37.32,
-     -12.36,
-     -66.59
-    ]
-   },
-   "intracranialFraction": 0.22
-  },
-  {
    "id": "sb_external_jugular_vein",
    "name": "External jugular vein",
    "aliases": [],
@@ -1331,44 +807,6 @@
      48.11,
      -14.9,
      -75.8
-    ]
-   },
-   "intracranialFraction": 0.0
-  },
-  {
-   "id": "sb_facial_artery",
-   "name": "Facial artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_facial_artery.glb",
-   "bytes": 14700,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -34.91,
-     27.57,
-     -68.93
-    ],
-    "R": [
-     34.91,
-     27.57,
-     -68.93
     ]
    },
    "intracranialFraction": 0.0
@@ -1525,82 +963,6 @@
    }
   },
   {
-   "id": "sb_frontal_branch_of_superficial_temporal_artery",
-   "name": "Frontal branch of superficial temporal artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_frontal_branch_of_superficial_temporal_artery.glb",
-   "bytes": 16612,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -40.57,
-     55.06,
-     45.98
-    ],
-    "R": [
-     40.57,
-     55.06,
-     45.98
-    ]
-   },
-   "intracranialFraction": 0.0
-  },
-  {
-   "id": "sb_frontal_branches_of_callosomarginal_artery",
-   "name": "Frontal branches of callosomarginal artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_frontal_branches_of_callosomarginal_artery.glb",
-   "bytes": 9124,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -5.72,
-     36.65,
-     75.64
-    ],
-    "R": [
-     5.72,
-     36.65,
-     75.64
-    ]
-   },
-   "intracranialFraction": 1.0
-  },
-  {
    "id": "sb_glossopharyngeal_nerve_ix",
    "name": "Glossopharyngeal nerve (IX)",
    "aliases": [],
@@ -1638,44 +1000,6 @@
    },
    "cranialNerve": 9,
    "intracranialFraction": 0.69
-  },
-  {
-   "id": "sb_greater_palatine_artery",
-   "name": "Greater palatine artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_greater_palatine_artery.glb",
-   "bytes": 12604,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -11.8,
-     45.73,
-     -44.67
-    ],
-    "R": [
-     11.8,
-     45.73,
-     -44.67
-    ]
-   },
-   "intracranialFraction": 0.0
   },
   {
    "id": "sb_hypoglossal_nerve_xii",
@@ -1717,44 +1041,6 @@
    "intracranialFraction": 0.7
   },
   {
-   "id": "sb_inferior_alveolar_artery",
-   "name": "Inferior alveolar artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_inferior_alveolar_artery.glb",
-   "bytes": 24616,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -29.27,
-     27.47,
-     -67.99
-    ],
-    "R": [
-     29.27,
-     27.47,
-     -67.99
-    ]
-   },
-   "intracranialFraction": 0.1
-  },
-  {
    "id": "sb_inferior_alveolar_nerve",
    "name": "Inferior alveolar nerve",
    "aliases": [],
@@ -1791,44 +1077,6 @@
     ]
    },
    "cranialNerve": 5,
-   "intracranialFraction": 0.0
-  },
-  {
-   "id": "sb_inferior_labial_artery",
-   "name": "Inferior labial artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_inferior_labial_artery.glb",
-   "bytes": 11520,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -21.05,
-     54.79,
-     -73.49
-    ],
-    "R": [
-     21.05,
-     54.79,
-     -73.49
-    ]
-   },
    "intracranialFraction": 0.0
   },
   {
@@ -2021,44 +1269,6 @@
    "intracranialFraction": 1.0
   },
   {
-   "id": "sb_infra_orbital_artery",
-   "name": "Infra-orbital artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_infra_orbital_artery.glb",
-   "bytes": 10476,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -26.84,
-     47.62,
-     -24.58
-    ],
-    "R": [
-     26.84,
-     47.62,
-     -24.58
-    ]
-   },
-   "intracranialFraction": 0.2
-  },
-  {
    "id": "sb_insular_branches_of_middle_cerebral_artery_m2_segment",
    "name": "Insular branches of middle cerebral artery (M2 segment)",
    "aliases": [],
@@ -2094,6 +1304,7 @@
      27.43
     ]
    },
+   "system": "Middle cerebral artery",
    "intracranialFraction": 1.0
   },
   {
@@ -2132,45 +1343,8 @@
      -36.75
     ]
    },
+   "system": "Internal carotid artery",
    "intracranialFraction": 0.62
-  },
-  {
-   "id": "sb_lacrimal_artery",
-   "name": "Lacrimal artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_lacrimal_artery.glb",
-   "bytes": 16480,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -36.37,
-     40.56,
-     10.17
-    ],
-    "R": [
-     36.37,
-     40.56,
-     10.17
-    ]
-   },
-   "intracranialFraction": 1.0
   },
   {
    "id": "sb_lacrimal_bone",
@@ -2210,82 +1384,6 @@
    }
   },
   {
-   "id": "sb_lateral_frontobasal_artery",
-   "name": "Lateral frontobasal artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_lateral_frontobasal_artery.glb",
-   "bytes": 26612,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -38.6,
-     42.31,
-     43.5
-    ],
-    "R": [
-     38.6,
-     42.31,
-     43.5
-    ]
-   },
-   "intracranialFraction": 1.0
-  },
-  {
-   "id": "sb_lateral_occipital_artery",
-   "name": "Lateral occipital artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_lateral_occipital_artery.glb",
-   "bytes": 17904,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -30.25,
-     -78.13,
-     10.43
-    ],
-    "R": [
-     30.25,
-     -78.13,
-     10.43
-    ]
-   },
-   "intracranialFraction": 1.0
-  },
-  {
    "id": "sb_lateral_pontine_branches_of_basilar_artery",
    "name": "Lateral pontine branches of basilar artery",
    "aliases": [],
@@ -2321,6 +1419,7 @@
      -7.62
     ]
    },
+   "system": "Basilar artery",
    "intracranialFraction": 1.0
   },
   {
@@ -2401,44 +1500,6 @@
    "intracranialFraction": 0.0
   },
   {
-   "id": "sb_long_posterior_ciliary_arteries",
-   "name": "Long posterior ciliary arteries",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_long_posterior_ciliary_arteries.glb",
-   "bytes": 15960,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -24.04,
-     31.34,
-     9.26
-    ],
-    "R": [
-     24.04,
-     31.34,
-     9.26
-    ]
-   },
-   "intracranialFraction": 1.0
-  },
-  {
    "id": "sb_maxilla",
    "name": "Maxilla",
    "aliases": [],
@@ -2511,6 +1572,7 @@
      -34.99
     ]
    },
+   "system": "Maxillary artery",
    "intracranialFraction": 0.22
   },
   {
@@ -2591,44 +1653,6 @@
    "intracranialFraction": 0.16
   },
   {
-   "id": "sb_medial_occipital_artery",
-   "name": "Medial occipital artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_medial_occipital_artery.glb",
-   "bytes": 21544,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -4.65,
-     -82.64,
-     19.72
-    ],
-    "R": [
-     4.65,
-     -82.64,
-     19.72
-    ]
-   },
-   "intracranialFraction": 1.0
-  },
-  {
    "id": "sb_medial_pontine_branches_of_basilar_artery",
    "name": "Medial pontine branches of basilar artery",
    "aliases": [],
@@ -2664,6 +1688,7 @@
      -1.17
     ]
    },
+   "system": "Basilar artery",
    "intracranialFraction": 1.0
   },
   {
@@ -2704,44 +1729,6 @@
    },
    "cranialNerve": 5,
    "intracranialFraction": 0.63
-  },
-  {
-   "id": "sb_mental_branch_of_inferior_alveolar_artery",
-   "name": "Mental branch of inferior alveolar artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_mental_branch_of_inferior_alveolar_artery.glb",
-   "bytes": 6696,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -13.23,
-     60.55,
-     -82.78
-    ],
-    "R": [
-     13.23,
-     60.55,
-     -82.78
-    ]
-   },
-   "intracranialFraction": 0.0
   },
   {
    "id": "sb_mental_nerve",
@@ -2818,44 +1805,7 @@
      15.14
     ]
    },
-   "intracranialFraction": 1.0
-  },
-  {
-   "id": "sb_middle_cerebral_artery_m3_segment",
-   "name": "Middle cerebral artery (M3 segment)",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_middle_cerebral_artery_m3_segment.glb",
-   "bytes": 14996,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -55.36,
-     -35.1,
-     38.92
-    ],
-    "R": [
-     55.36,
-     -35.1,
-     38.92
-    ]
-   },
+   "system": "Middle cerebral artery",
    "intracranialFraction": 1.0
   },
   {
@@ -2894,45 +1844,8 @@
      -19.57
     ]
    },
+   "system": "Middle meningeal artery",
    "intracranialFraction": 1.0
-  },
-  {
-   "id": "sb_mylohyoid_branch_of_inferior_alveolar_artery",
-   "name": "Mylohyoid branch of inferior alveolar artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_mylohyoid_branch_of_inferior_alveolar_artery.glb",
-   "bytes": 10248,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -33.49,
-     4.09,
-     -58.9
-    ],
-    "R": [
-     33.49,
-     4.09,
-     -58.9
-    ]
-   },
-   "intracranialFraction": 0.0
   },
   {
    "id": "sb_nasal_bone",
@@ -3046,44 +1959,6 @@
      6.12
     ]
    }
-  },
-  {
-   "id": "sb_occipital_artery",
-   "name": "Occipital artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_occipital_artery.glb",
-   "bytes": 51196,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -47.55,
-     -92.48,
-     30.08
-    ],
-    "R": [
-     47.55,
-     -92.48,
-     30.08
-    ]
-   },
-   "intracranialFraction": 0.09
   },
   {
    "id": "sb_occipital_bone",
@@ -3312,6 +2187,7 @@
      6.96
     ]
    },
+   "system": "Internal carotid artery",
    "intracranialFraction": 1.0
   },
   {
@@ -3430,44 +2306,6 @@
    "intracranialFraction": 1.0
   },
   {
-   "id": "sb_orbitofrontal_branches_of_anterior_cerebral_artery",
-   "name": "Orbitofrontal branches of anterior cerebral artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_orbitofrontal_branches_of_anterior_cerebral_artery.glb",
-   "bytes": 15628,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -5.29,
-     47.85,
-     23.42
-    ],
-    "R": [
-     5.29,
-     47.85,
-     23.42
-    ]
-   },
-   "intracranialFraction": 1.0
-  },
-  {
    "id": "sb_palatine_bone",
    "name": "Palatine bone",
    "aliases": [],
@@ -3540,158 +2378,6 @@
      67.23
     ]
    }
-  },
-  {
-   "id": "sb_parietal_branches_of_middle_cerebral_artery",
-   "name": "Parietal branches of middle cerebral artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_parietal_branches_of_middle_cerebral_artery.glb",
-   "bytes": 19052,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -59.75,
-     -53.18,
-     65.15
-    ],
-    "R": [
-     59.75,
-     -53.18,
-     65.15
-    ]
-   },
-   "intracranialFraction": 1.0
-  },
-  {
-   "id": "sb_parieto_occipital_artery",
-   "name": "Parieto-occipital artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_parieto_occipital_artery.glb",
-   "bytes": 28164,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -5.99,
-     -81.68,
-     45.5
-    ],
-    "R": [
-     5.99,
-     -81.68,
-     45.5
-    ]
-   },
-   "intracranialFraction": 1.0
-  },
-  {
-   "id": "sb_pericallosal_artery",
-   "name": "Pericallosal artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_pericallosal_artery.glb",
-   "bytes": 94720,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -5.23,
-     -29.68,
-     72.28
-    ],
-    "R": [
-     5.23,
-     -29.68,
-     72.28
-    ]
-   },
-   "intracranialFraction": 1.0
-  },
-  {
-   "id": "sb_postcentral_arterial_branch",
-   "name": "Postcentral arterial branch",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_postcentral_arterial_branch.glb",
-   "bytes": 20720,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -55.61,
-     -38.89,
-     69.41
-    ],
-    "R": [
-     55.61,
-     -38.89,
-     69.41
-    ]
-   },
-   "intracranialFraction": 1.0
   },
   {
    "id": "sb_posterior_auricular_vein",
@@ -3767,6 +2453,7 @@
      15.15
     ]
    },
+   "system": "Posterior cerebral artery",
    "intracranialFraction": 1.0
   },
   {
@@ -3805,44 +2492,7 @@
      11.71
     ]
    },
-   "intracranialFraction": 1.0
-  },
-  {
-   "id": "sb_posterior_deep_temporal_artery",
-   "name": "Posterior deep temporal artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_posterior_deep_temporal_artery.glb",
-   "bytes": 15160,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -56.77,
-     8.37,
-     11.18
-    ],
-    "R": [
-     56.77,
-     8.37,
-     11.18
-    ]
-   },
+   "system": "Internal carotid artery",
    "intracranialFraction": 1.0
   },
   {
@@ -3958,6 +2608,7 @@
      3.74
     ]
    },
+   "system": "Ethmoidal arteries",
    "intracranialFraction": 1.0
   },
   {
@@ -3996,6 +2647,7 @@
      -21.64
     ]
    },
+   "system": "Vertebral artery",
    "intracranialFraction": 1.0
   },
   {
@@ -4038,7 +2690,7 @@
   },
   {
    "id": "sb_posterior_lateral_nasal_branches_of_sphenopalatine_artery",
-   "name": "Posterior lateral nasal branches of sphenopalatine artery.",
+   "name": "Posterior lateral nasal branches of sphenopalatine artery",
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_lateral_nasal_branches_of_sphenopalatine_artery.glb",
@@ -4072,45 +2724,8 @@
      -17.95
     ]
    },
+   "system": "Maxillary artery",
    "intracranialFraction": 0.54
-  },
-  {
-   "id": "sb_posterior_parietal_artery",
-   "name": "Posterior parietal artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_posterior_parietal_artery.glb",
-   "bytes": 33540,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -52.6,
-     -75.83,
-     57.3
-    ],
-    "R": [
-     52.6,
-     -75.83,
-     57.3
-    ]
-   },
-   "intracranialFraction": 1.0
   },
   {
    "id": "sb_posterior_septal_branches_of_sphenopalatine_artery",
@@ -4148,121 +2763,8 @@
      -33.9
     ]
    },
+   "system": "Maxillary artery",
    "intracranialFraction": 0.23
-  },
-  {
-   "id": "sb_posterior_superior_alveolar_artery",
-   "name": "Posterior superior alveolar artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_posterior_superior_alveolar_artery.glb",
-   "bytes": 8736,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -30.55,
-     21.75,
-     -27.92
-    ],
-    "R": [
-     30.55,
-     21.75,
-     -27.92
-    ]
-   },
-   "intracranialFraction": 0.74
-  },
-  {
-   "id": "sb_posterior_temporal_branch",
-   "name": "Posterior temporal branch",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_posterior_temporal_branch.glb",
-   "bytes": 18880,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -58.71,
-     -71.55,
-     18.7
-    ],
-    "R": [
-     58.71,
-     -71.55,
-     18.7
-    ]
-   },
-   "intracranialFraction": 1.0
-  },
-  {
-   "id": "sb_prefrontal_artery",
-   "name": "Prefrontal artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_prefrontal_artery.glb",
-   "bytes": 24468,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -46.82,
-     22.91,
-     62.98
-    ],
-    "R": [
-     46.82,
-     22.91,
-     62.98
-    ]
-   },
-   "intracranialFraction": 1.0
   },
   {
    "id": "sb_proximal_lateral_striate_branches",
@@ -4300,6 +2802,7 @@
      22.2
     ]
    },
+   "system": "Middle cerebral artery",
    "intracranialFraction": 1.0
   },
   {
@@ -4339,82 +2842,6 @@
     ]
    },
    "intracranialFraction": 0.68
-  },
-  {
-   "id": "sb_septal_branches_of_posterior_ethmoidal_artery",
-   "name": "Septal branches of posterior ethmoidal artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_septal_branches_of_posterior_ethmoidal_artery.glb",
-   "bytes": 10800,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -3.17,
-     22.78,
-     -8.85
-    ],
-    "R": [
-     3.17,
-     22.78,
-     -8.85
-    ]
-   },
-   "intracranialFraction": 1.0
-  },
-  {
-   "id": "sb_short_posterior_ciliary_arteries",
-   "name": "Short posterior ciliary arteries",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_short_posterior_ciliary_arteries.glb",
-   "bytes": 9872,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -19.73,
-     23.92,
-     5.94
-    ],
-    "R": [
-     19.73,
-     23.92,
-     5.94
-    ]
-   },
-   "intracranialFraction": 1.0
   },
   {
    "id": "sb_sigmoid_sinus",
@@ -4604,44 +3031,6 @@
    "intracranialFraction": 1.0
   },
   {
-   "id": "sb_submental_artery",
-   "name": "Submental artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_submental_artery.glb",
-   "bytes": 19608,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -18.38,
-     45.85,
-     -89.69
-    ],
-    "R": [
-     18.38,
-     45.85,
-     -89.69
-    ]
-   },
-   "intracranialFraction": 0.0
-  },
-  {
    "id": "sb_submental_vein",
    "name": "Submental vein",
    "aliases": [],
@@ -4678,44 +3067,6 @@
     ]
    },
    "intracranialFraction": 0.0
-  },
-  {
-   "id": "sb_superficial_temporal_artery",
-   "name": "Superficial temporal artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_superficial_temporal_artery.glb",
-   "bytes": 88172,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -67.14,
-     -26.61,
-     38.47
-    ],
-    "R": [
-     67.14,
-     -26.61,
-     38.47
-    ]
-   },
-   "intracranialFraction": 0.04
   },
   {
    "id": "sb_superficial_temporal_veins",
@@ -4791,45 +3142,8 @@
      6.23
     ]
    },
+   "system": "Basilar artery",
    "intracranialFraction": 1.0
-  },
-  {
-   "id": "sb_superior_labial_artery",
-   "name": "Superior labial artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_superior_labial_artery.glb",
-   "bytes": 8324,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -21.17,
-     64.36,
-     -50.29
-    ],
-    "R": [
-     21.17,
-     64.36,
-     -50.29
-    ]
-   },
-   "intracranialFraction": 0.0
   },
   {
    "id": "sb_superior_labial_vein",
@@ -4984,82 +3298,6 @@
    "intracranialFraction": 1.0
   },
   {
-   "id": "sb_supra_orbital_artery",
-   "name": "Supra-orbital artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_supra_orbital_artery.glb",
-   "bytes": 23968,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -25.13,
-     61.98,
-     27.34
-    ],
-    "R": [
-     25.13,
-     61.98,
-     27.34
-    ]
-   },
-   "intracranialFraction": 0.31
-  },
-  {
-   "id": "sb_supratrochlear_artery",
-   "name": "Supratrochlear artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_supratrochlear_artery.glb",
-   "bytes": 22016,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -12.73,
-     57.71,
-     15.34
-    ],
-    "R": [
-     12.73,
-     57.71,
-     15.34
-    ]
-   },
-   "intracranialFraction": 0.9
-  },
-  {
    "id": "sb_temporal_bone",
    "name": "Temporal bone",
    "aliases": [],
@@ -5097,82 +3335,6 @@
    }
   },
   {
-   "id": "sb_temporal_branches_of_middle_cerebral_artery",
-   "name": "Temporal branches of middle cerebral artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_temporal_branches_of_middle_cerebral_artery.glb",
-   "bytes": 22980,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -63.32,
-     -37.45,
-     21.3
-    ],
-    "R": [
-     63.32,
-     -37.45,
-     21.3
-    ]
-   },
-   "intracranialFraction": 1.0
-  },
-  {
-   "id": "sb_temporo_occipital_branch",
-   "name": "Temporo-occipital branch",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_temporo_occipital_branch.glb",
-   "bytes": 35316,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -38.38,
-     -97.28,
-     30.36
-    ],
-    "R": [
-     38.38,
-     -97.28,
-     30.36
-    ]
-   },
-   "intracranialFraction": 1.0
-  },
-  {
    "id": "sb_tentorium_cerebelli",
    "name": "Tentorium cerebelli",
    "aliases": [],
@@ -5208,44 +3370,6 @@
      4.48
     ]
    }
-  },
-  {
-   "id": "sb_transverse_facial_artery",
-   "name": "Transverse facial artery",
-   "aliases": [],
-   "type": "tube",
-   "file": "assets/skullbase/sb_transverse_facial_artery.glb",
-   "bytes": 18584,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
-   "centroid": {
-    "L": [
-     -46.59,
-     34.98,
-     -25.44
-    ],
-    "R": [
-     46.59,
-     34.98,
-     -25.44
-    ]
-   },
-   "intracranialFraction": 0.23
   },
   {
    "id": "sb_transverse_sinus",
@@ -5438,6 +3562,7 @@
      -43.37
     ]
    },
+   "system": "Vertebral artery",
    "intracranialFraction": 0.63
   },
   {
@@ -5592,6 +3717,17 @@
     ]
    }
   }
+ ],
+ "arterySystems": [
+  "Internal carotid artery",
+  "Anterior cerebral artery",
+  "Middle cerebral artery",
+  "Vertebral artery",
+  "Basilar artery",
+  "Posterior cerebral artery",
+  "Middle meningeal artery",
+  "Ethmoidal arteries",
+  "Maxillary artery"
  ],
  "dataset": {
   "name": "Z-Anatomy (based on BodyParts3D)",

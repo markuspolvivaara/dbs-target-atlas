@@ -41,6 +41,35 @@ function cnName(cn: number, members: string[]): string {
   if (trunk) return nameOf(trunk).replace(/\s*\([IVX]+\)$/, '');
   return members.length === 1 ? nameOf(members[0]) : `Cranial nerve ${ROMAN[cn - 1] ?? ''}`;
 }
+
+/** A nerve (I-XII) or an artery system with its members; trunk: one member is the nerve or artery itself. */
+interface Subgroup { num: string; title: string; members: string[]; trunk: boolean }
+function subgroups(kind: 'nerve' | 'artery', ids: string[]): Subgroup[] {
+  if (kind === 'nerve') {
+    return byCranialNerve(ids).map(([cn, m]) => ({
+      num: cn <= 12 ? ROMAN[cn - 1] : '', title: cnName(cn, m), members: m,
+      trunk: m.some((id) => nameOf(id).endsWith(`(${ROMAN[cn - 1]})`)),
+    }));
+  }
+  // arteries by system, in the order the manifest gives; the system's own artery first
+  const order = SB_MANIFEST.arterySystems;
+  const by = new Map<string, string[]>();
+  for (const id of ids) {
+    const k = SB.get(id)?.system ?? '';
+    by.set(k, [...(by.get(k) ?? []), id]);
+  }
+  // the system's own artery: its name, or its name with a segment ('Middle cerebral artery (M1 segment)')
+  const own = (id: string, k: string) => nameOf(id) === k || nameOf(id).startsWith(`${k} (`);
+  return [...by].sort(([a], [b]) => order.indexOf(a) - order.indexOf(b)).map(([k, m]) => ({
+    num: '', title: k, trunk: m.some((id) => own(id, k)),
+    members: m.sort((a, b) => Number(!own(a, k)) - Number(!own(b, k)) || nameOf(a).localeCompare(nameOf(b))),
+  }));
+}
+const subLabel = (g: Subgroup) => {
+  const n = g.members.length - 1;
+  const extra = !n ? '' : g.trunk ? ` (+${n} branch${n > 1 ? 'es' : ''})` : ` (${g.members.length})`;
+  return `${g.num ? g.num + ' ' : ''}${g.title}${extra}`;
+};
 const tokenOf = (id: string) => SB.get(id)?.colour.token ?? 'ctx';
 
 /** The 3D page of the skull-base section: groups, structure and landmark cards, layers and the cut-away. */
@@ -227,20 +256,22 @@ export class SkullbaseAtlasPage {
       h('span', { class: 'list-actions' },
         h('button', { type: 'button', class: 'linklike', onclick: () => show(ids, true) }, 'Show all'),
         h('button', { type: 'button', class: 'linklike', onclick: () => show(ids, false) }, 'Hide all')));
-    // vessels, nerves and soft tissue: one list per kind; cranial nerves in order I-XII, each under its own heading
+    // vessels, nerves and soft tissue: one list per kind; cranial nerves (I-XII) and artery systems each under
+    // their own heading
     for (const k of ['nerve', 'artery', 'vein', 'soft'] as const) {
       const ids = g.structures.filter((id) => { const st = SB.get(id); return st && st.type !== 'bone' && kindOf(st) === k; });
       if (!ids.length) continue;
       pane.append(listHead(KIND_PLURAL[KIND_LABEL[k]] ?? KIND_LABEL[k], ids));
-      if (k !== 'nerve') { pane.append(h('div', { class: 'chips wrap sb-list' }, ...ids.map(entry))); continue; }
-      for (const [cn, members] of byCranialNerve(ids)) {
-        if (members.length === 1) { // a nerve without separate branches: one row
-          pane.append(h('div', { class: 'cn-head single' }, h('span', { class: 'cn-num' }, cn <= 12 ? ROMAN[cn - 1] : ''), entry(members[0])));
+      if (k !== 'nerve' && k !== 'artery') { pane.append(h('div', { class: 'chips wrap sb-list' }, ...ids.map(entry))); continue; }
+      const nums = k === 'nerve';
+      for (const sg of subgroups(k, ids)) {
+        if (sg.members.length === 1) { // no separate branches: one row
+          pane.append(h('div', { class: `cn-head single${nums ? '' : ' no-num'}` }, nums ? h('span', { class: 'cn-num' }, sg.num) : null, entry(sg.members[0])));
           continue;
         }
-        pane.append(h('div', { class: 'cn-head' }, h('span', { class: 'cn-num' }, ROMAN[cn - 1]), eye(members, `cranial nerve ${ROMAN[cn - 1]}`),
-          h('span', {}, `${cnName(cn, members)} and branches`)),
-          h('div', { class: 'chips wrap sb-list cn-list' }, ...members.map(entry)));
+        pane.append(h('div', { class: `cn-head${nums ? '' : ' no-num'}` }, nums ? h('span', { class: 'cn-num' }, sg.num) : null, eye(sg.members, sg.title),
+          h('span', {}, sg.trunk ? `${sg.title} and branches` : sg.title)),
+          h('div', { class: `chips wrap sb-list cn-list${nums ? '' : ' no-num'}` }, ...sg.members.map(entry)));
       }
     }
     if (boneIds.length && g.kind !== 'overview') pane.append(h('p', { class: 'chips-label' }, 'Bones'), h('div', { class: 'chips wrap sb-list' }, ...boneIds.map((id) => btn(id))));
@@ -318,10 +349,10 @@ export class SkullbaseAtlasPage {
     if (this.s.layers.nuclei.on && bones.length) this.legend.append(row('solid', 'sbBone', `Bones (${bones.length})`, bones));
     for (const [k, ids] of kinds) {
       this.legend.append(row(k === 'Soft tissue' ? 'patch' : 'solid', tokenOf(ids[0]), `${KIND_PLURAL[k] ?? k} (${ids.length})`, ids));
-      if (k !== KIND_LABEL.nerve) continue;
-      // each cranial nerve on its own row (with its branches), I-XII
-      for (const [cn, members] of byCranialNerve(ids)) {
-        const r = row('solid', tokenOf(members[0]), `${cn <= 12 ? ROMAN[cn - 1] + ' ' : ''}${cnName(cn, members)}${members.length > 1 ? ` (+${members.length - 1} branches)` : ''}`, members);
+      if (k !== KIND_LABEL.nerve && k !== KIND_LABEL.artery) continue;
+      // each cranial nerve (I-XII) and each artery system on its own row, with its branches
+      for (const sg of subgroups(k === KIND_LABEL.nerve ? 'nerve' : 'artery', ids)) {
+        const r = row('solid', tokenOf(sg.members[0]), subLabel(sg), sg.members);
         r.classList.add('lg-sub');
         this.legend.append(r);
       }

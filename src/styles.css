@@ -138,6 +138,7 @@ ul.plain { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
 .list-actions { display: inline-flex; gap: 12px; font-size: 13px; }
 .cn-head { display: flex; align-items: center; gap: 8px; margin: 10px 0 4px; font-weight: 700; font-size: 14px; }
 .cn-list { margin-left: calc(2.6em + 8px); }
+.cn-list.no-num { margin-left: 30px; }
 .cn-head.single { font-weight: 400; margin: 6px 0; }
 .cn-num { width: 2.6em; flex: none; font-weight: 700; }
 .tlabel { align-self: center; font-size: 12px; color: var(--muted); padding: 0 4px 0 6px; }

@@ -55,8 +55,8 @@ export const SB_GROUPS: SbGroup[] = [
   },
   {
     id: 'arteries', kind: 'system', name: 'Arteries', camera: 'axial', hemi: 'both', cutAbove: null, focus: null, radius: 85,
-    description: 'Arteries of the model running mostly (at least 60% of their length) inside the outline of the cranial bones, measured.',
-    structures: SB_MANIFEST.structures.filter((s) => kindOf(s) === 'artery' && (s.intracranialFraction ?? 0) >= 0.6).map((s) => s.id), landmarks: [],
+    description: `The arteries kept for skull-base teaching, by system: ${SB_MANIFEST.arterySystems.join(', ').toLowerCase()}. Other external carotid branches (to the face, scalp, jaw and nose), distal cortical branches and small orbital branches of the model are left out. Show or hide each one in the list.`,
+    structures: ofKind('artery'), landmarks: [],
   },
   {
     id: 'veins', kind: 'system', name: 'Veins and dural sinuses', camera: 'posteriorOblique', hemi: 'both', cutAbove: null, focus: null, radius: 85,

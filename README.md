@@ -78,6 +78,12 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
   foramen ovale (25 mm around the foramen magnum), measured, with the distance on each item.
 - Vessels and nerves are tubes with the calibre Z-Anatomy models (its curve bevel; modelled, not measured).
   Each can be shown or hidden on its own; the cranial nerves are listed I–XII with their branches.
+- Arteries are limited to those kept for skull-base teaching (an editorial selection, `ARTERY_SYSTEMS` in
+  `pipeline/skullbase_build.py`): internal carotid with ophthalmic and posterior communicating, anterior, middle (M1,
+  M2, lenticulostriate) and posterior cerebral, vertebral with PICA and anterior spinal, basilar with AICA, SCA and
+  pontine branches, middle meningeal and ethmoidal arteries, and the maxillary artery with the sphenopalatine
+  branches and the artery of the pterygoid canal (endoscopic endonasal landmarks). The panel and legend list them by
+  system.
 - Bones are smoothed by one subdivision level (then decimated) and shaded with baked ambient occlusion. The
   geometry is Z-Anatomy's simplified BodyParts3D model: finer open skull models were checked (BodyParts3D's own
   release, the SPL head and neck atlas, MUG500+ CT skulls) and are either no finer, unlabelled or too noisy.

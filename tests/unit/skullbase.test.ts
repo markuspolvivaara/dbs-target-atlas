@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { crossCheckSb, DEFINITIONS, LANDMARKS, NOT_YET_SHOWN, REGIONS, SB_MANIFEST } from '../../src/skullbase';
+import { crossCheckSb, DEFINITIONS, definitionFor, LANDMARKS, NOT_YET_SHOWN, REGIONS, SB_MANIFEST } from '../../src/skullbase';
 import { SB_GROUPS } from '../../src/skullbase/groups';
 import { skullPlan, skullScene } from '../../src/skullbase/scene';
 import { decodeSkull, defaultSkullState, encodeSkull } from '../../src/skullbase/state';
@@ -35,7 +35,7 @@ describe('skull-base data (Z-Anatomy export)', () => {
   });
   it('vessels and nerves are tube meshes; every nerve knows its cranial nerve, and I–XII are all there', async () => {
     const tubes = SB_MANIFEST.structures.filter((s) => s.type === 'tube');
-    expect(tubes.length).toBeGreaterThan(100);
+    expect(tubes.length).toBeGreaterThan(60);
     expect(SB_MANIFEST.structures.some((s) => s.type === 'tract')).toBe(false);
     const nerves = tubes.filter((s) => s.category === 'nerve');
     expect(nerves.every((s) => s.cranialNerve !== undefined)).toBe(true);
@@ -46,6 +46,15 @@ describe('skull-base data (Z-Anatomy export)', () => {
     const means = await nodeMeans(ica.file);
     expect(means.L[0]).toBeLessThan(0);
     expect(means.R[0]).toBeGreaterThan(0);
+  });
+  it('keeps only the arteries selected for skull-base teaching, each under its system', () => {
+    const arts = SB_MANIFEST.structures.filter((s) => s.category === 'artery');
+    const names = new Set(arts.map((s) => s.name));
+    for (const n of ['Internal carotid artery', 'Anterior cerebral artery', 'Middle cerebral artery (M1 segment)', 'Posterior cerebral artery',
+      'Posterior inferior cerebellar artery', 'Anterior inferior cerebellar artery', 'Superior cerebellar artery', 'Basilar artery', 'Middle meningeal artery']) expect(names.has(n), n).toBe(true);
+    for (const n of ['Facial artery', 'Superficial temporal artery', 'Pericallosal artery', 'Lingual artery']) expect(names.has(n), n).toBe(false);
+    expect(arts.every((s) => SB_MANIFEST.arterySystems.includes(s.system ?? ''))).toBe(true);
+    expect(definitionFor('Middle cerebral artery (M1 segment)')).not.toBeNull();
   });
   it('the missing landmarks are listed as not yet shown', () => {
     expect(NOT_YET_SHOWN).toContain('Jugular foramen');
