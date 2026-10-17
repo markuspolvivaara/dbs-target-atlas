@@ -377,7 +377,20 @@ test('home page: sections, light load, and old links forward to the DBS section'
   // open the DBS section from the home page; the header leads back
   await page.locator('.section-card[data-section="dbs"] a.btn').click();
   await settle(page);
-  await expect(page.locator('.section-chip')).toHaveText('DBS targets');
+  await expect(page.locator('.section-chip')).toContainText('DBS targets');
+  // the section menu switches to the white-matter section and back
+  await page.locator('.section-chip').click();
+  await expect(page.locator('.section-menu [aria-current="page"]')).toHaveText('DBS targets');
+  await page.locator('.section-menu a', { hasText: 'White-matter tracts' }).click();
+  await settle(page);
+  await expect(page).toHaveTitle(/· White-matter tracts · Open Neuroanatomy Atlas$/);
+  await page.locator('.section-chip').press('ArrowDown');
+  await expect(page.locator('.section-menu')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.section-menu')).toBeHidden();
+  await page.locator('.section-chip').click();
+  await page.locator('.section-menu a', { hasText: 'DBS targets' }).click();
+  await settle(page);
   await expect(page).toHaveTitle(/· DBS targets · Open Neuroanatomy Atlas$/);
   await page.locator('a.brand').click();
   await expect(page.locator('h1')).toHaveText('Open Neuroanatomy Atlas');
@@ -477,6 +490,12 @@ test('core and extended tracts stay separate; the switch moves between them', as
   await expect(page.locator('.tract-btn')).toHaveCount(4);
   // only extended groups are offered while the extended set is open
   await expect(page.locator('.grp-chips .chip', { hasText: 'Vision' })).toHaveCount(0);
+  // "All" is offered first in the function row of each set
+  await expect(page.locator('.grp-chips').first().locator('.chip').first()).toHaveText('All');
+  await page.locator('.tier-btn[data-tier="core"]').click();
+  await page.locator('.grp-chips').first().locator('.chip', { hasText: /^All$/ }).click();
+  await expect(page.locator('.tract-btn[data-tract="wm_cc"]')).toBeVisible();
+  await page.locator('.tier-btn[data-tier="extended"]').click();
   await page.locator('.tract-btn[data-tract="wm_mdlf"]').click();
   await expect(page.locator('.card.sel .eyebrow')).toHaveText('Association tract · Extended');
   await page.locator('.tier-btn[data-tier="core"]').click();

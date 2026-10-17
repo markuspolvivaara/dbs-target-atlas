@@ -49,8 +49,17 @@ code { font-size: 0.92em; }
   background: var(--surface); border-bottom: 1px solid var(--line);
 }
 .brand { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--ink); text-decoration: none; white-space: nowrap; font-size: 1rem; }
-.section-chip { flex: none; font-size: 13px; font-weight: 700; color: var(--ink); text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; white-space: nowrap; }
-.section-chip:hover { background: var(--soft); }
+.section-switch { position: relative; flex: none; }
+.section-chip { font: inherit; font-size: 13px; font-weight: 700; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; white-space: nowrap; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+.section-chip:hover, .section-chip[aria-expanded="true"] { background: var(--soft); }
+.section-chip .caret { font-size: 11px; color: var(--muted); }
+.section-menu { position: absolute; top: calc(100% + 6px); left: 0; min-width: 210px; z-index: 30; display: grid; padding: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18); }
+.section-menu[hidden] { display: none; }
+.section-item { display: block; padding: 9px 12px; border-radius: 8px; color: var(--ink); text-decoration: none; font-size: 14px; white-space: nowrap; }
+.section-item:hover, .section-item:focus-visible { background: var(--soft); outline: none; }
+.section-item[aria-current="page"] { font-weight: 700; }
+.section-item[aria-current="page"]::after { content: " ✓"; color: var(--muted); }
+.section-item.home { border-top: 1px solid var(--line); margin-top: 4px; padding-top: 10px; border-radius: 0 0 8px 8px; color: var(--muted); }
 .brand-mark { width: 14px; height: 14px; border-radius: 50%; background: var(--c-stn); box-shadow: 6px 0 0 -2px var(--c-gpi), 12px 0 0 -4px var(--c-vim); margin-right: 8px; }
 .nav { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; flex: 1; min-width: 0; }
 .nav::-webkit-scrollbar { display: none; }

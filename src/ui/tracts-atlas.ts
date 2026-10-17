@@ -194,9 +194,11 @@ export class TractsAtlasPage {
           onclick: () => { if (g.tier !== t) pick(WM.groups.find((x) => x.tier === t)!.id); },
         }, h('strong', {}, TIER_LABEL[t]), h('span', {}, TIER_NOTE[t])))),
       h('p', { class: 'chips-label' }, 'By function'),
-      chips(inTier.filter((x) => x.kind === 'function').map((x) => [x.id, x.name]), g.id, pick, { label: 'Tracts by function', cls: 'grp-chips' }),
+      // "All" leads the function row so every tract of the set (e.g. the corpus callosum) is one click away
+      chips(inTier.filter((x) => x.kind === 'all' || x.kind === 'function').sort((x, y) => Number(y.kind === 'all') - Number(x.kind === 'all'))
+        .map((x) => [x.id, x.kind === 'all' ? 'All' : x.name]), g.id, pick, { label: 'Tracts by function', cls: 'grp-chips' }),
       h('p', { class: 'chips-label' }, 'By anatomy'),
-      chips(inTier.filter((x) => x.kind !== 'function').map((x) => [x.id, x.name]), g.id, pick, { label: 'Tracts by anatomy', cls: 'grp-chips' }));
+      chips(inTier.filter((x) => x.kind === 'anatomy').map((x) => [x.id, x.name]), g.id, pick, { label: 'Tracts by anatomy', cls: 'grp-chips' }));
     pane.append(h('ul', { class: 'tract-list', 'aria-label': `Tracts in ${g.name}` }, ...g.tractIds.map((id) => h('li', {},
       h('button', {
         type: 'button', class: 'tract-btn', 'aria-pressed': String(s.sel === id), 'data-tract': id,
