@@ -6,7 +6,7 @@ import { IMAGING } from '../data/imaging';
 import type { AppState, Axis, Hemi, LayerKey } from '../state';
 import { DEFAULT_LEAD, LEAD_ANCHORS, type LeadAnchor } from '../state';
 import { LEAD } from '../viewer/lead';
-import { LANDMARKS, type Plan } from '../viewer/selection';
+import { dbsScene, LANDMARKS, type Plan } from '../viewer/selection';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { chips, clear, fmtMm, h, refLinks } from './dom';
 import { clearAllLeadPrefs, clearLeadPref, isHidden, leadPrefFor, saveLeadDefault, saveLeadPref, visibleIndications } from './prefs';
@@ -32,7 +32,7 @@ const ANCHOR_LABEL: Record<LeadAnchor, string> = {
 
 export class AtlasPage {
   readonly el: HTMLElement;
-  viewer!: Viewer;
+  viewer!: Viewer<AppState, Plan>;
   private s!: AppState;
   private stage: HTMLElement;
   private panel: HTMLElement;
@@ -102,7 +102,7 @@ export class AtlasPage {
     this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status);
     this.readout.textContent = 'Point at a structure for MNI coordinates';
 
-    this.viewer = new Viewer(host, {
+    this.viewer = new Viewer<AppState, Plan>(host, {
       hover: (info, x, y) => this.showTip(info, x, y),
       pick: (info) => this.onPick(info),
       readout: (ras) => this.showReadout(ras),
@@ -114,7 +114,7 @@ export class AtlasPage {
       status: (t) => { this.status.hidden = !t; this.status.textContent = t ?? ''; },
       lead: (c) => this.showLead(c),
       moving: (on) => this.stage.classList.toggle('moving', on),
-    });
+    }, dbsScene);
     const origRender = this.viewer.renderer.render.bind(this.viewer.renderer);
     this.viewer.renderer.render = (sc, cam) => { origRender(sc, cam); this.placeLabels(); };
   }

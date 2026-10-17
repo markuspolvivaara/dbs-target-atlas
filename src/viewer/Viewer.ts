@@ -2,13 +2,12 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { LineSegments2 } from 'three/examples/jsm/lines/LineSegments2.js';
 import type { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
-import { MAN, MANIFEST, TGT } from '../data';
 import type { CameraPreset, ManifestStructure } from '../data/schema';
-import type { AppState, Axis, Hemi, LayerKey } from '../state';
+import type { Axis, Hemi, LayerKey } from '../state';
 import { loadStructure, type LineAsset, type MeshAsset } from './assets';
 import { Lead, contactCentres, trajectoryDir } from './lead';
 import { applyLook, lineMaterial, rimMaterial, solidMaterial, type Look, type MeshMaterials } from './materials';
-import { LANDMARKS, plan as makePlan, type Plan, type TractRole } from './selection';
+import type { SceneSource, ScenePlan, TractRole, ViewState } from './scene';
 import { Slices } from './slices';
 
 type Side = 'L' | 'R';
@@ -36,7 +35,8 @@ export interface ViewerEvents {
 const DEG = Math.PI / 180;
 const RAS_TO_WORLD = new THREE.Matrix4().makeRotationX(-Math.PI / 2); // (x, y, z) RAS -> (x, z, -y) three
 
-export class Viewer {
+/** Shared 3D viewer. What to draw comes from the section's SceneSource (catalogue + planner). */
+export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = ScenePlan> {
   readonly renderer: THREE.WebGLRenderer;
   readonly scene = new THREE.Scene();
   readonly camera: THREE.PerspectiveCamera;
@@ -50,8 +50,8 @@ export class Viewer {
   readonly slices: Slices;
   private palette: Palette = {};
   private ghost = new THREE.Color('#9aa5b1');
-  private plan: Plan | null = null;
-  private state: AppState | null = null;
+  private plan: P | null = null;
+  private state: S | null = null;
   private needsRender = true;
   private anim: { t0: number; dur: number; p0: THREE.Vector3; p1: THREE.Vector3; t0v: THREE.Vector3; t1v: THREE.Vector3 } | null = null;
   private raycaster = new THREE.Raycaster();
@@ -69,7 +69,10 @@ export class Viewer {
   private applySeq = 0;
   private moveTimer = 0;
 
-  constructor(private host: HTMLElement, private ev: ViewerEvents) {
+  private readonly cat;
+
+  constructor(private host: HTMLElement, private ev: ViewerEvents, private source: SceneSource<S, P>) {
+    this.cat = source.catalog;
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance', preserveDrawingBuffer: true });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.localClippingEnabled = true;
@@ -97,7 +100,7 @@ export class Viewer {
     this.root.updateMatrixWorld(true);
     this.scene.add(this.root);
     this.root.add(this.markerGroup, this.measureGroup, this.leads.L.group, this.leads.R.group);
-    this.slices = new Slices(MANIFEST.volumes, this.root, () => { this.ev.status(null); this.invalidate(); });
+    this.slices = new Slices(this.cat.volumes, this.root, () => { this.ev.status(null); this.invalidate(); });
     this.root.add(this.slices.group);
 
     const hemi = new THREE.HemisphereLight(0xffffff, 0x5a6470, 1.4);
@@ -164,7 +167,7 @@ export class Viewer {
   private async ensure(id: string): Promise<Item | null> {
     const have = this.items.get(id);
     if (have) return have;
-    const meta = MAN.get(id);
+    const meta = this.cat.byId.get(id);
     if (!meta) return null;
     this.loadingCount++;
     this.ev.status('Loading anatomy…');
@@ -218,20 +221,20 @@ export class Viewer {
 
   /** Load every nucleus up front (small); cortex and tracts on demand. */
   async preload(): Promise<void> {
-    const ids = MANIFEST.structures.filter((s) => s.type === 'nucleus' || s.type === 'target').map((s) => s.id);
+    const ids = this.cat.structures.filter((s) => s.type === 'nucleus' || s.type === 'target').map((s) => s.id);
     await Promise.all(ids.map((id) => this.ensure(id)));
     this.restyle();
   }
 
   // ---------------------------------------------------------------- state
-  async apply(s: AppState, opts: { animateCamera: boolean }): Promise<void> {
+  async apply(s: S, opts: { animateCamera: boolean }): Promise<void> {
     const seq = ++this.applySeq;
     const prev = this.state;
     this.state = structuredClone(s);
-    const planChanged = !prev || prev.ind !== s.ind || prev.sym !== s.sym || prev.borders !== s.borders;
-    if (planChanged) this.plan = makePlan(s.ind, s.sym, s.borders);
+    const planChanged = !prev || this.source.planKey(prev) !== this.source.planKey(s);
+    if (planChanged) this.plan = this.source.plan(s);
     const p = this.plan!;
-    const focusMeta = s.sel ? MAN.get(s.sel) : undefined;
+    const focusMeta = s.sel ? this.cat.byId.get(s.sel) : undefined;
     const needed = [
       ...[...p.tracts.keys()],
       // a structure selected from the index or legend is shown even if the view does not include it
@@ -270,7 +273,7 @@ export class Viewer {
     const s = this.state, p = this.plan;
     const hidden = new Set(s.hidden);
     // focus: a selected structure (not a marker) is emphasised and everything else fades back
-    const focus = s.sel && MAN.has(s.sel) && s.sel !== 'cortex' ? s.sel : null;
+    const focus = s.sel && this.cat.byId.has(s.sel) && s.sel !== 'cortex' ? s.sel : null;
     for (const it of this.items.values()) {
       if (it.kind === 'mesh') {
         let look: Look = 'hidden';
@@ -284,7 +287,7 @@ export class Viewer {
         if (hidden.has(it.meta.id)) look = 'hidden';
         if (it.meta.id === 'cortex') op *= 1.1;
         // landmark volumes (optic tract) must read clearly next to the target
-        if (LANDMARKS.has(it.meta.id) && look === 'context') op = Math.min(1, op * 2.2);
+        if (this.cat.landmarks.has(it.meta.id) && look === 'context') op = Math.min(1, op * 2.2);
         if (it.meta.type === 'cortex' && it.meta.id !== 'cortex' && look === 'context') op = Math.min(1, op * 1.6);
         if (focus && !focused && look !== 'ghost' && look !== 'hidden') op *= 0.3;
         const c = this.colour(it.meta);
@@ -341,9 +344,9 @@ export class Viewer {
     const p = this.plan!;
     const accent = new THREE.Color(this.palette[p.accent] ?? '#14253a');
     for (const m of p.markers) {
-      const t = TGT.get(m.targetId);
+      const t = this.cat.markers.get(m.targetId);
       if (!t) continue;
-      const colour = new THREE.Color(this.palette[MAN.get(t.structureId)?.colour.token ?? p.accent] ?? accent);
+      const colour = new THREE.Color(this.palette[this.cat.byId.get(t.structureId)?.colour.token ?? p.accent] ?? accent);
       for (const side of ['L', 'R'] as Side[]) {
         const pos = new THREE.Vector3(...(side === 'L' ? t.mni.left : t.mni.right));
         const geo = new THREE.SphereGeometry(m.primary ? 0.9 : 0.8, 24, 16);
@@ -384,7 +387,7 @@ export class Viewer {
     for (const [id, look] of this.plan.looks) {
       if (look !== 'primary' && look !== 'alt') continue;
       if (this.state.hidden.includes(id)) continue;
-      const m = MAN.get(id);
+      const m = this.cat.byId.get(id);
       if (!m || m.type !== 'nucleus' || !m.centroid) continue;
       const side: Side = this.sideShown('R') ? 'R' : 'L';
       if (!this.sideShown(side)) continue;
@@ -408,7 +411,7 @@ export class Viewer {
       const m = marks.find((x) => x.userData.side === 'R') ?? marks[0];
       return proj(m.getWorldPosition(new THREE.Vector3()));
     }
-    const meta = MAN.get(id);
+    const meta = this.cat.byId.get(id);
     if (!meta?.centroid) return null;
     const side: Side = this.sideShown('R') ? 'R' : 'L';
     if (!this.sideShown(side)) return null;
@@ -481,7 +484,7 @@ export class Viewer {
       const t = this.targetFor(side);
       if (t) pts.push(t);
       for (const id of p.focusIds) {
-        const c = MAN.get(id)?.centroid;
+        const c = this.cat.byId.get(id)?.centroid;
         if (c) pts.push(new THREE.Vector3(...c[side]));
       }
     }
@@ -591,7 +594,7 @@ export class Viewer {
     const ras = this.toRas(best.point);
     const o = best.object;
     if (o.userData.marker) {
-      const t = TGT.get(o.userData.marker);
+      const t = this.cat.markers.get(o.userData.marker);
       return { id: o.userData.marker, name: t?.label ?? '', ras, side: o.userData.side, kind: 'marker' };
     }
     if (o.userData.lead) return { id: null, name: `Lead (${o.userData.lead === 'L' ? 'left' : 'right'})`, ras, side: o.userData.lead, kind: 'lead' };
@@ -712,7 +715,7 @@ export class Viewer {
   describe(): string {
     const p = this.plan;
     if (!p) return '3D atlas';
-    const names = (ids: string[]) => ids.map((id) => MAN.get(id)?.name ?? id).join(', ');
+    const names = (ids: string[]) => ids.map((id) => this.cat.byId.get(id)?.name ?? id).join(', ');
     const prim = [...p.looks].filter(([, l]) => l === 'primary').map(([id]) => id);
     const alt = [...p.looks].filter(([, l]) => l === 'alt').map(([id]) => id);
     return `3D atlas, ${p.title}. Highlighted: ${names(prim)}.` +
@@ -721,7 +724,7 @@ export class Viewer {
       (p.parcels.size ? ` Cortex: ${names([...p.parcels.keys()])}.` : '');
   }
 
-  currentPlan(): Plan | null { return this.plan; }
+  currentPlan(): P | null { return this.plan; }
 
   snapshot(): string { this.renderer.render(this.scene, this.camera); return this.renderer.domElement.toDataURL('image/png'); }
 

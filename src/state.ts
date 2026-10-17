@@ -1,4 +1,5 @@
 import type { CameraPreset } from './data/schema';
+import type { ViewState } from './viewer/scene';
 
 export type Page = 'atlas' | 'imaging' | 'coords' | 'refs' | 'credits' | 'settings';
 export type Hemi = 'L' | 'R' | 'both';
@@ -14,7 +15,8 @@ export const LEAD_ANCHORS: LeadAnchor[] = ['centre', 'c0', 'c1', 'c2', 'c3', 'ti
 export interface Layer { on: boolean; opacity: number }
 export interface Clip { on: boolean; mm: number }
 
-export interface AppState {
+/** DBS section state; the viewer reads the ViewState part. */
+export interface AppState extends ViewState {
   page: Page;
   ind: string;
   sym: string | null;

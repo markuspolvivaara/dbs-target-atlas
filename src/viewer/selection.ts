@@ -1,6 +1,10 @@
-import { IND, MAN, SYM, TGT } from '../data';
-import type { CameraPreset, Indication, Symptom } from '../data/schema';
+import { IND, MAN, MANIFEST, SYM, TGT } from '../data';
+import type { Indication, Symptom } from '../data/schema';
+import type { AppState } from '../state';
 import type { Look } from './materials';
+import { makeCatalog, type SceneSource, type ScenePlan, type TractRole } from './scene';
+
+export type { TractRole };
 
 /** Nested structures: when a child is highlighted its parent becomes a translucent shell. */
 export const PARENT: Record<string, string> = {
@@ -27,18 +31,9 @@ const GPI_TRIGGERS = new Set(['gpi', 'gpi_sm']);
 const STN_TRIGGERS = new Set(['stn', 'stn_motor']);
 export const LANDMARKS = new Set(['optic_tract', 'rn']);
 
-export type TractRole = 'key' | 'alt' | 'border';
 
-export interface Plan {
-  title: string;
-  accent: string;
-  looks: Map<string, Look>; // nuclei + sweet-spot volumes
-  tracts: Map<string, TractRole>;
-  parcels: Map<string, 'key' | 'context'>;
-  markers: { targetId: string; primary: boolean }[];
-  camera: CameraPreset;
-  /** ids whose bounding volume the camera should frame */
-  focusIds: string[];
+/** DBS scene plan: the generic plan plus the indication / symptom it was made for. */
+export interface Plan extends ScenePlan {
   indication: Indication;
   symptom: Symptom | null;
 }
@@ -120,3 +115,10 @@ export function plan(indId: string, symId: string | null, borders: boolean): Pla
     symptom: sym,
   };
 }
+
+/** The DBS section as a scene source for the shared viewer. */
+export const dbsScene: SceneSource<AppState, Plan> = {
+  catalog: makeCatalog(MANIFEST.structures, MANIFEST.volumes, [...TGT.values()], LANDMARKS),
+  plan: (s) => plan(s.ind, s.sym, s.borders),
+  planKey: (s) => `${s.ind}|${s.sym}|${s.borders}`,
+};
