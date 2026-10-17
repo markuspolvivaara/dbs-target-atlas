@@ -1,7 +1,7 @@
 // Compress pipeline GLBs for the web: quantize vertex attributes
 // (KHR_mesh_quantization) and apply meshopt compression (EXT_meshopt_compression).
-// Input:  pipeline/data/build/{meshes,tracts}/*.glb
-// Output: public/assets/{meshes,tracts}/*.glb
+// Input:  pipeline/data/build/{meshes,tracts,wm}/*.glb
+// Output: public/assets/{meshes,tracts,wm}/*.glb
 import { NodeIO, Logger } from '@gltf-transform/core';
 import { EXTMeshoptCompression, KHRMeshQuantization } from '@gltf-transform/extensions';
 import { meshopt, quantize, dedup, prune } from '@gltf-transform/functions';
@@ -19,7 +19,7 @@ const io = new NodeIO()
   .registerDependencies({ 'meshopt.encoder': MeshoptEncoder, 'meshopt.decoder': MeshoptDecoder });
 
 let total = 0;
-for (const kind of ['meshes', 'tracts']) {
+for (const kind of ['meshes', 'tracts', 'wm']) {
   const src = join(root, 'data', 'build', kind);
   const dst = join(repo, 'public', 'assets', kind);
   mkdirSync(dst, { recursive: true });

@@ -107,12 +107,44 @@ def main() -> int:
     GEN.mkdir(parents=True, exist_ok=True)
     (GEN / "manifest.json").write_text(json.dumps(manifest, indent=1, ensure_ascii=False))
     shutil.copy(GEN / "manifest.json", PUBLIC / "manifest.json")
-    write_attribution(manifest)
-    print(f"manifest: {len(items)} structures")
+    wm = write_wm_manifest(rep)
+    write_attribution(manifest, wm)
+    print(f"manifest: {len(items)} structures; white-matter section: {len(wm['structures'])} tracts")
     return 0
 
 
-def write_attribution(m: dict) -> None:
+def write_wm_manifest(rep: dict) -> dict:
+    """wm-manifest.json: the white-matter section's tracts (HCP-1065), kept apart from the DBS assets."""
+    items = []
+    for t in C.WM_TRACTS:
+        f = f"assets/wm/{t.id}.glb"
+        r = rep[t.id]
+        items.append({
+            "id": t.id, "name": t.name, "aliases": [t.abbr], "type": "tract", "role": "tract", "file": f,
+            "bytes": size(f), "colour": colour(t.colour), "dataset": "hcp1065", **dataset_block("hcp1065"),
+            "derivation": ("Streamlines of the commissural file cut at x = 0 so each hemisphere can be shown alone. " if "midline" in t.files else "")
+                          + f"Up to {C.WM_BUDGET} streamlines per hemisphere (fixed seed, the same number on both sides, so on-screen "
+                          f"density says nothing about tract size or asymmetry), resampled to {C.STREAMLINE_STEP_MM:g} mm.",
+            "hcp": "confirmed", "category": t.group,
+            "streamlines": {s: r[s]["streamlines"] for s in ("L", "R")},
+            "sourceStreamlines": {s: r[s]["sourceStreamlines"] for s in ("L", "R")},
+            "centroid": {s: r[s]["centroid"] for s in ("L", "R")},
+        })
+    d = C.DATASETS["hcp1065"]
+    wm = {
+        "space": "MNI ICBM 2009a nonlinear asymmetric (RAS, mm), shown on the ICBM 2009b templates",
+        "generatedBy": "pipeline/build.py (wm) + pipeline/compress.mjs + pipeline/manifest.py",
+        "structures": items,
+        "dataset": {"name": d["name"], "licence": d["licence"], "url": d["url"], "note": d["note"],
+                    "citation": [CITES[c]["citation"] for c in d["cite"]], "citationUrls": [CITES[c]["url"] for c in d["cite"]]},
+        "hcpAcknowledgement": HCP_ACK,
+    }
+    (GEN / "wm-manifest.json").write_text(json.dumps(wm, indent=1, ensure_ascii=False))
+    shutil.copy(GEN / "wm-manifest.json", PUBLIC / "wm-manifest.json")
+    return wm
+
+
+def write_attribution(m: dict, wm: dict) -> None:
     lines = [
         "# Attribution and licences",
         "",
@@ -179,6 +211,25 @@ def write_attribution(m: dict) -> None:
         "HCP methods to cite:",
         "",
         *[f"- {c}" for c in m["datasets"]["hcp"]["citation"]],
+        "",
+        "## White-matter tracts section (HCP-1065)",
+        "",
+        "The tracts in `public/assets/wm/` and `wm-manifest.json`, and the tract-to-region probabilities in",
+        "`src/data/generated/wm-connectome.json`, are derived from the HCP-1065 population-averaged",
+        "tractography atlas. They are **not** GPL-licensed Lead-DBS material: they carry the atlas licence,",
+        f"{wm['dataset']['licence']}.",
+        "Share-alike: adapted versions of these files must be released under CC BY-SA 4.0 (or a compatible",
+        "licence) with attribution.",
+        "",
+        f"- Source: {wm['dataset']['url']}",
+        f"- Note: {wm['dataset']['note']}",
+        *[f"- Cite: {c}" for c in wm["dataset"]["citation"]],
+        f"- Assets: {', '.join(s['id'] for s in wm['structures'])}",
+        "- Changes made: streamlines subsampled and resampled, the corpus callosum cut at the midline, files",
+        "  converted to compressed glTF; connection probabilities kept as published (Brodmann block).",
+        "- HCP acknowledgement (required, as above):",
+        "",
+        "> " + HCP_ACK,
         "",
         "## Datasets considered and not used",
         "",

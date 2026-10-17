@@ -23,6 +23,12 @@ export interface ScenePlan {
   camera: CameraPreset;
   /** ids whose centroids the camera should frame */
   focusIds: string[];
+  /** smallest framing radius in mm (long tracts span far more than their centroids) */
+  minRadius?: number;
+  /** load and show the whole cortex as a ghost even without highlighted cortical areas */
+  cortex?: boolean;
+  /** "All" name labels include the drawn tracts (at their centroids), not only highlighted nuclei */
+  labelTracts?: boolean;
 }
 
 /** A point marker (target) the viewer can draw, label and place the lead on. */

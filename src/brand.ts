@@ -1,6 +1,6 @@
 /**
  * Project name and sections, in one place so the project can be renamed later
- * by editing this file (plus the static <title> tags in index.html and dbs/index.html).
+ * by editing this file (plus the static <title> tags in index.html, dbs/index.html and tracts/index.html).
  */
 export const BRAND = {
   name: 'Open Neuroanatomy Atlas',
@@ -23,8 +23,8 @@ export const SECTIONS: Section[] = [
     summary: 'Deep brain stimulation targets for movement disorders and epilepsy: nuclei, the tracts thought to carry the effect, published sweet spots, imaging and a lead model.',
   },
   {
-    id: 'tracts', name: 'White-matter tracts', path: 'tracts/', status: 'soon',
-    summary: 'Association, commissural and projection tracts in 3D with their course, terminations and surgical relevance, for tumour and epilepsy surgery teaching.',
+    id: 'tracts', name: 'White-matter tracts', path: 'tracts/', status: 'live',
+    summary: 'Language, visual, motor and limbic tracts in 3D with their course, connections, function and surgical relevance, for tumour and epilepsy surgery teaching.',
   },
 ];
 

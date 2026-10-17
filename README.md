@@ -3,7 +3,7 @@
 Interactive 3D neuroanatomy for teaching, built from published atlases in MNI space. Sections:
 
 - **DBS targets** (`dbs/`): described below.
-- **White-matter tracts** (`tracts/`): in development.
+- **White-matter tracts** (`tracts/`): described below.
 
 The home page (`index.html`) links the sections; they share the viewer, the anatomy pipeline,
 the design and the Settings. The project name and section list live in `src/brand.ts`.
@@ -28,6 +28,29 @@ in MNI ICBM 2009b nonlinear asymmetric space. Individual anatomy varies.
 - Geometry comes from published atlases distributed with Lead-DBS through an offline Python
   pipeline (`pipeline/`). Nothing is hand-modelled and no coordinate is typed by hand.
 
+## White-matter tracts
+
+Fourteen tracts that matter most in tumour and epilepsy surgery, from the HCP-1065
+population-averaged tractography atlas (Yeh 2022): arcuate fasciculus, SLF I–III, IFOF, ILF,
+uncinate fasciculus, frontal aslant tract, cingulum (dorsal and parahippocampal), optic radiation,
+corticospinal and corticobulbar tracts, and corpus callosum.
+
+- Browse **by function** (language, vision, motor and speech initiation, memory/emotion/social
+  cognition) or **by anatomy** (SLF–arcuate complex, association, projection, commissural, all).
+  Each group opens on its own hemisphere and view (language: left lateral; SLF complex: right).
+- Each **tract card** gives course, connections, function, effects of damage and stimulation,
+  surgical relevance and notes on the atlas version of the tract. Every sentence cites a paper
+  retrieved from PubMed and was checked against its abstract or open-access full text
+  (`src/tracts/content.ts`, `src/tracts/references.ts`). Nothing is written from memory.
+- **Cortical connections measured in the atlas**: the Brodmann areas each tract reached in at
+  least 95% of the 1065 subjects, straight from the published tract-to-region table.
+- Same viewer as the DBS section: slices (T1/T2/PD), cut-away, labels, legend highlight, measure,
+  shareable links. Camera presets: lateral and medial (relative to the shown hemisphere), coronal,
+  axial, posterior-oblique.
+- The tracts are CC BY-SA 4.0 (not GPL) and derived from HCP data; see Licence below.
+- Keyboard: `1`–`5` camera, `H` hemisphere, `[` `]` previous/next tract, `N` labels, `S` axial
+  slice, `M` measure, `Esc` close, `?` help.
+
 ## Quick start
 
 Requirements: Node ≥ 20. Python ≥ 3.10 only if you rebuild the anatomy.
@@ -50,7 +73,8 @@ npm run build
 ```
 
 `dist/` is a self-contained static site with a relative base path: `index.html` is the home page,
-`dbs/index.html` the DBS section; shared assets are under `assets/`. Copy it to any web server or
+`dbs/index.html` the DBS section, `tracts/index.html` the white-matter section; shared assets are
+under `assets/`. Copy it to any web server or
 subfolder; the app uses hash routing, so no rewrite rules are needed. Check locally with:
 
 ```bash
@@ -73,8 +97,9 @@ Server notes:
   already-decoded data.
 - WebGL 2 is required (all current desktop and mobile browsers).
 
-Load budget (mobile): about 2.6 MB for the first view (app 0.23 MB gzip, fonts, all nuclei,
-and the cortex and tracts of the default Parkinson's view). Tracts and cortex load the first
+Load budget (mobile): about 2.6 MB for the first view of the DBS section (app 0.23 MB gzip, fonts,
+all nuclei, and the cortex and tracts of the default Parkinson's view) and about 3 MB for the
+white-matter section's default language view (seven tracts, cortex, four orientation nuclei). Tracts and cortex load the first
 time they are needed; slice images (about 3 MB per sequence) load only when a slice is switched
 on or another sequence is picked.
 
@@ -138,12 +163,14 @@ src/data/                   typed content, validated with zod
   schema.ts                 zod schemas for all of the above
   palette.json              colour tokens (light/dark) shared with the pipeline
   generated/                manifest.json, coordinates.json (written by the pipeline)
+src/tracts/                 white-matter section: tract cards, groups, references (zod-checked),
+                            URL state, scene source
 src/viewer/                 three.js scene, loaders, materials, slices, lead, selection logic
-src/ui/                     atlas page, other pages, theme
+src/ui/                     atlas pages of both sections, shared stage pieces, other pages, theme
 pipeline/                   offline Python pipeline (see below)
-public/assets/              compressed GLBs, T1 volumes, manifest.json
+public/assets/              compressed GLBs (wm/: white-matter tracts), T1 volumes, manifests
 tests/unit/                 schema, verbatim-port, manifest, GLB-decoding, AC-PC, URL tests
-tests/e2e/                  Playwright visual smoke tests (one screenshot per indication)
+tests/e2e/                  Playwright visual smoke tests (one screenshot per indication and per tract group)
 scripts/check-palette.ts    WCAG contrast + colour-vision-deficiency check
 ```
 
@@ -168,7 +195,9 @@ npm run pipeline
 
 1. `fetch_sources.py`: pulls only the needed files from the official Lead-DBS data archive
    (an 8.5 GB zip) with HTTP range requests into `pipeline/data/raw/` (git-ignored), and records
-   SHA-256 hashes in `sources.lock.json`.
+   SHA-256 hashes in `sources.lock.json`. For the white-matter section it downloads the HCP-1065
+   tract archive once (590 MB, checked against a pinned SHA-256), extracts the 27 needed files
+   and fetches the tract-to-region table.
 2. `build.py`:
    - label volumes → Gaussian pre-smoothing → marching cubes → affine to MNI mm → Taubin
      smoothing → quadric decimation (one GLB per structure, nodes `L` and `R`)
@@ -180,12 +209,17 @@ npm run pipeline
    - streamlines → filtered → resampled to 2 mm → fixed-seed subsample of up to 300 per
      hemisphere → line geometry
    - T1, T2 and PD templates → 1.5 mm whole head plus a 0.5 mm subcortical crop each (uint8, gzip)
+   - white-matter tracts (HCP-1065 `.trk.gz`) → the same subsample of 300 streamlines per
+     hemisphere on both sides (the corpus callosum cut at x = 0) → `public/assets/wm/`; the
+     Brodmann block of the tract-to-region table → `src/data/generated/wm-connectome.json`
 3. `compress.mjs`: quantization plus meshopt compression (glTF-Transform).
 4. `manifest.py`: `manifest.json` (id, name, type, file, colour, source, licence, citation,
-   derivation, centroids) and `ATTRIBUTION.md`.
+   derivation, centroids), `wm-manifest.json` for the white-matter tracts, and `ATTRIBUTION.md`.
 5. `validate.py`: left/right symmetry; mesh centroid against the source-volume centroid;
    orientation (left nodes at x < 0, tract terminals on the labelled side, cortex labels against
-   an independent volumetric parcellation); everything inside the head. Exits 1 on any failure.
+   an independent volumetric parcellation); everything inside the head; white-matter tracts lie
+   in white matter on the 2009b T1 and no 2 mm shift improves that (the atlas is built in ICBM
+   2009a space). Exits 1 on any failure.
 
 What goes in is declared in `pipeline/config.py`. Dataset citations in
 `pipeline/sources/citations.json` are Crossref records looked up by DOI.
@@ -208,7 +242,7 @@ npm run check:palette
   symptom references exists in the manifest and on disk, verbatim comparison with
   `source/dbs-targets.html`, shipped GLBs decoded and checked against the pipeline meshes,
   AC–PC maths and URL round-trips.
-- `npm run test:e2e`: one screenshot per indication, a tools view, a mobile layout, all pages,
+- `npm run test:e2e`: one screenshot per indication and per tract group, a tools view, a mobile layout, all pages,
   plus assertions that no request leaves the local server and no console errors occur.
   Baselines were recorded on macOS with SwiftShader. On another platform, regenerate them with
   `npx playwright test --update-snapshots`.
@@ -221,7 +255,8 @@ not be used commercially; the T1 slices carry the McGill/MNI notice; bundled thi
 software licences are in `public/THIRD_PARTY_LICENSES.txt` (also published with the site).
 Tracts generated from Human Connectome Project data are additionally subject to the WU-Minn HCP
 Open Access Data Use Terms; the required acknowledgement is in `NOTICE`, `ATTRIBUTION.md` and on
-the Credits page.
+the Credits page. The white-matter section's tract files (`public/assets/wm/`, `wm-manifest.json`,
+`wm-connectome.json`) are **CC BY-SA 4.0** (HCP-1065 atlas) plus the HCP terms, not GPL.
 
 ## Data, licences, attribution
 

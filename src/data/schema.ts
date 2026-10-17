@@ -22,7 +22,8 @@ export const EvidenceSchema = z.object({
 });
 export type Evidence = z.infer<typeof EvidenceSchema>;
 
-export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon']);
+/** 'lateral' / 'medial' look at the shown hemisphere from outside / from the midline (white-matter section). */
+export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon', 'lateral', 'medial']);
 export type CameraPreset = z.infer<typeof CameraPresetSchema>;
 
 /** A rendered structure: nucleus, cortical area, tract or sweet-spot volume. */
@@ -169,6 +170,19 @@ export const ManifestSchema = z.object({
   })),
 });
 export type Manifest = z.infer<typeof ManifestSchema>;
+
+/** wm-manifest.json: the white-matter section's tracts (HCP-1065), separate from the DBS assets. */
+export const WmManifestSchema = z.object({
+  space: z.string(),
+  generatedBy: z.string(),
+  structures: z.array(ManifestStructureSchema),
+  dataset: z.object({
+    name: z.string(), licence: z.string(), url: z.string().url(), note: z.string(),
+    citation: z.array(z.string()), citationUrls: z.array(z.string()),
+  }),
+  hcpAcknowledgement: z.string(),
+});
+export type WmManifest = z.infer<typeof WmManifestSchema>;
 
 export const CoordinateSchema = z.object({ L: Vec3, R: Vec3, method: z.string(), dataset: z.string() });
 export const AcpcSchema = z.object({ AC: Vec3, PC: Vec3, MSP: Vec3, source: z.string(), url: z.string().url() });

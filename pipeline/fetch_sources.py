@@ -2,7 +2,9 @@
 
 Only the files listed in SOURCES are pulled from the Lead-DBS data package
 (an 8.5 GB zip) using HTTP range requests, so the full archive is never
-downloaded. Everything lands in pipeline/data/raw/ (git-ignored).
+downloaded. The white-matter section's tracts come the same way from the
+HCP-1065 atlas release (a 590 MB zip, downloaded once and hash-checked). Everything lands in pipeline/data/raw/
+(git-ignored).
 
 Usage:  python pipeline/fetch_sources.py
 """
@@ -15,6 +17,9 @@ import urllib.request
 from pathlib import Path
 
 from remotezip import RemoteZip
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import config as C  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent
 RAW = ROOT / "data" / "raw"
@@ -112,11 +117,50 @@ def main() -> int:
                 print(f"fetch {src}")
                 dest.write_bytes(z.read(src))
             record[src] = hashlib.sha256(dest.read_bytes()).hexdigest()
+    hcp = fetch_hcp1065()
     (RAW / "sources.lock.json").write_text(json.dumps(
-        {"archive": LEADDBS_DATA_ZIP, "files": record}, indent=1))
+        {"archive": LEADDBS_DATA_ZIP, "files": record,
+         "hcp1065": {"release": C.HCP1065_RELEASE, "files": hcp}}, indent=1))
     print(f"{len(record)} files ready in {RAW}")
     return 0
 
+
+def fetch_hcp1065() -> dict[str, str]:
+    """White-matter section: the listed .trk.gz members of the HCP-1065 release, plus its connectome table.
+
+    The release CDN rejects the suffix byte ranges remotezip needs, so the zip is downloaded once
+    (590 MB), checked against its pinned SHA-256 and only the listed members are extracted.
+    """
+    import zipfile
+    out = RAW / "hcp1065"
+    out.mkdir(parents=True, exist_ok=True)
+    record = {}
+    members = sorted({p for t in C.WM_TRACTS for p in t.files.values()})
+    if not all((out / "tracts" / m).exists() for m in members):
+        zp = out / C.HCP1065_TRK_ZIP
+        if not zp.exists():
+            print(f"fetch {C.HCP1065_TRK_ZIP} (590 MB)")
+            urllib.request.urlretrieve(C.HCP1065_RELEASE + C.HCP1065_TRK_ZIP, zp)
+        digest = hashlib.sha256(zp.read_bytes()).hexdigest()
+        if digest != C.HCP1065_TRK_SHA256:
+            print(f"{C.HCP1065_TRK_ZIP}: SHA-256 {digest} does not match the pinned {C.HCP1065_TRK_SHA256}", file=sys.stderr)
+            raise SystemExit(1)
+        with zipfile.ZipFile(zp) as z:
+            names = set(z.namelist())
+            for m in members:
+                if m not in names:
+                    print(f"MISSING in {C.HCP1065_TRK_ZIP}: {m}", file=sys.stderr)
+                    raise SystemExit(1)
+                dest = out / "tracts" / m
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                dest.write_bytes(z.read(m))
+    for m in members:
+        record[f"{C.HCP1065_TRK_ZIP}:{m}"] = hashlib.sha256((out / "tracts" / m).read_bytes()).hexdigest()
+    dest = out / C.HCP1065_CONNECTOME
+    if not dest.exists():
+        urllib.request.urlretrieve(C.HCP1065_RELEASE + C.HCP1065_CONNECTOME, dest)
+    record[C.HCP1065_CONNECTOME] = hashlib.sha256(dest.read_bytes()).hexdigest()
+    return record
 
 if __name__ == "__main__":
     sys.exit(main())

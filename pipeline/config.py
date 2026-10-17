@@ -351,6 +351,69 @@ TRACTS: list[Tract] = [
 STREAMLINE_STEP_MM = 2.0
 RANDOM_SEED = 20261014
 
+# ---------------------------------------------------------------- white-matter tracts section
+# HCP-1065 population-averaged tractography atlas (Yeh 2022), in ICBM 2009a nonlinear
+# asymmetric space according to the atlas page. Shown on the 2009b templates because its
+# tracts sit in white matter on the 2009b T1 and no shift of up to 2 mm improves the fit
+# (checked per tract by pipeline/validate.py).
+HCP1065_LICENCE = (
+    "CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome "
+    "Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms"
+)
+DATASETS["hcp1065"] = {
+    "name": "HCP-1065 population-averaged tractography atlas (Yeh 2022)",
+    "cite": ["yeh2022", "yeh2018"],
+    "licence": HCP1065_LICENCE,
+    "url": "https://brain.labsolver.org/hcp_trk_atlas.html",
+    "note": "Files from the 'hcp1065' release of github.com/data-others/atlas (hcp1065_avg_tracts_trk.zip; "
+            "tract_to_region_connectome_BM_KL.xlsx). Space: ICBM 2009a nonlinear asymmetric (atlas page), shown here on the "
+            "2009b templates after an alignment check: along every tract the 2009b T1 is white-matter bright, and no "
+            "shift of up to 2 mm in any direction raises it by more than 5% (pipeline/validate.py).",
+}
+HCP1065_RELEASE = "https://github.com/data-others/atlas/releases/download/hcp1065/"
+HCP1065_TRK_ZIP = "hcp1065_avg_tracts_trk.zip"
+HCP1065_TRK_SHA256 = "344aad4394f18b8926ed5e1bda911ad56e328c6cf75faa45e1302512ad779c67"  # as downloaded 2026-10-17
+HCP1065_CONNECTOME = "tract_to_region_connectome_BM_KL.xlsx"
+WM_BUDGET = 300  # streamlines per hemisphere, the same on both sides
+
+
+@dataclass
+class WmTract:
+    """A tract of the white-matter section: one HCP-1065 .trk.gz per hemisphere (or one midline file)."""
+
+    id: str
+    name: str
+    abbr: str
+    colour: str
+    group: str  # association | projection | commissural (the atlas folder)
+    files: dict[str, str]  # side -> path inside the zip, or {"midline": path} (split at x = 0)
+    connectome: str | None = None  # column in the tract-to-region table (Brodmann sheet)
+
+
+def _lr(folder: str, stem: str) -> dict[str, str]:
+    return {s: f"{folder}/{stem}_{s}.trk.gz" for s in ("L", "R")}
+
+
+WM_TRACTS: list[WmTract] = [
+    WmTract("wm_af", "Arcuate fasciculus", "AF", "wmAF", "association", _lr("association", "AF"), "AF"),
+    WmTract("wm_slf1", "Superior longitudinal fasciculus I", "SLF I", "wmSLF1", "association", _lr("association", "SLF1"), "SLF_I"),
+    WmTract("wm_slf2", "Superior longitudinal fasciculus II", "SLF II", "wmSLF2", "association", _lr("association", "SLF2"), "SLF_II"),
+    WmTract("wm_slf3", "Superior longitudinal fasciculus III", "SLF III", "wmSLF3", "association", _lr("association", "SLF3"), "SLF_III"),
+    WmTract("wm_ifof", "Inferior fronto-occipital fasciculus", "IFOF", "wmIFOF", "association", _lr("association", "IFOF"), "IFOF"),
+    WmTract("wm_ilf", "Inferior longitudinal fasciculus", "ILF", "wmILF", "association", _lr("association", "ILF"), "ILF"),
+    WmTract("wm_uf", "Uncinate fasciculus", "UF", "wmUF", "association", _lr("association", "UF"), "UF"),
+    WmTract("wm_fat", "Frontal aslant tract", "FAT", "wmFAT", "association", _lr("association", "FAT"), "FAT"),
+    WmTract("wm_cing_fp", "Cingulum, frontal–parietal (dorsal) segment", "Cingulum (dorsal)", "wmCingD", "association", _lr("association", "C_FP"), "C_FP"),
+    WmTract("wm_cing_ph", "Cingulum, parahippocampal segment", "Cingulum (parahippocampal)", "wmCingPH", "association", _lr("association", "C_PH"), "C_PH"),
+    WmTract("wm_or", "Optic radiation", "OR", "wmOR", "projection", _lr("projection", "OR"), "OR"),
+    WmTract("wm_cst", "Corticospinal tract", "CST", "wmCST", "projection", _lr("projection", "CST"), "CST"),
+    WmTract("wm_cbt", "Corticobulbar tract", "CBT", "wmCBT", "projection", _lr("projection", "CBT"), "CBT"),
+    WmTract("wm_cc", "Corpus callosum", "CC", "wmCC", "commissural", {"midline": "commissural/CC.trk.gz"}),
+]
+# a connectome entry counts as a connection of the tract when at least this fraction of the
+# 1065 individuals showed it (Yeh 2022: ~85% of entries are >95% or <5%)
+CONNECTOME_MIN = 0.95
+
 # T1 slice textures
 T1_FILE = "t1.nii"
 # Slice images: ICBM 2009b templates shipped with Lead-DBS (same grid, same McGill/MNI licence)

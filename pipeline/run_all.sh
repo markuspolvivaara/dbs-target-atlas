@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Rebuild every web asset from the source atlases.
 #   1. fetch the needed files from the Lead-DBS data archive (range requests, ~250 MB)
-#   2. build meshes, tracts, T1 volumes, coordinates
+#      and the HCP-1065 tract archive (590 MB, once)
+#   2. build meshes, tracts, T1 volumes, coordinates, white-matter tracts
 #   3. compress GLBs (quantization + meshopt)
 #   4. write manifest.json and ATTRIBUTION.md
 #   5. validate geometry against the sources (exit 1 on failure)

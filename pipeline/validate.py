@@ -9,6 +9,8 @@ Checks
                 labelled side; cortex: surface labels agree with an
                 independent volumetric parcellation (Mindboggle-101)
   in-brain      every centroid falls inside the T1 head volume
+  alignment     white-matter section (HCP-1065, 2009a space): the 2009b T1 is bright
+                along each tract and no 2 mm shift improves it by more than 5%
 
 Exit code 1 if any check fails. Writes pipeline/data/build/validation.json.
 """
@@ -24,6 +26,7 @@ import scipy.io as sio
 from scipy import ndimage
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import build as build_mod  # noqa: E402
 import config as C  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent
@@ -33,7 +36,8 @@ BUILD = ROOT / "data" / "build"
 SYM_X_MM = 3.0      # |xL + xR|
 SYM_YZ_MM = 3.0     # |yL - yR|, |zL - zR|
 CENTROID_MM = 1.0   # mesh vs source centroid (watertight nuclei)
-CORTEX_AGREE = 0.6  # minimum fraction of vertices agreeing with the volume labels
+CORTEX_AGREE = 0.6
+WM_SYM_X_MM = 6.0   # white-matter tracts: association tracts are not symmetric (e.g. arcuate)  # minimum fraction of vertices agreeing with the volume labels
 
 # Structures whose source atlases are not symmetric by construction may differ
 # more; widen tolerance only where the source itself differs (recorded here).
@@ -111,6 +115,30 @@ def main() -> int:
         a, b = r["L"]["centroid"], r["R"]["centroid"]
         if t.id not in ("rt_cerv",):  # 6 streamlines per side: centroid too noisy for a symmetry check
             check("symmetry", abs(a[0] + b[0]) <= 4.0, f"tract {t.id}: centroid x L {a[0]} R {b[0]}")
+
+    # white-matter section (HCP-1065, 2009a space): sides, symmetry and alignment with the 2009b T1
+    t1d = np.asanyarray(t1.dataobj).astype(np.float32)
+    wm_ref = float(np.percentile(t1d[head], 75))
+    shifts = [np.array(v, float) for v in np.ndindex(3, 3, 3)]
+    for t in C.WM_TRACTS:
+        r = rep[t.id]
+        for side in ("L", "R"):
+            x = r[side]["meanX"]
+            check("orientation", (x < 0) == (side == "L"), f"wm {t.id}/{side} mean x={x:.1f}")
+        a, b = r["L"]["centroid"], r["R"]["centroid"]
+        check("symmetry", abs(a[0] + b[0]) <= WM_SYM_X_MM, f"wm {t.id}: centroid x L {a[0]} R {b[0]}")
+        pts = []
+        for f in t.files.values():
+            sls = build_mod.read_trk_gz(RAW / "hcp1065" / "tracts" / f)
+            pts.extend(sls[::max(1, len(sls) // 200)])
+        p = np.vstack(pts)
+        def mean_t1(off):
+            ijk = nib.affines.apply_affine(inv, p + off)
+            return float(ndimage.map_coordinates(t1d, ijk.T, order=1).mean())
+        base = mean_t1(np.zeros(3))
+        best = max(mean_t1((s - 1) * 2.0) for s in shifts)
+        check("alignment", base >= wm_ref and best <= base * 1.05,
+              f"wm {t.id}: mean T1 along tract {base:.0f} (head p75 {wm_ref:.0f}); best 2 mm shift {best:.0f}")
 
     # cortex: compare surface parcels against the Mindboggle-101 volume (independent labels)
     mb = nib.load(RAW / "labeling/Mindboggle 101 - Desikan protocol (Klein 2012).nii")

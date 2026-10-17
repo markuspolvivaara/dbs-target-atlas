@@ -1,4 +1,4 @@
-Open Neuroanatomy Atlas (including the DBS targets section)
+Open Neuroanatomy Atlas (DBS targets and white-matter tracts sections)
 Copyright (C) 2026 Markus Polvivaara
 
 This program is free software: you can redistribute it and/or modify it under the
@@ -59,6 +59,19 @@ What is covered by which terms
 
    Data were provided [in part] by the Human Connectome Project, WU-Minn Consortium (Principal Investigators: David Van Essen and Kamil Ugurbil; 1U54MH091657) funded by the 16 NIH Institutes and Centers that support the NIH Blueprint for Neuroscience Research; and by the McDonnell Center for Systems Neuroscience at Washington University.
 
-6. Bundled third-party software (three.js and zod, MIT licence; Atkinson
+6. White-matter tracts section (public/assets/wm/, public/assets/wm-manifest.json,
+   src/data/generated/wm-manifest.json, src/data/generated/wm-connectome.json) is
+   derived from the HCP-1065 population-averaged tractography atlas
+   (https://brain.labsolver.org/hcp_trk_atlas.html; Yeh FC, Nat Commun
+   2022;13:4933, doi:10.1038/s41467-022-32595-4). These files are not GPL-licensed:
+   they are distributed under the Creative Commons Attribution-ShareAlike 4.0
+   International licence (CC BY-SA 4.0,
+   https://creativecommons.org/licenses/by-sa/4.0/). Changes made: streamlines
+   subsampled and resampled, the corpus callosum cut at the midline, files converted
+   to compressed glTF; connection probabilities kept as published. The atlas is
+   built from Human Connectome Project data, so the HCP terms and acknowledgement in
+   section 5 apply to these files as well.
+
+7. Bundled third-party software (three.js and zod, MIT licence; Atkinson
    Hyperlegible font, SIL Open Font Licence 1.1): see
    public/THIRD_PARTY_LICENSES.txt, which is also published with the site.

@@ -188,6 +188,26 @@ HCP methods to cite:
 - Glasser MF, Sotiropoulos SN, Wilson JA, Coalson TS, Fischl B, Andersson JL, et al. The minimal preprocessing pipelines for the Human Connectome Project. NeuroImage. 2013;80:105-124. doi:10.1016/j.neuroimage.2013.04.127.
 - Sotiropoulos SN, Jbabdi S, Xu J, Andersson JL, Moeller S, Auerbach EJ, et al. Advances in diffusion MRI acquisition and processing in the Human Connectome Project. NeuroImage. 2013;80:125-143. doi:10.1016/j.neuroimage.2013.05.057.
 
+## White-matter tracts section (HCP-1065)
+
+The tracts in `public/assets/wm/` and `wm-manifest.json`, and the tract-to-region probabilities in
+`src/data/generated/wm-connectome.json`, are derived from the HCP-1065 population-averaged
+tractography atlas. They are **not** GPL-licensed Lead-DBS material: they carry the atlas licence,
+CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms.
+Share-alike: adapted versions of these files must be released under CC BY-SA 4.0 (or a compatible
+licence) with attribution.
+
+- Source: https://brain.labsolver.org/hcp_trk_atlas.html
+- Note: Files from the 'hcp1065' release of github.com/data-others/atlas (hcp1065_avg_tracts_trk.zip; tract_to_region_connectome_BM_KL.xlsx). Space: ICBM 2009a nonlinear asymmetric (atlas page), shown here on the 2009b templates after an alignment check: along every tract the 2009b T1 is white-matter bright, and no shift of up to 2 mm in any direction raises it by more than 5% (pipeline/validate.py).
+- Cite: Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.
+- Cite: Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027.
+- Assets: wm_af, wm_slf1, wm_slf2, wm_slf3, wm_ifof, wm_ilf, wm_uf, wm_fat, wm_cing_fp, wm_cing_ph, wm_or, wm_cst, wm_cbt, wm_cc
+- Changes made: streamlines subsampled and resampled, the corpus callosum cut at the midline, files
+  converted to compressed glTF; connection probabilities kept as published (Brodmann block).
+- HCP acknowledgement (required, as above):
+
+> Data were provided [in part] by the Human Connectome Project, WU-Minn Consortium (Principal Investigators: David Van Essen and Kamil Ugurbil; 1U54MH091657) funded by the 16 NIH Institutes and Centers that support the NIH Blueprint for Neuroscience Research; and by the McDonnell Center for Systems Neuroscience at Washington University.
+
 ## Datasets considered and not used
 
 - **Basal Ganglia Pathway Atlas, original files (Petersen 2019, OSF mhd4z).** The OSF terms limit use to

@@ -108,5 +108,15 @@
   "citation": "Sotiropoulos SN, Jbabdi S, Xu J, Andersson JL, Moeller S, Auerbach EJ, et al. Advances in diffusion MRI acquisition and processing in the Human Connectome Project. NeuroImage. 2013;80:125-143. doi:10.1016/j.neuroimage.2013.05.057.",
   "doi": "10.1016/j.neuroimage.2013.05.057",
   "url": "https://doi.org/10.1016/j.neuroimage.2013.05.057"
+ },
+ "yeh2022": {
+  "citation": "Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.",
+  "doi": "10.1038/s41467-022-32595-4",
+  "url": "https://doi.org/10.1038/s41467-022-32595-4"
+ },
+ "yeh2018": {
+  "citation": "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027.",
+  "doi": "10.1016/j.neuroimage.2018.05.027",
+  "url": "https://doi.org/10.1016/j.neuroimage.2018.05.027"
  }
 }

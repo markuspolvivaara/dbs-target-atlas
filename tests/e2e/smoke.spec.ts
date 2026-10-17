@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { INDICATIONS } from '../../src/data/indications';
+import { GROUPS } from '../../src/tracts/content';
 
 /** Fail on any request that leaves the local server (no external runtime requests allowed). */
 function guard(page: Page) {
@@ -371,7 +372,7 @@ test('home page: sections, light load, and old links forward to the DBS section'
   await page.goto('./');
   await expect(page.locator('h1')).toHaveText('Open Neuroanatomy Atlas');
   await expect(page.locator('.section-card[data-section="dbs"] a.btn')).toHaveAttribute('href', './dbs/');
-  await expect(page.locator('.section-card[data-section="tracts"]')).toContainText('Coming soon');
+  await expect(page.locator('.section-card[data-section="tracts"] a.btn')).toHaveAttribute('href', './tracts/');
   expect(scripts.some((u) => /three-/.test(u))).toBe(false); // no 3D engine on the home page
   // open the DBS section from the home page; the header leads back
   await page.locator('.section-card[data-section="dbs"] a.btn').click();
@@ -385,6 +386,82 @@ test('home page: sections, light load, and old links forward to the DBS section'
   await page.waitForURL(/\/dbs\/#\/atlas\?i=et&s=et-head/);
   await settle(page);
   await expect(page.locator('.card h2').first()).toHaveText('Head tremor');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// ---------------------------------------------------------------- white-matter section
+for (const g of GROUPS) {
+  test(`tract group ${g.id}: renders and matches the visual baseline`, async ({ page }) => {
+    const gd = guard(page);
+    await page.goto(`./tracts/#/atlas?g=${g.id}`);
+    await settle(page);
+    await expect(page.locator('.pane:not([hidden]) .card h2').first()).toHaveText(g.name);
+    await expect(page.locator('.tract-btn')).toHaveCount(g.tractIds.length);
+    await expect(page.locator(`[data-hemi="${g.hemi}"]`)).toHaveAttribute('aria-pressed', 'true');
+    expect(await canvasColours(page)).toBeGreaterThan(40);
+    await expect(page.locator('.stage')).toHaveScreenshot(`tracts-${g.id}.png`);
+    expect(gd.external).toEqual([]);
+    expect(gd.errors).toEqual([]);
+  });
+}
+
+test('tract card: sourced sections, measured connections, highlight and the URL', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./tracts/#/atlas?g=language');
+  await settle(page);
+  await page.locator('.tract-btn[data-tract="wm_ifof"]').click();
+  const card = page.locator('.card.sel');
+  await expect(card.locator('h2')).toHaveText('Inferior fronto-occipital fasciculus (IFOF)');
+  for (const dt of ['Course', 'Connections', 'Cortical connections measured in the atlas', 'Function', 'Surgical relevance', 'Geometry']) await expect(card.locator('dt', { hasText: dt }).first()).toBeVisible();
+  await expect(card.locator('.areas')).toContainText('Left: BA');
+  // every list item carries at least one source link
+  const items = card.locator('.evidence li');
+  const n = await items.count();
+  for (let i = 0; i < n; i++) expect(await items.nth(i).locator('a.src').count()).toBeGreaterThan(0);
+  await expect(page).toHaveTitle(/^Inferior fronto-occipital fasciculus · White-matter tracts · Open Neuroanatomy Atlas$/);
+  expect(new URL(page.url()).hash).toContain('sel=wm_ifof');
+  // a selected tract outside the group is added to the view; the cortex it names is highlighted
+  await page.goto('./tracts/#/atlas?g=visual&sel=wm_fat&h=L');
+  await settle(page);
+  await expect(page.locator('.legend3d')).toContainText('Supplementary motor area');
+  // the keyboard steps through the group
+  await page.locator('body').press(']');
+  await expect.poll(() => new URL(page.url()).hash).toContain('sel=wm_or');
+  // a reload keeps the view
+  await page.goto('./tracts/#/atlas?g=slf&sel=wm_slf2&h=R&ax=12&seq=t2&lb=0');
+  await settle(page);
+  await page.reload();
+  await settle(page);
+  const st = await page.evaluate(() => (window as unknown as { __atlas: { state(): { grp: string; sel: string; hemi: string; sliceSeq: string; labels: string; clip: { axial: { on: boolean; mm: number } } } } }).__atlas.state());
+  expect([st.grp, st.sel, st.hemi, st.sliceSeq, st.labels, st.clip.axial.on, st.clip.axial.mm]).toEqual(['slf', 'wm_slf2', 'R', 't2', 'off', true, 12]);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('tracts section: references, credits and the way home', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./tracts/#/refs');
+  await page.fill('#ref-q', 'Meyer');
+  await expect(page.locator('.count')).toContainText('reference');
+  await page.goto('./tracts/#/credits');
+  await expect(page.locator('.page:not([hidden]) h1')).toHaveText('Credits and licences');
+  await expect(page.locator('#hcp1065')).toContainText('CC BY-SA 4.0');
+  await expect(page.locator('#hcp blockquote')).toContainText('Human Connectome Project');
+  await page.locator('a.brand').click();
+  await expect(page.locator('h1')).toHaveText('Open Neuroanatomy Atlas');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('tracts on a phone: viewer above the bottom sheet @mobile', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./tracts/#/atlas?g=motor');
+  await settle(page);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.locator('.ptab', { hasText: 'Tracts' }).click();
+  await page.locator('.tract-btn[data-tract="wm_cst"]').click();
+  await expect(page.locator('.card.sel h2')).toContainText('Corticospinal tract');
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });

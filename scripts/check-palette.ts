@@ -9,6 +9,7 @@
 import palette from '../src/data/palette.json';
 import { CONTENT, MAN, TGT } from '../src/data';
 import { plan } from '../src/viewer/selection';
+import { WM, WM_MAN } from '../src/tracts';
 
 type RGB = [number, number, number];
 const P = palette as unknown as Record<'light' | 'dark', Record<string, string>>;
@@ -102,6 +103,15 @@ for (const p of views) {
     const k = `${list[i]}|${list[j]}`;
     if (!pairs.has(k)) pairs.set(k, new Set());
     pairs.get(k)!.add(p.title);
+  }
+}
+// white-matter section: the tracts of each group appear together
+for (const g of WM.groups.filter((x) => x.kind !== 'all')) {
+  const list = [...new Set(g.tractIds.map((id) => WM_MAN.get(id)!.colour.token))].sort();
+  for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
+    const k = `${list[i]}|${list[j]}`;
+    if (!pairs.has(k)) pairs.set(k, new Set());
+    pairs.get(k)!.add(`tracts: ${g.name}`);
   }
 }
 const cvd: string[] = [];

@@ -5,7 +5,8 @@ Steps
      cubes -> affine to MNI mm -> Taubin smoothing -> quadric decimation
   2. cortex: Lead-DBS template surface -> decimation -> parcel labels
      (HMAT volume, Desikan-Killiany annotation) -> one sub-mesh per parcel
-  3. tracts: streamlines -> filter -> resample to 1 mm -> fixed-seed subsample
+  3. tracts: streamlines -> filter -> resample to 2 mm -> fixed-seed subsample
+     (also the white-matter section: HCP-1065 tracts and their cortical connections)
   4. T1: 0.5 mm template -> 1 mm whole brain + 0.5 mm subcortical crop (uint8)
   5. coordinates.json (centroids, sweet-spot peaks) and build/report.json
 
@@ -17,6 +18,7 @@ Usage:  python pipeline/build.py
 from __future__ import annotations
 
 import gzip
+import io
 import json
 import sys
 from pathlib import Path
@@ -392,6 +394,123 @@ def build_tracts(report: dict) -> None:
         print(f"tract {t.id:9s} L {rep['L']['streamlines']}/{rep['L']['sourceStreamlines']}  R {rep['R']['streamlines']}/{rep['R']['sourceStreamlines']}")
 
 
+# ---------------------------------------------------------------- white-matter section (HCP-1065)
+def read_trk_gz(path: Path) -> list[np.ndarray]:
+    """Streamlines of a gzipped TrackVis file, in RAS mm (nibabel applies the header affine)."""
+    with gzip.open(path, "rb") as g:
+        t = nib.streamlines.TrkFile.load(io.BytesIO(g.read()), lazy_load=False)
+    return [np.asarray(s, float) for s in t.streamlines]
+
+
+def split_midline(sl: np.ndarray) -> dict[str, list[np.ndarray]]:
+    """Cut a commissural streamline at x = 0 so each hemisphere can be shown on its own."""
+    out: dict[str, list[np.ndarray]] = {"L": [], "R": []}
+    side = np.where(sl[:, 0] < 0, "L", "R")
+    start = 0
+    for i in range(1, len(sl) + 1):
+        if i == len(sl) or side[i] != side[start]:
+            piece = sl[start:i]
+            if i < len(sl):  # end exactly on the midline, shared with the next piece
+                a, b = sl[i - 1], sl[i]
+                t = a[0] / (a[0] - b[0]) if a[0] != b[0] else 0.0
+                piece = np.vstack([piece, a + t * (b - a)])
+            if start > 0:
+                a, b = sl[start - 1], sl[start]
+                t = a[0] / (a[0] - b[0]) if a[0] != b[0] else 0.0
+                piece = np.vstack([a + t * (b - a), piece])
+            if len(piece) >= 2:
+                out[str(side[start])].append(piece)
+            start = i
+    return out
+
+
+def line_nodes(per_side: dict[str, list[np.ndarray]], budget: int, rng: np.random.Generator) -> tuple[list[dict], dict]:
+    """Fixed-seed subsample + resample per hemisphere -> glTF line nodes and a report."""
+    nodes, rep = [], {}
+    for side in ("L", "R"):
+        sls = per_side[side]
+        n_total = len(sls)
+        if n_total == 0:
+            raise SystemExit(f"{side}: no streamlines")
+        pick = np.sort(rng.choice(n_total, size=min(n_total, budget), replace=False))
+        res = [resample(sls[i], C.STREAMLINE_STEP_MM) for i in pick]
+        pos = np.vstack(res)
+        idx, off = [], 0
+        for r in res:
+            k = len(r)
+            idx.append(np.column_stack([np.arange(off, off + k - 1), np.arange(off + 1, off + k)]))
+            off += k
+        nodes.append({"name": side, "positions": pos, "normals": None, "indices": np.vstack(idx),
+                      "mode": LINES, "extras": {"streamlines": len(res), "sourceStreamlines": n_total}})
+        rep[side] = {"streamlines": len(res), "sourceStreamlines": n_total, "points": int(len(pos)),
+                     "meanX": round(float(pos[:, 0].mean()), 2), "centroid": pos.mean(0).round(2).tolist()}
+    return nodes, rep
+
+
+def read_connectome(path: Path) -> dict[str, dict[str, dict[str, float]]]:
+    """Brodmann block of the HCP-1065 tract-to-region table: column -> side -> {area: probability}.
+
+    The sheet holds two blocks: 'a' (Brodmann areas) then 'b' (Kleist areas). Each block has a
+    header row of tract names, the left-hemisphere columns first, then the right-hemisphere ones.
+    """
+    import re
+    import xml.etree.ElementTree as ET
+    import zipfile
+    ns = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
+    z = zipfile.ZipFile(path)
+    shared = [''.join(t.itertext()) for t in ET.fromstring(z.read("xl/sharedStrings.xml")).iter(ns + "si")]
+    rows: list[dict[int, str]] = []
+    for row in ET.fromstring(z.read("xl/worksheets/sheet1.xml")).iter(ns + "row"):
+        cells: dict[int, str] = {}
+        for c in row.iter(ns + "c"):
+            col = 0
+            for ch in re.match(r"[A-Z]+", c.get("r")).group(0):
+                col = col * 26 + ord(ch) - 64
+            v = c.find(ns + "v")
+            if v is not None:
+                cells[col - 1] = shared[int(v.text)] if c.get("t") == "s" else v.text
+        rows.append(cells)
+    start = next(i for i, r in enumerate(rows) if r.get(0) == "a")
+    end = next(i for i, r in enumerate(rows) if r.get(0) == "b")
+    header = rows[start + 1]
+    ncol = max(header) // 2  # left block then right block
+    out: dict[str, dict[str, dict[str, float]]] = {}
+    for col in range(1, max(header) + 1):
+        name, side = header[col], ("L" if col <= ncol else "R")
+        out.setdefault(name, {"L": {}, "R": {}})
+        for r in rows[start + 2:end]:
+            area = r.get(0)
+            if area and col in r:
+                out[name][side][area] = float(r[col])
+    return out
+
+
+def build_wm(report: dict) -> dict:
+    """Tier-1 tracts of the white-matter section, plus their cortical connections."""
+    rng = np.random.default_rng(C.RANDOM_SEED)
+    base = RAW / "hcp1065" / "tracts"
+    for t in C.WM_TRACTS:
+        if "midline" in t.files:
+            per_side: dict[str, list[np.ndarray]] = {"L": [], "R": []}
+            for sl in read_trk_gz(base / t.files["midline"]):
+                for side, pieces in split_midline(sl).items():
+                    per_side[side].extend(p for p in pieces if len(p) >= 2)
+        else:
+            per_side = {s: read_trk_gz(base / t.files[s]) for s in ("L", "R")}
+        nodes, rep = line_nodes(per_side, C.WM_BUDGET, rng)
+        write_glb(BUILD / "wm" / f"{t.id}.glb", nodes, {"id": t.id})
+        report[t.id] = rep
+        print(f"wm {t.id:11s} L {rep['L']['streamlines']}/{rep['L']['sourceStreamlines']}  R {rep['R']['streamlines']}/{rep['R']['sourceStreamlines']}")
+    table = read_connectome(RAW / "hcp1065" / C.HCP1065_CONNECTOME)
+    conn = {}
+    for t in C.WM_TRACTS:
+        if not t.connectome:
+            continue
+        col = table[t.connectome]
+        conn[t.id] = {s: {a: round(p, 3) for a, p in col[s].items() if p > 0} for s in ("L", "R")}
+    return conn
+
+
 # ---------------------------------------------------------------- T1
 def write_volume(name: str, data: np.ndarray, origin: np.ndarray, spacing: float, meta: dict) -> None:
     u8 = np.ascontiguousarray(data.transpose(2, 1, 0))  # z, y, x -> x fastest in memory
@@ -445,6 +564,11 @@ def main() -> int:
     if not only or "tracts" in only:
         build_tracts(report)
     t1 = build_t1() if (not only or "t1" in only) else None
+    if not only or "wm" in only:
+        conn = build_wm(report)
+        (GENERATED / "wm-connectome.json").write_text(json.dumps(
+            {"source": C.HCP1065_CONNECTOME, "parcellation": "Brodmann areas (Kleist-Brodmann table, block 'a')",
+             "min": C.CONNECTOME_MIN, "tracts": conn}, indent=1))
 
     rp = BUILD / "report.json"
     old = json.loads(rp.read_text()) if rp.exists() and only else {}

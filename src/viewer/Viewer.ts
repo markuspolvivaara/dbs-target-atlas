@@ -240,7 +240,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       // a structure selected from the index or legend is shown even if the view does not include it
       ...(focusMeta && (focusMeta.type === 'tract' || focusMeta.type === 'cortex') ? [focusMeta.id] : []),
       ...(s.layers.cortex.on && p.parcels.size ? ['cortex', ...p.parcels.keys()] : []),
-      ...(s.layers.cortex.on && !p.parcels.size && this.items.has('cortex') ? ['cortex'] : []),
+      ...(s.layers.cortex.on && !p.parcels.size && (p.cortex || this.items.has('cortex')) ? ['cortex'] : []),
     ];
     await Promise.all(needed.map((id) => this.ensure(id)));
     if (seq !== this.applySeq) return; // superseded while loading
@@ -379,11 +379,25 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     return this.markerTargets.get(side) ?? null;
   }
 
-  /** Screen positions for labels of highlighted nuclei (primary / alternative), one per structure. */
+  /** Screen positions for labels of highlighted nuclei (primary / alternative), one per structure; tracts too if the plan asks. */
   structureScreen(): { id: string; x: number; y: number; look: Look }[] {
     const out: { id: string; x: number; y: number; look: Look }[] = [];
-    if (!this.plan || !this.state?.layers.nuclei.on) return out;
+    if (!this.plan || !this.state) return out;
     const w = this.host.clientWidth, h = this.host.clientHeight;
+    if (this.plan.labelTracts && this.state.layers.tracts.on) {
+      for (const [id, role] of this.plan.tracts) {
+        if (role !== 'key' || this.state.hidden.includes(id)) continue;
+        const it = this.items.get(id);
+        if (it?.kind !== 'lines') continue;
+        const side: Side = this.sideShown('L') ? 'L' : 'R';
+        const c = it.centroid[side];
+        if (!c || !this.sideShown(side)) continue;
+        const v = this.toWorld(c.clone()).project(this.camera);
+        if (v.z > 1 || Math.abs(v.x) > 1.1 || Math.abs(v.y) > 1.1) continue;
+        out.push({ id, x: (v.x + 1) / 2 * w, y: (1 - v.y) / 2 * h, look: 'primary' });
+      }
+    }
+    if (!this.state.layers.nuclei.on) return out;
     for (const [id, look] of this.plan.looks) {
       if (look !== 'primary' && look !== 'alt') continue;
       if (this.state.hidden.includes(id)) continue;
@@ -490,7 +504,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     }
     if (!pts.length) pts.push(new THREE.Vector3(0, -12, -2));
     const centre = pts.reduce((a, b) => a.add(b), new THREE.Vector3()).divideScalar(pts.length);
-    let radius = 14;
+    let radius = p.minRadius ?? 14;
     for (const q of pts) radius = Math.max(radius, q.distanceTo(centre) + 10);
     // cortical areas in view need a wider frame
     if (this.state?.layers.cortex.on && p.parcels.size) radius = Math.max(radius, 55);
@@ -511,6 +525,9 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       // axial: seen from above with anterior up (camera nudged posterior so the orbit keeps anterior at the top)
       case 'axial': dir = new THREE.Vector3(0, -0.05, 1); break;
       case 'posteriorOblique': dir = new THREE.Vector3(0.65 * sideSign, -0.8, 0.55); break;
+      // lateral: the shown hemisphere from outside (both: from the left); medial: from the midline
+      case 'lateral': dir = new THREE.Vector3(hemi === 'R' ? 1 : -1, 0, 0.08); break;
+      case 'medial': dir = new THREE.Vector3(hemi === 'R' ? -1 : 1, 0, 0.08); break;
       case 'surgeon': {
         const side: Side = hemi === 'L' ? 'L' : 'R';
         const l = this.state!.lead;
