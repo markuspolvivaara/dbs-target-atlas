@@ -19,20 +19,19 @@ export function skullPlan(grpId: string, sel: string | null): SkullPlan {
   for (const s of SB_MANIFEST.structures) {
     if (s.type === 'bone') looks.set(s.id, inGroup.has(s.id) ? (g.kind === 'system' ? 'context' : 'primary') : g.kind === 'bone' ? 'ghost' : 'context');
     else if (s.type === 'soft') looks.set(s.id, inGroup.has(s.id) ? 'primary' : 'hidden');
-    else if (inGroup.has(s.id)) tracts.set(s.id, 'key');
+    else if (s.type === 'tube') looks.set(s.id, inGroup.has(s.id) ? 'primary' : 'hidden');
   }
   const lmSel = sel && sel.startsWith('lm_') ? sel : null;
   const lmIds = new Set(g.landmarks);
   if (lmSel) lmIds.add(lmSel);
   const st = sel ? SB.get(sel) : undefined;
-  if (st?.type === 'tract') tracts.set(st.id, 'key');
-  if (st && st.type !== 'tract') looks.set(st.id, 'primary');
+  if (st) looks.set(st.id, 'primary');
   return {
     title: g.name, accent: 'ctx', looks, tracts, parcels: new Map(),
     markers: [...lmIds].map((id) => ({ targetId: id, primary: true })),
     camera: g.camera,
     focusIds: g.focus ? [] : g.structures.filter((id) => SB.get(id)?.type === 'bone'),
-    minRadius: g.radius, labelTracts: g.kind === 'region', group: g.id,
+    minRadius: g.radius, group: g.id,
   };
 }
 

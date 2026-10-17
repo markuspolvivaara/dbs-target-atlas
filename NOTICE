@@ -82,9 +82,11 @@ What is covered by which terms
      Definitions: Wikipedia - CC-BY-SA 3.0 (each links its source page).
    Changes made: bones, soft tissue, vessels and cranial nerves of the head exported
    from the Z-Anatomy Blender file; coordinates converted to millimetres from the
-   hypophysial fossa landmark; midline structures cut at the midline; vessels and
-   nerves reduced to centre lines and cropped to the head; converted to compressed
-   glTF; definitions shortened to their lead section.
+   hypophysial fossa landmark; midline structures cut at the midline; bones
+   smoothed by one subdivision level, decimated and shaded with baked ambient
+   occlusion; vessels and nerves rebuilt as tubes with the radius Z-Anatomy models
+   and cropped to the head; converted to compressed glTF; definitions shortened to
+   their lead section.
    Mitsuhashi N, et al. BodyParts3D: 3D structure database for anatomical
    concepts. Nucleic Acids Res. 2009;37:D782-D785. doi:10.1093/nar/gkn613.
 

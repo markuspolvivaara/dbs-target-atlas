@@ -215,14 +215,15 @@ The meshes and lines in `public/assets/skullbase/` and the files `sb-manifest.js
 **not** GPL-licensed: CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0.
 
 - Source: https://github.com/Z-Anatomy/Models-of-human-anatomy
-- Note: One adult male model (BodyParts3D), not a population average, and not in MNI space. Coordinates are millimetres from Z-Anatomy's hypophysial fossa landmark. Bones were simplified (retopologized) by Z-Anatomy; vessels and nerves are centre lines with no calibre information.
+- Note: One adult male model (BodyParts3D), not a population average, and not in MNI space. Coordinates are millimetres from Z-Anatomy's hypophysial fossa landmark. Bones were simplified (retopologized) by Z-Anatomy and are smoothed here by one subdivision level; vessels and nerves are drawn as tubes with the calibre Z-Anatomy models (not measured).
 - Attribution: BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan
 - Attribution: Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0
 - Attribution: Definitions: Wikipedia - CC-BY-SA 3.0 (the source page is linked on each definition)
 - Cite: Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.
 - Changes made: head structures exported from the Z-Anatomy Blender file (pipeline/skullbase_export.py), coordinates
-  converted to mm from the hypophysial fossa landmark, midline structures cut at x = 0, vessels and nerves reduced to
-  centre lines and cropped to the head, files converted to compressed glTF, definitions shortened to their lead section.
+  converted to mm from the hypophysial fossa landmark, midline structures cut at x = 0, bones smoothed by one subdivision
+  level, decimated and shaded with baked ambient occlusion, vessels and nerves rebuilt as tubes with Z-Anatomy's modelled
+  radius and cropped to the head, files converted to compressed glTF, definitions shortened to their lead section.
 
 ## Cortex section (Destrieux parcellation on the Lead-DBS template surface)
 

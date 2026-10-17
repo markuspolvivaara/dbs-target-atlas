@@ -162,8 +162,9 @@ def skull_base_attribution() -> list[str]:
         *[f"- Attribution: {a}" for a in d["attribution"]],
         *[f"- Cite: {c}" for c in d["citation"]],
         "- Changes made: head structures exported from the Z-Anatomy Blender file (pipeline/skullbase_export.py), coordinates",
-        "  converted to mm from the hypophysial fossa landmark, midline structures cut at x = 0, vessels and nerves reduced to",
-        "  centre lines and cropped to the head, files converted to compressed glTF, definitions shortened to their lead section.",
+        "  converted to mm from the hypophysial fossa landmark, midline structures cut at x = 0, bones smoothed by one subdivision",
+        "  level, decimated and shaded with baked ambient occlusion, vessels and nerves rebuilt as tubes with Z-Anatomy's modelled",
+        "  radius and cropped to the head, files converted to compressed glTF, definitions shortened to their lead section.",
         "",
     ]
 

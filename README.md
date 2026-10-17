@@ -76,6 +76,11 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
 - **Cranial floor** view with a cut-away height (the calvaria lifted off), from above or below.
 - **Regions**: everything of the model within 15 mm of the hypophysial fossa, optic canal, petrous apex and
   foramen ovale (25 mm around the foramen magnum), measured, with the distance on each item.
+- Vessels and nerves are tubes with the calibre Z-Anatomy models (its curve bevel; modelled, not measured).
+  Each can be shown or hidden on its own; the cranial nerves are listed I–XII with their branches.
+- Bones are smoothed by one subdivision level (then decimated) and shaded with baked ambient occlusion. The
+  geometry is Z-Anatomy's simplified BodyParts3D model: finer open skull models were checked (BodyParts3D's own
+  release, the SPL head and neck atlas, MUG500+ CT skulls) and are either no finer, unlabelled or too noisy.
 - **Systems**: cranial nerves, arteries, veins and dural sinuses. **Bones**: each with the landmarks
   Z-Anatomy labels on it (126 in all: foramina, canals, clinoids, sella, grooves...).
 - Landmarks are the points Z-Anatomy anchors to each bone (the label line's hooked end), checked against the

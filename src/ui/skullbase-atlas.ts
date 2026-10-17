@@ -8,7 +8,7 @@ import type { SkullState } from '../skullbase/state';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
 import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem } from './stage';
-import { chips, clear, fmtMm } from './widgets';
+import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: SkullState) => void, opts?: { camera?: boolean }) => void;
 
@@ -21,6 +21,26 @@ const KIND_LABEL = { bone: 'Bone', soft: 'Soft tissue', artery: 'Artery', vein: 
 const KIND_PLURAL: Record<string, string> = { 'Soft tissue': 'Soft tissue', Artery: 'Arteries', 'Vein or dural sinus': 'Veins and dural sinuses', Nerve: 'Nerves' };
 const GROUP_ROWS: [SbGroup['kind'], string][] = [['overview', 'Overview'], ['region', 'Regions'], ['system', 'Systems'], ['bone', 'Bones and their landmarks']];
 const nameOf = (id: string) => SB.get(id)?.name ?? LM.get(id)?.name ?? id;
+const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+/** Nerves grouped by cranial nerve (I-XII); within one, the nerve itself first, then its branches by name. */
+function byCranialNerve(ids: string[]): [number, string[]][] {
+  const groups = new Map<number, string[]>();
+  for (const id of ids) {
+    const cn = SB.get(id)?.cranialNerve ?? 13;
+    groups.set(cn, [...(groups.get(cn) ?? []), id]);
+  }
+  const trunkFirst = (cn: number) => (a: string, b: string) => {
+    const t = (id: string) => (/\([IVX]+\)$/.test(nameOf(id)) && cn <= 12 ? 0 : 1);
+    return t(a) - t(b) || nameOf(a).localeCompare(nameOf(b));
+  };
+  return [...groups].sort(([a], [b]) => a - b).map(([cn, m]) => [cn, m.sort(trunkFirst(cn))]);
+}
+/** A cranial nerve's name as the model gives it ('Trigeminal nerve' from 'Trigeminal nerve (V)'). */
+function cnName(cn: number, members: string[]): string {
+  const trunk = members.find((id) => nameOf(id).endsWith(`(${ROMAN[cn - 1]})`));
+  if (trunk) return nameOf(trunk).replace(/\s*\([IVX]+\)$/, '');
+  return members.length === 1 ? nameOf(members[0]) : `Cranial nerve ${ROMAN[cn - 1] ?? ''}`;
+}
 const tokenOf = (id: string) => SB.get(id)?.colour.token ?? 'ctx';
 
 /** The 3D page of the skull-base section: groups, structure and landmark cards, layers and the cut-away. */
@@ -160,7 +180,7 @@ export class SkullbaseAtlasPage {
     this.stage.querySelectorAll<HTMLButtonElement>('[data-hemi]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.hemi === s.hemi)));
     this.stage.querySelectorAll<HTMLButtonElement>('.toolbar [data-labels]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.labels === s.labels)));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((b) => b.toggleAttribute('data-active', b.dataset.preset === s.cam.preset));
-    const key = `${s.grp}|${s.sel}`;
+    const key = `${s.grp}|${s.sel}|${s.hidden.join(',')}`;
     if (key !== this.lastKey || !prev) { this.lastKey = key; this.renderOverview(); }
     this.renderLayers();
     if (prev && prev.sel !== s.sel && s.sel) this.selectTab('overview', false);
@@ -176,22 +196,53 @@ export class SkullbaseAtlasPage {
   private renderOverview(): void {
     const s = this.s;
     const pane = this.tabs.overview;
+    // the lists re-render on every toggle: keep the reader's place
+    const keep = [pane.scrollTop, this.panel.scrollTop];
+    requestAnimationFrame(() => { pane.scrollTop = keep[0]; this.panel.scrollTop = keep[1]; });
     clear(pane);
     const g = SB_GROUP.get(s.grp)!;
     for (const [kind, label] of GROUP_ROWS) {
       pane.append(h('p', { class: 'chips-label' }, label),
         chips(SB_GROUPS.filter((x) => x.kind === kind).map((x) => [x.id, x.name]), g.id, (v) => this.pickGroup(v), { label, cls: 'grp-chips' }));
     }
-    const lines = g.structures.filter((id) => SB.get(id)?.type !== 'bone');
     const boneIds = g.structures.filter((id) => SB.get(id)?.type === 'bone');
+    const hidden = new Set(s.hidden);
     const btn = (id: string, extra = '') => h('button', {
       type: 'button', class: 'chip sb-item', 'aria-pressed': String(s.sel === id), 'data-id': id,
       onclick: () => this.update((st) => { st.sel = st.sel === id ? null : id; }),
     }, h('span', { class: 'swatch', style: `--c: var(--c-${LM.has(id) ? 'ctx' : tokenOf(id)})` }), nameOf(id), extra);
+    const show = (ids: string[], on: boolean) => this.update((st) => { st.hidden = on ? st.hidden.filter((x) => !ids.includes(x)) : [...new Set([...st.hidden, ...ids])]; });
+    const eye = (ids: string[], label: string) => {
+      const off = ids.every((x) => hidden.has(x));
+      return h('button', {
+        type: 'button', class: 'eye', 'aria-pressed': String(!off), title: off ? 'Show' : 'Hide', 'aria-label': `${off ? 'Show' : 'Hide'} ${label}`,
+        onclick: () => show(ids, off),
+      }, eyeIcon(!off));
+    };
     const region = g.kind === 'region' ? REGIONS.find((r) => `near_${r.landmark.toLowerCase().replace(/[^a-z0-9]+/g, '_')}` === g.id) : undefined;
     const dist = (id: string) => region?.structures.find((x) => x.id === id)?.distanceMm;
-    if (lines.length) pane.append(h('p', { class: 'chips-label' }, `Vessels, nerves and soft tissue (${lines.length})`),
-      h('div', { class: 'chips wrap sb-list' }, ...lines.map((id) => btn(id, dist(id) !== undefined ? ` · ${fmtMm(dist(id)!)} mm` : ''))));
+    const entry = (id: string) => h('span', { class: `sb-entry${hidden.has(id) ? ' off' : ''}` }, eye([id], nameOf(id)),
+      btn(id, dist(id) !== undefined ? ` · ${fmtMm(dist(id)!)} mm` : ''));
+    const listHead = (label: string, ids: string[]) => h('div', { class: 'list-head' }, h('p', { class: 'chips-label' }, `${label} (${ids.length})`),
+      h('span', { class: 'list-actions' },
+        h('button', { type: 'button', class: 'linklike', onclick: () => show(ids, true) }, 'Show all'),
+        h('button', { type: 'button', class: 'linklike', onclick: () => show(ids, false) }, 'Hide all')));
+    // vessels, nerves and soft tissue: one list per kind; cranial nerves in order I-XII, each under its own heading
+    for (const k of ['nerve', 'artery', 'vein', 'soft'] as const) {
+      const ids = g.structures.filter((id) => { const st = SB.get(id); return st && st.type !== 'bone' && kindOf(st) === k; });
+      if (!ids.length) continue;
+      pane.append(listHead(KIND_PLURAL[KIND_LABEL[k]] ?? KIND_LABEL[k], ids));
+      if (k !== 'nerve') { pane.append(h('div', { class: 'chips wrap sb-list' }, ...ids.map(entry))); continue; }
+      for (const [cn, members] of byCranialNerve(ids)) {
+        if (members.length === 1) { // a nerve without separate branches: one row
+          pane.append(h('div', { class: 'cn-head single' }, h('span', { class: 'cn-num' }, cn <= 12 ? ROMAN[cn - 1] : ''), entry(members[0])));
+          continue;
+        }
+        pane.append(h('div', { class: 'cn-head' }, h('span', { class: 'cn-num' }, ROMAN[cn - 1]), eye(members, `cranial nerve ${ROMAN[cn - 1]}`),
+          h('span', {}, `${cnName(cn, members)} and branches`)),
+          h('div', { class: 'chips wrap sb-list cn-list' }, ...members.map(entry)));
+      }
+    }
     if (boneIds.length && g.kind !== 'overview') pane.append(h('p', { class: 'chips-label' }, 'Bones'), h('div', { class: 'chips wrap sb-list' }, ...boneIds.map((id) => btn(id))));
     if (g.landmarks.length) pane.append(h('p', { class: 'chips-label' }, `Landmarks (${g.landmarks.length})`), h('div', { class: 'chips wrap sb-list' }, ...g.landmarks.map((id) => btn(id))));
     if (s.sel) pane.append(this.card(s.sel));
@@ -201,7 +252,7 @@ export class SkullbaseAtlasPage {
       h('p', {}, g.description),
       g.kind === 'overview' ? [
         h('p', { class: 'aside' }, 'Not yet shown (Z-Anatomy does not label these; they will be added from a labelled source): ', NOT_YET_SHOWN.join(', '), '.'),
-        h('p', { class: 'aside' }, 'One adult male model (BodyParts3D), simplified by Z-Anatomy. Positions are millimetres from the model’s hypophysial fossa landmark; this is not MNI space and does not match the DBS and white-matter sections. Vessels and nerves are centre lines without calibre.'),
+        h('p', { class: 'aside' }, 'One adult male model (BodyParts3D), simplified by Z-Anatomy. Positions are millimetres from the model’s hypophysial fossa landmark; this is not MNI space and does not match the DBS and white-matter sections. Vessels and nerves are drawn with the calibre Z-Anatomy models, which is not measured.'),
       ] : null);
     if (s.sel) pane.append(h('details', { class: 'more' }, h('summary', {}, `About ${g.name}`), groupCard));
     else pane.append(groupCard);
@@ -250,7 +301,7 @@ export class SkullbaseAtlasPage {
     if (!p) return;
     const hidden = new Set(this.s.hidden);
     const kinds = new Map<string, string[]>();
-    for (const id of [...p.tracts.keys(), ...[...p.looks].filter(([id, l]) => l === 'primary' && SB.get(id)?.type === 'soft').map(([id]) => id)]) {
+    for (const id of [...p.looks].filter(([id, l]) => l === 'primary' && ['soft', 'tube'].includes(SB.get(id)?.type ?? '')).map(([id]) => id)) {
       const k = KIND_LABEL[kindOf(SB.get(id)!)];
       kinds.set(k, [...(kinds.get(k) ?? []), id]);
     }
@@ -260,12 +311,21 @@ export class SkullbaseAtlasPage {
         h('button', {
           type: 'button', class: 'eye', 'aria-pressed': String(!off), title: off ? 'Show' : 'Hide', 'aria-label': `${off ? 'Show' : 'Hide'} ${text}`,
           onclick: () => this.update((s) => { s.hidden = off ? s.hidden.filter((x) => !ids.includes(x)) : [...new Set([...s.hidden, ...ids])]; }),
-        }, h('span', { 'aria-hidden': 'true' }, off ? '○' : '●')),
+        }, eyeIcon(!off)),
         h('span', { class: `sw ${cls}`, style: `--c: var(--c-${token})` }), h('span', { class: 'lg-text' }, text));
     };
     const bones = [...p.looks].filter(([id, l]) => l !== 'hidden' && SB.get(id)?.type === 'bone').map(([id]) => id);
     if (this.s.layers.nuclei.on && bones.length) this.legend.append(row('solid', 'sbBone', `Bones (${bones.length})`, bones));
-    for (const [k, ids] of kinds) this.legend.append(row(k === 'Soft tissue' ? 'patch' : 'line key', tokenOf(ids[0]), `${KIND_PLURAL[k] ?? k} (${ids.length})`, ids));
+    for (const [k, ids] of kinds) {
+      this.legend.append(row(k === 'Soft tissue' ? 'patch' : 'solid', tokenOf(ids[0]), `${KIND_PLURAL[k] ?? k} (${ids.length})`, ids));
+      if (k !== KIND_LABEL.nerve) continue;
+      // each cranial nerve on its own row (with its branches), I-XII
+      for (const [cn, members] of byCranialNerve(ids)) {
+        const r = row('solid', tokenOf(members[0]), `${cn <= 12 ? ROMAN[cn - 1] + ' ' : ''}${cnName(cn, members)}${members.length > 1 ? ` (+${members.length - 1} branches)` : ''}`, members);
+        r.classList.add('lg-sub');
+        this.legend.append(r);
+      }
+    }
     if (p.markers.length && this.s.layers.targets.on) this.legend.append(row('dot', 'ctx', `Landmarks (${p.markers.length})`, p.markers.map((m) => m.targetId)));
     if (this.s.hidden.length) this.legend.append(h('li', { class: 'lg-actions' }, h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.hidden = []; }) }, `Show all (${this.s.hidden.length} hidden)`)));
   }
@@ -278,7 +338,8 @@ export class SkullbaseAtlasPage {
     const add = (id: string, text: string, ax: number, ay: number, cls: string) => { if (!have.has(id)) { have.add(id); items.push({ id, text, ax, ay, cls }); } };
     if (mode === 'all') {
       for (const m of this.viewer.markerScreen()) add(m.id, LM.get(m.id)?.name ?? '', m.x, m.y, 'mlabel');
-      for (const p of this.viewer.structureScreen()) if (SB.get(p.id)?.type === 'tract') add(p.id, nameOf(p.id), p.x, p.y, 'slabel primary');
+      // vessels and nerves are named in the regions (in the system groups there would be too many)
+      if (SB_GROUP.get(this.s.grp)?.kind === 'region') for (const p of this.viewer.structureScreen()) if (SB.get(p.id)?.type === 'tube') add(p.id, nameOf(p.id), p.x, p.y, 'slabel primary');
     }
     if (mode !== 'off') for (const id of [this.legendHover, this.s?.sel]) {
       if (!id || have.has(id)) continue;

@@ -33,6 +33,20 @@ describe('skull-base data (Z-Anatomy export)', () => {
     expect(defs.length).toBeGreaterThan(150);
     expect(defs.filter((d) => d.url?.startsWith('https://en.wikipedia.org/')).length / defs.length).toBeGreaterThan(0.75);
   });
+  it('vessels and nerves are tube meshes; every nerve knows its cranial nerve, and I–XII are all there', async () => {
+    const tubes = SB_MANIFEST.structures.filter((s) => s.type === 'tube');
+    expect(tubes.length).toBeGreaterThan(100);
+    expect(SB_MANIFEST.structures.some((s) => s.type === 'tract')).toBe(false);
+    const nerves = tubes.filter((s) => s.category === 'nerve');
+    expect(nerves.every((s) => s.cranialNerve !== undefined)).toBe(true);
+    expect(new Set(nerves.map((s) => s.cranialNerve))).toEqual(new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]));
+    expect(nerves.find((s) => s.name === 'Buccal nerve')!.cranialNerve).toBe(5);
+    expect(nerves.find((s) => s.name === 'Chorda tympani')!.cranialNerve).toBe(7);
+    const ica = SB_MANIFEST.structures.find((s) => s.name === 'Internal carotid artery')!;
+    const means = await nodeMeans(ica.file);
+    expect(means.L[0]).toBeLessThan(0);
+    expect(means.R[0]).toBeGreaterThan(0);
+  });
   it('the missing landmarks are listed as not yet shown', () => {
     expect(NOT_YET_SHOWN).toContain('Jugular foramen');
     expect(NOT_YET_SHOWN).toContain('Superior orbital fissure');

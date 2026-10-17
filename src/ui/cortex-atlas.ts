@@ -8,7 +8,7 @@ import { VIEW, VIEWS, type ViewId } from '../cortex/views';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
 import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem } from './stage';
-import { chips, clear, fmtMm } from './widgets';
+import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: CortexState) => void, opts?: { camera?: boolean }) => void;
 
@@ -281,7 +281,7 @@ export class CortexAtlasPage {
         ids.length ? h('button', {
           type: 'button', class: 'eye', 'aria-pressed': String(!off), title: off ? 'Show' : 'Hide', 'aria-label': `${off ? 'Show' : 'Hide'} ${text}`,
           onclick: () => this.update((st) => { st.hidden = off ? st.hidden.filter((x) => !ids.includes(x)) : [...new Set([...st.hidden, ...ids])]; }),
-        }, h('span', { 'aria-hidden': 'true' }, off ? '○' : '●')) : h('span', { class: 'eye-space' }),
+        }, eyeIcon(!off)) : h('span', { class: 'eye-space' }),
         h('span', { class: 'sw patch', style }), h('span', { class: 'lg-text' }, text));
     };
     if (s.colour === 'lobe') {

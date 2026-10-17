@@ -8,12 +8,14 @@ Writes pipeline/data/build/skullbase/export.json with, in RAS millimetres relati
 hypophysial fossa landmark (Z-Anatomy: +X = patient left, -Y = anterior, +Z = superior, metres):
   bones      cranial bones as triangle meshes
   soft       soft-tissue meshes (cavernous sinus, pituitary, tentorium, falx, optic chiasm)
-  lines      arteries, veins and cranial nerves as centre-line polylines (cropped to the head)
+  lines      arteries, veins and cranial nerves as centre-line polylines (cropped to the head), each point with
+             the tube radius Z-Anatomy models there (its curve bevel), as [x, y, z, radius]
   landmarks  Z-Anatomy's labelled points on the cranial bones, with their collection path
   texts      the Wikipedia-derived definition of every exported structure (CC BY-SA 3.0)
 Nothing is added or moved by hand: the file only converts what the model contains.
 """
 import json
+import math
 import os
 import re
 import sys
@@ -28,6 +30,10 @@ HEAD_MARGIN_MM = 15.0  # keep geometry within the cranial bounding box plus this
 NECK_MM = 45.0         # and down to this far below the lowest cranial bone (craniocervical junction)
 LANDMARK_MAX_MM = 8.0   # an unhooked landmark must lie within this distance of a cranial bone
 HOOKED_MAX_MM = 20.0    # a landmark hooked to a cranial bone (opening centres lie away from the rim)
+BONE_SUBDIV = 1         # one Catmull-Clark level removes the facets of the low-poly bones...
+BONE_KEEP = 0.42        # ...then quadric decimation keeps this share of its triangles (about 2.5x the original)
+AO_RAYS = 24            # ambient occlusion baked per bone vertex: rays over the outward hemisphere
+AO_DIST_MM = 12.0       # occluders farther than this are ignored
 # landmarks are Z-Anatomy's skeletal labels; group labels (those with a '.g' heading object), teeth,
 # ossicle parts and vertebral landmarks are left out
 SKIP_LANDMARKS = ('tooth', 'teeth', 'dental', 'malleus', 'incus', 'stapes', 'ossicle', 'atlas', 'axis', 'dens ', 'cusp', 'root apex',
@@ -163,19 +169,85 @@ def inside(q) -> bool:
     return all(box_lo[i] <= q[i] <= box_hi[i] for i in range(3))
 
 
-def mesh_data(o):
+def mesh_data(o, smooth: bool = False):
+    """Triangles of the evaluated mesh in RAS mm. smooth: one subdivision level then decimation (bones), with the
+    world-space vertex normals for the occlusion bake."""
+    added = []
+    if smooth:
+        sub = o.modifiers.new('export_subdiv', 'SUBSURF')
+        sub.levels = sub.render_levels = BONE_SUBDIV
+        dec = o.modifiers.new('export_decimate', 'DECIMATE')
+        dec.ratio = BONE_KEEP
+        added = [sub, dec]
     dg = bpy.context.evaluated_depsgraph_get()
     ev = o.evaluated_get(dg)
     m = ev.to_mesh()
     m.calc_loop_triangles()
-    verts = [ras(o.matrix_world @ v.co) for v in m.vertices]
+    W = o.matrix_world
+    world = [W @ v.co for v in m.vertices]
+    nrm = [(W.to_3x3() @ v.normal).normalized() for v in m.vertices]
+    verts = [ras(p) for p in world]
     tris = [list(t.vertices) for t in m.loop_triangles]
     ev.to_mesh_clear()
-    return verts, tris
+    for md in added:
+        o.modifiers.remove(md)
+    return (verts, tris, world, nrm) if smooth else (verts, tris)
+
+
+def _hemisphere(n: int) -> list[mathutils.Vector]:
+    """n cosine-weighted directions over the +Z hemisphere (Fibonacci spiral)."""
+    out = []
+    for i in range(n):
+        r = math.sqrt((i + 0.5) / n)
+        a = i * math.pi * (3 - math.sqrt(5))
+        out.append(mathutils.Vector((r * math.cos(a), r * math.sin(a), math.sqrt(max(0.0, 1 - r * r)))))
+    return out
+
+
+def bake_ao(meshes: dict) -> dict:
+    """Ambient occlusion per bone vertex: the share of hemisphere rays (around the vertex normal) that reach
+    AO_DIST_MM without hitting any cranial bone. 1 = open, 0 = enclosed."""
+    allv, allf = [], []
+    for v_world, tris in ((m[2], m[1]) for m in meshes.values()):
+        off = len(allv)
+        allv += v_world
+        allf += [[a + off, b + off, c + off] for a, b, c in tris]
+    tree = BVHTree.FromPolygons(allv, allf)
+    dirs = _hemisphere(AO_RAYS)
+    dist = AO_DIST_MM / 1000.0
+    out = {}
+    for name, (_, _, world, nrm) in meshes.items():
+        ao = []
+        for p, n in zip(world, nrm):
+            q = n.to_track_quat('Z', 'Y')
+            o = p + n * 0.00005
+            hits = sum(1 for d in dirs if tree.ray_cast(o, q @ d, dist)[0] is not None)
+            ao.append(round(1 - hits / AO_RAYS, 3))
+        out[name] = ao
+    return out
+
+
+def bevel_kd(o):
+    """KD-tree (RAS mm) of the curve's evaluated tube surface, or None when it has no thickness."""
+    dg = bpy.context.evaluated_depsgraph_get()
+    ev = o.evaluated_get(dg)
+    m = ev.to_mesh()
+    vs = [ras(o.matrix_world @ v.co) for v in m.vertices] if len(m.polygons) else []
+    ev.to_mesh_clear()
+    if not vs:
+        return None
+    t = mathutils.kdtree.KDTree(len(vs))
+    for i, v in enumerate(vs):
+        t.insert(v, i)
+    t.balance()
+    return t
 
 
 def polylines(o) -> list[list[list[float]]]:
-    """Centre lines of a curve object (bevel removed), split into connected runs and cropped to the head."""
+    """Centre lines of a curve object, split into connected runs and cropped to the head. Each point carries the
+    radius of Z-Anatomy's tube there: the distance to the nearest vertex of the evaluated bevel surface (the
+    tube's rings lie at that radius around the centre line); 0 when the curve has no bevel."""
+    tube = bevel_kd(o)
     data = o.data.copy()
     data.bevel_depth = 0.0
     data.extrude = 0.0
@@ -187,6 +259,7 @@ def polylines(o) -> list[list[list[float]]]:
     ev = tmp.evaluated_get(dg)
     m = ev.to_mesh()
     pts = [ras(tmp.matrix_world @ v.co) for v in m.vertices]
+    pts = [q + [round(tube.find(q)[2], 3) if tube else 0.0] for q in pts]
     adj: dict[int, list[int]] = {}
     for e in m.edges:
         a, b = e.vertices
@@ -233,9 +306,11 @@ def text_for(name: str) -> str | None:
 export = {'origin': {'pin': ORIGIN_PIN, 'note': 'RAS mm relative to the hypophysial fossa landmark'},
           'box': [box_lo, box_hi], 'bones': {}, 'soft': {}, 'lines': {}, 'landmarks': [], 'texts': {}}
 
+smooth = {o.name: mesh_data(o, smooth=True) for o in bones}
+ao = bake_ao(smooth)
 for o in bones:
-    v, t = mesh_data(o)
-    export['bones'][o.name] = {'verts': v, 'tris': t}
+    v, t = smooth[o.name][:2]
+    export['bones'][o.name] = {'verts': v, 'tris': t, 'ao': ao[o.name]}
     export['texts'][base_name(o.name)] = text_for(o.name)
 
 SOFT = ['Cavernous sinus.l', 'Cavernous sinus.r', 'Adenohypophysis', 'Neurohypophysis', 'Tentorium cerebelli.l',

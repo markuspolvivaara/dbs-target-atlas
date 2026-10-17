@@ -35,7 +35,7 @@ export const StructureSchema = z.object({
   name: z.string(),
   aliases: z.array(z.string()),
   /** bone and soft (soft-tissue mesh) are used by the skull-base section */
-  type: z.enum(['nucleus', 'cortex', 'tract', 'target', 'bone', 'soft', 'surface']),
+  type: z.enum(['nucleus', 'cortex', 'tract', 'target', 'bone', 'soft', 'surface', 'tube']),
   colour: z.string(), // palette token
   meshFile: z.string().regex(/^assets\/(meshes|tracts)\/[a-z0-9_]+\.glb$/),
   /** Text taken from the attached content only; null when the content says nothing about it. */
@@ -131,7 +131,7 @@ export const ManifestStructureSchema = z.object({
   name: z.string(),
   aliases: z.array(z.string()),
   /** bone and soft (soft-tissue mesh) are used by the skull-base section, surface (a cortical label) by the cortex section */
-  type: z.enum(['nucleus', 'cortex', 'tract', 'target', 'bone', 'soft', 'surface']),
+  type: z.enum(['nucleus', 'cortex', 'tract', 'target', 'bone', 'soft', 'surface', 'tube']),
   role: z.enum(['tract', 'border', 'response']).optional(),
   file: z.string(),
   bytes: z.number().int().positive(),
@@ -147,6 +147,8 @@ export const ManifestStructureSchema = z.object({
   hcp: z.enum(['confirmed', 'likely']).optional(),
   /** skull-base section: share of the line inside the cranial bones' convex hull (measured) */
   intracranialFraction: z.number().optional(),
+  /** skull-base section: the cranial nerve (1-12) a nerve or nerve branch belongs to */
+  cranialNerve: z.number().int().min(1).max(12).optional(),
   /** white-matter section: core (surgical essentials), extended, or posterior fossa */
   tier: z.enum(['core', 'extended', 'fossa']).optional(),
   centroid: z.object({ L: Vec3, R: Vec3 }).nullable(),

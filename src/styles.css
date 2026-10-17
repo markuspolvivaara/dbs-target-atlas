@@ -128,8 +128,18 @@ code { font-size: 0.92em; }
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .legend3d .lg-note { color: var(--muted); font-size: 12px; }
+.legend3d li.lg-sub { padding-left: 18px; font-size: 12.5px; }
+.legend3d li.lg-sub .sw { width: 14px; }
 .legend3d .eye-space { width: 22px; flex: none; }
 ul.plain { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.sb-entry { display: inline-flex; align-items: center; gap: 4px; max-width: 100%; }
+.sb-entry.off .chip { opacity: 0.5; text-decoration: line-through; }
+.list-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.list-actions { display: inline-flex; gap: 12px; font-size: 13px; }
+.cn-head { display: flex; align-items: center; gap: 8px; margin: 10px 0 4px; font-weight: 700; font-size: 14px; }
+.cn-list { margin-left: calc(2.6em + 8px); }
+.cn-head.single { font-weight: 400; margin: 6px 0; }
+.cn-num { width: 2.6em; flex: none; font-weight: 700; }
 .tlabel { align-self: center; font-size: 12px; color: var(--muted); padding: 0 4px 0 6px; }
 @media (max-width: 599px) { .tlabel { display: none; } }
 .tip {
@@ -159,10 +169,14 @@ ul.plain { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
 .legend3d li.off .lg-item { text-decoration: line-through; }
 .legend3d li.on { background: var(--soft); border-radius: 6px; margin: 0 -4px; padding: 1px 4px; }
 .legend3d li.on .lg-item { font-weight: 700; text-decoration: none; }
-.legend3d .eye { font: inherit; font-size: 11px; line-height: 1; width: 22px; height: 22px; flex: none; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; padding: 0; }
-.legend3d .eye[aria-pressed="false"] { color: var(--muted); }
+.eye { display: inline-grid; place-items: center; width: 22px; height: 22px; flex: none; border-radius: 6px; border: 0; background: transparent; color: var(--ink); cursor: pointer; padding: 0; }
+.eye:hover { background: var(--soft); }
+.eye:focus-visible { outline: 2px solid var(--link); outline-offset: 1px; }
+.eye[aria-pressed="false"] { color: var(--muted); }
+.eye-icon { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.eye-icon .slash { stroke-width: 2.2; }
 .legend3d .lg-actions { gap: 14px; padding-top: 4px; border-top: 1px solid var(--line); }
-@media (pointer: coarse) { .legend3d .eye { width: 32px; height: 32px; font-size: 13px; } }
+@media (pointer: coarse) { .eye { width: 34px; height: 34px; } .eye-icon { width: 20px; height: 20px; } }
 .lg-item { font: inherit; background: none; border: 0; padding: 0; color: inherit; text-align: left; cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px; }
 .legend3d .info { font: inherit; font-size: 11px; font-weight: 700; width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; flex: none; padding: 0; }
 .sw { flex: none; width: 22px; height: 12px; border-radius: 3px; }

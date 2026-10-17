@@ -9,6 +9,7 @@ import { LEAD } from '../viewer/lead';
 import { dbsScene, LANDMARKS, type Plan } from '../viewer/selection';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { chips, clear, fmtMm, h, refLinks } from './dom';
+import { eyeIcon } from './widgets';
 import { clearAllLeadPrefs, clearLeadPref, isHidden, leadPrefFor, saveLeadDefault, saveLeadPref, visibleIndications } from './prefs';
 import { primaryTargetId } from '../viewer/selection';
 import { bindSheetDrag, buildSlicesPane, drawGizmo, layoutLabels, syncSlicesPane, type LabelItem } from './stage';
@@ -313,7 +314,7 @@ export class AtlasPage {
     const img = IMAGING.find((x) => x.structureId === id);
     const stream = m.streamlines ? `${m.streamlines.L + m.streamlines.R} of ${m.sourceStreamlines!.L + m.sourceStreamlines!.R} source streamlines shown.` : '';
     return h('article', { class: 'card sel', style: `--accent: var(--c-${m.colour.token})` }, close,
-      h('p', { class: 'eyebrow' }, m.category ?? { nucleus: 'Nucleus', cortex: 'Cortical area', tract: 'Tract', target: 'Sweet-spot volume', bone: 'Bone', soft: 'Soft tissue', surface: 'Cortical label' }[m.type]),
+      h('p', { class: 'eyebrow' }, m.category ?? { nucleus: 'Nucleus', cortex: 'Cortical area', tract: 'Tract', target: 'Sweet-spot volume', bone: 'Bone', soft: 'Soft tissue', surface: 'Cortical label', tube: 'Vessel or nerve' }[m.type]),
       h('h2', {}, h('span', { class: 'swatch', style: `--c: var(--c-${m.colour.token})` }), m.name),
       m.aliases.length ? h('p', { class: 'aside' }, 'Also: ', m.aliases.join(', ')) : null,
       h('dl', {},
@@ -358,7 +359,7 @@ export class AtlasPage {
             s.hidden = [...set];
             if (!off && s.sel && ids.includes(s.sel)) s.sel = null;
           }),
-        }, h('span', { 'aria-hidden': 'true' }, off ? '○' : '●')),
+        }, eyeIcon(!off)),
         h('span', { class: `sw ${cls}`, style: `--c: var(--c-${token})` }),
         h('button', {
           type: 'button', class: 'lg-item', 'aria-pressed': String(on), title: on ? 'Remove highlight' : 'Highlight and open card',

@@ -10,7 +10,7 @@
   "structures": [
    {
     "id": "sb_sphenoid_bone",
-    "distanceMm": 0.0
+    "distanceMm": 0.3
    },
    {
     "id": "sb_neurohypophysis",
@@ -22,7 +22,7 @@
    },
    {
     "id": "sb_sinus_of_sphenoid_bone",
-    "distanceMm": 7.3
+    "distanceMm": 8.2
    },
    {
     "id": "sb_basilar_artery",
@@ -78,7 +78,7 @@
    },
    {
     "id": "sb_occipital_bone",
-    "distanceMm": 14.0
+    "distanceMm": 14.2
    },
    {
     "id": "sb_posterior_communicating_artery",
@@ -124,7 +124,7 @@
    },
    {
     "id": "sb_sphenoid_bone",
-    "distanceMm": 2.5
+    "distanceMm": 2.3
    },
    {
     "id": "sb_central_retinal_artery",
@@ -148,7 +148,7 @@
    },
    {
     "id": "sb_sinus_of_sphenoid_bone",
-    "distanceMm": 4.2
+    "distanceMm": 4.3
    },
    {
     "id": "sb_oculomotor_nerve_iii",
@@ -220,7 +220,7 @@
    },
    {
     "id": "sb_ethmoid_bone",
-    "distanceMm": 12.3
+    "distanceMm": 12.5
    },
    {
     "id": "sb_septal_branches_of_posterior_ethmoidal_artery",
@@ -259,15 +259,15 @@
   "structures": [
    {
     "id": "sb_temporal_bone",
-    "distanceMm": 0.5
+    "distanceMm": 0.4
    },
    {
     "id": "sb_occipital_bone",
-    "distanceMm": 1.8
+    "distanceMm": 1.0
    },
    {
     "id": "sb_sphenoid_bone",
-    "distanceMm": 2.3
+    "distanceMm": 2.2
    },
    {
     "id": "sb_tentorium_cerebelli",
@@ -370,6 +370,10 @@
     "distanceMm": 1.8
    },
    {
+    "id": "sb_sphenoid_bone",
+    "distanceMm": 2.3
+   },
+   {
     "id": "sb_anterior_division_of_mandibular_nerve",
     "distanceMm": 2.5
    },
@@ -382,10 +386,6 @@
     "distanceMm": 2.5
    },
    {
-    "id": "sb_sphenoid_bone",
-    "distanceMm": 2.6
-   },
-   {
     "id": "sb_accessory_branch_of_middle_meningeal_artery",
     "distanceMm": 3.1
    },
@@ -394,11 +394,11 @@
     "distanceMm": 5.6
    },
    {
-    "id": "sb_temporal_bone",
-    "distanceMm": 6.8
+    "id": "sb_internal_carotid_artery",
+    "distanceMm": 7.0
    },
    {
-    "id": "sb_internal_carotid_artery",
+    "id": "sb_temporal_bone",
     "distanceMm": 7.0
    },
    {
@@ -415,7 +415,7 @@
    },
    {
     "id": "sb_occipital_bone",
-    "distanceMm": 13.5
+    "distanceMm": 13.7
    },
    {
     "id": "sb_tentorium_cerebelli",
@@ -454,7 +454,7 @@
    },
    {
     "id": "sb_occipital_bone",
-    "distanceMm": 15.4
+    "distanceMm": 15.7
    },
    {
     "id": "sb_vertebral_artery",

@@ -50,12 +50,12 @@ export const SB_GROUPS: SbGroup[] = [
   })),
   {
     id: 'nerves', kind: 'system', name: 'Cranial nerves', camera: 'axial', hemi: 'both', cutAbove: FLOOR_CUT_MM, focus: null, radius: 75,
-    description: 'All cranial nerves of the model (I–XII) and their branches, as centre lines without calibre, cropped to the head.',
+    description: 'All cranial nerves of the model (I–XII) and their branches, cropped to the head. Show or hide each one in the list.',
     structures: ofKind('nerve'), landmarks: [],
   },
   {
     id: 'arteries', kind: 'system', name: 'Arteries', camera: 'axial', hemi: 'both', cutAbove: null, focus: null, radius: 85,
-    description: 'Arteries of the model running mostly (at least 60% of their length) inside the outline of the cranial bones, measured; as centre lines without calibre.',
+    description: 'Arteries of the model running mostly (at least 60% of their length) inside the outline of the cranial bones, measured.',
     structures: SB_MANIFEST.structures.filter((s) => kindOf(s) === 'artery' && (s.intracranialFraction ?? 0) >= 0.6).map((s) => s.id), landmarks: [],
   },
   {

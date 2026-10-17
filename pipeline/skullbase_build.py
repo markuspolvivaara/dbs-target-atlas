@@ -23,7 +23,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build import split_midline  # noqa: E402
-from glb import LINES, TRIANGLES, write_glb  # noqa: E402
+from glb import TRIANGLES, write_glb  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parent
@@ -44,12 +44,13 @@ DATASET = {
         "Definitions: Wikipedia - CC-BY-SA 3.0 (the source page is linked on each definition)",
     ],
     "note": "One adult male model (BodyParts3D), not a population average, and not in MNI space. Coordinates are millimetres "
-            "from Z-Anatomy's hypophysial fossa landmark. Bones were simplified (retopologized) by Z-Anatomy; vessels and nerves "
-            "are centre lines with no calibre information.",
+            "from Z-Anatomy's hypophysial fossa landmark. Bones were simplified (retopologized) by Z-Anatomy and are smoothed here by "
+            "one subdivision level; vessels and nerves are drawn as tubes with the calibre Z-Anatomy models (not measured).",
 }
 # regions of the page: the model's structures that come within REGION_MM of these landmarks
 REGION_LANDMARKS = {"Hypophysial fossa": 15.0, "Optic canal": 15.0, "Apex of petrous part": 15.0, "Foramen ovale": 15.0,
                     "Foramen magnum": 25.0}  # the foramen magnum point is the centre of the opening
+AO_FLOOR = 0.45  # fully enclosed bone surface is drawn at this share of its colour
 KIND_TOKEN = {"bone": "sbBone", "soft": "sbSoft", "artery": "sbArtery", "vein": "sbVein", "nerve": "sbNerve"}
 
 
@@ -74,7 +75,7 @@ def colour(token: str) -> dict:
     return {"token": token, "light": PALETTE["light"][token], "dark": PALETTE["dark"][token]}
 
 
-def mesh_split(verts: np.ndarray, tris: np.ndarray) -> dict[str, tuple[np.ndarray, np.ndarray]]:
+def mesh_split(verts: np.ndarray, tris: np.ndarray, ao: np.ndarray) -> dict[str, tuple[np.ndarray, np.ndarray, np.ndarray]]:
     """Split a midline mesh into left/right halves by triangle centroid (x < 0 is left)."""
     cx = verts[tris].mean(axis=1)[:, 0]
     out = {}
@@ -83,8 +84,80 @@ def mesh_split(verts: np.ndarray, tris: np.ndarray) -> dict[str, tuple[np.ndarra
         if not len(t):
             continue
         used, inv = np.unique(t, return_inverse=True)
-        out[side] = (verts[used], inv.reshape(-1, 3))
+        out[side] = (verts[used], inv.reshape(-1, 3), ao[used])
     return out
+
+
+TUBE_MIN_RADIUS_MM = 0.3   # thinner Z-Anatomy branches are drawn this thick so they stay visible
+TUBE_STEP = (0.5, 2.5)     # ring spacing: 1.2 x radius, within these bounds (mm)
+ROMAN = {r: i + 1 for i, r in enumerate("I II III IV V VI VII VIII IX X XI XII".split())}
+
+
+def cranial_nerve(name: str, path: list[str] | None) -> int | None:
+    """Number of the cranial nerve a nerve belongs to: the numeral in its own name, else in the innermost
+    Z-Anatomy collection that names one (branches sit in their nerve's collection)."""
+    for n in [name, *(path or [])]:
+        m = re.search(r"\(([IVX]+)\)", n)
+        if m and m.group(1) in ROMAN:
+            return ROMAN[m.group(1)]
+    return None
+
+
+def resample(run: np.ndarray) -> np.ndarray:
+    """Thin a centre line (x, y, z, r) so rings are about 1.2 radii apart; ends are kept."""
+    keep, acc = [0], 0.0
+    for i in range(1, len(run)):
+        acc += float(np.linalg.norm(run[i, :3] - run[i - 1, :3]))
+        step = np.clip(1.2 * max(run[i, 3], TUBE_MIN_RADIUS_MM), *TUBE_STEP)
+        if acc >= step or i == len(run) - 1:
+            keep.append(i)
+            acc = 0.0
+    return run[keep]
+
+
+def tube(run: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Triangle tube around a centre line with per-point radius; closed with flat end caps.
+    Returns positions, normals, triangles."""
+    run = resample(run)
+    if len(run) < 2:
+        return np.zeros((0, 3)), np.zeros((0, 3)), np.zeros((0, 3), int)
+    P, R = run[:, :3], np.maximum(run[:, 3], TUBE_MIN_RADIUS_MM)
+    sides = 8 if R.max() >= 0.8 else 6
+    T = np.gradient(P, axis=0)
+    T /= np.linalg.norm(T, axis=1, keepdims=True) + 1e-12
+    # parallel-transport frames (no twisting along the tube)
+    a = np.array([1.0, 0, 0]) if abs(T[0, 0]) < 0.9 else np.array([0, 1.0, 0])
+    N = [np.cross(T[0], a)]
+    N[0] /= np.linalg.norm(N[0])
+    for i in range(1, len(P)):
+        n = N[-1] - T[i] * np.dot(N[-1], T[i])
+        ln = np.linalg.norm(n)
+        N.append(n / ln if ln > 1e-9 else N[-1])
+    N = np.array(N)
+    B = np.cross(T, N)
+    ang = np.linspace(0, 2 * np.pi, sides, endpoint=False)
+    dirs = np.cos(ang)[None, :, None] * N[:, None, :] + np.sin(ang)[None, :, None] * B[:, None, :]
+    pos = (P[:, None, :] + R[:, None, None] * dirs).reshape(-1, 3)
+    nrm = dirs.reshape(-1, 3)
+    tris = []
+    for i in range(len(P) - 1):
+        for k in range(sides):
+            a0, a1 = i * sides + k, i * sides + (k + 1) % sides
+            b0, b1 = a0 + sides, a1 + sides
+            tris += [[a0, b0, a1], [a1, b0, b1]]
+    # end caps: a centre vertex and a ring of their own (flat normals)
+    caps_p, caps_n = [], []
+    base = len(pos)
+    for end, sgn in ((0, -1.0), (len(P) - 1, 1.0)):
+        c = base + len(caps_p)
+        caps_p.append(P[end]); caps_n.append(sgn * T[end])
+        ring0 = c + 1
+        for k in range(sides):
+            caps_p.append(P[end] + R[end] * dirs[end, k]); caps_n.append(sgn * T[end])
+        for k in range(sides):
+            u, v = ring0 + k, ring0 + (k + 1) % sides
+            tris.append([c, v, u] if sgn < 0 else [c, u, v])
+    return np.vstack([pos, caps_p]), np.vstack([nrm, caps_n]), np.array(tris)
 
 
 def normals(v: np.ndarray, t: np.ndarray) -> np.ndarray:
@@ -131,13 +204,16 @@ def main() -> int:
 
     for n, b in ex["bones"].items():
         base, side = split_pair(n)
-        add(n, "bone", "bone", side, (np.array(b["verts"]), np.array(b["tris"])))
+        add(n, "bone", "bone", side, (np.array(b["verts"]), np.array(b["tris"]), np.array(b["ao"])))
     for n, b in ex["soft"].items():
         base, side = split_pair(n)
-        add(n, "soft", "soft", side, (np.array(b["verts"]), np.array(b["tris"])))
+        add(n, "soft", "soft", side, (np.array(b["verts"]), np.array(b["tris"]), np.ones(len(b["verts"]))))
+    cn: dict[str, int] = {}
     for n, ln in ex["lines"].items():
         base, side = split_pair(n)
-        add(n, ln["kind"], "tract", side, [np.array(r) for r in ln["runs"]])
+        add(n, ln["kind"], "tube", side, [np.array(r) for r in ln["runs"]])
+        if ln["kind"] == "nerve" and cranial_nerve(base, ln.get("path")):
+            cn[base] = cranial_nerve(base, ln.get("path"))
 
     items, report = [], {}
     for base, g in sorted(groups.items()):
@@ -145,10 +221,13 @@ def main() -> int:
         nodes, cent = [], {}
         if g["type"] in ("bone", "soft"):
             parts = {}
-            for side, (v, t) in g["sides"].items():
-                parts.update(mesh_split(v, t) if side == "M" else {side: (v, t)})
-            for side, (v, t) in sorted(parts.items()):
-                nodes.append({"name": side, "positions": v, "normals": normals(v, t), "indices": t, "mode": TRIANGLES})
+            for side, (v, t, ao) in g["sides"].items():
+                parts.update(mesh_split(v, t, ao) if side == "M" else {side: (v, t, ao)})
+            for side, (v, t, ao) in sorted(parts.items()):
+                node = {"name": side, "positions": v, "normals": normals(v, t), "indices": t, "mode": TRIANGLES}
+                if g["type"] == "bone":  # baked ambient occlusion as a grey vertex colour
+                    node["colors"] = np.repeat((AO_FLOOR + (1 - AO_FLOOR) * ao)[:, None], 3, axis=1)
+                nodes.append(node)
                 cent[side] = v.mean(0).round(2).tolist()
         else:
             per = {"L": [], "R": []}
@@ -162,14 +241,17 @@ def main() -> int:
             for side, runs in per.items():
                 if not runs:
                     continue
-                pos = np.vstack(runs)
-                idx, off = [], 0
+                vs, ns, ts, off = [], [], [], 0
                 for r in runs:
-                    k = len(r)
-                    idx.append(np.column_stack([np.arange(off, off + k - 1), np.arange(off + 1, off + k)]))
-                    off += k
-                nodes.append({"name": side, "positions": pos, "normals": None, "indices": np.vstack(idx), "mode": LINES})
-                cent[side] = pos.mean(0).round(2).tolist()
+                    v_, n_, t_ = tube(r)
+                    if not len(t_):
+                        continue
+                    vs.append(v_); ns.append(n_); ts.append(t_ + off)
+                    off += len(v_)
+                if not ts:
+                    continue
+                nodes.append({"name": side, "positions": np.vstack(vs), "normals": np.vstack(ns), "indices": np.vstack(ts), "mode": TRIANGLES})
+                cent[side] = np.vstack([r[:, :3] for r in runs]).mean(0).round(2).tolist()
         if not nodes:
             continue
         write_glb(BUILD / f"{sid}.glb", nodes, {"id": sid})
@@ -177,15 +259,19 @@ def main() -> int:
             cent.setdefault(side, cent.get("R" if side == "L" else "L"))
         f = f"assets/skullbase/{sid}.glb"
         items.append({
-            "id": sid, "name": base, "aliases": [], "type": g["type"], "role": "tract" if g["type"] == "tract" else None,
+            "id": sid, "name": base, "aliases": [], "type": g["type"], "role": None,
             "file": f, "bytes": 0, "colour": colour(KIND_TOKEN[g["kind"]]), "dataset": "zanatomy",
             "source": DATASET["name"], "licence": DATASET["licence"],
             "citation": [CITES[c]["citation"] for c in DATASET["cite"]], "citationUrls": [CITES[c]["url"] for c in DATASET["cite"]],
             "refIds": [], "category": g["kind"],
             "derivation": ("Cut at the midline (x = 0) into left and right halves. " if g["midline"] else "")
-                          + ("Mesh exported unchanged from Z-Anatomy." if g["type"] != "tract"
-                             else "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head."),
+                          + ("Mesh from Z-Anatomy, smoothed by one subdivision level and decimated; shading darkened where "
+                             "neighbouring bone encloses it (baked ambient occlusion)." if g["type"] == "bone"
+                             else "Mesh exported unchanged from Z-Anatomy." if g["type"] == "soft"
+                             else "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point "
+                                  f"(its curve bevel: modelled, not measured), at least {TUBE_MIN_RADIUS_MM} mm; cropped to the head."),
             "centroid": {"L": cent["L"], "R": cent["R"]},
+            **({"cranialNerve": cn[base]} if base in cn else {}),
         })
         report[sid] = {"sides": sorted(k for k in ("L", "R") if any(n["name"] == k for n in nodes)), "kind": g["kind"]}
     for it in items:
@@ -207,17 +293,17 @@ def main() -> int:
     # measured groupings: intracranial share of each vessel/nerve, and structures near key landmarks
     from scipy.spatial import Delaunay, cKDTree
     cran = ["Frontal bone", "Parietal bone", "Occipital bone", "Temporal bone", "Sphenoid bone", "Ethmoid bone"]
-    hull_pts = np.vstack([np.vstack([v for (v, _t) in [groups[b]["sides"][k] for k in groups[b]["sides"]]]) for b in cran])
+    hull_pts = np.vstack([np.vstack([v for (v, _t, _a) in [groups[b]["sides"][k] for k in groups[b]["sides"]]]) for b in cran])
     hull = Delaunay(hull_pts[::3])
     fm = next(lm for lm in ex["landmarks"] if lm["name"] == "Foramen magnum")["ras"]
     pts_of = {}
     for base, g in groups.items():
-        if g["type"] == "tract":
-            pts_of[slug(base)] = np.vstack([r for runs in g["sides"].values() for r in runs])
+        if g["type"] == "tube":
+            pts_of[slug(base)] = np.vstack([r[:, :3] for runs in g["sides"].values() for r in runs])
         else:
-            pts_of[slug(base)] = np.vstack([v for (v, _t) in g["sides"].values()])
+            pts_of[slug(base)] = np.vstack([v for (v, _t, _a) in g["sides"].values()])
     for it in items:
-        if it["type"] == "tract":
+        if it["type"] == "tube":
             p_ = pts_of[it["id"]]
             inside = (hull.find_simplex(p_) >= 0) & (p_[:, 2] > fm[2] - 5)
             it["intracranialFraction"] = round(float(inside.mean()), 2)
@@ -255,7 +341,7 @@ def main() -> int:
     (GEN / "sb-regions.json").write_text(json.dumps(regions, indent=1, ensure_ascii=False))
     (BUILD / "report.json").write_text(json.dumps(report, indent=1))
     print(f"skull base: {len(items)} structures ({sum(i['type'] == 'bone' for i in items)} bones, "
-          f"{sum(i['type'] == 'soft' for i in items)} soft, {sum(i['type'] == 'tract' for i in items)} vessels/nerves), "
+          f"{sum(i['type'] == 'soft' for i in items)} soft, {sum(i['type'] == 'tube' for i in items)} vessels/nerves), "
           f"{len(landmarks)} landmarks, {len(defs)} definitions")
     return 0
 
@@ -286,6 +372,10 @@ def validate() -> int:
     check(max(abs(v) for v in fossa["ras"]) < 0.01, f"origin: hypophysial fossa at {fossa['ras']}")
     for lm in lms:
         check(lm["distanceToBoneMm"] <= 16, f"landmark {lm['name']} {lm['distanceToBoneMm']} mm from bone")
+    # every cranial nerve I-XII is there, and each nerve knows which one it belongs to
+    cns = {it.get("cranialNerve") for it in m["structures"] if it.get("category") == "nerve"}
+    check(set(range(1, 13)) <= cns, f"cranial nerves present: {sorted(c for c in cns if c)}")
+    check(None not in cns, "a nerve without a cranial nerve number")
     print(f"skull base validation: {n - len(fails)}/{n} checks passed")
     for f in fails:
         print("FAIL", f)

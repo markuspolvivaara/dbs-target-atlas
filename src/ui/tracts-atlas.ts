@@ -9,7 +9,7 @@ import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
 import { refLinksFrom } from './reflinks';
 import { bindSheetDrag, buildSlicesPane, drawGizmo, layoutLabels, syncSlicesPane, type LabelItem } from './stage';
-import { chips, clear, fmtMm } from './widgets';
+import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: TractsState) => void, opts?: { camera?: boolean }) => void;
 
@@ -267,7 +267,7 @@ export class TractsAtlasPage {
             s.hidden = off ? s.hidden.filter((x) => x !== id) : [...s.hidden, id];
             if (!off && s.sel === id) s.sel = null;
           }),
-        }, h('span', { 'aria-hidden': 'true' }, off ? '○' : '●')),
+        }, eyeIcon(!off)),
         h('span', { class: `sw ${cls}`, style: `--c: var(--c-${tokenOf(id)})` }),
         h('button', {
           type: 'button', class: 'lg-item', 'aria-pressed': String(on), title: on ? 'Remove highlight' : 'Highlight and open card',

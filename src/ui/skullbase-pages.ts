@@ -37,7 +37,7 @@ export function skullCreditsPage() {
       h('p', {}, 'Attribution, as the authors ask:'),
       h('ul', {}, ...d.attribution.map((a) => h('li', {}, a))),
       h('p', { class: 'aside' }, 'Authors of the original model: Kousaku Okubo (BodyParts3D); Gauthier Kervyn (Z-Anatomy design, 3D, anatomy); Marcin Zielinski (Blender add-on); Lluis Vinent (Unity development).'),
-      h('p', { class: 'aside' }, 'Changes made: bones, soft tissue, vessels and cranial nerves of the head exported from the Z-Anatomy Blender file; coordinates converted to millimetres from the hypophysial fossa landmark (patient right, anterior, superior); midline structures cut at the midline; vessels and nerves reduced to centre lines and cropped to the head; files converted to compressed glTF; definitions shortened to their lead section.'),
+      h('p', { class: 'aside' }, 'Changes made: bones, soft tissue, vessels and cranial nerves of the head exported from the Z-Anatomy Blender file; coordinates converted to millimetres from the hypophysial fossa landmark (patient right, anterior, superior); midline structures cut at the midline; bones smoothed by one subdivision level, decimated and shaded with baked ambient occlusion; vessels and nerves rebuilt as tubes around their centre lines with Z-Anatomy’s modelled radius (at least 0.3 mm) and cropped to the head; files converted to compressed glTF; definitions shortened to their lead section.'),
       ...d.citation.map((c, i) => h('p', { class: 'cite' }, c, ' ', h('a', { href: d.citationUrls[i], target: '_blank', rel: 'noopener' }, 'DOI'))),
       h('p', {}, h('a', { href: d.url, target: '_blank', rel: 'noopener' }, 'Z-Anatomy repository'))),
     h('section', { class: 'card' },

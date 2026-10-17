@@ -227,9 +227,10 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       nodes[side] = m;
       this.root.add(m);
     }
-    // bone meshes share the 'nuclei' layer and soft-tissue meshes the 'cortex' layer (skull-base section);
-    // cortical labels (cortex section) use the 'cortex' layer
-    const layer: LayerKey = meta.type === 'cortex' || meta.type === 'soft' || surface ? 'cortex' : meta.type === 'target' ? 'targets' : 'nuclei';
+    // bone meshes share the 'nuclei' layer, soft-tissue meshes the 'cortex' layer and vessel / nerve tubes the
+    // 'tracts' layer (skull-base section); cortical labels (cortex section) use the 'cortex' layer
+    const layer: LayerKey = meta.type === 'cortex' || meta.type === 'soft' || surface ? 'cortex'
+      : meta.type === 'tube' ? 'tracts' : meta.type === 'target' ? 'targets' : 'nuclei';
     return { kind: 'mesh', meta, nodes, mats, look: 'hidden', layer, surface };
   }
 
@@ -282,7 +283,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
 
   /** Load every nucleus (and skull-base bone / soft-tissue mesh) up front (small); cortex and tracts on demand. */
   async preload(): Promise<void> {
-    const ids = this.cat.structures.filter((s) => ['nucleus', 'target', 'bone', 'soft', 'surface'].includes(s.type)).map((s) => s.id);
+    const ids = this.cat.structures.filter((s) => ['nucleus', 'target', 'bone', 'soft', 'surface', 'tube'].includes(s.type)).map((s) => s.id);
     await Promise.all(ids.map((id) => this.ensure(id)));
     this.restyle();
   }
@@ -485,10 +486,11 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         out.push({ id, x: (v.x + 1) / 2 * w, y: (1 - v.y) / 2 * h, look: 'primary' });
       }
     }
-    if (!this.state.layers.nuclei.on) return out;
     for (const [id, look] of this.plan.looks) {
       if (look !== 'primary' && look !== 'alt') continue;
       if (this.state.hidden.includes(id)) continue;
+      const it = this.items.get(id);
+      if (!this.state.layers[it?.kind === 'mesh' ? it.layer : 'nuclei'].on) continue;
       const m = this.cat.byId.get(id);
       if (!m || m.type === 'cortex' || m.type === 'tract' || !m.centroid) continue;
       const side: Side = this.sideShown('R') ? 'R' : 'L';
