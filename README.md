@@ -35,16 +35,20 @@ Tracts from the HCP-1065 population-averaged tractography atlas (Yeh 2022), in t
 - **Core** (15): the tracts that matter most in tumour and epilepsy surgery: arcuate fasciculus,
   SLF I–III, IFOF, ILF, uncinate fasciculus, frontal aslant tract, cingulum (dorsal and
   parahippocampal), fornix, optic radiation, corticospinal and corticobulbar tracts, corpus callosum.
-- **Extended** (9): middle longitudinal fasciculus, temporo-parietal aslant tract, vertical
+- **Extended** (12): middle longitudinal fasciculus, temporo-parietal aslant tract, vertical
   occipital fasciculus, extreme capsule fasciculus, anterior commissure, anterior / superior /
-  posterior thalamic radiations, acoustic radiation. Their cards are shorter where the literature
-  is thin.
+  posterior thalamic radiations, acoustic radiation, corticostriatal tracts (anterior, superior,
+  posterior). Their cards are shorter where the literature is thin.
+- **Posterior fossa** (9): superior, middle and inferior cerebellar peduncles, dentato-rubro-thalamic
+  tract, medial lemniscus, reticulospinal tract, frontal / parietal / occipital corticopontine
+  tracts. Cranial nerves are left for a future skull-base section.
 
-- A switch at the top of the panel picks Core or Extended; each set has its own groups **by
-  function** (core: language, vision, motor and speech initiation, memory/emotion/social cognition;
-  extended: language and hearing) and **by anatomy** (core: SLF–arcuate complex, association,
-  projection, commissural; extended: posterior ventral system, thalamic radiations, anterior
-  commissure; plus "all" for each). Each group opens on its own hemisphere and view (language:
+- A switch at the top of the panel picks Core, Extended or Posterior fossa; each set has its own
+  groups **by function** ("All" first; core: language, vision, motor and speech initiation,
+  memory/emotion/social cognition; extended: language and hearing; posterior fossa: cerebro-cerebellar
+  loop) and **by anatomy** (core: SLF–arcuate complex, association, projection, commissural;
+  extended: posterior ventral system, thalamic radiations, anterior commissure, corticostriatal;
+  posterior fossa: cerebellar peduncles, brainstem long tracts). Each group opens on its own hemisphere and view (language:
   left lateral; SLF complex: right).
 - The fornix card also reports a pipeline check: near the hypothalamus this atlas's fornix lies
   about 3 mm from the independent fornix label used in the DBS section.
@@ -206,7 +210,7 @@ npm run pipeline
 1. `fetch_sources.py`: pulls only the needed files from the official Lead-DBS data archive
    (an 8.5 GB zip) with HTTP range requests into `pipeline/data/raw/` (git-ignored), and records
    SHA-256 hashes in `sources.lock.json`. For the white-matter section it downloads the HCP-1065
-   tract archive once (590 MB, checked against a pinned SHA-256), extracts the 47 needed files
+   tract archive once (590 MB, checked against a pinned SHA-256), extracts the 69 needed files
    and fetches the tract-to-region table.
 2. `build.py`:
    - label volumes → Gaussian pre-smoothing → marching cubes → affine to MNI mm → Taubin

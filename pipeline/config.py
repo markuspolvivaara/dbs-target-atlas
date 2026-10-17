@@ -385,10 +385,10 @@ class WmTract:
     name: str
     abbr: str
     colour: str
-    group: str  # association | projection | commissural (the atlas folder)
+    group: str  # association | projection | commissural | cerebellar (the atlas folder)
     files: dict[str, str]  # side -> path inside the zip, or {"midline": path} (split at x = 0)
     connectome: str | None = None  # column in the tract-to-region table (Brodmann sheet)
-    tier: str = "core"  # core | extended (shown separately in the app)
+    tier: str = "core"  # core | extended | fossa (posterior fossa); shown separately in the app
 
 
 def _lr(folder: str, stem: str) -> dict[str, str]:
@@ -421,6 +421,19 @@ WM_TRACTS: list[WmTract] = [
     WmTract("wm_str", "Superior thalamic radiation", "STR", "wmSTR", "projection", _lr("projection", "TR_S"), "CTh_S", "extended"),
     WmTract("wm_ptr", "Posterior thalamic radiation", "PTR", "wmPTR", "projection", _lr("projection", "TR_P"), "CTh_P", "extended"),
     WmTract("wm_ar", "Acoustic radiation", "AR", "wmAR", "projection", _lr("projection", "AR"), None, "extended"),
+    WmTract("wm_cs_a", "Corticostriatal tract, anterior", "CStr-A", "wmCSA", "projection", _lr("projection", "CS_A"), "CStr_A", "extended"),
+    WmTract("wm_cs_s", "Corticostriatal tract, superior", "CStr-S", "wmCSS", "projection", _lr("projection", "CS_S"), "CStr_S", "extended"),
+    WmTract("wm_cs_p", "Corticostriatal tract, posterior", "CStr-P", "wmCSP", "projection", _lr("projection", "CS_P"), "CStr_P", "extended"),
+    # posterior fossa tier
+    WmTract("wm_scp", "Superior cerebellar peduncle", "SCP", "wmSCP", "cerebellar", {"midline": "cerebellum/SCP.trk.gz"}, None, "fossa"),
+    WmTract("wm_mcp", "Middle cerebellar peduncle", "MCP", "wmMCP", "cerebellar", {"midline": "cerebellum/MCP.trk.gz"}, None, "fossa"),
+    WmTract("wm_icp", "Inferior cerebellar peduncle", "ICP", "wmICP", "cerebellar", _lr("cerebellum", "ICP"), None, "fossa"),
+    WmTract("wm_drtt", "Dentato-rubro-thalamic tract", "DRTT", "wmDRTT", "projection", _lr("projection", "DRTT"), None, "fossa"),
+    WmTract("wm_ml", "Medial lemniscus", "ML", "wmML", "projection", _lr("projection", "ML"), None, "fossa"),
+    WmTract("wm_rst", "Reticulospinal tract", "RST", "wmRST", "projection", _lr("projection", "RST"), None, "fossa"),
+    WmTract("wm_cpt_f", "Corticopontine tract, frontal", "CPT-F", "wmCPTF", "projection", _lr("projection", "CPT_F"), None, "fossa"),
+    WmTract("wm_cpt_p", "Corticopontine tract, parietal", "CPT-P", "wmCPTP", "projection", _lr("projection", "CPT_P"), None, "fossa"),
+    WmTract("wm_cpt_o", "Corticopontine tract, occipital", "CPT-O", "wmCPTO", "projection", _lr("projection", "CPT_O"), None, "fossa"),
 ]
 # a connectome entry counts as a connection of the tract when at least this fraction of the
 # 1065 individuals showed it (Yeh 2022: ~85% of entries are >95% or <5%)

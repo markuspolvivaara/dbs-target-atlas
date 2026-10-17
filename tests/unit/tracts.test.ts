@@ -16,15 +16,16 @@ describe('white-matter content', () => {
       if (t.tier === 'core') expect(t.functions.length, t.id).toBeGreaterThan(0);
     }
   });
-  it('the core and extended tract lists', () => {
+  it('the core, extended and posterior fossa tract lists', () => {
     const abbr = (tier: string) => WM.topics.filter((t) => t.tier === tier).map((t) => t.abbr).sort();
     expect(abbr('core')).toEqual(
       ['AF', 'CBT', 'CC', 'CST', 'Cingulum (dorsal)', 'Cingulum (parahippocampal)', 'FAT', 'Fornix', 'IFOF', 'ILF', 'OR', 'SLF I', 'SLF II', 'SLF III', 'UF'].sort());
-    expect(abbr('extended')).toEqual(['AC', 'AR', 'ATR', 'EmC', 'MdLF', 'PTR', 'STR', 'TPAT', 'VOF'].sort());
+    expect(abbr('extended')).toEqual(['AC', 'AR', 'ATR', 'CStr-A', 'CStr-P', 'CStr-S', 'EmC', 'MdLF', 'PTR', 'STR', 'TPAT', 'VOF'].sort());
+    expect(abbr('fossa')).toEqual(['CPT-F', 'CPT-O', 'CPT-P', 'DRTT', 'ICP', 'MCP', 'ML', 'RST', 'SCP'].sort());
   });
   it('every group stays within one tier, and each tier opens on a function group', () => {
     for (const g of WM.groups) for (const id of g.tractIds) expect(TOPIC.get(id)!.tier, `${g.id}: ${id}`).toBe(g.tier);
-    for (const tier of ['core', 'extended']) expect(WM.groups.find((g) => g.tier === tier)!.kind).toBe('function');
+    for (const tier of ['core', 'extended', 'fossa']) expect(WM.groups.find((g) => g.tier === tier)!.kind).toBe('function');
   });
   it('highlighted cortex exists in the shared DBS assets', () => {
     const ctx = new Set(CONTEXT_STRUCTURES.map((s) => s.id));
@@ -33,8 +34,8 @@ describe('white-matter content', () => {
 });
 
 describe('cortical connections from the published tract-to-region table', () => {
-  it('covers every tract the table has a column for (not CC, EmC, AC or AR)', () => {
-    const missing = ['wm_cc', 'wm_emc', 'wm_ac', 'wm_ar'];
+  it('covers every tract the table has a column for (not CC, EmC, AC, AR or the posterior fossa tracts)', () => {
+    const missing = ['wm_cc', 'wm_emc', 'wm_ac', 'wm_ar', ...WM.topics.filter((t) => t.tier === 'fossa').map((t) => t.id)];
     expect(Object.keys(CONNECTOME.tracts).sort()).toEqual(WM.topics.map((t) => t.id).filter((id) => !missing.includes(id)).sort());
   });
   it('known values survive the conversion (spot checks against the spreadsheet)', () => {

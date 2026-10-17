@@ -1249,6 +1249,630 @@
      9.02
     ]
    }
+  },
+  {
+   "id": "wm_cs_a",
+   "name": "Corticostriatal tract, anterior",
+   "aliases": [
+    "CStr-A"
+   ],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/wm/wm_cs_a.glb",
+   "bytes": 105764,
+   "colour": {
+    "token": "wmCSA",
+    "light": "#5C5123",
+    "dark": "#DBCF9F"
+   },
+   "dataset": "hcp1065",
+   "source": "HCP-1065 population-averaged tractography atlas (Yeh 2022)",
+   "licence": "CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+   "citation": [
+    "Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.",
+    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41467-022-32595-4",
+    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
+   ],
+   "refIds": [],
+   "derivation": "Up to 300 streamlines per hemisphere (fixed seed, the same number on both sides, so on-screen density says nothing about tract size or asymmetry), resampled to 2 mm.",
+   "hcp": "confirmed",
+   "category": "projection",
+   "tier": "extended",
+   "streamlines": {
+    "L": 300,
+    "R": 300
+   },
+   "sourceStreamlines": {
+    "L": 959,
+    "R": 734
+   },
+   "centroid": {
+    "L": [
+     -21.64,
+     32.41,
+     6.75
+    ],
+    "R": [
+     23.25,
+     33.35,
+     8.29
+    ]
+   }
+  },
+  {
+   "id": "wm_cs_s",
+   "name": "Corticostriatal tract, superior",
+   "aliases": [
+    "CStr-S"
+   ],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/wm/wm_cs_s.glb",
+   "bytes": 116160,
+   "colour": {
+    "token": "wmCSS",
+    "light": "#A06F0D",
+    "dark": "#ECA413"
+   },
+   "dataset": "hcp1065",
+   "source": "HCP-1065 population-averaged tractography atlas (Yeh 2022)",
+   "licence": "CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+   "citation": [
+    "Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.",
+    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41467-022-32595-4",
+    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
+   ],
+   "refIds": [],
+   "derivation": "Up to 300 streamlines per hemisphere (fixed seed, the same number on both sides, so on-screen density says nothing about tract size or asymmetry), resampled to 2 mm.",
+   "hcp": "confirmed",
+   "category": "projection",
+   "tier": "extended",
+   "streamlines": {
+    "L": 300,
+    "R": 300
+   },
+   "sourceStreamlines": {
+    "L": 954,
+    "R": 1077
+   },
+   "centroid": {
+    "L": [
+     -23.99,
+     -1.55,
+     31.58
+    ],
+    "R": [
+     27.07,
+     -0.93,
+     30.31
+    ]
+   }
+  },
+  {
+   "id": "wm_cs_p",
+   "name": "Corticostriatal tract, posterior",
+   "aliases": [
+    "CStr-P"
+   ],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/wm/wm_cs_p.glb",
+   "bytes": 76476,
+   "colour": {
+    "token": "wmCSP",
+    "light": "#105BCB",
+    "dark": "#76A8F4"
+   },
+   "dataset": "hcp1065",
+   "source": "HCP-1065 population-averaged tractography atlas (Yeh 2022)",
+   "licence": "CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+   "citation": [
+    "Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.",
+    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41467-022-32595-4",
+    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
+   ],
+   "refIds": [],
+   "derivation": "Up to 300 streamlines per hemisphere (fixed seed, the same number on both sides, so on-screen density says nothing about tract size or asymmetry), resampled to 2 mm.",
+   "hcp": "confirmed",
+   "category": "projection",
+   "tier": "extended",
+   "streamlines": {
+    "L": 123,
+    "R": 165
+   },
+   "sourceStreamlines": {
+    "L": 123,
+    "R": 165
+   },
+   "centroid": {
+    "L": [
+     -26.47,
+     -38.16,
+     21.83
+    ],
+    "R": [
+     31.07,
+     -42.49,
+     16.93
+    ]
+   }
+  },
+  {
+   "id": "wm_scp",
+   "name": "Superior cerebellar peduncle",
+   "aliases": [
+    "SCP"
+   ],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/wm/wm_scp.glb",
+   "bytes": 100652,
+   "colour": {
+    "token": "wmSCP",
+    "light": "#7E3064",
+    "dark": "#C567A6"
+   },
+   "dataset": "hcp1065",
+   "source": "HCP-1065 population-averaged tractography atlas (Yeh 2022)",
+   "licence": "CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+   "citation": [
+    "Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.",
+    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41467-022-32595-4",
+    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
+   ],
+   "refIds": [],
+   "derivation": "Streamlines of the commissural file cut at x = 0 so each hemisphere can be shown alone. Up to 300 streamlines per hemisphere (fixed seed, the same number on both sides, so on-screen density says nothing about tract size or asymmetry), resampled to 2 mm.",
+   "hcp": "confirmed",
+   "category": "cerebellar",
+   "tier": "fossa",
+   "streamlines": {
+    "L": 300,
+    "R": 300
+   },
+   "sourceStreamlines": {
+    "L": 1247,
+    "R": 2123
+   },
+   "centroid": {
+    "L": [
+     -5.18,
+     -34.18,
+     -20.38
+    ],
+    "R": [
+     6.44,
+     -37.6,
+     -21.46
+    ]
+   }
+  },
+  {
+   "id": "wm_mcp",
+   "name": "Middle cerebellar peduncle",
+   "aliases": [
+    "MCP"
+   ],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/wm/wm_mcp.glb",
+   "bytes": 116252,
+   "colour": {
+    "token": "wmMCP",
+    "light": "#0B847C",
+    "dark": "#A1F7F2"
+   },
+   "dataset": "hcp1065",
+   "source": "HCP-1065 population-averaged tractography atlas (Yeh 2022)",
+   "licence": "CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+   "citation": [
+    "Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.",
+    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41467-022-32595-4",
+    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
+   ],
+   "refIds": [],
+   "derivation": "Streamlines of the commissural file cut at x = 0 so each hemisphere can be shown alone. Up to 300 streamlines per hemisphere (fixed seed, the same number on both sides, so on-screen density says nothing about tract size or asymmetry), resampled to 2 mm.",
+   "hcp": "confirmed",
+   "category": "cerebellar",
+   "tier": "fossa",
+   "streamlines": {
+    "L": 300,
+    "R": 300
+   },
+   "sourceStreamlines": {
+    "L": 2250,
+    "R": 2371
+   },
+   "centroid": {
+    "L": [
+     -16.12,
+     -49.38,
+     -35.79
+    ],
+    "R": [
+     15.74,
+     -43.46,
+     -37.75
+    ]
+   }
+  },
+  {
+   "id": "wm_icp",
+   "name": "Inferior cerebellar peduncle",
+   "aliases": [
+    "ICP"
+   ],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/wm/wm_icp.glb",
+   "bytes": 160912,
+   "colour": {
+    "token": "wmICP",
+    "light": "#425719",
+    "dark": "#BCDA81"
+   },
+   "dataset": "hcp1065",
+   "source": "HCP-1065 population-averaged tractography atlas (Yeh 2022)",
+   "licence": "CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+   "citation": [
+    "Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.",
+    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41467-022-32595-4",
+    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
+   ],
+   "refIds": [],
+   "derivation": "Up to 300 streamlines per hemisphere (fixed seed, the same number on both sides, so on-screen density says nothing about tract size or asymmetry), resampled to 2 mm.",
+   "hcp": "confirmed",
+   "category": "cerebellar",
+   "tier": "fossa",
+   "streamlines": {
+    "L": 300,
+    "R": 300
+   },
+   "sourceStreamlines": {
+    "L": 3003,
+    "R": 2315
+   },
+   "centroid": {
+    "L": [
+     -12.22,
+     -58.73,
+     -33.6
+    ],
+    "R": [
+     11.85,
+     -58.3,
+     -32.8
+    ]
+   }
+  },
+  {
+   "id": "wm_drtt",
+   "name": "Dentato-rubro-thalamic tract",
+   "aliases": [
+    "DRTT"
+   ],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/wm/wm_drtt.glb",
+   "bytes": 292848,
+   "colour": {
+    "token": "wmDRTT",
+    "light": "#235C42",
+    "dark": "#46B983"
+   },
+   "dataset": "hcp1065",
+   "source": "HCP-1065 population-averaged tractography atlas (Yeh 2022)",
+   "licence": "CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+   "citation": [
+    "Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.",
+    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41467-022-32595-4",
+    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
+   ],
+   "refIds": [],
+   "derivation": "Up to 300 streamlines per hemisphere (fixed seed, the same number on both sides, so on-screen density says nothing about tract size or asymmetry), resampled to 2 mm.",
+   "hcp": "confirmed",
+   "category": "projection",
+   "tier": "fossa",
+   "streamlines": {
+    "L": 300,
+    "R": 300
+   },
+   "sourceStreamlines": {
+    "L": 3698,
+    "R": 6984
+   },
+   "centroid": {
+    "L": [
+     -11.39,
+     -14.07,
+     9.08
+    ],
+    "R": [
+     14.55,
+     -21.66,
+     10.19
+    ]
+   }
+  },
+  {
+   "id": "wm_ml",
+   "name": "Medial lemniscus",
+   "aliases": [
+    "ML"
+   ],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/wm/wm_ml.glb",
+   "bytes": 269784,
+   "colour": {
+    "token": "wmML",
+    "light": "#6231AA",
+    "dark": "#9C75D7"
+   },
+   "dataset": "hcp1065",
+   "source": "HCP-1065 population-averaged tractography atlas (Yeh 2022)",
+   "licence": "CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+   "citation": [
+    "Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.",
+    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41467-022-32595-4",
+    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
+   ],
+   "refIds": [],
+   "derivation": "Up to 300 streamlines per hemisphere (fixed seed, the same number on both sides, so on-screen density says nothing about tract size or asymmetry), resampled to 2 mm.",
+   "hcp": "confirmed",
+   "category": "projection",
+   "tier": "fossa",
+   "streamlines": {
+    "L": 300,
+    "R": 300
+   },
+   "sourceStreamlines": {
+    "L": 6621,
+    "R": 5817
+   },
+   "centroid": {
+    "L": [
+     -16.22,
+     -29.45,
+     11.3
+    ],
+    "R": [
+     16.75,
+     -26.7,
+     11.23
+    ]
+   }
+  },
+  {
+   "id": "wm_rst",
+   "name": "Reticulospinal tract",
+   "aliases": [
+    "RST"
+   ],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/wm/wm_rst.glb",
+   "bytes": 283420,
+   "colour": {
+    "token": "wmRST",
+    "light": "#1E888F",
+    "dark": "#92E2E8"
+   },
+   "dataset": "hcp1065",
+   "source": "HCP-1065 population-averaged tractography atlas (Yeh 2022)",
+   "licence": "CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+   "citation": [
+    "Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.",
+    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41467-022-32595-4",
+    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
+   ],
+   "refIds": [],
+   "derivation": "Up to 300 streamlines per hemisphere (fixed seed, the same number on both sides, so on-screen density says nothing about tract size or asymmetry), resampled to 2 mm.",
+   "hcp": "confirmed",
+   "category": "projection",
+   "tier": "fossa",
+   "streamlines": {
+    "L": 300,
+    "R": 300
+   },
+   "sourceStreamlines": {
+    "L": 2382,
+    "R": 3249
+   },
+   "centroid": {
+    "L": [
+     -12.86,
+     1.48,
+     2.93
+    ],
+    "R": [
+     13.95,
+     2.2,
+     -3.11
+    ]
+   }
+  },
+  {
+   "id": "wm_cpt_f",
+   "name": "Corticopontine tract, frontal",
+   "aliases": [
+    "CPT-F"
+   ],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/wm/wm_cpt_f.glb",
+   "bytes": 241640,
+   "colour": {
+    "token": "wmCPTF",
+    "light": "#C2385D",
+    "dark": "#E8B0BF"
+   },
+   "dataset": "hcp1065",
+   "source": "HCP-1065 population-averaged tractography atlas (Yeh 2022)",
+   "licence": "CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+   "citation": [
+    "Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.",
+    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41467-022-32595-4",
+    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
+   ],
+   "refIds": [],
+   "derivation": "Up to 300 streamlines per hemisphere (fixed seed, the same number on both sides, so on-screen density says nothing about tract size or asymmetry), resampled to 2 mm.",
+   "hcp": "confirmed",
+   "category": "projection",
+   "tier": "fossa",
+   "streamlines": {
+    "L": 300,
+    "R": 300
+   },
+   "sourceStreamlines": {
+    "L": 1038,
+    "R": 4576
+   },
+   "centroid": {
+    "L": [
+     -14.97,
+     -0.12,
+     9.25
+    ],
+    "R": [
+     17.16,
+     -2.24,
+     9.85
+    ]
+   }
+  },
+  {
+   "id": "wm_cpt_p",
+   "name": "Corticopontine tract, parietal",
+   "aliases": [
+    "CPT-P"
+   ],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/wm/wm_cpt_p.glb",
+   "bytes": 251080,
+   "colour": {
+    "token": "wmCPTP",
+    "light": "#8413E7",
+    "dark": "#C084F5"
+   },
+   "dataset": "hcp1065",
+   "source": "HCP-1065 population-averaged tractography atlas (Yeh 2022)",
+   "licence": "CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+   "citation": [
+    "Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.",
+    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41467-022-32595-4",
+    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
+   ],
+   "refIds": [],
+   "derivation": "Up to 300 streamlines per hemisphere (fixed seed, the same number on both sides, so on-screen density says nothing about tract size or asymmetry), resampled to 2 mm.",
+   "hcp": "confirmed",
+   "category": "projection",
+   "tier": "fossa",
+   "streamlines": {
+    "L": 300,
+    "R": 300
+   },
+   "sourceStreamlines": {
+    "L": 3064,
+    "R": 3393
+   },
+   "centroid": {
+    "L": [
+     -20.18,
+     -30.35,
+     13.7
+    ],
+    "R": [
+     20.35,
+     -22.89,
+     12.29
+    ]
+   }
+  },
+  {
+   "id": "wm_cpt_o",
+   "name": "Corticopontine tract, occipital",
+   "aliases": [
+    "CPT-O"
+   ],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/wm/wm_cpt_o.glb",
+   "bytes": 221336,
+   "colour": {
+    "token": "wmCPTO",
+    "light": "#7C840B",
+    "dark": "#EAF368"
+   },
+   "dataset": "hcp1065",
+   "source": "HCP-1065 population-averaged tractography atlas (Yeh 2022)",
+   "licence": "CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+   "citation": [
+    "Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.",
+    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41467-022-32595-4",
+    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
+   ],
+   "refIds": [],
+   "derivation": "Up to 300 streamlines per hemisphere (fixed seed, the same number on both sides, so on-screen density says nothing about tract size or asymmetry), resampled to 2 mm.",
+   "hcp": "confirmed",
+   "category": "projection",
+   "tier": "fossa",
+   "streamlines": {
+    "L": 300,
+    "R": 242
+   },
+   "sourceStreamlines": {
+    "L": 324,
+    "R": 242
+   },
+   "centroid": {
+    "L": [
+     -22.86,
+     -40.24,
+     -0.87
+    ],
+    "R": [
+     24.61,
+     -35.62,
+     0.33
+    ]
+   }
   }
  ],
  "dataset": {

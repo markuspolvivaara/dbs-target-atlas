@@ -60,7 +60,7 @@ export function crossCheckWm(c: WmContent): string[] {
     g.tractIds.forEach((id) => { if (!topics.has(id)) errs.push(`group ${g.id}: unknown tract '${id}'`); });
     g.rationale.forEach((cl) => ref(`group ${g.id}`, cl));
   }
-  for (const tier of ['core', 'extended'] as const) {
+  for (const tier of ['core', 'extended', 'fossa'] as const) {
     const ids = new Set(c.topics.filter((t) => t.tier === tier).map((t) => t.id));
     const all = c.groups.find((g) => g.kind === 'all' && g.tier === tier);
     if (!all || all.tractIds.length !== ids.size || !all.tractIds.every((id) => ids.has(id))) errs.push(`the "all" group of the ${tier} tier must list exactly its tracts`);

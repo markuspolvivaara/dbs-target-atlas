@@ -522,6 +522,222 @@ export const TOPICS: TractTopicInput[] = [
       c('Hard to reconstruct with tractography because of the crossings around it; the atlas authors noted it had not been reported in tractography before.', 'maffei2019', 'yeh2018'),
     ],
   },
+  {
+    id: 'wm_cs_a', name: 'Corticostriatal tract, anterior', abbr: 'CStr-A', aliases: ['fronto-striatal fibres'], type: 'projection', tier: 'extended',
+    summary: 'Prefrontal projections to the caudate nucleus and anterior striatum.',
+    course: [
+      c('A projection pathway; in the atlas network, projection pathways form hubs at the thalamus, putamen and brainstem.', 'yeh2018'),
+    ],
+    connections: [
+      c('The caudate nucleus connects with prefrontal cortex, the inferior and middle temporal gyri, the frontal eye fields, cerebellum and thalamus. Dorsolateral prefrontal cortex connects with the dorsal-posterior caudate, ventrolateral prefrontal cortex with the ventral-anterior caudate.', 'leh2007'),
+    ],
+    functions: [
+      c('Cortico-basal ganglia loops are both segregated and overlapping in prefrontal, premotor and motor networks: an anatomical basis for parallel and integrative processing.', 'draganski2008'),
+    ],
+    deficits: [],
+    surgery: [],
+    atlas: [],
+  },
+  {
+    id: 'wm_cs_s', name: 'Corticostriatal tract, superior', abbr: 'CStr-S', aliases: [], type: 'projection', tier: 'extended',
+    summary: 'Sensorimotor and premotor projections to the putamen.',
+    course: [
+      c('A projection pathway; in the atlas network, projection pathways form hubs at the thalamus, putamen and brainstem.', 'yeh2018'),
+    ],
+    connections: [
+      c('The putamen connects with prefrontal cortex, primary motor and somatosensory cortex, SMA, premotor cortex, cerebellum and thalamus. SMA projects to the dorsal-posterior putamen, premotor cortex to the medial putamen and primary motor cortex to the lateral putamen.', 'leh2007'),
+    ],
+    functions: [
+      c('Part of segregated yet overlapping cortico-basal ganglia loops in motor and premotor networks.', 'draganski2008'),
+    ],
+    deficits: [],
+    surgery: [],
+    atlas: [],
+  },
+  {
+    id: 'wm_cs_p', name: 'Corticostriatal tract, posterior', abbr: 'CStr-P', aliases: [], type: 'projection', tier: 'extended',
+    summary: 'Posterior (parietal, temporal and occipital) projections to the striatum.',
+    course: [
+      c('The occipital connections of the corticostriatal tract had to be tracked separately to complete it in the atlas.', 'yeh2018'),
+    ],
+    connections: [
+      c('Diffusion tractography links the caudate nucleus with the inferior and middle temporal gyri.', 'leh2007'),
+    ],
+    functions: [],
+    deficits: [],
+    surgery: [],
+    atlas: [],
+    measured: ['The atlas file holds only 123 (left) and 165 (right) streamlines, all shown.'],
+  },
+  // ---------------------------------------------------------------- posterior fossa tier
+  {
+    id: 'wm_scp', name: 'Superior cerebellar peduncle', abbr: 'SCP', aliases: ['brachium conjunctivum'], type: 'cerebellar', tier: 'fossa',
+    summary: 'The main cerebellar outflow, from the dentate nucleus up to the midbrain; bilateral injury after fourth-ventricle tumour surgery is linked to posterior fossa syndrome.',
+    course: [
+      c('Dissection divides it into intracerebellar, intermediate and intrategmental segments; its centrifugal bundle ascends towards the midbrain and sinks below the fibres of the lateral lemniscus.', 'perrini2013'),
+      c('It is topographically organized: streamlines ending in the superior frontal gyrus lie dorsomedial to those ending in the precentral gyrus.', 'toescu2021'),
+    ],
+    connections: [
+      c('Classical anatomy: neocerebellum to contralateral cerebral cortex through the dentate nucleus, superior cerebellar peduncle, red nucleus and ventrolateral thalamus. Tractography suggests most streamlines through the peduncle reach contralateral associative cortex.', 'palesi2015'),
+    ],
+    functions: [
+      c('Carries the cerebellum’s contribution to cognition as well as motor function, through its connections with associative cortex.', 'palesi2015'),
+    ],
+    deficits: [
+      c('Posterior fossa syndrome: cerebellar dysfunction, oromotor and oculomotor apraxia, emotional lability and mutism after infratentorial injury.', 'morris2009'),
+    ],
+    surgery: [
+      c('In 26 children operated on for embryonal tumours, those who developed posterior fossa syndrome more often had postoperative signal changes in the superior cerebellar peduncles and midbrain, lower anisotropy in both peduncles, and tumours sitting higher in the fourth ventricle.', 'morris2009'),
+      c('Damage to the dentato-rubro-thalamo-cortical pathway is implicated in cerebellar mutism syndrome, seen in up to 25% of children after cerebellar tumour resection.', 'toescu2021'),
+    ],
+    atlas: [],
+    measured: ['The atlas stores both peduncles in one file; the viewer cuts its streamlines at the midline (x = 0), so each side includes the crossing fibres up to the midline.'],
+  },
+  {
+    id: 'wm_mcp', name: 'Middle cerebellar peduncle', abbr: 'MCP', aliases: ['brachium pontis'], type: 'cerebellar', tier: 'fossa',
+    summary: 'The largest peduncle, carrying pontocerebellar fibres from the pontine nuclei into the cerebellum.',
+    course: [
+      c('Dissection divides it into cisternal and intracerebellar segments; its pontocerebellar fibres pass over and lateral to the inferior and superior peduncles.', 'perrini2013'),
+    ],
+    connections: [
+      c('Pontocerebellar fibres: the second stage of the cortico-ponto-cerebellar pathway, whose first stage is the massive corticopontine projection to the pontine nuclei.', 'perrini2013', 'morecraft2018'),
+    ],
+    functions: [
+      c('Part of large-scale networks linking the cerebellum with frontal and posterior parietal association areas, not only motor cortex.', 'ramnani2012'),
+    ],
+    deficits: [
+      c('In 26 patients with bilateral middle cerebellar peduncle lesions, causes were infarction (35%), Wallerian degeneration after pontine infarction (31%), multiple system atrophy (23%, with cruciform pontine hyperintensity and posterior fossa atrophy), and single cases of neuromyelitis optica, heroin leukoencephalopathy and lymphoma.', 'jiang2020'),
+    ],
+    surgery: [],
+    atlas: [],
+    measured: ['The atlas stores the peduncle as one file crossing the pons; the viewer cuts its streamlines at the midline (x = 0).'],
+  },
+  {
+    id: 'wm_icp', name: 'Inferior cerebellar peduncle', abbr: 'ICP', aliases: ['restiform body'], type: 'cerebellar', tier: 'fossa',
+    summary: 'Afferent peduncle into the cerebellum, important for coordination and proprioception.',
+    course: [
+      c('Dissection divides it into cisternal, ventricular and intracerebellar segments; its centripetal fibres wrap around the radiation of the superior peduncle and the dentate nucleus towards the cortex of the vermis.', 'perrini2013'),
+    ],
+    connections: [
+      c('Centripetal (afferent) fibres directed to the vermis cortex.', 'perrini2013'),
+    ],
+    functions: [
+      c('Involved in coordination of movement and proprioception.', 'jang2020'),
+    ],
+    deficits: [
+      c('In 14 stroke patients with ataxia, ataxia severity correlated with the fibre count of the inferior cerebellar peduncle on the affected side.', 'jang2020'),
+    ],
+    surgery: [],
+    atlas: [],
+  },
+  {
+    id: 'wm_drtt', name: 'Dentato-rubro-thalamic tract', abbr: 'DRTT', aliases: ['dentato-rubro-thalamo-cortical tract', 'cerebello-thalamo-cortical pathway'], type: 'projection', tier: 'fossa',
+    summary: 'Main cerebellar output pathway to the thalamus and cortex; a targeting tract in tremor surgery.',
+    course: [
+      c('From the dentate nucleus through the superior cerebellar peduncle and red nucleus to the ventrolateral thalamus and on to contralateral cortex.', 'palesi2015'),
+    ],
+    connections: [
+      c('In 30 healthy children the densest connections ran to the precentral and superior frontal gyri, from cerebellar lobules I–IV and IX.', 'toescu2021'),
+    ],
+    functions: [
+      c('The main outflow pathway of the cerebellum, part of a cortico-cerebellar loop involved in cognitive and sensorimotor functions.', 'toescu2021'),
+    ],
+    deficits: [
+      c('Its damage is implicated in cerebellar mutism syndrome after cerebellar tumour resection in children.', 'toescu2021'),
+    ],
+    surgery: [
+      c('Tractographic display of the tract is used to plan stereotactic tremor surgery. The uncrossed part can be shown reliably with about 2 mm mean displacement, which should be allowed for; the crossed (decussating) part could not be reconstructed reliably in single subjects.', 'coenen2021'),
+    ],
+    atlas: [],
+  },
+  {
+    id: 'wm_ml', name: 'Medial lemniscus', abbr: 'ML', aliases: [], type: 'projection', tier: 'fossa',
+    summary: 'Major ascending sensory pathway through the brainstem tegmentum.',
+    course: [
+      c('At the pons it lies in the tegmentum, around the middle to medial third between the midline and the lateral border; the spinothalamic tract lies posterolateral to it.', 'jang2013'),
+    ],
+    connections: [
+      c('One of the brainstem pathways reconstructed in a population (HCP-488) tractography atlas and validated with histology.', 'meola2016'),
+    ],
+    functions: [
+      c('A major sensory pathway; in healthy people the non-dominant (right) medial lemniscus showed higher fractional anisotropy.', 'peng2019'),
+    ],
+    deficits: [],
+    surgery: [
+      c('Brainstem surgical approaches (supracollicular, infracollicular, lateral mesencephalic, perioculomotor, peritrigeminal, anterolateral medullary and retro-olivary) have been mapped against the medial lemniscus and the other brainstem pathways in a tractography atlas.', 'meola2016'),
+    ],
+    atlas: [],
+  },
+  {
+    id: 'wm_rst', name: 'Reticulospinal tract', abbr: 'RST', aliases: ['corticoreticulospinal pathway'], type: 'projection', tier: 'fossa',
+    summary: 'Descending motor command system from the pontomedullary reticular formation for posture and locomotion.',
+    course: [
+      c('Arises from the pontomedullary reticular formation, whose command neurons connect monosynaptically with spinal interneurons and motoneurons.', 'brownstone2018'),
+    ],
+    connections: [
+      c('Reticular formation to spinal cord; the reticular formation integrates descending instructions for particular movements.', 'brownstone2018'),
+    ],
+    functions: [
+      c('Postural adjustments, walking and sleep atonia, with roles in both activating and inhibiting movement.', 'brownstone2018'),
+      c('The cortical input to it, the corticoreticular tract, may help motor recovery of the paretic leg after stroke, especially when the corticospinal tract is completely injured; its role is not yet clear.', 'jang2022'),
+    ],
+    deficits: [],
+    surgery: [],
+    atlas: [],
+    measured: ['In this atlas the tract’s streamlines run up to the cerebral cortex (mean length about 140 mm), so it includes the cortical (corticoreticular) limb.'],
+  },
+  {
+    id: 'wm_cpt_f', name: 'Corticopontine tract, frontal', abbr: 'CPT-F', aliases: ['frontopontine tract'], type: 'projection', tier: 'fossa',
+    summary: 'Frontal cortex to the pontine nuclei: the first stage of the cortico-ponto-cerebellar pathway.',
+    course: [
+      c('Ipsilateral corticopontine projections form a massive descending system ending in the pontine nuclei; motor and premotor cortex also send weaker contralateral projections.', 'morecraft2018'),
+    ],
+    connections: [
+      c('Frontal association areas, not only motor areas, contribute to the cortico-cerebellar system; the claim that lateral prefrontal cortex sends little input to it has been challenged.', 'ramnani2012'),
+    ],
+    functions: [
+      c('Through the cerebro-cerebellar circuit, motor corticopontine projections influence contralateral upper limb movement.', 'morecraft2018'),
+      c('The cortico-cerebellar system also serves higher cognitive functions.', 'ramnani2012'),
+    ],
+    deficits: [
+      c('Contralateral corticopontine projections from the uninjured hemisphere may influence upper limb recovery after unilateral cortical damage.', 'morecraft2018'),
+    ],
+    surgery: [],
+    atlas: [],
+  },
+  {
+    id: 'wm_cpt_p', name: 'Corticopontine tract, parietal', abbr: 'CPT-P', aliases: ['parietopontine tract'], type: 'projection', tier: 'fossa',
+    summary: 'Posterior parietal cortex to the pontine nuclei.',
+    course: [
+      c('Corticopontine tracts are among the brainstem pathways reconstructed in a population tractography atlas and validated with histology.', 'meola2016'),
+    ],
+    connections: [
+      c('Posterior parietal cortex contributes to the cortico-cerebellar system together with frontal association areas.', 'ramnani2012'),
+    ],
+    functions: [
+      c('Connects the cerebellum with parietal association cortex known for higher cognitive functions.', 'ramnani2012'),
+    ],
+    deficits: [],
+    surgery: [],
+    atlas: [],
+  },
+  {
+    id: 'wm_cpt_o', name: 'Corticopontine tract, occipital', abbr: 'CPT-O', aliases: ['occipitopontine tract'], type: 'projection', tier: 'fossa',
+    summary: 'Occipital cortex to the pontine nuclei.',
+    course: [
+      c('The temporal and occipital connections of the corticopontine tract had to be tracked separately to complete it in the atlas.', 'yeh2018'),
+    ],
+    connections: [
+      c('Corticopontine tracts are among the brainstem pathways reconstructed in a population tractography atlas and validated with histology.', 'meola2016'),
+    ],
+    functions: [],
+    deficits: [],
+    surgery: [],
+    atlas: [
+      c('The right occipital corticopontine tract could not be reconstructed in one of the 1065 atlas subjects.', 'yeh2022'),
+    ],
+    measured: ['The right file holds only 242 streamlines, all shown.'],
+  },
 ];
 /** Notes shown for every tract: how far a group-average atlas can be trusted. */
 export const GENERAL: Claim[] = [
@@ -630,8 +846,47 @@ export const GROUPS: TractGroup[] = [
     rationale: [c('The commissural pathways comprise the corpus callosum (core) and the anterior and posterior commissures.', 'yeh2018')],
   },
   {
+    id: 'ext_striatal', kind: 'anatomy', tier: 'extended', name: 'Corticostriatal tracts', hemi: 'L', camera: 'lateral',
+    tractIds: ['wm_cs_a', 'wm_cs_s', 'wm_cs_p'],
+    rationale: [
+      c('Tractography reproduces the frontal-striatal topography known from animal studies: prefrontal cortex to the caudate, sensorimotor and premotor cortex to the putamen.', 'leh2007'),
+      c('Cortex–basal ganglia loops are segregated with overlap, supporting both parallel and integrative networks.', 'draganski2008'),
+      c('In awake surgery, stimulating a fronto-striatal tract inhibited movement, and resection close to it was followed by transient disorders of movement initiation.', 'kinoshita2015'),
+    ],
+  },
+  {
     id: 'ext_all', kind: 'all', tier: 'extended', name: 'All extended tracts', hemi: 'L', camera: 'lateral',
-    tractIds: ['wm_mdlf', 'wm_tpat', 'wm_vof', 'wm_emc', 'wm_ac', 'wm_atr', 'wm_str', 'wm_ptr', 'wm_ar'],
+    tractIds: ['wm_mdlf', 'wm_tpat', 'wm_vof', 'wm_emc', 'wm_ac', 'wm_atr', 'wm_str', 'wm_ptr', 'wm_ar', 'wm_cs_a', 'wm_cs_s', 'wm_cs_p'],
+    rationale: [],
+  },
+  // ---------------------------------------------------------------- posterior fossa tier
+  {
+    id: 'fossa_loop', kind: 'function', tier: 'fossa', name: 'Cerebro-cerebellar loop', hemi: 'L', camera: 'lateral',
+    tractIds: ['wm_cpt_f', 'wm_cpt_p', 'wm_cpt_o', 'wm_mcp', 'wm_scp', 'wm_drtt'],
+    rationale: [
+      c('Cortex reaches the cerebellum through the corticopontine projection to the pontine nuclei.', 'morecraft2018'),
+      c('The cerebellum returns to contralateral cortex through the dentate nucleus, superior cerebellar peduncle, red nucleus and ventrolateral thalamus, mostly to associative areas.', 'palesi2015'),
+      c('Frontal and posterior parietal association areas take part in this system, which is not only motor.', 'ramnani2012'),
+    ],
+  },
+  {
+    id: 'fossa_peduncles', kind: 'anatomy', tier: 'fossa', name: 'Cerebellar peduncles', hemi: 'both', camera: 'posteriorOblique', radius: 40,
+    tractIds: ['wm_scp', 'wm_mcp', 'wm_icp'],
+    rationale: [
+      c('Fibre dissection divides each peduncle into segments and shows how they relate: the middle peduncle’s fibres pass over and lateral to the inferior and superior peduncles.', 'perrini2013'),
+    ],
+  },
+  {
+    id: 'fossa_brainstem', kind: 'anatomy', tier: 'fossa', name: 'Brainstem long tracts', hemi: 'both', camera: 'coronal',
+    tractIds: ['wm_ml', 'wm_rst', 'wm_drtt'],
+    rationale: [
+      c('The brainstem leaves little room between nuclei and tracts; a population tractography atlas maps its pathways against the classic surgical approaches.', 'meola2016'),
+      c('The corticospinal tract, a core tract, also runs through the brainstem: most of its axons cross at the pyramidal decussation.', 'welniarz2017'),
+    ],
+  },
+  {
+    id: 'fossa_all', kind: 'all', tier: 'fossa', name: 'All posterior fossa tracts', hemi: 'both', camera: 'posteriorOblique',
+    tractIds: ['wm_scp', 'wm_mcp', 'wm_icp', 'wm_drtt', 'wm_ml', 'wm_rst', 'wm_cpt_f', 'wm_cpt_p', 'wm_cpt_o'],
     rationale: [],
   },
 ];

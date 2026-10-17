@@ -34,7 +34,7 @@ export function tractPlan(grpId: string, sel: string | null): TractPlan {
     title: t ? `${t.name} (${g.name})` : g.name,
     accent: 'ctx', looks, tracts, parcels, markers: [],
     camera: g.camera, focusIds: t ? [t.id] : g.tractIds,
-    minRadius: 85, cortex: true, labelTracts: true, group: g.id,
+    minRadius: g.radius ?? 85, cortex: true, labelTracts: true, group: g.id,
   };
 }
 

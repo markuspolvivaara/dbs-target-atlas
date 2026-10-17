@@ -19,11 +19,14 @@ export const ClaimSchema = z.object({
 });
 export type Claim = z.infer<typeof ClaimSchema>;
 
-/** Core: the tracts that matter most in tumour and epilepsy surgery. Extended: the rest, shown separately. */
-export const TierSchema = z.enum(['core', 'extended']);
+/**
+ * Core: the tracts that matter most in tumour and epilepsy surgery. Extended: further supratentorial
+ * tracts. Posterior fossa: cerebellar and brainstem pathways. Each set is shown separately.
+ */
+export const TierSchema = z.enum(['core', 'extended', 'fossa']);
 export type Tier = z.infer<typeof TierSchema>;
 
-export const TractTypeSchema = z.enum(['association', 'projection', 'commissural']);
+export const TractTypeSchema = z.enum(['association', 'projection', 'commissural', 'cerebellar']);
 export type TractType = z.infer<typeof TractTypeSchema>;
 
 export const TractTopicSchema = z.object({
@@ -66,5 +69,7 @@ export const TractGroupSchema = z.object({
   rationale: z.array(ClaimSchema),
   hemi: z.enum(['L', 'R', 'both']),
   camera: CameraSchema,
+  /** smallest framing radius in mm (default: whole hemisphere) */
+  radius: z.number().positive().optional(),
 });
 export type TractGroup = z.infer<typeof TractGroupSchema>;

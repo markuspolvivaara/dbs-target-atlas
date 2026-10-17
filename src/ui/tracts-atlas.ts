@@ -18,9 +18,9 @@ const PRESETS: [CameraPreset, string, string, string][] = [
   ['axial', 'Axial', '4', 'Ax'], ['posteriorOblique', 'Post-oblique', '5', 'Obl'],
 ];
 const LAYERS: [LayerKey, string][] = [['tracts', 'Tracts'], ['cortex', 'Cortex'], ['nuclei', 'Deep nuclei (orientation)']];
-const TYPE_LABEL = { association: 'Association tract', projection: 'Projection tract', commissural: 'Commissural tract' } as const;
-const TIER_LABEL = { core: 'Core', extended: 'Extended' } as const;
-const TIER_NOTE = { core: 'the tracts that matter most in surgery', extended: 'further tracts, less often decisive' } as const;
+const TYPE_LABEL = { association: 'Association tract', projection: 'Projection tract', commissural: 'Commissural tract', cerebellar: 'Cerebellar tract' } as const;
+const TIER_LABEL = { core: 'Core', extended: 'Extended', fossa: 'Posterior fossa' } as const;
+const TIER_NOTE = { core: 'the tracts that matter most in surgery', extended: 'further tracts, less often decisive', fossa: 'cerebellar and brainstem pathways' } as const;
 const CONTEXT = new Map(CONTEXT_STRUCTURES.map((m) => [m.id, m]));
 
 const refs = (ids: string[]) => refLinksFrom(WM_REF, ids);
@@ -189,7 +189,7 @@ export class TractsAtlasPage {
     const inTier = WM.groups.filter((x) => x.tier === g.tier);
     pane.append(
       h('div', { class: 'tier-switch', role: 'group', 'aria-label': 'Tract set' },
-        ...(['core', 'extended'] as const).map((t) => h('button', {
+        ...(['core', 'extended', 'fossa'] as const).map((t) => h('button', {
           type: 'button', class: 'tier-btn', 'aria-pressed': String(g.tier === t), 'data-tier': t,
           onclick: () => { if (g.tier !== t) pick(WM.groups.find((x) => x.tier === t)!.id); },
         }, h('strong', {}, TIER_LABEL[t]), h('span', {}, TIER_NOTE[t])))),
@@ -348,7 +348,7 @@ export class TractsAtlasPage {
           h('input', { type: 'range', min: 0, max: 1, step: 0.05, oninput: (e: Event) => this.update((st) => { st.layers[k].opacity = parseFloat((e.target as HTMLInputElement).value); }) }))));
       pane.append(h('h3', {}, 'Layers'), ...rows,
         h('p', { class: 'aside' }, `Deep nuclei shown faintly for orientation: ${ORIENTATION_NUCLEI.map(nameOf).join(', ')} (from the DBS section’s atlases). Tracts load when first needed.`),
-        ...(['core', 'extended'] as const).flatMap((tier) => [h('h3', {}, `${TIER_LABEL[tier]} tracts`),
+        ...(['core', 'extended', 'fossa'] as const).flatMap((tier) => [h('h3', {}, `${TIER_LABEL[tier]} tracts`),
           h('ul', { class: 'index-flat' }, ...WM.topics.filter((t) => t.tier === tier).map((t) => h('li', {}, h('span', { class: 'swatch', style: `--c: var(--c-${tokenOf(t.id)})` }),
             h('button', { type: 'button', class: 'linklike', onclick: () => this.update((st) => { st.sel = t.id; }) }, `${t.name} (${t.abbr})`))))]));
     }
