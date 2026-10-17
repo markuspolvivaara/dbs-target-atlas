@@ -41,10 +41,12 @@ SOURCES: list[str] = [
     SPACE + "t1.nii",
     SPACE + "t2.nii",  # ICBM 2009b T2 (Lead-DBS "mni_hires" t2 template)
     SPACE + "pd.nii",  # ICBM 2009b proton density
-    # Cortex surface + DKT annotation (Lead-DBS template surfaces)
+    # Cortex surface + annotations (Lead-DBS template surfaces): annot_DKT holds FreeSurfer's Desikan-Killiany
+    # aparc (despite its name); annot_a2009 the Destrieux 2009 aparc.a2009s (cortex section)
     SPACE + "cortex/CortexHiRes.mat",
     SPACE + "cortex/CortexLowRes_15000V.mat",
     SPACE + "cortex/annot_DKT.mat",
+    SPACE + "cortex/annot_a2009.mat",
     # Volumetric parcellations in 2009b space
     SPACE + "labeling/HMAT (Mayka 2005).nii",
     SPACE + "labeling/HMAT (Mayka 2005).txt",

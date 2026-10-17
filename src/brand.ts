@@ -9,7 +9,7 @@ export const BRAND = {
 } as const;
 
 export interface Section {
-  id: 'dbs' | 'tracts' | 'skullbase';
+  id: 'dbs' | 'tracts' | 'skullbase' | 'cortex';
   name: string;
   /** path from the site root */
   path: string;
@@ -29,6 +29,10 @@ export const SECTIONS: Section[] = [
   {
     id: 'skullbase', name: 'Skull base', path: 'skullbase/', status: 'live',
     summary: 'Cranial bones with their labelled foramina and landmarks, the cranial nerves, arteries and dural sinuses, in a cut-away 3D model: what passes where around the sella, orbit apex, petrous apex and foramen magnum.',
+  },
+  {
+    id: 'cortex', name: 'Cortical anatomy', path: 'cortex/', status: 'live',
+    summary: 'The gyri and sulci of the cerebral cortex (Destrieux parcellation) on a template brain: lateral, medial, basal and insular views, the pial surface and an inflated one that opens the sulci, with the lobes, borders and names of every label.',
   },
 ];
 

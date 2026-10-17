@@ -224,6 +224,22 @@ The meshes and lines in `public/assets/skullbase/` and the files `sb-manifest.js
   converted to mm from the hypophysial fossa landmark, midline structures cut at x = 0, vessels and nerves reduced to
   centre lines and cropped to the head, files converted to compressed glTF, definitions shortened to their lead section.
 
+## Cortex section (Destrieux parcellation on the Lead-DBS template surface)
+
+The meshes in `public/assets/cortex/` and `ctx-manifest.json` / `ctx-labels.json` are derived from the Lead-DBS
+MNI 2009b template surface and the FreeSurfer annotations (Destrieux aparc.a2009s, Desikan-Killiany aparc)
+shipped with it. Licence: GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy).
+
+- Source: https://www.lead-dbs.org
+- Note: One template brain (MNI ICBM 2009b nonlinear asymmetric average), not an individual. Labels from FreeSurfer's automatic Destrieux parcellation of that template, as shipped with Lead-DBS. Surfaces decimated to 80k faces per hemisphere; the inflated surface is computed by smoothing the pial surface.
+- Cite: Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.
+- Cite: Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862.
+- Lobe grouping: Klein A, Tourville J. Front Neurosci. 2012;6:171 (CC BY 3.0). doi:10.3389/fnins.2012.00171.
+- Names, views and mean areas: Table 1 of Destrieux et al. 2010.
+- Definitions: Wikipedia - CC-BY-SA 3.0, as shipped with Z-Anatomy (each links its source page).
+- Changes made: surfaces decimated and split by label, an inflated surface and sulcal-depth shading computed,
+  files converted to compressed glTF; definitions shortened to their lead section.
+
 ## Datasets considered and not used
 
 - **Basal Ganglia Pathway Atlas, original files (Petersen 2019, OSF mhd4z).** The OSF terms limit use to

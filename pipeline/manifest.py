@@ -168,6 +168,31 @@ def skull_base_attribution() -> list[str]:
     ]
 
 
+def cortex_attribution() -> list[str]:
+    """ATTRIBUTION.md section for the cortex section, from ctx-manifest.json (built by cortex_build.py)."""
+    p = GEN / "ctx-manifest.json"
+    if not p.exists():
+        return []
+    d = json.loads(p.read_text())["dataset"]
+    return [
+        "## Cortex section (Destrieux parcellation on the Lead-DBS template surface)",
+        "",
+        "The meshes in `public/assets/cortex/` and `ctx-manifest.json` / `ctx-labels.json` are derived from the Lead-DBS",
+        "MNI 2009b template surface and the FreeSurfer annotations (Destrieux aparc.a2009s, Desikan-Killiany aparc)",
+        f"shipped with it. Licence: {d['licence']}.",
+        "",
+        f"- Source: {d['url']}",
+        f"- Note: {d['note']}",
+        *[f"- Cite: {c}" for c in d["citation"]],
+        "- Lobe grouping: Klein A, Tourville J. Front Neurosci. 2012;6:171 (CC BY 3.0). doi:10.3389/fnins.2012.00171.",
+        "- Names, views and mean areas: Table 1 of Destrieux et al. 2010.",
+        "- Definitions: Wikipedia - CC-BY-SA 3.0, as shipped with Z-Anatomy (each links its source page).",
+        "- Changes made: surfaces decimated and split by label, an inflated surface and sulcal-depth shading computed,",
+        "  files converted to compressed glTF; definitions shortened to their lead section.",
+        "",
+    ]
+
+
 def write_attribution(m: dict, wm: dict) -> None:
     lines = [
         "# Attribution and licences",
@@ -256,6 +281,7 @@ def write_attribution(m: dict, wm: dict) -> None:
         "> " + HCP_ACK,
         "",
         *skull_base_attribution(),
+        *cortex_attribution(),
         "## Datasets considered and not used",
         "",
         "- **Basal Ganglia Pathway Atlas, original files (Petersen 2019, OSF mhd4z).** The OSF terms limit use to",

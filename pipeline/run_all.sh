@@ -21,3 +21,9 @@ node pipeline/compress.mjs
 "$PY" -I -W ignore pipeline/skullbase_build.py
 node pipeline/compress.mjs
 "$PY" -I -W ignore pipeline/skullbase_build.py finalize
+# cortex section (Destrieux labels on the Lead-DBS template surface; definition texts read from the Z-Anatomy file in Blender)
+"${BLENDER:-.tools/Blender.app/Contents/MacOS/Blender}" --factory-startup -b -noaudio \
+    pipeline/data/raw/zanatomy/Z-Anatomy/Startup.blend --python pipeline/cortex_texts.py
+"$PY" -I -W ignore pipeline/cortex_build.py
+node pipeline/compress.mjs cortex
+"$PY" -I -W ignore pipeline/cortex_build.py finalize

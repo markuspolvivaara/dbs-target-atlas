@@ -40,6 +40,13 @@ class _Builder:
         })
         return len(self.accessors) - 1
 
+    def scalar(self, a: np.ndarray) -> int:
+        a = np.ascontiguousarray(a, dtype=np.float32).ravel()
+        v = self._view(a.tobytes(), ARRAY_BUFFER)
+        self.accessors.append({"bufferView": v, "componentType": FLOAT, "count": int(a.size), "type": "SCALAR",
+                               "min": [float(a.min())], "max": [float(a.max())]})
+        return len(self.accessors) - 1
+
     def indices(self, a: np.ndarray) -> int:
         a = np.asarray(a).ravel()
         if a.max() < 65535:
@@ -52,15 +59,28 @@ class _Builder:
 
 
 def write_glb(path: Path, nodes: list[dict], extras: dict | None = None) -> None:
-    """nodes: [{name, positions (n,3), normals (n,3)|None, indices, mode, extras}]"""
+    """nodes: [{name, positions (n,3), normals (n,3)|None, indices, mode, extras}]
+
+    Optional per node: colors (n,3) in 0..1 (COLOR_0), scalars {"_NAME": (n,)} (custom vertex attributes),
+    targets [{"positions": (n,3) deltas, "normals": (n,3) deltas}] (morph targets, weights 0).
+    """
     b = _Builder()
     meshes, gnodes = [], []
     for n in nodes:
         attrs = {"POSITION": b.vec3(n["positions"])}
         if n.get("normals") is not None:
             attrs["NORMAL"] = b.vec3(n["normals"])
+        if n.get("colors") is not None:
+            attrs["COLOR_0"] = b.vec3(n["colors"])
+        for k, a in (n.get("scalars") or {}).items():
+            attrs[k] = b.scalar(a)
         prim = {"attributes": attrs, "indices": b.indices(n["indices"]), "mode": n.get("mode", TRIANGLES)}
-        meshes.append({"name": n["name"], "primitives": [prim]})
+        mesh = {"name": n["name"], "primitives": [prim]}
+        if n.get("targets"):
+            prim["targets"] = [{"POSITION": b.vec3(t["positions"]), **({"NORMAL": b.vec3(t["normals"])} if t.get("normals") is not None else {})}
+                               for t in n["targets"]]
+            mesh["weights"] = [0.0] * len(n["targets"])
+        meshes.append(mesh)
         node = {"name": n["name"], "mesh": len(meshes) - 1}
         if n.get("extras"):
             node["extras"] = n["extras"]

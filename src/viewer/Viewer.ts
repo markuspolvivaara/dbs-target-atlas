@@ -13,7 +13,7 @@ import { Slices } from './slices';
 type Side = 'L' | 'R';
 type Palette = Record<string, string>;
 
-interface MeshItem { kind: 'mesh'; meta: ManifestStructure; nodes: Partial<Record<Side, THREE.Mesh>>; mats: MeshMaterials; look: Look; layer: LayerKey }
+interface MeshItem { kind: 'mesh'; meta: ManifestStructure; nodes: Partial<Record<Side, THREE.Mesh>>; mats: MeshMaterials; look: Look; layer: LayerKey; surface: boolean }
 interface LineItem { kind: 'lines'; meta: ManifestStructure; nodes: Partial<Record<Side, LineSegments2>>; mat: LineMaterial; role: TractRole | null; centroid: Partial<Record<Side, THREE.Vector3>> }
 type Item = MeshItem | LineItem;
 
@@ -68,6 +68,11 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   private loadingCount = 0;
   private applySeq = 0;
   private moveTimer = 0;
+  /** pial (0) to inflated (1) morph of the cortical surfaces: current value and running animation */
+  private morph = 0;
+  private morphAnim: { t0: number; from: number; to: number } | null = null;
+  /** colour of the inside of cortical surfaces, seen through cut-aways and hidden labels */
+  private interior = { value: new THREE.Color('#7d858e') };
 
   private readonly cat;
 
@@ -130,6 +135,12 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       if (k >= 1) { this.anim = null; this.ev.cameraChanged(this.toRas(this.camera.position), this.toRas(this.controls.target)); this.ev.moving(false); }
       this.needsRender = true;
     }
+    if (this.morphAnim) {
+      const k = Math.min(1, (performance.now() - this.morphAnim.t0) / 800);
+      const e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      this.setMorph(this.morphAnim.from + (this.morphAnim.to - this.morphAnim.from) * e);
+      if (k >= 1) this.morphAnim = null;
+    }
     if (this.controls.update()) this.needsRender = true;
     if (this.needsRender) {
       this.needsRender = false;
@@ -154,6 +165,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.palette = palette;
     this.scene.background = new THREE.Color(background);
     this.ghost.set(ghost);
+    this.interior.value.set(palette.cortex ?? '#c4cbd3').multiplyScalar(0.62);
     this.leads.L.shaftMat.color.set(palette.electrode); this.leads.R.shaftMat.color.set(palette.electrode);
     if (this.plan) this.updateMarkers();
     this.restyle();
@@ -190,18 +202,66 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   private makeMeshItem(meta: ManifestStructure, a: MeshAsset): MeshItem {
     const c = this.colour(meta);
     const mats = { solid: solidMaterial(c), rim: rimMaterial(c) };
+    const surface = meta.type === 'surface';
     const nodes: MeshItem['nodes'] = {};
     for (const side of ['L', 'R'] as Side[]) {
       const m = a.sides[side];
       if (!m) continue;
       m.userData = { id: meta.id, side };
       m.visible = false;
+      // cortical labels carry sulcal-depth shading as vertex colours and the inflated surface as morph target 0
+      if (m.geometry.getAttribute('color')) mats.solid.vertexColors = true;
+      // cut-away surfaces (insular view, hidden labels, clip planes) show their inside, in one flat colour so an
+      // opening reads as a cut into the brain rather than a view through it
+      if (surface && mats.solid.side !== THREE.DoubleSide) {
+        mats.solid.side = THREE.DoubleSide;
+        mats.solid.onBeforeCompile = (sh) => {
+          sh.uniforms.uInterior = this.interior;
+          sh.fragmentShader = sh.fragmentShader
+            .replace('void main() {', 'uniform vec3 uInterior;\nvoid main() {')
+            .replace('#include <color_fragment>', '#include <color_fragment>\n  if (!gl_FrontFacing) diffuseColor.rgb = uInterior;');
+        };
+        mats.solid.customProgramCacheKey = () => 'cortex-interior';
+      }
+      if (m.morphTargetInfluences?.length) m.morphTargetInfluences[0] = this.morph;
       nodes[side] = m;
       this.root.add(m);
     }
-    // bone meshes share the 'nuclei' layer and soft-tissue meshes the 'cortex' layer (skull-base section)
-    const layer: LayerKey = meta.type === 'cortex' || meta.type === 'soft' ? 'cortex' : meta.type === 'target' ? 'targets' : 'nuclei';
-    return { kind: 'mesh', meta, nodes, mats, look: 'hidden', layer };
+    // bone meshes share the 'nuclei' layer and soft-tissue meshes the 'cortex' layer (skull-base section);
+    // cortical labels (cortex section) use the 'cortex' layer
+    const layer: LayerKey = meta.type === 'cortex' || meta.type === 'soft' || surface ? 'cortex' : meta.type === 'target' ? 'targets' : 'nuclei';
+    return { kind: 'mesh', meta, nodes, mats, look: 'hidden', layer, surface };
+  }
+
+  /** Set the pial-to-inflated morph of every cortical surface (0..1). */
+  private setMorph(v: number): void {
+    this.morph = v;
+    for (const it of this.items.values()) {
+      if (it.kind !== 'mesh' || !it.surface) continue;
+      for (const m of Object.values(it.nodes)) if (m?.morphTargetInfluences?.length) m.morphTargetInfluences[0] = v;
+    }
+    this.needsRender = true;
+  }
+
+  /** Swap a surface's index between all faces and the faces left after removing the opercula (flagged per vertex). */
+  private setOpercula(m: THREE.Mesh, cut: boolean): void {
+    const g = m.geometry;
+    const u = m.userData as { fullIndex?: THREE.BufferAttribute; cutIndex?: THREE.BufferAttribute };
+    if (!u.fullIndex) {
+      const oper = g.getAttribute('_oper');
+      const idx = g.getIndex();
+      if (!oper || !idx) return;
+      u.fullIndex = idx;
+      const keep: number[] = [];
+      for (let f = 0; f < idx.count; f += 3) {
+        let n = 0;
+        for (let k = 0; k < 3; k++) if (oper.getX(idx.getX(f + k)) > 0.5) n++;
+        if (n === 0) keep.push(idx.getX(f), idx.getX(f + 1), idx.getX(f + 2));
+      }
+      u.cutIndex = new THREE.BufferAttribute(new Uint32Array(keep), 1);
+    }
+    const want = cut ? u.cutIndex! : u.fullIndex;
+    if (g.getIndex() !== want) g.setIndex(want);
   }
 
   private makeLineItem(meta: ManifestStructure, a: LineAsset): LineItem {
@@ -222,7 +282,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
 
   /** Load every nucleus (and skull-base bone / soft-tissue mesh) up front (small); cortex and tracts on demand. */
   async preload(): Promise<void> {
-    const ids = this.cat.structures.filter((s) => ['nucleus', 'target', 'bone', 'soft'].includes(s.type)).map((s) => s.id);
+    const ids = this.cat.structures.filter((s) => ['nucleus', 'target', 'bone', 'soft', 'surface'].includes(s.type)).map((s) => s.id);
     await Promise.all(ids.map((id) => this.ensure(id)));
     this.restyle();
   }
@@ -250,6 +310,11 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.restyle();
     this.updateLead();
     const initial = !prev;
+    const inflate = s.inflate ?? 0;
+    if (inflate !== (this.morphAnim?.to ?? this.morph)) {
+      if (initial || this.reducedMotion) { this.morphAnim = null; this.setMorph(inflate); }
+      else this.morphAnim = { t0: performance.now(), from: this.morph, to: inflate };
+    }
     if (s.cam.pos && s.cam.tgt && (initial || opts.animateCamera)) {
       this.setCamera(new THREE.Vector3(...s.cam.pos), new THREE.Vector3(...s.cam.tgt), !initial);
     } else if (opts.animateCamera || (planChanged && !s.cam.pos) || (prev && prev.hemi !== s.hemi && !s.cam.pos)) {
@@ -276,7 +341,29 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     // focus: a selected structure (not a marker) is emphasised and everything else fades back
     const focus = s.sel && this.cat.byId.has(s.sel) && s.sel !== 'cortex' ? s.sel : null;
     for (const it of this.items.values()) {
-      if (it.kind === 'mesh') {
+      if (it.kind === 'mesh' && it.surface) {
+        // cortical labels stay opaque: a selection mutes the others instead of fading them
+        let look: Look = p.looks.get(it.meta.id) ?? 'muted';
+        const focused = focus === it.meta.id;
+        if (focused) look = 'primary';
+        else if (focus && look === 'primary') look = 'muted';
+        if (hidden.has(it.meta.id)) look = 'hidden';
+        const layer = s.layers[it.layer];
+        const op = layer.on ? layer.opacity : 0;
+        const hex = p.colours?.get(it.meta.id);
+        const c = hex ? new THREE.Color(hex) : this.colour(it.meta);
+        const neutral = new THREE.Color(this.palette.cortex ?? '#c4cbd3');
+        for (const side of ['L', 'R'] as Side[]) {
+          const m = it.nodes[side];
+          if (!m) continue;
+          applyLook(m, it.mats, look, op, neutral, c);
+          this.setOpercula(m, !!p.cutOpercula);
+          if (!this.sideVisible(side)) m.visible = false;
+        }
+        it.look = look;
+        it.mats.solid.emissive.copy(focused ? c.clone().multiplyScalar(0.35) : new THREE.Color(0x000000));
+        it.mats.solid.clippingPlanes = this.clipPlanes;
+      } else if (it.kind === 'mesh') {
         let look: Look = 'hidden';
         if (it.meta.type !== 'cortex') look = p.looks.get(it.meta.id) ?? 'hidden';
         else if (it.meta.id === 'cortex') look = 'ghost';
@@ -426,11 +513,43 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       const m = marks.find((x) => x.userData.side === 'R') ?? marks[0];
       return proj(m.getWorldPosition(new THREE.Vector3()));
     }
-    const meta = this.cat.byId.get(id);
-    if (!meta?.centroid) return null;
     const side: Side = this.sideShown('R') ? 'R' : 'L';
     if (!this.sideShown(side)) return null;
+    const sa = this.surfaceAnchor(id, side);
+    if (sa) return proj(this.toWorld(sa.pos));
+    const meta = this.cat.byId.get(id);
+    if (!meta?.centroid) return null;
     return proj(this.toWorld(new THREE.Vector3(...meta.centroid[side])));
+  }
+
+  /** A cortical label's anchor at the current pial-to-inflated morph, and whether it faces the camera. */
+  private surfaceAnchor(id: string, side: Side): { pos: THREE.Vector3; facing: boolean } | null {
+    const a = this.cat.anchors?.get(id)?.[side];
+    if (!a) return null;
+    const t = this.morph;
+    const pos = new THREE.Vector3(...a.pial).lerp(new THREE.Vector3(...a.inflated), t);
+    const n = new THREE.Vector3(...a.nPial).lerp(new THREE.Vector3(...a.nInflated), t).normalize();
+    const eye = this.toRas(this.camera.position);
+    return { pos, facing: n.dot(eye.sub(pos)) > 0 };
+  }
+
+  /** Screen positions of the drawn cortical labels' anchors that face the camera (one side: right if shown). */
+  surfaceScreen(): { id: string; x: number; y: number; look: Look; side: Side }[] {
+    const out: { id: string; x: number; y: number; look: Look; side: Side }[] = [];
+    if (!this.state?.layers.cortex.on) return out;
+    const w = this.host.clientWidth, h = this.host.clientHeight;
+    for (const it of this.items.values()) {
+      if (it.kind !== 'mesh' || !it.surface || it.look === 'hidden') continue;
+      for (const side of ['L', 'R'] as Side[]) {
+        if (!this.sideShown(side) || !it.nodes[side]) continue;
+        const a = this.surfaceAnchor(it.meta.id, side);
+        if (!a || !a.facing || !this.notClipped(this.toWorld(a.pos))) continue;
+        const v = this.toWorld(a.pos).project(this.camera);
+        if (v.z > 1 || Math.abs(v.x) > 1.05 || Math.abs(v.y) > 1.05) continue;
+        out.push({ id: it.meta.id, x: (v.x + 1) / 2 * w, y: (1 - v.y) / 2 * h, look: it.look, side });
+      }
+    }
+    return out;
   }
 
   markerScreen(): { id: string; side: Side; x: number; y: number; primary: boolean }[] {
@@ -531,8 +650,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       // lateral: the shown hemisphere from outside (both: from the left); medial: from the midline
       case 'lateral': dir = new THREE.Vector3(hemi === 'R' ? 1 : -1, 0, 0.08); break;
       case 'medial': dir = new THREE.Vector3(hemi === 'R' ? -1 : 1, 0, 0.08); break;
-      // inferior: up at the skull base from below, anterior up on screen
-      case 'inferior': dir = new THREE.Vector3(0, -0.05, -1); break;
+      // inferior: from below, anterior up on screen (camera nudged anterior so the orbit keeps anterior at the top)
+      case 'inferior': dir = new THREE.Vector3(0, 0.05, -1); break;
       case 'surgeon': {
         const side: Side = hemi === 'L' ? 'L' : 'R';
         const l = this.state!.lead;
@@ -750,7 +869,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
 
   snapshot(): string { this.renderer.render(this.scene, this.camera); return this.renderer.domElement.toDataURL('image/png'); }
 
-  isIdle(): boolean { return this.loadingCount === 0 && !this.anim && this.slices.status !== 'loading'; }
+  isIdle(): boolean { return this.loadingCount === 0 && !this.anim && !this.morphAnim && this.slices.status !== 'loading'; }
 
   dispose(): void { this.disposed = true; this.renderer.dispose(); }
 }

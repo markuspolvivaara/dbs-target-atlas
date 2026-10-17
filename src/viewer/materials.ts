@@ -1,11 +1,12 @@
 import * as THREE from 'three';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
 
-export type Look = 'primary' | 'alt' | 'context' | 'shell' | 'ghost' | 'hidden';
+/** muted: opaque, drawn in a colour close to the neutral one (cortical labels that are not highlighted) */
+export type Look = 'primary' | 'alt' | 'context' | 'shell' | 'ghost' | 'muted' | 'hidden';
 
 /** Base opacity per look; layer opacity multiplies these. */
 export const LOOK_OPACITY: Record<Look, number> = {
-  primary: 1, alt: 1, context: 0.35, shell: 0.22, ghost: 0.1, hidden: 0,
+  primary: 1, alt: 1, context: 0.35, shell: 0.22, ghost: 0.1, muted: 1, hidden: 0,
 };
 
 export interface MeshMaterials {
@@ -66,7 +67,8 @@ export function applyLook(
     return;
   }
   const m = mats.solid;
-  m.color.copy(look === 'ghost' ? ghostColour : colour);
+  if (look === 'muted') m.color.copy(colour).lerp(ghostColour, 0.8);
+  else m.color.copy(look === 'ghost' ? ghostColour : colour);
   m.opacity = op;
   m.transparent = op < 0.999;
   m.depthWrite = !m.transparent;

@@ -29,7 +29,14 @@ export interface ScenePlan {
   cortex?: boolean;
   /** "All" name labels include the drawn tracts (at their centroids), not only highlighted nuclei */
   labelTracts?: boolean;
+  /** colour per structure (hex), overriding its palette token (cortex section: atlas colours) */
+  colours?: Map<string, string>;
+  /** cortical surfaces: leave out the faces flagged as opercular (the insular view) */
+  cutOpercula?: boolean;
 }
+
+/** Where to put a label on a cortical surface, on the pial and on the inflated surface (RAS mm, unit normals). */
+export interface SurfaceAnchor { pial: V3; inflated: V3; nPial: V3; nInflated: V3 }
 
 /** A point marker (target) the viewer can draw, label and place the lead on. */
 export interface MarkerDef {
@@ -48,6 +55,8 @@ export interface Catalog {
   markers: Map<string, MarkerDef>;
   /** structures drawn with extra emphasis when shown as context (landmarks) */
   landmarks: Set<string>;
+  /** label anchors of cortical surfaces (cortex section) */
+  anchors?: Map<string, Record<'L' | 'R', SurfaceAnchor>>;
 }
 
 /** The part of a section's state the viewer reads. Section states extend this. */
@@ -63,6 +72,8 @@ export interface ViewState {
   hidden: string[];
   /** remove every structure above this height (mm); the skull-base section uses it to lift off the calvaria */
   cutAbove?: number | null;
+  /** cortical surfaces: 0 = pial, 1 = inflated (the viewer animates between them) */
+  inflate?: number;
 }
 
 export interface SceneSource<S extends ViewState, P extends ScenePlan = ScenePlan> {

@@ -558,9 +558,65 @@ test('skull base: structure and landmark cards, cut-away and the URL', async ({ 
   await expect(page.locator('#zanatomy')).toContainText('CC BY-SA');
   await page.goto('./skullbase/#/sources');
   await expect(page.locator('.page:not([hidden]) h1')).toHaveText('Sources');
-  // the section menu lists all three sections
+  // the section menu lists all four sections
   await page.locator('.section-chip').click();
-  await expect(page.locator('.section-menu a.section-item:not(.home)')).toHaveText(['DBS targets', 'White-matter tracts', 'Skull base']);
+  await expect(page.locator('.section-menu a.section-item:not(.home)')).toHaveText(['DBS targets', 'White-matter tracts', 'Skull base', 'Cortical anatomy']);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// ---------------------------------------------------------------- cortex section
+// view ids and names as src/cortex/views.ts defines them
+const CTX_VIEWS = [['lateral', 'Lateral'], ['medial', 'Medial'], ['basal', 'Basal'], ['insular', 'Insular']] as const;
+for (const [id, name] of CTX_VIEWS) {
+  for (const inf of [0, 1]) {
+    test(`cortex ${id} view (${inf ? 'inflated' : 'pial'}): renders and matches the visual baseline`, async ({ page }) => {
+      const gd = guard(page);
+      await page.goto(`./cortex/#/atlas?v=${id}${inf ? '&inf=1' : ''}`);
+      await settle(page);
+      await expect(page.locator('.pane:not([hidden]) .card h2').first()).toHaveText(`${name} view`);
+      expect(await canvasColours(page)).toBeGreaterThan(40);
+      await expect(page.locator('.stage')).toHaveScreenshot(`cortex-${id}-${inf ? 'inflated' : 'pial'}.png`);
+      expect(gd.external).toEqual([]);
+      expect(gd.errors).toEqual([]);
+    });
+  }
+}
+
+test('cortex: label cards, lobes, surface switch and the URL', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./cortex/#/atlas?v=lateral');
+  await settle(page);
+  await page.locator('.sb-item[data-id="ctx_g_precentral"]').click();
+  const card = page.locator('.card.sel');
+  await expect(card.locator('h2')).toHaveText('Precentral gyrus');
+  await expect(card).toContainText('From Wikipedia (CC BY-SA 3.0)');
+  await expect(card.locator('dt', { hasText: 'Borders (measured)' })).toBeVisible();
+  await expect(card.locator('dt', { hasText: 'DBS section’s cortical areas (measured)' })).toBeVisible();
+  // a border link opens the neighbour's card
+  await card.getByRole('button', { name: 'Central sulcus', exact: true }).click();
+  await expect(page.locator('.card.sel h2')).toHaveText('Central sulcus');
+  // lobe filter narrows the list
+  await page.locator('.lobe-chips .chip[data-v="insula"]').click();
+  await expect(page.locator('.sb-list .sb-item')).toHaveCount(5);
+  // inflated surface and atlas colours are part of the link and survive a reload
+  await page.locator('[data-inflate="1"]').click();
+  await page.locator('.ptab', { hasText: 'Display' }).click();
+  await page.locator('input[name=ctxcol][value=atlas]').check();
+  await expect.poll(() => new URL(page.url()).hash).toContain('inf=1');
+  await settle(page);
+  await page.reload();
+  await settle(page);
+  const st = await page.evaluate(() => (window as unknown as { __atlas: { state(): { lobe: string; inflate: number; colour: string } } }).__atlas.state());
+  expect([st.lobe, st.inflate, st.colour]).toEqual(['insula', 1, 'atlas']);
+  // the medial wall has its own card; sources and credits load without external requests
+  await page.goto('./cortex/#/atlas?v=medial&sel=ctx_medial_wall');
+  await settle(page);
+  await expect(page.locator('.card.sel h2')).toHaveText('Medial wall');
+  await page.goto('./cortex/#/credits');
+  await expect(page.locator('#destrieux')).toContainText('FreeSurfer');
+  await page.goto('./cortex/#/sources');
+  await expect(page.locator('.page:not([hidden]) h1')).toHaveText('Sources');
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });

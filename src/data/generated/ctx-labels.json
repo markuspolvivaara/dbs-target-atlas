@@ -1,0 +1,9410 @@
+{
+ "labels": [
+  {
+   "id": "ctx_g_and_s_frontomargin",
+   "short": "G_and_S_frontomargin",
+   "index": 1,
+   "name": "Fronto-marginal gyrus (of Wernicke) and sulcus",
+   "kind": "gyrus and sulcus",
+   "views": [
+    "A",
+    "L",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 9.55,
+    "R": 7.71
+   },
+   "areaCm2": {
+    "L": 9.67,
+    "R": 7.93
+   },
+   "lobe": "frontal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#17dc3c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -24.54,
+      63.75,
+      -17.08
+     ],
+     "inflated": [
+      -22.47,
+      56.49,
+      -15.07
+     ],
+     "nPial": [
+      -0.387,
+      0.435,
+      -0.813
+     ],
+     "nInflated": [
+      -0.314,
+      0.581,
+      -0.751
+     ]
+    },
+    "R": {
+     "pial": [
+      12.12,
+      67.64,
+      -20.6
+     ],
+     "inflated": [
+      15.77,
+      57.98,
+      -17.14
+     ],
+     "nPial": [
+      0.074,
+      0.888,
+      -0.454
+     ],
+     "nInflated": [
+      0.027,
+      0.505,
+      -0.863
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_orbital",
+     "share": 0.434
+    },
+    {
+     "id": "ctx_g_and_s_transv_frontopol",
+     "share": 0.25
+    },
+    {
+     "id": "ctx_g_front_middle",
+     "share": 0.125
+    },
+    {
+     "id": "ctx_s_front_middle",
+     "share": 0.118
+    },
+    {
+     "id": "ctx_g_rectus",
+     "share": 0.061
+    }
+   ],
+   "dk": [
+    {
+     "region": "rostralmiddlefrontal",
+     "labelInRegion": 0.881,
+     "regionInLabel": 0.101
+    },
+    {
+     "region": "frontalpole",
+     "labelInRegion": 0.109,
+     "regionInLabel": 0.347
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The inferior or orbital surface of the frontal lobe is concave, and rests on the orbital plate of the frontal bone. It is divided into four orbital gyri by a well-marked H-shaped orbital sulcus. These are named, from their position, the medial, anterior, lateral, and posterior, orbital gyri. The medial orbital gyrus presents a well-marked antero-posterior sulcus, the olfactory sulcus, for the olfactory tract; the portion medial to this is named the straight gyrus, and is continuous with the superior frontal gyrus on the medial surface.",
+    "url": "https://en.wikipedia.org/wiki/Orbital_gyri",
+    "source": "Orbital gyri (Frontomarginal gyrus and sulcus*)",
+    "scope": "the orbital gyri"
+   }
+  },
+  {
+   "id": "ctx_g_and_s_occipital_inf",
+   "short": "G_and_S_occipital_inf",
+   "index": 2,
+   "name": "Inferior occipital gyrus (O3) and sulcus",
+   "kind": "gyrus and sulcus",
+   "views": [
+    "L",
+    "P",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 13.22,
+    "R": 10.74
+   },
+   "areaCm2": {
+    "L": 14.83,
+    "R": 13.63
+   },
+   "lobe": "occipital",
+   "lobeShare": 0.878,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "occipital",
+     "share": 0.878
+    }
+   ],
+   "atlasColour": "#173cb4",
+   "anchor": {
+    "L": {
+     "pial": [
+      -45.58,
+      -86.21,
+      -14.63
+     ],
+     "inflated": [
+      -35.26,
+      -87.22,
+      -8.85
+     ],
+     "nPial": [
+      -0.76,
+      -0.516,
+      -0.395
+     ],
+     "nInflated": [
+      -0.664,
+      -0.46,
+      -0.589
+     ]
+    },
+    "R": {
+     "pial": [
+      45.02,
+      -81.38,
+      -16.64
+     ],
+     "inflated": [
+      38.52,
+      -81.55,
+      -10.94
+     ],
+     "nPial": [
+      0.217,
+      0.237,
+      -0.947
+     ],
+     "nInflated": [
+      0.584,
+      -0.618,
+      -0.525
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_pole_occipital",
+     "share": 0.22
+    },
+    {
+     "id": "ctx_g_occipital_middle",
+     "share": 0.205
+    },
+    {
+     "id": "ctx_g_oc_temp_lat_fusifor",
+     "share": 0.163
+    },
+    {
+     "id": "ctx_s_occipital_ant",
+     "share": 0.115
+    },
+    {
+     "id": "ctx_s_collat_transv_post",
+     "share": 0.089
+    },
+    {
+     "id": "ctx_g_temporal_inf",
+     "share": 0.078
+    },
+    {
+     "id": "ctx_s_oc_temp_lat",
+     "share": 0.068
+    },
+    {
+     "id": "ctx_g_oc_temp_med_lingual",
+     "share": 0.043
+    }
+   ],
+   "dk": [
+    {
+     "region": "lateraloccipital",
+     "labelInRegion": 0.878,
+     "regionInLabel": 0.181
+    },
+    {
+     "region": "fusiform",
+     "labelInRegion": 0.115,
+     "regionInLabel": 0.04
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The occipital gyri (OcG) are three gyri in parallel, along the lateral portion of the occipital lobe, also referred to as a composite structure in the brain. The gyri are the superior occipital gyrus, the middle occipital gyrus, and the inferior occipital gyrus, and these are also known as the occipital face area. The superior and inferior occipital sulci separates the three occipital gyri. The intraoccipital sulcus, also known as the superior occipital sulcus, stems from the intraparietal sulcus and continues until the sulcus reaches the transverse occipital sulcus, separating the superior occipital gyrus from the middle occipital gyrus. The transverse occipital sulcus comes down along the lateral occipital surface or the inferior occipital sulcus.",
+    "url": "https://en.wikipedia.org/wiki/Occipital_gyri",
+    "source": "Inferior occipital gyrus and sulcus*",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_and_s_paracentral",
+   "short": "G_and_S_paracentral",
+   "index": 3,
+   "name": "Paracentral lobule and sulcus",
+   "kind": "gyrus and sulcus",
+   "views": [
+    "S",
+    "P",
+    "M"
+   ],
+   "paperAreaCm2": {
+    "L": 13.62,
+    "R": 12.18
+   },
+   "areaCm2": {
+    "L": 14.65,
+    "R": 13.07
+   },
+   "lobe": "frontal",
+   "lobeShare": 0.76,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 0.76
+    }
+   ],
+   "atlasColour": "#3f643c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -7.48,
+      -36.17,
+      79.0
+     ],
+     "inflated": [
+      -17.65,
+      -34.18,
+      67.68
+     ],
+     "nPial": [
+      0.786,
+      0.536,
+      0.308
+     ],
+     "nInflated": [
+      0.143,
+      -0.176,
+      0.974
+     ]
+    },
+    "R": {
+     "pial": [
+      6.59,
+      -36.57,
+      80.57
+     ],
+     "inflated": [
+      16.32,
+      -34.58,
+      67.88
+     ],
+     "nPial": [
+      -0.544,
+      -0.055,
+      0.837
+     ],
+     "nInflated": [
+      -0.262,
+      -0.122,
+      0.957
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_front_sup",
+     "share": 0.244
+    },
+    {
+     "id": "ctx_s_cingul_marginalis",
+     "share": 0.219
+    },
+    {
+     "id": "ctx_g_postcentral",
+     "share": 0.145
+    },
+    {
+     "id": "ctx_g_precentral",
+     "share": 0.109
+    },
+    {
+     "id": "ctx_g_parietal_sup",
+     "share": 0.089
+    },
+    {
+     "id": "ctx_s_postcentral",
+     "share": 0.068
+    },
+    {
+     "id": "ctx_g_precuneus",
+     "share": 0.066
+    },
+    {
+     "id": "ctx_s_central",
+     "share": 0.06
+    }
+   ],
+   "dk": [
+    {
+     "region": "paracentral",
+     "labelInRegion": 0.646,
+     "regionInLabel": 0.411
+    },
+    {
+     "region": "postcentral",
+     "labelInRegion": 0.176,
+     "regionInLabel": 0.044
+    },
+    {
+     "region": "precentral",
+     "labelInRegion": 0.114,
+     "regionInLabel": 0.024
+    }
+   ],
+   "parcels": [
+    {
+     "id": "sma",
+     "labelInParcel": 0.146,
+     "parcelInLabel": 0.11
+    },
+    {
+     "id": "m1",
+     "labelInParcel": 0.407,
+     "parcelInLabel": 0.104
+    },
+    {
+     "id": "s1",
+     "labelInParcel": 0.13,
+     "parcelInLabel": 0.042
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The paracentral sulcus is a sulcus of the brain. It forms the paracentral lobule's anterior border. It is part of the cingulate sulcus.",
+    "url": "https://en.wikipedia.org/wiki/Paracentral_sulcus",
+    "source": "Paracentral gyrus and sulcus*",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_and_s_subcentral",
+   "short": "G_and_S_subcentral",
+   "index": 4,
+   "name": "Subcentral gyrus (central operculum) and sulci",
+   "kind": "gyrus and sulcus",
+   "views": [
+    "L"
+   ],
+   "paperAreaCm2": {
+    "L": 12.24,
+    "R": 11.54
+   },
+   "areaCm2": {
+    "L": 13.58,
+    "R": 12.13
+   },
+   "lobe": "parietal",
+   "lobeShare": 0.783,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "parietal",
+     "share": 0.783
+    }
+   ],
+   "atlasColour": "#3f14dc",
+   "anchor": {
+    "L": {
+     "pial": [
+      -67.79,
+      -6.7,
+      13.6
+     ],
+     "inflated": [
+      -55.36,
+      -10.44,
+      25.83
+     ],
+     "nPial": [
+      -0.875,
+      0.466,
+      -0.129
+     ],
+     "nInflated": [
+      -0.981,
+      0.107,
+      -0.164
+     ]
+    },
+    "R": {
+     "pial": [
+      69.02,
+      -6.33,
+      15.06
+     ],
+     "inflated": [
+      55.77,
+      -8.02,
+      26.21
+     ],
+     "nPial": [
+      0.974,
+      0.208,
+      -0.089
+     ],
+     "nInflated": [
+      0.992,
+      -0.011,
+      -0.129
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_pariet_inf_supramar",
+     "share": 0.275
+    },
+    {
+     "id": "ctx_g_front_inf_opercular",
+     "share": 0.173
+    },
+    {
+     "id": "ctx_g_postcentral",
+     "share": 0.158
+    },
+    {
+     "id": "ctx_s_circular_insula_sup",
+     "share": 0.139
+    },
+    {
+     "id": "ctx_g_precentral",
+     "share": 0.105
+    },
+    {
+     "id": "ctx_lat_fis_post",
+     "share": 0.091
+    },
+    {
+     "id": "ctx_s_central",
+     "share": 0.058
+    }
+   ],
+   "dk": [
+    {
+     "region": "postcentral",
+     "labelInRegion": 0.662,
+     "regionInLabel": 0.133
+    },
+    {
+     "region": "precentral",
+     "labelInRegion": 0.217,
+     "regionInLabel": 0.037
+    },
+    {
+     "region": "supramarginal",
+     "labelInRegion": 0.121,
+     "regionInLabel": 0.027
+    }
+   ],
+   "parcels": [
+    {
+     "id": "pmv",
+     "labelInParcel": 0.368,
+     "parcelInLabel": 0.099
+    },
+    {
+     "id": "s1",
+     "labelInParcel": 0.05,
+     "parcelInLabel": 0.013
+    }
+   ],
+   "insula": false,
+   "definition": null
+  },
+  {
+   "id": "ctx_g_and_s_transv_frontopol",
+   "short": "G_and_S_transv_frontopol",
+   "index": 5,
+   "name": "Transverse frontopolar gyri and sulci",
+   "kind": "gyrus and sulcus",
+   "views": [
+    "A",
+    "L",
+    "M",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 5.8,
+    "R": 9.39
+   },
+   "areaCm2": {
+    "L": 7.27,
+    "R": 10.71
+   },
+   "lobe": "frontal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#0d00fa",
+   "anchor": {
+    "L": {
+     "pial": [
+      -8.65,
+      71.77,
+      -10.06
+     ],
+     "inflated": [
+      -12.91,
+      63.59,
+      -9.15
+     ],
+     "nPial": [
+      -0.035,
+      0.943,
+      -0.33
+     ],
+     "nInflated": [
+      0.287,
+      0.801,
+      -0.525
+     ]
+    },
+    "R": {
+     "pial": [
+      5.63,
+      71.69,
+      -6.38
+     ],
+     "inflated": [
+      10.25,
+      64.05,
+      -7.99
+     ],
+     "nPial": [
+      -0.047,
+      0.745,
+      0.665
+     ],
+     "nInflated": [
+      -0.627,
+      0.755,
+      -0.193
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_front_sup",
+     "share": 0.372
+    },
+    {
+     "id": "ctx_g_and_s_frontomargin",
+     "share": 0.28
+    },
+    {
+     "id": "ctx_s_front_middle",
+     "share": 0.133
+    },
+    {
+     "id": "ctx_g_front_middle",
+     "share": 0.127
+    },
+    {
+     "id": "ctx_g_rectus",
+     "share": 0.063
+    }
+   ],
+   "dk": [
+    {
+     "region": "rostralmiddlefrontal",
+     "labelInRegion": 0.473,
+     "regionInLabel": 0.04
+    },
+    {
+     "region": "superiorfrontal",
+     "labelInRegion": 0.317,
+     "regionInLabel": 0.02
+    },
+    {
+     "region": "frontalpole",
+     "labelInRegion": 0.198,
+     "regionInLabel": 0.471
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": null
+  },
+  {
+   "id": "ctx_g_and_s_cingul_ant",
+   "short": "G_and_S_cingul-Ant",
+   "index": 6,
+   "name": "Anterior part of the cingulate gyrus and sulcus (ACC)",
+   "kind": "gyrus and sulcus",
+   "views": [
+    "M"
+   ],
+   "paperAreaCm2": {
+    "L": 18.89,
+    "R": 24.49
+   },
+   "areaCm2": {
+    "L": 22.66,
+    "R": 26.26
+   },
+   "lobe": "cingulate",
+   "lobeShare": 0.328,
+   "lobeBy": "name",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 0.672
+    },
+    {
+     "lobe": "cingulate",
+     "share": 0.328
+    }
+   ],
+   "atlasColour": "#1a3c00",
+   "anchor": {
+    "L": {
+     "pial": [
+      -2.18,
+      43.06,
+      0.8
+     ],
+     "inflated": [
+      -2.92,
+      38.18,
+      7.24
+     ],
+     "nPial": [
+      0.785,
+      0.437,
+      -0.438
+     ],
+     "nInflated": [
+      0.998,
+      0.065,
+      -0.026
+     ]
+    },
+    "R": {
+     "pial": [
+      -0.28,
+      39.18,
+      -3.27
+     ],
+     "inflated": [
+      2.58,
+      35.61,
+      3.08
+     ],
+     "nPial": [
+      -0.996,
+      0.057,
+      0.064
+     ],
+     "nInflated": [
+      -0.998,
+      0.058,
+      0.004
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_front_sup",
+     "share": 0.418
+    },
+    {
+     "id": "ctx_s_suborbital",
+     "share": 0.205
+    },
+    {
+     "id": "ctx_s_pericallosal",
+     "share": 0.17
+    },
+    {
+     "id": "ctx_g_and_s_cingul_mid_ant",
+     "share": 0.14
+    },
+    {
+     "id": "ctx_g_subcallosal",
+     "share": 0.038
+    }
+   ],
+   "dk": [
+    {
+     "region": "superiorfrontal",
+     "labelInRegion": 0.375,
+     "regionInLabel": 0.088
+    },
+    {
+     "region": "medialorbitofrontal",
+     "labelInRegion": 0.297,
+     "regionInLabel": 0.278
+    },
+    {
+     "region": "rostralanteriorcingulate",
+     "labelInRegion": 0.283,
+     "regionInLabel": 0.644
+    }
+   ],
+   "parcels": [
+    {
+     "id": "acc",
+     "labelInParcel": 0.328,
+     "parcelInLabel": 0.376
+    },
+    {
+     "id": "vmpfc",
+     "labelInParcel": 0.297,
+     "parcelInLabel": 0.278
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The cingulate cortex is a part of the brain situated in the medial aspect of the cerebral cortex. The cingulate cortex includes the entire cingulate gyrus, which lies immediately above the corpus callosum, and the continuation of this in the cingulate sulcus. The cingulate cortex is usually considered part of the limbic lobe. It receives inputs from the thalamus and the neocortex, and projects to the entorhinal cortex via the cingulum. It is an integral part of the limbic system, which is involved with emotion formation and processing, learning, and memory. The combination of these three functions makes the cingulate gyrus highly influential in linking motivational outcomes to behavior (e.g. a certain action induced a positive emotional response, which results in learning). This role makes the cingulate cortex highly important in disorders such as depression and schizophrenia.",
+    "url": "https://en.wikipedia.org/wiki/Cingulate_cortex",
+    "source": "Cingulate gyrus and sulcus (Middle anterior part)",
+    "scope": "the cingulate cortex"
+   }
+  },
+  {
+   "id": "ctx_g_and_s_cingul_mid_ant",
+   "short": "G_and_S_cingul-Mid-Ant",
+   "index": 7,
+   "name": "Middle-anterior part of the cingulate gyrus and sulcus (aMCC)",
+   "kind": "gyrus and sulcus",
+   "views": [
+    "M"
+   ],
+   "paperAreaCm2": {
+    "L": 12.23,
+    "R": 12.32
+   },
+   "areaCm2": {
+    "L": 13.63,
+    "R": 12.91
+   },
+   "lobe": "cingulate",
+   "lobeShare": 0.398,
+   "lobeBy": "name",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 0.602
+    },
+    {
+     "lobe": "cingulate",
+     "share": 0.398
+    }
+   ],
+   "atlasColour": "#1a3c4b",
+   "anchor": {
+    "L": {
+     "pial": [
+      -1.35,
+      16.77,
+      34.07
+     ],
+     "inflated": [
+      -2.44,
+      12.73,
+      30.6
+     ],
+     "nPial": [
+      0.83,
+      0.371,
+      0.416
+     ],
+     "nInflated": [
+      0.998,
+      0.008,
+      0.056
+     ]
+    },
+    "R": {
+     "pial": [
+      1.0,
+      17.52,
+      36.62
+     ],
+     "inflated": [
+      3.13,
+      16.14,
+      33.38
+     ],
+     "nPial": [
+      -0.831,
+      0.223,
+      0.509
+     ],
+     "nInflated": [
+      -0.996,
+      0.031,
+      0.087
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_front_sup",
+     "share": 0.357
+    },
+    {
+     "id": "ctx_g_and_s_cingul_mid_post",
+     "share": 0.23
+    },
+    {
+     "id": "ctx_g_and_s_cingul_ant",
+     "share": 0.212
+    },
+    {
+     "id": "ctx_s_pericallosal",
+     "share": 0.201
+    }
+   ],
+   "dk": [
+    {
+     "region": "superiorfrontal",
+     "labelInRegion": 0.602,
+     "regionInLabel": 0.084
+    },
+    {
+     "region": "caudalanteriorcingulate",
+     "labelInRegion": 0.364,
+     "regionInLabel": 0.503
+    }
+   ],
+   "parcels": [
+    {
+     "id": "presma",
+     "labelInParcel": 0.357,
+     "parcelInLabel": 0.29
+    },
+    {
+     "id": "acc",
+     "labelInParcel": 0.364,
+     "parcelInLabel": 0.25
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The cingulate cortex is a part of the brain situated in the medial aspect of the cerebral cortex. The cingulate cortex includes the entire cingulate gyrus, which lies immediately above the corpus callosum, and the continuation of this in the cingulate sulcus. The cingulate cortex is usually considered part of the limbic lobe. It receives inputs from the thalamus and the neocortex, and projects to the entorhinal cortex via the cingulum. It is an integral part of the limbic system, which is involved with emotion formation and processing, learning, and memory. The combination of these three functions makes the cingulate gyrus highly influential in linking motivational outcomes to behavior (e.g. a certain action induced a positive emotional response, which results in learning). This role makes the cingulate cortex highly important in disorders such as depression and schizophrenia.",
+    "url": "https://en.wikipedia.org/wiki/Cingulate_cortex",
+    "source": "Cingulate gyrus and sulcus (Middle anterior part)",
+    "scope": "the cingulate cortex"
+   }
+  },
+  {
+   "id": "ctx_g_and_s_cingul_mid_post",
+   "short": "G_and_S_cingul-Mid-Post",
+   "index": 8,
+   "name": "Middle-posterior part of the cingulate gyrus and sulcus (pMCC)",
+   "kind": "gyrus and sulcus",
+   "views": [
+    "M"
+   ],
+   "paperAreaCm2": {
+    "L": 12.38,
+    "R": 13.25
+   },
+   "areaCm2": {
+    "L": 11.32,
+    "R": 13.14
+   },
+   "lobe": "cingulate",
+   "lobeShare": 0.542,
+   "lobeBy": "name",
+   "lobes": [
+    {
+     "lobe": "cingulate",
+     "share": 0.542
+    },
+    {
+     "lobe": "frontal",
+     "share": 0.458
+    }
+   ],
+   "atlasColour": "#1a3c96",
+   "anchor": {
+    "L": {
+     "pial": [
+      -1.26,
+      -8.23,
+      39.53
+     ],
+     "inflated": [
+      -3.08,
+      -10.24,
+      36.51
+     ],
+     "nPial": [
+      0.991,
+      0.026,
+      -0.134
+     ],
+     "nInflated": [
+      0.997,
+      -0.027,
+      0.07
+     ]
+    },
+    "R": {
+     "pial": [
+      0.72,
+      -5.85,
+      41.66
+     ],
+     "inflated": [
+      3.65,
+      -6.03,
+      39.24
+     ],
+     "nPial": [
+      -0.996,
+      0.028,
+      0.079
+     ],
+     "nInflated": [
+      -0.995,
+      -0.022,
+      0.102
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_front_sup",
+     "share": 0.299
+    },
+    {
+     "id": "ctx_g_and_s_cingul_mid_ant",
+     "share": 0.231
+    },
+    {
+     "id": "ctx_s_pericallosal",
+     "share": 0.182
+    },
+    {
+     "id": "ctx_g_cingul_post_dorsal",
+     "share": 0.145
+    },
+    {
+     "id": "ctx_s_cingul_marginalis",
+     "share": 0.142
+    }
+   ],
+   "dk": [
+    {
+     "region": "posteriorcingulate",
+     "labelInRegion": 0.542,
+     "regionInLabel": 0.44
+    },
+    {
+     "region": "superiorfrontal",
+     "labelInRegion": 0.274,
+     "regionInLabel": 0.035
+    },
+    {
+     "region": "paracentral",
+     "labelInRegion": 0.185,
+     "regionInLabel": 0.104
+    }
+   ],
+   "parcels": [
+    {
+     "id": "sma",
+     "labelInParcel": 0.194,
+     "parcelInLabel": 0.129
+    },
+    {
+     "id": "presma",
+     "labelInParcel": 0.117,
+     "parcelInLabel": 0.088
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The cingulate sulcus is a sulcus (brain fold) on the cingulate cortex in the medial wall of the cerebral cortex. The frontal and parietal lobes are separated from the cingulate gyrus by the cingulate sulcus. It terminates as the marginal sulcus of the cingulate sulcus. It sends a ramus to separate the paracentral lobule from the frontal gyri, the paracentral sulcus.",
+    "url": "https://en.wikipedia.org/wiki/Cingulate_sulcus",
+    "source": "Cingulate gyrus and sulcus (Middle posterior part)",
+    "scope": "the cingulate cortex"
+   }
+  },
+  {
+   "id": "ctx_g_cingul_post_dorsal",
+   "short": "G_cingul-Post-dorsal",
+   "index": 9,
+   "name": "Posterior-dorsal part of the cingulate gyrus (dPCC)",
+   "kind": "gyrus",
+   "views": [
+    "M"
+   ],
+   "paperAreaCm2": {
+    "L": 4.44,
+    "R": 4.12
+   },
+   "areaCm2": {
+    "L": 7.26,
+    "R": 7.23
+   },
+   "lobe": "cingulate",
+   "lobeShare": 0.995,
+   "lobeBy": "name",
+   "lobes": [
+    {
+     "lobe": "cingulate",
+     "share": 0.995
+    }
+   ],
+   "atlasColour": "#193cfa",
+   "anchor": {
+    "L": {
+     "pial": [
+      -1.06,
+      -43.34,
+      27.98
+     ],
+     "inflated": [
+      -3.89,
+      -42.31,
+      28.32
+     ],
+     "nPial": [
+      0.958,
+      0.152,
+      0.243
+     ],
+     "nInflated": [
+      0.996,
+      -0.075,
+      -0.054
+     ]
+    },
+    "R": {
+     "pial": [
+      0.96,
+      -47.71,
+      26.38
+     ],
+     "inflated": [
+      5.11,
+      -44.52,
+      29.8
+     ],
+     "nPial": [
+      -0.998,
+      0.047,
+      0.033
+     ],
+     "nInflated": [
+      -0.987,
+      -0.125,
+      -0.099
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_subparietal",
+     "share": 0.313
+    },
+    {
+     "id": "ctx_s_pericallosal",
+     "share": 0.246
+    },
+    {
+     "id": "ctx_g_and_s_cingul_mid_post",
+     "share": 0.161
+    },
+    {
+     "id": "ctx_s_cingul_marginalis",
+     "share": 0.132
+    },
+    {
+     "id": "ctx_g_precuneus",
+     "share": 0.06
+    },
+    {
+     "id": "ctx_g_cingul_post_ventral",
+     "share": 0.054
+    },
+    {
+     "id": "ctx_medial_wall",
+     "share": 0.033
+    }
+   ],
+   "dk": [
+    {
+     "region": "isthmuscingulate",
+     "labelInRegion": 0.566,
+     "regionInLabel": 0.209
+    },
+    {
+     "region": "posteriorcingulate",
+     "labelInRegion": 0.43,
+     "regionInLabel": 0.142
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The cingulate sulcus is a sulcus (brain fold) on the cingulate cortex in the medial wall of the cerebral cortex. The frontal and parietal lobes are separated from the cingulate gyrus by the cingulate sulcus. It terminates as the marginal sulcus of the cingulate sulcus. It sends a ramus to separate the paracentral lobule from the frontal gyri, the paracentral sulcus.",
+    "url": "https://en.wikipedia.org/wiki/Cingulate_sulcus",
+    "source": "Cingulate gyrus and sulcus (Middle posterior part)",
+    "scope": "the cingulate cortex"
+   }
+  },
+  {
+   "id": "ctx_g_cingul_post_ventral",
+   "short": "G_cingul-Post-ventral",
+   "index": 10,
+   "name": "Posterior-ventral part of the cingulate gyrus (vPCC, isthmus of the cingulate gyrus)",
+   "kind": "gyrus",
+   "views": [
+    "M",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 2.5,
+    "R": 2.61
+   },
+   "areaCm2": {
+    "L": 2.52,
+    "R": 2.72
+   },
+   "lobe": "cingulate",
+   "lobeShare": 0.909,
+   "lobeBy": "name",
+   "lobes": [
+    {
+     "lobe": "cingulate",
+     "share": 0.909
+    }
+   ],
+   "atlasColour": "#3c1919",
+   "anchor": {
+    "L": {
+     "pial": [
+      -7.23,
+      -45.83,
+      2.17
+     ],
+     "inflated": [
+      -11.93,
+      -51.26,
+      7.68
+     ],
+     "nPial": [
+      0.788,
+      -0.134,
+      -0.601
+     ],
+     "nInflated": [
+      0.914,
+      -0.073,
+      -0.399
+     ]
+    },
+    "R": {
+     "pial": [
+      5.03,
+      -50.3,
+      6.8
+     ],
+     "inflated": [
+      10.26,
+      -49.8,
+      15.38
+     ],
+     "nPial": [
+      -0.874,
+      0.113,
+      -0.473
+     ],
+     "nInflated": [
+      -0.903,
+      -0.229,
+      -0.363
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_calcarine",
+     "share": 0.249
+    },
+    {
+     "id": "ctx_s_pericallosal",
+     "share": 0.24
+    },
+    {
+     "id": "ctx_g_precuneus",
+     "share": 0.197
+    },
+    {
+     "id": "ctx_medial_wall",
+     "share": 0.152
+    },
+    {
+     "id": "ctx_g_cingul_post_dorsal",
+     "share": 0.078
+    },
+    {
+     "id": "ctx_g_oc_temp_med_parahip",
+     "share": 0.068
+    }
+   ],
+   "dk": [
+    {
+     "region": "isthmuscingulate",
+     "labelInRegion": 0.909,
+     "regionInLabel": 0.169
+    },
+    {
+     "region": "precuneus",
+     "labelInRegion": 0.07,
+     "regionInLabel": 0.004
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The cingulate gyrus commences below the rostrum of the corpus callosum, curves around in front of the genu, extends along the upper surface of the body, and finally turns downward behind the splenium, where it is connected by a narrow isthmus with the parahippocampal gyrus.",
+    "url": "https://en.wikipedia.org/wiki/Isthmus_of_cingulate_gyrus",
+    "source": "Isthmus of cingulate gyrus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_cuneus",
+   "short": "G_cuneus",
+   "index": 11,
+   "name": "Cuneus (O6)",
+   "kind": "gyrus",
+   "views": [
+    "S",
+    "P",
+    "M"
+   ],
+   "paperAreaCm2": {
+    "L": 14.52,
+    "R": 15.41
+   },
+   "areaCm2": {
+    "L": 18.42,
+    "R": 16.73
+   },
+   "lobe": "occipital",
+   "lobeShare": 0.942,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "occipital",
+     "share": 0.942
+    }
+   ],
+   "atlasColour": "#b41414",
+   "anchor": {
+    "L": {
+     "pial": [
+      0.07,
+      -77.75,
+      22.56
+     ],
+     "inflated": [
+      -7.38,
+      -85.32,
+      18.79
+     ],
+     "nPial": [
+      0.999,
+      -0.001,
+      -0.054
+     ],
+     "nInflated": [
+      0.932,
+      0.27,
+      0.241
+     ]
+    },
+    "R": {
+     "pial": [
+      1.92,
+      -73.92,
+      25.79
+     ],
+     "inflated": [
+      11.18,
+      -82.63,
+      20.73
+     ],
+     "nPial": [
+      -0.996,
+      0.081,
+      0.045
+     ],
+     "nInflated": [
+      -0.953,
+      0.101,
+      0.285
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_calcarine",
+     "share": 0.263
+    },
+    {
+     "id": "ctx_s_parieto_occipital",
+     "share": 0.254
+    },
+    {
+     "id": "ctx_g_occipital_sup",
+     "share": 0.253
+    },
+    {
+     "id": "ctx_pole_occipital",
+     "share": 0.194
+    },
+    {
+     "id": "ctx_g_oc_temp_med_lingual",
+     "share": 0.036
+    }
+   ],
+   "dk": [
+    {
+     "region": "cuneus",
+     "labelInRegion": 0.807,
+     "regionInLabel": 0.751
+    },
+    {
+     "region": "pericalcarine",
+     "labelInRegion": 0.126,
+     "regionInLabel": 0.122
+    },
+    {
+     "region": "superiorparietal",
+     "labelInRegion": 0.058,
+     "regionInLabel": 0.013
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The cuneus (Latin for \"wedge\"; plural, cunei) is a smaller lobe in the occipital lobe of the brain. The cuneus is bounded anteriorly by the parieto-occipital sulcus, inferiorly by the calcarine sulcus.",
+    "url": "https://en.wikipedia.org/wiki/Cuneus",
+    "source": "Cuneus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_front_inf_opercular",
+   "short": "G_front_inf-Opercular",
+   "index": 12,
+   "name": "Opercular part of the inferior frontal gyrus",
+   "kind": "gyrus",
+   "views": [
+    "L",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 10.43,
+    "R": 9.98
+   },
+   "areaCm2": {
+    "L": 17.39,
+    "R": 17.0
+   },
+   "lobe": "frontal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#dc1464",
+   "anchor": {
+    "L": {
+     "pial": [
+      -60.1,
+      13.18,
+      7.75
+     ],
+     "inflated": [
+      -49.64,
+      15.41,
+      15.1
+     ],
+     "nPial": [
+      -0.89,
+      -0.415,
+      -0.189
+     ],
+     "nInflated": [
+      -0.978,
+      0.127,
+      -0.167
+     ]
+    },
+    "R": {
+     "pial": [
+      60.16,
+      14.35,
+      6.83
+     ],
+     "inflated": [
+      50.86,
+      16.69,
+      15.13
+     ],
+     "nPial": [
+      0.769,
+      -0.622,
+      -0.149
+     ],
+     "nInflated": [
+      0.982,
+      0.098,
+      -0.163
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_circular_insula_sup",
+     "share": 0.226
+    },
+    {
+     "id": "ctx_s_precentral_inf_part",
+     "share": 0.198
+    },
+    {
+     "id": "ctx_g_and_s_subcentral",
+     "share": 0.171
+    },
+    {
+     "id": "ctx_lat_fis_ant_vertical",
+     "share": 0.149
+    },
+    {
+     "id": "ctx_s_front_inf",
+     "share": 0.12
+    },
+    {
+     "id": "ctx_g_front_inf_triangul",
+     "share": 0.096
+    },
+    {
+     "id": "ctx_g_precentral",
+     "share": 0.041
+    }
+   ],
+   "dk": [
+    {
+     "region": "parsopercularis",
+     "labelInRegion": 0.75,
+     "regionInLabel": 0.446
+    },
+    {
+     "region": "precentral",
+     "labelInRegion": 0.25,
+     "regionInLabel": 0.043
+    }
+   ],
+   "parcels": [
+    {
+     "id": "pmv",
+     "labelInParcel": 0.41,
+     "parcelInLabel": 0.114
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The inferior frontal gyrus is highly convoluted and has three cytoarchitecturally diverse regions. The three subdivisions are an opercular part, a triangular part, and an orbital part. These divisions are marked by two rami arising from the lateral sulcus. The ascending ramus separates the opercular and triangular parts. The anterior (horizontal) ramus separates the triangular and orbital parts. Opercular part of inferior frontal gyrus (pars opercularis), (cortex posterior to the ascending ramus of the lateral sulcus), is the part of frontal lobe that overlies the insular cortex and may be associated with recognizing a tone of voice in spoken native languages. This expands on previous work indicating that comprehension of inflectional morpheme processing is associated with the inferior frontal gyrus.",
+    "url": null,
+    "source": "Opercular part of inferior frontal gyrus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_front_inf_orbital",
+   "short": "G_front_inf-Orbital",
+   "index": 13,
+   "name": "Orbital part of the inferior frontal gyrus",
+   "kind": "gyrus",
+   "views": [
+    "L",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 2.77,
+    "R": 3.15
+   },
+   "areaCm2": {
+    "L": 4.43,
+    "R": 4.15
+   },
+   "lobe": "frontal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#8c3c3c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -53.6,
+      35.55,
+      -14.59
+     ],
+     "inflated": [
+      -40.5,
+      39.66,
+      -8.65
+     ],
+     "nPial": [
+      -0.88,
+      -0.132,
+      -0.457
+     ],
+     "nInflated": [
+      -0.831,
+      0.03,
+      -0.555
+     ]
+    },
+    "R": {
+     "pial": [
+      53.24,
+      37.25,
+      -14.89
+     ],
+     "inflated": [
+      42.26,
+      40.9,
+      -6.86
+     ],
+     "nPial": [
+      0.872,
+      -0.119,
+      -0.475
+     ],
+     "nInflated": [
+      0.79,
+      0.038,
+      -0.611
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_orbital",
+     "share": 0.449
+    },
+    {
+     "id": "ctx_lat_fis_ant_horizont",
+     "share": 0.246
+    },
+    {
+     "id": "ctx_g_front_inf_triangul",
+     "share": 0.122
+    },
+    {
+     "id": "ctx_s_circular_insula_ant",
+     "share": 0.092
+    },
+    {
+     "id": "ctx_s_orbital_lateral",
+     "share": 0.086
+    }
+   ],
+   "dk": [
+    {
+     "region": "parsorbitalis",
+     "labelInRegion": 0.607,
+     "regionInLabel": 0.195
+    },
+    {
+     "region": "parstriangularis",
+     "labelInRegion": 0.276,
+     "regionInLabel": 0.041
+    },
+    {
+     "region": "lateralorbitofrontal",
+     "labelInRegion": 0.117,
+     "regionInLabel": 0.009
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "Orbital part of inferior frontal gyrus (pars orbitalis) (cortex inferior and anterior to the horizontal ramus of the lateral sulcus). The orbital part of the inferior frontal gyrus is known as Brodmann area 47.",
+    "url": null,
+    "source": "Orbital part of  inferior frontal gyrus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_front_inf_triangul",
+   "short": "G_front_inf-Triangul",
+   "index": 14,
+   "name": "Triangular part of the inferior frontal gyrus",
+   "kind": "gyrus",
+   "views": [
+    "L",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 7.79,
+    "R": 7.88
+   },
+   "areaCm2": {
+    "L": 14.46,
+    "R": 15.12
+   },
+   "lobe": "frontal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#b4dc8c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -56.74,
+      29.1,
+      -0.57
+     ],
+     "inflated": [
+      -46.62,
+      35.67,
+      3.87
+     ],
+     "nPial": [
+      -0.822,
+      -0.343,
+      0.454
+     ],
+     "nInflated": [
+      -0.961,
+      0.001,
+      -0.277
+     ]
+    },
+    "R": {
+     "pial": [
+      58.47,
+      30.78,
+      1.49
+     ],
+     "inflated": [
+      47.65,
+      35.56,
+      4.51
+     ],
+     "nPial": [
+      0.931,
+      0.192,
+      -0.311
+     ],
+     "nInflated": [
+      0.982,
+      0.064,
+      -0.178
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_front_inf",
+     "share": 0.302
+    },
+    {
+     "id": "ctx_lat_fis_ant_horizont",
+     "share": 0.161
+    },
+    {
+     "id": "ctx_lat_fis_ant_vertical",
+     "share": 0.153
+    },
+    {
+     "id": "ctx_s_orbital_lateral",
+     "share": 0.124
+    },
+    {
+     "id": "ctx_g_front_inf_opercular",
+     "share": 0.117
+    },
+    {
+     "id": "ctx_g_front_inf_orbital",
+     "share": 0.074
+    },
+    {
+     "id": "ctx_s_circular_insula_sup",
+     "share": 0.051
+    }
+   ],
+   "dk": [
+    {
+     "region": "parstriangularis",
+     "labelInRegion": 0.886,
+     "regionInLabel": 0.486
+    },
+    {
+     "region": "parsopercularis",
+     "labelInRegion": 0.114,
+     "regionInLabel": 0.056
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "Triangular part of inferior frontal gyrus (pars triangularis), (cortex between the ascending ramus and the horizontal ramus of the lateral sulcus). It may be associated with the ability to translate from a secondary or tertiary language back to one's native language. The triangular part of the inferior frontal gyrus is known as Brodmann area 45 (BA45), and the orbital part of the inferior frontal gyrus is known as Brodmann area 47.",
+    "url": "https://en.wikipedia.org/wiki/Inferior_frontal_gyrus",
+    "source": "Triangular part of inferior frontal gyrus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_front_middle",
+   "short": "G_front_middle",
+   "index": 15,
+   "name": "Middle frontal gyrus (F2)",
+   "kind": "gyrus",
+   "views": [
+    "S",
+    "A",
+    "L"
+   ],
+   "paperAreaCm2": {
+    "L": 34.29,
+    "R": 30.67
+   },
+   "areaCm2": {
+    "L": 65.79,
+    "R": 67.83
+   },
+   "lobe": "frontal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#8c64b4",
+   "anchor": {
+    "L": {
+     "pial": [
+      -46.34,
+      28.66,
+      40.12
+     ],
+     "inflated": [
+      -39.04,
+      32.32,
+      35.67
+     ],
+     "nPial": [
+      -0.387,
+      -0.31,
+      0.868
+     ],
+     "nInflated": [
+      -0.741,
+      0.45,
+      0.498
+     ]
+    },
+    "R": {
+     "pial": [
+      45.27,
+      32.84,
+      39.75
+     ],
+     "inflated": [
+      42.24,
+      32.12,
+      33.8
+     ],
+     "nPial": [
+      0.153,
+      0.936,
+      0.315
+     ],
+     "nInflated": [
+      0.795,
+      0.344,
+      0.5
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_front_middle",
+     "share": 0.283
+    },
+    {
+     "id": "ctx_s_front_inf",
+     "share": 0.239
+    },
+    {
+     "id": "ctx_s_front_sup",
+     "share": 0.2
+    },
+    {
+     "id": "ctx_g_front_sup",
+     "share": 0.059
+    },
+    {
+     "id": "ctx_s_precentral_inf_part",
+     "share": 0.05
+    },
+    {
+     "id": "ctx_s_orbital_lateral",
+     "share": 0.036
+    },
+    {
+     "id": "ctx_s_precentral_sup_part",
+     "share": 0.031
+    },
+    {
+     "id": "ctx_g_and_s_frontomargin",
+     "share": 0.03
+    }
+   ],
+   "dk": [
+    {
+     "region": "rostralmiddlefrontal",
+     "labelInRegion": 0.636,
+     "regionInLabel": 0.414
+    },
+    {
+     "region": "caudalmiddlefrontal",
+     "labelInRegion": 0.358,
+     "regionInLabel": 0.499
+    }
+   ],
+   "parcels": [
+    {
+     "id": "pmd",
+     "labelInParcel": 0.18,
+     "parcelInLabel": 0.197
+    },
+    {
+     "id": "pmv",
+     "labelInParcel": 0.06,
+     "parcelInLabel": 0.068
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The middle frontal gyrus makes up about one-third of the frontal lobe of the human brain. (A gyrus is one of the prominent \"bumps\" or \"ridges\" on the surface of the human brain.) The middle frontal gyrus, like the inferior frontal gyrus and the superior frontal gyrus, is more of a region in the frontal gyrus than a true gyrus. The borders of the middle frontal gyrus are the inferior frontal sulcus below; the superior frontal sulcus above; and the precentral sulcus behind.",
+    "url": "https://en.wikipedia.org/wiki/Middle_frontal_gyrus",
+    "source": "Middle frontal gyrus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_front_sup",
+   "short": "G_front_sup",
+   "index": 16,
+   "name": "Superior frontal gyrus (F1)",
+   "kind": "gyrus",
+   "views": [
+    "S",
+    "A",
+    "L",
+    "M"
+   ],
+   "paperAreaCm2": {
+    "L": 57.05,
+    "R": 52.97
+   },
+   "areaCm2": {
+    "L": 77.17,
+    "R": 73.14
+   },
+   "lobe": "frontal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#b4148c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -1.19,
+      30.49,
+      54.85
+     ],
+     "inflated": [
+      -7.43,
+      30.74,
+      48.57
+     ],
+     "nPial": [
+      0.988,
+      0.138,
+      -0.066
+     ],
+     "nInflated": [
+      0.701,
+      0.373,
+      0.608
+     ]
+    },
+    "R": {
+     "pial": [
+      1.17,
+      33.4,
+      50.84
+     ],
+     "inflated": [
+      7.8,
+      32.77,
+      46.69
+     ],
+     "nPial": [
+      -0.986,
+      0.135,
+      -0.095
+     ],
+     "nInflated": [
+      -0.777,
+      0.358,
+      0.517
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_front_sup",
+     "share": 0.206
+    },
+    {
+     "id": "ctx_g_and_s_cingul_ant",
+     "share": 0.205
+    },
+    {
+     "id": "ctx_g_and_s_cingul_mid_ant",
+     "share": 0.116
+    },
+    {
+     "id": "ctx_g_and_s_cingul_mid_post",
+     "share": 0.097
+    },
+    {
+     "id": "ctx_g_and_s_transv_frontopol",
+     "share": 0.095
+    },
+    {
+     "id": "ctx_g_and_s_paracentral",
+     "share": 0.087
+    },
+    {
+     "id": "ctx_g_front_middle",
+     "share": 0.07
+    },
+    {
+     "id": "ctx_s_precentral_sup_part",
+     "share": 0.059
+    }
+   ],
+   "dk": [
+    {
+     "region": "superiorfrontal",
+     "labelInRegion": 0.894,
+     "regionInLabel": 0.607
+    },
+    {
+     "region": "paracentral",
+     "labelInRegion": 0.086,
+     "regionInLabel": 0.254
+    }
+   ],
+   "parcels": [
+    {
+     "id": "sma",
+     "labelInParcel": 0.206,
+     "parcelInLabel": 0.715
+    },
+    {
+     "id": "presma",
+     "labelInParcel": 0.158,
+     "parcelInLabel": 0.622
+    },
+    {
+     "id": "pmd",
+     "labelInParcel": 0.09,
+     "parcelInLabel": 0.136
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The superior frontal gyrus (SFG) also marginal gyrus, makes up about one third of the frontal lobe of the human brain. It is bounded laterally by the superior frontal sulcus.The superior frontal gyrus is one of the frontal gyri.",
+    "url": "https://en.wikipedia.org/wiki/Superior_frontal_gyrus",
+    "source": "Superior frontal gyrus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_ins_lg_and_s_cent_ins",
+   "short": "G_Ins_lg_and_S_cent_ins",
+   "index": 17,
+   "name": "Long insular gyrus and central sulcus of the insula",
+   "kind": "gyrus",
+   "views": [
+    "L"
+   ],
+   "paperAreaCm2": {
+    "L": 4.61,
+    "R": 4.98
+   },
+   "areaCm2": {
+    "L": 5.68,
+    "R": 4.33
+   },
+   "lobe": "insula",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "insula",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#170a0a",
+   "anchor": {
+    "L": {
+     "pial": [
+      -42.69,
+      -0.06,
+      -8.55
+     ],
+     "inflated": [
+      -38.71,
+      0.69,
+      -8.49
+     ],
+     "nPial": [
+      -0.867,
+      0.494,
+      0.063
+     ],
+     "nInflated": [
+      -0.804,
+      0.594,
+      -0.032
+     ]
+    },
+    "R": {
+     "pial": [
+      42.97,
+      1.55,
+      -8.81
+     ],
+     "inflated": [
+      39.72,
+      2.71,
+      -7.08
+     ],
+     "nPial": [
+      0.886,
+      0.465,
+      -0.005
+     ],
+     "nInflated": [
+      0.903,
+      0.421,
+      -0.089
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_circular_insula_inf",
+     "share": 0.417
+    },
+    {
+     "id": "ctx_g_insular_short",
+     "share": 0.318
+    },
+    {
+     "id": "ctx_s_circular_insula_sup",
+     "share": 0.122
+    },
+    {
+     "id": "ctx_lat_fis_post",
+     "share": 0.071
+    },
+    {
+     "id": "ctx_g_temp_sup_plan_polar",
+     "share": 0.061
+    }
+   ],
+   "dk": [
+    {
+     "region": "insula",
+     "labelInRegion": 1.0,
+     "regionInLabel": 0.145
+    }
+   ],
+   "parcels": [],
+   "insula": true,
+   "definition": {
+    "text": "The insular cortex (also insula and insular lobe) is a portion of the cerebral cortex folded deep within the lateral sulcus (the fissure separating the temporal lobe from the parietal and frontal lobes) within each hemisphere of the mammalian brain. The insulae are believed to be involved in consciousness and play a role in diverse functions usually linked to emotion or the regulation of the body's homeostasis. These functions include compassion, empathy, taste, perception, motor control, self-awareness, cognitive functioning, interpersonal experience, and awareness of homeostatic emotions such as hunger, pain and fatigue. In relation to these, it is involved in psychopathology. The insular cortex is divided into two parts: the anterior insula and the posterior insula in which more than a dozen field areas have been identified.",
+    "url": "https://en.wikipedia.org/wiki/Insular_cortex",
+    "source": "Insula",
+    "scope": "the insula"
+   }
+  },
+  {
+   "id": "ctx_g_insular_short",
+   "short": "G_insular_short",
+   "index": 18,
+   "name": "Short insular gyri",
+   "kind": "gyrus",
+   "views": [
+    "L"
+   ],
+   "paperAreaCm2": {
+    "L": 5.32,
+    "R": 4.58
+   },
+   "areaCm2": {
+    "L": 8.34,
+    "R": 8.53
+   },
+   "lobe": "insula",
+   "lobeShare": 0.988,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "insula",
+     "share": 0.988
+    }
+   ],
+   "atlasColour": "#e18c8c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -41.67,
+      10.33,
+      -12.38
+     ],
+     "inflated": [
+      -35.33,
+      9.49,
+      -8.57
+     ],
+     "nPial": [
+      -0.718,
+      -0.136,
+      -0.683
+     ],
+     "nInflated": [
+      -0.817,
+      0.113,
+      -0.565
+     ]
+    },
+    "R": {
+     "pial": [
+      43.44,
+      12.8,
+      -12.47
+     ],
+     "inflated": [
+      36.8,
+      13.4,
+      -7.91
+     ],
+     "nPial": [
+      0.767,
+      -0.01,
+      -0.642
+     ],
+     "nInflated": [
+      0.837,
+      0.046,
+      -0.545
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_circular_insula_sup",
+     "share": 0.393
+    },
+    {
+     "id": "ctx_g_ins_lg_and_s_cent_ins",
+     "share": 0.285
+    },
+    {
+     "id": "ctx_s_circular_insula_ant",
+     "share": 0.23
+    },
+    {
+     "id": "ctx_g_orbital",
+     "share": 0.053
+    }
+   ],
+   "dk": [
+    {
+     "region": "insula",
+     "labelInRegion": 0.988,
+     "regionInLabel": 0.187
+    }
+   ],
+   "parcels": [
+    {
+     "id": "pmv",
+     "labelInParcel": 0.111,
+     "parcelInLabel": 0.017
+    }
+   ],
+   "insula": true,
+   "definition": {
+    "text": "The insular cortex (also insula and insular lobe) is a portion of the cerebral cortex folded deep within the lateral sulcus (the fissure separating the temporal lobe from the parietal and frontal lobes) within each hemisphere of the mammalian brain. The insulae are believed to be involved in consciousness and play a role in diverse functions usually linked to emotion or the regulation of the body's homeostasis. These functions include compassion, empathy, taste, perception, motor control, self-awareness, cognitive functioning, interpersonal experience, and awareness of homeostatic emotions such as hunger, pain and fatigue. In relation to these, it is involved in psychopathology. The insular cortex is divided into two parts: the anterior insula and the posterior insula in which more than a dozen field areas have been identified.",
+    "url": "https://en.wikipedia.org/wiki/Insular_cortex",
+    "source": "Insula",
+    "scope": "the insula"
+   }
+  },
+  {
+   "id": "ctx_g_occipital_middle",
+   "short": "G_occipital_middle",
+   "index": 19,
+   "name": "Middle occipital gyrus (O2, lateral occipital gyrus)",
+   "kind": "gyrus",
+   "views": [
+    "S",
+    "L",
+    "P"
+   ],
+   "paperAreaCm2": {
+    "L": 16.68,
+    "R": 17.01
+   },
+   "areaCm2": {
+    "L": 24.4,
+    "R": 30.0
+   },
+   "lobe": "occipital",
+   "lobeShare": 0.615,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "occipital",
+     "share": 0.615
+    },
+    {
+     "lobe": "parietal",
+     "share": 0.385
+    }
+   ],
+   "atlasColour": "#b43cb4",
+   "anchor": {
+    "L": {
+     "pial": [
+      -44.13,
+      -89.43,
+      14.24
+     ],
+     "inflated": [
+      -34.75,
+      -88.61,
+      18.66
+     ],
+     "nPial": [
+      -0.719,
+      -0.695,
+      -0.009
+     ],
+     "nInflated": [
+      -0.549,
+      -0.786,
+      0.284
+     ]
+    },
+    "R": {
+     "pial": [
+      50.39,
+      -77.6,
+      22.27
+     ],
+     "inflated": [
+      44.24,
+      -78.05,
+      20.89
+     ],
+     "nPial": [
+      0.618,
+      -0.676,
+      -0.402
+     ],
+     "nInflated": [
+      0.741,
+      -0.615,
+      0.27
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_oc_middle_and_lunatus",
+     "share": 0.321
+    },
+    {
+     "id": "ctx_s_oc_sup_and_transversal",
+     "share": 0.152
+    },
+    {
+     "id": "ctx_pole_occipital",
+     "share": 0.119
+    },
+    {
+     "id": "ctx_g_and_s_occipital_inf",
+     "share": 0.108
+    },
+    {
+     "id": "ctx_s_occipital_ant",
+     "share": 0.104
+    },
+    {
+     "id": "ctx_g_pariet_inf_angular",
+     "share": 0.079
+    },
+    {
+     "id": "ctx_s_temporal_sup",
+     "share": 0.077
+    },
+    {
+     "id": "ctx_g_occipital_sup",
+     "share": 0.034
+    }
+   ],
+   "dk": [
+    {
+     "region": "lateraloccipital",
+     "labelInRegion": 0.615,
+     "regionInLabel": 0.196
+    },
+    {
+     "region": "inferiorparietal",
+     "labelInRegion": 0.385,
+     "regionInLabel": 0.131
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The occipital gyri (OcG) are three gyri in parallel, along the lateral portion of the occipital lobe, also referred to as a composite structure in the brain. The gyri are the superior occipital gyrus, the middle occipital gyrus, and the inferior occipital gyrus, and these are also known as the occipital face area. The superior and inferior occipital sulci separates the three occipital gyri. The intraoccipital sulcus, also known as the superior occipital sulcus, stems from the intraparietal sulcus and continues until the sulcus reaches the transverse occipital sulcus, separating the superior occipital gyrus from the middle occipital gyrus. The transverse occipital sulcus comes down along the lateral occipital surface or the inferior occipital sulcus.",
+    "url": "https://en.wikipedia.org/wiki/Occipital_gyri",
+    "source": "Lateral occipital gyrus (Middle occipital gyrus*)",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_occipital_sup",
+   "short": "G_occipital_sup",
+   "index": 20,
+   "name": "Superior occipital gyrus (O1)",
+   "kind": "gyrus",
+   "views": [
+    "S",
+    "L",
+    "P"
+   ],
+   "paperAreaCm2": {
+    "L": 10.66,
+    "R": 11.98
+   },
+   "areaCm2": {
+    "L": 14.23,
+    "R": 20.03
+   },
+   "lobe": "parietal",
+   "lobeShare": 0.717,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "parietal",
+     "share": 0.717
+    },
+    {
+     "lobe": "occipital",
+     "share": 0.283
+    }
+   ],
+   "atlasColour": "#14dc3c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -8.39,
+      -92.09,
+      35.13
+     ],
+     "inflated": [
+      -12.97,
+      -91.23,
+      24.78
+     ],
+     "nPial": [
+      -0.362,
+      -0.357,
+      0.861
+     ],
+     "nInflated": [
+      0.512,
+      -0.602,
+      0.612
+     ]
+    },
+    "R": {
+     "pial": [
+      9.48,
+      -88.39,
+      41.92
+     ],
+     "inflated": [
+      15.56,
+      -86.01,
+      29.62
+     ],
+     "nPial": [
+      -0.4,
+      -0.703,
+      0.588
+     ],
+     "nInflated": [
+      -0.702,
+      -0.482,
+      0.524
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_oc_sup_and_transversal",
+     "share": 0.289
+    },
+    {
+     "id": "ctx_g_cuneus",
+     "share": 0.272
+    },
+    {
+     "id": "ctx_g_parietal_sup",
+     "share": 0.135
+    },
+    {
+     "id": "ctx_pole_occipital",
+     "share": 0.094
+    },
+    {
+     "id": "ctx_s_parieto_occipital",
+     "share": 0.078
+    },
+    {
+     "id": "ctx_s_intrapariet_and_p_trans",
+     "share": 0.072
+    },
+    {
+     "id": "ctx_g_occipital_middle",
+     "share": 0.061
+    }
+   ],
+   "dk": [
+    {
+     "region": "superiorparietal",
+     "labelInRegion": 0.717,
+     "regionInLabel": 0.152
+    },
+    {
+     "region": "lateraloccipital",
+     "labelInRegion": 0.236,
+     "regionInLabel": 0.058
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The occipital gyri (OcG) are three gyri in parallel, along the lateral portion of the occipital lobe, also referred to as a composite structure in the brain. The gyri are the superior occipital gyrus, the middle occipital gyrus, and the inferior occipital gyrus, and these are also known as the occipital face area. The superior and inferior occipital sulci separates the three occipital gyri. The intraoccipital sulcus, also known as the superior occipital sulcus, stems from the intraparietal sulcus and continues until the sulcus reaches the transverse occipital sulcus, separating the superior occipital gyrus from the middle occipital gyrus. The transverse occipital sulcus comes down along the lateral occipital surface or the inferior occipital sulcus.",
+    "url": "https://en.wikipedia.org/wiki/Occipital_gyri",
+    "source": "Superior occipital gyri",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_oc_temp_lat_fusifor",
+   "short": "G_oc-temp_lat-fusifor",
+   "index": 21,
+   "name": "Lateral occipito-temporal gyrus (fusiform gyrus, O4-T4)",
+   "kind": "gyrus",
+   "views": [
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 13.48,
+    "R": 13.6
+   },
+   "areaCm2": {
+    "L": 28.12,
+    "R": 20.64
+   },
+   "lobe": "temporal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "temporal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#3c148c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -45.3,
+      -67.17,
+      -20.45
+     ],
+     "inflated": [
+      -39.1,
+      -66.13,
+      -15.82
+     ],
+     "nPial": [
+      0.063,
+      -0.218,
+      -0.974
+     ],
+     "nInflated": [
+      -0.167,
+      -0.283,
+      -0.944
+     ]
+    },
+    "R": {
+     "pial": [
+      37.31,
+      -54.87,
+      -21.59
+     ],
+     "inflated": [
+      37.66,
+      -52.45,
+      -20.23
+     ],
+     "nPial": [
+      -0.3,
+      -0.193,
+      -0.934
+     ],
+     "nInflated": [
+      -0.122,
+      -0.307,
+      -0.944
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_oc_temp_med_and_lingual",
+     "share": 0.38
+    },
+    {
+     "id": "ctx_s_oc_temp_lat",
+     "share": 0.221
+    },
+    {
+     "id": "ctx_s_collat_transv_ant",
+     "share": 0.149
+    },
+    {
+     "id": "ctx_g_and_s_occipital_inf",
+     "share": 0.133
+    },
+    {
+     "id": "ctx_s_collat_transv_post",
+     "share": 0.063
+    },
+    {
+     "id": "ctx_pole_temporal",
+     "share": 0.033
+    }
+   ],
+   "dk": [
+    {
+     "region": "fusiform",
+     "labelInRegion": 1.0,
+     "regionInLabel": 0.429
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The fusiform gyrus, also known as the lateral occipitotemporal gyrus, is part of the temporal lobe and occipital lobe in Brodmann area 37. The fusiform gyrus is located between the lingual gyrus and parahippocampal gyrus above, and the inferior temporal gyrus below. Though the functionality of the fusiform gyrus is not fully understood, it has been linked with various neural pathways related to recognition. Additionally, it has been linked to various neurological phenomena such as synesthesia, dyslexia, and prosopagnosia.",
+    "url": "https://en.wikipedia.org/wiki/Fusiform_gyrus",
+    "source": "Lateral occipitotemporal gyrus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_oc_temp_med_lingual",
+   "short": "G_oc-temp_med-Lingual",
+   "index": 22,
+   "name": "Lingual gyrus, ligual part of the medial occipito-temporal gyrus, (O5)",
+   "kind": "gyrus",
+   "views": [
+    "P",
+    "M",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 21.22,
+    "R": 20.82
+   },
+   "areaCm2": {
+    "L": 30.41,
+    "R": 25.69
+   },
+   "lobe": "occipital",
+   "lobeShare": 0.983,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "occipital",
+     "share": 0.983
+    }
+   ],
+   "atlasColour": "#dcb48c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -1.52,
+      -77.49,
+      -6.22
+     ],
+     "inflated": [
+      -8.52,
+      -84.88,
+      -5.53
+     ],
+     "nPial": [
+      0.871,
+      0.361,
+      -0.334
+     ],
+     "nInflated": [
+      0.954,
+      0.092,
+      -0.287
+     ]
+    },
+    "R": {
+     "pial": [
+      2.55,
+      -70.4,
+      -0.12
+     ],
+     "inflated": [
+      12.35,
+      -72.36,
+      -4.92
+     ],
+     "nPial": [
+      -0.994,
+      0.085,
+      -0.075
+     ],
+     "nInflated": [
+      -0.918,
+      0.26,
+      -0.299
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_calcarine",
+     "share": 0.312
+    },
+    {
+     "id": "ctx_s_oc_temp_med_and_lingual",
+     "share": 0.278
+    },
+    {
+     "id": "ctx_pole_occipital",
+     "share": 0.239
+    },
+    {
+     "id": "ctx_g_oc_temp_med_parahip",
+     "share": 0.055
+    },
+    {
+     "id": "ctx_s_collat_transv_post",
+     "share": 0.051
+    },
+    {
+     "id": "ctx_g_and_s_occipital_inf",
+     "share": 0.032
+    },
+    {
+     "id": "ctx_g_cuneus",
+     "share": 0.03
+    }
+   ],
+   "dk": [
+    {
+     "region": "lingual",
+     "labelInRegion": 0.926,
+     "regionInLabel": 0.631
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": null
+  },
+  {
+   "id": "ctx_g_oc_temp_med_parahip",
+   "short": "G_oc-temp_med-Parahip",
+   "index": 23,
+   "name": "Parahippocampal gyrus, parahippocampal part of the medial occipito-temporal gyrus, (T5)",
+   "kind": "gyrus",
+   "views": [
+    "M",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 14.44,
+    "R": 13.48
+   },
+   "areaCm2": {
+    "L": 13.66,
+    "R": 18.38
+   },
+   "lobe": "temporal",
+   "lobeShare": 0.736,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "temporal",
+     "share": 0.736
+    }
+   ],
+   "atlasColour": "#416414",
+   "anchor": {
+    "L": {
+     "pial": [
+      -16.57,
+      -10.23,
+      -27.86
+     ],
+     "inflated": [
+      -26.71,
+      -12.97,
+      -27.27
+     ],
+     "nPial": [
+      0.871,
+      -0.169,
+      -0.462
+     ],
+     "nInflated": [
+      0.793,
+      -0.189,
+      -0.579
+     ]
+    },
+    "R": {
+     "pial": [
+      17.26,
+      -13.43,
+      -28.95
+     ],
+     "inflated": [
+      27.64,
+      -13.17,
+      -28.47
+     ],
+     "nPial": [
+      -0.854,
+      -0.317,
+      -0.414
+     ],
+     "nInflated": [
+      -0.91,
+      -0.105,
+      -0.4
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_medial_wall",
+     "share": 0.389
+    },
+    {
+     "id": "ctx_s_oc_temp_med_and_lingual",
+     "share": 0.184
+    },
+    {
+     "id": "ctx_pole_temporal",
+     "share": 0.147
+    },
+    {
+     "id": "ctx_g_temp_sup_plan_polar",
+     "share": 0.074
+    },
+    {
+     "id": "ctx_g_oc_temp_med_lingual",
+     "share": 0.053
+    },
+    {
+     "id": "ctx_s_collat_transv_ant",
+     "share": 0.034
+    },
+    {
+     "id": "ctx_s_orbital_med_olfact",
+     "share": 0.032
+    }
+   ],
+   "dk": [
+    {
+     "region": "parahippocampal",
+     "labelInRegion": 0.361,
+     "regionInLabel": 0.529
+    },
+    {
+     "region": "entorhinal",
+     "labelInRegion": 0.278,
+     "regionInLabel": 0.802
+    },
+    {
+     "region": "insula",
+     "labelInRegion": 0.247,
+     "regionInLabel": 0.105
+    },
+    {
+     "region": "fusiform",
+     "labelInRegion": 0.089,
+     "regionInLabel": 0.033
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The parahippocampal gyrus (or hippocampal gyrus) is a grey matter cortical region of the brain that surrounds the hippocampus and is part of the limbic system. The region plays an important role in memory encoding and retrieval. It has been involved in some cases of hippocampal sclerosis. Asymmetry has been observed in schizophrenia.",
+    "url": "https://en.wikipedia.org/wiki/Parahippocampal_gyrus",
+    "source": "Parahippocampal gyrus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_orbital",
+   "short": "G_orbital",
+   "index": 24,
+   "name": "Orbital gyri",
+   "kind": "gyrus",
+   "views": [
+    "A",
+    "L",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 18.79,
+    "R": 20.57
+   },
+   "areaCm2": {
+    "L": 28.9,
+    "R": 29.43
+   },
+   "lobe": "frontal",
+   "lobeShare": 0.984,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 0.984
+    }
+   ],
+   "atlasColour": "#dc3c14",
+   "anchor": {
+    "L": {
+     "pial": [
+      -37.58,
+      23.97,
+      -23.92
+     ],
+     "inflated": [
+      -31.8,
+      30.04,
+      -17.15
+     ],
+     "nPial": [
+      -0.365,
+      0.675,
+      -0.641
+     ],
+     "nInflated": [
+      -0.601,
+      -0.211,
+      -0.771
+     ]
+    },
+    "R": {
+     "pial": [
+      41.15,
+      38.34,
+      -21.99
+     ],
+     "inflated": [
+      37.24,
+      43.21,
+      -12.54
+     ],
+     "nPial": [
+      -0.159,
+      -0.074,
+      -0.984
+     ],
+     "nInflated": [
+      0.744,
+      0.135,
+      -0.654
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_orbital_h_shaped",
+     "share": 0.324
+    },
+    {
+     "id": "ctx_s_orbital_med_olfact",
+     "share": 0.17
+    },
+    {
+     "id": "ctx_g_and_s_frontomargin",
+     "share": 0.155
+    },
+    {
+     "id": "ctx_g_front_inf_orbital",
+     "share": 0.107
+    },
+    {
+     "id": "ctx_s_circular_insula_ant",
+     "share": 0.089
+    },
+    {
+     "id": "ctx_s_orbital_lateral",
+     "share": 0.059
+    },
+    {
+     "id": "ctx_g_front_middle",
+     "share": 0.035
+    }
+   ],
+   "dk": [
+    {
+     "region": "lateralorbitofrontal",
+     "labelInRegion": 0.616,
+     "regionInLabel": 0.387
+    },
+    {
+     "region": "parsorbitalis",
+     "labelInRegion": 0.242,
+     "regionInLabel": 0.614
+    },
+    {
+     "region": "rostralmiddlefrontal",
+     "labelInRegion": 0.116,
+     "regionInLabel": 0.033
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The inferior or orbital surface of the frontal lobe is concave, and rests on the orbital plate of the frontal bone. It is divided into four orbital gyri by a well-marked H-shaped orbital sulcus. These are named, from their position, the medial, anterior, lateral, and posterior, orbital gyri. The medial orbital gyrus presents a well-marked antero-posterior sulcus, the olfactory sulcus, for the olfactory tract; the portion medial to this is named the straight gyrus, and is continuous with the superior frontal gyrus on the medial surface.",
+    "url": "https://en.wikipedia.org/wiki/Orbital_gyri",
+    "source": "Orbital gyri",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_pariet_inf_angular",
+   "short": "G_pariet_inf-Angular",
+   "index": 25,
+   "name": "Angular gyrus",
+   "kind": "gyrus",
+   "views": [
+    "S",
+    "L",
+    "P"
+   ],
+   "paperAreaCm2": {
+    "L": 19.32,
+    "R": 23.07
+   },
+   "areaCm2": {
+    "L": 29.98,
+    "R": 33.36
+   },
+   "lobe": "parietal",
+   "lobeShare": 0.973,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "parietal",
+     "share": 0.973
+    }
+   ],
+   "atlasColour": "#143cdc",
+   "anchor": {
+    "L": {
+     "pial": [
+      -49.89,
+      -64.77,
+      52.22
+     ],
+     "inflated": [
+      -46.09,
+      -62.1,
+      42.25
+     ],
+     "nPial": [
+      -0.63,
+      -0.495,
+      0.598
+     ],
+     "nInflated": [
+      -0.589,
+      -0.505,
+      0.631
+     ]
+    },
+    "R": {
+     "pial": [
+      56.87,
+      -61.52,
+      42.38
+     ],
+     "inflated": [
+      49.77,
+      -62.98,
+      35.95
+     ],
+     "nPial": [
+      0.874,
+      -0.118,
+      0.472
+     ],
+     "nInflated": [
+      0.77,
+      -0.543,
+      0.334
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_temporal_sup",
+     "share": 0.399
+    },
+    {
+     "id": "ctx_s_intrapariet_and_p_trans",
+     "share": 0.191
+    },
+    {
+     "id": "ctx_g_pariet_inf_supramar",
+     "share": 0.135
+    },
+    {
+     "id": "ctx_s_interm_prim_jensen",
+     "share": 0.111
+    },
+    {
+     "id": "ctx_g_occipital_middle",
+     "share": 0.087
+    },
+    {
+     "id": "ctx_g_temporal_middle",
+     "share": 0.034
+    },
+    {
+     "id": "ctx_g_temp_sup_lateral",
+     "share": 0.033
+    }
+   ],
+   "dk": [
+    {
+     "region": "inferiorparietal",
+     "labelInRegion": 0.872,
+     "regionInLabel": 0.338
+    },
+    {
+     "region": "supramarginal",
+     "labelInRegion": 0.101,
+     "regionInLabel": 0.047
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The angular gyrus is a region of the brain lying mainly in the anterolateral region of parietal lobe, that lies near the superior edge of the temporal lobe, and immediately posterior to the supramarginal gyrus. Its significance is in transferring visual information to Wernicke's area, in order to make meaning out of visually perceived words. It is also involved in a number of processes related to language, number processing and spatial cognition, memory retrieval, attention, and theory of mind. It is Brodmann area 39 of the human brain.",
+    "url": "https://en.wikipedia.org/wiki/Angular_gyrus",
+    "source": "Angular gyrus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_pariet_inf_supramar",
+   "short": "G_pariet_inf-Supramar",
+   "index": 26,
+   "name": "Supramarginal gyrus",
+   "kind": "gyrus",
+   "views": [
+    "S",
+    "L",
+    "P"
+   ],
+   "paperAreaCm2": {
+    "L": 23.18,
+    "R": 19.58
+   },
+   "areaCm2": {
+    "L": 30.56,
+    "R": 32.87
+   },
+   "lobe": "parietal",
+   "lobeShare": 0.984,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "parietal",
+     "share": 0.984
+    }
+   ],
+   "atlasColour": "#64643c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -68.54,
+      -33.98,
+      31.74
+     ],
+     "inflated": [
+      -59.21,
+      -35.28,
+      34.47
+     ],
+     "nPial": [
+      -0.806,
+      -0.536,
+      0.25
+     ],
+     "nInflated": [
+      -0.966,
+      0.238,
+      0.097
+     ]
+    },
+    "R": {
+     "pial": [
+      66.18,
+      -29.34,
+      42.33
+     ],
+     "inflated": [
+      58.43,
+      -31.23,
+      34.76
+     ],
+     "nPial": [
+      0.798,
+      -0.266,
+      -0.541
+     ],
+     "nInflated": [
+      0.966,
+      0.098,
+      0.237
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_postcentral",
+     "share": 0.188
+    },
+    {
+     "id": "ctx_g_and_s_subcentral",
+     "share": 0.175
+    },
+    {
+     "id": "ctx_lat_fis_post",
+     "share": 0.15
+    },
+    {
+     "id": "ctx_g_pariet_inf_angular",
+     "share": 0.149
+    },
+    {
+     "id": "ctx_g_temp_sup_plan_tempo",
+     "share": 0.141
+    },
+    {
+     "id": "ctx_s_interm_prim_jensen",
+     "share": 0.126
+    },
+    {
+     "id": "ctx_g_temp_sup_lateral",
+     "share": 0.032
+    }
+   ],
+   "dk": [
+    {
+     "region": "supramarginal",
+     "labelInRegion": 0.974,
+     "regionInLabel": 0.505
+    }
+   ],
+   "parcels": [
+    {
+     "id": "s1",
+     "labelInParcel": 0.215,
+     "parcelInLabel": 0.126
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The supramarginal gyrus is a portion of the parietal lobe. This area of the brain is also known as Brodmann area 40 based on the brain map created by Korbinian Brodmann to define the structures in the cerebral cortex. It is probably involved with language perception and processing, and lesions in it may cause receptive aphasia.",
+    "url": "https://en.wikipedia.org/wiki/Supramarginal_gyrus",
+    "source": "Supramarginal gyrus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_parietal_sup",
+   "short": "G_parietal_sup",
+   "index": 27,
+   "name": "Superior parietal lobule (lateral part of P1)",
+   "kind": "gyrus",
+   "views": [
+    "S",
+    "L",
+    "P",
+    "M"
+   ],
+   "paperAreaCm2": {
+    "L": 22.04,
+    "R": 18.77
+   },
+   "areaCm2": {
+    "L": 40.19,
+    "R": 29.4
+   },
+   "lobe": "parietal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "parietal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#dcb4dc",
+   "anchor": {
+    "L": {
+     "pial": [
+      -25.26,
+      -64.53,
+      67.38
+     ],
+     "inflated": [
+      -21.81,
+      -61.75,
+      59.65
+     ],
+     "nPial": [
+      -0.746,
+      -0.62,
+      0.243
+     ],
+     "nInflated": [
+      -0.268,
+      -0.544,
+      0.795
+     ]
+    },
+    "R": {
+     "pial": [
+      21.32,
+      -63.03,
+      70.12
+     ],
+     "inflated": [
+      20.85,
+      -60.33,
+      60.23
+     ],
+     "nPial": [
+      0.141,
+      -0.252,
+      0.958
+     ],
+     "nInflated": [
+      0.18,
+      -0.648,
+      0.74
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_intrapariet_and_p_trans",
+     "share": 0.405
+    },
+    {
+     "id": "ctx_g_precuneus",
+     "share": 0.276
+    },
+    {
+     "id": "ctx_s_postcentral",
+     "share": 0.153
+    },
+    {
+     "id": "ctx_g_occipital_sup",
+     "share": 0.087
+    },
+    {
+     "id": "ctx_g_and_s_paracentral",
+     "share": 0.051
+    }
+   ],
+   "dk": [
+    {
+     "region": "superiorparietal",
+     "labelInRegion": 0.994,
+     "regionInLabel": 0.386
+    }
+   ],
+   "parcels": [
+    {
+     "id": "s1",
+     "labelInParcel": 0.071,
+     "parcelInLabel": 0.046
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The superior parietal lobule is bounded in front by the upper part of the postcentral sulcus, but is usually connected with the postcentral gyrus above the end of the sulcus. The superior parietal lobule contains Brodmann's areas 5 and 7. Behind it is the lateral part of the parietooccipital fissure, around the end of which it is joined to the occipital lobe by a curved gyrus, the arcus parietooccipitalis. Below, it is separated from the inferior parietal lobule by the horizontal portion of the intraparietal sulcus. The superior parietal lobule is involved with spatial orientation, and receives a great deal of visual input as well as sensory input from one's hand. It is also involved with other functions of the parietal lobe in general.",
+    "url": "https://en.wikipedia.org/wiki/Superior_parietal_lobule",
+    "source": "Superior parietal lobule",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_postcentral",
+   "short": "G_postcentral",
+   "index": 28,
+   "name": "Postcentral gyrus",
+   "kind": "gyrus",
+   "views": [
+    "S",
+    "L",
+    "P"
+   ],
+   "paperAreaCm2": {
+    "L": 19.53,
+    "R": 17.55
+   },
+   "areaCm2": {
+    "L": 26.3,
+    "R": 24.69
+   },
+   "lobe": "parietal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "parietal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#14b48c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -53.33,
+      -21.24,
+      59.89
+     ],
+     "inflated": [
+      -44.21,
+      -27.69,
+      53.47
+     ],
+     "nPial": [
+      -0.97,
+      0.19,
+      0.15
+     ],
+     "nInflated": [
+      -0.678,
+      0.047,
+      0.734
+     ]
+    },
+    "R": {
+     "pial": [
+      54.89,
+      -17.68,
+      57.2
+     ],
+     "inflated": [
+      45.9,
+      -23.62,
+      51.82
+     ],
+     "nPial": [
+      0.986,
+      0.031,
+      0.163
+     ],
+     "nInflated": [
+      0.721,
+      0.06,
+      0.69
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_central",
+     "share": 0.397
+    },
+    {
+     "id": "ctx_s_postcentral",
+     "share": 0.385
+    },
+    {
+     "id": "ctx_g_and_s_subcentral",
+     "share": 0.107
+    },
+    {
+     "id": "ctx_g_and_s_paracentral",
+     "share": 0.093
+    }
+   ],
+   "dk": [
+    {
+     "region": "postcentral",
+     "labelInRegion": 1.0,
+     "regionInLabel": 0.416
+    }
+   ],
+   "parcels": [
+    {
+     "id": "s1",
+     "labelInParcel": 0.49,
+     "parcelInLabel": 0.26
+    },
+    {
+     "id": "m1",
+     "labelInParcel": 0.486,
+     "parcelInLabel": 0.206
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The postcentral gyrus is a prominent gyrus in the lateral parietal lobe of the human brain. It is the location of the primary somatosensory cortex, the main sensory receptive area for the sense of touch. Like other sensory areas, there is a map of sensory space in this location, called the sensory homunculus. The primary somatosensory cortex was initially defined from surface stimulation studies of Wilder Penfield, and parallel surface potential studies of Bard, Woolsey, and Marshall. Although initially defined to be roughly the same as Brodmann areas 3, 1 and 2, more recent work by Kaas has suggested that for homogeny with other sensory fields only area 3 should be referred to as \"primary somatosensory cortex\", as it receives the bulk of the thalamocortical projections from the sensory input fields.",
+    "url": "https://en.wikipedia.org/wiki/Postcentral_gyrus",
+    "source": "Postcentral gyrus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_precentral",
+   "short": "G_precentral",
+   "index": 29,
+   "name": "Precentral gyrus",
+   "kind": "gyrus",
+   "views": [
+    "S",
+    "A",
+    "L"
+   ],
+   "paperAreaCm2": {
+    "L": 22.22,
+    "R": 22.55
+   },
+   "areaCm2": {
+    "L": 31.9,
+    "R": 30.71
+   },
+   "lobe": "frontal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#3c8cb4",
+   "anchor": {
+    "L": {
+     "pial": [
+      -52.4,
+      -4.99,
+      55.18
+     ],
+     "inflated": [
+      -41.38,
+      -4.87,
+      51.71
+     ],
+     "nPial": [
+      -0.188,
+      0.06,
+      0.98
+     ],
+     "nInflated": [
+      -0.768,
+      0.122,
+      0.628
+     ]
+    },
+    "R": {
+     "pial": [
+      51.59,
+      -1.27,
+      54.58
+     ],
+     "inflated": [
+      42.52,
+      -1.72,
+      50.5
+     ],
+     "nPial": [
+      0.127,
+      0.109,
+      0.986
+     ],
+     "nInflated": [
+      0.77,
+      0.168,
+      0.615
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_central",
+     "share": 0.353
+    },
+    {
+     "id": "ctx_s_precentral_sup_part",
+     "share": 0.228
+    },
+    {
+     "id": "ctx_s_precentral_inf_part",
+     "share": 0.221
+    },
+    {
+     "id": "ctx_g_and_s_subcentral",
+     "share": 0.062
+    },
+    {
+     "id": "ctx_g_and_s_paracentral",
+     "share": 0.06
+    }
+   ],
+   "dk": [
+    {
+     "region": "precentral",
+     "labelInRegion": 0.986,
+     "regionInLabel": 0.404
+    }
+   ],
+   "parcels": [
+    {
+     "id": "m1",
+     "labelInParcel": 0.491,
+     "parcelInLabel": 0.245
+    },
+    {
+     "id": "pmd",
+     "labelInParcel": 0.263,
+     "parcelInLabel": 0.167
+    },
+    {
+     "id": "pmv",
+     "labelInParcel": 0.207,
+     "parcelInLabel": 0.136
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The precentral gyrus is a prominent gyrus on the surface of the posterior frontal lobe of the brain. It is the site of the primary motor cortex that in humans is cytoarchitecturally defined as Brodmann area 4.",
+    "url": "https://en.wikipedia.org/wiki/Precentral_gyrus",
+    "source": "Precentral gyrus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_precuneus",
+   "short": "G_precuneus",
+   "index": 30,
+   "name": "Precuneus (medial part of P1)",
+   "kind": "gyrus",
+   "views": [
+    "S",
+    "P",
+    "M"
+   ],
+   "paperAreaCm2": {
+    "L": 19.32,
+    "R": 19.26
+   },
+   "areaCm2": {
+    "L": 32.09,
+    "R": 30.05
+   },
+   "lobe": "parietal",
+   "lobeShare": 0.986,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "parietal",
+     "share": 0.986
+    }
+   ],
+   "atlasColour": "#19148c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -0.21,
+      -68.33,
+      49.48
+     ],
+     "inflated": [
+      -7.61,
+      -65.93,
+      47.71
+     ],
+     "nPial": [
+      0.998,
+      0.058,
+      -0.005
+     ],
+     "nInflated": [
+      0.808,
+      -0.433,
+      0.399
+     ]
+    },
+    "R": {
+     "pial": [
+      1.62,
+      -67.64,
+      48.29
+     ],
+     "inflated": [
+      9.97,
+      -63.87,
+      46.9
+     ],
+     "nPial": [
+      -0.984,
+      -0.1,
+      -0.145
+     ],
+     "nInflated": [
+      -0.71,
+      -0.678,
+      0.192
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_subparietal",
+     "share": 0.294
+    },
+    {
+     "id": "ctx_g_parietal_sup",
+     "share": 0.252
+    },
+    {
+     "id": "ctx_s_parieto_occipital",
+     "share": 0.17
+    },
+    {
+     "id": "ctx_s_cingul_marginalis",
+     "share": 0.143
+    },
+    {
+     "id": "ctx_g_cingul_post_ventral",
+     "share": 0.059
+    },
+    {
+     "id": "ctx_g_and_s_paracentral",
+     "share": 0.035
+    }
+   ],
+   "dk": [
+    {
+     "region": "precuneus",
+     "labelInRegion": 0.912,
+     "regionInLabel": 0.427
+    },
+    {
+     "region": "superiorparietal",
+     "labelInRegion": 0.074,
+     "regionInLabel": 0.022
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The precuneus is the portion of the superior parietal lobule on the medial surface of each brain hemisphere. It is located in front of the cuneus (the upper portion of the occipital lobe). The precuneus is bounded in front by the marginal branch of the cingulate sulcus, at the rear by the parietooccipital sulcus, and underneath by the subparietal sulcus. It is involved with episodic memory, visuospatial processing, reflections upon self, and aspects of consciousness. The location of the precuneus makes it difficult to study. Furthermore, it is rarely subject to isolated injury due to strokes, or trauma such as gunshot wounds. This has resulted in it being \"one of the less accurately mapped areas of the whole cortical surface\". While originally described as homogeneous by Korbinian Brodmann, it is now appreciated to contain three subdivisions.",
+    "url": "https://en.wikipedia.org/wiki/Precuneus",
+    "source": "Precuneus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_rectus",
+   "short": "G_rectus",
+   "index": 31,
+   "name": "Straight gyrus, Gyrus rectus",
+   "kind": "gyrus",
+   "views": [
+    "A",
+    "M",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 7.11,
+    "R": 5.8
+   },
+   "areaCm2": {
+    "L": 13.21,
+    "R": 10.52
+   },
+   "lobe": "frontal",
+   "lobeShare": 0.983,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 0.983
+    }
+   ],
+   "atlasColour": "#143c64",
+   "anchor": {
+    "L": {
+     "pial": [
+      -1.75,
+      53.76,
+      -26.31
+     ],
+     "inflated": [
+      -8.44,
+      49.37,
+      -18.74
+     ],
+     "nPial": [
+      0.965,
+      0.174,
+      -0.195
+     ],
+     "nInflated": [
+      0.521,
+      0.425,
+      -0.741
+     ]
+    },
+    "R": {
+     "pial": [
+      0.29,
+      35.45,
+      -30.62
+     ],
+     "inflated": [
+      6.21,
+      41.72,
+      -19.53
+     ],
+     "nPial": [
+      -0.849,
+      -0.042,
+      -0.527
+     ],
+     "nInflated": [
+      -0.819,
+      0.025,
+      -0.574
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_orbital_med_olfact",
+     "share": 0.351
+    },
+    {
+     "id": "ctx_s_suborbital",
+     "share": 0.286
+    },
+    {
+     "id": "ctx_g_subcallosal",
+     "share": 0.124
+    },
+    {
+     "id": "ctx_g_orbital",
+     "share": 0.069
+    },
+    {
+     "id": "ctx_g_and_s_frontomargin",
+     "share": 0.052
+    },
+    {
+     "id": "ctx_g_and_s_transv_frontopol",
+     "share": 0.048
+    },
+    {
+     "id": "ctx_g_and_s_cingul_ant",
+     "share": 0.043
+    }
+   ],
+   "dk": [
+    {
+     "region": "medialorbitofrontal",
+     "labelInRegion": 0.929,
+     "regionInLabel": 0.289
+    }
+   ],
+   "parcels": [
+    {
+     "id": "vmpfc",
+     "labelInParcel": 0.929,
+     "parcelInLabel": 0.289
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The portion of the inferior frontal lobe immediately adjacent to the longitudinal fissure (and medial to the medial orbital gyrus and olfactory tract) is named the straight gyrus,(or gyrus rectus) and is continuous with the superior frontal gyrus on the medial surface. A specific function for the straight gyrus has not yet been brought to light; however, in males, greater activation of the straight gyrus within the medial orbitofrontal cortex while observing sexually visual pictures has been strongly linked to HSDD (hypoactive sexual desire disorder).",
+    "url": "https://en.wikipedia.org/wiki/Straight_gyrus",
+    "source": "Straight gyrus (Gyrus rectus)",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_subcallosal",
+   "short": "G_subcallosal",
+   "index": 32,
+   "name": "Subcallosal area, subcallosal gyrus",
+   "kind": "gyrus",
+   "views": [
+    "M",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 2.13,
+    "R": 2.41
+   },
+   "areaCm2": {
+    "L": 3.25,
+    "R": 2.72
+   },
+   "lobe": "frontal",
+   "lobeShare": 0.697,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 0.697
+    },
+    {
+     "lobe": "cingulate",
+     "share": 0.269
+    }
+   ],
+   "atlasColour": "#3cdc14",
+   "anchor": {
+    "L": {
+     "pial": [
+      -1.89,
+      12.03,
+      -10.62
+     ],
+     "inflated": [
+      -5.92,
+      20.97,
+      -11.14
+     ],
+     "nPial": [
+      0.998,
+      0.002,
+      0.063
+     ],
+     "nInflated": [
+      0.903,
+      -0.101,
+      -0.418
+     ]
+    },
+    "R": {
+     "pial": [
+      3.2,
+      9.04,
+      -17.66
+     ],
+     "inflated": [
+      7.81,
+      19.17,
+      -13.83
+     ],
+     "nPial": [
+      -0.72,
+      -0.549,
+      -0.424
+     ],
+     "nInflated": [
+      -0.761,
+      -0.21,
+      -0.614
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_medial_wall",
+     "share": 0.392
+    },
+    {
+     "id": "ctx_g_rectus",
+     "share": 0.211
+    },
+    {
+     "id": "ctx_s_pericallosal",
+     "share": 0.125
+    },
+    {
+     "id": "ctx_s_orbital_med_olfact",
+     "share": 0.106
+    },
+    {
+     "id": "ctx_g_and_s_cingul_ant",
+     "share": 0.095
+    },
+    {
+     "id": "ctx_s_suborbital",
+     "share": 0.071
+    }
+   ],
+   "dk": [
+    {
+     "region": "medialorbitofrontal",
+     "labelInRegion": 0.696,
+     "regionInLabel": 0.092
+    },
+    {
+     "region": "rostralanteriorcingulate",
+     "labelInRegion": 0.269,
+     "regionInLabel": 0.087
+    }
+   ],
+   "parcels": [
+    {
+     "id": "vmpfc",
+     "labelInParcel": 0.696,
+     "parcelInLabel": 0.092
+    },
+    {
+     "id": "acc",
+     "labelInParcel": 0.269,
+     "parcelInLabel": 0.044
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The subcallosal area (parolfactory area of Broca) is a small triangular field on the medial surface of the hemisphere in front of the subcallosal gyrus, from which it is separated by the posterior parolfactory sulcus; it is continuous below with the olfactory trigone, and above and in front with the cingulate gyrus; it is limited anteriorly by the anterior parolfactory sulcus.\nThe subcallosal area is also known as \"Zuckerkandl's gyrus\", for Emil Zuckerkandl.The parahippocampal gyrus, subcallosal area, and cingulate gyrus have been described together as the periarcheocortex.The \"subcallosal area\" and \"parolfactory area\" are considered equivalent in BrainInfo, but in Terminologia Anatomica they are considered distinct structures.",
+    "url": "https://en.wikipedia.org/wiki/Subcallosal_area",
+    "source": "Subcallosal area",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_temp_sup_g_t_transv",
+   "short": "G_temp_sup-G_T_transv",
+   "index": 33,
+   "name": "Anterior transverse temporal gyrus (of Heschl)",
+   "kind": "gyrus",
+   "views": [
+    "A",
+    "L"
+   ],
+   "paperAreaCm2": {
+    "L": 4.27,
+    "R": 3.42
+   },
+   "areaCm2": {
+    "L": 6.0,
+    "R": 4.53
+   },
+   "lobe": "temporal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "temporal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#3c3cdc",
+   "anchor": {
+    "L": {
+     "pial": [
+      -54.33,
+      -12.59,
+      8.89
+     ],
+     "inflated": [
+      -51.86,
+      -14.05,
+      -0.05
+     ],
+     "nPial": [
+      0.076,
+      0.521,
+      0.85
+     ],
+     "nInflated": [
+      -0.421,
+      0.635,
+      0.648
+     ]
+    },
+    "R": {
+     "pial": [
+      55.19,
+      -6.04,
+      5.44
+     ],
+     "inflated": [
+      54.06,
+      -11.15,
+      -0.27
+     ],
+     "nPial": [
+      -0.069,
+      0.41,
+      0.909
+     ],
+     "nInflated": [
+      0.502,
+      0.68,
+      0.534
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_circular_insula_inf",
+     "share": 0.313
+    },
+    {
+     "id": "ctx_s_temporal_transverse",
+     "share": 0.266
+    },
+    {
+     "id": "ctx_g_temp_sup_lateral",
+     "share": 0.176
+    },
+    {
+     "id": "ctx_lat_fis_post",
+     "share": 0.169
+    },
+    {
+     "id": "ctx_g_temp_sup_plan_polar",
+     "share": 0.076
+    }
+   ],
+   "dk": [
+    {
+     "region": "transversetemporal",
+     "labelInRegion": 0.853,
+     "regionInLabel": 0.67
+    },
+    {
+     "region": "superiortemporal",
+     "labelInRegion": 0.147,
+     "regionInLabel": 0.013
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The transverse temporal gyri, also called Heschl's gyri () or Heschl's convolutions, are gyri found in the area of primary auditory cortex buried within the lateral sulcus of the human brain, occupying Brodmann areas 41 and 42. Transverse temporal gyri are superior to and separated from the planum temporale (cortex involved in language production) by Heschl’s sulcus. Transverse temporal gyri are found in varying numbers in both the right and left hemispheres of the brain and one study found that this number is not related to the hemisphere or dominance of hemisphere studied in subjects. Transverse temporal gyri can be viewed in the sagittal plane as either an omega shape (if one gyrus is present) or a heart shape (if two gyri and a sulcus are present).Transverse temporal gyri are the first cortical structures to process incoming auditory information.",
+    "url": "https://en.wikipedia.org/wiki/Transverse_temporal_gyrus",
+    "source": "Transverse temporal gyri",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_temp_sup_lateral",
+   "short": "G_temp_sup-Lateral",
+   "index": 34,
+   "name": "Lateral aspect of the superior temporal gyrus",
+   "kind": "gyrus",
+   "views": [
+    "A",
+    "L"
+   ],
+   "paperAreaCm2": {
+    "L": 15.46,
+    "R": 15.2
+   },
+   "areaCm2": {
+    "L": 29.54,
+    "R": 24.84
+   },
+   "lobe": "temporal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "temporal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#dc3cdc",
+   "anchor": {
+    "L": {
+     "pial": [
+      -59.03,
+      11.77,
+      -11.15
+     ],
+     "inflated": [
+      -51.44,
+      -0.46,
+      -15.29
+     ],
+     "nPial": [
+      -0.827,
+      0.518,
+      -0.219
+     ],
+     "nInflated": [
+      -0.555,
+      0.738,
+      0.383
+     ]
+    },
+    "R": {
+     "pial": [
+      57.23,
+      16.15,
+      -10.91
+     ],
+     "inflated": [
+      50.4,
+      3.13,
+      -16.4
+     ],
+     "nPial": [
+      0.725,
+      0.688,
+      0.034
+     ],
+     "nInflated": [
+      0.518,
+      0.764,
+      0.383
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_temporal_sup",
+     "share": 0.355
+    },
+    {
+     "id": "ctx_g_temp_sup_plan_tempo",
+     "share": 0.158
+    },
+    {
+     "id": "ctx_g_temp_sup_plan_polar",
+     "share": 0.14
+    },
+    {
+     "id": "ctx_pole_temporal",
+     "share": 0.119
+    },
+    {
+     "id": "ctx_g_temporal_middle",
+     "share": 0.07
+    },
+    {
+     "id": "ctx_g_temp_sup_g_t_transv",
+     "share": 0.056
+    },
+    {
+     "id": "ctx_g_pariet_inf_angular",
+     "share": 0.035
+    },
+    {
+     "id": "ctx_g_pariet_inf_supramar",
+     "share": 0.031
+    }
+   ],
+   "dk": [
+    {
+     "region": "superiortemporal",
+     "labelInRegion": 0.906,
+     "regionInLabel": 0.319
+    },
+    {
+     "region": "bankssts",
+     "labelInRegion": 0.08,
+     "regionInLabel": 0.105
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The superior temporal gyrus (STG) is one of three (sometimes two) gyri in the temporal lobe of the human brain, which is located laterally to the head, situated somewhat above the external ear. The superior temporal gyrus is bounded by: the lateral sulcus above;\nthe superior temporal sulcus (not always present or visible) below;\nan imaginary line drawn from the preoccipital notch to the lateral sulcus posteriorly. The superior temporal gyrus contains several important structures of the brain, including: Brodmann areas 41 and 42, marking the location of the auditory cortex, the cortical region responsible for the sensation of sound;\nWernicke's area, Brodmann 22p, an important region for the processing of speech so that it can be understood as language. The superior temporal gyrus contains the auditory cortex, which is responsible for processing sounds.",
+    "url": "https://en.wikipedia.org/wiki/Superior_temporal_gyrus",
+    "source": "Superior temporal gyrus (Lateral part)",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_temp_sup_plan_polar",
+   "short": "G_temp_sup-Plan_polar",
+   "index": 35,
+   "name": "Planum polare of the superior temporal gyrus",
+   "kind": "gyrus",
+   "views": [
+    "A",
+    "L",
+    "M"
+   ],
+   "paperAreaCm2": {
+    "L": 6.08,
+    "R": 6.9
+   },
+   "areaCm2": {
+    "L": 4.87,
+    "R": 6.18
+   },
+   "lobe": "temporal",
+   "lobeShare": 0.885,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "temporal",
+     "share": 0.885
+    }
+   ],
+   "atlasColour": "#41dc3c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -39.61,
+      13.52,
+      -21.72
+     ],
+     "inflated": [
+      -41.29,
+      4.55,
+      -22.33
+     ],
+     "nPial": [
+      0.738,
+      0.078,
+      0.67
+     ],
+     "nInflated": [
+      0.237,
+      0.896,
+      0.375
+     ]
+    },
+    "R": {
+     "pial": [
+      40.78,
+      17.03,
+      -19.23
+     ],
+     "inflated": [
+      43.65,
+      7.22,
+      -22.7
+     ],
+     "nPial": [
+      -0.685,
+      0.059,
+      0.726
+     ],
+     "nInflated": [
+      -0.222,
+      0.885,
+      0.41
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_circular_insula_inf",
+     "share": 0.298
+    },
+    {
+     "id": "ctx_g_temp_sup_lateral",
+     "share": 0.278
+    },
+    {
+     "id": "ctx_pole_temporal",
+     "share": 0.183
+    },
+    {
+     "id": "ctx_g_oc_temp_med_parahip",
+     "share": 0.125
+    },
+    {
+     "id": "ctx_g_ins_lg_and_s_cent_ins",
+     "share": 0.05
+    },
+    {
+     "id": "ctx_g_temp_sup_g_t_transv",
+     "share": 0.048
+    }
+   ],
+   "dk": [
+    {
+     "region": "superiortemporal",
+     "labelInRegion": 0.675,
+     "regionInLabel": 0.081
+    },
+    {
+     "region": "temporalpole",
+     "labelInRegion": 0.199,
+     "regionInLabel": 0.261
+    },
+    {
+     "region": "insula",
+     "labelInRegion": 0.115,
+     "regionInLabel": 0.02
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The superior temporal gyrus (STG) is one of three (sometimes two) gyri in the temporal lobe of the human brain, which is located laterally to the head, situated somewhat above the external ear. The superior temporal gyrus is bounded by: the lateral sulcus above;\nthe superior temporal sulcus (not always present or visible) below;\nan imaginary line drawn from the preoccipital notch to the lateral sulcus posteriorly. The superior temporal gyrus contains several important structures of the brain, including: Brodmann areas 41 and 42, marking the location of the auditory cortex, the cortical region responsible for the sensation of sound;\nWernicke's area, Brodmann 22p, an important region for the processing of speech so that it can be understood as language. The superior temporal gyrus contains the auditory cortex, which is responsible for processing sounds.",
+    "url": "https://en.wikipedia.org/wiki/Superior_temporal_gyrus",
+    "source": "Superior temporal gyrus (Lateral part)",
+    "scope": "the superior temporal gyrus"
+   }
+  },
+  {
+   "id": "ctx_g_temp_sup_plan_tempo",
+   "short": "G_temp_sup-Plan_tempo",
+   "index": 36,
+   "name": "Planum temporale or temporal plane of the superior temporal gyrus",
+   "kind": "gyrus",
+   "views": [
+    "A",
+    "L"
+   ],
+   "paperAreaCm2": {
+    "L": 9.48,
+    "R": 7.52
+   },
+   "areaCm2": {
+    "L": 7.76,
+    "R": 6.8
+   },
+   "lobe": "temporal",
+   "lobeShare": 0.708,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "temporal",
+     "share": 0.708
+    },
+    {
+     "lobe": "parietal",
+     "share": 0.292
+    }
+   ],
+   "atlasColour": "#198c14",
+   "anchor": {
+    "L": {
+     "pial": [
+      -65.33,
+      -35.06,
+      17.83
+     ],
+     "inflated": [
+      -57.93,
+      -36.85,
+      14.73
+     ],
+     "nPial": [
+      0.224,
+      0.902,
+      0.37
+     ],
+     "nInflated": [
+      -0.941,
+      0.259,
+      0.218
+     ]
+    },
+    "R": {
+     "pial": [
+      69.22,
+      -27.45,
+      20.47
+     ],
+     "inflated": [
+      59.92,
+      -32.06,
+      21.99
+     ],
+     "nPial": [
+      0.775,
+      0.618,
+      0.13
+     ],
+     "nInflated": [
+      0.979,
+      0.191,
+      0.065
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_temp_sup_lateral",
+     "share": 0.325
+    },
+    {
+     "id": "ctx_g_pariet_inf_supramar",
+     "share": 0.281
+    },
+    {
+     "id": "ctx_lat_fis_post",
+     "share": 0.225
+    },
+    {
+     "id": "ctx_s_temporal_transverse",
+     "share": 0.169
+    }
+   ],
+   "dk": [
+    {
+     "region": "superiortemporal",
+     "labelInRegion": 0.708,
+     "regionInLabel": 0.106
+    },
+    {
+     "region": "supramarginal",
+     "labelInRegion": 0.292,
+     "regionInLabel": 0.043
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The superior temporal gyrus (STG) is one of three (sometimes two) gyri in the temporal lobe of the human brain, which is located laterally to the head, situated somewhat above the external ear. The superior temporal gyrus is bounded by: the lateral sulcus above;\nthe superior temporal sulcus (not always present or visible) below;\nan imaginary line drawn from the preoccipital notch to the lateral sulcus posteriorly. The superior temporal gyrus contains several important structures of the brain, including: Brodmann areas 41 and 42, marking the location of the auditory cortex, the cortical region responsible for the sensation of sound;\nWernicke's area, Brodmann 22p, an important region for the processing of speech so that it can be understood as language. The superior temporal gyrus contains the auditory cortex, which is responsible for processing sounds.",
+    "url": "https://en.wikipedia.org/wiki/Superior_temporal_gyrus",
+    "source": "Superior temporal gyrus (Lateral part)",
+    "scope": "the superior temporal gyrus"
+   }
+  },
+  {
+   "id": "ctx_g_temporal_inf",
+   "short": "G_temporal_inf",
+   "index": 37,
+   "name": "Inferior temporal gyrus (T3)",
+   "kind": "gyrus",
+   "views": [
+    "L",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 21.27,
+    "R": 18.05
+   },
+   "areaCm2": {
+    "L": 36.61,
+    "R": 34.23
+   },
+   "lobe": "temporal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "temporal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#dcdc64",
+   "anchor": {
+    "L": {
+     "pial": [
+      -58.03,
+      -39.25,
+      -29.04
+     ],
+     "inflated": [
+      -54.24,
+      -33.34,
+      -25.32
+     ],
+     "nPial": [
+      -0.121,
+      -0.22,
+      -0.968
+     ],
+     "nInflated": [
+      -0.465,
+      -0.351,
+      -0.812
+     ]
+    },
+    "R": {
+     "pial": [
+      56.94,
+      -41.85,
+      -28.18
+     ],
+     "inflated": [
+      54.52,
+      -34.9,
+      -25.43
+     ],
+     "nPial": [
+      0.362,
+      -0.149,
+      -0.92
+     ],
+     "nInflated": [
+      0.364,
+      -0.383,
+      -0.849
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_temporal_inf",
+     "share": 0.387
+    },
+    {
+     "id": "ctx_s_oc_temp_lat",
+     "share": 0.154
+    },
+    {
+     "id": "ctx_g_temporal_middle",
+     "share": 0.135
+    },
+    {
+     "id": "ctx_s_collat_transv_ant",
+     "share": 0.119
+    },
+    {
+     "id": "ctx_pole_temporal",
+     "share": 0.108
+    },
+    {
+     "id": "ctx_s_occipital_ant",
+     "share": 0.052
+    },
+    {
+     "id": "ctx_g_and_s_occipital_inf",
+     "share": 0.045
+    }
+   ],
+   "dk": [
+    {
+     "region": "inferiortemporal",
+     "labelInRegion": 0.991,
+     "regionInLabel": 0.54
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The inferior temporal gyrus is one of three gyri of the temporal lobe and is located below the middle temporal gyrus, connected behind with the inferior occipital gyrus; it also extends around the infero-lateral border on to the inferior surface of the temporal lobe, where it is limited by the inferior sulcus. This region is one of the higher levels of the ventral stream of visual processing, associated with the representation of objects, places, faces, and colors. It may also be involved in face perception, and in the recognition of numbers. The inferior temporal gyrus is the anterior region of the temporal lobe located underneath the central temporal sulcus.",
+    "url": "https://en.wikipedia.org/wiki/Inferior_temporal_gyrus",
+    "source": "Inferior temporal gyrus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_g_temporal_middle",
+   "short": "G_temporal_middle",
+   "index": 38,
+   "name": "Middle temporal gyrus (T2)",
+   "kind": "gyrus",
+   "views": [
+    "A",
+    "L",
+    "P",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 20.52,
+    "R": 22.59
+   },
+   "areaCm2": {
+    "L": 36.54,
+    "R": 39.08
+   },
+   "lobe": "temporal",
+   "lobeShare": 0.995,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "temporal",
+     "share": 0.995
+    }
+   ],
+   "atlasColour": "#b43c3c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -69.13,
+      -27.97,
+      -7.99
+     ],
+     "inflated": [
+      -61.32,
+      -34.81,
+      -11.09
+     ],
+     "nPial": [
+      -0.76,
+      0.269,
+      -0.592
+     ],
+     "nInflated": [
+      -0.998,
+      0.04,
+      0.048
+     ]
+    },
+    "R": {
+     "pial": [
+      71.65,
+      -20.9,
+      -11.88
+     ],
+     "inflated": [
+      61.71,
+      -25.01,
+      -16.92
+     ],
+     "nPial": [
+      0.989,
+      0.095,
+      -0.113
+     ],
+     "nInflated": [
+      0.99,
+      0.137,
+      0.041
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_s_temporal_sup",
+     "share": 0.373
+    },
+    {
+     "id": "ctx_s_temporal_inf",
+     "share": 0.324
+    },
+    {
+     "id": "ctx_g_temporal_inf",
+     "share": 0.131
+    },
+    {
+     "id": "ctx_g_temp_sup_lateral",
+     "share": 0.063
+    },
+    {
+     "id": "ctx_pole_temporal",
+     "share": 0.05
+    },
+    {
+     "id": "ctx_g_pariet_inf_angular",
+     "share": 0.033
+    }
+   ],
+   "dk": [
+    {
+     "region": "middletemporal",
+     "labelInRegion": 0.967,
+     "regionInLabel": 0.558
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "Middle temporal gyrus is a gyrus in the brain on the temporal lobe. It is located between the superior temporal gyrus and inferior temporal gyrus. It corresponds largely to Brodmann area 21.\nThe middle temporal gyrus is bounded by: the superior temporal sulcus above;\nthe inferior temporal sulcus below;\nan imaginary line drawn from the preoccipital notch to the lateral sulcus posteriorly. It has been connected with processes as different as contemplating distance, recognition of known faces, audio-visual emotional recognition, and accessing word meaning while reading. Some studies indicate that lesions of the posterior region of the middle temporal gyrus, in the left cerebral hemisphere, may result in alexia and agraphia for kanji characters (characters of Chinese origin used in Japanese writing). The left middle temporal gyrus is also activated during poem composition.",
+    "url": "https://en.wikipedia.org/wiki/Middle_temporal_gyrus",
+    "source": "Middle temporal gyrus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_lat_fis_ant_horizont",
+   "short": "Lat_Fis-ant-Horizont",
+   "index": 39,
+   "name": "Horizontal ramus of the anterior segment of the lateral sulcus (or fissure)",
+   "kind": "sulcus",
+   "views": [
+    "L",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 2.59,
+    "R": 3.22
+   },
+   "areaCm2": {
+    "L": 1.35,
+    "R": 3.4
+   },
+   "lobe": "frontal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#3d14dc",
+   "anchor": {
+    "L": {
+     "pial": [
+      -47.37,
+      33.49,
+      -6.8
+     ],
+     "inflated": [
+      -43.06,
+      33.6,
+      -3.69
+     ],
+     "nPial": [
+      -0.061,
+      -0.911,
+      -0.408
+     ],
+     "nInflated": [
+      -0.872,
+      -0.122,
+      -0.474
+     ]
+    },
+    "R": {
+     "pial": [
+      45.7,
+      30.64,
+      -6.82
+     ],
+     "inflated": [
+      43.77,
+      33.76,
+      -4.23
+     ],
+     "nPial": [
+      -0.715,
+      -0.16,
+      -0.681
+     ],
+     "nInflated": [
+      0.817,
+      -0.134,
+      -0.561
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_front_inf_triangul",
+     "share": 0.337
+    },
+    {
+     "id": "ctx_g_front_inf_orbital",
+     "share": 0.312
+    },
+    {
+     "id": "ctx_s_circular_insula_sup",
+     "share": 0.235
+    },
+    {
+     "id": "ctx_lat_fis_ant_vertical",
+     "share": 0.074
+    },
+    {
+     "id": "ctx_s_circular_insula_ant",
+     "share": 0.042
+    }
+   ],
+   "dk": [
+    {
+     "region": "parstriangularis",
+     "labelInRegion": 0.996,
+     "regionInLabel": 0.186
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": null
+  },
+  {
+   "id": "ctx_lat_fis_ant_vertical",
+   "short": "Lat_Fis-ant-Vertical",
+   "index": 40,
+   "name": "Vertical ramus of the anterior segment of the lateral sulcus (or fissure)",
+   "kind": "sulcus",
+   "views": [
+    "L",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 2.87,
+    "R": 2.43
+   },
+   "areaCm2": {
+    "L": 1.62,
+    "R": 1.59
+   },
+   "lobe": "frontal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#3d143c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -52.63,
+      20.59,
+      11.96
+     ],
+     "inflated": [
+      -47.34,
+      23.44,
+      8.14
+     ],
+     "nPial": [
+      -0.216,
+      -0.976,
+      -0.034
+     ],
+     "nInflated": [
+      -0.936,
+      -0.026,
+      -0.35
+     ]
+    },
+    "R": {
+     "pial": [
+      54.71,
+      24.61,
+      9.23
+     ],
+     "inflated": [
+      48.55,
+      27.57,
+      7.6
+     ],
+     "nPial": [
+      -0.139,
+      0.29,
+      -0.947
+     ],
+     "nInflated": [
+      0.959,
+      -0.008,
+      -0.282
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_front_inf_opercular",
+     "share": 0.439
+    },
+    {
+     "id": "ctx_g_front_inf_triangul",
+     "share": 0.37
+    },
+    {
+     "id": "ctx_s_circular_insula_sup",
+     "share": 0.105
+    },
+    {
+     "id": "ctx_lat_fis_ant_horizont",
+     "share": 0.086
+    }
+   ],
+   "dk": [
+    {
+     "region": "parsopercularis",
+     "labelInRegion": 0.679,
+     "regionInLabel": 0.085
+    },
+    {
+     "region": "parstriangularis",
+     "labelInRegion": 0.321,
+     "regionInLabel": 0.045
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": null
+  },
+  {
+   "id": "ctx_lat_fis_post",
+   "short": "Lat_Fis-post",
+   "index": 41,
+   "name": "Posterior ramus (or segment) of the lateral sulcus (or fissure)",
+   "kind": "sulcus",
+   "views": [
+    "A",
+    "L"
+   ],
+   "paperAreaCm2": {
+    "L": 9.73,
+    "R": 12.15
+   },
+   "areaCm2": {
+    "L": 6.76,
+    "R": 6.92
+   },
+   "lobe": "parietal",
+   "lobeShare": 0.531,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "parietal",
+     "share": 0.531
+    },
+    {
+     "lobe": "temporal",
+     "share": 0.259
+    }
+   ],
+   "atlasColour": "#3d3c64",
+   "anchor": {
+    "L": {
+     "pial": [
+      -49.75,
+      -38.29,
+      23.5
+     ],
+     "inflated": [
+      -56.49,
+      -35.61,
+      19.24
+     ],
+     "nPial": [
+      0.127,
+      0.834,
+      0.537
+     ],
+     "nInflated": [
+      -0.913,
+      0.398,
+      0.084
+     ]
+    },
+    "R": {
+     "pial": [
+      47.57,
+      -29.17,
+      25.55
+     ],
+     "inflated": [
+      56.41,
+      -24.05,
+      23.61
+     ],
+     "nPial": [
+      0.176,
+      -0.974,
+      0.142
+     ],
+     "nInflated": [
+      0.909,
+      0.361,
+      -0.207
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_pariet_inf_supramar",
+     "share": 0.297
+    },
+    {
+     "id": "ctx_g_temp_sup_plan_tempo",
+     "share": 0.225
+    },
+    {
+     "id": "ctx_g_and_s_subcentral",
+     "share": 0.115
+    },
+    {
+     "id": "ctx_g_temp_sup_g_t_transv",
+     "share": 0.11
+    },
+    {
+     "id": "ctx_s_circular_insula_inf",
+     "share": 0.077
+    },
+    {
+     "id": "ctx_s_circular_insula_sup",
+     "share": 0.061
+    },
+    {
+     "id": "ctx_g_ins_lg_and_s_cent_ins",
+     "share": 0.06
+    },
+    {
+     "id": "ctx_s_temporal_transverse",
+     "share": 0.056
+    }
+   ],
+   "dk": [
+    {
+     "region": "supramarginal",
+     "labelInRegion": 0.495,
+     "regionInLabel": 0.124
+    },
+    {
+     "region": "insula",
+     "labelInRegion": 0.21,
+     "regionInLabel": 0.079
+    },
+    {
+     "region": "superiortemporal",
+     "labelInRegion": 0.209,
+     "regionInLabel": 0.053
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": null
+  },
+  {
+   "id": "ctx_pole_occipital",
+   "short": "Pole_occipital",
+   "index": 42,
+   "name": "Occipital pole",
+   "kind": "pole",
+   "views": [
+    "L",
+    "P",
+    "M",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 14.62,
+    "R": 23.43
+   },
+   "areaCm2": {
+    "L": 16.21,
+    "R": 24.8
+   },
+   "lobe": "occipital",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "occipital",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#8c143c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -10.43,
+      -105.52,
+      -7.98
+     ],
+     "inflated": [
+      -16.24,
+      -100.33,
+      -1.16
+     ],
+     "nPial": [
+      0.227,
+      -0.929,
+      -0.293
+     ],
+     "nInflated": [
+      0.108,
+      -0.97,
+      -0.216
+     ]
+    },
+    "R": {
+     "pial": [
+      10.65,
+      -102.06,
+      -4.62
+     ],
+     "inflated": [
+      16.69,
+      -96.8,
+      1.3
+     ],
+     "nPial": [
+      -0.928,
+      -0.248,
+      -0.279
+     ],
+     "nInflated": [
+      -0.255,
+      -0.964,
+      -0.073
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_oc_temp_med_lingual",
+     "share": 0.255
+    },
+    {
+     "id": "ctx_g_occipital_middle",
+     "share": 0.181
+    },
+    {
+     "id": "ctx_g_and_s_occipital_inf",
+     "share": 0.177
+    },
+    {
+     "id": "ctx_g_cuneus",
+     "share": 0.175
+    },
+    {
+     "id": "ctx_g_occipital_sup",
+     "share": 0.079
+    },
+    {
+     "id": "ctx_s_calcarine",
+     "share": 0.071
+    },
+    {
+     "id": "ctx_s_collat_transv_post",
+     "share": 0.038
+    }
+   ],
+   "dk": [
+    {
+     "region": "lateraloccipital",
+     "labelInRegion": 0.809,
+     "regionInLabel": 0.3
+    },
+    {
+     "region": "lingual",
+     "labelInRegion": 0.084,
+     "regionInLabel": 0.051
+    },
+    {
+     "region": "pericalcarine",
+     "labelInRegion": 0.084,
+     "regionInLabel": 0.112
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "There are three known poles of the cerebral hemispheres: the occipital pole, the frontal pole, and the temporal pole.",
+    "url": null,
+    "source": "Occipital pole",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_pole_temporal",
+   "short": "Pole_temporal",
+   "index": 43,
+   "name": "Temporal pole",
+   "kind": "pole",
+   "views": [
+    "A",
+    "L",
+    "M",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 12.71,
+    "R": 11.91
+   },
+   "areaCm2": {
+    "L": 20.26,
+    "R": 19.52
+   },
+   "lobe": "temporal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "temporal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#dcb414",
+   "anchor": {
+    "L": {
+     "pial": [
+      -28.47,
+      16.6,
+      -45.19
+     ],
+     "inflated": [
+      -38.28,
+      4.61,
+      -37.26
+     ],
+     "nPial": [
+      0.004,
+      0.394,
+      -0.919
+     ],
+     "nInflated": [
+      0.434,
+      0.786,
+      -0.441
+     ]
+    },
+    "R": {
+     "pial": [
+      26.28,
+      22.28,
+      -39.31
+     ],
+     "inflated": [
+      38.0,
+      7.23,
+      -35.36
+     ],
+     "nPial": [
+      -0.658,
+      0.748,
+      -0.092
+     ],
+     "nInflated": [
+      -0.585,
+      0.802,
+      -0.117
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_oc_temp_med_parahip",
+     "share": 0.215
+    },
+    {
+     "id": "ctx_g_temp_sup_lateral",
+     "share": 0.204
+    },
+    {
+     "id": "ctx_g_temporal_inf",
+     "share": 0.199
+    },
+    {
+     "id": "ctx_g_temp_sup_plan_polar",
+     "share": 0.157
+    },
+    {
+     "id": "ctx_g_temporal_middle",
+     "share": 0.096
+    },
+    {
+     "id": "ctx_g_oc_temp_lat_fusifor",
+     "share": 0.042
+    },
+    {
+     "id": "ctx_s_collat_transv_ant",
+     "share": 0.039
+    }
+   ],
+   "dk": [
+    {
+     "region": "temporalpole",
+     "labelInRegion": 0.247,
+     "regionInLabel": 0.714
+    },
+    {
+     "region": "inferiortemporal",
+     "labelInRegion": 0.234,
+     "regionInLabel": 0.075
+    },
+    {
+     "region": "fusiform",
+     "labelInRegion": 0.219,
+     "regionInLabel": 0.074
+    },
+    {
+     "region": "middletemporal",
+     "labelInRegion": 0.161,
+     "regionInLabel": 0.049
+    },
+    {
+     "region": "superiortemporal",
+     "labelInRegion": 0.09,
+     "regionInLabel": 0.024
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "There are three known poles of the cerebral hemispheres: the occipital pole, the frontal pole, and the temporal pole.",
+    "url": null,
+    "source": "Temporal pole",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_calcarine",
+   "short": "S_calcarine",
+   "index": 44,
+   "name": "Calcarine sulcus",
+   "kind": "sulcus",
+   "views": [
+    "M"
+   ],
+   "paperAreaCm2": {
+    "L": 19.69,
+    "R": 18.51
+   },
+   "areaCm2": {
+    "L": 16.78,
+    "R": 15.73
+   },
+   "lobe": "occipital",
+   "lobeShare": 0.807,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "occipital",
+     "share": 0.807
+    }
+   ],
+   "atlasColour": "#3fb4b4",
+   "anchor": {
+    "L": {
+     "pial": [
+      -12.94,
+      -70.66,
+      5.56
+     ],
+     "inflated": [
+      -11.43,
+      -72.94,
+      2.05
+     ],
+     "nPial": [
+      -0.118,
+      0.29,
+      0.95
+     ],
+     "nInflated": [
+      0.929,
+      0.324,
+      0.182
+     ]
+    },
+    "R": {
+     "pial": [
+      12.38,
+      -67.57,
+      8.14
+     ],
+     "inflated": [
+      12.47,
+      -71.76,
+      4.26
+     ],
+     "nPial": [
+      0.306,
+      0.764,
+      0.568
+     ],
+     "nInflated": [
+      -0.943,
+      0.288,
+      0.166
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_oc_temp_med_lingual",
+     "share": 0.325
+    },
+    {
+     "id": "ctx_g_cuneus",
+     "share": 0.232
+    },
+    {
+     "id": "ctx_medial_wall",
+     "share": 0.121
+    },
+    {
+     "id": "ctx_s_parieto_occipital",
+     "share": 0.109
+    },
+    {
+     "id": "ctx_g_cingul_post_ventral",
+     "share": 0.103
+    },
+    {
+     "id": "ctx_pole_occipital",
+     "share": 0.069
+    },
+    {
+     "id": "ctx_g_precuneus",
+     "share": 0.031
+    }
+   ],
+   "dk": [
+    {
+     "region": "pericalcarine",
+     "labelInRegion": 0.556,
+     "regionInLabel": 0.699
+    },
+    {
+     "region": "lingual",
+     "labelInRegion": 0.251,
+     "regionInLabel": 0.144
+    },
+    {
+     "region": "precuneus",
+     "labelInRegion": 0.109,
+     "regionInLabel": 0.051
+    },
+    {
+     "region": "isthmuscingulate",
+     "labelInRegion": 0.084,
+     "regionInLabel": 0.138
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The calcarine sulcus (or calcarine fissure) is an anatomical landmark located at the caudal end of the medial surface of the brain of humans and other primates. Its name comes from the Latin \"calcar\" meaning \"spur\". It is very deep and known as a complete sulcus.",
+    "url": "https://en.wikipedia.org/wiki/Calcarine_sulcus",
+    "source": "Calcarine sulcus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_central",
+   "short": "S_central",
+   "index": 45,
+   "name": "Central sulcus (Rolando’s fissure)",
+   "kind": "sulcus",
+   "views": [
+    "S",
+    "A",
+    "L",
+    "P"
+   ],
+   "paperAreaCm2": {
+    "L": 25.98,
+    "R": 25.02
+   },
+   "areaCm2": {
+    "L": 19.84,
+    "R": 18.7
+   },
+   "lobe": "frontal",
+   "lobeShare": 0.554,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 0.554
+    },
+    {
+     "lobe": "parietal",
+     "share": 0.446
+    }
+   ],
+   "atlasColour": "#dd140a",
+   "anchor": {
+    "L": {
+     "pial": [
+      -45.34,
+      -16.99,
+      48.65
+     ],
+     "inflated": [
+      -45.41,
+      -19.53,
+      50.84
+     ],
+     "nPial": [
+      -0.104,
+      0.904,
+      -0.414
+     ],
+     "nInflated": [
+      -0.738,
+      0.149,
+      0.658
+     ]
+    },
+    "R": {
+     "pial": [
+      41.91,
+      -16.32,
+      51.33
+     ],
+     "inflated": [
+      43.38,
+      -18.6,
+      53.86
+     ],
+     "nPial": [
+      -0.822,
+      -0.051,
+      0.568
+     ],
+     "nInflated": [
+      0.666,
+      0.19,
+      0.722
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_precentral",
+     "share": 0.462
+    },
+    {
+     "id": "ctx_g_postcentral",
+     "share": 0.45
+    },
+    {
+     "id": "ctx_g_and_s_subcentral",
+     "share": 0.045
+    },
+    {
+     "id": "ctx_g_and_s_paracentral",
+     "share": 0.043
+    }
+   ],
+   "dk": [
+    {
+     "region": "precentral",
+     "labelInRegion": 0.554,
+     "regionInLabel": 0.239
+    },
+    {
+     "region": "postcentral",
+     "labelInRegion": 0.446,
+     "regionInLabel": 0.229
+    }
+   ],
+   "parcels": [
+    {
+     "id": "m1",
+     "labelInParcel": 0.762,
+     "parcelInLabel": 0.4
+    },
+    {
+     "id": "s1",
+     "labelInParcel": 0.165,
+     "parcelInLabel": 0.108
+    },
+    {
+     "id": "pmv",
+     "labelInParcel": 0.073,
+     "parcelInLabel": 0.05
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The central sulcus is a sulcus, or groove, in the cerebral cortex in the brains of vertebrates. Also called the central fissure, or the fissure of Rolando or the Rolandic fissure, after Luigi Rolando. It is sometimes confused with the longitudinal fissure. The central sulcus is a prominent landmark of the brain, separating the parietal lobe from the frontal lobe and the primary motor cortex from the primary somatosensory cortex.",
+    "url": "https://en.wikipedia.org/wiki/Central_sulcus",
+    "source": "Central sulcus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_cingul_marginalis",
+   "short": "S_cingul-Marginalis",
+   "index": 46,
+   "name": "Marginal branch (or part) of the cingulate sulcus",
+   "kind": "sulcus",
+   "views": [
+    "S",
+    "P",
+    "M"
+   ],
+   "paperAreaCm2": {
+    "L": 9.88,
+    "R": 11.23
+   },
+   "areaCm2": {
+    "L": 7.37,
+    "R": 9.22
+   },
+   "lobe": "frontal",
+   "lobeShare": 0.463,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 0.463
+    },
+    {
+     "lobe": "parietal",
+     "share": 0.321
+    }
+   ],
+   "atlasColour": "#dd1464",
+   "anchor": {
+    "L": {
+     "pial": [
+      -10.69,
+      -40.92,
+      53.92
+     ],
+     "inflated": [
+      -7.61,
+      -34.39,
+      59.88
+     ],
+     "nPial": [
+      0.513,
+      -0.395,
+      -0.762
+     ],
+     "nInflated": [
+      0.922,
+      -0.183,
+      0.34
+     ]
+    },
+    "R": {
+     "pial": [
+      9.17,
+      -38.69,
+      51.23
+     ],
+     "inflated": [
+      7.25,
+      -43.77,
+      53.94
+     ],
+     "nPial": [
+      -0.195,
+      0.941,
+      0.276
+     ],
+     "nInflated": [
+      -0.969,
+      -0.03,
+      0.247
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_precuneus",
+     "share": 0.346
+    },
+    {
+     "id": "ctx_g_and_s_paracentral",
+     "share": 0.279
+    },
+    {
+     "id": "ctx_g_and_s_cingul_mid_post",
+     "share": 0.163
+    },
+    {
+     "id": "ctx_g_cingul_post_dorsal",
+     "share": 0.137
+    },
+    {
+     "id": "ctx_g_front_sup",
+     "share": 0.048
+    }
+   ],
+   "dk": [
+    {
+     "region": "paracentral",
+     "labelInRegion": 0.463,
+     "regionInLabel": 0.231
+    },
+    {
+     "region": "precuneus",
+     "labelInRegion": 0.321,
+     "regionInLabel": 0.074
+    },
+    {
+     "region": "posteriorcingulate",
+     "labelInRegion": 0.216,
+     "regionInLabel": 0.156
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The cingulate sulcus is a sulcus (brain fold) on the cingulate cortex in the medial wall of the cerebral cortex. The frontal and parietal lobes are separated from the cingulate gyrus by the cingulate sulcus. It terminates as the marginal sulcus of the cingulate sulcus. It sends a ramus to separate the paracentral lobule from the frontal gyri, the paracentral sulcus.",
+    "url": "https://en.wikipedia.org/wiki/Cingulate_sulcus",
+    "source": "Cingulate sulcus (Marginal part*)",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_circular_insula_ant",
+   "short": "S_circular_insula_ant",
+   "index": 47,
+   "name": "Anterior segment of the circular sulcus of the insula",
+   "kind": "sulcus",
+   "views": [
+    "L",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 4.39,
+    "R": 5.05
+   },
+   "areaCm2": {
+    "L": 2.92,
+    "R": 2.62
+   },
+   "lobe": "insula",
+   "lobeShare": 0.273,
+   "lobeBy": "name",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 0.727
+    },
+    {
+     "lobe": "insula",
+     "share": 0.273
+    }
+   ],
+   "atlasColour": "#dd3c8c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -30.5,
+      15.64,
+      -17.41
+     ],
+     "inflated": [
+      -31.33,
+      17.1,
+      -13.17
+     ],
+     "nPial": [
+      0.093,
+      0.773,
+      -0.628
+     ],
+     "nInflated": [
+      -0.633,
+      -0.159,
+      -0.758
+     ]
+    },
+    "R": {
+     "pial": [
+      29.4,
+      19.97,
+      -17.37
+     ],
+     "inflated": [
+      30.2,
+      25.49,
+      -16.56
+     ],
+     "nPial": [
+      0.259,
+      -0.642,
+      0.722
+     ],
+     "nInflated": [
+      0.551,
+      -0.228,
+      -0.803
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_orbital",
+     "share": 0.404
+    },
+    {
+     "id": "ctx_g_insular_short",
+     "share": 0.373
+    },
+    {
+     "id": "ctx_g_front_inf_orbital",
+     "share": 0.1
+    },
+    {
+     "id": "ctx_s_circular_insula_sup",
+     "share": 0.087
+    },
+    {
+     "id": "ctx_lat_fis_ant_horizont",
+     "share": 0.036
+    }
+   ],
+   "dk": [
+    {
+     "region": "lateralorbitofrontal",
+     "labelInRegion": 0.722,
+     "regionInLabel": 0.103
+    },
+    {
+     "region": "insula",
+     "labelInRegion": 0.273,
+     "regionInLabel": 0.039
+    }
+   ],
+   "parcels": [],
+   "insula": true,
+   "definition": {
+    "text": "The insular cortex (also insula and insular lobe) is a portion of the cerebral cortex folded deep within the lateral sulcus (the fissure separating the temporal lobe from the parietal and frontal lobes) within each hemisphere of the mammalian brain. The insulae are believed to be involved in consciousness and play a role in diverse functions usually linked to emotion or the regulation of the body's homeostasis. These functions include compassion, empathy, taste, perception, motor control, self-awareness, cognitive functioning, interpersonal experience, and awareness of homeostatic emotions such as hunger, pain and fatigue. In relation to these, it is involved in psychopathology. The insular cortex is divided into two parts: the anterior insula and the posterior insula in which more than a dozen field areas have been identified.",
+    "url": "https://en.wikipedia.org/wiki/Insular_cortex",
+    "source": "Circular sulcus of insula",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_circular_insula_inf",
+   "short": "S_circular_insula_inf",
+   "index": 48,
+   "name": "Inferior segment of the circular sulcus of the insula",
+   "kind": "sulcus",
+   "views": [
+    "A",
+    "L"
+   ],
+   "paperAreaCm2": {
+    "L": 13.27,
+    "R": 11.13
+   },
+   "areaCm2": {
+    "L": 7.34,
+    "R": 6.81
+   },
+   "lobe": "insula",
+   "lobeShare": 0.412,
+   "lobeBy": "name",
+   "lobes": [
+    {
+     "lobe": "temporal",
+     "share": 0.588
+    },
+    {
+     "lobe": "insula",
+     "share": 0.412
+    }
+   ],
+   "atlasColour": "#dd14dc",
+   "anchor": {
+    "L": {
+     "pial": [
+      -45.54,
+      1.77,
+      -12.72
+     ],
+     "inflated": [
+      -44.57,
+      -0.43,
+      -12.69
+     ],
+     "nPial": [
+      0.842,
+      0.251,
+      0.477
+     ],
+     "nInflated": [
+      -0.122,
+      0.829,
+      0.545
+     ]
+    },
+    "R": {
+     "pial": [
+      42.77,
+      1.23,
+      -12.28
+     ],
+     "inflated": [
+      40.28,
+      1.94,
+      -9.16
+     ],
+     "nPial": [
+      0.936,
+      0.11,
+      -0.334
+     ],
+     "nInflated": [
+      0.73,
+      0.666,
+      0.155
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_ins_lg_and_s_cent_ins",
+     "share": 0.364
+    },
+    {
+     "id": "ctx_g_temp_sup_plan_polar",
+     "share": 0.316
+    },
+    {
+     "id": "ctx_g_temp_sup_g_t_transv",
+     "share": 0.209
+    },
+    {
+     "id": "ctx_lat_fis_post",
+     "share": 0.079
+    },
+    {
+     "id": "ctx_g_temp_sup_lateral",
+     "share": 0.031
+    }
+   ],
+   "dk": [
+    {
+     "region": "superiortemporal",
+     "labelInRegion": 0.531,
+     "regionInLabel": 0.146
+    },
+    {
+     "region": "insula",
+     "labelInRegion": 0.412,
+     "regionInLabel": 0.167
+    },
+    {
+     "region": "transversetemporal",
+     "labelInRegion": 0.058,
+     "regionInLabel": 0.139
+    }
+   ],
+   "parcels": [],
+   "insula": true,
+   "definition": {
+    "text": "The insular cortex (also insula and insular lobe) is a portion of the cerebral cortex folded deep within the lateral sulcus (the fissure separating the temporal lobe from the parietal and frontal lobes) within each hemisphere of the mammalian brain. The insulae are believed to be involved in consciousness and play a role in diverse functions usually linked to emotion or the regulation of the body's homeostasis. These functions include compassion, empathy, taste, perception, motor control, self-awareness, cognitive functioning, interpersonal experience, and awareness of homeostatic emotions such as hunger, pain and fatigue. In relation to these, it is involved in psychopathology. The insular cortex is divided into two parts: the anterior insula and the posterior insula in which more than a dozen field areas have been identified.",
+    "url": "https://en.wikipedia.org/wiki/Insular_cortex",
+    "source": "Circular sulcus of insula",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_circular_insula_sup",
+   "short": "S_circular_insula_sup",
+   "index": 49,
+   "name": "Superior segment of the circular sulcus of the insula",
+   "kind": "sulcus",
+   "views": [
+    "L",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 15.06,
+    "R": 12.5
+   },
+   "areaCm2": {
+    "L": 9.48,
+    "R": 7.14
+   },
+   "lobe": "insula",
+   "lobeShare": 0.499,
+   "lobeBy": "name",
+   "lobes": [
+    {
+     "lobe": "insula",
+     "share": 0.499
+    },
+    {
+     "lobe": "frontal",
+     "share": 0.435
+    }
+   ],
+   "atlasColour": "#3ddcdc",
+   "anchor": {
+    "L": {
+     "pial": [
+      -41.8,
+      0.87,
+      9.57
+     ],
+     "inflated": [
+      -46.32,
+      3.78,
+      8.48
+     ],
+     "nPial": [
+      0.301,
+      -0.881,
+      -0.364
+     ],
+     "nInflated": [
+      -0.756,
+      -0.062,
+      -0.652
+     ]
+    },
+    "R": {
+     "pial": [
+      38.86,
+      4.58,
+      8.79
+     ],
+     "inflated": [
+      46.2,
+      8.17,
+      7.0
+     ],
+     "nPial": [
+      -0.383,
+      -0.818,
+      -0.428
+     ],
+     "nInflated": [
+      0.765,
+      -0.082,
+      -0.638
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_insular_short",
+     "share": 0.293
+    },
+    {
+     "id": "ctx_g_front_inf_opercular",
+     "share": 0.227
+    },
+    {
+     "id": "ctx_g_and_s_subcentral",
+     "share": 0.139
+    },
+    {
+     "id": "ctx_lat_fis_ant_horizont",
+     "share": 0.092
+    },
+    {
+     "id": "ctx_g_ins_lg_and_s_cent_ins",
+     "share": 0.081
+    },
+    {
+     "id": "ctx_lat_fis_post",
+     "share": 0.048
+    },
+    {
+     "id": "ctx_g_front_inf_triangul",
+     "share": 0.042
+    },
+    {
+     "id": "ctx_s_circular_insula_ant",
+     "share": 0.04
+    },
+    {
+     "id": "ctx_lat_fis_ant_vertical",
+     "share": 0.036
+    }
+   ],
+   "dk": [
+    {
+     "region": "insula",
+     "labelInRegion": 0.499,
+     "regionInLabel": 0.215
+    },
+    {
+     "region": "precentral",
+     "labelInRegion": 0.164,
+     "regionInLabel": 0.035
+    },
+    {
+     "region": "parsopercularis",
+     "labelInRegion": 0.134,
+     "regionInLabel": 0.098
+    },
+    {
+     "region": "parstriangularis",
+     "labelInRegion": 0.121,
+     "regionInLabel": 0.098
+    },
+    {
+     "region": "postcentral",
+     "labelInRegion": 0.066,
+     "regionInLabel": 0.017
+    }
+   ],
+   "parcels": [
+    {
+     "id": "pmv",
+     "labelInParcel": 0.298,
+     "parcelInLabel": 0.101
+    }
+   ],
+   "insula": true,
+   "definition": {
+    "text": "The insular cortex (also insula and insular lobe) is a portion of the cerebral cortex folded deep within the lateral sulcus (the fissure separating the temporal lobe from the parietal and frontal lobes) within each hemisphere of the mammalian brain. The insulae are believed to be involved in consciousness and play a role in diverse functions usually linked to emotion or the regulation of the body's homeostasis. These functions include compassion, empathy, taste, perception, motor control, self-awareness, cognitive functioning, interpersonal experience, and awareness of homeostatic emotions such as hunger, pain and fatigue. In relation to these, it is involved in psychopathology. The insular cortex is divided into two parts: the anterior insula and the posterior insula in which more than a dozen field areas have been identified.",
+    "url": "https://en.wikipedia.org/wiki/Insular_cortex",
+    "source": "Circular sulcus of insula",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_collat_transv_ant",
+   "short": "S_collat_transv_ant",
+   "index": 50,
+   "name": "Anterior transverse collateral sulcus",
+   "kind": "sulcus",
+   "views": [
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 8.63,
+    "R": 8.81
+   },
+   "areaCm2": {
+    "L": 6.27,
+    "R": 7.34
+   },
+   "lobe": "temporal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "temporal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#64c8c8",
+   "anchor": {
+    "L": {
+     "pial": [
+      -42.72,
+      -16.5,
+      -35.7
+     ],
+     "inflated": [
+      -39.05,
+      -19.83,
+      -34.43
+     ],
+     "nPial": [
+      -0.912,
+      0.348,
+      -0.218
+     ],
+     "nInflated": [
+      0.184,
+      -0.462,
+      -0.867
+     ]
+    },
+    "R": {
+     "pial": [
+      42.75,
+      -16.29,
+      -35.21
+     ],
+     "inflated": [
+      37.25,
+      -19.52,
+      -34.39
+     ],
+     "nPial": [
+      0.995,
+      0.104,
+      -0.008
+     ],
+     "nInflated": [
+      -0.272,
+      -0.462,
+      -0.844
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_temporal_inf",
+     "share": 0.405
+    },
+    {
+     "id": "ctx_g_oc_temp_lat_fusifor",
+     "share": 0.354
+    },
+    {
+     "id": "ctx_g_oc_temp_med_parahip",
+     "share": 0.091
+    },
+    {
+     "id": "ctx_s_oc_temp_lat",
+     "share": 0.077
+    },
+    {
+     "id": "ctx_pole_temporal",
+     "share": 0.072
+    }
+   ],
+   "dk": [
+    {
+     "region": "fusiform",
+     "labelInRegion": 0.508,
+     "regionInLabel": 0.103
+    },
+    {
+     "region": "inferiortemporal",
+     "labelInRegion": 0.492,
+     "regionInLabel": 0.094
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": null
+  },
+  {
+   "id": "ctx_s_collat_transv_post",
+   "short": "S_collat_transv_post",
+   "index": 51,
+   "name": "Posterior transverse collateral sulcus",
+   "kind": "sulcus",
+   "views": [
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 3.93,
+    "R": 4.43
+   },
+   "areaCm2": {
+    "L": 1.48,
+    "R": 1.84
+   },
+   "lobe": "occipital",
+   "lobeShare": 0.599,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "occipital",
+     "share": 0.599
+    },
+    {
+     "lobe": "temporal",
+     "share": 0.401
+    }
+   ],
+   "atlasColour": "#0ac8c8",
+   "anchor": {
+    "L": {
+     "pial": [
+      -27.42,
+      -81.48,
+      -9.72
+     ],
+     "inflated": [
+      -27.58,
+      -83.78,
+      -12.98
+     ],
+     "nPial": [
+      0.212,
+      0.977,
+      -0.036
+     ],
+     "nInflated": [
+      -0.041,
+      -0.112,
+      -0.993
+     ]
+    },
+    "R": {
+     "pial": [
+      26.56,
+      -80.46,
+      -11.8
+     ],
+     "inflated": [
+      27.51,
+      -81.56,
+      -12.7
+     ],
+     "nPial": [
+      0.382,
+      0.878,
+      0.29
+     ],
+     "nInflated": [
+      -0.105,
+      -0.185,
+      -0.977
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_and_s_occipital_inf",
+     "share": 0.261
+    },
+    {
+     "id": "ctx_g_oc_temp_lat_fusifor",
+     "share": 0.224
+    },
+    {
+     "id": "ctx_g_oc_temp_med_lingual",
+     "share": 0.196
+    },
+    {
+     "id": "ctx_s_oc_temp_med_and_lingual",
+     "share": 0.162
+    },
+    {
+     "id": "ctx_pole_occipital",
+     "share": 0.137
+    }
+   ],
+   "dk": [
+    {
+     "region": "fusiform",
+     "labelInRegion": 0.401,
+     "regionInLabel": 0.034
+    },
+    {
+     "region": "lingual",
+     "labelInRegion": 0.304,
+     "regionInLabel": 0.025
+    },
+    {
+     "region": "lateraloccipital",
+     "labelInRegion": 0.295,
+     "regionInLabel": 0.015
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": null
+  },
+  {
+   "id": "ctx_s_front_inf",
+   "short": "S_front_inf",
+   "index": 52,
+   "name": "Inferior frontal sulcus",
+   "kind": "sulcus",
+   "views": [
+    "S",
+    "A",
+    "L"
+   ],
+   "paperAreaCm2": {
+    "L": 20.68,
+    "R": 18.17
+   },
+   "areaCm2": {
+    "L": 11.85,
+    "R": 11.63
+   },
+   "lobe": "frontal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#dddc14",
+   "anchor": {
+    "L": {
+     "pial": [
+      -43.95,
+      31.7,
+      16.23
+     ],
+     "inflated": [
+      -44.25,
+      37.05,
+      19.98
+     ],
+     "nPial": [
+      -0.186,
+      -0.889,
+      -0.419
+     ],
+     "nInflated": [
+      -0.906,
+      0.33,
+      0.265
+     ]
+    },
+    "R": {
+     "pial": [
+      42.4,
+      32.63,
+      18.19
+     ],
+     "inflated": [
+      47.35,
+      34.92,
+      15.18
+     ],
+     "nPial": [
+      -0.228,
+      0.853,
+      0.469
+     ],
+     "nInflated": [
+      0.939,
+      0.264,
+      0.222
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_front_middle",
+     "share": 0.553
+    },
+    {
+     "id": "ctx_g_front_inf_triangul",
+     "share": 0.185
+    },
+    {
+     "id": "ctx_s_precentral_inf_part",
+     "share": 0.122
+    },
+    {
+     "id": "ctx_g_front_inf_opercular",
+     "share": 0.09
+    },
+    {
+     "id": "ctx_s_orbital_lateral",
+     "share": 0.051
+    }
+   ],
+   "dk": [
+    {
+     "region": "rostralmiddlefrontal",
+     "labelInRegion": 0.504,
+     "regionInLabel": 0.123
+    },
+    {
+     "region": "caudalmiddlefrontal",
+     "labelInRegion": 0.264,
+     "regionInLabel": 0.138
+    },
+    {
+     "region": "parsopercularis",
+     "labelInRegion": 0.154,
+     "regionInLabel": 0.139
+    },
+    {
+     "region": "parstriangularis",
+     "labelInRegion": 0.078,
+     "regionInLabel": 0.078
+    }
+   ],
+   "parcels": [
+    {
+     "id": "pmv",
+     "labelInParcel": 0.323,
+     "parcelInLabel": 0.136
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The inferior frontal sulcus is a sulcus between the middle frontal gyrus and the inferior frontal gyrus.",
+    "url": "https://en.wikipedia.org/wiki/Inferior_frontal_sulcus",
+    "source": "Inferior frontal sulcus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_front_middle",
+   "short": "S_front_middle",
+   "index": 53,
+   "name": "Middle frontal sulcus",
+   "kind": "sulcus",
+   "views": [
+    "S",
+    "A",
+    "L"
+   ],
+   "paperAreaCm2": {
+    "L": 12.65,
+    "R": 17.16
+   },
+   "areaCm2": {
+    "L": 9.83,
+    "R": 11.38
+   },
+   "lobe": "frontal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#8d1464",
+   "anchor": {
+    "L": {
+     "pial": [
+      -30.66,
+      48.91,
+      23.03
+     ],
+     "inflated": [
+      -32.6,
+      52.02,
+      22.5
+     ],
+     "nPial": [
+      0.805,
+      -0.214,
+      0.554
+     ],
+     "nInflated": [
+      -0.572,
+      0.695,
+      0.436
+     ]
+    },
+    "R": {
+     "pial": [
+      31.88,
+      46.19,
+      24.47
+     ],
+     "inflated": [
+      34.65,
+      51.11,
+      23.43
+     ],
+     "nPial": [
+      -0.533,
+      -0.463,
+      0.708
+     ],
+     "nInflated": [
+      0.605,
+      0.664,
+      0.44
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_front_middle",
+     "share": 0.763
+    },
+    {
+     "id": "ctx_s_front_sup",
+     "share": 0.084
+    },
+    {
+     "id": "ctx_g_and_s_transv_frontopol",
+     "share": 0.077
+    },
+    {
+     "id": "ctx_g_and_s_frontomargin",
+     "share": 0.076
+    }
+   ],
+   "dk": [
+    {
+     "region": "rostralmiddlefrontal",
+     "labelInRegion": 1.0,
+     "regionInLabel": 0.211
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": null
+  },
+  {
+   "id": "ctx_s_front_sup",
+   "short": "S_front_sup",
+   "index": 54,
+   "name": "Superior frontal sulcus",
+   "kind": "sulcus",
+   "views": [
+    "S",
+    "A",
+    "L"
+   ],
+   "paperAreaCm2": {
+    "L": 25.82,
+    "R": 23.64
+   },
+   "areaCm2": {
+    "L": 16.85,
+    "R": 15.37
+   },
+   "lobe": "frontal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#3ddc64",
+   "anchor": {
+    "L": {
+     "pial": [
+      -23.13,
+      30.42,
+      46.53
+     ],
+     "inflated": [
+      -21.5,
+      32.66,
+      50.16
+     ],
+     "nPial": [
+      -0.462,
+      0.573,
+      -0.676
+     ],
+     "nInflated": [
+      -0.416,
+      0.513,
+      0.751
+     ]
+    },
+    "R": {
+     "pial": [
+      25.23,
+      36.2,
+      43.61
+     ],
+     "inflated": [
+      21.5,
+      38.64,
+      47.02
+     ],
+     "nPial": [
+      0.709,
+      -0.703,
+      0.057
+     ],
+     "nInflated": [
+      0.353,
+      0.566,
+      0.745
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_front_middle",
+     "share": 0.456
+    },
+    {
+     "id": "ctx_g_front_sup",
+     "share": 0.395
+    },
+    {
+     "id": "ctx_s_precentral_sup_part",
+     "share": 0.077
+    },
+    {
+     "id": "ctx_s_front_middle",
+     "share": 0.071
+    }
+   ],
+   "dk": [
+    {
+     "region": "superiorfrontal",
+     "labelInRegion": 0.598,
+     "regionInLabel": 0.147
+    },
+    {
+     "region": "caudalmiddlefrontal",
+     "labelInRegion": 0.231,
+     "regionInLabel": 0.161
+    },
+    {
+     "region": "rostralmiddlefrontal",
+     "labelInRegion": 0.171,
+     "regionInLabel": 0.056
+    }
+   ],
+   "parcels": [
+    {
+     "id": "pmd",
+     "labelInParcel": 0.359,
+     "parcelInLabel": 0.196
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The superior frontal sulcus is a sulcus between the superior frontal gyrus and the middle frontal gyrus.",
+    "url": "https://en.wikipedia.org/wiki/Superior_frontal_sulcus",
+    "source": "Superior frontal sulcus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_interm_prim_jensen",
+   "short": "S_interm_prim-Jensen",
+   "index": 55,
+   "name": "Sulcus intermedius primus (of Jensen)",
+   "kind": "sulcus",
+   "views": [
+    "S",
+    "L",
+    "P"
+   ],
+   "paperAreaCm2": {
+    "L": 3.83,
+    "R": 4.88
+   },
+   "areaCm2": {
+    "L": 2.29,
+    "R": 3.27
+   },
+   "lobe": "parietal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "parietal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#8d3c14",
+   "anchor": {
+    "L": {
+     "pial": [
+      -56.76,
+      -57.31,
+      38.95
+     ],
+     "inflated": [
+      -54.83,
+      -53.41,
+      37.75
+     ],
+     "nPial": [
+      0.619,
+      -0.783,
+      -0.059
+     ],
+     "nInflated": [
+      -0.888,
+      -0.334,
+      0.316
+     ]
+    },
+    "R": {
+     "pial": [
+      54.07,
+      -43.05,
+      41.92
+     ],
+     "inflated": [
+      56.53,
+      -44.32,
+      39.94
+     ],
+     "nPial": [
+      -0.644,
+      -0.713,
+      0.277
+     ],
+     "nInflated": [
+      0.87,
+      -0.112,
+      0.481
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_pariet_inf_supramar",
+     "share": 0.429
+    },
+    {
+     "id": "ctx_g_pariet_inf_angular",
+     "share": 0.417
+    },
+    {
+     "id": "ctx_s_intrapariet_and_p_trans",
+     "share": 0.078
+    },
+    {
+     "id": "ctx_s_temporal_sup",
+     "share": 0.076
+    }
+   ],
+   "dk": [
+    {
+     "region": "supramarginal",
+     "labelInRegion": 0.789,
+     "regionInLabel": 0.074
+    },
+    {
+     "region": "inferiorparietal",
+     "labelInRegion": 0.211,
+     "regionInLabel": 0.016
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": null
+  },
+  {
+   "id": "ctx_s_intrapariet_and_p_trans",
+   "short": "S_intrapariet_and_P_trans",
+   "index": 56,
+   "name": "Intraparietal sulcus (interparietal sulcus) and transverse parietal sulci",
+   "kind": "sulcus",
+   "views": [
+    "S",
+    "L",
+    "P"
+   ],
+   "paperAreaCm2": {
+    "L": 27.14,
+    "R": 28.44
+   },
+   "areaCm2": {
+    "L": 18.77,
+    "R": 19.41
+   },
+   "lobe": "parietal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "parietal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#8f14dc",
+   "anchor": {
+    "L": {
+     "pial": [
+      -34.79,
+      -60.3,
+      47.79
+     ],
+     "inflated": [
+      -30.13,
+      -65.23,
+      51.63
+     ],
+     "nPial": [
+      -0.813,
+      0.581,
+      -0.036
+     ],
+     "nInflated": [
+      -0.558,
+      -0.503,
+      0.66
+     ]
+    },
+    "R": {
+     "pial": [
+      29.08,
+      -61.93,
+      57.1
+     ],
+     "inflated": [
+      28.75,
+      -65.45,
+      53.41
+     ],
+     "nPial": [
+      -0.279,
+      0.456,
+      0.845
+     ],
+     "nInflated": [
+      0.447,
+      -0.505,
+      0.738
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_parietal_sup",
+     "share": 0.463
+    },
+    {
+     "id": "ctx_g_pariet_inf_angular",
+     "share": 0.231
+    },
+    {
+     "id": "ctx_s_postcentral",
+     "share": 0.104
+    },
+    {
+     "id": "ctx_s_oc_sup_and_transversal",
+     "share": 0.092
+    },
+    {
+     "id": "ctx_g_occipital_sup",
+     "share": 0.053
+    }
+   ],
+   "dk": [
+    {
+     "region": "superiorparietal",
+     "labelInRegion": 0.687,
+     "regionInLabel": 0.238
+    },
+    {
+     "region": "inferiorparietal",
+     "labelInRegion": 0.238,
+     "regionInLabel": 0.103
+    },
+    {
+     "region": "supramarginal",
+     "labelInRegion": 0.074,
+     "regionInLabel": 0.039
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The intraparietal sulcus (IPS) is located on the lateral surface of the parietal lobe, and consists of an oblique and a horizontal portion. The IPS contains a series of functionally distinct subregions that have been intensively investigated using both single cell neurophysiology in primates and human functional neuroimaging. Its principal functions are related to perceptual-motor coordination (e.g., directing eye movements and reaching) and visual attention, which allows for visually-guided pointing, grasping, and object manipulation that can produce a desired effect. The IPS is also thought to play a role in other functions, including processing symbolic numerical information, visuospatial working memory and interpreting the intent of others.",
+    "url": "https://en.wikipedia.org/wiki/Intraparietal_sulcus",
+    "source": "Intraparietal sulcus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_oc_middle_and_lunatus",
+   "short": "S_oc_middle_and_Lunatus",
+   "index": 57,
+   "name": "Middle occipital sulcus and lunatus sulcus",
+   "kind": "sulcus",
+   "views": [
+    "S",
+    "L",
+    "P"
+   ],
+   "paperAreaCm2": {
+    "L": 9.55,
+    "R": 8.29
+   },
+   "areaCm2": {
+    "L": 5.54,
+    "R": 6.42
+   },
+   "lobe": "occipital",
+   "lobeShare": 0.856,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "occipital",
+     "share": 0.856
+    }
+   ],
+   "atlasColour": "#653cdc",
+   "anchor": {
+    "L": {
+     "pial": [
+      -28.19,
+      -96.24,
+      6.86
+     ],
+     "inflated": [
+      -28.86,
+      -97.83,
+      2.1
+     ],
+     "nPial": [
+      0.175,
+      0.458,
+      0.872
+     ],
+     "nInflated": [
+      -0.586,
+      -0.806,
+      0.086
+     ]
+    },
+    "R": {
+     "pial": [
+      32.77,
+      -90.7,
+      7.79
+     ],
+     "inflated": [
+      32.78,
+      -92.05,
+      10.79
+     ],
+     "nPial": [
+      -0.297,
+      -0.681,
+      -0.669
+     ],
+     "nInflated": [
+      0.61,
+      -0.754,
+      0.242
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_occipital_middle",
+     "share": 0.927
+    },
+    {
+     "id": "ctx_pole_occipital",
+     "share": 0.046
+    }
+   ],
+   "dk": [
+    {
+     "region": "lateraloccipital",
+     "labelInRegion": 0.856,
+     "regionInLabel": 0.123
+    },
+    {
+     "region": "inferiorparietal",
+     "labelInRegion": 0.144,
+     "regionInLabel": 0.022
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "In brain anatomy, the lunate sulcus or simian sulcus also known as the sulcus lunatus is a fissure in the occipital lobe variably found in humans and more often larger when present in apes and monkeys. The lunate sulcus marks the transition between V1 and V2.The lunate sulcus lies further back in human brains but has a more forward location in chimpanzees. The evolutionary expansion of the frontal areas of the lunate sulcus would have caused a shift in the particular location of the fissure. It has been hypothesized that evolutionary pressures resulted in the human brain undergoing internal reorganization to develop the capability of human language.",
+    "url": "https://en.wikipedia.org/wiki/Lunate_sulcus",
+    "source": "Lunate sulcus",
+    "scope": "the lunate sulcus"
+   }
+  },
+  {
+   "id": "ctx_s_oc_sup_and_transversal",
+   "short": "S_oc_sup_and_transversal",
+   "index": 58,
+   "name": "Superior occipital sulcus and transverse occipital sulcus",
+   "kind": "sulcus",
+   "views": [
+    "S",
+    "L",
+    "P"
+   ],
+   "paperAreaCm2": {
+    "L": 10.38,
+    "R": 12.7
+   },
+   "areaCm2": {
+    "L": 7.62,
+    "R": 9.18
+   },
+   "lobe": "parietal",
+   "lobeShare": 0.814,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "parietal",
+     "share": 0.814
+    }
+   ],
+   "atlasColour": "#15148c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -26.39,
+      -87.95,
+      24.36
+     ],
+     "inflated": [
+      -20.56,
+      -88.71,
+      29.58
+     ],
+     "nPial": [
+      -0.725,
+      -0.457,
+      -0.515
+     ],
+     "nInflated": [
+      -0.124,
+      -0.764,
+      0.634
+     ]
+    },
+    "R": {
+     "pial": [
+      29.62,
+      -85.99,
+      21.8
+     ],
+     "inflated": [
+      26.52,
+      -91.58,
+      20.7
+     ],
+     "nPial": [
+      0.148,
+      0.706,
+      0.692
+     ],
+     "nInflated": [
+      0.388,
+      -0.823,
+      0.414
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_occipital_sup",
+     "share": 0.41
+    },
+    {
+     "id": "ctx_g_occipital_middle",
+     "share": 0.392
+    },
+    {
+     "id": "ctx_s_intrapariet_and_p_trans",
+     "share": 0.177
+    }
+   ],
+   "dk": [
+    {
+     "region": "superiorparietal",
+     "labelInRegion": 0.487,
+     "regionInLabel": 0.079
+    },
+    {
+     "region": "inferiorparietal",
+     "labelInRegion": 0.327,
+     "regionInLabel": 0.066
+    },
+    {
+     "region": "lateraloccipital",
+     "labelInRegion": 0.186,
+     "regionInLabel": 0.035
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The transverse occipital sulcus is a structure in the occipital lobe. The transverse occipital sulcus is continuous with the posterior end of the occipital ramus of the intraparietal sulcus, and runs across the upper part of the lobe, a short distance behind the parietooccipital fissure.",
+    "url": "https://en.wikipedia.org/wiki/Transverse_occipital_sulcus",
+    "source": "Transverse occipital sulcus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_occipital_ant",
+   "short": "S_occipital_ant",
+   "index": 59,
+   "name": "Anterior occipital sulcus and preoccipital notch (temporo-occipital incisure)",
+   "kind": "sulcus",
+   "views": [
+    "L",
+    "P"
+   ],
+   "paperAreaCm2": {
+    "L": 6.6,
+    "R": 6.64
+   },
+   "areaCm2": {
+    "L": 4.33,
+    "R": 5.33
+   },
+   "lobe": "occipital",
+   "lobeShare": 0.651,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "occipital",
+     "share": 0.651
+    }
+   ],
+   "atlasColour": "#3d14b4",
+   "anchor": {
+    "L": {
+     "pial": [
+      -44.94,
+      -74.48,
+      3.93
+     ],
+     "inflated": [
+      -45.32,
+      -78.85,
+      1.86
+     ],
+     "nPial": [
+      -0.332,
+      0.93,
+      -0.159
+     ],
+     "nInflated": [
+      -0.845,
+      -0.519,
+      -0.129
+     ]
+    },
+    "R": {
+     "pial": [
+      51.9,
+      -66.25,
+      4.97
+     ],
+     "inflated": [
+      51.13,
+      -70.09,
+      3.03
+     ],
+     "nPial": [
+      0.338,
+      -0.063,
+      -0.939
+     ],
+     "nInflated": [
+      0.885,
+      -0.466,
+      -0.007
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_occipital_middle",
+     "share": 0.271
+    },
+    {
+     "id": "ctx_s_temporal_sup",
+     "share": 0.163
+    },
+    {
+     "id": "ctx_g_and_s_occipital_inf",
+     "share": 0.158
+    },
+    {
+     "id": "ctx_s_temporal_inf",
+     "share": 0.154
+    },
+    {
+     "id": "ctx_g_temporal_inf",
+     "share": 0.126
+    },
+    {
+     "id": "ctx_g_temporal_middle",
+     "share": 0.063
+    },
+    {
+     "id": "ctx_s_oc_temp_lat",
+     "share": 0.057
+    }
+   ],
+   "dk": [
+    {
+     "region": "lateraloccipital",
+     "labelInRegion": 0.651,
+     "regionInLabel": 0.084
+    },
+    {
+     "region": "middletemporal",
+     "labelInRegion": 0.124,
+     "regionInLabel": 0.024
+    },
+    {
+     "region": "inferiorparietal",
+     "labelInRegion": 0.1,
+     "regionInLabel": 0.014
+    },
+    {
+     "region": "inferiortemporal",
+     "labelInRegion": 0.1,
+     "regionInLabel": 0.02
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": null
+  },
+  {
+   "id": "ctx_s_oc_temp_lat",
+   "short": "S_oc-temp_lat",
+   "index": 60,
+   "name": "Lateral occipito-temporal sulcus",
+   "kind": "sulcus",
+   "views": [
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 8.53,
+    "R": 9.13
+   },
+   "areaCm2": {
+    "L": 4.75,
+    "R": 4.44
+   },
+   "lobe": "temporal",
+   "lobeShare": 0.99,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "temporal",
+     "share": 0.99
+    }
+   ],
+   "atlasColour": "#dd8c14",
+   "anchor": {
+    "L": {
+     "pial": [
+      -45.13,
+      -52.58,
+      -13.83
+     ],
+     "inflated": [
+      -49.55,
+      -53.9,
+      -17.49
+     ],
+     "nPial": [
+      0.893,
+      0.092,
+      -0.44
+     ],
+     "nInflated": [
+      -0.348,
+      -0.473,
+      -0.809
+     ]
+    },
+    "R": {
+     "pial": [
+      42.99,
+      -53.86,
+      -15.6
+     ],
+     "inflated": [
+      42.69,
+      -55.55,
+      -19.03
+     ],
+     "nPial": [
+      0.758,
+      0.096,
+      0.645
+     ],
+     "nInflated": [
+      0.161,
+      -0.368,
+      -0.916
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_oc_temp_lat_fusifor",
+     "share": 0.382
+    },
+    {
+     "id": "ctx_g_temporal_inf",
+     "share": 0.378
+    },
+    {
+     "id": "ctx_g_and_s_occipital_inf",
+     "share": 0.096
+    },
+    {
+     "id": "ctx_s_occipital_ant",
+     "share": 0.058
+    },
+    {
+     "id": "ctx_s_collat_transv_ant",
+     "share": 0.056
+    }
+   ],
+   "dk": [
+    {
+     "region": "fusiform",
+     "labelInRegion": 0.515,
+     "regionInLabel": 0.102
+    },
+    {
+     "region": "inferiortemporal",
+     "labelInRegion": 0.475,
+     "regionInLabel": 0.088
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": null
+  },
+  {
+   "id": "ctx_s_oc_temp_med_and_lingual",
+   "short": "S_oc-temp_med_and_Lingual",
+   "index": 61,
+   "name": "Medial occipito-temporal sulcus (collateral sulcus) and lingual sulcus",
+   "kind": "sulcus",
+   "views": [
+    "M",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 19.4,
+    "R": 18.57
+   },
+   "areaCm2": {
+    "L": 13.01,
+    "R": 12.76
+   },
+   "lobe": "temporal",
+   "lobeShare": 0.659,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "temporal",
+     "share": 0.659
+    },
+    {
+     "lobe": "occipital",
+     "share": 0.341
+    }
+   ],
+   "atlasColour": "#8d64dc",
+   "anchor": {
+    "L": {
+     "pial": [
+      -23.28,
+      -41.49,
+      -13.4
+     ],
+     "inflated": [
+      -24.3,
+      -40.66,
+      -16.55
+     ],
+     "nPial": [
+      -0.416,
+      -0.719,
+      -0.557
+     ],
+     "nInflated": [
+      0.765,
+      -0.11,
+      -0.634
+     ]
+    },
+    "R": {
+     "pial": [
+      23.23,
+      -45.93,
+      -10.57
+     ],
+     "inflated": [
+      21.01,
+      -50.17,
+      -11.69
+     ],
+     "nPial": [
+      0.702,
+      -0.196,
+      -0.685
+     ],
+     "nInflated": [
+      -0.795,
+      0.036,
+      -0.605
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_oc_temp_lat_fusifor",
+     "share": 0.399
+    },
+    {
+     "id": "ctx_g_oc_temp_med_lingual",
+     "share": 0.315
+    },
+    {
+     "id": "ctx_g_oc_temp_med_parahip",
+     "share": 0.216
+    },
+    {
+     "id": "ctx_s_collat_transv_post",
+     "share": 0.048
+    }
+   ],
+   "dk": [
+    {
+     "region": "fusiform",
+     "labelInRegion": 0.405,
+     "regionInLabel": 0.179
+    },
+    {
+     "region": "lingual",
+     "labelInRegion": 0.341,
+     "regionInLabel": 0.148
+    },
+    {
+     "region": "parahippocampal",
+     "labelInRegion": 0.239,
+     "regionInLabel": 0.419
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The collateral fissure (or sulcus) is on the tentorial surface of the hemisphere and extends from near the occipital pole to within a short distance of the temporal pole. Behind, it lies below and lateral to the calcarine fissure, from which it is separated by the lingual gyrus; in front, it is situated between the parahippocampal gyrus and the anterior part of the fusiform gyrus.",
+    "url": "https://en.wikipedia.org/wiki/Collateral_fissure",
+    "source": "Collateral sulcus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_orbital_lateral",
+   "short": "S_orbital_lateral",
+   "index": 62,
+   "name": "Lateral orbital sulcus",
+   "kind": "sulcus",
+   "views": [
+    "A",
+    "L",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 3.13,
+    "R": 3.46
+   },
+   "areaCm2": {
+    "L": 2.25,
+    "R": 2.17
+   },
+   "lobe": "frontal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#dd6414",
+   "anchor": {
+    "L": {
+     "pial": [
+      -48.33,
+      43.28,
+      -9.02
+     ],
+     "inflated": [
+      -41.55,
+      46.6,
+      -4.93
+     ],
+     "nPial": [
+      -0.314,
+      -0.806,
+      0.502
+     ],
+     "nInflated": [
+      -0.864,
+      0.265,
+      -0.428
+     ]
+    },
+    "R": {
+     "pial": [
+      49.85,
+      45.6,
+      -9.12
+     ],
+     "inflated": [
+      41.55,
+      49.1,
+      -5.17
+     ],
+     "nPial": [
+      0.826,
+      -0.553,
+      0.108
+     ],
+     "nInflated": [
+      0.776,
+      0.386,
+      -0.498
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_orbital",
+     "share": 0.274
+    },
+    {
+     "id": "ctx_g_front_middle",
+     "share": 0.248
+    },
+    {
+     "id": "ctx_g_front_inf_triangul",
+     "share": 0.228
+    },
+    {
+     "id": "ctx_s_front_inf",
+     "share": 0.154
+    },
+    {
+     "id": "ctx_g_front_inf_orbital",
+     "share": 0.095
+    }
+   ],
+   "dk": [
+    {
+     "region": "rostralmiddlefrontal",
+     "labelInRegion": 0.46,
+     "regionInLabel": 0.02
+    },
+    {
+     "region": "parstriangularis",
+     "labelInRegion": 0.362,
+     "regionInLabel": 0.065
+    },
+    {
+     "region": "parsorbitalis",
+     "labelInRegion": 0.178,
+     "regionInLabel": 0.069
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The inferior or orbital surface of the frontal lobe is concave, and rests on the orbital plate of the frontal bone. It is divided into four orbital gyri by a well-marked H-shaped orbital sulcus",
+    "url": "https://en.wikipedia.org/wiki/Orbital_sulcus",
+    "source": "Orbital sulci (Lateral Orbital sulcus*)",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_orbital_med_olfact",
+   "short": "S_orbital_med-olfact",
+   "index": 63,
+   "name": "Medial orbital sulcus (olfactory sulcus)",
+   "kind": "sulcus",
+   "views": [
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 5.34,
+    "R": 5.6
+   },
+   "areaCm2": {
+    "L": 8.29,
+    "R": 7.25
+   },
+   "lobe": "frontal",
+   "lobeShare": 0.908,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 0.908
+    }
+   ],
+   "atlasColour": "#b5c814",
+   "anchor": {
+    "L": {
+     "pial": [
+      -8.91,
+      27.75,
+      -24.49
+     ],
+     "inflated": [
+      -8.74,
+      36.26,
+      -21.45
+     ],
+     "nPial": [
+      -0.894,
+      0.107,
+      -0.436
+     ],
+     "nInflated": [
+      0.562,
+      -0.103,
+      -0.821
+     ]
+    },
+    "R": {
+     "pial": [
+      8.31,
+      25.04,
+      -23.34
+     ],
+     "inflated": [
+      9.25,
+      33.97,
+      -21.29
+     ],
+     "nPial": [
+      0.855,
+      0.001,
+      -0.518
+     ],
+     "nInflated": [
+      -0.547,
+      -0.206,
+      -0.811
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_orbital",
+     "share": 0.426
+    },
+    {
+     "id": "ctx_g_rectus",
+     "share": 0.37
+    },
+    {
+     "id": "ctx_medial_wall",
+     "share": 0.071
+    },
+    {
+     "id": "ctx_g_subcallosal",
+     "share": 0.066
+    },
+    {
+     "id": "ctx_g_oc_temp_med_parahip",
+     "share": 0.054
+    }
+   ],
+   "dk": [
+    {
+     "region": "lateralorbitofrontal",
+     "labelInRegion": 0.475,
+     "regionInLabel": 0.133
+    },
+    {
+     "region": "medialorbitofrontal",
+     "labelInRegion": 0.433,
+     "regionInLabel": 0.166
+    },
+    {
+     "region": "insula",
+     "labelInRegion": 0.092,
+     "regionInLabel": 0.025
+    }
+   ],
+   "parcels": [
+    {
+     "id": "vmpfc",
+     "labelInParcel": 0.433,
+     "parcelInLabel": 0.166
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The olfactory tract is a bilateral bundle of afferent nerve fibers from the mitral and tufted cells of the olfactory bulb that connects to several target regions in the brain, including the piriform cortex, amygdala, and entorhinal cortex. It is a narrow white band, triangular on coronal section, the apex being directed upward.",
+    "url": "https://en.wikipedia.org/wiki/Olfactory_tract",
+    "source": "Olfactory sulcus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_orbital_h_shaped",
+   "short": "S_orbital-H_Shaped",
+   "index": 64,
+   "name": "Orbital sulci (H-shaped sulci)",
+   "kind": "sulcus",
+   "views": [
+    "I",
+    "L"
+   ],
+   "paperAreaCm2": {
+    "L": 12.19,
+    "R": 12.84
+   },
+   "areaCm2": {
+    "L": 10.54,
+    "R": 10.03
+   },
+   "lobe": "frontal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#651414",
+   "anchor": {
+    "L": {
+     "pial": [
+      -27.0,
+      35.7,
+      -22.23
+     ],
+     "inflated": [
+      -21.87,
+      40.25,
+      -21.58
+     ],
+     "nPial": [
+      -0.69,
+      -0.104,
+      -0.716
+     ],
+     "nInflated": [
+      -0.242,
+      0.125,
+      -0.962
+     ]
+    },
+    "R": {
+     "pial": [
+      24.92,
+      38.01,
+      -22.5
+     ],
+     "inflated": [
+      24.55,
+      44.82,
+      -20.72
+     ],
+     "nPial": [
+      0.007,
+      -0.207,
+      -0.978
+     ],
+     "nInflated": [
+      0.302,
+      0.178,
+      -0.936
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_orbital",
+     "share": 1.0
+    }
+   ],
+   "dk": [
+    {
+     "region": "lateralorbitofrontal",
+     "labelInRegion": 0.917,
+     "regionInLabel": 0.355
+    },
+    {
+     "region": "parsorbitalis",
+     "labelInRegion": 0.079,
+     "regionInLabel": 0.123
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The inferior or orbital surface of the frontal lobe is concave, and rests on the orbital plate of the frontal bone. It is divided into four orbital gyri by a well-marked H-shaped orbital sulcus",
+    "url": "https://en.wikipedia.org/wiki/Orbital_sulcus",
+    "source": "Orbital sulci (H-shaped orbital sulci*)",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_parieto_occipital",
+   "short": "S_parieto_occipital",
+   "index": 65,
+   "name": "Parieto-occipital sulcus (or fissure)",
+   "kind": "sulcus",
+   "views": [
+    "S",
+    "P",
+    "M"
+   ],
+   "paperAreaCm2": {
+    "L": 17.13,
+    "R": 17.7
+   },
+   "areaCm2": {
+    "L": 11.38,
+    "R": 12.52
+   },
+   "lobe": "parietal",
+   "lobeShare": 0.809,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "parietal",
+     "share": 0.809
+    }
+   ],
+   "atlasColour": "#6564b4",
+   "anchor": {
+    "L": {
+     "pial": [
+      -11.48,
+      -72.42,
+      25.06
+     ],
+     "inflated": [
+      -9.3,
+      -80.37,
+      22.92
+     ],
+     "nPial": [
+      -0.073,
+      0.82,
+      0.568
+     ],
+     "nInflated": [
+      0.972,
+      0.135,
+      0.193
+     ]
+    },
+    "R": {
+     "pial": [
+      14.18,
+      -70.89,
+      31.68
+     ],
+     "inflated": [
+      13.89,
+      -73.83,
+      36.79
+     ],
+     "nPial": [
+      0.181,
+      0.571,
+      -0.801
+     ],
+     "nInflated": [
+      -0.947,
+      -0.295,
+      0.128
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_precuneus",
+     "share": 0.353
+    },
+    {
+     "id": "ctx_g_cuneus",
+     "share": 0.336
+    },
+    {
+     "id": "ctx_s_calcarine",
+     "share": 0.163
+    },
+    {
+     "id": "ctx_g_occipital_sup",
+     "share": 0.096
+    },
+    {
+     "id": "ctx_g_parietal_sup",
+     "share": 0.052
+    }
+   ],
+   "dk": [
+    {
+     "region": "precuneus",
+     "labelInRegion": 0.742,
+     "regionInLabel": 0.271
+    },
+    {
+     "region": "cuneus",
+     "labelInRegion": 0.189,
+     "regionInLabel": 0.179
+    },
+    {
+     "region": "superiorparietal",
+     "labelInRegion": 0.067,
+     "regionInLabel": 0.016
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The parieto-occipital sulcus (also called the parieto-occipital fissure) is a deep sulcus in the cerebral cortex that marks the boundary between the cuneus and precuneus, and also between the parietal and occipital lobes. Only a small part can be seen on the lateral surface of the hemisphere, its chief part being on the medial surface. The lateral part of the parieto-occipital sulcus is situated about 5 cm in front of the occipital pole of the hemisphere, and measures about 1.25 cm. in length. The medial part of the parieto-occipital sulcus runs downward and forward as a deep cleft on the medial surface of the hemisphere, and joins the calcarine fissure below and behind the posterior end of the corpus callosum. In most cases, it contains a submerged gyrus.",
+    "url": "https://en.wikipedia.org/wiki/Parieto-occipital_sulcus",
+    "source": "Parieto-occipital sulcus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_pericallosal",
+   "short": "S_pericallosal",
+   "index": 66,
+   "name": "Pericallosal sulcus (S of corpus callosum)",
+   "kind": "sulcus",
+   "views": [
+    "M"
+   ],
+   "paperAreaCm2": {
+    "L": 9.08,
+    "R": 10.21
+   },
+   "areaCm2": {
+    "L": 5.96,
+    "R": 10.22
+   },
+   "lobe": "cingulate",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "cingulate",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#b5dc14",
+   "anchor": {
+    "L": {
+     "pial": [
+      -9.12,
+      -39.17,
+      4.66
+     ],
+     "inflated": [
+      -10.24,
+      -35.03,
+      6.32
+     ],
+     "nPial": [
+      0.276,
+      0.249,
+      -0.928
+     ],
+     "nInflated": [
+      0.822,
+      -0.205,
+      -0.532
+     ]
+    },
+    "R": {
+     "pial": [
+      4.97,
+      -36.29,
+      5.94
+     ],
+     "inflated": [
+      7.9,
+      -30.66,
+      8.53
+     ],
+     "nPial": [
+      -0.325,
+      0.139,
+      -0.936
+     ],
+     "nInflated": [
+      -0.835,
+      -0.309,
+      -0.455
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_medial_wall",
+     "share": 0.431
+    },
+    {
+     "id": "ctx_g_and_s_cingul_ant",
+     "share": 0.134
+    },
+    {
+     "id": "ctx_g_cingul_post_dorsal",
+     "share": 0.116
+    },
+    {
+     "id": "ctx_g_and_s_cingul_mid_ant",
+     "share": 0.105
+    },
+    {
+     "id": "ctx_g_and_s_cingul_mid_post",
+     "share": 0.095
+    },
+    {
+     "id": "ctx_g_cingul_post_ventral",
+     "share": 0.079
+    },
+    {
+     "id": "ctx_g_subcallosal",
+     "share": 0.04
+    }
+   ],
+   "dk": [
+    {
+     "region": "isthmuscingulate",
+     "labelInRegion": 0.321,
+     "regionInLabel": 0.334
+    },
+    {
+     "region": "caudalanteriorcingulate",
+     "labelInRegion": 0.269,
+     "regionInLabel": 0.393
+    },
+    {
+     "region": "posteriorcingulate",
+     "labelInRegion": 0.225,
+     "regionInLabel": 0.209
+    },
+    {
+     "region": "rostralanteriorcingulate",
+     "labelInRegion": 0.185,
+     "regionInLabel": 0.268
+    }
+   ],
+   "parcels": [
+    {
+     "id": "acc",
+     "labelInParcel": 0.454,
+     "parcelInLabel": 0.33
+    }
+   ],
+   "insula": false,
+   "definition": null
+  },
+  {
+   "id": "ctx_s_postcentral",
+   "short": "S_postcentral",
+   "index": 67,
+   "name": "Postcentral sulcus",
+   "kind": "sulcus",
+   "views": [
+    "S",
+    "L",
+    "P"
+   ],
+   "paperAreaCm2": {
+    "L": 25.27,
+    "R": 21.32
+   },
+   "areaCm2": {
+    "L": 14.46,
+    "R": 13.76
+   },
+   "lobe": "parietal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "parietal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#158cc8",
+   "anchor": {
+    "L": {
+     "pial": [
+      -45.37,
+      -31.55,
+      47.87
+     ],
+     "inflated": [
+      -44.14,
+      -32.85,
+      53.26
+     ],
+     "nPial": [
+      -0.513,
+      -0.681,
+      -0.522
+     ],
+     "nInflated": [
+      -0.72,
+      -0.144,
+      0.679
+     ]
+    },
+    "R": {
+     "pial": [
+      45.28,
+      -30.29,
+      50.88
+     ],
+     "inflated": [
+      43.34,
+      -30.27,
+      54.39
+     ],
+     "nPial": [
+      0.108,
+      -0.981,
+      -0.163
+     ],
+     "nInflated": [
+      0.69,
+      -0.058,
+      0.721
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_postcentral",
+     "share": 0.428
+    },
+    {
+     "id": "ctx_g_pariet_inf_supramar",
+     "share": 0.222
+    },
+    {
+     "id": "ctx_g_parietal_sup",
+     "share": 0.189
+    },
+    {
+     "id": "ctx_s_intrapariet_and_p_trans",
+     "share": 0.112
+    },
+    {
+     "id": "ctx_g_and_s_paracentral",
+     "share": 0.048
+    }
+   ],
+   "dk": [
+    {
+     "region": "postcentral",
+     "labelInRegion": 0.392,
+     "regionInLabel": 0.148
+    },
+    {
+     "region": "superiorparietal",
+     "labelInRegion": 0.305,
+     "regionInLabel": 0.087
+    },
+    {
+     "region": "supramarginal",
+     "labelInRegion": 0.303,
+     "regionInLabel": 0.13
+    }
+   ],
+   "parcels": [
+    {
+     "id": "s1",
+     "labelInParcel": 0.78,
+     "parcelInLabel": 0.376
+    },
+    {
+     "id": "m1",
+     "labelInParcel": 0.051,
+     "parcelInLabel": 0.02
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The postcentral sulcus of the parietal lobe lies parallel to, and behind, the central sulcus in the human brain. (A sulcus is one of the prominent grooves on the surface of the brain.) The postcentral sulcus divides the postcentral gyrus from the remainder of the parietal lobe.",
+    "url": "https://en.wikipedia.org/wiki/Postcentral_sulcus",
+    "source": "Postcentral sulcus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_precentral_inf_part",
+   "short": "S_precentral-inf-part",
+   "index": 68,
+   "name": "Inferior part of the precentral sulcus",
+   "kind": "sulcus",
+   "views": [
+    "S",
+    "A",
+    "L"
+   ],
+   "paperAreaCm2": {
+    "L": 13.58,
+    "R": 14.92
+   },
+   "areaCm2": {
+    "L": 8.12,
+    "R": 9.53
+   },
+   "lobe": "frontal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#1514f0",
+   "anchor": {
+    "L": {
+     "pial": [
+      -52.34,
+      6.39,
+      23.94
+     ],
+     "inflated": [
+      -50.35,
+      7.79,
+      28.12
+     ],
+     "nPial": [
+      0.374,
+      0.787,
+      -0.491
+     ],
+     "nInflated": [
+      -0.931,
+      0.291,
+      0.22
+     ]
+    },
+    "R": {
+     "pial": [
+      47.28,
+      12.09,
+      31.4
+     ],
+     "inflated": [
+      50.68,
+      9.18,
+      30.78
+     ],
+     "nPial": [
+      -0.336,
+      0.931,
+      0.142
+     ],
+     "nInflated": [
+      0.879,
+      0.367,
+      0.305
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_precentral",
+     "share": 0.419
+    },
+    {
+     "id": "ctx_g_front_inf_opercular",
+     "share": 0.223
+    },
+    {
+     "id": "ctx_s_front_inf",
+     "share": 0.183
+    },
+    {
+     "id": "ctx_g_front_middle",
+     "share": 0.176
+    }
+   ],
+   "dk": [
+    {
+     "region": "precentral",
+     "labelInRegion": 0.407,
+     "regionInLabel": 0.084
+    },
+    {
+     "region": "caudalmiddlefrontal",
+     "labelInRegion": 0.345,
+     "regionInLabel": 0.141
+    },
+    {
+     "region": "parsopercularis",
+     "labelInRegion": 0.248,
+     "regionInLabel": 0.176
+    }
+   ],
+   "parcels": [
+    {
+     "id": "pmv",
+     "labelInParcel": 0.802,
+     "parcelInLabel": 0.266
+    },
+    {
+     "id": "pmd",
+     "labelInParcel": 0.198,
+     "parcelInLabel": 0.064
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The precentral sulcus is a part of the human brain that lies parallel to, and in front of, the central sulcus. (A sulcus is one of the prominent grooves on the surface of the human brain.) The precentral sulcus divides the inferior, middle and superior frontal gyri from the precentral gyrus. In most brains, the precentral sulcus is divided into two parts: the inferior precentral sulcus and the superior precentral sulcus. However, the precentral sulcus may sometimes be divided into three parts or form one continuous sulcus.",
+    "url": "https://en.wikipedia.org/wiki/Precentral_sulcus",
+    "source": "Precentral sulcus (inferior part)*",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_precentral_sup_part",
+   "short": "S_precentral-sup-part",
+   "index": 69,
+   "name": "Superior part of the precentral sulcus",
+   "kind": "sulcus",
+   "views": [
+    "S",
+    "L"
+   ],
+   "paperAreaCm2": {
+    "L": 12.16,
+    "R": 12.16
+   },
+   "areaCm2": {
+    "L": 6.07,
+    "R": 6.41
+   },
+   "lobe": "frontal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#1514c8",
+   "anchor": {
+    "L": {
+     "pial": [
+      -26.38,
+      -12.07,
+      64.24
+     ],
+     "inflated": [
+      -25.8,
+      -9.16,
+      65.42
+     ],
+     "nPial": [
+      -0.44,
+      0.832,
+      -0.338
+     ],
+     "nInflated": [
+      -0.467,
+      0.174,
+      0.867
+     ]
+    },
+    "R": {
+     "pial": [
+      29.83,
+      -6.95,
+      62.29
+     ],
+     "inflated": [
+      24.13,
+      -0.79,
+      64.95
+     ],
+     "nPial": [
+      0.978,
+      -0.151,
+      -0.141
+     ],
+     "nInflated": [
+      0.409,
+      0.231,
+      0.883
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_precentral",
+     "share": 0.52
+    },
+    {
+     "id": "ctx_g_front_sup",
+     "share": 0.209
+    },
+    {
+     "id": "ctx_s_front_sup",
+     "share": 0.142
+    },
+    {
+     "id": "ctx_g_front_middle",
+     "share": 0.13
+    }
+   ],
+   "dk": [
+    {
+     "region": "precentral",
+     "labelInRegion": 0.726,
+     "regionInLabel": 0.125
+    },
+    {
+     "region": "caudalmiddlefrontal",
+     "labelInRegion": 0.148,
+     "regionInLabel": 0.05
+    },
+    {
+     "region": "superiorfrontal",
+     "labelInRegion": 0.126,
+     "regionInLabel": 0.015
+    }
+   ],
+   "parcels": [
+    {
+     "id": "pmd",
+     "labelInParcel": 0.898,
+     "parcelInLabel": 0.24
+    },
+    {
+     "id": "sma",
+     "labelInParcel": 0.051,
+     "parcelInLabel": 0.031
+    },
+    {
+     "id": "m1",
+     "labelInParcel": 0.051,
+     "parcelInLabel": 0.011
+    }
+   ],
+   "insula": false,
+   "definition": {
+    "text": "The precentral sulcus is a part of the human brain that lies parallel to, and in front of, the central sulcus. (A sulcus is one of the prominent grooves on the surface of the human brain.) The precentral sulcus divides the inferior, middle and superior frontal gyri from the precentral gyrus. In most brains, the precentral sulcus is divided into two parts: the inferior precentral sulcus and the superior precentral sulcus. However, the precentral sulcus may sometimes be divided into three parts or form one continuous sulcus.",
+    "url": "https://en.wikipedia.org/wiki/Precentral_sulcus",
+    "source": "Precentral sulcus (Superior part)*",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_suborbital",
+   "short": "S_suborbital",
+   "index": 70,
+   "name": "Suborbital sulcus (sulcus rostrales, supraorbital sulcus)",
+   "kind": "sulcus",
+   "views": [
+    "M"
+   ],
+   "paperAreaCm2": {
+    "L": 5.67,
+    "R": 2.74
+   },
+   "areaCm2": {
+    "L": 4.53,
+    "R": 1.72
+   },
+   "lobe": "frontal",
+   "lobeShare": 0.995,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "frontal",
+     "share": 0.995
+    }
+   ],
+   "atlasColour": "#15143c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -1.98,
+      40.42,
+      -17.1
+     ],
+     "inflated": [
+      -5.35,
+      46.06,
+      -15.56
+     ],
+     "nPial": [
+      0.838,
+      -0.263,
+      0.478
+     ],
+     "nInflated": [
+      0.958,
+      0.083,
+      -0.273
+     ]
+    },
+    "R": {
+     "pial": [
+      1.67,
+      40.28,
+      -20.21
+     ],
+     "inflated": [
+      5.15,
+      47.5,
+      -17.19
+     ],
+     "nPial": [
+      -0.517,
+      -0.293,
+      0.805
+     ],
+     "nInflated": [
+      -0.859,
+      0.101,
+      -0.502
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_and_s_cingul_ant",
+     "share": 0.42
+    },
+    {
+     "id": "ctx_g_rectus",
+     "share": 0.4
+    },
+    {
+     "id": "ctx_g_front_sup",
+     "share": 0.094
+    },
+    {
+     "id": "ctx_g_subcallosal",
+     "share": 0.058
+    }
+   ],
+   "dk": [
+    {
+     "region": "medialorbitofrontal",
+     "labelInRegion": 0.995,
+     "regionInLabel": 0.138
+    }
+   ],
+   "parcels": [
+    {
+     "id": "vmpfc",
+     "labelInParcel": 0.995,
+     "parcelInLabel": 0.138
+    }
+   ],
+   "insula": false,
+   "definition": null
+  },
+  {
+   "id": "ctx_s_subparietal",
+   "short": "S_subparietal",
+   "index": 71,
+   "name": "Subparietal sulcus",
+   "kind": "sulcus",
+   "views": [
+    "M"
+   ],
+   "paperAreaCm2": {
+    "L": 9.21,
+    "R": 10.92
+   },
+   "areaCm2": {
+    "L": 7.56,
+    "R": 8.0
+   },
+   "lobe": "parietal",
+   "lobeShare": 0.801,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "parietal",
+     "share": 0.801
+    }
+   ],
+   "atlasColour": "#653c3c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -5.22,
+      -45.44,
+      37.18
+     ],
+     "inflated": [
+      -3.96,
+      -46.16,
+      35.1
+     ],
+     "nPial": [
+      -0.395,
+      0.035,
+      0.918
+     ],
+     "nInflated": [
+      0.999,
+      -0.037,
+      0.027
+     ]
+    },
+    "R": {
+     "pial": [
+      4.86,
+      -45.79,
+      36.16
+     ],
+     "inflated": [
+      4.98,
+      -45.62,
+      35.97
+     ],
+     "nPial": [
+      0.417,
+      0.024,
+      0.908
+     ],
+     "nInflated": [
+      -0.997,
+      -0.072,
+      0.023
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_precuneus",
+     "share": 0.666
+    },
+    {
+     "id": "ctx_g_cingul_post_dorsal",
+     "share": 0.304
+    }
+   ],
+   "dk": [
+    {
+     "region": "precuneus",
+     "labelInRegion": 0.801,
+     "regionInLabel": 0.16
+    },
+    {
+     "region": "isthmuscingulate",
+     "labelInRegion": 0.183,
+     "regionInLabel": 0.128
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The subparietal sulcus (Sulcus subparietalis) or suprasplenial sulcus is a sulcus, or crevice, on the medial surface of each cerebral hemisphere, above the splenium of the corpus callosum. It separates the precuneus from the posterior part of the cingulate gyrus. It is the posterior continuation of the cingulate sulcus. The cingulate sulcus actually \"terminates\" as the marginal sulcus of the cingulate sulcus (margin of cingulate gyrus). It extends posteriorly toward the calcarine sulcus. The precuneus is bordered anteriorly by the marginal branch of the cingulate sulcus (margin of cingulate sulcus), posteriorly by the parietooccipital sulcus, and inferiorly by the subparietal sulcus.",
+    "url": "https://en.wikipedia.org/wiki/Subparietal_sulcus",
+    "source": "Subparietal sulcus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_temporal_inf",
+   "short": "S_temporal_inf",
+   "index": 72,
+   "name": "Inferior temporal sulcus",
+   "kind": "sulcus",
+   "views": [
+    "L",
+    "P",
+    "I"
+   ],
+   "paperAreaCm2": {
+    "L": 13.63,
+    "R": 11.04
+   },
+   "areaCm2": {
+    "L": 7.1,
+    "R": 9.76
+   },
+   "lobe": "temporal",
+   "lobeShare": 0.999,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "temporal",
+     "share": 0.999
+    }
+   ],
+   "atlasColour": "#15b4b4",
+   "anchor": {
+    "L": {
+     "pial": [
+      -60.3,
+      -29.27,
+      -22.98
+     ],
+     "inflated": [
+      -58.43,
+      -25.38,
+      -26.1
+     ],
+     "nPial": [
+      0.448,
+      0.698,
+      -0.559
+     ],
+     "nInflated": [
+      -0.751,
+      -0.285,
+      -0.596
+     ]
+    },
+    "R": {
+     "pial": [
+      58.79,
+      -57.26,
+      -2.06
+     ],
+     "inflated": [
+      57.2,
+      -58.09,
+      -1.89
+     ],
+     "nPial": [
+      -0.174,
+      -0.237,
+      0.956
+     ],
+     "nInflated": [
+      0.905,
+      -0.416,
+      -0.091
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_temporal_inf",
+     "share": 0.478
+    },
+    {
+     "id": "ctx_g_temporal_middle",
+     "share": 0.41
+    },
+    {
+     "id": "ctx_s_occipital_ant",
+     "share": 0.079
+    }
+   ],
+   "dk": [
+    {
+     "region": "inferiortemporal",
+     "labelInRegion": 0.541,
+     "regionInLabel": 0.18
+    },
+    {
+     "region": "middletemporal",
+     "labelInRegion": 0.459,
+     "regionInLabel": 0.145
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The inferior surface of the temporal lobe is concave, and is continuous posteriorly with the tentorial surface of the occipital lobe. It is traversed by the inferior temporal sulcus, which extends from near the occipital pole behind, to within a short distance of the temporal pole in front, but is frequently subdivided by bridging gyri.",
+    "url": "https://en.wikipedia.org/wiki/Inferior_temporal_sulcus",
+    "source": "Inferior temporal sulcus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_temporal_sup",
+   "short": "S_temporal_sup",
+   "index": 73,
+   "name": "Superior temporal sulcus (parallel sulcus)",
+   "kind": "sulcus",
+   "views": [
+    "S",
+    "A",
+    "L",
+    "P"
+   ],
+   "paperAreaCm2": {
+    "L": 49.45,
+    "R": 54.83
+   },
+   "areaCm2": {
+    "L": 35.34,
+    "R": 35.67
+   },
+   "lobe": "temporal",
+   "lobeShare": 0.605,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "temporal",
+     "share": 0.605
+    },
+    {
+     "lobe": "parietal",
+     "share": 0.394
+    }
+   ],
+   "atlasColour": "#dfdc3c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -56.37,
+      -50.26,
+      12.98
+     ],
+     "inflated": [
+      -56.82,
+      -54.91,
+      8.43
+     ],
+     "nPial": [
+      -0.309,
+      0.661,
+      0.683
+     ],
+     "nInflated": [
+      -0.958,
+      -0.205,
+      0.202
+     ]
+    },
+    "R": {
+     "pial": [
+      57.39,
+      -37.0,
+      6.84
+     ],
+     "inflated": [
+      59.9,
+      -35.31,
+      10.47
+     ],
+     "nPial": [
+      0.227,
+      -0.732,
+      -0.642
+     ],
+     "nInflated": [
+      0.999,
+      -0.05,
+      -0.022
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_pariet_inf_angular",
+     "share": 0.307
+    },
+    {
+     "id": "ctx_g_temporal_middle",
+     "share": 0.299
+    },
+    {
+     "id": "ctx_g_temp_sup_lateral",
+     "share": 0.256
+    },
+    {
+     "id": "ctx_g_occipital_middle",
+     "share": 0.065
+    },
+    {
+     "id": "ctx_s_occipital_ant",
+     "share": 0.053
+    }
+   ],
+   "dk": [
+    {
+     "region": "inferiorparietal",
+     "labelInRegion": 0.382,
+     "regionInLabel": 0.308
+    },
+    {
+     "region": "bankssts",
+     "labelInRegion": 0.219,
+     "regionInLabel": 0.813
+    },
+    {
+     "region": "superiortemporal",
+     "labelInRegion": 0.2,
+     "regionInLabel": 0.198
+    },
+    {
+     "region": "middletemporal",
+     "labelInRegion": 0.185,
+     "regionInLabel": 0.211
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": {
+    "text": "The superior temporal sulcus (STS) is the sulcus separating the superior temporal gyrus from the middle temporal gyrus in the temporal lobe of the brain. A sulcus (plural sulci) is a deep groove that curves into the largest part of the brain, the cerebrum, and a gyrus (plural gyri) is a ridge that curves outward of the cerebrum. The STS is located under the lateral fissure, which is the fissure that separates the temporal lobe, parietal lobe, and frontal lobe. The STS has an asymmetric structure between the left and right hemisphere, with the STS being longer in the left hemisphere, but deeper in the right hemisphere. This asymmetrical structural organization between hemispheres has only been found to occur in the STS of the human brain.",
+    "url": "https://en.wikipedia.org/wiki/Superior_temporal_sulcus",
+    "source": "Superior temporal sulcus",
+    "scope": null
+   }
+  },
+  {
+   "id": "ctx_s_temporal_transverse",
+   "short": "S_temporal_transverse",
+   "index": 74,
+   "name": "Transverse temporal sulcus",
+   "kind": "sulcus",
+   "views": [
+    "A",
+    "L"
+   ],
+   "paperAreaCm2": {
+    "L": 3.24,
+    "R": 2.59
+   },
+   "areaCm2": {
+    "L": 1.87,
+    "R": 0.94
+   },
+   "lobe": "temporal",
+   "lobeShare": 1.0,
+   "lobeBy": "measure",
+   "lobes": [
+    {
+     "lobe": "temporal",
+     "share": 1.0
+    }
+   ],
+   "atlasColour": "#dd3c3c",
+   "anchor": {
+    "L": {
+     "pial": [
+      -58.6,
+      -16.33,
+      5.33
+     ],
+     "inflated": [
+      -54.33,
+      -19.04,
+      2.9
+     ],
+     "nPial": [
+      -0.382,
+      -0.883,
+      -0.274
+     ],
+     "nInflated": [
+      -0.564,
+      0.579,
+      0.589
+     ]
+    },
+    "R": {
+     "pial": [
+      58.18,
+      -11.65,
+      5.55
+     ],
+     "inflated": [
+      55.83,
+      -15.82,
+      3.86
+     ],
+     "nPial": [
+      -0.422,
+      0.646,
+      0.636
+     ],
+     "nInflated": [
+      0.664,
+      0.605,
+      0.44
+     ]
+    }
+   },
+   "borders": [
+    {
+     "id": "ctx_g_temp_sup_g_t_transv",
+     "share": 0.394
+    },
+    {
+     "id": "ctx_g_temp_sup_plan_tempo",
+     "share": 0.385
+    },
+    {
+     "id": "ctx_lat_fis_post",
+     "share": 0.127
+    },
+    {
+     "id": "ctx_g_temp_sup_lateral",
+     "share": 0.095
+    }
+   ],
+   "dk": [
+    {
+     "region": "superiortemporal",
+     "labelInRegion": 0.838,
+     "regionInLabel": 0.048
+    },
+    {
+     "region": "transversetemporal",
+     "labelInRegion": 0.162,
+     "regionInLabel": 0.082
+    }
+   ],
+   "parcels": [],
+   "insula": false,
+   "definition": null
+  }
+ ],
+ "lobes": [
+  {
+   "id": "frontal",
+   "name": "Frontal lobe",
+   "token": "lobeFrontal",
+   "definition": {
+    "text": "The frontal lobe is the largest of the four major lobes of the brain in mammals, and is located at the front of each cerebral hemisphere (in front of the parietal lobe and the temporal lobe). It is parted from the parietal lobe by a groove between tissues called the central sulcus and from the temporal lobe by a deeper groove called the lateral sulcus (Sylvian fissure). The most anterior rounded part of the frontal lobe (though not well-defined) is known as the frontal pole, one of the three poles of the cerebrum. The frontal lobe is covered by the frontal cortex. The frontal cortex includes the premotor cortex, and the primary motor cortex – parts of the motor cortex. The front part of the frontal cortex is covered by the prefrontal cortex. There are four principal gyri in the frontal lobe.",
+    "url": "https://en.wikipedia.org/wiki/Frontal_lobe",
+    "source": "Frontal lobe"
+   },
+   "labels": [
+    "ctx_g_and_s_frontomargin",
+    "ctx_g_and_s_paracentral",
+    "ctx_g_and_s_transv_frontopol",
+    "ctx_g_and_s_cingul_ant",
+    "ctx_g_and_s_cingul_mid_ant",
+    "ctx_g_and_s_cingul_mid_post",
+    "ctx_g_front_inf_opercular",
+    "ctx_g_front_inf_orbital",
+    "ctx_g_front_inf_triangul",
+    "ctx_g_front_middle",
+    "ctx_g_front_sup",
+    "ctx_g_orbital",
+    "ctx_g_precentral",
+    "ctx_g_rectus",
+    "ctx_g_subcallosal",
+    "ctx_lat_fis_ant_horizont",
+    "ctx_lat_fis_ant_vertical",
+    "ctx_s_central",
+    "ctx_s_cingul_marginalis",
+    "ctx_s_circular_insula_ant",
+    "ctx_s_circular_insula_sup",
+    "ctx_s_front_inf",
+    "ctx_s_front_middle",
+    "ctx_s_front_sup",
+    "ctx_s_orbital_lateral",
+    "ctx_s_orbital_med_olfact",
+    "ctx_s_orbital_h_shaped",
+    "ctx_s_precentral_inf_part",
+    "ctx_s_precentral_sup_part",
+    "ctx_s_suborbital"
+   ]
+  },
+  {
+   "id": "parietal",
+   "name": "Parietal lobe",
+   "token": "lobeParietal",
+   "definition": {
+    "text": "The parietal lobe is one of the four major lobes of the cerebral cortex in the brain of mammals. The parietal lobe is positioned above the temporal lobe and behind the frontal lobe and central sulcus.\nThe parietal lobe integrates sensory information among various modalities, including spatial sense and navigation (proprioception), the main sensory receptive area for the sense of touch in the somatosensory cortex which is just posterior to the central sulcus in the postcentral gyrus, and the dorsal stream of the visual system. The major sensory inputs from the skin (touch, temperature, and pain receptors), relay through the thalamus to the parietal lobe.\nSeveral areas of the parietal lobe are important in language processing.",
+    "url": "https://en.wikipedia.org/wiki/Parietal_lobe",
+    "source": "Parietal lobe"
+   },
+   "labels": [
+    "ctx_g_and_s_subcentral",
+    "ctx_g_occipital_middle",
+    "ctx_g_occipital_sup",
+    "ctx_g_pariet_inf_angular",
+    "ctx_g_pariet_inf_supramar",
+    "ctx_g_parietal_sup",
+    "ctx_g_postcentral",
+    "ctx_g_precuneus",
+    "ctx_g_temp_sup_plan_tempo",
+    "ctx_lat_fis_post",
+    "ctx_s_central",
+    "ctx_s_cingul_marginalis",
+    "ctx_s_interm_prim_jensen",
+    "ctx_s_intrapariet_and_p_trans",
+    "ctx_s_oc_sup_and_transversal",
+    "ctx_s_parieto_occipital",
+    "ctx_s_postcentral",
+    "ctx_s_subparietal",
+    "ctx_s_temporal_sup"
+   ]
+  },
+  {
+   "id": "temporal",
+   "name": "Temporal lobe",
+   "token": "lobeTemporal",
+   "definition": {
+    "text": "The temporal lobe is one of the four major lobes of the cerebral cortex in the brain of mammals. The temporal lobe is located beneath the lateral fissure on both cerebral hemispheres of the mammalian brain. The temporal lobe is involved in processing sensory input into derived meanings for the appropriate retention of visual memory, language comprehension, and emotion association.:\nTemporal refers to the head's temples.",
+    "url": "https://en.wikipedia.org/wiki/Temporal_lobe",
+    "source": "Temporal lobe"
+   },
+   "labels": [
+    "ctx_g_oc_temp_lat_fusifor",
+    "ctx_g_oc_temp_med_parahip",
+    "ctx_g_temp_sup_g_t_transv",
+    "ctx_g_temp_sup_lateral",
+    "ctx_g_temp_sup_plan_polar",
+    "ctx_g_temp_sup_plan_tempo",
+    "ctx_g_temporal_inf",
+    "ctx_g_temporal_middle",
+    "ctx_lat_fis_post",
+    "ctx_pole_temporal",
+    "ctx_s_circular_insula_inf",
+    "ctx_s_collat_transv_ant",
+    "ctx_s_collat_transv_post",
+    "ctx_s_oc_temp_lat",
+    "ctx_s_oc_temp_med_and_lingual",
+    "ctx_s_temporal_inf",
+    "ctx_s_temporal_sup",
+    "ctx_s_temporal_transverse"
+   ]
+  },
+  {
+   "id": "occipital",
+   "name": "Occipital lobe",
+   "token": "lobeOccipital",
+   "definition": null,
+   "labels": [
+    "ctx_g_and_s_occipital_inf",
+    "ctx_g_cuneus",
+    "ctx_g_occipital_middle",
+    "ctx_g_occipital_sup",
+    "ctx_g_oc_temp_med_lingual",
+    "ctx_pole_occipital",
+    "ctx_s_calcarine",
+    "ctx_s_collat_transv_post",
+    "ctx_s_oc_middle_and_lunatus",
+    "ctx_s_occipital_ant",
+    "ctx_s_oc_temp_med_and_lingual"
+   ]
+  },
+  {
+   "id": "cingulate",
+   "name": "Cingulate cortex",
+   "token": "lobeCingulate",
+   "definition": {
+    "text": "The limbic lobe is an arc-shaped region of cortex on the medial surface of each cerebral hemisphere of the mammalian brain, consisting of parts of the frontal, parietal and temporal lobes. The term is ambiguous, with some authors including the paraterminal gyrus, the subcallosal area, the cingulate gyrus, the parahippocampal gyrus, the dentate gyrus, the hippocampus and the subiculum; while the Terminologia Anatomica includes the cingulate sulcus, the cingulate gyrus, the isthmus of cingulate gyrus, the fasciolar gyrus, the parahippocampal gyrus, the parahippocampal sulcus, the dentate gyrus, the fimbrodentate sulcus, the fimbria of hippocampus, the collateral sulcus, and the rhinal sulcus, and omits the hippocampus.",
+    "url": "https://en.wikipedia.org/wiki/Limbic_lobe",
+    "source": "Limbic lobe"
+   },
+   "labels": [
+    "ctx_g_and_s_cingul_ant",
+    "ctx_g_and_s_cingul_mid_ant",
+    "ctx_g_and_s_cingul_mid_post",
+    "ctx_g_cingul_post_dorsal",
+    "ctx_g_cingul_post_ventral",
+    "ctx_g_subcallosal",
+    "ctx_s_pericallosal"
+   ]
+  },
+  {
+   "id": "insula",
+   "name": "Insula",
+   "token": "lobeInsula",
+   "definition": {
+    "text": "The insular cortex (also insula and insular lobe) is a portion of the cerebral cortex folded deep within the lateral sulcus (the fissure separating the temporal lobe from the parietal and frontal lobes) within each hemisphere of the mammalian brain. The insulae are believed to be involved in consciousness and play a role in diverse functions usually linked to emotion or the regulation of the body's homeostasis. These functions include compassion, empathy, taste, perception, motor control, self-awareness, cognitive functioning, interpersonal experience, and awareness of homeostatic emotions such as hunger, pain and fatigue. In relation to these, it is involved in psychopathology. The insular cortex is divided into two parts: the anterior insula and the posterior insula in which more than a dozen field areas have been identified.",
+    "url": "https://en.wikipedia.org/wiki/Insular_cortex",
+    "source": "Insula"
+   },
+   "labels": [
+    "ctx_g_ins_lg_and_s_cent_ins",
+    "ctx_g_insular_short",
+    "ctx_s_circular_insula_ant",
+    "ctx_s_circular_insula_inf",
+    "ctx_s_circular_insula_sup"
+   ]
+  }
+ ],
+ "method": {
+  "faces": 80000,
+  "inflateIterations": 600,
+  "inflateStep": 0.5,
+  "midlineGapMm": 2.0,
+  "operMarginMm": 3.0,
+  "operLateralMm": 1.0,
+  "hmatMaxDistMm": 3.0
+ },
+ "report": {
+  "L": {
+   "faces": 98344,
+   "vertices": 49174,
+   "crossedBefore": 2101,
+   "crossedAfter": 0,
+   "untangleMovedVertices": 8588,
+   "untangleMaxMm": 3.73,
+   "opercularVertices": 2029,
+   "depthRange": [
+    -10.8,
+    13.7
+   ]
+  },
+  "R": {
+   "faces": 98078,
+   "vertices": 49040,
+   "crossedBefore": 2480,
+   "crossedAfter": 0,
+   "untangleMovedVertices": 9603,
+   "untangleMaxMm": 2.97,
+   "opercularVertices": 1827,
+   "depthRange": [
+    -10.8,
+    14.0
+   ]
+  }
+ }
+}

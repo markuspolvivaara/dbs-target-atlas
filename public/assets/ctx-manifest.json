@@ -1,0 +1,3318 @@
+{
+ "space": "MNI ICBM 2009b nonlinear asymmetric (Lead-DBS template), RAS mm",
+ "generatedBy": "pipeline/cortex_build.py",
+ "structures": [
+  {
+   "id": "ctx_g_and_s_frontomargin",
+   "name": "Fronto-marginal gyrus (of Wernicke) and sulcus",
+   "aliases": [
+    "G_and_S_frontomargin"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_and_s_frontomargin.glb",
+   "bytes": 33252,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus and sulcus",
+   "centroid": {
+    "L": [
+     -24.54,
+     63.75,
+     -17.08
+    ],
+    "R": [
+     12.12,
+     67.64,
+     -20.6
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_and_s_occipital_inf",
+   "name": "Inferior occipital gyrus (O3) and sulcus",
+   "aliases": [
+    "G_and_S_occipital_inf"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_and_s_occipital_inf.glb",
+   "bytes": 46324,
+   "colour": {
+    "token": "lobeOccipital",
+    "light": "#CC79A7",
+    "dark": "#CC79A7"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus and sulcus",
+   "centroid": {
+    "L": [
+     -45.58,
+     -86.21,
+     -14.63
+    ],
+    "R": [
+     45.02,
+     -81.38,
+     -16.64
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_and_s_paracentral",
+   "name": "Paracentral lobule and sulcus",
+   "aliases": [
+    "G_and_S_paracentral"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_and_s_paracentral.glb",
+   "bytes": 34808,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus and sulcus",
+   "centroid": {
+    "L": [
+     -7.48,
+     -36.17,
+     79.0
+    ],
+    "R": [
+     6.59,
+     -36.57,
+     80.57
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_and_s_subcentral",
+   "name": "Subcentral gyrus (central operculum) and sulci",
+   "aliases": [
+    "G_and_S_subcentral"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_and_s_subcentral.glb",
+   "bytes": 36060,
+   "colour": {
+    "token": "lobeParietal",
+    "light": "#E69F00",
+    "dark": "#E69F00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus and sulcus",
+   "centroid": {
+    "L": [
+     -67.79,
+     -6.7,
+     13.6
+    ],
+    "R": [
+     69.02,
+     -6.33,
+     15.06
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_and_s_transv_frontopol",
+   "name": "Transverse frontopolar gyri and sulci",
+   "aliases": [
+    "G_and_S_transv_frontopol"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_and_s_transv_frontopol.glb",
+   "bytes": 30124,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus and sulcus",
+   "centroid": {
+    "L": [
+     -8.65,
+     71.77,
+     -10.06
+    ],
+    "R": [
+     5.63,
+     71.69,
+     -6.38
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_and_s_cingul_ant",
+   "name": "Anterior part of the cingulate gyrus and sulcus (ACC)",
+   "aliases": [
+    "G_and_S_cingul-Ant"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_and_s_cingul_ant.glb",
+   "bytes": 67284,
+   "colour": {
+    "token": "lobeCingulate",
+    "light": "#D55E00",
+    "dark": "#D55E00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus and sulcus",
+   "centroid": {
+    "L": [
+     -2.18,
+     43.06,
+     0.8
+    ],
+    "R": [
+     -0.28,
+     39.18,
+     -3.27
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_and_s_cingul_mid_ant",
+   "name": "Middle-anterior part of the cingulate gyrus and sulcus (aMCC)",
+   "aliases": [
+    "G_and_S_cingul-Mid-Ant"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_and_s_cingul_mid_ant.glb",
+   "bytes": 40084,
+   "colour": {
+    "token": "lobeCingulate",
+    "light": "#D55E00",
+    "dark": "#D55E00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus and sulcus",
+   "centroid": {
+    "L": [
+     -1.35,
+     16.77,
+     34.07
+    ],
+    "R": [
+     1.0,
+     17.52,
+     36.62
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_and_s_cingul_mid_post",
+   "name": "Middle-posterior part of the cingulate gyrus and sulcus (pMCC)",
+   "aliases": [
+    "G_and_S_cingul-Mid-Post"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_and_s_cingul_mid_post.glb",
+   "bytes": 37684,
+   "colour": {
+    "token": "lobeCingulate",
+    "light": "#D55E00",
+    "dark": "#D55E00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus and sulcus",
+   "centroid": {
+    "L": [
+     -1.26,
+     -8.23,
+     39.53
+    ],
+    "R": [
+     0.72,
+     -5.85,
+     41.66
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_cingul_post_dorsal",
+   "name": "Posterior-dorsal part of the cingulate gyrus (dPCC)",
+   "aliases": [
+    "G_cingul-Post-dorsal"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_cingul_post_dorsal.glb",
+   "bytes": 25600,
+   "colour": {
+    "token": "lobeCingulate",
+    "light": "#D55E00",
+    "dark": "#D55E00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -1.06,
+     -43.34,
+     27.98
+    ],
+    "R": [
+     0.96,
+     -47.71,
+     26.38
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_cingul_post_ventral",
+   "name": "Posterior-ventral part of the cingulate gyrus (vPCC, isthmus of the cingulate gyrus)",
+   "aliases": [
+    "G_cingul-Post-ventral"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_cingul_post_ventral.glb",
+   "bytes": 17012,
+   "colour": {
+    "token": "lobeCingulate",
+    "light": "#D55E00",
+    "dark": "#D55E00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -7.23,
+     -45.83,
+     2.17
+    ],
+    "R": [
+     5.03,
+     -50.3,
+     6.8
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_cuneus",
+   "name": "Cuneus (O6)",
+   "aliases": [
+    "G_cuneus"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_cuneus.glb",
+   "bytes": 46200,
+   "colour": {
+    "token": "lobeOccipital",
+    "light": "#CC79A7",
+    "dark": "#CC79A7"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     0.07,
+     -77.75,
+     22.56
+    ],
+    "R": [
+     1.92,
+     -73.92,
+     25.79
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_front_inf_opercular",
+   "name": "Opercular part of the inferior frontal gyrus",
+   "aliases": [
+    "G_front_inf-Opercular"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_front_inf_opercular.glb",
+   "bytes": 38456,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -60.1,
+     13.18,
+     7.75
+    ],
+    "R": [
+     60.16,
+     14.35,
+     6.83
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_front_inf_orbital",
+   "name": "Orbital part of the inferior frontal gyrus",
+   "aliases": [
+    "G_front_inf-Orbital"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_front_inf_orbital.glb",
+   "bytes": 16452,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -53.6,
+     35.55,
+     -14.59
+    ],
+    "R": [
+     53.24,
+     37.25,
+     -14.89
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_front_inf_triangul",
+   "name": "Triangular part of the inferior frontal gyrus",
+   "aliases": [
+    "G_front_inf-Triangul"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_front_inf_triangul.glb",
+   "bytes": 33852,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -56.74,
+     29.1,
+     -0.57
+    ],
+    "R": [
+     58.47,
+     30.78,
+     1.49
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_front_middle",
+   "name": "Middle frontal gyrus (F2)",
+   "aliases": [
+    "G_front_middle"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_front_middle.glb",
+   "bytes": 143076,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -46.34,
+     28.66,
+     40.12
+    ],
+    "R": [
+     45.27,
+     32.84,
+     39.75
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_front_sup",
+   "name": "Superior frontal gyrus (F1)",
+   "aliases": [
+    "G_front_sup"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_front_sup.glb",
+   "bytes": 154736,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -1.19,
+     30.49,
+     54.85
+    ],
+    "R": [
+     1.17,
+     33.4,
+     50.84
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_ins_lg_and_s_cent_ins",
+   "name": "Long insular gyrus and central sulcus of the insula",
+   "aliases": [
+    "G_Ins_lg_and_S_cent_ins"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_ins_lg_and_s_cent_ins.glb",
+   "bytes": 24920,
+   "colour": {
+    "token": "lobeInsula",
+    "light": "#F0E442",
+    "dark": "#F0E442"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -42.69,
+     -0.06,
+     -8.55
+    ],
+    "R": [
+     42.97,
+     1.55,
+     -8.81
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_insular_short",
+   "name": "Short insular gyri",
+   "aliases": [
+    "G_insular_short"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_insular_short.glb",
+   "bytes": 25868,
+   "colour": {
+    "token": "lobeInsula",
+    "light": "#F0E442",
+    "dark": "#F0E442"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -41.67,
+     10.33,
+     -12.38
+    ],
+    "R": [
+     43.44,
+     12.8,
+     -12.47
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_occipital_middle",
+   "name": "Middle occipital gyrus (O2, lateral occipital gyrus)",
+   "aliases": [
+    "G_occipital_middle"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_occipital_middle.glb",
+   "bytes": 67448,
+   "colour": {
+    "token": "lobeOccipital",
+    "light": "#CC79A7",
+    "dark": "#CC79A7"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -44.13,
+     -89.43,
+     14.24
+    ],
+    "R": [
+     50.39,
+     -77.6,
+     22.27
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_occipital_sup",
+   "name": "Superior occipital gyrus (O1)",
+   "aliases": [
+    "G_occipital_sup"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_occipital_sup.glb",
+   "bytes": 45736,
+   "colour": {
+    "token": "lobeParietal",
+    "light": "#E69F00",
+    "dark": "#E69F00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -8.39,
+     -92.09,
+     35.13
+    ],
+    "R": [
+     9.48,
+     -88.39,
+     41.92
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_oc_temp_lat_fusifor",
+   "name": "Lateral occipito-temporal gyrus (fusiform gyrus, O4-T4)",
+   "aliases": [
+    "G_oc-temp_lat-fusifor"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_oc_temp_lat_fusifor.glb",
+   "bytes": 54040,
+   "colour": {
+    "token": "lobeTemporal",
+    "light": "#009E73",
+    "dark": "#009E73"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -45.3,
+     -67.17,
+     -20.45
+    ],
+    "R": [
+     37.31,
+     -54.87,
+     -21.59
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_oc_temp_med_lingual",
+   "name": "Lingual gyrus, ligual part of the medial occipito-temporal gyrus, (O5)",
+   "aliases": [
+    "G_oc-temp_med-Lingual"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_oc_temp_med_lingual.glb",
+   "bytes": 73976,
+   "colour": {
+    "token": "lobeOccipital",
+    "light": "#CC79A7",
+    "dark": "#CC79A7"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -1.52,
+     -77.49,
+     -6.22
+    ],
+    "R": [
+     2.55,
+     -70.4,
+     -0.12
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_oc_temp_med_parahip",
+   "name": "Parahippocampal gyrus, parahippocampal part of the medial occipito-temporal gyrus, (T5)",
+   "aliases": [
+    "G_oc-temp_med-Parahip"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_oc_temp_med_parahip.glb",
+   "bytes": 49956,
+   "colour": {
+    "token": "lobeTemporal",
+    "light": "#009E73",
+    "dark": "#009E73"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -16.57,
+     -10.23,
+     -27.86
+    ],
+    "R": [
+     17.26,
+     -13.43,
+     -28.95
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_orbital",
+   "name": "Orbital gyri",
+   "aliases": [
+    "G_orbital"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_orbital.glb",
+   "bytes": 69404,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -37.58,
+     23.97,
+     -23.92
+    ],
+    "R": [
+     41.15,
+     38.34,
+     -21.99
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_pariet_inf_angular",
+   "name": "Angular gyrus",
+   "aliases": [
+    "G_pariet_inf-Angular"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_pariet_inf_angular.glb",
+   "bytes": 69996,
+   "colour": {
+    "token": "lobeParietal",
+    "light": "#E69F00",
+    "dark": "#E69F00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -49.89,
+     -64.77,
+     52.22
+    ],
+    "R": [
+     56.87,
+     -61.52,
+     42.38
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_pariet_inf_supramar",
+   "name": "Supramarginal gyrus",
+   "aliases": [
+    "G_pariet_inf-Supramar"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_pariet_inf_supramar.glb",
+   "bytes": 70136,
+   "colour": {
+    "token": "lobeParietal",
+    "light": "#E69F00",
+    "dark": "#E69F00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -68.54,
+     -33.98,
+     31.74
+    ],
+    "R": [
+     66.18,
+     -29.34,
+     42.33
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_parietal_sup",
+   "name": "Superior parietal lobule (lateral part of P1)",
+   "aliases": [
+    "G_parietal_sup"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_parietal_sup.glb",
+   "bytes": 73980,
+   "colour": {
+    "token": "lobeParietal",
+    "light": "#E69F00",
+    "dark": "#E69F00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -25.26,
+     -64.53,
+     67.38
+    ],
+    "R": [
+     21.32,
+     -63.03,
+     70.12
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_postcentral",
+   "name": "Postcentral gyrus",
+   "aliases": [
+    "G_postcentral"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_postcentral.glb",
+   "bytes": 51620,
+   "colour": {
+    "token": "lobeParietal",
+    "light": "#E69F00",
+    "dark": "#E69F00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -53.33,
+     -21.24,
+     59.89
+    ],
+    "R": [
+     54.89,
+     -17.68,
+     57.2
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_precentral",
+   "name": "Precentral gyrus",
+   "aliases": [
+    "G_precentral"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_precentral.glb",
+   "bytes": 59180,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -52.4,
+     -4.99,
+     55.18
+    ],
+    "R": [
+     51.59,
+     -1.27,
+     54.58
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_precuneus",
+   "name": "Precuneus (medial part of P1)",
+   "aliases": [
+    "G_precuneus"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_precuneus.glb",
+   "bytes": 70832,
+   "colour": {
+    "token": "lobeParietal",
+    "light": "#E69F00",
+    "dark": "#E69F00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -0.21,
+     -68.33,
+     49.48
+    ],
+    "R": [
+     1.62,
+     -67.64,
+     48.29
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_rectus",
+   "name": "Straight gyrus, Gyrus rectus",
+   "aliases": [
+    "G_rectus"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_rectus.glb",
+   "bytes": 29520,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -1.75,
+     53.76,
+     -26.31
+    ],
+    "R": [
+     0.29,
+     35.45,
+     -30.62
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_subcallosal",
+   "name": "Subcallosal area, subcallosal gyrus",
+   "aliases": [
+    "G_subcallosal"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_subcallosal.glb",
+   "bytes": 18632,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -1.89,
+     12.03,
+     -10.62
+    ],
+    "R": [
+     3.2,
+     9.04,
+     -17.66
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_temp_sup_g_t_transv",
+   "name": "Anterior transverse temporal gyrus (of Heschl)",
+   "aliases": [
+    "G_temp_sup-G_T_transv"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_temp_sup_g_t_transv.glb",
+   "bytes": 18524,
+   "colour": {
+    "token": "lobeTemporal",
+    "light": "#009E73",
+    "dark": "#009E73"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -54.33,
+     -12.59,
+     8.89
+    ],
+    "R": [
+     55.19,
+     -6.04,
+     5.44
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_temp_sup_lateral",
+   "name": "Lateral aspect of the superior temporal gyrus",
+   "aliases": [
+    "G_temp_sup-Lateral"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_temp_sup_lateral.glb",
+   "bytes": 54504,
+   "colour": {
+    "token": "lobeTemporal",
+    "light": "#009E73",
+    "dark": "#009E73"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -59.03,
+     11.77,
+     -11.15
+    ],
+    "R": [
+     57.23,
+     16.15,
+     -10.91
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_temp_sup_plan_polar",
+   "name": "Planum polare of the superior temporal gyrus",
+   "aliases": [
+    "G_temp_sup-Plan_polar"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_temp_sup_plan_polar.glb",
+   "bytes": 22468,
+   "colour": {
+    "token": "lobeTemporal",
+    "light": "#009E73",
+    "dark": "#009E73"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -39.61,
+     13.52,
+     -21.72
+    ],
+    "R": [
+     40.78,
+     17.03,
+     -19.23
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_temp_sup_plan_tempo",
+   "name": "Planum temporale or temporal plane of the superior temporal gyrus",
+   "aliases": [
+    "G_temp_sup-Plan_tempo"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_temp_sup_plan_tempo.glb",
+   "bytes": 25060,
+   "colour": {
+    "token": "lobeTemporal",
+    "light": "#009E73",
+    "dark": "#009E73"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -65.33,
+     -35.06,
+     17.83
+    ],
+    "R": [
+     69.22,
+     -27.45,
+     20.47
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_temporal_inf",
+   "name": "Inferior temporal gyrus (T3)",
+   "aliases": [
+    "G_temporal_inf"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_temporal_inf.glb",
+   "bytes": 77096,
+   "colour": {
+    "token": "lobeTemporal",
+    "light": "#009E73",
+    "dark": "#009E73"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -58.03,
+     -39.25,
+     -29.04
+    ],
+    "R": [
+     56.94,
+     -41.85,
+     -28.18
+    ]
+   }
+  },
+  {
+   "id": "ctx_g_temporal_middle",
+   "name": "Middle temporal gyrus (T2)",
+   "aliases": [
+    "G_temporal_middle"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_g_temporal_middle.glb",
+   "bytes": 76868,
+   "colour": {
+    "token": "lobeTemporal",
+    "light": "#009E73",
+    "dark": "#009E73"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "gyrus",
+   "centroid": {
+    "L": [
+     -69.13,
+     -27.97,
+     -7.99
+    ],
+    "R": [
+     71.65,
+     -20.9,
+     -11.88
+    ]
+   }
+  },
+  {
+   "id": "ctx_lat_fis_ant_horizont",
+   "name": "Horizontal ramus of the anterior segment of the lateral sulcus (or fissure)",
+   "aliases": [
+    "Lat_Fis-ant-Horizont"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_lat_fis_ant_horizont.glb",
+   "bytes": 14988,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -47.37,
+     33.49,
+     -6.8
+    ],
+    "R": [
+     45.7,
+     30.64,
+     -6.82
+    ]
+   }
+  },
+  {
+   "id": "ctx_lat_fis_ant_vertical",
+   "name": "Vertical ramus of the anterior segment of the lateral sulcus (or fissure)",
+   "aliases": [
+    "Lat_Fis-ant-Vertical"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_lat_fis_ant_vertical.glb",
+   "bytes": 15128,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -52.63,
+     20.59,
+     11.96
+    ],
+    "R": [
+     54.71,
+     24.61,
+     9.23
+    ]
+   }
+  },
+  {
+   "id": "ctx_lat_fis_post",
+   "name": "Posterior ramus (or segment) of the lateral sulcus (or fissure)",
+   "aliases": [
+    "Lat_Fis-post"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_lat_fis_post.glb",
+   "bytes": 30276,
+   "colour": {
+    "token": "lobeParietal",
+    "light": "#E69F00",
+    "dark": "#E69F00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -49.75,
+     -38.29,
+     23.5
+    ],
+    "R": [
+     47.57,
+     -29.17,
+     25.55
+    ]
+   }
+  },
+  {
+   "id": "ctx_pole_occipital",
+   "name": "Occipital pole",
+   "aliases": [
+    "Pole_occipital"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_pole_occipital.glb",
+   "bytes": 60768,
+   "colour": {
+    "token": "lobeOccipital",
+    "light": "#CC79A7",
+    "dark": "#CC79A7"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "pole",
+   "centroid": {
+    "L": [
+     -10.43,
+     -105.52,
+     -7.98
+    ],
+    "R": [
+     10.65,
+     -102.06,
+     -4.62
+    ]
+   }
+  },
+  {
+   "id": "ctx_pole_temporal",
+   "name": "Temporal pole",
+   "aliases": [
+    "Pole_temporal"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_pole_temporal.glb",
+   "bytes": 43756,
+   "colour": {
+    "token": "lobeTemporal",
+    "light": "#009E73",
+    "dark": "#009E73"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "pole",
+   "centroid": {
+    "L": [
+     -28.47,
+     16.6,
+     -45.19
+    ],
+    "R": [
+     26.28,
+     22.28,
+     -39.31
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_calcarine",
+   "name": "Calcarine sulcus",
+   "aliases": [
+    "S_calcarine"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_calcarine.glb",
+   "bytes": 59564,
+   "colour": {
+    "token": "lobeOccipital",
+    "light": "#CC79A7",
+    "dark": "#CC79A7"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -12.94,
+     -70.66,
+     5.56
+    ],
+    "R": [
+     12.38,
+     -67.57,
+     8.14
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_central",
+   "name": "Central sulcus (Rolando’s fissure)",
+   "aliases": [
+    "S_central"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_central.glb",
+   "bytes": 50496,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -45.34,
+     -16.99,
+     48.65
+    ],
+    "R": [
+     41.91,
+     -16.32,
+     51.33
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_cingul_marginalis",
+   "name": "Marginal branch (or part) of the cingulate sulcus",
+   "aliases": [
+    "S_cingul-Marginalis"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_cingul_marginalis.glb",
+   "bytes": 29512,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -10.69,
+     -40.92,
+     53.92
+    ],
+    "R": [
+     9.17,
+     -38.69,
+     51.23
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_circular_insula_ant",
+   "name": "Anterior segment of the circular sulcus of the insula",
+   "aliases": [
+    "S_circular_insula_ant"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_circular_insula_ant.glb",
+   "bytes": 18272,
+   "colour": {
+    "token": "lobeInsula",
+    "light": "#F0E442",
+    "dark": "#F0E442"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -30.5,
+     15.64,
+     -17.41
+    ],
+    "R": [
+     29.4,
+     19.97,
+     -17.37
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_circular_insula_inf",
+   "name": "Inferior segment of the circular sulcus of the insula",
+   "aliases": [
+    "S_circular_insula_inf"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_circular_insula_inf.glb",
+   "bytes": 30116,
+   "colour": {
+    "token": "lobeInsula",
+    "light": "#F0E442",
+    "dark": "#F0E442"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -45.54,
+     1.77,
+     -12.72
+    ],
+    "R": [
+     42.77,
+     1.23,
+     -12.28
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_circular_insula_sup",
+   "name": "Superior segment of the circular sulcus of the insula",
+   "aliases": [
+    "S_circular_insula_sup"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_circular_insula_sup.glb",
+   "bytes": 36144,
+   "colour": {
+    "token": "lobeInsula",
+    "light": "#F0E442",
+    "dark": "#F0E442"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -41.8,
+     0.87,
+     9.57
+    ],
+    "R": [
+     38.86,
+     4.58,
+     8.79
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_collat_transv_ant",
+   "name": "Anterior transverse collateral sulcus",
+   "aliases": [
+    "S_collat_transv_ant"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_collat_transv_ant.glb",
+   "bytes": 24940,
+   "colour": {
+    "token": "lobeTemporal",
+    "light": "#009E73",
+    "dark": "#009E73"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -42.72,
+     -16.5,
+     -35.7
+    ],
+    "R": [
+     42.75,
+     -16.29,
+     -35.21
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_collat_transv_post",
+   "name": "Posterior transverse collateral sulcus",
+   "aliases": [
+    "S_collat_transv_post"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_collat_transv_post.glb",
+   "bytes": 15940,
+   "colour": {
+    "token": "lobeOccipital",
+    "light": "#CC79A7",
+    "dark": "#CC79A7"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -27.42,
+     -81.48,
+     -9.72
+    ],
+    "R": [
+     26.56,
+     -80.46,
+     -11.8
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_front_inf",
+   "name": "Inferior frontal sulcus",
+   "aliases": [
+    "S_front_inf"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_front_inf.glb",
+   "bytes": 51656,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -43.95,
+     31.7,
+     16.23
+    ],
+    "R": [
+     42.4,
+     32.63,
+     18.19
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_front_middle",
+   "name": "Middle frontal sulcus",
+   "aliases": [
+    "S_front_middle"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_front_middle.glb",
+   "bytes": 47024,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -30.66,
+     48.91,
+     23.03
+    ],
+    "R": [
+     31.88,
+     46.19,
+     24.47
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_front_sup",
+   "name": "Superior frontal sulcus",
+   "aliases": [
+    "S_front_sup"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_front_sup.glb",
+   "bytes": 54724,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -23.13,
+     30.42,
+     46.53
+    ],
+    "R": [
+     25.23,
+     36.2,
+     43.61
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_interm_prim_jensen",
+   "name": "Sulcus intermedius primus (of Jensen)",
+   "aliases": [
+    "S_interm_prim-Jensen"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_interm_prim_jensen.glb",
+   "bytes": 18048,
+   "colour": {
+    "token": "lobeParietal",
+    "light": "#E69F00",
+    "dark": "#E69F00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -56.76,
+     -57.31,
+     38.95
+    ],
+    "R": [
+     54.07,
+     -43.05,
+     41.92
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_intrapariet_and_p_trans",
+   "name": "Intraparietal sulcus (interparietal sulcus) and transverse parietal sulci",
+   "aliases": [
+    "S_intrapariet_and_P_trans"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_intrapariet_and_p_trans.glb",
+   "bytes": 58008,
+   "colour": {
+    "token": "lobeParietal",
+    "light": "#E69F00",
+    "dark": "#E69F00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -34.79,
+     -60.3,
+     47.79
+    ],
+    "R": [
+     29.08,
+     -61.93,
+     57.1
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_oc_middle_and_lunatus",
+   "name": "Middle occipital sulcus and lunatus sulcus",
+   "aliases": [
+    "S_oc_middle_and_Lunatus"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_oc_middle_and_lunatus.glb",
+   "bytes": 29384,
+   "colour": {
+    "token": "lobeOccipital",
+    "light": "#CC79A7",
+    "dark": "#CC79A7"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -28.19,
+     -96.24,
+     6.86
+    ],
+    "R": [
+     32.77,
+     -90.7,
+     7.79
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_oc_sup_and_transversal",
+   "name": "Superior occipital sulcus and transverse occipital sulcus",
+   "aliases": [
+    "S_oc_sup_and_transversal"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_oc_sup_and_transversal.glb",
+   "bytes": 33340,
+   "colour": {
+    "token": "lobeParietal",
+    "light": "#E69F00",
+    "dark": "#E69F00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -26.39,
+     -87.95,
+     24.36
+    ],
+    "R": [
+     29.62,
+     -85.99,
+     21.8
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_occipital_ant",
+   "name": "Anterior occipital sulcus and preoccipital notch (temporo-occipital incisure)",
+   "aliases": [
+    "S_occipital_ant"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_occipital_ant.glb",
+   "bytes": 28016,
+   "colour": {
+    "token": "lobeOccipital",
+    "light": "#CC79A7",
+    "dark": "#CC79A7"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -44.94,
+     -74.48,
+     3.93
+    ],
+    "R": [
+     51.9,
+     -66.25,
+     4.97
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_oc_temp_lat",
+   "name": "Lateral occipito-temporal sulcus",
+   "aliases": [
+    "S_oc-temp_lat"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_oc_temp_lat.glb",
+   "bytes": 27304,
+   "colour": {
+    "token": "lobeTemporal",
+    "light": "#009E73",
+    "dark": "#009E73"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -45.13,
+     -52.58,
+     -13.83
+    ],
+    "R": [
+     42.99,
+     -53.86,
+     -15.6
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_oc_temp_med_and_lingual",
+   "name": "Medial occipito-temporal sulcus (collateral sulcus) and lingual sulcus",
+   "aliases": [
+    "S_oc-temp_med_and_Lingual"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_oc_temp_med_and_lingual.glb",
+   "bytes": 41512,
+   "colour": {
+    "token": "lobeTemporal",
+    "light": "#009E73",
+    "dark": "#009E73"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -23.28,
+     -41.49,
+     -13.4
+    ],
+    "R": [
+     23.23,
+     -45.93,
+     -10.57
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_orbital_lateral",
+   "name": "Lateral orbital sulcus",
+   "aliases": [
+    "S_orbital_lateral"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_orbital_lateral.glb",
+   "bytes": 17500,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -48.33,
+     43.28,
+     -9.02
+    ],
+    "R": [
+     49.85,
+     45.6,
+     -9.12
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_orbital_med_olfact",
+   "name": "Medial orbital sulcus (olfactory sulcus)",
+   "aliases": [
+    "S_orbital_med-olfact"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_orbital_med_olfact.glb",
+   "bytes": 27856,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -8.91,
+     27.75,
+     -24.49
+    ],
+    "R": [
+     8.31,
+     25.04,
+     -23.34
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_orbital_h_shaped",
+   "name": "Orbital sulci (H-shaped sulci)",
+   "aliases": [
+    "S_orbital-H_Shaped"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_orbital_h_shaped.glb",
+   "bytes": 36424,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -27.0,
+     35.7,
+     -22.23
+    ],
+    "R": [
+     24.92,
+     38.01,
+     -22.5
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_parieto_occipital",
+   "name": "Parieto-occipital sulcus (or fissure)",
+   "aliases": [
+    "S_parieto_occipital"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_parieto_occipital.glb",
+   "bytes": 44400,
+   "colour": {
+    "token": "lobeParietal",
+    "light": "#E69F00",
+    "dark": "#E69F00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -11.48,
+     -72.42,
+     25.06
+    ],
+    "R": [
+     14.18,
+     -70.89,
+     31.68
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_pericallosal",
+   "name": "Pericallosal sulcus (S of corpus callosum)",
+   "aliases": [
+    "S_pericallosal"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_pericallosal.glb",
+   "bytes": 50268,
+   "colour": {
+    "token": "lobeCingulate",
+    "light": "#D55E00",
+    "dark": "#D55E00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -9.12,
+     -39.17,
+     4.66
+    ],
+    "R": [
+     4.97,
+     -36.29,
+     5.94
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_postcentral",
+   "name": "Postcentral sulcus",
+   "aliases": [
+    "S_postcentral"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_postcentral.glb",
+   "bytes": 49196,
+   "colour": {
+    "token": "lobeParietal",
+    "light": "#E69F00",
+    "dark": "#E69F00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -45.37,
+     -31.55,
+     47.87
+    ],
+    "R": [
+     45.28,
+     -30.29,
+     50.88
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_precentral_inf_part",
+   "name": "Inferior part of the precentral sulcus",
+   "aliases": [
+    "S_precentral-inf-part"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_precentral_inf_part.glb",
+   "bytes": 35020,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -52.34,
+     6.39,
+     23.94
+    ],
+    "R": [
+     47.28,
+     12.09,
+     31.4
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_precentral_sup_part",
+   "name": "Superior part of the precentral sulcus",
+   "aliases": [
+    "S_precentral-sup-part"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_precentral_sup_part.glb",
+   "bytes": 28968,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -26.38,
+     -12.07,
+     64.24
+    ],
+    "R": [
+     29.83,
+     -6.95,
+     62.29
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_suborbital",
+   "name": "Suborbital sulcus (sulcus rostrales, supraorbital sulcus)",
+   "aliases": [
+    "S_suborbital"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_suborbital.glb",
+   "bytes": 20524,
+   "colour": {
+    "token": "lobeFrontal",
+    "light": "#56B4E9",
+    "dark": "#56B4E9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -1.98,
+     40.42,
+     -17.1
+    ],
+    "R": [
+     1.67,
+     40.28,
+     -20.21
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_subparietal",
+   "name": "Subparietal sulcus",
+   "aliases": [
+    "S_subparietal"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_subparietal.glb",
+   "bytes": 32428,
+   "colour": {
+    "token": "lobeParietal",
+    "light": "#E69F00",
+    "dark": "#E69F00"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -5.22,
+     -45.44,
+     37.18
+    ],
+    "R": [
+     4.86,
+     -45.79,
+     36.16
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_temporal_inf",
+   "name": "Inferior temporal sulcus",
+   "aliases": [
+    "S_temporal_inf"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_temporal_inf.glb",
+   "bytes": 44232,
+   "colour": {
+    "token": "lobeTemporal",
+    "light": "#009E73",
+    "dark": "#009E73"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -60.3,
+     -29.27,
+     -22.98
+    ],
+    "R": [
+     58.79,
+     -57.26,
+     -2.06
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_temporal_sup",
+   "name": "Superior temporal sulcus (parallel sulcus)",
+   "aliases": [
+    "S_temporal_sup"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_temporal_sup.glb",
+   "bytes": 96424,
+   "colour": {
+    "token": "lobeTemporal",
+    "light": "#009E73",
+    "dark": "#009E73"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -56.37,
+     -50.26,
+     12.98
+    ],
+    "R": [
+     57.39,
+     -37.0,
+     6.84
+    ]
+   }
+  },
+  {
+   "id": "ctx_s_temporal_transverse",
+   "name": "Transverse temporal sulcus",
+   "aliases": [
+    "S_temporal_transverse"
+   ],
+   "type": "surface",
+   "file": "assets/cortex/ctx_s_temporal_transverse.glb",
+   "bytes": 13196,
+   "colour": {
+    "token": "lobeTemporal",
+    "light": "#009E73",
+    "dark": "#009E73"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Destrieux label on the template's pial surface; vertex labels majority-filtered and border triangles cut at their edge midpoints.",
+   "category": "sulcus",
+   "centroid": {
+    "L": [
+     -58.6,
+     -16.33,
+     5.33
+    ],
+    "R": [
+     58.18,
+     -11.65,
+     5.55
+    ]
+   }
+  },
+  {
+   "id": "ctx_medial_wall",
+   "name": "Medial wall (not cortex)",
+   "aliases": [],
+   "type": "surface",
+   "file": "assets/cortex/ctx_medial_wall.glb",
+   "bytes": 147800,
+   "colour": {
+    "token": "cortex",
+    "light": "#C4CBD3",
+    "dark": "#4A5663"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "Vertices the Destrieux parcellation leaves unlabelled (medial wall).",
+   "category": "medial wall",
+   "centroid": {
+    "L": [
+     -3.44,
+     -12.41,
+     -15.01
+    ],
+    "R": [
+     2.53,
+     -12.83,
+     -13.86
+    ]
+   }
+  }
+ ],
+ "dataset": {
+  "name": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+  "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+  "url": "https://www.lead-dbs.org",
+  "note": "One template brain (MNI ICBM 2009b nonlinear asymmetric average), not an individual. Labels from FreeSurfer's automatic Destrieux parcellation of that template, as shipped with Lead-DBS. Surfaces decimated to 80k faces per hemisphere; the inflated surface is computed by smoothing the pial surface.",
+  "citation": [
+   "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+   "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+  ],
+  "citationUrls": [
+   "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+   "https://doi.org/10.1016/j.neuroimage.2023.119862"
+  ]
+ }
+}

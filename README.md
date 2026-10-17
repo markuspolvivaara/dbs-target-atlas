@@ -5,6 +5,7 @@ Interactive 3D neuroanatomy for teaching, built from published atlases in MNI sp
 - **DBS targets** (`dbs/`): described below.
 - **White-matter tracts** (`tracts/`): described below.
 - **Skull base** (`skullbase/`): described below.
+- **Cortical anatomy** (`cortex/`): described below.
 
 The home page (`index.html`) links the sections; they share the viewer, the anatomy pipeline,
 the design and the Settings. The project name and section list live in `src/brand.ts`.
@@ -86,6 +87,25 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
 - Pipeline: `pipeline/skullbase_export.py` runs inside Blender (installed under `.tools/`, or set `BLENDER`) and
   `pipeline/skullbase_build.py` writes the assets and checks sides, symmetry and landmark distances.
 
+## Cortical anatomy
+
+The 74 gyri and sulci of FreeSurfer's Destrieux 2009 parcellation (Destrieux et al. 2010) on the Lead-DBS MNI
+2009b template surface, the same surface the DBS section uses.
+
+- **Views**: lateral, medial, basal and insular. Each highlights the labels Destrieux et al. 2010 (Table 1)
+  list as visible on that view; the insular view lists the insula and its circular sulcus and, on the pial
+  surface, cuts away everything lateral of the insula over its outline (the opercula).
+- **Pial and inflated surface**: the inflated surface is computed by smoothing the pial one, so every vertex has
+  both positions and the viewer morphs between them. Shading is sulcal depth (light = crown, dark = depth).
+- **Colours** by lobe (Okabe-Ito colours, checked for colour-vision deficiency), by the Destrieux atlas colours,
+  or plain. A lobe filter narrows the list.
+- **Cards**: Destrieux name and views, the Z-Anatomy/Wikipedia definition (CC BY-SA 3.0, labelled as such), and
+  measured facts: lobe shares (via Desikan-Killiany, lobes as in Klein & Tourville 2012), borders, overlap with
+  Desikan-Killiany regions and with the DBS section's cortical areas (HMAT motor areas, ACC, vmPFC proxy), and
+  the area on the template next to the paper's mean.
+- Pipeline: `pipeline/cortex_texts.py` (in Blender) reads the definition texts, `pipeline/cortex_build.py` writes
+  the assets and checks them.
+
 ## Quick start
 
 Requirements: Node ≥ 20. Python ≥ 3.10 only if you rebuild the anatomy.
@@ -109,7 +129,7 @@ npm run build
 
 `dist/` is a self-contained static site with a relative base path: `index.html` is the home page,
 `dbs/index.html` the DBS section, `tracts/index.html` the white-matter section, `skullbase/index.html`
-the skull-base section; shared assets are under `assets/`. Copy it to any web server or
+the skull-base section, `cortex/index.html` the cortex section; shared assets are under `assets/`. Copy it to any web server or
 subfolder; the app uses hash routing, so no rewrite rules are needed. Check locally with:
 
 ```bash
@@ -294,7 +314,9 @@ Open Access Data Use Terms; the required acknowledgement is in `NOTICE`, `ATTRIB
 the Credits page. The white-matter section's tract files (`public/assets/wm/`, `wm-manifest.json`,
 `wm-connectome.json`) are **CC BY-SA 4.0** (HCP-1065 atlas) plus the HCP terms, not GPL. The skull-base
 files (`public/assets/skullbase/`, `sb-*.json`) are **CC BY-SA** (Z-Anatomy 4.0, BodyParts3D 2.1 Japan,
-Wikipedia definitions 3.0), not GPL.
+Wikipedia definitions 3.0), not GPL. The cortex section's meshes (`public/assets/cortex/`, `ctx-*.json`) are
+GPL-3.0, non-commercial like the other Lead-DBS-derived assets; their labels were made with FreeSurfer (MGH
+licence, research use) and the definition texts in `ctx-labels.json` are CC BY-SA 3.0.
 
 ## Data, licences, attribution
 
@@ -317,6 +339,9 @@ Tracked here and in the final report:
 - **Published Vo coordinates** (Voa/Vop junction). Not in the attached content; the Vo marker is
   the Morel VLa centroid.
 - **vmPFC.** Shown with the Desikan-Killiany medial orbitofrontal label as a proxy.
+- **Cortex overlays (later phase).** Functional areas (HCPex), arterial territories (Liu 2023), the
+  direct-stimulation points of Sarubbo et al. 2020 (CC BY 4.0) and tract terminations. Julich-Brain
+  cytoarchitecture is left out for now (CC BY-NC-SA 4.0; its insular subdivisions are the main gain).
 - **Morel atlas citation.** Confirm the "Jakab 2008" publication Lead-DBS credits for the MNI
   version.
 - **Fragmented sweet-spot maps.** The Hollunder 2024 dystonia and Tourette maps split into many

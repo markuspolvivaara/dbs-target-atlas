@@ -313,7 +313,7 @@ export class AtlasPage {
     const img = IMAGING.find((x) => x.structureId === id);
     const stream = m.streamlines ? `${m.streamlines.L + m.streamlines.R} of ${m.sourceStreamlines!.L + m.sourceStreamlines!.R} source streamlines shown.` : '';
     return h('article', { class: 'card sel', style: `--accent: var(--c-${m.colour.token})` }, close,
-      h('p', { class: 'eyebrow' }, m.category ?? { nucleus: 'Nucleus', cortex: 'Cortical area', tract: 'Tract', target: 'Sweet-spot volume', bone: 'Bone', soft: 'Soft tissue' }[m.type]),
+      h('p', { class: 'eyebrow' }, m.category ?? { nucleus: 'Nucleus', cortex: 'Cortical area', tract: 'Tract', target: 'Sweet-spot volume', bone: 'Bone', soft: 'Soft tissue', surface: 'Cortical label' }[m.type]),
       h('h2', {}, h('span', { class: 'swatch', style: `--c: var(--c-${m.colour.token})` }), m.name),
       m.aliases.length ? h('p', { class: 'aside' }, 'Also: ', m.aliases.join(', ')) : null,
       h('dl', {},

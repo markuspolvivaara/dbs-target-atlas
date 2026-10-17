@@ -35,7 +35,7 @@ export const StructureSchema = z.object({
   name: z.string(),
   aliases: z.array(z.string()),
   /** bone and soft (soft-tissue mesh) are used by the skull-base section */
-  type: z.enum(['nucleus', 'cortex', 'tract', 'target', 'bone', 'soft']),
+  type: z.enum(['nucleus', 'cortex', 'tract', 'target', 'bone', 'soft', 'surface']),
   colour: z.string(), // palette token
   meshFile: z.string().regex(/^assets\/(meshes|tracts)\/[a-z0-9_]+\.glb$/),
   /** Text taken from the attached content only; null when the content says nothing about it. */
@@ -130,8 +130,8 @@ export const ManifestStructureSchema = z.object({
   id: Id,
   name: z.string(),
   aliases: z.array(z.string()),
-  /** bone and soft (soft-tissue mesh) are used by the skull-base section */
-  type: z.enum(['nucleus', 'cortex', 'tract', 'target', 'bone', 'soft']),
+  /** bone and soft (soft-tissue mesh) are used by the skull-base section, surface (a cortical label) by the cortex section */
+  type: z.enum(['nucleus', 'cortex', 'tract', 'target', 'bone', 'soft', 'surface']),
   role: z.enum(['tract', 'border', 'response']).optional(),
   file: z.string(),
   bytes: z.number().int().positive(),
@@ -204,6 +204,18 @@ export const SbManifestSchema = z.object({
   }),
 });
 export type SbManifest = z.infer<typeof SbManifestSchema>;
+
+/** ctx-manifest.json: the cortex section's labels (Destrieux on the Lead-DBS template surface), in MNI space. */
+export const CtxManifestSchema = z.object({
+  space: z.string(),
+  generatedBy: z.string(),
+  structures: z.array(ManifestStructureSchema),
+  dataset: z.object({
+    name: z.string(), licence: z.string(), url: z.string().url(), note: z.string(),
+    citation: z.array(z.string()), citationUrls: z.array(z.string()),
+  }),
+});
+export type CtxManifest = z.infer<typeof CtxManifestSchema>;
 
 export const CoordinateSchema = z.object({ L: Vec3, R: Vec3, method: z.string(), dataset: z.string() });
 export const AcpcSchema = z.object({ AC: Vec3, PC: Vec3, MSP: Vec3, source: z.string(), url: z.string().url() });

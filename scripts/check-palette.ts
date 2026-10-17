@@ -114,6 +114,15 @@ for (const g of WM.groups.filter((x) => x.kind !== 'all')) {
     pairs.get(k)!.add(`tracts: ${g.name}`);
   }
 }
+// cortex section: the six lobe colours appear together
+{
+  const list = ['lobeFrontal', 'lobeParietal', 'lobeTemporal', 'lobeOccipital', 'lobeCingulate', 'lobeInsula'];
+  for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
+    const k = `${list[i]}|${list[j]}`;
+    if (!pairs.has(k)) pairs.set(k, new Set());
+    pairs.get(k)!.add('cortex: lobes');
+  }
+}
 const cvd: string[] = [];
 const MIN_DE = 10;
 for (const t of ['light', 'dark'] as const) {

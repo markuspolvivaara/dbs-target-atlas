@@ -88,6 +88,20 @@ What is covered by which terms
    Mitsuhashi N, et al. BodyParts3D: 3D structure database for anatomical
    concepts. Nucleic Acids Res. 2009;37:D782-D785. doi:10.1093/nar/gkn613.
 
-8. Bundled third-party software (three.js and zod, MIT licence; Atkinson
+8. Cortex section (public/assets/cortex/, public/assets/ctx-manifest.json,
+   src/data/generated/ctx-*.json) is derived from the MNI ICBM 2009b template
+   surface and the FreeSurfer annotations (Destrieux 2009 aparc.a2009s,
+   Desikan-Killiany aparc) distributed with Lead-DBS; like section 2 these files
+   are GPL-3.0 and should not be used commercially. The annotations were made
+   with FreeSurfer (https://surfer.nmr.mgh.harvard.edu/), whose licence
+   (MGH, https://surfer.nmr.mgh.harvard.edu/fswiki/FreeSurferSoftwareLicense)
+   is for research use and not for clinical applications. The definition texts in
+   ctx-labels.json are Wikipedia leads shipped with Z-Anatomy, CC BY-SA 3.0, each
+   linking its source page. Changes made: surfaces decimated and split by label,
+   an inflated surface and sulcal-depth shading computed, converted to compressed
+   glTF. Destrieux C, Fischl B, Dale A, Halgren E. NeuroImage. 2010;53:1-15.
+   doi:10.1016/j.neuroimage.2010.06.010.
+
+9. Bundled third-party software (three.js and zod, MIT licence; Atkinson
    Hyperlegible font, SIL Open Font Licence 1.1): see
    public/THIRD_PARTY_LICENSES.txt, which is also published with the site.
