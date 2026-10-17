@@ -144,6 +144,30 @@ def write_wm_manifest(rep: dict) -> dict:
     return wm
 
 
+def skull_base_attribution() -> list[str]:
+    """ATTRIBUTION.md section for the skull-base section, from sb-manifest.json (built by skullbase_build.py)."""
+    p = GEN / "sb-manifest.json"
+    if not p.exists():
+        return []
+    d = json.loads(p.read_text())["dataset"]
+    return [
+        "## Skull base section (Z-Anatomy / BodyParts3D)",
+        "",
+        "The meshes and lines in `public/assets/skullbase/` and the files `sb-manifest.json`, `sb-landmarks.json`,",
+        "`sb-regions.json` and `sb-definitions.json` are derived from Z-Anatomy, itself based on BodyParts3D. They are",
+        f"**not** GPL-licensed: {d['licence']}.",
+        "",
+        f"- Source: {d['url']}",
+        f"- Note: {d['note']}",
+        *[f"- Attribution: {a}" for a in d["attribution"]],
+        *[f"- Cite: {c}" for c in d["citation"]],
+        "- Changes made: head structures exported from the Z-Anatomy Blender file (pipeline/skullbase_export.py), coordinates",
+        "  converted to mm from the hypophysial fossa landmark, midline structures cut at x = 0, vessels and nerves reduced to",
+        "  centre lines and cropped to the head, files converted to compressed glTF, definitions shortened to their lead section.",
+        "",
+    ]
+
+
 def write_attribution(m: dict, wm: dict) -> None:
     lines = [
         "# Attribution and licences",
@@ -231,6 +255,7 @@ def write_attribution(m: dict, wm: dict) -> None:
         "",
         "> " + HCP_ACK,
         "",
+        *skull_base_attribution(),
         "## Datasets considered and not used",
         "",
         "- **Basal Ganglia Pathway Atlas, original files (Petersen 2019, OSF mhd4z).** The OSF terms limit use to",

@@ -118,9 +118,11 @@ def main() -> int:
                 dest.write_bytes(z.read(src))
             record[src] = hashlib.sha256(dest.read_bytes()).hexdigest()
     hcp = fetch_hcp1065()
+    zan = fetch_zanatomy()
     (RAW / "sources.lock.json").write_text(json.dumps(
         {"archive": LEADDBS_DATA_ZIP, "files": record,
-         "hcp1065": {"release": C.HCP1065_RELEASE, "files": hcp}}, indent=1))
+         "hcp1065": {"release": C.HCP1065_RELEASE, "files": hcp},
+         "zanatomy": {"source": ZANATOMY_URL, "files": zan}}, indent=1))
     print(f"{len(record)} files ready in {RAW}")
     return 0
 
@@ -161,6 +163,33 @@ def fetch_hcp1065() -> dict[str, str]:
         urllib.request.urlretrieve(C.HCP1065_RELEASE + C.HCP1065_CONNECTOME, dest)
     record[C.HCP1065_CONNECTOME] = hashlib.sha256(dest.read_bytes()).hexdigest()
     return record
+
+# Skull-base section: Z-Anatomy Blender package (CC BY-SA 4.0), downloaded once and hash-checked
+ZANATOMY_URL = "https://github.com/Z-Anatomy/Models-of-human-anatomy/raw/master/Z-Anatomy.zip"
+ZANATOMY_SHA256 = "e029688545627bd0214b269e1063143abb580aad72b2c2445d6d8a9a0d9da736"  # as downloaded 2026-10-17
+
+
+def fetch_zanatomy() -> dict[str, str]:
+    import zipfile
+    out = RAW / "zanatomy"
+    out.mkdir(parents=True, exist_ok=True)
+    zp = out / "Z-Anatomy.zip"
+    if not zp.exists():
+        print("fetch Z-Anatomy.zip (87 MB)")
+        urllib.request.urlretrieve(ZANATOMY_URL, zp)
+    digest = hashlib.sha256(zp.read_bytes()).hexdigest()
+    if digest != ZANATOMY_SHA256:
+        print(f"Z-Anatomy.zip: SHA-256 {digest} does not match the pinned {ZANATOMY_SHA256}", file=sys.stderr)
+        raise SystemExit(1)
+    blend = out / "Z-Anatomy" / "Startup.blend"
+    if not blend.exists():
+        with zipfile.ZipFile(zp) as z:
+            z.extract("Z-Anatomy/Startup.blend", out)
+    for name in ("License.txt",):
+        if not (out / name).exists():
+            urllib.request.urlretrieve(ZANATOMY_URL.replace("Z-Anatomy.zip", name), out / name)
+    return {"Z-Anatomy.zip": digest, "Z-Anatomy/Startup.blend": hashlib.sha256(blend.read_bytes()).hexdigest()}
+
 
 if __name__ == "__main__":
     sys.exit(main())

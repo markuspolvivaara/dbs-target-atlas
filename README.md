@@ -4,6 +4,7 @@ Interactive 3D neuroanatomy for teaching, built from published atlases in MNI sp
 
 - **DBS targets** (`dbs/`): described below.
 - **White-matter tracts** (`tracts/`): described below.
+- **Skull base** (`skullbase/`): described below.
 
 The home page (`index.html`) links the sections; they share the viewer, the anatomy pipeline,
 the design and the Settings. The project name and section list live in `src/brand.ts`.
@@ -65,6 +66,26 @@ Tracts from the HCP-1065 population-averaged tractography atlas (Yeh 2022), in t
 - Keyboard: `1`–`5` camera, `H` hemisphere, `[` `]` previous/next tract, `N` labels, `S` axial
   slice, `M` measure, `Esc` close, `?` help.
 
+## Skull base
+
+The cranial bones, cranial nerves I–XII, the main intracranial arteries and the dural sinuses from the
+Z-Anatomy model (based on BodyParts3D: one adult male, CC BY-SA), in their own space: millimetres from the
+model's hypophysial fossa landmark. Not MNI and not registered to the other sections.
+
+- **Cranial floor** view with a cut-away height (the calvaria lifted off), from above or below.
+- **Regions**: everything of the model within 15 mm of the hypophysial fossa, optic canal, petrous apex and
+  foramen ovale (25 mm around the foramen magnum), measured, with the distance on each item.
+- **Systems**: cranial nerves, arteries, veins and dural sinuses. **Bones**: each with the landmarks
+  Z-Anatomy labels on it (126 in all: foramina, canals, clinoids, sella, grooves...).
+- Landmarks are the points Z-Anatomy anchors to each bone (the label line's hooked end), checked against the
+  bone surface (0–4 mm; opening centres such as the foramen magnum further). Not yet labelled in the model and
+  so not shown: superior orbital fissure, foramen lacerum, carotid canal, jugular foramen, internal acoustic
+  meatus, stylomastoid foramen, cribriform plate, clivus.
+- Cards show the Wikipedia definition that Z-Anatomy ships (CC BY-SA 3.0, with its source link), labelled as
+  such; peer-reviewed teaching notes are still to come.
+- Pipeline: `pipeline/skullbase_export.py` runs inside Blender (installed under `.tools/`, or set `BLENDER`) and
+  `pipeline/skullbase_build.py` writes the assets and checks sides, symmetry and landmark distances.
+
 ## Quick start
 
 Requirements: Node ≥ 20. Python ≥ 3.10 only if you rebuild the anatomy.
@@ -87,8 +108,8 @@ npm run build
 ```
 
 `dist/` is a self-contained static site with a relative base path: `index.html` is the home page,
-`dbs/index.html` the DBS section, `tracts/index.html` the white-matter section; shared assets are
-under `assets/`. Copy it to any web server or
+`dbs/index.html` the DBS section, `tracts/index.html` the white-matter section, `skullbase/index.html`
+the skull-base section; shared assets are under `assets/`. Copy it to any web server or
 subfolder; the app uses hash routing, so no rewrite rules are needed. Check locally with:
 
 ```bash
@@ -271,7 +292,9 @@ software licences are in `public/THIRD_PARTY_LICENSES.txt` (also published with 
 Tracts generated from Human Connectome Project data are additionally subject to the WU-Minn HCP
 Open Access Data Use Terms; the required acknowledgement is in `NOTICE`, `ATTRIBUTION.md` and on
 the Credits page. The white-matter section's tract files (`public/assets/wm/`, `wm-manifest.json`,
-`wm-connectome.json`) are **CC BY-SA 4.0** (HCP-1065 atlas) plus the HCP terms, not GPL.
+`wm-connectome.json`) are **CC BY-SA 4.0** (HCP-1065 atlas) plus the HCP terms, not GPL. The skull-base
+files (`public/assets/skullbase/`, `sb-*.json`) are **CC BY-SA** (Z-Anatomy 4.0, BodyParts3D 2.1 Japan,
+Wikipedia definitions 3.0), not GPL.
 
 ## Data, licences, attribution
 

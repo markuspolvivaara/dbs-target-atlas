@@ -1,0 +1,78 @@
+import { describe, expect, it } from 'vitest';
+import { crossCheckSb, DEFINITIONS, LANDMARKS, NOT_YET_SHOWN, REGIONS, SB_MANIFEST } from '../../src/skullbase';
+import { SB_GROUPS } from '../../src/skullbase/groups';
+import { skullPlan, skullScene } from '../../src/skullbase/scene';
+import { decodeSkull, defaultSkullState, encodeSkull } from '../../src/skullbase/state';
+import { nodeMeans } from './glb';
+
+describe('skull-base data (Z-Anatomy export)', () => {
+  it('generated files agree with each other', () => {
+    expect(crossCheckSb()).toEqual([]);
+  });
+  it('has the cranial bones, cranial nerves I–XII and the main intracranial arteries and sinuses', () => {
+    const names = new Set(SB_MANIFEST.structures.map((s) => s.name));
+    for (const b of ['Sphenoid bone', 'Temporal bone', 'Occipital bone', 'Frontal bone', 'Ethmoid bone', 'Parietal bone']) expect(names.has(b), b).toBe(true);
+    for (const n of ['Olfactory nerve (I)', 'Optic nerve (II)', 'Oculomotor nerve (III)', 'Trochlear nerve (IV)', 'Trigeminal nerve (V)', 'Abducens nerve (VI)',
+      'Facial nerve (VII)', 'Vestibulocochlear nerve (VIII)', 'Glossopharyngeal nerve (IX)', 'Vagus nerve (X)', 'Accessory nerve (XI)', 'Hypoglossal nerve (XII)']) expect(names.has(n), n).toBe(true);
+    for (const n of ['Internal carotid artery', 'Basilar artery', 'Vertebral artery', 'Posterior communicating artery', 'Cavernous sinus', 'Sigmoid sinus', 'Superior sagittal sinus']) expect(names.has(n), n).toBe(true);
+  });
+  it('the origin is the hypophysial fossa, and sella landmarks sit around it as expected from their names', () => {
+    const lm = new Map(LANDMARKS.map((l) => [l.name, l.ras]));
+    expect(lm.get('Hypophysial fossa')!.map((v) => v + 0)).toEqual([0, 0, 0]);
+    expect(lm.get('Tuberculum sellae')![1]).toBeGreaterThan(0); // anterior
+    expect(lm.get('Dorsum sellae')![1]).toBeLessThan(0); // posterior
+    expect(lm.get('Foramen magnum')![2]).toBeLessThan(-20); // well below
+    expect(Math.abs(lm.get('Foramen ovale')![0])).toBeGreaterThan(15); // lateral
+  });
+  it('every landmark lies close to its bone (opening centres excepted) and every region lists measured neighbours', () => {
+    for (const l of LANDMARKS) expect(l.distanceToBoneMm, l.name).toBeLessThanOrEqual(20);
+    for (const r of REGIONS) expect(r.structures.length, r.landmark).toBeGreaterThan(1);
+  });
+  it('most definitions carry their Wikipedia source link (cards show it when present)', () => {
+    const defs = Object.values(DEFINITIONS);
+    expect(defs.length).toBeGreaterThan(150);
+    expect(defs.filter((d) => d.url?.startsWith('https://en.wikipedia.org/')).length / defs.length).toBeGreaterThan(0.75);
+  });
+  it('the missing landmarks are listed as not yet shown', () => {
+    expect(NOT_YET_SHOWN).toContain('Jugular foramen');
+    expect(NOT_YET_SHOWN).toContain('Superior orbital fissure');
+  });
+});
+
+describe('skull-base scene and URL state', () => {
+  it('plans reference only catalogue entries', () => {
+    for (const g of SB_GROUPS) {
+      const p = skullPlan(g.id, null);
+      for (const id of [...p.looks.keys(), ...p.tracts.keys(), ...p.focusIds]) expect(skullScene.catalog.byId.has(id), `${g.id}: ${id}`).toBe(true);
+      for (const m of p.markers) expect(skullScene.catalog.markers.has(m.targetId), m.targetId).toBe(true);
+    }
+  });
+  it('round-trips a teaching link', () => {
+    const s = { ...defaultSkullState(), grp: 'near_hypophysial_fossa', sel: 'sb_internal_carotid_artery', hemi: 'L' as const, cutAbove: 12, cutSide: 'R' as const, labels: 'all' as const, hidden: ['sb_basilar_artery'] };
+    s.layers.nuclei = { on: true, opacity: 0.5 };
+    expect(decodeSkull(encodeSkull(s))).toEqual(s);
+  });
+  it('a link without settings takes them from its group', () => {
+    const s = decodeSkull('#/atlas?g=arteries');
+    expect(s.cutAbove).toBeNull();
+  });
+});
+
+describe('shipped skull-base GLBs', () => {
+  it.each(SB_MANIFEST.structures.filter((s) => ['Sphenoid bone', 'Temporal bone', 'Internal carotid artery', 'Cavernous sinus'].includes(s.name)).map((s) => [s.name, s]))('%s decodes, on the right sides', async (_n, s) => {
+    const means = await nodeMeans(s.file);
+    for (const side of ['L', 'R'] as const) {
+      expect(means[side], side).toBeDefined();
+      expect(Math.sign(means[side][0])).toBe(side === 'L' ? -1 : 1);
+    }
+  });
+});
+
+describe('e2e group list stays in step with the groups module', () => {
+  it('ids and names match tests/e2e/smoke.spec.ts', async () => {
+    const { readFileSync } = await import('node:fs');
+    const spec = readFileSync(new URL('../e2e/smoke.spec.ts', import.meta.url), 'utf8');
+    for (const g of SB_GROUPS) if (g.kind === 'bone') expect(spec, g.name).toContain(`'${g.name}'`);
+    expect(SB_GROUPS.length).toBe(1 + REGIONS.length + 3 + 5);
+  });
+});

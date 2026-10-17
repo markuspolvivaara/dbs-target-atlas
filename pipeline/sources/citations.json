@@ -118,5 +118,10 @@
   "citation": "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027.",
   "doi": "10.1016/j.neuroimage.2018.05.027",
   "url": "https://doi.org/10.1016/j.neuroimage.2018.05.027"
+ },
+ "mitsuhashi2009": {
+  "citation": "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+  "doi": "10.1093/nar/gkn613",
+  "url": "https://doi.org/10.1093/nar/gkn613"
  }
 }

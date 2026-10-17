@@ -1,6 +1,6 @@
 /**
  * Project name and sections, in one place so the project can be renamed later
- * by editing this file (plus the static <title> tags in index.html, dbs/index.html and tracts/index.html).
+ * by editing this file (plus the static <title> tags in index.html and each section's index.html).
  */
 export const BRAND = {
   name: 'Open Neuroanatomy Atlas',
@@ -9,7 +9,7 @@ export const BRAND = {
 } as const;
 
 export interface Section {
-  id: 'dbs' | 'tracts';
+  id: 'dbs' | 'tracts' | 'skullbase';
   name: string;
   /** path from the site root */
   path: string;
@@ -25,6 +25,10 @@ export const SECTIONS: Section[] = [
   {
     id: 'tracts', name: 'White-matter tracts', path: 'tracts/', status: 'live',
     summary: 'Core, extended and posterior fossa white-matter tracts in 3D (language, visual, motor, limbic, cerebellar and brainstem) with their course, connections, function and surgical relevance, for tumour and epilepsy surgery teaching.',
+  },
+  {
+    id: 'skullbase', name: 'Skull base', path: 'skullbase/', status: 'live',
+    summary: 'Cranial bones with their labelled foramina and landmarks, the cranial nerves, arteries and dural sinuses, in a cut-away 3D model: what passes where around the sella, orbit apex, petrous apex and foramen magnum.',
   },
 ];
 

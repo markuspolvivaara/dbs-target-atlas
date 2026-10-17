@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { INDICATIONS } from '../../src/data/indications';
 import { GROUPS } from '../../src/tracts/content';
+import { readFileSync } from 'node:fs';
 
 /** Fail on any request that leaves the local server (no external runtime requests allowed). */
 function guard(page: Page) {
@@ -504,6 +505,62 @@ test('core and extended tracts stay separate; the switch moves between them', as
   await page.goto('./tracts/#/atlas?g=limbic&sel=wm_fx');
   await settle(page);
   await expect(page.locator('.card.sel dt', { hasText: 'Checked by this project’s pipeline' })).toBeVisible();
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// ---------------------------------------------------------------- skull-base section
+// group ids and names as src/skullbase/groups.ts builds them (Playwright cannot import the generated JSON it uses)
+const SB_REGIONS = JSON.parse(readFileSync(new URL('../../src/data/generated/sb-regions.json', import.meta.url), 'utf8')) as { landmark: string }[];
+const slug = (x: string) => x.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+const SB_GROUPS = [
+  { id: 'floor', name: 'Cranial floor' },
+  ...SB_REGIONS.map((r) => ({ id: `near_${slug(r.landmark)}`, name: `Around the ${r.landmark.toLowerCase()}` })),
+  { id: 'nerves', name: 'Cranial nerves' }, { id: 'arteries', name: 'Arteries' }, { id: 'veins', name: 'Veins and dural sinuses' },
+  ...['Sphenoid bone', 'Temporal bone', 'Occipital bone', 'Frontal and ethmoid bones', 'Parietal bone'].map((n) => ({ id: `bone_${slug(n)}`, name: n })),
+];
+for (const g of SB_GROUPS) {
+  test(`skull base ${g.id}: renders and matches the visual baseline`, async ({ page }) => {
+    const gd = guard(page);
+    await page.goto(`./skullbase/#/atlas?g=${g.id}`);
+    await settle(page);
+    await expect(page.locator('.pane:not([hidden]) .card h2').first()).toHaveText(g.name);
+    expect(await canvasColours(page)).toBeGreaterThan(40);
+    await expect(page.locator('.stage')).toHaveScreenshot(`skull-${g.id}.png`);
+    expect(gd.external).toEqual([]);
+    expect(gd.errors).toEqual([]);
+  });
+}
+
+test('skull base: structure and landmark cards, cut-away and the URL', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./skullbase/#/atlas?g=near_hypophysial_fossa');
+  await settle(page);
+  await page.locator('.sb-item[data-id="sb_basilar_artery"]').click();
+  const card = page.locator('.card.sel');
+  await expect(card.locator('h2')).toHaveText('Basilar artery');
+  await expect(card).toContainText('From Wikipedia (CC BY-SA 3.0)');
+  await expect(card.locator('dt', { hasText: 'Near (measured in the model)' })).toBeVisible();
+  await page.locator('.sb-item[data-id="lm_tuberculum_sellae"]').click();
+  await expect(page.locator('.card.sel h2')).toHaveText('Tuberculum sellae');
+  await expect(page.locator('.card.sel')).toContainText('Sphenoid bone');
+  // the cut-away is part of the link and survives a reload
+  await page.locator('.ptab', { hasText: 'Layers and cut' }).click();
+  await page.locator('[data-k="cz-on"]').uncheck();
+  await expect.poll(() => new URL(page.url()).hash).toContain('cz=off');
+  await settle(page);
+  await page.reload();
+  await settle(page);
+  const st = await page.evaluate(() => (window as unknown as { __atlas: { state(): { grp: string; sel: string; cutAbove: number | null } } }).__atlas.state());
+  expect([st.grp, st.sel, st.cutAbove]).toEqual(['near_hypophysial_fossa', 'lm_tuberculum_sellae', null]);
+  // sources and credits, without external requests
+  await page.goto('./skullbase/#/credits');
+  await expect(page.locator('#zanatomy')).toContainText('CC BY-SA');
+  await page.goto('./skullbase/#/sources');
+  await expect(page.locator('.page:not([hidden]) h1')).toHaveText('Sources');
+  // the section menu lists all three sections
+  await page.locator('.section-chip').click();
+  await expect(page.locator('.section-menu a.section-item:not(.home)')).toHaveText(['DBS targets', 'White-matter tracts', 'Skull base']);
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });

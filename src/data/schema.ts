@@ -22,8 +22,11 @@ export const EvidenceSchema = z.object({
 });
 export type Evidence = z.infer<typeof EvidenceSchema>;
 
-/** 'lateral' / 'medial' look at the shown hemisphere from outside / from the midline (white-matter section). */
-export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon', 'lateral', 'medial']);
+/**
+ * 'lateral' / 'medial' look at the shown hemisphere from outside / from the midline (white-matter section);
+ * 'inferior' looks up at the skull base from below (skull-base section).
+ */
+export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon', 'lateral', 'medial', 'inferior']);
 export type CameraPreset = z.infer<typeof CameraPresetSchema>;
 
 /** A rendered structure: nucleus, cortical area, tract or sweet-spot volume. */
@@ -31,7 +34,8 @@ export const StructureSchema = z.object({
   id: Id,
   name: z.string(),
   aliases: z.array(z.string()),
-  type: z.enum(['nucleus', 'cortex', 'tract', 'target']),
+  /** bone and soft (soft-tissue mesh) are used by the skull-base section */
+  type: z.enum(['nucleus', 'cortex', 'tract', 'target', 'bone', 'soft']),
   colour: z.string(), // palette token
   meshFile: z.string().regex(/^assets\/(meshes|tracts)\/[a-z0-9_]+\.glb$/),
   /** Text taken from the attached content only; null when the content says nothing about it. */
@@ -126,7 +130,8 @@ export const ManifestStructureSchema = z.object({
   id: Id,
   name: z.string(),
   aliases: z.array(z.string()),
-  type: z.enum(['nucleus', 'cortex', 'tract', 'target']),
+  /** bone and soft (soft-tissue mesh) are used by the skull-base section */
+  type: z.enum(['nucleus', 'cortex', 'tract', 'target', 'bone', 'soft']),
   role: z.enum(['tract', 'border', 'response']).optional(),
   file: z.string(),
   bytes: z.number().int().positive(),
@@ -140,6 +145,8 @@ export const ManifestStructureSchema = z.object({
   derivation: z.string(),
   category: z.string().optional(),
   hcp: z.enum(['confirmed', 'likely']).optional(),
+  /** skull-base section: share of the line inside the cranial bones' convex hull (measured) */
+  intracranialFraction: z.number().optional(),
   /** white-matter section: core (surgical essentials), extended, or posterior fossa */
   tier: z.enum(['core', 'extended', 'fossa']).optional(),
   centroid: z.object({ L: Vec3, R: Vec3 }).nullable(),
@@ -185,6 +192,18 @@ export const WmManifestSchema = z.object({
   hcpAcknowledgement: z.string(),
 });
 export type WmManifest = z.infer<typeof WmManifestSchema>;
+
+/** sb-manifest.json: the skull-base section's structures (Z-Anatomy / BodyParts3D), in their own space. */
+export const SbManifestSchema = z.object({
+  space: z.string(),
+  generatedBy: z.string(),
+  structures: z.array(ManifestStructureSchema),
+  dataset: z.object({
+    name: z.string(), licence: z.string(), url: z.string().url(), note: z.string(), attribution: z.array(z.string()),
+    citation: z.array(z.string()), citationUrls: z.array(z.string()),
+  }),
+});
+export type SbManifest = z.infer<typeof SbManifestSchema>;
 
 export const CoordinateSchema = z.object({ L: Vec3, R: Vec3, method: z.string(), dataset: z.string() });
 export const AcpcSchema = z.object({ AC: Vec3, PC: Vec3, MSP: Vec3, source: z.string(), url: z.string().url() });

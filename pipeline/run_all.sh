@@ -15,3 +15,9 @@ PY="${PYTHON:-pipeline/.venv/bin/python}"
 node pipeline/compress.mjs
 "$PY" -I -W ignore pipeline/manifest.py
 "$PY" -I -W ignore pipeline/validate.py
+# skull base section (needs Blender in .tools/ or BLENDER=/path/to/blender, and the Z-Anatomy package in pipeline/data/raw/zanatomy)
+"${BLENDER:-.tools/Blender.app/Contents/MacOS/Blender}" --factory-startup -b -noaudio \
+    pipeline/data/raw/zanatomy/Z-Anatomy/Startup.blend --python pipeline/skullbase_export.py
+"$PY" -I -W ignore pipeline/skullbase_build.py
+node pipeline/compress.mjs
+"$PY" -I -W ignore pipeline/skullbase_build.py finalize

@@ -1,0 +1,5714 @@
+{
+ "space": "RAS millimetres from the hypophysial fossa landmark of the Z-Anatomy model (not MNI)",
+ "generatedBy": "pipeline/skullbase_export.py (Blender) + pipeline/skullbase_build.py + pipeline/compress.mjs",
+ "structures": [
+  {
+   "id": "sb_x",
+   "name": "?x",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_x.glb",
+   "bytes": 3624,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -2.23,
+     38.01,
+     -22.3
+    ],
+    "R": [
+     2.23,
+     38.01,
+     -22.3
+    ]
+   },
+   "intracranialFraction": 0.67
+  },
+  {
+   "id": "sb_abducens_nerve_vi",
+   "name": "Abducens nerve (VI)",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_abducens_nerve_vi.glb",
+   "bytes": 4172,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -16.76,
+     8.7,
+     -0.47
+    ],
+    "R": [
+     16.76,
+     8.7,
+     -0.47
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_accessory_branch_of_middle_meningeal_artery",
+   "name": "Accessory branch of middle meningeal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_accessory_branch_of_middle_meningeal_artery.glb",
+   "bytes": 2764,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -25.8,
+     -4.07,
+     -17.64
+    ],
+    "R": [
+     25.8,
+     -4.07,
+     -17.64
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_accessory_nerve_xi",
+   "name": "Accessory nerve (XI)",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_accessory_nerve_xi.glb",
+   "bytes": 6276,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -23.39,
+     -31.73,
+     -49.43
+    ],
+    "R": [
+     23.39,
+     -31.73,
+     -49.43
+    ]
+   },
+   "intracranialFraction": 0.52
+  },
+  {
+   "id": "sb_adenohypophysis",
+   "name": "Adenohypophysis",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/sb_adenohypophysis.glb",
+   "bytes": 8488,
+   "colour": {
+    "token": "sbSoft",
+    "light": "#8A6FA8",
+    "dark": "#B9A3D6"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "soft",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -2.78,
+     2.65,
+     7.59
+    ],
+    "R": [
+     2.78,
+     2.65,
+     7.59
+    ]
+   }
+  },
+  {
+   "id": "sb_angular_artery",
+   "name": "Angular artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_angular_artery.glb",
+   "bytes": 6936,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -7.6,
+     66.1,
+     23.15
+    ],
+    "R": [
+     7.6,
+     66.1,
+     23.15
+    ]
+   },
+   "intracranialFraction": 0.09
+  },
+  {
+   "id": "sb_angular_vein",
+   "name": "Angular vein",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_angular_vein.glb",
+   "bytes": 3968,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -16.27,
+     63.2,
+     -12.56
+    ],
+    "R": [
+     16.27,
+     63.2,
+     -12.56
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_anterior_cerebral_artery",
+   "name": "Anterior cerebral artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_anterior_cerebral_artery.glb",
+   "bytes": 2544,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -7.4,
+     13.6,
+     15.59
+    ],
+    "R": [
+     7.4,
+     13.6,
+     15.59
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_anterior_deep_temporal_artery",
+   "name": "Anterior deep temporal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_anterior_deep_temporal_artery.glb",
+   "bytes": 3892,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -48.99,
+     18.03,
+     4.32
+    ],
+    "R": [
+     48.99,
+     18.03,
+     4.32
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_anterior_division_of_mandibular_nerve",
+   "name": "Anterior division of mandibular nerve",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_anterior_division_of_mandibular_nerve.glb",
+   "bytes": 2440,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -27.22,
+     3.59,
+     -23.24
+    ],
+    "R": [
+     27.22,
+     3.59,
+     -23.24
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_anterior_division_of_retromandibular_vein",
+   "name": "Anterior division of retromandibular vein",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_anterior_division_of_retromandibular_vein.glb",
+   "bytes": 2392,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -36.36,
+     -7.19,
+     -56.37
+    ],
+    "R": [
+     36.36,
+     -7.19,
+     -56.37
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_anterior_ethmoidal_artery",
+   "name": "Anterior ethmoidal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_anterior_ethmoidal_artery.glb",
+   "bytes": 3716,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -4.25,
+     51.87,
+     1.56
+    ],
+    "R": [
+     4.25,
+     51.87,
+     1.56
+    ]
+   },
+   "intracranialFraction": 0.86
+  },
+  {
+   "id": "sb_anterior_inferior_cerebellar_artery",
+   "name": "Anterior inferior cerebellar artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_anterior_inferior_cerebellar_artery.glb",
+   "bytes": 4164,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -18.07,
+     -30.69,
+     -13.83
+    ],
+    "R": [
+     18.07,
+     -30.69,
+     -13.83
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_anterior_intercavernous_sinus",
+   "name": "Anterior intercavernous sinus",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_anterior_intercavernous_sinus.glb",
+   "bytes": 2388,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -2.24,
+     2.59,
+     12.37
+    ],
+    "R": [
+     2.08,
+     2.62,
+     12.4
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_anterior_septal_branches_of_anterior_ethmoidal_artery",
+   "name": "Anterior septal branches of anterior ethmoidal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_anterior_septal_branches_of_anterior_ethmoidal_artery.glb",
+   "bytes": 3408,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -2.1,
+     39.95,
+     -11.0
+    ],
+    "R": [
+     2.1,
+     39.95,
+     -11.0
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_anterior_spinal_artery",
+   "name": "Anterior spinal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_anterior_spinal_artery.glb",
+   "bytes": 2896,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -5.2,
+     -34.95,
+     -37.73
+    ],
+    "R": [
+     5.2,
+     -34.95,
+     -37.73
+    ]
+   },
+   "intracranialFraction": 0.74
+  },
+  {
+   "id": "sb_anterior_temporal_branch",
+   "name": "Anterior temporal branch",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_anterior_temporal_branch.glb",
+   "bytes": 6772,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -59.76,
+     -4.85,
+     20.47
+    ],
+    "R": [
+     59.76,
+     -4.85,
+     20.47
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_artery_of_central_sulcus",
+   "name": "Artery of central sulcus",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_artery_of_central_sulcus.glb",
+   "bytes": 4176,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -48.9,
+     -23.53,
+     70.95
+    ],
+    "R": [
+     48.9,
+     -23.53,
+     70.95
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_artery_of_precentral_sulcus",
+   "name": "Artery of precentral sulcus",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_artery_of_precentral_sulcus.glb",
+   "bytes": 7468,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -44.67,
+     0.59,
+     74.3
+    ],
+    "R": [
+     44.67,
+     0.59,
+     74.3
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_artery_of_pterygoid_canal",
+   "name": "Artery of pterygoid canal",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_artery_of_pterygoid_canal.glb",
+   "bytes": 2756,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -22.94,
+     19.79,
+     -19.64
+    ],
+    "R": [
+     22.94,
+     19.79,
+     -19.64
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_ascending_pharyngeal_artery",
+   "name": "Ascending pharyngeal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_ascending_pharyngeal_artery.glb",
+   "bytes": 4824,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -24.63,
+     9.54,
+     -49.4
+    ],
+    "R": [
+     24.63,
+     9.54,
+     -49.4
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_basilar_artery",
+   "name": "Basilar artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_basilar_artery.glb",
+   "bytes": 1592,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     0.0,
+     -11.43,
+     -3.55
+    ],
+    "R": [
+     0.0,
+     -11.43,
+     -3.55
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_branch_to_angular_gyrus",
+   "name": "Branch to angular gyrus",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_branch_to_angular_gyrus.glb",
+   "bytes": 2532,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -60.29,
+     -78.34,
+     35.37
+    ],
+    "R": [
+     60.29,
+     -78.34,
+     35.37
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_buccal_artery",
+   "name": "Buccal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_buccal_artery.glb",
+   "bytes": 2720,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -31.95,
+     30.28,
+     -37.96
+    ],
+    "R": [
+     31.95,
+     30.28,
+     -37.96
+    ]
+   },
+   "intracranialFraction": 0.28
+  },
+  {
+   "id": "sb_buccal_nerve",
+   "name": "Buccal nerve",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_buccal_nerve.glb",
+   "bytes": 3232,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -31.96,
+     32.77,
+     -54.4
+    ],
+    "R": [
+     31.96,
+     32.77,
+     -54.4
+    ]
+   },
+   "intracranialFraction": 0.08
+  },
+  {
+   "id": "sb_callosomarginal_artery",
+   "name": "Callosomarginal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_callosomarginal_artery.glb",
+   "bytes": 8296,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -3.38,
+     21.79,
+     75.16
+    ],
+    "R": [
+     3.38,
+     21.79,
+     75.16
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_cavernous_sinus",
+   "name": "Cavernous sinus",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/sb_cavernous_sinus.glb",
+   "bytes": 112048,
+   "colour": {
+    "token": "sbSoft",
+    "light": "#8A6FA8",
+    "dark": "#B9A3D6"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "soft",
+   "derivation": "Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -8.08,
+     -2.03,
+     7.72
+    ],
+    "R": [
+     8.08,
+     -2.03,
+     7.72
+    ]
+   }
+  },
+  {
+   "id": "sb_central_retinal_artery",
+   "name": "Central retinal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_central_retinal_artery.glb",
+   "bytes": 86492,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -29.0,
+     41.0,
+     -4.09
+    ],
+    "R": [
+     29.0,
+     41.0,
+     -4.09
+    ]
+   },
+   "intracranialFraction": 0.89
+  },
+  {
+   "id": "sb_chorda_tympani",
+   "name": "Chorda tympani",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_chorda_tympani.glb",
+   "bytes": 2920,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -29.01,
+     -7.61,
+     -26.25
+    ],
+    "R": [
+     29.01,
+     -7.61,
+     -26.25
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_cochlear_nerve",
+   "name": "Cochlear nerve",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_cochlear_nerve.glb",
+   "bytes": 1676,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -30.56,
+     -16.74,
+     -13.09
+    ],
+    "R": [
+     -30.56,
+     -16.74,
+     -13.09
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_descending_palatine_artery",
+   "name": "Descending palatine artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_descending_palatine_artery.glb",
+   "bytes": 3668,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -19.51,
+     24.54,
+     -25.6
+    ],
+    "R": [
+     19.51,
+     24.54,
+     -25.6
+    ]
+   },
+   "intracranialFraction": 0.86
+  },
+  {
+   "id": "sb_distal_lateral_striate_branches",
+   "name": "Distal lateral striate branches",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_distal_lateral_striate_branches.glb",
+   "bytes": 6316,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -21.79,
+     8.72,
+     23.81
+    ],
+    "R": [
+     21.79,
+     8.72,
+     23.81
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_ethmoid_bone",
+   "name": "Ethmoid bone",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase/sb_ethmoid_bone.glb",
+   "bytes": 71452,
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "bone",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -8.38,
+     36.37,
+     -6.33
+    ],
+    "R": [
+     8.38,
+     36.37,
+     -6.32
+    ]
+   }
+  },
+  {
+   "id": "sb_external_carotid_artery",
+   "name": "External carotid artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_external_carotid_artery.glb",
+   "bytes": 2808,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -37.32,
+     -12.36,
+     -66.59
+    ],
+    "R": [
+     37.32,
+     -12.36,
+     -66.59
+    ]
+   },
+   "intracranialFraction": 0.22
+  },
+  {
+   "id": "sb_external_jugular_vein",
+   "name": "External jugular vein",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_external_jugular_vein.glb",
+   "bytes": 2552,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -48.11,
+     -14.9,
+     -75.8
+    ],
+    "R": [
+     48.11,
+     -14.9,
+     -75.8
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_facial_artery",
+   "name": "Facial artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_facial_artery.glb",
+   "bytes": 3260,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -34.91,
+     27.57,
+     -68.93
+    ],
+    "R": [
+     34.91,
+     27.57,
+     -68.93
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_facial_nerve_vii",
+   "name": "Facial nerve (VII)",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_facial_nerve_vii.glb",
+   "bytes": 13484,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -44.62,
+     10.76,
+     -30.93
+    ],
+    "R": [
+     44.62,
+     10.76,
+     -30.93
+    ]
+   },
+   "intracranialFraction": 0.35
+  },
+  {
+   "id": "sb_facial_vein",
+   "name": "Facial vein",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_facial_vein.glb",
+   "bytes": 3652,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -33.65,
+     31.4,
+     -67.42
+    ],
+    "R": [
+     33.65,
+     31.4,
+     -67.42
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_falx_cerebri",
+   "name": "Falx cerebri",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/sb_falx_cerebri.glb",
+   "bytes": 101212,
+   "colour": {
+    "token": "sbSoft",
+    "light": "#8A6FA8",
+    "dark": "#B9A3D6"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "soft",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -0.98,
+     -37.74,
+     44.71
+    ],
+    "R": [
+     0.91,
+     -37.73,
+     44.76
+    ]
+   }
+  },
+  {
+   "id": "sb_frontal_bone",
+   "name": "Frontal bone",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase/sb_frontal_bone.glb",
+   "bytes": 56800,
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "bone",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -26.22,
+     34.67,
+     40.1
+    ],
+    "R": [
+     26.22,
+     34.67,
+     40.1
+    ]
+   }
+  },
+  {
+   "id": "sb_frontal_branch_of_superficial_temporal_artery",
+   "name": "Frontal branch of superficial temporal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_frontal_branch_of_superficial_temporal_artery.glb",
+   "bytes": 4132,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -40.57,
+     55.06,
+     45.98
+    ],
+    "R": [
+     40.57,
+     55.06,
+     45.98
+    ]
+   },
+   "intracranialFraction": 0.01
+  },
+  {
+   "id": "sb_frontal_branches_of_callosomarginal_artery",
+   "name": "Frontal branches of callosomarginal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_frontal_branches_of_callosomarginal_artery.glb",
+   "bytes": 3076,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -5.72,
+     36.65,
+     75.64
+    ],
+    "R": [
+     5.72,
+     36.65,
+     75.64
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_glossopharyngeal_nerve_ix",
+   "name": "Glossopharyngeal nerve (IX)",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_glossopharyngeal_nerve_ix.glb",
+   "bytes": 7116,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -19.19,
+     -26.12,
+     -41.83
+    ],
+    "R": [
+     19.19,
+     -26.12,
+     -41.83
+    ]
+   },
+   "intracranialFraction": 0.69
+  },
+  {
+   "id": "sb_greater_palatine_artery",
+   "name": "Greater palatine artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_greater_palatine_artery.glb",
+   "bytes": 3016,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -11.8,
+     45.73,
+     -44.67
+    ],
+    "R": [
+     11.8,
+     45.73,
+     -44.67
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_hypoglossal_nerve_xii",
+   "name": "Hypoglossal nerve (XII)",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_hypoglossal_nerve_xii.glb",
+   "bytes": 9000,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -12.9,
+     -13.98,
+     -39.59
+    ],
+    "R": [
+     12.9,
+     -13.98,
+     -39.59
+    ]
+   },
+   "intracranialFraction": 0.7
+  },
+  {
+   "id": "sb_inferior_alveolar_artery",
+   "name": "Inferior alveolar artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_inferior_alveolar_artery.glb",
+   "bytes": 4352,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -29.27,
+     27.47,
+     -67.99
+    ],
+    "R": [
+     29.27,
+     27.47,
+     -67.99
+    ]
+   },
+   "intracranialFraction": 0.1
+  },
+  {
+   "id": "sb_inferior_alveolar_nerve",
+   "name": "Inferior alveolar nerve",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_inferior_alveolar_nerve.glb",
+   "bytes": 9340,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -19.26,
+     44.16,
+     -77.81
+    ],
+    "R": [
+     19.26,
+     44.16,
+     -77.81
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_inferior_labial_artery",
+   "name": "Inferior labial artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_inferior_labial_artery.glb",
+   "bytes": 3180,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -21.05,
+     54.79,
+     -73.49
+    ],
+    "R": [
+     21.05,
+     54.79,
+     -73.49
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_inferior_labial_veins",
+   "name": "Inferior labial veins",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_inferior_labial_veins.glb",
+   "bytes": 4812,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -21.73,
+     48.78,
+     -83.4
+    ],
+    "R": [
+     21.73,
+     48.78,
+     -83.4
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_inferior_nasal_concha_bone",
+   "name": "Inferior nasal concha bone",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase/sb_inferior_nasal_concha_bone.glb",
+   "bytes": 9016,
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "bone",
+   "derivation": "Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -9.69,
+     43.55,
+     -30.66
+    ],
+    "R": [
+     9.69,
+     43.55,
+     -30.66
+    ]
+   }
+  },
+  {
+   "id": "sb_inferior_ophthalmic_vein",
+   "name": "Inferior ophthalmic vein",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_inferior_ophthalmic_vein.glb",
+   "bytes": 2540,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -17.21,
+     22.94,
+     -1.48
+    ],
+    "R": [
+     17.21,
+     22.94,
+     -1.48
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_inferior_petrosal_sinus",
+   "name": "Inferior petrosal sinus",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_inferior_petrosal_sinus.glb",
+   "bytes": 2916,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -23.0,
+     -24.78,
+     -17.2
+    ],
+    "R": [
+     23.0,
+     -24.78,
+     -17.2
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_inferior_sagittal_sinus",
+   "name": "Inferior sagittal sinus",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_inferior_sagittal_sinus.glb",
+   "bytes": 2128,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     0.0,
+     -23.01,
+     43.92
+    ],
+    "R": [
+     0.0,
+     -23.01,
+     43.92
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_infra_orbital_artery",
+   "name": "Infra-orbital artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_infra_orbital_artery.glb",
+   "bytes": 2648,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -26.84,
+     47.62,
+     -24.58
+    ],
+    "R": [
+     26.84,
+     47.62,
+     -24.58
+    ]
+   },
+   "intracranialFraction": 0.2
+  },
+  {
+   "id": "sb_insular_branches_of_middle_cerebral_artery_m2_segment",
+   "name": "Insular branches of middle cerebral artery (M2 segment)",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_insular_branches_of_middle_cerebral_artery_m2_segment.glb",
+   "bytes": 3008,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -42.24,
+     1.84,
+     27.43
+    ],
+    "R": [
+     42.24,
+     1.84,
+     27.43
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_internal_carotid_artery",
+   "name": "Internal carotid artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_internal_carotid_artery.glb",
+   "bytes": 3284,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -23.53,
+     -7.86,
+     -36.75
+    ],
+    "R": [
+     23.53,
+     -7.86,
+     -36.75
+    ]
+   },
+   "intracranialFraction": 0.62
+  },
+  {
+   "id": "sb_lacrimal_artery",
+   "name": "Lacrimal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_lacrimal_artery.glb",
+   "bytes": 4036,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -36.37,
+     40.56,
+     10.17
+    ],
+    "R": [
+     36.37,
+     40.56,
+     10.17
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_lacrimal_bone",
+   "name": "Lacrimal bone",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase/sb_lacrimal_bone.glb",
+   "bytes": 10440,
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "bone",
+   "derivation": "Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -10.8,
+     53.46,
+     -8.7
+    ],
+    "R": [
+     10.8,
+     53.46,
+     -8.7
+    ]
+   }
+  },
+  {
+   "id": "sb_lateral_frontobasal_artery",
+   "name": "Lateral frontobasal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_lateral_frontobasal_artery.glb",
+   "bytes": 4660,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -38.6,
+     42.31,
+     43.5
+    ],
+    "R": [
+     38.6,
+     42.31,
+     43.5
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_lateral_occipital_artery",
+   "name": "Lateral occipital artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_lateral_occipital_artery.glb",
+   "bytes": 4032,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -30.25,
+     -78.13,
+     10.43
+    ],
+    "R": [
+     30.25,
+     -78.13,
+     10.43
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_lateral_pontine_branches_of_basilar_artery",
+   "name": "Lateral pontine branches of basilar artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_lateral_pontine_branches_of_basilar_artery.glb",
+   "bytes": 3716,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -13.21,
+     -16.17,
+     -7.62
+    ],
+    "R": [
+     13.21,
+     -16.17,
+     -7.62
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_lingual_nerve",
+   "name": "Lingual nerve",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_lingual_nerve.glb",
+   "bytes": 3244,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -21.26,
+     16.03,
+     -56.75
+    ],
+    "R": [
+     21.26,
+     16.03,
+     -56.75
+    ]
+   },
+   "intracranialFraction": 0.27
+  },
+  {
+   "id": "sb_lingual_vein",
+   "name": "Lingual vein",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_lingual_vein.glb",
+   "bytes": 2604,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -25.46,
+     13.24,
+     -57.29
+    ],
+    "R": [
+     25.46,
+     13.24,
+     -57.29
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_long_posterior_ciliary_arteries",
+   "name": "Long posterior ciliary arteries",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_long_posterior_ciliary_arteries.glb",
+   "bytes": 4088,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -24.04,
+     31.34,
+     9.26
+    ],
+    "R": [
+     24.04,
+     31.34,
+     9.26
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_maxilla",
+   "name": "Maxilla",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase/sb_maxilla.glb",
+   "bytes": 61088,
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "bone",
+   "derivation": "Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -18.45,
+     49.0,
+     -33.55
+    ],
+    "R": [
+     18.45,
+     49.0,
+     -33.55
+    ]
+   }
+  },
+  {
+   "id": "sb_maxillary_artery",
+   "name": "Maxillary artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_maxillary_artery.glb",
+   "bytes": 6180,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -28.8,
+     31.65,
+     -34.99
+    ],
+    "R": [
+     28.8,
+     31.65,
+     -34.99
+    ]
+   },
+   "intracranialFraction": 0.22
+  },
+  {
+   "id": "sb_maxillary_nerve",
+   "name": "Maxillary nerve",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_maxillary_nerve.glb",
+   "bytes": 5480,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -23.11,
+     42.2,
+     -23.74
+    ],
+    "R": [
+     23.11,
+     42.2,
+     -23.74
+    ]
+   },
+   "intracranialFraction": 0.33
+  },
+  {
+   "id": "sb_maxillary_veins",
+   "name": "Maxillary veins",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_maxillary_veins.glb",
+   "bytes": 3328,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -33.52,
+     18.81,
+     -44.08
+    ],
+    "R": [
+     33.52,
+     18.81,
+     -44.08
+    ]
+   },
+   "intracranialFraction": 0.16
+  },
+  {
+   "id": "sb_medial_occipital_artery",
+   "name": "Medial occipital artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_medial_occipital_artery.glb",
+   "bytes": 4284,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -4.65,
+     -82.64,
+     19.72
+    ],
+    "R": [
+     4.65,
+     -82.64,
+     19.72
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_medial_pontine_branches_of_basilar_artery",
+   "name": "Medial pontine branches of basilar artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_medial_pontine_branches_of_basilar_artery.glb",
+   "bytes": 3208,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -5.88,
+     -9.94,
+     -1.17
+    ],
+    "R": [
+     5.88,
+     -9.94,
+     -1.17
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_meningeal_branch_of_maxillary_nerve",
+   "name": "Meningeal branch of maxillary nerve",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_meningeal_branch_of_maxillary_nerve.glb",
+   "bytes": 4696,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -60.12,
+     -13.63,
+     10.09
+    ],
+    "R": [
+     60.12,
+     -13.63,
+     10.09
+    ]
+   },
+   "intracranialFraction": 0.63
+  },
+  {
+   "id": "sb_mental_branch_of_inferior_alveolar_artery",
+   "name": "Mental branch of inferior alveolar artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_mental_branch_of_inferior_alveolar_artery.glb",
+   "bytes": 2724,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -13.23,
+     60.55,
+     -82.78
+    ],
+    "R": [
+     13.23,
+     60.55,
+     -82.78
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_mental_nerve",
+   "name": "Mental nerve",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_mental_nerve.glb",
+   "bytes": 3288,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -20.66,
+     53.72,
+     -83.59
+    ],
+    "R": [
+     20.66,
+     53.72,
+     -83.59
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_middle_cerebral_artery_m1_segment",
+   "name": "Middle cerebral artery (M1 segment)",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_middle_cerebral_artery_m1_segment.glb",
+   "bytes": 2760,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -20.45,
+     6.94,
+     15.14
+    ],
+    "R": [
+     20.45,
+     6.94,
+     15.14
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_middle_cerebral_artery_m3_segment",
+   "name": "Middle cerebral artery (M3 segment)",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_middle_cerebral_artery_m3_segment.glb",
+   "bytes": 3696,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -55.36,
+     -35.1,
+     38.92
+    ],
+    "R": [
+     55.36,
+     -35.1,
+     38.92
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_middle_meningeal_artery",
+   "name": "Middle meningeal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_middle_meningeal_artery.glb",
+   "bytes": 2732,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -29.33,
+     -6.69,
+     -19.57
+    ],
+    "R": [
+     29.33,
+     -6.69,
+     -19.57
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_mylohyoid_branch_of_inferior_alveolar_artery",
+   "name": "Mylohyoid branch of inferior alveolar artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_mylohyoid_branch_of_inferior_alveolar_artery.glb",
+   "bytes": 3524,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -33.49,
+     4.09,
+     -58.9
+    ],
+    "R": [
+     33.49,
+     4.09,
+     -58.9
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_nasal_bone",
+   "name": "Nasal bone",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase/sb_nasal_bone.glb",
+   "bytes": 6676,
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "bone",
+   "derivation": "Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -3.8,
+     72.44,
+     -2.59
+    ],
+    "R": [
+     3.8,
+     72.44,
+     -2.59
+    ]
+   }
+  },
+  {
+   "id": "sb_nerve_to_mylohyoid_muscle",
+   "name": "Nerve to mylohyoid muscle",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_nerve_to_mylohyoid_muscle.glb",
+   "bytes": 3700,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -22.18,
+     22.76,
+     -76.08
+    ],
+    "R": [
+     22.18,
+     22.76,
+     -76.08
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_neurohypophysis",
+   "name": "Neurohypophysis",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/sb_neurohypophysis.glb",
+   "bytes": 7704,
+   "colour": {
+    "token": "sbSoft",
+    "light": "#8A6FA8",
+    "dark": "#B9A3D6"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "soft",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -2.76,
+     -1.03,
+     6.12
+    ],
+    "R": [
+     2.76,
+     -1.03,
+     6.12
+    ]
+   }
+  },
+  {
+   "id": "sb_occipital_artery",
+   "name": "Occipital artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_occipital_artery.glb",
+   "bytes": 7796,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -47.55,
+     -92.48,
+     30.08
+    ],
+    "R": [
+     47.55,
+     -92.48,
+     30.08
+    ]
+   },
+   "intracranialFraction": 0.08
+  },
+  {
+   "id": "sb_occipital_bone",
+   "name": "Occipital bone",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase/sb_occipital_bone.glb",
+   "bytes": 54544,
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "bone",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -27.53,
+     -70.16,
+     -1.24
+    ],
+    "R": [
+     27.49,
+     -70.17,
+     -1.29
+    ]
+   }
+  },
+  {
+   "id": "sb_occipital_sinus",
+   "name": "Occipital sinus",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_occipital_sinus.glb",
+   "bytes": 1648,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     0.0,
+     -30.55,
+     -22.12
+    ],
+    "R": [
+     0.0,
+     -30.55,
+     -22.12
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_occipital_vein",
+   "name": "Occipital vein",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_occipital_vein.glb",
+   "bytes": 4376,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -35.01,
+     -78.46,
+     -9.16
+    ],
+    "R": [
+     35.01,
+     -78.46,
+     -9.16
+    ]
+   },
+   "intracranialFraction": 0.26
+  },
+  {
+   "id": "sb_oculomotor_nerve_iii",
+   "name": "Oculomotor nerve (III)",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_oculomotor_nerve_iii.glb",
+   "bytes": 5804,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -16.68,
+     15.92,
+     5.04
+    ],
+    "R": [
+     16.68,
+     15.92,
+     5.04
+    ]
+   },
+   "intracranialFraction": 0.95
+  },
+  {
+   "id": "sb_olfactory_nerve_i",
+   "name": "Olfactory nerve (I)",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_olfactory_nerve_i.glb",
+   "bytes": 13280,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -3.16,
+     42.06,
+     9.01
+    ],
+    "R": [
+     3.16,
+     42.06,
+     9.01
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_ophthalmic_artery",
+   "name": "Ophthalmic artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_ophthalmic_artery.glb",
+   "bytes": 2868,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -14.98,
+     23.8,
+     6.96
+    ],
+    "R": [
+     14.98,
+     23.8,
+     6.96
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_ophthalmic_nerve",
+   "name": "Ophthalmic nerve",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_ophthalmic_nerve.glb",
+   "bytes": 4956,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -23.9,
+     47.8,
+     19.23
+    ],
+    "R": [
+     23.9,
+     47.8,
+     19.23
+    ]
+   },
+   "intracranialFraction": 0.42
+  },
+  {
+   "id": "sb_optic_chiasm",
+   "name": "Optic chiasm",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/sb_optic_chiasm.glb",
+   "bytes": 14244,
+   "colour": {
+    "token": "sbSoft",
+    "light": "#8A6FA8",
+    "dark": "#B9A3D6"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "soft",
+   "derivation": "Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -3.82,
+     0.81,
+     18.48
+    ],
+    "R": [
+     3.82,
+     0.81,
+     18.48
+    ]
+   }
+  },
+  {
+   "id": "sb_optic_nerve_ii",
+   "name": "Optic nerve (II)",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_optic_nerve_ii.glb",
+   "bytes": 2900,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -15.53,
+     20.6,
+     7.58
+    ],
+    "R": [
+     15.53,
+     20.6,
+     7.58
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_orbitofrontal_branches_of_anterior_cerebral_artery",
+   "name": "Orbitofrontal branches of anterior cerebral artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_orbitofrontal_branches_of_anterior_cerebral_artery.glb",
+   "bytes": 4136,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -5.29,
+     47.85,
+     23.42
+    ],
+    "R": [
+     5.29,
+     47.85,
+     23.42
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_palatine_bone",
+   "name": "Palatine bone",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase/sb_palatine_bone.glb",
+   "bytes": 21480,
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "bone",
+   "derivation": "Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -13.7,
+     28.24,
+     -32.84
+    ],
+    "R": [
+     13.7,
+     28.24,
+     -32.84
+    ]
+   }
+  },
+  {
+   "id": "sb_parietal_bone",
+   "name": "Parietal bone",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase/sb_parietal_bone.glb",
+   "bytes": 92840,
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "bone",
+   "derivation": "Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -24.19,
+     -50.76,
+     69.39
+    ],
+    "R": [
+     27.01,
+     -48.89,
+     67.75
+    ]
+   }
+  },
+  {
+   "id": "sb_parietal_branches_of_middle_cerebral_artery",
+   "name": "Parietal branches of middle cerebral artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_parietal_branches_of_middle_cerebral_artery.glb",
+   "bytes": 3972,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -59.75,
+     -53.18,
+     65.15
+    ],
+    "R": [
+     59.75,
+     -53.18,
+     65.15
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_parieto_occipital_artery",
+   "name": "Parieto-occipital artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_parieto_occipital_artery.glb",
+   "bytes": 5640,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -5.99,
+     -81.68,
+     45.5
+    ],
+    "R": [
+     5.99,
+     -81.68,
+     45.5
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_pericallosal_artery",
+   "name": "Pericallosal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_pericallosal_artery.glb",
+   "bytes": 15388,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -5.23,
+     -29.68,
+     72.28
+    ],
+    "R": [
+     5.23,
+     -29.68,
+     72.28
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_postcentral_arterial_branch",
+   "name": "Postcentral arterial branch",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_postcentral_arterial_branch.glb",
+   "bytes": 4328,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -55.61,
+     -38.89,
+     69.41
+    ],
+    "R": [
+     55.61,
+     -38.89,
+     69.41
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_posterior_auricular_vein",
+   "name": "Posterior auricular vein",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_posterior_auricular_vein.glb",
+   "bytes": 3052,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -65.11,
+     -33.55,
+     -9.43
+    ],
+    "R": [
+     65.11,
+     -33.55,
+     -9.43
+    ]
+   },
+   "intracranialFraction": 0.36
+  },
+  {
+   "id": "sb_posterior_cerebral_artery",
+   "name": "Posterior cerebral artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_posterior_cerebral_artery.glb",
+   "bytes": 16076,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -19.78,
+     -33.65,
+     15.15
+    ],
+    "R": [
+     19.78,
+     -33.65,
+     15.15
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_posterior_communicating_artery",
+   "name": "Posterior communicating artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_posterior_communicating_artery.glb",
+   "bytes": 2544,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -8.27,
+     -1.41,
+     11.71
+    ],
+    "R": [
+     8.27,
+     -1.41,
+     11.71
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_posterior_deep_temporal_artery",
+   "name": "Posterior deep temporal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_posterior_deep_temporal_artery.glb",
+   "bytes": 3724,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -56.77,
+     8.37,
+     11.18
+    ],
+    "R": [
+     56.77,
+     8.37,
+     11.18
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_posterior_division_of_mandibular_nerve",
+   "name": "Posterior division of mandibular nerve",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_posterior_division_of_mandibular_nerve.glb",
+   "bytes": 2540,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -31.68,
+     2.14,
+     -28.02
+    ],
+    "R": [
+     31.68,
+     2.14,
+     -28.02
+    ]
+   },
+   "intracranialFraction": 0.86
+  },
+  {
+   "id": "sb_posterior_division_of_retromandibular_vein",
+   "name": "Posterior division of retromandibular vein",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_posterior_division_of_retromandibular_vein.glb",
+   "bytes": 2452,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -46.4,
+     -14.11,
+     -50.78
+    ],
+    "R": [
+     46.4,
+     -14.11,
+     -50.78
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_posterior_ethmoidal_artery",
+   "name": "Posterior ethmoidal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_posterior_ethmoidal_artery.glb",
+   "bytes": 2420,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -13.95,
+     29.08,
+     3.74
+    ],
+    "R": [
+     13.95,
+     29.08,
+     3.74
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_posterior_inferior_cerebellar_artery",
+   "name": "Posterior inferior cerebellar artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_posterior_inferior_cerebellar_artery.glb",
+   "bytes": 17860,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -24.91,
+     -63.04,
+     -21.64
+    ],
+    "R": [
+     24.91,
+     -63.04,
+     -21.64
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_posterior_intercavernous_sinus",
+   "name": "Posterior intercavernous sinus",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_posterior_intercavernous_sinus.glb",
+   "bytes": 2668,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -4.0,
+     -2.71,
+     9.57
+    ],
+    "R": [
+     3.41,
+     -3.4,
+     9.31
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_posterior_lateral_nasal_branches_of_sphenopalatine_artery",
+   "name": "Posterior lateral nasal branches of sphenopalatine artery.",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_posterior_lateral_nasal_branches_of_sphenopalatine_artery.glb",
+   "bytes": 8856,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -9.52,
+     45.83,
+     -17.95
+    ],
+    "R": [
+     9.52,
+     45.83,
+     -17.95
+    ]
+   },
+   "intracranialFraction": 0.54
+  },
+  {
+   "id": "sb_posterior_parietal_artery",
+   "name": "Posterior parietal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_posterior_parietal_artery.glb",
+   "bytes": 6216,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -52.6,
+     -75.83,
+     57.3
+    ],
+    "R": [
+     52.6,
+     -75.83,
+     57.3
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_posterior_septal_branches_of_sphenopalatine_artery",
+   "name": "Posterior septal branches of sphenopalatine artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_posterior_septal_branches_of_sphenopalatine_artery.glb",
+   "bytes": 3860,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -2.4,
+     51.8,
+     -33.9
+    ],
+    "R": [
+     2.4,
+     51.8,
+     -33.9
+    ]
+   },
+   "intracranialFraction": 0.22
+  },
+  {
+   "id": "sb_posterior_superior_alveolar_artery",
+   "name": "Posterior superior alveolar artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_posterior_superior_alveolar_artery.glb",
+   "bytes": 3296,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -30.55,
+     21.75,
+     -27.92
+    ],
+    "R": [
+     30.55,
+     21.75,
+     -27.92
+    ]
+   },
+   "intracranialFraction": 0.74
+  },
+  {
+   "id": "sb_posterior_temporal_branch",
+   "name": "Posterior temporal branch",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_posterior_temporal_branch.glb",
+   "bytes": 4080,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -58.71,
+     -71.55,
+     18.7
+    ],
+    "R": [
+     58.71,
+     -71.55,
+     18.7
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_prefrontal_artery",
+   "name": "Prefrontal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_prefrontal_artery.glb",
+   "bytes": 4916,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -46.82,
+     22.91,
+     62.98
+    ],
+    "R": [
+     46.82,
+     22.91,
+     62.98
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_proximal_lateral_striate_branches",
+   "name": "Proximal lateral striate branches",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_proximal_lateral_striate_branches.glb",
+   "bytes": 5560,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -12.52,
+     6.78,
+     22.2
+    ],
+    "R": [
+     12.52,
+     6.78,
+     22.2
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_retromandibular_vein",
+   "name": "Retromandibular vein",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_retromandibular_vein.glb",
+   "bytes": 2380,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -44.37,
+     -9.18,
+     -38.22
+    ],
+    "R": [
+     44.37,
+     -9.18,
+     -38.22
+    ]
+   },
+   "intracranialFraction": 0.68
+  },
+  {
+   "id": "sb_septal_branches_of_posterior_ethmoidal_artery",
+   "name": "Septal branches of posterior ethmoidal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_septal_branches_of_posterior_ethmoidal_artery.glb",
+   "bytes": 3360,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -3.17,
+     22.78,
+     -8.85
+    ],
+    "R": [
+     3.17,
+     22.78,
+     -8.85
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_short_posterior_ciliary_arteries",
+   "name": "Short posterior ciliary arteries",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_short_posterior_ciliary_arteries.glb",
+   "bytes": 3352,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -19.73,
+     23.92,
+     5.94
+    ],
+    "R": [
+     19.73,
+     23.92,
+     5.94
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_sigmoid_sinus",
+   "name": "Sigmoid sinus",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_sigmoid_sinus.glb",
+   "bytes": 2560,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -52.99,
+     -48.63,
+     -14.83
+    ],
+    "R": [
+     52.99,
+     -48.63,
+     -14.83
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_sinus_of_frontal_bone",
+   "name": "Sinus of frontal bone",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase/sb_sinus_of_frontal_bone.glb",
+   "bytes": 13488,
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "bone",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -10.99,
+     66.01,
+     25.91
+    ],
+    "R": [
+     10.99,
+     66.01,
+     25.91
+    ]
+   }
+  },
+  {
+   "id": "sb_sinus_of_sphenoid_bone",
+   "name": "Sinus of sphenoid bone",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase/sb_sinus_of_sphenoid_bone.glb",
+   "bytes": 5912,
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "bone",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -6.01,
+     12.47,
+     -0.75
+    ],
+    "R": [
+     6.01,
+     12.47,
+     -0.75
+    ]
+   }
+  },
+  {
+   "id": "sb_sphenoid_bone",
+   "name": "Sphenoid bone",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase/sb_sphenoid_bone.glb",
+   "bytes": 53908,
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "bone",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -21.05,
+     11.34,
+     -4.27
+    ],
+    "R": [
+     21.05,
+     11.34,
+     -4.27
+    ]
+   }
+  },
+  {
+   "id": "sb_straight_sinus",
+   "name": "Straight sinus",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_straight_sinus.glb",
+   "bytes": 1880,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     0.0,
+     -22.47,
+     11.09
+    ],
+    "R": [
+     0.0,
+     -22.47,
+     11.09
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_submental_artery",
+   "name": "Submental artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_submental_artery.glb",
+   "bytes": 4056,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -18.38,
+     45.85,
+     -89.69
+    ],
+    "R": [
+     18.38,
+     45.85,
+     -89.69
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_submental_vein",
+   "name": "Submental vein",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_submental_vein.glb",
+   "bytes": 3148,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -15.84,
+     45.52,
+     -91.7
+    ],
+    "R": [
+     15.84,
+     45.52,
+     -91.7
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_superficial_temporal_artery",
+   "name": "Superficial temporal artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_superficial_temporal_artery.glb",
+   "bytes": 13016,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -67.14,
+     -26.61,
+     38.47
+    ],
+    "R": [
+     67.14,
+     -26.61,
+     38.47
+    ]
+   },
+   "intracranialFraction": 0.12
+  },
+  {
+   "id": "sb_superficial_temporal_veins",
+   "name": "Superficial temporal veins",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_superficial_temporal_veins.glb",
+   "bytes": 3672,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -69.36,
+     -10.56,
+     21.6
+    ],
+    "R": [
+     69.36,
+     -10.56,
+     21.6
+    ]
+   },
+   "intracranialFraction": 0.34
+  },
+  {
+   "id": "sb_superior_cerebellar_artery",
+   "name": "Superior cerebellar artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_superior_cerebellar_artery.glb",
+   "bytes": 6856,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -18.9,
+     -51.4,
+     6.23
+    ],
+    "R": [
+     18.9,
+     -51.4,
+     6.23
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_superior_labial_artery",
+   "name": "Superior labial artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_superior_labial_artery.glb",
+   "bytes": 2648,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -21.17,
+     64.36,
+     -50.29
+    ],
+    "R": [
+     21.17,
+     64.36,
+     -50.29
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_superior_labial_vein",
+   "name": "Superior labial vein",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_superior_labial_vein.glb",
+   "bytes": 2676,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -21.18,
+     64.41,
+     -51.92
+    ],
+    "R": [
+     21.18,
+     64.41,
+     -51.92
+    ]
+   },
+   "intracranialFraction": 0.0
+  },
+  {
+   "id": "sb_superior_ophthalmic_vein",
+   "name": "Superior ophthalmic vein",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_superior_ophthalmic_vein.glb",
+   "bytes": 2648,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -18.59,
+     37.92,
+     11.65
+    ],
+    "R": [
+     18.59,
+     37.92,
+     11.65
+    ]
+   },
+   "intracranialFraction": 0.98
+  },
+  {
+   "id": "sb_superior_petrosal_sinus",
+   "name": "Superior petrosal sinus",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_superior_petrosal_sinus.glb",
+   "bytes": 2908,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -38.97,
+     -33.42,
+     -1.18
+    ],
+    "R": [
+     38.97,
+     -33.42,
+     -1.18
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_superior_sagittal_sinus",
+   "name": "Superior sagittal sinus",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_superior_sagittal_sinus.glb",
+   "bytes": 2696,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     0.0,
+     -26.1,
+     51.11
+    ],
+    "R": [
+     0.0,
+     -26.1,
+     51.11
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_supra_orbital_artery",
+   "name": "Supra-orbital artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_supra_orbital_artery.glb",
+   "bytes": 5648,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -25.13,
+     61.98,
+     27.34
+    ],
+    "R": [
+     25.13,
+     61.98,
+     27.34
+    ]
+   },
+   "intracranialFraction": 0.31
+  },
+  {
+   "id": "sb_supratrochlear_artery",
+   "name": "Supratrochlear artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_supratrochlear_artery.glb",
+   "bytes": 4548,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -12.73,
+     57.71,
+     15.34
+    ],
+    "R": [
+     12.73,
+     57.71,
+     15.34
+    ]
+   },
+   "intracranialFraction": 0.8
+  },
+  {
+   "id": "sb_temporal_bone",
+   "name": "Temporal bone",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase/sb_temporal_bone.glb",
+   "bytes": 169648,
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "bone",
+   "derivation": "Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -44.35,
+     -25.8,
+     -14.07
+    ],
+    "R": [
+     44.35,
+     -25.8,
+     -14.07
+    ]
+   }
+  },
+  {
+   "id": "sb_temporal_branches_of_middle_cerebral_artery",
+   "name": "Temporal branches of middle cerebral artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_temporal_branches_of_middle_cerebral_artery.glb",
+   "bytes": 4452,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -63.32,
+     -37.45,
+     21.3
+    ],
+    "R": [
+     63.32,
+     -37.45,
+     21.3
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_temporo_occipital_branch",
+   "name": "Temporo-occipital branch",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_temporo_occipital_branch.glb",
+   "bytes": 5876,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -38.38,
+     -97.28,
+     30.36
+    ],
+    "R": [
+     38.38,
+     -97.28,
+     30.36
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_tentorium_cerebelli",
+   "name": "Tentorium cerebelli",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/sb_tentorium_cerebelli.glb",
+   "bytes": 52404,
+   "colour": {
+    "token": "sbSoft",
+    "light": "#8A6FA8",
+    "dark": "#B9A3D6"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "soft",
+   "derivation": "Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -26.81,
+     -61.42,
+     4.48
+    ],
+    "R": [
+     26.81,
+     -61.42,
+     4.48
+    ]
+   }
+  },
+  {
+   "id": "sb_transverse_facial_artery",
+   "name": "Transverse facial artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_transverse_facial_artery.glb",
+   "bytes": 3832,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -46.59,
+     34.98,
+     -25.44
+    ],
+    "R": [
+     46.59,
+     34.98,
+     -25.44
+    ]
+   },
+   "intracranialFraction": 0.23
+  },
+  {
+   "id": "sb_transverse_sinus",
+   "name": "Transverse sinus",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_transverse_sinus.glb",
+   "bytes": 2996,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -35.17,
+     -82.38,
+     -4.85
+    ],
+    "R": [
+     35.17,
+     -82.38,
+     -4.85
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_trigeminal_nerve_v",
+   "name": "Trigeminal nerve (V)",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_trigeminal_nerve_v.glb",
+   "bytes": 3196,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -16.51,
+     -14.71,
+     -3.55
+    ],
+    "R": [
+     16.51,
+     -14.71,
+     -3.55
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_trochlear_nerve_iv",
+   "name": "Trochlear nerve (IV)",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_trochlear_nerve_iv.glb",
+   "bytes": 3716,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -13.11,
+     -4.03,
+     6.56
+    ],
+    "R": [
+     13.11,
+     -4.03,
+     6.56
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_vagus_nerve_x",
+   "name": "Vagus nerve (X)",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_vagus_nerve_x.glb",
+   "bytes": 6140,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -16.39,
+     -20.39,
+     -41.35
+    ],
+    "R": [
+     16.39,
+     -20.39,
+     -41.35
+    ]
+   },
+   "intracranialFraction": 0.58
+  },
+  {
+   "id": "sb_vertebral_artery",
+   "name": "Vertebral artery",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_vertebral_artery.glb",
+   "bytes": 3756,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -18.34,
+     -32.01,
+     -43.37
+    ],
+    "R": [
+     18.34,
+     -32.01,
+     -43.37
+    ]
+   },
+   "intracranialFraction": 0.62
+  },
+  {
+   "id": "sb_vestibular_nerve",
+   "name": "Vestibular nerve",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_vestibular_nerve.glb",
+   "bytes": 4140,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -35.62,
+     -19.32,
+     -12.43
+    ],
+    "R": [
+     35.62,
+     -19.32,
+     -12.43
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_vestibulocochlear_nerve_viii",
+   "name": "Vestibulocochlear nerve (VIII)",
+   "aliases": [],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/skullbase/sb_vestibulocochlear_nerve_viii.glb",
+   "bytes": 2976,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "nerve",
+   "derivation": "Centre line exported from the Z-Anatomy curve (no calibre), cropped to the head.",
+   "centroid": {
+    "L": [
+     -13.15,
+     -28.11,
+     -14.4
+    ],
+    "R": [
+     13.15,
+     -28.11,
+     -14.4
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_vomer",
+   "name": "Vomer",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase/sb_vomer.glb",
+   "bytes": 11024,
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "bone",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -0.89,
+     30.87,
+     -23.56
+    ],
+    "R": [
+     0.89,
+     30.87,
+     -23.56
+    ]
+   }
+  },
+  {
+   "id": "sb_zygomatic_bone",
+   "name": "Zygomatic bone",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase/sb_zygomatic_bone.glb",
+   "bytes": 19456,
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "bone",
+   "derivation": "Mesh exported unchanged from Z-Anatomy.",
+   "centroid": {
+    "L": [
+     -45.76,
+     38.56,
+     -16.0
+    ],
+    "R": [
+     45.76,
+     38.56,
+     -16.0
+    ]
+   }
+  }
+ ],
+ "dataset": {
+  "name": "Z-Anatomy (based on BodyParts3D)",
+  "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+  "url": "https://github.com/Z-Anatomy/Models-of-human-anatomy",
+  "note": "One adult male model (BodyParts3D), not a population average, and not in MNI space. Coordinates are millimetres from Z-Anatomy's hypophysial fossa landmark. Bones were simplified (retopologized) by Z-Anatomy; vessels and nerves are centre lines with no calibre information.",
+  "attribution": [
+   "BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan",
+   "Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0",
+   "Definitions: Wikipedia - CC-BY-SA 3.0 (the source page is linked on each definition)"
+  ],
+  "citation": [
+   "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+  ],
+  "citationUrls": [
+   "https://doi.org/10.1093/nar/gkn613"
+  ]
+ }
+}

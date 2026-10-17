@@ -199,7 +199,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       nodes[side] = m;
       this.root.add(m);
     }
-    const layer: LayerKey = meta.type === 'cortex' ? 'cortex' : meta.type === 'target' ? 'targets' : 'nuclei';
+    // bone meshes share the 'nuclei' layer and soft-tissue meshes the 'cortex' layer (skull-base section)
+    const layer: LayerKey = meta.type === 'cortex' || meta.type === 'soft' ? 'cortex' : meta.type === 'target' ? 'targets' : 'nuclei';
     return { kind: 'mesh', meta, nodes, mats, look: 'hidden', layer };
   }
 
@@ -219,9 +220,9 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     return { kind: 'lines', meta, nodes, mat, role: null, centroid: a.centroid };
   }
 
-  /** Load every nucleus up front (small); cortex and tracts on demand. */
+  /** Load every nucleus (and skull-base bone / soft-tissue mesh) up front (small); cortex and tracts on demand. */
   async preload(): Promise<void> {
-    const ids = this.cat.structures.filter((s) => s.type === 'nucleus' || s.type === 'target').map((s) => s.id);
+    const ids = this.cat.structures.filter((s) => ['nucleus', 'target', 'bone', 'soft'].includes(s.type)).map((s) => s.id);
     await Promise.all(ids.map((id) => this.ensure(id)));
     this.restyle();
   }
@@ -277,7 +278,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     for (const it of this.items.values()) {
       if (it.kind === 'mesh') {
         let look: Look = 'hidden';
-        if (it.meta.type === 'nucleus' || it.meta.type === 'target') look = p.looks.get(it.meta.id) ?? 'hidden';
+        if (it.meta.type !== 'cortex') look = p.looks.get(it.meta.id) ?? 'hidden';
         else if (it.meta.id === 'cortex') look = 'ghost';
         else if (it.meta.type === 'cortex') look = p.parcels.has(it.meta.id) ? 'context' : 'hidden';
         const layer = s.layers[it.layer];
@@ -347,7 +348,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       const t = this.cat.markers.get(m.targetId);
       if (!t) continue;
       const colour = new THREE.Color(this.palette[this.cat.byId.get(t.structureId)?.colour.token ?? p.accent] ?? accent);
-      for (const side of ['L', 'R'] as Side[]) {
+      for (const side of (t.sides ?? ['L', 'R']) as Side[]) {
         const pos = new THREE.Vector3(...(side === 'L' ? t.mni.left : t.mni.right));
         const geo = new THREE.SphereGeometry(m.primary ? 0.9 : 0.8, 24, 16);
         const mat = m.primary
@@ -402,7 +403,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       if (look !== 'primary' && look !== 'alt') continue;
       if (this.state.hidden.includes(id)) continue;
       const m = this.cat.byId.get(id);
-      if (!m || m.type !== 'nucleus' || !m.centroid) continue;
+      if (!m || m.type === 'cortex' || m.type === 'tract' || !m.centroid) continue;
       const side: Side = this.sideShown('R') ? 'R' : 'L';
       if (!this.sideShown(side)) continue;
       const v = this.toWorld(new THREE.Vector3(...m.centroid[side])).project(this.camera);
@@ -458,6 +459,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     // cut at the midline (x = 0): clipPlane(flip=false) keeps x <= 0, i.e. removes the patient's right half.
     // Only structures are cut; the slice images stay whole so that half shows the slice unobstructed.
     if (s.cutSide !== 'none') planes.push(this.slices.clipPlane('sagittal', 0, s.cutSide === 'L'));
+    // lift off everything above a height (skull base: the calvaria and brain-level vessels)
+    if (s.cutAbove !== undefined && s.cutAbove !== null) planes.push(this.slices.clipPlane('axial', s.cutAbove, false));
     const seqName = { t1: 'T1', t2: 'T2', pd: 'PD' }[s.sliceSeq];
     if (anyOn && this.slices.current !== s.sliceSeq && this.slices.status !== 'loading') {
       this.ev.status(`Loading ${seqName} slices…`);
@@ -528,6 +531,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       // lateral: the shown hemisphere from outside (both: from the left); medial: from the midline
       case 'lateral': dir = new THREE.Vector3(hemi === 'R' ? 1 : -1, 0, 0.08); break;
       case 'medial': dir = new THREE.Vector3(hemi === 'R' ? -1 : 1, 0, 0.08); break;
+      // inferior: up at the skull base from below, anterior up on screen
+      case 'inferior': dir = new THREE.Vector3(0, -0.05, -1); break;
       case 'surgeon': {
         const side: Side = hemi === 'L' ? 'L' : 'R';
         const l = this.state!.lead;

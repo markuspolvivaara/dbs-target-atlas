@@ -1,4 +1,4 @@
-Open Neuroanatomy Atlas (DBS targets and white-matter tracts sections)
+Open Neuroanatomy Atlas (DBS targets, white-matter tracts and skull base sections)
 Copyright (C) 2026 Markus Polvivaara
 
 This program is free software: you can redistribute it and/or modify it under the
@@ -72,6 +72,22 @@ What is covered by which terms
    built from Human Connectome Project data, so the HCP terms and acknowledgement in
    section 5 apply to these files as well.
 
-7. Bundled third-party software (three.js and zod, MIT licence; Atkinson
+7. Skull base section (public/assets/skullbase/, public/assets/sb-manifest.json,
+   src/data/generated/sb-*.json) is derived from Z-Anatomy
+   (https://github.com/Z-Anatomy/Models-of-human-anatomy), which is based on
+   BodyParts3D. These files are not GPL-licensed; they are distributed under the
+   Creative Commons Attribution-ShareAlike licences of their sources:
+     "BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan"
+     "Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0"
+     Definitions: Wikipedia - CC-BY-SA 3.0 (each links its source page).
+   Changes made: bones, soft tissue, vessels and cranial nerves of the head exported
+   from the Z-Anatomy Blender file; coordinates converted to millimetres from the
+   hypophysial fossa landmark; midline structures cut at the midline; vessels and
+   nerves reduced to centre lines and cropped to the head; converted to compressed
+   glTF; definitions shortened to their lead section.
+   Mitsuhashi N, et al. BodyParts3D: 3D structure database for anatomical
+   concepts. Nucleic Acids Res. 2009;37:D782-D785. doi:10.1093/nar/gkn613.
+
+8. Bundled third-party software (three.js and zod, MIT licence; Atkinson
    Hyperlegible font, SIL Open Font Licence 1.1): see
    public/THIRD_PARTY_LICENSES.txt, which is also published with the site.

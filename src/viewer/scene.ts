@@ -37,6 +37,8 @@ export interface MarkerDef {
   label: string;
   structureId: string;
   mni: { left: V3; right: V3 };
+  /** sides to draw (default both); a one-sided landmark draws a single point */
+  sides?: ('L' | 'R')[];
 }
 
 export interface Catalog {
@@ -59,6 +61,8 @@ export interface ViewState {
   lead: { spacing: 0.5 | 1.5; anchor: LeadAnchor; depth: number; ring: number; tilt: number; stim: boolean; contact: number; radius: number };
   sel: string | null;
   hidden: string[];
+  /** remove every structure above this height (mm); the skull-base section uses it to lift off the calvaria */
+  cutAbove?: number | null;
 }
 
 export interface SceneSource<S extends ViewState, P extends ScenePlan = ScenePlan> {

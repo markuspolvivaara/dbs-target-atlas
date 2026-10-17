@@ -208,6 +208,22 @@ licence) with attribution.
 
 > Data were provided [in part] by the Human Connectome Project, WU-Minn Consortium (Principal Investigators: David Van Essen and Kamil Ugurbil; 1U54MH091657) funded by the 16 NIH Institutes and Centers that support the NIH Blueprint for Neuroscience Research; and by the McDonnell Center for Systems Neuroscience at Washington University.
 
+## Skull base section (Z-Anatomy / BodyParts3D)
+
+The meshes and lines in `public/assets/skullbase/` and the files `sb-manifest.json`, `sb-landmarks.json`,
+`sb-regions.json` and `sb-definitions.json` are derived from Z-Anatomy, itself based on BodyParts3D. They are
+**not** GPL-licensed: CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0.
+
+- Source: https://github.com/Z-Anatomy/Models-of-human-anatomy
+- Note: One adult male model (BodyParts3D), not a population average, and not in MNI space. Coordinates are millimetres from Z-Anatomy's hypophysial fossa landmark. Bones were simplified (retopologized) by Z-Anatomy; vessels and nerves are centre lines with no calibre information.
+- Attribution: BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan
+- Attribution: Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0
+- Attribution: Definitions: Wikipedia - CC-BY-SA 3.0 (the source page is linked on each definition)
+- Cite: Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.
+- Changes made: head structures exported from the Z-Anatomy Blender file (pipeline/skullbase_export.py), coordinates
+  converted to mm from the hypophysial fossa landmark, midline structures cut at x = 0, vessels and nerves reduced to
+  centre lines and cropped to the head, files converted to compressed glTF, definitions shortened to their lead section.
+
 ## Datasets considered and not used
 
 - **Basal Ganglia Pathway Atlas, original files (Petersen 2019, OSF mhd4z).** The OSF terms limit use to

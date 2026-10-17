@@ -314,3 +314,7 @@ kbd { font: inherit; font-size: 0.9em; border: 1px solid var(--line); border-bot
 .tier-btn span { font-size: 0.8rem; color: var(--muted); }
 .tier-btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .tier-btn[aria-pressed="true"] span { color: var(--bg); opacity: 0.85; }
+.chips.wrap { flex-wrap: wrap; }
+.sb-list .chip { min-height: 32px; padding: 4px 10px; font-size: 13.5px; display: inline-flex; align-items: center; }
+.sb-list .chip .swatch { width: 10px; height: 10px; margin-right: 6px; }
+.legend3d .lg-text { padding: 2px 0; }

@@ -15,9 +15,8 @@ export function siteHeader(opts: { section: Section | null; nav: HTMLElement[]; 
   );
 }
 
-export function disclaimerNote(): HTMLElement {
-  return h('p', { class: 'disclaimer', role: 'note' },
-    h('strong', {}, 'Teaching tool. '), 'Atlas-based (MNI 2009b) group anatomy; individual anatomy varies. Not for surgical planning.');
+export function disclaimerNote(text = 'Atlas-based (MNI 2009b) group anatomy; individual anatomy varies. Not for surgical planning.'): HTMLElement {
+  return h('p', { class: 'disclaimer', role: 'note' }, h('strong', {}, 'Teaching tool. '), text);
 }
 
 /** The current section as a menu button: switch to another section or go to the home page. */
