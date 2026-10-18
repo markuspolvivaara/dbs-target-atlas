@@ -104,6 +104,22 @@ What is covered by which terms
    glTF. Destrieux C, Fischl B, Dale A, Halgren E. NeuroImage. 2010;53:1-15.
    doi:10.1016/j.neuroimage.2010.06.010.
 
-9. Bundled third-party software (three.js and zod, MIT licence; Atkinson
+9. Spine section (public/assets/spine/, public/assets/spine-manifest.json,
+   src/data/generated/spine-*.json) is derived from one CT of the VerSe 2020
+   dataset (sub-verse823, https://osf.io/4skx2/), published under the Creative
+   Commons Attribution-ShareAlike 4.0 licence; these files are not GPL-licensed
+   but CC BY-SA 4.0 as well. VerSe asks that its three papers be cited:
+     Löffler MT, et al. Radiol Artif Intell. 2020;2(4):e190138.
+     Liebl H, et al. Sci Data. 2021;8(1):284.
+     Sekuboyina A, et al. Med Image Anal. 2021;73:102166.
+   Soft tissue, discs, the sacrum and pelvis were segmented from that CT with
+   TotalSegmentator (open tasks, Apache-2.0; Wasserthal J, et al. Radiol Artif
+   Intell. 2023;5(5):e230024). Changes made: bone surfaces taken from the CT at a
+   fixed threshold within reach of the VerSe vertebra masks; segmentations turned
+   into smoothed, decimated meshes split at the midline; schematic roots and psoas
+   zones drawn by rule; coordinates moved to the centre of the L5 vertebral body;
+   converted to compressed glTF.
+
+10. Bundled third-party software (three.js and zod, MIT licence; Atkinson
    Hyperlegible font, SIL Open Font Licence 1.1): see
    public/THIRD_PARTY_LICENSES.txt, which is also published with the site.

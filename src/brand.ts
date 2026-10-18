@@ -9,7 +9,7 @@ export const BRAND = {
 } as const;
 
 export interface Section {
-  id: 'dbs' | 'tracts' | 'skullbase' | 'cortex';
+  id: 'dbs' | 'tracts' | 'skullbase' | 'cortex' | 'spine';
   name: string;
   /** path from the site root */
   path: string;
@@ -33,6 +33,10 @@ export const SECTIONS: Section[] = [
   {
     id: 'cortex', name: 'Cortical anatomy', path: 'cortex/', status: 'live',
     summary: 'The gyri and sulci of the cerebral cortex (Destrieux parcellation) on a template brain: lateral, medial, basal and insular views, the pial surface and an inflated one that opens the sulci, with the lobes, borders and names of every label.',
+  },
+  {
+    id: 'spine', name: 'Spine', path: 'spine/', status: 'live',
+    summary: 'Surgical anatomy of the spine from one adult CT: vertebrae, discs, the spinal canal, great vessels, kidneys and psoas by region and level. Lumbar region first; cervical and thoracic to follow.',
   },
 ];
 

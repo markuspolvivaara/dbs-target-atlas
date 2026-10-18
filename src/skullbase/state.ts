@@ -1,5 +1,5 @@
 import type { CameraPreset } from '../data/schema';
-import { DEFAULT_LEAD, type V3 } from '../state';
+import { DEFAULT_LEAD, type LayerKey, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
 import { SB_GROUP } from './groups';
 
@@ -35,7 +35,7 @@ export function defaultSkullState(): SkullState {
 
 // #/atlas?g=near_hypophysial_fossa&sel=sb_internal_carotid_artery&h=B&c=axial&cz=10&cut=L&lb=a
 const PAGES: SkullPage[] = ['atlas', 'sources', 'credits'];
-const LAYER_CODES: [keyof ViewState['layers'], string][] = [['nuclei', 'b'], ['tracts', 'v'], ['cortex', 's'], ['targets', 'l']];
+const LAYER_CODES: [LayerKey, string][] = [['nuclei', 'b'], ['tracts', 'v'], ['cortex', 's'], ['targets', 'l']];
 const r1 = (n: number) => Math.round(n * 10) / 10;
 
 export function encodeSkull(s: SkullState): string {

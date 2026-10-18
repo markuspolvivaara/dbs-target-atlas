@@ -241,6 +241,28 @@ shipped with it. Licence: GPL-3.0, non-commercial (derived from the Lead-DBS tem
 - Changes made: surfaces decimated and split by label, an inflated surface and sulcal-depth shading computed,
   files converted to compressed glTF; definitions shortened to their lead section.
 
+## Spine section (VerSe CT with TotalSegmentator segmentations)
+
+The meshes in `public/assets/spine/` and the files `spine-manifest.json` and `spine-levels.json` are derived from
+one CT of the VerSe 2020 dataset. They are **not** GPL-licensed: CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT.
+
+- Source: https://osf.io/4skx2/
+- Note: One adult whole-body trauma CT from the VerSe 2020 dataset (0.72 x 0.72 x 0.7 mm), not an average and not in MNI space. Coordinates are millimetres from the centre of the L5 vertebral body. Vertebrae C1-L5: surfaces taken from the CT at 200 HU within reach of VerSe's hand-corrected masks. Sacrum, pelvis, discs and spinal canal contents: TotalSegmentator segmentations of the same CT.
+- Cite: Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.
+- Cite: Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.
+- Cite: Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.
+- Cite: Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024.
+- Changes made: bone surfaces from the CT within reach of the VerSe masks, TotalSegmentator segmentations of the
+  same CT, meshes smoothed, decimated and split at the midline, schematic roots and psoas zones drawn by rule,
+  coordinates moved to the centre of the L5 vertebral body, files converted to compressed glTF.
+- The virtual screw's files (`public/assets/spine/screw_*.bin.gz`, `spine-screw.json`: distance fields of the
+  bone, points on the structures at risk, pedicle measurements) are derived from the same CT and segmentations
+  and carry the same licence.
+
+`spine-published.json` holds published pedicle values read from the tables of three open-access papers (cited
+on the cards and the Sources page): Wang 2023 (J Orthop Surg Res, CC BY 4.0), Moncada-Habib 2025 (Cureus,
+CC BY 4.0) and Nkwerem 2024 (J West Afr Coll Surg, CC BY-NC-SA 4.0); numbers only, no text or figures.
+
 ## Datasets considered and not used
 
 - **Basal Ganglia Pathway Atlas, original files (Petersen 2019, OSF mhd4z).** The OSF terms limit use to

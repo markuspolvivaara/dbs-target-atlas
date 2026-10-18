@@ -3,7 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { LineSegments2 } from 'three/examples/jsm/lines/LineSegments2.js';
 import type { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
 import type { CameraPreset, ManifestStructure } from '../data/schema';
-import type { Axis, Hemi, LayerKey } from '../state';
+import type { Axis, ExtraLayerKey, Hemi, LayerKey } from '../state';
 import { loadStructure, type LineAsset, type MeshAsset } from './assets';
 import { Lead, contactCentres, trajectoryDir } from './lead';
 import { applyLook, lineMaterial, rimMaterial, solidMaterial, type Look, type MeshMaterials } from './materials';
@@ -13,7 +13,7 @@ import { Slices } from './slices';
 type Side = 'L' | 'R';
 type Palette = Record<string, string>;
 
-interface MeshItem { kind: 'mesh'; meta: ManifestStructure; nodes: Partial<Record<Side, THREE.Mesh>>; mats: MeshMaterials; look: Look; layer: LayerKey; surface: boolean }
+interface MeshItem { kind: 'mesh'; meta: ManifestStructure; nodes: Partial<Record<Side, THREE.Mesh>>; mats: MeshMaterials; look: Look; layer: LayerKey | ExtraLayerKey; surface: boolean }
 interface LineItem { kind: 'lines'; meta: ManifestStructure; nodes: Partial<Record<Side, LineSegments2>>; mat: LineMaterial; role: TractRole | null; centroid: Partial<Record<Side, THREE.Vector3>> }
 type Item = MeshItem | LineItem;
 
@@ -33,6 +33,8 @@ export interface ViewerEvents {
 }
 
 const DEG = Math.PI / 180;
+/** a layer the section's state does not have is drawn */
+const SHOWN = { on: true, opacity: 1 };
 const RAS_TO_WORLD = new THREE.Matrix4().makeRotationX(-Math.PI / 2); // (x, y, z) RAS -> (x, z, -y) three
 
 /** Shared 3D viewer. What to draw comes from the section's SceneSource (catalogue + planner). */
@@ -46,6 +48,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   private items = new Map<string, Item>();
   private markerGroup = new THREE.Group();
   private measureGroup = new THREE.Group();
+  /** objects a section draws itself (the spine's virtual screw); coloured by palette token, cut like the anatomy */
+  private overlayGroup = new THREE.Group();
   private leads: Record<Side, Lead> = { L: new Lead('L'), R: new Lead('R') };
   readonly slices: Slices;
   private palette: Palette = {};
@@ -104,7 +108,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.root.matrix.copy(RAS_TO_WORLD);
     this.root.updateMatrixWorld(true);
     this.scene.add(this.root);
-    this.root.add(this.markerGroup, this.measureGroup, this.leads.L.group, this.leads.R.group);
+    this.root.add(this.markerGroup, this.measureGroup, this.overlayGroup, this.leads.L.group, this.leads.R.group);
     this.slices = new Slices(this.cat.volumes, this.root, () => { this.ev.status(null); this.invalidate(); });
     this.root.add(this.slices.group);
 
@@ -168,7 +172,41 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.interior.value.set(palette.cortex ?? '#c4cbd3').multiplyScalar(0.62);
     this.leads.L.shaftMat.color.set(palette.electrode); this.leads.R.shaftMat.color.set(palette.electrode);
     if (this.plan) this.updateMarkers();
+    this.recolourOverlay();
     this.restyle();
+  }
+
+  // ---------------------------------------------------------------- overlay
+  /** Replace the section's own objects (in the scene's RAS millimetres). A mesh whose userData.token names a palette
+   * token takes that colour, now and on theme changes. */
+  setOverlay(objects: THREE.Object3D[]): void {
+    for (const c of [...this.overlayGroup.children]) {
+      this.overlayGroup.remove(c);
+      c.traverse((o) => {
+        const m = o as THREE.Mesh;
+        if (m.isMesh) { m.geometry.dispose(); for (const mt of [m.material].flat()) mt.dispose(); }
+      });
+    }
+    for (const o of objects) this.overlayGroup.add(o);
+    this.recolourOverlay();
+    this.clipOverlay();
+    this.invalidate();
+  }
+
+  private recolourOverlay(): void {
+    this.overlayGroup.traverse((o) => {
+      const m = o as THREE.Mesh;
+      const token = m.userData?.token as string | undefined;
+      if (m.isMesh && token && this.palette[token]) for (const mt of [m.material].flat()) (mt as THREE.MeshStandardMaterial).color?.set(this.palette[token]);
+    });
+    this.invalidate();
+  }
+
+  private clipOverlay(): void {
+    this.overlayGroup.traverse((o) => {
+      const m = o as THREE.Mesh;
+      if (m.isMesh) for (const mt of [m.material].flat()) mt.clippingPlanes = this.clipPlanes;
+    });
   }
 
   private colour(meta: ManifestStructure): THREE.Color {
@@ -229,8 +267,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     }
     // bone meshes share the 'nuclei' layer, soft-tissue meshes the 'cortex' layer and vessel / nerve tubes the
     // 'tracts' layer (skull-base section); cortical labels (cortex section) use the 'cortex' layer
-    const layer: LayerKey = meta.type === 'cortex' || meta.type === 'soft' || surface ? 'cortex'
-      : meta.type === 'tube' ? 'tracts' : meta.type === 'target' ? 'targets' : 'nuclei';
+    const layer: LayerKey | ExtraLayerKey = meta.layer ?? (meta.type === 'cortex' || meta.type === 'soft' || surface ? 'cortex'
+      : meta.type === 'tube' ? 'tracts' : meta.type === 'target' ? 'targets' : 'nuclei');
     return { kind: 'mesh', meta, nodes, mats, look: 'hidden', layer, surface };
   }
 
@@ -349,7 +387,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         if (focused) look = 'primary';
         else if (focus && look === 'primary') look = 'muted';
         if (hidden.has(it.meta.id)) look = 'hidden';
-        const layer = s.layers[it.layer];
+        const layer = s.layers[it.layer] ?? SHOWN;
         const op = layer.on ? layer.opacity : 0;
         const hex = p.colours?.get(it.meta.id);
         const c = hex ? new THREE.Color(hex) : this.colour(it.meta);
@@ -369,7 +407,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         if (it.meta.type !== 'cortex') look = p.looks.get(it.meta.id) ?? 'hidden';
         else if (it.meta.id === 'cortex') look = 'ghost';
         else if (it.meta.type === 'cortex') look = p.parcels.has(it.meta.id) ? 'context' : 'hidden';
-        const layer = s.layers[it.layer];
+        const layer = s.layers[it.layer] ?? SHOWN;
         let op = layer.on ? layer.opacity : 0;
         const focused = focus === it.meta.id;
         if (focused) { look = 'primary'; op = 1; }
@@ -435,13 +473,15 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     for (const m of p.markers) {
       const t = this.cat.markers.get(m.targetId);
       if (!t) continue;
-      const colour = new THREE.Color(this.palette[this.cat.byId.get(t.structureId)?.colour.token ?? p.accent] ?? accent);
+      const own = t.token ? this.palette[t.token] : undefined;
+      const colour = new THREE.Color(own ?? this.palette[this.cat.byId.get(t.structureId)?.colour.token ?? p.accent] ?? accent);
       for (const side of (t.sides ?? ['L', 'R']) as Side[]) {
         const pos = new THREE.Vector3(...(side === 'L' ? t.mni.left : t.mni.right));
-        const geo = new THREE.SphereGeometry(m.primary ? 0.9 : 0.8, 24, 16);
+        const geo = new THREE.SphereGeometry(t.radius ?? (m.primary ? 0.9 : 0.8), 24, 16);
         const mat = m.primary
-          // primary markers use the ink colour so they stand out against their (same-coloured) target
-          ? new THREE.MeshBasicMaterial({ color: new THREE.Color(this.palette.ctx ?? '#14253a') })
+          // primary markers use the ink colour so they stand out against their (same-coloured) target, unless they
+          // have a colour of their own
+          ? new THREE.MeshBasicMaterial({ color: own ? colour : new THREE.Color(this.palette.ctx ?? '#14253a') })
           : rimMaterial(colour);
         // markers often sit inside a solid target: draw them on top so they stay visible
         mat.depthTest = false;
@@ -490,7 +530,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       if (look !== 'primary' && look !== 'alt') continue;
       if (this.state.hidden.includes(id)) continue;
       const it = this.items.get(id);
-      if (!this.state.layers[it?.kind === 'mesh' ? it.layer : 'nuclei'].on) continue;
+      if (!(this.state.layers[it?.kind === 'mesh' ? it.layer : 'nuclei'] ?? SHOWN).on) continue;
       const m = this.cat.byId.get(id);
       if (!m || m.type === 'cortex' || m.type === 'tract' || !m.centroid) continue;
       const side: Side = this.sideShown('R') ? 'R' : 'L';
@@ -582,6 +622,11 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     if (s.cutSide !== 'none') planes.push(this.slices.clipPlane('sagittal', 0, s.cutSide === 'L'));
     // lift off everything above a height (skull base: the calvaria and brain-level vessels)
     if (s.cutAbove !== undefined && s.cutAbove !== null) planes.push(this.slices.clipPlane('axial', s.cutAbove, false));
+    if (s.cutPlane) {
+      const n = new THREE.Vector3(...s.cutPlane.normal).normalize();
+      // three.js keeps the side where normal . x + constant >= 0: here the side away from the given normal
+      planes.push(new THREE.Plane(n.clone().negate(), n.dot(new THREE.Vector3(...s.cutPlane.point))).applyMatrix4(this.root.matrixWorld));
+    }
     const seqName = { t1: 'T1', t2: 'T2', pd: 'PD' }[s.sliceSeq];
     if (anyOn && this.slices.current !== s.sliceSeq && this.slices.status !== 'loading') {
       this.ev.status(`Loading ${seqName} slices…`);
@@ -592,6 +637,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     }
     this.clipPlanes = planes;
     this.leads.L.setClipping(planes); this.leads.R.setClipping(planes);
+    this.clipOverlay();
   }
 
   // ---------------------------------------------------------------- lead

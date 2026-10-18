@@ -558,9 +558,9 @@ test('skull base: structure and landmark cards, cut-away and the URL', async ({ 
   await expect(page.locator('#zanatomy')).toContainText('CC BY-SA');
   await page.goto('./skullbase/#/sources');
   await expect(page.locator('.page:not([hidden]) h1')).toHaveText('Sources');
-  // the section menu lists all four sections
+  // the section menu lists every section
   await page.locator('.section-chip').click();
-  await expect(page.locator('.section-menu a.section-item:not(.home)')).toHaveText(['DBS targets', 'White-matter tracts', 'Skull base', 'Cortical anatomy']);
+  await expect(page.locator('.section-menu a.section-item:not(.home)')).toHaveText(['DBS targets', 'White-matter tracts', 'Skull base', 'Cortical anatomy', 'Spine']);
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
@@ -616,6 +616,104 @@ test('cortex: label cards, lobes, surface switch and the URL', async ({ page }) 
   await page.goto('./cortex/#/credits');
   await expect(page.locator('#destrieux')).toContainText('FreeSurfer');
   await page.goto('./cortex/#/sources');
+  await expect(page.locator('.page:not([hidden]) h1')).toHaveText('Sources');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// ---------------------------------------------------------------- spine section
+for (const [name, hash] of [['lumbar', 'r=lumbar&c=posteriorOblique'], ['lumbar-l4', 'r=lumbar&lv=L4&c=lateral'], ['lumbar-lesion', 'r=lumbar&lv=L4&les=L4-L5.paracentral.L&c=posteriorOblique'], ['lumbar-screw', 'r=lumbar&lv=L4&scr=tt~L~15.8~0~45~6.5~0~0&c=lateral']] as const) {
+  test(`spine ${name}: renders and matches the visual baseline`, async ({ page }) => {
+    const gd = guard(page);
+    await page.goto(`./spine/#/atlas?${hash}`);
+    await settle(page);
+    expect(await canvasColours(page)).toBeGreaterThan(40);
+    await expect(page.locator('.stage')).toHaveScreenshot(`spine-${name}.png`);
+    expect(gd.external).toEqual([]);
+    expect(gd.errors).toEqual([]);
+  });
+}
+
+test('spine: virtual screw — start position, breach grade, cut, and a link that survives a reload', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./spine/#/atlas?r=lumbar&lv=L4');
+  await settle(page);
+  const card = page.locator('.card.sel');
+  // measured pedicles beside the published values
+  await expect(card.locator('.morph')).toContainText('regional means');
+  await card.locator('.screw-tech .chip[data-v="tt"]').click();
+  await expect(card.locator('.screw-readout .grade')).toHaveText('A');
+  await expect(card.locator('.screw-readout')).toContainText('No breach of the pedicle wall');
+  // turned far medially the screw enters the canal
+  await card.locator('#screw-medial').fill('40');
+  await expect(card.locator('.screw-readout .grade')).toHaveText('E');
+  await expect(card.locator('.screw-readout')).toContainText('Medial breach');
+  await card.locator('.screw-cut').click();
+  await expect.poll(() => new URL(page.url()).hash).toContain('x=s');
+  await expect.poll(() => decodeURIComponent(new URL(page.url()).hash)).toContain('scr=tt~L~40~');
+  await settle(page);
+  await page.reload();
+  await settle(page);
+  await expect(page.locator('.card.sel .screw-readout .grade')).toHaveText('E');
+  await expect(page.locator('#screw-medial')).toHaveValue('40');
+  // S1 offers the tricortical screw only; changing level clears the screw
+  await page.locator('.level-chips .chip[data-v="S1"]').click();
+  await expect(page.locator('.screw-tech .chip')).toHaveText(['None', 'S1 tricortical']);
+  await expect.poll(() => new URL(page.url()).hash).not.toContain('scr=');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('spine: lesion-to-root tool picks the root, its function and a link that survives a reload', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./spine/#/atlas?r=lumbar&lv=L4');
+  await settle(page);
+  const card = page.locator('.card.sel');
+  await card.locator('.lesion-kind .chip[data-v="paracentral"]').click();
+  await expect(card.locator('.lesion-result')).toContainText('L5 nerve root (traversing), left');
+  await expect(card).toContainText('Long toe extensors');
+  await expect(card.locator('.body-chart .bc-dot.on')).toHaveCount(1);
+  await card.locator('.lesion-kind .chip[data-v="foraminal"]').click();
+  await card.locator('.lesion-side .chip[data-v="R"]').click();
+  await expect(card.locator('.lesion-result')).toContainText('L4 nerve root (exiting), right');
+  await expect(card).toContainText('Ankle dorsiflexors');
+  await expect.poll(() => new URL(page.url()).hash).toContain('les=L4-L5.foraminal.R');
+  await settle(page);
+  await page.reload();
+  await settle(page);
+  await expect(page.locator('.card.sel .lesion-result')).toContainText('L4 nerve root (exiting), right');
+  // changing level clears the lesion
+  await page.locator('.level-chips .chip[data-v="L3"]').click();
+  await expect(page.locator('.card.sel .lesion-result')).toHaveCount(0);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('spine: level card with measurements, schematic roots labelled, the URL', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./spine/#/atlas?r=lumbar');
+  await settle(page);
+  await page.locator('.level-chips .chip[data-v="L4"]').click();
+  const card = page.locator('.card.sel');
+  await expect(card.locator('h2')).toHaveText('L4');
+  await expect(card.locator('dt', { hasText: 'Foramen L4-L5 (measured)' })).toBeVisible();
+  await expect(card).toContainText('Hwang 2019');
+  // every schematic element says so on its card
+  await card.getByRole('button', { name: 'L4 nerve root', exact: true }).click();
+  await expect(page.locator('.card.sel h2')).toHaveText('L4 nerve root');
+  await expect(page.locator('.card.sel .schematic-note')).toBeVisible();
+  await page.locator('.sb-item[data-id="sp_drg_l4"]').click();
+  await expect(page.locator('.card.sel .schematic-note')).toBeVisible();
+  // the selection and level survive a reload
+  await expect.poll(() => new URL(page.url()).hash).toContain('lv=L4');
+  await settle(page);
+  await page.reload();
+  await settle(page);
+  const st = await page.evaluate(() => (window as unknown as { __atlas: { state(): { level: string; sel: string } } }).__atlas.state());
+  expect([st.level, st.sel]).toEqual(['L4', 'sp_drg_l4']);
+  await page.goto('./spine/#/credits');
+  await expect(page.locator('#verse')).toContainText('CC BY-SA 4.0');
+  await page.goto('./spine/#/sources');
   await expect(page.locator('.page:not([hidden]) h1')).toHaveText('Sources');
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);

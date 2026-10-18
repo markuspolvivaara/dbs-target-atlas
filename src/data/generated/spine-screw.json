@@ -1,0 +1,1719 @@
+{
+ "levels": {
+  "L1": {
+   "frame": {
+    "origin": [
+     -6.33,
+     -7.47,
+     133.77
+    ],
+    "ex": [
+     0.99864,
+     0.02484,
+     -0.04574
+    ],
+    "ey": [
+     -0.02149,
+     0.99716,
+     0.07223
+    ],
+    "ez": [
+     0.0474,
+     -0.07115,
+     0.99634
+    ]
+   },
+   "pedicle": {
+    "L": {
+     "width": 7.2,
+     "height": 17.0,
+     "transverseAngle": 17.2,
+     "sagittalAngle": -8.7,
+     "chord": 68.9,
+     "inscribedRadius": 3.24,
+     "isthmus": [
+      -20.11,
+      -25.13,
+      136.56
+     ],
+     "isthmusUvw": [
+      -15.1,
+      -19.7,
+      3.8
+     ],
+     "entry": [
+      -28.49,
+      -55.44,
+      139.62
+     ],
+     "dir": [
+      0.2652,
+      0.9593,
+      -0.0968
+     ]
+    },
+    "R": {
+     "width": 6.5,
+     "height": 17.5,
+     "transverseAngle": 13.2,
+     "sagittalAngle": -2.5,
+     "chord": 61.6,
+     "inscribedRadius": 3.24,
+     "isthmus": [
+      8.13,
+      -24.02,
+      136.13
+     ],
+     "isthmusUvw": [
+      14.8,
+      -20.3,
+      4.4
+     ],
+     "entry": [
+      14.83,
+      -49.75,
+      135.14
+     ],
+     "dir": [
+      -0.2516,
+      0.9671,
+      0.0373
+     ]
+    }
+   },
+   "start": {
+    "tt": {
+     "L": {
+      "entry": [
+       -26.73,
+       -48.26,
+       135.22
+      ],
+      "dir": [
+       0.2748,
+       0.9599,
+       0.0555
+      ],
+      "chord": 59.9,
+      "size": {
+       "diameter": 6.5,
+       "length": 45.0
+      }
+     },
+     "R": {
+      "entry": [
+       14.33,
+       -48.05,
+       134.12
+      ],
+      "dir": [
+       -0.249,
+       0.9651,
+       0.0808
+      ],
+      "chord": 59.4,
+      "size": {
+       "diameter": 6.5,
+       "length": 45.0
+      }
+     }
+    },
+    "cbt": {
+     "L": {
+      "entry": [
+       -18.27,
+       -42.51,
+       127.84
+      ],
+      "dir": [
+       -0.1321,
+       0.8499,
+       0.5101
+      ],
+      "trajectory": 32.0,
+      "size": {
+       "diameter": 4.0,
+       "length": 30.0
+      }
+     },
+     "R": {
+      "entry": [
+       6.56,
+       -42.47,
+       127.28
+      ],
+      "dir": [
+       0.1359,
+       0.8566,
+       0.4978
+      ],
+      "trajectory": 32.5,
+      "size": {
+       "diameter": 4.0,
+       "length": 30.0
+      }
+     }
+    }
+   },
+   "check": {
+    "tt.L": {
+     "grade": "B",
+     "seated": 7.0,
+     "breach": {
+      "inferior": 0.28,
+      "lateral": 0.34,
+      "medial": 0.39
+     },
+     "nearest": [
+      {
+       "id": "sp_root_l1",
+       "mm": 0.2
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 1.49
+      },
+      {
+       "id": "sp_drg_l1",
+       "mm": 5.7
+      }
+     ]
+    },
+    "tt.R": {
+     "grade": "B",
+     "seated": 6.0,
+     "breach": {
+      "anterior": 0.39,
+      "lateral": 0.23,
+      "medial": 0.51
+     },
+     "nearest": [
+      {
+       "id": "sp_root_l1",
+       "mm": -0.27
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 1.31
+      },
+      {
+       "id": "sp_drg_l1",
+       "mm": 6.07
+      }
+     ]
+    },
+    "cbt.L": {
+     "grade": "A",
+     "seated": 3.5,
+     "breach": {},
+     "nearest": [
+      {
+       "id": "sp_root_l1",
+       "mm": 1.51
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 2.33
+      },
+      {
+       "id": "sp_drg_l1",
+       "mm": 4.92
+      }
+     ]
+    },
+    "cbt.R": {
+     "grade": "A",
+     "seated": 3.0,
+     "breach": {},
+     "nearest": [
+      {
+       "id": "sp_root_l1",
+       "mm": 1.09
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 2.28
+      },
+      {
+       "id": "sp_drg_l1",
+       "mm": 5.55
+      }
+     ]
+    }
+   },
+   "risk": [
+    {
+     "id": "sp_dural_sac",
+     "offset": 835296,
+     "count": 7578
+    },
+    {
+     "id": "sp_root_l1",
+     "offset": 880764,
+     "count": 1805
+    },
+    {
+     "id": "sp_root_l2",
+     "offset": 891594,
+     "count": 1732
+    },
+    {
+     "id": "sp_root_l3",
+     "offset": 901986,
+     "count": 941
+    },
+    {
+     "id": "sp_drg_l1",
+     "offset": 907632,
+     "count": 1037
+    },
+    {
+     "id": "sp_drg_l2",
+     "offset": 913854,
+     "count": 1053
+    },
+    {
+     "id": "sp_drg_l3",
+     "offset": 920172,
+     "count": 966
+    }
+   ],
+   "sdf": {
+    "origin": [
+     -50.672,
+     -84.597,
+     87.502
+    ],
+    "dims": [
+     96,
+     113,
+     77
+    ],
+    "step": 1.0,
+    "scale": 0.1,
+    "clamp": 8.0,
+    "offset": 0
+   },
+   "file": "assets/spine/screw_l1.bin.gz",
+   "bytes": 227172
+  },
+  "L2": {
+   "frame": {
+    "origin": [
+     -6.25,
+     0.72,
+     101.36
+    ],
+    "ex": [
+     0.99963,
+     0.01377,
+     0.02341
+    ],
+    "ey": [
+     -0.01627,
+     0.99375,
+     0.11046
+    ],
+    "ez": [
+     -0.02175,
+     -0.1108,
+     0.9936
+    ]
+   },
+   "pedicle": {
+    "L": {
+     "width": 6.8,
+     "height": 16.5,
+     "transverseAngle": 18.5,
+     "sagittalAngle": -16.3,
+     "chord": 66.6,
+     "inscribedRadius": 3.24,
+     "isthmus": [
+      -20.47,
+      -18.57,
+      105.05
+     ],
+     "isthmusUvw": [
+      -15.7,
+      -22.4,
+      7.3
+     ],
+     "entry": [
+      -28.04,
+      -42.64,
+      109.41
+     ],
+     "dir": [
+      0.2958,
+      0.9399,
+      -0.1703
+     ]
+    },
+    "R": {
+     "width": 6.5,
+     "height": 15.5,
+     "transverseAngle": 11.0,
+     "sagittalAngle": -20.3,
+     "chord": 75.0,
+     "inscribedRadius": 3.15,
+     "isthmus": [
+      8.19,
+      -17.8,
+      105.18
+     ],
+     "isthmusUvw": [
+      14.5,
+      -19.4,
+      6.0
+     ],
+     "entry": [
+      14.77,
+      -51.38,
+      113.88
+     ],
+     "dir": [
+      -0.1864,
+      0.9511,
+      -0.2464
+     ]
+    }
+   },
+   "start": {
+    "tt": {
+     "L": {
+      "entry": [
+       -26.75,
+       -38.26,
+       102.72
+      ],
+      "dir": [
+       0.3018,
+       0.9468,
+       0.1122
+      ],
+      "chord": 59.2,
+      "size": {
+       "diameter": 6.5,
+       "length": 45.0
+      }
+     },
+     "R": {
+      "entry": [
+       12.7,
+       -39.01,
+       102.91
+      ],
+      "dir": [
+       -0.2067,
+       0.9729,
+       0.104
+      ],
+      "chord": 57.5,
+      "size": {
+       "diameter": 6.5,
+       "length": 45.0
+      }
+     }
+    },
+    "cbt": {
+     "L": {
+      "entry": [
+       -18.33,
+       -35.34,
+       96.04
+      ],
+      "dir": [
+       -0.1572,
+       0.8376,
+       0.5232
+      ],
+      "trajectory": 29.0,
+      "size": {
+       "diameter": 4.5,
+       "length": 25.0
+      }
+     },
+     "R": {
+      "entry": [
+       7.01,
+       -35.26,
+       96.45
+      ],
+      "dir": [
+       0.1095,
+       0.8412,
+       0.5295
+      ],
+      "trajectory": 14.5,
+      "size": {
+       "diameter": 4.5,
+       "length": 20.0
+      }
+     }
+    }
+   },
+   "check": {
+    "tt.L": {
+     "grade": "B",
+     "seated": 5.5,
+     "breach": {
+      "anterior": 0.23,
+      "inferior": 0.37,
+      "lateral": 0.62,
+      "medial": 0.63
+     },
+     "nearest": [
+      {
+       "id": "sp_root_l2",
+       "mm": 0.07
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 0.95
+      },
+      {
+       "id": "sp_drg_l2",
+       "mm": 5.02
+      }
+     ]
+    },
+    "tt.R": {
+     "grade": "B",
+     "seated": 5.5,
+     "breach": {
+      "anterior": 0.16,
+      "inferior": 1.54,
+      "medial": 0.85
+     },
+     "nearest": [
+      {
+       "id": "sp_root_l2",
+       "mm": 0.01
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 1.02
+      },
+      {
+       "id": "sp_drg_l2",
+       "mm": 5.45
+      }
+     ]
+    },
+    "cbt.L": {
+     "grade": "A",
+     "seated": 5.5,
+     "breach": {},
+     "nearest": [
+      {
+       "id": "sp_root_l2",
+       "mm": 1.22
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 1.46
+      },
+      {
+       "id": "sp_drg_l2",
+       "mm": 4.77
+      }
+     ]
+    },
+    "cbt.R": {
+     "grade": "B",
+     "seated": 4.0,
+     "breach": {
+      "inferior": 0.19
+     },
+     "nearest": [
+      {
+       "id": "sp_root_l2",
+       "mm": 1.34
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 2.1
+      },
+      {
+       "id": "sp_drg_l2",
+       "mm": 4.65
+      }
+     ]
+    }
+   },
+   "risk": [
+    {
+     "id": "sp_dural_sac",
+     "offset": 1045440,
+     "count": 7612
+    },
+    {
+     "id": "sp_root_l1",
+     "offset": 1091112,
+     "count": 1805
+    },
+    {
+     "id": "sp_root_l2",
+     "offset": 1101942,
+     "count": 1732
+    },
+    {
+     "id": "sp_root_l3",
+     "offset": 1112334,
+     "count": 1768
+    },
+    {
+     "id": "sp_root_l4",
+     "offset": 1122942,
+     "count": 930
+    },
+    {
+     "id": "sp_drg_l1",
+     "offset": 1128522,
+     "count": 1051
+    },
+    {
+     "id": "sp_drg_l2",
+     "offset": 1134828,
+     "count": 1049
+    },
+    {
+     "id": "sp_drg_l3",
+     "offset": 1141122,
+     "count": 1052
+    },
+    {
+     "id": "sp_drg_l4",
+     "offset": 1147434,
+     "count": 1048
+    }
+   ],
+   "sdf": {
+    "origin": [
+     -59.297,
+     -84.597,
+     54.601
+    ],
+    "dims": [
+     108,
+     121,
+     80
+    ],
+    "step": 1.0,
+    "scale": 0.1,
+    "clamp": 8.0,
+    "offset": 0
+   },
+   "file": "assets/spine/screw_l2.bin.gz",
+   "bytes": 259709
+  },
+  "L3": {
+   "frame": {
+    "origin": [
+     -4.24,
+     5.53,
+     66.99
+    ],
+    "ex": [
+     0.99864,
+     -0.02324,
+     0.04672
+    ],
+    "ey": [
+     0.02333,
+     0.99973,
+     -0.00137
+    ],
+    "ez": [
+     -0.04668,
+     0.00246,
+     0.99891
+    ]
+   },
+   "pedicle": {
+    "L": {
+     "width": 9.5,
+     "height": 16.0,
+     "transverseAngle": 13.8,
+     "sagittalAngle": -7.5,
+     "chord": 62.8,
+     "inscribedRadius": 4.19,
+     "isthmus": [
+      -21.08,
+      -13.84,
+      71.12
+     ],
+     "isthmusUvw": [
+      -16.2,
+      -19.8,
+      4.9
+     ],
+     "entry": [
+      -27.33,
+      -36.52,
+      73.98
+     ],
+     "dir": [
+      0.2639,
+      0.957,
+      -0.1207
+     ]
+    },
+    "R": {
+     "width": 9.2,
+     "height": 15.2,
+     "transverseAngle": 9.3,
+     "sagittalAngle": -5.5,
+     "chord": 63.5,
+     "inscribedRadius": 4.4,
+     "isthmus": [
+      11.4,
+      -14.65,
+      72.06
+     ],
+     "isthmusUvw": [
+      16.6,
+      -21.5,
+      4.5
+     ],
+     "entry": [
+      14.93,
+      -40.97,
+      74.85
+     ],
+     "dir": [
+      -0.1324,
+      0.9857,
+      -0.1046
+     ]
+    }
+   },
+   "start": {
+    "tt": {
+     "L": {
+      "entry": [
+       -26.35,
+       -33.34,
+       70.92
+      ],
+      "dir": [
+       0.2609,
+       0.9653,
+       0.0098
+      ],
+      "chord": 58.3,
+      "size": {
+       "diameter": 6.5,
+       "length": 45.0
+      }
+     },
+     "R": {
+      "entry": [
+       14.42,
+       -36.24,
+       72.25
+      ],
+      "dir": [
+       -0.1384,
+       0.9903,
+       -0.0089
+      ],
+      "chord": 58.2,
+      "size": {
+       "diameter": 6.5,
+       "length": 45.0
+      }
+     }
+    },
+    "cbt": {
+     "L": {
+      "entry": [
+       -18.77,
+       -30.31,
+       64.33
+      ],
+      "dir": [
+       -0.1417,
+       0.8901,
+       0.4332
+      ],
+      "trajectory": 29.0,
+      "size": {
+       "diameter": 5.5,
+       "length": 25.0
+      }
+     },
+     "R": {
+      "entry": [
+       9.04,
+       -30.31,
+       65.4
+      ],
+      "dir": [
+       0.1418,
+       0.8835,
+       0.4464
+      ],
+      "trajectory": 29.0,
+      "size": {
+       "diameter": 5.5,
+       "length": 25.0
+      }
+     }
+    }
+   },
+   "check": {
+    "tt.L": {
+     "grade": "A",
+     "seated": 6.5,
+     "breach": {},
+     "nearest": [
+      {
+       "id": "sp_root_l3",
+       "mm": 1.56
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 3.74
+      },
+      {
+       "id": "sp_drg_l3",
+       "mm": 3.84
+      }
+     ]
+    },
+    "tt.R": {
+     "grade": "A",
+     "seated": 8.0,
+     "breach": {},
+     "nearest": [
+      {
+       "id": "sp_root_l3",
+       "mm": 1.39
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 2.8
+      },
+      {
+       "id": "sp_drg_l3",
+       "mm": 5.61
+      }
+     ]
+    },
+    "cbt.L": {
+     "grade": "A",
+     "seated": 6.5,
+     "breach": {},
+     "nearest": [
+      {
+       "id": "sp_root_l3",
+       "mm": 2.01
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 3.41
+      },
+      {
+       "id": "sp_drg_l3",
+       "mm": 4.06
+      }
+     ]
+    },
+    "cbt.R": {
+     "grade": "A",
+     "seated": 5.5,
+     "breach": {},
+     "nearest": [
+      {
+       "id": "sp_root_l3",
+       "mm": 1.7
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 2.71
+      },
+      {
+       "id": "sp_drg_l3",
+       "mm": 5.51
+      }
+     ]
+    }
+   },
+   "risk": [
+    {
+     "id": "sp_dural_sac",
+     "offset": 1205524,
+     "count": 7626
+    },
+    {
+     "id": "sp_root_l1",
+     "offset": 1251280,
+     "count": 1446
+    },
+    {
+     "id": "sp_root_l2",
+     "offset": 1259956,
+     "count": 1736
+    },
+    {
+     "id": "sp_root_l3",
+     "offset": 1270372,
+     "count": 1778
+    },
+    {
+     "id": "sp_root_l4",
+     "offset": 1281040,
+     "count": 1738
+    },
+    {
+     "id": "sp_root_l5",
+     "offset": 1291468,
+     "count": 770
+    },
+    {
+     "id": "sp_drg_l1",
+     "offset": 1296088,
+     "count": 1033
+    },
+    {
+     "id": "sp_drg_l2",
+     "offset": 1302286,
+     "count": 1037
+    },
+    {
+     "id": "sp_drg_l3",
+     "offset": 1308508,
+     "count": 1041
+    },
+    {
+     "id": "sp_drg_l4",
+     "offset": 1314754,
+     "count": 1033
+    }
+   ],
+   "sdf": {
+    "origin": [
+     -64.328,
+     -82.441,
+     22.4
+    ],
+    "dims": [
+     121,
+     123,
+     81
+    ],
+    "step": 1.0,
+    "scale": 0.1,
+    "clamp": 8.0,
+    "offset": 0
+   },
+   "file": "assets/spine/screw_l3.bin.gz",
+   "bytes": 274828
+  },
+  "L4": {
+   "frame": {
+    "origin": [
+     -2.23,
+     5.89,
+     31.99
+    ],
+    "ex": [
+     0.99986,
+     -0.00249,
+     0.01642
+    ],
+    "ey": [
+     0.00524,
+     0.98555,
+     -0.1693
+    ],
+    "ez": [
+     -0.01576,
+     0.16936,
+     0.98543
+    ]
+   },
+   "pedicle": {
+    "L": {
+     "width": 12.2,
+     "height": 15.0,
+     "transverseAngle": 15.8,
+     "sagittalAngle": -12.7,
+     "chord": 66.1,
+     "inscribedRadius": 4.66,
+     "isthmus": [
+      -21.23,
+      -15.31,
+      38.52
+     ],
+     "isthmusUvw": [
+      -17.6,
+      -17.9,
+      2.1
+     ],
+     "entry": [
+      -27.29,
+      -35.01,
+      46.78
+     ],
+     "dir": [
+      0.2731,
+      0.8871,
+      -0.3721
+     ]
+    },
+    "R": {
+     "width": 12.2,
+     "height": 15.0,
+     "transverseAngle": 7.2,
+     "sagittalAngle": -13.0,
+     "chord": 63.9,
+     "inscribedRadius": 5.29,
+     "isthmus": [
+      16.01,
+      -14.49,
+      39.29
+     ],
+     "isthmusUvw": [
+      18.2,
+      -19.5,
+      3.1
+     ],
+     "entry": [
+      18.79,
+      -36.72,
+      48.71
+     ],
+     "dir": [
+      -0.1143,
+      0.9148,
+      -0.3873
+     ]
+    }
+   },
+   "start": {
+    "tt": {
+     "L": {
+      "entry": [
+       -25.81,
+       -30.95,
+       41.13
+      ],
+      "dir": [
+       0.2773,
+       0.9476,
+       -0.1584
+      ],
+      "chord": 56.8,
+      "size": {
+       "diameter": 6.5,
+       "length": 45.0
+      }
+     },
+     "R": {
+      "entry": [
+       18.2,
+       -32.29,
+       42.38
+      ],
+      "dir": [
+       -0.1201,
+       0.9781,
+       -0.17
+      ],
+      "chord": 53.9,
+      "size": {
+       "diameter": 6.5,
+       "length": 45.0
+      }
+     }
+    },
+    "cbt": {
+     "L": {
+      "entry": [
+       -18.14,
+       -28.15,
+       34.18
+      ],
+      "dir": [
+       -0.1444,
+       0.9493,
+       0.2794
+      ],
+      "trajectory": 29.0,
+      "size": {
+       "diameter": 5.5,
+       "length": 25.0
+      }
+     },
+     "R": {
+      "entry": [
+       12.99,
+       -28.49,
+       35.06
+      ],
+      "dir": [
+       0.1399,
+       0.9485,
+       0.2841
+      ],
+      "trajectory": 33.0,
+      "size": {
+       "diameter": 5.5,
+       "length": 30.0
+      }
+     }
+    }
+   },
+   "check": {
+    "tt.L": {
+     "grade": "A",
+     "seated": 9.5,
+     "breach": {},
+     "nearest": [
+      {
+       "id": "sp_drg_l4",
+       "mm": 2.65
+      },
+      {
+       "id": "sp_root_l4",
+       "mm": 3.12
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 4.55
+      }
+     ]
+    },
+    "tt.R": {
+     "grade": "A",
+     "seated": 8.0,
+     "breach": {},
+     "nearest": [
+      {
+       "id": "sp_root_l4",
+       "mm": 3.2
+      },
+      {
+       "id": "sp_drg_l4",
+       "mm": 3.75
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 4.84
+      }
+     ]
+    },
+    "cbt.L": {
+     "grade": "A",
+     "seated": 3.5,
+     "breach": {},
+     "nearest": [
+      {
+       "id": "sp_root_l4",
+       "mm": 3.14
+      },
+      {
+       "id": "sp_drg_l4",
+       "mm": 3.52
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 4.1
+      }
+     ]
+    },
+    "cbt.R": {
+     "grade": "A",
+     "seated": 6.0,
+     "breach": {},
+     "nearest": [
+      {
+       "id": "sp_root_l4",
+       "mm": 3.06
+      },
+      {
+       "id": "sp_drg_l4",
+       "mm": 3.67
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 3.75
+      }
+     ]
+    }
+   },
+   "risk": [
+    {
+     "id": "sp_dural_sac",
+     "offset": 1092240,
+     "count": 7660
+    },
+    {
+     "id": "sp_root_l1",
+     "offset": 1138200,
+     "count": 61
+    },
+    {
+     "id": "sp_root_l2",
+     "offset": 1138566,
+     "count": 1394
+    },
+    {
+     "id": "sp_root_l3",
+     "offset": 1146930,
+     "count": 1753
+    },
+    {
+     "id": "sp_root_l4",
+     "offset": 1157448,
+     "count": 1715
+    },
+    {
+     "id": "sp_root_l5",
+     "offset": 1167738,
+     "count": 1665
+    },
+    {
+     "id": "sp_root_s1",
+     "offset": 1177728,
+     "count": 532
+    },
+    {
+     "id": "sp_drg_l2",
+     "offset": 1180920,
+     "count": 1056
+    },
+    {
+     "id": "sp_drg_l3",
+     "offset": 1187256,
+     "count": 1046
+    },
+    {
+     "id": "sp_drg_l4",
+     "offset": 1193532,
+     "count": 1058
+    },
+    {
+     "id": "sp_drg_l5",
+     "offset": 1199880,
+     "count": 1052
+    },
+    {
+     "id": "sp_drg_s1",
+     "offset": 1206192,
+     "count": 31
+    }
+   ],
+   "sdf": {
+    "origin": [
+     -64.328,
+     -81.003,
+     -3.5
+    ],
+    "dims": [
+     123,
+     120,
+     74
+    ],
+    "step": 1.0,
+    "scale": 0.1,
+    "clamp": 8.0,
+    "offset": 0
+   },
+   "file": "assets/spine/screw_l4.bin.gz",
+   "bytes": 272971
+  },
+  "L5": {
+   "frame": {
+    "origin": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "ex": [
+     0.99754,
+     -0.04492,
+     -0.0539
+    ],
+    "ey": [
+     0.01986,
+     0.91757,
+     -0.39708
+    ],
+    "ez": [
+     0.06729,
+     0.39503,
+     0.9162
+    ]
+   },
+   "pedicle": {
+    "L": {
+     "width": 14.0,
+     "height": 16.0,
+     "transverseAngle": 17.3,
+     "sagittalAngle": -10.5,
+     "chord": 61.9,
+     "inscribedRadius": 4.2,
+     "isthmus": [
+      -24.01,
+      -19.81,
+      9.71
+     ],
+     "isthmusUvw": [
+      -25.3,
+      -28.1,
+      0.6
+     ],
+     "entry": [
+      -29.95,
+      -35.34,
+      20.83
+     ],
+     "dir": [
+      0.2972,
+      0.7765,
+      -0.5555
+     ]
+    },
+    "R": {
+     "width": 20.0,
+     "height": 18.2,
+     "transverseAngle": 15.3,
+     "sagittalAngle": -11.0,
+     "chord": 64.4,
+     "inscribedRadius": 4.31,
+     "isthmus": [
+      21.31,
+      -20.52,
+      11.62
+     ],
+     "isthmusUvw": [
+      20.1,
+      -17.6,
+      2.9
+     ],
+     "entry": [
+      26.64,
+      -37.59,
+      23.0
+     ],
+     "dir": [
+      -0.2516,
+      0.8052,
+      -0.537
+     ]
+    }
+   },
+   "start": {
+    "tt": {
+     "L": {
+      "entry": [
+       -29.19,
+       -33.96,
+       16.19
+      ],
+      "dir": [
+       0.3156,
+       0.8627,
+       -0.3951
+      ],
+      "chord": 57.6,
+      "size": {
+       "diameter": 6.5,
+       "length": 45.0
+      }
+     },
+     "R": {
+      "entry": [
+       25.43,
+       -35.68,
+       17.85
+      ],
+      "dir": [
+       -0.2441,
+       0.8969,
+       -0.3688
+      ],
+      "chord": 58.0,
+      "size": {
+       "diameter": 6.5,
+       "length": 45.0
+      }
+     }
+    },
+    "cbt": {
+     "L": {
+      "entry": [
+       -21.17,
+       -31.15,
+       6.83
+      ],
+      "dir": [
+       -0.0904,
+       0.9945,
+       0.0529
+      ],
+      "trajectory": 31.5,
+      "size": {
+       "diameter": 5.5,
+       "length": 30.0
+      }
+     },
+     "R": {
+      "entry": [
+       15.6,
+       -32.22,
+       8.48
+      ],
+      "dir": [
+       0.1844,
+       0.9821,
+       0.038
+      ],
+      "trajectory": 12.0,
+      "size": {
+       "diameter": 5.5,
+       "length": 20.0
+      }
+     }
+    }
+   },
+   "check": {
+    "tt.L": {
+     "grade": "A",
+     "seated": 14.0,
+     "breach": {},
+     "nearest": [
+      {
+       "id": "sp_root_l5",
+       "mm": 4.0
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 7.85
+      },
+      {
+       "id": "sp_root_l4",
+       "mm": 10.54
+      }
+     ]
+    },
+    "tt.R": {
+     "grade": "A",
+     "seated": 11.5,
+     "breach": {},
+     "nearest": [
+      {
+       "id": "sp_root_l5",
+       "mm": 2.98
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 7.15
+      },
+      {
+       "id": "sp_root_l4",
+       "mm": 10.05
+      }
+     ]
+    },
+    "cbt.L": {
+     "grade": "A",
+     "seated": 7.5,
+     "breach": {},
+     "nearest": [
+      {
+       "id": "sp_root_l5",
+       "mm": 3.14
+      },
+      {
+       "id": "sp_root_l4",
+       "mm": 7.08
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 7.48
+      }
+     ]
+    },
+    "cbt.R": {
+     "grade": "B",
+     "seated": 6.5,
+     "breach": {
+      "medial": 0.3
+     },
+     "nearest": [
+      {
+       "id": "sp_root_l5",
+       "mm": 0.43
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 4.61
+      },
+      {
+       "id": "sp_root_l4",
+       "mm": 10.08
+      }
+     ]
+    }
+   },
+   "risk": [
+    {
+     "id": "sp_dural_sac",
+     "offset": 1071456,
+     "count": 6911
+    },
+    {
+     "id": "sp_root_l2",
+     "offset": 1112922,
+     "count": 242
+    },
+    {
+     "id": "sp_root_l3",
+     "offset": 1114374,
+     "count": 1508
+    },
+    {
+     "id": "sp_root_l4",
+     "offset": 1123422,
+     "count": 1706
+    },
+    {
+     "id": "sp_root_l5",
+     "offset": 1133658,
+     "count": 1930
+    },
+    {
+     "id": "sp_root_s1",
+     "offset": 1145238,
+     "count": 1556
+    },
+    {
+     "id": "sp_drg_l3",
+     "offset": 1154574,
+     "count": 1045
+    },
+    {
+     "id": "sp_drg_l4",
+     "offset": 1160844,
+     "count": 1040
+    },
+    {
+     "id": "sp_drg_l5",
+     "offset": 1167084,
+     "count": 1048
+    },
+    {
+     "id": "sp_drg_s1",
+     "offset": 1173372,
+     "count": 1042
+    }
+   ],
+   "sdf": {
+    "origin": [
+     -60.016,
+     -79.566,
+     -33.601
+    ],
+    "dims": [
+     121,
+     115,
+     77
+    ],
+    "step": 1.0,
+    "scale": 0.1,
+    "clamp": 8.0,
+    "offset": 0
+   },
+   "file": "assets/spine/screw_l5.bin.gz",
+   "bytes": 265817
+  },
+  "S1": {
+   "frame": {
+    "origin": [
+     0.75,
+     -15.93,
+     -27.88
+    ],
+    "ex": [
+     0.99843,
+     -0.02792,
+     0.04858
+    ],
+    "ey": [
+     0.05107,
+     0.81016,
+     -0.58399
+    ],
+    "ez": [
+     -0.02305,
+     0.58555,
+     0.81031
+    ]
+   },
+   "start": {
+    "s1": {
+     "L": {
+      "entry": [
+       -21.07,
+       -29.63,
+       -8.11
+      ],
+      "dir": [
+       0.3895,
+       0.7517,
+       -0.5322
+      ],
+      "chord": 48.8,
+      "promontory": [
+       -2.07,
+       7.05,
+       -34.08
+      ],
+      "size": {
+       "diameter": 5.5,
+       "length": 48.8
+      }
+     },
+     "R": {
+      "entry": [
+       19.37,
+       -29.69,
+       -6.91
+      ],
+      "dir": [
+       -0.2935,
+       0.7708,
+       -0.5654
+      ],
+      "chord": 47.5,
+      "promontory": [
+       5.43,
+       6.93,
+       -33.77
+      ],
+      "size": {
+       "diameter": 5.5,
+       "length": 47.5
+      }
+     }
+    }
+   },
+   "check": {
+    "s1.L": {
+     "grade": "B",
+     "seated": 3.5,
+     "breach": {
+      "anterior": 2.67,
+      "medial": 1.33,
+      "superior": 1.79
+     },
+     "nearest": [
+      {
+       "id": "sp_root_l5",
+       "mm": -0.54
+      },
+      {
+       "id": "sp_drg_l5",
+       "mm": 0.6
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 4.55
+      }
+     ]
+    },
+    "s1.R": {
+     "grade": "C",
+     "seated": 3.5,
+     "breach": {
+      "anterior": 2.98,
+      "medial": 2.44
+     },
+     "nearest": [
+      {
+       "id": "sp_root_l5",
+       "mm": 0.74
+      },
+      {
+       "id": "sp_drg_l5",
+       "mm": 1.53
+      },
+      {
+       "id": "sp_root_s1",
+       "mm": 2.7
+      }
+     ]
+    }
+   },
+   "risk": [
+    {
+     "id": "sp_dural_sac",
+     "offset": 1771562,
+     "count": 6467
+    },
+    {
+     "id": "sp_root_l3",
+     "offset": 1810364,
+     "count": 1115
+    },
+    {
+     "id": "sp_root_l4",
+     "offset": 1817054,
+     "count": 1720
+    },
+    {
+     "id": "sp_root_l5",
+     "offset": 1827374,
+     "count": 1940
+    },
+    {
+     "id": "sp_root_s1",
+     "offset": 1839014,
+     "count": 1803
+    },
+    {
+     "id": "sp_drg_l3",
+     "offset": 1849832,
+     "count": 783
+    },
+    {
+     "id": "sp_drg_l4",
+     "offset": 1854530,
+     "count": 1049
+    },
+    {
+     "id": "sp_drg_l5",
+     "offset": 1860824,
+     "count": 1041
+    },
+    {
+     "id": "sp_drg_s1",
+     "offset": 1867070,
+     "count": 1051
+    }
+   ],
+   "sdf": {
+    "origin": [
+     -59.297,
+     -76.691,
+     -88.202
+    ],
+    "dims": [
+     121,
+     121,
+     121
+    ],
+    "step": 1.0,
+    "scale": 0.1,
+    "clamp": 8.0,
+    "offset": 0
+   },
+   "file": "assets/spine/screw_s1.bin.gz",
+   "bytes": 404127
+  }
+ }
+}

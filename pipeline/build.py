@@ -124,6 +124,18 @@ def isosurface(data: np.ndarray, aff: np.ndarray, level: float, sigma: float, fa
     if len(m.faces) > faces:
         m = m.simplify_quadric_decimation(face_count=faces)
     m.fix_normals()
+    # fix_normals orients only a watertight mesh, and decimation can leave a few non-manifold edges: orient each
+    # connected piece by the volume it encloses as well, or the viewer draws the far wall of an inside-out surface
+    # instead of the near one
+    labels = trimesh.graph.connected_component_labels(m.face_adjacency, node_count=len(m.faces))
+    faces = m.faces.copy()
+    for k in np.unique(labels):
+        sel = labels == k
+        tri = m.vertices[faces[sel]] - m.vertices[faces[sel]].reshape(-1, 3).mean(0)
+        if np.einsum("ij,ij->i", tri[:, 0], np.cross(tri[:, 1], tri[:, 2])).sum() < 0:
+            faces[sel] = faces[sel][:, ::-1]
+    if not np.array_equal(faces, m.faces):
+        m.faces = faces
     return m
 
 

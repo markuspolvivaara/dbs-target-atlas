@@ -121,10 +121,12 @@ def main() -> int:
             record[src] = hashlib.sha256(dest.read_bytes()).hexdigest()
     hcp = fetch_hcp1065()
     zan = fetch_zanatomy()
+    verse = fetch_verse()
     (RAW / "sources.lock.json").write_text(json.dumps(
         {"archive": LEADDBS_DATA_ZIP, "files": record,
          "hcp1065": {"release": C.HCP1065_RELEASE, "files": hcp},
-         "zanatomy": {"source": ZANATOMY_URL, "files": zan}}, indent=1))
+         "zanatomy": {"source": ZANATOMY_URL, "files": zan},
+         "verse": {"subject": VERSE_SUBJECT, "files": verse}}, indent=1))
     print(f"{len(record)} files ready in {RAW}")
     return 0
 
@@ -169,6 +171,33 @@ def fetch_hcp1065() -> dict[str, str]:
 # Skull-base section: Z-Anatomy Blender package (CC BY-SA 4.0), downloaded once and hash-checked
 ZANATOMY_URL = "https://github.com/Z-Anatomy/Models-of-human-anatomy/raw/master/Z-Anatomy.zip"
 ZANATOMY_SHA256 = "e029688545627bd0214b269e1063143abb580aad72b2c2445d6d8a9a0d9da736"  # as downloaded 2026-10-17
+
+
+# Spine section: one VerSe whole-spine CT (CC BY-SA 4.0, OSF project 4skx2), isotropic 0.72 x 0.72 x 0.7 mm,
+# C1-L5 with hand-corrected vertebra masks; pinned by SHA-256 as downloaded 2026-10-17
+VERSE_SUBJECT = "sub-verse823"
+VERSE_FILES = {
+    "sub-verse823_dir-iso_ct.nii.gz": ("https://osf.io/download/2a35c/", "7e0cf8f31a4e2d597b6bae2b9996e61b8b158e0ab0d44bf250144fac9b062d71"),
+    "sub-verse823_dir-iso_seg-vert_msk.nii.gz": ("https://osf.io/download/9j5qz/", "bc12746141863b8d44b0c7903bc6c50f5a43ddd96f2bce1463c387ef6ecb630b"),
+    "sub-verse823_dir-iso_seg-subreg_ctd.json": ("https://osf.io/download/j7dtw/", "71f0d225a54a2b5aaed152b1fe95568017a0229d77796a09f083654843ee3b46"),
+}
+
+
+def fetch_verse() -> dict[str, str]:
+    out = RAW / "verse" / VERSE_SUBJECT
+    out.mkdir(parents=True, exist_ok=True)
+    record = {}
+    for name, (url, sha) in VERSE_FILES.items():
+        dest = out / name
+        if not dest.exists():
+            print(f"fetch {name}")
+            urllib.request.urlretrieve(url, dest)
+        digest = hashlib.sha256(dest.read_bytes()).hexdigest()
+        if digest != sha:
+            print(f"{name}: SHA-256 {digest} does not match the pinned {sha}", file=sys.stderr)
+            raise SystemExit(1)
+        record[name] = digest
+    return record
 
 
 def fetch_zanatomy() -> dict[str, str]:

@@ -157,7 +157,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/meshes/stn_limbic.glb",
-   "bytes": 29836,
+   "bytes": 29880,
    "colour": {
     "token": "stnLimbic",
     "light": "#F1E3BC",
@@ -257,7 +257,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/gpi_sm.glb",
-   "bytes": 30492,
+   "bytes": 30504,
    "colour": {
     "token": "gpi",
     "light": "#1F7F5A",
@@ -1451,7 +1451,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/meshes/ss_ts.glb",
-   "bytes": 24008,
+   "bytes": 24040,
    "colour": {
     "token": "cm",
     "light": "#127C94",

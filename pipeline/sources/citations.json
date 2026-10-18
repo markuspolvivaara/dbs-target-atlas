@@ -128,5 +128,165 @@
   "citation": "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
   "doi": "10.1016/j.neuroimage.2010.06.010",
   "url": "https://doi.org/10.1016/j.neuroimage.2010.06.010"
+ },
+ "loffler2020": {
+  "citation": "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+  "doi": "10.1148/ryai.2020190138",
+  "url": "https://doi.org/10.1148/ryai.2020190138",
+  "pmid": "33937831"
+ },
+ "liebl2021": {
+  "citation": "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+  "doi": "10.1038/s41597-021-01060-0",
+  "url": "https://doi.org/10.1038/s41597-021-01060-0",
+  "pmid": "34711848"
+ },
+ "sekuboyina2021": {
+  "citation": "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+  "doi": "10.1016/j.media.2021.102166",
+  "url": "https://doi.org/10.1016/j.media.2021.102166",
+  "pmid": "34340104"
+ },
+ "wasserthal2023": {
+  "citation": "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024.",
+  "doi": "10.1148/ryai.230024",
+  "url": "https://doi.org/10.1148/ryai.230024",
+  "pmid": "37795137"
+ },
+ "moro2003": {
+  "citation": "Moro T, Kikuchi S, Konno S, Yaginuma H. An anatomic study of the lumbar plexus with respect to retroperitoneal endoscopic surgery. Spine. 2003;28(5):423-8; discussion 427-8. doi:10.1097/01.BRS.0000049226.87064.3B.",
+  "doi": "10.1097/01.BRS.0000049226.87064.3B",
+  "url": "https://doi.org/10.1097/01.BRS.0000049226.87064.3B",
+  "pmid": "12616150"
+ },
+ "uribe2010": {
+  "citation": "Uribe JS, Arredondo N, Dakwar E, Vale FL. Defining the safe working zones using the minimally invasive lateral retroperitoneal transpsoas approach: an anatomical study. J Neurosurg Spine. 2010;13(2):260-6. doi:10.3171/2010.3.SPINE09766.",
+  "doi": "10.3171/2010.3.SPINE09766",
+  "url": "https://doi.org/10.3171/2010.3.SPINE09766",
+  "pmid": "20672964"
+ },
+ "benglis2009": {
+  "citation": "Benglis DM, Vanni S, Levi AD. An anatomical study of the lumbosacral plexus as related to the minimally invasive transpsoas approach to the lumbar spine. J Neurosurg Spine. 2009;10(2):139-44. doi:10.3171/2008.10.SPI08479.",
+  "doi": "10.3171/2008.10.SPI08479",
+  "url": "https://doi.org/10.3171/2008.10.SPI08479",
+  "pmid": "19278328"
+ },
+ "fardon2014": {
+  "citation": "Fardon DF, Williams AL, Dohring EJ, Murtagh FR, Gabriel Rothman SL, Sze GK. Lumbar disc nomenclature: version 2.0: Recommendations of the combined task forces of the North American Spine Society, the American Society of Spine Radiology and the American Society of Neuroradiology. Spine J. 2014;14(11):2525-45. doi:10.1016/j.spinee.2014.04.022.",
+  "doi": "10.1016/j.spinee.2014.04.022",
+  "url": "https://doi.org/10.1016/j.spinee.2014.04.022",
+  "pmid": "24768732"
+ },
+ "zindrick1987": {
+  "citation": "Zindrick MR, Wiltse LL, Doornik A, Widell EH, Knight GW, Patwardhan AG, et al. Analysis of the morphometric characteristics of the thoracic and lumbar pedicles. Spine. 1987;12(2):160-6. doi:10.1097/00007632-198703000-00012.",
+  "doi": "10.1097/00007632-198703000-00012",
+  "url": "https://doi.org/10.1097/00007632-198703000-00012",
+  "pmid": "3589807"
+ },
+ "hwang2019": {
+  "citation": "Hwang SM, Son IS, Yang PJ, Kang MS. Preganglionic Epidural Steroid Injection through Translateral Recess Approach. Clin Orthop Surg. 2019;11(1):131-136. doi:10.4055/cios.2019.11.1.131.",
+  "doi": "10.4055/cios.2019.11.1.131",
+  "url": "https://doi.org/10.4055/cios.2019.11.1.131",
+  "pmid": "30838118"
+ },
+ "merckaert2015": {
+  "citation": "Merckaert S, Pierzchala K, Kulik G, Schizas C. Influence of anatomical variations on lumbar foraminal stenosis pathogenesis. Eur Spine J. 2015;24(2):313-8. doi:10.1007/s00586-014-3524-3.",
+  "doi": "10.1007/s00586-014-3524-3",
+  "url": "https://doi.org/10.1007/s00586-014-3524-3",
+  "pmid": "25169143"
+ },
+ "hasegawa1996": {
+  "citation": "Hasegawa T, Mikawa Y, Watanabe R, An HS. Morphometric analysis of the lumbosacral nerve roots and dorsal root ganglia by magnetic resonance imaging. Spine. 1996;21(9):1005-9. doi:10.1097/00007632-199605010-00001.",
+  "doi": "10.1097/00007632-199605010-00001",
+  "url": "https://doi.org/10.1097/00007632-199605010-00001",
+  "pmid": "8724082"
+ },
+ "osman2021": {
+  "citation": "Osman SG. Anatomic Image-Based Classification of Lumbar Intervertebral Disc Pathologies. Cureus. 2021;13(8):e16861. doi:10.7759/cureus.16861.",
+  "doi": "10.7759/cureus.16861",
+  "url": "https://doi.org/10.7759/cureus.16861",
+  "pmid": "34367839"
+ },
+ "luebbers2025": {
+  "citation": "Luebbers T, Ali A, Baalmann R, Kale A. Percutaneous endoscopic lumbar discectomy for extreme lateral lumbar disc herniation. Surg Neurol Int. 2025;16:150. doi:10.25259/SNI_144_2025.",
+  "doi": "10.25259/SNI_144_2025",
+  "url": "https://doi.org/10.25259/SNI_144_2025",
+  "pmid": "40353179"
+ },
+ "downs2011": {
+  "citation": "Downs MB, Laporte C. Conflicting dermatome maps: educational and clinical implications. J Orthop Sports Phys Ther. 2011;41(6):427-34. doi:10.2519/jospt.2011.3506.",
+  "doi": "10.2519/jospt.2011.3506",
+  "url": "https://doi.org/10.2519/jospt.2011.3506",
+  "pmid": "21628826"
+ },
+ "lee2008": {
+  "citation": "Lee MW, McPhee RW, Stringer MD. An evidence-based approach to human dermatomes. Clin Anat. 2008;21(5):363-73. doi:10.1002/ca.20636.",
+  "doi": "10.1002/ca.20636",
+  "url": "https://doi.org/10.1002/ca.20636",
+  "pmid": "18470936"
+ },
+ "rupp2021": {
+  "citation": "Rupp R, Biering-Sørensen F, Burns SP, Graves DE, Guest J, Jones L, et al. International Standards for Neurological Classification of Spinal Cord Injury: Revised 2019. Top Spinal Cord Inj Rehabil. 2021;27(2):1-22. doi:10.46292/sci2702-1.",
+  "doi": "10.46292/sci2702-1",
+  "url": "https://doi.org/10.46292/sci2702-1",
+  "pmid": "34108832"
+ },
+ "isncsci2019": {
+  "citation": "American Spinal Injury Association, International Spinal Cord Society. International Standards for Neurological Classification of Spinal Cord Injury (ISNCSCI) worksheet, revision 04/2019.",
+  "url": "https://asia-spinalinjury.org/wp-content/uploads/2019/10/ASIA-ISCOS-Worksheet_10.2019_PRINT-Page-1-2.pdf"
+ },
+ "matsukawa2017": {
+  "citation": "Matsukawa K, Yato Y. Lumbar pedicle screw fixation with cortical bone trajectory: A review from anatomical and biomechanical standpoints. Spine Surg Relat Res. 2017;1(4):164-173. doi:10.22603/ssrr.1.2017-0006.",
+  "doi": "10.22603/ssrr.1.2017-0006",
+  "url": "https://doi.org/10.22603/ssrr.1.2017-0006",
+  "pmid": "31440629"
+ },
+ "zhao2021": {
+  "citation": "Zhao YH, Ma YL, Wang L, Liang JL, Luo HT, Xu YQ, Lu S. Anatomical study of the ideal cortical bone trajectory in the lumbar spine. Medicine (Baltimore). 2021;100(2):e24099. doi:10.1097/MD.0000000000024099.",
+  "doi": "10.1097/MD.0000000000024099",
+  "url": "https://doi.org/10.1097/MD.0000000000024099",
+  "pmid": "33466177"
+ },
+ "koeck2026": {
+  "citation": "Koeck K, Reissig LF, Hainfellner A, Weninger WJ, Grossauer S. Anatomic safeguards and the low risk of vascular injury during percutaneous tricortical S1 pedicle screw fixation - a cadaver study. Sci Rep. 2026;16(1):7126. doi:10.1038/s41598-026-38331-y.",
+  "doi": "10.1038/s41598-026-38331-y",
+  "url": "https://doi.org/10.1038/s41598-026-38331-y",
+  "pmid": "41634140"
+ },
+ "jenkins2026": {
+  "citation": "Jenkins P, Walton C, Ferdon RJ, Yu B, Silvestre J, Ravinsky RA. Relationship of posterior superior iliac spine morphology and ideal S1 pedicle screw trajectory: A cross-sectional study of closed versus open posterior superior iliac spine morphology. J Craniovertebr Junction Spine. 2026;17(4):379-383. doi:10.4103/jcvjs.jcvjs_42_26.",
+  "doi": "10.4103/jcvjs.jcvjs_42_26",
+  "url": "https://doi.org/10.4103/jcvjs.jcvjs_42_26",
+  "pmid": "42643957"
+ },
+ "gertzbein1990": {
+  "citation": "Gertzbein SD, Robbins SE. Accuracy of pedicular screw placement in vivo. Spine (Phila Pa 1976). 1990;15(1):11-14. doi:10.1097/00007632-199001000-00004.",
+  "doi": "10.1097/00007632-199001000-00004",
+  "url": "https://doi.org/10.1097/00007632-199001000-00004",
+  "pmid": "2326693"
+ },
+ "miyamoto2025": {
+  "citation": "Miyamoto T, Naito N, Yamashita H, Ueda S, Ohara J. Accuracy of Lumbar Pedicle Screw Placement Based on Insertion Techniques in a Single-Center Retrospective Study. Cureus. 2025;17(9):e93528. doi:10.7759/cureus.93528.",
+  "doi": "10.7759/cureus.93528",
+  "url": "https://doi.org/10.7759/cureus.93528",
+  "pmid": "41179055"
+ },
+ "wang2023": {
+  "citation": "Wang Y, Kahaer A, Shi W, Guo H, Rexiti P. Morphometric measurement of lumbar pedicle in different regions: a systematic review. J Orthop Surg Res. 2023;18(1):30. doi:10.1186/s13018-023-03499-w.",
+  "doi": "10.1186/s13018-023-03499-w",
+  "url": "https://doi.org/10.1186/s13018-023-03499-w",
+  "pmid": "36631862"
+ },
+ "moncadahabib2025": {
+  "citation": "Moncada-Habib T, Jiménez-Molina T, Muñuzuri-Camacho MA, Pulido Bayona PA, Toache KS, Álvaro Heredia J, López-Valencia G, Alvaro-Heredia JA. Lumbar Pedicle Morphometry in the Mexican Population: Defining Anatomical References for Safer Spine Surgery. Cureus. 2025;17(9):e91799. doi:10.7759/cureus.91799.",
+  "doi": "10.7759/cureus.91799",
+  "url": "https://doi.org/10.7759/cureus.91799",
+  "pmid": "41069924"
+ },
+ "nkwerem2024": {
+  "citation": "Nkwerem SP, Ohaegbulam SC, Mezue W, Emejulu JC, Ndubuisi CA, Nkwerem GI. Lumbar Pedicle Dimensions Using CT Scan in Adults of South-Eastern Nigeria as Related to Transpedicular Fixation. J West Afr Coll Surg. 2024;14(4):396-402. doi:10.4103/jwas.jwas_169_23.",
+  "doi": "10.4103/jwas.jwas_169_23",
+  "url": "https://doi.org/10.4103/jwas.jwas_169_23",
+  "pmid": "39309380"
  }
 }

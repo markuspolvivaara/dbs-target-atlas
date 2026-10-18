@@ -8,7 +8,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_abducens_nerve_vi.glb",
-   "bytes": 19700,
+   "bytes": 19704,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -47,7 +47,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_accessory_branch_of_middle_meningeal_artery.glb",
-   "bytes": 10568,
+   "bytes": 10564,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -86,7 +86,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_accessory_nerve_xi.glb",
-   "bytes": 43280,
+   "bytes": 43292,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -200,7 +200,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_cerebral_artery.glb",
-   "bytes": 6468,
+   "bytes": 6472,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -239,7 +239,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_division_of_mandibular_nerve.glb",
-   "bytes": 6712,
+   "bytes": 6728,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -278,7 +278,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_division_of_retromandibular_vein.glb",
-   "bytes": 5564,
+   "bytes": 5568,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -316,7 +316,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_ethmoidal_artery.glb",
-   "bytes": 13312,
+   "bytes": 13304,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -355,7 +355,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_inferior_cerebellar_artery.glb",
-   "bytes": 15488,
+   "bytes": 15480,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -432,7 +432,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_spinal_artery.glb",
-   "bytes": 9064,
+   "bytes": 9076,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -471,7 +471,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_artery_of_pterygoid_canal.glb",
-   "bytes": 7044,
+   "bytes": 7048,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -510,7 +510,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_basilar_artery.glb",
-   "bytes": 3904,
+   "bytes": 3892,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -664,7 +664,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_cochlear_nerve.glb",
-   "bytes": 4360,
+   "bytes": 4356,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -703,7 +703,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_distal_lateral_striate_branches.glb",
-   "bytes": 21324,
+   "bytes": 21340,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -779,7 +779,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_external_jugular_vein.glb",
-   "bytes": 6788,
+   "bytes": 6792,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -817,7 +817,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_facial_nerve_vii.glb",
-   "bytes": 118480,
+   "bytes": 118496,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -856,7 +856,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_facial_vein.glb",
-   "bytes": 14372,
+   "bytes": 14376,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -968,7 +968,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_glossopharyngeal_nerve_ix.glb",
-   "bytes": 44732,
+   "bytes": 44756,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1007,7 +1007,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_hypoglossal_nerve_xii.glb",
-   "bytes": 52016,
+   "bytes": 52076,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1046,7 +1046,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_inferior_alveolar_nerve.glb",
-   "bytes": 58668,
+   "bytes": 58496,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1123,7 +1123,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_inferior_nasal_concha_bone.glb",
-   "bytes": 22076,
+   "bytes": 23552,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -1160,7 +1160,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_inferior_ophthalmic_vein.glb",
-   "bytes": 8296,
+   "bytes": 8276,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1198,7 +1198,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_inferior_petrosal_sinus.glb",
-   "bytes": 10348,
+   "bytes": 10344,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1274,7 +1274,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_insular_branches_of_middle_cerebral_artery_m2_segment.glb",
-   "bytes": 8684,
+   "bytes": 8676,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1352,7 +1352,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_lacrimal_bone.glb",
-   "bytes": 26164,
+   "bytes": 28028,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -1389,7 +1389,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_lateral_pontine_branches_of_basilar_artery.glb",
-   "bytes": 16048,
+   "bytes": 16052,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1428,7 +1428,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_lingual_nerve.glb",
-   "bytes": 17780,
+   "bytes": 17776,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1467,7 +1467,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_lingual_vein.glb",
-   "bytes": 9876,
+   "bytes": 9872,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1505,7 +1505,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_maxilla.glb",
-   "bytes": 177960,
+   "bytes": 192208,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -1542,7 +1542,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_maxillary_artery.glb",
-   "bytes": 31124,
+   "bytes": 31132,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1581,7 +1581,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_maxillary_nerve.glb",
-   "bytes": 33792,
+   "bytes": 33804,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1620,7 +1620,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_maxillary_veins.glb",
-   "bytes": 16972,
+   "bytes": 16964,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1658,7 +1658,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_medial_pontine_branches_of_basilar_artery.glb",
-   "bytes": 9300,
+   "bytes": 9296,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1697,7 +1697,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_meningeal_branch_of_maxillary_nerve.glb",
-   "bytes": 32184,
+   "bytes": 32172,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1736,7 +1736,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_mental_nerve.glb",
-   "bytes": 9796,
+   "bytes": 9780,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1775,7 +1775,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_middle_cerebral_artery_m1_segment.glb",
-   "bytes": 6620,
+   "bytes": 6632,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1814,7 +1814,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_middle_meningeal_artery.glb",
-   "bytes": 9080,
+   "bytes": 9076,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1853,7 +1853,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_nasal_bone.glb",
-   "bytes": 14868,
+   "bytes": 15864,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -1890,7 +1890,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_nerve_to_mylohyoid_muscle.glb",
-   "bytes": 19604,
+   "bytes": 19592,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2003,7 +2003,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_occipital_sinus.glb",
-   "bytes": 5704,
+   "bytes": 5700,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -2041,7 +2041,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_occipital_vein.glb",
-   "bytes": 30892,
+   "bytes": 30880,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -2079,7 +2079,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_oculomotor_nerve_iii.glb",
-   "bytes": 37156,
+   "bytes": 37172,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2118,7 +2118,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_olfactory_nerve_i.glb",
-   "bytes": 65428,
+   "bytes": 65308,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2157,7 +2157,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_ophthalmic_artery.glb",
-   "bytes": 9908,
+   "bytes": 9904,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2196,7 +2196,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_ophthalmic_nerve.glb",
-   "bytes": 32280,
+   "bytes": 32308,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2235,7 +2235,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_optic_chiasm.glb",
-   "bytes": 14244,
+   "bytes": 15352,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -2272,7 +2272,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_optic_nerve_ii.glb",
-   "bytes": 9880,
+   "bytes": 9876,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2311,7 +2311,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_palatine_bone.glb",
-   "bytes": 59216,
+   "bytes": 63584,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -2385,7 +2385,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_auricular_vein.glb",
-   "bytes": 14392,
+   "bytes": 14388,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -2423,7 +2423,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_cerebral_artery.glb",
-   "bytes": 101436,
+   "bytes": 101504,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2462,7 +2462,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_communicating_artery.glb",
-   "bytes": 5232,
+   "bytes": 5244,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2501,7 +2501,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_division_of_mandibular_nerve.glb",
-   "bytes": 8140,
+   "bytes": 8136,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2540,7 +2540,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_division_of_retromandibular_vein.glb",
-   "bytes": 5888,
+   "bytes": 5880,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -2578,7 +2578,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_ethmoidal_artery.glb",
-   "bytes": 5188,
+   "bytes": 5180,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2656,7 +2656,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_intercavernous_sinus.glb",
-   "bytes": 5888,
+   "bytes": 5884,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -2694,7 +2694,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_lateral_nasal_branches_of_sphenopalatine_artery.glb",
-   "bytes": 41192,
+   "bytes": 41204,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2772,7 +2772,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_proximal_lateral_striate_branches.glb",
-   "bytes": 15944,
+   "bytes": 15932,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2811,7 +2811,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_retromandibular_vein.glb",
-   "bytes": 5392,
+   "bytes": 5404,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -2849,7 +2849,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_sigmoid_sinus.glb",
-   "bytes": 6016,
+   "bytes": 6020,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -2998,7 +2998,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_straight_sinus.glb",
-   "bytes": 9048,
+   "bytes": 9052,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3036,7 +3036,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_submental_vein.glb",
-   "bytes": 12356,
+   "bytes": 12340,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3074,7 +3074,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_superficial_temporal_veins.glb",
-   "bytes": 24680,
+   "bytes": 24672,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3112,7 +3112,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_superior_cerebellar_artery.glb",
-   "bytes": 50252,
+   "bytes": 50232,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3151,7 +3151,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_superior_labial_vein.glb",
-   "bytes": 8364,
+   "bytes": 8360,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3189,7 +3189,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_superior_ophthalmic_vein.glb",
-   "bytes": 9608,
+   "bytes": 9624,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3227,7 +3227,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_superior_petrosal_sinus.glb",
-   "bytes": 15720,
+   "bytes": 15712,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3303,7 +3303,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_temporal_bone.glb",
-   "bytes": 498216,
+   "bytes": 540188,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -3340,7 +3340,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_tentorium_cerebelli.glb",
-   "bytes": 52404,
+   "bytes": 57608,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -3377,7 +3377,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_transverse_sinus.glb",
-   "bytes": 11728,
+   "bytes": 11732,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3454,7 +3454,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_trochlear_nerve_iv.glb",
-   "bytes": 19168,
+   "bytes": 19160,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -3493,7 +3493,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_vagus_nerve_x.glb",
-   "bytes": 41324,
+   "bytes": 41332,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -3532,7 +3532,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_vertebral_artery.glb",
-   "bytes": 16768,
+   "bytes": 16760,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3571,7 +3571,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_vestibular_nerve.glb",
-   "bytes": 12400,
+   "bytes": 12404,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -3610,7 +3610,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_vestibulocochlear_nerve_viii.glb",
-   "bytes": 10128,
+   "bytes": 10116,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -3649,7 +3649,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_vomer.glb",
-   "bytes": 24720,
+   "bytes": 24808,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -3686,7 +3686,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_zygomatic_bone.glb",
-   "bytes": 52264,
+   "bytes": 56256,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",

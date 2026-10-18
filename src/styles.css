@@ -342,3 +342,31 @@ kbd { font: inherit; font-size: 0.9em; border: 1px solid var(--line); border-bot
 .sb-list .chip { min-height: 32px; padding: 4px 10px; font-size: 13.5px; display: inline-flex; align-items: center; }
 .sb-list .chip .swatch { width: 10px; height: 10px; margin-right: 6px; }
 .legend3d .lg-text { padding: 2px 0; }
+/* spine section: lower-limb chart with key sensory points */
+.body-chart { width: 100%; max-width: 320px; height: auto; display: block; margin: 6px 0; }
+.body-chart .bc-leg { fill: var(--soft); stroke: var(--muted); stroke-width: 0.8; }
+.body-chart .bc-view { font: 700 6px "Atkinson Hyperlegible", system-ui, sans-serif; fill: var(--muted); }
+.body-chart .bc-dot { fill: var(--muted); }
+.body-chart .bc-detail { fill: none; stroke: var(--muted); stroke-width: 0.6; opacity: 0.7; }
+.body-chart .bc-side { font: 4.5px "Atkinson Hyperlegible", system-ui, sans-serif; fill: var(--muted); }
+.body-chart .bc-dot.on { fill: var(--c-spRoot); stroke: var(--ink); stroke-width: 0.8; }
+.body-chart .bc-lab { font: 5px "Atkinson Hyperlegible", system-ui, sans-serif; fill: var(--muted); }
+.body-chart .bc-lab.on { font-weight: 700; fill: var(--ink); }
+.lesion-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 4px 0; }
+/* spine: virtual screw and pedicle table */
+.screw { display: grid; gap: 6px; }
+.screw-sliders { display: grid; grid-template-columns: auto minmax(0, 1fr) 7.5em; gap: 4px 10px; align-items: center; margin: 4px 0; }
+.screw-sliders label { font-size: 15px; color: var(--muted); }
+.screw-sliders input[type="range"] { width: 100%; min-height: 32px; accent-color: var(--ink); }
+.screw-sliders output { font-variant-numeric: tabular-nums; font-size: 15px; text-align: right; }
+@media (max-width: 480px) {
+  .screw-sliders { grid-template-columns: minmax(0, 1fr) auto; }
+  .screw-sliders label { grid-column: 1 / -1; margin-top: 4px; }
+}
+.screw-readout p { margin: 4px 0; }
+.screw-grade { font-weight: 700; }
+.grade { display: inline-grid; place-items: center; min-width: 1.8em; height: 1.8em; border-radius: 6px; background: var(--g); color: var(--bg); font-weight: 700; }
+.morph { border-collapse: collapse; width: 100%; font-size: 15px; margin: 4px 0; }
+.morph th, .morph td { text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.morph thead th { color: var(--muted); font-weight: 700; }
+.morph td { font-variant-numeric: tabular-nums; }

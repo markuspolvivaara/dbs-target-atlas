@@ -117,6 +117,40 @@ The 74 gyri and sulci of FreeSurfer's Destrieux 2009 parcellation (Destrieux et 
 - Pipeline: `pipeline/cortex_texts.py` (in Blender) reads the definition texts, `pipeline/cortex_build.py` writes
   the assets and checks them.
 
+## Spine (phase 1: lumbar)
+
+Surgical anatomy of the spine from one adult CT: VerSe 2020 sub-verse823 (CC BY-SA 4.0, 0.72 × 0.72 × 0.7 mm,
+C1 to the pelvis), with TotalSegmentator (Apache-2.0 open tasks) run on the same CT. One subject throughout, in
+its own space (mm from the centre of the L5 vertebral body).
+
+- **Region and level selectors**: lumbar now (L1–S1); cervical and thoracic are segmented and will follow.
+- **Bone**: vertebrae C1–L5 from the CT's bone surface (VerSe's hand-corrected masks only assign bone to each
+  vertebra; their outlines step every few slices). Sacrum (TotalSegmentator's sacrum and S1 classes) and pelvis
+  from TotalSegmentator.
+- **Discs** (TotalSegmentator, split by the two bones each disc touches) and the **dural sac** (TotalSegmentator's
+  "spinal cord" class, which on CT follows the canal contents). The section is for the dorsal approaches: no great
+  vessels, psoas or psoas zones.
+- **Measured per level**: canal width, depth and area; foraminal height, antero-posterior extent and area (L1–L4
+  both sides; the plane method does not capture L5–S1 in this CT); disc height.
+- **Schematic, and labelled so**: roots L1–S1 and their ganglia (sac at the disc above → lateral recess → upper part
+  of the foramen; L5 and S1 exits estimated).
+- **Lesion-to-root tool** (level card): paracentral, foraminal or far-lateral herniation per side; the affected root,
+  its ISNCSCI key muscle, other movements and key sensory point on a leg chart.
+- **Pedicles, measured beside published values** (L1–L5): narrowest width and height at the isthmus, transverse and
+  sagittal angle, chord; published regional means (Wang 2023) and transverse angles (Moncada-Habib 2025,
+  Nkwerem 2024), read from the papers' tables by `pipeline/spine_published.py`.
+- **Virtual screw** (level card): traditional trajectory and cortical bone trajectory at L1–L5, tricortical S1
+  screw, each from its published start; angles, length, diameter and entry adjustable; breach depth and
+  direction against this CT's bone surface, graded after Gertzbein–Robbins, and the nearest structures at risk;
+  a cut along the screw. Data from `pipeline/spine_screw.py` (a bone distance field per level, loaded on demand).
+- Pipeline: `pipeline/spine_segment.py` (TotalSegmentator in `pipeline/.venv-seg`, about an hour on Apple
+  silicon for the main task), `pipeline/spine_verify.py` (TotalSegmentator's vertebrae against VerSe's: same
+  labels, overlap), `pipeline/spine_build.py` + `pipeline/spine_geom.py` (meshes, measurements, schematic parts,
+  validation), `pipeline/spine_screw.py` (pedicles, screw start positions, distance fields; the browser's breach
+  computation is checked against its reference results), `pipeline/spine_published.py`. The spine steps read the CT
+  and masks in blocks and stay under about 2.5 GB of memory; do not run them alongside TotalSegmentator on an 8 GB
+  machine.
+
 ## Quick start
 
 Requirements: Node ≥ 20. Python ≥ 3.10 only if you rebuild the anatomy.
@@ -326,7 +360,8 @@ the Credits page. The white-matter section's tract files (`public/assets/wm/`, `
 `wm-connectome.json`) are **CC BY-SA 4.0** (HCP-1065 atlas) plus the HCP terms, not GPL. The skull-base
 files (`public/assets/skullbase/`, `sb-*.json`) are **CC BY-SA** (Z-Anatomy 4.0, BodyParts3D 2.1 Japan,
 Wikipedia definitions 3.0), not GPL. The cortex section's meshes (`public/assets/cortex/`, `ctx-*.json`) are
-GPL-3.0, non-commercial like the other Lead-DBS-derived assets; their labels were made with FreeSurfer (MGH
+GPL-3.0, non-commercial like the other Lead-DBS-derived assets; the spine section's files (`public/assets/spine/`,
+`spine-*.json`) are **CC BY-SA 4.0** (VerSe); their labels were made with FreeSurfer (MGH
 licence, research use) and the definition texts in `ctx-labels.json` are CC BY-SA 3.0.
 
 ## Data, licences, attribution
@@ -350,6 +385,9 @@ Tracked here and in the final report:
 - **Published Vo coordinates** (Voa/Vop junction). Not in the attached content; the Vo marker is
   the Morel VLa centroid.
 - **vmPFC.** Shown with the Desikan-Killiany medial orbitofrontal label as a proxy.
+- **Spine, later phases.** Reflexes per root (no source with checkable text yet); S2-alar-iliac screw (needs the
+  dorsal sacral foramina located on this CT); Kambin's triangle and the approach presets. Phase 2 cervical (vertebral artery: no open segmentation; the PAM50 cord atlas has no
+  stated licence), phase 3 thoracic.
 - **Cortex overlays (later phase).** Functional areas (HCPex), arterial territories (Liu 2023), the
   direct-stimulation points of Sarubbo et al. 2020 (CC BY 4.0) and tract terminations. Julich-Brain
   cytoarchitecture is left out for now (CC BY-NC-SA 4.0; its insular subdivisions are the main gain).

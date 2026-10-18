@@ -19,7 +19,7 @@ const io = new NodeIO()
   .registerDependencies({ 'meshopt.encoder': MeshoptEncoder, 'meshopt.decoder': MeshoptDecoder });
 
 let total = 0;
-for (const kind of (process.argv[2] ? [process.argv[2]] : ['meshes', 'tracts', 'wm', 'skullbase', 'cortex'])) {
+for (const kind of (process.argv[2] ? [process.argv[2]] : ['meshes', 'tracts', 'wm', 'skullbase', 'cortex', 'spine'])) {
   const src = join(root, 'data', 'build', kind);
   if (!existsSync(src)) continue; // a section not built yet
   const dst = join(repo, 'public', 'assets', kind);

@@ -1,0 +1,3299 @@
+{
+ "space": "RAS millimetres of one CT, origin at the centre of the L5 vertebral body (not MNI)",
+ "references": {
+  "hwang2019": {
+   "citation": "Hwang SM, Son IS, Yang PJ, Kang MS. Preganglionic Epidural Steroid Injection through Translateral Recess Approach. Clin Orthop Surg. 2019;11(1):131-136. doi:10.4055/cios.2019.11.1.131.",
+   "url": "https://doi.org/10.4055/cios.2019.11.1.131"
+  },
+  "merckaert2015": {
+   "citation": "Merckaert S, Pierzchala K, Kulik G, Schizas C. Influence of anatomical variations on lumbar foraminal stenosis pathogenesis. Eur Spine J. 2015;24(2):313-8. doi:10.1007/s00586-014-3524-3.",
+   "url": "https://doi.org/10.1007/s00586-014-3524-3"
+  },
+  "hasegawa1996": {
+   "citation": "Hasegawa T, Mikawa Y, Watanabe R, An HS. Morphometric analysis of the lumbosacral nerve roots and dorsal root ganglia by magnetic resonance imaging. Spine. 1996;21(9):1005-9. doi:10.1097/00007632-199605010-00001.",
+   "url": "https://doi.org/10.1097/00007632-199605010-00001"
+  },
+  "zindrick1987": {
+   "citation": "Zindrick MR, Wiltse LL, Doornik A, Widell EH, Knight GW, Patwardhan AG, et al. Analysis of the morphometric characteristics of the thoracic and lumbar pedicles. Spine. 1987;12(2):160-6. doi:10.1097/00007632-198703000-00012.",
+   "url": "https://doi.org/10.1097/00007632-198703000-00012"
+  },
+  "fardon2014": {
+   "citation": "Fardon DF, Williams AL, Dohring EJ, Murtagh FR, Gabriel Rothman SL, Sze GK. Lumbar disc nomenclature: version 2.0: Recommendations of the combined task forces of the North American Spine Society, the American Society of Spine Radiology and the American Society of Neuroradiology. Spine J. 2014;14(11):2525-45. doi:10.1016/j.spinee.2014.04.022.",
+   "url": "https://doi.org/10.1016/j.spinee.2014.04.022"
+  },
+  "osman2021": {
+   "citation": "Osman SG. Anatomic Image-Based Classification of Lumbar Intervertebral Disc Pathologies. Cureus. 2021;13(8):e16861. doi:10.7759/cureus.16861.",
+   "url": "https://doi.org/10.7759/cureus.16861"
+  },
+  "luebbers2025": {
+   "citation": "Luebbers T, Ali A, Baalmann R, Kale A. Percutaneous endoscopic lumbar discectomy for extreme lateral lumbar disc herniation. Surg Neurol Int. 2025;16:150. doi:10.25259/SNI_144_2025.",
+   "url": "https://doi.org/10.25259/SNI_144_2025"
+  },
+  "downs2011": {
+   "citation": "Downs MB, Laporte C. Conflicting dermatome maps: educational and clinical implications. J Orthop Sports Phys Ther. 2011;41(6):427-34. doi:10.2519/jospt.2011.3506.",
+   "url": "https://doi.org/10.2519/jospt.2011.3506"
+  },
+  "lee2008": {
+   "citation": "Lee MW, McPhee RW, Stringer MD. An evidence-based approach to human dermatomes. Clin Anat. 2008;21(5):363-73. doi:10.1002/ca.20636.",
+   "url": "https://doi.org/10.1002/ca.20636"
+  },
+  "isncsci2019": {
+   "citation": "American Spinal Injury Association, International Spinal Cord Society. International Standards for Neurological Classification of Spinal Cord Injury (ISNCSCI) worksheet, revision 04/2019.",
+   "url": "https://asia-spinalinjury.org/wp-content/uploads/2019/10/ASIA-ISCOS-Worksheet_10.2019_PRINT-Page-1-2.pdf"
+  },
+  "rupp2021": {
+   "citation": "Rupp R, Biering-Sørensen F, Burns SP, Graves DE, Guest J, Jones L, et al. International Standards for Neurological Classification of Spinal Cord Injury: Revised 2019. Top Spinal Cord Inj Rehabil. 2021;27(2):1-22. doi:10.46292/sci2702-1.",
+   "url": "https://doi.org/10.46292/sci2702-1"
+  },
+  "matsukawa2017": {
+   "citation": "Matsukawa K, Yato Y. Lumbar pedicle screw fixation with cortical bone trajectory: A review from anatomical and biomechanical standpoints. Spine Surg Relat Res. 2017;1(4):164-173. doi:10.22603/ssrr.1.2017-0006.",
+   "url": "https://doi.org/10.22603/ssrr.1.2017-0006"
+  },
+  "zhao2021": {
+   "citation": "Zhao YH, Ma YL, Wang L, Liang JL, Luo HT, Xu YQ, Lu S. Anatomical study of the ideal cortical bone trajectory in the lumbar spine. Medicine (Baltimore). 2021;100(2):e24099. doi:10.1097/MD.0000000000024099.",
+   "url": "https://doi.org/10.1097/MD.0000000000024099"
+  },
+  "koeck2026": {
+   "citation": "Koeck K, Reissig LF, Hainfellner A, Weninger WJ, Grossauer S. Anatomic safeguards and the low risk of vascular injury during percutaneous tricortical S1 pedicle screw fixation - a cadaver study. Sci Rep. 2026;16(1):7126. doi:10.1038/s41598-026-38331-y.",
+   "url": "https://doi.org/10.1038/s41598-026-38331-y"
+  },
+  "jenkins2026": {
+   "citation": "Jenkins P, Walton C, Ferdon RJ, Yu B, Silvestre J, Ravinsky RA. Relationship of posterior superior iliac spine morphology and ideal S1 pedicle screw trajectory: A cross-sectional study of closed versus open posterior superior iliac spine morphology. J Craniovertebr Junction Spine. 2026;17(4):379-383. doi:10.4103/jcvjs.jcvjs_42_26.",
+   "url": "https://doi.org/10.4103/jcvjs.jcvjs_42_26"
+  },
+  "gertzbein1990": {
+   "citation": "Gertzbein SD, Robbins SE. Accuracy of pedicular screw placement in vivo. Spine (Phila Pa 1976). 1990;15(1):11-14. doi:10.1097/00007632-199001000-00004.",
+   "url": "https://doi.org/10.1097/00007632-199001000-00004"
+  },
+  "miyamoto2025": {
+   "citation": "Miyamoto T, Naito N, Yamashita H, Ueda S, Ohara J. Accuracy of Lumbar Pedicle Screw Placement Based on Insertion Techniques in a Single-Center Retrospective Study. Cureus. 2025;17(9):e93528. doi:10.7759/cureus.93528.",
+   "url": "https://doi.org/10.7759/cureus.93528"
+  },
+  "wang2023": {
+   "citation": "Wang Y, Kahaer A, Shi W, Guo H, Rexiti P. Morphometric measurement of lumbar pedicle in different regions: a systematic review. J Orthop Surg Res. 2023;18(1):30. doi:10.1186/s13018-023-03499-w.",
+   "url": "https://doi.org/10.1186/s13018-023-03499-w"
+  },
+  "moncadahabib2025": {
+   "citation": "Moncada-Habib T, Jiménez-Molina T, Muñuzuri-Camacho MA, Pulido Bayona PA, Toache KS, Álvaro Heredia J, López-Valencia G, Alvaro-Heredia JA. Lumbar Pedicle Morphometry in the Mexican Population: Defining Anatomical References for Safer Spine Surgery. Cureus. 2025;17(9):e91799. doi:10.7759/cureus.91799.",
+   "url": "https://doi.org/10.7759/cureus.91799"
+  },
+  "nkwerem2024": {
+   "citation": "Nkwerem SP, Ohaegbulam SC, Mezue W, Emejulu JC, Ndubuisi CA, Nkwerem GI. Lumbar Pedicle Dimensions Using CT Scan in Adults of South-Eastern Nigeria as Related to Transpedicular Fixation. J West Afr Coll Surg. 2024;14(4):396-402. doi:10.4103/jwas.jwas_169_23.",
+   "url": "https://doi.org/10.4103/jwas.jwas_169_23"
+  }
+ },
+ "generatedBy": "pipeline/spine_segment.py (TotalSegmentator) + pipeline/spine_build.py + pipeline/compress.mjs",
+ "structures": [
+  {
+   "aliases": [],
+   "bytes": 69516,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_c1",
+   "name": "C1 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_c1.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "C1",
+   "region": "cervical",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C1.",
+   "centroid": {
+    "L": [
+     -9.79,
+     57.65,
+     525.86
+    ],
+    "R": [
+     -9.79,
+     57.65,
+     525.86
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 72288,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_c2",
+   "name": "C2 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_c2.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "C2",
+   "region": "cervical",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C2.",
+   "centroid": {
+    "L": [
+     -12.2,
+     50.31,
+     507.51
+    ],
+    "R": [
+     -12.2,
+     50.31,
+     507.51
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 72164,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_c3",
+   "name": "C3 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_c3.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "C3",
+   "region": "cervical",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C3.",
+   "centroid": {
+    "L": [
+     -10.69,
+     47.32,
+     490.42
+    ],
+    "R": [
+     -10.69,
+     47.32,
+     490.42
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 72232,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_c4",
+   "name": "C4 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_c4.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "C4",
+   "region": "cervical",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C4.",
+   "centroid": {
+    "L": [
+     -10.22,
+     41.77,
+     474.69
+    ],
+    "R": [
+     -10.22,
+     41.77,
+     474.69
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 72364,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_c5",
+   "name": "C5 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_c5.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "C5",
+   "region": "cervical",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C5.",
+   "centroid": {
+    "L": [
+     -10.65,
+     34.04,
+     460.19
+    ],
+    "R": [
+     -10.65,
+     34.04,
+     460.19
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 72580,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_c6",
+   "name": "C6 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_c6.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "C6",
+   "region": "cervical",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C6.",
+   "centroid": {
+    "L": [
+     -11.05,
+     25.5,
+     446.17
+    ],
+    "R": [
+     -11.05,
+     25.5,
+     446.17
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 73760,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_c7",
+   "name": "C7 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_c7.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "C7",
+   "region": "cervical",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C7.",
+   "centroid": {
+    "L": [
+     -12.06,
+     12.01,
+     433.95
+    ],
+    "R": [
+     -12.06,
+     12.01,
+     433.95
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 87360,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_t1",
+   "name": "T1 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_t1.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "T1",
+   "region": "thoracic",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T1.",
+   "centroid": {
+    "L": [
+     -13.54,
+     -0.37,
+     418.87
+    ],
+    "R": [
+     -13.54,
+     -0.37,
+     418.87
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 87376,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_t2",
+   "name": "T2 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_t2.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "T2",
+   "region": "thoracic",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T2.",
+   "centroid": {
+    "L": [
+     -15.93,
+     -14.92,
+     400.76
+    ],
+    "R": [
+     -15.93,
+     -14.92,
+     400.76
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 87592,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_t3",
+   "name": "T3 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_t3.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "T3",
+   "region": "thoracic",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T3.",
+   "centroid": {
+    "L": [
+     -17.98,
+     -29.15,
+     380.73
+    ],
+    "R": [
+     -17.98,
+     -29.15,
+     380.73
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 87516,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_t4",
+   "name": "T4 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_t4.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "T4",
+   "region": "thoracic",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T4.",
+   "centroid": {
+    "L": [
+     -18.08,
+     -39.73,
+     358.62
+    ],
+    "R": [
+     -18.08,
+     -39.73,
+     358.62
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 88752,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_t5",
+   "name": "T5 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_t5.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "T5",
+   "region": "thoracic",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T5.",
+   "centroid": {
+    "L": [
+     -15.49,
+     -46.61,
+     335.97
+    ],
+    "R": [
+     -15.49,
+     -46.61,
+     335.97
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 89852,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_t6",
+   "name": "T6 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_t6.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "T6",
+   "region": "thoracic",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T6.",
+   "centroid": {
+    "L": [
+     -13.39,
+     -49.32,
+     311.41
+    ],
+    "R": [
+     -13.39,
+     -49.32,
+     311.41
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 90052,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_t7",
+   "name": "T7 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_t7.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "T7",
+   "region": "thoracic",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T7.",
+   "centroid": {
+    "L": [
+     -12.99,
+     -49.35,
+     287.02
+    ],
+    "R": [
+     -12.99,
+     -49.35,
+     287.02
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 90300,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_t8",
+   "name": "T8 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_t8.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "T8",
+   "region": "thoracic",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T8.",
+   "centroid": {
+    "L": [
+     -13.28,
+     -48.05,
+     262.95
+    ],
+    "R": [
+     -13.28,
+     -48.05,
+     262.95
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 89644,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_t9",
+   "name": "T9 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_t9.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "T9",
+   "region": "thoracic",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T9.",
+   "centroid": {
+    "L": [
+     -12.16,
+     -44.68,
+     238.94
+    ],
+    "R": [
+     -12.16,
+     -44.68,
+     238.94
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 88716,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_t10",
+   "name": "T10 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_t10.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "T10",
+   "region": "thoracic",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T10.",
+   "centroid": {
+    "L": [
+     -9.57,
+     -40.12,
+     214.54
+    ],
+    "R": [
+     -9.57,
+     -40.12,
+     214.54
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 88844,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_t11",
+   "name": "T11 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_t11.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "T11",
+   "region": "thoracic",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T11.",
+   "centroid": {
+    "L": [
+     -7.22,
+     -35.02,
+     190.16
+    ],
+    "R": [
+     -7.22,
+     -35.02,
+     190.16
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 90040,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_t12",
+   "name": "T12 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_t12.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "T12",
+   "region": "thoracic",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T12.",
+   "centroid": {
+    "L": [
+     -5.73,
+     -30.35,
+     161.05
+    ],
+    "R": [
+     -5.73,
+     -30.35,
+     161.05
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 111280,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_l1",
+   "name": "L1 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_l1.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "L1",
+   "region": "lumbar",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for L1.",
+   "centroid": {
+    "L": [
+     -5.84,
+     -26.03,
+     130.82
+    ],
+    "R": [
+     -5.84,
+     -26.03,
+     130.82
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 109048,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_l2",
+   "name": "L2 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_l2.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "L2",
+   "region": "lumbar",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for L2.",
+   "centroid": {
+    "L": [
+     -5.91,
+     -21.61,
+     98.66
+    ],
+    "R": [
+     -5.91,
+     -21.61,
+     98.66
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 109144,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_l3",
+   "name": "L3 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_l3.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "L3",
+   "region": "lumbar",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for L3.",
+   "centroid": {
+    "L": [
+     -4.94,
+     -16.74,
+     64.91
+    ],
+    "R": [
+     -4.94,
+     -16.74,
+     64.91
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 110276,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_l4",
+   "name": "L4 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_l4.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "L4",
+   "region": "lumbar",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for L4.",
+   "centroid": {
+    "L": [
+     -2.28,
+     -14.1,
+     32.86
+    ],
+    "R": [
+     -2.28,
+     -14.1,
+     32.86
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 108944,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_l5",
+   "name": "L5 vertebra",
+   "type": "bone",
+   "file": "assets/spine/sp_l5.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "vertebra",
+   "level": "L5",
+   "region": "lumbar",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for L5.",
+   "centroid": {
+    "L": [
+     0.6,
+     -15.52,
+     4.54
+    ],
+    "R": [
+     0.6,
+     -15.52,
+     4.54
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 111600,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_sacrum",
+   "name": "Sacrum",
+   "type": "bone",
+   "layer": "nuclei",
+   "file": "assets/spine/sp_sacrum.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "bone",
+   "derivation": "TotalSegmentator total: sacrum and vertebrae_S1, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     0.16,
+     -47.55,
+     -50.93
+    ],
+    "R": [
+     0.16,
+     -47.55,
+     -50.93
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 92944,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_hip_left",
+   "name": "Hip bone (left)",
+   "type": "bone",
+   "layer": "nuclei",
+   "file": "assets/spine/sp_hip_left.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "bone",
+   "derivation": "TotalSegmentator total: hip_left, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -70.69,
+     2.02,
+     -79.66
+    ],
+    "R": [
+     -70.69,
+     2.02,
+     -79.66
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 92824,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_hip_right",
+   "name": "Hip bone (right)",
+   "type": "bone",
+   "layer": "nuclei",
+   "file": "assets/spine/sp_hip_right.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "bone",
+   "derivation": "TotalSegmentator total: hip_right, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     71.79,
+     1.16,
+     -76.95
+    ],
+    "R": [
+     71.79,
+     1.16,
+     -76.95
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 81300,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_dural_sac",
+   "name": "Dural sac (spinal canal contents)",
+   "type": "soft",
+   "layer": "tracts",
+   "file": "assets/spine/sp_dural_sac.glb",
+   "colour": {
+    "token": "spCord",
+    "light": "#E3B505",
+    "dark": "#F2CC4A"
+   },
+   "category": "neural",
+   "derivation": "TotalSegmentator total: spinal_cord, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -9.0,
+     -18.54,
+     249.55
+    ],
+    "R": [
+     -9.0,
+     -18.54,
+     249.55
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 38292,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_l5_s1",
+   "name": "Intervertebral disc L5-S1",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_l5_s1.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "L5-S1",
+   "region": "lumbar",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     1.05,
+     -1.98,
+     -17.87
+    ],
+    "R": [
+     1.05,
+     -1.98,
+     -17.87
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 37800,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_l4_l5",
+   "name": "Intervertebral disc L4-L5",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_l4_l5.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "L4-L5",
+   "region": "lumbar",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -0.49,
+     8.63,
+     14.13
+    ],
+    "R": [
+     -0.49,
+     8.63,
+     14.13
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 37528,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_l3_l4",
+   "name": "Intervertebral disc L3-L4",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_l3_l4.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "L3-L4",
+   "region": "lumbar",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -2.73,
+     8.54,
+     49.22
+    ],
+    "R": [
+     -2.73,
+     8.54,
+     49.22
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 37336,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_l2_l3",
+   "name": "Intervertebral disc L2-L3",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_l2_l3.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "L2-L3",
+   "region": "lumbar",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -5.09,
+     5.0,
+     84.46
+    ],
+    "R": [
+     -5.09,
+     5.0,
+     84.46
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 37516,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_l1_l2",
+   "name": "Intervertebral disc L1-L2",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_l1_l2.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "L1-L2",
+   "region": "lumbar",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -5.86,
+     -1.55,
+     118.18
+    ],
+    "R": [
+     -5.86,
+     -1.55,
+     118.18
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 37300,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t11_t12",
+   "name": "Intervertebral disc T11-T12",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t11_t12.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T11-T12",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -5.37,
+     -15.3,
+     179.3
+    ],
+    "R": [
+     -5.37,
+     -15.3,
+     179.3
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 36872,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t12_l1",
+   "name": "Intervertebral disc T12-L1",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t12_l1.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T12-L1",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -5.18,
+     -8.36,
+     150.23
+    ],
+    "R": [
+     -5.18,
+     -8.36,
+     150.23
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 36392,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t9_t10",
+   "name": "Intervertebral disc T9-T10",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t9_t10.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T9-T10",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -10.22,
+     -24.3,
+     229.61
+    ],
+    "R": [
+     -10.22,
+     -24.3,
+     229.61
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 36936,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t8_t9",
+   "name": "Intervertebral disc T8-T9",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t8_t9.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T8-T9",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -12.22,
+     -27.32,
+     253.17
+    ],
+    "R": [
+     -12.22,
+     -27.32,
+     253.17
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 35376,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t7_t8",
+   "name": "Intervertebral disc T7-T8",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t7_t8.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T7-T8",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -12.18,
+     -29.69,
+     276.51
+    ],
+    "R": [
+     -12.18,
+     -29.69,
+     276.51
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 27784,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t6_t7",
+   "name": "Intervertebral disc T6-T7",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t6_t7.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T6-T7",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -11.8,
+     -31.15,
+     299.65
+    ],
+    "R": [
+     -11.8,
+     -31.15,
+     299.65
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 36376,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t1_t2",
+   "name": "Intervertebral disc T1-T2",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t1_t2.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T1-T2",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -14.6,
+     6.88,
+     398.44
+    ],
+    "R": [
+     -14.6,
+     6.88,
+     398.44
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 25856,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_c7_t1",
+   "name": "Intervertebral disc C7-T1",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_c7_t1.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "C7-T1",
+   "region": "cervical",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -12.04,
+     19.7,
+     414.79
+    ],
+    "R": [
+     -12.04,
+     19.7,
+     414.79
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 30976,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t5_t6",
+   "name": "Intervertebral disc T5-T6",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t5_t6.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T5-T6",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -12.37,
+     -30.09,
+     321.95
+    ],
+    "R": [
+     -12.37,
+     -30.09,
+     321.95
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 37144,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t4_t5",
+   "name": "Intervertebral disc T4-T5",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t4_t5.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T4-T5",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -14.98,
+     -23.32,
+     343.39
+    ],
+    "R": [
+     -14.98,
+     -23.32,
+     343.39
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 22056,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_c6_c7",
+   "name": "Intervertebral disc C6-C7",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_c6_c7.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "C6-C7",
+   "region": "cervical",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -10.59,
+     30.83,
+     429.34
+    ],
+    "R": [
+     -10.59,
+     30.83,
+     429.34
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 19848,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_c5_c6",
+   "name": "Intervertebral disc C5-C6",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_c5_c6.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "C5-C6",
+   "region": "cervical",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -9.89,
+     39.02,
+     444.99
+    ],
+    "R": [
+     -9.89,
+     39.02,
+     444.99
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 17884,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_c3_c4",
+   "name": "Intervertebral disc C3-C4",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_c3_c4.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "C3-C4",
+   "region": "cervical",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -9.32,
+     54.13,
+     477.06
+    ],
+    "R": [
+     -9.32,
+     54.13,
+     477.06
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 34612,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t2_t3",
+   "name": "Intervertebral disc T2-T3",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t2_t3.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T2-T3",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -16.38,
+     -5.76,
+     380.86
+    ],
+    "R": [
+     -16.38,
+     -5.76,
+     380.86
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 19012,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_c4_c5",
+   "name": "Intervertebral disc C4-C5",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_c4_c5.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "C4-C5",
+   "region": "cervical",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -9.57,
+     47.1,
+     460.02
+    ],
+    "R": [
+     -9.57,
+     47.1,
+     460.02
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 35760,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t3_t4",
+   "name": "Intervertebral disc T3-T4",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t3_t4.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T3-T4",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -17.36,
+     -14.82,
+     361.18
+    ],
+    "R": [
+     -17.36,
+     -14.82,
+     361.18
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 9216,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_c2_c3",
+   "name": "Intervertebral disc C2-C3",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_c2_c3.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "C2-C3",
+   "region": "cervical",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -10.4,
+     60.18,
+     494.9
+    ],
+    "R": [
+     -10.4,
+     60.18,
+     494.9
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 8472,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t10_t11",
+   "name": "Intervertebral disc T10-T11",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t10_t11.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T10-T11",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -20.2,
+     -20.97,
+     204.14
+    ],
+    "R": [
+     -20.2,
+     -20.97,
+     204.14
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 10996,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_root_l1",
+   "name": "L1 nerve root",
+   "type": "soft",
+   "region": "lumbar",
+   "layer": "tracts",
+   "file": "assets/spine/sp_root_l1.glb",
+   "colour": {
+    "token": "spRoot",
+    "light": "#BD7738",
+    "dark": "#F88C28"
+   },
+   "category": "root",
+   "level": "L1",
+   "schematic": true,
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T12-L1 disc, runs in the lateral recess at L1 and exits through the L1-L2 foramen (measured position); drawn 3 mm thick.",
+   "centroid": {
+    "L": [
+     8.68,
+     -28.23,
+     123.82
+    ],
+    "R": [
+     8.68,
+     -28.23,
+     123.82
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 12344,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_drg_l1",
+   "name": "L1 dorsal root ganglion",
+   "type": "soft",
+   "region": "lumbar",
+   "layer": "tracts",
+   "file": "assets/spine/sp_drg_l1.glb",
+   "colour": {
+    "token": "spRoot",
+    "light": "#BD7738",
+    "dark": "#F88C28"
+   },
+   "category": "ganglion",
+   "level": "L1",
+   "schematic": true,
+   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
+   "centroid": {
+    "L": [
+     8.68,
+     -28.23,
+     123.82
+    ],
+    "R": [
+     8.68,
+     -28.23,
+     123.82
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 10952,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_root_l2",
+   "name": "L2 nerve root",
+   "type": "soft",
+   "region": "lumbar",
+   "layer": "tracts",
+   "file": "assets/spine/sp_root_l2.glb",
+   "colour": {
+    "token": "spRoot",
+    "light": "#BD7738",
+    "dark": "#F88C28"
+   },
+   "category": "root",
+   "level": "L2",
+   "schematic": true,
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L1-L2 disc, runs in the lateral recess at L2 and exits through the L2-L3 foramen (measured position); drawn 3 mm thick.",
+   "centroid": {
+    "L": [
+     8.04,
+     -22.08,
+     93.41
+    ],
+    "R": [
+     8.04,
+     -22.08,
+     93.41
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 12340,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_drg_l2",
+   "name": "L2 dorsal root ganglion",
+   "type": "soft",
+   "region": "lumbar",
+   "layer": "tracts",
+   "file": "assets/spine/sp_drg_l2.glb",
+   "colour": {
+    "token": "spRoot",
+    "light": "#BD7738",
+    "dark": "#F88C28"
+   },
+   "category": "ganglion",
+   "level": "L2",
+   "schematic": true,
+   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
+   "centroid": {
+    "L": [
+     8.04,
+     -22.08,
+     93.41
+    ],
+    "R": [
+     8.04,
+     -22.08,
+     93.41
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 10928,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_root_l3",
+   "name": "L3 nerve root",
+   "type": "soft",
+   "region": "lumbar",
+   "layer": "tracts",
+   "file": "assets/spine/sp_root_l3.glb",
+   "colour": {
+    "token": "spRoot",
+    "light": "#BD7738",
+    "dark": "#F88C28"
+   },
+   "category": "root",
+   "level": "L3",
+   "schematic": true,
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L2-L3 disc, runs in the lateral recess at L3 and exits through the L3-L4 foramen (measured position); drawn 3 mm thick.",
+   "centroid": {
+    "L": [
+     9.12,
+     -15.61,
+     60.82
+    ],
+    "R": [
+     9.12,
+     -15.61,
+     60.82
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 12336,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_drg_l3",
+   "name": "L3 dorsal root ganglion",
+   "type": "soft",
+   "region": "lumbar",
+   "layer": "tracts",
+   "file": "assets/spine/sp_drg_l3.glb",
+   "colour": {
+    "token": "spRoot",
+    "light": "#BD7738",
+    "dark": "#F88C28"
+   },
+   "category": "ganglion",
+   "level": "L3",
+   "schematic": true,
+   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
+   "centroid": {
+    "L": [
+     9.12,
+     -15.61,
+     60.82
+    ],
+    "R": [
+     9.12,
+     -15.61,
+     60.82
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 10884,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_root_l4",
+   "name": "L4 nerve root",
+   "type": "soft",
+   "region": "lumbar",
+   "layer": "tracts",
+   "file": "assets/spine/sp_root_l4.glb",
+   "colour": {
+    "token": "spRoot",
+    "light": "#BD7738",
+    "dark": "#F88C28"
+   },
+   "category": "root",
+   "level": "L4",
+   "schematic": true,
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L3-L4 disc, runs in the lateral recess at L4 and exits through the L4-L5 foramen (measured position); drawn 3 mm thick.",
+   "centroid": {
+    "L": [
+     12.18,
+     -14.61,
+     30.17
+    ],
+    "R": [
+     12.18,
+     -14.61,
+     30.17
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 12312,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_drg_l4",
+   "name": "L4 dorsal root ganglion",
+   "type": "soft",
+   "region": "lumbar",
+   "layer": "tracts",
+   "file": "assets/spine/sp_drg_l4.glb",
+   "colour": {
+    "token": "spRoot",
+    "light": "#BD7738",
+    "dark": "#F88C28"
+   },
+   "category": "ganglion",
+   "level": "L4",
+   "schematic": true,
+   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
+   "centroid": {
+    "L": [
+     12.18,
+     -14.61,
+     30.17
+    ],
+    "R": [
+     12.18,
+     -14.61,
+     30.17
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 10924,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_root_l5",
+   "name": "L5 nerve root",
+   "type": "soft",
+   "region": "lumbar",
+   "layer": "tracts",
+   "file": "assets/spine/sp_root_l5.glb",
+   "colour": {
+    "token": "spRoot",
+    "light": "#BD7738",
+    "dark": "#F88C28"
+   },
+   "category": "root",
+   "level": "L5",
+   "schematic": true,
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L4-L5 disc, runs in the lateral recess at L5 and exits through the L5-S1 foramen, whose position is estimated on L and R (not captured by the measurement); drawn 3 mm thick.",
+   "centroid": {
+    "L": [
+     24.82,
+     -23.98,
+     -10.17
+    ],
+    "R": [
+     24.82,
+     -23.98,
+     -10.17
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 12340,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_drg_l5",
+   "name": "L5 dorsal root ganglion",
+   "type": "soft",
+   "region": "lumbar",
+   "layer": "tracts",
+   "file": "assets/spine/sp_drg_l5.glb",
+   "colour": {
+    "token": "spRoot",
+    "light": "#BD7738",
+    "dark": "#F88C28"
+   },
+   "category": "ganglion",
+   "level": "L5",
+   "schematic": true,
+   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
+   "centroid": {
+    "L": [
+     24.82,
+     -23.98,
+     -10.17
+    ],
+    "R": [
+     24.82,
+     -23.98,
+     -10.17
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 10924,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_root_s1",
+   "name": "S1 nerve root",
+   "type": "soft",
+   "region": "lumbar",
+   "layer": "tracts",
+   "file": "assets/spine/sp_root_s1.glb",
+   "colour": {
+    "token": "spRoot",
+    "light": "#BD7738",
+    "dark": "#F88C28"
+   },
+   "category": "root",
+   "level": "S1",
+   "schematic": true,
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L5-S1 disc, runs in the lateral recess of S1 and leaves through the first sacral foramen, whose position is estimated (not captured by the measurement); drawn 3 mm thick.",
+   "centroid": {
+    "L": [
+     2.49,
+     -1.83,
+     -36.97
+    ],
+    "R": [
+     2.49,
+     -1.83,
+     -36.97
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 12032,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_drg_s1",
+   "name": "S1 dorsal root ganglion",
+   "type": "soft",
+   "region": "lumbar",
+   "layer": "tracts",
+   "file": "assets/spine/sp_drg_s1.glb",
+   "colour": {
+    "token": "spRoot",
+    "light": "#BD7738",
+    "dark": "#F88C28"
+   },
+   "category": "ganglion",
+   "level": "S1",
+   "schematic": true,
+   "derivation": "Schematic: drawn inside the canal, where the S1 ganglion more often lies (Hasegawa 1996); not to scale.",
+   "centroid": {
+    "L": [
+     2.49,
+     -1.83,
+     -36.97
+    ],
+    "R": [
+     2.49,
+     -1.83,
+     -36.97
+    ]
+   }
+  }
+ ],
+ "dataset": {
+  "name": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+  "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+  "url": "https://osf.io/4skx2/",
+  "note": "One adult whole-body trauma CT from the VerSe 2020 dataset (0.72 x 0.72 x 0.7 mm), not an average and not in MNI space. Coordinates are millimetres from the centre of the L5 vertebral body. Vertebrae C1-L5: surfaces taken from the CT at 200 HU within reach of VerSe's hand-corrected masks. Sacrum, pelvis, discs and spinal canal contents: TotalSegmentator segmentations of the same CT.",
+  "citation": [
+   "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+   "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+   "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+   "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+  ],
+  "citationUrls": [
+   "https://doi.org/10.1148/ryai.2020190138",
+   "https://doi.org/10.1038/s41597-021-01060-0",
+   "https://doi.org/10.1016/j.media.2021.102166",
+   "https://doi.org/10.1148/ryai.230024"
+  ]
+ }
+}

@@ -151,6 +151,13 @@ export const ManifestStructureSchema = z.object({
   cranialNerve: z.number().int().min(1).max(12).optional(),
   /** skull-base section: the arterial system an artery is listed under (its trunk's name) */
   system: z.string().optional(),
+  /** layer the structure belongs to when its type alone does not say (spine section) */
+  layer: z.enum(['nuclei', 'tracts', 'cortex', 'targets', 'discs', 'vessels', 'viscera']).optional(),
+  /** spine section: vertebral level ('L4', 'L4-L5') and region */
+  level: z.string().optional(),
+  region: z.enum(['cervical', 'thoracic', 'lumbar']).optional(),
+  /** drawn by rule from the anatomy and published descriptions, not segmented: the UI must say so */
+  schematic: z.boolean().optional(),
   /** white-matter section: core (surgical essentials), extended, or posterior fossa */
   tier: z.enum(['core', 'extended', 'fossa']).optional(),
   centroid: z.object({ L: Vec3, R: Vec3 }).nullable(),
@@ -222,6 +229,20 @@ export const CtxManifestSchema = z.object({
   }),
 });
 export type CtxManifest = z.infer<typeof CtxManifestSchema>;
+
+/** spine-manifest.json: the spine section's structures (one CT, VerSe + TotalSegmentator), in their own space. */
+export const SpineManifestSchema = z.object({
+  space: z.string(),
+  /** content references by key (Crossref/PubMed-checked citations from pipeline/sources/citations.json) */
+  references: z.record(z.object({ citation: z.string(), url: z.string().url() })),
+  generatedBy: z.string(),
+  structures: z.array(ManifestStructureSchema),
+  dataset: z.object({
+    name: z.string(), licence: z.string(), url: z.string().url(), note: z.string(),
+    citation: z.array(z.string()), citationUrls: z.array(z.string()),
+  }),
+});
+export type SpineManifest = z.infer<typeof SpineManifestSchema>;
 
 export const CoordinateSchema = z.object({ L: Vec3, R: Vec3, method: z.string(), dataset: z.string() });
 export const AcpcSchema = z.object({ AC: Vec3, PC: Vec3, MSP: Vec3, source: z.string(), url: z.string().url() });

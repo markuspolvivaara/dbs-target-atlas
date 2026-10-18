@@ -27,3 +27,13 @@ node pipeline/compress.mjs
 "$PY" -I -W ignore pipeline/cortex_build.py
 node pipeline/compress.mjs cortex
 "$PY" -I -W ignore pipeline/cortex_build.py finalize
+# spine section (TotalSegmentator in its own environment: python -m venv pipeline/.venv-seg && pipeline/.venv-seg/bin/pip install "TotalSegmentator==2.*";
+# the main task takes about an hour on Apple silicon, longer on CPU)
+pipeline/.venv-seg/bin/python -I pipeline/spine_segment.py
+"$PY" -I -W ignore pipeline/spine_verify.py total vertebrae_body
+"$PY" -I -W ignore pipeline/spine_build.py
+node pipeline/compress.mjs spine
+"$PY" -I -W ignore pipeline/spine_build.py finalize
+"$PY" -I -W ignore pipeline/spine_screw.py      # virtual screw: pedicles, start positions, bone distance fields
+"$PY" -I pipeline/spine_published.py            # published pedicle values, from the papers' tables
+"$PY" -I -W ignore pipeline/winding_check.py         # every mesh wound outward (the viewer draws the side a triangle faces)

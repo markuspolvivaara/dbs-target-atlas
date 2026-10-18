@@ -42,3 +42,23 @@ def _test(V, F, E, ei, fi):
     s = (e2 * q).sum(1) * inv
     hit = ok & (u >= 0) & (v >= 0) & (u + v <= 1) & (s >= 0) & (s <= 1)
     return np.unique(fi[hit])
+
+
+def signed_volume(V, F):
+    """Volume enclosed by a triangle mesh, positive when its triangles are wound outward (counter-clockwise seen from
+    outside); taken about the centroid, so it means something for closed meshes only."""
+    t = V[F] - V.mean(0)
+    return float(np.einsum("ij,ij->i", t[:, 0], np.cross(t[:, 1], t[:, 2])).sum() / 6)
+
+
+def is_closed(F, max_open=0.001):
+    """Every edge shared by two triangles (up to a small share of open edges, e.g. from decimation)."""
+    e = np.sort(np.vstack([F[:, [0, 1]], F[:, [1, 2]], F[:, [2, 0]]]), 1)
+    _, counts = np.unique(e, axis=0, return_counts=True)
+    return (counts == 1).mean() <= max_open
+
+
+def orient_outward(V, F):
+    """The triangles wound outward: a closed mesh enclosing a negative volume is turned inside in. The viewer draws
+    only the side a triangle's winding faces, so an inside-out mesh shows its far wall instead of its near one."""
+    return F[:, ::-1].copy() if is_closed(F) and signed_volume(V, F) < 0 else F

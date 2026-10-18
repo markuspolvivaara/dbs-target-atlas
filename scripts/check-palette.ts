@@ -123,6 +123,15 @@ for (const g of WM.groups.filter((x) => x.kind !== 'all')) {
     pairs.get(k)!.add('cortex: lobes');
   }
 }
+// spine section: the colours drawn together in the 3D view (spSafe and spCaution only colour the lettered grade badge)
+{
+  const list = ['spBone', 'spDisc', 'spCord', 'spRoot', 'spRisk'];
+  for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
+    const k = `${list[i]}|${list[j]}`;
+    if (!pairs.has(k)) pairs.set(k, new Set());
+    pairs.get(k)!.add('spine: lumbar');
+  }
+}
 const cvd: string[] = [];
 const MIN_DE = 10;
 for (const t of ['light', 'dark'] as const) {

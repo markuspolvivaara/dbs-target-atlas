@@ -9,3 +9,4 @@ test-results/
 playwright-report/
 .claude/
 dist-test/
+pipeline/.venv-seg/

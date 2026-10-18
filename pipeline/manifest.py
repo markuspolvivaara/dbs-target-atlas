@@ -194,6 +194,35 @@ def cortex_attribution() -> list[str]:
     ]
 
 
+def spine_attribution() -> list[str]:
+    """ATTRIBUTION.md section for the spine section, from spine-manifest.json (built by spine_build.py)."""
+    p = GEN / "spine-manifest.json"
+    if not p.exists():
+        return []
+    d = json.loads(p.read_text())["dataset"]
+    return [
+        "## Spine section (VerSe CT with TotalSegmentator segmentations)",
+        "",
+        "The meshes in `public/assets/spine/` and the files `spine-manifest.json` and `spine-levels.json` are derived from",
+        f"one CT of the VerSe 2020 dataset. They are **not** GPL-licensed: {d['licence']}.",
+        "",
+        f"- Source: {d['url']}",
+        f"- Note: {d['note']}",
+        *[f"- Cite: {c}" for c in d["citation"]],
+        "- Changes made: bone surfaces from the CT within reach of the VerSe masks, TotalSegmentator segmentations of the",
+        "  same CT, meshes smoothed, decimated and split at the midline, schematic roots and psoas zones drawn by rule,",
+        "  coordinates moved to the centre of the L5 vertebral body, files converted to compressed glTF.",
+        "- The virtual screw's files (`public/assets/spine/screw_*.bin.gz`, `spine-screw.json`: distance fields of the",
+        "  bone, points on the structures at risk, pedicle measurements) are derived from the same CT and segmentations",
+        "  and carry the same licence.",
+        "",
+        "`spine-published.json` holds published pedicle values read from the tables of three open-access papers (cited",
+        "on the cards and the Sources page): Wang 2023 (J Orthop Surg Res, CC BY 4.0), Moncada-Habib 2025 (Cureus,",
+        "CC BY 4.0) and Nkwerem 2024 (J West Afr Coll Surg, CC BY-NC-SA 4.0); numbers only, no text or figures.",
+        "",
+    ]
+
+
 def write_attribution(m: dict, wm: dict) -> None:
     lines = [
         "# Attribution and licences",
@@ -283,6 +312,7 @@ def write_attribution(m: dict, wm: dict) -> None:
         "",
         *skull_base_attribution(),
         *cortex_attribution(),
+        *spine_attribution(),
         "## Datasets considered and not used",
         "",
         "- **Basal Ganglia Pathway Atlas, original files (Petersen 2019, OSF mhd4z).** The OSF terms limit use to",

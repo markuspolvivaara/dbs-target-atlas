@@ -24,6 +24,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build import split_midline  # noqa: E402
 from glb import TRIANGLES, write_glb  # noqa: E402
+from meshcheck import orient_outward  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parent
@@ -163,7 +164,7 @@ def tube(run: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         for k in range(sides):
             a0, a1 = i * sides + k, i * sides + (k + 1) % sides
             b0, b1 = a0 + sides, a1 + sides
-            tris += [[a0, b0, a1], [a1, b0, b1]]
+            tris += [[a0, a1, b0], [a1, b1, b0]]  # wound outward (around the tangent)
     # end caps: a centre vertex and a ring of their own (flat normals)
     caps_p, caps_n = [], []
     base = len(pos)
@@ -247,6 +248,7 @@ def main() -> int:
         if g["type"] in ("bone", "soft"):
             parts = {}
             for side, (v, t, ao) in g["sides"].items():
+                t = orient_outward(v, t)  # a few source meshes are inside out
                 parts.update(mesh_split(v, t, ao) if side == "M" else {side: (v, t, ao)})
             for side, (v, t, ao) in sorted(parts.items()):
                 node = {"name": side, "positions": v, "normals": normals(v, t), "indices": t, "mode": TRIANGLES}

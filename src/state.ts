@@ -4,6 +4,8 @@ import type { ViewState } from './viewer/scene';
 export type Page = 'atlas' | 'imaging' | 'coords' | 'refs' | 'credits' | 'settings';
 export type Hemi = 'L' | 'R' | 'both';
 export type LayerKey = 'nuclei' | 'tracts' | 'cortex' | 'targets' | 'electrode';
+/** Extra layers only the spine section has (other sections leave them out; missing = shown). */
+export type ExtraLayerKey = 'discs' | 'vessels' | 'viscera';
 export type Axis = 'axial' | 'coronal' | 'sagittal';
 export type V3 = [number, number, number];
 /** MRI sequence drawn on the slice planes (ICBM 2009b templates). */

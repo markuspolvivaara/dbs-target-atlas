@@ -1,0 +1,189 @@
+{
+ "levels": {
+  "L1": {
+   "widthRegionalMeans": {
+    "US": 8.0,
+    "CN": 6.75,
+    "EA and SEA": 6.78,
+    "WA": 7.3,
+    "SA": 6.83,
+    "OA": 9.2
+   },
+   "heightRegionalMeans": {
+    "US": 16.13,
+    "CN": 14.94,
+    "EA and SEA": 15.0,
+    "WA": 14.7,
+    "SA": 10.2,
+    "OA": 17.87
+   },
+   "transverseAngleMexico": {
+    "L": [
+     16.8,
+     1.9
+    ],
+    "R": [
+     16.7,
+     2.0
+    ],
+    "n": 37
+   },
+   "transverseAngleNigeria": {
+    "meanSd": [
+     17.8,
+     4.45
+    ],
+    "n": 287
+   }
+  },
+  "L2": {
+   "widthRegionalMeans": {
+    "US": 8.17,
+    "CN": 7.31,
+    "EA and SEA": 7.36,
+    "WA": 8.15,
+    "SA": 7.27,
+    "OA": 9.5
+   },
+   "heightRegionalMeans": {
+    "US": 15.38,
+    "CN": 14.5,
+    "EA and SEA": 14.61,
+    "WA": 14.7,
+    "SA": 10.6,
+    "OA": 17.3
+   },
+   "transverseAngleMexico": {
+    "L": [
+     16.5,
+     2.3
+    ],
+    "R": [
+     16.4,
+     2.0
+    ],
+    "n": 37
+   },
+   "transverseAngleNigeria": {
+    "meanSd": [
+     19.34,
+     3.89
+    ],
+    "n": 287
+   }
+  },
+  "L3": {
+   "widthRegionalMeans": {
+    "US": 9.89,
+    "CN": 8.9,
+    "EA and SEA": 8.9,
+    "WA": 9.6,
+    "SA": 8.49,
+    "OA": 11.97
+   },
+   "heightRegionalMeans": {
+    "US": 15.06,
+    "CN": 14.16,
+    "EA and SEA": 14.07,
+    "WA": 13.9,
+    "SA": 10.2,
+    "OA": 17.23
+   },
+   "transverseAngleMexico": {
+    "L": [
+     17.0,
+     2.4
+    ],
+    "R": [
+     17.0,
+     2.6
+    ],
+    "n": 37
+   },
+   "transverseAngleNigeria": {
+    "meanSd": [
+     20.8,
+     4.25
+    ],
+    "n": 287
+   }
+  },
+  "L4": {
+   "widthRegionalMeans": {
+    "US": 12.52,
+    "CN": 10.38,
+    "EA and SEA": 10.88,
+    "WA": 11.3,
+    "SA": 10.47,
+    "OA": 14.97
+   },
+   "heightRegionalMeans": {
+    "US": 14.44,
+    "CN": 14.25,
+    "EA and SEA": 13.77,
+    "WA": 13.8,
+    "SA": 11.6,
+    "OA": 16.27
+   },
+   "transverseAngleMexico": {
+    "L": [
+     18.6,
+     1.9
+    ],
+    "R": [
+     18.6,
+     1.9
+    ],
+    "n": 37
+   },
+   "transverseAngleNigeria": {
+    "meanSd": [
+     22.0,
+     4.9
+    ],
+    "n": 287
+   }
+  },
+  "L5": {
+   "widthRegionalMeans": {
+    "US": 17.23,
+    "CN": 13.67,
+    "EA and SEA": 14.59,
+    "WA": 14.45,
+    "SA": 13.3,
+    "OA": 19.73
+   },
+   "heightRegionalMeans": {
+    "US": 14.13,
+    "CN": 17.08,
+    "EA and SEA": 15.9,
+    "WA": 14.1,
+    "SA": 16.3,
+    "OA": 17.0
+   },
+   "transverseAngleMexico": {
+    "L": [
+     21.9,
+     2.8
+    ],
+    "R": [
+     21.9,
+     2.5
+    ],
+    "n": 37
+   },
+   "transverseAngleNigeria": {
+    "meanSd": [
+     25.7,
+     5.0
+    ],
+    "n": 287
+   }
+  }
+ },
+ "sources": {
+  "wang2023": "Tables 2 and 3: mean pedicle width and height by level and region (mm)",
+  "moncadahabib2025": "Table 2: pedicle transverse angle (angle between the pedicle axis and the vertebral midline), mean +- SD",
+  "nkwerem2024": "Table 1: transverse angle per level, mean +- SD"
+ }
+}

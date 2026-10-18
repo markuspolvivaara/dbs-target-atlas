@@ -1,5 +1,5 @@
 import type { CameraPreset, ManifestStructure, VolumeInfo } from '../data/schema';
-import type { Axis, Clip, Hemi, Layer, LayerKey, LeadAnchor, SliceSeq, V3 } from '../state';
+import type { Axis, Clip, ExtraLayerKey, Hemi, Layer, LayerKey, LeadAnchor, SliceSeq, V3 } from '../state';
 import type { Look } from './materials';
 
 /**
@@ -46,6 +46,10 @@ export interface MarkerDef {
   mni: { left: V3; right: V3 };
   /** sides to draw (default both); a one-sided landmark draws a single point */
   sides?: ('L' | 'R')[];
+  /** sphere radius in mm (default 0.8, primary 0.9: sized for deep-brain targets) */
+  radius?: number;
+  /** palette token of its own: also used when primary, instead of the ink colour */
+  token?: string;
 }
 
 export interface Catalog {
@@ -63,7 +67,7 @@ export interface Catalog {
 export interface ViewState {
   hemi: Hemi;
   cam: { preset: CameraPreset | null; pos?: V3; tgt?: V3 };
-  layers: Record<LayerKey, Layer>;
+  layers: Record<LayerKey, Layer> & Partial<Record<ExtraLayerKey, Layer>>;
   clip: Record<Axis, Clip>;
   cutSide: 'none' | 'L' | 'R';
   sliceSeq: SliceSeq;
@@ -72,6 +76,9 @@ export interface ViewState {
   hidden: string[];
   /** remove every structure above this height (mm); the skull-base section uses it to lift off the calvaria */
   cutAbove?: number | null;
+  /** remove every structure on the side of this plane that its normal points to (RAS mm); the spine section cuts
+   * along a virtual screw with it */
+  cutPlane?: { normal: [number, number, number]; point: [number, number, number] } | null;
   /** cortical surfaces: 0 = pial, 1 = inflated (the viewer animates between them) */
   inflate?: number;
 }
