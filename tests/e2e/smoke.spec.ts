@@ -738,10 +738,13 @@ test('spine: virtual screw — start position, breach grade, cut, and a link tha
   await box.locator('#screw-medial').fill('40');
   await expect(box.locator('.screw-readout .grade')).toHaveText('E');
   await expect(box.locator('.screw-readout')).toContainText('Medial breach');
-  // it stays when a structure is picked
-  await page.locator('.sb-item[data-id="sp_l4"]').click();
+  // it stays when a structure is picked, and when the level's own vertebra is clicked
+  await page.locator('.sb-item[data-id="sp_dural_sac"]').click();
+  await expect(page.locator('.card.sel h2')).toContainText('Dural sac');
   await expect(box.locator('.screw-readout .grade')).toHaveText('E');
   await page.locator('.sb-item[data-id="sp_l4"]').click();
+  await expect(page.locator('.card.sel h2')).toHaveText('L4');
+  await expect(box.locator('.screw-readout .grade')).toHaveText('E');
   await box.locator('.screw-cut').click();
   await expect.poll(() => new URL(page.url()).hash).toContain('x=s');
   await expect.poll(() => decodeURIComponent(new URL(page.url()).hash)).toContain('scr=tt~L~40~');
@@ -826,6 +829,28 @@ test('spine: cervical region — the C8 rule, the foramina transversaria, the ve
   await page.getByRole('tab', { name: 'Layers and cut' }).click();
   await expect(page.locator('.layer[data-layer="viscera"] input[type=checkbox]')).toBeChecked();
   await page.getByRole('tab', { name: 'Anatomy' }).click();
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('spine: clicking a vertebra picks its level, as the level chips do', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./spine/#/atlas?r=thoracic');
+  await settle(page);
+  await expect(page.locator('.screw-box')).toHaveCount(0);
+  const cam = () => page.evaluate(() => { const v = (window as any).__atlas.viewer; return [v.camera.position.toArray(), v.controls.target.toArray()].flat().map((x: number) => Math.round(x)); });
+  const before = await cam();
+  await page.locator('.sb-item[data-id="sp_t6"]').click();
+  await expect.poll(() => new URL(page.url()).hash).toContain('lv=T6');
+  await settle(page);
+  expect(await cam()).toEqual(before);   // the camera stays where it was
+  await expect(page.locator('.card.sel h2')).toHaveText('T6');
+  await expect(page.locator('.level-chips .chip[data-v="T6"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('.screw-box')).toHaveCount(1);
+  // the vertebra's own card is one click away
+  await page.locator('.card.sel').getByRole('button', { name: 'T6 vertebra', exact: true }).click();
+  await expect(page.locator('.card.sel h2')).toHaveText('T6 vertebra');
+  await expect(page.locator('.screw-box')).toHaveCount(1);
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });

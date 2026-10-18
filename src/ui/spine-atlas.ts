@@ -219,7 +219,7 @@ export class SpineAtlasPage {
 
     this.viewer = new Viewer<SpineState, SpinePlan>(host, {
       hover: (info, x, y) => this.showTip(info, x, y),
-      pick: (info) => { if (info.id && info.kind === 'structure') this.update((s) => { s.sel = s.sel === info.id ? null : info.id; }); },
+      pick: (info) => { if (info.id && info.kind === 'structure' && !this.pickLevel(info.id)) this.update((s) => { s.sel = s.sel === info.id ? null : info.id; }); },
       readout: (ras) => this.showReadout(ras),
       measure: (pts) => { this.measurePts = pts; this.showMeasure(); },
       cameraChanged: (pos, tgt) => this.update((s) => {
@@ -364,7 +364,7 @@ export class SpineAtlasPage {
     const entry = (id: string) => h('span', { class: `sb-entry${isOff(id) ? ' off' : ''}` }, eye([id], nameOf(id)),
       h('button', {
         type: 'button', class: 'chip sb-item', 'aria-pressed': String(s.sel === id), 'data-id': id,
-        onclick: () => this.update((st) => { st.sel = st.sel === id ? null : id; }),
+        onclick: () => { if (!this.pickLevel(id)) this.update((st) => { st.sel = st.sel === id ? null : id; }); },
       }, h('span', { class: 'swatch', style: `--c: var(--c-${tokenOf(id)})` }), nameOf(id)));
     for (const [, label, cats] of GROUPS) {
       // cranial to caudal (a disc by its upper level), then by name
@@ -393,6 +393,18 @@ export class SpineAtlasPage {
 
   private stmt(st: Statement): HTMLElement {
     return h('p', {}, st.text, st.refIds.length ? ' ' : '', refLinksFrom(SP_REFS, st.refIds));
+  }
+
+  /** Clicking a vertebra of this region (in 3D or in the list) picks its level, as the level chips do (the level card
+   * and the virtual screw) but leaves the camera where it is. Its own card stays one click away (the level card's Bone
+   * link). Another region's vertebra, shown for context, opens its card instead. */
+  private pickLevel(id: string): boolean {
+    const st = SP.get(id);
+    const level = st?.category === 'vertebra' ? st.level : id === 'sp_sacrum' ? 'S1' : undefined;
+    if (!level || !REGION.get(this.s.region)!.levels.includes(level)) return false;
+    if (this.s.level === level) { if (this.s.sel) this.update((x) => { x.sel = null; }); return true; }
+    this.update((x) => { x.level = level; x.lesion = null; x.screw = null; x.approach = null; x.sel = null; });
+    return true;
   }
 
   private link(id: string): HTMLElement {
