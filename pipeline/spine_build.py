@@ -811,11 +811,27 @@ REF_KEYS = ("hwang2019", "merckaert2015", "hasegawa1996", "zindrick1987", "fardo
             "epstein2023", "taterra2019", "moreno2021", "tanaka2000", "tudose2023", "hong2008", "bruneau2006", "vigo2020",
             "valenzuela2026", "tudose2026", "joaquim2018", "rathinavelu2021", "jiang2024", "joaquim2020", "singh2022",
             "kucherina2026", "jannelli2025", "hasan2025", "arumalla2021", "alicandri2020", "siribumrungwong2018",
-            "kendirlioglu2026", "zhou2022", "aosurgeryref")
+            "kendirlioglu2026", "zhou2022", "aosurgeryref",
+            "figa2025", "sung2018", "gonzalezvargas2026", "loganathan2023", "fidan2026")
 
 
 def references() -> dict:
     return {k: {"citation": CITES[k]["citation"], "url": CITES[k]["url"]} for k in REF_KEYS}
+
+
+def manifest_entries(items: list[dict], junction: bool = False) -> list[dict]:
+    """Manifest entries of segmented structures (and of the craniocervical junction's, from its own CT)."""
+    cites = [CITES[c] for c in DATASET["cite"]]
+    name = "VerSe cervical CT (sub-gl090) with TotalSegmentator segmentations" if junction else DATASET["name"]
+    base = {"aliases": [], "bytes": 0, "dataset": "verse", "source": name, "licence": DATASET["licence"],
+            "citation": [c["citation"] for c in cites], "citationUrls": [c["url"] for c in cites], "refIds": DATASET["cite"]}
+    return [{**base, "id": t["id"], "name": t["name"], "type": "bone" if t["category"] == "bone" else "soft",
+             "layer": t["layer"], "file": f"assets/spine/{t['id']}.glb", "colour": colour(t["token"]),
+             "category": t["category"], **({"level": t["level"]} if "level" in t else {}),
+             **({"region": t["region"]} if "region" in t else {}),
+             **({"schematic": True} if t.get("schematic") else {}),
+             "derivation": t["source"] + ("." if t.get("schematic") else ", surface of the segmentation."),
+             "centroid": {"L": t["centroid"], "R": t["centroid"]}} for t in items]
 
 
 def write_manifest(verts: list[dict], ts: list[dict], dsc: list[dict]) -> None:
@@ -828,14 +844,8 @@ def write_manifest(verts: list[dict], ts: list[dict], dsc: list[dict]) -> None:
                            "colour": colour("spBone"), "category": "vertebra", "level": v["name"], "region": v["region"],
                            "derivation": f"CT surface at {BONE_HU} HU within {MASK_REACH_MM} mm of VerSe's hand-corrected mask for {v['name']}.",
                            "centroid": {"L": v["centroid"], "R": v["centroid"]}})
-    for t in ts + dsc:
-        structures.append({**base, "id": t["id"], "name": t["name"], "type": "bone" if t["category"] == "bone" else "soft",
-                           "layer": t["layer"], "file": f"assets/spine/{t['id']}.glb", "colour": colour(t["token"]),
-                           "category": t["category"], **({"level": t["level"]} if "level" in t else {}),
-                           **({"region": t["region"]} if "region" in t else {}),
-                           **({"schematic": True} if t.get("schematic") else {}),
-                           "derivation": t["source"] + ("." if t.get("schematic") else ", surface of the segmentation."),
-                           "centroid": {"L": t["centroid"], "R": t["centroid"]}})
+    structures += manifest_entries([t for t in ts + dsc if t.get("region") != "ccj"])
+    structures += manifest_entries([t for t in ts + dsc if t.get("region") == "ccj"], junction=True)
     GEN.mkdir(parents=True, exist_ok=True)
     manifest = {
         "space": "RAS millimetres of one CT, origin at the centre of the L5 vertebral body (not MNI)",
@@ -896,6 +906,20 @@ def validate() -> int:
         check(y["sp_trachea"] > y["sp_esophagus"] > y["sp_c6"], f"front-to-back order trachea, oesophagus, C6: {y}")
         xt = by["sp_trachea"]["centroid"]["R"][0]
         check(by["sp_cca_left"]["centroid"]["R"][0] < xt < by["sp_cca_right"]["centroid"]["R"][0], "carotids either side of the trachea")
+    # the craniocervical junction (its own CT): its structures, and every measurement within the range Fidan 2026 found
+    # in 500 adults (the landmarks are found automatically: a value outside it more likely means a misplaced landmark)
+    for sid in ("sp_ccj_occiput", "sp_ccj_c1", "sp_ccj_c2", "sp_ccj_c3", "sp_ccj_dural_sac"):
+        check(sid in by and by[sid].get("region") == "ccj", f"{sid} missing")
+    lv = json.loads((GEN / "spine-levels.json").read_text()).get("ccj")
+    check(lv is not None, "ccj measurements missing")
+    if lv:
+        mm, L = lv["measurements"], lv["landmarks"]
+        for k, (lo, hi) in {"adi": (0.36, 2.92), "padi": (13.11, 26.81), "mcrae": (28.53, 43.11), "bdi": (1.66, 9.34),
+                            "bai": (2.54, 11.34), "cca": (116.03, 179.62)}.items():
+            check(lo <= mm[k] <= hi, f"ccj {k} {mm[k]} outside {lo}-{hi}")
+        check(mm["densBelowMcRae"] > 0, "ccj: the dens tip above McRae's line")
+        check(L["basion"][1] > L["opisthion"][1] and L["basion"][2] > L["densTip"][2], "ccj: basion not in front of the opisthion and above the dens")
+        check(lv["axialPoints"] >= 8 and lv["clivusMm"] >= 10, "ccj: too little of the C2 body or the clivus for its lines")
     print(f"spine validation: {n - len(fails)}/{n} checks passed")
     for f in fails:
         print("FAIL", f)
@@ -929,10 +953,12 @@ def main() -> int:
     soft = cervical_soft(report)
     va, va_data = vertebral_artery(report)
     landmarks = neck_landmarks(levels_c)
+    import spine_ccj
+    ccj, ccj_data, _ = spine_ccj.build(report)
     (BUILD / "report.json").write_text(json.dumps(report, indent=1, default=float))
-    write_manifest(verts, ts, dsc + roots + roots_t + roots_c + soft + va)
+    write_manifest(verts, ts, dsc + roots + roots_t + roots_c + soft + va + ccj)
     (GEN / "spine-levels.json").write_text(json.dumps({"lumbar": levels, "thoracic": levels_t, "cervical": levels_c,
-                                                       "vertebralArtery": va_data, "neckLandmarks": landmarks},
+                                                       "vertebralArtery": va_data, "neckLandmarks": landmarks, "ccj": ccj_data},
                                                       indent=1, default=float))
     return 0
 

@@ -968,5 +968,124 @@
     413.01
    ]
   }
+ },
+ "ccj": {
+  "slab": 1.5,
+  "landmarks": {
+   "densTip": [
+    0.15,
+    -0.02,
+    0.0
+   ],
+   "basion": [
+    -0.94,
+    1.6,
+    2.5
+   ],
+   "opisthion": [
+    -0.39,
+    -33.67,
+    3.75
+   ],
+   "adi": [
+    [
+     1.25,
+     8.44,
+     -11.25
+    ],
+    [
+     -0.39,
+     7.34,
+     -11.25
+    ]
+   ],
+   "padi": [
+    [
+     1.25,
+     -5.23,
+     -8.75
+    ],
+    [
+     0.43,
+     -24.38,
+     -13.75
+    ]
+   ],
+   "axialLine": [
+    [
+     0.0,
+     -4.91,
+     -35.43
+    ],
+    [
+     0.0,
+     -7.02,
+     2.01
+    ]
+   ],
+   "clivusLine": [
+    [
+     0.0,
+     -0.42,
+     5.67
+    ],
+    [
+     0.0,
+     14.28,
+     25.98
+    ]
+   ]
+  },
+  "measurements": {
+   "adi": 1.1,
+   "padi": 19.8,
+   "mcrae": 35.3,
+   "densBelowMcRae": 2.6,
+   "bdi": 3.0,
+   "bai": 8.6,
+   "cca": 141.0
+  },
+  "clivusMm": 21.2,
+  "axialPoints": 14,
+  "range": {
+   "adi": [
+    1.1,
+    1.1
+   ],
+   "padi": [
+    19.8,
+    19.8
+   ],
+   "mcrae": [
+    35.3,
+    36.4
+   ],
+   "densBelowMcRae": [
+    2.6,
+    2.6
+   ],
+   "bdi": [
+    2.9,
+    3.8
+   ],
+   "bai": [
+    8.1,
+    10.7
+   ],
+   "cca": [
+    140.0,
+    141.0
+   ]
+  },
+  "note": "The craniocervical junction comes from a second adult CT of the VerSe dataset (a cervical scan, 0.27 x 0.27 x 1.25 mm), not the whole-spine CT of the other regions, whose field of view ends just above C1. Coordinates are millimetres from the tip of the dens. C1-C3: CT surfaces within reach of VerSe's hand-corrected masks; the occipital bone (cut 50 mm around the foramen magnum) and the canal contents: TotalSegmentator segmentations of the same CT.",
+  "image": {
+   "file": "assets/spine/ccj_midsag.png",
+   "width": 425,
+   "height": 390,
+   "pxPerMm": 5,
+   "left": 30.0,
+   "top": 28.0,
+   "slab": 2.0
+  }
  }
 }

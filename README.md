@@ -117,13 +117,13 @@ The 74 gyri and sulci of FreeSurfer's Destrieux 2009 parcellation (Destrieux et 
 - Pipeline: `pipeline/cortex_texts.py` (in Blender) reads the definition texts, `pipeline/cortex_build.py` writes
   the assets and checks them.
 
-## Spine (cervical, thoracic, lumbar)
+## Spine (craniocervical junction, cervical, thoracic, lumbar)
 
 Surgical anatomy of the spine from one adult CT: VerSe 2020 sub-verse823 (CC BY-SA 4.0, 0.72 × 0.72 × 0.7 mm,
 C1 to the pelvis), with TotalSegmentator (Apache-2.0 open tasks) run on the same CT. One subject throughout, in
-its own space (mm from the centre of the L5 vertebral body).
+its own space (mm from the centre of the L5 vertebral body), except the craniocervical junction (below).
 
-- **Region and level selectors**: cervical (C1–C7), thoracic (T1–T12) and lumbar (L1–S1).
+- **Region and level selectors**: craniocervical junction, cervical (C1–C7), thoracic (T1–T12) and lumbar (L1–S1).
 - **Cervical** (phase 2a): vertebrae C1–C7, discs C2–C3 to C7–T1, canal contents, canal and disc height per level;
   schematic roots C3–C8 by the cervical rule (each above the vertebra of its number, C8 between C7 and T1; Moreno
   2021), through the lower part of foramina found in planes turned 30° forwards (their size is not reported); the
@@ -140,6 +140,16 @@ its own space (mm from the centre of the L5 vertebral body).
   and the C1–C2 transarticular screw (checked against the atlas and axis together, the joint counted as bone), each
   from landmarks measured on this CT; the C2 isthmus height and the bone over the vertebral artery's groove beside
   the usual high-riding definition (Kucherina 2026); the C1 and C2 cards link to the skull base section.
+- **Odontoid screw** (C2): one midline screw from the anteroinferior C2 body to the apex of the dens, 4 mm, through
+  the apical cortex (Figà 2025; Sung 2018; González-Vargas 2026); its angles are read looking backwards and its
+  breaches along its own line (front and back walls of the dens, the far cortex at the apex).
+- **Craniocervical junction** (its own region): the whole-spine CT ends just above C1, so the junction comes from a
+  second VerSe CT, a cervical scan reaching the clivus (sub-gl090, 0.27 × 0.27 × 1.25 mm; mm from the tip of the
+  dens), shown on its own: the occipital bone around the foramen magnum, C1–C3, the canal contents. In its
+  midsagittal plane the ADI, PADI, McRae's line (and the dens tip below it), BDI, BAI and the clivus–canal angle
+  are measured between landmarks found automatically and compared with 500 adults' CT values (Fidan 2026); the card
+  draws each on a midsagittal CT of the scan, with its range when the plane is moved up to 1 mm sideways.
+  `pipeline/spine_ccj.py` (run by `spine_build.py`, or alone followed by compress and finalize).
 - **Anterior approach (ACDF)** (phase 2d, cervical level card): from either side, with the carotid sheath, trachea,
   oesophagus, thyroid, larynx, prevertebral muscles and vertebral arteries shown; the approach plane, side choice,
   nerve injuries (Hasan 2025; Arumalla 2021), landmark levels and their variability (Siribumrungwong 2018;

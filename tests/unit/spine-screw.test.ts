@@ -18,7 +18,7 @@ describe('virtual screw data (pipeline/spine_screw.py)', () => {
     const T = Array.from({ length: 12 }, (_, i) => `T${i + 1}`);
     expect(Object.keys(SCREW_LEVELS)).toEqual(['C1', 'C2', 'C1-C2', 'C3', 'C4', 'C5', 'C6', 'C7', ...T, 'L1', 'L2', 'L3', 'L4', 'L5', 'S1']);
     expect(Object.keys(SCREW_LEVELS.C1.start)).toEqual(['c1lm']);
-    expect(Object.keys(SCREW_LEVELS.C2.start).sort()).toEqual(['c2p', 'c2pars', 'c2tl']);
+    expect(Object.keys(SCREW_LEVELS.C2.start).sort()).toEqual(['c2p', 'c2pars', 'c2tl', 'od']);
     expect(Object.keys(SCREW_LEVELS['C1-C2'].start)).toEqual(['ta']);
     for (const lv of ['C3', 'C4', 'C5', 'C6']) expect(Object.keys(SCREW_LEVELS[lv].start).sort(), lv).toEqual(['an', 'mg', 'rc']);
     expect(Object.keys(SCREW_LEVELS.C7.start)).toEqual(['cp']);
@@ -111,8 +111,25 @@ describe('virtual screw data (pipeline/spine_screw.py)', () => {
       expect(m.groove.height).toBeGreaterThan(0);
     }
   });
+  it('odontoid screw: one midline screw from the front of the axis to the apex of the dens, through its tip', () => {
+    const lv = SCREW_LEVELS.C2;
+    const st = lv.start.od!.L;
+    expect(st.ventral).toBe(true);
+    expect(lv.start.od!.R).toEqual(st);
+    const { origin, ey } = lv.frame;
+    expect(st.entry.reduce((a, x, i) => a + (x - origin[i]) * ey[i], 0)).toBeGreaterThan(5);   // in front of the body
+    const a = anglesOf(lv, 'L', st.dir, 'od');
+    expect(Math.abs(a.medial)).toBeLessThan(5);                                                   // Figà 2025: < 5 deg
+    expect(direction(lv, 'L', a.medial, a.cranial, 'od').every((x, i) => Math.abs(x - st.dir[i]) < 1e-3)).toBe(true);
+    expect(st.size.diameter).toBe(4);
+    const ck = lv.check['od.L'];
+    expect(ck.breach.anterior).toBeGreaterThan(0);                                                // through the apical cortex
+    expect(ck.nearest.find((x) => x.id === 'sp_dural_sac')!.mm).toBeGreaterThan(0);
+    expect(decodeSpine(encodeSpine({ ...defaultSpineState(), region: 'cervical', level: 'C2', screw: { ...screwDefaults('C2', 'od', 'L'), side: 'R' } })).screw!.side).toBe('L');
+  });
+
   it('every start position fits the sliders (a start outside them would be clamped in the browser and in links)', () => {
-    for (const t of Object.values(TECHNIQUES)) for (const lv of t.levels) for (const sd of ['L', 'R'] as const) {
+    for (const t of Object.values(TECHNIQUES)) for (const lv of t.levels) for (const sd of t.midline ? ['L'] as const : ['L', 'R'] as const) {
       const d = screwDefaults(lv, t.id, sd);
       for (const k of ['medial', 'cranial', 'length', 'diameter'] as const) {
         const [lo, hi] = SCREW_RANGE[k];
@@ -128,7 +145,7 @@ describe('virtual screw data (pipeline/spine_screw.py)', () => {
       for (const [key, ref] of Object.entries(lv.check)) {
         const [tech, sd] = key.split('.') as [TechniqueId, ScrewSide];
         const st = lv.start[tech]![sd];
-        const r = evaluate(f, lv, sd, st.entry, st.dir, st.size.length, st.size.diameter / 2);
+        const r = evaluate(f, lv, sd, st.entry, st.dir, st.size.length, st.size.diameter / 2, 3, tech);
         expect(r.grade, `${name} ${key}`).toBe(ref.grade);
         expect(r.seated, `${name} ${key}`).toBeCloseTo(ref.seated, 5);
         for (const [dir, mm] of Object.entries(ref.breach)) expect(r.breach[dir as 'medial'], `${name} ${key} ${dir}`).toBeCloseTo(mm, 1);

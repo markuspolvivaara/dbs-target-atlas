@@ -23,6 +23,7 @@ function sanitize(s: SpineState): SpineState {
   if (!REGION.get(s.region)?.ready) s.region = 'lumbar';
   if (s.sel && !SP.has(s.sel)) s.sel = null;
   if (s.screw && (!s.level || !TECHNIQUES[s.screw.tech].levels.includes(s.level))) s.screw = null;
+  if (s.region !== 'ccj') s.measure = null;
   if (s.approach && !((s.level?.startsWith(s.approach.id === 'acdf' ? 'C' : 'T')) && GEOM_BY_LEVEL.get(s.level!))) s.approach = null;
   const disc = s.level ? GEOM_BY_LEVEL.get(s.level) : undefined;
   if ((s.cut === 'disc' && !disc) || (s.cut === 'screw' && !s.screw)) s.cut = 'none';
@@ -83,7 +84,7 @@ function render(pageChanged = false): void {
   document.body.dataset.page = state.page;
   pages[state.page].render(state);
   if (state.page === 'atlas') atlas.onShow();
-  const atlasTitle = state.sel ? (SP.get(state.sel)?.name ?? '') : state.level ? state.level : `${REGION.get(state.region)!.name} spine`;
+  const atlasTitle = state.sel ? (SP.get(state.sel)?.name ?? '') : state.level ? state.level : REGION.get(state.region)!.title;
   const titles: Record<SpinePage, string> = { atlas: atlasTitle, sources: 'Sources', credits: 'Credits' };
   document.title = `${titles[state.page]} · ${SECTION.name} · ${BRAND.name}`;
   if (pageChanged) window.scrollTo(0, 0);

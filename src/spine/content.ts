@@ -38,12 +38,65 @@ const LEVELS = z.object({
   neckLandmarks: z.object({
     hyoid: z.object({ level: z.string() }), thyroidCartilage: z.object({ level: z.string() }), cricoidInferior: z.object({ level: z.string() }),
   }),
+  /** the craniocervical junction, from its own CT (pipeline/spine_ccj.py): landmarks in its midsagittal plane (mm from
+   * the tip of the dens) and the measurements between them */
+  ccj: z.object({
+    slab: z.number(), note: z.string(), clivusMm: z.number(), axialPoints: z.number(),
+    /** the midsagittal CT the card draws the measurements on: anterior on the left; `left` and `top` are the scene y
+     * and z (mm) of its left and top edges */
+    image: z.object({ file: z.string(), width: z.number(), height: z.number(), pxPerMm: z.number(), left: z.number(), top: z.number(), slab: z.number() }),
+    landmarks: z.object({
+      densTip: V3, basion: V3, opisthion: V3, adi: z.tuple([V3, V3]), padi: z.tuple([V3, V3]), axialLine: z.tuple([V3, V3]), clivusLine: z.tuple([V3, V3]),
+    }),
+    measurements: z.object({ adi: z.number(), padi: z.number(), mcrae: z.number(), densBelowMcRae: z.number(), bdi: z.number(), bai: z.number(), cca: z.number() }),
+    /** each value's range with the plane moved up to 1 mm to either side */
+    range: z.record(z.tuple([z.number(), z.number()])),
+  }),
 }).parse(levelsJson);
+export const CCJ = LEVELS.ccj;
 export const LUMBAR_GEOM = LEVELS.lumbar;
 export const THORACIC_GEOM = LEVELS.thoracic;
 export const CERVICAL_GEOM = LEVELS.cervical;
 export const VERTEBRAL_ARTERY = LEVELS.vertebralArtery;
 export const NECK_LANDMARKS = LEVELS.neckLandmarks;
+/** The craniocervical junction's measurements (Fidan 2026's definitions, on its midsagittal CT): what each is, its value
+ * on this CT and the published normal values. The lines each draws are its landmarks in CCJ.landmarks. */
+export type CcjMeasureId = 'adi' | 'padi' | 'mcrae' | 'bdi' | 'bai' | 'cca';
+export interface CcjMeasure { id: CcjMeasureId; name: string; short: string; unit: 'mm' | '°'; definition: Statement; normal: Statement }
+const FIDAN: Statement['refIds'] = ['fidan2026'];
+export const CCJ_MEASURES: CcjMeasure[] = [
+  {
+    id: 'adi', name: 'Atlanto-dens interval (ADI)', short: 'ADI', unit: 'mm',
+    definition: { text: 'From the anterior arch of C1 to the closest anterior point of the dens, in the midsagittal plane.', refIds: FIDAN },
+    normal: { text: 'In 500 adults on CT: median 1.45 mm (0.36–2.92 mm). Normal values of up to 3.5 mm are quoted in adults, and over 10 mm points to rupture of the transverse ligament.', refIds: FIDAN },
+  },
+  {
+    id: 'padi', name: 'Posterior atlanto-dens interval (PADI)', short: 'PADI', unit: 'mm',
+    definition: { text: 'From the posterior border of the dens to the closest point of the posterior arch of C1: the space for the cord at C1–C2.', refIds: FIDAN },
+    normal: { text: 'In 500 adults on CT: median 19.31 mm (13.11–26.81 mm), larger in men. A threshold of more than 14 mm (on radiographs) is quoted, and values under 19 mm have been linked with neurological symptoms.', refIds: FIDAN },
+  },
+  {
+    id: 'mcrae', name: 'McRae’s line (foramen magnum)', short: 'McRae', unit: 'mm',
+    definition: { text: 'From the basion to the opisthion: the anteroposterior diameter of the foramen magnum. Here also the distance of the dens’s tip below it.', refIds: FIDAN },
+    normal: { text: 'In 500 adults on CT: median 36.15 mm (28.53–43.11 mm), larger in men. It typically exceeds 30 mm without symptoms, and values below 25 mm often go with neurological symptoms; in two series no dens tip lay above the line.', refIds: FIDAN },
+  },
+  {
+    id: 'bdi', name: 'Basion–dens interval (BDI)', short: 'BDI', unit: 'mm',
+    definition: { text: 'From the basion to the tip of the dens.', refIds: FIDAN },
+    normal: { text: 'In 500 adults on CT: median 5.33 mm (1.66–9.34 mm), no difference between the sexes. Over 9 mm has been taken to suggest injury (controls 4.7 ± 1.7 mm).', refIds: FIDAN },
+  },
+  {
+    id: 'bai', name: 'Basion–axial interval (BAI)', short: 'BAI', unit: 'mm',
+    definition: { text: 'From the basion to the rostral extension of the posterior axial line, the line along the back of the C2 body; used to assess vertical translocation.', refIds: FIDAN },
+    normal: { text: 'In 500 adults on CT: median 7.14 mm (2.54–11.34 mm), slightly larger in men.', refIds: FIDAN },
+  },
+  {
+    id: 'cca', name: 'Clivus–canal angle (Wackenheim)', short: 'Clivus–canal', unit: '°',
+    definition: { text: 'Between the posterior surface of the clivus and the posterior axial line along the back of the dens; used to assess the risk of brainstem compression.', refIds: FIDAN },
+    normal: { text: 'In 500 adults on CT: median 154.14° (116.03–179.62°).', refIds: FIDAN },
+  },
+];
+
 // T12-L1 and C7-T1 are in two chains each: the thoracic entry for T12-L1 and the cervical one for C7-T1 (measured as
 // the cervical foramina are) are the ones used
 const ALL_GEOM = [...LUMBAR_GEOM, ...THORACIC_GEOM, ...CERVICAL_GEOM];
@@ -196,13 +249,17 @@ export function affectedRoot(pair: string, zone: LesionZone): string {
 
 /** Virtual-screw techniques: how the start position and the start size are set (spine_screw.py does it). */
 export interface Technique {
-  id: 'tt' | 'cbt' | 's1' | 'st' | 'at' | 'rc' | 'mg' | 'an' | 'cp' | 'c1lm' | 'c2p' | 'c2pars' | 'c2tl' | 'ta';
+  id: 'tt' | 'cbt' | 's1' | 'st' | 'at' | 'rc' | 'mg' | 'an' | 'cp' | 'c1lm' | 'c2p' | 'c2pars' | 'c2tl' | 'ta' | 'od';
   name: string; levels: string[]; start: Statement; size: Statement; note?: Statement;
   /** the bone a screw that is not a pedicle screw lies in (lateral mass, pars, lamina...): such screws are not graded
    * after Gertzbein and Robbins, their readout gives the breach's direction and depth only */
   within?: string;
   /** the far cortex is meant to be crossed (bicortical screws) */
   bicortical?: boolean;
+  /** one screw in the midline (no side to choose; its angle and entry move to the left or right) */
+  midline?: boolean;
+  /** what its breaches' directions are called when they are not the vertebra's (a screw running up the dens) */
+  breachWords?: Partial<Record<'medial' | 'lateral' | 'superior' | 'inferior', string>>;
 }
 const LATERAL_MASS_LEVELS = ['C3', 'C4', 'C5', 'C6'];
 const LATERAL_MASS_SIZE: Statement = {
@@ -342,6 +399,23 @@ export const TECHNIQUES: Record<Technique['id'], Technique> = {
     },
     size: { text: 'Start size 3.5 mm, the tip at least 1 mm short of where it would leave the atlas on this CT; average lengths of 20–30 mm are quoted.', refIds: ['joaquim2020'] },
     note: { text: 'Too cranial a screw can violate the occipito-atlantal joint, too caudal holds C1 poorly, too medial endangers the cord and too lateral the vertebral artery. About 22% of patients were not suited to it, and its vertebral artery risk is higher than other C2 techniques’.', refIds: ['joaquim2020', 'singh2022'] },
+  },
+  od: {
+    id: 'od', name: 'Odontoid (anterior)', levels: ['C2'], within: 'axis', bicortical: true, midline: true,
+    // the screw's line is 'anterior' (its far cortex: the apex); its front and back walls are 'superior' / 'inferior'
+    breachWords: { superior: 'anterior', inferior: 'posterior', medial: 'right', lateral: 'left' },
+    start: {
+      text: 'Anterior odontoid screw (type II fractures), through an anterior neck approach: a guide wire from the anteroinferior aspect of the C2 body towards the apex of the dens, at 25–30° in the sagittal plane and within 5° of the midline; on the lateral view the entry is at the anterior edge of the endplate. Start position here: in the midline, from the bone of the axis furthest forwards and down in its midsagittal plane to the centre of the dens’s tip on this CT. Its angles are read looking backwards: straight back is 0°, cranial positive.',
+      refIds: ['figa2025', 'loganathan2023', 'sung2018'],
+    },
+    size: {
+      text: 'Start size 4 mm (the diameter most used), as long as the line from the entry to the apex on this CT, rounded up, so the tip engages the apical cortex: penetrating it is recommended for the lag effect (bicortical). One series used lag screws of 34–42 mm; on CT the entry-to-apex length averaged 39.2 ± 2.6 mm in 55 adults, and screws several millimetres longer are needed to penetrate the tip.',
+      refIds: ['gonzalezvargas2026', 'figa2025', 'sung2018'],
+    },
+    note: {
+      text: 'Beyond the apex the ventral dura lay 7.7 ± 1.7 mm away along the screw’s line, but only 2.1 ± 3.2 mm beyond the posterior end of the dens’s tip: a trajectory aimed further back leaves less margin. Severe kyphosis, a comminuted odontoid base or an unfavourable fracture line can make the anterior approach unsuitable.',
+      refIds: ['sung2018', 'figa2025'],
+    },
   },
   s1: {
     id: 's1', name: 'S1 tricortical', levels: ['S1'],

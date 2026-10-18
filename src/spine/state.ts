@@ -2,7 +2,7 @@ import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
 import type { RegionId } from './index';
-import { APPROACHES, TECHNIQUES, type ApproachId, type LesionZone } from './content';
+import { APPROACHES, CCJ_MEASURES, TECHNIQUES, type ApproachId, type CcjMeasureId, type LesionZone } from './content';
 import type { TechniqueId } from './screw';
 import { REGION } from './regions';
 
@@ -24,6 +24,8 @@ export interface SpineState extends ViewState {
   screw: ScrewState | null;
   /** an approach to the disc below the selected level, from one side: dorsal (thoracic) or anterior (cervical, ACDF) */
   approach: { id: ApproachId | 'acdf'; side: 'L' | 'R' } | null;
+  /** craniocervical junction: the measurement whose lines are drawn */
+  measure: CcjMeasureId | null;
 }
 
 export interface ScrewState {
@@ -64,7 +66,7 @@ export function defaultSpineState(): SpineState {
     labels: 'hover',
     clip: { axial: { on: false, mm: 0 }, coronal: { on: false, mm: 0 }, sagittal: { on: false, mm: 0 } },
     cutSide: 'none', sliceSeq: 't1', lead: { ...DEFAULT_LEAD },
-    sel: null, hidden: [], lesion: null, cut: 'none', screw: null, approach: null, cutAbove: null, cutPlane: null,
+    sel: null, hidden: [], lesion: null, cut: 'none', screw: null, approach: null, measure: null, cutAbove: null, cutPlane: null,
   };
 }
 
@@ -95,6 +97,7 @@ export function encodeSpine(s: SpineState): string {
     }
     if (s.lesion) p.set('les', `${s.lesion.pair}.${s.lesion.zone}.${s.lesion.side}`);
     if (s.approach && s.level) p.set('ap', `${s.approach.id}.${s.approach.side}`);
+    if (s.measure && s.region === 'ccj') p.set('cm', s.measure);
   }
   const q = p.toString();
   return `#/${s.page}${q ? '?' + q : ''}`;
@@ -140,6 +143,8 @@ export function decodeSpine(hash: string): SpineState {
   const ap = /^([a-z]+)\.([LR])$/.exec(p.get('ap') ?? '');
   s.approach = ap && s.level?.startsWith('T') && ap[1] in APPROACHES ? { id: ap[1] as ApproachId, side: ap[2] as 'L' | 'R' }
     : ap && s.level?.startsWith('C') && ap[1] === 'acdf' ? { id: 'acdf', side: ap[2] as 'L' | 'R' } : null;
+  const cm = p.get('cm');
+  s.measure = s.region === 'ccj' && CCJ_MEASURES.some((x) => x.id === cm) ? cm as CcjMeasureId : null;
   return s;
 }
 
@@ -152,7 +157,7 @@ function decodeScrew(v: string | null, level: string | null): ScrewState | null 
   const n = nums.map(Number);
   if (!n.every(Number.isFinite)) return null;
   const keys = ['medial', 'cranial', 'length', 'diameter', 'du', 'dw'] as const;
-  const out = { tech: tech as TechniqueId, side } as ScrewState;
+  const out = { tech: tech as TechniqueId, side: t.midline ? 'L' : side } as ScrewState;   // a midline screw is the 'left' one
   keys.forEach((k, i) => { const [lo, hi] = SCREW_RANGE[k]; out[k] = Math.min(hi, Math.max(lo, n[i])); });
   return out;
 }

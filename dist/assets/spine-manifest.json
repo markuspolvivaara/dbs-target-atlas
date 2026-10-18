@@ -224,6 +224,26 @@
   "aosurgeryref": {
    "citation": "AO Foundation. AO Surgery Reference, spine, basic technique: C2 pars screw insertion; C2 pedicle screw insertion. surgeryreference.aofoundation.org (accessed 2026-10-18).",
    "url": "https://surgeryreference.aofoundation.org/spine/basic-technique/c2-pars-screw-insertion"
+  },
+  "figa2025": {
+   "citation": "Figà F, Tirendi MN, Talacchi A, Olivi A, Visocchi M. Anterior odontoid screw fixation for trauma: case series and technical considerations. J Clin Med. 2025;14(21):7754. doi:10.3390/jcm14217754.",
+   "url": "https://doi.org/10.3390/jcm14217754"
+  },
+  "sung2018": {
+   "citation": "Sung MJ, Kim KT, Hwang JH, Sung JK, Cho DC. Safe margin beyond dens tips to ventral dura in anterior odontoid screw fixation: analysis of three-dimensional computed tomography scan of odontoid process. J Korean Neurosurg Soc. 2018;61(4):503-508. doi:10.3340/jkns.2018.0034.",
+   "url": "https://doi.org/10.3340/jkns.2018.0034"
+  },
+  "gonzalezvargas2026": {
+   "citation": "González-Vargas PM, Millán A, Thenier-Villa JL, Badaoui A, Conde C, Pou J, et al. Finite element analysis of anterior odontoid screw fixation for type II odontoid fractures. Materials (Basel). 2026;19(4):825. doi:10.3390/ma19040825.",
+   "url": "https://doi.org/10.3390/ma19040825"
+  },
+  "loganathan2023": {
+   "citation": "Loganathan K, Sellappan K. Anterior screw fixation for odontoid fractures - a case series. J Orthop Case Rep. 2023;13(7):77-81. doi:10.13107/jocr.2023.v13.i07.3760.",
+   "url": "https://doi.org/10.13107/jocr.2023.v13.i07.3760"
+  },
+  "fidan2026": {
+   "citation": "Fidan N, Cetin A, Tosun A. Morphometric evaluation of the craniovertebral junction using computed tomography: a sex-based analysis of 500 adults. Biomed Res Int. 2026;2026:2388226. doi:10.1155/bmri/2388226.",
+   "url": "https://doi.org/10.1155/bmri/2388226"
   }
  },
  "generatedBy": "pipeline/spine_segment.py (TotalSegmentator) + pipeline/spine_build.py + pipeline/compress.mjs",
@@ -6041,6 +6061,256 @@
      -26.19,
      52.09,
      478.39
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 199744,
+   "dataset": "verse",
+   "source": "VerSe cervical CT (sub-gl090) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_ccj_occiput",
+   "name": "Occipital bone (around the foramen magnum)",
+   "type": "bone",
+   "layer": "nuclei",
+   "file": "assets/spine/sp_ccj_occiput.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "bone",
+   "region": "ccj",
+   "derivation": "TotalSegmentator craniofacial_structures: skull, within 50 mm of the middle of the foramen magnum, its CT surface, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -0.55,
+     -9.95,
+     9.77
+    ],
+    "R": [
+     -0.55,
+     -9.95,
+     9.77
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 63628,
+   "dataset": "verse",
+   "source": "VerSe cervical CT (sub-gl090) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_ccj_c1",
+   "name": "C1 (junction CT)",
+   "type": "bone",
+   "layer": "nuclei",
+   "file": "assets/spine/sp_ccj_c1.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "bone",
+   "region": "ccj",
+   "derivation": "CT surface at 200 HU within reach of VerSe's hand-corrected mask for C1, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     0.37,
+     -7.59,
+     -9.51
+    ],
+    "R": [
+     0.37,
+     -7.59,
+     -9.51
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 64456,
+   "dataset": "verse",
+   "source": "VerSe cervical CT (sub-gl090) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_ccj_c2",
+   "name": "C2 (junction CT)",
+   "type": "bone",
+   "layer": "nuclei",
+   "file": "assets/spine/sp_ccj_c2.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "bone",
+   "region": "ccj",
+   "derivation": "CT surface at 200 HU within reach of VerSe's hand-corrected mask for C2, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -0.87,
+     -9.47,
+     -25.71
+    ],
+    "R": [
+     -0.87,
+     -9.47,
+     -25.71
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 64528,
+   "dataset": "verse",
+   "source": "VerSe cervical CT (sub-gl090) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_ccj_c3",
+   "name": "C3 (junction CT)",
+   "type": "bone",
+   "layer": "nuclei",
+   "file": "assets/spine/sp_ccj_c3.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "bone",
+   "region": "ccj",
+   "derivation": "CT surface at 200 HU within reach of VerSe's hand-corrected mask for C3, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -2.94,
+     -11.5,
+     -43.45
+    ],
+    "R": [
+     -2.94,
+     -11.5,
+     -43.45
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 44196,
+   "dataset": "verse",
+   "source": "VerSe cervical CT (sub-gl090) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_ccj_dural_sac",
+   "name": "Dural sac (spinal canal contents, junction CT)",
+   "type": "soft",
+   "layer": "tracts",
+   "file": "assets/spine/sp_ccj_dural_sac.glb",
+   "colour": {
+    "token": "spCord",
+    "light": "#E3B505",
+    "dark": "#F2CC4A"
+   },
+   "category": "neural",
+   "region": "ccj",
+   "derivation": "TotalSegmentator total: spinal_cord, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -1.56,
+     -15.37,
+     -24.25
+    ],
+    "R": [
+     -1.56,
+     -15.37,
+     -24.25
     ]
    }
   }

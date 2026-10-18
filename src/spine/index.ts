@@ -11,7 +11,7 @@ export const SP = new Map(SP_MANIFEST.structures.map((s) => [s.id, s]));
 const REF_LABELS: Record<string, string> = {
   isncsci2019: 'ISNCSCI 2019', moncadahabib2025: 'Moncada-Habib 2025', wangr2021: 'Wang 2021', lehmankuklo2003: 'Lehman & Kuklo 2003',
   alicandri2020: 'Alicandri-Ciufelli 2020', valenzuela2026: 'Valenzuela-Fuenzalida 2026',
-  aosurgeryref: 'AO Surgery Reference',
+  aosurgeryref: 'AO Surgery Reference', gonzalezvargas2026: 'González-Vargas 2026', figa2025: 'Figà 2025',
 };
 export const SP_REFS = new Map(Object.entries(SP_MANIFEST.references).map(([k, r]) => {
   const m = /^([a-z]+)(\d{4})$/.exec(k);
@@ -19,7 +19,7 @@ export const SP_REFS = new Map(Object.entries(SP_MANIFEST.references).map(([k, r
   return [k, { ...r, shortLabel: label }];
 }));
 
-export type RegionId = 'cervical' | 'thoracic' | 'lumbar';
+export type RegionId = 'cervical' | 'thoracic' | 'lumbar' | 'ccj';
 export const LEVEL_ORDER = [...Array.from({ length: 7 }, (_, i) => `C${i + 1}`), ...Array.from({ length: 12 }, (_, i) => `T${i + 1}`),
   ...Array.from({ length: 5 }, (_, i) => `L${i + 1}`), 'S1'];
 

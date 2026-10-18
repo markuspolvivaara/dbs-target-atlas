@@ -622,7 +622,7 @@ test('cortex: label cards, lobes, surface switch and the URL', async ({ page }) 
 });
 
 // ---------------------------------------------------------------- spine section
-for (const [name, hash] of [['lumbar', 'r=lumbar&c=posteriorOblique'], ['lumbar-l4', 'r=lumbar&lv=L4&c=lateral'], ['lumbar-lesion', 'r=lumbar&lv=L4&les=L4-L5.paracentral.L&c=posteriorOblique'], ['lumbar-screw', 'r=lumbar&lv=L4&scr=tt~L~15.8~0~45~6.5~0~0&c=lateral'], ['thoracic', 'r=thoracic&c=posteriorOblique'], ['thoracic-t6', 'r=thoracic&lv=T6&c=lateral'], ['thoracic-approach', 'r=thoracic&lv=T8&ap=ctv.L&c=posteriorOblique'], ['cervical', 'r=cervical&c=lateral'], ['cervical-c5', 'r=cervical&lv=C5&c=coronal&ly=b1:0.30,d1,n1,v1,o0'], ['thoracic-screw', 'r=thoracic&lv=T8&scr=st~L~12.3~0~45~4.5~0~0&c=lateral'], ['cervical-screw', 'r=cervical&lv=C5&scr=mg~L~-25~51.7~20~3.5~0~0&c=lateral&ly=b1,d1,n1,v1,o0'], ['cervical-acdf', 'r=cervical&lv=C5&c=-98.8,283.3,475,-9.9,39,445&ly=b1,d1,n1,v1,o1:0.60&ap=acdf.L'], ['cervical-transarticular', 'r=cervical&lv=C2&scr=ta~L~10~67.3~42~3.5~0~0&c=lateral']] as const) {
+for (const [name, hash] of [['lumbar', 'r=lumbar&c=posteriorOblique'], ['lumbar-l4', 'r=lumbar&lv=L4&c=lateral'], ['lumbar-lesion', 'r=lumbar&lv=L4&les=L4-L5.paracentral.L&c=posteriorOblique'], ['lumbar-screw', 'r=lumbar&lv=L4&scr=tt~L~15.8~0~45~6.5~0~0&c=lateral'], ['thoracic', 'r=thoracic&c=posteriorOblique'], ['thoracic-t6', 'r=thoracic&lv=T6&c=lateral'], ['thoracic-approach', 'r=thoracic&lv=T8&ap=ctv.L&c=posteriorOblique'], ['cervical', 'r=cervical&c=lateral'], ['cervical-c5', 'r=cervical&lv=C5&c=coronal&ly=b1:0.30,d1,n1,v1,o0'], ['thoracic-screw', 'r=thoracic&lv=T8&scr=st~L~12.3~0~45~4.5~0~0&c=lateral'], ['cervical-screw', 'r=cervical&lv=C5&scr=mg~L~-25~51.7~20~3.5~0~0&c=lateral&ly=b1,d1,n1,v1,o0'], ['cervical-acdf', 'r=cervical&lv=C5&c=-98.8,283.3,475,-9.9,39,445&ly=b1,d1,n1,v1,o1:0.60&ap=acdf.L'], ['cervical-transarticular', 'r=cervical&lv=C2&scr=ta~L~10~67.3~42~3.5~0~0&c=lateral'], ['ccj', 'r=ccj&c=lateral&cm=mcrae']] as const) {
   test(`spine ${name}: renders and matches the visual baseline`, async ({ page }) => {
     const gd = guard(page);
     await page.goto(`./spine/#/atlas?${hash}`);
@@ -633,6 +633,32 @@ for (const [name, hash] of [['lumbar', 'r=lumbar&c=posteriorOblique'], ['lumbar-
     expect(gd.errors).toEqual([]);
   });
 }
+
+test('spine: craniocervical junction — its own CT, the measurements on its midsagittal CT, the link', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./spine/#/atlas?r=cervical');
+  await settle(page);
+  await page.locator('.grp-chips .chip[data-v="ccj"]').click();
+  await expect.poll(() => new URL(page.url()).hash).toContain('r=ccj');
+  await expect(page.locator('.level-chips')).toHaveCount(0);
+  await expect(page.locator('.card.ccj')).toContainText('Measurements in the midsagittal plane');
+  await expect(page).toHaveTitle(/Craniocervical junction/);
+  // no measurement picked: the image has no lines; picking one draws it, gives its value and Fidan's normal values
+  await expect(page.locator('.ccj-img line')).toHaveCount(0);
+  await page.locator('.ccj-measures .chip', { hasText: 'BDI' }).click();
+  await expect.poll(() => new URL(page.url()).hash).toContain('cm=bdi');
+  await expect(page.locator('.ccj-img line')).toHaveCount(1);
+  await expect(page.locator('.ccj-sel')).toContainText('On this CT:');
+  await expect(page.locator('.ccj-sel')).toContainText('Fidan 2026');
+  expect(await page.locator('.ccj-img img').evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
+  await page.locator('.ccj-measures .chip', { hasText: 'Clivus' }).click();
+  await expect(page.locator('.ccj-img line')).toHaveCount(2);
+  // back to a spine region: the junction's measurement leaves the link
+  await page.locator('.grp-chips .chip[data-v="cervical"]').click();
+  await expect.poll(() => new URL(page.url()).hash).not.toContain('cm=');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
 
 test('spine: thoracic region — levels, the root and the rib-head note on the level card', async ({ page }) => {
   const g = guard(page);
@@ -719,7 +745,15 @@ test('spine: cervical region — the C8 rule, the foramina transversaria, the ve
   await page.locator('.level-chips .chip[data-v="C1"]').click();
   await expect(page.locator('.screw-tech .chip')).toHaveText(['None', 'C1 lateral mass']);
   await page.locator('.level-chips .chip[data-v="C2"]').click();
-  await expect(page.locator('.screw-tech .chip')).toHaveText(['None', 'C2 pedicle', 'C2 pars', 'C2 translaminar', 'C1–C2 transarticular']);
+  await expect(page.locator('.screw-tech .chip')).toHaveText(['None', 'C2 pedicle', 'C2 pars', 'C2 translaminar', 'C1–C2 transarticular', 'Odontoid (anterior)']);
+  // the odontoid screw: one midline screw (no side), from the front, through the dens's apex
+  await page.locator('.screw-tech .chip', { hasText: 'Odontoid' }).click();
+  await expect(page.locator('.screw-side')).toHaveCount(0);
+  await expect(page.locator('#screw-medial + output')).toHaveText('midline');
+  await expect(page.locator('.screw-readout')).toContainText('Through the far cortex');
+  await expect(page.locator('.screw-readout')).toContainText('(bicortical)');
+  await expect(page.locator('.card.sel')).toContainText('Sung 2018');
+  await page.locator('.screw-tech .chip', { hasText: 'None' }).click();
   await expect(page.locator('.card.sel')).toContainText('High-riding vertebral artery?');
   await expect(page.locator('.card.sel')).toContainText('Kucherina 2026');
   await expect(page.locator('.card.sel a[href="../skullbase/"]')).toBeVisible();

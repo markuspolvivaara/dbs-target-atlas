@@ -507,6 +507,8 @@ PARS_ABOVE_JOINT = 3.5
 PARS_SPAN = (5.0, 18.0)             # mm along the screw (past its entry, to its length) kept in the most bone
 TL_MARGIN = 0.08                    # of the lamina's height: the left screw that far above its middle, the right below
 TL_ANGLES = (25.0, 65.0)            # deg from the midline searched for the lamina's axis (Zhou 2022: 49.4 +- 3.0)
+OD_DIAMETER = 4.0                   # odontoid screw: González-Vargas 2026, the size most used
+OD_APEX = 3.0                       # mm: the dens's tip, whose centre the odontoid screw aims at
 TA_MEDIAL = 10.0                    # transarticular: Kendirlioglu 2026 measured 11.4 +- 2.2 deg
 CC_DIAMETER = 3.5                   # Singh 2022: 3.5 mm screws at C2; Joaquim 2020 the same for C1
 # start lengths: the C1 lateral mass screw bicortical (Joaquim 2020: to the far cortex); the others with the tip 1 mm
@@ -799,6 +801,45 @@ def foramen_roof(labels, c: np.ndarray, F: np.ndarray, can: dict, sg: int) -> di
         return None
     return {"height": round(float((top - j + 1) * 0.25), 1), "lateralOfCanal": round(float(abs(rel[0]) - can["halfWidth"]), 1),
             "atlasAbove": bool(k < len(ws) and col[k] == 1)}
+
+
+def odontoid_start(bone: Bone, c: np.ndarray, F: np.ndarray) -> dict:
+    """Anterior odontoid screw start (Figà 2025, Sung 2018): in the midline, from the anterior-inferior point of the
+    body of the axis (here the bone in the midsagittal plane furthest forwards and down, at 45 deg) to the apex of the
+    dens (the centre of its top OD_APEX mm); the screw is meant to go through the apical cortex. "ventral": its angles are read
+    looking backwards, its breaches along its own line (breach_frame)."""
+    pts = nib.affines.apply_affine(bone.aff, np.argwhere(bone.sdf < 0))
+    rel = (pts - c) @ F.T
+    top = rel[np.abs(rel[:, 0]) < 6]
+    apex = top[top[:, 2] > top[:, 2].max() - OD_APEX].mean(0)    # the centre of the dens's tip
+    mid = rel[(np.abs(rel[:, 0] - apex[0]) < 1.0) & (rel[:, 2] < 0)]
+    if len(mid) < 50:
+        raise SystemExit("C2: the body's midsagittal outline was not found")
+    corner = mid[np.argmax(mid[:, 1] - mid[:, 2])]
+    corner[0] = apex[0]                                   # in the midline: no coronal deviation
+    d_rel = (apex - corner) / np.linalg.norm(apex - corner)
+    d = d_rel @ F
+    p = c + corner @ F
+    t = first_entry(bone, p - 15 * d, d, 35.0)
+    entry = p - 15 * d + (t if t is not None else 15.0) * d
+    out = leaves_bone(bone, entry + 1.5 * d, d, 70.0)
+    return {"entry": entry.round(2).tolist(), "dir": d.round(4).tolist(), "chord": round(float(out + 1.5), 1) if out else None,
+            "ventral": True, "apex": (c + apex @ F).round(2).tolist()}
+
+
+def breach_frame(F: np.ndarray, st: dict) -> np.ndarray:
+    """The frame a screw's breaches are named in (screw_result): the vertebra's, or for a ventral screw its own line
+    (src/spine/screw.ts breachFrame): 'anterior' along the screw (its far cortex), 'superior' / 'inferior' its
+    front and back walls, 'lateral' / 'medial' its sides."""
+    if not st.get("ventral"):
+        return F
+    ey = np.array(st["dir"], float)
+    ey /= np.linalg.norm(ey)
+    ex = F[0] - (F[0] @ ey) * ey
+    ex /= np.linalg.norm(ex)
+    ez = np.cross(ex, ey)
+    ez = ez if ez @ F[1] > 0 else -ez
+    return np.array([ex, ey, ez])
 
 
 def c1c2_bone(m: np.ndarray, ct: np.ndarray, aff: np.ndarray, vox: np.ndarray, o: np.ndarray) -> Bone:
@@ -1104,6 +1145,8 @@ def level_data(lv: str, region_name: str, m: np.ndarray, ct: np.ndarray, body_ma
         starts["c2pars"] = {sd: pars_start(labels, bone, c, F, can, sg) for sd, sg in (("L", -1), ("R", 1))}
         starts["c2p"] = {sd: c2_pedicle_start(labels, bone, c, F, can, sg) for sd, sg in (("L", -1), ("R", 1))}
         starts["c2tl"] = {sd: translaminar_start(bone, c, F, can, sg) for sd, sg in (("L", -1), ("R", 1))}
+        od = odontoid_start(bone, c, F)                   # one midline screw: the same on both sides
+        starts["od"] = {"L": od, "R": dict(od)}
         lvl["isthmus"] = {sd: {**isthmus_heights(labels, c, F, can, sg), "groove": foramen_roof(labels, c, F, can, sg)}
                           for sd, sg in (("L", -1), ("R", 1))}
         for sd in ("L", "R"):
@@ -1161,7 +1204,11 @@ def level_data(lv: str, region_name: str, m: np.ndarray, ct: np.ndarray, body_ma
     for tech, per in starts.items():
         for sd, sg in (("L", -1), ("R", 1)):
             st = per[sd]
-            if tech in ("c1lm", "c2p", "c2pars", "c2tl", "ta"):
+            if tech == "od":
+                if st.get("chord") is None:
+                    raise SystemExit(f"{lv}{sd} od: the start trajectory does not leave the bone ({st})")
+                dia, ln = OD_DIAMETER, float(np.ceil(st["chord"]))   # to the apex's cortex, through it
+            elif tech in ("c1lm", "c2p", "c2pars", "c2tl", "ta"):
                 if st.get("chord") is None:
                     raise SystemExit(f"{lv}{sd} {tech}: the start trajectory does not leave the bone ({st})")
                 ln = st["chord"] if tech == "c1lm" else min(st["chord"] - 1.0, CC_MAX_LENGTH.get(tech, 99.0))
@@ -1182,7 +1229,8 @@ def level_data(lv: str, region_name: str, m: np.ndarray, ct: np.ndarray, body_ma
                     length = max([x for x in CBT_LENGTHS if x <= st["trajectory"]], default=CBT_LENGTHS[0])
                 ln = length if length else st["chord"]
             st["size"] = {"diameter": dia, "length": ln}
-            checks[f"{tech}.{sd}"] = screw_result(shipped, F, sg, np.array(st["entry"]), np.array(st["dir"]), ln, dia / 2, risks_mm)
+            checks[f"{tech}.{sd}"] = screw_result(shipped, breach_frame(F, st), sg, np.array(st["entry"]), np.array(st["dir"]), ln,
+                                                  dia / 2, risks_mm)
     lvl["check"] = checks
     # binary: int8 distance field, then int16 risk points (0.1 mm)
     blob = bytearray(q.tobytes())
@@ -1230,7 +1278,10 @@ def validate(out: dict) -> list[str]:
             if lv in ("C1", "C2", "C1-C2"):
                 for tech, per in d["start"].items():
                     e = np.array(per[sd]["entry"]) - c
-                    if e @ F[1] > -3:
+                    if per[sd].get("ventral"):
+                        if e @ F[1] < 5:
+                            fails.append(f"{lv}{sd} {tech}: entry not in front of the {lv} ({(e @ F).round(1)})")
+                    elif e @ F[1] > -3:
                         fails.append(f"{lv}{sd} {tech}: entry not behind the {lv} ({(e @ F).round(1)})")
                     if not 8 <= per[sd]["size"]["length"] <= 50:
                         fails.append(f"{lv}{sd} {tech}: start length {per[sd]['size']['length']}")

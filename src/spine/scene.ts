@@ -23,7 +23,8 @@ export function spinePlan(s: Pick<SpineState, 'region' | 'level' | 'sel'> & Part
   }
   const looks = new Map<string, Look>();
   for (const st of SP_MANIFEST.structures) {
-    if (!inRegion.has(st.id)) { looks.set(st.id, st.category === 'vertebra' ? 'ghost' : 'hidden'); continue; }
+    // the junction is another CT: nothing of the whole-spine CT is drawn with it, not even as a ghost
+    if (!inRegion.has(st.id)) { looks.set(st.id, st.category === 'vertebra' && r.id !== 'ccj' ? 'ghost' : 'hidden'); continue; }
     const bone = st.category === 'vertebra' || st.category === 'bone';
     looks.set(st.id, !s.level || focus.has(st.id) || !bone ? 'primary' : 'context');
   }
@@ -51,13 +52,14 @@ export function spinePlan(s: Pick<SpineState, 'region' | 'level' | 'sel'> & Part
   const screwBone = s.screw && s.level ? vertebraOf(s.level) : undefined;
   if (screwBone) looks.set(screwBone.id, s.cut === 'screw' ? 'primary' : 'context');
   if (s.sel && SP.has(s.sel)) looks.set(s.sel, 'primary');
-  const focusIds = s.level ? [...focus] : r.structures.filter((id) => SP.get(id)?.category === 'vertebra' || id === 'sp_sacrum');
+  const focusIds = s.level ? [...focus] : r.id === 'ccj' ? r.structures.filter((id) => SP.get(id)?.category === 'bone')
+    : r.structures.filter((id) => SP.get(id)?.category === 'vertebra' || id === 'sp_sacrum');
   return {
-    title: s.level ? `${s.level}` : `${r.name} spine`, accent: 'spSafe', looks, tracts: new Map(), parcels: new Map(),
+    title: s.level ? `${s.level}` : r.title, accent: 'spSafe', looks, tracts: new Map(), parcels: new Map(),
     markers: [
       ...(s.lesion ? [{ targetId: lesionMarkerId(s.lesion.pair, s.lesion.zone, s.lesion.side), primary: true }] : []),
     ],
-    camera: r.camera, focusIds, minRadius: s.level ? 50 : 150, region: r.id, level: s.level,
+    camera: r.camera, focusIds, minRadius: s.level ? 50 : r.id === 'ccj' ? 85 : 150, region: r.id, level: s.level,
   };
 }
 

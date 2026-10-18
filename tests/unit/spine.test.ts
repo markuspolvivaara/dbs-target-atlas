@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { crossCheckSpine, discBelow, SP, SP_MANIFEST, SP_REFS, vertebraOf } from '../../src/spine';
 import published from '../../src/data/generated/spine-published.json';
 import {
-  ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, CERVICAL_GEOM, crossCheckContent, exitingRoot, exposureRegion, GEOM_BY_LEVEL,
+  ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, CCJ, CCJ_MEASURES, CERVICAL_GEOM, crossCheckContent, exitingRoot, exposureRegion, GEOM_BY_LEVEL,
   LESION_ZONES, LUMBAR_GEOM, NECK_LANDMARKS, ROOT_FUNCTION, STATEMENTS, THORACIC_GEOM, VERTEBRAL_ARTERY,
 } from '../../src/spine/content';
 import { REGION, REGIONS } from '../../src/spine/regions';
@@ -243,5 +243,44 @@ describe('cervical region (phase 2a)', () => {
     expect(p.looks.get('sp_l4')).not.toBe('primary');
     expect(SP.get('sp_trachea')!.layer).toBe('viscera');
     expect(SP.get('sp_cca_left')!.layer).toBe('vessels');
+  });
+});
+
+describe('spine craniocervical junction (its own CT)', () => {
+  it('is a region of its own: the occiput, C1-C3 and the canal contents, nothing of the whole-spine CT, not even ghosted', () => {
+    const r = REGION.get('ccj')!;
+    expect(r.ready).toBe(true);
+    expect(r.levels).toEqual([]);
+    expect([...r.structures].sort()).toEqual(['sp_ccj_c1', 'sp_ccj_c2', 'sp_ccj_c3', 'sp_ccj_dural_sac', 'sp_ccj_occiput']);
+    const p = spinePlan({ ...defaultSpineState(), region: 'ccj' });
+    for (const st of SP_MANIFEST.structures) expect(p.looks.get(st.id), st.id).toBe(r.structures.includes(st.id) ? 'primary' : 'hidden');
+    // and the junction is never drawn with the other regions
+    for (const reg of ['lumbar', 'thoracic', 'cervical'] as const) {
+      const q = spinePlan({ ...defaultSpineState(), region: reg });
+      for (const id of r.structures) expect(q.looks.get(id), `${reg} ${id}`).toBe('hidden');
+    }
+  });
+
+  it('its measurements lie within the ranges of 500 adults; its landmarks are in place; each measurement is sourced', () => {
+    const m = CCJ.measurements;
+    const range: Record<string, [number, number]> = { adi: [0.36, 2.92], padi: [13.11, 26.81], mcrae: [28.53, 43.11], bdi: [1.66, 9.34], bai: [2.54, 11.34], cca: [116.03, 179.62] };
+    for (const [k, [lo, hi]] of Object.entries(range)) { expect(m[k as 'adi'], k).toBeGreaterThanOrEqual(lo); expect(m[k as 'adi'], k).toBeLessThanOrEqual(hi); }
+    expect(m.densBelowMcRae).toBeGreaterThan(0);
+    const L = CCJ.landmarks;
+    expect(Math.hypot(...L.densTip)).toBeLessThan(1);           // the origin
+    expect(L.basion[1]).toBeGreaterThan(L.opisthion[1]);        // the basion in front of the opisthion
+    expect(L.basion[2]).toBeGreaterThan(L.densTip[2]);          // and above the dens
+    expect(Math.hypot(L.basion[1] - L.opisthion[1], L.basion[2] - L.opisthion[2])).toBeCloseTo(m.mcrae, 0);
+    expect(Math.hypot(L.basion[1] - L.densTip[1], L.basion[2] - L.densTip[2])).toBeCloseTo(m.bdi, 0);
+    expect(CCJ_MEASURES.map((x) => x.id).sort()).toEqual(['adi', 'bai', 'bdi', 'cca', 'mcrae', 'padi']);
+    for (const x of CCJ_MEASURES) for (const st of [x.definition, x.normal]) expect(st.refIds.every((r) => SP_REFS.has(r)), x.id).toBe(true);
+    expect(CCJ.image.file).toBe('assets/spine/ccj_midsag.png');
+  });
+
+  it('the measurement shown is in the link, and only in the junction', () => {
+    const s = { ...defaultSpineState(), region: 'ccj' as const, measure: 'bdi' as const };
+    expect(decodeSpine(encodeSpine(s)).measure).toBe('bdi');
+    expect(decodeSpine('#/atlas?r=cervical&cm=bdi').measure).toBeNull();
+    expect(decodeSpine('#/atlas?r=ccj&cm=nonsense').measure).toBeNull();
   });
 });

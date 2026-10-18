@@ -122,11 +122,13 @@ def main() -> int:
     hcp = fetch_hcp1065()
     zan = fetch_zanatomy()
     verse = fetch_verse()
+    verse_ccj = fetch_verse(VERSE_CCJ_SUBJECT, VERSE_CCJ_FILES)
     (RAW / "sources.lock.json").write_text(json.dumps(
         {"archive": LEADDBS_DATA_ZIP, "files": record,
          "hcp1065": {"release": C.HCP1065_RELEASE, "files": hcp},
          "zanatomy": {"source": ZANATOMY_URL, "files": zan},
-         "verse": {"subject": VERSE_SUBJECT, "files": verse}}, indent=1))
+         "verse": {"subject": VERSE_SUBJECT, "files": verse},
+         "verseCcj": {"subject": VERSE_CCJ_SUBJECT, "files": verse_ccj}}, indent=1))
     print(f"{len(record)} files ready in {RAW}")
     return 0
 
@@ -181,13 +183,21 @@ VERSE_FILES = {
     "sub-verse823_dir-iso_seg-vert_msk.nii.gz": ("https://osf.io/download/9j5qz/", "bc12746141863b8d44b0c7903bc6c50f5a43ddd96f2bce1463c387ef6ecb630b"),
     "sub-verse823_dir-iso_seg-subreg_ctd.json": ("https://osf.io/download/j7dtw/", "71f0d225a54a2b5aaed152b1fe95568017a0229d77796a09f083654843ee3b46"),
 }
+# the craniocervical junction: a cervical VerSe CT that reaches the clivus (0.27 x 0.27 x 1.25 mm, C1-T3), as downloaded
+# 2026-10-18
+VERSE_CCJ_SUBJECT = "sub-gl090"
+VERSE_CCJ_FILES = {
+    "sub-gl090_dir-ax_ct.nii.gz": ("https://osf.io/download/m8qbj/", "a0d12d93b17a7a229fc7fe9d3072b8ba063da4faaef6b3657da08f880dbbb916"),
+    "sub-gl090_dir-ax_seg-vert_msk.nii.gz": ("https://osf.io/download/sh9v2/", "0e27e9df7e6764e968026bcf265a2de0a33b901f15b87798f33f4e9e28952586"),
+    "sub-gl090_dir-ax_seg-subreg_ctd.json": ("https://osf.io/download/gz3eu/", "28cfc1b2c10e4e908a4cd0445d235bcd7745fd54d8afd4cd8c18bd4e08061f2d"),
+}
 
 
-def fetch_verse() -> dict[str, str]:
-    out = RAW / "verse" / VERSE_SUBJECT
+def fetch_verse(subject: str = VERSE_SUBJECT, files: dict = VERSE_FILES) -> dict[str, str]:
+    out = RAW / "verse" / subject
     out.mkdir(parents=True, exist_ok=True)
     record = {}
-    for name, (url, sha) in VERSE_FILES.items():
+    for name, (url, sha) in files.items():
         dest = out / name
         if not dest.exists():
             print(f"fetch {name}")

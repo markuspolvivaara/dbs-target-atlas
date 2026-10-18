@@ -20,7 +20,7 @@ const Isthmus = z.object({
 const LateralMassSchema = z.object({ width: z.number(), height: z.number(), facetInclination: z.array(z.number()), centre: V3 });
 const StartSchema = z.object({
   entry: V3, dir: V3, chord: z.number().nullable().optional(), trajectory: z.number().optional(), promontory: V3.optional(), bodyDepth: z.number().optional(),
-  sagittal: z.number().optional(),
+  sagittal: z.number().optional(), ventral: z.boolean().optional(), apex: V3.optional(),
   size: z.object({ diameter: z.number(), length: z.number() }),
 });
 const Side = z.object({ L: StartSchema, R: StartSchema });
@@ -35,6 +35,7 @@ const LevelSchema = z.object({
     tt: Side.optional(), cbt: Side.optional(), s1: Side.optional(), st: Side.optional(), at: Side.optional(),
     rc: Side.optional(), mg: Side.optional(), an: Side.optional(), cp: Side.optional(),
     c1lm: Side.optional(), c2p: Side.optional(), c2pars: Side.optional(), c2tl: Side.optional(), ta: Side.optional(),
+    od: Side.optional(),
   }),
   isthmus: z.object({ L: Isthmus, R: Isthmus }).optional(),
   lateralMass: z.object({ L: LateralMassSchema, R: LateralMassSchema }).optional(),
@@ -48,7 +49,7 @@ export type Pedicle = z.infer<typeof PedicleSchema>;
 export type Check = z.infer<typeof CheckSchema>;
 export const SCREW_LEVELS: Record<string, ScrewLevel> = z.object({ levels: z.record(LevelSchema) }).parse(screwJson).levels;
 
-export type TechniqueId = 'tt' | 'cbt' | 's1' | 'st' | 'at' | 'rc' | 'mg' | 'an' | 'cp' | 'c1lm' | 'c2p' | 'c2pars' | 'c2tl' | 'ta';
+export type TechniqueId = 'tt' | 'cbt' | 's1' | 'st' | 'at' | 'rc' | 'mg' | 'an' | 'cp' | 'c1lm' | 'c2p' | 'c2pars' | 'c2tl' | 'ta' | 'od';
 /** The data a technique's screw is checked against: its level's, except the transarticular screw, which crosses the
  * atlanto-axial joint (the atlas and axis together). */
 const DATA_KEY: Partial<Record<TechniqueId, string>> = { ta: 'C1-C2' };
@@ -64,18 +65,41 @@ const dot = (a: V3, b: V3) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const norm = (a: V3) => Math.hypot(a[0], a[1], a[2]);
 const DEG = Math.PI / 180;
 
-/** Direction into the bone from a transverse angle (medial convergence positive) and a sagittal angle (cranial
- * positive), in the level's frame (as spine_screw.direction). */
-export function direction(lv: ScrewLevel, sd: ScrewSide, medial: number, cranial: number): V3 {
+type Frame = { ex: V3; ey: V3; ez: V3 };
+const ventral = (lv: ScrewLevel, tech?: TechniqueId) => !!(tech && lv.start[tech]?.L.ventral);
+
+/** The frame a technique's angles are read in: the level's, looking backwards for a screw from the front (the
+ * odontoid screw), so its angles too are 0 straight into the bone and positive cranially. */
+export function angleFrame(lv: ScrewLevel, tech?: TechniqueId): Frame {
   const { ex, ey, ez } = lv.frame;
+  return ventral(lv, tech) ? { ex, ey: mul(ey, -1), ez } : { ex, ey, ez };
+}
+
+/** The frame a screw's breaches are named in (spine_screw.breach_frame): the level's, or for a screw from the front
+ * its own start line: 'anterior' along it (its far cortex), 'superior' / 'inferior' its front and back walls. */
+export function breachFrame(lv: ScrewLevel, tech: TechniqueId | undefined, sd: ScrewSide): Frame {
+  if (!ventral(lv, tech)) return lv.frame;
+  const d = lv.start[tech!]![sd].dir;
+  const ey = mul(d, 1 / norm(d));
+  let ex = sub(lv.frame.ex, mul(ey, dot(lv.frame.ex, ey)));
+  ex = mul(ex, 1 / norm(ex));
+  let ez: V3 = [ex[1] * ey[2] - ex[2] * ey[1], ex[2] * ey[0] - ex[0] * ey[2], ex[0] * ey[1] - ex[1] * ey[0]];
+  if (dot(ez, lv.frame.ey) < 0) ez = mul(ez, -1);
+  return { ex, ey, ez };
+}
+
+/** Direction into the bone from a transverse angle (medial convergence positive) and a sagittal angle (cranial
+ * positive), in the technique's angle frame (as spine_screw.direction). */
+export function direction(lv: ScrewLevel, sd: ScrewSide, medial: number, cranial: number, tech?: TechniqueId): V3 {
+  const { ex, ey, ez } = angleFrame(lv, tech);
   const m = medial * DEG, c = cranial * DEG, sg = sideSign(sd);
   const d = add(mul(add(mul(ey, Math.cos(m)), mul(ex, -sg * Math.sin(m))), Math.cos(c)), mul(ez, Math.sin(c)));
   return mul(d, 1 / norm(d));
 }
 
 /** The angles of a direction (as spine_screw.angles). */
-export function anglesOf(lv: ScrewLevel, sd: ScrewSide, d: V3): { medial: number; cranial: number } {
-  const { ex, ey, ez } = lv.frame;
+export function anglesOf(lv: ScrewLevel, sd: ScrewSide, d: V3, tech?: TechniqueId): { medial: number; cranial: number } {
+  const { ex, ey, ez } = angleFrame(lv, tech);
   return {
     medial: Math.atan2(-sideSign(sd) * dot(d, ex), dot(d, ey)) / DEG,
     cranial: Math.asin(Math.max(-1, Math.min(1, dot(d, ez)))) / DEG,
@@ -163,9 +187,10 @@ export function grRobbins(mm: number): ScrewResult['grade'] {
 }
 
 /** Breaches and the nearest structures at risk for a screw from `entry` along `d` (spine_screw.screw_result). */
-export function evaluate(f: ScrewField, lv: ScrewLevel, sd: ScrewSide, entry: V3, d: V3, length: number, radius: number, nearestN = 3): ScrewResult {
+export function evaluate(f: ScrewField, lv: ScrewLevel, sd: ScrewSide, entry: V3, d: V3, length: number, radius: number, nearestN = 3,
+  tech?: TechniqueId): ScrewResult {
   const sg = sideSign(sd);
-  const { ex, ey, ez } = lv.frame;
+  const { ex, ey, ez } = breachFrame(lv, tech, sd);
   const ts: number[] = [];
   for (let k = 0; k * 0.5 <= length + 1e-6; k++) ts.push(k * 0.5);
   const pts = ts.map((t) => add(entry, mul(d, t)));
@@ -229,7 +254,7 @@ export function movedEntry(f: ScrewField | null, lv: ScrewLevel, sd: ScrewSide, 
 export function screwDefaults(level: string, tech: TechniqueId, sd: ScrewSide) {
   const lv = SCREW_LEVELS[screwKey(level, tech)];
   const st = lv.start[tech]![sd];
-  const a = anglesOf(lv, sd, st.dir);
+  const a = anglesOf(lv, sd, st.dir, tech);
   const r1 = (n: number) => Math.round(n * 10) / 10 + 0; // + 0: no negative zero (a link would bring back 0)
   return { tech, side: sd, medial: r1(a.medial), cranial: r1(a.cranial), length: r1(st.size.length), diameter: st.size.diameter, du: 0, dw: 0 };
 }
@@ -238,7 +263,7 @@ export function screwDefaults(level: string, tech: TechniqueId, sd: ScrewSide) {
 export function screwAxis(level: string, c: { tech: TechniqueId; side: ScrewSide; medial: number; cranial: number; du: number; dw: number }): { entry: V3; dir: V3 } {
   const lv = SCREW_LEVELS[screwKey(level, c.tech)];
   const st = lv.start[c.tech]![c.side];
-  const dir = direction(lv, c.side, c.medial, c.cranial);
+  const dir = direction(lv, c.side, c.medial, c.cranial, c.tech);
   return { entry: movedEntry(null, lv, c.side, st.entry, dir, c.du, c.dw), dir };
 }
 

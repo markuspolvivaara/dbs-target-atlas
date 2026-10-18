@@ -20,7 +20,10 @@ const SLIDERS: [Key, string][] = [
 ];
 const one = (n: number) => (Math.round(n * 10) / 10).toFixed(1).replace(/\.0$/, '');
 
-function format(k: Key, v: number): string {
+function format(k: Key, v: number, midline = false): string {
+  // a midline screw (always the 'left' one): a positive angle or shift turns it to the patient's right
+  if (midline && k === 'medial') return !v ? 'midline' : `${one(Math.abs(v))}° to the ${v > 0 ? 'right' : 'left'}`;
+  if (midline && k === 'du') return v ? `${one(Math.abs(v))} mm ${v > 0 ? 'right' : 'left'}` : 'start';
   switch (k) {
     case 'medial': return !v ? 'straight ahead' : v > 0 ? `${one(v)}° medial` : `${one(-v)}° lateral`;
     case 'cranial': return !v ? 'parallel to the endplate' : v > 0 ? `${one(v)}° cranial` : `${one(-v)}° caudal`;
@@ -94,7 +97,7 @@ export class ScrewPanel {
     const techs = Object.values(TECHNIQUES).filter((t) => t.levels.includes(level));
     this.el.append(chips<TechniqueId | 'none'>([['none', 'None'], ...techs.map((t): [TechniqueId, string] => [t.id, t.name])], s.screw?.tech ?? 'none',
       (v) => this.update((st) => {
-        st.screw = v === 'none' ? null : screwDefaults(level, v, st.screw?.side ?? 'L');
+        st.screw = v === 'none' ? null : screwDefaults(level, v, TECHNIQUES[v as TechniqueId]?.midline ? 'L' : st.screw?.side ?? 'L');
         if (v === 'none' && st.cut === 'screw') st.cut = 'none';
       }), { label: 'Screw technique', cls: 'screw-tech' }));
     const c = s.screw;
@@ -104,15 +107,15 @@ export class ScrewPanel {
     }
     const t = TECHNIQUES[c.tech];
     this.el.append(
-      chips<'L' | 'R'>([['L', 'Left'], ['R', 'Right']], c.side, (v) => this.update((st) => { st.screw = screwDefaults(level, c.tech, v); }), { label: 'Screw side', cls: 'screw-side' }),
-      h('div', { class: 'screw-sliders' }, ...SLIDERS.flatMap(([k, label]) => {
+      t.midline ? '' : chips<'L' | 'R'>([['L', 'Left'], ['R', 'Right']], c.side, (v) => this.update((st) => { st.screw = screwDefaults(level, c.tech, v); }), { label: 'Screw side', cls: 'screw-side' }),
+      h('div', { class: 'screw-sliders' }, ...SLIDERS.map(([k, label]): [Key, string] => [k, t.midline && k === 'du' ? 'Entry, left / right' : label]).flatMap(([k, label]) => {
         const [lo, hi, step] = SCREW_RANGE[k];
         const id = `screw-${k}`;
         const input = h('input', {
           type: 'range', id, min: lo, max: hi, step, value: c[k],
           oninput: (e: Event) => { const v = Number((e.target as HTMLInputElement).value); this.update((st) => { if (st.screw) st.screw[k] = v; }); },
         }) as HTMLInputElement;
-        const out = h('output', { for: id }, format(k, c[k])) as HTMLOutputElement;
+        const out = h('output', { for: id }, format(k, c[k], t.midline)) as HTMLOutputElement;
         this.inputs.set(k, { input, out });
         return [h('label', { for: id }, label), input, out];
       })),
@@ -132,7 +135,7 @@ export class ScrewPanel {
       h('p', { class: 'aside schematic-note' }, 'Illustrative: one subject’s CT, not a plan for a patient.'),
       this.stmt(t.start), this.stmt(t.size), t.note ? this.stmt(t.note) : '',
       SCREW_LEVELS[level].pedicle ? this.stmt(STATEMENTS.fill) : '',
-      this.stmt(!t.within ? STATEMENTS.grades : level === 'C1' || level === 'C2' ? STATEMENTS.hrva : STATEMENTS.lateralMassRisk),
+      t.id === 'od' ? '' : this.stmt(!t.within ? STATEMENTS.grades : level === 'C1' || level === 'C2' ? STATEMENTS.hrva : STATEMENTS.lateralMassRisk),
       this.stmt(STATEMENTS.screwMethod),
     );
   }
@@ -143,7 +146,7 @@ export class ScrewPanel {
     if (!c || !level) { this.draw(''); return; }
     for (const [k, { input, out }] of this.inputs) {
       if (Number(input.value) !== c[k]) input.value = String(c[k]);
-      out.textContent = format(k, c[k]);
+      out.textContent = format(k, c[k], TECHNIQUES[c.tech].midline);
     }
     const key = screwKey(level, c.tech);
     if (!this.field || this.field.level !== key) {
@@ -156,9 +159,9 @@ export class ScrewPanel {
       return;
     }
     const lv = SCREW_LEVELS[key];
-    const d = direction(lv, c.side, c.medial, c.cranial);
+    const d = direction(lv, c.side, c.medial, c.cranial, c.tech);
     const entry = movedEntry(this.field, lv, c.side, lv.start[c.tech]![c.side].entry, d, c.du, c.dw);
-    const r = evaluate(this.field, lv, c.side, entry, d, c.length, c.diameter / 2);
+    const r = evaluate(this.field, lv, c.side, entry, d, c.length, c.diameter / 2, 3, c.tech);
     this.showResult(c, r, lv.pedicle?.[c.side].width);
     this.draw(JSON.stringify([level, c]), () => screwObject(entry, d, c.length, c.diameter / 2, Object.values(r.where)));
   }
@@ -171,9 +174,9 @@ export class ScrewPanel {
 
   private showResult(c: ScrewState, r: ScrewResult, pedicleWidth?: number): void {
     const wall = (['medial', 'lateral', 'superior', 'inferior'] as BreachDir[]).filter((k) => r.breach[k]).sort((a, b) => r.breach[b]! - r.breach[a]!);
-    const word = (k: BreachDir) => (k === 'superior' ? 'cranial' : k === 'inferior' ? 'caudal' : k);
-    const ant = r.breach.anterior;
     const t = TECHNIQUES[c.tech];
+    const word = (k: BreachDir) => t.breachWords?.[k as 'medial'] ?? (k === 'superior' ? 'cranial' : k === 'inferior' ? 'caudal' : k);
+    const ant = r.breach.anterior;
     const near = r.nearest.map((n) => {
       const sch = SP.get(n.id)?.schematic ? ' (schematic)' : '';
       return `${this.name(n.id)}${sch} ${n.mm <= 0 ? 'touched or crossed' : `${one(n.mm)} mm`}`;

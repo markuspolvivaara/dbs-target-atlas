@@ -155,7 +155,7 @@ export const ManifestStructureSchema = z.object({
   layer: z.enum(['nuclei', 'tracts', 'cortex', 'targets', 'discs', 'vessels', 'viscera']).optional(),
   /** spine section: vertebral level ('L4', 'L4-L5') and region */
   level: z.string().optional(),
-  region: z.enum(['cervical', 'thoracic', 'lumbar']).optional(),
+  region: z.enum(['cervical', 'thoracic', 'lumbar', 'ccj']).optional(),
   /** drawn by rule from the anatomy and published descriptions, not segmented: the UI must say so */
   schematic: z.boolean().optional(),
   /** white-matter section: core (surgical essentials), extended, or posterior fossa */

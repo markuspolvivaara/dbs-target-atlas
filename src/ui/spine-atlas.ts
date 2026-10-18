@@ -3,8 +3,9 @@ import type { CameraPreset } from '../data/schema';
 import type { Hemi } from '../state';
 import { discBelow, LEVEL_ORDER, SP, SP_MANIFEST, SP_REFS, vertebraOf } from '../spine';
 import {
-  ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, exitingRoot, exposureRegion, GEOM_BY_LEVEL, LESION_ZONES, NECK_LANDMARKS,
-  ROOT_FUNCTION, STATEMENTS, VERTEBRAL_ARTERY, type ApproachId, type LesionZone, type LevelGeom, type Statement,
+  ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, CCJ, CCJ_MEASURES, exitingRoot, exposureRegion, GEOM_BY_LEVEL, LESION_ZONES,
+  NECK_LANDMARKS, ROOT_FUNCTION, STATEMENTS, VERTEBRAL_ARTERY, type ApproachId, type CcjMeasure, type CcjMeasureId, type LesionZone,
+  type LevelGeom, type Statement,
 } from '../spine/content';
 import { bodyChart } from './body-chart';
 import { ScrewPanel } from './spine-screw';
@@ -68,6 +69,83 @@ function approachCamera(g: LevelGeom, deg: number, side: 'L' | 'R'): SpineState[
   const t = g.discCentre;
   const a = (deg * Math.PI) / 180, sx = side === 'L' ? -1 : 1, d = 230;
   return { preset: null, pos: [t[0] + sx * d * Math.sin(a), t[1] - d * Math.cos(a), t[2] + 30], tgt: [...t] };
+}
+
+/** A measurement's value on the junction's CT, as the card gives it. */
+function ccjValue(x: CcjMeasure): string {
+  const v = CCJ.measurements[x.id];
+  if (x.unit === '°') return `${Math.round(v)}°`;
+  const one = (n: number) => n.toFixed(1);
+  if (x.id !== 'mcrae') return `${one(v)} mm`;
+  const b = CCJ.measurements.densBelowMcRae;
+  return `${one(v)} mm; the dens’s tip ${one(Math.abs(b))} mm ${b >= 0 ? 'below' : 'above'} it`;
+}
+
+/** The segments and points of a junction measurement (its landmarks, in the junction's midsagittal plane). */
+function ccjLines(id: CcjMeasureId): { segs: [number[], number[]][]; pts: number[][] } {
+  const L = CCJ.landmarks;
+  const segs = {
+    adi: [L.adi], padi: [L.padi], mcrae: [[L.basion, L.opisthion]], bdi: [[L.basion, L.densTip]],
+    bai: [L.axialLine, [L.basion, L.axialLine[1]]], cca: [L.clivusLine, L.axialLine],
+  }[id] as [number[], number[]][];
+  return { segs, pts: [...(id === 'mcrae' ? [L.densTip] : []), ...segs.flat()] };
+}
+
+/** The midsagittal CT with a measurement's lines over it (an SVG on the image, in its pixels). */
+function ccjFigure(id: CcjMeasureId | null): HTMLElement {
+  const im = CCJ.image;
+  const px = (p: number[]) => [(im.left - p[1]) * im.pxPerMm, (im.top - p[2]) * im.pxPerMm];
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', `0 0 ${im.width} ${im.height}`);
+  svg.setAttribute('aria-hidden', 'true');
+  if (id) {
+    const { segs, pts } = ccjLines(id);
+    for (const [a, b] of segs) {
+      const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      const [x1, y1] = px(a), [x2, y2] = px(b);
+      Object.entries({ x1, y1, x2, y2 }).forEach(([k, v]) => l.setAttribute(k, v.toFixed(1)));
+      svg.append(l);
+    }
+    for (const p of pts) {
+      const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      const [cx, cy] = px(p);
+      Object.entries({ cx, cy, r: 3 }).forEach(([k, v]) => c.setAttribute(k, v.toFixed(1)));
+      svg.append(c);
+    }
+  }
+  return h('figure', { class: 'ccj-fig' },
+    h('div', { class: 'ccj-img' }, h('img', { src: `../${im.file}`, width: im.width, height: im.height, alt: 'Midsagittal CT of the craniocervical junction (anterior on the left)' }), svg),
+    h('figcaption', { class: 'aside' }, `Midsagittal CT of this scan (${im.slab} mm slab, bone window), anterior on the left.`));
+}
+
+/** How much a value moves with the midsagittal plane moved up to 1 mm to either side. */
+function ccjRange(x: CcjMeasure): string {
+  const [lo, hi] = CCJ.range[x.id];
+  const f = (v: number) => (x.unit === '°' ? `${Math.round(v)}°` : `${v.toFixed(1)} mm`);
+  return lo === hi ? ' (the same with the plane moved up to 1 mm to either side)' : ` (${f(lo)} to ${f(hi)} with the plane moved up to 1 mm to either side)`;
+}
+
+/** The lines of a junction measurement drawn over the bone. */
+function ccjObjects(id: CcjMeasureId): THREE.Object3D[] {
+  const { segs, pts } = ccjLines(id);
+  const mat = () => new THREE.MeshBasicMaterial({ depthTest: false, transparent: true, opacity: 0.95 });
+  const out: THREE.Object3D[] = [];
+  const v = (p: number[]) => new THREE.Vector3(p[0], p[1], p[2]);
+  for (const [a, b] of segs) {
+    const A = v(a), Bv = v(b);
+    const len = A.distanceTo(Bv);
+    const cyl = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, len, 12), mat());
+    cyl.position.copy(A.clone().add(Bv).multiplyScalar(0.5));
+    cyl.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), Bv.clone().sub(A).normalize());
+    out.push(cyl);
+  }
+  for (const p of pts) {
+    const m = new THREE.Mesh(new THREE.SphereGeometry(0.9, 16, 12), mat());
+    m.position.copy(v(p));
+    out.push(m);
+  }
+  for (const o of out) { o.renderOrder = 7; o.userData.token = 'spCaution'; }
+  return out;
 }
 
 export class SpineAtlasPage {
@@ -208,11 +286,40 @@ export class SpineAtlasPage {
     this.stage.querySelectorAll<HTMLButtonElement>('[data-hemi]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.hemi === s.hemi)));
     this.stage.querySelectorAll<HTMLButtonElement>('.toolbar [data-labels]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.labels === s.labels)));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((b) => b.toggleAttribute('data-active', b.dataset.preset === s.cam.preset));
-    const key = `${s.region}|${s.level}|${s.sel}|${s.hidden.join(',')}|${JSON.stringify(s.lesion)}|${s.cut}|${s.screw?.tech}|${s.screw?.side}|${JSON.stringify(s.approach)}|${Object.values(s.layers).map((l) => (l?.on ? 1 : 0)).join('')}`;
+    const key = `${s.region}|${s.level}|${s.sel}|${s.hidden.join(',')}|${JSON.stringify(s.lesion)}|${s.cut}|${s.screw?.tech}|${s.screw?.side}|${JSON.stringify(s.approach)}|${s.measure}|${Object.values(s.layers).map((l) => (l?.on ? 1 : 0)).join('')}`;
     if (key !== this.lastKey || !prev) { this.lastKey = key; this.renderOverview(); }
     this.screw.render(s);
+    this.drawCcj(s);
     this.renderLayers();
     if (prev && prev.sel !== s.sel && s.sel) this.selectTab('overview', false);
+  }
+
+  private ccjDrawn = '';
+  /** The junction's selected measurement over the bone (after the screw panel, which shares the overlay). */
+  private drawCcj(s: SpineState): void {
+    const key = s.region === 'ccj' && s.measure ? s.measure : '';
+    if (key === this.ccjDrawn) return;
+    this.ccjDrawn = key;
+    this.viewer.setOverlay(key ? ccjObjects(key as CcjMeasureId) : []);
+  }
+
+  private ccjCard(): HTMLElement {
+    const s = this.s;
+    const sel = CCJ_MEASURES.find((x) => x.id === s.measure);
+    return h('article', { class: 'card ccj' },
+      h('p', { class: 'eyebrow' }, 'Craniocervical junction'),
+      h('h2', {}, 'Measurements in the midsagittal plane'),
+      h('p', { class: 'aside' }, `Measured on this CT between landmarks within ${CCJ.slab} mm of its midsagittal plane: the basion and the opisthion, the tip and borders of the dens, the arches of C1, the back of the C2 body and the clivus (${Math.round(CCJ.clivusMm)} mm of it in the scan). Its slices are 1.25 mm thick, so heights are known to about a millimetre.`),
+      chips<CcjMeasureId | 'none'>([['none', 'None'], ...CCJ_MEASURES.map((x): [CcjMeasureId, string] => [x.id, x.short])],
+        s.measure ?? 'none', (v) => this.update((st) => { st.measure = v === 'none' ? null : v; }), { label: 'Measurement', cls: 'ccj-measures' }),
+      ccjFigure(s.measure),
+      sel ? h('div', { class: 'ccj-sel' },
+        h('h3', {}, sel.name),
+        h('p', { class: 'ccj-value' }, h('strong', {}, 'On this CT: '), ccjValue(sel), ccjRange(sel)),
+        this.stmt(sel.definition), this.stmt(sel.normal)) : '',
+      h('dl', { class: 'facts' }, ...CCJ_MEASURES.flatMap((x) => [h('dt', {}, x.name), h('dd', {}, ccjValue(x))])),
+      h('p', { class: 'aside' }, 'For the screws and the vertebral artery at C1 and C2, see the cervical region; for the skull base itself, ',
+        h('a', { href: '../skullbase/' }, 'the skull base section'), '.'));
   }
 
   private renderOverview(): void {
@@ -225,13 +332,18 @@ export class SpineAtlasPage {
     pane.append(h('p', { class: 'chips-label' }, 'Region'),
       h('div', { class: 'chips grp-chips', role: 'group', 'aria-label': 'Region' }, ...REGIONS.map((x) => h('button', {
         type: 'button', class: 'chip', 'aria-pressed': String(x.id === r.id), 'data-v': x.id, disabled: !x.ready,
-        title: x.ready ? undefined : 'Not built yet', onclick: () => this.update((st) => { st.region = x.id; st.level = null; st.lesion = null; st.screw = null; st.approach = null; st.sel = null; st.cam = { preset: null }; }, { camera: true }),
+        title: x.ready ? undefined : 'Not built yet', onclick: () => this.update((st) => {
+          st.region = x.id; st.level = null; st.lesion = null; st.screw = null; st.approach = null; st.sel = null; st.measure = null; st.cam = { preset: null };
+          st.hemi = 'both';
+          st.cutSide = 'none';
+        }, { camera: true }),
       }, x.name, x.ready ? '' : ' (later)'))));
-    pane.append(h('p', { class: 'chips-label' }, 'Level'),
+    if (r.levels.length) pane.append(h('p', { class: 'chips-label' }, 'Level'),
       chips<string>([['all', 'All'], ...r.levels.map((l): [string, string] => [l, l])], s.level ?? 'all',
         (v) => this.update((st) => { st.level = v === 'all' ? null : v; st.lesion = null; st.screw = null; st.approach = null; st.sel = null; st.cam = { preset: null }; }, { camera: true }), { label: 'Level', cls: 'grp-chips level-chips' }));
     if (s.sel) pane.append(this.card(s.sel));
     else if (s.level) pane.append(this.levelCard(s.level));
+    else if (r.id === 'ccj') pane.append(this.ccjCard());
     // structures of the region by category, each with a show / hide toggle
     const isOff = offTest(s);
     const show = (ids: string[], on: boolean) => this.update((st) => showIds(st, ids, on));
@@ -262,9 +374,9 @@ export class SpineAtlasPage {
     }
     const regionCard = h('article', { class: 'card' },
       h('p', { class: 'eyebrow' }, 'Region'),
-      h('h2', {}, `${r.name} spine`),
+      h('h2', {}, r.title),
       h('p', {}, r.description),
-      h('p', { class: 'aside' }, SP_MANIFEST.dataset.note));
+      h('p', { class: 'aside' }, r.id === 'ccj' ? CCJ.note : SP_MANIFEST.dataset.note));
     if (s.sel || s.level) pane.append(h('details', { class: 'more' }, h('summary', {}, `About the ${r.name.toLowerCase()} region`), regionCard));
     else pane.append(regionCard);
   }
@@ -637,7 +749,7 @@ export class SpineAtlasPage {
   private showReadout(ras: THREE.Vector3 | null): void {
     if (!ras) return;
     clear(this.readout);
-    this.readout.append(h('span', { class: 'k' }, 'From the L5 body centre'), ` x ${fmtMm(ras.x)}  y ${fmtMm(ras.y)}  z ${fmtMm(ras.z)} mm`);
+    this.readout.append(h('span', { class: 'k' }, this.s.region === 'ccj' ? 'From the tip of the dens' : 'From the L5 body centre'), ` x ${fmtMm(ras.x)}  y ${fmtMm(ras.y)}  z ${fmtMm(ras.z)} mm`);
   }
 
   private toggleMeasure(): void {
@@ -680,8 +792,8 @@ export class SpineAtlasPage {
     const regionIds = REGION.get(s.region)?.structures ?? [];
     for (const [k] of LAYERS) {
       const row = pane.querySelector<HTMLElement>(`[data-layer="${k}"]`)!;
-      // the neck's vessels and soft tissue are drawn in the cervical region only
-      row.hidden = (k === 'vessels' || k === 'viscera') && !regionIds.some((id) => SP.get(id)?.layer === k);
+      // the neck's vessels and soft tissue are drawn in the cervical region only, discs not in the junction
+      row.hidden = (k === 'vessels' || k === 'viscera' || k === 'discs') && !regionIds.some((id) => SP.get(id)?.layer === k);
       (row.querySelector('input[type=checkbox]') as HTMLInputElement).checked = s.layers[k]!.on;
       (row.querySelector('input[type=range]') as HTMLInputElement).value = String(s.layers[k]!.opacity);
     }
@@ -698,6 +810,7 @@ export class SpineAtlasPage {
     if (k === 'n' || k === 'N') { this.update((s) => { s.labels = s.labels === 'hover' ? 'all' : s.labels === 'all' ? 'off' : 'hover'; }); return true; }
     if (k === 'ArrowUp' || k === 'ArrowDown') {
       const lv = REGION.get(this.s.region)!.levels;
+      if (!lv.length) return false;
       const i = this.s.level ? lv.indexOf(this.s.level) : (k === 'ArrowUp' ? lv.length : -1);
       const j = Math.max(0, Math.min(lv.length - 1, i + (k === 'ArrowUp' ? -1 : 1)));
       this.update((s) => { s.level = lv[j]; s.lesion = null; s.screw = null; s.approach = null; s.sel = null; s.cam = { preset: null }; }, { camera: true });
