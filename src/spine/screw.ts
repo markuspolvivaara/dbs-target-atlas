@@ -13,8 +13,14 @@ const PedicleSchema = z.object({
   width: z.number(), height: z.number(), transverseAngle: z.number(), sagittalAngle: z.number(), chord: z.number(),
   inscribedRadius: z.number(), isthmus: V3, isthmusUvw: V3, entry: V3, dir: V3,
 });
+const Isthmus = z.object({
+  isthmusHeight: z.number(),
+  groove: z.object({ height: z.number(), lateralOfCanal: z.number(), atlasAbove: z.boolean() }),
+});
+const LateralMassSchema = z.object({ width: z.number(), height: z.number(), facetInclination: z.array(z.number()), centre: V3 });
 const StartSchema = z.object({
-  entry: V3, dir: V3, chord: z.number().optional(), trajectory: z.number().optional(), promontory: V3.optional(),
+  entry: V3, dir: V3, chord: z.number().nullable().optional(), trajectory: z.number().optional(), promontory: V3.optional(), bodyDepth: z.number().optional(),
+  sagittal: z.number().optional(),
   size: z.object({ diameter: z.number(), length: z.number() }),
 });
 const Side = z.object({ L: StartSchema, R: StartSchema });
@@ -25,7 +31,13 @@ const CheckSchema = z.object({
 const LevelSchema = z.object({
   frame: z.object({ origin: V3, ex: V3, ey: V3, ez: V3 }),
   pedicle: z.object({ L: PedicleSchema, R: PedicleSchema }).optional(),
-  start: z.object({ tt: Side.optional(), cbt: Side.optional(), s1: Side.optional() }),
+  start: z.object({
+    tt: Side.optional(), cbt: Side.optional(), s1: Side.optional(), st: Side.optional(), at: Side.optional(),
+    rc: Side.optional(), mg: Side.optional(), an: Side.optional(), cp: Side.optional(),
+    c1lm: Side.optional(), c2p: Side.optional(), c2pars: Side.optional(), c2tl: Side.optional(), ta: Side.optional(),
+  }),
+  isthmus: z.object({ L: Isthmus, R: Isthmus }).optional(),
+  lateralMass: z.object({ L: LateralMassSchema, R: LateralMassSchema }).optional(),
   check: z.record(CheckSchema),
   risk: z.array(z.object({ id: z.string(), offset: z.number().int(), count: z.number().int() })),
   sdf: z.object({ origin: V3, dims: V3, step: z.number(), scale: z.number(), clamp: z.number(), offset: z.number() }),
@@ -36,7 +48,11 @@ export type Pedicle = z.infer<typeof PedicleSchema>;
 export type Check = z.infer<typeof CheckSchema>;
 export const SCREW_LEVELS: Record<string, ScrewLevel> = z.object({ levels: z.record(LevelSchema) }).parse(screwJson).levels;
 
-export type TechniqueId = 'tt' | 'cbt' | 's1';
+export type TechniqueId = 'tt' | 'cbt' | 's1' | 'st' | 'at' | 'rc' | 'mg' | 'an' | 'cp' | 'c1lm' | 'c2p' | 'c2pars' | 'c2tl' | 'ta';
+/** The data a technique's screw is checked against: its level's, except the transarticular screw, which crosses the
+ * atlanto-axial joint (the atlas and axis together). */
+const DATA_KEY: Partial<Record<TechniqueId, string>> = { ta: 'C1-C2' };
+export const screwKey = (level: string, tech: TechniqueId) => DATA_KEY[tech] ?? level;
 export type ScrewSide = 'L' | 'R';
 export const sideSign = (sd: ScrewSide) => (sd === 'L' ? -1 : 1);
 
@@ -211,16 +227,16 @@ export function movedEntry(f: ScrewField | null, lv: ScrewLevel, sd: ScrewSide, 
 
 /** A technique's start position as screw settings: angles from its start direction, its start size, no entry shift. */
 export function screwDefaults(level: string, tech: TechniqueId, sd: ScrewSide) {
-  const lv = SCREW_LEVELS[level];
+  const lv = SCREW_LEVELS[screwKey(level, tech)];
   const st = lv.start[tech]![sd];
   const a = anglesOf(lv, sd, st.dir);
-  const r1 = (n: number) => Math.round(n * 10) / 10;
+  const r1 = (n: number) => Math.round(n * 10) / 10 + 0; // + 0: no negative zero (a link would bring back 0)
   return { tech, side: sd, medial: r1(a.medial), cranial: r1(a.cranial), length: r1(st.size.length), diameter: st.size.diameter, du: 0, dw: 0 };
 }
 
 /** Entry (before it is put back on the bone surface) and direction of a screw's settings. */
 export function screwAxis(level: string, c: { tech: TechniqueId; side: ScrewSide; medial: number; cranial: number; du: number; dw: number }): { entry: V3; dir: V3 } {
-  const lv = SCREW_LEVELS[level];
+  const lv = SCREW_LEVELS[screwKey(level, c.tech)];
   const st = lv.start[c.tech]![c.side];
   const dir = direction(lv, c.side, c.medial, c.cranial);
   return { entry: movedEntry(null, lv, c.side, st.entry, dir, c.du, c.dw), dir };
@@ -229,7 +245,7 @@ export function screwAxis(level: string, c: { tech: TechniqueId; side: ScrewSide
 /** The plane along a screw, cut open from above: through its axis, its normal the level's cranial axis made
  * perpendicular to the screw; and a camera position looking down onto it. */
 export function screwCut(level: string, c: Parameters<typeof screwAxis>[1] & { length: number }): { normal: V3; point: V3; camera: V3 } {
-  const lv = SCREW_LEVELS[level];
+  const lv = SCREW_LEVELS[screwKey(level, c.tech)];
   const { entry, dir } = screwAxis(level, c);
   const ez = lv.frame.ez;
   let n = sub(ez, mul(dir, dot(ez, dir)));

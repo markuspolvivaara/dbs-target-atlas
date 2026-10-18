@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { SP, SP_REFS } from '../spine';
 import { STATEMENTS, TECHNIQUES, type Statement } from '../spine/content';
 import {
-  direction, evaluate, loadField, movedEntry, SCREW_LEVELS, screwCut, screwDefaults, type BreachDir, type ScrewField, type ScrewResult,
+  direction, evaluate, loadField, movedEntry, SCREW_LEVELS, screwCut, screwDefaults, screwKey, type BreachDir, type ScrewField, type ScrewResult,
   type TechniqueId, type V3,
 } from '../spine/screw';
 import { SCREW_RANGE, type ScrewState, type SpineState } from '../spine/state';
@@ -131,7 +131,9 @@ export class ScrewPanel {
       this.readout,
       h('p', { class: 'aside schematic-note' }, 'Illustrative: one subject’s CT, not a plan for a patient.'),
       this.stmt(t.start), this.stmt(t.size), t.note ? this.stmt(t.note) : '',
-      this.stmt(STATEMENTS.grades), this.stmt(STATEMENTS.screwMethod),
+      SCREW_LEVELS[level].pedicle ? this.stmt(STATEMENTS.fill) : '',
+      this.stmt(!t.within ? STATEMENTS.grades : level === 'C1' || level === 'C2' ? STATEMENTS.hrva : STATEMENTS.lateralMassRisk),
+      this.stmt(STATEMENTS.screwMethod),
     );
   }
 
@@ -143,20 +145,21 @@ export class ScrewPanel {
       if (Number(input.value) !== c[k]) input.value = String(c[k]);
       out.textContent = format(k, c[k]);
     }
-    if (!this.field || this.field.level !== level) {
-      if (this.loading !== level) {
-        this.loading = level;
+    const key = screwKey(level, c.tech);
+    if (!this.field || this.field.level !== key) {
+      if (this.loading !== key) {
+        this.loading = key;
         this.readout.textContent = 'Loading the bone of this level…';
-        loadField(level).then((f) => { this.field = f; this.loading = null; if (this.last) this.refresh(this.last); })
+        loadField(key).then((f) => { this.field = f; this.loading = null; if (this.last) this.refresh(this.last); })
           .catch(() => { this.loading = null; this.readout.textContent = 'Could not load the bone of this level.'; });
       }
       return;
     }
-    const lv = SCREW_LEVELS[level];
+    const lv = SCREW_LEVELS[key];
     const d = direction(lv, c.side, c.medial, c.cranial);
     const entry = movedEntry(this.field, lv, c.side, lv.start[c.tech]![c.side].entry, d, c.du, c.dw);
     const r = evaluate(this.field, lv, c.side, entry, d, c.length, c.diameter / 2);
-    this.showResult(c, r);
+    this.showResult(c, r, lv.pedicle?.[c.side].width);
     this.draw(JSON.stringify([level, c]), () => screwObject(entry, d, c.length, c.diameter / 2, Object.values(r.where)));
   }
 
@@ -166,10 +169,11 @@ export class ScrewPanel {
     this.setOverlay(objs ? objs() : []);
   }
 
-  private showResult(c: ScrewState, r: ScrewResult): void {
+  private showResult(c: ScrewState, r: ScrewResult, pedicleWidth?: number): void {
     const wall = (['medial', 'lateral', 'superior', 'inferior'] as BreachDir[]).filter((k) => r.breach[k]).sort((a, b) => r.breach[b]! - r.breach[a]!);
     const word = (k: BreachDir) => (k === 'superior' ? 'cranial' : k === 'inferior' ? 'caudal' : k);
     const ant = r.breach.anterior;
+    const t = TECHNIQUES[c.tech];
     const near = r.nearest.map((n) => {
       const sch = SP.get(n.id)?.schematic ? ' (schematic)' : '';
       return `${this.name(n.id)}${sch} ${n.mm <= 0 ? 'touched or crossed' : `${one(n.mm)} mm`}`;
@@ -177,11 +181,14 @@ export class ScrewPanel {
     clear(this.readout);
     this.readout.append(
       h('p', { class: 'screw-grade' },
-        h('span', { class: 'grade', style: `--g: var(--c-${GRADE_TOKEN[r.grade]})`, title: 'Gertzbein–Robbins grade' }, r.grade), ' ',
-        wall.length ? `${word(wall[0]).replace(/^./, (x) => x.toUpperCase())} breach ${one(r.breach[wall[0]]!)} mm` : 'No breach of the pedicle wall',
+        // the Gertzbein-Robbins grade is for pedicle screws; other screws' breaches are given by direction only
+        t.within ? '' : [h('span', { class: 'grade', style: `--g: var(--c-${GRADE_TOKEN[r.grade]})`, title: 'Gertzbein–Robbins grade' }, r.grade), ' '],
+        wall.length ? `${word(wall[0]).replace(/^./, (x) => x.toUpperCase())} breach ${one(r.breach[wall[0]]!)} mm` : t.within ? `Within the ${t.within}` : 'No breach of the pedicle wall',
         wall.length > 1 ? `; also ${wall.slice(1).map((k) => `${word(k)} ${one(r.breach[k]!)} mm`).join(', ')}` : ''),
-      ant ? h('p', {}, `Tip ${one(ant)} mm beyond the anterior cortex${c.tech === 's1' ? ' (meant, for a tricortical screw)' : ''}.`) : '',
+      ant ? h('p', {}, t.within ? `Through the far cortex by ${one(ant)} mm${t.bicortical ? ' (bicortical)' : ''}.`
+        : `Through the anterior cortex by ${one(ant)} mm${c.tech === 's1' ? ' (meant, for a tricortical screw)' : ''}.`) : '',
       h('p', {}, r.inside ? `Wholly inside the bone from ${one(r.seated)} mm after the entry.` : 'Never wholly inside the bone.'),
+      pedicleWidth ? h('p', {}, `Diameter ${Math.round((100 * c.diameter) / pedicleWidth)}% of the pedicle’s measured width (${one(pedicleWidth)} mm).`) : '',
       near.length ? h('p', {}, 'Nearest: ', near.join(' · '), '.') : '',
     );
   }

@@ -184,6 +184,514 @@
  "sources": {
   "wang2023": "Tables 2 and 3: mean pedicle width and height by level and region (mm)",
   "moncadahabib2025": "Table 2: pedicle transverse angle (angle between the pedicle axis and the vertebral midline), mean +- SD",
-  "nkwerem2024": "Table 1: transverse angle per level, mean +- SD"
+  "nkwerem2024": "Table 1: transverse angle per level, mean +- SD",
+  "kshettry2015": "Abstract, results: share of the ventral canal's width exposed after each successive resection, per region (%)",
+  "jiang2024": "Table 1: the C7 pedicle axis (trajectory A) per side, mean +- SD; Table 4: C7 transverse and sagittal angles of earlier studies (means)",
+  "verma2020": "Tables 1-4: thoracic pedicle width, height (mm), transverse and sagittal angle (deg) per level, mean of each study compared (the last column: Verma 2020's own)"
+ },
+ "thoracic": {
+  "T1": {
+   "widthStudyMeans": {
+    "Datir & Mitra": 7.3,
+    "Scoles et al.": 7.3,
+    "Chaynes et al.": 8.3,
+    "Kim et al.": 8.1,
+    "Singh et al.": 7.72,
+    "Kaur et al.": 9.27,
+    "Verma et al.": 7.69
+   },
+   "heightStudyMeans": {
+    "Datir & Mitra": 9.4,
+    "Scoles et al.": 9.2,
+    "Singh et al.": 8.6,
+    "Verma et al.": 8.77
+   },
+   "transverseAngleStudyMeans": {
+    "Datir & Mitra": 30.0,
+    "Scoles et al.": 29.8,
+    "Chaynes et al.": 27.5,
+    "Zindrick et al.": 27.0,
+    "Singh et al.": 31.8,
+    "Kaur et al.": 35.4,
+    "Verma et al.": 30.37
+   },
+   "sagittalAngleStudyMeans": {
+    "Datir & Mitra": 9.6,
+    "Zindrick et al.": 12.6,
+    "Singh et al.": 15.03,
+    "Verma et al.": 14.0
+   }
+  },
+  "T2": {
+   "widthStudyMeans": {
+    "Datir & Mitra": 6.3,
+    "Chaynes et al.": 6.5,
+    "Kim et al.": 6.1,
+    "Singh et al.": 6.22,
+    "Kaur et al.": 7.5,
+    "Verma et al.": 5.7
+   },
+   "heightStudyMeans": {
+    "Datir & Mitra": 12.1,
+    "Singh et al.": 10.58,
+    "Verma et al.": 10.32
+   },
+   "transverseAngleStudyMeans": {
+    "Datir & Mitra": 19.0,
+    "Chaynes et al.": 17.3,
+    "Zindrick et al.": 20.0,
+    "Singh et al.": 25.8,
+    "Kaur et al.": 26.21,
+    "Verma et al.": 26.27
+   },
+   "sagittalAngleStudyMeans": {
+    "Datir & Mitra": 11.8,
+    "Zindrick et al.": 17.5,
+    "Singh et al.": 16.9,
+    "Verma et al.": 19.2
+   }
+  },
+  "T3": {
+   "widthStudyMeans": {
+    "Datir & Mitra": 5.2,
+    "Scoles et al.": 3.9,
+    "Chaynes et al.": 5.9,
+    "Kim et al.": 4.6,
+    "Singh et al.": 5.03,
+    "Kaur et al.": 6.0,
+    "Verma et al.": 4.19
+   },
+   "heightStudyMeans": {
+    "Datir & Mitra": 12.2,
+    "Scoles et al.": 11.8,
+    "Singh et al.": 11.39,
+    "Verma et al.": 10.47
+   },
+   "transverseAngleStudyMeans": {
+    "Datir & Mitra": 12.0,
+    "Scoles et al.": 15.3,
+    "Chaynes et al.": 13.0,
+    "Zindrick et al.": 15.0,
+    "Singh et al.": 20.79,
+    "Kaur et al.": 20.01,
+    "Verma et al.": 24.43
+   },
+   "sagittalAngleStudyMeans": {
+    "Datir & Mitra": 10.4,
+    "Zindrick et al.": 17.3,
+    "Singh et al.": 17.6,
+    "Verma et al.": 16.5
+   }
+  },
+  "T4": {
+   "widthStudyMeans": {
+    "Datir & Mitra": 4.8,
+    "Chaynes et al.": 5.4,
+    "Vaccaro et al.": 4.5,
+    "Kim et al.": 4.2,
+    "Singh et al.": 4.53,
+    "Kaur et al.": 4.5,
+    "Verma et al.": 3.69
+   },
+   "heightStudyMeans": {
+    "Datir & Mitra": 11.8,
+    "Vaccaro et al.": 10.1,
+    "Singh et al.": 11.09,
+    "Verma et al.": 10.43
+   },
+   "transverseAngleStudyMeans": {
+    "Datir & Mitra": 6.0,
+    "Chaynes et al.": 8.1,
+    "Vaccaro et al.": 14.0,
+    "Zindrick et al.": 13.0,
+    "Singh et al.": 8.12,
+    "Kaur et al.": 19.06,
+    "Verma et al.": 17.4
+   },
+   "sagittalAngleStudyMeans": {
+    "Datir & Mitra": 8.9,
+    "Zindrick et al.": 16.3,
+    "Singh et al.": 16.7,
+    "Verma et al.": 17.5
+   }
+  },
+  "T5": {
+   "widthStudyMeans": {
+    "Datir & Mitra": 4.7,
+    "Chaynes et al.": 4.9,
+    "Vaccaro et al.": 4.4,
+    "Kim et al.": 4.3,
+    "Singh et al.": 4.22,
+    "Kaur et al.": 5.0,
+    "Verma et al.": 3.65
+   },
+   "heightStudyMeans": {
+    "Datir & Mitra": 11.6,
+    "Vaccaro et al.": 10.6,
+    "Singh et al.": 10.86,
+    "Verma et al.": 10.38
+   },
+   "transverseAngleStudyMeans": {
+    "Datir & Mitra": 4.0,
+    "Chaynes et al.": 6.8,
+    "Vaccaro et al.": 13.0,
+    "Zindrick et al.": 9.0,
+    "Singh et al.": 15.5,
+    "Kaur et al.": 16.0,
+    "Verma et al.": 23.32
+   },
+   "sagittalAngleStudyMeans": {
+    "Datir & Mitra": 9.4,
+    "Zindrick et al.": 15.0,
+    "Singh et al.": 16.2,
+    "Verma et al.": 15.4
+   }
+  },
+  "T6": {
+   "widthStudyMeans": {
+    "Datir & Mitra": 5.0,
+    "Scoles et al.": 3.5,
+    "Chaynes et al.": 5.1,
+    "Vaccaro et al.": 4.6,
+    "Kim et al.": 4.7,
+    "Singh et al.": 4.58,
+    "Kaur et al.": 5.5,
+    "Verma et al.": 3.88
+   },
+   "heightStudyMeans": {
+    "Datir & Mitra": 11.7,
+    "Vaccaro et al.": 10.1,
+    "Scoles et al.": 11.5,
+    "Singh et al.": 10.85,
+    "Verma et al.": 10.13
+   },
+   "transverseAngleStudyMeans": {
+    "Datir & Mitra": 3.0,
+    "Scoles et al.": 10.2,
+    "Chaynes et al.": 6.7,
+    "Vaccaro et al.": 9.0,
+    "Zindrick et al.": 10.0,
+    "Singh et al.": 13.06,
+    "Kaur et al.": 14.38,
+    "Verma et al.": 15.84
+   },
+   "sagittalAngleStudyMeans": {
+    "Datir & Mitra": 8.2,
+    "Zindrick et al.": 15.0,
+    "Singh et al.": 15.2,
+    "Verma et al.": 16.8
+   }
+  },
+  "T7": {
+   "widthStudyMeans": {
+    "Datir & Mitra": 5.4,
+    "Chaynes et al.": 5.7,
+    "Vaccaro et al.": 4.7,
+    "Kim et al.": 4.8,
+    "Singh et al.": 4.82,
+    "Kaur et al.": 6.0,
+    "Verma et al.": 4.47
+   },
+   "heightStudyMeans": {
+    "Datir & Mitra": 12.5,
+    "Vaccaro et al.": 10.8,
+    "Singh et al.": 11.2,
+    "Verma et al.": 10.46
+   },
+   "transverseAngleStudyMeans": {
+    "Datir & Mitra": 1.0,
+    "Chaynes et al.": 7.2,
+    "Vaccaro et al.": 7.0,
+    "Zindrick et al.": 9.0,
+    "Singh et al.": 12.25,
+    "Kaur et al.": 11.82,
+    "Verma et al.": 12.71
+   },
+   "sagittalAngleStudyMeans": {
+    "Datir & Mitra": 9.2,
+    "Zindrick et al.": 15.7,
+    "Singh et al.": 16.2,
+    "Verma et al.": 14.4
+   }
+  },
+  "T8": {
+   "widthStudyMeans": {
+    "Datir & Mitra": 5.4,
+    "Chaynes et al.": 6.4,
+    "Vaccaro et al.": 5.1,
+    "Kim et al.": 5.1,
+    "Singh et al.": 4.82,
+    "Kaur et al.": 6.32,
+    "Verma et al.": 4.79
+   },
+   "heightStudyMeans": {
+    "Datir & Mitra": 13.2,
+    "Vaccaro et al.": 11.1,
+    "Singh et al.": 11.75,
+    "Verma et al.": 10.94
+   },
+   "transverseAngleStudyMeans": {
+    "Datir & Mitra": 1.0,
+    "Chaynes et al.": 7.1,
+    "Vaccaro et al.": 7.0,
+    "Zindrick et al.": 8.0,
+    "Singh et al.": 11.22,
+    "Kaur et al.": 12.29,
+    "Verma et al.": 14.35
+   },
+   "sagittalAngleStudyMeans": {
+    "Datir & Mitra": 8.6,
+    "Zindrick et al.": 16.6,
+    "Singh et al.": 15.6,
+    "Verma et al.": 13.8
+   }
+  },
+  "T9": {
+   "widthStudyMeans": {
+    "Datir & Mitra": 5.9,
+    "Hou et al.": 6.0,
+    "Scoles et al.": 3.9,
+    "Chaynes et al.": 6.4,
+    "Vaccaro et al.": 5.8,
+    "Kim et al.": 5.2,
+    "Singh et al.": 5.33,
+    "Kaur et al.": 6.28,
+    "Verma et al.": 5.35
+   },
+   "heightStudyMeans": {
+    "Datir & Mitra": 14.4,
+    "Hou et al.": 12.5,
+    "Vaccaro et al.": 12.3,
+    "Scoles et al.": 12.9,
+    "Singh et al.": 12.81,
+    "Verma et al.": 12.41
+   },
+   "transverseAngleStudyMeans": {
+    "Datir & Mitra": 1.0,
+    "Scoles et al.": 9.2,
+    "Chaynes et al.": 0.9,
+    "Vaccaro et al.": 7.0,
+    "Zindrick et al.": 8.0,
+    "Singh et al.": 10.09,
+    "Kaur et al.": 11.21,
+    "Verma et al.": 10.96
+   },
+   "sagittalAngleStudyMeans": {
+    "Datir & Mitra": 7.6,
+    "Zindrick et al.": 16.0,
+    "Singh et al.": 14.8,
+    "Verma et al.": 12.7
+   }
+  },
+  "T10": {
+   "widthStudyMeans": {
+    "Datir & Mitra": 6.7,
+    "Hou et al.": 7.0,
+    "Chaynes et al.": 7.4,
+    "Vaccaro et al.": 6.7,
+    "Kim et al.": 6.3,
+    "Singh et al.": 6.1,
+    "Kaur et al.": 6.54,
+    "Verma et al.": 5.8
+   },
+   "heightStudyMeans": {
+    "Datir & Mitra": 16.6,
+    "Hou et al.": 14.4,
+    "Vaccaro et al.": 14.1,
+    "Singh et al.": 14.22,
+    "Verma et al.": 13.73
+   },
+   "transverseAngleStudyMeans": {
+    "Datir & Mitra": 1.0,
+    "Chaynes et al.": 7.7,
+    "Vaccaro et al.": 4.0,
+    "Zindrick et al.": 5.0,
+    "Singh et al.": 8.78,
+    "Kaur et al.": 8.7,
+    "Verma et al.": 8.42
+   },
+   "sagittalAngleStudyMeans": {
+    "Datir & Mitra": 5.5,
+    "Zindrick et al.": 16.8,
+    "Singh et al.": 10.7,
+    "Verma et al.": 13.1
+   }
+  },
+  "T11": {
+   "widthStudyMeans": {
+    "Datir & Mitra": 8.2,
+    "Hou et al.": 8.6,
+    "Chaynes et al.": 9.3,
+    "Vaccaro et al.": 8.0,
+    "Kim et al.": 7.9,
+    "Singh et al.": 7.36,
+    "Kaur et al.": 7.84,
+    "Verma et al.": 7.39
+   },
+   "heightStudyMeans": {
+    "Datir & Mitra": 17.7,
+    "Hou et al.": 16.4,
+    "Vaccaro et al.": 15.0,
+    "Singh et al.": 15.55,
+    "Verma et al.": 14.94
+   },
+   "transverseAngleStudyMeans": {
+    "Datir & Mitra": 0.0,
+    "Chaynes et al.": 0.8,
+    "Vaccaro et al.": 1.0,
+    "Zindrick et al.": 1.0,
+    "Singh et al.": -1.4,
+    "Kaur et al.": -2.3,
+    "Verma et al.": 8.07
+   },
+   "sagittalAngleStudyMeans": {
+    "Datir & Mitra": 6.3,
+    "Zindrick et al.": 15.4,
+    "Singh et al.": 7.77,
+    "Verma et al.": 12.4
+   }
+  },
+  "T12": {
+   "widthStudyMeans": {
+    "Datir & Mitra": 8.7,
+    "Hou et al.": 8.8,
+    "Scoles et al.": 7.4,
+    "Chaynes et al.": 8.9,
+    "Vaccaro et al.": 7.8,
+    "Kim et al.": 7.9,
+    "Singh et al.": 7.94,
+    "Kaur et al.": 8.31,
+    "Verma et al.": 7.89
+   },
+   "heightStudyMeans": {
+    "Datir & Mitra": 18.7,
+    "Hou et al.": 17.1,
+    "Vaccaro et al.": 14.7,
+    "Scoles et al.": 16.0,
+    "Singh et al.": 15.53,
+    "Verma et al.": 15.45
+   },
+   "transverseAngleStudyMeans": {
+    "Datir & Mitra": 0.0,
+    "Scoles et al.": 9.5,
+    "Chaynes et al.": 2.0,
+    "Vaccaro et al.": 0.0,
+    "Zindrick et al.": 4.0,
+    "Singh et al.": -10.01,
+    "Kaur et al.": -9.8,
+    "Verma et al.": 7.19
+   },
+   "sagittalAngleStudyMeans": {
+    "Datir & Mitra": 8.5,
+    "Zindrick et al.": 11.6,
+    "Singh et al.": 3.92,
+    "Verma et al.": 9.5
+   }
+  }
+ },
+ "approachExposure": {
+  "T1-T2": {
+   "laminectomy": 25.8,
+   "medialFacetectomy": 31.5,
+   "transpedicular": 42.3,
+   "costotransversectomy": 45.1,
+   "lateralExtracavitary": 46.8
+  },
+  "T3-T6": {
+   "laminectomy": 19.1,
+   "medialFacetectomy": 29.6,
+   "transpedicular": 38.7,
+   "costotransversectomy": 44.4,
+   "lateralExtracavitary": 44.5
+  },
+  "T7-T10": {
+   "laminectomy": 17.9,
+   "medialFacetectomy": 30.6,
+   "transpedicular": 39.9,
+   "costotransversectomy": 44.9,
+   "lateralExtracavitary": 53.3
+  },
+  "T11-T12": {
+   "laminectomy": 14.2,
+   "medialFacetectomy": 25.8,
+   "transpedicular": 43.1,
+   "costotransversectomy": 47.7,
+   "lateralExtracavitary": 52.7
+  }
+ },
+ "cervical": {
+  "C7": {
+   "axisJiang": {
+    "transverseAngle": {
+     "R": [
+      32.0,
+      4.6
+     ],
+     "L": [
+      33.6,
+      5.5
+     ]
+    },
+    "sagittalAngle": {
+     "R": [
+      32.8,
+      8.0
+     ],
+     "L": [
+      32.4,
+      8.4
+     ]
+    },
+    "length": {
+     "R": [
+      32.1,
+      3.3
+     ],
+     "L": [
+      32.9,
+      3.7
+     ]
+    },
+    "width": {
+     "R": [
+      5.5,
+      1.0
+     ],
+     "L": [
+      5.5,
+      1.1
+     ]
+    },
+    "height": {
+     "R": [
+      5.5,
+      1.0
+     ],
+     "L": [
+      5.6,
+      1.0
+     ]
+    },
+    "n": 53
+   },
+   "studyMeans": {
+    "transverseAngle": {
+     "Rao 2008": 33.5,
+     "Zheng 2009": 34.0,
+     "Lee 2010": 28.0,
+     "Desai 2010": 27.1,
+     "Jang 2011": 35.1,
+     "Liao 2015": 41.1,
+     "Tse 2016": 29.4,
+     "Mahiphot 2019": 39.4,
+     "Moser 2019": 33.4
+    },
+    "sagittalAngle": {
+     "Rao 2008": -2.8,
+     "Lee 2010": -2.0,
+     "Mahiphot 2019": -5.6
+    }
+   }
+  }
  }
 }

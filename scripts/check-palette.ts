@@ -132,6 +132,16 @@ for (const g of WM.groups.filter((x) => x.kind !== 'all')) {
     pairs.get(k)!.add('spine: lumbar');
   }
 }
+// spine section, cervical: the neck's vessels and soft tissue (viscera and muscles share one colour) drawn with the
+// bone, cord and roots
+{
+  const list = ['spBone', 'spDisc', 'spCord', 'spRoot', 'spRisk', 'spArtery', 'spVein', 'spSoft'];
+  for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
+    const k = `${list[i]}|${list[j]}`;
+    if (!pairs.has(k)) pairs.set(k, new Set());
+    pairs.get(k)!.add('spine: cervical');
+  }
+}
 const cvd: string[] = [];
 const MIN_DE = 10;
 for (const t of ['light', 'dark'] as const) {

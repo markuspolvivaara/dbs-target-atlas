@@ -622,7 +622,7 @@ test('cortex: label cards, lobes, surface switch and the URL', async ({ page }) 
 });
 
 // ---------------------------------------------------------------- spine section
-for (const [name, hash] of [['lumbar', 'r=lumbar&c=posteriorOblique'], ['lumbar-l4', 'r=lumbar&lv=L4&c=lateral'], ['lumbar-lesion', 'r=lumbar&lv=L4&les=L4-L5.paracentral.L&c=posteriorOblique'], ['lumbar-screw', 'r=lumbar&lv=L4&scr=tt~L~15.8~0~45~6.5~0~0&c=lateral']] as const) {
+for (const [name, hash] of [['lumbar', 'r=lumbar&c=posteriorOblique'], ['lumbar-l4', 'r=lumbar&lv=L4&c=lateral'], ['lumbar-lesion', 'r=lumbar&lv=L4&les=L4-L5.paracentral.L&c=posteriorOblique'], ['lumbar-screw', 'r=lumbar&lv=L4&scr=tt~L~15.8~0~45~6.5~0~0&c=lateral'], ['thoracic', 'r=thoracic&c=posteriorOblique'], ['thoracic-t6', 'r=thoracic&lv=T6&c=lateral'], ['thoracic-approach', 'r=thoracic&lv=T8&ap=ctv.L&c=posteriorOblique'], ['cervical', 'r=cervical&c=lateral'], ['cervical-c5', 'r=cervical&lv=C5&c=coronal&ly=b1:0.30,d1,n1,v1,o0'], ['thoracic-screw', 'r=thoracic&lv=T8&scr=st~L~12.3~0~45~4.5~0~0&c=lateral'], ['cervical-screw', 'r=cervical&lv=C5&scr=mg~L~-25~51.7~20~3.5~0~0&c=lateral&ly=b1,d1,n1,v1,o0'], ['cervical-acdf', 'r=cervical&lv=C5&c=-98.8,283.3,475,-9.9,39,445&ly=b1,d1,n1,v1,o1:0.60&ap=acdf.L'], ['cervical-transarticular', 'r=cervical&lv=C2&scr=ta~L~10~67.3~42~3.5~0~0&c=lateral']] as const) {
   test(`spine ${name}: renders and matches the visual baseline`, async ({ page }) => {
     const gd = guard(page);
     await page.goto(`./spine/#/atlas?${hash}`);
@@ -633,6 +633,24 @@ for (const [name, hash] of [['lumbar', 'r=lumbar&c=posteriorOblique'], ['lumbar-
     expect(gd.errors).toEqual([]);
   });
 }
+
+test('spine: thoracic region — levels, the root and the rib-head note on the level card', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./spine/#/atlas?r=lumbar');
+  await settle(page);
+  await page.locator('.grp-chips .chip[data-v="thoracic"]').click();
+  await expect(page.locator('.level-chips .chip')).toHaveCount(13);
+  await page.locator('.level-chips .chip[data-v="T6"]').click();
+  const card = page.locator('.card.sel');
+  await expect(card.locator('h2')).toHaveText('T6');
+  await expect(card).toContainText('Gkasdaris 2016');
+  await expect(card).toContainText('Wang 2021');
+  await card.getByRole('button', { name: 'T6 nerve root', exact: true }).click();
+  await expect(page.locator('.card.sel .schematic-note')).toBeVisible();
+  await expect.poll(() => new URL(page.url()).hash).toContain('r=thoracic');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
 
 test('spine: virtual screw — start position, breach grade, cut, and a link that survives a reload', async ({ page }) => {
   const g = guard(page);
@@ -660,6 +678,97 @@ test('spine: virtual screw — start position, breach grade, cut, and a link tha
   await page.locator('.level-chips .chip[data-v="S1"]').click();
   await expect(page.locator('.screw-tech .chip')).toHaveText(['None', 'S1 tricortical']);
   await expect.poll(() => new URL(page.url()).hash).not.toContain('scr=');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('spine: cervical region — the C8 rule, the foramina transversaria, the vertebral artery and the neck layers', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./spine/#/atlas?r=lumbar');
+  await settle(page);
+  // the neck's layers are offered only where they are drawn
+  await page.getByRole('tab', { name: 'Layers and cut' }).click();
+  await expect(page.locator('.layer[data-layer="vessels"]')).toBeHidden();
+  await page.getByRole('tab', { name: 'Anatomy' }).click();
+  await page.locator('.grp-chips .chip[data-v="cervical"]').click();
+  await expect(page.locator('.level-chips .chip')).toHaveCount(8);
+  await page.locator('.level-chips .chip[data-v="C7"]').click();
+  const card = page.locator('.card.sel');
+  await expect(card.locator('h2')).toHaveText('C7');
+  await expect(card.getByRole('button', { name: 'C8 nerve root', exact: true })).toBeVisible();
+  await expect(card).toContainText('Moreno 2021');
+  await expect(card).toContainText('Foramina transversaria (measured)');
+  await card.getByRole('button', { name: 'Vertebral artery', exact: true }).click();
+  await expect(page.locator('.card.sel h2')).toHaveText('Vertebral artery');
+  await expect(page.locator('.card.sel .schematic-note')).toBeVisible();
+  await expect(page.locator('.card.sel')).toContainText('Tudose 2023');
+  await page.getByRole('tab', { name: 'Layers and cut' }).click();
+  await expect(page.locator('.layer[data-layer="vessels"]')).toBeVisible();
+  // the neck starts hidden; its layer can be turned on
+  await expect(page.locator('.layer[data-layer="viscera"] input[type=checkbox]')).not.toBeChecked();
+  await page.getByRole('tab', { name: 'Anatomy' }).click();
+  await expect.poll(() => new URL(page.url()).hash).toContain('r=cervical');
+  // lateral mass screws at C3-C6 (no pedicle-screw grade), a pedicle screw at C7
+  await page.locator('.level-chips .chip[data-v="C5"]').click();
+  await expect(page.locator('.screw-tech .chip')).toHaveText(['None', 'Roy-Camille', 'Magerl', 'An']);
+  await page.locator('.screw-tech .chip[data-v="mg"]').click();
+  await expect(page.locator('.screw-readout')).toContainText(/bicortical|Within the lateral mass|breach/);
+  await expect(page.locator('.screw-readout .grade')).toHaveCount(0);
+  await expect(page.locator('.card.sel')).toContainText('Joaquim 2018');
+  // C1-C2: the atlas's lateral mass screw; the axis's pedicle, pars, translaminar and the transarticular screws
+  await page.locator('.level-chips .chip[data-v="C1"]').click();
+  await expect(page.locator('.screw-tech .chip')).toHaveText(['None', 'C1 lateral mass']);
+  await page.locator('.level-chips .chip[data-v="C2"]').click();
+  await expect(page.locator('.screw-tech .chip')).toHaveText(['None', 'C2 pedicle', 'C2 pars', 'C2 translaminar', 'C1–C2 transarticular']);
+  await expect(page.locator('.card.sel')).toContainText('High-riding vertebral artery?');
+  await expect(page.locator('.card.sel')).toContainText('Kucherina 2026');
+  await expect(page.locator('.card.sel a[href="../skullbase/"]')).toBeVisible();
+  await page.locator('.screw-tech .chip[data-v="ta"]').click();
+  await expect(page.locator('.screw-readout')).toContainText(/axis and atlas|breach/);
+  await expect(page.locator('.screw-readout .grade')).toHaveCount(0);
+  await page.locator('.screw-tech .chip[data-v="c2p"]').click();
+  await expect(page.locator('.screw-readout .grade')).toHaveText(/[AB]/);
+  await page.locator('.level-chips .chip[data-v="C7"]').click();
+  await expect(page.locator('.screw-tech .chip')).toHaveText(['None', 'C7 pedicle screw']);
+  await page.locator('.screw-tech .chip[data-v="cp"]').click();
+  await expect(page.locator('.screw-readout .grade')).toHaveText(/[AB]/);
+  await expect(page.locator('.card.sel .morph').first()).toContainText('studies');
+  // the anterior approach turns the neck's layers on and keeps its side in the link
+  await page.locator('.level-chips .chip[data-v="C5"]').click();
+  await page.locator('.acdf-chips .chip[data-v="R"]').click();
+  await expect(page.locator('.card.sel')).toContainText('Hasan 2025');
+  await expect.poll(() => new URL(page.url()).hash).toContain('ap=acdf.R');
+  await page.getByRole('tab', { name: 'Layers and cut' }).click();
+  await expect(page.locator('.layer[data-layer="viscera"] input[type=checkbox]')).toBeChecked();
+  await page.getByRole('tab', { name: 'Anatomy' }).click();
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('spine: thoracic screw and dorsal approach — published values, start screw, approach card and link', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./spine/#/atlas?r=thoracic&lv=T8');
+  await settle(page);
+  const card = page.locator('.card.sel');
+  await expect(card.locator('.morph').first()).toContainText('studies');
+  await expect(card.locator('.screw-tech .chip')).toHaveText(['None', 'Straight-forward trajectory', 'Anatomic trajectory']);
+  await card.locator('.screw-tech .chip[data-v="st"]').click();
+  await expect(card.locator('.screw-readout .grade')).toHaveText(/[AB]/);
+  await expect(card.locator('.screw-readout')).toContainText('of the pedicle’s measured width');
+  await card.locator('.approach-chips .chip[data-v="ctv"]').click();
+  await expect(card.locator('.exposure caption')).toContainText('T7–T10');
+  await expect(card.locator('.exposure tr.cur th')).toHaveText('Costotransversectomy');
+  await expect(card).toContainText('Taterra 2019');
+  await card.locator('.approach-side .chip[data-v="R"]').click();
+  await expect.poll(() => new URL(page.url()).hash).toContain('ap=ctv.R');
+  await settle(page);
+  await page.reload();
+  await settle(page);
+  await expect(page.locator('.card.sel .approach-side .chip[aria-pressed="true"]')).toHaveText('Right');
+  await expect(page.locator('.card.sel .screw-readout .grade')).toHaveText(/[AB]/);
+  // another level clears both
+  await page.locator('.level-chips .chip[data-v="T9"]').click();
+  await expect.poll(() => new URL(page.url()).hash).not.toContain('ap=');
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });

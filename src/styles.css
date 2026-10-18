@@ -370,3 +370,5 @@ kbd { font: inherit; font-size: 0.9em; border: 1px solid var(--line); border-bot
 .morph th, .morph td { text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
 .morph thead th { color: var(--muted); font-weight: 700; }
 .morph td { font-variant-numeric: tabular-nums; }
+.morph caption { text-align: left; color: var(--muted); font-weight: 700; padding: 2px 6px; }
+.exposure tr.cur th, .exposure tr.cur td { font-weight: 700; background: var(--soft); }

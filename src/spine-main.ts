@@ -23,6 +23,7 @@ function sanitize(s: SpineState): SpineState {
   if (!REGION.get(s.region)?.ready) s.region = 'lumbar';
   if (s.sel && !SP.has(s.sel)) s.sel = null;
   if (s.screw && (!s.level || !TECHNIQUES[s.screw.tech].levels.includes(s.level))) s.screw = null;
+  if (s.approach && !((s.level?.startsWith(s.approach.id === 'acdf' ? 'C' : 'T')) && GEOM_BY_LEVEL.get(s.level!))) s.approach = null;
   const disc = s.level ? GEOM_BY_LEVEL.get(s.level) : undefined;
   if ((s.cut === 'disc' && !disc) || (s.cut === 'screw' && !s.screw)) s.cut = 'none';
   s.cutAbove = s.cut === 'disc' ? disc!.discCentre[2] : null;

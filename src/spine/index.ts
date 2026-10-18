@@ -8,9 +8,14 @@ import { SpineManifestSchema, type ManifestStructure } from '../data/schema';
 export const SP_MANIFEST = SpineManifestSchema.parse(manifestJson);
 export const SP = new Map(SP_MANIFEST.structures.map((s) => [s.id, s]));
 /** Content references with a short label ('uribe2010' -> 'Uribe 2010'), for the cards' source links. */
+const REF_LABELS: Record<string, string> = {
+  isncsci2019: 'ISNCSCI 2019', moncadahabib2025: 'Moncada-Habib 2025', wangr2021: 'Wang 2021', lehmankuklo2003: 'Lehman & Kuklo 2003',
+  alicandri2020: 'Alicandri-Ciufelli 2020', valenzuela2026: 'Valenzuela-Fuenzalida 2026',
+  aosurgeryref: 'AO Surgery Reference',
+};
 export const SP_REFS = new Map(Object.entries(SP_MANIFEST.references).map(([k, r]) => {
   const m = /^([a-z]+)(\d{4})$/.exec(k);
-  const label = k === 'isncsci2019' ? 'ISNCSCI 2019' : m ? `${m[1][0].toUpperCase()}${m[1].slice(1)} ${m[2]}` : k;
+  const label = REF_LABELS[k] ?? (m ? `${m[1][0].toUpperCase()}${m[1].slice(1)} ${m[2]}` : k);
   return [k, { ...r, shortLabel: label }];
 }));
 

@@ -91,8 +91,52 @@ def canal(grid: Grid, label: int, c: np.ndarray, F: np.ndarray) -> dict | None:
             "centre": (c + cu * F[0] + cv * F[1]).tolist()}
 
 
+def enclosed(solid: np.ndarray, reach: float = 6.0, ndir: int = 16, need: int = 14) -> np.ndarray:
+    """Empty pixels of a plane that bone surrounds: rays in at least `need` of `ndir` directions meet bone within `reach`
+    mm. Unlike filling holes, this tolerates the small gaps that thin cortex leaves at CT resolution."""
+    n = int(round(reach / STEP))
+    H, W = solid.shape
+    pad = np.pad(solid, n)
+    count = np.zeros(solid.shape, int)
+    for a in np.linspace(0, 2 * np.pi, ndir, endpoint=False):
+        hit = np.zeros(solid.shape, bool)
+        for k in range(1, n + 1):
+            di, dj = int(round(k * np.cos(a))), int(round(k * np.sin(a)))
+            hit |= pad[n + di:n + di + H, n + dj:n + dj + W]
+        count += hit
+    return (count >= need) & ~solid
+
+
+def transverse_foramina(grid: Grid, label: int, c: np.ndarray, F: np.ndarray, inner: float) -> dict:
+    """The foramina transversaria of a cervical vertebra: per side the largest region its bone encloses (`enclosed`)
+    lateral to the canal (|u| > inner mm), no wider or deeper than 12 mm, in axial planes (a +-1.5 mm slab merged) from
+    10 mm below to 10 mm above c. Returns per side ("L", "R") its area (mm2; the enclosed part, so an underestimate),
+    width (u), depth (v) and centre, or None where none is found."""
+    us = np.arange(-45, 45 + STEP, STEP)
+    vs = np.arange(-40, 25 + STEP, STEP)
+    best: dict = {"L": None, "R": None}
+    for w0 in np.arange(-10, 10.01, 1.0):
+        ring = np.zeros((len(us), len(vs)), bool)
+        for w in np.arange(w0 - 1.5, w0 + 1.5 + STEP / 2, STEP):
+            ring |= grid.sample(plane(c, F, us, vs, w)) == label
+        lab, n = ndimage.label(enclosed(ring))
+        for k in range(1, n + 1):
+            m = lab == k
+            area = float(m.sum() * STEP * STEP)
+            iu, iv = np.nonzero(m)
+            cu, cv = us[iu].mean(), vs[iv].mean()
+            if area < 4 or abs(cu) < inner or np.ptp(us[iu]) > 12 or np.ptp(vs[iv]) > 12:
+                continue
+            sd = "L" if cu < 0 else "R"
+            if best[sd] is None or area > best[sd]["area"]:
+                best[sd] = {"area": round(area, 0), "width": round(float(np.ptp(us[iu]) + STEP), 1),
+                            "depth": round(float(np.ptp(vs[iv]) + STEP), 1), "w": float(w0),
+                            "centre": (c + cu * F[0] + cv * F[1] + w0 * F[2]).tolist()}
+    return best
+
+
 def foramen(grid: Grid, up: int, down: int, extra: set[int], mid: np.ndarray, F: np.ndarray, u_from: float, h: float,
-            close_mm: float = 3.0) -> dict | None:
+            close_mm: float = 3.0, floor_clefts: bool = False, front: float = -5.0) -> dict | None:
     """The intervertebral foramen on one side, in parasagittal planes (u = u_from outward in 1 mm steps, 12 planes): the
     gap in the bone-and-disc profile that is roofed by the upper vertebra and floored by the lower one. Small gaps in its
     wall (the facet joint line) are bridged by a morphological closing of close_mm, then the gap is grown back to the
@@ -116,7 +160,7 @@ def foramen(grid: Grid, up: int, down: int, extra: set[int], mid: np.ndarray, F:
                 continue
             m = ndimage.binary_dilation(m, iterations=it) & ~solid  # back to the true bone edge
             iv, iw = np.nonzero(m)
-            if vs[iv].mean() > -5:  # in front of the posterior body wall: not a foramen
+            if vs[iv].mean() > front:  # in front of the posterior body wall: not a foramen
                 continue
             ring = ndimage.binary_dilation(m, iterations=3) & solid
             rw = ws[np.nonzero(ring)[1]]
@@ -128,6 +172,17 @@ def foramen(grid: Grid, up: int, down: int, extra: set[int], mid: np.ndarray, F:
                 best = m
         if best is None:
             continue
+        if floor_clefts:
+            # the floor in each column is the highest bone of the lower vertebra within 3 mm to either side, so a
+            # narrow cleft in that vertebra is cut off where the bone around it begins
+            lower = labs == down
+            top = np.where(lower.any(1), lower.shape[1] - 1 - np.argmax(lower[:, ::-1], axis=1), -1)
+            floor = ndimage.maximum_filter1d(top, size=2 * int(round(3 / STEP)) + 1)
+            best = best & (np.arange(best.shape[1])[None, :] > floor[:, None])
+            lab2, n2 = ndimage.label(best)
+            if not n2:
+                continue
+            best = lab2 == (int(np.argmax(ndimage.sum(best, lab2, range(1, n2 + 1)))) + 1)
         iv, iw = np.nonzero(best)
         cv, cw = vs[iv].mean(), ws[iw].mean()
         return {"height": round(float(np.ptp(ws[iw]) + STEP), 1), "width": round(float(np.ptp(vs[iv]) + STEP), 1),

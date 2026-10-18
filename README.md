@@ -117,13 +117,37 @@ The 74 gyri and sulci of FreeSurfer's Destrieux 2009 parcellation (Destrieux et 
 - Pipeline: `pipeline/cortex_texts.py` (in Blender) reads the definition texts, `pipeline/cortex_build.py` writes
   the assets and checks them.
 
-## Spine (phase 1: lumbar)
+## Spine (cervical, thoracic, lumbar)
 
 Surgical anatomy of the spine from one adult CT: VerSe 2020 sub-verse823 (CC BY-SA 4.0, 0.72 × 0.72 × 0.7 mm,
 C1 to the pelvis), with TotalSegmentator (Apache-2.0 open tasks) run on the same CT. One subject throughout, in
 its own space (mm from the centre of the L5 vertebral body).
 
-- **Region and level selectors**: lumbar now (L1–S1); cervical and thoracic are segmented and will follow.
+- **Region and level selectors**: cervical (C1–C7), thoracic (T1–T12) and lumbar (L1–S1).
+- **Cervical** (phase 2a): vertebrae C1–C7, discs C2–C3 to C7–T1, canal contents, canal and disc height per level;
+  schematic roots C3–C8 by the cervical rule (each above the vertebra of its number, C8 between C7 and T1; Moreno
+  2021), through the lower part of foramina found in planes turned 30° forwards (their size is not reported); the
+  foramina transversaria C1–C7 measured, and a schematic vertebral artery from the subclavian artery through them
+  (entry level inferred from their size, C6 on both sides here), behind the lateral mass of the atlas and over the
+  groove on its posterior arch. The neck from TotalSegmentator (common and internal carotids, internal jugular veins,
+  trachea, oesophagus, thyroid, larynx, prevertebral muscles, sternocleidomastoids) on two layers of their own,
+  shown in this region only and off at first (Layers and cut, or the legend's eye, turns them on).
+- **Cervical screws** (phase 2b): lateral mass screws at C3–C6 by Roy-Camille, Magerl and An (Joaquim 2018) from the
+  lateral mass measured on this CT (posterior face between the lamina junction, the outer edge and the facet joint
+  lines; facet joint inclination), 3.5 mm and bicortical (Rathinavelu 2021), read by breach direction, not the
+  pedicle-screw grade; a pedicle screw at C7 along the measured axis, beside Jiang 2024's CT values.
+- **C1–C2** (phase 2c): C1 lateral mass screw (Joaquim 2020), C2 pedicle, pars and translaminar screws (Singh 2022)
+  and the C1–C2 transarticular screw (checked against the atlas and axis together, the joint counted as bone), each
+  from landmarks measured on this CT; the C2 isthmus height and the bone over the vertebral artery's groove beside
+  the usual high-riding definition (Kucherina 2026); the C1 and C2 cards link to the skull base section.
+- **Anterior approach (ACDF)** (phase 2d, cervical level card): from either side, with the carotid sheath, trachea,
+  oesophagus, thyroid, larynx, prevertebral muscles and vertebral arteries shown; the approach plane, side choice,
+  nerve injuries (Hasan 2025; Arumalla 2021), landmark levels and their variability (Siribumrungwong 2018;
+  Alicandri-Ciufelli 2020) beside the levels the hyoid, thyroid cartilage and cricoid project to on this CT, and the
+  width between the foramina transversaria per level.
+- **Thoracic**: vertebrae T1–T12, discs, canal contents, schematic roots T1–T12 with a short intercostal course;
+  canal and disc height measured per level; the foramen's size is not reported (the rib heads, not drawn, form
+  part of its wall). No ribs and no ventral anatomy: the section serves the dorsal approaches.
 - **Bone**: vertebrae C1–L5 from the CT's bone surface (VerSe's hand-corrected masks only assign bone to each
   vertebra; their outlines step every few slices). Sacrum (TotalSegmentator's sacrum and S1 classes) and pelvis
   from TotalSegmentator.
@@ -136,13 +160,21 @@ its own space (mm from the centre of the L5 vertebral body).
   of the foramen; L5 and S1 exits estimated).
 - **Lesion-to-root tool** (level card): paracentral, foraminal or far-lateral herniation per side; the affected root,
   its ISNCSCI key muscle, other movements and key sensory point on a leg chart.
-- **Pedicles, measured beside published values** (L1–L5): narrowest width and height at the isthmus, transverse and
-  sagittal angle, chord; published regional means (Wang 2023) and transverse angles (Moncada-Habib 2025,
-  Nkwerem 2024), read from the papers' tables by `pipeline/spine_published.py`.
-- **Virtual screw** (level card): traditional trajectory and cortical bone trajectory at L1–L5, tricortical S1
-  screw, each from its published start; angles, length, diameter and entry adjustable; breach depth and
-  direction against this CT's bone surface, graded after Gertzbein–Robbins, and the nearest structures at risk;
-  a cut along the screw. Data from `pipeline/spine_screw.py` (a bone distance field per level, loaded on demand).
+- **Pedicles, measured beside published values** (T1–T12, L1–L5): narrowest width and height at the isthmus,
+  transverse and sagittal angle, chord; published lumbar regional means (Wang 2023) and transverse angles
+  (Moncada-Habib 2025, Nkwerem 2024), and the range of the thoracic study means tabulated by Verma 2020, read from
+  the papers' tables by `pipeline/spine_published.py`.
+- **Virtual screw** (level card): straight-forward and anatomic trajectories at T1–T12 (Lehman 2003; start size
+  from the measured pedicle width and body depth by the 80% rules in Mandelka 2023), traditional trajectory and
+  cortical bone trajectory at L1–L5, tricortical S1 screw, each from its published start; angles, length,
+  diameter and entry adjustable; breach depth and direction against this CT's bone surface, graded after
+  Gertzbein–Robbins, the screw diameter as a share of the pedicle width, and the nearest structures at risk; a cut
+  along the screw. Data from `pipeline/spine_screw.py` (a bone distance field per level, loaded on demand).
+- **Dorsal approaches to a thoracic disc** (level card): transpedicular, costotransversectomy and lateral
+  extracavitary, from either side: what each removes (published technique descriptions), the share of the ventral
+  canal each exposed in cadavers for the level's region (Kshettry 2015), which discs suit which approach
+  (Epstein 2023), the artery of Adamkiewicz as text (Taterra 2019; not drawn), and a view from the approach side
+  with the vertebrae at the disc see-through.
 - Pipeline: `pipeline/spine_segment.py` (TotalSegmentator in `pipeline/.venv-seg`, about an hour on Apple
   silicon for the main task), `pipeline/spine_verify.py` (TotalSegmentator's vertebrae against VerSe's: same
   labels, overlap), `pipeline/spine_build.py` + `pipeline/spine_geom.py` (meshes, measurements, schematic parts,
@@ -386,8 +418,10 @@ Tracked here and in the final report:
   the Morel VLa centroid.
 - **vmPFC.** Shown with the Desikan-Killiany medial orbitofrontal label as a proxy.
 - **Spine, later phases.** Reflexes per root (no source with checkable text yet); S2-alar-iliac screw (needs the
-  dorsal sacral foramina located on this CT); Kambin's triangle and the approach presets. Phase 2 cervical (vertebral artery: no open segmentation; the PAM50 cord atlas has no
-  stated licence), phase 3 thoracic.
+  dorsal sacral foramina located on this CT); Kambin's triangle and lumbar approach presets. Cervical: the vertebral
+  artery is drawn by rule (no open segmentation; this CT has no contrast), and the cord cannot be told from CSF on
+  CT (the PAM50 cord atlas has no stated licence), so the cord cross-section is the canal's. Thoracic: the ribs, the
+  pleura and the aorta are not drawn, so the screw tool checks lateral and anterior breaches only against the bone.
 - **Cortex overlays (later phase).** Functional areas (HCPex), arterial territories (Liu 2023), the
   direct-stimulation points of Sarubbo et al. 2020 (CC BY 4.0) and tract terminations. Julich-Brain
   cytoarchitecture is left out for now (CC BY-NC-SA 4.0; its insular subdivisions are the main gain).

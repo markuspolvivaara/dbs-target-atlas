@@ -303,6 +303,29 @@ def discs(report: dict, verts: list[dict]) -> list[dict]:
 
 # ---------------------------------------------------------------- lumbar geometry, schematic roots
 LUMBAR = ["T12", "L1", "L2", "L3", "L4", "L5", "S1"]
+THORACIC = ["C7"] + [f"T{i}" for i in range(1, 13)] + ["L1"]
+CERVICAL = ["C2", "C3", "C4", "C5", "C6", "C7", "T1"]
+# per region: the chain of levels (each pair of neighbours is a motion segment), the roots drawn, the margin of the
+# block read below the lowest vertebra, whether the sacrum closes the chain, herniation positions, the roots' course
+SEGMENTS = {
+    "lumbar": {"chain": LUMBAR, "roots": ["L1", "L2", "L3", "L4", "L5"], "below": 110, "sacrum": True, "lesions": True,
+               "course": "plexus", "close": 3.0, "report_foramen": True},
+    # thoracic: a narrow cleft in the lower vertebra (between its superior articular process and pedicle) can open
+    # into the foramen, so its floor is taken across it (spine_geom.foramen, floor_clefts). The foramen's size is not
+    # reported here: without the rib heads, which form part of its wall, the gap the plane method finds runs on into
+    # the costotransverse region; its position still places the schematic roots.
+    "thoracic": {"chain": THORACIC, "roots": [f"T{i}" for i in range(1, 13)], "below": 40, "sacrum": False, "lesions": False,
+                 "course": "intercostal", "close": 3.0, "floor_clefts": True, "report_foramen": False},
+    # cervical: eight roots for seven vertebrae; each leaves above the vertebra of its number, C8 between C7 and T1
+    # (root_of "lower": the root at a motion segment is named for its lower vertebra), in the lower part of the
+    # foramen (Moreno 2021). C1 and C2 have no disc and no foramen of this kind: the craniocervical junction follows
+    # with the C1-C2 fixation. The cervical foramina open obliquely forwards, so they are sought in planes across an
+    # axis turned foramen_angle degrees forwards from lateral, and on labels taken from the CT's bone (the VerSe masks
+    # step too coarsely for these small openings); their position places the roots, their size is not reported
+    "cervical": {"chain": CERVICAL, "roots": ["C3", "C4", "C5", "C6", "C7", "C8"], "root_of": "lower", "below": 40,
+                 "sacrum": False, "lesions": False, "course": "cervical", "close": 1.5, "report_foramen": False,
+                 "foramen_angle": 30.0, "ct_labels": True},
+}
 LABEL_OF = {v: k for k, v in VERSE_LEVELS.items()} | {"S1": 26}
 DISC_LABEL = 50
 ROOT_RADIUS = 1.5     # schematic drawing sizes (mm), not measurements
@@ -320,8 +343,12 @@ def merge(meshes: list[tuple]) -> tuple:
     return np.vstack(ps), np.vstack(ns), np.vstack(ts)
 
 
-def lumbar(report: dict) -> tuple[list[dict], list[dict]]:
-    """Measured canal, foramina and disc height per lumbar level, and schematic roots and ganglia L1-S1."""
+def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]:
+    """Measured canal, foramina and disc height per level of a region, and its schematic roots and ganglia (lumbar:
+    L1-S1, with herniation positions per disc; thoracic: T1-T12; cervical: C3-C8)."""
+    cfg = SEGMENTS[region]
+    chain = cfg["chain"]
+    bottom = [x for x in chain if x != "S1"][-1]
     img = nib.load(MASK)
     aff = img.affine
     o = origin()
@@ -329,19 +356,29 @@ def lumbar(report: dict) -> tuple[list[dict], list[dict]]:
     C = {c["label"]: nib.affines.apply_affine(aff, [c["X"], c["Y"], c["Z"]]) for c in ctd if "label" in c}
     # read only the lumbar block: whole-volume arrays of this CT are 0.3-1.3 GB each
     inv = np.linalg.inv(aff)
-    # 90 mm around the spine, from 110 mm below L5 (sacrum, S1 roots) to 60 mm above T12; corners mapped to voxels
-    corners = np.array([[x, y, z] for x in (-90, 90) for y in (-90, 90) for z in (-110, 60)], float)
-    span = np.vstack([nib.affines.apply_affine(inv, C[LABEL_OF["L5"]] + np.where(corners[:, 2:3] < 0, corners, 0)),
-                      nib.affines.apply_affine(inv, C[LABEL_OF["T12"]] + np.where(corners[:, 2:3] > 0, corners, 0))])
+    # 90 mm around the spine, from below the lowest vertebra (lumbar: the sacrum and S1 roots) to 60 mm above the
+    # highest; corners mapped to voxels
+    corners = np.array([[x, y, z] for x in (-90, 90) for y in (-90, 90) for z in (-cfg["below"], 60)], float)
+    span = np.vstack([nib.affines.apply_affine(inv, C[LABEL_OF[bottom]] + np.where(corners[:, 2:3] < 0, corners, 0)),
+                      nib.affines.apply_affine(inv, C[LABEL_OF[chain[0]]] + np.where(corners[:, 2:3] > 0, corners, 0))])
     lo = np.maximum(np.floor(span.min(0)).astype(int), 0)
     hi = np.minimum(np.ceil(span.max(0)).astype(int) + 1, img.shape)
     cr = tuple(slice(a, b) for a, b in zip(lo, hi))
     vm, a2 = load_mask(cr)
-    sac, _ = ts_mask("total", "sacrum+vertebrae_S1", cr)
+    if cfg.get("ct_labels"):
+        # each voxel of the CT's bone surface volume takes the label of the nearest VerSe mask within MASK_REACH_MM
+        vox = np.abs(np.diag(a2)[:3])
+        bone = ndimage.gaussian_filter(read_block(CT, cr).astype(np.float32), SIGMA_VOX) > BONE_HU
+        dist, ind = ndimage.distance_transform_edt(vm == 0, sampling=vox, return_indices=True)
+        vm = np.where(bone & (dist <= MASK_REACH_MM), vm[tuple(ind)], 0).astype(vm.dtype)
+        del bone, dist, ind
     disc, _ = ts_mask("vertebrae_body", "intervertebral_discs", cr)
     sacpts_mask, _ = ts_mask("total", "spinal_cord", cr)
     lab = vm.copy()
-    lab[sac & (lab == 0)] = LABEL_OF["S1"]
+    if cfg["sacrum"]:
+        sac, _ = ts_mask("total", "sacrum+vertebrae_S1", cr)
+        lab[sac & (lab == 0)] = LABEL_OF["S1"]
+        del sac
     lab[disc & (lab == 0)] = DISC_LABEL
     grid = G.Grid(lab, a2)
 
@@ -362,50 +399,101 @@ def lumbar(report: dict) -> tuple[list[dict], list[dict]]:
         if disc_pts[k + 1] is None:
             disc_pts[k + 1] = ras_of(disc_lab == k + 1)
         return disc_c[k], disc_pts[k + 1]
-    C[LABEL_OF["S1"]] = 2 * disc_between("L5", "S1")[0] - C[LABEL_OF["L5"]]  # S1 body centre: L5 mirrored across the disc
+    if cfg["sacrum"]:
+        C[LABEL_OF["S1"]] = 2 * disc_between("L5", "S1")[0] - C[LABEL_OF["L5"]]  # S1 body centre: L5 mirrored across the disc
 
     levels, roots = [], []
     canals = {}
-    for up, down in zip(LUMBAR, LUMBAR[1:]):
+    found = 0
+    for up, down in zip(chain, chain[1:]):
         cu, cd = C[LABEL_OF[up]], C[LABEL_OF[down]]
         F = G.frame(cu, cd)
         h = float(np.linalg.norm(cu - cd))
         mid = (cu + cd) / 2
-        can = G.canal(grid, LABEL_OF[up], cu, F)
+        # the ring closes in the plane through the body centre at most levels; where it does not (mid-thoracic, the
+        # pedicles high on the body), a plane a few millimetres up or down
+        for dw in (0.0, 3.0, 6.0, -3.0, 9.0):
+            can = G.canal(grid, LABEL_OF[up], cu + dw * F[2], F)
+            if can:
+                break
         canals[up] = (can, F)
         fors = {}
         for sd, sg in (("L", -1), ("R", 1)):
             fo = None
-            if can and down != "S1":  # the plane method does not capture the L5-S1 foramen in this CT
+            if can and down != "S1" and cfg.get("foramen_angle"):
+                # planes across an axis turned forwards from lateral, out from 90% of the canal's half-width
+                t = np.radians(cfg["foramen_angle"])
+                d_out = sg * np.cos(t) * F[0] + np.sin(t) * F[1]
+                d_fwd = np.cross(F[2], d_out)
+                d_fwd = d_fwd if d_fwd @ F[1] > 0 else -d_fwd
+                Fr = np.stack([d_out, d_fwd, F[2]])
+                centre = mid + can["u"] * F[0] + can["v"] * F[1]
+                fo = G.foramen(grid, LABEL_OF[up], LABEL_OF[down], {DISC_LABEL}, centre, Fr, 0.9 * can["halfWidth"], h,
+                               cfg["close"], False, front=30.0)
+                if fo:
+                    fo["axis"] = d_out
+            elif can and down != "S1":  # the plane method does not capture the L5-S1 foramen in this CT
                 fo = G.foramen(grid, LABEL_OF[up], LABEL_OF[down], {DISC_LABEL}, mid, F,
-                               (can["uMin"] - 1) if sg < 0 else (can["uMax"] + 1), h)
+                               (can["uMin"] - 1) if sg < 0 else (can["uMax"] + 1), h, cfg["close"],
+                               cfg.get("floor_clefts", False))
             fors[sd] = fo
+            found += fo is not None
         dc, dpts = disc_between(up, down)
         levels.append({"level": up, "pair": f"{up}-{down}", "bodyCentre": (cu - o).round(2).tolist(),
                        "canal": can and {k: can[k] for k in ("width", "depth", "area")},
-                       "foramen": {sd: fo and {k: fo[k] for k in ("height", "width", "area")} for sd, fo in fors.items()},
+                       "foramen": {sd: fo and {k: fo[k] for k in ("height", "width", "area")} if cfg["report_foramen"] else None
+                                   for sd, fo in fors.items()},
+                       **({} if cfg["report_foramen"] else {"foramenMeasured": False}),
                        "discCentre": (dc - o).round(2).tolist()})
-        report.setdefault("lumbar", {})[f"{up}-{down}"] = levels[-1]
+        report.setdefault(region, {})[f"{up}-{down}"] = levels[-1]
 
-        # ---- the root that exits here: the upper level's root, below its pedicle (skip T12: a thoracic root)
-        if up != "T12":
-            above = LUMBAR[LUMBAR.index(up) - 1]
-            dc_above, _ = disc_between(above, up)
-            Fa = G.frame(C[LABEL_OF[above]], cu)
+        # ---- the root that exits here: lumbar and thoracic, the upper level's root, below its pedicle; cervical, the
+        # root named for the lower level (C8 at C7-T1), above that level's pedicle
+        rname = up if cfg.get("root_of", "upper") == "upper" else (down if down.startswith("C") else "C8")
+        cervical = cfg["course"] == "cervical"
+        if rname in cfg["roots"]:
+            if not cervical:
+                above = chain[chain.index(up) - 1]
+                dc_above, _ = disc_between(above, up)
+                Fa = G.frame(C[LABEL_OF[above]], cu)
             parts, drgs, estimated = {}, {}, {}
             for sd, sg in (("L", -1), ("R", 1)):
-                p0 = G.lateral_point(sac_pts, dc_above, Fa, sg)  # take-off: lateral wall of the dural sac at the disc above
                 edge = (can["uMin"] if sg < 0 else can["uMax"]) if can else sg * 12.0
-                p1 = cu + (edge - sg * 2.5) * F[0] + ((can["v"] + 3) if can else -20) * F[1]  # lateral recess, own level
                 fo = fors[sd]
-                if fo:
-                    c = np.array(fo["centre"])
-                    p2 = c + ((fo["top"] - fo["w"]) / 2) * F[2]  # upper part of the foramen, beneath the pedicle
+                if cervical:
+                    # nearly level: from the sac at its own disc into the lower part of the foramen (Moreno 2021), then
+                    # on forwards and out along the foramen's axis and the transverse process
+                    p0 = G.lateral_point(sac_pts, dc, F, sg)
+                    if fo:
+                        w_low = (fo["top"] - fo["height"] + fo["w"]) / 2
+                        c = np.array(fo["centre"])
+                        p2 = c + (w_low - fo["w"]) * F[2] + 3 * fo["axis"]
+                        p1 = c + (w_low - fo["w"]) * F[2] - 2 * fo["axis"]  # foramen entrance
+                        out = fo["axis"]
+                    else:
+                        w_low = -0.1 * h
+                        p2 = mid + (edge + sg * 6) * F[0] + (can["v"] if can else -15) * F[1] + w_low * F[2]
+                        p1 = mid + (edge - sg * 1.0) * F[0] + float((p2 - mid) @ F[1]) * F[1] + w_low * F[2]
+                        out = sg * F[0]
+                    p3 = p2 + 10 * out + 3 * F[1] - 3 * F[2]
+                    p4 = p3 + 14 * out + 4 * F[1] - 9 * F[2]
+                    if p0 is not None and (p1 - p0) @ out < 1.0:  # the sac reaches out past the entrance: no kink back
+                        p1 = None
                 else:
-                    p2 = mid + (edge + sg * 6) * F[0] + ((can["v"] if can else -20)) * F[1] + 0.15 * h * F[2]
+                    p0 = G.lateral_point(sac_pts, dc_above, Fa, sg)  # take-off: lateral wall of the dural sac at the disc above
+                    p1 = cu + (edge - sg * 2.5) * F[0] + ((can["v"] + 3) if can else -20) * F[1]  # lateral recess, own level
+                    if fo:
+                        c = np.array(fo["centre"])
+                        p2 = c + ((fo["top"] - fo["w"]) / 2) * F[2]  # upper part of the foramen, beneath the pedicle
+                    else:
+                        p2 = mid + (edge + sg * 6) * F[0] + ((can["v"] if can else -20)) * F[1] + 0.15 * h * F[2]
+                    if cfg["course"] == "plexus":  # on forwards and down towards the lumbar plexus
+                        p3 = p2 + sg * 15 * F[0] + 8 * F[1] - 10 * F[2]
+                        p4 = p3 + sg * 15 * F[0] + 10 * F[1] - 20 * F[2]
+                    else:  # out along the intercostal course, a short way
+                        p3 = p2 + sg * 12 * F[0] + 1 * F[1] - 4 * F[2]
+                        p4 = p3 + sg * 22 * F[0] - 2 * F[1] - 6 * F[2]
                 estimated[sd] = fo is None
-                p3 = p2 + sg * 15 * F[0] + 8 * F[1] - 10 * F[2]
-                p4 = p3 + sg * 15 * F[0] + 10 * F[1] - 20 * F[2]
                 path = [p for p in (p0, p1, p2, p3, p4) if p is not None]
                 curve = G.catmull([q - o for q in path], 8)
                 parts[sd] = G.tube(curve, ROOT_RADIUS)
@@ -413,26 +501,31 @@ def lumbar(report: dict) -> tuple[list[dict], list[dict]]:
                 ez = (p3 - p2) / np.linalg.norm(p3 - p2)
                 ex = np.cross(ez, F[2]); ex /= np.linalg.norm(ex)
                 drgs[sd] = G.ellipsoid(p2 - o + 2.0 * (p3 - p2) / np.linalg.norm(p3 - p2), np.stack([ex, np.cross(ez, ex), ez]), DRG_RADII)
-            rid = f"sp_root_{up.lower()}"
+            rid = f"sp_root_{rname.lower()}"
             write_glb(BUILD / f"{rid}.glb", mesh_nodes(parts), {"id": rid})
-            gid = f"sp_drg_{up.lower()}"
+            gid = f"sp_drg_{rname.lower()}"
             write_glb(BUILD / f"{gid}.glb", mesh_nodes(drgs), {"id": gid})
-            exit_note = (f"exits through the {up}-{down} foramen (measured position)" if not any(estimated.values())
-                         else f"exits through the {up}-{down} foramen, whose position is estimated on "
+            where = "the lower part of " if cervical else ""
+            exit_note = (f"exits through {where}the {up}-{down} foramen (measured position)" if not any(estimated.values())
+                         else f"exits through {where}the {up}-{down} foramen, whose position is estimated on "
                               f"{' and '.join(k for k, v in estimated.items() if v)} (not captured by the measurement)")
-            roots.append({"id": rid, "name": f"{up} nerve root", "level": up, "token": "spRoot", "layer": "tracts", "category": "root",
-                          "schematic": True, "estimated": [k for k, v in estimated.items() if v],
+            if cervical:
+                path_note = f"leaves the lateral wall of the dural sac at the {up}-{down} disc and {exit_note}, then runs a short way forwards and out along the transverse process"
+            else:
+                after = "" if cfg["course"] == "plexus" else ", then a short way along its intercostal course"
+                path_note = f"leaves the lateral wall of the dural sac at the {above}-{up} disc, runs in the lateral recess at {up} and {exit_note}{after}"
+            roots.append({"id": rid, "name": f"{rname} nerve root", "level": rname, "token": "spRoot", "layer": "tracts", "category": "root",
+                          "region": region, "schematic": True, "estimated": [k for k, v in estimated.items() if v],
                           "centroid": (p2 - o).round(2).tolist(),
-                          "source": f"Schematic: leaves the lateral wall of the dural sac at the {above}-{up} disc, runs in the "
-                                    f"lateral recess at {up} and {exit_note}; drawn {2 * ROOT_RADIUS:g} mm thick"})
-            roots.append({"id": gid, "name": f"{up} dorsal root ganglion", "level": up, "token": "spRoot", "layer": "tracts",
-                          "category": "ganglion", "schematic": True, "centroid": (p2 - o).round(2).tolist(),
-                          "source": "Schematic: drawn in the upper part of the foramen, not to scale"})
+                          "source": f"Schematic: {path_note}; drawn {2 * ROOT_RADIUS:g} mm thick"})
+            roots.append({"id": gid, "name": f"{rname} dorsal root ganglion", "level": rname, "token": "spRoot", "layer": "tracts",
+                          "category": "ganglion", "region": region, "schematic": True, "centroid": (p2 - o).round(2).tolist(),
+                          "source": f"Schematic: drawn {'just outside' if cervical else 'in the upper part of'} the foramen, not to scale"})
 
         # ---- where a herniation of each kind sits at this disc (for the lesion-to-root tool; schematic positions):
         # paracentral = posterior edge of the disc halfway between the midline and the canal edge; foraminal = in the
         # foramen at disc level (the measured foramen, else the root's exit point); far lateral = 12 mm further out
-        if up != "T12":
+        if cfg["lesions"] and up in cfg["roots"]:
             les = {}
             for sd, sg in (("L", -1), ("R", 1)):
                 edge = (can["uMin"] if sg < 0 else can["uMax"]) if can else sg * 12.0
@@ -454,6 +547,9 @@ def lumbar(report: dict) -> tuple[list[dict], list[dict]]:
         if len(core) and down != "S1":
             dw = (core - dc) @ F[2]
             levels[-1]["discHeightMm"] = round(float(np.percentile(dw, 95) - np.percentile(dw, 5)), 1)
+    if not cfg["sacrum"]:
+        print(f"{region}: {len(levels)} levels, {len(roots)} root parts; foramina found (placing the roots) {found}/{2 * len(levels)}")
+        return levels, roots
     # ---- S1: leaves the sac at the L5-S1 disc, runs in the lateral recess of S1 and leaves through the first sacral
     # foramen, whose position the measurement does not capture (estimated); its ganglion is drawn inside the canal
     # (Hasegawa 1996: the S1 ganglion is more often intraspinal)
@@ -478,16 +574,214 @@ def lumbar(report: dict) -> tuple[list[dict], list[dict]]:
     write_glb(BUILD / "sp_root_s1.glb", mesh_nodes(parts), {"id": "sp_root_s1"})
     write_glb(BUILD / "sp_drg_s1.glb", mesh_nodes(drgs), {"id": "sp_drg_s1"})
     roots.append({"id": "sp_root_s1", "name": "S1 nerve root", "level": "S1", "token": "spRoot", "layer": "tracts", "category": "root",
-                  "schematic": True, "estimated": ["L", "R"], "centroid": (cs1 - o).round(2).tolist(),
+                  "region": region, "schematic": True, "estimated": ["L", "R"], "centroid": (cs1 - o).round(2).tolist(),
                   "source": "Schematic: leaves the lateral wall of the dural sac at the L5-S1 disc, runs in the lateral recess "
                             "of S1 and leaves through the first sacral foramen, whose position is estimated (not captured by "
                             f"the measurement); drawn {2 * ROOT_RADIUS:g} mm thick"})
     roots.append({"id": "sp_drg_s1", "name": "S1 dorsal root ganglion", "level": "S1", "token": "spRoot", "layer": "tracts",
-                  "category": "ganglion", "schematic": True, "centroid": (cs1 - o).round(2).tolist(),
+                  "category": "ganglion", "region": region, "schematic": True, "centroid": (cs1 - o).round(2).tolist(),
                   "source": "Schematic: drawn inside the canal, where the S1 ganglion more often lies (Hasegawa 1996); not to scale"})
-    print(f"lumbar: {len(levels)} levels, {len(roots)} root parts; foramina measured "
+    print(f"{region}: {len(levels)} levels, {len(roots)} root parts; foramina measured "
           f"{sum(1 for lv in levels for v in lv['foramen'].values() if v)}/{2 * len(levels)}")
     return levels, roots
+
+
+# ---------------------------------------------------------------- cervical: the neck's soft tissue, the vertebral artery
+# TotalSegmentator classes drawn in the cervical region (open tasks; see spine_segment.py), kept between 15 mm below
+# the T1 body and 30 mm above C1: the anterior approach's neighbours. Viscera and muscles share one colour (spSoft)
+CERVICAL_TS = [
+    ("total", "common_carotid_artery_left", "sp_cca_left", "Common carotid artery (left)", "spArtery", "vessels", "vessel", 4000),
+    ("total", "common_carotid_artery_right", "sp_cca_right", "Common carotid artery (right)", "spArtery", "vessels", "vessel", 4000),
+    ("headneck_bones_vessels", "internal_carotid_artery_left", "sp_ica_left", "Internal carotid artery (left)", "spArtery", "vessels", "vessel", 3000),
+    ("headneck_bones_vessels", "internal_carotid_artery_right", "sp_ica_right", "Internal carotid artery (right)", "spArtery", "vessels", "vessel", 3000),
+    ("headneck_bones_vessels", "internal_jugular_vein_left", "sp_ijv_left", "Internal jugular vein (left)", "spVein", "vessels", "vessel", 4000),
+    ("headneck_bones_vessels", "internal_jugular_vein_right", "sp_ijv_right", "Internal jugular vein (right)", "spVein", "vessels", "vessel", 4000),
+    ("total", "trachea", "sp_trachea", "Trachea", "spSoft", "viscera", "viscera", 4000),
+    ("total", "esophagus", "sp_esophagus", "Oesophagus", "spSoft", "viscera", "viscera", 4000),
+    ("total", "thyroid_gland", "sp_thyroid", "Thyroid gland", "spSoft", "viscera", "viscera", 4000),
+    ("headneck_bones_vessels", "thyroid_cartilage+cricoid_cartilage", "sp_larynx", "Larynx (thyroid and cricoid cartilages)", "spSoft", "viscera", "viscera", 5000),
+    ("headneck_muscles", "prevertebral_left", "sp_prevertebral_left", "Prevertebral muscles (left)", "spSoft", "viscera", "muscle", 4000),
+    ("headneck_muscles", "prevertebral_right", "sp_prevertebral_right", "Prevertebral muscles (right)", "spSoft", "viscera", "muscle", 4000),
+    ("headneck_muscles", "sternocleidomastoid_left", "sp_scm_left", "Sternocleidomastoid (left)", "spSoft", "viscera", "muscle", 4000),
+    ("headneck_muscles", "sternocleidomastoid_right", "sp_scm_right", "Sternocleidomastoid (right)", "spSoft", "viscera", "muscle", 4000),
+]
+VA_RADIUS = 2.0       # schematic drawing size (mm), not a measurement
+VA_FILLED = 0.6       # a foramen transversarium counts as carrying the artery at this share of the median C3-C6 area
+
+
+def centroids() -> dict:
+    img = nib.load(MASK)
+    ctd = json.loads(CTD.read_text())
+    return {c["label"]: nib.affines.apply_affine(img.affine, [c["X"], c["Y"], c["Z"]]) for c in ctd if "label" in c}
+
+
+NECK_LANDMARKS = [("hyoid", "hyoid", "centroid"), ("thyroidCartilage", "thyroid_cartilage", "centroid"),
+                  ("cricoidInferior", "cricoid_cartilage", "lowest")]
+
+
+def neck_landmarks(levels_c: list[dict]) -> dict:
+    """The level each laryngeal landmark lies at, projected perpendicularly onto the cervical spine (Alicandri-Ciufelli
+    2020): the hyoid's and the thyroid cartilage's centroids, the cricoid's lower margin (its lowest point); the level is
+    the vertebral body or disc whose centre lies nearest along the spine's axis there."""
+    o = origin()
+    marks = []
+    for g in levels_c:
+        marks.append((g["level"], np.array(g["bodyCentre"])))
+        marks.append((g["pair"], np.array(g["discCentre"])))
+    C = centroids()
+    marks.append(("T1", C[LABEL_OF["T1"]] - o))
+    out = {}
+    for key, cls, how in NECK_LANDMARKS:
+        sel, aff = ts_box("headneck_bones_vessels", cls)
+        pts = nib.affines.apply_affine(shifted(aff, o), np.argwhere(sel))
+        p = pts.mean(0) if how == "centroid" else pts[np.argmin(pts[:, 2])]
+        # the local spine axis: through the two marks nearest the landmark's height
+        near = sorted(marks, key=lambda m: abs(m[1][2] - p[2]))[:2]
+        axis = near[0][1] - near[1][1]
+        axis = axis / np.linalg.norm(axis) if np.linalg.norm(axis) > 0 else np.array([0, 0, 1.0])
+        best = min(marks, key=lambda m: abs((m[1] - p) @ axis))
+        out[key] = {"level": best[0], "point": p.round(2).tolist()}
+    print("neck landmarks:", {k: v["level"] for k, v in out.items()})
+    return out
+
+
+def cervical_soft(report: dict) -> list[dict]:
+    o = origin()
+    C = centroids()
+    z_lo, z_hi = C[LABEL_OF["T1"]][2] - 15, C[LABEL_OF["C1"]][2] + 30
+    x_mid = float(np.mean([C[LABEL_OF[f"C{i}"]][0] for i in range(1, 8)])) - o[0]
+    items = []
+    for task, cls, sid, name, token, layer, cat, faces in CERVICAL_TS:
+        sel, aff = ts_box(task, cls)
+        if not np.allclose(aff[2, :2], 0):
+            raise SystemExit("the CT's slices are not axial")
+        z = aff[2, 2] * np.arange(sel.shape[2]) + aff[2, 3]
+        sel[:, :, (z < z_lo) | (z > z_hi)] = False
+        if sel.sum() < 50:
+            raise SystemExit(f"{task}/{cls}: empty within the neck")
+        mesh = isosurface(sel.astype(np.float32), shifted(aff, o), 0.5, 1.0, faces)
+        paired = cls.endswith(("_left", "_right"))
+        nodes = ([{"name": side_of(cls), "positions": mesh.vertices, "normals": mesh.vertex_normals, "indices": mesh.faces, "mode": 4}]
+                 if paired else halves(mesh, x_mid))
+        write_glb(BUILD / f"{sid}.glb", nodes, {"id": sid})
+        items.append({"id": sid, "name": name, "token": token, "layer": layer, "category": cat, "region": "cervical",
+                      "faces": int(len(mesh.faces)), "centroid": mesh.centroid.round(2).tolist(),
+                      "source": f"TotalSegmentator {task}: {cls.replace('+', ' and ')}, within the neck"})
+        report[sid] = items[-1]
+        print(f"{sid:24s} faces {len(mesh.faces):6d}")
+    return items
+
+
+def vertebral_artery(report: dict) -> tuple[list[dict], dict]:
+    """The vertebral artery, schematic, by side: V1 from the subclavian artery (TotalSegmentator) to the foramen
+    transversarium where it enters, V2 through the foramina measured on this CT up to C1, V3 behind the lateral mass of
+    the atlas and over the groove on its posterior arch (measured surface), and the start of V4 towards the foramen
+    magnum. Where it enters is inferred from the foramina's size (those that carry the artery are larger: Hong 2008,
+    Bruneau 2006): the lowest whose enclosed area is at least VA_FILLED of the median at C3-C6."""
+    img = nib.load(MASK)
+    aff = img.affine
+    vox = np.abs(np.diag(aff)[:3])
+    o = origin()
+    C = centroids()
+    inv = np.linalg.inv(aff)
+    corners = np.array([[x, y, z] for x in (-70, 70) for y in (-70, 70) for z in (-20, 40)], float)
+    span = np.vstack([nib.affines.apply_affine(inv, C[LABEL_OF["C1"]] + corners), nib.affines.apply_affine(inv, C[LABEL_OF["T1"]] + corners)])
+    lo = np.maximum(np.floor(span.min(0)).astype(int), 0)
+    hi = np.minimum(np.ceil(span.max(0)).astype(int) + 1, img.shape)
+    cr = tuple(slice(a, b) for a, b in zip(lo, hi))
+    vm, a2 = load_mask(cr)
+    ct = read_block(CT, cr)
+    levels = [f"C{i}" for i in range(1, 8)]
+    tf, frames, bone_pts = {}, {}, {}
+    for lv in levels:
+        lab = LABEL_OF[lv]
+        sel = vm == lab
+        idx = np.argwhere(sel)
+        m = np.ceil(12 / vox).astype(int)
+        b0, b1 = np.maximum(idx.min(0) - m, 0), np.minimum(idx.max(0) + m + 1, sel.shape)
+        crp = tuple(slice(a, b) for a, b in zip(b0, b1))
+        vol = bone_volume(ct[crp].astype(np.float32), sel[crp], float(vox.mean()))
+        inside = ndimage.gaussian_filter(vol, SIGMA_VOX) > BONE_HU
+        lab_i, n = ndimage.label(inside)
+        if n > 1:
+            inside = lab_i == (int(np.argmax(ndimage.sum(inside, lab_i, range(1, n + 1)))) + 1)
+        a3 = a2.copy()
+        a3[:3, 3] = nib.affines.apply_affine(a2, b0)
+        grid = G.Grid(inside.astype(np.uint8), a3)
+        c = C[lab]
+        up, down = C.get(lab - 1), C.get(lab + 1)
+        F = G.frame(up if up is not None else c + (c - down), down)
+        can = None
+        for dw in (0.0, 3.0, -3.0, 6.0):
+            can = G.canal(grid, 1, c + dw * F[2], F)
+            if can:
+                break
+        tf[lv] = G.transverse_foramina(grid, 1, c, F, can["halfWidth"] + 2 if can else 14.0)
+        frames[lv] = F
+        if lv == "C1":
+            bone_pts[lv] = nib.affines.apply_affine(a3, np.argwhere(inside))
+    del vm, ct
+    entry, parts, areas = {}, {}, {}
+    for sd, sg in (("L", -1), ("R", 1)):
+        area = {lv: (tf[lv][sd]["area"] if tf[lv][sd] else 0.0) for lv in levels}
+        areas[sd] = area
+        ref = float(np.median([area[x] for x in ("C3", "C4", "C5", "C6") if area[x] > 0] or [0]))
+        cand = [lv for lv in ("C7", "C6", "C5", "C4", "C3") if area[lv] >= VA_FILLED * ref and tf[lv][sd]]
+        if not cand or any(tf[lv][sd] is None for lv in levels[:levels.index(cand[0]) + 1]):
+            raise SystemExit(f"vertebral artery {sd}: foramina transversaria not found at every level ({area})")
+        e = cand[0]
+        entry[sd] = e
+        v2 = [np.array(tf[lv][sd]["centre"]) for lv in reversed(levels[:levels.index(e) + 1])]  # entry level up to C1
+        Fe = frames[e]
+        # V1: from the subclavian artery's surface point nearest a point 30 mm below the entry, to just below the entry
+        sub, sa = ts_box("total", f"subclavian_artery_{'left' if sd == 'L' else 'right'}")
+        sub_pts = nib.affines.apply_affine(sa, np.argwhere(sub))
+        below = v2[0] - 10 * Fe[2] + 2 * Fe[1]
+        origin_pt = sub_pts[np.argmin(np.linalg.norm(sub_pts - (v2[0] - 30 * Fe[2]), axis=1))]
+        # V3: up out of the C1 foramen, behind the lateral mass, over the groove on the posterior arch (the lowest point
+        # of the arch's top surface 10-20 mm from the midline, behind the canal), then towards the foramen magnum
+        F1 = frames["C1"]
+        c1 = C[LABEL_OF["C1"]]
+        rel = (bone_pts["C1"] - c1) @ F1.T
+        best = None
+        for u in np.arange(10, 20.01, 1.0):
+            col = rel[(np.abs(rel[:, 0] - sg * u) < 0.75) & (rel[:, 1] < -12)]
+            if len(col):
+                top = col[np.argmax(col[:, 2])]
+                if best is None or top[2] < best[2]:
+                    best = top
+        if best is None:
+            raise SystemExit(f"vertebral artery {sd}: the groove on the posterior arch of C1 was not found")
+        g = c1 + best @ F1 + VA_RADIUS * 1.25 * F1[2]
+        t1 = (v2[-1] - c1) @ F1.T
+        q1 = c1 + t1[0] * F1[0] + (t1[1] - 2) * F1[1] + (t1[2] + 7) * F1[2]
+        q2 = c1 + 0.5 * (t1[0] + best[0]) * F1[0] + 0.5 * (t1[1] - 2 + best[1]) * F1[1] + (best[2] + 4) * F1[2]
+        dura = c1 + sg * 10 * F1[0] + (best[1] + 4) * F1[1] + (best[2] + 8) * F1[2]
+        v4 = c1 + sg * 7 * F1[0] + (best[1] + 12) * F1[1] + (best[2] + 18) * F1[2]
+        path = [origin_pt, below] + v2 + [q1, q2, g, dura, v4]
+        curve = G.catmull([q - o for q in path], 8)
+        parts[sd] = G.tube(curve, VA_RADIUS)
+    write_glb(BUILD / "sp_vertebral_artery.glb", mesh_nodes(parts), {"id": "sp_vertebral_artery"})
+    c4 = [np.array(tf[lv]["L"]["centre"]) for lv in ("C3", "C4") if tf[lv]["L"]] or [C[LABEL_OF["C4"]]]
+    va = {"id": "sp_vertebral_artery", "name": "Vertebral artery", "token": "spArtery", "layer": "vessels", "category": "vessel",
+          "region": "cervical", "schematic": True, "centroid": (np.mean(c4, axis=0) - o).round(2).tolist(),
+          "source": f"Schematic: from the subclavian artery (TotalSegmentator) into the foramen transversarium of {entry['L']} (left) "
+                    f"and {entry['R']} (right), inferred from the foramina's size on this CT; up through the foramina measured "
+                    f"on this CT to C1; behind the lateral mass of the atlas and over the groove on its posterior arch (measured "
+                    f"surface); then a short way towards the foramen magnum. Drawn {2 * VA_RADIUS:g} mm thick"}
+    report["vertebralArtery"] = {"entry": entry, "areas": areas}
+    data = {"entry": entry, "foramina": {lv: {sd: tf[lv][sd] and {k: tf[lv][sd][k] for k in ("area", "width", "depth")} for sd in ("L", "R")}
+                                         for lv in levels}}
+    # the width between the foramina's medial edges (a vertebral artery runs in each from its entry level up)
+    for lv in levels:
+        L_, R_ = tf[lv]["L"], tf[lv]["R"]
+        if L_ and R_:
+            c = C[LABEL_OF[lv]]
+            uL = (np.array(L_["centre"]) - c) @ frames[lv][0]
+            uR = (np.array(R_["centre"]) - c) @ frames[lv][0]
+            data["foramina"][lv]["medialGap"] = round(float((uR - R_["width"] / 2) - (uL + L_["width"] / 2)), 1)
+    print(f"vertebral artery: enters {entry}; foramen areas {areas}")
+    return [va], data
 
 
 PALETTE = json.loads((REPO / "src" / "data" / "palette.json").read_text())
@@ -512,7 +806,12 @@ def colour(token: str) -> dict:
 REF_KEYS = ("hwang2019", "merckaert2015", "hasegawa1996", "zindrick1987", "fardon2014",
             "osman2021", "luebbers2025", "downs2011", "lee2008", "isncsci2019", "rupp2021",
             "matsukawa2017", "zhao2021", "koeck2026", "jenkins2026", "gertzbein1990", "miyamoto2025", "wang2023",
-            "moncadahabib2025", "nkwerem2024")
+            "moncadahabib2025", "nkwerem2024", "gkasdaris2016", "wangr2021", "verma2020", "avila2016", "lehman2003",
+            "lehmankuklo2003", "mandelka2023", "kshettry2015", "komaitis2025", "scoscina2023", "jandial2012", "mozaffari2024",
+            "epstein2023", "taterra2019", "moreno2021", "tanaka2000", "tudose2023", "hong2008", "bruneau2006", "vigo2020",
+            "valenzuela2026", "tudose2026", "joaquim2018", "rathinavelu2021", "jiang2024", "joaquim2020", "singh2022",
+            "kucherina2026", "jannelli2025", "hasan2025", "arumalla2021", "alicandri2020", "siribumrungwong2018",
+            "kendirlioglu2026", "zhou2022", "aosurgeryref")
 
 
 def references() -> dict:
@@ -531,7 +830,6 @@ def write_manifest(verts: list[dict], ts: list[dict], dsc: list[dict]) -> None:
                            "centroid": {"L": v["centroid"], "R": v["centroid"]}})
     for t in ts + dsc:
         structures.append({**base, "id": t["id"], "name": t["name"], "type": "bone" if t["category"] == "bone" else "soft",
-                           **({"region": "lumbar"} if t["category"] in ("root", "ganglion") else {}),
                            "layer": t["layer"], "file": f"assets/spine/{t['id']}.glb", "colour": colour(t["token"]),
                            "category": t["category"], **({"level": t["level"]} if "level" in t else {}),
                            **({"region": t["region"]} if "region" in t else {}),
@@ -576,6 +874,28 @@ def validate() -> int:
     check(by["sp_sacrum"]["centroid"]["R"][2] < by["sp_l5"]["centroid"]["R"][2], "sacrum below L5")
     for lv in ("l1_l2", "l2_l3", "l3_l4", "l4_l5"):
         check(f"sp_disc_{lv}" in by, f"disc {lv} missing")
+    # thoracic: discs C7-T1 to T12-L1, roots T1-T12
+    for a, b in zip(THORACIC, THORACIC[1:]):
+        check(f"sp_disc_{a.lower()}_{b.lower()}" in by, f"disc {a}-{b} missing")
+    for i in range(1, 13):
+        check(f"sp_root_t{i}" in by and f"sp_drg_t{i}" in by, f"root T{i} missing")
+    # cervical: discs C2-C3 to C7-T1, roots C3-C8, the vertebral artery; the neck's soft tissue on the right sides and in
+    # the right order from front to back (trachea, oesophagus, vertebral bodies), the carotids beside the trachea
+    for a, b in zip(CERVICAL, CERVICAL[1:]):
+        check(f"sp_disc_{a.lower()}_{b.lower()}" in by, f"disc {a}-{b} missing")
+    for i in range(3, 9):
+        check(f"sp_root_c{i}" in by and f"sp_drg_c{i}" in by, f"root C{i} missing")
+    check(by.get("sp_vertebral_artery", {}).get("schematic") is True, "vertebral artery missing or not flagged schematic")
+    for _, cls, sid, *_ in CERVICAL_TS:
+        check(sid in by, f"{sid} missing")
+    for left in [x for x in by if x.endswith("_left") and by[x].get("region") == "cervical"]:
+        right = left.replace("_left", "_right")
+        check(right in by and by[left]["centroid"]["R"][0] < by[right]["centroid"]["R"][0], f"{left}: not left of its right partner")
+    if all(k in by for k in ("sp_trachea", "sp_esophagus", "sp_c6", "sp_cca_left", "sp_cca_right")):
+        y = {k: by[k]["centroid"]["R"][1] for k in ("sp_trachea", "sp_esophagus", "sp_c6")}
+        check(y["sp_trachea"] > y["sp_esophagus"] > y["sp_c6"], f"front-to-back order trachea, oesophagus, C6: {y}")
+        xt = by["sp_trachea"]["centroid"]["R"][0]
+        check(by["sp_cca_left"]["centroid"]["R"][0] < xt < by["sp_cca_right"]["centroid"]["R"][0], "carotids either side of the trachea")
     print(f"spine validation: {n - len(fails)}/{n} checks passed")
     for f in fails:
         print("FAIL", f)
@@ -603,10 +923,17 @@ def main() -> int:
     verts = vertebrae(report)
     ts = ts_structures(report)
     dsc = discs(report, verts)
-    levels, roots = lumbar(report)
+    levels, roots = segment_geometry(report, "lumbar")
+    levels_t, roots_t = segment_geometry(report, "thoracic")
+    levels_c, roots_c = segment_geometry(report, "cervical")
+    soft = cervical_soft(report)
+    va, va_data = vertebral_artery(report)
+    landmarks = neck_landmarks(levels_c)
     (BUILD / "report.json").write_text(json.dumps(report, indent=1, default=float))
-    write_manifest(verts, ts, dsc + roots)
-    (GEN / "spine-levels.json").write_text(json.dumps({"lumbar": levels}, indent=1, default=float))
+    write_manifest(verts, ts, dsc + roots + roots_t + roots_c + soft + va)
+    (GEN / "spine-levels.json").write_text(json.dumps({"lumbar": levels, "thoracic": levels_t, "cervical": levels_c,
+                                                       "vertebralArtery": va_data, "neckLandmarks": landmarks},
+                                                      indent=1, default=float))
     return 0
 
 

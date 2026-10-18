@@ -373,5 +373,600 @@
     }
    }
   }
- ]
+ ],
+ "thoracic": [
+  {
+   "level": "C7",
+   "pair": "C7-T1",
+   "bodyCentre": [
+    -10.71,
+    24.37,
+    423.51
+   ],
+   "canal": {
+    "width": 27.0,
+    "depth": 14.5,
+    "area": 257.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -11.93,
+    19.75,
+    414.76
+   ],
+   "discHeightMm": 3.6
+  },
+  {
+   "level": "T1",
+   "pair": "T1-T2",
+   "bodyCentre": [
+    -13.37,
+    11.79,
+    407.97
+   ],
+   "canal": {
+    "width": 24.5,
+    "depth": 16.0,
+    "area": 254.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -14.6,
+    6.92,
+    398.43
+   ],
+   "discHeightMm": 3.6
+  },
+  {
+   "level": "T2",
+   "pair": "T2-T3",
+   "bodyCentre": [
+    -15.53,
+    -0.5,
+    390.12
+   ],
+   "canal": {
+    "width": 22.5,
+    "depth": 16.0,
+    "area": 238.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -16.13,
+    -5.45,
+    380.68
+   ],
+   "discHeightMm": 3.2
+  },
+  {
+   "level": "T3",
+   "pair": "T3-T4",
+   "bodyCentre": [
+    -18.33,
+    -11.93,
+    371.71
+   ],
+   "canal": {
+    "width": 22.0,
+    "depth": 16.5,
+    "area": 256.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -17.49,
+    -14.52,
+    361.02
+   ],
+   "discHeightMm": 3.6
+  },
+  {
+   "level": "T4",
+   "pair": "T4-T5",
+   "bodyCentre": [
+    -16.89,
+    -21.06,
+    352.53
+   ],
+   "canal": {
+    "width": 23.5,
+    "depth": 17.0,
+    "area": 254.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -14.7,
+    -23.1,
+    343.37
+   ],
+   "discHeightMm": 3.1
+  },
+  {
+   "level": "T5",
+   "pair": "T5-T6",
+   "bodyCentre": [
+    -14.52,
+    -27.82,
+    332.37
+   ],
+   "canal": {
+    "width": 17.5,
+    "depth": 18.0,
+    "area": 219.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -12.05,
+    -29.83,
+    321.93
+   ],
+   "discHeightMm": 2.5
+  },
+  {
+   "level": "T6",
+   "pair": "T6-T7",
+   "bodyCentre": [
+    -12.43,
+    -31.98,
+    310.18
+   ],
+   "canal": {
+    "width": 20.0,
+    "depth": 18.0,
+    "area": 237.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -10.92,
+    -31.39,
+    299.72
+   ],
+   "discHeightMm": 2.2
+  },
+  {
+   "level": "T7",
+   "pair": "T7-T8",
+   "bodyCentre": [
+    -12.08,
+    -32.42,
+    288.13
+   ],
+   "canal": {
+    "width": 18.5,
+    "depth": 16.0,
+    "area": 213.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -12.29,
+    -29.41,
+    276.53
+   ],
+   "discHeightMm": 3.4
+  },
+  {
+   "level": "T8",
+   "pair": "T8-T9",
+   "bodyCentre": [
+    -13.44,
+    -30.26,
+    264.18
+   ],
+   "canal": {
+    "width": 23.5,
+    "depth": 16.5,
+    "area": 246.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -13.03,
+    -27.57,
+    253.11
+   ],
+   "discHeightMm": 3.6
+  },
+  {
+   "level": "T9",
+   "pair": "T9-T10",
+   "bodyCentre": [
+    -12.58,
+    -27.02,
+    240.73
+   ],
+   "canal": {
+    "width": 20.0,
+    "depth": 15.5,
+    "area": 207.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -10.12,
+    -23.89,
+    229.65
+   ],
+   "discHeightMm": 3.8
+  },
+  {
+   "level": "T10",
+   "pair": "T10-T11",
+   "bodyCentre": [
+    -8.77,
+    -24.44,
+    215.74
+   ],
+   "canal": {
+    "width": 22.0,
+    "depth": 14.5,
+    "area": 207.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -20.23,
+    -21.19,
+    204.11
+   ],
+   "discHeightMm": 2.3
+  },
+  {
+   "level": "T11",
+   "pair": "T11-T12",
+   "bodyCentre": [
+    -5.75,
+    -19.41,
+    192.78
+   ],
+   "canal": {
+    "width": 19.5,
+    "depth": 15.0,
+    "area": 198.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -5.23,
+    -15.29,
+    179.27
+   ],
+   "discHeightMm": 4.9
+  },
+  {
+   "level": "T12",
+   "pair": "T12-L1",
+   "bodyCentre": [
+    -4.46,
+    -13.44,
+    164.08
+   ],
+   "canal": {
+    "width": 22.0,
+    "depth": 15.5,
+    "area": 233.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -4.57,
+    -7.9,
+    150.32
+   ],
+   "discHeightMm": 4.7
+  }
+ ],
+ "cervical": [
+  {
+   "level": "C2",
+   "pair": "C2-C3",
+   "bodyCentre": [
+    -10.21,
+    63.11,
+    508.91
+   ],
+   "canal": {
+    "width": 25.0,
+    "depth": 18.0,
+    "area": 350.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -10.45,
+    60.16,
+    494.89
+   ],
+   "discHeightMm": 3.2
+  },
+  {
+   "level": "C3",
+   "pair": "C3-C4",
+   "bodyCentre": [
+    -9.34,
+    56.78,
+    485.53
+   ],
+   "canal": {
+    "width": 24.0,
+    "depth": 15.0,
+    "area": 258.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -9.26,
+    54.14,
+    477.06
+   ],
+   "discHeightMm": 3.3
+  },
+  {
+   "level": "C4",
+   "pair": "C4-C5",
+   "bodyCentre": [
+    -9.85,
+    50.24,
+    469.15
+   ],
+   "canal": {
+    "width": 25.5,
+    "depth": 15.5,
+    "area": 273.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -9.6,
+    47.03,
+    460.05
+   ],
+   "discHeightMm": 3.8
+  },
+  {
+   "level": "C5",
+   "pair": "C5-C6",
+   "bodyCentre": [
+    -9.56,
+    42.33,
+    453.75
+   ],
+   "canal": {
+    "width": 27.0,
+    "depth": 15.0,
+    "area": 281.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -9.89,
+    39.01,
+    444.99
+   ],
+   "discHeightMm": 3.1
+  },
+  {
+   "level": "C6",
+   "pair": "C6-C7",
+   "bodyCentre": [
+    -10.28,
+    34.36,
+    438.42
+   ],
+   "canal": {
+    "width": 26.5,
+    "depth": 16.5,
+    "area": 283.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -10.44,
+    30.85,
+    429.31
+   ],
+   "discHeightMm": 3.4
+  },
+  {
+   "level": "C7",
+   "pair": "C7-T1",
+   "bodyCentre": [
+    -10.71,
+    24.37,
+    423.51
+   ],
+   "canal": {
+    "width": 24.5,
+    "depth": 16.5,
+    "area": 270.0
+   },
+   "foramen": {
+    "L": null,
+    "R": null
+   },
+   "foramenMeasured": false,
+   "discCentre": [
+    -11.93,
+    19.75,
+    414.76
+   ],
+   "discHeightMm": 3.6
+  }
+ ],
+ "vertebralArtery": {
+  "entry": {
+   "L": "C6",
+   "R": "C6"
+  },
+  "foramina": {
+   "C1": {
+    "L": {
+     "area": 28.0,
+     "width": 6.5,
+     "depth": 7.0
+    },
+    "R": {
+     "area": 31.0,
+     "width": 8.5,
+     "depth": 6.5
+    },
+    "medialGap": 51.1
+   },
+   "C2": {
+    "L": {
+     "area": 23.0,
+     "width": 6.5,
+     "depth": 6.0
+    },
+    "R": {
+     "area": 22.0,
+     "width": 5.5,
+     "depth": 6.5
+    },
+    "medialGap": 30.0
+   },
+   "C3": {
+    "L": {
+     "area": 12.0,
+     "width": 5.0,
+     "depth": 3.5
+    },
+    "R": {
+     "area": 7.0,
+     "width": 4.0,
+     "depth": 3.5
+    },
+    "medialGap": 27.5
+   },
+   "C4": {
+    "L": {
+     "area": 24.0,
+     "width": 6.5,
+     "depth": 5.5
+    },
+    "R": {
+     "area": 26.0,
+     "width": 7.0,
+     "depth": 7.0
+    },
+    "medialGap": 27.9
+   },
+   "C5": {
+    "L": {
+     "area": 28.0,
+     "width": 6.5,
+     "depth": 6.0
+    },
+    "R": {
+     "area": 24.0,
+     "width": 5.5,
+     "depth": 6.5
+    },
+    "medialGap": 29.6
+   },
+   "C6": {
+    "L": {
+     "area": 28.0,
+     "width": 6.0,
+     "depth": 6.5
+    },
+    "R": {
+     "area": 27.0,
+     "width": 5.0,
+     "depth": 8.5
+    },
+    "medialGap": 33.7
+   },
+   "C7": {
+    "L": null,
+    "R": null
+   }
+  }
+ },
+ "neckLandmarks": {
+  "hyoid": {
+   "level": "C3",
+   "point": [
+    -4.22,
+    88.78,
+    457.38
+   ]
+  },
+  "thyroidCartilage": {
+   "level": "C5",
+   "point": [
+    -8.52,
+    75.78,
+    436.96
+   ]
+  },
+  "cricoidInferior": {
+   "level": "C5-C6",
+   "point": [
+    -0.36,
+    68.5,
+    413.01
+   ]
+  }
+ }
 }
