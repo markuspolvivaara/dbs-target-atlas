@@ -101,6 +101,28 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
 - Pipeline: `pipeline/skullbase_export.py` runs inside Blender (installed under `.tools/`, or set `BLENDER`) and
   `pipeline/skullbase_build.py` writes the assets and checks sides, symmetry and landmark distances.
 
+### Skull base v2: the detailed model (`skullbase-ct/`)
+
+A second skull-base model, its own entry ("Skull base v2", last on the home page) to compare with the first, and switched to from either page's **Model** chips (the same view opens in the other model):
+one head CT angiogram of the TopBrain 2025 release (case `topcow_ct_011`, 0.5 mm isotropic; University Hospital
+Zurich, open use with the source given, non-commercial), fetched member by member from the Zenodo zip.
+
+- **Bone**: the CT's own surface (400 HU; thin bone down to 170 HU where it adjoins that bone, so partial volume
+  does not open holes in the orbital roofs and wings), outside the labelled vessels and within TotalSegmentator's
+  skull mask; named bone by bone after the nearest bone of the fitted Z-Anatomy model. The cranial bones only: the
+  scan cuts the face off.
+- **Arteries and deep veins**: the surfaces of TopBrain's expert labels of the same scan (ICA, ACA A1–A3, ACom,
+  MCA M1–M3, PCom, PCA P1–P4, VA, BA, SCA, PICA, ophthalmic; vein of Galen, straight and superior sagittal sinuses,
+  internal cerebral and basal veins). Vessels this patient does not have (here the anterior choroidal and AICA) are
+  left out.
+- **Fitted from Z-Anatomy** (cards say "approximate position"): the cranial nerves, the dural sinuses and
+  arteries TopBrain does not label (middle meningeal, maxillary, ethmoidal...), the soft tissue and the landmark
+  names. Z-Anatomy is scaled onto the CT skull by ICP, then deformed by a smooth field (Gaussian-weighted
+  closest-point moves, 24 → 6 mm): its bone ends a median 1.5 mm (90% within 3.6 mm) from the CT's.
+- The CT is moved rigidly (true size) into the Z-Anatomy frame, origin at the fitted hypophysial fossa, so the
+  groups, cut-aways and cameras work unchanged. Pipeline: `pipeline/skullbase_ct.py`, then
+  `pipeline/skullbase_build.py ct`, `node pipeline/compress.mjs skullbase-ct`, `pipeline/skullbase_build.py ct finalize`.
+
 ## Cortical anatomy
 
 The 74 gyri and sulci of FreeSurfer's Destrieux 2009 parcellation (Destrieux et al. 2010) on the Lead-DBS MNI
@@ -413,7 +435,9 @@ Open Access Data Use Terms; the required acknowledgement is in `NOTICE`, `ATTRIB
 the Credits page. The white-matter section's tract files (`public/assets/wm/`, `wm-manifest.json`,
 `wm-connectome.json`) are **CC BY-SA 4.0** (HCP-1065 atlas) plus the HCP terms, not GPL. The skull-base
 files (`public/assets/skullbase/`, `sb-*.json`) are **CC BY-SA** (Z-Anatomy 4.0, BodyParts3D 2.1 Japan,
-Wikipedia definitions 3.0), not GPL. The cortex section's meshes (`public/assets/cortex/`, `ctx-*.json`) are
+Wikipedia definitions 3.0), not GPL. The skull base's detailed model (`public/assets/skullbase-ct/`, `sbct-*.json`)
+is derived from TopBrain 2025 data (University Hospital Zurich: open use with the source given, **non-commercial**;
+commercial use needs the data owner's permission) and from Z-Anatomy (CC BY-SA). The cortex section's meshes (`public/assets/cortex/`, `ctx-*.json`) are
 GPL-3.0, non-commercial like the other Lead-DBS-derived assets; the spine section's files (`public/assets/spine/`,
 `spine-*.json`) are **CC BY-SA 4.0** (VerSe); their labels were made with FreeSurfer (MGH
 licence, research use) and the definition texts in `ctx-labels.json` are CC BY-SA 3.0.

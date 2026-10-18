@@ -1,0 +1,450 @@
+[
+ {
+  "landmark": "Hypophysial fossa",
+  "ras": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "radiusMm": 15.0,
+  "structures": [
+   {
+    "id": "sb_neurohypophysis",
+    "distanceMm": 1.8
+   },
+   {
+    "id": "sb_adenohypophysis",
+    "distanceMm": 3.1
+   },
+   {
+    "id": "sb_sphenoid_bone",
+    "distanceMm": 3.5
+   },
+   {
+    "id": "sb_occipital_bone",
+    "distanceMm": 6.8
+   },
+   {
+    "id": "sb_medial_pontine_branches_of_basilar_artery",
+    "distanceMm": 7.6
+   },
+   {
+    "id": "sb_internal_carotid_artery",
+    "distanceMm": 7.9
+   },
+   {
+    "id": "sb_posterior_intercavernous_sinus",
+    "distanceMm": 9.0
+   },
+   {
+    "id": "sb_cavernous_sinus",
+    "distanceMm": 9.5
+   },
+   {
+    "id": "sb_lateral_pontine_branches_of_basilar_artery",
+    "distanceMm": 9.8
+   },
+   {
+    "id": "sb_trochlear_nerve_iv",
+    "distanceMm": 10.2
+   },
+   {
+    "id": "sb_basilar_artery",
+    "distanceMm": 10.8
+   },
+   {
+    "id": "sb_posterior_communicating_artery",
+    "distanceMm": 11.0
+   },
+   {
+    "id": "sb_abducens_nerve_vi",
+    "distanceMm": 12.0
+   },
+   {
+    "id": "sb_anterior_intercavernous_sinus",
+    "distanceMm": 12.1
+   },
+   {
+    "id": "sb_ophthalmic_nerve_v1",
+    "distanceMm": 12.4
+   },
+   {
+    "id": "sb_maxillary_nerve_v2",
+    "distanceMm": 12.8
+   },
+   {
+    "id": "sb_inferior_petrosal_sinus",
+    "distanceMm": 13.1
+   },
+   {
+    "id": "sb_oculomotor_nerve_iii",
+    "distanceMm": 13.5
+   },
+   {
+    "id": "sb_optic_chiasm",
+    "distanceMm": 14.6
+   },
+   {
+    "id": "sb_superior_cerebellar_artery",
+    "distanceMm": 14.7
+   }
+  ],
+  "landmarks": [
+   "(Middle clinoid process)",
+   "Carotid sulcus",
+   "Chiasmatic sulcus",
+   "Dorsum sellae",
+   "Hypophysial fossa",
+   "Posterior clinoid process",
+   "Sella turcica",
+   "Septum of sphenoidal sinuses",
+   "Tuberculum sellae"
+  ]
+ },
+ {
+  "landmark": "Optic canal",
+  "ras": [
+   12.742,
+   12.974,
+   8.894
+  ],
+  "radiusMm": 15.0,
+  "structures": [
+   {
+    "id": "sb_optic_nerve_ii",
+    "distanceMm": 0.4
+   },
+   {
+    "id": "sb_sphenoid_bone",
+    "distanceMm": 0.8
+   },
+   {
+    "id": "sb_ophthalmic_artery",
+    "distanceMm": 3.3
+   },
+   {
+    "id": "sb_internal_carotid_artery",
+    "distanceMm": 3.5
+   },
+   {
+    "id": "sb_oculomotor_nerve_iii",
+    "distanceMm": 4.4
+   },
+   {
+    "id": "sb_superior_ophthalmic_vein",
+    "distanceMm": 5.7
+   },
+   {
+    "id": "sb_frontal_bone",
+    "distanceMm": 5.9
+   },
+   {
+    "id": "sb_trochlear_nerve_iv",
+    "distanceMm": 6.7
+   },
+   {
+    "id": "sb_abducens_nerve_vi",
+    "distanceMm": 6.9
+   },
+   {
+    "id": "sb_inferior_ophthalmic_vein",
+    "distanceMm": 7.1
+   },
+   {
+    "id": "sb_middle_cerebral_artery_m1_segment",
+    "distanceMm": 7.6
+   },
+   {
+    "id": "sb_ophthalmic_nerve_v1",
+    "distanceMm": 7.6
+   },
+   {
+    "id": "sb_cavernous_sinus",
+    "distanceMm": 8.4
+   },
+   {
+    "id": "sb_ethmoid_bone",
+    "distanceMm": 9.9
+   },
+   {
+    "id": "sb_olfactory_nerve_i",
+    "distanceMm": 9.9
+   },
+   {
+    "id": "sb_distal_lateral_striate_branches",
+    "distanceMm": 10.4
+   },
+   {
+    "id": "sb_proximal_lateral_striate_branches",
+    "distanceMm": 10.4
+   },
+   {
+    "id": "sb_posterior_ethmoidal_artery",
+    "distanceMm": 11.0
+   },
+   {
+    "id": "sb_maxillary_nerve_v2",
+    "distanceMm": 11.8
+   },
+   {
+    "id": "sb_adenohypophysis",
+    "distanceMm": 12.5
+   },
+   {
+    "id": "sb_posterior_communicating_artery",
+    "distanceMm": 12.8
+   },
+   {
+    "id": "sb_optic_chiasm",
+    "distanceMm": 12.9
+   },
+   {
+    "id": "sb_neurohypophysis",
+    "distanceMm": 14.4
+   },
+   {
+    "id": "sb_anterior_cerebral_artery_a1_a2",
+    "distanceMm": 14.8
+   },
+   {
+    "id": "sb_anterior_intercavernous_sinus",
+    "distanceMm": 14.8
+   },
+   {
+    "id": "sb_posterior_intercavernous_sinus",
+    "distanceMm": 14.8
+   }
+  ],
+  "landmarks": [
+   "Chiasmatic sulcus",
+   "Foramen rotundum",
+   "Lesser wing",
+   "Limbus of sphenoid",
+   "Optic canal",
+   "Sphenoidal yoke",
+   "Tuberculum sellae"
+  ]
+ },
+ {
+  "landmark": "Apex of petrous part",
+  "ras": [
+   12.133,
+   -7.123,
+   -12.905
+  ],
+  "radiusMm": 15.0,
+  "structures": [
+   {
+    "id": "sb_temporal_bone",
+    "distanceMm": 0.0
+   },
+   {
+    "id": "sb_occipital_bone",
+    "distanceMm": 0.5
+   },
+   {
+    "id": "sb_sphenoid_bone",
+    "distanceMm": 0.8
+   },
+   {
+    "id": "sb_tentorium_cerebelli",
+    "distanceMm": 3.5
+   },
+   {
+    "id": "sb_cavernous_sinus",
+    "distanceMm": 5.4
+   },
+   {
+    "id": "sb_lateral_pontine_branches_of_basilar_artery",
+    "distanceMm": 5.5
+   },
+   {
+    "id": "sb_inferior_petrosal_sinus",
+    "distanceMm": 6.2
+   },
+   {
+    "id": "sb_abducens_nerve_vi",
+    "distanceMm": 6.3
+   },
+   {
+    "id": "sb_superior_petrosal_sinus",
+    "distanceMm": 7.8
+   },
+   {
+    "id": "sb_accessory_branch_of_middle_meningeal_artery",
+    "distanceMm": 8.9
+   },
+   {
+    "id": "sb_basilar_artery",
+    "distanceMm": 8.9
+   },
+   {
+    "id": "sb_medial_pontine_branches_of_basilar_artery",
+    "distanceMm": 9.5
+   },
+   {
+    "id": "sb_trigeminal_nerve_v",
+    "distanceMm": 9.8
+   },
+   {
+    "id": "sb_mandibular_nerve_v3",
+    "distanceMm": 12.2
+   },
+   {
+    "id": "sb_maxillary_nerve_v2",
+    "distanceMm": 12.2
+   },
+   {
+    "id": "sb_middle_meningeal_artery",
+    "distanceMm": 12.2
+   },
+   {
+    "id": "sb_vestibular_nerve",
+    "distanceMm": 12.7
+   },
+   {
+    "id": "sb_vestibulocochlear_nerve_viii",
+    "distanceMm": 13.2
+   },
+   {
+    "id": "sb_facial_nerve_vii",
+    "distanceMm": 13.5
+   }
+  ],
+  "landmarks": [
+   "Apex of petrous part",
+   "Carotid sulcus",
+   "Sphenoidal lingula"
+  ]
+ },
+ {
+  "landmark": "Foramen ovale",
+  "ras": [
+   -22.191,
+   -2.359,
+   -14.439
+  ],
+  "radiusMm": 15.0,
+  "structures": [
+   {
+    "id": "sb_sphenoid_bone",
+    "distanceMm": 0.6
+   },
+   {
+    "id": "sb_trigeminal_nerve_v",
+    "distanceMm": 1.6
+   },
+   {
+    "id": "sb_mandibular_nerve_v3",
+    "distanceMm": 2.3
+   },
+   {
+    "id": "sb_maxillary_nerve_v2",
+    "distanceMm": 2.3
+   },
+   {
+    "id": "sb_accessory_branch_of_middle_meningeal_artery",
+    "distanceMm": 2.8
+   },
+   {
+    "id": "sb_temporal_bone",
+    "distanceMm": 4.3
+   },
+   {
+    "id": "sb_middle_meningeal_artery",
+    "distanceMm": 5.1
+   },
+   {
+    "id": "sb_occipital_bone",
+    "distanceMm": 10.6
+   },
+   {
+    "id": "sb_facial_nerve_vii",
+    "distanceMm": 11.0
+   },
+   {
+    "id": "sb_cavernous_sinus",
+    "distanceMm": 11.9
+   },
+   {
+    "id": "sb_tentorium_cerebelli",
+    "distanceMm": 12.7
+   },
+   {
+    "id": "sb_cochlear_nerve",
+    "distanceMm": 13.4
+   },
+   {
+    "id": "sb_lateral_pontine_branches_of_basilar_artery",
+    "distanceMm": 14.1
+   },
+   {
+    "id": "sb_maxillary_artery",
+    "distanceMm": 14.3
+   },
+   {
+    "id": "sb_vestibular_nerve",
+    "distanceMm": 14.4
+   },
+   {
+    "id": "sb_superior_petrosal_sinus",
+    "distanceMm": 14.6
+   }
+  ],
+  "landmarks": [
+   "Foramen ovale",
+   "Foramen spinosum",
+   "Pterygoid canal",
+   "Scaphoid fossa",
+   "Spine of sphenoid bone",
+   "Sulcus of auditory tube"
+  ]
+ },
+ {
+  "landmark": "Foramen magnum",
+  "ras": [
+   -0.554,
+   -39.311,
+   -46.079
+  ],
+  "radiusMm": 25.0,
+  "structures": [
+   {
+    "id": "sb_posterior_inferior_cerebellar_artery",
+    "distanceMm": 4.4
+   },
+   {
+    "id": "sb_accessory_nerve_xi",
+    "distanceMm": 5.4
+   },
+   {
+    "id": "sb_occipital_bone",
+    "distanceMm": 8.2
+   },
+   {
+    "id": "sb_anterior_spinal_artery",
+    "distanceMm": 8.4
+   },
+   {
+    "id": "sb_vertebral_artery",
+    "distanceMm": 12.2
+   },
+   {
+    "id": "sb_hypoglossal_nerve_xii",
+    "distanceMm": 19.3
+   },
+   {
+    "id": "sb_glossopharyngeal_nerve_ix",
+    "distanceMm": 20.3
+   },
+   {
+    "id": "sb_vagus_nerve_x",
+    "distanceMm": 23.9
+   }
+  ],
+  "landmarks": [
+   "Foramen magnum",
+   "Groove for marginal sinus"
+  ]
+ }
+]

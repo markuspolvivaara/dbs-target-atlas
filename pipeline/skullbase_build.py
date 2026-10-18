@@ -28,7 +28,14 @@ from meshcheck import orient_outward  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parent
-BUILD = ROOT / "data" / "build" / "skullbase"
+# Two models share this build: the Z-Anatomy one (default) and the detailed one ("ct": the CT angiogram with
+# TopBrain's vessels and the fitted Z-Anatomy nerves, pipeline/skullbase_ct.py), with their own files
+CT = sys.argv[1:2] == ["ct"]
+if CT:
+    sys.argv.pop(1)
+KIND = "skullbase-ct" if CT else "skullbase"          # build folder and public/assets folder
+PREFIX = "sbct" if CT else "sb"                        # generated file names
+BUILD = ROOT / "data" / "build" / KIND
 GEN = REPO / "src" / "data" / "generated"
 PUBLIC = REPO / "public" / "assets"
 PALETTE = json.loads((REPO / "src" / "data" / "palette.json").read_text())
@@ -48,6 +55,27 @@ DATASET = {
             "from Z-Anatomy's hypophysial fossa landmark. Bones were simplified (retopologized) by Z-Anatomy and are smoothed here by "
             "one subdivision level; vessels and nerves are drawn as tubes with the calibre Z-Anatomy models (not measured).",
 }
+if CT:
+    DATASET = {
+        "name": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+        "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; "
+                   "University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+        "url": "https://topbrain2025.grand-challenge.org",
+        "cite": ["topbrain2025", "topcow2023", "mitsuhashi2009", "wasserthal2023"],
+        "attribution": [
+            "TopBrain 2025 challenge data (University Hospital Zurich): CT angiogram and vessel labels of case topcow_ct_011 - "
+            "https://topbrain2025.grand-challenge.org, https://zenodo.org/records/16878417 - open use, source given, non-commercial",
+            "BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan",
+            "Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0",
+            "Definitions: Wikipedia - CC-BY-SA 3.0 (the source page is linked on each definition)",
+        ],
+        "note": "One adult head CT angiogram (0.5 mm isotropic), not an average and not in MNI space. Bone (the cranial bones; the scan cuts the face off): the CT's own surface "
+                "(400 HU, and thin bone down to 170 HU where it adjoins that bone, outside the labelled vessels, within TotalSegmentator's skull), named bone by bone after the nearest bone of the "
+                "Z-Anatomy model fitted onto it. Arteries and the deep veins: surfaces of TopBrain's expert labels of the same scan. "
+                "Cranial nerves, the dural sinuses and arteries TopBrain does not label, the soft tissue and the landmark names: the "
+                "Z-Anatomy model fitted onto this skull (scaled, then deformed smoothly), so their positions are approximate. "
+                "Coordinates: millimetres from the fitted hypophysial fossa, the CT turned into the Z-Anatomy model's frame.",
+    }
 # regions of the page: the model's structures that come within REGION_MM of these landmarks
 REGION_LANDMARKS = {"Hypophysial fossa": 15.0, "Optic canal": 15.0, "Apex of petrous part": 15.0, "Foramen ovale": 15.0,
                     "Foramen magnum": 25.0}  # the foramen magnum point is the centre of the opening
@@ -76,6 +104,22 @@ ARTERY_SYSTEMS: dict[str, list[str]] = {
     "Maxillary artery": ["Maxillary artery", "Posterior septal branches of sphenopalatine artery",
                          "Posterior lateral nasal branches of sphenopalatine artery", "Artery of pterygoid canal"],
 }
+if CT:  # TopBrain's labelled arteries, and the Z-Anatomy ones it does not label (fitted)
+    ARTERY_SYSTEMS = {
+        "Internal carotid artery": ["Internal carotid artery", "Ophthalmic artery", "Posterior communicating artery", "Anterior choroidal artery"],
+        "Anterior cerebral artery": ["Anterior cerebral artery (A1–A2)", "Anterior cerebral artery (A3)", "Anterior communicating artery",
+                                     "Third anterior cerebral artery (A2)", "Third anterior cerebral artery (A3)"],
+        "Middle cerebral artery": ["Middle cerebral artery (M1 segment)", "Middle cerebral artery (M2 segment)",
+                                   "Middle cerebral artery (M3 segment)", "Proximal lateral striate branches", "Distal lateral striate branches"],
+        "Vertebral artery": ["Vertebral artery", "Posterior inferior cerebellar artery", "Anterior spinal artery"],
+        "Basilar artery": ["Basilar artery", "Anterior inferior cerebellar artery", "Superior cerebellar artery",
+                           "Medial pontine branches of basilar artery", "Lateral pontine branches of basilar artery"],
+        "Posterior cerebral artery": ["Posterior cerebral artery (P1–P2)", "Posterior cerebral artery (P3–P4)"],
+        "Middle meningeal artery": ["Middle meningeal artery", "Accessory branch of middle meningeal artery"],
+        "Ethmoidal arteries": ["Anterior ethmoidal artery", "Posterior ethmoidal artery"],
+        "Maxillary artery": ["Maxillary artery", "Posterior septal branches of sphenopalatine artery",
+                             "Posterior lateral nasal branches of sphenopalatine artery", "Artery of pterygoid canal"],
+    }
 ARTERY_SYSTEM = {a: sys_ for sys_, members in ARTERY_SYSTEMS.items() for a in members}
 # Nerves drawn as one structure under one name (editorial simplification): the trigeminal nerve's three divisions,
 # each with its branches, and the chorda tympani with the facial nerve
@@ -89,7 +133,11 @@ NERVE_MERGE = {
 }
 # a merged structure's definition: that of the nerve it is named for
 MERGED_TEXT = {"Ophthalmic nerve (V1)": "Ophthalmic nerve", "Maxillary nerve (V2)": "Maxillary nerve",
-               "Mandibular nerve (V3)": "Mandibular nerve"}
+               "Mandibular nerve (V3)": "Mandibular nerve",
+               # TopBrain's segments: the definition of the vessel they are part of
+               "Anterior cerebral artery (A1–A2)": "Anterior cerebral artery", "Anterior cerebral artery (A3)": "Anterior cerebral artery",
+               "Posterior cerebral artery (P1–P2)": "Posterior cerebral artery", "Posterior cerebral artery (P3–P4)": "Posterior cerebral artery",
+               "Middle cerebral artery (M2 segment)": "Insular branches of middle cerebral artery (M2 segment)"}
 AO_FLOOR = 0.45  # fully enclosed bone surface is drawn at this share of its colour
 KIND_TOKEN = {"bone": "sbBone", "soft": "sbSoft", "artery": "sbArtery", "vein": "sbVein", "nerve": "sbNerve"}
 
@@ -251,10 +299,26 @@ def main() -> int:
     for n, b in ex["soft"].items():
         base, side = split_pair(n)
         add(n, "soft", "soft", side, (np.array(b["verts"]), np.array(b["tris"]), np.ones(len(b["verts"]))))
+    # vessels drawn as the surfaces of labels (the CT model: TopBrain's)
+    for n, b in ex.get("meshes", {}).items():
+        base, side = split_pair(n)
+        add(n, b["kind"], "vmesh", side, (np.array(b["verts"]), np.array(b["tris"]), np.ones(len(b["verts"]))))
+    fitted = {split_pair(n)[0] for part in ("lines", "soft") for n, x in ex.get(part, {}).items() if x.get("fitted")}
     cn: dict[str, int] = {}
     arteries = {split_pair(n)[0] for n, ln in ex["lines"].items() if ln["kind"] == "artery"}
+    arteries |= {split_pair(n)[0] for n, m in ex.get("meshes", {}).items() if m["kind"] == "artery"}
     missing = set(ARTERY_SYSTEM) - arteries
-    if missing:
+    if CT:   # a CT case labels the vessels this patient has (variants: no anterior choroidal, no third A2...)
+        core = {"Internal carotid artery", "Basilar artery", "Vertebral artery", "Middle cerebral artery (M1 segment)",
+                "Anterior cerebral artery (A1–A2)", "Posterior cerebral artery (P1–P2)", "Anterior communicating artery",
+                "Posterior communicating artery", "Middle meningeal artery"}
+        if missing & core:
+            raise SystemExit(f"core arteries not in the CT model: {sorted(missing & core)}")
+        if missing:
+            print(f"not in this case (variants), left out: {sorted(missing)}")
+        for a_ in missing:
+            ARTERY_SYSTEM.pop(a_)
+    elif missing:
         raise SystemExit(f"ARTERY_SYSTEMS names not in the model: {sorted(missing)}")
     for n, ln in ex["lines"].items():
         base, side = split_pair(n)
@@ -275,7 +339,7 @@ def main() -> int:
     for base, g in sorted(groups.items()):
         sid = slug(base)
         nodes, cent = [], {}
-        if g["type"] in ("bone", "soft"):
+        if g["type"] in ("bone", "soft", "vmesh"):
             parts = {}
             for side, (v, t, ao) in g["sides"].items():
                 t = orient_outward(v, t)  # a few source meshes are inside out
@@ -314,15 +378,23 @@ def main() -> int:
         write_glb(BUILD / f"{sid}.glb", nodes, {"id": sid})
         for side in ("L", "R"):  # one-sided structures report the same centroid for both (the viewer reads both)
             cent.setdefault(side, cent.get("R" if side == "L" else "L"))
-        f = f"assets/skullbase/{sid}.glb"
+        f = f"assets/{KIND}/{sid}.glb"
+        if CT:   # where this structure comes from in the CT model
+            how = ("The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it, outside the labelled vessels), the part nearest this bone of the Z-Anatomy "
+                   "model fitted onto it; shading darkened where neighbouring bone encloses it." if g["type"] == "bone"
+                   else "Surface of TopBrain's expert label of this vessel on the CT angiogram." if g["type"] == "vmesh"
+                   else ("Fitted from the Z-Anatomy model onto this CT's skull (approximate position): " if base in fitted else "")
+                   + ("its mesh." if g["type"] == "soft" else
+                      f"a tube around its curve, with the radius Z-Anatomy models, at least {TUBE_MIN_RADIUS_MM} mm."))
         items.append({
-            "id": sid, "name": base, "aliases": [], "type": g["type"], "role": None,
+            "id": sid, "name": base, "aliases": [], "type": "tube" if g["type"] == "vmesh" else g["type"], "role": None,
+            **({"fitted": True} if CT and base in fitted else {}),
             "file": f, "bytes": 0, "colour": colour(KIND_TOKEN[g["kind"]]), "dataset": "zanatomy",
             "source": DATASET["name"], "licence": DATASET["licence"],
             "citation": [CITES[c]["citation"] for c in DATASET["cite"]], "citationUrls": [CITES[c]["url"] for c in DATASET["cite"]],
             "refIds": [], "category": g["kind"],
             "derivation": ("Cut at the midline (x = 0) into left and right halves. " if g["midline"] else "")
-                          + ("Mesh from Z-Anatomy, smoothed by one subdivision level and decimated; shading darkened where "
+                          + (how if CT else "Mesh from Z-Anatomy, smoothed by one subdivision level and decimated; shading darkened where "
                              "neighbouring bone encloses it (baked ambient occlusion)." if g["type"] == "bone"
                              else "Mesh exported unchanged from Z-Anatomy." if g["type"] == "soft"
                              else "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point "
@@ -391,8 +463,10 @@ def main() -> int:
             defs[merged] = d
 
     manifest = {
-        "space": "RAS millimetres from the hypophysial fossa landmark of the Z-Anatomy model (not MNI)",
-        "generatedBy": "pipeline/skullbase_export.py (Blender) + pipeline/skullbase_build.py + pipeline/compress.mjs",
+        "space": ("millimetres from the fitted hypophysial fossa, the CT turned into the Z-Anatomy model's frame (not MNI)" if CT
+                  else "RAS millimetres from the hypophysial fossa landmark of the Z-Anatomy model (not MNI)"),
+        "generatedBy": ("pipeline/skullbase_ct.py (TopBrain CTA + fitted Z-Anatomy) + pipeline/skullbase_build.py ct + pipeline/compress.mjs" if CT
+                        else "pipeline/skullbase_export.py (Blender) + pipeline/skullbase_build.py + pipeline/compress.mjs"),
         "structures": items,
         "arterySystems": list(ARTERY_SYSTEMS),
         "dataset": {"name": DATASET["name"], "licence": DATASET["licence"], "url": DATASET["url"], "note": DATASET["note"],
@@ -400,10 +474,10 @@ def main() -> int:
                     "citation": [CITES[c]["citation"] for c in DATASET["cite"]], "citationUrls": [CITES[c]["url"] for c in DATASET["cite"]]},
     }
     GEN.mkdir(parents=True, exist_ok=True)
-    (GEN / "sb-manifest.json").write_text(json.dumps(manifest, indent=1, ensure_ascii=False))
-    (GEN / "sb-landmarks.json").write_text(json.dumps(landmarks, indent=1, ensure_ascii=False))
-    (GEN / "sb-definitions.json").write_text(json.dumps(defs, indent=1, ensure_ascii=False))
-    (GEN / "sb-regions.json").write_text(json.dumps(regions, indent=1, ensure_ascii=False))
+    (GEN / f"{PREFIX}-manifest.json").write_text(json.dumps(manifest, indent=1, ensure_ascii=False))
+    (GEN / f"{PREFIX}-landmarks.json").write_text(json.dumps(landmarks, indent=1, ensure_ascii=False))
+    (GEN / f"{PREFIX}-definitions.json").write_text(json.dumps(defs, indent=1, ensure_ascii=False))
+    (GEN / f"{PREFIX}-regions.json").write_text(json.dumps(regions, indent=1, ensure_ascii=False))
     (BUILD / "report.json").write_text(json.dumps(report, indent=1))
     print(f"skull base: {len(items)} structures ({sum(i['type'] == 'bone' for i in items)} bones, "
           f"{sum(i['type'] == 'soft' for i in items)} soft, {sum(i['type'] == 'tube' for i in items)} vessels/nerves), "
@@ -413,8 +487,8 @@ def main() -> int:
 
 def validate() -> int:
     """Sides, symmetry and landmark sanity for the exported model. Exit 1 on failure."""
-    m = json.loads((GEN / "sb-manifest.json").read_text())
-    lms = json.loads((GEN / "sb-landmarks.json").read_text())
+    m = json.loads((GEN / f"{PREFIX}-manifest.json").read_text())
+    lms = json.loads((GEN / f"{PREFIX}-landmarks.json").read_text())
     fails, n = [], 0
 
     def check(ok: bool, msg: str) -> None:
@@ -453,16 +527,16 @@ def validate() -> int:
 def finalize() -> None:
     """After compress.mjs: drop compressed files of structures that no longer exist, fill in file sizes and
     copy the manifest next to the assets."""
-    p = GEN / "sb-manifest.json"
+    p = GEN / f"{PREFIX}-manifest.json"
     m = json.loads(p.read_text())
     keep = {Path(it["file"]).name for it in m["structures"]}
-    for f in (PUBLIC / "skullbase").glob("*.glb"):
+    for f in (PUBLIC / KIND).glob("*.glb"):
         if f.name not in keep:
             f.unlink()
     for it in m["structures"]:
         it["bytes"] = (REPO / "public" / it["file"]).stat().st_size
     p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
-    shutil.copy(p, PUBLIC / "sb-manifest.json")
+    shutil.copy(p, PUBLIC / f"{PREFIX}-manifest.json")
 
 
 if __name__ == "__main__":

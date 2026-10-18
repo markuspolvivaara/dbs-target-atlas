@@ -373,11 +373,11 @@ test('home page: sections, light load, and old links forward to the DBS section'
   await page.goto('./');
   await expect(page.locator('h1')).toHaveText('Open Neuroanatomy Atlas');
   // the modules from the more basic to the more specialised, the spine last; each card is a link over its own image
-  await expect(page.locator('.section-card')).toHaveCount(5);
-  expect(await page.locator('.section-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-section')))).toEqual(['cortex', 'tracts', 'skullbase', 'dbs', 'spine']);
+  await expect(page.locator('.section-card')).toHaveCount(6);
+  expect(await page.locator('.section-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-section')))).toEqual(['cortex', 'tracts', 'skullbase', 'dbs', 'spine', 'skullbase-ct']);
   await expect(page.locator('a.section-card[data-section="dbs"]')).toHaveAttribute('href', './dbs/');
   await expect(page.locator('a.section-card[data-section="tracts"]')).toHaveAttribute('href', './tracts/');
-  for (const id of ['cortex', 'tracts', 'skullbase', 'dbs', 'spine']) {
+  for (const id of ['cortex', 'tracts', 'skullbase', 'dbs', 'spine', 'skullbase-ct']) {
     const ok = await page.evaluate(async (u) => (await fetch(u)).ok, `./assets/home/${id}.webp`);
     expect(ok, id).toBe(true);
   }
@@ -538,6 +538,43 @@ for (const g of SB_GROUPS) {
     expect(gd.errors).toEqual([]);
   });
 }
+// the detailed model (CT): a few groups
+for (const id of ['floor', 'arteries', 'nerves', 'bone_sphenoid_bone']) {
+  test(`skull base (detailed) ${id}: renders and matches the visual baseline`, async ({ page }) => {
+    const gd = guard(page);
+    await page.goto(`./skullbase-ct/#/atlas?g=${id}`);
+    await settle(page);
+    expect(await canvasColours(page)).toBeGreaterThan(40);
+    await expect(page.locator('.stage')).toHaveScreenshot(`skullct-${id}.png`);
+    expect(gd.external).toEqual([]);
+    expect(gd.errors).toEqual([]);
+  });
+}
+
+test('skull base: the detailed model (CT) renders, and the Model switch keeps the view', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./skullbase/#/atlas?g=arteries');
+  await settle(page);
+  await expect(page.locator('.model-chips .chip[aria-pressed="true"]')).toHaveText('Skull base (Z-Anatomy)');
+  await page.locator('.model-chips .chip[data-v="ct"]').click();
+  await settle(page);
+  await expect(page).toHaveTitle(/Skull base v2/);
+  await expect.poll(() => new URL(page.url()).pathname).toContain('/skullbase-ct/');
+  await expect.poll(() => new URL(page.url()).hash).toContain('g=arteries');
+  expect(await canvasColours(page)).toBeGreaterThan(40);
+  await expect(page.locator('.model-chips .chip[aria-pressed="true"]')).toHaveText('Skull base v2 (CT)');
+  // a fitted structure says it is approximate; a CT vessel says where it comes from
+  await page.goto('./skullbase-ct/#/atlas?g=nerves&sel=sb_optic_nerve_ii');
+  await settle(page);
+  await expect(page.locator('.card.sel .schematic-note')).toContainText('Approximate position');
+  await page.goto('./skullbase-ct/#/atlas?g=arteries&sel=sb_basilar_artery');
+  await settle(page);
+  await expect(page.locator('.card.sel')).toContainText('TopBrain');
+  await page.goto('./skullbase-ct/#/credits');
+  await expect(page.locator('.page:not([hidden])')).toContainText('non-commercial');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
 
 test('skull base: structure and landmark cards, cut-away and the URL', async ({ page }) => {
   const g = guard(page);
@@ -567,7 +604,7 @@ test('skull base: structure and landmark cards, cut-away and the URL', async ({ 
   await expect(page.locator('.page:not([hidden]) h1')).toHaveText('Sources');
   // the section menu lists every section
   await page.locator('.section-chip').click();
-  await expect(page.locator('.section-menu a.section-item:not(.home)')).toHaveText(['Cortical anatomy', 'White-matter tracts', 'Skull base', 'DBS targets', 'Spine']);
+  await expect(page.locator('.section-menu a.section-item:not(.home)')).toHaveText(['Cortical anatomy', 'White-matter tracts', 'Skull base', 'DBS targets', 'Spine', 'Skull base v2']);
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });

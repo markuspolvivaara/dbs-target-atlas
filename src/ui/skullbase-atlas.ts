@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import type { CameraPreset } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
-import { definitionFor, kindOf, LANDMARKS, LM, NOT_YET_SHOWN, REGIONS, SB, SB_MANIFEST, type Landmark } from '../skullbase';
+import { definitionFor, kindOf, LANDMARKS, LM, NOT_YET_SHOWN, REGIONS, SB, SB_MANIFEST, SB_MODEL, type Landmark } from '../skullbase';
+import { encodeSkull } from '../skullbase/state';
 import { FLOOR_CUT_MM, SB_GROUP, SB_GROUPS, type SbGroup } from '../skullbase/groups';
 import { skullScene, type SkullPlan } from '../skullbase/scene';
 import type { SkullState } from '../skullbase/state';
@@ -229,6 +230,17 @@ export class SkullbaseAtlasPage {
     const keep = [pane.scrollTop, this.panel.scrollTop];
     requestAnimationFrame(() => { pane.scrollTop = keep[0]; this.panel.scrollTop = keep[1]; });
     clear(pane);
+    // the two models: the same view in the other one (its page, this link)
+    const other = (m: 'zanatomy' | 'ct') => `../${m === 'ct' ? 'skullbase-ct' : 'skullbase'}/${encodeSkull({ ...s, sel: null })}`;
+    pane.append(h('p', { class: 'chips-label' }, 'Model'),
+      h('div', { class: 'chips model-chips', role: 'group', 'aria-label': 'Model' },
+        ...([['zanatomy', 'Skull base (Z-Anatomy)'], ['ct', 'Skull base v2 (CT)']] as const).map(([m, label]) => h('a', {
+          class: 'chip', href: m === SB_MODEL ? '#' : other(m), 'aria-pressed': String(m === SB_MODEL), 'data-v': m,
+          onclick: m === SB_MODEL ? (e: Event) => e.preventDefault() : undefined,
+        }, label))),
+      h('p', { class: 'aside model-note' }, SB_MODEL === 'ct'
+        ? 'Bone and the labelled vessels from one head CT angiogram; the cranial nerves, the other vessels and the landmark names fitted onto it from the Z-Anatomy model (approximate).'
+        : 'The Z-Anatomy model (BodyParts3D). The detailed model shows a real CT’s bone and vessels.'));
     const g = SB_GROUP.get(s.grp)!;
     for (const [kind, label] of GROUP_ROWS) {
       pane.append(h('p', { class: 'chips-label' }, label),
@@ -306,6 +318,7 @@ export class SkullbaseAtlasPage {
     return h('article', { class: 'card sel', style: `--accent: var(--c-${st.colour.token})` }, close,
       h('p', { class: 'eyebrow' }, KIND_LABEL[k]),
       h('h2', {}, h('span', { class: 'swatch', style: `--c: var(--c-${st.colour.token})` }), st.name),
+      st.fitted ? h('p', { class: 'aside schematic-note' }, 'Approximate position: carried over from the Z-Anatomy model fitted onto this CT’s skull.') : '',
       h('dl', {}, ...defBlock,
         regions.length ? [h('dt', {}, 'Near (measured in the model)'), h('dd', {}, regions.join('; '))] : null,
         st.type === 'bone' ? [h('dt', {}, 'Labelled landmarks'), h('dd', {}, `${LANDMARKS.filter((l) => l.bone === st.name).length}; open the bone’s group to see them.`)] : null,
@@ -322,7 +335,9 @@ export class SkullbaseAtlasPage {
         ...(defBlock as HTMLElement[]),
         regions.length ? [h('dt', {}, 'In regions'), h('dd', {}, regions.join('; '))] : null,
         h('dt', {}, 'Position'), h('dd', {}, `${lm.ras.map(fmtMm).join(', ')} mm (right, anterior, superior of the hypophysial fossa); ${fmtMm(lm.distanceToBoneMm)} mm from the bone surface.`),
-        h('dt', {}, 'Source'), h('dd', {}, 'Z-Anatomy label point, anchored to the bone in the model.')));
+        h('dt', {}, 'Source'), h('dd', {}, SB_MODEL === 'ct'
+          ? 'Z-Anatomy label point, fitted onto this CT’s skull with the model (approximate) and moved onto its bone where it lay on it.'
+          : 'Z-Anatomy label point, anchored to the bone in the model.')));
   }
 
   // ---------------------------------------------------------------- legend, labels, readout

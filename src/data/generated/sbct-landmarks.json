@@ -1,0 +1,1766 @@
+[
+ {
+  "id": "lm_external_occipital_crest",
+  "name": "(External occipital crest)",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   0.185,
+   -87.849,
+   -27.372
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 6.0
+ },
+ {
+  "id": "lm_internal_occipital_crest",
+  "name": "(Internal occipital crest)",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   0.932,
+   -76.318,
+   -31.982
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_middle_clinoid_process",
+  "name": "(Middle clinoid process)",
+  "bone": "Sphenoid bone",
+  "part": "Sella turcica",
+  "ras": [
+   7.48,
+   0.613,
+   1.508
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_supra_orbital_notch",
+  "name": "(Supra-orbital notch)",
+  "bone": "Frontal bone",
+  "part": "Orbital part of frontal bone",
+  "ras": [
+   -20.362,
+   44.54,
+   29.151
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 7.2
+ },
+ {
+  "id": "lm_vermian_fossa",
+  "name": "(Vermian fossa)",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   1.912,
+   -66.426,
+   -38.044
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_trochlear_spine",
+  "name": "[Trochlear spine]",
+  "bone": "Frontal bone",
+  "part": null,
+  "ras": [
+   -9.179,
+   41.885,
+   22.753
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_anterior_clinoid_process",
+  "name": "Anterior clinoid process",
+  "bone": "Sphenoid bone",
+  "part": "Lesser wing",
+  "ras": [
+   -12.178,
+   3.284,
+   9.858
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_anterior_surface_of_petrous_part",
+  "name": "Anterior surface of petrous part",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   31.954,
+   -14.172,
+   -9.852
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.6
+ },
+ {
+  "id": "lm_apex_of_petrous_part",
+  "name": "Apex of petrous part",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   12.133,
+   -7.123,
+   -12.905
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_arcuate_eminence",
+  "name": "Arcuate eminence",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   37.672,
+   -20.301,
+   -6.08
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 1.4
+ },
+ {
+  "id": "lm_basilar_part_of_occipital_bone",
+  "name": "Basilar part of occipital bone",
+  "bone": "Occipital bone",
+  "part": "Basilar part of occipital bone",
+  "ras": [
+   0.338,
+   -14.756,
+   -18.212
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 4.5
+ },
+ {
+  "id": "lm_body_of_sphenoid_bone",
+  "name": "Body of sphenoid bone",
+  "bone": "Sphenoid bone",
+  "part": "Body of sphenoid bone",
+  "ras": [
+   -2.008,
+   8.221,
+   -12.886
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_carotid_sulcus",
+  "name": "Carotid sulcus",
+  "bone": "Sphenoid bone",
+  "part": "Body of sphenoid bone",
+  "ras": [
+   11.662,
+   -3.35,
+   -7.408
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_cerebellar_fossa",
+  "name": "Cerebellar fossa",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   -16.155,
+   -81.06,
+   -33.089
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_cerebral_fossa",
+  "name": "Cerebral fossa",
+  "bone": "Occipital bone",
+  "part": "Lateral part of occipital bone",
+  "ras": [
+   -21.365,
+   -100.896,
+   -3.579
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_cerebral_surface_of_greater_wing",
+  "name": "Cerebral surface of greater wing",
+  "bone": "Sphenoid bone",
+  "part": "Greater wing",
+  "ras": [
+   26.81,
+   14.2,
+   -3.929
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_chiasmatic_sulcus",
+  "name": "Chiasmatic sulcus",
+  "bone": "Sphenoid bone",
+  "part": "Body of sphenoid bone",
+  "ras": [
+   0.42,
+   8.342,
+   11.378
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_condylar_canal",
+  "name": "Condylar canal",
+  "bone": "Occipital bone",
+  "part": "Lateral part of occipital bone",
+  "ras": [
+   23.173,
+   -37.319,
+   -33.767
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.5
+ },
+ {
+  "id": "lm_condylar_fossa",
+  "name": "Condylar fossa",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   -31.818,
+   -48.95,
+   -39.306
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_cruciform_eminence",
+  "name": "Cruciform eminence",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   5.427,
+   -89.028,
+   -16.112
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_dorsum_sellae",
+  "name": "Dorsum sellae",
+  "bone": "Sphenoid bone",
+  "part": "Sella turcica",
+  "ras": [
+   -0.162,
+   -4.462,
+   7.083
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_ethmoidal_notch",
+  "name": "Ethmoidal notch",
+  "bone": "Frontal bone",
+  "part": null,
+  "ras": [
+   1.462,
+   32.281,
+   7.463
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 2.4
+ },
+ {
+  "id": "lm_external_occipital_protuberance",
+  "name": "External occipital protuberance",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   -0.527,
+   -97.522,
+   -25.887
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_external_surface_of_frontal_bone",
+  "name": "External surface of frontal bone",
+  "bone": "Frontal bone",
+  "part": "External surface of squamous part of frontal bone",
+  "ras": [
+   -19.504,
+   25.686,
+   82.004
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_external_surface_of_parietal_bone",
+  "name": "External surface of parietal bone",
+  "bone": "Parietal bone",
+  "part": null,
+  "ras": [
+   54.575,
+   -50.679,
+   68.934
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_foramen_caecum_of_frontal_bone",
+  "name": "Foramen caecum of frontal bone",
+  "bone": "Frontal bone",
+  "part": null,
+  "ras": [
+   1.666,
+   38.916,
+   17.154
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_foramen_magnum",
+  "name": "Foramen magnum",
+  "bone": "Occipital bone",
+  "part": null,
+  "ras": [
+   -0.554,
+   -39.311,
+   -46.079
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 8.2
+ },
+ {
+  "id": "lm_foramen_ovale",
+  "name": "Foramen ovale",
+  "bone": "Sphenoid bone",
+  "part": "Greater wing",
+  "ras": [
+   -22.191,
+   -2.359,
+   -14.439
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.6
+ },
+ {
+  "id": "lm_foramen_rotundum",
+  "name": "Foramen rotundum",
+  "bone": "Sphenoid bone",
+  "part": "Greater wing",
+  "ras": [
+   16.701,
+   8.238,
+   -2.555
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 1.0
+ },
+ {
+  "id": "lm_foramen_spinosum",
+  "name": "Foramen spinosum",
+  "bone": "Sphenoid bone",
+  "part": "Greater wing",
+  "ras": [
+   -26.928,
+   -7.02,
+   -15.343
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 1.0
+ },
+ {
+  "id": "lm_fossa_for_lacrimal_gland",
+  "name": "Fossa for lacrimal gland",
+  "bone": "Frontal bone",
+  "part": "Orbital surface of frontal bone",
+  "ras": [
+   43.279,
+   34.209,
+   16.386
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_frontal_angle_of_parietal_bone",
+  "name": "Frontal angle of parietal bone",
+  "bone": "Parietal bone",
+  "part": null,
+  "ras": [
+   2.416,
+   3.979,
+   94.074
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_frontal_border_of_parietal_bone",
+  "name": "Frontal border of parietal bone",
+  "bone": "Parietal bone",
+  "part": null,
+  "ras": [
+   45.755,
+   10.149,
+   69.406
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_frontal_crest",
+  "name": "Frontal crest",
+  "bone": "Frontal bone",
+  "part": "Internal surface of frontal bone",
+  "ras": [
+   0.716,
+   49.693,
+   45.237
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_frontal_eminence",
+  "name": "Frontal eminence",
+  "bone": "Frontal bone",
+  "part": null,
+  "ras": [
+   -29.209,
+   52.752,
+   49.159
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_frontal_margin_of_greater_wing",
+  "name": "Frontal margin of greater wing",
+  "bone": "Sphenoid bone",
+  "part": "Greater wing",
+  "ras": [
+   -34.199,
+   20.787,
+   18.499
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_glabella",
+  "name": "Glabella",
+  "bone": "Frontal bone",
+  "part": null,
+  "ras": [
+   1.884,
+   50.702,
+   22.736
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 4.6
+ },
+ {
+  "id": "lm_greater_wing",
+  "name": "Greater wing",
+  "bone": "Sphenoid bone",
+  "part": "Greater wing",
+  "ras": [
+   36.622,
+   21.412,
+   18.179
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_groove_for_marginal_sinus",
+  "name": "Groove for marginal sinus",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   -12.624,
+   -47.829,
+   -40.142
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_groove_for_middle_meningeal_artery",
+  "name": "Groove for middle meningeal artery",
+  "bone": "Parietal bone",
+  "part": null,
+  "ras": [
+   61.406,
+   -9.14,
+   24.644
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_groove_for_occipital_sinus",
+  "name": "Groove for occipital sinus",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   0.529,
+   -80.179,
+   -26.628
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_groove_for_transverse_sinus",
+  "name": "Groove for transverse sinus",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   28.49,
+   -85.206,
+   -15.459
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_groove_of_pterygoid_hamulus",
+  "name": "Groove of pterygoid hamulus",
+  "bone": "Sphenoid bone",
+  "part": "Pterygoid hamulus",
+  "ras": [
+   14.347,
+   18.432,
+   -37.967
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_hypoglossal_canal",
+  "name": "Hypoglossal canal",
+  "bone": "Occipital bone",
+  "part": "Lateral part of occipital bone",
+  "ras": [
+   17.485,
+   -26.68,
+   -31.932
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 1.7
+ },
+ {
+  "id": "lm_hypophysial_fossa",
+  "name": "Hypophysial fossa",
+  "bone": "Sphenoid bone",
+  "part": "Sella turcica",
+  "ras": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_inferior_nuchal_line",
+  "name": "Inferior nuchal line",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   -17.484,
+   -76.085,
+   -36.552
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_inferior_temporal_line",
+  "name": "Inferior temporal line",
+  "bone": "Parietal bone",
+  "part": null,
+  "ras": [
+   58.827,
+   -68.421,
+   29.544
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_infratemporal_surface_of_greater_wing",
+  "name": "Infratemporal surface of greater wing",
+  "bone": "Sphenoid bone",
+  "part": "Greater wing",
+  "ras": [
+   29.111,
+   5.108,
+   -16.295
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_internal_occipital_protuberance",
+  "name": "Internal occipital protuberance",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   0.32,
+   -88.06,
+   -16.493
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_internal_surface_of_parietal_bone",
+  "name": "Internal surface of parietal bone",
+  "bone": "Parietal bone",
+  "part": null,
+  "ras": [
+   48.742,
+   -48.059,
+   66.536
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_internal_surface_of_squamous_part_of_frontal_bone",
+  "name": "Internal surface of squamous part of frontal bone",
+  "bone": "Frontal bone",
+  "part": "Internal surface of frontal bone",
+  "ras": [
+   -26.307,
+   41.866,
+   65.711
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_intrajugular_process_of_occipital_bone",
+  "name": "Intrajugular process of occipital bone",
+  "bone": "Occipital bone",
+  "part": "Lateral part of occipital bone",
+  "ras": [
+   27.138,
+   -26.734,
+   -31.686
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_jugular_notch_of_occipital_bone",
+  "name": "Jugular notch of occipital bone",
+  "bone": "Occipital bone",
+  "part": "Lateral part of occipital bone",
+  "ras": [
+   -27.609,
+   -25.922,
+   -28.932
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 1.7
+ },
+ {
+  "id": "lm_jugular_process",
+  "name": "Jugular process",
+  "bone": "Occipital bone",
+  "part": "Lateral part of occipital bone",
+  "ras": [
+   -34.423,
+   -25.003,
+   -27.164
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_lateral_mass",
+  "name": "Lateral mass",
+  "bone": "Occipital bone",
+  "part": null,
+  "ras": [
+   -22.854,
+   -26.865,
+   -44.549
+  ],
+  "side": "L",
+  "boneFrom": "nearest surface",
+  "distanceToBoneMm": 1.4
+ },
+ {
+  "id": "lm_lateral_pterygoid_plate",
+  "name": "Lateral pterygoid plate",
+  "bone": "Sphenoid bone",
+  "part": "Pterygoid process",
+  "ras": [
+   -26.449,
+   19.354,
+   -33.792
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_lesser_wing",
+  "name": "Lesser wing",
+  "bone": "Sphenoid bone",
+  "part": "Lesser wing",
+  "ras": [
+   22.192,
+   16.859,
+   16.908
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_limbus_of_sphenoid",
+  "name": "Limbus of sphenoid",
+  "bone": "Sphenoid bone",
+  "part": "Body of sphenoid bone",
+  "ras": [
+   0.573,
+   11.308,
+   11.617
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 1.5
+ },
+ {
+  "id": "lm_mastoid_angle_of_parietal_bone",
+  "name": "Mastoid angle of parietal bone",
+  "bone": "Parietal bone",
+  "part": null,
+  "ras": [
+   58.041,
+   -63.796,
+   -6.528
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_mastoid_notch",
+  "name": "Mastoid notch",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   47.71,
+   -34.272,
+   -31.362
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_mastoid_process",
+  "name": "Mastoid process",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   53.827,
+   -29.415,
+   -33.124
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_maxillary_surface_of_greater_wing",
+  "name": "Maxillary surface of greater wing",
+  "bone": "Sphenoid bone",
+  "part": "Greater wing",
+  "ras": [
+   18.978,
+   17.056,
+   -10.759
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_medial_pterygoid_plate",
+  "name": "Medial pterygoid plate",
+  "bone": "Sphenoid bone",
+  "part": "Pterygoid process",
+  "ras": [
+   -14.564,
+   21.093,
+   -34.527
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_nasal_spine_of_frontal_bone",
+  "name": "Nasal spine of frontal bone",
+  "bone": "Frontal bone",
+  "part": null,
+  "ras": [
+   1.225,
+   45.522,
+   4.113
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 8.2
+ },
+ {
+  "id": "lm_occipital_angle_of_parietal_bone",
+  "name": "Occipital angle of parietal bone",
+  "bone": "Parietal bone",
+  "part": null,
+  "ras": [
+   1.238,
+   -97.766,
+   55.503
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_occipital_condyle",
+  "name": "Occipital condyle",
+  "bone": "Occipital bone",
+  "part": "Lateral part of occipital bone",
+  "ras": [
+   22.74,
+   -30.224,
+   -42.919
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_occipital_plane",
+  "name": "Occipital plane",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   0.02,
+   -103.933,
+   -11.218
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_opening_of_frontal_sinus",
+  "name": "Opening of frontal sinus",
+  "bone": "Frontal bone",
+  "part": "Sinus of frontal bone",
+  "ras": [
+   -3.073,
+   41.681,
+   9.535
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 7.9
+ },
+ {
+  "id": "lm_optic_canal",
+  "name": "Optic canal",
+  "bone": "Sphenoid bone",
+  "part": "Lesser wing",
+  "ras": [
+   12.742,
+   12.974,
+   8.894
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.8
+ },
+ {
+  "id": "lm_orbital_plate_of_frontal_bone",
+  "name": "Orbital plate of frontal bone",
+  "bone": "Frontal bone",
+  "part": null,
+  "ras": [
+   23.631,
+   24.954,
+   22.179
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_orbital_surface_of_frontal_bone",
+  "name": "Orbital surface of frontal bone",
+  "bone": "Frontal bone",
+  "part": null,
+  "ras": [
+   36.881,
+   26.925,
+   18.193
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_orbital_surface_of_greater_wing",
+  "name": "Orbital surface of greater wing",
+  "bone": "Sphenoid bone",
+  "part": "Greater wing",
+  "ras": [
+   -25.618,
+   20.802,
+   1.732
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_parietal_eminence",
+  "name": "Parietal eminence",
+  "bone": "Parietal bone",
+  "part": null,
+  "ras": [
+   60.775,
+   -43.356,
+   61.901
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_parietal_foramen",
+  "name": "Parietal foramen",
+  "bone": "Parietal bone",
+  "part": null,
+  "ras": [
+   6.034,
+   -83.544,
+   79.375
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_pharyngeal_tubercle",
+  "name": "Pharyngeal tubercle",
+  "bone": "Occipital bone",
+  "part": "Basilar part of occipital bone",
+  "ras": [
+   -0.13,
+   -7.547,
+   -29.41
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_posterior_clinoid_process",
+  "name": "Posterior clinoid process",
+  "bone": "Sphenoid bone",
+  "part": "Sella turcica",
+  "ras": [
+   -6.705,
+   -6.803,
+   6.705
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_posterior_surface_of_petrous_part",
+  "name": "Posterior surface of petrous part",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   31.441,
+   -27.829,
+   -12.917
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 3.6
+ },
+ {
+  "id": "lm_pterygoid_canal",
+  "name": "Pterygoid canal",
+  "bone": "Sphenoid bone",
+  "part": null,
+  "ras": [
+   -13.607,
+   4.679,
+   -10.419
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 1.2
+ },
+ {
+  "id": "lm_pterygoid_fossa",
+  "name": "Pterygoid fossa",
+  "bone": "Sphenoid bone",
+  "part": null,
+  "ras": [
+   14.14,
+   15.485,
+   -24.751
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_pterygoid_hamulus",
+  "name": "Pterygoid hamulus",
+  "bone": "Sphenoid bone",
+  "part": "Pterygoid hamulus",
+  "ras": [
+   15.273,
+   18.288,
+   -39.455
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_pterygoid_notch",
+  "name": "Pterygoid notch",
+  "bone": "Sphenoid bone",
+  "part": null,
+  "ras": [
+   -19.0,
+   21.444,
+   -31.936
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.5
+ },
+ {
+  "id": "lm_scaphoid_fossa",
+  "name": "Scaphoid fossa",
+  "bone": "Sphenoid bone",
+  "part": null,
+  "ras": [
+   -18.139,
+   -0.274,
+   -15.89
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_sphenoidal_angle_of_parietal_bone",
+  "name": "Sphenoidal angle of parietal bone",
+  "bone": "Parietal bone",
+  "part": null,
+  "ras": [
+   55.456,
+   17.171,
+   19.499
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_sphenoidal_crest",
+  "name": "Sphenoidal crest",
+  "bone": "Sphenoid bone",
+  "part": "Body of sphenoid bone",
+  "ras": [
+   1.341,
+   24.246,
+   5.125
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_sphenoidal_lingula",
+  "name": "Sphenoidal lingula",
+  "bone": "Sphenoid bone",
+  "part": "Body of sphenoid bone",
+  "ras": [
+   14.478,
+   -7.662,
+   -11.032
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_sphenoidal_yoke",
+  "name": "Sphenoidal yoke",
+  "bone": "Sphenoid bone",
+  "part": "Body of sphenoid bone",
+  "ras": [
+   0.541,
+   12.706,
+   13.741
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_frontal_part_of_orbital_margin",
+  "name": "Frontal part of orbital margin",
+  "bone": "Frontal bone",
+  "part": "External surface of squamous part of frontal bone",
+  "ras": [
+   -32.041,
+   41.407,
+   25.14
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 10.8
+ },
+ {
+  "id": "lm_lateral_part_of_occipital_bone",
+  "name": "Lateral part of occipital bone",
+  "bone": "Occipital bone",
+  "part": "Lateral part of occipital bone",
+  "ras": [
+   -29.83,
+   -48.821,
+   -39.355
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_mastoid_border_of_occipital_bone",
+  "name": "Mastoid border of occipital bone",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   -41.856,
+   -44.95,
+   -32.26
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_nasal_margin_of_frontal_bone",
+  "name": "Nasal margin of frontal bone",
+  "bone": "Frontal bone",
+  "part": "Nasal part of frontal bone",
+  "ras": [
+   -2.03,
+   47.736,
+   12.786
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 8.9
+ },
+ {
+  "id": "lm_nasal_part_of_frontal_bone",
+  "name": "Nasal part of frontal bone",
+  "bone": "Frontal bone",
+  "part": "Nasal part of frontal bone",
+  "ras": [
+   5.78,
+   41.366,
+   7.152
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 7.2
+ },
+ {
+  "id": "lm_occipital_border_of_parietal_bone",
+  "name": "Occipital border of parietal bone",
+  "bone": "Parietal bone",
+  "part": null,
+  "ras": [
+   40.651,
+   -91.521,
+   19.33
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_occipital_margin_of_temporal_bone",
+  "name": "Occipital margin of temporal bone",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   43.955,
+   -38.99,
+   -35.748
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_orbital_part_of_frontal_bone",
+  "name": "Orbital part of frontal bone",
+  "bone": "Frontal bone",
+  "part": null,
+  "ras": [
+   25.068,
+   29.848,
+   26.293
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_parietal_margin_of_frontal_bone",
+  "name": "Parietal margin of frontal bone",
+  "bone": "Frontal bone",
+  "part": null,
+  "ras": [
+   40.183,
+   9.087,
+   75.307
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_parietal_margin_of_greater_wing",
+  "name": "Parietal margin of greater wing",
+  "bone": "Sphenoid bone",
+  "part": "Greater wing",
+  "ras": [
+   -47.588,
+   13.676,
+   20.912
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_petrous_part_of_temporal_bone",
+  "name": "Petrous part of temporal bone",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   33.621,
+   -22.667,
+   -5.422
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 1.6
+ },
+ {
+  "id": "lm_pterygoid_process",
+  "name": "Pterygoid process",
+  "bone": "Sphenoid bone",
+  "part": "Pterygoid process",
+  "ras": [
+   14.608,
+   17.703,
+   -22.542
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_pterygospinous_process",
+  "name": "Pterygospinous process",
+  "bone": "Sphenoid bone",
+  "part": null,
+  "ras": [
+   -27.604,
+   7.565,
+   -25.813
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 4.4
+ },
+ {
+  "id": "lm_sagittal_border_of_parietal_bone",
+  "name": "Sagittal border of parietal bone",
+  "bone": "Parietal bone",
+  "part": null,
+  "ras": [
+   -0.462,
+   -47.558,
+   98.38
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_sella_turcica",
+  "name": "Sella turcica",
+  "bone": "Sphenoid bone",
+  "part": "Sella turcica",
+  "ras": [
+   0.051,
+   1.507,
+   -0.308
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 4.3
+ },
+ {
+  "id": "lm_septum_of_frontal_sinuses",
+  "name": "Septum of frontal sinuses",
+  "bone": "Sinus of frontal bone",
+  "part": "Sinus of frontal bone",
+  "ras": [
+   0.691,
+   48.377,
+   27.671
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.6
+ },
+ {
+  "id": "lm_septum_of_sphenoidal_sinuses",
+  "name": "Septum of sphenoidal sinuses",
+  "bone": "Sinus of sphenoid bone",
+  "part": "Sinus of sphenoid bone",
+  "ras": [
+   0.172,
+   10.086,
+   -0.16
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 5.9
+ },
+ {
+  "id": "lm_sphenoidal_margin_of_frontal_bone",
+  "name": "Sphenoidal margin of frontal bone",
+  "bone": "Frontal bone",
+  "part": null,
+  "ras": [
+   -21.025,
+   16.598,
+   17.287
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_spine_of_sphenoid_bone",
+  "name": "Spine of sphenoid bone",
+  "bone": "Sphenoid bone",
+  "part": "Greater wing",
+  "ras": [
+   -29.63,
+   -4.944,
+   -24.723
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_squamosal_border_of_parietal_bone",
+  "name": "Squamosal border of parietal bone",
+  "bone": "Parietal bone",
+  "part": null,
+  "ras": [
+   65.913,
+   -23.825,
+   12.674
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_squamosal_margin_of_greater_wing",
+  "name": "Squamosal margin of greater wing",
+  "bone": "Sphenoid bone",
+  "part": "Greater wing",
+  "ras": [
+   -43.383,
+   15.115,
+   -2.564
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_squamous_part_of_frontal_bone",
+  "name": "Squamous part of frontal bone",
+  "bone": "Frontal bone",
+  "part": "Squamous part of frontal bone",
+  "ras": [
+   16.637,
+   45.6,
+   69.841
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_squamous_part_of_occipital_bone",
+  "name": "Squamous part of occipital bone",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   -22.06,
+   -107.013,
+   7.541
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_squamous_part_of_temporal_bone",
+  "name": "Squamous part of temporal bone",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   66.201,
+   -18.211,
+   0.052
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_styloid_process_of_temporal_bone",
+  "name": "Styloid process of temporal bone",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   35.602,
+   -12.101,
+   -42.811
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_sulcus_of_auditory_tube",
+  "name": "Sulcus of auditory tube",
+  "bone": "Sphenoid bone",
+  "part": "Greater wing",
+  "ras": [
+   -20.996,
+   -7.185,
+   -15.021
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_supercilliary_arch",
+  "name": "Supercilliary arch",
+  "bone": "Frontal bone",
+  "part": null,
+  "ras": [
+   29.464,
+   48.643,
+   31.531
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 4.4
+ },
+ {
+  "id": "lm_superior_nuchal_line",
+  "name": "Superior nuchal line",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   -20.401,
+   -86.529,
+   -24.394
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_superior_temporal_line",
+  "name": "Superior temporal line",
+  "bone": "Parietal bone",
+  "part": null,
+  "ras": [
+   52.42,
+   -76.837,
+   40.478
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_supreme_nuchal_line",
+  "name": "Supreme nuchal line",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   -23.523,
+   -95.796,
+   -11.677
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_tegmen_tympani",
+  "name": "Tegmen tympani",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   40.102,
+   -16.257,
+   -8.912
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_temporal_line",
+  "name": "Temporal line",
+  "bone": "Frontal bone",
+  "part": "Temporal surface of frontal bone",
+  "ras": [
+   51.821,
+   31.114,
+   30.978
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_temporal_surface_of_frontal_bone",
+  "name": "Temporal surface of frontal bone",
+  "bone": "Frontal bone",
+  "part": "Temporal surface of frontal bone",
+  "ras": [
+   46.017,
+   28.53,
+   19.062
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_temporal_surface_of_greater_wing",
+  "name": "Temporal surface of greater wing",
+  "bone": "Sphenoid bone",
+  "part": "Greater wing",
+  "ras": [
+   40.946,
+   21.033,
+   6.105
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_trochlear_fovea",
+  "name": "Trochlear fovea",
+  "bone": "Frontal bone",
+  "part": null,
+  "ras": [
+   11.624,
+   42.365,
+   17.96
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 4.0
+ },
+ {
+  "id": "lm_tuberculum_sellae",
+  "name": "Tuberculum sellae",
+  "bone": "Sphenoid bone",
+  "part": "Sella turcica",
+  "ras": [
+   -0.128,
+   6.56,
+   9.617
+  ],
+  "side": "M",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_tympanic_part_of_temporal_bone",
+  "name": "Tympanic part of temporal bone",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   50.76,
+   -17.708,
+   -25.501
+  ],
+  "side": "R",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_vaginal_process_of_sphenoid_bone",
+  "name": "Vaginal process of sphenoid bone",
+  "bone": "Sphenoid bone",
+  "part": "Vaginal process of sphenoid bone",
+  "ras": [
+   -7.484,
+   3.437,
+   -15.307
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_zygomatic_margin_of_greater_wing",
+  "name": "Zygomatic margin of greater wing",
+  "bone": "Sphenoid bone",
+  "part": "Greater wing",
+  "ras": [
+   -33.961,
+   26.835,
+   3.162
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_zygomatic_process_of_frontal_bone",
+  "name": "Zygomatic process of frontal bone",
+  "bone": "Frontal bone",
+  "part": null,
+  "ras": [
+   -41.361,
+   36.202,
+   21.976
+  ],
+  "side": "L",
+  "boneFrom": "hook",
+  "distanceToBoneMm": 4.0
+ }
+]

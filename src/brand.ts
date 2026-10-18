@@ -9,7 +9,7 @@ export const BRAND = {
 } as const;
 
 export interface Section {
-  id: 'dbs' | 'tracts' | 'skullbase' | 'cortex' | 'spine';
+  id: 'dbs' | 'tracts' | 'skullbase' | 'cortex' | 'spine' | 'skullbase-ct';
   name: string;
   /** path from the site root */
   path: string;
@@ -38,6 +38,11 @@ export const SECTIONS: Section[] = [
   {
     id: 'spine', name: 'Spine', path: 'spine/', status: 'live',
     summary: 'Surgical anatomy of the spine from one adult CT, by region and level: vertebrae, discs, the spinal canal and the nerve roots, the vertebral artery and the neck, a virtual screw, and the craniocervical junction with its measurements.',
+  },
+  {
+    // the skull base's second model, to compare with the first (each page switches to the other)
+    id: 'skullbase-ct', name: 'Skull base v2', path: 'skullbase-ct/', status: 'live',
+    summary: 'The skull base from a real head CT angiogram: the CT’s own bone with its foramina, the patient’s own arteries and veins (circle of Willis with both communicating arteries) from expert labels, and the cranial nerves and landmark names fitted onto it from the first model. To compare with Skull base.',
   },
 ];
 

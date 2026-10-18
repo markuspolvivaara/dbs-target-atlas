@@ -160,6 +160,8 @@ export const ManifestStructureSchema = z.object({
   region: z.enum(['cervical', 'thoracic', 'lumbar', 'ccj']).optional(),
   /** drawn by rule from the anatomy and published descriptions, not segmented: the UI must say so */
   schematic: z.boolean().optional(),
+  /** skull base, detailed model: carried over from the Z-Anatomy model fitted onto the CT, so its position is approximate */
+  fitted: z.boolean().optional(),
   /** white-matter section: core (surgical essentials), extended, or posterior fossa */
   tier: z.enum(['core', 'extended', 'fossa']).optional(),
   centroid: z.object({ L: Vec3, R: Vec3 }).nullable(),

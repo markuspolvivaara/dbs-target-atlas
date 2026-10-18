@@ -2,7 +2,7 @@ import '@fontsource/atkinson-hyperlegible/latin-400.css';
 import '@fontsource/atkinson-hyperlegible/latin-700.css';
 import './styles.css';
 import { BRAND, SECTIONS } from './brand';
-import { LM, SB } from './skullbase';
+import { LM, SB, SB_MODEL } from './skullbase';
 import { SB_GROUP } from './skullbase/groups';
 import { decodeSkull, encodeSkull, type SkullPage, type SkullState } from './skullbase/state';
 import { h } from './ui/h';
@@ -11,7 +11,7 @@ import { SkullbaseAtlasPage } from './ui/skullbase-atlas';
 import { skullCreditsPage, skullSourcesPage } from './ui/skullbase-pages';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
 
-const SECTION = SECTIONS.find((s) => s.id === 'skullbase')!;
+const SECTION = SECTIONS.find((s) => s.id === (SB_MODEL === 'ct' ? 'skullbase-ct' : 'skullbase'))!;
 
 injectPaletteCss();
 let theme: ThemePref = storedTheme();
@@ -31,7 +31,9 @@ const app = document.getElementById('app')!;
 const navLinks = NAV.map(([p, label]) => h('a', { href: `#/${p}`, class: 'navlink', 'data-page': p }, label));
 const themeBtn = h('button', { type: 'button', class: 'theme-btn', onclick: () => cycleTheme() });
 const header = siteHeader({ section: SECTION, nav: navLinks, themeBtn });
-const disclaimer = disclaimerNote('Single-model anatomy (Z-Anatomy / BodyParts3D, one adult); individual anatomy varies. Not for surgical planning.');
+const disclaimer = disclaimerNote(SB_MODEL === 'ct'
+  ? 'One adult’s CT angiogram; nerves and landmarks fitted from a model (approximate). Individual anatomy varies. Not for surgical planning.'
+  : 'Single-model anatomy (Z-Anatomy / BodyParts3D, one adult); individual anatomy varies. Not for surgical planning.');
 
 const update = (fn: (s: SkullState) => void, opts: { camera?: boolean } = {}) => {
   const next = structuredClone(state);

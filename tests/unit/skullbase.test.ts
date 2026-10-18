@@ -113,3 +113,32 @@ describe('e2e group list stays in step with the groups module', () => {
     expect(SB_GROUPS.length).toBe(1 + REGIONS.length + 3 + 5);
   });
 });
+
+describe('the detailed model (TopBrain CT angiogram, Z-Anatomy fitted onto it)', async () => {
+  const { SbManifestSchema } = await import('../../src/data/schema');
+  const ct = SbManifestSchema.parse((await import('../../src/data/generated/sbct-manifest.json')).default);
+  const lms = (await import('../../src/data/generated/sbct-landmarks.json')).default as { name: string; ras: number[]; distanceToBoneMm: number }[];
+  it('has the same bones, cranial nerves I–XII and artery systems as the first model', () => {
+    const bones = (m: typeof ct) => new Set(m.structures.filter((s) => s.type === 'bone').map((s) => s.name));
+    for (const b of ['Sphenoid bone', 'Temporal bone', 'Occipital bone', 'Frontal bone', 'Ethmoid bone']) expect(bones(ct).has(b), b).toBe(true);
+    const cns = new Set(ct.structures.filter((s) => s.category === 'nerve').map((s) => s.cranialNerve));
+    expect(cns).toEqual(new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]));
+    expect(new Set(ct.structures.filter((s) => s.category === 'artery').map((s) => s.system))).toEqual(new Set(ct.arterySystems));
+  });
+  it('draws the labelled vessels from the CT and marks what was fitted from the model as approximate', () => {
+    const by = (n: string) => ct.structures.find((s) => s.name === n)!;
+    for (const n of ['Internal carotid artery', 'Basilar artery', 'Anterior communicating artery', 'Posterior communicating artery', 'Superior sagittal sinus']) {
+      expect(by(n), n).toBeTruthy();
+      expect(by(n).fitted, n).toBeUndefined();
+      expect(by(n).derivation, n).toMatch(/TopBrain/);
+    }
+    for (const n of ['Optic nerve (II)', 'Middle meningeal artery', 'Cavernous sinus']) expect(by(n)?.fitted, n).toBe(true);
+    for (const s of ct.structures) if (s.type === 'bone') expect(s.fitted, s.name).toBeUndefined();
+  });
+  it('keeps the frame: origin at the hypophysial fossa, the landmarks on or near the bone', () => {
+    expect(lms.find((l) => l.name === 'Hypophysial fossa')!.ras).toEqual([0, 0, 0]);
+    expect(lms.length).toBeGreaterThan(100);
+    expect(lms.filter((l) => l.distanceToBoneMm > 16)).toEqual([]);
+    for (const s of ct.structures) expect(s.file, s.id).toMatch(/^assets\/skullbase-ct\//);
+  });
+});
