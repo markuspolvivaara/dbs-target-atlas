@@ -169,6 +169,64 @@ def skull_base_attribution() -> list[str]:
     ]
 
 
+def skull_base_ct_attribution() -> list[str]:
+    """ATTRIBUTION.md section for the skull base's detailed model, from sbct-manifest.json (skullbase_build.py ct)."""
+    p = GEN / "sbct-manifest.json"
+    if not p.exists():
+        return []
+    d = json.loads(p.read_text())["dataset"]
+    return [
+        "## Skull base v2 (TopBrain 2025 CT angiogram with Z-Anatomy fitted onto it)",
+        "",
+        "The meshes in `public/assets/skullbase-ct/` and the files `sbct-manifest.json`, `sbct-landmarks.json`,",
+        "`sbct-regions.json` and `sbct-definitions.json` are derived from one CT angiogram of the TopBrain 2025 release and",
+        f"from Z-Anatomy. They are **not** GPL-licensed: {d['licence']}.",
+        "",
+        f"- Source: {d['url']}",
+        f"- Note: {d['note']}",
+        *[f"- Attribution: {a}" for a in d["attribution"]],
+        *[f"- Cite: {c}" for c in d["citation"]],
+        "- Changes made: the CT's bone surface taken at 400 HU (thin bone down to 170 HU next to it) within TotalSegmentator's",
+        "  skull mask, smoothed, decimated and named after the fitted Z-Anatomy bones; TopBrain's vessel labels meshed; the CT",
+        "  moved rigidly into the Z-Anatomy frame; Z-Anatomy's nerves, unlabelled vessels, soft tissue and landmarks scaled and",
+        "  smoothly deformed onto the CT's skull (pipeline/skullbase_ct.py); files converted to compressed glTF.",
+        "",
+    ]
+
+
+def brainstem_attribution() -> list[str]:
+    """ATTRIBUTION.md section for the brainstem section, from bs-manifest.json (built by brainstem_build.py)."""
+    p = GEN / "bs-manifest.json"
+    if not p.exists():
+        return []
+    ds = json.loads(p.read_text())["datasets"]
+    za, aan = ds["zanatomy"], ds["aan"]
+    return [
+        "## Brainstem section (Z-Anatomy fitted into MNI space; Harvard Ascending Arousal Network atlas 2.0)",
+        "",
+        "The meshes in `public/assets/brainstem/` and the files `bs-manifest.json`, `bs-zones.json` and `bs-definitions.json`",
+        "are **not** GPL-licensed. The arousal network nuclei (`bs_aan_*.glb`) are derived from the Harvard Ascending Arousal",
+        f"Network atlas 2.0 ({aan['licence']}); everything else from Z-Anatomy, itself based on BodyParts3D ({za['licence']}).",
+        "The section also shows the white-matter section's tracts and the DBS section's deep nuclei, under their licences above.",
+        "",
+        f"- Source: {za['url']}",
+        f"- Note: {za['note']}",
+        *[f"- Attribution: {a}" for a in za["attribution"]],
+        *[f"- Cite: {c}" for c in za["citation"]],
+        f"- Source: {aan['url']}",
+        f"- Note: {aan['note']}",
+        *[f"- Attribution: {a}" for a in aan["attribution"]],
+        *[f"- Cite: {c}" for c in aan["citation"]],
+        "- Changes made: the brainstem, its surface features, ventricles, cranial nerve nuclei, cranial nerves III-XII and the",
+        "  arteries around it exported from the Z-Anatomy Blender file (pipeline/brainstem_export.py) and fitted into MNI space",
+        "  onto the ICBM 2009b T2 template (pipeline/brainstem_fit.py); nerves and arteries rebuilt as tubes and kept near the",
+        "  brainstem; safe entry zones drawn by rule on the fitted surface; the AAN labels' surfaces taken after resampling to",
+        "  0.5 mm; midline structures cut at x = 0; files converted to compressed glTF; definitions shortened to their lead",
+        "  section.",
+        "",
+    ]
+
+
 def cortex_attribution() -> list[str]:
     """ATTRIBUTION.md section for the cortex section, from ctx-manifest.json (built by cortex_build.py)."""
     p = GEN / "ctx-manifest.json"
@@ -311,6 +369,8 @@ def write_attribution(m: dict, wm: dict) -> None:
         "> " + HCP_ACK,
         "",
         *skull_base_attribution(),
+        *skull_base_ct_attribution(),
+        *brainstem_attribution(),
         *cortex_attribution(),
         *spine_attribution(),
         "## Datasets considered and not used",

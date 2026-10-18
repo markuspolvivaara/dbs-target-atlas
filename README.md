@@ -2,10 +2,12 @@
 
 Interactive 3D neuroanatomy for teaching, built from published atlases in MNI space. Sections:
 
-- **DBS targets** (`dbs/`): described below.
-- **White-matter tracts** (`tracts/`): described below.
-- **Skull base** (`skullbase/`): described below.
 - **Cortical anatomy** (`cortex/`): described below.
+- **White-matter tracts** (`tracts/`): described below.
+- **Skull base** (`skullbase/`), with a second, detailed model (**Skull base v2**, `skullbase-ct/`): described below.
+- **Brainstem** (`brainstem/`): described below.
+- **DBS targets** (`dbs/`): described below.
+- **Spine** (`spine/`): described below.
 
 The home page (`index.html`) links the sections; they share the viewer, the anatomy pipeline,
 the design and the Settings. The project name and section list live in `src/brand.ts`.
@@ -122,6 +124,42 @@ Zurich, open use with the source given, non-commercial), fetched member by membe
 - The CT is moved rigidly (true size) into the Z-Anatomy frame, origin at the fitted hypophysial fossa, so the
   groups, cut-aways and cameras work unchanged. Pipeline: `pipeline/skullbase_ct.py`, then
   `pipeline/skullbase_build.py ct`, `node pipeline/compress.mjs skullbase-ct`, `pipeline/skullbase_build.py ct finalize`.
+
+## Brainstem
+
+The midbrain, pons and medulla in MNI space (ICBM 2009b), with what lies on and in them, and the published safe
+entry zones for brainstem surgery.
+
+- **Anatomy**: the Z-Anatomy model's brainstem (its surface features: crus, colliculi, olive, pyramid, medial
+  geniculate body), the aqueduct and fourth ventricle, the cranial nerve nuclei the model has (all but the trigeminal
+  nuclei), cranial nerves III–XII and the vertebrobasilar arteries next to the brainstem. Fitted into MNI space by
+  `pipeline/brainstem_fit.py`: the ICBM 2009b T2 template, averaged with its mirror image, gives the tissue–fluid
+  boundary (cisterns, aqueduct, fourth ventricle); the model's brainstem and ventricle walls are matched to it where
+  their normals agree, by a similarity transform kept on the midline (pitch, shift, one scale) and then a smooth,
+  left–right symmetric deformation. The matched surface lies a median 0.8 mm (90 % within 2.6 mm) from the
+  template's boundary, and 98.5 % of the HCP-1065 corticospinal tract's points between z −55 and −30 mm (built
+  independently) lie inside the fitted pons and medulla. Nerves, arteries and the model's nuclei (simple shapes) are carried along, so the cards call
+  them approximate; the model's red nucleus, for one, sits about 5 mm below the Lead-DBS one, so the red nucleus,
+  substantia nigra, STN, thalamus and dentate nucleus come from the DBS section's atlases instead.
+- **Ascending arousal network**: the ten brainstem nuclei of the Harvard AAN atlas 2.0 (CC0; MNI-native).
+- **Tracts**: the brainstem tracts of the white-matter section (HCP-1065).
+- **Safe entry zones** (15): perioculomotor (anterior mesencephalic), lateral mesencephalic sulcus, supra- and
+  infracollicular; supratrigeminal and peritrigeminal; suprafacial and infrafacial triangles and the median sulcus
+  on the floor of the fourth ventricle; anterolateral (preolivary) sulcus, olivary zone, postolivary sulcus, and the
+  posterior median, posterior intermediate and posterolateral sulci of the medulla. Each is drawn by rule on the
+  fitted surface from its published definition (the rule is on its card, with the model's measurements); the facial
+  colliculus and sulcus limitans are placed by the floor proportions measured by Erginoglu et al. 2026. Zones the
+  sources name without a definition that can be placed (lateral pontine zone, intercollicular region...) are listed
+  as not drawn.
+- **Cards**: every statement cites its source (`src/brainstem/content.ts`, `references.ts`): open-access full texts
+  (Cavalheiro 2015, Rajagopal 2019, Cavalcanti 2026, Erginoglu 2026, Olchanyi 2025, Kim 2020) and abstracts
+  (Cavalcanti 2016, Yagmurlu 2014, Yang 2019, Guberinic 2022, Edlow 2024). Nerve cards give each nerve's functional
+  components (Kim 2020, Table 1); the model's structures also show the Wikipedia definition Z-Anatomy ships,
+  labelled as such. The Brainstem Navigator atlas was not used: its licence forbids redistributing information
+  derived from it.
+- Pipeline: `pipeline/brainstem_export.py` (in Blender), then `pipeline/brainstem_build.py` (fit, meshes, zones,
+  manifest), `node pipeline/compress.mjs brainstem`, `pipeline/brainstem_build.py finalize` (checks sides, positions,
+  the fit and the zones).
 
 ## Cortical anatomy
 
@@ -341,6 +379,8 @@ src/data/                   typed content, validated with zod
   generated/                manifest.json, coordinates.json (written by the pipeline)
 src/tracts/                 white-matter section: tract cards, groups, references (zod-checked),
                             URL state, scene source
+src/brainstem/              brainstem section: entry-zone and nucleus content, references, groups, URL state,
+                            scene source (also skullbase/, cortex/, spine/ for those sections)
 src/viewer/                 three.js scene, loaders, materials, slices, lead, selection logic
 src/ui/                     atlas pages of both sections, shared stage pieces, other pages, theme
 pipeline/                   offline Python pipeline (see below)
@@ -437,7 +477,9 @@ the Credits page. The white-matter section's tract files (`public/assets/wm/`, `
 files (`public/assets/skullbase/`, `sb-*.json`) are **CC BY-SA** (Z-Anatomy 4.0, BodyParts3D 2.1 Japan,
 Wikipedia definitions 3.0), not GPL. The skull base's detailed model (`public/assets/skullbase-ct/`, `sbct-*.json`)
 is derived from TopBrain 2025 data (University Hospital Zurich: open use with the source given, **non-commercial**;
-commercial use needs the data owner's permission) and from Z-Anatomy (CC BY-SA). The cortex section's meshes (`public/assets/cortex/`, `ctx-*.json`) are
+commercial use needs the data owner's permission) and from Z-Anatomy (CC BY-SA). The brainstem section's files (`public/assets/brainstem/`, `bs-*.json`) are **CC BY-SA**
+(Z-Anatomy, fitted into MNI space), except its arousal network nuclei (`bs_aan_*.glb`), which come from the Harvard
+Ascending Arousal Network atlas 2.0 (**CC0**). The cortex section's meshes (`public/assets/cortex/`, `ctx-*.json`) are
 GPL-3.0, non-commercial like the other Lead-DBS-derived assets; the spine section's files (`public/assets/spine/`,
 `spine-*.json`) are **CC BY-SA 4.0** (VerSe); their labels were made with FreeSurfer (MGH
 licence, research use) and the definition texts in `ctx-labels.json` are CC BY-SA 3.0.

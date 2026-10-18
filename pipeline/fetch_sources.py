@@ -123,12 +123,14 @@ def main() -> int:
     zan = fetch_zanatomy()
     verse = fetch_verse()
     verse_ccj = fetch_verse(VERSE_CCJ_SUBJECT, VERSE_CCJ_FILES)
+    aan = fetch_aan()
     (RAW / "sources.lock.json").write_text(json.dumps(
         {"archive": LEADDBS_DATA_ZIP, "files": record,
          "hcp1065": {"release": C.HCP1065_RELEASE, "files": hcp},
          "zanatomy": {"source": ZANATOMY_URL, "files": zan},
          "verse": {"subject": VERSE_SUBJECT, "files": verse},
-         "verseCcj": {"subject": VERSE_CCJ_SUBJECT, "files": verse_ccj}}, indent=1))
+         "verseCcj": {"subject": VERSE_CCJ_SUBJECT, "files": verse_ccj},
+         "aan": {"source": AAN_URL.format(""), "files": aan}}, indent=1))
     print(f"{len(record)} files ready in {RAW}")
     return 0
 
@@ -191,6 +193,33 @@ VERSE_CCJ_FILES = {
     "sub-gl090_dir-ax_seg-vert_msk.nii.gz": ("https://osf.io/download/sh9v2/", "0e27e9df7e6764e968026bcf265a2de0a33b901f15b87798f33f4e9e28952586"),
     "sub-gl090_dir-ax_seg-subreg_ctd.json": ("https://osf.io/download/gz3eu/", "28cfc1b2c10e4e908a4cd0445d235bcd7745fd54d8afd4cd8c18bd4e08061f2d"),
 }
+
+
+# Brainstem section: Harvard Ascending Arousal Network atlas 2.0 (Edlow & Kinney 2023, CC0 1.0; Dryad
+# doi:10.5061/dryad.zw3r228d2, files served from its Zenodo record), pinned by SHA-256 as downloaded 2026-10-19
+AAN_URL = "https://zenodo.org/records/8161638/files/{}?download=1"
+AAN_FILES = {
+    "AAN_Brainstem_MNI152_1mm_v2p0.nii": "e6a7746f13a8c5e3f79aa3701e3a088fcc9f7b7365fc6fed7249884a64e2eb47",
+    "AAN_Brainstem_v2p0_Color_LUT_FreeSurfer.txt": "b6cc5d69748965de155bd68065ff9b0160083318d071d7ae301032eef7770b88",
+    "README.md": "9c170b938deaa02571e4869225e52cd2ac271b7023cace1a7035abead46e4007",
+}
+
+
+def fetch_aan() -> dict[str, str]:
+    out = RAW / "aan"
+    out.mkdir(parents=True, exist_ok=True)
+    record = {}
+    for name, sha in AAN_FILES.items():
+        dest = out / name
+        if not dest.exists():
+            print(f"fetch {name}")
+            urllib.request.urlretrieve(AAN_URL.format(name), dest)
+        digest = hashlib.sha256(dest.read_bytes()).hexdigest()
+        if digest != sha:
+            print(f"{name}: SHA-256 {digest} does not match the pinned {sha}", file=sys.stderr)
+            raise SystemExit(1)
+        record[name] = digest
+    return record
 
 
 def fetch_verse(subject: str = VERSE_SUBJECT, files: dict = VERSE_FILES) -> dict[str, str]:

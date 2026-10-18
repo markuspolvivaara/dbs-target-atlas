@@ -24,9 +24,10 @@ export type Evidence = z.infer<typeof EvidenceSchema>;
 
 /**
  * 'lateral' / 'medial' look at the shown hemisphere from outside / from the midline (white-matter section);
- * 'inferior' looks up at the skull base from below (skull-base section).
+ * 'inferior' looks up at the skull base from below (skull-base section); 'posterior' looks at the brainstem from behind
+ * (the floor of the fourth ventricle, brainstem section).
  */
-export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon', 'lateral', 'medial', 'inferior']);
+export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon', 'lateral', 'medial', 'inferior', 'posterior']);
 export type CameraPreset = z.infer<typeof CameraPresetSchema>;
 
 /** A rendered structure: nucleus, cortical area, tract or sweet-spot volume. */
@@ -162,6 +163,10 @@ export const ManifestStructureSchema = z.object({
   schematic: z.boolean().optional(),
   /** skull base, detailed model: carried over from the Z-Anatomy model fitted onto the CT, so its position is approximate */
   fitted: z.boolean().optional(),
+  /** brainstem section: the part of the brainstem a safe entry zone lies on */
+  bsRegion: z.enum(['midbrain', 'pons', 'floor', 'medulla']).optional(),
+  /** brainstem section: the atlas's abbreviation (arousal network nuclei) */
+  abbr: z.string().optional(),
   /** white-matter section: core (surgical essentials), extended, or posterior fossa */
   tier: z.enum(['core', 'extended', 'fossa']).optional(),
   centroid: z.object({ L: Vec3, R: Vec3 }).nullable(),
@@ -221,6 +226,28 @@ export const SbManifestSchema = z.object({
   }),
 });
 export type SbManifest = z.infer<typeof SbManifestSchema>;
+
+const DatasetInfoSchema = z.object({
+  name: z.string(), licence: z.string(), url: z.string().url(), note: z.string(), attribution: z.array(z.string()),
+  citation: z.array(z.string()), citationUrls: z.array(z.string()),
+});
+
+/** bs-manifest.json: the brainstem section's structures in MNI space (Z-Anatomy fitted to the template; AAN 2.0). */
+export const BsManifestSchema = z.object({
+  space: z.string(),
+  generatedBy: z.string(),
+  structures: z.array(ManifestStructureSchema),
+  /** how well the Z-Anatomy brainstem was fitted to the template (pipeline/brainstem_fit.py) */
+  fit: z.object({
+    scale: z.number(), rotationDeg: z.number(), similarityMatchedShare: z.number(), similarityMedianMm: z.number(),
+    warpedMatchedShare: z.number(), warpedMedianMm: z.number(), warpedP90Mm: z.number(),
+    /** share of the HCP-1065 corticospinal tract inside the fitted pons and medulla between cstLevels (MNI z) */
+    cstInsideShare: z.number(), cstLevels: z.tuple([z.number(), z.number()]),
+  }),
+  datasets: z.record(DatasetInfoSchema),
+  dataset: DatasetInfoSchema,
+});
+export type BsManifest = z.infer<typeof BsManifestSchema>;
 
 /** ctx-manifest.json: the cortex section's labels (Destrieux on the Lead-DBS template surface), in MNI space. */
 export const CtxManifestSchema = z.object({

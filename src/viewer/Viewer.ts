@@ -700,6 +700,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       case 'medial': dir = new THREE.Vector3(hemi === 'R' ? -1 : 1, 0, 0.08); break;
       // inferior: from below, anterior up on screen (camera nudged anterior so the orbit keeps anterior at the top)
       case 'inferior': dir = new THREE.Vector3(0, 0.05, -1); break;
+      // posterior: from behind and a little above (the floor of the fourth ventricle faces back and up)
+      case 'posterior': dir = new THREE.Vector3(0, -1, 0.35); break;
       case 'surgeon': {
         const side: Side = hemi === 'L' ? 'L' : 'R';
         const l = this.state!.lead;

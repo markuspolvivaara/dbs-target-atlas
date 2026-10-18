@@ -566,5 +566,20 @@
   "citation": "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
   "doi": "10.1056/AIdbp2500994",
   "url": "https://doi.org/10.1056/AIdbp2500994"
+ },
+ "edlow2023aan": {
+  "citation": "Edlow BL, Kinney HC. Harvard Ascending Arousal Network Atlas – Version 2.0 [dataset]. Dryad; 2023. doi:10.5061/dryad.zw3r228d2.",
+  "doi": "10.5061/dryad.zw3r228d2",
+  "url": "https://doi.org/10.5061/dryad.zw3r228d2"
+ },
+ "edlow2024": {
+  "citation": "Edlow BL, Olchanyi M, Freeman HJ, et al. Multimodal MRI reveals brainstem connections that sustain wakefulness in human consciousness. Sci Transl Med. 2024;16(745):eadj4303. doi:10.1126/scitranslmed.adj4303.",
+  "doi": "10.1126/scitranslmed.adj4303",
+  "url": "https://doi.org/10.1126/scitranslmed.adj4303"
+ },
+ "olchanyi2025": {
+  "citation": "Olchanyi MD, Augustinack J, Haynes RL, et al. Automated MRI segmentation of brainstem nuclei critical to consciousness. Hum Brain Mapp. 2025;46(14):e70357. doi:10.1002/hbm.70357.",
+  "doi": "10.1002/hbm.70357",
+  "url": "https://doi.org/10.1002/hbm.70357"
  }
 }

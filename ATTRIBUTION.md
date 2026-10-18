@@ -225,6 +225,53 @@ The meshes and lines in `public/assets/skullbase/` and the files `sb-manifest.js
   level, decimated and shaded with baked ambient occlusion, vessels and nerves rebuilt as tubes with Z-Anatomy's modelled
   radius and cropped to the head, files converted to compressed glTF, definitions shortened to their lead section.
 
+## Skull base v2 (TopBrain 2025 CT angiogram with Z-Anatomy fitted onto it)
+
+The meshes in `public/assets/skullbase-ct/` and the files `sbct-manifest.json`, `sbct-landmarks.json`,
+`sbct-regions.json` and `sbct-definitions.json` are derived from one CT angiogram of the TopBrain 2025 release and
+from Z-Anatomy. They are **not** GPL-licensed: TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0.
+
+- Source: https://topbrain2025.grand-challenge.org
+- Note: One adult head CT angiogram (0.5 mm isotropic), not an average and not in MNI space. Bone (the cranial bones; the scan cuts the face off): the CT's own surface (400 HU, and thin bone down to 170 HU where it adjoins that bone, outside the labelled vessels, within TotalSegmentator's skull), named bone by bone after the nearest bone of the Z-Anatomy model fitted onto it. Arteries and the deep veins: surfaces of TopBrain's expert labels of the same scan. Cranial nerves, the dural sinuses and arteries TopBrain does not label, the soft tissue and the landmark names: the Z-Anatomy model fitted onto this skull (scaled, then deformed smoothly), so their positions are approximate. Coordinates: millimetres from the fitted hypophysial fossa, the CT turned into the Z-Anatomy model's frame.
+- Attribution: TopBrain 2025 challenge data (University Hospital Zurich): CT angiogram and vessel labels of case topcow_ct_011 - https://topbrain2025.grand-challenge.org, https://zenodo.org/records/16878417 - open use, source given, non-commercial
+- Attribution: BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan
+- Attribution: Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0
+- Attribution: Definitions: Wikipedia - CC-BY-SA 3.0 (the source page is linked on each definition)
+- Cite: Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.
+- Cite: Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).
+- Cite: Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.
+- Cite: Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024.
+- Changes made: the CT's bone surface taken at 400 HU (thin bone down to 170 HU next to it) within TotalSegmentator's
+  skull mask, smoothed, decimated and named after the fitted Z-Anatomy bones; TopBrain's vessel labels meshed; the CT
+  moved rigidly into the Z-Anatomy frame; Z-Anatomy's nerves, unlabelled vessels, soft tissue and landmarks scaled and
+  smoothly deformed onto the CT's skull (pipeline/skullbase_ct.py); files converted to compressed glTF.
+
+## Brainstem section (Z-Anatomy fitted into MNI space; Harvard Ascending Arousal Network atlas 2.0)
+
+The meshes in `public/assets/brainstem/` and the files `bs-manifest.json`, `bs-zones.json` and `bs-definitions.json`
+are **not** GPL-licensed. The arousal network nuclei (`bs_aan_*.glb`) are derived from the Harvard Ascending Arousal
+Network atlas 2.0 (CC0 1.0); everything else from Z-Anatomy, itself based on BodyParts3D (CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0).
+The section also shows the white-matter section's tracts and the DBS section's deep nuclei, under their licences above.
+
+- Source: https://github.com/Z-Anatomy/Models-of-human-anatomy
+- Note: One adult model (BodyParts3D), fitted onto the ICBM 2009b template's brainstem: a similarity transform, then a smooth deformation, to the boundary between brainstem tissue and fluid on the T2 template. The surface follows the template closely; nerves, arteries and the nuclei inside are carried along, so their positions are approximate (the model's nuclei are simple shapes).
+- Attribution: BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan
+- Attribution: Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0
+- Attribution: Definitions: Wikipedia - CC-BY-SA 3.0 (the source page is linked on each definition)
+- Cite: Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.
+- Cite: Fonov V, Evans AC, Botteron K, Almli CR, McKinstry RC, Collins DL. Unbiased average age-appropriate atlases for pediatric studies. NeuroImage. 2011;54(1):313-327. doi:10.1016/j.neuroimage.2010.07.033.
+- Source: https://doi.org/10.5061/dryad.zw3r228d2
+- Note: Ten brainstem nuclei of the ascending arousal network, annotated on ex vivo MRI with histology, in MNI152 space at 1 mm.
+- Attribution: Edlow BL, Kinney HC (2023). Harvard Ascending Arousal Network Atlas - Version 2.0. Dryad. CC0 1.0
+- Cite: Edlow BL, Kinney HC. Harvard Ascending Arousal Network Atlas – Version 2.0 [dataset]. Dryad; 2023. doi:10.5061/dryad.zw3r228d2.
+- Cite: Olchanyi MD, Augustinack J, Haynes RL, et al. Automated MRI segmentation of brainstem nuclei critical to consciousness. Hum Brain Mapp. 2025;46(14):e70357. doi:10.1002/hbm.70357.
+- Changes made: the brainstem, its surface features, ventricles, cranial nerve nuclei, cranial nerves III-XII and the
+  arteries around it exported from the Z-Anatomy Blender file (pipeline/brainstem_export.py) and fitted into MNI space
+  onto the ICBM 2009b T2 template (pipeline/brainstem_fit.py); nerves and arteries rebuilt as tubes and kept near the
+  brainstem; safe entry zones drawn by rule on the fitted surface; the AAN labels' surfaces taken after resampling to
+  0.5 mm; midline structures cut at x = 0; files converted to compressed glTF; definitions shortened to their lead
+  section.
+
 ## Cortex section (Destrieux parcellation on the Lead-DBS template surface)
 
 The meshes in `public/assets/cortex/` and `ctx-manifest.json` / `ctx-labels.json` are derived from the Lead-DBS

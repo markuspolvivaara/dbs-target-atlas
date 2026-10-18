@@ -120,6 +120,34 @@ What is covered by which terms
    zones drawn by rule; coordinates moved to the centre of the L5 vertebral body;
    converted to compressed glTF.
 
-10. Bundled third-party software (three.js and zod, MIT licence; Atkinson
+10. Skull base v2 (public/assets/skullbase-ct/, public/assets/sbct-manifest.json,
+   src/data/generated/sbct-*.json) is derived from one CT angiogram of the TopBrain
+   2025 challenge data (case topcow_ct_011, University Hospital Zurich,
+   https://topbrain2025.grand-challenge.org, https://zenodo.org/records/16878417),
+   whose terms allow open use with the source given, non-commercially (commercial
+   use needs the data owner's permission), and from Z-Anatomy (as in section 7,
+   CC BY-SA). These files are not GPL-licensed. Changes made: the CT's bone surface
+   taken at a fixed threshold within TotalSegmentator's skull mask, smoothed and
+   decimated; TopBrain's vessel labels meshed; the CT moved rigidly into the
+   Z-Anatomy frame; Z-Anatomy's nerves, unlabelled vessels, soft tissue and
+   landmarks scaled and smoothly deformed onto the CT's skull; converted to
+   compressed glTF.
+
+11. Brainstem section (public/assets/brainstem/, public/assets/bs-manifest.json,
+   src/data/generated/bs-*.json). The arousal network nuclei (bs_aan_*.glb) are
+   derived from the Harvard Ascending Arousal Network Atlas 2.0 (Edlow BL, Kinney
+   HC, 2023, Dryad, doi:10.5061/dryad.zw3r228d2), dedicated to the public domain
+   (CC0 1.0). Everything else is derived from Z-Anatomy (as in section 7) and is
+   distributed under CC BY-SA 4.0 (Z-Anatomy), CC BY-SA 2.1 Japan (BodyParts3D) and
+   CC BY-SA 3.0 (Wikipedia definitions); these files are not GPL-licensed. Changes
+   made: brainstem structures, cranial nerves and arteries exported from the
+   Z-Anatomy Blender file and fitted into MNI space onto the ICBM 2009b T2 template
+   (a similarity transform and a smooth deformation); nerves and arteries rebuilt as
+   tubes; safe entry zones drawn by rule on the fitted surface; the AAN labels'
+   surfaces taken after resampling; converted to compressed glTF. The section also
+   shows the white-matter section's tracts (section 6) and the DBS section's deep
+   nuclei (section 2) from their own files, under their own terms.
+
+12. Bundled third-party software (three.js and zod, MIT licence; Atkinson
    Hyperlegible font, SIL Open Font Licence 1.1): see
    public/THIRD_PARTY_LICENSES.txt, which is also published with the site.

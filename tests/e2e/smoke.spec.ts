@@ -373,11 +373,11 @@ test('home page: sections, light load, and old links forward to the DBS section'
   await page.goto('./');
   await expect(page.locator('h1')).toHaveText('Open Neuroanatomy Atlas');
   // the modules from the more basic to the more specialised, the spine last; each card is a link over its own image
-  await expect(page.locator('.section-card')).toHaveCount(6);
-  expect(await page.locator('.section-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-section')))).toEqual(['cortex', 'tracts', 'skullbase', 'dbs', 'spine', 'skullbase-ct']);
+  await expect(page.locator('.section-card')).toHaveCount(7);
+  expect(await page.locator('.section-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-section')))).toEqual(['cortex', 'tracts', 'skullbase', 'brainstem', 'dbs', 'spine', 'skullbase-ct']);
   await expect(page.locator('a.section-card[data-section="dbs"]')).toHaveAttribute('href', './dbs/');
   await expect(page.locator('a.section-card[data-section="tracts"]')).toHaveAttribute('href', './tracts/');
-  for (const id of ['cortex', 'tracts', 'skullbase', 'dbs', 'spine', 'skullbase-ct']) {
+  for (const id of ['cortex', 'tracts', 'skullbase', 'brainstem', 'dbs', 'spine', 'skullbase-ct']) {
     const ok = await page.evaluate(async (u) => (await fetch(u)).ok, `./assets/home/${id}.webp`);
     expect(ok, id).toBe(true);
   }
@@ -604,7 +604,66 @@ test('skull base: structure and landmark cards, cut-away and the URL', async ({ 
   await expect(page.locator('.page:not([hidden]) h1')).toHaveText('Sources');
   // the section menu lists every section
   await page.locator('.section-chip').click();
-  await expect(page.locator('.section-menu a.section-item:not(.home)')).toHaveText(['Cortical anatomy', 'White-matter tracts', 'Skull base', 'DBS targets', 'Spine', 'Skull base v2']);
+  await expect(page.locator('.section-menu a.section-item:not(.home)')).toHaveText(['Cortical anatomy', 'White-matter tracts', 'Skull base', 'Brainstem', 'DBS targets', 'Spine', 'Skull base v2']);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// ---------------------------------------------------------------- brainstem section
+// group ids and names as src/brainstem/groups.ts defines them
+const BS_GROUPS = [
+  { id: 'overview', name: 'Brainstem and cranial nerves' }, { id: 'arteries', name: 'Arteries' },
+  { id: 'cn_nuclei', name: 'Cranial nerve nuclei' }, { id: 'arousal', name: 'Ascending arousal network' }, { id: 'tracts', name: 'Tracts and deep nuclei' },
+  { id: 'sez_all', name: 'All safe entry zones' }, { id: 'sez_midbrain', name: 'Midbrain' }, { id: 'sez_pons', name: 'Ventral pons' },
+  { id: 'sez_floor', name: 'Floor of the fourth ventricle' }, { id: 'sez_medulla', name: 'Medulla' },
+];
+for (const g of BS_GROUPS) {
+  test(`brainstem ${g.id}: renders and matches the visual baseline`, async ({ page }) => {
+    const gd = guard(page);
+    await page.goto(`./brainstem/#/atlas?g=${g.id}`);
+    await settle(page);
+    await expect(page.locator('.pane:not([hidden]) .card h2').first()).toHaveText(g.name);
+    expect(await canvasColours(page)).toBeGreaterThan(30);
+    await expect(page.locator('.stage')).toHaveScreenshot(`brainstem-${g.id}.png`);
+    expect(gd.external).toEqual([]);
+    expect(gd.errors).toEqual([]);
+  });
+}
+
+test('brainstem: entry zone and nucleus cards with sources, slices and the URL', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./brainstem/#/atlas?g=sez_floor');
+  await settle(page);
+  await page.locator('.sb-item[data-id="sez_suprafacial"]').click();
+  const card = page.locator('.card.sel');
+  await expect(card.locator('h2')).toHaveText('Suprafacial triangle');
+  await expect(card.locator('dt', { hasText: 'Where it lies' })).toBeVisible();
+  await expect(card.locator('dt', { hasText: 'How it is drawn here' })).toBeVisible();
+  await expect(card.locator('a.src', { hasText: 'Cavalheiro 2015' }).first()).toHaveAttribute('href', 'https://doi.org/10.1007/s00381-015-2799-y');
+  await expect(card).toContainText('Erginoglu 2026');
+  // an arousal network nucleus and a cranial nerve nucleus
+  await page.goto('./brainstem/#/atlas?g=arousal&sel=bs_aan_lc');
+  await settle(page);
+  await expect(page.locator('.card.sel')).toContainText('Noradrenergic');
+  await page.goto('./brainstem/#/atlas?g=cn_nuclei&sel=bs_n_hypoglossal');
+  await settle(page);
+  await expect(page.locator('.card.sel')).toContainText('Somatic efferent');
+  await expect(page.locator('.card.sel .schematic-note')).toContainText('approximate');
+  // a slice and the surface opacity are part of the link and survive a reload
+  await page.locator('.ptab', { hasText: 'Layers' }).click();
+  await page.locator('[data-layer="cortex"] input[type=range]').fill('0.5');
+  await expect.poll(() => decodeURIComponent(new URL(page.url()).hash)).toContain('c1:0.50');
+  await page.reload();
+  await settle(page);
+  const st = await page.evaluate(() => (window as unknown as { __atlas: { state(): { grp: string; sel: string; layers: { cortex: { opacity: number } } } } }).__atlas.state());
+  expect([st.grp, st.sel, st.layers.cortex.opacity]).toEqual(['cn_nuclei', 'bs_n_hypoglossal', 0.5]);
+  // sources and credits
+  await page.goto('./brainstem/#/credits');
+  await expect(page.locator('#zanatomy')).toContainText('CC BY-SA');
+  await expect(page.locator('#aan')).toContainText('CC0');
+  await page.goto('./brainstem/#/sources');
+  await expect(page.locator('.page:not([hidden]) h1')).toHaveText('Sources');
+  await expect(page.locator('.page:not([hidden])')).toContainText('Rajagopal N');
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });

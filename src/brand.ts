@@ -9,7 +9,7 @@ export const BRAND = {
 } as const;
 
 export interface Section {
-  id: 'dbs' | 'tracts' | 'skullbase' | 'cortex' | 'spine' | 'skullbase-ct';
+  id: 'dbs' | 'tracts' | 'skullbase' | 'cortex' | 'spine' | 'skullbase-ct' | 'brainstem';
   name: string;
   /** path from the site root */
   path: string;
@@ -30,6 +30,10 @@ export const SECTIONS: Section[] = [
   {
     id: 'skullbase', name: 'Skull base', path: 'skullbase/', status: 'live',
     summary: 'Cranial bones with their labelled foramina and landmarks, the cranial nerves, arteries and dural sinuses, in a cut-away 3D model: what passes where around the sella, orbit apex, petrous apex and foramen magnum.',
+  },
+  {
+    id: 'brainstem', name: 'Brainstem', path: 'brainstem/', status: 'live',
+    summary: 'The midbrain, pons and medulla in MNI space with cranial nerves III–XII, the cranial nerve and arousal network nuclei, the long tracts, and the published safe entry zones for brainstem surgery, each with its borders, approaches and sources.',
   },
   {
     id: 'dbs', name: 'DBS targets', path: 'dbs/', status: 'live',
