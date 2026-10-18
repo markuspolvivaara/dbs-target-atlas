@@ -1,12 +1,13 @@
 import * as THREE from 'three';
 import type { CameraPreset } from '../data/schema';
 import type { Hemi } from '../state';
-import { CTX, DBS_PARCEL, DK_NAMES, LABEL, LOBE, LOBES, MEDIAL_WALL, METHOD, shortName, type CtxLabel, type LobeId } from '../cortex';
+import { CTX, CTX_REFS, DBS_PARCEL, DK_NAMES, FN_GROUPS, FUNCTIONS, LABEL, LOBE, LOBES, MEDIAL_WALL, METHOD, shortName, type CtxLabel, type FnGroupId, type LobeId } from '../cortex';
 import { cortexScene, viewLabels, type CortexPlan } from '../cortex/scene';
 import type { ColourMode, CortexState } from '../cortex/state';
 import { VIEW, VIEWS, type ViewId } from '../cortex/views';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
+import { refLinksFrom } from './reflinks';
 import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
@@ -170,7 +171,7 @@ export class CortexAtlasPage {
     this.stage.querySelectorAll<HTMLButtonElement>('[data-inflate]').forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.inflate) === s.inflate)));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((b) => b.toggleAttribute('data-active', b.dataset.preset === s.cam.preset));
     this.measureBtn.disabled = s.inflate > 0;
-    const key = `${s.view}|${s.lobe}|${s.sel}|${s.colour}`;
+    const key = `${s.view}|${s.lobe}|${s.fn}|${s.sel}|${s.colour}`;
     if (key !== this.lastKey || !prev) { this.lastKey = key; this.renderOverview(); }
     this.renderDisplay();
     if (prev && prev.sel !== s.sel && s.sel) this.selectTab('overview', false);
@@ -193,6 +194,10 @@ export class CortexAtlasPage {
     pane.append(h('p', { class: 'chips-label' }, 'Lobe'),
       chips<string>([['all', 'All'], ...LOBES.map((l): [string, string] => [l.id, l.name])], s.lobe ?? 'all',
         (id) => this.update((st) => { st.lobe = id === 'all' ? null : (id as LobeId); st.sel = null; }), { label: 'Lobe', cls: 'grp-chips lobe-chips' }));
+    pane.append(h('p', { class: 'chips-label' }, 'Function'),
+      chips<string>([['none', 'None'], ...FN_GROUPS.map((g): [string, string] => [g.id, g.name])], s.fn ?? 'none',
+        (id) => this.update((st) => { st.fn = id === 'none' ? null : (id as FnGroupId); st.sel = null; }), { label: 'Function', cls: 'grp-chips fn-chips' }));
+    if (s.fn) pane.append(this.fnCard(s.fn));
     const ids = viewLabels(s);
     const btn = (id: string) => h('button', {
       type: 'button', class: 'chip sb-item', 'aria-pressed': String(s.sel === id), 'data-id': id,
@@ -261,6 +266,21 @@ export class CortexAtlasPage {
       h('p', {}, 'The part of the medial surface the Destrieux parcellation leaves unlabelled. In Destrieux et al. 2010 this “Medial_wall” groups non-cortical structures on the midline, including the hippocampus, thalamus, ventricles and corpus callosum, and is left out of their measurements.'));
   }
 
+  private fnCard(id: FnGroupId): HTMLElement {
+    const g = FN_GROUPS.find((x) => x.id === id)!;
+    const areas = FUNCTIONS.filter((f) => f.group === id);
+    const one = (n: number) => n.toFixed(1);
+    return h('article', { class: 'card fn-card' },
+      h('p', { class: 'eyebrow' }, 'Function'),
+      h('h2', {}, g.name),
+      h('ul', { class: 'fn-areas' }, ...areas.map((f) => h('li', {},
+        h('span', { class: 'swatch', style: `--c: var(--c-${f.token})` }), h('strong', {}, f.name),
+        ` · ${one(f.areaCm2.L)} cm² left, ${one(f.areaCm2.R)} cm² right on this surface`,
+        f.labels.length ? h('span', { class: 'aside' }, ` (${f.labels.map(shortName).join(', ')})`) : ''))),
+      h('p', {}, g.text, ' ', refLinksFrom(CTX_REFS, g.refIds)),
+      h('p', { class: 'aside' }, 'Group-level definitions on one template brain, not an individual’s functional map: in a patient these areas are located by imaging or mapping, not by anatomy alone.'));
+  }
+
   private lobeCard(id: LobeId): HTMLElement {
     const lb = LOBE.get(id)!;
     return h('article', { class: 'card', style: `--accent: var(--c-${lb.token})` },
@@ -284,7 +304,9 @@ export class CortexAtlasPage {
         }, eyeIcon(!off)) : h('span', { class: 'eye-space' }),
         h('span', { class: 'sw patch', style }), h('span', { class: 'lg-text' }, text));
     };
-    if (s.colour === 'lobe') {
+    if (s.fn) {
+      for (const f of FUNCTIONS.filter((x) => x.group === s.fn)) this.legend.append(row(`--c: var(--c-${f.token})`, f.name, [f.id]));
+    } else if (s.colour === 'lobe') {
       // a label is coloured by the lobe holding most of it
       for (const lb of LOBES) this.legend.append(row(`--c: var(--c-${lb.token})`, lb.name, [...LABEL.values()].filter((l) => l.lobe === lb.id).map((l) => l.id)));
     } else if (s.colour === 'atlas') {

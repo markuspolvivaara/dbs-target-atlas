@@ -56,9 +56,16 @@ REGION_LANDMARKS = {"Hypophysial fossa": 15.0, "Optic canal": 15.0, "Apex of pet
 # scalp, jaw and nose; distal cortical branches; small orbital branches) is left out.
 ARTERY_SYSTEMS: dict[str, list[str]] = {
     "Internal carotid artery": ["Internal carotid artery", "Ophthalmic artery", "Posterior communicating artery"],
-    "Anterior cerebral artery": ["Anterior cerebral artery"],
+    "Anterior cerebral artery": ["Anterior cerebral artery", "Anterior communicating artery",
+                                 "Orbitofrontal branches of anterior cerebral artery", "Pericallosal artery",
+                                 "Callosomarginal artery", "Frontal branches of callosomarginal artery"],
     "Middle cerebral artery": ["Middle cerebral artery (M1 segment)", "Insular branches of middle cerebral artery (M2 segment)",
-                               "Proximal lateral striate branches", "Distal lateral striate branches"],
+                               "Middle cerebral artery (M3 segment)", "Proximal lateral striate branches",
+                               "Distal lateral striate branches", "Lateral frontobasal artery", "Prefrontal artery",
+                               "Artery of precentral sulcus", "Artery of central sulcus", "Postcentral arterial branch",
+                               "Posterior parietal artery", "Parietal branches of middle cerebral artery", "Angular artery",
+                               "Branch to angular gyrus", "Temporal branches of middle cerebral artery",
+                               "Anterior temporal branch", "Posterior temporal branch", "Temporo-occipital branch"],
     "Vertebral artery": ["Vertebral artery", "Posterior inferior cerebellar artery", "Anterior spinal artery"],
     "Basilar artery": ["Basilar artery", "Anterior inferior cerebellar artery", "Superior cerebellar artery",
                        "Medial pontine branches of basilar artery", "Lateral pontine branches of basilar artery"],
@@ -70,6 +77,19 @@ ARTERY_SYSTEMS: dict[str, list[str]] = {
                          "Posterior lateral nasal branches of sphenopalatine artery", "Artery of pterygoid canal"],
 }
 ARTERY_SYSTEM = {a: sys_ for sys_, members in ARTERY_SYSTEMS.items() for a in members}
+# Nerves drawn as one structure under one name (editorial simplification): the trigeminal nerve's three divisions,
+# each with its branches, and the chorda tympani with the facial nerve
+NERVE_MERGE = {
+    "Ophthalmic nerve": "Ophthalmic nerve (V1)",
+    "Maxillary nerve": "Maxillary nerve (V2)", "Meningeal branch of maxillary nerve": "Maxillary nerve (V2)",
+    **{n: "Mandibular nerve (V3)" for n in ("Anterior division of mandibular nerve", "Posterior division of mandibular nerve",
+                                             "Inferior alveolar nerve", "Lingual nerve", "Buccal nerve", "Mental nerve",
+                                             "Nerve to mylohyoid muscle")},
+    "Chorda tympani": "Facial nerve (VII)",
+}
+# a merged structure's definition: that of the nerve it is named for
+MERGED_TEXT = {"Ophthalmic nerve (V1)": "Ophthalmic nerve", "Maxillary nerve (V2)": "Maxillary nerve",
+               "Mandibular nerve (V3)": "Mandibular nerve"}
 AO_FLOOR = 0.45  # fully enclosed bone surface is drawn at this share of its colour
 KIND_TOKEN = {"bone": "sbBone", "soft": "sbSoft", "artery": "sbArtery", "vein": "sbVein", "nerve": "sbNerve"}
 
@@ -220,7 +240,10 @@ def main() -> int:
     def add(name: str, kind: str, mtype: str, side: str | None, payload):
         base, _ = split_pair(name)
         g = groups.setdefault(base, {"name": base, "kind": kind, "type": mtype, "sides": {}, "midline": side is None})
-        g["sides"][side or "M"] = payload
+        if mtype == "tube":   # a nerve's runs can come from several source curves (NERVE_MERGE)
+            g["sides"].setdefault(side or "M", []).extend(payload)
+        else:
+            g["sides"][side or "M"] = payload
 
     for n, b in ex["bones"].items():
         base, side = split_pair(n)
@@ -237,7 +260,14 @@ def main() -> int:
         base, side = split_pair(n)
         if ln["kind"] == "artery" and base not in ARTERY_SYSTEM:
             continue  # not among the arteries kept for skull-base teaching
-        add(n, ln["kind"], "tube", side, [np.array(r) for r in ln["runs"]])
+        runs = [np.array(r) for r in ln["runs"]]
+        if ln["kind"] == "nerve" and base in NERVE_MERGE:
+            merged = NERVE_MERGE[base]
+            g = groups.setdefault(merged, {"name": merged, "kind": "nerve", "type": "tube", "sides": {}, "midline": side is None})
+            g["sides"].setdefault(side or "M", []).extend(runs)
+            cn[merged] = cranial_nerve(base, ln.get("path"))
+            continue
+        add(n, ln["kind"], "tube", side, runs)
         if ln["kind"] == "nerve" and cranial_nerve(base, ln.get("path")):
             cn[base] = cranial_nerve(base, ln.get("path"))
 
@@ -355,6 +385,10 @@ def main() -> int:
         key = split_pair(n.strip())[0]  # structures by their normalised name ('(M1 segment)'), as the cards look them up
         if d and key in shown:
             defs[key] = d
+    for merged, src in MERGED_TEXT.items():
+        d = definition(ex["texts"].get(src))
+        if d and merged in shown:
+            defs[merged] = d
 
     manifest = {
         "space": "RAS millimetres from the hypophysial fossa landmark of the Z-Anatomy model (not MNI)",

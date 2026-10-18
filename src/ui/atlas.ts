@@ -6,7 +6,7 @@ import { IMAGING } from '../data/imaging';
 import type { AppState, Hemi, LayerKey } from '../state';
 import { DEFAULT_LEAD, LEAD_ANCHORS, type LeadAnchor } from '../state';
 import { LEAD } from '../viewer/lead';
-import { dbsScene, LANDMARKS, type Plan } from '../viewer/selection';
+import { dbsScene, LANDMARKS, plan, STN_ZONES, type Plan } from '../viewer/selection';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { chips, clear, fmtMm, h, refLinks } from './dom';
 import { eyeIcon } from './widgets';
@@ -169,7 +169,7 @@ export class AtlasPage {
     this.stage.querySelectorAll<HTMLButtonElement>('[data-hemi]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.hemi === s.hemi)));
     this.stage.querySelectorAll<HTMLButtonElement>('.toolbar [data-labels]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.labels === s.labels)));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((b) => b.toggleAttribute('data-active', b.dataset.preset === s.cam.preset));
-    const key = `${s.ind}|${s.sym}|${s.sel}`;
+    const key = `${s.ind}|${s.sym}|${s.sel}|${s.stn}`;
     if (key !== this.lastPlanKey || !prev) { this.lastPlanKey = key; this.renderOverview(); }
     this.renderLayers();
     this.renderSlices();
@@ -189,6 +189,12 @@ export class AtlasPage {
       const items: [string, string][] = [['', 'Whole indication'], ...ind.symptomIds.map((id) => [id, SYM.get(id)!.name] as [string, string])];
       pane.append(h('p', { class: 'chips-label' }, 'Symptom'));
       pane.append(chips(items, s.sym ?? '', (v) => this.update((st) => { st.sym = v || null; st.sel = null; st.cam = { preset: null }; }, { camera: true }), { label: 'Symptom', cls: 'sym-chips' }));
+    }
+    // where the view shows the STN: its three zones, or the nucleus as one
+    const p = plan(s.ind, s.sym, s.borders);
+    if ([...STN_ZONES, 'stn'].some((id) => ['primary', 'alt', 'context'].includes(p.looks.get(id) ?? ''))) {
+      pane.append(h('p', { class: 'chips-label' }, 'Subthalamic nucleus'),
+        chips<'zones' | 'whole'>([['zones', 'Functional zones'], ['whole', 'Whole nucleus']], s.stn, (v) => this.update((st) => { st.stn = v; }), { label: 'Subthalamic nucleus', cls: 'stn-chips' }));
     }
     if (s.sel) pane.append(this.selectionCard(s.sel));
     const sym = s.sym ? SYM.get(s.sym) : null;

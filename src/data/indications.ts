@@ -17,7 +17,9 @@ export const INDICATIONS: IndicationInput[] = [
     id: 'pd', label: "Parkinson's", name: "Parkinson's disease", accent: 'stn',
     symptomIds: ['pd-tremor', 'pd-bradykinesia', 'pd-rigidity', 'pd-axial', 'pd-dyskinesia'],
     primaryTargets: ['stn', 'stn_motor'], alternativeTargets: ['gpi', 'snr'],
-    contextStructures: ['ppn'],
+    contextStructures: [],
+    // the pedunculopontine nucleus and the optic tract (a GPi landmark) are left out of the Parkinson's views
+    omit: ['ppn', 'optic_tract'],
     keyTracts: ['hdp', 'sw_pd'], alternativeTracts: ['al', 'lf'],
     corticalAreas: ['sma', 'm1', 'pmd', 'pmv'],
     targetMarkers: ['t-ss-pd'], alternativeMarkers: ['t-atlas-gpi-sm'],

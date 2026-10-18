@@ -21,9 +21,10 @@ describe('spine data (VerSe CT + TotalSegmentator)', () => {
     for (const lv of ['L1', 'L2', 'L3', 'L4', 'L5']) expect(discBelow(lv), lv).toBeTruthy();
     expect(SP.get('sp_dural_sac')?.layer).toBe('tracts');
   });
-  it('every schematic element is flagged (the card shows the flag): roots, ganglia, the vertebral artery; vessels and soft tissue only in the neck', () => {
+  it('every schematic element is flagged (the card shows the flag): roots (each with its ganglion), the vertebral artery; vessels and soft tissue only in the neck', () => {
     for (const s of SP_MANIFEST.structures) {
-      if (['root', 'ganglion'].includes(s.category ?? '') || s.id === 'sp_vertebral_artery') expect(s.schematic, s.id).toBe(true);
+      expect(s.category, s.id).not.toBe('ganglion');   // a root and its ganglion are one structure
+      if (s.category === 'root' || s.id === 'sp_vertebral_artery') expect(s.schematic, s.id).toBe(true);
       else expect(s.schematic, s.id).toBeUndefined();
       expect(['zone', 'artery', 'vein'], s.id).not.toContain(s.category);
       // dorsal focus in the lumbar and thoracic regions: vessels, viscera and muscles are drawn in the cervical one only
@@ -64,14 +65,15 @@ describe('spine scene and URL state', () => {
     expect(REGIONS.every((r) => r.ready)).toBe(true);
   });
   it('round-trips a teaching link and ignores regions that are not built yet', () => {
-    const s = { ...defaultSpineState(), level: 'L4', sel: 'sp_root_l4', hemi: 'L' as const, cutSide: 'R' as const, labels: 'all' as const, hidden: ['sp_sacrum'] };
+    const s = { ...defaultSpineState(), region: 'lumbar' as const, level: 'L4', sel: 'sp_root_l4', hemi: 'L' as const, cutSide: 'R' as const, labels: 'all' as const, hidden: ['sp_sacrum'] };
     s.layers.discs = { on: true, opacity: 0.5 };
     expect(decodeSpine(encodeSpine(s))).toEqual(s);
-    expect(decodeSpine('#/atlas?r=sacral').region).toBe('lumbar');
+    expect(decodeSpine('#/atlas?r=sacral').region).toBe('cervical');   // an unknown region opens the default, cervical
+    expect(decodeSpine('#/atlas').region).toBe('cervical');
     const neck = { ...defaultSpineState(), region: 'cervical' as const, level: 'C5' };
     neck.layers.viscera = { on: false, opacity: 0.3 };
     expect(decodeSpine(encodeSpine(neck))).toEqual(neck);
-    const les = { ...defaultSpineState(), level: 'L5', lesion: { pair: 'L5-S1', zone: 'farlateral' as const, side: 'R' as const } };
+    const les = { ...defaultSpineState(), region: 'lumbar' as const, level: 'L5', lesion: { pair: 'L5-S1', zone: 'farlateral' as const, side: 'R' as const } };
     expect(decodeSpine(encodeSpine(les))).toEqual(les);
     // a lesion belongs to the disc below the selected level; anything else is dropped
     expect(decodeSpine('#/atlas?lv=L3&les=L4-L5.paracentral.L').lesion).toBeNull();
@@ -101,7 +103,6 @@ describe('lesion-to-root tool', () => {
   it('the plan puts the affected root forward and marks the herniation', () => {
     const p = spinePlan({ region: 'lumbar', level: 'L4', sel: null, lesion: { pair: 'L4-L5', zone: 'paracentral', side: 'L' } });
     expect(p.looks.get('sp_root_l5')).toBe('primary');
-    expect(p.looks.get('sp_drg_l5')).toBe('primary');
     expect(p.looks.get('sp_root_l4')).toBe('context');
     expect(p.markers).toEqual([{ targetId: lesionMarkerId('L4-L5', 'paracentral', 'L'), primary: true }]);
     expect(spineScene.catalog.markers.has(p.markers[0].targetId)).toBe(true);
@@ -119,7 +120,7 @@ describe('thoracic region (phase 3a)', () => {
     expect(r.ready).toBe(true);
     expect(r.levels).toEqual(Array.from({ length: 12 }, (_, i) => `T${i + 1}`));
     for (let i = 1; i <= 12; i++) {
-      for (const id of [`sp_t${i}`, `sp_root_t${i}`, `sp_drg_t${i}`]) expect(r.structures, id).toContain(id);
+      for (const id of [`sp_t${i}`, `sp_root_t${i}`]) expect(r.structures, id).toContain(id);
     }
     expect(SP_MANIFEST.structures.filter((s) => s.category === 'rib')).toEqual([]);
     for (const id of ['sp_disc_c7_t1', 'sp_disc_t6_t7', 'sp_disc_t12_l1', 'sp_dural_sac']) expect(r.structures, id).toContain(id);
@@ -173,7 +174,7 @@ describe('thoracic dorsal approaches (phase 3c)', () => {
     const p = spinePlan(s);
     for (const id of [...p.looks.keys(), ...p.focusIds]) expect(spineScene.catalog.byId.has(id), id).toBe(true);
     expect([p.looks.get('sp_t6'), p.looks.get('sp_t7')]).toEqual(['context', 'context']);
-    expect([p.looks.get('sp_disc_t6_t7'), p.looks.get('sp_dural_sac'), p.looks.get('sp_root_t6'), p.looks.get('sp_drg_t6')]).toEqual(['primary', 'primary', 'primary', 'primary']);
+    expect([p.looks.get('sp_disc_t6_t7'), p.looks.get('sp_dural_sac'), p.looks.get('sp_root_t6')]).toEqual(['primary', 'primary', 'primary']);
     expect(p.looks.get('sp_root_t8')).toBe('context');
     // roots outside the region stay hidden
     expect(p.looks.get('sp_root_l4')).toBe('hidden');
@@ -187,7 +188,7 @@ describe('cervical region (phase 2a)', () => {
   it('is built: C1-C7 with the discs C2-C3 to C7-T1, roots C3-C8, the vertebral artery and the neck', () => {
     const r = REGION.get('cervical')!;
     expect(r.levels).toEqual(['C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7']);
-    for (const id of ['sp_c1', 'sp_c7', 'sp_t1', 'sp_dural_sac', 'sp_disc_c2_c3', 'sp_disc_c7_t1', 'sp_root_c8', 'sp_drg_c3', 'sp_vertebral_artery',
+    for (const id of ['sp_c1', 'sp_c7', 'sp_t1', 'sp_dural_sac', 'sp_disc_c2_c3', 'sp_disc_c7_t1', 'sp_root_c8', 'sp_root_c3', 'sp_vertebral_artery',
       'sp_cca_left', 'sp_ijv_right', 'sp_trachea', 'sp_esophagus', 'sp_thyroid', 'sp_larynx', 'sp_prevertebral_left', 'sp_scm_right']) {
       expect(r.structures, id).toContain(id);
     }

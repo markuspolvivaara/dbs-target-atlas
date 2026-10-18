@@ -372,11 +372,18 @@ test('home page: sections, light load, and old links forward to the DBS section'
   page.on('request', (r) => { if (r.resourceType() === 'script') scripts.push(r.url()); });
   await page.goto('./');
   await expect(page.locator('h1')).toHaveText('Open Neuroanatomy Atlas');
-  await expect(page.locator('.section-card[data-section="dbs"] a.btn')).toHaveAttribute('href', './dbs/');
-  await expect(page.locator('.section-card[data-section="tracts"] a.btn')).toHaveAttribute('href', './tracts/');
+  // the modules from the more basic to the more specialised, the spine last; each card is a link over its own image
+  await expect(page.locator('.section-card')).toHaveCount(5);
+  expect(await page.locator('.section-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-section')))).toEqual(['cortex', 'tracts', 'skullbase', 'dbs', 'spine']);
+  await expect(page.locator('a.section-card[data-section="dbs"]')).toHaveAttribute('href', './dbs/');
+  await expect(page.locator('a.section-card[data-section="tracts"]')).toHaveAttribute('href', './tracts/');
+  for (const id of ['cortex', 'tracts', 'skullbase', 'dbs', 'spine']) {
+    const ok = await page.evaluate(async (u) => (await fetch(u)).ok, `./assets/home/${id}.webp`);
+    expect(ok, id).toBe(true);
+  }
   expect(scripts.some((u) => /three-/.test(u))).toBe(false); // no 3D engine on the home page
   // open the DBS section from the home page; the header leads back
-  await page.locator('.section-card[data-section="dbs"] a.btn').click();
+  await page.locator('a.section-card[data-section="dbs"]').click();
   await settle(page);
   await expect(page.locator('.section-chip')).toContainText('DBS targets');
   // the section menu switches to the white-matter section and back
@@ -560,7 +567,7 @@ test('skull base: structure and landmark cards, cut-away and the URL', async ({ 
   await expect(page.locator('.page:not([hidden]) h1')).toHaveText('Sources');
   // the section menu lists every section
   await page.locator('.section-chip').click();
-  await expect(page.locator('.section-menu a.section-item:not(.home)')).toHaveText(['DBS targets', 'White-matter tracts', 'Skull base', 'Cortical anatomy', 'Spine']);
+  await expect(page.locator('.section-menu a.section-item:not(.home)')).toHaveText(['Cortical anatomy', 'White-matter tracts', 'Skull base', 'DBS targets', 'Spine']);
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
@@ -582,6 +589,41 @@ for (const [id, name] of CTX_VIEWS) {
     });
   }
 }
+
+test('cortex: the Function selector draws the areas with their sources and keeps them in the link', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./cortex/#/atlas?v=lateral');
+  await settle(page);
+  await page.locator('.fn-chips .chip[data-v="language"]').click();
+  await expect.poll(() => new URL(page.url()).hash).toContain('f=language');
+  const card = page.locator('.fn-card');
+  await expect(card).toContainText('Broca’s area');
+  await expect(card).toContainText('Wernicke’s area');
+  await expect(card).toContainText('Bulut 2023');
+  await expect(page.locator('.legend3d')).toContainText('Broca’s area');
+  await page.locator('.fn-chips .chip[data-v="motor"]').click();
+  await expect(card).toContainText('Mayka 2006');
+  await expect(card.locator('.fn-areas li')).toHaveCount(5);
+  await page.locator('.fn-chips .chip[data-v="none"]').click();
+  await expect(page.locator('.fn-card')).toHaveCount(0);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('dbs: the STN as its zones or as one nucleus; the Parkinson\'s view without the PPN and the optic tract', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./dbs/#/atlas?i=pd');
+  await settle(page);
+  await expect(page.locator('.legend3d')).not.toContainText('Pedunculopontine');
+  await expect(page.locator('.legend3d')).not.toContainText('Optic tract');
+  await expect(page.locator('.legend3d')).toContainText('STN, sensorimotor zone');
+  await page.locator('.stn-chips .chip[data-v="whole"]').click();
+  await expect.poll(() => new URL(page.url()).hash).toContain('stn=w');
+  await expect(page.locator('.legend3d')).toContainText('Subthalamic nucleus');
+  await expect(page.locator('.legend3d')).not.toContainText('STN, sensorimotor zone');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
 
 test('cortex: label cards, lobes, surface switch and the URL', async ({ page }) => {
   const g = guard(page);
@@ -685,20 +727,28 @@ test('spine: virtual screw — start position, breach grade, cut, and a link tha
   const card = page.locator('.card.sel');
   // measured pedicles beside the published values
   await expect(card.locator('.morph')).toContainText('regional means');
-  await card.locator('.screw-tech .chip[data-v="tt"]').click();
-  await expect(card.locator('.screw-readout .grade')).toHaveText('A');
-  await expect(card.locator('.screw-readout')).toContainText('No breach of the pedicle wall');
+  // the virtual screw sits in a box of its own under the level chips, closed at first
+  const box = page.locator('.screw-box');
+  await expect(box).not.toHaveAttribute('open', '');
+  await box.locator('summary').click();
+  await box.locator('.screw-tech .chip[data-v="tt"]').click();
+  await expect(box.locator('.screw-readout .grade')).toHaveText('A');
+  await expect(box.locator('.screw-readout')).toContainText('No breach of the pedicle wall');
   // turned far medially the screw enters the canal
-  await card.locator('#screw-medial').fill('40');
-  await expect(card.locator('.screw-readout .grade')).toHaveText('E');
-  await expect(card.locator('.screw-readout')).toContainText('Medial breach');
-  await card.locator('.screw-cut').click();
+  await box.locator('#screw-medial').fill('40');
+  await expect(box.locator('.screw-readout .grade')).toHaveText('E');
+  await expect(box.locator('.screw-readout')).toContainText('Medial breach');
+  // it stays when a structure is picked
+  await page.locator('.sb-item[data-id="sp_l4"]').click();
+  await expect(box.locator('.screw-readout .grade')).toHaveText('E');
+  await page.locator('.sb-item[data-id="sp_l4"]').click();
+  await box.locator('.screw-cut').click();
   await expect.poll(() => new URL(page.url()).hash).toContain('x=s');
   await expect.poll(() => decodeURIComponent(new URL(page.url()).hash)).toContain('scr=tt~L~40~');
   await settle(page);
   await page.reload();
   await settle(page);
-  await expect(page.locator('.card.sel .screw-readout .grade')).toHaveText('E');
+  await expect(page.locator('.screw-box .screw-readout .grade')).toHaveText('E');
   await expect(page.locator('#screw-medial')).toHaveValue('40');
   // S1 offers the tricortical screw only; changing level clears the screw
   await page.locator('.level-chips .chip[data-v="S1"]').click();
@@ -736,11 +786,12 @@ test('spine: cervical region — the C8 rule, the foramina transversaria, the ve
   await expect.poll(() => new URL(page.url()).hash).toContain('r=cervical');
   // lateral mass screws at C3-C6 (no pedicle-screw grade), a pedicle screw at C7
   await page.locator('.level-chips .chip[data-v="C5"]').click();
-  await expect(page.locator('.screw-tech .chip')).toHaveText(['None', 'Roy-Camille', 'Magerl', 'An']);
+  await page.locator('.screw-box summary').click();   // stays open from level to level
+  await expect(page.locator('.screw-tech .chip')).toHaveText(['None', 'Lateral mass screw (Magerl)']);
   await page.locator('.screw-tech .chip[data-v="mg"]').click();
   await expect(page.locator('.screw-readout')).toContainText(/bicortical|Within the lateral mass|breach/);
   await expect(page.locator('.screw-readout .grade')).toHaveCount(0);
-  await expect(page.locator('.card.sel')).toContainText('Joaquim 2018');
+  await expect(page.locator('.screw-box')).toContainText('Joaquim 2018');
   // C1-C2: the atlas's lateral mass screw; the axis's pedicle, pars, translaminar and the transarticular screws
   await page.locator('.level-chips .chip[data-v="C1"]').click();
   await expect(page.locator('.screw-tech .chip')).toHaveText(['None', 'C1 lateral mass']);
@@ -752,7 +803,7 @@ test('spine: cervical region — the C8 rule, the foramina transversaria, the ve
   await expect(page.locator('#screw-medial + output')).toHaveText('midline');
   await expect(page.locator('.screw-readout')).toContainText('Through the far cortex');
   await expect(page.locator('.screw-readout')).toContainText('(bicortical)');
-  await expect(page.locator('.card.sel')).toContainText('Sung 2018');
+  await expect(page.locator('.screw-box')).toContainText('Sung 2018');
   await page.locator('.screw-tech .chip', { hasText: 'None' }).click();
   await expect(page.locator('.card.sel')).toContainText('High-riding vertebral artery?');
   await expect(page.locator('.card.sel')).toContainText('Kucherina 2026');
@@ -785,10 +836,12 @@ test('spine: thoracic screw and dorsal approach — published values, start scre
   await settle(page);
   const card = page.locator('.card.sel');
   await expect(card.locator('.morph').first()).toContainText('studies');
-  await expect(card.locator('.screw-tech .chip')).toHaveText(['None', 'Straight-forward trajectory', 'Anatomic trajectory']);
-  await card.locator('.screw-tech .chip[data-v="st"]').click();
-  await expect(card.locator('.screw-readout .grade')).toHaveText(/[AB]/);
-  await expect(card.locator('.screw-readout')).toContainText('of the pedicle’s measured width');
+  const box = page.locator('.screw-box');
+  await box.locator('summary').click();
+  await expect(box.locator('.screw-tech .chip')).toHaveText(['None', 'Pedicle screw']);
+  await box.locator('.screw-tech .chip[data-v="st"]').click();
+  await expect(box.locator('.screw-readout .grade')).toHaveText(/[AB]/);
+  await expect(box.locator('.screw-readout')).toContainText('of the pedicle’s measured width');
   await card.locator('.approach-chips .chip[data-v="ctv"]').click();
   await expect(card.locator('.exposure caption')).toContainText('T7–T10');
   await expect(card.locator('.exposure tr.cur th')).toHaveText('Costotransversectomy');
@@ -799,7 +852,7 @@ test('spine: thoracic screw and dorsal approach — published values, start scre
   await page.reload();
   await settle(page);
   await expect(page.locator('.card.sel .approach-side .chip[aria-pressed="true"]')).toHaveText('Right');
-  await expect(page.locator('.card.sel .screw-readout .grade')).toHaveText(/[AB]/);
+  await expect(page.locator('.screw-box .screw-readout .grade')).toHaveText(/[AB]/);
   // another level clears both
   await page.locator('.level-chips .chip[data-v="T9"]').click();
   await expect.poll(() => new URL(page.url()).hash).not.toContain('ap=');
@@ -845,15 +898,13 @@ test('spine: level card with measurements, schematic roots labelled, the URL', a
   await card.getByRole('button', { name: 'L4 nerve root', exact: true }).click();
   await expect(page.locator('.card.sel h2')).toHaveText('L4 nerve root');
   await expect(page.locator('.card.sel .schematic-note')).toBeVisible();
-  await page.locator('.sb-item[data-id="sp_drg_l4"]').click();
-  await expect(page.locator('.card.sel .schematic-note')).toBeVisible();
   // the selection and level survive a reload
   await expect.poll(() => new URL(page.url()).hash).toContain('lv=L4');
   await settle(page);
   await page.reload();
   await settle(page);
   const st = await page.evaluate(() => (window as unknown as { __atlas: { state(): { level: string; sel: string } } }).__atlas.state());
-  expect([st.level, st.sel]).toEqual(['L4', 'sp_drg_l4']);
+  expect([st.level, st.sel]).toEqual(['L4', 'sp_root_l4']);
   await page.goto('./spine/#/credits');
   await expect(page.locator('#verse')).toContainText('CC BY-SA 4.0');
   await page.goto('./spine/#/sources');

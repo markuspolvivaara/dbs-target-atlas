@@ -4,7 +4,7 @@ import type { Hemi } from '../state';
 import { discBelow, LEVEL_ORDER, SP, SP_MANIFEST, SP_REFS, vertebraOf } from '../spine';
 import {
   ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, CCJ, CCJ_MEASURES, exitingRoot, exposureRegion, GEOM_BY_LEVEL, LESION_ZONES,
-  NECK_LANDMARKS, ROOT_FUNCTION, STATEMENTS, VERTEBRAL_ARTERY, type ApproachId, type CcjMeasure, type CcjMeasureId, type LesionZone,
+  NECK_LANDMARKS, ROOT_FUNCTION, STATEMENTS, TECHNIQUES, VERTEBRAL_ARTERY, type ApproachId, type CcjMeasure, type CcjMeasureId, type LesionZone,
   type LevelGeom, type Statement,
 } from '../spine/content';
 import { bodyChart } from './body-chart';
@@ -31,7 +31,7 @@ const LAYERS: [SpineLayer, string][] = [['nuclei', 'Bone'], ['discs', 'Discs'], 
 /** list sections of the panel and legend, by category */
 const GROUPS: [string, string, string[]][] = [
   ['bone', 'Bone', ['vertebra', 'bone']], ['disc', 'Discs', ['disc']], ['neural', 'Neural', ['neural']],
-  ['root', 'Roots and ganglia (schematic)', ['root', 'ganglion']], ['vessel', 'Vessels', ['vessel']],
+  ['root', 'Nerve roots (schematic)', ['root']], ['vessel', 'Vessels', ['vessel']],
   ['soft', 'Viscera and muscles', ['viscera', 'muscle']],
 ];
 const nameOf = (id: string) => SP.get(id)?.name ?? id;
@@ -295,6 +295,8 @@ export class SpineAtlasPage {
   }
 
   private ccjDrawn = '';
+  /** the virtual screw's box: open or closed (null until the first level with a screw) */
+  private screwOpen: boolean | null = null;
   /** The junction's selected measurement over the bone (after the screw panel, which shares the overlay). */
   private drawCcj(s: SpineState): void {
     const key = s.region === 'ccj' && s.measure ? s.measure : '';
@@ -341,6 +343,14 @@ export class SpineAtlasPage {
     if (r.levels.length) pane.append(h('p', { class: 'chips-label' }, 'Level'),
       chips<string>([['all', 'All'], ...r.levels.map((l): [string, string] => [l, l])], s.level ?? 'all',
         (v) => this.update((st) => { st.level = v === 'all' ? null : v; st.lesion = null; st.screw = null; st.approach = null; st.sel = null; st.cam = { preset: null }; }, { camera: true }), { label: 'Level', cls: 'grp-chips level-chips' }));
+    // the virtual screw: whenever the level has one, in a box of its own that starts closed
+    if (s.level && SCREW_LEVELS[s.level]) {
+      if (this.screwOpen === null) this.screwOpen = !!s.screw;   // open when a link brings a screw
+      pane.append(h('details', {
+        class: 'screw-box', open: this.screwOpen || undefined,
+        ontoggle: (e: Event) => { this.screwOpen = (e.target as HTMLDetailsElement).open; },
+      }, h('summary', {}, 'Virtual screw', s.screw ? h('span', { class: 'screw-box-tech' }, ` · ${TECHNIQUES[s.screw.tech].name}, ${TECHNIQUES[s.screw.tech].midline ? 'midline' : s.screw.side === 'L' ? 'left' : 'right'}`) : ''), this.screw.el));
+    }
     if (s.sel) pane.append(this.card(s.sel));
     else if (s.level) pane.append(this.levelCard(s.level));
     else if (r.id === 'ccj') pane.append(this.ccjCard());
@@ -427,12 +437,15 @@ export class SpineAtlasPage {
           this.stmt(thoracic ? STATEMENTS.thoracicNerve : cervical ? STATEMENTS.cervicalRootRule : STATEMENTS.rootRule))] : null,
         cervical ? [h('dt', {}, 'Foramina transversaria (measured)'), h('dd', {}, this.transverseForamina(level))] : null,
         g?.lesions ? [h('dt', {}, `Disc herniation at ${g.pair}`), h('dd', {}, this.lesionTool(g))] : null,
-        SCREW_LEVELS[level] ? [h('dt', {}, 'Virtual screw'), h('dd', {}, this.screw.el)] : null,
         SCREW_LEVELS[level]?.pedicle ? [h('dt', {}, 'Pedicles (measured) and published values'), h('dd', {}, this.morphometry(level))] : null,
         SCREW_LEVELS[level]?.lateralMass ? [h('dt', {}, 'Lateral masses (measured)'), h('dd', {}, this.lateralMasses(level))] : null,
         SCREW_LEVELS[level]?.isthmus ? [h('dt', {}, 'High-riding vertebral artery? (measured)'), h('dd', {}, this.highRiding(level))] : null,
         level === 'C1' || level === 'C2' ? [h('dt', {}, 'Craniocervical junction'), h('dd', {},
-          h('p', {}, 'The occiput, the foramen magnum and the arteries and nerves above the atlas are in the ',
+          h('p', {}, 'The junction’s measurements (ADI, BDI, McRae’s line…) are in the ',
+            h('button', { type: 'button', class: 'linklike', onclick: () => this.update((st) => {
+              st.region = 'ccj'; st.level = null; st.screw = null; st.lesion = null; st.approach = null; st.sel = null; st.cam = { preset: null };
+            }, { camera: true }) }, 'craniocervical region'),
+            ' (another CT, which reaches the clivus); the occiput, the foramen magnum and the arteries and nerves above the atlas in the ',
             h('a', { href: '../skullbase/' }, 'skull base section'), '.'))] : null,
         thoracic && g ? [h('dt', {}, `Dorsal approach to the ${g.pair} disc`), h('dd', {}, this.approachTool(level, g))] : null,
         cervical && g ? [h('dt', {}, `Anterior approach (ACDF) to the ${g.pair} disc`), h('dd', {}, this.acdfTool(level, g))] : null));
@@ -698,7 +711,6 @@ export class SpineAtlasPage {
         return f ? `${sd === 'L' ? 'left' : 'right'} ${fmtMm(f.height)} mm high` : `${sd === 'L' ? 'left' : 'right'} not captured`;
       }).join(', ') + '.');
     }
-    if (category === 'ganglion') add('Ganglia', this.stmt(thoracic ? STATEMENTS.thoracicNerve : cervical ? STATEMENTS.cervicalRootRule : STATEMENTS.ganglia));
     if (id === 'sp_dural_sac') add('What this is', this.stmt(STATEMENTS.sac));
     return out;
   }

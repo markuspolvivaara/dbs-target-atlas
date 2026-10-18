@@ -43,7 +43,7 @@ export const SYMPTOMS: SymptomInput[] = [
   {
     id: 'pd-axial', indicationId: 'pd', name: 'Axial signs and gait',
     summary: 'Axial signs map to SMA and brainstem. For freezing of gait, deep contacts at the STN/SNr border.',
-    structures: ['stn', 'stn_motor', 'ppn'], alternativeStructures: ['snr'],
+    structures: ['stn', 'stn_motor'], alternativeStructures: ['snr'],
     tracts: ['sw_pd_sma'], corticalAreas: ['sma'], targetId: 't-ss-pd',
     evidence: [
       { claim: 'Symptom-specific tracts mapped in 237 patients from five centres', refIds: ['rajamani2024'] },

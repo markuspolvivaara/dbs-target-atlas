@@ -41,8 +41,18 @@ export const LabelSchema = z.object({
   definition: Definition.extend({ scope: z.string().nullable() }).nullable(),
 });
 export type CtxLabel = z.infer<typeof LabelSchema>;
+/** A functional area drawn over the labels: HMAT's (motor, somatosensory) or the Destrieux labels its definition names. */
+const FunctionSchema = z.object({
+  id: z.string().regex(/^ctx_fn_[a-z0-9]+$/), name: z.string(), group: z.enum(['motor', 'somatosensory', 'language', 'visual', 'auditory']),
+  token: z.string(), areaCm2: z.object({ L: z.number(), R: z.number() }), basis: z.enum(['hmat', 'labels', 'behind']),
+  labels: z.array(z.string()), refIds: z.array(z.string()).min(1),
+});
+export type CtxFunction = z.infer<typeof FunctionSchema>;
+export type FnGroupId = CtxFunction['group'];
 const FileSchema = z.object({
   labels: z.array(LabelSchema),
+  functions: z.array(FunctionSchema),
+  references: z.record(z.object({ citation: z.string(), url: z.string().url() })),
   lobes: z.array(z.object({ id: LobeId, name: z.string(), token: z.string(), definition: Definition.nullable(), labels: z.array(z.string()) })),
   method: z.object({
     faces: z.number(), inflateIterations: z.number(), inflateStep: z.number(), midlineGapMm: z.number(),
@@ -56,6 +66,40 @@ export const LABEL = new Map(LABELS.map((l) => [l.id, l]));
 export const LOBES = FILE.lobes;
 export const LOBE = new Map(LOBES.map((l) => [l.id, l]));
 export const METHOD = FILE.method;
+export const FUNCTIONS = FILE.functions;
+/** The cortex section's content references ('mayka2006' -> 'Mayka 2006'), for the function cards' source links. */
+export const CTX_REFS = new Map(Object.entries(FILE.references).map(([k, r]) => {
+  const m = /^([a-z]+)(\d{4})$/.exec(k);
+  return [k, { ...r, shortLabel: m ? `${m[1][0].toUpperCase()}${m[1].slice(1)} ${m[2]}` : k }];
+}));
+/** The Function selector's groups, with what the areas are and how they are drawn (sources in refIds). */
+export const FN_GROUPS: { id: FnGroupId; name: string; text: string; refIds: string[] }[] = [
+  {
+    id: 'motor', name: 'Motor',
+    text: 'The motor areas of the Human Motor Area Template (HMAT), made from a meta-analysis of 126 functional imaging articles: primary motor cortex, supplementary motor area proper, pre-supplementary motor area, and dorsal and ventral premotor cortex. Drawn vertex by vertex on this surface.',
+    refIds: ['mayka2006'],
+  },
+  {
+    id: 'somatosensory', name: 'Somatosensory',
+    text: 'Primary somatosensory cortex as HMAT defines it, from the same meta-analysis; with the primary motor cortex it makes up the primary sensorimotor cortex. Drawn vertex by vertex on this surface.',
+    refIds: ['mayka2006'],
+  },
+  {
+    id: 'language', name: 'Language',
+    text: 'Broca’s area lies in the left inferior frontal gyrus, its pars opercularis and pars triangularis (sometimes extended to the pars orbitalis), and is classically associated with language production; Wernicke’s area, in the posterior part of the superior temporal gyrus, with comprehension; the arcuate fasciculus connects the two. Drawn on both sides: the Destrieux opercular and triangular parts of the inferior frontal gyrus, and the superior temporal gyrus behind the centre of Heschl’s gyrus (its lateral aspect and the planum temporale; “posterior” is taken that way here).',
+    refIds: ['bulut2023', 'barba2026', 'kiernan2012'],
+  },
+  {
+    id: 'visual', name: 'Visual',
+    text: 'The primary visual cortex lies along the calcarine sulcus: the centre of vision at the occipital pole, the periphery anteriorly, the lower visual field in the upper bank of the sulcus and the upper field in the lower bank. Drawn: the Destrieux calcarine sulcus and occipital pole labels.',
+    refIds: ['ribeiro2025'],
+  },
+  {
+    id: 'auditory', name: 'Auditory',
+    text: 'The primary auditory cortex is the transverse temporal gyri (of Heschl), on the upper surface of the superior temporal gyrus, with the planum temporale behind them. Drawn: the Destrieux anterior transverse temporal gyrus label.',
+    refIds: ['kiernan2012'],
+  },
+];
 
 /** Name for labels and lists: the Destrieux long name without parenthetical synonyms, up to its first comma. */
 export function shortName(id: string): string {
@@ -93,6 +137,13 @@ export function crossCheckCtx(): string[] {
     if (!l.lobes.some((x) => x.lobe === l.lobe)) errs.push(`${l.id}: main lobe not among its lobes`);
   }
   for (const lb of LOBES) for (const id of lb.labels) if (!LABEL.has(id)) errs.push(`lobe ${lb.id}: unknown label ${id}`);
-  for (const s of CTX_MANIFEST.structures) if (s.id !== MEDIAL_WALL && !LABEL.has(s.id)) errs.push(`${s.id}: no label facts`);
+  const fns = new Set(FUNCTIONS.map((f) => f.id));
+  for (const s of CTX_MANIFEST.structures) if (s.id !== MEDIAL_WALL && !LABEL.has(s.id) && !fns.has(s.id)) errs.push(`${s.id}: no label facts`);
+  for (const f of FUNCTIONS) {
+    if (!CTX.has(f.id)) errs.push(`${f.id}: no manifest structure`);
+    for (const r of f.refIds) if (!CTX_REFS.has(r)) errs.push(`${f.id}: reference ${r} unknown`);
+    for (const l of f.labels) if (!LABEL.has(l)) errs.push(`${f.id}: label ${l} unknown`);
+  }
+  for (const g of FN_GROUPS) for (const r of g.refIds) if (!CTX_REFS.has(r)) errs.push(`group ${g.id}: reference ${r} unknown`);
   return errs;
 }

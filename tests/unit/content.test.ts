@@ -74,7 +74,8 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
     };
     for (const o of src.IND) {
       const n = CONTENT.indications.find((i) => i.id === o.id)!;
-      const all = new Set([...n.primaryTargets, ...n.alternativeTargets, ...n.contextStructures, ...n.corticalAreas]);
+      // a node the indication leaves out on purpose (omit: Parkinson's without the PPN) counts as decided
+      const all = new Set([...n.primaryTargets, ...n.alternativeTargets, ...n.contextStructures, ...n.corticalAreas, ...n.omit]);
       for (const node of [...o.nodes.primary, ...o.nodes.alt, ...o.nodes.context]) {
         expect(map[node].some((id) => all.has(id)), `${o.id}: ${node}`).toBe(true);
       }
@@ -202,6 +203,20 @@ describe('epilepsy (researched addition)', () => {
   });
 });
 
+describe('Parkinson\'s view: the STN whole or as zones; the PPN and the optic tract left out', () => {
+  it('draws the zones by default and the nucleus whole when asked, and never the PPN or the optic tract', () => {
+    const z = plan('pd', null, true);
+    expect(z.looks.get('stn_motor')).toBe('primary');
+    const w = plan('pd', null, true, true);
+    expect(w.looks.get('stn')).toBe('primary');
+    for (const id of ['stn_motor', 'stn_assoc', 'stn_limbic']) expect(w.looks.get(id), id).toBe('hidden');
+    for (const p of [z, w, plan('pd', 'pd-axial', true)]) for (const id of ['ppn', 'optic_tract']) expect(p.looks.get(id), id).toBe('hidden');
+    // other indications keep the optic tract as a GPi landmark
+    const gpiInd = CONTENT.indications.find((i) => i.id !== 'pd' && [...i.primaryTargets, ...i.alternativeTargets].some((t) => t === 'gpi' || t === 'gpi_sm'))!;
+    expect(plan(gpiInd.id, null, true).looks.get('optic_tract'), gpiInd.id).toBe('context');
+  });
+});
+
 describe('optic tract (GPi landmark, researched addition)', () => {
   it('sits beneath the GPi on both sides', () => {
     const m = (id: string) => MANIFEST.structures.find((s) => s.id === id)!;
@@ -210,10 +225,10 @@ describe('optic tract (GPi landmark, researched addition)', () => {
       expect(Math.sign(m('optic_tract').centroid![side][0])).toBe(side === 'L' ? -1 : 1);
     }
   });
-  it('appears as a landmark whenever GPi is a target or alternative, and only then', () => {
+  it('appears as a landmark whenever GPi is a target or alternative (unless the indication leaves it out), and only then', () => {
     for (const ind of CONTENT.indications) {
       const p = plan(ind.id, null, true);
-      const gpi = [...ind.primaryTargets, ...ind.alternativeTargets].some((t) => t === 'gpi' || t === 'gpi_sm');
+      const gpi = [...ind.primaryTargets, ...ind.alternativeTargets].some((t) => t === 'gpi' || t === 'gpi_sm') && !ind.omit.includes('optic_tract');
       expect(p.looks.get('optic_tract') === 'context', ind.id).toBe(gpi);
       expect(plan(ind.id, null, false).looks.get('optic_tract'), ind.id).not.toBe('context');
     }

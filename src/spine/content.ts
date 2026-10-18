@@ -258,6 +258,8 @@ export interface Technique {
   bicortical?: boolean;
   /** one screw in the midline (no side to choose; its angle and entry move to the left or right) */
   midline?: boolean;
+  /** not offered (kept, to be offered again later): one technique per region is shown */
+  hidden?: boolean;
   /** what its breaches' directions are called when they are not the vertebra's (a screw running up the dens) */
   breachWords?: Partial<Record<'medial' | 'lateral' | 'superior' | 'inferior', string>>;
 }
@@ -296,16 +298,16 @@ export const TECHNIQUES: Record<Technique['id'], Technique> = {
     },
   },
   st: {
-    id: 'st', name: 'Straight-forward trajectory', levels: THORACIC_LEVELS,
+    id: 'st', name: 'Pedicle screw', levels: THORACIC_LEVELS,
     start: {
-      text: 'The straight-forward trajectory runs parallel to the vertebral endplate, the anatomic one along the true axis of the pedicle; in a cadaver comparison the straight-forward screws had 39% more maximum insertional torque and 27% more pullout strength. Start position here: through the pedicle’s isthmus at its transverse angle measured on this CT, parallel to the superior endplate, entering where it leaves the dorsal bone.',
-      refIds: ['lehman2003'],
+      text: 'The straight-forward trajectory runs parallel to the vertebral endplate, the anatomic one along the true axis of the pedicle; in a cadaver comparison the straight-forward screws had 39% more maximum insertional torque and 27% more pullout strength. Start position here: through the pedicle’s isthmus at its transverse angle measured on this CT, parallel to the superior endplate, entering where it leaves the dorsal bone; where a narrow pedicle’s measured axis falls outside the range of the published study means for its level (it can turn outwards), at their mean instead.',
+      refIds: ['lehman2003', 'verma2020'],
     },
     size: THORACIC_SIZE,
     note: THORACIC_FREEHAND,
   },
   at: {
-    id: 'at', name: 'Anatomic trajectory', levels: THORACIC_LEVELS,
+    id: 'at', name: 'Anatomic trajectory', levels: THORACIC_LEVELS, hidden: true,
     start: {
       text: 'The anatomic trajectory follows the true axis of the pedicle; after a straight-forward screw had broken through the medial wall, a screw in the anatomic trajectory reached 62% of the original maximum insertional torque in cadavers, enough for a salvage. Start position here: along the pedicle axis measured on this CT, entering where it leaves the dorsal bone.',
       refIds: ['lehman2003', 'lehmankuklo2003'],
@@ -314,7 +316,7 @@ export const TECHNIQUES: Record<Technique['id'], Technique> = {
     note: THORACIC_FREEHAND,
   },
   rc: {
-    id: 'rc', name: 'Roy-Camille', levels: LATERAL_MASS_LEVELS, within: 'lateral mass', bicortical: true,
+    id: 'rc', name: 'Roy-Camille', levels: LATERAL_MASS_LEVELS, within: 'lateral mass', bicortical: true, hidden: true,
     start: {
       text: 'Roy-Camille: entry at the midpoint of the lateral mass, about 10° lateral, perpendicular to the lateral mass’s surface. Start position here: the midpoint of the lateral mass’s posterior face as measured on this CT, perpendicular to a plane fitted to that face, 10° lateral.',
       refIds: ['joaquim2018'],
@@ -323,7 +325,7 @@ export const TECHNIQUES: Record<Technique['id'], Technique> = {
     note: { text: 'Compared with the Magerl technique, Roy-Camille screws violated nerve roots less often but facet joints more often, and they are shorter.', refIds: ['joaquim2018'] },
   },
   mg: {
-    id: 'mg', name: 'Magerl', levels: LATERAL_MASS_LEVELS, within: 'lateral mass', bicortical: true,
+    id: 'mg', name: 'Lateral mass screw (Magerl)', levels: LATERAL_MASS_LEVELS, within: 'lateral mass', bicortical: true,
     start: {
       text: 'Magerl: entry 1 mm medial and 1 mm cranial to the midpoint of the lateral mass, 20–30° lateral, parallel to the adjacent facet joints. Start position here: 25° lateral, parallel to the mean inclination of the facet joints above and below as measured on this CT.',
       refIds: ['joaquim2018'],
@@ -332,7 +334,7 @@ export const TECHNIQUES: Record<Technique['id'], Technique> = {
     note: { text: 'Magerl screws can be longer and violate the facet joint less often than Roy-Camille screws; in a cadaver comparison with deliberately long (20 mm) screws they violated a nerve in 95%, against 60% for the An technique.', refIds: ['joaquim2018'] },
   },
   an: {
-    id: 'an', name: 'An', levels: LATERAL_MASS_LEVELS, within: 'lateral mass', bicortical: true,
+    id: 'an', name: 'An', levels: LATERAL_MASS_LEVELS, within: 'lateral mass', bicortical: true, hidden: true,
     start: {
       text: 'An: entry 1 mm medial to the midpoint of the lateral mass, 30° lateral, 15° cephalad. Start position here: the cephalad angle taken from the perpendicular to the lateral mass’s face measured on this CT.',
       refIds: ['joaquim2018'],

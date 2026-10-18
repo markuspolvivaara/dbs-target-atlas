@@ -59,6 +59,24 @@ UNTANGLE_ROUNDS = 20     # at most this many local smoothing rounds to remove de
 LABEL_SMOOTH_STEPS = 2   # majority-filter passes on the transferred vertex labels
 LOBE_MIN_SHARE = 0.25   # a label belongs to every lobe holding at least this share of its vertices (via Desikan-Killiany)
 LOBE_TOKEN = {k: f"lobe{k.capitalize()}" for k in CL.LOBES}
+# Functional areas drawn over the labels (the Function selector): (id, name, group, palette token, rule, references).
+# The motor and somatosensory areas are HMAT's (Mayka 2006), vertex by vertex; the others are the Destrieux labels
+# their published definitions name. Wernicke's area, "the posterior part of the superior temporal gyrus", is taken
+# here as the gyrus behind the centre of Heschl's gyrus (its lateral aspect and the planum temporale).
+FUNCTIONS = [
+    ("m1", "Primary motor cortex (M1)", "motor", "ctxM1", ("hmat", [1, 2]), ["mayka2006"]),
+    ("sma", "Supplementary motor area (SMA)", "motor", "ctxSMA", ("hmat", [5, 6]), ["mayka2006"]),
+    ("presma", "Pre-SMA", "motor", "ctxPreSMA", ("hmat", [7, 8]), ["mayka2006"]),
+    ("pmd", "Dorsal premotor cortex (PMd)", "motor", "ctxPM", ("hmat", [9, 10]), ["mayka2006"]),
+    ("pmv", "Ventral premotor cortex (PMv)", "motor", "ctxPMv", ("hmat", [11, 12]), ["mayka2006"]),
+    ("s1", "Primary somatosensory cortex (S1)", "somatosensory", "ctxS1", ("hmat", [3, 4]), ["mayka2006"]),
+    ("broca", "Broca’s area", "language", "ctxBroca", ("labels", ["G_front_inf-Opercular", "G_front_inf-Triangul"]), ["bulut2023", "barba2026"]),
+    ("wernicke", "Wernicke’s area", "language", "ctxWernicke", ("behind", ["G_temp_sup-Lateral", "G_temp_sup-Plan_tempo"], "G_temp_sup-G_T_transv"),
+     ["kiernan2012", "barba2026"]),
+    ("v1", "Primary visual cortex (V1)", "visual", "ctxV1", ("labels", ["S_calcarine", "Pole_occipital"]), ["ribeiro2025"]),
+    ("a1", "Primary auditory cortex (A1)", "auditory", "ctxA1", ("labels", ["G_temp_sup-G_T_transv"]), ["kiernan2012"]),
+]
+FN_LIFT_MM = 0.25   # the patches float this far off the surface (pial and inflated), over the labels
 MEDIAL_WALL = {"Unknown", "Medial_wall", "unknown", "?"}
 
 DATASET = {
@@ -245,6 +263,8 @@ def main() -> int:
     MW = "ctx_medial_wall"
 
     nodes: dict[str, list[dict]] = {i: [] for i in [*ids.values(), MW]}
+    fn_nodes: dict[str, list[dict]] = {f[0]: [] for f in FUNCTIONS}
+    fn_area: dict[str, dict[str, float]] = {f[0]: {} for f in FUNCTIONS}
     facts: dict[str, dict] = {i: {"L": {}, "R": {}} for i in [*ids.values(), MW]}
     border_len: dict[tuple[str, str], float] = {}
     rel_dk: dict[str, dict[str, list[int]]] = {}
@@ -306,6 +326,30 @@ def main() -> int:
         li = smooth_labels(np.array([names_all.index(x) for x in vlab]), F, len(names_all))
         vlab = np.array(names_all)[li]
         oper = smooth_mask(opercular(V, vlab, side), F, np.isin(vlab, CL.INSULA_LABELS))
+
+        # ---- functional areas: whole faces of the decimated surface, lifted off it
+        hm_d = hm[near]
+        for fid, _name, _grp, _tok, rule, _refs in FUNCTIONS:
+            if rule[0] == "hmat":
+                inside = np.isin(hm_d, rule[1])
+            elif rule[0] == "labels":
+                inside = np.isin(vlab, rule[1])
+            else:  # behind the centre of a label (Wernicke: behind Heschl's gyrus)
+                y0 = V[vlab == rule[2], 1].mean()
+                inside = np.isin(vlab, rule[1]) & (V[:, 1] < y0)
+            ff = F[inside[F].all(1)]
+            if not len(ff):
+                raise SystemExit(f"function {fid}/{side}: no faces")
+            used, inv = np.unique(ff, return_inverse=True)
+            Pv, Qv = V[used] + FN_LIFT_MM * Np[used], X[used] + FN_LIFT_MM * Ni[used]
+            fn_nodes[fid].append({
+                "name": side, "positions": Pv, "normals": Np[used], "indices": inv.reshape(-1, 3),
+                "colors": np.repeat(shade[used, None], 3, axis=1),
+                "scalars": {"_OPER": oper[used].astype(np.float32)},
+                "targets": [{"positions": Qv - Pv, "normals": Ni[used] - Np[used]}],
+            })
+            tri = V[ff]
+            fn_area[fid][side] = round(float(np.linalg.norm(np.cross(tri[:, 1] - tri[:, 0], tri[:, 2] - tri[:, 0]), axis=1).sum() / 2) / 100, 2)
         par, w, faces_by, borders = split_by_label(F, li, len(V))
 
         def blend(a: np.ndarray) -> np.ndarray:
@@ -416,6 +460,24 @@ def main() -> int:
             "insula": s in CL.INSULA_LABELS,
             "definition": ({**d, "source": zt[0], "scope": zt[1]} if d else None),
         })
+    functions = []
+    for fid, name, grp, tok, rule, refs in FUNCTIONS:
+        sid = f"ctx_fn_{fid}"
+        write_glb(BUILD / f"{sid}.glb", fn_nodes[fid], {"id": sid})
+        labels_of = sorted(rule[1]) if rule[0] != "hmat" else []
+        structures.append({
+            "id": sid, "name": name, "aliases": [], "type": "surface", "file": f"assets/cortex/{sid}.glb", "bytes": 1,
+            "colour": {"token": tok, "light": PALETTE["light"][tok], "dark": PALETTE["dark"][tok]},
+            "dataset": "destrieux", "source": DATASET["name"], "licence": DATASET["licence"],
+            "citation": [c["citation"] for c in cites], "citationUrls": [c["url"] for c in cites], "refIds": DATASET["cite"],
+            "derivation": ("HMAT (Mayka 2006) on the template's pial surface, vertex by vertex." if rule[0] == "hmat"
+                           else "The Destrieux labels its definition names" + (", behind the centre of Heschl's gyrus" if rule[0] == "behind" else "")
+                           + "; drawn just above the surface."),
+            "category": "function",
+            "centroid": {k: [round(float(x), 2) for x in fn_nodes[fid][0 if k == "L" else -1]["positions"].mean(0)] for k in "LR"},
+        })
+        functions.append({"id": sid, "name": name, "group": grp, "token": tok, "areaCm2": fn_area[fid],
+                          "basis": rule[0], "labels": [ids[x] for x in labels_of], "refIds": refs})
     lobes = []
     for lb in CL.LOBES:
         zt = CL.ZTEXT_LOBES[lb]
@@ -433,7 +495,8 @@ def main() -> int:
     }
     (GEN / "ctx-manifest.json").write_text(json.dumps(manifest, indent=1, ensure_ascii=False))
     (GEN / "ctx-labels.json").write_text(json.dumps({
-        "labels": labels, "lobes": lobes,
+        "labels": labels, "lobes": lobes, "functions": functions,
+        "references": {k: {"citation": CITES[k]["citation"], "url": CITES[k]["url"]} for k in sorted({r for f in functions for r in f["refIds"]})},
         "method": {"faces": FACES, "inflateIterations": INFLATE_ITER, "inflateStep": INFLATE_STEP, "midlineGapMm": MIDLINE_GAP_MM,
                    "operMarginMm": OPER_MARGIN_MM, "operLateralMm": OPER_LATERAL_MM, "hmatMaxDistMm": C.HMAT_MAX_DIST_MM},
         "report": {k: v for k, v in report.items() if k != "dkSize"},

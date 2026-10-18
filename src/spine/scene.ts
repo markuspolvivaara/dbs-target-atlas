@@ -12,7 +12,7 @@ export interface SpinePlan extends ScenePlan { region: string; level: string | n
  * other bones of the region step back.
  */
 export function spinePlan(s: Pick<SpineState, 'region' | 'level' | 'sel'> & Partial<Pick<SpineState, 'lesion' | 'screw' | 'cut' | 'approach'>>): SpinePlan {
-  const r = REGION.get(s.region) ?? REGION.get('lumbar')!;
+  const r = REGION.get(s.region) ?? REGION.get('cervical')!;
   const inRegion = new Set(r.structures);
   const focus = new Set<string>();
   if (s.level) {
@@ -31,7 +31,7 @@ export function spinePlan(s: Pick<SpineState, 'region' | 'level' | 'sel'> & Part
   // a lesion: the root it affects stands out, the other roots step back, and the herniation is marked
   const lesionRoot = s.lesion ? `sp_root_${affectedRoot(s.lesion.pair, s.lesion.zone).toLowerCase()}` : null;
   if (lesionRoot) for (const st of SP_MANIFEST.structures) {
-    if (inRegion.has(st.id) && (st.category === 'root' || st.category === 'ganglion')) looks.set(st.id, st.id === lesionRoot || st.id === lesionRoot.replace('root', 'drg') ? 'primary' : 'context');
+    if (inRegion.has(st.id) && st.category === 'root') looks.set(st.id, st.id === lesionRoot ? 'primary' : 'context');
   }
   // a dorsal approach to the disc below the level: the two vertebrae at the disc turn see-through; the disc, the dural
   // sac and the level's root stand out, the other roots step back
@@ -43,7 +43,7 @@ export function spinePlan(s: Pick<SpineState, 'region' | 'level' | 'sel'> & Part
     const root = `sp_root_${s.level.toLowerCase()}`;
     for (const st of SP_MANIFEST.structures) {
       if (!inRegion.has(st.id)) continue;
-      if (st.category === 'root' || st.category === 'ganglion') looks.set(st.id, !acdf && (st.id === root || st.id === root.replace('root', 'drg')) ? 'primary' : 'context');
+      if (st.category === 'root') looks.set(st.id, !acdf && st.id === root ? 'primary' : 'context');
       if (acdf && (st.category === 'vessel' || st.category === 'viscera')) looks.set(st.id, 'primary');
       if (acdf && st.category === 'muscle') looks.set(st.id, st.id.startsWith('sp_prevertebral') ? 'primary' : 'context');
     }

@@ -313,6 +313,8 @@ for o in bones:
     export['bones'][o.name] = {'verts': v, 'tris': t, 'ao': ao[o.name]}
     export['texts'][base_name(o.name)] = text_for(o.name)
 
+MESH_VESSELS = ['Anterior communicating artery']
+EXTRA_TEXTS = ['Mandibular nerve']
 SOFT = ['Cavernous sinus.l', 'Cavernous sinus.r', 'Adenohypophysis', 'Neurohypophysis', 'Tentorium cerebelli.l',
         'Tentorium cerebelli.r', 'Falx cerebri', 'Optic chiasm.l', 'Optic chiasm.r']
 for n in SOFT:
@@ -340,6 +342,28 @@ for o in bpy.data.objects:
     tree = under(o, {'artery': 'Systemic arteries', 'vein': 'Systemic veins', 'nerve': 'Cranial nerves'}[kind]) or []
     export['lines'][o.name] = {'kind': kind, 'runs': runs, 'path': tree}
     export['texts'][base_name(o.name)] = text_for(o.name)
+
+# vessels modelled as meshes, not curves (the anterior communicating artery): a centre line along the mesh's long
+# axis, with its mean distance from that axis as the radius
+for name in MESH_VESSELS:
+    o = bpy.data.objects.get(name)
+    if o is None or o.type != 'MESH':
+        continue
+    vs = [ras(o.matrix_world @ v.co) for v in o.data.vertices]
+    n = len(vs)
+    c = [sum(v[i] for v in vs) / n for i in range(3)]
+    cov = mathutils.Matrix([[sum((v[i] - c[i]) * (v[j] - c[j]) for v in vs) / n for j in range(3)] for i in range(3)])
+    axis = mathutils.Vector((1.0, 0.0, 0.0))
+    for _ in range(50):                                   # power iteration: the long axis
+        axis = (cov @ axis).normalized()
+    t = [sum((v[i] - c[i]) * axis[i] for i in range(3)) for v in vs]
+    lo, hi = min(t), max(t)
+    r = sum(((sum((v[i] - c[i]) ** 2 for i in range(3))) - tt * tt) ** 0.5 for v, tt in zip(vs, t)) / n
+    run = [[round(c[i] + (lo + (hi - lo) * k / 4) * axis[i], 3) for i in range(3)] + [round(r, 3)] for k in range(5)]
+    export['lines'][name] = {'kind': 'artery', 'runs': [run], 'path': under(o, 'Systemic arteries') or []}
+    export['texts'][base_name(name)] = text_for(name)
+for name in EXTRA_TEXTS:   # definitions for structures merged under these names in the build
+    export['texts'][name] = text_for(name)
 
 for o in bpy.data.objects:
     if not (o.name.endswith('.j') and o.type == 'MESH' and len(o.data.vertices) == 2):

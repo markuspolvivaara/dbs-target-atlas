@@ -96,6 +96,8 @@ export const IndicationSchema = z.object({
   alternativeMarkers: z.array(Id),
   /** Published sweet-spot volumes shown as context without a point marker (their largest region is not in the named target). */
   extraVolumes: z.array(Id).default([]),
+  /** Structures never drawn in this indication's views (not even as ghosts or landmarks). */
+  omit: z.array(Id).default([]),
   target: z.string(),
   alternatives: z.string(),
   why: z.string(),

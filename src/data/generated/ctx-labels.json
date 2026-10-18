@@ -9370,6 +9370,193 @@
    ]
   }
  ],
+ "functions": [
+  {
+   "id": "ctx_fn_m1",
+   "name": "Primary motor cortex (M1)",
+   "group": "motor",
+   "token": "ctxM1",
+   "areaCm2": {
+    "L": 38.71,
+    "R": 41.06
+   },
+   "basis": "hmat",
+   "labels": [],
+   "refIds": [
+    "mayka2006"
+   ]
+  },
+  {
+   "id": "ctx_fn_sma",
+   "name": "Supplementary motor area (SMA)",
+   "group": "motor",
+   "token": "ctxSMA",
+   "areaCm2": {
+    "L": 15.18,
+    "R": 15.61
+   },
+   "basis": "hmat",
+   "labels": [],
+   "refIds": [
+    "mayka2006"
+   ]
+  },
+  {
+   "id": "ctx_fn_presma",
+   "name": "Pre-SMA",
+   "group": "motor",
+   "token": "ctxPreSMA",
+   "areaCm2": {
+    "L": 12.8,
+    "R": 14.73
+   },
+   "basis": "hmat",
+   "labels": [],
+   "refIds": [
+    "mayka2006"
+   ]
+  },
+  {
+   "id": "ctx_fn_pmd",
+   "name": "Dorsal premotor cortex (PMd)",
+   "group": "motor",
+   "token": "ctxPM",
+   "areaCm2": {
+    "L": 37.76,
+    "R": 35.53
+   },
+   "basis": "hmat",
+   "labels": [],
+   "refIds": [
+    "mayka2006"
+   ]
+  },
+  {
+   "id": "ctx_fn_pmv",
+   "name": "Ventral premotor cortex (PMv)",
+   "group": "motor",
+   "token": "ctxPMv",
+   "areaCm2": {
+    "L": 32.51,
+    "R": 34.08
+   },
+   "basis": "hmat",
+   "labels": [],
+   "refIds": [
+    "mayka2006"
+   ]
+  },
+  {
+   "id": "ctx_fn_s1",
+   "name": "Primary somatosensory cortex (S1)",
+   "group": "somatosensory",
+   "token": "ctxS1",
+   "areaCm2": {
+    "L": 33.59,
+    "R": 33.11
+   },
+   "basis": "hmat",
+   "labels": [],
+   "refIds": [
+    "mayka2006"
+   ]
+  },
+  {
+   "id": "ctx_fn_broca",
+   "name": "Broca’s area",
+   "group": "language",
+   "token": "ctxBroca",
+   "areaCm2": {
+    "L": 28.85,
+    "R": 29.06
+   },
+   "basis": "labels",
+   "labels": [
+    "ctx_g_front_inf_opercular",
+    "ctx_g_front_inf_triangul"
+   ],
+   "refIds": [
+    "bulut2023",
+    "barba2026"
+   ]
+  },
+  {
+   "id": "ctx_fn_wernicke",
+   "name": "Wernicke’s area",
+   "group": "language",
+   "token": "ctxWernicke",
+   "areaCm2": {
+    "L": 14.51,
+    "R": 13.93
+   },
+   "basis": "behind",
+   "labels": [
+    "ctx_g_temp_sup_lateral",
+    "ctx_g_temp_sup_plan_tempo"
+   ],
+   "refIds": [
+    "kiernan2012",
+    "barba2026"
+   ]
+  },
+  {
+   "id": "ctx_fn_v1",
+   "name": "Primary visual cortex (V1)",
+   "group": "visual",
+   "token": "ctxV1",
+   "areaCm2": {
+    "L": 29.25,
+    "R": 36.02
+   },
+   "basis": "labels",
+   "labels": [
+    "ctx_pole_occipital",
+    "ctx_s_calcarine"
+   ],
+   "refIds": [
+    "ribeiro2025"
+   ]
+  },
+  {
+   "id": "ctx_fn_a1",
+   "name": "Primary auditory cortex (A1)",
+   "group": "auditory",
+   "token": "ctxA1",
+   "areaCm2": {
+    "L": 4.98,
+    "R": 3.66
+   },
+   "basis": "labels",
+   "labels": [
+    "ctx_g_temp_sup_g_t_transv"
+   ],
+   "refIds": [
+    "kiernan2012"
+   ]
+  }
+ ],
+ "references": {
+  "barba2026": {
+   "citation": "Barba C, De Benedictis A, Pelliccia V, Tortora D, Melani F, Consales A, et al. Beyond Broca and Wernicke: epilepsy surgery in the language areas. Epileptic Disord. 2026;28(3):581-601. doi:10.1002/epd2.70282.",
+   "url": "https://doi.org/10.1002/epd2.70282"
+  },
+  "bulut2023": {
+   "citation": "Bulut T. Domain-general and domain-specific functional networks of Broca's area underlying language processing. Brain Behav. 2023;13(7):e3046. doi:10.1002/brb3.3046.",
+   "url": "https://doi.org/10.1002/brb3.3046"
+  },
+  "kiernan2012": {
+   "citation": "Kiernan JA. Anatomy of the temporal lobe. Epilepsy Res Treat. 2012;2012:176157. doi:10.1155/2012/176157.",
+   "url": "https://doi.org/10.1155/2012/176157"
+  },
+  "mayka2006": {
+   "citation": "Mayka MA, Corcos DM, Leurgans SE, Vaillancourt DE. Three-dimensional locations and boundaries of motor and premotor cortices as defined by functional brain imaging: A meta-analysis. NeuroImage. 2006;31(4):1453-1474. doi:10.1016/j.neuroimage.2006.02.004.",
+   "url": "https://doi.org/10.1016/j.neuroimage.2006.02.004"
+  },
+  "ribeiro2025": {
+   "citation": "Ribeiro FL, Benson NC, Puckett AM. Human retinotopic mapping: from empirical to computational models of retinotopy. J Vis. 2025;25(8):14. doi:10.1167/jov.25.8.14.",
+   "url": "https://doi.org/10.1167/jov.25.8.14"
+  }
+ },
  "method": {
   "faces": 80000,
   "inflateIterations": 600,

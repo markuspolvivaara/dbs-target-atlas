@@ -3,7 +3,7 @@ import { NodeIO } from '@gltf-transform/core';
 import { EXTMeshoptCompression, KHRMeshQuantization } from '@gltf-transform/extensions';
 import { MeshoptDecoder } from 'meshoptimizer';
 import { readFileSync } from 'node:fs';
-import { crossCheckCtx, CTX_MANIFEST, LABEL, LABELS, LOBE, LOBES, MEDIAL_WALL, shortName } from '../../src/cortex';
+import { crossCheckCtx, CTX_MANIFEST, FUNCTIONS, LABEL, LABELS, LOBE, LOBES, MEDIAL_WALL, shortName } from '../../src/cortex';
 import { cortexPlan, cortexScene, viewLabels } from '../../src/cortex/scene';
 import { decodeCortex, defaultCortexState, encodeCortex } from '../../src/cortex/state';
 import { VIEW, VIEWS } from '../../src/cortex/views';
@@ -15,10 +15,11 @@ describe('cortex data (Destrieux on the Lead-DBS template surface)', () => {
   it('generated files agree with each other', () => {
     expect(crossCheckCtx()).toEqual([]);
   });
-  it('has the 74 Destrieux labels plus the medial wall, each with its own file', () => {
+  it('has the 74 Destrieux labels plus the medial wall and the 10 functional areas, each with its own file', () => {
     expect(LABELS.length).toBe(74);
-    expect(CTX_MANIFEST.structures.length).toBe(75);
-    expect(new Set(CTX_MANIFEST.structures.map((s) => s.file)).size).toBe(75);
+    expect(FUNCTIONS.length).toBe(10);
+    expect(CTX_MANIFEST.structures.length).toBe(85);
+    expect(new Set(CTX_MANIFEST.structures.map((s) => s.file)).size).toBe(85);
     expect(CTX_MANIFEST.structures.find((s) => s.id === MEDIAL_WALL)).toBeTruthy();
   });
   it('keeps Destrieux Table 1 facts: names and the views each label is seen on', () => {
@@ -88,7 +89,13 @@ describe('cortex scene and URL state', () => {
   });
   it('colour modes: atlas colours override every label, plain highlights nothing', () => {
     expect(cortexPlan({ view: 'lateral', lobe: null, colour: 'atlas', inflate: 0 }).colours!.size).toBe(74);
-    expect([...cortexPlan({ view: 'lateral', lobe: null, colour: 'plain', inflate: 0 }).looks.values()].every((l) => l === 'muted')).toBe(true);
+    const plain = cortexPlan({ view: 'lateral', lobe: null, colour: 'plain', inflate: 0 });
+    expect(LABELS.every((l) => plain.looks.get(l.id) === 'muted')).toBe(true);
+    // functional areas are drawn only when their group is picked, over muted labels
+    expect(FUNCTIONS.every((f) => plain.looks.get(f.id) === 'hidden')).toBe(true);
+    const lang = cortexPlan({ view: 'lateral', lobe: null, colour: 'lobe', inflate: 0, fn: 'language' });
+    for (const f of FUNCTIONS) expect(lang.looks.get(f.id), f.id).toBe(f.group === 'language' ? 'primary' : 'hidden');
+    expect(LABELS.every((l) => lang.looks.get(l.id) === 'muted')).toBe(true);
   });
   it('the insular view cuts the opercula on the pial surface only', () => {
     expect(cortexPlan({ view: 'insular', lobe: null, colour: 'lobe', inflate: 0 }).cutOpercula).toBe(true);

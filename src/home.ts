@@ -33,12 +33,19 @@ const nav = [
   h('a', { href: `${SITE_ROOT}${dbs.path}#/settings`, class: 'navlink' }, 'Settings'),
 ];
 
+// each module's card: the whole card is the link, over a view of the module itself (public/assets/home/<id>.webp)
 const cards = SECTIONS.map((s) => {
   const live = s.status === 'live';
-  return h('article', { class: `section-card ${live ? '' : 'soon'}`, 'data-section': s.id },
+  // absolute: a url() inside a custom property resolves against the stylesheet that uses it, not this page
+  const style = `--img: url('${new URL(`${SITE_ROOT}assets/home/${s.id}.webp`, location.href).href}')`;
+  const body = [
     h('h2', {}, s.name, live ? null : h('span', { class: 'badge' }, 'Coming soon')),
     h('p', {}, s.summary),
-    live ? h('a', { class: 'btn primary', href: `${SITE_ROOT}${s.path}` }, `Open ${s.name}`) : h('p', { class: 'aside' }, 'In development.'));
+    live ? h('span', { class: 'open', 'aria-hidden': 'true' }, `Open ${s.name} →`) : h('p', { class: 'aside' }, 'In development.'),
+  ];
+  return live
+    ? h('a', { class: 'section-card', 'data-section': s.id, href: `${SITE_ROOT}${s.path}`, style }, ...body)
+    : h('article', { class: 'section-card soon', 'data-section': s.id, style }, ...body);
 });
 
 const main = h('main', { id: 'main', class: 'home wrap' },

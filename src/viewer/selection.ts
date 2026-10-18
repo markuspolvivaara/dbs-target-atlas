@@ -47,7 +47,10 @@ export function primaryTargetId(indId: string, symId: string | null): string | n
   return ind.targetMarkers[0] ?? null;
 }
 
-export function plan(indId: string, symId: string | null, borders: boolean): Plan {
+/** The STN's zones, drawn instead of the whole nucleus unless it is shown whole. */
+export const STN_ZONES = ['stn_motor', 'stn_assoc', 'stn_limbic'];
+
+export function plan(indId: string, symId: string | null, borders: boolean, stnWhole = false): Plan {
   const ind = IND.get(indId) ?? IND.get('pd')!;
   const sym = symId ? SYM.get(symId) ?? null : null;
   const looks = new Map<string, Look>();
@@ -99,6 +102,14 @@ export function plan(indId: string, symId: string | null, borders: boolean): Pla
     ind.alternativeMarkers.forEach((t) => markers.push({ targetId: t, primary: false }));
   }
   if (!sym) for (const v of ind.extraVolumes) looks.set(v, 'context');
+  // the STN as one nucleus: as prominent as its most prominent zone, the zones not drawn
+  const STRENGTH: Look[] = ['primary', 'alt', 'context', 'shell', 'ghost'];
+  if (stnWhole && [...STN_ZONES, 'stn'].some((id) => ['primary', 'alt', 'context', 'shell'].includes(looks.get(id) ?? ''))) {
+    const best = STRENGTH.find((l) => [...STN_ZONES, 'stn'].some((id) => looks.get(id) === l && l !== 'shell')) ?? 'primary';
+    looks.set('stn', best);
+    for (const z of STN_ZONES) looks.set(z, 'hidden');
+  }
+  for (const id of ind.omit) looks.set(id, 'hidden');
   for (const m of markers) {
     const tg = TGT.get(m.targetId);
     // translucent so the marker sphere at its centroid stays visible
@@ -119,6 +130,6 @@ export function plan(indId: string, symId: string | null, borders: boolean): Pla
 /** The DBS section as a scene source for the shared viewer. */
 export const dbsScene: SceneSource<AppState, Plan> = {
   catalog: makeCatalog(MANIFEST.structures, MANIFEST.volumes, [...TGT.values()], LANDMARKS),
-  plan: (s) => plan(s.ind, s.sym, s.borders),
-  planKey: (s) => `${s.ind}|${s.sym}|${s.borders}`,
+  plan: (s) => plan(s.ind, s.sym, s.borders, s.stn === 'whole'),
+  planKey: (s) => `${s.ind}|${s.sym}|${s.borders}|${s.stn}`,
 };

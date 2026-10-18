@@ -20,7 +20,7 @@ let theme: ThemePref = storedTheme();
 let resolved = applyTheme(theme);
 
 function sanitize(s: SpineState): SpineState {
-  if (!REGION.get(s.region)?.ready) s.region = 'lumbar';
+  if (!REGION.get(s.region)?.ready) s.region = 'cervical';
   if (s.sel && !SP.has(s.sel)) s.sel = null;
   if (s.screw && (!s.level || !TECHNIQUES[s.screw.tech].levels.includes(s.level))) s.screw = null;
   if (s.region !== 'ccj') s.measure = null;

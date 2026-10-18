@@ -27,6 +27,8 @@ export interface AppState extends ViewState {
   cam: { preset: CameraPreset | null; pos?: V3; tgt?: V3 };
   layers: Record<LayerKey, Layer>;
   borders: boolean;
+  /** The subthalamic nucleus drawn as its three functional zones, or as one nucleus. */
+  stn: 'zones' | 'whole';
   /** Name labels in 3D: always, only for the hovered / selected item, or never. */
   labels: 'all' | 'hover' | 'off';
   clip: Record<Axis, Clip>;
@@ -56,6 +58,7 @@ export function defaultState(): AppState {
       electrode: { on: false, opacity: 1 },
     },
     borders: true,
+    stn: 'zones',
     labels: 'hover',
     clip: {
       axial: { on: false, mm: -4 },
@@ -91,6 +94,7 @@ export function encode(s: AppState): string {
     const dly = LAYER_CODES.map(([k, c]) => `${c}${d.layers[k].on ? 1 : 0}`).join(',');
     if (ly !== dly) p.set('ly', ly);
     if (!s.borders) p.set('b', '0');
+    if (s.stn === 'whole') p.set('stn', 'w');
     if (s.labels !== 'hover') p.set('lb', s.labels === 'all' ? 'a' : '0');
     for (const [a, code] of AXES) {
       const c = s.clip[a];
@@ -138,6 +142,7 @@ export function decode(hash: string, base: AppState = defaultState()): AppState 
     s.layers[e[0]] = { on: on === '1', opacity: Math.min(1, Math.max(0, num(op ?? null, 1))) };
   }
   s.borders = p.get('b') !== '0';
+  s.stn = p.get('stn') === 'w' ? 'whole' : 'zones';
   const cut = p.get('cut');
   s.cutSide = cut === 'L' || cut === 'R' ? cut : 'none';
   const seq = p.get('seq');

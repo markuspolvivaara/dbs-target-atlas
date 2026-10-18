@@ -2819,7 +2819,7 @@
   },
   {
    "aliases": [],
-   "bytes": 10996,
+   "bytes": 19548,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -2855,7 +2855,7 @@
    "level": "L1",
    "region": "lumbar",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T12-L1 disc, runs in the lateral recess at L1 and exits through the L1-L2 foramen (measured position); drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T12-L1 disc, runs in the lateral recess at L1 and exits through the L1-L2 foramen (measured position); drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      8.68,
@@ -2871,59 +2871,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12344,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_l1",
-   "name": "L1 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_l1.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "L1",
-   "region": "lumbar",
-   "schematic": true,
-   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     8.68,
-     -28.23,
-     123.82
-    ],
-    "R": [
-     8.68,
-     -28.23,
-     123.82
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 10952,
+   "bytes": 19520,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -2959,7 +2907,7 @@
    "level": "L2",
    "region": "lumbar",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L1-L2 disc, runs in the lateral recess at L2 and exits through the L2-L3 foramen (measured position); drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L1-L2 disc, runs in the lateral recess at L2 and exits through the L2-L3 foramen (measured position); drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      8.04,
@@ -2975,59 +2923,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12340,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_l2",
-   "name": "L2 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_l2.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "L2",
-   "region": "lumbar",
-   "schematic": true,
-   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     8.04,
-     -22.08,
-     93.41
-    ],
-    "R": [
-     8.04,
-     -22.08,
-     93.41
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 10928,
+   "bytes": 19480,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3063,7 +2959,7 @@
    "level": "L3",
    "region": "lumbar",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L2-L3 disc, runs in the lateral recess at L3 and exits through the L3-L4 foramen (measured position); drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L2-L3 disc, runs in the lateral recess at L3 and exits through the L3-L4 foramen (measured position); drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      9.12,
@@ -3079,59 +2975,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12336,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_l3",
-   "name": "L3 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_l3.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "L3",
-   "region": "lumbar",
-   "schematic": true,
-   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     9.12,
-     -15.61,
-     60.82
-    ],
-    "R": [
-     9.12,
-     -15.61,
-     60.82
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 10884,
+   "bytes": 19428,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3167,7 +3011,7 @@
    "level": "L4",
    "region": "lumbar",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L3-L4 disc, runs in the lateral recess at L4 and exits through the L4-L5 foramen (measured position); drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L3-L4 disc, runs in the lateral recess at L4 and exits through the L4-L5 foramen (measured position); drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      12.18,
@@ -3183,59 +3027,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12312,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_l4",
-   "name": "L4 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_l4.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "L4",
-   "region": "lumbar",
-   "schematic": true,
-   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     12.18,
-     -14.61,
-     30.17
-    ],
-    "R": [
-     12.18,
-     -14.61,
-     30.17
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 10924,
+   "bytes": 19412,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3271,7 +3063,7 @@
    "level": "L5",
    "region": "lumbar",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L4-L5 disc, runs in the lateral recess at L5 and exits through the L5-S1 foramen, whose position is estimated on L and R (not captured by the measurement); drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L4-L5 disc, runs in the lateral recess at L5 and exits through the L5-S1 foramen, whose position is estimated on L and R (not captured by the measurement); drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      24.82,
@@ -3287,59 +3079,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12340,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_l5",
-   "name": "L5 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_l5.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "L5",
-   "region": "lumbar",
-   "schematic": true,
-   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     24.82,
-     -23.98,
-     -10.17
-    ],
-    "R": [
-     24.82,
-     -23.98,
-     -10.17
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 10924,
+   "bytes": 19284,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3375,7 +3115,7 @@
    "level": "S1",
    "region": "lumbar",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L5-S1 disc, runs in the lateral recess of S1 and leaves through the first sacral foramen, whose position is estimated (not captured by the measurement); drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L5-S1 disc, runs in the lateral recess of S1 and leaves through the first sacral foramen, whose position is estimated (not captured by the measurement); drawn 3 mm thick, with its dorsal root ganglion inside the canal, where the S1 ganglion more often lies (Hasegawa 1996; not to scale).",
    "centroid": {
     "L": [
      2.49,
@@ -3391,59 +3131,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12032,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_s1",
-   "name": "S1 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_s1.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "S1",
-   "region": "lumbar",
-   "schematic": true,
-   "derivation": "Schematic: drawn inside the canal, where the S1 ganglion more often lies (Hasegawa 1996); not to scale.",
-   "centroid": {
-    "L": [
-     2.49,
-     -1.83,
-     -36.97
-    ],
-    "R": [
-     2.49,
-     -1.83,
-     -36.97
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 10956,
+   "bytes": 19300,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3479,7 +3167,7 @@
    "level": "T1",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the C7-T1 disc, runs in the lateral recess at T1 and exits through the T1-T2 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the C7-T1 disc, runs in the lateral recess at T1 and exits through the T1-T2 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      -0.65,
@@ -3495,59 +3183,7 @@
   },
   {
    "aliases": [],
-   "bytes": 11940,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_t1",
-   "name": "T1 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_t1.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "T1",
-   "region": "thoracic",
-   "schematic": true,
-   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     -0.65,
-     1.48,
-     410.79
-    ],
-    "R": [
-     -0.65,
-     1.48,
-     410.79
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 10928,
+   "bytes": 19280,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3583,7 +3219,7 @@
    "level": "T2",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T1-T2 disc, runs in the lateral recess at T2 and exits through the T2-T3 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T1-T2 disc, runs in the lateral recess at T2 and exits through the T2-T3 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      -1.52,
@@ -3599,59 +3235,7 @@
   },
   {
    "aliases": [],
-   "bytes": 11956,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_t2",
-   "name": "T2 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_t2.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "T2",
-   "region": "thoracic",
-   "schematic": true,
-   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     -1.52,
-     -13.76,
-     397.32
-    ],
-    "R": [
-     -1.52,
-     -13.76,
-     397.32
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 10948,
+   "bytes": 19284,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3687,7 +3271,7 @@
    "level": "T3",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T2-T3 disc, runs in the lateral recess at T3 and exits through the T3-T4 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T2-T3 disc, runs in the lateral recess at T3 and exits through the T3-T4 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      -6.35,
@@ -3703,59 +3287,7 @@
   },
   {
    "aliases": [],
-   "bytes": 11936,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_t3",
-   "name": "T3 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_t3.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "T3",
-   "region": "thoracic",
-   "schematic": true,
-   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     -6.35,
-     -27.99,
-     380.1
-    ],
-    "R": [
-     -6.35,
-     -27.99,
-     380.1
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 10888,
+   "bytes": 19244,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3791,7 +3323,7 @@
    "level": "T4",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T3-T4 disc, runs in the lateral recess at T4 and exits through the T4-T5 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T3-T4 disc, runs in the lateral recess at T4 and exits through the T4-T5 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      -5.35,
@@ -3807,59 +3339,7 @@
   },
   {
    "aliases": [],
-   "bytes": 11956,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_t4",
-   "name": "T4 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_t4.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "T4",
-   "region": "thoracic",
-   "schematic": true,
-   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     -5.35,
-     -37.45,
-     358.27
-    ],
-    "R": [
-     -5.35,
-     -37.45,
-     358.27
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 10948,
+   "bytes": 19292,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3895,7 +3375,7 @@
    "level": "T5",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T4-T5 disc, runs in the lateral recess at T5 and exits through the T5-T6 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T4-T5 disc, runs in the lateral recess at T5 and exits through the T5-T6 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      -6.55,
@@ -3911,59 +3391,7 @@
   },
   {
    "aliases": [],
-   "bytes": 11944,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_t5",
-   "name": "T5 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_t5.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "T5",
-   "region": "thoracic",
-   "schematic": true,
-   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     -6.55,
-     -47.89,
-     336.89
-    ],
-    "R": [
-     -6.55,
-     -47.89,
-     336.89
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 10868,
+   "bytes": 19208,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3999,7 +3427,7 @@
    "level": "T6",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T5-T6 disc, runs in the lateral recess at T6 and exits through the T6-T7 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T5-T6 disc, runs in the lateral recess at T6 and exits through the T6-T7 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      -3.46,
@@ -4015,59 +3443,7 @@
   },
   {
    "aliases": [],
-   "bytes": 11952,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_t6",
-   "name": "T6 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_t6.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "T6",
-   "region": "thoracic",
-   "schematic": true,
-   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     -3.46,
-     -52.48,
-     311.98
-    ],
-    "R": [
-     -3.46,
-     -52.48,
-     311.98
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 10896,
+   "bytes": 19240,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4103,7 +3479,7 @@
    "level": "T7",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T6-T7 disc, runs in the lateral recess at T7 and exits through the T7-T8 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T6-T7 disc, runs in the lateral recess at T7 and exits through the T7-T8 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      -4.05,
@@ -4119,59 +3495,7 @@
   },
   {
    "aliases": [],
-   "bytes": 11940,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_t7",
-   "name": "T7 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_t7.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "T7",
-   "region": "thoracic",
-   "schematic": true,
-   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     -4.05,
-     -52.36,
-     286.56
-    ],
-    "R": [
-     -4.05,
-     -52.36,
-     286.56
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 10904,
+   "bytes": 19244,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4207,7 +3531,7 @@
    "level": "T8",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T7-T8 disc, runs in the lateral recess at T8 and exits through the T8-T9 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T7-T8 disc, runs in the lateral recess at T8 and exits through the T8-T9 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      0.84,
@@ -4223,59 +3547,7 @@
   },
   {
    "aliases": [],
-   "bytes": 11952,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_t8",
-   "name": "T8 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_t8.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "T8",
-   "region": "thoracic",
-   "schematic": true,
-   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     0.84,
-     -49.09,
-     267.99
-    ],
-    "R": [
-     0.84,
-     -49.09,
-     267.99
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 10924,
+   "bytes": 19280,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4311,7 +3583,7 @@
    "level": "T9",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T8-T9 disc, runs in the lateral recess at T9 and exits through the T9-T10 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T8-T9 disc, runs in the lateral recess at T9 and exits through the T9-T10 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      -2.0,
@@ -4327,59 +3599,7 @@
   },
   {
    "aliases": [],
-   "bytes": 11980,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_t9",
-   "name": "T9 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_t9.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "T9",
-   "region": "thoracic",
-   "schematic": true,
-   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     -2.0,
-     -48.52,
-     238.81
-    ],
-    "R": [
-     -2.0,
-     -48.52,
-     238.81
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 10948,
+   "bytes": 19312,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4415,7 +3635,7 @@
    "level": "T10",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T9-T10 disc, runs in the lateral recess at T10 and exits through the T10-T11 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T9-T10 disc, runs in the lateral recess at T10 and exits through the T10-T11 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      1.98,
@@ -4431,59 +3651,7 @@
   },
   {
    "aliases": [],
-   "bytes": 11960,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_t10",
-   "name": "T10 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_t10.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "T10",
-   "region": "thoracic",
-   "schematic": true,
-   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     1.98,
-     -44.87,
-     214.02
-    ],
-    "R": [
-     1.98,
-     -44.87,
-     214.02
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 10952,
+   "bytes": 19300,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4519,7 +3687,7 @@
    "level": "T11",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T10-T11 disc, runs in the lateral recess at T11 and exits through the T11-T12 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T10-T11 disc, runs in the lateral recess at T11 and exits through the T11-T12 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      3.42,
@@ -4535,59 +3703,7 @@
   },
   {
    "aliases": [],
-   "bytes": 11960,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_t11",
-   "name": "T11 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_t11.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "T11",
-   "region": "thoracic",
-   "schematic": true,
-   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     3.42,
-     -38.96,
-     185.02
-    ],
-    "R": [
-     3.42,
-     -38.96,
-     185.02
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 10960,
+   "bytes": 19312,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4623,7 +3739,7 @@
    "level": "T12",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T11-T12 disc, runs in the lateral recess at T12 and exits through the T12-L1 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T11-T12 disc, runs in the lateral recess at T12 and exits through the T12-L1 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      6.35,
@@ -4639,59 +3755,7 @@
   },
   {
    "aliases": [],
-   "bytes": 11952,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_t12",
-   "name": "T12 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_t12.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "T12",
-   "region": "thoracic",
-   "schematic": true,
-   "derivation": "Schematic: drawn in the upper part of the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     6.35,
-     -34.27,
-     156.32
-    ],
-    "R": [
-     6.35,
-     -34.27,
-     156.32
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 11152,
+   "bytes": 19796,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4727,7 +3791,7 @@
    "level": "C3",
    "region": "cervical",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the C2-C3 disc and exits through the lower part of the C2-C3 foramen (measured position), then runs a short way forwards and out along the transverse process; drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the C2-C3 disc and exits through the lower part of the C2-C3 foramen (measured position), then runs a short way forwards and out along the transverse process; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen (not to scale).",
    "centroid": {
     "L": [
      4.41,
@@ -4743,59 +3807,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12364,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_c3",
-   "name": "C3 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_c3.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "C3",
-   "region": "cervical",
-   "schematic": true,
-   "derivation": "Schematic: drawn just outside the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     4.41,
-     52.82,
-     496.53
-    ],
-    "R": [
-     4.41,
-     52.82,
-     496.53
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 11160,
+   "bytes": 19796,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4831,7 +3843,7 @@
    "level": "C4",
    "region": "cervical",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the C3-C4 disc and exits through the lower part of the C3-C4 foramen (measured position), then runs a short way forwards and out along the transverse process; drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the C3-C4 disc and exits through the lower part of the C3-C4 foramen (measured position), then runs a short way forwards and out along the transverse process; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen (not to scale).",
    "centroid": {
     "L": [
      5.13,
@@ -4847,59 +3859,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12356,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_c4",
-   "name": "C4 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_c4.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "C4",
-   "region": "cervical",
-   "schematic": true,
-   "derivation": "Schematic: drawn just outside the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     5.13,
-     46.2,
-     480.29
-    ],
-    "R": [
-     5.13,
-     46.2,
-     480.29
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 11124,
+   "bytes": 19768,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4935,7 +3895,7 @@
    "level": "C5",
    "region": "cervical",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the C4-C5 disc and exits through the lower part of the C4-C5 foramen (measured position), then runs a short way forwards and out along the transverse process; drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the C4-C5 disc and exits through the lower part of the C4-C5 foramen (measured position), then runs a short way forwards and out along the transverse process; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen (not to scale).",
    "centroid": {
     "L": [
      5.32,
@@ -4951,59 +3911,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12356,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_c5",
-   "name": "C5 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_c5.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "C5",
-   "region": "cervical",
-   "schematic": true,
-   "derivation": "Schematic: drawn just outside the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     5.32,
-     39.04,
-     464.81
-    ],
-    "R": [
-     5.32,
-     39.04,
-     464.81
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 11120,
+   "bytes": 19752,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -5039,7 +3947,7 @@
    "level": "C6",
    "region": "cervical",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the C5-C6 disc and exits through the lower part of the C5-C6 foramen (measured position), then runs a short way forwards and out along the transverse process; drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the C5-C6 disc and exits through the lower part of the C5-C6 foramen (measured position), then runs a short way forwards and out along the transverse process; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen (not to scale).",
    "centroid": {
     "L": [
      5.03,
@@ -5055,59 +3963,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12352,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_c6",
-   "name": "C6 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_c6.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "C6",
-   "region": "cervical",
-   "schematic": true,
-   "derivation": "Schematic: drawn just outside the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     5.03,
-     31.16,
-     449.61
-    ],
-    "R": [
-     5.03,
-     31.16,
-     449.61
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 11164,
+   "bytes": 19808,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -5143,7 +3999,7 @@
    "level": "C7",
    "region": "cervical",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the C6-C7 disc and exits through the lower part of the C6-C7 foramen (measured position), then runs a short way forwards and out along the transverse process; drawn 3 mm thick.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the C6-C7 disc and exits through the lower part of the C6-C7 foramen (measured position), then runs a short way forwards and out along the transverse process; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen (not to scale).",
    "centroid": {
     "L": [
      4.93,
@@ -5159,59 +4015,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12352,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_c7",
-   "name": "C7 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_c7.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "C7",
-   "region": "cervical",
-   "schematic": true,
-   "derivation": "Schematic: drawn just outside the foramen, not to scale.",
-   "centroid": {
-    "L": [
-     4.93,
-     22.77,
-     437.5
-    ],
-    "R": [
-     4.93,
-     22.77,
-     437.5
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 10884,
+   "bytes": 20276,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -5247,59 +4051,7 @@
    "level": "C8",
    "region": "cervical",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the C7-T1 disc and exits through the lower part of the C7-T1 foramen (measured position), then runs a short way forwards and out along the transverse process; drawn 3 mm thick.",
-   "centroid": {
-    "L": [
-     1.43,
-     10.15,
-     422.53
-    ],
-    "R": [
-     1.43,
-     10.15,
-     422.53
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 12344,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_drg_c8",
-   "name": "C8 dorsal root ganglion",
-   "type": "soft",
-   "layer": "tracts",
-   "file": "assets/spine/sp_drg_c8.glb",
-   "colour": {
-    "token": "spRoot",
-    "light": "#BD7738",
-    "dark": "#F88C28"
-   },
-   "category": "ganglion",
-   "level": "C8",
-   "region": "cervical",
-   "schematic": true,
-   "derivation": "Schematic: drawn just outside the foramen, not to scale.",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the C7-T1 disc and exits through the lower part of the C7-T1 foramen (measured position), then runs a short way forwards and out along the transverse process; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen (not to scale).",
    "centroid": {
     "L": [
      1.43,

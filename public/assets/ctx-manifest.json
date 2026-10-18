@@ -3299,6 +3299,426 @@
      -13.86
     ]
    }
+  },
+  {
+   "id": "ctx_fn_m1",
+   "name": "Primary motor cortex (M1)",
+   "aliases": [],
+   "type": "surface",
+   "file": "assets/cortex/ctx_fn_m1.glb",
+   "bytes": 70008,
+   "colour": {
+    "token": "ctxM1",
+    "light": "#E3836B",
+    "dark": "#C9533A"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "HMAT (Mayka 2006) on the template's pial surface, vertex by vertex.",
+   "category": "function",
+   "centroid": {
+    "L": [
+     -35.13,
+     -20.0,
+     56.23
+    ],
+    "R": [
+     34.58,
+     -20.4,
+     57.24
+    ]
+   }
+  },
+  {
+   "id": "ctx_fn_sma",
+   "name": "Supplementary motor area (SMA)",
+   "aliases": [],
+   "type": "surface",
+   "file": "assets/cortex/ctx_fn_sma.glb",
+   "bytes": 36080,
+   "colour": {
+    "token": "ctxSMA",
+    "light": "#7E88E0",
+    "dark": "#4A56B8"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "HMAT (Mayka 2006) on the template's pial surface, vertex by vertex.",
+   "category": "function",
+   "centroid": {
+    "L": [
+     -5.31,
+     -13.04,
+     60.02
+    ],
+    "R": [
+     5.86,
+     -11.96,
+     61.44
+    ]
+   }
+  },
+  {
+   "id": "ctx_fn_presma",
+   "name": "Pre-SMA",
+   "aliases": [],
+   "type": "surface",
+   "file": "assets/cortex/ctx_fn_presma.glb",
+   "bytes": 34392,
+   "colour": {
+    "token": "ctxPreSMA",
+    "light": "#B3B8EE",
+    "dark": "#7A80C9"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "HMAT (Mayka 2006) on the template's pial surface, vertex by vertex.",
+   "category": "function",
+   "centroid": {
+    "L": [
+     -5.71,
+     12.29,
+     55.36
+    ],
+    "R": [
+     6.51,
+     11.93,
+     55.2
+    ]
+   }
+  },
+  {
+   "id": "ctx_fn_pmd",
+   "name": "Dorsal premotor cortex (PMd)",
+   "aliases": [],
+   "type": "surface",
+   "file": "assets/cortex/ctx_fn_pmd.glb",
+   "bytes": 68788,
+   "colour": {
+    "token": "ctxPM",
+    "light": "#DDA6D2",
+    "dark": "#9A4A8C"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "HMAT (Mayka 2006) on the template's pial surface, vertex by vertex.",
+   "category": "function",
+   "centroid": {
+    "L": [
+     -31.8,
+     1.2,
+     57.47
+    ],
+    "R": [
+     32.71,
+     1.21,
+     57.58
+    ]
+   }
+  },
+  {
+   "id": "ctx_fn_pmv",
+   "name": "Ventral premotor cortex (PMv)",
+   "aliases": [],
+   "type": "surface",
+   "file": "assets/cortex/ctx_fn_pmv.glb",
+   "bytes": 72548,
+   "colour": {
+    "token": "ctxPMv",
+    "light": "#B98BD9",
+    "dark": "#7B4FA8"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "HMAT (Mayka 2006) on the template's pial surface, vertex by vertex.",
+   "category": "function",
+   "centroid": {
+    "L": [
+     -48.39,
+     6.92,
+     24.51
+    ],
+    "R": [
+     49.55,
+     6.51,
+     24.28
+    ]
+   }
+  },
+  {
+   "id": "ctx_fn_s1",
+   "name": "Primary somatosensory cortex (S1)",
+   "aliases": [],
+   "type": "surface",
+   "file": "assets/cortex/ctx_fn_s1.glb",
+   "bytes": 66880,
+   "colour": {
+    "token": "ctxS1",
+    "light": "#F0B79A",
+    "dark": "#B5785F"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "HMAT (Mayka 2006) on the template's pial surface, vertex by vertex.",
+   "category": "function",
+   "centroid": {
+    "L": [
+     -44.25,
+     -29.06,
+     49.91
+    ],
+    "R": [
+     43.48,
+     -28.94,
+     50.43
+    ]
+   }
+  },
+  {
+   "id": "ctx_fn_broca",
+   "name": "Broca’s area",
+   "aliases": [],
+   "type": "surface",
+   "file": "assets/cortex/ctx_fn_broca.glb",
+   "bytes": 47768,
+   "colour": {
+    "token": "ctxBroca",
+    "light": "#E0A030",
+    "dark": "#B07A12"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "The Destrieux labels its definition names; drawn just above the surface.",
+   "category": "function",
+   "centroid": {
+    "L": [
+     -51.96,
+     20.89,
+     6.39
+    ],
+    "R": [
+     52.72,
+     22.42,
+     6.61
+    ]
+   }
+  },
+  {
+   "id": "ctx_fn_wernicke",
+   "name": "Wernicke’s area",
+   "aliases": [],
+   "type": "surface",
+   "file": "assets/cortex/ctx_fn_wernicke.glb",
+   "bytes": 27644,
+   "colour": {
+    "token": "ctxWernicke",
+    "light": "#5FB36B",
+    "dark": "#2F8040"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "The Destrieux labels its definition names, behind the centre of Heschl's gyrus; drawn just above the surface.",
+   "category": "function",
+   "centroid": {
+    "L": [
+     -63.67,
+     -38.15,
+     15.19
+    ],
+    "R": [
+     64.4,
+     -27.96,
+     12.91
+    ]
+   }
+  },
+  {
+   "id": "ctx_fn_v1",
+   "name": "Primary visual cortex (V1)",
+   "aliases": [],
+   "type": "surface",
+   "file": "assets/cortex/ctx_fn_v1.glb",
+   "bytes": 83348,
+   "colour": {
+    "token": "ctxV1",
+    "light": "#4FA3D9",
+    "dark": "#256D9E"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "The Destrieux labels its definition names; drawn just above the surface.",
+   "category": "function",
+   "centroid": {
+    "L": [
+     -16.66,
+     -84.52,
+     -0.1
+    ],
+    "R": [
+     17.98,
+     -83.07,
+     -0.57
+    ]
+   }
+  },
+  {
+   "id": "ctx_fn_a1",
+   "name": "Primary auditory cortex (A1)",
+   "aliases": [],
+   "type": "surface",
+   "file": "assets/cortex/ctx_fn_a1.glb",
+   "bytes": 13656,
+   "colour": {
+    "token": "ctxA1",
+    "light": "#D9C34F",
+    "dark": "#9E8A1C"
+   },
+   "dataset": "destrieux",
+   "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
+   "licence": "GPL-3.0, non-commercial (derived from the Lead-DBS template surface and the FreeSurfer annotations shipped with it; FreeSurfer: MGH licence, research use); definition texts CC BY-SA 3.0 (Wikipedia, via Z-Anatomy)",
+   "citation": [
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.1016/j.neuroimage.2023.119862"
+   ],
+   "refIds": [
+    "destrieux2010",
+    "leaddbs3"
+   ],
+   "derivation": "The Destrieux labels its definition names; drawn just above the surface.",
+   "category": "function",
+   "centroid": {
+    "L": [
+     -47.68,
+     -19.92,
+     10.03
+    ],
+    "R": [
+     48.14,
+     -13.7,
+     8.28
+    ]
+   }
   }
  ],
  "dataset": {

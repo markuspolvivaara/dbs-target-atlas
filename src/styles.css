@@ -253,6 +253,13 @@ body[data-page="atlas"] .page { display: none; }
 .swatch { display: inline-block; width: 14px; height: 14px; border-radius: 4px; background: var(--c); margin-right: 8px; vertical-align: -1px; }
 .more, .shown { margin: 8px 0; }
 .more > summary, .shown > summary, .index summary { cursor: pointer; font-weight: 700; padding: 6px 0; }
+/* the spine's virtual screw, in a box of its own under the level chips */
+.screw-box { border: 1px solid var(--line); border-radius: 10px; padding: 4px 12px; margin: 10px 0; background: var(--surface); }
+.screw-box > summary { cursor: pointer; font-weight: 700; padding: 8px 0; }
+.screw-box[open] > summary { border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+.screw-box-tech { font-weight: 400; color: var(--muted); }
+/* the cortex's functional areas */
+.fn-areas { list-style: none; padding: 0; margin: 6px 0 10px; display: grid; gap: 6px; }
 .prov { padding-left: 1.1em; font-size: 0.92rem; margin: 4px 0; }
 .prov li { margin: 4px 0; }
 .roles { padding-left: 1.1em; margin: 0; }
@@ -324,14 +331,28 @@ kbd { font: inherit; font-size: 0.9em; border: 1px solid var(--line); border-bot
 @media print { .toolbar, .panel .ptabs, .sheet-handle { display: none; } }
 
 /* ---------------------------------------------------------------- home */
-.home h1 { margin-top: 28px; }
-.section-grid { display: grid; gap: 14px; margin: 18px 0; }
+.home h1 { margin-top: 28px; font-size: clamp(1.8rem, 4vw, 2.6rem); letter-spacing: -0.01em; }
+.home .lede { font-size: 1.08rem; }
+.section-grid { display: grid; gap: 16px; margin: 22px 0; }
 @media (min-width: 720px) { .section-grid { grid-template-columns: 1fr 1fr; } }
-.section-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
-.section-card h2 { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+@media (min-width: 1100px) { .section-grid { grid-template-columns: repeat(6, 1fr); } .section-grid > :nth-child(-n+3) { grid-column: span 2; } .section-grid > :nth-child(n+4) { grid-column: span 3; } }
+/* a module: a view of it across the top of its card, fading into the card behind the text */
+.section-card { position: relative; isolation: isolate; overflow: hidden; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 16px; padding: 168px 20px 18px; display: flex; flex-direction: column; gap: 6px; color: var(--ink);
+  text-decoration: none; transition: border-color .15s, box-shadow .15s, transform .15s; }
+.section-card::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 210px; z-index: -2;
+  background: var(--viewer-bg) var(--img) center / cover no-repeat; transition: transform .4s ease; }
+.section-card::after { content: ''; position: absolute; inset: 0 0 auto 0; height: 211px; z-index: -1;
+  background: linear-gradient(to top, var(--surface) 8%, color-mix(in srgb, var(--surface) 55%, transparent) 30%, transparent 60%); }
+:root[data-theme="dark"] .section-card::before { filter: brightness(0.82) saturate(0.95); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .section-card::before { filter: brightness(0.82) saturate(0.95); } }
+.section-card:hover, .section-card:focus-visible { border-color: var(--link); box-shadow: 0 6px 22px rgba(20, 37, 58, 0.16); transform: translateY(-2px); }
+.section-card:hover::before, .section-card:focus-visible::before { transform: scale(1.04); }
+.section-card h2 { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 0; }
 .section-card p { margin: 0; flex: 1; }
+.section-card .open { margin-top: 8px; font-weight: 700; color: var(--link); }
 .section-card.soon { background: var(--bg); border-style: dashed; }
-.section-card .btn { align-self: flex-start; margin-top: 10px; text-decoration: none; }
+@media (prefers-reduced-motion: reduce) { .section-card, .section-card::before { transition: none; } .section-card:hover { transform: none; } }
 .btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); font-weight: 700; }
 
 /* ---- white-matter section */

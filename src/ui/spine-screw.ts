@@ -94,7 +94,7 @@ export class ScrewPanel {
     this.inputs.clear();
     const level = this.level;
     if (!level) return;
-    const techs = Object.values(TECHNIQUES).filter((t) => t.levels.includes(level));
+    const techs = Object.values(TECHNIQUES).filter((t) => t.levels.includes(level) && (!t.hidden || t.id === s.screw?.tech));
     this.el.append(chips<TechniqueId | 'none'>([['none', 'None'], ...techs.map((t): [TechniqueId, string] => [t.id, t.name])], s.screw?.tech ?? 'none',
       (v) => this.update((st) => {
         st.screw = v === 'none' ? null : screwDefaults(level, v, TECHNIQUES[v as TechniqueId]?.midline ? 'L' : st.screw?.side ?? 'L');

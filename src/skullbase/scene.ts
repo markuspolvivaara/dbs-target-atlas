@@ -26,6 +26,10 @@ export function skullPlan(grpId: string, sel: string | null): SkullPlan {
   if (lmSel) lmIds.add(lmSel);
   const st = sel ? SB.get(sel) : undefined;
   if (st) looks.set(st.id, 'primary');
+  // a cranial nerve's own trunk ('Trigeminal nerve (V)'): all of that nerve lights up (its divisions and branches)
+  if (st?.cranialNerve && /\([IVX]+\)$/.test(st.name)) {
+    for (const x of SB_MANIFEST.structures) if (x.cranialNerve === st.cranialNerve) looks.set(x.id, 'primary');
+  }
   return {
     title: g.name, accent: 'ctx', looks, tracts, parcels: new Map(),
     markers: [...lmIds].map((id) => ({ targetId: id, primary: true })),

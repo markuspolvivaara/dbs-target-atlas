@@ -91,6 +91,10 @@
   "text": "The accessory nerve is a cranial nerve that supplies the sternocleidomastoid and trapezius muscles. It is considered as the eleventh of twelve pairs of cranial nerves, or simply cranial nerve XI, as part of it was formerly believed to originate in the brain. The sternocleidomastoid muscle tilts and rotates the head, while the trapezius muscle, connecting to the scapula, acts to shrug the shoulder. Traditional descriptions of the accessory nerve divide it into a spinal part and a cranial part. The cranial component rapidly joins the vagus nerve, and there is ongoing debate about whether the cranial part should be considered part of the accessory nerve proper. Consequently, the term \"accessory nerve\" usually refers only to nerve supplying the sternocleidomastoid and trapezius muscles, also called the spinal accessory nerve.",
   "url": "https://en.wikipedia.org/wiki/Accessory_nerve"
  },
+ "Angular artery": {
+  "text": "The angular artery is an artery of the face. It is the terminal part of the facial artery. It ascends to the medial angle of the eye's orbit. It is accompanied by the angular vein. It ends by anastomosing with the dorsal nasal branch of the ophthalmic artery. It supplies the lacrimal sac, the orbicularis oculi muscle, and the outer side of the nose.",
+  "url": "https://en.wikipedia.org/wiki/Angular_artery"
+ },
  "Angular vein": {
   "text": "The angular vein is a vein of the face. It is the upper part of the facial vein, above its junction with the superior labial vein. It is formed by the junction of the supratrochlear vein and supraorbital vein, and joins with the superior labial vein. It drains the medial canthus, and parts of the nose and the upper lip. It can be a route of spread of infection from the danger triangle of the face to the cavernous sinus.",
   "url": "https://en.wikipedia.org/wiki/Angular_vein"
@@ -98,10 +102,6 @@
  "Anterior cerebral artery": {
   "text": "The anterior cerebral artery (ACA) is one of a pair of cerebral arteries that supplies oxygenated blood to most midline portions of the frontal lobes and superior medial parietal lobes of the brain. The two anterior cerebral arteries arise from the internal carotid artery and are part of the circle of Willis. The left and right anterior cerebral arteries are connected by the anterior communicating artery.\nAnterior cerebral artery syndrome refers to symptoms that follow a stroke occurring in the area normally supplied by one of the arteries. It is characterized by weakness and sensory loss in the lower leg and foot opposite to the lesion and behavioral changes.",
   "url": "https://en.wikipedia.org/wiki/Anterior_cerebral_artery"
- },
- "Anterior division of mandibular nerve": {
-  "text": "The mandibular nerve divides into a small anterior and large posterior trunk after passing between tensor veli palatini, which is medial, and lateral pterygoid, which is lateral, and giving off a meningeal branch (nervus spinosus) and the nerve to medial pterygoid from its medial side. The anterior division gives off branches to three major muscles of mastication and a buccal branch which is sensory to the cheek: -the nerve to medial pterygoid muscle,\n-the nerve to tensor veli palatini,\n-the nerve to tensor tympani,\n-the masseteric nerve,\n-the deep temporal nerves,\n-the nerve to lateral pterygoid muscle,\n-and the buccal nerve",
-  "url": null
  },
  "Anterior division of retromandibular vein": {
   "text": "The retromandibular vein emerges from the confluence of several veins, in front of the ear, and reaches the facial vein. It is formed by the union of the superficial temporal vein and the maxillary vein. It descends in the substance of the parotid gland, superficial to the external carotid artery (but beneath the facial nerve), between the ramus of the mandible and the sternocleidomastoideus muscle. It divides into two branches: the anterior division of retromandibular vein, which passes forward and joins anterior facial vein, to form the common facial vein, which then drains into the internal jugular vein. the posterior division of retromandibular vein, which is joined by the posterior auricular vein and becomes the external jugular vein.",
@@ -127,13 +127,9 @@
   "text": "The basilar artery () is one of the arteries that supplies the brain with oxygen-rich blood.\nThe two vertebral arteries and the basilar artery are known as the vertebral basilar system, which supplies blood to the posterior part of the circle of Willis and joins with blood supplied to the anterior part of the circle of Willis from the internal carotid arteries.",
   "url": "https://en.wikipedia.org/wiki/Basilar_artery"
  },
- "Buccal nerve": {
-  "text": "The buccal nerve (long buccal nerve) is a nerve in the face. It is a branch of the mandibular nerve (which is itself a branch of the trigeminal nerve) and transmits sensory information from skin over the buccal membrane (in general, the cheek) and from the second and third molar teeth. Not to be confused with the buccal branch of the facial nerve which transmits motor information to the buccinator muscle.",
-  "url": "https://en.wikipedia.org/wiki/Buccal_nerve"
- },
- "Chorda tympani": {
-  "text": "The chorda tympani is a branch of the facial nerve that originates from the taste buds in the front of the tongue, runs through the middle ear, and carries taste messages to the brain. It joins the facial nerve (cranial nerve VII) inside the facial canal, at the level where the facial nerve exits the skull via the stylomastoid foramen, but exits through the petrotympanic fissure and descends in the infratemporal fossa. The chorda tympani is part of one of three cranial nerves that are involved in taste. The taste system involves a complicated feedback loop, with each nerve acting to inhibit the signals of other nerves.",
-  "url": "https://en.wikipedia.org/wiki/Chorda_tympani"
+ "Callosomarginal artery": {
+  "text": "A2 extends from the AComm to the bifurcation forming the pericallosal and callosomarginal arteries. The recurrent artery of Heubner (distal medial striate artery), which irrigates the internal capsule, usually arises at the beginning of this segment near the AComm. Two branches arise from this segment: -Orbitofrontal artery (medial frontal basal):\nArises a small distance away from the AComm -Frontopolar artery (polar frontal):\nArises after the orbitofrontal, close to the curvature of A2 over the corpus callosum. It can also originate from the callosal marginal.",
+  "url": "https://en.wikipedia.org/wiki/Anterior_cerebral_artery"
  },
  "Cochlear nerve": {
   "text": "The cochlear nerve (also auditory nerve or acoustic nerve) is one of two parts of the vestibulocochlear nerve, a cranial nerve present in amniotes, the other part being the vestibular nerve. The cochlear nerve carries auditory sensory information from the cochlea of the inner ear directly to the brain. The other portion of the vestibulocochlear nerve is the vestibular nerve, which carries spatial orientation information to the brain from the semicircular canals, also known as semicircular ducts.",
@@ -159,10 +155,6 @@
   "text": "The hypoglossal nerve is the twelfth cranial nerve, and innervates all the extrinsic and intrinsic muscles of the tongue, except for the palatoglossus which is innervated by the vagus nerve. It is a nerve with a solely motor function. The nerve arises from the hypoglossal nucleus in the medulla as a number of small rootlets, passes through the hypoglossal canal and down through the neck, and eventually passes up again over the tongue muscles it supplies into the tongue.\nThe nerve is involved in controlling tongue movements required for speech and swallowing, including sticking out the tongue and moving it from side to side. Damage to the nerve or the neural pathways which control it can affect the ability of the tongue to move and its appearance, with the most common sources of damage being injury from trauma or surgery, and motor neuron disease.",
   "url": "https://en.wikipedia.org/wiki/Hypoglossal_nerve"
  },
- "Inferior alveolar nerve": {
-  "text": "The inferior alveolar nerve (sometimes called the inferior dental nerve) is a branch of the mandibular nerve, which is itself the third branch of the trigeminal nerve. The inferior alveolar nerves supply sensation to the lower teeth.",
-  "url": "https://en.wikipedia.org/wiki/Inferior_alveolar_nerve"
- },
  "Inferior labial veins": {
   "text": "The inferior labial veins drain the blood of the inferior part of the oral region to the facial vein, then to the common facial vein, then to the internal jugular vein.",
   "url": null
@@ -183,29 +175,13 @@
   "text": "The internal carotid artery (Latin: arteria carotis interna) is located in the inner side of the neck in contrast to the external carotid artery. In human anatomy, they arise from the common carotid arteries, where these bifurcate into the internal and external carotid arteries at cervical vertebrae C3 or C4; the internal carotid artery supplies the brain, including the eyes, while the external carotid nourishes other portions of the head, such as the face, the scalp, the skull, and the meninges.",
   "url": "https://en.wikipedia.org/wiki/Internal_carotid_artery"
  },
- "Lingual nerve": {
-  "text": "The lingual nerve carries sensory innervation from the anterior two-thirds of the tongue. It contains fibres from both the mandibular division of the trigeminal nerve (CN V3) and from the facial nerve (CN VII). The fibres from the trigeminal nerve are for touch, pain and temperature (general sensation), and the ones from the facial nerve are for taste (special sensation).",
-  "url": "https://en.wikipedia.org/wiki/Lingual_nerve"
- },
  "Maxillary artery": {
   "text": "The maxillary artery supplies deep structures of the face. It branches from the external carotid artery just deep to the neck of the mandible.",
   "url": "https://en.wikipedia.org/wiki/Maxillary_artery"
  },
- "Maxillary nerve": {
-  "text": "The maxillary nerve (V2) is one of the three branches or divisions of the trigeminal nerve, the fifth (CN V) cranial nerve. It comprises the principal functions of sensation from the maxilla, nasal cavity, sinuses, the palate and subsequently that of the mid-face, and is intermediate, both in position and size, between the ophthalmic nerve and the mandibular nerve.",
-  "url": "https://en.wikipedia.org/wiki/Maxillary_nerve"
- },
  "Maxillary veins": {
   "text": "The maxillary vein, or internal maxillary vein, is a vein of the head. It is a short trunk which accompanies the first part of the maxillary artery. It is formed by a confluence of the veins of the pterygoid plexus and the interpterygoid emissary vein, and passes posteriorly between the sphenomandibular ligament and the neck of the mandible. It unites with the superficial temporal vein to form the retromandibular vein.",
   "url": "https://en.wikipedia.org/wiki/Maxillary_veins"
- },
- "Meningeal branch of maxillary nerve": {
-  "text": "MENINGEAL BRANCH OF MAXILLARY NERVE/\nMENINGEAL BRANCH OF THE MANDIBULAR NERVE (to be verified) The meningeal (recurrent) branch of the mandibular nerve (nervus spinosus) is a branch of the mandibular nerve that supplies the dura mater.",
-  "url": "https://en.wikipedia.org/wiki/Meningeal_branch_of_the_mandibular_nerve"
- },
- "Mental nerve": {
-  "text": "Mental nerve is a sensory nerve which provides sensation to the front of the chin and lower lip as well as the labial gingivae of the mandibular anterior teeth and the premolars. It is a branch of the posterior trunk of the inferior alveolar nerve, which is itself a branch of the mandibular division of the trigeminal nerve (CN V).\nThe nerve emerges at the mental foramen in the mandible, and divides beneath the Depressor anguli oris muscle into three branches: one descends to the skin of the chin.\ntwo ascend to the skin and mucous membrane of the lower lip.These branches communicate freely with the facial nerve.",
-  "url": "https://en.wikipedia.org/wiki/Mental_nerve"
  },
  "Middle cerebral artery (M1 segment)": {
   "text": "The middle cerebral artery (MCA) is one of the three major paired arteries that supply blood to the cerebrum. The MCA arises from the internal carotid and continues into the lateral sulcus where it then branches and projects to many parts of the lateral cerebral cortex. It also supplies blood to the anterior temporal lobes and the insular cortices. The left and right MCAs rise from trifurcations of the internal carotid arteries and thus are connected to the anterior cerebral arteries and the posterior communicating arteries, which connect to the posterior cerebral arteries. The MCAs are not considered a part of the Circle of Willis.",
@@ -231,13 +207,13 @@
   "text": "The ophthalmic artery (OA) is an artery of the head. It is the first branch of the internal carotid artery distal to the cavernous sinus. Branches of the ophthalmic artery supply all the structures in the orbit around the eye, as well as some structures in the nose, face, and meninges. Occlusion of the ophthalmic artery or its branches can produce sight-threatening conditions.",
   "url": "https://en.wikipedia.org/wiki/Ophthalmic_artery"
  },
- "Ophthalmic nerve": {
-  "text": "The ophthalmic nerve (V1) is a sensory nerve of the face. It is one of three divisions of the trigeminal nerve (CN V). It has three branches that provide sensory innervation to the eye, the skin of the upper face, and the skin of the anterior scalp.",
-  "url": "https://en.wikipedia.org/wiki/Ophthalmic_nerve"
- },
  "Optic nerve (II)": {
   "text": "The optic nerve, also known as cranial nerve II, or simply as CN II, is a paired cranial nerve that transmits visual information from the retina to the brain. In humans, the optic nerve is derived from optic stalks during the seventh week of development and is composed of retinal ganglion cell axons and glial cells; it extends from the optic disc to the optic chiasma and continues as the optic tract to the lateral geniculate nucleus, pretectal nuclei, and superior colliculus.",
   "url": "https://en.wikipedia.org/wiki/Optic_nerve"
+ },
+ "Pericallosal artery": {
+  "text": "A3, also termed the pericallosal artery, is one of the (or the only) main terminal branches of the ACA, which extends posteriorly in the pericallosal sulcus to form the internal parietal arteries (superior, inferior) and the precuneal artery. This artery may form an anastomosis with the posterior cerebral artery.",
+  "url": "https://en.wikipedia.org/wiki/Anterior_cerebral_artery"
  },
  "Posterior auricular vein": {
   "text": "The posterior auricular vein is a vein of the head. It begins from a plexus with the occipital vein and the superficial temporal vein, descends behind the auricle, and drains into the external jugular vein.",
@@ -250,10 +226,6 @@
  "Posterior communicating artery": {
   "text": "In human anatomy, the left and right posterior communicating arteries are arteries at the base of the brain that form part of the circle of Willis. Each posterior communicating artery connects the three cerebral arteries of the same side. Anteriorly, it connects to the internal carotid artery (ICA) prior to the terminal bifurcation of the ICA into the anterior cerebral artery and middle cerebral artery. Posteriorly, it communicates with the posterior cerebral artery.\nThe brain is supplied with blood by the internal carotid arteries and also by the posterior cerebral arteries; the posterior communicating arteries connects the two systems. This provides redundancies or collaterals in the cerebral circulation so that, if one system is blocked or narrowed, the other can take over.",
   "url": "https://en.wikipedia.org/wiki/Posterior_communicating_artery"
- },
- "Posterior division of mandibular nerve": {
-  "text": "The mandibular nerve divides into a small anterior and large posterior trunk after passing between tensor veli palatini, which is medial, and lateral pterygoid, which is lateral, and giving off a meningeal branch (nervus spinosus) and the nerve to medial pterygoid from its medial side. The posterior division gives off three main sensory branches, the auriculotemporal, lingual and inferior alveolar nerves and motor fibres to supply mylohyoid and the anterior belly of the digastric muscle: -the auriculotemporal nerve\n-the lingual nerve\n-and the inferior alveolar nerve",
-  "url": null
  },
  "Posterior division of retromandibular vein": {
   "text": "The retromandibular vein (temporomaxillary vein, posterior facial vein) is a major vein of the face.",
@@ -342,6 +314,10 @@
  "Vestibulocochlear nerve (VIII)": {
   "text": "The vestibulocochlear nerve (auditory vestibular nerve), known as the eighth cranial nerve, transmits sound and equilibrium (balance) information from the inner ear to the brain. Through olivocochlear fibers, it also transmits motor and modulatory information from the superior olivary complex in the brainstem to the cochlea.",
   "url": "https://en.wikipedia.org/wiki/Vestibulocochlear_nerve"
+ },
+ "Anterior communicating artery": {
+  "text": "In human anatomy, the anterior communicating artery is a blood vessel of the brain that connects the left and right anterior cerebral arteries.",
+  "url": "https://en.wikipedia.org/wiki/Anterior_communicating_artery"
  },
  "(External occipital crest)": {
   "text": "The external occipital crest is part of the external surface of the squamous part of the occipital bone. It is a ridge along the midline, beginning at the external occipital protuberance and descending to the foramen magnum, that gives attachment to the nuchal ligament. It is also called the median nuchal line.",
@@ -802,5 +778,17 @@
  "Zygomatic margin of greater wing": {
   "text": "Edge of the great wing connecting it to the zygomatic bone.",
   "url": null
+ },
+ "Ophthalmic nerve (V1)": {
+  "text": "The ophthalmic nerve (V1) is a sensory nerve of the face. It is one of three divisions of the trigeminal nerve (CN V). It has three branches that provide sensory innervation to the eye, the skin of the upper face, and the skin of the anterior scalp.",
+  "url": "https://en.wikipedia.org/wiki/Ophthalmic_nerve"
+ },
+ "Maxillary nerve (V2)": {
+  "text": "The maxillary nerve (V2) is one of the three branches or divisions of the trigeminal nerve, the fifth (CN V) cranial nerve. It comprises the principal functions of sensation from the maxilla, nasal cavity, sinuses, the palate and subsequently that of the mid-face, and is intermediate, both in position and size, between the ophthalmic nerve and the mandibular nerve.",
+  "url": "https://en.wikipedia.org/wiki/Maxillary_nerve"
+ },
+ "Mandibular nerve (V3)": {
+  "text": "The mandibular nerve (V3) is the largest of the three divisions of the trigeminal nerve, the fifth cranial nerve (CN V).",
+  "url": "https://en.wikipedia.org/wiki/Mandibular_nerve"
  }
 }

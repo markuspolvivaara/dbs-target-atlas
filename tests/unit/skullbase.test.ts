@@ -40,8 +40,11 @@ describe('skull-base data (Z-Anatomy export)', () => {
     const nerves = tubes.filter((s) => s.category === 'nerve');
     expect(nerves.every((s) => s.cranialNerve !== undefined)).toBe(true);
     expect(new Set(nerves.map((s) => s.cranialNerve))).toEqual(new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]));
-    expect(nerves.find((s) => s.name === 'Buccal nerve')!.cranialNerve).toBe(5);
-    expect(nerves.find((s) => s.name === 'Chorda tympani')!.cranialNerve).toBe(7);
+    // the trigeminal nerve as its trunk and three divisions (branches merged into them); the chorda tympani in the facial nerve
+    expect(nerves.filter((s) => s.cranialNerve === 5).map((s) => s.name).sort())
+      .toEqual(['Mandibular nerve (V3)', 'Maxillary nerve (V2)', 'Ophthalmic nerve (V1)', 'Trigeminal nerve (V)']);
+    expect(nerves.filter((s) => s.cranialNerve === 7).map((s) => s.name)).toEqual(['Facial nerve (VII)']);
+    for (const n of ['Mandibular nerve (V3)', 'Maxillary nerve (V2)', 'Ophthalmic nerve (V1)']) expect(definitionFor(n), n).not.toBeNull();
     const ica = SB_MANIFEST.structures.find((s) => s.name === 'Internal carotid artery')!;
     const means = await nodeMeans(ica.file);
     expect(means.L[0]).toBeLessThan(0);
@@ -51,8 +54,10 @@ describe('skull-base data (Z-Anatomy export)', () => {
     const arts = SB_MANIFEST.structures.filter((s) => s.category === 'artery');
     const names = new Set(arts.map((s) => s.name));
     for (const n of ['Internal carotid artery', 'Anterior cerebral artery', 'Middle cerebral artery (M1 segment)', 'Posterior cerebral artery',
-      'Posterior inferior cerebellar artery', 'Anterior inferior cerebellar artery', 'Superior cerebellar artery', 'Basilar artery', 'Middle meningeal artery']) expect(names.has(n), n).toBe(true);
-    for (const n of ['Facial artery', 'Superficial temporal artery', 'Pericallosal artery', 'Lingual artery']) expect(names.has(n), n).toBe(false);
+      'Posterior inferior cerebellar artery', 'Anterior inferior cerebellar artery', 'Superior cerebellar artery', 'Basilar artery', 'Middle meningeal artery',
+      'Anterior communicating artery', 'Posterior communicating artery', 'Pericallosal artery', 'Callosomarginal artery', 'Angular artery',
+      'Middle cerebral artery (M3 segment)']) expect(names.has(n), n).toBe(true);
+    for (const n of ['Facial artery', 'Superficial temporal artery', 'Lingual artery', 'Lateral occipital artery']) expect(names.has(n), n).toBe(false);
     expect(arts.every((s) => SB_MANIFEST.arterySystems.includes(s.system ?? ''))).toBe(true);
     expect(definitionFor('Middle cerebral artery (M1 segment)')).not.toBeNull();
   });
@@ -69,6 +74,15 @@ describe('skull-base scene and URL state', () => {
       for (const id of [...p.looks.keys(), ...p.tracts.keys(), ...p.focusIds]) expect(skullScene.catalog.byId.has(id), `${g.id}: ${id}`).toBe(true);
       for (const m of p.markers) expect(skullScene.catalog.markers.has(m.targetId), m.targetId).toBe(true);
     }
+  });
+  it('selecting a cranial nerve\'s trunk lights up the whole nerve; a division on its own only itself', () => {
+    const id = (n: string) => SB_MANIFEST.structures.find((s) => s.name === n)!.id;
+    const fifth = SB_MANIFEST.structures.filter((s) => s.cranialNerve === 5).map((s) => s.id);
+    const all = skullPlan('floor', id('Trigeminal nerve (V)'));
+    for (const x of fifth) expect(all.looks.get(x), x).toBe('primary');
+    const one = skullPlan('floor', id('Ophthalmic nerve (V1)'));
+    expect(one.looks.get(id('Ophthalmic nerve (V1)'))).toBe('primary');
+    expect(one.looks.get(id('Mandibular nerve (V3)'))).not.toBe('primary');
   });
   it('round-trips a teaching link', () => {
     const s = { ...defaultSkullState(), grp: 'near_hypophysial_fossa', sel: 'sb_internal_carotid_artery', hemi: 'L' as const, cutAbove: 12, cutSide: 'R' as const, labels: 'all' as const, hidden: ['sb_basilar_artery'] };

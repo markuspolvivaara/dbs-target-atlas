@@ -77,10 +77,13 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
 - **Regions**: everything of the model within 15 mm of the hypophysial fossa, optic canal, petrous apex and
   foramen ovale (25 mm around the foramen magnum), measured, with the distance on each item.
 - Vessels and nerves are tubes with the calibre Z-Anatomy models (its curve bevel; modelled, not measured).
-  Each can be shown or hidden on its own; the cranial nerves are listed I–XII with their branches.
+  Each can be shown or hidden on its own; the cranial nerves are listed I–XII with their branches. The trigeminal
+  nerve is drawn as its trunk and three divisions (V1–V3, each with its branches merged in), and the chorda tympani
+  with the facial nerve; selecting a nerve's trunk highlights all of it.
 - Arteries are limited to those kept for skull-base teaching (an editorial selection, `ARTERY_SYSTEMS` in
-  `pipeline/skullbase_build.py`): internal carotid with ophthalmic and posterior communicating, anterior, middle (M1,
-  M2, lenticulostriate) and posterior cerebral, vertebral with PICA and anterior spinal, basilar with AICA, SCA and
+  `pipeline/skullbase_build.py`): internal carotid with ophthalmic and posterior communicating, anterior (with the
+  anterior communicating, pericallosal, callosomarginal and orbitofrontal branches), middle (M1–M3, lenticulostriate
+  and its cortical branches) and posterior cerebral, vertebral with PICA and anterior spinal, basilar with AICA, SCA and
   pontine branches, middle meningeal and ethmoidal arteries, and the maxillary artery with the sphenopalatine
   branches and the artery of the pterygoid canal (endoscopic endonasal landmarks). The panel and legend list them by
   system.
@@ -110,6 +113,11 @@ The 74 gyri and sulci of FreeSurfer's Destrieux 2009 parcellation (Destrieux et 
   both positions and the viewer morphs between them. Shading is sulcal depth (light = crown, dark = depth).
 - **Colours** by lobe (Okabe-Ito colours, checked for colour-vision deficiency), by the Destrieux atlas colours,
   or plain. A lobe filter narrows the list.
+- **Function** selector: motor (M1, SMA, pre-SMA, PMd, PMv) and somatosensory (S1) areas from HMAT (Mayka 2006),
+  vertex by vertex on this surface; Broca's area (pars opercularis and triangularis; Bulut 2023), Wernicke's area
+  (the superior temporal gyrus behind the centre of Heschl's gyrus; Kiernan 2012, Barba 2026), V1 (calcarine sulcus
+  and occipital pole; Ribeiro 2025) and A1 (Heschl's gyrus; Kiernan 2012) from the Destrieux labels, drawn over
+  the labels with their areas and sources.
 - **Cards**: Destrieux name and views, the Z-Anatomy/Wikipedia definition (CC BY-SA 3.0, labelled as such), and
   measured facts: lobe shares (via Desikan-Killiany, lobes as in Klein & Tourville 2012), borders, overlap with
   Desikan-Killiany regions and with the DBS section's cortical areas (HMAT motor areas, ACC, vmPFC proxy), and
@@ -123,7 +131,7 @@ Surgical anatomy of the spine from one adult CT: VerSe 2020 sub-verse823 (CC BY-
 C1 to the pelvis), with TotalSegmentator (Apache-2.0 open tasks) run on the same CT. One subject throughout, in
 its own space (mm from the centre of the L5 vertebral body), except the craniocervical junction (below).
 
-- **Region and level selectors**: craniocervical junction, cervical (C1–C7), thoracic (T1–T12) and lumbar (L1–S1).
+- **Region and level selectors**: craniocervical junction, cervical (C1–C7; the region the section opens on), thoracic (T1–T12) and lumbar (L1–S1).
 - **Cervical** (phase 2a): vertebrae C1–C7, discs C2–C3 to C7–T1, canal contents, canal and disc height per level;
   schematic roots C3–C8 by the cervical rule (each above the vertebra of its number, C8 between C7 and T1; Moreno
   2021), through the lower part of foramina found in planes turned 30° forwards (their size is not reported); the
@@ -132,7 +140,8 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
   groove on its posterior arch. The neck from TotalSegmentator (common and internal carotids, internal jugular veins,
   trachea, oesophagus, thyroid, larynx, prevertebral muscles, sternocleidomastoids) on two layers of their own,
   shown in this region only and off at first (Layers and cut, or the legend's eye, turns them on).
-- **Cervical screws** (phase 2b): lateral mass screws at C3–C6 by Roy-Camille, Magerl and An (Joaquim 2018) from the
+- **Cervical screws** (phase 2b): lateral mass screws at C3–C6 by Magerl (offered; Roy-Camille and An are kept in the
+  code, not offered; Joaquim 2018) from the
   lateral mass measured on this CT (posterior face between the lamina junction, the outer edge and the facet joint
   lines; facet joint inclination), 3.5 mm and bicortical (Rathinavelu 2021), read by breach direction, not the
   pedicle-screw grade; a pedicle screw at C7 along the measured axis, beside Jiang 2024's CT values.
@@ -166,7 +175,7 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
   vessels, psoas or psoas zones.
 - **Measured per level**: canal width, depth and area; foraminal height, antero-posterior extent and area (L1–L4
   both sides; the plane method does not capture L5–S1 in this CT); disc height.
-- **Schematic, and labelled so**: roots L1–S1 and their ganglia (sac at the disc above → lateral recess → upper part
+- **Schematic, and labelled so**: roots L1–S1, each with its ganglion as one structure (sac at the disc above → lateral recess → upper part
   of the foramen; L5 and S1 exits estimated).
 - **Lesion-to-root tool** (level card): paracentral, foraminal or far-lateral herniation per side; the affected root,
   its ISNCSCI key muscle, other movements and key sensory point on a leg chart.
@@ -174,7 +183,9 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
   transverse and sagittal angle, chord; published lumbar regional means (Wang 2023) and transverse angles
   (Moncada-Habib 2025, Nkwerem 2024), and the range of the thoracic study means tabulated by Verma 2020, read from
   the papers' tables by `pipeline/spine_published.py`.
-- **Virtual screw** (level card): straight-forward and anatomic trajectories at T1–T12 (Lehman 2003; start size
+- **Virtual screw** (a box of its own under the level chips, closed at first; it stays while structures are picked):
+  the pedicle screw at T1–T12 (the straight-forward trajectory; the anatomic one is kept in the code; Lehman 2003;
+  at the published mean transverse angle where a narrow pedicle's measured axis falls outside the study means; start size
   from the measured pedicle width and body depth by the 80% rules in Mandelka 2023), traditional trajectory and
   cortical bone trajectory at L1–L5, tricortical S1 screw, each from its published start; angles, length,
   diameter and entry adjustable; breach depth and direction against this CT's bone surface, graded after
@@ -257,7 +268,8 @@ on or another sequence is picked.
   fade while the view moves.
 - **Layers** tab: nuclei, tracts, cortex, targets and electrode, each with an opacity slider; name
   labels; landmarks (CST and medial lemniscus around Vim/PSA targets, the optic tract beneath GPi
-  targets, the red nucleus beside STN targets); an index of every structure.
+  targets except in Parkinson's, the red nucleus beside STN targets); an index of every structure. The STN can be
+  shown as its three zones or as one nucleus (Overview); the Parkinson's views leave out the PPN.
 - **Slices** tab: axial, coronal and sagittal planes with an ICBM 2009b template drawn on them
   (choose **T1, T2 or PD**; each loads on first use), an mm
   slider, and a "Cut away" choice (nothing / patient's left half / patient's right half) that removes

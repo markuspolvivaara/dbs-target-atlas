@@ -65,11 +65,11 @@
     "distanceMm": 12.5
    },
    {
-    "id": "sb_ophthalmic_nerve",
+    "id": "sb_ophthalmic_nerve_v1",
     "distanceMm": 13.5
    },
    {
-    "id": "sb_maxillary_nerve",
+    "id": "sb_maxillary_nerve_v2",
     "distanceMm": 13.6
    },
    {
@@ -155,7 +155,7 @@
     "distanceMm": 7.1
    },
    {
-    "id": "sb_ophthalmic_nerve",
+    "id": "sb_ophthalmic_nerve_v1",
     "distanceMm": 7.9
    },
    {
@@ -179,11 +179,15 @@
     "distanceMm": 9.8
    },
    {
+    "id": "sb_orbitofrontal_branches_of_anterior_cerebral_artery",
+    "distanceMm": 10.1
+   },
+   {
     "id": "sb_posterior_communicating_artery",
     "distanceMm": 10.6
    },
    {
-    "id": "sb_maxillary_nerve",
+    "id": "sb_maxillary_nerve_v2",
     "distanceMm": 11.5
    },
    {
@@ -209,6 +213,10 @@
    {
     "id": "sb_posterior_ethmoidal_artery",
     "distanceMm": 14.3
+   },
+   {
+    "id": "sb_anterior_communicating_artery",
+    "distanceMm": 14.4
    }
   ],
   "landmarks": [
@@ -298,7 +306,7 @@
     "distanceMm": 13.3
    },
    {
-    "id": "sb_maxillary_nerve",
+    "id": "sb_maxillary_nerve_v2",
     "distanceMm": 13.4
    },
    {
@@ -310,15 +318,7 @@
     "distanceMm": 14.1
    },
    {
-    "id": "sb_anterior_division_of_mandibular_nerve",
-    "distanceMm": 14.3
-   },
-   {
-    "id": "sb_meningeal_branch_of_maxillary_nerve",
-    "distanceMm": 14.3
-   },
-   {
-    "id": "sb_posterior_division_of_mandibular_nerve",
+    "id": "sb_mandibular_nerve_v3",
     "distanceMm": 14.3
    }
   ],
@@ -346,15 +346,11 @@
     "distanceMm": 2.3
    },
    {
-    "id": "sb_anterior_division_of_mandibular_nerve",
+    "id": "sb_mandibular_nerve_v3",
     "distanceMm": 2.5
    },
    {
-    "id": "sb_meningeal_branch_of_maxillary_nerve",
-    "distanceMm": 2.5
-   },
-   {
-    "id": "sb_posterior_division_of_mandibular_nerve",
+    "id": "sb_maxillary_nerve_v2",
     "distanceMm": 2.5
    },
    {
@@ -374,11 +370,7 @@
     "distanceMm": 7.0
    },
    {
-    "id": "sb_lingual_nerve",
-    "distanceMm": 11.1
-   },
-   {
-    "id": "sb_chorda_tympani",
+    "id": "sb_facial_nerve_vii",
     "distanceMm": 11.6
    },
    {

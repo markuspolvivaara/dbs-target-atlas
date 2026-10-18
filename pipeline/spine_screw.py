@@ -16,7 +16,7 @@ as drawn):
     promontory apex; thoracic straight-forward (parallel to the superior endplate) and anatomic (along the measured
     pedicle axis) trajectories, sized from the measured pedicle width and vertebral body depth;
   * a signed distance field of the bone (mm; 1 mm grid; int8 in 0.1 mm steps) and points on the surfaces of the
-    structures at risk nearby (dural sac, roots, ganglia), together in one gzip file per level.
+    structures at risk nearby (dural sac, roots with their ganglia), together in one gzip file per level.
 Writes public/assets/spine/screw_<level>.bin.gz and src/data/generated/spine-screw.json. Nothing is typed in except the
 published technique angles (TECHNIQUE_ANGLES, with their sources).
 """
@@ -54,7 +54,7 @@ CBT_ANGLES = {"L1": (26.2, 8.6), "L2": (25.5, 8.5), "L3": (26.2, 9.1), "L4": (26
 S1_CONVERGENCE = 20.0
 S1_BELOW_ENDPLATE = 5.0  # mm: drawing choice, the S1 screw axis this far below the endplate so the screw stays under it
 ROOTS = [f"c{i}" for i in range(3, 9)] + [x.lower() for x in THORACIC + LUMBAR + ["S1"]]
-RISK_IDS = ["sp_dural_sac", "sp_vertebral_artery", "sp_ica_left", "sp_ica_right"] + [f"sp_root_{x}" for x in ROOTS] + [f"sp_drg_{x}" for x in ROOTS]
+RISK_IDS = ["sp_dural_sac", "sp_vertebral_artery", "sp_ica_left", "sp_ica_right"] + [f"sp_root_{x}" for x in ROOTS]  # roots with their ganglia
 # Lateral mass techniques (Joaquim 2018): entry offset from the midpoint of the lateral mass (mm medial, mm cranial),
 # lateral angle from the sagittal plane, and the sagittal inclination: Roy-Camille perpendicular to the lateral mass
 # surface; Magerl parallel to the adjacent facet joints (20-30 deg lateral: the middle, 25); An 15 deg cephalad (taken
@@ -339,12 +339,26 @@ def promontory_screw(bone: Bone, c: np.ndarray, F: np.ndarray, sg: int, r: float
             "promontory": tip.round(2).tolist()}
 
 
-def tt_start(bone: Bone, F: np.ndarray, ped: dict, sg: int) -> dict:
+def published_transverse(lv: str) -> list[float] | None:
+    """The published study means of a thoracic level's transverse pedicle angle (spine_published.py's table)."""
+    p = B.GEN / "spine-published.json"
+    t = json.loads(p.read_text()).get("thoracic", {}).get(lv) if p.exists() else None
+    return list(t["transverseAngleStudyMeans"].values()) if t else None
+
+
+def tt_start(bone: Bone, F: np.ndarray, ped: dict, sg: int, lv: str | None = None) -> dict:
     """Traditional-trajectory start position: through the isthmus centre at the pedicle's measured transverse angle,
     parallel to the superior endplate (a choice for the start: the measured axis tilts towards the superior articular
-    process, which would put the entry far behind the pedicle); the entry where it leaves the dorsal bone."""
+    process, which would put the entry far behind the pedicle); the entry where it leaves the dorsal bone. In the
+    thoracic spine (`lv`), where a narrow pedicle's measured axis can turn outwards, an angle outside the range of the
+    published study means is replaced by their mean (the line still through the isthmus: a more medial angle puts
+    the entry further out)."""
     centre = np.array(ped["isthmus"])
-    d = direction(F, sg, ped["transverseAngle"], 0.0)
+    angle = ped["transverseAngle"]
+    means = published_transverse(lv) if lv else None
+    if means and not min(means) <= angle <= max(means):
+        angle = float(np.mean(means))
+    d = direction(F, sg, angle, 0.0)
     back = surface_along(bone, centre, -d)
     return {"entry": (centre - back * d).round(2).tolist(), "dir": d.round(4).tolist(), "chord": round(back + surface_along(bone, centre, d), 1)}
 
@@ -1193,7 +1207,7 @@ def level_data(lv: str, region_name: str, m: np.ndarray, ct: np.ndarray, body_ma
         elif region_name == "thoracic":
             # straight-forward: as the lumbar traditional start (through the isthmus at the measured transverse angle,
             # parallel to the superior endplate); anatomic: along the measured pedicle axis
-            starts["st"] = {sd: tt_start(bone, F, ped[sd], sg) for sd, sg in (("L", -1), ("R", 1))}
+            starts["st"] = {sd: tt_start(bone, F, ped[sd], sg, lv) for sd, sg in (("L", -1), ("R", 1))}
             starts["at"] = {sd: {"entry": ped[sd]["entry"], "dir": ped[sd]["dir"], "chord": ped[sd]["chord"]} for sd in ("L", "R")}
         else:
             starts["tt"] = {sd: tt_start(bone, F, ped[sd], sg) for sd, sg in (("L", -1), ("R", 1))}

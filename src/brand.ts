@@ -4,7 +4,7 @@
  */
 export const BRAND = {
   name: 'Open Neuroanatomy Atlas',
-  tagline: 'Interactive 3D neuroanatomy for teaching, built from published atlases in MNI space.',
+  tagline: 'Interactive 3D neuroanatomy for teaching, built from published atlases and open imaging data.',
   repo: 'https://github.com/markuspolvivaara/dbs-target-atlas',
 } as const;
 
@@ -18,9 +18,10 @@ export interface Section {
 }
 
 export const SECTIONS: Section[] = [
+  // from the more basic to the more specialised; the spine, anatomically apart, last
   {
-    id: 'dbs', name: 'DBS targets', path: 'dbs/', status: 'live',
-    summary: 'Deep brain stimulation targets for movement disorders and epilepsy: nuclei, the tracts thought to carry the effect, published sweet spots, imaging and a lead model.',
+    id: 'cortex', name: 'Cortical anatomy', path: 'cortex/', status: 'live',
+    summary: 'The gyri and sulci of the cerebral cortex (Destrieux parcellation) on a template brain: lateral, medial, basal and insular views, the pial surface and an inflated one that opens the sulci, with the lobes, borders and names of every label.',
   },
   {
     id: 'tracts', name: 'White-matter tracts', path: 'tracts/', status: 'live',
@@ -31,12 +32,12 @@ export const SECTIONS: Section[] = [
     summary: 'Cranial bones with their labelled foramina and landmarks, the cranial nerves, arteries and dural sinuses, in a cut-away 3D model: what passes where around the sella, orbit apex, petrous apex and foramen magnum.',
   },
   {
-    id: 'cortex', name: 'Cortical anatomy', path: 'cortex/', status: 'live',
-    summary: 'The gyri and sulci of the cerebral cortex (Destrieux parcellation) on a template brain: lateral, medial, basal and insular views, the pial surface and an inflated one that opens the sulci, with the lobes, borders and names of every label.',
+    id: 'dbs', name: 'DBS targets', path: 'dbs/', status: 'live',
+    summary: 'Deep brain stimulation targets for movement disorders and epilepsy: nuclei, the tracts thought to carry the effect, published sweet spots, imaging and a lead model.',
   },
   {
     id: 'spine', name: 'Spine', path: 'spine/', status: 'live',
-    summary: 'Surgical anatomy of the spine from one adult CT: vertebrae, discs, the spinal canal, great vessels, kidneys and psoas by region and level. Lumbar region first; cervical and thoracic to follow.',
+    summary: 'Surgical anatomy of the spine from one adult CT, by region and level: vertebrae, discs, the spinal canal and the nerve roots, the vertebral artery and the neck, a virtual screw, and the craniocervical junction with its measurements.',
   },
 ];
 

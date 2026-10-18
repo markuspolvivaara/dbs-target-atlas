@@ -344,7 +344,7 @@ def merge(meshes: list[tuple]) -> tuple:
 
 
 def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]:
-    """Measured canal, foramina and disc height per level of a region, and its schematic roots and ganglia (lumbar:
+    """Measured canal, foramina and disc height per level of a region, and its schematic roots, each with its ganglion (lumbar:
     L1-S1, with herniation positions per disc; thoracic: T1-T12; cervical: C3-C8)."""
     cfg = SEGMENTS[region]
     chain = cfg["chain"]
@@ -501,10 +501,9 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
                 ez = (p3 - p2) / np.linalg.norm(p3 - p2)
                 ex = np.cross(ez, F[2]); ex /= np.linalg.norm(ex)
                 drgs[sd] = G.ellipsoid(p2 - o + 2.0 * (p3 - p2) / np.linalg.norm(p3 - p2), np.stack([ex, np.cross(ez, ex), ez]), DRG_RADII)
+            # the root and its dorsal root ganglion are one structure
             rid = f"sp_root_{rname.lower()}"
-            write_glb(BUILD / f"{rid}.glb", mesh_nodes(parts), {"id": rid})
-            gid = f"sp_drg_{rname.lower()}"
-            write_glb(BUILD / f"{gid}.glb", mesh_nodes(drgs), {"id": gid})
+            write_glb(BUILD / f"{rid}.glb", mesh_nodes({sd: merge([parts[sd], drgs[sd]]) for sd in parts}), {"id": rid})
             where = "the lower part of " if cervical else ""
             exit_note = (f"exits through {where}the {up}-{down} foramen (measured position)" if not any(estimated.values())
                          else f"exits through {where}the {up}-{down} foramen, whose position is estimated on "
@@ -517,10 +516,8 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
             roots.append({"id": rid, "name": f"{rname} nerve root", "level": rname, "token": "spRoot", "layer": "tracts", "category": "root",
                           "region": region, "schematic": True, "estimated": [k for k, v in estimated.items() if v],
                           "centroid": (p2 - o).round(2).tolist(),
-                          "source": f"Schematic: {path_note}; drawn {2 * ROOT_RADIUS:g} mm thick"})
-            roots.append({"id": gid, "name": f"{rname} dorsal root ganglion", "level": rname, "token": "spRoot", "layer": "tracts",
-                          "category": "ganglion", "region": region, "schematic": True, "centroid": (p2 - o).round(2).tolist(),
-                          "source": f"Schematic: drawn {'just outside' if cervical else 'in the upper part of'} the foramen, not to scale"})
+                          "source": f"Schematic: {path_note}; drawn {2 * ROOT_RADIUS:g} mm thick, with its dorsal root ganglion "
+                                    f"{'just outside' if cervical else 'in the upper part of'} the foramen (not to scale)"})
 
         # ---- where a herniation of each kind sits at this disc (for the lesion-to-root tool; schematic positions):
         # paracentral = posterior edge of the disc halfway between the midline and the canal edge; foraminal = in the
@@ -571,16 +568,13 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
         ez = (p2 - p1) / np.linalg.norm(p2 - p1)
         ex = np.cross(ez, Fs[1]); ex /= np.linalg.norm(ex)
         drgs[sd] = G.ellipsoid((p1 + p2) / 2 - o, np.stack([ex, np.cross(ez, ex), ez]), DRG_RADII)
-    write_glb(BUILD / "sp_root_s1.glb", mesh_nodes(parts), {"id": "sp_root_s1"})
-    write_glb(BUILD / "sp_drg_s1.glb", mesh_nodes(drgs), {"id": "sp_drg_s1"})
+    write_glb(BUILD / "sp_root_s1.glb", mesh_nodes({sd: merge([parts[sd], drgs[sd]]) for sd in parts}), {"id": "sp_root_s1"})
     roots.append({"id": "sp_root_s1", "name": "S1 nerve root", "level": "S1", "token": "spRoot", "layer": "tracts", "category": "root",
                   "region": region, "schematic": True, "estimated": ["L", "R"], "centroid": (cs1 - o).round(2).tolist(),
                   "source": "Schematic: leaves the lateral wall of the dural sac at the L5-S1 disc, runs in the lateral recess "
                             "of S1 and leaves through the first sacral foramen, whose position is estimated (not captured by "
-                            f"the measurement); drawn {2 * ROOT_RADIUS:g} mm thick"})
-    roots.append({"id": "sp_drg_s1", "name": "S1 dorsal root ganglion", "level": "S1", "token": "spRoot", "layer": "tracts",
-                  "category": "ganglion", "region": region, "schematic": True, "centroid": (cs1 - o).round(2).tolist(),
-                  "source": "Schematic: drawn inside the canal, where the S1 ganglion more often lies (Hasegawa 1996); not to scale"})
+                            f"the measurement); drawn {2 * ROOT_RADIUS:g} mm thick, with its dorsal root ganglion inside the "
+                            "canal, where the S1 ganglion more often lies (Hasegawa 1996; not to scale)"})
     print(f"{region}: {len(levels)} levels, {len(roots)} root parts; foramina measured "
           f"{sum(1 for lv in levels for v in lv['foramen'].values() if v)}/{2 * len(levels)}")
     return levels, roots
@@ -888,13 +882,13 @@ def validate() -> int:
     for a, b in zip(THORACIC, THORACIC[1:]):
         check(f"sp_disc_{a.lower()}_{b.lower()}" in by, f"disc {a}-{b} missing")
     for i in range(1, 13):
-        check(f"sp_root_t{i}" in by and f"sp_drg_t{i}" in by, f"root T{i} missing")
+        check(f"sp_root_t{i}" in by, f"root T{i} missing")
     # cervical: discs C2-C3 to C7-T1, roots C3-C8, the vertebral artery; the neck's soft tissue on the right sides and in
     # the right order from front to back (trachea, oesophagus, vertebral bodies), the carotids beside the trachea
     for a, b in zip(CERVICAL, CERVICAL[1:]):
         check(f"sp_disc_{a.lower()}_{b.lower()}" in by, f"disc {a}-{b} missing")
     for i in range(3, 9):
-        check(f"sp_root_c{i}" in by and f"sp_drg_c{i}" in by, f"root C{i} missing")
+        check(f"sp_root_c{i}" in by, f"root C{i} missing")
     check(by.get("sp_vertebral_artery", {}).get("schematic") is True, "vertebral artery missing or not flagged schematic")
     for _, cls, sid, *_ in CERVICAL_TS:
         check(sid in by, f"{sid} missing")

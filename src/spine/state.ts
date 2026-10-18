@@ -52,7 +52,7 @@ export const SPINE_PRESETS: CameraPreset[] = ['lateral', 'posteriorOblique', 'co
 
 export function defaultSpineState(): SpineState {
   return {
-    page: 'atlas', region: 'lumbar', level: null, hemi: 'both', cam: { preset: null },
+    page: 'atlas', region: 'cervical', level: null, hemi: 'both', cam: { preset: null },
     layers: {
       nuclei: { on: true, opacity: 1 },   // bone
       discs: { on: true, opacity: 1 },
@@ -109,7 +109,7 @@ export function decodeSpine(hash: string): SpineState {
   s.page = PAGES.includes(m[0] as SpinePage) ? (m[0] as SpinePage) : 'atlas';
   const p = new URLSearchParams(m[1] ?? '');
   const r = REGION.get(p.get('r') as RegionId);
-  s.region = r && r.ready ? r.id : 'lumbar';
+  s.region = r && r.ready ? r.id : 'cervical';   // the spine opens on the cervical region
   const lv = p.get('lv');
   s.level = lv && REGION.get(s.region)!.levels.includes(lv) ? lv : null;
   s.sel = p.get('sel');

@@ -1,8 +1,8 @@
 import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
-import type { LobeId } from './index';
-import { LOBE } from './index';
+import type { FnGroupId, LobeId } from './index';
+import { FN_GROUPS, LOBE } from './index';
 import { VIEW, type ViewId } from './views';
 
 export type CortexPage = 'atlas' | 'sources' | 'credits';
@@ -14,6 +14,8 @@ export interface CortexState extends ViewState {
   view: ViewId;
   /** highlight only this lobe's labels within the view */
   lobe: LobeId | null;
+  /** functional areas drawn over the labels (motor, language...), or none */
+  fn: FnGroupId | null;
   colour: ColourMode;
   labels: 'all' | 'hover' | 'off';
   inflate: number;
@@ -23,7 +25,7 @@ export const CTX_PRESETS: CameraPreset[] = ['lateral', 'medial', 'inferior', 'ax
 
 export function defaultCortexState(): CortexState {
   return {
-    page: 'atlas', view: 'lateral', lobe: null, colour: 'lobe', hemi: 'both', cam: { preset: null },
+    page: 'atlas', view: 'lateral', lobe: null, fn: null, colour: 'lobe', hemi: 'both', cam: { preset: null },
     layers: {
       nuclei: { on: false, opacity: 1 }, tracts: { on: false, opacity: 1 },
       cortex: { on: true, opacity: 1 },
@@ -45,6 +47,7 @@ export function encodeCortex(s: CortexState): string {
   if (s.page === 'atlas') {
     p.set('v', s.view);
     if (s.lobe) p.set('lobe', s.lobe);
+    if (s.fn) p.set('f', s.fn);
     if (s.sel) p.set('sel', s.sel);
     p.set('h', s.hemi === 'both' ? 'B' : s.hemi);
     if (s.cam.pos && s.cam.tgt) p.set('c', [...s.cam.pos, ...s.cam.tgt].map(r1).join(','));
@@ -70,6 +73,8 @@ export function decodeCortex(hash: string): CortexState {
   s.view = v.id; s.hemi = v.hemi;
   const lobe = p.get('lobe');
   s.lobe = lobe && LOBE.has(lobe as LobeId) ? (lobe as LobeId) : null;
+  const fn = p.get('f');
+  s.fn = FN_GROUPS.some((g) => g.id === fn) ? (fn as FnGroupId) : null;
   s.sel = p.get('sel');
   const h = p.get('h');
   if (h === 'L' || h === 'R') s.hemi = h; else if (h === 'B') s.hemi = 'both';

@@ -532,5 +532,29 @@
   "doi": "10.1155/bmri/2388226",
   "url": "https://doi.org/10.1155/bmri/2388226",
   "pmid": "41830926"
+ },
+ "bulut2023": {
+  "citation": "Bulut T. Domain-general and domain-specific functional networks of Broca's area underlying language processing. Brain Behav. 2023;13(7):e3046. doi:10.1002/brb3.3046.",
+  "doi": "10.1002/brb3.3046",
+  "url": "https://doi.org/10.1002/brb3.3046",
+  "pmid": "37132333"
+ },
+ "kiernan2012": {
+  "citation": "Kiernan JA. Anatomy of the temporal lobe. Epilepsy Res Treat. 2012;2012:176157. doi:10.1155/2012/176157.",
+  "doi": "10.1155/2012/176157",
+  "url": "https://doi.org/10.1155/2012/176157",
+  "pmid": "22934160"
+ },
+ "barba2026": {
+  "citation": "Barba C, De Benedictis A, Pelliccia V, Tortora D, Melani F, Consales A, et al. Beyond Broca and Wernicke: epilepsy surgery in the language areas. Epileptic Disord. 2026;28(3):581-601. doi:10.1002/epd2.70282.",
+  "doi": "10.1002/epd2.70282",
+  "url": "https://doi.org/10.1002/epd2.70282",
+  "pmid": "42217160"
+ },
+ "ribeiro2025": {
+  "citation": "Ribeiro FL, Benson NC, Puckett AM. Human retinotopic mapping: from empirical to computational models of retinotopy. J Vis. 2025;25(8):14. doi:10.1167/jov.25.8.14.",
+  "doi": "10.1167/jov.25.8.14",
+  "url": "https://doi.org/10.1167/jov.25.8.14",
+  "pmid": "40668063"
  }
 }
