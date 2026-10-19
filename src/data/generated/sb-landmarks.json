@@ -1762,5 +1762,305 @@
   "side": "L",
   "boneFrom": "hook",
   "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_internal_acoustic_meatus_l",
+  "name": "Internal acoustic meatus",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   -20.608,
+   -22.119,
+   -11.008
+  ],
+  "side": "L",
+  "boneFrom": "located from what passes through it",
+  "distanceToBoneMm": 1.0,
+  "how": "Where the model's facial and vestibulocochlear nerves enter the temporal bone (rays cast across each nerve meet bone on at least 50% of sides within 6 mm: the meatus is wide), averaged.",
+  "from": [
+   "Facial nerve (VII)",
+   "Vestibulocochlear nerve (VIII)"
+  ]
+ },
+ {
+  "id": "lm_stylomastoid_foramen_l",
+  "name": "Stylomastoid foramen",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   -46.358,
+   -25.93,
+   -28.291
+  ],
+  "side": "L",
+  "boneFrom": "located from what passes through it",
+  "distanceToBoneMm": 2.7,
+  "how": "Where the model's facial nerve leaves the temporal bone for the last time (the end of its last passage through bone: rays across it meet bone on at least 50% of sides within 6 mm).",
+  "from": [
+   "Facial nerve (VII)"
+  ]
+ },
+ {
+  "id": "lm_jugular_foramen_l",
+  "name": "Jugular foramen",
+  "bone": "Occipital bone",
+  "part": null,
+  "ras": [
+   -26.496,
+   -30.601,
+   -24.563
+  ],
+  "side": "L",
+  "boneFrom": "located from what passes through it",
+  "distanceToBoneMm": 3.2,
+  "how": "The middle of the passage of the model's glossopharyngeal, vagus and accessory nerves through the skull base (rays across each nerve meet bone on at least 50% of sides within 10 mm), averaged.",
+  "from": [
+   "Glossopharyngeal nerve (IX)",
+   "Vagus nerve (X)",
+   "Accessory nerve (XI)"
+  ]
+ },
+ {
+  "id": "lm_superior_orbital_fissure_l",
+  "name": "Superior orbital fissure",
+  "bone": "Sphenoid bone",
+  "part": null,
+  "ras": [
+   -18.722,
+   17.313,
+   6.123
+  ],
+  "side": "L",
+  "boneFrom": "located from what passes through it",
+  "distanceToBoneMm": 1.6,
+  "how": "Where the model's oculomotor, trochlear, ophthalmic and abducens nerves run closest together, among points where the bone encloses them on at least 50% of sides (rays of 6 mm); the nerves' nearest points to it, averaged.",
+  "from": [
+   "Oculomotor nerve (III)",
+   "Trochlear nerve (IV)",
+   "Ophthalmic nerve",
+   "Abducens nerve (VI)"
+  ]
+ },
+ {
+  "id": "lm_external_opening_of_carotid_canal_l",
+  "name": "External opening of carotid canal",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   -24.146,
+   -17.284,
+   -22.891
+  ],
+  "side": "L",
+  "boneFrom": "located from what passes through it",
+  "distanceToBoneMm": 0.4,
+  "how": "Where the model's internal carotid artery enters the temporal bone from below (rays across it meet the temporal bone on at least 75% of sides within 10 mm).",
+  "from": [
+   "Internal carotid artery"
+  ]
+ },
+ {
+  "id": "lm_internal_opening_of_carotid_canal_l",
+  "name": "Internal opening of carotid canal",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   -20.124,
+   -10.367,
+   -16.515
+  ],
+  "side": "L",
+  "boneFrom": "located from what passes through it",
+  "distanceToBoneMm": 0.7,
+  "how": "Where the model's internal carotid artery leaves the carotid canal (the end of its passage through the temporal bone).",
+  "from": [
+   "Internal carotid artery"
+  ]
+ },
+ {
+  "id": "lm_foramen_lacerum_l",
+  "name": "Foramen lacerum",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   -18.797,
+   -7.712,
+   -19.088
+  ],
+  "side": "L",
+  "boneFrom": "located from what passes through it",
+  "distanceToBoneMm": 1.3,
+  "how": "3 mm below the model's internal carotid artery, 3 mm beyond where it leaves the carotid canal (the canal opens at the foramen's posterolateral margin, and the artery's lacerum segment lies just above it).",
+  "from": [
+   "Internal carotid artery"
+  ]
+ },
+ {
+  "id": "lm_cribriform_plate_l",
+  "name": "Cribriform plate",
+  "bone": "Ethmoid bone",
+  "part": null,
+  "ras": [
+   -1.816,
+   49.761,
+   5.658
+  ],
+  "side": "L",
+  "boneFrom": "located from what passes through it",
+  "distanceToBoneMm": 0.2,
+  "how": "The middle of the olfactory filaments' passages through the bone (rays of 3 mm across each meet bone on at least 50% of sides), averaged over 3 filaments.",
+  "from": [
+   "Olfactory nerve (I)"
+  ]
+ },
+ {
+  "id": "lm_internal_acoustic_meatus_r",
+  "name": "Internal acoustic meatus",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   20.607,
+   -22.119,
+   -11.008
+  ],
+  "side": "R",
+  "boneFrom": "located from what passes through it",
+  "distanceToBoneMm": 1.0,
+  "how": "Where the model's facial and vestibulocochlear nerves enter the temporal bone (rays cast across each nerve meet bone on at least 50% of sides within 6 mm: the meatus is wide), averaged.",
+  "from": [
+   "Facial nerve (VII)",
+   "Vestibulocochlear nerve (VIII)"
+  ]
+ },
+ {
+  "id": "lm_stylomastoid_foramen_r",
+  "name": "Stylomastoid foramen",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   46.358,
+   -25.93,
+   -28.29
+  ],
+  "side": "R",
+  "boneFrom": "located from what passes through it",
+  "distanceToBoneMm": 2.7,
+  "how": "Where the model's facial nerve leaves the temporal bone for the last time (the end of its last passage through bone: rays across it meet bone on at least 50% of sides within 6 mm).",
+  "from": [
+   "Facial nerve (VII)"
+  ]
+ },
+ {
+  "id": "lm_jugular_foramen_r",
+  "name": "Jugular foramen",
+  "bone": "Occipital bone",
+  "part": null,
+  "ras": [
+   26.496,
+   -30.601,
+   -24.563
+  ],
+  "side": "R",
+  "boneFrom": "located from what passes through it",
+  "distanceToBoneMm": 3.3,
+  "how": "The middle of the passage of the model's glossopharyngeal, vagus and accessory nerves through the skull base (rays across each nerve meet bone on at least 50% of sides within 10 mm), averaged.",
+  "from": [
+   "Glossopharyngeal nerve (IX)",
+   "Vagus nerve (X)",
+   "Accessory nerve (XI)"
+  ]
+ },
+ {
+  "id": "lm_superior_orbital_fissure_r",
+  "name": "Superior orbital fissure",
+  "bone": "Sphenoid bone",
+  "part": null,
+  "ras": [
+   18.722,
+   17.312,
+   6.123
+  ],
+  "side": "R",
+  "boneFrom": "located from what passes through it",
+  "distanceToBoneMm": 1.3,
+  "how": "Where the model's oculomotor, trochlear, ophthalmic and abducens nerves run closest together, among points where the bone encloses them on at least 50% of sides (rays of 6 mm); the nerves' nearest points to it, averaged.",
+  "from": [
+   "Oculomotor nerve (III)",
+   "Trochlear nerve (IV)",
+   "Ophthalmic nerve",
+   "Abducens nerve (VI)"
+  ]
+ },
+ {
+  "id": "lm_external_opening_of_carotid_canal_r",
+  "name": "External opening of carotid canal",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   24.146,
+   -17.284,
+   -22.891
+  ],
+  "side": "R",
+  "boneFrom": "located from what passes through it",
+  "distanceToBoneMm": 0.4,
+  "how": "Where the model's internal carotid artery enters the temporal bone from below (rays across it meet the temporal bone on at least 75% of sides within 10 mm).",
+  "from": [
+   "Internal carotid artery"
+  ]
+ },
+ {
+  "id": "lm_internal_opening_of_carotid_canal_r",
+  "name": "Internal opening of carotid canal",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   20.124,
+   -10.368,
+   -16.515
+  ],
+  "side": "R",
+  "boneFrom": "located from what passes through it",
+  "distanceToBoneMm": 0.7,
+  "how": "Where the model's internal carotid artery leaves the carotid canal (the end of its passage through the temporal bone).",
+  "from": [
+   "Internal carotid artery"
+  ]
+ },
+ {
+  "id": "lm_foramen_lacerum_r",
+  "name": "Foramen lacerum",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   18.797,
+   -7.712,
+   -19.088
+  ],
+  "side": "R",
+  "boneFrom": "located from what passes through it",
+  "distanceToBoneMm": 1.3,
+  "how": "3 mm below the model's internal carotid artery, 3 mm beyond where it leaves the carotid canal (the canal opens at the foramen's posterolateral margin, and the artery's lacerum segment lies just above it).",
+  "from": [
+   "Internal carotid artery"
+  ]
+ },
+ {
+  "id": "lm_cribriform_plate_r",
+  "name": "Cribriform plate",
+  "bone": "Ethmoid bone",
+  "part": null,
+  "ras": [
+   1.816,
+   49.761,
+   5.658
+  ],
+  "side": "R",
+  "boneFrom": "located from what passes through it",
+  "distanceToBoneMm": 0.1,
+  "how": "The middle of the olfactory filaments' passages through the bone (rays of 3 mm across each meet bone on at least 50% of sides), averaged over 3 filaments.",
+  "from": [
+   "Olfactory nerve (I)"
+  ]
  }
 ]

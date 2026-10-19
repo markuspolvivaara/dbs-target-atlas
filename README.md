@@ -95,9 +95,16 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
 - **Systems**: cranial nerves, arteries, veins and dural sinuses. **Bones**: each with the landmarks
   Z-Anatomy labels on it (126 in all: foramina, canals, clinoids, sella, grooves...).
 - Landmarks are the points Z-Anatomy anchors to each bone (the label line's hooked end), checked against the
-  bone surface (0–4 mm; opening centres such as the foramen magnum further). Not yet labelled in the model and
-  so not shown: superior orbital fissure, foramen lacerum, carotid canal, jugular foramen, internal acoustic
-  meatus, stylomastoid foramen, cribriform plate, clivus.
+  bone surface (0–4 mm; opening centres such as the foramen magnum further).
+- Foramina the model does not label are located on both sides from where what passes through them crosses the bone
+  (`pipeline/skullbase_foramina.py`: rays cast across each nerve or vessel show where bone encloses it): the internal
+  acoustic meatus (VII, VIII entering the temporal bone), stylomastoid foramen (VII leaving it), jugular foramen (the
+  passage of IX–XI), superior orbital fissure (where III, IV, V1 and VI bundle at the orbital apex), the carotid canal's
+  external and internal openings (the carotid's passage through the temporal bone), the foramen lacerum (just below
+  and beyond the canal's internal opening) and the cribriform plate (the olfactory filaments' passage). Each card says
+  how its point was found and what passes through it (Romano 2019, Muslu 2025). The first model only: on the detailed
+  model the fitted nerves and carotid do not follow the CT's own canals closely enough. Not shown yet: the clivus.
+- **All bones**: every bone with all its landmarks at once, next to the single-bone views.
 - Cards show the Wikipedia definition that Z-Anatomy ships (CC BY-SA 3.0, with its source link), labelled as
   such; peer-reviewed teaching notes are still to come.
 - Pipeline: `pipeline/skullbase_export.py` runs inside Blender (installed under `.tools/`, or set `BLENDER`) and

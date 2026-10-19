@@ -10,6 +10,8 @@ import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
 import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
+import { refLinksFrom } from './reflinks';
+import { FORAMEN_CONTENTS, FORAMEN_REF } from '../skullbase/foramina';
 
 type Update = (fn: (s: SkullState) => void, opts?: { camera?: boolean }) => void;
 
@@ -294,7 +296,9 @@ export class SkullbaseAtlasPage {
       h('h2', {}, g.name),
       h('p', {}, g.description),
       g.kind === 'overview' ? [
-        h('p', { class: 'aside' }, 'Not yet shown (Z-Anatomy does not label these; they will be added from a labelled source): ', NOT_YET_SHOWN.join(', '), '.'),
+        SB_MODEL === 'ct'
+          ? h('p', { class: 'aside' }, 'Not yet shown in this model (Z-Anatomy does not label these; the first model locates the foramina from what passes through them): ', NOT_YET_SHOWN.join(', '), '.')
+          : h('p', { class: 'aside' }, 'Z-Anatomy does not label the superior orbital fissure, internal acoustic meatus, stylomastoid and jugular foramina, carotid canal, foramen lacerum or cribriform plate: they are located here from where the nerves and vessels that pass through them cross the bone (each card says how). Not yet shown: ', NOT_YET_SHOWN.join(', '), '.'),
         h('p', { class: 'aside' }, 'One adult male model (BodyParts3D), simplified by Z-Anatomy. Positions are millimetres from the model’s hypophysial fossa landmark; this is not MNI space and does not match the DBS and white-matter sections. Vessels and nerves are drawn with the calibre Z-Anatomy models, which is not measured.'),
       ] : null);
     if (s.sel) pane.append(h('details', { class: 'more' }, h('summary', {}, `About ${g.name}`), groupCard));
@@ -335,7 +339,11 @@ export class SkullbaseAtlasPage {
         ...(defBlock as HTMLElement[]),
         regions.length ? [h('dt', {}, 'In regions'), h('dd', {}, regions.join('; '))] : null,
         h('dt', {}, 'Position'), h('dd', {}, `${lm.ras.map(fmtMm).join(', ')} mm (right, anterior, superior of the hypophysial fossa); ${fmtMm(lm.distanceToBoneMm)} mm from the bone surface.`),
-        h('dt', {}, 'Source'), h('dd', {}, SB_MODEL === 'ct'
+        lm.how ? [
+          h('dt', {}, 'What passes through'), h('dd', {}, h('ul', { class: 'evidence' }, ...(FORAMEN_CONTENTS[lm.name] ?? []).map((c) => h('li', {}, c.text, ' ', refLinksFrom(FORAMEN_REF, c.refIds))))),
+          h('dt', {}, 'How it was located'), h('dd', {}, lm.how, ' Nerves, vessels and bone are all the Z-Anatomy model’s.'),
+        ] : null,
+        lm.how ? null : h('dt', {}, 'Source'), lm.how ? null : h('dd', {}, SB_MODEL === 'ct'
           ? 'Z-Anatomy label point, fitted onto this CT’s skull with the model (approximate) and moved onto its bone where it lay on it.'
           : 'Z-Anatomy label point, anchored to the bone in the model.')));
   }

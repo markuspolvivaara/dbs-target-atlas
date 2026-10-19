@@ -4,6 +4,7 @@ import { SB_GROUPS } from '../../src/skullbase/groups';
 import { skullPlan, skullScene } from '../../src/skullbase/scene';
 import { decodeSkull, defaultSkullState, encodeSkull } from '../../src/skullbase/state';
 import { nodeMeans } from './glb';
+import { FORAMEN_CONTENTS } from '../../src/skullbase/foramina';
 
 describe('skull-base data (Z-Anatomy export)', () => {
   it('generated files agree with each other', () => {
@@ -61,9 +62,21 @@ describe('skull-base data (Z-Anatomy export)', () => {
     expect(arts.every((s) => SB_MANIFEST.arterySystems.includes(s.system ?? ''))).toBe(true);
     expect(definitionFor('Middle cerebral artery (M1 segment)')).not.toBeNull();
   });
-  it('the missing landmarks are listed as not yet shown', () => {
-    expect(NOT_YET_SHOWN).toContain('Jugular foramen');
-    expect(NOT_YET_SHOWN).toContain('Superior orbital fissure');
+  it('foramina the model does not label are located on both sides, with how and what passes through', () => {
+    const located = LANDMARKS.filter((l) => l.how);
+    for (const n of ['Superior orbital fissure', 'Internal acoustic meatus', 'Stylomastoid foramen', 'Jugular foramen',
+      'External opening of carotid canal', 'Internal opening of carotid canal', 'Foramen lacerum', 'Cribriform plate']) {
+      const both = located.filter((l) => l.name === n);
+      expect(both.map((l) => l.side).sort(), n).toEqual(['L', 'R']);
+      expect(FORAMEN_CONTENTS[n]?.length, n).toBeGreaterThan(0);
+      for (const l of both) expect(Math.sign(l.ras[0]), n).toBe(l.side === 'L' ? -1 : 1);
+    }
+    const at = (n: string) => located.find((l) => l.name === n && l.side === 'R')!.ras;
+    // order from front to back: cribriform plate, orbital fissure, internal acoustic meatus, jugular foramen
+    expect(at('Cribriform plate')[1]).toBeGreaterThan(at('Superior orbital fissure')[1]);
+    expect(at('Superior orbital fissure')[1]).toBeGreaterThan(at('Internal acoustic meatus')[1]);
+    expect(at('Internal acoustic meatus')[2]).toBeGreaterThan(at('Stylomastoid foramen')[2]);
+    expect(NOT_YET_SHOWN).toEqual(['Clivus']);
   });
 });
 
@@ -110,7 +123,11 @@ describe('e2e group list stays in step with the groups module', () => {
     const { readFileSync } = await import('node:fs');
     const spec = readFileSync(new URL('../e2e/smoke.spec.ts', import.meta.url), 'utf8');
     for (const g of SB_GROUPS) if (g.kind === 'bone') expect(spec, g.name).toContain(`'${g.name}'`);
-    expect(SB_GROUPS.length).toBe(1 + REGIONS.length + 3 + 5);
+    expect(SB_GROUPS.length).toBe(1 + REGIONS.length + 3 + 6);
+    // the all-bones view draws every bone and every landmark
+    const all = SB_GROUPS.find((g) => g.id === 'bone_all_bones')!;
+    expect(all.landmarks.length).toBe(LANDMARKS.length);
+    expect(all.structures.length).toBe(SB_MANIFEST.structures.filter((s) => s.type === 'bone').length);
   });
 });
 

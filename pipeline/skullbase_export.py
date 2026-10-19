@@ -314,7 +314,10 @@ for o in bones:
     export['texts'][base_name(o.name)] = text_for(o.name)
 
 MESH_VESSELS = ['Anterior communicating artery']
-EXTRA_TEXTS = ['Mandibular nerve']
+EXTRA_TEXTS = ['Mandibular nerve',
+               # foramina Z-Anatomy does not label, located in the build from what passes through them (skullbase_foramina.py)
+               'Superior orbital fissure', 'Internal acoustic meatus', 'Stylomastoid foramen', 'Jugular foramen', 'Carotid canal',
+               'Foramen lacerum', 'Cribriform plate']
 SOFT = ['Cavernous sinus.l', 'Cavernous sinus.r', 'Adenohypophysis', 'Neurohypophysis', 'Tentorium cerebelli.l',
         'Tentorium cerebelli.r', 'Falx cerebri', 'Optic chiasm.l', 'Optic chiasm.r']
 for n in SOFT:

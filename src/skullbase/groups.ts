@@ -31,6 +31,7 @@ const ofKind = (k: string) => SB_MANIFEST.structures.filter((s) => kindOf(s) ===
 export const FLOOR_CUT_MM = 22;
 
 const BONE_GROUPS: [string, string[]][] = [
+  ['All bones', [...new Set(bones.map((b) => b.name))]],
   ['Sphenoid bone', ['Sphenoid bone']], ['Temporal bone', ['Temporal bone']], ['Occipital bone', ['Occipital bone']],
   ['Frontal and ethmoid bones', ['Frontal bone', 'Ethmoid bone']], ['Parietal bone', ['Parietal bone']],
 ];
@@ -65,9 +66,11 @@ export const SB_GROUPS: SbGroup[] = [
   },
   ...BONE_GROUPS.map(([name, members]): SbGroup => ({
     id: `bone_${slug(name)}`, kind: 'bone', name, camera: 'axial', hemi: 'both', cutAbove: FLOOR_CUT_MM, focus: null, radius: 75,
-    description: `${members.join(' and ')} with the landmarks Z-Anatomy labels on ${members.length > 1 ? 'them' : 'it'}. The landmark list follows Z-Anatomy’s anatomical hierarchy (Terminologia Anatomica names).`,
+    description: name === 'All bones'
+      ? 'Every bone of the model with all its landmarks at once. Choose a single bone for fewer labels, or set Labels to Hover.'
+      : `${members.join(' and ')} with the landmarks Z-Anatomy labels on ${members.length > 1 ? 'them' : 'it'}. The landmark list follows Z-Anatomy’s anatomical hierarchy (Terminologia Anatomica names).`,
     structures: bones.filter((b) => members.includes(b.name)).map((b) => b.id),
-    landmarks: LANDMARKS.filter((l) => members.includes(l.bone)).map((l) => l.id),
+    landmarks: (name === 'All bones' ? LANDMARKS : LANDMARKS.filter((l) => members.includes(l.bone))).map((l) => l.id),
   })),
 ];
 export const SB_GROUP = new Map(SB_GROUPS.map((g) => [g.id, g]));

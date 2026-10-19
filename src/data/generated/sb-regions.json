@@ -225,7 +225,8 @@
    "Lesser wing",
    "Limbus of sphenoid",
    "Optic canal",
-   "Sphenoidal yoke"
+   "Sphenoidal yoke",
+   "Superior orbital fissure"
   ]
  },
  {
@@ -325,7 +326,9 @@
   "landmarks": [
    "Apex of petrous part",
    "Carotid sulcus",
-   "Sphenoidal lingula"
+   "Sphenoidal lingula",
+   "Internal opening of carotid canal",
+   "Foramen lacerum"
   ]
  },
  {
@@ -396,7 +399,9 @@
    "Pterygoid canal",
    "Scaphoid fossa",
    "Spine of sphenoid bone",
-   "Sulcus of auditory tube"
+   "Sulcus of auditory tube",
+   "Internal opening of carotid canal",
+   "Foramen lacerum"
   ]
  },
  {

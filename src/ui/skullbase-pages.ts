@@ -1,4 +1,5 @@
 import { DEFINITIONS, LANDMARKS, SB_MANIFEST, SB_MODEL } from '../skullbase';
+import { FORAMEN_REFS } from '../skullbase/foramina';
 import { h } from './h';
 
 /** Sources and Credits of the skull-base section. */
@@ -23,7 +24,11 @@ export function skullSourcesPage() {
         h('ul', { class: 'refs' }, ...urls.map((u) => h('li', {}, h('a', { href: u, target: '_blank', rel: 'noopener' }, decodeURIComponent(u.replace(/^https?:\/\/en\.wikipedia\.org\/wiki\//, '')).replace(/_/g, ' '))))))),
     h('section', { class: 'card' },
       h('h2', {}, 'Landmarks'),
-      h('p', {}, `${LANDMARKS.length} labelled points on the cranial bones, each the point Z-Anatomy anchors to its bone (the label line’s hooked end), with the bone and part from Z-Anatomy’s anatomical hierarchy.`)),
+      h('p', {}, `${LANDMARKS.filter((l) => !l.how).length} labelled points on the cranial bones, each the point Z-Anatomy anchors to its bone (the label line’s hooked end), with the bone and part from Z-Anatomy’s anatomical hierarchy.`),
+      SB_MODEL === 'ct' ? null : [
+        h('p', {}, `${LANDMARKS.filter((l) => l.how).length} more points (both sides) mark foramina Z-Anatomy does not label: each is located where the nerves or vessels that pass through it cross the bone (pipeline/skullbase_foramina.py; the rule is on its card). What passes through each comes from these open-access sources:`),
+        h('ul', { class: 'refs' }, ...FORAMEN_REFS.map((r) => h('li', {}, r.citation, ' ', h('a', { href: r.url, target: '_blank', rel: 'noopener' }, 'DOI')))),
+      ]),
   );
   return { el, render() { /* stateless */ } };
 }

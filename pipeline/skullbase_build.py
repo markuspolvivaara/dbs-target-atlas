@@ -23,6 +23,8 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build import split_midline  # noqa: E402
+from scipy.spatial import cKDTree  # noqa: E402
+import skullbase_foramina as foramina  # noqa: E402
 from glb import TRIANGLES, write_glb  # noqa: E402
 from meshcheck import orient_outward  # noqa: E402
 
@@ -139,6 +141,10 @@ MERGED_TEXT = {"Ophthalmic nerve (V1)": "Ophthalmic nerve", "Maxillary nerve (V2
                "Anterior cerebral artery (A1–A2)": "Anterior cerebral artery", "Anterior cerebral artery (A3)": "Anterior cerebral artery",
                "Posterior cerebral artery (P1–P2)": "Posterior cerebral artery", "Posterior cerebral artery (P3–P4)": "Posterior cerebral artery",
                "Middle cerebral artery (M2 segment)": "Insular branches of middle cerebral artery (M2 segment)"}
+# the bone a located foramen is listed under (otherwise the nearest bone)
+FORAMEN_BONE = {"Internal acoustic meatus": "Temporal bone", "Stylomastoid foramen": "Temporal bone", "Superior orbital fissure": "Sphenoid bone",
+                "External opening of carotid canal": "Temporal bone", "Internal opening of carotid canal": "Temporal bone",
+                "Foramen lacerum": "Temporal bone", "Jugular foramen": "Occipital bone", "Cribriform plate": "Ethmoid bone"}
 AO_FLOOR = 0.45  # fully enclosed bone surface is drawn at this share of its colour
 KIND_TOKEN = {"bone": "sbBone", "soft": "sbSoft", "artery": "sbArtery", "vein": "sbVein", "nerve": "sbNerve"}
 
@@ -421,8 +427,25 @@ def main() -> int:
             "ras": lm["ras"], "side": "M" if abs(x) < 3 else ("R" if x > 0 else "L"),
             "boneFrom": lm["boneFrom"], "distanceToBoneMm": lm["distanceToBoneMm"],
         })
+    # foramina the model does not label, located from what passes through them (both sides). The Z-Anatomy model only: on
+    # the CT the fitted nerves and the fitted carotid do not run through the CT's own canals closely enough
+    bone_meshes = {n: (np.array(b["verts"]), np.array(b["tris"])) for n, b in ex["bones"].items() if not n.startswith("Sinus of")}
+    btrees = {n: cKDTree(v) for n, (v, _t) in bone_meshes.items()}
+    for f in ([] if CT else foramina.derive(bone_meshes, ex["lines"])):
+        p_ = np.array(f["ras"])
+        dist = {n: float(t.query(p_)[0]) for n, t in btrees.items()}
+        near = min(dist, key=dist.get)
+        bone_name = FORAMEN_BONE.get(f["name"]) or split_pair(near)[0]
+        lm = {"name": f["name"], "ras": f["ras"], "path": None, "bone": bone_name, "boneFrom": "located from what passes through it",
+              "distanceToBoneMm": round(dist[near], 1)}
+        ex["landmarks"].append(lm)
+        landmarks.append({
+            "id": slug(f["name"]).replace("sb_", "lm_", 1) + "_" + f["side"].lower(), "name": f["name"], "bone": bone_name, "part": None,
+            "ras": f["ras"], "side": f["side"], "boneFrom": lm["boneFrom"], "distanceToBoneMm": lm["distanceToBoneMm"],
+            "how": f["how"][0].upper() + f["how"][1:] + ".", "from": f["from"],
+        })
     # measured groupings: intracranial share of each vessel/nerve, and structures near key landmarks
-    from scipy.spatial import Delaunay, cKDTree
+    from scipy.spatial import Delaunay
     cran = ["Frontal bone", "Parietal bone", "Occipital bone", "Temporal bone", "Sphenoid bone", "Ethmoid bone"]
     hull_pts = np.vstack([np.vstack([v for (v, _t, _a) in [groups[b]["sides"][k] for k in groups[b]["sides"]]]) for b in cran])
     hull = Delaunay(hull_pts[::3])
@@ -447,7 +470,7 @@ def main() -> int:
             d = float(cKDTree(pts_of[it["id"]]).query(c)[0])
             if d <= REGION_MM:
                 near.append({"id": it["id"], "distanceMm": round(d, 1)})
-        lmn = [x["name"] for x in ex["landmarks"] if np.linalg.norm(np.array(x["ras"]) - c) <= REGION_MM]
+        lmn = list(dict.fromkeys(x["name"] for x in ex["landmarks"] if np.linalg.norm(np.array(x["ras"]) - c) <= REGION_MM))
         regions.append({"landmark": lm_name, "ras": lm["ras"], "radiusMm": REGION_MM,
                         "structures": sorted(near, key=lambda x: x["distanceMm"]), "landmarks": lmn})
 

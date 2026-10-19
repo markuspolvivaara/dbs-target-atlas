@@ -524,7 +524,7 @@ const SB_GROUPS = [
   { id: 'floor', name: 'Cranial floor' },
   ...SB_REGIONS.map((r) => ({ id: `near_${slug(r.landmark)}`, name: `Around the ${r.landmark.toLowerCase()}` })),
   { id: 'nerves', name: 'Cranial nerves' }, { id: 'arteries', name: 'Arteries' }, { id: 'veins', name: 'Veins and dural sinuses' },
-  ...['Sphenoid bone', 'Temporal bone', 'Occipital bone', 'Frontal and ethmoid bones', 'Parietal bone'].map((n) => ({ id: `bone_${slug(n)}`, name: n })),
+  ...['All bones', 'Sphenoid bone', 'Temporal bone', 'Occipital bone', 'Frontal and ethmoid bones', 'Parietal bone'].map((n) => ({ id: `bone_${slug(n)}`, name: n })),
 ];
 for (const g of SB_GROUPS) {
   test(`skull base ${g.id}: renders and matches the visual baseline`, async ({ page }) => {
