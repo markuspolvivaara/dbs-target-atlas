@@ -138,7 +138,7 @@
     ]
    },
    "cranialNerve": 11,
-   "intracranialFraction": 0.6
+   "intracranialFraction": 0.61
   },
   {
    "id": "sb_adenohypophysis",
@@ -227,7 +227,7 @@
      -10.14
     ]
    },
-   "intracranialFraction": 0.24
+   "intracranialFraction": 0.25
   },
   {
    "id": "sb_anterior_cerebral_artery_a1_a2",
@@ -407,7 +407,7 @@
      -53.38
     ]
    },
-   "intracranialFraction": 0.04
+   "intracranialFraction": 0.12
   },
   {
    "id": "sb_anterior_ethmoidal_artery",
@@ -544,7 +544,7 @@
     ]
    },
    "system": "Vertebral artery",
-   "intracranialFraction": 0.84
+   "intracranialFraction": 0.85
   },
   {
    "id": "sb_artery_of_pterygoid_canal",
@@ -823,7 +823,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_ethmoid_bone.glb",
-   "bytes": 55316,
+   "bytes": 166068,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -846,17 +846,17 @@
    ],
    "refIds": [],
    "category": "bone",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it, outside the labelled vessels), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -6.27,
-     25.2,
-     -6.47
+     -6.29,
+     27.42,
+     -8.19
     ],
     "R": [
-     8.22,
-     24.25,
-     -5.89
+     7.09,
+     26.38,
+     -7.52
     ]
    }
   },
@@ -949,7 +949,7 @@
     ]
    },
    "cranialNerve": 7,
-   "intracranialFraction": 0.55
+   "intracranialFraction": 0.67
   },
   {
    "id": "sb_facial_vein",
@@ -1046,7 +1046,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_frontal_bone.glb",
-   "bytes": 439940,
+   "bytes": 738740,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -1069,17 +1069,17 @@
    ],
    "refIds": [],
    "category": "bone",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it, outside the labelled vessels), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -22.57,
-     33.78,
-     48.21
+     -25.44,
+     33.05,
+     46.69
     ],
     "R": [
-     23.71,
-     36.52,
-     46.55
+     27.23,
+     36.69,
+     48.96
     ]
    }
   },
@@ -1127,7 +1127,7 @@
     ]
    },
    "cranialNerve": 9,
-   "intracranialFraction": 0.69
+   "intracranialFraction": 0.7
   },
   {
    "id": "sb_great_cerebral_vein_of_galen",
@@ -1217,7 +1217,7 @@
     ]
    },
    "cranialNerve": 12,
-   "intracranialFraction": 0.7
+   "intracranialFraction": 0.71
   },
   {
    "id": "sb_inferior_labial_veins",
@@ -1622,7 +1622,7 @@
     ]
    },
    "cranialNerve": 5,
-   "intracranialFraction": 0.08
+   "intracranialFraction": 0.09
   },
   {
    "id": "sb_maxillary_artery",
@@ -1668,7 +1668,7 @@
     ]
    },
    "system": "Maxillary artery",
-   "intracranialFraction": 0.34
+   "intracranialFraction": 0.39
   },
   {
    "id": "sb_maxillary_nerve_v2",
@@ -1713,7 +1713,7 @@
     ]
    },
    "cranialNerve": 5,
-   "intracranialFraction": 0.49
+   "intracranialFraction": 0.56
   },
   {
    "id": "sb_maxillary_veins",
@@ -1758,7 +1758,7 @@
      -39.91
     ]
    },
-   "intracranialFraction": 0.31
+   "intracranialFraction": 0.39
   },
   {
    "id": "sb_medial_pontine_branches_of_basilar_artery",
@@ -2037,7 +2037,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_occipital_bone.glb",
-   "bytes": 530400,
+   "bytes": 685688,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -2060,17 +2060,17 @@
    ],
    "refIds": [],
    "category": "bone",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it, outside the labelled vessels), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -22.76,
-     -63.72,
-     -19.69
+     -26.67,
+     -72.13,
+     -19.33
     ],
     "R": [
-     21.74,
-     -61.94,
-     -19.99
+     25.74,
+     -70.95,
+     -18.18
     ]
    }
   },
@@ -2162,7 +2162,7 @@
      -12.21
     ]
    },
-   "intracranialFraction": 0.83
+   "intracranialFraction": 0.87
   },
   {
    "id": "sb_oculomotor_nerve_iii",
@@ -2442,7 +2442,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_parietal_bone.glb",
-   "bytes": 697332,
+   "bytes": 1164012,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -2465,17 +2465,17 @@
    ],
    "refIds": [],
    "category": "bone",
-   "derivation": "The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it, outside the labelled vessels), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
+   "derivation": "The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -41.11,
-     -45.16,
-     54.09
+     -43.16,
+     -46.85,
+     57.24
     ],
     "R": [
-     43.15,
-     -39.33,
-     56.13
+     45.07,
+     -49.55,
+     55.28
     ]
    }
   },
@@ -2522,7 +2522,7 @@
      -12.62
     ]
    },
-   "intracranialFraction": 0.58
+   "intracranialFraction": 0.63
   },
   {
    "id": "sb_posterior_cerebral_artery_p1_p2",
@@ -2702,7 +2702,7 @@
      -48.76
     ]
    },
-   "intracranialFraction": 0.04
+   "intracranialFraction": 0.28
   },
   {
    "id": "sb_posterior_ethmoidal_artery",
@@ -2884,7 +2884,7 @@
     ]
    },
    "system": "Maxillary artery",
-   "intracranialFraction": 0.62
+   "intracranialFraction": 0.66
   },
   {
    "id": "sb_posterior_septal_branches_of_sphenopalatine_artery",
@@ -3074,7 +3074,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_sphenoid_bone.glb",
-   "bytes": 348728,
+   "bytes": 382616,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -3097,17 +3097,17 @@
    ],
    "refIds": [],
    "category": "bone",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it, outside the labelled vessels), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -18.85,
-     8.83,
-     -4.94
+     -18.12,
+     9.74,
+     -7.77
     ],
     "R": [
-     19.82,
-     8.97,
-     -5.49
+     19.3,
+     10.11,
+     -6.38
     ]
    }
   },
@@ -3243,7 +3243,7 @@
      17.15
     ]
    },
-   "intracranialFraction": 0.34
+   "intracranialFraction": 0.53
   },
   {
    "id": "sb_superior_cerebellar_artery",
@@ -3475,7 +3475,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_temporal_bone.glb",
-   "bytes": 769052,
+   "bytes": 914972,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -3498,17 +3498,17 @@
    ],
    "refIds": [],
    "category": "bone",
-   "derivation": "The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it, outside the labelled vessels), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
+   "derivation": "The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -46.86,
-     -23.31,
-     -14.93
+     -50.33,
+     -19.71,
+     -15.15
     ],
     "R": [
-     46.19,
-     -23.6,
-     -17.66
+     51.09,
+     -25.25,
+     -19.26
     ]
    }
   },
@@ -3827,7 +3827,7 @@
     ]
    },
    "cranialNerve": 10,
-   "intracranialFraction": 0.59
+   "intracranialFraction": 0.6
   },
   {
    "id": "sb_vertebral_artery",
@@ -3872,7 +3872,7 @@
     ]
    },
    "system": "Vertebral artery",
-   "intracranialFraction": 0.84
+   "intracranialFraction": 1.0
   },
   {
    "id": "sb_vestibular_nerve",
@@ -3982,7 +3982,7 @@
   "name": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
   "url": "https://topbrain2025.grand-challenge.org",
-  "note": "One adult head CT angiogram (0.5 mm isotropic), not an average and not in MNI space. Bone (the cranial bones; the scan cuts the face off): the CT's own surface (400 HU, and thin bone down to 170 HU where it adjoins that bone, outside the labelled vessels, within TotalSegmentator's skull), named bone by bone after the nearest bone of the Z-Anatomy model fitted onto it. Arteries and the deep veins: surfaces of TopBrain's expert labels of the same scan. Cranial nerves, the dural sinuses and arteries TopBrain does not label, the soft tissue and the landmark names: the Z-Anatomy model fitted onto this skull (scaled, then deformed smoothly), so their positions are approximate. Coordinates: millimetres from the fitted hypophysial fossa, the CT turned into the Z-Anatomy model's frame.",
+  "note": "One adult head CT angiogram (0.5 mm isotropic), not an average and not in MNI space. Bone (the cranial bones; the scan cuts the face off): the CT's own surface (400 HU, and thin bone down to 170 HU where it adjoins that bone, outside the labelled vessels, within TotalSegmentator's skull; and the walls of the air sinuses, where thin bone averaged with the air falls below any threshold), named bone by bone after the nearest bone of the Z-Anatomy model fitted onto it. Arteries and the deep veins: surfaces of TopBrain's expert labels of the same scan. Cranial nerves, the dural sinuses and arteries TopBrain does not label, the soft tissue and the landmark names: the Z-Anatomy model fitted onto this skull (scaled, then deformed smoothly), so their positions are approximate. Coordinates: millimetres from the fitted hypophysial fossa, the CT turned into the Z-Anatomy model's frame.",
   "attribution": [
    "TopBrain 2025 challenge data (University Hospital Zurich): CT angiogram and vessel labels of case topcow_ct_011 - https://topbrain2025.grand-challenge.org, https://zenodo.org/records/16878417 - open use, source given, non-commercial",
    "BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan",

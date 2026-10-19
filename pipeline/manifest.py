@@ -186,7 +186,7 @@ def skull_base_ct_attribution() -> list[str]:
         f"- Note: {d['note']}",
         *[f"- Attribution: {a}" for a in d["attribution"]],
         *[f"- Cite: {c}" for c in d["citation"]],
-        "- Changes made: the CT's bone surface taken at 400 HU (thin bone down to 170 HU next to it) within TotalSegmentator's",
+        "- Changes made: the CT's bone surface taken at 400 HU (thin bone down to 170 HU next to it, and the walls of the air sinuses) within TotalSegmentator's",
         "  skull mask, smoothed, decimated and named after the fitted Z-Anatomy bones; TopBrain's vessel labels meshed; the CT",
         "  moved rigidly into the Z-Anatomy frame; Z-Anatomy's nerves, unlabelled vessels, soft tissue and landmarks scaled and",
         "  smoothly deformed onto the CT's skull (pipeline/skullbase_ct.py); files converted to compressed glTF.",

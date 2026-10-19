@@ -112,7 +112,10 @@ Zurich, open use with the source given, non-commercial), fetched member by membe
 - **Bone**: the CT's own surface (400 HU; thin bone down to 170 HU where it adjoins that bone, so partial volume
   does not open holes in the orbital roofs and wings), outside the labelled vessels and within TotalSegmentator's
   skull mask; named bone by bone after the nearest bone of the fitted Z-Anatomy model. The cranial bones only: the
-  scan cuts the face off.
+  scan cuts the face off. Where bone is thinner than a voxel next to air (the sellar floor over the sphenoid sinus, the
+  sinus septa) its HU is averaged with the air and no threshold finds it, so the walls of the air enclosed in the skull
+  (sinuses and air cells, told from outside air by closing their narrow openings) are added as a 1 mm shell; the fit
+  to Z-Anatomy uses the bone without these walls.
 - **Arteries and deep veins**: the surfaces of TopBrain's expert labels of the same scan (ICA, ACA A1–A3, ACom,
   MCA M1–M3, PCom, PCA P1–P4, VA, BA, SCA, PICA, ophthalmic; vein of Galen, straight and superior sagittal sinuses,
   internal cerebral and basal veins). Vessels this patient does not have (here the anterior choroidal and AICA) are

@@ -70,7 +70,8 @@ if CT:
             "Definitions: Wikipedia - CC-BY-SA 3.0 (the source page is linked on each definition)",
         ],
         "note": "One adult head CT angiogram (0.5 mm isotropic), not an average and not in MNI space. Bone (the cranial bones; the scan cuts the face off): the CT's own surface "
-                "(400 HU, and thin bone down to 170 HU where it adjoins that bone, outside the labelled vessels, within TotalSegmentator's skull), named bone by bone after the nearest bone of the "
+                "(400 HU, and thin bone down to 170 HU where it adjoins that bone, outside the labelled vessels, within TotalSegmentator's skull; and the walls of the air "
+                "sinuses, where thin bone averaged with the air falls below any threshold), named bone by bone after the nearest bone of the "
                 "Z-Anatomy model fitted onto it. Arteries and the deep veins: surfaces of TopBrain's expert labels of the same scan. "
                 "Cranial nerves, the dural sinuses and arteries TopBrain does not label, the soft tissue and the landmark names: the "
                 "Z-Anatomy model fitted onto this skull (scaled, then deformed smoothly), so their positions are approximate. "
@@ -380,7 +381,7 @@ def main() -> int:
             cent.setdefault(side, cent.get("R" if side == "L" else "L"))
         f = f"assets/{KIND}/{sid}.glb"
         if CT:   # where this structure comes from in the CT model
-            how = ("The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it, outside the labelled vessels), the part nearest this bone of the Z-Anatomy "
+            how = ("The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels), the part nearest this bone of the Z-Anatomy "
                    "model fitted onto it; shading darkened where neighbouring bone encloses it." if g["type"] == "bone"
                    else "Surface of TopBrain's expert label of this vessel on the CT angiogram." if g["type"] == "vmesh"
                    else ("Fitted from the Z-Anatomy model onto this CT's skull (approximate position): " if base in fitted else "")

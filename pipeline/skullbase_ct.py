@@ -12,7 +12,8 @@ Inputs
   pipeline/data/build/skullbase/export.json              the Z-Anatomy export (skullbase_export.py)
 Writes
   pipeline/data/build/skullbase_ct/export.json   the same format as the Z-Anatomy export, plus vessel meshes:
-    bones     the CT's bone surface (400 HU, outside the labelled vessels), split into the cranial bones by the
+    bones     the CT's bone surface (400 HU, thin bone down to 170 HU next to it, and the walls of the air sinuses;
+              outside the labelled vessels), split into the cranial bones by the
               nearest bone of the fitted Z-Anatomy model
     meshes    TopBrain's arteries and veins as surfaces of their labels
     lines     the Z-Anatomy cranial nerves, and the vessels TopBrain does not label, fitted onto this skull
@@ -51,6 +52,15 @@ BONE_HU = 400.0      # above contrast-filled vessels (lumens 150-300 HU here), b
 THIN_HU = 170.0      # thin bone (orbital roofs, wings, sellar floor) falls below BONE_HU at this resolution: voxels down to
 THIN_REACH_MM = 1.5  # this value count as bone when they touch it and lie within this far of bone above BONE_HU
 GRID_MM = 0.5        # the CT is resampled to this grid before its surface is taken
+# the walls of the air sinuses (sphenoid, ethmoid, mastoid air cells): where the bone is thinner than a voxel its HU is
+# averaged with the air (the sellar floor over the sphenoid sinus comes out at soft-tissue values), so no threshold finds
+# it. Air enclosed in the skull is walled by bone, so a thin shell around it is drawn as bone.
+SINUS_AIR_HU = -400.0    # air
+SINUS_OPEN_MM = 1.0      # narrow openings (ostia) closed before air enclosed in the skull is told from outside air
+SINUS_ML = (0.02, 50.0)  # enclosed air spaces of this size (the largest sinus here is about 6 ml)
+SINUS_SHELL_MM = 1.0     # the wall drawn around them, where it is not air itself
+SHELL_MIN_HU = -750.0    # voxels in the wall are partial volume: above this (the air inside is about -900)
+SURFACE_LEVEL = 0.4      # the bone surface at this level of the smoothed mask (0.5 thins plates one voxel thick away)
 SKULL_REACH_MM = 3.0  # bone within this far of TotalSegmentator's skull
 # the cranial bones the fit uses (Z-Anatomy names; paired bones with .l / .r); the face is cut off in this CT
 FIT_BONES = ["Frontal bone", "Parietal bone.l", "Parietal bone.r", "Occipital bone", "Temporal bone.l", "Temporal bone.r",
@@ -84,6 +94,24 @@ def bone_mask(ct: np.ndarray, lab: np.ndarray, skull: np.ndarray, zooms: np.ndar
     lab_w, _ = ndimage.label(weak | strong)
     keep = np.unique(lab_w[strong])
     return np.isin(lab_w, keep[keep > 0])
+
+
+def sinus_walls(ct: np.ndarray, lab: np.ndarray, zooms: np.ndarray) -> np.ndarray:
+    """A shell around the air enclosed in the skull (sinuses, air cells): its walls, bone even where they are thinner
+    than a voxel. Enclosed air: the components of the air, with narrow openings closed (an erosion), that do not reach
+    the edge of the scan and are no larger than a sinus; grown back within the air."""
+    vessels = ndimage.binary_dilation(lab > 0, iterations=2)
+    air = ct < SINUS_AIR_HU
+    it = max(1, int(round(SINUS_OPEN_MM / float(zooms.min()))))
+    core = ndimage.binary_erosion(air, iterations=it)
+    cl, n = ndimage.label(core)
+    edge = set(np.unique(np.concatenate([cl[0].ravel(), cl[-1].ravel(), cl[:, 0].ravel(), cl[:, -1].ravel(),
+                                         cl[:, :, 0].ravel(), cl[:, :, -1].ravel()])).tolist())
+    ml = ndimage.sum(core, cl, index=np.arange(1, n + 1)) * float(np.prod(zooms)) / 1000.0
+    keep = [i for i in range(1, n + 1) if i not in edge and SINUS_ML[0] <= ml[i - 1] <= SINUS_ML[1]]
+    sinus = ndimage.binary_propagation(np.isin(cl, keep), mask=air)
+    shell_it = max(1, int(round(SINUS_SHELL_MM / float(zooms.min()))))
+    return ndimage.binary_dilation(sinus, iterations=shell_it) & ~sinus & ~vessels & (ct > SHELL_MIN_HU)
 
 
 def similarity(src: np.ndarray, dst: np.ndarray) -> tuple[float, np.ndarray, np.ndarray]:
@@ -173,22 +201,25 @@ def nonrigid(src: np.ndarray, dst: np.ndarray, sigmas=(24.0, 14.0, 9.0, 6.0), st
     return warp
 
 
-def ct_bone() -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """The CT's bone mask on the GRID_MM grid, its affine (scanner RAS), and the vessel labels on that grid (cached in
+def ct_bone() -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """The CT's bone mask on the GRID_MM grid (with the sinus walls), the same without them (the fit uses it: the model's
+    bones have no sinus linings or septa), its affine (scanner RAS), and the vessel labels on that grid (cached in
     BUILD/bone.npz: it takes minutes on the full-resolution CT)."""
     cache = BUILD / "bone.npz"
     if cache.exists() and cache.stat().st_mtime > max(CT.stat().st_mtime, TS_SKULL.stat().st_mtime, Path(__file__).stat().st_mtime):
         c = np.load(cache)
-        return c["b"], c["a"], c["lab"]
+        return c["b"], c["p"], c["a"], c["lab"]
     ct, aff = load_ct()
     lab = np.asanyarray(nib.load(LABELS).dataobj).astype(np.uint8)
     skull = np.asanyarray(nib.load(TS_SKULL).dataobj) > 0
     zooms = np.sqrt((aff[:3, :3] ** 2).sum(0))
-    bone = bone_mask(ct, lab, skull, zooms)
-    b, a = resample(bone.astype(np.float32), aff, GRID_MM, 1)
+    plain = bone_mask(ct, lab, skull, zooms)
+    walls = sinus_walls(ct, lab, zooms)
+    b, a = resample((plain | walls).astype(np.float32), aff, GRID_MM, 1)
+    p, _ = resample(plain.astype(np.float32), aff, GRID_MM, 1)
     lab_g, _ = resample(lab.astype(np.float32), aff, GRID_MM, 0)
-    np.savez_compressed(cache, b=b.astype(np.float16), a=a, lab=lab_g.astype(np.uint8))
-    return b, a, lab_g.astype(np.uint8)
+    np.savez_compressed(cache, b=b.astype(np.float16), p=p.astype(np.float16), a=a, lab=lab_g.astype(np.uint8))
+    return b, p, a, lab_g.astype(np.uint8)
 
 
 def surface_points(mask: np.ndarray, aff: np.ndarray, n: int = 60000) -> np.ndarray:
@@ -256,7 +287,7 @@ Z_ARTERIES = {"Middle meningeal artery", "Accessory branch of middle meningeal a
               "Medial pontine branches of basilar artery", "Lateral pontine branches of basilar artery",
               "Proximal lateral striate branches", "Distal lateral striate branches"}
 Z_VEINS_REPLACED = {"Superior sagittal sinus", "Straight sinus"}
-BONE_FACES = 420_000   # the CT bone surface, all bones together, after decimation
+BONE_FACES = 640_000   # the CT bone surface, all bones together, after decimation (the sinus walls add surface)
 # the bones drawn: the cranial bones (the scan cuts the face off in front, so its bones would be fragments)
 CRANIAL = {"Frontal bone", "Parietal bone.l", "Parietal bone.r", "Occipital bone", "Temporal bone.l", "Temporal bone.r",
            "Sphenoid bone", "Ethmoid bone"}
@@ -273,8 +304,8 @@ def main() -> int:
     import trimesh
     BUILD.mkdir(parents=True, exist_ok=True)
     ex = json.loads(ZEXPORT.read_text())
-    b, a, lab = ct_bone()
-    pts = surface_points(b, a)
+    b, plain, a, lab = ct_bone()
+    pts = surface_points(plain, a)
     s, R, t, warp, rep = fit(ex, pts)
     print("fit", rep)
     zmap = lambda q: warp(s * np.asarray(q, float) @ R.T + t)  # noqa: E731  Z-Anatomy frame -> scanner RAS
@@ -291,7 +322,7 @@ def main() -> int:
     a_f = a.copy()
     a_f[:3, :3] = R.T @ a[:3, :3]
     a_f[:3, 3] = (a[:3, 3] - fossa_ct) @ R
-    mesh = isosurface(b, a_f, 0.5, 0.6, BONE_FACES)
+    mesh = isosurface(b, a_f, SURFACE_LEVEL, 0.6, BONE_FACES)
     V, F = np.asarray(mesh.vertices), np.asarray(mesh.faces)
     znames = [n for n in ex["bones"] if not n.startswith("Sinus of")]
     zp, zl = [], []
@@ -381,8 +412,8 @@ def main() -> int:
 
 if __name__ == "__main__" and sys.argv[1:] == ["fit"]:
     ex = json.loads(ZEXPORT.read_text())
-    b, a, _ = ct_bone()
-    pts = surface_points(b, a)
+    _, plain, a, _ = ct_bone()
+    pts = surface_points(plain, a)
     s, R, t, warp, rep = fit(ex, pts)
     print(rep)
     np.savez(BUILD / "fit.npz", s=s, R=R, t=t)
