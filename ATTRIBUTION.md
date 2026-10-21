@@ -208,7 +208,7 @@ licence) with attribution.
 
 > Data were provided [in part] by the Human Connectome Project, WU-Minn Consortium (Principal Investigators: David Van Essen and Kamil Ugurbil; 1U54MH091657) funded by the 16 NIH Institutes and Centers that support the NIH Blueprint for Neuroscience Research; and by the McDonnell Center for Systems Neuroscience at Washington University.
 
-## Skull base section (Z-Anatomy / BodyParts3D)
+## Skull base v1 (Z-Anatomy / BodyParts3D)
 
 The meshes and lines in `public/assets/skullbase/` and the files `sb-manifest.json`, `sb-landmarks.json`,
 `sb-regions.json` and `sb-definitions.json` are derived from Z-Anatomy, itself based on BodyParts3D. They are
@@ -245,6 +245,33 @@ from Z-Anatomy. They are **not** GPL-licensed: TopBrain data: open use with attr
   skull mask, smoothed, decimated and named after the fitted Z-Anatomy bones; TopBrain's vessel labels meshed; the CT
   moved rigidly into the Z-Anatomy frame; Z-Anatomy's nerves, unlabelled vessels, soft tissue and landmarks scaled and
   smoothly deformed onto the CT's skull (pipeline/skullbase_ct.py); files converted to compressed glTF.
+
+## Skull base, the default model ("v3" in the pipeline: the TopBrain CT with its anatomy made to fit it)
+
+The meshes in `public/assets/skullbase-v3/` and the files `sbv3-manifest.json`, `sbv3-landmarks.json` and `sbv3-fit.json`
+are derived from the OpenEar library of human temporal bones (CC BY 4.0); the page also shows Skull base v2's bone and
+vessel files (TopBrain, see above). They are **not** GPL-licensed: TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); OpenEar: CC BY 4.0; the nerves' courses derive from Z-Anatomy: CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); definitions Wikipedia CC BY-SA 3.0 (as shipped with Z-Anatomy); TotalSegmentator segmentations (Apache-2.0 models).
+
+- Source: https://zenodo.org/records/1473724
+- Note: The bone and the labelled vessels are one adult's CT angiogram (TopBrain case 011); the cervical carotids, jugular veins and optic nerves are TotalSegmentator's segmentations of it. The temporal bone's contents (facial nerve, chorda tympani, cochleovestibular nerve, perilymphatic spaces, ossicles, tympanic membrane, petrous carotid) are a real ear's: OpenEar specimen ALPHA, registered onto each temporal bone of this CT, the left ear mirrored. The cranial nerves are routed through this CT's foramina from the Z-Anatomy model fitted onto it (their cisternal courses approximate). The greater petrosal nerve is drawn by rule.
+- Attribution: OpenEar library (Sieber D, Erfurt P, John S, et al.), specimen ALPHA: segmentations - https://zenodo.org/records/1473724 - CC BY 4.0
+- Attribution: TopBrain 2025 challenge data (University Hospital Zurich): CT angiogram and vessel labels of case topcow_ct_011 - https://topbrain2025.grand-challenge.org, https://zenodo.org/records/16878417 - open use, source given, non-commercial
+- Attribution: BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan
+- Attribution: Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0
+- Cite: Sieber D, Erfurt P, John S, Ribeiro dos Santos G, Schurzig D, Sørensen MS, Lenarz T. The OpenEar library of 3D models of the human temporal bone based on computed tomography and micro-slicing. Sci Data. 2019;6:180297. doi:10.1038/sdata.2018.297.
+- Cite: Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.
+- Cite: Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).
+- Cite: Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024.
+- Cite: Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.
+- Changes made: specimen ALPHA's segmentations (facial nerve, chorda tympani, cochleovestibular nerve, scala tympani,
+  scala vestibuli, ossicles, tympanic membrane, carotid) meshed (smoothed, decimated) and moved into the CT by a
+  similarity registration of the specimen's bone onto each temporal bone, the left one mirrored
+  (pipeline/skullbase_v3.py); landmarks derived from them; files converted to compressed glTF. The greater petrosal
+  nerve is drawn by rule (the project's own, GPL-3.0). The cranial nerves are Z-Anatomy's fitted courses (CC BY-SA)
+  rerouted through the CT's own foramina (pipeline/skullbase_v3_base.py); the optic nerves, cervical carotids and jugular
+  veins are TotalSegmentator segmentations of the CT; the sigmoid and transverse sinuses are traced through its
+  enhanced lumen, as is the petrous carotid; small arteries the CT cannot show are Z-Anatomy's fitted branches anchored to
+  the CT's own parent vessels; foramina are located from the routes, the cranial floor's openings and the segmented carotid.
 
 ## Brainstem section (Z-Anatomy fitted into MNI space; Harvard Ascending Arousal Network atlas 2.0)
 

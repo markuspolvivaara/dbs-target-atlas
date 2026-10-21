@@ -322,6 +322,8 @@ def main() -> int:
     a_f = a.copy()
     a_f[:3, :3] = R.T @ a[:3, :3]
     a_f[:3, 3] = (a[:3, 3] - fossa_ct) @ R
+    # the frame for the temporal-bone model (skullbase_v3.py): a scanner point p is at (p - fossa) @ R in the frame
+    np.savez(BUILD / "frame.npz", R=R, fossa=fossa_ct)
     mesh = isosurface(b, a_f, SURFACE_LEVEL, 0.6, BONE_FACES)
     V, F = np.asarray(mesh.vertices), np.asarray(mesh.faces)
     znames = [n for n in ex["bones"] if not n.startswith("Sinus of")]

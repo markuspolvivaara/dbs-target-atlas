@@ -34,7 +34,7 @@ const nav = [
 ];
 
 // each module's card: the whole card is the link, over a view of the module itself (public/assets/home/<id>.webp)
-const cards = SECTIONS.map((s) => {
+const card = (s: (typeof SECTIONS)[number]) => {
   const live = s.status === 'live';
   // absolute: a url() inside a custom property resolves against the stylesheet that uses it, not this page
   const style = `--img: url('${new URL(`${SITE_ROOT}assets/home/${s.id}.webp`, location.href).href}')`;
@@ -46,12 +46,18 @@ const cards = SECTIONS.map((s) => {
   return live
     ? h('a', { class: 'section-card', 'data-section': s.id, href: `${SITE_ROOT}${s.path}`, style }, ...body)
     : h('article', { class: 'section-card soon', 'data-section': s.id, style }, ...body);
-});
+};
+const cards = SECTIONS.filter((s) => !s.alt).map(card);
+const altCards = SECTIONS.filter((s) => s.alt).map(card);
 
 const main = h('main', { id: 'main', class: 'home wrap' },
   h('h1', {}, BRAND.name),
   h('p', { class: 'lede' }, BRAND.tagline),
   h('div', { class: 'section-grid' }, ...cards),
+  altCards.length ? h('section', { class: 'alt-versions', 'aria-labelledby': 'alt-title' },
+    h('h2', { id: 'alt-title' }, 'Alternative versions'),
+    h('p', { class: 'aside' }, 'Earlier versions of a section, kept for comparison.'),
+    h('div', { class: 'section-grid' }, ...altCards)) : null,
   h('section', { class: 'card about' },
     h('h2', {}, 'About'),
     h('p', {}, 'All 3D anatomy comes from published atlases, converted by an open pipeline and checked against its sources; nothing is hand-modelled. Every clinical statement links to its reference.'),

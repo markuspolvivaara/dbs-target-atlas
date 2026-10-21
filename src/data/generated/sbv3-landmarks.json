@@ -1,0 +1,580 @@
+[
+ {
+  "id": "lm_fundus_of_internal_acoustic_meatus_r",
+  "name": "Fundus of internal acoustic meatus",
+  "bone": "Temporal bone",
+  "part": "Petrous part",
+  "ras": [
+   35.45,
+   -21.04,
+   -10.45
+  ],
+  "side": "R",
+  "boneFrom": "carried over from OpenEar specimen ALPHA",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_geniculate_ganglion_r",
+  "name": "Geniculate ganglion",
+  "bone": "Temporal bone",
+  "part": "Petrous part",
+  "ras": [
+   37.0,
+   -18.78,
+   -11.06
+  ],
+  "side": "R",
+  "boneFrom": "carried over from OpenEar specimen ALPHA",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_second_genu_of_facial_nerve_r",
+  "name": "Second genu of facial nerve",
+  "bone": "Temporal bone",
+  "part": "Petrous part",
+  "ras": [
+   40.73,
+   -25.45,
+   -18.11
+  ],
+  "side": "R",
+  "boneFrom": "carried over from OpenEar specimen ALPHA",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_distal_end_of_the_specimen_s_facial_nerve_r",
+  "name": "Distal end of the specimen's facial nerve",
+  "bone": "Temporal bone",
+  "part": "Petrous part",
+  "ras": [
+   40.32,
+   -25.27,
+   -31.81
+  ],
+  "side": "R",
+  "boneFrom": "carried over from OpenEar specimen ALPHA",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_oval_window_r",
+  "name": "Oval window",
+  "bone": "Temporal bone",
+  "part": "Petrous part",
+  "ras": [
+   37.13,
+   -22.25,
+   -14.24
+  ],
+  "side": "R",
+  "boneFrom": "carried over from OpenEar specimen ALPHA",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_round_window_r",
+  "name": "Round window",
+  "bone": "Temporal bone",
+  "part": "Petrous part",
+  "ras": [
+   35.71,
+   -22.39,
+   -16.95
+  ],
+  "side": "R",
+  "boneFrom": "carried over from OpenEar specimen ALPHA",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_bone_over_the_superior_semicircular_canal_r",
+  "name": "Bone over the superior semicircular canal",
+  "bone": "Temporal bone",
+  "part": "Petrous part",
+  "ras": [
+   38.63,
+   -26.91,
+   -4.62
+  ],
+  "side": "R",
+  "boneFrom": "the CT's bone surface over the carried-over superior semicircular canal",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_fundus_of_internal_acoustic_meatus_l",
+  "name": "Fundus of internal acoustic meatus",
+  "bone": "Temporal bone",
+  "part": "Petrous part",
+  "ras": [
+   -35.39,
+   -20.38,
+   -7.8
+  ],
+  "side": "L",
+  "boneFrom": "carried over from OpenEar specimen ALPHA",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_geniculate_ganglion_l",
+  "name": "Geniculate ganglion",
+  "bone": "Temporal bone",
+  "part": "Petrous part",
+  "ras": [
+   -36.84,
+   -18.07,
+   -8.24
+  ],
+  "side": "L",
+  "boneFrom": "carried over from OpenEar specimen ALPHA",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_second_genu_of_facial_nerve_l",
+  "name": "Second genu of facial nerve",
+  "bone": "Temporal bone",
+  "part": "Petrous part",
+  "ras": [
+   -41.91,
+   -24.68,
+   -14.89
+  ],
+  "side": "L",
+  "boneFrom": "carried over from OpenEar specimen ALPHA",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_distal_end_of_the_specimen_s_facial_nerve_l",
+  "name": "Distal end of the specimen's facial nerve",
+  "bone": "Temporal bone",
+  "part": "Petrous part",
+  "ras": [
+   -43.12,
+   -24.55,
+   -29.15
+  ],
+  "side": "L",
+  "boneFrom": "carried over from OpenEar specimen ALPHA",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_oval_window_l",
+  "name": "Oval window",
+  "bone": "Temporal bone",
+  "part": "Petrous part",
+  "ras": [
+   -37.54,
+   -21.66,
+   -11.46
+  ],
+  "side": "L",
+  "boneFrom": "carried over from OpenEar specimen ALPHA",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_round_window_l",
+  "name": "Round window",
+  "bone": "Temporal bone",
+  "part": "Petrous part",
+  "ras": [
+   -36.42,
+   -21.91,
+   -14.43
+  ],
+  "side": "L",
+  "boneFrom": "carried over from OpenEar specimen ALPHA",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_bone_over_the_superior_semicircular_canal_l",
+  "name": "Bone over the superior semicircular canal",
+  "bone": "Temporal bone",
+  "part": "Petrous part",
+  "ras": [
+   -38.42,
+   -26.42,
+   -1.14
+  ],
+  "side": "L",
+  "boneFrom": "the CT's bone surface over the carried-over superior semicircular canal",
+  "distanceToBoneMm": 0.0
+ },
+ {
+  "id": "lm_optic_canal_r",
+  "name": "Optic canal",
+  "bone": "Sphenoid bone",
+  "part": null,
+  "ras": [
+   15.54,
+   16.76,
+   12.99
+  ],
+  "side": "R",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "Where the optic nerve (II), routed through this CT, is most closely surrounded by bone (37 % bone within 2 mm of it).",
+  "from": [
+   "Optic nerve (II)"
+  ]
+ },
+ {
+  "id": "lm_optic_canal_l",
+  "name": "Optic canal",
+  "bone": "Sphenoid bone",
+  "part": null,
+  "ras": [
+   -13.78,
+   14.93,
+   14.28
+  ],
+  "side": "L",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "Where the optic nerve (II), routed through this CT, is most closely surrounded by bone (28 % bone within 2 mm of it).",
+  "from": [
+   "Optic nerve (II)"
+  ]
+ },
+ {
+  "id": "lm_foramen_rotundum_r",
+  "name": "Foramen rotundum",
+  "bone": "Sphenoid bone",
+  "part": null,
+  "ras": [
+   20.75,
+   14.67,
+   -2.2
+  ],
+  "side": "R",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "Where the maxillary nerve (V2), routed through this CT, first passes between bone on most sides (54 % bone within 2 mm of it).",
+  "from": [
+   "Maxillary nerve (V2)"
+  ]
+ },
+ {
+  "id": "lm_foramen_rotundum_l",
+  "name": "Foramen rotundum",
+  "bone": "Sphenoid bone",
+  "part": null,
+  "ras": [
+   -18.78,
+   14.83,
+   -0.79
+  ],
+  "side": "L",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "Where the maxillary nerve (V2), routed through this CT, first passes between bone on most sides (53 % bone within 2 mm of it).",
+  "from": [
+   "Maxillary nerve (V2)"
+  ]
+ },
+ {
+  "id": "lm_foramen_ovale_r",
+  "name": "Foramen ovale",
+  "bone": "Sphenoid bone",
+  "part": null,
+  "ras": [
+   23.54,
+   -0.4,
+   -13.5
+  ],
+  "side": "R",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "Where the mandibular nerve (V3), routed through this CT, first passes between bone on most sides (51 % bone within 2 mm of it).",
+  "from": [
+   "Mandibular nerve (V3)"
+  ]
+ },
+ {
+  "id": "lm_foramen_ovale_l",
+  "name": "Foramen ovale",
+  "bone": "Sphenoid bone",
+  "part": null,
+  "ras": [
+   -23.69,
+   0.44,
+   -12.37
+  ],
+  "side": "L",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "Where the mandibular nerve (V3), routed through this CT, is most closely surrounded by bone (47 % bone within 2 mm of it).",
+  "from": [
+   "Mandibular nerve (V3)"
+  ]
+ },
+ {
+  "id": "lm_foramen_spinosum_r",
+  "name": "Foramen spinosum",
+  "bone": "Sphenoid bone",
+  "part": null,
+  "ras": [
+   26.71,
+   -6.1,
+   -19.52
+  ],
+  "side": "R",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "Where the middle meningeal artery, routed through this CT, first passes between bone on most sides (50 % bone within 2 mm of it).",
+  "from": [
+   "Middle meningeal artery"
+  ]
+ },
+ {
+  "id": "lm_foramen_spinosum_l",
+  "name": "Foramen spinosum",
+  "bone": "Sphenoid bone",
+  "part": null,
+  "ras": [
+   -27.25,
+   -9.27,
+   -16.6
+  ],
+  "side": "L",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "Where the middle meningeal artery, routed through this CT, first passes between bone on most sides (54 % bone within 2 mm of it).",
+  "from": [
+   "Middle meningeal artery"
+  ]
+ },
+ {
+  "id": "lm_hypoglossal_canal_r",
+  "name": "Hypoglossal canal",
+  "bone": "Occipital bone",
+  "part": null,
+  "ras": [
+   18.62,
+   -22.17,
+   -32.54
+  ],
+  "side": "R",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "Where the hypoglossal nerve (XII), routed through this CT, is most closely surrounded by bone (46 % bone within 2 mm of it).",
+  "from": [
+   "Hypoglossal nerve (XII)"
+  ]
+ },
+ {
+  "id": "lm_hypoglossal_canal_l",
+  "name": "Hypoglossal canal",
+  "bone": "Occipital bone",
+  "part": null,
+  "ras": [
+   -20.86,
+   -20.42,
+   -32.38
+  ],
+  "side": "L",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "Where the hypoglossal nerve (XII), routed through this CT, first passes between bone on most sides (51 % bone within 2 mm of it).",
+  "from": [
+   "Hypoglossal nerve (XII)"
+  ]
+ },
+ {
+  "id": "lm_superior_orbital_fissure_r",
+  "name": "Superior orbital fissure",
+  "bone": "Sphenoid bone",
+  "part": null,
+  "ras": [
+   20.44,
+   18.08,
+   7.44
+  ],
+  "side": "R",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "Where the oculomotor, trochlear, ophthalmic and abducens nerves, routed through this CT, run closest together (within 2.8 mm of each other on average).",
+  "from": [
+   "Oculomotor nerve (III)",
+   "Trochlear nerve (IV)",
+   "Ophthalmic nerve (V1)",
+   "Abducens nerve (VI)"
+  ]
+ },
+ {
+  "id": "lm_superior_orbital_fissure_l",
+  "name": "Superior orbital fissure",
+  "bone": "Sphenoid bone",
+  "part": null,
+  "ras": [
+   -17.56,
+   14.82,
+   6.34
+  ],
+  "side": "L",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "Where the oculomotor, trochlear, ophthalmic and abducens nerves, routed through this CT, run closest together (within 2.5 mm of each other on average).",
+  "from": [
+   "Oculomotor nerve (III)",
+   "Trochlear nerve (IV)",
+   "Ophthalmic nerve (V1)",
+   "Abducens nerve (VI)"
+  ]
+ },
+ {
+  "id": "lm_jugular_foramen_r",
+  "name": "Jugular foramen",
+  "bone": "Occipital bone",
+  "part": null,
+  "ras": [
+   26.05,
+   -24.51,
+   -29.87
+  ],
+  "side": "R",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "The middle of where the glossopharyngeal, vagus and accessory nerves, routed through this CT, are most closely surrounded by bone.",
+  "from": [
+   "Glossopharyngeal nerve (IX)",
+   "Vagus nerve (X)",
+   "Accessory nerve (XI)"
+  ]
+ },
+ {
+  "id": "lm_external_opening_of_carotid_canal_r",
+  "name": "External opening of carotid canal",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   26.5,
+   -12.96,
+   -23.43
+  ],
+  "side": "R",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "The top of the internal carotid artery as TotalSegmentator segments it in this CT, where it enters the carotid canal.",
+  "from": [
+   "Internal carotid artery (cervical part)"
+  ]
+ },
+ {
+  "id": "lm_internal_acoustic_meatus_r",
+  "name": "Internal acoustic meatus",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   19.58,
+   -20.38,
+   -9.07
+  ],
+  "side": "R",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "The medial end of the canal's contents in the registered OpenEar ear: the meatus' opening.",
+  "from": [
+   "Nerves in the internal acoustic meatus (VII, VIII)"
+  ]
+ },
+ {
+  "id": "lm_jugular_foramen_l",
+  "name": "Jugular foramen",
+  "bone": "Occipital bone",
+  "part": null,
+  "ras": [
+   -27.4,
+   -23.52,
+   -26.94
+  ],
+  "side": "L",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "The middle of where the glossopharyngeal, vagus and accessory nerves, routed through this CT, are most closely surrounded by bone.",
+  "from": [
+   "Glossopharyngeal nerve (IX)",
+   "Vagus nerve (X)",
+   "Accessory nerve (XI)"
+  ]
+ },
+ {
+  "id": "lm_external_opening_of_carotid_canal_l",
+  "name": "External opening of carotid canal",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   -29.43,
+   -11.08,
+   -27.84
+  ],
+  "side": "L",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "The top of the internal carotid artery as TotalSegmentator segments it in this CT, where it enters the carotid canal.",
+  "from": [
+   "Internal carotid artery (cervical part)"
+  ]
+ },
+ {
+  "id": "lm_internal_acoustic_meatus_l",
+  "name": "Internal acoustic meatus",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   -18.74,
+   -20.92,
+   -8.17
+  ],
+  "side": "L",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "The medial end of the canal's contents in the registered OpenEar ear: the meatus' opening.",
+  "from": [
+   "Nerves in the internal acoustic meatus (VII, VIII)"
+  ]
+ },
+ {
+  "id": "lm_foramen_magnum",
+  "name": "Foramen magnum",
+  "bone": "Occipital bone",
+  "part": null,
+  "ras": [
+   -1.44,
+   -31.49,
+   -40.0
+  ],
+  "side": "M",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "The centre of the largest opening of the cranial floor seen from above (692 mm²), at its rim's height.",
+  "from": []
+ },
+ {
+  "id": "lm_foramen_lacerum_r",
+  "name": "Foramen lacerum",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   12.95,
+   -1.38,
+   -5.0
+  ],
+  "side": "R",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "The opening of the cranial floor beside the sella, medial to the foramen ovale, seen from above (17 mm²), at its rim's height.",
+  "from": []
+ },
+ {
+  "id": "lm_foramen_lacerum_l",
+  "name": "Foramen lacerum",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   -13.89,
+   -1.74,
+   -7.5
+  ],
+  "side": "L",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "how": "The opening of the cranial floor beside the sella, medial to the foramen ovale, seen from above (16 mm²), at its rim's height.",
+  "from": []
+ }
+]

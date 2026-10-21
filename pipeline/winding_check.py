@@ -67,7 +67,7 @@ def closed_volume(parts: list[tuple[np.ndarray, np.ndarray]]) -> float | None:
 
 
 def main() -> int:
-    dirs = [Path(d) for d in sys.argv[1:]] or [d for d in BUILD.iterdir() if d.is_dir() and d.name in ("meshes", "spine", "skullbase", "skullbase-ct", "cortex", "brainstem")]
+    dirs = [Path(d) for d in sys.argv[1:]] or [d for d in BUILD.iterdir() if d.is_dir() and d.name in ("meshes", "spine", "skullbase", "skullbase-ct", "skullbase-v3", "cortex", "brainstem")]
     bad, n = [], 0
     for d in dirs:
         for f in sorted(d.glob("*.glb")):

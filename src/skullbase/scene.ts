@@ -1,6 +1,6 @@
 import type { Look } from '../viewer/materials';
 import { makeCatalog, type MarkerDef, type SceneSource, type ScenePlan, type TractRole } from '../viewer/scene';
-import { SB_GROUP } from './groups';
+import { DEFAULT_GROUP, SB_GROUP, viewGroup } from './groups';
 import { LANDMARKS, SB, SB_MANIFEST } from './index';
 import type { SkullState } from './state';
 
@@ -11,13 +11,13 @@ const markers: MarkerDef[] = LANDMARKS.map((l) => ({
   mni: { left: l.ras, right: l.ras }, sides: [l.side === 'L' ? 'L' : 'R'],
 }));
 
-export function skullPlan(grpId: string, sel: string | null): SkullPlan {
-  const g = SB_GROUP.get(grpId) ?? SB_GROUP.get('floor')!;
+export function skullPlan(grpId: string, sel: string | null, also: readonly string[] = []): SkullPlan {
+  const g = viewGroup(SB_GROUP.has(grpId) ? grpId : DEFAULT_GROUP, also);
   const looks = new Map<string, Look>();
   const tracts = new Map<string, TractRole>();
   const inGroup = new Set(g.structures);
   for (const s of SB_MANIFEST.structures) {
-    if (s.type === 'bone') looks.set(s.id, inGroup.has(s.id) ? (g.kind === 'system' ? 'context' : 'primary') : g.kind === 'bone' ? 'ghost' : 'context');
+    if (s.type === 'bone') looks.set(s.id, inGroup.has(s.id) ? (g.kind === 'system' ? 'context' : 'primary') : g.kind === 'bone' ? 'ghost' : (g.boneLook ?? 'context'));
     else if (s.type === 'soft') looks.set(s.id, inGroup.has(s.id) ? 'primary' : 'hidden');
     else if (s.type === 'tube') looks.set(s.id, inGroup.has(s.id) ? 'primary' : 'hidden');
   }
@@ -41,6 +41,6 @@ export function skullPlan(grpId: string, sel: string | null): SkullPlan {
 
 export const skullScene: SceneSource<SkullState, SkullPlan> = {
   catalog: makeCatalog(SB_MANIFEST.structures, {}, markers),
-  plan: (s) => skullPlan(s.grp, s.sel),
-  planKey: (s) => `${s.grp}|${s.sel}`,
+  plan: (s) => skullPlan(s.grp, s.sel, s.also),
+  planKey: (s) => `${s.grp}|${s.also.join(',')}|${s.sel}`,
 };

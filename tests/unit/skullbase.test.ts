@@ -5,6 +5,7 @@ import { skullPlan, skullScene } from '../../src/skullbase/scene';
 import { decodeSkull, defaultSkullState, encodeSkull } from '../../src/skullbase/state';
 import { nodeMeans } from './glb';
 import { FORAMEN_CONTENTS } from '../../src/skullbase/foramina';
+import { TB_NOTES, TB_REF, TB_REFS } from '../../src/skullbase/temporal';
 
 describe('skull-base data (Z-Anatomy export)', () => {
   it('generated files agree with each other', () => {
@@ -102,6 +103,21 @@ describe('skull-base scene and URL state', () => {
     s.layers.nuclei = { on: true, opacity: 0.5 };
     expect(decodeSkull(encodeSkull(s))).toEqual(s);
   });
+  it('systems combine: the link keeps them, the plan draws both, the cut is the least restrictive', () => {
+    const s = decodeSkull('#/atlas?g=nerves&with=arteries');
+    expect(s.grp).toBe('nerves');
+    expect(s.also).toEqual(['arteries']);
+    expect(s.cutAbove).toBeNull();                                   // the arteries are not cut away
+    expect(decodeSkull(encodeSkull(s))).toEqual(s);
+    const p = skullPlan(s.grp, null, s.also);
+    const nerve = SB_MANIFEST.structures.find((x) => x.name === 'Optic nerve (II)')!.id;
+    const artery = SB_MANIFEST.structures.find((x) => x.name === 'Basilar artery')!.id;
+    expect(p.looks.get(nerve)).toBe('primary');
+    expect(p.looks.get(artery)).toBe('primary');
+    // only systems combine: with another kind of view, or an unknown id, the extra is dropped
+    expect(decodeSkull('#/atlas?g=floor&with=arteries').also).toEqual([]);
+    expect(decodeSkull('#/atlas?g=nerves&with=floor,nope,nerves').also).toEqual([]);
+  });
   it('a link without settings takes them from its group', () => {
     const s = decodeSkull('#/atlas?g=arteries');
     expect(s.cutAbove).toBeNull();
@@ -157,5 +173,111 @@ describe('the detailed model (TopBrain CT angiogram, Z-Anatomy fitted onto it)',
     expect(lms.length).toBeGreaterThan(100);
     expect(lms.filter((l) => l.distanceToBoneMm > 16)).toEqual([]);
     for (const s of ct.structures) expect(s.file, s.id).toMatch(/^assets\/skullbase-ct\//);
+  });
+});
+
+describe('the temporal-bone model (v3: OpenEar specimen registered onto the CT)', async () => {
+  const { SbManifestSchema } = await import('../../src/data/schema');
+  const { LandmarkSchema } = await import('../../src/skullbase');
+  const v3 = SbManifestSchema.parse((await import('../../src/data/generated/sbv3-manifest.json')).default);
+  const lms = (await import('../../src/data/generated/sbv3-landmarks.json')).default.map((l: unknown) => LandmarkSchema.parse(l));
+  const fit = (await import('../../src/data/generated/sbv3-fit.json')).default as {
+    fit: Record<string, { correlation: number; scale: number; mirrored: boolean; checksHU: Record<string, number> }>;
+    crossCheck: Record<string, Record<string, { failed?: boolean; distanceMm?: Record<string, number> }>>;
+    facialSegmentsMm: Record<string, { labyrinthine: number; tympanic: number; mastoid: number; secondGenuAngle: number }>;
+  };
+  it('registers the specimen onto both ears: good correlation, near true size, the left one mirrored', () => {
+    for (const side of ['R', 'L']) {
+      expect(fit.fit[side].correlation, side).toBeGreaterThan(0.6);
+      expect(Math.abs(fit.fit[side].scale - 1), side).toBeLessThan(0.15);
+      expect(fit.fit[side].mirrored, side).toBe(side === 'L');
+      // independent of the fit: the carried-over canal contents on fluid, the carotid on the contrast-filled lumen
+      expect(fit.fit[side].checksHU['Nerves in the internal acoustic meatus (VII, VIII)'], side).toBeLessThan(150);
+      const car = fit.fit[side].checksHU['Internal carotid artery (petrous part)'];
+      expect(car > 150 && car < 500, `${side} carotid ${car}`).toBe(true);
+    }
+  });
+  it('another ear registered the same way puts the geniculate ganglion and the windows within a few millimetres', () => {
+    for (const side of ['R', 'L']) {
+      const ok = Object.values(fit.crossCheck[side]).filter((r) => !r.failed);
+      expect(ok.length, side).toBeGreaterThan(0);
+      for (const r of ok) {
+        expect(r.distanceMm!['Geniculate ganglion'], side).toBeLessThan(3);
+        expect(r.distanceMm!['Oval window'], side).toBeLessThan(2);
+      }
+    }
+  });
+  it('the facial nerve segments measure within about two SD of a 50-bone dissection series (Kalaiarasi 2018)', () => {
+    for (const side of ['R', 'L']) {
+      const s = fit.facialSegmentsMm[side];
+      expect(Math.abs(s.tympanic - 9.34), side).toBeLessThan(2 * 1.12 + 0.1);
+      expect(Math.abs(s.mastoid - 12.8), side).toBeLessThan(2 * 1.8 + 0.1);
+      expect(s.secondGenuAngle >= 95 && s.secondGenuAngle <= 125, side).toBe(true);   // Gupta 2013
+    }
+  });
+  it('every carried-over structure has both ears, on their sides; bone and vessels are the CT model\'s own files', () => {
+    for (const s of v3.structures) {
+      if (s.id.startsWith('tb_')) {
+        expect(s.centroid!.L[0], s.id).toBeLessThan(0);
+        expect(s.centroid!.R[0], s.id).toBeGreaterThan(0);
+        expect(s.file, s.id).toMatch(/^assets\/skullbase-v3\//);
+      } else {
+        expect(s.file, s.id).toMatch(/^assets\/skullbase-ct\//);
+        expect(s.fitted, s.id).toBeUndefined();     // nothing approximate from Z-Anatomy
+      }
+    }
+    for (const side of ['L', 'R']) expect(lms.filter((l) => l.side === side).length).toBeGreaterThanOrEqual(6);
+  });
+  it('routes the cranial nerves I–XII through this CT: hardly through bone, near their fitted course, out by the right foramina', async () => {
+    const f = (await import('../../src/data/generated/sbv3-fit.json')).default as unknown as {
+      nerves: Record<string, Record<string, { boneCrossedMm: number; maxFromFittedMm: number }>>;
+      nerveChecks: { mandibularNerveToOvaleHoleMm: Record<string, number>; opticNerveToSegmentationMm: Record<string, number>; jugularNervesToBulbMm: Record<string, Record<string, number>> };
+    };
+    expect(new Set(v3.structures.map((s) => s.cranialNerve).filter(Boolean))).toEqual(new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]));
+    for (const [n, sides] of Object.entries(f.nerves)) for (const [side, r] of Object.entries(sides)) {
+      expect(r.boneCrossedMm, `${n} ${side}`).toBeLessThanOrEqual(2);
+      expect(r.maxFromFittedMm, `${n} ${side}`).toBeLessThanOrEqual(8);
+    }
+    for (const side of ['R', 'L']) {
+      expect(f.nerveChecks.mandibularNerveToOvaleHoleMm[side], side).toBeLessThanOrEqual(2.5);   // the floor's own foramen ovale
+      expect(f.nerveChecks.opticNerveToSegmentationMm[side], side).toBeLessThanOrEqual(2);       // TotalSegmentator's optic nerve
+      for (const d of Object.values(f.nerveChecks.jugularNervesToBulbMm[side])) expect(d, side).toBeLessThanOrEqual(7);
+    }
+  });
+  it('traces the carotid through the canal in its own lumen, and anchors the small arteries it cannot show (marked approximate)', async () => {
+    const f = (await import('../../src/data/generated/sbv3-fit.json')).default as unknown as { carotids: Record<string, { inLumenShare: number; medianFromSpecimenMm: number }> };
+    for (const side of ['R', 'L']) {
+      expect(f.carotids[side].inLumenShare, side).toBeGreaterThanOrEqual(0.9);
+      expect(f.carotids[side].medianFromSpecimenMm, side).toBeLessThanOrEqual(3.5);
+    }
+    const byName = (n: string) => v3.structures.find((s) => s.name === n);
+    expect(byName('Internal carotid artery (petrous and lacerum parts)')?.system).toBe('Internal carotid artery');
+    expect(byName('Internal carotid artery (petrous part)')).toBeUndefined();       // the specimen's only guides the trace
+    for (const n of ['Proximal lateral striate branches', 'Medial pontine branches of basilar artery', 'Anterior spinal artery', 'Anterior ethmoidal artery']) {
+      expect(byName(n)?.fitted, n).toBe(true);
+      expect(v3.arterySystems).toContain(byName(n)!.system);
+    }
+  });
+  it('locates the foramina on both sides, roughly mirror images of each other', () => {
+    const named = (n: string, s: string) => lms.find((l) => l.name === n && l.side === s)!;
+    for (const n of ['Optic canal', 'Superior orbital fissure', 'Foramen rotundum', 'Foramen ovale', 'Foramen spinosum', 'Foramen lacerum',
+      'Jugular foramen', 'Hypoglossal canal', 'Internal acoustic meatus', 'External opening of carotid canal']) {
+      const r = named(n, 'R'), l = named(n, 'L');
+      expect(r && l, n).toBeTruthy();
+      expect(r.ras[0], n).toBeGreaterThan(0);
+      expect(Math.abs(r.ras[0] + l.ras[0]), n).toBeLessThan(6);
+      expect(Math.abs(r.ras[1] - l.ras[1]), n).toBeLessThan(6);
+      expect(r.how, n).toBeTruthy();
+    }
+    expect(lms.filter((l) => l.name === 'Foramen magnum')).toHaveLength(1);
+  });
+  it('notes name things the model shows, and cite references that exist', () => {
+    const names = new Set([...v3.structures.map((s) => s.name), ...lms.map((l) => l.name)]);
+    for (const [name, claims] of Object.entries(TB_NOTES)) {
+      expect(names.has(name), name).toBe(true);
+      for (const c of claims) for (const r of c.refIds) expect(TB_REF.has(r), r).toBe(true);
+    }
+    const used = new Set(Object.values(TB_NOTES).flat().flatMap((c) => c.refIds));
+    expect(TB_REFS.map((r) => r.id).filter((r) => !used.has(r))).toEqual([]);
   });
 });

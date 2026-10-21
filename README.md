@@ -4,7 +4,7 @@ Interactive 3D neuroanatomy for teaching, built from published atlases in MNI sp
 
 - **Cortical anatomy** (`cortex/`): described below.
 - **White-matter tracts** (`tracts/`): described below.
-- **Skull base** (`skullbase/`), with a second, detailed model (**Skull base v2**, `skullbase-ct/`): described below.
+- **Skull base** (`skullbase/`), with its earlier versions **Skull base v1** (`skullbase-v1/`) and **Skull base v2** (`skullbase-ct/`) under Alternative versions: described below.
 - **Brainstem** (`brainstem/`): described below.
 - **DBS targets** (`dbs/`): described below.
 - **Spine** (`spine/`): described below.
@@ -71,6 +71,67 @@ Tracts from the HCP-1065 population-averaged tractography atlas (Yeh 2022), in t
 
 ## Skull base
 
+Three models of the skull base share the section's page and switch between each other on its **Model** chips
+(the same view opens in the other model where it has it). The default (`skullbase/`) is a real CT with its anatomy
+made to fit it; its two earlier versions stay available under **Alternative versions** on the home page and in the
+section menu: Skull base v1 (`skullbase-v1/`, the Z-Anatomy model) and Skull base v2 (`skullbase-ct/`, the CT with the
+Z-Anatomy anatomy fitted onto it).
+
+### The default model (`skullbase/`): the CT with its anatomy made to fit it
+
+The section's default ("Skull base" on the home page, first on the **Model** chips; the pipeline and its files call it
+v3): Skull base v2's CT (its bone and TopBrain vessel
+meshes, reused) with a real ear's contents inside each temporal bone. A CT does not show the nerves and this one blurs
+the canals, so the contents come from the OpenEar library (Sieber et al. 2019, CC BY 4.0): eight cadaver temporal
+bones, cone-beam CT and micro-slicing, segmented at 0.125 mm. `pipeline/fetch_openear.py` reads only the bone and label
+volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
+
+- **Registration** (`pipeline/skullbase_v3.py`): each specimen's bone, blurred to the CT's resolution, is matched to
+  the CT's bone within 14 mm of the labyrinth by a similarity transform (1500 rotations, as is and mirrored, then a
+  local optimisation of the best twelve), started from the labyrinth picked by hand on the CT's slices. Specimen ALPHA
+  fits both ears best (bone correlation 0.72 right, 0.66 left, scale 0.99 and 0.95; the left is ALPHA mirrored), and
+  its structures follow the transform: facial nerve, chorda tympani, the contents of the internal acoustic meatus,
+  scala tympani, scala vestibuli with the vestibule and semicircular canals, ossicles, tympanic membrane and petrous
+  carotid. Checks independent of the fit: on the CT, the meatus' contents fall on fluid (about 60 HU) and the carotid on
+  its contrast-filled lumen (about 280 HU). EPSILON and ZETA, registered the same way, put the geniculate ganglion within
+  0.9–1.5 mm and the oval window within 0.6 mm of ALPHA's (ZETA's left fit fails and is left out).
+- **Landmarks** from the carried-over structures: the fundus of the meatus, the geniculate ganglion (the facial nerve's
+  sharpest turn), the second genu (half way between its tympanic and mastoid directions), the oval and round windows
+  and the CT's bone surface over the superior semicircular canal. Measured on the model and shown on the cards next to
+  the published values: the facial nerve's segments (tympanic 10.7–11.0 mm, mastoid 14.0–14.7 mm, second genu 120°),
+  the geniculate ganglion's distance to the cochlea and to the superior canal.
+- **Drawn by rule**: the greater petrosal nerve, from the geniculate ganglion forwards and medially along the CT's
+  middle fossa floor, kept 1 mm clear of the carotid, for its published mean length (Nguyen 2026).
+- **The rest of the skull base** (`pipeline/skullbase_v3_base.py`, `pipeline/skullbase_nerves.py`): the cranial nerves
+  I–XII are routed through this CT: from the fitted Z-Anatomy course of Skull base v2 (where each leaves the brainstem,
+  which way it runs), the least-cost path near that course that cannot cross the model's bone except through an
+  opening (bone costs 60 times more, so a canal the 0.5 mm mask closes with a voxel of blurred bone can still be
+  passed; at most 1.2 mm is). Each nerve thus leaves the skull through this CT's own foramen; VII and VIII run to the
+  registered ear's internal acoustic meatus. The optic nerves follow TotalSegmentator's segmentation of them
+  (`head_glands_cavities`, 0.2 mm apart). Foramina are located from the routes (the first stretch where a nerve is
+  mostly surrounded by bone; the superior orbital fissure where III, IV, V1 and VI run closest together; the jugular
+  foramen from IX–XI), from the cranial floor's through-holes seen from above (foramen lacerum, foramen magnum) and
+  from TotalSegmentator's carotid (`headneck_bones_vessels`: the carotid canal's outer opening). Checks: the mandibular
+  nerve's foramen lies 1.2–1.4 mm from the floor's own foramen ovale holes; IX–XI pass 3–5.5 mm from the jugular bulb.
+  The sigmoid and transverse sinuses are traced through the CT's enhanced lumen (84–92 % of the trace at least 1.5 mm
+  inside it), the middle meningeal artery routed through the foramen spinosum; the cervical carotids and jugular veins
+  are TotalSegmentator's. The nerves' cisternal courses stay approximate (the brainstem is not in the CT).
+- **Arteries**: TopBrain's expert labels for the circle of Willis and its large branches; this patient's carotid
+  through the carotid canal and foramen lacerum traced through its contrast-filled lumen (97–100 % of the trace at
+  least 1.5 mm inside it, a median 2.1–2.3 mm from the registered specimen's carotid, which only guides it), so the
+  carotid runs continuously from TotalSegmentator's cervical segment to TopBrain's cavernous one. Branches this CT
+  cannot show (lateral striate and pontine branches, anterior spinal artery) are the fitted Z-Anatomy branches moved to
+  start on this patient's own parent vessel; the ethmoidal arteries and the accessory meningeal branch are routed from
+  it through the CT's openings; all marked approximate.
+- Cards cite open-access sources checked against their full texts (`src/skullbase/temporal.ts`): Gupta 2013,
+  Kalaiarasi 2018, Nguyen 2026, García-Barrios 2021, Sieber 2019.
+- Pipeline: `pipeline/fetch_openear.py volumes`, `pipeline/skullbase_ct.py` (writes the frame and the bone grid),
+  TotalSegmentator's `head_glands_cavities` and `headneck_bones_vessels` on the CT (into
+  `pipeline/data/build/skullbase-ct/ts/`), then `pipeline/skullbase_v3.py`, `node pipeline/compress.mjs skullbase-v3`,
+  `pipeline/skullbase_v3.py finalize`.
+
+### Skull base v1: the Z-Anatomy model (`skullbase-v1/`)
+
 The cranial bones, cranial nerves I–XII, the main intracranial arteries and the dural sinuses from the
 Z-Anatomy model (based on BodyParts3D: one adult male, CC BY-SA), in their own space: millimetres from the
 model's hypophysial fossa landmark. Not MNI and not registered to the other sections.
@@ -112,7 +173,7 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
 
 ### Skull base v2: the detailed model (`skullbase-ct/`)
 
-A second skull-base model, its own entry ("Skull base v2", last on the home page) to compare with the first, and switched to from either page's **Model** chips (the same view opens in the other model):
+The second version, under Alternative versions on the home page ("Skull base v2"), to compare with the others, and switched to from either page's **Model** chips (the same view opens in the other model):
 one head CT angiogram of the TopBrain 2025 release (case `topcow_ct_011`, 0.5 mm isotropic; University Hospital
 Zurich, open use with the source given, non-commercial), fetched member by member from the Zenodo zip.
 

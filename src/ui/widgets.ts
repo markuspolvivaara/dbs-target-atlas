@@ -9,12 +9,13 @@ export function fmtMm(n: number): string {
 export function clear(el: Element): void { while (el.firstChild) el.removeChild(el.firstChild); }
 
 export function chips<T extends string>(
-  items: [T, string][], current: T | null, onPick: (v: T) => void, opts: { label: string; cls?: string },
+  items: [T, string][], current: T | null | readonly T[], onPick: (v: T) => void, opts: { label: string; cls?: string },
 ): HTMLElement {
+  const on = (v: T) => (Array.isArray(current) ? current.includes(v) : v === current);
   const g = h('div', { class: `chips ${opts.cls ?? ''}`, role: 'group', 'aria-label': opts.label });
   for (const [v, label] of items) {
     g.append(h('button', {
-      type: 'button', class: 'chip', 'aria-pressed': v === current ? 'true' : 'false', 'data-v': v,
+      type: 'button', class: 'chip', 'aria-pressed': on(v) ? 'true' : 'false', 'data-v': v,
       onclick: () => onPick(v),
     }, label));
   }

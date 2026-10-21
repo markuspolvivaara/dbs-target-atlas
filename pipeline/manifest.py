@@ -151,7 +151,7 @@ def skull_base_attribution() -> list[str]:
         return []
     d = json.loads(p.read_text())["dataset"]
     return [
-        "## Skull base section (Z-Anatomy / BodyParts3D)",
+        "## Skull base v1 (Z-Anatomy / BodyParts3D)",
         "",
         "The meshes and lines in `public/assets/skullbase/` and the files `sb-manifest.json`, `sb-landmarks.json`,",
         "`sb-regions.json` and `sb-definitions.json` are derived from Z-Anatomy, itself based on BodyParts3D. They are",
@@ -190,6 +190,36 @@ def skull_base_ct_attribution() -> list[str]:
         "  skull mask, smoothed, decimated and named after the fitted Z-Anatomy bones; TopBrain's vessel labels meshed; the CT",
         "  moved rigidly into the Z-Anatomy frame; Z-Anatomy's nerves, unlabelled vessels, soft tissue and landmarks scaled and",
         "  smoothly deformed onto the CT's skull (pipeline/skullbase_ct.py); files converted to compressed glTF.",
+        "",
+    ]
+
+
+def skull_base_v3_attribution() -> list[str]:
+    """ATTRIBUTION.md section for the skull base's temporal-bone model, from sbv3-manifest.json (skullbase_v3.py)."""
+    p = GEN / "sbv3-manifest.json"
+    if not p.exists():
+        return []
+    d = json.loads(p.read_text())["dataset"]
+    return [
+        "## Skull base, the default model (\"v3\" in the pipeline: the TopBrain CT with its anatomy made to fit it)",
+        "",
+        "The meshes in `public/assets/skullbase-v3/` and the files `sbv3-manifest.json`, `sbv3-landmarks.json` and `sbv3-fit.json`",
+        "are derived from the OpenEar library of human temporal bones (CC BY 4.0); the page also shows Skull base v2's bone and",
+        f"vessel files (TopBrain, see above). They are **not** GPL-licensed: {d['licence']}.",
+        "",
+        f"- Source: {d['url']}",
+        f"- Note: {d['note']}",
+        *[f"- Attribution: {a}" for a in d["attribution"]],
+        *[f"- Cite: {c}" for c in d["citation"]],
+        "- Changes made: specimen ALPHA's segmentations (facial nerve, chorda tympani, cochleovestibular nerve, scala tympani,",
+        "  scala vestibuli, ossicles, tympanic membrane, carotid) meshed (smoothed, decimated) and moved into the CT by a",
+        "  similarity registration of the specimen's bone onto each temporal bone, the left one mirrored",
+        "  (pipeline/skullbase_v3.py); landmarks derived from them; files converted to compressed glTF. The greater petrosal",
+        "  nerve is drawn by rule (the project's own, GPL-3.0). The cranial nerves are Z-Anatomy's fitted courses (CC BY-SA)",
+        "  rerouted through the CT's own foramina (pipeline/skullbase_v3_base.py); the optic nerves, cervical carotids and jugular",
+        "  veins are TotalSegmentator segmentations of the CT; the sigmoid and transverse sinuses are traced through its",
+        "  enhanced lumen, as is the petrous carotid; small arteries the CT cannot show are Z-Anatomy's fitted branches anchored to",
+        "  the CT's own parent vessels; foramina are located from the routes, the cranial floor's openings and the segmented carotid.",
         "",
     ]
 
@@ -370,6 +400,7 @@ def write_attribution(m: dict, wm: dict) -> None:
         "",
         *skull_base_attribution(),
         *skull_base_ct_attribution(),
+        *skull_base_v3_attribution(),
         *brainstem_attribution(),
         *cortex_attribution(),
         *spine_attribution(),

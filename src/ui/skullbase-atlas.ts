@@ -1,9 +1,10 @@
 import * as THREE from 'three';
 import type { CameraPreset } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
-import { definitionFor, kindOf, LANDMARKS, LM, NOT_YET_SHOWN, REGIONS, SB, SB_MANIFEST, SB_MODEL, type Landmark } from '../skullbase';
+import { definitionFor, kindOf, LANDMARKS, LM, NOT_YET_SHOWN, REGIONS, SB, SB_MANIFEST, SB_MODEL, V3_FIT, type Landmark, type SbModel } from '../skullbase';
+import { TB_NOTES, TB_REF } from '../skullbase/temporal';
 import { encodeSkull } from '../skullbase/state';
-import { FLOOR_CUT_MM, SB_GROUP, SB_GROUPS, type SbGroup } from '../skullbase/groups';
+import { combinedCut, FLOOR_CUT_MM, SB_GROUP, SB_GROUPS, viewGroup, type SbGroup } from '../skullbase/groups';
 import { skullScene, type SkullPlan } from '../skullbase/scene';
 import type { SkullState } from '../skullbase/state';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
@@ -20,9 +21,18 @@ const PRESETS: [CameraPreset, string, string, string][] = [
   ['coronal', 'Anterior', '4', 'Ant'], ['posteriorOblique', 'Post-oblique', '5', 'Obl'],
 ];
 const LAYERS: [LayerKey, string][] = [['nuclei', 'Bones'], ['tracts', 'Vessels and nerves'], ['cortex', 'Soft tissue'], ['targets', 'Landmarks']];
-const KIND_LABEL = { bone: 'Bone', soft: 'Soft tissue', artery: 'Artery', vein: 'Vein or dural sinus', nerve: 'Nerve' } as const;
-const KIND_PLURAL: Record<string, string> = { 'Soft tissue': 'Soft tissue', Artery: 'Arteries', 'Vein or dural sinus': 'Veins and dural sinuses', Nerve: 'Nerves' };
-const GROUP_ROWS: [SbGroup['kind'], string][] = [['overview', 'Overview'], ['region', 'Regions'], ['system', 'Systems'], ['bone', 'Bones and their landmarks']];
+const KIND_LABEL = { bone: 'Bone', soft: 'Soft tissue', artery: 'Artery', vein: 'Vein or dural sinus', nerve: 'Nerve', labyrinth: 'Inner ear', ossicle: 'Ossicle', membrane: 'Membrane' } as const;
+const KIND_PLURAL: Record<string, string> = { 'Soft tissue': 'Soft tissue', Artery: 'Arteries', 'Vein or dural sinus': 'Veins and dural sinuses', Nerve: 'Nerves', Ossicle: 'Ossicles', Membrane: 'Membranes' };
+const GROUP_ROWS: [SbGroup['kind'], string][] = SB_MODEL === 'v3'
+  ? [['overview', 'Overview'], ['region', 'Each side'], ['system', 'Systems']]
+  : [['overview', 'Overview'], ['region', 'Regions'], ['system', 'Systems'], ['bone', 'Bones and their landmarks']];
+/** the three models of the section: page folder and chip label */
+const MODELS: [SbModel, string, string][] = [['v3', 'skullbase', 'Skull base'], ['zanatomy', 'skullbase-v1', 'Skull base v1 (Z-Anatomy)'], ['ct', 'skullbase-ct', 'Skull base v2 (CT)']];
+const SIDE_NAME = { R: 'right', L: 'left' } as const;
+/** a list of sourced notes */
+const notesList = (name: string) => (TB_NOTES[name] ?? []).length
+  ? h('ul', { class: 'evidence' }, ...TB_NOTES[name].map((c) => h('li', {}, c.text, ' ', refLinksFrom(TB_REF, c.refIds))))
+  : null;
 const nameOf = (id: string) => SB.get(id)?.name ?? LM.get(id)?.name ?? id;
 const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
 /** Nerves grouped by cranial nerve (I-XII); within one, the nerve itself first, then its branches by name. */
@@ -212,7 +222,7 @@ export class SkullbaseAtlasPage {
     this.stage.querySelectorAll<HTMLButtonElement>('[data-hemi]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.hemi === s.hemi)));
     this.stage.querySelectorAll<HTMLButtonElement>('.toolbar [data-labels]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.labels === s.labels)));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((b) => b.toggleAttribute('data-active', b.dataset.preset === s.cam.preset));
-    const key = `${s.grp}|${s.sel}|${s.hidden.join(',')}`;
+    const key = `${s.grp}|${s.also.join(',')}|${s.sel}|${s.hidden.join(',')}`;
     if (key !== this.lastKey || !prev) { this.lastKey = key; this.renderOverview(); }
     this.renderLayers();
     if (prev && prev.sel !== s.sel && s.sel) this.selectTab('overview', false);
@@ -221,8 +231,26 @@ export class SkullbaseAtlasPage {
   private pickGroup(id: string): void {
     this.update((st) => {
       const g = SB_GROUP.get(id)!;
-      st.grp = id; st.hemi = g.hemi; st.cutAbove = g.cutAbove; st.cam = { preset: null }; st.hidden = []; st.sel = null;
+      st.grp = id; st.also = []; st.hemi = g.hemi; st.cutAbove = g.cutAbove; st.cam = { preset: null }; st.hidden = []; st.sel = null;
     }, { camera: true });
+  }
+
+  /** Systems combine: with a system shown, a tap adds another or removes one (the last one stays); from any other view
+   * a system opens on its own. The view keeps its camera; the cut-away becomes the least restrictive of the systems'. */
+  private toggleSystem(id: string): void {
+    if (SB_GROUP.get(this.s.grp)?.kind !== 'system') { this.pickGroup(id); return; }
+    this.update((st) => {
+      const shown = [st.grp, ...st.also];
+      if (shown.includes(id)) {
+        if (shown.length === 1) return;
+        const rest = shown.filter((x) => x !== id);
+        st.grp = rest[0]; st.also = rest.slice(1);
+      } else {
+        st.also = [...st.also, id];
+        const cut = combinedCut([st.grp, ...st.also]);
+        st.cutAbove = cut === null || st.cutAbove === null ? null : Math.max(st.cutAbove, cut);
+      }
+    });   // (not { camera: false }: that marks an update from the camera, which is not re-rendered)
   }
 
   private renderOverview(): void {
@@ -233,20 +261,29 @@ export class SkullbaseAtlasPage {
     requestAnimationFrame(() => { pane.scrollTop = keep[0]; this.panel.scrollTop = keep[1]; });
     clear(pane);
     // the two models: the same view in the other one (its page, this link)
-    const other = (m: 'zanatomy' | 'ct') => `../${m === 'ct' ? 'skullbase-ct' : 'skullbase'}/${encodeSkull({ ...s, sel: null })}`;
+    // v1 and v2 share their views; the temporal-bone model has its own (a view one does not have opens the default)
+    const other = (dir: string) => `../${dir}/${encodeSkull({ ...s, sel: null })}`;
     pane.append(h('p', { class: 'chips-label' }, 'Model'),
       h('div', { class: 'chips model-chips', role: 'group', 'aria-label': 'Model' },
-        ...([['zanatomy', 'Skull base (Z-Anatomy)'], ['ct', 'Skull base v2 (CT)']] as const).map(([m, label]) => h('a', {
-          class: 'chip', href: m === SB_MODEL ? '#' : other(m), 'aria-pressed': String(m === SB_MODEL), 'data-v': m,
+        ...MODELS.map(([m, dir, label]) => h('a', {
+          class: 'chip', href: m === SB_MODEL ? '#' : other(dir), 'aria-pressed': String(m === SB_MODEL), 'data-v': m,
           onclick: m === SB_MODEL ? (e: Event) => e.preventDefault() : undefined,
         }, label))),
-      h('p', { class: 'aside model-note' }, SB_MODEL === 'ct'
+      h('p', { class: 'aside model-note' }, SB_MODEL === 'v3'
+        ? 'The CT of v2 with its anatomy made to fit it: cranial nerves routed through its own foramina, sinuses traced in it, and a real ear’s structures (OpenEar specimen ALPHA) registered into each temporal bone.'
+        : SB_MODEL === 'ct'
         ? 'Bone and the labelled vessels from one head CT angiogram; the cranial nerves, the other vessels and the landmark names fitted onto it from the Z-Anatomy model (approximate).'
         : 'The Z-Anatomy model (BodyParts3D). The detailed model shows a real CT’s bone and vessels.'));
-    const g = SB_GROUP.get(s.grp)!;
+    const g = viewGroup(s.grp, s.also);
+    const shownSystems = SB_GROUP.get(s.grp)?.kind === 'system' ? [s.grp, ...s.also] : [];
     for (const [kind, label] of GROUP_ROWS) {
-      pane.append(h('p', { class: 'chips-label' }, label),
-        chips(SB_GROUPS.filter((x) => x.kind === kind).map((x) => [x.id, x.name]), g.id, (v) => this.pickGroup(v), { label, cls: 'grp-chips' }));
+      const items = SB_GROUPS.filter((x) => x.kind === kind).map((x): [string, string] => [x.id, x.name]);
+      pane.append(kind === 'system'
+        ? h('p', { class: 'chips-label' }, label, h('span', { class: 'chips-hint' }, ' · tap to combine'))
+        : h('p', { class: 'chips-label' }, label),
+      kind === 'system'
+        ? chips(items, shownSystems, (v) => this.toggleSystem(v), { label, cls: 'grp-chips' })
+        : chips(items, s.grp, (v) => this.pickGroup(v), { label, cls: 'grp-chips' }));
     }
     const boneIds = g.structures.filter((id) => SB.get(id)?.type === 'bone');
     const hidden = new Set(s.hidden);
@@ -272,7 +309,7 @@ export class SkullbaseAtlasPage {
         h('button', { type: 'button', class: 'linklike', onclick: () => show(ids, false) }, 'Hide all')));
     // vessels, nerves and soft tissue: one list per kind; cranial nerves (I-XII) and artery systems each under
     // their own heading
-    for (const k of ['nerve', 'artery', 'vein', 'soft'] as const) {
+    for (const k of ['nerve', 'labyrinth', 'ossicle', 'membrane', 'artery', 'vein', 'soft'] as const) {
       const ids = g.structures.filter((id) => { const st = SB.get(id); return st && st.type !== 'bone' && kindOf(st) === k; });
       if (!ids.length) continue;
       pane.append(listHead(KIND_PLURAL[KIND_LABEL[k]] ?? KIND_LABEL[k], ids));
@@ -295,7 +332,8 @@ export class SkullbaseAtlasPage {
       h('p', { class: 'eyebrow' }, GROUP_ROWS.find(([k]) => k === g.kind)![1]),
       h('h2', {}, g.name),
       h('p', {}, g.description),
-      g.kind === 'overview' ? [
+      g.kind === 'overview' && SB_MODEL === 'v3' ? this.fitReport() : null,
+      g.kind === 'overview' && SB_MODEL !== 'v3' ? [
         SB_MODEL === 'ct'
           ? h('p', { class: 'aside' }, 'Not yet shown in this model (Z-Anatomy does not label these; the first model locates the foramina from what passes through them): ', NOT_YET_SHOWN.join(', '), '.')
           : h('p', { class: 'aside' }, 'Z-Anatomy does not label the superior orbital fissure, internal acoustic meatus, stylomastoid and jugular foramina, carotid canal, foramen lacerum or cribriform plate: they are located here from where the nerves and vessels that pass through them cross the bone (each card says how). Not yet shown: ', NOT_YET_SHOWN.join(', '), '.'),
@@ -323,7 +361,10 @@ export class SkullbaseAtlasPage {
       h('p', { class: 'eyebrow' }, KIND_LABEL[k]),
       h('h2', {}, h('span', { class: 'swatch', style: `--c: var(--c-${st.colour.token})` }), st.name),
       st.fitted ? h('p', { class: 'aside schematic-note' }, 'Approximate position: carried over from the Z-Anatomy model fitted onto this CT’s skull.') : '',
+      st.schematic ? h('p', { class: 'aside schematic-note' }, 'Drawn by rule, not segmented: its course is illustrative.') : '',
       h('dl', {}, ...defBlock,
+        notesList(st.name) ? [h('dt', {}, 'Notes'), h('dd', {}, notesList(st.name))] : null,
+        SB_MODEL === 'v3' ? this.measured(st.name) : null,
         regions.length ? [h('dt', {}, 'Near (measured in the model)'), h('dd', {}, regions.join('; '))] : null,
         st.type === 'bone' ? [h('dt', {}, 'Labelled landmarks'), h('dd', {}, `${LANDMARKS.filter((l) => l.bone === st.name).length}; open the bone’s group to see them.`)] : null,
         h('dt', {}, 'Geometry'), h('dd', {}, `${st.source}. ${st.derivation} `, h('a', { href: '#/credits' }, 'Licence and attribution'))));
@@ -338,14 +379,53 @@ export class SkullbaseAtlasPage {
         h('dt', {}, 'Bone'), h('dd', {}, bone ? h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.sel = bone.id; }) }, lm.bone) : lm.bone, lm.part ? ` · ${lm.part}` : ''),
         ...(defBlock as HTMLElement[]),
         regions.length ? [h('dt', {}, 'In regions'), h('dd', {}, regions.join('; '))] : null,
-        h('dt', {}, 'Position'), h('dd', {}, `${lm.ras.map(fmtMm).join(', ')} mm (right, anterior, superior of the hypophysial fossa); ${fmtMm(lm.distanceToBoneMm)} mm from the bone surface.`),
-        lm.how ? [
+        h('dt', {}, 'Position'), h('dd', {}, `${lm.ras.map(fmtMm).join(', ')} mm (right, anterior, superior of the hypophysial fossa)${SB_MODEL === 'v3' ? '' : `; ${fmtMm(lm.distanceToBoneMm)} mm from the bone surface`}.`),
+        lm.how && SB_MODEL !== 'v3' ? [
           h('dt', {}, 'What passes through'), h('dd', {}, h('ul', { class: 'evidence' }, ...(FORAMEN_CONTENTS[lm.name] ?? []).map((c) => h('li', {}, c.text, ' ', refLinksFrom(FORAMEN_REF, c.refIds))))),
           h('dt', {}, 'How it was located'), h('dd', {}, lm.how, ' Nerves, vessels and bone are all the Z-Anatomy model’s.'),
         ] : null,
-        lm.how ? null : h('dt', {}, 'Source'), lm.how ? null : h('dd', {}, SB_MODEL === 'ct'
+        lm.how && SB_MODEL === 'v3' ? [h('dt', {}, 'How it was located'), h('dd', {}, lm.how, ' The bone is this CT’s.')] : null,
+        notesList(lm.name) ? [h('dt', {}, 'Notes'), h('dd', {}, notesList(lm.name))] : null,
+        SB_MODEL === 'v3' ? this.measured(lm.name, lm.side === 'L' ? 'L' : 'R') : null,
+        SB_MODEL === 'v3' ? this.crossCheck(lm) : null,
+        lm.how ? null : h('dt', {}, 'Source'), lm.how ? null : h('dd', {}, SB_MODEL === 'v3'
+          ? `${lm.boneFrom[0].toUpperCase()}${lm.boneFrom.slice(1)} (registered onto this CT; how is on the Sources page).`
+          : SB_MODEL === 'ct'
           ? 'Z-Anatomy label point, fitted onto this CT’s skull with the model (approximate) and moved onto its bone where it lay on it.'
           : 'Z-Anatomy label point, anchored to the bone in the model.')));
+  }
+
+  /** v3: what this model measures for a structure or landmark, next to the published values on its notes. */
+  private measured(name: string, side?: 'L' | 'R'): HTMLElement[] | null {
+    const sides = side ? [side] : (['R', 'L'] as const);
+    const seg = V3_FIT.facialSegmentsMm, rel = V3_FIT.relationsMm;
+    let rows: string[] = [];
+    if (name === 'Facial nerve (VII)') rows = sides.map((sd) => `${SIDE_NAME[sd]}: labyrinthine ${fmtMm(seg[sd].labyrinthine)} mm, tympanic ${fmtMm(seg[sd].tympanic)} mm, mastoid ${fmtMm(seg[sd].mastoid)} mm; second genu ${seg[sd].secondGenuAngle}°`);
+    else if (name === 'Geniculate ganglion') rows = sides.map((sd) => `${SIDE_NAME[sd]}: ${fmtMm(rel[sd].geniculateToCochlea)} mm from the cochlea, ${fmtMm(rel[sd].geniculateToSuperiorCanal)} mm from the top of the superior semicircular canal`);
+    else if (name === 'Greater petrosal nerve') rows = sides.map((sd) => `${SIDE_NAME[sd]}: drawn ${fmtMm(rel[sd].gspnLength)} mm long; its centre line comes within ${fmtMm(rel[sd].gspnToCarotid)} mm of the carried-over petrous carotid`);
+    if (!rows.length) return null;
+    return [h('dt', {}, 'On this model'), h('dd', {}, h('ul', { class: 'evidence' }, ...rows.map((r) => h('li', {}, r))),
+      h('p', { class: 'aside' }, 'Measured on the registered specimen (centre lines and nearest surfaces), so they are this ear’s values, not averages.'))];
+  }
+
+  /** v3: where two other OpenEar ears, registered the same way, put this landmark. */
+  private crossCheck(lm: Landmark): HTMLElement[] | null {
+    const side = lm.side === 'L' ? 'L' : 'R';
+    const rows = Object.entries(V3_FIT.crossCheck[side] ?? {}).map(([spec, r]) => r.failed || !r.distanceMm
+      ? `${spec}: its registration failed on this side (correlation ${r.correlation}), so it is not compared`
+      : r.distanceMm[lm.name] !== undefined ? `${spec}: ${fmtMm(r.distanceMm[lm.name])} mm away` : null).filter((r): r is string => !!r);
+    if (!rows.some((r) => r.includes('mm away'))) return null;
+    return [h('dt', {}, 'Another ear'), h('dd', {}, h('ul', { class: 'evidence' }, ...rows.map((r) => h('li', {}, r))),
+      h('p', { class: 'aside' }, 'Two other OpenEar specimens registered onto this CT the same way: how far from this point their own landmark falls.'))];
+  }
+
+  /** v3 overview: how well the specimen fits each ear. */
+  private fitReport(): HTMLElement {
+    const f = V3_FIT.fit;
+    return h('div', {},
+      h('p', { class: 'aside' }, 'Registration (pipeline/skullbase_v3.py): ',
+        (['R', 'L'] as const).map((sd) => `${SIDE_NAME[sd]} ear: correlation of bone ${f[sd].correlation}, scale ${f[sd].scale}${f[sd].mirrored ? ', mirrored' : ''}; the meatus’ contents fall at ${f[sd].checksHU['Nerves in the internal acoustic meatus (VII, VIII)']} HU (fluid) and the carotid at ${f[sd].checksHU['Internal carotid artery (petrous part)']} HU (the contrast-filled lumen) on the CT`).join('. '), '.'),
+      h('p', { class: 'aside' }, 'The bone and the TopBrain vessels are this CT’s; the facial nerve, the meatus’ nerves, the inner ear, ossicles, tympanic membrane and petrous carotid are the specimen’s, which is a different person: expect a millimetre or two of difference from where this patient’s own are. The greater petrosal nerve is drawn by rule.'));
   }
 
   // ---------------------------------------------------------------- legend, labels, readout

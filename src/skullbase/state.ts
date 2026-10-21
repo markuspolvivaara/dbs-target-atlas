@@ -1,7 +1,7 @@
 import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type LayerKey, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
-import { SB_GROUP } from './groups';
+import { combinedCut, DEFAULT_GROUP, SB_GROUP } from './groups';
 
 export type SkullPage = 'atlas' | 'sources' | 'credits';
 
@@ -9,6 +9,8 @@ export type SkullPage = 'atlas' | 'sources' | 'credits';
 export interface SkullState extends ViewState {
   page: SkullPage;
   grp: string;
+  /** other systems shown together with grp (a system); in the URL as with=id,id */
+  also: string[];
   labels: 'all' | 'hover' | 'off';
   cutAbove: number | null;
 }
@@ -16,9 +18,9 @@ export interface SkullState extends ViewState {
 export const SKULL_PRESETS: CameraPreset[] = ['axial', 'inferior', 'lateral', 'coronal', 'posteriorOblique'];
 
 export function defaultSkullState(): SkullState {
-  const g = SB_GROUP.get('floor')!;
+  const g = SB_GROUP.get(DEFAULT_GROUP)!;
   return {
-    page: 'atlas', grp: g.id, hemi: 'both', cam: { preset: null },
+    page: 'atlas', grp: g.id, also: [], hemi: 'both', cam: { preset: null },
     layers: {
       nuclei: { on: true, opacity: 1 },   // bones
       tracts: { on: true, opacity: 1 },   // vessels and nerves
@@ -42,6 +44,7 @@ export function encodeSkull(s: SkullState): string {
   const p = new URLSearchParams();
   if (s.page === 'atlas') {
     p.set('g', s.grp);
+    if (s.also.length) p.set('with', s.also.join(','));
     if (s.sel) p.set('sel', s.sel);
     p.set('h', s.hemi === 'both' ? 'B' : s.hemi);
     if (s.cam.pos && s.cam.tgt) p.set('c', [...s.cam.pos, ...s.cam.tgt].map(r1).join(','));
@@ -64,8 +67,11 @@ export function decodeSkull(hash: string): SkullState {
   const m = hash.replace(/^#\/?/, '').split('?');
   s.page = PAGES.includes(m[0] as SkullPage) ? (m[0] as SkullPage) : 'atlas';
   const p = new URLSearchParams(m[1] ?? '');
-  const g = SB_GROUP.get(p.get('g') ?? '') ?? SB_GROUP.get('floor')!;
+  const g = SB_GROUP.get(p.get('g') ?? '') ?? SB_GROUP.get(DEFAULT_GROUP)!;
   s.grp = g.id; s.hemi = g.hemi; s.cutAbove = g.cutAbove;
+  s.also = g.kind !== 'system' ? [] : [...new Set((p.get('with') ?? '').split(','))]
+    .filter((id) => id !== g.id && SB_GROUP.get(id)?.kind === 'system');
+  if (s.also.length) s.cutAbove = combinedCut([g.id, ...s.also]);
   s.sel = p.get('sel');
   const h = p.get('h');
   if (h === 'L' || h === 'R') s.hemi = h; else if (h === 'B') s.hemi = 'both';

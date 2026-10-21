@@ -142,6 +142,15 @@ for (const g of WM.groups.filter((x) => x.kind !== 'all')) {
     pairs.get(k)!.add('spine: cervical');
   }
 }
+// skull base v3 (temporal bone): the ear's views draw bone (the ossicles too), nerves, the inner ear, the tympanic
+// membrane and the petrous carotid together; its vessels view draws bone with the arteries and veins
+for (const [view, list] of [['skull base v3: ear', ['sbBone', 'sbArtery', 'sbNerve', 'sbLabyrinth', 'sbMembrane']], ['skull base v3: vessels', ['sbBone', 'sbArtery', 'sbVein']]] as const) {
+  for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
+    const k = `${list[i]}|${list[j]}`;
+    if (!pairs.has(k)) pairs.set(k, new Set());
+    pairs.get(k)!.add(view);
+  }
+}
 const cvd: string[] = [];
 const MIN_DE = 10;
 for (const t of ['light', 'dark'] as const) {

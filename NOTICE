@@ -72,7 +72,7 @@ What is covered by which terms
    built from Human Connectome Project data, so the HCP terms and acknowledgement in
    section 5 apply to these files as well.
 
-7. Skull base section (public/assets/skullbase/, public/assets/sb-manifest.json,
+7. Skull base v1, the Z-Anatomy model (public/assets/skullbase/, public/assets/sb-manifest.json,
    src/data/generated/sb-*.json) is derived from Z-Anatomy
    (https://github.com/Z-Anatomy/Models-of-human-anatomy), which is based on
    BodyParts3D. These files are not GPL-licensed; they are distributed under the
@@ -148,6 +148,24 @@ What is covered by which terms
    shows the white-matter section's tracts (section 6) and the DBS section's deep
    nuclei (section 2) from their own files, under their own terms.
 
-12. Bundled third-party software (three.js and zod, MIT licence; Atkinson
+12. Skull base, the default model ("v3" in the pipeline; public/assets/skullbase-v3/,
+   public/assets/sbv3-manifest.json,
+   src/data/generated/sbv3-*.json) shows Skull base v2's CT bone and vessel files
+   (section 10) with structures derived from the OpenEar library of human temporal
+   bones (Sieber D, Erfurt P, John S, et al., Sci Data 2019;6:180297,
+   https://zenodo.org/records/1473724), licensed CC BY 4.0. Changes made: specimen
+   ALPHA's segmentations (facial nerve, chorda tympani, cochleovestibular nerve,
+   scala tympani, scala vestibuli, ossicles, tympanic membrane, carotid) meshed and
+   moved into the CT by a registration of the specimen's bone onto each temporal
+   bone (the left one mirrored); landmarks derived from them; converted to
+   compressed glTF. The greater petrosal nerve is the project's own drawing. The
+   cranial nerves are Z-Anatomy's fitted courses (as in section 10, CC BY-SA)
+   rerouted through the CT's foramina; the optic nerves, cervical carotids and
+   jugular veins are TotalSegmentator segmentations of the CT; the sigmoid and
+   transverse sinuses and the petrous carotid are traced through the CT's
+   contrast-filled lumen; small arteries the CT cannot show are Z-Anatomy's
+   fitted branches anchored to the CT's own parent vessels.
+
+13. Bundled third-party software (three.js and zod, MIT licence; Atkinson
    Hyperlegible font, SIL Open Font Licence 1.1): see
    public/THIRD_PARTY_LICENSES.txt, which is also published with the site.

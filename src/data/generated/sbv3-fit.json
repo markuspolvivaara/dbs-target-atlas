@@ -1,0 +1,336 @@
+{
+ "fit": {
+  "R": {
+   "specimen": "ALPHA",
+   "correlation": 0.722,
+   "scale": 0.985,
+   "mirrored": false,
+   "checksHU": {
+    "Nerves in the internal acoustic meatus (VII, VIII)": 61,
+    "Internal carotid artery (petrous part)": 291
+   }
+  },
+  "L": {
+   "specimen": "ALPHA",
+   "correlation": 0.662,
+   "scale": 0.95,
+   "mirrored": true,
+   "checksHU": {
+    "Nerves in the internal acoustic meatus (VII, VIII)": 59,
+    "Internal carotid artery (petrous part)": 277
+   }
+  }
+ },
+ "crossCheck": {
+  "R": {
+   "EPSILON": {
+    "correlation": 0.689,
+    "scale": 1.06,
+    "distanceMm": {
+     "Fundus of internal acoustic meatus": 2.2,
+     "Geniculate ganglion": 0.9,
+     "Second genu of facial nerve": 1.1,
+     "Oval window": 0.5
+    }
+   },
+   "ZETA": {
+    "correlation": 0.668,
+    "scale": 1.089,
+    "distanceMm": {
+     "Fundus of internal acoustic meatus": 4.2,
+     "Geniculate ganglion": 1.5,
+     "Second genu of facial nerve": 0.7,
+     "Oval window": 0.1
+    }
+   }
+  },
+  "L": {
+   "EPSILON": {
+    "correlation": 0.632,
+    "scale": 1.023,
+    "distanceMm": {
+     "Fundus of internal acoustic meatus": 2.6,
+     "Geniculate ganglion": 1.1,
+     "Second genu of facial nerve": 1.4,
+     "Oval window": 0.6
+    }
+   },
+   "ZETA": {
+    "correlation": 0.51,
+    "failed": true
+   }
+  }
+ },
+ "facialSegmentsMm": {
+  "R": {
+   "labyrinthine": 2.9,
+   "tympanic": 10.7,
+   "mastoid": 14.0,
+   "secondGenuAngle": 120
+  },
+  "L": {
+   "labyrinthine": 2.8,
+   "tympanic": 11.0,
+   "mastoid": 14.7,
+   "secondGenuAngle": 120
+  }
+ },
+ "relationsMm": {
+  "R": {
+   "geniculateToCochlea": 2.5,
+   "geniculateToSuperiorCanal": 9.8,
+   "gspnLength": 13.6,
+   "gspnToCarotid": 3.2
+  },
+  "L": {
+   "geniculateToCochlea": 2.6,
+   "geniculateToSuperiorCanal": 10.2,
+   "gspnLength": 13.6,
+   "gspnToCarotid": 3.2
+  }
+ },
+ "nerves": {
+  "Olfactory nerve (I)": {
+   "R": {
+    "lengthMm": 31.6,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 1.7
+   },
+   "L": {
+    "lengthMm": 32.4,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 1.0
+   }
+  },
+  "Optic nerve (II)": {
+   "R": {
+    "lengthMm": 43.9,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 1.5
+   },
+   "L": {
+    "lengthMm": 42.8,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 1.3
+   }
+  },
+  "Oculomotor nerve (III)": {
+   "R": {
+    "lengthMm": 55.2,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 1.4
+   },
+   "L": {
+    "lengthMm": 54.4,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 1.3
+   }
+  },
+  "Trochlear nerve (IV)": {
+   "R": {
+    "lengthMm": 52.2,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 5.6
+   },
+   "L": {
+    "lengthMm": 53.5,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 5.5
+   }
+  },
+  "Trigeminal nerve (V)": {
+   "R": {
+    "lengthMm": 21.0,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 5.8
+   },
+   "L": {
+    "lengthMm": 23.4,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 4.7
+   }
+  },
+  "Ophthalmic nerve (V1)": {
+   "R": {
+    "lengthMm": 49.3,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 0.8
+   },
+   "L": {
+    "lengthMm": 48.7,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 1.3
+   }
+  },
+  "Maxillary nerve (V2)": {
+   "R": {
+    "lengthMm": 52.6,
+    "boneCrossedMm": 1.2,
+    "maxFromFittedMm": 5.0
+   },
+   "L": {
+    "lengthMm": 47.6,
+    "boneCrossedMm": 0.6,
+    "maxFromFittedMm": 5.7
+   }
+  },
+  "Mandibular nerve (V3)": {
+   "R": {
+    "lengthMm": 56.1,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 2.6
+   },
+   "L": {
+    "lengthMm": 59.6,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 4.0
+   }
+  },
+  "Abducens nerve (VI)": {
+   "R": {
+    "lengthMm": 63.4,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 2.2
+   },
+   "L": {
+    "lengthMm": 63.3,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 2.6
+   }
+  },
+  "Facial nerve (VII)": {
+   "R": {
+    "lengthMm": 20.1,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 3.6
+   },
+   "L": {
+    "lengthMm": 18.4,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 4.3
+   }
+  },
+  "Vestibulocochlear nerve (VIII)": {
+   "R": {
+    "lengthMm": 18.1,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 4.6
+   },
+   "L": {
+    "lengthMm": 16.6,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 5.0
+   }
+  },
+  "Glossopharyngeal nerve (IX)": {
+   "R": {
+    "lengthMm": 43.9,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 1.4
+   },
+   "L": {
+    "lengthMm": 46.6,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 3.4
+   }
+  },
+  "Vagus nerve (X)": {
+   "R": {
+    "lengthMm": 41.5,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 1.6
+   },
+   "L": {
+    "lengthMm": 43.0,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 1.5
+   }
+  },
+  "Accessory nerve (XI)": {
+   "R": {
+    "lengthMm": 46.8,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 1.7
+   },
+   "L": {
+    "lengthMm": 49.9,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 4.8
+   }
+  },
+  "Hypoglossal nerve (XII)": {
+   "R": {
+    "lengthMm": 24.6,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 4.2
+   },
+   "L": {
+    "lengthMm": 25.9,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 3.9
+   }
+  },
+  "Middle meningeal artery": {
+   "R": {
+    "lengthMm": 31.7,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 4.7
+   },
+   "L": {
+    "lengthMm": 31.7,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 4.5
+   }
+  }
+ },
+ "nerveChecks": {
+  "opticNerveToSegmentationMm": {
+   "R": 0.2,
+   "L": 0.2
+  },
+  "jugularNervesToBulbMm": {
+   "R": {
+    "Glossopharyngeal nerve (IX)": 3.2,
+    "Vagus nerve (X)": 4.1,
+    "Accessory nerve (XI)": 4.3
+   },
+   "L": {
+    "Glossopharyngeal nerve (IX)": 3.1,
+    "Vagus nerve (X)": 5.5,
+    "Accessory nerve (XI)": 3.1
+   }
+  },
+  "mandibularNerveToOvaleHoleMm": {
+   "R": 1.2,
+   "L": 1.4
+  }
+ },
+ "sinuses": {
+  "R": {
+   "lengthMm": 115.0,
+   "inLumenShare": 0.92,
+   "medianRadiusMm": 2.1,
+   "boneCrossedMm": 0.0
+  },
+  "L": {
+   "lengthMm": 143.2,
+   "inLumenShare": 0.84,
+   "medianRadiusMm": 1.9,
+   "boneCrossedMm": 0.0
+  }
+ },
+ "carotids": {
+  "R": {
+   "lengthMm": 39.0,
+   "inLumenShare": 1.0,
+   "medianRadiusMm": 2.1,
+   "medianFromSpecimenMm": 2.1
+  },
+  "L": {
+   "lengthMm": 49.4,
+   "inLumenShare": 0.97,
+   "medianRadiusMm": 2.2,
+   "medianFromSpecimenMm": 2.3
+  }
+ }
+}

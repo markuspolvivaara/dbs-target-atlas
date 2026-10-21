@@ -373,11 +373,14 @@ test('home page: sections, light load, and old links forward to the DBS section'
   await page.goto('./');
   await expect(page.locator('h1')).toHaveText('Open Neuroanatomy Atlas');
   // the modules from the more basic to the more specialised, the spine last; each card is a link over its own image
-  await expect(page.locator('.section-card')).toHaveCount(7);
-  expect(await page.locator('.section-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-section')))).toEqual(['cortex', 'tracts', 'skullbase', 'brainstem', 'dbs', 'spine', 'skullbase-ct']);
+  await expect(page.locator('.section-card')).toHaveCount(8);
+  expect(await page.locator('.section-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-section')))).toEqual(['cortex', 'tracts', 'skullbase', 'brainstem', 'dbs', 'spine', 'skullbase-v1', 'skullbase-ct']);
   await expect(page.locator('a.section-card[data-section="dbs"]')).toHaveAttribute('href', './dbs/');
   await expect(page.locator('a.section-card[data-section="tracts"]')).toHaveAttribute('href', './tracts/');
-  for (const id of ['cortex', 'tracts', 'skullbase', 'brainstem', 'dbs', 'spine', 'skullbase-ct']) {
+  // the skull base's earlier versions sit apart, under Alternative versions
+  await expect(page.locator('.alt-versions > h2')).toHaveText('Alternative versions');
+  expect(await page.locator('.alt-versions .section-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-section')))).toEqual(['skullbase-v1', 'skullbase-ct']);
+  for (const id of ['cortex', 'tracts', 'skullbase', 'brainstem', 'dbs', 'spine', 'skullbase-v1', 'skullbase-ct']) {
     const ok = await page.evaluate(async (u) => (await fetch(u)).ok, `./assets/home/${id}.webp`);
     expect(ok, id).toBe(true);
   }
@@ -529,7 +532,7 @@ const SB_GROUPS = [
 for (const g of SB_GROUPS) {
   test(`skull base ${g.id}: renders and matches the visual baseline`, async ({ page }) => {
     const gd = guard(page);
-    await page.goto(`./skullbase/#/atlas?g=${g.id}`);
+    await page.goto(`./skullbase-v1/#/atlas?g=${g.id}`);
     await settle(page);
     await expect(page.locator('.pane:not([hidden]) .card h2').first()).toHaveText(g.name);
     expect(await canvasColours(page)).toBeGreaterThan(40);
@@ -551,11 +554,85 @@ for (const id of ['floor', 'arteries', 'nerves', 'bone_sphenoid_bone']) {
   });
 }
 
-test('skull base: the detailed model (CT) renders, and the Model switch keeps the view', async ({ page }) => {
+// the temporal-bone model (v3): every view
+const SB_V3_GROUPS = ['floor', 'nerves', 'temporal', 'ear_r', 'ear_l', 'facial', 'inner_ear', 'middle_ear', 'arteries', 'veins'];
+for (const id of SB_V3_GROUPS) {
+  test(`skull base (temporal bone) ${id}: renders and matches the visual baseline`, async ({ page }) => {
+    const gd = guard(page);
+    await page.goto(`./skullbase/#/atlas?g=${id}`);
+    await settle(page);
+    expect(await canvasColours(page)).toBeGreaterThan(40);
+    await expect(page.locator('.stage')).toHaveScreenshot(`skullv3-${id}.png`);
+    expect(gd.external).toEqual([]);
+    expect(gd.errors).toEqual([]);
+  });
+}
+
+test('skull base (temporal bone): the model switch, sourced cards, the other ears and the fit report', async ({ page }) => {
   const g = guard(page);
+  await page.goto('./skullbase/#/atlas');
+  await settle(page);
+  // three models; this one opens on both temporal bones
+  await expect(page.locator('.model-chips .chip')).toHaveCount(3);
+  await expect(page.locator('.model-chips .chip[aria-pressed="true"]')).toHaveText('Skull base');
+  await expect(page.locator('.pane:not([hidden]) article.card h2').first()).toHaveText('Cranial floor');
+  await expect(page.locator('.pane:not([hidden]) article.card').first()).toContainText('correlation of bone');
+  // the facial nerve: published segments, and this model's own
+  await page.goto('./skullbase/#/atlas?g=facial&sel=tb_facial_nerve_vii');
+  await settle(page);
+  const card = page.locator('.card.sel');
+  await expect(card).toContainText('Kalaiarasi 2018');
+  await expect(card).toContainText('On this model');
+  await expect(card).toContainText('tympanic');
+  // a landmark: where two other ears put it
+  await page.goto('./skullbase/#/atlas?g=facial&sel=lm_geniculate_ganglion_r');
+  await settle(page);
+  await expect(page.locator('.card.sel')).toContainText('Another ear');
+  await expect(page.locator('.card.sel')).toContainText('EPSILON');
+  // a cranial nerve: routed through the CT, with how far through bone and from its fitted course; a foramen: how it was located
+  await page.goto('./skullbase/#/atlas?g=nerves&sel=tb_mandibular_nerve_v3');
+  await settle(page);
+  await expect(page.locator('.card.sel')).toContainText('foramen ovale');
+  await expect(page.locator('.card.sel')).toContainText('Romano 2019');
+  await page.goto('./skullbase/#/atlas?g=floor&sel=lm_foramen_ovale_r');
+  await settle(page);
+  await expect(page.locator('.card.sel')).toContainText('How it was located');
+  // systems combine: arteries with the cranial nerves, in the view, the legend and the link
   await page.goto('./skullbase/#/atlas?g=arteries');
   await settle(page);
-  await expect(page.locator('.model-chips .chip[aria-pressed="true"]')).toHaveText('Skull base (Z-Anatomy)');
+  await page.locator('.grp-chips[aria-label="Systems"] .chip[data-v="nerves"]').click();
+  await settle(page);
+  await expect(page.locator('.grp-chips[aria-label="Systems"] .chip[aria-pressed="true"]')).toHaveCount(2);
+  await expect.poll(() => new URL(page.url()).hash).toContain('with=nerves');
+  await expect(page.locator('.legend3d')).toContainText('Arteries');
+  await expect(page.locator('.legend3d')).toContainText('Nerves');
+  await page.locator('.grp-chips[aria-label="Systems"] .chip[data-v="arteries"]').click();   // removes it again
+  await settle(page);
+  await expect(page.locator('.grp-chips[aria-label="Systems"] .chip[aria-pressed="true"]')).toHaveText('Cranial nerves');
+  // the rule-built nerve says so
+  await page.goto('./skullbase/#/atlas?g=facial&sel=tb_greater_petrosal_nerve');
+  await settle(page);
+  await expect(page.locator('.card.sel .schematic-note')).toContainText('Drawn by rule');
+  // switching to v2 keeps the camera link working and lands on v2's default view
+  await page.locator('.model-chips .chip[data-v="ct"]').click();
+  await expect.poll(() => new URL(page.url()).pathname).toContain('/skullbase-ct/');
+  await settle(page);
+  await expect(page.locator('.model-chips .chip')).toHaveCount(3);
+  // the sources page: the registration report and the references with their full texts
+  await page.goto('./skullbase/#/sources');
+  await expect(page.locator('.page:not([hidden])')).toContainText('Cross-check');
+  await expect(page.locator('.page:not([hidden]) a[href*="PMC6171777"]')).toHaveCount(1);
+  await page.goto('./skullbase/#/credits');
+  await expect(page.locator('.page:not([hidden])')).toContainText('CC BY 4.0');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('skull base: the detailed model (CT) renders, and the Model switch keeps the view', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./skullbase-v1/#/atlas?g=arteries');
+  await settle(page);
+  await expect(page.locator('.model-chips .chip[aria-pressed="true"]')).toHaveText('Skull base v1 (Z-Anatomy)');
   await page.locator('.model-chips .chip[data-v="ct"]').click();
   await settle(page);
   await expect(page).toHaveTitle(/Skull base v2/);
@@ -578,7 +655,7 @@ test('skull base: the detailed model (CT) renders, and the Model switch keeps th
 
 test('skull base: structure and landmark cards, cut-away and the URL', async ({ page }) => {
   const g = guard(page);
-  await page.goto('./skullbase/#/atlas?g=near_hypophysial_fossa');
+  await page.goto('./skullbase-v1/#/atlas?g=near_hypophysial_fossa');
   await settle(page);
   await page.locator('.sb-item[data-id="sb_basilar_artery"]').click();
   const card = page.locator('.card.sel');
@@ -598,13 +675,13 @@ test('skull base: structure and landmark cards, cut-away and the URL', async ({ 
   const st = await page.evaluate(() => (window as unknown as { __atlas: { state(): { grp: string; sel: string; cutAbove: number | null } } }).__atlas.state());
   expect([st.grp, st.sel, st.cutAbove]).toEqual(['near_hypophysial_fossa', 'lm_tuberculum_sellae', null]);
   // sources and credits, without external requests
-  await page.goto('./skullbase/#/credits');
+  await page.goto('./skullbase-v1/#/credits');
   await expect(page.locator('#zanatomy')).toContainText('CC BY-SA');
-  await page.goto('./skullbase/#/sources');
+  await page.goto('./skullbase-v1/#/sources');
   await expect(page.locator('.page:not([hidden]) h1')).toHaveText('Sources');
   // the section menu lists every section
   await page.locator('.section-chip').click();
-  await expect(page.locator('.section-menu a.section-item:not(.home)')).toHaveText(['Cortical anatomy', 'White-matter tracts', 'Skull base', 'Brainstem', 'DBS targets', 'Spine', 'Skull base v2']);
+  await expect(page.locator('.section-menu a.section-item:not(.home)')).toHaveText(['Cortical anatomy', 'White-matter tracts', 'Skull base', 'Brainstem', 'DBS targets', 'Spine', 'Skull base v1', 'Skull base v2']);
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });

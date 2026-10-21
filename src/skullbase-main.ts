@@ -3,7 +3,7 @@ import '@fontsource/atkinson-hyperlegible/latin-700.css';
 import './styles.css';
 import { BRAND, SECTIONS } from './brand';
 import { LM, SB, SB_MODEL } from './skullbase';
-import { SB_GROUP } from './skullbase/groups';
+import { DEFAULT_GROUP, SB_GROUP, viewGroup } from './skullbase/groups';
 import { decodeSkull, encodeSkull, type SkullPage, type SkullState } from './skullbase/state';
 import { h } from './ui/h';
 import { disclaimerNote, siteHeader } from './ui/shell';
@@ -11,14 +11,15 @@ import { SkullbaseAtlasPage } from './ui/skullbase-atlas';
 import { skullCreditsPage, skullSourcesPage } from './ui/skullbase-pages';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
 
-const SECTION = SECTIONS.find((s) => s.id === (SB_MODEL === 'ct' ? 'skullbase-ct' : 'skullbase'))!;
+const SECTION = SECTIONS.find((s) => s.id === (SB_MODEL === 'v3' ? 'skullbase' : SB_MODEL === 'ct' ? 'skullbase-ct' : 'skullbase-v1'))!;
 
 injectPaletteCss();
 let theme: ThemePref = storedTheme();
 let resolved = applyTheme(theme);
 
 function sanitize(s: SkullState): SkullState {
-  if (!SB_GROUP.has(s.grp)) s.grp = 'floor';
+  if (!SB_GROUP.has(s.grp)) s.grp = DEFAULT_GROUP;
+  s.also = SB_GROUP.get(s.grp)!.kind === 'system' ? s.also.filter((id) => id !== s.grp && SB_GROUP.get(id)?.kind === 'system') : [];
   if (s.sel && !SB.has(s.sel) && !LM.has(s.sel)) s.sel = null;
   return s;
 }
@@ -31,7 +32,9 @@ const app = document.getElementById('app')!;
 const navLinks = NAV.map(([p, label]) => h('a', { href: `#/${p}`, class: 'navlink', 'data-page': p }, label));
 const themeBtn = h('button', { type: 'button', class: 'theme-btn', onclick: () => cycleTheme() });
 const header = siteHeader({ section: SECTION, nav: navLinks, themeBtn });
-const disclaimer = disclaimerNote(SB_MODEL === 'ct'
+const disclaimer = disclaimerNote(SB_MODEL === 'v3'
+  ? 'One adult’s CT with another person’s ear (a cadaver specimen) registered into it: positions are approximate to a millimetre or two. Individual anatomy varies. Not for surgical planning.'
+  : SB_MODEL === 'ct'
   ? 'One adult’s CT angiogram; nerves and landmarks fitted from a model (approximate). Individual anatomy varies. Not for surgical planning.'
   : 'Single-model anatomy (Z-Anatomy / BodyParts3D, one adult); individual anatomy varies. Not for surgical planning.');
 
@@ -74,7 +77,7 @@ function render(pageChanged = false): void {
   document.body.dataset.page = state.page;
   pages[state.page].render(state);
   if (state.page === 'atlas') atlas.onShow();
-  const atlasTitle = state.sel ? (SB.get(state.sel)?.name ?? LM.get(state.sel)?.name ?? '') : SB_GROUP.get(state.grp)!.name;
+  const atlasTitle = state.sel ? (SB.get(state.sel)?.name ?? LM.get(state.sel)?.name ?? '') : viewGroup(state.grp, state.also).name;
   const titles: Record<SkullPage, string> = { atlas: atlasTitle, sources: 'Sources', credits: 'Credits' };
   document.title = `${titles[state.page]} · ${SECTION.name} · ${BRAND.name}`;
   if (pageChanged) window.scrollTo(0, 0);

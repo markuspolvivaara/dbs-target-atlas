@@ -1,6 +1,7 @@
 import type { CameraPreset } from '../data/schema';
 import type { V3 } from '../state';
-import { kindOf, LANDMARKS, REGIONS, SB_MANIFEST } from './index';
+import type { Look } from '../viewer/materials';
+import { kindOf, LANDMARKS, REGIONS, SB_MANIFEST, SB_MODEL } from './index';
 
 /**
  * Groups of the skull-base page, all derived from the model itself: measured neighbourhoods of key
@@ -22,6 +23,8 @@ export interface SbGroup {
   cutAbove: number | null;
   focus: V3 | null;
   radius: number;
+  /** how the bones not in the group are drawn (default: context); the temporal-bone views see through them */
+  boneLook?: Look;
 }
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
@@ -36,7 +39,78 @@ const BONE_GROUPS: [string, string[]][] = [
   ['Frontal and ethmoid bones', ['Frontal bone', 'Ethmoid bone']], ['Parietal bone', ['Parietal bone']],
 ];
 
-export const SB_GROUPS: SbGroup[] = [
+/** The foramina Skull base v3 locates on its CT. */
+const FORAMINA = ['Optic canal', 'Superior orbital fissure', 'Foramen rotundum', 'Foramen ovale', 'Foramen spinosum', 'Foramen lacerum',
+  'External opening of carotid canal', 'Internal acoustic meatus', 'Jugular foramen', 'Hypoglossal canal', 'Foramen magnum'];
+
+/** Skull base v3's views: this CT's skull base with its anatomy made to fit it, the ears' contents seen through the bone. */
+function temporalGroups(): SbGroup[] {
+  const byName = (...names: string[]) => SB_MANIFEST.structures.filter((s) => names.includes(s.name)).map((s) => s.id);
+  // the ear's contents (OpenEar) and the greater petrosal nerve; a view never shows a branch without its parent vessel,
+  // so the arteries (TopBrain's trunks, the traced carotid, the anchored small branches) are drawn together in their view
+  const ear = SB_MANIFEST.structures.filter((s) => s.dataset === 'openear' || s.name === 'Greater petrosal nerve').map((s) => s.id);
+  const earWithCarotid = [...ear, ...byName('Internal carotid artery (petrous and lacerum parts)')];
+  const earLms = LANDMARKS.filter((l) => !FORAMINA.includes(l.name) || l.name === 'Internal acoustic meatus');
+  const lm = (...names: string[]) => LANDMARKS.filter((l) => names.includes(l.name)).map((l) => l.id);
+  const gen = (side: 'L' | 'R') => LANDMARKS.find((l) => l.name === 'Geniculate ganglion' && l.side === side)?.ras as V3 | undefined;
+  const FACIAL = ['Facial nerve (VII)', 'Chorda tympani', 'Greater petrosal nerve', 'Nerves in the internal acoustic meatus (VII, VIII)'];
+  const arteries = SB_MANIFEST.structures.filter((s) => kindOf(s) === 'artery').map((s) => s.id);
+  const veins = SB_MANIFEST.structures.filter((s) => kindOf(s) === 'vein').map((s) => s.id);
+  const base = { boneLook: 'shell' as Look, cutAbove: null, hemi: 'both' as const };
+  const nerves = SB_MANIFEST.structures.filter((s) => kindOf(s) === 'nerve').map((s) => s.id);
+  const bonesV3 = SB_MANIFEST.structures.filter((s) => s.type === 'bone').map((s) => s.id);
+  return [
+    {
+      ...base, id: 'floor', kind: 'overview', name: 'Cranial floor', camera: 'axial', cutAbove: FLOOR_CUT_MM, focus: null, radius: 75, boneLook: undefined,
+      description: `This CT’s skull base seen from above, everything over ${FLOOR_CUT_MM} mm cut away: the cranial nerves routed through its own foramina, the foramina located on it, and the temporal bones’ contents from a real ear. The arteries and veins have their own views.`,
+      structures: [...bonesV3, ...nerves, ...ear], landmarks: lm(...FORAMINA),
+    },
+    {
+      ...base, id: 'nerves', kind: 'system', name: 'Cranial nerves', camera: 'axial', cutAbove: FLOOR_CUT_MM, focus: null, radius: 75,
+      description: 'The cranial nerves I–XII, each routed through this CT from the fitted model’s course so that it leaves the skull through the CT’s own foramen; the bone see-through.',
+      structures: nerves, landmarks: lm(...FORAMINA),
+    },
+    {
+      ...base, id: 'temporal', kind: 'overview', name: 'Temporal bones', camera: 'axial', cutAbove: 4, focus: null, radius: 70,
+      description: 'Both temporal bones of one CT, seen from above with the vault cut away and the bone see-through: inside each, the facial nerve, the nerves of the internal acoustic meatus, the inner ear, the ossicles and the petrous carotid of a real ear (OpenEar specimen ALPHA) registered onto it.',
+      structures: earWithCarotid, landmarks: earLms.map((l) => l.id),
+    },
+    ...(['R', 'L'] as const).map((side): SbGroup => ({
+      ...base, id: `ear_${side.toLowerCase()}`, kind: 'region', name: side === 'R' ? 'Right temporal bone' : 'Left temporal bone',
+      camera: 'lateral', hemi: side, focus: gen(side) ?? null, radius: 32,
+      description: `The ${side === 'R' ? 'right' : 'left'} temporal bone from the side, the bone see-through.${side === 'L' ? ' The specimen is a right ear, mirrored here.' : ''}`,
+      structures: earWithCarotid, landmarks: earLms.filter((l) => l.side === side).map((l) => l.id),
+    })),
+    {
+      ...base, id: 'facial', kind: 'system', name: 'Facial nerve', camera: 'lateral', hemi: 'R', focus: gen('R') ?? null, radius: 30,
+      description: 'The facial nerve through the temporal bone: from the internal acoustic meatus, its labyrinthine, tympanic and mastoid segments with the geniculate ganglion and the second genu, the chorda tympani and the greater petrosal nerve.',
+      structures: byName(...FACIAL), landmarks: lm('Fundus of internal acoustic meatus', 'Geniculate ganglion', 'Second genu of facial nerve', "Distal end of the specimen's facial nerve"),
+    },
+    {
+      ...base, id: 'inner_ear', kind: 'system', name: 'Inner ear', camera: 'lateral', hemi: 'R', focus: gen('R') ?? null, radius: 26,
+      description: 'The perilymphatic spaces of the cochlea, vestibule and semicircular canals, with the nerves of the internal acoustic meatus and the oval and round windows.',
+      structures: byName('Scala tympani', 'Scala vestibuli, vestibule and semicircular canals', 'Nerves in the internal acoustic meatus (VII, VIII)', 'Stapes'),
+      landmarks: lm('Oval window', 'Round window', 'Bone over the superior semicircular canal', 'Fundus of internal acoustic meatus'),
+    },
+    {
+      ...base, id: 'middle_ear', kind: 'system', name: 'Middle ear', camera: 'lateral', hemi: 'R', focus: gen('R') ?? null, radius: 26,
+      description: 'The tympanic membrane and the ossicles, with the facial nerve’s tympanic segment above the oval window and the chorda tympani crossing the middle ear.',
+      structures: byName('Malleus', 'Incus', 'Stapes', 'Tympanic membrane', 'Chorda tympani', 'Facial nerve (VII)'), landmarks: lm('Oval window', 'Round window', 'Second genu of facial nerve'),
+    },
+    {
+      ...base, id: 'arteries', kind: 'system', name: 'Arteries', camera: 'axial', focus: null, radius: 85,
+      description: 'This CT’s own arteries: the circle of Willis and its branches from TopBrain’s expert labels of the angiogram, the carotid traced through the carotid canal and foramen lacerum, the cervical carotids from TotalSegmentator; the small branches this CT cannot show anchored to them (approximate). Show or hide each in the list.',
+      structures: arteries, landmarks: [],
+    },
+    {
+      ...base, id: 'veins', kind: 'system', name: 'Veins and dural sinuses', camera: 'posteriorOblique', focus: null, radius: 85,
+      description: 'This CT’s own veins: the sigmoid and transverse sinuses traced through their enhanced lumen, the deep veins and the straight and superior sagittal sinuses from TopBrain’s labels, and the internal jugular veins from TotalSegmentator.',
+      structures: veins, landmarks: [],
+    },
+  ];
+}
+
+export const SB_GROUPS: SbGroup[] = SB_MODEL === 'v3' ? temporalGroups() : [
   {
     id: 'floor', kind: 'overview', name: 'Cranial floor', camera: 'axial', hemi: 'both', cutAbove: FLOOR_CUT_MM, focus: null, radius: 75,
     description: `The cranial bones of the model with everything above ${FLOOR_CUT_MM} mm (over the hypophysial fossa) cut away, seen from above. Use the regions to see what passes each opening, and the bones for their labelled landmarks.`,
@@ -74,3 +148,28 @@ export const SB_GROUPS: SbGroup[] = [
   })),
 ];
 export const SB_GROUP = new Map(SB_GROUPS.map((g) => [g.id, g]));
+/** the group a page opens on */
+export const DEFAULT_GROUP = SB_GROUPS[0].id;
+
+/** Systems shown together: the first one's camera, side and focus; the others' structures and landmarks added to it. */
+export function viewGroup(grp: string, also: readonly string[] = []): SbGroup {
+  const g = SB_GROUP.get(grp) ?? SB_GROUP.get(DEFAULT_GROUP)!;
+  const more = also.map((id) => SB_GROUP.get(id)).filter((x): x is SbGroup => !!x && x.kind === 'system' && g.kind === 'system' && x.id !== g.id);
+  if (!more.length) return g;
+  const all = [g, ...more];
+  return {
+    ...g,
+    name: all.map((x) => x.name).join(' + '),
+    description: all.map((x) => x.description).join(' '),
+    structures: [...new Set(all.flatMap((x) => x.structures))],
+    landmarks: [...new Set(all.flatMap((x) => x.landmarks))],
+    focus: null,
+    radius: Math.max(...all.map((x) => x.radius)),
+  };
+}
+
+/** The cut-away height for systems shown together: the least restrictive of theirs (none if any has none). */
+export function combinedCut(ids: readonly string[]): number | null {
+  const cuts = ids.map((id) => SB_GROUP.get(id)?.cutAbove ?? null);
+  return cuts.some((c) => c === null) ? null : Math.max(...(cuts as number[]));
+}

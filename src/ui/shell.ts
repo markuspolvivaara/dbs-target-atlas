@@ -21,14 +21,17 @@ export function disclaimerNote(text = 'Atlas-based (MNI 2009b) group anatomy; in
 
 /** The current section as a menu button: switch to another section or go to the home page. */
 function sectionSwitch(current: Section): HTMLElement {
-  const links = [
-    ...SECTIONS.filter((s) => s.status === 'live').map((s) => h('a', {
-      role: 'menuitem', href: `${SITE_ROOT}${s.path}`, class: 'section-item', tabindex: -1,
-      ...(s.id === current.id ? { 'aria-current': 'page' } : {}),
-    }, s.name)),
-    h('a', { role: 'menuitem', href: SITE_ROOT, class: 'section-item home', tabindex: -1 }, 'All sections (home)'),
-  ];
-  const menu = h('div', { class: 'section-menu', role: 'menu', id: 'section-menu', hidden: true }, ...links);
+  const item = (s: Section) => h('a', {
+    role: 'menuitem', href: `${SITE_ROOT}${s.path}`, class: 'section-item', tabindex: -1,
+    ...(s.id === current.id ? { 'aria-current': 'page' } : {}),
+  }, s.name);
+  const main = SECTIONS.filter((s) => s.status === 'live' && !s.alt).map(item);
+  const alts = SECTIONS.filter((s) => s.status === 'live' && s.alt).map(item);
+  const home = h('a', { role: 'menuitem', href: SITE_ROOT, class: 'section-item home', tabindex: -1 }, 'All sections (home)');
+  // the menu items, in keyboard order; the alternative versions under their own label
+  const links = [...main, ...alts, home];
+  const menu = h('div', { class: 'section-menu', role: 'menu', id: 'section-menu', hidden: true }, ...main,
+    alts.length ? h('p', { class: 'section-group', role: 'presentation' }, 'Alternative versions') : null, ...alts, home);
   const btn = h('button', {
     type: 'button', class: 'section-chip', 'aria-haspopup': 'menu', 'aria-expanded': 'false', 'aria-controls': 'section-menu',
     title: 'Switch section',

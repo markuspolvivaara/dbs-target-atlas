@@ -1,10 +1,93 @@
-import { DEFINITIONS, LANDMARKS, SB_MANIFEST, SB_MODEL } from '../skullbase';
+import { DEFINITIONS, LANDMARKS, SB_MANIFEST, SB_MODEL, V3_FIT } from '../skullbase';
 import { FORAMEN_REFS } from '../skullbase/foramina';
+import { TB_REFS } from '../skullbase/temporal';
 import { h } from './h';
 
 /** Sources and Credits of the skull-base section. */
 
+const link = (href: string, text: string) => h('a', { href, target: '_blank', rel: 'noopener' }, text);
+
+/** The temporal-bone model's sources: how a real ear was registered into the CT, and the references of its notes. */
+function temporalSourcesPage() {
+  const el = h('div', { class: 'page wrap' });
+  const f = V3_FIT;
+  const sides = ['R', 'L'] as const;
+  const sideName = { R: 'Right', L: 'Left' };
+  el.append(
+    h('h1', {}, 'Sources'),
+    h('section', { class: 'card' },
+      h('h2', {}, 'How this model is made'),
+      h('p', {}, 'Bone and the labelled arteries and deep veins: the TopBrain 2025 CT angiogram (case 011), the same meshes as Skull base v2, in its frame (millimetres from the fitted hypophysial fossa). A CT does not show the nerves, and this one blurs the canals of the temporal bone, so its contents come from a real ear.'),
+      h('p', {}, 'The OpenEar library holds eight cadaver temporal bones, imaged by cone-beam CT and micro-slicing and segmented at 0.125 mm (Sieber et al. 2019). Each was registered onto each temporal bone of this CT (pipeline/skullbase_v3.py): a rotation, shift and one scale that make the specimen’s bone, blurred to the CT’s resolution, correlate best with the CT’s bone within 14 mm of the labyrinth. The search tries 1500 rotations, the specimen as it is and mirrored, and refines the best twelve, starting from the labyrinth picked by hand on the CT’s slices. Specimen ALPHA fitted best: its structures were then carried into the CT with that transform, so they stay consistent with each other as they were in that ear (the facial nerve in its canal, the stapes in the oval window). The left ear is ALPHA mirrored.'),
+      h('table', { class: 'coords' },
+        h('thead', {}, h('tr', {}, ...['Ear', 'Correlation', 'Scale', 'Canal contents on the CT', 'Carotid on the CT'].map((t) => h('th', {}, t)))),
+        h('tbody', {}, ...sides.map((sd) => h('tr', {},
+          h('td', {}, sideName[sd] + (f.fit[sd].mirrored ? ' (mirrored)' : '')), h('td', {}, String(f.fit[sd].correlation)), h('td', {}, String(f.fit[sd].scale)),
+          h('td', {}, `${f.fit[sd].checksHU['Nerves in the internal acoustic meatus (VII, VIII)']} HU`), h('td', {}, `${f.fit[sd].checksHU['Internal carotid artery (petrous part)']} HU`))))),
+      h('p', { class: 'aside' }, 'A check independent of the fit: the CT’s values inside the carried-over structures. The meatus’ contents fall on fluid and nerve (under 100 HU), the carotid on its contrast-filled lumen (about 150–300 HU), not on bone (over 1000 HU).'),
+      h('p', {}, 'Cross-check: two other ears, registered the same way, put the same landmarks this far from ALPHA’s:'),
+      h('ul', {}, ...sides.flatMap((sd) => Object.entries(f.crossCheck[sd] ?? {}).map(([spec, r]) => h('li', {}, `${sideName[sd]}, ${spec}: `,
+        r.failed || !r.distanceMm ? `registration failed (correlation ${r.correlation}); not compared` : Object.entries(r.distanceMm).map(([k, v]) => `${k.toLowerCase()} ${v} mm`).join(', '))))),
+      h('p', {}, 'The greater petrosal nerve, which no specimen segments, is drawn by rule from the carried-over geniculate ganglion forwards and medially along this CT’s middle fossa floor, for its published mean length (Nguyen 2026). The bone over the superior semicircular canal is the CT’s bone surface directly above the carried-over canal’s top.')),
+    h('section', { class: 'card' },
+      h('h2', {}, 'Cranial nerves, foramina and sinuses'),
+      h('p', {}, 'The cranial nerves are routed through this CT (pipeline/skullbase_v3_base.py, skullbase_nerves.py). The Z-Anatomy model fitted onto the CT (Skull base v2) gives each nerve’s course: where it leaves the brainstem and which way it runs. The path drawn is the least-cost path near that course through the CT, where bone costs sixty times more than soft tissue, and air and the vessels’ lumens twenty-five times more. So a nerve keeps to its fitted course in the cisterns, and crosses the skull base through this CT’s own opening nearest to it. Its cisternal course stays approximate (the brainstem is not in the CT). The optic nerves follow TotalSegmentator’s segmentation of them; VII and VIII run to the registered ear’s internal acoustic meatus.'),
+      h('table', { class: 'coords' },
+        h('thead', {}, h('tr', {}, ...['Nerve', 'Bone crossed (R / L)', 'Furthest from the fitted course (R / L)'].map((t) => h('th', {}, t)))),
+        h('tbody', {}, ...Object.entries(f.nerves).map(([n, r]) => h('tr', {}, h('td', {}, n),
+          h('td', {}, `${r.R.boneCrossedMm} / ${r.L.boneCrossedMm} mm`), h('td', {}, `${r.R.maxFromFittedMm} / ${r.L.maxFromFittedMm} mm`))))),
+      h('p', { class: 'aside' }, '“Bone crossed”: where the 0.5 mm bone mask closes a small canal with a voxel of blurred bone (the right foramen rotundum here), the path may cross it rather than detour through another opening.'),
+      h('p', {}, 'Foramina are located from the routes: where a nerve first passes between bone on most sides; the superior orbital fissure where III, IV, V1 and VI run closest together; the jugular foramen from IX, X and XI. The foramen lacerum and the foramen magnum are the cranial floor’s through-holes seen from above; the carotid canal’s outer opening is the top of TotalSegmentator’s internal carotid artery. Independent checks: ',
+        `the mandibular nerve leaves ${f.nerveChecks.mandibularNerveToOvaleHoleMm.R} mm (right) and ${f.nerveChecks.mandibularNerveToOvaleHoleMm.L} mm (left) from the foramen ovale hole the floor shows; `,
+        `the optic nerve’s route lies ${f.nerveChecks.opticNerveToSegmentationMm.R} mm from TotalSegmentator’s; `,
+        `IX–XI pass ${Math.min(...Object.values(f.nerveChecks.jugularNervesToBulbMm.R), ...Object.values(f.nerveChecks.jugularNervesToBulbMm.L))}–${Math.max(...Object.values(f.nerveChecks.jugularNervesToBulbMm.R), ...Object.values(f.nerveChecks.jugularNervesToBulbMm.L))} mm from the jugular bulb (they run beside it).`),
+      h('p', {}, 'The sigmoid and transverse sinuses are traced through this CT’s own contrast-filled lumen, from the jugular bulb to the transverse sinus near the midline, along the middle of the enhanced channel: ',
+        sides.map((sd) => `${sideName[sd].toLowerCase()} ${Math.round(f.sinuses[sd].inLumenShare * 100)} % of the trace at least 1.5 mm inside the lumen, median radius ${f.sinuses[sd].medianRadiusMm} mm`).join('; '), '. The middle meningeal artery is routed like the nerves, through the foramen spinosum; the cervical carotids and jugular veins are TotalSegmentator’s (headneck_bones_vessels).'),
+      h('p', {}, 'Arteries: the circle of Willis and its large branches are TopBrain’s expert labels of this angiogram. This patient’s carotid between the cervical segment and the cavernous one is traced the same way as the sinuses, through its contrast-filled lumen in the carotid canal and foramen lacerum: ',
+        sides.map((sd) => `${sideName[sd].toLowerCase()} ${Math.round(f.carotids[sd].inLumenShare * 100)} % of the trace at least 1.5 mm inside the lumen, median radius ${f.carotids[sd].medianRadiusMm} mm, a median ${f.carotids[sd].medianFromSpecimenMm} mm from the registered specimen’s carotid`).join('; '),
+        '. Branches too small for this CT to show (the lateral striate and pontine branches, the anterior spinal artery) are the fitted Z-Anatomy branches moved to start on this patient’s own parent vessel; the ethmoidal arteries and the accessory meningeal branch are routed from it through the CT like the nerves. Their courses are approximate and their cards say so.')),
+    h('section', { class: 'card' },
+      h('h2', {}, 'References'),
+      h('p', {}, 'Every note on the cards cites its source; each was checked against the open-access full text.'),
+      h('ul', { class: 'refs' }, ...TB_REFS.map((r) => h('li', {}, r.citation, ' ', link(r.url, 'DOI'), ' · ',
+        link(`https://pubmed.ncbi.nlm.nih.gov/${r.pmid}/`, 'PubMed'), ' · ', link(`https://pmc.ncbi.nlm.nih.gov/articles/${r.pmcid}/`, 'full text'))))),
+    h('section', { class: 'card' },
+      h('h2', {}, 'Definitions'),
+      h('p', {}, `The definitions on the cards (${Object.keys(DEFINITIONS).length}) are the Wikipedia texts that Z-Anatomy ships with its model, under CC BY-SA 3.0, shortened to their lead section; they have not been checked against the literature.`)),
+  );
+  return { el, render() { /* stateless */ } };
+}
+
+function temporalCreditsPage() {
+  const el = h('div', { class: 'page wrap' });
+  const d = SB_MANIFEST.dataset;
+  el.append(
+    h('h1', {}, 'Credits and licences'),
+    h('section', { class: 'card', id: 'openear' },
+      h('h2', {}, 'OpenEar library'),
+      h('p', {}, h('strong', {}, 'Licence: '), 'CC BY 4.0. Specimen ALPHA’s segmentations (facial nerve, chorda tympani, cochleovestibular nerve, scala tympani, scala vestibuli, malleus, incus, stapes, tympanic membrane, carotid, round window), cross-checked against EPSILON and ZETA.'),
+      h('p', {}, 'Sieber D, Erfurt P, John S, Ribeiro dos Santos G, Schurzig D, Sørensen MS, Lenarz T. ', link('https://zenodo.org/records/1473724', 'Zenodo record 1473724'), '.'),
+      h('p', { class: 'aside' }, 'Changes made: each segmentation meshed (smoothed, decimated), moved into this CT by the specimen’s registration, mirrored for the left ear; the cochleovestibular nerve shown as the contents of the internal acoustic meatus (it fills the canal); landmarks derived from the facial nerve’s centre line, the stapes and the round window; files converted to compressed glTF.')),
+    h('section', { class: 'card', id: 'zanatomy' },
+      h('h2', {}, 'Z-Anatomy (BodyParts3D)'),
+      h('p', {}, h('strong', {}, 'Licence: '), 'CC BY-SA 4.0 (Z-Anatomy), CC BY-SA 2.1 Japan (BodyParts3D). The cranial nerves’ courses (and the middle meningeal artery’s) come from the Z-Anatomy model fitted onto this CT (Skull base v2), rerouted through the CT’s foramina; adapted versions stay under CC BY-SA with attribution. Definitions: Wikipedia, CC BY-SA 3.0, as shipped with Z-Anatomy.')),
+    h('section', { class: 'card', id: 'totalsegmentator' },
+      h('h2', {}, 'TotalSegmentator'),
+      h('p', {}, 'The optic nerves, cervical internal carotid arteries and internal jugular veins are TotalSegmentator’s segmentations of this CT (tasks head_glands_cavities and headneck_bones_vessels; open models, Apache-2.0). Wasserthal J, et al. Radiol Artif Intell. 2023;5(5):e230024.')),
+    h('section', { class: 'card', id: 'topbrain' },
+      h('h2', {}, 'TopBrain 2025 CT angiogram'),
+      h('p', {}, h('strong', {}, 'Licence: '), 'open use with the source given, non-commercial (commercial use needs the data owner’s permission; University Hospital Zurich). The bone and vessel meshes are Skull base v2’s: see its credits.'),
+      h('ul', {}, ...d.attribution.map((a) => h('li', {}, a))),
+      ...d.citation.map((c, i) => h('p', { class: 'cite' }, c, ' ', link(d.citationUrls[i], 'DOI')))),
+    h('section', { class: 'card' },
+      h('h2', {}, 'Software'),
+      h('p', {}, 'three.js, zod, Vite and glTF-Transform (MIT), meshoptimizer (MIT); scikit-image, SciPy and trimesh for the build. Font: Atkinson Hyperlegible, SIL Open Font License 1.1, self-hosted. The source code is GPL-3.0.')),
+  );
+  return { el, render() { /* stateless */ } };
+}
+
 export function skullSourcesPage() {
+  if (SB_MODEL === 'v3') return temporalSourcesPage();
   const el = h('div', { class: 'page wrap' });
   const d = SB_MANIFEST.dataset;
   const urls = [...new Set(Object.values(DEFINITIONS).map((x) => x.url).filter((u): u is string => !!u))].sort();
@@ -34,6 +117,7 @@ export function skullSourcesPage() {
 }
 
 export function skullCreditsPage() {
+  if (SB_MODEL === 'v3') return temporalCreditsPage();
   const el = h('div', { class: 'page wrap' });
   const d = SB_MANIFEST.dataset;
   el.append(
