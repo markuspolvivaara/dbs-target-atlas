@@ -72,9 +72,10 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   private loadingCount = 0;
   private applySeq = 0;
   private moveTimer = 0;
-  /** pial (0) to inflated (1) morph of the cortical surfaces: current value and running animation */
-  private morph = 0;
-  private morphAnim: { t0: number; from: number; to: number } | null = null;
+  /** morph targets by name (a glTF mesh's extras.targetNames: the skull base's surgical shapes); an unnamed target 0
+   * (the cortex's inflated surface) is '0' and follows inflate. Current values and running animations. */
+  private morph: Record<string, number> = {};
+  private morphAnim = new Map<string, { t0: number; from: number; to: number }>();
   /** colour of the inside of cortical surfaces, seen through cut-aways and hidden labels */
   private interior = { value: new THREE.Color('#7d858e') };
 
@@ -139,11 +140,11 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       if (k >= 1) { this.anim = null; this.ev.cameraChanged(this.toRas(this.camera.position), this.toRas(this.controls.target)); this.ev.moving(false); }
       this.needsRender = true;
     }
-    if (this.morphAnim) {
-      const k = Math.min(1, (performance.now() - this.morphAnim.t0) / 800);
+    for (const [name, a] of [...this.morphAnim]) {
+      const k = Math.min(1, (performance.now() - a.t0) / 800);
       const e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
-      this.setMorph(this.morphAnim.from + (this.morphAnim.to - this.morphAnim.from) * e);
-      if (k >= 1) this.morphAnim = null;
+      this.setMorph(name, a.from + (a.to - a.from) * e);
+      if (k >= 1) this.morphAnim.delete(name);
     }
     if (this.controls.update()) this.needsRender = true;
     if (this.needsRender) {
@@ -261,7 +262,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         };
         mats.solid.customProgramCacheKey = () => 'cortex-interior';
       }
-      if (m.morphTargetInfluences?.length) m.morphTargetInfluences[0] = this.morph;
+      for (const [name, i] of Object.entries(m.morphTargetDictionary ?? {})) if (m.morphTargetInfluences) m.morphTargetInfluences[i] = this.morph[name] ?? 0;
       nodes[side] = m;
       this.root.add(m);
     }
@@ -272,12 +273,15 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     return { kind: 'mesh', meta, nodes, mats, look: 'hidden', layer, surface };
   }
 
-  /** Set the pial-to-inflated morph of every cortical surface (0..1). */
-  private setMorph(v: number): void {
-    this.morph = v;
+  /** Set the morph target of this name on every mesh that has it (0..1). */
+  private setMorph(name: string, v: number): void {
+    this.morph[name] = v;
     for (const it of this.items.values()) {
-      if (it.kind !== 'mesh' || !it.surface) continue;
-      for (const m of Object.values(it.nodes)) if (m?.morphTargetInfluences?.length) m.morphTargetInfluences[0] = v;
+      if (it.kind !== 'mesh') continue;
+      for (const m of Object.values(it.nodes)) {
+        const i = m?.morphTargetDictionary?.[name];
+        if (i !== undefined && m?.morphTargetInfluences) m.morphTargetInfluences[i] = v;
+      }
     }
     this.needsRender = true;
   }
@@ -349,10 +353,14 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.restyle();
     this.updateLead();
     const initial = !prev;
-    const inflate = s.inflate ?? 0;
-    if (inflate !== (this.morphAnim?.to ?? this.morph)) {
-      if (initial || this.reducedMotion) { this.morphAnim = null; this.setMorph(inflate); }
-      else this.morphAnim = { t0: performance.now(), from: this.morph, to: inflate };
+    const want: Record<string, number> = { '0': s.inflate ?? 0, ...(s.morphs ?? {}) };
+    for (const name of Object.keys(this.morph)) if (!(name in want)) want[name] = 0;
+    for (const [name, to] of Object.entries(want)) {
+      const cur = this.morph[name] ?? 0;
+      if (to === (this.morphAnim.get(name)?.to ?? cur)) continue;
+      // a slider's small steps follow at once; a toggle (pial / inflated, open / closed) animates
+      if (initial || this.reducedMotion || Math.abs(to - cur) <= 0.15) { this.morphAnim.delete(name); this.setMorph(name, to); }
+      else this.morphAnim.set(name, { t0: performance.now(), from: cur, to });
     }
     if (s.cam.pos && s.cam.tgt && (initial || opts.animateCamera)) {
       this.setCamera(new THREE.Vector3(...s.cam.pos), new THREE.Vector3(...s.cam.tgt), !initial);
@@ -568,7 +576,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   private surfaceAnchor(id: string, side: Side): { pos: THREE.Vector3; facing: boolean } | null {
     const a = this.cat.anchors?.get(id)?.[side];
     if (!a) return null;
-    const t = this.morph;
+    const t = this.morph['0'] ?? 0;
     const pos = new THREE.Vector3(...a.pial).lerp(new THREE.Vector3(...a.inflated), t);
     const n = new THREE.Vector3(...a.nPial).lerp(new THREE.Vector3(...a.nInflated), t).normalize();
     const eye = this.toRas(this.camera.position);
@@ -702,6 +710,14 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       case 'inferior': dir = new THREE.Vector3(0, 0.05, -1); break;
       // posterior: from behind and a little above (the floor of the fourth ventricle faces back and up)
       case 'posterior': dir = new THREE.Vector3(0, -1, 0.35); break;
+      // anterolateral: the shown side from in front, the side and above, along a pterional craniotomy
+      case 'anterolateral': dir = new THREE.Vector3(0.8 * sideSign, 0.4, 0.45); break;
+      // frontolateral: more from in front and above, along a lateral supraorbital craniotomy
+      case 'frontolateral': dir = new THREE.Vector3(0.55 * sideSign, 0.75, 0.5); break;
+      // vertex: from above and a little behind, down the interhemispheric fissure
+      case 'vertex': dir = new THREE.Vector3(0.05 * sideSign, -0.3, 1); break;
+      // suboccipital: from behind and below, up into the cerebellomedullary fissure
+      case 'suboccipital': dir = new THREE.Vector3(0, -1, -0.95); break;
       case 'surgeon': {
         const side: Side = hemi === 'L' ? 'L' : 'R';
         const l = this.state!.lead;
@@ -919,7 +935,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
 
   snapshot(): string { this.renderer.render(this.scene, this.camera); return this.renderer.domElement.toDataURL('image/png'); }
 
-  isIdle(): boolean { return this.loadingCount === 0 && !this.anim && !this.morphAnim && this.slices.status !== 'loading'; }
+  isIdle(): boolean { return this.loadingCount === 0 && !this.anim && !this.morphAnim.size && this.slices.status !== 'loading'; }
 
   dispose(): void { this.disposed = true; this.renderer.dispose(); }
 }

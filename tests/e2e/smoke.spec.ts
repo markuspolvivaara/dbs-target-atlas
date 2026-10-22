@@ -555,7 +555,7 @@ for (const id of ['floor', 'arteries', 'nerves', 'bone_sphenoid_bone']) {
 }
 
 // the temporal-bone model (v3): every view
-const SB_V3_GROUPS = ['floor', 'nerves', 'temporal', 'ear_r', 'ear_l', 'facial', 'inner_ear', 'middle_ear', 'arteries', 'veins'];
+const SB_V3_GROUPS = ['floor', 'nerves', 'temporal', 'ear_r', 'ear_l', 'facial', 'inner_ear', 'middle_ear', 'arteries', 'veins', 'transsylvian', 'lso', 'interhemispheric', 'telovelar'];
 for (const id of SB_V3_GROUPS) {
   test(`skull base (temporal bone) ${id}: renders and matches the visual baseline`, async ({ page }) => {
     const gd = guard(page);
@@ -624,6 +624,84 @@ test('skull base (temporal bone): the model switch, sourced cards, the other ear
   await expect(page.locator('.page:not([hidden]) a[href*="PMC6171777"]')).toHaveCount(1);
   await page.goto('./skullbase/#/credits');
   await expect(page.locator('.page:not([hidden])')).toContainText('CC BY 4.0');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('skull base (temporal bone): the surgical view opens the Sylvian fissure with the slider, sourced and in the link', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./skullbase/#/atlas?g=transsylvian');
+  await settle(page);
+  await expect(page.locator('.grp-chips[aria-label="Surgical views"] .chip[aria-pressed="true"]')).toHaveText('Pterional transsylvian approach');
+  const card = page.locator('.pane:not([hidden]) article.card').last();
+  for (const ref of ['Yilmaz 2025', 'Muhammad 2019', 'Srinivasa 2021', 'Wang 2011', 'Imada 2021']) await expect(card).toContainText(ref);
+  await expect(card).toContainText('Lifting the frontal lobe');
+  await expect(card).toContainText('How the brain is fitted');
+  await expect(page.locator('.legend3d')).toContainText('Bone removed');
+  await expect(page.locator('.legend3d')).toContainText('Brain');
+  // the slider: the opening goes into the link and into the brain's morph
+  const slider = page.locator('#sb-m-open');
+  await expect(slider).toHaveValue('0');
+  await slider.evaluate((el: HTMLInputElement) => { el.value = '100'; el.dispatchEvent(new Event('input', { bubbles: true })); });
+  await settle(page);
+  await expect.poll(() => new URL(page.url()).hash).toContain('op=100');
+  await expect(page.locator('.stage')).toHaveScreenshot('skullv3-transsylvian-open.png');
+  // the largest value a visible mesh gives this named shape
+  const morph = (name: string) => page.evaluate((n) => {
+    type M = { morphTargetInfluences?: number[]; morphTargetDictionary?: Record<string, number>; visible: boolean };
+    const v = (window as unknown as { __atlas: { viewer: { scene: { traverse: (f: (o: M) => void) => void } } } }).__atlas.viewer;
+    let m = -1;
+    v.scene.traverse((o) => { const i = o.morphTargetDictionary?.[n]; if (o.visible && i !== undefined && o.morphTargetInfluences) m = Math.max(m, o.morphTargetInfluences[i]); });
+    return m;
+  }, name);
+  expect(await morph('open')).toBe(1);
+  // the second slider lifts the frontal lobe: morph target 1, in the link too
+  await page.locator('#sb-m-lift').evaluate((el: HTMLInputElement) => { el.value = '100'; el.dispatchEvent(new Event('input', { bubbles: true })); });
+  await settle(page);
+  await expect.poll(() => new URL(page.url()).hash).toContain('lf=100');
+  await expect(page.locator('.stage')).toHaveScreenshot('skullv3-transsylvian-lifted.png');
+  expect(await morph('lift')).toBe(1);
+  // the keys close both again; another view always opens closed
+  await page.keyboard.press('l');
+  await page.keyboard.press('o');
+  await settle(page);
+  await expect.poll(() => new URL(page.url()).hash).not.toContain('op=');
+  expect(new URL(page.url()).hash).not.toContain('lf=');
+  await expect(slider).toHaveValue('0');
+  await page.goto('./skullbase/#/atlas?g=arteries&op=60');
+  await settle(page);
+  expect(new URL(page.url()).hash).not.toContain('op=');
+  // the lateral supraorbital view: its own sourced card, the same sliders
+  await page.locator('.grp-chips[aria-label="Surgical views"] .chip[data-v="lso"]').click();
+  await settle(page);
+  await expect(page.locator('.pane:not([hidden]) article.card').last()).toContainText('Cha 2012');
+  await expect(page.locator('.pane:not([hidden]) article.card').last()).toContainText('Mosteiro 2026');
+  await expect(page.locator('#sb-m-lift')).toHaveCount(1);
+  // the interhemispheric view: its own slider (the right hemisphere held off the falx), sourced, in the link
+  await page.locator('.grp-chips[aria-label="Surgical views"] .chip[data-v="interhemispheric"]').click();
+  await settle(page);
+  await expect(page.locator('.pane:not([hidden]) article.card').last()).toContainText('Symss 2014');
+  await expect(page.locator('.pane:not([hidden]) article.card').last()).toContainText('accessory (median) artery');
+  await expect(page.locator('#sb-m-lift')).toHaveCount(0);
+  await page.locator('#sb-m-interhemispheric').evaluate((el: HTMLInputElement) => { el.value = '100'; el.dispatchEvent(new Event('input', { bubbles: true })); });
+  await settle(page);
+  await expect.poll(() => new URL(page.url()).hash).toContain('ih=100');
+  expect(await morph('interhemispheric')).toBe(1);
+  await expect(page.locator('.stage')).toHaveScreenshot('skullv3-interhemispheric-retracted.png');
+  // the telovelar view: the posterior fossa's contents, the tonsils drawn apart by key
+  await page.locator('.grp-chips[aria-label="Surgical views"] .chip[data-v="telovelar"]').click();
+  await settle(page);
+  await expect(page.locator('.pane:not([hidden]) article.card').last()).toContainText('Longatti 2026');
+  await expect(page.locator('.pane:not([hidden]) article.card').last()).toContainText('How the cerebellum and brainstem are fitted');
+  await expect(page.locator('.legend3d')).toContainText('Cerebellum and brainstem');
+  await page.keyboard.press('t');
+  await settle(page);
+  await expect.poll(() => new URL(page.url()).hash).toContain('tv=');
+  expect(await morph('telovelar')).toBeGreaterThan(0);
+  // a cut bone's card says what it is
+  await page.goto('./skullbase/#/atlas?g=transsylvian&sel=sb_appr_pterional__removed');
+  await settle(page);
+  await expect(page.locator('.card.sel')).toContainText('ml, measured on the model');
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });

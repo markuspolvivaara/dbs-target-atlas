@@ -31,7 +31,7 @@ export const SECTIONS: Section[] = [
   },
   {
     id: 'skullbase', name: 'Skull base', path: 'skullbase/', status: 'live',
-    summary: 'The skull base of the v2 CT with its anatomy made to fit it: the cranial nerves routed through this skull’s own foramina, the foramina located on it, the sinuses traced in it, and a real ear’s facial nerve, inner ear, ossicles and petrous carotid (OpenEar) registered into each temporal bone.',
+    summary: 'The skull base of the v2 CT with its anatomy made to fit it: the cranial nerves routed through this skull’s own foramina, the foramina located on it, the sinuses traced in it, a real ear’s facial nerve, inner ear, ossicles and petrous carotid (OpenEar) registered into each temporal bone, and surgical views cut into it: pterional and lateral supraorbital craniotomies with a template brain fitted into the skull, its Sylvian fissure opened by a slider and its frontal lobe lifted; an interhemispheric view down to the corpus callosum; and a telovelar view with the cerebellum, brainstem and fourth ventricle fitted into the posterior fossa, the tonsils drawn apart.',
   },
   {
     id: 'brainstem', name: 'Brainstem', path: 'brainstem/', status: 'live',

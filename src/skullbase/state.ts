@@ -13,9 +13,14 @@ export interface SkullState extends ViewState {
   also: string[];
   labels: 'all' | 'hover' | 'off';
   cutAbove: number | null;
+  /** a surgical view's shapes of the brain (named morph targets, 0..1 each; none in other views). In the URL by MORPH_PARAMS */
+  morphs: Record<string, number>;
 }
 
-export const SKULL_PRESETS: CameraPreset[] = ['axial', 'inferior', 'lateral', 'coronal', 'posteriorOblique'];
+/** the surgical shapes and their URL parameters (op=0..100 and so on) */
+export const MORPH_PARAMS: Record<string, string> = { open: 'op', lift: 'lf', interhemispheric: 'ih', telovelar: 'tv' };
+
+export const SKULL_PRESETS: CameraPreset[] = ['axial', 'inferior', 'lateral', 'coronal', 'posteriorOblique', 'anterolateral', 'frontolateral', 'vertex', 'suboccipital'];
 
 export function defaultSkullState(): SkullState {
   const g = SB_GROUP.get(DEFAULT_GROUP)!;
@@ -31,7 +36,7 @@ export function defaultSkullState(): SkullState {
     labels: 'hover',
     clip: { axial: { on: false, mm: 0 }, coronal: { on: false, mm: 0 }, sagittal: { on: false, mm: 0 } },
     cutSide: 'none', sliceSeq: 't1', lead: { ...DEFAULT_LEAD },
-    sel: null, hidden: [], cutAbove: g.cutAbove,
+    sel: null, hidden: [], cutAbove: g.cutAbove, morphs: {},
   };
 }
 
@@ -56,6 +61,7 @@ export function encodeSkull(s: SkullState): string {
     if (s.cutSide !== 'none') p.set('cut', s.cutSide);
     if (s.labels !== 'hover') p.set('lb', s.labels === 'all' ? 'a' : '0');
     if (s.hidden.length) p.set('hid', s.hidden.join(','));
+    for (const [name, key] of Object.entries(MORPH_PARAMS)) if ((s.morphs[name] ?? 0) > 0) p.set(key, String(Math.round(s.morphs[name] * 100)));
   }
   const q = p.toString();
   return `#/${s.page}${q ? '?' + q : ''}`;
@@ -97,5 +103,10 @@ export function decodeSkull(hash: string): SkullState {
   const lb = p.get('lb');
   s.labels = lb === 'a' ? 'all' : lb === '0' ? 'off' : 'hover';
   s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
+  s.morphs = {};
+  for (const name of g.morphs ?? []) {     // only the shapes this view has
+    const v = parseFloat(p.get(MORPH_PARAMS[name]) ?? '');
+    if (Number.isFinite(v) && v > 0) s.morphs[name] = Math.min(1, v / 100);
+  }
   return s;
 }

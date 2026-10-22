@@ -73,7 +73,8 @@ if CT:
         ],
         "note": "One adult head CT angiogram (0.5 mm isotropic), not an average and not in MNI space. Bone (the cranial bones; the scan cuts the face off): the CT's own surface "
                 "(400 HU, and thin bone down to 170 HU where it adjoins that bone, outside the labelled vessels, within TotalSegmentator's skull; and the walls of the air "
-                "sinuses, where thin bone averaged with the air falls below any threshold), named bone by bone after the nearest bone of the "
+                "sinuses, where thin bone averaged with the air falls below any threshold; the holes this leaves in the paper-thin orbital roofs "
+                "closed by rule at the height of the roof around them), named bone by bone after the nearest bone of the "
                 "Z-Anatomy model fitted onto it. Arteries and the deep veins: surfaces of TopBrain's expert labels of the same scan. "
                 "Cranial nerves, the dural sinuses and arteries TopBrain does not label, the soft tissue and the landmark names: the "
                 "Z-Anatomy model fitted onto this skull (scaled, then deformed smoothly), so their positions are approximate. "
@@ -387,7 +388,7 @@ def main() -> int:
             cent.setdefault(side, cent.get("R" if side == "L" else "L"))
         f = f"assets/{KIND}/{sid}.glb"
         if CT:   # where this structure comes from in the CT model
-            how = ("The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels), the part nearest this bone of the Z-Anatomy "
+            how = ("The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy "
                    "model fitted onto it; shading darkened where neighbouring bone encloses it." if g["type"] == "bone"
                    else "Surface of TopBrain's expert label of this vessel on the CT angiogram." if g["type"] == "vmesh"
                    else ("Fitted from the Z-Anatomy model onto this CT's skull (approximate position): " if base in fitted else "")
@@ -528,6 +529,9 @@ def validate() -> int:
             check(abs(c["L"][0] + c["R"][0]) < 6, f"{it['id']}: left/right centroids not mirror-like (x {c['L'][0]} / {c['R'][0]})")
     temporal = next(i for i in m["structures"] if i["id"] == "sb_temporal_bone")
     check(temporal["centroid"]["L"][0] < -30, f"temporal bone left centroid x {temporal['centroid']['L'][0]} (expected well left of midline)")
+    if CT:   # the orbital roofs' holes closed by rule (skullbase_ct.fill_orbital_roofs): on both sides, small
+        roof = json.loads((BUILD / "export.json").read_text()).get("roofFillMm2", {})
+        check(set(roof) == {"L", "R"} and all(0 <= v <= 300 for v in roof.values()), f"orbital roof fill {roof} mm2")
     frontal = next(i for i in m["structures"] if i["id"] == "sb_frontal_bone")
     occipital = next(i for i in m["structures"] if i["id"] == "sb_occipital_bone")
     check(frontal["centroid"]["R"][1] > occipital["centroid"]["R"][1], "frontal bone should lie anterior (+y) of the occipital bone")

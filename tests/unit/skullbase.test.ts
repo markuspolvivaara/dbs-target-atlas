@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { crossCheckSb, DEFINITIONS, definitionFor, LANDMARKS, NOT_YET_SHOWN, REGIONS, SB_MANIFEST } from '../../src/skullbase';
 import { SB_GROUPS } from '../../src/skullbase/groups';
 import { skullPlan, skullScene } from '../../src/skullbase/scene';
@@ -6,6 +6,7 @@ import { decodeSkull, defaultSkullState, encodeSkull } from '../../src/skullbase
 import { nodeMeans } from './glb';
 import { FORAMEN_CONTENTS } from '../../src/skullbase/foramina';
 import { TB_NOTES, TB_REF, TB_REFS } from '../../src/skullbase/temporal';
+import { APPROACH_REF, APPROACH_REFS, APPROACHES } from '../../src/skullbase/approaches';
 
 describe('skull-base data (Z-Anatomy export)', () => {
   it('generated files agree with each other', () => {
@@ -217,13 +218,17 @@ describe('the temporal-bone model (v3: OpenEar specimen registered onto the CT)'
   });
   it('every carried-over structure has both ears, on their sides; bone and vessels are the CT model\'s own files', () => {
     for (const s of v3.structures) {
-      if (s.id.startsWith('tb_')) {
+      if (s.id.startsWith('tb_') || s.id.startsWith('br_') || s.id.startsWith('pf_')) {
         expect(s.centroid!.L[0], s.id).toBeLessThan(0);
         expect(s.centroid!.R[0], s.id).toBeGreaterThan(0);
         expect(s.file, s.id).toMatch(/^assets\/skullbase-v3\//);
+      } else if (s.approach || s.morph) {
+        // the craniotomy's cut bones and the bone removed, and the arteries that move with the opening: this build's files
+        expect(s.file, s.id).toMatch(/^assets\/skullbase-v3\//);
       } else {
         expect(s.file, s.id).toMatch(/^assets\/skullbase-ct\//);
-        expect(s.fitted, s.id).toBeUndefined();     // nothing approximate from Z-Anatomy
+        // nothing approximate from Z-Anatomy, but the falx the interhemispheric view draws (v2's fitted one)
+        if (s.name !== 'Falx cerebri') expect(s.fitted, s.id).toBeUndefined();
       }
     }
     for (const side of ['L', 'R']) expect(lms.filter((l) => l.side === side).length).toBeGreaterThanOrEqual(6);
@@ -279,5 +284,160 @@ describe('the temporal-bone model (v3: OpenEar specimen registered onto the CT)'
     }
     const used = new Set(Object.values(TB_NOTES).flat().flatMap((c) => c.refIds));
     expect(TB_REFS.map((r) => r.id).filter((r) => !used.has(r))).toEqual([]);
+  });
+});
+
+/** The section's modules as a v3 page loads them (its <meta name="sb-model" content="v3">). */
+async function v3Modules() {
+  vi.resetModules();
+  const g = globalThis as unknown as { document?: unknown };
+  const had = 'document' in g;
+  g.document = { querySelector: (q: string) => (q.includes('sb-model') ? { content: 'v3' } : null) };
+  try {
+    return { groups: await import('../../src/skullbase/groups'), scene: await import('../../src/skullbase/scene'), state: await import('../../src/skullbase/state') };
+  } finally {
+    if (!had) delete g.document;
+  }
+}
+
+describe('v3 surgical view: the pterional craniotomy and the template brain fitted into the CT', async () => {
+  const { SbManifestSchema } = await import('../../src/data/schema');
+  const { groups: G3, scene: S3, state: T3 } = await v3Modules();
+  const v3 = SbManifestSchema.parse((await import('../../src/data/generated/sbv3-manifest.json')).default);
+  const byId = new Map(v3.structures.map((s) => [s.id, s]));
+  const geom = (await import('../../src/data/generated/sbv3-approaches.json')).default as unknown as Record<string, { bones: string[]; removed: string; removedMl: number; side: string; burrHoles: number[][] }>;
+  const brain = (await import('../../src/data/generated/sbv3-fit.json')).default.brain as unknown as {
+    fit: Record<string, number>; clear: Record<string, Record<string, number>>; open: Record<string, number>; lift: Record<string, number>;
+    interhemispheric: Record<string, number>; aca: { a3: string[]; thirdA2ToAcomMm: number | null };
+    params: Record<string, number>; vesselsMovedMaxMm: Record<string, Record<string, { open: number; lift: number }>>; m1LengthMm: Record<string, number>;
+  };
+  it('cuts the right pterional flap out of the CT bone: each cut bone stands in for a whole one, a plausible volume removed', () => {
+    const ap = geom.pterional;
+    expect(ap.side).toBe('R');
+    expect(ap.bones.map((id) => byId.get(id)!.name).sort()).toEqual(['Frontal bone', 'Parietal bone', 'Sphenoid bone', 'Temporal bone']);
+    for (const id of ap.bones) expect(byId.has(byId.get(id)!.replaces!), id).toBe(true);
+    expect(ap.removedMl).toBeGreaterThan(4);
+    expect(ap.removedMl).toBeLessThan(30);
+    // the burr holes on the right side of the skull, in front of the ear
+    for (const p of ap.burrHoles) { expect(p[0]).toBeGreaterThan(20); expect(p[1]).toBeGreaterThan(-35); }
+  });
+  it('cuts a lateral supraorbital flap from the frontal bone only, and each surgical view draws only its own craniotomy', () => {
+    const lso = geom.lso;
+    expect(lso.side).toBe('R');
+    expect(lso.bones.map((id) => byId.get(id)!.name)).toEqual(['Frontal bone']);
+    expect(lso.removedMl).toBeGreaterThan(4);
+    expect(lso.removedMl).toBeLessThan(30);
+    expect(lso.burrHoles).toHaveLength(1);                 // one burr hole (Cha 2012)
+    const pl = S3.skullPlan('lso', null), pt = S3.skullPlan('transsylvian', null);
+    expect(pl.camera).toBe('frontolateral');
+    for (const id of [...lso.bones, lso.removed]) { expect(pl.looks.get(id), id).not.toBe('hidden'); expect(pt.looks.get(id), id).toBe('hidden'); }
+    for (const id of [...geom.pterional.bones, geom.pterional.removed]) expect(pl.looks.get(id), id).toBe('hidden');
+    expect(pl.looks.get('sb_frontal_bone')).toBe('hidden');      // the cut frontal bone stands in for it
+    expect(pl.looks.get('sb_temporal_bone')).toBe('primary');    // the LSO leaves the temporal bone whole
+  });
+  it('fits the template brain into the skull and onto this patient\'s middle cerebral artery', () => {
+    const f = brain.fit;
+    expect(f.tableMedianMm).toBeLessThan(1.5);
+    expect(f.m2InsulaMedianMmR).toBeLessThan(2);           // M2 on the insula (Srinivasa 2021)
+    expect(f.m3FissureMedianMmR).toBeLessThan(2);          // M3 in the fissure
+    expect(f.m2InCortexShareR).toBeLessThan(0.1);
+    expect(f.m3InCortexShareR).toBeLessThan(0.1);
+    expect(f.minRelativeVolume).toBeGreaterThan(0);        // the deformation never folds
+    for (const side of ['R', 'L']) {
+      expect(brain.clear[side].inBoneWayAfter, side).toBe(0);
+      expect(brain.clear[side].inVesselAfter, side).toBe(0);
+      expect(brain.m1LengthMm[side], side).toBeGreaterThan(5);
+      expect(brain.m1LengthMm[side], side).toBeLessThan(40);
+    }
+  });
+  it('the opening moves the lips about as far as asked, and the M2 and M3 branches with them', () => {
+    expect(brain.open.maxMovedMm).toBeGreaterThan(Math.min(brain.params.openFrontalMm, brain.params.openTemporalMm) - 0.5);
+    expect(brain.open.maxMovedMm).toBeLessThan(Math.max(brain.params.openFrontalMm, brain.params.openTemporalMm) + 2);
+    for (const [name, m] of Object.entries(brain.vesselsMovedMaxMm)) {
+      expect(m.L, name).toEqual({ open: 0, lift: 0 });       // only the right side opens
+      expect(m.R.open, name).toBeGreaterThan(0.5);
+      expect(m.R.open, name).toBeLessThanOrEqual(brain.params.openFrontalMm + 1);   // with the frontal side only
+    }
+    // the lift: the frontal lobe's orbital surface up by about its stated amount
+    expect(brain.lift.maxMovedMm).toBeGreaterThan(brain.params.liftMm - 0.5);
+    expect(brain.lift.maxMovedMm).toBeLessThan(brain.params.liftMm + 2);
+    const morph = v3.structures.filter((s) => s.morph).map((s) => s.name);
+    expect(morph).toEqual(expect.arrayContaining(['Insula', 'Frontal lobe', 'Temporal lobe', 'Middle cerebral artery (M2 segment)', 'Middle cerebral artery (M3 segment)']));
+  });
+  it('the view draws the cut bones, the removed bone see-through and the brain; elsewhere none of them', () => {
+    const p = S3.skullPlan('transsylvian', null);
+    const ap = geom.pterional;
+    for (const id of ap.bones) { expect(p.looks.get(id), id).toBe('primary'); expect(p.looks.get(byId.get(id)!.replaces!), id).toBe('hidden'); }
+    expect(p.looks.get(ap.removed)).toBe('ghost');
+    for (const s of v3.structures.filter((x) => x.category === 'brain')) expect(p.looks.get(s.id), s.id).toBe('primary');
+    expect(p.camera).toBe('anterolateral');
+    for (const g of G3.SB_GROUPS.filter((x) => x.kind !== 'approach')) {
+      const q = S3.skullPlan(g.id, null);
+      for (const id of [...ap.bones, ap.removed]) expect(q.looks.get(id), `${g.id} ${id}`).toBe('hidden');
+      for (const s of v3.structures.filter((x) => x.category === 'brain')) expect(q.looks.get(s.id), `${g.id} ${s.id}`).toBe('hidden');
+    }
+  });
+  it('the interhemispheric view: a right parasagittal flap, both hemispheres, the right one held off the falx', () => {
+    const ih = geom.interhemispheric;
+    expect(ih.side).toBe('R');
+    expect(ih.removedMl).toBeGreaterThan(4);
+    const p = S3.skullPlan('interhemispheric', null);
+    expect(p.camera).toBe('vertex');
+    expect(G3.SB_GROUP.get('interhemispheric')!.hemi).toBe('both');
+    for (const id of [...ih.bones]) expect(p.looks.get(id), id).toBe('primary');
+    expect(p.looks.get(ih.removed)).toBe('ghost');
+    expect(p.looks.get(v3.structures.find((x) => x.name === 'Falx cerebri')!.id)).not.toBe('hidden');
+    expect(p.looks.get('br_medial_wall')).toBe('primary');
+    // the retraction moves the medial surface about as far as asked, and leaves nothing outside the cavity
+    expect(brain.interhemispheric.maxMovedMm).toBeGreaterThan(brain.params.interhemisphericMm - 0.5);
+    expect(brain.interhemispheric.maxMovedMm).toBeLessThan(brain.params.interhemisphericMm + 2);
+    expect(brain.interhemispheric.outsideCavityAfter).toBe(0);
+    // this CT labels a right A3 and a third anterior cerebral artery, no left A3 (the view's note says so)
+    expect(brain.aca.a3).toEqual(['R', 'third']);
+    expect(brain.aca.thirdA2ToAcomMm).toBe(0);
+    const s = T3.decodeSkull('#/atlas?g=interhemispheric&op=40&ih=50');
+    expect(s.morphs).toEqual({ interhemispheric: 0.5 });
+  });
+  it('the telovelar view: a midline suboccipital flap, the posterior fossa fitted around this patient\'s arteries, the tonsils drawn apart', async () => {
+    const so = geom.suboccipital;
+    expect(so.side).toBe('M');
+    expect(so.bones.map((id) => byId.get(id)!.name)).toEqual(['Occipital bone']);
+    const p = S3.skullPlan('telovelar', null);
+    expect(p.camera).toBe('suboccipital');
+    expect(G3.SB_GROUP.get('telovelar')!.hemi).toBe('both');
+    const pf = v3.structures.filter((x) => x.category === 'hindbrain' || x.category === 'ventricle');
+    expect(pf.map((x) => x.name)).toEqual(expect.arrayContaining(['Cerebellar hemisphere', 'Tonsil of cerebellum', 'Vermis', 'Medulla oblongata', 'Pons', 'Fourth ventricle']));
+    for (const x of pf) expect(p.looks.get(x.id), x.id).toBe('primary');
+    // the cerebrum is not drawn here, nor the posterior fossa in the other views
+    for (const x of v3.structures.filter((y) => y.category === 'brain')) expect(p.looks.get(x.id), x.id).toBe('hidden');
+    for (const x of pf) expect(S3.skullPlan('transsylvian', null).looks.get(x.id), x.id).toBe('hidden');
+    expect(pf.filter((x) => x.morph).map((x) => x.name).sort()).toEqual(['Cerebellar hemisphere', 'Tonsil of cerebellum']);
+    const pr = ((await import('../../src/data/generated/sbv3-fit.json')).default as unknown as { pfossa: {
+      fit: { vesselInsideShare: number; minRelativeVolume: number; before: { vesselInsideShare: number } }; clear: Record<string, number>; telovelar: { maxMovedMm: number; inBoneAfter: number; inVesselAfter: number; tonsilToMedullaMm: { rest: number; moved: number } };
+      params: Record<string, number>;
+    } }).pfossa;
+    expect(pr.fit.vesselInsideShare).toBeLessThan(pr.fit.before.vesselInsideShare);
+    expect(pr.fit.minRelativeVolume).toBeGreaterThan(0);
+    expect(pr.clear.inBoneAfter).toBe(0);
+    expect(pr.telovelar.inBoneAfter).toBe(0);
+    expect(pr.telovelar.inVesselAfter).toBe(0);
+    expect(pr.telovelar.tonsilToMedullaMm.moved).toBeGreaterThan(pr.telovelar.tonsilToMedullaMm.rest);
+    expect(T3.decodeSkull('#/atlas?g=telovelar&tv=60&op=30').morphs).toEqual({ telovelar: 0.6 });
+  });
+  it('the opening and the lift are in the link for the surgical view only', () => {
+    const s = T3.decodeSkull('#/atlas?g=transsylvian&op=40&lf=70&ih=50');
+    expect(s.grp).toBe('transsylvian');
+    expect(s.morphs.open).toBeCloseTo(0.4);
+    expect(s.morphs.lift).toBeCloseTo(0.7);
+    expect(s.morphs.interhemispheric).toBeUndefined();          // not this view's shape
+    expect(T3.encodeSkull(s)).toContain('op=40');
+    expect(T3.encodeSkull(s)).toContain('lf=70');
+    expect(T3.decodeSkull('#/atlas?g=arteries&op=40&lf=70').morphs).toEqual({});
+  });
+  it('sourced content: references exist and are used, context structures exist', () => {
+    const used = new Set(APPROACHES.flatMap((a) => a.sections.flatMap((x) => x.claims)).flatMap((c) => c.refIds));
+    for (const r of used) expect(APPROACH_REF.has(r), r).toBe(true);
+    expect(APPROACH_REFS.map((r) => r.id).filter((r) => !used.has(r))).toEqual([]);
+    for (const a of APPROACHES) for (const n of a.context) expect(v3.structures.some((s) => s.name === n), n).toBe(true);
   });
 });

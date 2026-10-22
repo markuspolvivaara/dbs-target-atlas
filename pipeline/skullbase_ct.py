@@ -47,6 +47,9 @@ LABELS = RAW / f"{CASE}.nii.gz"
 BUILD = ROOT / "data" / "build" / "skullbase-ct"   # its GLBs here too: compress.mjs skullbase-ct
 TS_SKULL = BUILD / "ts" / "craniofacial_structures" / "skull.nii.gz"
 ZEXPORT = ROOT / "data" / "build" / "skullbase" / "export.json"
+# the posterior fossa's contents (cerebellum, brainstem, fourth ventricle: skullbase_pfossa_export.py), carried onto the
+# CT by the same fit for Skull base v3's telovelar view (skullbase_pfossa.py fits them further)
+PFOSSA_EXPORT = ROOT / "data" / "build" / "skullbase" / "pfossa_export.json"
 
 BONE_HU = 400.0      # above contrast-filled vessels (lumens 150-300 HU here), below cortical bone
 THIN_HU = 170.0      # thin bone (orbital roofs, wings, sellar floor) falls below BONE_HU at this resolution: voxels down to
@@ -60,6 +63,7 @@ SINUS_OPEN_MM = 1.0      # narrow openings (ostia) closed before air enclosed in
 SINUS_ML = (0.02, 50.0)  # enclosed air spaces of this size (the largest sinus here is about 6 ml)
 SINUS_SHELL_MM = 1.0     # the wall drawn around them, where it is not air itself
 SHELL_MIN_HU = -750.0    # voxels in the wall are partial volume: above this (the air inside is about -900)
+HEAD_CLOSE_MM = 4.0      # the head: its tissue closed by this much (the nostrils and ear canals sealed) and filled
 SURFACE_LEVEL = 0.4      # the bone surface at this level of the smoothed mask (0.5 thins plates one voxel thick away)
 SKULL_REACH_MM = 3.0  # bone within this far of TotalSegmentator's skull
 # the cranial bones the fit uses (Z-Anatomy names; paired bones with .l / .r); the face is cut off in this CT
@@ -99,7 +103,9 @@ def bone_mask(ct: np.ndarray, lab: np.ndarray, skull: np.ndarray, zooms: np.ndar
 def sinus_walls(ct: np.ndarray, lab: np.ndarray, zooms: np.ndarray) -> np.ndarray:
     """A shell around the air enclosed in the skull (sinuses, air cells): its walls, bone even where they are thinner
     than a voxel. Enclosed air: the components of the air, with narrow openings closed (an erosion), that do not reach
-    the edge of the scan and are no larger than a sinus; grown back within the air."""
+    the edge of the scan and are no larger than a sinus; grown back within the air inside the head (grown back through
+    all the air, the thin layer of it around the head would join them and the skin get a wall: a shell drawn as bone
+    around the scalp)."""
     vessels = ndimage.binary_dilation(lab > 0, iterations=2)
     air = ct < SINUS_AIR_HU
     it = max(1, int(round(SINUS_OPEN_MM / float(zooms.min()))))
@@ -109,7 +115,11 @@ def sinus_walls(ct: np.ndarray, lab: np.ndarray, zooms: np.ndarray) -> np.ndarra
                                          cl[:, :, 0].ravel(), cl[:, :, -1].ravel()])).tolist())
     ml = ndimage.sum(core, cl, index=np.arange(1, n + 1)) * float(np.prod(zooms)) / 1000.0
     keep = [i for i in range(1, n + 1) if i not in edge and SINUS_ML[0] <= ml[i - 1] <= SINUS_ML[1]]
-    sinus = ndimage.binary_propagation(np.isin(cl, keep), mask=air)
+    r = max(1, int(round(HEAD_CLOSE_MM / float(zooms.min()))))
+    ball = np.linalg.norm(np.mgrid[-r:r + 1, -r:r + 1, -r:r + 1], axis=0) <= r
+    pad = r + 2
+    head = ndimage.binary_fill_holes(ndimage.binary_closing(np.pad(~air, pad), ball)[pad:-pad, pad:-pad, pad:-pad])
+    sinus = ndimage.binary_propagation(np.isin(cl, keep), mask=air & head)
     shell_it = max(1, int(round(SINUS_SHELL_MM / float(zooms.min()))))
     return ndimage.binary_dilation(sinus, iterations=shell_it) & ~sinus & ~vessels & (ct > SHELL_MIN_HU)
 
@@ -204,8 +214,8 @@ def nonrigid(src: np.ndarray, dst: np.ndarray, sigmas=(24.0, 14.0, 9.0, 6.0), st
 def ct_bone() -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """The CT's bone mask on the GRID_MM grid (with the sinus walls), the same without them (the fit uses it: the model's
     bones have no sinus linings or septa), its affine (scanner RAS), and the vessel labels on that grid (cached in
-    BUILD/bone.npz: it takes minutes on the full-resolution CT)."""
-    cache = BUILD / "bone.npz"
+    BUILD/bone_raw.npz: it takes minutes on the full-resolution CT; main() writes the finished mask to BUILD/bone.npz)."""
+    cache = BUILD / "bone_raw.npz"
     if cache.exists() and cache.stat().st_mtime > max(CT.stat().st_mtime, TS_SKULL.stat().st_mtime, Path(__file__).stat().st_mtime):
         c = np.load(cache)
         return c["b"], c["p"], c["a"], c["lab"]
@@ -220,6 +230,92 @@ def ct_bone() -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     lab_g, _ = resample(lab.astype(np.float32), aff, GRID_MM, 0)
     np.savez_compressed(cache, b=b.astype(np.float16), p=p.astype(np.float16), a=a, lab=lab_g.astype(np.uint8))
     return b, p, a, lab_g.astype(np.uint8)
+
+
+CAVITY_SEAL_MM = 5.0     # the cranial cavity: bone dilated this much closes the foramina ...
+CAVITY_FLOOR_Z = -40.0   # ... and below this (frame z; the foramen magnum is near -46) is shut
+CAVITY_SEED = [0.0, -10.0, 35.0]   # a point in the brain (frame)
+ROOF_X = (8.0, 44.0)     # the orbital roofs (frame, |x|): lateral of the cribriform plate ...
+ROOF_Y = (14.0, 52.0)    # ... and from the optic canal forward
+ROOF_BELOW_MM = 6.0      # a roof column has bone within this below the cranial cavity's floor
+ROOF_FILL_MM = 1.0       # a hole is closed with a plate this thick, at the height of the roof around it
+ROOF_HOLE_MAX_MM2 = 400.0   # larger gaps are left open (not a thin roof the CT misses)
+
+
+def cavity(b: np.ndarray, a_f: np.ndarray, step: float = GRID_MM) -> np.ndarray:
+    """The cranial cavity on the bone grid (a_f: grid -> frame): the bone dilated by CAVITY_SEAL_MM to close the
+    foramina (everything below CAVITY_FLOOR_Z shut), the component holding the brain, grown back to the inner table."""
+    B = b > SURFACE_LEVEL
+    shut = ndimage.distance_transform_edt(~B) * step <= CAVITY_SEAL_MM
+    ijk = np.indices(B.shape)
+    shut |= sum(a_f[2, k] * ijk[k] for k in range(3)) + a_f[2, 3] < CAVITY_FLOOR_Z
+    del ijk
+    lab, _ = ndimage.label(~shut)
+    c = np.rint(nib.affines.apply_affine(np.linalg.inv(a_f), CAVITY_SEED)).astype(int)
+    cav = (ndimage.distance_transform_edt(lab != lab[tuple(c)]) * step <= CAVITY_SEAL_MM) & ~B
+    return ndimage.binary_fill_holes(cav)
+
+
+def fill_orbital_roofs(b: np.ndarray, a_f: np.ndarray) -> tuple[np.ndarray, dict]:
+    """Close the holes the CT leaves in the orbital roofs. The roofs are thinner than this angiogram resolves: in places
+    they fall below THIN_HU, so the bone mask (and the surface drawn from it) has holes where the cranial cavity looks
+    straight into the orbit. Over each orbit, a column of the frame (vertical) has roof where bone lies within
+    ROOF_BELOW_MM under the cavity's floor; where it has none, a plate ROOF_FILL_MM thick is set at the roof's height
+    interpolated from the columns around (holes up to ROOF_HOLE_MAX_MM2; larger gaps are left). Where the roof is there
+    but thinner than ROOF_FILL_MM (a voxel, which the drawn surface can lose), it is thickened downwards to that.
+    Returns the mask and, per side, the area filled (mm2)."""
+    b = b.copy()
+    cav = cavity(b, a_f)
+    inv = np.linalg.inv(a_f)
+    st = 0.5
+    rep = {}
+    for side, sx in (("R", 1.0), ("L", -1.0)):
+        xs = np.arange(ROOF_X[0], ROOF_X[1] + 1e-6, st) * sx
+        ys = np.arange(ROOF_Y[0], ROOF_Y[1] + 1e-6, st)
+        zs = np.arange(-10.0, 60.0, st)
+        X, Y, Z = np.meshgrid(xs, ys, zs, indexing="ij")
+        q = nib.affines.apply_affine(inv, np.c_[X.ravel(), Y.ravel(), Z.ravel()]).T
+        bone = (ndimage.map_coordinates(b.astype(np.float32), q, order=1, mode="constant") > SURFACE_LEVEL).reshape(X.shape)
+        cv = (ndimage.map_coordinates(cav.astype(np.float32), q, order=0, mode="constant") > 0.5).reshape(X.shape)
+        top = np.full(X.shape[:2], np.nan)          # the roof's upper surface, per column
+        hole = np.zeros(X.shape[:2], bool)
+        nb = int(round(ROOF_BELOW_MM / st))
+        for i in range(X.shape[0]):
+            for j in range(X.shape[1]):
+                kc = np.nonzero(cv[i, j])[0]
+                if not len(kc):
+                    continue
+                k0 = kc[0]                          # the cavity's floor in this column
+                below = bone[i, j, max(0, k0 - nb):k0]
+                if below.any():
+                    top[i, j] = zs[max(0, k0 - nb) + np.nonzero(below)[0][-1]]
+                elif k0 > nb:                       # cavity above, nothing below it: the orbit shows through
+                    hole[i, j] = True
+        lab, n = ndimage.label(hole)
+        sizes = ndimage.sum(hole, lab, range(1, n + 1)) * st * st
+        hole &= np.isin(lab, 1 + np.nonzero(sizes <= ROOF_HOLE_MAX_MM2)[0])
+        # the roof's height across a hole: repeated averaging of the known heights around it
+        h = np.where(np.isnan(top), 0.0, top)
+        known = ~np.isnan(top)
+        for _ in range(400):
+            avg = ndimage.uniform_filter(h, 3) / np.maximum(ndimage.uniform_filter(known.astype(float), 3), 1e-9)
+            h = np.where(known, h, np.where(ndimage.uniform_filter(known.astype(float), 3) > 0, avg, h))
+            known = known | (ndimage.uniform_filter(known.astype(float), 3) > 0)
+        # the roof that is there, thickened downwards to ROOF_FILL_MM (its upper surface stays)
+        ii, jj = np.nonzero(~np.isnan(top) & ~hole)
+        h[ii, jj] = top[ii, jj]
+        ii, jj = np.nonzero(hole | ~np.isnan(top))
+        pts = []
+        for t in np.arange(0.0, ROOF_FILL_MM + 1e-6, 0.25):
+            for dx in (-0.25, 0.0, 0.25):
+                for dy in (-0.25, 0.0, 0.25):
+                    pts.append(np.c_[xs[ii] + dx, ys[jj] + dy, h[ii, jj] - t])
+        pts = np.vstack(pts) if pts else np.zeros((0, 3))
+        g = np.rint(nib.affines.apply_affine(inv, pts)).astype(int)
+        ok = (g >= 0).all(1) & (g < np.array(b.shape)).all(1)
+        b[tuple(g[ok].T)] = 1.0
+        rep[side] = round(float(hole.sum()) * st * st)
+    return b, rep
 
 
 def surface_points(mask: np.ndarray, aff: np.ndarray, n: int = 60000) -> np.ndarray:
@@ -324,6 +420,12 @@ def main() -> int:
     a_f[:3, 3] = (a[:3, 3] - fossa_ct) @ R
     # the frame for the temporal-bone model (skullbase_v3.py): a scanner point p is at (p - fossa) @ R in the frame
     np.savez(BUILD / "frame.npz", R=R, fossa=fossa_ct)
+    # the orbital roofs: thinner than this CT resolves in places; their holes closed by rule (and kept in bone.npz, which
+    # Skull base v3 reads)
+    b, roof = fill_orbital_roofs(np.asarray(b, np.float32), a_f)
+    out["roofFillMm2"] = roof
+    print("orbital roofs filled (mm2)", roof)
+    np.savez_compressed(BUILD / "bone.npz", b=b.astype(np.float16), p=np.asarray(plain, np.float16), a=a, lab=lab)
     mesh = isosurface(b, a_f, SURFACE_LEVEL, 0.6, BONE_FACES)
     V, F = np.asarray(mesh.vertices), np.asarray(mesh.faces)
     znames = [n for n in ex["bones"] if not n.startswith("Sinus of")]
@@ -407,6 +509,13 @@ def main() -> int:
     for k, (name, side, kind) in TOPBRAIN.items():
         out["texts"].setdefault(name, None)
     (BUILD / "export.json").write_text(json.dumps(out))
+    if PFOSSA_EXPORT.exists():
+        pf = json.loads(PFOSSA_EXPORT.read_text())
+        (BUILD / "pfossa.json").write_text(json.dumps({
+            "note": "Z-Anatomy's posterior fossa contents carried onto this CT by the Z-Anatomy fit (frame mm)",
+            "meshes": {n: {"verts": np.round(zz(np.array(m["verts"], float)), 3).tolist(), "tris": m["tris"]} for n, m in pf["meshes"].items()},
+            "landmarks": [{**lm, "ras": np.round(zz(np.array([lm["ras"]], float))[0], 3).tolist()} for lm in pf["landmarks"]],
+            "texts": pf["texts"]}))
     print("export:", len(out["bones"]), "bones,", len(out["meshes"]), "vessel meshes,", len(out["lines"]), "lines,",
           len(out["soft"]), "soft,", len(out["landmarks"]), "landmarks")
     return 0

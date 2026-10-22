@@ -62,7 +62,8 @@ def write_glb(path: Path, nodes: list[dict], extras: dict | None = None) -> None
     """nodes: [{name, positions (n,3), normals (n,3)|None, indices, mode, extras}]
 
     Optional per node: colors (n,3) in 0..1 (COLOR_0), scalars {"_NAME": (n,)} (custom vertex attributes),
-    targets [{"positions": (n,3) deltas, "normals": (n,3) deltas}] (morph targets, weights 0).
+    targets [{"positions": (n,3) deltas, "normals": (n,3) deltas, "name": optional}] (morph targets, weights 0; when every
+    target is named, the names go to the mesh's extras.targetNames).
     """
     b = _Builder()
     meshes, gnodes = [], []
@@ -80,6 +81,8 @@ def write_glb(path: Path, nodes: list[dict], extras: dict | None = None) -> None
             prim["targets"] = [{"POSITION": b.vec3(t["positions"]), **({"NORMAL": b.vec3(t["normals"])} if t.get("normals") is not None else {})}
                                for t in n["targets"]]
             mesh["weights"] = [0.0] * len(n["targets"])
+            if all(t.get("name") for t in n["targets"]):     # named targets (three.js morphTargetDictionary)
+                mesh["extras"] = {"targetNames": [t["name"] for t in n["targets"]]}
         meshes.append(mesh)
         node = {"name": n["name"], "mesh": len(meshes) - 1}
         if n.get("extras"):

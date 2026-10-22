@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import type { CameraPreset } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
-import { definitionFor, kindOf, LANDMARKS, LM, NOT_YET_SHOWN, REGIONS, SB, SB_MANIFEST, SB_MODEL, V3_FIT, type Landmark, type SbModel } from '../skullbase';
+import { APPROACH_GEOM, definitionFor, isApproachPart, kindOf, LANDMARKS, LM, NOT_YET_SHOWN, REGIONS, SB, SB_MANIFEST, SB_MODEL, V3_FIT, type Landmark, type SbModel } from '../skullbase';
+import { APPROACH, APPROACH_REF, INSULA, type ApproachClaim, type ApproachSection } from '../skullbase/approaches';
 import { TB_NOTES, TB_REF } from '../skullbase/temporal';
 import { encodeSkull } from '../skullbase/state';
 import { combinedCut, FLOOR_CUT_MM, SB_GROUP, SB_GROUPS, viewGroup, type SbGroup } from '../skullbase/groups';
@@ -19,16 +20,44 @@ type Update = (fn: (s: SkullState) => void, opts?: { camera?: boolean }) => void
 const PRESETS: [CameraPreset, string, string, string][] = [
   ['axial', 'From above', '1', 'Above'], ['inferior', 'From below', '2', 'Below'], ['lateral', 'Lateral', '3', 'Lat'],
   ['coronal', 'Anterior', '4', 'Ant'], ['posteriorOblique', 'Post-oblique', '5', 'Obl'],
+  ...(SB_MODEL === 'v3' ? [['anterolateral', 'Surgical (anterolateral)', '6', 'Surg'] as [CameraPreset, string, string, string]] : []),
 ];
 const LAYERS: [LayerKey, string][] = [['nuclei', 'Bones'], ['tracts', 'Vessels and nerves'], ['cortex', 'Soft tissue'], ['targets', 'Landmarks']];
-const KIND_LABEL = { bone: 'Bone', soft: 'Soft tissue', artery: 'Artery', vein: 'Vein or dural sinus', nerve: 'Nerve', labyrinth: 'Inner ear', ossicle: 'Ossicle', membrane: 'Membrane' } as const;
+const KIND_LABEL = { bone: 'Bone', soft: 'Soft tissue', artery: 'Artery', vein: 'Vein or dural sinus', nerve: 'Nerve', labyrinth: 'Inner ear', ossicle: 'Ossicle', membrane: 'Membrane', brain: 'Brain (fitted template)', hindbrain: 'Cerebellum and brainstem (fitted model)', ventricle: 'Ventricle (fitted model)', removed: 'Bone removed' } as const;
 const KIND_PLURAL: Record<string, string> = { 'Soft tissue': 'Soft tissue', Artery: 'Arteries', 'Vein or dural sinus': 'Veins and dural sinuses', Nerve: 'Nerves', Ossicle: 'Ossicles', Membrane: 'Membranes' };
 const GROUP_ROWS: [SbGroup['kind'], string][] = SB_MODEL === 'v3'
-  ? [['overview', 'Overview'], ['region', 'Each side'], ['system', 'Systems']]
+  ? [['overview', 'Overview'], ['region', 'Each side'], ['system', 'Systems'], ['approach', 'Surgical views']]
   : [['overview', 'Overview'], ['region', 'Regions'], ['system', 'Systems'], ['bone', 'Bones and their landmarks']];
 /** the three models of the section: page folder and chip label */
 const MODELS: [SbModel, string, string][] = [['v3', 'skullbase', 'Skull base'], ['zanatomy', 'skullbase-v1', 'Skull base v1 (Z-Anatomy)'], ['ct', 'skullbase-ct', 'Skull base v2 (CT)']];
 const SIDE_NAME = { R: 'right', L: 'left' } as const;
+/** the surgical views' shapes: slider label, key, and what full means on this model */
+const MORPH_UI: Record<string, { label: string; key: string; note: () => string | null }> = {
+  open: {
+    label: 'Open the Sylvian fissure', key: 'o', note: () => {
+      const b = V3_FIT.brain;
+      return b ? `At 100 % the fissure’s lips are ${fmtMm(b.params.openFrontalMm)} mm higher (frontal and parietal) and ${fmtMm(b.params.openTemporalMm)} mm lower (temporal) than at rest; the insula and the brain beyond ${fmtMm(b.params.openRoiMm)} mm stay put. The middle cerebral artery’s branches on the frontal and parietal opercula rise with them.` : null;
+    },
+  },
+  lift: {
+    label: 'Lift the frontal lobe', key: 'l', note: () => {
+      const b = V3_FIT.brain;
+      return b ? `At 100 % the frontal lobe’s orbital surface is ${fmtMm(b.params.liftMm)} mm higher along a corridor over the orbital roof, from the anterior clinoid process forward to the frontal pole (fading out ${fmtMm(b.params.liftReachMm)} mm from it); the front of the insula rises up to ${Math.round(b.params.liftInsulaShare * 100)} % of that; the temporal lobe stays.` : null;
+    },
+  },
+  interhemispheric: {
+    label: 'Hold the right hemisphere off the falx', key: 'i', note: () => {
+      const b = V3_FIT.brain;
+      return b ? `At 100 % the right hemisphere’s medial surface, the cingulate gyrus with it, is ${fmtMm(b.params.interhemisphericMm)} mm further from the midline over the craniotomy’s length (fading out ${fmtMm(b.params.interhemisphericFadeMm)} mm beyond it), the shift falling to none ${fmtMm(b.params.interhemisphericReachMm)} mm out; the corpus callosum, the medial wall and the left hemisphere stay. The arteries in the fissure stay where the CT shows them.` : null;
+    },
+  },
+  telovelar: {
+    label: 'Draw the cerebellar tonsils apart', key: 't', note: () => {
+      const p = V3_FIT.pfossa;
+      return p ? `At 100 % each tonsil is ${fmtMm(p.params.tvMm)} mm further out to its side (and a little up), the rest of the hemisphere following less the further it lies from the tonsil (none ${fmtMm(p.params.tvReachMm)} mm away); the vermis, brainstem and fourth ventricle stay, and so do the arteries.` : null;
+    },
+  },
+};
 /** a list of sourced notes */
 const notesList = (name: string) => (TB_NOTES[name] ?? []).length
   ? h('ul', { class: 'evidence' }, ...TB_NOTES[name].map((c) => h('li', {}, c.text, ' ', refLinksFrom(TB_REF, c.refIds))))
@@ -224,6 +253,14 @@ export class SkullbaseAtlasPage {
     this.stage.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((b) => b.toggleAttribute('data-active', b.dataset.preset === s.cam.preset));
     const key = `${s.grp}|${s.also.join(',')}|${s.sel}|${s.hidden.join(',')}`;
     if (key !== this.lastKey || !prev) { this.lastKey = key; this.renderOverview(); }
+    // the surgical view's sliders follow the state (keys move them too)
+    for (const slider of this.tabs.overview.querySelectorAll<HTMLInputElement>('input[data-morph]')) {
+      const v = Math.round((s.morphs[slider.dataset.morph!] ?? 0) * 100);
+      if (Number(slider.value) === v) continue;
+      slider.value = String(v);
+      const out = slider.parentElement?.querySelector('output');
+      if (out) out.textContent = `${v} %`;
+    }
     this.renderLayers();
     if (prev && prev.sel !== s.sel && s.sel) this.selectTab('overview', false);
   }
@@ -231,7 +268,7 @@ export class SkullbaseAtlasPage {
   private pickGroup(id: string): void {
     this.update((st) => {
       const g = SB_GROUP.get(id)!;
-      st.grp = id; st.also = []; st.hemi = g.hemi; st.cutAbove = g.cutAbove; st.cam = { preset: null }; st.hidden = []; st.sel = null;
+      st.grp = id; st.also = []; st.hemi = g.hemi; st.cutAbove = g.cutAbove; st.cam = { preset: null }; st.hidden = []; st.sel = null; st.morphs = {};
     }, { camera: true });
   }
 
@@ -278,6 +315,7 @@ export class SkullbaseAtlasPage {
     const shownSystems = SB_GROUP.get(s.grp)?.kind === 'system' ? [s.grp, ...s.also] : [];
     for (const [kind, label] of GROUP_ROWS) {
       const items = SB_GROUPS.filter((x) => x.kind === kind).map((x): [string, string] => [x.id, x.name]);
+      if (!items.length) continue;
       pane.append(kind === 'system'
         ? h('p', { class: 'chips-label' }, label, h('span', { class: 'chips-hint' }, ' · tap to combine'))
         : h('p', { class: 'chips-label' }, label),
@@ -285,6 +323,7 @@ export class SkullbaseAtlasPage {
         ? chips(items, shownSystems, (v) => this.toggleSystem(v), { label, cls: 'grp-chips' })
         : chips(items, s.grp, (v) => this.pickGroup(v), { label, cls: 'grp-chips' }));
     }
+    if (g.kind === 'approach') pane.append(this.openingSliders(g));
     const boneIds = g.structures.filter((id) => SB.get(id)?.type === 'bone');
     const hidden = new Set(s.hidden);
     const btn = (id: string, extra = '') => h('button', {
@@ -309,7 +348,7 @@ export class SkullbaseAtlasPage {
         h('button', { type: 'button', class: 'linklike', onclick: () => show(ids, false) }, 'Hide all')));
     // vessels, nerves and soft tissue: one list per kind; cranial nerves (I-XII) and artery systems each under
     // their own heading
-    for (const k of ['nerve', 'labyrinth', 'ossicle', 'membrane', 'artery', 'vein', 'soft'] as const) {
+    for (const k of ['brain', 'removed', 'nerve', 'labyrinth', 'ossicle', 'membrane', 'artery', 'vein', 'soft'] as const) {
       const ids = g.structures.filter((id) => { const st = SB.get(id); return st && st.type !== 'bone' && kindOf(st) === k; });
       if (!ids.length) continue;
       pane.append(listHead(KIND_PLURAL[KIND_LABEL[k]] ?? KIND_LABEL[k], ids));
@@ -333,6 +372,7 @@ export class SkullbaseAtlasPage {
       h('h2', {}, g.name),
       h('p', {}, g.description),
       g.kind === 'overview' && SB_MODEL === 'v3' ? this.fitReport() : null,
+      g.kind === 'approach' && g.approach ? this.approachBody(g.approach) : null,
       g.kind === 'overview' && SB_MODEL !== 'v3' ? [
         SB_MODEL === 'ct'
           ? h('p', { class: 'aside' }, 'Not yet shown in this model (Z-Anatomy does not label these; the first model locates the foramina from what passes through them): ', NOT_YET_SHOWN.join(', '), '.')
@@ -357,6 +397,20 @@ export class SkullbaseAtlasPage {
     if (lm) return this.landmarkCard(lm, close, defBlock, regions);
     if (!st) return h('p', {}, '');
     const k = kindOf(st);
+    if (st.approach || k === 'brain' || k === 'hindbrain' || k === 'ventricle') {
+      const ap = st.approach ? APPROACH.get(st.approach) : undefined;
+      return h('article', { class: 'card sel', style: `--accent: var(--c-${st.colour.token})` }, close,
+        h('p', { class: 'eyebrow' }, ap ? `${KIND_LABEL[k]} · ${ap.name}` : KIND_LABEL[k]),
+        h('h2', {}, h('span', { class: 'swatch', style: `--c: var(--c-${st.colour.token})` }), st.name),
+        k === 'brain' ? h('p', { class: 'aside schematic-note' }, 'A template brain fitted into this skull and its arteries, not this patient’s own: the gyri and sulci are the template’s.') : null,
+        k === 'hindbrain' || k === 'ventricle' ? h('p', { class: 'aside schematic-note' }, 'One adult’s anatomical model (Z-Anatomy) fitted into this skull and around its arteries, not this patient’s own.') : null,
+        h('dl', {},
+          k === 'removed' && st.approach ? [h('dt', {}, 'Volume'), h('dd', {}, `${APPROACH_GEOM[st.approach]?.removedMl} ml, measured on the model.`)] : null,
+          k === 'brain' && st.name === 'Insula' ? [h('dt', {}, 'Notes'), h('dd', {}, this.claims(INSULA))] : null,
+          (k === 'hindbrain' || k === 'ventricle') && definitionFor(st.name) ? [h('dt', {}, 'Definition'), h('dd', {}, h('p', {}, definitionFor(st.name)!.text),
+            h('p', { class: 'aside' }, 'From Wikipedia (CC BY-SA 3.0), as shipped with Z-Anatomy; not checked against the literature.'))] : null,
+          h('dt', {}, 'Geometry'), h('dd', {}, `${st.source}. ${st.derivation} `, h('a', { href: '#/credits' }, 'Licence and attribution'))));
+    }
     return h('article', { class: 'card sel', style: `--accent: var(--c-${st.colour.token})` }, close,
       h('p', { class: 'eyebrow' }, KIND_LABEL[k]),
       h('h2', {}, h('span', { class: 'swatch', style: `--c: var(--c-${st.colour.token})` }), st.name),
@@ -370,8 +424,69 @@ export class SkullbaseAtlasPage {
         h('dt', {}, 'Geometry'), h('dd', {}, `${st.source}. ${st.derivation} `, h('a', { href: '#/credits' }, 'Licence and attribution'))));
   }
 
+  private claims(cl: ApproachClaim[]): HTMLElement {
+    return h('ul', { class: 'evidence' }, ...cl.map((c) => h('li', {}, c.text, ' ', refLinksFrom(APPROACH_REF, c.refIds))));
+  }
+
+  /** The surgical view's sliders: one per shape of the brain it offers (named morph targets of the brain and of the
+   * arteries that move with it). */
+  private openingSliders(g: SbGroup): HTMLElement {
+    const slider = (name: string) => {
+      const ui = MORPH_UI[name];
+      const id = `sb-m-${name}`;
+      const pct = Math.round((this.s.morphs[name] ?? 0) * 100);
+      const out = h('output', { for: id, class: 'open-out' }, `${pct} %`);
+      const input = h('input', {
+        type: 'range', id, min: 0, max: 100, step: 1, value: pct, 'aria-describedby': `${id}-note`, 'data-morph': name,
+        oninput: (e: Event) => {
+          const v = Number((e.target as HTMLInputElement).value);
+          out.textContent = `${v} %`;
+          this.update((st) => { st.morphs = { ...st.morphs, [name]: v / 100 }; });
+        },
+      });
+      const note = ui.note();
+      return [h('label', { for: id, class: 'chips-label' }, `${ui.label} (${ui.key.toUpperCase()})`), h('div', { class: 'open-row' }, input, out),
+        note ? h('p', { class: 'aside', id: `${id}-note` }, note) : null];
+    };
+    return h('div', { class: 'open-slider' }, ...(g.morphs ?? []).flatMap(slider),
+      h('p', { class: 'aside' }, 'Illustrative shapes, not measured retractions. The arteries stay where they are, except on the brain being moved, which they follow.'));
+  }
+
+  /** The surgical view's card: the sourced description, what this model measures, and how it was drawn here. */
+  private approachBody(aid: string): HTMLElement[] {
+    const ap = APPROACH.get(aid);
+    const geom = APPROACH_GEOM[aid];
+    const b = V3_FIT.brain;
+    if (!ap || !geom) return [];
+    const pctOf = (x: number) => `${Math.round(x * 100)} %`;
+    const measured = (m: ApproachSection['measured']) => {
+      if (!b || !m) return null;
+      if (m === 'm1') return h('p', { class: 'aside' }, `On this CT: the M1 segment as TopBrain labels it measures ${fmtMm(b.m1LengthMm.R)} mm on the right (${fmtMm(b.m1LengthMm.L)} mm on the left), along its centre line. TopBrain’s labels stop at M3, so the cortical (M4) branches are not shown.`);
+      if (m === 'tonsils') {
+        const p = V3_FIT.pfossa;
+        return p ? h('p', { class: 'aside' }, `In this model the tonsils lie ${fmtMm(p.telovelar.tonsilToMedullaMm.rest)} mm from the medulla at their closest, ${fmtMm(p.telovelar.tonsilToMedullaMm.moved)} mm when drawn apart.`) : null;
+      }
+      const third = b.aca.a3.includes('third');
+      const sides = b.aca.a3.filter((x) => x !== 'third').map((x) => (x === 'R' ? 'the right' : 'the left'));
+      return h('p', { class: 'aside' }, `On this CT TopBrain labels an A3 segment on ${sides.join(' and ') || 'neither side'}${third ? `, and a third anterior cerebral artery (A2 and A3) between the two, ${b.aca.thirdA2ToAcomMm === 0 ? 'its A2 starting at the anterior communicating artery (the labels touch), as the accessory (median) artery the sources describe does' : `its A2 starting ${fmtMm(b.aca.thirdA2ToAcomMm ?? 0)} mm from the anterior communicating artery`}` : ''}. The labels stop at A3, so the callosomarginal and cortical branches are not shown.`);
+    };
+    return [
+      h('dl', {},
+        ...ap.sections.map((x) => [h('dt', {}, x.title), h('dd', {}, this.claims(x.claims), measured(x.measured))]),
+        h('dt', {}, 'How the craniotomy is drawn'), h('dd', {}, geom.how, ` Bone removed: ${geom.removedMl} ml (right side), drawn see-through.`),
+        ap.brain === 'hindbrain' && V3_FIT.pfossa ? [h('dt', {}, 'How the cerebellum and brainstem are fitted'), h('dd', {}, (() => {
+          const p = V3_FIT.pfossa!;
+          return `Z-Anatomy’s model (one adult) carried onto this CT by the fit of that model to its bones, then deformed smoothly to fit its posterior fossa: the hull ${fmtMm(p.params.tableGapMm)} mm inside the cavity behind the petrous bones (median error ${fmtMm(p.fit.tableMedianMm)} mm), this patient’s basilar, vertebral, superior and posterior inferior cerebellar arteries outside it (${pctOf(p.fit.before.vesselInsideShare)} of their centre-line points inside before, ${pctOf(p.fit.vesselInsideShare)} after), the tentorium above. The vertices still in an artery’s or the bone’s way were then pushed clear (${p.clear.inVesselAfter} left within an artery’s reach). Its folia and lobules are the model’s.`;
+        })())] : null,
+        b && ap.brain !== 'hindbrain' ? [h('dt', {}, 'How the brain is fitted'), h('dd', {},
+          `A template (the Lead-DBS MNI 2009b pial surface), deformed smoothly to fit this skull: its hull ${fmtMm(b.params.tableGapMm)} mm inside the cranial cavity (median error ${fmtMm(b.fit.tableMedianMm)} mm), every artery this CT labels outside the cortex (${pctOf(b.fit.vesselInCortexShare)} of their centre-line points still inside it before the final clearance, none after), the M2 segments on the insula (median ${fmtMm(b.fit.m2InsulaMedianMmR)} mm on the right) and the M3 segments in the Sylvian fissure (median ${fmtMm(b.fit.m3FissureMedianMmR)} mm). So the template’s fissure lies where this patient’s middle cerebral artery runs, but its gyri are the template’s.`)] : null,
+        h('dt', {}, 'Not shown'), h('dd', {}, ap.notShown)),
+      h('p', { class: 'aside schematic-note' }, 'Illustrative: drawn by rule on one CT’s skull from the published descriptions, with a template brain; not planned for a patient.'),
+    ];
+  }
+
   private landmarkCard(lm: Landmark, close: HTMLElement, defBlock: unknown[], regions: string[]): HTMLElement {
-    const bone = SB_MANIFEST.structures.find((s) => s.name === lm.bone);
+    const bone = SB_MANIFEST.structures.find((s) => s.name === lm.bone && !isApproachPart(s));
     return h('article', { class: 'card sel', style: '--accent: var(--c-ctx)' }, close,
       h('p', { class: 'eyebrow' }, 'Landmark'),
       h('h2', {}, lm.name),
@@ -435,7 +550,7 @@ export class SkullbaseAtlasPage {
     if (!p) return;
     const hidden = new Set(this.s.hidden);
     const kinds = new Map<string, string[]>();
-    for (const id of [...p.looks].filter(([id, l]) => l === 'primary' && ['soft', 'tube'].includes(SB.get(id)?.type ?? '')).map(([id]) => id)) {
+    for (const id of [...p.looks].filter(([id, l]) => (l === 'primary' || (l === 'ghost' && SB.get(id)?.approach)) && ['soft', 'tube'].includes(SB.get(id)?.type ?? '')).map(([id]) => id)) {
       const k = KIND_LABEL[kindOf(SB.get(id)!)];
       kinds.set(k, [...(kinds.get(k) ?? []), id]);
     }
@@ -561,6 +676,15 @@ export class SkullbaseAtlasPage {
     if (k === 'm' || k === 'M') { this.toggleMeasure(); return true; }
     if (k === 'n' || k === 'N') { this.update((s) => { s.labels = s.labels === 'hover' ? 'all' : s.labels === 'all' ? 'off' : 'hover'; }); return true; }
     if (k === 'c' || k === 'C') { this.update((s) => { s.cutAbove = s.cutAbove === null ? FLOOR_CUT_MM : null; }); return true; }
+    // a surgical view: each shape's key opens or closes it; [ and ] step the first one by a tenth
+    const morphs = SB_GROUP.get(this.s.grp)?.morphs ?? [];
+    const hit = morphs.find((n) => MORPH_UI[n].key === k.toLowerCase());
+    if (hit) { this.update((s) => { s.morphs = { ...s.morphs, [hit]: (s.morphs[hit] ?? 0) > 0 ? 0 : 1 }; }); return true; }
+    if (morphs.length && (k === '[' || k === ']')) {
+      const n = morphs[0];
+      this.update((s) => { s.morphs = { ...s.morphs, [n]: Math.min(1, Math.max(0, Math.round(((s.morphs[n] ?? 0) + (k === ']' ? 0.1 : -0.1)) * 10) / 10)) }; });
+      return true;
+    }
     if (k === 'Escape') {
       if (this.measureBtn.getAttribute('aria-pressed') === 'true') { this.toggleMeasure(); return true; }
       if (this.s.sel) { this.update((s) => { s.sel = null; }); return true; }

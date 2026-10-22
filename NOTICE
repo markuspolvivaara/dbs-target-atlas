@@ -164,7 +164,14 @@ What is covered by which terms
    jugular veins are TotalSegmentator segmentations of the CT; the sigmoid and
    transverse sinuses and the petrous carotid are traced through the CT's
    contrast-filled lumen; small arteries the CT cannot show are Z-Anatomy's
-   fitted branches anchored to the CT's own parent vessels.
+   fitted branches anchored to the CT's own parent vessels. Its surgical views
+   cuts craniotomies out of the CT's bone (the project's own drawing) and shows
+   the Lead-DBS MNI 2009b template surface (section 2's terms, GPL-3.0; the
+   FreeSurfer labels shipped with it, research use) deformed to fit the CT, its
+   right Sylvian fissure opened, its frontal lobe lifted and its right
+   hemisphere held off the falx as morph targets; and Z-Anatomy's cerebellum,
+   brainstem and fourth ventricle (as in section 10, CC BY-SA) fitted into the
+   CT's posterior fossa, the tonsils drawn apart as a morph target.
 
 13. Bundled third-party software (three.js and zod, MIT licence; Atkinson
    Hyperlegible font, SIL Open Font Licence 1.1): see

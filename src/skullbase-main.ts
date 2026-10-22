@@ -107,9 +107,12 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () 
 // ---------------------------------------------------------------- keyboard
 function buildHelp(): HTMLDialogElement {
   const rows: [string, string][] = [
-    ['1 – 5', 'Camera: from above, from below, lateral, anterior, posterior-oblique'],
+    SB_MODEL === 'v3' ? ['1 – 6', 'Camera: from above, from below, lateral, anterior, posterior-oblique, surgical (anterolateral)'] : ['1 – 5', 'Camera: from above, from below, lateral, anterior, posterior-oblique'],
     ['H', 'Side: both → left → right'], ['C', 'Cut away above the cranial floor: on / off'],
     ['N', 'Name labels: hover → all → off'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
+    ...(SB_MODEL === 'v3' ? [['O', 'Surgical view: open / close the Sylvian fissure'], ['[  ]', 'Surgical view: its first shape by a tenth'],
+      ['L', 'Surgical view: lift / lower the frontal lobe'], ['I', 'Interhemispheric view: hold the right hemisphere off the falx / let go'],
+      ['T', 'Telovelar view: draw the tonsils apart / let go']] as [string, string][] : []),
   ];
   return h('dialog', { class: 'help', 'aria-labelledby': 'help-title' },
     h('h2', { id: 'help-title' }, 'Keyboard shortcuts'),

@@ -201,14 +201,14 @@
   "bone": "Sphenoid bone",
   "part": null,
   "ras": [
-   15.54,
-   16.76,
-   12.99
+   14.33,
+   16.1,
+   12.81
   ],
   "side": "R",
   "boneFrom": "located on this CT",
   "distanceToBoneMm": 0.0,
-  "how": "Where the optic nerve (II), routed through this CT, is most closely surrounded by bone (37 % bone within 2 mm of it).",
+  "how": "Where the optic nerve (II), routed through this CT, first passes between bone on most sides (60 % bone within 2 mm of it).",
   "from": [
    "Optic nerve (II)"
   ]
@@ -219,14 +219,14 @@
   "bone": "Sphenoid bone",
   "part": null,
   "ras": [
-   -13.78,
-   14.93,
-   14.28
+   -12.93,
+   15.42,
+   14.41
   ],
   "side": "L",
   "boneFrom": "located on this CT",
   "distanceToBoneMm": 0.0,
-  "how": "Where the optic nerve (II), routed through this CT, is most closely surrounded by bone (28 % bone within 2 mm of it).",
+  "how": "Where the optic nerve (II), routed through this CT, is most closely surrounded by bone (42 % bone within 2 mm of it).",
   "from": [
    "Optic nerve (II)"
   ]
@@ -244,7 +244,7 @@
   "side": "R",
   "boneFrom": "located on this CT",
   "distanceToBoneMm": 0.0,
-  "how": "Where the maxillary nerve (V2), routed through this CT, first passes between bone on most sides (54 % bone within 2 mm of it).",
+  "how": "Where the maxillary nerve (V2), routed through this CT, first passes between bone on most sides (56 % bone within 2 mm of it).",
   "from": [
    "Maxillary nerve (V2)"
   ]
@@ -255,14 +255,14 @@
   "bone": "Sphenoid bone",
   "part": null,
   "ras": [
-   -18.78,
-   14.83,
-   -0.79
+   -18.82,
+   15.23,
+   -0.24
   ],
   "side": "L",
   "boneFrom": "located on this CT",
   "distanceToBoneMm": 0.0,
-  "how": "Where the maxillary nerve (V2), routed through this CT, first passes between bone on most sides (53 % bone within 2 mm of it).",
+  "how": "Where the maxillary nerve (V2), routed through this CT, first passes between bone on most sides (59 % bone within 2 mm of it).",
   "from": [
    "Maxillary nerve (V2)"
   ]

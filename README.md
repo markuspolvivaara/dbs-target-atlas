@@ -123,6 +123,48 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   cannot show (lateral striate and pontine branches, anterior spinal artery) are the fitted Z-Anatomy branches moved to
   start on this patient's own parent vessel; the ethmoidal arteries and the accessory meningeal branch are routed from
   it through the CT's openings; all marked approximate.
+- **The surgical views** (Surgical views: "Pterional transsylvian approach", "Lateral supraorbital approach",
+  "Interhemispheric transcallosal approach", "Telovelar approach"). The
+  lateral supraorbital (LSO) craniotomy is a frontolateral flap over the orbital roof with one burr hole posteriorly below
+  the temporal line, cut down to the anterior fossa floor and kept to the frontal bone (Cha 2012, Choque-Velasquez 2018),
+  its outline placed by hand and drawn wider than the mean LSO (about 1450 against 1275 mm², Cha 2012) to show the
+  anatomy; it shares the brain and its two sliders. The right pterional craniotomy is
+  cut out of the CT's own bone (`pipeline/skullbase_v3_approach.py`: burr holes placed from the fitted landmarks as
+  Yilmaz 2025 and Sevgi 2026 describe, the skull's thickness removed inside their outline, the lateral sphenoid ridge
+  drilled). A cut never bridges the cranial cavity into the floor beyond it. Each cut bone keeps v2's own mesh except
+  within 3 mm of the cut, where the cut mask's surface (meshed as v2 meshes the skull) takes over, each new face going
+  to the bone of the nearest v2 face, so the cut bones meet their untouched neighbours without gaps. A template brain, the Lead-DBS MNI 2009b pial surface
+  of the cortex section, is fitted into this CT (`pipeline/skullbase_brain.py`, `pipeline/brain_deform.py`): a smooth
+  deformation (affine, then Gaussian radial basis functions from 18 to 5 mm, a penalty against folding) puts its hull
+  2 mm inside the CT's cranial cavity, every artery TopBrain labels outside the cortex, the M2 segments on the insula
+  and the M3 segments in the Sylvian fissure (medians 1.0 and 1.1 mm on the right); what still touches bone or a vessel
+  is pushed clear (as-rigid-as-possible surface deformation). The slider opens the right Sylvian fissure: a shape
+  deformation (ARAP, facing sulcal banks held together, cortex against the inner table held, the insula fixed) that
+  lifts the frontal and parietal lips and lowers the temporal one by 6 mm each (illustrative), stored as morph
+  target 0. A second slider (morph target 1, solved on top of the opening) lifts the frontal lobe off the orbital roof
+  by 8 mm (illustrative) along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula
+  with it, to look under it at the carotid and the optic nerve. The M2 and M3 branches stay where the CT shows them except on cortex moved on
+  purpose: the frontal and parietal opercula when the fissure opens, the frontal lobe and insula when they are lifted. The cards cite open-access sources on the
+  craniotomy, the fissure's dissection, the middle cerebral artery's segments and the insula
+  (`src/skullbase/approaches.ts`).
+  The interhemispheric view cuts a right parasagittal flap at the coronal suture (from 40 mm in front of bregma to 20 mm
+  behind it, 40 mm wide: illustrative; Nair 2016, Symss 2014) and shows both hemispheres with v2's fitted falx; its
+  slider holds the right hemisphere off the falx by 8 mm (illustrative) over the craniotomy's length, only above the
+  corpus callosum (the template's medial wall, drawn apart, stays). The shift falls off with distance from the midline
+  more slowly than 1 mm per mm, so the surface cannot fold. The arteries stay where the CT shows them: this CT labels a
+  right A3 and a third anterior cerebral artery arising at the anterior communicating artery (the accessory or median
+  artery of Chrissicopoulos 2024 and Triantafyllou 2025), no left A3.
+  The telovelar view cuts a midline suboccipital flap from below the internal occipital protuberance through the
+  posterior rim of the foramen magnum (C1 left, Cho 2024). The cerebellum by lobule, the brainstem and the fourth
+  ventricle are Z-Anatomy's (`pipeline/skullbase_pfossa_export.py`), carried onto the CT by v2's fit
+  (`skullbase_ct.py` writes them) and fitted again into its posterior fossa (`pipeline/skullbase_pfossa.py`: the hull
+  inside the cavity behind the petrous bones, this patient's basilar, vertebral, superior and posterior inferior
+  cerebellar arteries outside, the tentorium above, no folding; then what still touches an artery or bone pushed
+  clear). Its slider draws both tonsils 6 mm apart (illustrative), opening the cerebellomedullary fissure onto the
+  fourth ventricle; sources: Pettersson 2023, Wang 2023, Longatti 2026, Cho 2024, Pantu 2026, Cavalheiro 2015.
+  Pipeline: `pipeline/skullbase_v3_approach.py`, then `pipeline/skullbase_brain.py` (it reads the interhemispheric
+  craniotomy's span) and `pipeline/skullbase_pfossa.py`, before `pipeline/skullbase_v3.py` (it takes their items);
+  the fits are cached in `pipeline/data/build/skullbase-v3/`.
 - Cards cite open-access sources checked against their full texts (`src/skullbase/temporal.ts`): Gupta 2013,
   Kalaiarasi 2018, Nguyen 2026, García-Barrios 2021, Sieber 2019.
 - Pipeline: `pipeline/fetch_openear.py volumes`, `pipeline/skullbase_ct.py` (writes the frame and the bone grid),
@@ -182,8 +224,12 @@ Zurich, open use with the source given, non-commercial), fetched member by membe
   skull mask; named bone by bone after the nearest bone of the fitted Z-Anatomy model. The cranial bones only: the
   scan cuts the face off. Where bone is thinner than a voxel next to air (the sellar floor over the sphenoid sinus, the
   sinus septa) its HU is averaged with the air and no threshold finds it, so the walls of the air enclosed in the skull
-  (sinuses and air cells, told from outside air by closing their narrow openings) are added as a 1 mm shell; the fit
-  to Z-Anatomy uses the bone without these walls.
+  (sinuses and air cells, told from outside air by closing their narrow openings, and grown back only within the head,
+  so the thin air around the scalp does not give the skin a wall) are added as a 1 mm shell; the fit
+  to Z-Anatomy uses the bone without these walls. The orbital roofs are thinner still in places (under 200 HU, some
+  under 100), leaving holes that look from the cranial cavity into the orbit; these are closed by rule
+  (`fill_orbital_roofs`): over each orbit, where a column has no bone under the cavity, a 1 mm plate at the roof's
+  height interpolated from the columns around (about 80 mm² on each side).
 - **Arteries and deep veins**: the surfaces of TopBrain's expert labels of the same scan (ICA, ACA A1–A3, ACom,
   MCA M1–M3, PCom, PCA P1–P4, VA, BA, SCA, PICA, ophthalmic; vein of Galen, straight and superior sagittal sinuses,
   internal cerebral and basal veins). Vessels this patient does not have (here the anterior choroidal and AICA) are

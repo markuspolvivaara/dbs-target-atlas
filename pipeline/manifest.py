@@ -187,6 +187,7 @@ def skull_base_ct_attribution() -> list[str]:
         *[f"- Attribution: {a}" for a in d["attribution"]],
         *[f"- Cite: {c}" for c in d["citation"]],
         "- Changes made: the CT's bone surface taken at 400 HU (thin bone down to 170 HU next to it, and the walls of the air sinuses) within TotalSegmentator's",
+        "  skull mask, the holes left in the thin orbital roofs closed by rule (a 1 mm plate at the height of the roof around them);",
         "  skull mask, smoothed, decimated and named after the fitted Z-Anatomy bones; TopBrain's vessel labels meshed; the CT",
         "  moved rigidly into the Z-Anatomy frame; Z-Anatomy's nerves, unlabelled vessels, soft tissue and landmarks scaled and",
         "  smoothly deformed onto the CT's skull (pipeline/skullbase_ct.py); files converted to compressed glTF.",
@@ -220,6 +221,14 @@ def skull_base_v3_attribution() -> list[str]:
         "  veins are TotalSegmentator segmentations of the CT; the sigmoid and transverse sinuses are traced through its",
         "  enhanced lumen, as is the petrous carotid; small arteries the CT cannot show are Z-Anatomy's fitted branches anchored to",
         "  the CT's own parent vessels; foramina are located from the routes, the cranial floor's openings and the segmented carotid.",
+        "- Surgical views: the pterional, lateral supraorbital, parasagittal and midline suboccipital craniotomies are cut out of",
+        "  the CT's bone by rule (pipeline/skullbase_v3_approach.py, the project's own drawing, GPL-3.0). The brain (`br_*.glb`)",
+        "  is the Lead-DBS MNI 2009b pial surface (GPL-3.0, as in the cortex section; its FreeSurfer labels research use)",
+        "  decimated, deformed to fit this CT, pushed clear of its bone and vessels, split by lobe, with the right hemisphere's",
+        "  fissure opened, its frontal lobe lifted and the hemisphere held off the falx as morph targets",
+        "  (pipeline/skullbase_brain.py). The cerebellum, brainstem and fourth ventricle (`pf_*.glb`) are Z-Anatomy's (CC BY-SA",
+        "  4.0; BodyParts3D CC BY-SA 2.1 Japan) fitted into the CT's posterior fossa, the tonsils' retraction a morph target",
+        "  (pipeline/skullbase_pfossa.py); adapted, they stay under CC BY-SA.",
         "",
     ]
 

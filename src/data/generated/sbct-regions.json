@@ -22,7 +22,7 @@
    },
    {
     "id": "sb_occipital_bone",
-    "distanceMm": 6.6
+    "distanceMm": 6.8
    },
    {
     "id": "sb_medial_pontine_branches_of_basilar_artery",
@@ -81,12 +81,12 @@
     "distanceMm": 13.5
    },
    {
-    "id": "sb_ethmoid_bone",
-    "distanceMm": 14.5
-   },
-   {
     "id": "sb_optic_chiasm",
     "distanceMm": 14.6
+   },
+   {
+    "id": "sb_ethmoid_bone",
+    "distanceMm": 14.7
    },
    {
     "id": "sb_superior_cerebellar_artery",
@@ -136,7 +136,7 @@
    },
    {
     "id": "sb_frontal_bone",
-    "distanceMm": 5.3
+    "distanceMm": 5.4
    },
    {
     "id": "sb_superior_ophthalmic_vein",
@@ -220,7 +220,6 @@
    }
   ],
   "landmarks": [
-   "(Middle clinoid process)",
    "Chiasmatic sulcus",
    "Foramen rotundum",
    "Lesser wing",
@@ -233,9 +232,9 @@
  {
   "landmark": "Apex of petrous part",
   "ras": [
-   12.335,
-   -7.246,
-   -12.545
+   12.139,
+   -7.019,
+   -12.878
   ],
   "radiusMm": 15.0,
   "structures": [
@@ -249,71 +248,71 @@
    },
    {
     "id": "sb_sphenoid_bone",
-    "distanceMm": 1.0
+    "distanceMm": 0.9
    },
    {
     "id": "sb_tentorium_cerebelli",
-    "distanceMm": 3.2
+    "distanceMm": 3.6
    },
    {
     "id": "sb_cavernous_sinus",
-    "distanceMm": 5.0
+    "distanceMm": 5.4
    },
    {
     "id": "sb_lateral_pontine_branches_of_basilar_artery",
-    "distanceMm": 5.3
-   },
-   {
-    "id": "sb_inferior_petrosal_sinus",
-    "distanceMm": 6.1
+    "distanceMm": 5.6
    },
    {
     "id": "sb_abducens_nerve_vi",
-    "distanceMm": 6.2
+    "distanceMm": 6.3
+   },
+   {
+    "id": "sb_inferior_petrosal_sinus",
+    "distanceMm": 6.3
    },
    {
     "id": "sb_superior_petrosal_sinus",
-    "distanceMm": 7.4
+    "distanceMm": 7.8
    },
    {
     "id": "sb_accessory_branch_of_middle_meningeal_artery",
-    "distanceMm": 8.7
-   },
-   {
-    "id": "sb_basilar_artery",
     "distanceMm": 8.9
    },
    {
+    "id": "sb_basilar_artery",
+    "distanceMm": 9.0
+   },
+   {
     "id": "sb_medial_pontine_branches_of_basilar_artery",
-    "distanceMm": 9.2
+    "distanceMm": 9.5
    },
    {
     "id": "sb_trigeminal_nerve_v",
-    "distanceMm": 9.6
-   },
-   {
-    "id": "sb_middle_meningeal_artery",
-    "distanceMm": 12.0
+    "distanceMm": 9.7
    },
    {
     "id": "sb_mandibular_nerve_v3",
-    "distanceMm": 12.3
+    "distanceMm": 12.2
    },
    {
     "id": "sb_maxillary_nerve_v2",
-    "distanceMm": 12.3
+    "distanceMm": 12.2
+   },
+   {
+    "id": "sb_middle_meningeal_artery",
+    "distanceMm": 12.2
    },
    {
     "id": "sb_vestibular_nerve",
-    "distanceMm": 12.5
+    "distanceMm": 12.8
    },
    {
     "id": "sb_vestibulocochlear_nerve_viii",
-    "distanceMm": 13.0
+    "distanceMm": 13.3
    },
    {
     "id": "sb_facial_nerve_vii",
-    "distanceMm": 13.2
+    "distanceMm": 13.6
    }
   ],
   "landmarks": [
@@ -333,7 +332,7 @@
   "structures": [
    {
     "id": "sb_sphenoid_bone",
-    "distanceMm": 0.8
+    "distanceMm": 0.7
    },
    {
     "id": "sb_trigeminal_nerve_v",
@@ -353,7 +352,7 @@
    },
    {
     "id": "sb_temporal_bone",
-    "distanceMm": 4.6
+    "distanceMm": 4.1
    },
    {
     "id": "sb_middle_meningeal_artery",
@@ -361,7 +360,7 @@
    },
    {
     "id": "sb_occipital_bone",
-    "distanceMm": 10.6
+    "distanceMm": 10.4
    },
    {
     "id": "sb_facial_nerve_vii",

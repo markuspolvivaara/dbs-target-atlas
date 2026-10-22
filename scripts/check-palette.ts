@@ -143,8 +143,16 @@ for (const g of WM.groups.filter((x) => x.kind !== 'all')) {
   }
 }
 // skull base v3 (temporal bone): the ear's views draw bone (the ossicles too), nerves, the inner ear, the tympanic
-// membrane and the petrous carotid together; its vessels view draws bone with the arteries and veins
-for (const [view, list] of [['skull base v3: ear', ['sbBone', 'sbArtery', 'sbNerve', 'sbLabyrinth', 'sbMembrane']], ['skull base v3: vessels', ['sbBone', 'sbArtery', 'sbVein']]] as const) {
+// membrane and the petrous carotid together; its vessels view draws bone with the arteries and veins; the transsylvian
+// view draws the brain (the insula apart), the arteries and nerves and the cut bone; the interhemispheric view the brain
+// with its medial wall apart, the falx, the arteries and the sagittal sinuses (the falx a sheet, the superior sagittal
+// sinus a tube along its edge); the telovelar view the cerebellum (its tonsils apart), the brainstem, the fourth
+// ventricle, the arteries, sinuses and lower cranial nerves. The bone a craniotomy removes is drawn see-through in the
+// viewer's ghost colour, so sbRemoved only colours its legend swatch and is not listed.
+for (const [view, list] of [['skull base v3: ear', ['sbBone', 'sbArtery', 'sbNerve', 'sbLabyrinth', 'sbMembrane']], ['skull base v3: vessels', ['sbBone', 'sbArtery', 'sbVein']],
+  ['skull base v3: transsylvian', ['sbBone', 'sbArtery', 'sbNerve', 'sbBrain', 'sbInsula']],
+  ['skull base v3: interhemispheric', ['sbBone', 'sbArtery', 'sbVein', 'sbSoft', 'sbBrain', 'sbMedialWall']],
+  ['skull base v3: telovelar', ['sbBone', 'sbArtery', 'sbVein', 'sbNerve', 'sbBrain', 'sbTonsil', 'sbBrainstem', 'sbCsf']]] as const) {
   for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
     const k = `${list[i]}|${list[j]}`;
     if (!pairs.has(k)) pairs.set(k, new Set());

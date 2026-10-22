@@ -109,9 +109,9 @@
     "maxFromFittedMm": 1.5
    },
    "L": {
-    "lengthMm": 42.8,
+    "lengthMm": 42.7,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 1.3
+    "maxFromFittedMm": 1.5
    }
   },
   "Oculomotor nerve (III)": {
@@ -164,14 +164,14 @@
   },
   "Maxillary nerve (V2)": {
    "R": {
-    "lengthMm": 52.6,
-    "boneCrossedMm": 1.2,
+    "lengthMm": 49.6,
+    "boneCrossedMm": 0.0,
     "maxFromFittedMm": 5.0
    },
    "L": {
-    "lengthMm": 47.6,
-    "boneCrossedMm": 0.6,
-    "maxFromFittedMm": 5.7
+    "lengthMm": 50.2,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 5.5
    }
   },
   "Mandibular nerve (V3)": {
@@ -286,7 +286,7 @@
  "nerveChecks": {
   "opticNerveToSegmentationMm": {
    "R": 0.2,
-   "L": 0.2
+   "L": 0.3
   },
   "jugularNervesToBulbMm": {
    "R": {
@@ -331,6 +331,228 @@
    "inLumenShare": 0.97,
    "medianRadiusMm": 2.2,
    "medianFromSpecimenMm": 2.3
+  }
+ },
+ "brain": {
+  "fit": {
+   "tableMedianMm": 0.68,
+   "boneInsideHullShare": 0.014,
+   "vesselInCortexShare": 0.051,
+   "m2InsulaMedianMmR": 1.038,
+   "m2InCortexShareR": 0.033,
+   "m3FissureMedianMmR": 1.147,
+   "m3InCortexShareR": 0.011,
+   "m2InsulaMedianMmL": 1.119,
+   "m2InCortexShareL": 0.064,
+   "m3FissureMedianMmL": 1.157,
+   "m3InCortexShareL": 0.027,
+   "duraInCortexShare": 0.331,
+   "affineScale": [
+    0.91,
+    0.885,
+    0.844
+   ],
+   "minRelativeVolume": 0.302,
+   "tablePoints": 20000,
+   "cavityMl": 1314
+  },
+  "untangle": {
+   "R": {
+    "crossedBefore": 2711,
+    "crossedAfter": 0
+   },
+   "L": {
+    "crossedBefore": 1852,
+    "crossedAfter": 0
+   }
+  },
+  "inverseResidualMm": {
+   "R": 0.0,
+   "L": 0.0
+  },
+  "clear": {
+   "R": {
+    "inBoneWayBefore": 1512,
+    "inVesselBefore": 630,
+    "inBoneWayAfter": 0,
+    "inVesselAfter": 0,
+    "maxMovedMm": 5.24
+   },
+   "L": {
+    "inBoneWayBefore": 660,
+    "inVesselBefore": 326,
+    "inBoneWayAfter": 0,
+    "inVesselAfter": 0,
+    "maxMovedMm": 4.75
+   }
+  },
+  "crossedTriangles": {
+   "R": {
+    "template": 0,
+    "fitted": 349
+   },
+   "L": {
+    "template": 0,
+    "fitted": 63
+   }
+  },
+  "open": {
+   "lipsFrontal": 531,
+   "lipsTemporal": 528,
+   "heldBySkull": 4502,
+   "moved": 9170,
+   "maxMovedMm": 6.47,
+   "heldAtCavity": 353,
+   "outsideCavityAfter": 256,
+   "crossedTriangles": 477
+  },
+  "lift": {
+   "orbitalHandles": 2355,
+   "insulaHandles": 892,
+   "moved": 16179,
+   "maxMovedMm": 8.02,
+   "heldAtCavity": 24,
+   "outsideCavityAfter": 255,
+   "line": [
+    [
+     12.1,
+     3.2,
+     9.8
+    ],
+    [
+     25.2,
+     29.4,
+     24.7
+    ],
+    [
+     20.4,
+     38.4,
+     37.8
+    ]
+   ],
+   "crossedTriangles": 497
+  },
+  "interhemispheric": {
+   "moved": 7269,
+   "fullyMoved": 432,
+   "maxMovedMm": 8.0,
+   "heldAtCavity": 123,
+   "outsideCavityAfter": 0,
+   "span": [
+    -14.1,
+    45.9
+   ],
+   "midline": 0.52,
+   "callosumTopMm": [
+    45.2,
+    51.8
+   ],
+   "crossedTriangles": 349
+  },
+  "vesselsMovedMaxMm": {
+   "Middle cerebral artery (M2 segment)": {
+    "L": {
+     "open": 0.0,
+     "lift": 0.0
+    },
+    "R": {
+     "open": 5.08,
+     "lift": 5.44
+    }
+   },
+   "Middle cerebral artery (M3 segment)": {
+    "L": {
+     "open": 0.0,
+     "lift": 0.0
+    },
+    "R": {
+     "open": 5.41,
+     "lift": 2.94
+    }
+   }
+  },
+  "m1LengthMm": {
+   "R": 25.1,
+   "L": 25.8
+  },
+  "aca": {
+   "a3": [
+    "R",
+    "third"
+   ],
+   "thirdA2ToAcomMm": 0.0
+  },
+  "params": {
+   "tableGapMm": 2.0,
+   "boneGapMm": 1.0,
+   "openFrontalMm": 6.0,
+   "openTemporalMm": 6.0,
+   "openRoiMm": 35.0,
+   "liftMm": 8.0,
+   "liftCoreMm": 10.0,
+   "liftReachMm": 22.0,
+   "liftInsulaShare": 0.5,
+   "interhemisphericMm": 8.0,
+   "interhemisphericFadeMm": 20.0,
+   "interhemisphericReachMm": 25.0,
+   "interhemisphericFlatMm": 3.0,
+   "interhemisphericAboveCallosumMm": 4.0,
+   "faces": {
+    "R": 120000,
+    "L": 60000
+   },
+   "jacMin": 0.45
+  }
+ },
+ "pfossa": {
+  "fit": {
+   "tableMedianMm": 0.513,
+   "wallWithinMinShare": 0.101,
+   "boneInsideHullShare": 0.001,
+   "vesselInsideShare": 0.039,
+   "tentoriumInsideShare": 0.017,
+   "before": {
+    "tableMedianMm": 2.065,
+    "wallWithinMinShare": 0.214,
+    "boneInsideHullShare": 0.065,
+    "vesselInsideShare": 0.466,
+    "tentoriumInsideShare": 0.041
+   },
+   "affineScale": [
+    1.125,
+    0.993,
+    0.935
+   ],
+   "minRelativeVolume": 0.447
+  },
+  "inverseResidualMm": 0.0,
+  "clear": {
+   "containedPushed": 244,
+   "inVesselBefore": 889,
+   "inBoneBefore": 201,
+   "inVesselAfter": 1,
+   "inBoneAfter": 0,
+   "maxMovedMm": 7.76
+  },
+  "modelMl": 155.1,
+  "telovelar": {
+   "maxMovedMm": 6.19,
+   "moved": 25461,
+   "inBoneAfter": 0,
+   "inVesselAfter": 0,
+   "tonsilToMedullaMm": {
+    "rest": 1.26,
+    "moved": 3.94
+   }
+  },
+  "params": {
+   "tableGapMm": 1.5,
+   "tableMinMm": 1.0,
+   "boneGapMm": 1.0,
+   "tvMm": 6.0,
+   "tvUp": 0.4,
+   "tvReachMm": 15.0,
+   "jacMin": 0.45
   }
  }
 }

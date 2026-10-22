@@ -232,7 +232,7 @@ The meshes in `public/assets/skullbase-ct/` and the files `sbct-manifest.json`, 
 from Z-Anatomy. They are **not** GPL-licensed: TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0.
 
 - Source: https://topbrain2025.grand-challenge.org
-- Note: One adult head CT angiogram (0.5 mm isotropic), not an average and not in MNI space. Bone (the cranial bones; the scan cuts the face off): the CT's own surface (400 HU, and thin bone down to 170 HU where it adjoins that bone, outside the labelled vessels, within TotalSegmentator's skull; and the walls of the air sinuses, where thin bone averaged with the air falls below any threshold), named bone by bone after the nearest bone of the Z-Anatomy model fitted onto it. Arteries and the deep veins: surfaces of TopBrain's expert labels of the same scan. Cranial nerves, the dural sinuses and arteries TopBrain does not label, the soft tissue and the landmark names: the Z-Anatomy model fitted onto this skull (scaled, then deformed smoothly), so their positions are approximate. Coordinates: millimetres from the fitted hypophysial fossa, the CT turned into the Z-Anatomy model's frame.
+- Note: One adult head CT angiogram (0.5 mm isotropic), not an average and not in MNI space. Bone (the cranial bones; the scan cuts the face off): the CT's own surface (400 HU, and thin bone down to 170 HU where it adjoins that bone, outside the labelled vessels, within TotalSegmentator's skull; and the walls of the air sinuses, where thin bone averaged with the air falls below any threshold; the holes this leaves in the paper-thin orbital roofs closed by rule at the height of the roof around them), named bone by bone after the nearest bone of the Z-Anatomy model fitted onto it. Arteries and the deep veins: surfaces of TopBrain's expert labels of the same scan. Cranial nerves, the dural sinuses and arteries TopBrain does not label, the soft tissue and the landmark names: the Z-Anatomy model fitted onto this skull (scaled, then deformed smoothly), so their positions are approximate. Coordinates: millimetres from the fitted hypophysial fossa, the CT turned into the Z-Anatomy model's frame.
 - Attribution: TopBrain 2025 challenge data (University Hospital Zurich): CT angiogram and vessel labels of case topcow_ct_011 - https://topbrain2025.grand-challenge.org, https://zenodo.org/records/16878417 - open use, source given, non-commercial
 - Attribution: BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan
 - Attribution: Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0
@@ -242,6 +242,7 @@ from Z-Anatomy. They are **not** GPL-licensed: TopBrain data: open use with attr
 - Cite: Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.
 - Cite: Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024.
 - Changes made: the CT's bone surface taken at 400 HU (thin bone down to 170 HU next to it, and the walls of the air sinuses) within TotalSegmentator's
+  skull mask, the holes left in the thin orbital roofs closed by rule (a 1 mm plate at the height of the roof around them);
   skull mask, smoothed, decimated and named after the fitted Z-Anatomy bones; TopBrain's vessel labels meshed; the CT
   moved rigidly into the Z-Anatomy frame; Z-Anatomy's nerves, unlabelled vessels, soft tissue and landmarks scaled and
   smoothly deformed onto the CT's skull (pipeline/skullbase_ct.py); files converted to compressed glTF.
@@ -250,10 +251,10 @@ from Z-Anatomy. They are **not** GPL-licensed: TopBrain data: open use with attr
 
 The meshes in `public/assets/skullbase-v3/` and the files `sbv3-manifest.json`, `sbv3-landmarks.json` and `sbv3-fit.json`
 are derived from the OpenEar library of human temporal bones (CC BY 4.0); the page also shows Skull base v2's bone and
-vessel files (TopBrain, see above). They are **not** GPL-licensed: TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); OpenEar: CC BY 4.0; the nerves' courses derive from Z-Anatomy: CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); definitions Wikipedia CC BY-SA 3.0 (as shipped with Z-Anatomy); TotalSegmentator segmentations (Apache-2.0 models).
+vessel files (TopBrain, see above). They are **not** GPL-licensed: TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); OpenEar: CC BY 4.0; the nerves' courses derive from Z-Anatomy: CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); definitions Wikipedia CC BY-SA 3.0 (as shipped with Z-Anatomy); TotalSegmentator segmentations (Apache-2.0 models); the surgical view's template brain: Lead-DBS, GPL-3.0 (FreeSurfer labels: research use).
 
 - Source: https://zenodo.org/records/1473724
-- Note: The bone and the labelled vessels are one adult's CT angiogram (TopBrain case 011); the cervical carotids, jugular veins and optic nerves are TotalSegmentator's segmentations of it. The temporal bone's contents (facial nerve, chorda tympani, cochleovestibular nerve, perilymphatic spaces, ossicles, tympanic membrane, petrous carotid) are a real ear's: OpenEar specimen ALPHA, registered onto each temporal bone of this CT, the left ear mirrored. The cranial nerves are routed through this CT's foramina from the Z-Anatomy model fitted onto it (their cisternal courses approximate). The greater petrosal nerve is drawn by rule.
+- Note: The bone and the labelled vessels are one adult's CT angiogram (TopBrain case 011); the cervical carotids, jugular veins and optic nerves are TotalSegmentator's segmentations of it. The temporal bone's contents (facial nerve, chorda tympani, cochleovestibular nerve, perilymphatic spaces, ossicles, tympanic membrane, petrous carotid) are a real ear's: OpenEar specimen ALPHA, registered onto each temporal bone of this CT, the left ear mirrored. The cranial nerves are routed through this CT's foramina from the Z-Anatomy model fitted onto it (their cisternal courses approximate). The greater petrosal nerve is drawn by rule. The surgical view's brain is a template (the Lead-DBS MNI 2009b pial surface, GPL-3.0) fitted into this CT, and its craniotomy is cut out of the CT's bone by rule.
 - Attribution: OpenEar library (Sieber D, Erfurt P, John S, et al.), specimen ALPHA: segmentations - https://zenodo.org/records/1473724 - CC BY 4.0
 - Attribution: TopBrain 2025 challenge data (University Hospital Zurich): CT angiogram and vessel labels of case topcow_ct_011 - https://topbrain2025.grand-challenge.org, https://zenodo.org/records/16878417 - open use, source given, non-commercial
 - Attribution: BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan
@@ -272,6 +273,14 @@ vessel files (TopBrain, see above). They are **not** GPL-licensed: TopBrain data
   veins are TotalSegmentator segmentations of the CT; the sigmoid and transverse sinuses are traced through its
   enhanced lumen, as is the petrous carotid; small arteries the CT cannot show are Z-Anatomy's fitted branches anchored to
   the CT's own parent vessels; foramina are located from the routes, the cranial floor's openings and the segmented carotid.
+- Surgical views: the pterional, lateral supraorbital, parasagittal and midline suboccipital craniotomies are cut out of
+  the CT's bone by rule (pipeline/skullbase_v3_approach.py, the project's own drawing, GPL-3.0). The brain (`br_*.glb`)
+  is the Lead-DBS MNI 2009b pial surface (GPL-3.0, as in the cortex section; its FreeSurfer labels research use)
+  decimated, deformed to fit this CT, pushed clear of its bone and vessels, split by lobe, with the right hemisphere's
+  fissure opened, its frontal lobe lifted and the hemisphere held off the falx as morph targets
+  (pipeline/skullbase_brain.py). The cerebellum, brainstem and fourth ventricle (`pf_*.glb`) are Z-Anatomy's (CC BY-SA
+  4.0; BodyParts3D CC BY-SA 2.1 Japan) fitted into the CT's posterior fossa, the tonsils' retraction a morph target
+  (pipeline/skullbase_pfossa.py); adapted, they stay under CC BY-SA.
 
 ## Brainstem section (Z-Anatomy fitted into MNI space; Harvard Ascending Arousal Network atlas 2.0)
 

@@ -7,11 +7,13 @@ import ctDefinitions from '../data/generated/sbct-definitions.json';
 import ctLandmarks from '../data/generated/sbct-landmarks.json';
 import ctManifest from '../data/generated/sbct-manifest.json';
 import ctRegions from '../data/generated/sbct-regions.json';
+import v3Approaches from '../data/generated/sbv3-approaches.json';
 import v3Definitions from '../data/generated/sbv3-definitions.json';
 import v3Fit from '../data/generated/sbv3-fit.json';
 import v3Landmarks from '../data/generated/sbv3-landmarks.json';
 import v3Manifest from '../data/generated/sbv3-manifest.json';
 import { SbManifestSchema, type ManifestStructure } from '../data/schema';
+import { APPROACH, APPROACH_REF } from './approaches';
 import { FORAMEN_CONTENTS, FORAMEN_REF } from './foramina';
 
 /**
@@ -64,8 +66,26 @@ const RegionSchema = z.object({
 });
 export const REGIONS = z.array(RegionSchema).parse(regionsJson);
 
-export type Kind = 'bone' | 'soft' | 'artery' | 'vein' | 'nerve' | 'labyrinth' | 'ossicle' | 'membrane';
+export type Kind = 'bone' | 'soft' | 'artery' | 'vein' | 'nerve' | 'labyrinth' | 'ossicle' | 'membrane' | 'brain' | 'hindbrain' | 'ventricle' | 'removed';
 export const kindOf = (m: ManifestStructure): Kind => (m.category ?? 'bone') as Kind;
+/** structures that belong to a surgical approach (a cut bone, or the bone removed): drawn only in that approach's view */
+export const isApproachPart = (m: ManifestStructure): boolean => !!m.approach;
+
+const ApproachGeomSchema = z.object({
+  name: z.string(),
+  /** the craniotomy's side, or M: on the midline */
+  side: z.enum(['L', 'R', 'M']),
+  /** how the opening was drawn on this skull (generated with the geometry) */
+  how: z.string().min(1),
+  removedMl: z.number().positive(),
+  /** the cut bones, each replacing the whole bone in the approach's view */
+  bones: z.array(z.string()).min(1),
+  removed: z.string(),
+  burrHoles: z.array(V3),
+});
+export type ApproachGeom = z.infer<typeof ApproachGeomSchema>;
+/** The approaches cut out of this model's bone (Skull base v3 only: pipeline/skullbase_v3_approach.py). */
+export const APPROACH_GEOM: Record<string, ApproachGeom> = V3M ? z.record(ApproachGeomSchema).parse(v3Approaches) : {};
 
 /** Foramina Z-Anatomy does not label: the pipeline locates them in the Z-Anatomy model (marked by `how`), not on the CT. */
 export const LOCATED_FORAMINA = ['Superior orbital fissure', 'Internal acoustic meatus', 'Stylomastoid foramen', 'Jugular foramen',
@@ -91,6 +111,49 @@ export const V3_FIT = z.object({
   }),
   sinuses: z.record(z.object({ lengthMm: z.number(), inLumenShare: z.number(), medianRadiusMm: z.number(), boneCrossedMm: z.number() })),
   carotids: z.record(z.object({ lengthMm: z.number(), inLumenShare: z.number(), medianRadiusMm: z.number(), medianFromSpecimenMm: z.number() })),
+  /** the template brain fitted into the CT and its transsylvian opening (pipeline/skullbase_brain.py) */
+  brain: z.object({
+    fit: z.object({
+      tableMedianMm: z.number(), boneInsideHullShare: z.number(), vesselInCortexShare: z.number(),
+      m2InsulaMedianMmR: z.number(), m2InCortexShareR: z.number(), m3FissureMedianMmR: z.number(), m3InCortexShareR: z.number(),
+      m2InsulaMedianMmL: z.number(), m3FissureMedianMmL: z.number(), duraInCortexShare: z.number(),
+      affineScale: z.array(z.number()), minRelativeVolume: z.number(), cavityMl: z.number(),
+    }),
+    clear: z.record(z.object({ inBoneWayBefore: z.number(), inVesselBefore: z.number(), inBoneWayAfter: z.number(), inVesselAfter: z.number(), maxMovedMm: z.number() })),
+    crossedTriangles: z.record(z.object({ template: z.number(), fitted: z.number() })),
+    open: z.object({ lipsFrontal: z.number(), lipsTemporal: z.number(), moved: z.number(), maxMovedMm: z.number(), crossedTriangles: z.number(), outsideCavityAfter: z.number() }),
+    lift: z.object({ orbitalHandles: z.number(), insulaHandles: z.number(), moved: z.number(), maxMovedMm: z.number(), crossedTriangles: z.number(), outsideCavityAfter: z.number() }),
+    interhemispheric: z.object({
+      moved: z.number(), fullyMoved: z.number(), maxMovedMm: z.number(), crossedTriangles: z.number(), outsideCavityAfter: z.number(),
+      span: z.tuple([z.number(), z.number()]), callosumTopMm: z.tuple([z.number(), z.number()]),
+    }),
+    params: z.object({
+      tableGapMm: z.number(), boneGapMm: z.number(), openFrontalMm: z.number(), openTemporalMm: z.number(), openRoiMm: z.number(),
+      liftMm: z.number(), liftCoreMm: z.number(), liftReachMm: z.number(), liftInsulaShare: z.number(),
+      interhemisphericMm: z.number(), interhemisphericFadeMm: z.number(), interhemisphericReachMm: z.number(), interhemisphericFlatMm: z.number(),
+      interhemisphericAboveCallosumMm: z.number(),
+    }),
+    /** the anterior cerebral arteries TopBrain labels on this CT: which A3 segments, and how far the third artery's A2
+     * starts from the anterior communicating artery */
+    aca: z.object({ a3: z.array(z.enum(['R', 'L', 'third'])), thirdA2ToAcomMm: z.number().nullable() }),
+    /** per artery and side: how far the opening and the lift move it at most */
+    vesselsMovedMaxMm: z.record(z.record(z.object({ open: z.number(), lift: z.number() }))),
+    m1LengthMm: z.record(z.number()),
+  }).optional(),
+  /** the cerebellum, brainstem and fourth ventricle fitted into the posterior fossa, and the telovelar shape
+   * (pipeline/skullbase_pfossa.py) */
+  pfossa: z.object({
+    fit: z.object({
+      tableMedianMm: z.number(), vesselInsideShare: z.number(), boneInsideHullShare: z.number(), tentoriumInsideShare: z.number(),
+      minRelativeVolume: z.number(), affineScale: z.array(z.number()),
+      before: z.object({ tableMedianMm: z.number(), vesselInsideShare: z.number() }),
+    }),
+    clear: z.object({ inVesselBefore: z.number(), inBoneBefore: z.number(), inVesselAfter: z.number(), inBoneAfter: z.number(), maxMovedMm: z.number() }),
+    modelMl: z.number(),
+    telovelar: z.object({ maxMovedMm: z.number(), inBoneAfter: z.number(), inVesselAfter: z.number(),
+      tonsilToMedullaMm: z.object({ rest: z.number(), moved: z.number() }) }),
+    params: z.object({ tableGapMm: z.number(), tableMinMm: z.number(), boneGapMm: z.number(), tvMm: z.number(), tvUp: z.number(), tvReachMm: z.number() }),
+  }).optional(),
 }).parse(v3Fit);
 
 /** Definition for a structure or landmark name (paired structures use their base name). */
@@ -111,5 +174,13 @@ export function crossCheckSb(): string[] {
   for (const n of NOT_YET_SHOWN) if (LANDMARKS.some((l) => l.name.toLowerCase() === n.toLowerCase())) errs.push(`${n} is now labelled: remove it from NOT_YET_SHOWN`);
   for (const l of LANDMARKS) if (l.how && !FORAMEN_CONTENTS[l.name]) errs.push(`located foramen ${l.name}: no sourced contents`);
   for (const cl of Object.values(FORAMEN_CONTENTS).flat()) for (const r of cl.refIds) if (!FORAMEN_REF.has(r)) errs.push(`foramen claim: unknown refId ${r}`);
+  for (const [aid, g] of Object.entries(APPROACH_GEOM)) {
+    const c = APPROACH.get(aid);
+    if (!c) { errs.push(`approach ${aid}: no sourced content`); continue; }
+    for (const id of [...g.bones, g.removed]) if (!ids.has(id)) errs.push(`approach ${aid}: unknown structure ${id}`);
+    for (const id of g.bones) { const r = SB.get(id)?.replaces; if (!r || !ids.has(r)) errs.push(`approach ${aid}: ${id} replaces an unknown bone`); }
+    for (const cl of c.sections.flatMap((x) => x.claims)) for (const r of cl.refIds) if (!APPROACH_REF.has(r)) errs.push(`approach ${aid}: unknown refId ${r}`);
+    for (const n of c.context) if (!SB_MANIFEST.structures.some((s) => s.name === n)) errs.push(`approach ${aid}: unknown context structure ${n}`);
+  }
   return errs;
 }

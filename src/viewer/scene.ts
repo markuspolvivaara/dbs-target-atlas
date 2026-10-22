@@ -79,8 +79,10 @@ export interface ViewState {
   /** remove every structure on the side of this plane that its normal points to (RAS mm); the spine section cuts
    * along a virtual screw with it */
   cutPlane?: { normal: [number, number, number]; point: [number, number, number] } | null;
-  /** cortical surfaces: 0 = pial, 1 = inflated (the viewer animates between them) */
+  /** cortical surfaces: an unnamed morph target 0, pial (0) to inflated (1) (the viewer animates between them) */
   inflate?: number;
+  /** named morph targets (a glTF mesh's extras.targetNames), 0..1 each: skull base v3's surgical shapes */
+  morphs?: Record<string, number>;
 }
 
 export interface SceneSource<S extends ViewState, P extends ScenePlan = ScenePlan> {

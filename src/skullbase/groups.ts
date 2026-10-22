@@ -1,7 +1,8 @@
 import type { CameraPreset } from '../data/schema';
 import type { V3 } from '../state';
 import type { Look } from '../viewer/materials';
-import { kindOf, LANDMARKS, REGIONS, SB_MANIFEST, SB_MODEL } from './index';
+import { APPROACHES } from './approaches';
+import { APPROACH_GEOM, isApproachPart, kindOf, LANDMARKS, REGIONS, SB, SB_MANIFEST, SB_MODEL } from './index';
 
 /**
  * Groups of the skull-base page, all derived from the model itself: measured neighbourhoods of key
@@ -10,7 +11,7 @@ import { kindOf, LANDMARKS, REGIONS, SB_MANIFEST, SB_MODEL } from './index';
  */
 export interface SbGroup {
   id: string;
-  kind: 'overview' | 'region' | 'system' | 'bone';
+  kind: 'overview' | 'region' | 'system' | 'bone' | 'approach';
   name: string;
   description: string;
   /** structures drawn highlighted (bones solid, vessels and nerves as lines) */
@@ -25,6 +26,12 @@ export interface SbGroup {
   radius: number;
   /** how the bones not in the group are drawn (default: context); the temporal-bone views see through them */
   boneLook?: Look;
+  /** a surgical view: the approach drawn (its cut bones stand in for the whole ones) */
+  approach?: string;
+  /** structures whose centroids the camera frames (default: the group's bones, unless it has a focus point) */
+  focusIds?: string[];
+  /** a surgical view's shapes of the brain (named morph targets), each with its slider */
+  morphs?: string[];
 }
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
@@ -58,7 +65,24 @@ function temporalGroups(): SbGroup[] {
   const veins = SB_MANIFEST.structures.filter((s) => kindOf(s) === 'vein').map((s) => s.id);
   const base = { boneLook: 'shell' as Look, cutAbove: null, hemi: 'both' as const };
   const nerves = SB_MANIFEST.structures.filter((s) => kindOf(s) === 'nerve').map((s) => s.id);
-  const bonesV3 = SB_MANIFEST.structures.filter((s) => s.type === 'bone').map((s) => s.id);
+  const bonesV3 = SB_MANIFEST.structures.filter((s) => s.type === 'bone' && !isApproachPart(s)).map((s) => s.id);
+  // the surgical view: the craniotomy's cut bones (the other bones whole), the bone removed, the right hemisphere of the
+  // fitted brain and the arteries and nerves the approach exposes
+  // the brain a view draws: the fitted template's cerebrum, or the posterior fossa's contents (the telovelar view)
+  const brainOf = (b: 'cerebrum' | 'hindbrain') => SB_MANIFEST.structures
+    .filter((s) => (b === 'cerebrum' ? kindOf(s) === 'brain' : ['hindbrain', 'ventricle'].includes(kindOf(s)))).map((s) => s.id);
+  const surgical = APPROACHES.filter((a) => APPROACH_GEOM[a.id]).map((a): SbGroup => {
+    const geom = APPROACH_GEOM[a.id];
+    const replaced = new Set(geom.bones.map((id) => SB.get(id)?.replaces));
+    return {
+      id: a.view, kind: 'approach', name: a.name, camera: a.camera, hemi: a.hemi ?? (geom.side === 'M' ? 'both' : geom.side), cutAbove: null, boneLook: undefined,
+      // framed on the craniotomy and what it is for: the view looks in through the one onto the other
+      focus: null, focusIds: [geom.removed, ...byName(...a.focus)], radius: 60, approach: a.id, morphs: a.morphs,
+      description: a.summary,
+      structures: [...bonesV3.filter((id) => !replaced.has(id)), ...geom.bones, geom.removed, ...brainOf(a.brain ?? 'cerebrum'), ...byName(...a.context)],
+      landmarks: [],
+    };
+  });
   return [
     {
       ...base, id: 'floor', kind: 'overview', name: 'Cranial floor', camera: 'axial', cutAbove: FLOOR_CUT_MM, focus: null, radius: 75, boneLook: undefined,
@@ -107,6 +131,7 @@ function temporalGroups(): SbGroup[] {
       description: 'This CT’s own veins: the sigmoid and transverse sinuses traced through their enhanced lumen, the deep veins and the straight and superior sagittal sinuses from TopBrain’s labels, and the internal jugular veins from TotalSegmentator.',
       structures: veins, landmarks: [],
     },
+    ...surgical,
   ];
 }
 

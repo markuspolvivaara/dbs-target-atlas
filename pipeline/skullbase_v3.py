@@ -426,8 +426,8 @@ def tube_mesh(P: np.ndarray, r: float):
 def main() -> int:
     ct = CT()
     BUILD.mkdir(parents=True, exist_ok=True)
-    for old in BUILD.glob("*.glb"):
-        old.unlink()
+    for old in BUILD.glob("tb_*.glb"):      # its own; the brain (br_), the craniotomy and the vessels the brain module
+        old.unlink()                        # carries are written by skullbase_brain.py and skullbase_v3_approach.py
     ears, fits = {}, {}
     sp = Specimen(SPECIMEN)
     for side in ("R", "L"):
@@ -492,7 +492,8 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
         "name": "TopBrain 2025 CT angiogram (case 011) with OpenEar temporal bone ALPHA registered onto it",
         "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); OpenEar: CC BY 4.0; "
                    "the nerves' courses derive from Z-Anatomy: CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); "
-                   "definitions Wikipedia CC BY-SA 3.0 (as shipped with Z-Anatomy); TotalSegmentator segmentations (Apache-2.0 models)",
+                   "definitions Wikipedia CC BY-SA 3.0 (as shipped with Z-Anatomy); TotalSegmentator segmentations (Apache-2.0 models); "
+                   "the surgical view's template brain: Lead-DBS, GPL-3.0 (FreeSurfer labels: research use)",
         "url": "https://zenodo.org/records/1473724",
         "cite": ["sieber2019", "topbrain2025", "topcow2023", "wasserthal2023", "mitsuhashi2009"],
     }
@@ -673,6 +674,9 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
             "derivation": "Segmented in this CT by TotalSegmentator's headneck_bones_vessels task, up to the skull base.",
             "centroid": {"L": cent["L"], "R": cent["R"]},
         })
+    brain_items(items, ex2, v2)
+    pfossa_items(items)
+    approach_items(items, ex2)
     for it in items:
         if it.get("cranialNerve") is None:
             it.pop("cranialNerve", None)
@@ -732,7 +736,9 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
                             "(facial nerve, chorda tympani, cochleovestibular nerve, perilymphatic spaces, ossicles, tympanic membrane, "
                             "petrous carotid) are a real ear's: OpenEar specimen ALPHA, registered onto each temporal bone of this CT, the "
                             "left ear mirrored. The cranial nerves are routed through this CT's foramina from the Z-Anatomy model fitted "
-                            "onto it (their cisternal courses approximate). The greater petrosal nerve is drawn by rule.",
+                            "onto it (their cisternal courses approximate). The greater petrosal nerve is drawn by rule. "
+                            "The surgical view's brain is a template (the Lead-DBS MNI 2009b pial surface, GPL-3.0) fitted into "
+                            "this CT, and its craniotomy is cut out of the CT's bone by rule.",
                     "attribution": [
                         "OpenEar library (Sieber D, Erfurt P, John S, et al.), specimen ALPHA: segmentations - "
                         "https://zenodo.org/records/1473724 - CC BY 4.0",
@@ -746,9 +752,15 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
     (GEN / f"{PREFIX}-fit.json").write_text(json.dumps({"fit": fits, "crossCheck": cross, "facialSegmentsMm": seglen, "relationsMm": relations,
                                                    "nerves": base["report"], "nerveChecks": base["checks"],
                                                    "sinuses": {s_: base["sinuses"][s_]["report"] for s_ in ("R", "L")},
-                                                   "carotids": {s_: base["carotids"][s_]["report"] for s_ in ("R", "L")}}, indent=1))
+                                                   "carotids": {s_: base["carotids"][s_]["report"] for s_ in ("R", "L")},
+                                                   **({"brain": json.loads((BUILD / "brain.json").read_text())["report"]}
+                                                      if (BUILD / "brain.json").exists() else {}),
+                                                   **({"pfossa": json.loads((BUILD / "pfossa.json").read_text())["report"]}
+                                                      if (BUILD / "pfossa.json").exists() else {})}, indent=1))
     # definitions: the Wikipedia texts Z-Anatomy ships, for the names shown
     ex = json.loads(ZEXPORT.read_text())
+    if (BUILD / "pfossa.json").exists():          # the posterior fossa's (skullbase_pfossa_export.py)
+        ex["texts"] = {**json.loads((BUILD / "pfossa.json").read_text())["texts"], **ex["texts"]}
     want = {it["name"] for it in items} | {lm["name"] for lm in landmarks} | {"Cochlea", "Vestibule", "Semicircular canals"}
     alias = {"Facial nerve (VII)": "Facial nerve", IAM: "Internal acoustic meatus",
              "Internal carotid artery (petrous part)": "Internal carotid artery", CAROTID: "Internal carotid artery"}
@@ -760,6 +772,151 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
             defs[n] = d
     (GEN / f"{PREFIX}-definitions.json").write_text(json.dumps(defs, indent=1, ensure_ascii=False))
     print("v3:", len(items), "structures,", len(landmarks), "landmarks,", len(defs), "definitions; facial segments", seglen)
+
+
+LEAD_DBS = {
+    "licence": "GPL-3.0, non-commercial (the Lead-DBS template surface and the FreeSurfer labels shipped with it; FreeSurfer: "
+               "research use); its fit into this CT uses the TopBrain data (non-commercial)",
+    "cite": ["leaddbs3", "destrieux2010", "topbrain2025"],
+}
+
+
+def brain_items(items: list, ex2: dict, v2: dict) -> None:
+    """The brain fitted into this CT and its surgical shapes (pipeline/skullbase_brain.py, brain.json): the lobes of both
+    hemispheres, the right one with the fissure's opening, the frontal lift and the interhemispheric retraction as named
+    morph targets; the middle cerebral artery's M2 and M3 segments again, with the displacement the opening and the lift
+    give them as theirs; and v2's falx (the Z-Anatomy model's, fitted onto this CT) for the interhemispheric view."""
+    p = BUILD / "brain.json"
+    if not p.exists():
+        return
+    import skullbase_build as SB
+    br = json.loads(p.read_text())
+    rep = br["report"]
+    fit, op = rep["fit"], rep["open"]
+    falx = next(it for it in v2["structures"] if it["name"] == "Falx cerebri")
+    items.append({**falx})
+    for b in br["items"]:
+        if "vessel" in b:     # the artery v2 draws, now with a morph target: same mesh, this build's file
+            it = next(i for i in items if i["name"] == b["vessel"])
+            it["file"] = b["file"]
+            it["morph"] = True
+            continue
+        items.append({
+            "id": b["id"], "name": b["name"], "aliases": [], "type": "soft", "file": f"assets/{KIND}/{b['id']}.glb", "bytes": 0,
+            "colour": colour(b["token"]), "dataset": "template", "source": "Lead-DBS MNI 2009b template surface, fitted into this CT",
+            "licence": LEAD_DBS["licence"], "citation": [SB.CITES[c]["citation"] for c in LEAD_DBS["cite"]],
+            "citationUrls": [SB.CITES[c]["url"] for c in LEAD_DBS["cite"]], "refIds": [], "category": "brain", "layer": "cortex",
+            "morph": True,
+            "derivation": ("The template's medial wall: where its pial surface is cut at the midline, through the corpus callosum and "
+                           "the diencephalon (a cut, not a surface of the brain). " if b["id"] == "br_medial_wall" else "") +
+                          "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by "
+                          "its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth "
+                          f"deformation: its hull {rep['params']['tableGapMm']} mm inside the cranial cavity (median error "
+                          f"{fit['tableMedianMm']} mm), this patient's arteries outside the cortex, the M2 segments on the insula "
+                          f"(median {fit['m2InsulaMedianMmR']} mm on the right) and the M3 segments in the Sylvian fissure (median "
+                          f"{fit['m3FissureMedianMmR']} mm). Its sulci and gyri are the template's. The right hemisphere opens at the "
+                          f"Sylvian fissure (the first slider): the lips moved apart {rep['params']['openFrontalMm']:.0f} mm up and "
+                          f"{rep['params']['openTemporalMm']:.0f} mm down, the rest following as rigidly as possible; and its frontal lobe "
+                          f"lifts off the orbital roof (the second slider: {rep['params']['liftMm']:.0f} mm along a corridor from the "
+                          "anterior clinoid process forward to the frontal pole, the front of the insula with it). In the interhemispheric "
+                          f"view its medial surface is held {rep['params']['interhemisphericMm']:.0f} mm off the falx over the craniotomy's "
+                          "length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue.",
+            "centroid": b["centroid"],
+        })
+
+
+ZANATOMY = {
+    "licence": "Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); its fit into this CT uses the TopBrain data (non-commercial)",
+    "cite": ["mitsuhashi2009", "topbrain2025"],
+}
+
+
+def pfossa_items(items: list) -> None:
+    """The cerebellum, brainstem and fourth ventricle fitted into this CT's posterior fossa, the tonsils drawn apart for
+    the telovelar view (pipeline/skullbase_pfossa.py, pfossa.json)."""
+    p = BUILD / "pfossa.json"
+    if not p.exists():
+        return
+    import skullbase_build as SB
+    pf = json.loads(p.read_text())
+    rep = pf["report"]
+    f, c, tv = rep["fit"], rep["clear"], rep["params"]
+    for b in pf["items"]:
+        items.append({
+            "id": b["id"], "name": b["name"], "aliases": [], "type": "soft", "file": f"assets/{KIND}/{b['id']}.glb", "bytes": 0,
+            "colour": colour(b["token"]), "dataset": "zanatomy", "fitted": True,
+            "source": "Z-Anatomy model (BodyParts3D), carried onto this CT by Skull base v2's fit and fitted into its posterior fossa",
+            "licence": ZANATOMY["licence"], "citation": [SB.CITES[x]["citation"] for x in ZANATOMY["cite"]],
+            "citationUrls": [SB.CITES[x]["url"] for x in ZANATOMY["cite"]], "refIds": [], "category": b["category"], "layer": "cortex",
+            "morph": b["morph"],
+            "derivation": f"One adult's (Z-Anatomy, from BodyParts3D: {', '.join(b['parts']).lower()}), not this patient's: carried onto this CT by the "
+                          "fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the "
+                          f"contents' hull {tv['tableGapMm']} mm inside the cavity behind the petrous bones (median error {f['tableMedianMm']} mm), "
+                          f"this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them ({round(f['before']['vesselInsideShare'] * 100)} % "
+                          f"of their centre-line points inside before, {round(f['vesselInsideShare'] * 100)} % after), the tentorium above; then the "
+                          f"{c['inVesselBefore']} vertices still in an artery's way and the {c['inBoneBefore']} in bone's pushed clear."
+                          + (f" The telovelar slider draws the tonsils {tv['tvMm']:.0f} mm apart (laterally, a little up), the rest of each "
+                             "hemisphere following; a shape, not a simulation of the tissue." if b["morph"] else ""),
+            "centroid": b["centroid"],
+        })
+
+
+def approach_items(items: list, ex2: dict) -> None:
+    """The right pterional craniotomy (pipeline/skullbase_v3_approach.py, approach.json): each bone it cuts again, with
+    the cut (it replaces the whole bone in the transsylvian view), and the bone removed as one mesh."""
+    p = BUILD / "approach.json"
+    if not p.exists():
+        return
+    import skullbase_build as SB
+    from meshcheck import orient_outward
+    aps = json.loads(p.read_text())
+    whole: dict[str, dict] = {}
+    for n, b in ex2["bones"].items():
+        base, side = SB.split_pair(n)
+        whole.setdefault(base, {})[side or "M"] = (np.array(b["verts"], float), np.array(b["tris"], int), np.array(b["ao"], float))
+    cut_of = {it["id"]: it for it in items}
+    summary = {}
+    for aid, ap in aps.items():
+        ids = []
+        by_base: dict[str, dict] = {}
+        for n, b in ap["bones"].items():
+            base, side = SB.split_pair(n)
+            by_base.setdefault(base, {})[side or "M"] = (np.array(b["verts"], float), np.array(b["tris"], int), np.array(b["ao"], float))
+        for base, cut_sides in sorted(by_base.items()):
+            sides = dict(whole[base])
+            sides.update(cut_sides)
+            parts = {}
+            for side, (v, t, ao) in sides.items():
+                t = orient_outward(v, t)
+                parts.update(SB.mesh_split(v, t, ao) if side == "M" else {side: (v, t, ao)})
+            nodes, cent = [], {}
+            for side, (v, t, ao) in sorted(parts.items()):
+                nodes.append({"name": side, "positions": v, "normals": SB.normals(v, t), "indices": t, "mode": TRIANGLES,
+                              "colors": np.repeat((SB.AO_FLOOR + (1 - SB.AO_FLOOR) * ao)[:, None], 3, axis=1)})
+                cent[side] = v.mean(0).round(2).tolist()
+            sid = f"sb_appr_{aid}__{SB.slug(base)[3:]}"
+            write_glb(BUILD / f"{sid}.glb", nodes, {"id": sid})
+            src = cut_of[SB.slug(base)]
+            items.append({**{k: src[k] for k in ("aliases", "colour", "dataset", "source", "licence", "citation", "citationUrls")},
+                          "id": sid, "name": base, "type": "bone", "file": f"assets/{KIND}/{sid}.glb", "bytes": 0, "refIds": [],
+                          "category": "bone", "approach": aid, "replaces": SB.slug(base),
+                          "derivation": f"The CT's {base.lower()} with the bone of the {ap['name'].lower()} removed "
+                                        "(pipeline/skullbase_v3_approach.py).",
+                          "centroid": {"L": cent.get("L", cent.get("R")), "R": cent.get("R", cent.get("L"))}})
+            ids.append(sid)
+        v, t = np.array(ap["removed"]["verts"], float), np.array(ap["removed"]["tris"], int)
+        t = orient_outward(v, t)
+        sid = f"sb_appr_{aid}__removed"
+        write_glb(BUILD / f"{sid}.glb", [{"name": "R", "positions": v, "normals": SB.normals(v, t), "indices": t, "mode": TRIANGLES}], {"id": sid})
+        c = v.mean(0).round(2).tolist()
+        items.append({"id": sid, "name": "Bone removed", "aliases": [], "type": "soft", "file": f"assets/{KIND}/{sid}.glb", "bytes": 0,
+                      "colour": colour("sbRemoved"), "dataset": "rule", "source": "Cut out of the CT's bone by rule",
+                      "licence": DATASET_V2_LICENCE, "citation": [], "citationUrls": [], "refIds": [], "category": "removed",
+                      "approach": aid, "layer": "nuclei",
+                      "derivation": f"The bone the {ap['name'].lower()} removes: {ap['removedMl']} ml. {ap['how']}", "centroid": {"L": c, "R": c}})
+        summary[aid] = {"name": ap["name"], "side": ap["side"], "how": ap["how"], "removedMl": ap["removedMl"], "bones": ids,
+                        "removed": sid, "burrHoles": ap["burrHoles"]}
+    (GEN / f"{PREFIX}-approaches.json").write_text(json.dumps(summary, indent=1, ensure_ascii=False))
 
 
 def finalize() -> int:
@@ -798,11 +955,17 @@ def validate() -> int:
     for s, seg in fit["facialSegmentsMm"].items():
         check(2 <= seg["labyrinthine"] <= 8, f"{s}: labyrinthine segment {seg['labyrinthine']} mm")
         check(6 <= seg["tympanic"] <= 16, f"{s}: tympanic segment {seg['tympanic']} mm")
+    aps = json.loads((GEN / f"{PREFIX}-approaches.json").read_text())
     for it in m["structures"]:
         check((REPO / "public" / it["file"]).exists(), f"missing {it['file']}")
         if it["file"].startswith(f"assets/{KIND}/"):
             c = it["centroid"]
-            check(c["L"][0] < 0 < c["R"][0], f"{it['id']}: sides {c}")
+            if it.get("category") == "removed" and aps[it["approach"]]["side"] == "M":     # a midline craniotomy
+                check(abs(c["R"][0]) < 5, f"{it['id']}: not on the midline {c}")
+            elif it.get("category") == "removed":     # one side only: the craniotomy is on the right
+                check(c["R"][0] > 0, f"{it['id']}: not on the right {c}")
+            else:
+                check(c["L"][0] < 0 < c["R"][0], f"{it['id']}: sides {c}")
     for nerve, sides in fit["nerves"].items():
         for s, r in sides.items():
             check(r["boneCrossedMm"] <= 2.0, f"{nerve} {s}: crosses {r['boneCrossedMm']} mm of bone")
@@ -832,6 +995,60 @@ def validate() -> int:
                  "Optic canal", "Superior orbital fissure", "Foramen rotundum", "Foramen ovale", "Foramen spinosum", "Hypoglossal canal",
                  "Jugular foramen", "Foramen magnum", "Foramen lacerum", "Internal acoustic meatus", "External opening of carotid canal"):
         check(need in names, f"landmark {need} missing")
+    # the surgical view: the craniotomy's cut bones stand in for whole ones; the brain fitted, cleared and opened
+    ids = {it["id"]: it for it in m["structures"]}
+    check({"pterional", "lso", "interhemispheric", "suboccipital"} <= set(aps), f"craniotomies: {sorted(aps)}")
+    for aid, ap in aps.items():
+        check((2 if aid == "suboccipital" else 4) <= ap["removedMl"] <= 30, f"{aid}: removes {ap['removedMl']} ml")   # the squama is thin below the inion
+        check(ap["removed"] in ids and all(b in ids for b in ap["bones"]), f"{aid}: structures missing")
+        for b in ap["bones"]:
+            check(ids.get(ids[b].get("replaces", ""), {}).get("type") == "bone", f"{aid}: {b} replaces no bone")
+    brain = [it for it in m["structures"] if it.get("category") == "brain"]
+    check(len(brain) == 7 and all(it.get("morph") for it in brain), f"{len(brain)} brain pieces, all with the surgical shapes as morph targets")
+    check(any(it["name"] == "Falx cerebri" for it in m["structures"]), "the falx is missing")
+    check(sum(1 for it in m["structures"] if it.get("category") == "artery" and it.get("morph")) == 2, "M2 and M3 carry the opening")
+    b = fit.get("brain")
+    check(b is not None, "the brain's report is missing")
+    if b:
+        f_ = b["fit"]
+        check(f_["tableMedianMm"] <= 1.5, f"brain hull {f_['tableMedianMm']} mm from its place in the cavity")
+        check(f_["m2InsulaMedianMmR"] <= 2.0 and f_["m3FissureMedianMmR"] <= 2.0, f"right M2 / M3 {f_['m2InsulaMedianMmR']} / {f_['m3FissureMedianMmR']} mm off the insula / fissure")
+        check(f_["m2InCortexShareR"] <= 0.1 and f_["m3InCortexShareR"] <= 0.1, "right M2 / M3 inside the cortex")
+        check(f_["minRelativeVolume"] > 0, f"the deformation folds (relative volume {f_['minRelativeVolume']})")
+        for s in ("R", "L"):
+            check(b["clear"][s]["inBoneWayAfter"] == 0 and b["clear"][s]["inVesselAfter"] == 0, f"{s}: brain still in bone's way or in a vessel")
+        o = b["open"]
+        check(min(b["params"]["openFrontalMm"], b["params"]["openTemporalMm"]) - 0.5 <= o["maxMovedMm"] <= max(b["params"]["openFrontalMm"], b["params"]["openTemporalMm"]) + 2,
+              f"opening moves the brain up to {o['maxMovedMm']} mm")
+        lf = b["lift"]
+        check(b["params"]["liftMm"] - 0.5 <= lf["maxMovedMm"] <= b["params"]["liftMm"] + 2, f"the lift moves the brain up to {lf['maxMovedMm']} mm")
+        check(lf["orbitalHandles"] > 100 and lf["insulaHandles"] > 100, f"the lift holds {lf['orbitalHandles']} orbital, {lf['insulaHandles']} insular vertices")
+        ih = b["interhemispheric"]
+        check(b["params"]["interhemisphericMm"] - 0.5 <= ih["maxMovedMm"] <= b["params"]["interhemisphericMm"] + 2,
+              f"the interhemispheric retraction moves the brain up to {ih['maxMovedMm']} mm")
+        check(ih["fullyMoved"] > 300 and ih["outsideCavityAfter"] == 0, f"the retraction moves {ih['fullyMoved']} vertices fully, "
+              f"{ih['outsideCavityAfter']} left outside the cavity")
+        check(ih["crossedTriangles"] <= b["crossedTriangles"]["R"]["fitted"] + 20,
+              f"the retraction crosses {ih['crossedTriangles']} triangles (fitted: {b['crossedTriangles']['R']['fitted']})")
+        check("third" in b["aca"]["a3"] and b["aca"]["thirdA2ToAcomMm"] is not None, f"anterior cerebral arteries {b['aca']}")
+        for name, mv in b["vesselsMovedMaxMm"].items():
+            check(mv["L"]["open"] == 0 and mv["L"]["lift"] == 0, f"{name}: the left side moves {mv['L']}")
+            check(0.5 < mv["R"]["open"] <= b["params"]["openFrontalMm"] + 1, f"{name}: the opening moves it {mv['R']['open']} mm")
+            check(mv["R"]["lift"] <= b["params"]["liftMm"] + 1, f"{name}: the lift moves it {mv['R']['lift']} mm")
+    # the telovelar view: the cerebellum, brainstem and fourth ventricle fitted into the posterior fossa, the tonsils drawn apart
+    pf = [it for it in m["structures"] if it.get("category") in ("hindbrain", "ventricle")]
+    check(len(pf) == 8 and {it["name"] for it in pf if it.get("morph")} == {"Cerebellar hemisphere", "Tonsil of cerebellum"},
+          f"{len(pf)} posterior fossa pieces")
+    pr = fit.get("pfossa")
+    check(pr is not None, "the posterior fossa's report is missing")
+    if pr:
+        f_, c_, t_ = pr["fit"], pr["clear"], pr["telovelar"]
+        check(f_["tableMedianMm"] <= 1.5 and f_["vesselInsideShare"] <= 0.1 and f_["minRelativeVolume"] > 0,
+              f"posterior fossa fit: table {f_['tableMedianMm']} mm, vessels inside {f_['vesselInsideShare']}, volume {f_['minRelativeVolume']}")
+        check(c_["inBoneAfter"] == 0 and c_["inVesselAfter"] <= 20, f"posterior fossa clearance {c_}")
+        check(pr["params"]["tvMm"] - 0.5 <= t_["maxMovedMm"] <= pr["params"]["tvMm"] + 1.5 and t_["inBoneAfter"] == 0 and t_["inVesselAfter"] == 0,
+              f"telovelar shape {t_}")
+        check(t_["tonsilToMedullaMm"]["moved"] > t_["tonsilToMedullaMm"]["rest"], f"the tonsils do not part from the medulla {t_}")
     print(f"skull base v3 validation: {n - len(fails)}/{n} checks passed")
     for f in fails:
         print("FAIL", f)

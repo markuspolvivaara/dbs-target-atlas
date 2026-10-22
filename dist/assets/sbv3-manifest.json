@@ -232,7 +232,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_ethmoid_bone.glb",
-   "bytes": 166068,
+   "bytes": 212304,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -255,17 +255,17 @@
    ],
    "refIds": [],
    "category": "bone",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -6.29,
-     27.42,
-     -8.19
+     -6.32,
+     27.29,
+     -8.49
     ],
     "R": [
-     7.09,
-     26.38,
-     -7.52
+     7.28,
+     26.39,
+     -7.48
     ]
    }
   },
@@ -275,7 +275,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_frontal_bone.glb",
-   "bytes": 738740,
+   "bytes": 787968,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -298,17 +298,17 @@
    ],
    "refIds": [],
    "category": "bone",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -25.44,
-     33.05,
-     46.69
+     -22.6,
+     33.43,
+     37.37
     ],
     "R": [
-     27.23,
-     36.69,
-     48.96
+     24.21,
+     36.07,
+     39.61
     ]
    }
   },
@@ -495,8 +495,8 @@
    "name": "Middle cerebral artery (M2 segment)",
    "aliases": [],
    "type": "tube",
-   "file": "assets/skullbase-ct/sb_middle_cerebral_artery_m2_segment.glb",
-   "bytes": 158800,
+   "file": "assets/skullbase-v3/sb_middle_cerebral_artery_m2_segment.glb",
+   "bytes": 186604,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -533,15 +533,16 @@
     ]
    },
    "system": "Middle cerebral artery",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "morph": true
   },
   {
    "id": "sb_middle_cerebral_artery_m3_segment",
    "name": "Middle cerebral artery (M3 segment)",
    "aliases": [],
    "type": "tube",
-   "file": "assets/skullbase-ct/sb_middle_cerebral_artery_m3_segment.glb",
-   "bytes": 155924,
+   "file": "assets/skullbase-v3/sb_middle_cerebral_artery_m3_segment.glb",
+   "bytes": 199552,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -578,7 +579,8 @@
     ]
    },
    "system": "Middle cerebral artery",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "morph": true
   },
   {
    "id": "sb_occipital_bone",
@@ -586,7 +588,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_occipital_bone.glb",
-   "bytes": 685688,
+   "bytes": 616792,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -609,17 +611,17 @@
    ],
    "refIds": [],
    "category": "bone",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -26.67,
-     -72.13,
-     -19.33
+     -22.31,
+     -62.87,
+     -19.61
     ],
     "R": [
-     25.74,
-     -70.95,
-     -18.18
+     21.86,
+     -62.3,
+     -19.93
     ]
    }
   },
@@ -674,7 +676,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_parietal_bone.glb",
-   "bytes": 1164012,
+   "bytes": 833928,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -697,17 +699,17 @@
    ],
    "refIds": [],
    "category": "bone",
-   "derivation": "The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
+   "derivation": "The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -43.16,
-     -46.85,
-     57.24
+     -41.3,
+     -43.8,
+     54.02
     ],
     "R": [
-     45.07,
-     -49.55,
-     55.28
+     42.86,
+     -39.52,
+     56.73
     ]
    }
   },
@@ -897,7 +899,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_sphenoid_bone.glb",
-   "bytes": 382616,
+   "bytes": 516288,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -920,17 +922,17 @@
    ],
    "refIds": [],
    "category": "bone",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -18.12,
-     9.74,
-     -7.77
+     -18.22,
+     9.86,
+     -7.91
     ],
     "R": [
-     19.3,
-     10.11,
-     -6.38
+     19.45,
+     9.95,
+     -6.9
     ]
    }
   },
@@ -1073,7 +1075,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_temporal_bone.glb",
-   "bytes": 914972,
+   "bytes": 1015400,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -1096,17 +1098,17 @@
    ],
    "refIds": [],
    "category": "bone",
-   "derivation": "The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
+   "derivation": "The CT angiogram's bone surface (400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it; shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -50.33,
-     -19.71,
-     -15.15
+     -48.0,
+     -21.21,
+     -14.85
     ],
     "R": [
-     51.09,
-     -25.25,
-     -19.26
+     48.27,
+     -23.44,
+     -18.63
     ]
    }
   },
@@ -1243,7 +1245,7 @@
     ]
    },
    "system": "Vertebral artery",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 0.86
   },
   {
    "id": "tb_facial_nerve_vii",
@@ -1677,7 +1679,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_optic_nerve_ii.glb",
-   "bytes": 7836,
+   "bytes": 7820,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1698,16 +1700,16 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 2,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 43.9 mm drawn, at most 1.5 mm from the fitted course, 0.0 mm through bone the mask closes; left: 42.8 mm drawn, at most 1.3 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 43.9 mm drawn, at most 1.5 mm from the fitted course, 0.0 mm through bone the mask closes; left: 42.7 mm drawn, at most 1.5 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base.",
    "centroid": {
     "L": [
-     -14.43,
-     18.65,
-     16.17
+     -14.33,
+     18.7,
+     16.19
     ],
     "R": [
-     15.42,
-     18.34,
+     15.41,
+     18.36,
      14.54
     ]
    }
@@ -1882,7 +1884,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_maxillary_nerve_v2.glb",
-   "bytes": 16572,
+   "bytes": 16500,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1903,17 +1905,17 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 5,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 52.6 mm drawn, at most 5.0 mm from the fitted course, 1.2 mm through bone the mask closes; left: 47.6 mm drawn, at most 5.7 mm from the fitted course, 0.6 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 49.6 mm drawn, at most 5.0 mm from the fitted course, 0.0 mm through bone the mask closes; left: 50.2 mm drawn, at most 5.5 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base.",
    "centroid": {
     "L": [
-     -16.33,
-     7.77,
-     -2.6
+     -16.34,
+     8.56,
+     -3.18
     ],
     "R": [
-     17.29,
-     8.63,
-     -4.15
+     17.45,
+     8.06,
+     -3.72
     ]
    }
   },
@@ -2416,7 +2418,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_anterior_ethmoidal_artery.glb",
-   "bytes": 18536,
+   "bytes": 16552,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2438,17 +2440,17 @@
    "layer": "tracts",
    "system": "Ethmoidal arteries",
    "fitted": true,
-   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), from this patient's ophthalmic artery (TopBrain's label), routed through the CT near its fitted course, crossing bone only through an opening (a median 12.2 mm on the right, 14.1 mm on the left). Its course is approximate.",
+   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), from this patient's ophthalmic artery (TopBrain's label), routed through the CT near its fitted course, crossing bone only through an opening (a median 11.8 mm on the right, 14.1 mm on the left). Its course is approximate.",
    "centroid": {
     "L": [
-     -8.39,
-     28.69,
-     1.73
+     -11.23,
+     31.69,
+     1.97
     ],
     "R": [
-     7.86,
-     27.22,
-     -0.87
+     10.14,
+     31.55,
+     3.83
     ]
    }
   },
@@ -2626,7 +2628,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_posterior_ethmoidal_artery.glb",
-   "bytes": 10332,
+   "bytes": 10844,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2651,9 +2653,9 @@
    "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), from this patient's ophthalmic artery (TopBrain's label), routed through the CT near its fitted course, crossing bone only through an opening (a median 6.7 mm on the right, 8.1 mm on the left). Its course is approximate.",
    "centroid": {
     "L": [
-     -14.05,
-     19.74,
-     1.92
+     -14.47,
+     20.62,
+     2.55
     ],
     "R": [
      14.13,
@@ -2780,6 +2782,1187 @@
      -35.66
     ]
    }
+  },
+  {
+   "id": "sb_falx_cerebri",
+   "name": "Falx cerebri",
+   "aliases": [],
+   "type": "soft",
+   "fitted": true,
+   "file": "assets/skullbase-ct/sb_falx_cerebri.glb",
+   "bytes": 100344,
+   "colour": {
+    "token": "sbSoft",
+    "light": "#8A6FA8",
+    "dark": "#B9A3D6"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "soft",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Fitted from the Z-Anatomy model onto this CT's skull (approximate position): its mesh.",
+   "centroid": {
+    "L": [
+     -0.76,
+     -50.76,
+     37.65
+    ],
+    "R": [
+     1.14,
+     -31.19,
+     38.95
+    ]
+   }
+  },
+  {
+   "id": "br_frontal_lobe",
+   "name": "Frontal lobe",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/br_frontal_lobe.glb",
+   "bytes": 630508,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "template",
+   "source": "Lead-DBS MNI 2009b template surface, fitted into this CT",
+   "licence": "GPL-3.0, non-commercial (the Lead-DBS template surface and the FreeSurfer labels shipped with it; FreeSurfer: research use); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862.",
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2023.119862",
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.68 mm), this patient's arteries outside the cortex, the M2 segments on the insula (median 1.038 mm on the right) and the M3 segments in the Sylvian fissure (median 1.147 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue.",
+   "centroid": {
+    "L": [
+     -21.04,
+     2.34,
+     59.91
+    ],
+    "R": [
+     25.7,
+     2.55,
+     58.44
+    ]
+   }
+  },
+  {
+   "id": "br_parietal_lobe",
+   "name": "Parietal lobe",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/br_parietal_lobe.glb",
+   "bytes": 314524,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "template",
+   "source": "Lead-DBS MNI 2009b template surface, fitted into this CT",
+   "licence": "GPL-3.0, non-commercial (the Lead-DBS template surface and the FreeSurfer labels shipped with it; FreeSurfer: research use); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862.",
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2023.119862",
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.68 mm), this patient's arteries outside the cortex, the M2 segments on the insula (median 1.038 mm on the right) and the M3 segments in the Sylvian fissure (median 1.147 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue.",
+   "centroid": {
+    "L": [
+     -28.94,
+     -67.36,
+     41.5
+    ],
+    "R": [
+     26.88,
+     -68.14,
+     40.94
+    ]
+   }
+  },
+  {
+   "id": "br_temporal_lobe",
+   "name": "Temporal lobe",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/br_temporal_lobe.glb",
+   "bytes": 259560,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "template",
+   "source": "Lead-DBS MNI 2009b template surface, fitted into this CT",
+   "licence": "GPL-3.0, non-commercial (the Lead-DBS template surface and the FreeSurfer labels shipped with it; FreeSurfer: research use); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862.",
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2023.119862",
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.68 mm), this patient's arteries outside the cortex, the M2 segments on the insula (median 1.038 mm on the right) and the M3 segments in the Sylvian fissure (median 1.147 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue.",
+   "centroid": {
+    "L": [
+     -41.91,
+     -28.61,
+     7.92
+    ],
+    "R": [
+     42.18,
+     -27.5,
+     4.5
+    ]
+   }
+  },
+  {
+   "id": "br_occipital_lobe",
+   "name": "Occipital lobe",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/br_occipital_lobe.glb",
+   "bytes": 153184,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "template",
+   "source": "Lead-DBS MNI 2009b template surface, fitted into this CT",
+   "licence": "GPL-3.0, non-commercial (the Lead-DBS template surface and the FreeSurfer labels shipped with it; FreeSurfer: research use); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862.",
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2023.119862",
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.68 mm), this patient's arteries outside the cortex, the M2 segments on the insula (median 1.038 mm on the right) and the M3 segments in the Sylvian fissure (median 1.147 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue.",
+   "centroid": {
+    "L": [
+     -20.74,
+     -75.25,
+     -2.68
+    ],
+    "R": [
+     17.12,
+     -74.47,
+     -1.69
+    ]
+   }
+  },
+  {
+   "id": "br_insula",
+   "name": "Insula",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/br_insula.glb",
+   "bytes": 77056,
+   "colour": {
+    "token": "sbInsula",
+    "light": "#4A3DA8",
+    "dark": "#8A7BE0"
+   },
+   "dataset": "template",
+   "source": "Lead-DBS MNI 2009b template surface, fitted into this CT",
+   "licence": "GPL-3.0, non-commercial (the Lead-DBS template surface and the FreeSurfer labels shipped with it; FreeSurfer: research use); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862.",
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2023.119862",
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.68 mm), this patient's arteries outside the cortex, the M2 segments on the insula (median 1.038 mm on the right) and the M3 segments in the Sylvian fissure (median 1.147 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue.",
+   "centroid": {
+    "L": [
+     -31.29,
+     -5.95,
+     30.89
+    ],
+    "R": [
+     32.77,
+     -7.41,
+     26.45
+    ]
+   }
+  },
+  {
+   "id": "br_cingulate_gyrus",
+   "name": "Cingulate gyrus",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/br_cingulate_gyrus.glb",
+   "bytes": 88540,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "template",
+   "source": "Lead-DBS MNI 2009b template surface, fitted into this CT",
+   "licence": "GPL-3.0, non-commercial (the Lead-DBS template surface and the FreeSurfer labels shipped with it; FreeSurfer: research use); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862.",
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2023.119862",
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.68 mm), this patient's arteries outside the cortex, the M2 segments on the insula (median 1.038 mm on the right) and the M3 segments in the Sylvian fissure (median 1.147 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue.",
+   "centroid": {
+    "L": [
+     -3.04,
+     -18.39,
+     45.93
+    ],
+    "R": [
+     5.77,
+     -22.19,
+     46.54
+    ]
+   }
+  },
+  {
+   "id": "br_medial_wall",
+   "name": "Medial wall (cut through the corpus callosum)",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/br_medial_wall.glb",
+   "bytes": 105148,
+   "colour": {
+    "token": "sbMedialWall",
+    "light": "#5A5A69",
+    "dark": "#73738C"
+   },
+   "dataset": "template",
+   "source": "Lead-DBS MNI 2009b template surface, fitted into this CT",
+   "licence": "GPL-3.0, non-commercial (the Lead-DBS template surface and the FreeSurfer labels shipped with it; FreeSurfer: research use); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862.",
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2023.119862",
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "The template's medial wall: where its pial surface is cut at the midline, through the corpus callosum and the diencephalon (a cut, not a surface of the brain). A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.68 mm), this patient's arteries outside the cortex, the M2 segments on the insula (median 1.038 mm on the right) and the M3 segments in the Sylvian fissure (median 1.147 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue.",
+   "centroid": {
+    "L": [
+     -14.44,
+     -20.34,
+     19.9
+    ],
+    "R": [
+     14.75,
+     -23.22,
+     18.25
+    ]
+   }
+  },
+  {
+   "id": "pf_cerebellar_hemisphere",
+   "name": "Cerebellar hemisphere",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/pf_cerebellar_hemisphere.glb",
+   "bytes": 835320,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "fitted": true,
+   "source": "Z-Anatomy model (BodyParts3D), carried onto this CT by Skull base v2's fit and fitted into its posterior fossa",
+   "licence": "Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.513 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 4 % after), the tentorium above; then the 889 vertices still in an artery's way and the 201 in bone's pushed clear. The telovelar slider draws the tonsils 6 mm apart (laterally, a little up), the rest of each hemisphere following; a shape, not a simulation of the tissue.",
+   "centroid": {
+    "L": [
+     -18.06,
+     -51.7,
+     -15.27
+    ],
+    "R": [
+     19.11,
+     -51.78,
+     -15.06
+    ]
+   }
+  },
+  {
+   "id": "pf_tonsil",
+   "name": "Tonsil of cerebellum",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/pf_tonsil.glb",
+   "bytes": 53392,
+   "colour": {
+    "token": "sbTonsil",
+    "light": "#7D6DFF",
+    "dark": "#6262C3"
+   },
+   "dataset": "zanatomy",
+   "fitted": true,
+   "source": "Z-Anatomy model (BodyParts3D), carried onto this CT by Skull base v2's fit and fitted into its posterior fossa",
+   "licence": "Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: tonsil of cerebellum), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.513 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 4 % after), the tentorium above; then the 889 vertices still in an artery's way and the 201 in bone's pushed clear. The telovelar slider draws the tonsils 6 mm apart (laterally, a little up), the rest of each hemisphere following; a shape, not a simulation of the tissue.",
+   "centroid": {
+    "L": [
+     -9.78,
+     -42.32,
+     -28.23
+    ],
+    "R": [
+     11.01,
+     -42.76,
+     -26.6
+    ]
+   }
+  },
+  {
+   "id": "pf_vermis",
+   "name": "Vermis",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/pf_vermis.glb",
+   "bytes": 93580,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "fitted": true,
+   "source": "Z-Anatomy model (BodyParts3D), carried onto this CT by Skull base v2's fit and fitted into its posterior fossa",
+   "licence": "Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": false,
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: lingula of cerebellum, central lobule, culmen, declive, folium of vermis, tuber of vermis, pyramis of vermis, uvula of vermis, nodule of vermis), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.513 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 4 % after), the tentorium above; then the 889 vertices still in an artery's way and the 201 in bone's pushed clear.",
+   "centroid": {
+    "L": [
+     -1.24,
+     -53.19,
+     -11.22
+    ],
+    "R": [
+     3.52,
+     -54.02,
+     -10.37
+    ]
+   }
+  },
+  {
+   "id": "pf_superior_cerebellar_peduncle",
+   "name": "Superior cerebellar peduncle",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/pf_superior_cerebellar_peduncle.glb",
+   "bytes": 112716,
+   "colour": {
+    "token": "sbBrainstem",
+    "light": "#51474C",
+    "dark": "#92929D"
+   },
+   "dataset": "zanatomy",
+   "fitted": true,
+   "source": "Z-Anatomy model (BodyParts3D), carried onto this CT by Skull base v2's fit and fitted into its posterior fossa",
+   "licence": "Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": false,
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: superior cerebellar peduncle), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.513 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 4 % after), the tentorium above; then the 889 vertices still in an artery's way and the 201 in bone's pushed clear.",
+   "centroid": {
+    "L": [
+     -4.16,
+     -39.88,
+     -8.26
+    ],
+    "R": [
+     9.18,
+     -40.15,
+     -7.45
+    ]
+   }
+  },
+  {
+   "id": "pf_midbrain",
+   "name": "Midbrain",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/pf_midbrain.glb",
+   "bytes": 81280,
+   "colour": {
+    "token": "sbBrainstem",
+    "light": "#51474C",
+    "dark": "#92929D"
+   },
+   "dataset": "zanatomy",
+   "fitted": true,
+   "source": "Z-Anatomy model (BodyParts3D), carried onto this CT by Skull base v2's fit and fitted into its posterior fossa",
+   "licence": "Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": false,
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: midbrain), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.513 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 4 % after), the tentorium above; then the 889 vertices still in an artery's way and the 201 in bone's pushed clear.",
+   "centroid": {
+    "L": [
+     -2.54,
+     -28.21,
+     11.72
+    ],
+    "R": [
+     6.74,
+     -28.17,
+     11.53
+    ]
+   }
+  },
+  {
+   "id": "pf_pons",
+   "name": "Pons",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/pf_pons.glb",
+   "bytes": 135324,
+   "colour": {
+    "token": "sbBrainstem",
+    "light": "#51474C",
+    "dark": "#92929D"
+   },
+   "dataset": "zanatomy",
+   "fitted": true,
+   "source": "Z-Anatomy model (BodyParts3D), carried onto this CT by Skull base v2's fit and fitted into its posterior fossa",
+   "licence": "Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": false,
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: pons), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.513 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 4 % after), the tentorium above; then the 889 vertices still in an artery's way and the 201 in bone's pushed clear.",
+   "centroid": {
+    "L": [
+     -5.86,
+     -26.4,
+     -8.27
+    ],
+    "R": [
+     9.67,
+     -26.65,
+     -7.79
+    ]
+   }
+  },
+  {
+   "id": "pf_medulla",
+   "name": "Medulla oblongata",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/pf_medulla.glb",
+   "bytes": 81536,
+   "colour": {
+    "token": "sbBrainstem",
+    "light": "#51474C",
+    "dark": "#92929D"
+   },
+   "dataset": "zanatomy",
+   "fitted": true,
+   "source": "Z-Anatomy model (BodyParts3D), carried onto this CT by Skull base v2's fit and fitted into its posterior fossa",
+   "licence": "Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": false,
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: medulla oblongata), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.513 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 4 % after), the tentorium above; then the 889 vertices still in an artery's way and the 201 in bone's pushed clear.",
+   "centroid": {
+    "L": [
+     -3.71,
+     -33.56,
+     -29.04
+    ],
+    "R": [
+     6.55,
+     -34.03,
+     -27.68
+    ]
+   }
+  },
+  {
+   "id": "pf_fourth_ventricle",
+   "name": "Fourth ventricle",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/pf_fourth_ventricle.glb",
+   "bytes": 43044,
+   "colour": {
+    "token": "sbCsf",
+    "light": "#0B8D9D",
+    "dark": "#51EFEF"
+   },
+   "dataset": "zanatomy",
+   "fitted": true,
+   "source": "Z-Anatomy model (BodyParts3D), carried onto this CT by Skull base v2's fit and fitted into its posterior fossa",
+   "licence": "Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "ventricle",
+   "layer": "cortex",
+   "morph": false,
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: fourth ventricle), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.513 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 4 % after), the tentorium above; then the 889 vertices still in an artery's way and the 201 in bone's pushed clear.",
+   "centroid": {
+    "L": [
+     -1.39,
+     -36.94,
+     -16.84
+    ],
+    "R": [
+     5.45,
+     -37.0,
+     -16.15
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_pterional__frontal_bone",
+   "name": "Frontal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_pterional__frontal_bone.glb",
+   "bytes": 843088,
+   "refIds": [],
+   "category": "bone",
+   "approach": "pterional",
+   "replaces": "sb_frontal_bone",
+   "derivation": "The CT's frontal bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -22.6,
+     33.43,
+     37.37
+    ],
+    "R": [
+     26.31,
+     36.17,
+     38.7
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_pterional__parietal_bone",
+   "name": "Parietal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_pterional__parietal_bone.glb",
+   "bytes": 824092,
+   "refIds": [],
+   "category": "bone",
+   "approach": "pterional",
+   "replaces": "sb_parietal_bone",
+   "derivation": "The CT's parietal bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -41.3,
+     -43.8,
+     54.02
+    ],
+    "R": [
+     42.61,
+     -40.93,
+     57.67
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_pterional__sphenoid_bone",
+   "name": "Sphenoid bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_pterional__sphenoid_bone.glb",
+   "bytes": 520276,
+   "refIds": [],
+   "category": "bone",
+   "approach": "pterional",
+   "replaces": "sb_sphenoid_bone",
+   "derivation": "The CT's sphenoid bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -18.22,
+     9.86,
+     -7.91
+    ],
+    "R": [
+     19.6,
+     10.07,
+     -6.55
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_pterional__temporal_bone",
+   "name": "Temporal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_pterional__temporal_bone.glb",
+   "bytes": 1017660,
+   "refIds": [],
+   "category": "bone",
+   "approach": "pterional",
+   "replaces": "sb_temporal_bone",
+   "derivation": "The CT's temporal bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -48.0,
+     -21.21,
+     -14.85
+    ],
+    "R": [
+     48.34,
+     -23.46,
+     -18.67
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_pterional__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/sb_appr_pterional__removed.glb",
+   "bytes": 376268,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of the CT's bone by rule",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "pterional",
+   "layer": "nuclei",
+   "derivation": "The bone the pterional (frontotemporal) craniotomy removes: 7.9 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; the model's zygomatic process of the frontal bone, raised 6 mm); a frontal hole near the superior orbital rim (Yilmaz 2025; here 20 mm above and 10 mm lateral to the supraorbital notch, 27 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral sphenoid ridge drilled (a 6 mm radius along the ridge), stopping 12 mm short of the anterior clinoid process (illustrative: Yilmaz 2025 limits this resection at the meningo-orbital artery in the orbitozygomatic approach, which the model does not show). Burr holes: (52, 48, 29) mm, (36, 54, 51) mm, (61, -7, -1) mm, (64, -10, 39) mm.",
+   "centroid": {
+    "L": [
+     52.06,
+     20.78,
+     29.09
+    ],
+    "R": [
+     52.06,
+     20.78,
+     29.09
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_lso__frontal_bone",
+   "name": "Frontal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_lso__frontal_bone.glb",
+   "bytes": 824520,
+   "refIds": [],
+   "category": "bone",
+   "approach": "lso",
+   "replaces": "sb_frontal_bone",
+   "derivation": "The CT's frontal bone with the bone of the lateral supraorbital craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -22.6,
+     33.43,
+     37.37
+    ],
+    "R": [
+     25.28,
+     35.98,
+     39.85
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_lso__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/sb_appr_lso__removed.glb",
+   "bytes": 222896,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of the CT's bone by rule",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "lso",
+   "layer": "nuclei",
+   "derivation": "The bone the lateral supraorbital craniotomy removes: 5.8 ml. A frontolateral flap over the orbital roof, with one burr hole posteriorly just below the temporal line (Cha 2012, Choque-Velasquez 2018), cut down to the anterior fossa floor (the basal part drilled off, Cha 2012); the sphenoid ridge is not drilled. Its outline is placed by hand on this skull: about 1396 mm² seen face on, larger than the mean LSO craniotomy of 1275 mm² (Cha 2012) on purpose, to show the anatomy (illustrative). Burr hole: (62, 9, 37) mm.",
+   "centroid": {
+    "L": [
+     48.17,
+     31.97,
+     52.83
+    ],
+    "R": [
+     48.17,
+     31.97,
+     52.83
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_interhemispheric__frontal_bone",
+   "name": "Frontal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_interhemispheric__frontal_bone.glb",
+   "bytes": 786144,
+   "refIds": [],
+   "category": "bone",
+   "approach": "interhemispheric",
+   "replaces": "sb_frontal_bone",
+   "derivation": "The CT's frontal bone with the bone of the right parasagittal craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -21.8,
+     33.23,
+     39.49
+    ],
+    "R": [
+     25.31,
+     37.53,
+     36.55
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_interhemispheric__parietal_bone",
+   "name": "Parietal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_interhemispheric__parietal_bone.glb",
+   "bytes": 853164,
+   "refIds": [],
+   "category": "bone",
+   "approach": "interhemispheric",
+   "replaces": "sb_parietal_bone",
+   "derivation": "The CT's parietal bone with the bone of the right parasagittal craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -40.89,
+     -43.41,
+     54.49
+    ],
+    "R": [
+     42.88,
+     -39.14,
+     57.55
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_interhemispheric__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/sb_appr_interhemispheric__removed.glb",
+   "bytes": 368780,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of the CT's bone by rule",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "interhemispheric",
+   "layer": "nuclei",
+   "derivation": "The bone the right parasagittal craniotomy removes: 15.3 ml. A right parasagittal flap at the coronal suture, its medial edge on the midline (over the superior sagittal sinus): from 40 mm in front of bregma to 20 mm behind it and 40 mm wide, about 2250 mm² seen from above (illustrative: the sources describe a right precoronal parasagittal or frontoparietal midline craniotomy without giving its size). Bregma here: (0, 6, 100) mm, where this skull's frontal and parietal bones meet at the midline.",
+   "centroid": {
+    "L": [
+     17.94,
+     14.01,
+     88.17
+    ],
+    "R": [
+     17.94,
+     14.01,
+     88.17
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_suboccipital__occipital_bone",
+   "name": "Occipital bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_suboccipital__occipital_bone.glb",
+   "bytes": 622844,
+   "refIds": [],
+   "category": "bone",
+   "approach": "suboccipital",
+   "replaces": "sb_occipital_bone",
+   "derivation": "The CT's occipital bone with the bone of the midline suboccipital craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -22.82,
+     -62.85,
+     -19.71
+    ],
+    "R": [
+     22.41,
+     -62.2,
+     -19.93
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_suboccipital__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/sb_appr_suboccipital__removed.glb",
+   "bytes": 367376,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of the CT's bone by rule",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "suboccipital",
+   "layer": "nuclei",
+   "derivation": "The bone the midline suboccipital craniotomy removes: 9.3 ml. A midline suboccipital flap from 10 mm below the internal occipital protuberance (the confluence of the sinuses) down through the posterior rim of the foramen magnum, 25 mm to each side of the midline, about 1654 mm² seen from behind (illustrative: the sources describe a median suboccipital craniotomy or craniectomy without one size; a keyhole of about 2 cm in Wang 2023). The posterior arch of C1 is left (Cho 2024).",
+   "centroid": {
+    "L": [
+     -0.61,
+     -68.65,
+     -40.03
+    ],
+    "R": [
+     -0.61,
+     -68.65,
+     -40.03
+    ]
+   }
   }
  ],
  "arterySystems": [
@@ -2795,9 +3978,9 @@
  ],
  "dataset": {
   "name": "TopBrain 2025 CT angiogram (case 011) with OpenEar temporal bone ALPHA registered onto it",
-  "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); OpenEar: CC BY 4.0; the nerves' courses derive from Z-Anatomy: CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); definitions Wikipedia CC BY-SA 3.0 (as shipped with Z-Anatomy); TotalSegmentator segmentations (Apache-2.0 models)",
+  "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); OpenEar: CC BY 4.0; the nerves' courses derive from Z-Anatomy: CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); definitions Wikipedia CC BY-SA 3.0 (as shipped with Z-Anatomy); TotalSegmentator segmentations (Apache-2.0 models); the surgical view's template brain: Lead-DBS, GPL-3.0 (FreeSurfer labels: research use)",
   "url": "https://zenodo.org/records/1473724",
-  "note": "The bone and the labelled vessels are one adult's CT angiogram (TopBrain case 011); the cervical carotids, jugular veins and optic nerves are TotalSegmentator's segmentations of it. The temporal bone's contents (facial nerve, chorda tympani, cochleovestibular nerve, perilymphatic spaces, ossicles, tympanic membrane, petrous carotid) are a real ear's: OpenEar specimen ALPHA, registered onto each temporal bone of this CT, the left ear mirrored. The cranial nerves are routed through this CT's foramina from the Z-Anatomy model fitted onto it (their cisternal courses approximate). The greater petrosal nerve is drawn by rule.",
+  "note": "The bone and the labelled vessels are one adult's CT angiogram (TopBrain case 011); the cervical carotids, jugular veins and optic nerves are TotalSegmentator's segmentations of it. The temporal bone's contents (facial nerve, chorda tympani, cochleovestibular nerve, perilymphatic spaces, ossicles, tympanic membrane, petrous carotid) are a real ear's: OpenEar specimen ALPHA, registered onto each temporal bone of this CT, the left ear mirrored. The cranial nerves are routed through this CT's foramina from the Z-Anatomy model fitted onto it (their cisternal courses approximate). The greater petrosal nerve is drawn by rule. The surgical view's brain is a template (the Lead-DBS MNI 2009b pial surface, GPL-3.0) fitted into this CT, and its craniotomy is cut out of the CT's bone by rule.",
   "attribution": [
    "OpenEar library (Sieber D, Erfurt P, John S, et al.), specimen ALPHA: segmentations - https://zenodo.org/records/1473724 - CC BY 4.0",
    "TopBrain 2025 challenge data (University Hospital Zurich): CT angiogram and vessel labels of case topcow_ct_011 - https://topbrain2025.grand-challenge.org, https://zenodo.org/records/16878417 - open use, source given, non-commercial",
