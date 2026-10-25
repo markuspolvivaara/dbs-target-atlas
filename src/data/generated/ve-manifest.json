@@ -5,7 +5,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 476376,
+   "bytes": 464772,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -28,24 +28,24 @@
    "id": "ve_lateral_ventricle",
    "name": "Lateral ventricle",
    "file": "assets/ventricles/ve_lateral_ventricle.glb",
-   "derivation": "This CT's own where it shows it: the fluid darker than 27 HU in its brain window (smoothed by 1 mm), at least 10 mm inside the cranial cavity and away from the labelled vessels, its largest body (1.38 ml on the right, 2.81 ml on the left; this patient's ventricles are narrow, and where they are a few millimetres wide the threshold sets their size). Where the CT does not show it, the Z-Anatomy model's (one adult, BodyParts3D), fitted onto the CT's ventricles by a smooth deformation: the CT's surface lies a median 0.79 mm from the fitted model's (1.87 mm at the 90th percentile). The temporal horns, too narrow for this CT to show, are the model's: along them the CT is 40.3 and 42.5 HU (right, left), against 43.3 and 41.8 HU in the brain 2.5 to 5 mm around, so they lie on its faint fluid. The atria's enhancing choroid plexus, which a threshold leaves out, is inside the model's. The drawn surface joins the two, softened (its signed distance smoothed by 0.75 mm) and drawn 0.5 mm outside them, within the CT's uncertainty. As drawn: 8.32 ml right, 9.19 ml left.",
+   "derivation": "This CT's own where it shows it: the fluid darker than 27 HU in its brain window (smoothed by 1 mm), at least 10 mm inside the cranial cavity and away from the labelled vessels, its largest body (1.38 ml on the right, 2.81 ml on the left; this patient's ventricles are narrow, and where they are a few millimetres wide the threshold sets their size). Where the CT does not show it, the Z-Anatomy model's (one adult, BodyParts3D), fitted onto the CT's ventricles by a smooth deformation: the CT's surface lies a median 0.79 mm from the fitted model's (1.9 mm at the 90th percentile). The temporal horns, too narrow for this CT to show, are the model's: along them the CT is 40.1 and 42.0 HU (right, left), against 43.2 and 41.7 HU in the brain 2.5 to 5 mm around, so they lie on its faint fluid. The atria's enhancing choroid plexus, which a threshold leaves out, is inside the model's. The drawn surface joins the two, softened (its signed distance smoothed by 0.75 mm) and drawn 0.5 mm outside them, within the CT's uncertainty. As drawn: 8.31 ml right, 9.19 ml left.",
    "centroid": {
     "L": [
-     -15.49,
-     -26.47,
-     28.82
+     -15.01,
+     -25.98,
+     29.38
     ],
     "R": [
-     15.41,
-     -25.28,
-     28.71
+     15.4,
+     -25.13,
+     28.77
     ]
    }
   },
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 58768,
+   "bytes": 58444,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -68,17 +68,17 @@
    "id": "ve_third_ventricle",
    "name": "Third ventricle",
    "file": "assets/ventricles/ve_third_ventricle.glb",
-   "derivation": "This CT's own as far as it shows it: the body of fluid darker than 27 HU on the midline below and between the lateral ventricles (0.58 ml), only its widest part. Where the CT does not show it, the Z-Anatomy model's (one adult, BodyParts3D), fitted onto the CT's ventricles by a smooth deformation: the CT's surface lies a median 0.79 mm from the fitted model's (1.87 mm at the 90th percentile). Its recesses and floor are the model's. The drawn surface joins the two, softened (its signed distance smoothed by 0.75 mm) and drawn 0.5 mm outside them, within the CT's uncertainty. As drawn: 1.59 ml.",
+   "derivation": "This CT's own as far as it shows it: the body of fluid darker than 27 HU on the midline below and between the lateral ventricles (0.58 ml), only its widest part. Where the CT does not show it, the Z-Anatomy model's (one adult, BodyParts3D), fitted onto the CT's ventricles by a smooth deformation: the CT's surface lies a median 0.79 mm from the fitted model's (1.9 mm at the 90th percentile). Its recesses and floor are the model's. The drawn surface joins the two, softened (its signed distance smoothed by 0.75 mm) and drawn 0.5 mm outside them, within the CT's uncertainty. As drawn: 1.58 ml.",
    "centroid": {
     "L": [
-     -1.04,
-     -16.85,
-     24.43
+     -1.07,
+     -16.93,
+     24.58
     ],
     "R": [
-     2.48,
-     -16.57,
-     24.42
+     2.49,
+     -16.48,
+     24.58
     ]
    }
   },
@@ -87,7 +87,7 @@
     "Foramen of Monro"
    ],
    "type": "soft",
-   "bytes": 8156,
+   "bytes": 8520,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -110,17 +110,100 @@
    "id": "ve_interventricular_foramen",
    "name": "Interventricular foramen (of Monro)",
    "file": "assets/ventricles/ve_interventricular_foramen.glb",
-   "derivation": "Drawn by rule: this CT does not resolve it. A tube of the mean cross-section Jean 2019 measured in 30 adults without hydrocephalus (5.23 mm², here a circle 2.6 mm across) between the points where the fitted lateral ventricle comes closest to the fitted third ventricle (2.24 mm apart on the right, 2.31 mm on the left): the third ventricle's front upper corner, the junction of its roof and anterior wall, where Azab 2014 places the foramina. Drawn 0.5 mm wider, like the ventricles.",
+   "derivation": "Drawn by rule: this CT does not resolve it. A tube of the mean cross-section Jean 2019 measured in 30 adults without hydrocephalus (5.23 mm², here a circle 2.6 mm across) between the points where the fitted lateral ventricle comes closest to the fitted third ventricle (2.24 mm apart on the right, 2.3 mm on the left): the third ventricle's front upper corner, the junction of its roof and anterior wall, where Azab 2014 places the foramina. Drawn 0.5 mm wider, like the ventricles.",
    "centroid": {
     "L": [
-     -2.15,
-     -9.02,
+     -2.23,
+     -9.08,
      31.19
     ],
     "R": [
-     4.05,
-     -8.96,
-     30.92
+     4.14,
+     -9.19,
+     30.88
+    ]
+   }
+  },
+  {
+   "aliases": [
+    "Aqueduct of midbrain",
+    "Aqueduct of Sylvius"
+   ],
+   "type": "soft",
+   "bytes": 15440,
+   "colour": {
+    "token": "sbCsf",
+    "light": "#0B8D9D",
+    "dark": "#51EFEF"
+   },
+   "dataset": "topbrain",
+   "source": "The fitted Z-Anatomy model's course, drawn at the calibre Xiao 2025 measured",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "ventricle",
+   "layer": "nuclei",
+   "id": "ve_cerebral_aqueduct",
+   "name": "Cerebral aqueduct (of Sylvius)",
+   "file": "assets/ventricles/ve_cerebral_aqueduct.glb",
+   "derivation": "This CT does not resolve it. Its course is the fitted Z-Anatomy model's aqueduct (15.0 mm long; its ends 0.76 and 0.97 mm from the fitted third and fourth ventricles), run on 1 mm into each (18.7 mm in all). Its diameter is the mean Xiao 2025 measured in 30 healthy adults aged 61 to 88: 1.98 mm where it leaves the third ventricle, 1.27 mm at its narrowest (put midway: the paper does not say clearly where) and 2.49 mm where it opens into the fourth; drawn 0.5 mm wider, like the ventricles. Along it the CT is 37.9 HU, against 40.0 HU around.",
+   "centroid": {
+    "L": [
+     -0.55,
+     -30.31,
+     13.05
+    ],
+    "R": [
+     1.13,
+     -29.56,
+     13.86
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "type": "soft",
+   "bytes": 71384,
+   "colour": {
+    "token": "sbCsf",
+    "light": "#0B8D9D",
+    "dark": "#51EFEF"
+   },
+   "dataset": "topbrain",
+   "source": "This CT (TopBrain 2025 case 011), and the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "ventricle",
+   "layer": "nuclei",
+   "id": "ve_fourth_ventricle",
+   "name": "Fourth ventricle",
+   "file": "assets/ventricles/ve_fourth_ventricle.glb",
+   "derivation": "This CT's own where it shows it: the fluid darker than 27 HU within 6 mm of the model's fourth ventricle (0.47 ml: its upper part; lower down this CT does not show it). Where the CT does not show it, the Z-Anatomy model's (one adult, BodyParts3D), fitted onto the CT's ventricles by a smooth deformation: the CT's surface lies a median 0.79 mm from the fitted model's (1.9 mm at the 90th percentile). The CT's part lies a median 0.72 mm from the fitted model's; along the rest of the model the CT is 43.3 HU, against 46.8 HU around. Its lateral recesses and the foramina of Luschka and Magendie are not modelled. The drawn surface joins the two, softened (its signed distance smoothed by 0.75 mm) and drawn 0.5 mm outside them, within the CT's uncertainty. As drawn: 1.6 ml.",
+   "centroid": {
+    "L": [
+     -2.91,
+     -38.58,
+     -10.26
+    ],
+    "R": [
+     2.97,
+     -38.32,
+     -8.98
     ]
    }
   },
@@ -688,7 +771,7 @@
   "name": "TopBrain 2025 CT angiogram (case 011), with the Z-Anatomy ventricles fitted onto it",
   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
   "url": "https://zenodo.org/records/16878417",
-  "note": "One adult's CT angiogram (TopBrain 2025 case 011, Skull base v2's): the bone is this patient's, and so are the ventricles where the CT shows them; where it does not (the temporal horns, the foramina of Monro, the third ventricle's floor), they are the Z-Anatomy model's, fitted onto them. The brain around them is a template fitted into the CT (Skull base v3). Teaching tool, not for planning.",
+  "note": "One adult's CT angiogram (TopBrain 2025 case 011, Skull base v2's): the bone is this patient's, and so are the ventricles where the CT shows them; where it does not (the temporal horns, the foramina of Monro, the third ventricle's floor, the aqueduct, most of the fourth ventricle), they are the Z-Anatomy model's, fitted onto them. The brain around them is a template fitted into the CT (Skull base v3). Teaching tool, not for planning.",
   "attribution": [
    "TopBrain 2025 challenge data (University Hospital Zurich): CT angiogram and vessel labels of case topcow_ct_011 - https://topbrain2025.grand-challenge.org, https://zenodo.org/records/16878417 - open use, source given, non-commercial",
    "BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan",

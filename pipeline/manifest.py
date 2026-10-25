@@ -285,10 +285,11 @@ def ventricles_attribution() -> list[str]:
         *[f"- Attribution: {a}" for a in d["attribution"]],
         *[f"- Cite: {c}" for c in d["citation"]],
         "- Changes made: the lateral and third ventricles segmented from the CT by a threshold in its brain window",
-        "  (pipeline/ventricles_build.py); Z-Anatomy's lateral and third ventricles (exported by pipeline/ventricles_export.py)",
+        "  (pipeline/ventricles_build.py); Z-Anatomy's ventricles, aqueduct included (exported by pipeline/ventricles_export.py)",
         "  fitted onto them by a similarity and a smooth deformation, and joined with them into one softened surface drawn",
         "  half a millimetre outside, split by part; the foramina of Monro drawn by rule between the fitted lateral and third",
-        "  ventricles (the project's own drawing); the coronal suture, Kocher's points and the external acoustic meatus",
+        "  ventricles, and the aqueduct as a tube of published calibre along the fitted model's course (the project's own",
+        "  drawing); the coronal suture, Kocher's points and the external acoustic meatus",
         "  located on the CT; ventriculostomy trajectories computed on it; files converted to compressed glTF.",
         "",
     ]

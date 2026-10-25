@@ -3,7 +3,7 @@ import type { CameraPreset } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
 import type { Claim } from '../brainstem/schema';
 import { KIND_LABEL, kindOf, LM, TARGETS, TRAJ, trajectoryFor, VE, VE_REF, type Trajectory } from '../ventricles';
-import { ACCURACY, IDEAL, KOCHER, LATERAL_WALLS, MONRO, PRACTICE, TARGET_NAME, THIRD_FLOOR } from '../ventricles/content';
+import { ACCURACY, AQUEDUCT, FOURTH, IDEAL, KOCHER, LATERAL_WALLS, MONRO, PRACTICE, TARGET_NAME, THIRD_FLOOR } from '../ventricles/content';
 import { VE_GROUP, VE_GROUPS, type VeGroup } from '../ventricles/groups';
 import { veScene, type VePlan } from '../ventricles/scene';
 import type { Catheter, VeState } from '../ventricles/state';
@@ -263,7 +263,9 @@ export class VentriclesAtlasPage {
       g.kind === 'anatomy' ? h('dl', {},
         h('dt', {}, 'The lateral ventricle’s walls'), h('dd', {}, claimList(LATERAL_WALLS)),
         h('dt', {}, 'The foramina of Monro'), h('dd', {}, claimList(MONRO)),
-        h('dt', {}, 'The floor of the third ventricle'), h('dd', {}, claimList(THIRD_FLOOR), h('p', { class: 'aside' }, 'This CT shows the third ventricle only in part: its floor is the fitted model’s.'))) : null,
+        h('dt', {}, 'The floor of the third ventricle'), h('dd', {}, claimList(THIRD_FLOOR), h('p', { class: 'aside' }, 'This CT shows the third ventricle only in part: its floor is the fitted model’s.')),
+        h('dt', {}, 'The aqueduct'), h('dd', {}, claimList(AQUEDUCT)),
+        h('dt', {}, 'The fourth ventricle'), h('dd', {}, claimList(FOURTH))) : null,
       h('p', { class: 'aside schematic-note' }, 'One young adult’s CT: the ventricles are this patient’s and narrow, completed by a fitted model where the CT cannot show them; the brain around them is a template fitted into the skull. For teaching, not for planning.'));
     if (s.sel) pane.append(h('details', { class: 'more' }, h('summary', {}, `About ${g.name}`), groupCard));
     else pane.append(groupCard);
@@ -311,6 +313,8 @@ export class VentriclesAtlasPage {
         h('dt', {}, 'Walls'), h('dd', {}, claimList(LATERAL_WALLS))] : null,
         id === 've_third_ventricle' ? [h('dt', {}, 'Its floor'), h('dd', {}, claimList(THIRD_FLOOR))] : null,
         id === 've_interventricular_foramen' ? [h('dt', {}, 'The foramen'), h('dd', {}, claimList(MONRO))] : null,
+        id === 've_cerebral_aqueduct' ? [h('dt', {}, 'The aqueduct'), h('dd', {}, claimList(AQUEDUCT))] : null,
+        id === 've_fourth_ventricle' ? [h('dt', {}, 'The fourth ventricle'), h('dd', {}, claimList(FOURTH))] : null,
         h('dt', {}, 'Geometry'), h('dd', {}, `${st.source}. ${st.derivation} `, h('a', { href: '#/credits' }, 'Licence and attribution'))));
   }
 

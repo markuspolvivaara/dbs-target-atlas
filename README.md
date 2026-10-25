@@ -284,8 +284,9 @@ entry zones for brainstem surgery.
 
 ## Ventricles
 
-The lateral and third ventricles of one CT, Skull base v2's (TopBrain 2025 case 011, in its frame), joined by the
-foramina of Monro, and a frontal ventriculostomy simulated on it.
+The ventricular system of one CT, Skull base v2's (TopBrain 2025 case 011, in its frame): the lateral ventricles, the
+foramina of Monro, the third ventricle, the aqueduct and the fourth ventricle, and a frontal ventriculostomy simulated
+on it.
 
 - **Ventricles as the CT shows them** (`pipeline/ventricles_build.py`): in its brain window the ventricular fluid is
   darker than the brain; the fluid below 27 HU (smoothed by 1 mm), at least 10 mm inside the cranial cavity and away
@@ -304,6 +305,11 @@ foramina of Monro, and a frontal ventriculostomy simulated on it.
 - **Foramina of Monro**: drawn by rule, a tube of the mean cross-section Jean 2019 measured (5.23 mm²) between the points
   where the fitted lateral ventricle comes closest to the fitted third ventricle, at the third ventricle's front upper
   corner (Azab 2014). The CT is about 10 HU darker along them than around them.
+- **Aqueduct and fourth ventricle**: the CT shows the fourth ventricle's upper part (about 0.5 ml of fluid near the
+  model's), which the fit pulls the model onto; the rest is the model's. The aqueduct, which this CT does not resolve,
+  is a tube along the fitted model's course, run on into the third and fourth ventricles, of the diameters Xiao 2025
+  measured (1.98 mm leaving the third ventricle, 1.27 mm at the narrowest, put midway, 2.49 mm into the fourth): the
+  drawn ventricles are one cavity, checked by the build.
 - **Kocher's point and the trajectories**: the coronal suture where the CT's frontal and parietal bones meet; Kocher's
   point 10 mm in front of it along the outer table, 25 mm (Chen 2025) or 30 mm (Park 2020) from the midline, and 10 mm
   further forward or back for comparison; the external acoustic meatus where each ear canal, the shortest way through
@@ -315,8 +321,8 @@ foramina of Monro, and a frontal ventriculostomy simulated on it.
   course inside, or how far they miss. The card shows that result beside the published accuracy of the same
   aim.
 - **Cards**: every statement cites its source (`src/ventricles/content.ts`, `references.ts`), checked against the
-  open-access full texts: Chen 2025, Park 2020, Charcos 2025, Gangal 2026, Abdala-Vargas 2022, Azab 2014; Jean 2019
-  (no open full text) against its abstract.
+  open-access full texts: Chen 2025, Park 2020, Charcos 2025, Gangal 2026, Abdala-Vargas 2022, Azab 2014, Xiao 2025,
+  Erginoglu 2026, Longatti 2026; Jean 2019 (no open full text) against its abstract.
 - Pipeline: after `pipeline/skullbase_ct.py` and the v3 build (it uses the bone, the fitted brain and the registered
   tympanic membrane), and `pipeline/ventricles_export.py` in Blender: `pipeline/ventricles_build.py`,
   `node pipeline/compress.mjs ventricles`,

@@ -4,7 +4,7 @@ import veManifestJson from '../data/generated/ve-manifest.json';
 import veTrajectories from '../data/generated/ve-trajectories.json';
 import { VeManifestSchema } from '../data/schema';
 import { BsReferenceSchema, ClaimSchema, type Claim } from '../brainstem/schema';
-import { ACCURACY, IDEAL, KOCHER, LATERAL_WALLS, MONRO, PRACTICE, THIRD_FLOOR } from './content';
+import { ACCURACY, AQUEDUCT, FOURTH, IDEAL, KOCHER, LATERAL_WALLS, MONRO, PRACTICE, THIRD_FLOOR } from './content';
 import { VE_REFERENCES } from './references';
 
 /**
@@ -34,22 +34,26 @@ const TrajFileSchema = z.object({
   midline: z.number(),
   ventricles: z.object({
     /** as far as the CT shows them (the fluid below the threshold) */
-    volumeMl: z.object({ R: z.number(), L: z.number(), third: z.number() }),
+    volumeMl: z.object({ R: z.number(), L: z.number(), third: z.number(), fourth: z.number() }),
     frontalHorns: z.object({ widthMm: z.number(), atZ: z.number(), innerSkullMm: z.number(), evansIndex: z.number() }),
     /** as drawn: completed by the fitted model, softened and drawn a little outside */
-    drawnMl: z.object({ R: z.number(), L: z.number(), third: z.number(), monroR: z.number(), monroL: z.number() }),
+    drawnMl: z.object({ R: z.number(), L: z.number(), third: z.number(), fourth: z.number(), aqueduct: z.number(), monroR: z.number(), monroL: z.number() }),
     /** the Z-Anatomy model's fit onto the CT's ventricles, and checks of it on the CT */
     fit: z.object({
       fitMedianMm: z.number(), fitP90Mm: z.number(), jacobianMin: z.number(), monroRadiusMm: z.number(),
       monro: z.record(z.object({ gapMm: z.number() })),
       temporalHorn: z.record(z.object({ insideHu: z.number(), aroundHu: z.number() })),
       monroCt: z.record(z.object({ insideHu: z.number(), aroundHu: z.number() })),
+      aqueduct: z.object({ modelLengthMm: z.number(), courseMm: z.number(), gapToThirdMm: z.number(), gapToFourthMm: z.number() }),
+      aqueductCt: z.object({ insideHu: z.number(), aroundHu: z.number() }),
+      fourthCt: z.object({ insideHu: z.number(), aroundHu: z.number() }),
+      fourthFitMedianMm: z.number(), drawnPieces: z.number(),
     }),
   }),
   canthusMm: z.number(),
   params: z.object({
     csfHu: z.number(), smoothMm: z.number(), depthMm: z.number(), kocher: z.record(z.number()), kocherAnteriorMm: z.number(), apOffsets: z.array(z.number()), maxDepthMm: z.number(),
-    fitPairMm: z.number(), fitBackMm: z.number(), monroAreaMm2: z.number(), softMm: z.number(), drawOutMm: z.number(),
+    fitPairMm: z.number(), fitBackMm: z.number(), monroAreaMm2: z.number(), aqueductMm: z.tuple([z.number(), z.number(), z.number()]), softMm: z.number(), drawOutMm: z.number(),
   }),
   trajectories: z.array(TrajectorySchema),
 });
@@ -72,7 +76,7 @@ export const KIND_LABEL: Record<Kind, string> = { ventricle: 'Ventricle (this CT
 export function crossCheckVe(): string[] {
   const errs: string[] = [];
   const used = new Set<string>();
-  const all: Claim[] = [...LATERAL_WALLS, ...MONRO, ...THIRD_FLOOR, ...KOCHER, ...IDEAL, ...PRACTICE, ...Object.values(ACCURACY).flat()];
+  const all: Claim[] = [...LATERAL_WALLS, ...MONRO, ...THIRD_FLOOR, ...AQUEDUCT, ...FOURTH, ...KOCHER, ...IDEAL, ...PRACTICE, ...Object.values(ACCURACY).flat()];
   for (const cl of all) {
     ClaimSchema.parse(cl);
     for (const r of cl.refIds) { used.add(r); if (!VE_REF.has(r)) errs.push(`unknown refId ${r}`); }
@@ -82,7 +86,7 @@ export function crossCheckVe(): string[] {
   for (const k of Object.keys(TRAJ.params.kocher)) for (const s of ['L', 'R']) for (const o of TRAJ.params.apOffsets) for (const t of TARGETS) {
     if (!trajectoryFor(k, s, o, t)) errs.push(`no trajectory ${k} ${s} ${o} ${t}`);
   }
-  for (const id of ['ve_lateral_ventricle', 've_third_ventricle', 've_interventricular_foramen']) if (!VE.has(id)) errs.push(`missing structure ${id}`);
+  for (const id of ['ve_lateral_ventricle', 've_third_ventricle', 've_interventricular_foramen', 've_cerebral_aqueduct', 've_fourth_ventricle']) if (!VE.has(id)) errs.push(`missing structure ${id}`);
   return errs;
 }
 

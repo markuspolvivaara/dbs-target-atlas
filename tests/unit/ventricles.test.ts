@@ -17,9 +17,17 @@ describe('ventricles section', () => {
     expect(v.frontalHorns.evansIndex).toBeCloseTo(v.frontalHorns.widthMm / v.frontalHorns.innerSkullMm, 2);
     expect(VE_MANIFEST.structures.some((s) => s.category === 'bone')).toBe(true);
   });
-  it('the drawn ventricles: the CT’s completed by the fitted model, joined by the foramina of Monro', () => {
+  it('the drawn ventricles: the CT’s completed by the fitted model, joined by the foramina of Monro and the aqueduct', () => {
     const v = TRAJ.ventricles;
-    for (const id of ['ve_lateral_ventricle', 've_third_ventricle', 've_interventricular_foramen']) expect(VE.get(id)?.category, id).toBe('ventricle');
+    for (const id of ['ve_lateral_ventricle', 've_third_ventricle', 've_interventricular_foramen', 've_cerebral_aqueduct', 've_fourth_ventricle']) expect(VE.get(id)?.category, id).toBe('ventricle');
+    // one cavity, lateral ventricles to fourth; the CT shows the fourth ventricle's upper part and the model lies on it
+    expect(v.fit.drawnPieces).toBe(1);
+    expect(v.drawnMl.fourth).toBeGreaterThanOrEqual(v.volumeMl.fourth);
+    expect(v.volumeMl.fourth).toBeGreaterThan(0);
+    expect(v.fit.fourthFitMedianMm).toBeLessThan(1.5);
+    expect(v.fit.aqueduct.courseMm).toBeGreaterThan(12);
+    expect(v.fit.aqueduct.courseMm).toBeLessThan(26);
+    expect(TRAJ.params.aqueductMm[1]).toBeLessThan(TRAJ.params.aqueductMm[0]);
     // the drawn ventricles hold the CT's, and each side has its foramen
     for (const s of ['R', 'L'] as const) {
       expect(v.drawnMl[s]).toBeGreaterThanOrEqual(v.volumeMl[s]);

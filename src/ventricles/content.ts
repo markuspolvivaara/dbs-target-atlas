@@ -25,6 +25,18 @@ export const MONRO: Claim[] = [
   c('In 30 adults without hydrocephalus (models from MRI) the foramen was an oval opening of 5.23 mm² on average, larger above the age of 55 and on the left; in hydrocephalus it averaged 32.6 mm².', 'jean2019'),
 ];
 
+/** the aqueduct, from the third ventricle to the fourth */
+export const AQUEDUCT: Claim[] = [
+  c('The aqueduct opens at the back of the third ventricle and runs down through the periaqueductal grey of the midbrain to the fourth ventricle. It is arc-shaped: an upper segment more horizontal and a lower, wider one more vertical, meeting at an angle between the superior and inferior colliculi.', 'xiao2025'),
+  c('In 30 healthy adults aged 61–88 (MRI) it was 19.63 ± 1.88 mm long and 1.98 ± 0.42 mm across where it leaves the third ventricle, 1.27 ± 0.23 mm at its narrowest and 2.49 ± 0.50 mm where it opens into the fourth; in idiopathic normal-pressure hydrocephalus it was as long but wider.', 'xiao2025'),
+];
+
+/** the fourth ventricle */
+export const FOURTH: Claim[] = [
+  c('Floor of the fourth ventricle in 40 cadavers: 33.58 ± 2.49 mm long and 20.0 ± 1.83 mm wide; from the aqueduct to the rostral margin of the facial colliculus 14.6 ± 1.97 mm.', 'erginoglu2026'),
+  c('Its caudal roof: the uvula and nodulus of the vermis; the inferior medullary velum branching off the nodulus on each side to the flocculus just outside the foramina of Luschka; below, the tela choroidea with the choroid plexus, fixed by the taeniae beside the foramen of Magendie.', 'longatti2026'),
+];
+
 /** the floor of the third ventricle, the target of an endoscopic third ventriculostomy */
 export const THIRD_FLOOR: Claim[] = [
   c('From front to back the floor of the third ventricle comprises the supraoptic recess, the optic chiasm, the infundibulum, the tuber cinereum and the mammillary bodies.', 'abdalavargas2022'),

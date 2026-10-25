@@ -824,7 +824,7 @@ test('brainstem: entry zone and nucleus cards with sources, slices and the URL',
 });
 
 // ---------------------------------------------------------------- ventricles section
-for (const [id, name] of [['ventricles', 'Lateral and third ventricles'], ['evd', 'Frontal ventriculostomy']] as const) {
+for (const [id, name] of [['ventricles', 'The ventricular system'], ['evd', 'Frontal ventriculostomy']] as const) {
   test(`ventricles ${id}: renders and matches the visual baseline`, async ({ page }) => {
     const gd = guard(page);
     await page.goto(`./ventricles/#/atlas?g=${id}`);

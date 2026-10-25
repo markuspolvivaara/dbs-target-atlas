@@ -11,17 +11,20 @@ The CT is Skull base v2's (TopBrain 2025 case 011, a CT angiogram). What comes f
     it (about 5 to 20 HU where the ventricles are a few millimetres wide, once smoothed by SMOOTH_MM, against about
     44 HU for the deep white matter). The fluid below CSF_HU, at least DEPTH_MM inside the cranial cavity (the
     subarachnoid spaces against the inner table left out) and away from the labelled vessels, is taken; the lateral
-    ventricles are the largest such body, the third ventricle the body of it on the midline below them. The threshold
-    sets the size of narrow ventricles, so this is approximate to about a millimetre; and it misses what is narrower
-    than the CT resolves (the temporal horns, the foramina of Monro, the third ventricle's floor) and the atria's
-    enhancing choroid plexus.
-  - The ventricles as drawn: the Z-Anatomy model's lateral and third ventricles (one adult, BodyParts3D; exported by
-    ventricles_export.py) fitted onto the CT's: scaled as Skull base v2 scaled the model, a similarity (ICP, CT onto
-    model), then a smooth deformation in which each point of the CT's surface pulls the nearest point of the model's
+    ventricles are the largest such body above LATERAL_Z_MIN, the third ventricle the body of it on the midline below
+    them, the fourth ventricle the fluid near the model's (placed by the similarity below). The threshold sets the size
+    of narrow ventricles, so this is approximate to about a millimetre; and it misses what is narrower than the CT
+    resolves (the temporal horns, the foramina of Monro, the third ventricle's floor, the aqueduct, most of the fourth
+    ventricle) and the atria's enhancing choroid plexus.
+  - The ventricles as drawn: the Z-Anatomy model's ventricles (one adult, BodyParts3D; exported by ventricles_export.py)
+    fitted onto the CT's: scaled as Skull base v2 scaled the model, a similarity (ICP, CT onto the model's lateral and
+    third ventricles), then a smooth deformation in which each point of the CT's surface pulls the nearest point of the model's
     within FIT_PAIR_MM and each point of the model's is pulled onto the CT's within FIT_BACK_MM (shorter: where the CT
     shows no fluid the model stays), Gaussian-averaged at FIT_SIGMAS_MM. The drawn surface is the union of the CT's
     ventricles, the fitted model and the foramina, its signed distance smoothed by SOFT_MM and drawn DRAW_OUT_MM outside
     it (a softer, slightly larger surface, within the CT's uncertainty), split by the part each point is nearest.
+  - The aqueduct: the fitted model's course, drawn as a tube of the diameters Xiao 2025 measured (AQUEDUCT_MM), run
+    on into the third and fourth ventricles, so the drawn ventricles are one cavity.
   - The foramina of Monro, drawn by rule: a tube of the mean cross-section Jean 2019 measured (MONRO_AREA_MM2, as a
     circle) between the points where the fitted lateral ventricle comes closest to the fitted third ventricle, which is
     at the junction of the third ventricle's roof and anterior wall, where Azab 2014 places the foramina.
@@ -75,7 +78,8 @@ PUBLIC = REPO / "public" / "assets"
 PALETTE = json.loads((REPO / "src" / "data" / "palette.json").read_text())
 CITES = json.loads((ROOT / "sources" / "citations.json").read_text())
 
-GRID_LO, GRID_HI, STEP = np.array([-60.0, -95.0, -15.0]), np.array([60.0, 60.0, 85.0]), 0.5   # the cerebrum (frame mm)
+GRID_LO, GRID_HI, STEP = np.array([-60.0, -95.0, -45.0]), np.array([60.0, 60.0, 85.0]), 0.5   # the brain (frame mm)
+LATERAL_Z_MIN = -15.0      # the lateral and third ventricles looked for above this height (the posterior fossa's cisterns below)
 SMOOTH_MM = 1.0
 CSF_HU = 27.0              # between the ventricular fluid (about 5-20 HU, smoothed) and the deep white matter (about 44 HU)
 DEPTH_MM = 10.0            # at least this far inside the cranial cavity
@@ -89,7 +93,11 @@ THIRD_ML = (0.1, 3.0)      # the third ventricle's body of fluid: this large ...
 THIRD_HALF_MM = 5.0        # ... and within this of the midline
 FRONTAL_MM = 25.0          # the frontal horns: the ventricles' front this far
 EXPORT = BUILD / "ventricles_export.json"   # Z-Anatomy's lateral and third ventricles (ventricles_export.py)
-MODEL_NAMES = {"Lateral ventricle.r": "R", "Lateral ventricle.l": "L", "Third ventricle": "third"}
+MODEL_NAMES = {"Lateral ventricle.r": "R", "Lateral ventricle.l": "L", "Third ventricle": "third", "Aqueduct of midbrain": "aqueduct",
+               "Fourth ventricle": "fourth"}
+SHOWN = ("R", "L", "third")   # the parts the CT shows above the posterior fossa: the similarity is fitted to these
+FOURTH_NEAR_MM = 6.0       # the CT's fourth ventricle: its fluid within this of the model's (placed by the similarity) ...
+FOURTH_MIN_ML = 0.05       # ... in bodies at least this large
 FIT_SIGMAS_MM = (10.0, 6.0, 4.0)   # the model's fit onto the CT's ventricles: Gaussian scales, coarse to fine ...
 FIT_STEPS = 8                      # ... this many steps each, half of the mean pull applied in each
 FIT_PAIR_MM = 5.0          # a point of the CT's surface pulls the nearest point of the model's within this ...
@@ -99,9 +107,13 @@ FIT_RESIDUALS = 6000
 TEMPORAL_Z_MM = 14.0       # the fitted lateral ventricle below this height (frame mm): the temporal horn (for the check)
 MONRO_AREA_MM2 = 5.23      # the foramen of Monro's mean opening, 30 adults without hydrocephalus (Jean 2019)
 MONRO_INTO_MM = 1.0        # the tube runs on this far into the lateral and the third ventricle
+AQUEDUCT_MM = (1.98, 1.27, 2.49)   # the aqueduct's diameter at its opening, narrowest and at its outlet (Xiao 2025: 30 healthy adults)
+AQUEDUCT_BINS = 12         # its course: the fitted model's aqueduct in this many slices along it
+AQUEDUCT_INTO_MM = 1.0     # ... run on this far into the third and the fourth ventricle
 SOFT_MM = 0.75             # the drawn surface: the union's signed distance smoothed by this (Gaussian sigma) ...
 DRAW_OUT_MM = 0.5          # ... and drawn this far outside it
-DRAWN_FACES = 90000
+DRAWN_FACES = 100000
+MIDLINE = ("third", "aqueduct", "fourth")   # drawn in left and right halves
 SEPTUM_HALF_MM = 0.5       # the drawn lateral ventricles kept apart within this of the midline (the septum pellucidum) ...
 SEPTUM_SPARE_MM = 2.0      # ... except this near the third ventricle and the foramina
 MAX_DEPTH_MM = 65.0        # each trajectory followed this far: with no fluid by 65 mm the catheter is withdrawn and re-aimed (Chen 2025)
@@ -153,12 +165,18 @@ class Grid:
         return np.rint((np.atleast_2d(P) - GRID_LO) / STEP).astype(int)
 
 
-def ventricles(g: Grid, midline: float) -> tuple[np.ndarray, np.ndarray | None, dict]:
-    """The lateral ventricles' mask: the largest body of fluid below CSF_HU deep in the cavity, away from the vessels;
-    and the third ventricle's: the body of that fluid on the midline (within THIRD_HALF_MM) below and between them,
-    when there is one (in a narrow third ventricle the CT shows it only in part)."""
+def fluid(g: Grid) -> np.ndarray:
+    """The fluid below CSF_HU, at least DEPTH_MM inside the cranial cavity and VESSEL_GAP_MM from the labelled vessels."""
     vgap = max(1, int(round(VESSEL_GAP_MM / STEP)))
-    csf = (g.hu < CSF_HU) & (g.hu > -200) & (g.depth > DEPTH_MM) & ~ndimage.binary_dilation(g.vessel, iterations=vgap)
+    return (g.hu < CSF_HU) & (g.hu > -200) & (g.depth > DEPTH_MM) & ~ndimage.binary_dilation(g.vessel, iterations=vgap)
+
+
+def ventricles(g: Grid, midline: float) -> tuple[np.ndarray, np.ndarray | None, dict]:
+    """The lateral ventricles' mask: the largest body of that fluid above LATERAL_Z_MIN; and the third ventricle's: the
+    body of it on the midline (within THIRD_HALF_MM) below and between them, when there is one (in a narrow third
+    ventricle the CT shows it only in part)."""
+    z = GRID_LO[2] + np.arange(g.shape[2]) * STEP
+    csf = fluid(g) & (z >= LATERAL_Z_MIN)[None, None, :]
     lab, n = ndimage.label(csf)
     sizes = np.bincount(lab.ravel())
     sizes[0] = 0
@@ -214,18 +232,29 @@ def thin(P: np.ndarray, cell: float) -> np.ndarray:
     return np.sort(first)
 
 
-def fit_model(ct: np.ndarray, scale: float) -> tuple[dict, dict]:
-    """Z-Anatomy's lateral and third ventricles fitted onto the CT's (ct: their mask). Returns {"R", "L", "third": (V, F)}
-    in the frame and the fit's report."""
+def fit_model(g: Grid, ct: np.ndarray, scale: float) -> tuple[dict, np.ndarray, dict]:
+    """Z-Anatomy's ventricles fitted onto the CT's (ct: the lateral and third ventricles' mask): a similarity onto the
+    lateral and third; then the CT's fourth ventricle, the fluid near the model's (placed by the similarity); then the
+    smooth deformation onto all the CT shows. Returns {"R", "L", "third", "aqueduct", "fourth": (V, F)} in the frame,
+    the CT's fourth ventricle and the fit's report."""
     ex = json.loads(EXPORT.read_text())["meshes"]
     V0 = {MODEL_NAMES[n]: scale * np.array(m["verts"], float) for n, m in ex.items()}
     F = {MODEL_NAMES[n]: np.array(m["tris"], int) for n, m in ex.items()}
+    sample = {k: trimesh.sample.sample_surface_even(trimesh.Trimesh(V0[k], F[k], process=False), FIT_SAMPLES, seed=1)[0] for k in V0}
     P = boundary_points(ct)
-    M = np.vstack([trimesh.sample.sample_surface_even(trimesh.Trimesh(V0[k], F[k], process=False), FIT_SAMPLES, seed=1)[0] for k in V0])
-    s, R, t, _ = K.icp_similarity(P, M, 60)
+    s, R, t, _ = K.icp_similarity(P, np.vstack([sample[k] for k in SHOWN]), 60)
     inv = lambda X: ((X - t) @ R) / s  # noqa: E731   model -> CT (the ICP maps the CT onto the model)
-    pts = inv(M)
-    d_sim = cKDTree(pts).query(P)[0]
+    d_sim = cKDTree(inv(np.vstack([sample[k] for k in SHOWN]))).query(P)[0]
+    # the CT's fourth ventricle: its fluid near the model's, clipped to FOURTH_NEAR_MM of it
+    near4 = ndimage.distance_transform_edt(~fill(inv(V0["fourth"]), F["fourth"], GRID_LO, g.shape, STEP)) * STEP <= FOURTH_NEAR_MM
+    lab, _ = ndimage.label(fluid(g) & ~ct)
+    ids = np.unique(lab[near4 & (lab > 0)])
+    ct4 = np.isin(lab, ids) & near4
+    lab4, n4 = ndimage.label(ct4)
+    keep = [i for i in range(1, n4 + 1) if (lab4 == i).sum() * STEP ** 3 / 1000 >= FOURTH_MIN_ML]
+    ct4 = np.isin(lab4, keep)
+    P = boundary_points(ct | ct4)
+    pts = inv(np.vstack([sample[k] for k in V0]))
     warp, rng = K.Warp(), np.random.default_rng(0)
     for sigma in FIT_SIGMAS_MM:
         for _ in range(FIT_STEPS):
@@ -246,6 +275,7 @@ def fit_model(ct: np.ndarray, scale: float) -> tuple[dict, dict]:
             pts = step(pts)
     d_fit = cKDTree(pts).query(P)[0]
     parts = {k: (warp(inv(V0[k])), F[k]) for k in V0}
+    d4 = cKDTree(np.vstack([warp(inv(sample["fourth"]))])).query(boundary_points(ct4))[0] if ct4.any() else np.zeros(1)
     # the deformation's Jacobian at the model's vertices: positive everywhere, so it does not fold the model
     X = np.vstack([inv(V0[k]) for k in V0])
     J = np.stack([(warp(X + 0.25 * e) - warp(X - 0.25 * e)) / 0.5 for e in np.eye(3)], -1)
@@ -254,8 +284,9 @@ def fit_model(ct: np.ndarray, scale: float) -> tuple[dict, dict]:
            "similarityMedianMm": round(float(np.median(d_sim)), 2), "similarityP90Mm": round(float(np.percentile(d_sim, 90)), 2),
            "fitMedianMm": round(float(np.median(d_fit)), 2), "fitP90Mm": round(float(np.percentile(d_fit, 90)), 2),
            "fitMaxMm": round(float(d_fit.max()), 2), "jacobianMin": round(float(det.min()), 3), "jacobianMax": round(float(det.max()), 3),
-           "modelMl": {k: round(abs(trimesh.Trimesh(*parts[k], process=False).volume) / 1000, 2) for k in parts}}
-    return parts, rep
+           "modelMl": {k: round(abs(trimesh.Trimesh(*parts[k], process=False).volume) / 1000, 2) for k in parts},
+           "fourthCtMl": round(float(ct4.sum() * STEP ** 3 / 1000), 2), "fourthFitMedianMm": round(float(np.median(d4)), 2)}
+    return parts, ct4, rep
 
 
 def monro(parts: dict) -> dict:
@@ -276,24 +307,67 @@ def monro(parts: dict) -> dict:
     return out
 
 
-def tube(a: np.ndarray, b: np.ndarray, r: float, lo: np.ndarray, shape: tuple) -> np.ndarray:
-    """The voxels of a grid (corner lo, STEP) within r of the segment a-b."""
-    G = lo + np.stack(np.meshgrid(*[np.arange(n) for n in shape], indexing="ij"), -1) * STEP
-    ab = b - a
-    t = np.clip(((G - a) @ ab) / (ab @ ab), 0, 1)
-    return np.linalg.norm(G - (a + t[..., None] * ab), axis=-1) <= r
+def tube_sd(pts: np.ndarray, radii: np.ndarray, lo: np.ndarray, shape: tuple) -> np.ndarray:
+    """The signed distance (mm, negative inside) from a tube along the polyline pts, its radius changing linearly
+    between the radii at its points, on a grid (corner lo, STEP); 30 mm beyond 3 mm from it."""
+    out = np.full(shape, 30.0, np.float32)
+    i0 = np.maximum(np.floor((pts.min(0) - radii.max() - 3.0 - lo) / STEP).astype(int), 0)
+    i1 = np.minimum(np.ceil((pts.max(0) + radii.max() + 3.0 - lo) / STEP).astype(int) + 1, np.array(shape))
+    G = lo + (np.stack(np.meshgrid(*[np.arange(a, b) for a, b in zip(i0, i1)], indexing="ij"), -1)) * STEP
+    best = np.full(G.shape[:3], 30.0)
+    for a, b, ra, rb in zip(pts[:-1], pts[1:], radii[:-1], radii[1:]):
+        ab = b - a
+        t = np.clip(((G - a) @ ab) / max(float(ab @ ab), 1e-9), 0, 1)
+        best = np.minimum(best, np.linalg.norm(G - (a + t[..., None] * ab), axis=-1) - (ra + t * (rb - ra)))
+    out[tuple(slice(a, b) for a, b in zip(i0, i1))] = best
+    return out
 
 
-def drawn(groups: dict[str, np.ndarray], lo: np.ndarray, midline: float, joined: list[str]) -> tuple[trimesh.Trimesh, np.ndarray, np.ndarray, np.ndarray]:
+def aqueduct(parts: dict) -> tuple[np.ndarray, np.ndarray, dict]:
+    """The aqueduct's course: the fitted model's aqueduct in AQUEDUCT_BINS slices along it (their centres), from the
+    third ventricle to the fourth, each end run on AQUEDUCT_INTO_MM into the ventricle it opens into; its diameter
+    Xiao 2025's at the opening, the narrowest (put midway) and the outlet, in between linearly. Returns the course, the
+    radius at each of its points and a report."""
+    A = parts["aqueduct"][0]
+    c = A.mean(0)
+    u = np.linalg.svd(A - c, full_matrices=False)[2][0]
+    s = (A - c) @ u
+    edges = np.linspace(s.min(), s.max(), AQUEDUCT_BINS + 1)
+    pts = np.array([A[(s >= a) & (s <= b)].mean(0) for a, b in zip(edges[:-1], edges[1:])])
+    V3, V4 = parts["third"][0], parts["fourth"][0]
+    if np.linalg.norm(pts[0] - V3.mean(0)) > np.linalg.norm(pts[-1] - V3.mean(0)):
+        pts = pts[::-1]
+    length = float(np.linalg.norm(np.diff(pts, axis=0), axis=1).sum())
+    ends, gaps = [], []
+    for end, V in ((pts[0], V3), (pts[-1], V4)):
+        d, j = cKDTree(V).query(end)
+        u_ = unit(V[j] - end) if d > 1e-3 else unit(V.mean(0) - end)
+        ends.append(V[j] + AQUEDUCT_INTO_MM * u_)
+        gaps.append(round(float(d), 2))
+    sl = np.r_[0, np.cumsum(np.linalg.norm(np.diff(pts, axis=0), axis=1))] / max(length, 1e-9)
+    d_open, d_narrow, d_out = AQUEDUCT_MM
+    r = np.interp(sl, [0, 0.5, 1], [d_open / 2, d_narrow / 2, d_out / 2])
+    course = np.vstack([ends[0], pts, ends[1]])
+    radii = np.r_[r[0], r, r[-1]]
+    return course, radii, {"modelLengthMm": round(length, 1), "gapToThirdMm": gaps[0], "gapToFourthMm": gaps[1],
+                           "courseMm": round(float(np.linalg.norm(np.diff(course, axis=0), axis=1).sum()), 1)}
+
+
+def drawn(groups: dict[str, np.ndarray], tubes: dict[str, np.ndarray], lo: np.ndarray, midline: float,
+          joined: list[str]) -> tuple[trimesh.Trimesh, np.ndarray, np.ndarray, np.ndarray]:
     """The drawn surface on a grid (corner lo, STEP): the union of the groups' masks, its signed distance smoothed by
-    SOFT_MM and drawn DRAW_OUT_MM outside it, kept apart at the midline (the septum pellucidum between the lateral
-    ventricles) except within SEPTUM_SPARE_MM of the joined groups (the third ventricle and the foramina). Returns the
-    mesh, each vertex's group (the nearest, as an index into groups), the drawn inside and each voxel's group."""
+    SOFT_MM and drawn DRAW_OUT_MM outside it, with the tubes (their signed distances, not smoothed, so that narrow ones
+    keep their calibre) drawn DRAW_OUT_MM outside too; kept apart at the midline (the septum pellucidum between the
+    lateral ventricles) except within SEPTUM_SPARE_MM of the joined groups (the midline ventricles and the tubes).
+    Returns the mesh, each vertex's group (the nearest, as an index into groups), the drawn inside and each voxel's
+    group."""
     keys = list(groups)
     U = np.any(np.stack([groups[k] for k in keys]), 0)
     sd = ndimage.gaussian_filter(sdf(U, STEP), SOFT_MM / STEP)
     # positive inside the drawn surface; isosurface's zero padding stays outside (the level is a hair above zero)
     field = np.clip(DRAW_OUT_MM - sd, -5.0, 5.0).astype(np.float32)
+    for t in tubes.values():
+        field = np.maximum(field, np.clip(DRAW_OUT_MM - t, -5.0, 5.0))
     x = lo[0] + np.arange(U.shape[0]) * STEP
     near = ndimage.distance_transform_edt(~np.any(np.stack([groups[k] for k in joined]), 0)) * STEP <= SEPTUM_SPARE_MM
     septum = (np.abs(x - midline) <= SEPTUM_HALF_MM)[:, None, None] & ~near
@@ -450,12 +524,13 @@ def main() -> int:
     if third is None:
         third = np.zeros_like(mask)
     # the model fitted onto the CT's ventricles, and the foramina between its lateral and third ventricles
-    parts, fit = fit_model(mask | third, float(ex2["fit"]["scale"]))
+    parts, fourth, fit = fit_model(g, mask | third, float(ex2["fit"]["scale"]))
+    vrep["volumeMl"]["fourth"] = fit["fourthCtMl"]
     fm = monro(parts)
     fit["monro"] = {s: {k: v for k, v in f.items() if k in ("gapMm", "onThird")} for s, f in fm.items()}
     print("model fitted", fit, flush=True)
     # the drawn surface, on a crop of the grid around the ventricles
-    allV = np.vstack([V for V, _ in parts.values()] + [boundary_points(mask | third)])
+    allV = np.vstack([V for V, _ in parts.values()] + [boundary_points(mask | third | fourth)])
     i0 = np.maximum(np.floor((allV.min(0) - 6.0 - GRID_LO) / STEP).astype(int), 0)
     i1 = np.minimum(np.ceil((allV.max(0) + 6.0 - GRID_LO) / STEP).astype(int) + 1, np.array(g.shape))
     crop = tuple(slice(a, b) for a, b in zip(i0, i1))
@@ -463,33 +538,40 @@ def main() -> int:
     x = lo[0] + np.arange(shape[0]) * STEP
     right = (x > midline)[:, None, None]
     model = {k: fill(V, F, lo, shape, STEP) for k, (V, F) in parts.items()}
-    groups = {"R": (mask[crop] & right) | model["R"], "L": (mask[crop] & ~right) | model["L"], "third": third[crop] | model["third"]}
+    groups = {"R": (mask[crop] & right) | model["R"], "L": (mask[crop] & ~right) | model["L"], "third": third[crop] | model["third"],
+              "fourth": fourth[crop] | model["fourth"]}
     r_monro = float(np.sqrt(MONRO_AREA_MM2 / np.pi))
+    tubes = {f"monro{s}": tube_sd(np.array([fm[s]["a"], fm[s]["b"]]), np.array([r_monro, r_monro]), lo, shape) for s in ("R", "L")}
+    course, radii, fit["aqueduct"] = aqueduct(parts)
+    tubes["aqueduct"] = tube_sd(course, radii, lo, shape)
+    groups["aqueduct"] = (tubes["aqueduct"] <= 0) & ~groups["third"] & ~groups["fourth"]
     for s in ("R", "L"):
-        groups[f"monro{s}"] = tube(fm[s]["a"], fm[s]["b"], r_monro, lo, shape) & ~groups[s] & ~groups["third"]
+        groups[f"monro{s}"] = (tubes[f"monro{s}"] <= 0) & ~groups[s] & ~groups["third"]
     keys = list(groups)
-    mesh, vlab, inside, lab = drawn(groups, lo, midline, ["third", "monroR", "monroL"])
+    mesh, vlab, inside, lab = drawn(groups, tubes, lo, midline, ["third", "monroR", "monroL", "aqueduct", "fourth"])
     pieces = split(mesh, vlab)
     nodes, cent = {}, {}
     for i, k in enumerate(keys):
         V, N, T = pieces[i]
-        if k == "third":     # the midline ventricle in its left and right halves, as the other sections draw it
+        if k in MIDLINE:     # a midline ventricle in its left and right halves, as the other sections draw them
             c = V[T].mean(1)[:, 0] > midline
             for s, sel in (("R", c), ("L", ~c)):
                 used, inv = np.unique(T[sel], return_inverse=True)
-                nodes.setdefault("third", []).append(piece_node(s, V[used], N[used], inv.reshape(-1, 3)))
-                cent[f"third{s}"] = V[used].mean(0).round(2).tolist()
+                nodes.setdefault(k, []).append(piece_node(s, V[used], N[used], inv.reshape(-1, 3)))
+                cent[f"{k}{s}"] = V[used].mean(0).round(2).tolist()
         else:
             s = k[-1]
             nodes.setdefault("monro" if k.startswith("monro") else "lateral", []).append(piece_node(s, V, N, T))
             cent[k] = V.mean(0).round(2).tolist()
     write_glb(BUILD / "ve_lateral_ventricle.glb", sorted(nodes["lateral"], key=lambda n: n["name"]), {"id": "ve_lateral_ventricle"})
     write_glb(BUILD / "ve_third_ventricle.glb", nodes["third"], {"id": "ve_third_ventricle"})
+    write_glb(BUILD / "ve_cerebral_aqueduct.glb", nodes["aqueduct"], {"id": "ve_cerebral_aqueduct"})
+    write_glb(BUILD / "ve_fourth_ventricle.glb", nodes["fourth"], {"id": "ve_fourth_ventricle"})
     write_glb(BUILD / "ve_interventricular_foramen.glb", sorted(nodes["monro"], key=lambda n: n["name"]), {"id": "ve_interventricular_foramen"})
     # what is drawn: its volumes, and (for the trajectories) each side's lateral ventricle with its foramen
     vrep["drawnMl"] = {k: round(float((inside & (lab == i)).sum() * STEP ** 3 / 1000), 2) for i, k in enumerate(keys)}
     np.savez_compressed(BUILD / "drawn.npz", inside=inside, lab=lab.astype(np.uint8), lo=lo, keys=np.array(keys),
-                        model=np.stack([model[k] for k in ("R", "L", "third")]))
+                        model=np.stack([model[k] for k in ("R", "L", "third", "aqueduct", "fourth")]))
     vent = {}
     for s in ("R", "L"):
         full = np.zeros(g.shape, bool)
@@ -497,13 +579,22 @@ def main() -> int:
         vent[s] = full
     # checks on the CT: is it darker along the fitted temporal horns and the foramina than in the brain around them?
     z = lo[2] + np.arange(shape[2]) * STEP
-    ctv = (mask | third)[crop]
+    ctv = (mask | third | fourth)[crop]
     allv = np.any(np.stack(list(groups.values())), 0)
     fit["temporalHorn"] = {s: contrast(g.hu[crop], model[s] & (z < TEMPORAL_Z_MM)[None, None, :] & ~ctv, allv, g.vessel[crop]) for s in ("R", "L")}
-    fit["monroCt"] = {s: contrast(g.hu[crop], tube(fm[s]["a"], fm[s]["b"], r_monro, lo, shape), allv, g.vessel[crop]) for s in ("R", "L")}
+    fit["monroCt"] = {s: contrast(g.hu[crop], tubes[f"monro{s}"] <= 0, allv, g.vessel[crop]) for s in ("R", "L")}
     fit["monroRadiusMm"] = round(r_monro, 2)
+    # the aqueduct and the fourth ventricle: the CT along the model's (where the CT does not already show fluid), and
+    # whether the drawn ventricles are one cavity, lateral to fourth
+    fit["aqueductCt"] = contrast(g.hu[crop], groups["aqueduct"] & ~ctv, allv, g.vessel[crop])
+    fit["fourthCt"] = contrast(g.hu[crop], model["fourth"] & ~ctv, allv, g.vessel[crop])
+    cl, ncl = ndimage.label(inside)
+    big = np.bincount(cl.ravel())[1:]
+    fit["drawnPieces"] = int(ncl)
+    fit["drawnLargestShare"] = round(float(big.max() / big.sum()), 4)
     vrep["fit"] = fit
-    print("drawn", vrep["drawnMl"], "temporal horns", fit["temporalHorn"], "foramina", fit["monroCt"], flush=True)
+    print("drawn", vrep["drawnMl"], "temporal horns", fit["temporalHorn"], "foramina", fit["monroCt"], "aqueduct", fit["aqueductCt"],
+          "fourth", fit["fourthCt"], "pieces", ncl, fit["drawnLargestShare"], flush=True)
     # the skull's landmarks
     bregma = A.bregma(S)
     sut = {f"{s}{int(d)}": suture_point(S, midline + (d if s == "R" else -d)) for s in ("R", "L") for d in (15.0, 25.0, 30.0, 40.0)}
@@ -557,7 +648,7 @@ def main() -> int:
     out = {"midline": round(midline, 2), "ventricles": vrep, "suture": suture, "canal": canal, "canthusMm": round(CANTHUS_MM, 2),
            "params": {"csfHu": CSF_HU, "smoothMm": SMOOTH_MM, "depthMm": DEPTH_MM, "kocher": KOCHER, "kocherAnteriorMm": KOCHER_ANTERIOR_MM,
                       "apOffsets": AP_OFFSETS, "maxDepthMm": MAX_DEPTH_MM, "fitSigmasMm": list(FIT_SIGMAS_MM), "fitPairMm": FIT_PAIR_MM,
-                      "fitBackMm": FIT_BACK_MM, "temporalZMm": TEMPORAL_Z_MM, "monroAreaMm2": MONRO_AREA_MM2, "softMm": SOFT_MM,
+                      "fitBackMm": FIT_BACK_MM, "temporalZMm": TEMPORAL_Z_MM, "monroAreaMm2": MONRO_AREA_MM2, "aqueductMm": list(AQUEDUCT_MM), "softMm": SOFT_MM,
                       "drawOutMm": DRAW_OUT_MM}, "trajectories": rows}
     (BUILD / "trajectories.json").write_text(json.dumps(out, indent=1))
     (BUILD / "landmarks.json").write_text(json.dumps(landmarks, indent=1))
@@ -570,7 +661,8 @@ def main() -> int:
 
 DATASET_NOTE = ("One adult's CT angiogram (TopBrain 2025 case 011, Skull base v2's): the bone is this patient's, and so are "
                 "the ventricles where the CT shows them; where it does not (the temporal horns, the foramina of Monro, the third "
-                "ventricle's floor), they are the Z-Anatomy model's, fitted onto them. The brain around them is a template fitted "
+                "ventricle's floor, the aqueduct, most of the fourth ventricle), they are the Z-Anatomy model's, fitted onto them. "
+                "The brain around them is a template fitted "
                 "into the CT (Skull base v3). Teaching tool, not for planning.")
 LICENCE = ("TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy "
            "CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)")
@@ -583,6 +675,7 @@ def write_manifest(cent: dict, vrep: dict) -> None:
     cite = [CITES[c]["citation"] for c in ("topbrain2025", "mitsuhashi2009")]
     url = [CITES[c]["url"] for c in ("topbrain2025", "mitsuhashi2009")]
     v, fit, d = vrep["volumeMl"], vrep["fit"], vrep["drawnMl"]
+    aq = fit["aqueduct"]
     th = fit["temporalHorn"]
     drawn_how = (f"The drawn surface joins the two, softened (its signed distance smoothed by {SOFT_MM} mm) and drawn {DRAW_OUT_MM} mm outside "
                  "them, within the CT's uncertainty.")
@@ -618,6 +711,25 @@ def write_manifest(cent: dict, vrep: dict) -> None:
                        f"{fit['monro']['L']['gapMm']} mm on the left): the third ventricle's front upper corner, the junction of its roof and anterior "
                        f"wall, where Azab 2014 places the foramina. Drawn {DRAW_OUT_MM} mm wider, like the ventricles."),
         "centroid": {"L": cent["monroL"], "R": cent["monroR"]},
+    }, {
+        **base, "id": "ve_cerebral_aqueduct", "name": "Cerebral aqueduct (of Sylvius)", "aliases": ["Aqueduct of midbrain", "Aqueduct of Sylvius"],
+        "file": f"assets/{KIND}/ve_cerebral_aqueduct.glb",
+        "source": "The fitted Z-Anatomy model's course, drawn at the calibre Xiao 2025 measured",
+        "derivation": (f"This CT does not resolve it. Its course is the fitted Z-Anatomy model's aqueduct ({aq['modelLengthMm']} mm long; its ends "
+                       f"{aq['gapToThirdMm']} and {aq['gapToFourthMm']} mm from the fitted third and fourth ventricles), run on "
+                       f"{AQUEDUCT_INTO_MM:.0f} mm into each ({aq['courseMm']} mm in all). Its diameter is the mean Xiao 2025 measured in 30 healthy adults "
+                       f"aged 61 to 88: {AQUEDUCT_MM[0]} mm where it leaves the third ventricle, {AQUEDUCT_MM[1]} mm at its narrowest (put midway: "
+                       f"the paper does not say clearly where) and {AQUEDUCT_MM[2]} mm where it opens into the fourth; drawn {DRAW_OUT_MM} mm wider, "
+                       f"like the ventricles. Along it the CT is {fit['aqueductCt']['insideHu']} HU, against {fit['aqueductCt']['aroundHu']} HU around."),
+        "centroid": {"L": cent["aqueductL"], "R": cent["aqueductR"]},
+    }, {
+        **base, "id": "ve_fourth_ventricle", "name": "Fourth ventricle", "file": f"assets/{KIND}/ve_fourth_ventricle.glb",
+        "derivation": (f"This CT's own where it shows it: the fluid darker than {CSF_HU:.0f} HU within {FOURTH_NEAR_MM:.0f} mm of the model's fourth "
+                       f"ventricle ({v['fourth']} ml: its upper part; lower down this CT does not show it). {model_how} "
+                       f"The CT's part lies a median {fit['fourthFitMedianMm']} mm from the fitted model's; along the rest of the model the CT is "
+                       f"{fit['fourthCt']['insideHu']} HU, against {fit['fourthCt']['aroundHu']} HU around. Its lateral recesses and the foramina of "
+                       f"Luschka and Magendie are not modelled. {drawn_how} As drawn: {d['fourth']} ml."),
+        "centroid": {"L": cent["fourthL"], "R": cent["fourthR"]},
     }]
     for it in v2["structures"]:
         if it["type"] == "bone":
@@ -678,6 +790,14 @@ def validate() -> int:
         check(mo["onThird"]["front"] >= 0.6 and mo["onThird"]["up"] >= 0.6, f"{s} foramen not at the third ventricle's front upper corner: {mo}")
         check(d[s] >= v["volumeMl"][s] and d[f"monro{s}"] > 0, f"{s} drawn {d[s]} ml, CT {v['volumeMl'][s]} ml; foramen {d[f'monro{s}']} ml")
     check(d["third"] >= v["volumeMl"]["third"], f"third ventricle drawn {d['third']} ml, CT {v['volumeMl']['third']} ml")
+    check(fit["drawnPieces"] == 1, f"the drawn ventricles are {fit['drawnPieces']} pieces, not one cavity")
+    aq = fit["aqueduct"]
+    check(aq["gapToThirdMm"] < 3.0 and aq["gapToFourthMm"] < 3.0, f"the model's aqueduct does not reach the third and fourth ventricles: {aq}")
+    check(12.0 <= aq["courseMm"] <= 26.0, f"aqueduct {aq['courseMm']} mm long")
+    check(d["aqueduct"] > 0 and d["fourth"] >= v["volumeMl"]["fourth"] > 0, f"aqueduct {d['aqueduct']} ml, fourth ventricle drawn {d['fourth']} ml, CT {v['volumeMl']['fourth']} ml")
+    check(fit["fourthFitMedianMm"] <= 1.5, f"the model's fourth ventricle {fit['fourthFitMedianMm']} mm from the CT's")
+    for k in ("aqueductCt", "fourthCt"):
+        check(fit[k]["insideHu"] <= fit[k]["aroundHu"] + 2.0, f"{k}: brighter on the CT than around it: {fit[k]}")
     mr, ml_ = np.array(lms["lm_meatus_r"]["ras"]), np.array(lms["lm_meatus_l"]["ras"])
     check(abs(mr[0] + ml_[0]) < 8 and abs(mr[1] - ml_[1]) < 8 and abs(mr[2] - ml_[2]) < 8, f"the two meatus are not mirror images: {mr} {ml_}")
     check(40 < mr[0] < 70 and -70 < ml_[0] < -40, f"meatus off the temporal bones: {mr} {ml_}")

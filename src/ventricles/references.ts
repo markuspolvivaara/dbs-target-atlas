@@ -18,4 +18,10 @@ export const VE_REFERENCES: BsReference[] = [
     citation: 'Azab WA, Salaheddin W, Alsheikh TM, Nasim K, Nasr MM. Colloid cysts posterior and anterior to the foramen of Monro: anatomical features and implications for endoscopic excision. Surg Neurol Int. 2014;5:124. doi:10.4103/2152-7806.138364.' },
   { id: 'jean2019', pmid: '30953154', shortLabel: 'Jean 2019', url: doi('10.1007/s00701-019-03887-4'),
     citation: 'Jean WC, Tai AX, Hogan E, Herur-Raman A, Felbaum DR, Leonardo J, et al. An anatomical study of the foramen of Monro: implications in management of pineal tumors presenting with hydrocephalus. Acta Neurochir (Wien). 2019;161(5):975–983. doi:10.1007/s00701-019-03887-4.' },
+  { id: 'xiao2025', pmid: '39748024', pmcid: 'PMC11695585', shortLabel: 'Xiao 2025', url: doi('10.1038/s41598-024-83874-7'),
+    citation: 'Xiao K, Zhou L, Tang X, Liu S, Deng Z, Yang F. MRI imaging characteristics of brainstem and midbrain aqueduct in patients with iNPH. Sci Rep. 2025;15(1):94. doi:10.1038/s41598-024-83874-7.' },
+  { id: 'erginoglu2026', pmid: '41283941', pmcid: 'PMC12967451', shortLabel: 'Erginoglu 2026', url: doi('10.1007/s11845-025-04170-5'),
+    citation: 'Erginoglu U, Sulaimanov U, Uslu I, Ataoglu C, Keles A, Aycan A, et al. Quantitative anatomy of the fourth ventricle floor: a cadaveric morphometric study. Ir J Med Sci. 2026;195(1):373–381. doi:10.1007/s11845-025-04170-5.' },
+  { id: 'longatti2026', pmid: '41784833', pmcid: 'PMC12963120', shortLabel: 'Longatti 2026', url: doi('10.1007/s00381-026-07188-x'),
+    citation: 'Longatti P, Fiorindi A, Siddi F, Boaro A, Canova G, Feletti A. The telovelar approach reshaped: a new perspective from inside the fourth ventricle. Childs Nerv Syst. 2026;42(1):96. doi:10.1007/s00381-026-07188-x.' },
 ];

@@ -4,7 +4,8 @@
   "volumeMl": {
    "R": 1.38,
    "L": 2.81,
-   "third": 0.58
+   "third": 0.58,
+   "fourth": 0.47
   },
   "extentMm": {
    "lo": [
@@ -25,11 +26,13 @@
    "evansIndex": 0.212
   },
   "drawnMl": {
-   "R": 8.32,
+   "R": 8.31,
    "L": 9.19,
-   "third": 1.59,
+   "third": 1.58,
+   "fourth": 1.6,
+   "aqueduct": 0.1,
    "monroR": 0.03,
-   "monroL": 0.02
+   "monroL": 0.03
   },
   "fit": {
    "modelScale": 0.905,
@@ -37,52 +40,72 @@
    "similarityMedianMm": 1.24,
    "similarityP90Mm": 3.41,
    "fitMedianMm": 0.79,
-   "fitP90Mm": 1.87,
-   "fitMaxMm": 3.6,
-   "jacobianMin": 0.414,
-   "jacobianMax": 1.329,
+   "fitP90Mm": 1.9,
+   "fitMaxMm": 3.62,
+   "jacobianMin": 0.423,
+   "jacobianMax": 1.657,
    "modelMl": {
-    "L": 7.05,
-    "R": 6.69,
-    "third": 1.14
+    "L": 7.02,
+    "R": 6.7,
+    "third": 1.1,
+    "aqueduct": 0.03,
+    "fourth": 1.12
    },
+   "fourthCtMl": 0.47,
+   "fourthFitMedianMm": 0.72,
    "monro": {
     "R": {
      "gapMm": 2.24,
      "onThird": {
-      "front": 0.75,
+      "front": 0.76,
       "up": 0.96
      }
     },
     "L": {
-     "gapMm": 2.31,
+     "gapMm": 2.3,
      "onThird": {
       "front": 0.76,
       "up": 0.98
      }
     }
    },
+   "aqueduct": {
+    "modelLengthMm": 15.0,
+    "gapToThirdMm": 0.76,
+    "gapToFourthMm": 0.97,
+    "courseMm": 18.7
+   },
    "temporalHorn": {
     "R": {
-     "insideHu": 40.3,
-     "aroundHu": 43.3
+     "insideHu": 40.1,
+     "aroundHu": 43.2
     },
     "L": {
-     "insideHu": 42.5,
-     "aroundHu": 41.8
+     "insideHu": 42.0,
+     "aroundHu": 41.7
     }
    },
    "monroCt": {
     "R": {
-     "insideHu": 33.8,
-     "aroundHu": 43.4
+     "insideHu": 33.5,
+     "aroundHu": 43.5
     },
     "L": {
-     "insideHu": 30.9,
+     "insideHu": 30.8,
      "aroundHu": 42.4
     }
    },
-   "monroRadiusMm": 1.29
+   "monroRadiusMm": 1.29,
+   "aqueductCt": {
+    "insideHu": 37.9,
+    "aroundHu": 40.0
+   },
+   "fourthCt": {
+    "insideHu": 43.3,
+    "aroundHu": 46.8
+   },
+   "drawnPieces": 1,
+   "drawnLargestShare": 1.0
   }
  },
  "suture": {
@@ -152,6 +175,11 @@
   "fitBackMm": 2.5,
   "temporalZMm": 14.0,
   "monroAreaMm2": 5.23,
+  "aqueductMm": [
+   1.98,
+   1.27,
+   2.49
+  ],
   "softMm": 0.75,
   "drawOutMm": 0.5
  },
@@ -180,7 +208,7 @@
    "boneMm": 7.5,
    "ventricle": null,
    "nearestSide": "R",
-   "missMm": 10.6
+   "missMm": 10.5
   },
   {
    "kocher": "chen",
@@ -449,12 +477,12 @@
    "angleToNormalDeg": 2.6,
    "boneMm": 6.8,
    "ventricle": "R",
-   "depthMm": 53.8,
-   "insideMm": 11.0,
+   "depthMm": 53.5,
+   "insideMm": 11.2,
    "entersAt": [
-    6.3,
-    6.1,
-    42.6
+    6.4,
+    6.2,
+    42.8
    ]
   },
   {
@@ -475,12 +503,12 @@
    "angleToNormalDeg": 0.0,
    "boneMm": 6.8,
    "ventricle": "R",
-   "depthMm": 56.2,
-   "insideMm": 6.5,
+   "depthMm": 55.5,
+   "insideMm": 0.2,
    "entersAt": [
-    3.5,
-    4.1,
-    41.6
+    3.8,
+    4.4,
+    42.2
    ]
   },
   {
@@ -642,7 +670,7 @@
    "boneMm": 7.5,
    "ventricle": null,
    "nearestSide": "L",
-   "missMm": 3.6
+   "missMm": 3.4
   },
   {
    "kocher": "chen",
@@ -1020,12 +1048,12 @@
    "angleToNormalDeg": 0.0,
    "boneMm": 6.8,
    "ventricle": "R",
-   "depthMm": 56.0,
-   "insideMm": 5.2,
+   "depthMm": 55.5,
+   "insideMm": 0.2,
    "entersAt": [
-    3.6,
-    2.8,
-    42.1
+    3.9,
+    3.0,
+    42.6
    ]
   },
   {
@@ -1129,12 +1157,12 @@
    "angleToNormalDeg": 0.0,
    "boneMm": 6.8,
    "ventricle": "R",
-   "depthMm": 54.5,
-   "insideMm": 8.8,
+   "depthMm": 53.8,
+   "insideMm": 0.2,
    "entersAt": [
-    4.9,
-    5.9,
-    42.1
+    5.3,
+    6.2,
+    42.7
    ]
   },
   {
@@ -1161,7 +1189,7 @@
    "boneMm": 8.0,
    "ventricle": null,
    "nearestSide": "L",
-   "missMm": 12.0
+   "missMm": 11.8
   },
   {
    "kocher": "park",
@@ -1291,7 +1319,7 @@
    "boneMm": 7.2,
    "ventricle": null,
    "nearestSide": "L",
-   "missMm": 6.2
+   "missMm": 6.1
   },
   {
    "kocher": "park",
@@ -1426,7 +1454,7 @@
    "boneMm": 6.5,
    "ventricle": "L",
    "depthMm": 46.8,
-   "insideMm": 17.0,
+   "insideMm": 18.0,
    "entersAt": [
     -10.0,
     8.5,
@@ -1451,12 +1479,12 @@
    "angleToNormalDeg": 0.0,
    "boneMm": 6.5,
    "ventricle": "L",
-   "depthMm": 53.8,
-   "insideMm": 0.5,
+   "depthMm": 54.8,
+   "insideMm": 7.5,
    "entersAt": [
-    -3.4,
-    6.1,
-    41.1
+    -3.0,
+    5.8,
+    40.2
    ]
   }
  ],

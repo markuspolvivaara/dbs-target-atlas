@@ -1,4 +1,4 @@
-"""Export the lateral and third ventricles from the Z-Anatomy Blender file for the ventricles section (runs inside
+"""Export the ventricles from the Z-Anatomy Blender file for the ventricles section (runs inside
 Blender).
 
 Usage (from the repository root):
@@ -7,7 +7,7 @@ Usage (from the repository root):
 
 Writes pipeline/data/build/ventricles/ventricles_export.json in the skull-base export's frame (RAS millimetres relative
 to the hypophysial fossa landmark, like skullbase_export.py, so Skull base v2's fit carries it onto the CT):
-  meshes     the lateral ventricles and the third ventricle
+  meshes     the lateral ventricles, the third ventricle, the aqueduct and the fourth ventricle
   texts      the Wikipedia-derived definition of every exported structure (CC BY-SA 3.0)
 Nothing is added or moved by hand: the file only converts what the model contains.
 """
@@ -19,7 +19,7 @@ import bpy
 
 OUT = os.path.join(os.getcwd(), 'pipeline', 'data', 'build', 'ventricles', 'ventricles_export.json')
 ORIGIN_PIN = 'Hypophysial fossa.j'
-NAMES = ['Lateral ventricle.l', 'Lateral ventricle.r', 'Third ventricle']
+NAMES = ['Lateral ventricle.l', 'Lateral ventricle.r', 'Third ventricle', 'Aqueduct of midbrain', 'Fourth ventricle']
 
 
 def base_name(n: str) -> str:

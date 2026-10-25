@@ -175,13 +175,13 @@ What is covered by which terms
    CT's posterior fossa, the tonsils drawn apart as a morph target.
 
 13. Ventricles section (public/assets/ventricles/, public/assets/ve-manifest.json,
-   src/data/generated/ve-*.json): the lateral and third ventricles segmented
-   here from the TopBrain 2025 CT angiogram (case 011; open use with
-   attribution, non-commercial, University Hospital Zurich) and completed by
-   Z-Anatomy's ventricles fitted onto them (CC BY-SA 4.0; BodyParts3D CC BY-SA
-   2.1 Japan): adapted from Z-Anatomy, the ventricle meshes stay under CC BY-SA
-   4.0, and their fit uses the TopBrain data. The foramina of Monro are drawn
-   by rule (the project's own, GPL-3.0). Landmarks and ventriculostomy
+   src/data/generated/ve-*.json): the ventricles segmented here from the
+   TopBrain 2025 CT angiogram (case 011; open use with attribution,
+   non-commercial, University Hospital Zurich) and completed by Z-Anatomy's
+   ventricles fitted onto them (CC BY-SA 4.0; BodyParts3D CC BY-SA 2.1 Japan):
+   adapted from Z-Anatomy, the ventricle meshes stay under CC BY-SA 4.0, and
+   their fit uses the TopBrain data. The foramina of Monro and the aqueduct's
+   calibre are drawn by rule (the project's own, GPL-3.0). Landmarks and ventriculostomy
    trajectories are computed on the CT. It shows Skull base v2's bone (section
    10) and the default skull base model's fitted brain (section 12) under their
    terms.
