@@ -59,9 +59,9 @@ commit and push it.
   - `.tools/`: the MacBook's own Node and Blender. Elsewhere, use the system Node, and set `BLENDER=/path/to/blender`
     for the Z-Anatomy exports.
   - `pipeline/.venv`: run `python3 -m venv pipeline/.venv && pipeline/.venv/bin/pip install -r pipeline/requirements.txt`.
-  - `pipeline/data/raw`: 6.6 GB. Fetch it with `pipeline/fetch_sources.py`, `pipeline/fetch_openear.py` and the
-    README's per-section notes. TopBrain case 011 comes from Zenodo 16878417.
-  - `pipeline/data/build`: caches. The v3 brain fit takes about 5.5 minutes to rebuild.
+  - `pipeline/data/raw` (6.6 GB) and `pipeline/data/build` (0.5 GB, the caches). Copy them across: see "Moving the
+    pipeline data" below. Fetching them again works too: `pipeline/fetch_sources.py`, `pipeline/fetch_openear.py` and
+    the README's per-section notes; TopBrain case 011 comes from Zenodo 16878417.
 - **Skull base v3 and ventricles build chain.** Run Python as `pipeline/.venv/bin/python -u -I -W ignore`:
   1. `skullbase_brain.py`
   2. `skullbase_pfossa.py`
@@ -87,7 +87,50 @@ commit and push it.
 - **Refreshing a stale baseline.** After geometry changes, `-u` won't rewrite a baseline that still matches within
   1 %. Delete the old PNG, run the test with `-u`, and look at the new image.
 
+## Moving the pipeline data
+
+Work on the app alone (cards, sources, text, UI, tests) needs none of this, because the generated assets are
+committed. Changing a section's geometry needs that section's raw data and the build caches.
+
+| `pipeline/data/raw/` | Size | Used for | Copy? |
+|---|---|---|---|
+| `totalseg_weights` | 3.0 GB | re-running TotalSegmentator (spine; the v3 carotids, jugular veins and optic nerves) | no. Its outputs are in `build/`, and TotalSegmentator downloads the weights itself if a re-run is needed. |
+| `hcp1065` | 1.0 GB | white-matter tracts | yes |
+| `verse` | 723 MB | spine CT | yes |
+| `zanatomy` | 377 MB | skull base, brainstem, ventricles, cortex texts (Blender exports) | yes |
+| `topbrain` | 213 MB | skull base v2/v3, ventricles | yes |
+| `t1.nii`, `t2.nii`, `pd.nii`, `atlases`, `cortex`, `labeling`, `aan` | ~0.6 GB | DBS, cortex, brainstem, the v3 template brain | yes |
+| `openear` | 88 MB | v3 temporal bone | yes |
+| `bodyparts3d`, `mug500` | 0.6 GB | not used by any build | no |
+
+`pipeline/data/build/` holds the intermediate results:
+- Skull base v2's Z-Anatomy fit (8.5 minutes) and the v3 brain and posterior fossa fits;
+- the Blender exports and the segmentations.
+
+Copy it too. Its caches are keyed on their inputs, so they stay valid on the other machine. All in all, about 3.7 GB (1,634 files).
+
+The exclude patterns drop the unused folders and the MacBook's iCloud duplicates (`name 2.ext`, `folder 3`). Replace
+`<desktop>` and `<repo>` with the desktop's address and the clone's path. Never add `--delete`: nothing should be
+removed on the receiving side.
+
+**To the desktop** (run on the desktop; on the MacBook turn on System Settings → General → Sharing → Remote Login):
+
+```bash
+rsync -av --exclude 'totalseg_weights' --exclude 'bodyparts3d' --exclude 'mug500' --exclude '* [0-9]' --exclude '* [0-9].*' markus@Markus-MacBook.local:Documents/DBS-targets/pipeline/data/ <repo>/pipeline/data/
+```
+
+**Back to the MacBook** (run on the MacBook; the desktop needs its SSH server running). `-u` keeps a file that is
+newer on the MacBook:
+
+```bash
+rsync -avu --exclude 'totalseg_weights' --exclude '* [0-9]' --exclude '* [0-9].*' <user>@<desktop>:<repo>/pipeline/data/ ~/Documents/DBS-targets/pipeline/data/
+```
+
+Copy back after `git pull`, so the code and the caches match. If the desktop changed only the app, there's nothing to
+copy back.
+
 ## When handing back to the MacBook
 
-Write a new handoff here (what changed, what's open, anything set up differently), then commit and push. On the
+Write a new handoff here (what changed, what's open, anything set up differently), then commit and push. Say which
+sections' pipeline data changed, so the MacBook knows whether to copy `pipeline/data/` back (see above). On the
 MacBook, Claude will pull from GitHub and read it before continuing.
