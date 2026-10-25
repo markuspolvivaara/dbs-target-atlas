@@ -308,6 +308,20 @@ The section also shows the white-matter section's tracts and the DBS section's d
   0.5 mm; midline structures cut at x = 0; files converted to compressed glTF; definitions shortened to their lead
   section.
 
+## Ventricles section (TopBrain 2025 CT angiogram, case 011)
+
+The ventricle meshes in `public/assets/ventricles/` and `ve-manifest.json`, `ve-landmarks.json` and `ve-trajectories.json`
+are derived from the TopBrain CT (TopBrain data: open use with attribution, non-commercial (University Hospital Zurich)): **not** GPL-licensed. The section also shows Skull base v2's bone and
+Skull base v3's fitted brain, under their licences above.
+
+- Source: https://zenodo.org/records/16878417
+- Note: One adult's CT angiogram (TopBrain 2025 case 011, Skull base v2's): the bone and these ventricles are this patient's; the brain around them is a template fitted into the CT (Skull base v3). Teaching tool, not for planning.
+- Attribution: TopBrain 2025 challenge data (University Hospital Zurich): CT angiogram and vessel labels of case topcow_ct_011 - https://topbrain2025.grand-challenge.org, https://zenodo.org/records/16878417 - open use, source given, non-commercial
+- Cite: Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.
+- Changes made: the lateral and third ventricles segmented from the CT by a threshold in its brain window
+  (pipeline/ventricles_build.py); the coronal suture, Kocher's points and the external acoustic meatus located on the
+  CT; ventriculostomy trajectories computed on it; files converted to compressed glTF.
+
 ## Cortex section (Destrieux parcellation on the Lead-DBS template surface)
 
 The meshes in `public/assets/cortex/` and `ctx-manifest.json` / `ctx-labels.json` are derived from the Lead-DBS

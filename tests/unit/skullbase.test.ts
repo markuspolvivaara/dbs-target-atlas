@@ -346,6 +346,7 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     for (const side of ['R', 'L']) {
       expect(brain.clear[side].inBoneWayAfter, side).toBe(0);
       expect(brain.clear[side].inVesselAfter, side).toBe(0);
+      expect(brain.clear[side].acrossFalxAfter, side).toBe(0);   // each hemisphere on its own side of the falx
       expect(brain.m1LengthMm[side], side).toBeGreaterThan(5);
       expect(brain.m1LengthMm[side], side).toBeLessThan(40);
     }
@@ -398,7 +399,7 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     const s = T3.decodeSkull('#/atlas?g=interhemispheric&op=40&ih=50');
     expect(s.morphs).toEqual({ interhemispheric: 0.5 });
   });
-  it('the telovelar view: a midline suboccipital flap, the posterior fossa fitted around this patient\'s arteries, the tonsils drawn apart', async () => {
+  it('the telovelar view: a midline suboccipital flap, the posterior fossa fitted around this patient\'s arteries, the tonsils drawn apart and the vermis lifted', async () => {
     const so = geom.suboccipital;
     expect(so.side).toBe('M');
     expect(so.bones.map((id) => byId.get(id)!.name)).toEqual(['Occipital bone']);
@@ -411,9 +412,10 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     // the cerebrum is not drawn here, nor the posterior fossa in the other views
     for (const x of v3.structures.filter((y) => y.category === 'brain')) expect(p.looks.get(x.id), x.id).toBe('hidden');
     for (const x of pf) expect(S3.skullPlan('transsylvian', null).looks.get(x.id), x.id).toBe('hidden');
-    expect(pf.filter((x) => x.morph).map((x) => x.name).sort()).toEqual(['Cerebellar hemisphere', 'Tonsil of cerebellum']);
+    expect(pf.filter((x) => x.morph).map((x) => x.name).sort()).toEqual(['Cerebellar hemisphere', 'Tonsil of cerebellum', 'Vermis']);
     const pr = ((await import('../../src/data/generated/sbv3-fit.json')).default as unknown as { pfossa: {
-      fit: { vesselInsideShare: number; minRelativeVolume: number; before: { vesselInsideShare: number } }; clear: Record<string, number>; telovelar: { maxMovedMm: number; inBoneAfter: number; inVesselAfter: number; tonsilToMedullaMm: { rest: number; moved: number } };
+      fit: { vesselInsideShare: number; minRelativeVolume: number; before: { vesselInsideShare: number } }; clear: Record<string, number>; telovelar: { maxMovedMm: number; inBoneAfter: number; inVesselAfter: number; tonsilToMedullaMm: { rest: number; moved: number };
+        vermisLiftMm: number; uvulaToMedullaMm: { rest: number; moved: number }; inVentricle: { rest: number; moved: number } };
       params: Record<string, number>;
     } }).pfossa;
     expect(pr.fit.vesselInsideShare).toBeLessThan(pr.fit.before.vesselInsideShare);
@@ -422,6 +424,11 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(pr.telovelar.inBoneAfter).toBe(0);
     expect(pr.telovelar.inVesselAfter).toBe(0);
     expect(pr.telovelar.tonsilToMedullaMm.moved).toBeGreaterThan(pr.telovelar.tonsilToMedullaMm.rest);
+    // the nodule and uvula lifted off the roof of the fourth ventricle, nothing carried into it, nothing folded
+    expect(pr.telovelar.vermisLiftMm).toBeCloseTo(pr.params.tvVermisMm, 0);
+    expect(pr.telovelar.uvulaToMedullaMm.moved).toBeGreaterThan(pr.telovelar.uvulaToMedullaMm.rest);
+    expect(pr.telovelar.inVentricle.moved).toBeLessThanOrEqual(pr.telovelar.inVentricle.rest);
+    expect(pr.params.tvMm / pr.params.tvReachMm + pr.params.tvVermisMm / pr.params.tvVermisReachMm).toBeLessThan(1);
     expect(T3.decodeSkull('#/atlas?g=telovelar&tv=60&op=30').morphs).toEqual({ telovelar: 0.6 });
   });
   it('the opening and the lift are in the link for the surgical view only', () => {

@@ -241,6 +241,16 @@ const DatasetInfoSchema = z.object({
   citation: z.array(z.string()), citationUrls: z.array(z.string()),
 });
 
+/** ve-manifest.json: the ventricles section's structures in Skull base v2's frame (this CT's ventricles, its bone and
+ * the template brain fitted into it). */
+export const VeManifestSchema = z.object({
+  space: z.string(),
+  generatedBy: z.string(),
+  structures: z.array(ManifestStructureSchema),
+  dataset: DatasetInfoSchema,
+});
+export type VeManifest = z.infer<typeof VeManifestSchema>;
+
 /** bs-manifest.json: the brainstem section's structures in MNI space (Z-Anatomy fitted to the template; AAN 2.0). */
 export const BsManifestSchema = z.object({
   space: z.string(),

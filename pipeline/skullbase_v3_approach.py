@@ -68,7 +68,8 @@ IH_WIDTH_MM = 40.0      # ... and this wide, from the midline to the right (illu
 SO_BELOW_IOP_MM = 10.0  # the suboccipital craniotomy: its upper edge this far below the internal occipital protuberance
                         # (the confluence of the sinuses) ...
 SO_HALF_WIDTH_MM = 25.0  # ... this far to each side of the midline (illustrative) ...
-SO_PAST_RIM_MM = 14.0   # ... and down through the foramen magnum's posterior rim (the outline reaches this far past it)
+SO_RIM_HALF_MM = 12.0   # ... down to the foramen magnum, its posterior rim taken this far to each side of the midline ...
+SO_PAST_RIM_MM = 4.0    # ... the outline's lower edge this far inside the opening, so the rim goes with the flap
 SO_DEEPER_MM = 25.0     # the squama curves from upright to nearly flat over the flap: its outer surface lies up to this much
                         # deeper than the median along the line of sight (the clivus, seen through the foramen, lies deeper)
 
@@ -463,24 +464,46 @@ def interhemispheric(S: Skull) -> dict:
             "areaMm2": round(area)}
 
 
+def foramen_rim(S: Skull, x: float) -> np.ndarray:
+    """The posterior rim of the foramen magnum at x: going back from the foramen's centre (the fitted landmark) within a
+    few millimetres of its height, the foremost bone met (the rim's inner edge)."""
+    fm = S.lms["Foramen magnum"]
+    best = None
+    for dz in np.arange(-8.0, 8.01, 1.0):
+        P = np.array([fm[0] + x, fm[1], fm[2] + dz]) - np.arange(0, 40, 0.25)[:, None] * np.array([0.0, 1.0, 0.0])
+        hit = S.bone_at(P)
+        if hit.any() and not hit[0]:
+            q = P[int(np.argmax(hit))]
+            if best is None or q[1] > best[1]:
+                best = q
+    if best is None:
+        raise SystemExit(f"no rim of the foramen magnum behind its centre at x = {x}")
+    return best
+
+
 def suboccipital(S: Skull) -> dict:
-    """A midline suboccipital craniotomy for the telovelar approach: from below the confluence of the sinuses down through
-    the posterior rim of the foramen magnum, the posterior arch of C1 left (Cho 2024: not removed in 39 of 40 children)."""
+    """A midline suboccipital craniotomy for the telovelar approach: from below the confluence of the sinuses down to the
+    foramen magnum, its posterior rim taken with the flap, the posterior arch of C1 left (Cho 2024: not removed in 39 of
+    40 children)."""
     iop, fm = S.lms["Internal occipital protuberance"], S.lms["Foramen magnum"]
     z_top, z_bot = iop[2] - SO_BELOW_IOP_MM, fm[2] + 2.0
     y_at = lambda z: iop[1] + (fm[1] - 20.0 - iop[1]) * (z - iop[2]) / (fm[2] - iop[2])   # noqa: E731  roughly on the squama
     w = SO_HALF_WIDTH_MM
-    xz = [(0, z_top), (0.6 * w, z_top - 1), (w, z_top - 5), (1.1 * w, 0.5 * (z_top + z_bot)), (0.7 * w, z_bot), (0.3 * w, z_bot - 1),
-          (-0.3 * w, z_bot - 1), (-0.7 * w, z_bot), (-1.1 * w, 0.5 * (z_top + z_bot)), (-w, z_top - 5), (-0.6 * w, z_top - 1)]
-    pts = [np.array([x, y_at(z), z]) for x, z in xz]
-    outline = np.array([S.surface(p, S.outward(p)) for p in pts])
+    right = [(0, z_top), (0.6 * w, z_top - 1), (w, z_top - 5), (1.1 * w, 0.5 * (z_top + z_bot))]
+    left = [(-1.1 * w, 0.5 * (z_top + z_bot)), (-w, z_top - 5), (-0.6 * w, z_top - 1)]
+    upper = lambda xz: [S.surface(np.array([x, y_at(z), z]), S.outward(np.array([x, y_at(z), z]))) for x, z in xz]   # noqa: E731
+    # the lower edge: the foramen's posterior rim, right to left, carried SO_PAST_RIM_MM into the opening
+    rim = []
+    for x in np.linspace(SO_RIM_HALF_MM, -SO_RIM_HALF_MM, 5):
+        q = foramen_rim(S, x)
+        rim.append(q + SO_PAST_RIM_MM * unit(np.array([fm[0] - q[0], fm[1] - q[1], 0.0])))
+    outline = np.array(upper(right) + rim + upper(left))
     n = S.outward(outline.mean(0))
-    low = outline[:, 2] <= z_bot + 1.0                    # the lower edge carried on down past the rim
-    outline[low, 2] -= SO_PAST_RIM_MM
     m = S.flap(outline, n, floor=False, deeper=SO_DEEPER_MM)
     area = outline_area(outline, n)
     how = (f"A midline suboccipital flap from {SO_BELOW_IOP_MM:.0f} mm below the internal occipital protuberance (the confluence of "
-           f"the sinuses) down through the posterior rim of the foramen magnum, {SO_HALF_WIDTH_MM:.0f} mm to each side of the midline, "
+           f"the sinuses) down to the foramen magnum, its posterior rim taken {SO_RIM_HALF_MM:.0f} mm to each side of the midline; "
+           f"{SO_HALF_WIDTH_MM:.0f} mm to each side above, "
            f"about {area:.0f} mm² seen from behind (illustrative: the sources describe a median suboccipital craniotomy or "
            "craniectomy without one size; a keyhole of about 2 cm in Wang 2023). The posterior arch of C1 is left (Cho 2024).")
     return {"id": "suboccipital", "name": "Midline suboccipital craniotomy", "side": "M", "cut": m, "how": how, "burrHoles": [], "areaMm2": round(area)}

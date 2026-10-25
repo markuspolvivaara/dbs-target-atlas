@@ -812,7 +812,7 @@ def brain_items(items: list, ex2: dict, v2: dict) -> None:
                           "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by "
                           "its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth "
                           f"deformation: its hull {rep['params']['tableGapMm']} mm inside the cranial cavity (median error "
-                          f"{fit['tableMedianMm']} mm), this patient's arteries outside the cortex, the M2 segments on the insula "
+                          f"{fit['tableMedianMm']} mm), this patient's arteries outside the cortex, each hemisphere on its own side of the falx, the M2 segments on the insula "
                           f"(median {fit['m2InsulaMedianMmR']} mm on the right) and the M3 segments in the Sylvian fissure (median "
                           f"{fit['m3FissureMedianMmR']} mm). Its sulci and gyri are the template's. The right hemisphere opens at the "
                           f"Sylvian fissure (the first slider): the lips moved apart {rep['params']['openFrontalMm']:.0f} mm up and "
@@ -855,8 +855,9 @@ def pfossa_items(items: list) -> None:
                           f"this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them ({round(f['before']['vesselInsideShare'] * 100)} % "
                           f"of their centre-line points inside before, {round(f['vesselInsideShare'] * 100)} % after), the tentorium above; then the "
                           f"{c['inVesselBefore']} vertices still in an artery's way and the {c['inBoneBefore']} in bone's pushed clear."
-                          + (f" The telovelar slider draws the tonsils {tv['tvMm']:.0f} mm apart (laterally, a little up), the rest of each "
-                             "hemisphere following; a shape, not a simulation of the tissue." if b["morph"] else ""),
+                          + (f" The telovelar slider draws the tonsils {tv['tvMm']:.0f} mm apart (laterally, a little up) and lifts the nodule "
+                             f"and uvula {tv['tvVermisMm']:.0f} mm up and back, the rest of the cerebellum following; a shape, not a simulation "
+                             "of the tissue." if b["morph"] else ""),
             "centroid": b["centroid"],
         })
 
@@ -1017,6 +1018,7 @@ def validate() -> int:
         check(f_["minRelativeVolume"] > 0, f"the deformation folds (relative volume {f_['minRelativeVolume']})")
         for s in ("R", "L"):
             check(b["clear"][s]["inBoneWayAfter"] == 0 and b["clear"][s]["inVesselAfter"] == 0, f"{s}: brain still in bone's way or in a vessel")
+            check(b["clear"][s]["acrossFalxAfter"] == 0, f"{s}: {b['clear'][s]['acrossFalxAfter']} vertices across the falx")
         o = b["open"]
         check(min(b["params"]["openFrontalMm"], b["params"]["openTemporalMm"]) - 0.5 <= o["maxMovedMm"] <= max(b["params"]["openFrontalMm"], b["params"]["openTemporalMm"]) + 2,
               f"opening moves the brain up to {o['maxMovedMm']} mm")
@@ -1037,7 +1039,7 @@ def validate() -> int:
             check(mv["R"]["lift"] <= b["params"]["liftMm"] + 1, f"{name}: the lift moves it {mv['R']['lift']} mm")
     # the telovelar view: the cerebellum, brainstem and fourth ventricle fitted into the posterior fossa, the tonsils drawn apart
     pf = [it for it in m["structures"] if it.get("category") in ("hindbrain", "ventricle")]
-    check(len(pf) == 8 and {it["name"] for it in pf if it.get("morph")} == {"Cerebellar hemisphere", "Tonsil of cerebellum"},
+    check(len(pf) == 8 and {it["name"] for it in pf if it.get("morph")} == {"Cerebellar hemisphere", "Tonsil of cerebellum", "Vermis"},
           f"{len(pf)} posterior fossa pieces")
     pr = fit.get("pfossa")
     check(pr is not None, "the posterior fossa's report is missing")
@@ -1046,9 +1048,13 @@ def validate() -> int:
         check(f_["tableMedianMm"] <= 1.5 and f_["vesselInsideShare"] <= 0.1 and f_["minRelativeVolume"] > 0,
               f"posterior fossa fit: table {f_['tableMedianMm']} mm, vessels inside {f_['vesselInsideShare']}, volume {f_['minRelativeVolume']}")
         check(c_["inBoneAfter"] == 0 and c_["inVesselAfter"] <= 20, f"posterior fossa clearance {c_}")
-        check(pr["params"]["tvMm"] - 0.5 <= t_["maxMovedMm"] <= pr["params"]["tvMm"] + 1.5 and t_["inBoneAfter"] == 0 and t_["inVesselAfter"] == 0,
+        tp_ = pr["params"]
+        check(tp_["tvMm"] - 0.5 <= t_["maxMovedMm"] <= tp_["tvMm"] + tp_["tvVermisMm"] + 1.5 and t_["inBoneAfter"] == 0 and t_["inVesselAfter"] == 0,
               f"telovelar shape {t_}")
         check(t_["tonsilToMedullaMm"]["moved"] > t_["tonsilToMedullaMm"]["rest"], f"the tonsils do not part from the medulla {t_}")
+        check(tp_["tvVermisMm"] - 0.5 <= t_["vermisLiftMm"] <= tp_["tvVermisMm"] + 1.5 and t_["uvulaToMedullaMm"]["moved"] > t_["uvulaToMedullaMm"]["rest"],
+              f"the vermis lift {t_}")
+        check(t_["inVentricle"]["moved"] <= t_["inVentricle"]["rest"], f"the lift carries the cerebellum into the fourth ventricle {t_['inVentricle']}")
     print(f"skull base v3 validation: {n - len(fails)}/{n} checks passed")
     for f in fails:
         print("FAIL", f)

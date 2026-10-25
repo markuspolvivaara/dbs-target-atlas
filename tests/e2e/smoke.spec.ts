@@ -373,14 +373,14 @@ test('home page: sections, light load, and old links forward to the DBS section'
   await page.goto('./');
   await expect(page.locator('h1')).toHaveText('Open Neuroanatomy Atlas');
   // the modules from the more basic to the more specialised, the spine last; each card is a link over its own image
-  await expect(page.locator('.section-card')).toHaveCount(8);
-  expect(await page.locator('.section-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-section')))).toEqual(['cortex', 'tracts', 'skullbase', 'brainstem', 'dbs', 'spine', 'skullbase-v1', 'skullbase-ct']);
+  await expect(page.locator('.section-card')).toHaveCount(9);
+  expect(await page.locator('.section-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-section')))).toEqual(['cortex', 'tracts', 'skullbase', 'brainstem', 'ventricles', 'dbs', 'spine', 'skullbase-v1', 'skullbase-ct']);
   await expect(page.locator('a.section-card[data-section="dbs"]')).toHaveAttribute('href', './dbs/');
   await expect(page.locator('a.section-card[data-section="tracts"]')).toHaveAttribute('href', './tracts/');
   // the skull base's earlier versions sit apart, under Alternative versions
   await expect(page.locator('.alt-versions > h2')).toHaveText('Alternative versions');
   expect(await page.locator('.alt-versions .section-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-section')))).toEqual(['skullbase-v1', 'skullbase-ct']);
-  for (const id of ['cortex', 'tracts', 'skullbase', 'brainstem', 'dbs', 'spine', 'skullbase-v1', 'skullbase-ct']) {
+  for (const id of ['cortex', 'tracts', 'skullbase', 'brainstem', 'ventricles', 'dbs', 'spine', 'skullbase-v1', 'skullbase-ct']) {
     const ok = await page.evaluate(async (u) => (await fetch(u)).ok, `./assets/home/${id}.webp`);
     expect(ok, id).toBe(true);
   }
@@ -759,7 +759,7 @@ test('skull base: structure and landmark cards, cut-away and the URL', async ({ 
   await expect(page.locator('.page:not([hidden]) h1')).toHaveText('Sources');
   // the section menu lists every section
   await page.locator('.section-chip').click();
-  await expect(page.locator('.section-menu a.section-item:not(.home)')).toHaveText(['Cortical anatomy', 'White-matter tracts', 'Skull base', 'Brainstem', 'DBS targets', 'Spine', 'Skull base v1', 'Skull base v2']);
+  await expect(page.locator('.section-menu a.section-item:not(.home)')).toHaveText(['Cortical anatomy', 'White-matter tracts', 'Skull base', 'Brainstem', 'Ventricles', 'DBS targets', 'Spine', 'Skull base v1', 'Skull base v2']);
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
@@ -819,6 +819,60 @@ test('brainstem: entry zone and nucleus cards with sources, slices and the URL',
   await page.goto('./brainstem/#/sources');
   await expect(page.locator('.page:not([hidden]) h1')).toHaveText('Sources');
   await expect(page.locator('.page:not([hidden])')).toContainText('Rajagopal N');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// ---------------------------------------------------------------- ventricles section
+for (const [id, name] of [['ventricles', 'Lateral and third ventricles'], ['evd', 'Frontal ventriculostomy']] as const) {
+  test(`ventricles ${id}: renders and matches the visual baseline`, async ({ page }) => {
+    const gd = guard(page);
+    await page.goto(`./ventricles/#/atlas?g=${id}`);
+    await settle(page);
+    await expect(page.locator('.pane:not([hidden]) .card h2').last()).toHaveText(name);
+    expect(await canvasColours(page)).toBeGreaterThan(30);
+    await expect(page.locator('.stage')).toHaveScreenshot(`ventricles-${id}.png`);
+    expect(gd.external).toEqual([]);
+    expect(gd.errors).toEqual([]);
+  });
+}
+
+test('ventricles: the catheter follows its aim, its result and sources on the card, all in the link', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./ventricles/#/atlas?g=evd');
+  await settle(page);
+  const box = page.locator('.catheter');
+  await expect(box).toContainText('On this CT');
+  await expect(box).toContainText('Chen 2025');
+  // another aim: the result and the published accuracy change, and the link carries it
+  await page.locator('.cath-target .chip[data-v="IMC"]').click();
+  await settle(page);
+  await expect(box).toContainText('Ipsilateral medial canthus');
+  await expect(box).toContainText('Park 2020');
+  await expect.poll(() => new URL(page.url()).hash).toContain('ct=IMC');
+  // T cycles the aim, S the side
+  await page.keyboard.press('t');
+  await page.keyboard.press('s');
+  await settle(page);
+  await expect.poll(() => new URL(page.url()).hash).toContain('ct=MAM');
+  await expect.poll(() => new URL(page.url()).hash).toContain('cs=L');
+  // the catheter is drawn: an overlay object in the scene
+  const n = await page.evaluate(() => {
+    const v = (window as unknown as { __atlas: { viewer: { scene: { traverse: (f: (o: { userData: { token?: string } }) => void) => void } } } }).__atlas.viewer;
+    let k = 0;
+    v.scene.traverse((o) => { if (o.userData.token === 'electrode') k++; });
+    return k;
+  });
+  expect(n).toBeGreaterThan(0);
+  // a ventricle's card measures it on this CT
+  await page.goto('./ventricles/#/atlas?g=ventricles&sel=ve_lateral_ventricle');
+  await settle(page);
+  await expect(page.locator('.card.sel')).toContainText('Evans’ index');
+  await expect(page.locator('.card.sel')).toContainText('Gangal 2026');
+  await page.goto('./ventricles/#/sources');
+  await expect(page.locator('.page:not([hidden])')).toContainText('Abdala-Vargas NJ');
+  await page.goto('./ventricles/#/credits');
+  await expect(page.locator('#topbrain')).toContainText('non-commercial');
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });

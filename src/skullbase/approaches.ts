@@ -86,6 +86,8 @@ export const APPROACH_REFS: ApproachRef[] = [
     citation: 'Cho A, Lippolis MA, Herta J, Dogan M, Hedrich C, Azizi AA, et al. The telovelar approach for fourth ventricular tumors in children: is removal of the posterior arch of C1 necessary? Childs Nerv Syst. 2024;40(9):2707. doi:10.1007/s00381-024-06443-3.' },
   { id: 'pettersson2023', pmid: '37151430', pmcid: 'PMC10159312', shortLabel: 'Pettersson 2023', url: doi('10.25259/SNI_167_2023'),
     citation: 'Pettersson SD, Jabbar R, Popławska M, Och A, Orrego-Gonzalez E, Klepinowski T, et al. Telovelar versus transvermian approach to tumors of the fourth ventricle and their impact on postoperative neurological complications: a multicenter study. Surg Neurol Int. 2023;14:124. doi:10.25259/SNI_167_2023.' },
+  { id: 'liu2014', pmid: '24678432', pmcid: 'PMC3942613', shortLabel: 'Liu 2014', url: doi('10.4103/2152-7806.126081'),
+    citation: 'Liu R, Kasper EM. Bilateral telovelar approach: a safe route revisited for resections of various large fourth ventricle tumors. Surg Neurol Int. 2014;5:16. doi:10.4103/2152-7806.126081.' },
   { id: 'wang2023', pmid: '35968951', pmcid: 'PMC9944752', shortLabel: 'Wang 2023', url: doi('10.1097/SCS.0000000000008883'),
     citation: 'Wang J, Wang X, Xu J, Wu Z, Dou Y. Microsurgical management of fourth ventricle lesions via the median suboccipital keyhole telovelar approach. J Craniofac Surg. 2023;34(2):607. doi:10.1097/SCS.0000000000008883.' },
   { id: 'longatti2026', pmid: '41784833', pmcid: 'PMC12963120', shortLabel: 'Longatti 2026', url: doi('10.1007/s00381-026-07188-x'),
@@ -206,7 +208,7 @@ export const APPROACHES: ApproachContent[] = [
   },
   {
     id: 'suboccipital', view: 'telovelar', name: 'Telovelar approach', camera: 'suboccipital', hemi: 'both', brain: 'hindbrain',
-    summary: 'A midline suboccipital craniotomy cut out of this CT’s bone, with the cerebellum, brainstem and fourth ventricle of an anatomical model fitted into its posterior fossa. The slider draws the cerebellar tonsils apart, opening the cerebellomedullary fissure onto the lower roof of the fourth ventricle and this patient’s posterior inferior cerebellar arteries.',
+    summary: 'A midline suboccipital craniotomy cut out of this CT’s bone, with the cerebellum, brainstem and fourth ventricle of an anatomical model fitted into its posterior fossa. The slider draws the cerebellar tonsils apart and lifts the inferior vermis, opening the cerebellomedullary fissure onto the lower roof of the fourth ventricle and this patient’s posterior inferior cerebellar arteries.',
     sections: [sec('The craniotomy', [
       c('A median suboccipital craniectomy, then the telovelar route along the embryonic cerebellomedullary fissure, which spares the vermis and the brainstem.', 'pantu2026'),
       c('In a keyhole variant (13 patients) the midline skin incision ran from the line between the mastoid tips 3 cm up and 1 cm down; the osteoplastic craniotomy was about 2 cm across, and the dura was opened in a reverse U extended towards the foramen magnum.', 'wang2023'),
@@ -215,10 +217,12 @@ export const APPROACHES: ApproachContent[] = [
     ]), sec('The cerebellomedullary fissure and the tonsils', [
       c('Matsushima’s transcerebellomedullary fissure approach (1992), now called telovelar, reaches the fourth ventricle from below through the fissure without splitting the vermis; in its unilateral form one cerebellar tonsil is retracted laterally and the tela choroidea opened.', 'pettersson2023'),
       c('With the arachnoid opened, both tonsils, the uvula, the posterior inferior cerebellar artery (which disappears into the cerebellomedullary fissure), the foramen of Magendie and the tela choroidea are seen. The tonsil is retracted after the uvulotonsillar and medullotonsillar spaces are dissected, and the tela choroidea is freed from the taenia on both sides.', 'wang2023'),
+      c('In a bilateral telovelar approach both cerebellomedullary fissures were opened and the tonsils gently retracted upwards and outwards; with the tela choroidea opened, the inferior vermis was not split and its caudal part could be lifted easily.', 'liu2014'),
       c('The cerebellum has tentorial, petrosal and suboccipital surfaces; the suboccipital surface of the cerebellum and the medulla are supplied by the posterior inferior cerebellar artery.', 'cavalheiro2015'),
     ], 'tonsils'), sec('The roof of the fourth ventricle', [
       c('Its caudal roof: the uvula and nodulus of the vermis; the inferior medullary velum branching off the nodulus on each side to the flocculus just outside the foramina of Luschka; below, the tela choroidea with the choroid plexus, fixed by the taeniae beside the foramen of Magendie.', 'longatti2026'),
       c('The telovelar incision starts low in the tela once the uvulotonsillar fissure is open: safe in its caudal part, cautious from the choroid plexus to the telovelar junction, very cautious in the inferior medullary velum near the fastigium. Seen endoscopically the velum beside the nodulus was barely 6 mm long (5.5–7.2 mm), and cutting it added little access.', 'longatti2026'),
+      c('With the tela choroidea freed from the taeniae on both sides, the inferior medullary velum and the vermis were gently retracted upwards for a broad view of the fourth ventricle; for larger or more lateral lesions the velum was opened further and the vermis lifted to expose the ventricle’s upper part, and its floor was identified and protected.', 'wang2023'),
       c('Dividing both taeniae can make the opening four or five times the size of the foramen of Magendie, but the roof can then be lifted only a little: the posterior inferior cerebellar artery crosses the field and can be stretched.', 'longatti2026'),
     ]), sec('Care points', [
       c('Incising the vermis where it is not infiltrated is generally held to raise the risk of a posterior fossa syndrome, including cerebellar mutism.', 'cho2024'),
@@ -227,7 +231,7 @@ export const APPROACHES: ApproachContent[] = [
     ])],
     context: ['Posterior inferior cerebellar artery', 'Vertebral artery', 'Basilar artery', 'Superior cerebellar artery', 'Transverse sinus', 'Sigmoid sinus',
       'Glossopharyngeal nerve (IX)', 'Vagus nerve (X)', 'Accessory nerve (XI)', 'Hypoglossal nerve (XII)'],
-    notShown: 'The skin, muscles, dura and arachnoid; the tela choroidea, inferior medullary velum and choroid plexus (thin sheets the model lacks: the fourth ventricle’s lower roof is open in it); the occipital sinus and the veins of the fissure. The cerebellum, brainstem and fourth ventricle are one adult’s anatomical model (Z-Anatomy) fitted into this skull and around its arteries, not this patient’s own; the tonsils’ retraction is a shape, not a simulation of the tissue.',
+    notShown: 'The skin, muscles, dura and arachnoid; the tela choroidea, inferior medullary velum and choroid plexus (thin sheets the model lacks: the fourth ventricle’s lower roof is open in it); the occipital sinus and the veins of the fissure. The cerebellum, brainstem and fourth ventricle are one adult’s anatomical model (Z-Anatomy) fitted into this skull and around its arteries, not this patient’s own; the tonsils’ retraction and the vermis’s lift are a shape, not a simulation of the tissue.',
     focus: ['Fourth ventricle', 'Tonsil of cerebellum'],
     morphs: ['telovelar'],
   },

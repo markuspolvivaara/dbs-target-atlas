@@ -18,11 +18,14 @@ Gaussian radial basis functions; phi: frame -> the carried model), found by mini
   a penalty wherever the local volume would shrink below JAC_MIN of the overall scale, so that it never folds.
 The model's meshes are carried through it (GridPhi inversion).
 
-The telovelar shape (morph target "telovelar", a slider) draws both tonsils apart, as the approach's retraction holds
-them: each tonsil moved TV_MM laterally and a little up (TV_UP), the rest of its hemisphere following with a weight that
-falls from 1 at the tonsil to 0 TV_REACH_MM from it; the vermis, the brainstem and the fourth ventricle stay. A
-displacement that changes by less than 1 mm per mm (TV_MM < TV_REACH_MM) cannot fold the hemisphere. The arteries stay
-where the CT shows them. A shape, not a simulation of the tissue.
+The telovelar shape (morph target "telovelar", a slider) draws both tonsils apart and lifts the inferior vermis, as the
+approach's retraction holds them: each tonsil moved TV_MM laterally and a little up (TV_UP), the rest of its hemisphere
+following with a weight that falls from 1 at the tonsil to 0 TV_REACH_MM from it; and the nodule and uvula moved
+TV_VERMIS_MM up and back (TV_VERMIS_BACK: back by this share of up), off the roof of the fourth ventricle, the rest of
+the cerebellum following with a weight falling to 0 TV_VERMIS_REACH_MM from them. The brainstem and the fourth ventricle
+stay. Each displacement changes by at most its size over its reach per mm, so the two together by at most
+TV_MM / TV_REACH_MM + TV_VERMIS_MM / TV_VERMIS_REACH_MM; below 1 they cannot fold the cerebellum. The arteries stay where
+the CT shows them. A shape, not a simulation of the tissue.
 
 Writes pipeline/data/build/skullbase-v3/pf_*.glb and pfossa.json (the items for the manifest and the fit report).
 """
@@ -86,16 +89,21 @@ STAGES = [  # (control grid spacing = Gaussian width in mm, or 'affine'; ridge; 
 TV_MM = 6.0                # illustrative: how far each tonsil is drawn aside
 TV_UP = 0.4                # ... laterally, and up by this share of it
 TV_REACH_MM = 15.0         # the rest of the hemisphere follows, none this far from the tonsil
+TV_VERMIS_MM = 5.0         # illustrative: how far the nodule and uvula are lifted
+TV_VERMIS_BACK = 1.0       # ... up, and back by this share of it (away from the fourth ventricle's roof)
+TV_VERMIS_REACH_MM = 15.0  # the rest of the cerebellum follows, none this far from them
+INFERIOR_VERMIS = ["Nodule of vermis", "Uvula of vermis"]
+assert TV_MM / TV_REACH_MM + TV_VERMIS_MM / TV_VERMIS_REACH_MM < 1, "the telovelar shape could fold the cerebellum"
 
 STEM = ["Midbrain", "Pons", "Medulla oblongata", "Fourth ventricle", "Superior cerebellar peduncle"]
 HEMISPHERE = ["Anterior quadrangular lobule", "Posterior quadrangular lobule", "Superior semilunar lobule", "Inferior semilunar lobule",
               "Gracile lobule", "Biventral lobule", "Flocculus", "Peduncle of flocculus", "Wing of central lobule"]
 VERMIS = ["Lingula of cerebellum", "Central lobule", "Culmen", "Declive", "Folium of vermis", "Tuber of vermis", "Pyramis of vermis",
           "Uvula of vermis", "Nodule of vermis"]
-PIECES = [  # (id, name, Z-Anatomy parts, token, category, moves with the tonsils)
+PIECES = [  # (id, name, Z-Anatomy parts, token, category, moves in the telovelar shape)
     ("pf_cerebellar_hemisphere", "Cerebellar hemisphere", HEMISPHERE, "sbBrain", "hindbrain", True),
     ("pf_tonsil", "Tonsil of cerebellum", ["Tonsil of cerebellum"], "sbTonsil", "hindbrain", True),
-    ("pf_vermis", "Vermis", VERMIS, "sbBrain", "hindbrain", False),
+    ("pf_vermis", "Vermis", VERMIS, "sbBrain", "hindbrain", True),
     ("pf_superior_cerebellar_peduncle", "Superior cerebellar peduncle", ["Superior cerebellar peduncle"], "sbBrainstem", "hindbrain", False),
     ("pf_midbrain", "Midbrain", ["Midbrain"], "sbBrainstem", "hindbrain", False),
     ("pf_pons", "Pons", ["Pons"], "sbBrainstem", "hindbrain", False),
@@ -415,12 +423,16 @@ def clear(parts: dict, fs: Fossa) -> dict:
             "maxMovedMm": round(float(moved.max()), 2)}
 
 
-def retract_tonsils(parts: dict, fs: Fossa) -> dict:
+def telovelar(parts: dict, fs: Fossa) -> dict:
     """Each part's displacement for the telovelar shape: the tonsils TV_MM laterally (and TV_UP of that up), the
-    cerebellar hemisphere following with a weight falling to 0 TV_REACH_MM from its tonsil; the rest still. The few points
-    it would carry within BONE_GAP_MM of bone, or into an artery the model draws, are moved back off it."""
+    cerebellar hemisphere following with a weight falling to 0 TV_REACH_MM from its tonsil; the nodule and uvula
+    TV_VERMIS_MM up and back, the cerebellum following with a weight falling to 0 TV_VERMIS_REACH_MM from them; the
+    brainstem and fourth ventricle still. The few points it would carry within BONE_GAP_MM of bone, or into an artery the
+    model draws, are moved back off it."""
     tons = {s: np.vstack([v[side == s] for n, (v, _, side) in parts.items() if n.startswith("Tonsil of cerebellum")]) for s in "RL"}
     trees = {s: cKDTree(tons[s]) for s in "RL"}
+    inferior = cKDTree(np.vstack([parts[n][0] for n in INFERIOR_VERMIS]))
+    lift = np.array([0.0, -TV_VERMIS_BACK, 1.0]) / np.hypot(1.0, TV_VERMIS_BACK)
     out = {}
     for n, (v, _, side) in parts.items():
         D = np.zeros_like(v)
@@ -433,6 +445,9 @@ def retract_tonsils(parts: dict, fs: Fossa) -> dict:
                 w = np.clip(1 - d / TV_REACH_MM, 0, 1)
                 dirn = np.array([sgn, 0.0, TV_UP]) / np.hypot(1.0, TV_UP)
                 D[m] = TV_MM * w[:, None] * dirn
+        if n.startswith("Tonsil of cerebellum") or any(n.startswith(h) for h in HEMISPHERE + VERMIS):
+            w = np.clip(1 - inferior.query(v)[0] / TV_VERMIS_REACH_MM, 0, 1)
+            D += TV_VERMIS_MM * w[:, None] * lift
         moved = np.abs(D).sum(1) > 0
         if moved.any():
             sb, gb = fs.bone(v[moved] + D[moved])
@@ -444,6 +459,20 @@ def retract_tonsils(parts: dict, fs: Fossa) -> dict:
             D[np.nonzero(moved)[0][hit]] += (VESSEL_MARGIN_MM + 0.1 - sv[hit])[:, None] * nv[hit]
         out[n] = D
     return out
+
+
+def inside_ventricle(parts: dict):
+    """Whether points lie inside the fourth ventricle's surface (by the normal at its nearest vertex, within 4 mm)."""
+    X, t, _ = parts["Fourth ventricle"]
+    m = trimesh.Trimesh(X, t, process=True)
+    if m.volume < 0:
+        m.invert()
+    tree, vn = cKDTree(m.vertices), m.vertex_normals
+
+    def f(P):
+        d, j = tree.query(P)
+        return (d < 4.0) & (((P - m.vertices[j]) * vn[j]).sum(1) < 0)
+    return f
 
 
 def params_hash() -> str:
@@ -473,7 +502,7 @@ def main() -> int:
         parts[n] = (X, t, side_of(n, v))
     rc = clear(parts, fs)
     print("cleared", rc, flush=True)
-    moves = retract_tonsils(parts, fs)
+    moves = telovelar(parts, fs)
     # GLBs: each piece as L and R nodes
     items = []
     for pid, name, members, tok, cat, moving in PIECES:
@@ -508,15 +537,24 @@ def main() -> int:
     moved = np.linalg.norm(mv, axis=1) > 0.1
     medulla = cKDTree(np.vstack([parts[n][0] for n in parts if n.startswith("Medulla oblongata")]))
     tons = [n for n in parts if n.startswith("Tonsil of cerebellum")]
+    cereb = [n for n in parts if not any(n.startswith(m) for m in STEM)]
+    in4 = inside_ventricle(parts)
+    inferior = [n for n in parts if n in INFERIOR_VERMIS]
     report = {"fit": rep, "inverseResidualMm": round(residual, 4), "clear": rc,
               "modelMl": round(md.solid_ml, 1),
               "telovelar": {"maxMovedMm": round(float(np.linalg.norm(mv, axis=1).max()), 2), "moved": int(moved.sum()),
                             "inBoneAfter": int((fs.bone(Xm[moved], grad=False) < 0).sum()),
                             "inVesselAfter": int((fs.vessel_sdf(Xm[moved])[0] < 0).sum()),
                             "tonsilToMedullaMm": {"rest": round(float(min(medulla.query(parts[n][0])[0].min() for n in tons)), 2),
-                                                  "moved": round(float(min(medulla.query(parts[n][0] + moves[n])[0].min() for n in tons)), 2)}},
+                                                  "moved": round(float(min(medulla.query(parts[n][0] + moves[n])[0].min() for n in tons)), 2)},
+                            "vermisLiftMm": round(float(min(np.linalg.norm(moves[n], axis=1).min() for n in inferior)), 2),
+                            "uvulaToMedullaMm": {"rest": round(float(min(medulla.query(parts[n][0])[0].min() for n in inferior)), 2),
+                                                 "moved": round(float(min(medulla.query(parts[n][0] + moves[n])[0].min() for n in inferior)), 2)},
+                            "inVentricle": {"rest": int(sum(in4(parts[n][0]).sum() for n in cereb)),
+                                            "moved": int(sum(in4(parts[n][0] + moves[n]).sum() for n in cereb))}},
               "params": {"tableGapMm": TABLE_GAP_MM, "tableMinMm": TABLE_MIN_MM, "boneGapMm": BONE_GAP_MM, "tvMm": TV_MM, "tvUp": TV_UP,
-                         "tvReachMm": TV_REACH_MM, "jacMin": JAC_MIN}}
+                         "tvReachMm": TV_REACH_MM, "tvVermisMm": TV_VERMIS_MM, "tvVermisBack": TV_VERMIS_BACK,
+                         "tvVermisReachMm": TV_VERMIS_REACH_MM, "jacMin": JAC_MIN}}
     (BUILD / "pfossa.json").write_text(json.dumps({"items": items, "texts": md.texts, "report": report}, indent=1))
     print("posterior fossa done", report["telovelar"], round(time.time() - t0), "s")
     return 0

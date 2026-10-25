@@ -72,8 +72,8 @@
  "suboccipital": {
   "name": "Midline suboccipital craniotomy",
   "side": "M",
-  "how": "A midline suboccipital flap from 10 mm below the internal occipital protuberance (the confluence of the sinuses) down through the posterior rim of the foramen magnum, 25 mm to each side of the midline, about 1654 mm² seen from behind (illustrative: the sources describe a median suboccipital craniotomy or craniectomy without one size; a keyhole of about 2 cm in Wang 2023). The posterior arch of C1 is left (Cho 2024).",
-  "removedMl": 9.3,
+  "how": "A midline suboccipital flap from 10 mm below the internal occipital protuberance (the confluence of the sinuses) down to the foramen magnum, its posterior rim taken 12 mm to each side of the midline; 25 mm to each side above, about 1792 mm² seen from behind (illustrative: the sources describe a median suboccipital craniotomy or craniectomy without one size; a keyhole of about 2 cm in Wang 2023). The posterior arch of C1 is left (Cho 2024).",
+  "removedMl": 9.8,
   "bones": [
    "sb_appr_suboccipital__occipital_bone"
   ],

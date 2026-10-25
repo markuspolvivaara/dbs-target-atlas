@@ -119,7 +119,8 @@ export const V3_FIT = z.object({
       m2InsulaMedianMmL: z.number(), m3FissureMedianMmL: z.number(), duraInCortexShare: z.number(),
       affineScale: z.array(z.number()), minRelativeVolume: z.number(), cavityMl: z.number(),
     }),
-    clear: z.record(z.object({ inBoneWayBefore: z.number(), inVesselBefore: z.number(), inBoneWayAfter: z.number(), inVesselAfter: z.number(), maxMovedMm: z.number() })),
+    clear: z.record(z.object({ inBoneWayBefore: z.number(), inVesselBefore: z.number(), acrossFalxBefore: z.number(), inBoneWayAfter: z.number(), inVesselAfter: z.number(),
+      acrossFalxAfter: z.number(), maxMovedMm: z.number() })),
     crossedTriangles: z.record(z.object({ template: z.number(), fitted: z.number() })),
     open: z.object({ lipsFrontal: z.number(), lipsTemporal: z.number(), moved: z.number(), maxMovedMm: z.number(), crossedTriangles: z.number(), outsideCavityAfter: z.number() }),
     lift: z.object({ orbitalHandles: z.number(), insulaHandles: z.number(), moved: z.number(), maxMovedMm: z.number(), crossedTriangles: z.number(), outsideCavityAfter: z.number() }),
@@ -151,8 +152,10 @@ export const V3_FIT = z.object({
     clear: z.object({ inVesselBefore: z.number(), inBoneBefore: z.number(), inVesselAfter: z.number(), inBoneAfter: z.number(), maxMovedMm: z.number() }),
     modelMl: z.number(),
     telovelar: z.object({ maxMovedMm: z.number(), inBoneAfter: z.number(), inVesselAfter: z.number(),
-      tonsilToMedullaMm: z.object({ rest: z.number(), moved: z.number() }) }),
-    params: z.object({ tableGapMm: z.number(), tableMinMm: z.number(), boneGapMm: z.number(), tvMm: z.number(), tvUp: z.number(), tvReachMm: z.number() }),
+      tonsilToMedullaMm: z.object({ rest: z.number(), moved: z.number() }), vermisLiftMm: z.number(),
+      uvulaToMedullaMm: z.object({ rest: z.number(), moved: z.number() }), inVentricle: z.object({ rest: z.number(), moved: z.number() }) }),
+    params: z.object({ tableGapMm: z.number(), tableMinMm: z.number(), boneGapMm: z.number(), tvMm: z.number(), tvUp: z.number(), tvReachMm: z.number(),
+      tvVermisMm: z.number(), tvVermisBack: z.number(), tvVermisReachMm: z.number() }),
   }).optional(),
 }).parse(v3Fit);
 

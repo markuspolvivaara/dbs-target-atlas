@@ -52,9 +52,9 @@ const MORPH_UI: Record<string, { label: string; key: string; note: () => string 
     },
   },
   telovelar: {
-    label: 'Draw the cerebellar tonsils apart', key: 't', note: () => {
+    label: 'Draw the tonsils apart, lift the vermis', key: 't', note: () => {
       const p = V3_FIT.pfossa;
-      return p ? `At 100 % each tonsil is ${fmtMm(p.params.tvMm)} mm further out to its side (and a little up), the rest of the hemisphere following less the further it lies from the tonsil (none ${fmtMm(p.params.tvReachMm)} mm away); the vermis, brainstem and fourth ventricle stay, and so do the arteries.` : null;
+      return p ? `At 100 % each tonsil is ${fmtMm(p.params.tvMm)} mm further out to its side (and a little up), the rest of the hemisphere following less the further it lies from the tonsil (none ${fmtMm(p.params.tvReachMm)} mm away); and the nodule and uvula are lifted ${fmtMm(p.params.tvVermisMm)} mm up and back off the roof of the fourth ventricle, the rest of the cerebellum following less with distance (none ${fmtMm(p.params.tvVermisReachMm)} mm away). The brainstem and fourth ventricle stay, and so do the arteries.` : null;
     },
   },
 };
@@ -464,7 +464,7 @@ export class SkullbaseAtlasPage {
       if (m === 'm1') return h('p', { class: 'aside' }, `On this CT: the M1 segment as TopBrain labels it measures ${fmtMm(b.m1LengthMm.R)} mm on the right (${fmtMm(b.m1LengthMm.L)} mm on the left), along its centre line. TopBrain’s labels stop at M3, so the cortical (M4) branches are not shown.`);
       if (m === 'tonsils') {
         const p = V3_FIT.pfossa;
-        return p ? h('p', { class: 'aside' }, `In this model the tonsils lie ${fmtMm(p.telovelar.tonsilToMedullaMm.rest)} mm from the medulla at their closest, ${fmtMm(p.telovelar.tonsilToMedullaMm.moved)} mm when drawn apart.`) : null;
+        return p ? h('p', { class: 'aside' }, `In this model the tonsils lie ${fmtMm(p.telovelar.tonsilToMedullaMm.rest)} mm from the medulla at their closest, ${fmtMm(p.telovelar.tonsilToMedullaMm.moved)} mm when drawn apart; the uvula and nodule ${fmtMm(p.telovelar.uvulaToMedullaMm.rest)} mm, ${fmtMm(p.telovelar.uvulaToMedullaMm.moved)} mm when lifted.`) : null;
       }
       const third = b.aca.a3.includes('third');
       const sides = b.aca.a3.filter((x) => x !== 'third').map((x) => (x === 'R' ? 'the right' : 'the left'));

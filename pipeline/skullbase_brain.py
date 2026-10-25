@@ -17,7 +17,8 @@ template, found by minimising together (weights in STAGES):
   folds;
 in stages from an affine map to Gaussian radial basis functions on finer grids. The template surfaces (decimated) are
 carried through it, and the contacts left are pushed clear (ARAP on the surface: brain_deform.ARAP) to CLEAR_CAVITY_MM
-inside the cavity and CLEAR_VESSEL_MM off each vessel the model draws.
+inside the cavity, CLEAR_VESSEL_MM off each vessel the model draws and CLEAR_FALX_MM on the hemisphere's own side of the
+falx (where the falx is: the fit keeps the cortex off the dura only on average, and each hemisphere is carried alone).
 
 The opening is a shape deformation, not a simulation of tissue: the lips of the right fissure (the opercula near the
 brain's surface) are moved apart, the frontal and parietal opercula up by OPEN_FRONTAL_MM, the temporal down by
@@ -107,7 +108,10 @@ FISSURE_LABELS = set(CL.INSULA_LABELS) | {"Lat_Fis-post", "Lat_Fis-ant-Horizont"
                                            "G_temp_sup-G_T_transv", "G_temp_sup-Plan_tempo", "S_temporal_transverse"}
 CLEAR_CAVITY_MM = 1.0
 CLEAR_VESSEL_MM = 0.3
-CLEAR_ROUNDS = 4
+CLEAR_FALX_MM = 0.5         # ... and this far on its own side of the falx
+FALX_GRID_MM = 0.5          # (the falx as a height field over the sagittal plane, on this grid)
+FALX_NEAR_MM = 8.0          # (a vertex further than this from the falx is not near it)
+CLEAR_ROUNDS = 6
 CLEAR_REACH_MM = 12.0      # around the vertices pushed clear, the surface follows within this; beyond it stays
 PAIR_REACH_MM = 2.5        # facing sulcal banks closer than this are held together while the surface moves
 PAIR_WEIGHT = 0.5
@@ -317,6 +321,37 @@ class Patient:
         V = np.vstack([v for v, _ in vs])
         N = np.vstack([trimesh.Trimesh(v, t, process=False).vertex_normals for v, t in vs])
         self.vessel_pts, self.vessel_nrm, self.vessel_tree = V, N, cKDTree(V)
+        # the falx (v2's fitted one, an open sheet, nearly sagittal) as a height field: its x at each (y, z) it covers,
+        # on a FALX_GRID_MM grid (its triangles are long and skewed, so their normals are no guide)
+        fx = ex2["soft"]["Falx cerebri"]
+        Vf, Tf = np.array(fx["verts"], float), np.array(fx["tris"], int)
+        self.falx_lo = Vf[:, 1:].min(0) - 1.0
+        n_yz = np.ceil((Vf[:, 1:].max(0) + 1.0 - self.falx_lo) / FALX_GRID_MM).astype(int) + 1
+        self.falx_x = np.full(n_yz, np.nan)
+        for tri in Vf[Tf]:
+            yz = tri[:, 1:]
+            E = np.array([yz[1] - yz[0], yz[2] - yz[0]]).T
+            if abs(np.linalg.det(E)) < 1e-9:
+                continue
+            i0 = np.floor((yz.min(0) - self.falx_lo) / FALX_GRID_MM).astype(int)
+            i1 = np.ceil((yz.max(0) - self.falx_lo) / FALX_GRID_MM).astype(int)
+            gi = np.stack(np.meshgrid(np.arange(i0[0], i1[0] + 1), np.arange(i0[1], i1[1] + 1), indexing="ij"), -1).reshape(-1, 2)
+            lam = np.linalg.solve(E, (self.falx_lo + gi * FALX_GRID_MM - yz[0]).T).T
+            ok = (lam >= -1e-6).all(1) & (lam.sum(1) <= 1 + 1e-6)
+            self.falx_x[gi[ok, 0], gi[ok, 1]] = tri[0, 0] + lam[ok] @ (tri[1:, 0] - tri[0, 0])
+
+    def falx_sdf(self, P: np.ndarray, side: str):
+        """Signed distance from the falx towards a hemisphere's own side, along x (negative: across it), and that
+        direction; only where the falx is (not below its free edge) and within FALX_NEAR_MM of it, else large."""
+        sgn = 1.0 if side == "R" else -1.0
+        i = np.rint((P[:, 1:] - self.falx_lo) / FALX_GRID_MM).astype(int)
+        ok = (i >= 0).all(1) & (i < self.falx_x.shape).all(1)
+        fx = np.full(len(P), np.nan)
+        fx[ok] = self.falx_x[i[ok, 0], i[ok, 1]]
+        sd = (P[:, 0] - fx) * sgn
+        n = np.zeros_like(P)
+        n[:, 0] = sgn
+        return np.where(np.isfinite(sd) & (np.abs(np.nan_to_num(sd)) < FALX_NEAR_MM), sd, 30.0), n
 
     def vessel_sdf(self, P: np.ndarray):
         """Signed distance off the nearest drawn vessel surface (along its normal), and that normal."""
@@ -465,32 +500,37 @@ def pairs_for(V, F, exclude=None):
     return BD.facing_pairs(V, F, nrm, PAIR_REACH_MM, exclude)
 
 
-def clear(V: np.ndarray, F: np.ndarray, pt: Patient) -> tuple[np.ndarray, dict]:
-    """Push the vertices still in bone's way or in a vessel clear, the surface around them following (ARAP)."""
+def clear(V: np.ndarray, F: np.ndarray, pt: Patient, side: str) -> tuple[np.ndarray, dict]:
+    """Push the vertices still in bone's way, in a vessel or across the falx clear, the surface around them following
+    (ARAP)."""
     pairs = pairs_for(V, F)
     X = V.copy()
     first = None
     for rnd in range(CLEAR_ROUNDS):
         sc, gc = pt.cavity(X)
         sv, nv = pt.vessel_sdf(X)
-        bad_c, bad_v = sc < CLEAR_CAVITY_MM, sv < CLEAR_VESSEL_MM
+        sf, nf = pt.falx_sdf(X, side)
+        bad_c, bad_v, bad_f = sc < CLEAR_CAVITY_MM, sv < CLEAR_VESSEL_MM, sf < CLEAR_FALX_MM
         if first is None:
-            first = {"inBoneWay": int(bad_c.sum()), "inVessel": int(bad_v.sum())}
-        bad = bad_c | bad_v
+            first = {"inBoneWay": int(bad_c.sum()), "inVessel": int(bad_v.sum()), "acrossFalx": int((sf < 0).sum())}
+        bad = bad_c | bad_v | bad_f
         if not bad.any():
             break
         target = X.copy()
         gn = gc / np.maximum(np.linalg.norm(gc, axis=1, keepdims=True), 1e-9)
         target[bad_c] += ((CLEAR_CAVITY_MM + 0.2 - sc[bad_c]))[:, None] * gn[bad_c]
         target[bad_v] += ((CLEAR_VESSEL_MM + 0.2 - sv[bad_v]))[:, None] * nv[bad_v]
+        target[bad_f] += ((CLEAR_FALX_MM + 0.2 - sf[bad_f]))[:, None] * nf[bad_f]
         reach = cKDTree(X[bad]).query(X, distance_upper_bound=CLEAR_REACH_MM)[0] < np.inf
         fixed = bad | ~reach
         solver = BD.ARAP(X, F, fixed, pairs, PAIR_WEIGHT * np.median(BD.cot_weights(X, F).data))
         X = solver.run(target[fixed], X0=X, iters=8)
     sc, _ = pt.cavity(X)
     sv, _ = pt.vessel_sdf(X)
+    sf, _ = pt.falx_sdf(X, side)
     return X, {**{f"{k}Before": v for k, v in first.items()}, "inBoneWayAfter": int((sc < CLEAR_CAVITY_MM - 0.3).sum()),
-               "inVesselAfter": int((sv < 0).sum()), "maxMovedMm": round(float(np.linalg.norm(X - V, axis=1).max()), 2)}
+               "inVesselAfter": int((sv < 0).sum()), "acrossFalxAfter": int((sf < 0).sum()),
+               "maxMovedMm": round(float(np.linalg.norm(X - V, axis=1).max()), 2)}
 
 
 def open_fissure(d: dict, V: np.ndarray, hull_sdf: np.ndarray, pt: Patient) -> tuple[np.ndarray, dict]:
@@ -741,7 +781,7 @@ def main() -> int:
             d = tp.dec[s]
             V, res = gp.invert(d["V"])
             part.setdefault("inverseResidualMm", {})[s] = round(float(res.max()), 4)
-            V, rc = clear(V, d["F"], pt)
+            V, rc = clear(V, d["F"], pt, s)
             part.setdefault("clear", {})[s] = rc
             crossed = len(self_intersections(V, d["F"])[0])
             part.setdefault("crossedTriangles", {})[s] = {"template": d["untangle"]["crossedAfter"], "fitted": crossed}

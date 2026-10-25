@@ -1,0 +1,101 @@
+[
+ {
+  "id": "lm_bregma",
+  "name": "Bregma",
+  "ras": [
+   0.0,
+   5.87,
+   99.75
+  ],
+  "side": "M",
+  "how": "Where this CT's frontal and parietal bones meet at the midline, on the outer table (the names from the fitted Z-Anatomy model)."
+ },
+ {
+  "id": "lm_meatus_r",
+  "name": "External acoustic meatus",
+  "ras": [
+   56.5,
+   -16.69,
+   -19.82
+  ],
+  "side": "R",
+  "how": "The ear canal is the shortest way through air from the registered tympanic membrane to outside; the meatus is where it leaves the bone."
+ },
+ {
+  "id": "lm_kocher_chen_r",
+  "name": "Kocher's point (Chen 2025)",
+  "ras": [
+   24.78,
+   14.75,
+   92.93
+  ],
+  "side": "R",
+  "how": "10 mm in front of the coronal suture along the outer table, 25 mm from the midline."
+ },
+ {
+  "id": "lm_kocher_park_r",
+  "name": "Kocher's point (Park 2020)",
+  "ras": [
+   29.55,
+   17.73,
+   89.49
+  ],
+  "side": "R",
+  "how": "10 mm in front of the coronal suture along the outer table, 30 mm from the midline."
+ },
+ {
+  "id": "lm_canthus_r",
+  "name": "Medial canthus (projected)",
+  "ras": [
+   16.87,
+   -16.54,
+   -18.57
+  ],
+  "side": "R",
+  "how": "Not in this CT (it stops at the forehead): 16.35 mm from the midline (half Chen 2025's mean intercanthal distance), on the line between the external acoustic meatus, as Chen projects it."
+ },
+ {
+  "id": "lm_meatus_l",
+  "name": "External acoustic meatus",
+  "ras": [
+   -55.0,
+   -16.26,
+   -16.31
+  ],
+  "side": "L",
+  "how": "The ear canal is the shortest way through air from the registered tympanic membrane to outside; the meatus is where it leaves the bone."
+ },
+ {
+  "id": "lm_kocher_chen_l",
+  "name": "Kocher's point (Chen 2025)",
+  "ras": [
+   -23.67,
+   14.72,
+   91.29
+  ],
+  "side": "L",
+  "how": "10 mm in front of the coronal suture along the outer table, 25 mm from the midline."
+ },
+ {
+  "id": "lm_kocher_park_l",
+  "name": "Kocher's point (Park 2020)",
+  "ras": [
+   -28.47,
+   15.3,
+   88.49
+  ],
+  "side": "L",
+  "how": "10 mm in front of the coronal suture along the outer table, 30 mm from the midline."
+ },
+ {
+  "id": "lm_canthus_l",
+  "name": "Medial canthus (projected)",
+  "ras": [
+   -15.83,
+   -16.41,
+   -17.54
+  ],
+  "side": "L",
+  "how": "Not in this CT (it stops at the forehead): 16.35 mm from the midline (half Chen 2025's mean intercanthal distance), on the line between the external acoustic meatus, as Chen projects it."
+ }
+]

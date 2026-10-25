@@ -9,7 +9,7 @@ export const BRAND = {
 } as const;
 
 export interface Section {
-  id: 'dbs' | 'tracts' | 'skullbase' | 'cortex' | 'spine' | 'skullbase-v1' | 'skullbase-ct' | 'brainstem';
+  id: 'dbs' | 'tracts' | 'skullbase' | 'cortex' | 'spine' | 'skullbase-v1' | 'skullbase-ct' | 'brainstem' | 'ventricles';
   name: string;
   /** path from the site root */
   path: string;
@@ -31,11 +31,15 @@ export const SECTIONS: Section[] = [
   },
   {
     id: 'skullbase', name: 'Skull base', path: 'skullbase/', status: 'live',
-    summary: 'The skull base of the v2 CT with its anatomy made to fit it: the cranial nerves routed through this skull’s own foramina, the foramina located on it, the sinuses traced in it, a real ear’s facial nerve, inner ear, ossicles and petrous carotid (OpenEar) registered into each temporal bone, and surgical views cut into it: pterional and lateral supraorbital craniotomies with a template brain fitted into the skull, its Sylvian fissure opened by a slider and its frontal lobe lifted; an interhemispheric view down to the corpus callosum; and a telovelar view with the cerebellum, brainstem and fourth ventricle fitted into the posterior fossa, the tonsils drawn apart.',
+    summary: 'The skull base of one adult CT: its foramina with the cranial nerves through them, its own vessels, a real ear in each temporal bone, and surgical views (pterional, lateral supraorbital, interhemispheric, telovelar) with the brain moved by sliders.',
   },
   {
     id: 'brainstem', name: 'Brainstem', path: 'brainstem/', status: 'live',
     summary: 'The midbrain, pons and medulla in MNI space with cranial nerves III–XII, the cranial nerve and arousal network nuclei, the long tracts, and the published safe entry zones for brainstem surgery, each with its borders, approaches and sources.',
+  },
+  {
+    id: 'ventricles', name: 'Ventricles', path: 'ventricles/', status: 'live',
+    summary: 'The lateral and third ventricles of one CT, and a frontal ventriculostomy simulated on it: Kocher’s point found on this skull, the four freehand trajectories, whether each reaches the ventricle and how deep, beside their published accuracy.',
   },
   {
     id: 'dbs', name: 'DBS targets', path: 'dbs/', status: 'live',

@@ -173,6 +173,14 @@ What is covered by which terms
    brainstem and fourth ventricle (as in section 10, CC BY-SA) fitted into the
    CT's posterior fossa, the tonsils drawn apart as a morph target.
 
-13. Bundled third-party software (three.js and zod, MIT licence; Atkinson
+13. Ventricles section (public/assets/ventricles/, public/assets/ve-manifest.json,
+   src/data/generated/ve-*.json): the lateral and third ventricles segmented
+   here from the TopBrain 2025 CT angiogram (case 011; open use with
+   attribution, non-commercial, University Hospital Zurich), with landmarks and
+   ventriculostomy trajectories computed on it. It shows Skull base v2's bone
+   (section 10) and the default skull base model's fitted brain (section 12)
+   under their terms.
+
+14. Bundled third-party software (three.js and zod, MIT licence; Atkinson
    Hyperlegible font, SIL Open Font Licence 1.1): see
    public/THIRD_PARTY_LICENSES.txt, which is also published with the site.

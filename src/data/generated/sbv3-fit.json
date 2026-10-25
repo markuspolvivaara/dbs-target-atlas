@@ -374,42 +374,46 @@
    "R": {
     "inBoneWayBefore": 1512,
     "inVesselBefore": 630,
+    "acrossFalxBefore": 606,
     "inBoneWayAfter": 0,
     "inVesselAfter": 0,
+    "acrossFalxAfter": 0,
     "maxMovedMm": 5.24
    },
    "L": {
     "inBoneWayBefore": 660,
     "inVesselBefore": 326,
+    "acrossFalxBefore": 537,
     "inBoneWayAfter": 0,
     "inVesselAfter": 0,
+    "acrossFalxAfter": 0,
     "maxMovedMm": 4.75
    }
   },
   "crossedTriangles": {
    "R": {
     "template": 0,
-    "fitted": 349
+    "fitted": 393
    },
    "L": {
     "template": 0,
-    "fitted": 63
+    "fitted": 68
    }
   },
   "open": {
    "lipsFrontal": 531,
    "lipsTemporal": 528,
-   "heldBySkull": 4502,
-   "moved": 9170,
+   "heldBySkull": 4503,
+   "moved": 9171,
    "maxMovedMm": 6.47,
    "heldAtCavity": 353,
    "outsideCavityAfter": 256,
-   "crossedTriangles": 477
+   "crossedTriangles": 522
   },
   "lift": {
-   "orbitalHandles": 2355,
+   "orbitalHandles": 2353,
    "insulaHandles": 892,
-   "moved": 16179,
+   "moved": 16186,
    "maxMovedMm": 8.02,
    "heldAtCavity": 24,
    "outsideCavityAfter": 255,
@@ -430,10 +434,10 @@
      37.8
     ]
    ],
-   "crossedTriangles": 497
+   "crossedTriangles": 537
   },
   "interhemispheric": {
-   "moved": 7269,
+   "moved": 7271,
    "fullyMoved": 432,
    "maxMovedMm": 8.0,
    "heldAtCavity": 123,
@@ -444,10 +448,10 @@
    ],
    "midline": 0.52,
    "callosumTopMm": [
-    45.2,
+    45.3,
     51.8
    ],
-   "crossedTriangles": 349
+   "crossedTriangles": 393
   },
   "vesselsMovedMaxMm": {
    "Middle cerebral artery (M2 segment)": {
@@ -536,13 +540,22 @@
   },
   "modelMl": 155.1,
   "telovelar": {
-   "maxMovedMm": 6.19,
-   "moved": 25461,
+   "maxMovedMm": 8.75,
+   "moved": 33086,
    "inBoneAfter": 0,
    "inVesselAfter": 0,
    "tonsilToMedullaMm": {
     "rest": 1.26,
-    "moved": 3.94
+    "moved": 6.53
+   },
+   "vermisLiftMm": 5.0,
+   "uvulaToMedullaMm": {
+    "rest": 1.62,
+    "moved": 5.98
+   },
+   "inVentricle": {
+    "rest": 43,
+    "moved": 0
    }
   },
   "params": {
@@ -552,6 +565,9 @@
    "tvMm": 6.0,
    "tvUp": 0.4,
    "tvReachMm": 15.0,
+   "tvVermisMm": 5.0,
+   "tvVermisBack": 1.0,
+   "tvVermisReachMm": 15.0,
    "jacMin": 0.45
   }
  }

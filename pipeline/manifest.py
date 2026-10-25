@@ -266,6 +266,30 @@ def brainstem_attribution() -> list[str]:
     ]
 
 
+def ventricles_attribution() -> list[str]:
+    """ATTRIBUTION.md section for the ventricles section, from ve-manifest.json (built by ventricles_build.py)."""
+    p = GEN / "ve-manifest.json"
+    if not p.exists():
+        return []
+    d = json.loads(p.read_text())["dataset"]
+    return [
+        "## Ventricles section (TopBrain 2025 CT angiogram, case 011)",
+        "",
+        "The ventricle meshes in `public/assets/ventricles/` and `ve-manifest.json`, `ve-landmarks.json` and `ve-trajectories.json`",
+        f"are derived from the TopBrain CT ({d['licence']}): **not** GPL-licensed. The section also shows Skull base v2's bone and",
+        "Skull base v3's fitted brain, under their licences above.",
+        "",
+        f"- Source: {d['url']}",
+        f"- Note: {d['note']}",
+        *[f"- Attribution: {a}" for a in d["attribution"]],
+        *[f"- Cite: {c}" for c in d["citation"]],
+        "- Changes made: the lateral and third ventricles segmented from the CT by a threshold in its brain window",
+        "  (pipeline/ventricles_build.py); the coronal suture, Kocher's points and the external acoustic meatus located on the",
+        "  CT; ventriculostomy trajectories computed on it; files converted to compressed glTF.",
+        "",
+    ]
+
+
 def cortex_attribution() -> list[str]:
     """ATTRIBUTION.md section for the cortex section, from ctx-manifest.json (built by cortex_build.py)."""
     p = GEN / "ctx-manifest.json"
@@ -411,6 +435,7 @@ def write_attribution(m: dict, wm: dict) -> None:
         *skull_base_ct_attribution(),
         *skull_base_v3_attribution(),
         *brainstem_attribution(),
+        *ventricles_attribution(),
         *cortex_attribution(),
         *spine_attribution(),
         "## Datasets considered and not used",

@@ -6,6 +6,7 @@ Interactive 3D neuroanatomy for teaching, built from published atlases in MNI sp
 - **White-matter tracts** (`tracts/`): described below.
 - **Skull base** (`skullbase/`), with its earlier versions **Skull base v1** (`skullbase-v1/`) and **Skull base v2** (`skullbase-ct/`) under Alternative versions: described below.
 - **Brainstem** (`brainstem/`): described below.
+- **Ventricles** (`ventricles/`): described below.
 - **DBS targets** (`dbs/`): described below.
 - **Spine** (`spine/`): described below.
 
@@ -137,8 +138,9 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   of the cortex section, is fitted into this CT (`pipeline/skullbase_brain.py`, `pipeline/brain_deform.py`): a smooth
   deformation (affine, then Gaussian radial basis functions from 18 to 5 mm, a penalty against folding) puts its hull
   2 mm inside the CT's cranial cavity, every artery TopBrain labels outside the cortex, the M2 segments on the insula
-  and the M3 segments in the Sylvian fissure (medians 1.0 and 1.1 mm on the right); what still touches bone or a vessel
-  is pushed clear (as-rigid-as-possible surface deformation). The slider opens the right Sylvian fissure: a shape
+  and the M3 segments in the Sylvian fissure (medians 1.0 and 1.1 mm on the right); what still touches bone or a vessel,
+  or lies across the falx, is pushed clear (as-rigid-as-possible surface deformation; off the falx sideways, the falx
+  taken as a height field over the sagittal plane). The slider opens the right Sylvian fissure: a shape
   deformation (ARAP, facing sulcal banks held together, cortex against the inner table held, the insula fixed) that
   lifts the frontal and parietal lips and lowers the temporal one by 6 mm each (illustrative), stored as morph
   target 0. A second slider (morph target 1, solved on top of the opening) lifts the frontal lobe off the orbital roof
@@ -160,8 +162,10 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   (`skullbase_ct.py` writes them) and fitted again into its posterior fossa (`pipeline/skullbase_pfossa.py`: the hull
   inside the cavity behind the petrous bones, this patient's basilar, vertebral, superior and posterior inferior
   cerebellar arteries outside, the tentorium above, no folding; then what still touches an artery or bone pushed
-  clear). Its slider draws both tonsils 6 mm apart (illustrative), opening the cerebellomedullary fissure onto the
-  fourth ventricle; sources: Pettersson 2023, Wang 2023, Longatti 2026, Cho 2024, Pantu 2026, Cavalheiro 2015.
+  clear). Its slider draws both tonsils 6 mm apart and lifts the nodule and uvula 5 mm up and back (illustrative), the
+  rest of the cerebellum following less with distance (each shift under 1 mm per mm together, so nothing folds),
+  opening the cerebellomedullary fissure onto the fourth ventricle; sources: Pettersson 2023, Wang 2023, Liu 2014,
+  Longatti 2026, Cho 2024, Pantu 2026, Cavalheiro 2015.
   Pipeline: `pipeline/skullbase_v3_approach.py`, then `pipeline/skullbase_brain.py` (it reads the interhemispheric
   craniotomy's span) and `pipeline/skullbase_pfossa.py`, before `pipeline/skullbase_v3.py` (it takes their items);
   the fits are cached in `pipeline/data/build/skullbase-v3/`.
@@ -277,6 +281,32 @@ entry zones for brainstem surgery.
 - Pipeline: `pipeline/brainstem_export.py` (in Blender), then `pipeline/brainstem_build.py` (fit, meshes, zones,
   manifest), `node pipeline/compress.mjs brainstem`, `pipeline/brainstem_build.py finalize` (checks sides, positions,
   the fit and the zones).
+
+## Ventricles
+
+The lateral and third ventricles of one CT, Skull base v2's (TopBrain 2025 case 011, in its frame), and a frontal
+ventriculostomy simulated on it.
+
+- **Ventricles**: this CT's own (`pipeline/ventricles_build.py`). In its brain window the ventricular fluid is darker than
+  the brain; the fluid below 27 HU (smoothed by 1 mm), at least 10 mm inside the cranial cavity and away from the
+  labelled vessels, is taken. The lateral ventricles are its largest body, split at the falx's plane; the third
+  ventricle is the body on the midline below and between them, as far as the CT shows it. This young adult's ventricles
+  are narrow (frontal horns about 25 mm across both, Evans' index about 0.21), so the threshold sets their size where
+  they are a few millimetres wide: approximate to about a millimetre.
+- **Kocher's point and the trajectories**: the coronal suture where the CT's frontal and parietal bones meet; Kocher's
+  point 10 mm in front of it along the outer table, 25 mm (Chen 2025) or 30 mm (Park 2020) from the midline, and 10 mm
+  further forward or back for comparison; the external acoustic meatus where each ear canal, the shortest way through
+  air from the registered tympanic membrane to outside, leaves the bone. The CT stops at the forehead, so the medial
+  canthi are placed at half Chen's mean intercanthal distance and projected onto the line between the meatus, as Chen
+  does. From each entry the four freehand trajectories (ipsilateral canthus, midpoint between the meatus,
+  contralateral canthus, perpendicular) are followed to the first ventricle they meet: side, depth from the outer
+  table, course inside, or how far they miss. The card shows that result beside the published accuracy of the same
+  aim.
+- **Cards**: every statement cites its source (`src/ventricles/content.ts`, `references.ts`), checked against the
+  open-access full texts: Chen 2025, Park 2020, Charcos 2025, Gangal 2026, Abdala-Vargas 2022.
+- Pipeline: after `pipeline/skullbase_ct.py` and the v3 build (it uses the bone, the fitted brain and the registered
+  tympanic membrane): `pipeline/ventricles_build.py`, `node pipeline/compress.mjs ventricles`,
+  `pipeline/ventricles_build.py finalize` (checks sizes, landmark positions and every trajectory).
 
 ## Cortical anatomy
 
@@ -497,7 +527,7 @@ src/data/                   typed content, validated with zod
 src/tracts/                 white-matter section: tract cards, groups, references (zod-checked),
                             URL state, scene source
 src/brainstem/              brainstem section: entry-zone and nucleus content, references, groups, URL state,
-                            scene source (also skullbase/, cortex/, spine/ for those sections)
+                            scene source (also skullbase/, cortex/, spine/, ventricles/ for those sections)
 src/viewer/                 three.js scene, loaders, materials, slices, lead, selection logic
 src/ui/                     atlas pages of both sections, shared stage pieces, other pages, theme
 pipeline/                   offline Python pipeline (see below)

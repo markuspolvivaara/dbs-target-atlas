@@ -1,7 +1,7 @@
 // Compress pipeline GLBs for the web: quantize vertex attributes
 // (KHR_mesh_quantization) and apply meshopt compression (EXT_meshopt_compression).
-// Input:  pipeline/data/build/{meshes,tracts,wm,skullbase,skullbase-ct,skullbase-v3,cortex,spine,brainstem}/*.glb (or only the kind given as argument)
-// Output: public/assets/{meshes,tracts,wm,skullbase,skullbase-ct,skullbase-v3,cortex,spine,brainstem}/*.glb
+// Input:  pipeline/data/build/{meshes,tracts,wm,skullbase,skullbase-ct,skullbase-v3,cortex,spine,brainstem,ventricles}/*.glb (or only the kind given as argument)
+// Output: public/assets/{meshes,tracts,wm,skullbase,skullbase-ct,skullbase-v3,cortex,spine,brainstem,ventricles}/*.glb
 import { NodeIO, Logger } from '@gltf-transform/core';
 import { EXTMeshoptCompression, KHRMeshQuantization } from '@gltf-transform/extensions';
 import { meshopt, quantize, dedup, prune } from '@gltf-transform/functions';
@@ -19,7 +19,7 @@ const io = new NodeIO()
   .registerDependencies({ 'meshopt.encoder': MeshoptEncoder, 'meshopt.decoder': MeshoptDecoder });
 
 let total = 0;
-for (const kind of (process.argv[2] ? [process.argv[2]] : ['meshes', 'tracts', 'wm', 'skullbase', 'skullbase-ct', 'skullbase-v3', 'cortex', 'spine', 'brainstem'])) {
+for (const kind of (process.argv[2] ? [process.argv[2]] : ['meshes', 'tracts', 'wm', 'skullbase', 'skullbase-ct', 'skullbase-v3', 'cortex', 'spine', 'brainstem', 'ventricles'])) {
   const src = join(root, 'data', 'build', kind);
   if (!existsSync(src)) continue; // a section not built yet
   const dst = join(repo, 'public', 'assets', kind);
