@@ -110,6 +110,8 @@ export const V3_FIT = z.object({
     jugularNervesToBulbMm: z.record(z.record(z.number())),
   }),
   sinuses: z.record(z.object({ lengthMm: z.number(), inLumenShare: z.number(), medianRadiusMm: z.number(), boneCrossedMm: z.number() })),
+  /** the trigeminal ganglion placed on this CT from its foramina (Meckel's cave), per side */
+  trigeminal: z.record(z.object({ meckel: z.array(z.number()), spanMm: z.number(), movedFromFittedMm: z.number() })).optional(),
   carotids: z.record(z.object({ lengthMm: z.number(), inLumenShare: z.number(), medianRadiusMm: z.number(), medianFromSpecimenMm: z.number() })),
   /** the template brain fitted into the CT and its transsylvian opening (pipeline/skullbase_brain.py) */
   brain: z.object({

@@ -62,6 +62,47 @@ FORAMEN_OF = {
     "Hypoglossal canal": ("Hypoglossal nerve (XII)", None),
 }
 JUGULAR_NERVES = ("Glossopharyngeal nerve (IX)", "Vagus nerve (X)", "Accessory nerve (XI)")
+# the trigeminal complex, placed on this CT: the fitted model's ganglion lies medial of where this skull's foramina put
+# it, and its root runs in front of the fitted pons rather than out of its side. Each division leaves the ganglion's convex
+# margin its mean intracranial length before its foramen (Chaware 2023, 80 sides, mm), the foramina as located on this CT
+TG_BRANCHES = {"Ophthalmic nerve (V1)": ("Superior orbital fissure", 27.38), "Maxillary nerve (V2)": ("Foramen rotundum", 11.23),
+               "Mandibular nerve (V3)": ("Foramen ovale", 4.54)}
+TG_LENGTH_MM, TG_WIDTH_MM, TG_THICK_MM = 15.39, 4.39, 2.54   # the ganglion (Chaware 2023)
+TG_CLEAR_MM = 1.0          # kept at least this far off bone (lifted)
+
+
+def trigeminal(g: NV.Grid, routes: dict, landmarks: list, side: str, root: np.ndarray) -> dict:
+    """The trigeminal ganglion on this CT: each division's route (through the CT's own foramen) cut back to its mean
+    intracranial length before its foramen (TG_BRANCHES): there it leaves the ganglion's convex margin. The ganglion is
+    the crescent through those origins (V3's end to V1's), set back TG_WIDTH_MM / 2 towards the root (its centre line) and
+    lifted TG_CLEAR_MM off bone; the root joins its concave margin, opposite the maxillary nerve's origin."""
+    def lm(name):
+        return next(np.array(l["ras"], float) for l in landmarks if l["name"] == name and l["side"] == side)
+
+    def clear(p):
+        for dz in np.arange(0.0, 8.01, 0.25):
+            q = p + [0, 0, dz]
+            if not g.in_bone(q + TG_CLEAR_MM * np.array([[0, 0, -1.0], [0, 0, 0], [1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0]])).any():
+                return q
+        return p + [0, 0, 8.0]
+    origins, cut = {}, {}
+    for name, (foramen, length) in TG_BRANCHES.items():
+        P = routes[(name, side)]["path"]
+        k = int(np.argmin(np.linalg.norm(P - lm(foramen), axis=1)))      # where the route passes its foramen
+        arc = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
+        i = int(np.argmin(np.abs(arc - (arc[k] - length))))               # its mean length back towards the ganglion
+        origins[name], cut[name] = P[i], i
+    o1, o2, o3 = (origins[n] for n in ("Ophthalmic nerve (V1)", "Maxillary nerve (V2)", "Mandibular nerve (V3)"))
+    axis = (o1 - o3) / np.linalg.norm(o1 - o3)
+    back = (root - o2) - ((root - o2) @ axis) * axis                      # towards the root, square to the ganglion's length
+    back /= np.linalg.norm(back)
+    t = np.linspace(0, 1, 25)[:, None]
+    margin = (1 - t) ** 2 * o3 + 2 * (1 - t) * t * (2 * o2 - (o1 + o3) / 2) + t ** 2 * o1    # through o3, o2 (at t=0.5), o1
+    gang = np.array([clear(q) for q in margin + 0.5 * TG_WIDTH_MM * back])
+    return {"meckel": gang.mean(0), "ganglion": gang, "radius": round((TG_WIDTH_MM + TG_THICK_MM) / 4, 2), "origins": origins,
+            "cut": cut, "root_end": gang[12] + 0.5 * TG_WIDTH_MM * back,
+            "spanMm": round(float(np.linalg.norm(o1 - o3)), 1),
+            "arcMm": round(float(np.linalg.norm(np.diff(gang, axis=0), axis=1).sum()), 1)}
 
 
 def fitted_course(ex: dict, sources, side: str, max_mm) -> np.ndarray:
@@ -166,9 +207,12 @@ def optic_guide(F: np.ndarray, T: np.ndarray) -> np.ndarray:
     return np.c_[np.vstack([lead[:-1], C]), np.full(len(lead) - 1 + len(C), r)]
 
 
-def build(ex: dict, ct_fossa: np.ndarray, ct_R: np.ndarray, porus: dict, carotid_guide: dict) -> dict:
+def build(ex: dict, ct_fossa: np.ndarray, ct_R: np.ndarray, porus: dict, carotid_guide: dict, roots: dict,
+          clear=None) -> dict:
     """Routes, foramina, vessels and checks. porus: side -> the internal acoustic meatus' opening (frame mm) of the
-    OpenEar ear; carotid_guide: side -> the registered specimen's petrous carotid (points, frame mm)."""
+    OpenEar ear; carotid_guide: side -> the registered specimen's petrous carotid (points, frame mm); roots: side -> where
+    the trigeminal nerve leaves the fitted pons (skullbase_pfossa.py); clear: (points, radii) -> points, the faded and
+    continued arteries' final courses moved out of the fitted hindbrain."""
     g = NV.Grid()
     routes, report = {}, {}
     optic_ts = {s: ts_points("head_glands_cavities/optic_nerve_" + ("right" if s == "R" else "left"), ct_fossa, ct_R) for s in ("R", "L")}
@@ -217,7 +261,7 @@ def build(ex: dict, ct_fossa: np.ndarray, ct_R: np.ndarray, porus: dict, carotid
                                       if e[i] >= ENCLOSED else f"Where the {nerve}, routed through this CT, is most closely surrounded by bone ")
                                      + f"({round(float(e[i]) * 100)} % bone within {ENCLOSE_MM:.0f} mm of it)."})
     # the superior orbital fissure: where the nerves that pass it run closest together, between the cavernous sinus
-    # and the orbit
+    # and the orbit (located before the trigeminal complex is placed: Meckel's cave is placed from it)
     for side in ("R", "L"):
         paths = [routes[(n, side)]["path"] for n in SOF_NERVES]
         trees = [cKDTree(p) for p in paths[1:]]
@@ -227,6 +271,25 @@ def build(ex: dict, ct_fossa: np.ndarray, ct_R: np.ndarray, porus: dict, carotid
         landmarks.append({"name": "Superior orbital fissure", "side": side, "ras": np.mean(pts, 0), "from": list(SOF_NERVES),
                           "how": "Where the oculomotor, trochlear, ophthalmic and abducens nerves, routed through this CT, run "
                                  f"closest together (within {spread[i] / 3:.1f} mm of each other on average)."})
+    # the trigeminal complex, on this CT: Meckel's cave placed from the foramina, the ganglion in it, the root from the
+    # fitted pons to it, V1-V3 from its convex margin to their foramina
+    tri = {}
+    for side in ("R", "L"):
+        old_origin = np.mean([routes[(n, side)]["path"][0] for n in TG_BRANCHES], axis=0)
+        tri[side] = trigeminal(g, routes, landmarks, side, roots[side])
+        tri[side]["movedFromFittedMm"] = round(float(np.linalg.norm(tri[side]["meckel"] - old_origin)), 1)
+        for name in TG_BRANCHES:                    # each division now starts at the ganglion's margin
+            routes[(name, side)]["path"] = routes[(name, side)]["path"][tri[side]["cut"][name]:]
+        start = tri[side]["root_end"]
+        routes[("Trigeminal nerve (V)", side)]["path"] = NV.route(g, np.linspace(roots[side], start, 40), roots[side], start)
+        for name in ["Trigeminal nerve (V)", *TG_BRANCHES]:
+            P = routes[(name, side)]["path"]
+            report[name][side].update({"lengthMm": round(float(np.linalg.norm(np.diff(P, axis=0), axis=1).sum()), 1),
+                                       "boneCrossedMm": round(NV.bone_crossed_mm(g, P), 1)})
+        landmarks.append({"name": "Meckel's cave", "side": side, "ras": tri[side]["meckel"], "from": [],
+                          "how": "The middle of the trigeminal ganglion as drawn on this CT: each division leaving it its mean "
+                                 "intracranial length before its foramen (Chaware 2023: V1 27.4 mm to the superior orbital fissure, V2 11.2 mm "
+                                 "to the foramen rotundum, V3 4.5 mm to the foramen ovale)."})
     for side in ("R", "L"):
         pts = []
         for n in JUGULAR_NERVES:
@@ -277,8 +340,8 @@ def build(ex: dict, ct_fossa: np.ndarray, ct_R: np.ndarray, porus: dict, carotid
         T = topbrain_surface("Internal carotid artery", side, ct_fossa, ct_R)
         cend[side] = T[np.argmin(T[:, 2])]
     carotids = trace_carotids(g, lum, cstart, cend, carotid_guide)
-    smalls = small_arteries(g, ex, ct_fossa, ct_R)
-    return {"routes": routes, "report": report, "landmarks": landmarks, "checks": checks, "sinuses": sinuses,
+    smalls = small_arteries(g, ex, ct_fossa, ct_R, clear)
+    return {"routes": routes, "report": report, "landmarks": landmarks, "checks": checks, "sinuses": sinuses, "trigeminal": tri,
             "carotids": carotids, "small": smalls}
 
 
@@ -405,7 +468,8 @@ def trace_carotids(g: NV.Grid, lum: Lumen, start: dict, end: dict, guide: dict) 
 # the fitted Z-Anatomy branches (Skull base v2) that this angiogram cannot show, each moved to start on this patient's own
 # parent vessel (TopBrain's label), or routed through the CT's openings where it crosses bone; drawn as approximate
 TOPBRAIN = {"Internal carotid artery": {"R": [4], "L": [6]}, "Basilar artery": {"R": [1], "L": [1]}, "Middle cerebral artery (M1 segment)": {"R": [5], "L": [7]},
-            "Vertebral artery": {"R": [23], "L": [24]}, "Ophthalmic artery": {"R": [33], "L": [34]}}
+            "Vertebral artery": {"R": [23], "L": [24]}, "Ophthalmic artery": {"R": [33], "L": [34]},
+            "Superior cerebellar artery": {"R": [25], "L": [26]}}
 ANCHORED = [  # name, parent (TopBrain), artery system
     ("Proximal lateral striate branches", "Middle cerebral artery (M1 segment)", "Middle cerebral artery"),
     ("Distal lateral striate branches", "Middle cerebral artery (M1 segment)", "Middle cerebral artery"),
@@ -418,6 +482,10 @@ ANCHORED = [  # name, parent (TopBrain), artery system
 # the first FADE_MM of their course (the fitted line from skullbase_v3_skull.py: v2 leaves it out)
 FADED = [("Anterior inferior cerebellar artery", "Basilar artery", "Basilar artery")]
 FADE_MM = 15.0
+# arteries whose first part this CT labels: the fitted model's course carried on from the label's far end (the end away
+# from the basilar artery), its start moved there, the move fading out over FADE_MM (name, Z-Anatomy line, its run, the
+# TopBrain label it continues, artery system)
+CONTINUED = [("Superior cerebellar artery (fitted course)", "Superior cerebellar artery", 0, "Superior cerebellar artery", "Basilar artery")]
 ROUTED_ARTERIES = [  # name, parent (TopBrain, or None), artery system
     ("Anterior ethmoidal artery", "Ophthalmic artery", "Ethmoidal arteries"),
     ("Posterior ethmoidal artery", "Ophthalmic artery", "Ethmoidal arteries"),
@@ -433,7 +501,7 @@ def topbrain_surface(parent: str, side: str, ct_fossa, ct_R) -> np.ndarray:
     return (nib.affines.apply_affine(lab.affine, np.argwhere(edge)) - ct_fossa) @ ct_R
 
 
-def small_arteries(g: NV.Grid, ex: dict, ct_fossa, ct_R) -> dict:
+def small_arteries(g: NV.Grid, ex: dict, ct_fossa, ct_R, clear=None) -> dict:
     """{(name, side): {"runs": [(P, r)], "system", "how", "moved"}}"""
     out = {}
     cache = {}
@@ -471,10 +539,32 @@ def small_arteries(g: NV.Grid, ex: dict, ct_fossa, ct_R) -> dict:
             arc = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(R[:, :3], axis=0), axis=1))]
             f = np.clip(1 - arc / FADE_MM, 0, 1)
             f = f * f * (3 - 2 * f)                 # smooth
-            out[(name, side)] = {"runs": [(R[:, :3] + f[:, None] * shift, R[:, 3])], "system": system,
+            P = R[:, :3] + f[:, None] * shift
+            out[(name, side)] = {"runs": [(clear(P, R[:, 3]) if clear else P, R[:, 3])], "system": system,
                                  "moved": round(float(np.linalg.norm(shift)), 1), "parent": parent,
                                  "how": f"its origin moved onto this patient's {parent.lower()} (TopBrain's label), the move fading out "
                                         f"over its first {FADE_MM:.0f} mm, the rest where the fit puts it"}
+    for name, line, run, parent, system in CONTINUED:
+        for side in ("R", "L"):
+            key = f"{line}.{side.lower()}"
+            if key not in ex["lines"]:
+                continue
+            R = np.array(ex["lines"][key]["runs"][run], float)
+            stub, bas = surf(parent, side).data, surf("Basilar artery", side)
+            end = stub[int(np.argmax(bas.query(stub)[0]))]          # the label's far end
+            if bas.query(R[-1, :3])[0] < bas.query(R[0, :3])[0]:
+                R = R[::-1]
+            k = int(np.argmin(np.linalg.norm(R[:, :3] - end, axis=1)))
+            R = R[k:]
+            shift = end - R[0, :3]
+            arc = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(R[:, :3], axis=0), axis=1))]
+            f = np.clip(1 - arc / FADE_MM, 0, 1)
+            f = f * f * (3 - 2 * f)
+            P = R[:, :3] + f[:, None] * shift
+            out[(name, side)] = {"runs": [(clear(P, R[:, 3]) if clear else P, R[:, 3])], "system": system,
+                                 "moved": round(float(np.linalg.norm(shift)), 1), "parent": parent,
+                                 "how": f"carried on from the far end of this patient's {parent.lower()} as TopBrain labels it (its first "
+                                        f"part), the start moved there and the move fading out over {FADE_MM:.0f} mm"}
     for name, parent, system in ROUTED_ARTERIES:
         for side in ("R", "L"):
             R = np.vstack([np.array(r) for r in ex["lines"][f"{name}.{side.lower()}"]["runs"] if len(r) > 1])

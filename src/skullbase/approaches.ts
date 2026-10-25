@@ -126,6 +126,8 @@ export const APPROACH_REFS: ApproachRef[] = [
     citation: 'Tang M, Richard SA, Lan Z. Cerebrospinal fluid leakage after retrosigmoid craniotomy and craniectomy for cerebellopontine angle tumors: a comparative retrospective study. Medicine (Baltimore). 2025;104(24):e42838. doi:10.1097/MD.0000000000042838.' },
   { id: 'aftahy2024', pmid: '39229481', pmcid: 'PMC11369374', shortLabel: 'Aftahy 2024', url: doi('10.1016/j.bas.2024.102909'),
     citation: 'Aftahy AK, Goldberg M, Butenschoen VM, Wagner A, Meyer B, Negwer C. Functional outcomes after retrosigmoid approach to the cerebellopontine angle: observations from a single-center experience of over 13 years. Brain Spine. 2024;4:102909. doi:10.1016/j.bas.2024.102909.' },
+  { id: 'zanin2023', pmid: '37959312', pmcid: 'PMC10648058', shortLabel: 'Zanin 2023', url: doi('10.3390/jcm12216847'),
+    citation: 'Zanin L, Agosti E, Ebner F, de Maria L, Belotti F, Buffoli B, et al. Quantitative anatomical comparison of surgical approaches to Meckel’s cave. J Clin Med. 2023;12(21):6847. doi:10.3390/jcm12216847.' },
 ];
 export const APPROACH_REF = new Map(APPROACH_REFS.map((r) => [r.id, r]));
 
@@ -281,6 +283,7 @@ export const APPROACHES: ApproachContent[] = [
       c('Alternatively, the cisterna magna is opened from outside the dura through a small horizontal slit at its level, letting cerebrospinal fluid out before the dura over the hemisphere is opened; the slit is sealed with a fibrinogen–thrombin sponge at the end. Rapid decompression should be avoided.', 'hamelinck2024'),
     ]), sec('The cerebellopontine angle', [
       c('In 17 cadaveric heads the anterior inferior cerebellar artery approached the facial–vestibulocochlear bundle from below in 29 of 34 angles (85 %), its meatal loop passing through the bundle in 22 (65 %); the loop lay medial to the internal acoustic meatus in 53 % and lateral to it in 47 %. The nervus intermedius rootlets arose most often from the proximal premeatal segment of VIII (57 %) and joined VII near the fundus of the meatus (63 %).', 'meybodi2023'),
+      c('In 12 cadaveric sides, of fifteen approaches to Meckel’s cave the retrosigmoid with a suprameatal extension exposed the most of the trigeminal stem: 78 % of it with 15 mm of retraction, 75 % with 10 mm; the plain retrosigmoid approach exposed 69 %.', 'zanin2023'),
       c('The labyrinthine artery was found in all 90 angles examined, single in 57.8 %; it arose from the anterior inferior cerebellar artery in 65.6 %, directly from the basilar artery in 13.3 % and from a trunk shared with the anterior inferior cerebellar artery in 21.1 %.', 'jeican2026'),
     ]), sec('The superior petrosal vein', [
       c('In 50 trigeminal microvascular decompressions there was one superior petrosal vein in 64 %, two in 32 % and three in 4 %, with 29 different configurations of the complex; the vein of the cerebellopontine fissure was present in 86 %.', 'basamh2020'),
@@ -290,12 +293,14 @@ export const APPROACHES: ApproachContent[] = [
       c('After 130 retrosigmoid craniotomies, imaging showed venous sinus thrombosis on the operated side in 46.9 %, mostly in the transverse sinus, and more often when that side’s sinus was the dominant one; it was diagnosed clinically in 3.1 %.', 'przepiorka2023'),
       c('In 540 retrosigmoid procedures (517 patients, 2007–2020) the overall complication rate was 21.1 %: cerebrospinal fluid leaks or fistulas in 7.5 %, meningitis in 5.0 % and wound infections in 4.6 %.', 'aftahy2024'),
     ])],
-    context: ['Trigeminal nerve (V)', 'Abducens nerve (VI)', 'Facial nerve (VII)', 'Vestibulocochlear nerve (VIII)', 'Nerves in the internal acoustic meatus (VII, VIII)',
+    context: ['Trigeminal nerve (V)', 'Trigeminal ganglion', 'Abducens nerve (VI)', 'Facial nerve (VII)', 'Vestibulocochlear nerve (VIII)', 'Nerves in the internal acoustic meatus (VII, VIII)',
       'Glossopharyngeal nerve (IX)', 'Vagus nerve (X)', 'Accessory nerve (XI)', 'Anterior inferior cerebellar artery', 'Superior cerebellar artery',
+      'Superior cerebellar artery (fitted course)',
       'Posterior inferior cerebellar artery', 'Basilar artery', 'Vertebral artery', 'Sigmoid sinus', 'Transverse sinus'],
-    notShown: 'The craniotomy is drawn larger than a keyhole, its outline placed by hand. The skin, muscles, dura and arachnoid; the superior petrosal vein and its tributaries and the labyrinthine artery (this angiogram labels neither); the nervus intermedius. The anterior inferior cerebellar artery is the fitted model’s (this angiogram does not label it), its origin moved onto this patient’s basilar artery: its course is approximate. The cerebellum, brainstem and fourth ventricle are one adult’s anatomical model (Z-Anatomy) fitted into this skull, not this patient’s own, and drawing the hemisphere back is a shape, not a simulation of the tissue.',
-    // framed on the meatus, seen along the corridor (the camera preset): the opening around the line of sight
-    focus: ['Nerves in the internal acoustic meatus (VII, VIII)'],
+    notShown: 'The craniotomy is drawn larger than a keyhole, its outline placed by hand. The skin, muscles, dura and arachnoid; the superior petrosal vein and its tributaries and the labyrinthine artery (this angiogram labels neither); the nervus intermedius. The anterior inferior cerebellar artery is the fitted model’s (this angiogram does not label it), its origin moved onto this patient’s basilar artery; this angiogram labels only the first part of the superior cerebellar artery, and its course beyond is the fitted model’s, carried on from there: both approximate. The trigeminal nerve’s course from the pons to the ganglion, and the ganglion, are drawn by rule from published measurements, not traced. The cerebellum, brainstem and fourth ventricle are one adult’s anatomical model (Z-Anatomy) fitted into this skull, not this patient’s own, and drawing the hemisphere back is a shape, not a simulation of the tissue.',
+    // framed on the cerebellopontine angle (between the trigeminal and the vestibulocochlear nerve), seen along the
+    // corridor (the camera preset): the opening around the line of sight
+    focus: ['Trigeminal nerve (V)', 'Vestibulocochlear nerve (VIII)'],
     frameOpening: false,
     radius: 45,
     morphs: ['retrosigmoid'],

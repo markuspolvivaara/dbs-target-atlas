@@ -126,7 +126,15 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   nerve's foramen lies 1.2–1.4 mm from the floor's own foramen ovale holes; IX–XI pass 3–5.5 mm from the jugular bulb.
   The sigmoid and transverse sinuses are traced through the CT's enhanced lumen (84–92 % of the trace at least 1.5 mm
   inside it), the middle meningeal artery routed through the foramen spinosum; the cervical carotids and jugular veins
-  are TotalSegmentator's. The nerves' cisternal courses stay approximate (the brainstem is not in the CT).
+  are TotalSegmentator's. The nerves' cisternal courses stay approximate (the brainstem is not in the CT); near the
+  brainstem they follow the posterior fossa fit's deformation (in full within 6 mm of the fitted cerebellum and
+  brainstem, none beyond 16 mm), so they leave the brainstem where it is drawn. The fitted anterior inferior and
+  superior cerebellar arteries are carried the same way and then kept just outside the fitted cerebellum and brainstem.
+- **The trigeminal complex**, drawn by rule (Chaware 2023, 80 sides): each division leaves the ganglion its mean
+  intracranial length before its foramen as located on this CT (V1 27.4 mm to the superior orbital fissure, V2 11.2 mm
+  to the foramen rotundum, V3 4.5 mm to the foramen ovale); the ganglion is the crescent through those origins, as wide
+  as the published mean, kept off bone (Meckel's cave landmark at its middle), and the sensory root runs from the side
+  of the fitted pons to it. The fitted model's own divisions began 18–19 mm away, medial of this skull's foramina.
 - **Arteries**: TopBrain's expert labels for the circle of Willis and its large branches; this patient's carotid
   through the carotid canal and foramen lacerum traced through its contrast-filled lumen (97–100 % of the trace at
   least 1.5 mm inside it, a median 2.1–2.3 mm from the registered specimen's carotid, which only guides it), so the

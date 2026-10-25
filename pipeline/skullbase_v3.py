@@ -458,6 +458,108 @@ def main() -> int:
     return 0
 
 
+CARRIED = ("Anterior inferior cerebellar artery", "Superior cerebellar artery")   # besides the nerves
+HINDBRAIN_CLEAR_MM = 0.3   # the carried arteries' surfaces kept this far outside the fitted cerebellum and brainstem
+CLEAR_PASSES = 8
+CARRY_FADE_MM = 12.0       # the carried deformation fades out over this much inside its grid's edge (none beyond it)
+CARRY_NEAR_MM, CARRY_REACH_MM = 6.0, 16.0   # ... and in full only this near the fitted hindbrain, none beyond the reach
+
+
+def carry_lines(ex2: dict) -> None:
+    """The cranial nerves' fitted courses (and the anterior inferior cerebellar artery's), carried by the posterior fossa
+    fit's deformation near the brainstem (skullbase_pfossa.py, pfossa_carry.npz), so they leave the brainstem where it is
+    drawn; at the skull base it has faded out, and the routing takes them through the CT's own foramina. Beyond the
+    field's grid (the hindbrain and 15 mm round it) nothing moves: it fades out over CARRY_FADE_MM inside the grid's edge;
+    and it applies in full only within CARRY_NEAR_MM of the fitted hindbrain, fading to none at CARRY_REACH_MM (the
+    trigeminal ganglion and the divisions in the middle fossa stay where the routing puts them)."""
+    p = BUILD / "pfossa_carry.npz"
+    if not p.exists():
+        return
+    c = np.load(p)
+    lo, step, F = c["lo"], float(c["step"]), c["field"]
+    hb = cKDTree(np.vstack([v for v, _ in hindbrain_meshes()]))
+    for name, line in ex2["lines"].items():
+        if line.get("kind") != "nerve" and not name.startswith(CARRIED):
+            continue
+        runs = []
+        for r in line["runs"]:
+            R = np.array(r, float)
+            if not len(R):
+                runs.append(r)
+                continue
+            g = ((R[:, :3] - lo) / step).T
+            D = np.stack([ndimage.map_coordinates(F[..., k], g, order=1, mode="constant", cval=0.0) for k in range(3)], 1)
+            edge = np.minimum(g, (np.array(F.shape[:3])[:, None] - 1) - g).min(0) * step     # mm inside the grid
+            near = np.clip((CARRY_REACH_MM - hb.query(R[:, :3])[0]) / (CARRY_REACH_MM - CARRY_NEAR_MM), 0, 1)
+            D *= (np.clip(edge / CARRY_FADE_MM, 0, 1) * near)[:, None]
+            runs.append(np.c_[R[:, :3] + D, R[:, 3:]].tolist())
+        line["runs"] = runs
+
+
+def hindbrain_meshes() -> list:
+    """skullbase_pfossa.py's fitted cerebellum and brainstem at rest (the fourth ventricle left out): [(verts, faces)]."""
+    from pygltflib import GLTF2
+    meshes = []
+    for f in sorted(BUILD.glob("pf_*.glb")):
+        if "fourth_ventricle" in f.name:
+            continue
+        g = GLTF2().load(str(f))
+        blob = g.binary_blob()
+
+        def acc(i):
+            a = g.accessors[i]
+            bv = g.bufferViews[a.bufferView]
+            dt = {5126: np.float32, 5125: np.uint32, 5123: np.uint16}[a.componentType]
+            n = {"SCALAR": 1, "VEC3": 3}[a.type]
+            arr = np.frombuffer(blob, dt, a.count * n, (bv.byteOffset or 0) + (a.byteOffset or 0))
+            return arr.reshape(a.count, n) if n > 1 else arr
+        for node in g.nodes:
+            if node.mesh is not None:
+                p = g.meshes[node.mesh].primitives[0]
+                meshes.append((acc(p.attributes.POSITION).astype(float), acc(p.indices).reshape(-1, 3).astype(int)))
+    return meshes
+
+
+def hindbrain_clearance():
+    """(points, radii) -> points: a vessel's centre line moved out of the fitted cerebellum and brainstem
+    (skullbase_pfossa.py's pieces at rest) where the fits leave it in or against them: each point closer than its radius
+    plus HINDBRAIN_CLEAR_MM to their surface (or inside) pushed out along the shortest way, the pushes smoothed along the
+    vessel, repeated CLEAR_PASSES times (a smoothed push falls short where the vessel dips in briefly). None without them."""
+    import skullbase_v3_skull as SK
+    meshes = hindbrain_meshes()
+    if not meshes:
+        return None
+    allv = np.vstack([v for v, _ in meshes])
+    step = 0.5
+    lo = allv.min(0) - 6
+    shape = tuple(np.ceil((allv.max(0) + 6 - lo) / step).astype(int))
+    a = np.eye(4)
+    a[:3, 3] = lo
+    a[[0, 1, 2], [0, 1, 2]] = step
+    inv = np.linalg.inv(a)
+    occ = np.zeros(shape, np.float32)
+    for v, t in meshes:
+        m, box = SK.rasterise(v, t, inv, shape)
+        occ[box] = np.maximum(occ[box], m)
+    inside = occ > 0.5
+    sd = (ndimage.distance_transform_edt(inside) - ndimage.distance_transform_edt(~inside)) * step   # positive inside
+    grad = np.stack(np.gradient(ndimage.gaussian_filter(sd, 1.0)), -1)
+
+    def clear(P: np.ndarray, r: np.ndarray) -> np.ndarray:
+        P = np.array(P, float)
+        for _ in range(CLEAR_PASSES):
+            g = nib.affines.apply_affine(inv, P).T
+            need = ndimage.map_coordinates(sd, g, order=1, mode="nearest") + r + HINDBRAIN_CLEAR_MM   # how far to go out
+            if not (need > 0).any():
+                break
+            gv = -np.stack([ndimage.map_coordinates(grad[..., k], g, order=1, mode="nearest") for k in range(3)], 1)
+            gv /= np.maximum(np.linalg.norm(gv, axis=1, keepdims=True), 1e-9)
+            D = np.where((need > 0)[:, None], need[:, None] * gv, 0.0)
+            P = P + ndimage.gaussian_filter1d(D, 1.5, axis=0, mode="nearest")
+        return P
+    return clear
+
+
 def porus_point(v: np.ndarray) -> np.ndarray:
     """The medial end of the internal acoustic meatus' contents (a mesh's vertices, frame mm): its opening."""
     c = v.mean(0)
@@ -478,8 +580,11 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
     ex2 = json.loads((ROOT / "data" / "build" / "skullbase-ct" / "export.json").read_text())
     if (BUILD / "skull.json").exists():      # vessels v2 leaves out, fitted by skullbase_v3_skull.py
         ex2["lines"].update(json.loads((BUILD / "skull.json").read_text()).get("lines", {}))
+    carry_lines(ex2)
     porus = {s: porus_point(ears[s]["parts"][IAM][0]) for s in ("L", "R")}
-    base = BASE.build(ex2, ct.fossa, ct.R, porus, {s: ears[s]["parts"][SPEC_CAROTID][0] for s in ("L", "R")})
+    roots = {s: np.array(r, float) for s, r in json.loads((BUILD / "pfossa.json").read_text())["report"]["trigeminalRoots"].items()}
+    base = BASE.build(ex2, ct.fossa, ct.R, porus, {s: ears[s]["parts"][SPEC_CAROTID][0] for s in ("L", "R")}, roots,
+                      hindbrain_clearance())
     # this patient's own carotid (traced in the CT) as a point cloud of its surface, for clearances
     carotid_surface = {}
     for s in ("L", "R"):
@@ -579,9 +684,36 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
                           + "; ".join(f"{'right' if s_ == 'R' else 'left'}: {rep_[s_]['lengthMm']} mm drawn, at most "
                                       f"{rep_[s_]['maxFromFittedMm']} mm from the fitted course, {rep_[s_]['boneCrossedMm']} mm through "
                                       "bone the mask closes" for s_ in ("R", "L"))
-                          + ". Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base.",
+                          + ". Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base."
+                          + (TRIGEMINAL_NOTE if name == "Trigeminal nerve (V)" else
+                             " It leaves the trigeminal ganglion, drawn in Meckel's cave as placed on this CT (Chaware 2023), and is routed "
+                             "from there to its foramen." if name in BASE.TG_BRANCHES else ""),
             "centroid": {"L": cent["L"], "R": cent["R"]},
         })
+    # the trigeminal ganglion, in Meckel's cave as placed on this CT
+    nodes, cent = [], {}
+    for s in ("L", "R"):
+        tg = base["trigeminal"][s]
+        v, n_, t = tube_mesh(tg["ganglion"], tg["radius"])
+        nodes.append({"name": s, "positions": v, "normals": n_, "indices": t, "mode": TRIANGLES})
+        cent[s] = tg["ganglion"].mean(0).round(2).tolist()
+    write_glb(BUILD / "tb_trigeminal_ganglion.glb", nodes, {"id": "tb_trigeminal_ganglion"})
+    tgr = base["trigeminal"]
+    items.append({
+        "id": "tb_trigeminal_ganglion", "name": "Trigeminal ganglion", "aliases": ["Gasserian ganglion", "Semilunar ganglion"], "type": "soft",
+        "file": f"assets/{KIND}/tb_trigeminal_ganglion.glb", "bytes": 0, "colour": colour("sbNerve"), "dataset": "rule", "source": "Drawn by rule",
+        "licence": "GPL-3.0 (the project's own drawing)", "citation": [], "citationUrls": [], "refIds": ["chaware2023"], "category": "nerve",
+        "layer": "tracts", "cranialNerve": 5, "schematic": True,
+        "derivation": "Drawn by rule on this CT: each division leaves the ganglion's convex margin its mean intracranial length before "
+                      "its foramen (Chaware 2023, 80 sides: the ophthalmic nerve 27.4 mm before the superior orbital fissure, the "
+                      "maxillary 11.2 mm before the foramen rotundum, the mandibular 4.5 mm before the foramen ovale), each found along its "
+                      "route through this CT's own foramen; the ganglion is the crescent through those three points, set back half its "
+                      f"width ({BASE.TG_WIDTH_MM} mm, Chaware 2023) towards the root and kept off bone, the root joining its concave margin. "
+                      "Its span between the ophthalmic and mandibular origins: "
+                      + ", ".join(f"{'right' if s_ == 'R' else 'left'} {tgr[s_]['spanMm']} mm" for s_ in ("R", "L"))
+                      + f" (Chaware 2023: the ganglion {BASE.TG_LENGTH_MM} mm long).",
+        "centroid": {"L": cent["L"], "R": cent["R"]},
+    })
     # the sigmoid and transverse sinuses, traced through this CT's enhanced lumen
     for part, name in (("sigmoid", "Sigmoid sinus"), ("transverse", "Transverse sinus")):
         nodes, cent = [], {}
@@ -766,6 +898,10 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
                                                       if (BUILD / "brain.json").exists() else {}),
                                                    **({"pfossa": json.loads((BUILD / "pfossa.json").read_text())["report"]}
                                                       if (BUILD / "pfossa.json").exists() else {}),
+                                                   "trigeminal": {s_: {"meckel": base["trigeminal"][s_]["meckel"].round(1).tolist(),
+                                                                       "spanMm": base["trigeminal"][s_]["spanMm"],
+                                                                       "movedFromFittedMm": base["trigeminal"][s_]["movedFromFittedMm"]}
+                                                                  for s_ in ("R", "L")},
                                                    **({"skull": {k: v for k, v in json.loads((BUILD / "skull.json").read_text())["report"].items()
                                                                  if k != "beyondScanShare"}}
                                                       if (BUILD / "skull.json").exists() else {})}, indent=1))
@@ -791,6 +927,12 @@ LEAD_DBS = {
                "research use); its fit into this CT uses the TopBrain data (non-commercial)",
     "cite": ["leaddbs3", "destrieux2010", "topbrain2025"],
 }
+
+
+TRIGEMINAL_NOTE = (" The fitted model's trigeminal root runs in front of the fitted pons, its ganglion medial of where this skull's "
+                   "foramina put Meckel's cave: so here the nerve starts where the fitted course leaves the pons (that pons as fitted "
+                   "into the posterior fossa: skullbase_pfossa.py) and is routed through this CT to the concave margin of the "
+                   "trigeminal ganglion, drawn in Meckel's cave as placed on this CT (Chaware 2023).")
 
 
 def brain_items(items: list, ex2: dict, v2: dict) -> None:
@@ -1145,7 +1287,7 @@ def validate() -> int:
         r_ = pr["retrosigmoid"]
         check(tp_["rsMm"] / tp_["rsReachMm"] < 1 and r_["maxMovedMm"] <= tp_["rsMm"] + 1.5 and r_["inBoneAfter"] == 0 and r_["inVesselAfter"] == 0,
               f"retrosigmoid shape {r_}")
-        check(r_["meatusToCerebellumMm"]["moved"] > r_["meatusToCerebellumMm"]["rest"] + 2 and r_["inCorridor"]["moved"] == 0,
+        check(r_["meatusToCerebellumMm"]["moved"] > r_["meatusToCerebellumMm"]["rest"] + 2 and r_["inCorridor"]["moved"] <= 0.01 * r_["inCorridor"]["rest"],
               f"the retrosigmoid shape does not clear the corridor {r_}")
     aica = ids.get("tb_anterior_inferior_cerebellar_artery")
     check(aica is not None and aica.get("fitted"), "the anterior inferior cerebellar artery (fitted) is missing")

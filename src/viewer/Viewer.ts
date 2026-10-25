@@ -721,10 +721,11 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       case 'vertex': dir = new THREE.Vector3(0.05 * sideSign, -0.3, 1); break;
       // suboccipital: from behind and below, up into the cerebellomedullary fissure
       case 'suboccipital': dir = new THREE.Vector3(0, -1, -0.95); break;
-      // retrosigmoid: from behind the sigmoid sinus along the back of the petrous bone into the cerebellopontine angle: the
-      // corridor of Skull base v3's retrosigmoid view: from the nerves in the internal acoustic meatus (the view's centre)
-      // out through the craniotomy just inside its corner at the sinuses' junction (skullbase_pfossa.py)
-      case 'retrosigmoid': dir = new THREE.Vector3(0.55 * sideSign, -0.78, -0.30); break;
+      // retrosigmoid: from behind the sigmoid sinus and a little below, along the back of the petrous bone into the
+      // cerebellopontine angle (Skull base v3's retrosigmoid view, the cerebellum drawn back, framed between the trigeminal
+      // and vestibulocochlear nerves): a direction that keeps the porus acusticus and the facial and vestibulocochlear
+      // nerves' cisternal course in clear sight past the bone, the sinuses and the cerebellum
+      case 'retrosigmoid': dir = new THREE.Vector3(0.45 * sideSign, -0.77, -0.45); break;
       case 'surgeon': {
         const side: Side = hemi === 'L' ? 'L' : 'R';
         const l = this.state!.lead;

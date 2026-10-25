@@ -26,6 +26,8 @@ export const TB_REFS: TbRef[] = [
     citation: 'Muslu M, Karaca Ö, Kökçe A, Acer N. A computed tomography-based morphometric assessment of the foramen lacerum in a Turkish population using the 3D Slicer method. Medicina (Kaunas). 2025;61(5):943. doi:10.3390/medicina61050943.' },
   { id: 'garciabarrios2021', pmid: '34542698', pmcid: 'PMC8510941', shortLabel: 'García-Barrios 2021', url: doi('10.1007/s00276-021-02834-2'),
     citation: 'García-Barrios A, Cisneros AI, Obon J, Crovetto R, Benito J, Whyte J. Anatomical study between the correlation of the arcuate eminence and the superior semicircular canal. Surg Radiol Anat. 2021;43(11):1845–1850. doi:10.1007/s00276-021-02834-2.' },
+  { id: 'chaware2023', pmid: '37200762', pmcid: 'PMC10186047', shortLabel: 'Chaware 2023', url: doi('10.4103/abr.abr_261_20'),
+    citation: 'Chaware P, Kumar V, Srivastava A, Raj S, Rathinam BAD. Neurovascular structures at risk during surgical access to trigeminal ganglion and Meckel’s cave: an anatomical study. Adv Biomed Res. 2023;12:62. doi:10.4103/abr.abr_261_20.' },
 ];
 export const TB_REF = new Map(TB_REFS.map((r) => [r.id, r]));
 
@@ -38,6 +40,10 @@ export const TB_NOTES: Record<string, TbClaim[]> = {
     c('Olfactory fibres enter the anterior cranial fossa through the cribriform plate and end in the olfactory bulb; the tract then runs between the gyrus rectus and the medial orbital gyrus.', 'romano2019'),
   ],
   'Optic nerve (II)': [c('It leaves the orbit for the cranial cavity through the optic canal.', 'romano2019')],
+  'Trigeminal ganglion': [
+    c('It lies in a shallow depression at the apex of the petrous temporal bone, just outside the posterior part of the lateral wall of the cavernous sinus, in a dural pouch: Meckel’s cave. It is semilunar, its convexity forwards and laterally; the ophthalmic, maxillary and the sensory part of the mandibular nerve leave its convex margin.', 'chaware2023'),
+    c('In 80 cadaveric sides it measured 15.4 mm long, 4.4 mm wide and 2.5 mm thick. Meckel’s cave lay 4.5 mm from the foramen ovale, 11.2 mm from the foramen rotundum, 6.4 mm from the foramen spinosum, 27.4 mm from the superior orbital fissure and 16.5 mm from the arcuate eminence; the abducens, trochlear and oculomotor nerves passed 2.5, 4.9 and 6.3 mm from it.', 'chaware2023'),
+  ],
   'Oculomotor nerve (III)': [c('It enters the cavernous sinus, where it is the most superior nerve, and reaches the orbit through the superior orbital fissure.', 'romano2019')],
   'Trochlear nerve (IV)': [c('It curves over the superior cerebellar peduncle, runs between the superior cerebellar and posterior cerebral arteries and along the free edge of the tentorium, enters the cavernous sinus below the oculomotor nerve and above the ophthalmic nerve, and reaches the orbit through the superior orbital fissure.', 'romano2019')],
   'Trigeminal nerve (V)': [c('It emerges straight forward from the lateral pons into Meckel’s cave, where the trigeminal ganglion lies and the nerve divides into its three divisions.', 'romano2019')],

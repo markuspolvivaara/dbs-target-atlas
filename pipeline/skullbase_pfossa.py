@@ -31,11 +31,21 @@ The retrosigmoid shape (morph target "retrosigmoid") draws the right cerebellar 
 opening the cerebellopontine angle as gentle retraction and the release of cerebrospinal fluid let it fall away. The
 corridor runs from the right internal acoustic meatus (the registered ear's, Skull base v3's landmark) out through the
 retrosigmoid craniotomy just inside its keypoint, the opening's corner at the junction of the transverse and sigmoid sinuses
-(skullbase_v3_approach.py), along the back of the petrous bone: each point of the right hemisphere and tonsil is moved RS_MM away from it, square to it and
-towards the hemisphere's centre, with a weight falling from 1 on the corridor to 0 RS_REACH_MM from it (RS_MM /
-RS_REACH_MM below 1: it cannot fold), then kept off bone and the arteries as the telovelar shape is.
+(skullbase_v3_approach.py), along the back of the petrous bone; a second runs from the same point to where the trigeminal nerve leaves the pons (the upper
+neurovascular complex, with the superior cerebellar artery). Each point of the right hemisphere and tonsil is moved away
+from each corridor, square to it and towards the hemisphere's centre, by RS_MM times a weight falling from 1 on the
+corridor to 0 RS_REACH_MM from it; where both apply the two are averaged (never more than RS_MM). The displacement changes
+by at most 2 RS_MM / RS_REACH_MM per mm (below 1: it cannot fold); then kept off bone and the arteries as the telovelar
+shape is.
 
-Writes pipeline/data/build/skullbase-v3/pf_*.glb and pfossa.json (the items for the manifest and the fit report).
+The fit also moves the model's brainstem away from where Skull base v2's fit left the Z-Anatomy model, from which the
+cranial nerves' and the anterior inferior cerebellar artery's courses come (it widens the brainstem to fill this
+patient's fossa). So that they still leave the brainstem where it is drawn, the same deformation is saved for them
+(pfossa_carry.npz: its displacement on a CARRY_STEP_MM grid, in full except near bone, fading to none within
+CARRY_BONE_MM of it, so at the skull base the nerves keep their way through the CT's own foramina);
+skullbase_v3.py carries their courses by it before routing them.
+
+Writes pipeline/data/build/skullbase-v3/pf_*.glb, pfossa_carry.npz and pfossa.json (the items for the manifest and the fit report).
 """
 from __future__ import annotations
 
@@ -104,8 +114,10 @@ INFERIOR_VERMIS = ["Nodule of vermis", "Uvula of vermis"]
 assert TV_MM / TV_REACH_MM + TV_VERMIS_MM / TV_VERMIS_REACH_MM < 1, "the telovelar shape could fold the cerebellum"
 RS_MM = 12.0               # illustrative: how far the right hemisphere is drawn back at the internal acoustic meatus
 RS_REACH_MM = 40.0         # ... none this far from it
-assert RS_MM / RS_REACH_MM < 1, "the retrosigmoid shape could fold the cerebellum"
+assert 2 * RS_MM / RS_REACH_MM < 1, "the retrosigmoid shape could fold the cerebellum"
 GEN = ROOT.parent / "src" / "data" / "generated"
+CARRY_STEP_MM = 2.0        # the deformation saved for the nerves' courses on this grid, in full ...
+CARRY_BONE_MM = 6.0        # ... except within this of bone, where it fades to none
 
 STEM = ["Midbrain", "Pons", "Medulla oblongata", "Fourth ventricle", "Superior cerebellar peduncle"]
 HEMISPHERE = ["Anterior quadrangular lobule", "Posterior quadrangular lobule", "Superior semilunar lobule", "Inferior semilunar lobule",
@@ -498,22 +510,42 @@ def to_corridor(P: np.ndarray, a: np.ndarray, b: np.ndarray) -> np.ndarray:
     return np.linalg.norm(P - (a + t[:, None] * (b - a)), axis=1)
 
 
-def retrosigmoid(parts: dict, fs: Fossa) -> dict:
-    """Each part's displacement for the retrosigmoid shape: the right hemisphere and tonsil drawn RS_MM away from the
-    corridor (meatus to keypoint), square to it towards the hemisphere's centre, with a weight falling to 0 RS_REACH_MM
-    from it; then kept off bone and the arteries (as telovelar)."""
-    iam, key = corridor()
-    axis = unit(key - iam)
+def trigeminal_root(ex2: dict, gp, parts: dict, side: str = "R") -> np.ndarray:
+    """Where the trigeminal nerve leaves the pons: its fitted course (Skull base v2's, carried by this fit) at the last
+    point within 2 mm of the fitted pons (skullbase_v3_base.py starts the nerve there)."""
+    V, _ = gp.invert(np.array(ex2["lines"][f"Trigeminal nerve (V).{side.lower()}"]["runs"][0], float)[:, :3])
+    pons = np.vstack([parts[n][0] for n in parts if n.startswith("Pons")])
+    d = cKDTree(pons).query(V)[0]
+    near = np.nonzero(d <= 2.0)[0]
+    return V[near[-1] if len(near) else int(np.argmin(d))]
+
+
+def corridors(root: np.ndarray) -> list:
+    """The retrosigmoid view's corridors: from the meatus, and from the trigeminal root, out to the opening."""
+    iam, end = corridor()
+    return [(iam, end), (root, end)]
+
+
+def retrosigmoid(parts: dict, fs: Fossa, root: np.ndarray) -> dict:
+    """Each part's displacement for the retrosigmoid shape: the right hemisphere and tonsil drawn away from each corridor
+    (corridors()), square to it towards the hemisphere's centre, RS_MM times a weight falling to 0 RS_REACH_MM from it,
+    the two averaged where both apply; then kept off bone and the arteries (as telovelar)."""
+    cs = corridors(root)
     right = [n for n in parts if n.startswith("Tonsil of cerebellum") or any(n.startswith(h) for h in HEMISPHERE)]
-    centre = np.vstack([parts[n][0][parts[n][2] == "R"] for n in right]).mean(0) - iam
-    dirn = unit(centre - (centre @ axis) * axis)
+    centre = np.vstack([parts[n][0][parts[n][2] == "R"] for n in right]).mean(0)
+    dirs = []
+    for a, b in cs:
+        ax = unit(b - a)
+        c_ = centre - a
+        dirs.append(unit(c_ - (c_ @ ax) * ax))
     out = {}
     for n, (v, _, side) in parts.items():
         D = np.zeros_like(v)
         if n in right:
             m = side == "R"
-            w = np.clip(1 - to_corridor(v[m], iam, key) / RS_REACH_MM, 0, 1)
-            D[m] = RS_MM * w[:, None] * dirn
+            ws = [np.clip(1 - to_corridor(v[m], a, b) / RS_REACH_MM, 0, 1) for a, b in cs]
+            num = sum(w[:, None] * d_ for w, d_ in zip(ws, dirs))
+            D[m] = RS_MM * num / np.maximum(1.0, sum(ws))[:, None]
             moved = np.abs(D).sum(1) > 0
             if moved.any():
                 sb, gb = fs.bone(v[moved] + D[moved])
@@ -551,10 +583,28 @@ def normals(v, t):
     return trimesh.Trimesh(v, t, process=False).vertex_normals.copy()
 
 
-def retro_report(parts: dict, moves: dict, fs: Fossa) -> dict:
+def save_carry(md, gp, allv: np.ndarray, fs: Fossa) -> dict:
+    """The fit's deformation, for the courses that come from Skull base v2's fit of the Z-Anatomy model (in its space):
+    on a CARRY_STEP_MM grid, in full except within CARRY_BONE_MM of the CT's bone, where it fades to none. Saved as
+    pfossa_carry.npz (lo, step, field: the weighted displacement)."""
+    lo, hi = allv.min(0) - 15, allv.max(0) + 15
+    ax = [np.arange(lo[k], hi[k] + 1e-6, CARRY_STEP_MM) for k in range(3)]
+    G = np.stack(np.meshgrid(*ax, indexing="ij"), -1).reshape(-1, 3)
+    d = np.clip(fs.bone(G, grad=False), 0, None)
+    w = np.clip(d / CARRY_BONE_MM, 0, 1)
+    D = np.zeros_like(G)
+    near = w > 0
+    X, _ = gp.invert(G[near])
+    D[near] = (X - G[near]) * w[near, None]
+    np.savez(BUILD / "pfossa_carry.npz", lo=lo, step=CARRY_STEP_MM, field=D.reshape(*[len(a) for a in ax], 3).astype(np.float32))
+    mag = np.linalg.norm(X - G[near], axis=1)
+    return {"medianMm": round(float(np.median(mag)), 2), "maxMm": round(float(mag.max()), 2)}
+
+
+def retro_report(parts: dict, moves: dict, fs: Fossa, root: np.ndarray) -> dict:
     """How far the retrosigmoid shape moves the hemisphere, whether it stays clear, and how far the cerebellum is from the
     internal acoustic meatus at rest and drawn back."""
-    iam, key = corridor()
+    (iam, key), (_, _) = corridors(root)
     mv = np.vstack([moves[n] for n in parts])
     Xm = np.vstack([parts[n][0] + moves[n] for n in parts])
     moved = np.linalg.norm(mv, axis=1) > 0.1
@@ -565,8 +615,9 @@ def retro_report(parts: dict, moves: dict, fs: Fossa) -> dict:
             "inVesselAfter": int((fs.vessel_sdf(Xm[moved])[0] < 0).sum()),
             "meatusToCerebellumMm": {"rest": gap(lambda n: parts[n][0] - iam), "moved": gap(lambda n: parts[n][0] + moves[n] - iam)},
             # the cerebellum's points within 4 mm of the corridor (the meatus to where it meets the bone: four fifths of the way)
-            "inCorridor": {k: int(sum((to_corridor(parts[n][0] + (moves[n] if k == "moved" else 0), iam, iam + 0.8 * (key - iam)) < 4).sum()
-                                      for n in cereb)) for k in ("rest", "moved")}}
+            "inCorridor": {k: int(sum(sum((to_corridor(parts[n][0] + (moves[n] if k == "moved" else 0), a, a + 0.8 * (b - a)) < 4).sum()
+                                          for a, b in corridors(root)) for n in cereb)) for k in ("rest", "moved")},
+            "trigeminalRoot": root.round(1).tolist()}
 
 
 def main() -> int:
@@ -587,7 +638,10 @@ def main() -> int:
     rc = clear(parts, fs)
     print("cleared", rc, flush=True)
     moves = telovelar(parts, fs)
-    rs_moves = retrosigmoid(parts, fs)
+    root = trigeminal_root(ex2, gp, parts)
+    rs_moves = retrosigmoid(parts, fs, root)
+    carry_rep = save_carry(md, gp, allv, fs)
+    print("carry", carry_rep, flush=True)
     # GLBs: each piece as L and R nodes
     items = []
     for pid, name, members, tok, cat, moving in PIECES:
@@ -639,7 +693,8 @@ def main() -> int:
                                                  "moved": round(float(min(medulla.query(parts[n][0] + moves[n])[0].min() for n in inferior)), 2)},
                             "inVentricle": {"rest": int(sum(in4(parts[n][0]).sum() for n in cereb)),
                                             "moved": int(sum(in4(parts[n][0] + moves[n]).sum() for n in cereb))}},
-              "retrosigmoid": retro_report(parts, rs_moves, fs),
+              "retrosigmoid": retro_report(parts, rs_moves, fs, root),
+              "trigeminalRoots": {s: trigeminal_root(ex2, gp, parts, s).round(2).tolist() for s in "RL"},
               "params": {"rsMm": RS_MM, "rsReachMm": RS_REACH_MM, "tableGapMm": TABLE_GAP_MM, "tableMinMm": TABLE_MIN_MM, "boneGapMm": BONE_GAP_MM, "tvMm": TV_MM, "tvUp": TV_UP,
                          "tvReachMm": TV_REACH_MM, "tvVermisMm": TV_VERMIS_MM, "tvVermisBack": TV_VERMIS_BACK,
                          "tvVermisReachMm": TV_VERMIS_REACH_MM, "jacMin": JAC_MIN}}

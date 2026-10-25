@@ -36,7 +36,8 @@ How:
      blended in over PATCH_MM.
   5. That surface is split into bones by the nearest bone of the fitted model (as v2 splits the CT's).
 It also carries Z-Anatomy vessels v2 leaves out (FITTED_LINES: the anterior inferior cerebellar arteries, which TopBrain
-labels in other cases but not in this one) into the frame by the same fit: each point moved as the model's bone around it
+labels in other cases but not in this one, and the superior cerebellar arteries, of which it labels only the first
+centimetre) into the frame by the same fit: each point moved as the model's bone around it
 moved (a Gaussian-weighted mean of the bone's displacements within LINE_SIGMA_MM; these vessels run within a few
 centimetres of the petrous bone and the clivus).
 Writes pipeline/data/build/skullbase-v3/skull.json (bones {name: verts, tris, ao}, each bone's share beyond the scan,
@@ -86,7 +87,8 @@ PAD_MM = 6.0                # the grid is extended this far beyond the fitted mo
 SHELL_MM = 1.0              # a bone mesh that is not closed is drawn as a shell this thick
 FACES = 720_000             # the whole skull's surface after decimation (v2: 640,000 for the cranial bones in the scan)
 SINUSES = ("Sinus of frontal bone", "Sinus of sphenoid bone")
-FITTED_LINES = ["Anterior inferior cerebellar artery.r", "Anterior inferior cerebellar artery.l"]
+FITTED_LINES = ["Anterior inferior cerebellar artery.r", "Anterior inferior cerebellar artery.l",
+                "Superior cerebellar artery.r", "Superior cerebellar artery.l"]
 LINE_SIGMA_MM = 8.0         # a line point moves as the model's bone within about twice this moved
 
 
