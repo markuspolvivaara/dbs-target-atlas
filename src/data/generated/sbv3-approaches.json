@@ -81,10 +81,10 @@
   "burrHoles": []
  },
  "retrosigmoid": {
-  "name": "Retrosigmoid keyhole craniotomy",
+  "name": "Retrosigmoid craniotomy",
   "side": "R",
-  "how": "A right retrosigmoid keyhole craniotomy: an oval 25 x 20 mm (Jian 2021: 18-20 x 20-25 mm), its upper and front edges along the transverse and sigmoid sinuses from the keypoint, where the transverse sinus' lower margin meets the sigmoid sinus' posterior margin (Jian 2021, 2022, 2024), here found on this CT's own sinuses (traced through its lumen) and carried out through the bone; the burr hole 3.5 mm behind and below it (Jian 2021). About 388 mm² seen face on; its edge smoothed over 1 mm (illustrative). Keypoint: (53, -59, -25) mm; burr hole: (51, -62, -26) mm.",
-  "removedMl": 2.4,
+  "how": "A right retrosigmoid craniotomy: its upper edge along the transverse sinus' lower margin for 28 mm and its front edge along the sigmoid sinus' posterior margin for 35 mm (Jian 2021: the window's upper and front margins against the two sinuses), closed behind and below by straight edges, its corners rounded; larger than Jian 2021's keyhole (18-20 x 20-25 mm), about the size of the craniotomies in Tang 2025 (a mean 3.8 cm across), the shape drawn by hand (illustrative). The sinuses are this CT's own (traced through its lumen), the edges 0 mm off their margins, drawn on the inner table and carried out through the bone. The keypoint is where the two margins meet (Jian 2021, 2022, 2024); the burr hole 3.5 mm behind and below it (Jian 2021). About 674 mm² seen face on; its edge smoothed over 1 mm (illustrative). Keypoint: (55, -57, -25) mm; burr hole: (53, -59, -26) mm.",
+  "removedMl": 4.2,
   "bones": [
    "sb_appr_retrosigmoid__occipital_bone",
    "sb_appr_retrosigmoid__temporal_bone"
@@ -92,8 +92,8 @@
   "removed": "sb_appr_retrosigmoid__removed",
   "burrHoles": [
    [
-    51.0,
-    -61.8,
+    52.6,
+    -58.7,
     -26.3
    ]
   ]

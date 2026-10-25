@@ -71,8 +71,10 @@ FLAKE_MM2 = 30.0        # with a smoothed edge, loose pieces of bone smaller tha
 IH_FRONT_MM = 40.0      # the interhemispheric craniotomy: from this far in front of bregma ...
 IH_BACK_MM = 20.0       # ... to this far behind it (illustrative; "precoronal parasagittal", Nair 2016) ...
 IH_WIDTH_MM = 40.0      # ... and this wide, from the midline to the right (illustrative)
-RS_FLAP_MM = (25.0, 20.0)   # the retrosigmoid keyhole flap: back along the transverse sinus, and down along the sigmoid
-                            # (Jian 2021: an oval 18-20 x 20-25 mm)
+RS_FLAP_MM = (28.0, 35.0)   # the retrosigmoid flap's edges: back along the transverse sinus, down along the sigmoid (larger
+                            # than Jian 2021's keyhole of 18-20 x 20-25 mm; Tang 2025: craniotomies a mean 3.8 cm across)
+RS_CORNER_CUTS = 3          # its corners rounded by this many rounds of corner cutting (Chaikin)
+RS_SINUS_GAP_MM = 0.0       # ... this far off the sinuses' margins (Jian 2021: the window's margins against them)
 RS_DRILL_BEHIND_MM = 3.5    # its burr hole this far behind and below the keypoint (Jian 2021: the keypoint 3-4 mm
                             # anterosuperior to the drilling point)
 RS_SOFT_MM = 1.0            # its edge smoothed as the LSO's
@@ -509,38 +511,65 @@ def lateral_supraorbital(S: Skull) -> dict:
 
 
 def retrosigmoid(S: Skull) -> dict:
-    """A right retrosigmoid keyhole craniotomy. The keypoint is the junction of the transverse sinus' lower margin and the
-    sigmoid sinus' posterior margin (Jian 2021, 2022, 2024), here on this CT's own sinuses (traced through its lumen,
-    skullbase_v3.py: sinuses.json): on the inner table at the angle between them, carried out through the bone. The flap
-    is an oval of RS_FLAP_MM whose upper and front edges run along the two sinuses from there, back and down; the burr hole
-    RS_DRILL_BEHIND_MM behind and below the keypoint."""
+    """A right retrosigmoid craniotomy, its upper edge along the transverse sinus' lower margin and its front edge along the
+    sigmoid sinus' posterior margin (Jian 2021: the window's upper and front margins against them), here this CT's own
+    sinuses (traced through its lumen, skullbase_v3.py: sinuses.json), RS_SINUS_GAP_MM off their margins. The keypoint is
+    where the two margins meet (Jian 2021, 2022, 2024). The edges run RS_FLAP_MM along the sinuses (back along the
+    transverse, down along the sigmoid); straight edges behind and below close the flap and its corners are rounded (a
+    shape drawn by hand, larger than a keyhole to show the anatomy). Everything is drawn on the inner table and carried
+    out through the bone. The burr hole RS_DRILL_BEHIND_MM behind and below the keypoint."""
     sin = json.loads((BUILD / "sinuses.json").read_text())
-    sig = np.array(sin["sigmoid"]["R"]["path"])           # from the jugular bulb up to the junction
+    sig = np.array(sin["sigmoid"]["R"]["path"])[::-1]     # from the junction down to the jugular bulb
     trn = np.array(sin["transverse"]["R"]["path"])        # from the junction back to the torcular
-    r_s, r_t = np.array(sin["sigmoid"]["R"]["radius"]), np.array(sin["transverse"]["R"]["radius"])
+    r_s = np.array(sin["sigmoid"]["R"]["radius"])[::-1]
+    r_t = np.array(sin["transverse"]["R"]["radius"])
     J = trn[0]
-    down = unit(sig[max(0, len(sig) - 12)] - J)           # along the sigmoid sinus, down from the junction
-    back = unit(trn[min(len(trn) - 1, 12)] - J)           # along the transverse sinus, back from the junction
     n = S.outward(J)
-    e_back = unit(back - (back @ n) * n)                  # both in the plane of the skull's surface there
-    e_down = unit(down - (down @ n) * n - (down @ e_back) * e_back)
-    # the keypoint: the inner table at the angle below the transverse and behind the sigmoid sinus, out through the bone
-    inner = J + (np.median(r_s[-12:]) + 1.0) * e_back + (np.median(r_t[:12]) + 1.0) * e_down
-    key = S.surface(inner, n)
-    drill = S.surface(key + RS_DRILL_BEHIND_MM / np.sqrt(2) * (e_back + e_down), n)
-    a, b = RS_FLAP_MM[0] / 2, RS_FLAP_MM[1] / 2
-    c = key + a * e_back + b * e_down                       # the oval's corner at the keypoint
-    th = np.linspace(0, 2 * np.pi, 24, endpoint=False)
-    outline = np.array([S.surface(c + a * np.cos(t) * e_back + b * np.sin(t) * e_down, n) for t in th])
+    flat = lambda v: v - (v @ n) * n                      # noqa: E731  in the plane of the skull's surface there
+    e_back = unit(flat(trn[min(len(trn) - 1, 12)] - J))
+    e_down = unit(flat(sig[min(len(sig) - 1, 12)] - J) - (flat(sig[min(len(sig) - 1, 12)] - J) @ e_back) * e_back)
+
+    def margin(path, rad, length, towards):
+        """The sinus' margin on the flap's side: its centre line (to `length` mm along it) moved by its radius plus the
+        gap, square to it in the surface's plane, towards the flap."""
+        arc = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(path, axis=0), axis=1))]
+        keep = arc <= length
+        P, R = path[keep], rad[keep]
+        T = np.gradient(P, axis=0)
+        out = []
+        for p_, t_, r_ in zip(P, T, R):
+            side = flat(towards) - (flat(towards) @ unit(flat(t_))) * unit(flat(t_))
+            out.append(p_ + (r_ + RS_SINUS_GAP_MM) * unit(side))
+        return np.array(out)
+    upper = margin(trn, r_t, RS_FLAP_MM[0], e_down)       # under the transverse sinus, from the junction back
+    front = margin(sig, r_s, RS_FLAP_MM[1], e_back)       # behind the sigmoid sinus, from the junction down
+    # the keypoint: where the two margins meet (their nearest points near the junction)
+    i, j = np.unravel_index(np.argmin(np.linalg.norm(upper[:8, None] - front[None, :8], axis=2)), (min(8, len(upper)), min(8, len(front))))
+    inner_key = (upper[i] + front[j]) / 2
+    upper, front = np.vstack([inner_key, upper[i + 1:]]), np.vstack([inner_key, front[j + 1:]])
+    # closed behind and below by straight edges (a back edge as long as the front one, parallel to it), the corners then
+    # rounded by corner cutting: the long straight edges' corners round most, the edges along the sinuses keep their course
+    K, U, F = inner_key, upper[-1], front[-1]
+    B = U + (F - K)
+    inner = np.vstack([upper, B[None], front[::-1][:-1]])
+    for _ in range(RS_CORNER_CUTS):
+        nxt = np.roll(inner, -1, axis=0)
+        inner = np.vstack([np.c_[0.75 * inner + 0.25 * nxt, 0.25 * inner + 0.75 * nxt].reshape(-1, 3)])
+    outline = np.array([S.surface(p_, n) for p_ in inner])
+    key = S.surface(inner_key, n)
+    drill = S.surface(inner_key + RS_DRILL_BEHIND_MM / np.sqrt(2) * (e_back + e_down), n)
     m = S.flap(outline, n, floor=False, smooth=True)
     area = outline_area(outline, n)
-    how = (f"A right retrosigmoid keyhole craniotomy: an oval {RS_FLAP_MM[0]:.0f} x {RS_FLAP_MM[1]:.0f} mm (Jian 2021: 18-20 x 20-25 mm), "
-           "its upper and front edges along the transverse and sigmoid sinuses from the keypoint, where the transverse sinus' lower "
-           "margin meets the sigmoid sinus' posterior margin (Jian 2021, 2022, 2024), here found on this CT's own sinuses (traced "
-           f"through its lumen) and carried out through the bone; the burr hole {RS_DRILL_BEHIND_MM} mm behind and below it (Jian 2021). "
-           f"About {area:.0f} mm² seen face on; its edge smoothed over {RS_SOFT_MM:.0f} mm (illustrative). "
-           f"Keypoint: {fmt(key)}; burr hole: {fmt(drill)}.")
-    return {"id": "retrosigmoid", "name": "Retrosigmoid keyhole craniotomy", "cut": m, "how": how, "burrHoles": [drill.round(1).tolist()],
+    how = (f"A right retrosigmoid craniotomy: its upper edge along the transverse sinus' lower margin for {RS_FLAP_MM[0]:.0f} mm and its "
+           f"front edge along the sigmoid sinus' posterior margin for {RS_FLAP_MM[1]:.0f} mm (Jian 2021: the window's upper and front margins "
+           "against the two sinuses), closed behind and below by straight edges, its corners rounded; larger than Jian 2021's keyhole "
+           "(18-20 x 20-25 mm), about the size of the craniotomies in Tang 2025 (a mean 3.8 cm across), the shape drawn by hand "
+           "(illustrative). The sinuses are this CT's own "
+           f"(traced through its lumen), the edges {RS_SINUS_GAP_MM:.0f} mm off their margins, drawn on the inner table and carried out "
+           "through the bone. The keypoint is where the two margins meet (Jian 2021, 2022, 2024); the burr hole "
+           f"{RS_DRILL_BEHIND_MM} mm behind and below it (Jian 2021). About {area:.0f} mm² seen face on; its edge smoothed over "
+           f"{RS_SOFT_MM:.0f} mm (illustrative). Keypoint: {fmt(key)}; burr hole: {fmt(drill)}.")
+    return {"id": "retrosigmoid", "name": "Retrosigmoid craniotomy", "cut": m, "how": how, "burrHoles": [drill.round(1).tolist()],
             "keypoint": key.round(1).tolist(), "outline": outline.round(1).tolist(), "areaMm2": round(area), "softMm": RS_SOFT_MM}
 
 

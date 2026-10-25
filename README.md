@@ -176,10 +176,12 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   rest of the cerebellum following less with distance (each shift under 1 mm per mm together, so nothing folds),
   opening the cerebellomedullary fissure onto the fourth ventricle; sources: Pettersson 2023, Wang 2023, Liu 2014,
   Longatti 2026, Cho 2024, Pantu 2026, Cavalheiro 2015.
-  The retrosigmoid view cuts a right keyhole (an oval 25 x 20 mm; Jian 2021: 18-20 x 20-25 mm) whose corner is the
-  keypoint: where the transverse sinus' lower margin meets the sigmoid sinus' posterior margin (Jian 2021, 2022, 2024),
-  found on this patient's own sinuses (traced through the CT's lumen; `skullbase_v3.py` writes them to `sinuses.json`)
-  and carried out through the bone. Its slider draws the right cerebellar hemisphere up to 12 mm away from the corridor
+  The retrosigmoid view cuts a right craniotomy whose upper edge runs 28 mm along the transverse sinus' lower margin and
+  whose front edge runs 35 mm along the sigmoid sinus' posterior margin (Jian 2021: the window's margins against them),
+  straight edges behind and below closing it, its corners rounded: drawn by hand, larger than Jian's keyhole (18-20 x
+  20-25 mm) to show the anatomy, about the size of Tang 2025's craniotomies (a mean 3.8 cm); the sinuses are this patient's own (traced through the CT's lumen;
+  `skullbase_v3.py` writes them to `sinuses.json`), and the keypoint is where the two margins meet (Jian 2021, 2022,
+  2024). Its slider draws the right cerebellar hemisphere up to 12 mm away from the corridor
   from the internal acoustic meatus out through the opening along the back of the petrous bone (illustrative; 12/40 mm
   per mm, so nothing folds), clearing it. The anterior inferior cerebellar artery, which this angiogram does not label,
   is the Z-Anatomy model's, carried by the skull's fit (`skullbase_v3_skull.py`) and its origin moved onto this

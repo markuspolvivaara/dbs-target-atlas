@@ -3477,7 +3477,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_cerebellar_hemisphere.glb",
-   "bytes": 1077216,
+   "bytes": 1069824,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -3519,7 +3519,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_tonsil.glb",
-   "bytes": 93764,
+   "bytes": 93620,
    "colour": {
     "token": "sbTonsil",
     "light": "#7D6DFF",
@@ -4333,12 +4333,12 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_retrosigmoid__occipital_bone.glb",
-   "bytes": 738244,
+   "bytes": 736568,
    "refIds": [],
    "category": "bone",
    "approach": "retrosigmoid",
    "replaces": "sb_occipital_bone",
-   "derivation": "The CT's occipital bone with the bone of the retrosigmoid keyhole craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "derivation": "The CT's occipital bone with the bone of the retrosigmoid craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
      -23.68,
@@ -4346,9 +4346,9 @@
      -20.64
     ],
     "R": [
-     22.96,
-     -58.97,
-     -21.51
+     22.64,
+     -58.28,
+     -21.66
     ]
    }
   },
@@ -4378,12 +4378,12 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_retrosigmoid__temporal_bone.glb",
-   "bytes": 1019572,
+   "bytes": 1034092,
    "refIds": [],
    "category": "bone",
    "approach": "retrosigmoid",
    "replaces": "sb_temporal_bone",
-   "derivation": "The CT's temporal bone with the bone of the retrosigmoid keyhole craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "derivation": "The CT's temporal bone with the bone of the retrosigmoid craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
      -49.06,
@@ -4391,9 +4391,9 @@
      -12.6
     ],
     "R": [
-     47.35,
-     -22.4,
-     -16.16
+     47.44,
+     -22.95,
+     -16.44
     ]
    }
   },
@@ -4403,7 +4403,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_retrosigmoid__removed.glb",
-   "bytes": 92624,
+   "bytes": 159856,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -4418,17 +4418,17 @@
    "category": "removed",
    "approach": "retrosigmoid",
    "layer": "nuclei",
-   "derivation": "The bone the retrosigmoid keyhole craniotomy removes: 2.4 ml. A right retrosigmoid keyhole craniotomy: an oval 25 x 20 mm (Jian 2021: 18-20 x 20-25 mm), its upper and front edges along the transverse and sigmoid sinuses from the keypoint, where the transverse sinus' lower margin meets the sigmoid sinus' posterior margin (Jian 2021, 2022, 2024), here found on this CT's own sinuses (traced through its lumen) and carried out through the bone; the burr hole 3.5 mm behind and below it (Jian 2021). About 388 mm² seen face on; its edge smoothed over 1 mm (illustrative). Keypoint: (53, -59, -25) mm; burr hole: (51, -62, -26) mm.",
+   "derivation": "The bone the retrosigmoid craniotomy removes: 4.2 ml. A right retrosigmoid craniotomy: its upper edge along the transverse sinus' lower margin for 28 mm and its front edge along the sigmoid sinus' posterior margin for 35 mm (Jian 2021: the window's upper and front margins against the two sinuses), closed behind and below by straight edges, its corners rounded; larger than Jian 2021's keyhole (18-20 x 20-25 mm), about the size of the craniotomies in Tang 2025 (a mean 3.8 cm across), the shape drawn by hand (illustrative). The sinuses are this CT's own (traced through its lumen), the edges 0 mm off their margins, drawn on the inner table and carried out through the bone. The keypoint is where the two margins meet (Jian 2021, 2022, 2024); the burr hole 3.5 mm behind and below it (Jian 2021). About 674 mm² seen face on; its edge smoothed over 1 mm (illustrative). Keypoint: (55, -57, -25) mm; burr hole: (53, -59, -26) mm.",
    "centroid": {
     "L": [
-     40.74,
-     -69.94,
-     -27.38
+     43.19,
+     -57.23,
+     -30.21
     ],
     "R": [
-     40.74,
-     -69.94,
-     -27.38
+     43.19,
+     -57.23,
+     -30.21
     ]
    }
   }

@@ -451,11 +451,11 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(pr.params.tvMm / pr.params.tvReachMm + pr.params.tvVermisMm / pr.params.tvVermisReachMm).toBeLessThan(1);
     expect(T3.decodeSkull('#/atlas?g=telovelar&tv=60&op=30').morphs).toEqual({ telovelar: 0.6 });
   });
-  it('the retrosigmoid view: a keyhole on this patient\'s own sinuses, the right hemisphere drawn back from the petrous bone', async () => {
+  it('the retrosigmoid view: a craniotomy against this patient\'s own sinuses, the right hemisphere drawn back from the petrous bone', async () => {
     const rs = geom.retrosigmoid;
     expect(rs.side).toBe('R');
     expect(rs.removedMl).toBeGreaterThan(1);
-    expect(rs.removedMl).toBeLessThan(10);                     // a keyhole (Jian 2021: about 2 x 2.5 cm)
+    expect(rs.removedMl).toBeLessThan(10);                     // a few centimetres across (Tang 2025: a mean 3.8 cm)
     expect(rs.bones.map((id) => byId.get(id)!.name)).toEqual(expect.arrayContaining(['Occipital bone']));
     for (const p of rs.burrHoles) { expect(p[0]).toBeGreaterThan(30); expect(p[1]).toBeLessThan(-20); }   // behind the right ear
     const p = S3.skullPlan('retrosigmoid', null);
