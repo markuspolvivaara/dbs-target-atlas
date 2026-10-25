@@ -45,6 +45,8 @@ export interface ApproachContent {
   focus: string[];
   /** the frame's least radius, mm (default 60): smaller comes closer */
   radius?: number;
+  /** false: frame on the focus alone, not the bone removed too (a corridor that looks past the opening's middle) */
+  frameOpening?: boolean;
   /** the shapes of the brain the view offers (named morph targets: open, lift, lsoLift, interhemispheric, telovelar), a slider each */
   morphs: string[];
 }
@@ -98,6 +100,32 @@ export const APPROACH_REFS: ApproachRef[] = [
     citation: 'Pantu C, Breazu A, Oprea S, Rădoi MP, Munteanu O, Dobrin N, et al. Telovelar approach for fourth-ventricular epidermoid cyst: anatomical respect, functional recovery, and long-term stability. Diagnostics (Basel). 2026;16(1):129. doi:10.3390/diagnostics16010129.' },
   { id: 'cavalheiro2015', pmid: '26351233', pmcid: 'PMC4564452', shortLabel: 'Cavalheiro 2015', url: doi('10.1007/s00381-015-2799-y'),
     citation: 'Cavalheiro S, Yagmurlu K, da Costa MDS, Nicácio JM, Rodrigues TP, Chaddad-Neto F, et al. Surgical approaches for brainstem tumors in pediatric patients. Childs Nerv Syst. 2015;31(10):1815–1840. doi:10.1007/s00381-015-2799-y.' },
+  { id: 'jian2021', pmid: '34692760', pmcid: 'PMC8531805', shortLabel: 'Jian 2021', url: doi('10.3389/fsurg.2021.700777'),
+    citation: 'Jian ZH, Sheng MF, Li JY, An DZ, Weng ZJ, Chen G. Developing a method to precisely locate the keypoint during craniotomy using the retrosigmoid keyhole approach: surgical anatomy and technical nuances. Front Surg. 2021;8:700777. doi:10.3389/fsurg.2021.700777.' },
+  { id: 'jian2022', pmid: '35495767', pmcid: 'PMC9046933', shortLabel: 'Jian 2022', url: doi('10.3389/fsurg.2022.809098'),
+    citation: 'Jian ZH, Sheng MF, Li JY, Li Y, Weng ZJ, Chen G. Precise localization in craniotomy with a retrosigmoid keyhole approach: microsurgical anatomy and clinical study. Front Surg. 2022;9:809098. doi:10.3389/fsurg.2022.809098.' },
+  { id: 'jian2024', pmid: '39008189', pmcid: 'PMC11249418', shortLabel: 'Jian 2024', url: doi('10.1007/s10143-024-02583-x'),
+    citation: 'Jian ZH, Sheng MF, Liao CC, Weng ZJ, Li JY, Yi XF, et al. A novel theory for rapid localization of the transverse-sigmoid sinus junction and “keyhole” in the retrosigmoid keyhole approach: micro-anatomical study and clinical application. Neurosurg Rev. 2024;47(1):331. doi:10.1007/s10143-024-02583-x.' },
+  { id: 'hu2023', pmid: '36908299', pmcid: 'PMC9995208', shortLabel: 'Hu 2023', url: doi('10.1155/2023/5407912'),
+    citation: 'Hu W, Zhou J, Liu ZM, Li Y, Cai QF, Hu XM, et al. Computed tomography study of the retrosigmoid craniotomy keyhole approach using surface landmarks. Int J Clin Pract. 2023;2023:5407912. doi:10.1155/2023/5407912.' },
+  { id: 'choquevelasquez2018rs', pmid: '30186664', pmcid: 'PMC6108164', shortLabel: 'Choque-Velasquez 2018b', url: doi('10.4103/sni.sni_186_18'),
+    citation: 'Choque-Velasquez J, Hernesniemi J. One burr-hole craniotomy: upper retrosigmoid approach in Helsinki Neurosurgery. Surg Neurol Int. 2018;9:163. doi:10.4103/sni.sni_186_18.' },
+  { id: 'hamelinck2024', pmid: '39193063', pmcid: 'PMC11349056', shortLabel: 'Hamelinck 2024', url: doi('10.7759/cureus.67841'),
+    citation: 'Hamelinck Z, Thijs D, Feyen B, Vanloon M, Van Rompaey V, Menovsky T. A novel way for efficient and safe posterior fossa relaxation: the extradural opening of the cisterna magna in retrosigmoid craniotomy. Cureus. 2024;16(8):e67841. doi:10.7759/cureus.67841.' },
+  { id: 'meybodi2023', pmid: '36895247', pmcid: 'PMC9990784', shortLabel: 'Meybodi 2023', url: doi('10.25259/SNI_1097_2022'),
+    citation: 'Meybodi AT, Liang AS, Mokhtari P, Moreira LB, Zhao X, Lawton MT, et al. Nervus intermedius: microsurgical and anatomic relationships to the cerebellopontine angle neurovascular complex. Surg Neurol Int. 2023;14:37. doi:10.25259/SNI_1097_2022.' },
+  { id: 'jeican2026', pmid: '42356086', pmcid: 'PMC13302864', shortLabel: 'Jeican 2026', url: doi('10.3390/medicina62061073'),
+    citation: 'Jeican II, Siserman CV, Toader C, Trombitaș VE. Microsurgical anatomy of the labyrinthine artery: a cadaveric microdissection study of number, origin and course at the cerebellopontine angle. Medicina (Kaunas). 2026;62(6):1073. doi:10.3390/medicina62061073.' },
+  { id: 'basamh2020', pmid: '31768757', pmcid: 'PMC6942005', shortLabel: 'Basamh 2020', url: doi('10.1007/s00701-019-04109-7'),
+    citation: 'Basamh M, Sinning N, Kehler U. Individual variations of the superior petrosal vein complex and their microsurgical relevance in 50 cases of trigeminal microvascular decompression. Acta Neurochir (Wien). 2020;162(1):197–209. doi:10.1007/s00701-019-04109-7.' },
+  { id: 'watanabe2013', pmid: '23990034', pmcid: 'PMC3779012', shortLabel: 'Watanabe 2013', url: doi('10.1007/s00701-013-1840-8'),
+    citation: 'Watanabe T, Igarashi T, Fukushima T, Yoshino A, Katayama Y. Anatomical variation of superior petrosal vein and its management during surgery for cerebellopontine angle meningiomas. Acta Neurochir (Wien). 2013;155(10):1871–1878. doi:10.1007/s00701-013-1840-8.' },
+  { id: 'przepiorka2023', pmid: '37508971', pmcid: 'PMC10377583', shortLabel: 'Przepiorka 2023', url: doi('10.3390/brainsci13071039'),
+    citation: 'Przepiorka L, Wójtowicz K, Camlet K, Jankowski J, Kujawski S, Grabowska-Derlatka L, et al. Postoperative cerebral venous sinus thrombosis following a retrosigmoid craniotomy—a clinical and radiological analysis. Brain Sci. 2023;13(7):1039. doi:10.3390/brainsci13071039.' },
+  { id: 'tang2025', pmid: '40527834', pmcid: 'PMC12173248', shortLabel: 'Tang 2025', url: doi('10.1097/MD.0000000000042838'),
+    citation: 'Tang M, Richard SA, Lan Z. Cerebrospinal fluid leakage after retrosigmoid craniotomy and craniectomy for cerebellopontine angle tumors: a comparative retrospective study. Medicine (Baltimore). 2025;104(24):e42838. doi:10.1097/MD.0000000000042838.' },
+  { id: 'aftahy2024', pmid: '39229481', pmcid: 'PMC11369374', shortLabel: 'Aftahy 2024', url: doi('10.1016/j.bas.2024.102909'),
+    citation: 'Aftahy AK, Goldberg M, Butenschoen VM, Wagner A, Meyer B, Negwer C. Functional outcomes after retrosigmoid approach to the cerebellopontine angle: observations from a single-center experience of over 13 years. Brain Spine. 2024;4:102909. doi:10.1016/j.bas.2024.102909.' },
 ];
 export const APPROACH_REF = new Map(APPROACH_REFS.map((r) => [r.id, r]));
 
@@ -238,6 +266,39 @@ export const APPROACHES: ApproachContent[] = [
     notShown: 'The skin, muscles, dura and arachnoid; the tela choroidea, inferior medullary velum and choroid plexus (thin sheets the model lacks: the fourth ventricle’s lower roof is open in it); the occipital sinus and the veins of the fissure. The cerebellum, brainstem and fourth ventricle are one adult’s anatomical model (Z-Anatomy) fitted into this skull and around its arteries, not this patient’s own; the tonsils’ retraction and the vermis’s lift are a shape, not a simulation of the tissue.',
     focus: ['Fourth ventricle', 'Tonsil of cerebellum'],
     morphs: ['telovelar'],
+  },
+  {
+    id: 'retrosigmoid', view: 'retrosigmoid', name: 'Retrosigmoid approach', camera: 'retrosigmoid', hemi: 'R', brain: 'hindbrain',
+    summary: 'A right retrosigmoid keyhole craniotomy cut out of this CT’s bone, placed on this patient’s own transverse and sigmoid sinuses, with the cerebellum, brainstem and fourth ventricle of an anatomical model fitted into the posterior fossa. The slider draws the right cerebellar hemisphere back from the petrous bone, opening the cerebellopontine angle onto the trigeminal nerve, the facial and vestibulocochlear nerves at the internal acoustic meatus, the lower cranial nerves and the arteries among them.',
+    sections: [sec('The craniotomy', [
+      c('The keypoint is the point on the outer surface over the junction of the transverse sinus’ lower margin with the sigmoid sinus’ posterior margin. A straight vertical incision about 4 cm long runs 1.5 cm behind the posterior margin of the mastoid process; the burr hole (about 6 mm) is centred 12 mm above the top of the digastric groove, on a line perpendicular to the baseline, and the keypoint lies 3–4 mm anterosuperior to it. The oval bone flap measured 18–20 × 20–25 mm.', 'jian2021'),
+      c('In a refinement applied in 53 patients, the burr hole was centred 14.0 mm above and 6.5 mm behind the top of the digastric groove, in a coordinate system on the line from the infraorbital margin to the upper margin of the external acoustic meatus.', 'jian2024'),
+      c('In 26 patients whose transverse and sigmoid sinuses were well exposed, the burr hole’s centre lay 3 mm from their junction; on dry skulls the keypoint lay 19.0 ± 2.6 mm (left) and 22.6 ± 4.2 mm (right) from the asterion.', 'jian2022'),
+      c('On 3D CT of 149 hemiskulls the asterion lay a mean 6.74 mm (0.5–15.3 mm) from the extended posterior margin of the mastoid process, on its ventral side in 66 % and its dorsal side in 34 %; 93 % of the keypoints fell within a 7 mm circle of a coordinate system built from surface landmarks.', 'hu2023'),
+      c('In Helsinki’s one burr-hole upper retrosigmoid craniotomy (park-bench position), the burr hole is made at the flap’s posterior border and two curved cuts run towards the mastoid process, partly exposing the sigmoid sinus; the dura is opened based on the sinus. (Checked against the abstract: a video article.)', 'choquevelasquez2018rs'),
+    ]), sec('Relaxing the cerebellum', [
+      c('In the Helsinki technique a spinal drain releases 50–100 ml of cerebrospinal fluid, and the head is raised about 20 cm above the heart. (Abstract.)', 'choquevelasquez2018rs'),
+      c('Alternatively, the cisterna magna is opened from outside the dura through a small horizontal slit at its level, letting cerebrospinal fluid out before the dura over the hemisphere is opened; the slit is sealed with a fibrinogen–thrombin sponge at the end. Rapid decompression should be avoided.', 'hamelinck2024'),
+    ]), sec('The cerebellopontine angle', [
+      c('In 17 cadaveric heads the anterior inferior cerebellar artery approached the facial–vestibulocochlear bundle from below in 29 of 34 angles (85 %), its meatal loop passing through the bundle in 22 (65 %); the loop lay medial to the internal acoustic meatus in 53 % and lateral to it in 47 %. The nervus intermedius rootlets arose most often from the proximal premeatal segment of VIII (57 %) and joined VII near the fundus of the meatus (63 %).', 'meybodi2023'),
+      c('The labyrinthine artery was found in all 90 angles examined, single in 57.8 %; it arose from the anterior inferior cerebellar artery in 65.6 %, directly from the basilar artery in 13.3 % and from a trunk shared with the anterior inferior cerebellar artery in 21.1 %.', 'jeican2026'),
+    ]), sec('The superior petrosal vein', [
+      c('In 50 trigeminal microvascular decompressions there was one superior petrosal vein in 64 %, two in 32 % and three in 4 %, with 29 different configurations of the complex; the vein of the cerebellopontine fissure was present in 86 %.', 'basamh2020'),
+      c('In 37 cerebellopontine angle meningiomas with an identified petrosal vein, one vein was found in 84 %. It entered the superior petrosal sinus lateral to the facial nerve’s entry into the internal acoustic meatus (type I) in 8 %, between the trigeminal and facial nerves (type II) in 41 %, and medial to the trigeminal nerve’s entry into Meckel’s cave (type III) in 51 %.', 'watanabe2013'),
+    ]), sec('Care points', [
+      c('Of 345 patients, cerebrospinal fluid leaked in 3 of 83 (3.6 %) after a craniotomy and in 38 of 262 (14.5 %) after a craniectomy (mean openings 3.8 and 4.2 cm).', 'tang2025'),
+      c('After 130 retrosigmoid craniotomies, imaging showed venous sinus thrombosis on the operated side in 46.9 %, mostly in the transverse sinus, and more often when that side’s sinus was the dominant one; it was diagnosed clinically in 3.1 %.', 'przepiorka2023'),
+      c('In 540 retrosigmoid procedures (517 patients, 2007–2020) the overall complication rate was 21.1 %: cerebrospinal fluid leaks or fistulas in 7.5 %, meningitis in 5.0 % and wound infections in 4.6 %.', 'aftahy2024'),
+    ])],
+    context: ['Trigeminal nerve (V)', 'Abducens nerve (VI)', 'Facial nerve (VII)', 'Vestibulocochlear nerve (VIII)', 'Nerves in the internal acoustic meatus (VII, VIII)',
+      'Glossopharyngeal nerve (IX)', 'Vagus nerve (X)', 'Accessory nerve (XI)', 'Anterior inferior cerebellar artery', 'Superior cerebellar artery',
+      'Posterior inferior cerebellar artery', 'Basilar artery', 'Vertebral artery', 'Sigmoid sinus', 'Transverse sinus'],
+    notShown: 'The skin, muscles, dura and arachnoid; the superior petrosal vein and its tributaries and the labyrinthine artery (this angiogram labels neither); the nervus intermedius. The anterior inferior cerebellar artery is the fitted model’s (this angiogram does not label it), its origin moved onto this patient’s basilar artery: its course is approximate. The cerebellum, brainstem and fourth ventricle are one adult’s anatomical model (Z-Anatomy) fitted into this skull, not this patient’s own, and drawing the hemisphere back is a shape, not a simulation of the tissue.',
+    // framed on the meatus, seen along the corridor (the camera preset): the opening around the line of sight
+    focus: ['Nerves in the internal acoustic meatus (VII, VIII)'],
+    frameOpening: false,
+    radius: 45,
+    morphs: ['retrosigmoid'],
   },
 ];
 export const APPROACH = new Map(APPROACHES.map((a) => [a.id, a]));

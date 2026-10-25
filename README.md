@@ -135,7 +135,7 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   start on this patient's own parent vessel; the ethmoidal arteries and the accessory meningeal branch are routed from
   it through the CT's openings; all marked approximate.
 - **The surgical views** (Surgical views: "Pterional transsylvian approach", "Lateral supraorbital approach",
-  "Interhemispheric transcallosal approach", "Telovelar approach"). The
+  "Interhemispheric transcallosal approach", "Telovelar approach", "Retrosigmoid approach"). The
   lateral supraorbital (LSO) craniotomy is a frontolateral flap over the orbital roof with one burr hole posteriorly below
   the temporal line, cut down to the anterior fossa floor and kept to the frontal bone (Cha 2012, Choque-Velasquez 2018),
   its outline placed by hand and drawn wider than the mean LSO (about 1450 against 1275 mm², Cha 2012) to show the
@@ -176,6 +176,15 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   rest of the cerebellum following less with distance (each shift under 1 mm per mm together, so nothing folds),
   opening the cerebellomedullary fissure onto the fourth ventricle; sources: Pettersson 2023, Wang 2023, Liu 2014,
   Longatti 2026, Cho 2024, Pantu 2026, Cavalheiro 2015.
+  The retrosigmoid view cuts a right keyhole (an oval 25 x 20 mm; Jian 2021: 18-20 x 20-25 mm) whose corner is the
+  keypoint: where the transverse sinus' lower margin meets the sigmoid sinus' posterior margin (Jian 2021, 2022, 2024),
+  found on this patient's own sinuses (traced through the CT's lumen; `skullbase_v3.py` writes them to `sinuses.json`)
+  and carried out through the bone. Its slider draws the right cerebellar hemisphere up to 12 mm away from the corridor
+  from the internal acoustic meatus out through the opening along the back of the petrous bone (illustrative; 12/40 mm
+  per mm, so nothing folds), clearing it. The anterior inferior cerebellar artery, which this angiogram does not label,
+  is the Z-Anatomy model's, carried by the skull's fit (`skullbase_v3_skull.py`) and its origin moved onto this
+  patient's basilar artery (approximate). Sources: Jian 2021, 2022, 2024, Hu 2023, Choque-Velasquez 2018 (abstract),
+  Hamelinck 2024, Meybodi 2023, Jeican 2026, Basamh 2020, Watanabe 2013, Tang 2025, Przepiorka 2023, Aftahy 2024.
   Pipeline: `pipeline/skullbase_v3_approach.py`, then `pipeline/skullbase_brain.py` (it reads the interhemispheric
   craniotomy's span) and `pipeline/skullbase_pfossa.py`, before `pipeline/skullbase_v3.py` (it takes their items);
   the fits are cached in `pipeline/data/build/skullbase-v3/`.

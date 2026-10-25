@@ -699,6 +699,16 @@ test('skull base (temporal bone): the surgical view opens the Sylvian fissure wi
   await settle(page);
   await expect.poll(() => new URL(page.url()).hash).toContain('tv=');
   expect(await morph('telovelar')).toBeGreaterThan(0);
+  // the retrosigmoid view: its own sourced card, the right hemisphere drawn back by key
+  await page.locator('.grp-chips[aria-label="Surgical views"] .chip[data-v="retrosigmoid"]').click();
+  await settle(page);
+  await expect(page.locator('.pane:not([hidden]) article.card').last()).toContainText('Jian 2021');
+  await expect(page.locator('.pane:not([hidden]) article.card').last()).toContainText('Meybodi 2023');
+  await expect(page.locator('#sb-m-retrosigmoid')).toHaveCount(1);
+  await page.keyboard.press('r');
+  await settle(page);
+  await expect.poll(() => new URL(page.url()).hash).toContain('rs=');
+  expect(await morph('retrosigmoid')).toBeGreaterThan(0);
   // a cut bone's card says what it is
   await page.goto('./skullbase/#/atlas?g=transsylvian&sel=sb_appr_pterional__removed');
   await settle(page);

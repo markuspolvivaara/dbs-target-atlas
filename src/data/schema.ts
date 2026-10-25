@@ -28,9 +28,10 @@ export type Evidence = z.infer<typeof EvidenceSchema>;
  * (the floor of the fourth ventricle, brainstem section); 'anterolateral' looks at the shown side from in front, the side
  * and a little above, along a pterional craniotomy; 'frontolateral' more from in front and above (a frontal
  * ventriculostomy); 'supraorbital' down a lateral supraorbital craniotomy's corridor over the orbital roof; 'vertex' from above and a little behind, down the interhemispheric fissure; 'suboccipital'
- * from behind and below, up into the cerebellomedullary fissure (skull-base section, surgical views).
+ * from behind and below, up into the cerebellomedullary fissure; 'retrosigmoid' from behind the sigmoid sinus along the
+ * petrous bone into the cerebellopontine angle (skull-base section, surgical views).
  */
-export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon', 'lateral', 'medial', 'inferior', 'posterior', 'anterolateral', 'frontolateral', 'supraorbital', 'vertex', 'suboccipital']);
+export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon', 'lateral', 'medial', 'inferior', 'posterior', 'anterolateral', 'frontolateral', 'supraorbital', 'vertex', 'suboccipital', 'retrosigmoid']);
 export type CameraPreset = z.infer<typeof CameraPresetSchema>;
 
 /** A rendered structure: nucleus, cortical area, tract or sweet-spot volume. */

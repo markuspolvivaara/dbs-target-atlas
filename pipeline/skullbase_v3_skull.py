@@ -35,8 +35,12 @@ How:
      a shelf over the frontal sinus: there, and within PATCH_REACH_MM of them, the fitted model stands in for the CT,
      blended in over PATCH_MM.
   5. That surface is split into bones by the nearest bone of the fitted model (as v2 splits the CT's).
+It also carries Z-Anatomy vessels v2 leaves out (FITTED_LINES: the anterior inferior cerebellar arteries, which TopBrain
+labels in other cases but not in this one) into the frame by the same fit: each point moved as the model's bone around it
+moved (a Gaussian-weighted mean of the bone's displacements within LINE_SIGMA_MM; these vessels run within a few
+centimetres of the petrous bone and the clivus).
 Writes pipeline/data/build/skullbase-v3/skull.json (bones {name: verts, tris, ao}, each bone's share beyond the scan,
-the fit report) and skull_bone.npz (the bone field and its affine, in v2's frame: skullbase_v3_approach.py cuts its
+the fitted lines {name: {runs}} as v2's export has them, the fit report) and skull_bone.npz (the bone field and its affine, in v2's frame: skullbase_v3_approach.py cuts its
 craniotomies out of it).
 """
 from __future__ import annotations
@@ -82,6 +86,8 @@ PAD_MM = 6.0                # the grid is extended this far beyond the fitted mo
 SHELL_MM = 1.0              # a bone mesh that is not closed is drawn as a shell this thick
 FACES = 720_000             # the whole skull's surface after decimation (v2: 640,000 for the cranial bones in the scan)
 SINUSES = ("Sinus of frontal bone", "Sinus of sphenoid bone")
+FITTED_LINES = ["Anterior inferior cerebellar artery.r", "Anterior inferior cerebellar artery.l"]
+LINE_SIGMA_MM = 8.0         # a line point moves as the model's bone within about twice this moved
 
 
 def frame_affine(a: np.ndarray, R: np.ndarray, fossa: np.ndarray) -> np.ndarray:
@@ -137,6 +143,23 @@ def fitted_model(ex: dict, p: np.ndarray, a: np.ndarray, R: np.ndarray, fossa: n
     names = list(out)
     np.savez(cache, names=json.dumps(names), report=json.dumps(rep), **{f"v_{i}": out[n] for i, n in enumerate(names)})
     return out, rep
+
+
+def carry_lines(ex: dict, model: dict) -> dict:
+    """FITTED_LINES carried by the fit (the model's bone vertices before and after it: their displacement, interpolated)."""
+    src = np.vstack([np.array(ex["bones"][n]["verts"], float) for n in model if n in ex["bones"]])
+    dst = np.vstack([model[n] for n in model if n in ex["bones"]])
+    sub = slice(None, None, max(1, len(src) // 60000))
+    src, disp = src[sub], (dst - np.vstack([np.array(ex["bones"][n]["verts"], float) for n in model if n in ex["bones"]]))[sub]
+    out = {}
+    for name in FITTED_LINES:
+        runs = []
+        for r in ex["lines"][name]["runs"]:
+            R = np.array(r, float)
+            num, wsum = K.gauss(R[:, :3], src, disp, LINE_SIGMA_MM)
+            runs.append(np.c_[R[:, :3] + num / np.maximum(wsum, 1e-9)[:, None], R[:, 3:]].round(3).tolist())
+        out[name] = {"kind": ex["lines"][name].get("kind"), "runs": runs, "fitted": True}
+    return out
 
 
 def is_face(name: str) -> bool:
@@ -258,6 +281,7 @@ def main() -> int:
     a_f = frame_affine(a, R, fossa)
     inv_f = np.linalg.inv(a_f)
     model, fit_rep = fitted_model(ex, p, a, R, fossa)
+    model0 = dict(model)                        # (the whole-skull fit, for the lines it carries)
     print("fit", fit_rep)
     names = [n for n in model if n not in SINUSES]
 
@@ -366,7 +390,7 @@ def main() -> int:
     print("bones", {n: (len(bones[n]["tris"]), share[n]) for n in bones})
     report = {"fit": fit_rep, "face": face_rep, "edge": edge_rep, "faceBones": list(FACE_BONES), "seamMm": SEAM_MM, "blendMm": BLEND_MM, "edgeFitMm": EDGE_FIT_MM, "edgeSigmasMm": list(EDGE_SIGMAS),
               "beyondScanShare": share, "faces": int(len(F))}
-    (BUILD / "skull.json").write_text(json.dumps({"bones": bones, "report": report}))
+    (BUILD / "skull.json").write_text(json.dumps({"bones": bones, "lines": carry_lines(ex, model0), "report": report}))
     np.savez_compressed(BUILD / "skull_bone.npz", b=field.astype(np.float16), a=a_x)
     return 0
 

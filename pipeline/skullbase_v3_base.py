@@ -413,6 +413,11 @@ ANCHORED = [  # name, parent (TopBrain), artery system
     ("Lateral pontine branches of basilar artery", "Basilar artery", "Basilar artery"),
     ("Anterior spinal artery", "Vertebral artery", "Vertebral artery"),
 ]
+# long branches whose distal course the fit places well (the anterior inferior cerebellar artery's loop at the internal
+# acoustic meatus, by the petrous bone): their origin moved onto this patient's parent vessel, the move fading out along
+# the first FADE_MM of their course (the fitted line from skullbase_v3_skull.py: v2 leaves it out)
+FADED = [("Anterior inferior cerebellar artery", "Basilar artery", "Basilar artery")]
+FADE_MM = 15.0
 ROUTED_ARTERIES = [  # name, parent (TopBrain, or None), artery system
     ("Anterior ethmoidal artery", "Ophthalmic artery", "Ethmoidal arteries"),
     ("Posterior ethmoidal artery", "Ophthalmic artery", "Ethmoidal arteries"),
@@ -453,6 +458,23 @@ def small_arteries(g: NV.Grid, ex: dict, ct_fossa, ct_R) -> dict:
                 moves.append(float(np.linalg.norm(shift)))
             out[(name, side)] = {"runs": runs, "system": system, "moved": round(float(np.median(moves)), 1), "parent": parent,
                                  "how": f"each branch moved, unchanged in shape, to start on this patient's {parent.lower()} (TopBrain's label)"}
+    for name, parent, system in FADED:
+        for side in ("R", "L"):
+            key = f"{name}.{side.lower()}"
+            if key not in ex["lines"]:
+                continue
+            R = np.vstack([np.array(r) for r in ex["lines"][key]["runs"] if len(r) > 1])
+            t = surf(parent, side)
+            if t.query(R[-1, :3])[0] < t.query(R[0, :3])[0]:
+                R = R[::-1]
+            shift = t.data[t.query(R[0, :3])[1]] - R[0, :3]
+            arc = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(R[:, :3], axis=0), axis=1))]
+            f = np.clip(1 - arc / FADE_MM, 0, 1)
+            f = f * f * (3 - 2 * f)                 # smooth
+            out[(name, side)] = {"runs": [(R[:, :3] + f[:, None] * shift, R[:, 3])], "system": system,
+                                 "moved": round(float(np.linalg.norm(shift)), 1), "parent": parent,
+                                 "how": f"its origin moved onto this patient's {parent.lower()} (TopBrain's label), the move fading out "
+                                        f"over its first {FADE_MM:.0f} mm, the rest where the fit puts it"}
     for name, parent, system in ROUTED_ARTERIES:
         for side in ("R", "L"):
             R = np.vstack([np.array(r) for r in ex["lines"][f"{name}.{side.lower()}"]["runs"] if len(r) > 1])

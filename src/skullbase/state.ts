@@ -18,9 +18,9 @@ export interface SkullState extends ViewState {
 }
 
 /** the surgical shapes and their URL parameters (op=0..100 and so on) */
-export const MORPH_PARAMS: Record<string, string> = { open: 'op', lift: 'lf', lsoLift: 'll', interhemispheric: 'ih', telovelar: 'tv' };
+export const MORPH_PARAMS: Record<string, string> = { open: 'op', lift: 'lf', lsoLift: 'll', interhemispheric: 'ih', telovelar: 'tv', retrosigmoid: 'rs' };
 
-export const SKULL_PRESETS: CameraPreset[] = ['axial', 'inferior', 'lateral', 'coronal', 'posteriorOblique', 'anterolateral', 'frontolateral', 'supraorbital', 'vertex', 'suboccipital'];
+export const SKULL_PRESETS: CameraPreset[] = ['axial', 'inferior', 'lateral', 'coronal', 'posteriorOblique', 'anterolateral', 'frontolateral', 'supraorbital', 'vertex', 'suboccipital', 'retrosigmoid'];
 
 export function defaultSkullState(): SkullState {
   const g = SB_GROUP.get(DEFAULT_GROUP)!;

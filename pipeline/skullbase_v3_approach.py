@@ -71,6 +71,11 @@ FLAKE_MM2 = 30.0        # with a smoothed edge, loose pieces of bone smaller tha
 IH_FRONT_MM = 40.0      # the interhemispheric craniotomy: from this far in front of bregma ...
 IH_BACK_MM = 20.0       # ... to this far behind it (illustrative; "precoronal parasagittal", Nair 2016) ...
 IH_WIDTH_MM = 40.0      # ... and this wide, from the midline to the right (illustrative)
+RS_FLAP_MM = (25.0, 20.0)   # the retrosigmoid keyhole flap: back along the transverse sinus, and down along the sigmoid
+                            # (Jian 2021: an oval 18-20 x 20-25 mm)
+RS_DRILL_BEHIND_MM = 3.5    # its burr hole this far behind and below the keypoint (Jian 2021: the keypoint 3-4 mm
+                            # anterosuperior to the drilling point)
+RS_SOFT_MM = 1.0            # its edge smoothed as the LSO's
 SO_BELOW_IOP_MM = 10.0  # the suboccipital craniotomy: its upper edge this far below the internal occipital protuberance
                         # (the confluence of the sinuses) ...
 SO_HALF_WIDTH_MM = 25.0  # ... this far to each side of the midline (illustrative) ...
@@ -503,6 +508,42 @@ def lateral_supraorbital(S: Skull) -> dict:
             "outline": outline.round(1).tolist(), "areaMm2": round(area), "softMm": LSO_SOFT_MM}
 
 
+def retrosigmoid(S: Skull) -> dict:
+    """A right retrosigmoid keyhole craniotomy. The keypoint is the junction of the transverse sinus' lower margin and the
+    sigmoid sinus' posterior margin (Jian 2021, 2022, 2024), here on this CT's own sinuses (traced through its lumen,
+    skullbase_v3.py: sinuses.json): on the inner table at the angle between them, carried out through the bone. The flap
+    is an oval of RS_FLAP_MM whose upper and front edges run along the two sinuses from there, back and down; the burr hole
+    RS_DRILL_BEHIND_MM behind and below the keypoint."""
+    sin = json.loads((BUILD / "sinuses.json").read_text())
+    sig = np.array(sin["sigmoid"]["R"]["path"])           # from the jugular bulb up to the junction
+    trn = np.array(sin["transverse"]["R"]["path"])        # from the junction back to the torcular
+    r_s, r_t = np.array(sin["sigmoid"]["R"]["radius"]), np.array(sin["transverse"]["R"]["radius"])
+    J = trn[0]
+    down = unit(sig[max(0, len(sig) - 12)] - J)           # along the sigmoid sinus, down from the junction
+    back = unit(trn[min(len(trn) - 1, 12)] - J)           # along the transverse sinus, back from the junction
+    n = S.outward(J)
+    e_back = unit(back - (back @ n) * n)                  # both in the plane of the skull's surface there
+    e_down = unit(down - (down @ n) * n - (down @ e_back) * e_back)
+    # the keypoint: the inner table at the angle below the transverse and behind the sigmoid sinus, out through the bone
+    inner = J + (np.median(r_s[-12:]) + 1.0) * e_back + (np.median(r_t[:12]) + 1.0) * e_down
+    key = S.surface(inner, n)
+    drill = S.surface(key + RS_DRILL_BEHIND_MM / np.sqrt(2) * (e_back + e_down), n)
+    a, b = RS_FLAP_MM[0] / 2, RS_FLAP_MM[1] / 2
+    c = key + a * e_back + b * e_down                       # the oval's corner at the keypoint
+    th = np.linspace(0, 2 * np.pi, 24, endpoint=False)
+    outline = np.array([S.surface(c + a * np.cos(t) * e_back + b * np.sin(t) * e_down, n) for t in th])
+    m = S.flap(outline, n, floor=False, smooth=True)
+    area = outline_area(outline, n)
+    how = (f"A right retrosigmoid keyhole craniotomy: an oval {RS_FLAP_MM[0]:.0f} x {RS_FLAP_MM[1]:.0f} mm (Jian 2021: 18-20 x 20-25 mm), "
+           "its upper and front edges along the transverse and sigmoid sinuses from the keypoint, where the transverse sinus' lower "
+           "margin meets the sigmoid sinus' posterior margin (Jian 2021, 2022, 2024), here found on this CT's own sinuses (traced "
+           f"through its lumen) and carried out through the bone; the burr hole {RS_DRILL_BEHIND_MM} mm behind and below it (Jian 2021). "
+           f"About {area:.0f} mm² seen face on; its edge smoothed over {RS_SOFT_MM:.0f} mm (illustrative). "
+           f"Keypoint: {fmt(key)}; burr hole: {fmt(drill)}.")
+    return {"id": "retrosigmoid", "name": "Retrosigmoid keyhole craniotomy", "cut": m, "how": how, "burrHoles": [drill.round(1).tolist()],
+            "keypoint": key.round(1).tolist(), "outline": outline.round(1).tolist(), "areaMm2": round(area), "softMm": RS_SOFT_MM}
+
+
 def bregma(S: Skull) -> np.ndarray:
     """Where the coronal suture meets the midline, on this skull: midway between the rearmost frontal-bone point and the
     foremost parietal-bone point near the midline at the vertex (the two bones' labels overlap there by about a
@@ -589,7 +630,7 @@ def preview(path: str) -> int:
     """The cuts only (no meshing): each approach's removed voxels in the frame, for checking (npz)."""
     S = Skull()
     arrs = {}
-    for ap in (pterional(S), lateral_supraorbital(S), interhemispheric(S), suboccipital(S)):
+    for ap in (pterional(S), lateral_supraorbital(S), interhemispheric(S), suboccipital(S), retrosigmoid(S)):
         pts = nib.affines.apply_affine(S.a, np.argwhere(ap["cut"]))
         arrs[ap["id"]] = pts
         print(ap["id"], f"{len(pts) * STEP ** 3 / 1000:.1f} ml", sorted(S.bone_names(ap["cut"])), ap.get("areaMm2", ""))
@@ -600,7 +641,7 @@ def preview(path: str) -> int:
 def main() -> int:
     S = Skull()
     res = {}
-    for ap in (pterional(S), lateral_supraorbital(S), interhemispheric(S), suboccipital(S)):
+    for ap in (pterional(S), lateral_supraorbital(S), interhemispheric(S), suboccipital(S), retrosigmoid(S)):
         cut, soft = ap["cut"], ap.get("softMm", 0.0)
         touched = set(S.bone_names(cut))
         bones = S.cut_bones(cut, only=touched, soft_mm=soft)
@@ -608,7 +649,7 @@ def main() -> int:
         removed = isosurface(np.minimum(S.b, soft_cut(cut, soft)) if soft else cut.astype(np.float32), S.a,
                              K.SURFACE_LEVEL if soft else 0.5, 0.6, 60_000)
         res[ap["id"]] = {"name": ap["name"], "how": ap["how"], "side": ap.get("side", "R"), "bones": bones, "burrHoles": ap["burrHoles"],
-                         **{k: ap[k] for k in ("bregma", "span") if k in ap},
+                         **{k: ap[k] for k in ("bregma", "span", "keypoint") if k in ap},
                          "removed": {"verts": np.asarray(removed.vertices).round(3).tolist(), "tris": np.asarray(removed.faces).tolist()},
                          "removedMl": round(float(cut.sum()) * STEP ** 3 / 1000, 1)}
         print(ap["id"], ": bones", sorted(bones), "removed", res[ap["id"]]["removedMl"], "ml")

@@ -584,7 +584,23 @@
     "moved": 0
    }
   },
+  "retrosigmoid": {
+   "maxMovedMm": 11.95,
+   "moved": 24001,
+   "inBoneAfter": 0,
+   "inVesselAfter": 0,
+   "meatusToCerebellumMm": {
+    "rest": 10.88,
+    "moved": 18.15
+   },
+   "inCorridor": {
+    "rest": 993,
+    "moved": 0
+   }
+  },
   "params": {
+   "rsMm": 12.0,
+   "rsReachMm": 40.0,
    "tableGapMm": 1.5,
    "tableMinMm": 1.0,
    "boneGapMm": 1.0,

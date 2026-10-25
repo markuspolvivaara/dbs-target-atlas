@@ -476,6 +476,8 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
     import skullbase_v3_base as BASE
     v2 = json.loads((GEN / "sbct-manifest.json").read_text())
     ex2 = json.loads((ROOT / "data" / "build" / "skullbase-ct" / "export.json").read_text())
+    if (BUILD / "skull.json").exists():      # vessels v2 leaves out, fitted by skullbase_v3_skull.py
+        ex2["lines"].update(json.loads((BUILD / "skull.json").read_text()).get("lines", {}))
     porus = {s: porus_point(ears[s]["parts"][IAM][0]) for s in ("L", "R")}
     base = BASE.build(ex2, ct.fossa, ct.R, porus, {s: ears[s]["parts"][SPEC_CAROTID][0] for s in ("L", "R")})
     # this patient's own carotid (traced in the CT) as a point cloud of its surface, for clearances
@@ -592,6 +594,11 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
         sid = SB.slug(name).replace("sb_", "tb_", 1)
         write_glb(BUILD / f"{sid}.glb", nodes, {"id": sid})
         rp = {s_: base["sinuses"][s_]["report"] for s_ in ("R", "L")}
+        # the traced centre lines, for the retrosigmoid craniotomy (skullbase_v3_approach.py places its keyhole on them)
+        lines = json.loads((BUILD / "sinuses.json").read_text()) if (BUILD / "sinuses.json").exists() else {}
+        lines[part] = {s_: {"path": base["sinuses"][s_][part][0].round(2).tolist(), "radius": base["sinuses"][s_][part][1].round(2).tolist()}
+                       for s_ in ("R", "L")}
+        (BUILD / "sinuses.json").write_text(json.dumps(lines))
         items.append({
             "id": sid, "name": name, "aliases": [], "type": "soft", "file": f"assets/{KIND}/{sid}.glb", "bytes": 0,
             "colour": colour("sbVein"), "dataset": "traced", "source": "Traced through the TopBrain CT's enhanced lumen",
@@ -862,8 +869,9 @@ def pfossa_items(items: list) -> None:
                           f"of their centre-line points inside before, {round(f['vesselInsideShare'] * 100)} % after), the tentorium above; then the "
                           f"{c['inVesselBefore']} vertices still in an artery's way and the {c['inBoneBefore']} in bone's pushed clear."
                           + (f" The telovelar slider draws the tonsils {tv['tvMm']:.0f} mm apart (laterally, a little up) and lifts the nodule "
-                             f"and uvula {tv['tvVermisMm']:.0f} mm up and back, the rest of the cerebellum following; a shape, not a simulation "
-                             "of the tissue." if b["morph"] else ""),
+                             f"and uvula {tv['tvVermisMm']:.0f} mm up and back, the rest of the cerebellum following; the retrosigmoid slider "
+                             f"draws the right hemisphere up to {tv['rsMm']:.0f} mm away from the corridor along the back of the petrous bone; shapes, not a "
+                             "simulation of the tissue." if b["morph"] else ""),
             "centroid": b["centroid"],
         })
 
@@ -1070,9 +1078,10 @@ def validate() -> int:
         check(need in names, f"landmark {need} missing")
     # the surgical view: the craniotomy's cut bones stand in for whole ones; the brain fitted, cleared and opened
     ids = {it["id"]: it for it in m["structures"]}
-    check({"pterional", "lso", "interhemispheric", "suboccipital"} <= set(aps), f"craniotomies: {sorted(aps)}")
+    check({"pterional", "lso", "interhemispheric", "suboccipital", "retrosigmoid"} <= set(aps), f"craniotomies: {sorted(aps)}")
+    least = {"suboccipital": 2, "retrosigmoid": 1}       # the squama is thin below the inion; the retrosigmoid is a keyhole
     for aid, ap in aps.items():
-        check((2 if aid == "suboccipital" else 4) <= ap["removedMl"] <= 30, f"{aid}: removes {ap['removedMl']} ml")   # the squama is thin below the inion
+        check(least.get(aid, 4) <= ap["removedMl"] <= 30, f"{aid}: removes {ap['removedMl']} ml")
         check(ap["removed"] in ids and all(b in ids for b in ap["bones"]), f"{aid}: structures missing")
         for b in ap["bones"]:
             check(ids.get(ids[b].get("replaces", ""), {}).get("type") == "bone", f"{aid}: {b} replaces no bone")
@@ -1133,6 +1142,13 @@ def validate() -> int:
         check(tp_["tvVermisMm"] - 0.5 <= t_["vermisLiftMm"] <= tp_["tvVermisMm"] + 1.5 and t_["uvulaToMedullaMm"]["moved"] > t_["uvulaToMedullaMm"]["rest"],
               f"the vermis lift {t_}")
         check(t_["inVentricle"]["moved"] <= t_["inVentricle"]["rest"], f"the lift carries the cerebellum into the fourth ventricle {t_['inVentricle']}")
+        r_ = pr["retrosigmoid"]
+        check(tp_["rsMm"] / tp_["rsReachMm"] < 1 and r_["maxMovedMm"] <= tp_["rsMm"] + 1.5 and r_["inBoneAfter"] == 0 and r_["inVesselAfter"] == 0,
+              f"retrosigmoid shape {r_}")
+        check(r_["meatusToCerebellumMm"]["moved"] > r_["meatusToCerebellumMm"]["rest"] + 2 and r_["inCorridor"]["moved"] == 0,
+              f"the retrosigmoid shape does not clear the corridor {r_}")
+    aica = ids.get("tb_anterior_inferior_cerebellar_artery")
+    check(aica is not None and aica.get("fitted"), "the anterior inferior cerebellar artery (fitted) is missing")
     print(f"skull base v3 validation: {n - len(fails)}/{n} checks passed")
     for f in fails:
         print("FAIL", f)

@@ -2756,6 +2756,48 @@
    }
   },
   {
+   "id": "tb_anterior_inferior_cerebellar_artery",
+   "name": "Anterior inferior cerebellar artery",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/tb_anterior_inferior_cerebellar_artery.glb",
+   "bytes": 16388,
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "fitted",
+   "source": "Z-Anatomy, fitted onto the TopBrain CT and anchored to it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "layer": "tracts",
+   "system": "Basilar artery",
+   "fitted": true,
+   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), its origin moved onto this patient's basilar artery (TopBrain's label), the move fading out over its first 15 mm, the rest where the fit puts it (a median 0.7 mm on the right, 0.7 mm on the left). Its course is approximate.",
+   "centroid": {
+    "L": [
+     -17.54,
+     -29.15,
+     -14.87
+    ],
+    "R": [
+     18.05,
+     -29.26,
+     -15.41
+    ]
+   }
+  },
+  {
    "id": "tb_anterior_spinal_artery",
    "name": "Anterior spinal artery",
    "aliases": [],
@@ -3435,7 +3477,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_cerebellar_hemisphere.glb",
-   "bytes": 884816,
+   "bytes": 1077216,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -3457,7 +3499,7 @@
    "category": "hindbrain",
    "layer": "cortex",
    "morph": true,
-   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.513 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 4 % after), the tentorium above; then the 889 vertices still in an artery's way and the 201 in bone's pushed clear. The telovelar slider draws the tonsils 6 mm apart (laterally, a little up) and lifts the nodule and uvula 5 mm up and back, the rest of the cerebellum following; a shape, not a simulation of the tissue.",
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.513 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 4 % after), the tentorium above; then the 889 vertices still in an artery's way and the 201 in bone's pushed clear. The telovelar slider draws the tonsils 6 mm apart (laterally, a little up) and lifts the nodule and uvula 5 mm up and back, the rest of the cerebellum following; the retrosigmoid slider draws the right hemisphere up to 12 mm away from the corridor along the back of the petrous bone; shapes, not a simulation of the tissue.",
    "centroid": {
     "L": [
      -18.06,
@@ -3477,7 +3519,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_tonsil.glb",
-   "bytes": 76312,
+   "bytes": 93764,
    "colour": {
     "token": "sbTonsil",
     "light": "#7D6DFF",
@@ -3499,7 +3541,7 @@
    "category": "hindbrain",
    "layer": "cortex",
    "morph": true,
-   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: tonsil of cerebellum), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.513 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 4 % after), the tentorium above; then the 889 vertices still in an artery's way and the 201 in bone's pushed clear. The telovelar slider draws the tonsils 6 mm apart (laterally, a little up) and lifts the nodule and uvula 5 mm up and back, the rest of the cerebellum following; a shape, not a simulation of the tissue.",
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: tonsil of cerebellum), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.513 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 4 % after), the tentorium above; then the 889 vertices still in an artery's way and the 201 in bone's pushed clear. The telovelar slider draws the tonsils 6 mm apart (laterally, a little up) and lifts the nodule and uvula 5 mm up and back, the rest of the cerebellum following; the retrosigmoid slider draws the right hemisphere up to 12 mm away from the corridor along the back of the petrous bone; shapes, not a simulation of the tissue.",
    "centroid": {
     "L": [
      -9.78,
@@ -3519,7 +3561,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_vermis.glb",
-   "bytes": 122520,
+   "bytes": 125880,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -3541,7 +3583,7 @@
    "category": "hindbrain",
    "layer": "cortex",
    "morph": true,
-   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: lingula of cerebellum, central lobule, culmen, declive, folium of vermis, tuber of vermis, pyramis of vermis, uvula of vermis, nodule of vermis), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.513 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 4 % after), the tentorium above; then the 889 vertices still in an artery's way and the 201 in bone's pushed clear. The telovelar slider draws the tonsils 6 mm apart (laterally, a little up) and lifts the nodule and uvula 5 mm up and back, the rest of the cerebellum following; a shape, not a simulation of the tissue.",
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: lingula of cerebellum, central lobule, culmen, declive, folium of vermis, tuber of vermis, pyramis of vermis, uvula of vermis, nodule of vermis), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.513 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 4 % after), the tentorium above; then the 889 vertices still in an artery's way and the 201 in bone's pushed clear. The telovelar slider draws the tonsils 6 mm apart (laterally, a little up) and lifts the nodule and uvula 5 mm up and back, the rest of the cerebellum following; the retrosigmoid slider draws the right hemisphere up to 12 mm away from the corridor along the back of the petrous bone; shapes, not a simulation of the tissue.",
    "centroid": {
     "L": [
      -1.24,
@@ -4262,6 +4304,131 @@
      -0.35,
      -68.97,
      -39.83
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_retrosigmoid__occipital_bone",
+   "name": "Occipital bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_retrosigmoid__occipital_bone.glb",
+   "bytes": 738244,
+   "refIds": [],
+   "category": "bone",
+   "approach": "retrosigmoid",
+   "replaces": "sb_occipital_bone",
+   "derivation": "The CT's occipital bone with the bone of the retrosigmoid keyhole craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -23.68,
+     -61.19,
+     -20.64
+    ],
+    "R": [
+     22.96,
+     -58.97,
+     -21.51
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_retrosigmoid__temporal_bone",
+   "name": "Temporal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_retrosigmoid__temporal_bone.glb",
+   "bytes": 1019572,
+   "refIds": [],
+   "category": "bone",
+   "approach": "retrosigmoid",
+   "replaces": "sb_temporal_bone",
+   "derivation": "The CT's temporal bone with the bone of the retrosigmoid keyhole craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -49.06,
+     -23.25,
+     -12.6
+    ],
+    "R": [
+     47.35,
+     -22.4,
+     -16.16
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_retrosigmoid__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/sb_appr_retrosigmoid__removed.glb",
+   "bytes": 92624,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of the CT's bone by rule",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "retrosigmoid",
+   "layer": "nuclei",
+   "derivation": "The bone the retrosigmoid keyhole craniotomy removes: 2.4 ml. A right retrosigmoid keyhole craniotomy: an oval 25 x 20 mm (Jian 2021: 18-20 x 20-25 mm), its upper and front edges along the transverse and sigmoid sinuses from the keypoint, where the transverse sinus' lower margin meets the sigmoid sinus' posterior margin (Jian 2021, 2022, 2024), here found on this CT's own sinuses (traced through its lumen) and carried out through the bone; the burr hole 3.5 mm behind and below it (Jian 2021). About 388 mm² seen face on; its edge smoothed over 1 mm (illustrative). Keypoint: (53, -59, -25) mm; burr hole: (51, -62, -26) mm.",
+   "centroid": {
+    "L": [
+     40.74,
+     -69.94,
+     -27.38
+    ],
+    "R": [
+     40.74,
+     -69.94,
+     -27.38
     ]
    }
   }

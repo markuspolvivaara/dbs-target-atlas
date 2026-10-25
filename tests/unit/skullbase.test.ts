@@ -451,6 +451,31 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(pr.params.tvMm / pr.params.tvReachMm + pr.params.tvVermisMm / pr.params.tvVermisReachMm).toBeLessThan(1);
     expect(T3.decodeSkull('#/atlas?g=telovelar&tv=60&op=30').morphs).toEqual({ telovelar: 0.6 });
   });
+  it('the retrosigmoid view: a keyhole on this patient\'s own sinuses, the right hemisphere drawn back from the petrous bone', async () => {
+    const rs = geom.retrosigmoid;
+    expect(rs.side).toBe('R');
+    expect(rs.removedMl).toBeGreaterThan(1);
+    expect(rs.removedMl).toBeLessThan(10);                     // a keyhole (Jian 2021: about 2 x 2.5 cm)
+    expect(rs.bones.map((id) => byId.get(id)!.name)).toEqual(expect.arrayContaining(['Occipital bone']));
+    for (const p of rs.burrHoles) { expect(p[0]).toBeGreaterThan(30); expect(p[1]).toBeLessThan(-20); }   // behind the right ear
+    const p = S3.skullPlan('retrosigmoid', null);
+    expect(p.camera).toBe('retrosigmoid');
+    expect(G3.SB_GROUP.get('retrosigmoid')!.hemi).toBe('R');
+    for (const id of [...rs.bones, rs.removed]) expect(p.looks.get(id), id).not.toBe('hidden');
+    const aica = v3.structures.find((x) => x.name === 'Anterior inferior cerebellar artery')!;
+    expect(aica.fitted).toBe(true);                             // this angiogram does not label it
+    expect(p.looks.get(aica.id)).not.toBe('hidden');
+    const pf = ((await import('../../src/data/generated/sbv3-fit.json')).default as unknown as { pfossa: {
+      retrosigmoid: { maxMovedMm: number; inBoneAfter: number; inVesselAfter: number; meatusToCerebellumMm: { rest: number; moved: number }; inCorridor: { rest: number; moved: number } };
+      params: Record<string, number> } }).pfossa;
+    expect(pf.params.rsMm / pf.params.rsReachMm).toBeLessThan(1);           // cannot fold the cerebellum
+    expect(pf.retrosigmoid.maxMovedMm).toBeLessThan(pf.params.rsMm + 2);
+    expect(pf.retrosigmoid.inVesselAfter).toBe(0);
+    expect(pf.retrosigmoid.meatusToCerebellumMm.moved).toBeGreaterThan(pf.retrosigmoid.meatusToCerebellumMm.rest);   // the angle opens
+    expect(pf.retrosigmoid.inCorridor.rest).toBeGreaterThan(0);                 // the cerebellum lies in the corridor at rest ...
+    expect(pf.retrosigmoid.inCorridor.moved).toBe(0);                           // ... and clears it drawn back
+    expect(T3.decodeSkull('#/atlas?g=retrosigmoid&rs=60&tv=40').morphs).toEqual({ retrosigmoid: 0.6 });
+  });
   it('the opening and the lift are in the link for the surgical view only', () => {
     const s = T3.decodeSkull('#/atlas?g=transsylvian&op=40&lf=70&ih=50');
     expect(s.grp).toBe('transsylvian');

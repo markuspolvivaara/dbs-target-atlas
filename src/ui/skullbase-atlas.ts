@@ -57,6 +57,12 @@ const MORPH_UI: Record<string, { label: string; key: string; note: () => string 
       return b ? `At 100 % the right hemisphere’s medial surface, the cingulate gyrus with it, is ${fmtMm(b.params.interhemisphericMm)} mm further from the midline over the craniotomy’s length (fading out ${fmtMm(b.params.interhemisphericFadeMm)} mm beyond it), the shift falling to none ${fmtMm(b.params.interhemisphericReachMm)} mm out; the corpus callosum, the medial wall and the left hemisphere stay. The arteries in the fissure stay where the CT shows them.` : null;
     },
   },
+  retrosigmoid: {
+    label: 'Draw the cerebellum back', key: 'r', note: () => {
+      const p = V3_FIT.pfossa;
+      return p ? `At 100 % the right cerebellar hemisphere is drawn ${fmtMm(p.params.rsMm)} mm away from the corridor along the back of the petrous bone (from the internal acoustic meatus out through the craniotomy, just inside its corner at the sinuses’ junction), the movement falling to none ${fmtMm(p.params.rsReachMm)} mm from it (it cannot fold the cerebellum); the cerebellum is then ${fmtMm(p.retrosigmoid.meatusToCerebellumMm.moved)} mm from the meatus, ${fmtMm(p.retrosigmoid.meatusToCerebellumMm.rest)} mm at rest. The brainstem, the nerves and the arteries stay.` : null;
+    },
+  },
   telovelar: {
     label: 'Draw the tonsils apart, lift the vermis', key: 't', note: () => {
       const p = V3_FIT.pfossa;

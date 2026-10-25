@@ -27,6 +27,14 @@ stay. Each displacement changes by at most its size over its reach per mm, so th
 TV_MM / TV_REACH_MM + TV_VERMIS_MM / TV_VERMIS_REACH_MM; below 1 they cannot fold the cerebellum. The arteries stay where
 the CT shows them. A shape, not a simulation of the tissue.
 
+The retrosigmoid shape (morph target "retrosigmoid") draws the right cerebellar hemisphere back from the petrous bone,
+opening the cerebellopontine angle as gentle retraction and the release of cerebrospinal fluid let it fall away. The
+corridor runs from the right internal acoustic meatus (the registered ear's, Skull base v3's landmark) out through the
+retrosigmoid craniotomy just inside its keypoint, the opening's corner at the junction of the transverse and sigmoid sinuses
+(skullbase_v3_approach.py), along the back of the petrous bone: each point of the right hemisphere and tonsil is moved RS_MM away from it, square to it and
+towards the hemisphere's centre, with a weight falling from 1 on the corridor to 0 RS_REACH_MM from it (RS_MM /
+RS_REACH_MM below 1: it cannot fold), then kept off bone and the arteries as the telovelar shape is.
+
 Writes pipeline/data/build/skullbase-v3/pf_*.glb and pfossa.json (the items for the manifest and the fit report).
 """
 from __future__ import annotations
@@ -94,6 +102,10 @@ TV_VERMIS_BACK = 1.0       # ... up, and back by this share of it (away from the
 TV_VERMIS_REACH_MM = 15.0  # the rest of the cerebellum follows, none this far from them
 INFERIOR_VERMIS = ["Nodule of vermis", "Uvula of vermis"]
 assert TV_MM / TV_REACH_MM + TV_VERMIS_MM / TV_VERMIS_REACH_MM < 1, "the telovelar shape could fold the cerebellum"
+RS_MM = 12.0               # illustrative: how far the right hemisphere is drawn back at the internal acoustic meatus
+RS_REACH_MM = 40.0         # ... none this far from it
+assert RS_MM / RS_REACH_MM < 1, "the retrosigmoid shape could fold the cerebellum"
+GEN = ROOT.parent / "src" / "data" / "generated"
 
 STEM = ["Midbrain", "Pons", "Medulla oblongata", "Fourth ventricle", "Superior cerebellar peduncle"]
 HEMISPHERE = ["Anterior quadrangular lobule", "Posterior quadrangular lobule", "Superior semilunar lobule", "Inferior semilunar lobule",
@@ -461,6 +473,60 @@ def telovelar(parts: dict, fs: Fossa) -> dict:
     return out
 
 
+def unit(v) -> np.ndarray:
+    v = np.asarray(v, float)
+    return v / np.linalg.norm(v)
+
+
+def meatus_r() -> np.ndarray:
+    """The right internal acoustic meatus (the registered ear's porus: Skull base v3's landmark, sbv3-landmarks.json)."""
+    return np.array(next(lm["ras"] for lm in json.loads((GEN / "sbv3-landmarks.json").read_text())
+                         if lm["name"] == "Internal acoustic meatus" and lm.get("side") == "R"), float)
+
+
+RS_INTO_OPENING = 0.15     # the corridor ends this share of the way from the keypoint to the opening's centre
+def corridor() -> tuple[np.ndarray, np.ndarray]:
+    """The retrosigmoid corridor: from the right internal acoustic meatus out through the craniotomy, just inside it from
+    its keypoint (the opening's front upper corner, at the sinuses' junction: approach.json)."""
+    ap = json.loads((BUILD / "approach.json").read_text())["retrosigmoid"]
+    key, c = np.array(ap["keypoint"], float), np.array(ap["removed"]["verts"], float).mean(0)
+    return meatus_r(), key + RS_INTO_OPENING * (c - key)
+
+
+def to_corridor(P: np.ndarray, a: np.ndarray, b: np.ndarray) -> np.ndarray:
+    t = np.clip(((P - a) @ (b - a)) / ((b - a) @ (b - a)), 0, 1)
+    return np.linalg.norm(P - (a + t[:, None] * (b - a)), axis=1)
+
+
+def retrosigmoid(parts: dict, fs: Fossa) -> dict:
+    """Each part's displacement for the retrosigmoid shape: the right hemisphere and tonsil drawn RS_MM away from the
+    corridor (meatus to keypoint), square to it towards the hemisphere's centre, with a weight falling to 0 RS_REACH_MM
+    from it; then kept off bone and the arteries (as telovelar)."""
+    iam, key = corridor()
+    axis = unit(key - iam)
+    right = [n for n in parts if n.startswith("Tonsil of cerebellum") or any(n.startswith(h) for h in HEMISPHERE)]
+    centre = np.vstack([parts[n][0][parts[n][2] == "R"] for n in right]).mean(0) - iam
+    dirn = unit(centre - (centre @ axis) * axis)
+    out = {}
+    for n, (v, _, side) in parts.items():
+        D = np.zeros_like(v)
+        if n in right:
+            m = side == "R"
+            w = np.clip(1 - to_corridor(v[m], iam, key) / RS_REACH_MM, 0, 1)
+            D[m] = RS_MM * w[:, None] * dirn
+            moved = np.abs(D).sum(1) > 0
+            if moved.any():
+                sb, gb = fs.bone(v[moved] + D[moved])
+                near = sb < BONE_GAP_MM
+                gbn = gb / np.maximum(np.linalg.norm(gb, axis=1, keepdims=True), 1e-9)
+                D[np.nonzero(moved)[0][near]] += (BONE_GAP_MM + 0.1 - sb[near])[:, None] * gbn[near]
+                sv, nv = fs.vessel_sdf(v[moved] + D[moved])
+                hit = sv < VESSEL_MARGIN_MM
+                D[np.nonzero(moved)[0][hit]] += (VESSEL_MARGIN_MM + 0.1 - sv[hit])[:, None] * nv[hit]
+        out[n] = D
+    return out
+
+
 def inside_ventricle(parts: dict):
     """Whether points lie inside the fourth ventricle's surface (by the normal at its nearest vertex, within 4 mm)."""
     X, t, _ = parts["Fourth ventricle"]
@@ -476,13 +542,31 @@ def inside_ventricle(parts: dict):
 
 
 def params_hash() -> str:
-    keys = {k: v for k, v in globals().items() if k.isupper() and isinstance(v, (int, float, str, list, dict, tuple)) and not k.startswith("TV_")}
+    keys = {k: v for k, v in globals().items() if k.isupper() and isinstance(v, (int, float, str, list, dict, tuple)) and not k.startswith(("TV_", "RS_"))}
     keys["inputs"] = [hashlib.sha1(p.read_bytes()).hexdigest() for p in (CT_BUILD / "bone.npz", CT_BUILD / "pfossa.json")]
     return hashlib.sha1(json.dumps(keys, sort_keys=True, default=str).encode()).hexdigest()[:16]
 
 
 def normals(v, t):
     return trimesh.Trimesh(v, t, process=False).vertex_normals.copy()
+
+
+def retro_report(parts: dict, moves: dict, fs: Fossa) -> dict:
+    """How far the retrosigmoid shape moves the hemisphere, whether it stays clear, and how far the cerebellum is from the
+    internal acoustic meatus at rest and drawn back."""
+    iam, key = corridor()
+    mv = np.vstack([moves[n] for n in parts])
+    Xm = np.vstack([parts[n][0] + moves[n] for n in parts])
+    moved = np.linalg.norm(mv, axis=1) > 0.1
+    cereb = [n for n in parts if not any(n.startswith(m) for m in STEM)]
+    gap = lambda f: round(float(min(np.linalg.norm(f(n), axis=1).min() for n in cereb)), 2)   # noqa: E731
+    return {"maxMovedMm": round(float(np.linalg.norm(mv, axis=1).max()), 2), "moved": int(moved.sum()),
+            "inBoneAfter": int((fs.bone(Xm[moved], grad=False) < 0).sum()),
+            "inVesselAfter": int((fs.vessel_sdf(Xm[moved])[0] < 0).sum()),
+            "meatusToCerebellumMm": {"rest": gap(lambda n: parts[n][0] - iam), "moved": gap(lambda n: parts[n][0] + moves[n] - iam)},
+            # the cerebellum's points within 4 mm of the corridor (the meatus to where it meets the bone: four fifths of the way)
+            "inCorridor": {k: int(sum((to_corridor(parts[n][0] + (moves[n] if k == "moved" else 0), iam, iam + 0.8 * (key - iam)) < 4).sum()
+                                      for n in cereb)) for k in ("rest", "moved")}}
 
 
 def main() -> int:
@@ -503,6 +587,7 @@ def main() -> int:
     rc = clear(parts, fs)
     print("cleared", rc, flush=True)
     moves = telovelar(parts, fs)
+    rs_moves = retrosigmoid(parts, fs)
     # GLBs: each piece as L and R nodes
     items = []
     for pid, name, members, tok, cat, moving in PIECES:
@@ -517,15 +602,17 @@ def main() -> int:
                     continue
                 used, inv = np.unique(t[fsel], return_inverse=True)
                 Vs.append(X[used])
-                Ds.append(moves[n][used])
+                Ds.append(np.c_[moves[n][used], rs_moves[n][used]])
                 Ts.append(inv.reshape(-1, 3) + off)
                 off += len(used)
             if not Vs:
                 continue
-            v, tt, D = np.vstack(Vs), np.vstack(Ts), np.vstack(Ds)
+            v, tt, DD = np.vstack(Vs), np.vstack(Ts), np.vstack(Ds)
+            D, DR = DD[:, :3], DD[:, 3:]
             node = {"name": s, "positions": v, "normals": normals(v, tt), "indices": tt, "mode": TRIANGLES}
             if moving:
-                node["targets"] = [{"name": "telovelar", "positions": D, "normals": normals(v + D, tt) - node["normals"]}]
+                node["targets"] = [{"name": "telovelar", "positions": D, "normals": normals(v + D, tt) - node["normals"]},
+                                   {"name": "retrosigmoid", "positions": DR, "normals": normals(v + DR, tt) - node["normals"]}]
             nodes.append(node)
             cent[s] = v.mean(0).round(2).tolist()
         write_glb(BUILD / f"{pid}.glb", nodes, {"id": pid})
@@ -552,11 +639,12 @@ def main() -> int:
                                                  "moved": round(float(min(medulla.query(parts[n][0] + moves[n])[0].min() for n in inferior)), 2)},
                             "inVentricle": {"rest": int(sum(in4(parts[n][0]).sum() for n in cereb)),
                                             "moved": int(sum(in4(parts[n][0] + moves[n]).sum() for n in cereb))}},
-              "params": {"tableGapMm": TABLE_GAP_MM, "tableMinMm": TABLE_MIN_MM, "boneGapMm": BONE_GAP_MM, "tvMm": TV_MM, "tvUp": TV_UP,
+              "retrosigmoid": retro_report(parts, rs_moves, fs),
+              "params": {"rsMm": RS_MM, "rsReachMm": RS_REACH_MM, "tableGapMm": TABLE_GAP_MM, "tableMinMm": TABLE_MIN_MM, "boneGapMm": BONE_GAP_MM, "tvMm": TV_MM, "tvUp": TV_UP,
                          "tvReachMm": TV_REACH_MM, "tvVermisMm": TV_VERMIS_MM, "tvVermisBack": TV_VERMIS_BACK,
                          "tvVermisReachMm": TV_VERMIS_REACH_MM, "jacMin": JAC_MIN}}
     (BUILD / "pfossa.json").write_text(json.dumps({"items": items, "texts": md.texts, "report": report}, indent=1))
-    print("posterior fossa done", report["telovelar"], round(time.time() - t0), "s")
+    print("posterior fossa done", report["telovelar"], report["retrosigmoid"], round(time.time() - t0), "s")
     return 0
 
 
