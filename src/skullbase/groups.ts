@@ -77,7 +77,7 @@ function temporalGroups(): SbGroup[] {
     return {
       id: a.view, kind: 'approach', name: a.name, camera: a.camera, hemi: a.hemi ?? (geom.side === 'M' ? 'both' : geom.side), cutAbove: null, boneLook: undefined,
       // framed on the craniotomy and what it is for: the view looks in through the one onto the other
-      focus: null, focusIds: [geom.removed, ...byName(...a.focus)], radius: 60, approach: a.id, morphs: a.morphs,
+      focus: null, focusIds: [geom.removed, ...byName(...a.focus)], radius: a.radius ?? 60, approach: a.id, morphs: a.morphs,
       description: a.summary,
       structures: [...bonesV3.filter((id) => !replaced.has(id)), ...geom.bones, geom.removed, ...brainOf(a.brain ?? 'cerebrum'), ...byName(...a.context)],
       landmarks: [],

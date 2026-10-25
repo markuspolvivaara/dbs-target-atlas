@@ -3,8 +3,9 @@ supraorbital (LSO) and the right parasagittal one of the interhemispheric approa
 
   pipeline/.venv/bin/python -I -W ignore pipeline/skullbase_v3_approach.py      (then skullbase_v3.py takes its items)
 
-The bone is the CT's own (Skull base v2's mask on its 0.5 mm grid, pipeline/data/build/skullbase-ct/bone.npz, the surface
-the model draws). The flap is drawn as an outline through burr holes on this skull, seen along the outward direction at
+The bone is v3's skull (pipeline/skullbase_v3_skull.py: the CT's own bone where the scan reaches, the fitted Z-Anatomy
+model beyond it; skull_bone.npz on the CT's 0.5 mm grid, the surface the model draws), or without it Skull base v2's mask
+(pipeline/data/build/skullbase-ct/bone.npz). The flap is drawn as an outline through burr holes on this skull, seen along the outward direction at
 the pterion: the bone it removes is, along each line of sight through the outline, the first run of bone from outside
 (the skull's thickness there; gaps under FLAP_GAP_MM, the diploe and air cells, bridged, but never across the cranial
 cavity, so the floor beyond it stays; the run lying on the cavity when there are more, so a thin shell outside the skull is
@@ -15,9 +16,9 @@ Choque-Velasquez 2018, its outline placed by hand on this skull (cited on the pa
 sources give no number the drawing says so ("illustrative"). The landmarks are the Z-Anatomy model's fitted onto this CT
 (Skull base v2).
 
-A bone the cut touches keeps v2's own mesh except within BAND_MM of the cut; there it takes the surface of the cut
-mask, meshed as v2 meshes the whole skull (skullbase_ct.py: same level, smoothing, face density and baked shading), each
-new face going to the bone of the nearest of v2's faces. So the cut bone meets its untouched neighbours exactly as in v2,
+A bone the cut touches keeps its own mesh (v3's skull, else v2's) except within BAND_MM of the cut; there it takes the
+surface of the cut mask, meshed as that skull was meshed (same level, smoothing, face density and baked shading), each
+new face going to the bone of the nearest of its faces. So the cut bone meets its untouched neighbours exactly as in v2,
 with no gap or overlap; only the cut's walls and the band around them are new.
 Writes pipeline/data/build/skullbase-v3/approach.json (the cut bones, the bone removed, how it was drawn).
 """
@@ -39,6 +40,7 @@ from build import isosurface  # noqa: E402
 
 CT_BUILD = ROOT / "data" / "build" / "skullbase-ct"
 BUILD = ROOT / "data" / "build" / "skullbase-v3"
+SKULL = BUILD / "skull_bone.npz"        # v3's skull (skullbase_v3_skull.py), when built
 STEP = 0.5
 FLAP_GAP_MM = 8.0       # bridged within a run: the diploe and air cells (the cranial cavity behind is wider)
 FLAP_DEEPER_MM = 10.0
@@ -53,15 +55,19 @@ LSO_MEAN_AREA = 1275.4  # mm2: the mean LSO craniotomy in Cha 2012 (61 patients;
 # fitted landmarks (right side), drawn wider than the mean on purpose, to show the anatomy, but not much taller
 # (illustrative)
 LSO_OUTLINE = [
-    ("(Supra-orbital notch)", (12.0, -2.0, 8.0)),               # basal, medial: above the orbital roof, behind the field of view's edge
-    ("Zygomatic process of frontal bone", (0.0, -2.0, 9.0)),    # basal: above the frontozygomatic suture
-    ("Sphenoidal angle of parietal bone", (0.0, 4.0, 6.0)),     # basal, lateral: just above the pterion (the sphenoid ridge's end)
+    ("(Supra-orbital notch)", (12.0, -2.0, 4.0)),               # basal, medial: at the orbital roof's level, behind the field of view's edge
+    ("Zygomatic process of frontal bone", (0.0, -2.0, 5.0)),    # basal: just above the frontozygomatic suture, at the floor's level
+    ("Sphenoidal angle of parietal bone", (0.0, 4.0, 3.0)),     # basal, lateral: at the pterion (the sphenoid ridge's end)
     ("Sphenoidal angle of parietal bone", (0.0, -12.0, 16.0)),  # the burr hole: posteriorly, just below the temporal line
     ("Sphenoidal angle of parietal bone", (-5.0, -8.0, 36.0)),  # upper, posterior (in front of the coronal suture)
     ("Zygomatic process of frontal bone", (-7.0, -3.0, 40.0)),  # upper, anterior
     ("(Supra-orbital notch)", (12.0, -7.0, 30.0)),              # upper, medial
 ]
 LSO_BURR_HOLE = 3
+LSO_SOFT_MM = 1.0       # the LSO's cut edge smoothed over this (Gaussian), its outline rounded through the points above and the
+                        # depth of the cut smoothed between neighbouring lines of sight, so the rim is not jagged (illustrative)
+SMOOTH_DEPTH_MM = 1.5   # (that depth smoothing's width)
+FLAKE_MM2 = 30.0        # with a smoothed edge, loose pieces of bone smaller than this left at the cut are dropped
 IH_FRONT_MM = 40.0      # the interhemispheric craniotomy: from this far in front of bregma ...
 IH_BACK_MM = 20.0       # ... to this far behind it (illustrative; "precoronal parasagittal", Nair 2016) ...
 IH_WIDTH_MM = 40.0      # ... and this wide, from the midline to the right (illustrative)
@@ -83,6 +89,40 @@ def fmt(p) -> str:
     return "(" + ", ".join(f"{x:.0f}" for x in p) + ") mm"
 
 
+def rounded(poly: np.ndarray, per: int = 16) -> np.ndarray:
+    """A closed outline (2-D points in order) as a smooth curve through them: a centripetal Catmull-Rom spline, which
+    does not overshoot between unevenly spaced points (a craniotome cuts curves, not corners)."""
+    n, out = len(poly), []
+    for i in range(n):
+        p0, p1, p2, p3 = poly[i - 1], poly[i], poly[(i + 1) % n], poly[(i + 2) % n]
+        t0 = 0.0
+        t1 = t0 + np.linalg.norm(p1 - p0) ** 0.5
+        t2 = t1 + np.linalg.norm(p2 - p1) ** 0.5
+        t3 = t2 + np.linalg.norm(p3 - p2) ** 0.5
+        for t in np.linspace(t1, t2, per, endpoint=False):
+            a1 = (t1 - t) / (t1 - t0) * p0 + (t - t0) / (t1 - t0) * p1
+            a2 = (t2 - t) / (t2 - t1) * p1 + (t - t1) / (t2 - t1) * p2
+            a3 = (t3 - t) / (t3 - t2) * p2 + (t - t2) / (t3 - t2) * p3
+            b1 = (t2 - t) / (t2 - t0) * a1 + (t - t0) / (t2 - t0) * a2
+            b2 = (t3 - t) / (t3 - t1) * a2 + (t - t1) / (t3 - t1) * a3
+            out.append((t2 - t) / (t2 - t1) * b1 + (t - t1) / (t2 - t1) * b2)
+    return np.array(out)
+
+
+def smooth_depth(depth: np.ndarray, inside: np.ndarray) -> np.ndarray:
+    """A cut's depth per line of sight (NaN: none) made even: inside the outline, lines without one take their nearest
+    neighbour's, then a Gaussian of SMOOTH_DEPTH_MM over the outline (normalised by the lines inside it), so single lines
+    that kept or lost bone do not leave spikes on the rim."""
+    ok = inside & ~np.isnan(depth)
+    if not ok.any():
+        return depth
+    _, near = ndimage.distance_transform_edt(~ok, return_indices=True)
+    filled = depth[tuple(near)]
+    w = ndimage.gaussian_filter(inside.astype(float), SMOOTH_DEPTH_MM / STEP)
+    sm = ndimage.gaussian_filter(np.where(inside, filled, 0.0), SMOOTH_DEPTH_MM / STEP) / np.maximum(w, 1e-6)
+    return np.where(inside, sm, np.nan)
+
+
 def in_polygon(pts: np.ndarray, poly: np.ndarray) -> np.ndarray:
     """Even-odd test of 2-D points against a polygon (its vertices in order)."""
     x, y = pts[:, 0], pts[:, 1]
@@ -99,17 +139,26 @@ class Skull:
     """The CT's bone on v2's grid in the frame, its named bone surfaces and the fitted landmarks."""
 
     def __init__(self):
-        c = np.load(CT_BUILD / "bone.npz")
-        f = np.load(CT_BUILD / "frame.npz")
-        a, R, fossa = c["a"], f["R"], f["fossa"]
-        self.a = a.copy()
-        self.a[:3, :3] = R.T @ a[:3, :3]
-        self.a[:3, 3] = (a[:3, 3] - fossa) @ R
-        self.inv = np.linalg.inv(self.a)
-        self.b = c["b"].astype(np.float32)
         self.ex = json.loads((CT_BUILD / "export.json").read_text())
-        self.znames = list(self.ex["bones"])
-        pts = [np.array(self.ex["bones"][n]["verts"], float)[::2] for n in self.znames]
+        if SKULL.exists():      # v3's skull, already in the frame
+            import skullbase_v3_skull as SK
+            c = np.load(SKULL)
+            self.a, self.b = c["a"], c["b"].astype(np.float32)
+            self.bones = json.loads((BUILD / "skull.json").read_text())["bones"]
+            self.faces = SK.FACES
+        else:
+            c = np.load(CT_BUILD / "bone.npz")
+            f = np.load(CT_BUILD / "frame.npz")
+            a, R, fossa = c["a"], f["R"], f["fossa"]
+            self.a = a.copy()
+            self.a[:3, :3] = R.T @ a[:3, :3]
+            self.a[:3, 3] = (a[:3, 3] - fossa) @ R
+            self.b = c["b"].astype(np.float32)
+            self.bones = self.ex["bones"]
+            self.faces = K.BONE_FACES
+        self.inv = np.linalg.inv(self.a)
+        self.znames = list(self.bones)
+        pts = [np.array(self.bones[n]["verts"], float)[::2] for n in self.znames]
         self.zp = np.vstack(pts)
         self.zl = np.concatenate([np.full(len(p), k) for k, p in enumerate(pts)])
         self.lms = {}
@@ -164,14 +213,17 @@ class Skull:
         idx = np.stack(np.meshgrid(*[np.arange(lo[k], hi[k]) for k in range(3)], indexing="ij"), -1).reshape(-1, 3)
         return idx, nib.affines.apply_affine(self.a, idx)
 
-    def flap(self, outline: np.ndarray, n: np.ndarray, floor: bool = True, deeper: float = FLAP_DEEPER_MM) -> np.ndarray:
+    def flap(self, outline: np.ndarray, n: np.ndarray, floor: bool = True, deeper: float = FLAP_DEEPER_MM, smooth: bool = False) -> np.ndarray:
         """Grid mask of the bone a flap removes: outline (points in the frame, in order) seen along n (outward); along each
-        line of sight inside it, the first run of bone from outside; with floor, the cranial floor kept (keep_floor)."""
+        line of sight inside it, the first run of bone from outside; with floor, the cranial floor kept (keep_floor). With
+        smooth, the outline is rounded (rounded) and the cut's depth made even between lines of sight (smooth_depth)."""
         n = unit(n)
         c = outline.mean(0)
         e1 = unit(np.cross(n, [0, 0, 1.0]) if abs(n[2]) < 0.9 else np.cross(n, [1.0, 0, 0]))
         e2 = np.cross(n, e1)
         poly = np.c_[(outline - c) @ e1, (outline - c) @ e2]
+        if smooth:
+            poly = rounded(poly)
         us = np.arange(poly[:, 0].min() - 1, poly[:, 0].max() + 1, STEP)
         vs = np.arange(poly[:, 1].min() - 1, poly[:, 1].max() + 1, STEP)
         U, V = np.meshgrid(us, vs, indexing="ij")
@@ -208,6 +260,8 @@ class Skull:
         # surface (within FLAP_DEEPER_MM of the median start)
         deep = start < np.nanmedian(start) - deeper
         start[deep], end[deep] = np.nan, np.nan
+        if smooth:
+            start, end = smooth_depth(start, inside), smooth_depth(end, inside)
         corners = np.array([c + u * e1 + v * e2 + w * n for u in (us[0], us[-1]) for v in (vs[0], vs[-1]) for w in (OUT_MM, -OUT_MM)])
         ijk, P = self._grid_box(corners)
         P = P - c
@@ -299,15 +353,16 @@ class Skull:
         mask[tuple(ijk[sel].T)] = True
         return mask & (self.b > K.SURFACE_LEVEL)
 
-    def cut_bones(self, cut: np.ndarray, only: set[str]) -> dict:
+    def cut_bones(self, cut: np.ndarray, only: set[str], soft_mm: float = 0.0) -> dict:
         """The bones in `only`, cut: v2's mesh away from the cut, the cut mask's surface within BAND_MM of it (each new face
-        given to the bone of the nearest v2 face). {bone name: {verts, tris, ao}}"""
-        new = self.mesh_bones(self.b * (~cut), only=None, split=False)
+        given to the bone of the nearest v2 face); with soft_mm, the cut's edge smoothed (soft_cut).
+        {bone name: {verts, tris, ao}}"""
+        new = self.mesh_bones(self.b * (1.0 - soft_cut(cut, soft_mm)), only=None, split=False)
         dist = (ndimage.distance_transform_edt(~cut) * STEP).astype(np.float32)
 
         def dist_at(P):
             return ndimage.map_coordinates(dist, nib.affines.apply_affine(self.inv, P).T, order=1, mode="nearest")
-        orig = {n: (np.array(b["verts"], float), np.array(b["tris"], int), np.array(b["ao"], float)) for n, b in self.ex["bones"].items()}
+        orig = {n: (np.array(b["verts"], float), np.array(b["tris"], int), np.array(b["ao"], float)) for n, b in self.bones.items()}
         names = list(orig)
         cent = np.vstack([v[t].mean(1) for v, t, _ in orig.values()])
         lab = np.concatenate([np.full(len(t), k) for k, (_, t, _) in enumerate(orig.values())])
@@ -325,15 +380,16 @@ class Skull:
             patch = NF[(new_lab == names.index(n)) & (new_d <= reach)]
             used_o, inv_o = np.unique(keep, return_inverse=True)
             used_p, inv_p = np.unique(patch, return_inverse=True)
-            out[n] = {"verts": np.vstack([v[used_o], NV[used_p]]).round(3).tolist(),
-                      "tris": np.vstack([inv_o.reshape(-1, 3), inv_p.reshape(-1, 3) + len(used_o)]).tolist(),
-                      "ao": np.r_[ao[used_o], NA[used_p]].round(3).tolist()}
+            V2, T2, A2 = np.vstack([v[used_o], NV[used_p]]), np.vstack([inv_o.reshape(-1, 3), inv_p.reshape(-1, 3) + len(used_o)]), np.r_[ao[used_o], NA[used_p]]
+            if soft_mm > 0:
+                V2, T2, A2 = drop_flakes(V2, T2, A2, dist_at)
+            out[n] = {"verts": V2.round(3).tolist(), "tris": T2.tolist(), "ao": A2.round(3).tolist()}
         return out
 
     def mesh_bones(self, b: np.ndarray, only: set[str] | None, split: bool = True) -> dict:
         """The bone surface of a mask, meshed as skullbase_ct.py meshes v2's skull (level, smoothing, face density, baked
         shading), split into bones by the nearest of v2's bone surfaces: {bone name: {verts, tris, ao}} for `only`."""
-        mesh = isosurface(b, self.a, K.SURFACE_LEVEL, 0.6, K.BONE_FACES)
+        mesh = isosurface(b, self.a, K.SURFACE_LEVEL, 0.6, self.faces)
         V, F = np.asarray(mesh.vertices), np.asarray(mesh.faces)
         if not split:
             occ = ndimage.gaussian_filter((b > 0.5).astype(np.float32), K.AO_SIGMA_MM / K.GRID_MM)
@@ -355,6 +411,25 @@ class Skull:
             used, inv_i = np.unique(sel, return_inverse=True)
             out[n] = {"verts": V[used].round(3).tolist(), "tris": inv_i.reshape(-1, 3).tolist(), "ao": ao[used].round(3).tolist()}
         return out
+
+
+def drop_flakes(V: np.ndarray, T: np.ndarray, ao: np.ndarray, dist_at) -> tuple:
+    """A cut bone without the loose pieces its smoothed edge leaves where the bone is thin: connected pieces under
+    FLAKE_MM2 within BAND_MM of the cut (the CT's own small pieces elsewhere stay)."""
+    import trimesh
+    m = trimesh.Trimesh(V, T, process=False)
+    lab = trimesh.graph.connected_component_labels(m.face_adjacency, node_count=len(T))
+    area = np.bincount(lab, weights=m.area_faces)
+    near = np.bincount(lab, weights=(dist_at(m.triangles_center) <= BAND_MM).astype(float)) > 0
+    keep = ~(near & (area < FLAKE_MM2))[lab]
+    used, inv = np.unique(T[keep], return_inverse=True)
+    return V[used], inv.reshape(-1, 3), ao[used]
+
+
+def soft_cut(cut: np.ndarray, soft_mm: float) -> np.ndarray:
+    """How much of the bone a cut removes, 0..1: the mask itself, or with soft_mm a Gaussian of it, so the cut's edge (where
+    the bone left falls to the surface level) is a smooth curve rather than the grid's steps."""
+    return ndimage.gaussian_filter(cut.astype(np.float32), soft_mm / STEP) if soft_mm > 0 else cut.astype(np.float32)
 
 
 def pterional(S: Skull) -> dict:
@@ -411,7 +486,7 @@ def lateral_supraorbital(S: Skull) -> dict:
     centre = np.mean(pts, axis=0)
     n = S.outward(centre)
     outline = np.array([S.surface(p, S.outward(p)) for p in pts])
-    m = S.keep_below_cavity(S.flap(outline, n))       # the basal part drilled flush with the floor, the roof kept
+    m = S.keep_below_cavity(S.flap(outline, n, smooth=True))       # the basal part drilled flush with the floor, the roof kept
     # a frontal craniotomy: the cut keeps to the frontal bone (the outline's corner reaches the coronal suture)
     idx = np.argwhere(m)
     _, j = cKDTree(S.zp).query(nib.affines.apply_affine(S.a, idx))
@@ -421,18 +496,19 @@ def lateral_supraorbital(S: Skull) -> dict:
     how = ("A frontolateral flap over the orbital roof, with one burr hole posteriorly just below the temporal line (Cha 2012, "
            "Choque-Velasquez 2018), cut down to the anterior fossa floor (the basal part drilled off, Cha 2012); the sphenoid "
            f"ridge is not drilled. Its outline is placed by hand on this skull: about {area:.0f} mm² seen face on, larger than the "
-           f"mean LSO craniotomy of {LSO_MEAN_AREA:.0f} mm² (Cha 2012) on purpose, to show the anatomy (illustrative). "
-           f"Burr hole: {fmt(outline[LSO_BURR_HOLE])}.")
+           f"mean LSO craniotomy of {LSO_MEAN_AREA:.0f} mm² (Cha 2012) on purpose, to show the anatomy (illustrative), its basal edge "
+           f"at the level of the orbital roof. The outline is a smooth curve through those points and the cut's edge is smoothed over "
+           f"{LSO_SOFT_MM:.0f} mm (illustrative). Burr hole: {fmt(outline[LSO_BURR_HOLE])}.")
     return {"id": "lso", "name": "Lateral supraorbital craniotomy", "cut": m, "how": how, "burrHoles": [outline[LSO_BURR_HOLE].round(1).tolist()],
-            "outline": outline.round(1).tolist(), "areaMm2": round(area)}
+            "outline": outline.round(1).tolist(), "areaMm2": round(area), "softMm": LSO_SOFT_MM}
 
 
 def bregma(S: Skull) -> np.ndarray:
     """Where the coronal suture meets the midline, on this skull: midway between the rearmost frontal-bone point and the
     foremost parietal-bone point near the midline at the vertex (the two bones' labels overlap there by about a
     centimetre), on the outer surface."""
-    F = np.array(S.ex["bones"]["Frontal bone"]["verts"], float)
-    P = np.vstack([np.array(S.ex["bones"][n]["verts"], float) for n in ("Parietal bone.r", "Parietal bone.l")])
+    F = np.array(S.bones["Frontal bone"]["verts"], float)
+    P = np.vstack([np.array(S.bones[n]["verts"], float) for n in ("Parietal bone.r", "Parietal bone.l")])
     f = F[(np.abs(F[:, 0]) < 3) & (F[:, 2] > F[:, 2].max() - 25)]
     p = P[(np.abs(P[:, 0]) < 3) & (P[:, 2] > F[:, 2].max() - 25)]
     y = 0.5 * (f[:, 1].min() + p[:, 1].max())
@@ -525,10 +601,12 @@ def main() -> int:
     S = Skull()
     res = {}
     for ap in (pterional(S), lateral_supraorbital(S), interhemispheric(S), suboccipital(S)):
-        cut = ap["cut"]
+        cut, soft = ap["cut"], ap.get("softMm", 0.0)
         touched = set(S.bone_names(cut))
-        bones = S.cut_bones(cut, only=touched)
-        removed = isosurface(cut.astype(np.float32), S.a, 0.5, 0.6, 60_000)
+        bones = S.cut_bones(cut, only=touched, soft_mm=soft)
+        # the bone removed: where the cut takes more than half of the bone (its smoothed edge, as the cut bones have it)
+        removed = isosurface(np.minimum(S.b, soft_cut(cut, soft)) if soft else cut.astype(np.float32), S.a,
+                             K.SURFACE_LEVEL if soft else 0.5, 0.6, 60_000)
         res[ap["id"]] = {"name": ap["name"], "how": ap["how"], "side": ap.get("side", "R"), "bones": bones, "burrHoles": ap["burrHoles"],
                          **{k: ap[k] for k in ("bregma", "span") if k in ap},
                          "removed": {"verts": np.asarray(removed.vertices).round(3).tolist(), "tris": np.asarray(removed.faces).tolist()},

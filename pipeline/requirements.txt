@@ -1,6 +1,7 @@
 fast_simplification==0.2.0
 h5py==3.16.0
 nibabel==5.4.2
+pygltflib==1.16.5
 numpy==2.5.4
 remotezip==0.12.6
 scikit-image==0.26.0

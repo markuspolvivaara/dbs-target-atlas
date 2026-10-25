@@ -124,21 +124,23 @@ export const V3_FIT = z.object({
     crossedTriangles: z.record(z.object({ template: z.number(), fitted: z.number() })),
     open: z.object({ lipsFrontal: z.number(), lipsTemporal: z.number(), moved: z.number(), maxMovedMm: z.number(), crossedTriangles: z.number(), outsideCavityAfter: z.number() }),
     lift: z.object({ orbitalHandles: z.number(), insulaHandles: z.number(), moved: z.number(), maxMovedMm: z.number(), crossedTriangles: z.number(), outsideCavityAfter: z.number() }),
+    /** the lateral supraorbital view's lift, along that approach's corridor */
+    lsoLift: z.object({ orbitalHandles: z.number(), insulaHandles: z.number(), moved: z.number(), maxMovedMm: z.number(), crossedTriangles: z.number(), outsideCavityAfter: z.number() }),
     interhemispheric: z.object({
       moved: z.number(), fullyMoved: z.number(), maxMovedMm: z.number(), crossedTriangles: z.number(), outsideCavityAfter: z.number(),
       span: z.tuple([z.number(), z.number()]), callosumTopMm: z.tuple([z.number(), z.number()]),
     }),
     params: z.object({
       tableGapMm: z.number(), boneGapMm: z.number(), openFrontalMm: z.number(), openTemporalMm: z.number(), openRoiMm: z.number(),
-      liftMm: z.number(), liftCoreMm: z.number(), liftReachMm: z.number(), liftInsulaShare: z.number(),
+      liftMm: z.number(), liftCoreMm: z.number(), liftReachMm: z.number(), liftInsulaShare: z.number(), lsoLiftMm: z.number(),
       interhemisphericMm: z.number(), interhemisphericFadeMm: z.number(), interhemisphericReachMm: z.number(), interhemisphericFlatMm: z.number(),
       interhemisphericAboveCallosumMm: z.number(),
     }),
     /** the anterior cerebral arteries TopBrain labels on this CT: which A3 segments, and how far the third artery's A2
      * starts from the anterior communicating artery */
     aca: z.object({ a3: z.array(z.enum(['R', 'L', 'third'])), thirdA2ToAcomMm: z.number().nullable() }),
-    /** per artery and side: how far the opening and the lift move it at most */
-    vesselsMovedMaxMm: z.record(z.record(z.object({ open: z.number(), lift: z.number() }))),
+    /** per artery and side: how far the opening and the lifts move it at most */
+    vesselsMovedMaxMm: z.record(z.record(z.object({ open: z.number(), lift: z.number(), lsoLift: z.number() }))),
     m1LengthMm: z.record(z.number()),
   }).optional(),
   /** the cerebellum, brainstem and fourth ventricle fitted into the posterior fossa, and the telovelar shape
@@ -156,6 +158,13 @@ export const V3_FIT = z.object({
       uvulaToMedullaMm: z.object({ rest: z.number(), moved: z.number() }), inVentricle: z.object({ rest: z.number(), moved: z.number() }) }),
     params: z.object({ tableGapMm: z.number(), tableMinMm: z.number(), boneGapMm: z.number(), tvMm: z.number(), tvUp: z.number(), tvReachMm: z.number(),
       tvVermisMm: z.number(), tvVermisBack: z.number(), tvVermisReachMm: z.number() }),
+  }).optional(),
+  /** the skull completed beyond the CT's field of view, the face from the fitted model (pipeline/skullbase_v3_skull.py) */
+  skull: z.object({
+    fit: z.object({ scale: z.number(), warpedMedianMm: z.number() }),
+    face: z.object({ medianBeforeMm: z.number(), medianAfterMm: z.number(), withinBefore: z.number(), withinAfter: z.number() }),
+    edge: z.object({ medianBeforeMm: z.number(), medianAfterMm: z.number(), p90BeforeMm: z.number(), p90AfterMm: z.number() }),
+    faceBones: z.array(z.string()), seamMm: z.number(), blendMm: z.number(), edgeFitMm: z.number(),
   }).optional(),
 }).parse(v3Fit);
 

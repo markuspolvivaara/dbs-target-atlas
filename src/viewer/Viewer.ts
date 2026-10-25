@@ -712,8 +712,11 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       case 'posterior': dir = new THREE.Vector3(0, -1, 0.35); break;
       // anterolateral: the shown side from in front, the side and above, along a pterional craniotomy
       case 'anterolateral': dir = new THREE.Vector3(0.8 * sideSign, 0.4, 0.45); break;
-      // frontolateral: more from in front and above, along a lateral supraorbital craniotomy
+      // frontolateral: more from in front and above (the ventricles' frontal ventriculostomy)
       case 'frontolateral': dir = new THREE.Vector3(0.55 * sideSign, 0.75, 0.5); break;
+      // supraorbital: down a lateral supraorbital craniotomy's corridor, over the lateral orbital roof to the carotid and
+      // optic nerve (the mean clear line of sight from them out through that opening, with the frontal lobe lifted)
+      case 'supraorbital': dir = new THREE.Vector3(0.64 * sideSign, 0.52, 0.57); break;
       // vertex: from above and a little behind, down the interhemispheric fissure
       case 'vertex': dir = new THREE.Vector3(0.05 * sideSign, -0.3, 1); break;
       // suboccipital: from behind and below, up into the cerebellomedullary fissure

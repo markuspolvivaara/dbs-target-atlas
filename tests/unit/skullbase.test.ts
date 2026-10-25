@@ -216,14 +216,15 @@ describe('the temporal-bone model (v3: OpenEar specimen registered onto the CT)'
       expect(s.secondGenuAngle >= 95 && s.secondGenuAngle <= 125, side).toBe(true);   // Gupta 2013
     }
   });
-  it('every carried-over structure has both ears, on their sides; bone and vessels are the CT model\'s own files', () => {
+  it('every carried-over structure has both ears, on their sides; vessels are the CT model\'s own files, bone this model\'s', () => {
     for (const s of v3.structures) {
       if (s.id.startsWith('tb_') || s.id.startsWith('br_') || s.id.startsWith('pf_')) {
         expect(s.centroid!.L[0], s.id).toBeLessThan(0);
         expect(s.centroid!.R[0], s.id).toBeGreaterThan(0);
         expect(s.file, s.id).toMatch(/^assets\/skullbase-v3\//);
-      } else if (s.approach || s.morph) {
-        // the craniotomy's cut bones and the bone removed, and the arteries that move with the opening: this build's files
+      } else if (s.approach || s.morph || s.type === 'bone') {
+        // the craniotomy's cut bones and the bone removed, the arteries that move with the opening, and v3's own skull
+        // (completed beyond the scan): this build's files
         expect(s.file, s.id).toMatch(/^assets\/skullbase-v3\//);
       } else {
         expect(s.file, s.id).toMatch(/^assets\/skullbase-ct\//);
@@ -307,9 +308,9 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
   const byId = new Map(v3.structures.map((s) => [s.id, s]));
   const geom = (await import('../../src/data/generated/sbv3-approaches.json')).default as unknown as Record<string, { bones: string[]; removed: string; removedMl: number; side: string; burrHoles: number[][] }>;
   const brain = (await import('../../src/data/generated/sbv3-fit.json')).default.brain as unknown as {
-    fit: Record<string, number>; clear: Record<string, Record<string, number>>; open: Record<string, number>; lift: Record<string, number>;
+    fit: Record<string, number>; clear: Record<string, Record<string, number>>; open: Record<string, number>; lift: Record<string, number>; lsoLift: Record<string, number>;
     interhemispheric: Record<string, number>; aca: { a3: string[]; thirdA2ToAcomMm: number | null };
-    params: Record<string, number>; vesselsMovedMaxMm: Record<string, Record<string, { open: number; lift: number }>>; m1LengthMm: Record<string, number>;
+    params: Record<string, number>; vesselsMovedMaxMm: Record<string, Record<string, { open: number; lift: number; lsoLift: number }>>; m1LengthMm: Record<string, number>;
   };
   it('cuts the right pterional flap out of the CT bone: each cut bone stands in for a whole one, a plausible volume removed', () => {
     const ap = geom.pterional;
@@ -329,7 +330,7 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(lso.removedMl).toBeLessThan(30);
     expect(lso.burrHoles).toHaveLength(1);                 // one burr hole (Cha 2012)
     const pl = S3.skullPlan('lso', null), pt = S3.skullPlan('transsylvian', null);
-    expect(pl.camera).toBe('frontolateral');
+    expect(pl.camera).toBe('supraorbital');                 // down its corridor over the lateral orbital roof
     for (const id of [...lso.bones, lso.removed]) { expect(pl.looks.get(id), id).not.toBe('hidden'); expect(pt.looks.get(id), id).toBe('hidden'); }
     for (const id of [...geom.pterional.bones, geom.pterional.removed]) expect(pl.looks.get(id), id).toBe('hidden');
     expect(pl.looks.get('sb_frontal_bone')).toBe('hidden');      // the cut frontal bone stands in for it
@@ -355,15 +356,34 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(brain.open.maxMovedMm).toBeGreaterThan(Math.min(brain.params.openFrontalMm, brain.params.openTemporalMm) - 0.5);
     expect(brain.open.maxMovedMm).toBeLessThan(Math.max(brain.params.openFrontalMm, brain.params.openTemporalMm) + 2);
     for (const [name, m] of Object.entries(brain.vesselsMovedMaxMm)) {
-      expect(m.L, name).toEqual({ open: 0, lift: 0 });       // only the right side opens
+      expect(m.L, name).toEqual({ open: 0, lift: 0, lsoLift: 0 });       // only the right side opens
       expect(m.R.open, name).toBeGreaterThan(0.5);
       expect(m.R.open, name).toBeLessThanOrEqual(brain.params.openFrontalMm + 1);   // with the frontal side only
     }
     // the lift: the frontal lobe's orbital surface up by about its stated amount
     expect(brain.lift.maxMovedMm).toBeGreaterThan(brain.params.liftMm - 0.5);
     expect(brain.lift.maxMovedMm).toBeLessThan(brain.params.liftMm + 2);
+    // the lateral supraorbital view's own lift, along its corridor; the arteries carried no further than the cortex
+    expect(brain.lsoLift.maxMovedMm).toBeGreaterThan(brain.params.lsoLiftMm - 0.5);
+    expect(brain.lsoLift.maxMovedMm).toBeLessThan(brain.params.lsoLiftMm + 2);
+    for (const [name, m] of Object.entries(brain.vesselsMovedMaxMm)) expect(m.R.lsoLift, name).toBeLessThanOrEqual(brain.params.lsoLiftMm + 1);
     const morph = v3.structures.filter((s) => s.morph).map((s) => s.name);
     expect(morph).toEqual(expect.arrayContaining(['Insula', 'Frontal lobe', 'Temporal lobe', 'Middle cerebral artery (M2 segment)', 'Middle cerebral artery (M3 segment)']));
+  });
+  it('draws its own skull: the CT\'s bone, completed beyond the scan, and the face from the fitted model', async () => {
+    const fit = (await import('../../src/data/generated/sbv3-fit.json')).default as unknown as { skull: { faceBones: string[]; face: Record<string, number>; edge: Record<string, number> } };
+    const bones = v3.structures.filter((s) => s.type === 'bone' && !s.approach);
+    for (const n of ['Frontal bone', 'Sphenoid bone', 'Temporal bone', 'Maxilla', 'Zygomatic bone', 'Nasal bone', 'Vomer']) expect(bones.some((b) => b.name === n), n).toBe(true);
+    for (const b of bones) expect(b.file, b.name).toMatch(/^assets\/skullbase-v3\//);         // v3's own meshes, not v2's
+    for (const n of fit.skull.faceBones) {
+      const b = bones.find((x) => x.name === n);
+      if (b) expect(b.derivation, n).toMatch(/fitted onto this CT throughout/);
+    }
+    expect(bones.find((b) => b.name === 'Sphenoid bone')!.derivation).toMatch(/CT angiogram's bone surface/);
+    // the refits bring the model closer to the CT's bone
+    expect(fit.skull.face.withinAfter).toBeGreaterThanOrEqual(fit.skull.face.withinBefore);
+    expect(fit.skull.edge.medianAfterMm).toBeLessThan(fit.skull.edge.medianBeforeMm);
+    expect(fit.skull.edge.p90AfterMm).toBeLessThan(2.5);
   });
   it('the view draws the cut bones, the removed bone see-through and the brain; elsewhere none of them', () => {
     const p = S3.skullPlan('transsylvian', null);
@@ -440,6 +460,10 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(T3.encodeSkull(s)).toContain('op=40');
     expect(T3.encodeSkull(s)).toContain('lf=70');
     expect(T3.decodeSkull('#/atlas?g=arteries&op=40&lf=70').morphs).toEqual({});
+    // the lateral supraorbital view lifts along its own corridor (its own parameter); the pterional lift is not its shape
+    const l = T3.decodeSkull('#/atlas?g=lso&ll=80&lf=70&op=20');
+    expect(l.morphs).toEqual({ lsoLift: 0.8, open: 0.2 });
+    expect(T3.encodeSkull(l)).toContain('ll=80');
   });
   it('sourced content: references exist and are used, context structures exist', () => {
     const used = new Set(APPROACHES.flatMap((a) => a.sections.flatMap((x) => x.claims)).flatMap((c) => c.refIds));

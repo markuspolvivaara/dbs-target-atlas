@@ -29,7 +29,10 @@ inside the cavity. The opened surface is the fitted one's morph target "open" (a
 A second shape, on top of the opening (target "lift"), lifts the frontal lobe off the orbital roof as a spatula would,
 opening a subfrontal corridor: the orbital surface along the line from the right anterior clinoid process forward over
 the orbital roof to the frontal pole (LIFT_ALONG) raised by LIFT_MM (illustrative), the anterior insula with it, the
-temporal lobe and posterior insula still. Both the pterional and the lateral supraorbital views use it.
+temporal lobe and posterior insula still. The pterional view uses it. The lateral supraorbital view has its own (target
+"lsoLift"), the same lift by LSO_LIFT_MM (illustrative) along that approach's corridor instead (LSO_LIFT_ALONG): from the
+anterior clinoid process out over the lateral orbital roof to under the craniotomy's basal edge, which lies lateral to the
+first one's line; along the first one, nothing would open below the LSO's opening.
 
 A third (target "interhemispheric", from the fitted surface) holds the right hemisphere off the falx over the
 interhemispheric craniotomy (its span from skullbase_v3_approach.py's approach.json): a smooth shift to the right, IH_MM
@@ -133,6 +136,12 @@ LIFT_CORE_MM = 10.0        # full within this of that line ...
 LIFT_REACH_MM = 22.0       # ... fading to none at this distance
 LIFT_INSULA_SHARE = 0.5    # the anterior insula rises this share of the lift (none at its middle, all at its front)
 LIFT_ROI_MM = 45.0         # the brain further than this from what is lifted does not move
+LSO_LIFT_MM = 12.0         # illustrative: the lateral supraorbital view's lift (the same shape, along its own corridor) ...
+LSO_LIFT_DIR = (-0.4, 0.0, 1.0)   # ... up and towards the midline, off the lateral wall (illustrative) ...
+LSO_LIFT_ALONG = [         # ... from the anterior clinoid process out over the lateral orbital roof (right side; offsets mm)
+    ("Anterior clinoid process", (0.0, 0.0, 0.0)),
+    ("Zygomatic process of frontal bone", (0.0, -4.0, 8.0)),    # to the lateral orbital roof, behind the frontozygomatic suture
+]                          # (not on under the craniotomy: the brain there lies against the vault, and lifting it creases it)
 IH_MM = 8.0                # illustrative: how far the right hemisphere's medial surface is held off the falx
 IH_FLAT_MM = 3.0           # ... all of it within this of the midline (the medial surface) ...
 IH_REACH_MM = 25.0         # ... falling to none this far from it
@@ -584,10 +593,11 @@ def open_fissure(d: dict, V: np.ndarray, hull_sdf: np.ndarray, pt: Patient) -> t
                "outsideCavityAfter": int((sc[roi] < 0).sum())}
 
 
-def lift_frontal(d: dict, V: np.ndarray, X_open: np.ndarray, line: tuple, pt: Patient) -> tuple[np.ndarray, dict]:
+def lift_frontal(d: dict, V: np.ndarray, X_open: np.ndarray, line: tuple, pt: Patient, mm: float = LIFT_MM,
+                 direction: tuple = (0.0, 0.0, 1.0)) -> tuple[np.ndarray, dict]:
     """The frontal lobe lifted off the orbital roof, as a spatula would hold it along a subfrontal corridor: the orbital
-    surface along `line` (a polyline from the anterior clinoid process forward over the orbital roof to the frontal pole)
-    raised by LIFT_MM, fading out
+    surface along `line` (a polyline from the anterior clinoid process forward over the orbital roof) moved by mm along
+    direction (up, unless given), fading out
     by LIFT_REACH_MM from it; the anterior
     insula raised by up to LIFT_INSULA_SHARE of it; the temporal lobe, the posterior insula, the cortex held by the vault
     and the brain beyond LIFT_ROI_MM where the opening left them; the rest as rigid as possible. Solved from the fitted
@@ -595,6 +605,7 @@ def lift_frontal(d: dict, V: np.ndarray, X_open: np.ndarray, line: tuple, pt: Pa
     F, lobe, ins = d["F"], d["lobe"], d["ins"]
     nrm = trimesh.Trimesh(V, F, process=False).vertex_normals
     up = np.array([0.0, 0.0, 1.0])
+    move = np.asarray(direction, float) / np.linalg.norm(direction)
     frontal = lobe == "frontal"
     r = np.full(len(V), np.inf)
     for a, b in zip(line[:-1], line[1:]):          # distance to the polyline
@@ -607,8 +618,8 @@ def lift_frontal(d: dict, V: np.ndarray, X_open: np.ndarray, line: tuple, pt: Pa
     w_ins[ins] = LIFT_INSULA_SHARE * np.clip((V[ins, 1] - np.median(yi)) / (yi.max() - np.median(yi)), 0, 1)
     ins_front = ins & (w_ins > 0.02)
     target = X_open.copy()
-    target[base] += LIFT_MM * w[base, None] * up
-    target[ins_front] += LIFT_MM * w_ins[ins_front, None] * up
+    target[base] += mm * w[base, None] * move
+    target[ins_front] += mm * w_ins[ins_front, None] * move
     handles = base | ins_front
     roi = cKDTree(V[handles]).query(V)[0] <= LIFT_ROI_MM
     sc, _ = pt.cavity(V)
@@ -743,7 +754,7 @@ def piece(V, F, faces_sel, targets=None):
     return node
 
 
-OPENING_KEYS = ("OPEN_", "LIP_", "HOLD_", "SKIN_", "ARAP_", "MORPHED_", "PIECES", "LIFT_", "IH_")
+OPENING_KEYS = ("OPEN_", "LIP_", "HOLD_", "SKIN_", "ARAP_", "MORPHED_", "PIECES", "LIFT_", "LSO_", "IH_")
 
 
 def params_hash(fit_only: bool = False) -> str:
@@ -804,6 +815,11 @@ def main() -> int:
     rl["crossedTriangles"] = len(self_intersections(XL, d["F"])[0])
     report["lift"] = rl
     print("lifted", rl, round(time.time() - t0), "s")
+    # the lateral supraorbital view's lift, along its own corridor
+    XS, rs = lift_frontal(d, out["R"], X, [landmark_r(n, o) for n, o in LSO_LIFT_ALONG], pt, mm=LSO_LIFT_MM, direction=LSO_LIFT_DIR)
+    rs["crossedTriangles"] = len(self_intersections(XS, d["F"])[0])
+    report["lsoLift"] = rs
+    print("lifted (LSO)", rs, round(time.time() - t0), "s")
     # the right hemisphere held off the falx over the interhemispheric craniotomy (skullbase_v3_approach.py: its span)
     ih = json.loads((BUILD / "approach.json").read_text())["interhemispheric"]
     falx = np.array(ex2["soft"]["Falx cerebri"]["verts"], float)
@@ -811,9 +827,9 @@ def main() -> int:
     ri["crossedTriangles"] = len(self_intersections(XI, d["F"])[0])
     report["interhemispheric"] = ri
     print("retracted", ri, round(time.time() - t0), "s")
-    # GLBs: the brain by part (right hemisphere: the opening, the lift on top of it, and the interhemispheric retraction
-    # as named morph targets)
-    shapes = [("open", X, out["R"]), ("lift", XL, X), ("interhemispheric", XI, out["R"])]
+    # GLBs: the brain by part (right hemisphere: the opening, the two lifts on top of it, and the interhemispheric
+    # retraction as named morph targets)
+    shapes = [("open", X, out["R"]), ("lift", XL, X), ("interhemispheric", XI, out["R"]), ("lsoLift", XS, X)]
     items = []
     for pid, name, lobes, tok in PIECES:
         nodes, cent = [], {}
@@ -843,13 +859,16 @@ def main() -> int:
             if s == "R":
                 D0 = skin(v, out["R"], X, follow_open)
                 D1 = skin(v, out["R"], XL, follow_lift) - D0
+                D2 = skin(v, out["R"], XS, follow_lift) - D0
             else:
-                D0 = D1 = np.zeros_like(v)
+                D0 = D1 = D2 = np.zeros_like(v)
             node["targets"] = [{"name": "open", "positions": D0, "normals": np.zeros_like(v)},
-                               {"name": "lift", "positions": D1, "normals": np.zeros_like(v)}]
+                               {"name": "lift", "positions": D1, "normals": np.zeros_like(v)},
+                               {"name": "lsoLift", "positions": D2, "normals": np.zeros_like(v)}]
             nodes.append(node)
             cent[s] = v.mean(0).round(2).tolist()
-            moved[s] = {"open": round(float(np.linalg.norm(D0, axis=1).max()), 2), "lift": round(float(np.linalg.norm(D1, axis=1).max()), 2)}
+            moved[s] = {"open": round(float(np.linalg.norm(D0, axis=1).max()), 2), "lift": round(float(np.linalg.norm(D1, axis=1).max()), 2),
+                        "lsoLift": round(float(np.linalg.norm(D2, axis=1).max()), 2)}
         sid = "sb_" + re.sub(r"[^a-z0-9]+", "_", vname.lower()).strip("_")
         write_glb(BUILD / f"{sid}.glb", nodes, {"id": sid})
         report.setdefault("vesselsMovedMaxMm", {})[vname] = moved
@@ -870,7 +889,7 @@ def main() -> int:
     report["aca"] = {"a3": a3, "thirdA2ToAcomMm": gap}
     report["params"] = {"tableGapMm": TABLE_GAP_MM, "boneGapMm": BONE_GAP_MM, "openFrontalMm": OPEN_FRONTAL_MM,
                         "openTemporalMm": OPEN_TEMPORAL_MM, "openRoiMm": OPEN_ROI_MM, "liftMm": LIFT_MM, "liftCoreMm": LIFT_CORE_MM,
-                        "liftReachMm": LIFT_REACH_MM, "liftInsulaShare": LIFT_INSULA_SHARE, "interhemisphericMm": IH_MM,
+                        "liftReachMm": LIFT_REACH_MM, "liftInsulaShare": LIFT_INSULA_SHARE, "lsoLiftMm": LSO_LIFT_MM, "interhemisphericMm": IH_MM,
                         "interhemisphericFadeMm": IH_FADE_MM, "interhemisphericReachMm": IH_REACH_MM, "interhemisphericFlatMm": IH_FLAT_MM,
                         "interhemisphericAboveCallosumMm": IH_ABOVE_CC_MM, "faces": FACES, "jacMin": JAC_MIN}
     (BUILD / "brain.json").write_text(json.dumps({"items": items, "report": report}, indent=1))

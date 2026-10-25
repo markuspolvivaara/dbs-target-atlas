@@ -43,7 +43,9 @@ export interface ApproachContent {
   notShown: string;
   /** structures (names) the view frames, with the bone removed */
   focus: string[];
-  /** the shapes of the brain the view offers (named morph targets: open, lift, interhemispheric, telovelar), a slider each */
+  /** the frame's least radius, mm (default 60): smaller comes closer */
+  radius?: number;
+  /** the shapes of the brain the view offers (named morph targets: open, lift, lsoLift, interhemispheric, telovelar), a slider each */
   morphs: string[];
 }
 const sec = (title: string, claims: ApproachClaim[], measured?: ApproachSection['measured']): ApproachSection => ({ title, claims, ...(measured ? { measured } : {}) });
@@ -150,8 +152,8 @@ export const APPROACHES: ApproachContent[] = [
     morphs: ['open', 'lift'],
   },
   {
-    id: 'lso', view: 'lso', name: 'Lateral supraorbital approach', camera: 'frontolateral',
-    summary: 'A right lateral supraorbital (LSO) craniotomy cut out of this CT’s bone, drawn larger than usual to show the anatomy, over the same fitted brain. The fissure lies at the craniotomy’s lower edge; the lift raises the frontal lobe to look along the orbital roof at the carotid, the optic nerve and M1, and the other slider opens the fissure.',
+    id: 'lso', view: 'lso', name: 'Lateral supraorbital approach', camera: 'supraorbital',
+    summary: 'A right lateral supraorbital (LSO) craniotomy cut out of this CT’s bone, drawn larger than usual to show the anatomy, over the same fitted brain. The fissure lies at the craniotomy’s lower edge; the lift raises the frontal lobe off the lateral orbital roof, opening a corridor under it to the carotid, the optic nerve and M1, and the other slider opens the fissure.',
     sections: [sec('The craniotomy', [
       c('A more aesthetic variant of the classic pterional approach, developed in Helsinki and the approach used most there: a curved frontotemporal skin incision behind the hairline, stopping 2–3 cm above the zygoma, and the temporalis muscle opened only a little, near its upper insertion.', 'choquevelasquez2018'),
       c('One burr hole posteriorly, just below the insertion line of the temporalis muscle; the bone flap is cut mainly with the side-cutting craniotome and its basal part drilled off before it is lifted; about 3 × 4 cm.', 'cha2012'),
@@ -171,8 +173,10 @@ export const APPROACHES: ApproachContent[] = [
     ], 'm1'), sec('Insula', INSULA), sec('Care points', [VEINS])],
     context: [...CONTEXT, 'Olfactory nerve (I)'],
     notShown: `${NOT_SHOWN} The craniotomy is drawn larger than the usual LSO, its outline placed by hand on this skull.`,
-    focus: ['Middle cerebral artery (M1 segment)', 'Optic nerve (II)'],
-    morphs: ['lift', 'open'],
+    // framed on the corridor's far end (the carotid, optic nerve and M1) and its opening, closer than the other views
+    focus: ['Middle cerebral artery (M1 segment)', 'Optic nerve (II)', 'Internal carotid artery'],
+    radius: 48,
+    morphs: ['lsoLift', 'open'],
   },
   {
     id: 'interhemispheric', view: 'interhemispheric', name: 'Interhemispheric transcallosal approach', camera: 'vertex', hemi: 'both',

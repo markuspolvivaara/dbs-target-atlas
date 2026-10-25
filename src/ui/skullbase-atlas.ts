@@ -45,6 +45,12 @@ const MORPH_UI: Record<string, { label: string; key: string; note: () => string 
       return b ? `At 100 % the frontal lobe’s orbital surface is ${fmtMm(b.params.liftMm)} mm higher along a corridor over the orbital roof, from the anterior clinoid process forward to the frontal pole (fading out ${fmtMm(b.params.liftReachMm)} mm from it); the front of the insula rises up to ${Math.round(b.params.liftInsulaShare * 100)} % of that; the temporal lobe stays.` : null;
     },
   },
+  lsoLift: {
+    label: 'Lift the frontal lobe', key: 'l', note: () => {
+      const b = V3_FIT.brain;
+      return b ? `At 100 % the frontal lobe’s orbital surface is ${fmtMm(b.params.lsoLiftMm)} mm higher along this approach’s corridor, from the anterior clinoid process out over the lateral orbital roof to under the craniotomy’s lower edge (fading out ${fmtMm(b.params.liftReachMm)} mm from it); the front of the insula rises up to ${Math.round(b.params.liftInsulaShare * 100)} % of that; the temporal lobe stays.` : null;
+    },
+  },
   interhemispheric: {
     label: 'Hold the right hemisphere off the falx', key: 'i', note: () => {
       const b = V3_FIT.brain;

@@ -676,7 +676,8 @@ test('skull base (temporal bone): the surgical view opens the Sylvian fissure wi
   await settle(page);
   await expect(page.locator('.pane:not([hidden]) article.card').last()).toContainText('Cha 2012');
   await expect(page.locator('.pane:not([hidden]) article.card').last()).toContainText('Mosteiro 2026');
-  await expect(page.locator('#sb-m-lift')).toHaveCount(1);
+  await expect(page.locator('#sb-m-lsoLift')).toHaveCount(1);
+  await expect(page.locator('#sb-m-lift')).toHaveCount(0);
   // the interhemispheric view: its own slider (the right hemisphere held off the falx), sourced, in the link
   await page.locator('.grp-chips[aria-label="Surgical views"] .chip[data-v="interhemispheric"]').click();
   await settle(page);

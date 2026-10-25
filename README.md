@@ -81,12 +81,22 @@ Z-Anatomy anatomy fitted onto it).
 ### The default model (`skullbase/`): the CT with its anatomy made to fit it
 
 The section's default ("Skull base" on the home page, first on the **Model** chips; the pipeline and its files call it
-v3): Skull base v2's CT (its bone and TopBrain vessel
-meshes, reused) with a real ear's contents inside each temporal bone. A CT does not show the nerves and this one blurs
+v3): Skull base v2's CT (its TopBrain vessel meshes reused; its bone completed, below) with a real ear's contents
+inside each temporal bone. A CT does not show the nerves and this one blurs
 the canals, so the contents come from the OpenEar library (Sieber et al. 2019, CC BY 4.0): eight cadaver temporal
 bones, cone-beam CT and micro-slicing, segmented at 0.125 mm. `pipeline/fetch_openear.py` reads only the bone and label
 volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
 
+- **The skull, completed** (`pipeline/skullbase_v3_skull.py`): the angiogram is a box that cuts off the front of the
+  forehead, the lower maxillae and parts of the vault, and resolves the thin facial bones only in pieces (v2 leaves the
+  face out). v3 draws every bone of the Z-Anatomy model: the CT's bone where the scan reaches, the fitted model beyond
+  it, and the face (maxillae, zygomatic, nasal, lacrimal and palatine bones, vomer, inferior conchae) from the model
+  throughout. The model's face is fitted again on its own onto the CT's facial bone (pairs both ways, an affine map held
+  close to a rotation), the whole model again near the scan's edge; then one bone field (the CT inside, the model
+  beyond, blended over the last 6 mm inside the edge, the face blended in across the sutures over 1.5 mm, all voxels
+  softened by about one voxel so gently sloping surfaces show no grid steps) gives one surface, split into bones as v2
+  splits it. On the skull's outer surface, v2's rule-drawn walls around enclosed air (they made ridges and a shelf over
+  the frontal sinus) and the CT's bone within 5 mm of them give way to the model too. The craniotomies are cut out of it. Each bone's card says how much of it is the model. No mandible.
 - **Registration** (`pipeline/skullbase_v3.py`): each specimen's bone, blurred to the CT's resolution, is matched to
   the CT's bone within 14 mm of the labyrinth by a similarity transform (1500 rotations, as is and mirrored, then a
   local optimisation of the best twelve), started from the labyrinth picked by hand on the CT's slices. Specimen ALPHA

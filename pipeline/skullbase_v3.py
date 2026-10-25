@@ -484,9 +484,11 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
         c = base["carotids"][s]
         carotid_surface[s] = tube_mesh_var(c["path"], c["radius"])[0]
     items = []
-    # v2's bones and the vessels the CT itself shows (not the Z-Anatomy structures fitted onto it)
+    # v3's own skull (completed beyond the scan), else v2's bones; and the vessels the CT itself shows (not the Z-Anatomy
+    # structures fitted onto it)
+    own_skull = skull_items(items, v2)
     for it in v2["structures"]:
-        if it["type"] == "bone" or (it.get("category") in ("artery", "vein") and not it.get("fitted")):
+        if (it["type"] == "bone" and not own_skull) or (it.get("category") in ("artery", "vein") and not it.get("fitted")):
             items.append({**it})
     dataset = {
         "name": "TopBrain 2025 CT angiogram (case 011) with OpenEar temporal bone ALPHA registered onto it",
@@ -756,7 +758,10 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
                                                    **({"brain": json.loads((BUILD / "brain.json").read_text())["report"]}
                                                       if (BUILD / "brain.json").exists() else {}),
                                                    **({"pfossa": json.loads((BUILD / "pfossa.json").read_text())["report"]}
-                                                      if (BUILD / "pfossa.json").exists() else {})}, indent=1))
+                                                      if (BUILD / "pfossa.json").exists() else {}),
+                                                   **({"skull": {k: v for k, v in json.loads((BUILD / "skull.json").read_text())["report"].items()
+                                                                 if k != "beyondScanShare"}}
+                                                      if (BUILD / "skull.json").exists() else {})}, indent=1))
     # definitions: the Wikipedia texts Z-Anatomy ships, for the names shown
     ex = json.loads(ZEXPORT.read_text())
     if (BUILD / "pfossa.json").exists():          # the posterior fossa's (skullbase_pfossa_export.py)
@@ -765,7 +770,7 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
     alias = {"Facial nerve (VII)": "Facial nerve", IAM: "Internal acoustic meatus",
              "Internal carotid artery (petrous part)": "Internal carotid artery", CAROTID: "Internal carotid artery"}
     defs = {}
-    for n in want:
+    for n in sorted(want):          # (sorted: a set's order changes from run to run)
         raw = ex["texts"].get(n) or ex["texts"].get(alias.get(n, n)) or ex["texts"].get(n + ".r")
         d = SB.definition(raw)
         if d:
@@ -818,7 +823,8 @@ def brain_items(items: list, ex2: dict, v2: dict) -> None:
                           f"Sylvian fissure (the first slider): the lips moved apart {rep['params']['openFrontalMm']:.0f} mm up and "
                           f"{rep['params']['openTemporalMm']:.0f} mm down, the rest following as rigidly as possible; and its frontal lobe "
                           f"lifts off the orbital roof (the second slider: {rep['params']['liftMm']:.0f} mm along a corridor from the "
-                          "anterior clinoid process forward to the frontal pole, the front of the insula with it). In the interhemispheric "
+                          "anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital "
+                          f"view {rep['params']['lsoLiftMm']:.0f} mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric "
                           f"view its medial surface is held {rep['params']['interhemisphericMm']:.0f} mm off the falx over the craniotomy's "
                           "length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue.",
             "centroid": b["centroid"],
@@ -862,6 +868,78 @@ def pfossa_items(items: list) -> None:
         })
 
 
+def bone_nodes(sides: dict) -> tuple[list, dict]:
+    """A bone's GLB nodes from its meshes by side ('M': one midline mesh, cut at x = 0 into L and R), with the baked
+    shading as vertex colours; and its centroid by side."""
+    import skullbase_build as SB
+    from meshcheck import orient_outward
+    parts = {}
+    for side, (v, t, ao) in sides.items():
+        t = orient_outward(v, t)
+        parts.update(SB.mesh_split(v, t, ao) if side == "M" else {side: (v, t, ao)})
+    nodes, cent = [], {}
+    for side, (v, t, ao) in sorted(parts.items()):
+        nodes.append({"name": side, "positions": v, "normals": SB.normals(v, t), "indices": t, "mode": TRIANGLES,
+                      "colors": np.repeat((SB.AO_FLOOR + (1 - SB.AO_FLOOR) * ao)[:, None], 3, axis=1)})
+        cent[side] = v.mean(0).round(2).tolist()
+    return nodes, cent
+
+
+def skull_bones() -> dict | None:
+    """v3's skull (pipeline/skullbase_v3_skull.py, skull.json): {Z-Anatomy bone name: (verts, tris, ao)}, or None."""
+    p = BUILD / "skull.json"
+    if not p.exists():
+        return None
+    return {n: (np.array(b["verts"], float), np.array(b["tris"], int), np.array(b["ao"], float))
+            for n, b in json.loads(p.read_text())["bones"].items()}
+
+
+def skull_items(items: list, v2: dict) -> bool:
+    """v3's own skull: every bone of the Z-Anatomy model, the CT's bone where the scan reaches and the fitted model beyond
+    it (pipeline/skullbase_v3_skull.py); False if it has not been built (v2's bones are used)."""
+    bones = skull_bones()
+    if bones is None:
+        return False
+    import skullbase_build as SB
+    rep = json.loads((BUILD / "skull.json").read_text())["report"]
+    v2b = {it["name"]: it for it in v2["structures"] if it["type"] == "bone"}
+    tmpl = next(iter(v2b.values()))
+    by_base: dict[str, dict] = {}
+    beyond: dict[str, float] = {}
+    for n, mesh in bones.items():
+        base, side = SB.split_pair(n)
+        by_base.setdefault(base, {})[side or "M"] = mesh
+        beyond[base] = max(beyond.get(base, 0.0), rep["beyondScanShare"][n])
+    for base, sides in sorted(by_base.items()):
+        nodes, cent = bone_nodes(sides)
+        sid = SB.slug(base)
+        write_glb(BUILD / f"{sid}.glb", nodes, {"id": sid})
+        src = v2b.get(base, tmpl)
+        share = round(beyond[base] * 100)
+        face = base in rep.get("faceBones", [])
+        where = (f"The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): "
+                 "this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the "
+                 f"CT's facial bone (median distance {rep['face']['medianBeforeMm']} mm before, {rep['face']['medianAfterMm']} mm "
+                 f"after) and blended into the CT's cranium across the sutures over {rep['seamMm']} mm. " if face else
+                 "All of it lies within the scan. " if share == 0 else
+                 f"Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about "
+                 f"{share} % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT "
+                 f"and fitted again onto the CT's bone within {rep['edgeFitMm']:.0f} mm of the edge (median distance "
+                 f"{rep['edge']['medianBeforeMm']} mm before, {rep['edge']['medianAfterMm']} mm after), the CT giving way to it "
+                 f"over the last {rep['blendMm']:.0f} mm inside the edge, so the two make one surface (a fitted model, another "
+                 "person's anatomy, not this patient's). ")
+        items.append({**{k: src[k] for k in ("colour", "dataset", "source", "licence", "citation", "citationUrls")},
+                      "aliases": src["aliases"] if base in v2b else [], "id": sid, "name": base, "type": "bone",
+                      "file": f"assets/{KIND}/{sid}.glb", "bytes": 0, "refIds": [], "category": "bone",
+                      "derivation": ("Cut at the midline (x = 0) into left and right halves. " if "M" in sides else "")
+                                    + ("" if face else "The CT angiogram's bone surface where the scan reaches (as in Skull base v2: "
+                                       "400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled "
+                                       "vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the "
+                                       "Z-Anatomy model fitted onto it. ") + where + "Shading darkened where neighbouring bone encloses it.",
+                      "centroid": {"L": cent.get("L", cent.get("R")), "R": cent.get("R", cent.get("L"))}})
+    return True
+
+
 def approach_items(items: list, ex2: dict) -> None:
     """The right pterional craniotomy (pipeline/skullbase_v3_approach.py, approach.json): each bone it cuts again, with
     the cut (it replaces the whole bone in the transsylvian view), and the bone removed as one mesh."""
@@ -872,9 +950,11 @@ def approach_items(items: list, ex2: dict) -> None:
     from meshcheck import orient_outward
     aps = json.loads(p.read_text())
     whole: dict[str, dict] = {}
-    for n, b in ex2["bones"].items():
+    own = skull_bones()
+    for n, mesh in (own.items() if own is not None else
+                    ((n, (np.array(b["verts"], float), np.array(b["tris"], int), np.array(b["ao"], float))) for n, b in ex2["bones"].items())):
         base, side = SB.split_pair(n)
-        whole.setdefault(base, {})[side or "M"] = (np.array(b["verts"], float), np.array(b["tris"], int), np.array(b["ao"], float))
+        whole.setdefault(base, {})[side or "M"] = mesh
     cut_of = {it["id"]: it for it in items}
     summary = {}
     for aid, ap in aps.items():
@@ -886,15 +966,7 @@ def approach_items(items: list, ex2: dict) -> None:
         for base, cut_sides in sorted(by_base.items()):
             sides = dict(whole[base])
             sides.update(cut_sides)
-            parts = {}
-            for side, (v, t, ao) in sides.items():
-                t = orient_outward(v, t)
-                parts.update(SB.mesh_split(v, t, ao) if side == "M" else {side: (v, t, ao)})
-            nodes, cent = [], {}
-            for side, (v, t, ao) in sorted(parts.items()):
-                nodes.append({"name": side, "positions": v, "normals": SB.normals(v, t), "indices": t, "mode": TRIANGLES,
-                              "colors": np.repeat((SB.AO_FLOOR + (1 - SB.AO_FLOOR) * ao)[:, None], 3, axis=1)})
-                cent[side] = v.mean(0).round(2).tolist()
+            nodes, cent = bone_nodes(sides)
             sid = f"sb_appr_{aid}__{SB.slug(base)[3:]}"
             write_glb(BUILD / f"{sid}.glb", nodes, {"id": sid})
             src = cut_of[SB.slug(base)]
@@ -1025,6 +1097,11 @@ def validate() -> int:
         lf = b["lift"]
         check(b["params"]["liftMm"] - 0.5 <= lf["maxMovedMm"] <= b["params"]["liftMm"] + 2, f"the lift moves the brain up to {lf['maxMovedMm']} mm")
         check(lf["orbitalHandles"] > 100 and lf["insulaHandles"] > 100, f"the lift holds {lf['orbitalHandles']} orbital, {lf['insulaHandles']} insular vertices")
+        ll = b["lsoLift"]
+        check(b["params"]["lsoLiftMm"] - 0.5 <= ll["maxMovedMm"] <= b["params"]["lsoLiftMm"] + 2, f"the LSO lift moves the brain up to {ll['maxMovedMm']} mm")
+        check(ll["orbitalHandles"] > 100, f"the LSO lift holds {ll['orbitalHandles']} orbital vertices")
+        check(ll["crossedTriangles"] <= b["crossedTriangles"]["R"]["fitted"] + 800,
+              f"the LSO lift crosses {ll['crossedTriangles']} triangles (fitted: {b['crossedTriangles']['R']['fitted']})")
         ih = b["interhemispheric"]
         check(b["params"]["interhemisphericMm"] - 0.5 <= ih["maxMovedMm"] <= b["params"]["interhemisphericMm"] + 2,
               f"the interhemispheric retraction moves the brain up to {ih['maxMovedMm']} mm")
@@ -1034,9 +1111,10 @@ def validate() -> int:
               f"the retraction crosses {ih['crossedTriangles']} triangles (fitted: {b['crossedTriangles']['R']['fitted']})")
         check("third" in b["aca"]["a3"] and b["aca"]["thirdA2ToAcomMm"] is not None, f"anterior cerebral arteries {b['aca']}")
         for name, mv in b["vesselsMovedMaxMm"].items():
-            check(mv["L"]["open"] == 0 and mv["L"]["lift"] == 0, f"{name}: the left side moves {mv['L']}")
+            check(mv["L"]["open"] == 0 and mv["L"]["lift"] == 0 and mv["L"]["lsoLift"] == 0, f"{name}: the left side moves {mv['L']}")
             check(0.5 < mv["R"]["open"] <= b["params"]["openFrontalMm"] + 1, f"{name}: the opening moves it {mv['R']['open']} mm")
             check(mv["R"]["lift"] <= b["params"]["liftMm"] + 1, f"{name}: the lift moves it {mv['R']['lift']} mm")
+            check(mv["R"]["lsoLift"] <= b["params"]["lsoLiftMm"] + 1, f"{name}: the LSO lift moves it {mv['R']['lsoLift']} mm")
     # the telovelar view: the cerebellum, brainstem and fourth ventricle fitted into the posterior fossa, the tonsils drawn apart
     pf = [it for it in m["structures"] if it.get("category") in ("hindbrain", "ventricle")]
     check(len(pf) == 8 and {it["name"] for it in pf if it.get("morph")} == {"Cerebellar hemisphere", "Tonsil of cerebellum", "Vermis"},

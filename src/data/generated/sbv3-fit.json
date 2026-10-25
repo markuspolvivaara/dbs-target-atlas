@@ -436,19 +436,40 @@
    ],
    "crossedTriangles": 537
   },
+  "lsoLift": {
+   "orbitalHandles": 1968,
+   "insulaHandles": 892,
+   "moved": 15973,
+   "maxMovedMm": 12.3,
+   "heldAtCavity": 49,
+   "outsideCavityAfter": 247,
+   "line": [
+    [
+     12.1,
+     3.2,
+     9.8
+    ],
+    [
+     40.1,
+     29.0,
+     32.0
+    ]
+   ],
+   "crossedTriangles": 755
+  },
   "interhemispheric": {
-   "moved": 7271,
-   "fullyMoved": 432,
+   "moved": 7251,
+   "fullyMoved": 430,
    "maxMovedMm": 8.0,
-   "heldAtCavity": 123,
+   "heldAtCavity": 120,
    "outsideCavityAfter": 0,
    "span": [
-    -14.1,
-    45.9
+    -13.8,
+    46.2
    ],
    "midline": 0.52,
    "callosumTopMm": [
-    45.3,
+    45.4,
     51.8
    ],
    "crossedTriangles": 393
@@ -457,21 +478,25 @@
    "Middle cerebral artery (M2 segment)": {
     "L": {
      "open": 0.0,
-     "lift": 0.0
+     "lift": 0.0,
+     "lsoLift": 0.0
     },
     "R": {
      "open": 5.08,
-     "lift": 5.44
+     "lift": 5.44,
+     "lsoLift": 12.02
     }
    },
    "Middle cerebral artery (M3 segment)": {
     "L": {
      "open": 0.0,
-     "lift": 0.0
+     "lift": 0.0,
+     "lsoLift": 0.0
     },
     "R": {
      "open": 5.41,
-     "lift": 2.94
+     "lift": 2.94,
+     "lsoLift": 7.57
     }
    }
   },
@@ -496,6 +521,7 @@
    "liftCoreMm": 10.0,
    "liftReachMm": 22.0,
    "liftInsulaShare": 0.5,
+   "lsoLiftMm": 12.0,
    "interhemisphericMm": 8.0,
    "interhemisphericFadeMm": 20.0,
    "interhemisphericReachMm": 25.0,
@@ -570,5 +596,57 @@
    "tvVermisReachMm": 15.0,
    "jacMin": 0.45
   }
+ },
+ "skull": {
+  "fit": {
+   "scale": 0.907,
+   "similarityMedianMm": 1.84,
+   "similarityP90Mm": 6.73,
+   "warpedMedianMm": 1.51,
+   "warpedP90Mm": 3.45
+  },
+  "face": {
+   "ctPoints": 14277,
+   "medianBeforeMm": 1.24,
+   "withinBefore": 0.702,
+   "medianAfterMm": 1.17,
+   "withinAfter": 0.739,
+   "scales": [
+    1.005,
+    0.973,
+    0.959
+   ],
+   "shiftMm": [
+    -0.4,
+    -3.4,
+    1.5
+   ]
+  },
+  "edge": {
+   "bandPoints": 68398,
+   "pairedShare": 0.938,
+   "medianBeforeMm": 1.06,
+   "medianAfterMm": 0.83,
+   "p90BeforeMm": 2.58,
+   "p90AfterMm": 2.0
+  },
+  "faceBones": [
+   "Maxilla",
+   "Zygomatic bone",
+   "Nasal bone",
+   "Lacrimal bone",
+   "Palatine bone",
+   "Vomer",
+   "Inferior nasal concha bone"
+  ],
+  "seamMm": 1.5,
+  "blendMm": 6.0,
+  "edgeFitMm": 25.0,
+  "edgeSigmasMm": [
+   12.0,
+   7.0,
+   4.0
+  ],
+  "faces": 720000
  }
 }
