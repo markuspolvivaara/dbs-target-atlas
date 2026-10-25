@@ -85,3 +85,40 @@ export function lineMaterial(colour: THREE.Color, widthPx: number, dashed: boole
   m.clipping = true;
   return m;
 }
+
+/** Shared by the selection outlines: its width in drawing-buffer pixels and that buffer's size (set on resize). */
+export interface OutlineUniforms { uOutlinePx: { value: number }; uResolution: { value: THREE.Vector2 } }
+
+/**
+ * The selected structure's outline: its back faces pushed out a few pixels round its silhouette (an inverted hull),
+ * in one flat colour, depth-tested so that what lies in front of the structure also covers its outline. Clipped like
+ * the anatomy; follows morph targets (the normals are the unmorphed ones, enough for a few pixels).
+ */
+export function outlineMaterial(colour: THREE.Color, u: OutlineUniforms, widthScale: number): THREE.MeshBasicMaterial {
+  const m = new THREE.MeshBasicMaterial({ color: colour.clone(), side: THREE.BackSide, depthWrite: false });
+  m.onBeforeCompile = (sh) => {
+    sh.uniforms.uOutlinePx = u.uOutlinePx;
+    sh.uniforms.uResolution = u.uResolution;
+    sh.uniforms.uScale = { value: widthScale };
+    sh.vertexShader = sh.vertexShader
+      .replace('void main() {', 'uniform float uOutlinePx;\nuniform float uScale;\nuniform vec2 uResolution;\nvoid main() {')
+      .replace('#include <project_vertex>', /* glsl */ `#include <project_vertex>
+  {
+    vec2 dir = ( projectionMatrix * vec4( normalize( normalMatrix * normal ), 0.0 ) ).xy;
+    float len = length( dir );
+    if ( len > 1e-6 ) gl_Position.xy += dir / len * uOutlinePx * uScale * 2.0 / uResolution * gl_Position.w;
+  }`);
+  };
+  m.customProgramCacheKey = () => `selection-outline-${widthScale}`;
+  return m;
+}
+
+/**
+ * The selected structure where something covers it: drawn only where it lies behind what is already drawn (depth
+ * test reversed), translucent in its own colour, so it can be found through bone or brain without fading them.
+ */
+export function xrayMaterial(): THREE.MeshBasicMaterial {
+  return new THREE.MeshBasicMaterial({
+    color: 0xffffff, transparent: true, opacity: 0.35, depthWrite: false, depthFunc: THREE.GreaterDepth,
+  });
+}

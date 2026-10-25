@@ -6,14 +6,15 @@ import type { CameraPreset, ManifestStructure } from '../data/schema';
 import type { Axis, ExtraLayerKey, Hemi, LayerKey } from '../state';
 import { loadStructure, type LineAsset, type MeshAsset } from './assets';
 import { Lead, contactCentres, trajectoryDir } from './lead';
-import { applyLook, lineMaterial, rimMaterial, solidMaterial, type Look, type MeshMaterials } from './materials';
+import { applyLook, lineMaterial, outlineMaterial, rimMaterial, solidMaterial, xrayMaterial, type Look, type MeshMaterials, type OutlineUniforms } from './materials';
+import { onViewPrefs, viewPrefs } from './viewprefs';
 import type { SceneSource, ScenePlan, TractRole, ViewState } from './scene';
 import { Slices } from './slices';
 
 type Side = 'L' | 'R';
 type Palette = Record<string, string>;
 
-interface MeshItem { kind: 'mesh'; meta: ManifestStructure; nodes: Partial<Record<Side, THREE.Mesh>>; mats: MeshMaterials; look: Look; layer: LayerKey | ExtraLayerKey; surface: boolean }
+interface MeshItem { kind: 'mesh'; meta: ManifestStructure; nodes: Partial<Record<Side, THREE.Mesh>>; mats: MeshMaterials; look: Look; layer: LayerKey | ExtraLayerKey; surface: boolean; faded?: boolean }
 interface LineItem { kind: 'lines'; meta: ManifestStructure; nodes: Partial<Record<Side, LineSegments2>>; mat: LineMaterial; role: TractRole | null; centroid: Partial<Record<Side, THREE.Vector3>> }
 type Item = MeshItem | LineItem;
 
@@ -78,6 +79,16 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   private morphAnim = new Map<string, { t0: number; from: number; to: number }>();
   /** colour of the inside of cortical surfaces, seen through cut-aways and hidden labels */
   private interior = { value: new THREE.Color('#7d858e') };
+  /** the selected structure's look: a dark ring with a light halo outside it (reads on light and dark backgrounds and
+   * on any structure's colour), and the x-ray of its covered parts in its own colour */
+  private outlineU: OutlineUniforms = { uOutlinePx: { value: 1.5 }, uResolution: { value: new THREE.Vector2(1, 1) } };
+  private selMats = {
+    halo: outlineMaterial(new THREE.Color('#ffffff'), this.outlineU, 2.4),
+    ring: outlineMaterial(new THREE.Color('#0b1620'), this.outlineU, 1),
+    xray: xrayMaterial(),
+  };
+  private selOverlays: THREE.Mesh[] = [];
+  private unsubPrefs: () => void;
 
   private readonly cat;
 
@@ -120,6 +131,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.camera.add(head);
     this.scene.add(this.camera);
 
+    this.unsubPrefs = onViewPrefs(() => this.restyle());
     new ResizeObserver(() => this.resize()).observe(host);
     this.resize();
     this.bindPointer();
@@ -159,6 +171,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
     for (const it of this.items.values()) if (it.kind === 'lines') it.mat.resolution.set(w, h);
+    this.renderer.getDrawingBufferSize(this.outlineU.uResolution.value);
+    this.outlineU.uOutlinePx.value = 1.5 * this.renderer.getPixelRatio();
     this.invalidate();
   }
 
@@ -371,6 +385,29 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.invalidate();
   }
 
+  /** Outline the selected mesh structure and show its covered parts through what covers it (children of its meshes
+   * sharing their geometry and morph targets, so they follow the shapes and visibility; not pickable). */
+  private showSelection(id: string | null): void {
+    for (const o of this.selOverlays) o.removeFromParent();
+    this.selOverlays = [];
+    const it = id ? this.items.get(id) : undefined;
+    if (!it || it.kind !== 'mesh') return;
+    this.selMats.xray.color.copy(this.colour(it.meta));
+    for (const m of Object.values(this.selMats)) m.clippingPlanes = this.clipPlanes;
+    for (const node of Object.values(it.nodes)) {
+      if (!node) continue;
+      for (const [mat, order] of [[this.selMats.halo, 7], [this.selMats.ring, 8], [this.selMats.xray, 9]] as const) {
+        const o = new THREE.Mesh(node.geometry, mat);
+        o.morphTargetInfluences = node.morphTargetInfluences;
+        o.morphTargetDictionary = node.morphTargetDictionary;
+        o.renderOrder = order;
+        o.raycast = () => {};
+        node.add(o);
+        this.selOverlays.push(o);
+      }
+    }
+  }
+
   private sideVisible(side: Side): boolean {
     const h: Hemi = this.state?.hemi ?? 'both';
     return h === 'both' || h === side;
@@ -385,15 +422,17 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     if (!this.state || !this.plan) return;
     const s = this.state, p = this.plan;
     const hidden = new Set(s.hidden);
-    // focus: a selected structure (not a marker) is emphasised and everything else fades back
+    // focus: a selected structure (not a marker) is emphasised: outlined and shown through what covers it, and, if the
+    // viewer's setting asks for it, everything else fades back
     const focus = s.sel && this.cat.byId.has(s.sel) && s.sel !== 'cortex' ? s.sel : null;
+    const fade = viewPrefs().fadeOthers;
     for (const it of this.items.values()) {
       if (it.kind === 'mesh' && it.surface) {
         // cortical labels stay opaque: a selection mutes the others instead of fading them
         let look: Look = p.looks.get(it.meta.id) ?? 'muted';
         const focused = focus === it.meta.id;
         if (focused) look = 'primary';
-        else if (focus && look === 'primary') look = 'muted';
+        else if (fade && focus && look === 'primary') look = 'muted';
         if (hidden.has(it.meta.id)) look = 'hidden';
         const layer = s.layers[it.layer] ?? SHOWN;
         const op = layer.on ? layer.opacity : 0;
@@ -424,7 +463,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         // landmark volumes (optic tract) must read clearly next to the target
         if (this.cat.landmarks.has(it.meta.id) && look === 'context') op = Math.min(1, op * 2.2);
         if (it.meta.type === 'cortex' && it.meta.id !== 'cortex' && look === 'context') op = Math.min(1, op * 1.6);
-        if (focus && !focused && look !== 'ghost' && look !== 'hidden') op *= 0.3;
+        it.faded = fade && !!focus && !focused && look !== 'ghost' && look !== 'hidden';
+        if (it.faded) op *= 0.3;
         const c = this.colour(it.meta);
         for (const side of ['L', 'R'] as Side[]) {
           const m = it.nodes[side];
@@ -447,7 +487,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         it.mat.opacity = (role === 'border' ? 0.22 : role === 'alt' ? 0.6 : response ? 0.32 : 0.62) * layer.opacity;
         it.mat.linewidth = role === 'border' ? 1 : role === 'alt' ? 1.2 : response ? 1 : 1.4;
         if (focused) { it.mat.opacity = 1; it.mat.linewidth = 3; }
-        else if (focus) it.mat.opacity *= 0.25;
+        else if (focus && fade) it.mat.opacity *= 0.25;
         const dashed = role === 'alt';
         if (it.mat.dashed !== dashed) { it.mat.dashed = dashed; it.mat.needsUpdate = true; }
         it.mat.clippingPlanes = this.clipPlanes;
@@ -460,6 +500,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         }
       }
     }
+    this.showSelection(focus);
     this.markerGroup.visible = s.layers.targets.on;
     for (const m of this.markerGroup.children) {
       const side = m.userData.side as Side;
@@ -772,12 +813,12 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     for (const it of this.items.values()) {
       for (const n of Object.values(it.nodes)) {
         if (!n || !n.visible) continue;
-        if (it.kind === 'mesh' && (it.look === 'ghost' || it.look === 'hidden') && it.meta.id !== 'cortex') continue;
+        if (it.kind === 'mesh' && (it.look === 'ghost' || it.look === 'hidden' || it.faded) && it.meta.id !== 'cortex') continue;
         out.push(n);
       }
     }
-    // ghosted nuclei remain pickable but rank after highlighted ones
-    for (const it of this.items.values()) if (it.kind === 'mesh' && it.look === 'ghost' && it.meta.id !== 'cortex') for (const n of Object.values(it.nodes)) if (n?.visible) out.push(n);
+    // ghosted nuclei (and structures faded back round a selection) remain pickable but rank after highlighted ones
+    for (const it of this.items.values()) if (it.kind === 'mesh' && (it.look === 'ghost' || it.faded) && it.meta.id !== 'cortex') for (const n of Object.values(it.nodes)) if (n?.visible) out.push(n);
     out.push(...this.markerGroup.children.filter((m) => m.visible && this.markerGroup.visible));
     out.push(...this.slices.pickables());
     for (const l of Object.values(this.leads)) if (l.group.visible) out.push(l.group);
@@ -793,7 +834,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     const objs = this.pickables().filter((o) => withLines || !(o as LineSegments2).isLineSegments2);
     const hits = this.raycaster.intersectObjects(objs, true).filter((h) => this.notClipped(h.point));
     if (!hits.length) return null;
-    // prefer: lead > marker > highlighted structures > cortex/ghost > slice
+    // prefer: lead > marker > highlighted structures > faded > cortex/ghost > slice
     const rank = (h: THREE.Intersection) => {
       const o = h.object;
       if (o.userData.lead) return 0;
@@ -803,6 +844,9 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       if (!it) return 4;
       if (it.kind === 'lines') return 2;
       if (it.meta.id === 'cortex') return 4;
+      // faded back round a selection: still seen, so before ghosts (the skull base's removed bone, barely drawn: a
+      // click into an opening goes to what lies beyond it); faded bone, seen through, after what it encloses
+      if (it.kind === 'mesh' && it.faded) return it.meta.type === 'bone' ? 3.2 : 3;
       return it.look === 'ghost' ? 3.5 : 2;
     };
     const best = hits.reduce((a, b) => (rank(b) < rank(a) || (rank(b) === rank(a) && b.distance < a.distance) ? b : a));
@@ -945,5 +989,5 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
 
   isIdle(): boolean { return this.loadingCount === 0 && !this.anim && !this.morphAnim.size && this.slices.status !== 'loading'; }
 
-  dispose(): void { this.disposed = true; this.renderer.dispose(); }
+  dispose(): void { this.disposed = true; this.unsubPrefs(); this.renderer.dispose(); }
 }

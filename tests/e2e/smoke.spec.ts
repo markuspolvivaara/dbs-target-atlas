@@ -232,15 +232,23 @@ test('legend: show/hide and highlight structures', async ({ page }) => {
   await expect(row('Corticospinal')).toHaveClass(/off/);
   expect((await item('cst')).visible).toBe(false);
   expect(new URL(page.url()).hash).toContain('hid=cst');
-  // highlight the DRTT: brighter and thicker, others fade back, card opens
+  // highlight the DRTT: brighter and thicker, the others left as they are (by default), card opens
   const before = await item('ndrtt');
   await row('Dentato-rubro').locator('.lg-item').click();
   await expect(row('Dentato-rubro')).toHaveClass(/on/);
   const drtt = await item('drtt');
   expect(drtt.opacity).toBe(1);
   expect(drtt.width).toBeGreaterThan(2);
-  expect((await item('ndrtt')).opacity).toBeLessThan(before.opacity);
+  expect((await item('ndrtt')).opacity).toBe(before.opacity);
   await expect(page.locator('.card.sel h2')).toContainText('Dentato-rubro-thalamic');
+  // the viewer's setting fades the others back, and is remembered
+  await page.locator('.view-settings-btn').click();
+  await page.getByLabel(/Fade the rest/).check();
+  expect((await item('ndrtt')).opacity).toBeLessThan(before.opacity);
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('atlas-view-prefs') ?? '{}').fadeOthers)).toBe(true);
+  await page.getByLabel(/Fade the rest/).uncheck();
+  await page.keyboard.press('Escape');
+  expect((await item('ndrtt')).opacity).toBe(before.opacity);
   // clicking again clears the highlight; "Show all" brings the hidden tract back
   await row('Dentato-rubro').locator('.lg-item').click();
   await expect(row('Dentato-rubro')).not.toHaveClass(/on/);

@@ -539,9 +539,13 @@ on or another sequence is picked.
   offset; anchor, offset and spacing are remembered per target marker in this browser, with an
   optional default for other targets. Links carrying their own lead position override this.
 - **Legend** (bottom left): the dot button shows or hides each structure, tract, cortical area or
-  marker in the current view; clicking a name highlights it (tracts become opaque and thicker,
-  structures solid and glowing, everything else fades back) and opens its card. Click again or
-  press Esc to clear. Hidden items and the highlight are part of the shareable link.
+  marker in the current view; clicking a name highlights it (tracts become opaque and thicker;
+  structures solid and glowing, outlined, and shown faintly through whatever covers them) and
+  opens its card. Click again or press Esc to clear. Hidden items and the highlight are part of
+  the shareable link.
+- **Settings** (header, every section): "Fade the rest when a structure is selected" fades
+  everything else back as well (off by default; remembered in this browser). A click goes to
+  what is drawn solid before anything faded, and through faded bone to what it encloses.
 - **Click or tap** any structure, tract or marker for its card: role in the source content,
   indications that use it, imaging, data source, licence, centroid.
 - **Readout**: MNI coordinates under the pointer plus approximate AC–PC coordinates (see below).
