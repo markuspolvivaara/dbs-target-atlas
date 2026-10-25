@@ -308,19 +308,26 @@ The section also shows the white-matter section's tracts and the DBS section's d
   0.5 mm; midline structures cut at x = 0; files converted to compressed glTF; definitions shortened to their lead
   section.
 
-## Ventricles section (TopBrain 2025 CT angiogram, case 011)
+## Ventricles section (TopBrain 2025 CT angiogram, case 011, with the Z-Anatomy ventricles fitted onto it)
 
 The ventricle meshes in `public/assets/ventricles/` and `ve-manifest.json`, `ve-landmarks.json` and `ve-trajectories.json`
-are derived from the TopBrain CT (TopBrain data: open use with attribution, non-commercial (University Hospital Zurich)): **not** GPL-licensed. The section also shows Skull base v2's bone and
-Skull base v3's fitted brain, under their licences above.
+are derived from the TopBrain CT and from Z-Anatomy (TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)): **not** GPL-licensed. Adapted from Z-Anatomy,
+the ventricle meshes stay under CC BY-SA 4.0; their fit uses the TopBrain data (non-commercial). The section also shows
+Skull base v2's bone and Skull base v3's fitted brain, under their licences above.
 
 - Source: https://zenodo.org/records/16878417
-- Note: One adult's CT angiogram (TopBrain 2025 case 011, Skull base v2's): the bone and these ventricles are this patient's; the brain around them is a template fitted into the CT (Skull base v3). Teaching tool, not for planning.
+- Note: One adult's CT angiogram (TopBrain 2025 case 011, Skull base v2's): the bone is this patient's, and so are the ventricles where the CT shows them; where it does not (the temporal horns, the foramina of Monro, the third ventricle's floor), they are the Z-Anatomy model's, fitted onto them. The brain around them is a template fitted into the CT (Skull base v3). Teaching tool, not for planning.
 - Attribution: TopBrain 2025 challenge data (University Hospital Zurich): CT angiogram and vessel labels of case topcow_ct_011 - https://topbrain2025.grand-challenge.org, https://zenodo.org/records/16878417 - open use, source given, non-commercial
+- Attribution: BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan
+- Attribution: Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0
 - Cite: Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.
+- Cite: Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.
 - Changes made: the lateral and third ventricles segmented from the CT by a threshold in its brain window
-  (pipeline/ventricles_build.py); the coronal suture, Kocher's points and the external acoustic meatus located on the
-  CT; ventriculostomy trajectories computed on it; files converted to compressed glTF.
+  (pipeline/ventricles_build.py); Z-Anatomy's lateral and third ventricles (exported by pipeline/ventricles_export.py)
+  fitted onto them by a similarity and a smooth deformation, and joined with them into one softened surface drawn
+  half a millimetre outside, split by part; the foramina of Monro drawn by rule between the fitted lateral and third
+  ventricles (the project's own drawing); the coronal suture, Kocher's points and the external acoustic meatus
+  located on the CT; ventriculostomy trajectories computed on it; files converted to compressed glTF.
 
 ## Cortex section (Destrieux parcellation on the Lead-DBS template surface)
 

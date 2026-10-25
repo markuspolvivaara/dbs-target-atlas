@@ -3,78 +3,124 @@
  "generatedBy": "pipeline/ventricles_build.py + pipeline/compress.mjs",
  "structures": [
   {
-   "id": "ve_lateral_ventricle",
-   "name": "Lateral ventricle",
    "aliases": [],
    "type": "soft",
-   "file": "assets/ventricles/ve_lateral_ventricle.glb",
-   "bytes": 253024,
+   "bytes": 476376,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
     "dark": "#51EFEF"
    },
    "dataset": "topbrain",
-   "source": "This CT (TopBrain 2025 case 011), segmented here",
-   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich)",
+   "source": "This CT (TopBrain 2025 case 011), and the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312"
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
    "category": "ventricle",
    "layer": "nuclei",
-   "derivation": "This CT's own: the fluid darker than 27 HU in its brain window (smoothed by 1 mm), at least 10 mm inside the cranial cavity and away from the labelled vessels; the largest such body, its surface drawn at 27 HU and split at the falx's plane. 1.38 ml on the right, 2.81 ml on the left: this patient's ventricles are narrow, and where they are only a few millimetres wide the threshold sets their size (approximate to about a millimetre).",
+   "id": "ve_lateral_ventricle",
+   "name": "Lateral ventricle",
+   "file": "assets/ventricles/ve_lateral_ventricle.glb",
+   "derivation": "This CT's own where it shows it: the fluid darker than 27 HU in its brain window (smoothed by 1 mm), at least 10 mm inside the cranial cavity and away from the labelled vessels, its largest body (1.38 ml on the right, 2.81 ml on the left; this patient's ventricles are narrow, and where they are a few millimetres wide the threshold sets their size). Where the CT does not show it, the Z-Anatomy model's (one adult, BodyParts3D), fitted onto the CT's ventricles by a smooth deformation: the CT's surface lies a median 0.79 mm from the fitted model's (1.87 mm at the 90th percentile). The temporal horns, too narrow for this CT to show, are the model's: along them the CT is 40.3 and 42.5 HU (right, left), against 43.3 and 41.8 HU in the brain 2.5 to 5 mm around, so they lie on its faint fluid. The atria's enhancing choroid plexus, which a threshold leaves out, is inside the model's. The drawn surface joins the two, softened (its signed distance smoothed by 0.75 mm) and drawn 0.5 mm outside them, within the CT's uncertainty. As drawn: 8.32 ml right, 9.19 ml left.",
    "centroid": {
     "L": [
-     -13.79,
-     -31.34,
-     33.18
+     -15.49,
+     -26.47,
+     28.82
     ],
     "R": [
-     10.09,
-     -16.66,
-     39.65
+     15.41,
+     -25.28,
+     28.71
     ]
    }
   },
   {
-   "id": "ve_third_ventricle",
-   "name": "Third ventricle",
    "aliases": [],
    "type": "soft",
-   "file": "assets/ventricles/ve_third_ventricle.glb",
-   "bytes": 59300,
+   "bytes": 58768,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
     "dark": "#51EFEF"
    },
    "dataset": "topbrain",
-   "source": "This CT (TopBrain 2025 case 011), segmented here",
-   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich)",
+   "source": "This CT (TopBrain 2025 case 011), and the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312"
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
    "category": "ventricle",
    "layer": "nuclei",
-   "derivation": "This CT's own, as far as it shows it: the body of fluid darker than 27 HU on the midline below and between the lateral ventricles (0.58 ml). The third ventricle is a narrow cleft; the CT shows only its widest part, so its recesses and floor are missing.",
+   "id": "ve_third_ventricle",
+   "name": "Third ventricle",
+   "file": "assets/ventricles/ve_third_ventricle.glb",
+   "derivation": "This CT's own as far as it shows it: the body of fluid darker than 27 HU on the midline below and between the lateral ventricles (0.58 ml), only its widest part. Where the CT does not show it, the Z-Anatomy model's (one adult, BodyParts3D), fitted onto the CT's ventricles by a smooth deformation: the CT's surface lies a median 0.79 mm from the fitted model's (1.87 mm at the 90th percentile). Its recesses and floor are the model's. The drawn surface joins the two, softened (its signed distance smoothed by 0.75 mm) and drawn 0.5 mm outside them, within the CT's uncertainty. As drawn: 1.59 ml.",
    "centroid": {
     "L": [
-     -0.12,
-     -18.49,
-     23.01
+     -1.04,
+     -16.85,
+     24.43
     ],
     "R": [
-     1.71,
-     -17.96,
-     23.35
+     2.48,
+     -16.57,
+     24.42
+    ]
+   }
+  },
+  {
+   "aliases": [
+    "Foramen of Monro"
+   ],
+   "type": "soft",
+   "bytes": 8156,
+   "colour": {
+    "token": "sbCsf",
+    "light": "#0B8D9D",
+    "dark": "#51EFEF"
+   },
+   "dataset": "topbrain",
+   "source": "Drawn by rule between the fitted lateral and third ventricles (Jean 2019; Azab 2014)",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "ventricle",
+   "layer": "nuclei",
+   "id": "ve_interventricular_foramen",
+   "name": "Interventricular foramen (of Monro)",
+   "file": "assets/ventricles/ve_interventricular_foramen.glb",
+   "derivation": "Drawn by rule: this CT does not resolve it. A tube of the mean cross-section Jean 2019 measured in 30 adults without hydrocephalus (5.23 mm², here a circle 2.6 mm across) between the points where the fitted lateral ventricle comes closest to the fitted third ventricle (2.24 mm apart on the right, 2.31 mm on the left): the third ventricle's front upper corner, the junction of its roof and anterior wall, where Azab 2014 places the foramina. Drawn 0.5 mm wider, like the ventricles.",
+   "centroid": {
+    "L": [
+     -2.15,
+     -9.02,
+     31.19
+    ],
+    "R": [
+     4.05,
+     -8.96,
+     30.92
     ]
    }
   },
@@ -639,18 +685,22 @@
   }
  ],
  "dataset": {
-  "name": "TopBrain 2025 CT angiogram (case 011)",
-  "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich)",
+  "name": "TopBrain 2025 CT angiogram (case 011), with the Z-Anatomy ventricles fitted onto it",
+  "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
   "url": "https://zenodo.org/records/16878417",
-  "note": "One adult's CT angiogram (TopBrain 2025 case 011, Skull base v2's): the bone and these ventricles are this patient's; the brain around them is a template fitted into the CT (Skull base v3). Teaching tool, not for planning.",
+  "note": "One adult's CT angiogram (TopBrain 2025 case 011, Skull base v2's): the bone is this patient's, and so are the ventricles where the CT shows them; where it does not (the temporal horns, the foramina of Monro, the third ventricle's floor), they are the Z-Anatomy model's, fitted onto them. The brain around them is a template fitted into the CT (Skull base v3). Teaching tool, not for planning.",
   "attribution": [
-   "TopBrain 2025 challenge data (University Hospital Zurich): CT angiogram and vessel labels of case topcow_ct_011 - https://topbrain2025.grand-challenge.org, https://zenodo.org/records/16878417 - open use, source given, non-commercial"
+   "TopBrain 2025 challenge data (University Hospital Zurich): CT angiogram and vessel labels of case topcow_ct_011 - https://topbrain2025.grand-challenge.org, https://zenodo.org/records/16878417 - open use, source given, non-commercial",
+   "BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan",
+   "Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0"
   ],
   "citation": [
-   "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+   "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
   ],
   "citationUrls": [
-   "https://doi.org/10.64898/2026.05.28.26354312"
+   "https://doi.org/10.64898/2026.05.28.26354312",
+   "https://doi.org/10.1093/nar/gkn613"
   ]
  }
 }

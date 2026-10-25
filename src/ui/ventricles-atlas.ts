@@ -3,7 +3,7 @@ import type { CameraPreset } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
 import type { Claim } from '../brainstem/schema';
 import { KIND_LABEL, kindOf, LM, TARGETS, TRAJ, trajectoryFor, VE, VE_REF, type Trajectory } from '../ventricles';
-import { ACCURACY, IDEAL, KOCHER, LATERAL_WALLS, PRACTICE, TARGET_NAME, THIRD_FLOOR } from '../ventricles/content';
+import { ACCURACY, IDEAL, KOCHER, LATERAL_WALLS, MONRO, PRACTICE, TARGET_NAME, THIRD_FLOOR } from '../ventricles/content';
 import { VE_GROUP, VE_GROUPS, type VeGroup } from '../ventricles/groups';
 import { veScene, type VePlan } from '../ventricles/scene';
 import type { Catheter, VeState } from '../ventricles/state';
@@ -262,8 +262,9 @@ export class VentriclesAtlasPage {
           `On this CT: the coronal suture is placed where its frontal and parietal bones meet; Kocher’s point ${fmtMm(TRAJ.params.kocherAnteriorMm)} mm in front of it along the outer table. The external acoustic meatus is where each ear canal leaves the bone. The CT stops at the forehead, so the medial canthi are put ${fmtMm(TRAJ.canthusMm)} mm from the midline (half Chen’s mean intercanthal distance) and, as in Chen, projected onto the line between the two meatus: the catheter aims at that point. Depths are measured from the outer table along the catheter.`)) : null,
       g.kind === 'anatomy' ? h('dl', {},
         h('dt', {}, 'The lateral ventricle’s walls'), h('dd', {}, claimList(LATERAL_WALLS)),
-        h('dt', {}, 'The floor of the third ventricle'), h('dd', {}, claimList(THIRD_FLOOR), h('p', { class: 'aside' }, 'This CT shows the third ventricle only in part: its floor is not drawn.'))) : null,
-      h('p', { class: 'aside schematic-note' }, 'One young adult’s CT: the ventricles are this patient’s and narrow; the brain around them is a template fitted into the skull. For teaching, not for planning.'));
+        h('dt', {}, 'The foramina of Monro'), h('dd', {}, claimList(MONRO)),
+        h('dt', {}, 'The floor of the third ventricle'), h('dd', {}, claimList(THIRD_FLOOR), h('p', { class: 'aside' }, 'This CT shows the third ventricle only in part: its floor is the fitted model’s.'))) : null,
+      h('p', { class: 'aside schematic-note' }, 'One young adult’s CT: the ventricles are this patient’s and narrow, completed by a fitted model where the CT cannot show them; the brain around them is a template fitted into the skull. For teaching, not for planning.'));
     if (s.sel) pane.append(h('details', { class: 'more' }, h('summary', {}, `About ${g.name}`), groupCard));
     else pane.append(groupCard);
   }
@@ -286,7 +287,7 @@ export class VentriclesAtlasPage {
     const ipsi = t.ventricle === c.side;
     const verdict = t.ventricle
       ? `${ipsi ? 'Reaches the ipsilateral' : 'Reaches the contralateral'} lateral ventricle ${fmtMm(t.depthMm ?? 0)} mm from the outer table, and runs ${fmtMm(t.insideMm ?? 0)} mm inside it.`
-      : `Misses both lateral ventricles: it passes ${fmtMm(t.missMm ?? 0)} mm from the ${t.nearestSide === c.side ? 'ipsilateral' : 'contralateral'} one.`;
+      : `Meets neither lateral ventricle within ${fmtMm(TRAJ.params.maxDepthMm)} mm of the outer table (where Chen advises withdrawing and re-aiming): it passes ${fmtMm(t.missMm ?? 0)} mm from the ${t.nearestSide === c.side ? 'ipsilateral' : 'contralateral'} one.`;
     box.append(h('div', { class: `cath-result ${t.ventricle ? (ipsi ? 'ok' : 'warn') : 'miss'}`, role: 'status' },
       h('p', {}, h('strong', {}, 'On this CT: '), verdict),
       h('p', { class: 'aside' }, `Skull ${fmtMm(t.boneMm)} mm thick at the entry; the catheter is ${fmtMm(t.angleToNormalDeg)}° from the perpendicular. This patient’s frontal horns are ${fmtMm(TRAJ.ventricles.frontalHorns.widthMm)} mm wide across both (Evans’ index ${TRAJ.ventricles.frontalHorns.evansIndex.toFixed(2)}).`)),
@@ -305,10 +306,11 @@ export class VentriclesAtlasPage {
       k === 'brain' ? h('p', { class: 'aside schematic-note' }, 'A template brain fitted into this skull and its arteries, not this patient’s own.') : null,
       h('dl', {},
         id === 've_lateral_ventricle' ? [h('dt', {}, 'Measured on this CT'), h('dd', {}, h('ul', { class: 'plain' },
-          h('li', {}, `Volume: ${fmtMm(TRAJ.ventricles.volumeMl.R)} ml right, ${fmtMm(TRAJ.ventricles.volumeMl.L)} ml left (as far as the CT shows them)`),
+          h('li', {}, `Volume: ${fmtMm(TRAJ.ventricles.volumeMl.R)} ml right, ${fmtMm(TRAJ.ventricles.volumeMl.L)} ml left as far as the CT shows them; ${fmtMm(TRAJ.ventricles.drawnMl.R)} and ${fmtMm(TRAJ.ventricles.drawnMl.L)} ml as drawn`),
           h('li', {}, `Frontal horns: ${fmtMm(fh.widthMm)} mm across both at their widest, against an inner skull width of ${fmtMm(fh.innerSkullMm)} mm on that slice (Evans’ index ${fh.evansIndex.toFixed(2)})`))),
         h('dt', {}, 'Walls'), h('dd', {}, claimList(LATERAL_WALLS))] : null,
         id === 've_third_ventricle' ? [h('dt', {}, 'Its floor'), h('dd', {}, claimList(THIRD_FLOOR))] : null,
+        id === 've_interventricular_foramen' ? [h('dt', {}, 'The foramen'), h('dd', {}, claimList(MONRO))] : null,
         h('dt', {}, 'Geometry'), h('dd', {}, `${st.source}. ${st.derivation} `, h('a', { href: '#/credits' }, 'Licence and attribution'))));
   }
 

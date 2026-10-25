@@ -23,6 +23,66 @@
    "atZ": 43.0,
    "innerSkullMm": 120.0,
    "evansIndex": 0.212
+  },
+  "drawnMl": {
+   "R": 8.32,
+   "L": 9.19,
+   "third": 1.59,
+   "monroR": 0.03,
+   "monroL": 0.02
+  },
+  "fit": {
+   "modelScale": 0.905,
+   "similarityScale": 1.006,
+   "similarityMedianMm": 1.24,
+   "similarityP90Mm": 3.41,
+   "fitMedianMm": 0.79,
+   "fitP90Mm": 1.87,
+   "fitMaxMm": 3.6,
+   "jacobianMin": 0.414,
+   "jacobianMax": 1.329,
+   "modelMl": {
+    "L": 7.05,
+    "R": 6.69,
+    "third": 1.14
+   },
+   "monro": {
+    "R": {
+     "gapMm": 2.24,
+     "onThird": {
+      "front": 0.75,
+      "up": 0.96
+     }
+    },
+    "L": {
+     "gapMm": 2.31,
+     "onThird": {
+      "front": 0.76,
+      "up": 0.98
+     }
+    }
+   },
+   "temporalHorn": {
+    "R": {
+     "insideHu": 40.3,
+     "aroundHu": 43.3
+    },
+    "L": {
+     "insideHu": 42.5,
+     "aroundHu": 41.8
+    }
+   },
+   "monroCt": {
+    "R": {
+     "insideHu": 33.8,
+     "aroundHu": 43.4
+    },
+    "L": {
+     "insideHu": 30.9,
+     "aroundHu": 42.4
+    }
+   },
+   "monroRadiusMm": 1.29
   }
  },
  "suture": {
@@ -82,7 +142,18 @@
    0.0,
    10.0
   ],
-  "maxDepthMm": 110.0
+  "maxDepthMm": 65.0,
+  "fitSigmasMm": [
+   10.0,
+   6.0,
+   4.0
+  ],
+  "fitPairMm": 5.0,
+  "fitBackMm": 2.5,
+  "temporalZMm": 14.0,
+  "monroAreaMm2": 5.23,
+  "softMm": 0.75,
+  "drawOutMm": 0.5
  },
  "trajectories": [
   {
@@ -109,7 +180,7 @@
    "boneMm": 7.5,
    "ventricle": null,
    "nearestSide": "R",
-   "missMm": 11.6
+   "missMm": 10.6
   },
   {
    "kocher": "chen",
@@ -135,7 +206,7 @@
    "boneMm": 7.0,
    "ventricle": null,
    "nearestSide": "R",
-   "missMm": 3.5
+   "missMm": 3.2
   },
   {
    "kocher": "chen",
@@ -160,12 +231,12 @@
    "angleToNormalDeg": 5.5,
    "boneMm": 7.0,
    "ventricle": "R",
-   "depthMm": 54.0,
-   "insideMm": 8.8,
+   "depthMm": 53.5,
+   "insideMm": 11.2,
    "entersAt": [
-    7.2,
-    -4.4,
-    45.1
+    7.4,
+    -4.3,
+    45.6
    ]
   },
   {
@@ -186,12 +257,12 @@
    "angleToNormalDeg": 0.0,
    "boneMm": 6.8,
    "ventricle": "L",
-   "depthMm": 58.0,
-   "insideMm": 11.8,
+   "depthMm": 59.2,
+   "insideMm": 5.5,
    "entersAt": [
-    0.7,
-    -5.1,
-    43.6
+    0.2,
+    -5.3,
+    42.5
    ]
   },
   {
@@ -218,7 +289,7 @@
    "boneMm": 7.2,
    "ventricle": null,
    "nearestSide": "R",
-   "missMm": 9.9
+   "missMm": 9.6
   },
   {
    "kocher": "chen",
@@ -244,7 +315,7 @@
    "boneMm": 7.0,
    "ventricle": null,
    "nearestSide": "R",
-   "missMm": 3.0
+   "missMm": 2.6
   },
   {
    "kocher": "chen",
@@ -269,12 +340,12 @@
    "angleToNormalDeg": 5.0,
    "boneMm": 7.0,
    "ventricle": "R",
-   "depthMm": 55.0,
-   "insideMm": 5.2,
+   "depthMm": 53.2,
+   "insideMm": 11.5,
    "entersAt": [
-    6.4,
-    0.7,
-    43.0
+    7.0,
+    1.1,
+    44.6
    ]
   },
   {
@@ -295,12 +366,12 @@
    "angleToNormalDeg": 0.0,
    "boneMm": 6.8,
    "ventricle": "L",
-   "depthMm": 61.2,
-   "insideMm": 5.2,
+   "depthMm": 60.0,
+   "insideMm": 4.8,
    "entersAt": [
-    -0.3,
-    -2.0,
-    39.6
+    0.2,
+    -1.7,
+    40.7
    ]
   },
   {
@@ -377,9 +448,14 @@
    ],
    "angleToNormalDeg": 2.6,
    "boneMm": 6.8,
-   "ventricle": null,
-   "nearestSide": "R",
-   "missMm": 1.5
+   "ventricle": "R",
+   "depthMm": 53.8,
+   "insideMm": 11.0,
+   "entersAt": [
+    6.3,
+    6.1,
+    42.6
+   ]
   },
   {
    "kocher": "chen",
@@ -398,9 +474,14 @@
    ],
    "angleToNormalDeg": 0.0,
    "boneMm": 6.8,
-   "ventricle": null,
-   "nearestSide": "R",
-   "missMm": 1.9
+   "ventricle": "R",
+   "depthMm": 56.2,
+   "insideMm": 6.5,
+   "entersAt": [
+    3.5,
+    4.1,
+    41.6
+   ]
   },
   {
    "kocher": "chen",
@@ -426,7 +507,7 @@
    "boneMm": 8.2,
    "ventricle": null,
    "nearestSide": "L",
-   "missMm": 14.5
+   "missMm": 12.4
   },
   {
    "kocher": "chen",
@@ -452,7 +533,7 @@
    "boneMm": 7.8,
    "ventricle": null,
    "nearestSide": "L",
-   "missMm": 6.2
+   "missMm": 5.6
   },
   {
    "kocher": "chen",
@@ -477,12 +558,12 @@
    "angleToNormalDeg": 5.0,
    "boneMm": 7.8,
    "ventricle": "L",
-   "depthMm": 60.0,
-   "insideMm": 5.2,
+   "depthMm": 50.8,
+   "insideMm": 14.0,
    "entersAt": [
-    -4.0,
-    -5.6,
-    38.0
+    -7.2,
+    -3.9,
+    46.6
    ]
   },
   {
@@ -503,12 +584,12 @@
    "angleToNormalDeg": 0.0,
    "boneMm": 7.5,
    "ventricle": "L",
-   "depthMm": 55.0,
-   "insideMm": 5.0,
+   "depthMm": 54.5,
+   "insideMm": 4.2,
    "entersAt": [
-    -1.3,
-    -4.9,
-    44.6
+    -1.5,
+    -4.8,
+    45.0
    ]
   },
   {
@@ -561,7 +642,7 @@
    "boneMm": 7.5,
    "ventricle": null,
    "nearestSide": "L",
-   "missMm": 5.8
+   "missMm": 3.6
   },
   {
    "kocher": "chen",
@@ -585,9 +666,14 @@
    ],
    "angleToNormalDeg": 5.7,
    "boneMm": 7.5,
-   "ventricle": null,
-   "nearestSide": "L",
-   "missMm": 0.5
+   "ventricle": "L",
+   "depthMm": 50.5,
+   "insideMm": 0.2,
+   "entersAt": [
+    -6.8,
+    1.7,
+    45.5
+   ]
   },
   {
    "kocher": "chen",
@@ -607,12 +693,12 @@
    "angleToNormalDeg": 0.0,
    "boneMm": 7.5,
    "ventricle": "R",
-   "depthMm": 63.8,
-   "insideMm": 1.8,
+   "depthMm": 59.2,
+   "insideMm": 5.5,
    "entersAt": [
-    3.2,
-    -2.7,
-    36.2
+    1.3,
+    -1.5,
+    40.1
    ]
   },
   {
@@ -639,7 +725,7 @@
    "boneMm": 7.0,
    "ventricle": null,
    "nearestSide": "L",
-   "missMm": 6.7
+   "missMm": 6.5
   },
   {
    "kocher": "chen",
@@ -690,12 +776,12 @@
    "angleToNormalDeg": 4.7,
    "boneMm": 6.5,
    "ventricle": "L",
-   "depthMm": 53.0,
-   "insideMm": 1.0,
+   "depthMm": 51.8,
+   "insideMm": 13.0,
    "entersAt": [
-    -5.3,
-    6.2,
-    41.5
+    -5.7,
+    6.6,
+    42.6
    ]
   },
   {
@@ -715,9 +801,14 @@
    ],
    "angleToNormalDeg": 0.0,
    "boneMm": 6.5,
-   "ventricle": null,
-   "nearestSide": "R",
-   "missMm": 1.2
+   "ventricle": "R",
+   "depthMm": 60.2,
+   "insideMm": 4.5,
+   "entersAt": [
+    1.3,
+    2.7,
+    37.4
+   ]
   },
   {
    "kocher": "park",
@@ -743,7 +834,7 @@
    "boneMm": 7.5,
    "ventricle": null,
    "nearestSide": "R",
-   "missMm": 14.0
+   "missMm": 13.5
   },
   {
    "kocher": "park",
@@ -769,7 +860,7 @@
    "boneMm": 7.0,
    "ventricle": null,
    "nearestSide": "R",
-   "missMm": 6.1
+   "missMm": 5.8
   },
   {
    "kocher": "park",
@@ -794,12 +885,12 @@
    "angleToNormalDeg": 7.9,
    "boneMm": 7.0,
    "ventricle": "R",
-   "depthMm": 57.0,
-   "insideMm": 7.8,
+   "depthMm": 51.5,
+   "insideMm": 13.2,
    "entersAt": [
-    8.7,
-    -3.4,
-    40.3
+    10.8,
+    -2.3,
+    45.2
    ]
   },
   {
@@ -820,12 +911,12 @@
    "angleToNormalDeg": 0.0,
    "boneMm": 6.8,
    "ventricle": "R",
-   "depthMm": 58.5,
-   "insideMm": 0.8,
+   "depthMm": 57.8,
+   "insideMm": 0.5,
    "entersAt": [
-    1.0,
-    -3.8,
-    42.6
+    1.4,
+    -3.7,
+    43.2
    ]
   },
   {
@@ -852,7 +943,7 @@
    "boneMm": 7.5,
    "ventricle": null,
    "nearestSide": "R",
-   "missMm": 12.5
+   "missMm": 12.1
   },
   {
    "kocher": "park",
@@ -878,7 +969,7 @@
    "boneMm": 7.0,
    "ventricle": null,
    "nearestSide": "R",
-   "missMm": 5.4
+   "missMm": 5.1
   },
   {
    "kocher": "park",
@@ -904,7 +995,7 @@
    "boneMm": 6.8,
    "ventricle": "R",
    "depthMm": 49.8,
-   "insideMm": 11.2,
+   "insideMm": 15.0,
    "entersAt": [
     10.9,
     3.7,
@@ -928,9 +1019,14 @@
    ],
    "angleToNormalDeg": 0.0,
    "boneMm": 6.8,
-   "ventricle": null,
-   "nearestSide": "L",
-   "missMm": 1.8
+   "ventricle": "R",
+   "depthMm": 56.0,
+   "insideMm": 5.2,
+   "entersAt": [
+    3.6,
+    2.8,
+    42.1
+   ]
   },
   {
    "kocher": "park",
@@ -956,7 +1052,7 @@
    "boneMm": 7.2,
    "ventricle": null,
    "nearestSide": "R",
-   "missMm": 12.4
+   "missMm": 11.9
   },
   {
    "kocher": "park",
@@ -982,7 +1078,7 @@
    "boneMm": 6.8,
    "ventricle": null,
    "nearestSide": "R",
-   "missMm": 5.9
+   "missMm": 4.9
   },
   {
    "kocher": "park",
@@ -1006,9 +1102,14 @@
    ],
    "angleToNormalDeg": 4.7,
    "boneMm": 6.5,
-   "ventricle": null,
-   "nearestSide": "R",
-   "missMm": 3.2
+   "ventricle": "R",
+   "depthMm": 50.5,
+   "insideMm": 14.2,
+   "entersAt": [
+    9.9,
+    8.9,
+    43.2
+   ]
   },
   {
    "kocher": "park",
@@ -1027,9 +1128,14 @@
    ],
    "angleToNormalDeg": 0.0,
    "boneMm": 6.8,
-   "ventricle": null,
-   "nearestSide": "R",
-   "missMm": 2.4
+   "ventricle": "R",
+   "depthMm": 54.5,
+   "insideMm": 8.8,
+   "entersAt": [
+    4.9,
+    5.9,
+    42.1
+   ]
   },
   {
    "kocher": "park",
@@ -1055,7 +1161,7 @@
    "boneMm": 8.0,
    "ventricle": null,
    "nearestSide": "L",
-   "missMm": 16.1
+   "missMm": 12.0
   },
   {
    "kocher": "park",
@@ -1081,7 +1187,7 @@
    "boneMm": 7.8,
    "ventricle": null,
    "nearestSide": "L",
-   "missMm": 8.8
+   "missMm": 8.3
   },
   {
    "kocher": "park",
@@ -1107,7 +1213,7 @@
    "boneMm": 7.5,
    "ventricle": null,
    "nearestSide": "L",
-   "missMm": 0.9
+   "missMm": 0.7
   },
   {
    "kocher": "park",
@@ -1127,12 +1233,12 @@
    "angleToNormalDeg": 0.0,
    "boneMm": 7.8,
    "ventricle": "L",
-   "depthMm": 53.2,
-   "insideMm": 9.0,
+   "depthMm": 51.5,
+   "insideMm": 10.8,
    "entersAt": [
-    -4.0,
-    -5.5,
-    45.2
+    -4.9,
+    -5.1,
+    46.7
    ]
   },
   {
@@ -1159,7 +1265,7 @@
    "boneMm": 7.2,
    "ventricle": null,
    "nearestSide": "L",
-   "missMm": 12.0
+   "missMm": 11.9
   },
   {
    "kocher": "park",
@@ -1185,7 +1291,7 @@
    "boneMm": 7.2,
    "ventricle": null,
    "nearestSide": "L",
-   "missMm": 6.9
+   "missMm": 6.2
   },
   {
    "kocher": "park",
@@ -1209,9 +1315,14 @@
    ],
    "angleToNormalDeg": 6.5,
    "boneMm": 7.0,
-   "ventricle": null,
-   "nearestSide": "L",
-   "missMm": 3.3
+   "ventricle": "L",
+   "depthMm": 50.0,
+   "insideMm": 2.2,
+   "entersAt": [
+    -9.7,
+    2.1,
+    44.1
+   ]
   },
   {
    "kocher": "park",
@@ -1231,12 +1342,12 @@
    "angleToNormalDeg": 0.0,
    "boneMm": 7.0,
    "ventricle": "L",
-   "depthMm": 53.5,
-   "insideMm": 4.5,
+   "depthMm": 53.0,
+   "insideMm": 7.2,
    "entersAt": [
-    -2.9,
-    1.1,
-    43.7
+    -3.1,
+    1.3,
+    44.1
    ]
   },
   {
@@ -1263,7 +1374,7 @@
    "boneMm": 8.2,
    "ventricle": null,
    "nearestSide": "L",
-   "missMm": 9.2
+   "missMm": 9.1
   },
   {
    "kocher": "park",
@@ -1289,7 +1400,7 @@
    "boneMm": 6.8,
    "ventricle": null,
    "nearestSide": "L",
-   "missMm": 2.9
+   "missMm": 2.7
   },
   {
    "kocher": "park",
@@ -1314,12 +1425,12 @@
    "angleToNormalDeg": 4.8,
    "boneMm": 6.5,
    "ventricle": "L",
-   "depthMm": 47.2,
-   "insideMm": 4.8,
+   "depthMm": 46.8,
+   "insideMm": 17.0,
    "entersAt": [
-    -9.9,
-    8.3,
-    44.7
+    -10.0,
+    8.5,
+    45.2
    ]
   },
   {
@@ -1339,9 +1450,14 @@
    ],
    "angleToNormalDeg": 0.0,
    "boneMm": 6.5,
-   "ventricle": null,
-   "nearestSide": "L",
-   "missMm": 1.1
+   "ventricle": "L",
+   "depthMm": 53.8,
+   "insideMm": 0.5,
+   "entersAt": [
+    -3.4,
+    6.1,
+    41.1
+   ]
   }
  ],
  "canal": {

@@ -31,7 +31,7 @@ const app = document.getElementById('app')!;
 const navLinks = NAV.map(([p, label]) => h('a', { href: `#/${p}`, class: 'navlink', 'data-page': p }, label));
 const themeBtn = h('button', { type: 'button', class: 'theme-btn', onclick: () => cycleTheme() });
 const header = siteHeader({ section: SECTION, nav: navLinks, themeBtn });
-const disclaimer = disclaimerNote('One young adult’s CT: the ventricles are this patient’s, approximate to about a millimetre, and narrow; trajectories are simulated on it. Not for surgical planning.');
+const disclaimer = disclaimerNote('One young adult’s CT: the ventricles are this patient’s where the CT shows them (narrow, approximate to about a millimetre) and a fitted model where it cannot; trajectories are simulated on it. Not for surgical planning.');
 
 const update = (fn: (s: VeState) => void, opts: { camera?: boolean } = {}) => {
   const next = structuredClone(state);

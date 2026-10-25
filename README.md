@@ -284,29 +284,44 @@ entry zones for brainstem surgery.
 
 ## Ventricles
 
-The lateral and third ventricles of one CT, Skull base v2's (TopBrain 2025 case 011, in its frame), and a frontal
-ventriculostomy simulated on it.
+The lateral and third ventricles of one CT, Skull base v2's (TopBrain 2025 case 011, in its frame), joined by the
+foramina of Monro, and a frontal ventriculostomy simulated on it.
 
-- **Ventricles**: this CT's own (`pipeline/ventricles_build.py`). In its brain window the ventricular fluid is darker than
-  the brain; the fluid below 27 HU (smoothed by 1 mm), at least 10 mm inside the cranial cavity and away from the
-  labelled vessels, is taken. The lateral ventricles are its largest body, split at the falx's plane; the third
-  ventricle is the body on the midline below and between them, as far as the CT shows it. This young adult's ventricles
-  are narrow (frontal horns about 25 mm across both, Evans' index about 0.21), so the threshold sets their size where
-  they are a few millimetres wide: approximate to about a millimetre.
+- **Ventricles as the CT shows them** (`pipeline/ventricles_build.py`): in its brain window the ventricular fluid is
+  darker than the brain; the fluid below 27 HU (smoothed by 1 mm), at least 10 mm inside the cranial cavity and away
+  from the labelled vessels, is taken. The lateral ventricles are its largest body; the third ventricle is the body on
+  the midline below and between them. This young adult's ventricles are narrow (frontal horns about 25 mm across both,
+  Evans' index about 0.21), so the threshold sets their size where they are a few millimetres wide, and it misses what
+  is narrower than the CT resolves: the temporal horns, the foramina of Monro, the third ventricle's floor.
+- **Ventricles as drawn**: Z-Anatomy's lateral and third ventricles (`pipeline/ventricles_export.py`, run in Blender)
+  fitted onto the CT's: scaled as v2 scaled the model, a similarity, then a smooth deformation in which the CT's surface
+  pulls the model's (within 5 mm) and the model's is pulled onto the CT's only within 2.5 mm, so that where the CT shows
+  no fluid the model stays. The CT's surface lies a median 0.8 mm from the fitted model's; along the fitted right
+  temporal horn the CT is a little darker than the brain around it (its faint fluid), along the left no darker (its
+  course is the model's). The drawn surface joins the CT's ventricles, the fitted model and the foramina, softened (its
+  signed distance smoothed by 0.75 mm) and drawn 0.5 mm outside, the lateral ventricles kept apart at the septum, then
+  split by part.
+- **Foramina of Monro**: drawn by rule, a tube of the mean cross-section Jean 2019 measured (5.23 mm²) between the points
+  where the fitted lateral ventricle comes closest to the fitted third ventricle, at the third ventricle's front upper
+  corner (Azab 2014). The CT is about 10 HU darker along them than around them.
 - **Kocher's point and the trajectories**: the coronal suture where the CT's frontal and parietal bones meet; Kocher's
   point 10 mm in front of it along the outer table, 25 mm (Chen 2025) or 30 mm (Park 2020) from the midline, and 10 mm
   further forward or back for comparison; the external acoustic meatus where each ear canal, the shortest way through
   air from the registered tympanic membrane to outside, leaves the bone. The CT stops at the forehead, so the medial
   canthi are placed at half Chen's mean intercanthal distance and projected onto the line between the meatus, as Chen
   does. From each entry the four freehand trajectories (ipsilateral canthus, midpoint between the meatus,
-  contralateral canthus, perpendicular) are followed to the first ventricle they meet: side, depth from the outer
-  table, course inside, or how far they miss. The card shows that result beside the published accuracy of the same
+  contralateral canthus, perpendicular) are followed 65 mm from the outer table (Chen: with no fluid by then the
+  catheter is withdrawn and re-aimed) to the first lateral ventricle they meet: side, depth from the outer table,
+  course inside, or how far they miss. The card shows that result beside the published accuracy of the same
   aim.
 - **Cards**: every statement cites its source (`src/ventricles/content.ts`, `references.ts`), checked against the
-  open-access full texts: Chen 2025, Park 2020, Charcos 2025, Gangal 2026, Abdala-Vargas 2022.
+  open-access full texts: Chen 2025, Park 2020, Charcos 2025, Gangal 2026, Abdala-Vargas 2022, Azab 2014; Jean 2019
+  (no open full text) against its abstract.
 - Pipeline: after `pipeline/skullbase_ct.py` and the v3 build (it uses the bone, the fitted brain and the registered
-  tympanic membrane): `pipeline/ventricles_build.py`, `node pipeline/compress.mjs ventricles`,
-  `pipeline/ventricles_build.py finalize` (checks sizes, landmark positions and every trajectory).
+  tympanic membrane), and `pipeline/ventricles_export.py` in Blender: `pipeline/ventricles_build.py`,
+  `node pipeline/compress.mjs ventricles`,
+  `pipeline/ventricles_build.py finalize` (checks sizes, the model's fit, the foramina, landmark positions and every
+  trajectory).
 
 ## Cortical anatomy
 

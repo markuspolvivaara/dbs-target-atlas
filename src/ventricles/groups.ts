@@ -28,7 +28,7 @@ export const BRAIN = ofCat('brain');
 export const VE_GROUPS: VeGroup[] = [
   {
     id: 'ventricles', kind: 'anatomy', name: 'Lateral and third ventricles', camera: 'anterolateral', radius: 75, bone: 'ghost', brain: null,
-    description: 'This CT’s own lateral ventricles, and its third ventricle as far as the CT shows it, inside the skull. They are narrow in this young adult: see how narrow on the ventricle’s card.',
+    description: 'This CT’s lateral and third ventricles, joined by the foramina of Monro, inside the skull. They are narrow in this young adult, and where the CT cannot show them (the temporal horns, the foramina, the third ventricle’s floor) they are a model fitted onto them: see each ventricle’s card.',
     key: VENTRICLES,
   },
   {

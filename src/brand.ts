@@ -39,7 +39,7 @@ export const SECTIONS: Section[] = [
   },
   {
     id: 'ventricles', name: 'Ventricles', path: 'ventricles/', status: 'live',
-    summary: 'The lateral and third ventricles of one CT, and a frontal ventriculostomy simulated on it: Kocher’s point found on this skull, the four freehand trajectories, whether each reaches the ventricle and how deep, beside their published accuracy.',
+    summary: 'The lateral and third ventricles of one CT, joined by the foramina of Monro, and a frontal ventriculostomy simulated on it: Kocher’s point found on this skull, the four freehand trajectories, whether each reaches the ventricle and how deep, beside their published accuracy.',
   },
   {
     id: 'dbs', name: 'DBS targets', path: 'dbs/', status: 'live',

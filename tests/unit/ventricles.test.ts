@@ -17,6 +17,25 @@ describe('ventricles section', () => {
     expect(v.frontalHorns.evansIndex).toBeCloseTo(v.frontalHorns.widthMm / v.frontalHorns.innerSkullMm, 2);
     expect(VE_MANIFEST.structures.some((s) => s.category === 'bone')).toBe(true);
   });
+  it('the drawn ventricles: the CT’s completed by the fitted model, joined by the foramina of Monro', () => {
+    const v = TRAJ.ventricles;
+    for (const id of ['ve_lateral_ventricle', 've_third_ventricle', 've_interventricular_foramen']) expect(VE.get(id)?.category, id).toBe('ventricle');
+    // the drawn ventricles hold the CT's, and each side has its foramen
+    for (const s of ['R', 'L'] as const) {
+      expect(v.drawnMl[s]).toBeGreaterThanOrEqual(v.volumeMl[s]);
+      expect(v.drawnMl[`monro${s}`]).toBeGreaterThan(0);
+      expect(v.fit.monro[s].gapMm).toBeLessThan(6);
+    }
+    expect(v.drawnMl.third).toBeGreaterThanOrEqual(v.volumeMl.third);
+    // the model follows the CT where it shows the ventricles, without folding; the foramina lie on darker CT
+    expect(v.fit.fitMedianMm).toBeLessThan(1.2);
+    expect(v.fit.jacobianMin).toBeGreaterThan(0.2);
+    for (const s of ['R', 'L']) expect(v.fit.monroCt[s].insideHu).toBeLessThan(v.fit.monroCt[s].aroundHu);
+    // a circle of the published mean cross-section
+    expect(Math.PI * v.fit.monroRadiusMm ** 2).toBeCloseTo(TRAJ.params.monroAreaMm2, 1);
+    // the trajectories stop where Chen advises withdrawing the catheter
+    for (const t of TRAJ.trajectories) if (t.ventricle) expect(t.depthMm!).toBeLessThanOrEqual(TRAJ.params.maxDepthMm);
+  });
   it('the skull’s landmarks: Kocher’s point at its stated distance from the midline and in front of bregma, the meatus on the temporal bones', () => {
     const lm = new Map(LANDMARKS.map((l) => [l.id, l]));
     const bregma = lm.get('lm_bregma')!.ras;

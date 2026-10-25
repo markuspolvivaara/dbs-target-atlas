@@ -273,19 +273,23 @@ def ventricles_attribution() -> list[str]:
         return []
     d = json.loads(p.read_text())["dataset"]
     return [
-        "## Ventricles section (TopBrain 2025 CT angiogram, case 011)",
+        "## Ventricles section (TopBrain 2025 CT angiogram, case 011, with the Z-Anatomy ventricles fitted onto it)",
         "",
         "The ventricle meshes in `public/assets/ventricles/` and `ve-manifest.json`, `ve-landmarks.json` and `ve-trajectories.json`",
-        f"are derived from the TopBrain CT ({d['licence']}): **not** GPL-licensed. The section also shows Skull base v2's bone and",
-        "Skull base v3's fitted brain, under their licences above.",
+        f"are derived from the TopBrain CT and from Z-Anatomy ({d['licence']}): **not** GPL-licensed. Adapted from Z-Anatomy,",
+        "the ventricle meshes stay under CC BY-SA 4.0; their fit uses the TopBrain data (non-commercial). The section also shows",
+        "Skull base v2's bone and Skull base v3's fitted brain, under their licences above.",
         "",
         f"- Source: {d['url']}",
         f"- Note: {d['note']}",
         *[f"- Attribution: {a}" for a in d["attribution"]],
         *[f"- Cite: {c}" for c in d["citation"]],
         "- Changes made: the lateral and third ventricles segmented from the CT by a threshold in its brain window",
-        "  (pipeline/ventricles_build.py); the coronal suture, Kocher's points and the external acoustic meatus located on the",
-        "  CT; ventriculostomy trajectories computed on it; files converted to compressed glTF.",
+        "  (pipeline/ventricles_build.py); Z-Anatomy's lateral and third ventricles (exported by pipeline/ventricles_export.py)",
+        "  fitted onto them by a similarity and a smooth deformation, and joined with them into one softened surface drawn",
+        "  half a millimetre outside, split by part; the foramina of Monro drawn by rule between the fitted lateral and third",
+        "  ventricles (the project's own drawing); the coronal suture, Kocher's points and the external acoustic meatus",
+        "  located on the CT; ventriculostomy trajectories computed on it; files converted to compressed glTF.",
         "",
     ]
 

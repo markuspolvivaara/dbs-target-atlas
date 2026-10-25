@@ -8,8 +8,9 @@ useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the file LICENSE for the
 full licence text.
 
-Teaching tool only. The anatomy is group-level atlas data in MNI ICBM 2009b space;
-individual anatomy varies. Not for surgical planning, diagnosis or treatment.
+Teaching tool only. The anatomy is group-level atlas data in MNI ICBM 2009b space, or
+one person's scan with models fitted onto it (the skull base, spine and ventricle
+sections); individual anatomy varies. Not for surgical planning, diagnosis or treatment.
 
 
 What is covered by which terms
@@ -176,10 +177,14 @@ What is covered by which terms
 13. Ventricles section (public/assets/ventricles/, public/assets/ve-manifest.json,
    src/data/generated/ve-*.json): the lateral and third ventricles segmented
    here from the TopBrain 2025 CT angiogram (case 011; open use with
-   attribution, non-commercial, University Hospital Zurich), with landmarks and
-   ventriculostomy trajectories computed on it. It shows Skull base v2's bone
-   (section 10) and the default skull base model's fitted brain (section 12)
-   under their terms.
+   attribution, non-commercial, University Hospital Zurich) and completed by
+   Z-Anatomy's ventricles fitted onto them (CC BY-SA 4.0; BodyParts3D CC BY-SA
+   2.1 Japan): adapted from Z-Anatomy, the ventricle meshes stay under CC BY-SA
+   4.0, and their fit uses the TopBrain data. The foramina of Monro are drawn
+   by rule (the project's own, GPL-3.0). Landmarks and ventriculostomy
+   trajectories are computed on the CT. It shows Skull base v2's bone (section
+   10) and the default skull base model's fitted brain (section 12) under their
+   terms.
 
 14. Bundled third-party software (three.js and zod, MIT licence; Atkinson
    Hyperlegible font, SIL Open Font Licence 1.1): see
