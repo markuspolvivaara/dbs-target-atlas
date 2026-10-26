@@ -14,6 +14,9 @@ What comes from where:
     da Silva 2024 measured in 200 MRIs; they are moved, unchanged in shape, so that their anterosuperior point lies
     where da Silva puts it behind the anterior commissure (MB_BEHIND_AC_MM, along the AC-PC line), at the height of
     the model's floor there; and the cavity is drawn round them, so that they bulge into the floor (MB_GAP_MM).
+  - The choroid plexus with the hydrocephalus shape: it follows the shape, and at each foramen of Monro, which grows
+    backwards, it is shifted towards the thalamus, the foramen's posterior border, until it lies against it
+    (PLEXUS_MONRO_MM, PLEXUS_THALAMUS_MM; its tela is fixed along the choroidal fissure by the thalamus's tenia: Azab 2014).
   - The AC-PC frame: the fitted anterior and posterior commissures' centres; its origin the anterior commissure's
     posterosuperior border in the midline (as da Silva 2024 defines it).
   - The ETV target: the middle of the tuber cinereum, the midline floor halfway between the infundibular recess and
@@ -60,6 +63,26 @@ WALL_SMOOTH = 6            # (this many neighbour-averaging rounds per pass)
 MB_BEHIND_AC_MM = (8.56, 7.01)   # the mammillary bodies' anterosuperior point: this far behind (along the AC-PC line)
                                  # and below the anterior commissure's posterosuperior border (da Silva 2024, 200 MRIs)
 MB_GAP_MM = 0.25           # the cavity drawn this far round them
+MB_AGE_Y = 20.0            # their size: Vann 2022's growth curve of the two bodies' total volume (250 MRIs, 6-24 years;
+MB_VOLUME_MM3 = 68.61 + 6.53 * MB_AGE_Y - 0.19 * MB_AGE_Y ** 2   # mm3 = 68.61 + 6.53 age - 0.19 age^2) at a young
+                           # adult's age; each drawn as a sphere of half of it (the model's are thin plates, which no
+                           # floor drawn over them shows as bulges: a modelling choice), centred where the model's lies
+MB_DRAWN_MM = 5.5          # ... and drawn this wide (a little larger), their distance from the midline in proportion
+                           # (so the groove between them stays): smaller, they barely show as the bulges an endoscopist
+                           # sees (a display choice)
+MB_WRAP_MM = (2.8, 5.5)    # with the hydrocephalus shape, the floor within the first of them (fading out by the second)
+                           # wrapped down onto them, MB_GAP_MM off, so each shows as a bulge
+MB_HYDRO_BEHIND_AC_MM = (11.30, 7.05)   # ... and in hydrocephalus (da Silva 2024, 24 MRIs: medians): further back. With the
+                                        # hydrocephalus shape they are placed that far back in the shaped AC-PC frame ...
+MB_PROTRUDE_MM = 4.0       # ... their tops this far above the shaped floor there, which then rests on them: they bulge
+                           # into it (a modelling choice: the bumps endoscopists see)
+PLEXUS_MONRO_MM = (6.0, 12.0)   # with the hydrocephalus shape, the choroid plexus within the first of a foramen's centre
+                                # (fading out by the second) is shifted towards the thalamus, the foramen's posterior
+                                # border (the foramen grows backwards; the plexus, fixed along the choroidal fissure by
+                                # the thalamus's tenia, goes with it: Azab 2014) ...
+PLEXUS_THALAMUS_MM = 0.3        # ... until its near side is this close to the thalamus, or more of it would leave the
+                                # cavity (PLEXUS_OUT_FRAC beyond what already did)
+PLEXUS_OUT_FRAC = 0.02
 
 
 def clean(V: np.ndarray, F: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
@@ -121,10 +144,15 @@ def floor_z(third: np.ndarray, frame: ACPC, yy: float, half: float = 1.5) -> flo
 
 
 def mammillary(hyp_parts: list, frame: ACPC, third: np.ndarray) -> tuple[list, dict]:
-    """The model's mammillary bodies (the hypothalamus mesh's two small pieces) moved, unchanged in shape, so that their
-    anterosuperior point lies MB_BEHIND_AC_MM behind the anterior commissure, at the height of the model's floor there.
-    Returns the moved pieces and a report."""
-    mb = hyp_parts[1:3]
+    """The mammillary bodies: spheres of Vann 2022's volume (MB_VOLUME_MM3) where the model's are (the hypothalamus
+    mesh's two small pieces), moved so that their anterosuperior point lies MB_BEHIND_AC_MM behind the anterior
+    commissure, at the height of the model's floor there. Returns the moved pieces and a report."""
+    r = (3 * MB_VOLUME_MM3 / 2 / (4 * np.pi)) ** (1 / 3)
+    k = MB_DRAWN_MM / (2 * r)
+    ball = trimesh.creation.icosphere(subdivisions=3, radius=r * k)
+    centres = [v.mean(0) * [k, 1, 1] - [frame.o[0] * (k - 1), 0, 0] for v, _ in hyp_parts[1:3]]
+    mb = [(np.asarray(ball.vertices) + c, np.asarray(ball.faces)) for c in centres]
+    model_mm3 = [round(abs(float(trimesh.Trimesh(v, f, process=False).volume)), 1) for v, f in hyp_parts[1:3]]
     allv = np.vstack([v for v, _ in mb])
     yz = frame.of(allv)
     i = int(np.argmax(yz[:, 1] + yz[:, 0]))          # anterosuperior: highest and furthest forward
@@ -134,8 +162,34 @@ def mammillary(hyp_parts: list, frame: ACPC, third: np.ndarray) -> tuple[list, d
     shift = target - allv[i]
     shift[0] = 0.0
     moved = [(v + shift, f) for v, f in mb]
-    return moved, {"modelAcpcMm": frame.of(allv[i])[0].round(2).tolist(), "placedAcpcMm": [round(yy, 2), round(zz, 2)],
+    return moved, {"modelVolumeMm3": model_mm3, "volumeMm3": round(MB_VOLUME_MM3 / 2, 1), "diameterMm": round(2 * r, 2),
+                   "drawnScale": round(k, 2), "drawnDiameterMm": round(2 * r * k, 2),
+                   "modelAcpcMm": frame.of(allv[i])[0].round(2).tolist(), "placedAcpcMm": [round(yy, 2), round(zz, 2)],
                    "daSilvaAcpcMm": [-MB_BEHIND_AC_MM[0], -MB_BEHIND_AC_MM[1]], "movedMm": round(float(np.linalg.norm(shift)), 2)}
+
+
+def mammillary_hydro(mb: list, frame_h: "ACPC", floor_h: np.ndarray) -> tuple[np.ndarray, dict]:
+    """The mammillary bodies' move with the hydrocephalus shape, unchanged in shape and still in the midline: their
+    anterosuperior point MB_HYDRO_BEHIND_AC_MM[0] behind the shaped anterior commissure (da Silva 2024's median in
+    hydrocephalus), their tops MB_PROTRUDE_MM above the shaped floor there (floor_h: the third ventricle's walls as the
+    shape moves them, before the floor is draped over them), so the floor, coming down, rests on them. Returns the move
+    and a report."""
+    allv = np.vstack([V for _, V, _ in mb])
+    yz = frame_h.of(allv)
+    i = int(np.argmax(yz[:, 1] + yz[:, 0]))
+    yy = -MB_HYDRO_BEHIND_AC_MM[0]
+    fy = frame_h.of(floor_h)
+    near = (np.abs(floor_h[:, 0] - frame_h.o[0]) < 4.0) & (np.abs(fy[:, 0] - yy) < 1.5)
+    z_floor = float(fy[near, 1].min())
+    dy = (yy - yz[i, 0]) * frame_h.y
+    top = float((frame_h.of(allv + dy))[:, 1].max())
+    dz = (z_floor + MB_PROTRUDE_MM - top) * frame_h.z
+    shift = dy + dz
+    shift[0] = 0.0
+    a = frame_h.of(allv[i] + shift)[0]
+    return shift, {"placedAcpcMm": [round(float(a[0]), 2), round(float(a[1]), 2)],
+                   "daSilvaHydroAcpcMm": [-MB_HYDRO_BEHIND_AC_MM[0], -MB_HYDRO_BEHIND_AC_MM[1]],
+                   "protrudeMm": MB_PROTRUDE_MM, "movedMm": round(float(np.linalg.norm(shift)), 2)}
 
 
 def solid_sd(meshes: list, lo: np.ndarray, shape: tuple, step: float, fill, sdf) -> np.ndarray:
@@ -286,7 +340,7 @@ def shaped_walls(deep: dict, field, Vh: np.ndarray, Fh: np.ndarray, Nh: np.ndarr
         moves[id_] = []
         for side, V, F in pieces:
             D = field(V)
-            if id_ not in IN_CAVITY:
+            if id_ not in IN_CAVITY and id_ != "ve_mammillary_body":
                 X, mx = push_out(V + D, F, sd, lo, step, Vh, Nh, tree)
                 D = X - V
                 rep[id_] = max(rep.get(id_, 0.0), round(mx, 2))
@@ -526,6 +580,69 @@ def hydrocephalus(V: np.ndarray, N: np.ndarray, part: np.ndarray, midline: float
     got = measures(V, part, target, apex, inner_skull, monro_z, f(V), f(target)[0])
     return f, {**vrep, "rest": rest, "hydrocephalus": got, "amplitudeMm": {k: round(v, 2) for k, v in a.items()}, "goal": goal,
                "maxMoveMm": round(float(np.linalg.norm(f(V), axis=1).max()), 1)}
+
+
+def plexus_on_thalamus(plexus: list, moves: list, thalamus: np.ndarray, monro: dict, wall_v: np.ndarray, wall_n: np.ndarray) -> tuple[list, dict]:
+    """The choroid plexus's moves with the hydrocephalus shape, kept against the thalamus at the foramina: the plexus
+    within PLEXUS_MONRO_MM of a shaped foramen's centre (monro) shifted as one piece towards the shaped thalamus
+    (thalamus: its vertices), in steps, until its near side is PLEXUS_THALAMUS_MM from it or more of it than before
+    would lie outside the shaped walls (wall_v, wall_n: vertices and outward normals); the shift fades out with the
+    distance from the foramen. Returns the moves and, per side, the shift and the thalamus's distance (median) before
+    and after."""
+    tt, wt = cKDTree(thalamus), cKDTree(wall_v)
+
+    def outside(P):
+        d, i = wt.query(P)
+        return (np.einsum("ij,ij->i", P - wall_v[i], wall_n[i]) > 0) & (d > 0.1)
+    a, b = PLEXUS_MONRO_MM
+    out, rep = [D.copy() for D in moves], {}
+    for s, c in monro.items():
+        c = np.asarray(c, float)
+        P = [V + D for (_, V, _), D in zip(plexus, out)]
+        core = np.vstack([X[np.linalg.norm(X - c, axis=1) < a] for X in P])
+        if len(core) < 20:
+            continue
+        u = (thalamus[tt.query(core)[1]] - core).mean(0)
+        u /= np.linalg.norm(u)
+        base = outside(core).mean()
+        t = 0.0
+        for k in np.arange(0.25, 8.01, 0.25):
+            Q = core + k * u
+            if outside(Q).mean() > base + PLEXUS_OUT_FRAC or tt.query(Q)[0].min() < PLEXUS_THALAMUS_MM:
+                break
+            t = float(k)
+        for X, D in zip(P, out):
+            w = np.clip((b - np.linalg.norm(X - c, axis=1)) / (b - a), 0, 1)
+            D += (t * w * w * (3 - 2 * w))[:, None] * u
+        rep[s] = {"shiftMm": round(t, 2), "thalamusMedianMm": [round(float(np.median(tt.query(core)[0])), 2),
+                                                               round(float(np.median(tt.query(core + t * u)[0])), 2)]}
+    return out, rep
+
+
+def wrap_floor(V: np.ndarray, F: np.ndarray, D: np.ndarray, third: np.ndarray, mb_dist, up: np.ndarray) -> tuple[np.ndarray, dict]:
+    """The shaped floor wrapped onto the shaped mammillary bodies: each third-ventricle wall point (third: a mask) above
+    them (their surface's outward direction there pointing up) and within MB_WRAP_MM of them moved towards them until
+    MB_GAP_MM off (fading out over the band), the moves smoothed a little over the surface. mb_dist: their signed
+    distance at points (mm). Returns the moves and a report."""
+    from scipy.sparse import coo_matrix
+    P = V + D
+    d = mb_dist(P)
+    h = 0.25
+    g = np.stack([(mb_dist(P + h * e) - mb_dist(P - h * e)) / (2 * h) for e in np.eye(3)], 1)
+    g /= np.maximum(np.linalg.norm(g, axis=1, keepdims=True), 1e-6)
+    a, b = MB_WRAP_MM
+    w = np.clip((b - d) / (b - a), 0, 1) * np.clip((g @ up - 0.2) / 0.3, 0, 1) * third
+    m = -(np.maximum(d - MB_GAP_MM, 0) * w)[:, None] * g
+    n = len(V)
+    e = np.vstack([F[:, [0, 1]], F[:, [1, 2]], F[:, [2, 0]]])
+    A = coo_matrix((np.ones(len(e) * 2), (np.r_[e[:, 0], e[:, 1]], np.r_[e[:, 1], e[:, 0]])), shape=(n, n)).tocsr()
+    deg = np.maximum(np.asarray(A.sum(1)).ravel(), 1)
+    for _ in range(2):
+        m = np.where(third[:, None], 0.5 * m + 0.5 * (A @ m) / deg[:, None], 0)
+    out = D + m
+    left = mb_dist(V + out)
+    return out, {"wrappedPoints": int((np.linalg.norm(m, axis=1) > 0.05).sum()), "maxMoveMm": round(float(np.linalg.norm(m, axis=1).max()), 2),
+                 "minGapMm": round(float(left[w > 0].min()) if (w > 0).any() else 0.0, 2)}
 
 
 def jacobian_min(f, P: np.ndarray, h: float = 0.5) -> float:

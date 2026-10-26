@@ -8,6 +8,7 @@ import { loadStructure, type LineAsset, type MeshAsset } from './assets';
 import { Lead, contactCentres, trajectoryDir } from './lead';
 import { applyLook, lineMaterial, outlineMaterial, rimMaterial, solidMaterial, xrayMaterial, type Look, type MeshMaterials, type OutlineUniforms } from './materials';
 import { onViewPrefs, viewPrefs } from './viewprefs';
+import { geometryOf, RayGridCache, type RayHit } from './endoray';
 import { Endoscope, type EndoMesh } from './endoscope';
 import type { SceneSource, ScenePlan, TractRole, ViewState } from './scene';
 import { Slices } from './slices';
@@ -23,6 +24,8 @@ export interface PickInfo {
   id: string | null; name: string; ras: THREE.Vector3; side: Side | null; kind: 'structure' | 'slice' | 'lead' | 'marker';
   /** seen through the endoscope: how far behind the ventricle's wall it lies (mm) */
   behindMm?: number;
+  /** ... through the thin floor of the third ventricle */
+  throughFloor?: boolean;
 }
 
 type V3t = [number, number, number];
@@ -35,8 +38,12 @@ export interface EndoscopeConfig {
   role(id: string, category: string | undefined): EndoMesh['role'] | null;
   /** a structure drawn with its own look in the endoscope's view */
   look?(id: string): EndoMesh['look'];
+  /** a body under the wall shown as the wall bulging white over it, not drawn itself (and picked before what lies
+   * around it): its meshes taken as spheres */
+  bulge?(id: string): boolean;
   colour(id: string): string;
-  floor: { centre: V3t; radiusMm: number; lambdaMm: number } | null;
+  /** RAS: the thin floor's middle, its front-to-back axis and half-length, its half-width side to side (mm) */
+  floor: { centre: V3t; ap: V3t; radiusMm: number; radiusLatMm: number; lambdaMm: number } | null;
 }
 
 export interface ViewerEvents {
@@ -60,6 +67,8 @@ const SHOWN = { on: true, opacity: 1 };
 const RAS_TO_WORLD = new THREE.Matrix4().makeRotationX(-Math.PI / 2); // (x, y, z) RAS -> (x, z, -y) three
 /** in the endoscope's view, what lies this close behind a wall is what the pointer is on (it shows through) */
 const ENDO_PICK_BEHIND_MM = 3;
+/** ... and through the thin floor of the third ventricle, this close: what lies under it can be named before it is opened */
+const ENDO_PICK_FLOOR_MM = 14;
 
 /** Shared 3D viewer. What to draw comes from the section's SceneSource (catalogue + planner). */
 export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = ScenePlan> {
@@ -117,6 +126,9 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   private endoInside = false;
   /** whether the tip's place must be found again (the pose, the shapes or the loaded meshes changed) */
   private endoDirty = true;
+  /** the endoscope's rays: against the walls and what lies in the cavity (each frame), and against all it shows (picks) */
+  private endoSeen = new RayGridCache();
+  private endoPick = new RayGridCache();
   private endoColours = new Map<string, THREE.Color>();
   private endoReported = false;
 
@@ -868,7 +880,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       const inOverview = x >= er.overview.x && x <= er.overview.right && y >= er.overview.y && y <= er.overview.bottom;
       if (inEndo && (this.endoCfg!.big ? !inOverview : true)) {
         if (!this.endoInside) return null;
-        return this.pickEndo(new THREE.Vector2(((x - er.endo.x) / er.endo.width) * 2 - 1, -((y - er.endo.y) / er.endo.height) * 2 + 1));
+        return this.pickEndo(Endoscope.undistort(new THREE.Vector2(((x - er.endo.x) / er.endo.width) * 2 - 1, -((y - er.endo.y) / er.endo.height) * 2 + 1),
+          er.endo.width, er.endo.height));
       }
       const a = this.camera.aspect;
       this.camera.aspect = er.overview.width / er.overview.height;
@@ -1057,6 +1070,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     if (cfg) {
       this.endo!.setPose({ tip: this.toWorld(new THREE.Vector3(...cfg.tip)), dir: this.dirWorld(cfg.dir), up: this.dirWorld(cfg.up) });
       this.endo!.setFloor(cfg.floor ? { centre: this.toWorld(new THREE.Vector3(...cfg.floor.centre)), radiusMm: cfg.floor.radiusMm,
+        ap: this.dirWorld(cfg.floor.ap), lat: this.dirWorld([1, 0, 0]), radiusLatMm: cfg.floor.radiusLatMm,
         lambdaMm: cfg.floor.lambdaMm, up: this.dirWorld([0, 0, 1]) } : null);
       this.endoDirty = true;
     }
@@ -1092,48 +1106,41 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       let c = this.endoColours.get(it.meta.id);
       if (!c) { c = new THREE.Color(cfg.colour(it.meta.id)); this.endoColours.set(it.meta.id, c); }
       const look = this.plan?.looks.get(it.meta.id) ?? 'hidden';
-      meshes.push({ nodes, colour: c, role, visible: look !== 'hidden' && !hidden.has(it.meta.id), look: cfg.look?.(it.meta.id) });
+      meshes.push({ nodes, colour: c, role, visible: look !== 'hidden' && !hidden.has(it.meta.id), look: cfg.look?.(it.meta.id), bulge: cfg.bulge?.(it.meta.id) });
       ids.push(it.meta.id);
     }
     return { meshes, ids };
   }
 
   private tipInside(): boolean {
-    const walls = this.endoMeshes().meshes.filter((m) => m.role === 'wall' && m.visible).flatMap((m) => m.nodes);
-    if (!walls.length) return false;
+    const shown = this.endoMeshes().meshes.filter((m) => m.visible);
+    const walls = new Set(shown.filter((m) => m.role === 'wall').flatMap((m) => m.nodes));
+    if (!walls.size) return false;
+    const grid = this.endoSeen.get([...walls, ...shown.filter((m) => m.role === 'inside').flatMap((m) => m.nodes)]);
+    const isWall = (n: THREE.Mesh) => walls.has(n);
     const tip = this.endo!.camera.position;
-    const swap = walls.map((n) => [n, n.material] as const);
-    const ds = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide });
-    for (const n of walls) n.material = ds;
     let inside = 0, n = 0;
     const dists: number[] = [], facing: number[] = [];
-    try {
-      this.scene.updateMatrixWorld(true);
-      for (const d of [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]] as V3t[]) {
-        const dir = new THREE.Vector3(...d);
-        this.raycaster.set(tip, dir);
-        const h = this.raycaster.intersectObjects(walls, false)[0];
-        if (!h?.face) continue;
-        n++;
-        dists.push(h.distance);
-        const nw = h.face.normal.clone().applyMatrix3(new THREE.Matrix3().getNormalMatrix(h.object.matrixWorld));
-        if (nw.dot(dir) > 0) inside++;
-      }
-      // the exposure: for what the lens faces (rays in a cone round its axis)
-      const cam = this.endo!.camera;
-      const fwd = new THREE.Vector3(0, 0, -1).applyQuaternion(cam.quaternion);
-      const right = new THREE.Vector3(1, 0, 0).applyQuaternion(cam.quaternion), upv = new THREE.Vector3(0, 1, 0).applyQuaternion(cam.quaternion);
-      for (const [a, b] of [[0, 0], [0.35, 0], [-0.35, 0], [0, 0.35], [0, -0.35]]) {
-        this.raycaster.set(tip, fwd.clone().addScaledVector(right, a).addScaledVector(upv, b).normalize());
-        const h = this.raycaster.intersectObjects(walls, false)[0];
-        if (h) facing.push(h.distance);
-      }
-    } finally {
-      for (const [m, mat] of swap) m.material = mat;
-      ds.dispose();
+    for (const d of [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]] as V3t[]) {
+      const dir = new THREE.Vector3(...d);
+      const h = grid.cast(tip, dir, { accept: isWall })[0];
+      if (!h) continue;
+      n++;
+      dists.push(h.distance);
+      if (h.normal.dot(dir) > 0) inside++;
     }
-    facing.sort((a, b) => a - b);
-    if (facing.length) this.endo!.setExposure(facing[Math.floor(facing.length / 2)]);
+    // the exposure: for what the lens sees (rays over its field, the walls and what lies in the cavity)
+    const cam = this.endo!.camera;
+    const fwd = new THREE.Vector3(0, 0, -1).applyQuaternion(cam.quaternion);
+    const right = new THREE.Vector3(1, 0, 0).applyQuaternion(cam.quaternion), upv = new THREE.Vector3(0, 1, 0).applyQuaternion(cam.quaternion);
+    for (const a of [-0.6, -0.3, 0, 0.3, 0.6]) for (const b of [-0.6, -0.3, 0, 0.3, 0.6]) {
+      if (a * a + b * b > 0.4) continue;
+      const h = grid.cast(tip, fwd.clone().addScaledVector(right, a).addScaledVector(upv, b).normalize())[0];
+      if (h) facing.push(h.distance);
+    }
+    // as a camera meters: by the light that comes back (as 1/d² from the light at the tip), so what is near brings
+    // the exposure down and does not burn out
+    if (facing.length) this.endo!.setExposure(1 / Math.sqrt(facing.reduce((s, d) => s + 1 / Math.max(d, 0.5) ** 2, 0) / facing.length));
     else if (dists.length) this.endo!.setExposure(dists.sort((a, b) => a - b)[Math.floor(dists.length / 2)]);
     return n > 0 && inside > n / 2;
   }
@@ -1149,7 +1156,18 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     const H = this.host.clientHeight;
     const gl = (r: DOMRect) => new THREE.Vector4(r.x, H - r.y - r.height, r.width, r.height);
     const { meshes } = this.endoMeshes();
-    const others = [this.markerGroup, this.measureGroup, this.overlayGroup, this.leads.L.group, this.leads.R.group, this.slices.group];
+    // the bodies drawn as bulges of the wall: each mesh as a sphere, as the shapes stand now
+    this.endo!.setBulges(meshes.filter((m) => m.visible && m.bulge).flatMap((m) => m.nodes).slice(0, 2).map((n) => {
+      const g = geometryOf(n.geometry), V = g.base.slice();
+      g.morphs.forEach((D, k) => { const w = n.morphTargetInfluences?.[k] ?? 0; if (w) for (let i = 0; i < V.length; i++) V[i] += w * D[i]; });
+      n.updateWorldMatrix(true, false);
+      const pts: THREE.Vector3[] = [];
+      for (let i = 0; i < V.length; i += 3) pts.push(new THREE.Vector3(V[i], V[i + 1], V[i + 2]).applyMatrix4(n.matrixWorld));
+      const c = pts.reduce((a, p) => a.add(p), new THREE.Vector3()).divideScalar(pts.length);
+      return { centre: c, radiusMm: pts.reduce((a, p) => a + p.distanceTo(c), 0) / pts.length };
+    }));
+    // (and the selection's outline and x-ray: the endoscope draws the structures its own way)
+    const others = [this.markerGroup, this.measureGroup, this.overlayGroup, this.leads.L.group, this.leads.R.group, this.slices.group, ...this.selOverlays];
     const drawOverview = (r: DOMRect, clear: boolean) => {
       const v = gl(r);
       const a = this.camera.aspect;
@@ -1182,30 +1200,38 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
    * (within ENDO_PICK_BEHIND_MM behind it), else the wall. */
   private pickEndo(ndc: THREE.Vector2): PickInfo | null {
     const { meshes, ids } = this.endoMeshes();
-    const roleOf = new Map<THREE.Object3D, { role: EndoMesh['role']; id: string }>();
-    meshes.forEach((m, i) => { if (m.visible) for (const n of m.nodes) roleOf.set(n, { role: m.role, id: ids[i] }); });
-    const objs = [...roleOf.keys()];
-    const swap = objs.map((o) => [o as THREE.Mesh, (o as THREE.Mesh).material] as const);
-    const ds = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide });
-    for (const [o] of swap) o.material = ds;
-    let hits: THREE.Intersection[] = [];
-    try {
-      this.raycaster.setFromCamera(ndc, this.endo!.camera);
-      hits = this.raycaster.intersectObjects(objs, false);
-    } finally {
-      for (const [o, m] of swap) o.material = m;
-      ds.dispose();
-    }
+    const roleOf = new Map<THREE.Object3D, { role: EndoMesh['role']; id: string; front: boolean }>();
+    meshes.forEach((m, i) => { if (m.visible) for (const n of m.nodes) roleOf.set(n, { role: m.role, id: ids[i], front: !!m.bulge }); });
+    this.raycaster.setFromCamera(ndc, this.endo!.camera);
+    const hits = this.endoPick.get([...roleOf.keys()] as THREE.Mesh[]).cast(this.raycaster.ray.origin, this.raycaster.ray.direction, { all: true });
     if (!hits.length) return null;
-    const wall = hits.find((h) => roleOf.get(h.object)!.role === 'wall');
-    const inner = hits.find((h) => roleOf.get(h.object)!.role === 'inside');
+    const wall = hits.find((h) => roleOf.get(h.node)!.role === 'wall');
+    const inner = hits.find((h) => roleOf.get(h.node)!.role === 'inside');
     // what shows through the wall: the first structure beyond it (one crossing the cavity in front of it is not drawn)
-    const behind = hits.find((h) => roleOf.get(h.object)!.role === 'behind' && (!wall || h.distance >= wall.distance - 0.2));
+    // (one drawn in front of the others there, if the ray meets it)
+    const beyond = hits.filter((h) => roleOf.get(h.node)!.role === 'behind' && (!wall || h.distance >= wall.distance - 0.2));
+    const behind = beyond.find((h) => roleOf.get(h.node)!.front) ?? beyond[0];
     let best = wall ?? behind ?? hits[0], behindMm: number | undefined;
+    const floor = !!wall && this.onFloor(wall);
     if (inner && (!wall || inner.distance < wall.distance)) best = inner;
-    else if (behind && wall && behind.distance - wall.distance < ENDO_PICK_BEHIND_MM) { best = behind; behindMm = behind.distance - wall.distance; }
-    const id = roleOf.get(best.object)!.id;
-    return { id, name: this.items.get(id)?.meta.name ?? '', ras: this.toRas(best.point), side: best.object.userData.side ?? null, kind: 'structure', behindMm };
+    else if (behind && wall && behind.distance - wall.distance < (floor ? ENDO_PICK_FLOOR_MM : ENDO_PICK_BEHIND_MM)) {
+      best = behind; behindMm = Math.max(0, behind.distance - wall.distance);
+    }
+    const id = roleOf.get(best.node)!.id;
+    return { id, name: this.items.get(id)?.meta.name ?? '', ras: this.toRas(best.point), side: best.node.userData.side ?? null, kind: 'structure', behindMm,
+      throughFloor: behindMm !== undefined && floor };
+  }
+
+  /** Whether a hit on a wall is on the thin floor of the third ventricle: near its middle, facing down. */
+  private onFloor(h: RayHit): boolean {
+    const f = this.endoCfg?.floor;
+    if (!f) return false;
+    const p = this.toRas(h.point);
+    const v = p.sub(new THREE.Vector3(...f.centre)), ap = new THREE.Vector3(...f.ap).normalize();
+    const a = v.dot(ap), s = v.x, up = v.clone().addScaledVector(ap, -a).setX(0).length();
+    if (Math.hypot(a / f.radiusMm, s / f.radiusLatMm, up / f.radiusMm) > 1.1) return false;
+    const nr = h.normal.clone().applyMatrix4(new THREE.Matrix4().copy(RAS_TO_WORLD).invert());
+    return nr.normalize().z < -0.3;                      // its outward normal points down
   }
 
   /** A structure's vertices (RAS mm), for distances. */

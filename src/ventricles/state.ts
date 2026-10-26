@@ -11,9 +11,12 @@ export type VePage = 'atlas' | 'sources' | 'credits';
 export interface Catheter { side: 'L' | 'R'; kocher: 'chen' | 'park'; offset: number; target: Target }
 
 /** The endoscope: the side of its burr hole, how deep its tip is (mm from the outer table along the shaft), its tilt
- * from Sousa's line (degrees: forwards, and towards the midline), and whether its view is the big one. */
-export interface Scope { side: 'L' | 'R'; depth: number; ap: number; ml: number; big: boolean }
+ * from the line to the target (degrees: forwards, and towards the midline), the burr hole moved from Sousa's entry (mm:
+ * forwards, and away from the midline), the view rotated about the shaft (degrees, clockwise), and whether its view is
+ * the big one. */
+export interface Scope { side: 'L' | 'R'; depth: number; ap: number; ml: number; ex: number; ey: number; roll: number; big: boolean }
 export const SCOPE_TILT_MAX = 20;
+export const SCOPE_ENTRY_MAX = { ex: 25, ey: 20 };
 
 /** Sousa's line for a side, with the ventricles at this much of the hydrocephalus shape (0 to 1): its ends move with
  * the walls (the line between the shapes taken as straight) */
@@ -25,10 +28,18 @@ export function etvLine(side: 'L' | 'R', hydro: number) {
     depthMm: lerp(a.depthMm, b.depthMm), depthToMonroMm: lerp(a.depthToMonroMm, b.depthToMonroMm) };
 }
 
-/** the default depth: the tip in the third ventricle, a little more than halfway from the foramen of Monro to the floor */
+/** the default depth: the tip in the third ventricle, a fifth of the way from the foramen of Monro to the floor (the
+ * floor and the mammillary bodies in view) */
 export function defaultScopeDepth(side: 'L' | 'R', hydro = 0): number {
   const t = etvLine(side, hydro);
-  return Math.round(t.depthToMonroMm + 0.6 * (t.depthMm - t.depthToMonroMm));
+  return Math.round(t.depthToMonroMm + 0.2 * (t.depthMm - t.depthToMonroMm));
+}
+
+/** The ventriculostomy view as it opens: the ventricles three-quarters of the way to the hydrocephalus shape, the burr
+ * hole 12 mm in front of Sousa's entry and the scope tilted 2 degrees back (a familiar view of the floor). */
+export const ETV_DEFAULT = { hydro: 0.75, ex: 12, ey: 0, ap: -2, ml: 0 } as const;
+export function defaultScope(side: 'L' | 'R' = 'R', hydro: number = ETV_DEFAULT.hydro): Scope {
+  return { side, depth: defaultScopeDepth(side, hydro), ap: ETV_DEFAULT.ap, ml: ETV_DEFAULT.ml, ex: ETV_DEFAULT.ex, ey: ETV_DEFAULT.ey, roll: 0, big: true };
 }
 export const scopeMaxDepth = (side: 'L' | 'R') => Math.ceil(Math.max(ETV.trajectories[side].depthMm, ETV.hydrocephalus.trajectories[side].depthMm) + 10);
 
@@ -60,7 +71,7 @@ export function defaultVeState(): VeState {
     clip: { axial: { on: false, mm: 30 }, coronal: { on: false, mm: 0 }, sagittal: { on: false, mm: 0 } },
     cutSide: 'none', sliceSeq: 't1', lead: { ...DEFAULT_LEAD },
     sel: null, hidden: [], cath: { ...DEFAULT_CATHETER },
-    scope: { side: 'R', depth: defaultScopeDepth('R'), ap: 0, ml: 0, big: true }, morphs: {},
+    scope: defaultScope(), morphs: {},
   };
 }
 
@@ -83,12 +94,16 @@ export function encodeVe(s: VeState): string {
       if (c.offset !== DEFAULT_CATHETER.offset) p.set('co', String(c.offset));
       if (c.target !== DEFAULT_CATHETER.target) p.set('ct', c.target);
     }
-    if ((s.morphs.hydrocephalus ?? 0) > 0) p.set('hy', String(Math.round(s.morphs.hydrocephalus * 100)));
+    const hy = s.morphs.hydrocephalus ?? 0;
+    // (the ventriculostomy view opens with the shape at ETV_DEFAULT.hydro: there the link says when it is otherwise)
+    if (VE_GROUP.get(s.grp)?.endoscope ? hy !== ETV_DEFAULT.hydro : hy > 0) p.set('hy', String(Math.round(hy * 100)));
     if (VE_GROUP.get(s.grp)?.endoscope) {
       const e = s.scope;
       if (e.side !== 'R') p.set('es', e.side);
       if (e.depth !== defaultScopeDepth(e.side, s.morphs.hydrocephalus ?? 0)) p.set('ed', String(e.depth));
-      if (e.ap || e.ml) p.set('ea', `${e.ap},${e.ml}`);
+      if (e.ap !== ETV_DEFAULT.ap || e.ml !== ETV_DEFAULT.ml) p.set('ea', `${e.ap},${e.ml}`);
+      if (e.ex !== ETV_DEFAULT.ex || e.ey !== ETV_DEFAULT.ey) p.set('eo', `${e.ex},${e.ey}`);
+      if (e.roll) p.set('er', String(e.roll));
       if (!e.big) p.set('ev', '3d');
     }
     if (s.labels !== 'hover') p.set('lb', s.labels === 'all' ? 'a' : '0');
@@ -124,7 +139,10 @@ export function decodeVe(hash: string): VeState {
   const ct = p.get('ct');
   if ((TARGETS as readonly string[]).includes(ct ?? '')) s.cath.target = ct as Target;
   const hy = Number(p.get('hy'));
-  if (p.has('hy') && Number.isFinite(hy) && hy > 0 && !VE_GROUP.get(s.grp)?.catheter) s.morphs.hydrocephalus = Math.min(1, hy / 100);
+  if (VE_GROUP.get(s.grp)?.endoscope) {
+    const v = p.has('hy') && Number.isFinite(hy) ? Math.max(0, Math.min(1, hy / 100)) : ETV_DEFAULT.hydro;
+    if (v > 0) s.morphs.hydrocephalus = v;
+  } else if (p.has('hy') && Number.isFinite(hy) && hy > 0 && !VE_GROUP.get(s.grp)?.catheter) s.morphs.hydrocephalus = Math.min(1, hy / 100);
   const es = p.get('es');
   if (es === 'L' || es === 'R') s.scope.side = es;
   s.scope.depth = defaultScopeDepth(s.scope.side, s.morphs.hydrocephalus ?? 0);
@@ -132,6 +150,13 @@ export function decodeVe(hash: string): VeState {
   if (p.has('ed') && Number.isFinite(ed)) s.scope.depth = Math.max(0, Math.min(scopeMaxDepth(s.scope.side), Math.round(ed * 2) / 2));
   const ea = (p.get('ea') ?? '').split(',').map(Number);
   if (ea.length === 2 && ea.every(Number.isFinite)) [s.scope.ap, s.scope.ml] = ea.map((x) => Math.max(-SCOPE_TILT_MAX, Math.min(SCOPE_TILT_MAX, Math.round(x * 2) / 2)));
+  const eo = (p.get('eo') ?? '').split(',').map(Number);
+  if (eo.length === 2 && eo.every(Number.isFinite)) {
+    s.scope.ex = Math.max(-SCOPE_ENTRY_MAX.ex, Math.min(SCOPE_ENTRY_MAX.ex, Math.round(eo[0])));
+    s.scope.ey = Math.max(-SCOPE_ENTRY_MAX.ey, Math.min(SCOPE_ENTRY_MAX.ey, Math.round(eo[1])));
+  }
+  const er = Number(p.get('er'));
+  if (p.has('er') && Number.isFinite(er)) s.scope.roll = Math.max(-180, Math.min(180, Math.round(er)));
   s.scope.big = p.get('ev') !== '3d';
   const lb = p.get('lb');
   s.labels = lb === 'a' ? 'all' : lb === '0' ? 'off' : 'hover';

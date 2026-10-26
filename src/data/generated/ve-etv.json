@@ -1,8 +1,16 @@
 {
  "mammillary": {
+  "modelVolumeMm3": [
+   39.5,
+   39.4
+  ],
+  "volumeMm3": 61.6,
+  "diameterMm": 4.9,
+  "drawnScale": 1.12,
+  "drawnDiameterMm": 5.5,
   "modelAcpcMm": [
-   -2.15,
-   -7.06
+   -1.4,
+   -8.08
   ],
   "placedAcpcMm": [
    -8.56,
@@ -12,7 +20,7 @@
    -8.56,
    -7.01
   ],
-  "movedMm": 6.66
+  "movedMm": 7.7
  },
  "acpcLengthMm": 25.4,
  "wallsMovedMm": {
@@ -77,9 +85,9 @@
    11.87
   ],
   "mammillaryBodies": [
-   0.69,
-   -12.56,
-   15.98
+   0.7,
+   -13.49,
+   16.85
   ],
   "monro": {
    "R": [
@@ -178,15 +186,31 @@
    "floorToApexMm": 2.75
   },
   "maxMoveMm": 20.4,
-  "stoppedPoints": 1482,
+  "mammillary": {
+   "placedAcpcMm": [
+    -11.3,
+    -2.4
+   ],
+   "daSilvaHydroAcpcMm": [
+    -11.3,
+    -7.05
+   ],
+   "protrudeMm": 4.0,
+   "movedMm": 4.02
+  },
+  "stoppedPoints": 1721,
+  "mammillaryWrap": {
+   "wrappedPoints": 276,
+   "maxMoveMm": 2.18,
+   "minGapMm": -0.31
+  },
   "wallsPushedMm": {
    "ve_fornix": 0.63,
    "ve_septum_pellucidum": 0.93,
-   "ve_thalamus": 0.41,
+   "ve_thalamus": 0.69,
    "ve_caudate_nucleus": 0.89,
    "ve_stria_terminalis": 0.72,
    "ve_hypothalamus": 3.43,
-   "ve_mammillary_body": 0.0,
    "ve_optic_chiasm": 0.67,
    "ve_optic_tract": 0.0,
    "ve_anterior_commissure": 0.49,
@@ -194,6 +218,22 @@
    "ve_habenula": 0.46,
    "ve_pineal_gland": 0.31,
    "ve_corpus_callosum": 1.02
+  },
+  "plexusAtMonro": {
+   "R": {
+    "shiftMm": 2.5,
+    "thalamusMedianMm": [
+     4.41,
+     2.19
+    ]
+   },
+   "L": {
+    "shiftMm": 2.0,
+    "thalamusMedianMm": [
+     4.29,
+     2.53
+    ]
+   }
   },
   "jacobianMinAround": 0.065,
   "points": {
@@ -215,9 +255,9 @@
     ]
    },
    "mammillaryBodies": [
-    -0.35,
-    -12.84,
-    10.81
+    0.7,
+    -17.42,
+    16.04
    ]
   },
   "trajectories": {

@@ -45,7 +45,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 104996,
+   "bytes": 105468,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -292,7 +292,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 475552,
+   "bytes": 475704,
    "colour": {
     "token": "veChoroid",
     "light": "#A85A78",
@@ -309,7 +309,9 @@
     "https://doi.org/10.64898/2026.05.28.26354312",
     "https://doi.org/10.1093/nar/gkn613"
    ],
-   "refIds": [],
+   "refIds": [
+    "azab2014"
+   ],
    "category": "deep",
    "layer": "nuclei",
    "id": "ve_choroid_plexus",
@@ -328,12 +330,12 @@
      24.3
     ]
    },
-   "derivation": "The Z-Anatomy model's (one adult, BodyParts3D), carried onto this CT by the fit that fits the model's ventricles onto this CT's (so it keeps its place around them); this CT does not show it. It lies in the ventricles, as drawn, and follows them with the hydrocephalus slider."
+   "derivation": "The Z-Anatomy model's (one adult, BodyParts3D), carried onto this CT by the fit that fits the model's ventricles onto this CT's (so it keeps its place around them); this CT does not show it. It lies in the ventricles, as drawn, and follows them with the hydrocephalus slider. There the foramina of Monro grow backwards, and at each the plexus is shifted with them, towards the thalamus (the foramen's posterior border; the plexus's tela is fixed along the choroidal fissure by the teniae of the thalamus and the fornix: Azab 2014) until it lies against it (by 2.5 mm on the right and 2 mm on the left, fading out 12 mm from the foramen), so it does not hang across the widened opening."
   },
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 108372,
+   "bytes": 108376,
    "colour": {
     "token": "thal",
     "light": "#8996A3",
@@ -497,7 +499,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 26236,
+   "bytes": 16244,
    "colour": {
     "token": "mb",
     "light": "#8C7A5A",
@@ -515,7 +517,8 @@
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [
-    "dasilva2024"
+    "dasilva2024",
+    "vann2022"
    ],
    "category": "deep",
    "layer": "nuclei",
@@ -525,17 +528,17 @@
    "fitted": true,
    "centroid": {
     "L": [
-     -2.77,
-     -12.55,
-     16.11
+     -3.18,
+     -13.48,
+     16.98
     ],
     "R": [
-     4.13,
-     -12.57,
-     15.86
+     4.57,
+     -13.5,
+     16.73
     ]
    },
-   "derivation": "The Z-Anatomy model's (one adult, BodyParts3D), carried onto this CT by the fit that fits the model's ventricles onto this CT's (so it keeps its place around them); this CT does not show it. The model's mammillary bodies (the two small bodies of its hypothalamus) lie 2.1 mm behind the anterior commissure; da Silva 2024 measured 8.56 mm in 200 MRIs (their anterosuperior point, along the AC-PC line from the anterior commissure's posterosuperior border, 7.01 mm below it). They are moved, unchanged in shape (6.66 mm), to lie that far behind it, at the height of the model's floor there (5.2 mm below the commissure), and the ventricle is drawn round them, so they bulge into its floor."
+   "derivation": "The Z-Anatomy model's (one adult, BodyParts3D), carried onto this CT by the fit that fits the model's ventricles onto this CT's (so it keeps its place around them); this CT does not show it. The model's mammillary bodies (the two small bodies of its hypothalamus) are thin plates (39.5 and 39.4 mm3), which a floor drawn over them does not show as bulges; each is drawn instead as a sphere where the model's lies, of half the two bodies' volume Vann 2022's growth curve gives at 20 years (from 250 MRIs at 6 to 24 years): 61.6 mm3, 4.9 mm across, drawn a little larger (5.5 mm across, further apart with it, so that they show as the bulges an endoscopist sees: a display choice, as is the round shape). The model's lie 1.4 mm behind the anterior commissure; da Silva 2024 measured 8.56 mm in 200 MRIs (their anterosuperior point, along the AC-PC line from the anterior commissure's posterosuperior border, 7.01 mm below it). They are moved (7.7 mm) to lie that far behind it, at the height of the model's floor there (5.2 mm below the commissure), and the ventricle is drawn round them, so they bulge into its floor. With the hydrocephalus slider they move to where da Silva measured them in 24 MRIs with hydrocephalus (their anterosuperior point a median 11.30 mm behind the commissure, which moves with the shape), their tops 4 mm above the floor there, and the floor, coming down, rests on them and is wrapped down onto each (the two bulges endoscopists see; the height and the wrap are modelling choices)."
   },
   {
    "aliases": [],

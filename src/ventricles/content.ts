@@ -22,6 +22,7 @@ export const MONRO: Claim[] = [
   c('The foramina of Monro are the highest points in the anterior wall of the third ventricle, at the junction of its roof and anterior wall.', 'azab2014'),
   c('The columns of the fornix arch along the foramen’s superior and anterior margins; the anterior tubercle of the thalamus forms its posterior border.', 'azab2014', 'gangal2026'),
   c('The choroid plexus of each lateral ventricle runs through the foramen of Monro, continuous with the two strands of choroid plexus in the roof of the third ventricle.', 'azab2014'),
+  c('The tela choroidea is attached along the choroidal fissure by small ridges of the thalamus and the fornix that border it: the tenia thalami (or tenia choroidea) and the tenia fornicis.', 'azab2014'),
   c('In 30 adults without hydrocephalus (models from MRI) the foramen was an oval opening of 5.23 mm² on average, larger above the age of 55 and on the left; in hydrocephalus it averaged 32.6 mm².', 'jean2019'),
 ];
 
@@ -92,7 +93,9 @@ export const ETV_ANATOMY: Claim[] = [
   c('Seen from above, the column of the fornix passes in front of the foramen of Monro; the thalamostriate, caudate, choroidal and septal veins of each lateral ventricle converge and drain through its posterior border; the choroid plexus lies on the choroidal fissure.', 'dasilva2024'),
   c('The floor is fenestrated behind the infundibular recess and in front of the basilar artery and the mammillary bodies. The anterior wall near the lamina terminalis is avoided (the optic chiasm and the infundibular recess), and so is the column of the fornix.', 'dasilva2024'),
   c('The basilar artery is not always visible through the semi-translucent floor; its injury risks fatal blood loss.', 'dasilva2024'),
+  c('The mammillary bodies grow until about 15 years of age: in 250 MRIs from 6 to 24 years, the two bodies’ total volume followed 68.61 + 6.53 × age − 0.19 × age² mm³ (age in years), with no difference between the sexes.', 'vann2022'),
   c('In 200 MRIs of adults without hydrocephalus, measured from the anterior commissure’s posterosuperior border along the AC–PC line: the mammillary bodies’ anterosuperior point 8.56 ± 1.18 mm behind it and 7.01 ± 1.65 mm below; the lowest point of the infundibular recess 0.49 ± 1.60 mm behind and 13.34 ± 1.78 mm below; the top of the basilar artery 9.79 ± 2.22 mm behind and 13.97 ± 4.08 mm below.', 'dasilva2024'),
+  c('In 24 MRIs with non-obstructive hydrocephalus every point studied lay further back than in normal brains: the mammillary bodies’ anterosuperior point a median 11.30 mm behind the anterior commissure and 7.05 mm below it.', 'dasilva2024'),
   c('With dilated ventricles the distance from the basilar apex to the floor was 2.75 mm, against 6.54 mm in controls (Aydin 2009, as cited); in hydrocephalus the floor may be pushed down, but the apex not.', 'dasilva2024'),
 ];
 

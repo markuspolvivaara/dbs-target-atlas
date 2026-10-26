@@ -72,7 +72,7 @@ const EtvTrajectorySchema = z.object({
 export type EtvTrajectory = z.infer<typeof EtvTrajectorySchema>;
 const YZ = z.tuple([z.number(), z.number()]);
 export const ETV = z.object({
-  mammillary: z.object({ modelAcpcMm: YZ, placedAcpcMm: YZ, daSilvaAcpcMm: YZ, movedMm: z.number() }),
+  mammillary: z.object({ modelAcpcMm: YZ, placedAcpcMm: YZ, daSilvaAcpcMm: YZ, movedMm: z.number(), volumeMm3: z.number(), diameterMm: z.number(), drawnScale: z.number(), drawnDiameterMm: z.number() }),
   acpcLengthMm: z.number(),
   wallsMovedMm: z.record(z.number()),
   infundibularRecessAcpcMm: YZ, targetAcpcMm: YZ, basilarApexAcpcMm: YZ, targetToBasilarApexMm: z.number(),
@@ -85,6 +85,8 @@ export const ETV = z.object({
     hydrocephalus: z.object({ evansIndex: z.number(), frontalHornsMm: z.number(), thirdWidthMm: z.number(), floorToApexMm: z.number() }),
     goal: z.object({ evansIndex: z.number(), thirdWidthMm: z.number(), floorToApexMm: z.number() }),
     maxMoveMm: z.number(), jacobianMinAround: z.number(),
+    /** the mammillary bodies with the shape: placed where da Silva measured them in hydrocephalus */
+    mammillary: z.object({ placedAcpcMm: YZ, daSilvaHydroAcpcMm: YZ, protrudeMm: z.number(), movedMm: z.number() }),
     points: z.object({ target: V3, monro: z.object({ R: V3, L: V3 }), mammillaryBodies: V3 }),
     trajectories: z.object({ R: EtvTrajectorySchema, L: EtvTrajectorySchema }),
   }),

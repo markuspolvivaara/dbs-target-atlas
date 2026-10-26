@@ -433,6 +433,10 @@ kbd { font: inherit; font-size: 0.9em; border: 1px solid var(--line); border-bot
 /* the ventricles section's endoscope: its round field (dark outside the circle) and the inset's frame */
 .endo-mask { position: absolute; pointer-events: none; background: radial-gradient(circle closest-side, rgba(0, 0, 0, 0) 74%, rgba(0, 0, 0, 0.45) 93%, #000 98.5%); }
 .endo-mask[hidden], .inset-frame[hidden] { display: none; }
+/* forwards (A) and backwards (P) on the rim of the endoscope's image */
+.endo-dir { position: absolute; transform: translate(-50%, -50%); pointer-events: none; font: 700 13px/1 var(--font-ui, system-ui); color: #fff;
+  background: rgba(0, 0, 0, 0.55); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 999px; padding: 4px 6px; }
+.endo-dir[hidden] { display: none; }
 .inset-frame { position: absolute; z-index: 2; pointer-events: none; border: 2px solid var(--line); border-radius: 8px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35); }
 .inset-frame::before { content: "3D view"; position: absolute; left: 6px; top: 4px; font-size: 11px; color: var(--muted); background: var(--surface); padding: 1px 6px; border-radius: 999px; }
 .inset-frame[data-kind="endo"]::before { content: "Endoscope"; }

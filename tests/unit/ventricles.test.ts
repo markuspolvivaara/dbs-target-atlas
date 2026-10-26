@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { crossCheckVe, ETV, LANDMARKS, TARGETS, TRAJ, trajectoryFor, VE, VE_MANIFEST } from '../../src/ventricles';
 import { VE_GROUPS } from '../../src/ventricles/groups';
 import { catheterMarkers, vePlan } from '../../src/ventricles/scene';
-import { decodeVe, defaultScopeDepth, defaultVeState, encodeVe, etvLine } from '../../src/ventricles/state';
+import { decodeVe, defaultScopeDepth, defaultVeState, encodeVe, ETV_DEFAULT, etvLine, SCOPE_ENTRY_MAX } from '../../src/ventricles/state';
 
 describe('ventricles section', () => {
   it('content, references and generated files agree', () => {
@@ -141,15 +141,26 @@ describe('ventricles section', () => {
     expect(H.hydrocephalus.floorToApexMm).toBeLessThan(H.rest.floorToApexMm - 3);
     expect(H.goal).toEqual({ evansIndex: 0.42, thirdWidthMm: 23.5, floorToApexMm: 2.75 });
     expect(H.jacobianMinAround).toBeGreaterThan(0);
+    // the mammillary bodies where da Silva 2024 measured them in hydrocephalus (medians, 24 MRIs)
+    expect(H.mammillary.placedAcpcMm[0]).toBeCloseTo(H.mammillary.daSilvaHydroAcpcMm[0], 0);
+    expect(H.mammillary.daSilvaHydroAcpcMm).toEqual([-11.3, -7.05]);
     // the line lengthens with the ventricles (Sousa: about 6 mm per 0.1 of Evans' index)
     expect(H.trajectories.R.depthMm).toBeGreaterThan(ETV.trajectories.R.depthMm);
   });
   it('the endoscope and the shape are in the link; the ventriculostomy view drops the shape', () => {
-    const s = decodeVe('#/atlas?g=etv&es=L&ed=70&ea=5,-3&ev=3d&hy=60');
-    expect(s.scope).toEqual({ side: 'L', depth: 70, ap: 5, ml: -3, big: false });
+    const s = decodeVe('#/atlas?g=etv&es=L&ed=70&ea=5,-3&eo=8,-4&er=90&ev=3d&hy=60');
+    expect(s.scope).toEqual({ side: 'L', depth: 70, ap: 5, ml: -3, ex: 8, ey: -4, roll: 90, big: false });
+    expect(decodeVe('#/atlas?g=etv&eo=99,-99&er=500').scope).toMatchObject({ ex: SCOPE_ENTRY_MAX.ex, ey: -SCOPE_ENTRY_MAX.ey, roll: 180 });
     expect(s.morphs.hydrocephalus).toBeCloseTo(0.6);
     expect(decodeVe(encodeVe(s))).toMatchObject({ scope: s.scope, morphs: s.morphs });
-    expect(decodeVe('#/atlas?g=etv').scope.depth).toBe(defaultScopeDepth('R'));
+    // the ventriculostomy view opens with the shape at ETV_DEFAULT.hydro and the scope as ETV_DEFAULT says
+    const d = decodeVe('#/atlas?g=etv');
+    expect(d.morphs.hydrocephalus).toBe(ETV_DEFAULT.hydro);
+    expect(d.scope).toMatchObject({ depth: defaultScopeDepth('R', ETV_DEFAULT.hydro), ex: ETV_DEFAULT.ex, ey: ETV_DEFAULT.ey, ap: ETV_DEFAULT.ap, ml: ETV_DEFAULT.ml });
+    expect(encodeVe(d)).not.toMatch(/[?&](hy|ed|ea|eo|er)=/);
+    const none = decodeVe('#/atlas?g=etv&hy=0');
+    expect(none.morphs).toEqual({});
+    expect(decodeVe(encodeVe(none)).morphs).toEqual({});
     expect(decodeVe('#/atlas?g=evd&hy=60').morphs).toEqual({});
     expect(encodeVe({ ...s, grp: 'ventricles' })).not.toContain('ed=');
     const p = vePlan(decodeVe('#/atlas?g=etv'));

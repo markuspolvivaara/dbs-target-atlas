@@ -6,7 +6,7 @@ import { ETV, KIND_LABEL, kindOf, LM, TARGETS, TRAJ, trajectoryFor, VE, VE_REF, 
 import { ACCURACY, AQUEDUCT, ETV_ANATOMY, ETV_TRAJECTORY, FOURTH, HYDRO, IDEAL, KOCHER, LATERAL_WALLS, MONRO, PRACTICE, TARGET_NAME, THIRD_FLOOR } from '../ventricles/content';
 import { VE_GROUP, VE_GROUPS, type VeGroup } from '../ventricles/groups';
 import { veScene, type VePlan } from '../ventricles/scene';
-import { defaultScopeDepth, etvLine, SCOPE_TILT_MAX, scopeMaxDepth, type Catheter, type Scope, type VeState } from '../ventricles/state';
+import { defaultScope, defaultScopeDepth, ETV_DEFAULT, etvLine, SCOPE_ENTRY_MAX, SCOPE_TILT_MAX, scopeMaxDepth, type Catheter, type Scope, type VeState } from '../ventricles/state';
 import { Viewer, type EndoscopeConfig, type PickInfo } from '../viewer/Viewer';
 import { ENDO_FOV_DEG, FLOOR_LAMBDA_MM } from '../viewer/endoscope';
 import { h } from './h';
@@ -65,19 +65,60 @@ function catheterObjects(t: Trajectory): THREE.Object3D[] {
 // ---------------------------------------------------------------- the endoscope
 const v3 = (a: readonly number[]) => new THREE.Vector3(a[0], a[1], a[2]);
 
-/** Where the endoscope is (RAS): Sousa's line for its side, tilted about its burr hole, the tip `depth` down the shaft;
- * up on the screen is forwards (the infundibular recess at the top, the mammillary bodies below). */
+/** Where the endoscope is (RAS): its burr hole (Sousa's entry for its side, moved forwards and away from the midline
+ * over the skull: taken as the sphere about the target through Sousa's entry, within about half a millimetre of the
+ * skull's own curve for these moves), aimed at the target and tilted about the burr hole, the tip `depth` down the
+ * shaft; up on the screen is forwards (the infundibular recess at the top, the mammillary bodies below), the view then
+ * rotated about the shaft by `roll`. `line`: Sousa's line. */
+type ScopeKey = 'depth' | 'ap' | 'ml' | 'ex' | 'ey' | 'roll';
+
+/** A movement on the endoscope's image (screen pixels, y down) as it would be on the image before the view was rotated
+ * clockwise by `rollDeg`. */
+function unroll(x: number, y: number, rollDeg: number): [number, number] {
+  const a = rollDeg * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
+  return [x * c + y * s, -x * s + y * c];
+}
+
 export function scopePose(sc: Scope, hydro: number): { entry: THREE.Vector3; tip: THREE.Vector3; dir: THREE.Vector3; up: THREE.Vector3; line: THREE.Vector3 } {
   const t = etvLine(sc.side, hydro);
-  const entry = v3(t.entry);
-  const line = v3(t.target).sub(entry).normalize();
-  const fwd = new THREE.Vector3(0, 1, 0).addScaledVector(line, -line.y).normalize();
-  const lat = new THREE.Vector3().crossVectors(fwd, line).normalize();
+  const target = v3(t.target), sousa = v3(t.entry);
+  const line = target.clone().sub(sousa).normalize();
+  const fwd0 = new THREE.Vector3(0, 1, 0).addScaledVector(line, -line.y).normalize();
+  const out0 = new THREE.Vector3(sc.side === 'R' ? 1 : -1, 0, 0).addScaledVector(line, -(sc.side === 'R' ? line.x : -line.x)).normalize();
+  const r = sousa.distanceTo(target);
+  const entry = sousa.clone().addScaledVector(fwd0, sc.ex).addScaledVector(out0, sc.ey).sub(target).setLength(r).add(target);
+  const aim = target.clone().sub(entry).normalize();
+  const fwd = new THREE.Vector3(0, 1, 0).addScaledVector(aim, -aim.y).normalize();
+  const lat = new THREE.Vector3().crossVectors(fwd, aim).normalize();
   const deg = Math.PI / 180;
-  const dir = line.clone().applyAxisAngle(lat, -sc.ap * deg).applyAxisAngle(fwd, (sc.side === 'R' ? 1 : -1) * sc.ml * deg).normalize();
+  const dir = aim.clone().applyAxisAngle(lat, -sc.ap * deg).applyAxisAngle(fwd, (sc.side === 'R' ? 1 : -1) * sc.ml * deg).normalize();
   const tip = entry.clone().addScaledVector(dir, sc.depth);
-  const up = new THREE.Vector3(0, 1, 0).addScaledVector(dir, -dir.y).normalize();
+  const up = new THREE.Vector3(0, 1, 0).addScaledVector(dir, -dir.y).normalize().applyAxisAngle(dir, -sc.roll * deg);
   return { entry, tip, dir, up, line };
+}
+
+/** Where forwards and backwards lie on the endoscope's round image: the angle (radians, from screen right,
+ * anticlockwise) at which the anterior direction points, or null when the scope looks nearly straight along it. */
+export function scopeAnterior(p: { dir: THREE.Vector3; up: THREE.Vector3 }): number | null {
+  const right = new THREE.Vector3().crossVectors(p.dir, p.up).normalize();
+  const a = new THREE.Vector3(0, 1, 0);
+  const x = a.dot(right), y = a.dot(p.up);
+  return Math.hypot(x, y) < 0.2 ? null : Math.atan2(y, x);
+}
+
+/** The thin part of the floor, where more shows through (a shading choice on the anatomy): a strip along the midline
+ * from in front of the target back over the mammillary bodies (the tuber cinereum, between the infundibular recess and
+ * them), narrower side to side; the floor thins as the ventricles enlarge. */
+function thinFloor(side: 'L' | 'R', hydro: number): NonNullable<EndoscopeConfig['floor']> {
+  const t = new THREE.Vector3(...etvLine(side, hydro).target);
+  const a = ETV.points.mammillaryBodies, b = ETV.hydrocephalus.points.mammillaryBodies;
+  const mb = new THREE.Vector3(...a.map((v, i) => v + (b[i] - v) * hydro));
+  const ap = mb.clone().sub(t);
+  const len = ap.length();
+  const c = t.clone().addScaledVector(ap, 0.4);
+  ap.normalize();
+  return { centre: [c.x, c.y, c.z], ap: [ap.x, ap.y, ap.z], radiusMm: 0.6 * len + 4.5, radiusLatMm: 3 + hydro,
+    lambdaMm: FLOOR_LAMBDA_MM * (1 + 0.6 * hydro) };
 }
 
 /** What each structure looks like through the endoscope (a rendering choice: tissue colours under a white light) */
@@ -88,7 +129,9 @@ function endoColour(id: string): string {
   if (k === 'nerve') return '#efe6cc';
   if (k === 'bone') return '#eadfc6';
   if (k === 'brainstem') return '#d9c3b3';
-  if (['ve_fornix', 've_mammillary_body', 've_anterior_commissure', 've_posterior_commissure', 've_corpus_callosum', 've_optic_chiasm', 've_optic_tract', 've_stria_terminalis'].includes(id)) return '#f6f2ea';
+  // the mammillary bodies the whitest (myelinated, the fornix ending in them): under the pale floor they show as white
+  if (id === 've_mammillary_body') return '#fffaf0';
+  if (['ve_fornix', 've_anterior_commissure', 've_posterior_commissure', 've_corpus_callosum', 've_optic_chiasm', 've_optic_tract', 've_stria_terminalis'].includes(id)) return '#f6f2ea';
   if (id === 've_caudate_nucleus') return '#c9ab9d';
   return '#d6bcac';
 }
@@ -165,7 +208,9 @@ export class VentriclesAtlasPage {
   private scopeOut = h('div', { class: 'scope-out', role: 'status', 'aria-live': 'polite' });
   private steer: { x: number; y: number; ap: number; ml: number } | null = null;
   /** the endoscope panel's sliders, updated in place as the scope moves (not rebuilt, so a drag is not lost) */
-  private scopeInputs: Partial<Record<'depth' | 'ap' | 'ml', { input: HTMLInputElement; out: HTMLElement; unit: string }>> = {};
+  private scopeInputs: Partial<Record<ScopeKey, { input: HTMLInputElement; out: HTMLElement; unit: string }>> = {};
+  /** forwards and backwards marked on the endoscope's round image */
+  private endoCompass = { a: h('span', { class: 'endo-dir', 'aria-hidden': 'true' }, 'A'), p: h('span', { class: 'endo-dir', 'aria-hidden': 'true' }, 'P') };
 
   constructor(private update: Update) {
     this.stage = h('section', { class: 'stage', 'aria-label': '3D viewer' });
@@ -209,7 +254,7 @@ export class VentriclesAtlasPage {
       h('div', { class: 'readout-box' }, this.measureOut, this.readout));
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
-    this.stage.append(host, this.endoMask, this.insetFrame, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status);
+    this.stage.append(host, this.endoMask, this.endoCompass.a, this.endoCompass.p, this.insetFrame, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status);
     this.bindSteering(host);
     this.readout.textContent = 'Point at a structure for its position';
 
@@ -304,6 +349,7 @@ export class VentriclesAtlasPage {
       this.viewer.setOverlay(g.endoscope ? scopeObjects(s.scope, hydro) : g.catheter && this.current() ? catheterObjects(this.current()!) : []);
       this.viewer.setEndoscope(g.endoscope ? this.endoscopeConfig(s.scope, hydro) : null);
       this.endoMask.hidden = this.insetFrame.hidden = !g.endoscope;
+      if (!g.endoscope) this.endoCompass.a.hidden = this.endoCompass.p.hidden = true;
       this.stage.classList.toggle('endo-big', !!g.endoscope && s.scope.big);
       if (g.endoscope) this.renderScopeOut();
     }
@@ -318,7 +364,10 @@ export class VentriclesAtlasPage {
     return {
       tip: xyz(p.tip), dir: xyz(p.dir), up: xyz(p.up), big: sc.big, role: endoRole, colour: endoColour,
       look: (id) => (id === 've_choroid_plexus' ? 'plexus' : undefined),
-      floor: { centre: etvLine(sc.side, hydro).target, radiusMm: 7 + 3 * hydro, lambdaMm: FLOOR_LAMBDA_MM * (1 + 0.6 * hydro) },
+      // the mammillary bodies: the floor drawn white and bulging over them, as an endoscopist sees them (they are not
+      // drawn as bodies behind it: placed by da Silva's measurements, they also overlap the fitted midbrain in places)
+      bulge: (id) => id === 've_mammillary_body',
+      floor: thinFloor(sc.side, hydro),
     };
   }
 
@@ -353,8 +402,9 @@ export class VentriclesAtlasPage {
       if (!this.steer || !(e.buttons & 1)) { this.steer = null; return; }
       const k = 0.12, st = this.steer;
       const clamp = (x: number) => Math.max(-SCOPE_TILT_MAX, Math.min(SCOPE_TILT_MAX, Math.round(x * 2) / 2));
-      // drag the view: the scene follows the pointer, so the scope turns the other way
-      const ap = clamp(st.ap + (e.clientY - st.y) * k), ml = clamp(st.ml + (this.s.scope.side === 'R' ? 1 : -1) * (e.clientX - st.x) * k);
+      // drag the view: the scene follows the pointer, so the scope turns the other way (in the view as rotated)
+      const [dx, dy] = unroll(e.clientX - st.x, e.clientY - st.y, this.s.scope.roll);
+      const ap = clamp(st.ap + dy * k), ml = clamp(st.ml + (this.s.scope.side === 'R' ? 1 : -1) * dx * k);
       if (ap !== this.s.scope.ap || ml !== this.s.scope.ml) this.setScope((sc) => { sc.ap = ap; sc.ml = ml; });
     });
     window.addEventListener('pointerup', () => { this.steer = null; });
@@ -363,6 +413,21 @@ export class VentriclesAtlasPage {
       e.preventDefault();
       this.moveScope(e.deltaY < 0 ? 1 : -1);
     }, { passive: false });
+  }
+
+  /** A and P on the rim of the endoscope's round image, where forwards and backwards lie (hidden when it looks along
+   * them, or when it shows brain tissue). */
+  private placeCompass(): void {
+    const er = this.viewer.endoscopeRects();
+    const g = VE_GROUP.get(this.s.grp);
+    const ang = er && g?.endoscope && this.viewer.endoscopeInside() ? scopeAnterior(scopePose(this.s.scope, this.s.morphs.hydrocephalus ?? 0)) : null;
+    for (const [el, k] of [[this.endoCompass.a, 0], [this.endoCompass.p, Math.PI]] as const) {
+      el.hidden = ang === null;
+      if (ang === null || !er) continue;
+      const e = er.endo, r = Math.min(e.width, e.height) / 2 * 0.78;
+      el.style.left = `${e.x + e.width / 2 + r * Math.cos(ang + k)}px`;
+      el.style.top = `${e.y + e.height / 2 - r * Math.sin(ang + k)}px`;
+    }
   }
 
   private moveScope(mm: number): void {
@@ -375,7 +440,7 @@ export class VentriclesAtlasPage {
     const hydro = this.s.morphs.hydrocephalus ?? 0;
     const p = scopePose(sc, hydro);
     const t = etvLine(sc.side, hydro);
-    for (const [k, v] of [['depth', sc.depth], ['ap', sc.ap], ['ml', sc.ml]] as const) {
+    for (const [k, v] of [['depth', sc.depth], ['ap', sc.ap], ['ml', sc.ml], ['ex', sc.ex], ['ey', sc.ey], ['roll', sc.roll]] as const) {
       const el = this.scopeInputs[k];
       if (!el) continue;
       if (document.activeElement !== el.input) el.input.value = String(v);
@@ -393,7 +458,9 @@ export class VentriclesAtlasPage {
       h('ul', { class: 'plain' },
         h('li', {}, `The tip is ${fmtMm(p.tip.distanceTo(tgt))} mm from the target on the floor, ${fmtMm(p.tip.distanceTo(apex))} mm from the basilar apex.`),
         fornix.length ? h('li', {}, `The shaft passes ${fmtMm(segmentDistance(p.entry, p.tip, fornix))} mm from the fornix (its nearest point).`) : null,
-        h('li', {}, off < 0.25 ? 'On Sousa’s line through the foramen of Monro.' : `${fmtMm(off)}° off Sousa’s line.`)));
+        sc.ex || sc.ey ? h('li', {}, `The burr hole is moved ${[sc.ex ? `${fmtMm(Math.abs(sc.ex))} mm ${sc.ex > 0 ? 'forwards' : 'backwards'}` : '', sc.ey ? `${fmtMm(Math.abs(sc.ey))} mm ${sc.ey > 0 ? 'away from' : 'towards'} the midline` : ''].filter(Boolean).join(' and ')} from Sousa’s entry.`) : null,
+        h('li', {}, off < 0.25 ? 'On Sousa’s line through the foramen of Monro.' : `${fmtMm(off)}° off Sousa’s line; the shaft’s line passes ${fmtMm(segmentDistance(p.entry, p.entry.clone().addScaledVector(p.dir, t.depthMm + 10), [monro]))} mm from the centre of the foramen of Monro.`)));
+    this.placeCompass();
   }
 
   private current(): Trajectory | undefined {
@@ -406,6 +473,11 @@ export class VentriclesAtlasPage {
       st.grp = id; st.cam = { preset: null }; st.hidden = []; st.sel = null;
       // the catheter's trajectories are this patient's: drawn on the ventricles as they are
       if (VE_GROUP.get(id)?.catheter) st.morphs = {};
+      // the ventriculostomy view opens as ETV_DEFAULT says (the scope's side kept)
+      if (VE_GROUP.get(id)?.endoscope) {
+        st.morphs = { ...st.morphs, hydrocephalus: ETV_DEFAULT.hydro };
+        st.scope = { ...defaultScope(st.scope.side, ETV_DEFAULT.hydro), big: st.scope.big };
+      }
       st.scope.depth = defaultScopeDepth(st.scope.side, st.morphs.hydrocephalus ?? 0);
     }, { camera: true });
   }
@@ -478,10 +550,10 @@ export class VentriclesAtlasPage {
     const yz = (a: [number, number]) => `${fmtMm(-a[0])} mm behind and ${fmtMm(-a[1])} mm below`;
     return h('div', {},
       h('p', {}, 'The structures around the ventricles are the Z-Anatomy model’s, carried onto this CT by the fit that fits its ventricles onto this CT’s; where this CT shows the ventricles larger than the model, they are pushed out to the walls. The CT shows none of them. The vessels are this patient’s, from the CT angiogram; the oculomotor nerves are routed through this CT; the brainstem is a fitted model (Skull base v3).'),
-      h('p', {}, `Measured from the anterior commissure along the AC–PC line (${fmtMm(ETV.acpcLengthMm)} mm here) as da Silva does: the infundibular recess lies ${yz(ETV.infundibularRecessAcpcMm)} it, and the top of the basilar artery ${yz(ETV.basilarApexAcpcMm)}. The model’s mammillary bodies lay ${fmtMm(-mb.modelAcpcMm[0])} mm behind it, too far forward: they are moved to da Silva’s ${fmtMm(-mb.daSilvaAcpcMm[0])} mm, at the height of the model’s floor there (${fmtMm(-mb.placedAcpcMm[1])} mm below it). The target is the midline floor halfway between the infundibular recess and the mammillary bodies; the basilar apex lies ${fmtMm(ETV.targetToBasilarApexMm)} mm from it.`),
+      h('p', {}, `Measured from the anterior commissure along the AC–PC line (${fmtMm(ETV.acpcLengthMm)} mm here) as da Silva does: the infundibular recess lies ${yz(ETV.infundibularRecessAcpcMm)} it, and the top of the basilar artery ${yz(ETV.basilarApexAcpcMm)}. The model’s mammillary bodies lay ${fmtMm(-mb.modelAcpcMm[0])} mm behind it, too far forward: they are moved to da Silva’s ${fmtMm(-mb.daSilvaAcpcMm[0])} mm (and drawn as spheres: ${mb.volumeMm3} mm³ each, ${fmtMm(mb.diameterMm)} mm across, from Vann 2022’s growth curve of their volume at 20 years, drawn a little larger, ${fmtMm(mb.drawnDiameterMm)} mm across, so they show as the bulges an endoscopist sees; the model’s are thin plates), at the height of the model’s floor there (${fmtMm(-mb.placedAcpcMm[1])} mm below it). The target is the midline floor halfway between the infundibular recess and the mammillary bodies; the basilar apex lies ${fmtMm(ETV.targetToBasilarApexMm)} mm from it.`),
       h('p', {}, `Sousa’s line, through the middle of the right foramen of Monro to the target and out to the outer table, is ${fmtMm(t.depthMm)} mm long on this CT and reaches the foramen at ${fmtMm(t.depthToMonroMm)} mm; its entry is ${fmtMm(t.fromMidlineMm)} mm from the midline and ${fmtMm(Math.abs(t.fromCoronalSutureMm))} mm ${t.fromCoronalSutureMm < 0 ? 'behind' : 'in front of'} the coronal suture; it is angled ${fmtMm(t.sagittalAngleDeg)}° in the sagittal and ${fmtMm(t.coronalAngleDeg)}° in the coronal plane against the AC–PC line’s perpendicular.`),
-      h('p', {}, `The hydrocephalus slider: at its full extent the ventricles measure as Roşu’s medians (Evans’ index ${ETV.hydrocephalus.hydrocephalus.evansIndex.toFixed(2)}, third ventricle ${fmtMm(ETV.hydrocephalus.hydrocephalus.thirdWidthMm)} mm wide; this patient’s: ${ETV.hydrocephalus.rest.evansIndex.toFixed(2)} and ${fmtMm(ETV.hydrocephalus.rest.thirdWidthMm)} mm as drawn), triventricular (the aqueduct and the fourth ventricle unchanged), and the floor is pushed down to ${fmtMm(ETV.hydrocephalus.hydrocephalus.floorToApexMm)} mm from the basilar apex (Aydin’s 2.75 mm, as da Silva cites it; ${fmtMm(ETV.hydrocephalus.rest.floorToApexMm)} mm here at rest), the apex itself still. How the walls get there is a shape, not a simulation of the tissue: each wall moves out along its normal (the septum, the lateral ventricles’ floors and the columns of the fornix stay; the foramina grow backwards and outwards), the walls are draped over this patient’s arteries at the skull base, which do not move, and everything around follows a smooth field that does not fold it. With it, Sousa’s line is ${fmtMm(ETV.hydrocephalus.trajectories.R.depthMm)} mm long and reaches the foramen at ${fmtMm(ETV.hydrocephalus.trajectories.R.depthToMonroMm)} mm.`),
-      h('p', { class: 'aside' }, `The endoscope’s view is drawn, not photographed: a ${ENDO_FOV_DEG}° field, a light at the tip, each wall showing what lies just behind it (more through the thin floor), and the choroid plexus lobulated and glistening. These are rendering choices on the fitted shapes, not measurements.`));
+      h('p', {}, `The hydrocephalus slider: at its full extent the ventricles measure as Roşu’s medians (Evans’ index ${ETV.hydrocephalus.hydrocephalus.evansIndex.toFixed(2)}, third ventricle ${fmtMm(ETV.hydrocephalus.hydrocephalus.thirdWidthMm)} mm wide; this patient’s: ${ETV.hydrocephalus.rest.evansIndex.toFixed(2)} and ${fmtMm(ETV.hydrocephalus.rest.thirdWidthMm)} mm as drawn), triventricular (the aqueduct and the fourth ventricle unchanged), and the floor is pushed down to ${fmtMm(ETV.hydrocephalus.hydrocephalus.floorToApexMm)} mm from the basilar apex (Aydin’s 2.75 mm, as da Silva cites it; ${fmtMm(ETV.hydrocephalus.rest.floorToApexMm)} mm here at rest), the apex itself still. How the walls get there is a shape, not a simulation of the tissue: each wall moves out along its normal (the septum, the lateral ventricles’ floors and the columns of the fornix stay; the foramina grow backwards and outwards), the walls are draped over this patient’s arteries at the skull base, which do not move, and the floor over the mammillary bodies, placed where da Silva measured them in hydrocephalus (${fmtMm(-ETV.hydrocephalus.mammillary.placedAcpcMm[0])} mm behind the anterior commissure; their height is the floor’s, their tops ${fmtMm(ETV.hydrocephalus.mammillary.protrudeMm)} mm above it, a modelling choice so they bulge as endoscopists see them: ${fmtMm(-ETV.hydrocephalus.mammillary.placedAcpcMm[1])} mm below the commissure, where da Silva measured ${fmtMm(-ETV.hydrocephalus.mammillary.daSilvaHydroAcpcMm[1])} mm, as the floor here stays higher), and everything around follows a smooth field that does not fold it. With it, Sousa’s line is ${fmtMm(ETV.hydrocephalus.trajectories.R.depthMm)} mm long and reaches the foramen at ${fmtMm(ETV.hydrocephalus.trajectories.R.depthToMonroMm)} mm.`),
+      h('p', { class: 'aside' }, `The endoscope’s view is drawn, not photographed: a ${ENDO_FOV_DEG}° field through a lens that magnifies its middle (barrel distortion, as an endoscope’s), a light at the tip on wet walls, each wall showing what lies just behind it (more through the thin floor; what lies deeper blurred and greyed), the camera’s exposure set by how near what it sees is, and the choroid plexus lobulated and glistening. The mammillary bodies show as the floor drawn white and bulging over them, not as bodies seen through it. These are rendering choices on the fitted shapes, not measurements.`));
   }
 
   /** The hydrocephalus slider and what the ventricles measure at it. */
@@ -505,7 +577,7 @@ export class VentriclesAtlasPage {
   /** The endoscope's controls and where it is. */
   private scopePanel(): HTMLElement {
     const sc = this.s.scope;
-    const slider = (key: 'depth' | 'ap' | 'ml', label: string, value: number, min: number, max: number, step: number, set: (v: number) => void, unit: string) => {
+    const slider = (key: ScopeKey, label: string, value: number, min: number, max: number, step: number, set: (v: number) => void, unit: string) => {
       const out = h('output', {}, `${fmtMm(value)}${unit}`);
       const input = h('input', { type: 'range', min, max, step, value, 'aria-label': label, oninput: (e: Event) => set(parseFloat((e.target as HTMLInputElement).value)) }) as HTMLInputElement;
       this.scopeInputs[key] = { input, out, unit };
@@ -519,10 +591,14 @@ export class VentriclesAtlasPage {
       slider('depth', 'Depth', sc.depth, 0, scopeMaxDepth(sc.side), 0.5, (v) => this.setScope((e) => { e.depth = v; }), ' mm'),
       slider('ap', 'Tilt forward', sc.ap, -SCOPE_TILT_MAX, SCOPE_TILT_MAX, 0.5, (v) => this.setScope((e) => { e.ap = v; }), '°'),
       slider('ml', 'Tilt towards the midline', sc.ml, -SCOPE_TILT_MAX, SCOPE_TILT_MAX, 0.5, (v) => this.setScope((e) => { e.ml = v; }), '°'),
+      slider('ex', 'Burr hole forwards', sc.ex, -SCOPE_ENTRY_MAX.ex, SCOPE_ENTRY_MAX.ex, 1, (v) => this.setScope((e) => { e.ex = v; }), ' mm'),
+      slider('ey', 'Burr hole away from the midline', sc.ey, -SCOPE_ENTRY_MAX.ey, SCOPE_ENTRY_MAX.ey, 1, (v) => this.setScope((e) => { e.ey = v; }), ' mm'),
+      slider('roll', 'Rotate the view', sc.roll, -180, 180, 5, (v) => this.setScope((e) => { e.roll = v; }), '°'),
       h('div', { class: 'chips' },
-        h('button', { type: 'button', class: 'chip', onclick: () => this.setScope((e) => { e.ap = 0; e.ml = 0; }) }, 'Back on the line'),
+        h('button', { type: 'button', class: 'chip', onclick: () => this.update((st) => { st.scope = { ...defaultScope(st.scope.side, st.morphs.hydrocephalus ?? 0), big: st.scope.big }; }) }, 'Back to the start'),
+        h('button', { type: 'button', class: 'chip', onclick: () => this.setScope((e) => { e.ap = 0; e.ml = 0; e.ex = 0; e.ey = 0; }) }, 'Back on Sousa’s line'),
         h('button', { type: 'button', class: 'chip', onclick: () => this.setScope((e) => { e.big = !e.big; }) }, sc.big ? 'Show the 3D view big' : 'Show the endoscope big')),
-      h('p', { class: 'aside' }, 'In the endoscope’s view: drag to tilt the scope, scroll to move it in or out (or the arrow keys, W and S). Up on the screen is forwards. Point at the image to name what you see, and what shows through the wall.'),
+      h('p', { class: 'aside' }, 'In the endoscope’s view: drag to tilt the scope, scroll to move it in or out (or the arrow keys, W and S); Q and E rotate the view. A and P on the rim mark forwards and backwards (up on the screen is forwards until the view is rotated). The burr hole moves over the skull and the scope stays aimed at the target. Point at the image to name what you see, and what shows through the wall.'),
       this.scopeOut);
     this.renderScopeOut();
     return box;
@@ -605,6 +681,7 @@ export class VentriclesAtlasPage {
     if (er) {
       const e = er.endo, o = er.overview;
       Object.assign(this.endoMask.style, { left: `${e.x}px`, top: `${e.y}px`, width: `${e.width}px`, height: `${e.height}px` });
+      this.placeCompass();
       const inset = this.s.scope.big ? o : e;
       Object.assign(this.insetFrame.style, { left: `${inset.x}px`, top: `${inset.y}px`, width: `${inset.width}px`, height: `${inset.height}px` });
       this.insetFrame.dataset.kind = this.s.scope.big ? '3d' : 'endo';
@@ -631,7 +708,7 @@ export class VentriclesAtlasPage {
     const r = this.stage.getBoundingClientRect();
     this.tip.hidden = false;
     this.tip.textContent = nameOf(info.id ?? '') + (info.side && info.kind === 'structure' ? (info.side === 'L' ? ' (left)' : ' (right)') : '')
-      + (info.behindMm !== undefined ? `, through the wall (${fmtMm(info.behindMm)} mm behind it)` : '');
+      + (info.behindMm !== undefined ? `, through the ${info.throughFloor ? 'floor' : 'wall'} (${info.behindMm < 0.5 ? 'just' : `${fmtMm(info.behindMm)} mm`} beyond it)` : '');
     this.tip.style.transform = `translate(${Math.round(x - r.left + 14)}px, ${Math.round(y - r.top + 14)}px)`;
   }
 
@@ -695,17 +772,22 @@ export class VentriclesAtlasPage {
       if (k === 's' || k === 'S') { this.setCath((c) => { c.side = c.side === 'R' ? 'L' : 'R'; }); return true; }
     }
     if (VE_GROUP.get(this.s.grp)?.endoscope) {
-      const tilt = (dap: number, dml: number) => this.setScope((e) => {
-        e.ap = Math.max(-SCOPE_TILT_MAX, Math.min(SCOPE_TILT_MAX, e.ap + dap));
-        e.ml = Math.max(-SCOPE_TILT_MAX, Math.min(SCOPE_TILT_MAX, e.ml + dml));
+      // (as dragging the view by a step: up looks up the screen, in the view as rotated)
+      const tilt = (sx: number, sy: number) => this.setScope((e) => {
+        const [dx, dy] = unroll(sx, sy, e.roll);
+        e.ap = Math.max(-SCOPE_TILT_MAX, Math.min(SCOPE_TILT_MAX, Math.round((e.ap + dy) * 2) / 2));
+        e.ml = Math.max(-SCOPE_TILT_MAX, Math.min(SCOPE_TILT_MAX, Math.round((e.ml + (e.side === 'R' ? 1 : -1) * dx) * 2) / 2));
       });
       if (k === 'w' || k === 'W') { this.moveScope(1); return true; }
       if (k === 's' || k === 'S') { this.moveScope(-1); return true; }
-      if (k === 'ArrowUp') { tilt(1, 0); return true; }
-      if (k === 'ArrowDown') { tilt(-1, 0); return true; }
-      if (k === 'ArrowLeft') { tilt(0, this.s.scope.side === 'R' ? 1 : -1); return true; }
-      if (k === 'ArrowRight') { tilt(0, this.s.scope.side === 'R' ? -1 : 1); return true; }
+      if (k === 'ArrowUp') { tilt(0, 1); return true; }
+      if (k === 'ArrowDown') { tilt(0, -1); return true; }
+      if (k === 'ArrowLeft') { tilt(1, 0); return true; }
+      if (k === 'ArrowRight') { tilt(-1, 0); return true; }
       if (k === 'v' || k === 'V') { this.setScope((e) => { e.big = !e.big; }); return true; }
+      const roll = (d: number) => this.setScope((e) => { e.roll = ((e.roll + d + 540) % 360) - 180; });
+      if (k === 'q' || k === 'Q') { roll(-5); return true; }
+      if (k === 'e' || k === 'E') { roll(5); return true; }
     }
     if (k === 'Escape') {
       if (this.measureBtn.getAttribute('aria-pressed') === 'true') { this.toggleMeasure(); return true; }

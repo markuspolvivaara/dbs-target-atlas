@@ -601,8 +601,30 @@ def main() -> int:
     def vessel_dist(P: np.ndarray) -> np.ndarray:
         return ndimage.map_coordinates(vdist, ((np.atleast_2d(P) - lo_v) / STEP).T, order=1, mode="nearest")
     hfield, hrep = E.hydrocephalus(Vm, Nm, part, midline, etv_tgt, apex, vrep["frontalHorns"]["innerSkullMm"], monro_c, vessel_dist)
-    Dm, drep = E.drape(Vm, Fm, hfield(Vm), vessel_dist)
+    # the mammillary bodies with the shape: where da Silva measured them in hydrocephalus; the floor is draped over them
+    def verts(id_):
+        return np.vstack([V for _, V, _ in deep[id_]])
+    frame_h = E.ACPC(verts("ve_anterior_commissure") + hfield(verts("ve_anterior_commissure")),
+                     verts("ve_posterior_commissure") + hfield(verts("ve_posterior_commissure")), midline)
+    third_v = Vm[part == "third"]
+    mb_shift, hrep["mammillary"] = E.mammillary_hydro(deep["ve_mammillary_body"], frame_h, third_v + hfield(third_v))
+    mbv = np.vstack([verts("ve_mammillary_body"), verts("ve_mammillary_body") + mb_shift])     # at rest and shaped
+    lo_m = mbv.min(0) - 8
+    shape_m = tuple(np.ceil((mbv.max(0) + 8 - lo_m) / STEP).astype(int) + 1)
+    mb_sd_h = E.solid_sd([(V + mb_shift, F) for _, V, F in deep["ve_mammillary_body"]], lo_m, shape_m, STEP, fill, sdf)
+
+    def obstacle(P: np.ndarray) -> np.ndarray:
+        """The skull-base arteries (kept VESSEL_CLEAR_MM clear) and the shaped mammillary bodies (MB_GAP_MM: the floor
+        rests on them)."""
+        q = ((np.atleast_2d(P) - lo_m) / STEP).T
+        mbd = ndimage.map_coordinates(mb_sd_h, q, order=1, mode="nearest", cval=30.0)
+        return np.minimum(vessel_dist(P), mbd + (E.VESSEL_CLEAR_MM - E.MB_GAP_MM))
+    Dm, drep = E.drape(Vm, Fm, hfield(Vm), obstacle)
     hrep.update(drep)
+    # the floor wrapped onto the mammillary bodies, so each shows as a bulge
+    Dm, hrep["mammillaryWrap"] = E.wrap_floor(Vm, Fm, Dm, part == "third", lambda P: ndimage.map_coordinates(
+        mb_sd_h, ((np.atleast_2d(P) - lo_m) / STEP).T, order=1, mode="nearest"), frame_h.z)
+    print("floor wrapped", hrep["mammillaryWrap"], flush=True)
     # what the walls measure as drawn (draped), the target moving with the floor under it
     j_tgt = int(np.argmin(np.linalg.norm(Vm - etv_tgt, axis=1)))
     hrep["hydrocephalus"] = E.measures(Vm, part, etv_tgt, apex, vrep["frontalHorns"]["innerSkullMm"], float(monro_c[:, 2].mean()), Dm, Dm[j_tgt])
@@ -635,6 +657,12 @@ def main() -> int:
     etv["wallsMovedMm"] = E.walls(deep, inside, lo, STEP, sdf, Vm, Nm)
     # with the hydrocephalus shape: the field's moves, each structure then kept out of the shaped cavity
     hmoves, hrep["wallsPushedMm"] = E.shaped_walls(deep, hfield, Vm + Dm, Fm, Nh, fill, sdf, STEP)
+    hmoves["ve_mammillary_body"] = [np.tile(mb_shift, (len(V), 1)) for _, V, _ in deep["ve_mammillary_body"]]
+    monro_h = {s: 0.5 * (fm[s]["a"] + fm[s]["b"]) + Dm[part == "monro"][(Vm[part == "monro", 0] > midline) == (s == "R")].mean(0) for s in ("R", "L")}
+    thal_h = np.vstack([V + D for (_, V, _), D in zip(deep["ve_thalamus"], hmoves["ve_thalamus"])])
+    hmoves["ve_choroid_plexus"], hrep["plexusAtMonro"] = E.plexus_on_thalamus(deep["ve_choroid_plexus"], hmoves["ve_choroid_plexus"], thal_h,
+                                                                              monro_h, Vm + Dm, Nh)
+    print("plexus at the foramina", hrep["plexusAtMonro"], flush=True)
     for id_, *_ in E.DEEP:
         nd = E.nodes(deep[id_], midline, hmoves[id_])
         write_glb(BUILD / f"{id_}.glb", nd, {"id": id_})
@@ -643,7 +671,6 @@ def main() -> int:
     print("walls", etv["wallsMovedMm"], flush=True)
     hrep["jacobianMinAround"] = round(E.jacobian_min(hfield, np.vstack([V for pcs in deep.values() for _, V, _ in pcs])[::3]), 3)
     tgt_h = etv_tgt + Dm[j_tgt]
-    monro_h = {s: 0.5 * (fm[s]["a"] + fm[s]["b"]) + Dm[part == "monro"][(Vm[part == "monro", 0] > midline) == (s == "R")].mean(0) for s in ("R", "L")}
     # what is drawn: its volumes, and (for the trajectories) each side's lateral ventricle with its foramen
     vrep["drawnMl"] = {k: round(float((inside & (lab == i)).sum() * STEP ** 3 / 1000), 2) for i, k in enumerate(keys)}
     np.savez_compressed(BUILD / "drawn.npz", inside=inside, lab=lab.astype(np.uint8), lo=lo, keys=np.array(keys),
@@ -732,7 +759,7 @@ def main() -> int:
     etv["trajectories"] = {s: E.trajectory(etv_tgt, 0.5 * (fm[s]["a"] + fm[s]["b"]), bone_at, frame, lambda x0: suture_point(S, x0))
                            for s in ("R", "L")}
     hrep["points"] = {"target": tgt_h.round(2).tolist(), "monro": {s: monro_h[s].round(2).tolist() for s in ("R", "L")},
-                      "mammillaryBodies": (mb_pts + hfield(mb_pts)).mean(0).round(2).tolist()}
+                      "mammillaryBodies": (mb_pts + mb_shift).mean(0).round(2).tolist()}
     hrep["trajectories"] = {s: E.trajectory(tgt_h, monro_h[s], bone_at, frame, lambda x0: suture_point(S, x0)) for s in ("R", "L")}
     etv["hydrocephalus"] = hrep
     print("etv", {k: v for k, v in etv.items() if k not in ("points", "frame")}, flush=True)
@@ -843,15 +870,31 @@ def write_manifest(cent: dict, vrep: dict, etv: dict) -> None:
               "source": "The Z-Anatomy model, carried onto this CT by the ventricles' fit", "fitted": True,
               "centroid": {s: cent[f"{id_}{s}"] for s in ("L", "R") if f"{id_}{s}" in cent}}
         if id_ == "ve_mammillary_body":
-            it["derivation"] = (f"{carried} The model's mammillary bodies (the two small bodies of its hypothalamus) lie "
+            it["derivation"] = (f"{carried} The model's mammillary bodies (the two small bodies of its hypothalamus) are thin plates "
+                                f"({mb['modelVolumeMm3'][0]:g} and {mb['modelVolumeMm3'][1]:g} mm3), which a floor drawn over them does not show as "
+                                f"bulges; each is drawn instead as a sphere where the model's lies, of half the two bodies' volume Vann 2022's growth "
+                                f"curve gives at {E.MB_AGE_Y:.0f} years (from 250 MRIs at 6 to 24 years): {mb['volumeMm3']:g} mm3, "
+                                f"{mb['diameterMm']:.1f} mm across, drawn a little larger ({mb['drawnDiameterMm']:.1f} mm across, further apart with "
+                                f"it, so that they show as the bulges an endoscopist sees: a display choice, as is the round shape). The model's lie "
                                 f"{-mb['modelAcpcMm'][0]:.1f} mm behind the anterior commissure; da Silva 2024 measured "
                                 f"{-mb['daSilvaAcpcMm'][0]:.2f} mm in 200 MRIs (their anterosuperior point, along the AC-PC line from the anterior "
-                                f"commissure's posterosuperior border, {-mb['daSilvaAcpcMm'][1]:.2f} mm below it). They are moved, unchanged in shape "
-                                f"({mb['movedMm']} mm), to lie that far behind it, at the height of the model's floor there "
-                                f"({-mb['placedAcpcMm'][1]:.1f} mm below the commissure), and the ventricle is drawn round them, so they bulge into its floor.")
-            it["refIds"] = ["dasilva2024"]
+                                f"commissure's posterosuperior border, {-mb['daSilvaAcpcMm'][1]:.2f} mm below it). They are moved "
+                                f"({mb['movedMm']} mm) to lie that far behind it, at the height of the model's floor there "
+                                f"({-mb['placedAcpcMm'][1]:.1f} mm below the commissure), and the ventricle is drawn round them, so they bulge into its floor. "
+                                f"With the hydrocephalus slider they move to where da Silva measured them in 24 MRIs with hydrocephalus (their "
+                                f"anterosuperior point a median {E.MB_HYDRO_BEHIND_AC_MM[0]:.2f} mm behind the commissure, which moves with the shape), "
+                                f"their tops {E.MB_PROTRUDE_MM:g} mm above the floor there, and the floor, coming down, rests on them and is wrapped "
+                                "down onto each (the two bulges endoscopists see; the height and the wrap are modelling choices).")
+            it["refIds"] = ["dasilva2024", "vann2022"]
         elif id_ in E.IN_CAVITY:
-            it["derivation"] = f"{carried} It lies in the ventricles, as drawn, and follows them with the hydrocephalus slider."
+            pm = etv["hydrocephalus"]["plexusAtMonro"]
+            it["derivation"] = (f"{carried} It lies in the ventricles, as drawn, and follows them with the hydrocephalus slider. There the "
+                                "foramina of Monro grow backwards, and at each the plexus is shifted with them, towards the thalamus (the "
+                                "foramen's posterior border; the plexus's tela is fixed along the choroidal fissure by the teniae of the "
+                                f"thalamus and the fornix: Azab 2014) until it lies against it (by {pm['R']['shiftMm']:g} mm on the right "
+                                f"and {pm['L']['shiftMm']:g} mm on the left, fading out {E.PLEXUS_MONRO_MM[1]:.0f} mm from the foramen), "
+                                "so it does not hang across the widened opening.")
+            it["refIds"] = ["azab2014"]
         else:
             mv = moved.get(id_, 0.0)
             it["derivation"] = carried + " With the hydrocephalus slider it follows the ventricles' walls." + (f" Where this CT shows the ventricles larger than the model, it is pushed out to their wall (by at "

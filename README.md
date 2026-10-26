@@ -355,22 +355,30 @@ shape.
   habenula, pineal gland and corpus callosum are the Z-Anatomy model's (exported with its ventricles), carried onto
   this CT by the same fit as its ventricles. Where the CT shows the ventricles larger than the model, each is pushed
   out to the wall (along the shortest way, the pushes smoothed over it); the choroid plexus stays in the ventricles.
-  The model's mammillary bodies lay about 6 mm too far forward: they are moved to da Silva 2024's mean (8.56 mm
-  behind the anterior commissure along the AC–PC line), at the height of the model's floor, and the ventricle is
-  drawn round them. Checks against da Silva's 200 MRIs: the infundibular recess and the basilar apex (TopBrain's
+  The model's mammillary bodies lay about 6 mm too far forward, and are thin plates: each is drawn as a sphere where
+  the model's lies, of the volume Vann 2022's growth curve gives a young adult (62 mm³, 4.9 mm across), drawn a
+  little larger (5.5 mm, a display choice, so they show as the bulges an endoscopist sees), moved to da Silva 2024's
+  mean (8.56 mm behind the anterior commissure along the AC–PC line), at the height of the model's floor, and the
+  ventricle is drawn round them. Checks against da Silva's 200 MRIs: the infundibular recess and the basilar apex (TopBrain's
   label) lie within about one standard deviation of the published positions. The vessels (the basilar artery, P1–P2,
   posterior communicating and superior cerebellar arteries, the internal cerebral veins and the veins of Galen and
   Rosenthal) are this CT angiogram's; the oculomotor and optic nerves are routed through it and the midbrain and pons
   are the fitted model (Skull base v3).
 - **Endoscopic third ventriculostomy**: the target is the midline floor halfway between the infundibular recess and
   the mammillary bodies (fenestrated behind the recess, in front of the mammillary bodies and the basilar artery: da
-  Silva 2024); the endoscope runs on Sousa 2025's line, from the target through the middle of the foramen of Monro out
-  to the outer table, tilted about its burr hole and moved in or out by the user. Its view is drawn, not
-  photographed: a 75° field, a light at the tip falling off with the square of the distance, the walls seen from
-  inside, each showing what lies just behind it (more through the floor, which thins as the ventricles enlarge).
-  The choroid plexus is drawn lobulated and glistening, raspberry red (its mesh subdivided, its surface pushed into
-  lobules): also a rendering choice on the fitted model's shape. Pointing at the view names what is under the
-  pointer, and what shows through the wall.
+  Silva 2024); the endoscope starts from Sousa 2025's line, from the target through the middle of the foramen of
+  Monro out to the outer table. The user moves its burr hole over the skull (forwards and sideways; the scope stays
+  aimed at the target, and the panel says how far its line passes from the foramen), tilts it about the burr hole,
+  moves it in or out and rotates the view (A and P on the rim mark forwards and backwards). It opens at 75 % of the
+  hydrocephalus shape, the burr hole 12 mm in front of Sousa's entry and tilted 2° back. Its view is drawn, not
+  photographed: a 75° field through a lens with an endoscope's barrel distortion, a light at the tip falling off with
+  the square of the distance (the exposure set by how near what it sees is), wet walls seen from inside, each showing
+  what lies just behind it, more through the thin strip of floor between the infundibular recess and the mammillary
+  bodies (which thins as the ventricles enlarge): what touches it sharp, what lies deeper blurred and bluish, fine
+  capillaries on it, and the floor white and bulging over the mammillary bodies. The choroid plexus is drawn
+  lobulated and glistening, raspberry red (its mesh subdivided, its surface pushed into lobules). These are rendering
+  choices on the fitted shapes. Pointing at the view names what is under the pointer, and what shows through the
+  wall or the floor.
 - **Hydrocephalus**: a shape (morph target) on the ventricles and everything around them. At full extent the
   ventricles measure as the medians of Roşu 2026's 68 adults with hydrocephalus (Evans' index 0.42, third ventricle
   23.5 mm wide), triventricular (the aqueduct and fourth ventricle unchanged), and the floor is brought down towards
@@ -379,7 +387,11 @@ shape.
   lateral ventricles' floors and the columns of the fornix stay; the foramina of Monro grow backwards and outwards,
   from Jean 2019's 5.23 to 32.6 mm²), the walls are draped over this CT's arteries at the skull base, which do not
   move (the basilar artery and its branches, the carotids, the A1 segments; the floor comes down over the P1
-  segments, not through them), and everything around follows a smooth field, checked not to fold,
+  segments, not through them; and over the mammillary bodies, placed where da Silva 2024 measured them in 24 MRIs
+  with hydrocephalus, 11.30 mm behind the anterior commissure, their tops 4 mm above the floor and the floor wrapped
+  onto each: a modelling choice), and everything around follows a smooth field, checked not to fold (the choroid
+  plexus at each foramen shifted with it towards the thalamus, its posterior border, as its tela is fixed there:
+  Azab 2014),
   then is pushed out of the shaped ventricles as at rest;
   the amplitudes are found by iteration to meet those three measures. Sousa's line is recomputed with it. The drawn
   ventricles are also kept clear of this patient's internal cerebral veins (the fitted model reached over them).
