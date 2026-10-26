@@ -571,6 +571,21 @@ export const LAMINECTOMY_STATEMENTS = {
   },
 } satisfies Record<string, Statement>;
 
+export const LAMINOPLASTY_STATEMENTS = {
+  technique: {
+    text: 'In the expansive open-door laminoplasty a trough is burred at the junction of the lamina and the lateral mass on each side: through both cortices on the opening side, usually the side with the worse radicular symptoms or more stenosis (a foraminotomy is easier there), and through the outer cortex only on the other, whose inner cortex is left as the hinge. The opening side is cut first. The lamina is then opened gradually towards the hinge, a greenstick fracture forming along the hinge trough, and held open: originally with stay sutures, now often with miniplates, spacers or bone graft.',
+    refIds: ['mitsunaga2012', 'cho2026'],
+  },
+  angle: {
+    text: 'In 124 patients the lamina open angle, measured on CT at C4–C6 a week after open-door laminoplasty, averaged 40.2° ± 11.3° (20–69°). Recovery was alike below and above 40° (JOA recovery rate 58.7% and 56.6%), but neck (axial) pain at 6 months was more frequent at 40° or more (32.1% against 14.1%); by the final follow-up the difference was no longer significant.',
+    refIds: ['wang2018'],
+  },
+  drawn: {
+    text: 'Here: only the selected vertebra, a round 4-mm burr (a drawing choice). The door opens once the open side’s trough is through and the hinge trough leaves 2 mm of bone or less (standing for the inner cortex: a drawing choice); it turns as one rigid piece about a line along the vertebra’s axis through the hinge’s bone, the greenstick fracture drawn as a clean break. The ligamentum flavum, the plates and the sutures are not drawn. Clearances are to the dural sac (segmented) and to the roots and vertebral arteries (schematic). Bone is simply taken away: nothing of the tissue’s behaviour is simulated.',
+    refIds: [],
+  },
+} satisfies Record<string, Statement>;
+
 export const OVER_THE_TOP_STATEMENTS = {
   technique: {
     text: 'In a microscopic tubular unilateral laminotomy for bilateral decompression (“over the top”), the laminotomy starts with a high-speed burr at the inferior edge of the upper lamina on the approach side and goes cranially to the insertion of the ligamentum flavum, which protects the dura meanwhile; the flavum is then removed, and the hypertrophied facet and osteophytes are burred. For the other side the table is tilted 10–20° away from the surgeon and the retractor angled medially: the burr clears the ventral part of the spinous process’s base, the flavum on the other side is removed and its lamina undercut, out to its lateral recess.',
@@ -607,7 +622,7 @@ export function crossCheckContent(): string[] {
     for (const st of [t.start, t.size, t.note]) for (const r of st?.refIds ?? []) if (!SP_MANIFEST.references[r]) errs.push(`${t.id}: unknown reference ${r}`);
   }
   for (const st of [...Object.values(APPROACHES).map((a) => a.removes), ...Object.values(APPROACH_STATEMENTS), ...Object.values(ACDF_STATEMENTS), ...Object.values(FORAMINOTOMY_STATEMENTS), ...Object.values(ACDF_DRILL_STATEMENTS),
-    ...Object.values(LAMINECTOMY_STATEMENTS), ...Object.values(OVER_THE_TOP_STATEMENTS), ...Object.values(SPLIT_STATEMENTS)]) {
+    ...Object.values(LAMINECTOMY_STATEMENTS), ...Object.values(LAMINOPLASTY_STATEMENTS), ...Object.values(OVER_THE_TOP_STATEMENTS), ...Object.values(SPLIT_STATEMENTS)]) {
     for (const r of st.refIds) if (!SP_MANIFEST.references[r]) errs.push(`approach: unknown reference ${r}`);
   }
   return errs;

@@ -149,6 +149,52 @@ describe('virtual drilling', () => {
     expect(halves.map((a) => Math.sign(a.across)).sort()).toEqual([-1, 1]);
   });
 
+  it('a laminoplasty: the door opens only with the open side through and a thin hinge, and turns about the hinge', () => {
+    // a body, two lateral masses, a lamina between them (y -6 to -2) and a spinous process behind it; the canal's
+    // back wall at y = -2, the spinous process's base at y = -4.6
+    const sd = (p: THREE.Vector3) => Math.max(sBall(p, [0, 8, 0], 6), sBox(p, [-10, -6, -5], [-5, 8, 5]), sBox(p, [5, -6, -5], [10, 8, 5]),
+      sBox(p, [-10, -6, -5], [10, -2, 5]), sBox(p, [-2, -13, -4], [2, -6, 4]));
+    const mk = () => {
+      const v = shape(sd, [0, 8, 0], [0, -4.6, 0], [0, -13, 0]);
+      v.pair.landmarks[0].spinous.wall = [0, -2, 0];
+      v.active[1] = false;
+      return v;
+    };
+    // a trough through on the left: x = -4, from behind down through the lamina
+    const openLeft = (v: DrillVolume) => { for (let z = -7; z <= 7; z += 0.5) for (let y = -9; y <= 1; y += 0.5) v.carve(new THREE.Vector3(-4, y, z)); };
+    // one on the right that stops 1.5 mm short of the lamina's front (its floor at y = -3.5)
+    const hingeRight = (v: DrillVolume, floor: number) => { for (let z = -7; z <= 7; z += 0.5) for (let y = -10; y <= floor - 2; y += 0.5) v.carve(new THREE.Vector3(4, y, z)); };
+    const v = mk();
+    expect(v.openDoor(0, 'L').ok).toBe(false);                     // nothing drilled
+    openLeft(v);
+    expect(v.settle()).toBe(false);
+    expect(v.attachment(0)).toEqual({ L: false, R: true });
+    expect(v.openDoor(0, 'L').ok).toBe(false);                      // no hinge trough yet
+    hingeRight(v, -5.5);                                            // one leaving 3.5 mm of bone: too thick
+    expect(v.openDoor(0, 'L').ok).toBe(false);
+    hingeRight(v, -3.5);                                            // deepened, leaving 1.5 mm
+    const r = v.openDoor(0, 'L');
+    expect(r.ok).toBe(true);
+    if (!r.ok) return;
+    const L = v.layers[r.layer];
+    expect(L.hinge!.pivot.x).toBeGreaterThan(0.5);                  // the hinge on the right
+    // opened 40 degrees: the open edge swings back, away from the canal; the hinge hardly moves
+    L.angle = THREE.MathUtils.degToRad(40);
+    const m = v.place(r.layer);
+    const edge = new THREE.Vector3(-3, -4, 0).applyMatrix4(m);
+    expect(edge.y).toBeLessThan(-7);
+    expect(new THREE.Vector3(L.hinge!.pivot.x, L.hinge!.pivot.y, 0).applyMatrix4(m).distanceTo(new THREE.Vector3(L.hinge!.pivot.x, L.hinge!.pivot.y, 0))).toBeLessThan(0.01);
+    // the burr meets the lamina where it is drawn: a ray from behind at a point of the door's new place meets it there
+    const inDoor = new THREE.Vector3(-1, -5, 0).applyMatrix4(m);   // a point of the door's lamina, where it is drawn
+    expect(inDoor.y).toBeLessThan(-6);
+    expect(v.hit(new THREE.Ray(new THREE.Vector3(inDoor.x, -40, 0), new THREE.Vector3(0, 1, 0)))!.point.y).toBeLessThan(inDoor.y + 0.3);
+    // the hinge trough too deep (through): the lamina is loose, not a door
+    const w = mk();
+    openLeft(w);
+    hingeRight(w, 2);
+    expect(w.openDoor(0, 'L').ok).toBe(false);
+  });
+
   it('drilling is in the link for a cervical level with a pair, and hides the pair and its disc', () => {
     const s = decodeSpine('#/atlas?r=cervical&lv=C5&dr=1');
     expect(s.drill).toBe('foraminotomy');
@@ -161,6 +207,8 @@ describe('virtual drilling', () => {
     expect(decodeSpine('#/atlas?r=cervical&lv=C1&dr=1').drill).toBeNull();   // no pair at C1
     expect(decodeSpine('#/atlas?r=lumbar&lv=L4&dr=1').drill).toBeNull();      // a cervical approach at a lumbar level
     expect(decodeSpine('#/atlas?r=cervical&lv=C5&dr=o').drill).toBeNull();    // and a lumbar one at a cervical level
+    expect(decodeSpine('#/atlas?r=cervical&lv=C5&dr=l&ds=R&dd=40')).toMatchObject({ drill: 'laminoplasty', drillSide: 'R', distract: 40 });
+    expect(decodeSpine('#/atlas?r=cervical&lv=C5&dr=l&dd=90').distract).toBe(60);
     for (const [code, mode] of [['e', 'lamEnBloc'], ['p', 'lamPiecemeal']] as const) expect(decodeSpine(`#/atlas?r=cervical&lv=C5&dr=${code}`).drill).toBe(mode);
     const o = decodeSpine('#/atlas?r=lumbar&lv=L4&dr=o&ds=R');
     expect([o.drill, o.drillSide]).toEqual(['overTheTop', 'R']);

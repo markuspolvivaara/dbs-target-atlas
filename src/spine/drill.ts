@@ -59,6 +59,9 @@ const SEED_MM = 3;
 /** how far in front of the canal's back wall (mm) bone counts as the front of the vertebra, for telling which side a
  * lamina is still joined on */
 const ATTACHED_FRONT_MM = 8;
+/** a laminoplasty's hinge: the bone left within this (mm) of the hinge trough, standing for the inner cortex left when
+ * the trough is cut through the outer one (a drawing choice); the door opens once nothing thicker holds it */
+export const HINGE_MAX_MM = 2;
 
 export type Vertebra = 0 | 1;
 /** One field of bone: a vertebra (where it lies, all of it still joined to its body) or a piece cut loose from one. */
@@ -74,10 +77,15 @@ export interface Layer {
   mm3: number;
   /** a piece: its centre (in the frame, where it lay) */
   centre: THREE.Vector3 | null;
+  /** a door (an open-door laminoplasty's lamina): the line it turns about (a point on it and its direction, in the
+   * frame where the bone lies; turning about it by a positive angle opens the door), and how far it is open (radians) */
+  hinge: { pivot: THREE.Vector3; axis: THREE.Vector3 } | null;
+  angle: number;
 }
 export type Osteotomy = 'spinous' | 'split' | 'base';
 export interface DrillSnapshot { layers: Layer[]; cut: Uint8Array; removed: [number, number] }
-const copyLayer = (l: Layer): Layer => ({ ...l, field: l.field.slice(), offset: l.offset.clone(), centre: l.centre?.clone() ?? null });
+const copyLayer = (l: Layer): Layer => ({ ...l, field: l.field.slice(), offset: l.offset.clone(), centre: l.centre?.clone() ?? null,
+  hinge: l.hinge && { pivot: l.hinge.pivot.clone(), axis: l.hinge.axis.clone() } });
 export type Structure = 'dura' | 'root' | 'artery';
 /** the burr stops where it would enter the dural sac, a root or a vertebral artery (closer than this to its surface,
  * mm): it does not drill past them to the bone behind */
@@ -133,7 +141,7 @@ export class DrillVolume {
   }
 
   private fresh(): Layer[] {
-    return this.orig.map((o, v) => ({ field: o.slice(), vertebra: v as Vertebra, piece: false, offset: new THREE.Vector3(), gone: false, mm3: 0, centre: null }));
+    return this.orig.map((o, v) => ({ field: o.slice(), vertebra: v as Vertebra, piece: false, offset: new THREE.Vector3(), gone: false, mm3: 0, centre: null, hinge: null, angle: 0 }));
   }
 
   private idx(i: number, j: number, k: number): number { return (i * this.ny + j) * this.nz + k; }
@@ -141,8 +149,17 @@ export class DrillVolume {
   /** the layers drawn and drilled */
   live(l: number): boolean { const L = this.layers[l]; return !!L && !L.gone && this.active[L.vertebra]; }
 
-  /** where a layer is drawn, moved from where it lies */
-  shift(l: number): THREE.Vector3 { const L = this.layers[l]; return this.offsets[L.vertebra].clone().add(L.offset); }
+  /** where a layer is drawn, moved from where it lies (its vertebra's and its own move, and a door's turn) */
+  place(l: number): THREE.Matrix4 {
+    const L = this.layers[l];
+    const m = new THREE.Matrix4().makeTranslation(this.offsets[L.vertebra].clone().add(L.offset));
+    if (L.hinge && L.angle) {
+      const p = L.hinge.pivot;
+      m.multiply(new THREE.Matrix4().makeTranslation(p)).multiply(new THREE.Matrix4().makeRotationAxis(L.hinge.axis, L.angle))
+        .multiply(new THREE.Matrix4().makeTranslation(p.clone().negate()));
+    }
+    return m;
+  }
 
   /** A field's value at a point in voxel coordinates (trilinear; outside: 0 for bone and the CT, 255 for distances). */
   sample(f: Uint8Array, x: number, y: number, z: number): number {
@@ -160,7 +177,8 @@ export class DrillVolume {
     let best: { layer: number; t: number } | null = null;
     for (let l = 0; l < this.layers.length; l++) {
       if (!this.live(l)) continue;
-      const t = this.hitOne(ray.origin.clone().sub(this.shift(l)), ray.direction, l);
+      const inv = this.place(l).invert();
+      const t = this.hitOne(ray.origin.clone().applyMatrix4(inv), ray.direction.clone().transformDirection(inv), l);
       if (t !== null && (!best || t < best.t)) best = { layer: l, t };
     }
     const stop = this.stopAlong(ray, best ? best.t : Infinity);
@@ -232,7 +250,7 @@ export class DrillVolume {
   /** Cut the burr's sphere out of the bone drilled, centred here (in the frame; each layer where it is drawn). Returns,
    * per layer, the voxel box it changed (or null). */
   carve(c: THREE.Vector3): ([THREE.Vector3, THREE.Vector3] | null)[] {
-    return this.layers.map((_, l) => (this.live(l) ? this.carveOne(c.clone().sub(this.shift(l)), l) : null));
+    return this.layers.map((_, l) => (this.live(l) ? this.carveOne(c.clone().applyMatrix4(this.place(l).invert()), l) : null));
   }
 
   private carveOne(c: THREE.Vector3, l: number): [THREE.Vector3, THREE.Vector3] | null {
@@ -385,25 +403,117 @@ export class DrillVolume {
           if (L.piece) L.mm3 -= mm3;
           continue;
         }
-        // its voxels, and those round it (below the surface: how far out its surface lies), to a field of its own
-        const g = new Uint8Array(f.length), inPart = new Uint8Array(f.length);
-        for (const x of part) inPart[x] = 1;
-        for (const x of part) {
-          g[x] = f[x];
-          const k = x % this.nz, j = ((x - k) / this.nz) % this.ny, i = (x - k - j * this.nz) / (this.nz * this.ny);
-          for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) for (let c = -1; c <= 1; c++) {
-            const ii = i + a, jj = j + b, kk = k + c;
-            if (ii < 0 || jj < 0 || kk < 0 || ii >= this.nx || jj >= this.ny || kk >= this.nz) continue;
-            const y = this.idx(ii, jj, kk);
-            if (!inPart[y]) g[y] = Math.max(g[y], f[y]);
-          }
-        }
-        for (const x of part) f[x] = 0;
-        this.layers.push({ field: g, vertebra: L.vertebra, piece: true, offset: L.offset.clone(), gone: false, mm3, centre: this.centreOf(part) });
+        this.layers.push(this.takeOut(L, part));
         if (L.piece) L.mm3 -= mm3;
       }
     }
     return changed;
+  }
+
+  /** A piece of its own from these voxels of a layer: they and those round them (below the surface, as far as they lie
+   * below it: where its surface lies), taken out of the layer. */
+  private takeOut(L: Layer, part: number[]): Layer {
+    const f = L.field, g = new Uint8Array(f.length), inPart = new Uint8Array(f.length);
+    for (const x of part) inPart[x] = 1;
+    for (const x of part) {
+      g[x] = f[x];
+      const k = x % this.nz, j = ((x - k) / this.nz) % this.ny, i = (x - k - j * this.nz) / (this.nz * this.ny);
+      for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) for (let c = -1; c <= 1; c++) {
+        const ii = i + a, jj = j + b, kk = k + c;
+        if (ii < 0 || jj < 0 || kk < 0 || ii >= this.nx || jj >= this.ny || kk >= this.nz) continue;
+        const y = this.idx(ii, jj, kk);
+        if (!inPart[y]) g[y] = Math.max(g[y], Math.min(f[y], this.iso - 1));
+      }
+    }
+    for (const x of part) f[x] = 0;
+    return { field: g, vertebra: L.vertebra, piece: true, offset: L.offset.clone(), gone: false, mm3: part.length * this.voxMm3,
+      centre: this.centreOf(part), hinge: null, angle: 0 };
+  }
+
+  /**
+   * An open-door laminoplasty's door: once the trough on the open side is through, the hinge is the bone left within
+   * HINGE_MAX_MM of the trough on the other side, under it (it stays); the door is the lamina and spinous process, the
+   * bone still joined to the spinous process without passing through the hinge (with the trough's wall on the lamina's
+   * side). If that bone still reaches the front of the vertebra the hinge is too thick, or the trough too short. The
+   * door becomes a piece that turns about a line along the vertebra's axis through the hinge. Returns the door's layer,
+   * or why it does not open.
+   */
+  openDoor(v: Vertebra, open: 'L' | 'R'): { ok: true; layer: number } | { ok: false; why: string } {
+    const L = this.layers.find((x) => x.vertebra === v && !x.piece);
+    const att = this.attachment(v);
+    if (!L || !att) return { ok: false, why: 'There is no lamina left to open.' };
+    const openSide = open === 'L' ? 'left' : 'right', hingeSide = open === 'L' ? 'right' : 'left';
+    if (open === 'L' ? att.L : att.R) return { ok: false, why: `The lamina is still joined on the open side (${openSide}): drill its trough through.` };
+    if (!(open === 'L' ? att.R : att.L)) return { ok: false, why: `The hinge side (${hingeSide}) is through as well: the lamina is loose.` };
+    const f = L.field, n = f.length, lm = this.pair.landmarks[v], base = new THREE.Vector3(...lm.spinous.base);
+    const [lat, ant, up] = lm.axes.map((a) => new THREE.Vector3(...a));
+    const hs = open === 'L' ? 1 : -1;   // the hinge's side along the frame's lateral axis (+: the patient's right)
+    const wallF = new THREE.Vector3(...lm.spinous.wall).sub(base).dot(ant);
+    // per voxel, across (towards the hinge), in front of the base and up (mm): linear in i, j, k
+    const o = new THREE.Vector3().applyMatrix4(this.toRas).sub(base);
+    const cols = [0, 1, 2].map((a) => new THREE.Vector3(...[0, 1, 2].map((r) => this.toRas.elements[a * 4 + r]) as [number, number, number]));
+    const lin = (e: THREE.Vector3, sg = 1) => [o.dot(e) * sg, cols[0].dot(e) * sg, cols[1].dot(e) * sg, cols[2].dot(e) * sg];
+    const [A0, Ai, Aj, Ak] = lin(lat, hs), [F0, Fi, Fj, Fk] = lin(ant);
+    const nz = this.nz, ny = this.ny, nx = this.nx;
+    const ijk = (x: number) => { const k = x % nz, j = ((x - k) / nz) % ny; return [(x - k - j * nz) / (nz * ny), j, k]; };
+    // the hinge trough: where the burr took bone away on the hinge side, beside the lamina
+    const trough: number[] = [];
+    for (let x = 0; x < n; x++) {
+      if (!this.cut[x] || f[x] >= this.iso) continue;
+      const [i, j, k] = ijk(x), a = A0 + Ai * i + Aj * j + Ak * k, fr = F0 + Fi * i + Fj * j + Fk * k;
+      if (a >= 2 && a <= 25 && fr >= wallF - 15 && fr <= wallF + ATTACHED_FRONT_MM) trough.push(x);
+    }
+    if (!trough.length) return { ok: false, why: `Drill the hinge trough on the ${hingeSide}, through the outer cortex.` };
+    // the bone within HINGE_MAX_MM of it: beside it on the lamina's side, the door's edge (2); otherwise the hinge (1)
+    const zone = new Uint8Array(n), near = new Float32Array(n).fill(Infinity);
+    const sp = cols.map((c) => c.length()), R = cols.map((c) => Math.ceil(HINGE_MAX_MM / c.length()));
+    for (const c of trough) {
+      const [ci, cj, ck] = ijk(c), ca = A0 + Ai * ci + Aj * cj + Ak * ck, cf = F0 + Fi * ci + Fj * cj + Fk * ck;
+      for (let di = -R[0]; di <= R[0]; di++) for (let dj = -R[1]; dj <= R[1]; dj++) for (let dk = -R[2]; dk <= R[2]; dk++) {
+        const i = ci + di, j = cj + dj, k = ck + dk;
+        if (i < 0 || j < 0 || k < 0 || i >= nx || j >= ny || k >= nz) continue;
+        const y = (i * ny + j) * nz + k;
+        if (f[y] < this.iso) continue;
+        const d = Math.hypot(di * sp[0], dj * sp[1], dk * sp[2]);
+        if (d > HINGE_MAX_MM || d >= near[y]) continue;
+        near[y] = d;
+        const da = A0 + Ai * i + Aj * j + Ak * k - ca, df = F0 + Fi * i + Fj * j + Fk * k - cf;
+        zone[y] = da < -1 && df < 1 ? 2 : 1;
+      }
+    }
+    // the door: the bone joined to the spinous process, not through the hinge
+    const seeds = this.nearLine(f, new THREE.Vector3(...lm.spinous.tip), base, SEED_MM);
+    let front = false;
+    const door = this.flood(f, seeds, (x) => {
+      if (zone[x] === 1) return false;
+      const [i, j, k] = ijk(x);
+      if (F0 + Fi * i + Fj * j + Fk * k > wallF + ATTACHED_FRONT_MM) front = true;
+      return true;
+    });
+    if (!door.length) return { ok: false, why: 'There is no lamina left to open.' };
+    if (front) return { ok: false, why: `The lamina is still held on the ${hingeSide} by more than ${HINGE_MAX_MM} mm of bone under the hinge trough, or beyond its ends: deepen or lengthen it, keeping the inner cortex.` };
+    // the hinge: its bone touching the door (where the door turns about)
+    const inDoor = new Uint8Array(n);
+    for (const x of door) inDoor[x] = 1;
+    const seen = new Uint8Array(n), pts: THREE.Vector3[] = [];
+    for (const x of door) {
+      const [i, j, k] = ijk(x);
+      for (const [a, b, c] of [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]]) {
+        const ii = i + a, jj = j + b, kk = k + c;
+        if (ii < 0 || jj < 0 || kk < 0 || ii >= nx || jj >= ny || kk >= nz) continue;
+        const y = (ii * ny + jj) * nz + kk;
+        if (inDoor[y] || seen[y] || zone[y] !== 1) continue;
+        seen[y] = 1;
+        pts.push(new THREE.Vector3(ii, jj, kk).applyMatrix4(this.toRas));
+      }
+    }
+    if (!pts.length) return { ok: false, why: 'The lamina is loose.' };
+    const pivot = pts.reduce((a, b) => a.add(b), new THREE.Vector3()).divideScalar(pts.length);
+    const piece = this.takeOut(L, door);
+    // turning about the axis by a positive angle carries the open edge backwards, away from the canal
+    piece.hinge = { pivot, axis: up.clone().multiplyScalar(hs) };
+    this.layers.push(piece);
+    return { ok: true, layer: this.layers.length - 1 };
   }
 
   private islandsOf(v: Vertebra): number[] {

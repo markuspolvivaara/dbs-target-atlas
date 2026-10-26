@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { SP, SP_REFS } from '../spine';
-import { ACDF_DRILL_STATEMENTS, FORAMINOTOMY_STATEMENTS, LAMINECTOMY_STATEMENTS, OVER_THE_TOP_STATEMENTS, SPLIT_STATEMENTS, type Statement } from '../spine/content';
-import { BURR_MM_BY_REGION, BURR_RATE_MM_S, BURR_RATE_RANGE, BURR_STEP_MM, drillPairFor, DrillVolume, type Clearance, type DrillPair, type DrillSnapshot, type Osteotomy, type Structure } from '../spine/drill';
+import { ACDF_DRILL_STATEMENTS, FORAMINOTOMY_STATEMENTS, LAMINECTOMY_STATEMENTS, LAMINOPLASTY_STATEMENTS, OVER_THE_TOP_STATEMENTS, SPLIT_STATEMENTS, type Statement } from '../spine/content';
+import { BURR_MM_BY_REGION, HINGE_MAX_MM, BURR_RATE_MM_S, BURR_RATE_RANGE, BURR_STEP_MM, drillPairFor, DrillVolume, type Clearance, type DrillPair, type DrillSnapshot, type Osteotomy, type Structure } from '../spine/drill';
 import { DRILL_MODES, type DrillMode, type SpineState } from '../spine/state';
 import type { PointerTool, Viewer } from '../viewer/Viewer';
 import { h } from './h';
@@ -24,12 +24,18 @@ export const DRILL_TEXT: Record<DrillMode, { label: string; summary: string }> =
   acdf: { label: 'Anterior discectomy (ACDF)', summary: 'anterior discectomy' },
   lamEnBloc: { label: 'Laminectomy en bloc', summary: 'laminectomy en bloc' },
   lamPiecemeal: { label: 'Laminectomy piece by piece', summary: 'laminectomy piece by piece' },
+  laminoplasty: { label: 'Open-door laminoplasty', summary: 'open-door laminoplasty' },
   overTheTop: { label: 'Over-the-top decompression', summary: 'over-the-top decompression' },
   spSplit: { label: 'Spinous process split', summary: 'spinous process-splitting decompression' },
 };
-const isLam = (m: DrillMode | null) => m === 'lamEnBloc' || m === 'lamPiecemeal';
+/** the approaches on the selected vertebra alone */
+const isLam = (m: DrillMode | null) => m === 'lamEnBloc' || m === 'lamPiecemeal' || m === 'laminoplasty';
 /** the approaches where bone cut loose becomes a piece of its own */
-const PIECES = new Set<DrillMode>(['lamEnBloc', 'lamPiecemeal', 'overTheTop', 'spSplit']);
+const PIECES = new Set<DrillMode>(['lamEnBloc', 'lamPiecemeal', 'laminoplasty', 'overTheTop', 'spSplit']);
+/** each slider's name */
+const SPREAD_LABEL: Partial<Record<DrillMode, string>> = { acdf: 'Distraction', spSplit: 'Halves drawn apart', laminoplasty: 'Door opened' };
+/** where a laminoplasty's door is first opened to when it is freed (deg): somewhere to start, the slider then sets it */
+const DOOR_START_DEG = 30;
 
 /** The middle of the two vertebrae, and the spine's direction there (from the lower to the upper). */
 function pairAxis(pair: DrillPair): { centre: THREE.Vector3; up: THREE.Vector3 } {
@@ -130,12 +136,12 @@ export class DrillPanel implements PointerTool {
   }
 
   /** At a discectomy, the two vertebrae drawn `mm` apart along the spine (each moved half of it); at a spinous process
-   * split, its halves drawn `mm` apart to the sides. */
+   * split, its halves drawn `mm` apart to the sides; at a laminoplasty, the door opened `mm` degrees. */
   private mm = 0;
   private spread(pair: DrillPair | null, mm: number): void {
     this.mm = mm;
     if (this.spreadIn && document.activeElement !== this.spreadIn) this.spreadIn.value = String(mm);
-    this.spreadOut.textContent = `${one(mm)} mm`;
+    this.spreadOut.textContent = this.mode && DRILL_MODES[this.mode].unit === '°' ? `${Math.round(mm)}°` : `${one(mm)} mm`;
     if (!pair || !this.vol) return;
     const vol = this.vol;
     const up = pairAxis(pair).up;
@@ -148,7 +154,9 @@ export class DrillPanel implements PointerTool {
         const at = vol.spinousAt(L.vertebra, L.centre);
         if (at.front < 0 && Math.abs(at.across) > 1) L.offset.copy(new THREE.Vector3(...pair.landmarks[L.vertebra].axes[0])).multiplyScalar(Math.sign(at.across) * mm / 2);
       }
-      this.lgroups[l]?.position.copy(vol.shift(l));
+      L.angle = this.mode === 'laminoplasty' && L.hinge ? THREE.MathUtils.degToRad(mm) : 0;
+      const g = this.lgroups[l];
+      if (g) { g.matrix.copy(vol.place(l)); g.matrixWorldNeedsUpdate = true; }
     });
     this.viewer.invalidate();
   }
@@ -177,19 +185,21 @@ export class DrillPanel implements PointerTool {
     const modes = (Object.keys(DRILL_MODES) as DrillMode[]).filter((m) => DRILL_MODES[m].region === pair.region);
     const spread = DRILL_MODES[pick].spread;
     if (spread) {
-      this.spreadIn = h('input', { type: 'range', min: 0, max: spread[0], step: spread[1], value: s.distract, 'aria-label': pick === 'acdf' ? 'Distraction' : 'Halves drawn apart',
+      this.spreadIn = h('input', { type: 'range', min: 0, max: spread[0], step: spread[1], value: s.distract, 'aria-label': SPREAD_LABEL[pick],
         oninput: (e: Event) => this.update((x) => { x.distract = parseFloat((e.target as HTMLInputElement).value); }) }) as HTMLInputElement;
     }
     const region = pair.region, rateOut = h('output', {}, `${this.rate[region]} mm/s`);
     const rateIn = h('input', { type: 'range', min: BURR_RATE_RANGE[0], max: BURR_RATE_RANGE[1], step: BURR_RATE_RANGE[2], value: this.rate[region], 'aria-label': 'Drill speed',
       oninput: (e: Event) => { this.rate[region] = parseFloat((e.target as HTMLInputElement).value); rateOut.textContent = `${this.rate[region]} mm/s`; } });
     const sideChip = (sd: 'L' | 'R') => h('button', { type: 'button', class: 'chip', 'aria-pressed': String(s.drillSide === sd),
-      onclick: () => (mode ? go(mode, sd) : this.update((x) => { x.drillSide = sd; })) }, sd === 'L' ? 'From the left' : 'From the right');
+      onclick: () => (mode ? go(mode, sd) : this.update((x) => { x.drillSide = sd; })) },
+      pick === 'laminoplasty' ? (sd === 'L' ? 'Open on the left' : 'Open on the right') : sd === 'L' ? 'From the left' : 'From the right');
     const what: Record<DrillMode, string> = {
       foraminotomy: `Drill the ${up}–${lo} foramen from behind, where the ${root.toLowerCase()} exits: the two vertebrae at once, with a round ${BURR_MM}-mm burr.`,
       acdf: `Drill the ${up}–${lo} disc space from the front, the disc taken out: the two vertebrae at once, with a round ${BURR_MM}-mm burr.`,
       lamEnBloc: `Take off the lamina of ${up} in one piece: drill a trough through each side, where the lamina meets the lateral mass, then lift it off with its spinous process. ${up} alone, with a round ${BURR_MM}-mm burr.`,
       lamPiecemeal: `Take off the spinous process of ${up}, then drill its laminae away. ${up} alone, with a round ${BURR_MM}-mm burr.`,
+      laminoplasty: `Open the lamina of ${up} like a door: drill a trough through both cortices on the open side (${s.drillSide === 'L' ? 'left' : 'right'}), and one through the outer cortex only on the other, where the inner cortex is left as the hinge; then open it. ${up} alone, with a round ${BURR_MM}-mm burr.`,
       overTheTop: `Decompress ${up}–${lo} from one side: a laminotomy on the approach side, then over the top, under the base of the spinous process, to the other side’s lamina and lateral recess. The two vertebrae, with a round ${BURR_MM}-mm burr.`,
       spSplit: `Split the spinous process of ${up} in the midline and detach its base, draw the halves apart, then decompress ${up}–${lo} between them. The two vertebrae, with a round ${BURR_MM}-mm burr.`,
     };
@@ -198,20 +208,21 @@ export class DrillPanel implements PointerTool {
       acdf: [ACDF_DRILL_STATEMENTS.distraction, ACDF_DRILL_STATEMENTS.lateral, ACDF_DRILL_STATEMENTS.drawn],
       lamEnBloc: [LAMINECTOMY_STATEMENTS.enBloc, LAMINECTOMY_STATEMENTS.piecemeal, LAMINECTOMY_STATEMENTS.drawn],
       lamPiecemeal: [LAMINECTOMY_STATEMENTS.piecemeal, LAMINECTOMY_STATEMENTS.enBloc, LAMINECTOMY_STATEMENTS.drawn],
+      laminoplasty: [LAMINOPLASTY_STATEMENTS.technique, LAMINOPLASTY_STATEMENTS.angle, LAMINOPLASTY_STATEMENTS.drawn],
       overTheTop: [OVER_THE_TOP_STATEMENTS.technique, OVER_THE_TOP_STATEMENTS.drawn],
       spSplit: [SPLIT_STATEMENTS.technique, SPLIT_STATEMENTS.drawn],
     };
     this.el.append(...([
       h('div', { class: 'chips', role: 'group', 'aria-label': 'Approach' }, ...modes.map(chip)),
       h('p', {}, what[pick]),
-      pick === 'overTheTop' ? h('div', { class: 'chips', role: 'group', 'aria-label': 'Approach side' }, sideChip('L'), sideChip('R')) : null,
+      DRILL_MODES[pick].sided ? h('div', { class: 'chips', role: 'group', 'aria-label': pick === 'laminoplasty' ? 'Open side' : 'Approach side' }, sideChip('L'), sideChip('R')) : null,
       h('div', { class: 'chips' },
         h('button', { type: 'button', class: 'chip', 'aria-pressed': String(!!mode), onclick: () => go(mode ? null : pick) }, mode ? 'Stop drilling' : 'Start drilling'),
         mode ? h('button', { type: 'button', class: 'chip', onclick: () => this.undoStroke() }, 'Undo') : null,
         mode ? h('button', { type: 'button', class: 'chip', onclick: () => this.resetPair() }, 'Start the bone over') : null),
       mode ? this.actions : null,
       mode ? h('label', { class: 'range scope-range' }, h('span', {}, 'Drill speed ', rateOut), rateIn) : null,
-      mode && this.spreadIn ? h('label', { class: 'range scope-range' }, h('span', {}, pick === 'acdf' ? 'Distraction ' : 'Halves drawn apart ', this.spreadOut), this.spreadIn) : null,
+      mode && this.spreadIn ? h('label', { class: 'range scope-range' }, h('span', {}, `${SPREAD_LABEL[pick]} `, this.spreadOut), this.spreadIn) : null,
       mode ? h('p', { class: 'aside' }, 'Point at the bone and hold the button to drill in along your line of sight; move to widen. The right button turns the view (with Shift: moves it), the wheel zooms; Ctrl+Z undoes a stroke.') : null,
       this.out,
       ...statements[pick].map(st)] as (Node | null)[]).filter((x): x is Node => x !== null));
@@ -226,7 +237,8 @@ export class DrillPanel implements PointerTool {
     if (!this.active || !vol || !mode || !PIECES.has(mode)) return;
     const pieces = vol.pieces();
     const halves = mode === 'spSplit' ? pieces.filter((l) => { const L = vol.layers[l], a = vol.spinousAt(L.vertebra, L.centre!); return L.vertebra === 0 && a.front < 0; }) : [];
-    const loose = pieces.filter((l) => !halves.includes(l));
+    const door = pieces.find((l) => vol.layers[l].hinge);
+    const loose = pieces.filter((l) => !halves.includes(l) && l !== door);
     const mm3 = (ls: number[]) => Math.round(ls.reduce((a, l) => a + vol.layers[l].mm3, 0));
     const btn = (label: string, fn: () => void, enabled = true) => h('button', { type: 'button', class: 'chip', disabled: !enabled || undefined, onclick: fn }, label);
     const lvl = SP.get(this.pair!.upper)?.level ?? '';
@@ -240,6 +252,20 @@ export class DrillPanel implements PointerTool {
     } else {
       const chips: Node[] = [];
       if (mode === 'lamPiecemeal') chips.push(btn('Take off the spinous process', () => this.osteotomy(['spinous']), vol.spinousLeft(0)));
+      if (mode === 'laminoplasty') {
+        const openSide = this.side === 'L' ? 'left' : 'right', hingeSide = this.side === 'L' ? 'right' : 'left';
+        if (door !== undefined) {
+          const hg = vol.layers[door].hinge!;
+          rows.push(h('p', {}, `The door is free, hinged on the ${hg.axis.dot(new THREE.Vector3(...this.pair!.landmarks[0].axes[2])) > 0 ? 'right' : 'left'}: open it further or close it with the slider.`));
+        } else {
+          const at = vol.attachment(0);
+          const openJoined = at ? (this.side === 'L' ? at.L : at.R) : false, hingeJoined = at ? (this.side === 'L' ? at.R : at.L) : false;
+          rows.push(h('p', {}, !at ? `There is no lamina of ${lvl} left to open.`
+            : `Open side (${openSide}): ${openJoined ? 'still joined' : 'through'}. Hinge side (${hingeSide}): ${hingeJoined ? `joined, the hinge (the door opens once at most ${HINGE_MAX_MM} mm of bone is left under its trough)` : 'through as well'}.`),
+          ...(this.doorWhy ? [h('p', { class: 'drill-stop' }, this.doorWhy)] : []));
+          chips.push(btn('Open the door', () => this.openDoor(), !!at && !openJoined && hingeJoined));
+        }
+      }
       if (mode === 'spSplit') chips.push(btn('Split it in the midline', () => this.osteotomy(['split'])), btn('Detach its base', () => this.osteotomy(['base'])));
       if (loose.length) chips.push(btn(`Take out the loose bone (${mm3(loose)} mm³)`, () => this.lift(loose)));
       if (mode === 'spSplit') rows.push(h('p', {}, halves.length >= 2 ? `The spinous process of ${lvl} is split and detached: ${halves.length} pieces, drawn apart with the slider.`
@@ -322,7 +348,7 @@ export class DrillPanel implements PointerTool {
   private rebuild(): void {
     const vol = this.vol!;
     this.clearMeshes();
-    this.lgroups = vol.layers.map(() => new THREE.Group());
+    this.lgroups = vol.layers.map(() => { const g = new THREE.Group(); g.matrixAutoUpdate = false; return g; });
     this.group.add(...this.lgroups);
     const [cx, cy, cz] = vol.chunks;
     vol.layers.forEach((_, l) => {
@@ -380,6 +406,21 @@ export class DrillPanel implements PointerTool {
     this.vol.reset();
     if (this.mode && PIECES.has(this.mode)) this.vol.settle();
     this.rebuild();
+    this.readout(null);
+  }
+
+  /** why the door did not open, the last time it was tried */
+  private doorWhy = '';
+
+  /** A laminoplasty's door freed and opened (if its troughs allow it). */
+  private openDoor(): void {
+    if (!this.vol) return;
+    this.remember();
+    const r = this.vol.openDoor(0, this.side);
+    if (!r.ok) { this.undo.pop(); this.doorWhy = r.why; this.refreshActions(); return; }
+    this.doorWhy = '';
+    this.rebuild();
+    if (!this.mm) this.update((x) => { x.distract = DOOR_START_DEG; });
     this.readout(null);
   }
 
@@ -457,6 +498,7 @@ export class DrillPanel implements PointerTool {
   up(): void {
     const was = this.pressing;
     this.pressing = false;
+    if (was) this.doorWhy = '';
     // bone the stroke cut loose becomes a piece of its own
     if (was && this.vol && this.mode && PIECES.has(this.mode)) { if (this.vol.settle()) { this.rebuild(); this.readout(null); } else this.refreshActions(); }
     if (this.ray) this.hover(this.ray);

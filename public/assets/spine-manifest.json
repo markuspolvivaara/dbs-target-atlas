@@ -284,6 +284,18 @@
   "ma2025": {
    "citation": "Ma Y, Mao L, Liu G, Hu L, Chen K. Research Progress on the Posterior Midline Lumbar Spinous Process-Splitting Approach. Orthop Surg. 2025;17(4):990-998. doi:10.1111/os.14355.",
    "url": "https://doi.org/10.1111/os.14355"
+  },
+  "mitsunaga2012": {
+   "citation": "Mitsunaga LK, Klineberg EO, Gupta MC. Laminoplasty techniques for the treatment of multilevel cervical stenosis. Adv Orthop. 2012;2012:307916. doi:10.1155/2012/307916.",
+   "url": "https://doi.org/10.1155/2012/307916"
+  },
+  "wang2018": {
+   "citation": "Wang J, Sun T, He X. Impact of different laminae open angles on axial symptoms after expansive open-door laminoplasty. Medicine (Baltimore). 2018;97(32):e11823. doi:10.1097/MD.0000000000011823.",
+   "url": "https://doi.org/10.1097/MD.0000000000011823"
+  },
+  "cho2026": {
+   "citation": "Cho N, Mehta AI, Vedantam A, Goodwin CR, Agochukwu UF, Grassner L, et al. Techniques for Cervical Laminoplasty. Global Spine J. 2026;16(1_suppl):53S-63S. doi:10.1177/21925682251375448.",
+   "url": "https://doi.org/10.1177/21925682251375448"
   }
  },
  "generatedBy": "pipeline/spine_segment.py (TotalSegmentator) + pipeline/spine_build.py + pipeline/compress.mjs",

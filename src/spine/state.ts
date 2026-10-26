@@ -30,20 +30,23 @@ export interface SpineState extends ViewState {
   /** drilling the selected level and the vertebra below it (cervical: a posterior foraminotomy, an anterior discectomy,
    * a laminectomy of the level alone; lumbar: an over-the-top decompression or a spinous process-splitting one) */
   drill: DrillMode | null;
-  /** at an anterior discectomy, the two vertebrae drawn this far apart (mm); at a spinous process split, the two halves */
+  /** at an anterior discectomy, the two vertebrae drawn this far apart (mm); at a spinous process split, the two halves
+   * (mm); at a laminoplasty, how far the door is opened (deg) */
   distract: number;
-  /** the side an over-the-top decompression comes from */
+  /** the side an over-the-top decompression comes from; the side a laminoplasty opens on (its hinge on the other) */
   drillSide: 'L' | 'R';
 }
 
-export type DrillMode = 'foraminotomy' | 'acdf' | 'lamEnBloc' | 'lamPiecemeal' | 'overTheTop' | 'spSplit';
-/** each approach: its link code, the region it is offered in, and how far its slider draws the bone apart (mm, step) */
-export const DRILL_MODES: Record<DrillMode, { code: string; region: 'cervical' | 'lumbar'; spread?: [number, number] }> = {
+export type DrillMode = 'foraminotomy' | 'acdf' | 'lamEnBloc' | 'lamPiecemeal' | 'laminoplasty' | 'overTheTop' | 'spSplit';
+/** each approach: its link code, the region it is offered in, how far its slider draws the bone apart or opens it (to
+ * a maximum, in steps) and in what unit, and whether it is done from a side */
+export const DRILL_MODES: Record<DrillMode, { code: string; region: 'cervical' | 'lumbar'; spread?: [number, number]; unit?: 'mm' | '°'; sided?: boolean }> = {
   foraminotomy: { code: '1', region: 'cervical' },
   acdf: { code: 'a', region: 'cervical', spread: [5, 0.5] },
   lamEnBloc: { code: 'e', region: 'cervical' },
   lamPiecemeal: { code: 'p', region: 'cervical' },
-  overTheTop: { code: 'o', region: 'lumbar' },
+  laminoplasty: { code: 'l', region: 'cervical', spread: [60, 5], unit: '°', sided: true },
+  overTheTop: { code: 'o', region: 'lumbar', sided: true },
   spSplit: { code: 's', region: 'lumbar', spread: [12, 1] },
 };
 export const DISTRACT_MAX_MM = DRILL_MODES.acdf.spread![0];
@@ -121,7 +124,7 @@ export function encodeSpine(s: SpineState): string {
     if (s.drill && drillPairFor(s.level)) {
       p.set('dr', DRILL_MODES[s.drill].code);
       if (DRILL_MODES[s.drill].spread && s.distract) p.set('dd', String(s.distract));
-      if (s.drill === 'overTheTop' && s.drillSide !== 'L') p.set('ds', s.drillSide);
+      if (DRILL_MODES[s.drill].sided && s.drillSide !== 'L') p.set('ds', s.drillSide);
     }
   }
   const q = p.toString();
@@ -175,7 +178,7 @@ export function decodeSpine(hash: string): SpineState {
   s.drill = pair && mode && DRILL_MODES[mode].region === pair.region && pair.region === s.region ? mode : null;
   const dd = Number(p.get('dd')), spread = s.drill ? DRILL_MODES[s.drill].spread : undefined;
   s.distract = spread && Number.isFinite(dd) ? Math.max(0, Math.min(spread[0], Math.round(dd / spread[1]) * spread[1])) : 0;
-  s.drillSide = s.drill === 'overTheTop' && p.get('ds') === 'R' ? 'R' : 'L';
+  s.drillSide = s.drill && DRILL_MODES[s.drill].sided && p.get('ds') === 'R' ? 'R' : 'L';
   return s;
 }
 

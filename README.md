@@ -515,6 +515,11 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
   process are lifted off in one piece (Chang 2014); piece by piece, a rongeur takes the spinous process off at its base
   (a fifth of the way from the canal's back wall to its tip: a drawing choice) and the laminae are drilled away (Dave
   2020 on the conventional rongeur and the burr). The ligamentum flavum is not drawn.
+- **Drilling: open-door laminoplasty** (the same box, C2–C7, the level alone; open on the left or right): a trough
+  through on the open side and one on the other leaving at most 2 mm of bone under it (standing for the inner cortex:
+  a drawing choice); the door, the lamina and spinous process, then turns about a line along the vertebra's axis
+  through the hinge, opened up to 60° with a slider (Mitsunaga 2012 and Cho 2026 on the technique; Wang 2018: the
+  open angle averaged 40°, 20–69°, and neck pain at 6 months was commoner at 40° or more).
 - **Drilling: lumbar decompressions** (L1–L4, with the vertebra below; the fields 1.5–1.7 MB): an over-the-top
   decompression (unilateral laminotomy for bilateral decompression) from the left or right, its view turned 15° to
   the approach side (Immanuel Rajan 2026), and a spinous process-splitting decompression: an osteotome (cuts drawn

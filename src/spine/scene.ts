@@ -61,7 +61,7 @@ export function spinePlan(s: Pick<SpineState, 'region' | 'level' | 'sel'> & Part
   if (drill && s.drill) {
     // the region's other bones step back (whatever the viewer's fade setting): those drilled stand out
     for (const st of SP_MANIFEST.structures) if (inRegion.has(st.id) && (st.category === 'vertebra' || st.category === 'bone')) looks.set(st.id, 'context');
-    const lam = s.drill === 'lamEnBloc' || s.drill === 'lamPiecemeal';
+    const lam = s.drill === 'lamEnBloc' || s.drill === 'lamPiecemeal' || s.drill === 'laminoplasty';
     const disc = s.drill === 'foraminotomy' || s.drill === 'acdf';
     for (const id of [drill.upper, ...(lam ? [] : [drill.lower]), ...(disc ? [drill.disc] : [])]) looks.set(id, 'hidden');
   }

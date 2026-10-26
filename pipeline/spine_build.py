@@ -928,7 +928,8 @@ REF_KEYS = ("hwang2019", "merckaert2015", "hasegawa1996", "zindrick1987", "fardo
             "kucherina2026", "jannelli2025", "hasan2025", "arumalla2021", "alicandri2020", "siribumrungwong2018",
             "kendirlioglu2026", "zhou2022", "aosurgeryref",
             "figa2025", "sung2018", "gonzalezvargas2026", "loganathan2023", "fidan2026", "kang2022", "zhang2020", "kong2022", "silverstein2015", "sugawara2015", "cheung2016",
-            "chang2014", "dave2020", "immanuelrajan2026", "ma2025")
+            "chang2014", "dave2020", "immanuelrajan2026", "ma2025",
+            "mitsunaga2012", "wang2018", "cho2026")
 
 
 def references() -> dict:
