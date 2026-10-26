@@ -55,12 +55,15 @@ export function spinePlan(s: Pick<SpineState, 'region' | 'level' | 'sel'> & Part
   const screwBone = s.screw && s.level ? vertebraOf(s.level) : undefined;
   if (screwBone) looks.set(screwBone.id, s.cut === 'screw' ? 'primary' : 'context');
   if (s.sel && SP.has(s.sel)) looks.set(s.sel, 'primary');
-  // drilling: the pair's bone is drawn by the drill (as cut) and its disc taken out
+  // drilling: the bone drilled is drawn by the drill (as cut): both vertebrae, or at a laminectomy the upper alone; at a
+  // foraminotomy and a discectomy the disc is taken out
   const drill = s.drill ? drillPairFor(s.level) : undefined;
-  if (drill) {
-    // the region's other bones step back (whatever the viewer's fade setting): the two drilled stand out
+  if (drill && s.drill) {
+    // the region's other bones step back (whatever the viewer's fade setting): those drilled stand out
     for (const st of SP_MANIFEST.structures) if (inRegion.has(st.id) && (st.category === 'vertebra' || st.category === 'bone')) looks.set(st.id, 'context');
-    for (const id of [drill.upper, drill.lower, drill.disc]) looks.set(id, 'hidden');
+    const lam = s.drill === 'lamEnBloc' || s.drill === 'lamPiecemeal';
+    const disc = s.drill === 'foraminotomy' || s.drill === 'acdf';
+    for (const id of [drill.upper, ...(lam ? [] : [drill.lower]), ...(disc ? [drill.disc] : [])]) looks.set(id, 'hidden');
   }
   const focusIds = s.level ? [...focus] : r.id === 'ccj' ? r.structures.filter((id) => SP.get(id)?.category === 'bone')
     : r.structures.filter((id) => SP.get(id)?.category === 'vertebra' || id === 'sp_sacrum');

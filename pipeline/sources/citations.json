@@ -633,5 +633,33 @@
   "url": "https://doi.org/10.4184/asj.2016.10.2.385",
   "pmid": "27114784",
   "pmcid": "PMC4843080"
+ },
+ "chang2014": {
+  "citation": "Chang V, Lu DC, Hoffman H, Buchanan C, Holly LT. Clinical results of cervical laminectomy and fusion for the treatment of cervical spondylotic myelopathy in 58 consecutive patients. Surg Neurol Int. 2014;5(Suppl 3):S133-7. doi:10.4103/2152-7806.130670.",
+  "doi": "10.4103/2152-7806.130670",
+  "url": "https://doi.org/10.4103/2152-7806.130670",
+  "pmid": "24843810",
+  "pmcid": "PMC4023005"
+ },
+ "dave2020": {
+  "citation": "Dave BR, Krishnan A, Rai RR, Degulmadi D, Mayi S, Gudhe M. The Effectiveness and Safety of Ultrasonic Bone Scalpel Versus Conventional Method in Cervical Laminectomy: A Retrospective Study of 311 Patients. Global Spine J. 2020;10(6):760-766. doi:10.1177/2192568219876246.",
+  "doi": "10.1177/2192568219876246",
+  "url": "https://doi.org/10.1177/2192568219876246",
+  "pmid": "32707009",
+  "pmcid": "PMC7383792"
+ },
+ "immanuelrajan2026": {
+  "citation": "Immanuel Rajan N, John SC, Arsha AV. Microscopic tubular unilateral laminotomy for bilateral decompression: a detailed surgical illustration and single-arm cohort study on outcomes in lumbar canal stenosis. J Orthop Surg Res. 2026;21(1):79. doi:10.1186/s13018-025-06564-8.",
+  "doi": "10.1186/s13018-025-06564-8",
+  "url": "https://doi.org/10.1186/s13018-025-06564-8",
+  "pmid": "41484628",
+  "pmcid": "PMC12866137"
+ },
+ "ma2025": {
+  "citation": "Ma Y, Mao L, Liu G, Hu L, Chen K. Research Progress on the Posterior Midline Lumbar Spinous Process-Splitting Approach. Orthop Surg. 2025;17(4):990-998. doi:10.1111/os.14355.",
+  "doi": "10.1111/os.14355",
+  "url": "https://doi.org/10.1111/os.14355",
+  "pmid": "39777989",
+  "pmcid": "PMC11962294"
  }
 }

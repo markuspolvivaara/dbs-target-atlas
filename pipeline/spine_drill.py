@@ -1,6 +1,6 @@
-"""The spine section's drilling volumes: for each pair of adjacent cervical vertebrae, the bone as a field the browser
-can cut away with a burr (a posterior foraminotomy drills both: the lower lamina and inferior articular process of the
-one above, the superior articular process of the one below).
+"""The spine section's drilling volumes: for each pair of adjacent cervical and lumbar vertebrae, the bone as a field the
+browser can cut away with a burr (a posterior foraminotomy drills both: the lower lamina and inferior articular process
+of the one above, the superior articular process of the one below; a cervical laminectomy only the upper one).
 
 For each pair, on the CT's own grid (0.72 x 0.72 x 0.7 mm), cropped to the two vertebrae and a margin:
   * each vertebra's bone field: the volume spine_build.py takes the vertebra's surface from (the CT within the
@@ -10,7 +10,12 @@ For each pair, on the CT's own grid (0.72 x 0.72 x 0.7 mm), cropped to the two v
   * the CT itself (smoothed as the bone field), uint8 from DENSITY_MIN_HU in DENSITY_STEP_HU steps: the cut surface is
     coloured by it (cortex against cancellous bone);
   * the distance (mm, uint8 in DIST_STEP_MM steps; the CT and the distances only within REACH_VOX of the bone) from each voxel to the dural sac (TotalSegmentator's segmentation of
-    this CT), to the nerve roots and to the vertebral arteries (both schematic: spine_build.py's tubes).
+    this CT), to the nerve roots and to the vertebral arteries (both schematic: spine_build.py's tubes; lumbar: no
+    artery, the field left far).
+Each vertebra also gets landmarks (spine frame, mm): its body centre (the bone still attached to it is what the flood
+from there reaches) and its own axes, and its spinous process: the midline through it, its tip, and its base, put
+SPINOUS_BASE of the way from the canal's back wall to the tip (a drawing choice: where a rongeur or an osteotome takes
+it off the laminae); the browser takes the spinous process as the bone joined to its tip behind that base.
 Writes public/assets/spine/drill_<pair>.bin.gz (the six fields one after another, C order) and
 src/data/generated/spine-drill.json. Run after spine_build.py (it reads the roots' and arteries' meshes).
 """
@@ -31,7 +36,11 @@ from skimage import measure
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import spine_build as B  # noqa: E402
 
-PAIRS = [("C2", "C3"), ("C3", "C4"), ("C4", "C5"), ("C5", "C6"), ("C6", "C7"), ("C7", "T1")]
+PAIRS = [("C2", "C3"), ("C3", "C4"), ("C4", "C5"), ("C5", "C6"), ("C6", "C7"), ("C7", "T1"),
+         ("L1", "L2"), ("L2", "L3"), ("L3", "L4"), ("L4", "L5")]   # (L5-S1: the sacrum is drawn from another segmentation)
+SPINOUS_BASE = 0.22       # the spinous process's base: this share of the way from the canal's back wall to its tip
+MIDLINE_MM = 1.5          # the midline strip (each side) the canal's back wall and the tip are found in
+BIN_MM = 0.5
 MARGIN_VOX = 8            # the crop round the two vertebrae (as spine_build.py's)
 FIELD_ISO = 128           # the bone field's surface value (at BONE_HU) ...
 FIELD_HU_STEP = 4.0       # ... and its HU per unit (BONE_HU +- 512 HU)
@@ -41,7 +50,8 @@ STRUCTURE_REACH_MM = 4.0  # ... and the distances also within this of each struc
 REACH_VOX = 3             # the CT and the distances are kept only within this of the bone (where a burr can be): the
                           # rest is stored empty, so the files stay small
 SURFACE_SAMPLE_MM = 0.25  # the schematic tubes' surfaces sampled this densely for their distances
-CHECK_MEDIAN_MM, CHECK_P95_MM = 0.25, 0.8   # the field's surface against the drawn vertebra (decimated and smoothed)
+CHECK_MEDIAN_MM, CHECK_P95_MM = 0.3, 0.8    # the field's surface against the drawn vertebra (decimated and smoothed: the lumbar
+                                            # ones, larger for their triangles, lie a little further)
 OUT = B.GEN / "spine-drill.json"
 
 
@@ -64,13 +74,39 @@ def u8_dist(d: np.ndarray) -> np.ndarray:
     return np.clip(np.round(d / DIST_STEP_MM), 0, 255).astype(np.uint8)
 
 
+def landmarks(m_full: np.ndarray, aff: np.ndarray, ctd: dict, name: str, o: np.ndarray) -> dict:
+    """A vertebra's body centre, axes (lateral, anterior, up: towards the vertebra above) and spinous process (spine frame)."""
+    lab = label_of(name)
+    c = ctd[lab]
+    F = B.G.frame(ctd.get(lab - 1, c), ctd.get(lab + 1, c))   # (one of the two neighbours is enough)
+    P = nib.affines.apply_affine(aff, np.argwhere(m_full == lab)) - c
+    U, V = P @ F[0], P @ F[1]
+    # along the midline strip, backwards from the body: its back edge, the gap of the canal, then the arch to the tip
+    mid = np.abs(U) < MIDLINE_MM
+    occ = np.zeros(200, bool)
+    k = np.floor(-V[mid & (V < 0)] / BIN_MM).astype(int)
+    occ[k[k < 200]] = True
+    gap = int(np.argmax(~occ))                       # first empty bin behind the body
+    wall = gap + int(np.argmax(occ[gap:]))           # the canal's back wall (the arch's front at the midline)
+    tip = 199 - int(np.argmax(occ[::-1]))
+    v_wall, v_tip = -wall * BIN_MM, -(tip + 1) * BIN_MM
+    v_base = v_wall + SPINOUS_BASE * (v_tip - v_wall)
+    u_c = float(np.median(U[(V < (v_base + v_tip) / 2) & (np.abs(U) < 10)]))   # its midline, from its back half
+    pt = lambda u, v: (c + u * F[0] + v * F[1] - o).round(2).tolist()
+    return {"body": (c - o).round(2).tolist(), "axes": np.round(F, 5).tolist(),
+            "spinous": {"base": pt(u_c, v_base), "tip": pt(u_c, v_tip), "wall": pt(u_c, v_wall)}}
+
+
 def main() -> int:
     m_full, aff = B.load_mask()
     boxes = ndimage.find_objects(m_full)
     o = B.origin()
     vox = np.abs(np.diag(aff)[:3])
-    roots = [p for p in (glb_points(f"sp_root_c{i}") for i in range(3, 9)) if p is not None]
-    root_tree = cKDTree(np.vstack(roots)) if roots else None
+    ctd = {c["label"]: nib.affines.apply_affine(aff, [c["X"], c["Y"], c["Z"]]) for c in json.loads(B.CTD.read_text()) if "label" in c}
+    trees = {}
+    for region, ids in (("cervical", [f"sp_root_c{i}" for i in range(3, 9)]), ("lumbar", [f"sp_root_l{i}" for i in range(1, 6)] + ["sp_root_s1"])):
+        pts = [p for p in (glb_points(x) for x in ids) if p is not None]
+        trees[region] = cKDTree(np.vstack(pts)) if pts else None
     va = glb_points("sp_vertebral_artery")
     va_tree = cKDTree(va) if va is not None else None
     out = {"params": {"fieldIso": FIELD_ISO, "fieldHuStep": FIELD_HU_STEP, "boneHu": B.BONE_HU, "densityMinHu": DENSITY_MIN_HU,
@@ -100,7 +136,8 @@ def main() -> int:
         fields.append(u8_dist(ndimage.distance_transform_edt(~sac, sampling=vox) if sac.any() else np.full(m.shape, 99.0)))
         ijk = np.indices(m.shape).reshape(3, -1).T
         P = nib.affines.apply_affine(a, ijk)
-        for tree in (root_tree, va_tree):
+        region = "lumbar" if up.startswith("L") else "cervical"
+        for tree in (trees[region], va_tree if region == "cervical" else None):
             fields.append(u8_dist(tree.query(P, distance_upper_bound=52.0)[0].reshape(m.shape)) if tree is not None
                           else np.full(m.shape, 255, np.uint8))
         fields[3:] = [np.asarray(f) for f in fields[3:]]
@@ -125,10 +162,12 @@ def main() -> int:
         name = f"drill_{up.lower()}_{lo_.lower()}.bin.gz"
         data = gzip.compress(b"".join(np.ascontiguousarray(x).tobytes() for x in fields), 9, mtime=0)
         (B.PUBLIC / "spine" / name).write_bytes(data)
+        # the root named for the lower level: cervical, the one exiting here; lumbar, the one traversing (to the next foramen)
         root = f"sp_root_{'c8' if lo_ == 'T1' else lo_.lower()}"
-        out["pairs"].append({"id": pid, "upper": B.level_id(up), "lower": B.level_id(lo_), "disc": f"sp_disc_{up.lower()}_{lo_.lower()}",
-                             "root": root, "file": f"assets/spine/{name}", "bytes": len(data), "dims": list(m.shape),
-                             "affine": np.round(a, 5).tolist(), "check": checks})
+        out["pairs"].append({"id": pid, "region": region, "upper": B.level_id(up), "lower": B.level_id(lo_), "disc": f"sp_disc_{up.lower()}_{lo_.lower()}",
+                             "root": root, "artery": region == "cervical", "file": f"assets/spine/{name}", "bytes": len(data), "dims": list(m.shape),
+                             "affine": np.round(a, 5).tolist(), "check": checks,
+                             "landmarks": [landmarks(m_full, aff, ctd, x, o) for x in (up, lo_)]})
         print(pid, m.shape, f"{len(data) / 1024:.0f} KB", checks, flush=True)
     OUT.write_text(json.dumps(out, indent=1))
     for f in fails:

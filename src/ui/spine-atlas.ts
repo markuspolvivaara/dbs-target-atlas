@@ -9,7 +9,7 @@ import {
 } from '../spine/content';
 import { bodyChart } from './body-chart';
 import { ScrewPanel } from './spine-screw';
-import { DrillPanel } from './spine-drill';
+import { DRILL_TEXT, DrillPanel } from './spine-drill';
 import { drillPairFor } from '../spine/drill';
 import published from '../data/generated/spine-published.json';
 import { SCREW_LEVELS } from '../spine/screw';
@@ -358,13 +358,13 @@ export class SpineAtlasPage {
         ontoggle: (e: Event) => { this.screwOpen = (e.target as HTMLDetailsElement).open; },
       }, h('summary', {}, 'Virtual screw', s.screw ? h('span', { class: 'screw-box-tech' }, ` · ${TECHNIQUES[s.screw.tech].name}, ${TECHNIQUES[s.screw.tech].midline ? 'midline' : s.screw.side === 'L' ? 'left' : 'right'}`) : ''), this.screw.el));
     }
-    // drilling (a posterior foraminotomy): a cervical level and the one below, in a box of its own
-    if (s.region === 'cervical' && drillPairFor(s.level)) {
+    // drilling: a cervical or lumbar level and the one below, in a box of its own
+    if (drillPairFor(s.level)?.region === s.region) {
       if (this.drillOpen === null) this.drillOpen = !!s.drill;
       pane.append(h('details', {
         class: 'screw-box', open: this.drillOpen || s.drill || undefined,
         ontoggle: (e: Event) => { this.drillOpen = (e.target as HTMLDetailsElement).open; },
-      }, h('summary', {}, 'Drilling', s.drill ? h('span', { class: 'screw-box-tech' }, s.drill === 'acdf' ? ' · anterior discectomy' : ' · posterior foraminotomy') : ''), this.drill.el));
+      }, h('summary', {}, 'Drilling', s.drill ? h('span', { class: 'screw-box-tech' }, ` · ${DRILL_TEXT[s.drill].summary}`) : ''), this.drill.el));
     }
     if (s.sel) pane.append(this.card(s.sel));
     else if (s.level) pane.append(this.levelCard(s.level));

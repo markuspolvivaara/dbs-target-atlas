@@ -27,15 +27,26 @@ export interface SpineState extends ViewState {
   approach: { id: ApproachId | 'acdf'; side: 'L' | 'R' } | null;
   /** craniocervical junction: the measurement whose lines are drawn */
   measure: CcjMeasureId | null;
-  /** drilling the selected cervical level and the vertebra below it: from behind (a posterior foraminotomy) or from the
-   * front (an anterior cervical discectomy) */
+  /** drilling the selected level and the vertebra below it (cervical: a posterior foraminotomy, an anterior discectomy,
+   * a laminectomy of the level alone; lumbar: an over-the-top decompression or a spinous process-splitting one) */
   drill: DrillMode | null;
-  /** at an anterior discectomy, the two vertebrae drawn this far apart (mm) */
+  /** at an anterior discectomy, the two vertebrae drawn this far apart (mm); at a spinous process split, the two halves */
   distract: number;
+  /** the side an over-the-top decompression comes from */
+  drillSide: 'L' | 'R';
 }
 
-export type DrillMode = 'foraminotomy' | 'acdf';
-export const DISTRACT_MAX_MM = 5;
+export type DrillMode = 'foraminotomy' | 'acdf' | 'lamEnBloc' | 'lamPiecemeal' | 'overTheTop' | 'spSplit';
+/** each approach: its link code, the region it is offered in, and how far its slider draws the bone apart (mm, step) */
+export const DRILL_MODES: Record<DrillMode, { code: string; region: 'cervical' | 'lumbar'; spread?: [number, number] }> = {
+  foraminotomy: { code: '1', region: 'cervical' },
+  acdf: { code: 'a', region: 'cervical', spread: [5, 0.5] },
+  lamEnBloc: { code: 'e', region: 'cervical' },
+  lamPiecemeal: { code: 'p', region: 'cervical' },
+  overTheTop: { code: 'o', region: 'lumbar' },
+  spSplit: { code: 's', region: 'lumbar', spread: [12, 1] },
+};
+export const DISTRACT_MAX_MM = DRILL_MODES.acdf.spread![0];
 
 export interface ScrewState {
   tech: TechniqueId;
@@ -75,7 +86,7 @@ export function defaultSpineState(): SpineState {
     labels: 'hover',
     clip: { axial: { on: false, mm: 0 }, coronal: { on: false, mm: 0 }, sagittal: { on: false, mm: 0 } },
     cutSide: 'none', sliceSeq: 't1', lead: { ...DEFAULT_LEAD },
-    sel: null, hidden: [], lesion: null, cut: 'none', screw: null, approach: null, measure: null, cutAbove: null, cutPlane: null, drill: null, distract: 0,
+    sel: null, hidden: [], lesion: null, cut: 'none', screw: null, approach: null, measure: null, cutAbove: null, cutPlane: null, drill: null, distract: 0, drillSide: 'L',
   };
 }
 
@@ -108,8 +119,9 @@ export function encodeSpine(s: SpineState): string {
     if (s.approach && s.level) p.set('ap', `${s.approach.id}.${s.approach.side}`);
     if (s.measure && s.region === 'ccj') p.set('cm', s.measure);
     if (s.drill && drillPairFor(s.level)) {
-      p.set('dr', s.drill === 'acdf' ? 'a' : '1');
-      if (s.drill === 'acdf' && s.distract) p.set('dd', String(s.distract));
+      p.set('dr', DRILL_MODES[s.drill].code);
+      if (DRILL_MODES[s.drill].spread && s.distract) p.set('dd', String(s.distract));
+      if (s.drill === 'overTheTop' && s.drillSide !== 'L') p.set('ds', s.drillSide);
     }
   }
   const q = p.toString();
@@ -158,10 +170,12 @@ export function decodeSpine(hash: string): SpineState {
     : ap && s.level?.startsWith('C') && ap[1] === 'acdf' ? { id: 'acdf', side: ap[2] as 'L' | 'R' } : null;
   const cm = p.get('cm');
   s.measure = s.region === 'ccj' && CCJ_MEASURES.some((x) => x.id === cm) ? cm as CcjMeasureId : null;
-  const dr = p.get('dr');
-  s.drill = !drillPairFor(s.level) ? null : dr === '1' ? 'foraminotomy' : dr === 'a' ? 'acdf' : null;
-  const dd = Number(p.get('dd'));
-  s.distract = s.drill === 'acdf' && Number.isFinite(dd) ? Math.max(0, Math.min(DISTRACT_MAX_MM, Math.round(dd * 2) / 2)) : 0;
+  const dr = p.get('dr'), pair = drillPairFor(s.level);
+  const mode = (Object.keys(DRILL_MODES) as DrillMode[]).find((m) => DRILL_MODES[m].code === dr);
+  s.drill = pair && mode && DRILL_MODES[mode].region === pair.region && pair.region === s.region ? mode : null;
+  const dd = Number(p.get('dd')), spread = s.drill ? DRILL_MODES[s.drill].spread : undefined;
+  s.distract = spread && Number.isFinite(dd) ? Math.max(0, Math.min(spread[0], Math.round(dd / spread[1]) * spread[1])) : 0;
+  s.drillSide = s.drill === 'overTheTop' && p.get('ds') === 'R' ? 'R' : 'L';
   return s;
 }
 

@@ -556,6 +556,43 @@ export const ACDF_DRILL_STATEMENTS = {
   },
 } satisfies Record<string, Statement>;
 
+export const LAMINECTOMY_STATEMENTS = {
+  enBloc: {
+    text: 'In a series of 58 cervical laminectomies with fusion, the laminectomy was done en bloc: troughs were drilled with a high-speed matchstick burr at the lateral edge of the laminae, the ligamentum flavum was cut with Kerrison rongeurs, and the laminae were lifted off the spinal cord in one piece.',
+    refIds: ['chang2014'],
+  },
+  piecemeal: {
+    text: 'Conventionally the laminae are removed piece by piece with Kerrison and Leksell rongeurs, or cut on both sides with a Kerrison and removed en bloc. A Kerrison’s footplate placed under an intact lamina takes room in an already narrow canal; a high-speed burr does not enter the canal while it makes the troughs, though the last of the laminectomy is still done with a rongeur, a curette or a hook.',
+    refIds: ['dave2020'],
+  },
+  drawn: {
+    text: 'Here: only the upper vertebra is drilled, with a round 4-mm burr (a drawing choice); the ligamentum flavum, the interspinous ligaments and the muscles are not drawn. Bone no longer joined to the vertebral body is a loose piece: once both troughs are through, the laminae and the spinous process can be lifted off. The spinous process is taken off at a base placed a fifth of the way from the canal’s back wall to its tip (a drawing choice), in one bite instead of a rongeur’s many. Clearances are to the dural sac (segmented) and to the roots and vertebral arteries (schematic). Bone is simply taken away: nothing of the tissue’s behaviour is simulated.',
+    refIds: [],
+  },
+} satisfies Record<string, Statement>;
+
+export const OVER_THE_TOP_STATEMENTS = {
+  technique: {
+    text: 'In a microscopic tubular unilateral laminotomy for bilateral decompression (“over the top”), the laminotomy starts with a high-speed burr at the inferior edge of the upper lamina on the approach side and goes cranially to the insertion of the ligamentum flavum, which protects the dura meanwhile; the flavum is then removed, and the hypertrophied facet and osteophytes are burred. For the other side the table is tilted 10–20° away from the surgeon and the retractor angled medially: the burr clears the ventral part of the spinous process’s base, the flavum on the other side is removed and its lamina undercut, out to its lateral recess.',
+    refIds: ['immanuelrajan2026'],
+  },
+  drawn: {
+    text: 'Here: the two vertebrae of the segment, drilled with a round 5-mm burr (a drawing choice), seen from behind and a little from the approach side; the table’s tilt is a turn of the view. The ligamentum flavum is not drawn: the burr meets the dural sac where in the operation the flavum would still cover it. Clearances are to the dural sac (segmented) and to the roots (schematic). Bone is simply taken away: nothing of the tissue’s behaviour is simulated.',
+    refIds: [],
+  },
+} satisfies Record<string, Statement>;
+
+export const SPLIT_STATEMENTS = {
+  technique: {
+    text: 'In the classic spinous process-splitting approach (Watanabe 2005) the spinous process is split lengthwise in the midline and its base detached from the lamina, so the paraspinal muscles stay attached to both halves, which are drawn apart for the decompression and sutured back afterwards. In a cadaver study 10–12 mm of retraction was a safe margin that still allowed the whole procedure. In variants one half alone is detached, or the halves are tilted apart still attached to the lamina.',
+    refIds: ['ma2025'],
+  },
+  drawn: {
+    text: 'Here: the osteotome’s cuts are drawn 1.5 mm wide, along the midline of the upper vertebra’s spinous process down to its base and across its base (placed a fifth of the way from the canal’s back wall to its tip): drawing choices, as is which spinous process is split. The halves are drawn straight out to the sides, each half the distance; the muscles, ligaments and ligamentum flavum are not drawn. Both vertebrae can then be drilled with a round 5-mm burr (a drawing choice). Clearances are to the dural sac (segmented) and to the roots (schematic).',
+    refIds: [],
+  },
+} satisfies Record<string, Statement>;
+
 /** Kshettry 2015's region for a thoracic disc below `level` (T12 and its disc fall in T11-T12). */
 export function exposureRegion(level: string): 'T1-T2' | 'T3-T6' | 'T7-T10' | 'T11-T12' {
   const n = Number(level.slice(1));
@@ -569,7 +606,8 @@ export function crossCheckContent(): string[] {
   for (const t of Object.values(TECHNIQUES)) {
     for (const st of [t.start, t.size, t.note]) for (const r of st?.refIds ?? []) if (!SP_MANIFEST.references[r]) errs.push(`${t.id}: unknown reference ${r}`);
   }
-  for (const st of [...Object.values(APPROACHES).map((a) => a.removes), ...Object.values(APPROACH_STATEMENTS), ...Object.values(ACDF_STATEMENTS), ...Object.values(FORAMINOTOMY_STATEMENTS), ...Object.values(ACDF_DRILL_STATEMENTS)]) {
+  for (const st of [...Object.values(APPROACHES).map((a) => a.removes), ...Object.values(APPROACH_STATEMENTS), ...Object.values(ACDF_STATEMENTS), ...Object.values(FORAMINOTOMY_STATEMENTS), ...Object.values(ACDF_DRILL_STATEMENTS),
+    ...Object.values(LAMINECTOMY_STATEMENTS), ...Object.values(OVER_THE_TOP_STATEMENTS), ...Object.values(SPLIT_STATEMENTS)]) {
     for (const r of st.refIds) if (!SP_MANIFEST.references[r]) errs.push(`approach: unknown reference ${r}`);
   }
   return errs;

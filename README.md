@@ -468,7 +468,8 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
   nerve injuries (Hasan 2025; Arumalla 2021), landmark levels and their variability (Siribumrungwong 2018;
   Alicandri-Ciufelli 2020) beside the levels the hyoid, thyroid cartilage and cricoid project to on this CT, and the
   width between the foramina transversaria per level.
-- **Thoracic**: vertebrae T1–T12, discs, canal contents, schematic roots T1–T12 with a short intercostal course;
+- **Thoracic**: vertebrae T1–T12, discs, canal contents, schematic roots T1–T12 (from the sac level with the upper part
+  of their foramen, straight out beneath the pedicle: a drawing choice) with a short intercostal course;
   canal and disc height measured per level; the foramen's size is not reported (the rib heads, not drawn, form
   part of its wall). No ribs and no ventral anatomy: the section serves the dorsal approaches.
 - **Bone**: vertebrae C1–L5 from the CT's bone surface (VerSe's hand-corrected masks only assign bone to each
@@ -496,7 +497,8 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
   Gertzbein–Robbins, the screw diameter as a share of the pedicle width, and the nearest structures at risk; a cut
   along the screw. Data from `pipeline/spine_screw.py` (a bone distance field per level, loaded on demand).
 - **Drilling: posterior foraminotomy or anterior discectomy (ACDF)** (a box of its own for C2–C7): the selected level and the vertebra below it are
-  drilled with a round 4-mm burr held against the bone along the line of sight (4 mm a second, a drawing choice);
+  drilled with a round 4-mm burr held against the bone along the line of sight (its speed set by a slider: at first 4 mm a
+  second in the neck and 8 in the lumbar spine, where the burr is 5 mm; drawing choices);
   the bone is this CT's own (each vertebra's field, built as its drawn surface: within 0.25 mm median of it), cut
   bone coloured by the CT's density, and where little bone is left over the dural sac, a root or the vertebral
   artery, its colour shows through. The burr's clearance to the dural sac (segmented) and to the root and the
@@ -507,6 +509,18 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
   5 mm apart along the spine (each half the distance; Kang 2022: 2–3 mm beyond the disc's own height opened the
   foramina most); its notes (the uncovertebral joint as the lateral limit, the vertebral artery 1–2 mm beyond it) are
   from Cheung 2016 and Sugawara 2015. The foraminotomy starts straight from behind; the other bones are see-through.
+- **Drilling: cervical laminectomy** (the same box, C2–C7; the level alone is drilled, the vertebra below drawn as it is),
+  en bloc or piece by piece. Bone no longer joined to its vertebral body becomes a loose piece: en bloc, once troughs
+  are drilled through on both sides (the panel says on which side the lamina still holds), the laminae and spinous
+  process are lifted off in one piece (Chang 2014); piece by piece, a rongeur takes the spinous process off at its base
+  (a fifth of the way from the canal's back wall to its tip: a drawing choice) and the laminae are drilled away (Dave
+  2020 on the conventional rongeur and the burr). The ligamentum flavum is not drawn.
+- **Drilling: lumbar decompressions** (L1–L4, with the vertebra below; the fields 1.5–1.7 MB): an over-the-top
+  decompression (unilateral laminotomy for bilateral decompression) from the left or right, its view turned 15° to
+  the approach side (Immanuel Rajan 2026), and a spinous process-splitting decompression: an osteotome (cuts drawn
+  1.5 mm wide) splits the upper vertebra's spinous process in the midline and detaches its base, and the halves are
+  drawn up to 12 mm apart (Ma 2025: 10–12 mm was a safe retraction in cadavers). No vertebral artery here; clearances
+  are to the dural sac and the roots.
 - **Dorsal approaches to a thoracic disc** (level card): transpedicular, costotransversectomy and lateral
   extracavitary, from either side: what each removes (published technique descriptions), the share of the ventral
   canal each exposed in cadavers for the level's region (Kshettry 2015), which discs suit which approach
