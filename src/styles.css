@@ -445,3 +445,9 @@ kbd { font: inherit; font-size: 0.9em; border: 1px solid var(--line); border-bot
 .scope-range { display: grid; gap: 2px; margin: 8px 0; font-size: 14px; }
 .scope-range output { color: var(--muted); font-variant-numeric: tabular-nums; }
 .scope-out { margin-top: 8px; font-size: 14px; }
+
+/* the spine's drilling: the burr's clearances */
+.drill-clear li { padding: 2px 0; }
+.drill-clear .clear-safe strong { color: var(--c-spSafe); }
+.drill-clear .clear-caution strong { color: var(--c-spCaution); }
+.drill-clear .clear-risk strong { color: var(--c-spRisk); }

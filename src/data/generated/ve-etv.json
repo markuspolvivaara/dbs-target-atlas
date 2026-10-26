@@ -24,14 +24,14 @@
  },
  "acpcLengthMm": 25.4,
  "wallsMovedMm": {
-  "ve_fornix": 2.76,
+  "ve_fornix": 2.78,
   "ve_septum_pellucidum": 1.47,
-  "ve_thalamus": 2.55,
+  "ve_thalamus": 2.52,
   "ve_caudate_nucleus": 4.08,
   "ve_stria_terminalis": 2.31,
-  "ve_hypothalamus": 1.57,
-  "ve_optic_chiasm": 0.9,
-  "ve_optic_tract": 0.57,
+  "ve_hypothalamus": 1.58,
+  "ve_optic_chiasm": 0.91,
+  "ve_optic_tract": 0.59,
   "ve_anterior_commissure": 2.27,
   "ve_posterior_commissure": 2.83,
   "ve_habenula": 1.47,
@@ -40,7 +40,7 @@
  },
  "infundibularRecessAcpcMm": [
   -2.21,
-  -9.97
+  -9.96
  ],
  "targetAcpcMm": [
   -5.39,
@@ -50,7 +50,7 @@
   -10.77,
   -12.41
  ],
- "targetToBasilarApexMm": 7.13,
+ "targetToBasilarApexMm": 7.12,
  "frame": {
   "origin": [
    0.52,
@@ -75,9 +75,9 @@
    17.45
   ],
   "infundibularRecess": [
-   0.62,
+   0.64,
    -4.92,
-   15.85
+   15.86
   ],
   "basilarApex": [
    0.79,
@@ -106,7 +106,7 @@
   "R": {
    "entry": [
     21.11,
-    -10.54,
+    -10.55,
     99.28
    ],
    "direction": [
@@ -133,13 +133,13 @@
   },
   "L": {
    "entry": [
-    -14.59,
+    -14.58,
     -10.29,
     99.67
    ],
    "direction": [
-    -0.1807,
-    -0.022,
+    -0.1806,
+    -0.0221,
     0.9833
    ],
    "target": [
@@ -153,7 +153,7 @@
     32.07
    ],
    "depthMm": 83.6,
-   "depthToMonroMm": 68.8,
+   "depthToMonroMm": 68.7,
    "fromMidlineMm": 15.1,
    "fromCoronalSutureMm": -14.1,
    "sagittalAngleDeg": 9.4,
@@ -162,7 +162,7 @@
  },
  "hydrocephalus": {
   "vesselIntrusionMaxMm": 0.05,
-  "correctedPoints": 420,
+  "correctedPoints": 412,
   "rest": {
    "evansIndex": 0.215,
    "frontalHornsMm": 25.8,
@@ -171,151 +171,151 @@
   },
   "hydrocephalus": {
    "evansIndex": 0.42,
-   "frontalHornsMm": 50.4,
+   "frontalHornsMm": 50.3,
    "thirdWidthMm": 23.5,
-   "floorToApexMm": 3.36
+   "floorToApexMm": 3.35
   },
   "amplitudeMm": {
-   "lateral": 31.92,
-   "third": 7.92,
-   "floor": 83.36
+   "lateral": 31.13,
+   "third": 7.85,
+   "floor": 82.93
   },
   "goal": {
    "evansIndex": 0.42,
    "thirdWidthMm": 23.5,
    "floorToApexMm": 2.75
   },
-  "maxMoveMm": 20.4,
+  "maxMoveMm": 20.1,
   "mammillary": {
    "placedAcpcMm": [
     -11.3,
-    -2.4
+    -2.61
    ],
    "daSilvaHydroAcpcMm": [
     -11.3,
     -7.05
    ],
    "protrudeMm": 4.0,
-   "movedMm": 4.02
+   "movedMm": 3.89
   },
-  "stoppedPoints": 1721,
+  "stoppedPoints": 1934,
   "mammillaryWrap": {
-   "wrappedPoints": 276,
-   "maxMoveMm": 2.18,
-   "minGapMm": -0.31
+   "wrappedPoints": 383,
+   "maxMoveMm": 2.22,
+   "minGapMm": -0.32
   },
   "wallsPushedMm": {
-   "ve_fornix": 0.63,
-   "ve_septum_pellucidum": 0.93,
-   "ve_thalamus": 0.69,
-   "ve_caudate_nucleus": 0.89,
-   "ve_stria_terminalis": 0.72,
-   "ve_hypothalamus": 3.43,
-   "ve_optic_chiasm": 0.67,
+   "ve_fornix": 0.69,
+   "ve_septum_pellucidum": 1.08,
+   "ve_thalamus": 0.47,
+   "ve_caudate_nucleus": 1.22,
+   "ve_stria_terminalis": 0.7,
+   "ve_hypothalamus": 2.08,
+   "ve_optic_chiasm": 0.31,
    "ve_optic_tract": 0.0,
-   "ve_anterior_commissure": 0.49,
+   "ve_anterior_commissure": 0.52,
    "ve_posterior_commissure": 0.5,
-   "ve_habenula": 0.46,
-   "ve_pineal_gland": 0.31,
+   "ve_habenula": 0.42,
+   "ve_pineal_gland": 0.35,
    "ve_corpus_callosum": 1.02
   },
   "plexusAtMonro": {
    "R": {
     "shiftMm": 2.5,
     "thalamusMedianMm": [
-     4.41,
-     2.19
+     4.43,
+     2.23
     ]
    },
    "L": {
     "shiftMm": 2.0,
     "thalamusMedianMm": [
-     4.29,
-     2.53
+     4.06,
+     2.29
     ]
    }
   },
-  "jacobianMinAround": 0.065,
+  "jacobianMinAround": 0.069,
   "points": {
    "target": [
-    -1.04,
-    -8.7,
-    12.47
+    -0.9,
+    -8.87,
+    12.64
    ],
    "monro": {
     "R": [
-     7.41,
-     -8.4,
-     28.96
+     7.48,
+     -8.33,
+     28.82
     ],
     "L": [
-     -7.6,
-     -8.92,
-     28.3
+     -7.7,
+     -8.98,
+     28.25
     ]
    },
    "mammillaryBodies": [
     0.7,
-    -17.42,
-    16.04
+    -17.28,
+    15.99
    ]
   },
   "trajectories": {
    "R": {
     "entry": [
-     38.63,
-     -7.3,
-     89.92
+     38.95,
+     -6.32,
+     89.63
     ],
     "direction": [
-     0.4558,
-     0.0161,
-     0.8899
+     0.4595,
+     0.0293,
+     0.8877
     ],
     "target": [
-     -1.04,
-     -8.7,
-     12.47
+     -0.9,
+     -8.87,
+     12.64
     ],
     "monro": [
-     7.41,
-     -8.4,
-     28.96
+     7.48,
+     -8.33,
+     28.82
     ],
-    "depthMm": 87.0,
+    "depthMm": 86.7,
     "depthToMonroMm": 68.5,
-    "fromMidlineMm": 38.1,
-    "fromCoronalSutureMm": -15.6,
-    "sagittalAngleDeg": 11.7,
-    "coronalAngleDeg": 27.6
+    "fromMidlineMm": 38.4,
+    "fromCoronalSutureMm": -14.7,
+    "sagittalAngleDeg": 12.6,
+    "coronalAngleDeg": 27.9
    },
    "L": {
     "entry": [
-     -33.92,
-     -9.79,
-     91.81
+     -35.17,
+     -9.46,
+     91.28
     ],
     "direction": [
-     -0.3828,
-     -0.0127,
-     0.9237
+     -0.3995,
+     -0.0069,
+     0.9167
     ],
     "target": [
-     -1.04,
-     -8.7,
-     12.47
+     -0.9,
+     -8.87,
+     12.64
     ],
     "monro": [
-     -7.6,
-     -8.92,
-     28.3
+     -7.7,
+     -8.98,
+     28.25
     ],
-    "depthMm": 85.9,
+    "depthMm": 85.8,
     "depthToMonroMm": 68.8,
-    "fromMidlineMm": 34.4,
-    "fromCoronalSutureMm": -18.0,
-    "sagittalAngleDeg": 9.9,
-    "coronalAngleDeg": 22.8
+    "fromMidlineMm": 35.7,
+    "fromCoronalSutureMm": -17.6,
+    "sagittalAngleDeg": 10.2,
+    "coronalAngleDeg": 23.9
    }
   }
  }

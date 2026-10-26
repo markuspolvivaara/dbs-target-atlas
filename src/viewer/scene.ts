@@ -33,6 +33,9 @@ export interface ScenePlan {
   colours?: Map<string, string>;
   /** cortical surfaces: leave out the faces flagged as opercular (the insular view) */
   cutOpercula?: boolean;
+  /** structures outlined as a selected one is, while nothing is selected (a section's focus, when the viewer's
+   * setting leaves the rest unfaded) */
+  outline?: string[];
 }
 
 /** Where to put a label on a cortical surface, on the pial and on the inflated surface (RAS mm, unit normals). */

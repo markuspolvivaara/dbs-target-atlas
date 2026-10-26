@@ -1,3 +1,4 @@
+import { drillPairFor } from './drill';
 import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
@@ -26,6 +27,8 @@ export interface SpineState extends ViewState {
   approach: { id: ApproachId | 'acdf'; side: 'L' | 'R' } | null;
   /** craniocervical junction: the measurement whose lines are drawn */
   measure: CcjMeasureId | null;
+  /** drilling the selected cervical level and the vertebra below it (a posterior foraminotomy) */
+  drill: boolean;
 }
 
 export interface ScrewState {
@@ -66,7 +69,7 @@ export function defaultSpineState(): SpineState {
     labels: 'hover',
     clip: { axial: { on: false, mm: 0 }, coronal: { on: false, mm: 0 }, sagittal: { on: false, mm: 0 } },
     cutSide: 'none', sliceSeq: 't1', lead: { ...DEFAULT_LEAD },
-    sel: null, hidden: [], lesion: null, cut: 'none', screw: null, approach: null, measure: null, cutAbove: null, cutPlane: null,
+    sel: null, hidden: [], lesion: null, cut: 'none', screw: null, approach: null, measure: null, cutAbove: null, cutPlane: null, drill: false,
   };
 }
 
@@ -98,6 +101,7 @@ export function encodeSpine(s: SpineState): string {
     if (s.lesion) p.set('les', `${s.lesion.pair}.${s.lesion.zone}.${s.lesion.side}`);
     if (s.approach && s.level) p.set('ap', `${s.approach.id}.${s.approach.side}`);
     if (s.measure && s.region === 'ccj') p.set('cm', s.measure);
+    if (s.drill && drillPairFor(s.level)) p.set('dr', '1');
   }
   const q = p.toString();
   return `#/${s.page}${q ? '?' + q : ''}`;
@@ -145,6 +149,7 @@ export function decodeSpine(hash: string): SpineState {
     : ap && s.level?.startsWith('C') && ap[1] === 'acdf' ? { id: 'acdf', side: ap[2] as 'L' | 'R' } : null;
   const cm = p.get('cm');
   s.measure = s.region === 'ccj' && CCJ_MEASURES.some((x) => x.id === cm) ? cm as CcjMeasureId : null;
+  s.drill = p.get('dr') === '1' && !!drillPairFor(s.level);
   return s;
 }
 

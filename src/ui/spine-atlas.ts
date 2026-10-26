@@ -9,6 +9,8 @@ import {
 } from '../spine/content';
 import { bodyChart } from './body-chart';
 import { ScrewPanel } from './spine-screw';
+import { DrillPanel } from './spine-drill';
+import { drillPairFor } from '../spine/drill';
 import published from '../data/generated/spine-published.json';
 import { SCREW_LEVELS } from '../spine/screw';
 import { refLinksFrom } from './reflinks';
@@ -170,6 +172,9 @@ export class SpineAtlasPage {
   private lastKey = '';
   private legendHover: string | null = null;
   private screw!: ScrewPanel;
+  private drill!: DrillPanel;
+  /** the drilling box: open or closed (null until the first level that has one) */
+  private drillOpen: boolean | null = null;
 
   constructor(private update: Update) {
     this.stage = h('section', { class: 'stage', 'aria-label': '3D viewer' });
@@ -178,6 +183,7 @@ export class SpineAtlasPage {
     this.buildStage();
     this.buildPanel();
     this.screw = new ScrewPanel(this.update, (objs) => this.viewer.setOverlay(objs), nameOf);
+    this.drill = new DrillPanel(this.update, this.viewer);
   }
 
   // ---------------------------------------------------------------- stage
@@ -286,9 +292,10 @@ export class SpineAtlasPage {
     this.stage.querySelectorAll<HTMLButtonElement>('[data-hemi]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.hemi === s.hemi)));
     this.stage.querySelectorAll<HTMLButtonElement>('.toolbar [data-labels]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.labels === s.labels)));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((b) => b.toggleAttribute('data-active', b.dataset.preset === s.cam.preset));
-    const key = `${s.region}|${s.level}|${s.sel}|${s.hidden.join(',')}|${JSON.stringify(s.lesion)}|${s.cut}|${s.screw?.tech}|${s.screw?.side}|${JSON.stringify(s.approach)}|${s.measure}|${Object.values(s.layers).map((l) => (l?.on ? 1 : 0)).join('')}`;
+    const key = `${s.region}|${s.level}|${s.sel}|${s.drill}|${s.hidden.join(',')}|${JSON.stringify(s.lesion)}|${s.cut}|${s.screw?.tech}|${s.screw?.side}|${JSON.stringify(s.approach)}|${s.measure}|${Object.values(s.layers).map((l) => (l?.on ? 1 : 0)).join('')}`;
     if (key !== this.lastKey || !prev) { this.lastKey = key; this.renderOverview(); }
     this.screw.render(s);
+    this.drill.render(s);
     this.drawCcj(s);
     this.renderLayers();
     if (prev && prev.sel !== s.sel && s.sel) this.selectTab('overview', false);
@@ -335,14 +342,14 @@ export class SpineAtlasPage {
       h('div', { class: 'chips grp-chips', role: 'group', 'aria-label': 'Region' }, ...REGIONS.map((x) => h('button', {
         type: 'button', class: 'chip', 'aria-pressed': String(x.id === r.id), 'data-v': x.id, disabled: !x.ready,
         title: x.ready ? undefined : 'Not built yet', onclick: () => this.update((st) => {
-          st.region = x.id; st.level = null; st.lesion = null; st.screw = null; st.approach = null; st.sel = null; st.measure = null; st.cam = { preset: null };
+          st.region = x.id; st.level = null; st.lesion = null; st.screw = null; st.approach = null; st.sel = null; st.measure = null; st.drill = false; st.cam = { preset: null };
           st.hemi = 'both';
           st.cutSide = 'none';
         }, { camera: true }),
       }, x.name, x.ready ? '' : ' (later)'))));
     if (r.levels.length) pane.append(h('p', { class: 'chips-label' }, 'Level'),
       chips<string>([['all', 'All'], ...r.levels.map((l): [string, string] => [l, l])], s.level ?? 'all',
-        (v) => this.update((st) => { st.level = v === 'all' ? null : v; st.lesion = null; st.screw = null; st.approach = null; st.sel = null; st.cam = { preset: null }; }, { camera: true }), { label: 'Level', cls: 'grp-chips level-chips' }));
+        (v) => this.update((st) => { st.level = v === 'all' ? null : v; st.lesion = null; st.screw = null; st.approach = null; st.sel = null; st.drill = false; st.cam = { preset: null }; }, { camera: true }), { label: 'Level', cls: 'grp-chips level-chips' }));
     // the virtual screw: whenever the level has one, in a box of its own that starts closed
     if (s.level && SCREW_LEVELS[s.level]) {
       if (this.screwOpen === null) this.screwOpen = !!s.screw;   // open when a link brings a screw
@@ -350,6 +357,14 @@ export class SpineAtlasPage {
         class: 'screw-box', open: this.screwOpen || undefined,
         ontoggle: (e: Event) => { this.screwOpen = (e.target as HTMLDetailsElement).open; },
       }, h('summary', {}, 'Virtual screw', s.screw ? h('span', { class: 'screw-box-tech' }, ` · ${TECHNIQUES[s.screw.tech].name}, ${TECHNIQUES[s.screw.tech].midline ? 'midline' : s.screw.side === 'L' ? 'left' : 'right'}`) : ''), this.screw.el));
+    }
+    // drilling (a posterior foraminotomy): a cervical level and the one below, in a box of its own
+    if (s.region === 'cervical' && drillPairFor(s.level)) {
+      if (this.drillOpen === null) this.drillOpen = s.drill;
+      pane.append(h('details', {
+        class: 'screw-box', open: this.drillOpen || s.drill || undefined,
+        ontoggle: (e: Event) => { this.drillOpen = (e.target as HTMLDetailsElement).open; },
+      }, h('summary', {}, 'Posterior foraminotomy', s.drill ? h('span', { class: 'screw-box-tech' }, ' · drilling') : ''), this.drill.el));
     }
     if (s.sel) pane.append(this.card(s.sel));
     else if (s.level) pane.append(this.levelCard(s.level));

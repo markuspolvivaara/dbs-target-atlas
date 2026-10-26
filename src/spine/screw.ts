@@ -144,7 +144,7 @@ export function decodeField(level: string, lv: ScrewLevel, buf: ArrayBuffer): Sc
   };
 }
 
-async function gunzip(buf: ArrayBuffer): Promise<ArrayBuffer> {
+export async function gunzip(buf: ArrayBuffer): Promise<ArrayBuffer> {
   const head = new Uint8Array(buf, 0, 2);
   if (head[0] !== 0x1f || head[1] !== 0x8b) return buf; // the server already decoded it
   const stream = new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'));

@@ -516,6 +516,22 @@ export const ACDF_STATEMENTS = {
   },
 } satisfies Record<string, Statement>;
 
+/** A posterior cervical (keyhole) foraminotomy, drilled on this CT's two vertebrae at a foramen. */
+export const FORAMINOTOMY_STATEMENTS = {
+  vpoint: {
+    text: 'The keyhole starts at the V-point: where the inferior margin of the upper lamina, the medial junction of the inferior and superior articular processes, and the superior margin of the lower lamina meet. In one endoscopic technique a 3-mm diamond burr marks it, takes the upper lamina first (it lies over the joint), and the foraminotomy proceeds from the lamina–facet junction.',
+    refIds: ['zhang2020'],
+  },
+  facet: {
+    text: 'The medial half of the facet joint is removed to free the root. Removing 50% of the facet or more lowered the segment’s torsional stiffness markedly in a biomechanical study, so less than half is resected; removing up to 5 mm of the lateral mass is considered safe. In one en-bloc technique the inferior articular process is removed first, then the medial half of the superior articular process is cut in grooves and lifted out.',
+    refIds: ['kang2022'],
+  },
+  drawn: {
+    text: 'Here: a round 4-mm burr (a drawing choice) takes bone away from this CT’s two vertebrae (each its CT surface, as drawn elsewhere); the disc between them is not drawn while drilling. Its clearance is measured to the dural sac (segmented on this CT) and to the roots and the vertebral arteries (both schematic, drawn through the measured foramina). Cut bone is coloured by the CT’s density; where little bone is left over a structure, its colour shows through. Bone is simply taken away: nothing of the tissue’s behaviour is simulated.',
+    refIds: [],
+  },
+} satisfies Record<string, Statement>;
+
 /** Kshettry 2015's region for a thoracic disc below `level` (T12 and its disc fall in T11-T12). */
 export function exposureRegion(level: string): 'T1-T2' | 'T3-T6' | 'T7-T10' | 'T11-T12' {
   const n = Number(level.slice(1));
@@ -529,7 +545,7 @@ export function crossCheckContent(): string[] {
   for (const t of Object.values(TECHNIQUES)) {
     for (const st of [t.start, t.size, t.note]) for (const r of st?.refIds ?? []) if (!SP_MANIFEST.references[r]) errs.push(`${t.id}: unknown reference ${r}`);
   }
-  for (const st of [...Object.values(APPROACHES).map((a) => a.removes), ...Object.values(APPROACH_STATEMENTS), ...Object.values(ACDF_STATEMENTS)]) {
+  for (const st of [...Object.values(APPROACHES).map((a) => a.removes), ...Object.values(APPROACH_STATEMENTS), ...Object.values(ACDF_STATEMENTS), ...Object.values(FORAMINOTOMY_STATEMENTS)]) {
     for (const r of st.refIds) if (!SP_MANIFEST.references[r]) errs.push(`approach: unknown reference ${r}`);
   }
   return errs;

@@ -244,6 +244,14 @@
   "fidan2026": {
    "citation": "Fidan N, Cetin A, Tosun A. Morphometric evaluation of the craniovertebral junction using computed tomography: a sex-based analysis of 500 adults. Biomed Res Int. 2026;2026:2388226. doi:10.1155/bmri/2388226.",
    "url": "https://doi.org/10.1155/bmri/2388226"
+  },
+  "kang2022": {
+   "citation": "Kang KC, Jang TS, Jung CH. Cervical Radiculopathy: Focus on Factors for Better Surgical Outcomes and Operative Techniques. Asian Spine J. 2022;16(6):995-1012. doi:10.31616/asj.2022.0445.",
+   "url": "https://doi.org/10.31616/asj.2022.0445"
+  },
+  "zhang2020": {
+   "citation": "Zhang C, Wu J, Zheng W, Li C, Zhou Y. Posterior Endoscopic Cervical Decompression: Review and Technical Note. Neurospine. 2020;17(Suppl 1):S74-S80. doi:10.14245/ns.2040166.083.",
+   "url": "https://doi.org/10.14245/ns.2040166.083"
   }
  },
  "generatedBy": "pipeline/spine_segment.py (TotalSegmentator) + pipeline/spine_build.py + pipeline/compress.mjs",

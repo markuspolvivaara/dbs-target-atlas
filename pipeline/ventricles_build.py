@@ -120,7 +120,8 @@ AQUEDUCT_BINS = 12         # its course: the fitted model's aqueduct in this man
 AQUEDUCT_INTO_MM = 1.0     # ... run on this far into the third and the fourth ventricle
 SOFT_MM = 0.75             # the drawn surface: the union's signed distance smoothed by this (Gaussian sigma) ...
 DRAW_OUT_MM = 0.5          # ... and drawn this far outside it
-DRAWN_FACES = 100000
+DRAWN_FACES = 140000
+DRAWN_SMOOTH = 10          # ... smoothed again after decimation (Taubin rounds)
 MIDLINE = ("third", "aqueduct", "fourth")   # drawn in left and right halves
 SEPTUM_HALF_MM = 0.5       # the drawn lateral ventricles kept apart within this of the midline (the septum pellucidum) ...
 SEPTUM_SPARE_MM = 2.0      # ... except this near the third ventricle and the foramina
@@ -395,6 +396,9 @@ def drawn(groups: dict[str, np.ndarray], tubes: dict[str, np.ndarray], lo: np.nd
     aff = np.diag([STEP, STEP, STEP, 1.0])
     aff[:3, 3] = lo
     mesh = isosurface(field, aff, 0.01, 0.0, DRAWN_FACES)
+    # smoothed again after the decimation, which leaves flat facets and creases that the endoscope's light shows
+    # (Taubin's: it keeps the volume)
+    trimesh.smoothing.filter_taubin(mesh, lamb=0.5, nu=0.53, iterations=DRAWN_SMOOTH)
     dist = np.stack([ndimage.distance_transform_edt(~groups[k]).astype(np.float32) for k in keys])
     q = ((np.asarray(mesh.vertices) - lo) / STEP).T
     vlab = np.argmin(np.stack([ndimage.map_coordinates(d, q, order=1, mode="nearest") for d in dist]), 0)

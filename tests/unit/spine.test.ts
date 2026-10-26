@@ -8,6 +8,7 @@ import {
 import { REGION, REGIONS } from '../../src/spine/regions';
 import { LESION_MARKERS, lesionMarkerId, spinePlan, spineScene } from '../../src/spine/scene';
 import { decodeSpine, defaultSpineState, encodeSpine } from '../../src/spine/state';
+import { setViewPrefs } from '../../src/viewer/viewprefs';
 import { nodeMeans } from './glb';
 
 describe('spine data (VerSe CT + TotalSegmentator)', () => {
@@ -56,11 +57,18 @@ describe('spine data (VerSe CT + TotalSegmentator)', () => {
 
 describe('spine scene and URL state', () => {
   it('plans reference only catalogue entries; a level keeps its vertebra and disc solid', () => {
+    // the viewer's setting: the other bones fade back, or stay and the level is outlined
+    setViewPrefs({ fadeOthers: true });
     const p = spinePlan({ region: 'lumbar', level: 'L4', sel: null });
+    setViewPrefs({ fadeOthers: false });
+    const q = spinePlan({ region: 'lumbar', level: 'L4', sel: null });
     for (const id of [...p.looks.keys(), ...p.focusIds]) expect(spineScene.catalog.byId.has(id), id).toBe(true);
     expect(p.looks.get('sp_l4')).toBe('primary');
     expect(p.looks.get('sp_disc_l4_l5')).toBe('primary');
     expect(p.looks.get('sp_l2')).toBe('context');
+    expect(p.outline).toBeUndefined();
+    expect(q.looks.get('sp_l2')).toBe('primary');
+    expect(q.outline).toEqual(['sp_l4', 'sp_disc_l4_l5']);
     for (const m of p.markers) expect(spineScene.catalog.markers.has(m.targetId), m.targetId).toBe(true);
     expect(REGIONS.every((r) => r.ready)).toBe(true);
   });
@@ -143,7 +151,9 @@ describe('thoracic region (phase 3a)', () => {
     expect(GEOM_BY_LEVEL.get('L4')!.foramen.L).toBeTruthy();
   });
   it('a thoracic level plan references only catalogue entries and keeps its vertebra solid', () => {
+    setViewPrefs({ fadeOthers: true });
     const p = spinePlan({ region: 'thoracic', level: 'T6', sel: null });
+    setViewPrefs({ fadeOthers: false });
     for (const id of [...p.looks.keys(), ...p.focusIds]) expect(spineScene.catalog.byId.has(id), id).toBe(true);
     expect(p.looks.get('sp_t6')).toBe('primary');
     expect(p.looks.get('sp_disc_t6_t7')).toBe('primary');

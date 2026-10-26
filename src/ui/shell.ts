@@ -25,7 +25,7 @@ function viewSettings(): HTMLElement {
   const panel = h('div', { class: 'view-settings-panel', id: 'view-settings', role: 'dialog', 'aria-label': 'Viewer settings', hidden: true },
     h('label', { class: 'view-setting', for: 'set-fade-others' }, fade,
       h('span', {}, h('strong', {}, 'Fade the rest when a structure is selected'),
-        h('span', { class: 'view-setting-note' }, 'Off: the selected structure is outlined, and shown through whatever covers it.'))));
+        h('span', { class: 'view-setting-note' }, 'Off: the selected structure (or the spine’s chosen level) is outlined, and shown through whatever covers it.'))));
   const btn = h('button', {
     type: 'button', class: 'view-settings-btn', 'aria-haspopup': 'dialog', 'aria-expanded': 'false', 'aria-controls': 'view-settings',
     title: 'Viewer settings',

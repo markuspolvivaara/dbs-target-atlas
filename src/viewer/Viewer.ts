@@ -46,6 +46,15 @@ export interface EndoscopeConfig {
   floor: { centre: V3t; ap: V3t; radiusMm: number; radiusLatMm: number; lambdaMm: number } | null;
 }
 
+/** A tool that takes the left button over the 3D view (the view then turns with the right button, pans with it and
+ * Shift): it is given the pointer's ray in the scene's own frame (RAS mm), or null when the pointer leaves. */
+export interface PointerTool {
+  hover(ray: THREE.Ray | null): void;
+  down(ray: THREE.Ray): void;
+  drag(ray: THREE.Ray): void;
+  up(): void;
+}
+
 export interface ViewerEvents {
   hover(info: PickInfo | null, clientX: number, clientY: number): void;
   pick(info: PickInfo): void;
@@ -83,6 +92,10 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   private measureGroup = new THREE.Group();
   /** objects a section draws itself (the spine's virtual screw); coloured by palette token, cut like the anatomy */
   private overlayGroup = new THREE.Group();
+  /** a pointer tool's own objects, in the scene's frame (the tool adds, updates and disposes them) */
+  readonly toolGroup = new THREE.Group();
+  private tool: PointerTool | null = null;
+  private toolDown = false;
   private leads: Record<Side, Lead> = { L: new Lead('L'), R: new Lead('R') };
   readonly slices: Slices;
   private palette: Palette = {};
@@ -162,7 +175,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.root.matrix.copy(RAS_TO_WORLD);
     this.root.updateMatrixWorld(true);
     this.scene.add(this.root);
-    this.root.add(this.markerGroup, this.measureGroup, this.overlayGroup, this.leads.L.group, this.leads.R.group);
+    this.root.add(this.markerGroup, this.measureGroup, this.overlayGroup, this.toolGroup, this.leads.L.group, this.leads.R.group);
     this.slices = new Slices(this.cat.volumes, this.root, () => { this.ev.status(null); this.invalidate(); });
     this.root.add(this.slices.group);
 
@@ -173,7 +186,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.camera.add(head);
     this.scene.add(this.camera);
 
-    this.unsubPrefs = onViewPrefs(() => this.restyle());
+    // (a section's plan may follow the setting too)
+    this.unsubPrefs = onViewPrefs(() => { if (this.state) this.plan = this.source.plan(this.state); this.restyle(); });
     new ResizeObserver(() => this.resize()).observe(host);
     this.resize();
     this.bindPointer();
@@ -430,25 +444,28 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.invalidate();
   }
 
-  /** Outline the selected mesh structure and show its covered parts through what covers it (children of its meshes
-   * sharing their geometry and morph targets, so they follow the shapes and visibility; not pickable). */
-  private showSelection(id: string | null): void {
+  /** Outline these mesh structures (the selected one, or a plan's) and show their covered parts through what covers
+   * them (children of their meshes sharing their geometry and morph targets, so they follow the shapes and visibility;
+   * not pickable). */
+  private showSelection(ids: string[]): void {
     for (const o of this.selOverlays) o.removeFromParent();
     this.selOverlays = [];
-    const it = id ? this.items.get(id) : undefined;
-    if (!it || it.kind !== 'mesh') return;
-    this.selMats.xray.color.copy(this.colour(it.meta));
     for (const m of Object.values(this.selMats)) m.clippingPlanes = this.clipPlanes;
-    for (const node of Object.values(it.nodes)) {
-      if (!node) continue;
-      for (const [mat, order] of [[this.selMats.halo, 7], [this.selMats.ring, 8], [this.selMats.xray, 9]] as const) {
-        const o = new THREE.Mesh(node.geometry, mat);
-        o.morphTargetInfluences = node.morphTargetInfluences;
-        o.morphTargetDictionary = node.morphTargetDictionary;
-        o.renderOrder = order;
-        o.raycast = () => {};
-        node.add(o);
-        this.selOverlays.push(o);
+    for (const id of ids) {
+      const it = this.items.get(id);
+      if (!it || it.kind !== 'mesh') continue;
+      if (id === ids[0]) this.selMats.xray.color.copy(this.colour(it.meta));
+      for (const node of Object.values(it.nodes)) {
+        if (!node) continue;
+        for (const [mat, order] of [[this.selMats.halo, 7], [this.selMats.ring, 8], [this.selMats.xray, 9]] as const) {
+          const o = new THREE.Mesh(node.geometry, mat);
+          o.morphTargetInfluences = node.morphTargetInfluences;
+          o.morphTargetDictionary = node.morphTargetDictionary;
+          o.renderOrder = order;
+          o.raycast = () => {};
+          node.add(o);
+          this.selOverlays.push(o);
+        }
       }
     }
   }
@@ -545,7 +562,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         }
       }
     }
-    this.showSelection(focus);
+    this.showSelection(focus ? [focus] : (p.outline ?? []).filter((id) => !hidden.has(id)));
     this.markerGroup.visible = s.layers.targets.on;
     for (const m of this.markerGroup.children) {
       const side = m.userData.side as Side;
@@ -846,6 +863,27 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.invalidate();
   }
 
+  /** Give the left button to a tool (null: back to turning the view). */
+  setPointerTool(t: PointerTool | null): void {
+    if (this.tool && this.toolDown) this.tool.up();
+    this.tool = t;
+    this.toolDown = false;
+    this.controls.mouseButtons = t ? { LEFT: null, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE }
+      : { LEFT: THREE.MOUSE.ROTATE, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.PAN };
+    this.renderer.domElement.style.cursor = t ? 'none' : '';
+    this.renderer.domElement.oncontextmenu = t ? (e) => e.preventDefault() : null;
+  }
+
+  /** The ray under a point of the canvas, in the scene's frame (RAS mm). */
+  private rasRay(clientX: number, clientY: number): THREE.Ray {
+    const r = this.renderer.domElement.getBoundingClientRect();
+    this.camera.updateMatrixWorld();   // (the view may not have been drawn since the camera last moved)
+    this.raycaster.setFromCamera(new THREE.Vector2(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1), this.camera);
+    const o = this.toRas(this.raycaster.ray.origin);
+    const d = this.toRas(this.raycaster.ray.origin.clone().add(this.raycaster.ray.direction)).sub(o).normalize();
+    return new THREE.Ray(o, d);
+  }
+
   // ---------------------------------------------------------------- picking
   setMeasuring(on: boolean): void {
     this.measuring = on;
@@ -939,11 +977,23 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     const el = this.renderer.domElement;
     let down: { x: number; y: number; t: number } | null = null;
     el.addEventListener('pointerdown', (e) => {
+      if (this.tool) {
+        if (e.button !== 0) return;
+        this.toolDown = true;
+        try { el.setPointerCapture(e.pointerId); } catch { /* not a live pointer */ }
+        this.tool.down(this.rasRay(e.clientX, e.clientY));
+        return;
+      }
       down = { x: e.clientX, y: e.clientY, t: performance.now() };
       const hit = this.state?.layers.electrode.on ? this.pick(e.clientX, e.clientY, false) : null;
       if (hit?.kind === 'lead' && hit.side) this.beginDrag(hit.side, e);
     });
     el.addEventListener('pointermove', (e) => {
+      if (this.tool) {
+        const ray = this.rasRay(e.clientX, e.clientY);
+        if (this.toolDown) this.tool.drag(ray); else this.tool.hover(ray);
+        return;
+      }
       if (this.drag) { this.onDrag(e); return; }
       this.lastPointer = e;
       if (!this.hoverQueued) {
@@ -958,8 +1008,12 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         });
       }
     });
-    el.addEventListener('pointerleave', () => { this.ev.hover(null, 0, 0); });
+    el.addEventListener('pointerleave', () => { this.ev.hover(null, 0, 0); if (this.tool && !this.toolDown) this.tool.hover(null); });
     el.addEventListener('pointerup', (e) => {
+      if (this.tool) {
+        if (this.toolDown) { this.toolDown = false; this.tool.up(); }
+        return;
+      }
       if (this.drag) { this.endDrag(); return; }
       if (!down) return;
       const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);

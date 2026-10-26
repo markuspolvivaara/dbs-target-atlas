@@ -5,7 +5,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 837724,
+   "bytes": 1086200,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -31,21 +31,21 @@
    "derivation": "This CT's own where it shows it: the fluid darker than 27 HU in its brain window (smoothed by 1 mm), at least 10 mm inside the cranial cavity and away from the labelled vessels, its largest body (1.38 ml on the right, 2.81 ml on the left; this patient's ventricles are narrow, and where they are a few millimetres wide the threshold sets their size). Where the CT does not show it, the Z-Anatomy model's (one adult, BodyParts3D), fitted onto the CT's ventricles by a smooth deformation: the CT's surface lies a median 0.79 mm from the fitted model's (1.9 mm at the 90th percentile). The temporal horns, too narrow for this CT to show, are the model's: along them the CT is 40.1 and 42.0 HU (right, left), against 43.2 and 41.7 HU in the brain 2.5 to 5 mm around, so they lie on its faint fluid. The atria's enhancing choroid plexus, which a threshold leaves out, is inside the model's. The drawn surface joins the two, softened (its signed distance smoothed by 0.75 mm) and drawn 0.5 mm outside them, within the CT's uncertainty; it is kept 0.5 mm clear of this patient's internal cerebral veins (the fitted model reaches over them in places) and drawn round the mammillary bodies. The hydrocephalus slider shapes it as the Sources page describes (a shape, not a simulation of the tissue). As drawn: 8.27 ml right, 9.15 ml left.",
    "centroid": {
     "L": [
-     -14.8,
-     -25.83,
-     29.57
+     -14.96,
+     -24.69,
+     29.42
     ],
     "R": [
-     15.37,
-     -25.11,
-     28.8
+     14.99,
+     -23.71,
+     29.27
     ]
    }
   },
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 105468,
+   "bytes": 118228,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -71,14 +71,14 @@
    "derivation": "This CT's own as far as it shows it: the body of fluid darker than 27 HU on the midline below and between the lateral ventricles (0.58 ml), only its widest part. Where the CT does not show it, the Z-Anatomy model's (one adult, BodyParts3D), fitted onto the CT's ventricles by a smooth deformation: the CT's surface lies a median 0.79 mm from the fitted model's (1.9 mm at the 90th percentile). Its recesses and floor are the model's. The drawn surface joins the two, softened (its signed distance smoothed by 0.75 mm) and drawn 0.5 mm outside them, within the CT's uncertainty; it is kept 0.5 mm clear of this patient's internal cerebral veins (the fitted model reaches over them in places) and drawn round the mammillary bodies. The hydrocephalus slider shapes it as the Sources page describes (a shape, not a simulation of the tissue). As drawn: 1.58 ml.",
    "centroid": {
     "L": [
-     -1.07,
-     -16.93,
-     24.58
+     -1.12,
+     -16.97,
+     24.66
     ],
     "R": [
-     2.49,
-     -16.48,
-     24.58
+     2.56,
+     -16.54,
+     24.66
     ]
    }
   },
@@ -87,7 +87,7 @@
     "Foramen of Monro"
    ],
    "type": "soft",
-   "bytes": 13940,
+   "bytes": 13816,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -113,14 +113,14 @@
    "derivation": "Drawn by rule: this CT does not resolve it. A tube of the mean cross-section Jean 2019 measured in 30 adults without hydrocephalus (5.23 mm², here a circle 2.6 mm across) between the points where the fitted lateral ventricle comes closest to the fitted third ventricle (2.24 mm apart on the right, 2.3 mm on the left): the third ventricle's front upper corner, the junction of its roof and anterior wall, where Azab 2014 places the foramina. Drawn 0.5 mm wider, like the ventricles.",
    "centroid": {
     "L": [
-     -2.23,
-     -9.08,
+     -2.25,
+     -9.09,
      31.19
     ],
     "R": [
-     4.15,
-     -9.21,
-     30.9
+     4.13,
+     -9.2,
+     30.88
     ]
    }
   },
@@ -130,7 +130,7 @@
     "Aqueduct of Sylvius"
    ],
    "type": "soft",
-   "bytes": 25804,
+   "bytes": 25824,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -162,7 +162,7 @@
     ],
     "R": [
      1.13,
-     -29.56,
+     -29.55,
      13.86
     ]
    }
@@ -170,7 +170,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 110140,
+   "bytes": 118556,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -196,21 +196,21 @@
    "derivation": "This CT's own where it shows it: the fluid darker than 27 HU within 6 mm of the model's fourth ventricle (0.47 ml: its upper part; lower down this CT does not show it). Where the CT does not show it, the Z-Anatomy model's (one adult, BodyParts3D), fitted onto the CT's ventricles by a smooth deformation: the CT's surface lies a median 0.79 mm from the fitted model's (1.9 mm at the 90th percentile). The CT's part lies a median 0.72 mm from the fitted model's; along the rest of the model the CT is 43.3 HU, against 46.8 HU around. Its lateral recesses and the foramina of Luschka and Magendie are not modelled. The drawn surface joins the two, softened (its signed distance smoothed by 0.75 mm) and drawn 0.5 mm outside them, within the CT's uncertainty; it is kept 0.5 mm clear of this patient's internal cerebral veins (the fitted model reaches over them in places) and drawn round the mammillary bodies. The hydrocephalus slider shapes it as the Sources page describes (a shape, not a simulation of the tissue). As drawn: 1.6 ml.",
    "centroid": {
     "L": [
-     -2.91,
-     -38.58,
-     -10.26
+     -2.88,
+     -38.44,
+     -10.0
     ],
     "R": [
-     2.97,
-     -38.32,
-     -8.98
+     2.95,
+     -38.21,
+     -8.83
     ]
    }
   },
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 67648,
+   "bytes": 67544,
    "colour": {
     "token": "fx",
     "light": "#6E8888",
@@ -237,21 +237,21 @@
    "centroid": {
     "L": [
      -10.9,
-     -23.49,
+     -23.5,
      25.4
     ],
     "R": [
-     11.65,
+     11.66,
      -22.7,
      24.8
     ]
    },
-   "derivation": "The Z-Anatomy model's (one adult, BodyParts3D), carried onto this CT by the fit that fits the model's ventricles onto this CT's (so it keeps its place around them); this CT does not show it. With the hydrocephalus slider it follows the ventricles' walls. Where this CT shows the ventricles larger than the model, it is pushed out to their wall (by at most 2.76 mm), so that it forms the wall rather than lying in the fluid."
+   "derivation": "The Z-Anatomy model's (one adult, BodyParts3D), carried onto this CT by the fit that fits the model's ventricles onto this CT's (so it keeps its place around them); this CT does not show it. With the hydrocephalus slider it follows the ventricles' walls. Where this CT shows the ventricles larger than the model, it is pushed out to their wall (by at most 2.78 mm), so that it forms the wall rather than lying in the fluid."
   },
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 85368,
+   "bytes": 84968,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -277,9 +277,9 @@
    "fitted": true,
    "centroid": {
     "L": [
-     -1.39,
-     -3.52,
-     35.85
+     -1.4,
+     -3.5,
+     35.86
     ],
     "R": [
      1.41,
@@ -292,7 +292,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 475704,
+   "bytes": 475728,
    "colour": {
     "token": "veChoroid",
     "light": "#A85A78",
@@ -335,7 +335,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 108376,
+   "bytes": 108328,
    "colour": {
     "token": "thal",
     "light": "#8996A3",
@@ -371,12 +371,12 @@
      26.3
     ]
    },
-   "derivation": "The Z-Anatomy model's (one adult, BodyParts3D), carried onto this CT by the fit that fits the model's ventricles onto this CT's (so it keeps its place around them); this CT does not show it. With the hydrocephalus slider it follows the ventricles' walls. Where this CT shows the ventricles larger than the model, it is pushed out to their wall (by at most 2.55 mm), so that it forms the wall rather than lying in the fluid."
+   "derivation": "The Z-Anatomy model's (one adult, BodyParts3D), carried onto this CT by the fit that fits the model's ventricles onto this CT's (so it keeps its place around them); this CT does not show it. With the hydrocephalus slider it follows the ventricles' walls. Where this CT shows the ventricles larger than the model, it is pushed out to their wall (by at most 2.52 mm), so that it forms the wall rather than lying in the fluid."
   },
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 223884,
+   "bytes": 223068,
    "colour": {
     "token": "str",
     "light": "#8E5A84",
@@ -404,7 +404,7 @@
     "L": [
      -13.47,
      -13.57,
-     32.28
+     32.27
     ],
     "R": [
      14.82,
@@ -417,7 +417,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 97064,
+   "bytes": 96952,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -444,7 +444,7 @@
    "centroid": {
     "L": [
      -14.49,
-     -21.08,
+     -21.09,
      24.47
     ],
     "R": [
@@ -458,7 +458,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 50940,
+   "bytes": 50848,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -485,21 +485,21 @@
    "centroid": {
     "L": [
      -1.86,
-     -3.92,
+     -3.94,
      18.35
     ],
     "R": [
-     3.16,
-     -3.9,
+     3.17,
+     -3.89,
      18.32
     ]
    },
-   "derivation": "The Z-Anatomy model's (one adult, BodyParts3D), carried onto this CT by the fit that fits the model's ventricles onto this CT's (so it keeps its place around them); this CT does not show it. With the hydrocephalus slider it follows the ventricles' walls. Where this CT shows the ventricles larger than the model, it is pushed out to their wall (by at most 1.57 mm), so that it forms the wall rather than lying in the fluid."
+   "derivation": "The Z-Anatomy model's (one adult, BodyParts3D), carried onto this CT by the fit that fits the model's ventricles onto this CT's (so it keeps its place around them); this CT does not show it. With the hydrocephalus slider it follows the ventricles' walls. Where this CT shows the ventricles larger than the model, it is pushed out to their wall (by at most 1.58 mm), so that it forms the wall rather than lying in the fluid."
   },
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 16244,
+   "bytes": 16164,
    "colour": {
     "token": "mb",
     "light": "#8C7A5A",
@@ -543,7 +543,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 36008,
+   "bytes": 35972,
    "colour": {
     "token": "ot",
     "light": "#B9E3E8",
@@ -579,12 +579,12 @@
      15.77
     ]
    },
-   "derivation": "The Z-Anatomy model's (one adult, BodyParts3D), carried onto this CT by the fit that fits the model's ventricles onto this CT's (so it keeps its place around them); this CT does not show it. With the hydrocephalus slider it follows the ventricles' walls. Where this CT shows the ventricles larger than the model, it is pushed out to their wall (by at most 0.9 mm), so that it forms the wall rather than lying in the fluid."
+   "derivation": "The Z-Anatomy model's (one adult, BodyParts3D), carried onto this CT by the fit that fits the model's ventricles onto this CT's (so it keeps its place around them); this CT does not show it. With the hydrocephalus slider it follows the ventricles' walls. Where this CT shows the ventricles larger than the model, it is pushed out to their wall (by at most 0.91 mm), so that it forms the wall rather than lying in the fluid."
   },
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 87396,
+   "bytes": 87416,
    "colour": {
     "token": "ot",
     "light": "#B9E3E8",
@@ -620,12 +620,12 @@
      15.83
     ]
    },
-   "derivation": "The Z-Anatomy model's (one adult, BodyParts3D), carried onto this CT by the fit that fits the model's ventricles onto this CT's (so it keeps its place around them); this CT does not show it. With the hydrocephalus slider it follows the ventricles' walls. Where this CT shows the ventricles larger than the model, it is pushed out to their wall (by at most 0.57 mm), so that it forms the wall rather than lying in the fluid."
+   "derivation": "The Z-Anatomy model's (one adult, BodyParts3D), carried onto this CT by the fit that fits the model's ventricles onto this CT's (so it keeps its place around them); this CT does not show it. With the hydrocephalus slider it follows the ventricles' walls. Where this CT shows the ventricles larger than the model, it is pushed out to their wall (by at most 0.59 mm), so that it forms the wall rather than lying in the fluid."
   },
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 15512,
+   "bytes": 15548,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -656,7 +656,7 @@
      25.92
     ],
     "R": [
-     5.83,
+     5.8,
      -2.84,
      25.38
     ]
@@ -666,7 +666,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 17804,
+   "bytes": 17760,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -707,7 +707,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 10216,
+   "bytes": 10128,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -734,12 +734,12 @@
    "centroid": {
     "L": [
      -1.11,
-     -31.75,
-     21.97
+     -31.76,
+     21.95
     ],
     "R": [
-     2.48,
-     -31.71,
+     2.53,
+     -31.69,
      21.87
     ]
    },
@@ -748,7 +748,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 15736,
+   "bytes": 15704,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -779,9 +779,9 @@
      19.9
     ],
     "R": [
-     1.71,
-     -35.81,
-     20.1
+     1.72,
+     -35.85,
+     20.09
     ]
    },
    "derivation": "The Z-Anatomy model's (one adult, BodyParts3D), carried onto this CT by the fit that fits the model's ventricles onto this CT's (so it keeps its place around them); this CT does not show it. With the hydrocephalus slider it follows the ventricles' walls. Where this CT shows the ventricles larger than the model, it is pushed out to their wall (by at most 1.61 mm), so that it forms the wall rather than lying in the fluid."
@@ -789,7 +789,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 209980,
+   "bytes": 209352,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -816,13 +816,13 @@
    "centroid": {
     "L": [
      -8.29,
-     -22.35,
+     -22.36,
      36.7
     ],
     "R": [
      8.22,
-     -21.31,
-     37.93
+     -21.3,
+     37.94
     ]
    },
    "derivation": "The Z-Anatomy model's (one adult, BodyParts3D), carried onto this CT by the fit that fits the model's ventricles onto this CT's (so it keeps its place around them); this CT does not show it. With the hydrocephalus slider it follows the ventricles' walls. Where this CT shows the ventricles larger than the model, it is pushed out to their wall (by at most 2.41 mm), so that it forms the wall rather than lying in the fluid."
