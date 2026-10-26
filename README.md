@@ -495,7 +495,7 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
   diameter and entry adjustable; breach depth and direction against this CT's bone surface, graded after
   Gertzbein–Robbins, the screw diameter as a share of the pedicle width, and the nearest structures at risk; a cut
   along the screw. Data from `pipeline/spine_screw.py` (a bone distance field per level, loaded on demand).
-- **Posterior foraminotomy (drilling)** (a box of its own for C2–C7): the selected level and the vertebra below it are
+- **Drilling: posterior foraminotomy or anterior discectomy (ACDF)** (a box of its own for C2–C7): the selected level and the vertebra below it are
   drilled with a round 4-mm burr held against the bone along the line of sight (4 mm a second, a drawing choice);
   the bone is this CT's own (each vertebra's field, built as its drawn surface: within 0.25 mm median of it), cut
   bone coloured by the CT's density, and where little bone is left over the dural sac, a root or the vertebral
@@ -503,6 +503,10 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
   vertebral artery (schematic) is read out, with the bone removed from each vertebra; undo per stroke. The disc is
   not drawn while drilling. The technique notes (V-point, the medial half of the facet, under 50% resected) are from
   Zhang 2020 and Kang 2022. Data from `pipeline/spine_drill.py` (the fields per pair, 0.5–0.8 MB, loaded on demand).
+  The ACDF is drilled from the front (straight on) with the disc taken out, and the two vertebrae can be drawn up to
+  5 mm apart along the spine (each half the distance; Kang 2022: 2–3 mm beyond the disc's own height opened the
+  foramina most); its notes (the uncovertebral joint as the lateral limit, the vertebral artery 1–2 mm beyond it) are
+  from Cheung 2016 and Sugawara 2015. The foraminotomy starts straight from behind; the other bones are see-through.
 - **Dorsal approaches to a thoracic disc** (level card): transpedicular, costotransversectomy and lateral
   extracavitary, from either side: what each removes (published technique descriptions), the share of the ventral
   canal each exposed in cadavers for the level's region (Kshettry 2015), which discs suit which approach

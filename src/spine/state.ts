@@ -27,9 +27,15 @@ export interface SpineState extends ViewState {
   approach: { id: ApproachId | 'acdf'; side: 'L' | 'R' } | null;
   /** craniocervical junction: the measurement whose lines are drawn */
   measure: CcjMeasureId | null;
-  /** drilling the selected cervical level and the vertebra below it (a posterior foraminotomy) */
-  drill: boolean;
+  /** drilling the selected cervical level and the vertebra below it: from behind (a posterior foraminotomy) or from the
+   * front (an anterior cervical discectomy) */
+  drill: DrillMode | null;
+  /** at an anterior discectomy, the two vertebrae drawn this far apart (mm) */
+  distract: number;
 }
+
+export type DrillMode = 'foraminotomy' | 'acdf';
+export const DISTRACT_MAX_MM = 5;
 
 export interface ScrewState {
   tech: TechniqueId;
@@ -69,7 +75,7 @@ export function defaultSpineState(): SpineState {
     labels: 'hover',
     clip: { axial: { on: false, mm: 0 }, coronal: { on: false, mm: 0 }, sagittal: { on: false, mm: 0 } },
     cutSide: 'none', sliceSeq: 't1', lead: { ...DEFAULT_LEAD },
-    sel: null, hidden: [], lesion: null, cut: 'none', screw: null, approach: null, measure: null, cutAbove: null, cutPlane: null, drill: false,
+    sel: null, hidden: [], lesion: null, cut: 'none', screw: null, approach: null, measure: null, cutAbove: null, cutPlane: null, drill: null, distract: 0,
   };
 }
 
@@ -101,7 +107,10 @@ export function encodeSpine(s: SpineState): string {
     if (s.lesion) p.set('les', `${s.lesion.pair}.${s.lesion.zone}.${s.lesion.side}`);
     if (s.approach && s.level) p.set('ap', `${s.approach.id}.${s.approach.side}`);
     if (s.measure && s.region === 'ccj') p.set('cm', s.measure);
-    if (s.drill && drillPairFor(s.level)) p.set('dr', '1');
+    if (s.drill && drillPairFor(s.level)) {
+      p.set('dr', s.drill === 'acdf' ? 'a' : '1');
+      if (s.drill === 'acdf' && s.distract) p.set('dd', String(s.distract));
+    }
   }
   const q = p.toString();
   return `#/${s.page}${q ? '?' + q : ''}`;
@@ -149,7 +158,10 @@ export function decodeSpine(hash: string): SpineState {
     : ap && s.level?.startsWith('C') && ap[1] === 'acdf' ? { id: 'acdf', side: ap[2] as 'L' | 'R' } : null;
   const cm = p.get('cm');
   s.measure = s.region === 'ccj' && CCJ_MEASURES.some((x) => x.id === cm) ? cm as CcjMeasureId : null;
-  s.drill = p.get('dr') === '1' && !!drillPairFor(s.level);
+  const dr = p.get('dr');
+  s.drill = !drillPairFor(s.level) ? null : dr === '1' ? 'foraminotomy' : dr === 'a' ? 'acdf' : null;
+  const dd = Number(p.get('dd'));
+  s.distract = s.drill === 'acdf' && Number.isFinite(dd) ? Math.max(0, Math.min(DISTRACT_MAX_MM, Math.round(dd * 2) / 2)) : 0;
   return s;
 }
 

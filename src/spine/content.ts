@@ -540,6 +540,22 @@ export const FORAMINOTOMY_STATEMENTS = {
   },
 } satisfies Record<string, Statement>;
 
+/** Drilling at an anterior cervical discectomy (ACDF), on this CT's two vertebrae at a disc. */
+export const ACDF_DRILL_STATEMENTS = {
+  distraction: {
+    text: 'Distracting the disc space opens the foramina: 2–3 mm beyond the patient’s own disc height was reported as the most useful for the foramen’s size, while more distraction loads the endplates and can contribute to graft failure, subsidence and non-union.',
+    refIds: ['kang2022'],
+  },
+  lateral: {
+    text: 'The uncinate process marks the lateral border of the canal, and the medial aspect of the uncovertebral joint the lateral limit for dissection or drilling, though osteophytes can hide it. The vertebral artery lies 1–2 mm lateral to the uncovertebral joint: too much lateral bone removal with a punch or a high-speed drill can tear it, and an anomalous, tortuous artery was found in 3%. The posterior longitudinal ligament is a helpful barrier while the bone over it is removed.',
+    refIds: ['cheung2016', 'sugawara2015'],
+  },
+  drawn: {
+    text: 'Here: the disc is not drawn (taken out), a round 4-mm burr (a drawing choice) takes bone away from this CT’s two vertebrae, and they can be drawn apart along the spine to widen the space between them (each half the distance; the vertebrae beyond them are not moved). Clearances are to the dural sac (segmented) and to the roots and vertebral arteries (schematic), where they lie undistracted. Bone is simply taken away: nothing of the tissue’s behaviour is simulated.',
+    refIds: [],
+  },
+} satisfies Record<string, Statement>;
+
 /** Kshettry 2015's region for a thoracic disc below `level` (T12 and its disc fall in T11-T12). */
 export function exposureRegion(level: string): 'T1-T2' | 'T3-T6' | 'T7-T10' | 'T11-T12' {
   const n = Number(level.slice(1));
@@ -553,7 +569,7 @@ export function crossCheckContent(): string[] {
   for (const t of Object.values(TECHNIQUES)) {
     for (const st of [t.start, t.size, t.note]) for (const r of st?.refIds ?? []) if (!SP_MANIFEST.references[r]) errs.push(`${t.id}: unknown reference ${r}`);
   }
-  for (const st of [...Object.values(APPROACHES).map((a) => a.removes), ...Object.values(APPROACH_STATEMENTS), ...Object.values(ACDF_STATEMENTS), ...Object.values(FORAMINOTOMY_STATEMENTS)]) {
+  for (const st of [...Object.values(APPROACHES).map((a) => a.removes), ...Object.values(APPROACH_STATEMENTS), ...Object.values(ACDF_STATEMENTS), ...Object.values(FORAMINOTOMY_STATEMENTS), ...Object.values(ACDF_DRILL_STATEMENTS)]) {
     for (const r of st.refIds) if (!SP_MANIFEST.references[r]) errs.push(`approach: unknown reference ${r}`);
   }
   return errs;

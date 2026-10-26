@@ -37,6 +37,10 @@ const CUT_GRADIENT = 60;
 const CHUNK = 16;
 
 export type Vertebra = 0 | 1;
+export type Structure = 'dura' | 'root' | 'artery';
+/** the burr stops where it would enter the dural sac, a root or a vertebral artery (closer than this to its surface,
+ * mm): it does not drill past them to the bone behind */
+export const STOP_MM = 0.3;
 export interface Clearance { dura: number; root: number; artery: number }
 
 export class DrillVolume {
@@ -52,6 +56,9 @@ export class DrillVolume {
   private readonly iso = DRILL.params.fieldIso;
   /** bone removed so far (mm3), per vertebra */
   readonly removedMm3: [number, number] = [0, 0];
+  /** where each vertebra is drawn, moved from where it lies (a distraction): its bone, cuts and surface move with it;
+   * the structures at risk stay */
+  readonly offsets: [THREE.Vector3, THREE.Vector3] = [new THREE.Vector3(), new THREE.Vector3()];
   private readonly voxMm3: number;
 
   constructor(readonly pair: DrillPair, buf: ArrayBuffer) {
@@ -88,10 +95,48 @@ export class DrillVolume {
     return l(l(l(at(0, 0, 0), at(0, 0, 1), w), l(at(0, 1, 0), at(0, 1, 1), w), v), l(l(at(1, 0, 0), at(1, 0, 1), w), l(at(1, 1, 0), at(1, 1, 1), w), v), u);
   }
 
-  /** Where a ray (in the frame) first meets bone, and which vertebra: null if it misses. */
-  hit(ray: THREE.Ray): { point: THREE.Vector3; vertebra: Vertebra } | null {
+  /** Where a ray (in the frame) first meets bone, and which vertebra; or, if the dural sac, a root or a vertebral artery
+   * comes first, where it meets that (`stop`): null if it meets neither. */
+  hit(ray: THREE.Ray): { point: THREE.Vector3; vertebra: Vertebra | null; stop?: Structure } | null {
+    let best: { vertebra: Vertebra; t: number } | null = null;
+    for (const v of [0, 1] as Vertebra[]) {
+      const t = this.hitOne(ray.origin.clone().sub(this.offsets[v]), ray.direction, v);
+      if (t !== null && (!best || t < best.t)) best = { vertebra: v, t };
+    }
+    const stop = this.stopAlong(ray, best ? best.t : Infinity);
+    if (stop) return { point: ray.origin.clone().addScaledVector(ray.direction, stop.t), vertebra: null, stop: stop.what };
+    return best && { point: ray.origin.clone().addScaledVector(ray.direction, best.t), vertebra: best.vertebra };
+  }
+
+  /** The first point along a ray (before `before` mm) within STOP_MM of the dural sac, a root or a vertebral artery. */
+  private stopAlong(ray: THREE.Ray, before: number): { t: number; what: Structure } | null {
     const o = ray.origin.clone().applyMatrix4(this.toIjk);
     const d = ray.origin.clone().add(ray.direction).applyMatrix4(this.toIjk).sub(o);
+    const len = d.length();
+    d.divideScalar(len);
+    let t0 = 0, t1 = before * len;
+    const hi = [this.nx - 1, this.ny - 1, this.nz - 1];
+    for (let a = 0; a < 3; a++) {
+      const oa = o.getComponent(a), da = d.getComponent(a);
+      if (Math.abs(da) < 1e-9) { if (oa < 0 || oa > hi[a]) return null; continue; }
+      let ta = (0 - oa) / da, tb = (hi[a] - oa) / da;
+      if (ta > tb) [ta, tb] = [tb, ta];
+      t0 = Math.max(t0, ta); t1 = Math.min(t1, tb);
+    }
+    const step = DRILL.params.distStepMm, lim = STOP_MM / step;
+    for (let t = t0; t <= t1; t += 0.25) {
+      const x = o.x + d.x * t, y = o.y + d.y * t, z = o.z + d.z * t;
+      for (const [f, what] of [[this.dura, 'dura'], [this.root, 'root'], [this.artery, 'artery']] as const) {
+        if (this.sample(f, x, y, z) <= lim) return { t: t / len, what };
+      }
+    }
+    return null;
+  }
+
+  /** How far along a ray (frame mm, the vertebra's own position) it meets that vertebra's bone, or null. */
+  private hitOne(origin: THREE.Vector3, dir: THREE.Vector3, v: Vertebra): number | null {
+    const o = origin.clone().applyMatrix4(this.toIjk);
+    const d = origin.clone().add(dir).applyMatrix4(this.toIjk).sub(o);
     const len = d.length();
     d.divideScalar(len);
     // the ray's span within the grid
@@ -105,14 +150,13 @@ export class DrillVolume {
       t0 = Math.max(t0, ta); t1 = Math.min(t1, tb);
     }
     if (t0 > t1) return null;
-    const val = (t: number, v: Vertebra) => this.sample(this.bone[v], o.x + d.x * t, o.y + d.y * t, o.z + d.z * t);
+    const f = this.bone[v];
+    const val = (t: number) => this.sample(f, o.x + d.x * t, o.y + d.y * t, o.z + d.z * t);
     for (let t = t0; t <= t1; t += 0.25) {
-      for (const v of [0, 1] as Vertebra[]) {
-        if (val(t, v) < this.iso) continue;
-        let a = Math.max(t0, t - 0.25), b = t;
-        for (let s = 0; s < 8; s++) { const m = (a + b) / 2; if (val(m, v) >= this.iso) b = m; else a = m; }
-        return { point: new THREE.Vector3(o.x + d.x * b, o.y + d.y * b, o.z + d.z * b).applyMatrix4(this.toRas), vertebra: v };
-      }
+      if (val(t) < this.iso) continue;
+      let a = Math.max(t0, t - 0.25), b = t;
+      for (let s = 0; s < 8; s++) { const m = (a + b) / 2; if (val(m) >= this.iso) b = m; else a = m; }
+      return b / len;   // voxel steps to frame mm along the ray
     }
     return null;
   }
@@ -125,31 +169,34 @@ export class DrillVolume {
     return { dura: at(this.dura), root: at(this.root), artery: at(this.artery) };
   }
 
-  /** Cut the burr's sphere out of both vertebrae, centred here (in the frame). Returns the voxel box it changed, or null. */
-  carve(c: THREE.Vector3): [THREE.Vector3, THREE.Vector3] | null {
+  /** Cut the burr's sphere out of both vertebrae, centred here (in the frame; each vertebra where it is drawn). Returns,
+   * per vertebra, the voxel box it changed (or null). */
+  carve(c: THREE.Vector3): [[THREE.Vector3, THREE.Vector3] | null, [THREE.Vector3, THREE.Vector3] | null] {
+    return [this.carveOne(c.clone().sub(this.offsets[0]), 0), this.carveOne(c.clone().sub(this.offsets[1]), 1)];
+  }
+
+  private carveOne(c: THREE.Vector3, v: Vertebra): [THREE.Vector3, THREE.Vector3] | null {
     const r = BURR_MM / 2;
-    const reach = r + 4 / CUT_GRADIENT * 40;   // where the cut's field still lies below the bone's
+    const reach = r + 255 / CUT_GRADIENT;   // where the cut's field can still lie below the bone's
     const corners = [-1, 1].flatMap((sx) => [-1, 1].flatMap((sy) => [-1, 1].map((sz) => c.clone().add(new THREE.Vector3(sx, sy, sz).multiplyScalar(reach)).applyMatrix4(this.toIjk))));
     const lo = new THREE.Vector3(Infinity, Infinity, Infinity), hi = new THREE.Vector3(-Infinity, -Infinity, -Infinity);
     for (const p of corners) { lo.min(p); hi.max(p); }
     const i0 = Math.max(0, Math.floor(lo.x)), j0 = Math.max(0, Math.floor(lo.y)), k0 = Math.max(0, Math.floor(lo.z));
     const i1 = Math.min(this.nx - 1, Math.ceil(hi.x)), j1 = Math.min(this.ny - 1, Math.ceil(hi.y)), k1 = Math.min(this.nz - 1, Math.ceil(hi.z));
     if (i0 > i1 || j0 > j1 || k0 > k1) return null;
-    const p = new THREE.Vector3();
+    const p = new THREE.Vector3(), f = this.bone[v];
     let changed = false;
     for (let i = i0; i <= i1; i++) for (let j = j0; j <= j1; j++) for (let k = k0; k <= k1; k++) {
       const dist = p.set(i, j, k).applyMatrix4(this.toRas).distanceTo(c);
       const s = this.iso + (dist - r) * CUT_GRADIENT;
       if (s >= 255) continue;
       const x = this.idx(i, j, k);
-      for (const v of [0, 1] as Vertebra[]) {
-        const old = this.bone[v][x];
-        if (s >= old) continue;
-        const nw = Math.max(0, Math.round(s));
-        if (old >= this.iso && nw < this.iso) this.removedMm3[v] += this.voxMm3;
-        this.bone[v][x] = nw;
-        changed = true;
-      }
+      const old = f[x];
+      if (s >= old) continue;
+      const nw = Math.max(0, Math.round(s));
+      if (old >= this.iso && nw < this.iso) this.removedMm3[v] += this.voxMm3;
+      f[x] = nw;
+      changed = true;
       if (dist < r + 1) this.cut[x] = 1;
     }
     return changed ? [new THREE.Vector3(i0, j0, k0), new THREE.Vector3(i1, j1, k1)] : null;

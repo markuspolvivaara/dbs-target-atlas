@@ -86,10 +86,15 @@ describe('virtual drilling', () => {
 
   it('drilling is in the link for a cervical level with a pair, and hides the pair and its disc', () => {
     const s = decodeSpine('#/atlas?r=cervical&lv=C5&dr=1');
-    expect(s.drill).toBe(true);
-    expect(decodeSpine(encodeSpine(s)).drill).toBe(true);
-    expect(decodeSpine('#/atlas?r=cervical&lv=C1&dr=1').drill).toBe(false);   // no pair at C1
-    expect(decodeSpine('#/atlas?r=lumbar&lv=L4&dr=1').drill).toBe(false);
+    expect(s.drill).toBe('foraminotomy');
+    expect(decodeSpine(encodeSpine(s)).drill).toBe('foraminotomy');
+    const a = decodeSpine('#/atlas?r=cervical&lv=C5&dr=a&dd=2.5');
+    expect([a.drill, a.distract]).toEqual(['acdf', 2.5]);
+    expect(decodeSpine(encodeSpine(a))).toMatchObject({ drill: 'acdf', distract: 2.5 });
+    expect(decodeSpine('#/atlas?r=cervical&lv=C5&dr=a&dd=99').distract).toBe(5);
+    expect(decodeSpine('#/atlas?r=cervical&lv=C5&dr=1&dd=3').distract).toBe(0);   // distraction only at an ACDF
+    expect(decodeSpine('#/atlas?r=cervical&lv=C1&dr=1').drill).toBeNull();   // no pair at C1
+    expect(decodeSpine('#/atlas?r=lumbar&lv=L4&dr=1').drill).toBeNull();
     const p = spinePlan(s);
     for (const id of ['sp_c5', 'sp_c6', 'sp_disc_c5_c6']) expect(p.looks.get(id)).toBe('hidden');
     expect(p.looks.get('sp_c4')).not.toBe('hidden');

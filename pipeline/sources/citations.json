@@ -619,5 +619,19 @@
   "url": "https://doi.org/10.14444/2003",
   "pmid": "25709886",
   "pmcid": "PMC4337191"
+ },
+ "sugawara2015": {
+  "citation": "Sugawara T. Anterior Cervical Spine Surgery for Degenerative Disease: A Review. Neurol Med Chir (Tokyo). 2015;55(7):540-546. doi:10.2176/nmc.ra.2014-0403.",
+  "doi": "10.2176/nmc.ra.2014-0403",
+  "url": "https://doi.org/10.2176/nmc.ra.2014-0403",
+  "pmid": "26119899",
+  "pmcid": "PMC4628186"
+ },
+ "cheung2016": {
+  "citation": "Cheung JP, Luk KD. Complications of Anterior and Posterior Cervical Spine Surgery. Asian Spine J. 2016;10(2):385-400. doi:10.4184/asj.2016.10.2.385.",
+  "doi": "10.4184/asj.2016.10.2.385",
+  "url": "https://doi.org/10.4184/asj.2016.10.2.385",
+  "pmid": "27114784",
+  "pmcid": "PMC4843080"
  }
 }

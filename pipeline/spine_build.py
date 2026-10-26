@@ -662,6 +662,34 @@ CERVICAL_TS = [
     ("headneck_muscles", "sternocleidomastoid_right", "sp_scm_right", "Sternocleidomastoid (right)", "spSoft", "viscera", "muscle", 4000),
 ]
 VA_RADIUS = 2.0       # schematic drawing size (mm), not a measurement
+# the neck's vessels where their segmentation breaks (this CT has no contrast): gaps up to this long bridged by a tube
+# from one piece's end to the next's start (schematic), and each common carotid on to its internal carotid
+BRIDGE_MAX_MM = 40.0
+BRIDGE_ONTO = {"sp_cca_left": "sp_ica_left", "sp_cca_right": "sp_ica_right"}
+
+
+def vessel_end(m, top: bool, depth: float = 3.0) -> tuple[np.ndarray, float, np.ndarray]:
+    """A vessel piece's end (top or bottom): its cross-section's centre and mean radius over the last `depth` mm, and
+    the direction it runs out of the piece there."""
+    V = np.asarray(m.vertices)
+    z0 = V[:, 2].max() if top else V[:, 2].min()
+    sel = V[np.abs(V[:, 2] - z0) < depth]
+    c = sel.mean(0)
+    deeper = V[np.abs(V[:, 2] - (z0 - (2 * depth if top else -2 * depth))) < depth].mean(0)
+    d = c - deeper
+    return c, float(np.mean(np.linalg.norm((sel - c)[:, :2], axis=1))), d / max(np.linalg.norm(d), 1e-6)
+
+
+def bridge(a, b) -> tuple[tuple, float] | None:
+    """A tube from piece a's top to piece b's bottom (a schematic bridge), and the gap it spans (mm); none beyond
+    BRIDGE_MAX_MM."""
+    ca, ra, da = vessel_end(a, True)
+    cb, rb, db = vessel_end(b, False)
+    gap = float(np.linalg.norm(cb - ca))
+    if gap < 1.0 or gap > BRIDGE_MAX_MM:
+        return None
+    path = G.catmull([ca - 2 * da, ca, cb, cb - 2 * db], 6)
+    return G.tube(path, (ra + rb) / 2), gap
 VA_FILLED = 0.6       # a foramen transversarium counts as carrying the artery at this share of the median C3-C6 area
 
 
@@ -707,6 +735,7 @@ def cervical_soft(report: dict) -> list[dict]:
     z_lo, z_hi = C[LABEL_OF["T1"]][2] - 15, C[LABEL_OF["C1"]][2] + 30
     x_mid = float(np.mean([C[LABEL_OF[f"C{i}"]][0] for i in range(1, 8)])) - o[0]
     items = []
+    built = {}
     for task, cls, sid, name, token, layer, cat, faces in CERVICAL_TS:
         sel, aff = ts_box(task, cls)
         if not np.allclose(aff[2, :2], 0):
@@ -715,16 +744,36 @@ def cervical_soft(report: dict) -> list[dict]:
         sel[:, :, (z < z_lo) | (z > z_hi)] = False
         if sel.sum() < 50:
             raise SystemExit(f"{task}/{cls}: empty within the neck")
-        mesh = isosurface(sel.astype(np.float32), shifted(aff, o), 0.5, 1.0, faces)
+        built[sid] = (task, cls, name, token, layer, cat, isosurface(sel.astype(np.float32), shifted(aff, o), 0.5, 1.0, faces))
+    for sid, (task, cls, name, token, layer, cat, mesh) in built.items():
+        extra, notes = [], []
+        if cat == "vessel":
+            # the segmentation's breaks bridged (pieces sorted up the neck), and a common carotid on to its internal one
+            pieces = sorted(mesh.split(only_watertight=False), key=lambda p: p.vertices[:, 2].min())
+            pieces = [p for p in pieces if len(p.faces) > 50]
+            for a, b in zip(pieces, pieces[1:]):
+                br = bridge(a, b)
+                if br:
+                    extra.append(br[0]); notes.append(f"a break of {br[1]:.0f} mm bridged")
+            if sid in BRIDGE_ONTO and pieces:
+                onto = sorted(built[BRIDGE_ONTO[sid]][6].split(only_watertight=False), key=lambda p: p.vertices[:, 2].min())
+                br = bridge(pieces[-1], onto[0]) if onto else None
+                if br:
+                    extra.append(br[0]); notes.append(f"joined to the internal carotid across {br[1]:.0f} mm")
         paired = cls.endswith(("_left", "_right"))
-        nodes = ([{"name": side_of(cls), "positions": mesh.vertices, "normals": mesh.vertex_normals, "indices": mesh.faces, "mode": 4}]
+        if extra:
+            P, N, T = merge([(np.asarray(mesh.vertices), np.asarray(mesh.vertex_normals), np.asarray(mesh.faces))] + extra)
+        else:
+            P, N, T = np.asarray(mesh.vertices), np.asarray(mesh.vertex_normals), np.asarray(mesh.faces)
+        nodes = ([{"name": side_of(cls), "positions": P, "normals": N, "indices": T, "mode": 4}]
                  if paired else halves(mesh, x_mid))
         write_glb(BUILD / f"{sid}.glb", nodes, {"id": sid})
         items.append({"id": sid, "name": name, "token": token, "layer": layer, "category": cat, "region": "cervical",
-                      "faces": int(len(mesh.faces)), "centroid": mesh.centroid.round(2).tolist(),
-                      "source": f"TotalSegmentator {task}: {cls.replace('+', ' and ')}, within the neck"})
+                      "faces": int(len(T)), "centroid": mesh.centroid.round(2).tolist(),
+                      "source": f"TotalSegmentator {task}: {cls.replace('+', ' and ')}, within the neck"
+                                + (f" ({'; '.join(notes)}: schematic tubes where the segmentation of this CT, which has no contrast, breaks)" if notes else "")})
         report[sid] = items[-1]
-        print(f"{sid:24s} faces {len(mesh.faces):6d}")
+        print(f"{sid:24s} faces {len(T):6d} {notes}")
     return items
 
 
@@ -868,7 +917,7 @@ REF_KEYS = ("hwang2019", "merckaert2015", "hasegawa1996", "zindrick1987", "fardo
             "valenzuela2026", "tudose2026", "joaquim2018", "rathinavelu2021", "jiang2024", "joaquim2020", "singh2022",
             "kucherina2026", "jannelli2025", "hasan2025", "arumalla2021", "alicandri2020", "siribumrungwong2018",
             "kendirlioglu2026", "zhou2022", "aosurgeryref",
-            "figa2025", "sung2018", "gonzalezvargas2026", "loganathan2023", "fidan2026", "kang2022", "zhang2020", "kong2022", "silverstein2015")
+            "figa2025", "sung2018", "gonzalezvargas2026", "loganathan2023", "fidan2026", "kang2022", "zhang2020", "kong2022", "silverstein2015", "sugawara2015", "cheung2016")
 
 
 def references() -> dict:

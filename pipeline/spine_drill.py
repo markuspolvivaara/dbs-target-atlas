@@ -37,6 +37,7 @@ FIELD_ISO = 128           # the bone field's surface value (at BONE_HU) ...
 FIELD_HU_STEP = 4.0       # ... and its HU per unit (BONE_HU +- 512 HU)
 DENSITY_MIN_HU, DENSITY_STEP_HU = -200.0, 7.0   # the CT: -200 to 1585 HU
 DIST_STEP_MM = 0.2        # distances to the structures at risk, to 51 mm
+STRUCTURE_REACH_MM = 4.0  # ... and the distances also within this of each structure
 REACH_VOX = 3             # the CT and the distances are kept only within this of the bone (where a burr can be): the
                           # rest is stored empty, so the files stay small
 SURFACE_SAMPLE_MM = 0.25  # the schematic tubes' surfaces sampled this densely for their distances
@@ -103,11 +104,13 @@ def main() -> int:
             fields.append(u8_dist(tree.query(P, distance_upper_bound=52.0)[0].reshape(m.shape)) if tree is not None
                           else np.full(m.shape, 255, np.uint8))
         fields[3:] = [np.asarray(f) for f in fields[3:]]
-        # only where a burr can be: the bone and a few voxels round it
+        # only where a burr can be: the bone and a few voxels round it (the CT); the distances there and near the
+        # structures themselves (the burr is stopped at them: it does not drill past the dural sac to the bone behind)
         near = ndimage.binary_dilation((fields[0] > 0) | (fields[1] > 0), iterations=REACH_VOX)
         fields[2][~near] = 0
+        near_s = near | np.any(np.stack([f < STRUCTURE_REACH_MM / DIST_STEP_MM for f in fields[3:]]), 0)
         for f in fields[3:]:
-            f[~near] = 255
+            f[~near_s] = 255
         # check: each vertebra's field surface against the drawn vertebra
         checks = {}
         for name, f in zip((up, lo_), fields[:2]):

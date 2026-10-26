@@ -260,6 +260,14 @@
   "silverstein2015": {
    "citation": "Silverstein MP, Romrell LJ, Benzel EC, Thompson N, Griffith S, Lieberman IH. Lumbar dorsal root Ganglia location: an anatomic and MRI assessment. Int J Spine Surg. 2015;9:3. doi:10.14444/2003.",
    "url": "https://doi.org/10.14444/2003"
+  },
+  "sugawara2015": {
+   "citation": "Sugawara T. Anterior Cervical Spine Surgery for Degenerative Disease: A Review. Neurol Med Chir (Tokyo). 2015;55(7):540-546. doi:10.2176/nmc.ra.2014-0403.",
+   "url": "https://doi.org/10.2176/nmc.ra.2014-0403"
+  },
+  "cheung2016": {
+   "citation": "Cheung JP, Luk KD. Complications of Anterior and Posterior Cervical Spine Surgery. Asian Spine J. 2016;10(2):385-400. doi:10.4184/asj.2016.10.2.385.",
+   "url": "https://doi.org/10.4184/asj.2016.10.2.385"
   }
  },
  "generatedBy": "pipeline/spine_segment.py (TotalSegmentator) + pipeline/spine_build.py + pipeline/compress.mjs",
@@ -4083,7 +4091,7 @@
   },
   {
    "aliases": [],
-   "bytes": 27868,
+   "bytes": 33056,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4117,7 +4125,7 @@
    },
    "category": "vessel",
    "region": "cervical",
-   "derivation": "TotalSegmentator total: common_carotid_artery_left, within the neck, surface of the segmentation.",
+   "derivation": "TotalSegmentator total: common_carotid_artery_left, within the neck (a break of 24 mm bridged; joined to the internal carotid across 10 mm: schematic tubes where the segmentation of this CT, which has no contrast, breaks), surface of the segmentation.",
    "centroid": {
     "L": [
      -35.91,
@@ -4133,7 +4141,7 @@
   },
   {
    "aliases": [],
-   "bytes": 28092,
+   "bytes": 30504,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4167,7 +4175,7 @@
    },
    "category": "vessel",
    "region": "cervical",
-   "derivation": "TotalSegmentator total: common_carotid_artery_right, within the neck, surface of the segmentation.",
+   "derivation": "TotalSegmentator total: common_carotid_artery_right, within the neck (joined to the internal carotid across 19 mm: schematic tubes where the segmentation of this CT, which has no contrast, breaks), surface of the segmentation.",
    "centroid": {
     "L": [
      14.85,
@@ -4183,7 +4191,7 @@
   },
   {
    "aliases": [],
-   "bytes": 21384,
+   "bytes": 23964,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4217,7 +4225,7 @@
    },
    "category": "vessel",
    "region": "cervical",
-   "derivation": "TotalSegmentator headneck_bones_vessels: internal_carotid_artery_left, within the neck, surface of the segmentation.",
+   "derivation": "TotalSegmentator headneck_bones_vessels: internal_carotid_artery_left, within the neck (a break of 13 mm bridged: schematic tubes where the segmentation of this CT, which has no contrast, breaks), surface of the segmentation.",
    "centroid": {
     "L": [
      -40.42,
@@ -4333,7 +4341,7 @@
   },
   {
    "aliases": [],
-   "bytes": 27116,
+   "bytes": 29564,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4367,7 +4375,7 @@
    },
    "category": "vessel",
    "region": "cervical",
-   "derivation": "TotalSegmentator headneck_bones_vessels: internal_jugular_vein_right, within the neck, surface of the segmentation.",
+   "derivation": "TotalSegmentator headneck_bones_vessels: internal_jugular_vein_right, within the neck (a break of 30 mm bridged: schematic tubes where the segmentation of this CT, which has no contrast, breaks), surface of the segmentation.",
    "centroid": {
     "L": [
      31.39,

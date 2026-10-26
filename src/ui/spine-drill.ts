@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { SP, SP_REFS } from '../spine';
-import { FORAMINOTOMY_STATEMENTS, type Statement } from '../spine/content';
-import { BURR_MM, BURR_RATE_MM_S, BURR_STEP_MM, drillPairFor, DrillVolume, type Clearance, type DrillPair, type Vertebra } from '../spine/drill';
-import type { SpineState } from '../spine/state';
+import { ACDF_DRILL_STATEMENTS, FORAMINOTOMY_STATEMENTS, type Statement } from '../spine/content';
+import { BURR_MM, BURR_RATE_MM_S, BURR_STEP_MM, drillPairFor, DrillVolume, type Clearance, type DrillPair, type Structure, type Vertebra } from '../spine/drill';
+import { DISTRACT_MAX_MM, type DrillMode, type SpineState } from '../spine/state';
 import type { PointerTool, Viewer } from '../viewer/Viewer';
 import { h } from './h';
 import { refLinksFrom } from './reflinks';
@@ -16,11 +16,19 @@ const WARN_MM = 1.5, TOUCH_MM = 0.25;
 const UNDO = 8;
 const one = (n: number) => (Math.round(n * 10) / 10).toFixed(1);
 
-/** The view straight from behind (the frame's posterior, -y) onto the middle of the two vertebrae. */
-function backView(pair: DrillPair): SpineState['cam'] {
-  const c = [pair.upper, pair.lower].map((id) => SP.get(id)?.centroid?.L ?? [0, 0, 0]);
-  const t = [0, 1, 2].map((k) => (c[0][k] + c[1][k]) / 2) as [number, number, number];
-  return { preset: null, pos: [t[0], t[1] - 140, t[2]], tgt: t };
+/** The middle of the two vertebrae, and the spine's direction there (from the lower to the upper). */
+function pairAxis(pair: DrillPair): { centre: THREE.Vector3; up: THREE.Vector3 } {
+  const [a, b] = [pair.upper, pair.lower].map((id) => new THREE.Vector3(...(SP.get(id)?.centroid?.L ?? [0, 0, 0])));
+  return { centre: a.clone().add(b).multiplyScalar(0.5), up: a.clone().sub(b).normalize() };
+}
+
+/** The view onto the middle of the two vertebrae from straight in front (a discectomy) or behind (a foraminotomy),
+ * along their endplates: square to the spine's direction there, so it looks into the disc space. */
+function pairView(pair: DrillPair, mode: DrillMode): SpineState['cam'] {
+  const { centre: t, up } = pairAxis(pair);
+  const fwd = new THREE.Vector3(0, 1, 0).addScaledVector(up, -up.y).normalize();
+  const eye = t.clone().addScaledVector(fwd, mode === 'acdf' ? 140 : -140);
+  return { preset: null, pos: [eye.x, eye.y, eye.z], tgt: [t.x, t.y, t.z] };
 }
 
 /**
@@ -36,6 +44,10 @@ export class DrillPanel implements PointerTool {
   private pair: DrillPair | null = null;
   private active = false;
   private group = new THREE.Group();
+  /** each vertebra's surface, moved as it is distracted */
+  private vgroups: [THREE.Group, THREE.Group] = [new THREE.Group(), new THREE.Group()];
+  private distractOut = h('output', {}, '0 mm');
+  private distractIn: HTMLInputElement | null = null;
   private chunks = new Map<string, THREE.Mesh>();
   private mats: [THREE.MeshStandardMaterial, THREE.MeshStandardMaterial];
   private burr: THREE.Group;
@@ -57,7 +69,7 @@ export class DrillPanel implements PointerTool {
     shaft.position.y = 15 + BURR_MM / 2 - 0.5;
     this.burr.add(head, shaft);
     this.burr.visible = false;
-    this.group.add(this.burr);
+    this.group.add(this.burr, ...this.vgroups);
     window.addEventListener('keydown', (e) => {
       if (!this.active || !(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== 'z') return;
       e.preventDefault();
@@ -68,35 +80,69 @@ export class DrillPanel implements PointerTool {
   // ---------------------------------------------------------------- the panel
   render(s: SpineState): void {
     const pair = s.region === 'cervical' ? drillPairFor(s.level) ?? null : null;
-    const want = !!pair && s.drill;
-    const key = `${pair?.id}|${want}`;
+    const mode = pair ? s.drill : null;
+    const key = `${pair?.id}|${mode}`;
     if (key !== this.key) {
       this.key = key;
-      this.build(pair, want);
-      if (want && pair) void this.start(pair); else this.stop();
+      this.build(pair, mode, s);
+      if (mode && pair) void this.start(pair); else this.stop();
     }
+    this.distract(pair, mode === 'acdf' ? s.distract : 0);
   }
 
-  private build(pair: DrillPair | null, on: boolean): void {
+  /** The two vertebrae drawn `mm` apart along the spine, each moved half of it. */
+  private mm = 0;
+  private distract(pair: DrillPair | null, mm: number): void {
+    this.mm = mm;
+    if (this.distractIn && document.activeElement !== this.distractIn) this.distractIn.value = String(mm);
+    this.distractOut.textContent = `${one(mm)} mm`;
+    if (!pair) return;
+    const up = pairAxis(pair).up;
+    const o: [THREE.Vector3, THREE.Vector3] = [up.clone().multiplyScalar(mm / 2), up.clone().multiplyScalar(-mm / 2)];
+    this.vgroups.forEach((g, v) => g.position.copy(o[v]));
+    if (this.vol) { this.vol.offsets[0].copy(o[0]); this.vol.offsets[1].copy(o[1]); }
+    this.viewer.invalidate();
+  }
+
+  private build(pair: DrillPair | null, mode: DrillMode | null, s: SpineState): void {
     clear(this.el);
+    this.distractIn = null;
     if (!pair) return;
     const up = SP.get(pair.upper)?.level ?? '', lo = SP.get(pair.lower)?.level ?? '';
     const root = SP.get(pair.root)?.name ?? pair.root;
     const st = (x: Statement) => h('p', { class: 'aside' }, x.text, x.refIds.length ? ' ' : '', refLinksFrom(SP_REFS, x.refIds));
+    // starting, or changing the approach: its view, the vertebral artery shown, no screw or cut
+    const go = (m: DrillMode | null) => this.update((x) => {
+      x.drill = m;
+      x.distract = 0;
+      if (m) { x.layers.vessels = { on: true, opacity: x.layers.vessels?.opacity ?? 1 }; x.cam = pairView(pair, m); x.screw = null; x.cut = 'none'; }
+    }, { camera: !!m });
+    const which = mode ?? this.pending;
+    const chip = (m: DrillMode, label: string) => h('button', { type: 'button', class: 'chip', 'aria-pressed': String(which === m),
+      onclick: () => { if (mode) go(m); else { this.pending = m; this.build(pair, null, s); } } }, label);
+    const pick = mode ?? this.pending;
+    this.distractIn = h('input', { type: 'range', min: 0, max: DISTRACT_MAX_MM, step: 0.5, value: s.distract, 'aria-label': 'Distraction',
+      oninput: (e: Event) => this.update((x) => { x.distract = parseFloat((e.target as HTMLInputElement).value); }) }) as HTMLInputElement;
     this.el.append(...([
-      h('p', {}, `Drill the ${up}–${lo} foramen from behind, where the ${root.toLowerCase()} exits: the two vertebrae at once, with a round ${BURR_MM}-mm burr.`),
+      h('div', { class: 'chips', role: 'group', 'aria-label': 'Approach' },
+        chip('foraminotomy', 'Posterior foraminotomy'), chip('acdf', 'Anterior discectomy (ACDF)')),
+      h('p', {}, pick === 'acdf'
+        ? `Drill the ${up}–${lo} disc space from the front, the disc taken out: the two vertebrae at once, with a round ${BURR_MM}-mm burr.`
+        : `Drill the ${up}–${lo} foramen from behind, where the ${root.toLowerCase()} exits: the two vertebrae at once, with a round ${BURR_MM}-mm burr.`),
       h('div', { class: 'chips' },
-        h('button', { type: 'button', class: 'chip', 'aria-pressed': String(on), onclick: () => this.update((x) => {
-          x.drill = !on;
-          if (!on) { x.layers.vessels = { on: true, opacity: x.layers.vessels?.opacity ?? 1 }; x.cam = backView(pair); x.screw = null; x.cut = 'none'; }
-        }, { camera: !on }) }, on ? 'Stop drilling' : 'Start drilling'),
-        on ? h('button', { type: 'button', class: 'chip', onclick: () => this.undoStroke() }, 'Undo') : null,
-        on ? h('button', { type: 'button', class: 'chip', onclick: () => this.resetPair() }, 'Start the bone over') : null),
-      on ? h('p', { class: 'aside' }, 'Point at the bone and hold the button to drill in along your line of sight; move to widen. The right button turns the view (with Shift: moves it), the wheel zooms; Ctrl+Z undoes a stroke.') : null,
+        h('button', { type: 'button', class: 'chip', 'aria-pressed': String(!!mode), onclick: () => go(mode ? null : pick) }, mode ? 'Stop drilling' : 'Start drilling'),
+        mode ? h('button', { type: 'button', class: 'chip', onclick: () => this.undoStroke() }, 'Undo') : null,
+        mode ? h('button', { type: 'button', class: 'chip', onclick: () => this.resetPair() }, 'Start the bone over') : null),
+      mode === 'acdf' ? h('label', { class: 'range scope-range' }, h('span', {}, 'Distraction ', this.distractOut), this.distractIn) : null,
+      mode ? h('p', { class: 'aside' }, 'Point at the bone and hold the button to drill in along your line of sight; move to widen. The right button turns the view (with Shift: moves it), the wheel zooms; Ctrl+Z undoes a stroke.') : null,
       this.out,
-      st(FORAMINOTOMY_STATEMENTS.vpoint), st(FORAMINOTOMY_STATEMENTS.facet), st(FORAMINOTOMY_STATEMENTS.drawn)] as (Node | null)[]).filter((x): x is Node => x !== null));
+      ...(pick === 'acdf' ? [st(ACDF_DRILL_STATEMENTS.distraction), st(ACDF_DRILL_STATEMENTS.lateral), st(ACDF_DRILL_STATEMENTS.drawn)]
+        : [st(FORAMINOTOMY_STATEMENTS.vpoint), st(FORAMINOTOMY_STATEMENTS.facet), st(FORAMINOTOMY_STATEMENTS.drawn)])] as (Node | null)[]).filter((x): x is Node => x !== null));
     this.readout(null);
   }
+
+  /** the approach chosen before drilling starts */
+  private pending: DrillMode = 'foraminotomy';
 
   /** The burr's clearances and the bone removed. */
   private readout(c: Clearance | null): void {
@@ -108,7 +154,9 @@ export class DrillPanel implements PointerTool {
       return h('li', { class: `clear-${cls}` }, `${label}${schematic ? ' (schematic)' : ''}: `,
         h('strong', {}, mm < TOUCH_MM ? 'touching' : mm > 20 ? 'more than 20 mm' : `${one(mm)} mm`));
     };
+    const against = { dura: 'the dural sac', root: `the ${(SP.get(this.pair.root)?.name ?? 'root').toLowerCase()} or another root (schematic)`, artery: 'the vertebral artery (schematic)' };
     this.out.append(
+      this.stopped ? h('p', { class: 'drill-stop' }, `The burr rests against ${against[this.stopped]}: it does not drill past it to the bone behind.`) : '',
       c ? h('ul', { class: 'plain drill-clear' },
         row('Dural sac', c.dura, false), row(name(this.pair.root), c.root, true), row('Vertebral artery', c.artery, true))
         : h('p', { class: 'aside' }, 'Point at the bone to see how near the burr is to the dural sac, the root and the vertebral artery.'),
@@ -117,6 +165,7 @@ export class DrillPanel implements PointerTool {
 
   // ---------------------------------------------------------------- the bone
   private async start(pair: DrillPair): Promise<void> {
+    const key = this.key;
     let p = this.vols.get(pair.id);
     if (!p) {
       p = DrillVolume.load(pair);
@@ -125,9 +174,10 @@ export class DrillPanel implements PointerTool {
     }
     this.out.replaceChildren(h('p', { class: 'aside' }, 'Loading the bone…'));
     const vol = await p;
-    if (this.key !== `${pair.id}|true`) return;   // left meanwhile
+    if (this.key !== key) return;   // left meanwhile
     this.vol = vol;
     this.pair = pair;
+    this.distract(pair, this.mm);
     this.active = true;
     this.undo = [];
     const pal = paletteFor(resolvedTheme(storedTheme()));
@@ -145,7 +195,7 @@ export class DrillPanel implements PointerTool {
     this.active = false;
     this.pressing = false;
     this.viewer.setPointerTool(null);
-    for (const m of this.chunks.values()) { this.group.remove(m); m.geometry.dispose(); }
+    for (const m of this.chunks.values()) { m.removeFromParent(); m.geometry.dispose(); }
     this.chunks.clear();
     this.burr.visible = false;
     this.viewer.toolGroup.remove(this.group);
@@ -177,12 +227,12 @@ export class DrillPanel implements PointerTool {
     const key = `${v}:${i}:${j}:${k}`;
     const old = this.chunks.get(key);
     const g = this.vol!.mesh(v, i, j, k, this.colour);
-    if (old) { old.geometry.dispose(); if (!g) { this.group.remove(old); this.chunks.delete(key); return; } old.geometry = g; return; }
+    if (old) { old.geometry.dispose(); if (!g) { old.removeFromParent(); this.chunks.delete(key); return; } old.geometry = g; return; }
     if (!g) return;
     const m = new THREE.Mesh(g, this.mats[v]);
     m.raycast = () => {};
     this.chunks.set(key, m);
-    this.group.add(m);
+    this.vgroups[v].add(m);
   }
 
   private undoStroke(): void {
@@ -205,11 +255,16 @@ export class DrillPanel implements PointerTool {
   }
 
   // ---------------------------------------------------------------- the burr (PointerTool)
-  /** Where the burr sits for a ray: touching the first bone it meets, or null. */
-  private place(ray: THREE.Ray, into = 0): THREE.Vector3 | null {
+  /** what stopped the burr last (the dural sac, a root, a vertebral artery), or null */
+  private stopped: Structure | null = null;
+
+  /** Where the burr sits for a ray: touching the first bone it meets (`into` it, drilling), or resting against the
+   * dural sac, a root or a vertebral artery if that comes first (and then not going in); null if it meets neither. */
+  private place(ray: THREE.Ray, into = 0): { c: THREE.Vector3; cut: boolean } | null {
     const hit = this.vol?.hit(ray);
+    this.stopped = hit?.stop ?? null;
     if (!hit) return null;
-    return hit.point.clone().addScaledVector(ray.direction, into - BURR_MM / 2);
+    return { c: hit.point.clone().addScaledVector(ray.direction, (hit.stop ? 0 : into) - BURR_MM / 2), cut: !hit.stop };
   }
 
   private show(c: THREE.Vector3 | null, dir: THREE.Vector3 | null): void {
@@ -226,7 +281,7 @@ export class DrillPanel implements PointerTool {
   hover(ray: THREE.Ray | null): void {
     this.ray = ray;
     if (!this.active || this.pressing) return;
-    this.show(ray ? this.place(ray) : null, ray?.direction ?? null);
+    this.show(ray ? this.place(ray)?.c ?? null : null, ray?.direction ?? null);
   }
 
   down(ray: THREE.Ray): void {
@@ -244,7 +299,7 @@ export class DrillPanel implements PointerTool {
       // the time held is banked, and cut in steps of BURR_STEP_MM; the burr follows the pointer meanwhile
       due += BURR_RATE_MM_S * dt;
       if (this.ray && due >= BURR_STEP_MM) { this.drillAt(this.ray, due); due = 0; }
-      else if (this.ray) this.show(this.place(this.ray), this.ray.direction);
+      else if (this.ray) this.show(this.place(this.ray)?.c ?? null, this.ray.direction);
       requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
@@ -260,10 +315,9 @@ export class DrillPanel implements PointerTool {
   /** One step of drilling: the burr pushed `mm` into the bone it touches along the ray, its sphere cut out. */
   private drillAt(ray: THREE.Ray, mm: number): void {
     const vol = this.vol!;
-    const c = this.place(ray, mm);
-    if (!c) { this.show(null, null); return; }
-    const box = vol.carve(c);
-    if (box) for (const [i, j, k] of vol.chunksOf(box[0], box[1])) for (const v of [0, 1] as Vertebra[]) this.remesh(v, i, j, k);
-    this.show(c, ray.direction);
+    const p = this.place(ray, mm);
+    if (!p) { this.show(null, null); return; }
+    if (p.cut) vol.carve(p.c).forEach((box, v) => { if (box) for (const [i, j, k] of vol.chunksOf(box[0], box[1])) this.remesh(v as Vertebra, i, j, k); });
+    this.show(p.c, ray.direction);
   }
 }
