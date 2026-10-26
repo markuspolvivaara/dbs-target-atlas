@@ -3155,7 +3155,7 @@
   },
   {
    "aliases": [],
-   "bytes": 21136,
+   "bytes": 17388,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3191,7 +3191,7 @@
    "level": "T1",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the C7-T1 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at T1 and exits through the T1-T2 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T1-T2 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      -0.65,
@@ -3207,7 +3207,7 @@
   },
   {
    "aliases": [],
-   "bytes": 21148,
+   "bytes": 17392,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3243,7 +3243,7 @@
    "level": "T2",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T1-T2 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at T2 and exits through the T2-T3 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T2-T3 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      -1.52,
@@ -3259,7 +3259,7 @@
   },
   {
    "aliases": [],
-   "bytes": 21168,
+   "bytes": 17388,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3295,7 +3295,7 @@
    "level": "T3",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T2-T3 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at T3 and exits through the T3-T4 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T3-T4 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      -6.35,
@@ -3311,7 +3311,7 @@
   },
   {
    "aliases": [],
-   "bytes": 21152,
+   "bytes": 17384,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3347,7 +3347,7 @@
    "level": "T4",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T3-T4 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at T4 and exits through the T4-T5 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T4-T5 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      -5.35,
@@ -3363,7 +3363,7 @@
   },
   {
    "aliases": [],
-   "bytes": 21144,
+   "bytes": 17408,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3399,7 +3399,7 @@
    "level": "T5",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T4-T5 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at T5 and exits through the T5-T6 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T5-T6 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      -6.55,
@@ -3415,7 +3415,7 @@
   },
   {
    "aliases": [],
-   "bytes": 21172,
+   "bytes": 17416,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3451,7 +3451,7 @@
    "level": "T6",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T5-T6 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at T6 and exits through the T6-T7 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T6-T7 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      -3.46,
@@ -3467,7 +3467,7 @@
   },
   {
    "aliases": [],
-   "bytes": 21180,
+   "bytes": 17400,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3503,7 +3503,7 @@
    "level": "T7",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T6-T7 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at T7 and exits through the T7-T8 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T7-T8 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      -4.05,
@@ -3519,7 +3519,7 @@
   },
   {
    "aliases": [],
-   "bytes": 21172,
+   "bytes": 17372,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3555,7 +3555,7 @@
    "level": "T8",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T7-T8 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at T8 and exits through the T8-T9 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T8-T9 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      0.84,
@@ -3571,7 +3571,7 @@
   },
   {
    "aliases": [],
-   "bytes": 21184,
+   "bytes": 17396,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3607,7 +3607,7 @@
    "level": "T9",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T8-T9 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at T9 and exits through the T9-T10 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T9-T10 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      -2.0,
@@ -3623,7 +3623,7 @@
   },
   {
    "aliases": [],
-   "bytes": 21196,
+   "bytes": 17404,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3659,7 +3659,7 @@
    "level": "T10",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T9-T10 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at T10 and exits through the T10-T11 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T10-T11 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      1.98,
@@ -3675,7 +3675,7 @@
   },
   {
    "aliases": [],
-   "bytes": 21152,
+   "bytes": 17428,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3711,7 +3711,7 @@
    "level": "T11",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T10-T11 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at T11 and exits through the T11-T12 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T11-T12 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      3.42,
@@ -3727,7 +3727,7 @@
   },
   {
    "aliases": [],
-   "bytes": 21168,
+   "bytes": 17420,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3763,7 +3763,7 @@
    "level": "T12",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T11-T12 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at T12 and exits through the T12-L1 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T12-L1 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      6.35,
