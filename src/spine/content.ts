@@ -158,7 +158,7 @@ export const STATEMENTS = {
     refIds: ['kong2022'],
   },
   lumbarTakeoff: {
-    text: 'In 16 cadavers the lumbar roots left the dural sac at the largest angle at L4 and L5 (50.5–58.8°); the centre of the dorsal root ganglion lay in the medial zone of the foramen at L1–L4 and in its lateral zone at L5. Here each lumbar root leaves the sac running down and out at 55° to it; each thoracic root too (not measured there: a drawing choice).',
+    text: 'In 16 cadavers the lumbar roots left the dural sac at the largest angle at L4 and L5 (50.5–58.8°); the centre of the dorsal root ganglion lay in the medial zone of the foramen at L1–L4 and in its lateral zone at L5. Here each lumbar root leaves the sac running down and out at 55° to it. Each thoracic root is drawn leaving the sac level with the upper part of its foramen and running straight out beneath the pedicle; its rootlets’ descent inside the sac is not drawn (a drawing choice, not measured).',
     refIds: ['silverstein2015'],
   },
   cervicalForamen: {

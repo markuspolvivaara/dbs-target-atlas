@@ -525,19 +525,27 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
                     if p0 is not None and (p1 - p0) @ out < 1.0:  # the sac reaches out past the entrance: no kink back
                         p1 = None
                 else:
-                    p0 = G.lateral_point(sac_pts, dc_above, Fa, sg)  # take-off: lateral wall of the dural sac at the disc above
-                    # leaving the sac down and out at TAKEOFF_DEG to its axis, from just inside its wall
-                    p0b = None
-                    if p0 is not None:
-                        t = np.radians(TAKEOFF_DEG)
-                        p0b = p0 + TAKEOFF_LEG_MM * (np.sin(t) * sg * Fa[0] - np.cos(t) * Fa[2])
-                        p0 = p0 - sg * ROOT_IN_MM * Fa[0]
-                    p1 = cu + (edge - sg * 2.5) * F[0] + ((can["v"] + 3) if can else -20) * F[1]  # lateral recess, own level
                     if fo:
                         c = np.array(fo["centre"])
                         p2 = c + ((fo["top"] - fo["w"]) / 2) * F[2]  # upper part of the foramen, beneath the pedicle
                     else:
                         p2 = mid + (edge + sg * 6) * F[0] + ((can["v"] if can else -20)) * F[1] + 0.15 * h * F[2]
+                    p0b = None
+                    if cfg["course"] == "plexus":
+                        p0 = G.lateral_point(sac_pts, dc_above, Fa, sg)  # take-off: lateral wall of the dural sac at the disc above
+                        # leaving the sac down and out at TAKEOFF_DEG to its axis, from just inside its wall
+                        if p0 is not None:
+                            t = np.radians(TAKEOFF_DEG)
+                            p0b = p0 + TAKEOFF_LEG_MM * (np.sin(t) * sg * Fa[0] - np.cos(t) * Fa[2])
+                            p0 = p0 - sg * ROOT_IN_MM * Fa[0]
+                        p1 = cu + (edge - sg * 2.5) * F[0] + ((can["v"] + 3) if can else -20) * F[1]  # lateral recess, own level
+                    else:
+                        # thoracic: from the sac's wall level with the upper part of its foramen, straight out beneath
+                        # the pedicle (a drawing choice: the rootlets' descent inside the sac is not drawn)
+                        p0 = G.lateral_point(sac_pts, dc + float((p2 - dc) @ F[2]) * F[2], F, sg)
+                        if p0 is not None:
+                            p0 = p0 - sg * ROOT_IN_MM * F[0]
+                        p1 = None
                     if cfg["course"] == "plexus":  # on forwards and down towards the lumbar plexus
                         p3 = p2 + sg * 15 * F[0] + 8 * F[1] - 10 * F[2]
                         p4 = p3 + sg * 15 * F[0] + 10 * F[1] - 20 * F[2]
@@ -567,7 +575,9 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
                 path_note = f"leaves the lateral wall of the dural sac level with its foramen's entrance and {exit_note}, then runs a short way forwards and out along the transverse process"
             else:
                 after = "" if cfg["course"] == "plexus" else ", then a short way along its intercostal course"
-                path_note = f"leaves the lateral wall of the dural sac at the {above}-{up} disc, down and out at {TAKEOFF_DEG:g} deg to the sac (Silverstein 2015), runs in the lateral recess at {up} and {exit_note}{after}"
+                path_note = (f"leaves the lateral wall of the dural sac at the {above}-{up} disc, down and out at {TAKEOFF_DEG:g} deg to the sac (Silverstein 2015), runs in the lateral recess at {up} and {exit_note}{after}"
+                             if cfg["course"] == "plexus" else
+                             f"leaves the lateral wall of the dural sac level with the upper part of its foramen and {exit_note}{after}")
             roots.append({"id": rid, "name": f"{rname} nerve root", "level": rname, "token": "spRoot", "layer": "tracts", "category": "root",
                           "region": region, "schematic": True, "estimated": [k for k, v in estimated.items() if v],
                           "centroid": (p2 - o).round(2).tolist(),
