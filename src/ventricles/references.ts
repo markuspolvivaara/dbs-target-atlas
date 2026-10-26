@@ -22,6 +22,12 @@ export const VE_REFERENCES: BsReference[] = [
     citation: 'Xiao K, Zhou L, Tang X, Liu S, Deng Z, Yang F. MRI imaging characteristics of brainstem and midbrain aqueduct in patients with iNPH. Sci Rep. 2025;15(1):94. doi:10.1038/s41598-024-83874-7.' },
   { id: 'erginoglu2026', pmid: '41283941', pmcid: 'PMC12967451', shortLabel: 'Erginoglu 2026', url: doi('10.1007/s11845-025-04170-5'),
     citation: 'Erginoglu U, Sulaimanov U, Uslu I, Ataoglu C, Keles A, Aycan A, et al. Quantitative anatomy of the fourth ventricle floor: a cadaveric morphometric study. Ir J Med Sci. 2026;195(1):373–381. doi:10.1007/s11845-025-04170-5.' },
+  { id: 'sousa2025', pmid: '39911564', pmcid: 'PMC11794814', shortLabel: 'Sousa 2025', url: doi('10.3389/fnana.2025.1431128'),
+    citation: 'Sousa J, Silva SM, Alves H, Carvalho B, Sousa JM, Ferreira-Pinto MJ, et al. Optimal trajectory of the neuroendoscope for third ventricle pavement access. Front Neuroanat. 2025;19:1431128. doi:10.3389/fnana.2025.1431128.' },
+  { id: 'dasilva2024', pmid: '38374441', pmcid: 'PMC10960742', shortLabel: 'da Silva 2024', url: doi('10.1007/s00276-024-03312-1'),
+    citation: 'da Silva AC, Silva SM, Alves H, Cunha-Cabral D, Pinto FF, Fernandes-Silva J, et al. Stereotactic anatomy of the third ventricle. Surg Radiol Anat. 2024;46(3):271–283. doi:10.1007/s00276-024-03312-1.' },
+  { id: 'rosu2026', pmid: '41681810', pmcid: 'PMC12897366', shortLabel: 'Roşu 2026', url: doi('10.3390/diagnostics16030491'),
+    citation: 'Roşu AI, Ghenciu LA, Roşu DC, Iacob ER, Stoicescu ER, Stoicescu R, et al. Ventricular anatomy across CT and MRI in hydrocephalus: a retrospective study. Diagnostics (Basel). 2026;16(3):491. doi:10.3390/diagnostics16030491.' },
   { id: 'longatti2026', pmid: '41784833', pmcid: 'PMC12963120', shortLabel: 'Longatti 2026', url: doi('10.1007/s00381-026-07188-x'),
     citation: 'Longatti P, Fiorindi A, Siddi F, Boaro A, Canova G, Feletti A. The telovelar approach reshaped: a new perspective from inside the fourth ventricle. Childs Nerv Syst. 2026;42(1):96. doi:10.1007/s00381-026-07188-x.' },
 ];

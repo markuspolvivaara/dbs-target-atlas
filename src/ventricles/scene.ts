@@ -25,6 +25,7 @@ export function vePlan(s: VeState): VePlan {
   const tracts = new Map<string, TractRole>();
   for (const id of BONES) looks.set(id, g.bone);
   for (const id of BRAIN) looks.set(id, g.brain ?? 'hidden');
+  for (const id of g.context ?? []) looks.set(id, 'context');
   for (const id of g.key) looks.set(id, 'primary');
   if (s.sel && VE.has(s.sel)) looks.set(s.sel, 'primary');
   return {

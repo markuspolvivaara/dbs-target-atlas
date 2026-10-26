@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { crossCheckVe, LANDMARKS, TARGETS, TRAJ, trajectoryFor, VE, VE_MANIFEST } from '../../src/ventricles';
+import { crossCheckVe, ETV, LANDMARKS, TARGETS, TRAJ, trajectoryFor, VE, VE_MANIFEST } from '../../src/ventricles';
 import { VE_GROUPS } from '../../src/ventricles/groups';
 import { catheterMarkers, vePlan } from '../../src/ventricles/scene';
-import { decodeVe, defaultVeState, encodeVe } from '../../src/ventricles/state';
+import { decodeVe, defaultScopeDepth, defaultVeState, encodeVe, etvLine } from '../../src/ventricles/state';
 
 describe('ventricles section', () => {
   it('content, references and generated files agree', () => {
@@ -93,5 +93,67 @@ describe('ventricles section', () => {
     // the catheter's settings stay out of the link of a view without one, and bad values fall back to the defaults
     expect(encodeVe({ ...s, grp: 'ventricles' })).not.toContain('ct=');
     expect(decodeVe('#/atlas?g=evd&co=7&ct=XYZ').cath).toEqual(defaultVeState().cath);
+  });
+  it('around the ventricles: the fitted structures are there, labelled fitted; the mammillary bodies where da Silva puts them', () => {
+    for (const id of ['ve_fornix', 've_septum_pellucidum', 've_choroid_plexus', 've_mammillary_body', 've_thalamus', 've_optic_chiasm']) {
+      expect(VE.get(id)?.fitted, id).toBe(true);
+      expect(VE.get(id)?.category, id).toBe('deep');
+    }
+    expect(VE.get('ve_mammillary_body')!.refIds).toContain('dasilva2024');
+    for (const id of ['sb_basilar_artery', 'sb_posterior_cerebral_artery_p1_p2', 'tb_oculomotor_nerve_iii', 'pf_midbrain']) expect(VE.has(id), id).toBe(true);
+    // da Silva 2024 (200 MRIs, mean ± SD from the anterior commissure along the AC-PC line): this CT within 3 SD
+    const near = ([y, z]: number[], my: number, sy: number, mz: number, sz: number) => Math.abs(y - my) < 3 * sy && Math.abs(z - mz) < 3 * sz;
+    expect(near(ETV.infundibularRecessAcpcMm, -0.49, 1.6, -13.34, 1.78)).toBe(true);
+    expect(near(ETV.basilarApexAcpcMm, -9.79, 2.22, -13.97, 4.08)).toBe(true);
+    expect(ETV.mammillary.placedAcpcMm[0]).toBeCloseTo(-8.56, 1);
+    expect(near(ETV.mammillary.placedAcpcMm, -8.56, 1.18, -7.01, 1.65)).toBe(true);
+    expect(ETV.acpcLengthMm).toBeGreaterThan(20);
+    expect(ETV.acpcLengthMm).toBeLessThan(32);
+  });
+  it('the endoscopic third ventriculostomy: the target between the recess and the mammillary bodies, Sousa’s line plausible on this skull', () => {
+    const [ty] = ETV.targetAcpcMm;
+    expect(ty).toBeLessThan(ETV.infundibularRecessAcpcMm[0]);
+    expect(ty).toBeGreaterThan(ETV.mammillary.placedAcpcMm[0]);
+    expect(ETV.targetToBasilarApexMm).toBeGreaterThan(3);
+    expect(ETV.targetToBasilarApexMm).toBeLessThan(12);
+    for (const side of ['R', 'L'] as const) {
+      const t = ETV.trajectories[side];
+      expect(Math.hypot(...t.direction), side).toBeCloseTo(1, 3);
+      expect(t.depthMm, side).toBeGreaterThan(75);          // Sousa 2025, without hydrocephalus: 88.5 ± 3.9 mm
+      expect(t.depthMm, side).toBeLessThan(100);
+      expect(t.depthToMonroMm, side).toBeLessThan(t.depthMm);
+      expect(t.fromMidlineMm, side).toBeGreaterThan(5);
+      expect(t.fromMidlineMm, side).toBeLessThan(35);
+      expect(Math.sign(t.entry[0] - ETV.frame.origin[0])).toBe(side === 'R' ? 1 : -1);
+      expect(t.entry[2]).toBeGreaterThan(t.target[2] + 60); // the burr hole far above the floor
+    }
+    expect(etvLine('R', 0).entry).toEqual(ETV.trajectories.R.entry);
+    expect(etvLine('R', 1).depthMm).toBeCloseTo(ETV.hydrocephalus.trajectories.R.depthMm, 5);
+  });
+  it('the hydrocephalus shape: meets Roşu’s medians and Aydin’s floor, triventricular, does not fold', () => {
+    const H = ETV.hydrocephalus;
+    expect(H.rest.evansIndex).toBeLessThan(0.3);
+    expect(Math.abs(H.hydrocephalus.evansIndex - H.goal.evansIndex)).toBeLessThan(0.01);
+    expect(Math.abs(H.hydrocephalus.thirdWidthMm - H.goal.thirdWidthMm)).toBeLessThan(0.5);
+    // the floor comes down over this patient's P1 segments, which hold it a little above Aydin's 2.75 mm
+    expect(H.hydrocephalus.floorToApexMm).toBeGreaterThanOrEqual(H.goal.floorToApexMm - 0.3);
+    expect(H.hydrocephalus.floorToApexMm).toBeLessThan(H.goal.floorToApexMm + 1);
+    expect(H.hydrocephalus.floorToApexMm).toBeLessThan(H.rest.floorToApexMm - 3);
+    expect(H.goal).toEqual({ evansIndex: 0.42, thirdWidthMm: 23.5, floorToApexMm: 2.75 });
+    expect(H.jacobianMinAround).toBeGreaterThan(0);
+    // the line lengthens with the ventricles (Sousa: about 6 mm per 0.1 of Evans' index)
+    expect(H.trajectories.R.depthMm).toBeGreaterThan(ETV.trajectories.R.depthMm);
+  });
+  it('the endoscope and the shape are in the link; the ventriculostomy view drops the shape', () => {
+    const s = decodeVe('#/atlas?g=etv&es=L&ed=70&ea=5,-3&ev=3d&hy=60');
+    expect(s.scope).toEqual({ side: 'L', depth: 70, ap: 5, ml: -3, big: false });
+    expect(s.morphs.hydrocephalus).toBeCloseTo(0.6);
+    expect(decodeVe(encodeVe(s))).toMatchObject({ scope: s.scope, morphs: s.morphs });
+    expect(decodeVe('#/atlas?g=etv').scope.depth).toBe(defaultScopeDepth('R'));
+    expect(decodeVe('#/atlas?g=evd&hy=60').morphs).toEqual({});
+    expect(encodeVe({ ...s, grp: 'ventricles' })).not.toContain('ed=');
+    const p = vePlan(decodeVe('#/atlas?g=etv'));
+    expect(p.looks.get('ve_third_ventricle')).toBe('context');
+    expect(p.looks.get('ve_fornix')).toBe('primary');
   });
 });

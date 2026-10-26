@@ -2,9 +2,10 @@ import { z } from 'zod';
 import veLandmarks from '../data/generated/ve-landmarks.json';
 import veManifestJson from '../data/generated/ve-manifest.json';
 import veTrajectories from '../data/generated/ve-trajectories.json';
+import veEtv from '../data/generated/ve-etv.json';
 import { VeManifestSchema } from '../data/schema';
 import { BsReferenceSchema, ClaimSchema, type Claim } from '../brainstem/schema';
-import { ACCURACY, AQUEDUCT, FOURTH, IDEAL, KOCHER, LATERAL_WALLS, MONRO, PRACTICE, THIRD_FLOOR } from './content';
+import { ACCURACY, AQUEDUCT, ETV_ANATOMY, ETV_TRAJECTORY, FOURTH, HYDRO, IDEAL, KOCHER, LATERAL_WALLS, MONRO, PRACTICE, THIRD_FLOOR } from './content';
 import { VE_REFERENCES } from './references';
 
 /**
@@ -62,21 +63,58 @@ export function trajectoryFor(kocher: string, side: string, offsetMm: number, ta
   return TRAJ.trajectories.find((t) => t.kocher === kocher && t.side === side && t.offsetMm === offsetMm && t.target === target);
 }
 
+/** The endoscopic third ventriculostomy on this CT (ventricles_etv.py): the AC-PC frame, the target and the landmarks
+ * around it, Sousa 2025's line through each foramen of Monro, and checks against the published positions. */
+const EtvTrajectorySchema = z.object({
+  entry: V3, direction: V3, target: V3, monro: V3, depthMm: z.number(), depthToMonroMm: z.number(), fromMidlineMm: z.number(),
+  fromCoronalSutureMm: z.number(), sagittalAngleDeg: z.number(), coronalAngleDeg: z.number(),
+});
+export type EtvTrajectory = z.infer<typeof EtvTrajectorySchema>;
+const YZ = z.tuple([z.number(), z.number()]);
+export const ETV = z.object({
+  mammillary: z.object({ modelAcpcMm: YZ, placedAcpcMm: YZ, daSilvaAcpcMm: YZ, movedMm: z.number() }),
+  acpcLengthMm: z.number(),
+  wallsMovedMm: z.record(z.number()),
+  infundibularRecessAcpcMm: YZ, targetAcpcMm: YZ, basilarApexAcpcMm: YZ, targetToBasilarApexMm: z.number(),
+  frame: z.object({ origin: V3, y: V3, z: V3 }),
+  points: z.object({ target: V3, infundibularRecess: V3, basilarApex: V3, mammillaryBodies: V3, monro: z.object({ R: V3, L: V3 }) }),
+  trajectories: z.object({ R: EtvTrajectorySchema, L: EtvTrajectorySchema }),
+  /** the hydrocephalus shape: what it measures (rest and shaped), and the target, foramina and line with it */
+  hydrocephalus: z.object({
+    rest: z.object({ evansIndex: z.number(), frontalHornsMm: z.number(), thirdWidthMm: z.number(), floorToApexMm: z.number() }),
+    hydrocephalus: z.object({ evansIndex: z.number(), frontalHornsMm: z.number(), thirdWidthMm: z.number(), floorToApexMm: z.number() }),
+    goal: z.object({ evansIndex: z.number(), thirdWidthMm: z.number(), floorToApexMm: z.number() }),
+    maxMoveMm: z.number(), jacobianMinAround: z.number(),
+    points: z.object({ target: V3, monro: z.object({ R: V3, L: V3 }), mammillaryBodies: V3 }),
+    trajectories: z.object({ R: EtvTrajectorySchema, L: EtvTrajectorySchema }),
+  }),
+}).parse(veEtv);
+
 export const VE_REFS = z.array(BsReferenceSchema).parse(VE_REFERENCES);
 export const VE_REF = new Map(VE_REFS.map((r) => [r.id, r]));
 
-export type Kind = 'ventricle' | 'bone' | 'brain';
+export type Kind = 'ventricle' | 'bone' | 'brain' | 'deep' | 'vessel' | 'nerve' | 'brainstem';
 export const kindOf = (id: string): Kind => {
-  const c = VE.get(id)?.category;
-  return c === 'ventricle' ? 'ventricle' : c === 'brain' ? 'brain' : 'bone';
+  const st = VE.get(id);
+  const c = st?.category;
+  if (c === 'ventricle' || c === 'brain' || c === 'deep') return c;
+  if (c === 'artery' || c === 'vein') return 'vessel';
+  if (c === 'nerve') return 'nerve';
+  if (c === 'hindbrain') return 'brainstem';
+  return 'bone';
 };
-export const KIND_LABEL: Record<Kind, string> = { ventricle: 'Ventricle (this CT, completed by a fitted model)', bone: 'Bone (this CT)', brain: 'Brain (fitted template)' };
+export const KIND_LABEL: Record<Kind, string> = {
+  ventricle: 'Ventricle (this CT, completed by a fitted model)', bone: 'Bone (this CT)', brain: 'Brain (fitted template)',
+  deep: 'Around the ventricles (fitted model)', vessel: 'Vessel (this CT angiogram)', nerve: 'Cranial nerve (routed through this CT)',
+  brainstem: 'Brainstem (fitted model)',
+};
 
 /** Cross-checks between content, references and the generated files. Returns problems (empty = consistent). */
 export function crossCheckVe(): string[] {
   const errs: string[] = [];
   const used = new Set<string>();
-  const all: Claim[] = [...LATERAL_WALLS, ...MONRO, ...THIRD_FLOOR, ...AQUEDUCT, ...FOURTH, ...KOCHER, ...IDEAL, ...PRACTICE, ...Object.values(ACCURACY).flat()];
+  const all: Claim[] = [...LATERAL_WALLS, ...MONRO, ...THIRD_FLOOR, ...AQUEDUCT, ...FOURTH, ...KOCHER, ...IDEAL, ...PRACTICE, ...Object.values(ACCURACY).flat(),
+    ...ETV_ANATOMY, ...ETV_TRAJECTORY, ...HYDRO];
   for (const cl of all) {
     ClaimSchema.parse(cl);
     for (const r of cl.refIds) { used.add(r); if (!VE_REF.has(r)) errs.push(`unknown refId ${r}`); }

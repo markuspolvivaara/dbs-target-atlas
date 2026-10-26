@@ -4,8 +4,8 @@
   "name": "Bregma",
   "ras": [
    0.0,
-   5.87,
-   99.75
+   6.21,
+   100.0
   ],
   "side": "M",
   "how": "Where this CT's frontal and parietal bones meet at the midline, on the outer table (the names from the fitted Z-Anatomy model)."
@@ -16,7 +16,7 @@
   "ras": [
    56.5,
    -16.69,
-   -19.82
+   -19.81
   ],
   "side": "R",
   "how": "The ear canal is the shortest way through air from the registered tympanic membrane to outside; the meatus is where it leaves the bone."
@@ -25,9 +25,9 @@
   "id": "lm_kocher_chen_r",
   "name": "Kocher's point (Chen 2025)",
   "ras": [
-   24.78,
-   14.75,
-   92.93
+   24.76,
+   14.66,
+   93.09
   ],
   "side": "R",
   "how": "10 mm in front of the coronal suture along the outer table, 25 mm from the midline."
@@ -36,9 +36,9 @@
   "id": "lm_kocher_park_r",
   "name": "Kocher's point (Park 2020)",
   "ras": [
-   29.55,
-   17.73,
-   89.49
+   29.63,
+   17.76,
+   89.84
   ],
   "side": "R",
   "how": "10 mm in front of the coronal suture along the outer table, 30 mm from the midline."
@@ -49,7 +49,7 @@
   "ras": [
    16.87,
    -16.54,
-   -18.57
+   -18.56
   ],
   "side": "R",
   "how": "Not in this CT (it stops at the forehead): 16.35 mm from the midline (half Chen 2025's mean intercanthal distance), on the line between the external acoustic meatus, as Chen projects it."
@@ -69,9 +69,9 @@
   "id": "lm_kocher_chen_l",
   "name": "Kocher's point (Chen 2025)",
   "ras": [
-   -23.67,
-   14.72,
-   91.29
+   -23.68,
+   14.62,
+   91.42
   ],
   "side": "L",
   "how": "10 mm in front of the coronal suture along the outer table, 25 mm from the midline."
@@ -80,9 +80,9 @@
   "id": "lm_kocher_park_l",
   "name": "Kocher's point (Park 2020)",
   "ras": [
-   -28.47,
-   15.3,
-   88.49
+   -28.56,
+   15.32,
+   88.81
   ],
   "side": "L",
   "how": "10 mm in front of the coronal suture along the outer table, 30 mm from the midline."

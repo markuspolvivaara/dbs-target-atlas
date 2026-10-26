@@ -154,7 +154,10 @@ for (const [view, list] of [['skull base v3: ear', ['sbBone', 'sbArtery', 'sbNer
   ['skull base v3: interhemispheric', ['sbBone', 'sbArtery', 'sbVein', 'sbSoft', 'sbBrain', 'sbMedialWall']],
   ['skull base v3: telovelar', ['sbBone', 'sbArtery', 'sbVein', 'sbNerve', 'sbBrain', 'sbTonsil', 'sbBrainstem', 'sbCsf']],
   // the ventricles section: this CT's ventricles in its bone, with the catheter (a tube against their surface)
-  ['ventricles: ventriculostomy', ['sbBone', 'sbCsf', 'electrode']]] as const) {
+  ['ventricles: ventriculostomy', ['sbBone', 'sbCsf', 'electrode']],
+  // the endoscopic view's 3D view: the structures around the ventricles (see-through), the vessels and the endoscope
+  ['ventricles: endoscopic third ventriculostomy', ['sbBone', 'sbCsf', 'electrode', 'fx', 'mb', 'ot', 'sbArtery', 'sbBrain', 'sbBrainstem',
+    'sbMedialWall', 'sbNerve', 'sbVein', 'str', 'thal', 'veChoroid']]] as const) {
   for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
     const k = `${list[i]}|${list[j]}`;
     if (!pairs.has(k)) pairs.set(k, new Set());

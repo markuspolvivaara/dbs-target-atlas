@@ -314,8 +314,9 @@ entry zones for brainstem surgery.
 ## Ventricles
 
 The ventricular system of one CT, Skull base v2's (TopBrain 2025 case 011, in its frame): the lateral ventricles, the
-foramina of Monro, the third ventricle, the aqueduct and the fourth ventricle, and a frontal ventriculostomy simulated
-on it.
+foramina of Monro, the third ventricle, the aqueduct and the fourth ventricle, a frontal ventriculostomy simulated
+on it, and an endoscopic third ventriculostomy view with the structures around the ventricles and a hydrocephalus
+shape.
 
 - **Ventricles as the CT shows them** (`pipeline/ventricles_build.py`): in its brain window the ventricular fluid is
   darker than the brain; the fluid below 27 HU (smoothed by 1 mm), at least 10 mm inside the cranial cavity and away
@@ -349,9 +350,43 @@ on it.
   catheter is withdrawn and re-aimed) to the first lateral ventricle they meet: side, depth from the outer table,
   course inside, or how far they miss. The card shows that result beside the published accuracy of the same
   aim.
+- **Around the ventricles** (`pipeline/ventricles_etv.py`): the fornix, septum pellucidum, choroid plexus, thalamus,
+  caudate nucleus, stria terminalis, hypothalamus, mammillary bodies, optic chiasm and tracts, the commissures,
+  habenula, pineal gland and corpus callosum are the Z-Anatomy model's (exported with its ventricles), carried onto
+  this CT by the same fit as its ventricles. Where the CT shows the ventricles larger than the model, each is pushed
+  out to the wall (along the shortest way, the pushes smoothed over it); the choroid plexus stays in the ventricles.
+  The model's mammillary bodies lay about 6 mm too far forward: they are moved to da Silva 2024's mean (8.56 mm
+  behind the anterior commissure along the AC–PC line), at the height of the model's floor, and the ventricle is
+  drawn round them. Checks against da Silva's 200 MRIs: the infundibular recess and the basilar apex (TopBrain's
+  label) lie within about one standard deviation of the published positions. The vessels (the basilar artery, P1–P2,
+  posterior communicating and superior cerebellar arteries, the internal cerebral veins and the veins of Galen and
+  Rosenthal) are this CT angiogram's; the oculomotor and optic nerves are routed through it and the midbrain and pons
+  are the fitted model (Skull base v3).
+- **Endoscopic third ventriculostomy**: the target is the midline floor halfway between the infundibular recess and
+  the mammillary bodies (fenestrated behind the recess, in front of the mammillary bodies and the basilar artery: da
+  Silva 2024); the endoscope runs on Sousa 2025's line, from the target through the middle of the foramen of Monro out
+  to the outer table, tilted about its burr hole and moved in or out by the user. Its view is drawn, not
+  photographed: a 75° field, a light at the tip falling off with the square of the distance, the walls seen from
+  inside, each showing what lies just behind it (more through the floor, which thins as the ventricles enlarge).
+  The choroid plexus is drawn lobulated and glistening, raspberry red (its mesh subdivided, its surface pushed into
+  lobules): also a rendering choice on the fitted model's shape. Pointing at the view names what is under the
+  pointer, and what shows through the wall.
+- **Hydrocephalus**: a shape (morph target) on the ventricles and everything around them. At full extent the
+  ventricles measure as the medians of Roşu 2026's 68 adults with hydrocephalus (Evans' index 0.42, third ventricle
+  23.5 mm wide), triventricular (the aqueduct and fourth ventricle unchanged), and the floor is brought down towards
+  2.75 mm from the basilar apex (Aydin 2009 as da Silva 2024 cites it; 3.3 mm as drawn, held by the left P1 segment
+  that runs under it here). Each wall moves out along its normal (the septum, the
+  lateral ventricles' floors and the columns of the fornix stay; the foramina of Monro grow backwards and outwards,
+  from Jean 2019's 5.23 to 32.6 mm²), the walls are draped over this CT's arteries at the skull base, which do not
+  move (the basilar artery and its branches, the carotids, the A1 segments; the floor comes down over the P1
+  segments, not through them), and everything around follows a smooth field, checked not to fold,
+  then is pushed out of the shaped ventricles as at rest;
+  the amplitudes are found by iteration to meet those three measures. Sousa's line is recomputed with it. The drawn
+  ventricles are also kept clear of this patient's internal cerebral veins (the fitted model reached over them).
 - **Cards**: every statement cites its source (`src/ventricles/content.ts`, `references.ts`), checked against the
   open-access full texts: Chen 2025, Park 2020, Charcos 2025, Gangal 2026, Abdala-Vargas 2022, Azab 2014, Xiao 2025,
-  Erginoglu 2026, Longatti 2026; Jean 2019 (no open full text) against its abstract.
+  Erginoglu 2026, Longatti 2026, Sousa 2025, da Silva 2024, Roşu 2026; Jean 2019 (no open full text) against its
+  abstract.
 - Pipeline: after `pipeline/skullbase_ct.py` and the v3 build (it uses the bone, the fitted brain and the registered
   tympanic membrane), and `pipeline/ventricles_export.py` in Blender: `pipeline/ventricles_build.py`,
   `node pipeline/compress.mjs ventricles`,

@@ -86,3 +86,25 @@ export const PRACTICE: Claim[] = [
 export const TARGET_NAME: Record<string, string> = {
   IMC: 'Ipsilateral medial canthus', MAM: 'Midpoint between the external acoustic meatus', CMC: 'Contralateral medial canthus', P: 'Perpendicular to the skull',
 };
+
+/** the endoscopic third ventriculostomy: what the endoscope passes and what lies around the stoma */
+export const ETV_ANATOMY: Claim[] = [
+  c('Seen from above, the column of the fornix passes in front of the foramen of Monro; the thalamostriate, caudate, choroidal and septal veins of each lateral ventricle converge and drain through its posterior border; the choroid plexus lies on the choroidal fissure.', 'dasilva2024'),
+  c('The floor is fenestrated behind the infundibular recess and in front of the basilar artery and the mammillary bodies. The anterior wall near the lamina terminalis is avoided (the optic chiasm and the infundibular recess), and so is the column of the fornix.', 'dasilva2024'),
+  c('The basilar artery is not always visible through the semi-translucent floor; its injury risks fatal blood loss.', 'dasilva2024'),
+  c('In 200 MRIs of adults without hydrocephalus, measured from the anterior commissure’s posterosuperior border along the AC–PC line: the mammillary bodies’ anterosuperior point 8.56 ± 1.18 mm behind it and 7.01 ± 1.65 mm below; the lowest point of the infundibular recess 0.49 ± 1.60 mm behind and 13.34 ± 1.78 mm below; the top of the basilar artery 9.79 ± 2.22 mm behind and 13.97 ± 4.08 mm below.', 'dasilva2024'),
+  c('With dilated ventricles the distance from the basilar apex to the floor was 2.75 mm, against 6.54 mm in controls (Aydin 2009, as cited); in hydrocephalus the floor may be pushed down, but the apex not.', 'dasilva2024'),
+];
+
+/** the endoscope's trajectory: through the foramen of Monro to the tuber cinereum */
+export const ETV_TRAJECTORY: Claim[] = [
+  c('On 187 MRIs, the line from the outer table through the foramen of Monro to the tuber cinereum, drawn as close to perpendicular to the bone as possible: in the 157 without hydrocephalus it was 88.5 ± 3.9 mm long, reached the foramen at 72.6 ± 3.8 mm and the lateral ventricle’s wall at 53.5 ± 4.8 mm; in the 30 with hydrocephalus 93.5 ± 7.2, 74.8 ± 5.8 and 38.8 ± 7.1 mm.', 'sousa2025'),
+  c('Its entry lay 14.7 ± 5.5 mm from the sagittal suture and a median 8.0 mm from the coronal suture without hydrocephalus (19.0 ± 8.6 and 10.6 mm with it); its angulation, measured relative to the AC–PC plane, was 2.2 ± 3.4° in the sagittal and 7.5 ± 3.5° in the coronal plane (2.5 ± 3.6° and 11.0 ± 6.1° with hydrocephalus).', 'sousa2025'),
+  c('Each 0.1 rise in Evans’ index lengthened the way to the tuber cinereum by about 6 mm and shortened the way to the lateral ventricle’s wall by about 7 mm.', 'sousa2025'),
+];
+
+/** hydrocephalus: how large the ventricles become (the slider's full extent) */
+export const HYDRO: Claim[] = [
+  c('In 68 adults with hydrocephalus (one centre, CT and MRI), the median Evans’ index was 0.42 (interquartile range 0.39–0.49) and the third ventricle’s median width 23.5 mm (18.2–26.0), measured as its greatest transverse diameter at or near the level of the foramina of Monro; 44 had triventricular, 16 tetraventricular and 8 biventricular hydrocephalus.', 'rosu2026'),
+  c('Without hydrocephalus Evans’ index averaged 0.262 ± 0.024 in 157 adults, and 0.375 ± 0.070 in 30 with it.', 'sousa2025'),
+];

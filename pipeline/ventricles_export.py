@@ -8,6 +8,7 @@ Usage (from the repository root):
 Writes pipeline/data/build/ventricles/ventricles_export.json in the skull-base export's frame (RAS millimetres relative
 to the hypophysial fossa landmark, like skullbase_export.py, so Skull base v2's fit carries it onto the CT):
   meshes     the lateral ventricles, the third ventricle, the aqueduct and the fourth ventricle
+  deep       the structures around them that the endoscopic view shows (DEEP): carried by the ventricles' fit
   texts      the Wikipedia-derived definition of every exported structure (CC BY-SA 3.0)
 Nothing is added or moved by hand: the file only converts what the model contains.
 """
@@ -20,6 +21,11 @@ import bpy
 OUT = os.path.join(os.getcwd(), 'pipeline', 'data', 'build', 'ventricles', 'ventricles_export.json')
 ORIGIN_PIN = 'Hypophysial fossa.j'
 NAMES = ['Lateral ventricle.l', 'Lateral ventricle.r', 'Third ventricle', 'Aqueduct of midbrain', 'Fourth ventricle']
+# the walls, floor and contents of the lateral and third ventricles (the endoscopic third ventriculostomy view)
+DEEP = ['Fornix.l', 'Fornix.r', 'Septum pellucidum', 'Choroid plexus.l', 'Choroid plexus.r', 'Thalamus.l', 'Thalamus.r',
+        'Caudate nucleus.l', 'Caudate nucleus.r', 'Stria terminalis.l', 'Stria terminalis.r', 'Hypothalamus', 'Optic chiasm.l',
+        'Optic chiasm.r', 'Optic tract.l', 'Optic tract.r', 'Anterior commissure', 'Posterior commissure', 'Habenula',
+        'Pineal gland', 'Neurohypophysis', 'Adenohypophysis', 'Corpus callosum']
 
 
 def base_name(n: str) -> str:
@@ -65,18 +71,20 @@ def text_for(name: str) -> str | None:
     return t.as_string() if t else None
 
 
-export = {'origin': {'pin': ORIGIN_PIN, 'note': 'RAS mm relative to the hypophysial fossa landmark'}, 'meshes': {}, 'texts': {}}
-for n in NAMES:
-    o = bpy.data.objects.get(n)
-    if o is None or o.type != 'MESH':
-        print('missing mesh', n)
-        continue
-    v, t = mesh_data(o)
-    export['meshes'][n] = {'verts': v, 'tris': t}
-    export['texts'][base_name(n)] = text_for(n)
+export = {'origin': {'pin': ORIGIN_PIN, 'note': 'RAS mm relative to the hypophysial fossa landmark'}, 'meshes': {}, 'deep': {},
+          'texts': {}}
+for key, names in (('meshes', NAMES), ('deep', DEEP)):
+    for n in names:
+        o = bpy.data.objects.get(n)
+        if o is None or o.type != 'MESH':
+            print('missing mesh', n)
+            continue
+        v, t = mesh_data(o)
+        export[key][n] = {'verts': v, 'tris': t}
+        export['texts'][base_name(n)] = text_for(n)
 
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
 with open(OUT, 'w') as f:
     json.dump(export, f)
-print(f"ventricles export: {len(export['meshes'])} meshes -> {OUT}")
+print(f"ventricles export: {len(export['meshes'])} meshes, {len(export['deep'])} around them -> {OUT}")
 sys.stdout.flush()

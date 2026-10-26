@@ -68,8 +68,9 @@ commit and push it.
   3. `skullbase_v3.py`
   4. `node pipeline/compress.mjs skullbase-v3`
   5. `skullbase_v3.py finalize`
-  6. `ventricles_export.py` (in Blender)
-  7. `ventricles_build.py`
+  6. `ventricles_export.py` (in Blender; it also exports the structures around the ventricles)
+  7. `ventricles_build.py` (with `ventricles_etv.py`: the endoscopic view's structures and the hydrocephalus shape;
+     about 10 minutes, most of it fitting that shape)
   8. `node pipeline/compress.mjs ventricles`
   9. `ventricles_build.py finalize`
   10. `manifest.py`

@@ -896,6 +896,40 @@ test('ventricles: the catheter follows its aim, its result and sources on the ca
   expect(g.errors).toEqual([]);
 });
 
+test('ventricles: the endoscope draws its view, moves by key, and the hydrocephalus shape is in the link', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./ventricles/#/atlas?g=etv');
+  await settle(page);
+  const box = page.locator('.card.scope');
+  await expect(box).toContainText('Endoscope');
+  await expect(box).toContainText('from the outer table');
+  expect(await canvasColours(page)).toBeGreaterThan(20);
+  // W advances the scope, the arrow keys tilt it; V swaps the views
+  const depth = () => page.evaluate(() => (window as unknown as { __atlas: { state(): { scope: { depth: number; ap: number } } } }).__atlas.state().scope);
+  const d0 = (await depth()).depth;
+  await page.locator('.viewer-host canvas').focus();
+  await page.keyboard.press('w');
+  await page.keyboard.press('ArrowUp');
+  await settle(page);
+  expect((await depth()).depth).toBe(d0 + 1);
+  expect((await depth()).ap).toBe(1);
+  await expect.poll(() => new URL(page.url()).hash).toContain('ea=1,0');
+  // the hydrocephalus slider: the shape is drawn (a morph weight) and carried by the link
+  await page.locator('.hydro input[type=range]').fill('0.5');
+  await settle(page);
+  await expect.poll(() => new URL(page.url()).hash).toContain('hy=50');
+  const w = await page.evaluate(() => {
+    const v = (window as unknown as { __atlas: { viewer: { scene: { traverse: (f: (o: { morphTargetDictionary?: Record<string, number>; morphTargetInfluences?: number[] }) => void) => void } } } }).__atlas.viewer;
+    let x = 0;
+    v.scene.traverse((o) => { const i = o.morphTargetDictionary?.hydrocephalus; if (i !== undefined) x = Math.max(x, o.morphTargetInfluences?.[i] ?? 0); });
+    return x;
+  });
+  expect(w).toBeGreaterThan(0.4);
+  await expect(page.locator('.hydro-now')).toContainText('Evans’ index');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
 // ---------------------------------------------------------------- cortex section
 // view ids and names as src/cortex/views.ts defines them
 const CTX_VIEWS = [['lateral', 'Lateral'], ['medial', 'Medial'], ['basal', 'Basal'], ['insular', 'Insular']] as const;
