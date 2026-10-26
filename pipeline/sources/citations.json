@@ -605,5 +605,19 @@
   "url": "https://doi.org/10.14245/ns.2040166.083",
   "pmid": "32746520",
   "pmcid": "PMC7410369"
+ },
+ "kong2022": {
+  "citation": "Kong QJ, Sun XF, Fu ZY, Wang Y, Sun JC, Sun PD, Xu XM, Guo YF, Ou-Yang J, Zhong SZ, Shi JG. Anatomical Evaluation of Spinal Nerve and Cervical Intervertebral Foramina in Anterior Controllable Antedisplacement and Fusion Surgery: A Cadaveric and Radiologic Study. Orthop Surg. 2022;14(2):331-340. doi:10.1111/os.13181.",
+  "doi": "10.1111/os.13181",
+  "url": "https://doi.org/10.1111/os.13181",
+  "pmid": "34935286",
+  "pmcid": "PMC8867434"
+ },
+ "silverstein2015": {
+  "citation": "Silverstein MP, Romrell LJ, Benzel EC, Thompson N, Griffith S, Lieberman IH. Lumbar dorsal root Ganglia location: an anatomic and MRI assessment. Int J Spine Surg. 2015;9:3. doi:10.14444/2003.",
+  "doi": "10.14444/2003",
+  "url": "https://doi.org/10.14444/2003",
+  "pmid": "25709886",
+  "pmcid": "PMC4337191"
  }
 }

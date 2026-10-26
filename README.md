@@ -496,7 +496,7 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
   Gertzbein–Robbins, the screw diameter as a share of the pedicle width, and the nearest structures at risk; a cut
   along the screw. Data from `pipeline/spine_screw.py` (a bone distance field per level, loaded on demand).
 - **Posterior foraminotomy (drilling)** (a box of its own for C2–C7): the selected level and the vertebra below it are
-  drilled with a round 4-mm burr held against the bone along the line of sight (3 mm a second, a drawing choice);
+  drilled with a round 4-mm burr held against the bone along the line of sight (4 mm a second, a drawing choice);
   the bone is this CT's own (each vertebra's field, built as its drawn surface: within 0.25 mm median of it), cut
   bone coloured by the CT's density, and where little bone is left over the dural sac, a root or the vertebral
   artery, its colour shows through. The burr's clearance to the dural sac (segmented) and to the root and the

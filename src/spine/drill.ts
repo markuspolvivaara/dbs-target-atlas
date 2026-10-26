@@ -28,7 +28,10 @@ export const drillPairFor = (level: string | null): DrillPair | undefined => DRI
 /** the burr: a 4 mm round one */
 export const BURR_MM = 4;
 /** how fast a burr held against the bone goes in (mm a second): a drawing choice */
-export const BURR_RATE_MM_S = 3;
+export const BURR_RATE_MM_S = 4;
+/** the burr cuts in steps of at least this (mm): smaller ones go in less than asked, the grid's values being whole
+ * numbers (at 0.05 mm about half, at 0.2 mm nine-tenths) */
+export const BURR_STEP_MM = 0.2;
 /** the cut's field: units per mm across the burr's edge (the bone field's own, near its surface, is of this order) */
 const CUT_GRADIENT = 60;
 const CHUNK = 16;

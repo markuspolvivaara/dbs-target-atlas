@@ -714,7 +714,9 @@ export class SpineAtlasPage {
     if (category === 'root' && cervical) {
       add('Exit', this.stmt(STATEMENTS.cervicalRootRule));
       add('Root and disc', this.stmt(STATEMENTS.cervicalRootDisc));
+      add('Rootlets', this.stmt(STATEMENTS.cervicalRootlets));
     }
+    if (category === 'root' && !cervical) add('Take-off', this.stmt(STATEMENTS.lumbarTakeoff));
     if (id === 'sp_vertebral_artery') {
       add('Course', this.stmt(STATEMENTS.vaSegments));
       add('Entry', `On this CT: the foramen of ${VERTEBRAL_ARTERY.entry.L} on the left and ${VERTEBRAL_ARTERY.entry.R} on the right (inferred from the foramina’s size).`, this.stmt(STATEMENTS.vaEntry));

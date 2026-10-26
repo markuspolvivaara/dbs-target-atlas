@@ -153,6 +153,14 @@ export const STATEMENTS = {
     text: 'In cadavers the C5 roots left over the middle of their disc, the C6 and C7 roots crossed its proximal part, and the C8 root hardly overlapped the C7–T1 disc. The foramen is funnel-shaped and narrowest at its entrance, where the roots were compressed: in front by discs and uncovertebral osteophytes, behind by the superior articular process and the ligamentum flavum.',
     refIds: ['tanaka2000'],
   },
+  cervicalRootlets: {
+    text: 'In three cadavers the ventral rootlets of C5 to C8 ran inside the dural sac from their origin on the cord to their foramen over 13–18 mm, the more steeply the lower the level: at 33.7° to the cord’s axis at C5, 24.5° at C6, 20.4° at C7 and 14.8° at C8, their origins higher above their foramina. Here each cervical root is drawn from the sac’s wall level with the entrance of its foramen; the rootlets inside the sac are not drawn.',
+    refIds: ['kong2022'],
+  },
+  lumbarTakeoff: {
+    text: 'In 16 cadavers the lumbar roots left the dural sac at the largest angle at L4 and L5 (50.5–58.8°); the centre of the dorsal root ganglion lay in the medial zone of the foramen at L1–L4 and in its lateral zone at L5. Here each lumbar root leaves the sac running down and out at 55° to it; each thoracic root too (not measured there: a drawing choice).',
+    refIds: ['silverstein2015'],
+  },
   cervicalForamen: {
     text: 'Here the cervical foramina are found in planes across an axis turned 30° forwards from lateral (they open obliquely forwards) and only place the schematic roots; their size is not given, because the measurement was built for the lumbar foramina.',
     refIds: [],

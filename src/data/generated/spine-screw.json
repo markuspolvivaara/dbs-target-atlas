@@ -87,11 +87,11 @@
       },
       {
        "id": "sp_dural_sac",
-       "mm": 8.52
+       "mm": 8.59
       },
       {
        "id": "sp_ica_left",
-       "mm": 10.56
+       "mm": 10.55
       }
      ]
     },
@@ -114,7 +114,7 @@
       },
       {
        "id": "sp_ica_right",
-       "mm": 12.93
+       "mm": 12.9
       }
      ]
     }
@@ -123,32 +123,32 @@
     {
      "id": "sp_dural_sac",
      "offset": 348480,
-     "count": 3925
+     "count": 3842
     },
     {
      "id": "sp_vertebral_artery",
-     "offset": 372030,
-     "count": 3513
+     "offset": 371532,
+     "count": 3508
     },
     {
      "id": "sp_ica_left",
-     "offset": 393108,
-     "count": 2564
+     "offset": 392580,
+     "count": 2608
     },
     {
      "id": "sp_ica_right",
-     "offset": 408492,
-     "count": 2279
+     "offset": 408228,
+     "count": 2299
     },
     {
      "id": "sp_root_c3",
-     "offset": 422166,
-     "count": 2325
+     "offset": 422022,
+     "count": 2374
     },
     {
      "id": "sp_root_c4",
-     "offset": 436116,
-     "count": 1975
+     "offset": 436266,
+     "count": 1959
     }
    ],
    "sdf": {
@@ -168,7 +168,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_c1.bin.gz",
-   "bytes": 148298
+   "bytes": 145867
   },
   "C2": {
    "frame": {
@@ -411,15 +411,15 @@
      "nearest": [
       {
        "id": "sp_root_c3",
-       "mm": 4.52
+       "mm": 4.72
       },
       {
        "id": "sp_vertebral_artery",
-       "mm": 5.18
+       "mm": 5.13
       },
       {
        "id": "sp_dural_sac",
-       "mm": 11.86
+       "mm": 11.85
       }
      ]
     },
@@ -434,11 +434,11 @@
       },
       {
        "id": "sp_root_c3",
-       "mm": 3.68
+       "mm": 4.3
       },
       {
        "id": "sp_dural_sac",
-       "mm": 4.44
+       "mm": 4.36
       }
      ]
     },
@@ -449,15 +449,15 @@
      "nearest": [
       {
        "id": "sp_vertebral_artery",
-       "mm": 4.08
-      },
-      {
-       "id": "sp_dural_sac",
-       "mm": 6.14
+       "mm": 4.11
       },
       {
        "id": "sp_root_c3",
-       "mm": 6.77
+       "mm": 5.94
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 6.18
       }
      ]
     },
@@ -476,7 +476,7 @@
       },
       {
        "id": "sp_root_c3",
-       "mm": 6.45
+       "mm": 6.64
       }
      ]
     },
@@ -487,11 +487,11 @@
      "nearest": [
       {
        "id": "sp_dural_sac",
-       "mm": 1.96
+       "mm": 1.97
       },
       {
        "id": "sp_root_c3",
-       "mm": 7.71
+       "mm": 7.07
       },
       {
        "id": "sp_vertebral_artery",
@@ -506,11 +506,11 @@
      "nearest": [
       {
        "id": "sp_dural_sac",
-       "mm": 1.19
+       "mm": 1.25
       },
       {
        "id": "sp_root_c3",
-       "mm": 2.73
+       "mm": 3.46
       },
       {
        "id": "sp_vertebral_artery",
@@ -528,15 +528,15 @@
      "nearest": [
       {
        "id": "sp_dural_sac",
-       "mm": 9.99
+       "mm": 9.96
       },
       {
        "id": "sp_vertebral_artery",
-       "mm": 15.03
+       "mm": 15.06
       },
       {
        "id": "sp_root_c3",
-       "mm": 16.09
+       "mm": 15.28
       }
      ]
     },
@@ -550,15 +550,15 @@
      "nearest": [
       {
        "id": "sp_dural_sac",
-       "mm": 9.99
+       "mm": 9.96
       },
       {
        "id": "sp_vertebral_artery",
-       "mm": 15.03
+       "mm": 15.06
       },
       {
        "id": "sp_root_c3",
-       "mm": 16.09
+       "mm": 15.28
       }
      ]
     }
@@ -567,42 +567,42 @@
     {
      "id": "sp_dural_sac",
      "offset": 449196,
-     "count": 5328
+     "count": 5311
     },
     {
      "id": "sp_vertebral_artery",
-     "offset": 481164,
-     "count": 4214
+     "offset": 481062,
+     "count": 4274
     },
     {
      "id": "sp_ica_left",
-     "offset": 506448,
-     "count": 2601
+     "offset": 506706,
+     "count": 2574
     },
     {
      "id": "sp_ica_right",
-     "offset": 522054,
-     "count": 2294
+     "offset": 522150,
+     "count": 2289
     },
     {
      "id": "sp_root_c3",
-     "offset": 535818,
-     "count": 2341
+     "offset": 535884,
+     "count": 2375
     },
     {
      "id": "sp_root_c4",
-     "offset": 549864,
-     "count": 2338
+     "offset": 550134,
+     "count": 2312
     },
     {
      "id": "sp_root_c5",
-     "offset": 563892,
+     "offset": 564006,
      "count": 2165
     },
     {
      "id": "sp_root_c6",
-     "offset": 576882,
-     "count": 1127
+     "offset": 576996,
+     "count": 1235
     }
    ],
    "sdf": {
@@ -622,7 +622,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_c2.bin.gz",
-   "bytes": 185732
+   "bytes": 183919
   },
   "C1-C2": {
    "frame": {
@@ -695,15 +695,15 @@
      "nearest": [
       {
        "id": "sp_vertebral_artery",
-       "mm": 1.91
+       "mm": 1.94
       },
       {
        "id": "sp_root_c3",
-       "mm": 3.93
+       "mm": 4.19
       },
       {
        "id": "sp_dural_sac",
-       "mm": 6.5
+       "mm": 6.55
       }
      ]
     },
@@ -720,11 +720,11 @@
       },
       {
        "id": "sp_dural_sac",
-       "mm": 3.06
+       "mm": 2.98
       },
       {
        "id": "sp_root_c3",
-       "mm": 3.9
+       "mm": 5.07
       }
      ]
     }
@@ -733,42 +733,42 @@
     {
      "id": "sp_dural_sac",
      "offset": 638880,
-     "count": 5328
+     "count": 5311
     },
     {
      "id": "sp_vertebral_artery",
-     "offset": 670848,
-     "count": 4214
+     "offset": 670746,
+     "count": 4274
     },
     {
      "id": "sp_ica_left",
-     "offset": 696132,
-     "count": 2601
+     "offset": 696390,
+     "count": 2574
     },
     {
      "id": "sp_ica_right",
-     "offset": 711738,
-     "count": 2294
+     "offset": 711834,
+     "count": 2289
     },
     {
      "id": "sp_root_c3",
-     "offset": 725502,
-     "count": 2341
+     "offset": 725568,
+     "count": 2375
     },
     {
      "id": "sp_root_c4",
-     "offset": 739548,
-     "count": 2338
+     "offset": 739818,
+     "count": 2312
     },
     {
      "id": "sp_root_c5",
-     "offset": 753576,
+     "offset": 753690,
      "count": 2165
     },
     {
      "id": "sp_root_c6",
-     "offset": 766566,
-     "count": 1127
+     "offset": 766680,
+     "count": 1235
     }
    ],
    "sdf": {
@@ -788,7 +788,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_c1-c2.bin.gz",
-   "bytes": 237139
+   "bytes": 231361
   },
   "C3": {
    "frame": {
@@ -967,7 +967,7 @@
      "nearest": [
       {
        "id": "sp_root_c4",
-       "mm": 1.68
+       "mm": 2.17
       },
       {
        "id": "sp_vertebral_artery",
@@ -975,7 +975,7 @@
       },
       {
        "id": "sp_dural_sac",
-       "mm": 8.68
+       "mm": 8.71
       }
      ]
     },
@@ -988,7 +988,7 @@
      "nearest": [
       {
        "id": "sp_root_c4",
-       "mm": 2.66
+       "mm": 2.44
       },
       {
        "id": "sp_vertebral_artery",
@@ -996,7 +996,7 @@
       },
       {
        "id": "sp_dural_sac",
-       "mm": 8.5
+       "mm": 8.4
       }
      ]
     },
@@ -1010,7 +1010,7 @@
      "nearest": [
       {
        "id": "sp_root_c3",
-       "mm": 4.06
+       "mm": 4.05
       },
       {
        "id": "sp_vertebral_artery",
@@ -1018,7 +1018,7 @@
       },
       {
        "id": "sp_root_c4",
-       "mm": 6.39
+       "mm": 6.87
       }
      ]
     },
@@ -1032,15 +1032,15 @@
      "nearest": [
       {
        "id": "sp_root_c3",
-       "mm": 3.03
+       "mm": 2.68
       },
       {
        "id": "sp_vertebral_artery",
        "mm": 5.29
       },
       {
-       "id": "sp_dural_sac",
-       "mm": 7.41
+       "id": "sp_root_c4",
+       "mm": 7.34
       }
      ]
     },
@@ -1053,7 +1053,7 @@
      "nearest": [
       {
        "id": "sp_root_c4",
-       "mm": 4.51
+       "mm": 4.91
       },
       {
        "id": "sp_vertebral_artery",
@@ -1061,7 +1061,7 @@
       },
       {
        "id": "sp_dural_sac",
-       "mm": 7.57
+       "mm": 7.59
       }
      ]
     },
@@ -1074,7 +1074,7 @@
      "nearest": [
       {
        "id": "sp_root_c4",
-       "mm": 4.84
+       "mm": 4.23
       },
       {
        "id": "sp_vertebral_artery",
@@ -1091,47 +1091,52 @@
     {
      "id": "sp_dural_sac",
      "offset": 347480,
-     "count": 6592
+     "count": 6558
     },
     {
      "id": "sp_vertebral_artery",
-     "offset": 387032,
+     "offset": 386828,
      "count": 4794
     },
     {
      "id": "sp_ica_left",
-     "offset": 415796,
-     "count": 2567
+     "offset": 415592,
+     "count": 2594
     },
     {
      "id": "sp_ica_right",
-     "offset": 431198,
+     "offset": 431156,
      "count": 2310
     },
     {
      "id": "sp_root_c3",
-     "offset": 445058,
-     "count": 2338
+     "offset": 445016,
+     "count": 2348
     },
     {
      "id": "sp_root_c4",
-     "offset": 459086,
-     "count": 2354
+     "offset": 459104,
+     "count": 2351
     },
     {
      "id": "sp_root_c5",
      "offset": 473210,
-     "count": 2329
+     "count": 2343
     },
     {
      "id": "sp_root_c6",
-     "offset": 487184,
-     "count": 2293
+     "offset": 487268,
+     "count": 2306
     },
     {
      "id": "sp_root_c7",
-     "offset": 500942,
-     "count": 1865
+     "offset": 501104,
+     "count": 1869
+    },
+    {
+     "id": "sp_root_c8",
+     "offset": 512318,
+     "count": 18
     }
    ],
    "sdf": {
@@ -1151,7 +1156,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_c3.bin.gz",
-   "bytes": 186902
+   "bytes": 185110
   },
   "C4": {
    "frame": {
@@ -1334,11 +1339,11 @@
       },
       {
        "id": "sp_root_c5",
-       "mm": 4.67
+       "mm": 4.24
       },
       {
        "id": "sp_root_c4",
-       "mm": 6.38
+       "mm": 7.21
       }
      ]
     },
@@ -1352,15 +1357,15 @@
      "nearest": [
       {
        "id": "sp_root_c5",
-       "mm": 2.82
+       "mm": 2.68
       },
       {
        "id": "sp_vertebral_artery",
        "mm": 2.93
       },
       {
-       "id": "sp_root_c4",
-       "mm": 7.24
+       "id": "sp_dural_sac",
+       "mm": 7.51
       }
      ]
     },
@@ -1373,7 +1378,7 @@
      "nearest": [
       {
        "id": "sp_root_c4",
-       "mm": 0.74
+       "mm": 0.77
       },
       {
        "id": "sp_vertebral_artery",
@@ -1396,7 +1401,7 @@
      "nearest": [
       {
        "id": "sp_root_c4",
-       "mm": 1.15
+       "mm": 0.84
       },
       {
        "id": "sp_vertebral_artery",
@@ -1417,7 +1422,7 @@
      "nearest": [
       {
        "id": "sp_root_c4",
-       "mm": 4.42
+       "mm": 4.43
       },
       {
        "id": "sp_vertebral_artery",
@@ -1425,7 +1430,7 @@
       },
       {
        "id": "sp_root_c5",
-       "mm": 7.65
+       "mm": 7.49
       }
      ]
     },
@@ -1442,11 +1447,11 @@
       },
       {
        "id": "sp_root_c4",
-       "mm": 5.93
+       "mm": 6.4
       },
       {
        "id": "sp_root_c5",
-       "mm": 6.7
+       "mm": 6.6
       }
      ]
     }
@@ -1455,57 +1460,57 @@
     {
      "id": "sp_dural_sac",
      "offset": 342380,
-     "count": 7135
+     "count": 7132
     },
     {
      "id": "sp_vertebral_artery",
-     "offset": 385190,
+     "offset": 385172,
      "count": 3623
     },
     {
      "id": "sp_ica_left",
-     "offset": 406928,
-     "count": 1997
+     "offset": 406910,
+     "count": 2019
     },
     {
      "id": "sp_ica_right",
-     "offset": 418910,
-     "count": 1693
+     "offset": 419024,
+     "count": 1700
     },
     {
      "id": "sp_root_c3",
-     "offset": 429068,
-     "count": 2326
+     "offset": 429224,
+     "count": 2395
     },
     {
      "id": "sp_root_c4",
-     "offset": 443024,
-     "count": 2352
+     "offset": 443594,
+     "count": 2344
     },
     {
      "id": "sp_root_c5",
-     "offset": 457136,
+     "offset": 457658,
      "count": 2351
     },
     {
      "id": "sp_root_c6",
-     "offset": 471242,
-     "count": 2334
+     "offset": 471764,
+     "count": 2336
     },
     {
      "id": "sp_root_c7",
-     "offset": 485246,
-     "count": 2346
+     "offset": 485780,
+     "count": 2331
     },
     {
      "id": "sp_root_c8",
-     "offset": 499322,
-     "count": 1798
+     "offset": 499766,
+     "count": 1916
     },
     {
      "id": "sp_root_t1",
-     "offset": 510110,
-     "count": 798
+     "offset": 511262,
+     "count": 1026
     }
    ],
    "sdf": {
@@ -1525,7 +1530,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_c4.bin.gz",
-   "bytes": 189336
+   "bytes": 189423
   },
   "C5": {
    "frame": {
@@ -1704,7 +1709,7 @@
      "nearest": [
       {
        "id": "sp_root_c6",
-       "mm": 3.88
+       "mm": 3.59
       },
       {
        "id": "sp_vertebral_artery",
@@ -1712,7 +1717,7 @@
       },
       {
        "id": "sp_root_c5",
-       "mm": 6.69
+       "mm": 7.05
       }
      ]
     },
@@ -1730,11 +1735,11 @@
       },
       {
        "id": "sp_root_c6",
-       "mm": 4.86
+       "mm": 4.67
       },
       {
        "id": "sp_root_c5",
-       "mm": 6.44
+       "mm": 6.62
       }
      ]
     },
@@ -1748,7 +1753,7 @@
      "nearest": [
       {
        "id": "sp_root_c5",
-       "mm": 3.0
+       "mm": 2.89
       },
       {
        "id": "sp_vertebral_artery",
@@ -1756,7 +1761,7 @@
       },
       {
        "id": "sp_root_c4",
-       "mm": 7.39
+       "mm": 7.32
       }
      ]
     },
@@ -1770,7 +1775,7 @@
      "nearest": [
       {
        "id": "sp_root_c5",
-       "mm": 2.31
+       "mm": 2.28
       },
       {
        "id": "sp_vertebral_artery",
@@ -1778,7 +1783,7 @@
       },
       {
        "id": "sp_dural_sac",
-       "mm": 7.43
+       "mm": 7.4
       }
      ]
     },
@@ -1791,7 +1796,7 @@
      "nearest": [
       {
        "id": "sp_root_c5",
-       "mm": 5.98
+       "mm": 6.29
       },
       {
        "id": "sp_vertebral_artery",
@@ -1799,7 +1804,7 @@
       },
       {
        "id": "sp_root_c6",
-       "mm": 7.47
+       "mm": 7.34
       }
      ]
     },
@@ -1816,11 +1821,11 @@
       },
       {
        "id": "sp_root_c5",
-       "mm": 5.59
+       "mm": 5.77
       },
       {
        "id": "sp_dural_sac",
-       "mm": 7.52
+       "mm": 7.59
       }
      ]
     }
@@ -1829,62 +1834,62 @@
     {
      "id": "sp_dural_sac",
      "offset": 403680,
-     "count": 7522
+     "count": 7513
     },
     {
      "id": "sp_vertebral_artery",
-     "offset": 448812,
+     "offset": 448758,
      "count": 3350
     },
     {
      "id": "sp_ica_left",
-     "offset": 468912,
-     "count": 1644
+     "offset": 468858,
+     "count": 1622
     },
     {
      "id": "sp_ica_right",
-     "offset": 478776,
-     "count": 1246
+     "offset": 478590,
+     "count": 1232
     },
     {
      "id": "sp_root_c3",
-     "offset": 486252,
-     "count": 2329
+     "offset": 485982,
+     "count": 2375
     },
     {
      "id": "sp_root_c4",
-     "offset": 500226,
-     "count": 2326
+     "offset": 500232,
+     "count": 2307
     },
     {
      "id": "sp_root_c5",
-     "offset": 514182,
-     "count": 2323
+     "offset": 514074,
+     "count": 2356
     },
     {
      "id": "sp_root_c6",
-     "offset": 528120,
-     "count": 2341
+     "offset": 528210,
+     "count": 2350
     },
     {
      "id": "sp_root_c7",
-     "offset": 542166,
+     "offset": 542310,
      "count": 2330
     },
     {
      "id": "sp_root_c8",
-     "offset": 556146,
-     "count": 2183
+     "offset": 556290,
+     "count": 2297
     },
     {
      "id": "sp_root_t1",
-     "offset": 569244,
-     "count": 2508
+     "offset": 570072,
+     "count": 2787
     },
     {
      "id": "sp_root_t2",
-     "offset": 584292,
-     "count": 1383
+     "offset": 586794,
+     "count": 1568
     }
    ],
    "sdf": {
@@ -1904,7 +1909,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_c5.bin.gz",
-   "bytes": 205515
+   "bytes": 205825
   },
   "C6": {
    "frame": {
@@ -2083,7 +2088,7 @@
      "nearest": [
       {
        "id": "sp_root_c7",
-       "mm": 5.35
+       "mm": 5.21
       },
       {
        "id": "sp_vertebral_artery",
@@ -2091,7 +2096,7 @@
       },
       {
        "id": "sp_root_c6",
-       "mm": 7.43
+       "mm": 7.72
       }
      ]
     },
@@ -2104,15 +2109,15 @@
      "nearest": [
       {
        "id": "sp_root_c7",
-       "mm": 4.82
-      },
-      {
-       "id": "sp_root_c6",
-       "mm": 8.35
+       "mm": 4.8
       },
       {
        "id": "sp_vertebral_artery",
        "mm": 8.48
+      },
+      {
+       "id": "sp_root_c6",
+       "mm": 8.72
       }
      ]
     },
@@ -2125,7 +2130,7 @@
      "nearest": [
       {
        "id": "sp_root_c6",
-       "mm": 2.65
+       "mm": 2.57
       },
       {
        "id": "sp_vertebral_artery",
@@ -2133,7 +2138,7 @@
       },
       {
        "id": "sp_root_c5",
-       "mm": 6.68
+       "mm": 7.08
       }
      ]
     },
@@ -2146,7 +2151,7 @@
      "nearest": [
       {
        "id": "sp_root_c6",
-       "mm": 3.11
+       "mm": 3.03
       },
       {
        "id": "sp_vertebral_artery",
@@ -2154,7 +2159,7 @@
       },
       {
        "id": "sp_dural_sac",
-       "mm": 8.2
+       "mm": 8.22
       }
      ]
     },
@@ -2166,16 +2171,16 @@
      },
      "nearest": [
       {
-       "id": "sp_root_c6",
-       "mm": 6.35
-      },
-      {
        "id": "sp_vertebral_artery",
        "mm": 6.35
       },
       {
+       "id": "sp_root_c6",
+       "mm": 6.54
+      },
+      {
        "id": "sp_dural_sac",
-       "mm": 7.72
+       "mm": 7.79
       }
      ]
     },
@@ -2188,15 +2193,15 @@
      "nearest": [
       {
        "id": "sp_root_c7",
-       "mm": 6.78
+       "mm": 6.65
       },
       {
        "id": "sp_root_c6",
-       "mm": 7.7
+       "mm": 7.97
       },
       {
-       "id": "sp_dural_sac",
-       "mm": 8.32
+       "id": "sp_vertebral_artery",
+       "mm": 8.33
       }
      ]
     }
@@ -2205,67 +2210,67 @@
     {
      "id": "sp_dural_sac",
      "offset": 474760,
-     "count": 7661
+     "count": 7664
     },
     {
      "id": "sp_vertebral_artery",
-     "offset": 520726,
+     "offset": 520744,
      "count": 3150
     },
     {
      "id": "sp_ica_left",
-     "offset": 539626,
-     "count": 1308
+     "offset": 539644,
+     "count": 1305
     },
     {
      "id": "sp_ica_right",
      "offset": 547474,
-     "count": 809
+     "count": 816
     },
     {
      "id": "sp_root_c3",
-     "offset": 552328,
-     "count": 2346
+     "offset": 552370,
+     "count": 2366
     },
     {
      "id": "sp_root_c4",
-     "offset": 566404,
-     "count": 2327
+     "offset": 566566,
+     "count": 2319
     },
     {
      "id": "sp_root_c5",
-     "offset": 580366,
-     "count": 2346
+     "offset": 580480,
+     "count": 2309
     },
     {
      "id": "sp_root_c6",
-     "offset": 594442,
-     "count": 2311
+     "offset": 594334,
+     "count": 2351
     },
     {
      "id": "sp_root_c7",
-     "offset": 608308,
-     "count": 2326
+     "offset": 608440,
+     "count": 2324
     },
     {
      "id": "sp_root_c8",
-     "offset": 622264,
-     "count": 2182
+     "offset": 622384,
+     "count": 2291
     },
     {
      "id": "sp_root_t1",
-     "offset": 635356,
-     "count": 2521
+     "offset": 636130,
+     "count": 2817
     },
     {
      "id": "sp_root_t2",
-     "offset": 650482,
-     "count": 2528
+     "offset": 653032,
+     "count": 2781
     },
     {
      "id": "sp_root_t3",
-     "offset": 665650,
-     "count": 334
+     "offset": 669718,
+     "count": 617
     }
    ],
    "sdf": {
@@ -2285,7 +2290,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_c6.bin.gz",
-   "bytes": 214305
+   "bytes": 215281
   },
   "C7": {
    "frame": {
@@ -2416,15 +2421,15 @@
      "nearest": [
       {
        "id": "sp_root_c7",
-       "mm": 0.34
+       "mm": 1.0
       },
       {
        "id": "sp_dural_sac",
-       "mm": 4.21
+       "mm": 4.2
       },
       {
        "id": "sp_root_c8",
-       "mm": 5.75
+       "mm": 5.63
       }
      ]
     },
@@ -2437,15 +2442,15 @@
      "nearest": [
       {
        "id": "sp_root_c7",
-       "mm": 3.12
+       "mm": 3.37
       },
       {
        "id": "sp_dural_sac",
-       "mm": 4.02
+       "mm": 4.1
       },
       {
-       "id": "sp_vertebral_artery",
-       "mm": 7.1
+       "id": "sp_root_c8",
+       "mm": 6.21
       }
      ]
     }
@@ -2454,72 +2459,72 @@
     {
      "id": "sp_dural_sac",
      "offset": 651000,
-     "count": 7721
+     "count": 7717
     },
     {
      "id": "sp_vertebral_artery",
-     "offset": 697326,
+     "offset": 697302,
      "count": 2850
     },
     {
      "id": "sp_ica_left",
-     "offset": 714426,
-     "count": 1014
+     "offset": 714402,
+     "count": 1015
     },
     {
      "id": "sp_ica_right",
-     "offset": 720510,
+     "offset": 720492,
      "count": 561
     },
     {
      "id": "sp_root_c3",
-     "offset": 723876,
-     "count": 1781
+     "offset": 723858,
+     "count": 1616
     },
     {
      "id": "sp_root_c4",
-     "offset": 734562,
-     "count": 2318
+     "offset": 733554,
+     "count": 2330
     },
     {
      "id": "sp_root_c5",
-     "offset": 748470,
-     "count": 2378
+     "offset": 747534,
+     "count": 2350
     },
     {
      "id": "sp_root_c6",
-     "offset": 762738,
-     "count": 2315
+     "offset": 761634,
+     "count": 2346
     },
     {
      "id": "sp_root_c7",
-     "offset": 776628,
-     "count": 2335
+     "offset": 775710,
+     "count": 2318
     },
     {
      "id": "sp_root_c8",
-     "offset": 790638,
-     "count": 2176
+     "offset": 789618,
+     "count": 2309
     },
     {
      "id": "sp_root_t1",
-     "offset": 803694,
-     "count": 2508
+     "offset": 803472,
+     "count": 2806
     },
     {
      "id": "sp_root_t2",
-     "offset": 818742,
-     "count": 2540
+     "offset": 820308,
+     "count": 2799
     },
     {
      "id": "sp_root_t3",
-     "offset": 833982,
-     "count": 2491
+     "offset": 837102,
+     "count": 2872
     },
     {
      "id": "sp_root_t4",
-     "offset": 848928,
-     "count": 106
+     "offset": 854334,
+     "count": 297
     }
    ],
    "sdf": {
@@ -2539,7 +2544,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_c7.bin.gz",
-   "bytes": 234458
+   "bytes": 236041
   },
   "T1": {
    "frame": {
@@ -2597,7 +2602,7 @@
      "width": 9.2,
      "height": 11.0,
      "transverseAngle": 29.2,
-     "sagittalAngle": 5.2,
+     "sagittalAngle": 5.3,
      "chord": 41.4,
      "inscribedRadius": 4.06,
      "isthmus": [
@@ -2711,15 +2716,15 @@
      "nearest": [
       {
        "id": "sp_root_t1",
-       "mm": 0.23
+       "mm": 1.14
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.98
+       "mm": 2.0
       },
       {
        "id": "sp_root_c8",
-       "mm": 2.06
+       "mm": 2.17
       }
      ]
     },
@@ -2730,15 +2735,15 @@
      "nearest": [
       {
        "id": "sp_root_t1",
-       "mm": -0.25
-      },
-      {
-       "id": "sp_root_c8",
-       "mm": 0.59
+       "mm": -3.04
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.62
+       "mm": 1.74
+      },
+      {
+       "id": "sp_root_c8",
+       "mm": 2.08
       }
      ]
     },
@@ -2749,15 +2754,15 @@
      "nearest": [
       {
        "id": "sp_root_t1",
-       "mm": -1.06
+       "mm": -0.15
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.77
+       "mm": 1.79
       },
       {
        "id": "sp_root_c8",
-       "mm": 2.99
+       "mm": 3.17
       }
      ]
     },
@@ -2768,15 +2773,15 @@
      "nearest": [
       {
        "id": "sp_root_t1",
-       "mm": -0.29
-      },
-      {
-       "id": "sp_root_c8",
-       "mm": 0.15
+       "mm": -3.11
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.69
+       "mm": 1.67
+      },
+      {
+       "id": "sp_root_c8",
+       "mm": 1.68
       }
      ]
     }
@@ -2785,67 +2790,67 @@
     {
      "id": "sp_dural_sac",
      "offset": 677160,
-     "count": 7699
+     "count": 7686
     },
     {
      "id": "sp_vertebral_artery",
-     "offset": 723354,
+     "offset": 723276,
      "count": 2218
     },
     {
      "id": "sp_ica_left",
-     "offset": 736662,
-     "count": 77
+     "offset": 736584,
+     "count": 80
     },
     {
      "id": "sp_root_c4",
-     "offset": 737124,
-     "count": 959
+     "offset": 737064,
+     "count": 885
     },
     {
      "id": "sp_root_c5",
-     "offset": 742878,
-     "count": 2350
+     "offset": 742374,
+     "count": 2341
     },
     {
      "id": "sp_root_c6",
-     "offset": 756978,
-     "count": 2315
+     "offset": 756420,
+     "count": 2360
     },
     {
      "id": "sp_root_c7",
-     "offset": 770868,
-     "count": 2327
+     "offset": 770580,
+     "count": 2314
     },
     {
      "id": "sp_root_c8",
-     "offset": 784830,
-     "count": 2193
+     "offset": 784464,
+     "count": 2307
     },
     {
      "id": "sp_root_t1",
-     "offset": 797988,
-     "count": 2526
+     "offset": 798306,
+     "count": 2826
     },
     {
      "id": "sp_root_t2",
-     "offset": 813144,
-     "count": 2514
+     "offset": 815262,
+     "count": 2787
     },
     {
      "id": "sp_root_t3",
-     "offset": 828228,
-     "count": 2506
+     "offset": 831984,
+     "count": 2884
     },
     {
      "id": "sp_root_t4",
-     "offset": 843264,
-     "count": 2240
+     "offset": 849288,
+     "count": 2615
     },
     {
      "id": "sp_root_t5",
-     "offset": 856704,
-     "count": 32
+     "offset": 864978,
+     "count": 98
     }
    ],
    "sdf": {
@@ -2865,7 +2870,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_t1.bin.gz",
-   "bytes": 226830
+   "bytes": 229755
   },
   "T2": {
    "frame": {
@@ -2895,7 +2900,7 @@
      "width": 8.2,
      "height": 13.2,
      "transverseAngle": 24.5,
-     "sagittalAngle": -13.7,
+     "sagittalAngle": -13.8,
      "chord": 47.4,
      "inscribedRadius": 3.51,
      "isthmus": [
@@ -3036,15 +3041,15 @@
      "nearest": [
       {
        "id": "sp_root_t2",
-       "mm": 0.18
+       "mm": -3.17
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.49
+       "mm": 1.53
       },
       {
        "id": "sp_root_t1",
-       "mm": 8.3
+       "mm": 7.4
       }
      ]
     },
@@ -3057,15 +3062,15 @@
      "nearest": [
       {
        "id": "sp_root_t2",
-       "mm": -0.68
+       "mm": -2.77
       },
       {
        "id": "sp_dural_sac",
-       "mm": 0.97
+       "mm": 1.02
       },
       {
        "id": "sp_root_t1",
-       "mm": 6.64
+       "mm": 6.38
       }
      ]
     },
@@ -3076,15 +3081,15 @@
      "nearest": [
       {
        "id": "sp_root_t2",
-       "mm": 0.1
+       "mm": -3.01
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.52
+       "mm": 1.45
       },
       {
        "id": "sp_root_t1",
-       "mm": 8.31
+       "mm": 7.49
       }
      ]
     },
@@ -3095,15 +3100,15 @@
      "nearest": [
       {
        "id": "sp_root_t2",
-       "mm": -0.71
+       "mm": -2.76
       },
       {
        "id": "sp_dural_sac",
-       "mm": 0.91
+       "mm": 1.0
       },
       {
        "id": "sp_root_t1",
-       "mm": 7.13
+       "mm": 6.88
       }
      ]
     }
@@ -3112,62 +3117,62 @@
     {
      "id": "sp_dural_sac",
      "offset": 749088,
-     "count": 7711
+     "count": 7706
     },
     {
      "id": "sp_vertebral_artery",
-     "offset": 795354,
+     "offset": 795324,
      "count": 1819
     },
     {
      "id": "sp_root_c4",
-     "offset": 806268,
+     "offset": 806238,
      "count": 37
     },
     {
      "id": "sp_root_c5",
-     "offset": 806490,
-     "count": 1303
+     "offset": 806460,
+     "count": 1292
     },
     {
      "id": "sp_root_c6",
-     "offset": 814308,
-     "count": 2332
+     "offset": 814212,
+     "count": 2355
     },
     {
      "id": "sp_root_c7",
-     "offset": 828300,
-     "count": 2307
+     "offset": 828342,
+     "count": 2311
     },
     {
      "id": "sp_root_c8",
-     "offset": 842142,
-     "count": 2200
+     "offset": 842208,
+     "count": 2295
     },
     {
      "id": "sp_root_t1",
-     "offset": 855342,
-     "count": 2511
+     "offset": 855978,
+     "count": 2821
     },
     {
      "id": "sp_root_t2",
-     "offset": 870408,
-     "count": 2517
+     "offset": 872904,
+     "count": 2795
     },
     {
      "id": "sp_root_t3",
-     "offset": 885510,
-     "count": 2537
+     "offset": 889674,
+     "count": 2897
     },
     {
      "id": "sp_root_t4",
-     "offset": 900732,
-     "count": 2492
+     "offset": 907056,
+     "count": 2910
     },
     {
      "id": "sp_root_t5",
-     "offset": 915684,
-     "count": 2115
+     "offset": 924516,
+     "count": 2487
     }
    ],
    "sdf": {
@@ -3187,7 +3192,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_t2.bin.gz",
-   "bytes": 230814
+   "bytes": 235315
   },
   "T3": {
    "frame": {
@@ -3356,15 +3361,15 @@
      "nearest": [
       {
        "id": "sp_root_t3",
-       "mm": 0.81
+       "mm": -1.91
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.75
+       "mm": 1.76
       },
       {
        "id": "sp_root_t2",
-       "mm": 11.6
+       "mm": 10.37
       }
      ]
     },
@@ -3379,15 +3384,15 @@
      "nearest": [
       {
        "id": "sp_root_t3",
-       "mm": -0.19
+       "mm": -1.54
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.07
+       "mm": 0.97
       },
       {
-       "id": "sp_root_t2",
-       "mm": 11.3
+       "id": "sp_root_t4",
+       "mm": 10.63
       }
      ]
     },
@@ -3398,15 +3403,15 @@
      "nearest": [
       {
        "id": "sp_root_t3",
-       "mm": 0.62
+       "mm": -1.74
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.49
+       "mm": 1.55
       },
       {
        "id": "sp_root_t2",
-       "mm": 11.31
+       "mm": 9.96
       }
      ]
     },
@@ -3420,15 +3425,15 @@
      "nearest": [
       {
        "id": "sp_root_t3",
-       "mm": -0.2
+       "mm": -1.66
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.3
+       "mm": 1.11
       },
       {
-       "id": "sp_root_t2",
-       "mm": 10.45
+       "id": "sp_root_t4",
+       "mm": 9.75
       }
      ]
     }
@@ -3437,57 +3442,57 @@
     {
      "id": "sp_dural_sac",
      "offset": 681030,
-     "count": 7609
+     "count": 7610
     },
     {
      "id": "sp_vertebral_artery",
-     "offset": 726684,
+     "offset": 726690,
      "count": 1115
     },
     {
      "id": "sp_root_c6",
-     "offset": 733374,
-     "count": 457
+     "offset": 733380,
+     "count": 434
     },
     {
      "id": "sp_root_c7",
-     "offset": 736116,
-     "count": 2348
+     "offset": 735984,
+     "count": 2312
     },
     {
      "id": "sp_root_c8",
-     "offset": 750204,
-     "count": 2211
+     "offset": 749856,
+     "count": 2276
     },
     {
      "id": "sp_root_t1",
-     "offset": 763470,
-     "count": 2519
+     "offset": 763512,
+     "count": 2788
     },
     {
      "id": "sp_root_t2",
-     "offset": 778584,
-     "count": 2487
+     "offset": 780240,
+     "count": 2772
     },
     {
      "id": "sp_root_t3",
-     "offset": 793506,
-     "count": 2515
+     "offset": 796872,
+     "count": 2888
     },
     {
      "id": "sp_root_t4",
-     "offset": 808596,
-     "count": 2515
+     "offset": 814200,
+     "count": 2876
     },
     {
      "id": "sp_root_t5",
-     "offset": 823686,
-     "count": 2584
+     "offset": 831456,
+     "count": 2947
     },
     {
      "id": "sp_root_t6",
-     "offset": 839190,
-     "count": 347
+     "offset": 849138,
+     "count": 690
     }
    ],
    "sdf": {
@@ -3507,7 +3512,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_t3.bin.gz",
-   "bytes": 220836
+   "bytes": 225606
   },
   "T4": {
    "frame": {
@@ -3536,7 +3541,7 @@
     "L": {
      "width": 5.8,
      "height": 14.2,
-     "transverseAngle": 24.8,
+     "transverseAngle": 24.7,
      "sagittalAngle": 5.0,
      "chord": 55.9,
      "inscribedRadius": 1.91,
@@ -3678,11 +3683,11 @@
      "nearest": [
       {
        "id": "sp_root_t4",
-       "mm": 0.74
+       "mm": -2.21
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.25
+       "mm": 1.3
       },
       {
        "id": "sp_root_t3",
@@ -3701,15 +3706,15 @@
      "nearest": [
       {
        "id": "sp_root_t4",
-       "mm": -0.85
+       "mm": -0.84
       },
       {
        "id": "sp_dural_sac",
-       "mm": 0.88
+       "mm": 0.89
       },
       {
        "id": "sp_root_t5",
-       "mm": 10.26
+       "mm": 9.51
       }
      ]
     },
@@ -3722,16 +3727,16 @@
      },
      "nearest": [
       {
-       "id": "sp_dural_sac",
-       "mm": 1.25
+       "id": "sp_root_t4",
+       "mm": -1.11
       },
       {
-       "id": "sp_root_t4",
-       "mm": 1.41
+       "id": "sp_dural_sac",
+       "mm": 1.34
       },
       {
        "id": "sp_root_t3",
-       "mm": 10.68
+       "mm": 10.62
       }
      ]
     },
@@ -3746,15 +3751,15 @@
      "nearest": [
       {
        "id": "sp_root_t4",
-       "mm": -0.87
+       "mm": -0.59
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.03
+       "mm": 1.13
       },
       {
        "id": "sp_root_t5",
-       "mm": 10.48
+       "mm": 9.55
       }
      ]
     }
@@ -3763,57 +3768,57 @@
     {
      "id": "sp_dural_sac",
      "offset": 820800,
-     "count": 7558
+     "count": 7547
     },
     {
      "id": "sp_vertebral_artery",
-     "offset": 866148,
+     "offset": 866082,
      "count": 414
     },
     {
      "id": "sp_root_c7",
-     "offset": 868632,
+     "offset": 868566,
      "count": 239
     },
     {
      "id": "sp_root_c8",
-     "offset": 870066,
-     "count": 1309
+     "offset": 870000,
+     "count": 1275
     },
     {
      "id": "sp_root_t1",
-     "offset": 877920,
-     "count": 2348
+     "offset": 877650,
+     "count": 2443
     },
     {
      "id": "sp_root_t2",
-     "offset": 892008,
-     "count": 2493
+     "offset": 892308,
+     "count": 2767
     },
     {
      "id": "sp_root_t3",
-     "offset": 906966,
-     "count": 2504
+     "offset": 908910,
+     "count": 2906
     },
     {
      "id": "sp_root_t4",
-     "offset": 921990,
-     "count": 2531
+     "offset": 926346,
+     "count": 2891
     },
     {
      "id": "sp_root_t5",
-     "offset": 937176,
-     "count": 2581
+     "offset": 943692,
+     "count": 2941
     },
     {
      "id": "sp_root_t6",
-     "offset": 952662,
-     "count": 2557
+     "offset": 961338,
+     "count": 2915
     },
     {
      "id": "sp_root_t7",
-     "offset": 968004,
-     "count": 2118
+     "offset": 978828,
+     "count": 2521
     }
    ],
    "sdf": {
@@ -3833,7 +3838,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_t4.bin.gz",
-   "bytes": 223662
+   "bytes": 229729
   },
   "T5": {
    "frame": {
@@ -4004,15 +4009,15 @@
      "nearest": [
       {
        "id": "sp_root_t5",
-       "mm": 0.41
+       "mm": -1.1
       },
       {
        "id": "sp_dural_sac",
-       "mm": 0.9
+       "mm": 1.08
       },
       {
        "id": "sp_root_t4",
-       "mm": 12.44
+       "mm": 12.31
       }
      ]
     },
@@ -4025,7 +4030,7 @@
      "nearest": [
       {
        "id": "sp_root_t5",
-       "mm": 0.45
+       "mm": -1.52
       },
       {
        "id": "sp_dural_sac",
@@ -4033,7 +4038,7 @@
       },
       {
        "id": "sp_root_t4",
-       "mm": 10.68
+       "mm": 10.63
       }
      ]
     },
@@ -4046,15 +4051,15 @@
      "nearest": [
       {
        "id": "sp_root_t5",
-       "mm": 0.37
+       "mm": -1.55
       },
       {
        "id": "sp_dural_sac",
-       "mm": 0.94
+       "mm": 1.12
       },
       {
        "id": "sp_root_t4",
-       "mm": 10.77
+       "mm": 10.63
       }
      ]
     },
@@ -4067,7 +4072,7 @@
      "nearest": [
       {
        "id": "sp_root_t5",
-       "mm": 0.51
+       "mm": -1.57
       },
       {
        "id": "sp_dural_sac",
@@ -4075,7 +4080,7 @@
       },
       {
        "id": "sp_root_t4",
-       "mm": 10.47
+       "mm": 10.42
       }
      ]
     }
@@ -4084,52 +4089,52 @@
     {
      "id": "sp_dural_sac",
      "offset": 839800,
-     "count": 7440
+     "count": 7436
     },
     {
      "id": "sp_root_c8",
-     "offset": 884440,
+     "offset": 884416,
      "count": 64
     },
     {
      "id": "sp_root_t1",
-     "offset": 884824,
-     "count": 93
+     "offset": 884800,
+     "count": 90
     },
     {
      "id": "sp_root_t2",
-     "offset": 885382,
-     "count": 2255
+     "offset": 885340,
+     "count": 2274
     },
     {
      "id": "sp_root_t3",
-     "offset": 898912,
-     "count": 2514
+     "offset": 898984,
+     "count": 2894
     },
     {
      "id": "sp_root_t4",
-     "offset": 913996,
-     "count": 2489
+     "offset": 916348,
+     "count": 2928
     },
     {
      "id": "sp_root_t5",
-     "offset": 928930,
-     "count": 2573
+     "offset": 933916,
+     "count": 2922
     },
     {
      "id": "sp_root_t6",
-     "offset": 944368,
-     "count": 2553
+     "offset": 951448,
+     "count": 2939
     },
     {
      "id": "sp_root_t7",
-     "offset": 959686,
-     "count": 2579
+     "offset": 969082,
+     "count": 3021
     },
     {
      "id": "sp_root_t8",
-     "offset": 975160,
-     "count": 1880
+     "offset": 987208,
+     "count": 2326
     }
    ],
    "sdf": {
@@ -4149,7 +4154,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_t5.bin.gz",
-   "bytes": 218949
+   "bytes": 225987
   },
   "T6": {
    "frame": {
@@ -4178,7 +4183,7 @@
     "L": {
      "width": 4.5,
      "height": 14.0,
-     "transverseAngle": -3.7,
+     "transverseAngle": -3.8,
      "sagittalAngle": -29.5,
      "chord": 47.1,
      "inscribedRadius": 1.91,
@@ -4321,15 +4326,15 @@
      "nearest": [
       {
        "id": "sp_root_t6",
-       "mm": -0.41
+       "mm": -1.41
       },
       {
        "id": "sp_dural_sac",
-       "mm": 0.9
+       "mm": 0.8
       },
       {
-       "id": "sp_root_t5",
-       "mm": 12.82
+       "id": "sp_root_t7",
+       "mm": 12.09
       }
      ]
     },
@@ -4343,15 +4348,15 @@
      "nearest": [
       {
        "id": "sp_root_t6",
-       "mm": 0.01
+       "mm": -1.57
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.08
+       "mm": 1.02
       },
       {
-       "id": "sp_root_t5",
-       "mm": 12.79
+       "id": "sp_root_t7",
+       "mm": 12.0
       }
      ]
     },
@@ -4365,15 +4370,15 @@
      "nearest": [
       {
        "id": "sp_root_t6",
-       "mm": -0.6
+       "mm": -1.6
       },
       {
        "id": "sp_dural_sac",
-       "mm": 0.35
+       "mm": 0.36
       },
       {
        "id": "sp_root_t5",
-       "mm": 9.86
+       "mm": 9.51
       }
      ]
     },
@@ -4387,7 +4392,7 @@
      "nearest": [
       {
        "id": "sp_root_t6",
-       "mm": 0.17
+       "mm": -1.67
       },
       {
        "id": "sp_dural_sac",
@@ -4395,7 +4400,7 @@
       },
       {
        "id": "sp_root_t7",
-       "mm": 10.25
+       "mm": 9.07
       }
      ]
     }
@@ -4404,47 +4409,47 @@
     {
      "id": "sp_dural_sac",
      "offset": 845500,
-     "count": 7352
+     "count": 7353
     },
     {
      "id": "sp_root_t3",
-     "offset": 889612,
-     "count": 1216
+     "offset": 889618,
+     "count": 1307
     },
     {
      "id": "sp_root_t4",
-     "offset": 896908,
-     "count": 2538
+     "offset": 897460,
+     "count": 2919
     },
     {
      "id": "sp_root_t5",
-     "offset": 912136,
-     "count": 2575
+     "offset": 914974,
+     "count": 2939
     },
     {
      "id": "sp_root_t6",
-     "offset": 927586,
-     "count": 2521
+     "offset": 932608,
+     "count": 2932
     },
     {
      "id": "sp_root_t7",
-     "offset": 942712,
-     "count": 2539
+     "offset": 950200,
+     "count": 3037
     },
     {
      "id": "sp_root_t8",
-     "offset": 957946,
-     "count": 2582
+     "offset": 968422,
+     "count": 2952
     },
     {
      "id": "sp_root_t9",
-     "offset": 973438,
-     "count": 2278
+     "offset": 986134,
+     "count": 2645
     },
     {
      "id": "sp_root_t10",
-     "offset": 987106,
-     "count": 48
+     "offset": 1002004,
+     "count": 141
     }
    ],
    "sdf": {
@@ -4464,7 +4469,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_t6.bin.gz",
-   "bytes": 216770
+   "bytes": 224370
   },
   "T7": {
    "frame": {
@@ -4635,7 +4640,7 @@
      "nearest": [
       {
        "id": "sp_root_t7",
-       "mm": -0.09
+       "mm": -1.74
       },
       {
        "id": "sp_dural_sac",
@@ -4643,7 +4648,7 @@
       },
       {
        "id": "sp_root_t8",
-       "mm": 12.81
+       "mm": 12.26
       }
      ]
     },
@@ -4655,16 +4660,16 @@
      },
      "nearest": [
       {
-       "id": "sp_dural_sac",
-       "mm": 0.95
+       "id": "sp_root_t7",
+       "mm": -2.08
       },
       {
-       "id": "sp_root_t7",
+       "id": "sp_dural_sac",
        "mm": 0.97
       },
       {
        "id": "sp_root_t6",
-       "mm": 12.02
+       "mm": 11.97
       }
      ]
     },
@@ -4675,15 +4680,15 @@
      "nearest": [
       {
        "id": "sp_root_t7",
-       "mm": -0.12
+       "mm": -1.86
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.25
+       "mm": 1.13
       },
       {
        "id": "sp_root_t6",
-       "mm": 9.61
+       "mm": 9.47
       }
      ]
     },
@@ -4696,15 +4701,15 @@
      "nearest": [
       {
        "id": "sp_root_t7",
-       "mm": 1.02
+       "mm": -2.0
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.19
+       "mm": 1.2
       },
       {
        "id": "sp_root_t6",
-       "mm": 11.21
+       "mm": 11.19
       }
      ]
     }
@@ -4713,47 +4718,47 @@
     {
      "id": "sp_dural_sac",
      "offset": 827200,
-     "count": 7228
+     "count": 7234
     },
     {
      "id": "sp_root_t4",
-     "offset": 870568,
+     "offset": 870604,
      "count": 355
     },
     {
      "id": "sp_root_t5",
-     "offset": 872698,
-     "count": 2549
+     "offset": 872734,
+     "count": 2902
     },
     {
      "id": "sp_root_t6",
-     "offset": 887992,
-     "count": 2537
+     "offset": 890146,
+     "count": 2928
     },
     {
      "id": "sp_root_t7",
-     "offset": 903214,
-     "count": 2553
+     "offset": 907714,
+     "count": 3028
     },
     {
      "id": "sp_root_t8",
-     "offset": 918532,
-     "count": 2590
+     "offset": 925882,
+     "count": 3004
     },
     {
      "id": "sp_root_t9",
-     "offset": 934072,
-     "count": 2484
+     "offset": 943906,
+     "count": 2875
     },
     {
      "id": "sp_root_t10",
-     "offset": 948976,
-     "count": 2380
+     "offset": 961156,
+     "count": 2662
     },
     {
      "id": "sp_root_t11",
-     "offset": 963256,
-     "count": 10
+     "offset": 977128,
+     "count": 68
     }
    ],
    "sdf": {
@@ -4773,7 +4778,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_t7.bin.gz",
-   "bytes": 215577
+   "bytes": 222259
   },
   "T8": {
    "frame": {
@@ -4942,15 +4947,15 @@
      "nearest": [
       {
        "id": "sp_root_t8",
-       "mm": -0.28
+       "mm": -1.94
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.49
+       "mm": 1.45
       },
       {
        "id": "sp_root_t7",
-       "mm": 13.83
+       "mm": 13.7
       }
      ]
     },
@@ -4963,15 +4968,15 @@
      "nearest": [
       {
        "id": "sp_root_t8",
-       "mm": -0.93
+       "mm": -1.98
       },
       {
        "id": "sp_dural_sac",
-       "mm": 0.29
+       "mm": 0.27
       },
       {
-       "id": "sp_root_t7",
-       "mm": 12.33
+       "id": "sp_root_t9",
+       "mm": 11.3
       }
      ]
     },
@@ -4982,15 +4987,15 @@
      "nearest": [
       {
        "id": "sp_root_t8",
-       "mm": -0.41
+       "mm": -2.16
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.46
+       "mm": 1.37
       },
       {
        "id": "sp_root_t7",
-       "mm": 12.87
+       "mm": 12.48
       }
      ]
     },
@@ -5006,15 +5011,15 @@
      "nearest": [
       {
        "id": "sp_root_t8",
-       "mm": -1.09
+       "mm": -1.9
       },
       {
        "id": "sp_dural_sac",
-       "mm": 0.62
+       "mm": 0.59
       },
       {
-       "id": "sp_root_t7",
-       "mm": 12.49
+       "id": "sp_root_t9",
+       "mm": 11.25
       }
      ]
     }
@@ -5023,42 +5028,42 @@
     {
      "id": "sp_dural_sac",
      "offset": 833340,
-     "count": 7063
+     "count": 7028
     },
     {
      "id": "sp_root_t5",
-     "offset": 875718,
-     "count": 210
+     "offset": 875508,
+     "count": 208
     },
     {
      "id": "sp_root_t6",
-     "offset": 876978,
-     "count": 2530
+     "offset": 876756,
+     "count": 2897
     },
     {
      "id": "sp_root_t7",
-     "offset": 892158,
-     "count": 2551
+     "offset": 894138,
+     "count": 3032
     },
     {
      "id": "sp_root_t8",
-     "offset": 907464,
-     "count": 2559
+     "offset": 912330,
+     "count": 2977
     },
     {
      "id": "sp_root_t9",
-     "offset": 922818,
-     "count": 2495
+     "offset": 930192,
+     "count": 2862
     },
     {
      "id": "sp_root_t10",
-     "offset": 937788,
-     "count": 2633
+     "offset": 947364,
+     "count": 2930
     },
     {
      "id": "sp_root_t11",
-     "offset": 953586,
-     "count": 1783
+     "offset": 964944,
+     "count": 1818
     }
    ],
    "sdf": {
@@ -5078,7 +5083,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_t8.bin.gz",
-   "bytes": 216609
+   "bytes": 220980
   },
   "T9": {
    "frame": {
@@ -5108,7 +5113,7 @@
      "width": 5.8,
      "height": 17.0,
      "transverseAngle": 10.8,
-     "sagittalAngle": -16.8,
+     "sagittalAngle": -16.7,
      "chord": 49.8,
      "inscribedRadius": 2.52,
      "isthmus": [
@@ -5247,15 +5252,15 @@
      "nearest": [
       {
        "id": "sp_root_t9",
-       "mm": 0.83
+       "mm": -2.1
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.76
+       "mm": 1.77
       },
       {
        "id": "sp_root_t8",
-       "mm": 9.64
+       "mm": 9.49
       }
      ]
     },
@@ -5268,15 +5273,15 @@
      "nearest": [
       {
        "id": "sp_root_t9",
-       "mm": 0.36
+       "mm": -2.44
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.25
+       "mm": 1.21
       },
       {
        "id": "sp_root_t10",
-       "mm": 11.08
+       "mm": 9.34
       }
      ]
     },
@@ -5287,7 +5292,7 @@
      "nearest": [
       {
        "id": "sp_root_t9",
-       "mm": 0.82
+       "mm": -2.18
       },
       {
        "id": "sp_dural_sac",
@@ -5295,7 +5300,7 @@
       },
       {
        "id": "sp_root_t8",
-       "mm": 9.2
+       "mm": 8.83
       }
      ]
     },
@@ -5308,15 +5313,15 @@
      "nearest": [
       {
        "id": "sp_root_t9",
-       "mm": 0.28
+       "mm": -2.42
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.24
+       "mm": 1.27
       },
       {
        "id": "sp_root_t10",
-       "mm": 11.43
+       "mm": 9.5
       }
      ]
     }
@@ -5325,42 +5330,42 @@
     {
      "id": "sp_dural_sac",
      "offset": 766320,
-     "count": 6818
+     "count": 6831
     },
     {
      "id": "sp_root_t6",
-     "offset": 807228,
-     "count": 72
+     "offset": 807306,
+     "count": 76
     },
     {
      "id": "sp_root_t7",
-     "offset": 807660,
-     "count": 2550
+     "offset": 807762,
+     "count": 2896
     },
     {
      "id": "sp_root_t8",
-     "offset": 822960,
-     "count": 2582
+     "offset": 825138,
+     "count": 2965
     },
     {
      "id": "sp_root_t9",
-     "offset": 838452,
-     "count": 2495
+     "offset": 842928,
+     "count": 2882
     },
     {
      "id": "sp_root_t10",
-     "offset": 853422,
-     "count": 2624
+     "offset": 860220,
+     "count": 2953
     },
     {
      "id": "sp_root_t11",
-     "offset": 869166,
-     "count": 2559
+     "offset": 877938,
+     "count": 2810
     },
     {
      "id": "sp_root_t12",
-     "offset": 884520,
-     "count": 411
+     "offset": 894798,
+     "count": 652
     }
    ],
    "sdf": {
@@ -5380,7 +5385,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_t9.bin.gz",
-   "bytes": 212168
+   "bytes": 216244
   },
   "T10": {
    "frame": {
@@ -5554,7 +5559,7 @@
      "nearest": [
       {
        "id": "sp_root_t10",
-       "mm": 0.23
+       "mm": -2.28
       },
       {
        "id": "sp_dural_sac",
@@ -5562,7 +5567,7 @@
       },
       {
        "id": "sp_root_t9",
-       "mm": 12.98
+       "mm": 12.49
       }
      ]
     },
@@ -5576,15 +5581,15 @@
      "nearest": [
       {
        "id": "sp_root_t10",
-       "mm": 0.24
+       "mm": -1.66
       },
       {
        "id": "sp_dural_sac",
-       "mm": 2.39
+       "mm": 2.4
       },
       {
        "id": "sp_root_t9",
-       "mm": 11.75
+       "mm": 10.49
       }
      ]
     },
@@ -5599,15 +5604,15 @@
      "nearest": [
       {
        "id": "sp_root_t10",
-       "mm": 0.16
+       "mm": -2.34
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.41
+       "mm": 1.46
       },
       {
        "id": "sp_root_t9",
-       "mm": 9.13
+       "mm": 8.5
       }
      ]
     },
@@ -5621,15 +5626,15 @@
      "nearest": [
       {
        "id": "sp_root_t10",
-       "mm": -0.19
+       "mm": -1.92
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.63
+       "mm": 1.64
       },
       {
        "id": "sp_root_t9",
-       "mm": 12.16
+       "mm": 10.91
       }
      ]
     }
@@ -5638,42 +5643,42 @@
     {
      "id": "sp_dural_sac",
      "offset": 687648,
-     "count": 7025
+     "count": 6993
     },
     {
      "id": "sp_root_t7",
-     "offset": 729798,
-     "count": 190
+     "offset": 729606,
+     "count": 191
     },
     {
      "id": "sp_root_t8",
-     "offset": 730938,
-     "count": 2563
+     "offset": 730752,
+     "count": 2948
     },
     {
      "id": "sp_root_t9",
-     "offset": 746316,
-     "count": 2504
+     "offset": 748440,
+     "count": 2865
     },
     {
      "id": "sp_root_t10",
-     "offset": 761340,
-     "count": 2617
+     "offset": 765630,
+     "count": 2912
     },
     {
      "id": "sp_root_t11",
-     "offset": 777042,
-     "count": 2578
+     "offset": 783102,
+     "count": 2839
     },
     {
      "id": "sp_root_t12",
-     "offset": 792510,
-     "count": 2593
+     "offset": 800136,
+     "count": 2812
     },
     {
      "id": "sp_root_l1",
-     "offset": 808068,
-     "count": 143
+     "offset": 817008,
+     "count": 330
     }
    ],
    "sdf": {
@@ -5693,7 +5698,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_t10.bin.gz",
-   "bytes": 213075
+   "bytes": 215932
   },
   "T11": {
    "frame": {
@@ -5864,15 +5869,15 @@
      "nearest": [
       {
        "id": "sp_root_t11",
-       "mm": 0.28
+       "mm": -2.76
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.7
+       "mm": 1.65
       },
       {
        "id": "sp_root_t10",
-       "mm": 12.0
+       "mm": 11.36
       }
      ]
     },
@@ -5885,7 +5890,7 @@
      "nearest": [
       {
        "id": "sp_root_t11",
-       "mm": 1.96
+       "mm": 1.91
       },
       {
        "id": "sp_dural_sac",
@@ -5893,7 +5898,7 @@
       },
       {
        "id": "sp_root_t10",
-       "mm": 13.3
+       "mm": 12.4
       }
      ]
     },
@@ -5904,15 +5909,15 @@
      "nearest": [
       {
        "id": "sp_root_t11",
-       "mm": 0.9
+       "mm": -2.81
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.72
+       "mm": 1.78
       },
       {
        "id": "sp_root_t10",
-       "mm": 8.4
+       "mm": 7.62
       }
      ]
     },
@@ -5923,7 +5928,7 @@
      "nearest": [
       {
        "id": "sp_root_t11",
-       "mm": 1.97
+       "mm": 1.87
       },
       {
        "id": "sp_dural_sac",
@@ -5931,7 +5936,7 @@
       },
       {
        "id": "sp_root_t10",
-       "mm": 10.48
+       "mm": 9.28
       }
      ]
     }
@@ -5940,37 +5945,37 @@
     {
      "id": "sp_dural_sac",
      "offset": 630700,
-     "count": 6982
+     "count": 6954
     },
     {
      "id": "sp_root_t8",
-     "offset": 672592,
-     "count": 253
+     "offset": 672424,
+     "count": 235
     },
     {
      "id": "sp_root_t9",
-     "offset": 674110,
-     "count": 2483
+     "offset": 673834,
+     "count": 2803
     },
     {
      "id": "sp_root_t10",
-     "offset": 689008,
-     "count": 2611
+     "offset": 690652,
+     "count": 2954
     },
     {
      "id": "sp_root_t11",
-     "offset": 704674,
-     "count": 2573
+     "offset": 708376,
+     "count": 2822
     },
     {
      "id": "sp_root_t12",
-     "offset": 720112,
-     "count": 2596
+     "offset": 725308,
+     "count": 2820
     },
     {
      "id": "sp_root_l1",
-     "offset": 735688,
-     "count": 1448
+     "offset": 742228,
+     "count": 1701
     }
    ],
    "sdf": {
@@ -5990,7 +5995,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_t11.bin.gz",
-   "bytes": 212816
+   "bytes": 213430
   },
   "T12": {
    "frame": {
@@ -6162,7 +6167,7 @@
      "nearest": [
       {
        "id": "sp_root_t12",
-       "mm": 1.15
+       "mm": 1.51
       },
       {
        "id": "sp_dural_sac",
@@ -6170,7 +6175,7 @@
       },
       {
        "id": "sp_root_l1",
-       "mm": 12.61
+       "mm": 11.45
       }
      ]
     },
@@ -6183,16 +6188,16 @@
      },
      "nearest": [
       {
-       "id": "sp_dural_sac",
-       "mm": 1.35
+       "id": "sp_root_t12",
+       "mm": 1.09
       },
       {
-       "id": "sp_root_t12",
-       "mm": 1.5
+       "id": "sp_dural_sac",
+       "mm": 1.32
       },
       {
        "id": "sp_root_t11",
-       "mm": 12.34
+       "mm": 11.64
       }
      ]
     },
@@ -6203,15 +6208,15 @@
      "nearest": [
       {
        "id": "sp_root_t12",
-       "mm": 1.39
+       "mm": 1.56
       },
       {
        "id": "sp_dural_sac",
-       "mm": 2.56
+       "mm": 2.6
       },
       {
        "id": "sp_root_t11",
-       "mm": 12.06
+       "mm": 9.93
       }
      ]
     },
@@ -6222,15 +6227,15 @@
      "nearest": [
       {
        "id": "sp_root_t12",
-       "mm": 1.49
+       "mm": 1.1
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.51
+       "mm": 1.48
       },
       {
        "id": "sp_root_t11",
-       "mm": 9.84
+       "mm": 8.84
       }
      ]
     }
@@ -6239,37 +6244,37 @@
     {
      "id": "sp_dural_sac",
      "offset": 615384,
-     "count": 7478
+     "count": 7465
     },
     {
      "id": "sp_root_t9",
-     "offset": 660252,
-     "count": 118
+     "offset": 660174,
+     "count": 119
     },
     {
      "id": "sp_root_t10",
-     "offset": 660960,
-     "count": 2452
+     "offset": 660888,
+     "count": 2680
     },
     {
      "id": "sp_root_t11",
-     "offset": 675672,
-     "count": 2543
+     "offset": 676968,
+     "count": 2823
     },
     {
      "id": "sp_root_t12",
-     "offset": 690930,
-     "count": 2588
+     "offset": 693906,
+     "count": 2802
     },
     {
      "id": "sp_root_l1",
-     "offset": 706458,
-     "count": 2801
+     "offset": 710718,
+     "count": 3094
     },
     {
      "id": "sp_root_l2",
-     "offset": 723264,
-     "count": 1639
+     "offset": 729282,
+     "count": 1909
     }
    ],
    "sdf": {
@@ -6289,7 +6294,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_t12.bin.gz",
-   "bytes": 224209
+   "bytes": 223914
   },
   "L1": {
    "frame": {
@@ -6318,8 +6323,8 @@
     "L": {
      "width": 7.2,
      "height": 17.0,
-     "transverseAngle": 17.2,
-     "sagittalAngle": -8.7,
+     "transverseAngle": 17.3,
+     "sagittalAngle": -8.8,
      "chord": 68.9,
      "inscribedRadius": 3.24,
      "isthmus": [
@@ -6346,7 +6351,7 @@
     "R": {
      "width": 6.5,
      "height": 17.5,
-     "transverseAngle": 13.2,
+     "transverseAngle": 13.3,
      "sagittalAngle": -2.5,
      "chord": 61.6,
      "inscribedRadius": 3.24,
@@ -6376,14 +6381,14 @@
     "tt": {
      "L": {
       "entry": [
-       -26.73,
-       -48.26,
-       135.22
+       -26.77,
+       -48.25,
+       135.23
       ],
       "dir": [
-       0.2748,
-       0.9599,
-       0.0555
+       0.2765,
+       0.9594,
+       0.0554
       ],
       "chord": 59.9,
       "size": {
@@ -6393,16 +6398,16 @@
      },
      "R": {
       "entry": [
-       14.33,
-       -48.05,
+       14.37,
+       -48.04,
        134.12
       ],
       "dir": [
-       -0.249,
-       0.9651,
+       -0.2507,
+       0.9647,
        0.0808
       ],
-      "chord": 59.4,
+      "chord": 59.5,
       "size": {
        "diameter": 6.5,
        "length": 45.0
@@ -6449,7 +6454,7 @@
    "check": {
     "tt.L": {
      "grade": "B",
-     "seated": 7.0,
+     "seated": 6.5,
      "breach": {
       "inferior": 0.28,
       "lateral": 0.34,
@@ -6458,15 +6463,15 @@
      "nearest": [
       {
        "id": "sp_root_l1",
-       "mm": 0.2
+       "mm": 0.49
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.49
+       "mm": 1.56
       },
       {
        "id": "sp_root_t12",
-       "mm": 15.29
+       "mm": 13.32
       }
      ]
     },
@@ -6475,21 +6480,21 @@
      "seated": 6.0,
      "breach": {
       "anterior": 0.39,
-      "lateral": 0.23,
+      "lateral": 0.24,
       "medial": 0.51
      },
      "nearest": [
       {
        "id": "sp_root_l1",
-       "mm": -0.22
+       "mm": -2.97
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.31
+       "mm": 1.35
       },
       {
        "id": "sp_root_t12",
-       "mm": 13.37
+       "mm": 12.99
       }
      ]
     },
@@ -6500,15 +6505,15 @@
      "nearest": [
       {
        "id": "sp_root_l1",
-       "mm": 1.45
+       "mm": 1.96
       },
       {
        "id": "sp_dural_sac",
-       "mm": 2.33
+       "mm": 2.28
       },
       {
        "id": "sp_root_t12",
-       "mm": 16.04
+       "mm": 14.75
       }
      ]
     },
@@ -6519,15 +6524,15 @@
      "nearest": [
       {
        "id": "sp_root_l1",
-       "mm": 1.17
+       "mm": -1.72
       },
       {
        "id": "sp_dural_sac",
-       "mm": 2.28
+       "mm": 2.27
       },
       {
        "id": "sp_root_t12",
-       "mm": 14.61
+       "mm": 14.35
       }
      ]
     }
@@ -6536,32 +6541,32 @@
     {
      "id": "sp_dural_sac",
      "offset": 835296,
-     "count": 7578
+     "count": 7575
     },
     {
      "id": "sp_root_t11",
-     "offset": 880764,
-     "count": 2290
+     "offset": 880746,
+     "count": 2354
     },
     {
      "id": "sp_root_t12",
-     "offset": 894504,
-     "count": 2603
+     "offset": 894870,
+     "count": 2822
     },
     {
      "id": "sp_root_l1",
-     "offset": 910122,
-     "count": 2796
+     "offset": 911802,
+     "count": 3121
     },
     {
      "id": "sp_root_l2",
-     "offset": 926898,
-     "count": 2733
+     "offset": 930528,
+     "count": 2977
     },
     {
      "id": "sp_root_l3",
-     "offset": 943296,
-     "count": 1875
+     "offset": 948390,
+     "count": 2119
     }
    ],
    "sdf": {
@@ -6581,7 +6586,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_l1.bin.gz",
-   "bytes": 246014
+   "bytes": 244020
   },
   "L2": {
    "frame": {
@@ -6611,7 +6616,7 @@
      "width": 6.8,
      "height": 16.5,
      "transverseAngle": 18.5,
-     "sagittalAngle": -16.3,
+     "sagittalAngle": -16.2,
      "chord": 66.6,
      "inscribedRadius": 3.24,
      "isthmus": [
@@ -6639,7 +6644,7 @@
      "width": 6.5,
      "height": 15.5,
      "transverseAngle": 11.0,
-     "sagittalAngle": -20.3,
+     "sagittalAngle": -20.2,
      "chord": 75.0,
      "inscribedRadius": 3.15,
      "isthmus": [
@@ -6751,7 +6756,7 @@
      "nearest": [
       {
        "id": "sp_root_l2",
-       "mm": 0.08
+       "mm": -3.01
       },
       {
        "id": "sp_dural_sac",
@@ -6774,15 +6779,15 @@
      "nearest": [
       {
        "id": "sp_root_l2",
-       "mm": -0.04
+       "mm": -0.1
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.02
+       "mm": 1.09
       },
       {
        "id": "sp_root_l1",
-       "mm": 12.14
+       "mm": 12.12
       }
      ]
     },
@@ -6793,15 +6798,15 @@
      "nearest": [
       {
        "id": "sp_root_l2",
-       "mm": 1.22
+       "mm": -0.8
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.46
+       "mm": 1.38
       },
       {
        "id": "sp_root_l1",
-       "mm": 10.98
+       "mm": 10.93
       }
      ]
     },
@@ -6814,15 +6819,15 @@
      "nearest": [
       {
        "id": "sp_root_l2",
-       "mm": 1.34
+       "mm": 1.35
       },
       {
        "id": "sp_dural_sac",
-       "mm": 2.1
+       "mm": 2.06
       },
       {
        "id": "sp_root_l1",
-       "mm": 12.12
+       "mm": 12.17
       }
      ]
     }
@@ -6831,32 +6836,32 @@
     {
      "id": "sp_dural_sac",
      "offset": 1045440,
-     "count": 7612
+     "count": 7617
     },
     {
      "id": "sp_root_t12",
-     "offset": 1091112,
-     "count": 2233
+     "offset": 1091142,
+     "count": 2260
     },
     {
      "id": "sp_root_l1",
-     "offset": 1104510,
-     "count": 2811
+     "offset": 1104702,
+     "count": 3085
     },
     {
      "id": "sp_root_l2",
-     "offset": 1121376,
-     "count": 2760
+     "offset": 1123212,
+     "count": 2963
     },
     {
      "id": "sp_root_l3",
-     "offset": 1137936,
-     "count": 2775
+     "offset": 1140990,
+     "count": 3007
     },
     {
      "id": "sp_root_l4",
-     "offset": 1154586,
-     "count": 1943
+     "offset": 1159032,
+     "count": 2256
     }
    ],
    "sdf": {
@@ -6876,7 +6881,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_l2.bin.gz",
-   "bytes": 268049
+   "bytes": 265916
   },
   "L3": {
    "frame": {
@@ -7041,15 +7046,15 @@
      "nearest": [
       {
        "id": "sp_root_l3",
-       "mm": 1.54
+       "mm": 1.76
       },
       {
        "id": "sp_dural_sac",
-       "mm": 3.74
+       "mm": 3.89
       },
       {
        "id": "sp_root_l2",
-       "mm": 13.52
+       "mm": 13.47
       }
      ]
     },
@@ -7060,15 +7065,15 @@
      "nearest": [
       {
        "id": "sp_root_l3",
-       "mm": 1.3
+       "mm": 1.54
       },
       {
        "id": "sp_dural_sac",
-       "mm": 2.8
+       "mm": 2.77
       },
       {
        "id": "sp_root_l2",
-       "mm": 13.12
+       "mm": 13.15
       }
      ]
     },
@@ -7079,15 +7084,15 @@
      "nearest": [
       {
        "id": "sp_root_l3",
-       "mm": 1.97
+       "mm": 2.28
       },
       {
        "id": "sp_dural_sac",
-       "mm": 3.41
+       "mm": 3.36
       },
       {
        "id": "sp_root_l2",
-       "mm": 10.25
+       "mm": 10.31
       }
      ]
     },
@@ -7098,15 +7103,15 @@
      "nearest": [
       {
        "id": "sp_root_l3",
-       "mm": 1.79
+       "mm": 2.03
       },
       {
        "id": "sp_dural_sac",
-       "mm": 2.71
+       "mm": 2.58
       },
       {
        "id": "sp_root_l2",
-       "mm": 10.68
+       "mm": 10.69
       }
      ]
     }
@@ -7115,32 +7120,32 @@
     {
      "id": "sp_dural_sac",
      "offset": 1205524,
-     "count": 7626
+     "count": 7639
     },
     {
      "id": "sp_root_l1",
-     "offset": 1251280,
-     "count": 2452
+     "offset": 1251358,
+     "count": 2464
     },
     {
      "id": "sp_root_l2",
-     "offset": 1265992,
-     "count": 2711
+     "offset": 1266142,
+     "count": 2987
     },
     {
      "id": "sp_root_l3",
-     "offset": 1282258,
-     "count": 2742
+     "offset": 1284064,
+     "count": 3050
     },
     {
      "id": "sp_root_l4",
-     "offset": 1298710,
-     "count": 2718
+     "offset": 1302364,
+     "count": 3038
     },
     {
      "id": "sp_root_l5",
-     "offset": 1315018,
-     "count": 736
+     "offset": 1320592,
+     "count": 1395
     }
    ],
    "sdf": {
@@ -7160,7 +7165,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_l3.bin.gz",
-   "bytes": 274082
+   "bytes": 273584
   },
   "L4": {
    "frame": {
@@ -7190,7 +7195,7 @@
      "width": 12.2,
      "height": 15.0,
      "transverseAngle": 15.8,
-     "sagittalAngle": -12.7,
+     "sagittalAngle": -12.8,
      "chord": 66.1,
      "inscribedRadius": 4.66,
      "isthmus": [
@@ -7217,7 +7222,7 @@
     "R": {
      "width": 12.2,
      "height": 15.0,
-     "transverseAngle": 7.2,
+     "transverseAngle": 7.3,
      "sagittalAngle": -13.0,
      "chord": 63.9,
      "inscribedRadius": 5.29,
@@ -7264,16 +7269,16 @@
      },
      "R": {
       "entry": [
-       18.2,
+       18.23,
        -32.29,
        42.38
       ],
       "dir": [
-       -0.1201,
-       0.9781,
+       -0.1218,
+       0.9779,
        -0.17
       ],
-      "chord": 53.9,
+      "chord": 54.0,
       "size": {
        "diameter": 6.5,
        "length": 45.0
@@ -7325,15 +7330,15 @@
      "nearest": [
       {
        "id": "sp_root_l4",
-       "mm": 2.65
+       "mm": -1.5
       },
       {
        "id": "sp_dural_sac",
-       "mm": 4.55
+       "mm": 4.46
       },
       {
        "id": "sp_root_l3",
-       "mm": 13.82
+       "mm": 13.81
       }
      ]
     },
@@ -7344,7 +7349,7 @@
      "nearest": [
       {
        "id": "sp_root_l4",
-       "mm": 3.2
+       "mm": 2.86
       },
       {
        "id": "sp_dural_sac",
@@ -7363,15 +7368,15 @@
      "nearest": [
       {
        "id": "sp_root_l4",
-       "mm": 3.14
+       "mm": 2.26
       },
       {
        "id": "sp_dural_sac",
-       "mm": 4.1
+       "mm": 4.08
       },
       {
        "id": "sp_root_l3",
-       "mm": 10.21
+       "mm": 10.1
       }
      ]
     },
@@ -7382,7 +7387,7 @@
      "nearest": [
       {
        "id": "sp_root_l4",
-       "mm": 3.0
+       "mm": 2.52
       },
       {
        "id": "sp_dural_sac",
@@ -7390,7 +7395,7 @@
       },
       {
        "id": "sp_root_l3",
-       "mm": 8.46
+       "mm": 8.47
       }
      ]
     }
@@ -7399,37 +7404,37 @@
     {
      "id": "sp_dural_sac",
      "offset": 1092240,
-     "count": 7660
+     "count": 7662
     },
     {
      "id": "sp_root_l1",
-     "offset": 1138200,
+     "offset": 1138212,
      "count": 61
     },
     {
      "id": "sp_root_l2",
-     "offset": 1138566,
-     "count": 2383
+     "offset": 1138578,
+     "count": 2371
     },
     {
      "id": "sp_root_l3",
-     "offset": 1152864,
-     "count": 2749
+     "offset": 1152804,
+     "count": 3021
     },
     {
      "id": "sp_root_l4",
-     "offset": 1169358,
-     "count": 2717
+     "offset": 1170930,
+     "count": 3048
     },
     {
      "id": "sp_root_l5",
-     "offset": 1185660,
-     "count": 2647
+     "offset": 1189218,
+     "count": 2909
     },
     {
      "id": "sp_root_s1",
-     "offset": 1201542,
-     "count": 551
+     "offset": 1206672,
+     "count": 513
     }
    ],
    "sdf": {
@@ -7449,7 +7454,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_l4.bin.gz",
-   "bytes": 272285
+   "bytes": 268003
   },
   "L5": {
    "frame": {
@@ -7478,7 +7483,7 @@
     "L": {
      "width": 14.0,
      "height": 16.0,
-     "transverseAngle": 17.3,
+     "transverseAngle": 17.2,
      "sagittalAngle": -10.5,
      "chord": 61.9,
      "inscribedRadius": 4.2,
@@ -7506,7 +7511,7 @@
     "R": {
      "width": 20.0,
      "height": 18.2,
-     "transverseAngle": 15.3,
+     "transverseAngle": 15.2,
      "sagittalAngle": -11.0,
      "chord": 64.4,
      "inscribedRadius": 4.31,
@@ -7536,14 +7541,14 @@
     "tt": {
      "L": {
       "entry": [
-       -29.19,
-       -33.96,
+       -29.16,
+       -33.97,
        16.19
       ],
       "dir": [
-       0.3156,
-       0.8627,
-       -0.3951
+       0.314,
+       0.8633,
+       -0.3953
       ],
       "chord": 57.6,
       "size": {
@@ -7553,16 +7558,16 @@
      },
      "R": {
       "entry": [
-       25.43,
+       25.41,
        -35.68,
-       17.85
+       17.86
       ],
       "dir": [
-       -0.2441,
-       0.8969,
-       -0.3688
+       -0.2424,
+       0.8972,
+       -0.3691
       ],
-      "chord": 58.0,
+      "chord": 57.8,
       "size": {
        "diameter": 6.5,
        "length": 45.0
@@ -7614,15 +7619,15 @@
      "nearest": [
       {
        "id": "sp_root_l5",
-       "mm": 4.0
+       "mm": -1.8
       },
       {
        "id": "sp_dural_sac",
-       "mm": 7.85
+       "mm": 7.84
       },
       {
        "id": "sp_root_l4",
-       "mm": 10.54
+       "mm": 10.52
       }
      ]
     },
@@ -7633,15 +7638,15 @@
      "nearest": [
       {
        "id": "sp_root_l5",
-       "mm": 3.1
+       "mm": 2.61
       },
       {
        "id": "sp_dural_sac",
-       "mm": 7.15
+       "mm": 7.2
       },
       {
        "id": "sp_root_l4",
-       "mm": 10.07
+       "mm": 10.56
       }
      ]
     },
@@ -7652,15 +7657,15 @@
      "nearest": [
       {
        "id": "sp_root_l5",
-       "mm": 3.14
+       "mm": -1.82
       },
       {
        "id": "sp_root_l4",
-       "mm": 6.98
+       "mm": 7.05
       },
       {
        "id": "sp_dural_sac",
-       "mm": 7.48
+       "mm": 7.49
       }
      ]
     },
@@ -7673,15 +7678,15 @@
      "nearest": [
       {
        "id": "sp_root_l5",
-       "mm": 0.43
+       "mm": 0.6
       },
       {
        "id": "sp_dural_sac",
-       "mm": 4.61
+       "mm": 4.62
       },
       {
        "id": "sp_root_l4",
-       "mm": 10.08
+       "mm": 10.72
       }
      ]
     }
@@ -7690,32 +7695,32 @@
     {
      "id": "sp_dural_sac",
      "offset": 1071456,
-     "count": 6911
+     "count": 7004
     },
     {
      "id": "sp_root_l2",
-     "offset": 1112922,
-     "count": 242
+     "offset": 1113480,
+     "count": 241
     },
     {
      "id": "sp_root_l3",
-     "offset": 1114374,
-     "count": 2501
+     "offset": 1114926,
+     "count": 2508
     },
     {
      "id": "sp_root_l4",
-     "offset": 1129380,
-     "count": 2718
+     "offset": 1129974,
+     "count": 3028
     },
     {
      "id": "sp_root_l5",
-     "offset": 1145688,
-     "count": 2936
+     "offset": 1148142,
+     "count": 3167
     },
     {
      "id": "sp_root_s1",
-     "offset": 1163304,
-     "count": 2559
+     "offset": 1167144,
+     "count": 2709
     }
    ],
    "sdf": {
@@ -7735,7 +7740,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_l5.bin.gz",
-   "bytes": 265446
+   "bytes": 260024
   },
   "S1": {
    "frame": {
@@ -7820,15 +7825,15 @@
      "nearest": [
       {
        "id": "sp_root_l5",
-       "mm": -0.54
+       "mm": 2.49
       },
       {
        "id": "sp_dural_sac",
-       "mm": 4.55
+       "mm": 4.61
       },
       {
        "id": "sp_root_s1",
-       "mm": 5.83
+       "mm": 5.88
       }
      ]
     },
@@ -7841,16 +7846,16 @@
      },
      "nearest": [
       {
-       "id": "sp_root_l5",
-       "mm": 0.67
+       "id": "sp_root_s1",
+       "mm": 2.76
       },
       {
-       "id": "sp_root_s1",
-       "mm": 2.7
+       "id": "sp_root_l5",
+       "mm": 3.27
       },
       {
        "id": "sp_dural_sac",
-       "mm": 3.43
+       "mm": 3.37
       }
      ]
     }
@@ -7859,27 +7864,27 @@
     {
      "id": "sp_dural_sac",
      "offset": 1771562,
-     "count": 6467
+     "count": 6449
     },
     {
      "id": "sp_root_l3",
-     "offset": 1810364,
-     "count": 1868
+     "offset": 1810256,
+     "count": 1878
     },
     {
      "id": "sp_root_l4",
-     "offset": 1821572,
-     "count": 2718
+     "offset": 1821524,
+     "count": 3022
     },
     {
      "id": "sp_root_l5",
-     "offset": 1837880,
-     "count": 2937
+     "offset": 1839656,
+     "count": 3206
     },
     {
      "id": "sp_root_s1",
-     "offset": 1855502,
-     "count": 2815
+     "offset": 1858892,
+     "count": 2911
     }
    ],
    "sdf": {
@@ -7899,7 +7904,7 @@
     "offset": 0
    },
    "file": "assets/spine/screw_s1.bin.gz",
-   "bytes": 403821
+   "bytes": 392458
   }
  }
 }

@@ -23,7 +23,7 @@
    "disc": "sp_disc_c2_c3",
    "root": "sp_root_c3",
    "file": "assets/spine/drill_c2_c3.bin.gz",
-   "bytes": 675909,
+   "bytes": 677379,
    "dims": [
     100,
     97,
@@ -57,12 +57,12 @@
    ],
    "check": {
     "C2": {
-     "medianMm": 0.237,
-     "p95Mm": 0.418
+     "medianMm": 0.241,
+     "p95Mm": 0.421
     },
     "C3": {
-     "medianMm": 0.226,
-     "p95Mm": 0.409
+     "medianMm": 0.225,
+     "p95Mm": 0.411
     }
    }
   },
@@ -73,7 +73,7 @@
    "disc": "sp_disc_c3_c4",
    "root": "sp_root_c4",
    "file": "assets/spine/drill_c3_c4.bin.gz",
-   "bytes": 553169,
+   "bytes": 553889,
    "dims": [
     102,
     98,
@@ -107,12 +107,12 @@
    ],
    "check": {
     "C3": {
-     "medianMm": 0.226,
-     "p95Mm": 0.409
+     "medianMm": 0.225,
+     "p95Mm": 0.411
     },
     "C4": {
      "medianMm": 0.225,
-     "p95Mm": 0.408
+     "p95Mm": 0.413
     }
    }
   },
@@ -123,7 +123,7 @@
    "disc": "sp_disc_c4_c5",
    "root": "sp_root_c5",
    "file": "assets/spine/drill_c4_c5.bin.gz",
-   "bytes": 565894,
+   "bytes": 566169,
    "dims": [
     103,
     103,
@@ -158,11 +158,11 @@
    "check": {
     "C4": {
      "medianMm": 0.225,
-     "p95Mm": 0.408
+     "p95Mm": 0.413
     },
     "C5": {
-     "medianMm": 0.234,
-     "p95Mm": 0.413
+     "medianMm": 0.235,
+     "p95Mm": 0.414
     }
    }
   },
@@ -173,7 +173,7 @@
    "disc": "sp_disc_c5_c6",
    "root": "sp_root_c6",
    "file": "assets/spine/drill_c5_c6.bin.gz",
-   "bytes": 615874,
+   "bytes": 616158,
    "dims": [
     105,
     107,
@@ -207,12 +207,12 @@
    ],
    "check": {
     "C5": {
-     "medianMm": 0.234,
-     "p95Mm": 0.413
+     "medianMm": 0.235,
+     "p95Mm": 0.414
     },
     "C6": {
-     "medianMm": 0.233,
-     "p95Mm": 0.415
+     "medianMm": 0.234,
+     "p95Mm": 0.42
     }
    }
   },
@@ -223,7 +223,7 @@
    "disc": "sp_disc_c6_c7",
    "root": "sp_root_c7",
    "file": "assets/spine/drill_c6_c7.bin.gz",
-   "bytes": 718028,
+   "bytes": 717340,
    "dims": [
     122,
     123,
@@ -257,12 +257,12 @@
    ],
    "check": {
     "C6": {
-     "medianMm": 0.233,
-     "p95Mm": 0.415
+     "medianMm": 0.234,
+     "p95Mm": 0.42
     },
     "C7": {
-     "medianMm": 0.239,
-     "p95Mm": 0.42
+     "medianMm": 0.237,
+     "p95Mm": 0.417
     }
    }
   },
@@ -273,7 +273,7 @@
    "disc": "sp_disc_c7_t1",
    "root": "sp_root_c8",
    "file": "assets/spine/drill_c7_t1.bin.gz",
-   "bytes": 827627,
+   "bytes": 826702,
    "dims": [
     133,
     132,
@@ -307,12 +307,12 @@
    ],
    "check": {
     "C7": {
-     "medianMm": 0.239,
-     "p95Mm": 0.42
+     "medianMm": 0.237,
+     "p95Mm": 0.417
     },
     "T1": {
-     "medianMm": 0.237,
-     "p95Mm": 0.421
+     "medianMm": 0.239,
+     "p95Mm": 0.419
     }
    }
   }

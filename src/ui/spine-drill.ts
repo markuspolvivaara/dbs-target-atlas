@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { SP, SP_REFS } from '../spine';
 import { FORAMINOTOMY_STATEMENTS, type Statement } from '../spine/content';
-import { BURR_MM, BURR_RATE_MM_S, drillPairFor, DrillVolume, type Clearance, type DrillPair, type Vertebra } from '../spine/drill';
+import { BURR_MM, BURR_RATE_MM_S, BURR_STEP_MM, drillPairFor, DrillVolume, type Clearance, type DrillPair, type Vertebra } from '../spine/drill';
 import type { SpineState } from '../spine/state';
 import type { PointerTool, Viewer } from '../viewer/Viewer';
 import { h } from './h';
@@ -15,6 +15,13 @@ const WARN_MM = 1.5, TOUCH_MM = 0.25;
 /** strokes kept for undo (each a copy of the two bone fields) */
 const UNDO = 8;
 const one = (n: number) => (Math.round(n * 10) / 10).toFixed(1);
+
+/** The view straight from behind (the frame's posterior, -y) onto the middle of the two vertebrae. */
+function backView(pair: DrillPair): SpineState['cam'] {
+  const c = [pair.upper, pair.lower].map((id) => SP.get(id)?.centroid?.L ?? [0, 0, 0]);
+  const t = [0, 1, 2].map((k) => (c[0][k] + c[1][k]) / 2) as [number, number, number];
+  return { preset: null, pos: [t[0], t[1] - 140, t[2]], tgt: t };
+}
 
 /**
  * Drilling a pair of cervical vertebrae (a posterior foraminotomy): the bone the drill draws in place of the two
@@ -81,7 +88,7 @@ export class DrillPanel implements PointerTool {
       h('div', { class: 'chips' },
         h('button', { type: 'button', class: 'chip', 'aria-pressed': String(on), onclick: () => this.update((x) => {
           x.drill = !on;
-          if (!on) { x.layers.vessels = { on: true, opacity: x.layers.vessels?.opacity ?? 1 }; x.cam = { preset: 'posteriorOblique' }; x.screw = null; x.cut = 'none'; }
+          if (!on) { x.layers.vessels = { on: true, opacity: x.layers.vessels?.opacity ?? 1 }; x.cam = backView(pair); x.screw = null; x.cut = 'none'; }
         }, { camera: !on }) }, on ? 'Stop drilling' : 'Start drilling'),
         on ? h('button', { type: 'button', class: 'chip', onclick: () => this.undoStroke() }, 'Undo') : null,
         on ? h('button', { type: 'button', class: 'chip', onclick: () => this.resetPair() }, 'Start the bone over') : null),
@@ -229,11 +236,15 @@ export class DrillPanel implements PointerTool {
     this.undo.push(this.vol.snapshot());
     if (this.undo.length > UNDO) this.undo.shift();
     this.last = performance.now();
+    let due = 0;
     const tick = () => {
       if (!this.pressing || !this.active) return;
       const now = performance.now(), dt = Math.min((now - this.last) / 1000, 0.2);
       this.last = now;
-      if (this.ray) this.drillAt(this.ray, BURR_RATE_MM_S * dt);
+      // the time held is banked, and cut in steps of BURR_STEP_MM; the burr follows the pointer meanwhile
+      due += BURR_RATE_MM_S * dt;
+      if (this.ray && due >= BURR_STEP_MM) { this.drillAt(this.ray, due); due = 0; }
+      else if (this.ray) this.show(this.place(this.ray), this.ray.direction);
       requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);

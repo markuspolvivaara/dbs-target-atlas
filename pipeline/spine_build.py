@@ -329,6 +329,13 @@ SEGMENTS = {
 LABEL_OF = {v: k for k, v in VERSE_LEVELS.items()} | {"S1": 26}
 DISC_LABEL = 50
 ROOT_RADIUS = 1.5     # schematic drawing sizes (mm), not measurements
+ROOT_IN_MM = 1.5      # each root starts this far inside the dural sac, so it leaves its wall rather than abutting it
+TAKEOFF_DEG = 55.0    # lumbar and thoracic roots leave the sac at this angle to its axis, running down and out
+                      # (Silverstein 2015: 50.5-58.8 deg at L4 and L5, the largest), for TAKEOFF_LEG_MM
+TAKEOFF_LEG_MM = 5.0
+ROOT_CLEAR_MM = 0.4   # each root's surface kept this far out of the drawn bone (its path pushed out where it ran in:
+ROOT_PUSH_PASSES = 16 # the schematic paths are placed by rule and would otherwise cut through a lamina or a facet)
+DRG_CLEAR_MM = 2.0    # ... and each ganglion's centre this far
 DRG_RADII = (3.0, 3.0, 5.0)
 
 
@@ -381,6 +388,40 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
         del sac
     lab[disc & (lab == 0)] = DISC_LABEL
     grid = G.Grid(lab, a2)
+    # the bone as the vertebrae are drawn (the CT's bone within reach of their masks; the sacrum's segmentation), its
+    # signed distance (mm, positive outside): the schematic roots are kept out of it
+    vox_b = np.abs(np.diag(a2)[:3])
+    drawn_bone = (ndimage.gaussian_filter(read_block(CT, cr).astype(np.float32), SIGMA_VOX) > BONE_HU) & \
+        (ndimage.distance_transform_edt(vm == 0, sampling=vox_b) <= MASK_REACH_MM)
+    if cfg["sacrum"]:
+        drawn_bone |= lab == LABEL_OF["S1"]
+    bone_sd = (ndimage.distance_transform_edt(~drawn_bone, sampling=vox_b) - ndimage.distance_transform_edt(drawn_bone, sampling=vox_b)).astype(np.float32)
+    del drawn_bone
+    inv_b = np.linalg.inv(a2)
+
+    def bone_dist(P: np.ndarray) -> np.ndarray:
+        return ndimage.map_coordinates(bone_sd, nib.affines.apply_affine(inv_b, np.atleast_2d(P)).T, order=1, mode="nearest")
+
+    def clear_of_bone(P: np.ndarray, clearance: float, fixed: int = 0) -> tuple[np.ndarray, float]:
+        """Points (RAS) pushed out of the drawn bone to `clearance` mm from it, along its distance's gradient, the
+        pushes smoothed along the path (a root bends rather than kinks); the first `fixed` stay. Returns the points and
+        what intrusion is left (mm)."""
+        P = P.copy()
+        for _ in range(ROOT_PUSH_PASSES):
+            need = np.clip(clearance - bone_dist(P), 0, None)
+            need[:fixed] = 0
+            if need.max() < 0.05:
+                break
+            g = np.stack([(bone_dist(P + 0.3 * e) - bone_dist(P - 0.3 * e)) / 0.6 for e in np.eye(3)], 1)
+            g /= np.maximum(np.linalg.norm(g, axis=1, keepdims=True), 1e-6)
+            D = need[:, None] * g
+            for _ in range(3):   # spread along the path, each point still moved at least its own way out
+                D[1:-1] = 0.5 * D[1:-1] + 0.25 * (D[:-2] + D[2:])
+            D += np.clip(need - np.einsum("ij,ij->i", D, g), 0, None)[:, None] * g
+            D[:fixed] = 0
+            P += D
+        return P, float(np.clip(clearance - bone_dist(P), 0, None)[fixed:].max(initial=0.0))
+    intrusion = {}
 
     def ras_of(mask: np.ndarray) -> np.ndarray:
         return nib.affines.apply_affine(a2, np.argwhere(mask))
@@ -461,9 +502,9 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
                 edge = (can["uMin"] if sg < 0 else can["uMax"]) if can else sg * 12.0
                 fo = fors[sd]
                 if cervical:
-                    # nearly level: from the sac at its own disc into the lower part of the foramen (Moreno 2021), then
-                    # on forwards and out along the foramen's axis and the transverse process
-                    p0 = G.lateral_point(sac_pts, dc, F, sg)
+                    # level: from the sac where the root enters its foramen, in the foramen's lower part (Moreno 2021),
+                    # then on forwards and out along the foramen's axis and the transverse process. The rootlets descend
+                    # inside the sac to that point (Kong 2022: the more steeply, the lower the level) and are not drawn.
                     if fo:
                         w_low = (fo["top"] - fo["height"] + fo["w"]) / 2
                         c = np.array(fo["centre"])
@@ -477,10 +518,20 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
                         out = sg * F[0]
                     p3 = p2 + 10 * out + 3 * F[1] - 3 * F[2]
                     p4 = p3 + 14 * out + 4 * F[1] - 9 * F[2]
+                    p0 = G.lateral_point(sac_pts, dc + float((p1 - dc) @ F[2]) * F[2], F, sg)
+                    if p0 is not None:
+                        p0 = p0 - sg * ROOT_IN_MM * F[0]
+                    p0b = None
                     if p0 is not None and (p1 - p0) @ out < 1.0:  # the sac reaches out past the entrance: no kink back
                         p1 = None
                 else:
                     p0 = G.lateral_point(sac_pts, dc_above, Fa, sg)  # take-off: lateral wall of the dural sac at the disc above
+                    # leaving the sac down and out at TAKEOFF_DEG to its axis, from just inside its wall
+                    p0b = None
+                    if p0 is not None:
+                        t = np.radians(TAKEOFF_DEG)
+                        p0b = p0 + TAKEOFF_LEG_MM * (np.sin(t) * sg * Fa[0] - np.cos(t) * Fa[2])
+                        p0 = p0 - sg * ROOT_IN_MM * Fa[0]
                     p1 = cu + (edge - sg * 2.5) * F[0] + ((can["v"] + 3) if can else -20) * F[1]  # lateral recess, own level
                     if fo:
                         c = np.array(fo["centre"])
@@ -494,13 +545,17 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
                         p3 = p2 + sg * 12 * F[0] + 1 * F[1] - 4 * F[2]
                         p4 = p3 + sg * 22 * F[0] - 2 * F[1] - 6 * F[2]
                 estimated[sd] = fo is None
-                path = [p for p in (p0, p1, p2, p3, p4) if p is not None]
-                curve = G.catmull([q - o for q in path], 8)
+                path = [p for p in (p0, p0b, p1, p2, p3, p4) if p is not None]
+                curve_ras, left = clear_of_bone(G.catmull(path, 8), ROOT_RADIUS + ROOT_CLEAR_MM, fixed=1 if p0 is not None else 0)
+                curve = curve_ras - o
                 parts[sd] = G.tube(curve, ROOT_RADIUS)
-                ax = curve[-1] - curve[0]
                 ez = (p3 - p2) / np.linalg.norm(p3 - p2)
                 ex = np.cross(ez, F[2]); ex /= np.linalg.norm(ex)
-                drgs[sd] = G.ellipsoid(p2 - o + 2.0 * (p3 - p2) / np.linalg.norm(p3 - p2), np.stack([ex, np.cross(ez, ex), ez]), DRG_RADII)
+                # the ganglion rides on the root as pushed, its centre kept out of the bone too
+                gc = curve_ras[np.argmin(np.linalg.norm(curve_ras - (p2 + 2.0 * ez), axis=1))]
+                gc = clear_of_bone(gc[None], DRG_CLEAR_MM)[0][0]
+                drgs[sd] = G.ellipsoid(gc - o, np.stack([ex, np.cross(ez, ex), ez]), DRG_RADII)
+                intrusion[f"{rname}{sd}"] = round(left, 2)
             # the root and its dorsal root ganglion are one structure
             rid = f"sp_root_{rname.lower()}"
             write_glb(BUILD / f"{rid}.glb", mesh_nodes({sd: merge([parts[sd], drgs[sd]]) for sd in parts}), {"id": rid})
@@ -509,10 +564,10 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
                          else f"exits through {where}the {up}-{down} foramen, whose position is estimated on "
                               f"{' and '.join(k for k, v in estimated.items() if v)} (not captured by the measurement)")
             if cervical:
-                path_note = f"leaves the lateral wall of the dural sac at the {up}-{down} disc and {exit_note}, then runs a short way forwards and out along the transverse process"
+                path_note = f"leaves the lateral wall of the dural sac level with its foramen's entrance and {exit_note}, then runs a short way forwards and out along the transverse process"
             else:
                 after = "" if cfg["course"] == "plexus" else ", then a short way along its intercostal course"
-                path_note = f"leaves the lateral wall of the dural sac at the {above}-{up} disc, runs in the lateral recess at {up} and {exit_note}{after}"
+                path_note = f"leaves the lateral wall of the dural sac at the {above}-{up} disc, down and out at {TAKEOFF_DEG:g} deg to the sac (Silverstein 2015), runs in the lateral recess at {up} and {exit_note}{after}"
             roots.append({"id": rid, "name": f"{rname} nerve root", "level": rname, "token": "spRoot", "layer": "tracts", "category": "root",
                           "region": region, "schematic": True, "estimated": [k for k, v in estimated.items() if v],
                           "centroid": (p2 - o).round(2).tolist(),
@@ -546,6 +601,8 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
             levels[-1]["discHeightMm"] = round(float(np.percentile(dw, 95) - np.percentile(dw, 5)), 1)
     if not cfg["sacrum"]:
         print(f"{region}: {len(levels)} levels, {len(roots)} root parts; foramina found (placing the roots) {found}/{2 * len(levels)}")
+        report.setdefault("rootIntrusionMm", {}).update(intrusion)
+        print(f"{region}: roots left in the bone (mm) {intrusion}")
         return levels, roots
     # ---- S1: leaves the sac at the L5-S1 disc, runs in the lateral recess of S1 and leaves through the first sacral
     # foramen, whose position the measurement does not capture (estimated); its ganglion is drawn inside the canal
@@ -563,11 +620,14 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
         p2 = cs1 + (edge - sg * 2) * Fs[0] + (v0 + 6) * Fs[1] - 10 * Fs[2]
         p3 = p2 + sg * 4 * Fs[0] + 15 * Fs[1] - 8 * Fs[2]
         p4 = p3 + sg * 6 * Fs[0] + 15 * Fs[1] - 15 * Fs[2]
-        curve = G.catmull([q - o for q in (p0, p1, p2, p3, p4) if q is not None], 8)
-        parts[sd] = G.tube(curve, ROOT_RADIUS)
+        curve_ras, left = clear_of_bone(G.catmull([q for q in (p0, p1, p2, p3, p4) if q is not None], 8), ROOT_RADIUS + ROOT_CLEAR_MM,
+                                        fixed=1 if p0 is not None else 0)
+        parts[sd] = G.tube(curve_ras - o, ROOT_RADIUS)
         ez = (p2 - p1) / np.linalg.norm(p2 - p1)
         ex = np.cross(ez, Fs[1]); ex /= np.linalg.norm(ex)
-        drgs[sd] = G.ellipsoid((p1 + p2) / 2 - o, np.stack([ex, np.cross(ez, ex), ez]), DRG_RADII)
+        gc = clear_of_bone(((p1 + p2) / 2)[None], DRG_CLEAR_MM)[0][0]
+        drgs[sd] = G.ellipsoid(gc - o, np.stack([ex, np.cross(ez, ex), ez]), DRG_RADII)
+        intrusion[f"S1{sd}"] = round(left, 2)
     write_glb(BUILD / "sp_root_s1.glb", mesh_nodes({sd: merge([parts[sd], drgs[sd]]) for sd in parts}), {"id": "sp_root_s1"})
     roots.append({"id": "sp_root_s1", "name": "S1 nerve root", "level": "S1", "token": "spRoot", "layer": "tracts", "category": "root",
                   "region": region, "schematic": True, "estimated": ["L", "R"], "centroid": (cs1 - o).round(2).tolist(),
@@ -577,6 +637,8 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
                             "canal, where the S1 ganglion more often lies (Hasegawa 1996; not to scale)"})
     print(f"{region}: {len(levels)} levels, {len(roots)} root parts; foramina measured "
           f"{sum(1 for lv in levels for v in lv['foramen'].values() if v)}/{2 * len(levels)}")
+    report.setdefault("rootIntrusionMm", {}).update(intrusion)
+    print(f"{region}: roots left in the bone (mm) {intrusion}")
     return levels, roots
 
 
@@ -806,7 +868,7 @@ REF_KEYS = ("hwang2019", "merckaert2015", "hasegawa1996", "zindrick1987", "fardo
             "valenzuela2026", "tudose2026", "joaquim2018", "rathinavelu2021", "jiang2024", "joaquim2020", "singh2022",
             "kucherina2026", "jannelli2025", "hasan2025", "arumalla2021", "alicandri2020", "siribumrungwong2018",
             "kendirlioglu2026", "zhou2022", "aosurgeryref",
-            "figa2025", "sung2018", "gonzalezvargas2026", "loganathan2023", "fidan2026", "kang2022", "zhang2020")
+            "figa2025", "sung2018", "gonzalezvargas2026", "loganathan2023", "fidan2026", "kang2022", "zhang2020", "kong2022", "silverstein2015")
 
 
 def references() -> dict:

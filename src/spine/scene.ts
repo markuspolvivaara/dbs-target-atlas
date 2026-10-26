@@ -57,7 +57,11 @@ export function spinePlan(s: Pick<SpineState, 'region' | 'level' | 'sel'> & Part
   if (s.sel && SP.has(s.sel)) looks.set(s.sel, 'primary');
   // drilling: the pair's bone is drawn by the drill (as cut) and its disc taken out
   const drill = s.drill ? drillPairFor(s.level) : undefined;
-  if (drill) for (const id of [drill.upper, drill.lower, drill.disc]) looks.set(id, 'hidden');
+  if (drill) {
+    // the region's other bones step back (whatever the viewer's fade setting): the two drilled stand out
+    for (const st of SP_MANIFEST.structures) if (inRegion.has(st.id) && (st.category === 'vertebra' || st.category === 'bone')) looks.set(st.id, 'context');
+    for (const id of [drill.upper, drill.lower, drill.disc]) looks.set(id, 'hidden');
+  }
   const focusIds = s.level ? [...focus] : r.id === 'ccj' ? r.structures.filter((id) => SP.get(id)?.category === 'bone')
     : r.structures.filter((id) => SP.get(id)?.category === 'vertebra' || id === 'sp_sacrum');
   return {
