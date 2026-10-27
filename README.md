@@ -515,6 +515,17 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
   process are lifted off in one piece (Chang 2014); piece by piece, a rongeur takes the spinous process off at its base
   (a fifth of the way from the canal's back wall to its tip: a drawing choice) and the laminae are drilled away (Dave
   2020 on the conventional rongeur and the burr). The ligamentum flavum is not drawn.
+- **Disc herniation, while drilling a lumbar pair** (schematic; this CT has none): paracentral, foraminal or far
+  lateral, left or right, a protrusion (a base wider than its depth) or an extrusion (a neck and a fragment, migrated up
+  or down; Eslami 2026), its size by a slider. It grows from the disc's margin towards the zone's position measured on
+  this CT (a foraminal one aimed at the exiting root in the foramen's upper part). The dural sac and the two levels'
+  roots are drawn pushed out of it (the sac dented, a root shifted as a whole); where bone holds a root it is
+  flattened and red, and drilling that bone away lets it go. The dural sac's cross-section at the disc is read out
+  (Sobański 2023: no agreed threshold; 75–145 mm² have been used). A paracentral one is reached by retracting the dural
+  sac and the traversing root medially (a slider; Berry 2019), which narrows the sac too; once a 5-mm corridor straight
+  back to it is free of bone (and, paracentral, of the sac and the root) it can be taken out, the sac and the root
+  returning. `src/spine/herniation.ts` holds the geometry, apart from
+  the drilling, so the lesion-to-root card (and the cervical spine) can use it later.
 - **Drilling readouts and review**: at a foraminotomy and the lumbar decompressions, the share of each facet joint's
   bone taken (schematic: either vertebra's bone within about 4 mm of the other's, lateral to the dural sac, behind the
   bodies), cautioned at half (Kang 2022 for the neck; Li 2026 for the lumbar spine, where it is a reference: 51

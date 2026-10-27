@@ -571,6 +571,25 @@ export const LAMINECTOMY_STATEMENTS = {
   },
 } satisfies Record<string, Statement>;
 
+export const HERNIA_STATEMENTS = {
+  types: {
+    text: 'A protrusion (a contained herniation) extends beyond the disc’s margin with the outer annulus and the posterior longitudinal ligament preserved, its base wider than what is displaced in at least one plane. An extrusion passes through a defect in the annulus or the ligament, the displaced fragment wider than its neck in at least one plane; with no continuity left it is a sequestration, often migrated up or down.',
+    refIds: ['eslami2026'],
+  },
+  retract: {
+    text: 'In an open microdiscectomy a hemilaminectomy and partial medial facetectomy are done with a high-speed drill and Kerrison rongeurs, and the ligamentum flavum is removed, exposing the root crossing over the disc; the root and the thecal sac are then retracted medially and the annulus exposed.',
+    refIds: ['berry2019'],
+  },
+  area: {
+    text: 'There is no agreed threshold for stenosis by the canal’s cross-section: studies have used less than 75, 100, 130 and 145 mm²; one classification grades the dural sac’s shape instead.',
+    refIds: ['sobanski2023'],
+  },
+  drawn: {
+    text: 'Here the herniation is schematic (this CT has none): it grows from the disc’s margin towards the zone’s position measured on this CT, half an ellipsoid for a protrusion, a neck and a fragment for an extrusion; its size and migration are set by the sliders (drawing choices). The dural sac and the roots of the two levels are pushed out of it, the sac dented, a root giving way as a whole; where bone holds a root it is flattened and turns red, and drilling that bone away lets it go. A medial retraction moves the sac’s wall on that side and the traversing root towards the midline, most at the disc and fading over about 12 mm up and down (the other wall stays). The dural sac’s cross-section is measured in the disc’s plane. The burr’s clearances and stops keep to the sac and roots where they lie undisplaced.',
+    refIds: [],
+  },
+} satisfies Record<string, Statement>;
+
 export const FACET_STATEMENTS = {
   measure: {
     text: 'The facet joint readout is schematic (the joints are not segmented on this CT): on each side, the bone of either vertebra within about 4 mm of the other’s, lateral to the edge of the dural sac and behind the vertebral bodies, and the share of it taken away. It stands for the joint and the articular processes next to it, not the whole of each process.',
@@ -633,7 +652,7 @@ export function crossCheckContent(): string[] {
     for (const st of [t.start, t.size, t.note]) for (const r of st?.refIds ?? []) if (!SP_MANIFEST.references[r]) errs.push(`${t.id}: unknown reference ${r}`);
   }
   for (const st of [...Object.values(APPROACHES).map((a) => a.removes), ...Object.values(APPROACH_STATEMENTS), ...Object.values(ACDF_STATEMENTS), ...Object.values(FORAMINOTOMY_STATEMENTS), ...Object.values(ACDF_DRILL_STATEMENTS),
-    ...Object.values(LAMINECTOMY_STATEMENTS), ...Object.values(LAMINOPLASTY_STATEMENTS), ...Object.values(FACET_STATEMENTS), ...Object.values(OVER_THE_TOP_STATEMENTS), ...Object.values(SPLIT_STATEMENTS)]) {
+    ...Object.values(LAMINECTOMY_STATEMENTS), ...Object.values(LAMINOPLASTY_STATEMENTS), ...Object.values(FACET_STATEMENTS), ...Object.values(HERNIA_STATEMENTS), ...Object.values(OVER_THE_TOP_STATEMENTS), ...Object.values(SPLIT_STATEMENTS)]) {
     for (const r of st.refIds) if (!SP_MANIFEST.references[r]) errs.push(`approach: unknown reference ${r}`);
   }
   return errs;

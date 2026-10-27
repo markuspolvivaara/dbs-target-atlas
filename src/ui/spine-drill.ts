@@ -7,6 +7,7 @@ import type { PointerTool, Viewer } from '../viewer/Viewer';
 import { loadStructure } from '../viewer/assets';
 import { LOOK_OPACITY } from '../viewer/materials';
 import { h } from './h';
+import { HerniaSection } from './spine-hernia';
 import { refLinksFrom } from './reflinks';
 import { paletteFor, resolvedTheme, storedTheme } from './theme';
 import { clear } from './widgets';
@@ -110,7 +111,11 @@ export class DrillPanel implements PointerTool {
   /** L5-S1: the rest of the sacrum (the drawn sacrum is hidden while S1 is drilled), drawn as the other bones are then */
   private rest = new THREE.Group();
 
+  /** a schematic disc herniation (lumbar pairs) */
+  private hernia: HerniaSection;
+
   constructor(private update: Update, private viewer: Viewer) {
+    this.hernia = new HerniaSection(update, viewer);
     // the burr: a diamond burr's round head and its shaft back along the line of sight
     this.burr = new THREE.Group();
     const steel = new THREE.MeshStandardMaterial({ color: 0xc9ccd1, roughness: 0.3, metalness: 0.7, transparent: true, opacity: 0.85 });
@@ -120,7 +125,7 @@ export class DrillPanel implements PointerTool {
     this.sizeBurr(BURR_MM_BY_REGION.cervical);
     this.burr.add(this.burrHead, this.burrShaft);
     this.burr.visible = false;
-    this.group.add(this.burr, this.rest, ...this.origGroups);
+    this.group.add(this.burr, this.rest, this.hernia.group, ...this.origGroups);
     window.addEventListener('keydown', (e) => {
       if (!this.active || !(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== 'z') return;
       e.preventDefault();
@@ -151,6 +156,7 @@ export class DrillPanel implements PointerTool {
       if (restart) { if (mode && pair) void this.start(pair, mode); else this.stop(); }
     }
     this.spread(pair, mode && DRILL_MODES[mode].spread ? s.distract : 0);
+    this.hernia.render(s, mode ? pair : null, this.active ? this.vol : null);
   }
 
   /** At a discectomy, the two vertebrae drawn `mm` apart along the spine (each moved half of it); at a spinous process
@@ -244,6 +250,7 @@ export class DrillPanel implements PointerTool {
       mode ? this.actions : null,
       mode ? h('label', { class: 'range scope-range' }, h('span', {}, 'Drill speed ', rateOut), rateIn) : null,
       mode && this.spreadIn ? h('label', { class: 'range scope-range' }, h('span', {}, `${SPREAD_LABEL[pick]} `, this.spreadOut), this.spreadIn) : null,
+      mode && pair.region === 'lumbar' ? this.hernia.el : null,
       mode ? h('p', { class: 'aside' }, 'Point at the bone and hold the button to drill in along your line of sight; move to widen. The right button turns the view (with Shift: moves it), the wheel zooms; Ctrl+Z undoes a stroke.') : null,
       this.out,
       ...statements[pick].map(st)] as (Node | null)[]).filter((x): x is Node => x !== null));
@@ -351,6 +358,7 @@ export class DrillPanel implements PointerTool {
     this.rebuild();
     this.drawOrig();
     if (pair.lowerRest) void this.drawRest(pair.lowerRest, key, new THREE.Color(pal.spBone));
+    this.hernia.refresh(vol);
     this.viewer.setPointerTool(this);
     this.readout(null);
   }
@@ -425,6 +433,7 @@ export class DrillPanel implements PointerTool {
     });
     this.spread(this.pair, this.mm);
     this.refreshActions();
+    this.hernia.refresh(vol);
     this.viewer.invalidate();
   }
 
@@ -569,6 +578,7 @@ export class DrillPanel implements PointerTool {
     if (was) this.doorWhy = '';
     // bone the stroke cut loose becomes a piece of its own
     if (was && this.vol && this.mode && PIECES.has(this.mode)) { if (this.vol.settle()) { this.rebuild(); this.readout(null); } else this.refreshActions(); }
+    if (was && this.vol) this.hernia.refresh(this.vol);
     if (this.ray) this.hover(this.ray);
   }
 

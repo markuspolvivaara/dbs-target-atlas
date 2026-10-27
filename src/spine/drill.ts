@@ -607,6 +607,14 @@ export class DrillVolume {
     return { L: Int32Array.from(L), R: Int32Array.from(R) };
   }
 
+  /** A test for bone at a point (in the frame, where it is drawn: the bone as cut, pieces where they are), for the
+   * layers as they are now. */
+  boneTest(): (p: THREE.Vector3) => boolean {
+    const ls = this.layers.map((L, l) => ({ f: L.field, inv: this.place(l).invert().premultiply(this.toIjk), gone: L.gone })).filter((x) => !x.gone);
+    const q = new THREE.Vector3();
+    return (p) => ls.some((x) => { q.copy(p).applyMatrix4(x.inv); return this.sample(x.f, q.x, q.y, q.z) >= this.iso; });
+  }
+
   /** Lift a piece off: it is taken away (its bone counted as removed). */
   lift(l: number): void {
     const L = this.layers[l];

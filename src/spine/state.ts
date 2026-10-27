@@ -1,4 +1,5 @@
 import { drillPairFor } from './drill';
+import { HERNIA_MIGRATE, HERNIA_SIZE, type HerniaSpec } from './herniation';
 import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
@@ -37,6 +38,8 @@ export interface SpineState extends ViewState {
   drillSide: 'L' | 'R';
   /** while drilling, the bone as it was drawn too (a translucent skin, showing where bone was taken) */
   drillGhost: boolean;
+  /** while drilling a lumbar pair: a schematic disc herniation at their disc, pushing the dural sac and the roots aside */
+  hernia: HerniaSpec | null;
 }
 
 export type DrillMode = 'foraminotomy' | 'acdf' | 'lamEnBloc' | 'lamPiecemeal' | 'laminoplasty' | 'overTheTop' | 'spSplit';
@@ -91,7 +94,7 @@ export function defaultSpineState(): SpineState {
     labels: 'hover',
     clip: { axial: { on: false, mm: 0 }, coronal: { on: false, mm: 0 }, sagittal: { on: false, mm: 0 } },
     cutSide: 'none', sliceSeq: 't1', lead: { ...DEFAULT_LEAD },
-    sel: null, hidden: [], lesion: null, cut: 'none', screw: null, approach: null, measure: null, cutAbove: null, cutPlane: null, drill: null, distract: 0, drillSide: 'L', drillGhost: false,
+    sel: null, hidden: [], lesion: null, cut: 'none', screw: null, approach: null, measure: null, cutAbove: null, cutPlane: null, drill: null, distract: 0, drillSide: 'L', drillGhost: false, hernia: null,
   };
 }
 
@@ -128,6 +131,8 @@ export function encodeSpine(s: SpineState): string {
       if (DRILL_MODES[s.drill].spread && s.distract) p.set('dd', String(s.distract));
       if (DRILL_MODES[s.drill].sided && s.drillSide !== 'L') p.set('ds', s.drillSide);
       if (s.drillGhost) p.set('dg', '1');
+      const hz = s.hernia;
+      if (hz && DRILL_MODES[s.drill].region === 'lumbar') p.set('hz', [hz.zone, hz.side, hz.type === 'extrusion' ? 'e' : 'p', hz.sizeMm, hz.migrateMm].join('.'));
     }
   }
   const q = p.toString();
@@ -183,7 +188,18 @@ export function decodeSpine(hash: string): SpineState {
   s.distract = spread && Number.isFinite(dd) ? Math.max(0, Math.min(spread[0], Math.round(dd / spread[1]) * spread[1])) : 0;
   s.drillSide = s.drill && DRILL_MODES[s.drill].sided && p.get('ds') === 'R' ? 'R' : 'L';
   s.drillGhost = !!s.drill && p.get('dg') === '1';
+  s.hernia = s.drill && DRILL_MODES[s.drill].region === 'lumbar' ? decodeHernia(p.get('hz')) : null;
   return s;
+}
+
+function decodeHernia(v: string | null): HerniaSpec | null {
+  const m = /^(paracentral|foraminal|farlateral)\.([LR])\.([pe])\.(-?[\d.]+)\.(-?[\d.]+)$/.exec(v ?? '');
+  if (!m) return null;
+  const clamp = (x: number, [lo, hi, st]: [number, number, number]) => Math.min(hi, Math.max(lo, Math.round(x / st) * st));
+  const size = Number(m[4]), mig = Number(m[5]);
+  if (!Number.isFinite(size) || !Number.isFinite(mig)) return null;
+  return { zone: m[1] as HerniaSpec['zone'], side: m[2] as 'L' | 'R', type: m[3] === 'e' ? 'extrusion' : 'protrusion',
+    sizeMm: clamp(size, HERNIA_SIZE), migrateMm: m[3] === 'e' ? clamp(mig, HERNIA_MIGRATE) : 0 };
 }
 
 function decodeScrew(v: string | null, level: string | null): ScrewState | null {

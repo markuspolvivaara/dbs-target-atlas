@@ -13,7 +13,7 @@ export interface SpinePlan extends ScenePlan { region: string; level: string | n
  * The region's structures are drawn; a selected level's vertebra (and the disc below it) stays solid while the
  * other bones of the region step back, or, when the viewer's setting does not fade the rest, is outlined among them.
  */
-export function spinePlan(s: Pick<SpineState, 'region' | 'level' | 'sel'> & Partial<Pick<SpineState, 'lesion' | 'screw' | 'cut' | 'approach' | 'drill'>>): SpinePlan {
+export function spinePlan(s: Pick<SpineState, 'region' | 'level' | 'sel'> & Partial<Pick<SpineState, 'lesion' | 'screw' | 'cut' | 'approach' | 'drill' | 'hernia'>>): SpinePlan {
   const r = REGION.get(s.region) ?? REGION.get('cervical')!;
   const inRegion = new Set(r.structures);
   const focus = new Set<string>();
@@ -64,6 +64,8 @@ export function spinePlan(s: Pick<SpineState, 'region' | 'level' | 'sel'> & Part
     const lam = s.drill === 'lamEnBloc' || s.drill === 'lamPiecemeal' || s.drill === 'laminoplasty';
     const disc = s.drill === 'foraminotomy' || s.drill === 'acdf';
     for (const id of [drill.upper, ...(lam ? [] : [drill.lower]), ...(disc ? [drill.disc] : [])]) looks.set(id, 'hidden');
+    // a herniation: the dural sac and the two levels' roots are drawn by it, pushed aside
+    if (s.hernia && drill.region === 'lumbar') for (const id of herniaDrawn(drill.id)) looks.set(id, 'hidden');
   }
   const focusIds = s.level ? [...focus] : r.id === 'ccj' ? r.structures.filter((id) => SP.get(id)?.category === 'bone')
     : r.structures.filter((id) => SP.get(id)?.category === 'vertebra' || id === 'sp_sacrum');
@@ -75,6 +77,12 @@ export function spinePlan(s: Pick<SpineState, 'region' | 'level' | 'sel'> & Part
     camera: r.camera, focusIds, minRadius: s.level ? 50 : r.id === 'ccj' ? 85 : 150, region: r.id, level: s.level,
     outline: s.level && !fade && !drill ? [...focus] : undefined,
   };
+}
+
+/** What a herniation at a lumbar pair's disc pushes aside, drawn by it in place of the structures: the dural sac and the
+ * roots of the two levels. */
+export function herniaDrawn(pair: string): string[] {
+  return ['sp_dural_sac', ...pair.split('-').map((lv) => `sp_root_${lv.toLowerCase()}`)];
 }
 
 /** Schematic herniation positions at each lumbar disc, per kind and side (measured on this CT, see content.ts). */
@@ -90,5 +98,5 @@ export function lesionMarkerId(pair: string, zone: string, side: string): string
 export const spineScene: SceneSource<SpineState, SpinePlan> = {
   catalog: makeCatalog(SP_MANIFEST.structures, {}, LESION_MARKERS),
   plan: (s) => spinePlan(s),
-  planKey: (s) => `${s.region}|${s.level}|${s.sel}|${s.drill}|${s.lesion ? JSON.stringify(s.lesion) : ''}|${s.screw ? 'screw' : ''}|${s.cut}|${s.approach ? s.approach.id + s.approach.side : ''}`,
+  planKey: (s) => `${s.region}|${s.level}|${s.sel}|${s.drill}|${s.hernia ? 'h' : ''}|${s.lesion ? JSON.stringify(s.lesion) : ''}|${s.screw ? 'screw' : ''}|${s.cut}|${s.approach ? s.approach.id + s.approach.side : ''}`,
 };

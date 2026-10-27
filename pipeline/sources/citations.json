@@ -689,5 +689,26 @@
   "url": "https://doi.org/10.1177/21925682261446557",
   "pmid": "42032952",
   "pmcid": "PMC13110247"
+ },
+ "eslami2026": {
+  "citation": "Eslami B, Atef Yekta R, Majedi H, Khajehnasiri A, Espahbodi E, Montaseri A, et al. From Protrusion to Extrusion: Reassessing the Selective Role of Intradiscal Interventions. Anesth Pain Med. 2026;16(1):e168119. doi:10.5812/aapm-168119.",
+  "doi": "10.5812/aapm-168119",
+  "url": "https://doi.org/10.5812/aapm-168119",
+  "pmid": "42763742",
+  "pmcid": "PMC13589456"
+ },
+ "sobanski2023": {
+  "citation": "Sobański D, Staszkiewicz R, Stachura M, Gadzieliński M, Grabarek BO. Presentation, Diagnosis, and Management of Lower Back Pain Associated with Spinal Stenosis: A Narrative Review. Med Sci Monit. 2023;29:e939237. doi:10.12659/MSM.939237.",
+  "doi": "10.12659/MSM.939237",
+  "url": "https://doi.org/10.12659/MSM.939237",
+  "pmid": "36814366",
+  "pmcid": "PMC9972697"
+ },
+ "berry2019": {
+  "citation": "Berry JA, Elia C, Saini HS, Miulli DE. A Review of Lumbar Radiculopathy, Diagnosis, and Treatment. Cureus. 2019;11(10):e5934. doi:10.7759/cureus.5934.",
+  "doi": "10.7759/cureus.5934",
+  "url": "https://doi.org/10.7759/cureus.5934",
+  "pmid": "31788391",
+  "pmcid": "PMC6858271"
  }
 }

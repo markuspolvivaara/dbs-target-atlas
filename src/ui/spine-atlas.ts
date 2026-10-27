@@ -342,14 +342,14 @@ export class SpineAtlasPage {
       h('div', { class: 'chips grp-chips', role: 'group', 'aria-label': 'Region' }, ...REGIONS.map((x) => h('button', {
         type: 'button', class: 'chip', 'aria-pressed': String(x.id === r.id), 'data-v': x.id, disabled: !x.ready,
         title: x.ready ? undefined : 'Not built yet', onclick: () => this.update((st) => {
-          st.region = x.id; st.level = null; st.lesion = null; st.screw = null; st.approach = null; st.sel = null; st.measure = null; st.drill = null; st.distract = 0; st.cam = { preset: null };
+          st.region = x.id; st.level = null; st.lesion = null; st.screw = null; st.approach = null; st.sel = null; st.measure = null; st.drill = null; st.distract = 0; st.hernia = null; st.cam = { preset: null };
           st.hemi = 'both';
           st.cutSide = 'none';
         }, { camera: true }),
       }, x.name, x.ready ? '' : ' (later)'))));
     if (r.levels.length) pane.append(h('p', { class: 'chips-label' }, 'Level'),
       chips<string>([['all', 'All'], ...r.levels.map((l): [string, string] => [l, l])], s.level ?? 'all',
-        (v) => this.update((st) => { st.level = v === 'all' ? null : v; st.lesion = null; st.screw = null; st.approach = null; st.sel = null; st.drill = null; st.distract = 0; st.cam = { preset: null }; }, { camera: true }), { label: 'Level', cls: 'grp-chips level-chips' }));
+        (v) => this.update((st) => { st.level = v === 'all' ? null : v; st.lesion = null; st.screw = null; st.approach = null; st.sel = null; st.drill = null; st.distract = 0; st.hernia = null; st.cam = { preset: null }; }, { camera: true }), { label: 'Level', cls: 'grp-chips level-chips' }));
     // the virtual screw: whenever the level has one, in a box of its own that starts closed
     if (s.level && SCREW_LEVELS[s.level]) {
       if (this.screwOpen === null) this.screwOpen = !!s.screw;   // open when a link brings a screw
