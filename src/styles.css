@@ -451,3 +451,4 @@ kbd { font: inherit; font-size: 0.9em; border: 1px solid var(--line); border-bot
 .drill-clear .clear-safe strong { color: var(--c-spSafe); }
 .drill-clear .clear-caution strong { color: var(--c-spCaution); }
 .drill-clear .clear-risk strong { color: var(--c-spRisk); }
+.drill-out .facet-over { color: var(--c-spCaution); }

@@ -9,7 +9,8 @@ type V = [number, number, number];
 /** A pair whose upper "vertebra" is drawn by a signed distance (mm, + inside), on a small grid like the CT's (x
  * flipped, 0.72 x 0.72 x 0.7 mm); its body at `body`, its spinous process from `base` back to `tip` (the frame's
  * axes: back is -y). */
-function shape(sd: (p: THREE.Vector3) => number, body: V = [0, 0, 0], base: V = [0, -3, 0], tip: V = [0, -12, 0], region: 'cervical' | 'lumbar' = 'cervical'): DrillVolume {
+function shape(sd: (p: THREE.Vector3) => number, body: V = [0, 0, 0], base: V = [0, -3, 0], tip: V = [0, -12, 0], region: 'cervical' | 'lumbar' = 'cervical',
+  lower: (p: THREE.Vector3) => number = () => -99): DrillVolume {
   const dims: [number, number, number] = [40, 40, 40];
   const affine = [[-0.72, 0, 0, 14], [0, 0.72, 0, -14], [0, 0, 0.7, -14], [0, 0, 0, 1]];
   const lm = { body, axes: [[1, 0, 0], [0, 1, 0], [0, 0, 1]] as [V, V, V], spinous: { base, tip, wall: [0, 0, 0] as V } };
@@ -22,7 +23,7 @@ function shape(sd: (p: THREE.Vector3) => number, body: V = [0, 0, 0], base: V = 
   for (let i = 0; i < dims[0]; i++) for (let j = 0; j < dims[1]; j++) for (let k = 0; k < dims[2]; k++) {
     const x = (i * dims[1] + j) * dims[2] + k;
     buf[x] = Math.max(0, Math.min(255, Math.round(iso + sd(p.set(i, j, k).applyMatrix4(M)) * 40)));   // upper: the shape
-    buf[n + x] = 0;                                                        // lower: none
+    buf[n + x] = Math.max(0, Math.min(255, Math.round(iso + lower(p) * 40)));                          // lower: none, or its shape
     buf[2 * n + x] = 150;                                                  // density
     buf[3 * n + x] = buf[4 * n + x] = buf[5 * n + x] = 255;               // far from everything
   }
@@ -50,14 +51,16 @@ function surface(v: DrillVolume): { pos: THREE.Vector3[]; tris: number[][]; nor:
 
 describe('virtual drilling', () => {
   it('every cervical pair is in the data, each vertebra in the catalogue, its field matching the drawn vertebra', () => {
-    expect(DRILL.pairs.map((p) => p.id)).toEqual(['C2-C3', 'C3-C4', 'C4-C5', 'C5-C6', 'C6-C7', 'C7-T1', 'L1-L2', 'L2-L3', 'L3-L4', 'L4-L5']);
+    expect(DRILL.pairs.map((p) => p.id)).toEqual(['C2-C3', 'C3-C4', 'C4-C5', 'C5-C6', 'C6-C7', 'C7-T1', 'L1-L2', 'L2-L3', 'L3-L4', 'L4-L5', 'L5-S1']);
     for (const p of DRILL.pairs) {
       for (const id of [p.upper, p.lower, p.root]) expect(SP.has(id), id).toBe(true);
-      for (const c of Object.values(p.check)) { expect(c.medianMm).toBeLessThan(0.3); expect(c.p95Mm).toBeLessThan(0.8); }
+      // (S1 against the drawn sacrum, smoothed and decimated over the whole sacrum: see spine_drill.py)
+      for (const [k, c] of Object.entries(p.check)) { expect(c.medianMm).toBeLessThan(k === 'S1' ? 0.35 : 0.3); expect(c.p95Mm).toBeLessThan(k === 'S1' ? 1.5 : 0.8); }
     }
     expect(drillPairFor('C5')?.id).toBe('C5-C6');
     expect(DRILL_PAIRS.get('C7-T1')?.root).toBe('sp_root_c8');
     expect(DRILL_PAIRS.get('L4-L5')).toMatchObject({ region: 'lumbar', root: 'sp_root_l5', artery: false });
+    expect(DRILL_PAIRS.get('L5-S1')).toMatchObject({ lower: 'sp_sacrum', root: 'sp_root_s1', lowerRest: 'assets/spine/drill/sacrum_rest.glb' });
     // each spinous process: its base between the canal's back wall and its tip, behind the body
     for (const p of DRILL.pairs) for (const lm of p.landmarks) {
       const ant = new THREE.Vector3(...lm.axes[1]), at = (x: [number, number, number]) => new THREE.Vector3(...x).sub(new THREE.Vector3(...lm.body)).dot(ant);
@@ -195,6 +198,20 @@ describe('virtual drilling', () => {
     expect(w.openDoor(0, 'L').ok).toBe(false);
   });
 
+  it('the facet joints: the bone of each vertebra near the other, beside the canal; drilling one side takes from it alone', () => {
+    // the upper vertebra's body and two articular processes; the lower one's processes 1.5 mm below them
+    const up = (p: THREE.Vector3) => Math.max(sBall(p, [0, 9, 4], 5), sBox(p, [-10, -6, 1], [-4, 2, 8]), sBox(p, [4, -6, 1], [10, 2, 8]));
+    const lo = (p: THREE.Vector3) => Math.max(sBox(p, [-10, -6, -8], [-4, 2, -0.5]), sBox(p, [4, -6, -8], [10, 2, -0.5]));
+    const v = shape(up, [0, 9, 4], [0, -6, 0], [0, -12, 0], 'cervical', lo);
+    v.pair.landmarks[0].spinous.wall = [0, -2, 0];
+    expect(v.facets()).toEqual({ L: 0, R: 0 });
+    // the left joint, drilled from behind (the frame's -x is the patient's left)
+    for (let z = -3; z <= 3; z += 0.5) for (let y = -9; y <= -1; y += 0.5) v.carve(new THREE.Vector3(-7, y, z));
+    const f = v.facets()!;
+    expect(f.L).toBeGreaterThan(0.3);
+    expect(f.R).toBe(0);
+  });
+
   it('drilling is in the link for a cervical level with a pair, and hides the pair and its disc', () => {
     const s = decodeSpine('#/atlas?r=cervical&lv=C5&dr=1');
     expect(s.drill).toBe('foraminotomy');
@@ -222,6 +239,11 @@ describe('virtual drilling', () => {
     // a laminectomy: the level alone is drilled, the one below and the disc drawn as they are
     const lam = spinePlan(decodeSpine('#/atlas?r=cervical&lv=C5&dr=e'));
     expect([lam.looks.get('sp_c5'), lam.looks.get('sp_c6'), lam.looks.get('sp_disc_c5_c6')]).toEqual(['hidden', 'context', 'primary']);
+    // the bone as it was, while drilling (the drill draws it): in the link
+    const g = decodeSpine('#/atlas?r=cervical&lv=C5&dr=1&dg=1');
+    expect(g.drillGhost).toBe(true);
+    expect(decodeSpine(encodeSpine(g)).drillGhost).toBe(true);
+    expect(decodeSpine('#/atlas?r=cervical&lv=C5&dg=1').drillGhost).toBe(false);
     const ott = spinePlan(decodeSpine('#/atlas?r=lumbar&lv=L4&dr=o'));
     expect([ott.looks.get('sp_l4'), ott.looks.get('sp_l5'), ott.looks.get('sp_disc_l4_l5')]).toEqual(['hidden', 'hidden', 'primary']);
   });

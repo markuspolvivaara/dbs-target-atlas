@@ -22,6 +22,8 @@ const PairSchema = z.object({
   dims: z.tuple([z.number(), z.number(), z.number()]), affine: z.array(z.array(z.number()).length(4)).length(4),
   check: z.record(z.object({ medianMm: z.number(), p95Mm: z.number() })),
   landmarks: z.tuple([LandmarkSchema, LandmarkSchema]),
+  /** L5-S1: the drilled lower bone is S1 alone, and the rest of the sacrum is drawn from this while drilling */
+  lowerRest: z.string().optional(),
 });
 export type DrillPair = z.infer<typeof PairSchema>;
 export const DRILL = z.object({
@@ -59,6 +61,12 @@ const SEED_MM = 3;
 /** how far in front of the canal's back wall (mm) bone counts as the front of the vertebra, for telling which side a
  * lamina is still joined on */
 const ATTACHED_FRONT_MM = 8;
+/** a facet joint's bone (schematic): each vertebra's bone within about this (mm) of the other's, lateral to the dural
+ * sac and behind the vertebral bodies */
+export const FACET_REACH_MM = 4;
+/** ... and at least this far (mm) behind the back of the upper vertebral body (clear of the pedicles and the
+ * uncovertebral joints) */
+const FACET_BODY_GAP_MM = 3;
 /** a laminoplasty's hinge: the bone left within this (mm) of the hinge trough, standing for the inner cortex left when
  * the trough is cut through the outer one (a drawing choice); the door opens once nothing thicker holds it */
 export const HINGE_MAX_MM = 2;
@@ -530,6 +538,75 @@ export class DrillVolume {
     return this.islands[v];
   }
 
+  /** each side's facet joint bone (voxels, both vertebrae's), found once */
+  private facetZone: { L: Int32Array; R: Int32Array } | null = null;
+
+  /**
+   * The facet joints between the two vertebrae (schematic: there is no segmentation of them): on each side, each
+   * vertebra's bone of the CT within FACET_REACH_MM of the other's (a box round each voxel), lateral to the dural sac's
+   * edge at the pair and behind the back of the upper body (not the endplates or the uncovertebral joints). Returns the
+   * share of each side's joint bone taken away (0-1), bone in a piece still in place counting as there.
+   */
+  facets(): { L: number; R: number } | null {
+    if (!this.facetZone) this.facetZone = this.findFacets();
+    const z = this.facetZone;
+    if (!z.L.length || !z.R.length) return null;
+    const live = this.layers.filter((L) => !L.gone);
+    const taken = (vox: Int32Array) => { let n = 0; for (const x of vox) if (!live.some((L) => L.field[x] >= this.iso)) n++; return n / vox.length; };
+    return { L: taken(z.L), R: taken(z.R) };
+  }
+
+  private findFacets(): { L: Int32Array; R: Int32Array } {
+    const [nx, ny, nz] = [this.nx, this.ny, this.nz], n = nx * ny * nz, iso = this.iso;
+    const lm = this.pair.landmarks[0], base = new THREE.Vector3(...lm.spinous.base);
+    const [lat, ant] = lm.axes.map((a) => new THREE.Vector3(...a));
+    const o = new THREE.Vector3().applyMatrix4(this.toRas).sub(base);
+    const cols = [0, 1, 2].map((a) => new THREE.Vector3(...[0, 1, 2].map((r) => this.toRas.elements[a * 4 + r]) as [number, number, number]));
+    const lin = (e: THREE.Vector3) => [o.dot(e), cols[0].dot(e), cols[1].dot(e), cols[2].dot(e)];
+    const [A0, Ai, Aj, Ak] = lin(lat), [F0, Fi, Fj, Fk] = lin(ant);
+    // each vertebra's bone grown by FACET_REACH_MM (a box, axis by axis)
+    const grow = (src: Uint8Array) => {
+      let a = new Uint8Array(n);
+      for (let x = 0; x < n; x++) a[x] = src[x] >= iso ? 1 : 0;
+      const dims = [nx, ny, nz], stride = [ny * nz, nz, 1];
+      for (let ax = 0; ax < 3; ax++) {
+        const r = Math.ceil(FACET_REACH_MM / cols[ax].length()), b = new Uint8Array(n), st = stride[ax], len = dims[ax];
+        for (let x = 0; x < n; x++) {
+          if (!a[x]) continue;
+          const c = Math.floor(x / st) % len;
+          for (let d = Math.max(-r, -c); d <= Math.min(r, len - 1 - c); d++) b[x + d * st] = 1;
+        }
+        a = b;
+      }
+      return a;
+    };
+    const near = [grow(this.orig[1]), grow(this.orig[0])];   // near the other vertebra, for each
+    // the dural sac's edges (its inside: no distance to it), and the back of the upper body (along the midline,
+    // forwards from the canal's back wall to the first bone)
+    let sacL = 0, sacR = 0;
+    for (let x = 0; x < n; x++) {
+      if (this.dura[x] !== 0) continue;
+      const k = x % nz, j = ((x - k) / nz) % ny, i = (x - k - j * nz) / (nz * ny), a = A0 + Ai * i + Aj * j + Ak * k;
+      if (a < sacL) sacL = a; if (a > sacR) sacR = a;
+    }
+    const wall = new THREE.Vector3(...lm.spinous.wall);
+    let bodyBack = wall.clone().sub(base).dot(ant) + 25;
+    for (let t = 1; t < 40; t += 0.25) {
+      const q = wall.clone().addScaledVector(ant, t).applyMatrix4(this.toIjk);
+      if (this.sample(this.orig[0], q.x, q.y, q.z) >= iso) { bodyBack = wall.clone().sub(base).dot(ant) + t; break; }
+    }
+    const L: number[] = [], R: number[] = [];
+    for (let x = 0; x < n; x++) {
+      const on0 = this.orig[0][x] >= iso && near[0][x], on1 = this.orig[1][x] >= iso && near[1][x];
+      if (!on0 && !on1) continue;
+      const k = x % nz, j = ((x - k) / nz) % ny, i = (x - k - j * nz) / (nz * ny);
+      if (F0 + Fi * i + Fj * j + Fk * k > bodyBack - FACET_BODY_GAP_MM) continue;
+      const a = A0 + Ai * i + Aj * j + Ak * k;
+      if (a < sacL + 1) L.push(x); else if (a > sacR - 1) R.push(x);
+    }
+    return { L: Int32Array.from(L), R: Int32Array.from(R) };
+  }
+
   /** Lift a piece off: it is taken away (its bone counted as removed). */
   lift(l: number): void {
     const L = this.layers[l];
@@ -669,7 +746,16 @@ export class DrillVolume {
    * (`colour`). Positions in the frame. Null if the surface does not pass through the chunk.
    */
   mesh(l: number, ci: number, cj: number, ck: number, colour: (p: THREE.Vector3, n: THREE.Vector3, ijk: THREE.Vector3) => [number, number, number]): THREE.BufferGeometry | null {
-    const f = this.layers[l].field, iso = this.iso;
+    return this.meshField(this.layers[l].field, ci, cj, ck, colour);
+  }
+
+  /** One chunk of a vertebra's surface as it was before any drilling (where it lay). */
+  meshOrig(v: Vertebra, ci: number, cj: number, ck: number): THREE.BufferGeometry | null {
+    return this.meshField(this.orig[v], ci, cj, ck, () => [1, 1, 1]);
+  }
+
+  private meshField(f: Uint8Array, ci: number, cj: number, ck: number, colour: (p: THREE.Vector3, n: THREE.Vector3, ijk: THREE.Vector3) => [number, number, number]): THREE.BufferGeometry | null {
+    const iso = this.iso;
     const x0 = ci * CHUNK, y0 = cj * CHUNK, z0 = ck * CHUNK;
     const x1 = Math.min(x0 + CHUNK, this.nx - 1), y1 = Math.min(y0 + CHUNK, this.ny - 1), z1 = Math.min(z0 + CHUNK, this.nz - 1);
     // cells from one before the chunk (its quads reach back one cell) to its end

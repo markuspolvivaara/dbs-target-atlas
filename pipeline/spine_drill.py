@@ -17,7 +17,7 @@ from there reaches) and its own axes, and its spinous process: the midline throu
 SPINOUS_BASE of the way from the canal's back wall to the tip (a drawing choice: where a rongeur or an osteotome takes
 it off the laminae); the browser takes the spinous process as the bone joined to its tip behind that base.
 Writes public/assets/spine/drill_<pair>.bin.gz (the six fields one after another, C order) and
-src/data/generated/spine-drill.json. Run after spine_build.py (it reads the roots' and arteries' meshes).
+src/data/generated/spine-drill.json (given pair ids, e.g. L5-S1, only those are rebuilt). Run after spine_build.py (it reads the roots' and arteries' meshes).
 """
 from __future__ import annotations
 
@@ -37,7 +37,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import spine_build as B  # noqa: E402
 
 PAIRS = [("C2", "C3"), ("C3", "C4"), ("C4", "C5"), ("C5", "C6"), ("C6", "C7"), ("C7", "T1"),
-         ("L1", "L2"), ("L2", "L3"), ("L3", "L4"), ("L4", "L5")]   # (L5-S1: the sacrum is drawn from another segmentation)
+         ("L1", "L2"), ("L2", "L3"), ("L3", "L4"), ("L4", "L5"), ("L5", "S1")]
+# S1: VerSe has no S1; the drawn sacrum is TotalSegmentator's sacrum and S1 classes (spine_build.py), so S1's field is
+# its S1 class smoothed as the sacrum's surface is (SIGMA 1 voxel, surface at 0.5), FIELD_ISO at 0.5 and MASK_FIELD_SCALE
+# units per unit of the mask; while drilling L5-S1, the rest of the sacrum (its sacrum class alone) is drawn from REST
+MASK_SIGMA_VOX, MASK_FIELD_SCALE = 1.0, 250.0
+REST = "spine/drill/sacrum_rest.glb"
+REST_FACES = 10000
+NEAR_FIELD = 8            # where there is bone, or nearly: a field above this (S1's smoothed mask is a little above 0 everywhere)
 SPINOUS_BASE = 0.22       # the spinous process's base: this share of the way from the canal's back wall to its tip
 MIDLINE_MM = 1.5          # the midline strip (each side) the canal's back wall and the tip are found in
 BIN_MM = 0.5
@@ -52,6 +59,8 @@ REACH_VOX = 3             # the CT and the distances are kept only within this o
 SURFACE_SAMPLE_MM = 0.25  # the schematic tubes' surfaces sampled this densely for their distances
 CHECK_MEDIAN_MM, CHECK_P95_MM = 0.3, 0.8    # the field's surface against the drawn vertebra (decimated and smoothed: the lumbar
                                             # ones, larger for their triangles, lie a little further)
+CHECK_S1 = (0.35, 1.5)    # S1 against the drawn sacrum: that is smoothed and decimated over the whole sacrum (16000
+                          # triangles), the field keeps the segmentation's finer edges
 OUT = B.GEN / "spine-drill.json"
 
 
@@ -79,7 +88,24 @@ def landmarks(m_full: np.ndarray, aff: np.ndarray, ctd: dict, name: str, o: np.n
     lab = label_of(name)
     c = ctd[lab]
     F = B.G.frame(ctd.get(lab - 1, c), ctd.get(lab + 1, c))   # (one of the two neighbours is enough)
-    P = nib.affines.apply_affine(aff, np.argwhere(m_full == lab)) - c
+    return landmarks_of(nib.affines.apply_affine(aff, np.argwhere(m_full == lab)), c, F, o)
+
+
+def s1_landmarks(s1: np.ndarray, a: np.ndarray, ctd: dict, o: np.ndarray) -> dict:
+    """S1's (no VerSe centroid): its body centre the middle of the front half of its central part (within 15 mm of the
+    midline), its axes from L5's centroid to that centre."""
+    pts = nib.affines.apply_affine(a, np.argwhere(s1)) + o   # (a: the spine frame; back to RAS)
+    c = pts.mean(0)
+    for _ in range(2):
+        F = B.G.frame(ctd[label_of("L5")], c)
+        U, V = (pts - c) @ F[0], (pts - c) @ F[1]
+        core = np.abs(U) < 15
+        c = pts[core & (V > np.median(V[core]))].mean(0)
+    return landmarks_of(pts, c, B.G.frame(ctd[label_of("L5")], c), o)
+
+
+def landmarks_of(pts: np.ndarray, c: np.ndarray, F: np.ndarray, o: np.ndarray) -> dict:
+    P = pts - c
     U, V = P @ F[0], P @ F[1]
     # along the midline strip, backwards from the body: its back edge, the gap of the canal, then the arch to the tip
     mid = np.abs(U) < MIDLINE_MM
@@ -97,9 +123,16 @@ def landmarks(m_full: np.ndarray, aff: np.ndarray, ctd: dict, name: str, o: np.n
             "spinous": {"base": pt(u_c, v_base), "tip": pt(u_c, v_tip), "wall": pt(u_c, v_wall)}}
 
 
-def main() -> int:
+def box_of(mask: np.ndarray) -> tuple:
+    return ndimage.find_objects(mask.astype(np.uint8))[0]
+
+
+def main(only: list[str]) -> int:
     m_full, aff = B.load_mask()
     boxes = ndimage.find_objects(m_full)
+    s1_full, _ = B.ts_mask("total", "vertebrae_S1")
+    s1_box = box_of(s1_full)
+    del s1_full
     o = B.origin()
     vox = np.abs(np.diag(aff)[:3])
     ctd = {c["label"]: nib.affines.apply_affine(aff, [c["X"], c["Y"], c["Z"]]) for c in json.loads(B.CTD.read_text()) if "label" in c}
@@ -114,20 +147,33 @@ def main() -> int:
                       "fields": ["upper", "lower", "density", "dura", "root", "artery"]},
            "pairs": []}
     fails = []
+    if only:   # rebuild only these pairs, keeping the others as they were written
+        old = {p["id"]: p for p in json.loads(OUT.read_text())["pairs"]}
     for up, lo_ in PAIRS:
-        lu, ll = label_of(up), label_of(lo_)
-        if boxes[lu - 1] is None or boxes[ll - 1] is None:
+        if only and f"{up}-{lo_}" not in only:
+            out["pairs"].append(old[f"{up}-{lo_}"])
+            continue
+        sacral = lo_ == "S1"
+        lu, ll = label_of(up), (None if sacral else label_of(lo_))
+        bu, bl = boxes[lu - 1], (s1_box if sacral else boxes[ll - 1])
+        if bu is None or bl is None:
             fails.append(f"{up}-{lo_}: missing in the mask")
             continue
-        cr = tuple(slice(max(min(boxes[lu - 1][k].start, boxes[ll - 1][k].start) - MARGIN_VOX, 0),
-                         min(max(boxes[lu - 1][k].stop, boxes[ll - 1][k].stop) + MARGIN_VOX, m_full.shape[k])) for k in range(3))
+        cr = tuple(slice(max(min(bu[k].start, bl[k].start) - MARGIN_VOX, 0),
+                         min(max(bu[k].stop, bl[k].stop) + MARGIN_VOX, m_full.shape[k])) for k in range(3))
         m = m_full[cr]
         ct = B.read_block(B.CT, cr, np.float32)
         a = B.block_affine(aff, cr)
         a[:3, 3] -= o                                   # the spine frame
         fields = []
-        for lab in (lu, ll):
-            vol = ndimage.gaussian_filter(B.bone_volume(ct, m == lab, float(vox.mean())), B.SIGMA_VOX)
+        vol = ndimage.gaussian_filter(B.bone_volume(ct, m == lu, float(vox.mean())), B.SIGMA_VOX)
+        fields.append(np.clip(np.round(FIELD_ISO + (vol - B.BONE_HU) / FIELD_HU_STEP), 0, 255).astype(np.uint8))
+        if sacral:   # S1: its segmentation, smoothed as the drawn sacrum is
+            s1, _ = B.ts_mask("total", "vertebrae_S1", cr)
+            vol = ndimage.gaussian_filter(s1.astype(np.float32), MASK_SIGMA_VOX)
+            fields.append(np.clip(np.round(FIELD_ISO + (vol - 0.5) * MASK_FIELD_SCALE), 0, 255).astype(np.uint8))
+        else:
+            vol = ndimage.gaussian_filter(B.bone_volume(ct, m == ll, float(vox.mean())), B.SIGMA_VOX)
             fields.append(np.clip(np.round(FIELD_ISO + (vol - B.BONE_HU) / FIELD_HU_STEP), 0, 255).astype(np.uint8))
         dens = ndimage.gaussian_filter(ct, B.SIGMA_VOX)
         fields.append(np.clip(np.round((dens - DENSITY_MIN_HU) / DENSITY_STEP_HU), 0, 255).astype(np.uint8))
@@ -143,20 +189,26 @@ def main() -> int:
         fields[3:] = [np.asarray(f) for f in fields[3:]]
         # only where a burr can be: the bone and a few voxels round it (the CT); the distances there and near the
         # structures themselves (the burr is stopped at them: it does not drill past the dural sac to the bone behind)
-        near = ndimage.binary_dilation((fields[0] > 0) | (fields[1] > 0), iterations=REACH_VOX)
+        near = ndimage.binary_dilation((fields[0] > NEAR_FIELD) | (fields[1] > NEAR_FIELD), iterations=REACH_VOX)
         fields[2][~near] = 0
         near_s = near | np.any(np.stack([f < STRUCTURE_REACH_MM / DIST_STEP_MM for f in fields[3:]]), 0)
         for f in fields[3:]:
             f[~near_s] = 255
-        # check: each vertebra's field surface against the drawn vertebra
+        # check: each vertebra's field surface against the drawn vertebra (S1: the drawn sacrum where it is S1's)
         checks = {}
         for name, f in zip((up, lo_), fields[:2]):
             v, _, _, _ = measure.marching_cubes(f.astype(np.float32), FIELD_ISO - 0.5)
             surf = cKDTree(nib.affines.apply_affine(a, v))
-            drawn = trimesh.util.concatenate(list(trimesh.load(B.BUILD / f"{B.level_id(name)}.glb", force="scene").dump()))
-            d = surf.query(drawn.vertices)[0]
+            drawn = trimesh.util.concatenate(list(trimesh.load(B.BUILD / f"{'sp_sacrum' if name == 'S1' else B.level_id(name)}.glb", force="scene").dump()))
+            dv = drawn.vertices
+            if name == "S1":   # (its outer surface: not where it meets the rest of the sacrum, which the drawn one runs on into)
+                rest_cr, _ = B.ts_mask("total", "sacrum", cr)
+                edge = nib.affines.apply_affine(a, np.argwhere(s1 & ~ndimage.binary_erosion(s1 | rest_cr)))
+                dv = dv[cKDTree(edge).query(dv, distance_upper_bound=2.0)[0] < 2.0]
+            d = surf.query(dv)[0]
             checks[name] = {"medianMm": round(float(np.median(d)), 3), "p95Mm": round(float(np.percentile(d, 95)), 3)}
-            if checks[name]["medianMm"] > CHECK_MEDIAN_MM or checks[name]["p95Mm"] > CHECK_P95_MM:
+            lim = CHECK_S1 if name == "S1" else (CHECK_MEDIAN_MM, CHECK_P95_MM)
+            if checks[name]["medianMm"] > lim[0] or checks[name]["p95Mm"] > lim[1]:
                 fails.append(f"{up}-{lo_} {name}: field surface {checks[name]} from the drawn vertebra")
         pid = f"{up}-{lo_}"
         name = f"drill_{up.lower()}_{lo_.lower()}.bin.gz"
@@ -164,10 +216,18 @@ def main() -> int:
         (B.PUBLIC / "spine" / name).write_bytes(data)
         # the root named for the lower level: cervical, the one exiting here; lumbar, the one traversing (to the next foramen)
         root = f"sp_root_{'c8' if lo_ == 'T1' else lo_.lower()}"
-        out["pairs"].append({"id": pid, "region": region, "upper": B.level_id(up), "lower": B.level_id(lo_), "disc": f"sp_disc_{up.lower()}_{lo_.lower()}",
-                             "root": root, "artery": region == "cervical", "file": f"assets/spine/{name}", "bytes": len(data), "dims": list(m.shape),
-                             "affine": np.round(a, 5).tolist(), "check": checks,
-                             "landmarks": [landmarks(m_full, aff, ctd, x, o) for x in (up, lo_)]})
+        extra = {}
+        if sacral:   # the rest of the sacrum, drawn while S1 is drilled (the drawn sacrum is hidden then)
+            rest, ra = B.ts_box("total", "sacrum")
+            mesh = B.isosurface(rest.astype(np.float32), B.shifted(ra, o), 0.5, MASK_SIGMA_VOX, REST_FACES)
+            (B.PUBLIC / REST).parent.mkdir(parents=True, exist_ok=True)
+            B.write_glb(B.PUBLIC / REST, B.halves(mesh, 0.0), {"id": "sp_sacrum_rest"})
+            extra = {"lowerRest": f"assets/{REST}"}
+        lms = [landmarks(m_full, aff, ctd, up, o), s1_landmarks(s1, a, ctd, o) if sacral else landmarks(m_full, aff, ctd, lo_, o)]
+        out["pairs"].append({"id": pid, "region": region, "upper": B.level_id(up), "lower": "sp_sacrum" if sacral else B.level_id(lo_),
+                             "disc": f"sp_disc_{up.lower()}_{lo_.lower()}", "root": root, "artery": region == "cervical",
+                             "file": f"assets/spine/{name}", "bytes": len(data), "dims": list(m.shape),
+                             "affine": np.round(a, 5).tolist(), "check": checks, "landmarks": lms, **extra})
         print(pid, m.shape, f"{len(data) / 1024:.0f} KB", checks, flush=True)
     OUT.write_text(json.dumps(out, indent=1))
     for f in fails:
@@ -176,4 +236,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))   # (pair ids, e.g. L5-S1: only those rebuilt)

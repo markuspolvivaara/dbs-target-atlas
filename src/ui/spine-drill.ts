@@ -1,9 +1,11 @@
 import * as THREE from 'three';
 import { SP, SP_REFS } from '../spine';
-import { ACDF_DRILL_STATEMENTS, FORAMINOTOMY_STATEMENTS, LAMINECTOMY_STATEMENTS, LAMINOPLASTY_STATEMENTS, OVER_THE_TOP_STATEMENTS, SPLIT_STATEMENTS, type Statement } from '../spine/content';
+import { ACDF_DRILL_STATEMENTS, FACET_STATEMENTS, FORAMINOTOMY_STATEMENTS, LAMINECTOMY_STATEMENTS, LAMINOPLASTY_STATEMENTS, OVER_THE_TOP_STATEMENTS, SPLIT_STATEMENTS, type Statement } from '../spine/content';
 import { BURR_MM_BY_REGION, HINGE_MAX_MM, BURR_RATE_MM_S, BURR_RATE_RANGE, BURR_STEP_MM, drillPairFor, DrillVolume, type Clearance, type DrillPair, type DrillSnapshot, type Osteotomy, type Structure } from '../spine/drill';
 import { DRILL_MODES, type DrillMode, type SpineState } from '../spine/state';
 import type { PointerTool, Viewer } from '../viewer/Viewer';
+import { loadStructure } from '../viewer/assets';
+import { LOOK_OPACITY } from '../viewer/materials';
 import { h } from './h';
 import { refLinksFrom } from './reflinks';
 import { paletteFor, resolvedTheme, storedTheme } from './theme';
@@ -31,9 +33,16 @@ export const DRILL_TEXT: Record<DrillMode, { label: string; summary: string }> =
 /** the approaches on the selected vertebra alone */
 const isLam = (m: DrillMode | null) => m === 'lamEnBloc' || m === 'lamPiecemeal' || m === 'laminoplasty';
 /** the approaches where bone cut loose becomes a piece of its own */
+/** the approaches from behind on the two vertebrae: the readout follows their facet joints */
+const FACETS = new Set<DrillMode>(['foraminotomy', 'overTheTop', 'spSplit']);
+/** a facet joint's share taken away (0-1) above which the readout cautions: Kang 2022 (cervical); a reference in the
+ * lumbar spine (Li 2026) */
+const FACET_CAUTION = 0.5;
 const PIECES = new Set<DrillMode>(['lamEnBloc', 'lamPiecemeal', 'laminoplasty', 'overTheTop', 'spSplit']);
 /** each slider's name */
 const SPREAD_LABEL: Partial<Record<DrillMode, string>> = { acdf: 'Distraction', spSplit: 'Halves drawn apart', laminoplasty: 'Door opened' };
+/** the bone as it was: how opaque its skin is drawn over the cut bone */
+const ORIG_OPACITY = 0.5;
 /** where a laminoplasty's door is first opened to when it is freed (deg): somewhere to start, the slider then sets it */
 const DOOR_START_DEG = 30;
 
@@ -94,6 +103,12 @@ export class DrillPanel implements PointerTool {
   private colours!: Record<'bone' | 'cancellous' | 'cortex' | 'dura' | 'root' | 'artery', THREE.Color>;
   private key = '';
   private side: 'L' | 'R' = 'L';
+  private ghost = false;
+  /** the bone as it was (an outline over the cut bone), per vertebra, moved as the vertebra is */
+  private origGroups: [THREE.Group, THREE.Group] = [new THREE.Group(), new THREE.Group()];
+  private origMat: THREE.MeshStandardMaterial | null = null;
+  /** L5-S1: the rest of the sacrum (the drawn sacrum is hidden while S1 is drilled), drawn as the other bones are then */
+  private rest = new THREE.Group();
 
   constructor(private update: Update, private viewer: Viewer) {
     // the burr: a diamond burr's round head and its shaft back along the line of sight
@@ -105,7 +120,7 @@ export class DrillPanel implements PointerTool {
     this.sizeBurr(BURR_MM_BY_REGION.cervical);
     this.burr.add(this.burrHead, this.burrShaft);
     this.burr.visible = false;
-    this.group.add(this.burr);
+    this.group.add(this.burr, this.rest, ...this.origGroups);
     window.addEventListener('keydown', (e) => {
       if (!this.active || !(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== 'z') return;
       e.preventDefault();
@@ -124,7 +139,10 @@ export class DrillPanel implements PointerTool {
     const pair = p && p.region === s.region ? p : null;
     const mode = pair ? s.drill : null;
     const key = `${pair?.id}|${mode}`;
-    if (key !== this.key || s.drillSide !== this.side) {
+    if (key !== this.key || s.drillSide !== this.side || s.drillGhost !== this.ghost) {
+      const ghostChanged = s.drillGhost !== this.ghost;
+      this.ghost = s.drillGhost;
+      if (ghostChanged && key === this.key) this.drawOrig();
       const restart = key !== this.key;
       this.key = key;
       this.mode = mode;
@@ -158,6 +176,7 @@ export class DrillPanel implements PointerTool {
       const g = this.lgroups[l];
       if (g) { g.matrix.copy(vol.place(l)); g.matrixWorldNeedsUpdate = true; }
     });
+    this.origGroups.forEach((g, v) => g.position.copy(vol.offsets[v]));
     this.viewer.invalidate();
   }
 
@@ -168,7 +187,7 @@ export class DrillPanel implements PointerTool {
     clear(this.el);
     this.spreadIn = null;
     if (!pair) return;
-    const up = SP.get(pair.upper)?.level ?? '', lo = SP.get(pair.lower)?.level ?? '';
+    const [up, lo] = pair.id.split('-');   // (the levels: the lower bone at L5-S1 is the sacrum)
     const root = SP.get(pair.root)?.name ?? pair.root;
     const BURR_MM = BURR_MM_BY_REGION[pair.region];
     const st = (x: Statement) => h('p', { class: 'aside' }, x.text, x.refIds.length ? ' ' : '', refLinksFrom(SP_REFS, x.refIds));
@@ -204,13 +223,13 @@ export class DrillPanel implements PointerTool {
       spSplit: `Split the spinous process of ${up} in the midline and detach its base, draw the halves apart, then decompress ${up}–${lo} between them. The two vertebrae, with a round ${BURR_MM}-mm burr.`,
     };
     const statements: Record<DrillMode, Statement[]> = {
-      foraminotomy: [FORAMINOTOMY_STATEMENTS.vpoint, FORAMINOTOMY_STATEMENTS.facet, FORAMINOTOMY_STATEMENTS.drawn],
+      foraminotomy: [FORAMINOTOMY_STATEMENTS.vpoint, FORAMINOTOMY_STATEMENTS.facet, FACET_STATEMENTS.measure, FORAMINOTOMY_STATEMENTS.drawn],
       acdf: [ACDF_DRILL_STATEMENTS.distraction, ACDF_DRILL_STATEMENTS.lateral, ACDF_DRILL_STATEMENTS.drawn],
       lamEnBloc: [LAMINECTOMY_STATEMENTS.enBloc, LAMINECTOMY_STATEMENTS.piecemeal, LAMINECTOMY_STATEMENTS.drawn],
       lamPiecemeal: [LAMINECTOMY_STATEMENTS.piecemeal, LAMINECTOMY_STATEMENTS.enBloc, LAMINECTOMY_STATEMENTS.drawn],
       laminoplasty: [LAMINOPLASTY_STATEMENTS.technique, LAMINOPLASTY_STATEMENTS.angle, LAMINOPLASTY_STATEMENTS.drawn],
-      overTheTop: [OVER_THE_TOP_STATEMENTS.technique, OVER_THE_TOP_STATEMENTS.drawn],
-      spSplit: [SPLIT_STATEMENTS.technique, SPLIT_STATEMENTS.drawn],
+      overTheTop: [OVER_THE_TOP_STATEMENTS.technique, FACET_STATEMENTS.lumbar, FACET_STATEMENTS.measure, OVER_THE_TOP_STATEMENTS.drawn],
+      spSplit: [SPLIT_STATEMENTS.technique, FACET_STATEMENTS.lumbar, FACET_STATEMENTS.measure, SPLIT_STATEMENTS.drawn],
     };
     this.el.append(...([
       h('div', { class: 'chips', role: 'group', 'aria-label': 'Approach' }, ...modes.map(chip)),
@@ -219,7 +238,9 @@ export class DrillPanel implements PointerTool {
       h('div', { class: 'chips' },
         h('button', { type: 'button', class: 'chip', 'aria-pressed': String(!!mode), onclick: () => go(mode ? null : pick) }, mode ? 'Stop drilling' : 'Start drilling'),
         mode ? h('button', { type: 'button', class: 'chip', onclick: () => this.undoStroke() }, 'Undo') : null,
-        mode ? h('button', { type: 'button', class: 'chip', onclick: () => this.resetPair() }, 'Start the bone over') : null),
+        mode ? h('button', { type: 'button', class: 'chip', onclick: () => this.resetPair() }, 'Start the bone over') : null,
+        mode ? h('button', { type: 'button', class: 'chip', 'aria-pressed': String(s.drillGhost), title: 'Where bone was taken: the bone as it was, a translucent skin over the cut bone',
+          onclick: () => this.update((x) => { x.drillGhost = !x.drillGhost; }) }, 'Bone as it was') : null),
       mode ? this.actions : null,
       mode ? h('label', { class: 'range scope-range' }, h('span', {}, 'Drill speed ', rateOut), rateIn) : null,
       mode && this.spreadIn ? h('label', { class: 'range scope-range' }, h('span', {}, `${SPREAD_LABEL[pick]} `, this.spreadOut), this.spreadIn) : null,
@@ -287,13 +308,17 @@ export class DrillPanel implements PointerTool {
         h('strong', {}, mm < TOUCH_MM ? 'touching' : mm > 20 ? 'more than 20 mm' : `${one(mm)} mm`));
     };
     const against = { dura: 'the dural sac', root: `the ${(SP.get(pair.root)?.name ?? 'root').toLowerCase()} or another root (schematic)`, artery: 'the vertebral artery (schematic)' };
-    const removed = [pair.upper, pair.lower].map((id, v) => (vol.active[v] ? `${SP.get(id)?.level} ${Math.round(vol.removedMm3[v])} mm³` : null)).filter(Boolean);
+    const removed = pair.id.split('-').map((lv, v) => (vol.active[v] ? `${lv} ${Math.round(vol.removedMm3[v])} mm³` : null)).filter(Boolean);
+    const fc = this.mode && FACETS.has(this.mode) ? vol.facets() : null;
+    const pct = (x: number) => h('strong', { class: x >= FACET_CAUTION ? 'facet-over' : '' }, `${Math.round(x * 100)}%`);
     this.out.append(
       this.stopped ? h('p', { class: 'drill-stop' }, `The burr rests against ${against[this.stopped]}: it does not drill past it to the bone behind.`) : '',
       c ? h('ul', { class: 'plain drill-clear' },
         row('Dural sac', c.dura, false), row(name(pair.root), c.root, true), pair.artery ? row('Vertebral artery', c.artery, true) : '')
         : h('p', { class: 'aside' }, `Point at the bone to see how near the burr is to the dural sac${pair.artery ? ', the roots and the vertebral artery' : ' and the roots'}.`),
-      h('p', {}, `Bone removed: ${removed.join(', ')}.`));
+      h('p', {}, `Bone removed: ${removed.join(', ')}.`),
+      fc ? h('p', {}, 'Facet joints taken (schematic): left ', pct(fc.L), ', right ', pct(fc.R),
+        fc.L >= FACET_CAUTION || fc.R >= FACET_CAUTION ? (pair.region === 'cervical' ? ': half or more of a joint (Kang 2022: keep it under half).' : ': half or more of a joint (see the note below).') : '.') : '');
   }
 
   // ---------------------------------------------------------------- the bone
@@ -309,6 +334,7 @@ export class DrillPanel implements PointerTool {
     const vol = await p;
     if (this.key !== key) return;   // left meanwhile
     this.clearMeshes();
+    this.rest.clear();   // (its geometry is the loader's, shared: not disposed)
     this.vol = vol;
     this.pair = pair;
     vol.active[1] = !isLam(mode);
@@ -320,7 +346,11 @@ export class DrillPanel implements PointerTool {
     this.colours = { bone: col(pal.spBone), cancellous: col('#d99a86'), cortex: col('#efe7d4'), dura: col(pal.spCord), root: col(pal.spRoot), artery: col(pal.spArtery) };
     this.viewer.toolGroup.add(this.group);
     if (PIECES.has(mode)) vol.settle();
+    this.origMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(pal.spCaution), roughness: 0.6, metalness: 0, transparent: true, opacity: ORIG_OPACITY,
+      depthWrite: false, polygonOffset: true, polygonOffsetFactor: 2, polygonOffsetUnits: 8 });
     this.rebuild();
+    this.drawOrig();
+    if (pair.lowerRest) void this.drawRest(pair.lowerRest, key, new THREE.Color(pal.spBone));
     this.viewer.setPointerTool(this);
     this.readout(null);
   }
@@ -331,9 +361,47 @@ export class DrillPanel implements PointerTool {
     this.pressing = false;
     this.viewer.setPointerTool(null);
     this.clearMeshes();
+    for (const g of this.origGroups) for (const m of [...g.children] as THREE.Mesh[]) { m.removeFromParent(); m.geometry.dispose(); }
+    this.rest.clear();
     this.burr.visible = false;
     this.viewer.toolGroup.remove(this.group);
     this.vol = null;
+    this.viewer.invalidate();
+  }
+
+  private async drawRest(file: string, key: string, colour: THREE.Color): Promise<void> {
+    const a = await loadStructure(file);
+    if (this.key !== key || a.kind !== 'mesh') return;
+    const mat = new THREE.MeshStandardMaterial({ color: colour, roughness: 0.6, metalness: 0, transparent: true, opacity: LOOK_OPACITY.context, depthWrite: false });
+    for (const m of Object.values(a.sides)) {
+      if (!m) continue;
+      const c = new THREE.Mesh(m.geometry, mat);
+      c.position.copy(m.position); c.quaternion.copy(m.quaternion); c.scale.copy(m.scale);
+      c.raycast = () => {};
+      c.renderOrder = 2;
+      this.rest.add(c);
+    }
+    this.viewer.invalidate();
+  }
+
+  /** The bone as it was, drawn (when asked for) as a translucent skin pushed a little back in depth: where bone is left,
+   * the cut surface (the same surface, there) hides it; where bone was taken, it shows. */
+  private drawOrig(): void {
+    for (const g of this.origGroups) for (const m of [...g.children] as THREE.Mesh[]) { m.removeFromParent(); m.geometry.dispose(); }
+    const vol = this.vol;
+    if (!vol || !this.ghost || !this.active || !this.origMat) { this.viewer.invalidate(); return; }
+    const [cx, cy, cz] = vol.chunks;
+    for (const v of [0, 1] as const) {
+      if (!vol.active[v]) continue;
+      for (let i = 0; i < cx; i++) for (let j = 0; j < cy; j++) for (let k = 0; k < cz; k++) {
+        const g = vol.meshOrig(v, i, j, k);
+        if (!g) continue;
+        const m = new THREE.Mesh(g, this.origMat);
+        m.raycast = () => {};
+        m.renderOrder = 4;
+        this.origGroups[v].add(m);
+      }
+    }
     this.viewer.invalidate();
   }
 

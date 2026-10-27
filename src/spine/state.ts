@@ -35,6 +35,8 @@ export interface SpineState extends ViewState {
   distract: number;
   /** the side an over-the-top decompression comes from; the side a laminoplasty opens on (its hinge on the other) */
   drillSide: 'L' | 'R';
+  /** while drilling, the bone as it was drawn too (a translucent skin, showing where bone was taken) */
+  drillGhost: boolean;
 }
 
 export type DrillMode = 'foraminotomy' | 'acdf' | 'lamEnBloc' | 'lamPiecemeal' | 'laminoplasty' | 'overTheTop' | 'spSplit';
@@ -89,7 +91,7 @@ export function defaultSpineState(): SpineState {
     labels: 'hover',
     clip: { axial: { on: false, mm: 0 }, coronal: { on: false, mm: 0 }, sagittal: { on: false, mm: 0 } },
     cutSide: 'none', sliceSeq: 't1', lead: { ...DEFAULT_LEAD },
-    sel: null, hidden: [], lesion: null, cut: 'none', screw: null, approach: null, measure: null, cutAbove: null, cutPlane: null, drill: null, distract: 0, drillSide: 'L',
+    sel: null, hidden: [], lesion: null, cut: 'none', screw: null, approach: null, measure: null, cutAbove: null, cutPlane: null, drill: null, distract: 0, drillSide: 'L', drillGhost: false,
   };
 }
 
@@ -125,6 +127,7 @@ export function encodeSpine(s: SpineState): string {
       p.set('dr', DRILL_MODES[s.drill].code);
       if (DRILL_MODES[s.drill].spread && s.distract) p.set('dd', String(s.distract));
       if (DRILL_MODES[s.drill].sided && s.drillSide !== 'L') p.set('ds', s.drillSide);
+      if (s.drillGhost) p.set('dg', '1');
     }
   }
   const q = p.toString();
@@ -179,6 +182,7 @@ export function decodeSpine(hash: string): SpineState {
   const dd = Number(p.get('dd')), spread = s.drill ? DRILL_MODES[s.drill].spread : undefined;
   s.distract = spread && Number.isFinite(dd) ? Math.max(0, Math.min(spread[0], Math.round(dd / spread[1]) * spread[1])) : 0;
   s.drillSide = s.drill && DRILL_MODES[s.drill].sided && p.get('ds') === 'R' ? 'R' : 'L';
+  s.drillGhost = !!s.drill && p.get('dg') === '1';
   return s;
 }
 

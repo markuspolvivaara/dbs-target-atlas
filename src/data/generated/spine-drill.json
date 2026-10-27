@@ -25,7 +25,7 @@
    "root": "sp_root_c3",
    "artery": true,
    "file": "assets/spine/drill_c2_c3.bin.gz",
-   "bytes": 780116,
+   "bytes": 775690,
    "dims": [
     100,
     97,
@@ -161,7 +161,7 @@
    "root": "sp_root_c4",
    "artery": true,
    "file": "assets/spine/drill_c3_c4.bin.gz",
-   "bytes": 632947,
+   "bytes": 629816,
    "dims": [
     102,
     98,
@@ -297,7 +297,7 @@
    "root": "sp_root_c5",
    "artery": true,
    "file": "assets/spine/drill_c4_c5.bin.gz",
-   "bytes": 656745,
+   "bytes": 653971,
    "dims": [
     103,
     103,
@@ -433,7 +433,7 @@
    "root": "sp_root_c6",
    "artery": true,
    "file": "assets/spine/drill_c5_c6.bin.gz",
-   "bytes": 727076,
+   "bytes": 723112,
    "dims": [
     105,
     107,
@@ -569,7 +569,7 @@
    "root": "sp_root_c7",
    "artery": true,
    "file": "assets/spine/drill_c6_c7.bin.gz",
-   "bytes": 850392,
+   "bytes": 846696,
    "dims": [
     122,
     123,
@@ -705,7 +705,7 @@
    "root": "sp_root_c8",
    "artery": true,
    "file": "assets/spine/drill_c7_t1.bin.gz",
-   "bytes": 962146,
+   "bytes": 957891,
    "dims": [
     133,
     132,
@@ -841,7 +841,7 @@
    "root": "sp_root_l2",
    "artery": false,
    "file": "assets/spine/drill_l1_l2.bin.gz",
-   "bytes": 1513900,
+   "bytes": 1505042,
    "dims": [
     132,
     150,
@@ -977,7 +977,7 @@
    "root": "sp_root_l3",
    "artery": false,
    "file": "assets/spine/drill_l2_l3.bin.gz",
-   "bytes": 1692391,
+   "bytes": 1682709,
    "dims": [
     150,
     156,
@@ -1113,7 +1113,7 @@
    "root": "sp_root_l4",
    "artery": false,
    "file": "assets/spine/drill_l3_l4.bin.gz",
-   "bytes": 1748298,
+   "bytes": 1739882,
    "dims": [
     154,
     153,
@@ -1249,7 +1249,7 @@
    "root": "sp_root_l5",
    "artery": false,
    "file": "assets/spine/drill_l4_l5.bin.gz",
-   "bytes": 1738353,
+   "bytes": 1731234,
    "dims": [
     156,
     149,
@@ -1375,6 +1375,143 @@
      }
     }
    ]
+  },
+  {
+   "id": "L5-S1",
+   "region": "lumbar",
+   "upper": "sp_l5",
+   "lower": "sp_sacrum",
+   "disc": "sp_disc_l5_s1",
+   "root": "sp_root_s1",
+   "artery": false,
+   "file": "assets/spine/drill_l5_s1.bin.gz",
+   "bytes": 1438371,
+   "dims": [
+    150,
+    149,
+    122
+   ],
+   "affine": [
+    [
+     -0.71875,
+     -0.0,
+     0.0,
+     53.54688
+    ],
+    [
+     -0.0,
+     0.71875,
+     -0.0,
+     -78.12812
+    ],
+    [
+     0.0,
+     0.0,
+     0.70001,
+     -49.00085
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "check": {
+    "L5": {
+     "medianMm": 0.246,
+     "p95Mm": 0.424
+    },
+    "S1": {
+     "medianMm": 0.307,
+     "p95Mm": 1.287
+    }
+   },
+   "landmarks": [
+    {
+     "body": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "axes": [
+      [
+       0.99766,
+       0.01238,
+       0.06721
+      ],
+      [
+       0.0,
+       0.98345,
+       -0.18118
+      ],
+      [
+       -0.06834,
+       0.18076,
+       0.98115
+      ]
+     ],
+     "spinous": {
+      "base": [
+       -2.0,
+       -39.5,
+       7.14
+      ],
+      "tip": [
+       -2.0,
+       -67.88,
+       12.37
+      ],
+      "wall": [
+       -2.0,
+       -31.5,
+       5.66
+      ]
+     }
+    },
+    {
+     "body": [
+      0.17,
+      -10.63,
+      -29.54
+     ],
+     "axes": [
+      [
+       0.99998,
+       0.00187,
+       0.00519
+      ],
+      [
+       0.0,
+       0.94094,
+       -0.33857
+      ],
+      [
+       -0.00552,
+       0.33856,
+       0.94093
+      ]
+     ],
+     "spinous": {
+      "base": [
+       -1.78,
+       -47.73,
+       -16.2
+      ],
+      "tip": [
+       -1.78,
+       -70.85,
+       -7.88
+      ],
+      "wall": [
+       -1.78,
+       -41.21,
+       -18.55
+      ]
+     }
+    }
+   ],
+   "lowerRest": "assets/spine/drill/sacrum_rest.glb"
   }
  ]
 }

@@ -571,6 +571,17 @@ export const LAMINECTOMY_STATEMENTS = {
   },
 } satisfies Record<string, Statement>;
 
+export const FACET_STATEMENTS = {
+  measure: {
+    text: 'The facet joint readout is schematic (the joints are not segmented on this CT): on each side, the bone of either vertebra within about 4 mm of the other’s, lateral to the edge of the dural sac and behind the vertebral bodies, and the share of it taken away. It stands for the joint and the articular processes next to it, not the whole of each process.',
+    refIds: [],
+  },
+  lumbar: {
+    text: 'In vitro, resecting more than half of an articular process may make the segment unstable. Yet in 51 patients whose interlaminar endoscopic discectomy took more than half of the inferior articular process (a median 82%), none showed segmental instability at follow-up, and the process grew back in part. The 50% mark here is a reference, not a limit.',
+    refIds: ['li2026'],
+  },
+} satisfies Record<string, Statement>;
+
 export const LAMINOPLASTY_STATEMENTS = {
   technique: {
     text: 'In the expansive open-door laminoplasty a trough is burred at the junction of the lamina and the lateral mass on each side: through both cortices on the opening side, usually the side with the worse radicular symptoms or more stenosis (a foraminotomy is easier there), and through the outer cortex only on the other, whose inner cortex is left as the hinge. The opening side is cut first. The lamina is then opened gradually towards the hinge, a greenstick fracture forming along the hinge trough, and held open: originally with stay sutures, now often with miniplates, spacers or bone graft.',
@@ -622,7 +633,7 @@ export function crossCheckContent(): string[] {
     for (const st of [t.start, t.size, t.note]) for (const r of st?.refIds ?? []) if (!SP_MANIFEST.references[r]) errs.push(`${t.id}: unknown reference ${r}`);
   }
   for (const st of [...Object.values(APPROACHES).map((a) => a.removes), ...Object.values(APPROACH_STATEMENTS), ...Object.values(ACDF_STATEMENTS), ...Object.values(FORAMINOTOMY_STATEMENTS), ...Object.values(ACDF_DRILL_STATEMENTS),
-    ...Object.values(LAMINECTOMY_STATEMENTS), ...Object.values(LAMINOPLASTY_STATEMENTS), ...Object.values(OVER_THE_TOP_STATEMENTS), ...Object.values(SPLIT_STATEMENTS)]) {
+    ...Object.values(LAMINECTOMY_STATEMENTS), ...Object.values(LAMINOPLASTY_STATEMENTS), ...Object.values(FACET_STATEMENTS), ...Object.values(OVER_THE_TOP_STATEMENTS), ...Object.values(SPLIT_STATEMENTS)]) {
     for (const r of st.refIds) if (!SP_MANIFEST.references[r]) errs.push(`approach: unknown reference ${r}`);
   }
   return errs;
