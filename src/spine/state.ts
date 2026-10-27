@@ -1,5 +1,5 @@
 import { drillPairFor } from './drill';
-import { HERNIA_MIGRATE, HERNIA_SIZE, type HerniaSpec } from './herniation';
+import { HERNIA_MIGRATE, HERNIA_SIZE, HERNIA_ZONES, type HerniaSpec } from './herniation';
 import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
@@ -38,7 +38,7 @@ export interface SpineState extends ViewState {
   drillSide: 'L' | 'R';
   /** while drilling, the bone as it was drawn too (a translucent skin, showing where bone was taken) */
   drillGhost: boolean;
-  /** while drilling a lumbar pair: a schematic disc herniation at their disc, pushing the dural sac and the roots aside */
+  /** while drilling a pair: a schematic disc herniation at their disc, pushing the dural sac and the roots aside */
   hernia: HerniaSpec | null;
 }
 
@@ -132,7 +132,7 @@ export function encodeSpine(s: SpineState): string {
       if (DRILL_MODES[s.drill].sided && s.drillSide !== 'L') p.set('ds', s.drillSide);
       if (s.drillGhost) p.set('dg', '1');
       const hz = s.hernia;
-      if (hz && DRILL_MODES[s.drill].region === 'lumbar') p.set('hz', [hz.zone, hz.side, hz.type === 'extrusion' ? 'e' : 'p', hz.sizeMm, hz.migrateMm].join('.'));
+      if (hz) p.set('hz', [hz.zone, hz.side, hz.type === 'extrusion' ? 'e' : 'p', hz.sizeMm, hz.migrateMm].join('.'));
     }
   }
   const q = p.toString();
@@ -188,13 +188,13 @@ export function decodeSpine(hash: string): SpineState {
   s.distract = spread && Number.isFinite(dd) ? Math.max(0, Math.min(spread[0], Math.round(dd / spread[1]) * spread[1])) : 0;
   s.drillSide = s.drill && DRILL_MODES[s.drill].sided && p.get('ds') === 'R' ? 'R' : 'L';
   s.drillGhost = !!s.drill && p.get('dg') === '1';
-  s.hernia = s.drill && DRILL_MODES[s.drill].region === 'lumbar' ? decodeHernia(p.get('hz')) : null;
+  s.hernia = s.drill ? decodeHernia(p.get('hz'), DRILL_MODES[s.drill].region) : null;
   return s;
 }
 
-function decodeHernia(v: string | null): HerniaSpec | null {
-  const m = /^(paracentral|foraminal|farlateral)\.([LR])\.([pe])\.(-?[\d.]+)\.(-?[\d.]+)$/.exec(v ?? '');
-  if (!m) return null;
+function decodeHernia(v: string | null, region: 'lumbar' | 'cervical'): HerniaSpec | null {
+  const m = /^(central|paracentral|foraminal|farlateral)\.([LR])\.([pe])\.(-?[\d.]+)\.(-?[\d.]+)$/.exec(v ?? '');
+  if (!m || !HERNIA_ZONES[region].some(([z]) => z === m[1])) return null;
   const clamp = (x: number, [lo, hi, st]: [number, number, number]) => Math.min(hi, Math.max(lo, Math.round(x / st) * st));
   const size = Number(m[4]), mig = Number(m[5]);
   if (!Number.isFinite(size) || !Number.isFinite(mig)) return null;

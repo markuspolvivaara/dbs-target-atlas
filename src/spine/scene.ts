@@ -1,6 +1,6 @@
 import type { Look } from '../viewer/materials';
 import { viewPrefs } from '../viewer/viewprefs';
-import { drillPairFor } from './drill';
+import { drillPairFor, type DrillPair } from './drill';
 import { makeCatalog, type MarkerDef, type SceneSource, type ScenePlan } from '../viewer/scene';
 import { affectedRoot, LESION_ZONES, LUMBAR_GEOM } from './content';
 import { discBelow, LEVEL_ORDER, SP, SP_MANIFEST, vertebraOf } from './index';
@@ -65,7 +65,7 @@ export function spinePlan(s: Pick<SpineState, 'region' | 'level' | 'sel'> & Part
     const disc = s.drill === 'foraminotomy' || s.drill === 'acdf';
     for (const id of [drill.upper, ...(lam ? [] : [drill.lower]), ...(disc ? [drill.disc] : [])]) looks.set(id, 'hidden');
     // a herniation: the dural sac and the two levels' roots are drawn by it, pushed aside
-    if (s.hernia && drill.region === 'lumbar') for (const id of herniaDrawn(drill.id)) looks.set(id, 'hidden');
+    if (s.hernia) for (const id of herniaDrawn(drill)) looks.set(id, 'hidden');
   }
   const focusIds = s.level ? [...focus] : r.id === 'ccj' ? r.structures.filter((id) => SP.get(id)?.category === 'bone')
     : r.structures.filter((id) => SP.get(id)?.category === 'vertebra' || id === 'sp_sacrum');
@@ -79,10 +79,10 @@ export function spinePlan(s: Pick<SpineState, 'region' | 'level' | 'sel'> & Part
   };
 }
 
-/** What a herniation at a lumbar pair's disc pushes aside, drawn by it in place of the structures: the dural sac and the
- * roots of the two levels. */
-export function herniaDrawn(pair: string): string[] {
-  return ['sp_dural_sac', ...pair.split('-').map((lv) => `sp_root_${lv.toLowerCase()}`)];
+/** What a herniation at a pair's disc pushes aside, drawn by it in place of the structures: the dural sac and (lumbar)
+ * the roots of the two levels, or (cervical) the root that exits there. */
+export function herniaDrawn(pair: DrillPair): string[] {
+  return ['sp_dural_sac', ...(pair.region === 'lumbar' ? pair.id.split('-').map((lv) => `sp_root_${lv.toLowerCase()}`) : [pair.root])];
 }
 
 /** Schematic herniation positions at each lumbar disc, per kind and side (measured on this CT, see content.ts). */

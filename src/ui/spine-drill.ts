@@ -250,7 +250,7 @@ export class DrillPanel implements PointerTool {
       mode ? this.actions : null,
       mode ? h('label', { class: 'range scope-range' }, h('span', {}, 'Drill speed ', rateOut), rateIn) : null,
       mode && this.spreadIn ? h('label', { class: 'range scope-range' }, h('span', {}, `${SPREAD_LABEL[pick]} `, this.spreadOut), this.spreadIn) : null,
-      mode && pair.region === 'lumbar' ? this.hernia.el : null,
+      mode ? this.hernia.el : null,
       mode ? h('p', { class: 'aside' }, 'Point at the bone and hold the button to drill in along your line of sight; move to widen. The right button turns the view (with Shift: moves it), the wheel zooms; Ctrl+Z undoes a stroke.') : null,
       this.out,
       ...statements[pick].map(st)] as (Node | null)[]).filter((x): x is Node => x !== null));

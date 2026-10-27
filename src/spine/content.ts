@@ -580,12 +580,16 @@ export const HERNIA_STATEMENTS = {
     text: 'In an open microdiscectomy a hemilaminectomy and partial medial facetectomy are done with a high-speed drill and Kerrison rongeurs, and the ligamentum flavum is removed, exposing the root crossing over the disc; the root and the thecal sac are then retracted medially and the annulus exposed.',
     refIds: ['berry2019'],
   },
+  cervicalApproach: {
+    text: 'A posterior cervical foraminotomy has relatively narrow indications, commonly a radiculopathy on one side at one or two levels, from a soft disc or an osteophyte; it is avoided when the spinal cord is compressed. An anterior discectomy (ACDF) is done for persistent arm pain or numbness despite conventional treatment or for neurological deficits, with axial imaging that matches. Here a central or paracentral herniation, lying against the cord, cannot be taken out from behind (the cord is not retracted); from the front, through the disc space, it can.',
+    refIds: ['kang2022'],
+  },
   area: {
     text: 'There is no agreed threshold for stenosis by the canal’s cross-section: studies have used less than 75, 100, 130 and 145 mm²; one classification grades the dural sac’s shape instead.',
     refIds: ['sobanski2023'],
   },
   drawn: {
-    text: 'Here the herniation is schematic (this CT has none): it grows from the disc’s margin towards the zone’s position measured on this CT, half an ellipsoid for a protrusion, a neck and a fragment for an extrusion; its size and migration are set by the sliders (drawing choices). The dural sac and the roots of the two levels are pushed out of it, the sac dented, a root giving way as a whole; where bone holds a root it is flattened and turns red, and drilling that bone away lets it go. A medial retraction moves the sac’s wall on that side and the traversing root towards the midline, most at the disc and fading over about 12 mm up and down (the other wall stays). The dural sac’s cross-section is measured in the disc’s plane. The burr’s clearances and stops keep to the sac and roots where they lie undisplaced.',
+    text: 'Here the herniation is schematic (this CT has none): it grows from the disc’s margin towards the zone’s position measured on this CT, half an ellipsoid for a protrusion, a neck and a fragment for an extrusion; its size and migration are set by the sliders (drawing choices). The dural sac and the nearby roots (lumbar: both levels’; cervical: the one exiting at that disc) are pushed out of it, the sac dented, a root giving way as a whole; where bone holds a root it is flattened and turns red, and drilling that bone away lets it go. A medial retraction moves the sac’s wall on that side and the traversing root towards the midline, most at the disc and fading over about 12 mm up and down (the other wall stays). The dural sac’s cross-section is measured in the disc’s plane. The burr’s clearances and stops keep to the sac and roots where they lie undisplaced.',
     refIds: [],
   },
 } satisfies Record<string, Statement>;

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
-import { herniaShape, meshSdf, pushOut, sectionArea, type HerniaSpec } from '../../src/spine/herniation';
+import { herniaRoot, herniaShape, meshSdf, pushOut, sectionArea, type HerniaSpec } from '../../src/spine/herniation';
 
 const up = new THREE.Vector3(0, 0, 1);
 const anchor = new THREE.Vector3(0, 0, 0), toward = new THREE.Vector3(0, -20, 0);   // out of the disc backwards (-y)
@@ -13,6 +13,15 @@ function reach(sdf: (p: THREE.Vector3) => number, p: THREE.Vector3, d: THREE.Vec
 }
 
 describe('disc herniation (schematic)', () => {
+  it('names the root it presses on: lumbar traversing or exiting, cervical the one exiting at the disc, central none', () => {
+    expect(herniaRoot('L4-L5', 'paracentral', 'lumbar')).toBe('L5');
+    expect(herniaRoot('L4-L5', 'foraminal', 'lumbar')).toBe('L4');
+    expect(herniaRoot('L4-L5', 'central', 'lumbar')).toBeNull();
+    expect(herniaRoot('C5-C6', 'paracentral', 'cervical')).toBe('C6');
+    expect(herniaRoot('C5-C6', 'foraminal', 'cervical')).toBe('C6');
+    expect(herniaRoot('C7-T1', 'foraminal', 'cervical')).toBe('C8');
+  });
+
   it('a protrusion reaches its size beyond the margin, on a base wider than it is deep', () => {
     const h = herniaShape(spec({}), anchor, toward, up, 10);
     expect(reach(h.sdf, anchor, new THREE.Vector3(0, -1, 0))).toBeCloseTo(6, 0);

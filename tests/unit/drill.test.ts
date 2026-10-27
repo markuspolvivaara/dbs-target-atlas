@@ -249,8 +249,12 @@ describe('virtual drilling', () => {
     expect(hz.hernia).toEqual({ zone: 'foraminal', side: 'R', type: 'extrusion', sizeMm: 7.5, migrateMm: -3 });
     expect(decodeSpine(encodeSpine(hz)).hernia).toEqual(hz.hernia);
     expect(decodeSpine('#/atlas?r=lumbar&lv=L4&dr=o&hz=paracentral.L.p.99.4').hernia).toMatchObject({ sizeMm: 15, migrateMm: 0 });
-    expect(decodeSpine('#/atlas?r=cervical&lv=C5&dr=1&hz=paracentral.L.p.6.0').hernia).toBeNull();
     for (const id of ['sp_dural_sac', 'sp_root_l4', 'sp_root_l5']) expect(spinePlan(hz).looks.get(id)).toBe('hidden');
+    // in the neck too (no far lateral: the vertebral artery's place), drawing the sac and the root exiting there
+    const cz = decodeSpine('#/atlas?r=cervical&lv=C5&dr=a&hz=central.L.p.4.0');
+    expect(cz.hernia).toMatchObject({ zone: 'central', sizeMm: 4 });
+    expect(decodeSpine('#/atlas?r=cervical&lv=C5&dr=1&hz=farlateral.L.p.6.0').hernia).toBeNull();
+    for (const id of ['sp_dural_sac', 'sp_root_c6']) expect(spinePlan(cz).looks.get(id)).toBe('hidden');
     const ott = spinePlan(decodeSpine('#/atlas?r=lumbar&lv=L4&dr=o'));
     expect([ott.looks.get('sp_l4'), ott.looks.get('sp_l5'), ott.looks.get('sp_disc_l4_l5')]).toEqual(['hidden', 'hidden', 'primary']);
   });

@@ -524,8 +524,15 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
   (Sobański 2023: no agreed threshold; 75–145 mm² have been used). A paracentral one is reached by retracting the dural
   sac and the traversing root medially (a slider; Berry 2019), which narrows the sac too; once a 5-mm corridor straight
   back to it is free of bone (and, paracentral, of the sac and the root) it can be taken out, the sac and the root
-  returning. `src/spine/herniation.ts` holds the geometry, apart from
-  the drilling, so the lesion-to-root card (and the cervical spine) can use it later.
+  returning. A central one (lumbar too) presses on the dural sac alone. `src/spine/herniation.ts` holds the geometry,
+  apart from the drilling, so the lesion-to-root card can use it later.
+- **Disc herniation, while drilling a cervical pair** (the same tool, C2–C3 to C7–T1): central, paracentral or foraminal
+  (no far lateral: the vertebral artery's place), pressing on the dural sac (the cord and fluid together on this CT) and
+  the root that exits at that disc (C6 at C5–C6, C8 at C7–T1). From behind (a foraminotomy, a laminectomy) only one
+  lying clear of the sac can be taken out, through a 3-mm corridor: the cord is not retracted; from the front (an
+  anterior discectomy) through the disc space, the back lips of the vertebral bodies drilled where they overhang it
+  (Kang 2022 on which suits which). The cervical herniation positions are measured as the lumbar ones
+  (`spine_build.py`, now for every cervical disc).
 - **Drilling readouts and review**: at a foraminotomy and the lumbar decompressions, the share of each facet joint's
   bone taken (schematic: either vertebra's bone within about 4 mm of the other's, lateral to the dural sac, behind the
   bodies), cautioned at half (Kang 2022 for the neck; Li 2026 for the lumbar spine, where it is a reference: 51

@@ -8,8 +8,10 @@ import type { LesionZone } from './content';
  * simulation of the tissue. Independent of the drilling: whatever draws it gives it the disc and, optionally, the bone.
  */
 export type HerniaType = 'protrusion' | 'extrusion';
+/** where it lies: in the midline, beside it, in the foramen or beyond it */
+export type HerniaZone = 'central' | LesionZone;
 export interface HerniaSpec {
-  zone: LesionZone;
+  zone: HerniaZone;
   side: 'L' | 'R';
   type: HerniaType;
   /** how far it reaches beyond the disc's margin (mm) */
@@ -19,9 +21,28 @@ export interface HerniaSpec {
 }
 export const HERNIA_SIZE: [number, number, number] = [2, 15, 0.5];
 export const HERNIA_MIGRATE: [number, number, number] = [-10, 10, 1];
-/** where each zone's size starts (mm; drawing choices): on this CT the dural sac and the schematic roots lie a few mm behind
- * the disc's margin, so a paracentral one must reach further to touch the traversing root */
-export const HERNIA_DEFAULT_SIZE: Record<LesionZone, number> = { paracentral: 10, foraminal: 6, farlateral: 7 };
+/** the zones offered per region (in the neck, far lateral is where the vertebral artery runs: not offered) */
+export const HERNIA_ZONES: Record<'lumbar' | 'cervical', [HerniaZone, string][]> = {
+  lumbar: [['central', 'Central'], ['paracentral', 'Paracentral'], ['foraminal', 'Foraminal'], ['farlateral', 'Far lateral']],
+  cervical: [['central', 'Central'], ['paracentral', 'Paracentral'], ['foraminal', 'Foraminal']],
+};
+/** where each zone's size starts (mm; drawing choices): on this CT the lumbar dural sac and the schematic roots lie a few
+ * mm behind the disc's margin, so a lumbar paracentral one must reach further to touch the traversing root; the cervical
+ * canal is tighter */
+export const HERNIA_DEFAULT_SIZE: Record<'lumbar' | 'cervical', Partial<Record<HerniaZone, number>>> = {
+  lumbar: { central: 8, paracentral: 10, foraminal: 6, farlateral: 7 },
+  cervical: { central: 4, paracentral: 4, foraminal: 4 },
+};
+
+/** The root a herniation presses on, if any (a central one: the dural sac, and in the neck the cord, alone). Lumbar:
+ * paracentral the traversing (lower) root, foraminal and far lateral the exiting (upper) one; cervical: the root that
+ * exits at that disc, named for the vertebra below (C8 at C7-T1). */
+export function herniaRoot(pair: string, zone: HerniaZone, region: 'lumbar' | 'cervical'): string | null {
+  const [up, down] = pair.split('-');
+  if (zone === 'central') return null;
+  if (region === 'cervical') return down === 'T1' ? 'C8' : down;
+  return zone === 'paracentral' ? down : up;
+}
 
 /** a protrusion's base reaches at most this far to each side (mm; a drawing choice) */
 const PROTRUSION_HALF_WIDTH_MM = 9;
@@ -193,6 +214,9 @@ export function pushOut(pos: THREE.BufferAttribute, index: ArrayLike<number>, sd
   clear: number; spread: number; reach: number; blocked?: (p: THREE.Vector3) => boolean;
   /** move together everything within this (mm): a root's cross-section, which shifts as a whole rather than dents */
   rigid?: number;
+  /** push each vertex in along its own surface (these outward normals): the dural sac is dented, into itself, rather
+   * than widened beside the herniation */
+  inward?: ArrayLike<number>;
 }): PushResult {
   const n = pos.count, P = new THREE.Vector3();
   const need = new Float32Array(n), g: THREE.Vector3[] = new Array(n), near: number[] = [];
@@ -201,7 +225,7 @@ export function pushOut(pos: THREE.BufferAttribute, index: ArrayLike<number>, sd
     const s = sdf(P);
     if (s > opts.reach) continue;
     near.push(v);
-    g[v] = awayFrom(core, P);
+    g[v] = opts.inward ? new THREE.Vector3(-opts.inward[v * 3], -opts.inward[v * 3 + 1], -opts.inward[v * 3 + 2]).normalize() : awayFrom(core, P);
     if (s >= opts.clear) continue;
     // how far along it until clear of the herniation (stepping out, then halving)
     let t0 = 0, t1 = 0.25;

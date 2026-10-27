@@ -725,7 +725,45 @@
     60.16,
     494.89
    ],
-   "discHeightMm": 3.2
+   "discHeightMm": 3.2,
+   "lesions": {
+    "L": {
+     "paracentral": [
+      -16.21,
+      55.35,
+      495.98
+     ],
+     "foraminal": [
+      -20.61,
+      50.72,
+      497.07
+     ],
+     "farlateral": [
+      -32.6,
+      53.51,
+      495.87
+     ],
+     "foraminalEstimated": false
+    },
+    "R": {
+     "paracentral": [
+      -3.96,
+      55.47,
+      496.4
+     ],
+     "foraminal": [
+      1.78,
+      51.57,
+      497.66
+     ],
+     "farlateral": [
+      13.78,
+      54.58,
+      497.29
+     ],
+     "foraminalEstimated": false
+    }
+   }
   },
   {
    "level": "C3",
@@ -750,7 +788,45 @@
     54.14,
     477.06
    ],
-   "discHeightMm": 3.3
+   "discHeightMm": 3.3,
+   "lesions": {
+    "L": {
+     "paracentral": [
+      -14.31,
+      46.36,
+      480.32
+     ],
+     "foraminal": [
+      -21.88,
+      45.48,
+      480.9
+     ],
+     "farlateral": [
+      -33.87,
+      48.4,
+      480.11
+     ],
+     "foraminalEstimated": false
+    },
+    "R": {
+     "paracentral": [
+      -2.57,
+      47.48,
+      479.51
+     ],
+     "foraminal": [
+      2.52,
+      44.67,
+      480.48
+     ],
+     "farlateral": [
+      14.51,
+      47.32,
+      479.05
+     ],
+     "foraminalEstimated": false
+    }
+   }
   },
   {
    "level": "C4",
@@ -775,7 +851,45 @@
     47.03,
     460.05
    ],
-   "discHeightMm": 3.8
+   "discHeightMm": 3.8,
+   "lesions": {
+    "L": {
+     "paracentral": [
+      -15.33,
+      40.23,
+      463.43
+     ],
+     "foraminal": [
+      -21.56,
+      38.3,
+      464.31
+     ],
+     "farlateral": [
+      -33.56,
+      40.88,
+      462.76
+     ],
+     "foraminalEstimated": false
+    },
+    "R": {
+     "paracentral": [
+      -2.83,
+      40.32,
+      463.62
+     ],
+     "foraminal": [
+      2.73,
+      37.53,
+      465.16
+     ],
+     "farlateral": [
+      14.73,
+      40.29,
+      463.96
+     ],
+     "foraminalEstimated": false
+    }
+   }
   },
   {
    "level": "C5",
@@ -800,7 +914,45 @@
     39.01,
     444.99
    ],
-   "discHeightMm": 3.1
+   "discHeightMm": 3.1,
+   "lesions": {
+    "L": {
+     "paracentral": [
+      -16.63,
+      32.63,
+      448.63
+     ],
+     "foraminal": [
+      -22.47,
+      29.53,
+      450.52
+     ],
+     "farlateral": [
+      -34.46,
+      32.42,
+      449.57
+     ],
+     "foraminalEstimated": false
+    },
+    "R": {
+     "paracentral": [
+      -3.39,
+      32.37,
+      448.14
+     ],
+     "foraminal": [
+      2.39,
+      29.38,
+      449.43
+     ],
+     "farlateral": [
+      14.38,
+      31.81,
+      447.6
+     ],
+     "foraminalEstimated": false
+    }
+   }
   },
   {
    "level": "C6",
@@ -825,7 +977,45 @@
     30.85,
     429.31
    ],
-   "discHeightMm": 3.4
+   "discHeightMm": 3.4,
+   "lesions": {
+    "L": {
+     "paracentral": [
+      -16.54,
+      25.05,
+      433.37
+     ],
+     "foraminal": [
+      -22.9,
+      20.13,
+      436.86
+     ],
+     "farlateral": [
+      -34.9,
+      22.78,
+      435.43
+     ],
+     "foraminalEstimated": false
+    },
+    "R": {
+     "paracentral": [
+      -3.54,
+      23.88,
+      433.78
+     ],
+     "foraminal": [
+      2.27,
+      20.07,
+      436.17
+     ],
+     "farlateral": [
+      14.27,
+      22.4,
+      434.26
+     ],
+     "foraminalEstimated": false
+    }
+   }
   },
   {
    "level": "C7",
@@ -850,7 +1040,45 @@
     19.75,
     414.76
    ],
-   "discHeightMm": 3.6
+   "discHeightMm": 3.6,
+   "lesions": {
+    "L": {
+     "paracentral": [
+      -18.84,
+      14.35,
+      420.31
+     ],
+     "foraminal": [
+      -24.45,
+      10.06,
+      424.74
+     ],
+     "farlateral": [
+      -36.35,
+      13.39,
+      424.09
+     ],
+     "foraminalEstimated": false
+    },
+    "R": {
+     "paracentral": [
+      -6.94,
+      13.51,
+      418.96
+     ],
+     "foraminal": [
+      -1.38,
+      8.1,
+      422.38
+     ],
+     "farlateral": [
+      10.51,
+      9.44,
+      419.26
+     ],
+     "foraminalEstimated": false
+    }
+   }
   }
  ],
  "vertebralArtery": {

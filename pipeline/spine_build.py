@@ -323,7 +323,7 @@ SEGMENTS = {
     # axis turned foramen_angle degrees forwards from lateral, and on labels taken from the CT's bone (the VerSe masks
     # step too coarsely for these small openings); their position places the roots, their size is not reported
     "cervical": {"chain": CERVICAL, "roots": ["C3", "C4", "C5", "C6", "C7", "C8"], "root_of": "lower", "below": 40,
-                 "sacrum": False, "lesions": False, "course": "cervical", "close": 1.5, "report_foramen": False,
+                 "sacrum": False, "lesions": True, "course": "cervical", "close": 1.5, "report_foramen": False,
                  "foramen_angle": 30.0, "ct_labels": True},
 }
 LABEL_OF = {v: k for k, v in VERSE_LEVELS.items()} | {"S1": 26}
@@ -352,7 +352,7 @@ def merge(meshes: list[tuple]) -> tuple:
 
 def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]:
     """Measured canal, foramina and disc height per level of a region, and its schematic roots, each with its ganglion (lumbar:
-    L1-S1, with herniation positions per disc; thoracic: T1-T12; cervical: C3-C8)."""
+    L1-S1, with herniation positions per disc; thoracic: T1-T12; cervical: C3-C8, with herniation positions per disc)."""
     cfg = SEGMENTS[region]
     chain = cfg["chain"]
     bottom = [x for x in chain if x != "S1"][-1]
@@ -587,7 +587,7 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
         # ---- where a herniation of each kind sits at this disc (for the lesion-to-root tool; schematic positions):
         # paracentral = posterior edge of the disc halfway between the midline and the canal edge; foraminal = in the
         # foramen at disc level (the measured foramen, else the root's exit point); far lateral = 12 mm further out
-        if cfg["lesions"] and up in cfg["roots"]:
+        if cfg["lesions"] and (up in cfg["roots"] or cervical):   # (cervical: every disc, C2-C3 too)
             les = {}
             for sd, sg in (("L", -1), ("R", 1)):
                 edge = (can["uMin"] if sg < 0 else can["uMax"]) if can else sg * 12.0
