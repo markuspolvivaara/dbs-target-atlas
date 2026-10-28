@@ -44,15 +44,27 @@ export interface EndoscopeConfig {
   colour(id: string): string;
   /** RAS: the thin floor's middle, its front-to-back axis and half-length, its half-width side to side (mm) */
   floor: { centre: V3t; ap: V3t; radiusMm: number; radiusLatMm: number; lambdaMm: number } | null;
+  /** meshes a tool draws (in the scene's frame) that the endoscope shows too, with an id and a name for picking (the
+   * walls the drilling cuts) */
+  extra?(): { id: string; name: string; mesh: EndoMesh }[];
+  /** whether the tip is in the cavity, where the caller knows it better than rays to the walls can tell */
+  inside?(): boolean;
+  /** x-ray vision: structures (behind ones) drawn over the view whatever lies in front of them, in this colour (CSS) */
+  xray?(id: string): string | null;
 }
 
 /** A tool that takes the left button over the 3D view (the view then turns with the right button, pans with it and
  * Shift): it is given the pointer's ray in the scene's own frame (RAS mm), or null when the pointer leaves. */
 export interface PointerTool {
-  hover(ray: THREE.Ray | null): void;
-  down(ray: THREE.Ray): void;
-  drag(ray: THREE.Ray): void;
-  up(): void;
+  hover(ray: THREE.Ray | null, e?: PointerEvent): void;
+  down(ray: THREE.Ray, e?: PointerEvent): void;
+  drag(ray: THREE.Ray, e?: PointerEvent): void;
+  up(e?: PointerEvent): void;
+  /** whether it takes this pointer (any button; without it, the left button everywhere): the rest goes to the view as
+   * when no tool is set. `inEndoscope`: over the endoscope's view. */
+  wants?(e: PointerEvent, inEndoscope: boolean): boolean;
+  /** the wheel over the endoscope's view (the 3D view's zoom then does not get it) */
+  wheel?(deltaY: number): void;
 }
 
 export interface ViewerEvents {
@@ -141,6 +153,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   private endoDirty = true;
   /** the endoscope's rays: against the walls and what lies in the cavity (each frame), and against all it shows (picks) */
   private endoSeen = new RayGridCache();
+  /** the names of the meshes a tool adds to the endoscope's view */
+  private extraNames = new Map<string, string>();
   private endoPick = new RayGridCache();
   private endoColours = new Map<string, THREE.Color>();
   private endoReported = false;
@@ -878,7 +892,23 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   private rasRay(clientX: number, clientY: number): THREE.Ray {
     const r = this.renderer.domElement.getBoundingClientRect();
     this.camera.updateMatrixWorld();   // (the view may not have been drawn since the camera last moved)
-    this.raycaster.setFromCamera(new THREE.Vector2(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1), this.camera);
+    const er = this.endoscopeRects();
+    const x = clientX - r.left, y = clientY - r.top;
+    const inRect = (q: DOMRect) => x >= q.x && x <= q.x + q.width && y >= q.y && y <= q.y + q.height;
+    const ndcIn = (q: DOMRect) => new THREE.Vector2(((x - q.x) / q.width) * 2 - 1, -((y - q.y) / q.height) * 2 + 1);
+    if (er && this.endo && (er.endo.width < r.width ? inRect(er.endo) : !inRect(er.overview))) {
+      // through the endoscope's lens: its image is distorted, the ray is the undistorted view's
+      this.endo.camera.updateMatrixWorld();
+      this.raycaster.setFromCamera(Endoscope.undistort(ndcIn(er.endo), er.endo.width, er.endo.height), this.endo.camera);
+    } else if (er) {
+      // the 3D view, drawn in its own rectangle (its aspect as drawn there)
+      const asp = this.camera.aspect;
+      this.camera.aspect = er.overview.width / er.overview.height;
+      this.camera.updateProjectionMatrix();
+      this.raycaster.setFromCamera(ndcIn(er.overview), this.camera);
+      this.camera.aspect = asp;
+      this.camera.updateProjectionMatrix();
+    } else this.raycaster.setFromCamera(new THREE.Vector2(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1), this.camera);
     const o = this.toRas(this.raycaster.ray.origin);
     const d = this.toRas(this.raycaster.ray.origin.clone().add(this.raycaster.ray.direction)).sub(o).normalize();
     return new THREE.Ray(o, d);
@@ -976,24 +1006,27 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   private bindPointer(): void {
     const el = this.renderer.domElement;
     let down: { x: number; y: number; t: number } | null = null;
+    const takes = (e: PointerEvent) => !!this.tool && (this.tool.wants ? this.tool.wants(e, this.inEndoscope(e.clientX, e.clientY)) : e.button <= 0);
     el.addEventListener('pointerdown', (e) => {
-      if (this.tool) {
-        if (e.button !== 0) return;
+      if (this.tool && takes(e)) {
         this.toolDown = true;
         try { el.setPointerCapture(e.pointerId); } catch { /* not a live pointer */ }
-        this.tool.down(this.rasRay(e.clientX, e.clientY));
+        this.tool.down(this.rasRay(e.clientX, e.clientY), e);
         return;
       }
+      if (this.tool && !this.tool.wants) return;
       down = { x: e.clientX, y: e.clientY, t: performance.now() };
       const hit = this.state?.layers.electrode.on ? this.pick(e.clientX, e.clientY, false) : null;
       if (hit?.kind === 'lead' && hit.side) this.beginDrag(hit.side, e);
     });
     el.addEventListener('pointermove', (e) => {
-      if (this.tool) {
+      if (this.tool && (this.toolDown || takes(e))) {
         const ray = this.rasRay(e.clientX, e.clientY);
-        if (this.toolDown) this.tool.drag(ray); else this.tool.hover(ray);
+        if (this.toolDown) this.tool.drag(ray, e); else this.tool.hover(ray, e);
         return;
       }
+      if (this.tool && !this.tool.wants) return;
+      if (this.tool) this.tool.hover(null, e);
       if (this.drag) { this.onDrag(e); return; }
       this.lastPointer = e;
       if (!this.hoverQueued) {
@@ -1008,12 +1041,18 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         });
       }
     });
+    // the wheel over the endoscope's view goes to the tool (before the 3D view's controls see it)
+    el.addEventListener('wheel', (e) => {
+      if (!this.tool?.wheel || !this.inEndoscope(e.clientX, e.clientY)) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      this.tool.wheel(e.deltaY * (e.deltaMode === 1 ? 33 : e.deltaMode === 2 ? 400 : 1));
+    }, { capture: true, passive: false });
+    el.addEventListener('contextmenu', (e) => { if (this.tool?.wants && this.inEndoscope(e.clientX, e.clientY)) e.preventDefault(); });
     el.addEventListener('pointerleave', () => { this.ev.hover(null, 0, 0); if (this.tool && !this.toolDown) this.tool.hover(null); });
     el.addEventListener('pointerup', (e) => {
-      if (this.tool) {
-        if (this.toolDown) { this.toolDown = false; this.tool.up(); }
-        return;
-      }
+      if (this.tool && this.toolDown) { this.toolDown = false; this.tool.up(e); return; }
+      if (this.tool && !this.tool.wants) return;
       if (this.drag) { this.endDrag(); return; }
       if (!down) return;
       const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);
@@ -1134,6 +1173,16 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   /** Whether the endoscope's tip is inside the ventricles (rays from it meet their walls from inside). */
   endoscopeInside(): boolean { return !!this.endoCfg && this.endoInside; }
 
+  /** Whether a point on the screen is over the endoscope's view. */
+  inEndoscope(clientX: number, clientY: number): boolean {
+    const r = this.endoscopeRects();
+    if (!r) return false;
+    const h = this.host.getBoundingClientRect();
+    const x = clientX - h.left, y = clientY - h.top;
+    const inside = (q: DOMRect) => x >= q.x && x <= q.x + q.width && y >= q.y && y <= q.y + q.height;
+    return inside(r.endo) && !(this.endoCfg!.big && inside(r.overview));
+  }
+
   /** Where the endoscope's view and the 3D view are drawn, CSS pixels from the host's top left. */
   endoscopeRects(): { endo: DOMRect; overview: DOMRect } | null {
     if (!this.endoCfg) return null;
@@ -1148,6 +1197,15 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     return new THREE.Vector3(...d).applyMatrix4(RAS_TO_WORLD).normalize();
   }
 
+  private xrayColours = new Map<string, THREE.Color>();
+  /** (one colour object for each, the endoscope keeping a material for each) */
+  private xrayColour(css: string | null | undefined): THREE.Color | undefined {
+    if (!css) return undefined;
+    let c = this.xrayColours.get(css);
+    if (!c) { c = new THREE.Color(css); this.xrayColours.set(css, c); }
+    return c;
+  }
+
   private endoMeshes(): { meshes: EndoMesh[]; ids: string[] } {
     const cfg = this.endoCfg!;
     const hidden = new Set(this.state?.hidden ?? []);
@@ -1160,9 +1218,10 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       let c = this.endoColours.get(it.meta.id);
       if (!c) { c = new THREE.Color(cfg.colour(it.meta.id)); this.endoColours.set(it.meta.id, c); }
       const look = this.plan?.looks.get(it.meta.id) ?? 'hidden';
-      meshes.push({ nodes, colour: c, role, visible: look !== 'hidden' && !hidden.has(it.meta.id), look: cfg.look?.(it.meta.id), bulge: cfg.bulge?.(it.meta.id) });
+      meshes.push({ nodes, colour: c, role, visible: look !== 'hidden' && !hidden.has(it.meta.id), look: cfg.look?.(it.meta.id), bulge: cfg.bulge?.(it.meta.id), xray: this.xrayColour(cfg.xray?.(it.meta.id)) });
       ids.push(it.meta.id);
     }
+    for (const x of cfg.extra?.() ?? []) { meshes.push(x.mesh); ids.push(x.id); this.extraNames.set(x.id, x.name); }
     return { meshes, ids };
   }
 
@@ -1196,6 +1255,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     // the exposure down and does not burn out
     if (facing.length) this.endo!.setExposure(1 / Math.sqrt(facing.reduce((s, d) => s + 1 / Math.max(d, 0.5) ** 2, 0) / facing.length));
     else if (dists.length) this.endo!.setExposure(dists.sort((a, b) => a - b)[Math.floor(dists.length / 2)]);
+    if (this.endoCfg?.inside) return this.endoCfg.inside();
     return n > 0 && inside > n / 2;
   }
 
@@ -1272,7 +1332,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       best = behind; behindMm = Math.max(0, behind.distance - wall.distance);
     }
     const id = roleOf.get(best.node)!.id;
-    return { id, name: this.items.get(id)?.meta.name ?? '', ras: this.toRas(best.point), side: best.node.userData.side ?? null, kind: 'structure', behindMm,
+    return { id, name: this.items.get(id)?.meta.name ?? this.extraNames.get(id) ?? '', ras: this.toRas(best.point), side: best.node.userData.side ?? null, kind: 'structure', behindMm,
       throughFloor: behindMm !== undefined && floor };
   }
 

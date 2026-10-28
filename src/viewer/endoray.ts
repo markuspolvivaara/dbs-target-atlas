@@ -202,7 +202,7 @@ export class RayGridCache {
   private grid: RayGrid | null = null;
 
   get(nodes: THREE.Mesh[]): RayGrid {
-    const key = nodes.map((n) => `${n.uuid}:${(n.morphTargetInfluences ?? []).map((w) => w.toFixed(4)).join(',')}`).join('|');
+    const key = nodes.map((n) => `${n.uuid}:${n.geometry.uuid}:${(n.morphTargetInfluences ?? []).map((w) => w.toFixed(4)).join(',')}`).join('|');
     if (!this.grid || key !== this.key) { this.grid = new RayGrid(nodes); this.key = key; }
     return this.grid;
   }

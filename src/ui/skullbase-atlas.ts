@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { CameraPreset } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
 import { APPROACH_GEOM, definitionFor, isApproachPart, kindOf, LANDMARKS, LM, NOT_YET_SHOWN, REGIONS, SB, SB_MANIFEST, SB_MODEL, V3_FIT, type Landmark, type SbModel } from '../skullbase';
-import { APPROACH, APPROACH_REF, INSULA, type ApproachClaim, type ApproachSection } from '../skullbase/approaches';
+import { APPROACH, APPROACH_REF, ENDONASAL_INFO, INSULA, type ApproachClaim, type ApproachSection } from '../skullbase/approaches';
 import { TB_NOTES, TB_REF } from '../skullbase/temporal';
 import { encodeSkull } from '../skullbase/state';
 import { combinedCut, FLOOR_CUT_MM, SB_GROUP, SB_GROUPS, viewGroup, type SbGroup } from '../skullbase/groups';
@@ -14,6 +14,7 @@ import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem } from './stage'
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 import { refLinksFrom } from './reflinks';
 import { FORAMEN_CONTENTS, FORAMEN_REF } from '../skullbase/foramina';
+import { EndonasalPanel } from './skullbase-endonasal';
 
 type Update = (fn: (s: SkullState) => void, opts?: { camera?: boolean }) => void;
 
@@ -148,6 +149,8 @@ export class SkullbaseAtlasPage {
   private sheetState: 'peek' | 'full' = 'peek';
   private measurePts: THREE.Vector3[] = [];
   private lastKey = '';
+  /** the endoscopic endonasal view's scope and drilling (Skull base v3) */
+  private endonasal!: EndonasalPanel;
 
   constructor(private update: Update) {
     this.stage = h('section', { class: 'stage', 'aria-label': '3D viewer' });
@@ -206,7 +209,9 @@ export class SkullbaseAtlasPage {
       status: (t) => { this.status.hidden = !t; this.status.textContent = t ?? ''; },
       lead: () => undefined,
       moving: (on) => this.stage.classList.toggle('moving', on),
+      endoscope: () => this.endonasal?.scopeMoved(),
     }, skullScene);
+    this.endonasal = new EndonasalPanel(this.viewer);
     const origRender = this.viewer.renderer.render.bind(this.viewer.renderer);
     this.viewer.renderer.render = (sc, cam) => { origRender(sc, cam); this.placeLabels(); };
   }
@@ -260,6 +265,7 @@ export class SkullbaseAtlasPage {
     const prev = this.s;
     this.s = s;
     this.viewer.apply(s, { animateCamera: opts.camera }).then(() => this.renderLegend());
+    this.endonasal.render(s);
     this.stage.querySelectorAll<HTMLButtonElement>('[data-hemi]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.hemi === s.hemi)));
     this.stage.querySelectorAll<HTMLButtonElement>('.toolbar [data-labels]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.labels === s.labels)));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((b) => b.toggleAttribute('data-active', b.dataset.preset === s.cam.preset));
@@ -335,7 +341,8 @@ export class SkullbaseAtlasPage {
         ? chips(items, shownSystems, (v) => this.toggleSystem(v), { label, cls: 'grp-chips' })
         : chips(items, s.grp, (v) => this.pickGroup(v), { label, cls: 'grp-chips' }));
     }
-    if (g.kind === 'approach') pane.append(this.openingSliders(g));
+    if (g.kind === 'approach' && !g.endonasal) pane.append(this.openingSliders(g));
+    if (g.endonasal) pane.append(this.endonasal.el);
     const boneIds = g.structures.filter((id) => SB.get(id)?.type === 'bone');
     const hidden = new Set(s.hidden);
     const btn = (id: string, extra = '') => h('button', {
@@ -385,6 +392,7 @@ export class SkullbaseAtlasPage {
       h('p', {}, g.description),
       g.kind === 'overview' && SB_MODEL === 'v3' ? this.fitReport() : null,
       g.kind === 'approach' && g.approach ? this.approachBody(g.approach) : null,
+      g.endonasal ? this.endonasalBody() : null,
       g.kind === 'overview' && SB_MODEL !== 'v3' ? [
         SB_MODEL === 'ct'
           ? h('p', { class: 'aside' }, 'Not yet shown in this model (Z-Anatomy does not label these; the first model locates the foramina from what passes through them): ', NOT_YET_SHOWN.join(', '), '.')
@@ -462,6 +470,17 @@ export class SkullbaseAtlasPage {
     };
     return h('div', { class: 'open-slider' }, ...(g.morphs ?? []).flatMap(slider),
       h('p', { class: 'aside' }, 'Illustrative shapes, not measured retractions. The arteries stay where they are, except on the brain being moved, which they follow.'));
+  }
+
+  /** The endoscopic endonasal view's card: what the sources say, and what is not shown (how it is drawn and what is
+   * measured on this CT are in its panel, with the scope). */
+  private endonasalBody(): HTMLElement[] {
+    return [
+      h('dl', {},
+        ...ENDONASAL_INFO.sections.map((x) => [h('dt', {}, x.title), h('dd', {}, this.claims(x.claims))]),
+        h('dt', {}, 'Not shown'), h('dd', {}, ENDONASAL_INFO.notShown)),
+      h('p', { class: 'aside schematic-note' }, 'Illustrative: one CT’s nasal cavity and sphenoid sinus, a scope and a burr drawn by rule from the published descriptions; not planned for a patient.'),
+    ];
   }
 
   /** The surgical view's card: the sourced description, what this model measures, and how it was drawn here. */

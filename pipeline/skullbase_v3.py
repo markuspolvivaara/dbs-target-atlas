@@ -597,6 +597,11 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
     for it in v2["structures"]:
         if (it["type"] == "bone" and not own_skull) or (it.get("category") in ("artery", "vein") and not it.get("fitted")):
             items.append({**it})
+    # the sellar structures v2 fits (the endonasal view draws them; skullbase_v3_endonasal.py adds them if this has not run)
+    import skullbase_v3_endonasal as ENDO
+    items += [{**it} for it in v2["structures"] if it["id"] in ENDO.CARRIED]
+    # (and the pituitary modelled in its fossa, which replaces v2's fitted one)
+    items += json.loads(ENDO.HYPO_ITEMS.read_text()) if ENDO.HYPO_ITEMS.exists() else []
     dataset = {
         "name": "TopBrain 2025 CT angiogram (case 011) with OpenEar temporal bone ALPHA registered onto it",
         "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); OpenEar: CC BY 4.0; "

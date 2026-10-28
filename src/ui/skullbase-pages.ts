@@ -87,7 +87,7 @@ function temporalSourcesPage() {
     h('section', { class: 'card' },
       h('h2', {}, 'References'),
       h('p', {}, 'Every note on the cards cites its source; each was checked against the open-access full text.'),
-      h('ul', { class: 'refs' }, ...[...TB_REFS, ...APPROACH_REFS].map((r) => h('li', {}, r.citation, ' ', link(r.url, 'DOI'), ' · ',
+      h('ul', { class: 'refs' }, ...[...TB_REFS, ...APPROACH_REFS].map((r) => h('li', {}, r.citation, ' ', link(r.url, r.url.includes('doi.org') ? 'DOI' : 'Article'), ' · ',
         link(`https://pubmed.ncbi.nlm.nih.gov/${r.pmid}/`, 'PubMed'), ' · ', link(`https://pmc.ncbi.nlm.nih.gov/articles/${r.pmcid}/`, 'full text'))))),
     h('section', { class: 'card' },
       h('h2', {}, 'Definitions'),

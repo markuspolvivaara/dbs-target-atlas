@@ -32,6 +32,8 @@ export interface SbGroup {
   focusIds?: string[];
   /** a surgical view's shapes of the brain (named morph targets), each with its slider */
   morphs?: string[];
+  /** the endoscopic endonasal view: the endoscope and the drilling of the sphenoid (skullbase/endonasal.ts) */
+  endonasal?: boolean;
 }
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
@@ -132,6 +134,15 @@ function temporalGroups(): SbGroup[] {
       structures: veins, landmarks: [],
     },
     ...surgical,
+    {
+      ...base, id: 'endonasal', kind: 'approach', name: 'Endoscopic endonasal (transsphenoidal)', camera: 'frontolateral', hemi: 'both', focus: [0, 8, 0], radius: 45,
+      boneLook: 'ghost', endonasal: true,
+      description: 'A 0° endoscope through one nostril to the sphenoid sinus and the sella: the lining of this CT’s nasal cavity and sinus as the scope sees it, and what lies behind its walls showing through where they are thin (the carotids, the optic nerves). The way is opened step by step (the sinus’s front wall, its septa, the sellar floor and the dura over it onto the hypophysis, modelled in this CT’s fossa, the tuberculum and planum, the upper clivus), each piece stopping short of the carotids and the nerves.',
+      structures: byName('Internal carotid artery', 'Internal carotid artery (petrous and lacerum parts)', 'Optic nerve (II)', 'Optic chiasm', 'Adenohypophysis (anterior lobe)',
+        'Neurohypophysis (posterior lobe)', 'Pituitary stalk', 'Cavernous sinus', 'Anterior intercavernous sinus', 'Posterior intercavernous sinus', 'Oculomotor nerve (III)', 'Trochlear nerve (IV)',
+        'Abducens nerve (VI)', 'Trigeminal nerve (V)', 'Trigeminal ganglion', 'Ophthalmic artery', 'Basilar artery'),
+      landmarks: lm('Optic canal'),
+    },
   ];
 }
 

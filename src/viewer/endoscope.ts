@@ -18,10 +18,13 @@ export interface EndoMesh {
   colour: THREE.Color;
   role: 'wall' | 'inside' | 'behind';
   visible: boolean;
-  /** drawn as choroid plexus: tufted, lobulated, glistening */
-  look?: 'plexus';
+  /** drawn as choroid plexus: tufted, lobulated, glistening; or (a wall) coloured by its own vertex colours (tissue: a
+   * lining over bone, the cut bone) */
+  look?: 'plexus' | 'tissue';
   /** not drawn as a body behind the wall: the wall over it is drawn white and bulging instead (setBulges) */
   bulge?: boolean;
+  /** x-ray vision: drawn over the view in this colour, see-through, whatever lies in front of it (a behind structure) */
+  xray?: THREE.Color;
 }
 
 export interface EndoPose {
@@ -87,6 +90,17 @@ export class Endoscope {
   private wallDepthMat = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, colorWrite: false });
   private peel = { uWallDepth: { value: null as THREE.Texture | null }, uPeelRes: { value: new THREE.Vector2(1, 1) } };
   private mats = new Map<THREE.Color, THREE.MeshStandardMaterial>();
+  private xrayMats = new Map<THREE.Color, THREE.MeshStandardMaterial>();
+
+  /** a structure seen by x-ray: half see-through, over the walls (they do not hide it), lit by the scope's light */
+  private xrayMaterial(c: THREE.Color): THREE.MeshStandardMaterial {
+    let m = this.xrayMats.get(c);
+    if (!m) {
+      m = new THREE.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: 0.45, roughness: 0.5, metalness: 0, transparent: true, opacity: 0.7, depthWrite: true });
+      this.xrayMats.set(c, m);
+    }
+    return m;
+  }
   /** the view drawn undistorted (linear colour), then through the lens onto the canvas */
   private rtView = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 4 });
   private lens = new THREE.ShaderMaterial({
@@ -106,6 +120,8 @@ void main() {
   private lensScene = new THREE.Scene();
   private lensCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
   private wall: THREE.MeshStandardMaterial;
+  /** the wall coloured by its vertices (the same shading: the lining of the nose and the sinus, the bone the burr cut) */
+  private wallTissue: THREE.MeshStandardMaterial;
   private plexus: THREE.MeshStandardMaterial;
   private uniforms = {
     uBehind: { value: null as THREE.Texture | null }, uBehindDepth: { value: null as THREE.Texture | null },
@@ -242,6 +258,23 @@ void main() {`)
   }`);
     };
     this.wall.customProgramCacheKey = () => 'endoscope-wall';
+    this.wallTissue = new THREE.MeshPhysicalMaterial({ color: 0xffffff, vertexColors: true, roughness: 0.32, metalness: 0, clearcoat: 0.75,
+      clearcoatRoughness: 0.14, side: THREE.DoubleSide });
+    // (a wall thinner than its grid's cells is meshed with both its sides on the same vertices: whichever side is drawn,
+    // it is lit as seen from the cavity, the only side the scope sees)
+    this.wallTissue.onBeforeCompile = (sh, r) => {
+      this.wall.onBeforeCompile(sh, r);
+      // (and where the vertices' normals disagree with the triangle's own facing, as round such a vertex, the
+      // triangle's taken: no dark rings where they swing through edge-on)
+      sh.fragmentShader = sh.fragmentShader.replace('#include <clearcoat_normal_fragment_begin>', `{
+    vec3 gn = normalize(cross(dFdx(vViewPosition), dFdy(vViewPosition)));
+    gn = dot(gn, vViewPosition) < 0.0 ? -gn : gn;
+    normal = dot(normal, vViewPosition) < 0.0 ? -normal : normal;
+    normal = normalize(mix(gn, normal, smoothstep(0.3, 0.7, dot(normal, gn))));
+  }
+#include <clearcoat_normal_fragment_begin>`);
+    };
+    this.wallTissue.customProgramCacheKey = () => 'endoscope-wall-tissue';
     // the choroid plexus: its surface pushed out into lobules (the outline is lumpy, not a tube), finer tufts as relief,
     // dark crevices and lighter, wet tops (a rendering choice on the fitted model's shape, not measured anatomy)
     this.plexus = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.38, metalness: 0 });
@@ -407,7 +440,7 @@ void main() {`)
       this.uniforms.uFar.value = this.camera.far;
       for (const m of meshes) for (const n of m.nodes) {
         n.visible = m.visible && m.role !== 'behind';
-        if (n.visible) n.material = m.role === 'wall' ? this.wall : m.look === 'plexus' ? this.plexus : this.material(m.colour);
+        if (n.visible) n.material = m.role === 'wall' ? (m.look === 'tissue' ? this.wallTissue : this.wall) : m.look === 'plexus' ? this.plexus : this.material(m.colour);
       }
       if (this.rtView.width !== w || this.rtView.height !== h) this.rtView.setSize(w, h);
       renderer.setRenderTarget(this.rtView);
@@ -416,6 +449,19 @@ void main() {`)
       renderer.setClearColor(BRAIN_COLOUR.clone().multiplyScalar(0.08));
       renderer.clear(true, true);
       renderer.render(scene, this.camera);
+      // x-ray vision: the structures asked for, over the walls (the depth cleared: only each other hides them)
+      const xray = meshes.filter((m) => m.xray && m.visible && m.role === 'behind');
+      if (xray.length) {
+        for (const m of meshes) for (const n of m.nodes) n.visible = false;
+        for (const m of xray) for (const n of m.nodes) { n.visible = true; n.material = this.xrayMaterial(m.xray!); }
+        const ac = renderer.autoClear, back = scene.background;
+        renderer.autoClear = false;
+        scene.background = null;      // (else the background is drawn over the view again)
+        renderer.clearDepth();
+        renderer.render(scene, this.camera);
+        renderer.autoClear = ac;
+        scene.background = back;
+      }
       // through the lens onto the canvas
       renderer.setRenderTarget(null);
       this.lens.uniforms.tView.value = this.rtView.texture;
@@ -444,7 +490,9 @@ void main() {`)
     this.lens.dispose();
     this.wallDepthMat.dispose();
     this.wall.dispose();
+    this.wallTissue.dispose();
     this.plexus.dispose();
     for (const m of this.mats.values()) m.dispose();
+    for (const m of this.xrayMats.values()) m.dispose();
   }
 }

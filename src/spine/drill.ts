@@ -3,6 +3,7 @@ import { z } from 'zod';
 import drillJson from '../data/generated/spine-drill.json';
 import { assetUrl } from '../viewer/assets';
 import { gunzip } from './screw';
+import { meshChunk, type Colour } from '../viewer/surfacenets';
 
 /**
  * Virtual drilling of a pair of adjacent cervical or lumbar vertebrae (pipeline/spine_drill.py writes the data): each
@@ -113,7 +114,7 @@ export class DrillVolume {
   /** where the burr has been: cut surfaces are coloured as cut bone */
   readonly cut: Uint8Array;
   readonly toRas: THREE.Matrix4; readonly toIjk: THREE.Matrix4;
-  private readonly normalM: THREE.Matrix3;
+  readonly normalM: THREE.Matrix3;
   private readonly iso = DRILL.params.fieldIso;
   /** bone removed so far (mm3), per vertebra */
   readonly removedMm3: [number, number] = [0, 0];
@@ -762,71 +763,8 @@ export class DrillVolume {
     return this.meshField(this.orig[v], ci, cj, ck, () => [1, 1, 1]);
   }
 
-  private meshField(f: Uint8Array, ci: number, cj: number, ck: number, colour: (p: THREE.Vector3, n: THREE.Vector3, ijk: THREE.Vector3) => [number, number, number]): THREE.BufferGeometry | null {
-    const iso = this.iso;
-    const x0 = ci * CHUNK, y0 = cj * CHUNK, z0 = ck * CHUNK;
-    const x1 = Math.min(x0 + CHUNK, this.nx - 1), y1 = Math.min(y0 + CHUNK, this.ny - 1), z1 = Math.min(z0 + CHUNK, this.nz - 1);
-    // cells from one before the chunk (its quads reach back one cell) to its end
-    const bx = Math.max(x0 - 1, 0), by = Math.max(y0 - 1, 0), bz = Math.max(z0 - 1, 0);
-    const sx = x1 - bx, sy = y1 - by, sz = z1 - bz;
-    const vid = new Int32Array(sx * sy * sz).fill(-1);
-    const pos: number[] = [], nor: number[] = [], col: number[] = [], ind: number[] = [];
-    const g = (i: number, j: number, k: number) => f[this.idx(i, j, k)];
-    const P = new THREE.Vector3(), N = new THREE.Vector3(), Q = new THREE.Vector3();
-    const E: [number, number, number, number, number, number][] = [
-      [0, 0, 0, 1, 0, 0], [0, 1, 0, 1, 1, 0], [0, 0, 1, 1, 0, 1], [0, 1, 1, 1, 1, 1],
-      [0, 0, 0, 0, 1, 0], [1, 0, 0, 1, 1, 0], [0, 0, 1, 0, 1, 1], [1, 0, 1, 1, 1, 1],
-      [0, 0, 0, 0, 0, 1], [1, 0, 0, 1, 0, 1], [0, 1, 0, 0, 1, 1], [1, 1, 0, 1, 1, 1]];
-    const cellVertex = (i: number, j: number, k: number): number => {
-      const ci2 = ((i - bx) * sy + (j - by)) * sz + (k - bz);
-      if (vid[ci2] !== -1) return vid[ci2];
-      let n = 0, px = 0, py = 0, pz = 0;
-      for (const [a, b, c, d, e, h] of E) {
-        const va = g(i + a, j + b, k + c), vb = g(i + d, j + e, k + h);
-        if ((va >= iso) === (vb >= iso)) continue;
-        const t = (iso - va) / (vb - va);
-        px += i + a + (d - a) * t; py += j + b + (e - b) * t; pz += k + c + (h - c) * t; n++;
-      }
-      if (!n) return (vid[ci2] = -2);
-      Q.set(px / n, py / n, pz / n);
-      // outward normal: down the field's gradient, to the frame
-      const s = (dx: number, dy: number, dz: number) => this.sample(f, Q.x + dx, Q.y + dy, Q.z + dz);
-      N.set(s(-0.5, 0, 0) - s(0.5, 0, 0), s(0, -0.5, 0) - s(0, 0.5, 0), s(0, 0, -0.5) - s(0, 0, 0.5)).applyMatrix3(this.normalM).normalize();
-      P.copy(Q).applyMatrix4(this.toRas);
-      const id = pos.length / 3;
-      pos.push(P.x, P.y, P.z); nor.push(N.x, N.y, N.z); col.push(...colour(P, N, Q));
-      return (vid[ci2] = id);
-    };
-    const inside = (i: number, j: number, k: number) => g(i, j, k) >= iso;
-    const quad = (a: number, b: number, c: number, d: number, out: THREE.Vector3) => {
-      if (a < 0 || b < 0 || c < 0 || d < 0) return;
-      // wound so its face points out of the bone (`out`): the quad's normal from its diagonals (one of its triangles
-      // can be a sliver)
-      const at = (x: number) => new THREE.Vector3(pos[x * 3], pos[x * 3 + 1], pos[x * 3 + 2]);
-      const fn = at(c).sub(at(a)).cross(at(d).sub(at(b)));
-      if (fn.dot(out) >= 0) ind.push(a, b, c, a, c, d); else ind.push(a, c, b, a, d, c);
-    };
-    const dirOut = (i: number, j: number, k: number, di: number, dj: number, dk: number) => {
-      const o = new THREE.Vector3(di, dj, dk).applyMatrix3(new THREE.Matrix3().setFromMatrix4(this.toRas));
-      return inside(i, j, k) ? o : o.negate();
-    };
-    for (let i = x0; i < x1; i++) for (let j = y0; j < y1; j++) for (let k = z0; k < z1; k++) {
-      // the edges from voxel (i, j, k) along each axis; each crossed one gets the quad of the four cells round it
-      if (i + 1 < this.nx && j >= 1 && k >= 1 && inside(i, j, k) !== inside(i + 1, j, k))
-        quad(cellVertex(i, j - 1, k - 1), cellVertex(i, j, k - 1), cellVertex(i, j, k), cellVertex(i, j - 1, k), dirOut(i, j, k, 1, 0, 0));
-      if (j + 1 < this.ny && i >= 1 && k >= 1 && inside(i, j, k) !== inside(i, j + 1, k))
-        quad(cellVertex(i - 1, j, k - 1), cellVertex(i, j, k - 1), cellVertex(i, j, k), cellVertex(i - 1, j, k), dirOut(i, j, k, 0, 1, 0));
-      if (k + 1 < this.nz && i >= 1 && j >= 1 && inside(i, j, k) !== inside(i, j, k + 1))
-        quad(cellVertex(i - 1, j - 1, k), cellVertex(i, j - 1, k), cellVertex(i, j, k), cellVertex(i - 1, j, k), dirOut(i, j, k, 0, 0, 1));
-    }
-    if (!ind.length) return null;
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-    geo.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3));
-    geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
-    geo.setIndex(ind);
-    geo.computeBoundingSphere();
-    return geo;
+  private meshField(f: Uint8Array, ci: number, cj: number, ck: number, colour: Colour): THREE.BufferGeometry | null {
+    return meshChunk(this, f, this.iso, ci, cj, ck, colour);
   }
 
   /** At a point (voxel coordinates): whether the burr cut near it, the CT (HU) a little inside the surface, and the

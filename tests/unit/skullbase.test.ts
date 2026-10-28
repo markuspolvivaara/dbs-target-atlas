@@ -6,7 +6,7 @@ import { decodeSkull, defaultSkullState, encodeSkull } from '../../src/skullbase
 import { nodeMeans } from './glb';
 import { FORAMEN_CONTENTS } from '../../src/skullbase/foramina';
 import { TB_NOTES, TB_REF, TB_REFS } from '../../src/skullbase/temporal';
-import { APPROACH_REF, APPROACH_REFS, APPROACHES } from '../../src/skullbase/approaches';
+import { APPROACH_REF, APPROACH_REFS, APPROACHES, ENDONASAL_INFO } from '../../src/skullbase/approaches';
 
 describe('skull-base data (Z-Anatomy export)', () => {
   it('generated files agree with each other', () => {
@@ -228,8 +228,11 @@ describe('the temporal-bone model (v3: OpenEar specimen registered onto the CT)'
         expect(s.file, s.id).toMatch(/^assets\/skullbase-v3\//);
       } else {
         expect(s.file, s.id).toMatch(/^assets\/skullbase-ct\//);
-        // nothing approximate from Z-Anatomy, but the falx the interhemispheric view draws (v2's fitted one)
-        if (s.name !== 'Falx cerebri') expect(s.fitted, s.id).toBeUndefined();
+        // nothing approximate from Z-Anatomy, but the falx the interhemispheric view draws and the sellar structures the
+        // endonasal view draws (v2's fitted ones, their cards saying so)
+        const fittedOk = ['Falx cerebri', 'Adenohypophysis', 'Neurohypophysis', 'Cavernous sinus', 'Anterior intercavernous sinus', 'Posterior intercavernous sinus', 'Optic chiasm'];
+        if (!fittedOk.includes(s.name)) expect(s.fitted, s.id).toBeUndefined();
+        else if (s.fitted) expect(s.derivation, s.id).toMatch(/approximate/);
       }
     }
     for (const side of ['L', 'R']) expect(lms.filter((l) => l.side === side).length).toBeGreaterThanOrEqual(6);
@@ -419,6 +422,16 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     const s = T3.decodeSkull('#/atlas?g=interhemispheric&op=40&ih=50');
     expect(s.morphs).toEqual({ interhemispheric: 0.5 });
   });
+  it('the endoscopic endonasal view: its group, with the carotids, the optic nerves and the sellar contents behind the walls', () => {
+    const g = G3.SB_GROUP.get('endonasal')!;
+    expect(g.endonasal).toBe(true);
+    expect(g.kind).toBe('approach');
+    const names = g.structures.map((id) => v3.structures.find((s) => s.id === id)?.name);
+    for (const n of ['Internal carotid artery', 'Optic nerve (II)', 'Adenohypophysis (anterior lobe)', 'Neurohypophysis (posterior lobe)', 'Pituitary stalk', 'Cavernous sinus']) expect(names, n).toContain(n);
+    // the hypophysis modelled in this CT's fossa replaces v2's fitted one in v3
+    expect(v3.structures.some((s) => s.id === 'sb_adenohypophysis')).toBe(false);
+  });
+
   it('the telovelar view: a midline suboccipital flap, the posterior fossa fitted around this patient\'s arteries, the tonsils drawn apart and the vermis lifted', async () => {
     const so = geom.suboccipital;
     expect(so.side).toBe('M');
@@ -518,7 +531,7 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(T3.encodeSkull(l)).toContain('ll=80');
   });
   it('sourced content: references exist and are used, context structures exist', () => {
-    const used = new Set(APPROACHES.flatMap((a) => a.sections.flatMap((x) => x.claims)).flatMap((c) => c.refIds));
+    const used = new Set([...APPROACHES, ENDONASAL_INFO].flatMap((a) => a.sections.flatMap((x) => x.claims)).flatMap((c) => c.refIds));
     for (const r of used) expect(APPROACH_REF.has(r), r).toBe(true);
     expect(APPROACH_REFS.map((r) => r.id).filter((r) => !used.has(r))).toEqual([]);
     for (const a of APPROACHES) for (const n of a.context) expect(v3.structures.some((s) => s.name === n), n).toBe(true);

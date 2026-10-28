@@ -198,6 +198,41 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   Pipeline: `pipeline/skullbase_v3_approach.py`, then `pipeline/skullbase_brain.py` (it reads the interhemispheric
   craniotomy's span) and `pipeline/skullbase_pfossa.py`, before `pipeline/skullbase_v3.py` (it takes their items);
   the fits are cached in `pipeline/data/build/skullbase-v3/`.
+- **The endoscopic endonasal (transsphenoidal) view** (`pipeline/skullbase_v3_endonasal.py`,
+  `src/skullbase/endonasal.ts`, `src/ui/skullbase-endonasal.ts`): a 0° endoscope through one nostril into the sphenoid
+  sinus, the way opened step by step, onto the hypophysis. The CT around the sphenoid is cropped to fields on a 0.5-mm grid
+  (`public/assets/skullbase-v3/endonasal.bin.gz`): the bone as v2/v3 draw it, what is not air (its surface is the
+  lining the scope sees: the CT at −400 HU, never less than the bone, holes in walls thinner than a voxel closed), the CT
+  (to colour the lining and the cut), and the distances to what the burr must not enter: TopBrain's arteries, the optic
+  nerves (TotalSegmentator) and chiasm, nerves III–VI as routed through this CT, the fitted pituitary and cavernous
+  sinuses and the fitted brain (these only where the CT shows soft tissue). The scan reaches only the back of the
+  nasal cavity: the scope starts there. Its way through each side of the nose is the path along TotalSegmentator's
+  nasal cavity with the most room, to the last air before the sinus (at its natural ostium on this CT); the CT's
+  passages being narrower than a 4-mm scope, a corridor 4 mm across is opened along it (the turbinates and mucosa
+  pushed aside: a drawing choice), stopping short of the sinus's front wall. From near the corridor's end the scope goes
+  straight on the way it looks, as far as it has a 2.5-mm clear core, so drilling where it looks (a round 3-mm burr,
+  swept as a sphere: it widens a hole narrower than itself before passing) opens its way into the sinus and on to the
+  sella (the burr is offered once the sinus's septa are taken away, for what the steps do not take; it goes right down
+  onto the arteries' wall, never into their lumen, an exercise in anatomy, the wall laid bare drawn red, and stops
+  0.3 mm short of the nerves, the hypophysis and the brain). Step by step, six pieces are taken away by clicking
+  them in the scope's view, or toggled in a list (clicked again, put back): the sinus's front wall, its septa, the sellar floor, the dura over the sella, the tuberculum and planum and the upper clivus, each
+  a region of smooth conditions on this CT (distances to the nose's and the sinus's air, to the hypophysis, planes about
+  the midline) stored as a label and a level so that its cut surfaces are smooth; the sellar floor, planum and clivus
+  take only bone and its mucosa, and every piece keeps clear of the carotids and nerves (drawing choices, not measured
+  extents). In the scope's view a drag turns the scope and the wheel moves it in and out. X-ray vision draws the
+  carotids, the optic nerves and chiasm, the hypophysis, the cavernous sinuses, nerves III-VI or the basilar artery
+  over the scope's view, see-through, whatever lies in front of them; the dura over the sella is drawn grey-blue.
+  The hypophysis is modelled in this CT's own fossa (it replaces v2's fitted pituitary in v3): what is not bone there,
+  1 mm inside the bone (the dura), under the diaphragma sellae taken as the plane from the tuberculum's back to the
+  dorsum's top, its upper surface slightly concave, within about 6 mm of the midline and clear of the carotids; on this
+  CT 12.5 x 10 x 5.5 mm (Paudel 2025: 12.3 x 9.4 x 5.4 mm at 21-30 years). Its posterior lobe and stalk are drawn by
+  rule. Opening the dura shows it to the scope, coloured as the lobes look (rendering choices). Sources added: Paudel
+  2025, Singh 2018, Yohannan 2015. The view is the ventricles'
+  endoscope (`src/viewer/endoscope.ts`), its walls meshed by surface nets in chunks (`src/viewer/surfacenets.ts`,
+  shared with the spine's drilling). Measured on this CT: the sinus's volume and how far back it reaches, the
+  carotids' distance through the sella. Sources: Solari 2012, van Lindert 2010, Famurewa 2018, Nguyen 2026 (the
+  ostium). The pipeline also carries v2's fitted pituitary, cavernous and intercavernous sinuses and chiasm into v3's
+  manifest; run it after `pipeline/skullbase_v3.py`.
 - Cards cite open-access sources checked against their full texts (`src/skullbase/temporal.ts`): Gupta 2013,
   Kalaiarasi 2018, Nguyen 2026, García-Barrios 2021, Sieber 2019.
 - Pipeline: `pipeline/fetch_openear.py volumes`, `pipeline/skullbase_ct.py` (writes the frame and the bone grid),

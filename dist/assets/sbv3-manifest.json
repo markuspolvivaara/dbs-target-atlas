@@ -4514,6 +4514,294 @@
      -30.21
     ]
    }
+  },
+  {
+   "id": "sb_cavernous_sinus",
+   "name": "Cavernous sinus",
+   "aliases": [],
+   "type": "soft",
+   "fitted": true,
+   "file": "assets/skullbase-ct/sb_cavernous_sinus.glb",
+   "bytes": 112476,
+   "colour": {
+    "token": "sbSoft",
+    "light": "#8A6FA8",
+    "dark": "#B9A3D6"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "soft",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): its mesh.",
+   "centroid": {
+    "L": [
+     -7.78,
+     -1.81,
+     7.27
+    ],
+    "R": [
+     7.87,
+     -1.72,
+     7.03
+    ]
+   }
+  },
+  {
+   "id": "sb_anterior_intercavernous_sinus",
+   "name": "Anterior intercavernous sinus",
+   "aliases": [],
+   "type": "tube",
+   "fitted": true,
+   "file": "assets/skullbase-ct/sb_anterior_intercavernous_sinus.glb",
+   "bytes": 4444,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm.",
+   "centroid": {
+    "L": [
+     -2.08,
+     1.9,
+     12.24
+    ],
+    "R": [
+     2.15,
+     1.97,
+     12.22
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_posterior_intercavernous_sinus",
+   "name": "Posterior intercavernous sinus",
+   "aliases": [],
+   "type": "tube",
+   "fitted": true,
+   "file": "assets/skullbase-ct/sb_posterior_intercavernous_sinus.glb",
+   "bytes": 5896,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm.",
+   "centroid": {
+    "L": [
+     -3.8,
+     -2.36,
+     8.97
+    ],
+    "R": [
+     3.42,
+     -2.72,
+     8.62
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_optic_chiasm",
+   "name": "Optic chiasm",
+   "aliases": [],
+   "type": "soft",
+   "fitted": true,
+   "file": "assets/skullbase-ct/sb_optic_chiasm.glb",
+   "bytes": 15396,
+   "colour": {
+    "token": "sbSoft",
+    "light": "#8A6FA8",
+    "dark": "#B9A3D6"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "soft",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): its mesh.",
+   "centroid": {
+    "L": [
+     -3.54,
+     0.34,
+     17.88
+    ],
+    "R": [
+     3.87,
+     0.41,
+     17.78
+    ]
+   }
+  },
+  {
+   "id": "tb_adenohypophysis",
+   "name": "Adenohypophysis (anterior lobe)",
+   "aliases": [
+    "Anterior pituitary",
+    "Pars distalis"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase-v3/tb_adenohypophysis.glb",
+   "bytes": 27584,
+   "colour": {
+    "token": "sbSoft",
+    "light": "#8A6FA8",
+    "dark": "#B9A3D6"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT's pituitary fossa",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "soft",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Modelled in this CT's pituitary fossa (Skull base v3's endonasal view, pipeline/skullbase_v3_endonasal.py): what is not bone in it, 1.0 mm inside the bone (the dura, which the CT does not tell from the gland), under the diaphragma sellae taken as the plane from the tuberculum's back to the dorsum's top on this CT, its upper surface 0.5 mm lower in the middle, at most 6.2 mm from the midline and 1.5 mm off the carotids (the cavernous sinuses' medial walls, which a CT does not show). The gland so drawn measures 12.5 mm across, 10.0 mm front to back and 5.5 mm high (450.5 mm³). The anterior lobe is the gland less the posterior lobe (drawn by rule).",
+   "centroid": {
+    "L": [
+     -3.1,
+     2.16,
+     7.49
+    ],
+    "R": [
+     3.05,
+     2.04,
+     7.53
+    ]
+   }
+  },
+  {
+   "id": "tb_neurohypophysis",
+   "name": "Neurohypophysis (posterior lobe)",
+   "aliases": [
+    "Posterior pituitary",
+    "Pars nervosa"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase-v3/tb_neurohypophysis.glb",
+   "bytes": 11732,
+   "colour": {
+    "token": "sbSoft",
+    "light": "#8A6FA8",
+    "dark": "#B9A3D6"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT's pituitary fossa",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "soft",
+   "schematic": true,
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Modelled in this CT's pituitary fossa (Skull base v3's endonasal view, pipeline/skullbase_v3_endonasal.py): what is not bone in it, 1.0 mm inside the bone (the dura, which the CT does not tell from the gland), under the diaphragma sellae taken as the plane from the tuberculum's back to the dorsum's top on this CT, its upper surface 0.5 mm lower in the middle, at most 6.2 mm from the midline and 1.5 mm off the carotids (the cavernous sinuses' medial walls, which a CT does not show). The gland so drawn measures 12.5 mm across, 10.0 mm front to back and 5.5 mm high (450.5 mm³). The posterior lobe is drawn by rule (no measured source here): an ellipsoid 7 × 5.6 × 5 mm at the back of the gland in the midline.",
+   "centroid": {
+    "L": [
+     -1.56,
+     -0.82,
+     6.54
+    ],
+    "R": [
+     1.57,
+     -0.86,
+     6.55
+    ]
+   }
+  },
+  {
+   "id": "tb_pituitary_stalk",
+   "name": "Pituitary stalk",
+   "aliases": [
+    "Infundibulum",
+    "Hypophyseal stalk"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase-v3/tb_pituitary_stalk.glb",
+   "bytes": 8584,
+   "colour": {
+    "token": "sbSoft",
+    "light": "#8A6FA8",
+    "dark": "#B9A3D6"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT's pituitary fossa",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "soft",
+   "schematic": true,
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Drawn by rule (no measured source here): a tube from the top of the gland modelled in this CT's fossa, where its lobes meet, 5 mm up and 2.5 mm back to behind the (fitted) optic chiasm, 2 mm thick at the gland and 2.8 mm above.",
+   "centroid": {
+    "L": [
+     -0.59,
+     -0.66,
+     12.25
+    ],
+    "R": [
+     0.59,
+     -0.66,
+     12.25
+    ]
+   }
   }
  ],
  "arterySystems": [

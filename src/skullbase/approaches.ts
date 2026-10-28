@@ -128,6 +128,20 @@ export const APPROACH_REFS: ApproachRef[] = [
     citation: 'Aftahy AK, Goldberg M, Butenschoen VM, Wagner A, Meyer B, Negwer C. Functional outcomes after retrosigmoid approach to the cerebellopontine angle: observations from a single-center experience of over 13 years. Brain Spine. 2024;4:102909. doi:10.1016/j.bas.2024.102909.' },
   { id: 'zanin2023', pmid: '37959312', pmcid: 'PMC10648058', shortLabel: 'Zanin 2023', url: doi('10.3390/jcm12216847'),
     citation: 'Zanin L, Agosti E, Ebner F, de Maria L, Belotti F, Buffoli B, et al. Quantitative anatomical comparison of surgical approaches to Meckel’s cave. J Clin Med. 2023;12(21):6847. doi:10.3390/jcm12216847.' },
+  { id: 'solari2012', pmid: '23905043', pmcid: 'PMC3728777', shortLabel: 'Solari 2012', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC3728777/',
+    citation: 'Solari D, Villa A, De Angelis M, Esposito F, Cavallo LM, Cappabianca P. Anatomy and surgery of the endoscopic endonasal approach to the skull base. Transl Med UniSa. 2012;2:36–46.' },
+  { id: 'vanlindert2010', pmid: '20306338', pmcid: 'PMC2872017', shortLabel: 'van Lindert 2010', url: doi('10.1007/s00701-010-0629-2'),
+    citation: 'van Lindert EJ, Ingels K, Mylanus E, Grotenhuis JA. Variations of endonasal anatomy: relevance for the endoscopic endonasal transsphenoidal approach. Acta Neurochir (Wien). 2010;152(6):1015–1020. doi:10.1007/s00701-010-0629-2.' },
+  { id: 'famurewa2018', pmid: '31198272', pmcid: 'PMC6561078', shortLabel: 'Famurewa 2018', url: doi('10.4103/nmj.nmj_138_18'),
+    citation: 'Famurewa OC, Ibitoye BO, Ameye SA, Asaleye CM, Ayoola OO, Onigbinde OS. Sphenoid sinus pneumatization, septation, and the internal carotid artery: a computed tomography study. Niger Med J. 2018;59(1):7–13. doi:10.4103/nmj.nmj_138_18.' },
+  { id: 'paudel2025', pmid: '41768804', pmcid: 'PMC12750977', shortLabel: 'Paudel 2025', url: doi('10.31729/jnma.9088'),
+    citation: 'Paudel S, Rokaha PS, Bista A, Subedi N, Thapa NB. Normative data for the dimensions and volume of pituitary gland in the general population undergoing magnetic resonance imaging under a tertiary care center: an observational study. JNMA J Nepal Med Assoc. 2025;63(286):423–427. doi:10.31729/jnma.9088.' },
+  { id: 'singh2018', pmid: '30294567', pmcid: 'PMC6166545', shortLabel: 'Singh 2018', url: doi('10.4103/ijem.IJEM_199_18'),
+    citation: 'Singh AKC, Kandasamy D, Garg A, Jyotsna VP, Khadgawat R. Study of pituitary morphometry using MRI in Indian subjects. Indian J Endocrinol Metab. 2018;22(5):605–609. doi:10.4103/ijem.IJEM_199_18.' },
+  { id: 'yohannan2015', pmid: '26473083', pmcid: 'PMC4584028', shortLabel: 'Yohannan 2015', url: doi('10.1155/2015/618042'),
+    citation: 'Yohannan DG, Krishnapillai R, Suresh R, Ramnarayan S. A morphometric study of the foramen of diaphragma sellae and delineation of its relation to optic neural pathways through computer aided superimposition. Anat Res Int. 2015;2015:618042. doi:10.1155/2015/618042.' },
+  { id: 'nguyen2026', pmid: '42332465', pmcid: 'PMC13286435', shortLabel: 'Nguyen 2026', url: doi('10.1097/MD.0000000000049344'),
+    citation: 'Nguyen MQ, Tang MP, Nguyen HT, Tran HT, Tran TT, Tran NBMH. Association of sphenoid sinus pneumatization patterns, Onodi cells, and rostrum pneumatization with natural ostium location: a cross-sectional CT study. Medicine (Baltimore). 2026;105(25):e49344. doi:10.1097/MD.0000000000049344.' },
 ];
 export const APPROACH_REF = new Map(APPROACH_REFS.map((r) => [r.id, r]));
 
@@ -307,3 +321,38 @@ export const APPROACHES: ApproachContent[] = [
   },
 ];
 export const APPROACH = new Map(APPROACHES.map((a) => [a.id, a]));
+
+/**
+ * The endoscopic endonasal (transsphenoidal) view (Skull base v3, src/ui/skullbase-endonasal.ts): what the sources say,
+ * checked against their open-access full texts: Solari 2012 (PMC3728777), van Lindert 2010 (PMC2872017), Famurewa 2018
+ * (PMC6561078), Nguyen 2026 (PMC13286435), Paudel 2025 (PMC12750977), Singh 2018 (PMC6166545), Yohannan 2015
+ * (PMC4584028).
+ */
+export const ENDONASAL_INFO: { sections: ApproachSection[]; notShown: string } = {
+  sections: [
+    sec('The scope and the way in', [
+      c('The approach is done with a rigid 0° endoscope, 4 mm across, as the only view of the field; angled scopes are kept for particular situations, such as looking round into the suprasellar space once the lesion is out.', 'solari2012', 'vanlindert2010'),
+      c('In 185 patients, 48 % had a variation of the nasal anatomy, most often a deviated septum (30 %) or a septal spur (20 %); in fewer than one in five of them did reaching the sphenoid ostium take special measures. Working through one nostril more often needs the middle turbinate removed to make room.', 'vanlindert2010'),
+      c('Extended approaches make more room: one middle turbinate removed, the other pushed aside, the back of the nasal septum taken out, and a wider sphenoidotomy.', 'solari2012'),
+    ]),
+    sec('The sphenoid ostium', [
+      c('In 181 adults on CT, each sphenoid sinus had a single natural ostium, on average 1.25 mm wide and 1.8 mm high, most often in the medial third of the sinus’s front wall (58 %) and in its middle third in height (73 %): its lower edge about 10–12 mm above the upper border of the choana, its medial edge 3–5 mm from the septum.', 'nguyen2026'),
+      c('Where the ostium is in plain view, orientation and the way into the sinus are straightforward. An Onodi (sphenoethmoidal) cell, a posterior ethmoid cell above and lateral to the sinus, can be taken for the sphenoid sinus once entered: it is reported in 8.4–9 % of people (and was found beside 39 % of the sinuses on Nguyen’s CTs).', 'vanlindert2010', 'nguyen2026'),
+      c('Bleeding after the anterior sphenoidotomy usually comes from a branch of the sphenopalatine artery at the inferolateral border of the middle turbinate.', 'vanlindert2010'),
+    ]),
+    sec('Inside the sphenoid sinus', [
+      c('The sellar floor lies in the middle, the planum above it and the clival indentation below; to either side are the bony prominences of the carotid (its cavernous part) and of the optic nerve, with the lateral opticocarotid recess between them, moulded by the pneumatised optic strut.', 'solari2012'),
+      c('By how far it is pneumatised, the sinus is conchal (solid bone under the sella), presellar (air no further back than the plane of the sella’s front wall), sellar (air under the sella, beyond the tuberculum) or postsellar (on past the dorsum sellae into the clivus). In 320 adults on CT: sellar 56.6 %, postsellar 40.3 %, conchal 1.9 %, presellar 1.2 %.', 'famurewa2018'),
+      c('In the same CTs a septum of the sinus was inserted on the carotid’s bony covering in 31.6 %, and the carotid bulged into the sinus (sinus air round it) in 34.4 %; in 65.6 % it lay wholly in bone.', 'famurewa2018'),
+    ]),
+    sec('The hypophysis', [
+      c('In 870 people with a presumed normal pituitary on MRI, the gland was on average 4.9 mm high and 282 mm³; at 21–30 years 9.4 mm front to back, 12.3 mm across and 5.4 mm high, lower again from 50 on.', 'paudel2025'),
+      c('Its upper surface, in 482 people, was most often concave (43.4 %); convex in 17.6 %, much more often in women (29 %, most of them 10–29 years old) than in men (8.6 %).', 'singh2018'),
+      c('The diaphragma sellae, the fold of dura roofing the gland, measured on average 11.7 mm front to back and 15.8 mm across in 100 autopsies; its opening, through which the stalk passes, 6.6 by 8.2 mm, and the optic chiasm covered that opening entirely in 45 %.', 'yohannan2015'),
+    ]),
+    sec('Opening the sella', [
+      c('High-speed, low-profile drills open the bone to the dura; a micro-Doppler probe finds the major arteries before the dura is opened, and navigation helps where the usual landmarks cannot be made out (a tumour that has destroyed the sellar floor, an Onodi cell).', 'solari2012', 'vanlindert2010'),
+    ]),
+  ],
+  notShown: 'The front of the nose (the scan does not reach it) and the nasal cavity’s own shape there: the scope starts at the back of the nasal cavity. The turbinates and the septum are not drawn as parts of their own (only the lining of this CT’s air), and pushing them aside is drawn as a corridor opened through them. The mucosal flaps, the dura and its opening, bleeding and the tissue’s give are not simulated: what the burr reaches is taken away. The hypophysis is modelled in this CT’s fossa (its outline from the bone, its lobes and stalk drawn by rule), not seen on it: a CT does not show the gland, the dura or the cavernous sinuses’ walls; the cavernous sinuses are fitted from another model (approximate).',
+};
