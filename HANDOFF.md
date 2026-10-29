@@ -27,6 +27,11 @@ commit and push it.
   - **Winding fix:** the cavernous sinus, its walls and the hypophysis meshes were inside out. They are now flipped
     in the pipeline (`mesh_of` in the cavernous step, the endonasal hypophysis). Only the flat, double-sided triangle
     patches remain flagged by `winding_check.py`.
+- **Then, on the vascular section:**
+  - the fistula views outline the fistula, its reflux and the sinus, with the normal vessels faded;
+  - the venous flow graph is bridged where the sinus labels stop short of each other, so a shunt's sinuses fill early
+    in the angiogram (`BRIDGE_MM`, `SMALL_VEIN_COST` in `vascular_build.py`);
+  - a Grading page (`src/vascular/grading.ts`) with Spetzler–Martin, supplementary, Borden and Cognard tables.
 - **Pipeline data changed on the desktop:** `pipeline/data/build/skullbase-v3` (brain and posterior fossa fits, the
   cavernous step) and `pipeline/data/build/vascular`. Copy `pipeline/data/` back before rebuilding those on the MacBook.
 - **No real AVM imaging is available** under an open licence (searched DIAS, OpenNeuro, RSNA/Kaggle, figshare, arXiv).

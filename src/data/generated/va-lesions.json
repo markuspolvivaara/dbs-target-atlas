@@ -184,7 +184,11 @@
     "va_avm1__feeders",
     "va_avm1__nidus",
     "va_avm1__drainers",
-    "va_avm1__superior_sagittal_sinus"
+    "va_avm1__inferior_petrosal_sinus",
+    "va_avm1__internal_jugular_vein",
+    "va_avm1__sigmoid_sinus",
+    "va_avm1__superior_sagittal_sinus",
+    "va_avm1__transverse_sinus"
    ],
    "location": "the right frontal pole (not eloquent)",
    "nidusMm": 22.0,
@@ -225,7 +229,11 @@
     "va_avm3__feeders",
     "va_avm3__nidus",
     "va_avm3__drainers",
-    "va_avm3__superior_sagittal_sinus"
+    "va_avm3__inferior_petrosal_sinus",
+    "va_avm3__internal_jugular_vein",
+    "va_avm3__sigmoid_sinus",
+    "va_avm3__superior_sagittal_sinus",
+    "va_avm3__transverse_sinus"
    ],
    "location": "the left sensorimotor cortex at the central sulcus (eloquent)",
    "nidusMm": 42.0,
@@ -272,12 +280,13 @@
     "va_avm5__nidus",
     "va_avm5__drainers",
     "va_avm5__basal_vein_of_rosenthal",
-    "va_avm5__deep_middle_cerebral_vein",
     "va_avm5__great_cerebral_vein_of_galen",
-    "va_avm5__insular_veins",
+    "va_avm5__inferior_petrosal_sinus",
     "va_avm5__internal_cerebral_veins",
+    "va_avm5__internal_jugular_vein",
+    "va_avm5__sigmoid_sinus",
     "va_avm5__straight_sinus",
-    "va_avm5__superior_sagittal_sinus"
+    "va_avm5__transverse_sinus"
    ],
    "location": "the right occipital lobe, visual cortex (eloquent), reaching deep towards the vein of Galen",
    "nidusMm": 64.0,
@@ -334,9 +343,9 @@
    ],
    "borden": 2,
    "fistulaMm": [
-    46.9,
-    -52.1,
-    -15.2
+    48.6,
+    -48.5,
+    -19.4
    ],
    "feeders": [
     "Middle meningeal artery",
@@ -355,11 +364,18 @@
    "name": "Direct carotid-cavernous fistula (Barrow type A)",
    "parts": [
     "va_ccfa__fistula",
+    "va_ccfa__anterior_intercavernous_sinus",
+    "va_ccfa__basilar_venous_plexus",
     "va_ccfa__cavernous_sinus",
     "va_ccfa__inferior_ophthalmic_vein",
+    "va_ccfa__inferior_petrosal_sinus",
+    "va_ccfa__internal_jugular_vein",
+    "va_ccfa__posterior_intercavernous_sinus",
+    "va_ccfa__sigmoid_sinus",
     "va_ccfa__sphenoparietal_sinus",
     "va_ccfa__superficial_middle_cerebral_vein",
-    "va_ccfa__superior_ophthalmic_vein"
+    "va_ccfa__superior_ophthalmic_vein",
+    "va_ccfa__superior_petrosal_sinus"
    ],
    "fistulaMm": [
     10.1,
@@ -374,10 +390,17 @@
    "name": "Indirect carotid-cavernous fistula (Barrow type D)",
    "parts": [
     "va_ccfd__feeders",
+    "va_ccfd__anterior_intercavernous_sinus",
+    "va_ccfd__basilar_venous_plexus",
     "va_ccfd__cavernous_sinus",
     "va_ccfd__inferior_ophthalmic_vein",
+    "va_ccfd__inferior_petrosal_sinus",
+    "va_ccfd__internal_jugular_vein",
+    "va_ccfd__posterior_intercavernous_sinus",
+    "va_ccfd__sigmoid_sinus",
     "va_ccfd__sphenoparietal_sinus",
-    "va_ccfd__superior_ophthalmic_vein"
+    "va_ccfd__superior_ophthalmic_vein",
+    "va_ccfd__superior_petrosal_sinus"
    ]
   }
  ]

@@ -518,9 +518,17 @@ base fits or draws), with vascular lesions drawn onto them by rule, none of them
   ground without depth, so vessels add up as on a radiograph, in 3D (play, pause, scrub). The timing is a drawing:
   arteries in order of their distance along the vessels from the injection, veins after a capillary delay, upstream ends
   first; a lesion's shunt (no capillary bed: Naranbhai 2023) fills its veins, and the sinuses downstream, straight after
-  its nidus or fistula, in the arterial phase. Copies of the veins a lesion fills early (or dilates) stand in for them in
-  its view.
+  its nidus or fistula, in the arterial phase: an AVM's on to both jugular veins, the dural fistula's down its sigmoid
+  sinus and back along its transverse sinus. The veins are one flow graph: the labels' gaps where sinuses meet (the
+  torcular, the straight sinus, the petrosal and cavernous sinuses) are bridged, and the way out runs through the
+  sinuses rather than back through small veins. Copies of the veins a lesion fills early (or dilates) stand in for them
+  in its view.
 - **Layers**: opacity sliders for the arteries, the veins, the lesion, the fitted brain and the bone.
+- **Grading page** (`src/vascular/grading.ts`): tables of the Spetzler–Martin grade (its points; each grade's
+  Spetzler–Ponce class, usual treatment and favourable outcome after surgery: Assker 2025, Naranbhai 2023, Hafez 2019),
+  the supplementary (Lawton–Young) grade (its points, the cut-off of 6, outcome by grade: Hafez 2019), and the Borden and
+  Cognard types of dural fistulas (drainage, sinus flow, cortical venous reflux, course and treatment: Li 2015,
+  Baharvahdat 2020, Shakeel 2025). The rows this atlas draws are marked and open their views.
 - Pipeline: `pipeline/vascular_build.py` (after `skullbase_v3.py`), `node pipeline/compress.mjs vascular`,
   `pipeline/vascular_build.py finalize`.
 

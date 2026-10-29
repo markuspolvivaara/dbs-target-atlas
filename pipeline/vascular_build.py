@@ -18,7 +18,9 @@ veins after a capillary delay (VEN_START_S) from their upstream ends to the jugu
 for a while (DWELL_*), then washes out. A lesion's shunt has no capillary bed between artery and vein (an arteriovenous
 malformation is a conglomeration of arteriovenous shunts without one: Naranbhai 2023), so its veins fill as soon as its
 nidus or fistula does, in the arterial phase, and the sinuses they drain into fill from there on, before the normal
-venous phase.
+venous phase. The veins are one flow graph: the gaps the labels leave where vessels meet are bridged (BRIDGE_MM; sinuses
+up to BRIDGE_MAX_MM, as at the torcular), and the way out to the jugular veins counts small veins SMALL_VEIN_COST times
+their length, so that it runs through the sinuses.
 
 Writes pipeline/data/build/vascular/*.glb (per vertex: _ARRIVAL and _DWELL, as shares of T_MAX_S) and
 src/data/generated/va-manifest.json.
@@ -54,6 +56,10 @@ VEN_SPAN_S = 2.6       # ... the jugular veins this much later
 DWELL_ART_S = 2.2      # how long a vessel stays opaque before it washes out (illustrative)
 DWELL_VEN_S = 3.0
 LINK_MM = 1.2          # vessels whose surfaces come this close are joined in the flow graph
+BRIDGE_MM = 3.0        # veins: two vessels whose surfaces come this close are joined at their closest point (the labels
+BRIDGE_MAX_MM = 12.0   # stop short where sinuses meet); pieces still apart are joined closest first, up to this gap
+SMALL_VEIN_COST = 3.0  # veins (not sinuses or the jugular veins) count this many times their length on the way out: the
+                       # way out runs through the sinuses, not backwards through small veins (illustrative)
 SHUNT_SPEED = 120.0    # mm/s: how fast contrast runs on from a shunt through its veins (illustrative)
 
 
@@ -115,7 +121,7 @@ class Network:
     """One system's vessels (all their nodes) as one graph: the mesh edges, and links between vessels whose vertices come
     within LINK_MM. Vertices are indexed in the order of (vessel, node)."""
 
-    def __init__(self, parts: list[tuple[str, str, np.ndarray, np.ndarray]]):
+    def __init__(self, parts: list[tuple[str, str, np.ndarray, np.ndarray]], bridge: bool = False, cost=None):
         self.keys, self.cut = [], [0]
         P, E = [], []
         for name, node, v, t in parts:
@@ -127,12 +133,49 @@ class Network:
         self.P = np.vstack(P)
         E = np.vstack(E)
         part = np.repeat(np.arange(len(parts)), np.diff(self.cut))
+        n_mesh = len(E)
         pairs = cKDTree(self.P).query_pairs(LINK_MM, output_type="ndarray")
         pairs = pairs[part[pairs[:, 0]] != part[pairs[:, 1]]]
-        E = np.vstack([E, pairs])
+        big = np.array([cost(name) <= 1.0 if cost else True for name, *_ in parts])
+        E = np.vstack([E, pairs] + ([self.bridges(part, E, pairs, big)] if bridge else []))
         w = np.linalg.norm(self.P[E[:, 0]] - self.P[E[:, 1]], axis=1) + 1e-3
         n = len(self.P)
+        self.Gmm = sp.coo_matrix((np.r_[w, w], (np.r_[E[:, 0], E[:, 1]], np.r_[E[:, 1], E[:, 0]])), shape=(n, n)).tocsr()
+        if cost is not None:          # (a vessel's own edges weighted by its cost; the links between vessels as they are)
+            c = np.array([cost(name) for name, *_ in parts])
+            w[:n_mesh] *= c[part[E[:n_mesh, 0]]]
+        n = len(self.P)
         self.G = sp.coo_matrix((np.r_[w, w], (np.r_[E[:, 0], E[:, 1]], np.r_[E[:, 1], E[:, 0]])), shape=(n, n)).tocsr()
+
+    def bridges(self, part: np.ndarray, E: np.ndarray, pairs: np.ndarray, big: np.ndarray) -> np.ndarray:
+        """Links across the gaps the labels leave where vessels meet: each pair of vessels within BRIDGE_MM at their
+        closest point; then the pieces still apart, closest first, up to BRIDGE_MAX_MM, between sinuses only (where the
+        labels stop short of a confluence: not a short cut between small veins)."""
+        from scipy.sparse.csgraph import connected_components
+        trees = [cKDTree(self.P[part == k]) for k in range(len(self.keys))]
+        idx = [np.nonzero(part == k)[0] for k in range(len(self.keys))]
+        close = []
+        for a in range(len(self.keys)):
+            for b in range(a + 1, len(self.keys)):
+                d, j = trees[b].query(self.P[idx[a]], distance_upper_bound=BRIDGE_MAX_MM)
+                k = int(np.argmin(d))
+                if np.isfinite(d[k]):
+                    close.append((float(d[k]), int(idx[a][k]), int(idx[b][j[k]])))
+        out = [(i, j) for g, i, j in close if g <= BRIDGE_MM]
+        n = len(self.P)
+        links = np.vstack([E, pairs, np.array(out).reshape(-1, 2)])
+        _, lab = connected_components(sp.coo_matrix((np.ones(len(links)), (links[:, 0], links[:, 1])), shape=(n, n)), directed=False)
+        root = {c: c for c in np.unique(lab)}
+        def find(c):
+            while root[c] != c:
+                c = root[c]
+            return c
+        for g, i, j in sorted(close):
+            a, b = find(lab[i]), find(lab[j])
+            if g > BRIDGE_MM and a != b and big[part[i]] and big[part[j]]:
+                root[a] = b
+                out.append((i, j))
+        return np.array(out, int).reshape(-1, 2)
 
     def distance(self, sources: list[int], offsets: list[float] | None = None) -> np.ndarray:
         """Shortest distance along the vessels from any source (plus its offset, mm); unreached vertices get the nearest
@@ -182,17 +225,20 @@ def timing(vessels: list[dict]) -> tuple[dict, dict, dict]:
                 d = sub.distance([int(np.argmin(np.linalg.norm(P - fs, axis=1)))], [0.0])
                 t_art[sl] = ECA_DELAY_S + d / span * ART_SPAN_S
     t_art = np.minimum(t_art, ART_SPAN_S * 1.15)
-    V = Network([(v["name"], n, P, T) for v in ven for n, (P, T) in v["nodes"].items()])
+    big = lambda name: any(w in name.lower() for w in ("sinus", "jugular", "plexus"))
+    V = Network([(v["name"], n, P, T) for v in ven for n, (P, T) in v["nodes"].items()], bridge=True,
+                cost=lambda name: 1.0 if big(name) else SMALL_VEIN_COST)
     outlets = []
     for v in ven:
         if v["name"] == "Internal jugular vein":
             for n, (P, T) in v["nodes"].items():
                 k = V.keys.index((v["name"], n))
                 outlets.append(V.cut[k] + int(np.argmin(P[:, 2])))
-    dout = V.distance(outlets, [0.0] * len(outlets))
+    douts = [V.distance([o], [0.0]) for o in outlets]       # (to each jugular vein: a shunt may drain to both)
+    dout = np.min(douts, axis=0)
     far = float(np.percentile(dout, 99))
     t_ven = VEN_START_S + np.clip(far - dout, 0, None) / far * VEN_SPAN_S
-    return A.split(t_art), V.split(t_ven), {"art": A, "ven": V, "dout": dout, "far": far, "span": span}
+    return A.split(t_art), V.split(t_ven), {"art": A, "ven": V, "dout": dout, "douts": douts, "far": far, "span": span}
 
 
 # ---------------------------------------------------------------- outputs
@@ -287,9 +333,18 @@ def finalize() -> int:
             size = 1 if l["nidusMm"] < 30 else 2 if l["nidusMm"] <= 60 else 3
             if size != sm["size"] or sm["grade"] != sm["size"] + sm["eloquence"] + sm["deep"]:
                 fails.append(f"{l['id']}: Spetzler-Martin points do not match its nidus")
+            # its shunt fills the sinuses on to the jugular veins early (the flow graph joined where the sinuses meet)
+            early = {p.split("__", 1)[1] for p in l["parts"] if "__" in p}
+            for need in ("transverse_sinus", "sigmoid_sinus", "internal_jugular_vein"):
+                if need not in early:
+                    fails.append(f"{l['id']}: its {need.replace('_', ' ')} does not fill early")
             got = l["nidus"]["measuredMm"]        # the drawn network's greatest diameter, as graded
             if abs(got - l["nidusMm"]) > 0.05 * l["nidusMm"] or (1 if got < 30 else 2 if got <= 60 else 3) != sm["size"]:
                 fails.append(f"{l['id']}: its drawn nidus measures {got} mm, not {l['nidusMm']} mm")
+        if l["kind"] == "davf":
+            for need in ("transverse_sinus", "sigmoid_sinus", "internal_jugular_vein", "reflux"):
+                if f"va_davf__{need}" not in l["parts"]:
+                    fails.append(f"davf: its {need.replace('_', ' ')} does not fill early")
     p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
     print("vascular:", len(m["structures"]), "structures,", len(les), "lesions;", "OK" if not fails else fails)
     return 1 if fails else 0

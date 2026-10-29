@@ -464,3 +464,13 @@ kbd { font: inherit; font-size: 0.9em; border: 1px solid var(--line); border-bot
 .sm-table .num { text-align: right; font-variant-numeric: tabular-nums; }
 .sm-table tfoot th, .sm-table tfoot td { font-weight: 700; border-bottom: none; }
 @media (max-width: 899px) { .dsa-bar { bottom: auto; top: 56px; } .dsa-bar input[type=range] { width: 38vw; } }
+/* the vascular section's Grading page */
+.grading h2 { margin-top: 28px; }
+.grade-scroll { overflow-x: auto; }
+.grade-table { border-collapse: collapse; width: 100%; font-size: 15px; margin: 4px 0 8px; }
+.grade-table th, .grade-table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.grade-table thead th { font-size: 13px; text-transform: none; color: var(--muted); font-weight: 600; }
+.grade-table tbody th { font-weight: 700; min-width: 4.5em; }
+.grade-table tr.is-drawn { background: var(--soft); }
+.drawn-tag { display: inline-block; margin-left: 4px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.grading .card { scroll-margin-top: calc(var(--header-h) + 12px); }

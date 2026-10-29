@@ -71,6 +71,23 @@ describe('vascular section', async () => {
     expect(q.looks.get(G.BONES[0])).toBe('hidden');
   });
 
+  it('outlines a fistula, its reflux and the sinus, with the normal vessels stepped back; not in the angiogram', () => {
+    const s = T.defaultVaState();
+    s.grp = 'davf';
+    const p = S.vaPlan(s);
+    expect(p.outline?.[0]).toBe('va_davf__fistula');
+    expect(p.outline).toEqual(expect.arrayContaining(['va_davf__reflux', 'va_davf__transverse_sinus', 'va_davf__sigmoid_sinus']));
+    expect(p.outline).not.toContain('va_davf__feeders');
+    expect(p.looks.get(G.ARTERIES[0])).toBe('context');
+    expect(p.focusIds).toContain('va_davf__reflux');
+    s.dsa.on = true;
+    const q = S.vaPlan(s);
+    expect(q.outline).toBeUndefined();
+    expect(q.looks.get(G.ARTERIES[0])).toBe('primary');
+    s.grp = 'avm3'; s.dsa.on = false;
+    expect(S.vaPlan(s).outline).toBeUndefined();
+  });
+
   it('times the angiogram: arteries, then veins; a lesion’s veins before the normal venous phase', () => {
     const d = I.DSA;
     expect(d.arterialS[1]).toBeLessThan(d.venStartS);
@@ -81,6 +98,28 @@ describe('vascular section', async () => {
       expect(existsSync(f), f).toBe(true);
       expect(readFileSync(f).includes(Buffer.from('_ARRIVAL')), f).toBe(true);
     }
+  });
+
+  it('grading tables: the classes, the drawn rows and the counts agree', async () => {
+    const T2 = await import('../../src/vascular/grading');
+    const roman = ['I', 'II', 'III', 'IV', 'V'];
+    for (const r of T2.SM_GRADES.rows) expect(r.cells[1], r.cells[0]).toBe(I.ponceClass(roman.indexOf(r.cells[0]) + 1));
+    for (const r of T2.SM_GRADES.rows.filter((x) => x.drawn)) expect(roman[I.LESION.get(r.drawn!)!.sm!.grade - 1]).toBe(r.cells[0]);
+    for (const r of T2.SUPP_POINTS.rows.filter((x) => x.drawn)) {
+      const n = (I.LESION.get(r.drawn!) as unknown as { nidus: { type: string } }).nidus;
+      expect(r.cells[1]).toBe(n.type);
+    }
+    // Hafez 2019: 200 patients in each table; each percentage is its count's
+    for (const t of [T2.SM_GRADES, T2.SUPP_GRADES]) {
+      let total = 0;
+      for (const r of t.rows) {
+        const m = /(\d+) % \((\d+) of (\d+)\)/.exec(r.cells[r.cells.length - 1])!;
+        expect(Math.round((100 * Number(m[2])) / Number(m[3])), `${t.id} ${r.cells[0]}`).toBe(Number(m[1]));
+        total += Number(m[3]);
+      }
+      expect(total, t.id).toBe(200);
+    }
+    expect(T.decodeVa('#/grading').page).toBe('grading');
   });
 
   it('round-trips its state through the link', () => {

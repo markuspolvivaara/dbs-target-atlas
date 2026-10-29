@@ -48,7 +48,7 @@ export const VA_GROUPS: VaGroup[] = [
     description: 'A large arteriovenous malformation (over 6 cm) in the right occipital lobe, the visual cortex (eloquent), reaching deep, fed by posterior and middle cerebral artery branches and draining both deep (the vein of Galen, the straight sinus) and superficially.',
   },
   {
-    id: 'davf', kind: 'fistula', name: 'Dural AV fistula', camera: 'sagittal', radius: 75, lesions: ['davf'], veins: true, brain: true,
+    id: 'davf', kind: 'fistula', name: 'Dural AV fistula', camera: 'posteriorOblique', radius: 75, lesions: ['davf'], veins: true, brain: true,
     description: 'A dural arteriovenous fistula on the wall of the right transverse–sigmoid junction, fed by meningeal branches, draining into the sinus (on to the jugular vein and back along the transverse sinus) and back into a cortical vein: Borden type II.',
   },
   {

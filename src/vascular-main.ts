@@ -6,7 +6,7 @@ import { VA } from './vascular';
 import { VA_GROUP } from './vascular/groups';
 import { decodeVa, encodeVa, type VaPage, type VaState } from './vascular/state';
 import { VascularAtlasPage } from './ui/vascular-atlas';
-import { vaCreditsPage, vaSourcesPage } from './ui/vascular-pages';
+import { vaCreditsPage, vaGradingPage, vaSourcesPage } from './ui/vascular-pages';
 import { h } from './ui/h';
 import { disclaimerNote, siteHeader } from './ui/shell';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
@@ -26,7 +26,7 @@ function sanitize(s: VaState): VaState {
 let state: VaState = sanitize(decodeVa(location.hash));
 
 // ---------------------------------------------------------------- shell
-const NAV: [VaPage, string][] = [['atlas', 'Atlas'], ['sources', 'Sources'], ['credits', 'Credits']];
+const NAV: [VaPage, string][] = [['atlas', 'Atlas'], ['grading', 'Grading'], ['sources', 'Sources'], ['credits', 'Credits']];
 const app = document.getElementById('app')!;
 const navLinks = NAV.map(([p, label]) => h('a', { href: `#/${p}`, class: 'navlink', 'data-page': p }, label));
 const themeBtn = h('button', { type: 'button', class: 'theme-btn', onclick: () => cycleTheme() });
@@ -41,6 +41,7 @@ const update = (fn: (s: VaState) => void, opts: { camera?: boolean } = {}) => {
 const atlas = new VascularAtlasPage(update);
 const pages: Record<VaPage, { el: HTMLElement; render(s: VaState): void }> = {
   atlas: { el: atlas.el, render: (s) => atlas.render(s, { camera: pendingCamera }) },
+  grading: vaGradingPage(),
   sources: vaSourcesPage(),
   credits: vaCreditsPage(),
 };
@@ -73,9 +74,12 @@ function render(pageChanged = false): void {
   pages[state.page].render(state);
   if (state.page === 'atlas') atlas.onShow();
   const atlasTitle = state.sel ? (VA.get(state.sel)?.name ?? '') : VA_GROUP.get(state.grp)!.name;
-  const titles: Record<VaPage, string> = { atlas: atlasTitle, sources: 'Sources', credits: 'Credits' };
+  const titles: Record<VaPage, string> = { atlas: atlasTitle, grading: 'Grading', sources: 'Sources', credits: 'Credits' };
   document.title = `${titles[state.page]} · ${SECTION.name} · ${BRAND.name}`;
   if (pageChanged) window.scrollTo(0, 0);
+  // the Grading page opened at one of its tables (#/grading?to=borden)
+  const to = state.page === 'grading' ? /[?&]to=([a-z-]+)/.exec(location.hash)?.[1] : undefined;
+  if (to) document.getElementById(to)?.scrollIntoView();
 }
 
 window.addEventListener('hashchange', () => {

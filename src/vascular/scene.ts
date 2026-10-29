@@ -13,6 +13,14 @@ export function lesionParts(grp: string): { parts: string[]; replaced: Set<strin
   return { parts, replaced: new Set(parts.map((p) => VA.get(p)?.replaces).filter((x): x is string => !!x)) };
 }
 
+/** A fistula's own parts, outlined as a selection is (the fistula first, then the veins it fills: the reflux, the
+ * sinus): not in the angiogram, where an outline would show a vessel before it fills. */
+export function outlined(kind: string, parts: string[]): string[] | undefined {
+  if (kind !== 'fistula') return undefined;
+  const cat = (id: string) => VA.get(id)?.category ?? '';
+  return [...parts.filter((p) => cat(p) === 'fistula'), ...parts.filter((p) => cat(p) === 'drainer' || cat(p) === 'vein')];
+}
+
 export function vaPlan(s: VaState): VaPlan {
   const g = VA_GROUP.get(s.grp) ?? VA_GROUP.get('normal')!;
   const { parts, replaced } = lesionParts(g.id);
@@ -21,14 +29,18 @@ export function vaPlan(s: VaState): VaPlan {
   // in the angiogram the bone and the brain are subtracted away
   for (const id of BONES) looks.set(id, s.dsa.on ? 'hidden' : 'ghost');
   for (const id of BRAIN) looks.set(id, s.dsa.on || !g.brain ? 'hidden' : 'context');
-  for (const id of ARTERIES) looks.set(id, replaced.has(id) ? 'hidden' : 'primary');
-  for (const id of VEINS) looks.set(id, replaced.has(id) || !g.veins ? 'hidden' : 'primary');
+  // in a fistula's view (not the angiogram) the normal vessels step back, the fistula's own parts outlined in front
+  const normal: Look = g.kind === 'fistula' && !s.dsa.on ? 'context' : 'primary';
+  for (const id of ARTERIES) looks.set(id, replaced.has(id) ? 'hidden' : normal);
+  for (const id of VEINS) looks.set(id, replaced.has(id) || !g.veins ? 'hidden' : normal);
   for (const id of parts) looks.set(id, 'primary');
   if (s.sel && VA.has(s.sel) && !looks.has(s.sel)) looks.set(s.sel, 'primary');
-  const focus = parts.filter((p) => ['aneurysm', 'nidus', 'fistula'].includes(VA.get(p)?.category ?? ''));
+  // framed: the lesion itself (and a fistula's reflux, which is its danger)
+  const focus = parts.filter((p) => ['aneurysm', 'nidus', 'fistula', ...(g.kind === 'fistula' ? ['drainer'] : [])].includes(VA.get(p)?.category ?? ''));
   return {
     title: g.name, accent: 'electrode', looks, tracts, parcels: new Map(), markers: [],
     camera: g.camera, focusIds: focus.length ? focus : [...ARTERIES], minRadius: g.radius, group: g.id,
+    outline: s.dsa.on ? undefined : outlined(g.kind, parts),
   };
 }
 

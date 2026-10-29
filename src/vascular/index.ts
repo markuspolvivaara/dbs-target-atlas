@@ -3,6 +3,7 @@ import vaManifestJson from '../data/generated/va-manifest.json';
 import vaLesionsJson from '../data/generated/va-lesions.json';
 import { VaManifestSchema } from '../data/schema';
 import { BsReferenceSchema, ClaimSchema, type Claim } from '../brainstem/schema';
+import { GRADE_TABLES } from './grading';
 import { ANEURYSM_SITES, AVM_NIDUS, AVM_OTHER, AVM_WHAT, BLISTER, CCF, CCF_VEINS, DAVF, FUSIFORM, SPETZLER_MARTIN, SPETZLER_PONCE } from './content';
 import { VA_REFERENCES } from './references';
 
@@ -55,6 +56,11 @@ export function crossCheckVa(): string[] {
   const errs: string[] = [];
   const used = new Set<string>();
   const all: Claim[] = [...ANEURYSM_SITES, ...FUSIFORM, ...BLISTER, ...AVM_WHAT, ...AVM_NIDUS, ...SPETZLER_MARTIN, ...SPETZLER_PONCE, ...AVM_OTHER, ...DAVF, ...CCF, ...CCF_VEINS];
+  // the Grading page's tables: their sources and notes
+  for (const t of GRADE_TABLES) {
+    all.push(...t.notes, { text: t.title, refIds: t.refIds });
+    for (const r of t.rows) if (r.cells.length !== t.head.length) errs.push(`${t.id}: a row of ${r.cells.length} cells under ${t.head.length} heads`);
+  }
   for (const cl of all) {
     ClaimSchema.parse(cl);
     for (const r of cl.refIds) { used.add(r); if (!VA_REF.has(r)) errs.push(`unknown refId ${r}`); }

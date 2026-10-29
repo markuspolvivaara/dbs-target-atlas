@@ -471,8 +471,12 @@ def route(a: np.ndarray, b: np.ndarray, push: np.ndarray, amount: float) -> np.n
 
 
 # ---------------------------------------------------------------- early veins (the shunt's drainage)
+EARLY_SPEED = 250.0      # mm/s: contrast running on from a shunt through this CT's veins and sinuses (illustrative)
+DOWN_SLACK_MM = 20.0     # downstream: on a way to the jugular veins at most this much longer than the shortest (round a
+                         # sinus's breadth; a few millimetres back into a tributary that joins downstream)
+EARLIER_S, EARLIER_SHARE = 0.3, 0.05   # a vein is copied into a lesion's view if this share of it fills this much earlier
 def early_veins(net: dict, t_flat: np.ndarray, seeds: list[tuple[np.ndarray, float]], speed: float,
-                names: set | None = None, retro_mm: float = 0.0) -> np.ndarray:
+                names: set | None = None, retro_mm: float = 0.0, both: bool = False) -> np.ndarray:
     """Venous arrival with a shunt: from each seed (a point and the time contrast reaches it) on through the veins at
     `speed`: downstream (towards the jugular veins) always, against the flow up to retro_mm (a sinus or veins filled back
     from a fistula); `names`: only these veins (and their seeds' nearest vertex among them)."""
@@ -481,11 +485,15 @@ def early_veins(net: dict, t_flat: np.ndarray, seeds: list[tuple[np.ndarray, flo
     part = np.repeat(np.arange(len(V.keys)), np.diff(V.cut))
     allowed = np.ones(len(V.P), bool) if names is None else np.isin(np.array([V.keys[k][0] for k in part]), list(names))
     best = t_flat.copy()
-    for p, t in seeds:
-        cand = np.nonzero(allowed)[0]
+    vname = np.array([V.keys[k][0] for k in part])
+    for p, t, *into in seeds:            # (a seed may name the vein it drains into: it starts there)
+        cand = np.nonzero(allowed & (vname == into[0]))[0] if into else np.nonzero(allowed)[0]
         i = int(cand[np.argmin(np.linalg.norm(V.P[cand] - p, axis=1))])
-        d = dijkstra(V.G, indices=i)
-        down = d + dout <= dout[i] + 6.0
+        d = dijkstra(V.Gmm, indices=i)       # (in millimetres along the vessels: how far the shunt's contrast runs)
+        down = d + dout <= dout[i] + DOWN_SLACK_MM
+        if both:                     # on the way to either jugular vein (a sinus confluence drains to both sides)
+            for do in net["douts"]:
+                down |= d + do <= do[i] + DOWN_SLACK_MM
         ok = allowed & np.isfinite(d) & (down | (d <= retro_mm))
         te = t + d / speed
         best = np.where(ok & (te < best), te, best)
@@ -531,7 +539,7 @@ class Out:
         by = {v["name"]: v for v in self.vessels}
         for name in sorted({k[0] for k in net["ven"].keys}):
             keys = [k for k in net["ven"].keys if k[0] == name]
-            earlier = any((split[k] < self.t_ven[k] - 0.05).any() for k in keys)
+            earlier = any((split[k] < self.t_ven[k] - EARLIER_S).mean() > EARLIER_SHARE for k in keys)
             if not earlier and not (dilate and name in dilate):
                 continue
             v = by[name]
@@ -631,13 +639,13 @@ def build_avms(o: Out, brain: Brain) -> None:
                 d = np.where(np.linalg.norm(P - q, axis=1) < 20, np.inf, d)
             i = int(np.argmin(d))
             used.setdefault(vname, []).append(P[i])
-            targets.append((P[i], dk, nid.nearest(P[i])))
+            targets.append((P[i], dk, nid.nearest(P[i]), vname))
         # fistulous channels: straight from a feeder's entry to a draining vein's exit
         for k in range(n_fist):
             nid.fistulas.append((entries[k % len(entries)], targets[k % len(targets)][2]))
         nparts, T = nid.draw(seeds)
         dparts, vseeds = [], []
-        for Tg, dk, x in targets:
+        for Tg, dk, x, vn in targets:
             X = nid.J[x]
             C = route(X, Tg, (X + Tg) / 2 - brain.centre, 0.15 if dk == "superficial" else 0.04)
             C = catmull(wiggle(C, 1.6, max(2, np.linalg.norm(Tg - X) / 14))[::3], 0.5)
@@ -645,7 +653,7 @@ def build_avms(o: Out, brain: Brain) -> None:
             pos, nrm, tri, idx = tube(C, np.linspace(1.5, 2.3, len(C)), 10)
             ta = T[x] + s / VB.SHUNT_SPEED
             dparts.append((pos, tri, ta[idx]))
-            vseeds.append((Tg, float(ta[-1])))
+            vseeds.append((Tg, float(ta[-1]), vn))
         S, E_, Vp = smpts
         grade = S + E_ + Vp
         loc = {"pole": "the right frontal pole (not eloquent)", "central": "the left sensorimotor cortex at the central sulcus (eloquent)",
@@ -665,7 +673,7 @@ def build_avms(o: Out, brain: Brain) -> None:
                o.part(lid, "drainers", f"{name}: draining veins", "drainer", "sbVein", dparts, VB.DWELL_VEN_S,
                       "Drawn by rule: from the nidus to this CT's " + ", ".join(sorted({x[0].lower() for x in drains})) +
                       ", dilated and tortuous (illustrative); they fill straight from the nidus, in the arterial phase.")]
-        early = early_veins(o.net, tflat, vseeds, VB.SHUNT_SPEED)
+        early = early_veins(o.net, tflat, vseeds, EARLY_SPEED, both=True)
         ids += o.vein_copies(lid, early)
         o.info.append({"id": lid, "kind": "avm", "name": name, "parts": ids, "location": loc, "nidusMm": dia,
                        "nidus": {**f, "type": kind},
@@ -687,9 +695,17 @@ def wiggle(C: np.ndarray, amp: float, waves: float) -> np.ndarray:
     return C + amp * np.sin(2 * np.pi * waves * s)[:, None] * np.sin(np.pi * s)[:, None] * Nn
 
 
+DAVF_MM = 5.0             # the drawn fistula's diameter (illustrative)
+DAVF_RETRO_MM = 130.0     # how far contrast runs back along the transverse sinus from the fistula (to the torcular: drawn)
+
+
 def build_davf(o: Out, brain: Brain) -> None:
     lid = "davf"
-    F = o.V.contact("Transverse sinus", "Sigmoid sinus", "R").mean(0)
+    F0 = o.V.contact("Transverse sinus", "Sigmoid sinus", "R").mean(0)
+    # the fistula on the sinus's outer wall (away from the brain) at the junction, where the dural feeders reach it
+    W = np.vstack([o.V.get(n, "R")[0][0] for n in ("Transverse sinus", "Sigmoid sinus")])
+    near = W[np.linalg.norm(W - F0, axis=1) < 8]
+    F = near[np.argmax((near - F0) @ unit(F0 - brain.centre))]
     parts, ends = [], []
     mma, t_mma, _ = o.V.nearest("Middle meningeal artery", "R", F)
     C = wiggle(route(mma, F, F - brain.centre, 0.12), 1.0, 3)
@@ -707,10 +723,10 @@ def build_davf(o: Out, brain: Brain) -> None:
     ids = [o.part(lid, "feeders", "Dural AV fistula: feeding arteries", "feeder", "sbArtery", parts, VB.DWELL_ART_S,
                   "Drawn by rule: a branch from this CT's right middle meningeal artery, and an occipital artery branch drawn "
                   "through the bone from outside the skull (this angiogram does not show the external carotid), to the fistula.")]
-    sph_v, sph_f = implicit_mesh(lambda Q: np.linalg.norm(Q - F, axis=1) - 2.2, F - 3, F + 3, 0.2)
+    sph_v, sph_f = implicit_mesh(lambda Q: np.linalg.norm(Q - F, axis=1) - DAVF_MM / 2, F - 4, F + 4, 0.2)
     ids.append(o.part(lid, "fistula", "Dural AV fistula: the fistula", "fistula", "vaNidus", [(sph_v, sph_f, np.full(len(sph_v), tF))],
-                      VB.DWELL_ART_S + 0.6, "Drawn by rule: where the feeders open into the wall of this CT's right sinus, at the "
-                      "junction of its transverse and sigmoid parts."))
+                      VB.DWELL_ART_S + 0.6, f"Drawn by rule: where the feeders open into the outer wall of this CT's right sinus, at the "
+                      f"junction of its transverse and sigmoid parts, {DAVF_MM:g} mm across (illustrative)."))
     # cortical venous reflux: from the transverse sinus back up over the temporal lobe (a vein of Labbé's course, drawn)
     (Ptr, _), _ = o.V.get("Transverse sinus", "R")
     T1 = Ptr[np.argmin(np.abs(np.linalg.norm(Ptr - F, axis=1) - 14))]
@@ -724,8 +740,8 @@ def build_davf(o: Out, brain: Brain) -> None:
     ids.append(o.part(lid, "reflux", "Dural AV fistula: cortical venous reflux", "drainer", "sbVein", [(pos, tri, ta[idx])], VB.DWELL_VEN_S,
                       "Drawn by rule: a cortical vein filled backwards from the transverse sinus, up over this patient's fitted "
                       "temporal lobe (the course of a vein of Labbé), in the arterial phase."))
-    early = early_veins(o.net, flat(o.net, o.t_ven), [(F, tF)], VB.SHUNT_SPEED,
-                        {"Transverse sinus", "Sigmoid sinus", "Internal jugular vein"}, retro_mm=45.0)
+    early = early_veins(o.net, flat(o.net, o.t_ven), [(F, tF)], EARLY_SPEED,
+                        {"Transverse sinus", "Sigmoid sinus", "Internal jugular vein"}, retro_mm=DAVF_RETRO_MM)
     ids += o.vein_copies(lid, early)
     o.info.append({"id": lid, "kind": "davf", "name": "Dural arteriovenous fistula (transverse–sigmoid)", "parts": ids,
                    "borden": 2, "fistulaMm": np.round(F, 1).tolist(), "feeders": ["Middle meningeal artery", "Occipital artery (drawn)"],
@@ -742,7 +758,7 @@ def build_ccfs(o: Out) -> None:
     sph_v, sph_f = implicit_mesh(lambda Q: np.linalg.norm(Q - F, axis=1) - 1.8, F - 3, F + 3, 0.15)
     ids = [o.part("ccfa", "fistula", "Direct carotid-cavernous fistula: the tear", "fistula", "vaNidus", [(sph_v, sph_f, np.full(len(sph_v), tF))],
                   VB.DWELL_ART_S + 0.6, "Drawn by rule: where the right cavernous carotid (this CT's) opens straight into the sinus.")]
-    early = early_veins(o.net, tflat, [(F, tF)], VB.SHUNT_SPEED, CS_NET, retro_mm=160.0)
+    early = early_veins(o.net, tflat, [(F, tF)], EARLY_SPEED, CS_NET, retro_mm=160.0)
     ids += o.vein_copies("ccfa", early, {"Superior ophthalmic vein": 1.2, "Inferior ophthalmic vein": 0.8})
     o.info.append({"id": "ccfa", "kind": "ccf", "barrow": "A", "name": "Direct carotid-cavernous fistula (Barrow type A)", "parts": ids,
                    "fistulaMm": np.round(F, 1).tolist()})

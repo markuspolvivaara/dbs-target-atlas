@@ -4,7 +4,7 @@ import type { ViewState } from '../viewer/scene';
 import { VA_GROUP } from './groups';
 import { DSA } from './index';
 
-export type VaPage = 'atlas' | 'sources' | 'credits';
+export type VaPage = 'atlas' | 'grading' | 'sources' | 'credits';
 
 /** The angiogram: on or off, and its time (s, from the injection). Playing is not part of the link. */
 export interface Dsa { on: boolean; t: number }
@@ -42,7 +42,7 @@ export function defaultVaState(): VaState {
 }
 
 // #/atlas?g=avm3&sel=va_avm3__nidus&h=B&c=axial&dsa=1&t=1.4&ly=b0,c40
-const PAGES: VaPage[] = ['atlas', 'sources', 'credits'];
+const PAGES: VaPage[] = ['atlas', 'grading', 'sources', 'credits'];
 const r1 = (n: number) => Math.round(n * 10) / 10;
 
 export function encodeVa(s: VaState): string {

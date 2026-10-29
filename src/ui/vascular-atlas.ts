@@ -290,11 +290,13 @@ export class VascularAtlasPage {
         h('dt', {}, 'The nidus'), h('dd', {}, claimList(AVM_NIDUS)),
         h('dt', {}, 'Spetzler–Martin grade'), h('dd', {}, claimList(SPETZLER_MARTIN)),
         h('dt', {}, 'Spetzler–Ponce class'), h('dd', {}, claimList(SPETZLER_PONCE)),
-        h('dt', {}, 'Other grades and management'), h('dd', {}, claimList(AVM_OTHER)));
+        h('dt', {}, 'Other grades and management'), h('dd', {}, claimList(AVM_OTHER)),
+        h('dt', {}, 'All the grades'), h('dd', {}, h('a', { href: '#/grading' }, 'Spetzler–Martin and supplementary grades, and what they mean for treatment →')));
     }
     if (g.id === 'davf') return h('dl', {},
-      h('dt', {}, 'This one'), h('dd', {}, 'Drawn as Borden type II: it drains into the sinus (on to the jugular vein, and back along the transverse sinus against its normal flow) and back into a cortical vein over the temporal lobe. In the angiogram the sinus and that vein fill in the arterial phase.'),
-      h('dt', {}, 'Borden and Cognard'), h('dd', {}, claimList(DAVF)));
+      h('dt', {}, 'This one'), h('dd', {}, 'Drawn as Borden type II, Cognard type IIa+b: it drains into the sinus (on to the jugular vein, and back along the transverse sinus against its normal flow) and back into a cortical vein over the temporal lobe. In the angiogram the sinus and that vein fill in the arterial phase.'),
+      h('dt', {}, 'Borden and Cognard'), h('dd', {}, claimList(DAVF)),
+      h('dt', {}, 'All the types'), h('dd', {}, h('a', { href: '#/grading?to=borden' }, 'Borden and Cognard tables, and what they mean for treatment →')));
     if (g.kind === 'fistula') return h('dl', {},
       h('dt', {}, 'Barrow types'), h('dd', {}, claimList(CCF)),
       h('dt', {}, 'Venous drainage'), h('dd', {}, claimList(CCF_VEINS)));

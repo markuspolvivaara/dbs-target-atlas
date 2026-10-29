@@ -145,6 +145,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     xray: xrayMaterial(),
   };
   private selOverlays: THREE.Mesh[] = [];
+  /** the x-rays of outlined structures after the first, each in its structure's own colour */
+  private selXrays: THREE.MeshBasicMaterial[] = [];
   private unsubPrefs: () => void;
   private endo: Endoscope | null = null;
   private endoCfg: EndoscopeConfig | null = null;
@@ -505,14 +507,18 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   private showSelection(ids: string[]): void {
     for (const o of this.selOverlays) o.removeFromParent();
     this.selOverlays = [];
+    for (const m of this.selXrays) m.dispose();
+    this.selXrays = [];
     for (const m of Object.values(this.selMats)) m.clippingPlanes = this.clipPlanes;
     for (const id of ids) {
       const it = this.items.get(id);
       if (!it || it.kind !== 'mesh') continue;
-      if (id === ids[0]) this.selMats.xray.color.copy(this.colour(it.meta));
+      let xray = this.selMats.xray;
+      if (id !== ids[0]) { xray = xray.clone(); xray.clippingPlanes = this.clipPlanes; this.selXrays.push(xray); }
+      xray.color.copy(this.colour(it.meta));
       for (const node of Object.values(it.nodes)) {
         if (!node) continue;
-        for (const [mat, order] of [[this.selMats.halo, 7], [this.selMats.ring, 8], [this.selMats.xray, 9]] as const) {
+        for (const [mat, order] of [[this.selMats.halo, 7], [this.selMats.ring, 8], [xray, 9]] as const) {
           const o = new THREE.Mesh(node.geometry, mat);
           o.morphTargetInfluences = node.morphTargetInfluences;
           o.morphTargetDictionary = node.morphTargetDictionary;

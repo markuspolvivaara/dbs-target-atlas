@@ -1,9 +1,44 @@
-import { DSA, LESIONS, VA_MANIFEST, VA_REFS } from '../vascular';
+import type { Claim } from '../brainstem/schema';
+import { DSA, LESIONS, VA_MANIFEST, VA_REF, VA_REFS } from '../vascular';
+import { AVM_TABLES, DAVF_TABLES, type GradeTable } from '../vascular/grading';
+import { VA_GROUP } from '../vascular/groups';
 import { h } from './h';
+import { refLinksFrom } from './reflinks';
 
 /** Sources and Credits of the vascular section. */
 
 const link = (href: string, text: string) => h('a', { href, target: '_blank', rel: 'noopener' }, text);
+
+const refs = (ids: string[]) => refLinksFrom(VA_REF, ids);
+const claimList = (cl: Claim[]) => h('ul', { class: 'evidence' }, ...cl.map((c) => h('li', {}, c.text, ' ', refs(c.refIds))));
+
+/** One grading table: the rows a view of this atlas draws marked, and linked to that view. */
+function gradeTable(t: GradeTable): HTMLElement {
+  const drawn = (g: string) => h('a', { class: 'drawn-tag', href: `#/atlas?g=${g}`, title: `Open the view: ${VA_GROUP.get(g)?.name ?? g}` }, 'drawn here');
+  return h('section', { class: 'card', id: t.id },
+    h('h3', {}, t.title, ' ', refs(t.refIds)),
+    h('div', { class: 'grade-scroll' },
+      h('table', { class: 'grade-table' },
+        h('thead', {}, h('tr', {}, ...t.head.map((x) => h('th', { scope: 'col' }, x)))),
+        h('tbody', {}, ...t.rows.map((r) => h('tr', r.drawn ? { class: 'is-drawn' } : {},
+          ...r.cells.map((x, i) => (i === 0 ? h('th', { scope: 'row' }, x, r.drawn ? [' ', drawn(r.drawn)] : null) : h('td', {}, x)))))))),
+    t.foot ? h('p', { class: 'aside' }, t.foot) : null,
+    t.notes.length ? claimList(t.notes) : null);
+}
+
+/** The grading systems of arteriovenous malformations and dural fistulas, and what they mean in the clinic. */
+export function vaGradingPage() {
+  const el = h('div', { class: 'page wrap grading' });
+  el.append(
+    h('h1', {}, 'Grading'),
+    h('p', { class: 'lead' }, 'How arteriovenous malformations and dural arteriovenous fistulas are graded, and what the grades mean for treatment. The rows marked “drawn here” are the lesions this atlas draws; open them from the mark. For teaching: not for diagnosis or planning.'),
+    h('h2', {}, 'Arteriovenous malformations'),
+    ...AVM_TABLES.map(gradeTable),
+    h('h2', {}, 'Dural arteriovenous fistulas'),
+    ...DAVF_TABLES.map(gradeTable),
+  );
+  return { el, render() { /* stateless */ } };
+}
 
 export function vaSourcesPage() {
   const el = h('div', { class: 'page wrap' });
