@@ -158,6 +158,11 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   private endoPick = new RayGridCache();
   private endoColours = new Map<string, THREE.Color>();
   private endoReported = false;
+  /** the angiogram view (vascular section): meshes whose geometry carries _arrival and _dwell (shares of the angiogram's
+   * length) fade in as contrast reaches them and wash out after their dwell, drawn in one dark ink over a light ground
+   * without depth (so vessels in front of each other add up, as on a radiograph); uT: the time, as a share */
+  private dsa = { on: false, uOn: { value: 0 }, uT: { value: 0 }, uFade: { value: 0.03 }, uInk: { value: new THREE.Color('#121212') },
+    ground: new THREE.Color('#d9d9d4'), themeGround: new THREE.Color('#ffffff') };
 
   private readonly cat;
 
@@ -253,7 +258,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   // ---------------------------------------------------------------- theme
   setTheme(palette: Palette, background: string, ghost: string): void {
     this.palette = palette;
-    this.scene.background = new THREE.Color(background);
+    this.dsa.themeGround.set(background);
+    this.scene.background = new THREE.Color(this.dsa.on ? this.dsa.ground : background);
     this.ghost.set(ghost);
     this.interior.value.set(palette.cortex ?? '#c4cbd3').multiplyScalar(0.62);
     this.leads.L.shaftMat.color.set(palette.electrode); this.leads.R.shaftMat.color.set(palette.electrode);
@@ -336,6 +342,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       m.visible = false;
       // cortical labels carry sulcal-depth shading as vertex colours and the inflated surface as morph target 0
       if (m.geometry.getAttribute('color')) mats.solid.vertexColors = true;
+      if (m.geometry.getAttribute('_arrival')) this.dsaMaterial(mats.solid);
       // cut-away surfaces (insular view, hidden labels, clip planes) show their inside, in one flat colour so an
       // opening reads as a cut into the brain rather than a view through it
       if (surface && mats.solid.side !== THREE.DoubleSide) {
@@ -357,6 +364,40 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     const layer: LayerKey | ExtraLayerKey = meta.layer ?? (meta.type === 'cortex' || meta.type === 'soft' || surface ? 'cortex'
       : meta.type === 'tube' ? 'tracts' : meta.type === 'target' ? 'targets' : 'nuclei');
     return { kind: 'mesh', meta, nodes, mats, look: 'hidden', layer, surface };
+  }
+
+  /** The angiogram's fade on a mesh's material (see `dsa`): off, the material is as it was. */
+  private dsaMaterial(m: THREE.MeshStandardMaterial): void {
+    const u = this.dsa;
+    m.onBeforeCompile = (sh) => {
+      Object.assign(sh.uniforms, { uDsaOn: u.uOn, uDsaT: u.uT, uDsaFade: u.uFade, uDsaInk: u.uInk });
+      sh.vertexShader = sh.vertexShader
+        .replace('void main() {', 'attribute float _arrival;\nattribute float _dwell;\nvarying float vArr;\nvarying float vDw;\nvoid main() {\n  vArr = _arrival; vDw = _dwell;');
+      sh.fragmentShader = sh.fragmentShader
+        .replace('void main() {', 'uniform float uDsaOn;\nuniform float uDsaT;\nuniform float uDsaFade;\nuniform vec3 uDsaInk;\nvarying float vArr;\nvarying float vDw;\nvoid main() {')
+        .replace('#include <dithering_fragment>', /* glsl */ `#include <dithering_fragment>
+  if (uDsaOn > 0.5) {
+    float a = smoothstep(vArr, vArr + uDsaFade, uDsaT) * (1.0 - smoothstep(vArr + vDw, vArr + vDw + 4.0 * uDsaFade, uDsaT));
+    if (a < 0.02) discard;
+    float facing = abs(dot(normalize(vNormal), normalize(vViewPosition)));
+    gl_FragColor = vec4(uDsaInk, a * (0.18 + 0.55 * facing));
+  }`);
+    };
+    m.customProgramCacheKey = () => 'dsa';
+  }
+
+  /** The angiogram view: on or off, and its time (s) of its length (s). */
+  setDsa(on: boolean, tS: number, lengthS: number): void {
+    const was = this.dsa.on;
+    this.dsa.on = on;
+    this.dsa.uOn.value = on ? 1 : 0;
+    this.dsa.uT.value = tS / lengthS;
+    this.dsa.uFade.value = 0.3 / lengthS;
+    if (on !== was) {
+      this.scene.background = new THREE.Color(on ? this.dsa.ground : this.dsa.themeGround);
+      this.restyle();
+    }
+    this.invalidate();
   }
 
   /** Set the morph target of this name on every mesh that has it (0..1). */
@@ -552,6 +593,14 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         it.mats.solid.emissive.copy(focused ? c.clone().multiplyScalar(0.45) : new THREE.Color(0x000000));
         it.mats.solid.clippingPlanes = this.clipPlanes;
         it.mats.rim.clippingPlanes = this.clipPlanes;
+        // the angiogram: no depth (what lies in front adds up, as on a radiograph), over everything else
+        const dsaMesh = Object.values(it.nodes).some((m) => m?.geometry.getAttribute('_arrival'));
+        it.mats.solid.depthTest = !(this.dsa.on && dsaMesh);
+        if (this.dsa.on && dsaMesh) {
+          it.mats.solid.transparent = true;
+          it.mats.solid.depthWrite = false;
+          for (const m of Object.values(it.nodes)) if (m) m.renderOrder = 5;
+        }
       } else {
         const focused = focus === it.meta.id;
         const role = p.tracts.get(it.meta.id) ?? (focused ? 'key' : null);

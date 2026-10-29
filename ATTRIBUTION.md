@@ -330,6 +330,29 @@ Skull base v2's bone and Skull base v3's fitted brain, under their licences abov
   drawing); the coronal suture, Kocher's points and the external acoustic meatus
   located on the CT; ventriculostomy trajectories computed on it; files converted to compressed glTF.
 
+## Vascular section (TopBrain 2025 CT angiogram, case 011: Skull base v3's vessels, with lesions drawn onto them)
+
+The vessel meshes in `public/assets/vascular/` and `va-manifest.json` and `va-lesions.json` are Skull base v3's vessels
+(TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); OpenEar: CC BY 4.0; the nerves' courses derive from Z-Anatomy: CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan); definitions Wikipedia CC BY-SA 3.0 (as shipped with Z-Anatomy); TotalSegmentator segmentations (Apache-2.0 models); the surgical view's template brain: Lead-DBS, GPL-3.0 (FreeSurfer labels: research use)): **not** GPL-licensed where they come from the TopBrain CT and the Z-Anatomy model; their fit uses the
+TopBrain data (non-commercial). The lesions (aneurysms, arteriovenous malformations and fistulas) are the project's own
+drawings on them. The section also shows Skull base v3's bone and fitted brain, under their licences above.
+
+- Source: https://zenodo.org/records/1473724
+- Note: The bone and the labelled vessels are one adult's CT angiogram (TopBrain case 011); the cervical carotids, jugular veins and optic nerves are TotalSegmentator's segmentations of it. The temporal bone's contents (facial nerve, chorda tympani, cochleovestibular nerve, perilymphatic spaces, ossicles, tympanic membrane, petrous carotid) are a real ear's: OpenEar specimen ALPHA, registered onto each temporal bone of this CT, the left ear mirrored. The cranial nerves are routed through this CT's foramina from the Z-Anatomy model fitted onto it (their cisternal courses approximate). The greater petrosal nerve is drawn by rule. The surgical view's brain is a template (the Lead-DBS MNI 2009b pial surface, GPL-3.0) fitted into this CT, and its craniotomy is cut out of the CT's bone by rule.
+- Attribution: OpenEar library (Sieber D, Erfurt P, John S, et al.), specimen ALPHA: segmentations - https://zenodo.org/records/1473724 - CC BY 4.0
+- Attribution: TopBrain 2025 challenge data (University Hospital Zurich): CT angiogram and vessel labels of case topcow_ct_011 - https://topbrain2025.grand-challenge.org, https://zenodo.org/records/16878417 - open use, source given, non-commercial
+- Attribution: BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan
+- Attribution: Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0
+- Cite: Sieber D, Erfurt P, John S, Ribeiro dos Santos G, Schurzig D, Sørensen MS, Lenarz T. The OpenEar library of 3D models of the human temporal bone based on computed tomography and micro-slicing. Sci Data. 2019;6:180297. doi:10.1038/sdata.2018.297.
+- Cite: Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.
+- Cite: Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).
+- Cite: Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024.
+- Cite: Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.
+- Changes made: Skull base v3's arteries and veins with a schematic angiogram's timing added per vertex
+  (pipeline/vascular_build.py); aneurysms, arteriovenous malformations, a dural fistula and carotid-cavernous fistulas
+  drawn by rule onto them (pipeline/vascular_lesions.py), with copies of the veins they fill early or dilate; files
+  converted to compressed glTF.
+
 ## Cortex section (Destrieux parcellation on the Lead-DBS template surface)
 
 The meshes in `public/assets/cortex/` and `ctx-manifest.json` / `ctx-labels.json` are derived from the Lead-DBS

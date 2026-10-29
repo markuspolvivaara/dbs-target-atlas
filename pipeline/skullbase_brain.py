@@ -40,8 +40,17 @@ at the midline (illustrative), only above the corpus callosum (retract_medial sa
 
 The middle cerebral artery's M2 and M3 segments stay where they are, except where they lie on cortex that is moved on
 purpose: on the frontal and parietal opercula they rise with them as the fissure opens, on the frontal lobe and the
-insula as these are lifted (each vertex the mean displacement of the cortex it follows within SKIN_MM, the rest counted
-as still).
+insula as these are lifted (the mean displacement of the cortex it follows within SKIN_MM, the rest counted as still),
+found along each vessel's centre line (TopBrain's label, skeletonised), smoothed along it, and given to its surface by
+cross-sections, so a vessel is carried and stretched along its length, not squeezed across it.
+
+The Sylvian veins are drawn by rule (this angiogram labels none near the fissure), on the fitted brain, as tubes with
+the same shapes: the superficial middle cerebral vein as one trunk along the fissure's edge on the temporal lip, from its
+back end forwards and down (Imada 2021), on to the sphenoparietal sinus (skullbase_v3_cavernous.py) under the lesser wing
+(Tanoue 2020), moving with the temporal lobe (the fissure opened on its frontal side); the precentral, central and
+posterior insular veins in from the insula's edge to its pole (where this patient's M1 meets its M2), and from there the
+deep middle cerebral vein to the front end of this patient's basal vein (Ota 2024), moving with the insula. Radii and
+the fan of the insular veins are illustrative (VEIN_*).
 
 Writes pipeline/data/build/skullbase-v3/br_*.glb and pipeline/data/build/skullbase-v3/brain.json (the items for the
 manifest, and the fit report, with the anterior cerebral arteries TopBrain labels on this CT).
@@ -125,6 +134,19 @@ OPEN_ROI_MM = 35.0         # the brain further than this from the opercula does 
 HOLD_MM = 3.0              # cortex this close to the inner table is held by it (does not move) ...
 HOLD_FREE_MM = 10.0        # ... unless this close to a lip
 SKIN_MM = 3.0
+SKIN_LINK_MM = 1.0         # a vessel moves by cross-sections: its displacement found on its centre line (TopBrain's label,
+SKIN_ROUNDS = 8            # skeletonised; points this close linked), smoothed along it this many rounds, and each surface
+                           # vertex given its nearest centre-line point's (so a vessel is carried, not squeezed)
+VEIN_SMCV_MM = 1.0         # the veins drawn by rule (none labelled near the fissure): their radii (illustrative) ...
+VEIN_DMCV_MM = 0.9
+VEIN_INSULAR_MM = 0.5
+VEIN_OFF_MM = 0.3          # ... their surface this far off the cortex ...
+VEIN_STEP_MM = 1.0         # ... their centre lines sampled this finely ...
+VEIN_ROUNDS = 40           # ... and their displacement smoothed along them this many rounds (a few millimetres)
+VEIN_EDGE_MM = 4.0         # temporal opercular surface (near the hull) within this of the frontal or parietal lip: the fissure's edge
+VEIN_INSULAR = (("precentral", 0.5), ("central", 0.0), ("posterior", 0.85))  # the insular veins, from the insula's pole out:
+                           # central along the boundary of the short and long gyri; the others this share of the way from it
+                           # to the insula's front and back edges (illustrative)
 ARAP_ITERS = 15
 LIFT_MM = 8.0              # illustrative: how far the frontal lobe's orbital surface is lifted
 LIFT_ALONG = [             # the lift runs along the orbital roof through these fitted landmarks (right side; offsets mm),
@@ -721,6 +743,184 @@ def skin(P: np.ndarray, rest: np.ndarray, moved: np.ndarray, follow: np.ndarray)
     return np.where(s > 0, (w[:, :, None] * D).sum(1) / np.maximum(s, 1e-9), 0.0)
 
 
+def skin_along(v: np.ndarray, line: np.ndarray, rest: np.ndarray, moved: np.ndarray, follow: np.ndarray,
+               link: float = SKIN_LINK_MM, rounds: int = SKIN_ROUNDS) -> np.ndarray:
+    """skin, by cross-sections: the displacement found on the vessel's centre line, smoothed along it (SKIN_ROUNDS), and
+    each surface point given its nearest centre-line point's. A vessel lying between cortex that moves and cortex that
+    stays is carried and stretched along its length, not squeezed across it."""
+    D = skin(line, rest, moved, follow)
+    pairs = cKDTree(line).query_pairs(link, output_type="ndarray")
+    n = len(line)
+    A = sp.coo_matrix((np.ones(2 * len(pairs)), (np.r_[pairs[:, 0], pairs[:, 1]], np.r_[pairs[:, 1], pairs[:, 0]])), shape=(n, n)).tocsr() + sp.identity(n)
+    deg = np.asarray(A.sum(1)).ravel()[:, None]
+    for _ in range(rounds):
+        D = (A @ D) / deg
+    _, j = cKDTree(line).query(v)
+    return D[j]
+
+
+def resample_line(P: np.ndarray, step: float) -> np.ndarray:
+    d = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
+    t = np.r_[np.arange(0.0, d[-1], step), d[-1]]
+    return np.stack([np.interp(t, d, P[:, k]) for k in range(3)], 1)
+
+
+def smooth_line(P: np.ndarray, rounds: int) -> np.ndarray:
+    """A polyline smoothed (its ends kept)."""
+    P = P.copy()
+    for _ in range(rounds):
+        P[1:-1] = (P[:-2] + 2 * P[1:-1] + P[2:]) / 4
+    return P
+
+
+def frames(P: np.ndarray, N0: np.ndarray | None = None) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Tangents and normals along a line: parallel-transported, or (N0, another shape's normals) each turned the least
+    way onto this shape's tangent, so the tube's rings keep their place between shapes and a morph does not twist it."""
+    T = np.gradient(P, axis=0)
+    T /= np.linalg.norm(T, axis=1, keepdims=True) + 1e-12
+    if N0 is None:
+        a = np.array([1.0, 0, 0]) if abs(T[0, 0]) < 0.9 else np.array([0, 1.0, 0])
+        N = [np.cross(T[0], a) / np.linalg.norm(np.cross(T[0], a))]
+        for i in range(1, len(P)):
+            n = N[-1] - T[i] * np.dot(N[-1], T[i])
+            ln = np.linalg.norm(n)
+            N.append(n / ln if ln > 1e-9 else N[-1])
+        N = np.array(N)
+    else:
+        N = N0 - T * (N0 * T).sum(1, keepdims=True)
+        N /= np.linalg.norm(N, axis=1, keepdims=True) + 1e-12
+    return T, N, np.cross(T, N)
+
+
+def sweep(P: np.ndarray, r: float, N0: np.ndarray | None = None, sides: int = 8):
+    """A tube round a centre line, one ring per point (no resampling: two shapes of one line give tubes with the same
+    vertices), closed with end caps. Returns positions, normals, triangles and the normals used (for another shape)."""
+    T, N, B = frames(P, N0)
+    ang = np.linspace(0, 2 * np.pi, sides, endpoint=False)
+    dirs = np.cos(ang)[None, :, None] * N[:, None, :] + np.sin(ang)[None, :, None] * B[:, None, :]
+    pos = np.vstack([(P[:, None, :] + r * dirs).reshape(-1, 3), P[[0, -1]]])
+    nrm = np.vstack([dirs.reshape(-1, 3), -T[0], T[-1]])
+    tris = []
+    for i in range(len(P) - 1):
+        for k in range(sides):
+            a, b = i * sides + k, i * sides + (k + 1) % sides
+            tris += [[a, b, b + sides], [a, b + sides, a + sides]]
+    c0, c1 = len(P) * sides, len(P) * sides + 1
+    for k in range(sides):
+        tris += [[c0, (k + 1) % sides, k], [c1, (len(P) - 1) * sides + k, (len(P) - 1) * sides + (k + 1) % sides]]
+    return pos, nrm, np.array(tris), N
+
+
+def settle(P: np.ndarray, V: np.ndarray, Nv: np.ndarray, off: float) -> np.ndarray:
+    """A line laid on the cortex: put on it (on_surface), then smoothed and kept off it, in turns (the cortex's vertices
+    alone would make it zigzag)."""
+    P = on_surface(P, V, Nv, off, snap=True)
+    for _ in range(6):
+        P = on_surface(smooth_line(P, 4), V, Nv, off, snap=False)
+    return P
+
+
+def on_surface(P: np.ndarray, V: np.ndarray, Nv: np.ndarray, off: float, snap: bool) -> np.ndarray:
+    """Points put on the cortex (snap: at the nearest vertex, off along its normal) or only kept off it (pushed out to
+    off where nearer or inside)."""
+    _, j = cKDTree(V).query(P)
+    if snap:
+        return V[j] + off * Nv[j]
+    s = ((P - V[j]) * Nv[j]).sum(1)
+    return np.where((s < off)[:, None], P + (off - s)[:, None] * Nv[j], P)
+
+
+def smcv_line(d: dict, V: np.ndarray, Nv: np.ndarray, hull: np.ndarray, sinus_end: np.ndarray | None) -> np.ndarray:
+    """The superficial middle cerebral vein's centre line, drawn by rule: along the fissure's edge on the temporal lip
+    (the temporal opercular surface near the hull nearest the frontal and parietal lips), from the fissure's back end
+    forwards and down, then on to the sphenoparietal sinus's outer end (when given), kept off the cortex."""
+    lob, oper = d["lobe"], d["oper"]
+    front = oper & np.isin(lob, ["frontal", "parietal"])
+    temp = oper & (lob == "temporal")
+    lip_f, lip_t = front & (hull > -LIP_DEPTH_MM), temp & (hull > -LIP_DEPTH_MM)
+    df = cKDTree(V[lip_f]).query(V[lip_t])[0]
+    E, de = V[lip_t][df < VEIN_EDGE_MM], df[df < VEIN_EDGE_MM]
+    c = E.mean(0)
+    a = np.linalg.svd(E - c, full_matrices=False)[2][0]
+    a = a if a[1] > 0 else -a                       # back to front
+    t = (E - c) @ a
+    pts = []
+    for t0 in np.arange(t.min(), t.max() + 1e-9, 2 * VEIN_STEP_MM):
+        k = np.abs(t - t0) <= VEIN_STEP_MM
+        if k.sum() >= 3:                             # in each slice, the edge itself: the points nearest the other lip
+            near = de[k] <= np.quantile(de[k], 0.3)
+            pts.append(E[k][near].mean(0))
+    P = smooth_line(resample_line(np.array(pts), VEIN_STEP_MM), 20)
+    tl = lob == "temporal"           # (laid on the temporal lobe alone: the frontal lip is near)
+    P = settle(P, V[tl], Nv[tl], VEIN_SMCV_MM + VEIN_OFF_MM)
+    if sinus_end is not None:
+        n = max(2, int(np.linalg.norm(sinus_end - P[-1]) / VEIN_STEP_MM))
+        P = np.vstack([P, P[-1] + np.linspace(0, 1, n + 1)[1:, None] * (sinus_end - P[-1])])
+    P = resample_line(P, VEIN_STEP_MM)
+    for _ in range(4):
+        P = on_surface(smooth_line(P, 4), V[tl], Nv[tl], VEIN_SMCV_MM + VEIN_OFF_MM, snap=False)
+    return P
+
+
+def insular_lines(d: dict, V: np.ndarray, Nv: np.ndarray, F: np.ndarray, genu: np.ndarray, bvr: np.ndarray | None) -> tuple[dict, np.ndarray]:
+    """The insular veins and the deep middle cerebral vein, drawn by rule. The insula's pole is where this patient's M1
+    meets its M2 (`genu`, TopBrain's labels); seen face on, the precentral, central and posterior insular veins run in
+    from the insula's edge to the pole (central: along the boundary of the template's short and long gyri; the others
+    VEIN_INSULAR of the way from it to the front and back), and from the pole the deep middle cerebral vein runs on to
+    the basal vein's front end (`bvr`, TopBrain's label), kept off the cortex."""
+    ins = d["ins"]
+    face = np.isin(d["des"], ["G_insular_short", "G_Ins_lg_and_S_cent_ins"])   # the insula's face (its gyri, not the circular
+    Vi, idx = V[ins], np.nonzero(ins)[0]                                        # sulci folding up under the opercula)
+    Vg = V[face]
+    pole_i = int(np.argmin(np.linalg.norm(Vi - genu, axis=1)))
+    pole = Vi[pole_i]
+    c = Vi.mean(0)
+    e1, e2, e3 = np.linalg.svd(Vi - c, full_matrices=False)[2]
+    uv = np.c_[(Vi - pole) @ e1, (Vi - pole) @ e2]
+    th, rho = np.arctan2(uv[:, 1], uv[:, 0]), np.linalg.norm(uv, axis=1)
+    des = d["des"][idx]
+    # the short and long gyri's boundary: short-gyrus vertices with a long-gyrus neighbour
+    E = np.vstack([F[:, [0, 1]], F[:, [1, 2]], F[:, [2, 0]]])
+    lab = np.full(len(V), "", dtype=object)
+    lab[idx] = des
+    bd = np.unique(E[(lab[E[:, 0]] == "G_insular_short") & (lab[E[:, 1]] == "G_Ins_lg_and_S_cent_ins"), 0])
+    pos = {v: k for k, v in enumerate(idx)}
+    far = rho > 0.3 * rho.max()
+
+    def mean_angle(sel):
+        return float(np.angle(np.exp(1j * th[sel]).mean()))
+    th_c = mean_angle(np.isin(np.arange(len(Vi)), [pos[b] for b in bd if b in pos]) & far)
+    fwd = np.array([0.0, 1.0, 0.0])
+    ahead = ((Vi - pole) @ fwd)
+    th_a = mean_angle(far & (ahead >= np.quantile(ahead[far], 0.9)))     # the insula's front, seen from the pole
+    th_p = mean_angle(far & (ahead <= np.quantile(ahead[far], 0.1)))     # ... and its back
+    out = {}
+    for name, share in VEIN_INSULAR:
+        to = th_a if name == "precentral" else th_p
+        dth = np.angle(np.exp(1j * (to - th_c)))
+        ang = th_c + share * dth
+        sel = np.abs(np.angle(np.exp(1j * (th - ang)))) < np.radians(8)
+        r_end = (np.quantile(rho[sel], 0.95) if sel.sum() > 5 else rho.max() * 0.8) - 2.0
+        rr = np.arange(r_end, 2.0, -VEIN_STEP_MM)                         # from the edge in to the pole
+        q = np.c_[rr * np.cos(ang), rr * np.sin(ang)]
+        # seen face on, the outermost of the insula's face near each point
+        guv = np.c_[(Vg - pole) @ e1, (Vg - pole) @ e2]
+        out_dir = e3 if ((Vg.mean(0) - V.mean(0)) @ e3) > 0 else -e3
+        _, jj = cKDTree(guv).query(q, k=8)
+        j = jj[np.arange(len(q)), np.argmax((Vg[jj] - pole) @ out_dir, axis=1)]
+        P = smooth_line(resample_line(np.vstack([Vg[j], pole]), VEIN_STEP_MM), 8)
+        out[name] = settle(P, Vg, Nv[face], VEIN_INSULAR_MM + VEIN_OFF_MM)
+    P0 = pole + (VEIN_DMCV_MM + VEIN_OFF_MM) * Nv[idx[pole_i]]
+    if bvr is not None:
+        b0 = bvr[np.argmin(np.linalg.norm(bvr - P0, axis=1))]
+        n = max(2, int(np.linalg.norm(b0 - P0) / VEIN_STEP_MM))
+        P = P0 + np.linspace(0, 1, n + 1)[:, None] * (b0 - P0)
+        for _ in range(3):
+            P = smooth_line(on_surface(P, V, Nv, VEIN_DMCV_MM + VEIN_OFF_MM, snap=False), 3)
+        out["deep"] = P
+    return out, pole
+
+
 # ---------------------------------------------------------------- outputs
 PIECES = [  # (id, name, lobes, token)
     ("br_frontal_lobe", "Frontal lobe", ["frontal"], "sbBrain"),
@@ -754,7 +954,92 @@ def piece(V, F, faces_sel, targets=None):
     return node
 
 
-OPENING_KEYS = ("OPEN_", "LIP_", "HOLD_", "SKIN_", "ARAP_", "MORPHED_", "PIECES", "LIFT_", "LSO_", "IH_")
+VEIN_ITEMS = [  # (id, name, aliases, lines): the veins of the fissure, drawn by rule
+    ("sb_superficial_middle_cerebral_vein", "Superficial middle cerebral vein", ["Superficial Sylvian vein"], ["smcv"]),
+    ("sb_insular_veins", "Insular veins", ["Precentral, central and posterior insular veins"], ["precentral", "central", "posterior"]),
+    ("sb_deep_middle_cerebral_vein", "Deep middle cerebral vein", ["Deep Sylvian vein"], ["deep"]),
+]
+
+
+def sylvian_veins(tp, fields: dict, out: dict, pt, shapes: dict, report: dict) -> list:
+    """The Sylvian veins, drawn by rule on the fitted brain (smcv_line, insular_lines), as tubes with the surgical
+    shapes as morph targets: the superficial vein moves with the temporal lobe it runs on (the fissure opened on its
+    frontal side), the insular and deep veins with the insula (still as the fissure opens; the front of it rises with
+    the lift). Each tube is carried by cross-sections along its line, as the arteries are."""
+    radius = {"smcv": VEIN_SMCV_MM, "deep": VEIN_DMCV_MM, "precentral": VEIN_INSULAR_MM, "central": VEIN_INSULAR_MM, "posterior": VEIN_INSULAR_MM}
+    spp = None
+    p = BUILD / "tb_sphenoparietal_sinus.glb"
+    if p.exists():
+        sc = trimesh.load(p, force="scene")
+        spp = {}
+        for node in sc.graph.nodes_geometry:
+            T, g = sc.graph[node]
+            v = np.asarray(sc.geometry[g].vertices) @ T[:3, :3].T + T[:3, 3]
+            spp[node] = v[np.abs(v[:, 0]) > np.abs(v[:, 0]).max() - 1.0].mean(0)   # its outer end
+    lines, rep = {}, {}
+    for s in "LR":
+        d = tp.dec[s]
+        V, F = out[s], d["F"]
+        Nv = normals(V, F)
+        if ((V - V.mean(0)) * Nv).sum(1).mean() < 0:
+            Nv = -Nv
+        hull = fields["hull"](d["V"], grad=False)
+        L = {"smcv": smcv_line(d, V, Nv, hull, None if spp is None else spp.get(s))}
+        m1 = pt.lines[{"R": 5, "L": 7}[s]][:, :3]
+        m2 = pt.lines[M2_CODES[s]][:, :3]
+        genu = m2[np.argmin(cKDTree(m1).query(m2)[0])]
+        bcode = {"R": 38, "L": 39}[s]
+        ins, pole = insular_lines(d, V, Nv, F, genu, pt.lines[bcode][:, :3] if bcode in pt.lines else None)
+        L.update(ins)
+        lines[s] = L
+        rep[s] = {k: round(float(np.linalg.norm(np.diff(P, axis=0), axis=1).sum()), 1) for k, P in L.items()}
+        rep[s]["poleToGenuMm"] = round(float(np.linalg.norm(pole - genu)), 1)
+    lob = tp.dec["R"]["lobe"]
+    follow = {"smcv": lob == "temporal"}
+    for k in ("precentral", "central", "posterior", "deep"):
+        follow[k] = lob == "insula"
+    items = []
+    for vid, name, aliases, keys in VEIN_ITEMS:
+        nodes, cent = [], {}
+        for s in "LR":
+            pos, nrm, tri, tg = [], [], [], {n: ([], []) for n in shapes}
+            for k in keys:
+                P = lines[s].get(k)
+                if P is None or len(P) < 2:
+                    continue
+                v0, n0, t0, N0 = sweep(P, radius[k])
+                base = {}
+                for n, Xs in shapes.items():
+                    if s == "R":
+                        D = skin_along(P, P, out["R"], Xs, follow[k], link=1.5 * VEIN_STEP_MM, rounds=VEIN_ROUNDS)
+                        v1, n1, _, _ = sweep(P + D, radius[k], N0)
+                    else:
+                        v1, n1 = v0, n0
+                    base[n] = (v1, n1)
+                # the lifts are on top of the opening (as the brain's targets)
+                for n in shapes:
+                    v1, n1 = base[n]
+                    vb, nb = (base["open"] if n != "open" else (v0, n0))
+                    tg[n][0].append(v1 - vb)
+                    tg[n][1].append(n1 - nb)
+                tri.append(t0 + sum(len(x) for x in pos))
+                pos.append(v0)
+                nrm.append(n0)
+            if not pos:
+                continue
+            v = np.vstack(pos)
+            node = {"name": s, "positions": v, "normals": np.vstack(nrm), "indices": np.vstack(tri), "mode": TRIANGLES,
+                    "targets": [{"name": n, "positions": np.vstack(tg[n][0]), "normals": np.vstack(tg[n][1])} for n in shapes]}
+            nodes.append(node)
+            cent[s] = v.mean(0).round(2).tolist()
+        write_glb(BUILD / f"{vid}.glb", nodes, {"id": vid})
+        items.append({"id": vid, "name": name, "aliases": aliases, "drawnVein": True, "centroid": cent})
+    report["veins"] = {"lengthMm": rep, "radiusMm": {"smcv": VEIN_SMCV_MM, "deep": VEIN_DMCV_MM, "insular": VEIN_INSULAR_MM},
+                       "sphenoparietal": spp is not None}
+    return items
+
+
+OPENING_KEYS = ("OPEN_", "LIP_", "HOLD_", "SKIN_", "ARAP_", "MORPHED_", "PIECES", "LIFT_", "LSO_", "IH_", "VEIN_")
 
 
 def params_hash(fit_only: bool = False) -> str:
@@ -857,9 +1142,10 @@ def main() -> int:
             v, t = np.array(m["verts"], float), np.array(m["tris"], int)
             node = {"name": s, "positions": v, "normals": normals(v, t), "indices": t, "mode": TRIANGLES}
             if s == "R":
-                D0 = skin(v, out["R"], X, follow_open)
-                D1 = skin(v, out["R"], XL, follow_lift) - D0
-                D2 = skin(v, out["R"], XS, follow_lift) - D0
+                line = pt.lines[(M2_CODES if "M2" in vname else M3_CODES)["R"]][:, :3]
+                D0 = skin_along(v, line, out["R"], X, follow_open)
+                D1 = skin_along(v, line, out["R"], XL, follow_lift) - D0
+                D2 = skin_along(v, line, out["R"], XS, follow_lift) - D0
             else:
                 D0 = D1 = D2 = np.zeros_like(v)
             node["targets"] = [{"name": "open", "positions": D0, "normals": np.zeros_like(v)},
@@ -873,6 +1159,7 @@ def main() -> int:
         write_glb(BUILD / f"{sid}.glb", nodes, {"id": sid})
         report.setdefault("vesselsMovedMaxMm", {})[vname] = moved
         items.append({"id": sid, "vessel": vname, "file": f"assets/{KIND}/{sid}.glb"})
+    items += sylvian_veins(tp, fields, out, pt, {"open": X, "lift": XL, "lsoLift": XS}, report)
     # this patient's M1 (TopBrain's label), from the carotid bifurcation (its end nearest the carotid's label)
     report["m1LengthMm"] = {s: round(centre_line_length(pt.lines[{"R": 5, "L": 7}[s]][:, :3], pt.lines[{"R": 4, "L": 6}[s]][:, :3]), 1)
                             for s in "RL"}

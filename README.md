@@ -149,10 +149,11 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   its outline placed by hand and drawn wider than the mean LSO (about 1450 against 1275 mm², Cha 2012) to show the
   anatomy; it shares the brain and its two sliders. The right pterional craniotomy is
   cut out of the CT's own bone (`pipeline/skullbase_v3_approach.py`: burr holes placed from the fitted landmarks as
-  Yilmaz 2025 and Sevgi 2026 describe, the skull's thickness removed inside their outline, the lateral sphenoid ridge
-  drilled). A cut never bridges the cranial cavity into the floor beyond it. Each cut bone keeps v2's own mesh except
+  Yilmaz 2025 and Sevgi 2026 describe, the skull's thickness removed inside an oval drawn through them with its sides
+  bowed out, behind the zygomatic bone, which stays; the corners where the cranial floor is kept are rounded over 2.5 mm
+  and the edge is smoothed over 1 mm, a drawing choice; the lateral sphenoid ridge drilled). A cut never bridges the cranial cavity into the floor beyond it. Each cut bone keeps v2's own mesh except
   within 3 mm of the cut, where the cut mask's surface (meshed as v2 meshes the skull) takes over, each new face going
-  to the bone of the nearest v2 face, so the cut bones meet their untouched neighbours without gaps. A template brain, the Lead-DBS MNI 2009b pial surface
+  to the bone of the nearest v2 face, so the cut bones meet their untouched neighbours without gaps. Where a smoothed cut edge would wear a pinhole through thin bone beside the opening (the orbit's walls), the bone within 2 mm of it is left whole; loose pieces at the cut are judged on the cut surface as a whole, not bone by bone. A whole bone with a face within 3 mm of a cut (across a suture) is remeshed with the cut bones and left unworn by the smoothed edge, so the two meet on one surface instead of at a seam between two meshings. Near the pterional's outline (within 5 mm) its smoothed edge never wears weak bone (as by the frontal sinus) below the surface outside the cut, and it leaves no pocket under 3 mm wide under the bone it keeps. A template brain, the Lead-DBS MNI 2009b pial surface
   of the cortex section, is fitted into this CT (`pipeline/skullbase_brain.py`, `pipeline/brain_deform.py`): a smooth
   deformation (affine, then Gaussian radial basis functions from 18 to 5 mm, a penalty against folding) puts its hull
   2 mm inside the CT's cranial cavity, every artery TopBrain labels outside the cortex, the M2 segments on the insula
@@ -164,8 +165,14 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   target 0. A second slider (morph target 1, solved on top of the opening) lifts the frontal lobe off the orbital roof
   by 8 mm (illustrative) along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula
   with it, to look under it at the carotid and the optic nerve. The M2 and M3 branches stay where the CT shows them except on cortex moved on
-  purpose: the frontal and parietal opercula when the fissure opens, the frontal lobe and insula when they are lifted. The cards cite open-access sources on the
-  craniotomy, the fissure's dissection, the middle cerebral artery's segments and the insula
+  purpose: the frontal and parietal opercula when the fissure opens, the frontal lobe and insula when they are lifted;
+  each moves by cross-sections along its centre line, so it is stretched along its length rather than squeezed. The
+  Sylvian veins, which this angiogram does not label, are drawn by rule on the fitted brain (`pipeline/skullbase_brain.py`):
+  the superficial middle cerebral vein as one trunk along the fissure's temporal edge from its back end forwards and down
+  (Imada 2021) to the sphenoparietal sinus (Tanoue 2020), moving with the temporal lobe; the precentral, central and
+  posterior insular veins from the insula's edge to its pole, and the deep middle cerebral vein from there to this
+  patient's basal vein (Ota 2024), moving with the insula. The cards cite open-access sources on the
+  craniotomy, the fissure's dissection, the middle cerebral artery's segments, the Sylvian veins and the insula
   (`src/skullbase/approaches.ts`).
   The interhemispheric view cuts a right parasagittal flap at the coronal suture (from 40 mm in front of bregma to 20 mm
   behind it, 40 mm wide: illustrative; Nair 2016, Symss 2014) and shows both hemispheres with v2's fitted falx; its
@@ -233,6 +240,47 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   carotids' distance through the sella. Sources: Solari 2012, van Lindert 2010, Famurewa 2018, Nguyen 2026 (the
   ostium). The pipeline also carries v2's fitted pituitary, cavernous and intercavernous sinuses and chiasm into v3's
   manifest; run it after `pipeline/skullbase_v3.py`.
+- **The cavernous sinus** (`pipeline/skullbase_v3_cavernous.py`, `src/skullbase/cavernous.ts`; run after
+  `pipeline/skullbase_v3.py`, before `pipeline/skullbase_v3_endonasal.py`): on the endonasal grid, the anterior and
+  posterior clinoids and the petrous apex are found on this CT's bone, the cavernous carotid's centre line traced from the
+  foramen lacerum (v3's traced part) through TopBrain's label to its anterior bend, and the sinus modelled round it between
+  Chotai 2018's borders: the sella and sphenoid body medially (off the bone and the modelled hypophysis), a lateral wall
+  (a plane through the superior orbital fissure, foramen rotundum, the ganglion's medial margin and the petrous apex, kept
+  at least 2.5 mm outside the carotid), the roof at the clinoids' level falling to the petrous apex, the carotid sulcus's
+  level below (drawing choices). The oculomotor, trochlear, ophthalmic and maxillary nerves are re-routed through its
+  lateral wall in their order from above (Corvino 2023), the abducens nerve from under Gruber's ligament against the
+  carotid's posterior vertical segment and on medial to V1 (Wysiadecki 2021): their v3 meshes are spliced (kept in
+  `cavernous.json`, which `skullbase_v3.py` applies again when it routes them). The ten triangles of Chung 2016 are
+  drawn as flat patches between those structures, and the sinus's walls as a translucent shell of dura round it (1.2 mm
+  at the lateral wall, its nerves inside it, 0.3 mm elsewhere: drawing choices); v2's fitted superior and inferior petrosal sinuses and ophthalmic
+  veins are carried over, the sphenoparietal sinus and the basilar plexus drawn by rule (Tanoue 2020). Its own view
+  (Systems: Cavernous sinus) draws the right sinus see-through with all of it; in the endonasal view, a step per side
+  opens its medial wall (the bone between it and the sphenoid sinus and its venous space, up to the carotid's wall,
+  clear of its nerves), the carotid's wall laid bare drawn red and the abducens nerve seen inside.
+- **Cranial floor landmarks** (`pipeline/skullbase_v3_floor.py`, run by `pipeline/skullbase_v3.py` once the
+  cavernous sinus is built, or alone): the Cranial floor view labels, besides the foramina, the anterior and posterior
+  clinoid processes and the petrous apex on both sides, found on this CT's bone (as the cavernous sinus finds them); the
+  foramen caecum, sphenoidal yoke (planum), limbus, chiasmatic sulcus, tuberculum sellae, hypophysial fossa, dorsum
+  sellae, clivus and internal occipital protuberance; and on each side the lesser wing, arcuate eminence, tegmen tympani
+  and groove for the transverse sinus. Those are the fitted Z-Anatomy model's points moved onto the CT's bone surface
+  facing the cranial cavity (median 1.5 mm, up to 4.2 mm for the clivus), the side the model does not label
+  mirrored from the other (kept when bone lies within 5 mm). Each card says how its point was placed.
+- **Posterior inferior cerebellar artery** (`pipeline/skullbase_v3_pica.py`, after `pipeline/skullbase_pfossa.py`; also
+  run by `pipeline/skullbase_v3.py`): TopBrain labels only its first part by the medulla, so the Z-Anatomy PICA (trunk
+  and branches) is carried on from the label's far end, as the superior cerebellar artery is: carried onto this CT by
+  the whole-skull fit and the posterior fossa fit (so it keeps its place against the fitted tonsils), its start moved
+  onto the label's end (6.9 mm right, 14.6 mm left) with the move fading over 15 mm, kept clear of the cerebellum and
+  brainstem. Both parts move with the cerebellum in the telovelar and retrosigmoid shapes, by cross-sections along
+  their centre lines.
+  Where its labelled loops lie on the back of the medulla below the obex, `pipeline/skullbase_pfossa.py` cuts a
+  shallow groove in the fitted medulla for them (`dent`: the model's medulla, not the patient's artery, gives way).
+- **Floor of the fourth ventricle** (`pipeline/skullbase_v3_rhomboid.py`, after `pipeline/skullbase_pfossa.py`; also
+  run by `pipeline/skullbase_v3.py`): the telovelar view labels the facial colliculi, hypoglossal and vagal trigones,
+  vestibular areas, the median sulcus and the obex. Z-Anatomy does not label them, so each is put on its fourth
+  ventricle's floor straight behind the model's nucleus beneath it (abducens, hypoglossal, dorsal vagal, vestibular
+  nuclei; the obex at the floor's caudal tip, the median sulcus at the colliculi's level) and carried into this CT with
+  the fitted ventricle, vertex for vertex: the model's, not this patient's. Their cards cite Erginoglu 2026 (the floor's
+  morphometry in 40 brainstems) and Zhuang 2021.
 - Cards cite open-access sources checked against their full texts (`src/skullbase/temporal.ts`): Gupta 2013,
   Kalaiarasi 2018, Nguyen 2026, García-Barrios 2021, Sieber 2019.
 - Pipeline: `pipeline/fetch_openear.py volumes`, `pipeline/skullbase_ct.py` (writes the frame and the bone grid),
@@ -439,6 +487,42 @@ shape.
   `node pipeline/compress.mjs ventricles`,
   `pipeline/ventricles_build.py finalize` (checks sizes, the model's fit, the foramina, landmark positions and every
   trajectory).
+
+## Vascular
+
+`vascular/`: the cerebral vessels of one CT angiogram (Skull base v3's: TopBrain's expert labels, the sinuses and middle
+meningeal artery traced in the CT, TotalSegmentator's cervical carotids and jugular veins, the small vessels the skull
+base fits or draws), with vascular lesions drawn onto them by rule, none of them a patient's:
+
+- **Aneurysms** (`pipeline/vascular_lesions.py`): saccular ones where this CT's arteries branch, at the commonest sites of
+  ruptured aneurysms (Zheng 2019): the anterior and posterior communicating arteries, the middle cerebral bifurcation,
+  the basilar tip, the ophthalmic segment, the vertebral artery at the PICA; each a dome on a neck joined smoothly (an
+  implicit surface), pointing along the inflow at bifurcations. A fusiform aneurysm widening the basilar trunk all round
+  (no neck: Xu 2022) and a blister on the internal carotid's dorsal wall (Wroe 2025). Sizes illustrative.
+- **Arteriovenous malformations** of Spetzler–Martin grades I, III and V (Naranbhai 2023; Spetzler–Ponce classes A, B and C:
+  Hofman 2018): a nidus drawn as a network after a theoretical model (Jain 2019): tortuous plexiform vessels (about 1 mm
+  wide) between junctions in an irregular, lobulated envelope scaled to the chosen greatest diameter, a compartment for
+  each feeder (its feeder branching into it), larger fistulous channels (2 mm) straight from a feeder to a draining vein,
+  compact for grades I and III, diffuse for grade V (lobes apart, pockets of brain between its vessels, stray vessels off
+  its margins: Wu 2024's definition); kept in its own hemisphere and under the cortex at its site; placed on the
+  fitted template brain (the right frontal pole; the left sensorimotor cortex at the central sulcus; the right occipital
+  lobe, reaching deep), dilated feeders from the nearest of this CT's arteries that supply it (ACA, MCA M3, PCA P3–P4) and
+  draining veins to its sinuses (superficial: the superior sagittal sinus; deep: the vein of Galen, the straight sinus).
+  The card works out the grade from the drawn lesion.
+- **Fistulas**: a dural arteriovenous fistula at the right transverse–sigmoid junction drawn as Borden type II (Li 2015,
+  Shakeel 2025): fed by a middle meningeal branch and an occipital branch drawn through the bone, draining into the sinus
+  (antegrade, and back along the transverse sinus) and back into a cortical vein; direct (Barrow A) and indirect (Barrow D)
+  carotid-cavernous fistulas on Skull base v3's cavernous sinus (Mishra 2022), the direct one dilating the ophthalmic veins.
+- **The angiogram**: every vessel carries, per vertex, the time contrast reaches it (`_ARRIVAL`, `_DWELL` in its GLB, as
+  shares of the angiogram's length), and the viewer's angiogram mode fades each in and out in one dark ink over a light
+  ground without depth, so vessels add up as on a radiograph, in 3D (play, pause, scrub). The timing is a drawing:
+  arteries in order of their distance along the vessels from the injection, veins after a capillary delay, upstream ends
+  first; a lesion's shunt (no capillary bed: Naranbhai 2023) fills its veins, and the sinuses downstream, straight after
+  its nidus or fistula, in the arterial phase. Copies of the veins a lesion fills early (or dilates) stand in for them in
+  its view.
+- **Layers**: opacity sliders for the arteries, the veins, the lesion, the fitted brain and the bone.
+- Pipeline: `pipeline/vascular_build.py` (after `skullbase_v3.py`), `node pipeline/compress.mjs vascular`,
+  `pipeline/vascular_build.py finalize`.
 
 ## Cortical anatomy
 

@@ -23,7 +23,7 @@ const WHEEL_MM_PER_PX = 0.01;
 /** how far the pointer moves before a press is a drag (px) */
 const DRAG_PX = 4;
 const STOP_NAME: Record<EndoStop, string> = {
-  vessel: 'Carotid and other vessels', nerve: 'Optic nerve, chiasm and nerves III–VI (fitted, routed)', sellar: 'Hypophysis (modelled) and cavernous sinus (fitted)', brain: 'Brain (fitted)',
+  vessel: 'Carotid and other vessels', nerve: 'Optic nerve, chiasm and nerves III–VI (fitted, routed)', sellar: 'Hypophysis (modelled) and intercavernous sinuses (fitted)', brain: 'Brain (fitted)',
 };
 /** x-ray vision: what can be seen through everything in front of it, by group (the structures' names), each in a
  * colour of its own that stands out against the mucosa (a rendering choice) */
@@ -36,7 +36,7 @@ const XRAY: [XrayId, string, string[], string][] = [
   ['nerves', 'Nerves III–VI', ['Oculomotor nerve (III)', 'Trochlear nerve (IV)', 'Abducens nerve (VI)', 'Trigeminal nerve (V)', 'Trigeminal ganglion'], '#b5e655'],
   ['basilar', 'Basilar artery', ['Basilar artery'], '#ff7a6b'],
 ];
-const STOP_AT: Record<EndoStop, string> = { vessel: 'a vessel (the carotid)', nerve: 'a nerve', sellar: 'the hypophysis or the cavernous sinus', brain: 'the brain' };
+const STOP_AT: Record<EndoStop, string> = { vessel: 'a vessel (the carotid)', nerve: 'a nerve', sellar: 'the hypophysis or an intercavernous sinus', brain: 'the brain' };
 const one = (n: number) => (Math.round(n * 10) / 10).toFixed(1);
 
 interface Scope { side: EndoSide; depth: number; yaw: number; pitch: number; roll: number; big: boolean }
@@ -44,7 +44,7 @@ interface Scope { side: EndoSide; depth: number; yaw: number; pitch: number; rol
 /**
  * The endoscopic endonasal view's panel: a 0° endoscope through one nostril (from as far forward as the scan reaches),
  * aimed at the sella and turned from there; its view, big or as an inset; and a burr that takes away bone and lining in
- * front of it, stopping at the carotids, the nerves, the pituitary and the cavernous sinuses and the brain.
+ * front of it, stopping at the carotids' wall, the nerves, the hypophysis and the brain.
  */
 export class EndonasalPanel implements PointerTool {
   readonly el = h('div', { class: 'endonasal drill' });
@@ -162,7 +162,8 @@ export class EndonasalPanel implements PointerTool {
     const theme = resolvedTheme(storedTheme());
     return {
       tip: xyz(p.tip), dir: xyz(p.dir), up: xyz(p.up), big: this.scope.big, floor: null,
-      role: (id) => (behind.has(id) ? 'behind' : null),
+      // (the abducens nerve inside the cavernous sinus, once its medial wall is opened: seen in the space, not behind a wall)
+      role: (id) => (!behind.has(id) ? null : SB.get(id)?.name === 'Abducens nerve (VI)' && [...(this.vol?.removed ?? [])].some((r) => r.startsWith('cs_')) ? 'inside' : 'behind'),
       xray: (id) => { const n = SB.get(id)?.name; return (n && XRAY.find(([k, , names]) => this.xray.has(k) && names.includes(n))?.[3]) || null; },
       // in air, by the CT (the scope only goes where it has room)
       inside: () => !!this.vol?.inAir(this.pose().tip),
@@ -284,7 +285,7 @@ export class EndonasalPanel implements PointerTool {
             h('input', { type: 'range', min: BURR_RATE.min, max: BURR_RATE.max, step: 1, value: this.rate, 'aria-label': 'Drill speed',
               oninput: (e: Event) => { this.rate = parseFloat((e.target as HTMLInputElement).value); rateOut.textContent = `${this.rate} mm/s`; } })),
           h('div', { class: 'chips' }, h('button', { type: 'button', class: 'chip', disabled: !this.undo.length, onclick: () => this.undoStroke() }, 'Undo the last drilling')),
-          h('p', { class: 'aside' }, `Point at what the scope sees (or at the 3D view) and hold the left button to drill in along that line, with a round ${ENDO_BURR_MM}-mm burr; it takes bone and lining away down to the carotids’ wall (never into them), and stops short of the nerves, the hypophysis, the cavernous sinuses and the brain. In the scope’s view the right button turns the scope.`),
+          h('p', { class: 'aside' }, `Point at what the scope sees (or at the 3D view) and hold the left button to drill in along that line, with a round ${ENDO_BURR_MM}-mm burr; it takes bone and lining away down to the carotids’ wall (never into them), and stops short of the nerves, the hypophysis and the brain (it goes through the cavernous sinus’s venous space). In the scope’s view the right button turns the scope.`),
         ] : [h('p', { class: 'aside' }, 'The sinus is open: the burr can take away what the steps do not, down to the carotids’ wall (an exercise in anatomy).')]),
       ] : []),
       this.out,
@@ -317,7 +318,7 @@ export class EndonasalPanel implements PointerTool {
         h('li', {}, `The scan reaches only the back of the nasal cavity, so the scope starts there, not at the nostril. Its way through the nose is the path along the nasal cavity (TotalSegmentator’s, of this CT) with the most room, to the sinus’s opening; the CT’s passages are narrower than a scope, so the turbinates and the mucosa are pushed aside to ${fmtMm(ENDONASAL.corridorMm)} mm across along it (a drawing choice), the sinus’s front wall left for the burr. From near its end the scope goes straight on the way it looks, where it has a clear core ${fmtMm(2 * ENDO_SCOPE_ROOM_MM)} mm across (forgiving, so that one pass of the burr opens the way), and stops ${fmtMm(ENDO_STANDOFF_MM)} mm short of the tissue ahead.`),
         h('li', {}, 'The hypophysis is modelled in this CT’s fossa: what is not bone there, a millimetre inside the bone (the dura, both its layers, which a CT does not tell from the gland: a drawing choice), under the diaphragma sellae taken as the plane from the tuberculum to the top of the dorsum, its upper surface a little concave, no more than about 6 mm from the midline and clear of the carotids. Its posterior lobe (an ellipsoid at its back) and its stalk (a tube up and back to behind the chiasm) are drawn by rule; its colours where the dura is opened are rendering choices.'),
         h('li', {}, `The pieces taken away step by step are regions drawn by rule on this CT (distances to its air spaces, the hypophysis and the midline): the walls between air spaces go whole, the sellar floor, planum and clivus only their bone and the mucosa on it, the dura over the sella the layer between the opened floor and the gland; each keeps ${fmtMm(ENDONASAL.params.pieceClearMm.vessel ?? 0.8)} mm off the carotids and ${fmtMm(ENDONASAL.params.pieceClearMm.nerve ?? 0.6)} mm off the nerves. Where they end is a drawing choice, not a measured extent of the operation.`),
-        h('li', {}, `The burr is a round one ${ENDO_BURR_MM} mm across that takes away whatever it reaches. It goes right down onto the wall of the arteries TopBrain labels on this CT, never into them (an exercise in anatomy: in surgery the bone over the carotid is thinned and lifted off with care, not drilled down onto it), where the wall laid bare is drawn red; and it stops ${fmtMm(ENDO_STOP_MM)} mm from the optic nerves (TotalSegmentator’s) and chiasm (fitted), nerves III–VI (routed through this CT), and the fitted pituitary, cavernous sinuses and brain, these only where the CT shows soft tissue (their fit puts parts of them in the sellar floor or the sinus’s air).`),
+        h('li', {}, `The burr is a round one ${ENDO_BURR_MM} mm across that takes away whatever it reaches. It goes right down onto the wall of the arteries TopBrain labels on this CT, never into them (an exercise in anatomy: in surgery the bone over the carotid is thinned and lifted off with care, not drilled down onto it), where the wall laid bare is drawn red; and it stops ${fmtMm(ENDO_STOP_MM)} mm from the optic nerves (TotalSegmentator’s) and chiasm (fitted), nerves III–VI (routed through this CT), the hypophysis modelled in its fossa, and the fitted intercavernous sinuses and brain, these only where the CT shows soft tissue.`),
         h('li', {}, 'The view is drawn as the ventricles’ endoscope is: a wide field through a lens with barrel distortion, a light at the tip on wet walls, what lies close behind a thin wall showing through it; rendering choices, not measurements.')));
   }
 
@@ -357,7 +358,7 @@ export class EndonasalPanel implements PointerTool {
     const gl = layer === 'solid' ? this.vol!.glandAt(q, out_) : 0;
     const dura = ENDONASAL.pieces.find((x) => x.id === 'dura');
     if (gl) out = gl === 1 ? c.adeno : gl === 2 ? c.neuro : c.stalk;
-    else if (layer === 'solid' && a.cut && this.vol!.vesselMm(q) < 0.4) out = c.artery;
+    else if (layer === 'solid' && (a.cut || a.opened) && this.vol!.vesselMm(q) < 0.4) out = c.artery;
     else if (layer === 'solid' && dura && !this.vol!.removed.has('dura') && this.vol!.pieceOf(q, out_) === dura.label) out = c.dura;
     else if (a.cut) out = c.cancellous.clone().lerp(c.cortex, THREE.MathUtils.clamp((a.hu - 250) / 550, 0, 1));
     else if (layer === 'bone') out = c.bone;

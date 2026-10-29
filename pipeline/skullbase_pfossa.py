@@ -58,6 +58,7 @@ from pathlib import Path
 import nibabel as nib
 import numpy as np
 import trimesh
+import scipy.sparse as sp
 from scipy import ndimage
 from scipy.interpolate import griddata
 from scipy.optimize import minimize
@@ -92,8 +93,10 @@ VESSEL_SIGMA_MM = 1.0      # ... an artery's push this wide
 VESSEL_SLACK_MM = 0.6      # an artery cleared by this much more than its margin: half the vertices' spacing
 CONTAIN_MAX_MM = 3.0       # a part's surface pushed in past a centre line inside it by at most this
 CLEAR_ROUNDS = 12          # ... in this many rounds
-DRAWN_VESSELS = ["Basilar artery", "Vertebral artery", "Superior cerebellar artery", "Posterior inferior cerebellar artery",
-                 "Posterior cerebral artery (P1–P2)"]
+DENT_MARGIN_MM = 0.6       # then a groove in the back of the medulla where an artery's drawn surface (v2's meshes of the
+DENT_SIGMA_MM = 1.5        # labels) still lies in it: its surface moved forward by the artery's depth plus this, falling off
+DENT_ROUNDS = 40           # as a Gaussian this wide, in up to this many rounds (the best kept) ...
+DENT_STEP_MM = 0.6         # ... each moving it at most this (dent)
 JAC_MIN = 0.45
 JAC_WEIGHT = 20.0
 HULL_CLOSE_MM = 3
@@ -447,6 +450,62 @@ def clear(parts: dict, fs: Fossa) -> dict:
             "maxMovedMm": round(float(moved.max()), 2)}
 
 
+def dent(parts: dict, fs: Fossa) -> dict:
+    """A groove in the back of the medulla where an artery's drawn surface (v2's meshes) lies in it (the PICA's loops
+    on the dorsal medulla; the centre lines' clearance leaves a flattened artery dipping in): the medulla's triangles
+    halved first (a coarse face can span a thin artery), then each artery point inside it (each part rasterised on its
+    own at 0.25 mm) moves the backward-facing vertices around it forward (into the brainstem) by its depth plus
+    DENT_MARGIN_MM, falling off as a Gaussian of their distance (DENT_SIGMA_MM; the largest such move kept per vertex);
+    repeated up to DENT_ROUNDS times while it helps."""
+    names = [n for n in parts if n.split(".")[0] == "Medulla oblongata"]
+    for n in names:
+        v, f = trimesh.remesh.subdivide(parts[n][0], parts[n][1])
+        parts[n] = (v, f, side_of(n, v))
+    cut = np.cumsum([0] + [len(parts[n][0]) for n in names])
+    X = np.vstack([parts[n][0] for n in names])
+    T = np.vstack([parts[n][1] + cut[i] for i, n in enumerate(names)])
+    Q, st = fs.vessel_pts, 0.25
+
+    def depth_of(X):
+        lo = X.min(0) - 2
+        shape = tuple(np.ceil((X.max(0) + 2 - lo) / st).astype(int) + 1)
+        solid = np.zeros(shape, bool)
+        for i, n in enumerate(names):
+            solid |= fill(X[cut[i]:cut[i + 1]], parts[n][1], lo, shape, st)
+        dep = ndimage.distance_transform_edt(solid) * st
+        ijk = np.rint((Q - lo) / st).astype(int)
+        ok = (ijk >= 0).all(1) & (ijk < np.array(shape)).all(1)
+        dq = np.zeros(len(Q))
+        dq[ok] = dep[tuple(ijk[ok].T)]
+        return dq
+    dq = depth_of(X)
+    before = best_n = int((dq > 0).sum())
+    best = X.copy()
+    fwd = np.array([0.0, 1.0, 0.0])
+    for _ in range(DENT_ROUNDS):
+        ins = np.nonzero(dq > 0)[0]
+        if not len(ins):
+            break
+        nrm = np.vstack([trimesh.Trimesh(X[cut[i]:cut[i + 1]], parts[n][1], process=False).vertex_normals for i, n in enumerate(names)])
+        back = nrm @ fwd < -0.2                                   # the backward-facing surface
+        need = np.zeros(len(X))
+        tq = cKDTree(Q[ins])
+        for j, near in enumerate(tq.query_ball_point(X, 3 * DENT_SIGMA_MM)):
+            if not near or not back[j]:
+                continue
+            d = np.linalg.norm(Q[ins][near] - X[j], axis=1)
+            need[j] = float(((dq[ins][near] + DENT_MARGIN_MM) * np.exp(-d ** 2 / (2 * DENT_SIGMA_MM ** 2))).max())
+        X = X + np.minimum(need, DENT_STEP_MM)[:, None] * fwd
+        dq = depth_of(X)
+        if int((dq > 0).sum()) < best_n:
+            best_n, best = int((dq > 0).sum()), X.copy()
+    X = best
+    for i, n in enumerate(names):
+        parts[n] = (X[cut[i]:cut[i + 1]], parts[n][1], parts[n][2])
+    _ = T
+    return {"arteryPointsInsideBefore": before, "arteryPointsInsideAfter": best_n}
+
+
 def telovelar(parts: dict, fs: Fossa) -> dict:
     """Each part's displacement for the telovelar shape: the tonsils TV_MM laterally (and TV_UP of that up), the
     cerebellar hemisphere following with a weight falling to 0 TV_REACH_MM from its tonsil; the nodule and uvula
@@ -574,7 +633,7 @@ def inside_ventricle(parts: dict):
 
 
 def params_hash() -> str:
-    keys = {k: v for k, v in globals().items() if k.isupper() and isinstance(v, (int, float, str, list, dict, tuple)) and not k.startswith(("TV_", "RS_"))}
+    keys = {k: v for k, v in globals().items() if k.isupper() and isinstance(v, (int, float, str, list, dict, tuple)) and not k.startswith(("TV_", "RS_", "DENT_"))}
     keys["inputs"] = [hashlib.sha1(p.read_bytes()).hexdigest() for p in (CT_BUILD / "bone.npz", CT_BUILD / "pfossa.json")]
     return hashlib.sha1(json.dumps(keys, sort_keys=True, default=str).encode()).hexdigest()[:16]
 
@@ -636,6 +695,7 @@ def main() -> int:
         residual = max(residual, float(res.max()))
         parts[n] = (X, t, side_of(n, v))
     rc = clear(parts, fs)
+    rc["dent"] = dent(parts, fs)
     print("cleared", rc, flush=True)
     moves = telovelar(parts, fs)
     root = trigeminal_root(ex2, gp, parts)

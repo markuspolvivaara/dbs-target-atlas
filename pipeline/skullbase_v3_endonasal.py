@@ -126,6 +126,8 @@ PIECES = [
     ("septa", "Septa of the sinus"),
     ("floor", "Sellar floor"),
     ("dura", "Dura over the sella"),
+    ("cs_R", "Medial wall of the right cavernous sinus"),
+    ("cs_L", "Medial wall of the left cavernous sinus"),
     ("planum", "Tuberculum sellae and planum"),
     ("clivus", "Upper clivus"),
 ]
@@ -135,6 +137,11 @@ PIECE_REACH_MM = 1.5      # a piece's level is stored this far outside it (its c
 PIECE_STEP_MM = 0.05      # the level in these steps about 128
 SEPTA_CLOSE_MM = 2.0
 BONE_ONLY = {"floor", "planum", "clivus"}
+# the cavernous sinus's medial wall (each side): the bone and lining between the sphenoid sinus and it (CS_FROM_SINUS_MM
+# of the sinus's air, CS_NEAR_MM of it), and its venous space (skullbase_v3_cavernous.py's model), up to the carotid's
+# wall (as the burr goes) and CS_KEEP_MM off its nerves and the hypophysis
+CS_FROM_SINUS_MM, CS_NEAR_MM, CS_KEEP_MM = 3.5, 2.5, 0.4
+CS_COND = V3_BUILD / "cavernous_cond.npz"
 
 
 def ball(r_vox: int) -> np.ndarray:
@@ -159,6 +166,9 @@ def build_pieces(bone, solid, s_mask, nasal_l, nasal_r, dist: dict, Pg, vox: flo
     clear = np.maximum.reduce([PIECE_CLEAR_MM[k] - dist[k] for k in PIECE_CLEAR_MM])
     # the dura over the gland goes up to the gland itself
     clear_dura = np.maximum.reduce([PIECE_CLEAR_MM[k] - dist[k] for k in PIECE_CLEAR_MM if k != "sellar"])
+    # the cavernous sinus's medial wall goes up to the carotid's wall, clear of the nerves, the gland and the brain
+    clear_cs = np.maximum.reduce([0.0 - dist["vessel"], CS_KEEP_MM - dist["nerve"], CS_KEEP_MM - off_gland, PIECE_CLEAR_MM["brain"] - dist["brain"]])
+    cs_cond = dict(np.load(CS_COND)) if CS_COND.exists() else {}
     # (and those against the dura keep the dura's thickness off the gland: the dura over the sella is a step of its own)
     base = np.maximum.reduce([tissue, clear, HYPO_DURA_MM - off_gland])
     front = float(Pg[s_mask & (np.abs(x) < 8)][:, 1].max()) if s_mask.any() else 25.0
@@ -172,6 +182,10 @@ def build_pieces(bone, solid, s_mask, nasal_l, nasal_r, dist: dict, Pg, vox: flo
         "floor": [dA - 3.0, dist["sellar"] - 3.5, np.abs(x) - 7.0],
         # the layer between the opened floor and the gland (the dura, with the CT's soft tissue there)
         "dura": [0.05 - off_gland, off_gland - (HYPO_DURA_MM + 0.4), dA - 4.5, np.abs(x) - 6.5],
+        **{f"cs_{sd}": [np.minimum(cs_cond[sd].astype(np.float32),                        # its venous space, or
+                                   np.maximum.reduce([dA - CS_FROM_SINUS_MM,                  # the wall between it and the sinus
+                                                      ndimage.distance_transform_edt(cs_cond[sd] > 0, sampling=vox) - CS_NEAR_MM]))]
+           for sd in ("R", "L") if sd in cs_cond},
         # above the front of the sella: the tuberculum, then the planum over the sinus
         "planum": [dA - 3.0, 7.0 - z, 2.0 - y, y - 16.0, np.abs(x) - 7.0],
         # behind and below the sella: the clival recess's bone
@@ -182,8 +196,9 @@ def build_pieces(bone, solid, s_mask, nasal_l, nasal_r, dist: dict, Pg, vox: flo
     label = np.zeros(shape, np.uint8)
     earlier: list[np.ndarray] = []
     summary = []
-    for i, (pid, name) in enumerate(PIECES, start=1):
-        c = np.maximum.reduce([base if pid in BONE_ONLY else clear_dura if pid == "dura" else clear, *cond[pid], *[-e for e in earlier]]).astype(np.float32)
+    for i, (pid, name) in enumerate([p_ for p_ in PIECES if p_[0] in cond], start=1):
+        own = base if pid in BONE_ONLY else clear_dura if pid == "dura" else clear_cs if pid.startswith("cs_") else clear
+        c = np.maximum.reduce([own, *cond[pid], *[-e for e in earlier]]).astype(np.float32)
         inside = (c < 0) & ~air
         take = c < best
         near = take & (c < PIECE_REACH_MM)
@@ -200,8 +215,11 @@ def build_pieces(bone, solid, s_mask, nasal_l, nasal_r, dist: dict, Pg, vox: flo
 
 
 # v2's fitted structures v3 takes over (its pituitary is replaced by the one modelled in this CT's fossa: HYPO_*)
-CARRIED = ["sb_cavernous_sinus", "sb_anterior_intercavernous_sinus", "sb_posterior_intercavernous_sinus", "sb_optic_chiasm"]
-REPLACED = ["sb_adenohypophysis", "sb_neurohypophysis"]
+CARRIED = ["sb_anterior_intercavernous_sinus", "sb_posterior_intercavernous_sinus", "sb_optic_chiasm",
+           # the veins joining the cavernous sinus (skullbase_v3_cavernous.py draws the sinus itself)
+           "sb_superior_petrosal_sinus", "sb_inferior_petrosal_sinus", "sb_superior_ophthalmic_vein", "sb_inferior_ophthalmic_vein"]
+REPLACED = ["sb_adenohypophysis", "sb_neurohypophysis", "sb_cavernous_sinus"]
+CAV_ITEMS = V3_BUILD / "cavernous_items.json"   # skullbase_v3_cavernous.py's items (the sinus, the triangles, veins drawn)
 HYPO_ITEMS = V3_BUILD / "hypophysis.json"     # the modelled pituitary's manifest items (skullbase_v3.py takes them too)
 
 # ---- the hypophysis, modelled in this CT's fossa: what is not bone in it, HYPO_DURA_MM inside the bone (the dura, which
@@ -268,6 +286,8 @@ def build_hypophysis(bone, d_art, Pg, vox: float, a_crop) -> dict:
         v = nib.affines.apply_affine(a_crop, v + lo_)
         mesh = trimesh.Trimesh(v, tri[:, ::-1], process=True)
         trimesh.smoothing.filter_taubin(mesh, iterations=10)
+        if mesh.volume < 0:   # (wound outward whichever way the crop's affine turns it)
+            mesh.invert()
         parts[pid] = {"mask": cc <= 0, "cond": cc, "mesh": mesh, "mm3": round(float((cc <= 0).sum()) * vox ** 3, 1)}
     gx = Pg[gland]
     summary = {"diaphragma": {"tuberculum": tuberculum.round(1).tolist(), "dorsum": dorsum.round(1).tolist()},
@@ -336,32 +356,47 @@ def carry_sellar() -> None:
     for sid in CARRIED:
         if sid in v2 and sid not in have:
             man["structures"].append({**v2[sid]})
-    hypo = json.loads(HYPO_ITEMS.read_text()) if HYPO_ITEMS.exists() else []
+    hypo = (json.loads(HYPO_ITEMS.read_text()) if HYPO_ITEMS.exists() else []) + (json.loads(CAV_ITEMS.read_text()) if CAV_ITEMS.exists() else [])
     for it in hypo:     # (the compressed file's size where there is one already: finalize sets it again)
         f = REPO / "public" / it["file"]
         if f.exists():
             it["bytes"] = f.stat().st_size
     man["structures"] = [s for s in man["structures"] if s["id"] not in {h["id"] for h in hypo}] + hypo
+    # the nerves skullbase_v3_cavernous.py re-routed through the cavernous sinus say so
+    import skullbase_v3_cavernous as CAV
+    if CAV.CAV_JSON.exists():
+        for it in man["structures"]:
+            note = CAV.REROUTE_NOTE.get(it["name"])
+            if note and note not in it["derivation"]:
+                it["derivation"] = it["derivation"].rstrip() + " " + note
     p.write_text(json.dumps(man, indent=1, ensure_ascii=False))
 
 
-def main() -> int:
+def ct_grid() -> dict:
+    """The grid over BOX (aligned with the model's frame, GRID_MM apart) and this CT's bone and TopBrain labels on it:
+    shape, a_crop (grid -> frame), P (the frame points, flat), S (scanner RAS), bone (the field), lab (labels), the
+    frame (R, fossa). Shared with skullbase_v3_cavernous.py."""
     bz = np.load(CT_BUILD / "bone.npz")
     b, a, lab = bz["b"].astype(np.float32), bz["a"], bz["lab"]
     fr = np.load(CT_BUILD / "frame.npz")
     R, fossa = fr["R"], fr["fossa"]
-    # a grid aligned with the frame over BOX, GRID_MM apart; a frame point is (p - fossa) @ R for a scanner point p
+    # a frame point is (p - fossa) @ R for a scanner point p
     shape = tuple(int(round((h - l) / GRID_MM)) + 1 for l, h in BOX)
     a_crop = np.diag([GRID_MM, GRID_MM, GRID_MM, 1.0])
     a_crop[:3, 3] = [l for l, _ in BOX]
     P = nib.affines.apply_affine(a_crop, np.indices(shape).reshape(3, -1).T)
     S = P @ R.T + fossa                                  # scanner RAS
-    print("grid", shape, "voxels", int(np.prod(shape)))
-
-    # ---- bone, as v2/v3 draw it (their smoothed mask, sampled)
+    # bone, as v2/v3 draw it (their smoothed mask, sampled)
     bone_s = ndimage.map_coordinates(ndimage.gaussian_filter(b, BONE_SIGMA_VOX), nib.affines.apply_affine(np.linalg.inv(a), S).T, order=1).reshape(shape)
     bone = np.clip(np.round(FIELD_ISO + (bone_s - BONE_LEVEL) * BONE_SCALE), 0, 255).astype(np.uint8)
     lab_s = ndimage.map_coordinates(lab, nib.affines.apply_affine(np.linalg.inv(a), S).T, order=0).reshape(shape)
+    return {"shape": shape, "a_crop": a_crop, "P": P, "S": S, "bone": bone, "lab": lab_s, "R": R, "fossa": fossa}
+
+
+def main() -> int:
+    g = ct_grid()
+    shape, a_crop, P, S, bone, lab_s, R, fossa = (g[k] for k in ("shape", "a_crop", "P", "S", "bone", "lab", "R", "fossa"))
+    print("grid", shape, "voxels", int(np.prod(shape)))
     # ---- the CT (smoothed as the bone), sampled
     img = nib.load(CT_PATH)
     ct = np.asanyarray(img.dataobj).astype(np.float32)
@@ -413,6 +448,7 @@ def main() -> int:
 
     hypo = build_hypophysis(bone, d_art, P.reshape(shape + (3,)), vox, a_crop)
     gland_pts = np.vstack([np.asarray(hypo["parts"][k]["mesh"].vertices) for k in ("adeno", "neuro")])
+    # (not the cavernous sinus: the burr may go through its venous space down onto the carotid, an exercise in anatomy)
     d_sellar = dist_to([gland_pts] + [in_soft(surface_points(CT_BUILD / f"{n}.glb")) for n in SELLAR if n not in REPLACED])
     d_brain = dist_to([in_soft(surface_points(V3_BUILD / f"{n}.glb")) for n in BRAIN_V3])
     # ---- the scope's entry in each nostril: the middle of the nasal cavity in its front-most ENTRY_SLAB_MM in the scan

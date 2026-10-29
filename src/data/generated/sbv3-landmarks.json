@@ -608,5 +608,500 @@
   "distanceToBoneMm": 0.0,
   "how": "The opening of the cranial floor beside the sella, medial to the foramen ovale, seen from above (16 mm²), at its rim's height.",
   "from": []
+ },
+ {
+  "id": "lm_anterior_clinoid_process_r",
+  "name": "Anterior clinoid process",
+  "bone": "Sphenoid bone",
+  "part": "Lesser wing",
+  "ras": [
+   11.15,
+   0.56,
+   9.11
+  ],
+  "side": "R",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "placed": "Found on this CT: the clinoid's tip, the furthest-back bone of the lesser wing's medial end."
+ },
+ {
+  "id": "lm_anterior_clinoid_process_l",
+  "name": "Anterior clinoid process",
+  "bone": "Sphenoid bone",
+  "part": "Lesser wing",
+  "ras": [
+   -12.59,
+   3.01,
+   10.44
+  ],
+  "side": "L",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "placed": "Found on this CT: the clinoid's tip, the furthest-back bone of the lesser wing's medial end."
+ },
+ {
+  "id": "lm_posterior_clinoid_process_r",
+  "name": "Posterior clinoid process",
+  "bone": "Sphenoid bone",
+  "part": "Sella turcica",
+  "ras": [
+   8.38,
+   -5.52,
+   9.49
+  ],
+  "side": "R",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "placed": "Found on this CT: the highest bone at the lateral corner of the dorsum sellae."
+ },
+ {
+  "id": "lm_posterior_clinoid_process_l",
+  "name": "Posterior clinoid process",
+  "bone": "Sphenoid bone",
+  "part": "Sella turcica",
+  "ras": [
+   -8.44,
+   -4.98,
+   9.96
+  ],
+  "side": "L",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "placed": "Found on this CT: the highest bone at the lateral corner of the dorsum sellae."
+ },
+ {
+  "id": "lm_apex_of_petrous_part_r",
+  "name": "Apex of petrous part",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   10.7,
+   -7.5,
+   -2.34
+  ],
+  "side": "R",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "placed": "Found on this CT: the highest bone at the medial end of the petrous ridge, behind the foramen lacerum (the CT shows it fused with the clivus)."
+ },
+ {
+  "id": "lm_apex_of_petrous_part_l",
+  "name": "Apex of petrous part",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   -10.1,
+   -7.57,
+   -1.72
+  ],
+  "side": "L",
+  "boneFrom": "located on this CT",
+  "distanceToBoneMm": 0.0,
+  "placed": "Found on this CT: the highest bone at the medial end of the petrous ridge, behind the foramen lacerum (the CT shows it fused with the clivus)."
+ },
+ {
+  "id": "lm_foramen_caecum_of_frontal_bone",
+  "name": "Foramen caecum of frontal bone",
+  "bone": "Frontal bone",
+  "part": null,
+  "ras": [
+   0.82,
+   38.7,
+   16.99
+  ],
+  "side": "M",
+  "boneFrom": "fitted model, put on this CT's bone",
+  "distanceToBoneMm": 0.0,
+  "placed": "The Z-Anatomy model's point, fitted onto this CT, moved 0.3 mm to the CT's bone surface (approximate)."
+ },
+ {
+  "id": "lm_sphenoidal_yoke",
+  "name": "Sphenoidal yoke",
+  "bone": "Sphenoid bone",
+  "part": "Body of sphenoid bone",
+  "ras": [
+   0.8,
+   13.48,
+   15.03
+  ],
+  "side": "M",
+  "boneFrom": "fitted model, put on this CT's bone",
+  "distanceToBoneMm": 0.0,
+  "placed": "The Z-Anatomy model's point, fitted onto this CT, moved 1.6 mm to the CT's bone surface facing the cranial cavity (approximate)."
+ },
+ {
+  "id": "lm_limbus_of_sphenoid",
+  "name": "Limbus of sphenoid",
+  "bone": "Sphenoid bone",
+  "part": "Body of sphenoid bone",
+  "ras": [
+   -0.25,
+   10.99,
+   13.55
+  ],
+  "side": "M",
+  "boneFrom": "fitted model, put on this CT's bone",
+  "distanceToBoneMm": 0.0,
+  "placed": "The Z-Anatomy model's point, fitted onto this CT, moved 2.1 mm to the CT's bone surface facing the cranial cavity (approximate)."
+ },
+ {
+  "id": "lm_chiasmatic_sulcus",
+  "name": "Chiasmatic sulcus",
+  "bone": "Sphenoid bone",
+  "part": "Body of sphenoid bone",
+  "ras": [
+   1.27,
+   7.78,
+   12.64
+  ],
+  "side": "M",
+  "boneFrom": "fitted model, put on this CT's bone",
+  "distanceToBoneMm": 0.0,
+  "placed": "The Z-Anatomy model's point, fitted onto this CT, moved 2.3 mm to the CT's bone surface facing the cranial cavity (approximate)."
+ },
+ {
+  "id": "lm_tuberculum_sellae",
+  "name": "Tuberculum sellae",
+  "bone": "Sphenoid bone",
+  "part": "Sella turcica",
+  "ras": [
+   -0.23,
+   6.67,
+   8.3
+  ],
+  "side": "M",
+  "boneFrom": "fitted model, put on this CT's bone",
+  "distanceToBoneMm": 0.0,
+  "placed": "The Z-Anatomy model's point, fitted onto this CT, moved 0.4 mm to the CT's bone surface facing the cranial cavity (approximate)."
+ },
+ {
+  "id": "lm_hypophysial_fossa",
+  "name": "Hypophysial fossa",
+  "bone": "Sphenoid bone",
+  "part": "Sella turcica",
+  "ras": [
+   0.08,
+   -1.81,
+   0.39
+  ],
+  "side": "M",
+  "boneFrom": "fitted model, put on this CT's bone",
+  "distanceToBoneMm": 0.0,
+  "placed": "The Z-Anatomy model's point, fitted onto this CT, moved 1.8 mm to the CT's bone surface (approximate)."
+ },
+ {
+  "id": "lm_dorsum_sellae",
+  "name": "Dorsum sellae",
+  "bone": "Sphenoid bone",
+  "part": "Sella turcica",
+  "ras": [
+   -0.17,
+   -4.36,
+   7.07
+  ],
+  "side": "M",
+  "boneFrom": "fitted model, put on this CT's bone",
+  "distanceToBoneMm": 0.0,
+  "placed": "The Z-Anatomy model's point, fitted onto this CT, moved 0.4 mm to the CT's bone surface facing the cranial cavity (approximate)."
+ },
+ {
+  "id": "lm_basilar_part_of_occipital_bone",
+  "name": "Basilar part of occipital bone",
+  "bone": "Occipital bone",
+  "part": "Basilar part of occipital bone",
+  "ras": [
+   1.05,
+   -10.92,
+   -19.76
+  ],
+  "side": "M",
+  "boneFrom": "fitted model, put on this CT's bone",
+  "distanceToBoneMm": 0.0,
+  "placed": "The Z-Anatomy model's point, fitted onto this CT, moved 4.2 mm to the CT's bone surface facing the cranial cavity (approximate)."
+ },
+ {
+  "id": "lm_internal_occipital_protuberance",
+  "name": "Internal occipital protuberance",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   0.38,
+   -88.07,
+   -16.29
+  ],
+  "side": "M",
+  "boneFrom": "fitted model, put on this CT's bone",
+  "distanceToBoneMm": 0.0,
+  "placed": "The Z-Anatomy model's point, fitted onto this CT, moved 0.2 mm to the CT's bone surface facing the cranial cavity (approximate)."
+ },
+ {
+  "id": "lm_lesser_wing_r",
+  "name": "Lesser wing",
+  "bone": "Sphenoid bone",
+  "part": "Lesser wing",
+  "ras": [
+   22.52,
+   16.37,
+   16.95
+  ],
+  "side": "R",
+  "boneFrom": "fitted model, put on this CT's bone",
+  "distanceToBoneMm": 0.0,
+  "placed": "The Z-Anatomy model's point (it labels the right side), fitted onto this CT, moved 0.2 mm to the CT's bone surface facing the cranial cavity (approximate)."
+ },
+ {
+  "id": "lm_lesser_wing_l",
+  "name": "Lesser wing",
+  "bone": "Sphenoid bone",
+  "part": "Lesser wing",
+  "ras": [
+   -23.35,
+   15.38,
+   16.24
+  ],
+  "side": "L",
+  "boneFrom": "fitted model, put on this CT's bone",
+  "distanceToBoneMm": 0.0,
+  "placed": "The Z-Anatomy model's point on the other side, mirrored and moved 1.6 mm to this CT's bone surface facing the cranial cavity (approximate)."
+ },
+ {
+  "id": "lm_arcuate_eminence_r",
+  "name": "Arcuate eminence",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   38.18,
+   -20.63,
+   -7.13
+  ],
+  "side": "R",
+  "boneFrom": "fitted model, put on this CT's bone",
+  "distanceToBoneMm": 0.0,
+  "placed": "The Z-Anatomy model's point (it labels the right side), fitted onto this CT, moved 1.2 mm to the CT's bone surface facing the cranial cavity (approximate)."
+ },
+ {
+  "id": "lm_arcuate_eminence_l",
+  "name": "Arcuate eminence",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   -38.12,
+   -19.35,
+   -4.96
+  ],
+  "side": "L",
+  "boneFrom": "fitted model, put on this CT's bone",
+  "distanceToBoneMm": 0.0,
+  "placed": "The Z-Anatomy model's point on the other side, mirrored and moved 1.5 mm to this CT's bone surface facing the cranial cavity (approximate)."
+ },
+ {
+  "id": "lm_tegmen_tympani_r",
+  "name": "Tegmen tympani",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   40.14,
+   -14.94,
+   -9.15
+  ],
+  "side": "R",
+  "boneFrom": "fitted model, put on this CT's bone",
+  "distanceToBoneMm": 0.0,
+  "placed": "The Z-Anatomy model's point (it labels the right side), fitted onto this CT, moved 0.3 mm to the CT's bone surface facing the cranial cavity (approximate)."
+ },
+ {
+  "id": "lm_tegmen_tympani_l",
+  "name": "Tegmen tympani",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   -40.29,
+   -13.29,
+   -6.69
+  ],
+  "side": "L",
+  "boneFrom": "fitted model, put on this CT's bone",
+  "distanceToBoneMm": 0.0,
+  "placed": "The Z-Anatomy model's point on the other side, mirrored and moved 3.2 mm to this CT's bone surface facing the cranial cavity (approximate)."
+ },
+ {
+  "id": "lm_groove_for_transverse_sinus_r",
+  "name": "Groove for transverse sinus",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   28.27,
+   -85.14,
+   -15.47
+  ],
+  "side": "R",
+  "boneFrom": "fitted model, put on this CT's bone",
+  "distanceToBoneMm": 0.0,
+  "placed": "The Z-Anatomy model's point (it labels the right side), fitted onto this CT, moved 0.3 mm to the CT's bone surface facing the cranial cavity (approximate)."
+ },
+ {
+  "id": "lm_groove_for_transverse_sinus_l",
+  "name": "Groove for transverse sinus",
+  "bone": "Occipital bone",
+  "part": "Squamous part of occipital bone",
+  "ras": [
+   -29.52,
+   -87.22,
+   -17.16
+  ],
+  "side": "L",
+  "boneFrom": "fitted model, put on this CT's bone",
+  "distanceToBoneMm": 0.0,
+  "placed": "The Z-Anatomy model's point on the other side, mirrored and moved 2.9 mm to this CT's bone surface facing the cranial cavity (approximate)."
+ },
+ {
+  "id": "lm_facial_colliculus_r",
+  "name": "Facial colliculus",
+  "bone": "Pons",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   4.24,
+   -33.4,
+   -13.75
+  ],
+  "side": "R",
+  "boneFrom": "fitted model, carried onto this CT",
+  "distanceToBoneMm": 0.0,
+  "placed": "On the floor of the fitted model's fourth ventricle, straight behind the middle of the nucleus of abducens nerve under it (3.3 mm from it); the model's (Z-Anatomy), not this patient's, carried into this CT with the ventricle (approximate)."
+ },
+ {
+  "id": "lm_facial_colliculus_l",
+  "name": "Facial colliculus",
+  "bone": "Pons",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   1.38,
+   -33.34,
+   -14.04
+  ],
+  "side": "L",
+  "boneFrom": "fitted model, carried onto this CT",
+  "distanceToBoneMm": 0.0,
+  "placed": "On the floor of the fitted model's fourth ventricle, straight behind the middle of the nucleus of abducens nerve under it (3.3 mm from it); the model's (Z-Anatomy), not this patient's, carried into this CT with the ventricle (approximate)."
+ },
+ {
+  "id": "lm_hypoglossal_trigone_r",
+  "name": "Hypoglossal trigone",
+  "bone": "Medulla oblongata",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   3.6,
+   -33.32,
+   -22.35
+  ],
+  "side": "R",
+  "boneFrom": "fitted model, carried onto this CT",
+  "distanceToBoneMm": 0.0,
+  "placed": "On the floor of the fitted model's fourth ventricle, straight behind the middle of the nucleus of hypoglossal nerve under it (2.1 mm from it); the model's (Z-Anatomy), not this patient's, carried into this CT with the ventricle (approximate)."
+ },
+ {
+  "id": "lm_hypoglossal_trigone_l",
+  "name": "Hypoglossal trigone",
+  "bone": "Medulla oblongata",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   2.01,
+   -33.39,
+   -22.4
+  ],
+  "side": "L",
+  "boneFrom": "fitted model, carried onto this CT",
+  "distanceToBoneMm": 0.0,
+  "placed": "On the floor of the fitted model's fourth ventricle, straight behind the middle of the nucleus of hypoglossal nerve under it (2.1 mm from it); the model's (Z-Anatomy), not this patient's, carried into this CT with the ventricle (approximate)."
+ },
+ {
+  "id": "lm_vagal_trigone_r",
+  "name": "Vagal trigone",
+  "bone": "Medulla oblongata",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   5.4,
+   -34.26,
+   -24.25
+  ],
+  "side": "R",
+  "boneFrom": "fitted model, carried onto this CT",
+  "distanceToBoneMm": 0.0,
+  "placed": "On the floor of the fitted model's fourth ventricle, straight behind the middle of the posterior nucleus of vagus nerve under it (3.5 mm from it); the model's (Z-Anatomy), not this patient's, carried into this CT with the ventricle (approximate)."
+ },
+ {
+  "id": "lm_vagal_trigone_l",
+  "name": "Vagal trigone",
+  "bone": "Medulla oblongata",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   0.04,
+   -34.96,
+   -23.78
+  ],
+  "side": "L",
+  "boneFrom": "fitted model, carried onto this CT",
+  "distanceToBoneMm": 0.0,
+  "placed": "On the floor of the fitted model's fourth ventricle, straight behind the middle of the posterior nucleus of vagus nerve under it (3.5 mm from it); the model's (Z-Anatomy), not this patient's, carried into this CT with the ventricle (approximate)."
+ },
+ {
+  "id": "lm_vestibular_area_r",
+  "name": "Vestibular area",
+  "bone": "Pons",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   6.31,
+   -33.53,
+   -6.8
+  ],
+  "side": "R",
+  "boneFrom": "fitted model, carried onto this CT",
+  "distanceToBoneMm": 0.0,
+  "placed": "On the floor of the fitted model's fourth ventricle, straight behind the middle of the vestibular nuclei under it (7.5 mm from it); the model's (Z-Anatomy), not this patient's, carried into this CT with the ventricle (approximate)."
+ },
+ {
+  "id": "lm_vestibular_area_l",
+  "name": "Vestibular area",
+  "bone": "Pons",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   -0.85,
+   -33.28,
+   -7.11
+  ],
+  "side": "L",
+  "boneFrom": "fitted model, carried onto this CT",
+  "distanceToBoneMm": 0.0,
+  "placed": "On the floor of the fitted model's fourth ventricle, straight behind the middle of the vestibular nuclei under it (7.5 mm from it); the model's (Z-Anatomy), not this patient's, carried into this CT with the ventricle (approximate)."
+ },
+ {
+  "id": "lm_obex",
+  "name": "Obex",
+  "bone": "Medulla oblongata",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   2.42,
+   -33.92,
+   -27.24
+  ],
+  "side": "M",
+  "boneFrom": "fitted model, carried onto this CT",
+  "distanceToBoneMm": 0.0,
+  "placed": "The caudal tip of the floor at the midline in the fitted model's fourth ventricle (its lowest point there); the model's, not this patient's, carried into this CT with the ventricle (approximate)."
+ },
+ {
+  "id": "lm_median_sulcus_of_fourth_ventricle",
+  "name": "Median sulcus of fourth ventricle",
+  "bone": "Pons",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   1.93,
+   -32.71,
+   -13.91
+  ],
+  "side": "M",
+  "boneFrom": "fitted model, carried onto this CT",
+  "distanceToBoneMm": 0.0,
+  "placed": "The floor at the midline at the level of the facial colliculi in the fitted model's fourth ventricle; the model's, not this patient's, carried into this CT with the ventricle (approximate)."
  }
 ]

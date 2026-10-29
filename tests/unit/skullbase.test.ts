@@ -6,7 +6,7 @@ import { decodeSkull, defaultSkullState, encodeSkull } from '../../src/skullbase
 import { nodeMeans } from './glb';
 import { FORAMEN_CONTENTS } from '../../src/skullbase/foramina';
 import { TB_NOTES, TB_REF, TB_REFS } from '../../src/skullbase/temporal';
-import { APPROACH_REF, APPROACH_REFS, APPROACHES, ENDONASAL_INFO } from '../../src/skullbase/approaches';
+import { APPROACH_REF, APPROACH_REFS, APPROACHES, CAVERNOUS_INFO, ENDONASAL_INFO } from '../../src/skullbase/approaches';
 
 describe('skull-base data (Z-Anatomy export)', () => {
   it('generated files agree with each other', () => {
@@ -228,9 +228,10 @@ describe('the temporal-bone model (v3: OpenEar specimen registered onto the CT)'
         expect(s.file, s.id).toMatch(/^assets\/skullbase-v3\//);
       } else {
         expect(s.file, s.id).toMatch(/^assets\/skullbase-ct\//);
-        // nothing approximate from Z-Anatomy, but the falx the interhemispheric view draws and the sellar structures the
-        // endonasal view draws (v2's fitted ones, their cards saying so)
-        const fittedOk = ['Falx cerebri', 'Adenohypophysis', 'Neurohypophysis', 'Cavernous sinus', 'Anterior intercavernous sinus', 'Posterior intercavernous sinus', 'Optic chiasm'];
+        // nothing approximate from Z-Anatomy, but the falx the interhemispheric view draws, the sellar structures the
+        // endonasal view draws and the veins the cavernous sinus view draws (v2's fitted ones, their cards saying so)
+        const fittedOk = ['Falx cerebri', 'Anterior intercavernous sinus', 'Posterior intercavernous sinus', 'Optic chiasm',
+          'Superior petrosal sinus', 'Inferior petrosal sinus', 'Superior ophthalmic vein', 'Inferior ophthalmic vein'];
         if (!fittedOk.includes(s.name)) expect(s.fitted, s.id).toBeUndefined();
         else if (s.fitted) expect(s.derivation, s.id).toMatch(/approximate/);
       }
@@ -304,12 +305,58 @@ async function v3Modules() {
   }
 }
 
+describe('v3 cranial floor landmarks', async () => {
+  const { groups: G3 } = await v3Modules();
+  const lms = (await import('../../src/data/generated/sbv3-landmarks.json')).default as unknown as { id: string; name: string; side: string; placed?: string }[];
+  it('labels the clinoid processes, the sella and the petrous apex on the cranial floor, each saying how it was placed', () => {
+    const floor = G3.SB_GROUP.get('floor')!;
+    const names = new Set(floor.landmarks.map((id) => lms.find((l) => l.id === id)!.name));
+    for (const n of ['Anterior clinoid process', 'Posterior clinoid process', 'Tuberculum sellae', 'Dorsum sellae', 'Apex of petrous part', 'Sphenoidal yoke']) expect(names, n).toContain(n);
+    for (const n of ['Anterior clinoid process', 'Posterior clinoid process', 'Apex of petrous part']) {
+      expect(lms.filter((l) => l.name === n).map((l) => l.side).sort(), n).toEqual(['L', 'R']);   // both sides, found on the CT
+    }
+    for (const l of lms.filter((l) => floor.landmarks.includes(l.id) && !['Optic canal'].includes(l.name))) {
+      if (l.placed !== undefined) expect(l.placed.length, l.id).toBeGreaterThan(20);
+    }
+  });
+});
+
+describe('v3 floor of the fourth ventricle (telovelar view)', async () => {
+  const { groups: G3 } = await v3Modules();
+  const { TB_NOTES } = await import('../../src/skullbase/temporal');
+  const lms = (await import('../../src/data/generated/sbv3-landmarks.json')).default as unknown as { id: string; name: string; side: string; ras: number[]; placed?: string }[];
+  const at = (name: string, side: string) => lms.find((l) => l.name === name && l.side === side)!.ras;
+  it('labels the facial colliculi, trigones, vestibular areas, median sulcus and obex, each with sourced notes', () => {
+    const tv = G3.SB_GROUP.get('telovelar')!;
+    const names = new Set(tv.landmarks.map((id) => lms.find((l) => l.id === id)!.name));
+    for (const n of ['Facial colliculus', 'Hypoglossal trigone', 'Vagal trigone', 'Vestibular area', 'Median sulcus of fourth ventricle', 'Obex']) {
+      expect(names, n).toContain(n);
+      expect((TB_NOTES[n] ?? []).length, n).toBeGreaterThan(0);
+    }
+  });
+  it('places them as the floor is laid out: paired ones either side of the median sulcus, the obex lowest, the colliculus about mid-floor', () => {
+    const mid = at('Median sulcus of fourth ventricle', 'M');
+    for (const n of ['Facial colliculus', 'Hypoglossal trigone', 'Vagal trigone', 'Vestibular area']) {
+      expect(at(n, 'R')[0], n).toBeGreaterThan(mid[0] - 0.5);
+      expect(at(n, 'L')[0], n).toBeLessThan(mid[0] + 0.5);
+    }
+    // laterally: hypoglossal trigone, then vagal trigone, then the vestibular area beyond the sulcus limitans
+    const off = (n: string) => (at(n, 'R')[0] - at(n, 'L')[0]) / 2;
+    expect(off('Hypoglossal trigone')).toBeLessThan(off('Vagal trigone'));
+    expect(off('Vagal trigone')).toBeLessThan(off('Vestibular area'));
+    const obex = at('Obex', 'M');
+    for (const n of ['Facial colliculus', 'Hypoglossal trigone', 'Vagal trigone']) expect(at(n, 'R')[2], n).toBeGreaterThan(obex[2]);
+    const fcToObex = at('Facial colliculus', 'R')[2] - obex[2];
+    expect(fcToObex).toBeGreaterThan(9); expect(fcToObex).toBeLessThan(20);     // 14.5 ± 1.7 mm in Erginoglu 2026
+  });
+});
+
 describe('v3 surgical view: the pterional craniotomy and the template brain fitted into the CT', async () => {
   const { SbManifestSchema } = await import('../../src/data/schema');
   const { groups: G3, scene: S3, state: T3 } = await v3Modules();
   const v3 = SbManifestSchema.parse((await import('../../src/data/generated/sbv3-manifest.json')).default);
   const byId = new Map(v3.structures.map((s) => [s.id, s]));
-  const geom = (await import('../../src/data/generated/sbv3-approaches.json')).default as unknown as Record<string, { bones: string[]; removed: string; removedMl: number; side: string; burrHoles: number[][] }>;
+  const geom = (await import('../../src/data/generated/sbv3-approaches.json')).default as unknown as Record<string, { bones: string[]; cutBones: string[]; removed: string; removedMl: number; side: string; burrHoles: number[][] }>;
   const brain = (await import('../../src/data/generated/sbv3-fit.json')).default.brain as unknown as {
     fit: Record<string, number>; clear: Record<string, Record<string, number>>; open: Record<string, number>; lift: Record<string, number>; lsoLift: Record<string, number>;
     interhemispheric: Record<string, number>; aca: { a3: string[]; thirdA2ToAcomMm: number | null };
@@ -318,7 +365,8 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
   it('cuts the right pterional flap out of the CT bone: each cut bone stands in for a whole one, a plausible volume removed', () => {
     const ap = geom.pterional;
     expect(ap.side).toBe('R');
-    expect(ap.bones.map((id) => byId.get(id)!.name).sort()).toEqual(['Frontal bone', 'Parietal bone', 'Sphenoid bone', 'Temporal bone']);
+    expect(ap.cutBones.map((id) => byId.get(id)!.name).sort()).toEqual(['Frontal bone', 'Parietal bone', 'Sphenoid bone', 'Temporal bone']);
+    for (const id of ap.cutBones) expect(ap.bones).toContain(id);
     for (const id of ap.bones) expect(byId.has(byId.get(id)!.replaces!), id).toBe(true);
     expect(ap.removedMl).toBeGreaterThan(4);
     expect(ap.removedMl).toBeLessThan(30);
@@ -328,7 +376,9 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
   it('cuts a lateral supraorbital flap from the frontal bone only, and each surgical view draws only its own craniotomy', () => {
     const lso = geom.lso;
     expect(lso.side).toBe('R');
-    expect(lso.bones.map((id) => byId.get(id)!.name)).toEqual(['Frontal bone']);
+    expect(lso.cutBones.map((id) => byId.get(id)!.name)).toEqual(['Frontal bone']);
+    // the whole bones next to it (across the coronal suture, the sphenoid ridge) are remeshed with it, not cut
+    expect(lso.bones.map((id) => byId.get(id)!.name).sort()).toEqual(['Frontal bone', 'Parietal bone', 'Sphenoid bone']);
     expect(lso.removedMl).toBeGreaterThan(4);
     expect(lso.removedMl).toBeLessThan(30);
     expect(lso.burrHoles).toHaveLength(1);                 // one burr hole (Cha 2012)
@@ -338,6 +388,19 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     for (const id of [...geom.pterional.bones, geom.pterional.removed]) expect(pl.looks.get(id), id).toBe('hidden');
     expect(pl.looks.get('sb_frontal_bone')).toBe('hidden');      // the cut frontal bone stands in for it
     expect(pl.looks.get('sb_temporal_bone')).toBe('primary');    // the LSO leaves the temporal bone whole
+  });
+  it('draws the Sylvian veins by rule, with the brain\'s shapes, in the pterional and supraorbital views', () => {
+    const names = ['Superficial middle cerebral vein', 'Insular veins', 'Deep middle cerebral vein'];
+    const veins = names.map((n) => v3.structures.find((s) => s.name === n)!);
+    for (const v of veins) {
+      expect(v, 'drawn').toBeDefined();
+      expect(v.category).toBe('vein');
+      expect(v.schematic, v.name).toBe(true);        // drawn by rule: this angiogram labels none near the fissure
+      expect(v.morph, v.name).toBe(true);            // they move with the opening and the lift
+    }
+    const pt = S3.skullPlan('transsylvian', null), pl = S3.skullPlan('lso', null);
+    for (const v of veins) { expect(pt.looks.get(v.id), v.name).not.toBe('hidden'); expect(pl.looks.get(v.id), v.name).not.toBe('hidden'); }
+    for (const n of ['Sphenoparietal sinus', 'Basal vein (of Rosenthal)']) expect(APPROACHES.find((a) => a.id === 'pterional')!.context).toContain(n);
   });
   it('fits the template brain into the skull and onto this patient\'s middle cerebral artery', () => {
     const f = brain.fit;
@@ -422,6 +485,17 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     const s = T3.decodeSkull('#/atlas?g=interhemispheric&op=40&ih=50');
     expect(s.morphs).toEqual({ interhemispheric: 0.5 });
   });
+  it('the cavernous sinus view: the sinus and its walls see-through, the ten triangles, the veins that join it', () => {
+    const g = G3.SB_GROUP.get('cavernous')!;
+    const names = g.structures.map((id) => v3.structures.find((s) => s.id === id)?.name);
+    for (const n of ['Cavernous sinus', 'Walls of the cavernous sinus', 'Abducens nerve (VI)', 'Superior petrosal sinus', 'Basilar venous plexus']) expect(names, n).toContain(n);
+    expect(v3.structures.filter((s) => s.category === 'triangle')).toHaveLength(10);
+    for (const n of ['Cavernous sinus', 'Walls of the cavernous sinus']) {
+      const id = v3.structures.find((s) => s.name === n)!.id;
+      expect([...(g.ghost ?? []), ...(g.shell ?? [])], n).toContain(id);
+    }
+  });
+
   it('the endoscopic endonasal view: its group, with the carotids, the optic nerves and the sellar contents behind the walls', () => {
     const g = G3.SB_GROUP.get('endonasal')!;
     expect(g.endonasal).toBe(true);
@@ -531,7 +605,7 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(T3.encodeSkull(l)).toContain('ll=80');
   });
   it('sourced content: references exist and are used, context structures exist', () => {
-    const used = new Set([...APPROACHES, ENDONASAL_INFO].flatMap((a) => a.sections.flatMap((x) => x.claims)).flatMap((c) => c.refIds));
+    const used = new Set([...APPROACHES, ENDONASAL_INFO, CAVERNOUS_INFO].flatMap((a) => a.sections.flatMap((x) => x.claims)).flatMap((c) => c.refIds));
     for (const r of used) expect(APPROACH_REF.has(r), r).toBe(true);
     expect(APPROACH_REFS.map((r) => r.id).filter((r) => !used.has(r))).toEqual([]);
     for (const a of APPROACHES) for (const n of a.context) expect(v3.structures.some((s) => s.name === n), n).toBe(true);

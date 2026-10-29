@@ -173,6 +173,8 @@ export const ManifestStructureSchema = z.object({
   replaces: z.string().optional(),
   /** skull base v3: carries morph target 0, the transsylvian opening (the brain, and the arteries that move with it) */
   morph: z.boolean().optional(),
+  /** vascular section: the lesion (view) a lesion's part belongs to; with `replaces`, a vessel it changes in that view */
+  lesion: z.string().optional(),
   /** brainstem section: the part of the brainstem a safe entry zone lies on */
   bsRegion: z.enum(['midbrain', 'pons', 'floor', 'medulla']).optional(),
   /** brainstem section: the atlas's abbreviation (arousal network nuclei) */
@@ -251,6 +253,20 @@ export const VeManifestSchema = z.object({
   dataset: DatasetInfoSchema,
 });
 export type VeManifest = z.infer<typeof VeManifestSchema>;
+
+/** va-manifest.json: the vascular section (pipeline/vascular_build.py): this CT angiogram's vessels and the lesions drawn
+ * on them, each with its timing in the schematic angiogram (per vertex, in its GLB), and that angiogram's phases. */
+export const VaManifestSchema = z.object({
+  space: z.string(),
+  generatedBy: z.string(),
+  structures: z.array(ManifestStructureSchema),
+  dataset: DatasetInfoSchema,
+  dsa: z.object({
+    tMaxS: z.number(), artSpanS: z.number(), venStartS: z.number(), venSpanS: z.number(), dwellArtS: z.number(), dwellVenS: z.number(),
+    arterialS: z.tuple([z.number(), z.number()]), venousS: z.tuple([z.number(), z.number()]),
+  }),
+});
+export type VaManifest = z.infer<typeof VaManifestSchema>;
 
 /** bs-manifest.json: the brainstem section's structures in MNI space (Z-Anatomy fitted to the template; AAN 2.0). */
 export const BsManifestSchema = z.object({

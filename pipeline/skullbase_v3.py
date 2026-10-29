@@ -417,6 +417,19 @@ def tube_mesh_var(P: np.ndarray, r: np.ndarray):
     return SB.tube(np.c_[P, r])
 
 
+def cavernous_splice(name: str, side: str, P: np.ndarray) -> np.ndarray:
+    """A nerve's route with its run through the cavernous sinus as skullbase_v3_cavernous.py re-routed it (its splices,
+    kept in cavernous.json), if it has and the route is the one it spliced."""
+    p = BUILD / "cavernous.json"
+    if not p.exists():
+        return P
+    sp = json.loads(p.read_text())["splices"].get(side, {}).get(name)
+    if not sp or sp["n"] != len(P):
+        return P
+    import skullbase_v3_cavernous as CAV
+    return CAV.splice(P, sp["i0"], sp["i1"], [np.asarray(m) for m in sp["middle"]])
+
+
 def tube_mesh(P: np.ndarray, r: float):
     import skullbase_build as SB
     v, n, t = SB.tube(np.c_[P, np.full(len(P), r)])
@@ -602,6 +615,8 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
     items += [{**it} for it in v2["structures"] if it["id"] in ENDO.CARRIED]
     # (and the pituitary modelled in its fossa, which replaces v2's fitted one)
     items += json.loads(ENDO.HYPO_ITEMS.read_text()) if ENDO.HYPO_ITEMS.exists() else []
+    # (and skullbase_v3_cavernous.py's: the sinus modelled on this CT, the triangles, the veins it draws)
+    items += json.loads(ENDO.CAV_ITEMS.read_text()) if ENDO.CAV_ITEMS.exists() else []
     dataset = {
         "name": "TopBrain 2025 CT angiogram (case 011) with OpenEar temporal bone ALPHA registered onto it",
         "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); OpenEar: CC BY 4.0; "
@@ -670,7 +685,7 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
         nodes, cent = [], {}
         for s in ("L", "R"):
             r_ = base["routes"][(name, s)]
-            v, n_, t = tube_mesh(r_["path"], r_["radius"])
+            v, n_, t = tube_mesh(cavernous_splice(name, s, r_["path"]), r_["radius"])
             nodes.append({"name": s, "positions": v, "normals": n_, "indices": t, "mode": TRIANGLES})
             cent[s] = r_["path"].mean(0).round(2).tolist()
         sid = SB.slug(name).replace("sb_", "tb_", 1)
@@ -695,6 +710,11 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
                              "from there to its foramen." if name in BASE.TG_BRANCHES else ""),
             "centroid": {"L": cent["L"], "R": cent["R"]},
         })
+        # (re-routed through the cavernous sinus by skullbase_v3_cavernous.py, if it has been run)
+        if (BUILD / "cavernous.json").exists():
+            import skullbase_v3_cavernous as CAV
+            if name in CAV.REROUTE_NOTE:
+                items[-1]["derivation"] += " " + CAV.REROUTE_NOTE[name]
     # the trigeminal ganglion, in Meckel's cave as placed on this CT
     nodes, cent = [], {}
     for s in ("L", "R"):
@@ -822,6 +842,10 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
         })
     brain_items(items, ex2, v2)
     pfossa_items(items)
+    if (BUILD / "pf_tonsil.glb").exists():      # the PICA carried on past its label, moving with the cerebellum
+        import skullbase_v3_pica as PICA
+        PICA.build(ex2)
+        PICA.items(items)
     approach_items(items, ex2)
     for it in items:
         if it.get("cranialNerve") is None:
@@ -910,6 +934,16 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
                                                    **({"skull": {k: v for k, v in json.loads((BUILD / "skull.json").read_text())["report"].items()
                                                                  if k != "beyondScanShare"}}
                                                       if (BUILD / "skull.json").exists() else {})}, indent=1))
+    if (GEN / f"{PREFIX}-cavernous.json").exists():    # the cranial floor's landmarks (skullbase_v3_floor.py), put on this CT
+        import skullbase_v3_floor as FLOOR
+        floor = FLOOR.floor_landmarks()
+        landmarks = [l for l in landmarks if l["id"] not in {f["id"] for f in floor}] + floor
+        (GEN / f"{PREFIX}-landmarks.json").write_text(json.dumps(landmarks, indent=1, ensure_ascii=False))
+    if (BUILD / "pf_fourth_ventricle.glb").exists():   # the floor of the fourth ventricle's (skullbase_v3_rhomboid.py)
+        import skullbase_v3_rhomboid as RHOMBOID
+        rh = RHOMBOID.rhomboid_landmarks()
+        landmarks = [l for l in landmarks if l["id"] not in {f["id"] for f in rh}] + rh
+        (GEN / f"{PREFIX}-landmarks.json").write_text(json.dumps(landmarks, indent=1, ensure_ascii=False))
     # definitions: the Wikipedia texts Z-Anatomy ships, for the names shown
     ex = json.loads(ZEXPORT.read_text())
     if (BUILD / "pfossa.json").exists():          # the posterior fossa's (skullbase_pfossa_export.py)
@@ -959,6 +993,36 @@ def brain_items(items: list, ex2: dict, v2: dict) -> None:
             it = next(i for i in items if i["name"] == b["vessel"])
             it["file"] = b["file"]
             it["morph"] = True
+            if "cross-sections" not in it.get("derivation", ""):
+                it["derivation"] = (it.get("derivation", "") + " In the surgical views it moves with the cortex it lies on where "
+                                    "that is moved on purpose (the frontal and parietal opercula as the fissure opens, the frontal "
+                                    "lobe and the front of the insula as they are lifted), carried by cross-sections along its "
+                                    "centre line, so it is stretched along its length, not squeezed across it.").strip()
+            continue
+        if b.get("drawnVein"):
+            vr = rep["veins"]
+            items.append({
+                "id": b["id"], "name": b["name"], "aliases": b["aliases"], "type": "tube", "file": f"assets/{KIND}/{b['id']}.glb",
+                "bytes": 0, "colour": colour("sbVein"), "dataset": "rule", "schematic": True,
+                "source": "Drawn by rule on the template brain fitted into this CT",
+                "licence": LEAD_DBS["licence"], "citation": [], "citationUrls": [], "refIds": [], "category": "vein", "morph": True,
+                "derivation": {
+                    "sb_superficial_middle_cerebral_vein": "Drawn by rule (this angiogram labels no vein near the fissure), on the fitted "
+                        "template brain, not traced: one trunk along the fissure's edge on the temporal lip, from its back end forwards "
+                        "and down, then on to the outer end of the sphenoparietal sinus (itself drawn by rule) under the lesser wing, "
+                        f"{2 * vr['radiusMm']['smcv']:g} mm across (illustrative). Its pattern varies (five types in Imada 2021, some "
+                        "with two trunks); here the fissure opens on its frontal side and it stays with the temporal lobe.",
+                    "sb_insular_veins": "Drawn by rule on the fitted template's insula, not traced: from the insula's edge in to its pole "
+                        "(taken where this patient's M1 meets its M2, TopBrain's labels); the central vein along the boundary of the "
+                        "template's short and long gyri, the precentral and posterior veins fanned in front of and behind it "
+                        f"(illustrative), each {2 * vr['radiusMm']['insular']:g} mm across.",
+                    "sb_deep_middle_cerebral_vein": "Drawn by rule, not traced: from the insula's pole, where the insular veins meet, "
+                        "under the brain to the front end of this patient's basal vein (TopBrain's label), kept off the fitted "
+                        f"template's cortex, {2 * vr['radiusMm']['deep']:g} mm across (illustrative).",
+                }[b["id"]] + " It moves with the brain in the surgical shapes (the superficial vein with the temporal lobe, the "
+                             "insular and deep veins with the insula), carried by cross-sections along its line.",
+                "centroid": b["centroid"],
+            })
             continue
         items.append({
             "id": b["id"], "name": b["name"], "aliases": [], "type": "soft", "file": f"assets/{KIND}/{b['id']}.glb", "bytes": 0,
@@ -1128,8 +1192,10 @@ def approach_items(items: list, ex2: dict) -> None:
             items.append({**{k: src[k] for k in ("aliases", "colour", "dataset", "source", "licence", "citation", "citationUrls")},
                           "id": sid, "name": base, "type": "bone", "file": f"assets/{KIND}/{sid}.glb", "bytes": 0, "refIds": [],
                           "category": "bone", "approach": aid, "replaces": SB.slug(base),
-                          "derivation": f"The CT's {base.lower()} with the bone of the {ap['name'].lower()} removed "
-                                        "(pipeline/skullbase_v3_approach.py).",
+                          "derivation": (f"The CT's {base.lower()} with the bone of the {ap['name'].lower()} removed "
+                                         "(pipeline/skullbase_v3_approach.py)." if any(SB.split_pair(c)[0] == base for c in ap.get("cutBones", ap["bones"])) else
+                                         f"The CT's {base.lower()}, which the {ap['name'].lower()} does not cut, remeshed within a few "
+                                         "millimetres of the cut so that it meets the cut bone on one surface (pipeline/skullbase_v3_approach.py)."),
                           "centroid": {"L": cent.get("L", cent.get("R")), "R": cent.get("R", cent.get("L"))}})
             ids.append(sid)
         v, t = np.array(ap["removed"]["verts"], float), np.array(ap["removed"]["tris"], int)
@@ -1142,7 +1208,8 @@ def approach_items(items: list, ex2: dict) -> None:
                       "licence": DATASET_V2_LICENCE, "citation": [], "citationUrls": [], "refIds": [], "category": "removed",
                       "approach": aid, "layer": "nuclei",
                       "derivation": f"The bone the {ap['name'].lower()} removes: {ap['removedMl']} ml. {ap['how']}", "centroid": {"L": c, "R": c}})
-        summary[aid] = {"name": ap["name"], "side": ap["side"], "how": ap["how"], "removedMl": ap["removedMl"], "bones": ids,
+        cut_ids = [f"sb_appr_{aid}__{SB.slug(b)[3:]}" for b in sorted({SB.split_pair(c)[0] for c in ap.get("cutBones", ap["bones"])})]
+        summary[aid] = {"name": ap["name"], "side": ap["side"], "how": ap["how"], "removedMl": ap["removedMl"], "bones": ids, "cutBones": cut_ids,
                         "removed": sid, "burrHoles": ap["burrHoles"]}
     (GEN / f"{PREFIX}-approaches.json").write_text(json.dumps(summary, indent=1, ensure_ascii=False))
 
@@ -1235,7 +1302,12 @@ def validate() -> int:
     brain = [it for it in m["structures"] if it.get("category") == "brain"]
     check(len(brain) == 7 and all(it.get("morph") for it in brain), f"{len(brain)} brain pieces, all with the surgical shapes as morph targets")
     check(any(it["name"] == "Falx cerebri" for it in m["structures"]), "the falx is missing")
-    check(sum(1 for it in m["structures"] if it.get("category") == "artery" and it.get("morph")) == 2, "M2 and M3 carry the opening")
+    check(all(it.get("morph") for it in m["structures"] if it["name"] in ("Middle cerebral artery (M2 segment)", "Middle cerebral artery (M3 segment)")),
+          "M2 and M3 carry the opening")
+    pica = [it for it in m["structures"] if it["name"].startswith("Posterior inferior cerebellar artery")]
+    check(len(pica) == 2 and all(it.get("morph") for it in pica), "the PICA and its carried-on course move with the cerebellum")
+    sv = [it for it in m["structures"] if it.get("category") == "vein" and it.get("morph")]
+    check(len(sv) == 3 and all(it.get("schematic") for it in sv), f"{len(sv)} Sylvian veins drawn, with the surgical shapes")
     b = fit.get("brain")
     check(b is not None, "the brain's report is missing")
     if b:

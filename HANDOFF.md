@@ -1,4 +1,4 @@
-# Handoff: MacBook session, 2026-10-25
+# Handoff: desktop session (CachyOS), 2026-10-29
 
 Read this first when continuing on another computer. Before handing back, overwrite this file with a new handoff, then
 commit and push it.
@@ -6,25 +6,45 @@ commit and push it.
 ## Where things stand
 
 - `main` is pushed to GitHub. GitHub Pages deploys `dist/` on every push (`.github/workflows/pages.yml`).
-- Sections: home, DBS targets, white-matter tracts, cortex, brainstem, ventricles, spine, and skull base. The skull
-  base default is the "v3" model; v1 (Z-Anatomy) and v2 (CT) are alternative versions.
-- Latest work:
-  - `e58ed04` added the Ventricles module and three Skull base v3 fixes: the falx clearance, the vermis lift in the
-    telovelar view, and the suboccipital cut down to the foramen magnum.
-  - `f6819dc` is a ventricles rework. Z-Anatomy's ventricles are fitted onto this CT's narrow ventricles, giving both
-    temporal horns, a softened surface drawn 0.5 mm larger, and the foramina of Monro. The foramina are drawn by rule:
-    Jean 2019 gives their area, Azab 2014 their position. Trajectories now stop at 65 mm (Chen 2025).
-  - `7db4d3b` adds the aqueduct and fourth ventricle. The whole system is fitted in one deformation. The aqueduct is a
-    tube of Xiao 2025's diameters, and the build checks that the drawn ventricles form one cavity.
+- Sections: home, DBS targets, white-matter tracts, cortex, brainstem, ventricles, spine, skull base and, new,
+  **Vascular** (`vascular/`). The skull base default is the "v3" model; v1 (Z-Anatomy) and v2 (CT) are alternatives.
+- Since the last handoff, the desktop committed the spine drilling work (foraminotomy, ACDF, laminectomy and
+  laminoplasty, disc herniations) and the skull base v3 endonasal view. The latest commit adds:
+  - **Skull base v3:**
+    - the cavernous sinus modelled on the CT, with its walls, the nerves re-routed through it, the ten triangles, and
+      the sphenoparietal sinus and basilar plexus (`pipeline/skullbase_v3_cavernous.py`);
+    - a rounded pterional flap and fixed approach cut edges (seals, flakes, sutures, whole-bone keep);
+    - Sylvian veins, and arteries skinned rigidly as the fissure opens;
+    - landmarks on the cranial floor (`skullbase_v3_floor.py`) and the fourth ventricle floor
+      (`skullbase_v3_rhomboid.py`);
+    - the PICA's fitted continuation, with a groove in the medulla (`skullbase_v3_pica.py`, `dent` in
+      `skullbase_pfossa.py`).
+  - **Vascular section:**
+    - `pipeline/vascular_build.py` and `vascular_lesions.py` build on the TopBrain CT angiogram;
+    - aneurysms, AVMs of Spetzler–Martin grades I, III and V (a network nidus after Jain 2019, compact or diffuse
+      after Wu 2024), a dural AV fistula, and direct and indirect carotid-cavernous fistulas;
+    - a 3D "DSA" filling animation (`setDsa` in `Viewer.ts`) and layer opacity sliders.
+  - **Winding fix:** the cavernous sinus, its walls and the hypophysis meshes were inside out. They are now flipped
+    in the pipeline (`mesh_of` in the cavernous step, the endonasal hypophysis). Only the flat, double-sided triangle
+    patches remain flagged by `winding_check.py`.
+- **Pipeline data changed on the desktop:** `pipeline/data/build/skullbase-v3` (brain and posterior fossa fits, the
+  cavernous step) and `pipeline/data/build/vascular`. Copy `pipeline/data/` back before rebuilding those on the MacBook.
+- **No real AVM imaging is available** under an open licence (searched DIAS, OpenNeuro, RSNA/Kaggle, figshare, arXiv).
+  If the user supplies a de-identified CTA or 3D rotational angiogram with permission, it could be fitted in.
+- **Build chain:**
+  - Vascular: `vascular_build.py`, then `node pipeline/compress.mjs vascular`, then `vascular_build.py finalize`.
+  - On the desktop, after compressing skull base v3, restore four GLBs that change by noise (see the memory note),
+    then run `skullbase_v3.py finalize`.
 
 ## Open items (offered, not yet requested)
 
 - **Left temporal horn.** It is placed by the model, about 5 mm too medial and high. The CT is not darker along it;
   along the right horn it is. It could be pulled onto the CT's faint fluid.
-- **Skull base v3's fourth ventricle** (`skullbase_pfossa.py`) sits about 3 mm in front of the fluid the CT shows. The
-  ventricles section's fit now matches the CT. The two could be made to agree.
-- **Brain deformation roadmap.** Still to do: a retrosigmoid view, then FEM. Heavy computation can run on the desktop
-  (CachyOS, i7-12700K, 32 GB RAM, RTX 5080), but ask before assuming access. The MacBook has 8 GB of RAM.
+- **Skull base v3's fourth ventricle** (`skullbase_pfossa.py`) sits about 3 mm in front of the fluid the CT shows.
+- **Brain deformation roadmap.** Still to do: FEM. Heavy computation can run on the desktop (CachyOS, i7-12700K,
+  32 GB RAM, RTX 5080). The MacBook has 8 GB of RAM.
+- **Playwright** was not run on the desktop (its baselines are macOS ones). Run it on the MacBook, and add baselines
+  for the vascular section.
 - The README's "Open items" section lists the older ones.
 
 ## Standing rules (the user's)
@@ -77,7 +97,7 @@ commit and push it.
   11. `npm run build`
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
-  - `npx vitest run` (253 tests)
+  - `npx vitest run` (306 tests)
   - `npm run build`
   - `npx playwright test` (130 tests, about 7 minutes, preview on port 4173)
   - `npm run check:palette`

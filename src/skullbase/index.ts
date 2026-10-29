@@ -48,6 +48,8 @@ export const LandmarkSchema = z.object({
   /** located by the pipeline from what passes through it (a foramen the model does not label): how, and from which structures */
   how: z.string().optional(),
   from: z.array(z.string()).optional(),
+  /** a cranial-floor landmark put on this CT's bone (pipeline/skullbase_v3_floor.py): how */
+  placed: z.string().optional(),
 });
 export type Landmark = z.infer<typeof LandmarkSchema>;
 export const LANDMARKS = z.array(LandmarkSchema).parse(landmarksJson);
@@ -66,7 +68,7 @@ const RegionSchema = z.object({
 });
 export const REGIONS = z.array(RegionSchema).parse(regionsJson);
 
-export type Kind = 'bone' | 'soft' | 'artery' | 'vein' | 'nerve' | 'labyrinth' | 'ossicle' | 'membrane' | 'brain' | 'hindbrain' | 'ventricle' | 'removed';
+export type Kind = 'bone' | 'soft' | 'artery' | 'vein' | 'nerve' | 'labyrinth' | 'ossicle' | 'membrane' | 'brain' | 'hindbrain' | 'ventricle' | 'removed' | 'triangle';
 export const kindOf = (m: ManifestStructure): Kind => (m.category ?? 'bone') as Kind;
 /** structures that belong to a surgical approach (a cut bone, or the bone removed): drawn only in that approach's view */
 export const isApproachPart = (m: ManifestStructure): boolean => !!m.approach;
@@ -78,8 +80,11 @@ const ApproachGeomSchema = z.object({
   /** how the opening was drawn on this skull (generated with the geometry) */
   how: z.string().min(1),
   removedMl: z.number().positive(),
-  /** the cut bones, each replacing the whole bone in the approach's view */
+  /** the bones it draws, each replacing the whole bone in the approach's view: those it cuts, and any whole bone within
+   *  a few millimetres of the cut (remeshed with them so they meet on one surface) */
   bones: z.array(z.string()).min(1),
+  /** of those, the bones it cuts */
+  cutBones: z.array(z.string()).min(1),
   removed: z.string(),
   burrHoles: z.array(V3),
 });

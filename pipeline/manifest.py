@@ -295,6 +295,32 @@ def ventricles_attribution() -> list[str]:
     ]
 
 
+def vascular_attribution() -> list[str]:
+    """ATTRIBUTION.md section for the vascular section, from va-manifest.json (built by vascular_build.py)."""
+    p = GEN / "va-manifest.json"
+    if not p.exists():
+        return []
+    d = json.loads(p.read_text())["dataset"]
+    return [
+        "## Vascular section (TopBrain 2025 CT angiogram, case 011: Skull base v3's vessels, with lesions drawn onto them)",
+        "",
+        "The vessel meshes in `public/assets/vascular/` and `va-manifest.json` and `va-lesions.json` are Skull base v3's vessels",
+        f"({d['licence']}): **not** GPL-licensed where they come from the TopBrain CT and the Z-Anatomy model; their fit uses the",
+        "TopBrain data (non-commercial). The lesions (aneurysms, arteriovenous malformations and fistulas) are the project's own",
+        "drawings on them. The section also shows Skull base v3's bone and fitted brain, under their licences above.",
+        "",
+        f"- Source: {d['url']}",
+        f"- Note: {d['note']}",
+        *[f"- Attribution: {a}" for a in d["attribution"]],
+        *[f"- Cite: {c}" for c in d["citation"]],
+        "- Changes made: Skull base v3's arteries and veins with a schematic angiogram's timing added per vertex",
+        "  (pipeline/vascular_build.py); aneurysms, arteriovenous malformations, a dural fistula and carotid-cavernous fistulas",
+        "  drawn by rule onto them (pipeline/vascular_lesions.py), with copies of the veins they fill early or dilate; files",
+        "  converted to compressed glTF.",
+        "",
+    ]
+
+
 def cortex_attribution() -> list[str]:
     """ATTRIBUTION.md section for the cortex section, from ctx-manifest.json (built by cortex_build.py)."""
     p = GEN / "ctx-manifest.json"
@@ -441,6 +467,7 @@ def write_attribution(m: dict, wm: dict) -> None:
         *skull_base_v3_attribution(),
         *brainstem_attribution(),
         *ventricles_attribution(),
+        *vascular_attribution(),
         *cortex_attribution(),
         *spine_attribution(),
         "## Datasets considered and not used",

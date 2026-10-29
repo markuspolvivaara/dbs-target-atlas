@@ -2,9 +2,15 @@
  "pterional": {
   "name": "Pterional (frontotemporal) craniotomy",
   "side": "R",
-  "how": "A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; the model's zygomatic process of the frontal bone, raised 6 mm); a frontal hole near the superior orbital rim (Yilmaz 2025; here 20 mm above and 10 mm lateral to the supraorbital notch, 28 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral sphenoid ridge drilled (a 6 mm radius along the ridge), stopping 12 mm short of the anterior clinoid process (illustrative: Yilmaz 2025 limits this resection at the meningo-orbital artery in the orbitozygomatic approach, which the model does not show). Burr holes: (46, 39, 30) mm, (36, 54, 52) mm, (62, -7, -1) mm, (66, -10, 40) mm.",
-  "removedMl": 8.4,
+  "how": "A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; the model's zygomatic process of the frontal bone, raised 6 mm); a frontal hole near the superior orbital rim (Yilmaz 2025; here 20 mm above and 10 mm lateral to the supraorbital notch, 28 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral sphenoid ridge drilled (a 6 mm radius along the ridge), stopping 12 mm short of the anterior clinoid process (illustrative: Yilmaz 2025 limits this resection at the meningo-orbital artery in the orbitozygomatic approach, which the model does not show). The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone (which stays), leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (46, 39, 30) mm, (36, 54, 52) mm, (62, -7, -1) mm, (66, -10, 40) mm.",
+  "removedMl": 12.5,
   "bones": [
+   "sb_appr_pterional__frontal_bone",
+   "sb_appr_pterional__parietal_bone",
+   "sb_appr_pterional__sphenoid_bone",
+   "sb_appr_pterional__temporal_bone"
+  ],
+  "cutBones": [
    "sb_appr_pterional__frontal_bone",
    "sb_appr_pterional__parietal_bone",
    "sb_appr_pterional__sphenoid_bone",
@@ -40,6 +46,11 @@
   "how": "A frontolateral flap over the orbital roof, with one burr hole posteriorly just below the temporal line (Cha 2012, Choque-Velasquez 2018), cut down to the anterior fossa floor (the basal part drilled off, Cha 2012); the sphenoid ridge is not drilled. Its outline is placed by hand on this skull: about 1482 mm² seen face on, larger than the mean LSO craniotomy of 1275 mm² (Cha 2012) on purpose, to show the anatomy (illustrative), its basal edge at the level of the orbital roof. The outline is a smooth curve through those points and the cut's edge is smoothed over 1 mm (illustrative). Burr hole: (61, 8, 37) mm.",
   "removedMl": 6.9,
   "bones": [
+   "sb_appr_lso__frontal_bone",
+   "sb_appr_lso__parietal_bone",
+   "sb_appr_lso__sphenoid_bone"
+  ],
+  "cutBones": [
    "sb_appr_lso__frontal_bone"
   ],
   "removed": "sb_appr_lso__removed",
@@ -60,6 +71,10 @@
    "sb_appr_interhemispheric__frontal_bone",
    "sb_appr_interhemispheric__parietal_bone"
   ],
+  "cutBones": [
+   "sb_appr_interhemispheric__frontal_bone",
+   "sb_appr_interhemispheric__parietal_bone"
+  ],
   "removed": "sb_appr_interhemispheric__removed",
   "burrHoles": [
    [
@@ -77,6 +92,9 @@
   "bones": [
    "sb_appr_suboccipital__occipital_bone"
   ],
+  "cutBones": [
+   "sb_appr_suboccipital__occipital_bone"
+  ],
   "removed": "sb_appr_suboccipital__removed",
   "burrHoles": []
  },
@@ -86,6 +104,10 @@
   "how": "A right retrosigmoid craniotomy: its upper edge along the transverse sinus' lower margin for 28 mm and its front edge along the sigmoid sinus' posterior margin for 35 mm (Jian 2021: the window's upper and front margins against the two sinuses), closed behind and below by straight edges, its corners rounded; larger than Jian 2021's keyhole (18-20 x 20-25 mm), about the size of the craniotomies in Tang 2025 (a mean 3.8 cm across), the shape drawn by hand (illustrative). The sinuses are this CT's own (traced through its lumen), the edges 0 mm off their margins, drawn on the inner table and carried out through the bone. The keypoint is where the two margins meet (Jian 2021, 2022, 2024); the burr hole 3.5 mm behind and below it (Jian 2021). About 674 mm² seen face on; its edge smoothed over 1 mm (illustrative). Keypoint: (55, -57, -25) mm; burr hole: (53, -59, -26) mm.",
   "removedMl": 4.2,
   "bones": [
+   "sb_appr_retrosigmoid__occipital_bone",
+   "sb_appr_retrosigmoid__temporal_bone"
+  ],
+  "cutBones": [
    "sb_appr_retrosigmoid__occipital_bone",
    "sb_appr_retrosigmoid__temporal_bone"
   ],

@@ -1,0 +1,384 @@
+{
+ "lesions": [
+  {
+   "id": "acom",
+   "kind": "aneurysm",
+   "type": "saccular",
+   "name": "Anterior communicating artery aneurysm",
+   "parts": [
+    "va_acom__sac"
+   ],
+   "parent": "Anterior communicating artery",
+   "branch": null,
+   "side": "R",
+   "siteMm": [
+    0.4,
+    4.1,
+    19.4
+   ],
+   "domeDiameterMm": 6.0,
+   "neckMm": 3.2,
+   "direction": [
+    0.0,
+    0.93,
+    0.37
+   ]
+  },
+  {
+   "id": "pcom",
+   "kind": "aneurysm",
+   "type": "saccular",
+   "name": "Posterior communicating artery aneurysm",
+   "parts": [
+    "va_pcom__sac"
+   ],
+   "parent": "Internal carotid artery",
+   "branch": "Posterior communicating artery",
+   "side": "R",
+   "siteMm": [
+    9.6,
+    -0.3,
+    10.1
+   ],
+   "domeDiameterMm": 7.0,
+   "neckMm": 3.8,
+   "direction": [
+    0.84,
+    -0.15,
+    -0.53
+   ]
+  },
+  {
+   "id": "mca",
+   "kind": "aneurysm",
+   "type": "saccular",
+   "name": "Middle cerebral artery bifurcation aneurysm",
+   "parts": [
+    "va_mca__sac"
+   ],
+   "parent": "Middle cerebral artery (M1 segment)",
+   "branch": "Middle cerebral artery (M2 segment)",
+   "side": "R",
+   "siteMm": [
+    31.4,
+    9.9,
+    14.6
+   ],
+   "domeDiameterMm": 7.0,
+   "neckMm": 4.0,
+   "direction": [
+    0.88,
+    0.44,
+    0.16
+   ]
+  },
+  {
+   "id": "basilar",
+   "kind": "aneurysm",
+   "type": "saccular",
+   "name": "Basilar tip aneurysm",
+   "parts": [
+    "va_basilar__sac"
+   ],
+   "parent": "Basilar artery",
+   "branch": null,
+   "side": "R",
+   "siteMm": [
+    0.3,
+    -13.3,
+    12.0
+   ],
+   "domeDiameterMm": 8.0,
+   "neckMm": 4.4,
+   "direction": [
+    -0.17,
+    -0.07,
+    0.98
+   ]
+  },
+  {
+   "id": "ophthalmic",
+   "kind": "aneurysm",
+   "type": "saccular",
+   "name": "Ophthalmic segment (paraclinoid) aneurysm",
+   "parts": [
+    "va_ophthalmic__sac"
+   ],
+   "parent": "Internal carotid artery",
+   "branch": "Ophthalmic artery",
+   "side": "L",
+   "siteMm": [
+    -12.1,
+    8.7,
+    9.4
+   ],
+   "domeDiameterMm": 7.0,
+   "neckMm": 4.0,
+   "direction": [
+    -0.17,
+    0.58,
+    0.8
+   ]
+  },
+  {
+   "id": "pica",
+   "kind": "aneurysm",
+   "type": "saccular",
+   "name": "Vertebral artery–PICA aneurysm",
+   "parts": [
+    "va_pica__sac"
+   ],
+   "parent": "Vertebral artery",
+   "branch": "Posterior inferior cerebellar artery",
+   "side": "L",
+   "siteMm": [
+    -9.9,
+    -26.9,
+    -27.7
+   ],
+   "domeDiameterMm": 5.0,
+   "neckMm": 2.8,
+   "direction": [
+    -0.44,
+    -0.89,
+    0.09
+   ]
+  },
+  {
+   "id": "fusiform",
+   "kind": "aneurysm",
+   "type": "fusiform",
+   "name": "Fusiform basilar trunk aneurysm",
+   "parts": [
+    "va_fusiform__sac"
+   ],
+   "parent": "Basilar artery",
+   "side": "M",
+   "lengthMm": 12.0,
+   "widestMm": 7.2,
+   "arteryMm": 3.3
+  },
+  {
+   "id": "blister",
+   "kind": "aneurysm",
+   "type": "blister",
+   "name": "Blister aneurysm of the internal carotid artery",
+   "parts": [
+    "va_blister__sac"
+   ],
+   "parent": "Internal carotid artery",
+   "side": "R",
+   "siteMm": [
+    9.0,
+    7.7,
+    11.1
+   ],
+   "baseMm": 2.6,
+   "heightMm": 1.6
+  },
+  {
+   "id": "avm1",
+   "kind": "avm",
+   "name": "AVM, Spetzler–Martin grade I",
+   "parts": [
+    "va_avm1__feeders",
+    "va_avm1__nidus",
+    "va_avm1__drainers",
+    "va_avm1__superior_sagittal_sinus"
+   ],
+   "location": "the right frontal pole (not eloquent)",
+   "nidusMm": 22.0,
+   "nidus": {
+    "junctions": 262,
+    "plexiform": 488,
+    "fistulous": 1,
+    "measuredMm": 21.6,
+    "compact": true,
+    "type": "compact"
+   },
+   "sm": {
+    "size": 1,
+    "eloquence": 0,
+    "deep": 0,
+    "grade": 1
+   },
+   "feeders": [
+    "Anterior cerebral artery (A3)"
+   ],
+   "drainage": [
+    {
+     "vessel": "Superior sagittal sinus",
+     "kind": "superficial"
+    }
+   ],
+   "centreMm": [
+    14.1,
+    41.9,
+    50.2
+   ]
+  },
+  {
+   "id": "avm3",
+   "kind": "avm",
+   "name": "AVM, Spetzler–Martin grade III",
+   "parts": [
+    "va_avm3__feeders",
+    "va_avm3__nidus",
+    "va_avm3__drainers",
+    "va_avm3__superior_sagittal_sinus"
+   ],
+   "location": "the left sensorimotor cortex at the central sulcus (eloquent)",
+   "nidusMm": 42.0,
+   "nidus": {
+    "junctions": 225,
+    "plexiform": 402,
+    "fistulous": 1,
+    "measuredMm": 41.2,
+    "compact": true,
+    "type": "compact"
+   },
+   "sm": {
+    "size": 2,
+    "eloquence": 1,
+    "deep": 0,
+    "grade": 3
+   },
+   "feeders": [
+    "Middle cerebral artery (M3 segment)",
+    "Middle cerebral artery (M3 segment)"
+   ],
+   "drainage": [
+    {
+     "vessel": "Superior sagittal sinus",
+     "kind": "superficial"
+    },
+    {
+     "vessel": "Superior sagittal sinus",
+     "kind": "superficial"
+    }
+   ],
+   "centreMm": [
+    -27.1,
+    -32.9,
+    70.8
+   ]
+  },
+  {
+   "id": "avm5",
+   "kind": "avm",
+   "name": "AVM, Spetzler–Martin grade V",
+   "parts": [
+    "va_avm5__feeders",
+    "va_avm5__nidus",
+    "va_avm5__drainers",
+    "va_avm5__basal_vein_of_rosenthal",
+    "va_avm5__deep_middle_cerebral_vein",
+    "va_avm5__great_cerebral_vein_of_galen",
+    "va_avm5__insular_veins",
+    "va_avm5__internal_cerebral_veins",
+    "va_avm5__straight_sinus",
+    "va_avm5__superior_sagittal_sinus"
+   ],
+   "location": "the right occipital lobe, visual cortex (eloquent), reaching deep towards the vein of Galen",
+   "nidusMm": 64.0,
+   "nidus": {
+    "junctions": 317,
+    "plexiform": 558,
+    "fistulous": 2,
+    "measuredMm": 64.0,
+    "compact": false,
+    "type": "diffuse"
+   },
+   "sm": {
+    "size": 3,
+    "eloquence": 1,
+    "deep": 1,
+    "grade": 5
+   },
+   "feeders": [
+    "Posterior cerebral artery (P3–P4)",
+    "Posterior cerebral artery (P3–P4)",
+    "Middle cerebral artery (M3 segment)"
+   ],
+   "drainage": [
+    {
+     "vessel": "Great cerebral vein (of Galen)",
+     "kind": "deep"
+    },
+    {
+     "vessel": "Straight sinus",
+     "kind": "deep"
+    },
+    {
+     "vessel": "Superior sagittal sinus",
+     "kind": "superficial"
+    }
+   ],
+   "centreMm": [
+    13.5,
+    -67.8,
+    4.6
+   ]
+  },
+  {
+   "id": "davf",
+   "kind": "davf",
+   "name": "Dural arteriovenous fistula (transverse–sigmoid)",
+   "parts": [
+    "va_davf__feeders",
+    "va_davf__fistula",
+    "va_davf__reflux",
+    "va_davf__internal_jugular_vein",
+    "va_davf__sigmoid_sinus",
+    "va_davf__transverse_sinus"
+   ],
+   "borden": 2,
+   "fistulaMm": [
+    46.9,
+    -52.1,
+    -15.2
+   ],
+   "feeders": [
+    "Middle meningeal artery",
+    "Occipital artery (drawn)"
+   ],
+   "drainage": [
+    "Sigmoid sinus and internal jugular vein (antegrade)",
+    "Transverse sinus (retrograde)",
+    "Cortical vein (reflux)"
+   ]
+  },
+  {
+   "id": "ccfa",
+   "kind": "ccf",
+   "barrow": "A",
+   "name": "Direct carotid-cavernous fistula (Barrow type A)",
+   "parts": [
+    "va_ccfa__fistula",
+    "va_ccfa__cavernous_sinus",
+    "va_ccfa__inferior_ophthalmic_vein",
+    "va_ccfa__sphenoparietal_sinus",
+    "va_ccfa__superficial_middle_cerebral_vein",
+    "va_ccfa__superior_ophthalmic_vein"
+   ],
+   "fistulaMm": [
+    10.1,
+    3.5,
+    1.9
+   ]
+  },
+  {
+   "id": "ccfd",
+   "kind": "ccf",
+   "barrow": "D",
+   "name": "Indirect carotid-cavernous fistula (Barrow type D)",
+   "parts": [
+    "va_ccfd__feeders",
+    "va_ccfd__cavernous_sinus",
+    "va_ccfd__inferior_ophthalmic_vein",
+    "va_ccfd__sphenoparietal_sinus",
+    "va_ccfd__superior_ophthalmic_vein"
+   ]
+  }
+ ]
+}

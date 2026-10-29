@@ -452,3 +452,15 @@ kbd { font: inherit; font-size: 0.9em; border: 1px solid var(--line); border-bot
 .drill-clear .clear-caution strong { color: var(--c-spCaution); }
 .drill-clear .clear-risk strong { color: var(--c-spRisk); }
 .drill-out .facet-over { color: var(--c-spCaution); }
+
+/* vascular: the angiogram's bar, and the AVM's grading table */
+.dsa-bar { position: absolute; right: 12px; bottom: 64px; display: flex; gap: 8px; align-items: center;
+  pointer-events: auto; background: var(--overlay); border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; backdrop-filter: blur(6px); z-index: 5; }
+.dsa-bar input[type=range] { width: min(240px, 26vw); }
+.dsa-time { font-variant-numeric: tabular-nums; font-size: 13px; min-width: 15ch; }
+.stage.dsa-on .dsa-time { font-weight: 700; }
+.sm-table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 4px 0 6px; }
+.sm-table th, .sm-table td { text-align: left; padding: 3px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.sm-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.sm-table tfoot th, .sm-table tfoot td { font-weight: 700; border-bottom: none; }
+@media (max-width: 899px) { .dsa-bar { bottom: auto; top: 56px; } .dsa-bar input[type=range] { width: 38vw; } }

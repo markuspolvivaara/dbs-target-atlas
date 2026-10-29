@@ -16,13 +16,14 @@ export function skullPlan(grpId: string, sel: string | null, also: readonly stri
   const looks = new Map<string, Look>();
   const tracts = new Map<string, TractRole>();
   const inGroup = new Set(g.structures);
+  const ghost = new Set(g.ghost ?? []), shell = new Set(g.shell ?? []);
   // a surgical view: its cut bones stand in for the whole ones, the bone removed is see-through; elsewhere both are hidden
   const replaced = new Set(g.structures.map((id) => SB.get(id)?.replaces).filter((x): x is string => !!x));
   for (const s of SB_MANIFEST.structures) {
     if (isApproachPart(s)) looks.set(s.id, !inGroup.has(s.id) ? 'hidden' : s.type === 'bone' ? 'primary' : 'ghost');
     else if (replaced.has(s.id)) looks.set(s.id, 'hidden');
     else if (s.type === 'bone') looks.set(s.id, inGroup.has(s.id) ? (g.kind === 'system' ? 'context' : 'primary') : g.kind === 'bone' ? 'ghost' : (g.boneLook ?? 'context'));
-    else if (s.type === 'soft') looks.set(s.id, inGroup.has(s.id) ? 'primary' : 'hidden');
+    else if (s.type === 'soft') looks.set(s.id, inGroup.has(s.id) ? (shell.has(s.id) || ghost.has(s.id) ? 'context' : 'primary') : 'hidden');
     else if (s.type === 'tube') looks.set(s.id, inGroup.has(s.id) ? 'primary' : 'hidden');
   }
   const lmSel = sel && sel.startsWith('lm_') ? sel : null;

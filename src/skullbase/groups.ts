@@ -2,6 +2,7 @@ import type { CameraPreset } from '../data/schema';
 import type { V3 } from '../state';
 import type { Look } from '../viewer/materials';
 import { APPROACHES } from './approaches';
+import { CAVERNOUS } from './cavernous';
 import { APPROACH_GEOM, isApproachPart, kindOf, LANDMARKS, REGIONS, SB, SB_MANIFEST, SB_MODEL } from './index';
 
 /**
@@ -34,6 +35,11 @@ export interface SbGroup {
   morphs?: string[];
   /** the endoscopic endonasal view: the endoscope and the drilling of the sphenoid (skullbase/endonasal.ts) */
   endonasal?: boolean;
+  /** structures of the group drawn see-through in their colour: a sinus round what it holds (ghost), its walls round it (shell) */
+  ghost?: string[];
+  shell?: string[];
+  /** the sourced card the view carries (skullbase/approaches.ts) */
+  info?: 'endonasal' | 'cavernous';
 }
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
@@ -51,6 +57,11 @@ const BONE_GROUPS: [string, string[]][] = [
 /** The foramina Skull base v3 locates on its CT. */
 const FORAMINA = ['Optic canal', 'Superior orbital fissure', 'Foramen rotundum', 'Foramen ovale', 'Foramen spinosum', 'Foramen lacerum',
   'External opening of carotid canal', 'Internal acoustic meatus', 'Jugular foramen', 'Hypoglossal canal', 'Foramen magnum'];
+
+/** The cranial floor's landmarks Skull base v3 puts on its CT (pipeline/skullbase_v3_floor.py), front to back. */
+const FLOOR_POINTS = ['Foramen caecum of frontal bone', 'Sphenoidal yoke', 'Limbus of sphenoid', 'Lesser wing', 'Chiasmatic sulcus',
+  'Tuberculum sellae', 'Anterior clinoid process', 'Hypophysial fossa', 'Dorsum sellae', 'Posterior clinoid process', 'Apex of petrous part',
+  'Basilar part of occipital bone', 'Tegmen tympani', 'Arcuate eminence', 'Internal occipital protuberance', 'Groove for transverse sinus'];
 
 /** Skull base v3's views: this CT's skull base with its anatomy made to fit it, the ears' contents seen through the bone. */
 function temporalGroups(): SbGroup[] {
@@ -82,14 +93,14 @@ function temporalGroups(): SbGroup[] {
       focus: null, focusIds: [...(a.frameOpening === false ? [] : [geom.removed]), ...byName(...a.focus)], radius: a.radius ?? 60, approach: a.id, morphs: a.morphs,
       description: a.summary,
       structures: [...bonesV3.filter((id) => !replaced.has(id)), ...geom.bones, geom.removed, ...brainOf(a.brain ?? 'cerebrum'), ...byName(...a.context)],
-      landmarks: [],
+      landmarks: lm(...(a.landmarks ?? [])),
     };
   });
   return [
     {
       ...base, id: 'floor', kind: 'overview', name: 'Cranial floor', camera: 'axial', cutAbove: FLOOR_CUT_MM, focus: null, radius: 75, boneLook: undefined,
-      description: `This CT’s skull base seen from above, everything over ${FLOOR_CUT_MM} mm cut away: the cranial nerves routed through its own foramina, the foramina located on it, and the temporal bones’ contents from a real ear. The arteries and veins have their own views.`,
-      structures: [...bonesV3, ...nerves, ...ear], landmarks: lm(...FORAMINA),
+      description: `This CT’s skull base seen from above, everything over ${FLOOR_CUT_MM} mm cut away: the cranial nerves routed through its own foramina, the foramina and the floor’s landmarks (the clinoid processes, the sella, the petrous apex and others) located on it, and the temporal bones’ contents from a real ear. The arteries and veins have their own views.`,
+      structures: [...bonesV3, ...nerves, ...ear], landmarks: lm(...FORAMINA, ...FLOOR_POINTS),
     },
     {
       ...base, id: 'nerves', kind: 'system', name: 'Cranial nerves', camera: 'axial', cutAbove: FLOOR_CUT_MM, focus: null, radius: 75,
@@ -136,12 +147,27 @@ function temporalGroups(): SbGroup[] {
     ...surgical,
     {
       ...base, id: 'endonasal', kind: 'approach', name: 'Endoscopic endonasal (transsphenoidal)', camera: 'frontolateral', hemi: 'both', focus: [0, 8, 0], radius: 45,
-      boneLook: 'ghost', endonasal: true,
+      boneLook: 'ghost', endonasal: true, info: 'endonasal',
       description: 'A 0° endoscope through one nostril to the sphenoid sinus and the sella: the lining of this CT’s nasal cavity and sinus as the scope sees it, and what lies behind its walls showing through where they are thin (the carotids, the optic nerves). The way is opened step by step (the sinus’s front wall, its septa, the sellar floor and the dura over it onto the hypophysis, modelled in this CT’s fossa, the tuberculum and planum, the upper clivus), each piece stopping short of the carotids and the nerves.',
       structures: byName('Internal carotid artery', 'Internal carotid artery (petrous and lacerum parts)', 'Optic nerve (II)', 'Optic chiasm', 'Adenohypophysis (anterior lobe)',
         'Neurohypophysis (posterior lobe)', 'Pituitary stalk', 'Cavernous sinus', 'Anterior intercavernous sinus', 'Posterior intercavernous sinus', 'Oculomotor nerve (III)', 'Trochlear nerve (IV)',
         'Abducens nerve (VI)', 'Trigeminal nerve (V)', 'Trigeminal ganglion', 'Ophthalmic artery', 'Basilar artery'),
       landmarks: lm('Optic canal'),
+    },
+    {
+      ...base, id: 'cavernous', kind: 'system', name: 'Cavernous sinus', camera: 'anterolateral', hemi: 'R', radius: 40, info: 'cavernous',
+      boneLook: 'ghost', cutAbove: 16,
+      // (framed on the sinus itself)
+      focus: CAVERNOUS.R.sinus.lo.map((v, i) => (v + CAVERNOUS.R.sinus.hi[i]) / 2) as V3, focusIds: byName('Cavernous sinus'),
+      description: 'The right cavernous sinus modelled on this CT, see-through: the carotid in it (this CT’s own), the abducens nerve inside, the oculomotor, trochlear, ophthalmic and maxillary nerves in its lateral wall (re-routed through it in their order), the ten triangles round it as Chung 2016 defines them, and the veins that join it.',
+      structures: byName('Cavernous sinus', 'Walls of the cavernous sinus', 'Internal carotid artery', 'Internal carotid artery (petrous and lacerum parts)', 'Ophthalmic artery',
+        'Optic nerve (II)', 'Optic chiasm', 'Oculomotor nerve (III)', 'Trochlear nerve (IV)', 'Trigeminal nerve (V)', 'Ophthalmic nerve (V1)',
+        'Maxillary nerve (V2)', 'Mandibular nerve (V3)', 'Trigeminal ganglion', 'Abducens nerve (VI)', 'Greater petrosal nerve',
+        'Adenohypophysis (anterior lobe)', 'Neurohypophysis (posterior lobe)', 'Pituitary stalk', 'Anterior intercavernous sinus', 'Posterior intercavernous sinus',
+        'Superior petrosal sinus', 'Inferior petrosal sinus', 'Superior ophthalmic vein', 'Inferior ophthalmic vein', 'Sphenoparietal sinus', 'Basilar venous plexus',
+        ...SB_MANIFEST.structures.filter((s) => kindOf(s) === 'triangle').map((s) => s.name)),
+      ghost: byName('Cavernous sinus'), shell: byName('Walls of the cavernous sinus'),
+      landmarks: lm('Superior orbital fissure', 'Foramen rotundum', 'Foramen ovale', 'Foramen lacerum', 'Optic canal'),
     },
   ];
 }

@@ -166,6 +166,8 @@ export class SinusVolume implements FieldGrid {
   readonly stops: Record<EndoStop, Uint8Array>;
   /** where the burr has been: cut surfaces are coloured as cut */
   readonly cut: Uint8Array;
+  /** what opening the cavernous sinus emptied (its venous space): what it held is seen as laid bare */
+  readonly opened: Uint8Array;
   readonly toRas: THREE.Matrix4; readonly toIjk: THREE.Matrix4; readonly normalM: THREE.Matrix3;
   readonly iso = ENDONASAL.params.fieldIso;
   private readonly voxMm3: number;
@@ -192,6 +194,7 @@ export class SinusVolume implements FieldGrid {
     this.density = f('density');
     this.stops = { vessel: f('vessel'), nerve: f('nerve'), sellar: f('sellar'), brain: f('brain') };
     this.cut = new Uint8Array(n);
+    this.opened = new Uint8Array(n);
     this.piece = f('piece');
     this.gland = f('gland');
     this.pieceLevel = f('pieceLevel');
@@ -323,17 +326,17 @@ export class SinusVolume implements FieldGrid {
     return changed ? [new THREE.Vector3(i0, j0, k0), new THREE.Vector3(i1, j1, k1)] : null;
   }
 
-  snapshot(): { bone: Uint8Array; solid: Uint8Array; cut: Uint8Array; removed: { bone: number; soft: number }; pieces: string[] } {
-    return { bone: this.fields.bone.slice(), solid: this.fields.solid.slice(), cut: this.cut.slice(), removed: { ...this.removedMm3 }, pieces: [...this.removed] };
+  snapshot(): { bone: Uint8Array; solid: Uint8Array; cut: Uint8Array; opened: Uint8Array; removed: { bone: number; soft: number }; pieces: string[] } {
+    return { bone: this.fields.bone.slice(), solid: this.fields.solid.slice(), cut: this.cut.slice(), opened: this.opened.slice(), removed: { ...this.removedMm3 }, pieces: [...this.removed] };
   }
 
   restore(s: ReturnType<SinusVolume['snapshot']>): void {
-    this.fields.bone.set(s.bone); this.fields.solid.set(s.solid); this.cut.set(s.cut); this.removedMm3 = { ...s.removed }; this.removed = new Set(s.pieces);
+    this.fields.bone.set(s.bone); this.fields.solid.set(s.solid); this.cut.set(s.cut); this.opened.set(s.opened); this.removedMm3 = { ...s.removed }; this.removed = new Set(s.pieces);
     for (const id of this.pieceTook.keys()) if (!this.removed.has(id)) this.pieceTook.delete(id);
   }
 
   reset(): void {
-    this.fields.bone.set(this.orig.bone); this.fields.solid.set(this.orig.solid); this.cut.fill(0); this.removedMm3 = { bone: 0, soft: 0 }; this.removed.clear();
+    this.fields.bone.set(this.orig.bone); this.fields.solid.set(this.orig.solid); this.cut.fill(0); this.opened.fill(0); this.removedMm3 = { bone: 0, soft: 0 }; this.removed.clear();
     this.pieceTook.clear();
   }
 
@@ -359,6 +362,8 @@ export class SinusVolume implements FieldGrid {
       if (nw < B[x]) B[x] = nw;
       // the bone's cut faces coloured as cut
       if (c > -1 && this.orig.bone[x] >= 64) this.cut[x] = 1;
+      // (the cavernous sinus opened: what it held, the carotid's wall, is seen as laid bare)
+      if (id.startsWith('cs_') && c < 0.5) this.opened[x] = 1;
     }
     this.removed.add(id);
     this.pieceTook.set(id, took);
@@ -374,7 +379,7 @@ export class SinusVolume implements FieldGrid {
     if (!pc || !vox || !this.removed.has(id)) return null;
     for (let v = 0; v < vox.length; v++) {
       const x = vox[v];
-      this.fields.solid[x] = this.orig.solid[x]; this.fields.bone[x] = this.orig.bone[x]; this.cut[x] = 0;
+      this.fields.solid[x] = this.orig.solid[x]; this.fields.bone[x] = this.orig.bone[x]; this.cut[x] = 0; this.opened[x] = 0;
     }
     const took = this.pieceTook.get(id);
     if (took) { this.removedMm3.bone = Math.max(0, this.removedMm3.bone - took.bone); this.removedMm3.soft = Math.max(0, this.removedMm3.soft - took.soft); }
@@ -468,15 +473,18 @@ export class SinusVolume implements FieldGrid {
   }
 
   /** At a point (voxel coordinates): whether the burr cut near it, and the CT (HU) a millimetre in from the surface. */
-  at(q: THREE.Vector3, n: THREE.Vector3): { cut: boolean; hu: number } {
+  at(q: THREE.Vector3, n: THREE.Vector3): { cut: boolean; opened: boolean; hu: number } {
     const i = Math.round(q.x), j = Math.round(q.y), k = Math.round(q.z);
-    let cut = false;
-    for (let a = -1; a <= 1 && !cut; a++) for (let b = -1; b <= 1 && !cut; b++) for (let c = -1; c <= 1 && !cut; c++) {
+    let cut = false, opened = false;
+    for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) for (let c = -1; c <= 1; c++) {
       const x = i + a, y = j + b, w = k + c;
-      if (x >= 0 && y >= 0 && w >= 0 && x < this.nx && y < this.ny && w < this.nz && this.cut[this.idx(x, y, w)]) cut = true;
+      if (x < 0 || y < 0 || w < 0 || x >= this.nx || y >= this.ny || w >= this.nz) continue;
+      const v = this.idx(x, y, w);
+      if (this.cut[v]) cut = true;
+      if (this.opened[v]) opened = true;
     }
     const inn = n.clone().applyMatrix3(new THREE.Matrix3().setFromMatrix4(this.toIjk)).multiplyScalar(-2);
     const p = ENDONASAL.params;
-    return { cut, hu: p.densityMinHu + this.sample(this.density, q.x + inn.x, q.y + inn.y, q.z + inn.z) * p.densityStepHu };
+    return { cut, opened, hu: p.densityMinHu + this.sample(this.density, q.x + inn.x, q.y + inn.y, q.z + inn.z) * p.densityStepHu };
   }
 }

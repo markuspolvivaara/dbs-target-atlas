@@ -10,6 +10,10 @@ export interface TbClaim { text: string; refIds: string[] }
 
 const doi = (d: string) => `https://doi.org/${d}`;
 export const TB_REFS: TbRef[] = [
+  { id: 'erginoglu2026', pmid: '41283941', pmcid: 'PMC12967451', shortLabel: 'Erginoglu 2026', url: doi('10.1007/s11845-025-04170-5'),
+    citation: 'Erginoglu U, Sulaimanov U, Uslu I, Ataoglu C, Keles A, Aycan A, et al. Quantitative anatomy of the fourth ventricle floor: a cadaveric morphometric study. Ir J Med Sci. 2026;195(1):373–381. doi:10.1007/s11845-025-04170-5.' },
+  { id: 'zhuang2021', pmid: '34930175', pmcid: 'PMC8686214', shortLabel: 'Zhuang 2021', url: doi('10.1186/s12883-021-02524-x'),
+    citation: 'Zhuang S, Xie W, Mao C. Bilateral facial colliculus syndrome caused by pontine tegmentum infarction: a case report. BMC Neurol. 2021;21(1):492. doi:10.1186/s12883-021-02524-x.' },
   { id: 'sieber2019', pmid: '30620342', pmcid: 'PMC6326113', shortLabel: 'Sieber 2019', url: doi('10.1038/sdata.2018.297'),
     citation: 'Sieber D, Erfurt P, John S, Ribeiro dos Santos G, Schurzig D, Sørensen MS, Lenarz T. The OpenEar library of 3D models of the human temporal bone based on computed tomography and micro-slicing. Sci Data. 2019;6:180297. doi:10.1038/sdata.2018.297.' },
   { id: 'gupta2013', pmid: '23766904', pmcid: 'PMC3676972', shortLabel: 'Gupta 2013', url: doi('10.1155/2013/248039'),
@@ -35,6 +39,26 @@ const c = (text: string, ...refIds: string[]): TbClaim => ({ text, refIds });
 
 /** Notes per structure or landmark name (the model's names). */
 export const TB_NOTES: Record<string, TbClaim[]> = {
+  // ---- the floor of the fourth ventricle (the telovelar view)
+  'Facial colliculus': [
+    c('An elevation on the floor of the fourth ventricle in the dorsal pons, over the abducens nucleus and the genu of the facial nerve.', 'zhuang2021'),
+    c('Present on both sides in all 40 cadaveric brainstems, it divided the floor into nearly equal rostral (pontine) and caudal (medullary) parts: 14.6 mm from the aqueduct’s opening to the colliculus, 14.5 mm from it to the obex. It orients the suprafacial, infrafacial and pericollicular entry zones.', 'erginoglu2026'),
+  ],
+  'Hypoglossal trigone': [
+    c('A surface elevation over the hypoglossal nucleus in the caudal (medullary) floor, towards the midline: 1.9 mm wide and 3.7 mm long in 40 brainstems, about a quarter of the length from the facial colliculus to the obex.', 'erginoglu2026'),
+  ],
+  'Vagal trigone': [
+    c('Over the nucleus of the vagus nerve, in the lateral part of the caudal floor: smaller than the hypoglossal trigone, 1.6 mm wide and 1.8 mm long in 40 brainstems, about an eighth of the length from the facial colliculus to the obex.', 'erginoglu2026'),
+  ],
+  'Vestibular area': [
+    c('It lies next to the sulcus limitans; from it the lateral recess ran obliquely to the foramen of Luschka, 6.6 mm on the right and 6.3 mm on the left in 40 brainstems (a small but significant asymmetry).', 'erginoglu2026'),
+  ],
+  'Obex': [
+    c('The floor’s caudal end: from the aqueduct’s opening to the obex the floor measured 33.6 mm (29–39 mm) in 40 brainstems, and 20.0 mm across between the foramina of Luschka.', 'erginoglu2026'),
+  ],
+  'Median sulcus of fourth ventricle': [
+    c('Along the floor’s midline; often used as a surgical entry point, relatively far from the critical motor and sensory nuclei. The sulcus limitans lay about 3.1 mm from it on each side, so the midline corridor between the two was only about 31 % of the floor’s width.', 'erginoglu2026'),
+  ],
   // ---- the cranial nerves and the foramina they leave by
   'Olfactory nerve (I)': [
     c('Olfactory fibres enter the anterior cranial fossa through the cribriform plate and end in the olfactory bulb; the tract then runs between the gyrus rectus and the medial orbital gyrus.', 'romano2019'),

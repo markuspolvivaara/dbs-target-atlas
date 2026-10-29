@@ -29,7 +29,7 @@
   ]
  },
  "file": "assets/skullbase-v3/endonasal.bin.gz",
- "bytes": 2881775,
+ "bytes": 2805218,
  "dims": [
   105,
   127,
@@ -374,12 +374,12 @@
    "id": "floor",
    "name": "Sellar floor",
    "label": 3,
-   "mm3": 415.6,
-   "boneMm3": 403.8,
+   "mm3": 360.1,
+   "boneMm3": 349.2,
    "centre": [
-    -0.2,
-    1.8,
-    4.8
+    -0.3,
+    2.8,
+    5.5
    ]
   },
   {
@@ -395,27 +395,51 @@
    ]
   },
   {
+   "id": "cs_R",
+   "name": "Medial wall of the right cavernous sinus",
+   "label": 5,
+   "mm3": 1433.6,
+   "boneMm3": 652.5,
+   "centre": [
+    12.0,
+    3.0,
+    2.0
+   ]
+  },
+  {
+   "id": "cs_L",
+   "name": "Medial wall of the left cavernous sinus",
+   "label": 6,
+   "mm3": 1413.1,
+   "boneMm3": 781.9,
+   "centre": [
+    -11.4,
+    2.4,
+    2.0
+   ]
+  },
+  {
    "id": "planum",
    "name": "Tuberculum sellae and planum",
-   "label": 5,
-   "mm3": 199.8,
-   "boneMm3": 196.2,
+   "label": 7,
+   "mm3": 190.0,
+   "boneMm3": 186.8,
    "centre": [
-    0.4,
-    12.0,
-    13.2
+    0.5,
+    12.2,
+    13.3
    ]
   },
   {
    "id": "clivus",
    "name": "Upper clivus",
-   "label": 6,
-   "mm3": 879.4,
-   "boneMm3": 872.4,
+   "label": 8,
+   "mm3": 855.8,
+   "boneMm3": 848.2,
    "centre": [
-    0.3,
+    0.1,
     -5.2,
-    -8.5
+    -8.8
    ]
   }
  ],

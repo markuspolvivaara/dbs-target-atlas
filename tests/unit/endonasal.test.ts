@@ -109,8 +109,8 @@ describe('endoscopic endonasal view (Skull base v3)', () => {
 });
 
 describe('endonasal pieces taken away step by step', () => {
-  it('six pieces in the order of the operation, each of some size', () => {
-    expect(ENDONASAL.pieces.map((p) => p.id)).toEqual(['face', 'septa', 'floor', 'dura', 'planum', 'clivus']);
+  it('the pieces in the order of the operation, each of some size', () => {
+    expect(ENDONASAL.pieces.map((p) => p.id)).toEqual(['face', 'septa', 'floor', 'dura', 'cs_R', 'cs_L', 'planum', 'clivus']);
     ENDONASAL.pieces.forEach((p, i) => { expect(p.label).toBe(i + 1); expect(p.mm3, p.id).toBeGreaterThan(50); });
   });
 
@@ -133,11 +133,12 @@ describe('endonasal pieces taken away step by step', () => {
     }
   });
 
-  it('nothing opens next to a carotid, and undo puts a piece back', () => {
+  it('nothing opens next to a carotid (but the cavernous sinus, opened onto it), and undo puts a piece back', () => {
     const vol = volume();
     const before = vol.snapshot();
-    for (const pc of ENDONASAL.pieces) vol.removePiece(pc.id);
-    expect(vol.removed.size).toBe(ENDONASAL.pieces.length);
+    const pieces = ENDONASAL.pieces.filter((pc) => !pc.id.startsWith('cs_'));
+    for (const pc of pieces) vol.removePiece(pc.id);
+    expect(vol.removed.size).toBe(pieces.length);
     const iso = ENDONASAL.params.fieldIso, step = ENDONASAL.params.distStepMm;
     let opened = 0;
     for (let x = 0; x < vol.fields.solid.length; x++) {

@@ -969,7 +969,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-v3/sb_middle_cerebral_artery_m2_segment.glb",
-   "bytes": 204888,
+   "bytes": 197852,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -992,7 +992,7 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram.",
+   "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. In the surgical views it moves with the cortex it lies on where that is moved on purpose (the frontal and parietal opercula as the fissure opens, the frontal lobe and the front of the insula as they are lifted), carried by cross-sections along its centre line, so it is stretched along its length, not squeezed across it.",
    "centroid": {
     "L": [
      -36.58,
@@ -1015,7 +1015,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-v3/sb_middle_cerebral_artery_m3_segment.glb",
-   "bytes": 220240,
+   "bytes": 197360,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1038,7 +1038,7 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram.",
+   "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. In the surgical views it moves with the cortex it lies on where that is moved on purpose (the frontal and parietal opercula as the fissure opens, the frontal lobe and the front of the insula as they are lifted), carried by cross-sections along its centre line, so it is stretched along its length, not squeezed across it.",
    "centroid": {
     "L": [
      -43.99,
@@ -1240,8 +1240,8 @@
    "name": "Posterior inferior cerebellar artery",
    "aliases": [],
    "type": "tube",
-   "file": "assets/skullbase-ct/sb_posterior_inferior_cerebellar_artery.glb",
-   "bytes": 132420,
+   "file": "assets/skullbase-v3/sb_posterior_inferior_cerebellar_artery.glb",
+   "bytes": 148568,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1264,7 +1264,7 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram.",
+   "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. This angiogram labels only its first part, by the medulla; its course beyond is the fitted model's (Posterior inferior cerebellar artery (fitted course)). In the telovelar and retrosigmoid views it moves with the cerebellum it lies against, carried by cross-sections along its centre line.",
    "centroid": {
     "L": [
      -6.97,
@@ -1278,7 +1278,8 @@
     ]
    },
    "system": "Vertebral artery",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "morph": true
   },
   {
    "id": "sb_straight_sinus",
@@ -2021,7 +2022,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_oculomotor_nerve_iii.glb",
-   "bytes": 16744,
+   "bytes": 18980,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2042,7 +2043,7 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 3,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 54.6 mm drawn, at most 1.3 mm from the fitted course, 0.0 mm through bone the mask closes; left: 54.2 mm drawn, at most 1.2 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 54.6 mm drawn, at most 1.3 mm from the fitted course, 0.0 mm through bone the mask closes; left: 54.2 mm drawn, at most 1.2 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): into the roof at the oculomotor triangle's centre, then forward in the top of the sinus's lateral wall to the superior orbital fissure.",
    "centroid": {
     "L": [
      -9.0,
@@ -2062,7 +2063,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_trochlear_nerve_iv.glb",
-   "bytes": 18288,
+   "bytes": 18780,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2083,7 +2084,7 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 4,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 55.3 mm drawn, at most 5.0 mm from the fitted course, 0.0 mm through bone the mask closes; left: 56.5 mm drawn, at most 4.9 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 55.3 mm drawn, at most 5.0 mm from the fitted course, 0.0 mm through bone the mask closes; left: 56.5 mm drawn, at most 4.9 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): into the roof at the back of the oculomotor triangle's lateral side, then forward in the lateral wall below the oculomotor nerve to the superior orbital fissure.",
    "centroid": {
     "L": [
      -10.19,
@@ -2144,7 +2145,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_ophthalmic_nerve_v1.glb",
-   "bytes": 13472,
+   "bytes": 13156,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2165,7 +2166,7 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 5,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 40.3 mm drawn, at most 0.8 mm from the fitted course, 0.0 mm through bone the mask closes; left: 40.7 mm drawn, at most 0.9 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. It leaves the trigeminal ganglion, drawn in Meckel's cave as placed on this CT (Chaware 2023), and is routed from there to its foramen.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 40.3 mm drawn, at most 0.8 mm from the fitted course, 0.0 mm through bone the mask closes; left: 40.7 mm drawn, at most 0.9 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. It leaves the trigeminal ganglion, drawn in Meckel's cave as placed on this CT (Chaware 2023), and is routed from there to its foramen. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): from the ganglion forward in the lateral wall below the trochlear nerve to the superior orbital fissure.",
    "centroid": {
     "L": [
      -16.29,
@@ -2185,7 +2186,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_maxillary_nerve_v2.glb",
-   "bytes": 9460,
+   "bytes": 9860,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2206,7 +2207,7 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 5,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 24.1 mm drawn, at most 5.0 mm from the fitted course, 0.0 mm through bone the mask closes; left: 23.1 mm drawn, at most 5.5 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. It leaves the trigeminal ganglion, drawn in Meckel's cave as placed on this CT (Chaware 2023), and is routed from there to its foramen.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 24.1 mm drawn, at most 5.0 mm from the fitted course, 0.0 mm through bone the mask closes; left: 23.1 mm drawn, at most 5.5 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. It leaves the trigeminal ganglion, drawn in Meckel's cave as placed on this CT (Chaware 2023), and is routed from there to its foramen. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): from the ganglion forward in the lowest part of the lateral wall to the foramen rotundum.",
    "centroid": {
     "L": [
      -17.87,
@@ -2267,7 +2268,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_abducens_nerve_vi.glb",
-   "bytes": 20296,
+   "bytes": 19936,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2288,7 +2289,7 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 6,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 64.9 mm drawn, at most 2.1 mm from the fitted course, 0.0 mm through bone the mask closes; left: 64.9 mm drawn, at most 2.5 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 64.9 mm drawn, at most 2.1 mm from the fitted course, 0.0 mm through bone the mask closes; left: 64.9 mm drawn, at most 2.5 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): under Gruber's ligament at the petrous apex (Dorello's canal), against the carotid's posterior vertical segment, then forward inside the sinus, lateral to the carotid and medial to the ophthalmic nerve, to the superior orbital fissure (Wysiadecki 2021, Corvino 2023).",
    "centroid": {
     "L": [
      -9.43,
@@ -3133,6 +3134,49 @@
    }
   },
   {
+   "aliases": [],
+   "type": "soft",
+   "colour": {
+    "token": "sbArtery",
+    "light": "#C0392B",
+    "dark": "#F07A6A"
+   },
+   "dataset": "fitted",
+   "source": "Z-Anatomy, fitted onto the TopBrain CT and anchored to it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "artery",
+   "layer": "tracts",
+   "fitted": true,
+   "id": "tb_posterior_inferior_cerebellar_artery_fitted_course",
+   "name": "Posterior inferior cerebellar artery (fitted course)",
+   "file": "assets/skullbase-v3/tb_posterior_inferior_cerebellar_artery_fitted_course.glb",
+   "bytes": 318900,
+   "system": "Vertebral artery",
+   "morph": true,
+   "derivation": "Too small for this angiogram to show beyond its first part: the Z-Anatomy branch (its trunk from the point nearest the label's far end on, and the branches that start on it), fitted onto this CT (the whole-skull fit, then the posterior fossa's), its start moved onto the far end of this patient's labelled PICA (6.9 mm on the right, 14.6 mm on the left), the move fading out over 15 mm, and kept clear of the fitted cerebellum and brainstem. It moves with the cerebellum in the telovelar and retrosigmoid views. Its course is approximate.",
+   "centroid": {
+    "L": [
+     -22.98,
+     -58.07,
+     -26.7
+    ],
+    "R": [
+     22.6,
+     -58.97,
+     -27.86
+    ]
+   }
+  },
+  {
    "id": "tb_internal_carotid_artery_cervical_part",
    "name": "Internal carotid artery (cervical part)",
    "aliases": [],
@@ -3555,12 +3599,123 @@
    }
   },
   {
+   "id": "sb_superficial_middle_cerebral_vein",
+   "name": "Superficial middle cerebral vein",
+   "aliases": [
+    "Superficial Sylvian vein"
+   ],
+   "type": "tube",
+   "file": "assets/skullbase-v3/sb_superficial_middle_cerebral_vein.glb",
+   "bytes": 30832,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "rule",
+   "schematic": true,
+   "source": "Drawn by rule on the template brain fitted into this CT",
+   "licence": "GPL-3.0, non-commercial (the Lead-DBS template surface and the FreeSurfer labels shipped with it; FreeSurfer: research use); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "vein",
+   "morph": true,
+   "derivation": "Drawn by rule (this angiogram labels no vein near the fissure), on the fitted template brain, not traced: one trunk along the fissure's edge on the temporal lip, from its back end forwards and down, then on to the outer end of the sphenoparietal sinus (itself drawn by rule) under the lesser wing, 2 mm across (illustrative). Its pattern varies (five types in Imada 2021, some with two trunks); here the fissure opens on its frontal side and it stays with the temporal lobe. It moves with the brain in the surgical shapes (the superficial vein with the temporal lobe, the insular and deep veins with the insula), carried by cross-sections along its line.",
+   "centroid": {
+    "L": [
+     -45.56,
+     -1.24,
+     30.82
+    ],
+    "R": [
+     50.5,
+     -6.18,
+     25.46
+    ]
+   }
+  },
+  {
+   "id": "sb_insular_veins",
+   "name": "Insular veins",
+   "aliases": [
+    "Precentral, central and posterior insular veins"
+   ],
+   "type": "tube",
+   "file": "assets/skullbase-v3/sb_insular_veins.glb",
+   "bytes": 61344,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "rule",
+   "schematic": true,
+   "source": "Drawn by rule on the template brain fitted into this CT",
+   "licence": "GPL-3.0, non-commercial (the Lead-DBS template surface and the FreeSurfer labels shipped with it; FreeSurfer: research use); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "vein",
+   "morph": true,
+   "derivation": "Drawn by rule on the fitted template's insula, not traced: from the insula's edge in to its pole (taken where this patient's M1 meets its M2, TopBrain's labels); the central vein along the boundary of the template's short and long gyri, the precentral and posterior veins fanned in front of and behind it (illustrative), each 1 mm across. It moves with the brain in the surgical shapes (the superficial vein with the temporal lobe, the insular and deep veins with the insula), carried by cross-sections along its line.",
+   "centroid": {
+    "L": [
+     -38.29,
+     -3.98,
+     28.84
+    ],
+    "R": [
+     41.45,
+     -3.65,
+     25.32
+    ]
+   }
+  },
+  {
+   "id": "sb_deep_middle_cerebral_vein",
+   "name": "Deep middle cerebral vein",
+   "aliases": [
+    "Deep Sylvian vein"
+   ],
+   "type": "tube",
+   "file": "assets/skullbase-v3/sb_deep_middle_cerebral_vein.glb",
+   "bytes": 18340,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "rule",
+   "schematic": true,
+   "source": "Drawn by rule on the template brain fitted into this CT",
+   "licence": "GPL-3.0, non-commercial (the Lead-DBS template surface and the FreeSurfer labels shipped with it; FreeSurfer: research use); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "vein",
+   "morph": true,
+   "derivation": "Drawn by rule, not traced: from the insula's pole, where the insular veins meet, under the brain to the front end of this patient's basal vein (TopBrain's label), kept off the fitted template's cortex, 1.8 mm across (illustrative). It moves with the brain in the surgical shapes (the superficial vein with the temporal lobe, the insular and deep veins with the insula), carried by cross-sections along its line.",
+   "centroid": {
+    "L": [
+     -23.71,
+     -6.79,
+     14.88
+    ],
+    "R": [
+     22.61,
+     -2.16,
+     15.4
+    ]
+   }
+  },
+  {
    "id": "pf_cerebellar_hemisphere",
    "name": "Cerebellar hemisphere",
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_cerebellar_hemisphere.glb",
-   "bytes": 1051088,
+   "bytes": 1051084,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -3602,7 +3757,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_tonsil.glb",
-   "bytes": 93636,
+   "bytes": 93644,
    "colour": {
     "token": "sbTonsil",
     "light": "#7D6DFF",
@@ -3812,7 +3967,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_medulla.glb",
-   "bytes": 81588,
+   "bytes": 296500,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -3916,7 +4071,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__frontal_bone.glb",
-   "bytes": 801648,
+   "bytes": 763924,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -3929,9 +4084,9 @@
      41.94
     ],
     "R": [
-     26.26,
-     36.05,
-     40.28
+     24.25,
+     36.54,
+     40.65
     ]
    }
   },
@@ -3961,7 +4116,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__parietal_bone.glb",
-   "bytes": 847084,
+   "bytes": 838628,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -3974,9 +4129,9 @@
      53.71
     ],
     "R": [
-     40.25,
-     -43.64,
-     59.08
+     39.85,
+     -44.73,
+     59.56
     ]
    }
   },
@@ -4006,7 +4161,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__sphenoid_bone.glb",
-   "bytes": 600960,
+   "bytes": 598868,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -4019,9 +4174,9 @@
      -5.77
     ],
     "R": [
-     21.01,
-     9.4,
-     -4.32
+     20.84,
+     9.32,
+     -4.55
     ]
    }
   },
@@ -4051,7 +4206,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__temporal_bone.glb",
-   "bytes": 1026024,
+   "bytes": 1012568,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -4064,9 +4219,9 @@
      -12.6
     ],
     "R": [
-     47.56,
-     -22.07,
-     -16.01
+     47.2,
+     -22.76,
+     -16.93
     ]
    }
   },
@@ -4076,7 +4231,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_pterional__removed.glb",
-   "bytes": 373456,
+   "bytes": 360776,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -4091,17 +4246,17 @@
    "category": "removed",
    "approach": "pterional",
    "layer": "nuclei",
-   "derivation": "The bone the pterional (frontotemporal) craniotomy removes: 8.4 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; the model's zygomatic process of the frontal bone, raised 6 mm); a frontal hole near the superior orbital rim (Yilmaz 2025; here 20 mm above and 10 mm lateral to the supraorbital notch, 28 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral sphenoid ridge drilled (a 6 mm radius along the ridge), stopping 12 mm short of the anterior clinoid process (illustrative: Yilmaz 2025 limits this resection at the meningo-orbital artery in the orbitozygomatic approach, which the model does not show). Burr holes: (46, 39, 30) mm, (36, 54, 52) mm, (62, -7, -1) mm, (66, -10, 40) mm.",
+   "derivation": "The bone the pterional (frontotemporal) craniotomy removes: 12.5 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; the model's zygomatic process of the frontal bone, raised 6 mm); a frontal hole near the superior orbital rim (Yilmaz 2025; here 20 mm above and 10 mm lateral to the supraorbital notch, 28 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral sphenoid ridge drilled (a 6 mm radius along the ridge), stopping 12 mm short of the anterior clinoid process (illustrative: Yilmaz 2025 limits this resection at the meningo-orbital artery in the orbitozygomatic approach, which the model does not show). The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone (which stays), leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (46, 39, 30) mm, (36, 54, 52) mm, (62, -7, -1) mm, (66, -10, 40) mm.",
    "centroid": {
     "L": [
-     53.21,
-     18.61,
-     29.95
+     54.7,
+     15.32,
+     31.92
     ],
     "R": [
-     53.21,
-     18.61,
-     29.95
+     54.7,
+     15.32,
+     31.92
     ]
    }
   },
@@ -4131,7 +4286,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_lso__frontal_bone.glb",
-   "bytes": 795636,
+   "bytes": 802400,
    "refIds": [],
    "category": "bone",
    "approach": "lso",
@@ -4144,9 +4299,99 @@
      41.94
     ],
     "R": [
-     25.17,
-     36.14,
-     40.63
+     25.62,
+     35.87,
+     40.72
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_lso__parietal_bone",
+   "name": "Parietal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_lso__parietal_bone.glb",
+   "bytes": 863076,
+   "refIds": [],
+   "category": "bone",
+   "approach": "lso",
+   "replaces": "sb_parietal_bone",
+   "derivation": "The CT's parietal bone, which the lateral supraorbital craniotomy does not cut, remeshed within a few millimetres of the cut so that it meets the cut bone on one surface (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -41.59,
+     -43.71,
+     53.71
+    ],
+    "R": [
+     40.73,
+     -41.14,
+     57.9
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_lso__sphenoid_bone",
+   "name": "Sphenoid bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_lso__sphenoid_bone.glb",
+   "bytes": 591440,
+   "refIds": [],
+   "category": "bone",
+   "approach": "lso",
+   "replaces": "sb_sphenoid_bone",
+   "derivation": "The CT's sphenoid bone, which the lateral supraorbital craniotomy does not cut, remeshed within a few millimetres of the cut so that it meets the cut bone on one surface (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -18.59,
+     7.18,
+     -5.77
+    ],
+    "R": [
+     20.71,
+     9.12,
+     -4.89
     ]
    }
   },
@@ -4156,7 +4401,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_lso__removed.glb",
-   "bytes": 208216,
+   "bytes": 208128,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -4174,14 +4419,14 @@
    "derivation": "The bone the lateral supraorbital craniotomy removes: 6.9 ml. A frontolateral flap over the orbital roof, with one burr hole posteriorly just below the temporal line (Cha 2012, Choque-Velasquez 2018), cut down to the anterior fossa floor (the basal part drilled off, Cha 2012); the sphenoid ridge is not drilled. Its outline is placed by hand on this skull: about 1482 mm² seen face on, larger than the mean LSO craniotomy of 1275 mm² (Cha 2012) on purpose, to show the anatomy (illustrative), its basal edge at the level of the orbital roof. The outline is a smooth curve through those points and the cut's edge is smoothed over 1 mm (illustrative). Burr hole: (61, 8, 37) mm.",
    "centroid": {
     "L": [
-     47.55,
-     32.42,
-     53.94
+     47.45,
+     32.49,
+     54.05
     ],
     "R": [
-     47.55,
-     32.42,
-     53.94
+     47.45,
+     32.49,
+     54.05
     ]
    }
   },
@@ -4416,7 +4661,7 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_retrosigmoid__occipital_bone.glb",
-   "bytes": 736568,
+   "bytes": 736868,
    "refIds": [],
    "category": "bone",
    "approach": "retrosigmoid",
@@ -4429,7 +4674,7 @@
      -20.64
     ],
     "R": [
-     22.64,
+     22.66,
      -58.28,
      -21.66
     ]
@@ -4461,7 +4706,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_retrosigmoid__temporal_bone.glb",
-   "bytes": 1034092,
+   "bytes": 1041076,
    "refIds": [],
    "category": "bone",
    "approach": "retrosigmoid",
@@ -4474,9 +4719,9 @@
      -12.6
     ],
     "R": [
-     47.44,
-     -22.95,
-     -16.44
+     47.45,
+     -23.31,
+     -16.62
     ]
    }
   },
@@ -4486,7 +4731,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_retrosigmoid__removed.glb",
-   "bytes": 159856,
+   "bytes": 160828,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -4505,57 +4750,13 @@
    "centroid": {
     "L": [
      43.19,
-     -57.23,
+     -57.2,
      -30.21
     ],
     "R": [
      43.19,
-     -57.23,
+     -57.2,
      -30.21
-    ]
-   }
-  },
-  {
-   "id": "sb_cavernous_sinus",
-   "name": "Cavernous sinus",
-   "aliases": [],
-   "type": "soft",
-   "fitted": true,
-   "file": "assets/skullbase-ct/sb_cavernous_sinus.glb",
-   "bytes": 112476,
-   "colour": {
-    "token": "sbSoft",
-    "light": "#8A6FA8",
-    "dark": "#B9A3D6"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [],
-   "category": "soft",
-   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): its mesh.",
-   "centroid": {
-    "L": [
-     -7.78,
-     -1.81,
-     7.27
-    ],
-    "R": [
-     7.87,
-     -1.72,
-     7.03
     ]
    }
   },
@@ -4694,6 +4895,186 @@
    }
   },
   {
+   "id": "sb_superior_petrosal_sinus",
+   "name": "Superior petrosal sinus",
+   "aliases": [],
+   "type": "tube",
+   "fitted": true,
+   "file": "assets/skullbase-ct/sb_superior_petrosal_sinus.glb",
+   "bytes": 15792,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm.",
+   "centroid": {
+    "L": [
+     -36.9,
+     -31.08,
+     -4.66
+    ],
+    "R": [
+     37.78,
+     -30.73,
+     -5.5
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_inferior_petrosal_sinus",
+   "name": "Inferior petrosal sinus",
+   "aliases": [],
+   "type": "tube",
+   "fitted": true,
+   "file": "assets/skullbase-ct/sb_inferior_petrosal_sinus.glb",
+   "bytes": 10568,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm.",
+   "centroid": {
+    "L": [
+     -21.65,
+     -22.36,
+     -18.47
+    ],
+    "R": [
+     22.09,
+     -22.29,
+     -18.83
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_superior_ophthalmic_vein",
+   "name": "Superior ophthalmic vein",
+   "aliases": [],
+   "type": "tube",
+   "fitted": true,
+   "file": "assets/skullbase-ct/sb_superior_ophthalmic_vein.glb",
+   "bytes": 10080,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm.",
+   "centroid": {
+    "L": [
+     -14.69,
+     27.87,
+     13.59
+    ],
+    "R": [
+     17.31,
+     28.33,
+     14.12
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
+   "id": "sb_inferior_ophthalmic_vein",
+   "name": "Inferior ophthalmic vein",
+   "aliases": [],
+   "type": "tube",
+   "fitted": true,
+   "file": "assets/skullbase-ct/sb_inferior_ophthalmic_vein.glb",
+   "bytes": 8300,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm.",
+   "centroid": {
+    "L": [
+     -15.38,
+     18.45,
+     -1.41
+    ],
+    "R": [
+     17.23,
+     17.98,
+     -1.56
+    ]
+   },
+   "intracranialFraction": 1.0
+  },
+  {
    "id": "tb_adenohypophysis",
    "name": "Adenohypophysis (anterior lobe)",
    "aliases": [
@@ -4702,7 +5083,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_adenohypophysis.glb",
-   "bytes": 27584,
+   "bytes": 27480,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -4738,7 +5119,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_neurohypophysis.glb",
-   "bytes": 11732,
+   "bytes": 11780,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -4775,7 +5156,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_pituitary_stalk.glb",
-   "bytes": 8584,
+   "bytes": 8620,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -4800,6 +5181,540 @@
      0.59,
      -0.66,
      12.25
+    ]
+   }
+  },
+  {
+   "id": "tb_cavernous_sinus",
+   "name": "Cavernous sinus",
+   "aliases": [
+    "Parasellar sinus"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase-v3/tb_cavernous_sinus.glb",
+   "bytes": 127284,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "vein",
+   "schematic": true,
+   "derivation": "Modelled on this CT (skullbase_v3_cavernous.py), between the borders Chotai 2018 gives: medially the sella and the sphenoid body (0.4 mm off the bone and the hypophysis modelled in its fossa), laterally its lateral wall (a plane through the superior orbital fissure, the foramen rotundum, the trigeminal ganglion's medial margin and the petrous apex: a drawing choice), under its roof (the plane of the oculomotor triangle: the anterior and posterior clinoids and the petrous apex), from the petrous apex back to the carotid's anterior bend, and within 5.5 mm of the carotid it contains (this CT's own, TopBrain's label). A CT does not show its walls: its shape is drawn by rule round what the CT does show. Right 1546 mm³, left 979 mm³.",
+   "centroid": {
+    "L": [
+     -11.34,
+     1.72,
+     3.66
+    ],
+    "R": [
+     10.36,
+     3.64,
+     2.27
+    ]
+   }
+  },
+  {
+   "id": "tb_cavernous_sinus_walls",
+   "name": "Walls of the cavernous sinus",
+   "aliases": [
+    "Dura of the cavernous sinus"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase-v3/tb_cavernous_sinus_walls.glb",
+   "bytes": 167876,
+   "colour": {
+    "token": "sbDura",
+    "light": "#7E8294",
+    "dark": "#D4D7E2"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "soft",
+   "schematic": true,
+   "derivation": "Drawn by rule round the cavernous sinus modelled on this CT (skullbase_v3_cavernous.py): a shell of dura, 1.2 mm thick at the lateral wall (its outer and inner layers, the oculomotor, trochlear, ophthalmic and maxillary nerves running between them, Chotai 2018) and 0.3 mm medially, above and below. A CT does not show the dura: its thicknesses are drawing choices.",
+   "centroid": {
+    "L": [
+     -11.7,
+     1.47,
+     3.28
+    ],
+    "R": [
+     11.07,
+     3.52,
+     2.29
+    ]
+   }
+  },
+  {
+   "id": "tb_triangle_superoposterior",
+   "name": "Superoposterior (oculomotor) triangle",
+   "aliases": [
+    "Oculomotor triangle"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase-v3/tb_triangle_superoposterior.glb",
+   "bytes": 3468,
+   "colour": {
+    "token": "sbTriMedial",
+    "light": "#B8467A",
+    "dark": "#F08AB8"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "triangle",
+   "schematic": true,
+   "derivation": "One of the ten triangles round the cavernous sinus as Chung 2016 defines them (medial group): anterior clinoid process, posterior clinoid process, apex of the petrous part (vertices). Drawn here as the flat triangle between those structures as they are drawn in this model (the nerves re-routed through the sinus's wall, the landmarks found on this CT): where they lie follows from them, not from a dissection.",
+   "centroid": {
+    "L": [
+     -10.33,
+     -3.17,
+     6.33
+    ],
+    "R": [
+     10.0,
+     -4.17,
+     5.33
+    ]
+   },
+   "triangle": {
+    "group": "medial"
+   }
+  },
+  {
+   "id": "tb_triangle_superior",
+   "name": "Superior (clinoidal) triangle",
+   "aliases": [
+    "Clinoidal, Dolenc's triangle"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase-v3/tb_triangle_superior.glb",
+   "bytes": 3640,
+   "colour": {
+    "token": "sbTriMedial",
+    "light": "#B8467A",
+    "dark": "#F08AB8"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "triangle",
+   "schematic": true,
+   "derivation": "One of the ten triangles round the cavernous sinus as Chung 2016 defines them (medial group): optic nerve, oculomotor nerve before the superior orbital fissure, dural fold between the two nerves' dural entries (borders). Drawn here as the flat triangle between those structures as they are drawn in this model (the nerves re-routed through the sinus's wall, the landmarks found on this CT): where they lie follows from them, not from a dissection.",
+   "centroid": {
+    "L": [
+     -13.72,
+     9.94,
+     9.52
+    ],
+    "R": [
+     14.56,
+     9.58,
+     8.6
+    ]
+   },
+   "triangle": {
+    "group": "medial"
+   }
+  },
+  {
+   "id": "tb_triangle_middle",
+   "name": "Middle (supratrochlear) triangle",
+   "aliases": [
+    "Paramedian, supratrochlear triangle"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase-v3/tb_triangle_middle.glb",
+   "bytes": 3636,
+   "colour": {
+    "token": "sbTriMedial",
+    "light": "#B8467A",
+    "dark": "#F08AB8"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "triangle",
+   "schematic": true,
+   "derivation": "One of the ten triangles round the cavernous sinus as Chung 2016 defines them (medial group): oculomotor nerve, trochlear nerve, dural fold between their dural entries (borders). Drawn here as the flat triangle between those structures as they are drawn in this model (the nerves re-routed through the sinus's wall, the landmarks found on this CT): where they lie follows from them, not from a dissection.",
+   "centroid": {
+    "L": [
+     -12.02,
+     -2.59,
+     4.79
+    ],
+    "R": [
+     13.34,
+     1.74,
+     4.16
+    ]
+   },
+   "triangle": {
+    "group": "medial"
+   }
+  },
+  {
+   "id": "tb_triangle_inferior",
+   "name": "Inferior (Parkinson's) triangle",
+   "aliases": [
+    "Parkinson's, infratrochlear triangle"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase-v3/tb_triangle_inferior.glb",
+   "bytes": 3620,
+   "colour": {
+    "token": "sbTriMedial",
+    "light": "#B8467A",
+    "dark": "#F08AB8"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "triangle",
+   "schematic": true,
+   "derivation": "One of the ten triangles round the cavernous sinus as Chung 2016 defines them (medial group): trochlear nerve, ophthalmic nerve, dural fold between their dural entries (borders). Drawn here as the flat triangle between those structures as they are drawn in this model (the nerves re-routed through the sinus's wall, the landmarks found on this CT): where they lie follows from them, not from a dissection.",
+   "centroid": {
+    "L": [
+     -12.51,
+     0.14,
+     3.91
+    ],
+    "R": [
+     13.64,
+     0.05,
+     3.09
+    ]
+   },
+   "triangle": {
+    "group": "medial"
+   }
+  },
+  {
+   "id": "tb_triangle_anteromedial",
+   "name": "Anteromedial (Mullan's) triangle",
+   "aliases": [
+    "Mullan's triangle"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase-v3/tb_triangle_anteromedial.glb",
+   "bytes": 3624,
+   "colour": {
+    "token": "sbTriLateral",
+    "light": "#2C8F62",
+    "dark": "#6FDCA6"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "triangle",
+   "schematic": true,
+   "derivation": "One of the ten triangles round the cavernous sinus as Chung 2016 defines them (lateral group): ophthalmic nerve, maxillary nerve, between the superior orbital fissure and the foramen rotundum (borders). Drawn here as the flat triangle between those structures as they are drawn in this model (the nerves re-routed through the sinus's wall, the landmarks found on this CT): where they lie follows from them, not from a dissection.",
+   "centroid": {
+    "L": [
+     -16.95,
+     9.69,
+     2.7
+    ],
+    "R": [
+     18.56,
+     9.53,
+     1.91
+    ]
+   },
+   "triangle": {
+    "group": "lateral"
+   }
+  },
+  {
+   "id": "tb_triangle_anterolateral",
+   "name": "Anterolateral triangle",
+   "aliases": [
+    "Lateral triangle"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase-v3/tb_triangle_anterolateral.glb",
+   "bytes": 3644,
+   "colour": {
+    "token": "sbTriLateral",
+    "light": "#2C8F62",
+    "dark": "#6FDCA6"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "triangle",
+   "schematic": true,
+   "derivation": "One of the ten triangles round the cavernous sinus as Chung 2016 defines them (lateral group): maxillary nerve, mandibular nerve, between the foramen rotundum and the foramen ovale (borders). Drawn here as the flat triangle between those structures as they are drawn in this model (the nerves re-routed through the sinus's wall, the landmarks found on this CT): where they lie follows from them, not from a dissection.",
+   "centroid": {
+    "L": [
+     -20.16,
+     5.43,
+     -5.7
+    ],
+    "R": [
+     21.16,
+     5.1,
+     -7.52
+    ]
+   },
+   "triangle": {
+    "group": "lateral"
+   }
+  },
+  {
+   "id": "tb_triangle_posterolateral",
+   "name": "Posterolateral (Glasscock's) triangle",
+   "aliases": [
+    "Glasscock's triangle"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase-v3/tb_triangle_posterolateral.glb",
+   "bytes": 3628,
+   "colour": {
+    "token": "sbTriLateral",
+    "light": "#2C8F62",
+    "dark": "#6FDCA6"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "triangle",
+   "schematic": true,
+   "derivation": "One of the ten triangles round the cavernous sinus as Chung 2016 defines them (lateral group): mandibular nerve, greater petrosal nerve, between the foramen ovale and the hiatus of the greater petrosal nerve (borders). Drawn here as the flat triangle between those structures as they are drawn in this model (the nerves re-routed through the sinus's wall, the landmarks found on this CT): where they lie follows from them, not from a dissection.",
+   "centroid": {
+    "L": [
+     -26.52,
+     -6.68,
+     -9.33
+    ],
+    "R": [
+     27.02,
+     -6.91,
+     -11.48
+    ]
+   },
+   "triangle": {
+    "group": "lateral"
+   }
+  },
+  {
+   "id": "tb_triangle_posteromedial",
+   "name": "Posteromedial (Kawase's) triangle",
+   "aliases": [
+    "Kawase's triangle"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase-v3/tb_triangle_posteromedial.glb",
+   "bytes": 3648,
+   "colour": {
+    "token": "sbTriLateral",
+    "light": "#2C8F62",
+    "dark": "#6FDCA6"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "triangle",
+   "schematic": true,
+   "derivation": "One of the ten triangles round the cavernous sinus as Chung 2016 defines them (lateral group): trigeminal ganglion, greater petrosal nerve, between the hiatus and the apex of the petrous part (borders). Drawn here as the flat triangle between those structures as they are drawn in this model (the nerves re-routed through the sinus's wall, the landmarks found on this CT): where they lie follows from them, not from a dissection.",
+   "centroid": {
+    "L": [
+     -24.18,
+     -11.65,
+     -5.62
+    ],
+    "R": [
+     24.47,
+     -11.98,
+     -7.15
+    ]
+   },
+   "triangle": {
+    "group": "lateral"
+   }
+  },
+  {
+   "id": "tb_triangle_lateral",
+   "name": "Lateral (inferolateral) triangle",
+   "aliases": [
+    "Inferolateral triangle"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase-v3/tb_triangle_lateral.glb",
+   "bytes": 3656,
+   "colour": {
+    "token": "sbTriPosterior",
+    "light": "#B8621A",
+    "dark": "#F5A35A"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "triangle",
+   "schematic": true,
+   "derivation": "One of the ten triangles round the cavernous sinus as Chung 2016 defines them (posterior group): dural entries of the trochlear and abducens nerves, apex of the petrous part (vertices). Drawn here as the flat triangle between those structures as they are drawn in this model (the nerves re-routed through the sinus's wall, the landmarks found on this CT): where they lie follows from them, not from a dissection.",
+   "centroid": {
+    "L": [
+     -9.9,
+     -6.19,
+     0.12
+    ],
+    "R": [
+     10.21,
+     -6.42,
+     -0.93
+    ]
+   },
+   "triangle": {
+    "group": "posterior"
+   }
+  },
+  {
+   "id": "tb_triangle_medial",
+   "name": "Medial (inferomedial) triangle",
+   "aliases": [
+    "Inferomedial triangle"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase-v3/tb_triangle_medial.glb",
+   "bytes": 3476,
+   "colour": {
+    "token": "sbTriPosterior",
+    "light": "#B8621A",
+    "dark": "#F5A35A"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "triangle",
+   "schematic": true,
+   "derivation": "One of the ten triangles round the cavernous sinus as Chung 2016 defines them (posterior group): dural entries of the trochlear and abducens nerves, posterior clinoid process (vertices). Drawn here as the flat triangle between those structures as they are drawn in this model (the nerves re-routed through the sinus's wall, the landmarks found on this CT): where they lie follows from them, not from a dissection.",
+   "centroid": {
+    "L": [
+     -9.4,
+     -5.35,
+     3.95
+    ],
+    "R": [
+     9.55,
+     -5.75,
+     3.07
+    ]
+   },
+   "triangle": {
+    "group": "posterior"
+   }
+  },
+  {
+   "id": "tb_sphenoparietal_sinus",
+   "name": "Sphenoparietal sinus",
+   "aliases": [
+    "Sinus of Breschet"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase-v3/tb_sphenoparietal_sinus.glb",
+   "bytes": 6724,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "vein",
+   "schematic": true,
+   "derivation": "Drawn by rule on this CT: under the free (back) edge of the lesser wing of the sphenoid, from the anterior clinoid's base outwards (the edge's furthest-back bone, a millimetre below it), 1.8 mm across, into the cavernous sinus's front.",
+   "centroid": {
+    "L": [
+     -19.73,
+     10.76,
+     12.9
+    ],
+    "R": [
+     18.26,
+     8.1,
+     9.33
+    ]
+   }
+  },
+  {
+   "id": "tb_basilar_plexus",
+   "name": "Basilar venous plexus",
+   "aliases": [
+    "Basilar plexus"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase-v3/tb_basilar_plexus.glb",
+   "bytes": 4260,
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "vein",
+   "schematic": true,
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Drawn by rule on this CT: a sheet on the back of the clivus (its bone surface), from just below the dorsum 14 mm down and 8 mm either side of the midline, 1 mm thick: the plexus joins both cavernous sinuses and inferior petrosal sinuses (Tanoue 2020); its channels are not drawn.",
+   "centroid": {
+    "L": [
+     -4.42,
+     -7.71,
+     -2.22
+    ],
+    "R": [
+     4.29,
+     -8.04,
+     -2.28
     ]
    }
   }

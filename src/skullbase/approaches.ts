@@ -49,6 +49,8 @@ export interface ApproachContent {
   frameOpening?: boolean;
   /** the shapes of the brain the view offers (named morph targets: open, lift, lsoLift, interhemispheric, telovelar), a slider each */
   morphs: string[];
+  /** landmarks (names) the view labels */
+  landmarks?: string[];
 }
 const sec = (title: string, claims: ApproachClaim[], measured?: ApproachSection['measured']): ApproachSection => ({ title, claims, ...(measured ? { measured } : {}) });
 
@@ -78,6 +80,12 @@ export const APPROACH_REFS: ApproachRef[] = [
     citation: 'Amini A, Swiatek VM, Stein KP, Rashidi A, Sandalcioglu IE, Neyazi B. Pterional vs. lateral supraorbital approach in the management of middle cerebral artery aneurysms: insights from a phantom model study. Neurosurg Rev. 2024;47(1):344. doi:10.1007/s10143-024-02518-6.' },
   { id: 'imada2021', pmid: '34645716', pmcid: 'PMC8666298', shortLabel: 'Imada 2021', url: doi('10.2176/nmc.oa.2021-0080'),
     citation: 'Imada Y, Mihara C, Kawamoto H, Kurisu K. Dissection of the Sylvian fissure in the trans-sylvian approach based on the morphological classification of the superficial middle cerebral vein. Neurol Med Chir (Tokyo). 2021;61(12):731–740. doi:10.2176/nmc.oa.2021-0080.' },
+  { id: 'erginoglu2026', pmid: '41283941', pmcid: 'PMC12967451', shortLabel: 'Erginoglu 2026', url: doi('10.1007/s11845-025-04170-5'),
+    citation: 'Erginoglu U, Sulaimanov U, Uslu I, Ataoglu C, Keles A, Aycan A, et al. Quantitative anatomy of the fourth ventricle floor: a cadaveric morphometric study. Ir J Med Sci. 2026;195(1):373–381. doi:10.1007/s11845-025-04170-5.' },
+  { id: 'zhuang2021', pmid: '34930175', pmcid: 'PMC8686214', shortLabel: 'Zhuang 2021', url: doi('10.1186/s12883-021-02524-x'),
+    citation: 'Zhuang S, Xie W, Mao C. Bilateral facial colliculus syndrome caused by pontine tegmentum infarction: a case report. BMC Neurol. 2021;21(1):492. doi:10.1186/s12883-021-02524-x.' },
+  { id: 'ota2024', pmid: '41583581', pmcid: 'PMC12778471', shortLabel: 'Ota 2024', url: doi('10.1161/SVIN.123.001050'),
+    citation: 'Ota T. Functional cerebral venous anatomy from the viewpoint of venous collaterals part I, supratentorial superficial and deep venous system. Stroke Vasc Interv Neurol. 2024;4(2):e001050. doi:10.1161/SVIN.123.001050.' },
   { id: 'symss2014', pmid: '25126118', pmcid: 'PMC4129577', shortLabel: 'Symss 2014', url: doi('10.4103/1793-5482.136708'),
     citation: 'Symss NP, Ramamurthi R, Kapu R, Rao SM, Vasudevan MC, Pande A, et al. Complication avoidance in transcallosal transforaminal approach to colloid cysts of the anterior third ventricle: an analysis of 80 cases. Asian J Neurosurg. 2014;9(2):51–57. doi:10.4103/1793-5482.136708.' },
   { id: 'nair2016', pmid: '27366259', pmcid: 'PMC4849301', shortLabel: 'Nair 2016', url: doi('10.4103/1793-5482.144185'),
@@ -140,6 +148,16 @@ export const APPROACH_REFS: ApproachRef[] = [
     citation: 'Singh AKC, Kandasamy D, Garg A, Jyotsna VP, Khadgawat R. Study of pituitary morphometry using MRI in Indian subjects. Indian J Endocrinol Metab. 2018;22(5):605–609. doi:10.4103/ijem.IJEM_199_18.' },
   { id: 'yohannan2015', pmid: '26473083', pmcid: 'PMC4584028', shortLabel: 'Yohannan 2015', url: doi('10.1155/2015/618042'),
     citation: 'Yohannan DG, Krishnapillai R, Suresh R, Ramnarayan S. A morphometric study of the foramen of diaphragma sellae and delineation of its relation to optic neural pathways through computer aided superimposition. Anat Res Int. 2015;2015:618042. doi:10.1155/2015/618042.' },
+  { id: 'chung2016cs', pmid: '27510391', pmcid: 'PMC4974189', shortLabel: 'Chung 2016', url: doi('10.3346/jkms.2016.31.9.1455'),
+    citation: 'Chung BS, Ahn YH, Park JS. Ten triangles around cavernous sinus for surgical approach, described by schematic diagram and three dimensional models with the sectioned images. J Korean Med Sci. 2016;31(9):1455–1463. doi:10.3346/jkms.2016.31.9.1455.' },
+  { id: 'corvino2023', pmid: '37626571', pmcid: 'PMC10452901', shortLabel: 'Corvino 2023', url: doi('10.3390/brainsci13081215'),
+    citation: 'Corvino S, Villanueva-Solórzano PL, Offi M, Armocida D, Nonaka M, Iaconetta G, et al. A new perspective on the cavernous sinus as seen through multiple surgical corridors: anatomical study comparing the transorbital, endonasal, and transcranial routes and the relative coterminous spatial regions. Brain Sci. 2023;13(8):1215. doi:10.3390/brainsci13081215.' },
+  { id: 'chotai2018', pmid: '29492113', pmcid: 'PMC5820859', shortLabel: 'Chotai 2018', url: doi('10.4103/ajns.AJNS_26_16'),
+    citation: 'Chotai S, Liu Y, Qi S. Review of surgical anatomy of the tumors involving cavernous sinus. Asian J Neurosurg. 2018;13(1):1–8. doi:10.4103/ajns.AJNS_26_16.' },
+  { id: 'wysiadecki2021', pmid: '34065668', pmcid: 'PMC8156379', shortLabel: 'Wysiadecki 2021', url: doi('10.3390/brainsci11050649'),
+    citation: 'Wysiadecki G, Radek M, Tubbs RS, Iwanaga J, Walocha J, Brzeziński P, et al. Gross and micro-anatomical study of the cavernous segment of the abducens nerve and its relationships to internal carotid plexus: application to skull base surgery. Brain Sci. 2021;11(5):649. doi:10.3390/brainsci11050649.' },
+  { id: 'tanoue2020', pmid: '37502139', pmcid: 'PMC10370663', shortLabel: 'Tanoue 2020', url: doi('10.5797/jnet.ra.2020-0086'),
+    citation: 'Tanoue S, Hirohata M, Takeuchi Y, Orito K, Kajiwara S, Abe T. Venous anatomy of the cavernous sinus and relevant veins. J Neuroendovasc Ther. 2020;14(12):547–557. doi:10.5797/jnet.ra.2020-0086.' },
   { id: 'nguyen2026', pmid: '42332465', pmcid: 'PMC13286435', shortLabel: 'Nguyen 2026', url: doi('10.1097/MD.0000000000049344'),
     citation: 'Nguyen MQ, Tang MP, Nguyen HT, Tran HT, Tran TT, Tran NBMH. Association of sphenoid sinus pneumatization patterns, Onodi cells, and rostrum pneumatization with natural ostium location: a cross-sectional CT study. Medicine (Baltimore). 2026;105(25):e49344. doi:10.1097/MD.0000000000049344.' },
 ];
@@ -160,10 +178,19 @@ export const INSULA: ApproachClaim[] = [
 ];
 const FISSURE = c('The Sylvian fissure (the lateral sulcus) separates the frontal and parietal lobes from the temporal lobe; the insula and the main branches of the middle cerebral artery lie deep in it, covered by the opercula.', 'muhammad2019');
 const VEINS = c('The superficial middle cerebral (Sylvian) vein is one of the main obstacles to a wide opening of the fissure. In 116 patients its pattern (five types) showed where to dissect so as to preserve it and its bridging veins; postoperative venous infarction occurred in 2.6 %.', 'imada2021');
+/** the Sylvian veins (drawn by rule: this angiogram labels none near the fissure) */
+const SYLVIAN_VEINS: ApproachClaim[] = [
+  c('The superficial middle cerebral vein receives frontosylvian, parietosylvian and temporosylvian veins; it usually begins at the back end of the fissure and runs forwards and down along its edges.', 'imada2021'),
+  c('Its main stems usually run on the temporal lobe: their adhesion, and where the vein drains into a skull-base sinus, limit how far the temporal lobe can be moved.', 'imada2021'),
+  c('In 116 patients: a common trunk with anastomoses to a frontosylvian trunk on the fissure in 60 %, a common trunk without them in 8 %, frontosylvian and temporosylvian trunks running side by side in 17 %, the veins of Trolard and Labbé meeting at the back of the fissure and dividing again in 13 %, an underdeveloped vein in 2 %. In the commonest type the fissure was opened at least on the temporal side of the common trunk; without anastomoses, on its frontal side.', 'imada2021'),
+  c('It generally runs along the lesser sphenoid wing into the front of the cavernous sinus, directly or through the sphenoparietal sinus. It may instead drain into the laterocavernous sinus, into the pterygoid plexus across the middle fossa floor, or back to the superior petrosal or a tentorial sinus.', 'tanoue2020'),
+  c('The precentral, central and posterior insular veins, in the insula’s precentral, central and posterior limiting sulci, run down and forward to its pole, where they join as the deep middle cerebral vein; it flows into the first segment of the basal vein of Rosenthal.', 'ota2024'),
+];
 const CISTERN = c('Opening the carotid cistern lets cerebrospinal fluid drain, which relaxes the brain, and exposes the internal carotid artery for proximal control; the dissection then goes medially to the chiasmatic and lamina terminalis cisterns.', 'yilmaz2025');
 const CONTEXT = ['Internal carotid artery', 'Middle cerebral artery (M1 segment)', 'Middle cerebral artery (M2 segment)', 'Middle cerebral artery (M3 segment)',
-  'Anterior cerebral artery (A1–A2)', 'Proximal lateral striate branches', 'Distal lateral striate branches', 'Optic nerve (II)', 'Oculomotor nerve (III)'];
-const NOT_SHOWN = 'The scalp, temporalis muscle, dura and arachnoid; the Sylvian veins (this angiogram labels none near the fissure); the cortical (M4) branches of the middle cerebral artery, which the labels stop short of. The brain is a template fitted to this skull and its arteries, not this patient’s own, and its opening and lift are shapes, not a simulation of the tissue.';
+  'Anterior cerebral artery (A1–A2)', 'Proximal lateral striate branches', 'Distal lateral striate branches', 'Optic nerve (II)', 'Oculomotor nerve (III)',
+  'Superficial middle cerebral vein', 'Sphenoparietal sinus', 'Insular veins', 'Deep middle cerebral vein', 'Basal vein (of Rosenthal)'];
+const NOT_SHOWN = 'The scalp, temporalis muscle, dura and arachnoid; the Sylvian veins’ tributaries and bridging veins (the veins themselves are drawn by rule, one superficial trunk of the many patterns, since this angiogram labels none near the fissure); the cortical (M4) branches of the middle cerebral artery, which the labels stop short of. The brain is a template fitted to this skull and its arteries, not this patient’s own, and its opening and lift are shapes, not a simulation of the tissue.';
 
 export const APPROACHES: ApproachContent[] = [
   {
@@ -185,7 +212,7 @@ export const APPROACHES: ApproachContent[] = [
       c('In the transsylvian transinsular approach, retraction is applied to the lateral fronto-orbital area to show the carotid cistern, which is opened between the optic nerve and the internal carotid artery.', 'wang2011'),
       CISTERN,
       c('After the fissure is dissected, retracting the frontal and temporal lobes exposes the optic nerve, the vessels and the anterior and middle cranial fossae.', 'yilmaz2025'),
-    ]), sec('Middle cerebral artery', ARTERY, 'm1'), sec('Insula', INSULA), sec('Care points', [
+    ]), sec('Middle cerebral artery', ARTERY, 'm1'), sec('Sylvian veins', SYLVIAN_VEINS), sec('Insula', INSULA), sec('Care points', [
       VEINS,
       c('The superficial Sylvian veins are preserved, especially those draining into the temporal lobe; frontal draining veins may be sacrificed if necessary.', 'yilmaz2025'),
       c('The orbital meningeal artery, met at the superolateral edge of the superior orbital fissure during sphenoid wing resection, often bleeds and is coagulated.', 'yilmaz2025'),
@@ -272,15 +299,21 @@ export const APPROACHES: ApproachContent[] = [
       c('The telovelar incision starts low in the tela once the uvulotonsillar fissure is open: safe in its caudal part, cautious from the choroid plexus to the telovelar junction, very cautious in the inferior medullary velum near the fastigium. Seen endoscopically the velum beside the nodulus was barely 6 mm long (5.5–7.2 mm), and cutting it added little access.', 'longatti2026'),
       c('With the tela choroidea freed from the taeniae on both sides, the inferior medullary velum and the vermis were gently retracted upwards for a broad view of the fourth ventricle; for larger or more lateral lesions the velum was opened further and the vermis lifted to expose the ventricle’s upper part, and its floor was identified and protected.', 'wang2023'),
       c('Dividing both taeniae can make the opening four or five times the size of the foramen of Magendie, but the roof can then be lifted only a little: the posterior inferior cerebellar artery crosses the field and can be stretched.', 'longatti2026'),
+    ]), sec('The floor of the fourth ventricle', [
+      c('The floor (the rhomboid fossa) carries surface landmarks over the brainstem’s nuclei: the facial colliculus, the sulcus limitans, the medial eminence, the striae medullares and the hypoglossal and vagal trigones.', 'erginoglu2026'),
+      c('In 40 cadaveric brainstems it measured 33.6 mm from the aqueduct’s opening to the obex and 20.0 mm across between the foramina of Luschka. The facial colliculus divided it into nearly equal pontine and medullary parts (14.6 and 14.5 mm), a landmark for suprafacial, infrafacial and pericollicular entry.', 'erginoglu2026'),
+      c('The facial colliculus lies over the abducens nucleus and the genu of the facial nerve.', 'zhuang2021'),
+      c('The sulcus limitans lay about 3.1 mm from the median sulcus on each side: the midline corridor between them was about 31 % of the floor’s width.', 'erginoglu2026'),
     ]), sec('Care points', [
       c('Incising the vermis where it is not infiltrated is generally held to raise the risk of a posterior fossa syndrome, including cerebellar mutism.', 'cho2024'),
       c('In 67 patients, and pooled with 304 from three earlier studies, the risk of postoperative neurological complications did not differ significantly between the telovelar and transvermian approaches. Neurophysiological monitoring protected against speech and swallowing deficits (odds ratio 0.076), and an external ventricular drain during surgery against gait and motor deficits (0.075) and hydrocephalus (0.020).', 'pettersson2023'),
       c('After a keyhole telovelar approach the commonest new or worse deficit was of gait or focal motor function (15.4 %); the abducens nerve was the cranial nerve most often affected, then the facial.', 'wang2023'),
     ])],
-    context: ['Posterior inferior cerebellar artery', 'Vertebral artery', 'Basilar artery', 'Superior cerebellar artery', 'Transverse sinus', 'Sigmoid sinus',
+    context: ['Posterior inferior cerebellar artery', 'Posterior inferior cerebellar artery (fitted course)', 'Vertebral artery', 'Basilar artery', 'Superior cerebellar artery', 'Transverse sinus', 'Sigmoid sinus',
       'Glossopharyngeal nerve (IX)', 'Vagus nerve (X)', 'Accessory nerve (XI)', 'Hypoglossal nerve (XII)'],
-    notShown: 'The skin, muscles, dura and arachnoid; the tela choroidea, inferior medullary velum and choroid plexus (thin sheets the model lacks: the fourth ventricle’s lower roof is open in it); the occipital sinus and the veins of the fissure. The cerebellum, brainstem and fourth ventricle are one adult’s anatomical model (Z-Anatomy) fitted into this skull and around its arteries, not this patient’s own; the tonsils’ retraction and the vermis’s lift are a shape, not a simulation of the tissue.',
+    notShown: 'The skin, muscles, dura and arachnoid; the tela choroidea, inferior medullary velum and choroid plexus (thin sheets the model lacks: the fourth ventricle’s lower roof is open in it); the occipital sinus and the veins of the fissure. The cerebellum, brainstem and fourth ventricle are one adult’s anatomical model (Z-Anatomy) fitted into this skull and around its arteries, not this patient’s own, and so are the floor’s landmarks (placed over the model’s nuclei); the tonsils’ retraction and the vermis’s lift are a shape, not a simulation of the tissue.',
     focus: ['Fourth ventricle', 'Tonsil of cerebellum'],
+    landmarks: ['Facial colliculus', 'Median sulcus of fourth ventricle', 'Vestibular area', 'Hypoglossal trigone', 'Vagal trigone', 'Obex'],
     morphs: ['telovelar'],
   },
   {
@@ -310,7 +343,7 @@ export const APPROACHES: ApproachContent[] = [
     context: ['Trigeminal nerve (V)', 'Trigeminal ganglion', 'Abducens nerve (VI)', 'Facial nerve (VII)', 'Vestibulocochlear nerve (VIII)', 'Nerves in the internal acoustic meatus (VII, VIII)',
       'Glossopharyngeal nerve (IX)', 'Vagus nerve (X)', 'Accessory nerve (XI)', 'Anterior inferior cerebellar artery', 'Superior cerebellar artery',
       'Superior cerebellar artery (fitted course)',
-      'Posterior inferior cerebellar artery', 'Basilar artery', 'Vertebral artery', 'Sigmoid sinus', 'Transverse sinus'],
+      'Posterior inferior cerebellar artery', 'Posterior inferior cerebellar artery (fitted course)', 'Basilar artery', 'Vertebral artery', 'Sigmoid sinus', 'Transverse sinus'],
     notShown: 'The craniotomy is drawn larger than a keyhole, its outline placed by hand. The skin, muscles, dura and arachnoid; the superior petrosal vein and its tributaries and the labyrinthine artery (this angiogram labels neither); the nervus intermedius. The anterior inferior cerebellar artery is the fitted model’s (this angiogram does not label it), its origin moved onto this patient’s basilar artery; this angiogram labels only the first part of the superior cerebellar artery, and its course beyond is the fitted model’s, carried on from there: both approximate. The trigeminal nerve’s course from the pons to the ganglion, and the ganglion, are drawn by rule from published measurements, not traced. The cerebellum, brainstem and fourth ventricle are one adult’s anatomical model (Z-Anatomy) fitted into this skull, not this patient’s own, and drawing the hemisphere back is a shape, not a simulation of the tissue.',
     // framed on the cerebellopontine angle (between the trigeminal and the vestibulocochlear nerve), seen along the
     // corridor (the camera preset): the opening around the line of sight
@@ -355,4 +388,33 @@ export const ENDONASAL_INFO: { sections: ApproachSection[]; notShown: string } =
     ]),
   ],
   notShown: 'The front of the nose (the scan does not reach it) and the nasal cavity’s own shape there: the scope starts at the back of the nasal cavity. The turbinates and the septum are not drawn as parts of their own (only the lining of this CT’s air), and pushing them aside is drawn as a corridor opened through them. The mucosal flaps, the dura and its opening, bleeding and the tissue’s give are not simulated: what the burr reaches is taken away. The hypophysis is modelled in this CT’s fossa (its outline from the bone, its lobes and stalk drawn by rule), not seen on it: a CT does not show the gland, the dura or the cavernous sinuses’ walls; the cavernous sinuses are fitted from another model (approximate).',
+};
+
+/**
+ * The cavernous sinus view (Skull base v3, pipeline/skullbase_v3_cavernous.py): what the sources say, checked against
+ * their open-access full texts: Chotai 2018 (PMC5820859), Corvino 2023 (PMC10452901), Wysiadecki 2021 (PMC8156379),
+ * Chung 2016 (PMC4974189), Tanoue 2020 (PMC10370663).
+ */
+export const CAVERNOUS_INFO: { sections: ApproachSection[]; notShown: string } = {
+  sections: [
+    sec('Its borders and walls', [
+      c('In front the anterior clinoid and the superior orbital fissure, behind the petrous tip and the posterior clinoid, medially the sella and the sphenoid body, laterally as far as the junction with the greater wing of the sphenoid.', 'chotai2018'),
+      c('The medial wall has been described as a single thin membrane or a distinct dural layer (a mean 0.195 mm thick in one study); the lateral wall has an outer and an inner layer, the cranial nerves running between them.', 'chotai2018'),
+    ]),
+    sec('The nerves', [
+      c('In the lateral wall, from above: the oculomotor nerve, then the trochlear nerve, then the ophthalmic nerve, then the maxillary nerve, each pair bounding a triangle (the supratrochlear between III and IV, Parkinson’s between IV and V1, the anteromedial between V1 and V2).', 'corvino2023'),
+      c('The abducens nerve leaves Dorello’s canal under Gruber’s ligament and runs forward medial to the ophthalmic nerve.', 'corvino2023'),
+      c('In 60 sides its cavernous segment was on average 26.9 mm long; it crossed the cavernous carotid’s proximal part about 4 mm (1.3–6.5) above the petrolingual ligament, always adhering to the artery where it crossed its posterior vertical segment.', 'wysiadecki2021'),
+    ]),
+    sec('The triangles', [
+      c('Ten triangles round the sinus in three groups. Medial: the superoposterior (oculomotor) triangle between the anterior and posterior clinoids and the petrous apex; the superior (clinoidal, Dolenc’s) between the optic and oculomotor nerves; the middle (supratrochlear) between the oculomotor and trochlear nerves; the inferior (Parkinson’s) between the trochlear and ophthalmic nerves.', 'chung2016cs'),
+      c('Lateral: the anteromedial (Mullan’s) between the ophthalmic and maxillary nerves; the anterolateral between the maxillary and mandibular nerves; the posterolateral (Glasscock’s) between the mandibular and greater petrosal nerves; the posteromedial (Kawase’s) between the trigeminal ganglion, the greater petrosal nerve and the petrous apex.', 'chung2016cs'),
+      c('Posterior: the lateral (inferolateral) triangle between the dural entries of the trochlear and abducens nerves and the petrous apex; the medial (inferomedial) between those entries and the posterior clinoid.', 'chung2016cs'),
+    ]),
+    sec('The veins', [
+      c('It receives the facial and orbital veins in front through the ophthalmic veins, the meningeal and osseous drainage laterally through the sphenoparietal sinus, the brain’s through the superficial middle cerebral and uncal veins, and connects with the other side through the intercavernous sinus; it drains to the jugular vein through the inferior petrosal sinus and to the pterygoid plexus through emissary veins.', 'tanoue2020'),
+      c('The superior petrosal sinus joins it to the transverse–sigmoid junction; the basilar plexus on the clivus joins both inferior petrosal sinuses, the cavernous sinuses and the marginal sinus.', 'tanoue2020'),
+    ]),
+  ],
+  notShown: 'A CT shows neither the sinus’s walls nor its venous spaces and trabeculae: the sinus is modelled round what this CT does show (its bone, its carotid, the hypophysis modelled in the fossa), its lateral wall a plane by rule. The carotid’s branches in it (the meningohypophyseal and inferolateral trunks) and the sympathetic plexus round it are not drawn; the nerves’ course through it is re-routed by rule in the published order, not traced. The superior and inferior petrosal sinuses and the ophthalmic veins are fitted from another model (approximate); the sphenoparietal sinus and the basilar plexus are drawn by rule, the laterocavernous sinus not at all; the superficial middle cerebral vein is drawn (by rule) only in the surgical views, ending in the sphenoparietal sinus, one of its several endings.',
 };

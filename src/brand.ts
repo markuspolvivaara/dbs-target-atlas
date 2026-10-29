@@ -9,7 +9,7 @@ export const BRAND = {
 } as const;
 
 export interface Section {
-  id: 'dbs' | 'tracts' | 'skullbase' | 'cortex' | 'spine' | 'skullbase-v1' | 'skullbase-ct' | 'brainstem' | 'ventricles';
+  id: 'dbs' | 'tracts' | 'skullbase' | 'cortex' | 'spine' | 'skullbase-v1' | 'skullbase-ct' | 'brainstem' | 'ventricles' | 'vascular';
   name: string;
   /** path from the site root */
   path: string;
@@ -40,6 +40,10 @@ export const SECTIONS: Section[] = [
   {
     id: 'ventricles', name: 'Ventricles', path: 'ventricles/', status: 'live',
     summary: 'The ventricular system of one CT, from the lateral ventricles through the foramina of Monro, the third ventricle and the aqueduct to the fourth, and a frontal ventriculostomy simulated on it: Kocher’s point found on this skull, the four freehand trajectories, whether each reaches the ventricle and how deep, beside their published accuracy.',
+  },
+  {
+    id: 'vascular', name: 'Vascular', path: 'vascular/', status: 'live',
+    summary: 'The cerebral arteries and veins of one CT angiogram, with aneurysms at their commonest sites, arteriovenous malformations of Spetzler–Martin grades I, III and V with their feeding arteries and draining veins, a dural fistula and direct and indirect carotid-cavernous fistulas drawn onto them, and a 3D angiogram that fills them in turn.',
   },
   {
     id: 'dbs', name: 'DBS targets', path: 'dbs/', status: 'live',

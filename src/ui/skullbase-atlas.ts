@@ -2,7 +2,8 @@ import * as THREE from 'three';
 import type { CameraPreset } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
 import { APPROACH_GEOM, definitionFor, isApproachPart, kindOf, LANDMARKS, LM, NOT_YET_SHOWN, REGIONS, SB, SB_MANIFEST, SB_MODEL, V3_FIT, type Landmark, type SbModel } from '../skullbase';
-import { APPROACH, APPROACH_REF, ENDONASAL_INFO, INSULA, type ApproachClaim, type ApproachSection } from '../skullbase/approaches';
+import { APPROACH, APPROACH_REF, CAVERNOUS_INFO, ENDONASAL_INFO, INSULA, type ApproachClaim, type ApproachSection } from '../skullbase/approaches';
+import { CAVERNOUS } from '../skullbase/cavernous';
 import { TB_NOTES, TB_REF } from '../skullbase/temporal';
 import { encodeSkull } from '../skullbase/state';
 import { combinedCut, FLOOR_CUT_MM, SB_GROUP, SB_GROUPS, viewGroup, type SbGroup } from '../skullbase/groups';
@@ -24,8 +25,8 @@ const PRESETS: [CameraPreset, string, string, string][] = [
   ...(SB_MODEL === 'v3' ? [['anterolateral', 'Surgical (anterolateral)', '6', 'Surg'] as [CameraPreset, string, string, string]] : []),
 ];
 const LAYERS: [LayerKey, string][] = [['nuclei', 'Bones'], ['tracts', 'Vessels and nerves'], ['cortex', 'Soft tissue'], ['targets', 'Landmarks']];
-const KIND_LABEL = { bone: 'Bone', soft: 'Soft tissue', artery: 'Artery', vein: 'Vein or dural sinus', nerve: 'Nerve', labyrinth: 'Inner ear', ossicle: 'Ossicle', membrane: 'Membrane', brain: 'Brain (fitted template)', hindbrain: 'Cerebellum and brainstem (fitted model)', ventricle: 'Ventricle (fitted model)', removed: 'Bone removed' } as const;
-const KIND_PLURAL: Record<string, string> = { 'Soft tissue': 'Soft tissue', Artery: 'Arteries', 'Vein or dural sinus': 'Veins and dural sinuses', Nerve: 'Nerves', Ossicle: 'Ossicles', Membrane: 'Membranes' };
+const KIND_LABEL = { bone: 'Bone', soft: 'Soft tissue', artery: 'Artery', vein: 'Vein or dural sinus', nerve: 'Nerve', labyrinth: 'Inner ear', ossicle: 'Ossicle', membrane: 'Membrane', brain: 'Brain (fitted template)', hindbrain: 'Cerebellum and brainstem (fitted model)', ventricle: 'Ventricle (fitted model)', removed: 'Bone removed', triangle: 'Surgical triangle' } as const;
+const KIND_PLURAL: Record<string, string> = { 'Surgical triangle': 'Surgical triangles', 'Soft tissue': 'Soft tissue', Artery: 'Arteries', 'Vein or dural sinus': 'Veins and dural sinuses', Nerve: 'Nerves', Ossicle: 'Ossicles', Membrane: 'Membranes' };
 const GROUP_ROWS: [SbGroup['kind'], string][] = SB_MODEL === 'v3'
   ? [['overview', 'Overview'], ['region', 'Each side'], ['system', 'Systems'], ['approach', 'Surgical views']]
   : [['overview', 'Overview'], ['region', 'Regions'], ['system', 'Systems'], ['bone', 'Bones and their landmarks']];
@@ -367,7 +368,7 @@ export class SkullbaseAtlasPage {
         h('button', { type: 'button', class: 'linklike', onclick: () => show(ids, false) }, 'Hide all')));
     // vessels, nerves and soft tissue: one list per kind; cranial nerves (I-XII) and artery systems each under
     // their own heading
-    for (const k of ['brain', 'removed', 'nerve', 'labyrinth', 'ossicle', 'membrane', 'artery', 'vein', 'soft'] as const) {
+    for (const k of ['brain', 'removed', 'nerve', 'labyrinth', 'ossicle', 'membrane', 'artery', 'vein', 'triangle', 'soft'] as const) {
       const ids = g.structures.filter((id) => { const st = SB.get(id); return st && st.type !== 'bone' && kindOf(st) === k; });
       if (!ids.length) continue;
       pane.append(listHead(KIND_PLURAL[KIND_LABEL[k]] ?? KIND_LABEL[k], ids));
@@ -392,7 +393,7 @@ export class SkullbaseAtlasPage {
       h('p', {}, g.description),
       g.kind === 'overview' && SB_MODEL === 'v3' ? this.fitReport() : null,
       g.kind === 'approach' && g.approach ? this.approachBody(g.approach) : null,
-      g.endonasal ? this.endonasalBody() : null,
+      g.info ? this.infoBody(g.info) : null,
       g.kind === 'overview' && SB_MODEL !== 'v3' ? [
         SB_MODEL === 'ct'
           ? h('p', { class: 'aside' }, 'Not yet shown in this model (Z-Anatomy does not label these; the first model locates the foramina from what passes through them): ', NOT_YET_SHOWN.join(', '), '.')
@@ -474,12 +475,19 @@ export class SkullbaseAtlasPage {
 
   /** The endoscopic endonasal view's card: what the sources say, and what is not shown (how it is drawn and what is
    * measured on this CT are in its panel, with the scope). */
-  private endonasalBody(): HTMLElement[] {
+  private infoBody(which: 'endonasal' | 'cavernous'): HTMLElement[] {
+    const info = which === 'endonasal' ? ENDONASAL_INFO : CAVERNOUS_INFO;
+    const c = CAVERNOUS;
     return [
       h('dl', {},
-        ...ENDONASAL_INFO.sections.map((x) => [h('dt', {}, x.title), h('dd', {}, this.claims(x.claims))]),
-        h('dt', {}, 'Not shown'), h('dd', {}, ENDONASAL_INFO.notShown)),
-      h('p', { class: 'aside schematic-note' }, 'Illustrative: one CT’s nasal cavity and sphenoid sinus, a scope and a burr drawn by rule from the published descriptions; not planned for a patient.'),
+        ...info.sections.map((x) => [h('dt', {}, x.title), h('dd', {}, this.claims(x.claims))]),
+        which === 'cavernous' ? [h('dt', {}, 'Measured on this model'), h('dd', {}, h('ul', { class: 'plain' },
+          h('li', {}, `The sinus as modelled: ${Math.round(c.R.sinus.mm3)} mm³ on the right, ${Math.round(c.L.sinus.mm3)} mm³ on the left (the carotid in it included).`),
+          h('li', {}, `The cavernous carotid, from the foramen lacerum to its anterior bend: ${fmtMm(c.R.carotid.lengthMm)} mm on the right, ${fmtMm(c.L.carotid.lengthMm)} mm on the left (along its centre line).`)))] : null,
+        h('dt', {}, 'Not shown'), h('dd', {}, info.notShown)),
+      h('p', { class: 'aside schematic-note' }, which === 'endonasal'
+        ? 'Illustrative: one CT’s nasal cavity and sphenoid sinus, a scope and a burr drawn by rule from the published descriptions; not planned for a patient.'
+        : 'Illustrative: the sinus, its walls, the nerves’ course through it and the triangles are drawn by rule round what one CT shows, from the published descriptions; not measured on a dissection.'),
     ];
   }
 
@@ -522,7 +530,7 @@ export class SkullbaseAtlasPage {
       h('p', { class: 'eyebrow' }, 'Landmark'),
       h('h2', {}, lm.name),
       h('dl', {},
-        h('dt', {}, 'Bone'), h('dd', {}, bone ? h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.sel = bone.id; }) }, lm.bone) : lm.bone, lm.part ? ` · ${lm.part}` : ''),
+        h('dt', {}, bone && bone.type !== 'bone' ? 'On' : 'Bone'), h('dd', {}, bone ? h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.sel = bone.id; }) }, lm.bone) : lm.bone, lm.part ? ` · ${lm.part}` : ''),
         ...(defBlock as HTMLElement[]),
         regions.length ? [h('dt', {}, 'In regions'), h('dd', {}, regions.join('; '))] : null,
         h('dt', {}, 'Position'), h('dd', {}, `${lm.ras.map(fmtMm).join(', ')} mm (right, anterior, superior of the hypophysial fossa)${SB_MODEL === 'v3' ? '' : `; ${fmtMm(lm.distanceToBoneMm)} mm from the bone surface`}.`),
@@ -531,10 +539,11 @@ export class SkullbaseAtlasPage {
           h('dt', {}, 'How it was located'), h('dd', {}, lm.how, ' Nerves, vessels and bone are all the Z-Anatomy model’s.'),
         ] : null,
         lm.how && SB_MODEL === 'v3' ? [h('dt', {}, 'How it was located'), h('dd', {}, lm.how, ' The bone is this CT’s.')] : null,
+        lm.placed ? [h('dt', {}, 'How it was placed'), h('dd', {}, lm.placed)] : null,
         notesList(lm.name) ? [h('dt', {}, 'Notes'), h('dd', {}, notesList(lm.name))] : null,
         SB_MODEL === 'v3' ? this.measured(lm.name, lm.side === 'L' ? 'L' : 'R') : null,
         SB_MODEL === 'v3' ? this.crossCheck(lm) : null,
-        lm.how ? null : h('dt', {}, 'Source'), lm.how ? null : h('dd', {}, SB_MODEL === 'v3'
+        lm.how || lm.placed ? null : h('dt', {}, 'Source'), lm.how || lm.placed ? null : h('dd', {}, SB_MODEL === 'v3'
           ? `${lm.boneFrom[0].toUpperCase()}${lm.boneFrom.slice(1)} (registered onto this CT; how is on the Sources page).`
           : SB_MODEL === 'ct'
           ? 'Z-Anatomy label point, fitted onto this CT’s skull with the model (approximate) and moved onto its bone where it lay on it.'
@@ -581,7 +590,8 @@ export class SkullbaseAtlasPage {
     if (!p) return;
     const hidden = new Set(this.s.hidden);
     const kinds = new Map<string, string[]>();
-    for (const id of [...p.looks].filter(([id, l]) => (l === 'primary' || (l === 'ghost' && SB.get(id)?.approach)) && ['soft', 'tube'].includes(SB.get(id)?.type ?? '')).map(([id]) => id)) {
+    const grp = SB_GROUP.get(this.s.grp);
+    for (const id of [...p.looks].filter(([id, l]) => (l === 'primary' || (l === 'ghost' && SB.get(id)?.approach) || (l === 'context' && (grp?.ghost?.includes(id) || grp?.shell?.includes(id)))) && ['soft', 'tube'].includes(SB.get(id)?.type ?? '')).map(([id]) => id)) {
       const k = KIND_LABEL[kindOf(SB.get(id)!)];
       kinds.set(k, [...(kinds.get(k) ?? []), id]);
     }
