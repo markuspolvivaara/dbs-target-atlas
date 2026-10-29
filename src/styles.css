@@ -474,3 +474,5 @@ kbd { font: inherit; font-size: 0.9em; border: 1px solid var(--line); border-bot
 .grade-table tr.is-drawn { background: var(--soft); }
 .drawn-tag { display: inline-block; margin-left: 4px; font-size: 12px; font-weight: 600; white-space: nowrap; }
 .grading .card { scroll-margin-top: calc(var(--header-h) + 12px); }
+.site-footer { box-sizing: border-box; width: calc(100% - 32px); max-width: 748px; margin: 0 auto; border-top: 1px solid var(--line); padding: 18px 0 28px; color: var(--muted); font-size: 15px; }
+.site-footer p { margin: 2px 0; }

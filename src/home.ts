@@ -65,11 +65,18 @@ const main = h('main', { id: 'main', class: 'home wrap' },
     h('p', {}, 'Data, licences and credits: ', ...SECTIONS.flatMap((s, i) => [i ? ' · ' : '', h('a', { href: `${SITE_ROOT}${s.path}#/credits` }, s.name)]), '.')),
 );
 
+// who made it, and how to reach him
+const CONTACT = 'markus.polvivaara@pm.me';
+const footer = h('footer', { class: 'site-footer' },
+  h('p', {}, 'Made by Markus Polvivaara, neurosurgeon, Tampere University Hospital, Finland.'),
+  h('p', {}, 'Contact: ', h('a', { href: `mailto:${CONTACT}` }, CONTACT)));
+
 document.getElementById('app')!.append(
   h('a', { class: 'skip', href: '#main' }, 'Skip to content'),
   siteHeader({ section: null, nav, themeBtn }),
   disclaimerNote(),
   main,
+  footer,
 );
 document.body.dataset.page = 'home';
 document.body.dataset.ready = '1';
