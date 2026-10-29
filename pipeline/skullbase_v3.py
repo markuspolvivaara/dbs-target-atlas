@@ -1250,6 +1250,13 @@ def validate() -> int:
     for s, seg in fit["facialSegmentsMm"].items():
         check(2 <= seg["labyrinthine"] <= 8, f"{s}: labyrinthine segment {seg['labyrinthine']} mm")
         check(6 <= seg["tympanic"] <= 16, f"{s}: tympanic segment {seg['tympanic']} mm")
+    # the vessels joined where they meet (skullbase_v3_junctions.py)
+    import skullbase_v3_junctions as JUNC
+    for ok, msg in JUNC.gaps(m["structures"]):
+        check(ok, msg)
+    import skullbase_v3_clearance as CLEAR
+    for ok, msg in CLEAR.check(m["structures"]):
+        check(ok, msg)
     aps = json.loads((GEN / f"{PREFIX}-approaches.json").read_text())
     for it in m["structures"]:
         check((REPO / "public" / it["file"]).exists(), f"missing {it['file']}")

@@ -10,7 +10,7 @@
   "dwellVenS": 3.0,
   "arterialS": [
    0.0,
-   1.77
+   1.72
   ],
   "venousS": [
    3.4,
@@ -46,7 +46,7 @@
    "id": "va_anterior_cerebral_artery_a1_a2",
    "type": "tube",
    "file": "assets/vascular/va_anterior_cerebral_artery_a1_a2.glb",
-   "bytes": 126884,
+   "bytes": 126560,
    "system": "Anterior cerebral artery",
    "layer": "tracts",
    "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the arterial phase.",
@@ -91,7 +91,7 @@
    "id": "va_anterior_cerebral_artery_a3",
    "type": "tube",
    "file": "assets/vascular/va_anterior_cerebral_artery_a3.glb",
-   "bytes": 49940,
+   "bytes": 49896,
    "system": "Anterior cerebral artery",
    "layer": "tracts",
    "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the arterial phase.",
@@ -136,7 +136,7 @@
    "id": "va_anterior_communicating_artery",
    "type": "tube",
    "file": "assets/vascular/va_anterior_communicating_artery.glb",
-   "bytes": 13620,
+   "bytes": 13556,
    "system": "Anterior cerebral artery",
    "layer": "tracts",
    "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the arterial phase.",
@@ -181,7 +181,7 @@
    "id": "va_basal_vein_of_rosenthal",
    "type": "tube",
    "file": "assets/vascular/va_basal_vein_of_rosenthal.glb",
-   "bytes": 84000,
+   "bytes": 84080,
    "layer": "vessels",
    "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the venous phase.",
    "centroid": {
@@ -225,7 +225,7 @@
    "id": "va_basilar_artery",
    "type": "tube",
    "file": "assets/vascular/va_basilar_artery.glb",
-   "bytes": 86912,
+   "bytes": 86844,
    "system": "Basilar artery",
    "layer": "tracts",
    "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the arterial phase.",
@@ -270,7 +270,7 @@
    "id": "va_great_cerebral_vein_of_galen",
    "type": "tube",
    "file": "assets/vascular/va_great_cerebral_vein_of_galen.glb",
-   "bytes": 52956,
+   "bytes": 53096,
    "layer": "vessels",
    "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the venous phase.",
    "centroid": {
@@ -314,7 +314,7 @@
    "id": "va_internal_carotid_artery",
    "type": "tube",
    "file": "assets/vascular/va_internal_carotid_artery.glb",
-   "bytes": 170620,
+   "bytes": 170192,
    "system": "Internal carotid artery",
    "layer": "tracts",
    "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the arterial phase.",
@@ -359,7 +359,7 @@
    "id": "va_internal_cerebral_veins",
    "type": "tube",
    "file": "assets/vascular/va_internal_cerebral_veins.glb",
-   "bytes": 90304,
+   "bytes": 90472,
    "layer": "vessels",
    "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the venous phase.",
    "centroid": {
@@ -403,7 +403,7 @@
    "id": "va_middle_cerebral_artery_m1_segment",
    "type": "tube",
    "file": "assets/vascular/va_middle_cerebral_artery_m1_segment.glb",
-   "bytes": 163328,
+   "bytes": 163104,
    "system": "Middle cerebral artery",
    "layer": "tracts",
    "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the arterial phase.",
@@ -448,7 +448,7 @@
    "id": "va_middle_cerebral_artery_m2_segment",
    "type": "tube",
    "file": "assets/vascular/va_middle_cerebral_artery_m2_segment.glb",
-   "bytes": 175512,
+   "bytes": 175424,
    "system": "Middle cerebral artery",
    "layer": "tracts",
    "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. In the surgical views it moves with the cortex it lies on where that is moved on purpose (the frontal and parietal opercula as the fissure opens, the frontal lobe and the front of the insula as they are lifted), carried by cross-sections along its centre line, so it is stretched along its length, not squeezed across it. In the angiogram it fills in the arterial phase.",
@@ -493,7 +493,7 @@
    "id": "va_middle_cerebral_artery_m3_segment",
    "type": "tube",
    "file": "assets/vascular/va_middle_cerebral_artery_m3_segment.glb",
-   "bytes": 171424,
+   "bytes": 171356,
    "system": "Middle cerebral artery",
    "layer": "tracts",
    "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. In the surgical views it moves with the cortex it lies on where that is moved on purpose (the frontal and parietal opercula as the fissure opens, the frontal lobe and the front of the insula as they are lifted), carried by cross-sections along its centre line, so it is stretched along its length, not squeezed across it. In the angiogram it fills in the arterial phase.",
@@ -538,20 +538,20 @@
    "id": "va_ophthalmic_artery",
    "type": "tube",
    "file": "assets/vascular/va_ophthalmic_artery.glb",
-   "bytes": 37436,
+   "bytes": 46864,
    "system": "Internal carotid artery",
    "layer": "tracts",
-   "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the arterial phase.",
+   "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. Joined to the internal carotid artery by a drawn segment across a 7.2 mm gap; to the internal carotid artery by a drawn segment across a 6.7 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). In the angiogram it fills in the arterial phase.",
    "centroid": {
     "L": [
-     -19.15,
-     20.67,
-     15.56
+     -18.21,
+     19.05,
+     14.61
     ],
     "R": [
-     19.42,
-     18.38,
-     11.45
+     17.58,
+     16.39,
+     10.68
     ]
    }
   },
@@ -583,7 +583,7 @@
    "id": "va_posterior_cerebral_artery_p1_p2",
    "type": "tube",
    "file": "assets/vascular/va_posterior_cerebral_artery_p1_p2.glb",
-   "bytes": 165920,
+   "bytes": 165688,
    "system": "Posterior cerebral artery",
    "layer": "tracts",
    "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the arterial phase.",
@@ -628,7 +628,7 @@
    "id": "va_posterior_cerebral_artery_p3_p4",
    "type": "tube",
    "file": "assets/vascular/va_posterior_cerebral_artery_p3_p4.glb",
-   "bytes": 74960,
+   "bytes": 74996,
    "system": "Posterior cerebral artery",
    "layer": "tracts",
    "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the arterial phase.",
@@ -673,7 +673,7 @@
    "id": "va_posterior_communicating_artery",
    "type": "tube",
    "file": "assets/vascular/va_posterior_communicating_artery.glb",
-   "bytes": 20512,
+   "bytes": 20504,
    "system": "Internal carotid artery",
    "layer": "tracts",
    "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the arterial phase.",
@@ -718,20 +718,20 @@
    "id": "va_posterior_inferior_cerebellar_artery",
    "type": "tube",
    "file": "assets/vascular/va_posterior_inferior_cerebellar_artery.glb",
-   "bytes": 144388,
+   "bytes": 10096,
    "system": "Vertebral artery",
    "layer": "tracts",
-   "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. This angiogram labels only its first part, by the medulla; its course beyond is the fitted model's (Posterior inferior cerebellar artery (fitted course)). In the telovelar and retrosigmoid views it moves with the cerebellum it lies against, carried by cross-sections along its centre line. In the angiogram it fills in the arterial phase.",
+   "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. Only its origin is shown: its first 6 mm from the vertebral artery. This angiogram labels only the PICA's first part, and this patient's vertebral arteries are long and tortuous: the labelled PICAs leave them near the midline and loop onto the back of the medulla, through where the fitted model's medulla lies; its course on from the origin is the model's typical one (Posterior inferior cerebellar artery (fitted course)). In the telovelar and retrosigmoid views it moves with the cerebellum it lies against, carried by cross-sections along its centre line. In the angiogram it fills in the arterial phase.",
    "centroid": {
     "L": [
-     -6.97,
-     -33.51,
-     -29.39
+     -9.54,
+     -27.87,
+     -29.88
     ],
     "R": [
-     5.55,
-     -31.61,
-     -28.62
+     1.78,
+     -22.63,
+     -26.54
     ]
    }
   },
@@ -763,7 +763,7 @@
    "id": "va_straight_sinus",
    "type": "tube",
    "file": "assets/vascular/va_straight_sinus.glb",
-   "bytes": 88520,
+   "bytes": 88380,
    "layer": "vessels",
    "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the venous phase.",
    "centroid": {
@@ -807,7 +807,7 @@
    "id": "va_superior_cerebellar_artery",
    "type": "tube",
    "file": "assets/vascular/va_superior_cerebellar_artery.glb",
-   "bytes": 41888,
+   "bytes": 41820,
    "system": "Basilar artery",
    "layer": "tracts",
    "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the arterial phase.",
@@ -852,7 +852,7 @@
    "id": "va_superior_sagittal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_superior_sagittal_sinus.glb",
-   "bytes": 93552,
+   "bytes": 93524,
    "layer": "vessels",
    "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the venous phase.",
    "centroid": {
@@ -896,7 +896,7 @@
    "id": "va_third_anterior_cerebral_artery_a2",
    "type": "tube",
    "file": "assets/vascular/va_third_anterior_cerebral_artery_a2.glb",
-   "bytes": 34336,
+   "bytes": 34280,
    "system": "Anterior cerebral artery",
    "layer": "tracts",
    "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the arterial phase.",
@@ -941,7 +941,7 @@
    "id": "va_third_anterior_cerebral_artery_a3",
    "type": "tube",
    "file": "assets/vascular/va_third_anterior_cerebral_artery_a3.glb",
-   "bytes": 38968,
+   "bytes": 38888,
    "system": "Anterior cerebral artery",
    "layer": "tracts",
    "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the arterial phase.",
@@ -986,7 +986,7 @@
    "id": "va_vertebral_artery",
    "type": "tube",
    "file": "assets/vascular/va_vertebral_artery.glb",
-   "bytes": 170808,
+   "bytes": 170708,
    "system": "Vertebral artery",
    "layer": "tracts",
    "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. In the angiogram it fills in the arterial phase.",
@@ -1000,6 +1000,276 @@
      4.93,
      -24.18,
      -33.96
+    ]
+   }
+  },
+  {
+   "name": "Anterior intercavernous sinus",
+   "aliases": [],
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "id": "va_anterior_intercavernous_sinus",
+   "type": "tube",
+   "file": "assets/vascular/va_anterior_intercavernous_sinus.glb",
+   "bytes": 12496,
+   "fitted": true,
+   "layer": "vessels",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Joined to the cavernous sinus by a drawn segment across a 2.8 mm gap; to the cavernous sinus by a drawn segment across a 3.7 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). In the angiogram it fills in the venous phase.",
+   "centroid": {
+    "L": [
+     -4.34,
+     1.52,
+     10.55
+    ],
+    "R": [
+     4.32,
+     2.01,
+     9.98
+    ]
+   }
+  },
+  {
+   "name": "Inferior ophthalmic vein",
+   "aliases": [],
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "id": "va_inferior_ophthalmic_vein",
+   "type": "tube",
+   "file": "assets/vascular/va_inferior_ophthalmic_vein.glb",
+   "bytes": 9964,
+   "fitted": true,
+   "layer": "vessels",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. In the angiogram it fills in the venous phase.",
+   "centroid": {
+    "L": [
+     -15.42,
+     18.37,
+     -1.5
+    ],
+    "R": [
+     17.27,
+     17.89,
+     -1.67
+    ]
+   }
+  },
+  {
+   "name": "Inferior petrosal sinus",
+   "aliases": [],
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "id": "va_inferior_petrosal_sinus",
+   "type": "tube",
+   "file": "assets/vascular/va_inferior_petrosal_sinus.glb",
+   "bytes": 21696,
+   "fitted": true,
+   "layer": "vessels",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Joined to the cavernous sinus by a drawn segment across a 4.1 mm gap; to the cavernous sinus by a drawn segment across a 3.0 mm gap; to the sigmoid sinus by a drawn segment across a 1.2 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). In the angiogram it fills in the venous phase.",
+   "centroid": {
+    "L": [
+     -16.66,
+     -14.23,
+     -13.03
+    ],
+    "R": [
+     20.66,
+     -19.08,
+     -15.59
+    ]
+   }
+  },
+  {
+   "name": "Posterior intercavernous sinus",
+   "aliases": [],
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "id": "va_posterior_intercavernous_sinus",
+   "type": "tube",
+   "file": "assets/vascular/va_posterior_intercavernous_sinus.glb",
+   "bytes": 12724,
+   "fitted": true,
+   "layer": "vessels",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Joined to the cavernous sinus by a drawn segment across a 1.5 mm gap; to the cavernous sinus by a drawn segment across a 2.5 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). In the angiogram it fills in the venous phase.",
+   "centroid": {
+    "L": [
+     -4.92,
+     -1.61,
+     8.32
+    ],
+    "R": [
+     5.21,
+     -1.06,
+     8.06
+    ]
+   }
+  },
+  {
+   "name": "Superior ophthalmic vein",
+   "aliases": [],
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "id": "va_superior_ophthalmic_vein",
+   "type": "tube",
+   "file": "assets/vascular/va_superior_ophthalmic_vein.glb",
+   "bytes": 12232,
+   "fitted": true,
+   "layer": "vessels",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. In the angiogram it fills in the venous phase.",
+   "centroid": {
+    "L": [
+     -14.46,
+     29.42,
+     14.34
+    ],
+    "R": [
+     17.19,
+     29.53,
+     14.72
+    ]
+   }
+  },
+  {
+   "name": "Superior petrosal sinus",
+   "aliases": [],
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "id": "va_superior_petrosal_sinus",
+   "type": "tube",
+   "file": "assets/vascular/va_superior_petrosal_sinus.glb",
+   "bytes": 35948,
+   "fitted": true,
+   "layer": "vessels",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Joined to the sigmoid sinus by a drawn segment across a 5.8 mm gap; to the transverse sinus by a drawn segment across a 11.4 mm gap; to the cavernous sinus by a drawn segment across a 6.0 mm gap; to the cavernous sinus by a drawn segment across a 4.4 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). In the angiogram it fills in the venous phase.",
+   "centroid": {
+    "L": [
+     -33.48,
+     -28.57,
+     -4.59
+    ],
+    "R": [
+     37.39,
+     -32.63,
+     -6.46
     ]
    }
   },
@@ -1027,7 +1297,7 @@
    "id": "va_middle_meningeal_artery",
    "type": "tube",
    "file": "assets/vascular/va_middle_meningeal_artery.glb",
-   "bytes": 13968,
+   "bytes": 13972,
    "system": "Middle meningeal artery",
    "layer": "tracts",
    "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 31.7 mm drawn, at most 4.7 mm from the fitted course, 0.0 mm through bone the mask closes; left: 31.7 mm drawn, at most 4.5 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the angiogram it fills in the arterial phase.",
@@ -1068,7 +1338,7 @@
    "id": "va_sigmoid_sinus",
    "type": "tube",
    "file": "assets/vascular/va_sigmoid_sinus.glb",
-   "bytes": 10472,
+   "bytes": 10488,
    "layer": "vessels",
    "derivation": "Traced through this CT's own contrast-filled lumen, from the jugular bulb (the top of TotalSegmentator's internal jugular vein) to the transverse sinus near the midline, near the fitted Z-Anatomy course and along the middle of the enhanced channel; drawn as thick as the lumen is deep. right: 92 % of the trace at least 1.5 mm inside the lumen, median radius 2.1 mm; left: 84 % of the trace at least 1.5 mm inside the lumen, median radius 1.9 mm. Split from the transverse sinus at the fitted junction of the two. In the angiogram it fills in the venous phase.",
    "centroid": {
@@ -1081,6 +1351,44 @@
      37.48,
      -36.16,
      -24.66
+    ]
+   }
+  },
+  {
+   "name": "Confluence of sinuses",
+   "aliases": [
+    "Torcular Herophili",
+    "Confluens sinuum"
+   ],
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "vein",
+   "id": "va_confluence_of_sinuses",
+   "type": "tube",
+   "file": "assets/vascular/va_confluence_of_sinuses.glb",
+   "bytes": 138120,
+   "schematic": true,
+   "layer": "vessels",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Drawn by rule on this CT: where its traced transverse sinuses meet, a swelling 6.9 mm across (1.25 times the widest sinus joining it), with the superior sagittal and straight sinuses' back ends (TopBrain's labels end 10.2 and 12.8 mm from its centre) run on into it, all joined smoothly (an implicit surface). In the angiogram it fills in the venous phase.",
+   "centroid": {
+    "L": [
+     -3.23,
+     -86.5,
+     -6.65
+    ],
+    "R": [
+     3.62,
+     -86.44,
+     -13.1
     ]
    }
   },
@@ -1108,7 +1416,7 @@
    "id": "va_transverse_sinus",
    "type": "tube",
    "file": "assets/vascular/va_transverse_sinus.glb",
-   "bytes": 11812,
+   "bytes": 11800,
    "layer": "vessels",
    "derivation": "Traced through this CT's own contrast-filled lumen, from the jugular bulb (the top of TotalSegmentator's internal jugular vein) to the transverse sinus near the midline, near the fitted Z-Anatomy course and along the middle of the enhanced channel; drawn as thick as the lumen is deep. right: 92 % of the trace at least 1.5 mm inside the lumen, median radius 2.1 mm; left: 84 % of the trace at least 1.5 mm inside the lumen, median radius 1.9 mm. Split from the transverse sinus at the fitted junction of the two. In the angiogram it fills in the venous phase.",
    "centroid": {
@@ -1191,7 +1499,7 @@
    "id": "va_accessory_branch_of_middle_meningeal_artery",
    "type": "tube",
    "file": "assets/vascular/va_accessory_branch_of_middle_meningeal_artery.glb",
-   "bytes": 14380,
+   "bytes": 14360,
    "system": "Middle meningeal artery",
    "fitted": true,
    "layer": "tracts",
@@ -1233,7 +1541,7 @@
    "id": "va_anterior_ethmoidal_artery",
    "type": "tube",
    "file": "assets/vascular/va_anterior_ethmoidal_artery.glb",
-   "bytes": 18972,
+   "bytes": 19052,
    "system": "Ethmoidal arteries",
    "fitted": true,
    "layer": "tracts",
@@ -1275,21 +1583,21 @@
    "id": "va_anterior_inferior_cerebellar_artery",
    "type": "tube",
    "file": "assets/vascular/va_anterior_inferior_cerebellar_artery.glb",
-   "bytes": 20764,
+   "bytes": 20752,
    "system": "Basilar artery",
    "fitted": true,
    "layer": "tracts",
-   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), its origin moved onto this patient's basilar artery (TopBrain's label), the move fading out over its first 15 mm, the rest where the fit puts it (a median 6.8 mm on the right, 6.8 mm on the left). Its course is approximate. In the angiogram it fills in the arterial phase.",
+   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), its origin moved onto this patient's basilar artery (TopBrain's label), the move fading out over its first 15 mm, the rest where the fit puts it (a median 6.8 mm on the right, 6.8 mm on the left). Its course is approximate. Lifted out of the fitted brainstem where this course ran into it, onto its surface (skullbase_v3_clearance.py). In the angiogram it fills in the arterial phase.",
    "centroid": {
     "L": [
-     -15.8,
-     -31.26,
-     -15.58
+     -15.93,
+     -31.2,
+     -15.81
     ],
     "R": [
-     18.29,
-     -31.88,
-     -14.87
+     18.39,
+     -31.83,
+     -15.09
     ]
    }
   },
@@ -1317,7 +1625,7 @@
    "id": "va_distal_lateral_striate_branches",
    "type": "tube",
    "file": "assets/vascular/va_distal_lateral_striate_branches.glb",
-   "bytes": 24296,
+   "bytes": 24300,
    "system": "Middle cerebral artery",
    "fitted": true,
    "layer": "tracts",
@@ -1359,7 +1667,7 @@
    "id": "va_lateral_pontine_branches_of_basilar_artery",
    "type": "tube",
    "file": "assets/vascular/va_lateral_pontine_branches_of_basilar_artery.glb",
-   "bytes": 17792,
+   "bytes": 17796,
    "system": "Basilar artery",
    "fitted": true,
    "layer": "tracts",
@@ -1401,7 +1709,7 @@
    "id": "va_medial_pontine_branches_of_basilar_artery",
    "type": "tube",
    "file": "assets/vascular/va_medial_pontine_branches_of_basilar_artery.glb",
-   "bytes": 11788,
+   "bytes": 11800,
    "system": "Basilar artery",
    "fitted": true,
    "layer": "tracts",
@@ -1443,7 +1751,7 @@
    "id": "va_posterior_ethmoidal_artery",
    "type": "tube",
    "file": "assets/vascular/va_posterior_ethmoidal_artery.glb",
-   "bytes": 12912,
+   "bytes": 12900,
    "system": "Ethmoidal arteries",
    "fitted": true,
    "layer": "tracts",
@@ -1485,7 +1793,7 @@
    "id": "va_proximal_lateral_striate_branches",
    "type": "tube",
    "file": "assets/vascular/va_proximal_lateral_striate_branches.glb",
-   "bytes": 18864,
+   "bytes": 18888,
    "system": "Middle cerebral artery",
    "fitted": true,
    "layer": "tracts",
@@ -1527,11 +1835,11 @@
    "id": "va_superior_cerebellar_artery_fitted_course",
    "type": "tube",
    "file": "assets/vascular/va_superior_cerebellar_artery_fitted_course.glb",
-   "bytes": 23224,
+   "bytes": 25688,
    "system": "Basilar artery",
    "fitted": true,
    "layer": "tracts",
-   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), carried on from the far end of this patient's superior cerebellar artery as TopBrain labels it (its first part), the start moved there and the move fading out over 15 mm (a median 3.6 mm on the right, 6.4 mm on the left). Its course is approximate. In the angiogram it fills in the arterial phase.",
+   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), carried on from the far end of this patient's superior cerebellar artery as TopBrain labels it (its first part), the start moved there and the move fading out over 15 mm (a median 3.6 mm on the right, 6.4 mm on the left). Its course is approximate. Lifted out of the fitted brainstem where this course ran into it, onto its surface (skullbase_v3_clearance.py). Joined to the superior cerebellar artery by a drawn segment across a 1.5 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). In the angiogram it fills in the arterial phase.",
    "centroid": {
     "L": [
      -32.09,
@@ -1539,9 +1847,9 @@
      -2.15
     ],
     "R": [
-     28.75,
-     -53.58,
-     -1.1
+     26.05,
+     -47.22,
+     0.17
     ]
    }
   },
@@ -1569,21 +1877,21 @@
    "id": "va_posterior_inferior_cerebellar_artery_fitted_course",
    "type": "tube",
    "file": "assets/vascular/va_posterior_inferior_cerebellar_artery_fitted_course.glb",
-   "bytes": 213496,
+   "bytes": 210192,
    "system": "Vertebral artery",
    "fitted": true,
    "layer": "tracts",
-   "derivation": "Too small for this angiogram to show beyond its first part: the Z-Anatomy branch (its trunk from the point nearest the label's far end on, and the branches that start on it), fitted onto this CT (the whole-skull fit, then the posterior fossa's), its start moved onto the far end of this patient's labelled PICA (6.9 mm on the right, 14.6 mm on the left), the move fading out over 15 mm, and kept clear of the fitted cerebellum and brainstem. It moves with the cerebellum in the telovelar and retrosigmoid views. Its course is approximate. In the angiogram it fills in the arterial phase.",
+   "derivation": "The model's typical course on from this CT's PICA origin: a run drawn from the end of the labelled origin round the outside of the brainstem (12.6 mm on the right, 6.9 mm on the left) to the start of the Z-Anatomy PICA's trunk, then that trunk (lateral to the medulla, round the tonsil) and the branches that start on it, fitted onto this CT (the whole-skull fit, then the posterior fossa's) and kept clear of the fitted cerebellum and brainstem. It moves with the cerebellum in the telovelar and retrosigmoid views. Its course is approximate, not this patient's: this CT's own PICAs loop medially from long, tortuous vertebral arteries. Lifted out of the fitted brainstem where this course ran into it, onto its surface (skullbase_v3_clearance.py). In the angiogram it fills in the arterial phase.",
    "centroid": {
     "L": [
-     -22.98,
-     -58.07,
-     -26.7
+     -23.92,
+     -57.94,
+     -27.02
     ],
     "R": [
-     22.6,
-     -58.97,
-     -27.86
+     22.36,
+     -57.79,
+     -27.67
     ]
    }
   },
@@ -1609,7 +1917,7 @@
    "id": "va_internal_carotid_artery_cervical_part",
    "type": "tube",
    "file": "assets/vascular/va_internal_carotid_artery_cervical_part.glb",
-   "bytes": 43236,
+   "bytes": 43252,
    "system": "Internal carotid artery",
    "layer": "tracts",
    "derivation": "Segmented in this CT by TotalSegmentator's headneck_bones_vessels task, up to the skull base. In the angiogram it fills in the arterial phase.",
@@ -1648,7 +1956,7 @@
    "id": "va_internal_jugular_vein",
    "type": "tube",
    "file": "assets/vascular/va_internal_jugular_vein.glb",
-   "bytes": 48768,
+   "bytes": 48808,
    "layer": "vessels",
    "derivation": "Segmented in this CT by TotalSegmentator's headneck_bones_vessels task, up to the skull base. In the angiogram it fills in the venous phase.",
    "centroid": {
@@ -1684,7 +1992,7 @@
    "id": "va_superficial_middle_cerebral_vein",
    "type": "tube",
    "file": "assets/vascular/va_superficial_middle_cerebral_vein.glb",
-   "bytes": 23632,
+   "bytes": 23628,
    "schematic": true,
    "layer": "vessels",
    "derivation": "Drawn by rule (this angiogram labels no vein near the fissure), on the fitted template brain, not traced: one trunk along the fissure's edge on the temporal lip, from its back end forwards and down, then on to the outer end of the sphenoparietal sinus (itself drawn by rule) under the lesser wing, 2 mm across (illustrative). Its pattern varies (five types in Imada 2021, some with two trunks); here the fissure opens on its frontal side and it stays with the temporal lobe. It moves with the brain in the surgical shapes (the superficial vein with the temporal lobe, the insular and deep veins with the insula), carried by cross-sections along its line. In the angiogram it fills in the venous phase.",
@@ -1721,7 +2029,7 @@
    "id": "va_insular_veins",
    "type": "tube",
    "file": "assets/vascular/va_insular_veins.glb",
-   "bytes": 41628,
+   "bytes": 41552,
    "schematic": true,
    "layer": "vessels",
    "derivation": "Drawn by rule on the fitted template's insula, not traced: from the insula's edge in to its pole (taken where this patient's M1 meets its M2, TopBrain's labels); the central vein along the boundary of the template's short and long gyri, the precentral and posterior veins fanned in front of and behind it (illustrative), each 1 mm across. It moves with the brain in the surgical shapes (the superficial vein with the temporal lobe, the insular and deep veins with the insula), carried by cross-sections along its line. In the angiogram it fills in the venous phase.",
@@ -1758,7 +2066,7 @@
    "id": "va_deep_middle_cerebral_vein",
    "type": "tube",
    "file": "assets/vascular/va_deep_middle_cerebral_vein.glb",
-   "bytes": 11900,
+   "bytes": 11904,
    "schematic": true,
    "layer": "vessels",
    "derivation": "Drawn by rule, not traced: from the insula's pole, where the insular veins meet, under the brain to the front end of this patient's basal vein (TopBrain's label), kept off the fitted template's cortex, 1.8 mm across (illustrative). It moves with the brain in the surgical shapes (the superficial vein with the temporal lobe, the insular and deep veins with the insula), carried by cross-sections along its line. In the angiogram it fills in the venous phase.",
@@ -1772,276 +2080,6 @@
      22.61,
      -2.16,
      15.4
-    ]
-   }
-  },
-  {
-   "name": "Anterior intercavernous sinus",
-   "aliases": [],
-   "colour": {
-    "token": "sbVein",
-    "light": "#2E5FB0",
-    "dark": "#7FA6F0"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [],
-   "category": "vein",
-   "id": "va_anterior_intercavernous_sinus",
-   "type": "tube",
-   "file": "assets/vascular/va_anterior_intercavernous_sinus.glb",
-   "bytes": 5980,
-   "fitted": true,
-   "layer": "vessels",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. In the angiogram it fills in the venous phase.",
-   "centroid": {
-    "L": [
-     -2.05,
-     1.83,
-     12.17
-    ],
-    "R": [
-     2.03,
-     1.91,
-     12.18
-    ]
-   }
-  },
-  {
-   "name": "Posterior intercavernous sinus",
-   "aliases": [],
-   "colour": {
-    "token": "sbVein",
-    "light": "#2E5FB0",
-    "dark": "#7FA6F0"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [],
-   "category": "vein",
-   "id": "va_posterior_intercavernous_sinus",
-   "type": "tube",
-   "file": "assets/vascular/va_posterior_intercavernous_sinus.glb",
-   "bytes": 7568,
-   "fitted": true,
-   "layer": "vessels",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. In the angiogram it fills in the venous phase.",
-   "centroid": {
-    "L": [
-     -3.38,
-     -2.37,
-     9.01
-    ],
-    "R": [
-     3.31,
-     -2.38,
-     8.87
-    ]
-   }
-  },
-  {
-   "name": "Superior petrosal sinus",
-   "aliases": [],
-   "colour": {
-    "token": "sbVein",
-    "light": "#2E5FB0",
-    "dark": "#7FA6F0"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [],
-   "category": "vein",
-   "id": "va_superior_petrosal_sinus",
-   "type": "tube",
-   "file": "assets/vascular/va_superior_petrosal_sinus.glb",
-   "bytes": 17752,
-   "fitted": true,
-   "layer": "vessels",
-   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. In the angiogram it fills in the venous phase.",
-   "centroid": {
-    "L": [
-     -35.48,
-     -29.75,
-     -4.7
-    ],
-    "R": [
-     36.36,
-     -29.39,
-     -5.59
-    ]
-   }
-  },
-  {
-   "name": "Inferior petrosal sinus",
-   "aliases": [],
-   "colour": {
-    "token": "sbVein",
-    "light": "#2E5FB0",
-    "dark": "#7FA6F0"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [],
-   "category": "vein",
-   "id": "va_inferior_petrosal_sinus",
-   "type": "tube",
-   "file": "assets/vascular/va_inferior_petrosal_sinus.glb",
-   "bytes": 12400,
-   "fitted": true,
-   "layer": "vessels",
-   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. In the angiogram it fills in the venous phase.",
-   "centroid": {
-    "L": [
-     -21.02,
-     -21.78,
-     -18.12
-    ],
-    "R": [
-     21.45,
-     -21.72,
-     -18.46
-    ]
-   }
-  },
-  {
-   "name": "Superior ophthalmic vein",
-   "aliases": [],
-   "colour": {
-    "token": "sbVein",
-    "light": "#2E5FB0",
-    "dark": "#7FA6F0"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [],
-   "category": "vein",
-   "id": "va_superior_ophthalmic_vein",
-   "type": "tube",
-   "file": "assets/vascular/va_superior_ophthalmic_vein.glb",
-   "bytes": 12216,
-   "fitted": true,
-   "layer": "vessels",
-   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. In the angiogram it fills in the venous phase.",
-   "centroid": {
-    "L": [
-     -14.46,
-     29.42,
-     14.34
-    ],
-    "R": [
-     17.19,
-     29.53,
-     14.72
-    ]
-   }
-  },
-  {
-   "name": "Inferior ophthalmic vein",
-   "aliases": [],
-   "colour": {
-    "token": "sbVein",
-    "light": "#2E5FB0",
-    "dark": "#7FA6F0"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [],
-   "category": "vein",
-   "id": "va_inferior_ophthalmic_vein",
-   "type": "tube",
-   "file": "assets/vascular/va_inferior_ophthalmic_vein.glb",
-   "bytes": 9936,
-   "fitted": true,
-   "layer": "vessels",
-   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. In the angiogram it fills in the venous phase.",
-   "centroid": {
-    "L": [
-     -15.42,
-     18.37,
-     -1.5
-    ],
-    "R": [
-     17.27,
-     17.89,
-     -1.67
     ]
    }
   },
@@ -2065,7 +2103,7 @@
    "id": "va_cavernous_sinus",
    "type": "tube",
    "file": "assets/vascular/va_cavernous_sinus.glb",
-   "bytes": 139860,
+   "bytes": 139724,
    "schematic": true,
    "layer": "vessels",
    "derivation": "Modelled on this CT (skullbase_v3_cavernous.py), between the borders Chotai 2018 gives: medially the sella and the sphenoid body (0.4 mm off the bone and the hypophysis modelled in its fossa), laterally its lateral wall (a plane through the superior orbital fissure, the foramen rotundum, the trigeminal ganglion's medial margin and the petrous apex: a drawing choice), under its roof (the plane of the oculomotor triangle: the anterior and posterior clinoids and the petrous apex), from the petrous apex back to the carotid's anterior bend, and within 5.5 mm of the carotid it contains (this CT's own, TopBrain's label). A CT does not show its walls: its shape is drawn by rule round what the CT does show. Right 1546 mm³, left 979 mm³. In the angiogram it fills in the venous phase.",
@@ -2102,7 +2140,7 @@
    "id": "va_sphenoparietal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_sphenoparietal_sinus.glb",
-   "bytes": 8504,
+   "bytes": 8512,
    "schematic": true,
    "layer": "vessels",
    "derivation": "Drawn by rule on this CT: under the free (back) edge of the lesser wing of the sphenoid, from the anterior clinoid's base outwards (the edge's furthest-back bone, a millimetre below it), 1.8 mm across, into the cavernous sinus's front. In the angiogram it fills in the venous phase.",
@@ -2139,20 +2177,20 @@
    "id": "va_basilar_venous_plexus",
    "type": "tube",
    "file": "assets/vascular/va_basilar_venous_plexus.glb",
-   "bytes": 5520,
+   "bytes": 16452,
    "schematic": true,
    "layer": "vessels",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Drawn by rule on this CT: a sheet on the back of the clivus (its bone surface), from just below the dorsum 14 mm down and 8 mm either side of the midline, 1 mm thick: the plexus joins both cavernous sinuses and inferior petrosal sinuses (Tanoue 2020); its channels are not drawn. In the angiogram it fills in the venous phase.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Drawn by rule on this CT: a sheet on the back of the clivus (its bone surface), from just below the dorsum 14 mm down and 8 mm either side of the midline, 1 mm thick: the plexus joins both cavernous sinuses and inferior petrosal sinuses (Tanoue 2020); its channels are not drawn. Joined to the cavernous sinus by a drawn segment across a 1.1 mm gap; to the cavernous sinus by a drawn segment across a 2.2 mm gap; to the inferior petrosal sinus by a drawn segment across a 1.9 mm gap; to the inferior petrosal sinus by a drawn segment across a 2.0 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). In the angiogram it fills in the venous phase.",
    "centroid": {
     "L": [
-     -4.42,
-     -7.71,
-     -2.22
+     -7.7,
+     -7.07,
+     -1.56
     ],
     "R": [
-     4.29,
-     -8.04,
-     -2.28
+     6.75,
+     -7.19,
+     -4.42
     ]
    }
   },
@@ -2165,7 +2203,7 @@
    "refIds": [],
    "aliases": [],
    "schematic": true,
-   "bytes": 115656,
+   "bytes": 115624,
    "type": "tube",
    "id": "va_acom__sac",
    "name": "Anterior communicating artery aneurysm",
@@ -2201,7 +2239,7 @@
    "refIds": [],
    "aliases": [],
    "schematic": true,
-   "bytes": 155944,
+   "bytes": 156004,
    "type": "tube",
    "id": "va_pcom__sac",
    "name": "Posterior communicating artery aneurysm",
@@ -2237,7 +2275,7 @@
    "refIds": [],
    "aliases": [],
    "schematic": true,
-   "bytes": 160748,
+   "bytes": 160684,
    "type": "tube",
    "id": "va_mca__sac",
    "name": "Middle cerebral artery bifurcation aneurysm",
@@ -2273,7 +2311,7 @@
    "refIds": [],
    "aliases": [],
    "schematic": true,
-   "bytes": 198204,
+   "bytes": 198372,
    "type": "tube",
    "id": "va_basilar__sac",
    "name": "Basilar tip aneurysm",
@@ -2309,7 +2347,7 @@
    "refIds": [],
    "aliases": [],
    "schematic": true,
-   "bytes": 160780,
+   "bytes": 160304,
    "type": "tube",
    "id": "va_ophthalmic__sac",
    "name": "Ophthalmic segment (paraclinoid) aneurysm",
@@ -2324,14 +2362,14 @@
    "derivation": "Drawn by rule, not this patient's: a saccular aneurysm 7 mm across on a 4 mm neck (illustrative sizes), where this CT's internal carotid artery meets its ophthalmic artery, its dome and neck joined smoothly (an implicit surface).",
    "centroid": {
     "L": [
-     -12.69,
-     10.61,
-     11.93
+     -14.26,
+     9.31,
+     12.06
     ],
     "R": [
-     -12.69,
-     10.61,
-     11.93
+     -14.26,
+     9.31,
+     12.06
     ]
    },
    "layer": "targets"
@@ -2345,7 +2383,7 @@
    "refIds": [],
    "aliases": [],
    "schematic": true,
-   "bytes": 84472,
+   "bytes": 85068,
    "type": "tube",
    "id": "va_pica__sac",
    "name": "Vertebral artery–PICA aneurysm",
@@ -2360,14 +2398,14 @@
    "derivation": "Drawn by rule, not this patient's: a saccular aneurysm 5 mm across on a 2.8 mm neck (illustrative sizes), where this CT's vertebral artery meets its posterior inferior cerebellar artery, its dome and neck joined smoothly (an implicit surface).",
    "centroid": {
     "L": [
-     -10.96,
-     -28.93,
-     -27.49
+     -9.6,
+     -29.15,
+     -29.62
     ],
     "R": [
-     -10.96,
-     -28.93,
-     -27.49
+     -9.6,
+     -29.15,
+     -29.62
     ]
    },
    "layer": "targets"
@@ -2417,7 +2455,7 @@
    "refIds": [],
    "aliases": [],
    "schematic": true,
-   "bytes": 44428,
+   "bytes": 44496,
    "type": "tube",
    "id": "va_blister__sac",
    "name": "Blister aneurysm of the internal carotid artery",
@@ -2432,14 +2470,14 @@
    "derivation": "Drawn by rule, not this patient's: a broad-based bleb on the upper (dorsal) wall of this CT's right internal carotid artery just past the ophthalmic artery (illustrative size), with no neck.",
    "centroid": {
     "L": [
-     9.11,
-     8.1,
-     11.69
+     8.99,
+     4.12,
+     12.09
     ],
     "R": [
-     9.11,
-     8.1,
-     11.69
+     8.99,
+     4.12,
+     12.09
     ]
    },
    "layer": "targets"
@@ -2453,7 +2491,7 @@
    "refIds": [],
    "aliases": [],
    "schematic": true,
-   "bytes": 8396,
+   "bytes": 8376,
    "type": "tube",
    "id": "va_avm1__feeders",
    "name": "AVM, Spetzler–Martin grade I: feeding arteries",
@@ -2489,7 +2527,7 @@
    "refIds": [],
    "aliases": [],
    "schematic": true,
-   "bytes": 324704,
+   "bytes": 324588,
    "type": "tube",
    "id": "va_avm1__nidus",
    "name": "AVM, Spetzler–Martin grade I: nidus",
@@ -2525,7 +2563,7 @@
    "refIds": [],
    "aliases": [],
    "schematic": true,
-   "bytes": 6292,
+   "bytes": 6296,
    "type": "tube",
    "id": "va_avm1__drainers",
    "name": "AVM, Spetzler–Martin grade I: draining veins",
@@ -2551,6 +2589,46 @@
     ]
    },
    "layer": "vessels"
+  },
+  {
+   "name": "Confluence of sinuses",
+   "aliases": [
+    "Torcular Herophili",
+    "Confluens sinuum"
+   ],
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "vein",
+   "id": "va_avm1__confluence_of_sinuses",
+   "type": "tube",
+   "file": "assets/vascular/va_avm1__confluence_of_sinuses.glb",
+   "bytes": 139400,
+   "schematic": true,
+   "layer": "vessels",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Drawn by rule on this CT: where its traced transverse sinuses meet, a swelling 6.9 mm across (1.25 times the widest sinus joining it), with the superior sagittal and straight sinuses' back ends (TopBrain's labels end 10.2 and 12.8 mm from its centre) run on into it, all joined smoothly (an implicit surface). Here filled early by the lesion's shunt.",
+   "centroid": {
+    "L": [
+     -3.23,
+     -86.5,
+     -6.65
+    ],
+    "R": [
+     3.62,
+     -86.44,
+     -13.1
+    ]
+   },
+   "lesion": "avm1",
+   "replaces": "va_confluence_of_sinuses"
   },
   {
    "name": "Inferior petrosal sinus",
@@ -2580,20 +2658,20 @@
    "id": "va_avm1__inferior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_avm1__inferior_petrosal_sinus.glb",
-   "bytes": 12436,
+   "bytes": 21716,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Here filled early by the lesion's shunt.",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Joined to the cavernous sinus by a drawn segment across a 4.1 mm gap; to the cavernous sinus by a drawn segment across a 3.0 mm gap; to the sigmoid sinus by a drawn segment across a 1.2 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -21.02,
-     -21.78,
-     -18.12
+     -16.66,
+     -14.23,
+     -13.03
     ],
     "R": [
-     21.45,
-     -21.72,
-     -18.46
+     20.66,
+     -19.08,
+     -15.59
     ]
    },
    "lesion": "avm1",
@@ -2621,7 +2699,7 @@
    "id": "va_avm1__internal_jugular_vein",
    "type": "tube",
    "file": "assets/vascular/va_avm1__internal_jugular_vein.glb",
-   "bytes": 48940,
+   "bytes": 48944,
    "layer": "vessels",
    "derivation": "Segmented in this CT by TotalSegmentator's headneck_bones_vessels task, up to the skull base. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -2663,7 +2741,7 @@
    "id": "va_avm1__sigmoid_sinus",
    "type": "tube",
    "file": "assets/vascular/va_avm1__sigmoid_sinus.glb",
-   "bytes": 10504,
+   "bytes": 10500,
    "layer": "vessels",
    "derivation": "Traced through this CT's own contrast-filled lumen, from the jugular bulb (the top of TotalSegmentator's internal jugular vein) to the transverse sinus near the midline, near the fitted Z-Anatomy course and along the middle of the enhanced channel; drawn as thick as the lumen is deep. right: 92 % of the trace at least 1.5 mm inside the lumen, median radius 2.1 mm; left: 84 % of the trace at least 1.5 mm inside the lumen, median radius 1.9 mm. Split from the transverse sinus at the fitted junction of the two. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -2680,6 +2758,53 @@
    },
    "lesion": "avm1",
    "replaces": "va_sigmoid_sinus"
+  },
+  {
+   "name": "Superior petrosal sinus",
+   "aliases": [],
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "id": "va_avm1__superior_petrosal_sinus",
+   "type": "tube",
+   "file": "assets/vascular/va_avm1__superior_petrosal_sinus.glb",
+   "bytes": 35972,
+   "fitted": true,
+   "layer": "vessels",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Joined to the sigmoid sinus by a drawn segment across a 5.8 mm gap; to the transverse sinus by a drawn segment across a 11.4 mm gap; to the cavernous sinus by a drawn segment across a 6.0 mm gap; to the cavernous sinus by a drawn segment across a 4.4 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
+   "centroid": {
+    "L": [
+     -33.48,
+     -28.57,
+     -4.59
+    ],
+    "R": [
+     37.39,
+     -32.63,
+     -6.46
+    ]
+   },
+   "lesion": "avm1",
+   "replaces": "va_superior_petrosal_sinus"
   },
   {
    "name": "Superior sagittal sinus",
@@ -2709,7 +2834,7 @@
    "id": "va_avm1__superior_sagittal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_avm1__superior_sagittal_sinus.glb",
-   "bytes": 94032,
+   "bytes": 93996,
    "layer": "vessels",
    "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of TopBrain's expert label of this vessel on the CT angiogram. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -2751,7 +2876,7 @@
    "id": "va_avm1__transverse_sinus",
    "type": "tube",
    "file": "assets/vascular/va_avm1__transverse_sinus.glb",
-   "bytes": 11812,
+   "bytes": 11828,
    "layer": "vessels",
    "derivation": "Traced through this CT's own contrast-filled lumen, from the jugular bulb (the top of TotalSegmentator's internal jugular vein) to the transverse sinus near the midline, near the fitted Z-Anatomy course and along the middle of the enhanced channel; drawn as thick as the lumen is deep. right: 92 % of the trace at least 1.5 mm inside the lumen, median radius 2.1 mm; left: 84 % of the trace at least 1.5 mm inside the lumen, median radius 1.9 mm. Split from the transverse sinus at the fitted junction of the two. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -2814,7 +2939,7 @@
    "refIds": [],
    "aliases": [],
    "schematic": true,
-   "bytes": 453268,
+   "bytes": 453340,
    "type": "tube",
    "id": "va_avm3__nidus",
    "name": "AVM, Spetzler–Martin grade III: nidus",
@@ -2850,7 +2975,7 @@
    "refIds": [],
    "aliases": [],
    "schematic": true,
-   "bytes": 16880,
+   "bytes": 16884,
    "type": "tube",
    "id": "va_avm3__drainers",
    "name": "AVM, Spetzler–Martin grade III: draining veins",
@@ -2876,6 +3001,46 @@
     ]
    },
    "layer": "vessels"
+  },
+  {
+   "name": "Confluence of sinuses",
+   "aliases": [
+    "Torcular Herophili",
+    "Confluens sinuum"
+   ],
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "vein",
+   "id": "va_avm3__confluence_of_sinuses",
+   "type": "tube",
+   "file": "assets/vascular/va_avm3__confluence_of_sinuses.glb",
+   "bytes": 139324,
+   "schematic": true,
+   "layer": "vessels",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Drawn by rule on this CT: where its traced transverse sinuses meet, a swelling 6.9 mm across (1.25 times the widest sinus joining it), with the superior sagittal and straight sinuses' back ends (TopBrain's labels end 10.2 and 12.8 mm from its centre) run on into it, all joined smoothly (an implicit surface). Here filled early by the lesion's shunt.",
+   "centroid": {
+    "L": [
+     -3.23,
+     -86.5,
+     -6.65
+    ],
+    "R": [
+     3.62,
+     -86.44,
+     -13.1
+    ]
+   },
+   "lesion": "avm3",
+   "replaces": "va_confluence_of_sinuses"
   },
   {
    "name": "Inferior petrosal sinus",
@@ -2905,20 +3070,20 @@
    "id": "va_avm3__inferior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_avm3__inferior_petrosal_sinus.glb",
-   "bytes": 12436,
+   "bytes": 21716,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Here filled early by the lesion's shunt.",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Joined to the cavernous sinus by a drawn segment across a 4.1 mm gap; to the cavernous sinus by a drawn segment across a 3.0 mm gap; to the sigmoid sinus by a drawn segment across a 1.2 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -21.02,
-     -21.78,
-     -18.12
+     -16.66,
+     -14.23,
+     -13.03
     ],
     "R": [
-     21.45,
-     -21.72,
-     -18.46
+     20.66,
+     -19.08,
+     -15.59
     ]
    },
    "lesion": "avm3",
@@ -2946,7 +3111,7 @@
    "id": "va_avm3__internal_jugular_vein",
    "type": "tube",
    "file": "assets/vascular/va_avm3__internal_jugular_vein.glb",
-   "bytes": 48928,
+   "bytes": 48924,
    "layer": "vessels",
    "derivation": "Segmented in this CT by TotalSegmentator's headneck_bones_vessels task, up to the skull base. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -2988,7 +3153,7 @@
    "id": "va_avm3__sigmoid_sinus",
    "type": "tube",
    "file": "assets/vascular/va_avm3__sigmoid_sinus.glb",
-   "bytes": 10500,
+   "bytes": 10504,
    "layer": "vessels",
    "derivation": "Traced through this CT's own contrast-filled lumen, from the jugular bulb (the top of TotalSegmentator's internal jugular vein) to the transverse sinus near the midline, near the fitted Z-Anatomy course and along the middle of the enhanced channel; drawn as thick as the lumen is deep. right: 92 % of the trace at least 1.5 mm inside the lumen, median radius 2.1 mm; left: 84 % of the trace at least 1.5 mm inside the lumen, median radius 1.9 mm. Split from the transverse sinus at the fitted junction of the two. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -3005,6 +3170,53 @@
    },
    "lesion": "avm3",
    "replaces": "va_sigmoid_sinus"
+  },
+  {
+   "name": "Superior petrosal sinus",
+   "aliases": [],
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "id": "va_avm3__superior_petrosal_sinus",
+   "type": "tube",
+   "file": "assets/vascular/va_avm3__superior_petrosal_sinus.glb",
+   "bytes": 35968,
+   "fitted": true,
+   "layer": "vessels",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Joined to the sigmoid sinus by a drawn segment across a 5.8 mm gap; to the transverse sinus by a drawn segment across a 11.4 mm gap; to the cavernous sinus by a drawn segment across a 6.0 mm gap; to the cavernous sinus by a drawn segment across a 4.4 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
+   "centroid": {
+    "L": [
+     -33.48,
+     -28.57,
+     -4.59
+    ],
+    "R": [
+     37.39,
+     -32.63,
+     -6.46
+    ]
+   },
+   "lesion": "avm3",
+   "replaces": "va_superior_petrosal_sinus"
   },
   {
    "name": "Superior sagittal sinus",
@@ -3034,7 +3246,7 @@
    "id": "va_avm3__superior_sagittal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_avm3__superior_sagittal_sinus.glb",
-   "bytes": 94000,
+   "bytes": 93932,
    "layer": "vessels",
    "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of TopBrain's expert label of this vessel on the CT angiogram. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -3076,7 +3288,7 @@
    "id": "va_avm3__transverse_sinus",
    "type": "tube",
    "file": "assets/vascular/va_avm3__transverse_sinus.glb",
-   "bytes": 11828,
+   "bytes": 11832,
    "layer": "vessels",
    "derivation": "Traced through this CT's own contrast-filled lumen, from the jugular bulb (the top of TotalSegmentator's internal jugular vein) to the transverse sinus near the midline, near the fitted Z-Anatomy course and along the middle of the enhanced channel; drawn as thick as the lumen is deep. right: 92 % of the trace at least 1.5 mm inside the lumen, median radius 2.1 mm; left: 84 % of the trace at least 1.5 mm inside the lumen, median radius 1.9 mm. Split from the transverse sinus at the fitted junction of the two. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -3103,7 +3315,7 @@
    "refIds": [],
    "aliases": [],
    "schematic": true,
-   "bytes": 15180,
+   "bytes": 15184,
    "type": "tube",
    "id": "va_avm5__feeders",
    "name": "AVM, Spetzler–Martin grade V: feeding arteries",
@@ -3139,7 +3351,7 @@
    "refIds": [],
    "aliases": [],
    "schematic": true,
-   "bytes": 828228,
+   "bytes": 828268,
    "type": "tube",
    "id": "va_avm5__nidus",
    "name": "AVM, Spetzler–Martin grade V: nidus",
@@ -3175,7 +3387,7 @@
    "refIds": [],
    "aliases": [],
    "schematic": true,
-   "bytes": 11720,
+   "bytes": 11716,
    "type": "tube",
    "id": "va_avm5__drainers",
    "name": "AVM, Spetzler–Martin grade V: draining veins",
@@ -3230,7 +3442,7 @@
    "id": "va_avm5__basal_vein_of_rosenthal",
    "type": "tube",
    "file": "assets/vascular/va_avm5__basal_vein_of_rosenthal.glb",
-   "bytes": 84080,
+   "bytes": 84148,
    "layer": "vessels",
    "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -3247,6 +3459,46 @@
    },
    "lesion": "avm5",
    "replaces": "va_basal_vein_of_rosenthal"
+  },
+  {
+   "name": "Confluence of sinuses",
+   "aliases": [
+    "Torcular Herophili",
+    "Confluens sinuum"
+   ],
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "rule",
+   "source": "Modelled on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "vein",
+   "id": "va_avm5__confluence_of_sinuses",
+   "type": "tube",
+   "file": "assets/vascular/va_avm5__confluence_of_sinuses.glb",
+   "bytes": 139696,
+   "schematic": true,
+   "layer": "vessels",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Drawn by rule on this CT: where its traced transverse sinuses meet, a swelling 6.9 mm across (1.25 times the widest sinus joining it), with the superior sagittal and straight sinuses' back ends (TopBrain's labels end 10.2 and 12.8 mm from its centre) run on into it, all joined smoothly (an implicit surface). Here filled early by the lesion's shunt.",
+   "centroid": {
+    "L": [
+     -3.23,
+     -86.5,
+     -6.65
+    ],
+    "R": [
+     3.62,
+     -86.44,
+     -13.1
+    ]
+   },
+   "lesion": "avm5",
+   "replaces": "va_confluence_of_sinuses"
   },
   {
    "name": "Great cerebral vein (of Galen)",
@@ -3276,7 +3528,7 @@
    "id": "va_avm5__great_cerebral_vein_of_galen",
    "type": "tube",
    "file": "assets/vascular/va_avm5__great_cerebral_vein_of_galen.glb",
-   "bytes": 53136,
+   "bytes": 53212,
    "layer": "vessels",
    "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of TopBrain's expert label of this vessel on the CT angiogram. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -3322,20 +3574,20 @@
    "id": "va_avm5__inferior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_avm5__inferior_petrosal_sinus.glb",
-   "bytes": 12432,
+   "bytes": 21716,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Here filled early by the lesion's shunt.",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Joined to the cavernous sinus by a drawn segment across a 4.1 mm gap; to the cavernous sinus by a drawn segment across a 3.0 mm gap; to the sigmoid sinus by a drawn segment across a 1.2 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -21.02,
-     -21.78,
-     -18.12
+     -16.66,
+     -14.23,
+     -13.03
     ],
     "R": [
-     21.45,
-     -21.72,
-     -18.46
+     20.66,
+     -19.08,
+     -15.59
     ]
    },
    "lesion": "avm5",
@@ -3369,7 +3621,7 @@
    "id": "va_avm5__internal_cerebral_veins",
    "type": "tube",
    "file": "assets/vascular/va_avm5__internal_cerebral_veins.glb",
-   "bytes": 90444,
+   "bytes": 90568,
    "layer": "vessels",
    "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of TopBrain's expert label of this vessel on the CT angiogram. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -3409,7 +3661,7 @@
    "id": "va_avm5__internal_jugular_vein",
    "type": "tube",
    "file": "assets/vascular/va_avm5__internal_jugular_vein.glb",
-   "bytes": 48944,
+   "bytes": 48960,
    "layer": "vessels",
    "derivation": "Segmented in this CT by TotalSegmentator's headneck_bones_vessels task, up to the skull base. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -3451,7 +3703,7 @@
    "id": "va_avm5__sigmoid_sinus",
    "type": "tube",
    "file": "assets/vascular/va_avm5__sigmoid_sinus.glb",
-   "bytes": 10500,
+   "bytes": 10504,
    "layer": "vessels",
    "derivation": "Traced through this CT's own contrast-filled lumen, from the jugular bulb (the top of TotalSegmentator's internal jugular vein) to the transverse sinus near the midline, near the fitted Z-Anatomy course and along the middle of the enhanced channel; drawn as thick as the lumen is deep. right: 92 % of the trace at least 1.5 mm inside the lumen, median radius 2.1 mm; left: 84 % of the trace at least 1.5 mm inside the lumen, median radius 1.9 mm. Split from the transverse sinus at the fitted junction of the two. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -3497,7 +3749,7 @@
    "id": "va_avm5__straight_sinus",
    "type": "tube",
    "file": "assets/vascular/va_avm5__straight_sinus.glb",
-   "bytes": 89272,
+   "bytes": 89080,
    "layer": "vessels",
    "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of TopBrain's expert label of this vessel on the CT angiogram. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -3514,6 +3766,99 @@
    },
    "lesion": "avm5",
    "replaces": "va_straight_sinus"
+  },
+  {
+   "name": "Superior petrosal sinus",
+   "aliases": [],
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "id": "va_avm5__superior_petrosal_sinus",
+   "type": "tube",
+   "file": "assets/vascular/va_avm5__superior_petrosal_sinus.glb",
+   "bytes": 35984,
+   "fitted": true,
+   "layer": "vessels",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Joined to the sigmoid sinus by a drawn segment across a 5.8 mm gap; to the transverse sinus by a drawn segment across a 11.4 mm gap; to the cavernous sinus by a drawn segment across a 6.0 mm gap; to the cavernous sinus by a drawn segment across a 4.4 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
+   "centroid": {
+    "L": [
+     -33.48,
+     -28.57,
+     -4.59
+    ],
+    "R": [
+     37.39,
+     -32.63,
+     -6.46
+    ]
+   },
+   "lesion": "avm5",
+   "replaces": "va_superior_petrosal_sinus"
+  },
+  {
+   "name": "Superior sagittal sinus",
+   "aliases": [],
+   "colour": {
+    "token": "sbVein",
+    "light": "#2E5FB0",
+    "dark": "#7FA6F0"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [],
+   "category": "vein",
+   "id": "va_avm5__superior_sagittal_sinus",
+   "type": "tube",
+   "file": "assets/vascular/va_avm5__superior_sagittal_sinus.glb",
+   "bytes": 93652,
+   "layer": "vessels",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of TopBrain's expert label of this vessel on the CT angiogram. Here filled early by the lesion's shunt.",
+   "centroid": {
+    "L": [
+     -3.84,
+     -84.11,
+     36.76
+    ],
+    "R": [
+     2.84,
+     -34.17,
+     75.97
+    ]
+   },
+   "lesion": "avm5",
+   "replaces": "va_superior_sagittal_sinus"
   },
   {
    "name": "Transverse sinus",
@@ -3539,7 +3884,7 @@
    "id": "va_avm5__transverse_sinus",
    "type": "tube",
    "file": "assets/vascular/va_avm5__transverse_sinus.glb",
-   "bytes": 11820,
+   "bytes": 11832,
    "layer": "vessels",
    "derivation": "Traced through this CT's own contrast-filled lumen, from the jugular bulb (the top of TotalSegmentator's internal jugular vein) to the transverse sinus near the midline, near the fitted Z-Anatomy course and along the middle of the enhanced channel; drawn as thick as the lumen is deep. right: 92 % of the trace at least 1.5 mm inside the lumen, median radius 2.1 mm; left: 84 % of the trace at least 1.5 mm inside the lumen, median radius 1.9 mm. Split from the transverse sinus at the fitted junction of the two. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -3687,7 +4032,7 @@
    "id": "va_davf__internal_jugular_vein",
    "type": "tube",
    "file": "assets/vascular/va_davf__internal_jugular_vein.glb",
-   "bytes": 48884,
+   "bytes": 48900,
    "layer": "vessels",
    "derivation": "Segmented in this CT by TotalSegmentator's headneck_bones_vessels task, up to the skull base. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -3729,7 +4074,7 @@
    "id": "va_davf__sigmoid_sinus",
    "type": "tube",
    "file": "assets/vascular/va_davf__sigmoid_sinus.glb",
-   "bytes": 10496,
+   "bytes": 10504,
    "layer": "vessels",
    "derivation": "Traced through this CT's own contrast-filled lumen, from the jugular bulb (the top of TotalSegmentator's internal jugular vein) to the transverse sinus near the midline, near the fitted Z-Anatomy course and along the middle of the enhanced channel; drawn as thick as the lumen is deep. right: 92 % of the trace at least 1.5 mm inside the lumen, median radius 2.1 mm; left: 84 % of the trace at least 1.5 mm inside the lumen, median radius 1.9 mm. Split from the transverse sinus at the fitted junction of the two. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -3771,7 +4116,7 @@
    "id": "va_davf__transverse_sinus",
    "type": "tube",
    "file": "assets/vascular/va_davf__transverse_sinus.glb",
-   "bytes": 11816,
+   "bytes": 11832,
    "layer": "vessels",
    "derivation": "Traced through this CT's own contrast-filled lumen, from the jugular bulb (the top of TotalSegmentator's internal jugular vein) to the transverse sinus near the midline, near the fitted Z-Anatomy course and along the middle of the enhanced channel; drawn as thick as the lumen is deep. right: 92 % of the trace at least 1.5 mm inside the lumen, median radius 2.1 mm; left: 84 % of the trace at least 1.5 mm inside the lumen, median radius 1.9 mm. Split from the transverse sinus at the fitted junction of the two. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -3853,20 +4198,20 @@
    "id": "va_ccfa__anterior_intercavernous_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfa__anterior_intercavernous_sinus.glb",
-   "bytes": 6004,
+   "bytes": 12524,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Here filled early by the lesion's shunt.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Joined to the cavernous sinus by a drawn segment across a 2.8 mm gap; to the cavernous sinus by a drawn segment across a 3.7 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -2.05,
-     1.83,
-     12.17
+     -4.34,
+     1.52,
+     10.55
     ],
     "R": [
-     2.03,
-     1.91,
-     12.18
+     4.32,
+     2.01,
+     9.98
     ]
    },
    "lesion": "ccfa",
@@ -3892,20 +4237,20 @@
    "id": "va_ccfa__basilar_venous_plexus",
    "type": "tube",
    "file": "assets/vascular/va_ccfa__basilar_venous_plexus.glb",
-   "bytes": 5532,
+   "bytes": 16532,
    "schematic": true,
    "layer": "vessels",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Drawn by rule on this CT: a sheet on the back of the clivus (its bone surface), from just below the dorsum 14 mm down and 8 mm either side of the midline, 1 mm thick: the plexus joins both cavernous sinuses and inferior petrosal sinuses (Tanoue 2020); its channels are not drawn. Here filled early by the lesion's shunt.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Drawn by rule on this CT: a sheet on the back of the clivus (its bone surface), from just below the dorsum 14 mm down and 8 mm either side of the midline, 1 mm thick: the plexus joins both cavernous sinuses and inferior petrosal sinuses (Tanoue 2020); its channels are not drawn. Joined to the cavernous sinus by a drawn segment across a 1.1 mm gap; to the cavernous sinus by a drawn segment across a 2.2 mm gap; to the inferior petrosal sinus by a drawn segment across a 1.9 mm gap; to the inferior petrosal sinus by a drawn segment across a 2.0 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -4.42,
-     -7.71,
-     -2.22
+     -7.7,
+     -7.07,
+     -1.56
     ],
     "R": [
-     4.29,
-     -8.04,
-     -2.28
+     6.75,
+     -7.19,
+     -4.42
     ]
    },
    "lesion": "ccfa",
@@ -3931,7 +4276,7 @@
    "id": "va_ccfa__cavernous_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfa__cavernous_sinus.glb",
-   "bytes": 140848,
+   "bytes": 140768,
    "schematic": true,
    "layer": "vessels",
    "derivation": "Modelled on this CT (skullbase_v3_cavernous.py), between the borders Chotai 2018 gives: medially the sella and the sphenoid body (0.4 mm off the bone and the hypophysis modelled in its fossa), laterally its lateral wall (a plane through the superior orbital fissure, the foramen rotundum, the trigeminal ganglion's medial margin and the petrous apex: a drawing choice), under its roof (the plane of the oculomotor triangle: the anterior and posterior clinoids and the petrous apex), from the petrous apex back to the carotid's anterior bend, and within 5.5 mm of the carotid it contains (this CT's own, TopBrain's label). A CT does not show its walls: its shape is drawn by rule round what the CT does show. Right 1546 mm³, left 979 mm³. Here filled early by the lesion's shunt.",
@@ -3978,7 +4323,7 @@
    "id": "va_ccfa__inferior_ophthalmic_vein",
    "type": "tube",
    "file": "assets/vascular/va_ccfa__inferior_ophthalmic_vein.glb",
-   "bytes": 10292,
+   "bytes": 10320,
    "fitted": true,
    "layer": "vessels",
    "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Here filled early by the lesion's shunt, drawn 0.8 mm wider (dilated, illustrative).",
@@ -4025,20 +4370,20 @@
    "id": "va_ccfa__inferior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfa__inferior_petrosal_sinus.glb",
-   "bytes": 12480,
+   "bytes": 21836,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Here filled early by the lesion's shunt.",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Joined to the cavernous sinus by a drawn segment across a 4.1 mm gap; to the cavernous sinus by a drawn segment across a 3.0 mm gap; to the sigmoid sinus by a drawn segment across a 1.2 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -21.02,
-     -21.78,
-     -18.12
+     -16.66,
+     -14.23,
+     -13.03
     ],
     "R": [
-     21.45,
-     -21.72,
-     -18.46
+     20.66,
+     -19.08,
+     -15.59
     ]
    },
    "lesion": "ccfa",
@@ -4066,7 +4411,7 @@
    "id": "va_ccfa__internal_jugular_vein",
    "type": "tube",
    "file": "assets/vascular/va_ccfa__internal_jugular_vein.glb",
-   "bytes": 48868,
+   "bytes": 48928,
    "layer": "vessels",
    "derivation": "Segmented in this CT by TotalSegmentator's headneck_bones_vessels task, up to the skull base. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -4112,20 +4457,20 @@
    "id": "va_ccfa__posterior_intercavernous_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfa__posterior_intercavernous_sinus.glb",
-   "bytes": 7592,
+   "bytes": 12776,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Here filled early by the lesion's shunt.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Joined to the cavernous sinus by a drawn segment across a 1.5 mm gap; to the cavernous sinus by a drawn segment across a 2.5 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -3.38,
-     -2.37,
-     9.01
+     -4.92,
+     -1.61,
+     8.32
     ],
     "R": [
-     3.31,
-     -2.38,
-     8.87
+     5.21,
+     -1.06,
+     8.06
     ]
    },
    "lesion": "ccfa",
@@ -4155,7 +4500,7 @@
    "id": "va_ccfa__sigmoid_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfa__sigmoid_sinus.glb",
-   "bytes": 10508,
+   "bytes": 10488,
    "layer": "vessels",
    "derivation": "Traced through this CT's own contrast-filled lumen, from the jugular bulb (the top of TotalSegmentator's internal jugular vein) to the transverse sinus near the midline, near the fitted Z-Anatomy course and along the middle of the enhanced channel; drawn as thick as the lumen is deep. right: 92 % of the trace at least 1.5 mm inside the lumen, median radius 2.1 mm; left: 84 % of the trace at least 1.5 mm inside the lumen, median radius 1.9 mm. Split from the transverse sinus at the fitted junction of the two. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -4193,7 +4538,7 @@
    "id": "va_ccfa__sphenoparietal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfa__sphenoparietal_sinus.glb",
-   "bytes": 8540,
+   "bytes": 8560,
    "schematic": true,
    "layer": "vessels",
    "derivation": "Drawn by rule on this CT: under the free (back) edge of the lesser wing of the sphenoid, from the anterior clinoid's base outwards (the edge's furthest-back bone, a millimetre below it), 1.8 mm across, into the cavernous sinus's front. Here filled early by the lesion's shunt.",
@@ -4232,7 +4577,7 @@
    "id": "va_ccfa__superficial_middle_cerebral_vein",
    "type": "tube",
    "file": "assets/vascular/va_ccfa__superficial_middle_cerebral_vein.glb",
-   "bytes": 23564,
+   "bytes": 23556,
    "schematic": true,
    "layer": "vessels",
    "derivation": "Drawn by rule (this angiogram labels no vein near the fissure), on the fitted template brain, not traced: one trunk along the fissure's edge on the temporal lip, from its back end forwards and down, then on to the outer end of the sphenoparietal sinus (itself drawn by rule) under the lesser wing, 2 mm across (illustrative). Its pattern varies (five types in Imada 2021, some with two trunks); here the fissure opens on its frontal side and it stays with the temporal lobe. It moves with the brain in the surgical shapes (the superficial vein with the temporal lobe, the insular and deep veins with the insula), carried by cross-sections along its line. Here filled early by the lesion's shunt.",
@@ -4279,7 +4624,7 @@
    "id": "va_ccfa__superior_ophthalmic_vein",
    "type": "tube",
    "file": "assets/vascular/va_ccfa__superior_ophthalmic_vein.glb",
-   "bytes": 12428,
+   "bytes": 12432,
    "fitted": true,
    "layer": "vessels",
    "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Here filled early by the lesion's shunt, drawn 1.2 mm wider (dilated, illustrative).",
@@ -4326,20 +4671,20 @@
    "id": "va_ccfa__superior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfa__superior_petrosal_sinus.glb",
-   "bytes": 17904,
+   "bytes": 36072,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Here filled early by the lesion's shunt.",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Joined to the sigmoid sinus by a drawn segment across a 5.8 mm gap; to the transverse sinus by a drawn segment across a 11.4 mm gap; to the cavernous sinus by a drawn segment across a 6.0 mm gap; to the cavernous sinus by a drawn segment across a 4.4 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -35.48,
-     -29.75,
-     -4.7
+     -33.48,
+     -28.57,
+     -4.59
     ],
     "R": [
-     36.36,
-     -29.39,
-     -5.59
+     37.39,
+     -32.63,
+     -6.46
     ]
    },
    "lesion": "ccfa",
@@ -4354,7 +4699,7 @@
    "refIds": [],
    "aliases": [],
    "schematic": true,
-   "bytes": 8648,
+   "bytes": 8652,
    "type": "tube",
    "id": "va_ccfd__feeders",
    "name": "Indirect carotid-cavernous fistula: dural feeders",
@@ -4409,20 +4754,20 @@
    "id": "va_ccfd__anterior_intercavernous_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfd__anterior_intercavernous_sinus.glb",
-   "bytes": 6048,
+   "bytes": 12788,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Here filled early by the lesion's shunt.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Joined to the cavernous sinus by a drawn segment across a 2.8 mm gap; to the cavernous sinus by a drawn segment across a 3.7 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -2.05,
-     1.83,
-     12.17
+     -4.34,
+     1.52,
+     10.55
     ],
     "R": [
-     2.03,
-     1.91,
-     12.18
+     4.32,
+     2.01,
+     9.98
     ]
    },
    "lesion": "ccfd",
@@ -4448,20 +4793,20 @@
    "id": "va_ccfd__basilar_venous_plexus",
    "type": "tube",
    "file": "assets/vascular/va_ccfd__basilar_venous_plexus.glb",
-   "bytes": 5548,
+   "bytes": 16764,
    "schematic": true,
    "layer": "vessels",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Drawn by rule on this CT: a sheet on the back of the clivus (its bone surface), from just below the dorsum 14 mm down and 8 mm either side of the midline, 1 mm thick: the plexus joins both cavernous sinuses and inferior petrosal sinuses (Tanoue 2020); its channels are not drawn. Here filled early by the lesion's shunt.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Drawn by rule on this CT: a sheet on the back of the clivus (its bone surface), from just below the dorsum 14 mm down and 8 mm either side of the midline, 1 mm thick: the plexus joins both cavernous sinuses and inferior petrosal sinuses (Tanoue 2020); its channels are not drawn. Joined to the cavernous sinus by a drawn segment across a 1.1 mm gap; to the cavernous sinus by a drawn segment across a 2.2 mm gap; to the inferior petrosal sinus by a drawn segment across a 1.9 mm gap; to the inferior petrosal sinus by a drawn segment across a 2.0 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -4.42,
-     -7.71,
-     -2.22
+     -7.7,
+     -7.07,
+     -1.56
     ],
     "R": [
-     4.29,
-     -8.04,
-     -2.28
+     6.75,
+     -7.19,
+     -4.42
     ]
    },
    "lesion": "ccfd",
@@ -4534,7 +4879,7 @@
    "id": "va_ccfd__inferior_ophthalmic_vein",
    "type": "tube",
    "file": "assets/vascular/va_ccfd__inferior_ophthalmic_vein.glb",
-   "bytes": 10036,
+   "bytes": 10040,
    "fitted": true,
    "layer": "vessels",
    "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Here filled early by the lesion's shunt.",
@@ -4581,20 +4926,20 @@
    "id": "va_ccfd__inferior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfd__inferior_petrosal_sinus.glb",
-   "bytes": 12556,
+   "bytes": 22144,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Here filled early by the lesion's shunt.",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Joined to the cavernous sinus by a drawn segment across a 4.1 mm gap; to the cavernous sinus by a drawn segment across a 3.0 mm gap; to the sigmoid sinus by a drawn segment across a 1.2 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -21.02,
-     -21.78,
-     -18.12
+     -16.66,
+     -14.23,
+     -13.03
     ],
     "R": [
-     21.45,
-     -21.72,
-     -18.46
+     20.66,
+     -19.08,
+     -15.59
     ]
    },
    "lesion": "ccfd",
@@ -4622,7 +4967,7 @@
    "id": "va_ccfd__internal_jugular_vein",
    "type": "tube",
    "file": "assets/vascular/va_ccfd__internal_jugular_vein.glb",
-   "bytes": 49108,
+   "bytes": 49148,
    "layer": "vessels",
    "derivation": "Segmented in this CT by TotalSegmentator's headneck_bones_vessels task, up to the skull base. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -4668,20 +5013,20 @@
    "id": "va_ccfd__posterior_intercavernous_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfd__posterior_intercavernous_sinus.glb",
-   "bytes": 7652,
+   "bytes": 12952,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Here filled early by the lesion's shunt.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Joined to the cavernous sinus by a drawn segment across a 1.5 mm gap; to the cavernous sinus by a drawn segment across a 2.5 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -3.38,
-     -2.37,
-     9.01
+     -4.92,
+     -1.61,
+     8.32
     ],
     "R": [
-     3.31,
-     -2.38,
-     8.87
+     5.21,
+     -1.06,
+     8.06
     ]
    },
    "lesion": "ccfd",
@@ -4711,7 +5056,7 @@
    "id": "va_ccfd__sigmoid_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfd__sigmoid_sinus.glb",
-   "bytes": 10492,
+   "bytes": 10504,
    "layer": "vessels",
    "derivation": "Traced through this CT's own contrast-filled lumen, from the jugular bulb (the top of TotalSegmentator's internal jugular vein) to the transverse sinus near the midline, near the fitted Z-Anatomy course and along the middle of the enhanced channel; drawn as thick as the lumen is deep. right: 92 % of the trace at least 1.5 mm inside the lumen, median radius 2.1 mm; left: 84 % of the trace at least 1.5 mm inside the lumen, median radius 1.9 mm. Split from the transverse sinus at the fitted junction of the two. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -4796,7 +5141,7 @@
    "id": "va_ccfd__superior_ophthalmic_vein",
    "type": "tube",
    "file": "assets/vascular/va_ccfd__superior_ophthalmic_vein.glb",
-   "bytes": 12332,
+   "bytes": 12336,
    "fitted": true,
    "layer": "vessels",
    "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Here filled early by the lesion's shunt.",
@@ -4843,20 +5188,20 @@
    "id": "va_ccfd__superior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfd__superior_petrosal_sinus.glb",
-   "bytes": 17992,
+   "bytes": 36584,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Here filled early by the lesion's shunt.",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Joined to the sigmoid sinus by a drawn segment across a 5.8 mm gap; to the transverse sinus by a drawn segment across a 11.4 mm gap; to the cavernous sinus by a drawn segment across a 6.0 mm gap; to the cavernous sinus by a drawn segment across a 4.4 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -35.48,
-     -29.75,
-     -4.7
+     -33.48,
+     -28.57,
+     -4.59
     ],
     "R": [
-     36.36,
-     -29.39,
-     -5.59
+     37.39,
+     -32.63,
+     -6.46
     ]
    },
    "lesion": "ccfd",

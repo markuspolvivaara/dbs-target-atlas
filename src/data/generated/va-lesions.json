@@ -108,16 +108,16 @@
    "branch": "Ophthalmic artery",
    "side": "L",
    "siteMm": [
-    -12.1,
-    8.7,
-    9.4
+    -12.9,
+    8.3,
+    9.3
    ],
    "domeDiameterMm": 7.0,
    "neckMm": 4.0,
    "direction": [
-    -0.17,
-    0.58,
-    0.8
+    -0.4,
+    0.31,
+    0.86
    ]
   },
   {
@@ -132,16 +132,16 @@
    "branch": "Posterior inferior cerebellar artery",
    "side": "L",
    "siteMm": [
-    -9.9,
-    -26.9,
-    -27.7
+    -9.7,
+    -26.8,
+    -29.9
    ],
    "domeDiameterMm": 5.0,
    "neckMm": 2.8,
    "direction": [
-    -0.44,
-    -0.89,
-    0.09
+    0.04,
+    -0.99,
+    0.1
    ]
   },
   {
@@ -169,9 +169,9 @@
    "parent": "Internal carotid artery",
    "side": "R",
    "siteMm": [
-    9.0,
-    7.7,
-    11.1
+    8.6,
+    3.8,
+    11.5
    ],
    "baseMm": 2.6,
    "heightMm": 1.6
@@ -184,9 +184,11 @@
     "va_avm1__feeders",
     "va_avm1__nidus",
     "va_avm1__drainers",
+    "va_avm1__confluence_of_sinuses",
     "va_avm1__inferior_petrosal_sinus",
     "va_avm1__internal_jugular_vein",
     "va_avm1__sigmoid_sinus",
+    "va_avm1__superior_petrosal_sinus",
     "va_avm1__superior_sagittal_sinus",
     "va_avm1__transverse_sinus"
    ],
@@ -229,9 +231,11 @@
     "va_avm3__feeders",
     "va_avm3__nidus",
     "va_avm3__drainers",
+    "va_avm3__confluence_of_sinuses",
     "va_avm3__inferior_petrosal_sinus",
     "va_avm3__internal_jugular_vein",
     "va_avm3__sigmoid_sinus",
+    "va_avm3__superior_petrosal_sinus",
     "va_avm3__superior_sagittal_sinus",
     "va_avm3__transverse_sinus"
    ],
@@ -280,12 +284,15 @@
     "va_avm5__nidus",
     "va_avm5__drainers",
     "va_avm5__basal_vein_of_rosenthal",
+    "va_avm5__confluence_of_sinuses",
     "va_avm5__great_cerebral_vein_of_galen",
     "va_avm5__inferior_petrosal_sinus",
     "va_avm5__internal_cerebral_veins",
     "va_avm5__internal_jugular_vein",
     "va_avm5__sigmoid_sinus",
     "va_avm5__straight_sinus",
+    "va_avm5__superior_petrosal_sinus",
+    "va_avm5__superior_sagittal_sinus",
     "va_avm5__transverse_sinus"
    ],
    "location": "the right occipital lobe, visual cortex (eloquent), reaching deep towards the vein of Galen",

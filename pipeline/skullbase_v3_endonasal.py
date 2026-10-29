@@ -553,6 +553,12 @@ def main() -> int:
            "sinus": sinus, "intercarotid": icd, "pieces": pieces, "hypophysis": hypo["summary"]}
     OUT_JSON.write_text(json.dumps(out, indent=1))
     carry_sellar()
+    # the last of v3's steps to write its manifest: then its arteries kept out of the brainstem, and its vessels joined
+    # where their sources stop short of one another (the confluence of the sinuses drawn)
+    import skullbase_v3_clearance as CLEAR
+    import skullbase_v3_junctions as JUNC
+    CLEAR.main()
+    JUNC.main()
     print(json.dumps({k: out[k] for k in ("entry", "sinus", "intercarotid")}, indent=0)[:1500])
     return 0
 

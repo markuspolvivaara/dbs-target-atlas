@@ -227,7 +227,9 @@ describe('the temporal-bone model (v3: OpenEar specimen registered onto the CT)'
         // (completed beyond the scan): this build's files
         expect(s.file, s.id).toMatch(/^assets\/skullbase-v3\//);
       } else {
-        expect(s.file, s.id).toMatch(/^assets\/skullbase-ct\//);
+        // (or v3's own copy of it, joined to the vessel it meets: skullbase_v3_junctions.py, its card saying so)
+        if (s.file.endsWith('.joined.glb')) expect(s.derivation, s.id).toMatch(/Joined to the /);
+        else expect(s.file, s.id).toMatch(/^assets\/skullbase-ct\//);
         // nothing approximate from Z-Anatomy, but the falx the interhemispheric view draws, the sellar structures the
         // endonasal view draws and the veins the cavernous sinus view draws (v2's fitted ones, their cards saying so)
         const fittedOk = ['Falx cerebri', 'Anterior intercavernous sinus', 'Posterior intercavernous sinus', 'Optic chiasm',

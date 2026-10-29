@@ -482,9 +482,9 @@
      "lsoLift": 0.0
     },
     "R": {
-     "open": 5.08,
-     "lift": 5.44,
-     "lsoLift": 12.02
+     "open": 2.76,
+     "lift": 3.93,
+     "lsoLift": 11.0
     }
    },
    "Middle cerebral artery (M3 segment)": {
@@ -494,11 +494,37 @@
      "lsoLift": 0.0
     },
     "R": {
-     "open": 5.41,
-     "lift": 2.94,
-     "lsoLift": 7.57
+     "open": 4.9,
+     "lift": 2.76,
+     "lsoLift": 6.91
     }
    }
+  },
+  "veins": {
+   "lengthMm": {
+    "L": {
+     "smcv": 78.7,
+     "precentral": 29.3,
+     "central": 50.2,
+     "posterior": 50.4,
+     "deep": 37.9,
+     "poleToGenuMm": 4.7
+    },
+    "R": {
+     "smcv": 89.1,
+     "precentral": 42.0,
+     "central": 45.2,
+     "posterior": 70.9,
+     "deep": 32.1,
+     "poleToGenuMm": 2.5
+    }
+   },
+   "radiusMm": {
+    "smcv": 1.0,
+    "deep": 0.9,
+    "insular": 0.5
+   },
+   "sphenoparietal": true
   },
   "m1LengthMm": {
    "R": 25.1,
@@ -562,7 +588,11 @@
    "inBoneBefore": 267,
    "inVesselAfter": 7,
    "inBoneAfter": 0,
-   "maxMovedMm": 6.94
+   "maxMovedMm": 6.94,
+   "dent": {
+    "arteryPointsInsideBefore": 404,
+    "arteryPointsInsideAfter": 261
+   }
   },
   "modelMl": 155.1,
   "telovelar": {
@@ -576,7 +606,7 @@
    },
    "vermisLiftMm": 5.0,
    "uvulaToMedullaMm": {
-    "rest": 2.18,
+    "rest": 2.21,
     "moved": 6.54
    },
    "inVentricle": {
@@ -586,7 +616,7 @@
   },
   "retrosigmoid": {
    "maxMovedMm": 11.87,
-   "moved": 24556,
+   "moved": 24555,
    "inBoneAfter": 0,
    "inVesselAfter": 0,
    "meatusToCerebellumMm": {
@@ -594,7 +624,7 @@
     "moved": 19.66
    },
    "inCorridor": {
-    "rest": 2014,
+    "rest": 2013,
     "moved": 4
    },
    "trigeminalRoot": [

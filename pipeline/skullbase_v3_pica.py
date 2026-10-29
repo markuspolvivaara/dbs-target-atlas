@@ -1,20 +1,21 @@
-"""Skull base v3: the posterior inferior cerebellar artery carried on past what this angiogram labels, and both parts
-moving with the cerebellum in the telovelar and retrosigmoid shapes.
+"""Skull base v3: the posterior inferior cerebellar artery from this CT's origin on, round the medulla to the
+cerebellum, and moving with the cerebellum in the telovelar and retrosigmoid shapes.
 
   pipeline/.venv/bin/python -I -W ignore pipeline/skullbase_v3_pica.py      (after skullbase_pfossa.py; also run by skullbase_v3.py)
 
-TopBrain labels only the first part of each PICA (by the medulla: some 17 mm on the right, 25 mm on the left here), so
-its loops round the tonsil and its branches over the cerebellum are missing. As for the superior cerebellar artery
-(skullbase_v3_base.CONTINUED), the Z-Anatomy model's PICA is carried on from the label's far end (the end away from the
-vertebral artery): its course carried onto this CT by the whole-skull fit (skullbase_v3_skull.fitted_model, as its
-FITTED_LINES are) and by the posterior fossa fit near the hindbrain (skullbase_v3.carry_lines: so it keeps its place
-against the fitted cerebellum and brainstem), its trunk from the point nearest the label's far end on, its branches
-with it, all moved so that the trunk starts there, the move fading out over FADE_MM from it; kept clear of the fitted
-cerebellum and brainstem (skullbase_v3.hindbrain_clearance); a branch that does not then start on the tree is left out.
+TopBrain labels only the first part of each PICA here, and this patient's vertebral arteries are long and tortuous: the
+labelled PICAs leave them near the midline and loop onto the back of the medulla, through where the fitted template
+medulla lies. So only the label's first STUB_MM (its origin on the vertebral artery, measured over its surface) is this
+CT's own; from there the model's typical course is drawn: a joining run from the stub's end round the outside of the
+brainstem to the start of the Z-Anatomy model's PICA trunk, then that trunk (lateral to the medulla, round the tonsil)
+and its branches, carried onto this CT by the whole-skull fit (skullbase_v3_skull.fitted_model, as its FITTED_LINES are)
+and by the posterior fossa fit near the hindbrain (skullbase_v3.carry_lines: so it keeps its place against the fitted
+cerebellum and brainstem); all kept clear of the fitted cerebellum and brainstem (skullbase_v3.hindbrain_clearance); a
+branch that does not then start on the tree is left out.
 
-Both the labelled part and the carried-on course move with the cerebellum in its two shapes (skullbase_pfossa.py: the
-tonsils drawn apart and the vermis lifted, the right hemisphere drawn back): each by cross-sections along its centre
-line (skullbase_brain.skin_along), following the cerebellum's vertices within REACH_MM, the brainstem's counted as still.
+Both the labelled stub and the course move with the cerebellum in its two shapes (skullbase_pfossa.py: the tonsils
+drawn apart and the vermis lifted, the right hemisphere drawn back): each by cross-sections along its centre line
+(skullbase_brain.skin_along), following the cerebellum's vertices within REACH_MM, the brainstem's counted as still.
 """
 from __future__ import annotations
 
@@ -32,7 +33,8 @@ BUILD = ROOT / "data" / "build" / "skullbase-v3"
 CT_BUILD = ROOT / "data" / "build" / "skullbase-ct"
 NAME = "Posterior inferior cerebellar artery"
 CODES = {"R": [29], "L": [30]}
-FADE_MM = 15.0
+STUB_MM = 6.0              # this CT's labelled PICA kept from its origin on the vertebral artery this far along it
+STEP_MM = 0.5
 ATTACH_MM = 3.0            # a branch is kept when it starts this near the tree
 REACH_MM = 4.0             # a vessel point follows the cerebellum's vertices this near
 SHAPES = ("telovelar", "retrosigmoid")
@@ -74,27 +76,46 @@ def label(side: str, fossa, R) -> tuple[np.ndarray, np.ndarray]:
     return out[0], out[1]
 
 
-def continued(side: str, clear) -> tuple[list, dict]:
-    """The carried-on course: [(P, r)] runs, and a report."""
+def stub(side: str, v: np.ndarray, t: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray, float]:
+    """This CT's labelled PICA (v2's mesh v, t) kept from its origin on the vertebral artery STUB_MM along it (by
+    distance over its surface): the faces kept, the stub's end (the centre of its surface there) and its radius."""
+    import scipy.sparse as sp
+    from scipy.sparse.csgraph import dijkstra
     fr = np.load(CT_BUILD / "frame.npz")
-    pica, vert = label(side, fr["fossa"], fr["R"])
-    far = pica[int(np.argmax(cKDTree(vert).query(pica)[0]))]       # the label's far end
+    _, vert = label(side, fr["fossa"], fr["R"])
+    o = int(np.argmin(cKDTree(vert).query(v)[0]))                 # the label's point nearest the vertebral artery
+    E = np.vstack([t[:, [0, 1]], t[:, [1, 2]], t[:, [2, 0]]])
+    w = np.linalg.norm(v[E[:, 0]] - v[E[:, 1]], axis=1)
+    G = sp.coo_matrix((np.r_[w, w], (np.r_[E[:, 0], E[:, 1]], np.r_[E[:, 1], E[:, 0]])), shape=(len(v), len(v))).tocsr()
+    d = dijkstra(G, indices=o)
+    keep = np.all(d[t] <= STUB_MM, axis=1)
+    rim = (d > STUB_MM - 1.0) & (d <= STUB_MM)
+    end = v[rim].mean(0)
+    r = float(np.median(np.linalg.norm(v[rim] - end, axis=1)))
+    return t[keep], end, v[o], r
+
+
+def continued(side: str, clear, start: np.ndarray, r0: float) -> tuple[list, dict]:
+    """The course on from the labelled stub's end (start, radius r0): a joining run round the medulla to the model's
+    trunk, then the trunk and its branches: [(P, r)] runs, and a report."""
+    fr = np.load(CT_BUILD / "frame.npz")
+    _, vert = label(side, fr["fossa"], fr["R"])
     runs = fitted_runs(side)
     trunk = runs[0] if cKDTree(vert).query(runs[0][0, :3])[0] < cKDTree(vert).query(runs[0][-1, :3])[0] else runs[0][::-1]
-    k = int(np.argmin(np.linalg.norm(trunk[:, :3] - far, axis=1)))
-    shift = far - trunk[k, :3]
-
-    def moved(R):
-        d = np.linalg.norm(R[:, :3] - trunk[k, :3], axis=1)
-        f = np.clip(1 - d / FADE_MM, 0, 1)
-        f = f * f * (3 - 2 * f)
-        return R[:, :3] + f[:, None] * shift
-    out = [(moved(trunk[k:]), trunk[k:, 3])]
+    # from the stub's end to the trunk's start, round the outside of the brainstem (the clearance pushes it out)
+    gap = float(np.linalg.norm(trunk[0, :3] - start))
+    n = max(2, int(gap / STEP_MM))
+    s_ = np.linspace(0, 1, n, endpoint=False)[:, None]
+    join = start + s_ * (trunk[0, :3] - start)
+    rj = r0 + s_[:, 0] * (trunk[0, 3] - r0)
+    P0 = np.vstack([join, trunk[:, :3]])
+    r_0 = np.r_[rj, trunk[:, 3]]
+    out = [(P0, r_0)]
     tree = [out[0][0]]
     kept, dropped = 0, 0
     for Rb in runs[1:]:
-        P = moved(Rb)
-        t = cKDTree(np.vstack(tree + [pica]))
+        P = Rb[:, :3]
+        t = cKDTree(np.vstack(tree))
         if t.query(P[0])[0] > ATTACH_MM and t.query(P[-1])[0] <= ATTACH_MM:
             P, Rb = P[::-1], Rb[::-1]
         if t.query(P[0])[0] > ATTACH_MM:
@@ -105,8 +126,9 @@ def continued(side: str, clear) -> tuple[list, dict]:
         kept += 1
     if clear is not None:
         out = [(clear(P, r), r) for P, r in out]
+        out[0] = (np.vstack([start, out[0][0][1:]]), out[0][1])     # (the stub's end kept: the course starts on it)
     length = float(sum(np.linalg.norm(np.diff(P, axis=0), axis=1).sum() for P, _ in out))
-    return out, {"labelFarEnd": np.round(far, 1).tolist(), "movedMm": round(float(np.linalg.norm(shift)), 1),
+    return out, {"stubEnd": np.round(start, 1).tolist(), "joinMm": round(gap, 1),
                  "branchesKept": kept, "branchesLeftOut": dropped, "lengthMm": round(length, 1)}
 
 
@@ -175,20 +197,27 @@ def build(ex2: dict) -> dict:
     hb = hindbrain_shapes()
     rep = {"continued": {}, "movedMaxMm": {}}
     # the labelled part, v2's mesh: the same vertices, with the shapes as morph targets
-    nodes = []
+    nodes, ends = [], {}
     for s in ("L", "R"):
         m = ex2["meshes"][f"{NAME}.{s.lower()}"]
         v, t = np.array(m["verts"], float), np.array(m["tris"], int)
+        t, end, origin, r0 = stub(s, v, t)
+        used = np.unique(t)
+        remap = -np.ones(len(v), int)
+        remap[used] = np.arange(len(used))
+        v, t = v[used], remap[t]
+        ends[s] = (end, r0)
         D = carried_by_shapes(v, label_line(s), hb)
         nodes.append({"name": s, "positions": v, "normals": SB.normals(v, t), "indices": t, "mode": TRIANGLES,
                       "targets": [{"name": n, "positions": D[n], "normals": np.zeros_like(v)} for n in SHAPES]})
         rep["movedMaxMm"][f"label{s}"] = {n: round(float(np.linalg.norm(D[n], axis=1).max()), 1) for n in SHAPES}
+        rep.setdefault("stub", {})[s] = {"origin": np.round(origin, 1).tolist(), "end": np.round(end, 1).tolist(), "radiusMm": round(r0, 2)}
     write_glb(BUILD / "sb_posterior_inferior_cerebellar_artery.glb", nodes, {"id": "sb_posterior_inferior_cerebellar_artery"})
     # the carried-on course: tubes round its runs, each moved by cross-sections
     import skullbase_brain as BR
     nodes, cent = [], {}
     for s in ("L", "R"):
-        runs, rep["continued"][s] = continued(s, clear)
+        runs, rep["continued"][s] = continued(s, clear, *ends[s])
         vs, ns, ts, tg, off = [], [], [], {n: ([], []) for n in SHAPES}, 0
         for P, r in runs:
             P = BR.resample_line(P, 0.5) if len(P) > 1 else P
@@ -222,10 +251,13 @@ def items(items: list) -> None:
     it = next(i for i in items if i["name"] == NAME)
     it["file"] = "assets/skullbase-v3/sb_posterior_inferior_cerebellar_artery.glb"
     it["morph"] = True
-    if "cross-sections" not in it.get("derivation", ""):
-        it["derivation"] = (it.get("derivation", "") + " This angiogram labels only its first part, by the medulla; its course beyond "
-                            "is the fitted model's (Posterior inferior cerebellar artery (fitted course)). In the telovelar and retrosigmoid "
-                            "views it moves with the cerebellum it lies against, carried by cross-sections along its centre line.").strip()
+    base = it.get("derivation", "").split(" This angiogram labels only")[0].split(" Only its origin")[0]
+    it["derivation"] = (base + f" Only its origin is shown: its first {STUB_MM:g} mm from the vertebral artery. This angiogram labels "
+                        "only the PICA's first part, and this patient's vertebral arteries are long and tortuous: the labelled PICAs leave "
+                        "them near the midline and loop onto the back of the medulla, through where the fitted model's medulla lies; its "
+                        "course on from the origin is the model's typical one (Posterior inferior cerebellar artery (fitted course)). In the "
+                        "telovelar and retrosigmoid views it moves with the cerebellum it lies against, carried by cross-sections along its "
+                        "centre line.").strip()
     sca = next(i for i in items if i["name"] == "Superior cerebellar artery (fitted course)")
     c = rep["continued"]
     new = {**{k: sca[k] for k in ("aliases", "type", "colour", "dataset", "source", "licence", "citation", "citationUrls", "refIds",
@@ -233,11 +265,12 @@ def items(items: list) -> None:
            "id": "tb_posterior_inferior_cerebellar_artery_fitted_course", "name": f"{NAME} (fitted course)",
            "file": "assets/skullbase-v3/tb_posterior_inferior_cerebellar_artery_fitted_course.glb", "bytes": 0,
            "system": "Vertebral artery", "morph": True,
-           "derivation": "Too small for this angiogram to show beyond its first part: the Z-Anatomy branch (its trunk from the point nearest "
-                         "the label's far end on, and the branches that start on it), fitted onto this CT (the whole-skull fit, then the posterior "
-                         f"fossa's), its start moved onto the far end of this patient's labelled PICA ({c['R']['movedMm']} mm on the right, "
-                         f"{c['L']['movedMm']} mm on the left), the move fading out over {FADE_MM:.0f} mm, and kept clear of the fitted cerebellum "
-                         "and brainstem. It moves with the cerebellum in the telovelar and retrosigmoid views. Its course is approximate.",
+           "derivation": "The model's typical course on from this CT's PICA origin: a run drawn from the end of the labelled origin round "
+                         f"the outside of the brainstem ({c['R']['joinMm']} mm on the right, {c['L']['joinMm']} mm on the left) to the start of the "
+                         "Z-Anatomy PICA's trunk, then that trunk (lateral to the medulla, round the tonsil) and the branches that start on it, "
+                         "fitted onto this CT (the whole-skull fit, then the posterior fossa's) and kept clear of the fitted cerebellum and "
+                         "brainstem. It moves with the cerebellum in the telovelar and retrosigmoid views. Its course is approximate, not this "
+                         "patient's: this CT's own PICAs loop medially from long, tortuous vertebral arteries.",
            "centroid": {"L": rep["centroid"]["L"], "R": rep["centroid"]["R"]}}
     old = next((i for i, x in enumerate(items) if x["id"] == new["id"]), None)
     if old is None:

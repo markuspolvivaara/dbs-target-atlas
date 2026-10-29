@@ -109,3 +109,37 @@ def write_glb(path: Path, nodes: list[dict], extras: dict | None = None) -> None
         f.write(struct.pack("<III", 0x46546C67, 2, total))
         f.write(struct.pack("<II", len(js), 0x4E4F534A) + js)
         f.write(struct.pack("<II", len(bn), 0x004E4942) + bn)
+
+
+def read_glb_full(path: Path) -> dict:
+    """A GLB as write_glb writes it: {node name: {"positions", "normals", "indices", "targets": [{"name", "positions",
+    "normals"}]}} (target deltas; names from the mesh's extras.targetNames)."""
+    import json
+    import struct
+    b = Path(path).read_bytes()
+    n = struct.unpack("<I", b[12:16])[0]
+    g = json.loads(b[20:20 + n])
+    blob = b[20 + n + 8:]
+
+    def acc(i):
+        a = g["accessors"][i]
+        bv = g["bufferViews"][a["bufferView"]]
+        k = {"SCALAR": 1, "VEC3": 3}[a["type"]]
+        dt = {5126: np.float32, 5125: np.uint32, 5123: np.uint16}[a["componentType"]]
+        arr = np.frombuffer(blob, dt, a["count"] * k, bv.get("byteOffset", 0) + a.get("byteOffset", 0))
+        return arr.reshape(a["count"], k).astype(float) if k > 1 else arr.astype(np.int64)
+    out = {}
+    for node in g["nodes"]:
+        if node.get("mesh") is None:
+            continue
+        mesh = g["meshes"][node["mesh"]]
+        p = mesh["primitives"][0]
+        names = (mesh.get("extras") or {}).get("targetNames", [])
+        out[node.get("name", str(len(out)))] = {
+            "positions": acc(p["attributes"]["POSITION"]),
+            "normals": acc(p["attributes"]["NORMAL"]) if "NORMAL" in p["attributes"] else None,
+            "indices": acc(p["indices"]).reshape(-1, 3),
+            "targets": [{"name": names[i] if i < len(names) else None, "positions": acc(t["POSITION"]),
+                         "normals": acc(t["NORMAL"]) if "NORMAL" in t else None} for i, t in enumerate(p.get("targets", []))],
+        }
+    return out

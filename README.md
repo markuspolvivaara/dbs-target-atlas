@@ -257,6 +257,18 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   (Systems: Cavernous sinus) draws the right sinus see-through with all of it; in the endonasal view, a step per side
   opens its medial wall (the bone between it and the sphenoid sinus and its venous space, up to the carotid's wall,
   clear of its nerves), the carotid's wall laid bare drawn red and the abducens nerve seen inside.
+- **Vessels kept continuous and out of the brainstem** (`pipeline/skullbase_v3_junctions.py`,
+  `pipeline/skullbase_v3_clearance.py`; run by `pipeline/skullbase_v3_endonasal.py`, the last step to write the
+  manifest). Where a vessel's source (TopBrain's labels, the traced sinuses, the fitted courses) stops a few millimetres
+  short of the vessel it joins, a short segment is drawn across (the petrosal and intercavernous sinuses and the basilar
+  plexus to the cavernous sinus, the petrosal sinuses to the sigmoid sinus, the ophthalmic artery to the carotid, the
+  superior cerebellar artery's fitted course to its label); the confluence of the sinuses is drawn where the traced
+  transverse sinuses meet, the superior sagittal and straight sinuses run on into it. Where an artery runs into the
+  fitted brainstem, the fitted courses (anterior inferior and superior cerebellar arteries) are lifted out onto its
+  surface (and should one of this CT's own arteries lie in it, a channel is cut in the brainstem for it: the tissue
+  straight behind it removed up to 3 mm, the part meshed again). Each changed mesh is its
+  own file (`<id>.joined.glb`, `<id>.cleared.glb`), its source's untouched; its card says what was drawn. Validation
+  checks every junction closed and no artery inside the brainstem in any shape of the brain.
 - **Cranial floor landmarks** (`pipeline/skullbase_v3_floor.py`, run by `pipeline/skullbase_v3.py` once the
   cavernous sinus is built, or alone): the Cranial floor view labels, besides the foramina, the anterior and posterior
   clinoid processes and the petrous apex on both sides, found on this CT's bone (as the cavernous sinus finds them); the
@@ -266,14 +278,13 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   facing the cranial cavity (median 1.5 mm, up to 4.2 mm for the clivus), the side the model does not label
   mirrored from the other (kept when bone lies within 5 mm). Each card says how its point was placed.
 - **Posterior inferior cerebellar artery** (`pipeline/skullbase_v3_pica.py`, after `pipeline/skullbase_pfossa.py`; also
-  run by `pipeline/skullbase_v3.py`): TopBrain labels only its first part by the medulla, so the Z-Anatomy PICA (trunk
-  and branches) is carried on from the label's far end, as the superior cerebellar artery is: carried onto this CT by
-  the whole-skull fit and the posterior fossa fit (so it keeps its place against the fitted tonsils), its start moved
-  onto the label's end (6.9 mm right, 14.6 mm left) with the move fading over 15 mm, kept clear of the cerebellum and
-  brainstem. Both parts move with the cerebellum in the telovelar and retrosigmoid shapes, by cross-sections along
-  their centre lines.
-  Where its labelled loops lie on the back of the medulla below the obex, `pipeline/skullbase_pfossa.py` cuts a
-  shallow groove in the fitted medulla for them (`dent`: the model's medulla, not the patient's artery, gives way).
+  run by `pipeline/skullbase_v3.py`): TopBrain labels only its first part, and this patient's vertebral arteries are
+  long and tortuous: the labelled PICAs leave them near the midline and loop onto the back of the medulla, through where
+  the fitted template medulla lies. So only the label's first 6 mm (its origin on the vertebral artery) is this CT's
+  own; from there the model's typical course is drawn: a run round the outside of the brainstem to the start of the
+  Z-Anatomy PICA's trunk, then that trunk (lateral to the medulla, round the tonsil) and its branches, carried onto
+  this CT by the whole-skull and posterior fossa fits and kept clear of the cerebellum and brainstem. Both parts move
+  with the cerebellum in the telovelar and retrosigmoid shapes, by cross-sections along their centre lines.
 - **Floor of the fourth ventricle** (`pipeline/skullbase_v3_rhomboid.py`, after `pipeline/skullbase_pfossa.py`; also
   run by `pipeline/skullbase_v3.py`): the telovelar view labels the facial colliculi, hypoglossal and vagal trigones,
   vestibular areas, the median sulcus and the obex. Z-Anatomy does not label them, so each is put on its fourth

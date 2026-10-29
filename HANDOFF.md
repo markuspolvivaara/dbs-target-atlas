@@ -32,6 +32,13 @@ commit and push it.
   - the venous flow graph is bridged where the sinus labels stop short of each other, so a shunt's sinuses fill early
     in the angiogram (`BRIDGE_MM`, `SMALL_VEIN_COST` in `vascular_build.py`);
   - a Grading page (`src/vascular/grading.ts`) with Spetzler–Martin, supplementary, Borden and Cognard tables.
+- **Then, vessel continuity and the PICA (skull base v3 and vascular):**
+  - `skullbase_v3_junctions.py` joins vessels whose sources stop short of each other and draws the confluence of the
+    sinuses; `skullbase_v3_clearance.py` keeps arteries out of the brainstem (fitted courses lifted out). Both write
+    `<id>.joined.glb` / `<id>.cleared.glb` copies and never change a source file; `skullbase_v3_endonasal.py` runs them.
+  - The PICA: only its CT origin (first 6 mm) is the CT's own; the model's typical lateral course is drawn from there
+    (this patient's tortuous vertebral arteries give PICAs that loop through the template medulla).
+  - `DRAWN_VESSELS` restored in `skullbase_pfossa.py` (lost in `c7db237`, which broke rebuilding the posterior fossa).
 - **Pipeline data changed on the desktop:** `pipeline/data/build/skullbase-v3` (brain and posterior fossa fits, the
   cavernous step) and `pipeline/data/build/vascular`. Copy `pipeline/data/` back before rebuilding those on the MacBook.
 - **No real AVM imaging is available** under an open licence (searched DIAS, OpenNeuro, RSNA/Kaggle, figshare, arXiv).
@@ -90,19 +97,22 @@ commit and push it.
 - **Skull base v3 and ventricles build chain.** Run Python as `pipeline/.venv/bin/python -u -I -W ignore`:
   1. `skullbase_brain.py`
   2. `skullbase_pfossa.py`
-  3. `skullbase_v3.py`
-  4. `node pipeline/compress.mjs skullbase-v3`
-  5. `skullbase_v3.py finalize`
-  6. `ventricles_export.py` (in Blender; it also exports the structures around the ventricles)
-  7. `ventricles_build.py` (with `ventricles_etv.py`: the endoscopic view's structures and the hydrocephalus shape;
+  3. `skullbase_v3.py` (it deletes and rewrites its own `tb_*.glb`, the next two steps' included, so run them after it)
+  4. `skullbase_v3_cavernous.py`
+  5. `skullbase_v3_endonasal.py` (the last step to write the manifest; it ends by running `skullbase_v3_clearance.py`
+     and `skullbase_v3_junctions.py`)
+  6. `node pipeline/compress.mjs skullbase-v3`, then restore the four noise GLBs on the desktop (see the memory note),
+     then `skullbase_v3.py finalize`
+  7. `ventricles_export.py` (in Blender; it also exports the structures around the ventricles)
+  8. `ventricles_build.py` (with `ventricles_etv.py`: the endoscopic view's structures and the hydrocephalus shape;
      about 10 minutes, most of it fitting that shape)
-  8. `node pipeline/compress.mjs ventricles`
-  9. `ventricles_build.py finalize`
-  10. `manifest.py`
-  11. `npm run build`
+  9. `node pipeline/compress.mjs ventricles`
+  10. `ventricles_build.py finalize`
+  11. `manifest.py`
+  12. `npm run build`
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
-  - `npx vitest run` (306 tests)
+  - `npx vitest run` (308 tests)
   - `npm run build`
   - `npx playwright test` (130 tests, about 7 minutes, preview on port 4173)
   - `npm run check:palette`

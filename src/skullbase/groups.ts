@@ -141,7 +141,7 @@ function temporalGroups(): SbGroup[] {
     },
     {
       ...base, id: 'veins', kind: 'system', name: 'Veins and dural sinuses', camera: 'posteriorOblique', focus: null, radius: 85,
-      description: 'This CT’s own veins: the sigmoid and transverse sinuses traced through their enhanced lumen, the deep veins and the straight and superior sagittal sinuses from TopBrain’s labels, and the internal jugular veins from TotalSegmentator.',
+      description: 'This CT’s own veins: the sigmoid and transverse sinuses traced through their enhanced lumen, the deep veins and the straight and superior sagittal sinuses from TopBrain’s labels, and the internal jugular veins from TotalSegmentator; the confluence of the sinuses is drawn where they meet, and short drawn segments join the vessels whose sources stop just short of one another.',
       structures: veins, landmarks: [],
     },
     ...surgical,

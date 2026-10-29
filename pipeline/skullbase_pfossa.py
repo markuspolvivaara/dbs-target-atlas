@@ -93,6 +93,8 @@ VESSEL_SIGMA_MM = 1.0      # ... an artery's push this wide
 VESSEL_SLACK_MM = 0.6      # an artery cleared by this much more than its margin: half the vertices' spacing
 CONTAIN_MAX_MM = 3.0       # a part's surface pushed in past a centre line inside it by at most this
 CLEAR_ROUNDS = 12          # ... in this many rounds
+DRAWN_VESSELS = ["Basilar artery", "Vertebral artery", "Superior cerebellar artery", "Posterior inferior cerebellar artery",
+                 "Posterior cerebral artery (P1–P2)"]
 DENT_MARGIN_MM = 0.6       # then a groove in the back of the medulla where an artery's drawn surface (v2's meshes of the
 DENT_SIGMA_MM = 1.5        # labels) still lies in it: its surface moved forward by the artery's depth plus this, falling off
 DENT_ROUNDS = 40           # as a Gaussian this wide, in up to this many rounds (the best kept) ...
