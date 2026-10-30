@@ -5,8 +5,8 @@ commit and push it.
 
 ## Where things stand
 
-- `main` on GitHub has commit `c7cd2d1` (vessel junctions, confluence of the sinuses, arteries out of the brainstem,
-  the PICA's course) and the home-page images. **Everything below is not committed yet** (the user commits when asked).
+- `main` on GitHub has everything below (commit `e212a99`, after `c7cd2d1`: vessel junctions, confluence of the
+  sinuses, arteries out of the brainstem, the PICA's course).
 - Sections: home, DBS targets, white-matter tracts, cortex, brainstem, ventricles, spine, skull base (default "v3"; v1
   Z-Anatomy and v2 CT are alternatives) and vascular.
 - **Clean-up (done):**
