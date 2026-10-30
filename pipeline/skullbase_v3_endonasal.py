@@ -362,6 +362,19 @@ def carry_sellar() -> None:
         if f.exists():
             it["bytes"] = f.stat().st_size
     man["structures"] = [s for s in man["structures"] if s["id"] not in {h["id"] for h in hypo}] + hypo
+    # the optic chiasm drawn by rule in place of the fitted block (skullbase_v3_chiasm.py), kept when this is run again
+    import skullbase_v3_chiasm as CH
+    man = CH.merge(man)
+    # the tumours (skullbase_v3_tumours.py), kept when this is run again
+    import skullbase_v3_tumours as TM
+    if TM.TM_ITEMS.exists():
+        tm = json.loads(TM.TM_ITEMS.read_text())
+        ids = {t["id"] for t in tm}
+        for it in tm:
+            f = REPO / "public" / it["file"]
+            if f.exists():
+                it["bytes"] = f.stat().st_size
+        man["structures"] = [s for s in man["structures"] if s["id"] not in ids] + tm
     # the nerves skullbase_v3_cavernous.py re-routed through the cavernous sinus say so
     import skullbase_v3_cavernous as CAV
     if CAV.CAV_JSON.exists():
@@ -372,8 +385,8 @@ def carry_sellar() -> None:
     p.write_text(json.dumps(man, indent=1, ensure_ascii=False))
 
 
-def ct_grid() -> dict:
-    """The grid over BOX (aligned with the model's frame, GRID_MM apart) and this CT's bone and TopBrain labels on it:
+def ct_grid(box=BOX) -> dict:
+    """The grid over box (default BOX) (aligned with the model's frame, GRID_MM apart) and this CT's bone and TopBrain labels on it:
     shape, a_crop (grid -> frame), P (the frame points, flat), S (scanner RAS), bone (the field), lab (labels), the
     frame (R, fossa). Shared with skullbase_v3_cavernous.py."""
     bz = np.load(CT_BUILD / "bone.npz")
@@ -381,9 +394,9 @@ def ct_grid() -> dict:
     fr = np.load(CT_BUILD / "frame.npz")
     R, fossa = fr["R"], fr["fossa"]
     # a frame point is (p - fossa) @ R for a scanner point p
-    shape = tuple(int(round((h - l) / GRID_MM)) + 1 for l, h in BOX)
+    shape = tuple(int(round((h - l) / GRID_MM)) + 1 for l, h in box)
     a_crop = np.diag([GRID_MM, GRID_MM, GRID_MM, 1.0])
-    a_crop[:3, 3] = [l for l, _ in BOX]
+    a_crop[:3, 3] = [l for l, _ in box]
     P = nib.affines.apply_affine(a_crop, np.indices(shape).reshape(3, -1).T)
     S = P @ R.T + fossa                                  # scanner RAS
     # bone, as v2/v3 draw it (their smoothed mask, sampled)

@@ -354,7 +354,7 @@ export class SpineAtlasPage {
     if (s.level && SCREW_LEVELS[s.level]) {
       if (this.screwOpen === null) this.screwOpen = !!s.screw;   // open when a link brings a screw
       pane.append(h('details', {
-        class: 'screw-box', open: this.screwOpen || undefined,
+        class: 'screw-box screw-panel', open: this.screwOpen || undefined,
         ontoggle: (e: Event) => { this.screwOpen = (e.target as HTMLDetailsElement).open; },
       }, h('summary', {}, 'Virtual screw', s.screw ? h('span', { class: 'screw-box-tech' }, ` · ${TECHNIQUES[s.screw.tech].name}, ${TECHNIQUES[s.screw.tech].midline ? 'midline' : s.screw.side === 'L' ? 'left' : 'right'}`) : ''), this.screw.el));
     }
@@ -362,7 +362,7 @@ export class SpineAtlasPage {
     if (drillPairFor(s.level)?.region === s.region) {
       if (this.drillOpen === null) this.drillOpen = !!s.drill;
       pane.append(h('details', {
-        class: 'screw-box', open: this.drillOpen || s.drill || undefined,
+        class: 'screw-box drill-panel', open: this.drillOpen || s.drill || undefined,
         ontoggle: (e: Event) => { this.drillOpen = (e.target as HTMLDetailsElement).open; },
       }, h('summary', {}, 'Drilling', s.drill ? h('span', { class: 'screw-box-tech' }, ` · ${DRILL_TEXT[s.drill].summary}`) : ''), this.drill.el));
     }

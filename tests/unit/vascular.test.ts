@@ -76,10 +76,10 @@ describe('vascular section', async () => {
     s.grp = 'davf';
     const p = S.vaPlan(s);
     expect(p.outline?.[0]).toBe('va_davf__fistula');
-    expect(p.outline).toEqual(expect.arrayContaining(['va_davf__reflux', 'va_davf__transverse_sinus', 'va_davf__sigmoid_sinus']));
+    expect(p.outline).toEqual(expect.arrayContaining(['va_davf__inferior_anastomotic_vein_of_labbe', 'va_davf__transverse_sinus', 'va_davf__sigmoid_sinus']));
     expect(p.outline).not.toContain('va_davf__feeders');
     expect(p.looks.get(G.ARTERIES[0])).toBe('context');
-    expect(p.focusIds).toContain('va_davf__reflux');
+    expect(p.focusIds).toContain('va_davf__inferior_anastomotic_vein_of_labbe');
     s.dsa.on = true;
     const q = S.vaPlan(s);
     expect(q.outline).toBeUndefined();
@@ -122,10 +122,40 @@ describe('vascular section', async () => {
     expect(T.decodeVa('#/grading').page).toBe('grading');
   });
 
+  it('shows a treatment in place of its aneurysm: clip and coils stop the filling, a flow diverter slows it', () => {
+    const s = T.defaultVaState();
+    s.grp = 'aneurysms';
+    expect(I.TREATMENTS.map((x) => x.id)).toEqual(['clip', 'coil', 'fd']);
+    for (const t of I.TREATMENTS) {
+      s.treat = t.id;
+      const p = S.vaPlan(s);
+      const treats = (t as unknown as { treats: string }).treats;
+      expect(p.looks.get(`va_${treats}__sac`), t.id).toBe('hidden');
+      for (const part of t.parts) expect(p.looks.get(part), part).not.toBe('hidden');
+    }
+    s.treat = 'fd';
+    expect(S.vaPlan(s).looks.get('va_fd__device')).toBe('alt');
+    // a treatment is the Aneurysms view's alone
+    s.grp = 'avm1';
+    expect(S.lesionParts('avm1', 'clip').parts.some((x) => x.startsWith('va_clip'))).toBe(false);
+  });
+
+  it('draws the circle of Willis variants on the right, in place of this CT’s own arteries', () => {
+    for (const [grp, seg] of [['fetal', 'va_posterior_cerebral_artery_p1_p2'], ['a1hypo', 'va_anterior_cerebral_artery_a1_a2']] as const) {
+      const s = T.defaultVaState();
+      s.grp = grp;
+      const p = S.vaPlan(s);
+      expect(p.looks.get(seg), grp).toBe('hidden');
+      expect(p.looks.get(`va_${grp}__${seg.slice(3)}`), grp).toBe('primary');
+    }
+  });
+
   it('round-trips its state through the link', () => {
     const s = T.defaultVaState();
     s.grp = 'ccfa'; s.dsa = { on: true, t: 1.4 }; s.layers.cortex.opacity = 0.3; s.layers.nuclei.on = false; s.sel = 'va_ccfa__fistula';
+    s.treat = 'coil';
     const t = T.decodeVa(T.encodeVa(s));
+    expect(t.treat).toBe('coil');
     expect(t.grp).toBe('ccfa');
     expect(t.dsa).toEqual({ on: true, t: 1.4 });
     expect(t.layers.cortex.opacity).toBeCloseTo(0.3);

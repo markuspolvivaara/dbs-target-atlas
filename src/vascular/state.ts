@@ -2,7 +2,7 @@ import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
 import { VA_GROUP } from './groups';
-import { DSA } from './index';
+import { DSA, TREATMENTS } from './index';
 
 export type VaPage = 'atlas' | 'grading' | 'sources' | 'credits';
 
@@ -15,6 +15,8 @@ export interface VaState extends ViewState {
   grp: string;
   labels: 'all' | 'hover' | 'off';
   dsa: Dsa;
+  /** the aneurysm treatment shown in the Aneurysms view ('' none) */
+  treat: string;
 }
 
 export const VA_PRESETS: CameraPreset[] = ['coronal', 'sagittal', 'axial', 'anterolateral', 'frontolateral'];
@@ -37,7 +39,7 @@ export function defaultVaState(): VaState {
     labels: 'hover',
     clip: { axial: { on: false, mm: 30 }, coronal: { on: false, mm: 0 }, sagittal: { on: false, mm: 0 } },
     cutSide: 'none', sliceSeq: 't1', lead: { ...DEFAULT_LEAD },
-    sel: null, hidden: [], dsa: { on: false, t: DSA.artSpanS },
+    sel: null, hidden: [], dsa: { on: false, t: DSA.artSpanS }, treat: '',
   };
 }
 
@@ -54,6 +56,7 @@ export function encodeVa(s: VaState): string {
     if (s.cam.pos && s.cam.tgt) p.set('c', [...s.cam.pos, ...s.cam.tgt].map(r1).join(','));
     else if (s.cam.preset) p.set('c', s.cam.preset);
     if (s.dsa.on) { p.set('dsa', '1'); p.set('t', String(r1(s.dsa.t))); }
+    if (s.treat) p.set('tr', s.treat);
     const ly = CODES.filter(([k]) => { const l = s.layers[k]!; return !l.on || l.opacity !== DEFAULT_OPACITY[k]; })
       .map(([k, c]) => { const l = s.layers[k]!; return `${c}${l.on ? Math.round(l.opacity * 100) : 0}`; });
     if (ly.length) p.set('ly', ly.join(','));
@@ -82,6 +85,8 @@ export function decodeVa(hash: string): VaState {
     else if ((VA_PRESETS as string[]).includes(c)) s.cam = { preset: c as CameraPreset };
   }
   s.dsa.on = p.get('dsa') === '1';
+  const tr = p.get('tr') ?? '';
+  s.treat = TREATMENTS.some((x) => x.id === tr) ? tr : '';
   const t = Number(p.get('t'));
   if (p.has('t') && Number.isFinite(t)) s.dsa.t = Math.max(0, Math.min(DSA.tMaxS, t));
   for (const part of (p.get('ly') ?? '').split(',')) {

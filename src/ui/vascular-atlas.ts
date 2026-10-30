@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import type { CameraPreset } from '../data/schema';
 import type { Hemi, LayerKey, ExtraLayerKey } from '../state';
 import type { Claim } from '../brainstem/schema';
-import { DSA, KIND_LABEL, kindOf, LESION, ponceClass, VA, VA_REF, type Lesion } from '../vascular';
-import { ANEURYSM_SITES, AVM_NIDUS, AVM_OTHER, AVM_WHAT, BLISTER, CCF, CCF_VEINS, DAVF, FUSIFORM, SPETZLER_MARTIN, SPETZLER_PONCE } from '../vascular/content';
+import { DSA, KIND_LABEL, kindOf, LESION, ponceClass, TREATMENTS, VA, VA_REF, type Lesion } from '../vascular';
+import { A1_HYPOPLASIA, ANASTOMOTIC_VEINS, ANEURYSM_SITES, AVM_NIDUS, AVM_OTHER, AVM_WHAT, BLISTER, CCF, CCF_VEINS, CLIPPING, COILING, DAVF, FETAL_PCOM, FLOW_DIVERSION, FUSIFORM, ISAT, SPETZLER_MARTIN, SPETZLER_PONCE } from '../vascular/content';
 import { VA_GROUP, VA_GROUPS, type VaGroup } from '../vascular/groups';
 import { lesionParts, vaScene, type VaPlan } from '../vascular/scene';
 import type { VaState } from '../vascular/state';
@@ -278,10 +278,15 @@ export class VascularAtlasPage {
   }
 
   private groupContent(g: VaGroup): HTMLElement | null {
-    if (g.kind === 'aneurysm') return h('dl', {},
+    if (g.id === 'normal') return h('dl', {},
+      h('dt', {}, 'The anastomotic veins'), h('dd', {}, 'The veins of Trolard (to the superior sagittal sinus) and Labbé (to the transverse sinus) are drawn by rule on the fitted brain from the superficial Sylvian vein.', claimList(ANASTOMOTIC_VEINS)));
+    if (g.id === 'fetal') return h('dl', {}, h('dt', {}, 'Fetal posterior cerebral artery'), h('dd', {}, claimList(FETAL_PCOM)));
+    if (g.id === 'a1hypo') return h('dl', {}, h('dt', {}, 'A1 hypoplasia'), h('dd', {}, claimList(A1_HYPOPLASIA)));
+    if (g.kind === 'aneurysm') return h('div', {}, this.treatmentBox(), h('dl', {},
       h('dt', {}, 'Where they arise'), h('dd', {}, claimList(ANEURYSM_SITES)),
       h('dt', {}, 'Fusiform aneurysms'), h('dd', {}, claimList(FUSIFORM)),
-      h('dt', {}, 'Blister and dissecting aneurysms'), h('dd', {}, claimList(BLISTER)));
+      h('dt', {}, 'Blister and dissecting aneurysms'), h('dd', {}, claimList(BLISTER)),
+      h('dt', {}, 'When one bleeds'), h('dd', {}, h('a', { href: '#/grading?to=hunt-hess' }, 'Hunt and Hess, WFNS and modified Fisher grades →'))));
     if (g.kind === 'avm') {
       const l = LESION.get(g.lesions[0])!;
       return h('dl', {},
@@ -294,13 +299,32 @@ export class VascularAtlasPage {
         h('dt', {}, 'All the grades'), h('dd', {}, h('a', { href: '#/grading' }, 'Spetzler–Martin and supplementary grades, and what they mean for treatment →')));
     }
     if (g.id === 'davf') return h('dl', {},
-      h('dt', {}, 'This one'), h('dd', {}, 'Drawn as Borden type II, Cognard type IIa+b: it drains into the sinus (on to the jugular vein, and back along the transverse sinus against its normal flow) and back into a cortical vein over the temporal lobe. In the angiogram the sinus and that vein fill in the arterial phase.'),
+      h('dt', {}, 'This one'), h('dd', {}, 'Drawn as Borden type II, Cognard type IIa+b: it drains into the sinus (on to the jugular vein, and back along the transverse sinus against its normal flow) and back into a cortical vein, the vein of Labbé over the temporal lobe (cortical venous reflux). In the angiogram the sinus and that vein fill in the arterial phase.'),
       h('dt', {}, 'Borden and Cognard'), h('dd', {}, claimList(DAVF)),
       h('dt', {}, 'All the types'), h('dd', {}, h('a', { href: '#/grading?to=borden' }, 'Borden and Cognard tables, and what they mean for treatment →')));
     if (g.kind === 'fistula') return h('dl', {},
       h('dt', {}, 'Barrow types'), h('dd', {}, claimList(CCF)),
       h('dt', {}, 'Venous drainage'), h('dd', {}, claimList(CCF_VEINS)));
     return null;
+  }
+
+  /** The aneurysm treatments: one at a time, each on one of the drawn aneurysms, with what the sources say of it. */
+  private treatmentBox(): HTMLElement {
+    const t = this.s.treat;
+    const lab = (id: string) => {
+      const l = TREATMENTS.find((x) => x.id === id)!;
+      const on = LESION.get((l as unknown as { treats: string }).treats)?.name ?? '';
+      return `${l.name} (${on.replace(/ aneurysm$/, '').replace(/^Middle cerebral artery bifurcation$/, 'MCA bifurcation')})`;
+    };
+    const notes: Record<string, [string, Claim[]][]> = {
+      clip: [['Clipping', CLIPPING], ['Clipping or coiling', ISAT]],
+      coil: [['Coiling', COILING], ['Clipping or coiling', ISAT]],
+      fd: [['Flow diversion', FLOW_DIVERSION]],
+    };
+    return h('div', { class: 'treat-box' },
+      chips<string>([['', 'None'], ...TREATMENTS.map((x) => [x.id, lab(x.id)] as [string, string])], t,
+        (v) => this.update((s) => { s.treat = v; s.sel = null; }), { label: 'Treatment', cls: 'treat-chips' }),
+      t ? h('dl', {}, ...notes[t].flatMap(([title, cl]) => [h('dt', {}, title), h('dd', {}, claimList(cl))])) : null);
   }
 
   /** An AVM's Spetzler–Martin points, as drawn, its grade and Spetzler–Ponce class. */

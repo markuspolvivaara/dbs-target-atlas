@@ -1,16 +1,18 @@
-"""Skull base v3's arteries kept out of the brainstem: the brainstem is a template fitted into this CT, the arteries
-are this CT's own (TopBrain's labels, carried with the brain's shapes) or fitted courses (Z-Anatomy's), so in places an
-artery's surface runs into the brainstem's and seems to pass through it (the PICA's loops by the obex, where the fitted
-medulla has a crevice; the fitted anterior inferior and superior cerebellar arteries in the pons).
+"""Skull base v3's arteries kept out of the fitted hindbrain: the brainstem and cerebellum are a template fitted into
+this CT, the arteries are this CT's own (TopBrain's labels, carried with the brain's shapes) or fitted courses
+(Z-Anatomy's), so in places an artery's surface runs into them and seems to pass through (the fitted anterior inferior
+and superior cerebellar arteries in the pons; the fitted PICA's branches inside the smooth template cerebellum, which
+has no fissures for them to lie in).
 
-Each artery point inside the brainstem, in any shape of the brain (the brainstem does not move), is moved out, its
-neighbours along the vessel with it (a Gaussian), so that the tube keeps its shape and comes to lie on the surface:
-  this CT's own arteries (the PICA's loops on the back of the medulla) straight back, as far as the first open space
-  behind them plus CLEAR_MM (nudge: a millimetre or so; their cards say how far);
-  the fitted courses towards the nearest open space (down the depth's gradient) by their depth plus CLEAR_MM, in rounds
-  of at most LIFT_STEP_MM (lift).
+  The fitted courses give way: each point inside the brainstem, in each of the artery's shapes (the brainstem does not
+  move), is lifted out along the shortest way by its depth plus CLEAR_MM, its neighbours along the vessel with it (a
+  Gaussian, LIFT_SIGMA_MM), in rounds of at most LIFT_STEP_MM, so that the tube keeps its shape and comes to lie on the
+  surface (lift). Out of the cerebellum they are kept upstream, as centre lines (skullbase_v3.hindbrain_clearance, the
+  PICA's in skullbase_v3_pica.py): checked here to lie on it or in its fissures.
+  This CT's own arteries: the brainstem gives way, should one lie in it (carve: a channel cut, the tissue straight
+  behind it removed, the part meshed again).
 
-A moved artery is written as a file of its own (<id>.cleared.glb) and v3's item points to it; the file its source wrote
+A changed mesh is written as a file of its own (<id>.cleared.glb) and v3's item points to it; the file its source wrote
 is never changed, so running this again changes nothing. skullbase_v3_endonasal.py (the last of v3's steps to write its
 manifest) runs this and then skullbase_v3_junctions.py, which joins the cleared files; on their own, run this and then
 that.
@@ -32,21 +34,23 @@ from glb import TRIANGLES, read_glb_full, write_glb  # noqa: E402
 DATA = ROOT / "data" / "build"
 GEN = ROOT.parent / "src" / "data" / "generated"
 STEM = ["Medulla oblongata", "Pons", "Midbrain"]
+CEREBELLUM = ["Cerebellar hemisphere", "Vermis", "Tonsil of cerebellum"]
+SHAPES = ("rest", "telovelar", "retrosigmoid")
+HINDBRAIN_GRID_MM = 0.35  # the whole hindbrain rasterised this fine (the brainstem alone at GRID_MM)
+FISSURE_SHARE = 0.2       # a fitted course on the cerebellum: at most this share of its surface touching it ...
+FISSURE_MM = 4.0          # ... at most this deep (its branches lie in the template's narrow fissures)
 CLEAR_MM = 0.3          # an artery's clearance off the brainstem
 GRID_MM = 0.2           # the brainstem rasterised this fine to find what lies in it
 LIFT_SIGMA_MM = 1.5     # a fitted course lifted with its neighbours along it (Gaussian)
-LIFT_STEP_MM = 0.5      # ... at most this per round
+LIFT_STEP_MM = 1.0      # ... at most this per round
 CARVE_BACK_MM = 3.0     # a channel for this CT's own artery: the tissue behind it removed up to this far
-NUDGE_WHOLE_MM = 1.2    # this CT's own artery moved back whole within this of a point that must move (its cross-section),
-NUDGE_SIGMA_MM = 1.0    # ... the move falling off beyond as a Gaussian this wide along the vessel ...
-NUDGE_MAX_MM = 5.0      # ... looking at most this far back for open space
-ROUNDS = 30
+ROUNDS = 60
 NEAR_MM = 3.0           # an artery's surface point counts for the brainstem's points this close to it
-LIFT_NOTE = " Lifted out of the fitted brainstem where this course ran into it, onto its surface (skullbase_v3_clearance.py)."
+LIFT_NOTE = " Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py)."
 CARVE_NOTE = (" Where this CT's own {} lies in it (the fitted template's surface reaching past the artery), a channel is"
               " cut for it: the artery widened by 0.3 mm and the tissue straight behind it removed, the surface meshed again"
               " (skullbase_v3_clearance.py).")
-NOTES = ("Lifted out of the fitted brainstem", "Where this CT's own")
+NOTES = ("Lifted out of the fitted brainstem", "Where this CT's own")    # (each note's start)
 
 
 def source_of(item: dict) -> str:
@@ -86,44 +90,63 @@ class Solid:
     """The brainstem rasterised (each part, each half on its own: their fills are OR-ed): depth inside it, and its
     surface's outward normals."""
 
-    def __init__(self, parts: list[tuple[np.ndarray, np.ndarray]]):
+    def __init__(self, parts: list[tuple[np.ndarray, np.ndarray]], grid: float = GRID_MM):
         from skullbase_brain import fill
+        self.grid = grid
         allv = np.vstack([P for P, _ in parts])
         self.lo = allv.min(0) - 3
-        self.shape = tuple(np.ceil((allv.max(0) + 3 - self.lo) / GRID_MM).astype(int) + 1)
+        self.shape = tuple(np.ceil((allv.max(0) + 3 - self.lo) / grid).astype(int) + 1)
         solid = np.zeros(self.shape, bool)
         for P, T in parts:
-            solid |= fill(P, T, self.lo, self.shape, GRID_MM)
-        self.dep = ndimage.distance_transform_edt(solid) * GRID_MM
-        self.grad = np.gradient(ndimage.gaussian_filter(self.dep, 1.0))
+            solid |= fill(P, T, self.lo, self.shape, grid)
+        dep, near = ndimage.distance_transform_edt(solid, return_indices=True)
+        self.dep = (dep * grid).astype(np.float32)
+        self.near = near.astype(np.int32)        # each voxel's nearest voxel outside
+        del dep
         self.surf = allv
         self.nrm = np.vstack([normals(P, T) for P, T in parts])
         self.tree = cKDTree(self.surf)
 
     def depth(self, Q: np.ndarray) -> np.ndarray:
-        ijk = np.rint((Q - self.lo) / GRID_MM).astype(int)
+        ijk = np.rint((Q - self.lo) / self.grid).astype(int)
         ok = (ijk >= 0).all(1) & (ijk < np.array(self.shape)).all(1)
         d = np.zeros(len(Q))
         d[ok] = self.dep[tuple(ijk[ok].T)]
         return d
 
     def outward(self, Q: np.ndarray, k: int = 8) -> np.ndarray:
-        """Towards the nearest open space: down the (smoothed) depth's gradient inside; the surface's normals near it
-        outside (or where the gradient is flat)."""
-        g = (Q - self.lo) / GRID_MM
-        v = -np.stack([ndimage.map_coordinates(c, g.T, order=1, mode="nearest") for c in self.grad], 1)
+        """Towards the nearest open space: inside, straight to the nearest voxel outside (the shortest way out);
+        outside, the surface's normals near it."""
         _, j = self.tree.query(Q, k)
         n = self.nrm[j].mean(1)
         n /= np.linalg.norm(n, axis=1, keepdims=True) + 1e-12
+        ijk = np.rint((Q - self.lo) / self.grid).astype(int)
+        ok = (ijk >= 0).all(1) & (ijk < np.array(self.shape)).all(1) & (self.depth(Q) > 0)
+        out = self.lo + self.near[(slice(None),) + tuple(ijk[ok].T)].T * self.grid
+        v = out - Q[ok]
         ln = np.linalg.norm(v, axis=1)
-        inside = (self.depth(Q) > 0) & (ln > 1e-4)
-        n[inside] = v[inside] / ln[inside, None]
+        n[np.nonzero(ok)[0][ln > 1e-6]] = v[ln > 1e-6] / ln[ln > 1e-6, None]
         return n
 
 
 def states(nd: dict) -> list[np.ndarray]:
     """A mesh's positions at rest and in each of its shapes."""
     return [nd["positions"]] + [nd["positions"] + t["positions"] for t in nd["targets"]]
+
+
+def shaped(nd: dict, shape: str) -> np.ndarray:
+    """A mesh's positions in one shape of the brain (at rest if it has no such shape)."""
+    for t in nd["targets"]:
+        if t["name"] == shape:
+            return nd["positions"] + t["positions"]
+    return nd["positions"]
+
+
+def hindbrain(by: dict, pick=None) -> dict:
+    """The fitted brainstem and cerebellum rasterised in each shape of the brain: {shape: Solid}."""
+    pick = pick or file_of
+    parts = [read_glb_full(pick(by[n])) for n in STEM + CEREBELLUM if n in by]
+    return {sh: Solid([(shaped(nd, sh), nd["indices"]) for p in parts for nd in p.values()], HINDBRAIN_GRID_MM) for sh in SHAPES}
 
 
 def write(path: Path, nodes: dict, vid: str) -> None:
@@ -139,61 +162,36 @@ def write(path: Path, nodes: dict, vid: str) -> None:
     write_glb(path, out, {"id": vid})
 
 
-def lift(art: dict, solid: Solid) -> int:
-    """Lift a fitted course's points out of the brainstem with their neighbours; returns how many were inside."""
-    nodes = art
-    first = None
-    for nd in nodes.values():
-        P = nd["positions"].copy()
-        tree = cKDTree(P)
-        for _ in range(ROUNDS):
-            dep = np.max([solid.depth(Q - nd["positions"] + P) for Q in states(nd)], axis=0)
-            ins = np.nonzero(dep > 0)[0]
-            if first is None:
-                first = 0
-            if not len(ins):
-                break
-            first = max(first, len(ins))
-            need = np.zeros(len(P))
-            for i, near in zip(ins, tree.query_ball_point(P[ins], 3 * LIFT_SIGMA_MM)):
-                near = np.asarray(near)
-                w = np.exp(-np.linalg.norm(P[near] - P[i], axis=1) ** 2 / (2 * LIFT_SIGMA_MM ** 2))
-                need[near] = np.maximum(need[near], (dep[i] + CLEAR_MM) * w)
-            k = need > 1e-3
-            P[k] += solid.outward(P[k]) * np.minimum(need[k], LIFT_STEP_MM)[:, None]
-        nd["positions"] = P
-    return first or 0
-
-
-def nudge(art: dict, solid: Solid) -> int:
-    """Move this CT's own artery back (posteriorly: its loops lie on the back of the medulla) just clear of the
-    brainstem: each point inside it, in any shape, goes back as far as the first open space behind it plus CLEAR_MM, its
-    cross-section with it (NUDGE_WHOLE_MM), falling off beyond along the vessel (NUDGE_SIGMA_MM); returns how many were
-    inside."""
-    back = np.array([0.0, -1.0, 0.0])
-    ts = np.arange(0.0, NUDGE_MAX_MM + 1e-9, 0.05)
+def lift(art: dict, solids: dict) -> int:
+    """Lift a fitted course's points out of the hindbrain (in each shape, against the hindbrain in that shape) with their
+    neighbours; returns how many were inside."""
     first = 0
     for nd in art.values():
         P = nd["positions"].copy()
         tree = cKDTree(P)
-        for _ in range(4):
-            need_pt = np.zeros(len(P))
-            for Q in states(nd):
-                Q = Q - nd["positions"] + P
-                ins = np.nonzero(solid.depth(Q) > 0)[0]
-                for i in ins:
-                    out = np.nonzero(solid.depth(Q[i] + ts[:, None] * back) == 0)[0]
-                    need_pt[i] = max(need_pt[i], (ts[out[0]] if len(out) else NUDGE_MAX_MM) + CLEAR_MM)
-            ins = np.nonzero(need_pt > 0)[0]
-            first = max(first, len(ins))
+        for _ in range(ROUNDS):
+            # the deepest of its shapes, and the way out there
+            dep, way = np.zeros(len(P)), np.zeros((len(P), 3))
+            for sh, solid in solids.items():
+                Q = shaped(nd, sh) - nd["positions"] + P
+                d = solid.depth(Q)
+                deeper = d > dep
+                if deeper.any():
+                    dep[deeper] = d[deeper]
+                    way[deeper] = solid.outward(Q[deeper])
+            ins = np.nonzero(dep > 0)[0]
             if not len(ins):
                 break
-            need = np.zeros(len(P))
-            for i, near in zip(ins, tree.query_ball_point(P[ins], NUDGE_WHOLE_MM + 3 * NUDGE_SIGMA_MM)):
-                near = np.asarray(near)
-                d = np.maximum(np.linalg.norm(P[near] - P[i], axis=1) - NUDGE_WHOLE_MM, 0)
-                need[near] = np.maximum(need[near], need_pt[i] * np.exp(-d ** 2 / (2 * NUDGE_SIGMA_MM ** 2)))
-            P += need[:, None] * back
+            first = max(first, len(ins))
+            need, vec = np.zeros(len(P)), np.zeros((len(P), 3))
+            for i, near in zip(ins, tree.query_ball_point(P[ins], 3 * LIFT_SIGMA_MM)):
+                near = np.asarray(near, int)
+                w = (dep[i] + CLEAR_MM) * np.exp(-np.linalg.norm(P[near] - P[i], axis=1) ** 2 / (2 * LIFT_SIGMA_MM ** 2))
+                more = w > need[near]
+                need[near[more]] = w[more]
+                vec[near[more]] = way[i]
+            k = need > 1e-3
+            P[k] += vec[k] * np.minimum(need[k], LIFT_STEP_MM)[:, None]
         nd["positions"] = P
     return first
 
@@ -267,18 +265,21 @@ def clear(items_list: list) -> dict:
     by = {it["name"]: it for it in items_list}
     stem = [read_glb_full(file_of(by[n])) for n in STEM if n in by]
     solid = Solid([(nd["positions"], nd["indices"]) for s in stem for nd in s.values()])
+    stem_solids = {sh: solid for sh in SHAPES}    # (the brainstem does not move; each of an artery's shapes against it)
     report, own = {}, []
     for it in items_list:
         if it.get("category") != "artery":
             continue
         nodes = read_glb_full(file_of(it))
-        if not any((solid.depth(Q) > 0).any() for nd in nodes.values() for Q in states(nd)):
+        fitted = it.get("fitted") or it.get("dataset") == "fitted"
+        if not fitted:
+            if any((solid.depth(Q) > 0).any() for nd in nodes.values() for Q in states(nd)):
+                own.append((it, nodes))           # this CT's own: the brainstem gives way (below)
             continue
-        if not (it.get("fitted") or it.get("dataset") == "fitted"):
-            own.append((it, nodes))           # this CT's own: the brainstem gives way (below)
+        if not any((solid.depth(shaped(nd, sh)) > 0).any() for sh in SHAPES for nd in nodes.values()):
             continue
         rest = {s: nd["positions"].copy() for s, nd in nodes.items()}
-        n = lift(nodes, solid)
+        n = lift(nodes, stem_solids)
         moved = max(float(np.linalg.norm(nodes[s]["positions"] - rest[s], axis=1).max()) for s in nodes)
         cleared(it, nodes, LIFT_NOTE)
         report[it["name"]] = {"insidePoints": n, "movedMm": round(moved, 2)}
@@ -294,10 +295,12 @@ def clear(items_list: list) -> dict:
 
 
 def check(items_list: list) -> list[tuple[bool, str]]:
-    """For skullbase_v3.py's validation: no artery's surface more than CLEAR_MM inside the brainstem, in any shape."""
+    """For skullbase_v3.py's validation: no artery's surface more than CLEAR_MM inside the brainstem, in any shape; no
+    fitted course's inside the cerebellum either."""
     by = {it["name"]: it for it in items_list}
     stem = [read_glb_full(shown(by[n])) for n in STEM if n in by]
     solid = Solid([(nd["positions"], nd["indices"]) for s in stem for nd in s.values()])
+    solids = hindbrain(by, shown)
     out = []
     for it in items_list:
         if it.get("category") != "artery":
@@ -305,6 +308,16 @@ def check(items_list: list) -> list[tuple[bool, str]]:
         nodes = read_glb_full(shown(it))
         worst = max(float(solid.depth(Q).max()) for nd in nodes.values() for Q in states(nd))
         out.append((worst <= CLEAR_MM + GRID_MM, f"{it['name']}: {worst:.1f} mm inside the brainstem"))
+        if it.get("fitted") or it.get("dataset") == "fitted":
+            # on the cerebellum or in its fissures (the template's narrow slits, where its branches lie: the tube's wall
+            # may touch their sides), not through it
+            # (in its own shapes: a vessel that does not move with the cerebellum is judged at rest)
+            own_shapes = {"rest"} | {t["name"] for nd in nodes.values() for t in nd["targets"]}
+            d = [sd.depth(shaped(nd, sh)) for sh, sd in solids.items() if sh in own_shapes for nd in nodes.values()]
+            share = max(float((x > 0).mean()) for x in d)
+            w2 = max(float(x.max()) for x in d)
+            out.append((share <= FISSURE_SHARE and w2 <= FISSURE_MM,
+                        f"{it['name']}: {100 * share:.0f} % of it, up to {w2:.1f} mm, inside the cerebellum"))
     return out
 
 

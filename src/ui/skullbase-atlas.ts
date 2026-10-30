@@ -3,6 +3,7 @@ import type { CameraPreset } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
 import { APPROACH_GEOM, definitionFor, isApproachPart, kindOf, LANDMARKS, LM, NOT_YET_SHOWN, REGIONS, SB, SB_MANIFEST, SB_MODEL, V3_FIT, type Landmark, type SbModel } from '../skullbase';
 import { APPROACH, APPROACH_REF, CAVERNOUS_INFO, ENDONASAL_INFO, INSULA, type ApproachClaim, type ApproachSection } from '../skullbase/approaches';
+import { measuredOn, TUMOUR_FAMILY, TUMOURS, tumourGroupId, type TumourFamily } from '../skullbase/tumours';
 import { CAVERNOUS } from '../skullbase/cavernous';
 import { TB_NOTES, TB_REF } from '../skullbase/temporal';
 import { encodeSkull } from '../skullbase/state';
@@ -25,10 +26,10 @@ const PRESETS: [CameraPreset, string, string, string][] = [
   ...(SB_MODEL === 'v3' ? [['anterolateral', 'Surgical (anterolateral)', '6', 'Surg'] as [CameraPreset, string, string, string]] : []),
 ];
 const LAYERS: [LayerKey, string][] = [['nuclei', 'Bones'], ['tracts', 'Vessels and nerves'], ['cortex', 'Soft tissue'], ['targets', 'Landmarks']];
-const KIND_LABEL = { bone: 'Bone', soft: 'Soft tissue', artery: 'Artery', vein: 'Vein or dural sinus', nerve: 'Nerve', labyrinth: 'Inner ear', ossicle: 'Ossicle', membrane: 'Membrane', brain: 'Brain (fitted template)', hindbrain: 'Cerebellum and brainstem (fitted model)', ventricle: 'Ventricle (fitted model)', removed: 'Bone removed', triangle: 'Surgical triangle' } as const;
-const KIND_PLURAL: Record<string, string> = { 'Surgical triangle': 'Surgical triangles', 'Soft tissue': 'Soft tissue', Artery: 'Arteries', 'Vein or dural sinus': 'Veins and dural sinuses', Nerve: 'Nerves', Ossicle: 'Ossicles', Membrane: 'Membranes' };
+const KIND_LABEL = { bone: 'Bone', soft: 'Soft tissue', artery: 'Artery', vein: 'Vein or dural sinus', nerve: 'Nerve', labyrinth: 'Inner ear', ossicle: 'Ossicle', membrane: 'Membrane', brain: 'Brain (fitted template)', hindbrain: 'Cerebellum and brainstem (fitted model)', ventricle: 'Ventricle (fitted model)', removed: 'Bone removed', triangle: 'Surgical triangle', tumour: 'Tumour (drawn by rule)', guide: 'Guide line' } as const;
+const KIND_PLURAL: Record<string, string> = { 'Tumour (drawn by rule)': 'Tumour (drawn by rule)', 'Guide line': 'Guide lines', 'Surgical triangle': 'Surgical triangles', 'Soft tissue': 'Soft tissue', Artery: 'Arteries', 'Vein or dural sinus': 'Veins and dural sinuses', Nerve: 'Nerves', Ossicle: 'Ossicles', Membrane: 'Membranes' };
 const GROUP_ROWS: [SbGroup['kind'], string][] = SB_MODEL === 'v3'
-  ? [['overview', 'Overview'], ['region', 'Each side'], ['system', 'Systems'], ['approach', 'Surgical views']]
+  ? [['overview', 'Overview'], ['region', 'Each side'], ['system', 'Systems'], ['approach', 'Surgical views'], ['tumour', 'Tumours']]
   : [['overview', 'Overview'], ['region', 'Regions'], ['system', 'Systems'], ['bone', 'Bones and their landmarks']];
 /** the three models of the section: page folder and chip label */
 const MODELS: [SbModel, string, string][] = [['v3', 'skullbase', 'Skull base'], ['zanatomy', 'skullbase-v1', 'Skull base v1 (Z-Anatomy)'], ['ct', 'skullbase-ct', 'Skull base v2 (CT)']];
@@ -287,7 +288,7 @@ export class SkullbaseAtlasPage {
   private pickGroup(id: string): void {
     this.update((st) => {
       const g = SB_GROUP.get(id)!;
-      st.grp = id; st.also = []; st.hemi = g.hemi; st.cutAbove = g.cutAbove; st.cam = { preset: null }; st.hidden = []; st.sel = null; st.morphs = {};
+      st.grp = id; st.also = []; st.hemi = g.hemi; st.cutAbove = g.cutAbove; st.cam = { preset: null }; st.hidden = []; st.sel = null; st.morphs = { ...(g.morphDefault ?? {}) };
     }, { camera: true });
   }
 
@@ -333,6 +334,30 @@ export class SkullbaseAtlasPage {
     const g = viewGroup(s.grp, s.also);
     const shownSystems = SB_GROUP.get(s.grp)?.kind === 'system' ? [s.grp, ...s.also] : [];
     for (const [kind, label] of GROUP_ROWS) {
+      if (kind === 'tumour') {     // one chip per kind of tumour; its grades (or sites) in a row of their own
+        const fams = TUMOURS.filter((t) => SB_GROUPS.some((x) => x.tumour?.family === t.family));
+        if (!fams.length) continue;
+        const cur = SB_GROUP.get(s.grp)?.tumour?.family ?? null;
+        pane.append(h('p', { class: 'chips-label' }, label),
+          chips(fams.map((t): [TumourFamily, string] => [t.family, t.short]), cur, (f) => {
+            const first = SB_GROUPS.find((x) => x.tumour?.family === f);
+            if (first) this.pickGroup(first.id);
+          }, { label, cls: 'grp-chips' }));
+        const g0 = SB_GROUP.get(s.grp);
+        if (g0?.tumour) {
+          const fam = TUMOUR_FAMILY.get(g0.tumour.family)!;
+          const grades = fam.grades.filter((x) => SB_GROUP.has(tumourGroupId(fam.family, x.id)));
+          pane.append(h('p', { class: 'chips-label' }, fam.scale),
+            chips(grades.map((x): [string, string] => [tumourGroupId(fam.family, x.id), x.label]), s.grp, (v) => this.pickGroup(v), { label: fam.scale, cls: 'grp-chips grade-chips' }));
+          if (g0.section) {
+            const id = 'sb-section';
+            pane.append(h('label', { class: 'check', for: id },
+              h('input', { type: 'checkbox', id, checked: s.section, onchange: (e: Event) => { const on = (e.target as HTMLInputElement).checked; this.update((st) => { st.section = on; }); } }),
+              ' Cut at the coronal section (the Knosp lines’ plane)'));
+          }
+        }
+        continue;
+      }
       const items = SB_GROUPS.filter((x) => x.kind === kind).map((x): [string, string] => [x.id, x.name]);
       if (!items.length) continue;
       pane.append(kind === 'system'
@@ -342,7 +367,7 @@ export class SkullbaseAtlasPage {
         ? chips(items, shownSystems, (v) => this.toggleSystem(v), { label, cls: 'grp-chips' })
         : chips(items, s.grp, (v) => this.pickGroup(v), { label, cls: 'grp-chips' }));
     }
-    if (g.kind === 'approach' && !g.endonasal) pane.append(this.openingSliders(g));
+    if ((g.kind === 'approach' && !g.endonasal && g.morphs?.length) || (g.kind === 'tumour' && g.morphs?.length)) pane.append(this.openingSliders(g));
     if (g.endonasal) pane.append(this.endonasal.el);
     const boneIds = g.structures.filter((id) => SB.get(id)?.type === 'bone');
     const hidden = new Set(s.hidden);
@@ -368,7 +393,7 @@ export class SkullbaseAtlasPage {
         h('button', { type: 'button', class: 'linklike', onclick: () => show(ids, false) }, 'Hide all')));
     // vessels, nerves and soft tissue: one list per kind; cranial nerves (I-XII) and artery systems each under
     // their own heading
-    for (const k of ['brain', 'removed', 'nerve', 'labyrinth', 'ossicle', 'membrane', 'artery', 'vein', 'triangle', 'soft'] as const) {
+    for (const k of ['tumour', 'guide', 'brain', 'removed', 'nerve', 'labyrinth', 'ossicle', 'membrane', 'artery', 'vein', 'triangle', 'soft'] as const) {
       const ids = g.structures.filter((id) => { const st = SB.get(id); return st && st.type !== 'bone' && kindOf(st) === k; });
       if (!ids.length) continue;
       pane.append(listHead(KIND_PLURAL[KIND_LABEL[k]] ?? KIND_LABEL[k], ids));
@@ -393,6 +418,7 @@ export class SkullbaseAtlasPage {
       h('p', {}, g.description),
       g.kind === 'overview' && SB_MODEL === 'v3' ? this.fitReport() : null,
       g.kind === 'approach' && g.approach ? this.approachBody(g.approach) : null,
+      g.tumour ? this.tumourBody(g) : null,
       g.info ? this.infoBody(g.info) : null,
       g.kind === 'overview' && SB_MODEL !== 'v3' ? [
         SB_MODEL === 'ct'
@@ -418,6 +444,13 @@ export class SkullbaseAtlasPage {
     if (lm) return this.landmarkCard(lm, close, defBlock, regions);
     if (!st) return h('p', {}, '');
     const k = kindOf(st);
+    if (k === 'tumour' || k === 'guide') {
+      return h('article', { class: 'card sel', style: `--accent: var(--c-${st.colour.token})` }, close,
+        h('p', { class: 'eyebrow' }, KIND_LABEL[k]),
+        h('h2', {}, h('span', { class: 'swatch', style: `--c: var(--c-${st.colour.token})` }), st.name),
+        h('p', { class: 'aside schematic-note' }, 'Drawn by rule, not a patient’s.'),
+        h('dl', {}, h('dt', {}, 'Geometry'), h('dd', {}, `${st.source}. ${st.derivation} `, h('a', { href: '#/credits' }, 'Licence and attribution'))));
+    }
     if (st.approach || k === 'brain' || k === 'hindbrain' || k === 'ventricle') {
       const ap = st.approach ? APPROACH.get(st.approach) : undefined;
       return h('article', { class: 'card sel', style: `--accent: var(--c-${st.colour.token})` }, close,
@@ -521,6 +554,25 @@ export class SkullbaseAtlasPage {
           `A template (the Lead-DBS MNI 2009b pial surface), deformed smoothly to fit this skull: its hull ${fmtMm(b.params.tableGapMm)} mm inside the cranial cavity (median error ${fmtMm(b.fit.tableMedianMm)} mm), every artery this CT labels outside the cortex (${pctOf(b.fit.vesselInCortexShare)} of their centre-line points still inside it before the final clearance, none after), the M2 segments on the insula (median ${fmtMm(b.fit.m2InsulaMedianMmR)} mm on the right) and the M3 segments in the Sylvian fissure (median ${fmtMm(b.fit.m3FissureMedianMmR)} mm). So the template’s fissure lies where this patient’s middle cerebral artery runs, but its gyri are the template’s.`)] : null,
         h('dt', {}, 'Not shown'), h('dd', {}, ap.notShown)),
       h('p', { class: 'aside schematic-note' }, 'Illustrative: drawn by rule on one CT’s skull from the published descriptions, with a template brain; not planned for a patient.'),
+    ];
+  }
+
+  /** A tumour's card: the grade (or site) and what the sources say, how it measures on this model, and its approach. */
+  private tumourBody(g: SbGroup): HTMLElement[] {
+    const t = g.tumour!;
+    const fam = TUMOUR_FAMILY.get(t.family)!;
+    const gr = fam.grades.find((x) => x.id === t.grade)!;
+    const host = g.approach ? APPROACH.get(g.approach) : undefined;
+    return [
+      h('dl', {},
+        h('dt', {}, t.family === 'meningioma' ? 'The site' : 'This grade'), h('dd', {}, this.claims([gr.definition])),
+        gr.notes?.length ? [h('dt', {}, 'Its approach'), h('dd', {}, this.claims(gr.notes))] : null,
+        ...fam.sections.map((x) => [h('dt', {}, x.title), h('dd', {}, this.claims(x.claims))]),
+        h('dt', {}, 'Drawn on this model'), h('dd', {}, h('ul', { class: 'plain' }, ...measuredOn(t.family, t.grade).map((x) => h('li', {}, x)))),
+        host ? [h('dt', {}, 'The view'), h('dd', {}, `Drawn in the ${host.name.toLowerCase()} view of this model: `, h('a', { href: `#/atlas?g=${host.view}` }, 'open it without the tumour'), '.')] : null,
+        h('dt', {}, 'Every grade'), h('dd', {}, h('a', { href: `#/grading` }, 'The Grading page'), ' has the table.'),
+        h('dt', {}, 'Not shown'), h('dd', {}, fam.notShown)),
+      h('p', { class: 'aside schematic-note' }, 'Illustrative: a tumour drawn by rule on one CT, not a patient’s; the brain pushed aside by it is a shape, not a simulation of the tissue.'),
     ];
   }
 

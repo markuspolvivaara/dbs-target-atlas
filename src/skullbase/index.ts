@@ -68,7 +68,7 @@ const RegionSchema = z.object({
 });
 export const REGIONS = z.array(RegionSchema).parse(regionsJson);
 
-export type Kind = 'bone' | 'soft' | 'artery' | 'vein' | 'nerve' | 'labyrinth' | 'ossicle' | 'membrane' | 'brain' | 'hindbrain' | 'ventricle' | 'removed' | 'triangle';
+export type Kind = 'bone' | 'soft' | 'artery' | 'vein' | 'nerve' | 'labyrinth' | 'ossicle' | 'membrane' | 'brain' | 'hindbrain' | 'ventricle' | 'removed' | 'triangle' | 'tumour' | 'guide';
 export const kindOf = (m: ManifestStructure): Kind => (m.category ?? 'bone') as Kind;
 /** structures that belong to a surgical approach (a cut bone, or the bone removed): drawn only in that approach's view */
 export const isApproachPart = (m: ManifestStructure): boolean => !!m.approach;

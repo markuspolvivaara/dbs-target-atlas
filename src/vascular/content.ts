@@ -16,6 +16,35 @@ export const BLISTER: Claim[] = [
   c('In the strict sense a blood blister-like aneurysm is a dissecting aneurysm of the dorsal wall of the internal carotid artery in its ophthalmic segment; the terms are often used interchangeably with dissecting aneurysm.', 'wroe2025'),
 ];
 
+// ---------------------------------------------------------------- treatment of aneurysms
+export const CLIPPING: Claim[] = [
+  c('Clipping reaches the aneurysm through a craniotomy, dissects it free, shows its neck and closes the neck for good with a metal clip, without compromising the parent and perforating arteries.', 'lee2022'),
+];
+export const COILING: Claim[] = [
+  c('Coiling packs the aneurysm densely with detachable platinum coils, so that an unorganised thrombus and then granulation tissue form in it.', 'lee2022'),
+];
+export const ISAT: Claim[] = [
+  c('In the International Subarachnoid Aneurysm Trial (ruptured aneurysms suitable for either treatment), 83 % of the patients allocated coiling and 79 % of those allocated clipping were alive at 10 years; patients in the coiling group were more likely to be alive and independent (odds ratio 1.34).', 'molyneux2015'),
+  c('Rebleeding was more likely after coiling than after clipping, but the risk was small; in both groups the risk of death and rebleeding from the treated aneurysm up to 18 years was very small.', 'molyneux2015'),
+];
+export const FLOW_DIVERSION: Claim[] = [
+  c('Flow diverters are stent-like devices placed in the parent artery: they change the inflow and outflow at the neck, so that the aneurysm thromboses over time; neointima then grows over the device and rebuilds the parent artery, usually sparing the origins of perforators.', 'alderazi2014'),
+  c('They have made previously untreatable wide-necked and giant aneurysms treatable, and in fusiform aneurysms they rebuild a smooth channel continuous with the parent artery. Antiplatelet therapy is mandatory; the risks include in-stent thrombosis, perianeurysmal oedema, distant and delayed haemorrhages and perforator occlusion.', 'alderazi2014'),
+];
+
+// ---------------------------------------------------------------- variants of the circle of Willis
+export const FETAL_PCOM: Claim[] = [
+  c('In a fetal configuration the P1 segment is narrower than the posterior communicating artery and the P2 segment is supplied from the internal carotid artery; the P1 may be hypoplastic (a partial fetal posterior cerebral artery) or absent (a full one).', 'davidoiu2023'),
+  c('In one study of 231 cases a fetal posterior cerebral artery was found on one side only, in 5.6 %; a review found it on both sides in up to 9 %.', 'davidoiu2023'),
+];
+export const A1_HYPOPLASIA: Claim[] = [
+  c('Hypoplasia of the A1 segment is found in 10 % of post-mortem examinations and aplasia in 1–2 %; MR angiography showed A1 hypoplasia in 3 %. The opposite A1 is then dilated and supplies both anterior cerebral territories across a dilated anterior communicating artery.', 'makowicz2013'),
+];
+export const ANASTOMOTIC_VEINS: Claim[] = [
+  c('In 21 brains the superior anastomotic vein (of Trolard) joined the superior sagittal sinus on average 0.6 and 1.3 cm from the central sulcus’s midpoint (right, left), and the inferior anastomotic vein (of Labbé) the transverse sinus 9.9 and 9.7 cm from the temporal pole.', 'tomasi2021'),
+  c('Which dominates varies: in 42 hemispheres the vein of Trolard in 21.4 %, the vein of Labbé in 16.7 %, the Sylvian veins in 42.9 %; these veins lie along the routes to most intracranial pathology and are at risk of occlusion.', 'tomasi2021'),
+];
+
 // ---------------------------------------------------------------- arteriovenous malformations
 export const AVM_WHAT: Claim[] = [
   c('A brain AVM is a nidus of abnormal vessels between feeding arteries and draining veins: many arteriovenous shunts with no brain tissue between them and no capillary bed.', 'naranbhai2023'),

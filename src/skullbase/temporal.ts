@@ -32,6 +32,8 @@ export const TB_REFS: TbRef[] = [
     citation: 'García-Barrios A, Cisneros AI, Obon J, Crovetto R, Benito J, Whyte J. Anatomical study between the correlation of the arcuate eminence and the superior semicircular canal. Surg Radiol Anat. 2021;43(11):1845–1850. doi:10.1007/s00276-021-02834-2.' },
   { id: 'chaware2023', pmid: '37200762', pmcid: 'PMC10186047', shortLabel: 'Chaware 2023', url: doi('10.4103/abr.abr_261_20'),
     citation: 'Chaware P, Kumar V, Srivastava A, Raj S, Rathinam BAD. Neurovascular structures at risk during surgical access to trigeminal ganglion and Meckel’s cave: an anatomical study. Adv Biomed Res. 2023;12:62. doi:10.4103/abr.abr_261_20.' },
+  { id: 'mncube2019', pmid: '31754545', pmcid: 'PMC6851876', shortLabel: 'Mncube 2019', url: doi('10.4102/sajr.v23i1.1772'),
+    citation: 'Mncube SS, Goodier MD. Normal measurements of the optic nerve, optic nerve sheath and optic chiasm in the adult population. SA J Radiol. 2019;23(1):1772. doi:10.4102/sajr.v23i1.1772.' },
 ];
 export const TB_REF = new Map(TB_REFS.map((r) => [r.id, r]));
 
@@ -63,7 +65,9 @@ export const TB_NOTES: Record<string, TbClaim[]> = {
   'Olfactory nerve (I)': [
     c('Olfactory fibres enter the anterior cranial fossa through the cribriform plate and end in the olfactory bulb; the tract then runs between the gyrus rectus and the medial orbital gyrus.', 'romano2019'),
   ],
-  'Optic nerve (II)': [c('It leaves the orbit for the cranial cavity through the optic canal.', 'romano2019')],
+  'Optic nerve (II)': [c('It leaves the orbit for the cranial cavity through the optic canal.', 'romano2019'),
+    c('On 3D T2-weighted MRI of 80 adults its intracranial segment, 5 mm in front of the chiasm, measured a mean 4.27 mm across (2.46–5.19 mm).', 'mncube2019')],
+  'Optic chiasm': [c('On coronal 3D T2-weighted MRI of 80 adults the chiasm measured a mean 13.63 mm across (11.13–16.92 mm) and 2.26 mm high (1.54–3.38 mm); its width was the most reproducible of the measurements between observers, its height among the least.', 'mncube2019')],
   'Trigeminal ganglion': [
     c('It lies in a shallow depression at the apex of the petrous temporal bone, just outside the posterior part of the lateral wall of the cavernous sinus, in a dural pouch: Meckel’s cave. It is semilunar, its convexity forwards and laterally; the ophthalmic, maxillary and the sensory part of the mandibular nerve leave its convex margin.', 'chaware2023'),
     c('In 80 cadaveric sides it measured 15.4 mm long, 4.4 mm wide and 2.5 mm thick. Meckel’s cave lay 4.5 mm from the foramen ovale, 11.2 mm from the foramen rotundum, 6.4 mm from the foramen spinosum, 27.4 mm from the superior orbital fissure and 16.5 mm from the arcuate eminence; the abducens, trochlear and oculomotor nerves passed 2.5, 4.9 and 6.3 mm from it.', 'chaware2023'),

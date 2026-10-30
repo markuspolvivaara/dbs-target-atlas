@@ -35,6 +35,7 @@ NAME = "Posterior inferior cerebellar artery"
 CODES = {"R": [29], "L": [30]}
 STUB_MM = 6.0              # this CT's labelled PICA kept from its origin on the vertebral artery this far along it
 STEP_MM = 0.5
+CLEAR_ROUNDS = 4           # the course cleared of the hindbrain and resampled in turn this many times
 ATTACH_MM = 3.0            # a branch is kept when it starts this near the tree
 REACH_MM = 4.0             # a vessel point follows the cerebellum's vertices this near
 SHAPES = ("telovelar", "retrosigmoid")
@@ -95,6 +96,20 @@ def stub(side: str, v: np.ndarray, t: np.ndarray) -> tuple[np.ndarray, np.ndarra
     return t[keep], end, v[o], r
 
 
+def tube_r(r: np.ndarray) -> float:
+    """A run's tube radius: its median, between 0.3 and 0.8 mm."""
+    return float(np.clip(np.median(r), 0.3, 0.8))
+
+
+def resampled(P: np.ndarray, r: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """A run (centre line, radii) resampled every STEP_MM along it."""
+    if len(P) < 2:
+        return P, r
+    d = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
+    t = np.r_[np.arange(0.0, d[-1], STEP_MM), d[-1]]
+    return np.stack([np.interp(t, d, P[:, k]) for k in range(3)], 1), np.interp(t, d, r)
+
+
 def continued(side: str, clear, start: np.ndarray, r0: float) -> tuple[list, dict]:
     """The course on from the labelled stub's end (start, radius r0): a joining run round the medulla to the model's
     trunk, then the trunk and its branches: [(P, r)] runs, and a report."""
@@ -124,8 +139,15 @@ def continued(side: str, clear, start: np.ndarray, r0: float) -> tuple[list, dic
         out.append((P, Rb[:, 3]))
         tree.append(P)
         kept += 1
+    # resampled at STEP_MM first, as the tubes are swept (cleared at the model's sparse points only, the straight runs
+    # between them could still cut into the cerebellum's curve)
+    out = [resampled(P, r) for P, r in out]
     if clear is not None:
-        out = [(clear(P, r), r) for P, r in out]
+        # cleared and resampled in turn (a clearing pushes neighbours apart unevenly; the straight runs then drawn
+        # between them could cut back in), then cleared once more: at the tube's own radius
+        for _ in range(CLEAR_ROUNDS):
+            out = [resampled(clear(P, np.maximum(r, tube_r(r))), r) for P, r in out]
+        out = [(clear(P, np.maximum(r, tube_r(r))), r) for P, r in out]
         out[0] = (np.vstack([start, out[0][0][1:]]), out[0][1])     # (the stub's end kept: the course starts on it)
     length = float(sum(np.linalg.norm(np.diff(P, axis=0), axis=1).sum() for P, _ in out))
     return out, {"stubEnd": np.round(start, 1).tolist(), "joinMm": round(gap, 1),
@@ -221,7 +243,7 @@ def build(ex2: dict) -> dict:
         vs, ns, ts, tg, off = [], [], [], {n: ([], []) for n in SHAPES}, 0
         for P, r in runs:
             P = BR.resample_line(P, 0.5) if len(P) > 1 else P
-            rr = float(np.clip(np.median(r), 0.3, 0.8))
+            rr = tube_r(r)
             v0, n0, t0, N0 = BR.sweep(P, rr, sides=8)
             D = carried_by_shapes(P, P, hb)
             for n in SHAPES:

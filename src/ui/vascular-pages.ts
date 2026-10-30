@@ -1,6 +1,6 @@
 import type { Claim } from '../brainstem/schema';
 import { DSA, LESIONS, VA_MANIFEST, VA_REF, VA_REFS } from '../vascular';
-import { AVM_TABLES, DAVF_TABLES, type GradeTable } from '../vascular/grading';
+import { AVM_TABLES, DAVF_TABLES, SAH_TABLES, type GradeTable } from '../vascular/grading';
 import { VA_GROUP } from '../vascular/groups';
 import { h } from './h';
 import { refLinksFrom } from './reflinks';
@@ -31,7 +31,9 @@ export function vaGradingPage() {
   const el = h('div', { class: 'page wrap grading' });
   el.append(
     h('h1', {}, 'Grading'),
-    h('p', { class: 'lead' }, 'How arteriovenous malformations and dural arteriovenous fistulas are graded, and what the grades mean for treatment. The rows marked “drawn here” are the lesions this atlas draws; open them from the mark. For teaching: not for diagnosis or planning.'),
+    h('p', { class: 'lead' }, 'How a subarachnoid haemorrhage from an aneurysm, arteriovenous malformations and dural arteriovenous fistulas are graded, and what the grades mean for treatment. The rows marked “drawn here” are the lesions this atlas draws; open them from the mark. For teaching: not for diagnosis or planning.'),
+    h('h2', {}, 'Aneurysmal subarachnoid haemorrhage'),
+    ...SAH_TABLES.map(gradeTable),
     h('h2', {}, 'Arteriovenous malformations'),
     ...AVM_TABLES.map(gradeTable),
     h('h2', {}, 'Dural arteriovenous fistulas'),
@@ -55,6 +57,7 @@ export function vaSourcesPage() {
       h('h2', {}, 'How the model is made'),
       h('p', {}, h('strong', {}, 'The vessels: '), 'Skull base v3’s, from one adult’s CT angiogram (TopBrain 2025 case 011), in its frame (millimetres from the fitted hypophysial fossa): the arteries and deep veins as TopBrain’s experts labelled them, the dural sinuses, the middle meningeal artery and the carotid’s petrous part traced in the CT, the cervical carotids and jugular veins segmented by TotalSegmentator, and the small vessels the skull base fits from the Z-Anatomy model or draws by rule (the cavernous sinus and its veins, the Sylvian veins, the perforators). Each card says which.'),
       h('p', {}, h('strong', {}, 'The lesions (pipeline/vascular_lesions.py): '), `drawn by rule onto that normal angiogram, none of them a patient’s: ${n('aneurysm')} aneurysms where its arteries branch (saccular ones as a dome on a neck, joined smoothly; a fusiform one widening the basilar trunk all round; a blister on the internal carotid’s dorsal wall), ${n('avm')} arteriovenous malformations (a nidus drawn as a network after a theoretical model (Jain 2019): tortuous plexiform vessels between junctions in an irregular, lobulated envelope of the chosen greatest diameter, a compartment for each feeder, larger fistulous channels from a feeder to a draining vein, compact or diffuse (Wu 2024), in a place on the fitted template brain chosen for its Spetzler–Martin points, with dilated feeders from the nearest of this CT’s arteries that supply it and draining veins to its sinuses), a dural fistula at the right transverse–sigmoid junction and two carotid-cavernous fistulas. Sizes and shapes are illustrative.`),
+      h('p', {}, h('strong', {}, 'Treatments and variants: '), 'three treatments, each drawn on one of the aneurysms: a clip across the middle cerebral bifurcation aneurysm’s neck (the sac then no longer fills), coils packing the basilar tip aneurysm, a flow diverter along the carotid across the ophthalmic segment aneurysm’s neck (the sac filling late and lingering). Two variants of the circle of Willis drawn on this CT’s right side: a fetal posterior communicating artery (the P1 narrowed, the communicating artery widened) and a hypoplastic A1 (narrowed, the anterior communicating artery widened), the arteries timed again with contrast crossing the narrowed segment slowly. The veins of Trolard and Labbé are drawn by rule on the fitted brain (Skull base v3’s). All illustrative.'),
       h('p', {}, h('strong', {}, 'The angiogram: '), `a drawing of the order in which contrast reaches the vessels, not of their transit times: arteries from the injection (both carotid and both vertebral arteries at once; the external carotid’s branches from the foramen spinosum, ${'a little later'}) in order of their distance along the vessels, the farthest at ${DSA.artSpanS} s; veins from ${DSA.venStartS} s, upstream ends first, the jugular veins by ${(DSA.venStartS + DSA.venSpanS).toFixed(1)} s; each vessel stays dark for ${DSA.dwellArtS} s (arteries) or ${DSA.dwellVenS} s (veins) and then fades. A lesion’s shunt fills its veins, and the sinuses downstream, straight after its nidus or fistula (with no capillary bed between: Naranbhai 2023). The phases named under the scrubber follow this drawing.`)),
   );
   return { el, render() { /* stateless */ } };

@@ -260,7 +260,7 @@
   },
   "Hypoglossal nerve (XII)": {
    "R": {
-    "lengthMm": 23.7,
+    "lengthMm": 23.8,
     "boneCrossedMm": 0.0,
     "maxFromFittedMm": 4.7
    },
@@ -508,7 +508,20 @@
      "central": 50.2,
      "posterior": 50.4,
      "deep": 37.9,
-     "poleToGenuMm": 4.7
+     "trolard": 101.2,
+     "labbe": 71.0,
+     "poleToGenuMm": 4.7,
+     "trolardJoinMm": [
+      -0.8,
+      -60.3,
+      81.8
+     ],
+     "labbeFromPoleMm": 97.9,
+     "labbeJoinMm": [
+      -47.4,
+      -54.0,
+      -10.3
+     ]
     },
     "R": {
      "smcv": 89.1,
@@ -516,13 +529,27 @@
      "central": 45.2,
      "posterior": 70.9,
      "deep": 32.1,
-     "poleToGenuMm": 2.5
+     "trolard": 83.7,
+     "labbe": 89.2,
+     "poleToGenuMm": 2.5,
+     "trolardJoinMm": [
+      4.2,
+      -63.3,
+      80.8
+     ],
+     "labbeFromPoleMm": 98.1,
+     "labbeJoinMm": [
+      42.3,
+      -58.4,
+      -13.9
+     ]
     }
    },
    "radiusMm": {
     "smcv": 1.0,
     "deep": 0.9,
-    "insular": 0.5
+    "insular": 0.5,
+    "anastomotic": 1.0
    },
    "sphenoparietal": true
   },

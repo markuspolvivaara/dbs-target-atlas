@@ -217,7 +217,7 @@ describe('the temporal-bone model (v3: OpenEar specimen registered onto the CT)'
     }
   });
   it('every carried-over structure has both ears, on their sides; vessels are the CT model\'s own files, bone this model\'s', () => {
-    for (const s of v3.structures) {
+    for (const s of v3.structures.filter((x) => !x.id.startsWith('tm_') && !x.pushedFrom)) {     // (the tumours have their own test)
       if (s.id.startsWith('tb_') || s.id.startsWith('br_') || s.id.startsWith('pf_')) {
         expect(s.centroid!.L[0], s.id).toBeLessThan(0);
         expect(s.centroid!.R[0], s.id).toBeGreaterThan(0);
@@ -458,9 +458,10 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     const ap = geom.pterional;
     for (const id of ap.bones) { expect(p.looks.get(id), id).toBe('primary'); expect(p.looks.get(byId.get(id)!.replaces!), id).toBe('hidden'); }
     expect(p.looks.get(ap.removed)).toBe('ghost');
-    for (const s of v3.structures.filter((x) => x.category === 'brain')) expect(p.looks.get(s.id), s.id).toBe('primary');
+    for (const s of v3.structures.filter((x) => x.category === 'brain' && !x.pushedFrom)) expect(p.looks.get(s.id), s.id).toBe('primary');
     expect(p.camera).toBe('anterolateral');
-    for (const g of G3.SB_GROUPS.filter((x) => x.kind !== 'approach')) {
+    // (a tumour's view is drawn in its approach's view: there, that approach's own parts)
+    for (const g of G3.SB_GROUPS.filter((x) => x.kind !== 'approach' && !(x.kind === 'tumour' && x.approach))) {
       const q = S3.skullPlan(g.id, null);
       for (const id of [...ap.bones, ap.removed]) expect(q.looks.get(id), `${g.id} ${id}`).toBe('hidden');
       for (const s of v3.structures.filter((x) => x.category === 'brain')) expect(q.looks.get(s.id), `${g.id} ${s.id}`).toBe('hidden');
@@ -515,7 +516,7 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     const p = S3.skullPlan('telovelar', null);
     expect(p.camera).toBe('suboccipital');
     expect(G3.SB_GROUP.get('telovelar')!.hemi).toBe('both');
-    const pf = v3.structures.filter((x) => x.category === 'hindbrain' || x.category === 'ventricle');
+    const pf = v3.structures.filter((x) => (x.category === 'hindbrain' || x.category === 'ventricle') && !x.pushedFrom);
     expect(pf.map((x) => x.name)).toEqual(expect.arrayContaining(['Cerebellar hemisphere', 'Tonsil of cerebellum', 'Vermis', 'Medulla oblongata', 'Pons', 'Fourth ventricle']));
     for (const x of pf) expect(p.looks.get(x.id), x.id).toBe('primary');
     // the cerebrum is not drawn here, nor the posterior fossa in the other views
@@ -606,10 +607,68 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(l.morphs).toEqual({ lsoLift: 0.8, open: 0.2 });
     expect(T3.encodeSkull(l)).toContain('ll=80');
   });
-  it('sourced content: references exist and are used, context structures exist', () => {
-    const used = new Set([...APPROACHES, ENDONASAL_INFO, CAVERNOUS_INFO].flatMap((a) => a.sections.flatMap((x) => x.claims)).flatMap((c) => c.refIds));
+  it('sourced content: references exist and are used, context structures exist', async () => {
+    const { TUMOURS } = await import('../../src/skullbase/tumours');
+    const tumourClaims = TUMOURS.flatMap((t) => [...t.sections.flatMap((x) => x.claims), ...t.grades.flatMap((g) => [g.definition, ...(g.notes ?? [])])]);
+    const used = new Set([...[...APPROACHES, ENDONASAL_INFO, CAVERNOUS_INFO].flatMap((a) => a.sections.flatMap((x) => x.claims)), ...tumourClaims].flatMap((c) => c.refIds));
     for (const r of used) expect(APPROACH_REF.has(r), r).toBe(true);
     expect(APPROACH_REFS.map((r) => r.id).filter((r) => !used.has(r))).toEqual([]);
     for (const a of APPROACHES) for (const n of a.context) expect(v3.structures.some((s) => s.name === n), n).toBe(true);
+  });
+});
+
+describe('v3 tumours drawn by rule: Knosp, Koos and meningioma sites', async () => {
+  const { SbManifestSchema } = await import('../../src/data/schema');
+  const { groups: G3, scene: S3, state: T3 } = await v3Modules();
+  const { TUMOURS, TUMOUR_FIT, KNOSP_GRADES, KOOS_GRADES } = await import('../../src/skullbase/tumours');
+  const v3 = SbManifestSchema.parse((await import('../../src/data/generated/sbv3-manifest.json')).default);
+  const byId = new Map(v3.structures.map((s) => [s.id, s]));
+  it('every grade and site has its tumour and its view; each drawn adenoma grades as it is meant to', () => {
+    for (const t of TUMOURS) for (const g of t.grades) {
+      expect(byId.get(g.structure)?.category, g.structure).toBe('tumour');
+      const grp = G3.SB_GROUP.get(`${t.family}_${g.id.toLowerCase()}`)!;
+      expect(grp.kind).toBe('tumour');
+      expect(grp.structures).toContain(g.structure);
+    }
+    expect(KNOSP_GRADES.map((g) => g.id)).toEqual(['0', '1', '2', '3A', '3B', '4']);
+    expect(KOOS_GRADES.length).toBe(4);
+    for (const g of KNOSP_GRADES) expect(TUMOUR_FIT.knosp.grades[g.id].grade, g.id).toBe(g.id);
+    // the section lies through the sella, the cavernous carotid below the supraclinoid one
+    const sec = TUMOUR_FIT.knosp.sections.R;
+    expect(sec.cavernous.c[1]).toBeLessThan(sec.supraclinoid.c[1]);
+    expect(Math.abs(TUMOUR_FIT.knosp.planeY)).toBeLessThan(6);
+  });
+  it('a pushed part stands in for its part in its tumour view only; the other views keep the part', () => {
+    const pushed = v3.structures.filter((s) => s.pushedFrom);
+    expect(pushed.length).toBeGreaterThan(5);
+    for (const p of pushed) {
+      expect(byId.has(p.replaces!), p.id).toBe(true);
+      for (const g of G3.SB_GROUPS) {
+        if (!g.structures.includes(p.id)) continue;
+        expect(g.kind, `${p.id} in ${g.id}`).toBe('tumour');
+        expect(g.structures).not.toContain(p.replaces);
+      }
+    }
+    const rs = G3.SB_GROUP.get('retrosigmoid')!;
+    expect(rs.structures.some((id) => byId.get(id)?.pushedFrom)).toBe(false);
+    const plan = S3.skullPlan('koos_iv', null);
+    expect(plan.looks.get('tm_koos_4')).toBe('primary');
+    expect(plan.looks.get('pf_cerebellar_hemisphere')).toBe('hidden');
+  });
+  it('Koos grades by the drawing: II off the brainstem and under 2 cm outside the meatus, IV over 3 cm', () => {
+    expect(TUMOUR_FIT.koos['2'].toBrainstemMm!).toBeGreaterThan(0);
+    expect(TUMOUR_FIT.koos['2'].extrameatalMaxMm!).toBeLessThan(20);
+    expect(TUMOUR_FIT.koos['3'].extrameatalMaxMm!).toBeLessThan(30);
+    expect(TUMOUR_FIT.koos['4'].extrameatalMaxMm!).toBeGreaterThan(30);
+    expect(TUMOUR_FIT.koos['4'].toBrainstemMm!).toBeLessThan(0);
+  });
+  it('the Knosp view is cut at its section while the reader keeps it; tumour views open onto the tumour', () => {
+    const s = T3.decodeSkull('#/atlas?g=knosp_3b');
+    expect(s.section).toBe(true);
+    expect(T3.encodeSkull({ ...s, section: false })).toContain('sec=0');
+    expect(T3.decodeSkull('#/atlas?g=knosp_3b&sec=0').section).toBe(false);
+    const k = T3.decodeSkull('#/atlas?g=koos_iii');
+    expect(k.morphs.retrosigmoid).toBe(1);                       // retracted by default ...
+    expect(T3.decodeSkull(T3.encodeSkull({ ...k, morphs: {} })).morphs.retrosigmoid).toBeUndefined();   // ... and closed if the link says so
   });
 });

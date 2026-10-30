@@ -958,7 +958,78 @@ VEIN_ITEMS = [  # (id, name, aliases, lines): the veins of the fissure, drawn by
     ("sb_superficial_middle_cerebral_vein", "Superficial middle cerebral vein", ["Superficial Sylvian vein"], ["smcv"]),
     ("sb_insular_veins", "Insular veins", ["Precentral, central and posterior insular veins"], ["precentral", "central", "posterior"]),
     ("sb_deep_middle_cerebral_vein", "Deep middle cerebral vein", ["Deep Sylvian vein"], ["deep"]),
+    ("sb_vein_of_trolard", "Superior anastomotic vein (of Trolard)", ["Vein of Trolard"], ["trolard"]),
+    ("sb_vein_of_labbe", "Inferior anastomotic vein (of Labbé)", ["Vein of Labbé"], ["labbe"]),
 ]
+VEIN_ANASTOMOTIC_MM = 1.0   # the veins of Trolard and Labbé: their radius (illustrative) ...
+VEIN_CROWN_MM = 1.5         # ... laid over the gyral crowns (the cortex within this of the brain's hull), bridging the sulci
+VEIN_CROWN_LINK_MM = 2.5    # ... (crown points this near are joined: the paths over them cross narrow sulci)
+VEIN_LABBE_POLE_MM = 98.0   # the vein of Labbé joins the transverse sinus this far over the cortex from the temporal pole
+                            # (Tomasi 2021: 9.9 and 9.7 cm, right and left)
+
+
+def crown_graph(V: np.ndarray, crown: np.ndarray):
+    """The gyral crowns' points (V[crown]) joined to those within VEIN_CROWN_LINK_MM: (their indices into V, the graph)."""
+    import scipy.sparse as sp
+    idx = np.nonzero(crown)[0]
+    pairs = cKDTree(V[idx]).query_pairs(VEIN_CROWN_LINK_MM, output_type="ndarray")
+    w = np.linalg.norm(V[idx][pairs[:, 0]] - V[idx][pairs[:, 1]], axis=1) + 1e-6
+    n = len(idx)
+    return idx, sp.coo_matrix((np.r_[w, w], (np.r_[pairs[:, 0], pairs[:, 1]], np.r_[pairs[:, 1], pairs[:, 0]])), shape=(n, n)).tocsr()
+
+
+def crown_path(V: np.ndarray, idx: np.ndarray, G, a: int, b: int) -> np.ndarray:
+    """The shortest way over the crowns from crown point a to crown point b (indices into idx): its points."""
+    from scipy.sparse.csgraph import dijkstra
+    _, pred = dijkstra(G, indices=a, return_predecessors=True)
+    path, j = [], b
+    while j >= 0 and j != a:
+        path.append(j)
+        j = pred[j]
+    return V[idx[[a] + path[::-1]]]
+
+
+def anastomotic_lines(d: dict, V: np.ndarray, Nv: np.ndarray, hull: np.ndarray, smcv: np.ndarray, sss: np.ndarray | None,
+                      transverse: np.ndarray | None) -> tuple[dict, dict]:
+    """The veins of Trolard and Labbé, drawn by rule from the superficial Sylvian vein's back end over the gyral crowns
+    (the shortest way over them): Trolard up to the superior sagittal sinus where the frontal lobe meets the parietal at
+    the top (the central sulcus: its junction lies near the central sulcus, Tomasi 2021); Labbé back and down to the
+    transverse sinus where it lies VEIN_LABBE_POLE_MM over the cortex from the temporal pole. Lines, and a report."""
+    from scipy.sparse.csgraph import dijkstra
+    lob = d["lobe"]
+    crown = (hull > -VEIN_CROWN_MM) & (lob != "insula")
+    idx, G = crown_graph(V, crown)
+    tree = cKDTree(V[idx])
+    start = int(tree.query(smcv[0])[1])          # the superficial vein's back end
+    out, rep = {}, {}
+
+    def finish(P: np.ndarray, sinus_end: np.ndarray) -> np.ndarray:
+        P = resample_line(P, VEIN_STEP_MM)
+        P = settle(P, V[crown], Nv[crown], VEIN_ANASTOMOTIC_MM + VEIN_OFF_MM)
+        n = max(2, int(np.linalg.norm(sinus_end - P[-1]) / VEIN_STEP_MM))
+        P = np.vstack([P, P[-1] + np.linspace(0, 1, n + 1)[1:, None] * (sinus_end - P[-1])])
+        return resample_line(P, VEIN_STEP_MM)
+    if sss is not None:
+        # where the frontal lobe meets the parietal (frontal crown points within 2.5 mm of parietal ones), at its top: the
+        # central sulcus at the vertex
+        fr, pa = idx[lob[idx] == "frontal"], idx[lob[idx] == "parietal"]
+        border = fr[cKDTree(V[pa]).query(V[fr])[0] < 2.5]
+        b = border[np.argmax(V[border, 2])]
+        end = sss[cKDTree(sss).query(V[b])[1]]
+        out["trolard"] = finish(crown_path(V, idx, G, start, int(np.searchsorted(idx, b))), end)
+        rep["trolardJoinMm"] = np.round(end, 1).tolist()
+    if transverse is not None:
+        temp = idx[lob[idx] == "temporal"]
+        pole = int(np.searchsorted(idx, temp[np.argmax(V[temp, 1])]))      # the temporal pole: its front-most crown point
+        dist = dijkstra(G, indices=pole)
+        cand = np.nonzero((cKDTree(transverse).query(V[idx])[0] < 8.0) & np.isfinite(dist))[0]
+        if len(cand):
+            b = int(cand[np.argmin(np.abs(dist[cand] - VEIN_LABBE_POLE_MM))])
+            end = transverse[cKDTree(transverse).query(V[idx[b]])[1]]
+            out["labbe"] = finish(crown_path(V, idx, G, start, b), end)
+            rep["labbeFromPoleMm"] = round(float(dist[b]), 1)
+            rep["labbeJoinMm"] = np.round(end, 1).tolist()
+    return out, rep
 
 
 def sylvian_veins(tp, fields: dict, out: dict, pt, shapes: dict, report: dict) -> list:
@@ -966,7 +1037,22 @@ def sylvian_veins(tp, fields: dict, out: dict, pt, shapes: dict, report: dict) -
     shapes as morph targets: the superficial vein moves with the temporal lobe it runs on (the fissure opened on its
     frontal side), the insular and deep veins with the insula (still as the fissure opens; the front of it rises with
     the lift). Each tube is carried by cross-sections along its line, as the arteries are."""
-    radius = {"smcv": VEIN_SMCV_MM, "deep": VEIN_DMCV_MM, "precentral": VEIN_INSULAR_MM, "central": VEIN_INSULAR_MM, "posterior": VEIN_INSULAR_MM}
+    radius = {"smcv": VEIN_SMCV_MM, "deep": VEIN_DMCV_MM, "precentral": VEIN_INSULAR_MM, "central": VEIN_INSULAR_MM, "posterior": VEIN_INSULAR_MM,
+              "trolard": VEIN_ANASTOMOTIC_MM, "labbe": VEIN_ANASTOMOTIC_MM}
+    # the sinuses the anastomotic veins join: this CT's superior sagittal sinus (TopBrain's label, v2's mesh) and
+    # transverse sinuses (traced by skullbase_v3.py, from a run before this one)
+    def sinus_pts(path: Path) -> dict:
+        if not path.exists():
+            return {}
+        sc = trimesh.load(path, force="scene")
+        out_ = {}
+        for node in sc.graph.nodes_geometry:
+            T, g = sc.graph[node]
+            out_[node] = np.asarray(sc.geometry[g].vertices) @ T[:3, :3].T + T[:3, 3]
+        return out_
+    sss_n = sinus_pts(CT_BUILD / "sb_superior_sagittal_sinus.glb")
+    sss = np.vstack(list(sss_n.values())) if sss_n else None
+    trans = sinus_pts(BUILD / "tb_transverse_sinus.glb")
     spp = None
     p = BUILD / "tb_sphenoparietal_sinus.glb"
     if p.exists():
@@ -991,11 +1077,14 @@ def sylvian_veins(tp, fields: dict, out: dict, pt, shapes: dict, report: dict) -
         bcode = {"R": 38, "L": 39}[s]
         ins, pole = insular_lines(d, V, Nv, F, genu, pt.lines[bcode][:, :3] if bcode in pt.lines else None)
         L.update(ins)
+        an, rep_an = anastomotic_lines(d, V, Nv, hull, L["smcv"], sss, trans.get(s))
+        L.update(an)
         lines[s] = L
         rep[s] = {k: round(float(np.linalg.norm(np.diff(P, axis=0), axis=1).sum()), 1) for k, P in L.items()}
         rep[s]["poleToGenuMm"] = round(float(np.linalg.norm(pole - genu)), 1)
+        rep[s].update(rep_an)
     lob = tp.dec["R"]["lobe"]
-    follow = {"smcv": lob == "temporal"}
+    follow = {"smcv": lob == "temporal", "trolard": np.isin(lob, ["frontal", "parietal"]), "labbe": np.isin(lob, ["temporal", "occipital"])}
     for k in ("precentral", "central", "posterior", "deep"):
         follow[k] = lob == "insula"
     items = []
@@ -1034,7 +1123,8 @@ def sylvian_veins(tp, fields: dict, out: dict, pt, shapes: dict, report: dict) -
             cent[s] = v.mean(0).round(2).tolist()
         write_glb(BUILD / f"{vid}.glb", nodes, {"id": vid})
         items.append({"id": vid, "name": name, "aliases": aliases, "drawnVein": True, "centroid": cent})
-    report["veins"] = {"lengthMm": rep, "radiusMm": {"smcv": VEIN_SMCV_MM, "deep": VEIN_DMCV_MM, "insular": VEIN_INSULAR_MM},
+    report["veins"] = {"lengthMm": rep, "radiusMm": {"smcv": VEIN_SMCV_MM, "deep": VEIN_DMCV_MM, "insular": VEIN_INSULAR_MM,
+                                                     "anastomotic": VEIN_ANASTOMOTIC_MM},
                        "sphenoparietal": spp is not None}
     return items
 

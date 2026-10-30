@@ -336,6 +336,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     const c = this.colour(meta);
     const mats = { solid: solidMaterial(c), rim: rimMaterial(c) };
     const surface = meta.type === 'surface';
+    // a tumour (skull base) cut at a section shows its inside in its own colour, darker, so the cut reads as solid
+    const cutShown = meta.category === 'tumour';
     const nodes: MeshItem['nodes'] = {};
     for (const side of ['L', 'R'] as Side[]) {
       const m = a.sides[side];
@@ -347,7 +349,14 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       if (m.geometry.getAttribute('_arrival')) this.dsaMaterial(mats.solid);
       // cut-away surfaces (insular view, hidden labels, clip planes) show their inside, in one flat colour so an
       // opening reads as a cut into the brain rather than a view through it
-      if (surface && mats.solid.side !== THREE.DoubleSide) {
+      if (cutShown && mats.solid.side !== THREE.DoubleSide) {
+        mats.solid.side = THREE.DoubleSide;
+        mats.solid.onBeforeCompile = (sh) => {
+          sh.fragmentShader = sh.fragmentShader
+            .replace('#include <color_fragment>', '#include <color_fragment>\n  if (!gl_FrontFacing) diffuseColor.rgb *= 0.72;');
+        };
+        mats.solid.customProgramCacheKey = () => 'solid-cut';
+      } else if (surface && mats.solid.side !== THREE.DoubleSide) {
         mats.solid.side = THREE.DoubleSide;
         mats.solid.onBeforeCompile = (sh) => {
           sh.uniforms.uInterior = this.interior;
@@ -898,6 +907,10 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       // and vestibulocochlear nerves): a direction that keeps the porus acusticus and the facial and vestibulocochlear
       // nerves' cisternal course in clear sight past the bone, the sinuses and the cerebellum
       case 'retrosigmoid': dir = new THREE.Vector3(0.45 * sideSign, -0.77, -0.45); break;
+      // orbitozygomatic: as the pterional view but from lower down, up under the frontal lobe past the removed orbital rim
+      case 'orbitozygomatic': dir = new THREE.Vector3(0.8 * sideSign, 0.5, 0.12); break;
+      // farLateral: from behind, the side and below, along the side of the medulla to the front of the foramen magnum
+      case 'farLateral': dir = new THREE.Vector3(0.5 * sideSign, -0.82, -0.28); break;
       case 'surgeon': {
         const side: Side = hemi === 'L' ? 'L' : 'R';
         const l = this.state!.lead;

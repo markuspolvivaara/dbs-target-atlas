@@ -98,6 +98,56 @@ export const SUPP_GRADES: GradeTable = {
   notes: [],
 };
 
+// ---------------------------------------------------------------- subarachnoid haemorrhage
+export const HUNT_HESS: GradeTable = {
+  id: 'hunt-hess', title: 'Hunt and Hess grade',
+  head: ['Grade', 'The patient'],
+  rows: [
+    { cells: ['1', 'no symptoms, or a mild headache'] },
+    { cells: ['2', 'a moderate to severe headache, a stiff neck'] },
+    { cells: ['3', 'drowsy or confused, a mild focal neurological deficit'] },
+    { cells: ['4', 'stupor, hemiparesis'] },
+    { cells: ['5', 'coma, decerebrate posturing'] },
+  ],
+  refIds: ['thilak2024'],
+  notes: [
+    c('A clinical grade from 1 to 5, from the symptoms and signs: from a mild headache to coma.', 'robba2024'),
+  ],
+};
+
+export const WFNS: GradeTable = {
+  id: 'wfns', title: 'World Federation of Neurosurgical Societies (WFNS) grade',
+  head: ['Grade', 'Glasgow Coma Scale', 'Focal deficit'],
+  rows: [
+    { cells: ['1', '15', 'none'] },
+    { cells: ['2', '13–14', 'none'] },
+    { cells: ['3', '13–14', 'present'] },
+    { cells: ['4', '7–12', 'with or without'] },
+    { cells: ['5', 'under 7', 'with or without'] },
+  ],
+  refIds: ['thilak2024'],
+  notes: [
+    c('The preferred clinical scale, based on the Glasgow Coma Scale; grades 4 and 5 indicate a poor outcome.', 'thilak2024'),
+  ],
+};
+
+export const MOD_FISHER: GradeTable = {
+  id: 'modified-fisher', title: 'Modified Fisher grade (the CT)',
+  head: ['Grade', 'Subarachnoid blood', 'Intraventricular blood'],
+  rows: [
+    { cells: ['0', 'none', 'none'] },
+    { cells: ['1', 'focal or diffuse, under 1 mm thick', 'none'] },
+    { cells: ['2', 'focal or diffuse, under 1 mm thick', 'present'] },
+    { cells: ['3', 'focal or diffuse, over 1 mm thick', 'none'] },
+    { cells: ['4', 'focal or diffuse, over 1 mm thick', 'present'] },
+  ],
+  refIds: ['thilak2024'],
+  notes: [
+    c('Imaging scales such as the modified Fisher grade quantify the subarachnoid, intraventricular and intraparenchymal blood and are associated with outcome.', 'robba2024'),
+    c('A poor clinical grade (Hunt and Hess or WFNS) and a poor radiographic grade (modified Fisher) are established predictors of delayed cerebral ischaemia; a higher clinical and radiological grade is also among the risk factors for needing a ventriculoperitoneal shunt.', 'robba2024'),
+  ],
+};
+
 // ---------------------------------------------------------------- dural arteriovenous fistulas
 export const BORDEN: GradeTable = {
   id: 'borden', title: 'Borden types',
@@ -135,5 +185,6 @@ export const COGNARD: GradeTable = {
 };
 
 export const AVM_TABLES = [SM_POINTS, SM_GRADES, SUPP_POINTS, SUPP_GRADES];
+export const SAH_TABLES = [HUNT_HESS, WFNS, MOD_FISHER];
 export const DAVF_TABLES = [BORDEN, COGNARD];
-export const GRADE_TABLES = [...AVM_TABLES, ...DAVF_TABLES];
+export const GRADE_TABLES = [...SAH_TABLES, ...AVM_TABLES, ...DAVF_TABLES];

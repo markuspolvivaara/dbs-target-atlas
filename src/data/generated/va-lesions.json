@@ -185,6 +185,7 @@
     "va_avm1__nidus",
     "va_avm1__drainers",
     "va_avm1__confluence_of_sinuses",
+    "va_avm1__inferior_anastomotic_vein_of_labbe",
     "va_avm1__inferior_petrosal_sinus",
     "va_avm1__internal_jugular_vein",
     "va_avm1__sigmoid_sinus",
@@ -232,6 +233,7 @@
     "va_avm3__nidus",
     "va_avm3__drainers",
     "va_avm3__confluence_of_sinuses",
+    "va_avm3__inferior_anastomotic_vein_of_labbe",
     "va_avm3__inferior_petrosal_sinus",
     "va_avm3__internal_jugular_vein",
     "va_avm3__sigmoid_sinus",
@@ -286,6 +288,7 @@
     "va_avm5__basal_vein_of_rosenthal",
     "va_avm5__confluence_of_sinuses",
     "va_avm5__great_cerebral_vein_of_galen",
+    "va_avm5__inferior_anastomotic_vein_of_labbe",
     "va_avm5__inferior_petrosal_sinus",
     "va_avm5__internal_cerebral_veins",
     "va_avm5__internal_jugular_vein",
@@ -343,7 +346,7 @@
    "parts": [
     "va_davf__feeders",
     "va_davf__fistula",
-    "va_davf__reflux",
+    "va_davf__inferior_anastomotic_vein_of_labbe",
     "va_davf__internal_jugular_vein",
     "va_davf__sigmoid_sinus",
     "va_davf__transverse_sinus"
@@ -409,6 +412,60 @@
     "va_ccfd__superior_ophthalmic_vein",
     "va_ccfd__superior_petrosal_sinus"
    ]
+  },
+  {
+   "id": "clip",
+   "kind": "treatment",
+   "name": "Clipping",
+   "treats": "mca",
+   "treatment": "clip",
+   "parts": [
+    "va_clip__device",
+    "va_clip__sac"
+   ]
+  },
+  {
+   "id": "coil",
+   "kind": "treatment",
+   "name": "Coiling",
+   "treats": "basilar",
+   "treatment": "coil",
+   "parts": [
+    "va_coil__device"
+   ]
+  },
+  {
+   "id": "fd",
+   "kind": "treatment",
+   "name": "Flow diversion",
+   "treats": "ophthalmic",
+   "treatment": "fd",
+   "parts": [
+    "va_fd__device",
+    "va_fd__sac"
+   ]
+  },
+  {
+   "id": "fetal",
+   "kind": "variant",
+   "name": "Fetal posterior communicating artery",
+   "parts": [
+    "va_fetal__posterior_cerebral_artery_p1_p2",
+    "va_fetal__posterior_communicating_artery"
+   ],
+   "side": "R",
+   "segment": "Posterior cerebral artery (P1–P2)"
+  },
+  {
+   "id": "a1hypo",
+   "kind": "variant",
+   "name": "Hypoplastic A1 segment",
+   "parts": [
+    "va_a1hypo__anterior_cerebral_artery_a1_a2",
+    "va_a1hypo__anterior_communicating_artery"
+   ],
+   "side": "R",
+   "segment": "Anterior cerebral artery (A1–A2)"
   }
  ]
 }

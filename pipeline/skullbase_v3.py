@@ -473,7 +473,7 @@ def main() -> int:
 
 CARRIED = ("Anterior inferior cerebellar artery", "Superior cerebellar artery")   # besides the nerves
 HINDBRAIN_CLEAR_MM = 0.3   # the carried arteries' surfaces kept this far outside the fitted cerebellum and brainstem
-CLEAR_PASSES = 8
+CLEAR_PASSES = 40
 CARRY_FADE_MM = 12.0       # the carried deformation fades out over this much inside its grid's edge (none beyond it)
 CARRY_NEAR_MM, CARRY_REACH_MM = 6.0, 16.0   # ... and in full only this near the fitted hindbrain, none beyond the reach
 
@@ -537,8 +537,7 @@ def hindbrain_clearance():
     """(points, radii) -> points: a vessel's centre line moved out of the fitted cerebellum and brainstem
     (skullbase_pfossa.py's pieces at rest) where the fits leave it in or against them: each point closer than its radius
     plus HINDBRAIN_CLEAR_MM to their surface (or inside) pushed out along the shortest way, the pushes smoothed along the
-    vessel, repeated CLEAR_PASSES times (a smoothed push falls short where the vessel dips in briefly). None without them."""
-    import skullbase_v3_skull as SK
+    vessel (a point that must move getting at least its own push), repeated up to CLEAR_PASSES times. None without them."""
     meshes = hindbrain_meshes()
     if not meshes:
         return None
@@ -550,11 +549,12 @@ def hindbrain_clearance():
     a[:3, 3] = lo
     a[[0, 1, 2], [0, 1, 2]] = step
     inv = np.linalg.inv(a)
-    occ = np.zeros(shape, np.float32)
+    # each piece filled on its own (by parity: a half of a midline part counts as solid, which rasterise's open-mesh
+    # shell would not), the pieces OR-ed
+    from skullbase_brain import fill
+    inside = np.zeros(shape, bool)
     for v, t in meshes:
-        m, box = SK.rasterise(v, t, inv, shape)
-        occ[box] = np.maximum(occ[box], m)
-    inside = occ > 0.5
+        inside |= fill(v, t, lo, shape, step)
     sd = (ndimage.distance_transform_edt(inside) - ndimage.distance_transform_edt(~inside)) * step   # positive inside
     grad = np.stack(np.gradient(ndimage.gaussian_filter(sd, 1.0)), -1)
 
@@ -568,7 +568,10 @@ def hindbrain_clearance():
             gv = -np.stack([ndimage.map_coordinates(grad[..., k], g, order=1, mode="nearest") for k in range(3)], 1)
             gv /= np.maximum(np.linalg.norm(gv, axis=1, keepdims=True), 1e-9)
             D = np.where((need > 0)[:, None], need[:, None] * gv, 0.0)
-            P = P + ndimage.gaussian_filter1d(D, 1.5, axis=0, mode="nearest")
+            Ds = ndimage.gaussian_filter1d(D, 1.5, axis=0, mode="nearest")
+            # (a point that must move gets its whole push, its neighbours the smoothed share: a vessel dipping in briefly
+            # comes out too)
+            P = P + np.where((need > 0)[:, None], np.where(np.linalg.norm(Ds, axis=1, keepdims=True) > need[:, None], Ds, D), Ds)
         return P
     return clear
 
@@ -1019,8 +1022,23 @@ def brain_items(items: list, ex2: dict, v2: dict) -> None:
                     "sb_deep_middle_cerebral_vein": "Drawn by rule, not traced: from the insula's pole, where the insular veins meet, "
                         "under the brain to the front end of this patient's basal vein (TopBrain's label), kept off the fitted "
                         f"template's cortex, {2 * vr['radiusMm']['deep']:g} mm across (illustrative).",
-                }[b["id"]] + " It moves with the brain in the surgical shapes (the superficial vein with the temporal lobe, the "
-                             "insular and deep veins with the insula), carried by cross-sections along its line.",
+                    "sb_vein_of_trolard": "Drawn by rule on the fitted template brain, not traced (this angiogram labels no cortical "
+                        "vein): from the superficial Sylvian vein's back end up over the gyral crowns (the shortest way over them, "
+                        "bridging the sulci) to this CT's superior sagittal sinus, where the template's frontal lobe meets its "
+                        "parietal at the top: the central sulcus, near which the vein joins the sinus (Tomasi 2021); "
+                        f"{2 * vr['radiusMm'].get('anastomotic', 1.0):g} mm across (illustrative). Which of the anastomotic veins "
+                        "dominates varies.",
+                    "sb_vein_of_labbe": "Drawn by rule on the fitted template brain, not traced: from the superficial Sylvian vein's "
+                        "back end back and down over the temporal lobe's gyral crowns to this CT's traced transverse sinus, where it "
+                        "lies about 9.8 cm over the cortex from the temporal pole (the mean distance Tomasi 2021 measured: 9.9 and "
+                        f"9.7 cm); {2 * vr['radiusMm'].get('anastomotic', 1.0):g} mm across (illustrative). Which of the "
+                        "anastomotic veins dominates varies.",
+                }[b["id"]] + " It moves with the brain in the surgical shapes (" + {
+                    "sb_superficial_middle_cerebral_vein": "with the temporal lobe",
+                    "sb_insular_veins": "with the insula", "sb_deep_middle_cerebral_vein": "with the insula",
+                    "sb_vein_of_trolard": "with the frontal and parietal cortex it lies on",
+                    "sb_vein_of_labbe": "with the temporal and occipital cortex it lies on"}[b["id"]] +
+                             "), carried by cross-sections along its line.",
                 "centroid": b["centroid"],
             })
             continue
@@ -1219,6 +1237,13 @@ def finalize() -> int:
     p = GEN / f"{PREFIX}-manifest.json"
     m = json.loads(p.read_text())
     own = {Path(it["file"]).name for it in m["structures"] if it["file"].startswith(f"assets/{KIND}/")}
+    # (and the files other sections' manifests take from this one, as the ventricles section does)
+    for q in GEN.glob("*manifest*.json"):
+        if q.name == p.name:
+            continue
+        for it in json.loads(q.read_text()).get("structures", []):
+            if str(it.get("file", "")).startswith(f"assets/{KIND}/"):
+                own.add(Path(it["file"]).name)
     for f in (PUBLIC / KIND).glob("*.glb"):
         if f.name not in own:
             f.unlink()
@@ -1251,11 +1276,16 @@ def validate() -> int:
         check(2 <= seg["labyrinthine"] <= 8, f"{s}: labyrinthine segment {seg['labyrinthine']} mm")
         check(6 <= seg["tympanic"] <= 16, f"{s}: tympanic segment {seg['tympanic']} mm")
     # the vessels joined where they meet (skullbase_v3_junctions.py)
+    # (the parts of the fitted brain pushed aside by a tumour, for its view only, are not checked as the parts)
+    base = [it for it in m["structures"] if not it.get("pushedFrom")]
     import skullbase_v3_junctions as JUNC
-    for ok, msg in JUNC.gaps(m["structures"]):
+    for ok, msg in JUNC.gaps(base):
         check(ok, msg)
     import skullbase_v3_clearance as CLEAR
-    for ok, msg in CLEAR.check(m["structures"]):
+    for ok, msg in CLEAR.check(base):
+        check(ok, msg)
+    import skullbase_v3_tumours as TM
+    for ok, msg in TM.check(m["structures"]):
         check(ok, msg)
     aps = json.loads((GEN / f"{PREFIX}-approaches.json").read_text())
     for it in m["structures"]:
@@ -1266,6 +1296,8 @@ def validate() -> int:
                 check(abs(c["R"][0]) < 5, f"{it['id']}: not on the midline {c}")
             elif it.get("category") == "removed":     # one side only: the craniotomy is on the right
                 check(c["R"][0] > 0, f"{it['id']}: not on the right {c}")
+            elif it.get("category") in ("tumour", "guide"):     # drawn on the right, or across the midline
+                check(c["R"][0] > -5, f"{it['id']}: not on the right {c}")
             else:
                 check(c["L"][0] < 0 < c["R"][0], f"{it['id']}: sides {c}")
     for nerve, sides in fit["nerves"].items():
@@ -1306,7 +1338,7 @@ def validate() -> int:
         check(ap["removed"] in ids and all(b in ids for b in ap["bones"]), f"{aid}: structures missing")
         for b in ap["bones"]:
             check(ids.get(ids[b].get("replaces", ""), {}).get("type") == "bone", f"{aid}: {b} replaces no bone")
-    brain = [it for it in m["structures"] if it.get("category") == "brain"]
+    brain = [it for it in base if it.get("category") == "brain"]
     check(len(brain) == 7 and all(it.get("morph") for it in brain), f"{len(brain)} brain pieces, all with the surgical shapes as morph targets")
     check(any(it["name"] == "Falx cerebri" for it in m["structures"]), "the falx is missing")
     check(all(it.get("morph") for it in m["structures"] if it["name"] in ("Middle cerebral artery (M2 segment)", "Middle cerebral artery (M3 segment)")),
@@ -1314,7 +1346,15 @@ def validate() -> int:
     pica = [it for it in m["structures"] if it["name"].startswith("Posterior inferior cerebellar artery")]
     check(len(pica) == 2 and all(it.get("morph") for it in pica), "the PICA and its carried-on course move with the cerebellum")
     sv = [it for it in m["structures"] if it.get("category") == "vein" and it.get("morph")]
-    check(len(sv) == 3 and all(it.get("schematic") for it in sv), f"{len(sv)} Sylvian veins drawn, with the surgical shapes")
+    check(len(sv) == 5 and all(it.get("schematic") for it in sv), f"{len(sv)} veins drawn on the brain (the Sylvian veins, "
+          "Trolard's and Labbé's), with the surgical shapes")
+    # the anastomotic veins reach their sinuses: Trolard's the superior sagittal sinus, Labbé's the transverse sinus
+    vrep = (fit.get("brain") or {}).get("veins", {}).get("lengthMm", {})
+    for s_ in ("R", "L"):
+        r_ = vrep.get(s_, {})
+        check("trolard" in r_ and "labbe" in r_, f"{s_}: the veins of Trolard and Labbé drawn")
+        if "labbeFromPoleMm" in r_:
+            check(80 <= r_["labbeFromPoleMm"] <= 115, f"{s_}: Labbé joins {r_['labbeFromPoleMm']} mm over the cortex from the temporal pole")
     b = fit.get("brain")
     check(b is not None, "the brain's report is missing")
     if b:
@@ -1351,7 +1391,7 @@ def validate() -> int:
             check(mv["R"]["lift"] <= b["params"]["liftMm"] + 1, f"{name}: the lift moves it {mv['R']['lift']} mm")
             check(mv["R"]["lsoLift"] <= b["params"]["lsoLiftMm"] + 1, f"{name}: the LSO lift moves it {mv['R']['lsoLift']} mm")
     # the telovelar view: the cerebellum, brainstem and fourth ventricle fitted into the posterior fossa, the tonsils drawn apart
-    pf = [it for it in m["structures"] if it.get("category") in ("hindbrain", "ventricle")]
+    pf = [it for it in base if it.get("category") in ("hindbrain", "ventricle")]
     check(len(pf) == 8 and {it["name"] for it in pf if it.get("morph")} == {"Cerebellar hemisphere", "Tonsil of cerebellum", "Vermis"},
           f"{len(pf)} posterior fossa pieces")
     pr = fit.get("pfossa")
@@ -1381,7 +1421,28 @@ def validate() -> int:
     return 1 if fails else 0
 
 
+def approaches_only() -> int:
+    """The craniotomies' items again from approach.json (after skullbase_v3_approach.py only ...), into the manifest as it
+    stands, without running the rest of this step (then compress.mjs and finalize)."""
+    p = GEN / f"{PREFIX}-manifest.json"
+    m = json.loads(p.read_text())
+    items = [it for it in m["structures"] if not it.get("approach")]
+    for f in BUILD.glob("sb_appr_*.glb"):
+        f.unlink()
+    approach_items(items, None)
+    for it in items:
+        f = REPO / "public" / it["file"]
+        if not it.get("bytes") and f.exists():
+            it["bytes"] = f.stat().st_size
+    m["structures"] = items
+    p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
+    print("approach items:", sum(1 for it in items if it.get("approach")))
+    return 0
+
+
 if __name__ == "__main__":
     if sys.argv[1:] == ["finalize"]:
         sys.exit(finalize())
+    if sys.argv[1:] == ["approaches"]:
+        sys.exit(approaches_only())
     sys.exit(main())

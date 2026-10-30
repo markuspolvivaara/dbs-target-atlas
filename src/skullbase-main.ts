@@ -8,7 +8,7 @@ import { decodeSkull, encodeSkull, type SkullPage, type SkullState } from './sku
 import { h } from './ui/h';
 import { disclaimerNote, siteHeader } from './ui/shell';
 import { SkullbaseAtlasPage } from './ui/skullbase-atlas';
-import { skullCreditsPage, skullSourcesPage } from './ui/skullbase-pages';
+import { skullCreditsPage, skullGradingPage, skullSourcesPage } from './ui/skullbase-pages';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
 
 const SECTION = SECTIONS.find((s) => s.id === (SB_MODEL === 'v3' ? 'skullbase' : SB_MODEL === 'ct' ? 'skullbase-ct' : 'skullbase-v1'))!;
@@ -21,13 +21,18 @@ function sanitize(s: SkullState): SkullState {
   if (!SB_GROUP.has(s.grp)) s.grp = DEFAULT_GROUP;
   s.also = SB_GROUP.get(s.grp)!.kind === 'system' ? s.also.filter((id) => id !== s.grp && SB_GROUP.get(id)?.kind === 'system') : [];
   if (s.sel && !SB.has(s.sel) && !LM.has(s.sel)) s.sel = null;
+  // a view with a section (the Knosp grades) is cut at it while the reader keeps the cut on
+  const sec = SB_GROUP.get(s.grp)!.section;
+  s.cutPlane = sec && s.section ? { normal: sec.normal, point: sec.point } : null;
   return s;
 }
 
 let state: SkullState = sanitize(decodeSkull(location.hash));
 
 // ---------------------------------------------------------------- shell
-const NAV: [SkullPage, string][] = [['atlas', 'Atlas'], ['sources', 'Sources'], ['credits', 'Credits']];
+const NAV: [SkullPage, string][] = SB_MODEL === 'v3'
+  ? [['atlas', 'Atlas'], ['grading', 'Grading'], ['sources', 'Sources'], ['credits', 'Credits']]
+  : [['atlas', 'Atlas'], ['sources', 'Sources'], ['credits', 'Credits']];
 const app = document.getElementById('app')!;
 const navLinks = NAV.map(([p, label]) => h('a', { href: `#/${p}`, class: 'navlink', 'data-page': p }, label));
 const themeBtn = h('button', { type: 'button', class: 'theme-btn', onclick: () => cycleTheme() });
@@ -46,6 +51,7 @@ const update = (fn: (s: SkullState) => void, opts: { camera?: boolean } = {}) =>
 const atlas = new SkullbaseAtlasPage(update);
 const pages: Record<SkullPage, { el: HTMLElement; render(s: SkullState): void }> = {
   atlas: { el: atlas.el, render: (s) => atlas.render(s, { camera: pendingCamera }) },
+  grading: skullGradingPage(),
   sources: skullSourcesPage(),
   credits: skullCreditsPage(),
 };
@@ -78,7 +84,7 @@ function render(pageChanged = false): void {
   pages[state.page].render(state);
   if (state.page === 'atlas') atlas.onShow();
   const atlasTitle = state.sel ? (SB.get(state.sel)?.name ?? LM.get(state.sel)?.name ?? '') : viewGroup(state.grp, state.also).name;
-  const titles: Record<SkullPage, string> = { atlas: atlasTitle, sources: 'Sources', credits: 'Credits' };
+  const titles: Record<SkullPage, string> = { atlas: atlasTitle, grading: 'Grading', sources: 'Sources', credits: 'Credits' };
   document.title = `${titles[state.page]} · ${SECTION.name} · ${BRAND.name}`;
   if (pageChanged) window.scrollTo(0, 0);
 }

@@ -515,8 +515,10 @@ class Out:
         self.vessels, self.t_art, self.t_ven, self.net = vessels, t_art, t_ven, net
         self.V = Vessels(vessels, t_art, t_ven)
         self.items, self.info = [], []
+        self.aneu = {}      # each saccular aneurysm's geometry, for its treatments
 
-    def part(self, lesion: str, pid: str, name: str, cat: str, token: str, parts: list, dwell: float, derivation: str) -> str:
+    def part(self, lesion: str, pid: str, name: str, cat: str, token: str, parts: list, dwell: float, derivation: str,
+             replaces: str | None = None) -> str:
         """A lesion's part: [(positions, triangles, arrival)] in one GLB (node R)."""
         vs, ts, arr, off = [], [], [], 0
         for v, t, a in parts:
@@ -529,7 +531,8 @@ class Out:
         c = V.mean(0).round(2).tolist()
         self.items.append({**RULE, "id": vid, "name": name, "file": f"assets/{VB.KIND}/{vid}.glb", "colour": VB.colour(token),
                            "category": cat, "lesion": lesion, "derivation": derivation, "centroid": {"L": c, "R": c},
-                           "layer": {"feeder": "tracts", "drainer": "vessels"}.get(cat, "targets")})
+                           "layer": {"feeder": "tracts", "drainer": "vessels"}.get(cat, "targets"),
+                           **({"replaces": replaces} if replaces else {})})
         return vid
 
     def vein_copies(self, lesion: str, early: np.ndarray, dilate: dict | None = None) -> list[str]:
@@ -568,6 +571,8 @@ def build_aneurysms(o: Out) -> None:
                      ", its dome and neck joined smoothly (an implicit surface).")
         o.info.append({"id": aid, "kind": "aneurysm", "type": "saccular", "name": name, "parts": [pid], "parent": parent,
                        "branch": branch, "side": side, **facts})
+        o.aneu[aid] = {"v": v, "f": f, "arr": arr, "t0": t0, "R": R, "rn": rn, "parent": parent, "side": side, "name": name,
+                       "base": np.array(facts["siteMm"]), "d": np.array(facts["direction"]) / np.linalg.norm(facts["direction"])}
     v, f, arr, facts = fusiform(o.V)
     pid = o.part("fusiform", "sac", "Fusiform basilar trunk aneurysm", "aneurysm", "vaAneurysm", [(v, f, arr)], VB.DWELL_ART_S + 0.8,
                  f"Drawn by rule, not this patient's: this CT's basilar trunk widened all round over {FUSI_LEN_MM:g} mm, to "
@@ -696,6 +701,7 @@ def wiggle(C: np.ndarray, amp: float, waves: float) -> np.ndarray:
 
 
 DAVF_MM = 5.0             # the drawn fistula's diameter (illustrative)
+LABBE = "Inferior anastomotic vein (of Labbé)"
 DAVF_RETRO_MM = 130.0     # how far contrast runs back along the transverse sinus from the fistula (to the torcular: drawn)
 
 
@@ -727,22 +733,16 @@ def build_davf(o: Out, brain: Brain) -> None:
     ids.append(o.part(lid, "fistula", "Dural AV fistula: the fistula", "fistula", "vaNidus", [(sph_v, sph_f, np.full(len(sph_v), tF))],
                       VB.DWELL_ART_S + 0.6, f"Drawn by rule: where the feeders open into the outer wall of this CT's right sinus, at the "
                       f"junction of its transverse and sigmoid parts, {DAVF_MM:g} mm across (illustrative)."))
-    # cortical venous reflux: from the transverse sinus back up over the temporal lobe (a vein of Labbé's course, drawn)
-    (Ptr, _), _ = o.V.get("Transverse sinus", "R")
-    T1 = Ptr[np.argmin(np.abs(np.linalg.norm(Ptr - F, axis=1) - 14))]
-    Pt, _ = brain.lobes[("temporal", "R")]
-    lat = Pt[np.argmax(Pt[:, 0] + 0.0 * Pt[:, 1])]
-    up = Pt[np.argmax(Pt[:, 2] + 0.3 * Pt[:, 1])]
-    C = catmull(np.array([T1, (T1 + lat) / 2 + unit(lat - brain.centre) * 4, lat, (lat + up) / 2 + unit(up - brain.centre) * 3, up]), 0.5)
-    s = np.r_[0, np.cumsum(np.linalg.norm(np.diff(C, axis=0), axis=1))]
-    pos, nrm, tri, idx = tube(C, np.linspace(1.8, 1.0, len(C)), 10)
-    ta = tF + np.linalg.norm(T1 - F) / VB.SHUNT_SPEED + s / VB.SHUNT_SPEED
-    ids.append(o.part(lid, "reflux", "Dural AV fistula: cortical venous reflux", "drainer", "sbVein", [(pos, tri, ta[idx])], VB.DWELL_VEN_S,
-                      "Drawn by rule: a cortical vein filled backwards from the transverse sinus, up over this patient's fitted "
-                      "temporal lobe (the course of a vein of Labbé), in the arterial phase."))
+    # cortical venous reflux: the vein of Labbé (Skull base v3's, drawn on the fitted brain) filled backwards from the
+    # transverse sinus, as the sinus is back from the fistula
     early = early_veins(o.net, flat(o.net, o.t_ven), [(F, tF)], EARLY_SPEED,
-                        {"Transverse sinus", "Sigmoid sinus", "Internal jugular vein"}, retro_mm=DAVF_RETRO_MM)
+                        {"Transverse sinus", "Sigmoid sinus", "Internal jugular vein", LABBE}, retro_mm=DAVF_RETRO_MM)
     ids += o.vein_copies(lid, early)
+    for it in o.items:
+        if it.get("lesion") == lid and it["name"] == LABBE:
+            it["category"] = "drainer"
+            it["derivation"] += (" Here it fills backwards from the transverse sinus, in the arterial phase: the fistula's cortical "
+                                 "venous reflux (Borden type II).")
     o.info.append({"id": lid, "kind": "davf", "name": "Dural arteriovenous fistula (transverse–sigmoid)", "parts": ids,
                    "borden": 2, "fistulaMm": np.round(F, 1).tolist(), "feeders": ["Middle meningeal artery", "Occipital artery (drawn)"],
                    "drainage": ["Sigmoid sinus and internal jugular vein (antegrade)", "Transverse sinus (retrograde)", "Cortical vein (reflux)"]})
@@ -791,4 +791,186 @@ def build(vessels, t_art, t_ven, net) -> tuple[list, list]:
     build_avms(o, brain)
     build_davf(o, brain)
     build_ccfs(o)
+    build_treatments(o)
+    build_variants(o)
     return o.items, o.info
+
+
+# ---------------------------------------------------------------- treatments of aneurysms
+TREATMENTS = [  # (id, name, the aneurysm it treats, kind)
+    ("clip", "Clipping", "mca", "clip"),
+    ("coil", "Coiling", "basilar", "coil"),
+    ("fd", "Flow diversion", "ophthalmic", "fd"),
+]
+CLIP_BLADE_MM = 0.45        # a clip's blade radius (illustrative) ...
+CLIP_HEAD_MM = 1.3          # ... and its head's
+COIL_WIRE_MM = 0.12         # a coil's wire radius (illustrative), as many loops as COIL_LOOPS
+COIL_LOOPS = 36
+FD_SPAN_MM = 9.0            # a flow diverter reaches this far either side of the neck along its parent (illustrative) ...
+FD_OFF_MM = 0.25            # ... drawn this far outside the artery's wall
+FD_DELAY_S, FD_DWELL_S = 1.6, 4.0   # contrast entering a flow-diverted aneurysm late and lingering (stasis, illustrative)
+
+
+def build_treatments(o: Out) -> None:
+    """The three treatments, each on one of the drawn aneurysms: a clip across the neck (the sac then fills no more), coils
+    packing the dome (in its place), a flow diverter along the parent artery across the neck (the sac filling late and
+    slowly). Each comes with a copy of its aneurysm as treated, standing in for it when shown."""
+    for tid, name, aid, kind in TREATMENTS:
+        a = o.aneu[aid]
+        base, d, R, rn = a["base"], a["d"], a["R"], a["rn"]
+        centre = base + d * (R + 0.6 * rn)
+        (P, T), _ = o.V.get(a["parent"], a["side"])
+        ax = o.V.axis(a["parent"], a["side"], base)
+        ax = unit(ax - (ax @ d) * d)
+        w = np.cross(d, ax)
+        parts = []
+        if kind == "clip":
+            # two straight blades across the neck, along the parent, closing it just above the parent's wall; the head
+            # outside, turned away from the parent
+            h0 = base + d * (0.9 * rn)
+            L = 2 * rn + 5.0
+            blades = [(h0 + s_ * 0.35 * w - ax * L / 2, h0 + s_ * 0.35 * w + ax * L / 2) for s_ in (-1, 1)]
+            hp = h0 - ax * (L / 2 + CLIP_HEAD_MM)
+
+            def sdf(X):
+                f_ = capsule(X, *blades[0], CLIP_BLADE_MM)
+                f_ = np.minimum(f_, capsule(X, *blades[1], CLIP_BLADE_MM))
+                return np.minimum(f_, capsule(X, hp - d * 1.5, hp + d * 1.5, CLIP_HEAD_MM))
+            pts = np.vstack([blades[0][0], blades[0][1], blades[1][0], blades[1][1], hp])
+            v, f = implicit_mesh(sdf, pts.min(0) - 3, pts.max(0) + 3, 0.15)
+            dev = o.part(tid, "device", "Aneurysm clip", "device", "vaDevice", [(v, f, np.full(len(v), VB.T_MAX_S))], 0.0,
+                         f"Drawn by rule: a straight clip (two blades {2 * CLIP_BLADE_MM:g} mm thick and its head; illustrative) across "
+                         f"the neck of the drawn {a['name'].lower()}, along its parent, just above the parent's wall.")
+            sac = o.part(tid, "sac", f"{a['name']} (clipped)", "aneurysm", "vaAneurysm",
+                         [(a["v"], a["f"], np.full(len(a["v"]), VB.T_MAX_S))], 0.0,
+                         "The drawn aneurysm, clipped: its neck closed, it no longer fills in the angiogram.", replaces=f"va_{aid}__sac")
+        elif kind == "coil":
+            # loops of thin wire packed in the dome (in place of the sac: the coils fill its shape)
+            loops = []
+            for _ in range(COIL_LOOPS):
+                c0 = centre + RNG.normal(size=3) * R * 0.3
+                pts_ = []
+                for _ in range(RNG.integers(5, 9)):
+                    q = c0 + RNG.normal(size=3) * R * 0.45
+                    r_ = np.linalg.norm(q - centre)
+                    if r_ > 0.82 * R:
+                        q = centre + (q - centre) / r_ * 0.82 * R
+                    pts_.append(q)
+                C = catmull(np.array(pts_), 0.25, closed=True)
+                pos, nrm, tri, idx = tube(C, np.full(len(C), COIL_WIRE_MM), 5)
+                loops.append((pos, tri, np.full(len(pos), VB.T_MAX_S)))
+            dev = o.part(tid, "device", "Coil mass", "device", "vaDevice", loops, 0.0,
+                         f"Drawn by rule: {COIL_LOOPS} loops of thin wire ({2 * COIL_WIRE_MM:g} mm; illustrative) packed in the dome of the "
+                         f"drawn {a['name'].lower()}, in its place; the coiled sac no longer fills in the angiogram.",
+                         replaces=f"va_{aid}__sac")
+            sac = None
+        else:
+            # a sleeve over the parent's wall either side of the neck, drawn see-through
+            near = np.linalg.norm(P - base, axis=1) < FD_SPAN_MM
+            keep = near[T].all(1)
+            used = np.unique(T[keep])
+            remap = -np.ones(len(P), int)
+            remap[used] = np.arange(len(used))
+            Ps, Ts = P[used], remap[T[keep]]
+            Ps = Ps + VB.normals(Ps, Ts) * FD_OFF_MM
+            dev = o.part(tid, "device", "Flow diverter", "device", "vaDevice", [(Ps, Ts, np.full(len(Ps), VB.T_MAX_S))], 0.0,
+                         f"Drawn by rule: a sleeve over this CT's {a['parent'].lower()} for {FD_SPAN_MM:g} mm either side of the drawn "
+                         f"aneurysm's neck, just outside its wall (illustrative; a real device is a braided mesh).")
+            arr = a["arr"] + FD_DELAY_S
+            sac = o.part(tid, "sac", f"{a['name']} (flow-diverted)", "aneurysm", "vaAneurysm", [(a["v"], a["f"], arr)],
+                         VB.DWELL_ART_S + FD_DWELL_S,
+                         f"The drawn aneurysm behind a flow diverter: contrast enters it late ({FD_DELAY_S:g} s) and lingers "
+                         f"({FD_DWELL_S:g} s longer: stasis; illustrative timing).", replaces=f"va_{aid}__sac")
+        o.info.append({"id": tid, "kind": "treatment", "name": name, "treats": aid, "treatment": kind,
+                       "parts": [p_ for p_ in (dev, sac) if p_]})
+
+
+# ---------------------------------------------------------------- variants of the circle of Willis
+VARIANTS = [  # (id, name, side, thinned segment (vessel, from, to), widened [(vessel, factor)], ...)
+    ("fetal", "Fetal posterior communicating artery", "R",
+     ("Posterior cerebral artery (P1–P2)", "Basilar artery", "Posterior communicating artery"),
+     [("Posterior communicating artery", 1.8)]),
+    ("a1hypo", "Hypoplastic A1 segment", "R",
+     ("Anterior cerebral artery (A1–A2)", "Internal carotid artery", "Anterior communicating artery"),
+     [("Anterior communicating artery", 1.4)]),
+]
+VARIANT_THIN = 0.35         # a hypoplastic segment drawn this share of its width (illustrative)
+VARIANT_SLOW = 25.0         # ... and contrast crossing it this many times slower (it fills from the other side)
+
+
+def radial(P: np.ndarray, mask: np.ndarray, factor: float, reach: float = 3.0) -> np.ndarray:
+    """A vessel's surface narrowed or widened about its local axis (the mean and main direction of its surface within
+    reach) where mask, by factor (fading to 1 over 2 mm from the mask's edge)."""
+    tree = cKDTree(P)
+    out = P.copy()
+    edge = cKDTree(P[~mask]).query(P[mask])[0] if (~mask).any() else np.full(mask.sum(), np.inf)
+    fade = np.clip(edge / 2.0, 0, 1)
+    for k, (i, nb) in enumerate(zip(np.nonzero(mask)[0], tree.query_ball_point(P[mask], reach))):
+        Q = P[nb]
+        c = Q.mean(0)
+        a = np.linalg.svd(Q - c, full_matrices=False)[2][0]
+        proj = c + ((P[i] - c) @ a) * a
+        f_ = 1 + (factor - 1) * fade[k]
+        out[i] = proj + f_ * (P[i] - proj)
+    return out
+
+
+def build_variants(o: Out) -> None:
+    """Two common variants of the circle of Willis, drawn on this CT's arteries: a segment narrowed (hypoplastic) between
+    the vessels it joins, its partner widened, and the arteries timed again with contrast crossing the narrowed segment
+    VARIANT_SLOW times slower (so what lies beyond fills from the other side): copies of the arteries that change, in
+    place of them."""
+    from scipy.sparse.csgraph import dijkstra
+    A = o.net["art"]
+    by = {v["name"]: v for v in o.vessels}
+    for vid, name, side, (seg, frm, to), widen in VARIANTS:
+        nodes = {k: (P.copy(), T) for k, (P, T) in by[seg]["nodes"].items()}
+        P, T = nodes[side]
+        a_ = o.V.contact(seg, frm, side).mean(0)
+        b_ = o.V.contact(seg, to, side).mean(0)
+        ab = b_ - a_
+        t = np.clip((P - a_) @ ab / (ab @ ab), -0.2, 1.2)
+        dist = np.linalg.norm(P - (a_ + t[:, None] * ab), axis=1)
+        mask = (t > 0.05) & (t < 0.95) & (dist < 4.0)
+        nodes[side] = (radial(P, mask, VARIANT_THIN), T)
+        changed = {seg: nodes}
+        for wname, fac in widen:
+            wn = {k: (P_.copy(), T_) for k, (P_, T_) in by[wname]["nodes"].items()}
+            P2, T2 = wn[side]
+            wn[side] = (radial(P2, np.ones(len(P2), bool), fac), T2)
+            changed[wname] = wn
+        # the arteries timed again: the narrowed segment's edges slowed
+        k_ = A.keys.index((seg, side))
+        region = np.zeros(len(A.P), bool)
+        region[A.cut[k_]:A.cut[k_ + 1]] = mask
+        G = A.G.tocoo()
+        slow = region[G.row] | region[G.col]
+        import scipy.sparse as sp
+        G2 = sp.coo_matrix((np.where(slow, G.data * VARIANT_SLOW, G.data), (G.row, G.col)), shape=G.shape).tocsr()
+        d = dijkstra(G2, indices=o.net["roots"], min_only=True)
+        tn = d / o.net["span"] * VB.ART_SPAN_S
+        tn = np.where(np.isfinite(tn), tn, o.net["t_art_flat"])
+        tn = np.minimum(tn, VB.ART_SPAN_S * 1.15)
+        for i_, (vn_, _) in enumerate(A.keys):       # (the external carotid's branches keep their own timing)
+            if "meningeal" in vn_.lower():
+                tn[A.cut[i_]:A.cut[i_ + 1]] = o.net["t_art_flat"][A.cut[i_]:A.cut[i_ + 1]]
+        split = A.split(tn)
+        ids = []
+        for vname in sorted({k[0] for k in A.keys}):
+            keys = [k for k in A.keys if k[0] == vname]
+            later = any(np.abs(split[k] - o.t_art[k]).max() > 0.05 for k in keys)
+            if not later and vname not in changed:
+                continue
+            v = by[vname]
+            nds = changed.get(vname, v["nodes"])
+            cid = f"va_{vid}__{VB.slug(vname)}"
+            cent = VB.write_vessel(cid, nds, {k[1]: split[k] for k in keys}, VB.DWELL_ART_S)
+            base = VB.base_item(v["item"], cid, cent, "")
+            how = (" Drawn here narrowed (hypoplastic: {:g} of its width, illustrative) between the {} and the {}.".format(VARIANT_THIN, frm.lower(), to.lower())
+                   if vname == seg else
+                   " Drawn here widened ({:g} times, illustrative).".format(dict(widen)[vname]) if vname in dict(widen) else "")
+            o.items.append({**base, "lesion": vid, "replaces": "va_" + VB.slug(vname),
+                            "derivation": base["derivation"] + how + " Timed again for the variant: contrast crosses the narrowed segment "
+                                                                       f"{VARIANT_SLOW:g} times slower, so what lies beyond it fills from the other side."})
+            ids.append(cid)
+        o.info.append({"id": vid, "kind": "variant", "name": name, "parts": ids, "side": side, "segment": seg})

@@ -14,6 +14,8 @@
     "wmFX": "#A00D5C", "wmMdLF": "#893456", "wmTPAT": "#1F38DB", "wmVOF": "#616808", "wmEMC": "#0D83A0", "wmAC": "#A57618", "wmATR": "#514E1F", "wmSTR": "#12767D", "wmPTR": "#412CCE", "wmAR": "#C2384B",
     "wmCSA": "#5C5123", "wmCSS": "#A06F0D", "wmCSP": "#105BCB", "wmSCP": "#7E3064", "wmMCP": "#0B847C", "wmICP": "#425719", "wmDRTT": "#235C42", "wmML": "#6231AA", "wmRST": "#1E888F", "wmCPTF": "#C2385D", "wmCPTP": "#8413E7", "wmCPTO": "#7C840B",
     "sbBone": "#B9AE96", "sbSoft": "#8A6FA8", "sbArtery": "#C0392B", "sbVein": "#2E5FB0", "sbNerve": "#B08A00", "sbLabyrinth": "#00838F", "sbMembrane": "#7B3FA0", "sbBrain": "#9E625E", "sbInsula": "#4A3DA8", "sbRemoved": "#5F81DD", "sbMedialWall": "#5A5A69", "sbTonsil": "#7D6DFF", "sbBrainstem": "#51474C", "sbCsf": "#0B8D9D", "sbTriMedial": "#B8467A", "sbTriLateral": "#2C8F62", "sbTriPosterior": "#B8621A", "sbDura": "#7E8294", "vaAneurysm": "#D35400", "vaNidus": "#9B2D8E", "veChoroid": "#A85A78",
+    "vaDevice": "#6E7781",
+    "sbTumour": "#7A9A01", "sbGuide": "#1F2A36",
     "lobeFrontal": "#56B4E9", "lobeParietal": "#E69F00", "lobeTemporal": "#009E73", "lobeOccipital": "#CC79A7", "lobeCingulate": "#D55E00", "lobeInsula": "#F0E442",
     "spBone": "#CDBF9C", "spDisc": "#137A88", "spCord": "#E3B505", "spRoot": "#BD7738", "spSafe": "#1E7E70", "spRisk": "#D10CAB", "spCaution": "#8E601A", "spArtery": "#9E1B16", "spVein": "#23407E", "spSoft": "#8A8F98",
     "bsSurface": "#C9B8A6", "bsFeature": "#8E7155", "bsCsf": "#3A7FB5", "bsNucleus": "#C2410C", "bsAan": "#0F8A7E", "bsSez": "#278A36"
@@ -32,6 +34,8 @@
     "wmFX": "#EF3E9C", "wmMdLF": "#C5678D", "wmTPAT": "#7081EB", "wmVOF": "#F2F7A1", "wmEMC": "#68D7F3", "wmAC": "#E3AB3B", "wmATR": "#DBD79F", "wmSTR": "#A6EDF2", "wmPTR": "#8778E2", "wmAR": "#E8B0B7",
     "wmCSA": "#DBCF9F", "wmCSS": "#ECA413", "wmCSP": "#76A8F4", "wmSCP": "#C567A6", "wmMCP": "#A1F7F2", "wmICP": "#BCDA81", "wmDRTT": "#46B983", "wmML": "#9C75D7", "wmRST": "#92E2E8", "wmCPTF": "#E8B0BF", "wmCPTP": "#C084F5", "wmCPTO": "#EAF368",
     "sbBone": "#CFC6B1", "sbSoft": "#B9A3D6", "sbArtery": "#F07A6A", "sbVein": "#7FA6F0", "sbNerve": "#E8C547", "sbLabyrinth": "#4DD0E1", "sbMembrane": "#C08BE0", "sbBrain": "#A86A66", "sbInsula": "#8A7BE0", "sbRemoved": "#9ABEF4", "sbMedialWall": "#73738C", "sbTonsil": "#6262C3", "sbBrainstem": "#92929D", "sbCsf": "#51EFEF", "sbTriMedial": "#F08AB8", "sbTriLateral": "#6FDCA6", "sbTriPosterior": "#F5A35A", "sbDura": "#D4D7E2", "vaAneurysm": "#FF9A4D", "vaNidus": "#E07AD4", "veChoroid": "#E59AB6",
+    "vaDevice": "#C3CCD6",
+    "sbTumour": "#B5D334", "sbGuide": "#F2F4F7",
     "lobeFrontal": "#56B4E9", "lobeParietal": "#E69F00", "lobeTemporal": "#009E73", "lobeOccipital": "#CC79A7", "lobeCingulate": "#D55E00", "lobeInsula": "#F0E442",
     "spBone": "#D8CCAE", "spDisc": "#98DCE6", "spCord": "#F2CC4A", "spRoot": "#F88C28", "spSafe": "#39F6D9", "spRisk": "#F268D7", "spCaution": "#E5C189", "spArtery": "#E8504A", "spVein": "#4A68D0", "spSoft": "#9AA0AA",
     "bsSurface": "#8C7B6B", "bsFeature": "#C4A585", "bsCsf": "#6FB3E3", "bsNucleus": "#F28A50", "bsAan": "#4FD1C0", "bsSez": "#5BE36E"

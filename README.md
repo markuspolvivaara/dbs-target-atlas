@@ -171,7 +171,10 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   the superficial middle cerebral vein as one trunk along the fissure's temporal edge from its back end forwards and down
   (Imada 2021) to the sphenoparietal sinus (Tanoue 2020), moving with the temporal lobe; the precentral, central and
   posterior insular veins from the insula's edge to its pole, and the deep middle cerebral vein from there to this
-  patient's basal vein (Ota 2024), moving with the insula. The cards cite open-access sources on the
+  patient's basal vein (Ota 2024), moving with the insula. The anastomotic veins are drawn the same way from the
+  superficial vein's back end over the gyral crowns (the shortest way over them, bridging the sulci): Trolard's to the
+  superior sagittal sinus where the frontal lobe meets the parietal at the top (near the central sulcus, Tomasi 2021),
+  Labbé's to the transverse sinus about 9.8 cm over the cortex from the temporal pole (Tomasi 2021's mean). The cards cite open-access sources on the
   craniotomy, the fissure's dissection, the middle cerebral artery's segments, the Sylvian veins and the insula
   (`src/skullbase/approaches.ts`).
   The interhemispheric view cuts a right parasagittal flap at the coronal suture (from 40 mm in front of bregma to 20 mm
@@ -269,6 +272,35 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   straight behind it removed up to 3 mm, the part meshed again). Each changed mesh is its
   own file (`<id>.joined.glb`, `<id>.cleared.glb`), its source's untouched; its card says what was drawn. Validation
   checks every junction closed and no artery inside the brainstem in any shape of the brain.
+- **Orbitozygomatic and far lateral views** (`pipeline/skullbase_v3_approach.py`; `skullbase_v3.py approaches` writes
+  their items into the manifest without the rest of that step). The orbitozygomatic craniotomy is the pterional flap and a
+  second piece, the superolateral orbital rim and roof and the zygomatic arch (Yilmaz 2025, Rodriguez Rubio 2019), over
+  the same fitted brain (the fissure and frontal-lobe sliders), seen from lower down. The far lateral craniectomy is a
+  right lateral suboccipital one down through the foramen magnum's rim, the posterior third of the occipital condyle
+  drilled (Pai 2018, Bruneau 2008); the atlas is not modelled, so the C1 hemilaminectomy is not shown. The foramen
+  magnum meningioma is drawn in it.
+- **Optic chiasm** (`pipeline/skullbase_v3_chiasm.py`, after `skullbase_v3_endonasal.py`). Drawn by rule where the
+  fitted Z-Anatomy chiasm lies (its centre, plane and length): a flat crossing 13.6 mm wide and 2.3 mm thick (the MRI
+  means of Mncube 2019), each optic nerve turning in to its front corner and tapering to it, and the optic tracts' first
+  12 mm leaving its back corners (illustrative).
+- **Tumours graded on the model** (`pipeline/skullbase_v3_tumours.py`, `src/skullbase/tumours.ts`; run after
+  `skullbase_v3_endonasal.py`, then compress and finalize). Drawn by rule on this CT, none a patient's tumour; the
+  Tumours row of the panel has each kind with its grades, and a Grading page has the tables:
+  - **Pituitary adenoma, Knosp 0–4 (3A, 3B):** the coronal section through this CT's own cavernous and supraclinoid
+    carotid (TopBrain's label), the medial tangent, intercarotid line and lateral tangent drawn on it from the two
+    cross-sections; an adenoma over the sella cut back to between the lines (0–2) or joined to the modelled cavernous
+    sinus above, below or all round the carotid (3A, 3B, 4). Each drawing is graded again from its own section. The view
+    is cut at the section (a checkbox turns the cut off). Sources: Araujo-Castro 2021 (grades, cure and complication
+    rates per grade).
+  - **Vestibular schwannoma, Koos I–IV,** in the retrosigmoid view (opened with the cerebellum retracted): the
+    meatus's lumen, and a ball in the cerebellopontine angle joined to the porus. This model's fitted pons lies about
+    4 mm from the porus, closer than in life, so grade II is small (6 mm) and grade III is moulded against the brainstem;
+    grade IV pushes it aside. Sources: Gupta 2020, Starnoni 2020 (EANS).
+  - **Meningiomas** of the olfactory groove (lateral supraorbital view), tuberculum sellae (pterional), petroclival
+    (retrosigmoid) and foramen magnum (far lateral), with the approaches Ius 2021 lists for each site; Muskens
+    2018 (endonasal against transcranial), Singh 2019 (retrosigmoid for petroclival), Bruneau 2008 (foramen magnum).
+  - The fitted brain is pushed out of each tumour, the way it grows (a shape, not a simulation), written as copies for
+    that view only (`<part>__<view>.glb`, `replaces` the part); the cranial nerves keep channels through the tumours.
 - **Cranial floor landmarks** (`pipeline/skullbase_v3_floor.py`, run by `pipeline/skullbase_v3.py` once the
   cavernous sinus is built, or alone): the Cranial floor view labels, besides the foramina, the anterior and posterior
   clinoid processes and the petrous apex on both sides, found on this CT's bone (as the cavernous sinus finds them); the
@@ -534,8 +566,17 @@ base fits or draws), with vascular lesions drawn onto them by rule, none of them
   torcular, the straight sinus, the petrosal and cavernous sinuses) are bridged, and the way out runs through the
   sinuses rather than back through small veins. Copies of the veins a lesion fills early (or dilates) stand in for them
   in its view.
+- **Treatments** (the Aneurysms view, one at a time): a clip across the middle cerebral bifurcation aneurysm's neck (the
+  sac then no longer fills in the angiogram), coils packing the basilar tip aneurysm (in its place), a flow diverter as a
+  see-through sleeve along the carotid across the ophthalmic segment aneurysm's neck (the sac filling late and
+  lingering); notes from Lee 2022, Molyneux 2015 (ISAT) and Alderazi 2014. Drawn by rule, sizes illustrative.
+- **Variants of the circle of Willis** (views of their own): a fetal posterior communicating artery and a hypoplastic A1,
+  drawn on this CT's right side (the segment narrowed about its axis, its partner widened) and the arteries timed again
+  with contrast crossing the narrowed segment slowly (Davidoiu 2023, Makowicz 2013).
+- **The veins of Trolard and Labbé** come from Skull base v3 (drawn by rule on the fitted brain; Tomasi 2021).
 - **Layers**: opacity sliders for the arteries, the veins, the lesion, the fitted brain and the bone.
-- **Grading page** (`src/vascular/grading.ts`): tables of the Spetzler–Martin grade (its points; each grade's
+- **Grading page** (`src/vascular/grading.ts`): the Hunt and Hess, WFNS and modified Fisher grades of a subarachnoid
+  haemorrhage (Thilak 2024; what they predict: Robba 2024), tables of the Spetzler–Martin grade (its points; each grade's
   Spetzler–Ponce class, usual treatment and favourable outcome after surgery: Assker 2025, Naranbhai 2023, Hafez 2019),
   the supplementary (Lawton–Young) grade (its points, the cut-off of 6, outcome by grade: Hafez 2019), and the Borden and
   Cognard types of dural fistulas (drainage, sinus flow, cortical venous reflux, course and treatment: Li 2015,

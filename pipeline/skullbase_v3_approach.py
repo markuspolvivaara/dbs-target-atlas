@@ -1,5 +1,7 @@
 """Skull base v3: craniotomies cut out of the CT's bone for the surgical views: the right pterional, the right lateral
-supraorbital (LSO) and the right parasagittal one of the interhemispheric approach.
+supraorbital (LSO), the right parasagittal one of the interhemispheric approach, the midline suboccipital and right
+retrosigmoid ones, the right orbitozygomatic (the pterional flap and a second, orbitozygomatic piece: Yilmaz 2025) and the
+right far lateral craniectomy (Pai 2018, Bruneau 2008).
 
   pipeline/.venv/bin/python -I -W ignore pipeline/skullbase_v3_approach.py      (then skullbase_v3.py takes its items)
 
@@ -95,6 +97,23 @@ SO_RIM_HALF_MM = 12.0   # ... down to the foramen magnum, its posterior rim take
 SO_PAST_RIM_MM = 4.0    # ... the outline's lower edge this far inside the opening, so the rim goes with the flap
 SO_DEEPER_MM = 25.0     # the squama curves from upright to nearly flat over the flap: its outer surface lies up to this much
                         # deeper than the median along the line of sight (the clivus, seen through the foramen, lies deeper)
+
+OZ_NOTCH_LATERAL_MM = 4.0   # the orbitozygomatic bar: from this far lateral to the supraorbital notch (Yilmaz 2025: the
+#                             first orbital cut lateral to the supraorbital ridge) ...
+OZ_PAST_FZ_MM = 5.0         # ... to this far lateral to the frontozygomatic suture (the last cut "just lateral" to it) ...
+OZ_ROOF_MM = 25.0           # ... with the orbital roof this far back from the rim (towards the superior orbital fissure; illustrative)
+OZ_RIM_ABOVE_MM = 8.0       # (the rim's bone from this far above the frontozygomatic process's landmark ...
+OZ_RIM_BELOW_MM = 8.0       # ... to this far below it)
+OZ_ARCH_FRONT_MM = 8.0      # the zygomatic arch: from this far in front of the zygomatic bone's back end ...
+OZ_ARCH_ROOT_Y = 0.0        # ... back to its root in front of the articular tubercle (y in the frame; illustrative) ...
+OZ_ARCH_HALF_MM = 7.0       # ... the arch's bone this far above and below its line, lateral of OZ_ARCH_LATERAL_MM
+OZ_ARCH_LATERAL_MM = 50.0
+FL_MEDIAL_MM = 8.0          # the far lateral craniectomy: from this far right of the midline (illustrative) ...
+FL_BELOW_TRANSVERSE_MM = 12.0   # ... its upper edge this far below the transverse sinus' lower margin ...
+FL_SIGMOID_DOWN_MM = 22.0   # ... its lateral edge along the sigmoid sinus' posterior margin from this far down it
+FL_RIM_MM = (6.0, 18.0)     # the foramen magnum's rim taken from x = 6 to 18 mm (to the condyle)
+FL_CONDYLE_SHARE = 1 / 3    # the occipital condyle's posterior third drilled (Pai 2018: the posterior 30-40 %)
+FL_CONDYLE_MM = 11.0        # (the condyle's bone within this of its landmark)
 
 
 def unit(v) -> np.ndarray:
@@ -865,6 +884,79 @@ def suboccipital(S: Skull) -> dict:
     return {"id": "suboccipital", "name": "Midline suboccipital craniotomy", "side": "M", "cut": m, "how": how, "burrHoles": [], "areaMm2": round(area)}
 
 
+def orbitozygomatic(S: Skull) -> dict:
+    """The two-piece orbitozygomatic craniotomy (Yilmaz 2025): the pterional flap as drawn here, then a second piece, the
+    superolateral orbital rim with the orbital roof behind it, from lateral to the supraorbital notch to just lateral to the
+    frontozygomatic suture, and the zygomatic arch from in front of its root to the zygomatic bone (its anterior and
+    posterior cuts)."""
+    pt = pterional(S)
+    notch, fz = S.lm("(Supra-orbital notch)"), S.lm("Zygomatic process of frontal bone")
+    x0, x1 = notch[0] + OZ_NOTCH_LATERAL_MM, fz[0] + OZ_PAST_FZ_MM
+    rim_y = min(notch[1], fz[1])
+    z_lo, z_hi = fz[2] - OZ_RIM_BELOW_MM, max(notch[2], fz[2]) + OZ_RIM_ABOVE_MM
+
+    def bar(P):     # the rim and the roof behind it: above the orbit, below the anterior fossa's floor level at the rim
+        return (P[:, 0] >= x0) & (P[:, 0] <= x1) & (P[:, 1] >= rim_y - OZ_ROOF_MM) & (P[:, 2] >= z_lo) & (P[:, 2] <= z_hi)
+    c = np.array([(x0 + x1) / 2, rim_y - OZ_ROOF_MM / 2, (z_lo + z_hi) / 2])
+    orbit = S.region(bar, c, np.linalg.norm([x1 - x0, OZ_ROOF_MM + 15, z_hi - z_lo]) / 2 + 5)
+    Z = np.array(S.bones["Zygomatic bone.r"]["verts"], float)
+    back = Z[np.argmin(Z[:, 1])]
+    y_front = back[1] + OZ_ARCH_FRONT_MM
+
+    def arch(P):
+        return (P[:, 0] >= OZ_ARCH_LATERAL_MM) & (P[:, 1] <= y_front) & (P[:, 1] >= OZ_ARCH_ROOT_Y) & (np.abs(P[:, 2] - back[2]) <= OZ_ARCH_HALF_MM)
+    zyg = S.region(arch, np.array([back[0], (y_front + OZ_ARCH_ROOT_Y) / 2, back[2]]), 25.0)
+    # (each piece with the faint bone at its surface, so no skin of it is left)
+    orbit, zyg = (ndimage.binary_dilation(x, iterations=2) & (S.b > 0.05) for x in (orbit, zyg))
+    how = (pt["how"].replace(" behind the zygomatic bone (which stays),", " behind the zygomatic bone,") + " Then the orbitozygomatic piece (the two-piece craniotomy, Yilmaz 2025): the superolateral orbital rim from "
+           f"{OZ_NOTCH_LATERAL_MM:g} mm lateral to the supraorbital notch to {OZ_PAST_FZ_MM:g} mm lateral to the frontozygomatic suture "
+           f"(the model's zygomatic process of the frontal bone), with the orbital roof {OZ_ROOF_MM:g} mm back from the rim (illustrative), "
+           "and the zygomatic arch from "
+           f"{OZ_ARCH_FRONT_MM:g} mm in front of the zygomatic bone's back end back to its root in front of the articular tubercle "
+           f"(y = {OZ_ARCH_ROOT_Y:g} mm here; illustrative).")
+    return {"id": "orbitozygomatic", "name": "Orbitozygomatic craniotomy", "cut": pt["cut"] | orbit | zyg, "how": how,
+            "softMm": pt["softMm"], "guard": pt["guard"] & ~orbit & ~zyg, "burrHoles": pt["burrHoles"]}
+
+
+def far_lateral(S: Skull) -> dict:
+    """A right far lateral (lateral suboccipital) craniectomy: from the sigmoid sinus to near the midline, down through the
+    foramen magnum's rim to the occipital condyle, whose posterior third is drilled (Pai 2018: a lateral suboccipital
+    craniectomy reaching the sigmoid sinus and the foramen magnum's rim, a C1 hemilaminectomy, the posterior 30-40 % of
+    the condyle drilled; Bruneau 2008). The atlas is not part of this model."""
+    sin = json.loads((BUILD / "sinuses.json").read_text())
+    sig = np.array(sin["sigmoid"]["R"]["path"])[::-1]
+    trn = np.array(sin["transverse"]["R"]["path"])
+    r_s = np.array(sin["sigmoid"]["R"]["radius"])[::-1]
+    r_t = np.array(sin["transverse"]["R"]["radius"])
+    arc = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(sig, axis=0), axis=1))]
+    k = int(np.argmin(np.abs(arc - FL_SIGMOID_DOWN_MM)))
+    s_pt = sig[k] + (r_s[k] + 2.0) * unit(np.array([-1.0, -1.0, 0.0]))       # behind and medial to the sigmoid sinus
+    # the transverse sinus' lower margin at the craniectomy's medial edge
+    j = int(np.argmin(np.abs(trn[:, 0] - FL_MEDIAL_MM)))
+    t_pt = trn[j] - np.array([0, 0, r_t[j] + FL_BELOW_TRANSVERSE_MM])
+    top_lat = np.array([s_pt[0], s_pt[1], min(s_pt[2], t_pt[2] + 4)])
+    rim = [foramen_rim(S, x) for x in np.linspace(FL_RIM_MM[1], FL_RIM_MM[0], 4)]
+    pts = [top_lat, (top_lat + t_pt) / 2, t_pt, np.array([FL_MEDIAL_MM, t_pt[1] + 6, (t_pt[2] + rim[-1][2]) / 2])] + rim[::-1][::-1]
+    outline = np.array([S.surface(p, S.outward(p)) for p in pts])
+    n = S.outward(outline.mean(0))
+    m = S.flap(outline, n, floor=False, deeper=SO_DEEPER_MM)
+    # the condyle's posterior third (drilled, extradural)
+    cond = S.lm("Occipital condyle")
+    near = S.region(lambda P: np.ones(len(P), bool), cond, FL_CONDYLE_MM)
+    P = nib.affines.apply_affine(S.a, np.argwhere(near))
+    y_cut = P[:, 1].min() + FL_CONDYLE_SHARE * (P[:, 1].max() - P[:, 1].min())
+    drill = S.region(lambda Q: Q[:, 1] <= y_cut, cond, FL_CONDYLE_MM)
+    area = outline_area(outline, n)
+    how = (f"A right lateral suboccipital craniectomy (Pai 2018: lateral suboccipital, reaching the sigmoid sinus, the foramen magnum's "
+           f"rim taken): its lateral edge behind this CT's own sigmoid sinus from {FL_SIGMOID_DOWN_MM:g} mm down it, its upper edge "
+           f"{FL_BELOW_TRANSVERSE_MM:g} mm below the transverse sinus, its medial edge {FL_MEDIAL_MM:g} mm right of the midline, and below "
+           f"the foramen magnum's posterior rim from x = {FL_RIM_MM[0]:g} to {FL_RIM_MM[1]:g} mm, about {area:.0f} mm² seen face on (the "
+           "outline illustrative). Then the posterior third of the right occipital condyle drilled (Pai 2018: the posterior 30-40 %; "
+           f"here the third of the condyle's bone within {FL_CONDYLE_MM:g} mm of its fitted landmark that lies furthest back). The "
+           "hemilaminectomy of C1 that goes with it is not shown: the atlas is not part of this model.")
+    return {"id": "far_lateral", "name": "Far lateral craniectomy", "cut": m | drill, "how": how, "burrHoles": [], "areaMm2": round(area)}
+
+
 def preview(path: str) -> int:
     """The cuts only (no meshing): each approach's removed voxels in the frame, for checking (npz)."""
     S = Skull()
@@ -882,7 +974,7 @@ def main(only: list[str] | None = None) -> int:
     S = Skull()
     res = json.loads((BUILD / "approach.json").read_text()) if only and (BUILD / "approach.json").exists() else {}
     makers = {"pterional": pterional, "lso": lateral_supraorbital, "interhemispheric": interhemispheric,
-              "suboccipital": suboccipital, "retrosigmoid": retrosigmoid}
+              "suboccipital": suboccipital, "retrosigmoid": retrosigmoid, "orbitozygomatic": orbitozygomatic, "far_lateral": far_lateral}
     for ap in (makers[k](S) for k in makers if not only or k in only):
         cut, soft, guard = ap["cut"], ap.get("softMm", 0.0), ap.get("guard")
         cutb = set(S.bone_names(cut))

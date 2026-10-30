@@ -3,6 +3,7 @@ import type { V3 } from '../state';
 import type { Look } from '../viewer/materials';
 import { APPROACHES } from './approaches';
 import { CAVERNOUS } from './cavernous';
+import { TUMOUR_FIT, TUMOURS, tumourGroupId, type TumourFamily } from './tumours';
 import { APPROACH_GEOM, isApproachPart, kindOf, LANDMARKS, REGIONS, SB, SB_MANIFEST, SB_MODEL } from './index';
 
 /**
@@ -12,7 +13,7 @@ import { APPROACH_GEOM, isApproachPart, kindOf, LANDMARKS, REGIONS, SB, SB_MANIF
  */
 export interface SbGroup {
   id: string;
-  kind: 'overview' | 'region' | 'system' | 'bone' | 'approach';
+  kind: 'overview' | 'region' | 'system' | 'bone' | 'approach' | 'tumour';
   name: string;
   description: string;
   /** structures drawn highlighted (bones solid, vessels and nerves as lines) */
@@ -40,6 +41,12 @@ export interface SbGroup {
   shell?: string[];
   /** the sourced card the view carries (skullbase/approaches.ts) */
   info?: 'endonasal' | 'cavernous';
+  /** a tumour's view: its family and grade (or site; skullbase/tumours.ts) */
+  tumour?: { family: TumourFamily; grade: string };
+  /** shapes of the brain the view opens with (a tumour seen past the retracted cerebellum) */
+  morphDefault?: Record<string, number>;
+  /** a section the view is cut at (everything on the normal's side of the point removed), while the reader keeps it on */
+  section?: { normal: V3; point: V3 };
 }
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
@@ -64,25 +71,29 @@ const FLOOR_POINTS = ['Foramen caecum of frontal bone', 'Sphenoidal yoke', 'Limb
   'Basilar part of occipital bone', 'Tegmen tympani', 'Arcuate eminence', 'Internal occipital protuberance', 'Groove for transverse sinus'];
 
 /** Skull base v3's views: this CT's skull base with its anatomy made to fit it, the ears' contents seen through the bone. */
+/** the structures the views list: not the parts of the fitted brain pushed aside by a tumour (for its view only) */
+const OWN = SB_MANIFEST.structures.filter((s) => !s.pushedFrom);
+const PUSHED = SB_MANIFEST.structures.filter((s) => s.pushedFrom);
+
 function temporalGroups(): SbGroup[] {
-  const byName = (...names: string[]) => SB_MANIFEST.structures.filter((s) => names.includes(s.name)).map((s) => s.id);
+  const byName = (...names: string[]) => OWN.filter((s) => names.includes(s.name)).map((s) => s.id);
   // the ear's contents (OpenEar) and the greater petrosal nerve; a view never shows a branch without its parent vessel,
   // so the arteries (TopBrain's trunks, the traced carotid, the anchored small branches) are drawn together in their view
-  const ear = SB_MANIFEST.structures.filter((s) => s.dataset === 'openear' || s.name === 'Greater petrosal nerve').map((s) => s.id);
+  const ear = OWN.filter((s) => s.dataset === 'openear' || s.name === 'Greater petrosal nerve').map((s) => s.id);
   const earWithCarotid = [...ear, ...byName('Internal carotid artery (petrous and lacerum parts)')];
   const earLms = LANDMARKS.filter((l) => !FORAMINA.includes(l.name) || l.name === 'Internal acoustic meatus');
   const lm = (...names: string[]) => LANDMARKS.filter((l) => names.includes(l.name)).map((l) => l.id);
   const gen = (side: 'L' | 'R') => LANDMARKS.find((l) => l.name === 'Geniculate ganglion' && l.side === side)?.ras as V3 | undefined;
   const FACIAL = ['Facial nerve (VII)', 'Chorda tympani', 'Greater petrosal nerve', 'Nerves in the internal acoustic meatus (VII, VIII)'];
-  const arteries = SB_MANIFEST.structures.filter((s) => kindOf(s) === 'artery').map((s) => s.id);
-  const veins = SB_MANIFEST.structures.filter((s) => kindOf(s) === 'vein').map((s) => s.id);
+  const arteries = OWN.filter((s) => kindOf(s) === 'artery').map((s) => s.id);
+  const veins = OWN.filter((s) => kindOf(s) === 'vein').map((s) => s.id);
   const base = { boneLook: 'shell' as Look, cutAbove: null, hemi: 'both' as const };
-  const nerves = SB_MANIFEST.structures.filter((s) => kindOf(s) === 'nerve').map((s) => s.id);
-  const bonesV3 = SB_MANIFEST.structures.filter((s) => s.type === 'bone' && !isApproachPart(s)).map((s) => s.id);
+  const nerves = OWN.filter((s) => kindOf(s) === 'nerve').map((s) => s.id);
+  const bonesV3 = OWN.filter((s) => s.type === 'bone' && !isApproachPart(s)).map((s) => s.id);
   // the surgical view: the craniotomy's cut bones (the other bones whole), the bone removed, the right hemisphere of the
   // fitted brain and the arteries and nerves the approach exposes
   // the brain a view draws: the fitted template's cerebrum, or the posterior fossa's contents (the telovelar view)
-  const brainOf = (b: 'cerebrum' | 'hindbrain') => SB_MANIFEST.structures
+  const brainOf = (b: 'cerebrum' | 'hindbrain') => OWN
     .filter((s) => (b === 'cerebrum' ? kindOf(s) === 'brain' : ['hindbrain', 'ventricle'].includes(kindOf(s)))).map((s) => s.id);
   const surgical = APPROACHES.filter((a) => APPROACH_GEOM[a.id]).map((a): SbGroup => {
     const geom = APPROACH_GEOM[a.id];
@@ -96,6 +107,36 @@ function temporalGroups(): SbGroup[] {
       landmarks: lm(...(a.landmarks ?? [])),
     };
   });
+  // the tumours: each grade (or site) a view of its own, drawn in the view that suits it; the fitted brain it pushes aside
+  // drawn as pushed for that view (copies that stand in for the parts, skullbase_v3_tumours.py)
+  const sbIds = new Set(OWN.map((s) => s.id));
+  const pushedFor = (tag: string) => new Map(PUSHED.filter((s) => s.tumourView === tag && s.replaces).map((s) => [s.replaces!, s.id]));
+  const knospStructs = byName('Internal carotid artery', 'Internal carotid artery (petrous and lacerum parts)', 'Ophthalmic artery', 'Anterior cerebral artery',
+    'Optic nerve (II)', 'Optic chiasm', 'Pituitary stalk', 'Cavernous sinus', 'Walls of the cavernous sinus', 'Oculomotor nerve (III)', 'Trochlear nerve (IV)',
+    'Ophthalmic nerve (V1)', 'Maxillary nerve (V2)', 'Abducens nerve (VI)', 'Trigeminal ganglion', 'Anterior intercavernous sinus', 'Posterior intercavernous sinus', 'Knosp lines');
+  const tumourGroups: SbGroup[] = TUMOURS.flatMap((t) => t.grades.filter((gr) => sbIds.has(gr.structure)).map((gr): SbGroup => {
+    const id = tumourGroupId(t.family, gr.id);
+    const tag = t.family === 'knosp' ? '' : t.family === 'koos' ? `koos_${gr.structure.slice(-1)}` : `men_${gr.id}`;
+    if (t.family === 'knosp') {
+      const y0 = TUMOUR_FIT.knosp.planeY;
+      return {
+        ...base, id, kind: 'tumour', name: `Pituitary adenoma, Knosp ${gr.id}`, camera: 'coronal', hemi: 'both', cutAbove: null, boneLook: 'ghost',
+        focus: null, focusIds: [gr.structure], radius: 24, description: t.summary,
+        structures: [...knospStructs, gr.structure], landmarks: [], ghost: byName('Cavernous sinus'), shell: byName('Walls of the cavernous sinus'),
+        tumour: { family: t.family, grade: gr.id }, section: { normal: [0, 1, 0], point: [0, y0, 0] },
+      };
+    }
+    const host = surgical.find((x) => x.id === gr.view);
+    if (!host) throw new Error(`tumour ${id}: no view ${gr.view}`);
+    const swap = pushedFor(tag);
+    return {
+      ...host, id, kind: 'tumour', name: t.family === 'koos' ? `Vestibular schwannoma, Koos ${gr.id}` : `${gr.label} meningioma`,
+      description: t.summary, focusIds: [gr.structure, ...(host.focusIds ?? []).slice(0, 1)], radius: Math.max(host.radius, 55),
+      structures: [...host.structures.map((x) => swap.get(x) ?? x), gr.structure], tumour: { family: t.family, grade: gr.id },
+      // (opened onto the tumour: the cerebellum retracted, the frontal lobe lifted)
+      morphDefault: Object.fromEntries((host.morphs ?? []).filter((m) => ['retrosigmoid', 'lsoLift', 'lift', 'open', 'telovelar'].includes(m)).map((m) => [m, 1])),
+    };
+  }));
   return [
     {
       ...base, id: 'floor', kind: 'overview', name: 'Cranial floor', camera: 'axial', cutAbove: FLOOR_CUT_MM, focus: null, radius: 75, boneLook: undefined,
@@ -165,10 +206,11 @@ function temporalGroups(): SbGroup[] {
         'Maxillary nerve (V2)', 'Mandibular nerve (V3)', 'Trigeminal ganglion', 'Abducens nerve (VI)', 'Greater petrosal nerve',
         'Adenohypophysis (anterior lobe)', 'Neurohypophysis (posterior lobe)', 'Pituitary stalk', 'Anterior intercavernous sinus', 'Posterior intercavernous sinus',
         'Superior petrosal sinus', 'Inferior petrosal sinus', 'Superior ophthalmic vein', 'Inferior ophthalmic vein', 'Sphenoparietal sinus', 'Basilar venous plexus',
-        ...SB_MANIFEST.structures.filter((s) => kindOf(s) === 'triangle').map((s) => s.name)),
+        ...OWN.filter((s) => kindOf(s) === 'triangle').map((s) => s.name)),
       ghost: byName('Cavernous sinus'), shell: byName('Walls of the cavernous sinus'),
       landmarks: lm('Superior orbital fissure', 'Foramen rotundum', 'Foramen ovale', 'Foramen lacerum', 'Optic canal'),
     },
+    ...tumourGroups,
   ];
 }
 

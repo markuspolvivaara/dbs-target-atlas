@@ -316,6 +316,7 @@ test('labels: all / hover / off, legend hover, fade while moving', async ({ page
   await expect.poll(shown).toEqual([]);
   // the selected structure keeps its label
   await page.locator('.legend3d li', { hasText: 'Substantia nigra' }).locator('.lg-item').click();
+  await page.mouse.move(5, 5);     // (the legend is drawn again: the pointer would rest on another row, hovering it)
   await expect.poll(shown).toEqual(['Substantia nigra pars reticulata']);
   // all: every highlighted structure and primary marker, one leader line each
   await page.locator('.toolbar [data-labels="all"]').click();
@@ -381,14 +382,14 @@ test('home page: sections, light load, and old links forward to the DBS section'
   await page.goto('./');
   await expect(page.locator('h1')).toHaveText('Open Neuroanatomy Atlas');
   // the modules from the more basic to the more specialised, the spine last; each card is a link over its own image
-  await expect(page.locator('.section-card')).toHaveCount(9);
-  expect(await page.locator('.section-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-section')))).toEqual(['cortex', 'tracts', 'skullbase', 'brainstem', 'ventricles', 'dbs', 'spine', 'skullbase-v1', 'skullbase-ct']);
+  await expect(page.locator('.section-card')).toHaveCount(10);
+  expect(await page.locator('.section-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-section')))).toEqual(['cortex', 'tracts', 'skullbase', 'brainstem', 'ventricles', 'vascular', 'dbs', 'spine', 'skullbase-v1', 'skullbase-ct']);
   await expect(page.locator('a.section-card[data-section="dbs"]')).toHaveAttribute('href', './dbs/');
   await expect(page.locator('a.section-card[data-section="tracts"]')).toHaveAttribute('href', './tracts/');
   // the skull base's earlier versions sit apart, under Alternative versions
   await expect(page.locator('.alt-versions > h2')).toHaveText('Alternative versions');
   expect(await page.locator('.alt-versions .section-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-section')))).toEqual(['skullbase-v1', 'skullbase-ct']);
-  for (const id of ['cortex', 'tracts', 'skullbase', 'brainstem', 'ventricles', 'dbs', 'spine', 'skullbase-v1', 'skullbase-ct']) {
+  for (const id of ['cortex', 'tracts', 'skullbase', 'brainstem', 'ventricles', 'vascular', 'dbs', 'spine', 'skullbase-v1', 'skullbase-ct']) {
     const ok = await page.evaluate(async (u) => (await fetch(u)).ok, `./assets/home/${id}.webp`);
     expect(ok, id).toBe(true);
   }
@@ -575,6 +576,39 @@ for (const id of SB_V3_GROUPS) {
     expect(gd.errors).toEqual([]);
   });
 }
+
+// the newer views (no visual baselines yet: run with -u on the Mac to add them)
+for (const id of ['orbitozygomatic', 'far_lateral', 'knosp_3b', 'koos_iv', 'meningioma_petroclival']) {
+  test(`skull base (temporal bone) ${id}: renders`, async ({ page }) => {
+    const gd = guard(page);
+    await page.goto(`./skullbase/#/atlas?g=${id}`);
+    await settle(page);
+    expect(await canvasColours(page)).toBeGreaterThan(40);
+    expect(gd.external).toEqual([]);
+    expect(gd.errors).toEqual([]);
+  });
+}
+
+test('skull base tumours: grade chips, the Knosp section, opened views and the Grading page', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./skullbase/#/atlas?g=knosp_3a');
+  await settle(page);
+  await expect(page.locator('.grade-chips .chip')).toHaveCount(6);
+  await expect(page.locator('.grade-chips .chip[aria-pressed="true"]')).toHaveText('3A');
+  await expect(page.locator('.pane:not([hidden]) article.card').first()).toContainText('Araujo-Castro 2021');
+  await page.locator('#sb-section').uncheck();
+  await expect.poll(() => page.url()).toContain('sec=0');
+  await page.locator('.grade-chips .chip', { hasText: '4' }).click();
+  await expect.poll(() => page.url()).toContain('g=knosp_4');
+  // a schwannoma opens with the cerebellum drawn back
+  await page.goto('./skullbase/#/atlas?g=koos_iii');
+  await settle(page);
+  await expect(page.locator('input[data-morph="retrosigmoid"]')).toHaveValue('100');
+  await page.goto('./skullbase/#/grading');
+  await expect(page.locator('.grade-table')).toHaveCount(5);
+  await expect(page.locator('#knosp .drawn-tag')).toHaveCount(6);
+  expect(g.errors).toEqual([]);
+});
 
 test('skull base (temporal bone): the model switch, sourced cards, the other ears and the fit report', async ({ page }) => {
   const g = guard(page);
@@ -778,7 +812,7 @@ test('skull base: structure and landmark cards, cut-away and the URL', async ({ 
   await expect(page.locator('.page:not([hidden]) h1')).toHaveText('Sources');
   // the section menu lists every section
   await page.locator('.section-chip').click();
-  await expect(page.locator('.section-menu a.section-item:not(.home)')).toHaveText(['Cortical anatomy', 'White-matter tracts', 'Skull base', 'Brainstem', 'Ventricles', 'DBS targets', 'Spine', 'Skull base v1', 'Skull base v2']);
+  await expect(page.locator('.section-menu a.section-item:not(.home)')).toHaveText(['Cortical anatomy', 'White-matter tracts', 'Skull base', 'Brainstem', 'Ventricles', 'Vascular', 'DBS targets', 'Spine', 'Skull base v1', 'Skull base v2']);
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
@@ -906,14 +940,14 @@ test('ventricles: the endoscope draws its view, moves by key, and the hydrocepha
   expect(await canvasColours(page)).toBeGreaterThan(20);
   // W advances the scope, the arrow keys tilt it; V swaps the views
   const depth = () => page.evaluate(() => (window as unknown as { __atlas: { state(): { scope: { depth: number; ap: number } } } }).__atlas.state().scope);
-  const d0 = (await depth()).depth;
+  const { depth: d0, ap: a0 } = await depth();     // (the scope starts tilted a little back)
   await page.locator('.viewer-host canvas').focus();
   await page.keyboard.press('w');
   await page.keyboard.press('ArrowUp');
   await settle(page);
   expect((await depth()).depth).toBe(d0 + 1);
-  expect((await depth()).ap).toBe(1);
-  await expect.poll(() => new URL(page.url()).hash).toContain('ea=1,0');
+  expect((await depth()).ap).toBe(a0 + 1);
+  await expect.poll(() => decodeURIComponent(new URL(page.url()).hash)).toContain(`ea=${a0 + 1},0`);
   // the hydrocephalus slider: the shape is drawn (a morph weight) and carried by the link
   await page.locator('.hydro input[type=range]').fill('0.5');
   await settle(page);
@@ -1086,7 +1120,7 @@ test('spine: virtual screw — start position, breach grade, cut, and a link tha
   // measured pedicles beside the published values
   await expect(card.locator('.morph')).toContainText('regional means');
   // the virtual screw sits in a box of its own under the level chips, closed at first
-  const box = page.locator('.screw-box');
+  const box = page.locator('.screw-panel');
   await expect(box).not.toHaveAttribute('open', '');
   await box.locator('summary').click();
   await box.locator('.screw-tech .chip[data-v="tt"]').click();
@@ -1109,7 +1143,7 @@ test('spine: virtual screw — start position, breach grade, cut, and a link tha
   await settle(page);
   await page.reload();
   await settle(page);
-  await expect(page.locator('.screw-box .screw-readout .grade')).toHaveText('E');
+  await expect(page.locator('.screw-panel .screw-readout .grade')).toHaveText('E');
   await expect(page.locator('#screw-medial')).toHaveValue('40');
   // S1 offers the tricortical screw only; changing level clears the screw
   await page.locator('.level-chips .chip[data-v="S1"]').click();
@@ -1147,12 +1181,12 @@ test('spine: cervical region — the C8 rule, the foramina transversaria, the ve
   await expect.poll(() => new URL(page.url()).hash).toContain('r=cervical');
   // lateral mass screws at C3-C6 (no pedicle-screw grade), a pedicle screw at C7
   await page.locator('.level-chips .chip[data-v="C5"]').click();
-  await page.locator('.screw-box summary').click();   // stays open from level to level
+  await page.locator('.screw-panel summary').click();   // stays open from level to level
   await expect(page.locator('.screw-tech .chip')).toHaveText(['None', 'Lateral mass screw (Magerl)']);
   await page.locator('.screw-tech .chip[data-v="mg"]').click();
   await expect(page.locator('.screw-readout')).toContainText(/bicortical|Within the lateral mass|breach/);
   await expect(page.locator('.screw-readout .grade')).toHaveCount(0);
-  await expect(page.locator('.screw-box')).toContainText('Joaquim 2018');
+  await expect(page.locator('.screw-panel')).toContainText('Joaquim 2018');
   // C1-C2: the atlas's lateral mass screw; the axis's pedicle, pars, translaminar and the transarticular screws
   await page.locator('.level-chips .chip[data-v="C1"]').click();
   await expect(page.locator('.screw-tech .chip')).toHaveText(['None', 'C1 lateral mass']);
@@ -1164,7 +1198,7 @@ test('spine: cervical region — the C8 rule, the foramina transversaria, the ve
   await expect(page.locator('#screw-medial + output')).toHaveText('midline');
   await expect(page.locator('.screw-readout')).toContainText('Through the far cortex');
   await expect(page.locator('.screw-readout')).toContainText('(bicortical)');
-  await expect(page.locator('.screw-box')).toContainText('Sung 2018');
+  await expect(page.locator('.screw-panel')).toContainText('Sung 2018');
   await page.locator('.screw-tech .chip', { hasText: 'None' }).click();
   await expect(page.locator('.card.sel')).toContainText('High-riding vertebral artery?');
   await expect(page.locator('.card.sel')).toContainText('Kucherina 2026');
@@ -1195,7 +1229,7 @@ test('spine: clicking a vertebra picks its level, as the level chips do', async 
   const g = guard(page);
   await page.goto('./spine/#/atlas?r=thoracic');
   await settle(page);
-  await expect(page.locator('.screw-box')).toHaveCount(0);
+  await expect(page.locator('.screw-panel')).toHaveCount(0);
   const cam = () => page.evaluate(() => { const v = (window as any).__atlas.viewer; return [v.camera.position.toArray(), v.controls.target.toArray()].flat().map((x: number) => Math.round(x)); });
   const before = await cam();
   await page.locator('.sb-item[data-id="sp_t6"]').click();
@@ -1204,11 +1238,11 @@ test('spine: clicking a vertebra picks its level, as the level chips do', async 
   expect(await cam()).toEqual(before);   // the camera stays where it was
   await expect(page.locator('.card.sel h2')).toHaveText('T6');
   await expect(page.locator('.level-chips .chip[data-v="T6"]')).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('.screw-box')).toHaveCount(1);
+  await expect(page.locator('.screw-panel')).toHaveCount(1);
   // the vertebra's own card is one click away
   await page.locator('.card.sel').getByRole('button', { name: 'T6 vertebra', exact: true }).click();
   await expect(page.locator('.card.sel h2')).toHaveText('T6 vertebra');
-  await expect(page.locator('.screw-box')).toHaveCount(1);
+  await expect(page.locator('.screw-panel')).toHaveCount(1);
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
@@ -1219,7 +1253,7 @@ test('spine: thoracic screw and dorsal approach — published values, start scre
   await settle(page);
   const card = page.locator('.card.sel');
   await expect(card.locator('.morph').first()).toContainText('studies');
-  const box = page.locator('.screw-box');
+  const box = page.locator('.screw-panel');
   await box.locator('summary').click();
   await expect(box.locator('.screw-tech .chip')).toHaveText(['None', 'Pedicle screw']);
   await box.locator('.screw-tech .chip[data-v="st"]').click();
@@ -1235,7 +1269,7 @@ test('spine: thoracic screw and dorsal approach — published values, start scre
   await page.reload();
   await settle(page);
   await expect(page.locator('.card.sel .approach-side .chip[aria-pressed="true"]')).toHaveText('Right');
-  await expect(page.locator('.screw-box .screw-readout .grade')).toHaveText(/[AB]/);
+  await expect(page.locator('.screw-panel .screw-readout .grade')).toHaveText(/[AB]/);
   // another level clears both
   await page.locator('.level-chips .chip[data-v="T9"]').click();
   await expect.poll(() => new URL(page.url()).hash).not.toContain('ap=');

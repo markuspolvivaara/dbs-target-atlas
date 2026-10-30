@@ -160,6 +160,24 @@ export const APPROACH_REFS: ApproachRef[] = [
     citation: 'Tanoue S, Hirohata M, Takeuchi Y, Orito K, Kajiwara S, Abe T. Venous anatomy of the cavernous sinus and relevant veins. J Neuroendovasc Ther. 2020;14(12):547–557. doi:10.5797/jnet.ra.2020-0086.' },
   { id: 'nguyen2026', pmid: '42332465', pmcid: 'PMC13286435', shortLabel: 'Nguyen 2026', url: doi('10.1097/MD.0000000000049344'),
     citation: 'Nguyen MQ, Tang MP, Nguyen HT, Tran HT, Tran TT, Tran NBMH. Association of sphenoid sinus pneumatization patterns, Onodi cells, and rostrum pneumatization with natural ostium location: a cross-sectional CT study. Medicine (Baltimore). 2026;105(25):e49344. doi:10.1097/MD.0000000000049344.' },
+  { id: 'araujocastro2021', pmid: '35127519', pmcid: 'PMC8810816', shortLabel: 'Araujo-Castro 2021', url: doi('10.3389/fonc.2021.807040'),
+    citation: 'Araujo-Castro M, Acitores Cancela A, Vior C, Pascual-Corrales E, Rodríguez Berrocal V. Radiological Knosp, revised-Knosp, and Hardy-Wilson classifications for the prediction of surgical outcomes in the endoscopic endonasal surgery of pituitary adenomas: study of 228 cases. Front Oncol. 2021;11:807040. doi:10.3389/fonc.2021.807040.' },
+  { id: 'gupta2020', pmid: '32232723', pmcid: 'PMC7669921', shortLabel: 'Gupta 2020', url: doi('10.1007/s12105-020-01155-x'),
+    citation: 'Gupta VK, Thakker A, Gupta KK. Vestibular schwannoma: what we know and where we are heading. Head Neck Pathol. 2020;14(4):1058–1066. doi:10.1007/s12105-020-01155-x.' },
+  { id: 'starnoni2020', pmid: '32728903', pmcid: 'PMC7550309', shortLabel: 'Starnoni 2020', url: doi('10.1007/s00701-020-04491-7'),
+    citation: 'Starnoni D, Giammattei L, Cossu G, Link MJ, Roche PH, Chacko AG, et al. Surgical management for large vestibular schwannomas: a systematic review, meta-analysis, and consensus statement on behalf of the EANS skull base section. Acta Neurochir (Wien). 2020;162(11):2595–2617. doi:10.1007/s00701-020-04491-7.' },
+  { id: 'ius2021', pmid: '34071391', pmcid: 'PMC8198762', shortLabel: 'Ius 2021', url: doi('10.3390/cancers13112664'),
+    citation: 'Ius T, Tel A, Minniti G, Somma T, Solari D, Longhi M, et al. Advances in multidisciplinary management of skull base meningiomas. Cancers (Basel). 2021;13(11):2664. doi:10.3390/cancers13112664.' },
+  { id: 'muskens2018', pmid: '29127655', pmcid: 'PMC5735207', shortLabel: 'Muskens 2018', url: doi('10.1007/s00701-017-3390-y'),
+    citation: 'Muskens IS, Briceno V, Ouwehand TL, Castlen JP, Gormley WB, Aglio LS, et al. The endoscopic endonasal approach is not superior to the microscopic transcranial approach for anterior skull base meningiomas—a meta-analysis. Acta Neurochir (Wien). 2018;160(1):59–75. doi:10.1007/s00701-017-3390-y.' },
+  { id: 'bruneau2008', pmid: '17882459', pmcid: 'PMC2077911', shortLabel: 'Bruneau 2008', url: doi('10.1007/s10143-007-0097-1'),
+    citation: 'Bruneau M, George B. Foramen magnum meningiomas: detailed surgical approaches and technical aspects at Lariboisière Hospital and review of the literature. Neurosurg Rev. 2008;31(1):19–32. doi:10.1007/s10143-007-0097-1.' },
+  { id: 'rodriguezrubio2019', pmid: '31929953', pmcid: 'PMC6945284', shortLabel: 'Rodriguez Rubio 2019', url: doi('10.7759/cureus.6053'),
+    citation: 'Rodriguez Rubio R, Chae R, Kournoutas I, Abla A, McDermott M. Immersive surgical anatomy of the frontotemporal-orbitozygomatic approach. Cureus. 2019;11(11):e6053. doi:10.7759/cureus.6053.' },
+  { id: 'pai2018', pmid: '30283520', pmcid: 'PMC6159062', shortLabel: 'Pai 2018', url: doi('10.4103/ajns.ajns_273_16'),
+    citation: 'Pai SB, Raghuram G, Keshav GC, Rodrigues E. Far-lateral transcondylar approach to anterior foramen magnum lesions—our experience. Asian J Neurosurg. 2018;13(3):651–655. doi:10.4103/ajns.ajns_273_16.' },
+  { id: 'singh2019', pmid: '30937033', pmcid: 'PMC6417359', shortLabel: 'Singh 2019', url: doi('10.4103/ajns.ajns_192_18'),
+    citation: 'Singh N, Singh DK, Ahmad F, Kumar R. The retrosigmoid approach: workhorse for petroclival meningioma surgery. Asian J Neurosurg. 2019;14(1):188–192. doi:10.4103/ajns.ajns_192_18.' },
 ];
 export const APPROACH_REF = new Map(APPROACH_REFS.map((r) => [r.id, r]));
 
@@ -351,6 +369,48 @@ export const APPROACHES: ApproachContent[] = [
     frameOpening: false,
     radius: 45,
     morphs: ['retrosigmoid'],
+  },
+  {
+    id: 'orbitozygomatic', view: 'orbitozygomatic', name: 'Orbitozygomatic approach', camera: 'orbitozygomatic',
+    summary: 'This model’s pterional craniotomy extended by an orbitozygomatic piece: the superolateral orbital rim with the orbital roof behind it, and the zygomatic arch, cut out of this CT’s bone, over the same fitted brain. The view looks up from lower down, under the frontal lobe; the sliders open the Sylvian fissure and lift the frontal lobe.',
+    sections: [sec('The craniotomy', [
+      c('An extension of the pterional craniotomy for anterior skull base and orbital lesions, reaching vascular and oncological lesions without adding morbidity; Hakuba described the orbitozygomatic infratemporal approach in 1986, Al-Mefty the cranio-orbitozygomatic approach after him.', 'yilmaz2025'),
+      c('One piece: three burr holes (the McCarty keyhole, one in the temporal squama above the zygomatic root, one in the frontal bone lateral to the supraorbital notch or behind the superior temporal line), then six osteotomies through the orbit’s walls and roof, the zygoma’s body and the zygomatic root in front of the articular tubercle, the flap coming away whole.', 'yilmaz2025'),
+      c('Two pieces (drawn here): a standard pterional craniotomy, then the orbital piece: a cut medial on the orbital rim, lateral to the supraorbital ridge, one back from it to the superior orbital fissure and one across the rim just lateral to the frontozygomatic suture towards the fissure; anterior and posterior cuts free the zygomatic arch.', 'yilmaz2025'),
+      c('The McCarty keyhole and the inferior orbital fissure are the landmarks for the six bone cuts; the craniotomy can be made in two, one or three pieces.', 'rodriguezrubio2019'),
+    ]), sec('What it opens', [
+      c('An extension of the pterional approach with wide exposure of the orbit and the anterior, middle and posterior cranial fossae: the basilar apex, the orbital and petrous apices, the upper clivus, the infratemporal, interpeduncular and pterygopalatine fossae and the sellar and parasellar regions, with more manoeuvrability than the pterional approach.', 'rodriguezrubio2019'),
+      c('For the anterior and middle skull base with the least retraction, the sphenoid ridge, the orbital roof and the temporal squama are resected: the orbital roof without breaching the periorbita, the sphenoid ridge only as far as the meningo-orbital artery to spare the anterior clinoid.', 'yilmaz2025'),
+      FISSURE,
+    ]), sec('Care points', [
+      c('The facial nerve is preserved by interfascial or subfascial dissection, as in the pterional approach; the temporalis muscle is lifted leaving a cuff at the superior temporal line for reattaching it, and the subperiosteal dissection continues down along the zygomatic arch.', 'yilmaz2025'),
+    ])],
+    context: CONTEXT,
+    notShown: 'The orbital piece’s and the arch’s extents are drawn by rule on this skull (illustrative). The temporalis and masseter muscles, the periorbita and the orbit’s contents, and the facial nerve’s frontal branch are not modelled. ' + NOT_SHOWN,
+    focus: ['Middle cerebral artery (M2 segment)'],
+    morphs: ['open', 'lift'],
+  },
+  {
+    id: 'far_lateral', view: 'far_lateral', name: 'Far lateral approach', camera: 'farLateral', hemi: 'R', brain: 'hindbrain',
+    summary: 'A right far lateral (lateral suboccipital) craniectomy cut out of this CT’s bone down through the foramen magnum’s rim, the posterior third of the occipital condyle drilled, with the cerebellum, brainstem and fourth ventricle of the fitted model: the view along the side of the medulla to the front of the foramen magnum, past the vertebral artery and the lower cranial nerves.',
+    sections: [sec('The craniectomy', [
+      c('A lateral suboccipital craniectomy and a hemilaminectomy of C1 (of C2 and C3 too when the lesion reaches lower); the transverse–sigmoid junction may be exposed. The posterior 30–40 % of the occipital condyle is drilled extradurally, widening the angle onto the ventral and ventrolateral craniovertebral junction.', 'pai2018'),
+      c('The craniectomy should take in the whole lesion, reach the sigmoid sinus laterally and take the rim of the foramen magnum below. Heros’s basic far lateral approach is a low suboccipital approach up to the condyle, not into it.', 'pai2018'),
+      c('In a modified park-bench position the two outer muscle layers are reflected together onto the suboccipital triangle; the vertebral artery is exposed and controlled from C2 to where it enters the dura over the groove of C1.', 'pai2018'),
+      c('Rhoton’s far lateral approach is a lateral suboccipital approach behind the sternocleidomastoid and the vertebral artery, just medial to the occipital and atlantal condyles; the extreme lateral approach goes deep to the front of the sternocleidomastoid.', 'bruneau2008'),
+    ]), sec('What it reaches', [
+      c('Lesions ventrolateral and even ventral to the brainstem and upper cervical cord, with little or no retraction: the tumour–brain interface is met early, and the vertebral artery is controlled early.', 'pai2018'),
+      c('In 8 patients with lesions in front of the brainstem and upper cord (2 meningiomas, 3 epidermoids, a chordoma, 2 vascular lesions): total excision of 5 of the 6 tumours; one patient died suddenly 18 hours after surgery, one had a cerebrospinal fluid leak.', 'pai2018'),
+    ]), sec('Care points', [
+      c('For intradural foramen magnum meningiomas, drilling of the condyle and the atlas’s lateral mass is almost never needed; the lateral wall is drilled as far as the tumour reaches across the midline.', 'bruneau2008'),
+      c('Permanent morbidity in published series: 0–17 % through a far lateral approach, 21–56 % through an extreme lateral transcondylar one.', 'bruneau2008'),
+    ])],
+    context: ['Vertebral artery', 'Posterior inferior cerebellar artery', 'Posterior inferior cerebellar artery (fitted course)', 'Basilar artery',
+      'Glossopharyngeal nerve (IX)', 'Vagus nerve (X)', 'Accessory nerve (XI)', 'Hypoglossal nerve (XII)', 'Sigmoid sinus', 'Transverse sinus'],
+    notShown: 'The atlas and axis are not part of this model, so the hemilaminectomy of C1 is not shown, nor the vertebral artery outside the skull. The craniectomy’s outline is placed by rule (illustrative). The muscles, the dura and the arachnoid. The cerebellum, brainstem and fourth ventricle are one adult’s anatomical model (Z-Anatomy) fitted into this skull, not this patient’s own.',
+    focus: ['Medulla oblongata', 'Hypoglossal nerve (XII)'],
+    radius: 50,
+    morphs: [],
   },
 ];
 export const APPROACH = new Map(APPROACHES.map((a) => [a.id, a]));

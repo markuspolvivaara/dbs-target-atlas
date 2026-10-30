@@ -68,6 +68,8 @@ def colour(token: str) -> dict:
 
 
 def slug(s: str) -> str:
+    import unicodedata
+    s = "".join(ch for ch in unicodedata.normalize("NFKD", s) if unicodedata.category(ch) != "Mn")   # (é as e)
     return re.sub(r"[^a-z0-9]+", "_", s.lower()).strip("_")
 
 
@@ -238,7 +240,8 @@ def timing(vessels: list[dict]) -> tuple[dict, dict, dict]:
     dout = np.min(douts, axis=0)
     far = float(np.percentile(dout, 99))
     t_ven = VEN_START_S + np.clip(far - dout, 0, None) / far * VEN_SPAN_S
-    return A.split(t_art), V.split(t_ven), {"art": A, "ven": V, "dout": dout, "douts": douts, "far": far, "span": span}
+    return A.split(t_art), V.split(t_ven), {"art": A, "ven": V, "dout": dout, "douts": douts, "far": far, "span": span,
+                                            "roots": roots, "t_art_flat": t_art}
 
 
 # ---------------------------------------------------------------- outputs
@@ -316,6 +319,12 @@ def finalize() -> int:
     p = GEN / "va-manifest.json"
     m = json.loads(p.read_text())
     fails = []
+    # this section's own files that no structure uses any more (a lesion's copy of a vein it no longer changes), gone
+    own = {it["file"].split("/")[-1] for it in m["structures"] if it["file"].startswith(f"assets/{KIND}/")}
+    for d in (BUILD, REPO / "public" / "assets" / KIND):
+        for f in d.glob("*.glb"):
+            if f.name not in own:
+                f.unlink()
     for it in m["structures"]:
         f = REPO / "public" / it["file"]
         if not f.exists():
@@ -342,7 +351,7 @@ def finalize() -> int:
             if abs(got - l["nidusMm"]) > 0.05 * l["nidusMm"] or (1 if got < 30 else 2 if got <= 60 else 3) != sm["size"]:
                 fails.append(f"{l['id']}: its drawn nidus measures {got} mm, not {l['nidusMm']} mm")
         if l["kind"] == "davf":
-            for need in ("transverse_sinus", "sigmoid_sinus", "internal_jugular_vein", "reflux"):
+            for need in ("transverse_sinus", "sigmoid_sinus", "internal_jugular_vein", "inferior_anastomotic_vein_of_labbe"):
                 if f"va_davf__{need}" not in l["parts"]:
                     fails.append(f"davf: its {need.replace('_', ' ')} does not fill early")
     p.write_text(json.dumps(m, indent=1, ensure_ascii=False))

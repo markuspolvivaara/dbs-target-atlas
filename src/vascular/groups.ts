@@ -32,6 +32,14 @@ export const VA_GROUPS: VaGroup[] = [
     description: 'This CT angiogram’s vessels: the carotid and vertebral arteries, the circle of Willis and the cerebral arteries as far as its labels go, the veins and dural sinuses. Turn on the angiogram to watch contrast reach them: the arteries first, then, after the capillary phase, the veins.',
   },
   {
+    id: 'fetal', kind: 'normal', name: 'Fetal posterior communicating artery', camera: 'axial', radius: 32, lesions: ['fetal'], veins: false, brain: false,
+    description: 'A common variant drawn on this CT’s right circle of Willis: the posterior communicating artery wider than a narrowed P1, so that the posterior cerebral artery beyond is fed from the internal carotid (a fetal configuration). The rest is this patient’s.',
+  },
+  {
+    id: 'a1hypo', kind: 'normal', name: 'Hypoplastic A1 segment', camera: 'axial', radius: 32, lesions: ['a1hypo'], veins: false, brain: false,
+    description: 'A common variant drawn on this CT’s circle of Willis: the right A1 segment narrowed and the anterior communicating artery widened, so that the right A2 fills across from the left. The rest is this patient’s.',
+  },
+  {
     id: 'aneurysms', kind: 'aneurysm', name: 'Aneurysms', camera: 'axial', radius: 45, lesions: lesionIds('aneurysm'), veins: false, brain: false,
     description: 'Saccular aneurysms drawn where this CT’s arteries branch, at the commonest sites (the communicating arteries, the middle cerebral bifurcation, the basilar tip, the ophthalmic segment, the PICA origin); a fusiform aneurysm of the basilar trunk; and a blister on the internal carotid’s dorsal wall. All are drawings on this patient’s arteries, with illustrative sizes.',
   },
@@ -49,7 +57,7 @@ export const VA_GROUPS: VaGroup[] = [
   },
   {
     id: 'davf', kind: 'fistula', name: 'Dural AV fistula', camera: 'posteriorOblique', radius: 75, lesions: ['davf'], veins: true, brain: true,
-    description: 'A dural arteriovenous fistula on the wall of the right transverse–sigmoid junction, fed by meningeal branches, draining into the sinus (on to the jugular vein and back along the transverse sinus) and back into a cortical vein: Borden type II.',
+    description: 'A dural arteriovenous fistula on the wall of the right transverse–sigmoid junction, fed by meningeal branches, draining into the sinus (on to the jugular vein and back along the transverse sinus) and back into a cortical vein, the vein of Labbé: Borden type II.',
   },
   {
     id: 'ccfa', kind: 'fistula', name: 'Direct carotid-cavernous fistula', camera: 'anterolateral', radius: 55, lesions: ['ccfa'], veins: true, brain: false,

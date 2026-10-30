@@ -1,12 +1,68 @@
 import { APPROACH_GEOM, DEFINITIONS, LANDMARKS, SB_MANIFEST, SB_MODEL, V3_FIT } from '../skullbase';
-import { APPROACH_REFS } from '../skullbase/approaches';
+import { APPROACH_REF, APPROACH_REFS, type ApproachClaim } from '../skullbase/approaches';
+import { SB_GROUP } from '../skullbase/groups';
+import { KNOSP_GRADES, KOOS_GRADES, MENINGIOMA_EEA, MENINGIOMA_SITES, TUMOUR_FAMILY, tumourGroupId, type TumourFamily } from '../skullbase/tumours';
+import { refLinksFrom } from './reflinks';
 import { FORAMEN_REFS } from '../skullbase/foramina';
 import { TB_REFS } from '../skullbase/temporal';
 import { h } from './h';
 
-/** Sources and Credits of the skull-base section. */
+/** Grading, Sources and Credits of the skull-base section. */
 
 const link = (href: string, text: string) => h('a', { href, target: '_blank', rel: 'noopener' }, text);
+
+const refs = (ids: string[]) => refLinksFrom(APPROACH_REF, ids);
+const claimList = (cl: ApproachClaim[]) => h('ul', { class: 'evidence' }, ...cl.map((c) => h('li', {}, c.text, ' ', refs(c.refIds))));
+
+/** One grading table: each row drawn in this atlas linked to its view. */
+function gradeTable(id: string, title: string, refIds: string[], head: string[], rows: { cells: string[]; view?: string }[], foot?: string, notes: ApproachClaim[] = []) {
+  const drawn = (g: string) => h('a', { class: 'drawn-tag', href: `#/atlas?g=${g}`, title: `Open the view: ${SB_GROUP.get(g)?.name ?? g}` }, 'drawn here');
+  return h('section', { class: 'card', id },
+    h('h3', {}, title, ' ', refs(refIds)),
+    h('div', { class: 'grade-scroll' },
+      h('table', { class: 'grade-table' },
+        h('thead', {}, h('tr', {}, ...head.map((x) => h('th', { scope: 'col' }, x)))),
+        h('tbody', {}, ...rows.map((r) => {
+          const shown = r.view && SB_GROUP.has(r.view) ? r.view : undefined;
+          return h('tr', shown ? { class: 'is-drawn' } : {}, ...r.cells.map((x, i) => (i === 0 ? h('th', { scope: 'row' }, x, shown ? [' ', drawn(shown)] : null) : h('td', {}, x))));
+        })))),
+    foot ? h('p', { class: 'aside' }, foot) : null,
+    notes.length ? claimList(notes) : null);
+}
+
+const view = (f: TumourFamily, g: string) => tumourGroupId(f, g);
+
+/** How the skull base tumours this atlas draws are graded, what the grades predict and how each site is reached. */
+export function skullGradingPage() {
+  const el = h('div', { class: 'page wrap grading' });
+  const kn = TUMOUR_FAMILY.get('knosp')!, ko = TUMOUR_FAMILY.get('koos')!, me = TUMOUR_FAMILY.get('meningioma')!;
+  el.append(
+    h('h1', {}, 'Grading'),
+    h('p', { class: 'lead' }, 'How pituitary adenomas and vestibular schwannomas are graded, what the grades predict, and which approaches suit meningiomas at four sites of the skull base. The rows marked “drawn here” are tumours this atlas draws on its CT, by rule; open them from the mark. For teaching: not for diagnosis or planning.'),
+    h('h2', {}, 'Pituitary adenoma: cavernous sinus invasion'),
+    gradeTable('knosp', 'Knosp grade (revised)', ['araujocastro2021'], ['Grade', 'The adenoma on the coronal section', 'Surgical cure', 'Major complications'],
+      KNOSP_GRADES.map((g) => ({ cells: [g.id, g.definition, g.cure, g.complications], view: view('knosp', g.id) })),
+      '228 patients after a first endoscopic endonasal operation, 2009–2020 (surgical cure: total resection of a non-functioning adenoma, biochemical remission of a functioning one). The lines join the supraclinoid and the intracavernous carotid on the coronal section: the medial tangent along their medial walls, the intercarotid line through their centres, the lateral tangent along their lateral walls.',
+      kn.sections.flatMap((x) => x.claims).slice(2)),
+    h('h2', {}, 'Vestibular schwannoma'),
+    gradeTable('koos', 'Koos grade', ['gupta2020'], ['Grade', 'Description'],
+      KOOS_GRADES.map((g) => ({ cells: [g.id, g.definition], view: view('koos', g.id) })),
+      undefined, ko.sections.flatMap((x) => x.claims).slice(1)),
+    h('h2', {}, 'Skull base meningiomas'),
+    gradeTable('meningioma-sites', 'Sites and the approaches listed for them', ['ius2021'], ['Site', 'Share', 'Approaches', 'Drawn in this model’s'],
+      MENINGIOMA_SITES.map((x) => ({ cells: [x.name, x.share, x.approaches, `${x.viewName} view`], view: view('meningioma', x.id) })),
+      'Share: of skull base meningiomas (petroclival: of posterior fossa meningiomas), from the review’s table, which collects other series.', me.sections.flatMap((x) => x.claims)),
+    gradeTable('eea', 'Endoscopic endonasal against transcranial, anterior skull base', ['muskens2018'], ['Site', 'Gross total resection (endonasal / transcranial)', 'Cerebrospinal fluid leak (endonasal / transcranial)'],
+      MENINGIOMA_EEA.map((x) => ({ cells: [x.site, x.gtr.join(' / '), x.csf.join(' / ')] })),
+      'A meta-analysis of 64 case series (fixed-effects pooled rates); the difference in gross total resection was significant for olfactory groove meningiomas, not for tuberculum sellae ones.'),
+    gradeTable('foramen-magnum', 'Foramen magnum meningiomas by their dural insertion', ['bruneau2008'], ['Type', 'Insertion'],
+      [{ cells: ['Posterior', 'Behind the dentate ligament'] }, { cells: ['Lateral', 'In front of the dentate ligament'] },
+        { cells: ['Anterior', 'In front of the dentate ligament, across the midline'] }],
+      'Intradural tumours; the classification also notes the compartment (intradural, extradural or both) and the relation to the vertebral artery.',
+      (me.grades.find((g) => g.id === 'foramen_magnum')?.notes ?? []).slice(1)),
+  );
+  return { el, render() { /* stateless */ } };
+}
 
 /** The temporal-bone model's sources: how a real ear was registered into the CT, and the references of its notes. */
 function temporalSourcesPage() {
@@ -65,6 +121,10 @@ function temporalSourcesPage() {
         `${APPROACH_GEOM.suboccipital.removedMl} ml of bone removed.`) : null,
       APPROACH_GEOM.retrosigmoid ? h('p', {}, 'The right retrosigmoid craniotomy is placed on this patient’s own sinuses: the transverse and sigmoid sinuses traced through the CT’s contrast-filled lumen, their junction found where the transverse sinus’ lower margin meets the sigmoid sinus’ posterior margin (the keypoint, as Jian 2021, 2022 and 2024 define it) and carried out through the bone. The flap’s upper edge runs 28 mm back along the transverse sinus’ lower margin and its front edge 35 mm down along the sigmoid sinus’ posterior margin, against the sinuses as they describe, straight edges behind and below closing it, its corners rounded: drawn by hand, larger than their keyhole (18–20 × 20–25 mm) to show the anatomy, about the size of the craniotomies in Tang 2025 (a mean 3.8 cm across). Its burr hole 3.5 mm behind and below the keypoint, its edge smoothed like the lateral supraorbital one: ',
         `${APPROACH_GEOM.retrosigmoid.removedMl} ml of bone removed.`) : null,
+      APPROACH_GEOM.orbitozygomatic ? h('p', {}, 'The right orbitozygomatic craniotomy is the pterional flap and a second piece (the two-piece craniotomy, Yilmaz 2025): the superolateral orbital rim with the orbital roof behind it, from lateral to the supraorbital notch to just lateral to the frontozygomatic suture, and the zygomatic arch from in front of its root to the zygomatic bone, their extents drawn by rule (illustrative). ',
+        `${APPROACH_GEOM.orbitozygomatic.removedMl} ml of bone removed.`) : null,
+      APPROACH_GEOM.far_lateral ? h('p', {}, 'The right far lateral craniectomy is a lateral suboccipital one placed on this patient’s own sinuses, from behind the sigmoid sinus to near the midline and down through the foramen magnum’s posterior rim, the posterior third of the occipital condyle drilled (Pai 2018); the atlas is not part of this model, so its hemilaminectomy is not shown. ',
+        `${APPROACH_GEOM.far_lateral.removedMl} ml of bone removed.`) : null,
       h('p', {}, 'A CT angiogram does not show the cortex well enough to segment it, so the brain is a template, the Lead-DBS MNI 2009b pial surface (the cortex section’s), fitted into this skull by a smooth deformation (pipeline/skullbase_brain.py, brain_deform.py). The deformation is an affine map plus Gaussian radial basis functions on grids from 18 to 5 mm. It is found by minimising together: the brain’s hull (sulci bridged) ',
         `${f.brain.params.tableGapMm} mm inside the CT’s cranial cavity and never within ${f.brain.params.boneGapMm} mm of bone; every artery and deep vein TopBrain labels outside the cortex; the M2 segments on the insula and the M3 segments in the Sylvian fissure; the falx and tentorium (fitted in v2) outside the cortex; and a penalty wherever the local volume would shrink below 45 % of the overall scale, so that it never folds. The vertices still touching bone or a vessel, or across the falx, are then pushed clear (off the falx sideways, where the falx is), the surface around them following as rigidly as possible (ARAP).`),
       h('table', { class: 'coords' },

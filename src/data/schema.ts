@@ -29,9 +29,11 @@ export type Evidence = z.infer<typeof EvidenceSchema>;
  * and a little above, along a pterional craniotomy; 'frontolateral' more from in front and above (a frontal
  * ventriculostomy); 'supraorbital' down a lateral supraorbital craniotomy's corridor over the orbital roof; 'vertex' from above and a little behind, down the interhemispheric fissure; 'suboccipital'
  * from behind and below, up into the cerebellomedullary fissure; 'retrosigmoid' from behind the sigmoid sinus along the
- * petrous bone into the cerebellopontine angle (skull-base section, surgical views).
+ * petrous bone into the cerebellopontine angle; 'orbitozygomatic' from the side and in front but lower than
+ * 'anterolateral', up under the frontal lobe; 'farLateral' from behind, the side and below, along the medulla to the front
+ * of the foramen magnum (skull-base section, surgical views).
  */
-export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon', 'lateral', 'medial', 'inferior', 'posterior', 'anterolateral', 'frontolateral', 'supraorbital', 'vertex', 'suboccipital', 'retrosigmoid']);
+export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon', 'lateral', 'medial', 'inferior', 'posterior', 'anterolateral', 'frontolateral', 'supraorbital', 'vertex', 'suboccipital', 'retrosigmoid', 'orbitozygomatic', 'farLateral']);
 export type CameraPreset = z.infer<typeof CameraPresetSchema>;
 
 /** A rendered structure: nucleus, cortical area, tract or sweet-spot volume. */
@@ -173,6 +175,11 @@ export const ManifestStructureSchema = z.object({
   replaces: z.string().optional(),
   /** skull base v3: carries morph target 0, the transsylvian opening (the brain, and the arteries that move with it) */
   morph: z.boolean().optional(),
+  /** skull base v3: a tumour drawn by rule (its family and grade or site) */
+  tumour: z.object({ family: z.string(), grade: z.string() }).optional(),
+  /** skull base v3: a part of the fitted brain pushed aside by a tumour, for that tumour's view (with `replaces`) */
+  tumourView: z.string().optional(),
+  pushedFrom: z.string().optional(),
   /** vascular section: the lesion (view) a lesion's part belongs to; with `replaces`, a vessel it changes in that view */
   lesion: z.string().optional(),
   /** brainstem section: the part of the brainstem a safe entry zone lies on */
