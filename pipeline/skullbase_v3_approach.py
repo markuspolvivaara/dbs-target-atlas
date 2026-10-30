@@ -108,10 +108,14 @@ OZ_ARCH_FRONT_MM = 8.0      # the zygomatic arch: from this far in front of the 
 OZ_ARCH_ROOT_Y = 0.0        # ... back to its root in front of the articular tubercle (y in the frame; illustrative) ...
 OZ_ARCH_HALF_MM = 7.0       # ... the arch's bone this far above and below its line, lateral of OZ_ARCH_LATERAL_MM
 OZ_ARCH_LATERAL_MM = 50.0
-FL_MEDIAL_MM = 8.0          # the far lateral craniectomy: from this far right of the midline (illustrative) ...
-FL_BELOW_TRANSVERSE_MM = 12.0   # ... its upper edge this far below the transverse sinus' lower margin ...
-FL_SIGMOID_DOWN_MM = 22.0   # ... its lateral edge along the sigmoid sinus' posterior margin from this far down it
-FL_RIM_MM = (6.0, 18.0)     # the foramen magnum's rim taken from x = 6 to 18 mm (to the condyle)
+FL_TRANSVERSE_MM = 30.0     # the far lateral craniectomy: its upper edge along the transverse sinus' lower margin for
+#                             this far from the junction (illustrative) ...
+FL_SIGMOID_MM = 35.0        # ... its lateral edge along the sigmoid sinus' posterior margin for this far down it (towards
+#                             the jugular bulb, beside the condyle; illustrative) ...
+FL_RIM_MM = (3.0, 16.0)     # ... and below, the foramen magnum's posterior rim taken from x = 3 to 16 mm (to the
+#                             condyle), the outline SO_PAST_RIM_MM inside the opening so the rim goes with it
+FL_CORNER_CUTS = 3          # its corners rounded by this many rounds of corner cutting (Chaikin)
+FL_BOW = 0.22               # its medial edge bowed outwards by this share of its length (illustrative)
 FL_CONDYLE_SHARE = 1 / 3    # the occipital condyle's posterior third drilled (Pai 2018: the posterior 30-40 %)
 FL_CONDYLE_MM = 11.0        # (the condyle's bone within this of its landmark)
 
@@ -919,27 +923,54 @@ def orbitozygomatic(S: Skull) -> dict:
 
 
 def far_lateral(S: Skull) -> dict:
-    """A right far lateral (lateral suboccipital) craniectomy: from the sigmoid sinus to near the midline, down through the
-    foramen magnum's rim to the occipital condyle, whose posterior third is drilled (Pai 2018: a lateral suboccipital
-    craniectomy reaching the sigmoid sinus and the foramen magnum's rim, a C1 hemilaminectomy, the posterior 30-40 % of
-    the condyle drilled; Bruneau 2008). The atlas is not part of this model."""
+    """A right far lateral (lateral suboccipital) craniectomy: from under the transverse sinus and behind the sigmoid sinus
+    down through the foramen magnum's posterior rim, opening into the foramen, the occipital condyle's posterior third
+    drilled (Pai 2018: a lateral suboccipital craniectomy reaching the sigmoid sinus and taking the foramen magnum's rim,
+    a C1 hemilaminectomy, the posterior 30-40 % of the condyle drilled; Bruneau 2008). The atlas is not part of this
+    model. The outline follows this CT's own sinuses (traced through its lumen, sinuses.json) as the retrosigmoid's does,
+    its corners rounded."""
     sin = json.loads((BUILD / "sinuses.json").read_text())
-    sig = np.array(sin["sigmoid"]["R"]["path"])[::-1]
-    trn = np.array(sin["transverse"]["R"]["path"])
+    sig = np.array(sin["sigmoid"]["R"]["path"])[::-1]     # from the junction down to the jugular bulb
+    trn = np.array(sin["transverse"]["R"]["path"])        # from the junction back to the torcular
     r_s = np.array(sin["sigmoid"]["R"]["radius"])[::-1]
     r_t = np.array(sin["transverse"]["R"]["radius"])
-    arc = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(sig, axis=0), axis=1))]
-    k = int(np.argmin(np.abs(arc - FL_SIGMOID_DOWN_MM)))
-    s_pt = sig[k] + (r_s[k] + 2.0) * unit(np.array([-1.0, -1.0, 0.0]))       # behind and medial to the sigmoid sinus
-    # the transverse sinus' lower margin at the craniectomy's medial edge
-    j = int(np.argmin(np.abs(trn[:, 0] - FL_MEDIAL_MM)))
-    t_pt = trn[j] - np.array([0, 0, r_t[j] + FL_BELOW_TRANSVERSE_MM])
-    top_lat = np.array([s_pt[0], s_pt[1], min(s_pt[2], t_pt[2] + 4)])
-    rim = [foramen_rim(S, x) for x in np.linspace(FL_RIM_MM[1], FL_RIM_MM[0], 4)]
-    pts = [top_lat, (top_lat + t_pt) / 2, t_pt, np.array([FL_MEDIAL_MM, t_pt[1] + 6, (t_pt[2] + rim[-1][2]) / 2])] + rim[::-1][::-1]
-    outline = np.array([S.surface(p, S.outward(p)) for p in pts])
-    n = S.outward(outline.mean(0))
-    m = S.flap(outline, n, floor=False, deeper=SO_DEEPER_MM)
+    J = trn[0]
+    fm = S.lms["Foramen magnum"]
+    rim = []
+    for x in np.linspace(FL_RIM_MM[1], FL_RIM_MM[0], 5):  # the rim, lateral to medial, carried into the opening
+        q = foramen_rim(S, x)
+        rim.append(q + SO_PAST_RIM_MM * unit(np.array([fm[0] - q[0], fm[1] - q[1], 0.0])))
+    rim = np.array(rim)
+    n = S.outward(np.vstack([J, rim]).mean(0))
+    flat = lambda v: v - (v @ n) * n                      # noqa: E731
+
+    def margin(path, rad, length, towards):
+        """A sinus' margin on the opening's side (its centre line moved by its radius, square to it, towards the
+        opening), to `length` mm along it."""
+        arc = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(path, axis=0), axis=1))]
+        keep = arc <= length
+        out = []
+        for p_, t_, r_ in zip(path[keep], np.gradient(path[keep], axis=0), rad[keep]):
+            side = flat(towards(p_)) - (flat(towards(p_)) @ unit(flat(t_))) * unit(flat(t_))
+            out.append(p_ + (r_ + RS_SINUS_GAP_MM) * unit(side))
+        return np.array(out)
+    centre = (J + rim.mean(0)) / 2
+    upper = margin(trn, r_t, FL_TRANSVERSE_MM, lambda p_: centre - p_)      # under the transverse sinus, from the junction back
+    lateral = margin(sig, r_s, FL_SIGMOID_MM, lambda p_: centre - p_)       # behind the sigmoid sinus, from the junction down
+    # round the outline: down the sigmoid's margin, across to the rim beside the condyle, along the rim to the midline
+    # side, up to the transverse sinus' margin and back along it to the junction
+    # the medial edge, from the rim up to the transverse sinus' margin, bowed outwards (a rounded window, not a straight cut)
+    a_, b_ = rim[-1], upper[-1]
+    mid = (a_ + b_) / 2
+    away = unit(flat(mid - np.vstack([lateral, rim, upper]).mean(0)))
+    chord = np.linalg.norm(flat(b_ - a_))
+    bow = [a_ + t * (b_ - a_) + FL_BOW * chord * np.sin(np.pi * t) * away for t in (0.25, 0.5, 0.75)]
+    inner = np.vstack([lateral[1:], rim, bow, upper[::-1][:-1]])
+    for _ in range(FL_CORNER_CUTS):
+        nxt = np.roll(inner, -1, axis=0)
+        inner = np.c_[0.75 * inner + 0.25 * nxt, 0.25 * inner + 0.75 * nxt].reshape(-1, 3)
+    outline = inner           # (seen along n: where its points lie along the line of sight does not matter)
+    m = S.flap(outline, n, floor=False, deeper=SO_DEEPER_MM, smooth=True)
     # the condyle's posterior third (drilled, extradural)
     cond = S.lm("Occipital condyle")
     near = S.region(lambda P: np.ones(len(P), bool), cond, FL_CONDYLE_MM)
@@ -947,13 +978,14 @@ def far_lateral(S: Skull) -> dict:
     y_cut = P[:, 1].min() + FL_CONDYLE_SHARE * (P[:, 1].max() - P[:, 1].min())
     drill = S.region(lambda Q: Q[:, 1] <= y_cut, cond, FL_CONDYLE_MM)
     area = outline_area(outline, n)
-    how = (f"A right lateral suboccipital craniectomy (Pai 2018: lateral suboccipital, reaching the sigmoid sinus, the foramen magnum's "
-           f"rim taken): its lateral edge behind this CT's own sigmoid sinus from {FL_SIGMOID_DOWN_MM:g} mm down it, its upper edge "
-           f"{FL_BELOW_TRANSVERSE_MM:g} mm below the transverse sinus, its medial edge {FL_MEDIAL_MM:g} mm right of the midline, and below "
-           f"the foramen magnum's posterior rim from x = {FL_RIM_MM[0]:g} to {FL_RIM_MM[1]:g} mm, about {area:.0f} mm² seen face on (the "
-           "outline illustrative). Then the posterior third of the right occipital condyle drilled (Pai 2018: the posterior 30-40 %; "
-           f"here the third of the condyle's bone within {FL_CONDYLE_MM:g} mm of its fitted landmark that lies furthest back). The "
-           "hemilaminectomy of C1 that goes with it is not shown: the atlas is not part of this model.")
+    how = (f"A right lateral suboccipital craniectomy (Pai 2018: lateral suboccipital, reaching the sigmoid sinus, the foramen "
+           f"magnum's rim taken), its outline following this CT's own sinuses (traced through their lumen): its upper edge along the "
+           f"transverse sinus' lower margin for {FL_TRANSVERSE_MM:g} mm from the junction, its lateral edge along the sigmoid sinus' "
+           f"posterior margin for {FL_SIGMOID_MM:g} mm down towards the jugular bulb, and below, the foramen magnum's posterior rim taken "
+           f"from x = {FL_RIM_MM[0]:g} to {FL_RIM_MM[1]:g} mm, so that the opening runs into the foramen; its medial edge bowed outwards "
+           f"and its corners rounded (the extents and shape illustrative), about {area:.0f} mm² seen face on. Then the posterior third of the right occipital condyle drilled "
+           f"(Pai 2018: the posterior 30-40 %; here the third of the condyle's bone within {FL_CONDYLE_MM:g} mm of its fitted landmark "
+           "that lies furthest back). The hemilaminectomy of C1 that goes with it is not shown: the atlas is not part of this model.")
     return {"id": "far_lateral", "name": "Far lateral craniectomy", "cut": m | drill, "how": how, "burrHoles": [], "areaMm2": round(area)}
 
 

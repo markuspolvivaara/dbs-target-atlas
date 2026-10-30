@@ -166,8 +166,8 @@
  "far_lateral": {
   "name": "Far lateral craniectomy",
   "side": "R",
-  "how": "A right lateral suboccipital craniectomy (Pai 2018: lateral suboccipital, reaching the sigmoid sinus, the foramen magnum's rim taken): its lateral edge behind this CT's own sigmoid sinus from 22 mm down it, its upper edge 12 mm below the transverse sinus, its medial edge 8 mm right of the midline, and below the foramen magnum's posterior rim from x = 6 to 18 mm, about 735 mm² seen face on (the outline illustrative). Then the posterior third of the right occipital condyle drilled (Pai 2018: the posterior 30-40 %; here the third of the condyle's bone within 11 mm of its fitted landmark that lies furthest back). The hemilaminectomy of C1 that goes with it is not shown: the atlas is not part of this model.",
-  "removedMl": 4.2,
+  "how": "A right lateral suboccipital craniectomy (Pai 2018: lateral suboccipital, reaching the sigmoid sinus, the foramen magnum's rim taken), its outline following this CT's own sinuses (traced through their lumen): its upper edge along the transverse sinus' lower margin for 30 mm from the junction, its lateral edge along the sigmoid sinus' posterior margin for 35 mm down towards the jugular bulb, and below, the foramen magnum's posterior rim taken from x = 3 to 16 mm, so that the opening runs into the foramen; its medial edge bowed outwards and its corners rounded (the extents and shape illustrative), about 1423 mm² seen face on. Then the posterior third of the right occipital condyle drilled (Pai 2018: the posterior 30-40 %; here the third of the condyle's bone within 11 mm of its fitted landmark that lies furthest back). The hemilaminectomy of C1 that goes with it is not shown: the atlas is not part of this model.",
+  "removedMl": 7.7,
   "bones": [
    "sb_appr_far_lateral__occipital_bone",
    "sb_appr_far_lateral__temporal_bone"
