@@ -147,13 +147,13 @@
   },
   "2": {
    "centre": [
-    20.5,
-    -22.5,
-    -8.5
+    19.5,
+    -20.5,
+    -7.5
    ],
    "diameterMm": 6.0,
-   "extrameatalMaxMm": 5.2,
-   "toBrainstemMm": 0.7,
+   "extrameatalMaxMm": 5.4,
+   "toBrainstemMm": 0.5,
    "fromBoneMm": 0.7,
    "ml": 0.09,
    "push": {
@@ -161,6 +161,13 @@
     "leftInside": 0,
     "rounds": 1,
     "maxMovedMm": 0.0
+   },
+   "nerves": {
+    "Facial nerve (VII)": {
+     "pointsInside": 3,
+     "leftInside": 0,
+     "maxMovedMm": 1.5
+    }
    }
   },
   "3": {
@@ -170,15 +177,27 @@
     -5.5
    ],
    "diameterMm": 25.0,
-   "extrameatalMaxMm": 24.8,
+   "extrameatalMaxMm": 25.0,
    "toBrainstemMm": -8.0,
    "fromBoneMm": 9.2,
-   "ml": 6.61,
+   "ml": 6.63,
    "push": {
-    "pointsInside": 5154,
+    "pointsInside": 5179,
     "leftInside": 0,
-    "rounds": 51,
-    "maxMovedMm": 17.63
+    "rounds": 15,
+    "maxMovedMm": 17.88
+   },
+   "nerves": {
+    "Facial nerve (VII)": {
+     "pointsInside": 32,
+     "leftInside": 0,
+     "maxMovedMm": 5.6
+    },
+    "Trigeminal nerve (V)": {
+     "pointsInside": 10,
+     "leftInside": 0,
+     "maxMovedMm": 8.2
+    }
    }
   },
   "4": {
@@ -188,15 +207,42 @@
     -6.5
    ],
    "diameterMm": 34.0,
-   "extrameatalMaxMm": 33.7,
+   "extrameatalMaxMm": 33.6,
    "toBrainstemMm": -12.8,
    "fromBoneMm": 10.3,
-   "ml": 17.42,
+   "ml": 17.48,
    "push": {
-    "pointsInside": 23521,
+    "pointsInside": 23644,
     "leftInside": 0,
     "rounds": 5,
-    "maxMovedMm": 31.22
+    "maxMovedMm": 31.4
+   },
+   "nerves": {
+    "Facial nerve (VII)": {
+     "pointsInside": 32,
+     "leftInside": 0,
+     "maxMovedMm": 10.3
+    },
+    "Trigeminal nerve (V)": {
+     "pointsInside": 14,
+     "leftInside": 2,
+     "maxMovedMm": 12.9
+    },
+    "Abducens nerve (VI)": {
+     "pointsInside": 12,
+     "leftInside": 0,
+     "maxMovedMm": 4.7
+    },
+    "Glossopharyngeal nerve (IX)": {
+     "pointsInside": 7,
+     "leftInside": 0,
+     "maxMovedMm": 0.3
+    },
+    "Vagus nerve (X)": {
+     "pointsInside": 18,
+     "leftInside": 0,
+     "maxMovedMm": 2.7
+    }
    }
   }
  },
@@ -213,7 +259,7 @@
     26.61
    ],
    "diameterRuleMm": 30.0,
-   "ml": 12.02,
+   "ml": 12.01,
    "normal": [
     0.0,
     -0.27,
@@ -248,7 +294,7 @@
     "pointsInside": 170,
     "leftInside": 0,
     "rounds": 6,
-    "maxMovedMm": 16.6
+    "maxMovedMm": 16.66
    }
   },
   "petroclival": {
@@ -270,10 +316,10 @@
     0.25
    ],
    "push": {
-    "pointsInside": 6134,
+    "pointsInside": 6138,
     "leftInside": 0,
     "rounds": 5,
-    "maxMovedMm": 19.66
+    "maxMovedMm": 19.71
    }
   },
   "foramen_magnum": {

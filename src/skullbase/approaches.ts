@@ -166,6 +166,8 @@ export const APPROACH_REFS: ApproachRef[] = [
     citation: 'Gupta VK, Thakker A, Gupta KK. Vestibular schwannoma: what we know and where we are heading. Head Neck Pathol. 2020;14(4):1058–1066. doi:10.1007/s12105-020-01155-x.' },
   { id: 'starnoni2020', pmid: '32728903', pmcid: 'PMC7550309', shortLabel: 'Starnoni 2020', url: doi('10.1007/s00701-020-04491-7'),
     citation: 'Starnoni D, Giammattei L, Cossu G, Link MJ, Roche PH, Chacko AG, et al. Surgical management for large vestibular schwannomas: a systematic review, meta-analysis, and consensus statement on behalf of the EANS skull base section. Acta Neurochir (Wien). 2020;162(11):2595–2617. doi:10.1007/s00701-020-04491-7.' },
+  { id: 'choi2014', pmid: '25289119', pmcid: 'PMC4185313', shortLabel: 'Choi 2014', url: doi('10.3340/jkns.2014.56.1.11'),
+    citation: 'Choi KS, Kim MS, Kwon HG, Jang SH, Kim OL. Preoperative identification of facial nerve in vestibular schwannomas surgery using diffusion tensor tractography. J Korean Neurosurg Soc. 2014;56(1):11–15. doi:10.3340/jkns.2014.56.1.11.' },
   { id: 'ius2021', pmid: '34071391', pmcid: 'PMC8198762', shortLabel: 'Ius 2021', url: doi('10.3390/cancers13112664'),
     citation: 'Ius T, Tel A, Minniti G, Somma T, Solari D, Longhi M, et al. Advances in multidisciplinary management of skull base meningiomas. Cancers (Basel). 2021;13(11):2664. doi:10.3390/cancers13112664.' },
   { id: 'muskens2018', pmid: '29127655', pmcid: 'PMC5735207', shortLabel: 'Muskens 2018', url: doi('10.1007/s00701-017-3390-y'),

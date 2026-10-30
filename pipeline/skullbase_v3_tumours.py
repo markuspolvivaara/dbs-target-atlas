@@ -28,8 +28,10 @@ routes where it says so.
     II kept KOOS_CLEAR_MM off the brainstem (as large as that allows), III reaching it and moulded against it (cut at its
     surface, up to KOOS_MOULD_MM in), IV reaching KOOS_INTO_MM into where it lies (the brainstem pushed aside); of the
     centres allowed, the one furthest off the brainstem. This model's fitted pons lies about 4 mm from the porus, closer
-    than in life, which is why II is small and III moulded. The facial and vestibulocochlear nerves run into the
-    tumour; the other nerves keep a channel through it.
+    than in life, which is why II is small and III moulded. The nerves of the angle are moved round it
+    (displaced_nerves): the facial nerve forwards onto its anterior surface (Choi 2014), thinned and flattened over
+    grades III and IV (Starnoni 2020), the others and the fitted small arteries the shortest way out; the
+    vestibulocochlear nerve, from which it grows, runs into it.
   * Meningiomas (sites and approaches from Ius 2021's table of skull base meningiomas): a ball of MENINGIOMA_MM
     diameter on the dura of each site (its centre MENINGIOMA_RISE of its radius off the bone along the way out of it, so
     the bone cuts it to a broad base), kept inside the dura (within MENINGIOMA_INTRADURAL_MM of the fitted brain, on the
@@ -510,7 +512,6 @@ def koos(man: list) -> dict:
     stem = gr.of(names=STEM, sides=("R",))
     brain_ = gr.of(kinds=("brain",), sides=("R",))
     art = gr.arteries()
-    keep_nerves = gr.of(kinds=("nerve",)) & ~gr.of(names=("Facial nerve (VII)", "Nerves in the internal acoustic meatus (VII, VIII)", "Vestibulocochlear nerve (VIII)"))
     d_bone, d_stem = gr.dist(gr.bone), gr.dist(stem)
     out_bone = ~gr.bone
     along = (P - fundus) @ axis
@@ -518,7 +519,7 @@ def koos(man: list) -> dict:
     l, _ = ndimage.label(canal)
     mid = l[gr.at((fundus + porus) / 2)]
     canal = l == mid if mid else largest(canal)
-    keep = (gr.dist(art) <= VESSEL_KEEP_MM) | (gr.dist(keep_nerves) <= NERVE_KEEP_MM)
+    keep = gr.dist(art) <= VESSEL_KEEP_MM      # (the nerves are moved round it: displaced_nerves)
     out, rep, ways = {"1": smoothed(canal) & ~gr.bone & ~keep}, {}, {}
     rep["1"] = {"ml": round(float(out["1"].sum()) * STEP ** 3 / 1000, 2), "canalMm": round(float(np.linalg.norm(porus - fundus)), 1)}
     # the ball's centre: searched on a 1 mm lattice of open points in the posterior fossa (not in the cerebrum)
@@ -583,7 +584,7 @@ def koos(man: list) -> dict:
                   "toBrainstemMm": round(float(dC_stem[i] - R), 1), "fromBoneMm": round(float(dC_bone[i]), 1),
                   "ml": round(float(t.sum()) * STEP ** 3 / 1000, 2)}
         print("Koos", g, rep[g])
-    return {"grid": gr, "masks": out, "report": rep, "ways": ways}
+    return {"grid": gr, "masks": out, "report": rep, "ways": ways, "porus": porus, "axis": axis}
 
 
 def meningioma_site(site: str, gr: Grid) -> np.ndarray:
@@ -728,6 +729,166 @@ def pushed_copies(view: str, tag: str, tumour: np.ndarray, gr: Grid, man: list, 
     return items, res["report"]
 
 
+# ---------------------------------------------------------------- the nerves round a vestibular schwannoma
+NERVE_GAP_MM = 0.3          # a nerve moved round a tumour lies this far off its surface (beyond its own radius)
+NERVE_SIGMA_MM = 2.5        # the move spread along the nerve (Gaussian of arc length): it drapes, it does not kink
+NERVE_ROUNDS = 40
+FACIAL_WAY = np.array([0.0, 1.0, 0.0])    # the facial nerve moved forwards, onto the tumour's anterior surface (Choi 2014)
+FLAT = {"3": (1.8, 0.45), "4": (2.2, 0.35)}   # (III, IV) where it lies on the tumour, the facial nerve drawn this much
+#                             wider and thinner (a band; Starnoni 2020: the nerve thinned over large tumours; illustrative)
+MOVED_NERVES = ("Facial nerve (VII)", "Trigeminal nerve (V)", "Abducens nerve (VI)", "Glossopharyngeal nerve (IX)", "Vagus nerve (X)",
+                "Accessory nerve (XI)", "Anterior inferior cerebellar artery", "Superior cerebellar artery (fitted course)",
+                "Posterior inferior cerebellar artery (fitted course)")
+
+
+def tube_part(V: np.ndarray):
+    """The tube (skullbase_build.tube: rings of 6 or 8, then two caps) at the end of a node's vertices: (first vertex,
+    centre line, radius), or None. A routed nerve is all tube; the facial nerve is the specimen's mesh, its routed
+    cisternal tube after it. The longest run of regular rings that ends where the caps begin."""
+    for sides in (8, 6):
+        for n in range((len(V) - 2 * (sides + 1)) // sides, 2, -1):
+            s0 = len(V) - n * sides - 2 * (sides + 1)
+            ring = V[s0:s0 + n * sides].reshape(n, sides, 3)
+            c = ring.mean(1)
+            rr = np.linalg.norm(ring - c[:, None], axis=2)
+            if rr.std(1).max() <= 0.05 * max(float(rr.mean()), 0.1) and np.linalg.norm(np.diff(c, axis=0), axis=1).max() < 2.0:
+                return s0, c, rr.mean(1)
+    return None
+
+
+def flat_tube(P: np.ndarray, a: np.ndarray, b: np.ndarray, up: np.ndarray):
+    """A tube whose cross-section is an ellipse: a across (square to `up`), b along `up` (per point)."""
+    import skullbase_build as SB
+    v, n_, t = SB.tube(np.c_[P, np.ones(len(P))])     # (its rings, resampled)
+    sides = 8
+    Q = SB.resample(np.c_[P, a, b, up])
+    C, A, Bb, U = Q[:, :3], Q[:, 3], Q[:, 4], Q[:, 5:8]
+    T = np.gradient(C, axis=0)
+    T /= np.linalg.norm(T, axis=1, keepdims=True) + 1e-12
+    U = U - (U * T).sum(1, keepdims=True) * T
+    U /= np.linalg.norm(U, axis=1, keepdims=True) + 1e-12
+    X = np.cross(T, U)
+    ang = np.linspace(0, 2 * np.pi, sides, endpoint=False)
+    pos = (C[:, None] + A[:, None, None] * np.cos(ang)[None, :, None] * X[:, None] + Bb[:, None, None] * np.sin(ang)[None, :, None] * U[:, None]).reshape(-1, 3)
+    tris = []
+    for i in range(len(C) - 1):
+        for k in range(sides):
+            a0, a1 = i * sides + k, i * sides + (k + 1) % sides
+            tris += [[a0, a1, a0 + sides], [a1, a1 + sides, a0 + sides]]
+    caps, base = [], len(pos)
+    for end, sg in ((0, -1), (len(C) - 1, 1)):
+        c = base + len(caps)
+        caps.append(C[end])
+        for k in range(sides):
+            caps.append(pos[end * sides + k])
+        for k in range(sides):
+            u, w = c + 1 + k, c + 1 + (k + 1) % sides
+            tris.append([c, w, u] if sg < 0 else [c, u, w])
+    V = np.vstack([pos, caps])
+    T_ = np.array(tris)
+    m = trimesh.Trimesh(V, T_, process=False)
+    if m.volume < 0:
+        T_ = T_[:, ::-1]
+    return V, SB.normals(V, T_), T_
+
+
+def displaced_nerves(g: str, tumour: np.ndarray, gr: Grid, man: list, porus: np.ndarray, axis: np.ndarray) -> tuple[list, dict]:
+    """The nerves and fitted arteries of the angle moved round the schwannoma (for its view): each centre-line point
+    inside it (less than its radius and NERVE_GAP_MM off it), beyond the porus, pushed out (the facial nerve forwards,
+    FACIAL_WAY, onto its anterior surface; the others the shortest way out), the move spread along the nerve, for up to
+    NERVE_ROUNDS rounds; points in the meatus and away from the tumour stay. Where it lies on a grade III or IV tumour,
+    the facial nerve is drawn as a flattened band (FLAT). The vestibulocochlear nerve, from which the tumour grows, runs
+    into it as before."""
+    import skullbase_build as SB
+    sd = ENDO.signed(tumour, STEP).astype(np.float32)
+    grad = [ndimage.gaussian_filter(x, 1.0) for x in np.gradient(sd, STEP)]
+    bone_d = gr.dist(gr.bone)
+
+    def sample(F, X):
+        ijk = (X - gr.lo) / STEP
+        return ndimage.map_coordinates(F, ijk.T, order=1, mode="nearest")
+    items, rep = [], {}
+    for it in man:
+        if it["name"] not in MOVED_NERVES or it.get("pushedFrom"):
+            continue
+        nodes = read_glb_full(file_of(it))
+        if "R" not in nodes:
+            continue
+        nd = nodes["R"]
+        tp = tube_part(nd["positions"])
+        if tp is None:
+            continue
+        s0, C, R = tp
+        arc = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(C, axis=0), axis=1))]
+        W = np.exp(-((arc[:, None] - arc[None]) ** 2) / (2 * NERVE_SIGMA_MM ** 2))
+        out_canal = ((C - porus) @ axis) > 0.5
+        X = C.copy()
+        facial = it["name"] == "Facial nerve (VII)"
+        moved0 = None
+        for _ in range(NERVE_ROUNDS):
+            depth = R + NERVE_GAP_MM - sample(sd, X)          # > 0: inside, or too close
+            need = (depth > 0) & out_canal
+            if moved0 is None:
+                moved0 = int(need.sum())
+            if not need.any():
+                break
+            D = np.zeros_like(X)
+            if facial:
+                # forwards until clear of the tumour (or, where bone comes first, the shortest way out)
+                for i in np.nonzero(need)[0]:
+                    for t in np.arange(0.5, 40.0, 0.5):
+                        q = X[i] + t * FACIAL_WAY
+                        if sample(sd, q[None])[0] >= R[i] + NERVE_GAP_MM:
+                            D[i] = q - X[i]
+                            break
+                        if sample(bone_d, q[None])[0] < R[i]:
+                            gv = np.array([sample(gg, X[i][None])[0] for gg in grad])
+                            D[i] = gv / (np.linalg.norm(gv) + 1e-9) * depth[i]
+                            break
+            else:
+                gv = np.stack([sample(gg, X[need]) for gg in grad], 1)
+                D[need] = gv / (np.linalg.norm(gv, axis=1, keepdims=True) + 1e-9) * (depth[need] + 0.1)[:, None]
+            # spread along the nerve (a normalised Gaussian: an isolated push keeps its size)
+            w = W[:, need]
+            step_ = (w @ D[need]) / np.maximum(w.sum(1, keepdims=True), 1.0)
+            step_[~out_canal] = 0
+            X = X + step_
+        moved = np.linalg.norm(X - C, axis=1)
+        if moved.max() < 0.2:
+            continue
+        left = int(((R + NERVE_GAP_MM - sample(sd, X) > 0.05) & out_canal).sum())
+        # the facial nerve on a large tumour: a flattened band where it lies on it
+        if facial and g in FLAT:
+            on = np.clip(moved / max(moved.max(), 1e-6) * 2.0, 0, 1)
+            on = np.convolve(on, np.ones(5) / 5, mode="same")
+            a = R * (1 + (FLAT[g][0] - 1) * on)
+            b = R * (1 + (FLAT[g][1] - 1) * on)
+            up = np.stack([sample(gg, X) for gg in grad], 1)
+            v, n_, t = flat_tube(X, a, b, up)
+        else:
+            v, n_, t = SB.tube(np.c_[X, R])
+        keepV = nd["positions"][:s0]
+        keepT = nd["indices"][(nd["indices"] < s0).all(1)]
+        V = np.vstack([keepV, v])
+        T = np.vstack([keepT, t + len(keepV)]) if len(keepV) else t
+        node_R = {"name": "R", "positions": V, "normals": SB.normals(V, T), "indices": T, "mode": TRIANGLES}
+        nid = f"{it['id']}__koos_{g}"
+        write_glb(V3_BUILD / f"{nid}.glb", [node_R], {"id": nid})
+        what = ("moved forwards round it onto its anterior surface (Choi 2014: there in 5 of 11 tumours at surgery, anteroinferior in 3, "
+                "anterosuperior in 2, posteroinferior in 1)" + (", drawn thinned and flattened where it lies on it (Starnoni 2020: the nerve "
+                "thins over large tumours; the band's shape illustrative)" if g in FLAT else "") if facial else "moved the shortest way out of it, onto its surface")
+        cent = dict(it["centroid"])
+        cent["R"] = V.mean(0).round(2).tolist()
+        items.append({**{k: v_ for k, v_ in it.items() if k not in ("clearedFrom", "joinedFrom")}, "id": nid,
+                      "file": f"assets/skullbase-v3/{nid}.glb", "bytes": 0, "replaces": it["id"], "pushedFrom": it["file"],
+                      "tumourView": f"koos_{g}", "centroid": cent,
+                      "derivation": it["derivation"].rstrip() + f" In this view, where it ran through the vestibular schwannoma drawn here it is "
+                      f"{what} (skullbase_v3_tumours.py; at most {moved.max():.1f} mm), its course in the meatus kept: a shape, not a simulation."})
+        rep[it["name"]] = {"pointsInside": moved0, "leftInside": left, "maxMovedMm": round(float(moved.max()), 1)}
+    print("  nerves koos", g, rep)
+    return items, rep
+
+
 def main() -> int:
     import skullbase_v3 as V3
     man = json.loads((GEN / "sbv3-manifest.json").read_text())["structures"]
@@ -787,6 +948,9 @@ def main() -> int:
                                    way=Q["ways"][g], names_still=STEM + ("Fourth ventricle",) if g in ("2", "3") else ())
             items += cp
             Q["report"][g]["push"] = rp
+            dn, rn = displaced_nerves(g, mask, gr, man, Q["porus"], Q["axis"])
+            items += dn
+            Q["report"][g]["nerves"] = rn
 
     # ---- meningiomas
     report["meningioma"] = {}

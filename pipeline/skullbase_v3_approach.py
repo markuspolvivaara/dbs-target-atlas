@@ -108,6 +108,9 @@ OZ_ARCH_FRONT_MM = 8.0      # the zygomatic arch: from this far in front of the 
 OZ_ARCH_ROOT_Y = 0.0        # ... back to its root in front of the articular tubercle (y in the frame; illustrative) ...
 OZ_ARCH_HALF_MM = 7.0       # ... the arch's bone this far above and below its line, lateral of OZ_ARCH_LATERAL_MM
 OZ_ARCH_LATERAL_MM = 50.0
+OZ_ZYGOMA_BELOW_MM = 5.0    # the zygoma's body taken down to this far below the arch's level (about 1 cm below its processes'
+#                             junction; illustrative) ...
+OZ_ZYGOMA_LATERAL_MM = 33.0 # ... lateral of this (the infraorbital rim's medial part, the maxillary process, kept; illustrative)
 FL_TRANSVERSE_MM = 30.0     # the far lateral craniectomy: its upper edge along the transverse sinus' lower margin for
 #                             this far from the junction (illustrative) ...
 FL_SIGMOID_MM = 35.0        # ... its lateral edge along the sigmoid sinus' posterior margin for this far down it (towards
@@ -910,12 +913,22 @@ def orbitozygomatic(S: Skull) -> dict:
     def arch(P):
         return (P[:, 0] >= OZ_ARCH_LATERAL_MM) & (P[:, 1] <= y_front) & (P[:, 1] >= OZ_ARCH_ROOT_Y) & (np.abs(P[:, 2] - back[2]) <= OZ_ARCH_HALF_MM)
     zyg = S.region(arch, np.array([back[0], (y_front + OZ_ARCH_ROOT_Y) / 2, back[2]]), 25.0)
+    # the zygoma itself: its frontal process and its body above the lower cut (Yilmaz 2025: from the zygomatic body to the
+    # inferior orbital fissure, about 1 cm below its frontal and temporal processes), lateral to the infraorbital rim
+    zi = S.znames.index("Zygomatic bone.r")
+    ztree = cKDTree(S.zp)
+
+    def zygoma(P):
+        return (S.zl[ztree.query(P)[1]] == zi) & (P[:, 2] >= back[2] - OZ_ZYGOMA_BELOW_MM) & (P[:, 0] >= OZ_ZYGOMA_LATERAL_MM)
+    zyg |= S.region(zygoma, Z.mean(0), float(np.linalg.norm(np.ptp(Z, 0)) / 2 + 2))
     # (each piece with the faint bone at its surface, so no skin of it is left)
     orbit, zyg = (ndimage.binary_dilation(x, iterations=2) & (S.b > 0.05) for x in (orbit, zyg))
     how = (pt["how"].replace(" behind the zygomatic bone (which stays),", " behind the zygomatic bone,") + " Then the orbitozygomatic piece (the two-piece craniotomy, Yilmaz 2025): the superolateral orbital rim from "
            f"{OZ_NOTCH_LATERAL_MM:g} mm lateral to the supraorbital notch to {OZ_PAST_FZ_MM:g} mm lateral to the frontozygomatic suture "
            f"(the model's zygomatic process of the frontal bone), with the orbital roof {OZ_ROOF_MM:g} mm back from the rim (illustrative), "
-           "and the zygomatic arch from "
+           f"the zygoma's frontal process and its body down to {OZ_ZYGOMA_BELOW_MM:g} mm below the arch's level (Yilmaz 2025: the cut from the "
+           "zygomatic body to the inferior orbital fissure about 1 cm below its frontal and temporal processes; its medial part with "
+           f"the infraorbital rim, medial of x = {OZ_ZYGOMA_LATERAL_MM:g} mm, kept; illustrative), and the zygomatic arch from "
            f"{OZ_ARCH_FRONT_MM:g} mm in front of the zygomatic bone's back end back to its root in front of the articular tubercle "
            f"(y = {OZ_ARCH_ROOT_Y:g} mm here; illustrative).")
     return {"id": "orbitozygomatic", "name": "Orbitozygomatic craniotomy", "cut": pt["cut"] | orbit | zyg, "how": how,

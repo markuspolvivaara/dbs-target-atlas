@@ -295,7 +295,9 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   - **Vestibular schwannoma, Koos I–IV,** in the retrosigmoid view (opened with the cerebellum retracted): the
     meatus's lumen, and a ball in the cerebellopontine angle joined to the porus. This model's fitted pons lies about
     4 mm from the porus, closer than in life, so grade II is small (6 mm) and grade III is moulded against the brainstem;
-    grade IV pushes it aside. Sources: Gupta 2020, Starnoni 2020 (EANS).
+    grade IV pushes it aside. The nerves of the angle are moved round the tumour: the facial nerve forwards onto its
+    anterior surface (Choi 2014: its commonest place), thinned and flattened over grades III and IV; the others and the
+    fitted small arteries the shortest way out. Sources: Gupta 2020, Starnoni 2020 (EANS), Choi 2014.
   - **Meningiomas** of the olfactory groove (lateral supraorbital view), tuberculum sellae (pterional), petroclival
     (retrosigmoid) and foramen magnum (far lateral), with the approaches Ius 2021 lists for each site; Muskens
     2018 (endonasal against transcranial), Singh 2019 (retrosigmoid for petroclival), Bruneau 2008 (foramen magnum).

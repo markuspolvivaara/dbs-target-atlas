@@ -134,6 +134,10 @@ export const TUMOURS: TumourFamilyContent[] = [
         c('The Koos scale grades a vestibular schwannoma by its extension from the meatus and its relation to the brainstem: I intracanalicular; II into the cerebellopontine angle, under 2 cm; III occupying the angle without displacing the brainstem, under 3 cm; IV displacing the brainstem, over 3 cm.', 'gupta2020'),
         c('It combines the extrameatal size with the anatomy; tumours over 30 mm in the largest extrameatal diameter are “large” and over 40 mm “giant” (the 2003 consensus on reporting: linear measurement on post-contrast axial MRI).', 'starnoni2020'),
       ]),
+      sec('The facial nerve', [
+        c('With tractography checked at surgery in 11 vestibular schwannomas, the facial nerve lay on the anterior surface of the tumour in 5, anteroinferior in 3, anterosuperior in 2 and posteroinferior in 1. In one patient it was very thin and fragile from the tumour’s indentation, and it was cut during the removal.', 'choi2014'),
+        c('Over large tumours the nerve thins and the landmarks are distorted, so it is harder to follow on high-resolution T2-weighted MRI; tractography has shown the cranial nerves displaced by the tumour in 80 to 100 % of the cases studied.', 'starnoni2020'),
+      ]),
       sec('Management', [
         c('Observation (“watch and rescan”), surgery and radiotherapy are the options; in a systematic review of 41 papers tumours grew a mean 1–2 mm a year, and up to 75 % did not grow further.', 'gupta2020'),
         c('The middle fossa approach has been used for small intrameatal tumours, larger medially placed tumours through a retrosigmoid craniotomy; with serviceable hearing the middle fossa or retrosigmoid approach, without it the retrosigmoid or translabyrinthine. Class III evidence has not shown one approach better than another for hearing.', 'starnoni2020'),
@@ -141,7 +145,7 @@ export const TUMOURS: TumourFamilyContent[] = [
         c('Pooled data on large tumours removed through a retrosigmoid craniotomy: gross total resection in 79.1 %, a good facial nerve outcome (House–Brackmann I–II) in 62.9 %.', 'starnoni2020'),
       ]),
     ],
-    notShown: 'The schwannoma is a shape drawn by rule, not a patient’s. The facial and cochlear nerves, the anterior inferior cerebellar artery and the petrosal veins are not moved round it. This model’s fitted pons lies only about 4 mm from the porus, closer than in life, so grade II is small here and grade III is moulded against the brainstem rather than placed clear of it.',
+    notShown: 'The schwannoma is a shape drawn by rule, not a patient’s. Its displacement of the nerves is drawn by rule too: the facial nerve moved forwards onto the tumour’s anterior surface (its commonest place) and drawn thinned and flattened over grades III and IV, the other nerves of the angle and the fitted small arteries moved the shortest way out onto its surface, the vestibulocochlear nerve, from which it grows, running into it. The petrosal veins are not drawn. This model’s fitted pons lies only about 4 mm from the porus, closer than in life, so grade II is small here and grade III is moulded against the brainstem rather than placed clear of it.',
     grades: KOOS_GRADES.map((g, i) => ({ id: g.id, label: g.id, structure: `tm_koos_${i + 1}`, definition: c(`Koos ${g.id}: ${g.definition.charAt(0).toLowerCase()}${g.definition.slice(1)}.`, 'gupta2020'), view: 'retrosigmoid' })),
   },
   {
