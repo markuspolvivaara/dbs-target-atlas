@@ -31,9 +31,10 @@ export type Evidence = z.infer<typeof EvidenceSchema>;
  * from behind and below, up into the cerebellomedullary fissure; 'retrosigmoid' from behind the sigmoid sinus along the
  * petrous bone into the cerebellopontine angle; 'orbitozygomatic' from the side and in front but lower than
  * 'anterolateral', up under the frontal lobe; 'farLateral' from behind, the side and below, along the medulla to the front
- * of the foramen magnum (skull-base section, surgical views).
+ * of the foramen magnum; 'subtemporal' from the side and above, under the lifted temporal lobe onto the middle fossa floor
+ * (skull-base section, surgical views).
  */
-export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon', 'lateral', 'medial', 'inferior', 'posterior', 'anterolateral', 'frontolateral', 'supraorbital', 'vertex', 'suboccipital', 'retrosigmoid', 'orbitozygomatic', 'farLateral']);
+export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon', 'lateral', 'medial', 'inferior', 'posterior', 'anterolateral', 'frontolateral', 'supraorbital', 'vertex', 'suboccipital', 'retrosigmoid', 'orbitozygomatic', 'farLateral', 'subtemporal']);
 export type CameraPreset = z.infer<typeof CameraPresetSchema>;
 
 /** A rendered structure: nucleus, cortical area, tract or sweet-spot volume. */
@@ -179,6 +180,8 @@ export const ManifestStructureSchema = z.object({
   tumour: z.object({ family: z.string(), grade: z.string() }).optional(),
   /** skull base v3: a part of the fitted brain pushed aside by a tumour, for that tumour's view (with `replaces`) */
   tumourView: z.string().optional(),
+  /** skull base v3: a copy for one surgical view only (the temporal lobe held up in the Kawase view), with `replaces` */
+  forView: z.string().optional(),
   pushedFrom: z.string().optional(),
   /** vascular section: the lesion (view) a lesion's part belongs to; with `replaces`, a vessel it changes in that view */
   lesion: z.string().optional(),

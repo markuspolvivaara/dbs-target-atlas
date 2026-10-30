@@ -98,12 +98,15 @@ function temporalGroups(): SbGroup[] {
   const surgical = APPROACHES.filter((a) => APPROACH_GEOM[a.id]).map((a): SbGroup => {
     const geom = APPROACH_GEOM[a.id];
     const replaced = new Set(geom.bones.map((id) => SB.get(id)?.replaces));
+    // copies for this view only (the Kawase view's lifted temporal lobe) stand in for their parts
+    const own = new Map(PUSHED.filter((s) => s.forView === a.view && s.replaces).map((s) => [s.replaces!, s.id]));
     return {
       id: a.view, kind: 'approach', name: a.name, camera: a.camera, hemi: a.hemi ?? (geom.side === 'M' ? 'both' : geom.side), cutAbove: null, boneLook: undefined,
       // framed on the craniotomy and what it is for: the view looks in through the one onto the other
       focus: null, focusIds: [...(a.frameOpening === false ? [] : [geom.removed]), ...byName(...a.focus)], radius: a.radius ?? 60, approach: a.id, morphs: a.morphs,
       description: a.summary,
-      structures: [...bonesV3.filter((id) => !replaced.has(id)), ...geom.bones, geom.removed, ...brainOf(a.brain ?? 'cerebrum'), ...byName(...a.context)],
+      structures: [...bonesV3.filter((id) => !replaced.has(id)), ...geom.bones, geom.removed, ...(geom.guides ?? []),
+        ...[...brainOf(a.brain ?? 'cerebrum'), ...byName(...a.context)].map((id) => own.get(id) ?? id)],
       landmarks: lm(...(a.landmarks ?? [])),
     };
   });

@@ -51,10 +51,9 @@ commit and push it.
 
 ## Open items
 
-- **Subtemporal and anterior petrosectomy (Kawase) approaches** are next on the roadmap. They need a new brain shape
-  (a temporal-lobe lift, a morph target in `skullbase_brain.py`) and a middle fossa floor craniotomy; the Kawase
-  triangle's drilling (between the greater petrosal nerve, V3, the petrous ridge and the arcuate eminence) can use the
-  landmarks the cavernous step already finds.
+- **Kawase (anterior petrosectomy) is done** (see the README); the temporal lobe is a fixed lifted copy for that view,
+  not a slider. **A plain subtemporal approach** is still open: it could reuse the Kawase flap and lift without the apex
+  drilling. Neither the dura nor the tentorium is modelled, so the tentorial cut is not shown.
 - **Koos geometry.** The fitted pons fills more of the cerebellopontine angle than in life. A narrower brainstem fit
   near the porus would let grades II and III be drawn at their usual sizes.
 - **Orbitozygomatic cut.** Thin strands of the zygomatic arch's surface remain at its cut ends; the orbital piece's and

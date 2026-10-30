@@ -21,7 +21,7 @@ export interface ApproachSection {
   claims: ApproachClaim[];
   /** a measurement on this CT shown under the claims (from sbv3-fit.json): M1's length, or the anterior cerebral
    * arteries TopBrain labels */
-  measured?: 'm1' | 'aca' | 'tonsils';
+  measured?: 'm1' | 'aca' | 'tonsils' | 'kawase';
 }
 export interface ApproachContent {
   /** the geometry's id (sbv3-approaches.json) */
@@ -178,6 +178,12 @@ export const APPROACH_REFS: ApproachRef[] = [
     citation: 'Rodriguez Rubio R, Chae R, Kournoutas I, Abla A, McDermott M. Immersive surgical anatomy of the frontotemporal-orbitozygomatic approach. Cureus. 2019;11(11):e6053. doi:10.7759/cureus.6053.' },
   { id: 'pai2018', pmid: '30283520', pmcid: 'PMC6159062', shortLabel: 'Pai 2018', url: doi('10.4103/ajns.ajns_273_16'),
     citation: 'Pai SB, Raghuram G, Keshav GC, Rodrigues E. Far-lateral transcondylar approach to anterior foramen magnum lesions—our experience. Asian J Neurosurg. 2018;13(3):651–655. doi:10.4103/ajns.ajns_273_16.' },
+  { id: 'floresjusta2021', pmid: '33921434', pmcid: 'PMC8069204', shortLabel: 'Flores-Justa 2021', url: doi('10.3390/brainsci11040488'),
+    citation: 'Flores-Justa A, Luzzi S, Giotta Lucifero A, Villalonga JF, Saenz A, Santin-Amo JM, et al. Use of neuroanatomic knowledge and neuronavigation system for a safe anterior petrosectomy. Brain Sci. 2021;11(4):488. doi:10.3390/brainsci11040488.' },
+  { id: 'signoretti2025', pmid: '40002437', pmcid: 'PMC11853630', shortLabel: 'Signoretti 2025', url: doi('10.3390/brainsci15020104'),
+    citation: 'Signoretti S, Signorelli F, Pesce A, Delitala A, Visocchi M. Anterior petrosectomy vs. retrosigmoid approach—surgical anatomy and navigation-augmented morphometric analysis: a comparative study in cadaveric laboratory setting. Brain Sci. 2025;15(2):104. doi:10.3390/brainsci15020104.' },
+  { id: 'voormolen2020', pmid: '31323686', pmcid: 'PMC7058156', shortLabel: 'Voormolen 2020', url: doi('10.1093/ons/opz064'),
+    citation: 'Voormolen EH, Diederen S, Cebula H, Woerdeman PA, Noordmans HJ, Viergever MA, et al. Distance control and virtual drilling improves anatomical orientation during anterior petrosectomy. Oper Neurosurg. 2020;18(1):83–91. doi:10.1093/ons/opz064.' },
   { id: 'singh2019', pmid: '30937033', pmcid: 'PMC6417359', shortLabel: 'Singh 2019', url: doi('10.4103/ajns.ajns_192_18'),
     citation: 'Singh N, Singh DK, Ahmad F, Kumar R. The retrosigmoid approach: workhorse for petroclival meningioma surgery. Asian J Neurosurg. 2019;14(1):188–192. doi:10.4103/ajns.ajns_192_18.' },
 ];
@@ -412,6 +418,36 @@ export const APPROACHES: ApproachContent[] = [
     notShown: 'The atlas and axis are not part of this model, so the hemilaminectomy of C1 is not shown, nor the vertebral artery outside the skull. The craniectomy’s outline is placed by rule (illustrative). The muscles, the dura and the arachnoid. The cerebellum, brainstem and fourth ventricle are one adult’s anatomical model (Z-Anatomy) fitted into this skull, not this patient’s own.',
     focus: ['Medulla oblongata', 'Hypoglossal nerve (XII)'],
     radius: 50,
+    morphs: [],
+  },
+  {
+    id: 'kawase', view: 'kawase', name: 'Anterior petrosectomy (Kawase approach)', camera: 'subtemporal',
+    summary: 'A right temporal flap flush with the middle fossa floor, the temporal lobe held up off the floor (extradurally, with its dura), and the petrous apex drilled within the Kawase rhomboid (outlined on the floor) down to the inferior petrosal sinus, kept off the structures that limit it: the carotid, the cochlea and labyrinth, the internal acoustic meatus and facial nerve, V3 and the Gasserian ganglion, the abducens nerve.',
+    sections: [sec('The craniotomy', [
+      c('A frontotemporal craniotomy whose base runs parallel to the zygomatic arch and the middle fossa floor, just above the zygomatic root and the external auditory meatus, two-thirds in front of the external auditory canal and one-third behind it; the rest of the temporal squama is drilled down to the floor. A partial zygomatic osteotomy gave a more angled view beneath the temporal lobe with less retraction.', 'floresjusta2021'),
+      c('The dura is lifted off the petrous bone from behind forwards and from lateral to medial; the middle meningeal artery is cut at the foramen spinosum, and the dura propria peeled from the sheath of V3 and the lateral side of the Gasserian ganglion, which relaxes the temporal dura.', 'floresjusta2021'),
+      c('In eight cadaveric anterior petrosectomies the craniotomy measured a mean 1272 mm², and the petrous apex lay 46.0 mm from the skull surface (71.3 mm through a retrosigmoid craniotomy); the surgical corridor was larger, 21.3 against 13.4 cm³.', 'signoretti2025'),
+    ]), sec('The rhomboid: the limits of the drilling', [
+      c('The Kawase rhomboid: the greater superficial petrosal nerve laterally, the petrous ridge medially, the mandibular nerve (V3) in front, and the internal acoustic canal and the anteromedial margin of the arcuate eminence behind. The same structures mark the limit of the drilling.', 'floresjusta2021'),
+      c('In one construct, the bone within four landmarks (the petrous apex, where the greater petrosal nerve meets V3, the geniculate ganglion and the arcuate eminence on the petrous ridge) was removed down to the inferior petrosal sinus: a corridor of 2.83 ± 0.28 cm³ free of neurovascular structures. Mean distances: arcuate eminence to geniculate ganglion 12.8 mm, ganglion to the nerves’ meeting 16.8 mm, that to the petrous apex 18.7 mm.', 'signoretti2025'),
+      c('Drilling the area bounded by the greater petrosal and trigeminal nerves in front, the carotid and the cochlea laterally, and the internal acoustic canal and the semicircular canals behind was safe; removing the bone opens the posterior fossa and the cerebellopontine angle from above, widened by dividing the tentorium.', 'signoretti2025'),
+    ], 'kawase'), sec('What is at risk', [
+      c('Drilling the anterior petrous bone risks the cochlea, the superior semicircular canal, the internal carotid artery and the internal auditory canal. The middle meningeal artery, V3, the geniculate ganglion and the greater petrosal nerve are seen; the cochlea, the canal and the meatus are not, and are more easily injured while drilling the meatal plane.', 'floresjusta2021'),
+      c('The sphenopetrosal groove, in which the greater petrosal nerve runs, marks the horizontal petrous carotid beneath. The cochlea lies in front of the fundus of the internal auditory canal, below the geniculate ganglion, in the angle between the greater petrosal nerve and the canal.', 'floresjusta2021'),
+      c('In ten cadaveric anterior petrosectomies by five skull base surgeons, the cochlea was injured once with standard image guidance; with distance-control feedback they drilled closer to the cochlea and the meatus without injuring them.', 'voormolen2020'),
+    ]), sec('What it reaches', [
+      c('Kawase described the extradural middle fossa route with partial resection of the petrous pyramid in 1985 for midbasilar aneurysms; it exposes the upper clivus and the porus trigeminus and is used for petroclival and sphenopetroclival tumours.', 'floresjusta2021', 'signoretti2025'),
+      c('The exposure of the basilar artery lengthened from 6.9 mm through a plain subtemporal approach to 22.1 mm with the anterior petrosectomy.', 'signoretti2025'),
+    ])],
+    context: ['Greater petrosal nerve', 'Mandibular nerve (V3)', 'Trigeminal ganglion', 'Trigeminal nerve (V)', 'Ophthalmic nerve (V1)', 'Maxillary nerve (V2)',
+      'Internal carotid artery (petrous and lacerum parts)', 'Internal carotid artery', 'Nerves in the internal acoustic meatus (VII, VIII)', 'Facial nerve (VII)',
+      'Scala tympani', 'Scala vestibuli, vestibule and semicircular canals', 'Abducens nerve (VI)', 'Superior petrosal sinus', 'Inferior petrosal sinus',
+      'Middle meningeal artery', 'Basilar artery', 'Superior cerebellar artery', 'Anterior inferior cerebellar artery', 'Pons'],
+    notShown: 'The dura: the middle fossa dura and its layers, the tentorium and the dura of the posterior fossa and the meatus are not modelled; the temporal lobe is drawn held up (a shape, not a simulation), and the lesser petrosal nerve, the temporalis muscle and the optional zygomatic osteotomy are not drawn. The rhomboid’s landmarks and the structures that limit the drilling are this model’s: the greater petrosal nerve, V3 and the ganglion drawn by rule, the cochlea, labyrinth, geniculate ganglion and meatus from the registered ear, the carotid this CT’s own; the margins kept off them are drawing choices.',
+    focus: ['Trigeminal ganglion', 'Greater petrosal nerve', 'Geniculate ganglion'],
+    frameOpening: false,
+    radius: 45,
+    landmarks: ['Geniculate ganglion', 'Apex of petrous part', 'Bone over the superior semicircular canal', 'Foramen ovale', 'Foramen spinosum', 'Internal acoustic meatus'],
     morphs: [],
   },
 ];

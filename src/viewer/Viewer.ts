@@ -910,6 +910,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       // orbitozygomatic: as the pterional view but from lower down, up under the frontal lobe past the removed orbital rim
       case 'orbitozygomatic': dir = new THREE.Vector3(0.8 * sideSign, 0.5, 0.12); break;
       // farLateral: from behind, the side and below, along the side of the medulla to the front of the foramen magnum
+      // subtemporal: from the side and above, under the lifted temporal lobe down onto the middle fossa floor (Kawase)
+      case 'subtemporal': dir = new THREE.Vector3(0.97 * sideSign, -0.08, 0.22); break;
       case 'farLateral': dir = new THREE.Vector3(0.5 * sideSign, -0.82, -0.28); break;
       case 'surgeon': {
         const side: Side = hemi === 'L' ? 'L' : 'R';

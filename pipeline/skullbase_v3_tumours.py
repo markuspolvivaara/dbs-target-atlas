@@ -892,7 +892,7 @@ def displaced_nerves(g: str, tumour: np.ndarray, gr: Grid, man: list, porus: np.
 def main() -> int:
     import skullbase_v3 as V3
     man = json.loads((GEN / "sbv3-manifest.json").read_text())["structures"]
-    man = [it for it in man if not (it["id"].startswith("tm_") or it.get("pushedFrom"))]
+    man = [it for it in man if not (it["id"].startswith("tm_") or it.get("tumourView"))]
     for f in V3_BUILD.glob("tm_*.glb"):
         f.unlink()
     for f in [*V3_BUILD.glob("*__koos_*.glb"), *V3_BUILD.glob("*__men_*.glb")]:
@@ -988,7 +988,7 @@ def merge() -> None:
         if f.exists():
             it["bytes"] = f.stat().st_size
     ids = {it["id"] for it in new}
-    m["structures"] = [s for s in m["structures"] if s["id"] not in ids and not s["id"].startswith("tm_") and not s.get("pushedFrom")] + new
+    m["structures"] = [s for s in m["structures"] if s["id"] not in ids and not s["id"].startswith("tm_") and not s.get("tumourView")] + new
     p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
 
 

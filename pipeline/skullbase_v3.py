@@ -1228,7 +1228,22 @@ def approach_items(items: list, ex2: dict) -> None:
                       "derivation": f"The bone the {ap['name'].lower()} removes: {ap['removedMl']} ml. {ap['how']}", "centroid": {"L": c, "R": c}})
         cut_ids = [f"sb_appr_{aid}__{SB.slug(b)[3:]}" for b in sorted({SB.split_pair(c)[0] for c in ap.get("cutBones", ap["bones"])})]
         summary[aid] = {"name": ap["name"], "side": ap["side"], "how": ap["how"], "removedMl": ap["removedMl"], "bones": ids, "cutBones": cut_ids,
-                        "removed": sid, "burrHoles": ap["burrHoles"]}
+                        "removed": sid, "burrHoles": ap["burrHoles"], **{k: ap[k] for k in ("measured", "corners") if k in ap}}
+        if ap.get("guide"):     # an outline drawn on the bone (the Kawase rhomboid)
+            gid = f"sb_appr_{aid}__guide"
+            gv, gn, gt = SB.tube(np.c_[np.array(ap["guide"]["points"]), np.full(len(ap["guide"]["points"]), 0.35)])
+            write_glb(BUILD / f"{gid}.glb", [{"name": "R", "positions": gv, "normals": gn, "indices": gt, "mode": TRIANGLES}], {"id": gid})
+            gc = gv.mean(0).round(2).tolist()
+            items.append({"id": gid, "name": ap["guide"]["name"], "aliases": [], "type": "soft", "file": f"assets/{KIND}/{gid}.glb", "bytes": 0,
+                          "colour": colour("sbGuide"), "dataset": "rule", "source": "Drawn by rule on the TopBrain CT",
+                          "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)", "citation": [], "citationUrls": [], "refIds": [],
+                          "category": "guide", "approach": aid, "schematic": True, "centroid": {"L": gc, "R": gc},
+                          "derivation": ("The rhomboid drawn on the middle fossa floor between its four landmarks on this model (Signoretti 2025): the "
+                                         "petrous apex, where the greater petrosal nerve meets V3 seen from above, the geniculate ganglion and the "
+                                         "arcuate eminence (the bone over the superior semicircular canal).")})
+            summary[aid]["guides"] = [gid]
+        if aid == "kawase":
+            lift_temporal_lobe(items, ap)
     (GEN / f"{PREFIX}-approaches.json").write_text(json.dumps(summary, indent=1, ensure_ascii=False))
 
 
@@ -1421,12 +1436,47 @@ def validate() -> int:
     return 1 if fails else 0
 
 
+KW_LIFT_MM = 15.0       # the Kawase view: the temporal lobe held up (with its dura, extradurally) this far over the rhomboid ...
+KW_LIFT_SPAN_MM = 16.0  # ... the lift falling off with a Gaussian of this width front to back ...
+KW_LIFT_FALL_MM = 18.0  # ... and exponentially over this height above the floor (illustrative)
+
+
+def lift_temporal_lobe(items: list, ap: dict) -> None:
+    """The temporal lobe held up off the middle fossa floor for the Kawase view (a copy that stands in for it there): each
+    point lifted KW_LIFT_MM times a weight falling off front to back from the rhomboid's middle (KW_LIFT_SPAN_MM), towards
+    the midline from 8 to 18 mm off it, and with height above the rhomboid (KW_LIFT_FALL_MM). Its gradient stays below 1,
+    so it does not fold. A shape, not a simulation."""
+    src = next((it for it in items if it["id"] == "br_temporal_lobe"), None)
+    if src is None:
+        return
+    from glb import read_glb_full
+    nodes = read_glb_full(BUILD / Path(src["file"]).name)
+    c = np.array(ap["corners"]).mean(0)
+    out, cent = [], dict(src["centroid"])
+    moved = 0.0
+    for s_, nd in nodes.items():
+        V = nd["positions"].copy()
+        if s_ == "R":
+            w = (np.exp(-((V[:, 1] - c[1]) ** 2) / (2 * KW_LIFT_SPAN_MM ** 2)) * np.clip((V[:, 0] - 8.0) / 10.0, 0, 1)
+                 * np.exp(-np.maximum(0.0, V[:, 2] - c[2]) / KW_LIFT_FALL_MM))
+            V[:, 2] += KW_LIFT_MM * w
+            moved = float((KW_LIFT_MM * w).max())
+            cent["R"] = V.mean(0).round(2).tolist()
+        out.append({"name": s_, "positions": V, "normals": mesh_normals(V, nd["indices"]), "indices": nd["indices"], "mode": TRIANGLES})
+    nid = "br_temporal_lobe__kawase"
+    write_glb(BUILD / f"{nid}.glb", out, {"id": nid})
+    items.append({**{k: v for k, v in src.items() if k not in ("morph",)}, "id": nid, "file": f"assets/{KIND}/{nid}.glb", "bytes": 0,
+                  "replaces": src["id"], "pushedFrom": src["file"], "forView": "kawase", "centroid": cent,
+                  "derivation": src["derivation"].rstrip() + f" In the Kawase view held up off the middle fossa floor (extradurally, with its dura) "
+                  f"by up to {moved:.0f} mm over the petrous apex (skullbase_v3.py: lift_temporal_lobe; illustrative): a shape, not a simulation."})
+
+
 def approaches_only() -> int:
     """The craniotomies' items again from approach.json (after skullbase_v3_approach.py only ...), into the manifest as it
     stands, without running the rest of this step (then compress.mjs and finalize)."""
     p = GEN / f"{PREFIX}-manifest.json"
     m = json.loads(p.read_text())
-    items = [it for it in m["structures"] if not it.get("approach")]
+    items = [it for it in m["structures"] if not it.get("approach") and not it.get("forView")]
     for f in BUILD.glob("sb_appr_*.glb"):
         f.unlink()
     approach_items(items, None)

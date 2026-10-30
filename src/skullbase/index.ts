@@ -87,6 +87,10 @@ const ApproachGeomSchema = z.object({
   cutBones: z.array(z.string()).min(1),
   removed: z.string(),
   burrHoles: z.array(V3),
+  /** outlines drawn on the bone in its view (the Kawase rhomboid) */
+  guides: z.array(z.string()).optional(),
+  /** what this model measures for it (the Kawase rhomboid's sides, the bone drilled) */
+  measured: z.record(z.number()).optional(),
 });
 export type ApproachGeom = z.infer<typeof ApproachGeomSchema>;
 /** The approaches cut out of this model's bone (Skull base v3 only: pipeline/skullbase_v3_approach.py). */

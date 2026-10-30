@@ -639,7 +639,7 @@ describe('v3 tumours drawn by rule: Knosp, Koos and meningioma sites', async () 
     expect(Math.abs(TUMOUR_FIT.knosp.planeY)).toBeLessThan(6);
   });
   it('a pushed part stands in for its part in its tumour view only; the other views keep the part', () => {
-    const pushed = v3.structures.filter((s) => s.pushedFrom);
+    const pushed = v3.structures.filter((s) => s.pushedFrom && s.tumourView);
     expect(pushed.length).toBeGreaterThan(5);
     for (const p of pushed) {
       expect(byId.has(p.replaces!), p.id).toBe(true);
@@ -670,5 +670,27 @@ describe('v3 tumours drawn by rule: Knosp, Koos and meningioma sites', async () 
     const k = T3.decodeSkull('#/atlas?g=koos_iii');
     expect(k.morphs.retrosigmoid).toBe(1);                       // retracted by default ...
     expect(T3.decodeSkull(T3.encodeSkull({ ...k, morphs: {} })).morphs.retrosigmoid).toBeUndefined();   // ... and closed if the link says so
+  });
+});
+
+describe('v3 anterior petrosectomy (Kawase)', async () => {
+  const { SbManifestSchema } = await import('../../src/data/schema');
+  const { groups: G3, scene: S3 } = await v3Modules();
+  const v3 = SbManifestSchema.parse((await import('../../src/data/generated/sbv3-manifest.json')).default);
+  const geom = (await import('../../src/data/generated/sbv3-approaches.json')).default as unknown as Record<string, { removed: string; guides?: string[]; measured?: Record<string, number> }>;
+  it('drills the petrous apex within the rhomboid, draws the rhomboid, and lifts the temporal lobe in its view only', () => {
+    const k = geom.kawase;
+    expect(k.measured!.drilledMl).toBeGreaterThan(0.5);
+    expect(k.measured!.drilledMl).toBeLessThan(4);        // (Signoretti 2025: 2.83 ± 0.28 cm³)
+    const g = G3.SB_GROUP.get('kawase')!;
+    expect(g.structures).toContain(k.guides![0]);
+    expect(g.structures).toContain('br_temporal_lobe__kawase');
+    expect(g.structures).not.toContain('br_temporal_lobe');
+    const plan = S3.skullPlan('kawase', null);
+    expect(plan.looks.get('br_temporal_lobe')).toBe('hidden');
+    expect(plan.looks.get(k.guides![0])).toBe('primary');
+    // elsewhere the lobe is the fitted one
+    expect(G3.SB_GROUP.get('transsylvian')!.structures).toContain('br_temporal_lobe');
+    expect(v3.structures.find((s) => s.id === 'br_temporal_lobe__kawase')?.forView).toBe('kawase');
   });
 });

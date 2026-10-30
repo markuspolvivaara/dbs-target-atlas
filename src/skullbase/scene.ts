@@ -20,7 +20,7 @@ export function skullPlan(grpId: string, sel: string | null, also: readonly stri
   // a surgical view: its cut bones stand in for the whole ones, the bone removed is see-through; elsewhere both are hidden
   const replaced = new Set(g.structures.map((id) => SB.get(id)?.replaces).filter((x): x is string => !!x));
   for (const s of SB_MANIFEST.structures) {
-    if (isApproachPart(s)) looks.set(s.id, !inGroup.has(s.id) ? 'hidden' : s.type === 'bone' ? 'primary' : 'ghost');
+    if (isApproachPart(s)) looks.set(s.id, !inGroup.has(s.id) ? 'hidden' : s.type === 'bone' || s.category === 'guide' ? 'primary' : 'ghost');
     else if (replaced.has(s.id)) looks.set(s.id, 'hidden');
     else if (s.type === 'bone') looks.set(s.id, inGroup.has(s.id) ? (g.kind === 'system' ? 'context' : 'primary') : g.kind === 'bone' ? 'ghost' : (g.boneLook ?? 'context'));
     else if (s.type === 'soft') looks.set(s.id, inGroup.has(s.id) ? (shell.has(s.id) || ghost.has(s.id) ? 'context' : 'primary') : 'hidden');

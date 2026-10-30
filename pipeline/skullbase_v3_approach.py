@@ -38,6 +38,9 @@ from scipy.spatial import cKDTree
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 import skullbase_ct as K  # noqa: E402
+
+REPO = ROOT.parent
+OVER_SSC_NAME = "Bone over the superior semicircular canal"   # (skullbase_v3.OVER_SSC: the arcuate eminence on the canal)
 from build import isosurface  # noqa: E402
 
 CT_BUILD = ROOT / "data" / "build" / "skullbase-ct"
@@ -121,6 +124,17 @@ FL_CORNER_CUTS = 3          # its corners rounded by this many rounds of corner 
 FL_BOW = 0.22               # its medial edge bowed outwards by this share of its length (illustrative)
 FL_CONDYLE_SHARE = 1 / 3    # the occipital condyle's posterior third drilled (Pai 2018: the posterior 30-40 %)
 FL_CONDYLE_MM = 11.0        # (the condyle's bone within this of its landmark)
+
+KW_FLAP_MM = (40.0, 32.0)   # the Kawase approach's temporal flap: this long (front to back) and high (illustrative; about the
+#                             1272 mm2 Signoretti 2025 measured) ...
+KW_FRONT_SHARE = 2 / 3      # ... two thirds of it in front of the external auditory canal (Flores-Justa 2021)
+KW_KEEP_MM = {              # the petrous apex drilled within the rhomboid, down to the inferior petrosal sinus, kept this far
+    "Internal carotid artery (petrous and lacerum parts)": 1.5,      # off what must not be entered (illustrative margins)
+    "Scala tympani": 1.5, "Scala vestibuli, vestibule and semicircular canals": 1.5,
+    "Nerves in the internal acoustic meatus (VII, VIII)": 1.0, "Facial nerve (VII)": 1.5,
+    "Mandibular nerve (V3)": 1.0, "Trigeminal ganglion": 1.0, "Greater petrosal nerve": 0.5, "Abducens nerve (VI)": 1.0,
+}
+KW_ABOVE_MM = 1.0           # (the rhomboid's prism reaches this far above its highest corner)
 
 
 def unit(v) -> np.ndarray:
@@ -1002,6 +1016,102 @@ def far_lateral(S: Skull) -> dict:
     return {"id": "far_lateral", "name": "Far lateral craniectomy", "cut": m | drill, "how": how, "burrHoles": [], "areaMm2": round(area)}
 
 
+def structure_points(names, side: str = "R", step: float = 0.4) -> dict:
+    """Surface points of v3's structures (the files the viewer shows), by name: the meshes' vertices and points sampled
+    on their faces, for distances."""
+    import trimesh as _tm
+    from glb import read_glb_full
+    man = json.loads((REPO / "src" / "data" / "generated" / "sbv3-manifest.json").read_text())["structures"]
+    out = {}
+    for it in man:
+        if it["name"] in names and not it.get("pushedFrom") and it["name"] not in out:
+            nd = read_glb_full(ROOT / "data" / "build" / it["file"].replace("assets/", "")).get(side)
+            if nd is None:
+                continue
+            m = _tm.Trimesh(nd["positions"], nd["indices"], process=False)
+            out[it["name"]] = np.vstack([nd["positions"], m.sample(max(1, int(m.area / (step * step))))])
+    return out
+
+
+def kawase(S: Skull) -> dict:
+    """The anterior petrosectomy (Kawase approach), right: a temporal flap flush with the middle fossa floor, two thirds of
+    it in front of the external auditory canal (Flores-Justa 2021), then the petrous apex drilled within the rhomboid of
+    four landmarks (Signoretti 2025: the petrous apex, where the greater petrosal nerve meets V3, the geniculate ganglion
+    and the arcuate eminence) down to the inferior petrosal sinus, kept off the structures that limit it (KW_KEEP_MM)."""
+    import skullbase_v3_cavernous as CAV
+    gen = REPO / "src" / "data" / "generated"
+    lms = {l["name"]: np.array(l["ras"]) for l in json.loads((gen / "sbv3-landmarks.json").read_text()) if l.get("side") == "R"}
+    man = {it["name"]: it for it in json.loads((gen / "sbv3-manifest.json").read_text())["structures"] if not it.get("pushedFrom")}
+    # the flap: on the temporal squama, its base at the middle fossa floor's level (the tegmen), centred on the external
+    # auditory canal two thirds forwards (the canal's line: the tympanic membrane's, from the registered ear)
+    eac_y = man["Tympanic membrane"]["centroid"]["R"][1]
+    z0 = lms["Tegmen tympani"][2]
+    L, H = KW_FLAP_MM
+    y_back, y_front = eac_y - L * (1 - KW_FRONT_SHARE), eac_y + L * KW_FRONT_SHARE
+    lat = np.array([1.0, 0.0, 0.0])
+    corners = [(y_back, z0), (y_front, z0), (y_front, z0 + H), (y_back, z0 + H)]
+    outline = []
+    for (ya, za), (yb, zb) in zip(corners, corners[1:] + corners[:1]):
+        for t in np.linspace(0, 1, 6, endpoint=False):
+            outline.append(np.array([70.0, ya + t * (yb - ya), za + t * (zb - za)]))
+    outline = np.array([S.surface(p_, lat) for p_ in outline])
+    m = S.flap(outline, lat, floor=True, smooth=True)
+    # the rhomboid: its corners on this model
+    apex, gg, ae = lms["Apex of petrous part"], lms["Geniculate ganglion"], lms[OVER_SSC_NAME]
+    gspn = CAV.centre_lines(ROOT / "data" / "build" / "skullbase-v3" / "tb_greater_petrosal_nerve.glb")["R"][0]
+    v3 = CAV.centre_lines(ROOT / "data" / "build" / "skullbase-v3" / "tb_mandibular_nerve_v3.glb")["R"][0]
+    d2 = np.linalg.norm(gspn[:, None, :2] - v3[None, :, :2], axis=2)
+    i, _ = np.unravel_index(np.argmin(d2), d2.shape)
+    meet = gspn[i]
+    quad = np.array([apex, meet, gg, ae])
+    # the rhomboid as seen from above, on the middle fossa floor; the bone under it drilled straight down
+    c = quad.mean(0)
+    up = np.array([0.0, 0.0, 1.0])
+    e1, e2 = np.array([1.0, 0.0, 0.0]), np.array([0.0, 1.0, 0.0])
+    poly = np.c_[(quad - c) @ e1, (quad - c) @ e2]
+    top = max(float(q_[2]) for q_ in quad) + KW_ABOVE_MM
+    keep_pts = structure_points(set(KW_KEEP_MM) | {"Inferior petrosal sinus"})
+    trees = {n: cKDTree(p_) for n, p_ in keep_pts.items()}
+    ips = keep_pts["Inferior petrosal sinus"]
+    ips_xy = cKDTree(ips[:, :2])
+
+    def drill_pred(P):
+        q = P - c
+        inside = in_polygon(np.c_[q @ e1, q @ e2], poly) & (P[:, 2] <= top)
+        inside &= P[:, 2] >= ips[ips_xy.query(P[:, :2])[1], 2]           # down to the inferior petrosal sinus's level
+        for n_, mm in KW_KEEP_MM.items():
+            if n_ in trees and inside.any():
+                idx = np.nonzero(inside)[0]
+                inside[idx[trees[n_].query(P[idx])[0] < mm]] = False
+        return inside
+    radius = float(np.linalg.norm(quad - c, axis=1).max()) + 25.0
+    drill = S.region(drill_pred, c, radius)
+    area = outline_area(outline, lat)
+    dist = lambda a_, b_: float(np.linalg.norm(a_ - b_))   # noqa: E731
+    measured = {"aeToGgMm": round(dist(ae, gg), 1), "ggToMeetMm": round(dist(gg, meet), 1), "meetToApexMm": round(dist(meet, apex), 1),
+                "apexToAeMm": round(dist(apex, ae), 1), "drilledMl": round(float(drill.sum()) * STEP ** 3 / 1000, 2), "flapMm2": round(area)}
+    how = (f"A right temporal flap {L:g} × {H:g} mm (about {area:.0f} mm² seen from the side; Signoretti 2025 measured a mean 1272 mm²), its base "
+           "at the middle fossa floor's level (the tegmen, as located on this CT), two thirds of it in front of the external auditory canal "
+           "and one third behind (Flores-Justa 2021; the canal's line taken from the registered ear's tympanic membrane), cut down flush "
+           "with the floor. Then the petrous apex drilled within the rhomboid of four landmarks (Signoretti 2025): the petrous apex, "
+           "where the greater petrosal nerve meets V3 (seen from above), the geniculate ganglion and the arcuate eminence (the bone over "
+           "the superior semicircular canal, from the registered ear), seen from above and drilled straight down to the level of the "
+           "inferior petrosal sinus, kept "
+           + ", ".join(f"{mm:g} mm off the {n_[0].lower() + n_[1:]}" for n_, mm in KW_KEEP_MM.items())
+           + f" (the margins illustrative): {measured['drilledMl']} ml (Signoretti 2025: 2.83 ± 0.28 cm³). On this model the arcuate eminence "
+           f"lies {measured['aeToGgMm']} mm from the geniculate ganglion, that {measured['ggToMeetMm']} mm from the nerves' meeting, that "
+           f"{measured['meetToApexMm']} mm from the petrous apex, and the apex {measured['apexToAeMm']} mm (straight) from the eminence.")
+    # the rhomboid's outline on the bone (drawn on the floor as a guide)
+    edge = []
+    for a_, b_ in zip(quad, np.roll(quad, -1, axis=0)):
+        for t in np.linspace(0, 1, 10, endpoint=False):
+            p_ = a_ + t * (b_ - a_)
+            edge.append(S.surface(p_, up, reach=12.0) + 0.6 * up)
+    return {"id": "kawase", "name": "Anterior petrosectomy (Kawase)", "cut": m | drill, "how": how, "burrHoles": [],
+            "areaMm2": round(area), "measured": measured, "corners": np.round(quad, 2).tolist(),
+            "guide": {"name": "Kawase rhomboid", "points": np.round(np.array(edge + edge[:1]), 2).tolist()}}
+
+
 def preview(path: str) -> int:
     """The cuts only (no meshing): each approach's removed voxels in the frame, for checking (npz)."""
     S = Skull()
@@ -1019,7 +1129,8 @@ def main(only: list[str] | None = None) -> int:
     S = Skull()
     res = json.loads((BUILD / "approach.json").read_text()) if only and (BUILD / "approach.json").exists() else {}
     makers = {"pterional": pterional, "lso": lateral_supraorbital, "interhemispheric": interhemispheric,
-              "suboccipital": suboccipital, "retrosigmoid": retrosigmoid, "orbitozygomatic": orbitozygomatic, "far_lateral": far_lateral}
+              "suboccipital": suboccipital, "retrosigmoid": retrosigmoid, "orbitozygomatic": orbitozygomatic, "far_lateral": far_lateral,
+              "kawase": kawase}
     for ap in (makers[k](S) for k in makers if not only or k in only):
         cut, soft, guard = ap["cut"], ap.get("softMm", 0.0), ap.get("guard")
         cutb = set(S.bone_names(cut))
@@ -1033,7 +1144,7 @@ def main(only: list[str] | None = None) -> int:
                              K.SURFACE_LEVEL if soft else 0.5, 0.6, 60_000)
         res[ap["id"]] = {"name": ap["name"], "how": ap["how"], "side": ap.get("side", "R"), "bones": bones, "cutBones": sorted(cutb),
                          "burrHoles": ap["burrHoles"],
-                         **{k: ap[k] for k in ("bregma", "span", "keypoint") if k in ap},
+                         **{k: ap[k] for k in ("bregma", "span", "keypoint", "measured", "corners", "guide") if k in ap},
                          "removed": {"verts": np.asarray(removed.vertices).round(3).tolist(), "tris": np.asarray(removed.faces).tolist()},
                          "removedMl": round(float(cut.sum()) * STEP ** 3 / 1000, 1)}
         print(ap["id"], ": bones", sorted(cutb), "remeshed with them", sorted(touched - cutb), "removed", res[ap["id"]]["removedMl"], "ml")

@@ -279,6 +279,14 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   right lateral suboccipital one down through the foramen magnum's rim, the posterior third of the occipital condyle
   drilled (Pai 2018, Bruneau 2008); the atlas is not modelled, so the C1 hemilaminectomy is not shown. The foramen
   magnum meningioma is drawn in it.
+- **Anterior petrosectomy (Kawase)** (`skullbase_v3_approach.py`, `skullbase_v3.py approaches`). A right temporal flap
+  flush with the middle fossa floor, two thirds in front of the external auditory canal (Flores-Justa 2021); the petrous
+  apex drilled within the rhomboid of four landmarks on this model (Signoretti 2025: the petrous apex, where the greater
+  petrosal nerve meets V3, the geniculate ganglion, the arcuate eminence), seen from above and straight down to the
+  inferior petrosal sinus, kept off the limits (the carotid, the cochlea and labyrinth, the meatus and facial nerve, V3
+  and the ganglion, the abducens nerve; margins illustrative); the rhomboid outlined on the floor; the temporal lobe drawn
+  held up off the floor for its view (`br_temporal_lobe__kawase`, `forView`). The card lists the limits and what is at
+  risk (Flores-Justa 2021, Signoretti 2025, Voormolen 2020) and this model's rhomboid measurements.
 - **Optic chiasm** (`pipeline/skullbase_v3_chiasm.py`, after `skullbase_v3_endonasal.py`). Drawn by rule where the
   fitted Z-Anatomy chiasm lies (its centre, plane and length): a flat crossing 13.6 mm wide and 2.3 mm thick (the MRI
   means of Mncube 2019), each optic nerve turning in to its front corner and tapering to it, and the optic tracts' first

@@ -534,6 +534,10 @@ export class SkullbaseAtlasPage {
     const measured = (m: ApproachSection['measured']) => {
       if (!b || !m) return null;
       if (m === 'm1') return h('p', { class: 'aside' }, `On this CT: the M1 segment as TopBrain labels it measures ${fmtMm(b.m1LengthMm.R)} mm on the right (${fmtMm(b.m1LengthMm.L)} mm on the left), along its centre line. TopBrain’s labels stop at M3, so the cortical (M4) branches are not shown.`);
+      if (m === 'kawase') {
+        const k = geom.measured;
+        return k ? h('p', { class: 'aside' }, `On this model: the arcuate eminence lies ${fmtMm(k.aeToGgMm)} mm from the geniculate ganglion, that ${fmtMm(k.ggToMeetMm)} mm from where the greater petrosal nerve meets V3, that ${fmtMm(k.meetToApexMm)} mm from the petrous apex, and the apex ${fmtMm(k.apexToAeMm)} mm (straight) from the eminence. Bone drilled within the rhomboid: ${k.drilledMl} ml; the flap about ${Math.round(k.flapMm2)} mm².`) : null;
+      }
       if (m === 'tonsils') {
         const p = V3_FIT.pfossa;
         return p ? h('p', { class: 'aside' }, `In this model the tonsils lie ${fmtMm(p.telovelar.tonsilToMedullaMm.rest)} mm from the medulla at their closest, ${fmtMm(p.telovelar.tonsilToMedullaMm.moved)} mm when drawn apart; the uvula and nodule ${fmtMm(p.telovelar.uvulaToMedullaMm.rest)} mm, ${fmtMm(p.telovelar.uvulaToMedullaMm.moved)} mm when lifted.`) : null;

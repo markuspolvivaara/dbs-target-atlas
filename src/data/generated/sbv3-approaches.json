@@ -180,5 +180,57 @@
   ],
   "removed": "sb_appr_far_lateral__removed",
   "burrHoles": []
+ },
+ "kawase": {
+  "name": "Anterior petrosectomy (Kawase)",
+  "side": "R",
+  "how": "A right temporal flap 40 × 32 mm (about 1280 mm² seen from the side; Signoretti 2025 measured a mean 1272 mm²), its base at the middle fossa floor's level (the tegmen, as located on this CT), two thirds of it in front of the external auditory canal and one third behind (Flores-Justa 2021; the canal's line taken from the registered ear's tympanic membrane), cut down flush with the floor. Then the petrous apex drilled within the rhomboid of four landmarks (Signoretti 2025): the petrous apex, where the greater petrosal nerve meets V3 (seen from above), the geniculate ganglion and the arcuate eminence (the bone over the superior semicircular canal, from the registered ear), seen from above and drilled straight down to the level of the inferior petrosal sinus, kept 1.5 mm off the internal carotid artery (petrous and lacerum parts), 1.5 mm off the scala tympani, 1.5 mm off the scala vestibuli, vestibule and semicircular canals, 1 mm off the nerves in the internal acoustic meatus (VII, VIII), 1.5 mm off the facial nerve (VII), 1 mm off the mandibular nerve (V3), 1 mm off the trigeminal ganglion, 0.5 mm off the greater petrosal nerve, 1 mm off the abducens nerve (VI) (the margins illustrative): 1.27 ml (Signoretti 2025: 2.83 ± 0.28 cm³). On this model the arcuate eminence lies 10.5 mm from the geniculate ganglion, that 13.7 mm from the nerves' meeting, that 17.3 mm from the petrous apex, and the apex 34.1 mm (straight) from the eminence.",
+  "removedMl": 7.1,
+  "bones": [
+   "sb_appr_kawase__occipital_bone",
+   "sb_appr_kawase__parietal_bone",
+   "sb_appr_kawase__sphenoid_bone",
+   "sb_appr_kawase__temporal_bone"
+  ],
+  "cutBones": [
+   "sb_appr_kawase__parietal_bone",
+   "sb_appr_kawase__sphenoid_bone",
+   "sb_appr_kawase__temporal_bone"
+  ],
+  "removed": "sb_appr_kawase__removed",
+  "burrHoles": [],
+  "measured": {
+   "aeToGgMm": 10.5,
+   "ggToMeetMm": 13.7,
+   "meetToApexMm": 17.3,
+   "apexToAeMm": 34.1,
+   "drilledMl": 1.27,
+   "flapMm2": 1280
+  },
+  "corners": [
+   [
+    10.7,
+    -7.5,
+    -2.34
+   ],
+   [
+    26.61,
+    -10.23,
+    -8.55
+   ],
+   [
+    37.0,
+    -18.78,
+    -11.06
+   ],
+   [
+    38.63,
+    -26.91,
+    -4.62
+   ]
+  ],
+  "guides": [
+   "sb_appr_kawase__guide"
+  ]
  }
 }
