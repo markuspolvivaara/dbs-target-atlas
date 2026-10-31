@@ -2177,7 +2177,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_greater_petrosal_nerve.glb",
-   "bytes": 5852,
+   "bytes": 5092,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2195,7 +2195,7 @@
    "layer": "tracts",
    "cranialNerve": 7,
    "schematic": true,
-   "derivation": "Drawn by rule (no specimen segments it): from the carried-over geniculate ganglion forwards and medially, towards the foramen lacerum over the anteromedial end of this patient's petrous carotid, lifted onto this CT's middle fossa floor, kept 1 mm clear of the carotid, and stopped at 13.78 mm (the mean length in Nguyen 2026). Radius 0.45 mm, illustrative.",
+   "derivation": "Drawn by rule (no specimen segments it): from the carried-over geniculate ganglion forwards and medially, towards the foramen lacerum over the anteromedial end of this patient's petrous carotid, lifted onto this CT's middle fossa floor, kept 1 mm clear of the carotid, and stopped at 13.78 mm (the mean length in Nguyen 2026). Radius 0.45 mm, illustrative. Past the facial hiatus it lies on the drawn skull's surface (in the sphenopetrosal groove), its centre its radius and 0.15 mm off the bone.",
    "centroid": {
     "L": [
      -31.01,
@@ -8414,12 +8414,12 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_kawase__occipital_bone.glb",
-   "bytes": 722520,
+   "bytes": 735516,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
    "replaces": "sb_occipital_bone",
-   "derivation": "The CT's occipital bone, which the anterior petrosectomy (kawase) does not cut, remeshed within a few millimetres of the cut so that it meets the cut bone on one surface (pipeline/skullbase_v3_approach.py).",
+   "derivation": "The CT's occipital bone with the bone of the anterior petrosectomy (kawase) removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
      -23.68,
@@ -8427,9 +8427,9 @@
      -20.64
     ],
     "R": [
-     22.21,
-     -58.22,
-     -21.31
+     22.03,
+     -56.95,
+     -21.38
     ]
    }
   },
@@ -8459,7 +8459,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_kawase__parietal_bone.glb",
-   "bytes": 863296,
+   "bytes": 863272,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -8472,9 +8472,9 @@
      53.71
     ],
     "R": [
-     40.82,
+     40.83,
      -41.83,
-     57.57
+     57.56
     ]
    }
   },
@@ -8504,7 +8504,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_kawase__sphenoid_bone.glb",
-   "bytes": 608916,
+   "bytes": 611020,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -8517,9 +8517,9 @@
      -5.77
     ],
     "R": [
-     20.55,
-     8.1,
-     -5.4
+     20.54,
+     8.03,
+     -5.55
     ]
    }
   },
@@ -8549,7 +8549,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_kawase__temporal_bone.glb",
-   "bytes": 1123384,
+   "bytes": 1107820,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -8562,9 +8562,9 @@
      -12.6
     ],
     "R": [
-     44.57,
-     -21.42,
-     -16.56
+     45.26,
+     -21.66,
+     -16.68
     ]
    }
   },
@@ -8574,7 +8574,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_kawase__removed.glb",
-   "bytes": 355048,
+   "bytes": 372896,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -8589,17 +8589,17 @@
    "category": "removed",
    "approach": "kawase",
    "layer": "nuclei",
-   "derivation": "The bone the anterior petrosectomy (kawase) removes: 7.1 ml. A right temporal flap 40 × 32 mm (about 1280 mm² seen from the side; Signoretti 2025 measured a mean 1272 mm²), its base at the middle fossa floor's level (the tegmen, as located on this CT), two thirds of it in front of the external auditory canal and one third behind (Flores-Justa 2021; the canal's line taken from the registered ear's tympanic membrane), cut down flush with the floor. Then the petrous apex drilled within the rhomboid of four landmarks (Signoretti 2025): the petrous apex, where the greater petrosal nerve meets V3 (seen from above), the geniculate ganglion and the arcuate eminence (the bone over the superior semicircular canal, from the registered ear), seen from above and drilled straight down to the level of the inferior petrosal sinus, kept 1.5 mm off the internal carotid artery (petrous and lacerum parts), 1.5 mm off the scala tympani, 1.5 mm off the scala vestibuli, vestibule and semicircular canals, 1 mm off the nerves in the internal acoustic meatus (VII, VIII), 1.5 mm off the facial nerve (VII), 1 mm off the mandibular nerve (V3), 1 mm off the trigeminal ganglion, 0.5 mm off the greater petrosal nerve, 1 mm off the abducens nerve (VI) (the margins illustrative): 1.27 ml (Signoretti 2025: 2.83 ± 0.28 cm³). On this model the arcuate eminence lies 10.5 mm from the geniculate ganglion, that 13.7 mm from the nerves' meeting, that 17.3 mm from the petrous apex, and the apex 34.1 mm (straight) from the eminence.",
+   "derivation": "The bone the anterior petrosectomy (kawase) removes: 8.3 ml. A right temporal flap 40 × 32 mm (about 1280 mm² seen from the side; Signoretti 2025 measured a mean 1272 mm²), its base at the middle fossa floor's level (the tegmen, as located on this CT), two thirds of it in front of the external auditory canal and one third behind (Flores-Justa 2021; the canal's line taken from the registered ear's tympanic membrane), cut down flush with the floor. Then the petrous apex drilled within the rhomboid of four landmarks (Signoretti 2025): the petrous apex, where the greater petrosal nerve meets V3 (seen from above), the geniculate ganglion and the arcuate eminence (the bone over the superior semicircular canal, from the registered ear), seen from above and drilled straight down to the level of the inferior petrosal sinus, the ridge and the pyramid behind it taken through to the posterior fossa's dura (up to 12 mm behind the line from the apex to the eminence, from the apex to the porus: not medial to the apex, not behind the internal acoustic canal), kept 1.5 mm off the internal carotid artery (petrous and lacerum parts), 1.5 mm off the scala tympani, 1.5 mm off the scala vestibuli, vestibule and semicircular canals, 1 mm off the nerves in the internal acoustic meatus (VII, VIII), 1.5 mm off the facial nerve (VII), 1 mm off the mandibular nerve (V3), 1 mm off the trigeminal ganglion, 0.5 mm off the greater petrosal nerve, 1 mm off the abducens nerve (VI) (the margins illustrative): 2.46 ml (Signoretti 2025: 2.83 ± 0.28 cm³). On this model the arcuate eminence lies 10.5 mm from the geniculate ganglion, that 14.0 mm from the nerves' meeting, that 16.8 mm from the petrous apex, and the apex 34.1 mm (straight) from the eminence.",
    "centroid": {
     "L": [
-     51.37,
-     -12.3,
-     -0.07
+     47.06,
+     -12.66,
+     -2.05
     ],
     "R": [
-     51.37,
-     -12.3,
-     -0.07
+     47.06,
+     -12.66,
+     -2.05
     ]
    }
   },
@@ -8644,7 +8644,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_temporal_lobe__kawase.glb",
-   "bytes": 206792,
+   "bytes": 206808,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8676,7 +8676,7 @@
     "R": [
      42.18,
      -27.5,
-     8.61
+     8.68
     ]
    },
    "replaces": "br_temporal_lobe",

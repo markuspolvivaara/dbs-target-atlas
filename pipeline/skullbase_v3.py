@@ -399,7 +399,80 @@ def gspn(ct: CT, gen: np.ndarray, carotid: np.ndarray, side_sign: float) -> np.n
             P[1:] = ndimage.gaussian_filter1d(P, 1, axis=0, mode="nearest")[1:]
     s = np.r_[0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]   # the length again, after the pushing
     keep = s <= GSPN_MM + 1e-6
-    return P[keep]
+    return seat_on_skull(P[keep], GSPN_R_MM)
+
+
+GSPN_R_MM = 0.45        # (its radius as drawn)
+GSPN_HIATUS_MM = 1.5    # its first part, through the facial hiatus, stays in the bone
+GSPN_GAP_MM = 0.15      # beyond that it lies on the drawn skull's surface: its centre this far more than its radius off the bone
+
+
+def seat_on_skull(P: np.ndarray, r: float) -> np.ndarray:
+    """The nerve on the surface v3 draws (skull_bone.npz, the completed skull at its surface level), not on the CT's
+    bone, which differs from it by up to a millimetre: past the facial hiatus (GSPN_HIATUS_MM) each point is lifted
+    straight up until its centre is r + GSPN_GAP_MM off the bone, the lift then smoothed along the nerve (it may only
+    rise), a few rounds. In its groove (the sphenopetrosal groove) it then lies on the bone, not in it."""
+    p = BUILD / "skull_bone.npz"
+    if not p.exists():
+        return P
+    import skullbase_ct as K
+    c = np.load(p)
+    a, b = c["a"], c["b"]
+    vox = float(np.abs(a[0, 0]))
+    d_out = ndimage.distance_transform_edt(b <= K.SURFACE_LEVEL, sampling=vox)
+    inv = np.linalg.inv(a)
+
+    def clear(Q):
+        ijk = (Q @ inv[:3, :3].T + inv[:3, 3]).T
+        return ndimage.map_coordinates(d_out, ijk, order=1, mode="nearest")
+    s = np.r_[0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
+    free = s > GSPN_HIATUS_MM
+    need_r = r + GSPN_GAP_MM
+    Q = P.copy()
+    lift = np.zeros(len(P))
+    for _ in range(6):
+        for i in np.nonzero(free)[0]:
+            for dz in np.arange(0.0, 6.0, 0.05):
+                if clear(Q[i][None] + np.array([[0, 0, dz]]))[0] >= need_r:
+                    lift[i] += dz
+                    Q[i, 2] += dz
+                    break
+        sm = ndimage.gaussian_filter1d(lift, 1.5, mode="nearest")
+        lift = np.maximum(lift, sm) * free + lift * ~free
+        Q = P.copy()
+        Q[:, 2] += lift
+        if (clear(Q[free]) >= need_r - 0.02).all():
+            break
+    # (the hiatus part blended into the lifted course over its last millimetre)
+    w = np.clip((s - (GSPN_HIATUS_MM - 1.0)) / 1.0, 0, 1)
+    Q[:, 2] = P[:, 2] + w * lift
+    return Q
+
+
+def reseat_gspn() -> int:
+    """Only the greater petrosal nerve again, seated on the drawn skull (its route as built, re-seated), its file
+    rewritten in place (then the Kawase cut, which keeps off it, compress.mjs and finalize)."""
+    import skullbase_v3_cavernous as CAV
+    sid = "tb_greater_petrosal_nerve"
+    lines = CAV.centre_lines(BUILD / f"{sid}.glb")
+    nodes = []
+    for s in ("L", "R"):
+        P = seat_on_skull(lines[s][0], GSPN_R_MM)
+        v, n, t = tube_mesh(P, GSPN_R_MM)
+        nodes.append({"name": s, "positions": v, "normals": n, "indices": t, "mode": TRIANGLES})
+        print(s, "lifted at most", round(float(np.abs(P - lines[s][0]).max()), 2), "mm")
+    write_glb(BUILD / f"{sid}.glb", nodes, {"id": sid})
+    p = GEN / f"{PREFIX}-manifest.json"
+    m = json.loads(p.read_text())
+    for it in m["structures"]:
+        if it["id"] == sid and "drawn skull's surface" not in it["derivation"]:
+            it["derivation"] = it["derivation"].rstrip() + GSPN_NOTE
+    p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
+    return 0
+
+
+GSPN_NOTE = (" Past the facial hiatus it lies on the drawn skull's surface (in the sphenopetrosal groove), its centre its radius "
+             "and 0.15 mm off the bone.")
 
 
 # ---------------------------------------------------------------- output
@@ -677,7 +750,8 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
         "category": "nerve", "layer": "tracts", "cranialNerve": 7, "schematic": True,
         "derivation": "Drawn by rule (no specimen segments it): from the carried-over geniculate ganglion forwards and medially, "
                       "towards the foramen lacerum over the anteromedial end of this patient's petrous carotid, lifted onto "
-                      f"this CT's middle fossa floor, kept 1 mm clear of the carotid, and stopped at {GSPN_MM} mm (the mean length in Nguyen 2026). Radius 0.45 mm, illustrative.",
+                      f"this CT's middle fossa floor, kept 1 mm clear of the carotid, and stopped at {GSPN_MM} mm (the mean length in Nguyen 2026). Radius 0.45 mm, illustrative."
+                      + GSPN_NOTE,
         "centroid": {"L": cent["L"], "R": cent["R"]},
     })
     # the cranial nerves routed through this CT (VII's cisternal part is in the facial nerve above)
@@ -1495,4 +1569,6 @@ if __name__ == "__main__":
         sys.exit(finalize())
     if sys.argv[1:] == ["approaches"]:
         sys.exit(approaches_only())
+    if sys.argv[1:] == ["gspn"]:
+        sys.exit(reseat_gspn())
     sys.exit(main())

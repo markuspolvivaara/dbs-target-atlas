@@ -135,6 +135,8 @@ KW_KEEP_MM = {              # the petrous apex drilled within the rhomboid, down
     "Mandibular nerve (V3)": 1.0, "Trigeminal ganglion": 1.0, "Greater petrosal nerve": 0.5, "Abducens nerve (VI)": 1.0,
 }
 KW_ABOVE_MM = 1.0           # (the rhomboid's prism reaches this far above its highest corner)
+KW_WALL_MM = 12.0           # the pyramid behind the apex-eminence line drilled through to the posterior fossa, up to this far
+KW_APEX_MEDIAL_MM = 1.0     # ... but not more than this medial to the petrous apex (the clivus stays)
 
 
 def unit(v) -> np.ndarray:
@@ -1072,13 +1074,47 @@ def kawase(S: Skull) -> dict:
     top = max(float(q_[2]) for q_ in quad) + KW_ABOVE_MM
     keep_pts = structure_points(set(KW_KEEP_MM) | {"Inferior petrosal sinus"})
     trees = {n: cKDTree(p_) for n, p_ in keep_pts.items()}
+
+    # behind the line from the apex to the eminence lies the rest of the pyramid, up to the posterior fossa's dura: the
+    # drilling goes through it (the ridge itself taken), up to KW_WALL_MM behind that line, not medial to the apex
+    ra, rb = apex[:2], ae[:2]
+    nrm = np.array([-(rb - ra)[1], (rb - ra)[0]])
+    nrm = nrm / np.linalg.norm(nrm)
+    if (meet[:2] - ra) @ nrm < 0:
+        nrm = -nrm                      # (towards the rhomboid's inside)
+
+    # the depth: the inferior petrosal sinus's height at the same place along the ridge (it runs behind the ridge, in the
+    # petroclival fissure, descending from the cavernous sinus at the apex; its surface's lowest point at each step)
     ips = keep_pts["Inferior petrosal sinus"]
-    ips_xy = cKDTree(ips[:, :2])
+    it_ = ((ips[:, :2] - ra) @ (rb - ra)) / ((rb - ra) @ (rb - ra))
+    behind = ((ips[:, :2] - ra) @ nrm) < 1.0
+    ips_t, ips_z = [], []
+    for t0 in np.arange(-0.1, 1.25, 0.05):
+        sel = behind & (np.abs(it_ - t0) < 0.04)
+        if sel.any():
+            ips_t.append(t0)
+            ips_z.append(float(ips[sel, 2].min()))
+    ips_t, ips_z = np.array(ips_t), np.minimum.accumulate(np.array(ips_z))     # (never rising towards the back)
+    # (only medial to the porus: the internal acoustic canal is the posterior limit, the bone behind it stays)
+    t_porus = float(((lms["Internal acoustic meatus"][:2] - ra) @ (rb - ra)) / ((rb - ra) @ (rb - ra)))
 
     def drill_pred(P):
         q = P - c
-        inside = in_polygon(np.c_[q @ e1, q @ e2], poly) & (P[:, 2] <= top)
-        inside &= P[:, 2] >= ips[ips_xy.query(P[:, :2])[1], 2]           # down to the inferior petrosal sinus's level
+        t_ = ((P[:, :2] - ra) @ (rb - ra)) / ((rb - ra) @ (rb - ra))
+        sd_ = (P[:, :2] - ra) @ nrm
+        wall = (t_ >= 0) & (t_ <= t_porus) & (sd_ < 0) & (sd_ >= -KW_WALL_MM) & (P[:, 0] >= apex[0] - KW_APEX_MEDIAL_MM)
+        # (only the bone between the line and the posterior fossa: none beyond the cavity it opens into)
+        iw = np.nonzero(wall)[0]
+        for st in np.arange(STEP, KW_WALL_MM + STEP, STEP):
+            if not len(iw):
+                break
+            ahead = st <= -sd_[iw]
+            hit = np.zeros(len(iw), bool)
+            hit[ahead] = S.cavity_at(P[iw[ahead]] + st * np.r_[nrm, 0.0])
+            wall[iw[hit]] = False
+            iw = iw[~hit]
+        inside = (in_polygon(np.c_[q @ e1, q @ e2], poly) | wall) & (P[:, 2] <= top)
+        inside &= P[:, 2] >= np.interp(t_, ips_t, ips_z)                  # down to the inferior petrosal sinus's level
         for n_, mm in KW_KEEP_MM.items():
             if n_ in trees and inside.any():
                 idx = np.nonzero(inside)[0]
@@ -1096,7 +1132,9 @@ def kawase(S: Skull) -> dict:
            "with the floor. Then the petrous apex drilled within the rhomboid of four landmarks (Signoretti 2025): the petrous apex, "
            "where the greater petrosal nerve meets V3 (seen from above), the geniculate ganglion and the arcuate eminence (the bone over "
            "the superior semicircular canal, from the registered ear), seen from above and drilled straight down to the level of the "
-           "inferior petrosal sinus, kept "
+           "inferior petrosal sinus, the ridge and the pyramid behind it taken through to the posterior fossa's dura (up to "
+           f"{KW_WALL_MM:g} mm behind the line from the apex to the eminence, from the apex to the porus: not medial to the apex, "
+           "not behind the internal acoustic canal), kept "
            + ", ".join(f"{mm:g} mm off the {n_[0].lower() + n_[1:]}" for n_, mm in KW_KEEP_MM.items())
            + f" (the margins illustrative): {measured['drilledMl']} ml (Signoretti 2025: 2.83 ± 0.28 cm³). On this model the arcuate eminence "
            f"lies {measured['aeToGgMm']} mm from the geniculate ganglion, that {measured['ggToMeetMm']} mm from the nerves' meeting, that "
