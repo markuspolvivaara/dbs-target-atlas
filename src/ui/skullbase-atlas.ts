@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import type { CameraPreset } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
-import { APPROACH_GEOM, definitionFor, isApproachPart, kindOf, LANDMARKS, LM, NOT_YET_SHOWN, REGIONS, SB, SB_MANIFEST, SB_MODEL, V3_FIT, type Landmark, type SbModel } from '../skullbase';
-import { APPROACH, APPROACH_REF, CAVERNOUS_INFO, ENDONASAL_INFO, INSULA, type ApproachClaim, type ApproachSection } from '../skullbase/approaches';
+import { APPROACH_GEOM, definitionFor, isApproachPart, kindOf, LANDMARKS, LM, NOT_YET_SHOWN, REGIONS, SB, SB_MANIFEST, SB_MODEL, V1_FIT, V3_FIT, type Landmark, type SbModel } from '../skullbase';
+import { APPROACH, APPROACH_REF, CAVERNOUS_INFO, ENDONASAL_INFO, INSULA, V1_TEXT, type ApproachClaim, type ApproachSection } from '../skullbase/approaches';
 import { measuredOn, TUMOUR_FAMILY, TUMOURS, tumourGroupId, type TumourFamily } from '../skullbase/tumours';
 import { CAVERNOUS } from '../skullbase/cavernous';
 import { TB_NOTES, TB_REF } from '../skullbase/temporal';
@@ -26,10 +26,15 @@ const PRESETS: [CameraPreset, string, string, string][] = [
   ...(SB_MODEL === 'v3' ? [['anterolateral', 'Surgical (anterolateral)', '6', 'Surg'] as [CameraPreset, string, string, string]] : []),
 ];
 const LAYERS: [LayerKey, string][] = [['nuclei', 'Bones'], ['tracts', 'Vessels and nerves'], ['cortex', 'Soft tissue'], ['targets', 'Landmarks']];
-const KIND_LABEL = { bone: 'Bone', soft: 'Soft tissue', artery: 'Artery', vein: 'Vein or dural sinus', nerve: 'Nerve', labyrinth: 'Inner ear', ossicle: 'Ossicle', membrane: 'Membrane', brain: 'Brain (fitted template)', hindbrain: 'Cerebellum and brainstem (fitted model)', ventricle: 'Ventricle (fitted model)', removed: 'Bone removed', triangle: 'Surgical triangle', tumour: 'Tumour (drawn by rule)', guide: 'Guide line' } as const;
+const KIND_LABEL = { bone: 'Bone', soft: 'Soft tissue', artery: 'Artery', vein: 'Vein or dural sinus', nerve: 'Nerve', labyrinth: 'Inner ear', ossicle: 'Ossicle', membrane: 'Membrane', ...(SB_MODEL === 'zanatomy'
+    // (v1's brain, hindbrain and ventricle are Z-Anatomy's own, in its own skull: nothing fitted)
+    ? { brain: 'Brain', hindbrain: 'Cerebellum and brainstem', ventricle: 'Ventricle' }
+    : { brain: 'Brain (fitted template)', hindbrain: 'Cerebellum and brainstem (fitted model)', ventricle: 'Ventricle (fitted model)' }), removed: 'Bone removed', triangle: 'Surgical triangle', tumour: 'Tumour (drawn by rule)', guide: 'Guide line' } as const;
 const KIND_PLURAL: Record<string, string> = { 'Tumour (drawn by rule)': 'Tumour (drawn by rule)', 'Guide line': 'Guide lines', 'Surgical triangle': 'Surgical triangles', 'Soft tissue': 'Soft tissue', Artery: 'Arteries', 'Vein or dural sinus': 'Veins and dural sinuses', Nerve: 'Nerves', Ossicle: 'Ossicles', Membrane: 'Membranes' };
 const GROUP_ROWS: [SbGroup['kind'], string][] = SB_MODEL === 'v3'
   ? [['overview', 'Overview'], ['region', 'Each side'], ['system', 'Systems'], ['approach', 'Surgical views'], ['tumour', 'Tumours']]
+  : SB_MODEL === 'zanatomy'
+  ? [['overview', 'Overview'], ['region', 'Regions'], ['system', 'Systems'], ['approach', 'Surgical views'], ['bone', 'Bones and their landmarks']]
   : [['overview', 'Overview'], ['region', 'Regions'], ['system', 'Systems'], ['bone', 'Bones and their landmarks']];
 /** the three models of the section: page folder and chip label */
 const MODELS: [SbModel, string, string][] = [['v3', 'skullbase', 'Skull base'], ['zanatomy', 'skullbase-v1', 'Skull base v1 (Z-Anatomy)'], ['ct', 'skullbase-ct', 'Skull base v2 (CT)']];
@@ -456,8 +461,8 @@ export class SkullbaseAtlasPage {
       return h('article', { class: 'card sel', style: `--accent: var(--c-${st.colour.token})` }, close,
         h('p', { class: 'eyebrow' }, ap ? `${KIND_LABEL[k]} · ${ap.name}` : KIND_LABEL[k]),
         h('h2', {}, h('span', { class: 'swatch', style: `--c: var(--c-${st.colour.token})` }), st.name),
-        k === 'brain' ? h('p', { class: 'aside schematic-note' }, 'A template brain fitted into this skull and its arteries, not this patient’s own: the gyri and sulci are the template’s.') : null,
-        k === 'hindbrain' || k === 'ventricle' ? h('p', { class: 'aside schematic-note' }, 'One adult’s anatomical model (Z-Anatomy) fitted into this skull and around its arteries, not this patient’s own.') : null,
+        k === 'brain' ? h('p', { class: 'aside schematic-note' }, SB_MODEL === 'zanatomy' ? 'Z-Anatomy’s own cortex (BodyParts3D, one adult), not a patient’s.' : 'A template brain fitted into this skull and its arteries, not this patient’s own: the gyri and sulci are the template’s.') : null,
+        k === 'hindbrain' || k === 'ventricle' ? h('p', { class: 'aside schematic-note' }, SB_MODEL === 'zanatomy' ? 'Z-Anatomy’s own model (BodyParts3D, one adult), not a patient’s.' : 'One adult’s anatomical model (Z-Anatomy) fitted into this skull and around its arteries, not this patient’s own.') : null,
         h('dl', {},
           k === 'removed' && st.approach ? [h('dt', {}, 'Volume'), h('dd', {}, `${APPROACH_GEOM[st.approach]?.removedMl} ml, measured on the model.`)] : null,
           k === 'brain' && st.name === 'Insula' ? [h('dt', {}, 'Notes'), h('dd', {}, this.claims(INSULA))] : null,
@@ -528,7 +533,9 @@ export class SkullbaseAtlasPage {
   private approachBody(aid: string): HTMLElement[] {
     const ap = APPROACH.get(aid);
     const geom = APPROACH_GEOM[aid];
-    const b = V3_FIT.brain;
+    const v1 = SB_MODEL === 'zanatomy';
+    // (v1: Z-Anatomy's own brain, nothing fitted: none of the CT's measures)
+    const b = v1 ? undefined : V3_FIT.brain;
     if (!ap || !geom) return [];
     const pctOf = (x: number) => `${Math.round(x * 100)} %`;
     const measured = (m: ApproachSection['measured']) => {
@@ -550,14 +557,17 @@ export class SkullbaseAtlasPage {
       h('dl', {},
         ...ap.sections.map((x) => [h('dt', {}, x.title), h('dd', {}, this.claims(x.claims), measured(x.measured))]),
         h('dt', {}, 'How the craniotomy is drawn'), h('dd', {}, geom.how, ` Bone removed: ${geom.removedMl} ml (right side), drawn see-through.`),
-        ap.brain === 'hindbrain' && V3_FIT.pfossa ? [h('dt', {}, 'How the cerebellum and brainstem are fitted'), h('dd', {}, (() => {
+        v1 ? [h('dt', {}, ap.brain === 'hindbrain' ? 'The cerebellum and brainstem' : 'The brain'), h('dd', {}, ap.brain === 'hindbrain'
+          ? `Z-Anatomy’s own (BodyParts3D), nothing fitted: where they reached into or through this model’s bone (out of its cranial cavity) or into the arteries it draws (${V1_FIT.pfossa.clear.inBoneBefore} and ${V1_FIT.pfossa.clear.inVesselBefore} of their points), pushed clear (${V1_FIT.pfossa.clear.inBoneAfter} and ${V1_FIT.pfossa.clear.inVesselAfter} left, at most ${fmtMm(V1_FIT.pfossa.clear.maxMovedMm)} mm moved). Its folia and lobules are the model’s.`
+          : `Z-Anatomy’s own cortex (BodyParts3D), nothing fitted: its gyrus and sulcus patches (which overlap and cut through one another) remade as one closed surface per hemisphere, each part keeping its lobe; where it reached into this model’s bone (${V1_FIT.brain.clear.R.inBoneWayBefore} points on the right), pushed 1 mm inside the cranial cavity by a smooth field in small steps (${V1_FIT.brain.clear.R.inBoneWayAfter} left, at most ${fmtMm(V1_FIT.brain.clear.R.maxMovedMm)} mm moved). The cavity is this model’s skull, rasterised (${Math.round(V1_FIT.brain.cavityMl)} ml).`)] : null,
+        !v1 && ap.brain === 'hindbrain' && V3_FIT.pfossa ? [h('dt', {}, 'How the cerebellum and brainstem are fitted'), h('dd', {}, (() => {
           const p = V3_FIT.pfossa!;
           return `Z-Anatomy’s model (one adult) carried onto this CT by the fit of that model to its bones, then deformed smoothly to fit its posterior fossa: the hull ${fmtMm(p.params.tableGapMm)} mm inside the cavity behind the petrous bones (median error ${fmtMm(p.fit.tableMedianMm)} mm), this patient’s basilar, vertebral, superior and posterior inferior cerebellar arteries outside it (${pctOf(p.fit.before.vesselInsideShare)} of their centre-line points inside before, ${pctOf(p.fit.vesselInsideShare)} after), the tentorium above. The vertices still in an artery’s or the bone’s way were then pushed clear (${p.clear.inVesselAfter} left within an artery’s reach). Its folia and lobules are the model’s.`;
         })())] : null,
         b && ap.brain !== 'hindbrain' ? [h('dt', {}, 'How the brain is fitted'), h('dd', {},
           `A template (the Lead-DBS MNI 2009b pial surface), deformed smoothly to fit this skull: its hull ${fmtMm(b.params.tableGapMm)} mm inside the cranial cavity (median error ${fmtMm(b.fit.tableMedianMm)} mm), every artery this CT labels outside the cortex (${pctOf(b.fit.vesselInCortexShare)} of their centre-line points still inside it before the final clearance, none after), the M2 segments on the insula (median ${fmtMm(b.fit.m2InsulaMedianMmR)} mm on the right) and the M3 segments in the Sylvian fissure (median ${fmtMm(b.fit.m3FissureMedianMmR)} mm). So the template’s fissure lies where this patient’s middle cerebral artery runs, but its gyri are the template’s.`)] : null,
-        h('dt', {}, 'Not shown'), h('dd', {}, ap.notShown)),
-      h('p', { class: 'aside schematic-note' }, 'Illustrative: drawn by rule on one CT’s skull from the published descriptions, with a template brain; not planned for a patient.'),
+        h('dt', {}, 'Not shown'), h('dd', {}, v1 ? V1_TEXT[aid]?.notShown ?? ap.notShown : ap.notShown)),
+      v1 ? h('p', { class: 'aside schematic-note' }, 'Illustrative: drawn by rule on one anatomical model’s skull (Z-Anatomy) from the published descriptions, with its own brain; not planned for a patient.') : h('p', { class: 'aside schematic-note' }, 'Illustrative: drawn by rule on one CT’s skull from the published descriptions, with a template brain; not planned for a patient.'),
     ];
   }
 

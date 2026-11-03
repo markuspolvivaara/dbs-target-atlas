@@ -1251,17 +1251,20 @@ def skull_items(items: list, v2: dict) -> bool:
     return True
 
 
-def approach_items(items: list, ex2: dict) -> None:
-    """The right pterional craniotomy (pipeline/skullbase_v3_approach.py, approach.json): each bone it cuts again, with
-    the cut (it replaces the whole bone in the transsylvian view), and the bone removed as one mesh."""
-    p = BUILD / "approach.json"
+def approach_items(items: list, ex2: dict, build: Path | None = None, kind: str = KIND, prefix: str = PREFIX,
+                   licence: str = DATASET_V2_LICENCE, owner: str = "The CT's", whole_bones: dict | None = None) -> None:
+    """The craniotomies (pipeline/skullbase_v3_approach.py, approach.json): each bone a craniotomy cuts again, with the
+    cut (it replaces the whole bone in its view), the bone removed as one mesh, and any outline drawn on the bone. For v3
+    by default; v1 (skullbase_v1.py) passes its own build folder, asset kind, prefix, licence and whole bones."""
+    build = build or BUILD
+    p = build / "approach.json"
     if not p.exists():
         return
     import skullbase_build as SB
     from meshcheck import orient_outward
     aps = json.loads(p.read_text())
     whole: dict[str, dict] = {}
-    own = skull_bones()
+    own = whole_bones if whole_bones is not None else skull_bones()
     for n, mesh in (own.items() if own is not None else
                     ((n, (np.array(b["verts"], float), np.array(b["tris"], int), np.array(b["ao"], float))) for n, b in ex2["bones"].items())):
         base, side = SB.split_pair(n)
@@ -1279,25 +1282,25 @@ def approach_items(items: list, ex2: dict) -> None:
             sides.update(cut_sides)
             nodes, cent = bone_nodes(sides)
             sid = f"sb_appr_{aid}__{SB.slug(base)[3:]}"
-            write_glb(BUILD / f"{sid}.glb", nodes, {"id": sid})
+            write_glb(build / f"{sid}.glb", nodes, {"id": sid})
             src = cut_of[SB.slug(base)]
             items.append({**{k: src[k] for k in ("aliases", "colour", "dataset", "source", "licence", "citation", "citationUrls")},
-                          "id": sid, "name": base, "type": "bone", "file": f"assets/{KIND}/{sid}.glb", "bytes": 0, "refIds": [],
+                          "id": sid, "name": base, "type": "bone", "file": f"assets/{kind}/{sid}.glb", "bytes": 0, "refIds": [],
                           "category": "bone", "approach": aid, "replaces": SB.slug(base),
-                          "derivation": (f"The CT's {base.lower()} with the bone of the {ap['name'].lower()} removed "
+                          "derivation": (f"{owner} {base.lower()} with the bone of the {ap['name'].lower()} removed "
                                          "(pipeline/skullbase_v3_approach.py)." if any(SB.split_pair(c)[0] == base for c in ap.get("cutBones", ap["bones"])) else
-                                         f"The CT's {base.lower()}, which the {ap['name'].lower()} does not cut, remeshed within a few "
+                                         f"{owner} {base.lower()}, which the {ap['name'].lower()} does not cut, remeshed within a few "
                                          "millimetres of the cut so that it meets the cut bone on one surface (pipeline/skullbase_v3_approach.py)."),
                           "centroid": {"L": cent.get("L", cent.get("R")), "R": cent.get("R", cent.get("L"))}})
             ids.append(sid)
         v, t = np.array(ap["removed"]["verts"], float), np.array(ap["removed"]["tris"], int)
         t = orient_outward(v, t)
         sid = f"sb_appr_{aid}__removed"
-        write_glb(BUILD / f"{sid}.glb", [{"name": "R", "positions": v, "normals": SB.normals(v, t), "indices": t, "mode": TRIANGLES}], {"id": sid})
+        write_glb(build / f"{sid}.glb", [{"name": "R", "positions": v, "normals": SB.normals(v, t), "indices": t, "mode": TRIANGLES}], {"id": sid})
         c = v.mean(0).round(2).tolist()
-        items.append({"id": sid, "name": "Bone removed", "aliases": [], "type": "soft", "file": f"assets/{KIND}/{sid}.glb", "bytes": 0,
-                      "colour": colour("sbRemoved"), "dataset": "rule", "source": "Cut out of the CT's bone by rule",
-                      "licence": DATASET_V2_LICENCE, "citation": [], "citationUrls": [], "refIds": [], "category": "removed",
+        items.append({"id": sid, "name": "Bone removed", "aliases": [], "type": "soft", "file": f"assets/{kind}/{sid}.glb", "bytes": 0,
+                      "colour": colour("sbRemoved"), "dataset": "rule", "source": f"Cut out of {owner.replace('The ', 'the ')} bone by rule",
+                      "licence": licence, "citation": [], "citationUrls": [], "refIds": [], "category": "removed",
                       "approach": aid, "layer": "nuclei",
                       "derivation": f"The bone the {ap['name'].lower()} removes: {ap['removedMl']} ml. {ap['how']}", "centroid": {"L": c, "R": c}})
         cut_ids = [f"sb_appr_{aid}__{SB.slug(b)[3:]}" for b in sorted({SB.split_pair(c)[0] for c in ap.get("cutBones", ap["bones"])})]
@@ -1306,10 +1309,10 @@ def approach_items(items: list, ex2: dict) -> None:
         if ap.get("guide"):     # an outline drawn on the bone (the Kawase rhomboid)
             gid = f"sb_appr_{aid}__guide"
             gv, gn, gt = SB.tube(np.c_[np.array(ap["guide"]["points"]), np.full(len(ap["guide"]["points"]), 0.35)])
-            write_glb(BUILD / f"{gid}.glb", [{"name": "R", "positions": gv, "normals": gn, "indices": gt, "mode": TRIANGLES}], {"id": gid})
+            write_glb(build / f"{gid}.glb", [{"name": "R", "positions": gv, "normals": gn, "indices": gt, "mode": TRIANGLES}], {"id": gid})
             gc = gv.mean(0).round(2).tolist()
-            items.append({"id": gid, "name": ap["guide"]["name"], "aliases": [], "type": "soft", "file": f"assets/{KIND}/{gid}.glb", "bytes": 0,
-                          "colour": colour("sbGuide"), "dataset": "rule", "source": "Drawn by rule on the TopBrain CT",
+            items.append({"id": gid, "name": ap["guide"]["name"], "aliases": [], "type": "soft", "file": f"assets/{kind}/{gid}.glb", "bytes": 0,
+                          "colour": colour("sbGuide"), "dataset": "rule", "source": "Drawn by rule",
                           "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)", "citation": [], "citationUrls": [], "refIds": [],
                           "category": "guide", "approach": aid, "schematic": True, "centroid": {"L": gc, "R": gc},
                           "derivation": ("The rhomboid drawn on the middle fossa floor between its four landmarks on this model (Signoretti 2025): the "
@@ -1317,8 +1320,8 @@ def approach_items(items: list, ex2: dict) -> None:
                                          "arcuate eminence (the bone over the superior semicircular canal).")})
             summary[aid]["guides"] = [gid]
         if aid == "kawase":
-            lift_temporal_lobe(items, ap)
-    (GEN / f"{PREFIX}-approaches.json").write_text(json.dumps(summary, indent=1, ensure_ascii=False))
+            lift_temporal_lobe(items, ap, build, kind)
+    (GEN / f"{prefix}-approaches.json").write_text(json.dumps(summary, indent=1, ensure_ascii=False))
 
 
 def finalize() -> int:
@@ -1515,7 +1518,7 @@ KW_LIFT_SPAN_MM = 16.0  # ... the lift falling off with a Gaussian of this width
 KW_LIFT_FALL_MM = 18.0  # ... and exponentially over this height above the floor (illustrative)
 
 
-def lift_temporal_lobe(items: list, ap: dict) -> None:
+def lift_temporal_lobe(items: list, ap: dict, build: Path | None = None, kind: str = KIND) -> None:
     """The temporal lobe held up off the middle fossa floor for the Kawase view (a copy that stands in for it there): each
     point lifted KW_LIFT_MM times a weight falling off front to back from the rhomboid's middle (KW_LIFT_SPAN_MM), towards
     the midline from 8 to 18 mm off it, and with height above the rhomboid (KW_LIFT_FALL_MM). Its gradient stays below 1,
@@ -1524,7 +1527,8 @@ def lift_temporal_lobe(items: list, ap: dict) -> None:
     if src is None:
         return
     from glb import read_glb_full
-    nodes = read_glb_full(BUILD / Path(src["file"]).name)
+    build = build or BUILD
+    nodes = read_glb_full(build / Path(src["file"]).name)
     c = np.array(ap["corners"]).mean(0)
     out, cent = [], dict(src["centroid"])
     moved = 0.0
@@ -1538,8 +1542,8 @@ def lift_temporal_lobe(items: list, ap: dict) -> None:
             cent["R"] = V.mean(0).round(2).tolist()
         out.append({"name": s_, "positions": V, "normals": mesh_normals(V, nd["indices"]), "indices": nd["indices"], "mode": TRIANGLES})
     nid = "br_temporal_lobe__kawase"
-    write_glb(BUILD / f"{nid}.glb", out, {"id": nid})
-    items.append({**{k: v for k, v in src.items() if k not in ("morph",)}, "id": nid, "file": f"assets/{KIND}/{nid}.glb", "bytes": 0,
+    write_glb(build / f"{nid}.glb", out, {"id": nid})
+    items.append({**{k: v for k, v in src.items() if k not in ("morph",)}, "id": nid, "file": f"assets/{kind}/{nid}.glb", "bytes": 0,
                   "replaces": src["id"], "pushedFrom": src["file"], "forView": "kawase", "centroid": cent,
                   "derivation": src["derivation"].rstrip() + f" In the Kawase view held up off the middle fossa floor (extradurally, with its dura) "
                   f"by up to {moved:.0f} mm over the petrous apex (skullbase_v3.py: lift_temporal_lobe; illustrative): a shape, not a simulation."})

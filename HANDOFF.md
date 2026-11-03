@@ -1,4 +1,4 @@
-# Handoff: desktop session (CachyOS), 2026-10-30
+# Handoff: desktop session (CachyOS), 2026-11-03
 
 Read this first when continuing on another computer. Before handing back, overwrite this file with a new handoff, then
 commit and push it.
@@ -39,7 +39,34 @@ commit and push it.
   lateral (lateral suboccipital, foramen magnum rim, posterior third of the condyle; C1 is not modelled). New camera
   presets `orbitozygomatic` and `farLateral`. `skullbase_v3.py approaches` rewrites only the approach items from
   `approach.json`, so the whole v3 step need not run.
-- **Pipeline data changed on the desktop:** `pipeline/data/build/skullbase-v3` (the clean-up's chain, the tumours, the
+- **Skull base v1 gets v3's views (phase 1 of 4 done: the approaches).** The user asked (2026-11-03) for everything
+  in the v3 module on v1, built from v1's own Z-Anatomy models, not v3's CT, template or ear. Where Z-Anatomy lacks
+  something, it is drawn by rule on Z-Anatomy and labelled so. Built afresh on the desktop; the MacBook stash is not
+  used. The phases: (1) the approaches, done; (2) the ear views, then Kawase (it needs the geniculate ganglion and
+  the greater petrosal nerve, drawn by rule); (3) the cavernous sinus, triangles and endonasal view; (4) the tumours
+  and the Grading page. Commit after each phase.
+  - `skullbase_v1_skull.py`: Z-Anatomy's bones rasterised at 0.5 mm. The open meshes become a 1 mm shell, filled; the
+    sinus air is taken out; the gaps between bones are bridged (`close_sutures`). The cavity is 1720 ml at a 7 mm seal.
+  - `SB_PROFILE=v1 skullbase_v3_approach.py`: the same craniotomy code on that grid. v1 differences, each under
+    `PROFILE == "v1"`: the floor rule is stricter (Z-Anatomy's wall slopes about 45° by the pterion and has ledges),
+    and the sphenoid ridge is found from the skull. Kawase is not cut on v1 yet.
+  - `skullbase_v1_brain.py`: Z-Anatomy's cortex patches (`skullbase_v1_brain_export.py`, in Blender), remade as one
+    closed surface per hemisphere (0.25 mm grid). They are pushed out of their own bone by a smooth field (up to 7 mm;
+    v3's per-vertex push folded the sulci), then shaped by v3's open, lift, LSO-lift and interhemispheric rules.
+  - `skullbase_v1_pfossa.py`: Z-Anatomy's cerebellum, brainstem and fourth ventricle. Outside the cranial cavity
+    counts as bone, except the foramen magnum's way out (the cerebellum passes through its thin squama). Then v3's
+    telovelar and retrosigmoid shapes. The superior, anterior inferior and posterior inferior cerebellar arteries
+    carry the same morph targets.
+  - `skullbase_v1.py approaches` / `brain`: merge the items into `sb-manifest.json` and write `sb-approaches.json` and
+    `sb-v1fit.json`.
+  - v1's retrosigmoid camera is `retrosigmoidLevel`: on this skull the opening lies level with the porus, so v3's view
+    from below meets the mastoid. `V1_NAMES` and `V1_ABSENT` (`approaches.ts`) map v3's context names to v1's, or
+    leave them out.
+  - v1 chain: `skullbase_build.py`, `skullbase_v1_skull.py`, `SB_PROFILE=v1 skullbase_v3_approach.py only pterional
+    lso interhemispheric suboccipital retrosigmoid orbitozygomatic far_lateral`, `skullbase_v1.py approaches`,
+    `skullbase_v1_brain.py`, `skullbase_v1_pfossa.py`, `skullbase_v1.py brain`, `node pipeline/compress.mjs skullbase`,
+    `skullbase_build.py finalize`. Compressing v1 left the untouched GLBs byte-identical here.
+- **Pipeline data changed on the desktop:** `pipeline/data/build/skullbase` (the whole v1 port), `pipeline/data/build/skullbase-v3` (the clean-up's chain, the tumours, the
   two approaches in `approach.json`) and `pipeline/data/build/vascular`. Copy `pipeline/data/` back before rebuilding
   those on the MacBook.
 - **Build chain additions:**
@@ -83,9 +110,9 @@ commit and push it.
 - **Downloads.** Downloaded files are untrusted: put each in its own folder and run Python with `-I`.
 - **Provenance labels.** Label what is the CT's own, what is a fitted model and what is drawn by rule. For thin
   structures a CT cannot resolve, a fitted, labelled model is fine; the user liked the smooth Z-Anatomy look.
-- **Skull base v3.** Hand-placed points are allowed if they are the best option, but label them. Don't re-propose
-  approach cut-outs on v1/v2. The shelved approaches are in a `git stash` that exists only on the MacBook; it was not
-  pushed.
+- **Skull base v3.** Hand-placed points are allowed if they are the best option, but label them. v1 now gets v3's views
+  on its own Z-Anatomy models, at the user's request (above). v2 stays as it is. The older shelved v1/v2 approaches in
+  the MacBook's `git stash` are not used.
 - **Spine.** Dorsal focus: no great vessels, psoas or viscera in the lumbar and thoracic spine; ventral anatomy only
   for the cervical spine. The lesion-to-root tool and its dermatome chart are on hold until colleagues give feedback.
 - **iCloud duplicates.** On the MacBook, copies like `index 2.html`, `… 3.png` and `… 3.glb` appear (iCloud sync).
@@ -121,7 +148,7 @@ commit and push it.
   14. `npm run build`
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
-  - `npx vitest run` (314 tests)
+  - `npx vitest run` (323 tests)
   - `npm run build`
   - `npx playwright test` (130 tests, about 7 minutes, preview on port 4173)
   - `npm run check:palette`

@@ -550,6 +550,25 @@ for (const g of SB_GROUPS) {
     expect(gd.errors).toEqual([]);
   });
 }
+// v1's surgical views: v3's craniotomies cut on Z-Anatomy's own skull, over its own brain and hindbrain (no baselines yet)
+test('skull base v1: the surgical views render on Z-Anatomy\u2019s own skull and brain', async ({ page }) => {
+  const gd = guard(page);
+  const views: [string, string, string?][] = [['transsylvian', 'Pterional transsylvian approach', 'op'], ['lso', 'Lateral supraorbital approach', 'll'],
+    ['interhemispheric', 'Interhemispheric transcallosal approach', 'ih'], ['telovelar', 'Telovelar approach', 'tv'],
+    ['retrosigmoid', 'Retrosigmoid approach', 'rs'], ['orbitozygomatic', 'Orbitozygomatic approach'], ['far_lateral', 'Far lateral approach']];
+  for (const [id, name, morph] of views) {
+    await page.goto(`./skullbase-v1/#/atlas?g=${id}${morph ? `&${morph}=100` : ''}`);
+    await settle(page);
+    await expect(page.locator('.pane:not([hidden]) .card h2').first()).toHaveText(name);
+    await expect(page.locator('.pane:not([hidden]) article.card').last()).toContainText('Z-Anatomy');
+    await expect(page.locator('.pane:not([hidden]) article.card').last()).not.toContainText('this CT');
+    expect(await canvasColours(page), id).toBeGreaterThan(40);
+  }
+  // (Kawase waits for the ear's structures on this model)
+  await expect(page.locator('.grp-chips[aria-label="Surgical views"] .chip[data-v="kawase"]')).toHaveCount(0);
+  expect(gd.external).toEqual([]);
+  expect(gd.errors).toEqual([]);
+});
 // the detailed model (CT): a few groups
 for (const id of ['floor', 'arteries', 'nerves', 'bone_sphenoid_bone']) {
   test(`skull base (detailed) ${id}: renders and matches the visual baseline`, async ({ page }) => {

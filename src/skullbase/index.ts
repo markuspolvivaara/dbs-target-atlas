@@ -8,12 +8,14 @@ import ctLandmarks from '../data/generated/sbct-landmarks.json';
 import ctManifest from '../data/generated/sbct-manifest.json';
 import ctRegions from '../data/generated/sbct-regions.json';
 import v3Approaches from '../data/generated/sbv3-approaches.json';
+import zaApproaches from '../data/generated/sb-approaches.json';
+import zaV1Fit from '../data/generated/sb-v1fit.json';
 import v3Definitions from '../data/generated/sbv3-definitions.json';
 import v3Fit from '../data/generated/sbv3-fit.json';
 import v3Landmarks from '../data/generated/sbv3-landmarks.json';
 import v3Manifest from '../data/generated/sbv3-manifest.json';
 import { SbManifestSchema, type ManifestStructure } from '../data/schema';
-import { APPROACH, APPROACH_REF } from './approaches';
+import { APPROACH, APPROACH_REF, V1_ABSENT, V1_NAMES } from './approaches';
 import { FORAMEN_CONTENTS, FORAMEN_REF } from './foramina';
 
 /**
@@ -94,7 +96,14 @@ const ApproachGeomSchema = z.object({
 });
 export type ApproachGeom = z.infer<typeof ApproachGeomSchema>;
 /** The approaches cut out of this model's bone (Skull base v3 only: pipeline/skullbase_v3_approach.py). */
-export const APPROACH_GEOM: Record<string, ApproachGeom> = V3M ? z.record(ApproachGeomSchema).parse(v3Approaches) : {};
+export const APPROACH_GEOM: Record<string, ApproachGeom> = V3M ? z.record(ApproachGeomSchema).parse(v3Approaches)
+  : SB_MODEL === 'zanatomy' ? z.record(ApproachGeomSchema).parse(zaApproaches) : {};
+/** v1's own brain and posterior fossa (pipeline/skullbase_v1_brain.py, skullbase_v1_pfossa.py): what their clearances
+ * and shapes moved */
+export const V1_FIT = z.object({
+  brain: z.object({ cavityMl: z.number(), clear: z.record(z.object({ inBoneWayBefore: z.number(), inBoneWayAfter: z.number(), maxMovedMm: z.number() })) }).passthrough(),
+  pfossa: z.object({ clear: z.object({ inBoneBefore: z.number(), inBoneAfter: z.number(), inVesselBefore: z.number(), inVesselAfter: z.number(), maxMovedMm: z.number() }) }).passthrough(),
+}).parse(zaV1Fit);
 
 /** Foramina Z-Anatomy does not label: the pipeline locates them in the Z-Anatomy model (marked by `how`), not on the CT. */
 export const LOCATED_FORAMINA = ['Superior orbital fissure', 'Internal acoustic meatus', 'Stylomastoid foramen', 'Jugular foramen',
@@ -206,7 +215,11 @@ export function crossCheckSb(): string[] {
     for (const id of [...g.bones, g.removed]) if (!ids.has(id)) errs.push(`approach ${aid}: unknown structure ${id}`);
     for (const id of g.bones) { const r = SB.get(id)?.replaces; if (!r || !ids.has(r)) errs.push(`approach ${aid}: ${id} replaces an unknown bone`); }
     for (const cl of c.sections.flatMap((x) => x.claims)) for (const r of cl.refIds) if (!APPROACH_REF.has(r)) errs.push(`approach ${aid}: unknown refId ${r}`);
-    for (const n of c.context) if (!SB_MANIFEST.structures.some((s) => s.name === n)) errs.push(`approach ${aid}: unknown context structure ${n}`);
+    for (const n of c.context) {
+      if (SB_MODEL === 'zanatomy' && V1_ABSENT.has(n)) continue;
+      const own = SB_MODEL === 'zanatomy' ? V1_NAMES[n] ?? n : n;
+      if (!SB_MANIFEST.structures.some((s) => s.name === own)) errs.push(`approach ${aid}: unknown context structure ${own}`);
+    }
   }
   return errs;
 }

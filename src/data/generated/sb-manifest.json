@@ -394,7 +394,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_inferior_cerebellar_artery.glb",
-   "bytes": 15480,
+   "bytes": 21664,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -411,7 +411,7 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py).",
    "centroid": {
     "L": [
      -18.07,
@@ -425,7 +425,8 @@
     ]
    },
    "system": "Basilar artery",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "morph": true
   },
   {
    "id": "sb_anterior_intercavernous_sinus",
@@ -2851,7 +2852,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_inferior_cerebellar_artery.glb",
-   "bytes": 96380,
+   "bytes": 123188,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2868,7 +2869,7 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py).",
    "centroid": {
     "L": [
      -24.91,
@@ -2882,7 +2883,8 @@
     ]
    },
    "system": "Vertebral artery",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "morph": true
   },
   {
    "id": "sb_posterior_intercavernous_sinus",
@@ -3463,7 +3465,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_superior_cerebellar_artery.glb",
-   "bytes": 50232,
+   "bytes": 60804,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3480,7 +3482,7 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py).",
    "centroid": {
     "L": [
      -18.9,
@@ -3494,7 +3496,8 @@
     ]
    },
    "system": "Basilar artery",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "morph": true
   },
   {
    "id": "sb_superior_labial_vein",
@@ -4145,6 +4148,1655 @@
      -15.59
     ]
    }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_pterional__frontal_bone",
+   "name": "Frontal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_pterional__frontal_bone.glb",
+   "bytes": 264484,
+   "refIds": [],
+   "category": "bone",
+   "approach": "pterional",
+   "replaces": "sb_frontal_bone",
+   "derivation": "Z-Anatomy's frontal bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -27.7,
+     34.9,
+     39.9
+    ],
+    "R": [
+     35.98,
+     39.95,
+     36.71
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_pterional__parietal_bone",
+   "name": "Parietal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_pterional__parietal_bone.glb",
+   "bytes": 308056,
+   "refIds": [],
+   "category": "bone",
+   "approach": "pterional",
+   "replaces": "sb_parietal_bone",
+   "derivation": "Z-Anatomy's parietal bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -25.92,
+     -50.8,
+     68.47
+    ],
+    "R": [
+     40.89,
+     -42.4,
+     59.7
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_pterional__sphenoid_bone",
+   "name": "Sphenoid bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_pterional__sphenoid_bone.glb",
+   "bytes": 260540,
+   "refIds": [],
+   "category": "bone",
+   "approach": "pterional",
+   "replaces": "sb_sphenoid_bone",
+   "derivation": "Z-Anatomy's sphenoid bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -21.23,
+     10.93,
+     -4.28
+    ],
+    "R": [
+     24.92,
+     15.2,
+     3.38
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_pterional__temporal_bone",
+   "name": "Temporal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_pterional__temporal_bone.glb",
+   "bytes": 569028,
+   "refIds": [],
+   "category": "bone",
+   "approach": "pterional",
+   "replaces": "sb_temporal_bone",
+   "derivation": "Z-Anatomy's temporal bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -44.43,
+     -25.12,
+     -14.03
+    ],
+    "R": [
+     46.39,
+     -23.55,
+     -11.77
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_pterional__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/sb_appr_pterional__removed.glb",
+   "bytes": 369624,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of Z-Anatomy's bone by rule",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "pterional",
+   "layer": "nuclei",
+   "derivation": "The bone the pterional (frontotemporal) craniotomy removes: 15.6 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; the model's zygomatic process of the frontal bone, raised 6 mm); a frontal hole near the superior orbital rim (Yilmaz 2025; here 20 mm above and 10 mm lateral to the supraorbital notch, 20 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral sphenoid ridge drilled (a 6 mm radius along the ridge), stopping 12 mm short of the anterior clinoid process (illustrative: Yilmaz 2025 limits this resection at the meningo-orbital artery in the orbitozygomatic approach, which the model does not show). The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone (which stays), leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (49, 51, 26) mm, (40, 61, 41) mm, (58, -7, -2) mm, (69, -9, 46) mm.",
+   "centroid": {
+    "L": [
+     50.14,
+     23.63,
+     29.06
+    ],
+    "R": [
+     50.14,
+     23.63,
+     29.06
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_lso__frontal_bone",
+   "name": "Frontal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_lso__frontal_bone.glb",
+   "bytes": 347632,
+   "refIds": [],
+   "category": "bone",
+   "approach": "lso",
+   "replaces": "sb_frontal_bone",
+   "derivation": "Z-Anatomy's frontal bone with the bone of the lateral supraorbital craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -27.7,
+     34.9,
+     39.9
+    ],
+    "R": [
+     38.96,
+     39.22,
+     41.6
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_lso__parietal_bone",
+   "name": "Parietal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_lso__parietal_bone.glb",
+   "bytes": 302468,
+   "refIds": [],
+   "category": "bone",
+   "approach": "lso",
+   "replaces": "sb_parietal_bone",
+   "derivation": "Z-Anatomy's parietal bone, which the lateral supraorbital craniotomy does not cut, remeshed within a few millimetres of the cut so that it meets the cut bone on one surface (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -25.92,
+     -50.8,
+     68.47
+    ],
+    "R": [
+     36.78,
+     -33.82,
+     61.98
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_lso__sphenoid_bone",
+   "name": "Sphenoid bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_lso__sphenoid_bone.glb",
+   "bytes": 165584,
+   "refIds": [],
+   "category": "bone",
+   "approach": "lso",
+   "replaces": "sb_sphenoid_bone",
+   "derivation": "Z-Anatomy's sphenoid bone, which the lateral supraorbital craniotomy does not cut, remeshed within a few millimetres of the cut so that it meets the cut bone on one surface (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -21.9,
+     11.57,
+     -4.62
+    ],
+    "R": [
+     24.68,
+     13.03,
+     -0.73
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_lso__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/sb_appr_lso__removed.glb",
+   "bytes": 351356,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of Z-Anatomy's bone by rule",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "lso",
+   "layer": "nuclei",
+   "derivation": "The bone the lateral supraorbital craniotomy removes: 5.7 ml. A frontolateral flap over the orbital roof, with one burr hole posteriorly just below the temporal line (Cha 2012, Choque-Velasquez 2018), cut down to the anterior fossa floor (the basal part drilled off, Cha 2012); the sphenoid ridge is not drilled. Its outline is placed by hand on this skull: about 1570 mm² seen face on, larger than the mean LSO craniotomy of 1275 mm² (Cha 2012) on purpose, to show the anatomy (illustrative), its basal edge at the level of the orbital roof. The outline is a smooth curve through those points and the cut's edge is smoothed over 1 mm (illustrative). Burr hole: (63, 11, 42) mm.",
+   "centroid": {
+    "L": [
+     49.85,
+     36.62,
+     51.61
+    ],
+    "R": [
+     49.85,
+     36.62,
+     51.61
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_interhemispheric__frontal_bone",
+   "name": "Frontal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_interhemispheric__frontal_bone.glb",
+   "bytes": 291204,
+   "refIds": [],
+   "category": "bone",
+   "approach": "interhemispheric",
+   "replaces": "sb_frontal_bone",
+   "derivation": "Z-Anatomy's frontal bone with the bone of the right parasagittal craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -17.01,
+     33.43,
+     65.77
+    ],
+    "R": [
+     28.84,
+     37.6,
+     59.82
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_interhemispheric__parietal_bone",
+   "name": "Parietal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_interhemispheric__parietal_bone.glb",
+   "bytes": 293924,
+   "refIds": [],
+   "category": "bone",
+   "approach": "interhemispheric",
+   "replaces": "sb_parietal_bone",
+   "derivation": "Z-Anatomy's parietal bone with the bone of the right parasagittal craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -24.46,
+     -47.69,
+     71.24
+    ],
+    "R": [
+     29.91,
+     -42.88,
+     72.93
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_interhemispheric__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/sb_appr_interhemispheric__removed.glb",
+   "bytes": 372504,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of Z-Anatomy's bone by rule",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "interhemispheric",
+   "layer": "nuclei",
+   "derivation": "The bone the right parasagittal craniotomy removes: 11.3 ml. A right parasagittal flap at the coronal suture, its medial edge on the midline (over the superior sagittal sinus): from 40 mm in front of bregma to 20 mm behind it and 40 mm wide, about 2357 mm² seen from above (illustrative: the sources describe a right precoronal parasagittal or frontoparietal midline craniotomy without giving its size). Bregma here: (0, 8, 107) mm, where this skull's frontal and parietal bones meet at the midline.",
+   "centroid": {
+    "L": [
+     19.36,
+     19.42,
+     93.75
+    ],
+    "R": [
+     19.36,
+     19.42,
+     93.75
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_suboccipital__occipital_bone",
+   "name": "Occipital bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_suboccipital__occipital_bone.glb",
+   "bytes": 239512,
+   "refIds": [],
+   "category": "bone",
+   "approach": "suboccipital",
+   "replaces": "sb_occipital_bone",
+   "derivation": "Z-Anatomy's occipital bone with the bone of the midline suboccipital craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -25.27,
+     -71.32,
+     -14.99
+    ],
+    "R": [
+     25.22,
+     -71.68,
+     -14.23
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_suboccipital__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/sb_appr_suboccipital__removed.glb",
+   "bytes": 274588,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of Z-Anatomy's bone by rule",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "suboccipital",
+   "layer": "nuclei",
+   "derivation": "The bone the midline suboccipital craniotomy removes: 8.5 ml. A midline suboccipital flap from 10 mm below the internal occipital protuberance (the confluence of the sinuses) down to the foramen magnum, its posterior rim taken 12 mm to each side of the midline; 25 mm to each side above, about 1431 mm² seen from behind (illustrative: the sources describe a median suboccipital craniotomy or craniectomy without one size; a keyhole of about 2 cm in Wang 2023). The posterior arch of C1 is left (Cho 2024).",
+   "centroid": {
+    "L": [
+     -0.26,
+     -74.58,
+     -32.09
+    ],
+    "R": [
+     -0.26,
+     -74.58,
+     -32.09
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_retrosigmoid__occipital_bone",
+   "name": "Occipital bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_retrosigmoid__occipital_bone.glb",
+   "bytes": 186992,
+   "refIds": [],
+   "category": "bone",
+   "approach": "retrosigmoid",
+   "replaces": "sb_occipital_bone",
+   "derivation": "Z-Anatomy's occipital bone with the bone of the retrosigmoid craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -27.75,
+     -69.62,
+     -3.66
+    ],
+    "R": [
+     33.72,
+     -69.52,
+     -9.29
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_retrosigmoid__parietal_bone",
+   "name": "Parietal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_retrosigmoid__parietal_bone.glb",
+   "bytes": 270948,
+   "refIds": [],
+   "category": "bone",
+   "approach": "retrosigmoid",
+   "replaces": "sb_parietal_bone",
+   "derivation": "Z-Anatomy's parietal bone with the bone of the retrosigmoid craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -25.92,
+     -50.8,
+     68.47
+    ],
+    "R": [
+     29.75,
+     -49.97,
+     64.43
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_retrosigmoid__temporal_bone",
+   "name": "Temporal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_retrosigmoid__temporal_bone.glb",
+   "bytes": 556820,
+   "refIds": [],
+   "category": "bone",
+   "approach": "retrosigmoid",
+   "replaces": "sb_temporal_bone",
+   "derivation": "Z-Anatomy's temporal bone with the bone of the retrosigmoid craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -44.43,
+     -25.12,
+     -14.03
+    ],
+    "R": [
+     45.26,
+     -26.86,
+     -14.29
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_retrosigmoid__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/sb_appr_retrosigmoid__removed.glb",
+   "bytes": 144564,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of Z-Anatomy's bone by rule",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "retrosigmoid",
+   "layer": "nuclei",
+   "derivation": "The bone the retrosigmoid craniotomy removes: 4.8 ml. A right retrosigmoid craniotomy: its upper edge along the transverse sinus' lower margin for 28 mm and its front edge along the sigmoid sinus' posterior margin for 35 mm (Jian 2021: the window's upper and front margins against the two sinuses), closed behind and below by straight edges, its corners rounded; larger than Jian 2021's keyhole (18-20 x 20-25 mm), about the size of the craniotomies in Tang 2025 (a mean 3.8 cm across), the shape drawn by hand (illustrative). The sinuses are Z-Anatomy's own (its centre lines and radii), the edges 0 mm off their margins, drawn on the inner table and carried out through the bone. The keypoint is where the two margins meet (Jian 2021, 2022, 2024); the burr hole 3.5 mm behind and below it (Jian 2021). About 604 mm² seen face on; its edge smoothed over 1 mm (illustrative). Keypoint: (64, -59, -2) mm; burr hole: (63, -61, -5) mm.",
+   "centroid": {
+    "L": [
+     51.43,
+     -63.17,
+     -15.76
+    ],
+    "R": [
+     51.43,
+     -63.17,
+     -15.76
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_orbitozygomatic__frontal_bone",
+   "name": "Frontal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_orbitozygomatic__frontal_bone.glb",
+   "bytes": 253152,
+   "refIds": [],
+   "category": "bone",
+   "approach": "orbitozygomatic",
+   "replaces": "sb_frontal_bone",
+   "derivation": "Z-Anatomy's frontal bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -27.7,
+     34.9,
+     39.9
+    ],
+    "R": [
+     32.59,
+     42.03,
+     38.55
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_orbitozygomatic__maxilla",
+   "name": "Maxilla",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_orbitozygomatic__maxilla.glb",
+   "bytes": 215400,
+   "refIds": [],
+   "category": "bone",
+   "approach": "orbitozygomatic",
+   "replaces": "sb_maxilla",
+   "derivation": "Z-Anatomy's maxilla with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -18.98,
+     49.02,
+     -34.01
+    ],
+    "R": [
+     22.11,
+     48.18,
+     -32.17
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_orbitozygomatic__parietal_bone",
+   "name": "Parietal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_orbitozygomatic__parietal_bone.glb",
+   "bytes": 308224,
+   "refIds": [],
+   "category": "bone",
+   "approach": "orbitozygomatic",
+   "replaces": "sb_parietal_bone",
+   "derivation": "Z-Anatomy's parietal bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -25.92,
+     -50.8,
+     68.47
+    ],
+    "R": [
+     40.94,
+     -42.34,
+     59.67
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_orbitozygomatic__sphenoid_bone",
+   "name": "Sphenoid bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_orbitozygomatic__sphenoid_bone.glb",
+   "bytes": 275956,
+   "refIds": [],
+   "category": "bone",
+   "approach": "orbitozygomatic",
+   "replaces": "sb_sphenoid_bone",
+   "derivation": "Z-Anatomy's sphenoid bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -21.22,
+     10.92,
+     -4.28
+    ],
+    "R": [
+     25.29,
+     16.09,
+     2.32
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_orbitozygomatic__temporal_bone",
+   "name": "Temporal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_orbitozygomatic__temporal_bone.glb",
+   "bytes": 576772,
+   "refIds": [],
+   "category": "bone",
+   "approach": "orbitozygomatic",
+   "replaces": "sb_temporal_bone",
+   "derivation": "Z-Anatomy's temporal bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -44.43,
+     -25.12,
+     -14.03
+    ],
+    "R": [
+     46.51,
+     -23.14,
+     -11.72
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_orbitozygomatic__zygomatic_bone",
+   "name": "Zygomatic bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_orbitozygomatic__zygomatic_bone.glb",
+   "bytes": 50260,
+   "refIds": [],
+   "category": "bone",
+   "approach": "orbitozygomatic",
+   "replaces": "sb_zygomatic_bone",
+   "derivation": "Z-Anatomy's zygomatic bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -45.87,
+     38.85,
+     -15.59
+    ],
+    "R": [
+     44.26,
+     41.69,
+     -27.27
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_orbitozygomatic__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/sb_appr_orbitozygomatic__removed.glb",
+   "bytes": 374964,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of Z-Anatomy's bone by rule",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "orbitozygomatic",
+   "layer": "nuclei",
+   "derivation": "The bone the orbitozygomatic craniotomy removes: 28.8 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; the model's zygomatic process of the frontal bone, raised 6 mm); a frontal hole near the superior orbital rim (Yilmaz 2025; here 20 mm above and 10 mm lateral to the supraorbital notch, 20 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral sphenoid ridge drilled (a 6 mm radius along the ridge), stopping 12 mm short of the anterior clinoid process (illustrative: Yilmaz 2025 limits this resection at the meningo-orbital artery in the orbitozygomatic approach, which the model does not show). The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone, leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (49, 51, 26) mm, (40, 61, 41) mm, (58, -7, -2) mm, (69, -9, 46) mm. Then the orbitozygomatic piece (the two-piece craniotomy, Yilmaz 2025): the superolateral orbital rim from 4 mm lateral to the supraorbital notch to 5 mm lateral to the frontozygomatic suture (the model's zygomatic process of the frontal bone), with the orbital roof 25 mm back from the rim (illustrative), the zygoma's frontal process and its body down to 5 mm below the arch's level (Yilmaz 2025: the cut from the zygomatic body to the inferior orbital fissure about 1 cm below its frontal and temporal processes; its medial part with the infraorbital rim, medial of x = 33 mm, kept; illustrative), and the zygomatic arch from 8 mm in front of the zygomatic bone's back end back to its root in front of the articular tubercle (y = 0 mm here; illustrative).",
+   "centroid": {
+    "L": [
+     48.41,
+     28.23,
+     19.36
+    ],
+    "R": [
+     48.41,
+     28.23,
+     19.36
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_far_lateral__occipital_bone",
+   "name": "Occipital bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_far_lateral__occipital_bone.glb",
+   "bytes": 290124,
+   "refIds": [],
+   "category": "bone",
+   "approach": "far_lateral",
+   "replaces": "sb_occipital_bone",
+   "derivation": "Z-Anatomy's occipital bone with the bone of the far lateral craniectomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -22.42,
+     -68.99,
+     -11.79
+    ],
+    "R": [
+     26.93,
+     -65.46,
+     -15.57
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_far_lateral__parietal_bone",
+   "name": "Parietal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_far_lateral__parietal_bone.glb",
+   "bytes": 268504,
+   "refIds": [],
+   "category": "bone",
+   "approach": "far_lateral",
+   "replaces": "sb_parietal_bone",
+   "derivation": "Z-Anatomy's parietal bone, which the far lateral craniectomy does not cut, remeshed within a few millimetres of the cut so that it meets the cut bone on one surface (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -25.92,
+     -50.8,
+     68.47
+    ],
+    "R": [
+     28.89,
+     -49.55,
+     66.12
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_far_lateral__temporal_bone",
+   "name": "Temporal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_far_lateral__temporal_bone.glb",
+   "bytes": 562152,
+   "refIds": [],
+   "category": "bone",
+   "approach": "far_lateral",
+   "replaces": "sb_temporal_bone",
+   "derivation": "Z-Anatomy's temporal bone with the bone of the far lateral craniectomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -44.43,
+     -25.12,
+     -14.03
+    ],
+    "R": [
+     45.47,
+     -27.59,
+     -14.35
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_far_lateral__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/sb_appr_far_lateral__removed.glb",
+   "bytes": 372808,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of Z-Anatomy's bone by rule",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "far_lateral",
+   "layer": "nuclei",
+   "derivation": "The bone the far lateral craniectomy removes: 15.3 ml. A right lateral suboccipital craniectomy (Pai 2018: lateral suboccipital, reaching the sigmoid sinus, the foramen magnum's rim taken), its outline following Z-Anatomy's own sinuses (their centre lines and radii): its upper edge along the transverse sinus' lower margin for 30 mm from the junction, its lateral edge along the sigmoid sinus' posterior margin for 35 mm down towards the jugular bulb, and below, the foramen magnum's posterior rim taken from x = 3 to 16 mm, so that the opening runs into the foramen; its medial edge bowed outwards and its corners rounded (the extents and shape illustrative), about 1941 mm² seen face on. Then the posterior third of the right occipital condyle drilled (Pai 2018: the posterior 30-40 %; here the third of the condyle's bone within 11 mm of its fitted landmark that lies furthest back). The hemilaminectomy of C1 that goes with it is not shown: the atlas is not part of this model.",
+   "centroid": {
+    "L": [
+     34.78,
+     -61.98,
+     -26.32
+    ],
+    "R": [
+     34.78,
+     -61.98,
+     -26.32
+    ]
+   }
+  },
+  {
+   "id": "br_frontal_lobe",
+   "name": "Frontal lobe",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/br_frontal_lobe.glb",
+   "bytes": 761528,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as one closed surface per hemisphere about 0.25 mm outside them), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
+   "centroid": {
+    "L": [
+     -25.61,
+     5.17,
+     63.84
+    ],
+    "R": [
+     25.5,
+     5.1,
+     63.91
+    ]
+   }
+  },
+  {
+   "id": "br_parietal_lobe",
+   "name": "Parietal lobe",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/br_parietal_lobe.glb",
+   "bytes": 338704,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as one closed surface per hemisphere about 0.25 mm outside them), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
+   "centroid": {
+    "L": [
+     -31.76,
+     -63.59,
+     68.02
+    ],
+    "R": [
+     31.93,
+     -63.49,
+     68.13
+    ]
+   }
+  },
+  {
+   "id": "br_temporal_lobe",
+   "name": "Temporal lobe",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/br_temporal_lobe.glb",
+   "bytes": 353492,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as one closed surface per hemisphere about 0.25 mm outside them), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
+   "centroid": {
+    "L": [
+     -43.45,
+     -33.08,
+     18.06
+    ],
+    "R": [
+     43.52,
+     -33.15,
+     18.11
+    ]
+   }
+  },
+  {
+   "id": "br_occipital_lobe",
+   "name": "Occipital lobe",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/br_occipital_lobe.glb",
+   "bytes": 183396,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as one closed surface per hemisphere about 0.25 mm outside them), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
+   "centroid": {
+    "L": [
+     -19.27,
+     -89.43,
+     25.28
+    ],
+    "R": [
+     19.19,
+     -89.51,
+     25.25
+    ]
+   }
+  },
+  {
+   "id": "br_insula",
+   "name": "Insula",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/br_insula.glb",
+   "bytes": 41616,
+   "colour": {
+    "token": "sbInsula",
+    "light": "#4A3DA8",
+    "dark": "#8A7BE0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as one closed surface per hemisphere about 0.25 mm outside them), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
+   "centroid": {
+    "L": [
+     -37.87,
+     -7.97,
+     47.11
+    ],
+    "R": [
+     37.8,
+     -8.12,
+     47.15
+    ]
+   }
+  },
+  {
+   "id": "br_cingulate_gyrus",
+   "name": "Cingulate gyrus",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/br_cingulate_gyrus.glb",
+   "bytes": 71076,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as one closed surface per hemisphere about 0.25 mm outside them), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
+   "centroid": {
+    "L": [
+     -7.49,
+     -31.49,
+     58.49
+    ],
+    "R": [
+     7.33,
+     -31.28,
+     58.82
+    ]
+   }
+  },
+  {
+   "id": "pf_cerebellar_hemisphere",
+   "name": "Cerebellar hemisphere",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/pf_cerebellar_hemisphere.glb",
+   "bytes": 1054664,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": true,
+   "centroid": {
+    "L": [
+     -19.63,
+     -55.41,
+     -9.72
+    ],
+    "R": [
+     19.62,
+     -55.41,
+     -9.71
+    ]
+   },
+   "derivation": "Z-Anatomy's (BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue."
+  },
+  {
+   "id": "pf_tonsil",
+   "name": "Tonsil of cerebellum",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/pf_tonsil.glb",
+   "bytes": 95476,
+   "colour": {
+    "token": "sbTonsil",
+    "light": "#7D6DFF",
+    "dark": "#6262C3"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": true,
+   "centroid": {
+    "L": [
+     -11.42,
+     -48.92,
+     -21.38
+    ],
+    "R": [
+     11.42,
+     -48.93,
+     -21.38
+    ]
+   },
+   "derivation": "Z-Anatomy's (BodyParts3D: tonsil of cerebellum); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue."
+  },
+  {
+   "id": "pf_vermis",
+   "name": "Vermis",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/pf_vermis.glb",
+   "bytes": 126428,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": true,
+   "centroid": {
+    "L": [
+     -2.64,
+     -58.52,
+     -4.75
+    ],
+    "R": [
+     2.56,
+     -59.47,
+     -4.27
+    ]
+   },
+   "derivation": "Z-Anatomy's (BodyParts3D: lingula of cerebellum, central lobule, culmen, declive, folium of vermis, tuber of vermis, pyramis of vermis, uvula of vermis, nodule of vermis); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue."
+  },
+  {
+   "id": "pf_superior_cerebellar_peduncle",
+   "name": "Superior cerebellar peduncle",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/pf_superior_cerebellar_peduncle.glb",
+   "bytes": 111812,
+   "colour": {
+    "token": "sbBrainstem",
+    "light": "#51474C",
+    "dark": "#92929D"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": false,
+   "centroid": {
+    "L": [
+     -7.7,
+     -42.88,
+     -3.25
+    ],
+    "R": [
+     7.7,
+     -42.88,
+     -3.25
+    ]
+   },
+   "derivation": "Z-Anatomy's (BodyParts3D: superior cerebellar peduncle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity)."
+  },
+  {
+   "id": "pf_midbrain",
+   "name": "Midbrain",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/pf_midbrain.glb",
+   "bytes": 81132,
+   "colour": {
+    "token": "sbBrainstem",
+    "light": "#51474C",
+    "dark": "#92929D"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": false,
+   "centroid": {
+    "L": [
+     -5.19,
+     -25.84,
+     16.32
+    ],
+    "R": [
+     5.19,
+     -25.84,
+     16.33
+    ]
+   },
+   "derivation": "Z-Anatomy's (BodyParts3D: midbrain); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity)."
+  },
+  {
+   "id": "pf_pons",
+   "name": "Pons",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/pf_pons.glb",
+   "bytes": 135884,
+   "colour": {
+    "token": "sbBrainstem",
+    "light": "#51474C",
+    "dark": "#92929D"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": false,
+   "centroid": {
+    "L": [
+     -9.18,
+     -25.17,
+     -4.82
+    ],
+    "R": [
+     9.18,
+     -25.16,
+     -4.83
+    ]
+   },
+   "derivation": "Z-Anatomy's (BodyParts3D: pons); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity)."
+  },
+  {
+   "id": "pf_medulla",
+   "name": "Medulla oblongata",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/pf_medulla.glb",
+   "bytes": 82044,
+   "colour": {
+    "token": "sbBrainstem",
+    "light": "#51474C",
+    "dark": "#92929D"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": false,
+   "centroid": {
+    "L": [
+     -5.6,
+     -34.99,
+     -26.61
+    ],
+    "R": [
+     5.6,
+     -34.99,
+     -26.6
+    ]
+   },
+   "derivation": "Z-Anatomy's (BodyParts3D: medulla oblongata); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity)."
+  },
+  {
+   "id": "pf_fourth_ventricle",
+   "name": "Fourth ventricle",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/pf_fourth_ventricle.glb",
+   "bytes": 43236,
+   "colour": {
+    "token": "sbCsf",
+    "light": "#0B8D9D",
+    "dark": "#51EFEF"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "ventricle",
+   "layer": "cortex",
+   "morph": false,
+   "centroid": {
+    "L": [
+     -3.99,
+     -40.49,
+     -13.18
+    ],
+    "R": [
+     3.56,
+     -40.47,
+     -13.2
+    ]
+   },
+   "derivation": "Z-Anatomy's (BodyParts3D: fourth ventricle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity)."
   }
  ],
  "arterySystems": [

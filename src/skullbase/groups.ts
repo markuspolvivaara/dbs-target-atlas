@@ -1,7 +1,7 @@
 import type { CameraPreset } from '../data/schema';
 import type { V3 } from '../state';
 import type { Look } from '../viewer/materials';
-import { APPROACHES } from './approaches';
+import { APPROACHES, V1_NAMES, V1_TEXT } from './approaches';
 import { CAVERNOUS } from './cavernous';
 import { TUMOUR_FIT, TUMOURS, tumourGroupId, type TumourFamily } from './tumours';
 import { APPROACH_GEOM, isApproachPart, kindOf, LANDMARKS, REGIONS, SB, SB_MANIFEST, SB_MODEL } from './index';
@@ -75,6 +75,35 @@ const FLOOR_POINTS = ['Foramen caecum of frontal bone', 'Sphenoidal yoke', 'Limb
 const OWN = SB_MANIFEST.structures.filter((s) => !s.pushedFrom);
 const PUSHED = SB_MANIFEST.structures.filter((s) => s.pushedFrom);
 
+/** v1 (Z-Anatomy) calls some of v3's structures by other names */
+const ownName = (n: string) => (SB_MODEL === 'zanatomy' ? V1_NAMES[n] ?? n : n);
+
+/** The surgical views (v3, and v1 with v3's craniotomies cut on Z-Anatomy's skull): the craniotomy's cut bones (the
+ * other bones whole), the bone removed, the right hemisphere of the brain (v3: the fitted template; v1: Z-Anatomy's own)
+ * or the posterior fossa's contents, and the arteries and nerves the approach exposes. */
+function surgicalGroups(): SbGroup[] {
+  const byName = (...names: string[]) => OWN.filter((s) => names.map(ownName).includes(s.name)).map((s) => s.id);
+  const lm = (...names: string[]) => LANDMARKS.filter((l) => names.includes(l.name)).map((l) => l.id);
+  const bones = OWN.filter((s) => s.type === 'bone' && !isApproachPart(s)).map((s) => s.id);
+  const brainOf = (b: 'cerebrum' | 'hindbrain') => OWN
+    .filter((s) => (b === 'cerebrum' ? kindOf(s) === 'brain' : ['hindbrain', 'ventricle'].includes(kindOf(s)))).map((s) => s.id);
+  return APPROACHES.filter((a) => APPROACH_GEOM[a.id]).map((a): SbGroup => {
+    const geom = APPROACH_GEOM[a.id];
+    const replaced = new Set(geom.bones.map((id) => SB.get(id)?.replaces));
+    // copies for this view only (the Kawase view's lifted temporal lobe) stand in for their parts
+    const own = new Map(PUSHED.filter((s) => s.forView === a.view && s.replaces).map((s) => [s.replaces!, s.id]));
+    return {
+      id: a.view, kind: 'approach', name: a.name, camera: (SB_MODEL === 'zanatomy' ? V1_TEXT[a.id]?.camera : undefined) ?? a.camera, hemi: a.hemi ?? (geom.side === 'M' ? 'both' : geom.side), cutAbove: null, boneLook: undefined,
+      // framed on the craniotomy and what it is for: the view looks in through the one onto the other
+      focus: null, focusIds: [...(a.frameOpening === false ? [] : [geom.removed]), ...byName(...a.focus)], radius: a.radius ?? 60, approach: a.id, morphs: a.morphs,
+      description: SB_MODEL === 'zanatomy' ? V1_TEXT[a.id]?.summary ?? a.summary : a.summary,
+      structures: [...bones.filter((id) => !replaced.has(id)), ...geom.bones, geom.removed, ...(geom.guides ?? []),
+        ...[...brainOf(a.brain ?? 'cerebrum'), ...byName(...a.context)].map((id) => own.get(id) ?? id)],
+      landmarks: lm(...(a.landmarks ?? [])),
+    };
+  });
+}
+
 function temporalGroups(): SbGroup[] {
   const byName = (...names: string[]) => OWN.filter((s) => names.includes(s.name)).map((s) => s.id);
   // the ear's contents (OpenEar) and the greater petrosal nerve; a view never shows a branch without its parent vessel,
@@ -90,26 +119,7 @@ function temporalGroups(): SbGroup[] {
   const base = { boneLook: 'shell' as Look, cutAbove: null, hemi: 'both' as const };
   const nerves = OWN.filter((s) => kindOf(s) === 'nerve').map((s) => s.id);
   const bonesV3 = OWN.filter((s) => s.type === 'bone' && !isApproachPart(s)).map((s) => s.id);
-  // the surgical view: the craniotomy's cut bones (the other bones whole), the bone removed, the right hemisphere of the
-  // fitted brain and the arteries and nerves the approach exposes
-  // the brain a view draws: the fitted template's cerebrum, or the posterior fossa's contents (the telovelar view)
-  const brainOf = (b: 'cerebrum' | 'hindbrain') => OWN
-    .filter((s) => (b === 'cerebrum' ? kindOf(s) === 'brain' : ['hindbrain', 'ventricle'].includes(kindOf(s)))).map((s) => s.id);
-  const surgical = APPROACHES.filter((a) => APPROACH_GEOM[a.id]).map((a): SbGroup => {
-    const geom = APPROACH_GEOM[a.id];
-    const replaced = new Set(geom.bones.map((id) => SB.get(id)?.replaces));
-    // copies for this view only (the Kawase view's lifted temporal lobe) stand in for their parts
-    const own = new Map(PUSHED.filter((s) => s.forView === a.view && s.replaces).map((s) => [s.replaces!, s.id]));
-    return {
-      id: a.view, kind: 'approach', name: a.name, camera: a.camera, hemi: a.hemi ?? (geom.side === 'M' ? 'both' : geom.side), cutAbove: null, boneLook: undefined,
-      // framed on the craniotomy and what it is for: the view looks in through the one onto the other
-      focus: null, focusIds: [...(a.frameOpening === false ? [] : [geom.removed]), ...byName(...a.focus)], radius: a.radius ?? 60, approach: a.id, morphs: a.morphs,
-      description: a.summary,
-      structures: [...bonesV3.filter((id) => !replaced.has(id)), ...geom.bones, geom.removed, ...(geom.guides ?? []),
-        ...[...brainOf(a.brain ?? 'cerebrum'), ...byName(...a.context)].map((id) => own.get(id) ?? id)],
-      landmarks: lm(...(a.landmarks ?? [])),
-    };
-  });
+  const surgical = surgicalGroups();
   // the tumours: each grade (or site) a view of its own, drawn in the view that suits it; the fitted brain it pushes aside
   // drawn as pushed for that view (copies that stand in for the parts, skullbase_v3_tumours.py)
   const sbIds = new Set(OWN.map((s) => s.id));
@@ -218,6 +228,7 @@ function temporalGroups(): SbGroup[] {
 }
 
 export const SB_GROUPS: SbGroup[] = SB_MODEL === 'v3' ? temporalGroups() : [
+  ...(SB_MODEL === 'zanatomy' ? surgicalGroups() : []),
   {
     id: 'floor', kind: 'overview', name: 'Cranial floor', camera: 'axial', hemi: 'both', cutAbove: FLOOR_CUT_MM, focus: null, radius: 75,
     description: `The cranial bones of the model with everything above ${FLOOR_CUT_MM} mm (over the hypophysial fossa) cut away, seen from above. Use the regions to see what passes each opening, and the bones for their labelled landmarks.`,

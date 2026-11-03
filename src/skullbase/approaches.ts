@@ -459,6 +459,45 @@ export const APPROACH = new Map(APPROACHES.map((a) => [a.id, a]));
  * (PMC6561078), Nguyen 2026 (PMC13286435), Paudel 2025 (PMC12750977), Singh 2018 (PMC6166545), Yohannan 2015
  * (PMC4584028).
  */
+/** v1 (the Z-Anatomy model): the same views cut on Z-Anatomy's own skull, over its own brain (pipeline/skullbase_v1.py);
+ * what each view says of itself there. The sourced sections are the same. */
+const V1_BRAIN = 'The brain is Z-Anatomy’s own (BodyParts3D: its cortex patches remade as one closed surface per hemisphere, pushed 1 mm inside the cranial cavity where it reached into the bone), not a patient’s; its shapes are Skull base v3’s rules, not a simulation of the tissue. Z-Anatomy’s arteries and veins stay where the model has them: they are not carried with the opened or lifted cortex.';
+const V1_HIND = 'The cerebellum, brainstem and fourth ventricle are Z-Anatomy’s (pushed clear where they reached into or through its bone, or into its arteries); drawing them aside is a shape, not a simulation of the tissue. The cerebellar arteries lying on the cerebellum move with it; the trunks stay.';
+/** v1's names for what a view's context names in v3 (Z-Anatomy draws the artery whole, or under another name). */
+export const V1_NAMES: Record<string, string> = {
+  'Middle cerebral artery (M2 segment)': 'Insular branches of middle cerebral artery (M2 segment)',
+  'Anterior cerebral artery (A1–A2)': 'Anterior cerebral artery',
+  'Superior cerebellar artery (fitted course)': 'Superior cerebellar artery',
+  'Posterior inferior cerebellar artery (fitted course)': 'Posterior inferior cerebellar artery',
+};
+/** What v3 draws from other data (TopBrain's segments, its drawn veins, the ganglion, the meatal bundle, a variant
+ * artery) and v1's Z-Anatomy model does not have: left out of v1's views. */
+export const V1_ABSENT = new Set([
+  'Anterior cerebral artery (A3)', 'Third anterior cerebral artery (A2)', 'Third anterior cerebral artery (A3)',
+  'Superficial middle cerebral vein', 'Sphenoparietal sinus', 'Insular veins', 'Deep middle cerebral vein', 'Basal vein (of Rosenthal)',
+  'Internal cerebral veins', 'Trigeminal ganglion', 'Nerves in the internal acoustic meatus (VII, VIII)',
+]);
+
+export const V1_TEXT: Record<string, { summary: string; notShown: string; camera?: CameraPreset }> = {
+  pterional: { summary: 'The right pterional craniotomy cut out of Z-Anatomy’s skull, over Z-Anatomy’s own brain. One slider opens the Sylvian fissure onto the insula and the model’s middle cerebral artery; another lifts the frontal lobe off the orbital roof to look under it, at the carotid and the optic nerve.',
+    notShown: `The scalp, temporalis muscle, dura and arachnoid; the Sylvian veins. ${V1_BRAIN}` },
+  lso: { summary: 'A right lateral supraorbital (LSO) craniotomy cut out of Z-Anatomy’s skull, drawn larger than usual to show the anatomy, over the same brain. The fissure lies at the craniotomy’s lower edge; the lift raises the frontal lobe off the lateral orbital roof.',
+    notShown: `The scalp, dura and arachnoid; the Sylvian veins. The craniotomy is drawn larger than the usual LSO, its outline placed by rule. ${V1_BRAIN}` },
+  interhemispheric: { summary: 'A right parasagittal craniotomy at the coronal suture cut out of Z-Anatomy’s skull, over its brain. The slider holds the right hemisphere off the falx, opening the interhemispheric fissure down to the corpus callosum.',
+    notShown: `The scalp, dura and arachnoid; the bridging veins. ${V1_BRAIN}` },
+  suboccipital: { summary: 'A midline suboccipital craniotomy cut out of Z-Anatomy’s skull, with its cerebellum, brainstem and fourth ventricle. The slider draws the cerebellar tonsils apart and lifts the inferior vermis, opening the cerebellomedullary fissure.',
+    notShown: `The skin, muscles, dura and arachnoid; the tela choroidea, inferior medullary velum and choroid plexus. ${V1_HIND}` },
+  retrosigmoid: { summary: 'A right retrosigmoid craniotomy cut out of Z-Anatomy’s skull against its own transverse and sigmoid sinuses, drawn larger than a keyhole, with its cerebellum, brainstem and fourth ventricle. The slider draws the right cerebellar hemisphere back from the petrous bone, opening the cerebellopontine angle.',
+    notShown: `The skin, muscles, dura and arachnoid; the superior petrosal vein and the labyrinthine artery; the nervus intermedius. ${V1_HIND}`,
+    camera: 'retrosigmoidLevel' },
+  orbitozygomatic: { summary: 'The pterional craniotomy extended by an orbitozygomatic piece (the superolateral orbital rim and roof, the zygoma and its arch), cut out of Z-Anatomy’s skull, over the same brain, seen from lower down.',
+    notShown: `The orbital piece’s and the arch’s extents are drawn by rule on this skull. The temporalis and masseter muscles, the periorbita and the facial nerve’s frontal branch. ${V1_BRAIN}` },
+  far_lateral: { summary: 'A right far lateral (lateral suboccipital) craniectomy cut out of Z-Anatomy’s skull down through the foramen magnum, the posterior third of the occipital condyle drilled, with its cerebellum, brainstem and fourth ventricle.',
+    notShown: `The atlas and axis are not part of this model, so the hemilaminectomy of C1 is not shown. The craniectomy’s outline is placed by rule. The muscles, the dura and the arachnoid. ${V1_HIND}` },
+  kawase: { summary: 'A right temporal flap flush with the middle fossa floor and the petrous apex drilled within the Kawase rhomboid, on Z-Anatomy’s skull.',
+    notShown: `The dura and the tentorium. ${V1_BRAIN}` },
+};
+
 export const ENDONASAL_INFO: { sections: ApproachSection[]; notShown: string } = {
   sections: [
     sec('The scope and the way in', [

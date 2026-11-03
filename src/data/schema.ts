@@ -34,7 +34,7 @@ export type Evidence = z.infer<typeof EvidenceSchema>;
  * of the foramen magnum; 'subtemporal' from the side and above, under the lifted temporal lobe onto the middle fossa floor
  * (skull-base section, surgical views).
  */
-export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon', 'lateral', 'medial', 'inferior', 'posterior', 'anterolateral', 'frontolateral', 'supraorbital', 'vertex', 'suboccipital', 'retrosigmoid', 'orbitozygomatic', 'farLateral', 'subtemporal']);
+export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon', 'lateral', 'medial', 'inferior', 'posterior', 'anterolateral', 'frontolateral', 'supraorbital', 'vertex', 'suboccipital', 'retrosigmoid', 'orbitozygomatic', 'farLateral', 'subtemporal', 'retrosigmoidLevel']);
 export type CameraPreset = z.infer<typeof CameraPresetSchema>;
 
 /** A rendered structure: nucleus, cortical area, tract or sweet-spot volume. */

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { crossCheckSb, DEFINITIONS, definitionFor, LANDMARKS, NOT_YET_SHOWN, REGIONS, SB_MANIFEST } from '../../src/skullbase';
+import { APPROACH_GEOM, crossCheckSb, DEFINITIONS, definitionFor, LANDMARKS, NOT_YET_SHOWN, REGIONS, SB_MANIFEST } from '../../src/skullbase';
 import { SB_GROUPS } from '../../src/skullbase/groups';
 import { skullPlan, skullScene } from '../../src/skullbase/scene';
 import { decodeSkull, defaultSkullState, encodeSkull } from '../../src/skullbase/state';
@@ -11,6 +11,15 @@ import { APPROACH_REF, APPROACH_REFS, APPROACHES, CAVERNOUS_INFO, ENDONASAL_INFO
 describe('skull-base data (Z-Anatomy export)', () => {
   it('generated files agree with each other', () => {
     expect(crossCheckSb()).toEqual([]);
+  });
+  it('the surgical views use Z-Anatomy\u2019s own brain and hindbrain, with the shapes; the cerebellar arteries move with them', () => {
+    const by = (n: string) => SB_MANIFEST.structures.find((s) => s.name === n);
+    const brain = SB_MANIFEST.structures.filter((s) => s.category === 'brain');
+    expect(brain.length).toBe(6);
+    for (const b of brain) { expect(b.morph, b.name).toBe(true); expect(b.dataset).toBe('zanatomy'); }
+    for (const n of ['Superior cerebellar artery', 'Anterior inferior cerebellar artery', 'Posterior inferior cerebellar artery']) expect(by(n)?.morph, n).toBe(true);
+    // (the trunks and the posterior cerebral artery, above the tentorium, stay)
+    for (const n of ['Vertebral artery', 'Basilar artery', 'Posterior cerebral artery']) expect(by(n)?.morph, n).toBeFalsy();
   });
   it('has the cranial bones, cranial nerves I–XII and the main intracranial arteries and sinuses', () => {
     const names = new Set(SB_MANIFEST.structures.map((s) => s.name));
@@ -140,7 +149,10 @@ describe('e2e group list stays in step with the groups module', () => {
     const { readFileSync } = await import('node:fs');
     const spec = readFileSync(new URL('../e2e/smoke.spec.ts', import.meta.url), 'utf8');
     for (const g of SB_GROUPS) if (g.kind === 'bone') expect(spec, g.name).toContain(`'${g.name}'`);
-    expect(SB_GROUPS.length).toBe(1 + REGIONS.length + 3 + 6);
+    // (the overview, the regions, three systems, six bone views and the surgical views cut on this model's skull)
+    expect(SB_GROUPS.length).toBe(1 + REGIONS.length + 3 + 6 + Object.keys(APPROACH_GEOM).length);
+    expect(SB_GROUPS.filter((g) => g.kind === 'approach').map((g) => g.id).sort())
+      .toEqual(['far_lateral', 'interhemispheric', 'lso', 'orbitozygomatic', 'retrosigmoid', 'telovelar', 'transsylvian']);
     // the all-bones view draws every bone and every landmark
     const all = SB_GROUPS.find((g) => g.id === 'bone_all_bones')!;
     expect(all.landmarks.length).toBe(LANDMARKS.length);

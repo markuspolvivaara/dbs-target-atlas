@@ -525,7 +525,7 @@ def validate() -> int:
         c = it["centroid"]
         if c["L"] != c["R"]:  # two sides: the left node must lie left of the right node
             check(c["L"][0] < c["R"][0], f"{it['id']}: left centroid x {c['L'][0]} not left of right {c['R'][0]}")
-        if it["type"] == "bone" and c["L"] != c["R"]:
+        if it["type"] == "bone" and c["L"] != c["R"] and not it.get("approach"):     # (a craniotomy cuts one side)
             check(abs(c["L"][0] + c["R"][0]) < 6, f"{it['id']}: left/right centroids not mirror-like (x {c['L'][0]} / {c['R'][0]})")
     temporal = next(i for i in m["structures"] if i["id"] == "sb_temporal_bone")
     check(temporal["centroid"]["L"][0] < -30, f"temporal bone left centroid x {temporal['centroid']['L'][0]} (expected well left of midline)")
@@ -546,6 +546,22 @@ def validate() -> int:
     arts = [it for it in m["structures"] if it.get("category") == "artery"]
     check(all(it.get("system") in ARTERY_SYSTEMS for it in arts), "an artery without a system")
     check({it["system"] for it in arts} == set(ARTERY_SYSTEMS), "every artery system has a structure")
+    if not CT and (GEN / f"{PREFIX}-approaches.json").exists():     # v1 with v3's views (skullbase_v1.py)
+        ids = {it["id"]: it for it in m["structures"]}
+        aps = json.loads((GEN / f"{PREFIX}-approaches.json").read_text())
+        for aid, ap in aps.items():
+            check(ap["removed"] in ids and all(b in ids for b in ap["bones"]), f"{aid}: structures missing")
+            check(0.5 <= ap["removedMl"] <= 30, f"{aid}: removes {ap['removedMl']} ml")
+            for b in ap["bones"]:
+                check(ids.get(ids[b].get("replaces", ""), {}).get("type") == "bone", f"{aid}: {b} replaces no bone")
+        brain = [it for it in m["structures"] if it.get("category") == "brain" and not it.get("pushedFrom") and not it.get("forView")]
+        check(len(brain) == 6 and all(it.get("morph") for it in brain), f"{len(brain)} brain pieces with the surgical shapes")
+        pf = [it for it in m["structures"] if it.get("category") in ("hindbrain", "ventricle") and not it.get("pushedFrom")]
+        check(len(pf) == 8, f"{len(pf)} posterior fossa pieces")
+        fit = json.loads((GEN / f"{PREFIX}-v1fit.json").read_text())
+        for sd, rc in fit["brain"]["clear"].items():
+            check(rc["inBoneWayAfter"] <= 20, f"cortex {sd}: {rc['inBoneWayAfter']} vertices left in bone's way")
+        check(fit["pfossa"]["clear"]["inBoneAfter"] <= 60, f"hindbrain: {fit['pfossa']['clear']['inBoneAfter']} vertices left in bone")
     print(f"skull base validation: {n - len(fails)}/{n} checks passed")
     for f in fails:
         print("FAIL", f)

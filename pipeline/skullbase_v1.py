@@ -1,0 +1,105 @@
+"""Skull base v1 (the Z-Anatomy model) with what Skull base v3 shows on its CT, made from Z-Anatomy's own models: the
+craniotomies (skullbase_v3_approach.py with SB_PROFILE=v1), the brain and its surgical shapes (skullbase_v1_brain.py),
+and the items they add to v1's manifest.
+
+  pipeline/.venv/bin/python -I -W ignore pipeline/skullbase_v1.py approaches
+      (after skullbase_build.py, skullbase_v1_skull.py and SB_PROFILE=v1 skullbase_v3_approach.py; then compress.mjs
+      skullbase and skullbase_build.py finalize)
+
+Everything here is the Z-Anatomy model's (BodyParts3D, CC BY-SA): no CT, no TopBrain vessel, no registered ear, no
+template brain. Where Z-Anatomy lacks something v3 drew from other data, it is drawn by rule with v3's sourced rules and
+says so.
+"""
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+import numpy as np
+
+ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT))
+
+REPO = ROOT.parent
+KIND = "skullbase"
+PREFIX = "sb"
+BUILD = ROOT / "data" / "build" / KIND
+GEN = REPO / "src" / "data" / "generated"
+PUBLIC = REPO / "public" / "assets"
+LICENCE = "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan"
+
+
+def whole_bones() -> dict:
+    """v1's bones as skullbase_v1_skull.py wrote them (the meshes v1 draws): {name: (verts, tris, ao)}."""
+    return {n: (np.array(b["verts"], float), np.array(b["tris"], int), np.array(b["ao"], float))
+            for n, b in json.loads((BUILD / "skull.json").read_text())["bones"].items()}
+
+
+def approaches() -> int:
+    """The craniotomies' items (approach.json, cut on Z-Anatomy's skull) into v1's manifest, and sb-approaches.json."""
+    import skullbase_v3 as V3
+    p = GEN / f"{PREFIX}-manifest.json"
+    m = json.loads(p.read_text())
+    items = [it for it in m["structures"] if not it.get("approach") and not it.get("forView")]
+    for f in BUILD.glob("sb_appr_*.glb"):
+        f.unlink()
+    V3.approach_items(items, None, build=BUILD, kind=KIND, prefix=PREFIX, licence=LICENCE, owner="Z-Anatomy's",
+                      whole_bones=whole_bones())
+    for it in items:
+        f = REPO / "public" / it["file"]
+        if not it.get("bytes") and f.exists():
+            it["bytes"] = f.stat().st_size
+    m["structures"] = items
+    p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
+    print("approach items:", sum(1 for it in items if it.get("approach")))
+    return 0
+
+
+CARRIED_NOTE = ("In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's "
+                "shapes move it (skullbase_v1_pfossa.py).")
+
+
+def brain() -> int:
+    """The cerebrum (skullbase_v1_brain.py) and the posterior fossa (skullbase_v1_pfossa.py) into v1's manifest, their
+    definitions (Z-Anatomy's Wikipedia texts) into sb-definitions.json, and their reports into sb-v1fit.json."""
+    import skullbase_build as SB
+    p = GEN / f"{PREFIX}-manifest.json"
+    m = json.loads(p.read_text())
+    br = json.loads((BUILD / "brain.json").read_text())
+    pf = json.loads((BUILD / "pfossa.json").read_text())
+    new = br["items"] + pf["items"]
+    ids = {it["id"] for it in new}
+    for it in new:
+        f = REPO / "public" / it["file"]
+        it["bytes"] = f.stat().st_size if f.exists() else 0
+    m["structures"] = [s for s in m["structures"] if s["id"] not in ids] + new
+    carried = pf["report"].get("carried", {})
+    for it in m["structures"]:      # the arteries on the cerebellum, carried with its shapes (skullbase_v1_pfossa.py)
+        if it["name"] in carried:
+            it["morph"] = True
+            it["bytes"] = (REPO / "public" / it["file"]).stat().st_size
+            note = CARRIED_NOTE
+            if note not in it.get("derivation", ""):
+                it["derivation"] = (it.get("derivation", "") + " " + note).strip()
+    p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
+    dp = GEN / f"{PREFIX}-definitions.json"
+    defs = json.loads(dp.read_text())
+    for name, raw in pf.get("texts", {}).items():
+        d = SB.definition(raw)
+        if d and name not in defs:
+            defs[name] = d
+    dp.write_text(json.dumps(defs, indent=1, ensure_ascii=False))
+    (GEN / f"{PREFIX}-v1fit.json").write_text(json.dumps({"brain": br["report"], "pfossa": pf["report"]}, indent=1, default=str))
+    print("brain items:", len(new))
+    return 0
+
+
+if __name__ == "__main__":
+    cmd = sys.argv[1:2]
+    if cmd == ["approaches"]:
+        sys.exit(approaches())
+    if cmd == ["brain"]:
+        sys.exit(brain())
+    print(__doc__)
+    sys.exit(2)

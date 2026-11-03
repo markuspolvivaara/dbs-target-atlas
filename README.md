@@ -385,6 +385,32 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
   such; peer-reviewed teaching notes are still to come.
 - Pipeline: `pipeline/skullbase_export.py` runs inside Blender (installed under `.tools/`, or set `BLENDER`) and
   `pipeline/skullbase_build.py` writes the assets and checks sides, symmetry and landmark distances.
+- **Surgical views**: Skull base v3's craniotomies are cut on Z-Anatomy's own skull (pterional transsylvian, lateral
+  supraorbital, interhemispheric, telovelar, retrosigmoid, orbitozygomatic and far lateral), over Z-Anatomy's own brain
+  and hindbrain, with v3's sourced cards and sliders. Nothing comes from the CT, the template brain or the registered
+  ear. How each part is made:
+  - The bones are rasterised at 0.5 mm (`pipeline/skullbase_v1_skull.py`). The open meshes become a 1 mm shell, filled;
+    the paranasal sinuses' air is taken out; the gaps Z-Anatomy's meshes leave between neighbouring bones are bridged.
+  - The cuts are v3's rules (`SB_PROFILE=v1 pipeline/skullbase_v3_approach.py`). On this skull the pterional floor rule
+    needs bone flatter than about 32°, with the cranial cavity straight above it and none straight below. The sinuses
+    the cuts follow are Z-Anatomy's own.
+  - The cortex is Z-Anatomy's gyrus and sulcus patches, remade as one closed surface per hemisphere about 0.25 mm
+    outside them (the patches overlap and cut through one another), each part keeping its lobe
+    (`pipeline/skullbase_v1_brain.py`).
+  - Where the cortex reaches into its own bone (up to about 7 mm), it is pushed 1 mm inside the cavity by a smooth
+    field in small steps. Then v3's shape rules run: the Sylvian fissure opened, the frontal lobe lifted, the
+    hemisphere held off the falx.
+  - Z-Anatomy has no insular gyri: the insula is its circular sulcus's patch, and the patch filed as "Insula
+    (subcentral gyrus …)" is taken as frontal.
+  - The cerebellum, brainstem and fourth ventricle are Z-Anatomy's (`pipeline/skullbase_v1_pfossa.py`). They are
+    pushed out of its bone and back inside the cranial cavity, through which the cerebellum passes in places
+    (except at the foramen magnum), then shaped by v3's telovelar and retrosigmoid rules.
+  - The superior, anterior inferior and posterior inferior cerebellar arteries move with the cerebellum. The trunks
+    and the posterior cerebral artery stay.
+  - The retrosigmoid view is seen nearly level with the porus (on this skull the opening lies level with it).
+  - Not yet on v1: Kawase (it needs the ear's structures), the ear views, the cavernous sinus, triangles and endonasal
+    view, and the tumours. v3's Sylvian veins, A3 and its variant, the trigeminal ganglion and the meatal bundle are
+    not part of Z-Anatomy and are left out of the views.
 
 ### Skull base v2: the detailed model (`skullbase-ct/`)
 

@@ -1,0 +1,151 @@
+{
+ "brain": {
+  "cavityMl": 1720,
+  "clear": {
+   "R": {
+    "inBoneWayBefore": 4131,
+    "inBoneWayAfter": 0,
+    "rounds": 18,
+    "maxMovedMm": 7.24
+   },
+   "L": {
+    "inBoneWayBefore": 4270,
+    "inBoneWayAfter": 0,
+    "rounds": 18,
+    "maxMovedMm": 7.07
+   }
+  },
+  "open": {
+   "lipsFrontal": 402,
+   "lipsTemporal": 110,
+   "heldBySkull": 2237,
+   "moved": 12317,
+   "maxMovedMm": 6.87,
+   "heldAtCavity": 36,
+   "outsideCavityAfter": 5
+  },
+  "lift": {
+   "orbitalHandles": 1193,
+   "insulaHandles": 290,
+   "moved": 10173,
+   "maxMovedMm": 11.97,
+   "heldAtCavity": 14,
+   "outsideCavityAfter": 0,
+   "line": [
+    [
+     13.4,
+     3.9,
+     9.4
+    ],
+    [
+     26.9,
+     42.5,
+     21.1
+    ],
+    [
+     28.2,
+     59.1,
+     29.3
+    ]
+   ]
+  },
+  "lsoLift": {
+   "orbitalHandles": 1034,
+   "insulaHandles": 290,
+   "moved": 10277,
+   "maxMovedMm": 12.34,
+   "heldAtCavity": 15,
+   "outsideCavityAfter": 0,
+   "line": [
+    [
+     13.4,
+     3.9,
+     9.4
+    ],
+    [
+     48.0,
+     48.4,
+     28.1
+    ]
+   ]
+  },
+  "interhemispheric": {
+   "moved": 5084,
+   "fullyMoved": 613,
+   "maxMovedMm": 8.09,
+   "heldAtCavity": 128,
+   "outsideCavityAfter": 0,
+   "span": [
+    -11.8,
+    48.2
+   ],
+   "midline": 0.0,
+   "callosumTopMm": [
+    46.0,
+    60.5
+   ]
+  }
+ },
+ "pfossa": {
+  "telovelarMaxMm": 8.75,
+  "retrosigmoidMaxMm": 12.13,
+  "inBoneAtRest": {
+   "Anterior quadrangular lobule.l": 0,
+   "Anterior quadrangular lobule.r": 0,
+   "Posterior quadrangular lobule.l": 0,
+   "Posterior quadrangular lobule.r": 0,
+   "Superior semilunar lobule.l": 392,
+   "Superior semilunar lobule.r": 389,
+   "Inferior semilunar lobule.l": 658,
+   "Inferior semilunar lobule.r": 659,
+   "Gracile lobule.l": 0,
+   "Gracile lobule.r": 0,
+   "Biventral lobule.l": 61,
+   "Biventral lobule.r": 61,
+   "Tonsil of cerebellum.l": 0,
+   "Tonsil of cerebellum.r": 0,
+   "Flocculus.l": 255,
+   "Flocculus.r": 254,
+   "Peduncle of flocculus.l": 66,
+   "Peduncle of flocculus.r": 66,
+   "Wing of central lobule.l": 0,
+   "Wing of central lobule.r": 0,
+   "Superior cerebellar peduncle.l": 0,
+   "Superior cerebellar peduncle.r": 0,
+   "Midbrain.l": 0,
+   "Midbrain.r": 0,
+   "Pons.l": 884,
+   "Pons.r": 883,
+   "Medulla oblongata.l": 225,
+   "Medulla oblongata.r": 230,
+   "Lingula of cerebellum": 0,
+   "Central lobule": 0,
+   "Culmen": 0,
+   "Declive": 0,
+   "Folium of vermis": 0,
+   "Tuber of vermis": 0,
+   "Pyramis of vermis": 0,
+   "Uvula of vermis": 0,
+   "Nodule of vermis": 0,
+   "Fourth ventricle": 0
+  },
+  "clear": {
+   "containedPushed": 429,
+   "inVesselBefore": 3320,
+   "inBoneBefore": 5060,
+   "inVesselAfter": 3,
+   "inBoneAfter": 0,
+   "maxMovedMm": 5.24
+  },
+  "trigeminalRoot": [
+   11.21,
+   -13.4,
+   6.27
+  ],
+  "carried": {
+   "Anterior inferior cerebellar artery": 12.16,
+   "Posterior inferior cerebellar artery": 11.82,
+   "Superior cerebellar artery": 11.44
+  }
+ }
+}

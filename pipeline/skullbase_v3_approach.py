@@ -43,9 +43,26 @@ REPO = ROOT.parent
 OVER_SSC_NAME = "Bone over the superior semicircular canal"   # (skullbase_v3.OVER_SSC: the arcuate eminence on the canal)
 from build import isosurface  # noqa: E402
 
-CT_BUILD = ROOT / "data" / "build" / "skullbase-ct"
-BUILD = ROOT / "data" / "build" / "skullbase-v3"
-SKULL = BUILD / "skull_bone.npz"        # v3's skull (skullbase_v3_skull.py), when built
+# the model the craniotomies are cut on: v3 (this CT, the default) or v1 (the Z-Anatomy model, SB_PROFILE=v1: its own bones
+# rasterised by skullbase_v1_skull.py, its own landmarks, its own sinuses; its skull's sutures leave gaps the 5 mm seal of
+# the cranial cavity does not close, so the cavity is found with V1_CAVITY_SEAL_MM)
+import os  # noqa: E402
+PROFILE = os.environ.get("SB_PROFILE", "v3")
+V1_CAVITY_SEAL_MM = 7.0
+SINUSES_OWN = "Z-Anatomy's own (its centre lines and radii)" if PROFILE == "v1" else "this CT's own (traced through its lumen)"
+SINUSES_OWN_PL = "Z-Anatomy's own sinuses (their centre lines and radii)" if PROFILE == "v1" else "this CT's own sinuses (traced through their lumen)"
+V1_FLOOR_COS = 0.85       # (... and lies within about 32 degrees of flat, its nearest cavity that near straight up)
+V1_FLOOR_BELOW_MM = 15.0  # (Skull.keep_floor on v1: a floor has no cranial cavity this near straight below it)
+if PROFILE == "v1":
+    CT_BUILD = ROOT / "data" / "build" / "skullbase"
+    BUILD = CT_BUILD
+    K.CAVITY_SEAL_MM = V1_CAVITY_SEAL_MM
+    GEN_PREFIX = "sb"
+else:
+    CT_BUILD = ROOT / "data" / "build" / "skullbase-ct"
+    BUILD = ROOT / "data" / "build" / "skullbase-v3"
+    GEN_PREFIX = "sbv3"
+SKULL = BUILD / "skull_bone.npz"        # the model's skull (skullbase_v3_skull.py, skullbase_v1_skull.py), when built
 STEP = 0.5
 FLAP_GAP_MM = 8.0       # bridged within a run: the diploe and air cells (the cranial cavity behind is wider)
 FLAP_DEEPER_MM = 10.0
@@ -357,6 +374,18 @@ class Skull:
         del near, grid
         d = np.linalg.norm(vec, axis=0)
         floor = bone & (d <= FLOOR_NEAR_MM) & (vec[2] >= 0.7 * np.maximum(d, 1e-6))
+        if PROFILE == "v1":
+            # (Z-Anatomy's wall slopes at about 45 degrees by the pterion, and has ledges with the cavity over them: floor
+            # only flatter than V1_FLOOR_COS, with the cavity straight above it within FLOOR_NEAR_MM and none straight
+            # below it within V1_FLOOR_BELOW_MM, as the orbital roofs and the fossae's floors have the orbit and the
+            # infratemporal fossa below them)
+            above = np.zeros_like(cav)
+            below = np.zeros_like(cav)
+            for k in range(1, int(round(FLOOR_NEAR_MM / STEP)) + 1):
+                above[:, :, :-k] |= cav[:, :, k:]
+            for k in range(1, int(round(V1_FLOOR_BELOW_MM / STEP)) + 1):
+                below[:, :, k:] |= cav[:, :, :-k]
+            floor &= above & ~below & (vec[2] >= V1_FLOOR_COS * np.maximum(d, 1e-6))
         # the floor's level, per column of the frame (1 mm), where the floor is
         fi = np.argwhere(floor)
         F = nib.affines.apply_affine(self.a, fi + lo)
@@ -606,6 +635,8 @@ def pterional(S: Skull) -> dict:
         t = np.clip(((P - ridge0) @ seg) / (seg @ seg), 0, 1)
         return np.linalg.norm(P - (ridge0 + t[:, None] * seg), axis=1) <= RIDGE_RADIUS_MM
     drill = S.region(near_ridge, (ridge0 + stop) / 2, np.linalg.norm(seg) / 2 + RIDGE_RADIUS_MM + 1)
+    if PROFILE == "v1":      # Z-Anatomy's ridge lies lower than that line: found from the skull itself
+        drill |= ridge_between_fossae(S, whole | drill, n_p, acp)
     how = ("A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture "
            "(Yilmaz 2025, Sevgi 2026; the model's zygomatic process of the frontal bone, raised 6 mm); a frontal hole near the "
            f"superior orbital rim (Yilmaz 2025; here 20 mm above and 10 mm lateral to the supraorbital notch, "
@@ -622,6 +653,33 @@ def pterional(S: Skull) -> dict:
            f"Burr holes: {fmt(keyhole)}, {fmt(frontal)}, {fmt(root)}, {fmt(post)}.")
     return {"id": "pterional", "name": "Pterional (frontotemporal) craniotomy", "cut": m | drill, "how": how, "softMm": PT_SOFT_MM, "guard": ~free,
             "burrHoles": [keyhole.round(1).tolist(), frontal.round(1).tolist(), root.round(1).tolist(), post.round(1).tolist()]}
+
+
+def ridge_between_fossae(S: "Skull", opened: np.ndarray, n: np.ndarray, acp: np.ndarray) -> np.ndarray:
+    """v1: the lateral sphenoid ridge under a pterional opening, found from the skull: bone within RIDGE_REACH_MM of the
+    opening's cut, whose column (straight up and down) has the cranial cavity both above and below it within RIDGE_THIN_MM
+    (a ridge between the anterior and middle fossae, not a fossa's floor, which has the orbit or the infratemporal fossa
+    below it), lateral of RIDGE_STOP_MM short of the anterior clinoid process."""
+    near_cut = ndimage.distance_transform_edt(~opened) * STEP <= RIDGE_REACH_MM
+    bone = (S.b > K.SURFACE_LEVEL) & near_cut & ~opened
+    k = int(round(RIDGE_THIN_MM / STEP))
+    cav = S.cavity
+    up = np.zeros_like(cav)
+    down = np.zeros_like(cav)
+    for d in range(1, k + 1):
+        up[:, :, :-d] |= cav[:, :, d:]
+        down[:, :, d:] |= cav[:, :, :-d]
+    ridge = bone & up & down
+    idx = np.argwhere(ridge)
+    P = nib.affines.apply_affine(S.a, idx)
+    far = np.linalg.norm(P - acp, axis=1) >= RIDGE_STOP_MM
+    out = np.zeros_like(ridge)
+    out[tuple(idx[far].T)] = True
+    return out
+
+
+RIDGE_REACH_MM = 22.0   # (v1) the ridge's bone this near the opening's cut ...
+RIDGE_THIN_MM = 8.0     # ... with the cavity this near above and below it
 
 
 def zygomatic(S: "Skull", near: np.ndarray, reach_mm: float = 45.0) -> np.ndarray:
@@ -816,8 +874,7 @@ def retrosigmoid(S: Skull) -> dict:
            f"front edge along the sigmoid sinus' posterior margin for {RS_FLAP_MM[1]:.0f} mm (Jian 2021: the window's upper and front margins "
            "against the two sinuses), closed behind and below by straight edges, its corners rounded; larger than Jian 2021's keyhole "
            "(18-20 x 20-25 mm), about the size of the craniotomies in Tang 2025 (a mean 3.8 cm across), the shape drawn by hand "
-           "(illustrative). The sinuses are this CT's own "
-           f"(traced through its lumen), the edges {RS_SINUS_GAP_MM:.0f} mm off their margins, drawn on the inner table and carried out "
+           "(illustrative). The sinuses are " + SINUSES_OWN + f", the edges {RS_SINUS_GAP_MM:.0f} mm off their margins, drawn on the inner table and carried out "
            "through the bone. The keypoint is where the two margins meet (Jian 2021, 2022, 2024); the burr hole "
            f"{RS_DRILL_BEHIND_MM} mm behind and below it (Jian 2021). About {area:.0f} mm² seen face on; its edge smoothed over "
            f"{RS_SOFT_MM:.0f} mm (illustrative). Keypoint: {fmt(key)}; burr hole: {fmt(drill)}.")
@@ -1008,7 +1065,7 @@ def far_lateral(S: Skull) -> dict:
     drill = S.region(lambda Q: Q[:, 1] <= y_cut, cond, FL_CONDYLE_MM)
     area = outline_area(outline, n)
     how = (f"A right lateral suboccipital craniectomy (Pai 2018: lateral suboccipital, reaching the sigmoid sinus, the foramen "
-           f"magnum's rim taken), its outline following this CT's own sinuses (traced through their lumen): its upper edge along the "
+           f"magnum's rim taken), its outline following " + SINUSES_OWN_PL + ": its upper edge along the "
            f"transverse sinus' lower margin for {FL_TRANSVERSE_MM:g} mm from the junction, its lateral edge along the sigmoid sinus' "
            f"posterior margin for {FL_SIGMOID_MM:g} mm down towards the jugular bulb, and below, the foramen magnum's posterior rim taken "
            f"from x = {FL_RIM_MM[0]:g} to {FL_RIM_MM[1]:g} mm, so that the opening runs into the foramen; its medial edge bowed outwards "
@@ -1023,7 +1080,7 @@ def structure_points(names, side: str = "R", step: float = 0.4) -> dict:
     on their faces, for distances."""
     import trimesh as _tm
     from glb import read_glb_full
-    man = json.loads((REPO / "src" / "data" / "generated" / "sbv3-manifest.json").read_text())["structures"]
+    man = json.loads((REPO / "src" / "data" / "generated" / f"{GEN_PREFIX}-manifest.json").read_text())["structures"]
     out = {}
     for it in man:
         if it["name"] in names and not it.get("pushedFrom") and it["name"] not in out:
@@ -1042,8 +1099,8 @@ def kawase(S: Skull) -> dict:
     and the arcuate eminence) down to the inferior petrosal sinus, kept off the structures that limit it (KW_KEEP_MM)."""
     import skullbase_v3_cavernous as CAV
     gen = REPO / "src" / "data" / "generated"
-    lms = {l["name"]: np.array(l["ras"]) for l in json.loads((gen / "sbv3-landmarks.json").read_text()) if l.get("side") == "R"}
-    man = {it["name"]: it for it in json.loads((gen / "sbv3-manifest.json").read_text())["structures"] if not it.get("pushedFrom")}
+    lms = {l["name"]: np.array(l["ras"]) for l in json.loads((gen / f"{GEN_PREFIX}-landmarks.json").read_text()) if l.get("side") == "R"}
+    man = {it["name"]: it for it in json.loads((gen / f"{GEN_PREFIX}-manifest.json").read_text())["structures"] if not it.get("pushedFrom")}
     # the flap: on the temporal squama, its base at the middle fossa floor's level (the tegmen), centred on the external
     # auditory canal two thirds forwards (the canal's line: the tympanic membrane's, from the registered ear)
     eac_y = man["Tympanic membrane"]["centroid"]["R"][1]
@@ -1060,8 +1117,8 @@ def kawase(S: Skull) -> dict:
     m = S.flap(outline, lat, floor=True, smooth=True)
     # the rhomboid: its corners on this model
     apex, gg, ae = lms["Apex of petrous part"], lms["Geniculate ganglion"], lms[OVER_SSC_NAME]
-    gspn = CAV.centre_lines(ROOT / "data" / "build" / "skullbase-v3" / "tb_greater_petrosal_nerve.glb")["R"][0]
-    v3 = CAV.centre_lines(ROOT / "data" / "build" / "skullbase-v3" / "tb_mandibular_nerve_v3.glb")["R"][0]
+    gspn = CAV.centre_lines(ROOT / "data" / "build" / man["Greater petrosal nerve"]["file"].replace("assets/", ""))["R"][0]
+    v3 = CAV.centre_lines(ROOT / "data" / "build" / man["Mandibular nerve (V3)"]["file"].replace("assets/", ""))["R"][0]
     d2 = np.linalg.norm(gspn[:, None, :2] - v3[None, :, :2], axis=2)
     i, _ = np.unravel_index(np.argmin(d2), d2.shape)
     meet = gspn[i]
@@ -1127,7 +1184,7 @@ def kawase(S: Skull) -> dict:
     measured = {"aeToGgMm": round(dist(ae, gg), 1), "ggToMeetMm": round(dist(gg, meet), 1), "meetToApexMm": round(dist(meet, apex), 1),
                 "apexToAeMm": round(dist(apex, ae), 1), "drilledMl": round(float(drill.sum()) * STEP ** 3 / 1000, 2), "flapMm2": round(area)}
     how = (f"A right temporal flap {L:g} × {H:g} mm (about {area:.0f} mm² seen from the side; Signoretti 2025 measured a mean 1272 mm²), its base "
-           "at the middle fossa floor's level (the tegmen, as located on this CT), two thirds of it in front of the external auditory canal "
+           "at the middle fossa floor's level (the tegmen, as located on this " + ("model" if PROFILE == "v1" else "CT") + "), two thirds of it in front of the external auditory canal "
            "and one third behind (Flores-Justa 2021; the canal's line taken from the registered ear's tympanic membrane), cut down flush "
            "with the floor. Then the petrous apex drilled within the rhomboid of four landmarks (Signoretti 2025): the petrous apex, "
            "where the greater petrosal nerve meets V3 (seen from above), the geniculate ganglion and the arcuate eminence (the bone over "

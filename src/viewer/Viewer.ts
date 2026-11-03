@@ -907,6 +907,10 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       // and vestibulocochlear nerves): a direction that keeps the porus acusticus and the facial and vestibulocochlear
       // nerves' cisternal course in clear sight past the bone, the sinuses and the cerebellum
       case 'retrosigmoid': dir = new THREE.Vector3(0.45 * sideSign, -0.77, -0.45); break;
+      // retrosigmoidLevel: from behind the sigmoid sinus nearly level with the porus (Skull base v1: the line from
+      // Z-Anatomy's internal acoustic meatus out through the retrosigmoid craniotomy cut on its skull, which lies higher
+      // on this skull than on v3's CT, so v3's view from below meets the mastoid)
+      case 'retrosigmoidLevel': dir = new THREE.Vector3(0.6 * sideSign, -0.78, -0.15); break;
       // orbitozygomatic: as the pterional view but from lower down, up under the frontal lobe past the removed orbital rim
       case 'orbitozygomatic': dir = new THREE.Vector3(0.8 * sideSign, 0.5, 0.12); break;
       // farLateral: from behind, the side and below, along the side of the medulla to the front of the foramen magnum
