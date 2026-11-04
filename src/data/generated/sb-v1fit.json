@@ -1,36 +1,36 @@
 {
  "brain": {
-  "cavityMl": 1720,
+  "cavityMl": 1736,
   "clear": {
    "R": {
-    "inBoneWayBefore": 4131,
+    "inBoneWayBefore": 3471,
     "inBoneWayAfter": 0,
-    "rounds": 18,
-    "maxMovedMm": 7.24
+    "rounds": 16,
+    "maxMovedMm": 6.38
    },
    "L": {
-    "inBoneWayBefore": 4270,
+    "inBoneWayBefore": 3652,
     "inBoneWayAfter": 0,
-    "rounds": 18,
-    "maxMovedMm": 7.07
+    "rounds": 16,
+    "maxMovedMm": 6.37
    }
   },
   "open": {
-   "lipsFrontal": 402,
-   "lipsTemporal": 110,
-   "heldBySkull": 2237,
-   "moved": 12317,
-   "maxMovedMm": 6.87,
-   "heldAtCavity": 36,
-   "outsideCavityAfter": 5
+   "lipsFrontal": 333,
+   "lipsTemporal": 205,
+   "heldBySkull": 2001,
+   "moved": 5777,
+   "maxMovedMm": 6.85,
+   "heldAtCavity": 149,
+   "outsideCavityAfter": 94
   },
   "lift": {
-   "orbitalHandles": 1193,
-   "insulaHandles": 290,
-   "moved": 10173,
-   "maxMovedMm": 11.97,
-   "heldAtCavity": 14,
-   "outsideCavityAfter": 0,
+   "orbitalHandles": 876,
+   "insulaHandles": 10220,
+   "moved": 19893,
+   "maxMovedMm": 8.11,
+   "heldAtCavity": 36,
+   "outsideCavityAfter": 29,
    "line": [
     [
      13.4,
@@ -50,12 +50,12 @@
    ]
   },
   "lsoLift": {
-   "orbitalHandles": 1034,
-   "insulaHandles": 290,
-   "moved": 10277,
-   "maxMovedMm": 12.34,
-   "heldAtCavity": 15,
-   "outsideCavityAfter": 0,
+   "orbitalHandles": 775,
+   "insulaHandles": 10220,
+   "moved": 19575,
+   "maxMovedMm": 12.97,
+   "heldAtCavity": 16,
+   "outsideCavityAfter": 29,
    "line": [
     [
      13.4,
@@ -70,10 +70,10 @@
    ]
   },
   "interhemispheric": {
-   "moved": 5084,
-   "fullyMoved": 613,
-   "maxMovedMm": 8.09,
-   "heldAtCavity": 128,
+   "moved": 3681,
+   "fullyMoved": 436,
+   "maxMovedMm": 8.28,
+   "heldAtCavity": 137,
    "outsideCavityAfter": 0,
    "span": [
     -11.8,
@@ -88,20 +88,20 @@
  },
  "pfossa": {
   "telovelarMaxMm": 8.75,
-  "retrosigmoidMaxMm": 12.13,
+  "retrosigmoidMaxMm": 12.2,
   "inBoneAtRest": {
    "Anterior quadrangular lobule.l": 0,
    "Anterior quadrangular lobule.r": 0,
    "Posterior quadrangular lobule.l": 0,
    "Posterior quadrangular lobule.r": 0,
-   "Superior semilunar lobule.l": 392,
-   "Superior semilunar lobule.r": 389,
-   "Inferior semilunar lobule.l": 658,
-   "Inferior semilunar lobule.r": 659,
+   "Superior semilunar lobule.l": 294,
+   "Superior semilunar lobule.r": 300,
+   "Inferior semilunar lobule.l": 588,
+   "Inferior semilunar lobule.r": 584,
    "Gracile lobule.l": 0,
    "Gracile lobule.r": 0,
-   "Biventral lobule.l": 61,
-   "Biventral lobule.r": 61,
+   "Biventral lobule.l": 18,
+   "Biventral lobule.r": 18,
    "Tonsil of cerebellum.l": 0,
    "Tonsil of cerebellum.r": 0,
    "Flocculus.l": 255,
@@ -114,10 +114,10 @@
    "Superior cerebellar peduncle.r": 0,
    "Midbrain.l": 0,
    "Midbrain.r": 0,
-   "Pons.l": 884,
-   "Pons.r": 883,
-   "Medulla oblongata.l": 225,
-   "Medulla oblongata.r": 230,
+   "Pons.l": 664,
+   "Pons.r": 677,
+   "Medulla oblongata.l": 171,
+   "Medulla oblongata.r": 171,
    "Lingula of cerebellum": 0,
    "Central lobule": 0,
    "Culmen": 0,
@@ -132,10 +132,10 @@
   "clear": {
    "containedPushed": 429,
    "inVesselBefore": 3320,
-   "inBoneBefore": 5060,
-   "inVesselAfter": 3,
+   "inBoneBefore": 4126,
+   "inVesselAfter": 14,
    "inBoneAfter": 0,
-   "maxMovedMm": 5.24
+   "maxMovedMm": 5.02
   },
   "trigeminalRoot": [
    11.21,

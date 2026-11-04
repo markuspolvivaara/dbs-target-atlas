@@ -10,6 +10,7 @@ hypophysial fossa landmark, like skullbase_export.py):
             interlobular sulci and the lateral fissure's patches as "between", their lobe found from their neighbours)
             and side
   callosum  the corpus callosum (the medial wall's reference for the interhemispheric view)
+  whiteMatter  each hemisphere's white matter of the telencephalon (the floor of the opened Sylvian fissure)
   texts     the Wikipedia-derived definition of every exported structure (CC BY-SA 3.0)
 Nothing is added or moved by hand: the file only converts what the model contains.
 """
@@ -89,12 +90,17 @@ for o in list(tel.objects) + list(bpy.data.collections['Cerebral hemisphere'].ob
         patches.append({'name': base_name(o.name), 'side': 'L' if o.name.endswith('.l') else 'R', 'lobe': 'between', 'verts': v, 'tris': t})
 cc = bpy.data.objects['Corpus callosum']
 cv, ct = mesh_data(cc)
+# the white matter of each hemisphere (the floor of the opened Sylvian fissure: the model has no insular cortex)
+wm = {}
+for s_, suf in (('L', '.l'), ('R', '.r')):
+    wv, wt = mesh_data(bpy.data.objects['White matter of telencephalon' + suf])
+    wm[s_] = {'verts': wv, 'tris': wt}
 texts = {}
 for p in patches:
     t = bpy.data.texts.get(p['name'])
     texts[p['name']] = t.as_string() if t else None
 out = {'origin': {'pin': ORIGIN_PIN, 'note': 'RAS mm relative to the hypophysial fossa landmark'}, 'patches': patches,
-       'callosum': {'verts': cv, 'tris': ct}, 'texts': texts}
+       'callosum': {'verts': cv, 'tris': ct}, 'whiteMatter': wm, 'texts': texts}
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
 with open(OUT, 'w') as f:
     json.dump(out, f)

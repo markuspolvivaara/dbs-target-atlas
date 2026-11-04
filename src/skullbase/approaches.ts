@@ -461,7 +461,7 @@ export const APPROACH = new Map(APPROACHES.map((a) => [a.id, a]));
  */
 /** v1 (the Z-Anatomy model): the same views cut on Z-Anatomy's own skull, over its own brain (pipeline/skullbase_v1.py);
  * what each view says of itself there. The sourced sections are the same. */
-const V1_BRAIN = 'The brain is Z-Anatomy’s own (BodyParts3D: its cortex patches remade as one closed surface per hemisphere, pushed 1 mm inside the cranial cavity where it reached into the bone), not a patient’s; its shapes are Skull base v3’s rules, not a simulation of the tissue. Z-Anatomy’s arteries and veins stay where the model has them: they are not carried with the opened or lifted cortex.';
+const V1_BRAIN = 'The brain is Z-Anatomy’s own (BodyParts3D: its cortex patches remade as closed surfaces, pushed 1 mm inside the cranial cavity where it reached into the bone; it has no insular cortex, so the opened fissure’s floor is its white matter), not a patient’s; its shapes are Skull base v3’s rules, not a simulation of the tissue. Z-Anatomy’s arteries and veins stay where the model has them: they are not carried with the opened or lifted cortex.';
 const V1_HIND = 'The cerebellum, brainstem and fourth ventricle are Z-Anatomy’s (pushed clear where they reached into or through its bone, or into its arteries); drawing them aside is a shape, not a simulation of the tissue. The cerebellar arteries lying on the cerebellum move with it; the trunks stay.';
 /** v1's names for what a view's context names in v3 (Z-Anatomy draws the artery whole, or under another name). */
 export const V1_NAMES: Record<string, string> = {

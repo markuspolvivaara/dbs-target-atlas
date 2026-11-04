@@ -45,13 +45,17 @@ commit and push it.
   used. The phases: (1) the approaches, done; (2) the ear views, then Kawase (it needs the geniculate ganglion and
   the greater petrosal nerve, drawn by rule); (3) the cavernous sinus, triangles and endonasal view; (4) the tumours
   and the Grading page. Commit after each phase.
-  - `skullbase_v1_skull.py`: Z-Anatomy's bones rasterised at 0.5 mm. The open meshes become a 1 mm shell, filled; the
-    sinus air is taken out; the gaps between bones are bridged (`close_sutures`). The cavity is 1720 ml at a 7 mm seal.
+  - `skullbase_v1_skull.py`: Z-Anatomy's bones rasterised at 0.5 mm. Nearly closed meshes are filled by a 3-axis
+    parity majority, plus 0.5 mm round the surface; the sinus air is taken out; the gaps between bones are bridged
+    (`close_sutures`). The cavity is 1736 ml at a 7 mm seal.
+  - v1 cut fixes (2026-11-04) for bone remnants (the lace in the pterional and OZ views): the flap's run is capped at
+    `V1_FLAP_RUN_MM`; `thin_by_cut`; the smoothing mask is extended into air; the pinhole seal applies outside the cut only.
   - `SB_PROFILE=v1 skullbase_v3_approach.py`: the same craniotomy code on that grid. v1 differences, each under
     `PROFILE == "v1"`: the floor rule is stricter (Z-Anatomy's wall slopes about 45° by the pterion and has ledges),
     and the sphenoid ridge is found from the skull. Kawase is not cut on v1 yet.
-  - `skullbase_v1_brain.py`: Z-Anatomy's cortex patches (`skullbase_v1_brain_export.py`, in Blender), remade as one
-    closed surface per hemisphere (0.25 mm grid). They are pushed out of their own bone by a smooth field (up to 7 mm;
+  - `skullbase_v1_brain.py`: Z-Anatomy's cortex patches (`skullbase_v1_brain_export.py`, in Blender, now with each
+    hemisphere's white matter), remade as closed surfaces (0.25 mm grid; temporal lobe, insula and the rest apart).
+    Opercula: within 10 mm of Z-Anatomy's M1/M2/M3. The opened fissure's floor is its white matter (`white_floor`). They are pushed out of their own bone by a smooth field (up to 7 mm;
     v3's per-vertex push folded the sulci), then shaped by v3's open, lift, LSO-lift and interhemispheric rules.
   - `skullbase_v1_pfossa.py`: Z-Anatomy's cerebellum, brainstem and fourth ventricle. Outside the cranial cavity
     counts as bone, except the foramen magnum's way out (the cerebellum passes through its thin squama). Then v3's

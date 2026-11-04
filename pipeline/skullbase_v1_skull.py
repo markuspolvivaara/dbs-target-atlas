@@ -5,8 +5,9 @@ brain's shapes that v3 cuts and fits on its CT (skullbase_v3_approach.py, skullb
 
 v1 draws Z-Anatomy's own bone meshes (pipeline/data/build/skullbase/export.json, millimetres from the hypophysial fossa
 landmark). Each is rasterised on one grid in that frame: a closed mesh filled (its inside by the parity of crossings), an
-open one (the frontal, occipital, sphenoid and ethmoid bones are stored open) as a shell SHELL_MM round its surface with
-what that shell encloses filled. The paranasal sinuses' own meshes (Sinus of frontal bone, Sinus of sphenoid bone) are air,
+nearly closed one (the frontal, occipital, sphenoid and ethmoid bones have a few dozen open edges) by the parity of
+crossings along each axis, where two of the three agree, with the voxels within SURF_MM of its surface (so its thin
+sheets stay whole). The paranasal sinuses' own meshes (Sinus of frontal bone, Sinus of sphenoid bone) are air,
 taken out of the bone. Gaps the meshes leave between neighbouring bones (close_sutures) are bridged. The field is that mask softened by a Gaussian of SOFT_MM, its surface at skullbase_ct.SURFACE_LEVEL
 as v2's and v3's are, so the same craniotomy code meshes the cut edge the same way.
 
@@ -31,7 +32,7 @@ from skullbase_brain import fill  # noqa: E402
 
 BUILD = ROOT / "data" / "build" / "skullbase"
 STEP = 0.5
-SHELL_MM = 1.0       # an open bone mesh: this far round its surface counts as bone, then what the shell encloses
+SURF_MM = 0.5        # a nearly closed bone's surface counts as bone this far round it (thin sheets stay whole)
 SOFT_MM = 0.35       # the mask softened by this (Gaussian), so the surface taken from it shows no grid steps
 AIR = ("Sinus of frontal bone", "Sinus of sphenoid bone")
 MARGIN_MM = 6.0
@@ -54,14 +55,25 @@ def main() -> int:
             got = fill(np.asarray(m.vertices), np.asarray(m.faces), lo, shape, STEP)
             how = "filled"
         else:
-            # the shell round the surface (points sampled on it), then what it encloses
+            # nearly closed (a few dozen open edges): the inside by the parity of crossings along each axis, kept where
+            # two of the three agree (a ray through a small hole miscounts along one axis only), with the voxels its
+            # surface passes through, so a thin sheet stays whole; the grid's surface then lies on Z-Anatomy's own
+            # (a cut bone's new faces meet the faces it keeps)
             P = np.vstack([V, m.sample(int(m.area / (0.25 * STEP * STEP)))])
             ijk = np.rint((P - lo) / STEP).astype(int)
-            shell = np.zeros(shape, bool)
-            shell[tuple(ijk.T)] = True
-            shell = ndimage.binary_dilation(shell, iterations=max(1, int(round(SHELL_MM / STEP))))
-            got = ndimage.binary_fill_holes(shell)
-            how = "shell"
+            surf = np.zeros(shape, bool)
+            surf[tuple(ijk.T)] = True
+            # (a sheet one voxel thick would fall below the surface level where the smoothing meets it obliquely, leaving
+            # holes: the surface's voxels taken SURF_MM thick)
+            surf = ndimage.binary_dilation(surf, iterations=max(1, int(round(SURF_MM / STEP))))
+            votes = np.zeros(shape, np.uint8)
+            for ax in range(3):
+                perm = [a for a in range(3) if a != ax] + [ax]            # the ray along axis ax
+                inv = np.argsort(perm)
+                f = fill(np.asarray(m.vertices)[:, perm], np.asarray(m.faces), lo[perm], tuple(np.array(shape)[perm]), STEP)
+                votes += np.transpose(f, inv).astype(np.uint8)
+            got = (votes >= 2) | surf
+            how = "parity (3 axes, majority)"
         mask |= got
         rep[n] = {"how": how, "ml": round(float(got.sum()) * STEP ** 3 / 1000, 1)}
         print(n, rep[n])

@@ -551,7 +551,8 @@ def validate() -> int:
         aps = json.loads((GEN / f"{PREFIX}-approaches.json").read_text())
         for aid, ap in aps.items():
             check(ap["removed"] in ids and all(b in ids for b in ap["bones"]), f"{aid}: structures missing")
-            check(0.5 <= ap["removedMl"] <= 30, f"{aid}: removes {ap['removedMl']} ml")
+            # (the orbitozygomatic piece takes the zygoma and its arch with the orbital rim and roof)
+            check(0.5 <= ap["removedMl"] <= (35 if aid == "orbitozygomatic" else 30), f"{aid}: removes {ap['removedMl']} ml")
             for b in ap["bones"]:
                 check(ids.get(ids[b].get("replaces", ""), {}).get("type") == "bone", f"{aid}: {b} replaces no bone")
         brain = [it for it in m["structures"] if it.get("category") == "brain" and not it.get("pushedFrom") and not it.get("forView")]

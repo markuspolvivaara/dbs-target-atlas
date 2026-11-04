@@ -51,6 +51,7 @@ PROFILE = os.environ.get("SB_PROFILE", "v3")
 V1_CAVITY_SEAL_MM = 7.0
 SINUSES_OWN = "Z-Anatomy's own (its centre lines and radii)" if PROFILE == "v1" else "this CT's own (traced through its lumen)"
 SINUSES_OWN_PL = "Z-Anatomy's own sinuses (their centre lines and radii)" if PROFILE == "v1" else "this CT's own sinuses (traced through their lumen)"
+V1_FLAP_RUN_MM = 14.0     # (Skull.flap on v1: a flap's run along a line of sight at most this deep)
 V1_FLOOR_COS = 0.85       # (... and lies within about 32 degrees of flat, its nearest cavity that near straight up)
 V1_FLOOR_BELOW_MM = 15.0  # (Skull.keep_floor on v1: a floor has no cranial cavity this near straight below it)
 if PROFILE == "v1":
@@ -331,6 +332,10 @@ class Skull:
                     k1 = k if k is not None else k1
                 walls = [r for r in runs if cav[j, r[1] + 1:r[1] + gap + 2].any()]
                 k0, k1 = walls[0] if walls else runs[0]
+                if PROFILE == "v1":
+                    # (a line of sight grazing a shelf of bone, as the sphenoid ridge under a pterional flap, runs along it:
+                    # the flap takes at most a wall's thickness, the ridge is drilled separately)
+                    k1 = min(k1, k0 + int(round(V1_FLAP_RUN_MM / STEP)))
                 start[i, j], end[i, j] = ws[k0] + STEP, ws[k1] - STEP
         # lines of sight that pass under the skull's edge meet deeper bone first: keep only runs that start near the outer
         # surface (within FLAP_DEEPER_MM of the median start)
@@ -437,6 +442,11 @@ class Skull:
         outline), bone outside the cut is eased but never taken; and where
         the smoothed edge would wear through thin bone (the orbit's walls), making a pinhole apart from the opening
         (SEAL_APART_MM), the bone there is left whole (SEAL_MM round it)."""
+        if PROFILE == "v1" and soft_mm > 0:
+            # (the smoothing averages the cut with what lies round it: where the cut meets air or the cavity, rather
+            # than bone it keeps, those count as cut, or a crust of the bone's surface stays half taken there)
+            k = int(np.ceil(2 * soft_mm / STEP))
+            cut = cut | (ndimage.binary_dilation(cut, iterations=k) & (self.b <= K.SURFACE_LEVEL))
         g = soft_cut(cut, soft_mm)
         if soft_mm <= 0:
             return g
@@ -462,6 +472,10 @@ class Skull:
             if not holes.any():
                 break
             holes = np.isin(lab, np.unique(lab[holes]))
+            if PROFILE == "v1":     # (a pinhole is bone outside the cut worn through: a part of the cut itself that opens
+                holes &= ~cut       # to the outside apart from the rest, as a drilled ridge, is not put back)
+                if not holes.any():
+                    break
             seal = ndimage.binary_dilation(holes, iterations=int(round(SEAL_MM / STEP))) & ~cut
             g[seal | holes] = 0.0
         return g
@@ -651,7 +665,7 @@ def pterional(S: Skull) -> dict:
            f"{2 * SLOT_MM:g} mm, the "
            f"corners where the cranial floor is kept rounded over {PT_ROUND_MM:g} mm and its edge smoothed over {PT_SOFT_MM:.0f} mm (illustrative). "
            f"Burr holes: {fmt(keyhole)}, {fmt(frontal)}, {fmt(root)}, {fmt(post)}.")
-    return {"id": "pterional", "name": "Pterional (frontotemporal) craniotomy", "cut": m | drill, "how": how, "softMm": PT_SOFT_MM, "guard": ~free,
+    return {"id": "pterional", "name": "Pterional (frontotemporal) craniotomy", "cut": m | drill, "drill": drill, "how": how, "softMm": PT_SOFT_MM, "guard": ~free,
             "burrHoles": [keyhole.round(1).tolist(), frontal.round(1).tolist(), root.round(1).tolist(), post.round(1).tolist()]}
 
 
@@ -680,6 +694,41 @@ def ridge_between_fossae(S: "Skull", opened: np.ndarray, n: np.ndarray, acp: np.
 
 RIDGE_REACH_MM = 22.0   # (v1) the ridge's bone this near the opening's cut ...
 RIDGE_THIN_MM = 8.0     # ... with the cavity this near above and below it
+
+
+def thin_by_cut(S: "Skull", cut: np.ndarray) -> np.ndarray:
+    """v1: the thin bone a cut leaves beside it (thinner than about 2 x V1_THIN_MM: bone a ball of that radius does not
+    fit in), within V1_THIN_REACH_MM of the cut and not the cranial floor (as the orbital roofs). Z-Anatomy's sphenoid has sheets
+    this thin by the pterion, and the flap's smoothed depth leaves a crust of the outer table a voxel thick where the
+    surface curves: a smoothed cut edge would leave them as lace, so they go with the cut."""
+    idx = np.argwhere(cut)
+    if not len(idx):
+        return cut
+    pad = int(np.ceil((V1_THIN_REACH_MM + 2 * V1_THIN_MM) / STEP)) + 2
+    lo = np.maximum(idx.min(0) - pad, 0)
+    hi = np.minimum(idx.max(0) + pad + 1, S.b.shape)
+    box = tuple(slice(a, b) for a, b in zip(lo, hi))
+    rem = (S.b[box] > K.SURFACE_LEVEL) & ~cut[box]
+    r = int(round(V1_THIN_MM / STEP))
+    ball = np.linalg.norm(np.mgrid[-r:r + 1, -r:r + 1, -r:r + 1], axis=0) <= r
+    near = ndimage.distance_transform_edt(~cut[box]) * STEP <= V1_THIN_REACH_MM
+    thin = rem & near & ~ndimage.binary_opening(np.pad(rem, r), ball)[r:-r, r:-r, r:-r]
+    # (the cranial floor kept: thin bone with the cavity straight above it within FLOOR_NEAR_MM and none straight below
+    # within V1_FLOOR_BELOW_MM, as the orbital roofs)
+    cav = S.cavity[box]
+    above = np.zeros_like(cav)
+    below = np.zeros_like(cav)
+    for k in range(1, int(round(FLOOR_NEAR_MM / STEP)) + 1):
+        above[:, :, :-k] |= cav[:, :, k:]
+    for k in range(1, int(round(V1_FLOOR_BELOW_MM / STEP)) + 1):
+        below[:, :, k:] |= cav[:, :, :-k]
+    out = np.zeros_like(cut)
+    out[box] = thin & ~(above & ~below)
+    return out
+
+
+V1_THIN_MM = 1.0
+V1_THIN_REACH_MM = 2.0
 
 
 def zygomatic(S: "Skull", near: np.ndarray, reach_mm: float = 45.0) -> np.ndarray:
@@ -1228,6 +1277,9 @@ def main(only: list[str] | None = None) -> int:
               "kawase": kawase}
     for ap in (makers[k](S) for k in makers if not only or k in only):
         cut, soft, guard = ap["cut"], ap.get("softMm", 0.0), ap.get("guard")
+        if PROFILE == "v1":
+            cut = cut | thin_by_cut(S, cut)
+            ap["cut"] = cut
         cutb = set(S.bone_names(cut))
         # a whole bone whose surface lies within BAND_MM of the cut (across a suture) is remeshed with it, so the two
         # meet on one surface rather than at a seam between two meshings

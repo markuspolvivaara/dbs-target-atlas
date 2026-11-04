@@ -7,12 +7,16 @@ them on its fitted template (skullbase_brain.py).
 
 The cortex is Z-Anatomy's (BodyParts3D), already in its own skull: nothing is fitted. It is stored as separate gyrus and
 sulcus patches, which overlap and cut through one another; per hemisphere they are welded where their vertices meet
-(within WELD_MM) and remade as one closed surface round them (remesh: the grid within REMESH_SHELL_MM of a patch, filled,
-its isosurface), each vertex keeping the lobe of its nearest patch's Z-Anatomy collection (an interlobular sulcus's or the
-lateral fissure's patch takes its nearest lobe; the limbic lobe is the cingulate gyrus; each piece wound outward first,
-many being closed slabs stored inside out). Z-Anatomy has no insular gyri: the insula is its circular sulcus's patch (its
-patch named "Insula (Subcentral gyrus ...)" is the subcentral gyrus on the lateral surface, taken as frontal); the opercula are the frontal, parietal and temporal surface within OPER_MM of the lateral
-fissure's own patches (Lat_Fis-*) and within OPER_INSULA_MM of the insula.
+(within WELD_MM) and remade as closed surfaces round them (remesh: the grid within REMESH_SHELL_MM of a patch, filled,
+its isosurface). The temporal lobe, the insula and the rest are remade apart, so the banks of the Sylvian fissure stay
+apart. Each vertex keeps the lobe of its nearest patch's Z-Anatomy collection (an interlobular sulcus's or the lateral
+fissure's patch takes its nearest lobe; the limbic lobe is the cingulate gyrus). Z-Anatomy has no insular gyri: the
+insula is its circular sulcus's patch (the patch named "Insula (Subcentral gyrus ...)" is the subcentral gyrus on the
+lateral surface, taken as frontal), and the floor of the opened fissure is Z-Anatomy's own white matter of the
+telencephalon within INSULA_REACH_MM of the middle cerebral artery's course there (white_floor), shown with the insula.
+The opercula are the frontal, parietal and temporal surface within OPER_MCA_MM of that course (Z-Anatomy's M1, insular
+M2 and opercular M3): its fissure patches and insula lie some 10 mm above the arteries and reach the fissure's stem in
+front poorly.
 
 Where Z-Anatomy's cortex reaches into its own bone (up to about 7 mm), it is pushed skullbase_brain.CLEAR_CAVITY_MM
 inside the cavity first, by a smooth field in small steps (clear_smooth), which does not fold the surface. The shapes are v3's (skullbase_brain.open_fissure, lift_frontal, retract_medial), with their parameters, run on this
@@ -45,8 +49,11 @@ from glb import write_glb  # noqa: E402
 REPO = ROOT.parent
 BUILD = ROOT / "data" / "build" / "skullbase"
 WELD_MM = 0.05
-OPER_MM = 6.0
-OPER_INSULA_MM = 18.0
+OPER_MCA_MM = 10.0       # the opercula: within this of the middle cerebral artery's course in the fissure
+OPER_STEP_MM = 1.0
+M2 = "Insular branches of middle cerebral artery (M2)"
+FISSURE_ARTERIES = ("Middle cerebral artery (M1-segment)", M2,
+                    "Middle cerebral artery (M3-segment)")
 CAVITY_STEP = 1.0
 FISSURE = ("Lat_Fis-post", "Lat_Fis-ant-Horizont", "Lat_Fis-ant-Vertical")
 # Z-Anatomy files the subcentral gyrus (on the lateral surface, the frontoparietal operculum) under "Insula"; the insula's
@@ -78,7 +85,7 @@ class V1Patient:
         return np.full(len(P), 30.0), np.zeros_like(P)
 
 
-def hemisphere(patches: list, side: str) -> dict:
+def hemisphere(patches: list, side: str, mca: np.ndarray, wm: dict) -> dict:
     """One hemisphere's cortex: its patches welded (for their labels), remade as one closed surface with those labels."""
     ps = [p for p in patches if p["side"] == side]
     V, T, lab, name = [], [], [], []
@@ -118,17 +125,77 @@ def hemisphere(patches: list, side: str) -> dict:
     lobe[lobe == "limbic"] = LIMBIC_AS
     # one closed surface round the patches (they overlap and cut through one another, which no welding mends), each of its
     # vertices taking the labels of the nearest patch vertex
-    m = remesh(Vw, F)
-    _, j = cKDTree(Vw).query(m.vertices)
-    Vw, F = np.asarray(m.vertices), np.asarray(m.faces)
+    # remade apart for the banks of the Sylvian fissure (the temporal lobe; the insula; the rest), or one surface would
+    # bridge the fissure where its banks lie closer than the grid and the opening would stretch that bridge over the insula
+    fl = np.array([max(set(r), key=list(r).count) for r in lobe[F]], dtype=object)
+    group = np.where(fl == "temporal", 0, np.where(fl == "insula", 1, 2))
+    Vs, Fs, J, off = [], [], [], 0
+    area = trimesh.Trimesh(Vw, F, process=False).area_faces
+    for g in range(3):
+        Fg = F[group == g]
+        if not len(Fg):
+            continue
+        used = np.unique(Fg)
+        m = remesh(Vw, Fg, max(2000, int(REMESH_FACES * area[group == g].sum() / area.sum())))
+        _, jj = cKDTree(Vw[used]).query(m.vertices)
+        Vs.append(np.asarray(m.vertices))
+        Fs.append(np.asarray(m.faces) + off)
+        J.append(used[jj])
+        off += len(m.vertices)
+    j = np.concatenate(J)
+    Vw, F = np.vstack(Vs), np.vstack(Fs)
     lobe, ins, fis, pname = lobe[j], ins[j], fis[j], pname[j]
-    d_fis = cKDTree(Vw[fis]).query(Vw)[0] if fis.any() else np.full(len(Vw), np.inf)
-    d_ins = cKDTree(Vw[ins]).query(Vw)[0]
-    oper = np.isin(lobe, ["frontal", "parietal", "temporal"]) & (d_fis <= OPER_MM) & (d_ins <= OPER_INSULA_MM)
-    return {"V": Vw, "F": F, "lobe": lobe, "ins": ins, "oper": oper, "patch": pname}
+    # the opercula: the frontal, parietal and temporal surface within OPER_MCA_MM of the middle cerebral artery's course
+    # in the fissure (Z-Anatomy's own M1 in its stem, insular M2 and opercular M3: the Sylvian fissure is where they run). Its
+    # fissure patches (Lat_Fis-*) and its insula (the circular sulcus's patch) lie some 10 mm above that course and
+    # reach the fissure's stem in front poorly, so they do not place the opercula here.
+    oper = np.isin(lobe, ["frontal", "parietal", "temporal"]) & (cKDTree(mca).query(Vw)[0] <= OPER_MCA_MM)
+    # the fissure's floor: Z-Anatomy's own white matter under it (it has no insular cortex under its M2 branches)
+    Vi, Fi = white_floor(wm, mca)
+    n0 = len(Vw)
+    Vw, F = np.vstack([Vw, Vi]), np.vstack([F, Fi + n0])
+    lobe = np.r_[lobe, np.full(len(Vi), "insula", dtype=object)]
+    ins, oper = np.r_[ins, np.ones(len(Vi), bool)], np.r_[oper, np.zeros(len(Vi), bool)]
+    pname = np.r_[pname, np.full(len(Vi), INSULA_FLOOR, dtype=object)]
+    return {"V": Vw, "F": F, "lobe": lobe, "ins": ins, "oper": oper, "patch": pname, "insulaFloor": len(Fi)}
 
 
-def remesh(V: np.ndarray, F: np.ndarray) -> trimesh.Trimesh:
+def white_floor(wm: dict, course: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Z-Anatomy's white matter of the telencephalon within INSULA_REACH_MM of the middle cerebral artery's course in
+    the fissure: the floor of the opened fissure (the model has no insular cortex over it). Elsewhere the lobes' own
+    surfaces hide it. (verts, tris)"""
+    V, T = np.array(wm["verts"], float), np.array(wm["tris"], int)
+    m = trimesh.Trimesh(V, T, process=False)
+    if m.volume < 0:
+        T = T[:, ::-1]
+    keep = cKDTree(course).query(V[T].mean(1))[0] <= INSULA_REACH_MM
+    part = trimesh.Trimesh(V, T[keep], process=False)
+    part.remove_unreferenced_vertices()
+    return np.asarray(part.vertices), np.asarray(part.faces)
+
+
+INSULA_FLOOR = "White matter of telencephalon"
+INSULA_REACH_MM = 25.0    # (the white matter shown with the insula within this of the artery's course in the fissure)
+
+
+def fissure_course(ex: dict, side: str, names: tuple = ()) -> np.ndarray:
+    """Z-Anatomy's middle cerebral artery in the Sylvian fissure (its insular M2 and opercular M3 segments), points
+    every OPER_STEP_MM."""
+    pts = []
+    want = {n.replace("-segment", "") for n in names or FISSURE_ARTERIES}     # (Z-Anatomy names a side's segment "(M2)"
+    for key, ln in ex["lines"].items():                                        # or "(M2-segment)")
+        base, _, sfx = key.rpartition(".")
+        if sfx != side.lower() or base.replace("-segment", "") not in want:
+            continue
+        for run in ln.get("runs", []):
+            P = np.array(run, float)[:, :3]
+            for a, b in zip(P[:-1], P[1:]):
+                k = max(1, int(np.ceil(np.linalg.norm(b - a) / OPER_STEP_MM)))
+                pts.append(a + np.linspace(0, 1, k, endpoint=False)[:, None] * (b - a))
+    return np.vstack(pts)
+
+
+def remesh(V: np.ndarray, F: np.ndarray, faces: int = 0) -> trimesh.Trimesh:
     """The patches' surface remade as one: the grid (REMESH_STEP) within REMESH_SHELL_MM of any patch, with what
     that shell encloses, its surface (build.isosurface: smoothed, at most REMESH_FACES faces), the largest piece only."""
     from build import isosurface
@@ -141,7 +208,7 @@ def remesh(V: np.ndarray, F: np.ndarray) -> trimesh.Trimesh:
     M = ndimage.binary_fill_holes(ndimage.binary_dilation(M, iterations=max(1, int(round(REMESH_SHELL_MM / REMESH_STEP)))))
     a = np.diag([REMESH_STEP] * 3 + [1.0])
     a[:3, 3] = lo
-    out = isosurface(M.astype(np.float32), a, 0.5, 0.6, REMESH_FACES)
+    out = isosurface(M.astype(np.float32), a, 0.5, 0.6, faces or REMESH_FACES)
     parts = out.split(only_watertight=False)
     return max(parts, key=lambda p: p.area) if len(parts) > 1 else out
 
@@ -211,9 +278,9 @@ def main() -> int:
     t0 = time.time()
     ex = json.loads((BUILD / "export.json").read_text())
     be = json.loads((BUILD / "brain_export.json").read_text())
-    hemis = {s: hemisphere(be["patches"], s) for s in "RL"}
+    hemis = {s: hemisphere(be["patches"], s, fissure_course(ex, s), be["whiteMatter"][s]) for s in "RL"}
     for s, h in hemis.items():
-        print(s, len(h["V"]), "verts", len(h["F"]), "faces; opercula", int(h["oper"].sum()), "insula", int(h["ins"].sum()),
+        print(s, "white matter floor", h["insulaFloor"], "faces;", len(h["V"]), "verts", len(h["F"]), "faces; opercula", int(h["oper"].sum()), "insula", int(h["ins"].sum()),
               {k: int((h["lobe"] == k).sum()) for k in sorted(set(h["lobe"]))})
     pt = V1Patient()
     print("cavity", round(pt.cavity_ml), "ml", round(time.time() - t0), "s")
@@ -270,10 +337,13 @@ def main() -> int:
                       "colour": SBB.colour(tok), "dataset": "zanatomy", "source": "Z-Anatomy (based on BodyParts3D)", "licence": lic,
                       "citation": [cite], "citationUrls": ["https://doi.org/10.1093/nar/gkn613"], "refIds": [], "category": "brain",
                       "layer": "cortex", "morph": True,
-                      "derivation": ("Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as one closed surface per hemisphere about "
-                                     f"{REMESH_SHELL_MM:g} mm outside them), "
+                      "derivation": ("Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about "
+                                     f"{REMESH_SHELL_MM:g} mm outside them, the temporal lobe apart from the rest), "
                                      "by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the "
-                                     "cranial cavity. Its shapes for the surgical views (the right Sylvian "
+                                     "cranial cavity. "
+                                     + ("Z-Anatomy has no insular cortex: this is its circular sulcus of the insula, with its white matter of the "
+                                        "telencephalon under the Sylvian fissure as the floor of the opened fissure. " if pid == "br_insula" else "")
+                                     + "Its shapes for the surgical views (the right Sylvian "
                                      "fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the "
                                      "right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity "
                                      "(skullbase_v1_brain.py): shapes, not simulations of the tissue."),

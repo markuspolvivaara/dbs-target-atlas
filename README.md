@@ -389,19 +389,29 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
   supraorbital, interhemispheric, telovelar, retrosigmoid, orbitozygomatic and far lateral), over Z-Anatomy's own brain
   and hindbrain, with v3's sourced cards and sliders. Nothing comes from the CT, the template brain or the registered
   ear. How each part is made:
-  - The bones are rasterised at 0.5 mm (`pipeline/skullbase_v1_skull.py`). The open meshes become a 1 mm shell, filled;
-    the paranasal sinuses' air is taken out; the gaps Z-Anatomy's meshes leave between neighbouring bones are bridged.
-  - The cuts are v3's rules (`SB_PROFILE=v1 pipeline/skullbase_v3_approach.py`). On this skull the pterional floor rule
-    needs bone flatter than about 32°, with the cranial cavity straight above it and none straight below. The sinuses
-    the cuts follow are Z-Anatomy's own.
-  - The cortex is Z-Anatomy's gyrus and sulcus patches, remade as one closed surface per hemisphere about 0.25 mm
-    outside them (the patches overlap and cut through one another), each part keeping its lobe
-    (`pipeline/skullbase_v1_brain.py`).
+  - The bones are rasterised at 0.5 mm (`pipeline/skullbase_v1_skull.py`). A closed mesh is filled; a nearly closed one
+    (frontal, occipital, sphenoid, ethmoid: a few dozen open edges) is filled where crossings along two of the three axes
+    agree, with 0.5 mm round its surface, so thin sheets stay whole and the grid lies on Z-Anatomy's own surface. The
+    paranasal sinuses' air is taken out; the gaps Z-Anatomy's meshes leave between neighbouring bones are bridged.
+  - The cuts are v3's rules (`SB_PROFILE=v1 pipeline/skullbase_v3_approach.py`), with v1's own adjustments:
+    - The pterional floor rule needs bone flatter than about 32°, with the cranial cavity straight above it and none
+      straight below.
+    - A flap takes at most 14 mm along a line of sight, so a line grazing the sphenoid ridge does not run along it.
+    - Bone under about 2 mm thick, left within 2 mm of a cut, goes with the cut (the orbital roofs stay). So do crusts
+      of outer table that the smoothed edge would leave as lace.
+    - The pinhole seal applies only to bone outside the cut.
+    The sinuses the cuts follow are Z-Anatomy's own.
+  - The cortex is Z-Anatomy's gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them (the
+    patches overlap and cut through one another), each part keeping its lobe (`pipeline/skullbase_v1_brain.py`). The
+    temporal lobe, the insula and the rest are remade apart, so the banks of the Sylvian fissure stay apart.
+  - The opercula that the opening moves are the cortex within 10 mm of Z-Anatomy's middle cerebral artery in the
+    fissure (M1, insular M2, opercular M3). Its own fissure patches and insula lie about 10 mm above the arteries.
+    Z-Anatomy has no insular cortex: the floor of the opened fissure is its white matter of the telencephalon there,
+    shown with the insula.
   - Where the cortex reaches into its own bone (up to about 7 mm), it is pushed 1 mm inside the cavity by a smooth
     field in small steps. Then v3's shape rules run: the Sylvian fissure opened, the frontal lobe lifted, the
     hemisphere held off the falx.
-  - Z-Anatomy has no insular gyri: the insula is its circular sulcus's patch, and the patch filed as "Insula
-    (subcentral gyrus …)" is taken as frontal.
+  - The patch Z-Anatomy files as "Insula (subcentral gyrus …)" is the subcentral gyrus, taken as frontal.
   - The cerebellum, brainstem and fourth ventricle are Z-Anatomy's (`pipeline/skullbase_v1_pfossa.py`). They are
     pushed out of its bone and back inside the cranial cavity, through which the cerebellum passes in places
     (except at the foramen magnum), then shaped by v3's telovelar and retrosigmoid rules.
