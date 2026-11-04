@@ -88,14 +88,14 @@
  },
  "pfossa": {
   "telovelarMaxMm": 8.75,
-  "retrosigmoidMaxMm": 12.2,
+  "retrosigmoidMaxMm": 12.09,
   "inBoneAtRest": {
-   "Anterior quadrangular lobule.l": 0,
-   "Anterior quadrangular lobule.r": 0,
-   "Posterior quadrangular lobule.l": 0,
-   "Posterior quadrangular lobule.r": 0,
-   "Superior semilunar lobule.l": 294,
-   "Superior semilunar lobule.r": 300,
+   "Anterior quadrangular lobule.l": 238,
+   "Anterior quadrangular lobule.r": 237,
+   "Posterior quadrangular lobule.l": 34,
+   "Posterior quadrangular lobule.r": 32,
+   "Superior semilunar lobule.l": 345,
+   "Superior semilunar lobule.r": 349,
    "Inferior semilunar lobule.l": 588,
    "Inferior semilunar lobule.r": 584,
    "Gracile lobule.l": 0,
@@ -108,20 +108,20 @@
    "Flocculus.r": 254,
    "Peduncle of flocculus.l": 66,
    "Peduncle of flocculus.r": 66,
-   "Wing of central lobule.l": 0,
-   "Wing of central lobule.r": 0,
+   "Wing of central lobule.l": 29,
+   "Wing of central lobule.r": 29,
    "Superior cerebellar peduncle.l": 0,
    "Superior cerebellar peduncle.r": 0,
    "Midbrain.l": 0,
    "Midbrain.r": 0,
-   "Pons.l": 664,
-   "Pons.r": 677,
+   "Pons.l": 704,
+   "Pons.r": 720,
    "Medulla oblongata.l": 171,
    "Medulla oblongata.r": 171,
    "Lingula of cerebellum": 0,
    "Central lobule": 0,
-   "Culmen": 0,
-   "Declive": 0,
+   "Culmen": 60,
+   "Declive": 89,
    "Folium of vermis": 0,
    "Tuber of vermis": 0,
    "Pyramis of vermis": 0,
@@ -130,22 +130,48 @@
    "Fourth ventricle": 0
   },
   "clear": {
-   "containedPushed": 429,
-   "inVesselBefore": 3320,
-   "inBoneBefore": 4126,
-   "inVesselAfter": 14,
-   "inBoneAfter": 0,
-   "maxMovedMm": 5.02
+   "containedPushed": 16,
+   "inVesselBefore": 2889,
+   "inBoneBefore": 5057,
+   "inVesselAfter": 144,
+   "inBoneAfter": 16,
+   "maxMovedMm": 6.53
   },
   "trigeminalRoot": [
-   11.21,
-   -13.4,
-   6.27
+   15.85,
+   -22.81,
+   4.74
   ],
   "carried": {
-   "Anterior inferior cerebellar artery": 12.16,
-   "Posterior inferior cerebellar artery": 11.82,
-   "Superior cerebellar artery": 11.44
+   "Anterior inferior cerebellar artery": 12.0,
+   "Posterior inferior cerebellar artery": 11.84,
+   "Superior cerebellar artery": 11.32
+  },
+  "ontoSurface": {
+   "Anterior inferior cerebellar artery.l": {
+    "points": 175,
+    "maxMm": 2.16
+   },
+   "Anterior inferior cerebellar artery.r": {
+    "points": 171,
+    "maxMm": 2.08
+   },
+   "Posterior inferior cerebellar artery.l": {
+    "points": 686,
+    "maxMm": 3.32
+   },
+   "Posterior inferior cerebellar artery.r": {
+    "points": 681,
+    "maxMm": 3.27
+   },
+   "Superior cerebellar artery.l": {
+    "points": 262,
+    "maxMm": 1.57
+   },
+   "Superior cerebellar artery.r": {
+    "points": 255,
+    "maxMm": 1.28
+   }
   }
  },
  "ear": {

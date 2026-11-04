@@ -710,5 +710,15 @@
   "url": "https://doi.org/10.7759/cureus.5934",
   "pmid": "31788391",
   "pmcid": "PMC6858271"
+ },
+ "hollunder2024": {
+  "citation": "Hollunder B, Ostrem JL, Sahin IA, Rajamani N, et al., Li N, Horn A. Mapping dysfunctional circuits in the frontal cortex using deep brain stimulation. Nat Neurosci. 2024;27(3):573–586. doi:10.1038/s41593-024-01570-1.",
+  "doi": "10.1038/s41593-024-01570-1",
+  "url": "https://doi.org/10.1038/s41593-024-01570-1"
+ },
+ "horn2022": {
+  "citation": "Horn A, et al. Optimal deep brain stimulation sites and networks for cervical vs. generalized dystonia. Proc Natl Acad Sci U S A. 2022;119(14):e2114985119. doi:10.1073/pnas.2114985119.",
+  "doi": "10.1073/pnas.2114985119",
+  "url": "https://doi.org/10.1073/pnas.2114985119"
  }
 }

@@ -118,6 +118,7 @@ The ICBM 2009b T1, T2 and PD template slices carry the McGill/MNI notice:
 
 - Licence: GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md
 - Source: https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/
+- Cite: Horn A, et al. Optimal deep brain stimulation sites and networks for cervical vs. generalized dystonia. Proc Natl Acad Sci U S A. 2022;119(14):e2114985119. doi:10.1073/pnas.2114985119.
 - Cite: Petersen MV, Mlakar J, Haber SN, Parent M, Smith Y, Strick PL, et al. Holographic Reconstruction of Axonal Pathways in the Human Brain. Neuron. 2019;104(6):1056-1064.e3. doi:10.1016/j.neuron.2019.09.030.
 - Cite: see in-app reference(s) horn2022
 - Assets: ss_gen, ss_cerv, rt_gen, rt_cerv
@@ -126,6 +127,7 @@ The ICBM 2009b T1, T2 and PD template slices carry the McGill/MNI notice:
 
 - Licence: GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md
 - Source: https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/
+- Cite: Hollunder B, Ostrem JL, Sahin IA, Rajamani N, et al., Li N, Horn A. Mapping dysfunctional circuits in the frontal cortex using deep brain stimulation. Nat Neurosci. 2024;27(3):573–586. doi:10.1038/s41593-024-01570-1.
 - Cite: see in-app reference(s) hollunder2024
 - Assets: ss_pd, ss_dyt, ss_ts, sw_pd, sw_dyt, sw_ts, sw_pd_m1, sw_pd_sma, sw_pd_pm
 

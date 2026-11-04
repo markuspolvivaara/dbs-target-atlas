@@ -1368,8 +1368,12 @@
    "dataset": "hollunder2024",
    "source": "Human Dysfunctome Atlas (Hollunder 2024)",
    "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
-   "citation": [],
-   "citationUrls": [],
+   "citation": [
+    "Hollunder B, Ostrem JL, Sahin IA, Rajamani N, et al., Li N, Horn A. Mapping dysfunctional circuits in the frontal cortex using deep brain stimulation. Nat Neurosci. 2024;27(3):573–586. doi:10.1038/s41593-024-01570-1."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41593-024-01570-1"
+   ],
    "refIds": [
     "hollunder2024"
    ],
@@ -1414,8 +1418,12 @@
    "dataset": "hollunder2024",
    "source": "Human Dysfunctome Atlas (Hollunder 2024)",
    "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
-   "citation": [],
-   "citationUrls": [],
+   "citation": [
+    "Hollunder B, Ostrem JL, Sahin IA, Rajamani N, et al., Li N, Horn A. Mapping dysfunctional circuits in the frontal cortex using deep brain stimulation. Nat Neurosci. 2024;27(3):573–586. doi:10.1038/s41593-024-01570-1."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41593-024-01570-1"
+   ],
    "refIds": [
     "hollunder2024"
    ],
@@ -1460,8 +1468,12 @@
    "dataset": "hollunder2024",
    "source": "Human Dysfunctome Atlas (Hollunder 2024)",
    "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
-   "citation": [],
-   "citationUrls": [],
+   "citation": [
+    "Hollunder B, Ostrem JL, Sahin IA, Rajamani N, et al., Li N, Horn A. Mapping dysfunctional circuits in the frontal cortex using deep brain stimulation. Nat Neurosci. 2024;27(3):573–586. doi:10.1038/s41593-024-01570-1."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41593-024-01570-1"
+   ],
    "refIds": [
     "hollunder2024"
    ],
@@ -1507,9 +1519,11 @@
    "source": "Dystonia Response Tract Atlas (Horn 2022), built on the Petersen 2019 pathway atlas",
    "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
    "citation": [
+    "Horn A, et al. Optimal deep brain stimulation sites and networks for cervical vs. generalized dystonia. Proc Natl Acad Sci U S A. 2022;119(14):e2114985119. doi:10.1073/pnas.2114985119.",
     "Petersen MV, Mlakar J, Haber SN, Parent M, Smith Y, Strick PL, et al. Holographic Reconstruction of Axonal Pathways in the Human Brain. Neuron. 2019;104(6):1056-1064.e3. doi:10.1016/j.neuron.2019.09.030."
    ],
    "citationUrls": [
+    "https://doi.org/10.1073/pnas.2114985119",
     "https://doi.org/10.1016/j.neuron.2019.09.030"
    ],
    "refIds": [
@@ -1557,9 +1571,11 @@
    "source": "Dystonia Response Tract Atlas (Horn 2022), built on the Petersen 2019 pathway atlas",
    "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
    "citation": [
+    "Horn A, et al. Optimal deep brain stimulation sites and networks for cervical vs. generalized dystonia. Proc Natl Acad Sci U S A. 2022;119(14):e2114985119. doi:10.1073/pnas.2114985119.",
     "Petersen MV, Mlakar J, Haber SN, Parent M, Smith Y, Strick PL, et al. Holographic Reconstruction of Axonal Pathways in the Human Brain. Neuron. 2019;104(6):1056-1064.e3. doi:10.1016/j.neuron.2019.09.030."
    ],
    "citationUrls": [
+    "https://doi.org/10.1073/pnas.2114985119",
     "https://doi.org/10.1016/j.neuron.2019.09.030"
    ],
    "refIds": [
@@ -2420,9 +2436,11 @@
    "source": "Dystonia Response Tract Atlas (Horn 2022), built on the Petersen 2019 pathway atlas",
    "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
    "citation": [
+    "Horn A, et al. Optimal deep brain stimulation sites and networks for cervical vs. generalized dystonia. Proc Natl Acad Sci U S A. 2022;119(14):e2114985119. doi:10.1073/pnas.2114985119.",
     "Petersen MV, Mlakar J, Haber SN, Parent M, Smith Y, Strick PL, et al. Holographic Reconstruction of Axonal Pathways in the Human Brain. Neuron. 2019;104(6):1056-1064.e3. doi:10.1016/j.neuron.2019.09.030."
    ],
    "citationUrls": [
+    "https://doi.org/10.1073/pnas.2114985119",
     "https://doi.org/10.1016/j.neuron.2019.09.030"
    ],
    "refIds": [
@@ -2467,9 +2485,11 @@
    "source": "Dystonia Response Tract Atlas (Horn 2022), built on the Petersen 2019 pathway atlas",
    "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
    "citation": [
+    "Horn A, et al. Optimal deep brain stimulation sites and networks for cervical vs. generalized dystonia. Proc Natl Acad Sci U S A. 2022;119(14):e2114985119. doi:10.1073/pnas.2114985119.",
     "Petersen MV, Mlakar J, Haber SN, Parent M, Smith Y, Strick PL, et al. Holographic Reconstruction of Axonal Pathways in the Human Brain. Neuron. 2019;104(6):1056-1064.e3. doi:10.1016/j.neuron.2019.09.030."
    ],
    "citationUrls": [
+    "https://doi.org/10.1073/pnas.2114985119",
     "https://doi.org/10.1016/j.neuron.2019.09.030"
    ],
    "refIds": [
@@ -2513,8 +2533,12 @@
    "dataset": "hollunder2024",
    "source": "Human Dysfunctome Atlas (Hollunder 2024)",
    "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
-   "citation": [],
-   "citationUrls": [],
+   "citation": [
+    "Hollunder B, Ostrem JL, Sahin IA, Rajamani N, et al., Li N, Horn A. Mapping dysfunctional circuits in the frontal cortex using deep brain stimulation. Nat Neurosci. 2024;27(3):573–586. doi:10.1038/s41593-024-01570-1."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41593-024-01570-1"
+   ],
    "refIds": [
     "hollunder2024"
    ],
@@ -2557,8 +2581,12 @@
    "dataset": "hollunder2024",
    "source": "Human Dysfunctome Atlas (Hollunder 2024)",
    "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
-   "citation": [],
-   "citationUrls": [],
+   "citation": [
+    "Hollunder B, Ostrem JL, Sahin IA, Rajamani N, et al., Li N, Horn A. Mapping dysfunctional circuits in the frontal cortex using deep brain stimulation. Nat Neurosci. 2024;27(3):573–586. doi:10.1038/s41593-024-01570-1."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41593-024-01570-1"
+   ],
    "refIds": [
     "hollunder2024"
    ],
@@ -2601,8 +2629,12 @@
    "dataset": "hollunder2024",
    "source": "Human Dysfunctome Atlas (Hollunder 2024)",
    "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
-   "citation": [],
-   "citationUrls": [],
+   "citation": [
+    "Hollunder B, Ostrem JL, Sahin IA, Rajamani N, et al., Li N, Horn A. Mapping dysfunctional circuits in the frontal cortex using deep brain stimulation. Nat Neurosci. 2024;27(3):573–586. doi:10.1038/s41593-024-01570-1."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41593-024-01570-1"
+   ],
    "refIds": [
     "hollunder2024"
    ],
@@ -2645,8 +2677,12 @@
    "dataset": "hollunder2024",
    "source": "Human Dysfunctome Atlas (Hollunder 2024)",
    "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
-   "citation": [],
-   "citationUrls": [],
+   "citation": [
+    "Hollunder B, Ostrem JL, Sahin IA, Rajamani N, et al., Li N, Horn A. Mapping dysfunctional circuits in the frontal cortex using deep brain stimulation. Nat Neurosci. 2024;27(3):573–586. doi:10.1038/s41593-024-01570-1."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41593-024-01570-1"
+   ],
    "refIds": [
     "hollunder2024"
    ],
@@ -2689,8 +2725,12 @@
    "dataset": "hollunder2024",
    "source": "Human Dysfunctome Atlas (Hollunder 2024)",
    "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
-   "citation": [],
-   "citationUrls": [],
+   "citation": [
+    "Hollunder B, Ostrem JL, Sahin IA, Rajamani N, et al., Li N, Horn A. Mapping dysfunctional circuits in the frontal cortex using deep brain stimulation. Nat Neurosci. 2024;27(3):573–586. doi:10.1038/s41593-024-01570-1."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41593-024-01570-1"
+   ],
    "refIds": [
     "hollunder2024"
    ],
@@ -2733,8 +2773,12 @@
    "dataset": "hollunder2024",
    "source": "Human Dysfunctome Atlas (Hollunder 2024)",
    "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
-   "citation": [],
-   "citationUrls": [],
+   "citation": [
+    "Hollunder B, Ostrem JL, Sahin IA, Rajamani N, et al., Li N, Horn A. Mapping dysfunctional circuits in the frontal cortex using deep brain stimulation. Nat Neurosci. 2024;27(3):573–586. doi:10.1038/s41593-024-01570-1."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41593-024-01570-1"
+   ],
    "refIds": [
     "hollunder2024"
    ],
@@ -3022,9 +3066,11 @@
    "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
    "url": "https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/",
    "citation": [
+    "Horn A, et al. Optimal deep brain stimulation sites and networks for cervical vs. generalized dystonia. Proc Natl Acad Sci U S A. 2022;119(14):e2114985119. doi:10.1073/pnas.2114985119.",
     "Petersen MV, Mlakar J, Haber SN, Parent M, Smith Y, Strick PL, et al. Holographic Reconstruction of Axonal Pathways in the Human Brain. Neuron. 2019;104(6):1056-1064.e3. doi:10.1016/j.neuron.2019.09.030."
    ],
    "citationUrls": [
+    "https://doi.org/10.1073/pnas.2114985119",
     "https://doi.org/10.1016/j.neuron.2019.09.030"
    ]
   },
@@ -3035,8 +3081,12 @@
    ],
    "licence": "GPL-3.0 (non-commercial use requested by atlas owners), as stated for the standard-space atlases in the Lead-DBS LICENSE.md",
    "url": "https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/",
-   "citation": [],
-   "citationUrls": []
+   "citation": [
+    "Hollunder B, Ostrem JL, Sahin IA, Rajamani N, et al., Li N, Horn A. Mapping dysfunctional circuits in the frontal cortex using deep brain stimulation. Nat Neurosci. 2024;27(3):573–586. doi:10.1038/s41593-024-01570-1."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41593-024-01570-1"
+   ]
   },
   "neudorfer2020": {
    "name": "Atlas of the human hypothalamic region (Neudorfer 2020)",

@@ -261,7 +261,7 @@ export const TOPICS: TractTopicInput[] = [
     id: 'wm_cst', name: 'Corticospinal tract', abbr: 'CST', aliases: ['pyramidal tract'], type: 'projection', tier: 'core', parcels: ['m1'],
     summary: 'The principal pathway for voluntary movement, fanning from the motor cortex through the internal capsule to the spinal cord.',
     course: [
-      c('Fans out from the precentral (motor) cortex along the cortical surface; its lateral fanning parts cross the corpus callosum and are missed by traditional low-angular-resolution tractography.', 'yeh2018'),
+      c('Fans out from the precentral (motor) cortex along the cortical surface; its lateral fanning parts cross with the horizontally passing fibres of the corpus callosum (a crossing configuration, not a passage through it) and are missed by traditional low-angular-resolution tractography.', 'yeh2018'),
       c('In the posterior limb of the internal capsule it lies in a compact area in the third quarter (of four, front to back), more posterior than classically taught; in 17 of 20 tracts hand fibres lay anterolateral to foot fibres.', 'holodny2005'),
       c('Most axons cross the midline at the junction of brainstem and spinal cord, in the pyramidal decussation.', 'welniarz2017'),
     ],
@@ -286,7 +286,7 @@ export const TOPICS: TractTopicInput[] = [
     summary: 'Motor projection fanning from the precentral cortex alongside the CST; relevant to facial motor function and swallowing.',
     course: [
       c('Like the CST, fans out from the precentral (motor) cortex along the cortical surface.', 'yeh2018'),
-      c('The lateral fanning parts of the corticospinal and corticobulbar tracts cross the corpus callosum and cannot be resolved reliably by traditional low-angular-resolution tractography.', 'yeh2018'),
+      c('The lateral fanning parts of the corticospinal and corticobulbar tracts cross with the horizontally passing fibres of the corpus callosum and, at that crossing, cannot be resolved reliably by traditional low-angular-resolution tractography.', 'yeh2018'),
     ],
     connections: [
       c('A projection pathway: projection pathways connect cortical areas with subcortical nuclei and the brainstem.', 'yeh2018'),

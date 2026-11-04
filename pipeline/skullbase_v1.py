@@ -89,6 +89,12 @@ def brain() -> int:
             if note not in it.get("derivation", ""):
                 it["derivation"] = (it.get("derivation", "") + " " + note).strip()
     p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
+    # the floor of the fourth ventricle's landmarks (skullbase_v1_pfossa.rhomboid)
+    lp = GEN / f"{PREFIX}-landmarks.json"
+    lms = json.loads(lp.read_text())
+    new_l = pf.get("landmarks", [])
+    lids = {lm["id"] for lm in new_l}
+    lp.write_text(json.dumps([lm for lm in lms if lm["id"] not in lids] + new_l, indent=1, ensure_ascii=False))
     dp = GEN / f"{PREFIX}-definitions.json"
     defs = json.loads(dp.read_text())
     for name, raw in pf.get("texts", {}).items():

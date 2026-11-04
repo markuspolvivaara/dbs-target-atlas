@@ -429,7 +429,16 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
     pushed out of its bone and back inside the cranial cavity, through which the cerebellum passes in places
     (except at the foramen magnum), then shaped by v3's telovelar and retrosigmoid rules.
   - The superior, anterior inferior and posterior inferior cerebellar arteries move with the cerebellum. The trunks
-    and the posterior cerebral artery stay.
+    and the posterior cerebral artery stay. Where Z-Anatomy's own cerebellar arteries ran inside its cerebellum, they
+    are moved out onto its surface (up to about 3.4 mm). The hindbrain is kept under Z-Anatomy's tentorium, which the
+    retrosigmoid view shows.
+  - The telovelar view has v3's landmarks on the floor of the fourth ventricle, placed by v3's rule over Z-Anatomy's
+    own cranial nerve nuclei: the facial colliculi, the vestibular areas, the hypoglossal and vagal trigones, the
+    median sulcus and the obex.
+  - Z-Anatomy's optic nerves and olfactory tracts and striae ran through its arteries (and the striae through the
+    optic nerves). They are moved just clear (`pipeline/skullbase_v1_nerves.py`; up to about 2.4 mm, their ends stay).
+    Its chiasm, two pads, is redrawn by v3's rule (Mncube 2019's mean width and height) as a crossing, with the
+    optic tracts' first part.
   - The retrosigmoid view is seen nearly level with the porus (on this skull the opening lies level with it).
   - Kawase (anterior petrosectomy) on this skull: v3's flap and rhomboid. Its landmarks are Z-Anatomy's petrous apex,
     with the geniculate ganglion, the greater petrosal nerve and the bone over the superior canal drawn by rule (below).

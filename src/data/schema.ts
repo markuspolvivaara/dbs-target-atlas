@@ -182,7 +182,13 @@ export const ManifestStructureSchema = z.object({
   tumourView: z.string().optional(),
   /** skull base v3: a copy for one surgical view only (the temporal lobe held up in the Kawase view), with `replaces` */
   forView: z.string().optional(),
+  /** a copy's source: the structure's own file it was made from (shipped) */
   pushedFrom: z.string().optional(),
+  /** skull base v3: the pipeline's own input for this structure before it was joined to its neighbour
+   *  (skullbase_v3_junctions.py) or cleared of the brainstem (skullbase_v3_clearance.py), which a re-run starts from. A
+   *  file in pipeline/data/build, not shipped (the shipped file is `file`) */
+  joinedFrom: z.string().optional(),
+  clearedFrom: z.string().optional(),
   /** vascular section: the lesion (view) a lesion's part belongs to; with `replaces`, a vessel it changes in that view */
   lesion: z.string().optional(),
   /** brainstem section: the part of the brainstem a safe entry zone lies on */

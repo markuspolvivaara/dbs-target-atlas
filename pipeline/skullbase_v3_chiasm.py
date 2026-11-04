@@ -62,10 +62,12 @@ GRID = 0.2
 REPLACED = "sb_optic_chiasm"
 
 
-def frame() -> dict:
-    """The fitted chiasm's centre, axes (lateral x, forwards along its plane, its normal) and length along its plane."""
-    ch = read_glb_full(CT_BUILD / "sb_optic_chiasm.glb")
-    V = np.vstack([n["positions"] for n in ch.values()])
+def frame(V: np.ndarray | None = None) -> dict:
+    """The fitted chiasm's centre, axes (lateral x, forwards along its plane, its normal) and length along its plane
+    (V: the model chiasm's vertices; by default v2's fitted block)."""
+    if V is None:
+        ch = read_glb_full(CT_BUILD / "sb_optic_chiasm.glb")
+        V = np.vstack([n["positions"] for n in ch.values()])
     c = V.mean(0)
     w, U = np.linalg.eigh((V - c).T @ (V - c))
     n = U[:, 0]                             # the least axis: the plane's normal
@@ -92,10 +94,21 @@ def seg_d2(Q, a, b):
 
 
 def main() -> int:
+    items, meas = draw(frame(), CAV.centre_lines(V3_BUILD / "tb_optic_nerve_ii.glb"), V3_BUILD,
+                       {"chiasm": "tb_optic_chiasm", "tract": "tb_optic_tract", "nerve": "tb_optic_nerve_ii", "nerveFile": "tb_optic_nerve_ii.chiasm.glb"},
+                       "assets/skullbase-v3", "Drawn by rule on the TopBrain CT", "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+                       "where the fitted Z-Anatomy chiasm lies")
+    CH_ITEMS.write_text(json.dumps({"items": items, "measured": meas}, indent=1, ensure_ascii=False))
+    merge()
+    print("chiasm", meas)
+    return 0
+
+
+def draw(F: dict, nerves: dict, out: Path, ids: dict, assets: str, source: str, licence: str, where: str) -> tuple[list, dict]:
+    """The chiasm, the tracts' first part and the optic nerves ending in it, written to out (ids: the files' and items'
+    names); returns the items and the measurements."""
     import skullbase_build as SB
     import skullbase_v3 as V3
-    F = frame()
-    nerves = CAV.centre_lines(V3_BUILD / "tb_optic_nerve_ii.glb")
     r_n = float(np.median(np.r_[nerves["R"][1], nerves["L"][1]]))
     half_w = CHIASM_WIDTH_MM / 2
     u_join = half_w - r_n * CHIASM_BAND       # a nerve joins the chiasm's front corner, a band's half-width in from its side
@@ -149,14 +162,14 @@ def main() -> int:
     for s, (vv, tt, _) in sorted(halves.items()):
         nodes.append({"name": s, "positions": vv, "normals": SB.normals(vv, tt), "indices": tt, "mode": TRIANGLES})
         cent[s] = vv.mean(0).round(2).tolist()
-    write_glb(V3_BUILD / "tb_optic_chiasm.glb", nodes, {"id": "tb_optic_chiasm"})
+    write_glb(out / f"{ids['chiasm']}.glb", nodes, {"id": ids["chiasm"]})
     meas = {"widthMm": round(float(np.ptp(v[:, 0])), 1), "lengthMm": round(float(np.ptp(v[:, 1])), 1), "heightMm": round(float(np.ptp(v[:, 2])), 1),
             "tiltDeg": round(float(np.degrees(np.arcsin(abs(F["f"][2])))), 0), "nerveJoinsMm": round(float(corner["R"][0] - corner["L"][0]), 1)}
-    base = {"aliases": [], "type": "soft", "bytes": 0, "colour": col_n, "dataset": "rule", "source": "Drawn by rule on the TopBrain CT",
-            "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)", "citation": [], "citationUrls": [], "refIds": [],
+    base = {"aliases": [], "type": "soft", "bytes": 0, "colour": col_n, "dataset": "rule", "source": source,
+            "licence": licence, "citation": [], "citationUrls": [], "refIds": [],
             "category": "nerve", "layer": "tracts", "cranialNerve": 2, "schematic": True}
-    items.append({**base, "id": "tb_optic_chiasm", "name": "Optic chiasm", "aliases": ["Chiasma opticum"], "file": "assets/skullbase-v3/tb_optic_chiasm.glb",
-                  "derivation": ("Drawn by rule (skullbase_v3_chiasm.py) where the fitted Z-Anatomy chiasm lies: its centre, its plane (tilted "
+    items.append({**base, "id": ids["chiasm"], "name": "Optic chiasm", "aliases": ["Chiasma opticum"], "file": f"{assets}/{ids['chiasm']}.glb",
+                  "derivation": (f"Drawn by rule (skullbase_v3_chiasm.py) {where}: its centre, its plane (tilted "
                                  f"{meas['tiltDeg']:.0f}° from the horizontal) and its length front to back ({meas['lengthMm']} mm here). Its width "
                                  f"({CHIASM_WIDTH_MM} mm) and height ({CHIASM_HEIGHT_MM} mm) are the means Mncube 2019 measured on coronal MRI in 80 adults. "
                                  "Its shape is two bands crossing, each from where one optic nerve joins its front edge to the other side's back corner, "
@@ -174,8 +187,8 @@ def main() -> int:
         vv, nn, tt = CAV.tube(Pw, r_n)
         nodes.append({"name": s, "positions": vv, "normals": nn, "indices": tt, "mode": TRIANGLES})
         cent[s] = Pw.mean(0).round(2).tolist()
-    write_glb(V3_BUILD / "tb_optic_tract.glb", nodes, {"id": "tb_optic_tract"})
-    items.append({**base, "id": "tb_optic_tract", "name": "Optic tract", "file": "assets/skullbase-v3/tb_optic_tract.glb",
+    write_glb(out / f"{ids['tract']}.glb", nodes, {"id": ids["tract"]})
+    items.append({**base, "id": ids["tract"], "name": "Optic tract", "file": f"{assets}/{ids['tract']}.glb",
                   "derivation": (f"Drawn by rule (skullbase_v3_chiasm.py): the tracts' first {TRACT_MM:g} mm from the chiasm's back corners, backwards and "
                                  f"outwards at {TRACT_ANGLE_DEG:g}° from the midline in the chiasm's plane, as wide as the optic nerves drawn here "
                                  "(illustrative); the rest of their course round the cerebral peduncles is not drawn."),
@@ -186,11 +199,8 @@ def main() -> int:
         P, r = keep[s]
         vv, nn, tt = SB.tube(np.c_[P, np.r_[r[:12], np.full(len(r) - 12, float(np.median(nerves[s][1])))]])
         nodes.append({"name": s, "positions": vv, "normals": nn, "indices": tt, "mode": TRIANGLES})
-    write_glb(V3_BUILD / "tb_optic_nerve_ii.chiasm.glb", nodes, {"id": "tb_optic_nerve_ii"})
-    CH_ITEMS.write_text(json.dumps({"items": items, "measured": meas}, indent=1, ensure_ascii=False))
-    merge()
-    print("chiasm", meas)
-    return 0
+    write_glb(out / ids["nerveFile"], nodes, {"id": ids["nerve"]})
+    return items, meas
 
 
 NERVE_NOTE = (" Near its end it turns in to the optic chiasm's front corner and ends 1.5 mm inside it (skullbase_v3_chiasm.py), "

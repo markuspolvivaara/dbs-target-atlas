@@ -482,8 +482,9 @@ export const V1_ABSENT = new Set([
   'Internal cerebral veins', 'Trigeminal ganglion',
 ]);
 
-/** v1's own wording for a view; camera: its own view direction; hide: structures left out of that view */
-export const V1_TEXT: Record<string, { summary: string; notShown: string; camera?: CameraPreset; hide?: string[] }> = {
+/** v1's own wording for a view; camera: its own view direction; hide: structures left out of that view; add: the model's
+ * own structures added to it */
+export const V1_TEXT: Record<string, { summary: string; notShown: string; camera?: CameraPreset; hide?: string[]; add?: string[] }> = {
   pterional: { summary: 'The right pterional craniotomy cut out of Z-Anatomy’s skull, over Z-Anatomy’s own brain. One slider opens the Sylvian fissure onto the insula and the model’s middle cerebral artery; another lifts the frontal lobe off the orbital roof to look under it, at the carotid and the optic nerve.',
     notShown: `The scalp, temporalis muscle, dura and arachnoid; the Sylvian veins. ${V1_BRAIN}` },
   lso: { summary: 'A right lateral supraorbital (LSO) craniotomy cut out of Z-Anatomy’s skull, drawn larger than usual to show the anatomy, over the same brain. The fissure lies at the craniotomy’s lower edge; the lift raises the frontal lobe off the lateral orbital roof.',
@@ -493,8 +494,8 @@ export const V1_TEXT: Record<string, { summary: string; notShown: string; camera
   suboccipital: { summary: 'A midline suboccipital craniotomy cut out of Z-Anatomy’s skull, with its cerebellum, brainstem and fourth ventricle. The slider draws the cerebellar tonsils apart and lifts the inferior vermis, opening the cerebellomedullary fissure.',
     notShown: `The skin, muscles, dura and arachnoid; the tela choroidea, inferior medullary velum and choroid plexus. ${V1_HIND}` },
   retrosigmoid: { summary: 'A right retrosigmoid craniotomy cut out of Z-Anatomy’s skull against its own transverse and sigmoid sinuses, drawn larger than a keyhole, with its cerebellum, brainstem and fourth ventricle. The slider draws the right cerebellar hemisphere back from the petrous bone, opening the cerebellopontine angle.',
-    notShown: `The skin, muscles, dura and arachnoid; the superior petrosal vein and the labyrinthine artery; the nervus intermedius. ${V1_HIND}`,
-    camera: 'retrosigmoidLevel' },
+    notShown: `The skin, muscles, dura and arachnoid (Z-Anatomy’s tentorium is shown, the rest of the dura not); the superior petrosal vein and the labyrinthine artery; the nervus intermedius. ${V1_HIND}`,
+    camera: 'retrosigmoidLevel', add: ['Tentorium cerebelli'] },
   orbitozygomatic: { summary: 'The pterional craniotomy extended by an orbitozygomatic piece (the superolateral orbital rim and roof, the zygoma and its arch), cut out of Z-Anatomy’s skull, over the same brain, seen from lower down.',
     notShown: `The orbital piece’s and the arch’s extents are drawn by rule on this skull. The temporalis and masseter muscles, the periorbita and the facial nerve’s frontal branch. ${V1_BRAIN}` },
   far_lateral: { summary: 'A right far lateral (lateral suboccipital) craniectomy cut out of Z-Anatomy’s skull down through the foramen magnum, the posterior third of the occipital condyle drilled, with its cerebellum, brainstem and fourth ventricle.',

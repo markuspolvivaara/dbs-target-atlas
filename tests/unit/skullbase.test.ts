@@ -27,6 +27,20 @@ describe('skull-base data (Z-Anatomy export)', () => {
     expect(lm('Geniculate ganglion')[0]).toBeGreaterThan(lm('Internal acoustic meatus')[0] + 10);
     expect(lm('Second genu of facial nerve')[1]).toBeLessThan(lm('Geniculate ganglion')[1]);
   });
+  it('the telovelar view has the floor’s landmarks, the retrosigmoid the tentorium, and the chiasm is a drawn crossing', () => {
+    const tv = SB_GROUPS.find((g) => g.id === 'telovelar')!;
+    const names = tv.landmarks.map((id) => LANDMARKS.find((l) => l.id === id)!.name);
+    for (const n of ['Facial colliculus', 'Median sulcus of fourth ventricle', 'Vestibular area', 'Hypoglossal trigone', 'Vagal trigone', 'Obex'])
+      expect(names, n).toContain(n);
+    const rs = SB_GROUPS.find((g) => g.id === 'retrosigmoid')!;
+    expect(rs.structures.map((id) => SB_MANIFEST.structures.find((s) => s.id === id)?.name)).toContain('Tentorium cerebelli');
+    const ch = SB_MANIFEST.structures.find((s) => s.name === 'Optic chiasm')!;
+    expect(ch.dataset).toBe('rule');
+    expect(ch.derivation).toMatch(/Mncube 2019/);
+    expect(SB_MANIFEST.structures.some((s) => s.name === 'Optic tract')).toBe(true);
+    for (const n of ['Optic nerve (II)', 'Olfactory nerve (I)'])
+      expect(SB_MANIFEST.structures.find((s) => s.name === n)?.derivation, n).toMatch(/moved just clear/);
+  });
   it('the surgical views use Z-Anatomy\u2019s own brain and hindbrain, with the shapes; the cerebellar arteries move with them', () => {
     const by = (n: string) => SB_MANIFEST.structures.find((s) => s.name === n);
     // (six lobes, and the Kawase view's lifted copy of the temporal lobe)

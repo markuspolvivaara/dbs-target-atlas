@@ -137,7 +137,8 @@ describe('manifest', () => {
     for (const s of MANIFEST.structures) {
       expect(s.source.length, s.id).toBeGreaterThan(3);
       expect(s.licence, s.id).toMatch(/GPL|McGill/);
-      expect(s.citation.length + s.refIds.length, s.id).toBeGreaterThan(0);
+      // (the citation text itself, for the attribution and the credits, not only an in-app reference id)
+      expect(s.citation.length, s.id).toBeGreaterThan(0);
     }
   });
   it('bilateral centroids are on the correct side (RAS)', () => {

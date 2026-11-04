@@ -71,7 +71,14 @@ commit and push it.
     superior canal and the GSPN (v3's rule on v1's grid). `skullbase_v1.py ear` merges the items, landmarks
     (`placed`), definitions and the `ear` report. Kawase on v1: `KW_KEEP_MM` under v1 names, edge smoothed 1 mm, insula
     hidden in that view (`V1_TEXT.kawase.hide`). The lifted temporal lobe is redone in `skullbase_v1.py brain`.
-  - v1 chain: `skullbase_build.py`, `skullbase_v1_skull.py`, `skullbase_v1_ear.py`, `skullbase_v1.py ear`,
+  - Fixes after the user's look (2026-11-04):
+    - `skullbase_v1_pfossa.py`: `onto_surface` (the cerebellar arteries out of the cerebellum), `tentorium` (kept
+      off as bone) and `rhomboid` (v3's floor landmarks over Z-Anatomy's nuclei; the brainstem export is a
+      translation away).
+    - `skullbase_v1_nerves.py`: the optic nerves and olfactory nerve off the arteries, the chiasm by
+      `skullbase_v3_chiasm.draw`.
+    - `V1_TEXT.retrosigmoid.add`: the tentorium.
+  - v1 chain: `skullbase_build.py`, `skullbase_v1_nerves.py`, `skullbase_v1_skull.py`, `skullbase_v1_ear.py`, `skullbase_v1.py ear`,
     `SB_PROFILE=v1 skullbase_v3_approach.py only pterional lso interhemispheric suboccipital retrosigmoid
     orbitozygomatic far_lateral kawase`, `skullbase_v1.py approaches`, `skullbase_v1_brain.py`,
     `skullbase_v1_pfossa.py`, `skullbase_v1.py brain`, `node pipeline/compress.mjs skullbase`,
@@ -87,6 +94,18 @@ commit and push it.
   - Vascular: `vascular_build.py`, then `node pipeline/compress.mjs vascular`, then `vascular_build.py finalize`.
 
 ## Open items
+
+- **External review of 3–4 Nov 2026** (the user's notes; my comments are in the session):
+  - Done:
+    - C10: the vascular page's own description, with a test that no two pages share one.
+    - T1: the endonasal step returns the clearance and junction steps' failures.
+    - T5/T4: `joinedFrom`/`clearedFrom` are in the schema as build-only sources; a test checks every `file` and
+      `pushedFrom` is shipped.
+    - T10: the Hollunder 2024 and Horn 2022 sweet-spot items now carry citation text.
+    - C2 (Yeh 2018: the fibres cross with the callosal fibres), C3 (Naranbhai 2023: the usual definition, with the
+      diffuse nidus as the exception) and C4 (Lee 2022: the aim, then the outcomes): checked against full text,
+      with wording tests.
+  - Still open: C1, C5–C9 and C11 (to source and for the user's sign-off), T2, T3, T6–T9 and T11, and §4–§6.
 
 - **Kawase (anterior petrosectomy) is done** (see the README); the temporal lobe is a fixed lifted copy for that view,
   not a slider. **A plain subtemporal approach** is still open: it could reuse the Kawase flap and lift without the apex
@@ -158,7 +177,7 @@ commit and push it.
   14. `npm run build`
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
-  - `npx vitest run` (325 tests)
+  - `npx vitest run` (332 tests)
   - `npm run build`
   - `npx playwright test` (130 tests, about 7 minutes, preview on port 4173)
   - `npm run check:palette`

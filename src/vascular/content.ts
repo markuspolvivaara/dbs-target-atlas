@@ -18,7 +18,8 @@ export const BLISTER: Claim[] = [
 
 // ---------------------------------------------------------------- treatment of aneurysms
 export const CLIPPING: Claim[] = [
-  c('Clipping reaches the aneurysm through a craniotomy, dissects it free, shows its neck and closes the neck for good with a metal clip, without compromising the parent and perforating arteries.', 'lee2022'),
+  c('Clipping reaches the aneurysm through a craniotomy, dissects it free and shows its neck; its aim is to close the neck permanently and completely with a metal clip while keeping the parent and perforating arteries open.', 'lee2022'),
+  c('In the series this review summarises, clipping closed the aneurysm completely in about 95 % and left a residual neck in about 5 % (bleeding from it in under 1 %); 1–5 % were treated again; mortality was under 1 % and morbidity 3–5 %. In complex aneurysms part of the neck can be hidden from view and the aneurysm still fill after clipping.', 'lee2022'),
 ];
 export const COILING: Claim[] = [
   c('Coiling packs the aneurysm densely with detachable platinum coils, so that an unorganised thrombus and then granulation tissue form in it.', 'lee2022'),
@@ -47,7 +48,7 @@ export const ANASTOMOTIC_VEINS: Claim[] = [
 
 // ---------------------------------------------------------------- arteriovenous malformations
 export const AVM_WHAT: Claim[] = [
-  c('A brain AVM is a nidus of abnormal vessels between feeding arteries and draining veins: many arteriovenous shunts with no brain tissue between them and no capillary bed.', 'naranbhai2023'),
+  c('A brain AVM is a nidus of abnormal vessels between feeding arteries and draining veins: in its usual definition many arteriovenous shunts without interposed brain tissue and with no capillary bed (a diffuse nidus, below, has brain parenchyma interspersed with it).', 'naranbhai2023'),
   c('Over time the high-flow shunting changes the vessels: the feeding arteries dilate, with smooth-muscle hyperplasia and fibromuscular cushions, and the draining veins dilate and thicken (“venous arterialisation”).', 'naranbhai2023'),
 ];
 export const AVM_NIDUS: Claim[] = [

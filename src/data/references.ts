@@ -92,7 +92,9 @@ const DATASET_LABELS: Record<string, string> = {
   sotiropoulos2013: 'Sotiropoulos 2013 (HCP diffusion MRI)',
 };
 
-const DATASET_REFS: Reference[] = Object.entries(citations as Record<string, { citation: string; url: string }>).map(
+// (a dataset cited by a paper the content already lists, as the Hollunder 2024 and Horn 2022 atlases, keeps that entry)
+const CONTENT_IDS = new Set([...CONTENT, ...ADDITION_REFERENCES, ...EPILEPSY_REFERENCES].map((r) => r.id));
+const DATASET_REFS: Reference[] = Object.entries(citations as Record<string, { citation: string; url: string }>).filter(([id]) => !CONTENT_IDS.has(id)).map(
   ([id, c]) => ({ id, topic: 'atlas' as Topic, shortLabel: DATASET_LABELS[id] ?? id, citation: c.citation, url: c.url }),
 );
 

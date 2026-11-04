@@ -570,8 +570,15 @@ def main() -> int:
     # where their sources stop short of one another (the confluence of the sinuses drawn)
     import skullbase_v3_clearance as CLEAR
     import skullbase_v3_junctions as JUNC
-    CLEAR.main()
-    JUNC.main()
+    # (each step's failure is this step's: the chain run with set -e stops on it)
+    rc = CLEAR.main()
+    if rc:
+        print("clearance failed: the arteries are not all clear of the brainstem")
+        return rc
+    rc = JUNC.main()
+    if rc:
+        print("junctions failed")
+        return rc
     print(json.dumps({k: out[k] for k in ("entry", "sinus", "intercarotid")}, indent=0)[:1500])
     return 0
 

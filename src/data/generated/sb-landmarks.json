@@ -2182,5 +2182,155 @@
   "boneFrom": "drawn by rule",
   "distanceToBoneMm": 0.0,
   "placed": "Drawn by rule: the bone's surface straight above the highest point of Z-Anatomy's vestibule mesh (the top of the superior semicircular canal)."
+ },
+ {
+  "id": "lm_facial_colliculus_r",
+  "name": "Facial colliculus",
+  "bone": "Pons",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   1.55,
+   -34.8,
+   -11.5
+  ],
+  "side": "R",
+  "boneFrom": "the model's own (Z-Anatomy)",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: Z-Anatomy does not label it. On the floor of its fourth ventricle, straight behind the middle of its nucleus of abducens nerve (3.3 mm from it), as Skull base v3 places it (approximate)."
+ },
+ {
+  "id": "lm_facial_colliculus_l",
+  "name": "Facial colliculus",
+  "bone": "Pons",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   -1.55,
+   -34.8,
+   -11.5
+  ],
+  "side": "L",
+  "boneFrom": "the model's own (Z-Anatomy)",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: Z-Anatomy does not label it. On the floor of its fourth ventricle, straight behind the middle of its nucleus of abducens nerve (3.3 mm from it), as Skull base v3 places it (approximate)."
+ },
+ {
+  "id": "lm_hypoglossal_trigone_r",
+  "name": "Hypoglossal trigone",
+  "bone": "Medulla oblongata",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   0.65,
+   -36.36,
+   -21.48
+  ],
+  "side": "R",
+  "boneFrom": "the model's own (Z-Anatomy)",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: Z-Anatomy does not label it. On the floor of its fourth ventricle, straight behind the middle of its nucleus of hypoglossal nerve (2.1 mm from it), as Skull base v3 places it (approximate)."
+ },
+ {
+  "id": "lm_hypoglossal_trigone_l",
+  "name": "Hypoglossal trigone",
+  "bone": "Medulla oblongata",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   -0.65,
+   -36.36,
+   -21.48
+  ],
+  "side": "L",
+  "boneFrom": "the model's own (Z-Anatomy)",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: Z-Anatomy does not label it. On the floor of its fourth ventricle, straight behind the middle of its nucleus of hypoglossal nerve (2.1 mm from it), as Skull base v3 places it (approximate)."
+ },
+ {
+  "id": "lm_vagal_trigone_r",
+  "name": "Vagal trigone",
+  "bone": "Medulla oblongata",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   1.78,
+   -38.92,
+   -22.0
+  ],
+  "side": "R",
+  "boneFrom": "the model's own (Z-Anatomy)",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: Z-Anatomy does not label it. On the floor of its fourth ventricle, straight behind the middle of its posterior nucleus of vagus nerve (3.5 mm from it), as Skull base v3 places it (approximate)."
+ },
+ {
+  "id": "lm_vagal_trigone_l",
+  "name": "Vagal trigone",
+  "bone": "Medulla oblongata",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   -1.78,
+   -38.92,
+   -22.0
+  ],
+  "side": "L",
+  "boneFrom": "the model's own (Z-Anatomy)",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: Z-Anatomy does not label it. On the floor of its fourth ventricle, straight behind the middle of its posterior nucleus of vagus nerve (3.5 mm from it), as Skull base v3 places it (approximate)."
+ },
+ {
+  "id": "lm_vestibular_area_r",
+  "name": "Vestibular area",
+  "bone": "Pons",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   4.26,
+   -33.78,
+   -3.35
+  ],
+  "side": "R",
+  "boneFrom": "the model's own (Z-Anatomy)",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: Z-Anatomy does not label it. On the floor of its fourth ventricle, straight behind the middle of its vestibular nuclei (7.5 mm from it), as Skull base v3 places it (approximate)."
+ },
+ {
+  "id": "lm_vestibular_area_l",
+  "name": "Vestibular area",
+  "bone": "Pons",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   -4.26,
+   -33.78,
+   -3.35
+  ],
+  "side": "L",
+  "boneFrom": "the model's own (Z-Anatomy)",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: Z-Anatomy does not label it. On the floor of its fourth ventricle, straight behind the middle of its vestibular nuclei (7.5 mm from it), as Skull base v3 places it (approximate)."
+ },
+ {
+  "id": "lm_obex",
+  "name": "Obex",
+  "bone": "Medulla oblongata",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   0.0,
+   -38.32,
+   -26.4
+  ],
+  "side": "M",
+  "boneFrom": "the model's own (Z-Anatomy)",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: the caudal tip of the floor of Z-Anatomy's fourth ventricle at the midline (approximate)."
+ },
+ {
+  "id": "lm_median_sulcus_of_fourth_ventricle",
+  "name": "Median sulcus of fourth ventricle",
+  "bone": "Pons",
+  "part": "Floor of fourth ventricle",
+  "ras": [
+   -0.92,
+   -33.98,
+   -11.47
+  ],
+  "side": "M",
+  "boneFrom": "the model's own (Z-Anatomy)",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: the floor of Z-Anatomy's fourth ventricle at the midline at the level of the facial colliculi (approximate)."
  }
 ]

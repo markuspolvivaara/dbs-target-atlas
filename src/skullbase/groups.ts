@@ -98,7 +98,7 @@ function surgicalGroups(): SbGroup[] {
       focus: null, focusIds: [...(a.frameOpening === false ? [] : [geom.removed]), ...byName(...a.focus)], radius: a.radius ?? 60, approach: a.id, morphs: a.morphs,
       description: SB_MODEL === 'zanatomy' ? V1_TEXT[a.id]?.summary ?? a.summary : a.summary,
       structures: [...bones.filter((id) => !replaced.has(id)), ...geom.bones, geom.removed, ...(geom.guides ?? []),
-        ...[...brainOf(a.brain ?? 'cerebrum'), ...byName(...a.context)].map((id) => own.get(id) ?? id)]
+        ...[...brainOf(a.brain ?? 'cerebrum'), ...byName(...a.context, ...(SB_MODEL === 'zanatomy' ? V1_TEXT[a.id]?.add ?? [] : []))].map((id) => own.get(id) ?? id)]
         .filter((id) => !(SB_MODEL === 'zanatomy' && V1_TEXT[a.id]?.hide?.includes(SB.get(id)?.name ?? ''))),
       landmarks: lm(...(a.landmarks ?? [])),
     };

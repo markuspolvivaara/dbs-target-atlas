@@ -575,6 +575,12 @@ def validate() -> int:
             check(abs(r["gspnMm"] - 13.78) <= 1.5, f"ear {sd}: greater petrosal nerve {r['gspnMm']} mm")
             check(r["toGeniculateMm"] < r["toSecondGenuMm"], f"ear {sd}: the genua out of order")
         check("kawase" in aps and any(it.get("forView") == "kawase" for it in m["structures"]), "Kawase: the cut or its lifted temporal lobe missing")
+        # the floor of the fourth ventricle's landmarks; the chiasm drawn, with the tracts; the cerebellar arteries on the surface
+        floor_lms = [lm for lm in lms if lm.get("part") == "Floor of fourth ventricle"]
+        check(len(floor_lms) == 10, f"{len(floor_lms)} landmarks on the floor of the fourth ventricle")
+        check(names.get("Optic chiasm", {}).get("dataset") == "rule" and "Optic tract" in names, "the optic chiasm not drawn by rule, or no optic tract")
+        surf = fit["pfossa"].get("ontoSurface", {})
+        check(len(surf) == 6 and all(v["maxMm"] <= 6 for v in surf.values()), f"cerebellar arteries onto the surface: {surf}")
     print(f"skull base validation: {n - len(fails)}/{n} checks passed")
     for f in fails:
         print("FAIL", f)

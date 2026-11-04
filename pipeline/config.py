@@ -102,14 +102,14 @@ DATASETS: dict[str, dict] = {
     },
     "horn2022": {
         "name": "Dystonia Response Tract Atlas (Horn 2022), built on the Petersen 2019 pathway atlas",
-        "cite": ["petersen2019"],
+        "cite": ["horn2022", "petersen2019"],
         "refIds": ["horn2022"],
         "licence": LEADDBS_LICENCE,
         "url": "https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/",
     },
     "hollunder2024": {
         "name": "Human Dysfunctome Atlas (Hollunder 2024)",
-        "cite": [],
+        "cite": ["hollunder2024"],
         "refIds": ["hollunder2024"],
         "licence": LEADDBS_LICENCE,
         "url": "https://www.lead-dbs.org/helpsupport/knowledge-base/atlasesresources/atlases/",
