@@ -162,20 +162,22 @@ def hemisphere(patches: list, side: str, mca: np.ndarray, wm: dict) -> dict:
 
 def white_floor(wm: dict, course: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """Z-Anatomy's white matter of the telencephalon within INSULA_REACH_MM of the middle cerebral artery's course in
-    the fissure: the floor of the opened fissure (the model has no insular cortex over it). Elsewhere the lobes' own
+    the fissure, not more than INSULA_BELOW_MM below it: the floor of the opened fissure (the model has no insular cortex over it). Elsewhere the lobes' own
     surfaces hide it. (verts, tris)"""
     V, T = np.array(wm["verts"], float), np.array(wm["tris"], int)
     m = trimesh.Trimesh(V, T, process=False)
     if m.volume < 0:
         T = T[:, ::-1]
-    keep = cKDTree(course).query(V[T].mean(1))[0] <= INSULA_REACH_MM
+    C = V[T].mean(1)
+    keep = (cKDTree(course).query(C)[0] <= INSULA_REACH_MM) & (C[:, 2] >= course[:, 2].min() - INSULA_BELOW_MM)
     part = trimesh.Trimesh(V, T[keep], process=False)
     part.remove_unreferenced_vertices()
     return np.asarray(part.vertices), np.asarray(part.faces)
 
 
 INSULA_FLOOR = "White matter of telencephalon"
-INSULA_REACH_MM = 25.0    # (the white matter shown with the insula within this of the artery's course in the fissure)
+INSULA_REACH_MM = 25.0    # (the white matter shown with the insula within this of the artery's course in the fissure ...
+INSULA_BELOW_MM = 5.0     # ... and not more than this below its lowest point: none under the temporal lobe)
 
 
 def fissure_course(ex: dict, side: str, names: tuple = ()) -> np.ndarray:

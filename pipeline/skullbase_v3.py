@@ -1313,8 +1313,8 @@ def approach_items(items: list, ex2: dict, build: Path | None = None, kind: str 
             gc = gv.mean(0).round(2).tolist()
             items.append({"id": gid, "name": ap["guide"]["name"], "aliases": [], "type": "soft", "file": f"assets/{kind}/{gid}.glb", "bytes": 0,
                           "colour": colour("sbGuide"), "dataset": "rule", "source": "Drawn by rule",
-                          "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)", "citation": [], "citationUrls": [], "refIds": [],
-                          "category": "guide", "approach": aid, "schematic": True, "centroid": {"L": gc, "R": gc},
+                          "licence": "GPL-3.0 (the project's own drawing, on " + ("the Z-Anatomy model)" if kind == "skullbase" else "the TopBrain CT)"),
+                          "citation": [], "citationUrls": [], "refIds": [], "category": "guide", "approach": aid, "schematic": True, "centroid": {"L": gc, "R": gc},
                           "derivation": ("The rhomboid drawn on the middle fossa floor between its four landmarks on this model (Signoretti 2025): the "
                                          "petrous apex, where the greater petrosal nerve meets V3 seen from above, the geniculate ganglion and the "
                                          "arcuate eminence (the bone over the superior semicircular canal).")})

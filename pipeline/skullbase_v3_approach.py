@@ -49,6 +49,7 @@ from build import isosurface  # noqa: E402
 import os  # noqa: E402
 PROFILE = os.environ.get("SB_PROFILE", "v3")
 V1_CAVITY_SEAL_MM = 7.0
+EAR_OWN = "Z-Anatomy's ear" if PROFILE == "v1" else "the registered ear"
 SINUSES_OWN = "Z-Anatomy's own (its centre lines and radii)" if PROFILE == "v1" else "this CT's own (traced through its lumen)"
 SINUSES_OWN_PL = "Z-Anatomy's own sinuses (their centre lines and radii)" if PROFILE == "v1" else "this CT's own sinuses (traced through their lumen)"
 V1_FLAP_RUN_MM = 14.0     # (Skull.flap on v1: a flap's run along a line of sight at most this deep)
@@ -152,6 +153,13 @@ KW_KEEP_MM = {              # the petrous apex drilled within the rhomboid, down
     "Nerves in the internal acoustic meatus (VII, VIII)": 1.0, "Facial nerve (VII)": 1.5,
     "Mandibular nerve (V3)": 1.0, "Trigeminal ganglion": 1.0, "Greater petrosal nerve": 0.5, "Abducens nerve (VI)": 1.0,
 }
+if PROFILE == "v1":         # (v1's names for them: Z-Anatomy draws the carotid whole, the labyrinth as its cochlea and
+    KW_KEEP_MM = {          # vestibule, the nerves of the meatus as VIII, the trigeminal ganglion with its nerve)
+        "Internal carotid artery": 1.5, "Cochlea": 1.5, "Vestibule and semicircular canals": 1.5,
+        "Vestibulocochlear nerve (VIII)": 1.0, "Facial nerve (VII)": 1.5, "Mandibular nerve (V3)": 1.0, "Trigeminal nerve (V)": 1.0,
+        "Greater petrosal nerve": 0.5, "Abducens nerve (VI)": 1.0,
+    }
+KW_V1_SOFT_MM = 1.0
 KW_ABOVE_MM = 1.0           # (the rhomboid's prism reaches this far above its highest corner)
 KW_WALL_MM = 12.0           # the pyramid behind the apex-eminence line drilled through to the posterior fossa, up to this far
 KW_APEX_MEDIAL_MM = 1.0     # ... but not more than this medial to the petrous apex (the clivus stays)
@@ -1234,10 +1242,10 @@ def kawase(S: Skull) -> dict:
                 "apexToAeMm": round(dist(apex, ae), 1), "drilledMl": round(float(drill.sum()) * STEP ** 3 / 1000, 2), "flapMm2": round(area)}
     how = (f"A right temporal flap {L:g} × {H:g} mm (about {area:.0f} mm² seen from the side; Signoretti 2025 measured a mean 1272 mm²), its base "
            "at the middle fossa floor's level (the tegmen, as located on this " + ("model" if PROFILE == "v1" else "CT") + "), two thirds of it in front of the external auditory canal "
-           "and one third behind (Flores-Justa 2021; the canal's line taken from the registered ear's tympanic membrane), cut down flush "
+           "and one third behind (Flores-Justa 2021; the canal's line taken from " + EAR_OWN + "'s tympanic membrane), cut down flush "
            "with the floor. Then the petrous apex drilled within the rhomboid of four landmarks (Signoretti 2025): the petrous apex, "
            "where the greater petrosal nerve meets V3 (seen from above), the geniculate ganglion and the arcuate eminence (the bone over "
-           "the superior semicircular canal, from the registered ear), seen from above and drilled straight down to the level of the "
+           "the superior semicircular canal, from " + EAR_OWN + "), seen from above and drilled straight down to the level of the "
            "inferior petrosal sinus, the ridge and the pyramid behind it taken through to the posterior fossa's dura (up to "
            f"{KW_WALL_MM:g} mm behind the line from the apex to the eminence, from the apex to the porus: not medial to the apex, "
            "not behind the internal acoustic canal), kept "
@@ -1251,7 +1259,10 @@ def kawase(S: Skull) -> dict:
         for t in np.linspace(0, 1, 10, endpoint=False):
             p_ = a_ + t * (b_ - a_)
             edge.append(S.surface(p_, up, reach=12.0) + 0.6 * up)
+    if PROFILE == "v1":       # (on v1 the drilled edge smoothed as the flaps' are: unsmoothed it shows the grid's steps)
+        how += f" The cut's edge smoothed over {KW_V1_SOFT_MM:g} mm (illustrative)."
     return {"id": "kawase", "name": "Anterior petrosectomy (Kawase)", "cut": m | drill, "how": how, "burrHoles": [],
+            **({"softMm": KW_V1_SOFT_MM} if PROFILE == "v1" else {}),
             "areaMm2": round(area), "measured": measured, "corners": np.round(quad, 2).tolist(),
             "guide": {"name": "Kawase rhomboid", "points": np.round(np.array(edge + edge[:1]), 2).tolist()}}
 

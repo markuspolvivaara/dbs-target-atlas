@@ -563,6 +563,18 @@ def validate() -> int:
         for sd, rc in fit["brain"]["clear"].items():
             check(rc["inBoneWayAfter"] <= 20, f"cortex {sd}: {rc['inBoneWayAfter']} vertices left in bone's way")
         check(fit["pfossa"]["clear"]["inBoneAfter"] <= 60, f"hindbrain: {fit['pfossa']['clear']['inBoneAfter']} vertices left in bone")
+        # the temporal-bone views (skullbase_v1_ear.py): Z-Anatomy's ear, and what it lacks drawn by rule, on both sides
+        names = {it["name"]: it for it in m["structures"]}
+        for n_ in ("Cochlea", "Vestibule and semicircular canals", "Malleus", "Incus", "Stapes", "Tympanic membrane", "Greater petrosal nerve"):
+            it = names.get(n_)
+            check(it is not None and it["centroid"]["L"][0] < 0 < it["centroid"]["R"][0], f"ear: {n_} missing or on the wrong side")
+        drawn = {(lm["name"], lm["side"]) for lm in lms if lm.get("placed", "").startswith("Drawn by rule")}
+        for n_ in ("Geniculate ganglion", "Second genu of facial nerve", "Oval window", "Bone over the superior semicircular canal"):
+            check({(n_, "L"), (n_, "R")} <= drawn, f"ear: landmark {n_} not drawn on both sides")
+        for sd, r in fit.get("ear", {}).items():
+            check(abs(r["gspnMm"] - 13.78) <= 1.5, f"ear {sd}: greater petrosal nerve {r['gspnMm']} mm")
+            check(r["toGeniculateMm"] < r["toSecondGenuMm"], f"ear {sd}: the genua out of order")
+        check("kawase" in aps and any(it.get("forView") == "kawase" for it in m["structures"]), "Kawase: the cut or its lifted temporal lobe missing")
     print(f"skull base validation: {n - len(fails)}/{n} checks passed")
     for f in fails:
         print("FAIL", f)

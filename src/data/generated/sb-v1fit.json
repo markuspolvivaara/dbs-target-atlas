@@ -3,33 +3,33 @@
   "cavityMl": 1736,
   "clear": {
    "R": {
-    "inBoneWayBefore": 3471,
+    "inBoneWayBefore": 3483,
     "inBoneWayAfter": 0,
     "rounds": 16,
-    "maxMovedMm": 6.38
+    "maxMovedMm": 6.33
    },
    "L": {
-    "inBoneWayBefore": 3652,
+    "inBoneWayBefore": 3636,
     "inBoneWayAfter": 0,
-    "rounds": 16,
-    "maxMovedMm": 6.37
+    "rounds": 17,
+    "maxMovedMm": 6.8
    }
   },
   "open": {
-   "lipsFrontal": 333,
-   "lipsTemporal": 205,
-   "heldBySkull": 2001,
-   "moved": 5777,
-   "maxMovedMm": 6.85,
-   "heldAtCavity": 149,
-   "outsideCavityAfter": 94
+   "lipsFrontal": 328,
+   "lipsTemporal": 203,
+   "heldBySkull": 1981,
+   "moved": 5879,
+   "maxMovedMm": 6.8,
+   "heldAtCavity": 150,
+   "outsideCavityAfter": 98
   },
   "lift": {
-   "orbitalHandles": 876,
-   "insulaHandles": 10220,
-   "moved": 19893,
-   "maxMovedMm": 8.11,
-   "heldAtCavity": 36,
+   "orbitalHandles": 885,
+   "insulaHandles": 10015,
+   "moved": 19864,
+   "maxMovedMm": 8.37,
+   "heldAtCavity": 30,
    "outsideCavityAfter": 29,
    "line": [
     [
@@ -50,11 +50,11 @@
    ]
   },
   "lsoLift": {
-   "orbitalHandles": 775,
-   "insulaHandles": 10220,
-   "moved": 19575,
-   "maxMovedMm": 12.97,
-   "heldAtCavity": 16,
+   "orbitalHandles": 778,
+   "insulaHandles": 10015,
+   "moved": 19637,
+   "maxMovedMm": 12.63,
+   "heldAtCavity": 17,
    "outsideCavityAfter": 29,
    "line": [
     [
@@ -70,10 +70,10 @@
    ]
   },
   "interhemispheric": {
-   "moved": 3681,
-   "fullyMoved": 436,
-   "maxMovedMm": 8.28,
-   "heldAtCavity": 137,
+   "moved": 3715,
+   "fullyMoved": 444,
+   "maxMovedMm": 8.23,
+   "heldAtCavity": 136,
    "outsideCavityAfter": 0,
    "span": [
     -11.8,
@@ -146,6 +146,24 @@
    "Anterior inferior cerebellar artery": 12.16,
    "Posterior inferior cerebellar artery": 11.82,
    "Superior cerebellar artery": 11.44
+  }
+ },
+ "ear": {
+  "L": {
+   "facialCourseMm": 53.3,
+   "toGeniculateMm": 25.1,
+   "toSecondGenuMm": 38.4,
+   "gspnMm": 13.5,
+   "overCanalMm": 0.5,
+   "arcuateEminenceToOverCanalMm": null
+  },
+  "R": {
+   "facialCourseMm": 53.3,
+   "toGeniculateMm": 25.1,
+   "toSecondGenuMm": 38.4,
+   "gspnMm": 13.5,
+   "overCanalMm": 0.5,
+   "arcuateEminenceToOverCanalMm": 1.2
   }
  }
 }

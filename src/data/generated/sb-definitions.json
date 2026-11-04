@@ -862,5 +862,25 @@
  "Posterior median sulcus of medulla oblongata": {
   "text": "The posterior median sulcus of medulla oblongata (or posterior median fissure or dorsal median sulcus) is a narrow groove; and exists only in the closed part of the medulla oblongata; it becomes gradually shallower from below upward, and finally ends about the middle of the medulla oblongata, where the central canal expands into the cavity of the fourth ventricle.",
   "url": "https://en.wikipedia.org/wiki/Posterior_median_sulcus_of_medulla_oblongata"
+ },
+ "Cochlea": {
+  "text": "The cochlea is the part of the inner ear involved in hearing. It is a spiral-shaped cavity in the bony labyrinth, in humans making 2.75 turns around its axis, the modiolus. A core component of the cochlea is the Organ of Corti, the sensory organ of hearing, which is distributed along the partition separating the fluid chambers in the coiled tapered tube of the cochlea. The name cochlea derives from Ancient Greek κοχλίας (kokhlias) 'spiral, snail shell'.",
+  "url": "https://en.wikipedia.org/wiki/Cochlea"
+ },
+ "Malleus": {
+  "text": "The malleus, or hammer, is a hammer-shaped small bone or ossicle of the middle ear. It connects with the incus, and is attached to the inner surface of the eardrum. The word is Latin for 'hammer' or 'mallet'. It transmits the sound vibrations from the eardrum to the incus (anvil).",
+  "url": "https://en.wikipedia.org/wiki/Malleus"
+ },
+ "Incus": {
+  "text": "The incus or anvil is a bone in the middle ear. The anvil-shaped small bone is one of three ossicles in the middle ear. The incus receives vibrations from the malleus, to which it is connected laterally, and transmits these to the stapes medially. The incus is so-called because of its resemblance to an anvil (Latin: Incus).",
+  "url": "https://en.wikipedia.org/wiki/Incus"
+ },
+ "Stapes": {
+  "text": "The stapes or stirrup is a bone in the middle ear of humans and other animals which is involved in the conduction of sound vibrations to the inner ear. This bone is connected to the oval window by its annular ligament, which allows the footplate to transmit sound energy through the oval window into the inner ear. The stapes is the smallest and lightest bone in the human body, and is so-called because of its resemblance to a stirrup (Latin: Stapes).",
+  "url": "https://en.wikipedia.org/wiki/Stapes"
+ },
+ "Tympanic membrane": {
+  "text": "In the anatomy of humans and various other tetrapods, the eardrum, also called the tympanic membrane or myringa, is a thin, cone-shaped membrane that separates the external ear from the middle ear. Its function is to transmit sound from the air to the ossicles inside the middle ear, and then to the oval window in the fluid-filled cochlea. Hence, it ultimately converts and amplifies vibration in air to vibration in cochlear fluid. The malleus bone bridges the gap between the eardrum and the other ossicles.Rupture or perforation of the eardrum can lead to conductive hearing loss. Collapse or retraction of the eardrum can cause conductive hearing loss or cholesteatoma.",
+  "url": "https://en.wikipedia.org/wiki/Eardrum"
  }
 }

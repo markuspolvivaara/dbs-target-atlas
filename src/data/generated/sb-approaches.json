@@ -183,5 +183,57 @@
   ],
   "removed": "sb_appr_far_lateral__removed",
   "burrHoles": []
+ },
+ "kawase": {
+  "name": "Anterior petrosectomy (Kawase)",
+  "side": "R",
+  "how": "A right temporal flap 40 × 32 mm (about 1280 mm² seen from the side; Signoretti 2025 measured a mean 1272 mm²), its base at the middle fossa floor's level (the tegmen, as located on this model), two thirds of it in front of the external auditory canal and one third behind (Flores-Justa 2021; the canal's line taken from Z-Anatomy's ear's tympanic membrane), cut down flush with the floor. Then the petrous apex drilled within the rhomboid of four landmarks (Signoretti 2025): the petrous apex, where the greater petrosal nerve meets V3 (seen from above), the geniculate ganglion and the arcuate eminence (the bone over the superior semicircular canal, from Z-Anatomy's ear), seen from above and drilled straight down to the level of the inferior petrosal sinus, the ridge and the pyramid behind it taken through to the posterior fossa's dura (up to 12 mm behind the line from the apex to the eminence, from the apex to the porus: not medial to the apex, not behind the internal acoustic canal), kept 1.5 mm off the internal carotid artery, 1.5 mm off the cochlea, 1.5 mm off the vestibule and semicircular canals, 1 mm off the vestibulocochlear nerve (VIII), 1.5 mm off the facial nerve (VII), 1 mm off the mandibular nerve (V3), 1 mm off the trigeminal nerve (V), 0.5 mm off the greater petrosal nerve, 1 mm off the abducens nerve (VI) (the margins illustrative): 1.69 ml (Signoretti 2025: 2.83 ± 0.28 cm³). On this model the arcuate eminence lies 10.8 mm from the geniculate ganglion, that 12.6 mm from the nerves' meeting, that 18.6 mm from the petrous apex, and the apex 31.6 mm (straight) from the eminence. The cut's edge smoothed over 1 mm (illustrative).",
+  "removedMl": 7.5,
+  "bones": [
+   "sb_appr_kawase__occipital_bone",
+   "sb_appr_kawase__parietal_bone",
+   "sb_appr_kawase__sphenoid_bone",
+   "sb_appr_kawase__temporal_bone"
+  ],
+  "cutBones": [
+   "sb_appr_kawase__occipital_bone",
+   "sb_appr_kawase__parietal_bone",
+   "sb_appr_kawase__temporal_bone"
+  ],
+  "removed": "sb_appr_kawase__removed",
+  "burrHoles": [],
+  "measured": {
+   "aeToGgMm": 10.8,
+   "ggToMeetMm": 12.6,
+   "meetToApexMm": 18.6,
+   "apexToAeMm": 31.6,
+   "drilledMl": 1.69,
+   "flapMm2": 1280
+  },
+  "corners": [
+   [
+    12.3,
+    -8.94,
+    -12.03
+   ],
+   [
+    30.6,
+    -12.44,
+    -11.75
+   ],
+   [
+    42.54,
+    -14.53,
+    -8.43
+   ],
+   [
+    39.07,
+    -23.12,
+    -2.93
+   ]
+  ],
+  "guides": [
+   "sb_appr_kawase__guide"
+  ]
  }
 }

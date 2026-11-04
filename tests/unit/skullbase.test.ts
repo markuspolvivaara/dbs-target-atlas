@@ -12,10 +12,27 @@ describe('skull-base data (Z-Anatomy export)', () => {
   it('generated files agree with each other', () => {
     expect(crossCheckSb()).toEqual([]);
   });
+  it('the temporal-bone views: Z-Anatomy\u2019s own ear, and what it lacks drawn by rule and said so', () => {
+    const by = (n: string) => SB_MANIFEST.structures.find((s) => s.name === n);
+    for (const n of ['Cochlea', 'Vestibule and semicircular canals', 'Malleus', 'Incus', 'Stapes', 'Tympanic membrane']) {
+      expect(by(n)?.dataset, n).toBe('zanatomy');
+      expect(by(n)?.centroid?.R?.[0], n).toBeGreaterThan(0);
+      expect(by(n)?.centroid?.L?.[0], n).toBeLessThan(0);
+    }
+    expect(by('Greater petrosal nerve')?.derivation).toMatch(/^Drawn by rule/);
+    for (const n of ['Geniculate ganglion', 'Second genu of facial nerve', 'Oval window', 'Bone over the superior semicircular canal'])
+      for (const side of ['L', 'R']) expect(LANDMARKS.find((l) => l.name === n && l.side === side)?.placed, `${n} ${side}`).toMatch(/^Drawn by rule/);
+    // the ganglion lies on the facial nerve's way between the meatus and the stylomastoid foramen, lateral to the meatus
+    const lm = (n: string) => LANDMARKS.find((l) => l.name === n && l.side === 'R')!.ras;
+    expect(lm('Geniculate ganglion')[0]).toBeGreaterThan(lm('Internal acoustic meatus')[0] + 10);
+    expect(lm('Second genu of facial nerve')[1]).toBeLessThan(lm('Geniculate ganglion')[1]);
+  });
   it('the surgical views use Z-Anatomy\u2019s own brain and hindbrain, with the shapes; the cerebellar arteries move with them', () => {
     const by = (n: string) => SB_MANIFEST.structures.find((s) => s.name === n);
-    const brain = SB_MANIFEST.structures.filter((s) => s.category === 'brain');
+    // (six lobes, and the Kawase view's lifted copy of the temporal lobe)
+    const brain = SB_MANIFEST.structures.filter((s) => s.category === 'brain' && !s.forView);
     expect(brain.length).toBe(6);
+    expect(SB_MANIFEST.structures.filter((s) => s.forView === 'kawase').map((s) => s.replaces)).toEqual(['br_temporal_lobe']);
     for (const b of brain) { expect(b.morph, b.name).toBe(true); expect(b.dataset).toBe('zanatomy'); }
     for (const n of ['Superior cerebellar artery', 'Anterior inferior cerebellar artery', 'Posterior inferior cerebellar artery']) expect(by(n)?.morph, n).toBe(true);
     // (the trunks and the posterior cerebral artery, above the tentorium, stay)
@@ -55,7 +72,8 @@ describe('skull-base data (Z-Anatomy export)', () => {
     // the trigeminal nerve as its trunk and three divisions (branches merged into them); the chorda tympani in the facial nerve
     expect(nerves.filter((s) => s.cranialNerve === 5).map((s) => s.name).sort())
       .toEqual(['Mandibular nerve (V3)', 'Maxillary nerve (V2)', 'Ophthalmic nerve (V1)', 'Trigeminal nerve (V)']);
-    expect(nerves.filter((s) => s.cranialNerve === 7).map((s) => s.name)).toEqual(['Facial nerve (VII)']);
+    // (the greater petrosal nerve, drawn by rule on the model for the temporal-bone views, is a branch of VII)
+    expect(nerves.filter((s) => s.cranialNerve === 7).map((s) => s.name).sort()).toEqual(['Facial nerve (VII)', 'Greater petrosal nerve']);
     for (const n of ['Mandibular nerve (V3)', 'Maxillary nerve (V2)', 'Ophthalmic nerve (V1)']) expect(definitionFor(n), n).not.toBeNull();
     const ica = SB_MANIFEST.structures.find((s) => s.name === 'Internal carotid artery')!;
     const means = await nodeMeans(ica.file);
@@ -150,9 +168,11 @@ describe('e2e group list stays in step with the groups module', () => {
     const spec = readFileSync(new URL('../e2e/smoke.spec.ts', import.meta.url), 'utf8');
     for (const g of SB_GROUPS) if (g.kind === 'bone') expect(spec, g.name).toContain(`'${g.name}'`);
     // (the overview, the regions, three systems, six bone views and the surgical views cut on this model's skull)
-    expect(SB_GROUPS.length).toBe(1 + REGIONS.length + 3 + 6 + Object.keys(APPROACH_GEOM).length);
+    // (and the six temporal-bone views)
+    expect(SB_GROUPS.length).toBe(1 + REGIONS.length + 3 + 6 + Object.keys(APPROACH_GEOM).length + 6);
     expect(SB_GROUPS.filter((g) => g.kind === 'approach').map((g) => g.id).sort())
-      .toEqual(['far_lateral', 'interhemispheric', 'lso', 'orbitozygomatic', 'retrosigmoid', 'telovelar', 'transsylvian']);
+      .toEqual(['far_lateral', 'interhemispheric', 'kawase', 'lso', 'orbitozygomatic', 'retrosigmoid', 'telovelar', 'transsylvian']);
+    expect(SB_GROUPS.filter((g) => ['temporal', 'ear_r', 'ear_l', 'facial', 'inner_ear', 'middle_ear'].includes(g.id)).length).toBe(6);
     // the all-bones view draws every bone and every landmark
     const all = SB_GROUPS.find((g) => g.id === 'bone_all_bones')!;
     expect(all.landmarks.length).toBe(LANDMARKS.length);

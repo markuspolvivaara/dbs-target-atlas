@@ -551,11 +551,12 @@ for (const g of SB_GROUPS) {
   });
 }
 // v1's surgical views: v3's craniotomies cut on Z-Anatomy's own skull, over its own brain and hindbrain (no baselines yet)
-test('skull base v1: the surgical views render on Z-Anatomy\u2019s own skull and brain', async ({ page }) => {
+test('skull base v1: the surgical and temporal-bone views render on Z-Anatomy\u2019s own skull, brain and ear', async ({ page }) => {
   const gd = guard(page);
   const views: [string, string, string?][] = [['transsylvian', 'Pterional transsylvian approach', 'op'], ['lso', 'Lateral supraorbital approach', 'll'],
     ['interhemispheric', 'Interhemispheric transcallosal approach', 'ih'], ['telovelar', 'Telovelar approach', 'tv'],
-    ['retrosigmoid', 'Retrosigmoid approach', 'rs'], ['orbitozygomatic', 'Orbitozygomatic approach'], ['far_lateral', 'Far lateral approach']];
+    ['retrosigmoid', 'Retrosigmoid approach', 'rs'], ['orbitozygomatic', 'Orbitozygomatic approach'], ['far_lateral', 'Far lateral approach'],
+    ['kawase', 'Anterior petrosectomy (Kawase approach)']];
   for (const [id, name, morph] of views) {
     await page.goto(`./skullbase-v1/#/atlas?g=${id}${morph ? `&${morph}=100` : ''}`);
     await settle(page);
@@ -564,8 +565,16 @@ test('skull base v1: the surgical views render on Z-Anatomy\u2019s own skull and
     await expect(page.locator('.pane:not([hidden]) article.card').last()).not.toContainText('this CT');
     expect(await canvasColours(page), id).toBeGreaterThan(40);
   }
-  // (Kawase waits for the ear's structures on this model)
-  await expect(page.locator('.grp-chips[aria-label="Surgical views"] .chip[data-v="kawase"]')).toHaveCount(0);
+  // the temporal-bone views: Z-Anatomy's own ear, what it lacks drawn by rule and said so
+  for (const [id, name] of [['temporal', 'Temporal bones'], ['ear_r', 'Right temporal bone'], ['ear_l', 'Left temporal bone'],
+    ['facial', 'Facial nerve'], ['inner_ear', 'Inner ear'], ['middle_ear', 'Middle ear']]) {
+    await page.goto(`./skullbase-v1/#/atlas?g=${id}`);
+    await settle(page);
+    await expect(page.locator('.pane:not([hidden]) .card h2').first()).toHaveText(name);
+    await expect(page.locator('.pane:not([hidden]) .card').first()).toContainText('Z-Anatomy');
+    expect(await canvasColours(page), id).toBeGreaterThan(40);
+  }
+  await expect(page.locator('.pane:not([hidden]) .card').first()).not.toContainText('OpenEar');
   expect(gd.external).toEqual([]);
   expect(gd.errors).toEqual([]);
 });

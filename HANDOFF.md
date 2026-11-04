@@ -39,7 +39,7 @@ commit and push it.
   lateral (lateral suboccipital, foramen magnum rim, posterior third of the condyle; C1 is not modelled). New camera
   presets `orbitozygomatic` and `farLateral`. `skullbase_v3.py approaches` rewrites only the approach items from
   `approach.json`, so the whole v3 step need not run.
-- **Skull base v1 gets v3's views (phase 1 of 4 done: the approaches).** The user asked (2026-11-03) for everything
+- **Skull base v1 gets v3's views (phases 1 and 2 of 4 done: the approaches; the ear views and Kawase).** The user asked (2026-11-03) for everything
   in the v3 module on v1, built from v1's own Z-Anatomy models, not v3's CT, template or ear. Where Z-Anatomy lacks
   something, it is drawn by rule on Z-Anatomy and labelled so. Built afresh on the desktop; the MacBook stash is not
   used. The phases: (1) the approaches, done; (2) the ear views, then Kawase (it needs the geniculate ganglion and
@@ -52,7 +52,7 @@ commit and push it.
     `V1_FLAP_RUN_MM`; `thin_by_cut`; the smoothing mask is extended into air; the pinhole seal applies outside the cut only.
   - `SB_PROFILE=v1 skullbase_v3_approach.py`: the same craniotomy code on that grid. v1 differences, each under
     `PROFILE == "v1"`: the floor rule is stricter (Z-Anatomy's wall slopes about 45° by the pterion and has ledges),
-    and the sphenoid ridge is found from the skull. Kawase is not cut on v1 yet.
+    and the sphenoid ridge is found from the skull. Kawase is cut on v1 since phase 2.
   - `skullbase_v1_brain.py`: Z-Anatomy's cortex patches (`skullbase_v1_brain_export.py`, in Blender, now with each
     hemisphere's white matter), remade as closed surfaces (0.25 mm grid; temporal lobe, insula and the rest apart).
     Opercula: within 10 mm of Z-Anatomy's M1/M2/M3. The opened fissure's floor is its white matter (`white_floor`). They are pushed out of their own bone by a smooth field (up to 7 mm;
@@ -66,9 +66,15 @@ commit and push it.
   - v1's retrosigmoid camera is `retrosigmoidLevel`: on this skull the opening lies level with the porus, so v3's view
     from below meets the mastoid. `V1_NAMES` and `V1_ABSENT` (`approaches.ts`) map v3's context names to v1's, or
     leave them out.
-  - v1 chain: `skullbase_build.py`, `skullbase_v1_skull.py`, `SB_PROFILE=v1 skullbase_v3_approach.py only pterional
-    lso interhemispheric suboccipital retrosigmoid orbitozygomatic far_lateral`, `skullbase_v1.py approaches`,
-    `skullbase_v1_brain.py`, `skullbase_v1_pfossa.py`, `skullbase_v1.py brain`, `node pipeline/compress.mjs skullbase`,
+  - Phase 2: `skullbase_v1_ear_export.py` (Blender) and `skullbase_v1_ear.py`. These give Z-Anatomy's ear, plus by rule
+    the geniculate ganglion (the facial nerve's first genu), the second genu, the oval window, the bone over the
+    superior canal and the GSPN (v3's rule on v1's grid). `skullbase_v1.py ear` merges the items, landmarks
+    (`placed`), definitions and the `ear` report. Kawase on v1: `KW_KEEP_MM` under v1 names, edge smoothed 1 mm, insula
+    hidden in that view (`V1_TEXT.kawase.hide`). The lifted temporal lobe is redone in `skullbase_v1.py brain`.
+  - v1 chain: `skullbase_build.py`, `skullbase_v1_skull.py`, `skullbase_v1_ear.py`, `skullbase_v1.py ear`,
+    `SB_PROFILE=v1 skullbase_v3_approach.py only pterional lso interhemispheric suboccipital retrosigmoid
+    orbitozygomatic far_lateral kawase`, `skullbase_v1.py approaches`, `skullbase_v1_brain.py`,
+    `skullbase_v1_pfossa.py`, `skullbase_v1.py brain`, `node pipeline/compress.mjs skullbase`,
     `skullbase_build.py finalize`. Compressing v1 left the untouched GLBs byte-identical here.
 - **Pipeline data changed on the desktop:** `pipeline/data/build/skullbase` (the whole v1 port), `pipeline/data/build/skullbase-v3` (the clean-up's chain, the tumours, the
   two approaches in `approach.json`) and `pipeline/data/build/vascular`. Copy `pipeline/data/` back before rebuilding
@@ -152,7 +158,7 @@ commit and push it.
   14. `npm run build`
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
-  - `npx vitest run` (323 tests)
+  - `npx vitest run` (325 tests)
   - `npm run build`
   - `npx playwright test` (130 tests, about 7 minutes, preview on port 4173)
   - `npm run check:palette`

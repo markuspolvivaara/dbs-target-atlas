@@ -385,8 +385,21 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
   such; peer-reviewed teaching notes are still to come.
 - Pipeline: `pipeline/skullbase_export.py` runs inside Blender (installed under `.tools/`, or set `BLENDER`) and
   `pipeline/skullbase_build.py` writes the assets and checks sides, symmetry and landmark distances.
+- **Temporal-bone views** (`pipeline/skullbase_v1_ear_export.py` in Blender, then `pipeline/skullbase_v1_ear.py`):
+  - The views: both temporal bones from above, each side from the side, the facial nerve, the inner ear and the middle
+    ear, as in v3.
+  - Z-Anatomy's own: the cochlea, its vestibule mesh (which takes in the semicircular canals), the malleus, incus and
+    stapes, the tympanic membrane, and the facial and vestibulocochlear nerves. The chorda tympani is drawn with the
+    facial nerve.
+  - Drawn by rule, since Z-Anatomy lacks them, and labelled so:
+    - the geniculate ganglion, at the first genu of Z-Anatomy's facial nerve (the sharpest turn on its course through
+      the temporal bone);
+    - the second genu;
+    - the oval window, at the stapes footplate's centre;
+    - the bone over the superior semicircular canal;
+    - the greater petrosal nerve, by v3's rule (Gupta 2013; Nguyen 2026's mean length) on this skull.
 - **Surgical views**: Skull base v3's craniotomies are cut on Z-Anatomy's own skull (pterional transsylvian, lateral
-  supraorbital, interhemispheric, telovelar, retrosigmoid, orbitozygomatic and far lateral), over Z-Anatomy's own brain
+  supraorbital, interhemispheric, telovelar, retrosigmoid, orbitozygomatic, far lateral and Kawase), over Z-Anatomy's own brain
   and hindbrain, with v3's sourced cards and sliders. Nothing comes from the CT, the template brain or the registered
   ear. How each part is made:
   - The bones are rasterised at 0.5 mm (`pipeline/skullbase_v1_skull.py`). A closed mesh is filled; a nearly closed one
@@ -418,8 +431,10 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
   - The superior, anterior inferior and posterior inferior cerebellar arteries move with the cerebellum. The trunks
     and the posterior cerebral artery stay.
   - The retrosigmoid view is seen nearly level with the porus (on this skull the opening lies level with it).
-  - Not yet on v1: Kawase (it needs the ear's structures), the ear views, the cavernous sinus, triangles and endonasal
-    view, and the tumours. v3's Sylvian veins, A3 and its variant, the trigeminal ganglion and the meatal bundle are
+  - Kawase (anterior petrosectomy) on this skull: v3's flap and rhomboid. Its landmarks are Z-Anatomy's petrous apex,
+    with the geniculate ganglion, the greater petrosal nerve and the bone over the superior canal drawn by rule (below).
+    The drilling keeps off Z-Anatomy's cochlea, vestibule, carotid and nerves, and the temporal lobe is drawn held up.
+  - Not yet on v1: the cavernous sinus, triangles and endonasal view, and the tumours. v3's Sylvian veins, A3 and its variant, the trigeminal ganglion and the meatal bundle are
     not part of Z-Anatomy and are left out of the views.
 
 ### Skull base v2: the detailed model (`skullbase-ct/`)

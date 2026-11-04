@@ -98,7 +98,8 @@ function surgicalGroups(): SbGroup[] {
       focus: null, focusIds: [...(a.frameOpening === false ? [] : [geom.removed]), ...byName(...a.focus)], radius: a.radius ?? 60, approach: a.id, morphs: a.morphs,
       description: SB_MODEL === 'zanatomy' ? V1_TEXT[a.id]?.summary ?? a.summary : a.summary,
       structures: [...bones.filter((id) => !replaced.has(id)), ...geom.bones, geom.removed, ...(geom.guides ?? []),
-        ...[...brainOf(a.brain ?? 'cerebrum'), ...byName(...a.context)].map((id) => own.get(id) ?? id)],
+        ...[...brainOf(a.brain ?? 'cerebrum'), ...byName(...a.context)].map((id) => own.get(id) ?? id)]
+        .filter((id) => !(SB_MODEL === 'zanatomy' && V1_TEXT[a.id]?.hide?.includes(SB.get(id)?.name ?? ''))),
       landmarks: lm(...(a.landmarks ?? [])),
     };
   });
@@ -227,8 +228,54 @@ function temporalGroups(): SbGroup[] {
   ];
 }
 
+/** v1's temporal-bone views, as v3's: Z-Anatomy's own ear (its cochlea, vestibule and semicircular canals, ossicles,
+ * tympanic membrane, facial and vestibulocochlear nerves), with the geniculate ganglion, the second genu, the oval window,
+ * the bone over the superior canal and the greater petrosal nerve drawn by rule on it (skullbase_v1_ear.py). */
+function v1EarGroups(): SbGroup[] {
+  const byName = (...names: string[]) => OWN.filter((s) => names.includes(s.name)).map((s) => s.id);
+  const lm = (...names: string[]) => LANDMARKS.filter((l) => names.includes(l.name)).map((l) => l.id);
+  const gen = (side: 'L' | 'R') => LANDMARKS.find((l) => l.name === 'Geniculate ganglion' && l.side === side)?.ras as V3 | undefined;
+  const EAR = ['Cochlea', 'Vestibule and semicircular canals', 'Malleus', 'Incus', 'Stapes', 'Tympanic membrane', 'Facial nerve (VII)',
+    'Vestibulocochlear nerve (VIII)', 'Cochlear nerve', 'Vestibular nerve', 'Greater petrosal nerve', 'Internal carotid artery'];
+  const EAR_LMS = ['Internal acoustic meatus', 'Stylomastoid foramen', 'Geniculate ganglion', 'Second genu of facial nerve', 'Oval window',
+    'Bone over the superior semicircular canal', 'Arcuate eminence', 'Tegmen tympani', 'Apex of petrous part'];
+  const base = { boneLook: 'shell' as Look, cutAbove: null, hemi: 'both' as const };
+  const drawn = 'The geniculate ganglion, the second genu, the oval window, the bone over the superior canal and the greater petrosal nerve are drawn by rule on Z-Anatomy’s own ear and nerve, which do not have them.';
+  return [
+    {
+      ...base, id: 'temporal', kind: 'overview', name: 'Temporal bones', camera: 'axial', cutAbove: 4, focus: null, radius: 70,
+      description: `Both temporal bones of the Z-Anatomy model, seen from above with the vault cut away and the bone see-through: inside each, its facial and vestibulocochlear nerves, cochlea, vestibule and semicircular canals, ossicles and carotid. ${drawn}`,
+      structures: byName(...EAR), landmarks: lm(...EAR_LMS),
+    },
+    ...(['R', 'L'] as const).map((side): SbGroup => ({
+      ...base, id: `ear_${side.toLowerCase()}`, kind: 'region', name: side === 'R' ? 'Right temporal bone' : 'Left temporal bone',
+      camera: 'lateral', hemi: side, focus: gen(side) ?? null, radius: 32,
+      description: `The ${side === 'R' ? 'right' : 'left'} temporal bone of the Z-Anatomy model from the side, the bone see-through. ${drawn}`,
+      structures: byName(...EAR), landmarks: LANDMARKS.filter((l) => EAR_LMS.includes(l.name) && l.side === side).map((l) => l.id),
+    })),
+    {
+      ...base, id: 'facial', kind: 'system', name: 'Facial nerve', camera: 'lateral', hemi: 'R', focus: gen('R') ?? null, radius: 30,
+      description: 'Z-Anatomy’s facial nerve through the temporal bone, from the internal acoustic meatus to the stylomastoid foramen (its chorda tympani drawn with it), with the geniculate ganglion at its first genu, the second genu (both drawn by rule on its course) and the greater petrosal nerve (drawn by rule).',
+      structures: byName('Facial nerve (VII)', 'Greater petrosal nerve', 'Vestibulocochlear nerve (VIII)'),
+      landmarks: lm('Internal acoustic meatus', 'Geniculate ganglion', 'Second genu of facial nerve', 'Stylomastoid foramen'),
+    },
+    {
+      ...base, id: 'inner_ear', kind: 'system', name: 'Inner ear', camera: 'lateral', hemi: 'R', focus: gen('R') ?? null, radius: 26,
+      description: 'Z-Anatomy’s cochlea and its vestibule with the semicircular canals, the cochlear and vestibular nerves and the stapes in the oval window (the window drawn by rule at the footplate’s centre).',
+      structures: byName('Cochlea', 'Vestibule and semicircular canals', 'Cochlear nerve', 'Vestibular nerve', 'Vestibulocochlear nerve (VIII)', 'Stapes'),
+      landmarks: lm('Oval window', 'Bone over the superior semicircular canal', 'Internal acoustic meatus'),
+    },
+    {
+      ...base, id: 'middle_ear', kind: 'system', name: 'Middle ear', camera: 'lateral', hemi: 'R', focus: gen('R') ?? null, radius: 26,
+      description: 'Z-Anatomy’s tympanic membrane and ossicles, with its facial nerve’s tympanic segment above the oval window (its chorda tympani is drawn with the facial nerve).',
+      structures: byName('Malleus', 'Incus', 'Stapes', 'Tympanic membrane', 'Facial nerve (VII)'), landmarks: lm('Oval window', 'Second genu of facial nerve'),
+    },
+  ];
+}
+
 export const SB_GROUPS: SbGroup[] = SB_MODEL === 'v3' ? temporalGroups() : [
   ...(SB_MODEL === 'zanatomy' ? surgicalGroups() : []),
+  ...(SB_MODEL === 'zanatomy' ? v1EarGroups() : []),
   {
     id: 'floor', kind: 'overview', name: 'Cranial floor', camera: 'axial', hemi: 'both', cutAbove: FLOOR_CUT_MM, focus: null, radius: 75,
     description: `The cranial bones of the model with everything above ${FLOOR_CUT_MM} mm (over the hypophysial fossa) cut away, seen from above. Use the regions to see what passes each opening, and the bones for their labelled landmarks.`,

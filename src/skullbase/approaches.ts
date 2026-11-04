@@ -469,16 +469,21 @@ export const V1_NAMES: Record<string, string> = {
   'Anterior cerebral artery (A1–A2)': 'Anterior cerebral artery',
   'Superior cerebellar artery (fitted course)': 'Superior cerebellar artery',
   'Posterior inferior cerebellar artery (fitted course)': 'Posterior inferior cerebellar artery',
+  'Internal carotid artery (petrous and lacerum parts)': 'Internal carotid artery',
+  'Scala tympani': 'Cochlea',
+  'Scala vestibuli, vestibule and semicircular canals': 'Vestibule and semicircular canals',
+  'Nerves in the internal acoustic meatus (VII, VIII)': 'Vestibulocochlear nerve (VIII)',
 };
 /** What v3 draws from other data (TopBrain's segments, its drawn veins, the ganglion, the meatal bundle, a variant
  * artery) and v1's Z-Anatomy model does not have: left out of v1's views. */
 export const V1_ABSENT = new Set([
   'Anterior cerebral artery (A3)', 'Third anterior cerebral artery (A2)', 'Third anterior cerebral artery (A3)',
   'Superficial middle cerebral vein', 'Sphenoparietal sinus', 'Insular veins', 'Deep middle cerebral vein', 'Basal vein (of Rosenthal)',
-  'Internal cerebral veins', 'Trigeminal ganglion', 'Nerves in the internal acoustic meatus (VII, VIII)',
+  'Internal cerebral veins', 'Trigeminal ganglion',
 ]);
 
-export const V1_TEXT: Record<string, { summary: string; notShown: string; camera?: CameraPreset }> = {
+/** v1's own wording for a view; camera: its own view direction; hide: structures left out of that view */
+export const V1_TEXT: Record<string, { summary: string; notShown: string; camera?: CameraPreset; hide?: string[] }> = {
   pterional: { summary: 'The right pterional craniotomy cut out of Z-Anatomy’s skull, over Z-Anatomy’s own brain. One slider opens the Sylvian fissure onto the insula and the model’s middle cerebral artery; another lifts the frontal lobe off the orbital roof to look under it, at the carotid and the optic nerve.',
     notShown: `The scalp, temporalis muscle, dura and arachnoid; the Sylvian veins. ${V1_BRAIN}` },
   lso: { summary: 'A right lateral supraorbital (LSO) craniotomy cut out of Z-Anatomy’s skull, drawn larger than usual to show the anatomy, over the same brain. The fissure lies at the craniotomy’s lower edge; the lift raises the frontal lobe off the lateral orbital roof.',
@@ -494,8 +499,9 @@ export const V1_TEXT: Record<string, { summary: string; notShown: string; camera
     notShown: `The orbital piece’s and the arch’s extents are drawn by rule on this skull. The temporalis and masseter muscles, the periorbita and the facial nerve’s frontal branch. ${V1_BRAIN}` },
   far_lateral: { summary: 'A right far lateral (lateral suboccipital) craniectomy cut out of Z-Anatomy’s skull down through the foramen magnum, the posterior third of the occipital condyle drilled, with its cerebellum, brainstem and fourth ventricle.',
     notShown: `The atlas and axis are not part of this model, so the hemilaminectomy of C1 is not shown. The craniectomy’s outline is placed by rule. The muscles, the dura and the arachnoid. ${V1_HIND}` },
-  kawase: { summary: 'A right temporal flap flush with the middle fossa floor and the petrous apex drilled within the Kawase rhomboid, on Z-Anatomy’s skull.',
-    notShown: `The dura and the tentorium. ${V1_BRAIN}` },
+  kawase: { summary: 'A right temporal flap flush with the middle fossa floor, cut out of Z-Anatomy’s skull, and the petrous apex drilled within the Kawase rhomboid down to the inferior petrosal sinus, kept off Z-Anatomy’s cochlea, labyrinth, carotid and nerves; the temporal lobe drawn held up.',
+    notShown: `The dura: the middle fossa dura and its layers, the tentorium and the dura of the posterior fossa and the meatus are not modelled; the lesser petrosal nerve, the temporalis muscle and the optional zygomatic osteotomy are not drawn. Of the rhomboid’s landmarks the geniculate ganglion (at the facial nerve’s first genu), the greater petrosal nerve and the bone over the superior canal are drawn by rule on Z-Anatomy’s ear and nerves, which do not have them; the petrous apex, the cochlea, the vestibule and canals, V3 and the carotid are Z-Anatomy’s own; the trigeminal ganglion is part of its trigeminal nerve; the margins kept off them are drawing choices. The insula, which lies above and medial to the lifted temporal lobe under dura the model does not have, is left out of this view. ${V1_BRAIN}`,
+    hide: ['Insula'] },
 };
 
 export const ENDONASAL_INFO: { sections: ApproachSection[]; notShown: string } = {

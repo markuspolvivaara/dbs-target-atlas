@@ -74,6 +74,12 @@ def brain() -> int:
         f = REPO / "public" / it["file"]
         it["bytes"] = f.stat().st_size if f.exists() else 0
     m["structures"] = [s for s in m["structures"] if s["id"] not in ids] + new
+    # the Kawase view's lifted temporal lobe, again from the temporal lobe just written
+    import skullbase_v3 as V3
+    aps = json.loads((BUILD / "approach.json").read_text())
+    if "kawase" in aps:
+        m["structures"] = [s for s in m["structures"] if s.get("forView") != "kawase"]
+        V3.lift_temporal_lobe(m["structures"], aps["kawase"], build=BUILD, kind=KIND)
     carried = pf["report"].get("carried", {})
     for it in m["structures"]:      # the arteries on the cerebellum, carried with its shapes (skullbase_v1_pfossa.py)
         if it["name"] in carried:
@@ -90,8 +96,43 @@ def brain() -> int:
         if d and name not in defs:
             defs[name] = d
     dp.write_text(json.dumps(defs, indent=1, ensure_ascii=False))
-    (GEN / f"{PREFIX}-v1fit.json").write_text(json.dumps({"brain": br["report"], "pfossa": pf["report"]}, indent=1, default=str))
+    fp = GEN / f"{PREFIX}-v1fit.json"
+    fit = json.loads(fp.read_text()) if fp.exists() else {}
+    fit.update({"brain": br["report"], "pfossa": pf["report"]})
+    fp.write_text(json.dumps(fit, indent=1, default=str))
     print("brain items:", len(new))
+    return 0
+
+
+def ear() -> int:
+    """The ear (skullbase_v1_ear.py) into v1's manifest, its drawn landmarks into sb-landmarks.json, its definitions
+    (Z-Anatomy's Wikipedia texts) into sb-definitions.json, its report into sb-v1fit.json."""
+    import skullbase_build as SB
+    e = json.loads((BUILD / "ear.json").read_text())
+    p = GEN / f"{PREFIX}-manifest.json"
+    m = json.loads(p.read_text())
+    ids = {it["id"] for it in e["items"]}
+    for it in e["items"]:
+        f = REPO / "public" / it["file"]
+        it["bytes"] = f.stat().st_size if f.exists() else 0
+    m["structures"] = [s for s in m["structures"] if s["id"] not in ids] + e["items"]
+    p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
+    lp = GEN / f"{PREFIX}-landmarks.json"
+    lms = json.loads(lp.read_text())
+    lids = {lm["id"] for lm in e["landmarks"]}
+    lp.write_text(json.dumps([lm for lm in lms if lm["id"] not in lids] + e["landmarks"], indent=1, ensure_ascii=False))
+    dp = GEN / f"{PREFIX}-definitions.json"
+    defs = json.loads(dp.read_text())
+    for name, raw in e["texts"].items():
+        d = SB.definition(raw)
+        if d:
+            defs[name] = d
+    dp.write_text(json.dumps(defs, indent=1, ensure_ascii=False))
+    fp = GEN / f"{PREFIX}-v1fit.json"
+    fit = json.loads(fp.read_text()) if fp.exists() else {}
+    fit["ear"] = e["report"]
+    fp.write_text(json.dumps(fit, indent=1, default=str))
+    print("ear items:", len(e["items"]), "landmarks:", len(e["landmarks"]))
     return 0
 
 
@@ -101,5 +142,7 @@ if __name__ == "__main__":
         sys.exit(approaches())
     if cmd == ["brain"]:
         sys.exit(brain())
+    if cmd == ["ear"]:
+        sys.exit(ear())
     print(__doc__)
     sys.exit(2)
