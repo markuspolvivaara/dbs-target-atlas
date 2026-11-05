@@ -1,0 +1,27 @@
+# Checks the committed assets and the app on every push and pull request, without the anatomy pipeline (its raw data and
+# build caches are not in git: the pipeline's own validators run where it runs). Gated here: the typecheck, the unit tests
+# (content, references, manifests and their provenance fields, every shipped GLB's geometry and laterality, URL round
+# trips) and the palette's contrast rules.
+name: Checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm test
+      - run: npm run check:palette

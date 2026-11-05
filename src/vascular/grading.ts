@@ -38,20 +38,22 @@ export const SM_POINTS: GradeTable = {
 };
 
 export const SM_GRADES: GradeTable = {
-  id: 'sm-grades', title: 'Spetzler–Martin grade: what it means',
-  head: ['Grade', 'Spetzler–Ponce class', 'Treatment, in general', 'Favourable outcome after surgery*'],
+  id: 'sm-grades', title: 'Spetzler–Martin grade: the surgical risk it estimates',
+  head: ['Grade', 'Spetzler–Ponce class', 'Adverse outcomes of surgery, by class†', 'Modified Rankin Scale 0–2 after surgery*'],
   rows: [
-    { cells: ['I', 'A', 'Surgery is safe: immediate decompression, faster recovery, a shorter hospital stay.', '85 % (40 of 47)'], drawn: 'avm1' },
-    { cells: ['II', 'A', 'As grade I.', '67 % (37 of 55)'] },
-    { cells: ['III', 'B', 'The hardest to decide: some operate, others choose radiosurgery or several treatments combined.', '60 % (25 of 42)'], drawn: 'avm3' },
-    { cells: ['IV', 'C', 'Considered by most inoperable: other, conservative measures are taken to reduce re-bleeding and morbidity.', '54 % (25 of 46)'] },
-    { cells: ['V', 'C', 'As grade IV.', '60 % (6 of 10)'], drawn: 'avm5' },
+    { cells: ['I', 'A', 'about 10 %', '85 % (40 of 47)'], drawn: 'avm1' },
+    { cells: ['II', 'A', 'about 10 %', '67 % (37 of 55)'] },
+    { cells: ['III', 'B', 'about 18 %', '60 % (25 of 42)'], drawn: 'avm3' },
+    { cells: ['IV', 'C', 'over 30 %', '54 % (25 of 46)'] },
+    { cells: ['V', 'C', 'over 30 %', '60 % (6 of 10)'], drawn: 'avm5' },
   ],
-  foot: '* Modified Rankin Scale 0–2 at the last follow-up, in 200 patients operated on in Helsinki (Hafez 2019); few had grade V.',
-  refIds: ['assker2025', 'hofman2018', 'hafez2019'],
+  foot: '† As reported for each Spetzler–Ponce class (Naranbhai 2023). * Modified Rankin Scale 0–2 at the last follow-up, in 200 patients operated on in Helsinki (Hafez 2019); few had grade V. The grade estimates the risk of an operation; it is not a treatment recommendation.',
+  refIds: ['assker2025', 'naranbhai2023', 'hofman2018', 'hafez2019'],
   notes: [
-    c('In one simplified algorithm, Spetzler–Ponce class A patients may be offered surgery if they are good surgical candidates; class B, if the nidus is compact or the patient younger than 40 (for the rest of class B conservative management may be preferred); class C is generally not treated, unless the patient is young or has poorly controlled seizures and accepts the risk of a permanent deficit.', 'naranbhai2023'),
+    c('The score aims to estimate the risk of an operation, in mortality and morbidity. Whether to operate also depends on the natural history, the patient’s other illnesses, the treatments available and the patient’s own expectations: the grade is a first step in judging operability.', 'assker2025'),
     c('Adverse outcomes of surgery are reported as 10 % for Spetzler–Ponce class A and 18 % for class B (each better than the class’s natural history over 5 and 10 years), and more than 30 % for class C.', 'naranbhai2023'),
+    c('As one review summarises practice: in grades I and II surgery offers immediate decompression, faster recovery and a shorter hospital stay; grade III is the hardest to decide (some operate, others choose radiosurgery or several treatments combined); grades IV and V are considered by most inoperable, and other measures are taken to reduce re-bleeding and morbidity.', 'assker2025'),
+    c('In one simplified algorithm, Spetzler–Ponce class A patients may be offered surgery if they are good surgical candidates; class B, if the nidus is compact or the patient younger than 40 (for the rest of class B conservative management may be preferred); class C is generally not treated, unless the patient is young or has poorly controlled seizures and accepts the risk of a permanent deficit.', 'naranbhai2023'),
     c('In grades I to III radiosurgery has outcomes similar to surgery apart from the time to obliteration; in grade IV, staged-dose radiosurgery obliterated the AVM in only 50 % of cases.', 'assker2025'),
     c('Grade III is a mixed group: an eloquent AVM of 3–6 cm (S2E1V0) carries a high surgical risk and is managed conservatively, like grades IV and V, while one of that size with deep drainage (S2E0V1) is sometimes operated on.', 'assker2025'),
     c('Most surgical morbidity came with eloquence rather than deep venous drainage: in one series 0.6 % in non-eloquent areas against 9.5 % in eloquent ones.', 'assker2025'),

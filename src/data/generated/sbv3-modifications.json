@@ -1,0 +1,52 @@
+{
+ "steps": [
+  {
+   "step": "skullbase_v3_clearance",
+   "operation": "the fitted arteries lifted off the brainstem; the brainstem carved for the CT's own",
+   "structures": [
+    "Posterior inferior cerebellar artery (fitted course)",
+    "Superior cerebellar artery (fitted course)"
+   ],
+   "parameters": {
+    "clearMm": 0.3
+   },
+   "metrics": {
+    "note": "recorded from the shipped assets; each structure's own figures are written when the step next runs"
+   },
+   "validation": {
+    "checks": 42,
+    "failed": [
+     "Posterior inferior cerebellar artery (fitted course): 30 % of it, up to 3.7 mm, inside the cerebellum"
+    ]
+   },
+   "revision": "bb9e150",
+   "date": "2026-11-05"
+  },
+  {
+   "step": "skullbase_v3_junctions",
+   "operation": "vessels joined where their sources stop short (drawn segments); the confluence of the sinuses drawn",
+   "structures": [
+    "Anterior intercavernous sinus",
+    "Basilar venous plexus",
+    "Inferior petrosal sinus",
+    "Ophthalmic artery",
+    "Posterior intercavernous sinus",
+    "Superior cerebellar artery (fitted course)",
+    "Superior petrosal sinus"
+   ],
+   "parameters": {
+    "joinMinMm": 0.8,
+    "joinMaxMm": 15.0
+   },
+   "metrics": {
+    "note": "recorded from the shipped assets; each structure's own figures are written when the step next runs"
+   },
+   "validation": {
+    "checks": 24,
+    "failed": []
+   },
+   "revision": "bb9e150",
+   "date": "2026-11-05"
+  }
+ ]
+}

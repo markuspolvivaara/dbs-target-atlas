@@ -740,3 +740,15 @@ describe('v3 anterior petrosectomy (Kawase)', async () => {
     expect(v3.structures.find((s) => s.id === 'br_temporal_lobe__kawase')?.forView).toBe('kawase');
   });
 });
+
+describe('what passes through a foramen (review C11)', async () => {
+  const { PASSAGES, FORAMEN_REF } = await import('../../src/skullbase/foramina');
+  it('the foramen ovale lists V3, the accessory meningeal artery, the lesser petrosal nerve (variable) and the emissary vein, each sourced', () => {
+    const ov = PASSAGES['Foramen ovale'];
+    expect(ov.map((p) => p.structure)).toEqual(['Mandibular nerve (V3)', 'Accessory meningeal artery', 'Lesser petrosal nerve', 'Emissary vein']);
+    expect(ov.find((p) => p.structure === 'Lesser petrosal nerve')!.passage).toBe('variable');
+    for (const p of ov) for (const r of p.refIds) expect(FORAMEN_REF.has(r), r).toBe(true);
+    // a structure the model draws is named by the model's own name
+    for (const p of ov) for (const n of p.model) expect(SB_MANIFEST.structures.some((s) => s.name === n), n).toBe(true);
+  });
+});

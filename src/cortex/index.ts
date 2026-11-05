@@ -86,17 +86,17 @@ export const FN_GROUPS: { id: FnGroupId; name: string; text: string; refIds: str
   },
   {
     id: 'language', name: 'Language',
-    text: 'Broca’s area lies in the left inferior frontal gyrus, its pars opercularis and pars triangularis (sometimes extended to the pars orbitalis), and is classically associated with language production; Wernicke’s area, in the posterior part of the superior temporal gyrus, with comprehension; the arcuate fasciculus connects the two. Drawn on both sides: the Destrieux opercular and triangular parts of the inferior frontal gyrus, and the superior temporal gyrus behind the centre of Heschl’s gyrus (its lateral aspect and the planum temporale; “posterior” is taken that way here).',
+    text: 'Broca’s area lies in the left inferior frontal gyrus, its pars opercularis and pars triangularis (sometimes extended to the pars orbitalis), and is classically associated with language production; Wernicke’s area, in the posterior part of the superior temporal gyrus, with comprehension; the arcuate fasciculus connects the two. Approximated here by anatomical labels, on both sides (on the right it marks the homologous region, not a language area): the Destrieux opercular and triangular parts of the inferior frontal gyrus, and the superior temporal gyrus behind the centre of Heschl’s gyrus (its lateral aspect and the planum temporale; “posterior” is taken that way here).',
     refIds: ['bulut2023', 'barba2026', 'kiernan2012'],
   },
   {
     id: 'visual', name: 'Visual',
-    text: 'The primary visual cortex lies along the calcarine sulcus: the centre of vision at the occipital pole, the periphery anteriorly, the lower visual field in the upper bank of the sulcus and the upper field in the lower bank. Drawn: the Destrieux calcarine sulcus and occipital pole labels.',
+    text: 'The primary visual cortex lies along the calcarine sulcus: the centre of vision at the occipital pole, the periphery anteriorly, the lower visual field in the upper bank of the sulcus and the upper field in the lower bank. Approximated here by anatomical labels: the Destrieux calcarine sulcus and occipital pole.',
     refIds: ['ribeiro2025'],
   },
   {
     id: 'auditory', name: 'Auditory',
-    text: 'The primary auditory cortex is the transverse temporal gyri (of Heschl), on the upper surface of the superior temporal gyrus, with the planum temporale behind them. Drawn: the Destrieux anterior transverse temporal gyrus label.',
+    text: 'The primary auditory cortex is the transverse temporal gyri (of Heschl), on the upper surface of the superior temporal gyrus, with the planum temporale behind them. Approximated here by an anatomical label: the Destrieux anterior transverse temporal gyrus.',
     refIds: ['kiernan2012'],
   },
 ];

@@ -312,6 +312,10 @@
   "berry2019": {
    "citation": "Berry JA, Elia C, Saini HS, Miulli DE. A Review of Lumbar Radiculopathy, Diagnosis, and Treatment. Cureus. 2019;11(10):e5934. doi:10.7759/cureus.5934.",
    "url": "https://doi.org/10.7759/cureus.5934"
+  },
+  "angileri2026": {
+   "citation": "Angileri SA, Lanza C, Carriero S, Platì M, Perazzo C, Girlando MF, et al. Interventional radiology management of disc herniation: a narrative review. Radiol Med. 2026;131(8):1382-1394. doi:10.1007/s11547-026-02236-7.",
+   "url": "https://doi.org/10.1007/s11547-026-02236-7"
   }
  },
  "generatedBy": "pipeline/spine_segment.py (TotalSegmentator) + pipeline/spine_build.py + pipeline/compress.mjs",

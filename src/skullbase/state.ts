@@ -2,6 +2,7 @@ import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type LayerKey, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
 import { combinedCut, DEFAULT_GROUP, SB_GROUP } from './groups';
+import { defaultLabels, labelsFrom, labelsParam } from '../labels';
 
 export type SkullPage = 'atlas' | 'grading' | 'sources' | 'credits';
 
@@ -35,7 +36,7 @@ export function defaultSkullState(): SkullState {
       targets: { on: true, opacity: 1 },  // landmarks
       electrode: { on: false, opacity: 1 },
     },
-    labels: 'hover',
+    labels: defaultLabels(),
     clip: { axial: { on: false, mm: 0 }, coronal: { on: false, mm: 0 }, sagittal: { on: false, mm: 0 } },
     cutSide: 'none', sliceSeq: 't1', lead: { ...DEFAULT_LEAD },
     sel: null, hidden: [], cutAbove: g.cutAbove, morphs: {}, section: true,
@@ -61,7 +62,7 @@ export function encodeSkull(s: SkullState): string {
     if (ly !== LAYER_CODES.map(([k, c]) => `${c}${d.layers[k].on ? 1 : 0}`).join(',')) p.set('ly', ly);
     p.set('cz', s.cutAbove === null ? 'off' : `${r1(s.cutAbove)}`);
     if (s.cutSide !== 'none') p.set('cut', s.cutSide);
-    if (s.labels !== 'hover') p.set('lb', s.labels === 'all' ? 'a' : '0');
+    { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
     if (s.hidden.length) p.set('hid', s.hidden.join(','));
     const dflt = SB_GROUP.get(s.grp)?.morphDefault ?? {};
     for (const [name, key] of Object.entries(MORPH_PARAMS)) {
@@ -108,7 +109,7 @@ export function decodeSkull(hash: string): SkullState {
   const cut = p.get('cut');
   s.cutSide = cut === 'L' || cut === 'R' ? cut : 'none';
   const lb = p.get('lb');
-  s.labels = lb === 'a' ? 'all' : lb === '0' ? 'off' : 'hover';
+  s.labels = labelsFrom(lb);
   s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
   s.section = p.get('sec') !== '0';
   s.morphs = {};

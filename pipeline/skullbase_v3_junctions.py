@@ -314,7 +314,13 @@ def main() -> int:
     add_definition()
     for k, v in rep.items():
         print(k, v)
-    return 0
+    checks = gaps(m["structures"])
+    bad = [msg for ok, msg in checks if not ok]
+    from modifications import record
+    record("sbv3", "skullbase_v3_junctions", "vessels joined where their sources stop short (drawn segments); the confluence of the sinuses drawn",
+           list(rep), {"joinMinMm": JOIN_MIN_MM, "joinMaxMm": JOIN_MAX_MM, "intoMm": INTO_MM, "confluenceGain": CONFLUENCE_GAIN},
+           {k: v if isinstance(v, dict) else {"gapsMm": v} for k, v in rep.items()}, {"checks": len(checks), "failed": bad})
+    return 1 if bad else 0
 
 
 def add_definition() -> None:

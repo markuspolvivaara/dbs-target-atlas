@@ -278,7 +278,9 @@ export class CortexAtlasPage {
         ` · ${one(f.areaCm2.L)} cm² left, ${one(f.areaCm2.R)} cm² right on this surface`,
         f.labels.length ? h('span', { class: 'aside' }, ` (${f.labels.map(shortName).join(', ')})`) : ''))),
       h('p', {}, g.text, ' ', refLinksFrom(CTX_REFS, g.refIds)),
-      h('p', { class: 'aside' }, 'Group-level definitions on one template brain, not an individual’s functional map: in a patient these areas are located by imaging or mapping, not by anatomy alone.'));
+      h('p', { class: 'aside' }, areas.some((f) => f.basis !== 'hmat')
+        ? 'Approximations of functional territories, not measured borders: drawn from anatomical labels (gyri and sulci), whose borders are not those of the cytoarchitectonic or functional areas. One template brain, not an individual’s map: in a patient these areas are located by imaging or mapping, not by anatomy alone.'
+        : 'A group-level template from a meta-analysis of functional imaging, drawn on one template brain: not an individual’s functional map. In a patient these areas are located by imaging or mapping, not by anatomy alone.'));
   }
 
   private lobeCard(id: LobeId): HTMLElement {

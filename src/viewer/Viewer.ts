@@ -92,6 +92,41 @@ const ENDO_PICK_BEHIND_MM = 3;
 const ENDO_PICK_FLOOR_MM = 14;
 
 /** Shared 3D viewer. What to draw comes from the section's SceneSource (catalogue + planner). */
+/** True when this browser can give the 3D viewer a WebGL context. */
+export function webglAvailable(): boolean {
+  try {
+    const c = document.createElement('canvas');
+    return !!(c.getContext('webgl2') || c.getContext('webgl'));
+  } catch {
+    return false;
+  }
+}
+
+/** The WebGL renderer, or, where WebGL cannot start (disabled, blocked or lost), an inert stand-in with the same surface
+ * the viewer uses, and a note in the stage: the rest of the page (cards, lists, sources, credits) works without it. */
+function makeRenderer(host: HTMLElement): THREE.WebGLRenderer {
+  if (webglAvailable()) {
+    try {
+      return new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance', preserveDrawingBuffer: true });
+    } catch { /* fall through to the stand-in */ }
+  }
+  const el = document.createElement('canvas');
+  const note = document.createElement('div');
+  note.className = 'no-webgl';
+  note.setAttribute('role', 'note');
+  note.textContent = 'The 3D view needs WebGL, which this browser could not start (it may be turned off, blocked or not supported). The lists, cards, sources and credits still work.';
+  host.appendChild(note);
+  document.body.dataset.webgl = 'off';
+  const noop = () => undefined;
+  const stub = {
+    domElement: el, autoClear: true, localClippingEnabled: false,
+    setPixelRatio: noop, getPixelRatio: () => 1, setSize: noop, setViewport: noop, setScissor: noop, setScissorTest: noop,
+    render: noop, clear: noop, dispose: noop, setClearColor: noop, setAnimationLoop: noop, compile: noop,
+    getDrawingBufferSize: (v: THREE.Vector2) => v.set(1, 1),
+  };
+  return stub as unknown as THREE.WebGLRenderer;
+}
+
 export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = ScenePlan> {
   readonly renderer: THREE.WebGLRenderer;
   readonly scene = new THREE.Scene();
@@ -170,7 +205,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
 
   constructor(private host: HTMLElement, private ev: ViewerEvents, private source: SceneSource<S, P>) {
     this.cat = source.catalog;
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance', preserveDrawingBuffer: true });
+    // (without WebGL the page still works: an inert renderer stands in, and the stage says why it is empty)
+    this.renderer = makeRenderer(host);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.localClippingEnabled = true;
     host.appendChild(this.renderer.domElement);

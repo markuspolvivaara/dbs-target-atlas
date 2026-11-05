@@ -3,6 +3,7 @@ import { DEFAULT_LEAD, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
 import { VE_GROUP } from './groups';
 import { ETV, TARGETS, TRAJ, type Target } from './index';
+import { defaultLabels, labelsFrom, labelsParam } from '../labels';
 
 export type VePage = 'atlas' | 'sources' | 'credits';
 
@@ -67,7 +68,7 @@ export function defaultVeState(): VeState {
       targets: { on: true, opacity: 1 },  // landmarks
       electrode: { on: false, opacity: 1 },
     },
-    labels: 'hover',
+    labels: defaultLabels(),
     clip: { axial: { on: false, mm: 30 }, coronal: { on: false, mm: 0 }, sagittal: { on: false, mm: 0 } },
     cutSide: 'none', sliceSeq: 't1', lead: { ...DEFAULT_LEAD },
     sel: null, hidden: [], cath: { ...DEFAULT_CATHETER },
@@ -106,7 +107,7 @@ export function encodeVe(s: VeState): string {
       if (e.roll) p.set('er', String(e.roll));
       if (!e.big) p.set('ev', '3d');
     }
-    if (s.labels !== 'hover') p.set('lb', s.labels === 'all' ? 'a' : '0');
+    { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
     if (s.hidden.length) p.set('hid', s.hidden.join(','));
   }
   const q = p.toString();
@@ -159,7 +160,7 @@ export function decodeVe(hash: string): VeState {
   if (p.has('er') && Number.isFinite(er)) s.scope.roll = Math.max(-180, Math.min(180, Math.round(er)));
   s.scope.big = p.get('ev') !== '3d';
   const lb = p.get('lb');
-  s.labels = lb === 'a' ? 'all' : lb === '0' ? 'off' : 'hover';
+  s.labels = labelsFrom(lb);
   s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
   return s;
 }

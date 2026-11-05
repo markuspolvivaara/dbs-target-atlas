@@ -9,6 +9,8 @@ import type { Reference } from './schema';
  * Red nucleus as an STN landmark (with a dissenting study for balance).
  */
 export const ADDITION_REFERENCES: Reference[] = [
+  { id: 'gruber2018', topic: 'dyst', shortLabel: 'Gruber 2018', url: 'https://doi.org/10.1016/j.brs.2018.08.006',
+    citation: 'Gruber D, Südmeyer M, Deuschl G, Falk D, Krauss JK, Mueller J, et al. Neurostimulation in tardive dystonia/dyskinesia: a delayed start, sham stimulation-controlled randomized trial. Brain Stimul. 2018;11(6):1368–1377. doi:10.1016/j.brs.2018.08.006. (Abstract only: not open access.)' },
   { id: 'vitek1998', topic: 'img', shortLabel: 'Vitek 1998', url: 'https://doi.org/10.3171/jns.1998.88.6.1027',
     citation: 'Vitek JL, Bakay RA, Hashimoto T, et al. Microelectrode-guided pallidotomy: technical approach and its application in medically intractable Parkinson’s disease. J Neurosurg. 1998;88(6):1027–1043. doi:10.3171/jns.1998.88.6.1027.' },
   { id: 'yokoyama2002', topic: 'img', shortLabel: 'Yokoyama 2002', url: 'https://doi.org/10.1007/s00701-002-0958-x',

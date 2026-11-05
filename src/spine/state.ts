@@ -7,6 +7,7 @@ import type { RegionId } from './index';
 import { APPROACHES, CCJ_MEASURES, TECHNIQUES, type ApproachId, type CcjMeasureId, type LesionZone } from './content';
 import type { TechniqueId } from './screw';
 import { REGION } from './regions';
+import { defaultLabels, labelsFrom, labelsParam } from '../labels';
 
 export type SpinePage = 'atlas' | 'sources' | 'credits';
 
@@ -91,7 +92,7 @@ export function defaultSpineState(): SpineState {
       viscera: { on: false, opacity: 0.6 },
       cortex: { on: false, opacity: 1 }, targets: { on: true, opacity: 1 }, electrode: { on: false, opacity: 1 },
     },
-    labels: 'hover',
+    labels: defaultLabels(),
     clip: { axial: { on: false, mm: 0 }, coronal: { on: false, mm: 0 }, sagittal: { on: false, mm: 0 } },
     cutSide: 'none', sliceSeq: 't1', lead: { ...DEFAULT_LEAD },
     sel: null, hidden: [], lesion: null, cut: 'none', screw: null, approach: null, measure: null, cutAbove: null, cutPlane: null, drill: null, distract: 0, drillSide: 'L', drillGhost: false, hernia: null,
@@ -116,7 +117,7 @@ export function encodeSpine(s: SpineState): string {
     const code = (st: SpineState) => LAYER_CODES.map(([k, c]) => `${c}${st.layers[k]!.on ? 1 : 0}${st.layers[k]!.opacity !== 1 ? ':' + st.layers[k]!.opacity.toFixed(2) : ''}`).join(',');
     if (code(s) !== code(d)) p.set('ly', code(s));
     if (s.cutSide !== 'none') p.set('cut', s.cutSide);
-    if (s.labels !== 'hover') p.set('lb', s.labels === 'all' ? 'a' : '0');
+    { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
     if (s.hidden.length) p.set('hid', s.hidden.join(','));
     if (s.cut !== 'none' && s.level) p.set('x', s.cut === 'disc' ? 'd' : 's');
     if (s.screw && s.level) {
@@ -168,7 +169,7 @@ export function decodeSpine(hash: string): SpineState {
   const cut = p.get('cut');
   s.cutSide = cut === 'L' || cut === 'R' ? cut : 'none';
   const lb = p.get('lb');
-  s.labels = lb === 'a' ? 'all' : lb === '0' ? 'off' : 'hover';
+  s.labels = labelsFrom(lb);
   s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
   const les = /^([LST]\d)-([LS]\d)\.(paracentral|foraminal|farlateral)\.([LR])$/.exec(p.get('les') ?? '');
   s.screw = decodeScrew(p.get('scr'), s.level);

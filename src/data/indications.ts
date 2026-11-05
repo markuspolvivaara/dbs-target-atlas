@@ -191,9 +191,10 @@ export const INDICATIONS: IndicationInput[] = [
     evidence: [
       { claim: 'Bilateral GPi effective, often within days', refIds: ['tardiveov'] },
       { claim: '117 patients reviewed, 109 treated with GPi DBS', refIds: ['macerollo2018'] },
+      { claim: 'One randomized, sham-controlled trial (delayed start, 25 patients): the primary endpoint, the difference in BFMDRS change between active and sham stimulation at 3 months, was not significant (22.8 % against 12.0 %; recruitment incomplete); with both groups stimulated, a blinded 41.5 % improvement by 6 months', refIds: ['gruber2018'] },
     ],
-    caveat: 'No level I studies exist.',
-    caveatRefIds: ['macerollo2018'],
+    caveat: 'Mostly uncontrolled series. The one randomized, sham-controlled trial did not reach its primary endpoint (most likely, its authors judge, because recruitment was incomplete); its secondary endpoints and open extension favoured stimulation.',
+    caveatRefIds: ['macerollo2018', 'gruber2018'],
     camera: 'coronal',
   },
   {

@@ -68,7 +68,7 @@ export const CCJ_MEASURES: CcjMeasure[] = [
   {
     id: 'adi', name: 'Atlanto-dens interval (ADI)', short: 'ADI', unit: 'mm',
     definition: { text: 'From the anterior arch of C1 to the closest anterior point of the dens, in the midsagittal plane.', refIds: FIDAN },
-    normal: { text: 'In 500 adults on CT: median 1.45 mm (0.36–2.92 mm). Normal values of up to 3.5 mm are quoted in adults, and over 10 mm points to rupture of the transverse ligament.', refIds: FIDAN },
+    normal: { text: 'In 500 healthy adults on CT: median 1.45 mm (0.36–2.92 mm), a little higher in women (mean 1.54 against 1.36 mm); earlier studies of healthy controls report means of 1.10–2.29 mm. The paper also quotes, without the setting they come from, up to 3.5 mm as normal in adults and over 10 mm as pointing to rupture of the transverse ligament: such limits depend on the setting (trauma, inflammatory disease, children) and the imaging, and the atlas does not apply them as diagnostic thresholds.', refIds: FIDAN },
   },
   {
     id: 'padi', name: 'Posterior atlanto-dens interval (PADI)', short: 'PADI', unit: 'mm',
@@ -573,8 +573,8 @@ export const LAMINECTOMY_STATEMENTS = {
 
 export const HERNIA_STATEMENTS = {
   types: {
-    text: 'A protrusion (a contained herniation) extends beyond the disc’s margin with the outer annulus and the posterior longitudinal ligament preserved, its base wider than what is displaced in at least one plane. An extrusion passes through a defect in the annulus or the ligament, the displaced fragment wider than its neck in at least one plane; with no continuity left it is a sequestration, often migrated up or down.',
-    refIds: ['eslami2026'],
+    text: 'Four descriptions, each on its own: shape — a protrusion’s base is wider than the displaced material in at least one plane, an extrusion’s displaced fragment wider than its neck; containment — a contained herniation is covered by the posterior longitudinal ligament and/or outer annulus fibres, an uncontained one is not (extrusions are usually uncontained); continuity — a sequestration has lost continuity with the disc of origin; and migration — the fragment displaced from where it arose, whatever its continuity.',
+    refIds: ['angileri2026', 'eslami2026'],
   },
   retract: {
     text: 'In an open microdiscectomy a hemilaminectomy and partial medial facetectomy are done with a high-speed drill and Kerrison rongeurs, and the ligamentum flavum is removed, exposing the root crossing over the disc; the root and the thecal sac are then retracted medially and the annulus exposed.',

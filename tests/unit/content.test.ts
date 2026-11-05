@@ -49,6 +49,14 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
       expect(r.topic, k).toBe(src.R[k].g);
     }
   });
+  // review of 3–4 Nov 2026, C8: "No level I studies exist" no longer holds (Gruber 2018, a sham-controlled RCT)
+  const CORRECTED: Record<string, { caveat?: string; caveatRefIds?: string[]; addEvidence?: { claim: string; refIds: string[] }[] }> = {
+    tard: {
+      caveat: 'Mostly uncontrolled series. The one randomized, sham-controlled trial did not reach its primary endpoint (most likely, its authors judge, because recruitment was incomplete); its secondary endpoints and open extension favoured stimulation.',
+      caveatRefIds: ['macerollo2018', 'gruber2018'],
+      addEvidence: [{ claim: 'One randomized, sham-controlled trial (delayed start, 25 patients): the primary endpoint, the difference in BFMDRS change between active and sham stimulation at 3 months, was not significant (22.8 % against 12.0 %; recruitment incomplete); with both groups stimulated, a blinded 41.5 % improvement by 6 months', refIds: ['gruber2018'] }],
+    },
+  };
   it('keeps every indication text and evidence claim', () => {
     // the original indications, in order, plus the researched epilepsy addition
     expect(CONTENT.indications.map((i) => i.id)).toEqual([...src.IND.map((i) => i.id), 'epi']);
@@ -62,9 +70,11 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
       expect(n.why).toBe(o.why);
       expect(n.howToChoose).toBe(o.choose);
       expect(n.imaging).toBe(o.imaging);
-      expect(n.caveat).toBe(o.caveat);
-      expect(n.caveatRefIds).toEqual(o.cref);
-      expect(n.evidence).toEqual(o.ev.map((e) => ({ claim: e[0], refIds: e.slice(1) })));
+      // (corrected after review, each against its source: the original's wording no longer holds)
+      const fix = CORRECTED[o.id];
+      expect(n.caveat).toBe(fix?.caveat ?? o.caveat);
+      expect(n.caveatRefIds).toEqual(fix?.caveatRefIds ?? o.cref);
+      expect(n.evidence).toEqual([...o.ev.map((e) => ({ claim: e[0], refIds: e.slice(1) })), ...(fix?.addEvidence ?? [])]);
     }
   });
   it('maps every schematic node of an indication to a 3D structure', () => {

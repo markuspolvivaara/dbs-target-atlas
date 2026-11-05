@@ -194,6 +194,7 @@ def landmark(name: str, side: str, p: np.ndarray, bone: str, placed: str) -> dic
 
 
 def main() -> int:
+    np.random.seed(0)        # (trimesh samples surfaces at random: seeded, so a run gives the same files)
     ear = json.loads((BUILD / "ear_export.json").read_text())
     ex = json.loads((BUILD / "export.json").read_text())
     lms = {(l["name"], l.get("side")): np.array(l["ras"], float) for l in json.loads((GEN / "sb-landmarks.json").read_text())}

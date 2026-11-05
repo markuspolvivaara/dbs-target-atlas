@@ -34,16 +34,16 @@
     -1.6
    ],
    [
-    69.1,
+    69.0,
     -9.9,
-    46.0
+    46.2
    ]
   ]
  },
  "lso": {
   "name": "Lateral supraorbital craniotomy",
   "side": "R",
-  "how": "A frontolateral flap over the orbital roof, with one burr hole posteriorly just below the temporal line (Cha 2012, Choque-Velasquez 2018), cut down to the anterior fossa floor (the basal part drilled off, Cha 2012); the sphenoid ridge is not drilled. Its outline is placed by hand on this skull: about 1607 mm² seen face on, larger than the mean LSO craniotomy of 1275 mm² (Cha 2012) on purpose, to show the anatomy (illustrative), its basal edge at the level of the orbital roof. The outline is a smooth curve through those points and the cut's edge is smoothed over 1 mm (illustrative). Burr hole: (64, 10, 42) mm.",
+  "how": "A frontolateral flap over the orbital roof, with one burr hole posteriorly just below the temporal line (Cha 2012, Choque-Velasquez 2018), cut down to the anterior fossa floor (the basal part drilled off, Cha 2012); the sphenoid ridge is not drilled. Its outline is placed by hand on this skull: about 1605 mm² seen face on, larger than the mean LSO craniotomy of 1275 mm² (Cha 2012) on purpose, to show the anatomy (illustrative), its basal edge at the level of the orbital roof. The outline is a smooth curve through those points and the cut's edge is smoothed over 1 mm (illustrative). Burr hole: (64, 10, 42) mm.",
   "removedMl": 6.8,
   "bones": [
    "sb_appr_lso__frontal_bone",
@@ -56,16 +56,16 @@
   "removed": "sb_appr_lso__removed",
   "burrHoles": [
    [
-    63.8,
+    63.7,
     10.4,
-    41.8
+    41.9
    ]
   ]
  },
  "interhemispheric": {
   "name": "Right parasagittal craniotomy",
   "side": "R",
-  "how": "A right parasagittal flap at the coronal suture, its medial edge on the midline (over the superior sagittal sinus): from 40 mm in front of bregma to 20 mm behind it and 40 mm wide, about 2388 mm² seen from above (illustrative: the sources describe a right precoronal parasagittal or frontoparietal midline craniotomy without giving its size). Bregma here: (0, 8, 106) mm, where this skull's frontal and parietal bones meet at the midline.",
+  "how": "A right parasagittal flap at the coronal suture, its medial edge on the midline (over the superior sagittal sinus): from 40 mm in front of bregma to 20 mm behind it and 40 mm wide, about 2390 mm² seen from above (illustrative: the sources describe a right precoronal parasagittal or frontoparietal midline craniotomy without giving its size). Bregma here: (0, 8, 106) mm, where this skull's frontal and parietal bones meet at the midline.",
   "removedMl": 13.6,
   "bones": [
    "sb_appr_interhemispheric__frontal_bone",
@@ -87,7 +87,7 @@
  "suboccipital": {
   "name": "Midline suboccipital craniotomy",
   "side": "M",
-  "how": "A midline suboccipital flap from 10 mm below the internal occipital protuberance (the confluence of the sinuses) down to the foramen magnum, its posterior rim taken 12 mm to each side of the midline; 25 mm to each side above, about 1398 mm² seen from behind (illustrative: the sources describe a median suboccipital craniotomy or craniectomy without one size; a keyhole of about 2 cm in Wang 2023). The posterior arch of C1 is left (Cho 2024).",
+  "how": "A midline suboccipital flap from 10 mm below the internal occipital protuberance (the confluence of the sinuses) down to the foramen magnum, its posterior rim taken 12 mm to each side of the midline; 25 mm to each side above, about 1392 mm² seen from behind (illustrative: the sources describe a median suboccipital craniotomy or craniectomy without one size; a keyhole of about 2 cm in Wang 2023). The posterior arch of C1 is left (Cho 2024).",
   "removedMl": 7.2,
   "bones": [
    "sb_appr_suboccipital__occipital_bone"
@@ -101,7 +101,7 @@
  "retrosigmoid": {
   "name": "Retrosigmoid craniotomy",
   "side": "R",
-  "how": "A right retrosigmoid craniotomy: its upper edge along the transverse sinus' lower margin for 28 mm and its front edge along the sigmoid sinus' posterior margin for 35 mm (Jian 2021: the window's upper and front margins against the two sinuses), closed behind and below by straight edges, its corners rounded; larger than Jian 2021's keyhole (18-20 x 20-25 mm), about the size of the craniotomies in Tang 2025 (a mean 3.8 cm across), the shape drawn by hand (illustrative). The sinuses are Z-Anatomy's own (its centre lines and radii), the edges 0 mm off their margins, drawn on the inner table and carried out through the bone. The keypoint is where the two margins meet (Jian 2021, 2022, 2024); the burr hole 3.5 mm behind and below it (Jian 2021). About 605 mm² seen face on; its edge smoothed over 1 mm (illustrative). Keypoint: (64, -59, -3) mm; burr hole: (63, -61, -5) mm.",
+  "how": "A right retrosigmoid craniotomy: its upper edge along the transverse sinus' lower margin for 28 mm and its front edge along the sigmoid sinus' posterior margin for 35 mm (Jian 2021: the window's upper and front margins against the two sinuses), closed behind and below by straight edges, its corners rounded; larger than Jian 2021's keyhole (18-20 x 20-25 mm), about the size of the craniotomies in Tang 2025 (a mean 3.8 cm across), the shape drawn by hand (illustrative). The sinuses are Z-Anatomy's own (its centre lines and radii), the edges 0 mm off their margins, drawn on the inner table and carried out through the bone. The keypoint is where the two margins meet (Jian 2021, 2022, 2024); the burr hole 3.5 mm behind and below it (Jian 2021). About 603 mm² seen face on; its edge smoothed over 1 mm (illustrative). Keypoint: (64, -59, -2) mm; burr hole: (63, -61, -5) mm.",
   "removedMl": 4.6,
   "bones": [
    "sb_appr_retrosigmoid__occipital_bone",
@@ -118,7 +118,7 @@
    [
     62.7,
     -61.5,
-    -5.3
+    -5.2
    ]
   ]
  },
@@ -161,17 +161,17 @@
     -1.6
    ],
    [
-    69.1,
+    69.0,
     -9.9,
-    46.0
+    46.2
    ]
   ]
  },
  "far_lateral": {
   "name": "Far lateral craniectomy",
   "side": "R",
-  "how": "A right lateral suboccipital craniectomy (Pai 2018: lateral suboccipital, reaching the sigmoid sinus, the foramen magnum's rim taken), its outline following Z-Anatomy's own sinuses (their centre lines and radii): its upper edge along the transverse sinus' lower margin for 30 mm from the junction, its lateral edge along the sigmoid sinus' posterior margin for 35 mm down towards the jugular bulb, and below, the foramen magnum's posterior rim taken from x = 3 to 16 mm, so that the opening runs into the foramen; its medial edge bowed outwards and its corners rounded (the extents and shape illustrative), about 1894 mm² seen face on. Then the posterior third of the right occipital condyle drilled (Pai 2018: the posterior 30-40 %; here the third of the condyle's bone within 11 mm of its fitted landmark that lies furthest back). The hemilaminectomy of C1 that goes with it is not shown: the atlas is not part of this model.",
-  "removedMl": 13.5,
+  "how": "A right lateral suboccipital craniectomy (Pai 2018: lateral suboccipital, reaching the sigmoid sinus, the foramen magnum's rim taken), its outline following Z-Anatomy's own sinuses (their centre lines and radii): its upper edge along the transverse sinus' lower margin for 30 mm from the junction, its lateral edge along the sigmoid sinus' posterior margin for 35 mm down towards the jugular bulb, and below, the foramen magnum's posterior rim taken from x = 3 to 16 mm, so that the opening runs into the foramen; its medial edge bowed outwards and its corners rounded (the extents and shape illustrative), about 1899 mm² seen face on. Then the posterior third of the right occipital condyle drilled (Pai 2018: the posterior 30-40 %; here the third of the condyle's bone within 11 mm of its fitted landmark that lies furthest back). The hemilaminectomy of C1 that goes with it is not shown: the atlas is not part of this model.",
+  "removedMl": 13.6,
   "bones": [
    "sb_appr_far_lateral__occipital_bone",
    "sb_appr_far_lateral__parietal_bone",
@@ -217,8 +217,8 @@
     -12.03
    ],
    [
-    30.6,
-    -12.44,
+    30.55,
+    -12.43,
     -11.75
    ],
    [

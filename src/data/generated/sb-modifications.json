@@ -1,0 +1,251 @@
+{
+ "steps": [
+  {
+   "step": "skullbase_v1_brain",
+   "operation": "the cortex remade as closed surfaces and pushed out of its bone by a smooth field; the opercula and the fissure's floor found from the model's arteries and white matter",
+   "structures": [
+    "Cingulate gyrus",
+    "Frontal lobe",
+    "Insula",
+    "Occipital lobe",
+    "Parietal lobe",
+    "Temporal lobe"
+   ],
+   "parameters": {
+    "remeshStepMm": 0.25,
+    "remeshShellMm": 0.25,
+    "clearSigmaMm": 4.0,
+    "clearStepMm": 0.5,
+    "operMcaMm": 10.0,
+    "insulaReachMm": 25.0
+   },
+   "metrics": {
+    "cavityMl": 1736,
+    "clear": {
+     "R": {
+      "inBoneWayBefore": 3521,
+      "inBoneWayAfter": 0,
+      "rounds": 16,
+      "maxMovedMm": 6.37
+     },
+     "L": {
+      "inBoneWayBefore": 3667,
+      "inBoneWayAfter": 0,
+      "rounds": 16,
+      "maxMovedMm": 6.76
+     }
+    },
+    "open": {
+     "lipsFrontal": 347,
+     "lipsTemporal": 200,
+     "heldBySkull": 1962,
+     "moved": 5987,
+     "maxMovedMm": 6.84,
+     "heldAtCavity": 195,
+     "outsideCavityAfter": 113
+    },
+    "lift": {
+     "orbitalHandles": 879,
+     "insulaHandles": 10014,
+     "moved": 19845,
+     "maxMovedMm": 8.41,
+     "heldAtCavity": 37,
+     "outsideCavityAfter": 36,
+     "line": [
+      [
+       13.4,
+       3.9,
+       9.4
+      ],
+      [
+       26.9,
+       42.5,
+       21.1
+      ],
+      [
+       28.2,
+       59.1,
+       29.3
+      ]
+     ]
+    },
+    "lsoLift": {
+     "orbitalHandles": 764,
+     "insulaHandles": 10014,
+     "moved": 19642,
+     "maxMovedMm": 13.35,
+     "heldAtCavity": 20,
+     "outsideCavityAfter": 36,
+     "line": [
+      [
+       13.4,
+       3.9,
+       9.4
+      ],
+      [
+       48.0,
+       48.4,
+       28.1
+      ]
+     ]
+    },
+    "interhemispheric": {
+     "moved": 3736,
+     "fullyMoved": 451,
+     "maxMovedMm": 8.25,
+     "heldAtCavity": 138,
+     "outsideCavityAfter": 0,
+     "span": [
+      -11.8,
+      48.2
+     ],
+     "midline": 0.0,
+     "callosumTopMm": [
+      46.0,
+      60.5
+     ]
+    }
+   },
+   "validation": {
+    "R": {
+     "inBoneWayAfter": 0
+    },
+    "L": {
+     "inBoneWayAfter": 0
+    }
+   },
+   "revision": "bb9e150",
+   "date": "2026-11-05"
+  },
+  {
+   "step": "skullbase_v1_nerves",
+   "operation": "the optic and olfactory nerves moved clear of the arteries (ends kept); the chiasm drawn by rule",
+   "structures": [
+    "Olfactory nerve (I)",
+    "Optic chiasm",
+    "Optic nerve (II)",
+    "Optic tract"
+   ],
+   "parameters": {
+    "gapMm": 0.3,
+    "endMm": 4.0,
+    "smoothPts": 3.0,
+    "rounds": 12
+   },
+   "metrics": {
+    "Optic nerve (II)": {
+     "maxMovedMm": 2.36,
+     "points": 54,
+     "closestMm": 0.16
+    },
+    "Olfactory nerve (I)": {
+     "maxMovedMm": 2.11,
+     "points": 60,
+     "closestMm": -0.25
+    },
+    "Optic chiasm": {
+     "widthMm": 13.6,
+     "lengthMm": 11.2,
+     "heightMm": 2.3,
+     "tiltDeg": 33.0,
+     "nerveJoinsMm": 11.6,
+     "chiasmToArteriesMm": 2.28
+    }
+   },
+   "validation": {
+    "closestMm": {
+     "Olfactory nerve (I)": -0.25,
+     "Optic nerve (II)": 0.16
+    }
+   },
+   "revision": "bb9e150",
+   "date": "2026-11-05"
+  },
+  {
+   "step": "skullbase_v1_pfossa",
+   "operation": "the cerebellar arteries onto the cerebellum's surface; the hindbrain pushed off bone, the tentorium and the arteries; the arteries carried with the telovelar and retrosigmoid shapes",
+   "structures": [
+    "Anterior inferior cerebellar artery",
+    "Anterior quadrangular lobule",
+    "Biventral lobule",
+    "Central lobule",
+    "Culmen",
+    "Declive",
+    "Flocculus",
+    "Folium of vermis",
+    "Fourth ventricle",
+    "Gracile lobule",
+    "Inferior semilunar lobule",
+    "Lingula of cerebellum",
+    "Medulla oblongata",
+    "Midbrain",
+    "Nodule of vermis",
+    "Peduncle of flocculus",
+    "Pons",
+    "Posterior inferior cerebellar artery",
+    "Posterior quadrangular lobule",
+    "Pyramis of vermis",
+    "Superior cerebellar artery",
+    "Superior cerebellar peduncle",
+    "Superior semilunar lobule",
+    "Tonsil of cerebellum",
+    "Tuber of vermis",
+    "Uvula of vermis",
+    "Wing of central lobule"
+   ],
+   "parameters": {
+    "surfaceGapMm": 0.2,
+    "tentoriumMm": 1.0,
+    "carryNearMm": 2.0,
+    "carryFarMm": 5.0
+   },
+   "metrics": {
+    "ontoSurface": {
+     "Anterior inferior cerebellar artery.l": {
+      "points": 173,
+      "maxMm": 2.61
+     },
+     "Anterior inferior cerebellar artery.r": {
+      "points": 172,
+      "maxMm": 1.95
+     },
+     "Posterior inferior cerebellar artery.l": {
+      "points": 719,
+      "maxMm": 3.32
+     },
+     "Posterior inferior cerebellar artery.r": {
+      "points": 728,
+      "maxMm": 3.27
+     },
+     "Superior cerebellar artery.l": {
+      "points": 265,
+      "maxMm": 1.77
+     },
+     "Superior cerebellar artery.r": {
+      "points": 263,
+      "maxMm": 1.68
+     }
+    },
+    "clear": {
+     "containedPushed": 0,
+     "inVesselBefore": 2912,
+     "inBoneBefore": 5041,
+     "inVesselAfter": 130,
+     "inBoneAfter": 14,
+     "maxMovedMm": 6.56
+    },
+    "carried": {
+     "Anterior inferior cerebellar artery": 12.0,
+     "Posterior inferior cerebellar artery": 11.86,
+     "Superior cerebellar artery": 11.51
+    }
+   },
+   "validation": {
+    "inBoneAfter": 14,
+    "inVesselAfter": 130
+   },
+   "revision": "bb9e150",
+   "date": "2026-11-05"
+  }
+ ]
+}

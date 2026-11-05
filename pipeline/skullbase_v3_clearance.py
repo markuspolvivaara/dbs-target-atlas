@@ -327,8 +327,13 @@ def main() -> int:
     rep = clear(m["structures"])
     p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
     print(rep)
-    bad = [msg for ok, msg in check(m["structures"]) if not ok]
+    checks = check(m["structures"])
+    bad = [msg for ok, msg in checks if not ok]
     print("still inside:", bad or "none")
+    from modifications import record
+    record("sbv3", "skullbase_v3_clearance", "the fitted arteries lifted off the brainstem; the brainstem carved for the CT's own",
+           list(rep), {"clearMm": CLEAR_MM, "shapes": list(SHAPES), "fissureShare": FISSURE_SHARE, "fissureMm": FISSURE_MM},
+           rep, {"checks": len(checks), "failed": bad})
     return 1 if bad else 0
 
 

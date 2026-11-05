@@ -23,6 +23,7 @@ import config as C  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent
 RAW = ROOT / "data" / "raw"
+PINNED = ROOT / "sources" / "sources.lock.json"     # the inputs' SHA-256, committed: a fetch must match them
 
 # Resolved from https://www.lead-dbs.org/release/download.php?id=data_pcloud
 LEADDBS_DATA_ZIP = "https://filedn.com/lsPIJ4ragTWjjmV6PvlDQLu/leaddbs_data.zip"
@@ -124,15 +125,39 @@ def main() -> int:
     verse = fetch_verse()
     verse_ccj = fetch_verse(VERSE_CCJ_SUBJECT, VERSE_CCJ_FILES)
     aan = fetch_aan()
-    (RAW / "sources.lock.json").write_text(json.dumps(
-        {"archive": LEADDBS_DATA_ZIP, "files": record,
-         "hcp1065": {"release": C.HCP1065_RELEASE, "files": hcp},
-         "zanatomy": {"source": ZANATOMY_URL, "files": zan},
-         "verse": {"subject": VERSE_SUBJECT, "files": verse},
-         "verseCcj": {"subject": VERSE_CCJ_SUBJECT, "files": verse_ccj},
-         "aan": {"source": AAN_URL.format(""), "files": aan}}, indent=1))
-    print(f"{len(record)} files ready in {RAW}")
+    lock = {"archive": LEADDBS_DATA_ZIP, "files": record,
+            "hcp1065": {"release": C.HCP1065_RELEASE, "files": hcp},
+            "zanatomy": {"source": ZANATOMY_URL, "files": zan},
+            "verse": {"subject": VERSE_SUBJECT, "files": verse},
+            "verseCcj": {"subject": VERSE_CCJ_SUBJECT, "files": verse_ccj},
+            "aan": {"source": AAN_URL.format(""), "files": aan}}
+    (RAW / "sources.lock.json").write_text(json.dumps(lock, indent=1))
+    # the inputs pinned in the repository: every file fetched must match its recorded SHA-256 (--relock records them anew,
+    # on purpose, after a source changes)
+    if "--relock" in sys.argv or not PINNED.exists():
+        PINNED.write_text(json.dumps(lock, indent=1) + "\n")
+        print(f"pinned the inputs' hashes in {PINNED.relative_to(ROOT.parent)}")
+    else:
+        bad = mismatches(json.loads(PINNED.read_text()), lock)
+        if bad:
+            for b in bad:
+                print(f"INPUT CHANGED: {b}", file=sys.stderr)
+            print(f"{len(bad)} inputs differ from {PINNED.name}; check them, then run with --relock to accept them", file=sys.stderr)
+            return 1
+    print(f"{len(record)} files ready in {RAW}, matching the pinned hashes")
     return 0
+
+
+def mismatches(pinned: dict, now: dict, path: str = "") -> list[str]:
+    """Every file whose hash differs from, or is missing in, the pinned lock (the sources' addresses compared too)."""
+    out = []
+    for k, v in pinned.items():
+        here = f"{path}/{k}" if path else k
+        if isinstance(v, dict):
+            out += mismatches(v, now.get(k, {}) if isinstance(now.get(k), dict) else {}, here)
+        elif now.get(k) != v:
+            out.append(f"{here}: pinned {v!r}, now {now.get(k)!r}")
+    return out
 
 
 def fetch_hcp1065() -> dict[str, str]:

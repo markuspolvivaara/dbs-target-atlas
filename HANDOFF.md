@@ -95,18 +95,35 @@ commit and push it.
 
 ## Open items
 
-- **External review of 3–4 Nov 2026** (the user's notes; my comments are in the session):
-  - Done:
-    - C10: the vascular page's own description, with a test that no two pages share one.
-    - T1: the endonasal step returns the clearance and junction steps' failures.
-    - T5/T4: `joinedFrom`/`clearedFrom` are in the schema as build-only sources; a test checks every `file` and
-      `pushedFrom` is shipped.
-    - T10: the Hollunder 2024 and Horn 2022 sweet-spot items now carry citation text.
-    - C2 (Yeh 2018: the fibres cross with the callosal fibres), C3 (Naranbhai 2023: the usual definition, with the
-      diffuse nidus as the exception) and C4 (Lee 2022: the aim, then the outcomes): checked against full text,
-      with wording tests.
-  - Still open: C1, C5–C9 and C11 (to source and for the user's sign-off), T2, T3, T6–T9 and T11, and §4–§6.
-
+- **External review of 3–4 Nov 2026** (the user's notes; my comments are in the session). Done (2026-11-04/05):
+  - Content, each checked against the source's full text (abstract where noted):
+    - C2 Yeh 2018; C3 Naranbhai 2023 and Wu 2024; C4 Lee 2022.
+    - C5: the Spetzler–Martin table is now a surgical-risk estimate (Assker 2025; Naranbhai 2023), the practice
+      statements reported separately.
+    - C6: Fidan 2026's population values kept apart from the limits it quotes without their setting.
+    - C7: shape, containment, sequestration and migration as four descriptors (Angileri 2026; Fardon 2014's full
+      text is not open).
+    - C8: Gruber 2018 added, its primary endpoint not significant (abstract only; a correction list in
+      content.test.ts records the change from the port).
+    - C9: functional overlays from labels said to be approximations.
+    - C11: a passage table on the foramen ovale card (Khairnar 2013), "not modelled" kept apart from "absent".
+  - Technical:
+    - C10, T1, T4/T5, T10.
+    - T2: `.github/workflows/checks.yml`: the typecheck, the tests and the palette on every push and pull request.
+    - T3: the inputs' SHA-256 pinned in `pipeline/sources/sources.lock.json` (fetch fails on a mismatch;
+      `--relock`); Blender found on Linux in `run_all.sh`; the v1 scripts seeded (reproducible files).
+    - T6: `pipeline/modifications.py` writes `<prefix>-modifications.json`, from v3's clearance and junction steps
+      and v1's nerves, pfossa and brain steps. v3's file so far holds the shipped assets' validation only.
+    - T7: labels on by default on touch screens (`src/labels.ts`; `lb=h` keeps hover in a link).
+    - T8: without WebGL an inert renderer and a note; every section's page still works (checked with WebGL off).
+  - Left:
+    - C1 (the user checks it).
+    - T9: `preserveDrawingBuffer` is what lets the e2e tests read the canvas; unchanged, unmeasured.
+    - T11: CI Playwright needs Linux baselines (the user's call).
+    - §4–§6.
+  - Found while recording T6: v3's clearance check fails on the shipped assets ("Posterior inferior cerebellar artery
+    (fitted course): 30 % of it, up to 3.7 mm, inside the cerebellum"; the limit is 20 %). Since T1 the endonasal
+    step stops on it. To fix before v3 is rebuilt.
 - **Kawase (anterior petrosectomy) is done** (see the README); the temporal lobe is a fixed lifted copy for that view,
   not a slider. **A plain subtemporal approach** is still open: it could reuse the Kawase flap and lift without the apex
   drilling. Neither the dura nor the tentorium is modelled, so the tentorial cut is not shown.
@@ -177,7 +194,7 @@ commit and push it.
   14. `npm run build`
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
-  - `npx vitest run` (332 tests)
+  - `npx vitest run` (333 tests)
   - `npm run build`
   - `npx playwright test` (130 tests, about 7 minutes, preview on port 4173)
   - `npm run check:palette`

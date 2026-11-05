@@ -930,7 +930,7 @@ REF_KEYS = ("hwang2019", "merckaert2015", "hasegawa1996", "zindrick1987", "fardo
             "figa2025", "sung2018", "gonzalezvargas2026", "loganathan2023", "fidan2026", "kang2022", "zhang2020", "kong2022", "silverstein2015", "sugawara2015", "cheung2016",
             "chang2014", "dave2020", "immanuelrajan2026", "ma2025",
             "mitsunaga2012", "wang2018", "cho2026", "li2026",
-            "eslami2026", "sobanski2023", "berry2019")
+            "eslami2026", "sobanski2023", "berry2019", "angileri2026")
 
 
 def references() -> dict:

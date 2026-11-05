@@ -15,7 +15,7 @@ import { h } from './h';
 import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 import { refLinksFrom } from './reflinks';
-import { FORAMEN_CONTENTS, FORAMEN_REF } from '../skullbase/foramina';
+import { FORAMEN_CONTENTS, FORAMEN_REF, PASSAGES } from '../skullbase/foramina';
 import { EndonasalPanel } from './skullbase-endonasal';
 
 type Update = (fn: (s: SkullState) => void, opts?: { camera?: boolean }) => void;
@@ -590,6 +590,21 @@ export class SkullbaseAtlasPage {
     ];
   }
 
+  /** A foramen's contents, one row each: the usual or a variable passage, whether this model draws it (not modelled
+   *  is not absent), the evidence. */
+  private passages(name: string): HTMLElement {
+    const has = (n: string) => SB_MANIFEST.structures.some((s) => s.name === n && !isApproachPart(s));
+    return h('div', {},
+      h('table', { class: 'passages' },
+        h('thead', {}, h('tr', {}, h('th', {}, 'Structure'), h('th', {}, 'Passage'), h('th', {}, 'In this model'), h('th', {}, 'Evidence'))),
+        h('tbody', {}, ...PASSAGES[name].map((p) => h('tr', {},
+          h('td', {}, p.structure),
+          h('td', {}, p.passage === 'usual' ? 'usual' : `variable${p.note ? `: ${p.note}` : ''}`),
+          h('td', {}, p.model.some(has) ? `drawn${p.model[0] !== p.structure ? ` (as its “${p.model[0]}”)` : ''}` : 'not modelled'),
+          h('td', {}, refLinksFrom(FORAMEN_REF, p.refIds)))))),
+      h('p', { class: 'aside' }, 'Not modelled does not mean absent. Drawn means the model has the structure, along its own course.'));
+  }
+
   private landmarkCard(lm: Landmark, close: HTMLElement, defBlock: unknown[], regions: string[]): HTMLElement {
     const bone = SB_MANIFEST.structures.find((s) => s.name === lm.bone && !isApproachPart(s));
     return h('article', { class: 'card sel', style: '--accent: var(--c-ctx)' }, close,
@@ -606,6 +621,7 @@ export class SkullbaseAtlasPage {
         ] : null,
         lm.how && SB_MODEL === 'v3' ? [h('dt', {}, 'How it was located'), h('dd', {}, lm.how, ' The bone is this CT’s.')] : null,
         lm.placed ? [h('dt', {}, 'How it was placed'), h('dd', {}, lm.placed)] : null,
+        PASSAGES[lm.name] ? [h('dt', {}, 'Passing through'), h('dd', {}, this.passages(lm.name))] : null,
         notesList(lm.name) ? [h('dt', {}, 'Notes'), h('dd', {}, notesList(lm.name))] : null,
         SB_MODEL === 'v3' ? this.measured(lm.name, lm.side === 'L' ? 'L' : 'R') : null,
         SB_MODEL === 'v3' ? this.crossCheck(lm) : null,

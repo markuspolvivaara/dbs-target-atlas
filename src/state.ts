@@ -1,5 +1,6 @@
 import type { CameraPreset } from './data/schema';
 import type { ViewState } from './viewer/scene';
+import { defaultLabels, labelsFrom, labelsParam } from './labels';
 
 export type Page = 'atlas' | 'imaging' | 'coords' | 'refs' | 'credits' | 'settings';
 export type Hemi = 'L' | 'R' | 'both';
@@ -59,7 +60,7 @@ export function defaultState(): AppState {
     },
     borders: true,
     stn: 'zones',
-    labels: 'hover',
+    labels: defaultLabels(),
     clip: {
       axial: { on: false, mm: -4 },
       coronal: { on: false, mm: -13 },
@@ -95,7 +96,7 @@ export function encode(s: AppState): string {
     if (ly !== dly) p.set('ly', ly);
     if (!s.borders) p.set('b', '0');
     if (s.stn === 'whole') p.set('stn', 'w');
-    if (s.labels !== 'hover') p.set('lb', s.labels === 'all' ? 'a' : '0');
+    { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
     for (const [a, code] of AXES) {
       const c = s.clip[a];
       if (c.on) p.set(code, `${r1(c.mm)}`);
@@ -148,7 +149,7 @@ export function decode(hash: string, base: AppState = defaultState()): AppState 
   const seq = p.get('seq');
   s.sliceSeq = seq === 't2' || seq === 'pd' ? seq : 't1';
   const lb = p.get('lb');
-  s.labels = lb === 'a' ? 'all' : lb === '0' ? 'off' : 'hover';
+  s.labels = labelsFrom(lb);
   for (const [a, code] of AXES) {
     const v = p.get(code);
     // older links may carry per-plane cut flags ('c', 'f'); those cuts are no longer offered and are ignored

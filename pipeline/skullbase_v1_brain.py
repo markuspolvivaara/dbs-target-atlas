@@ -277,6 +277,7 @@ def hull_field(hemis: dict) -> BD.Field:
 
 
 def main() -> int:
+    np.random.seed(0)        # (trimesh samples surfaces at random: seeded, so a run gives the same files)
     t0 = time.time()
     ex = json.loads((BUILD / "export.json").read_text())
     be = json.loads((BUILD / "brain_export.json").read_text())
@@ -350,6 +351,12 @@ def main() -> int:
                                      "right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity "
                                      "(skullbase_v1_brain.py): shapes, not simulations of the tissue."),
                       "centroid": {"L": cent["L"], "R": cent["R"]}})
+    from modifications import record
+    record("sb", "skullbase_v1_brain", "the cortex remade as closed surfaces and pushed out of its bone by a smooth field; the opercula and the "
+           "fissure's floor found from the model's arteries and white matter",
+           [it["name"] for it in items], {"remeshStepMm": REMESH_STEP, "remeshShellMm": REMESH_SHELL_MM, "clearSigmaMm": CLEAR_SIGMA_MM,
+                                          "clearStepMm": CLEAR_STEP_MM, "operMcaMm": OPER_MCA_MM, "insulaReachMm": INSULA_REACH_MM},
+           report, {s: {"inBoneWayAfter": report["clear"][s]["inBoneWayAfter"]} for s in report["clear"]})
     (BUILD / "brain.json").write_text(json.dumps({"items": items, "report": report}, indent=1, default=str))
     print("written", len(items), "pieces;", round(time.time() - t0), "s")
     return 0

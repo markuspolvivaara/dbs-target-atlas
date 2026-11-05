@@ -2,6 +2,7 @@ import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type Axis, type LayerKey, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
 import { BS_GROUP } from './groups';
+import { defaultLabels, labelsFrom, labelsParam } from '../labels';
 
 export type BsPage = 'atlas' | 'sources' | 'credits';
 
@@ -24,7 +25,7 @@ export function defaultBsState(): BsState {
       targets: { on: true, opacity: 1 },  // safe entry zones
       electrode: { on: false, opacity: 1 },
     },
-    labels: 'hover',
+    labels: defaultLabels(),
     clip: { axial: { on: false, mm: -30 }, coronal: { on: false, mm: -30 }, sagittal: { on: false, mm: 0 } },
     cutSide: 'none', sliceSeq: 't1', lead: { ...DEFAULT_LEAD },
     sel: null, hidden: [],
@@ -51,7 +52,7 @@ export function encodeBs(s: BsState): string {
     for (const [a, code] of AXES) if (s.clip[a].on) p.set(code, `${r1(s.clip[a].mm)}`);
     if (s.cutSide !== 'none') p.set('cut', s.cutSide);
     if (s.sliceSeq !== 't1') p.set('seq', s.sliceSeq);
-    if (s.labels !== 'hover') p.set('lb', s.labels === 'all' ? 'a' : '0');
+    { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
     if (s.hidden.length) p.set('hid', s.hidden.join(','));
   }
   const q = p.toString();
@@ -92,7 +93,7 @@ export function decodeBs(hash: string): BsState {
   const seq = p.get('seq');
   s.sliceSeq = seq === 't2' || seq === 'pd' ? seq : 't1';
   const lb = p.get('lb');
-  s.labels = lb === 'a' ? 'all' : lb === '0' ? 'off' : 'hover';
+  s.labels = labelsFrom(lb);
   s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
   return s;
 }

@@ -39,6 +39,7 @@ MARGIN_MM = 6.0
 
 
 def main() -> int:
+    np.random.seed(0)        # (trimesh samples surfaces at random: seeded, so a run gives the same files)
     ex = json.loads((BUILD / "export.json").read_text())
     bones = {n: b for n, b in ex["bones"].items() if n not in AIR}
     allv = np.vstack([np.array(b["verts"], float) for b in ex["bones"].values()])

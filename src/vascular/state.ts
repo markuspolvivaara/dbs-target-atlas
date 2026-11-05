@@ -3,6 +3,7 @@ import { DEFAULT_LEAD, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
 import { VA_GROUP } from './groups';
 import { DSA, TREATMENTS } from './index';
+import { defaultLabels, labelsFrom, labelsParam } from '../labels';
 
 export type VaPage = 'atlas' | 'grading' | 'sources' | 'credits';
 
@@ -36,7 +37,7 @@ export function defaultVaState(): VaState {
       electrode: { on: false, opacity: 1 },
       vessels: { on: true, opacity: 1 },
     },
-    labels: 'hover',
+    labels: defaultLabels(),
     clip: { axial: { on: false, mm: 30 }, coronal: { on: false, mm: 0 }, sagittal: { on: false, mm: 0 } },
     cutSide: 'none', sliceSeq: 't1', lead: { ...DEFAULT_LEAD },
     sel: null, hidden: [], dsa: { on: false, t: DSA.artSpanS }, treat: '',
@@ -60,7 +61,7 @@ export function encodeVa(s: VaState): string {
     const ly = CODES.filter(([k]) => { const l = s.layers[k]!; return !l.on || l.opacity !== DEFAULT_OPACITY[k]; })
       .map(([k, c]) => { const l = s.layers[k]!; return `${c}${l.on ? Math.round(l.opacity * 100) : 0}`; });
     if (ly.length) p.set('ly', ly.join(','));
-    if (s.labels !== 'hover') p.set('lb', s.labels === 'all' ? 'a' : '0');
+    { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
     if (s.hidden.length) p.set('hid', s.hidden.join(','));
   }
   const q = p.toString();
@@ -95,7 +96,7 @@ export function decodeVa(hash: string): VaState {
     if (e && Number.isFinite(v)) { const l = s.layers[e[0]]!; l.on = v > 0; l.opacity = v > 0 ? Math.min(1, v / 100) : DEFAULT_OPACITY[e[0]]; }
   }
   const lb = p.get('lb');
-  s.labels = lb === 'a' ? 'all' : lb === '0' ? 'off' : 'hover';
+  s.labels = labelsFrom(lb);
   s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
   return s;
 }

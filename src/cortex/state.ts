@@ -4,6 +4,7 @@ import type { ViewState } from '../viewer/scene';
 import type { FnGroupId, LobeId } from './index';
 import { FN_GROUPS, LOBE } from './index';
 import { VIEW, type ViewId } from './views';
+import { defaultLabels, labelsFrom, labelsParam } from '../labels';
 
 export type CortexPage = 'atlas' | 'sources' | 'credits';
 export type ColourMode = 'lobe' | 'atlas' | 'plain';
@@ -31,7 +32,7 @@ export function defaultCortexState(): CortexState {
       cortex: { on: true, opacity: 1 },
       targets: { on: false, opacity: 1 }, electrode: { on: false, opacity: 1 },
     },
-    labels: 'hover',
+    labels: defaultLabels(),
     clip: { axial: { on: false, mm: 0 }, coronal: { on: false, mm: 0 }, sagittal: { on: false, mm: 0 } },
     cutSide: 'none', sliceSeq: 't1', lead: { ...DEFAULT_LEAD },
     sel: null, hidden: [], inflate: 0,
@@ -54,7 +55,7 @@ export function encodeCortex(s: CortexState): string {
     else if (s.cam.preset) p.set('c', s.cam.preset);
     if (s.inflate) p.set('inf', '1');
     if (s.colour !== 'lobe') p.set('col', s.colour === 'atlas' ? 'a' : 'p');
-    if (s.labels !== 'hover') p.set('lb', s.labels === 'all' ? 'a' : '0');
+    { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
     if (s.cutSide !== 'none') p.set('cut', s.cutSide);
     if (s.layers.cortex.opacity !== 1) p.set('op', s.layers.cortex.opacity.toFixed(2));
     if (s.hidden.length) p.set('hid', s.hidden.join(','));
@@ -88,7 +89,7 @@ export function decodeCortex(hash: string): CortexState {
   const col = p.get('col');
   s.colour = col === 'a' ? 'atlas' : col === 'p' ? 'plain' : 'lobe';
   const lb = p.get('lb');
-  s.labels = lb === 'a' ? 'all' : lb === '0' ? 'off' : 'hover';
+  s.labels = labelsFrom(lb);
   const cut = p.get('cut');
   s.cutSide = cut === 'L' || cut === 'R' ? cut : 'none';
   const op = parseFloat(p.get('op') ?? '');

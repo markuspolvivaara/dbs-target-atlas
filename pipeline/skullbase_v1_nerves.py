@@ -110,6 +110,7 @@ def clear_nerve(ex: dict, n: str, A: np.ndarray, report: dict) -> dict:
 
 
 def main() -> int:
+    np.random.seed(0)        # (trimesh samples surfaces at random: seeded, so a run gives the same files)
     import skullbase_v3_cavernous as CAV
     from glb import read_glb_full
     ex = json.loads((BUILD / "export.json").read_text())
@@ -149,6 +150,10 @@ def main() -> int:
         nodes.append({"name": s, "positions": np.vstack(vs), "normals": np.vstack(ns), "indices": np.vstack(ts), "mode": TRIANGLES})
     write_glb(BUILD / f"{sid}.glb", nodes, {"id": sid})
     merge(items, report)
+    from modifications import record
+    record("sb", "skullbase_v1_nerves", "the optic and olfactory nerves moved clear of the arteries (ends kept); the chiasm drawn by rule",
+           [*NERVES, "Optic chiasm", "Optic tract"], {"gapMm": GAP_MM, "endMm": END_MM, "smoothPts": SMOOTH_PTS, "rounds": ROUNDS},
+           {**report, "Optic chiasm": meas}, {"closestMm": {n: report[n]["closestMm"] for n in NERVES}})
     print("v1 nerves:", report, "chiasm", meas)
     return 0
 

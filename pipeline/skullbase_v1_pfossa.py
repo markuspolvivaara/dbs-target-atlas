@@ -290,6 +290,7 @@ CARRY_MIN_MM = 0.5      # (an artery moved less than this anywhere is left as it
 
 
 def main() -> int:
+    np.random.seed(0)        # (trimesh samples surfaces at random: seeded, so a run gives the same files)
     ex = json.loads((BUILD / "export.json").read_text())
     pf = json.loads((BUILD / "pfossa_export.json").read_text())
     parts = {}
@@ -357,6 +358,12 @@ def main() -> int:
               "retrosigmoidMaxMm": round(float(np.linalg.norm(rv, axis=1).max()), 2),
               "inBoneAtRest": in_bone, "clear": rc, "trigeminalRoot": root.round(2).tolist(), "carried": carried,
               "ontoSurface": surf}
+    from modifications import record
+    record("sb", "skullbase_v1_pfossa", "the cerebellar arteries onto the cerebellum's surface; the hindbrain pushed off bone, the tentorium and "
+           "the arteries; the arteries carried with the telovelar and retrosigmoid shapes",
+           [*CARRIED, *[n.split(".")[0] for n in parts]], {"surfaceGapMm": SURFACE_GAP_MM, "tentoriumMm": TENTORIUM_MM, "carryNearMm": CARRY_NEAR_MM,
+                                                          "carryFarMm": CARRY_FAR_MM},
+           {"ontoSurface": surf, "clear": rc, "carried": carried}, {"inBoneAfter": rc["inBoneAfter"], "inVesselAfter": rc["inVesselAfter"]})
     (BUILD / "pfossa.json").write_text(json.dumps({"items": items, "texts": pf["texts"], "report": report, "landmarks": lms}, indent=1))
     print("posterior fossa (v1)", report["telovelarMaxMm"], report["retrosigmoidMaxMm"], "cleared", rc)
     return 0
