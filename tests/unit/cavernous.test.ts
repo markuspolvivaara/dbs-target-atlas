@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import data from '../../src/data/generated/sbv3-cavernous.json';
-import { CAVERNOUS } from '../../src/skullbase/cavernous';
+import { CAVERNOUS_V1, CAVERNOUS_V3 as CAVERNOUS } from '../../src/skullbase/cavernous';
 
 type V = [number, number, number];
 const nerves = (data as unknown as { nerves: Record<'R' | 'L', Record<string, V[]>> }).nerves;
@@ -40,6 +40,25 @@ describe('the cavernous sinus modelled on this CT (Skull base v3)', () => {
     it(`${side}: the ten triangles, none degenerate`, () => {
       expect(Object.keys(c.triangles).sort()).toEqual(['anterolateral', 'anteromedial', 'inferior', 'lateral', 'medial', 'middle', 'posterolateral', 'posteromedial', 'superior', 'superoposterior']);
       for (const [k, [a, b, d]] of Object.entries(c.triangles)) expect(norm(cross(sub(b as V, a as V), sub(d as V, a as V))) / 2, k).toBeGreaterThan(1);
+    });
+  }
+});
+
+describe('the cavernous sinus on the Z-Anatomy model (Skull base v1)', () => {
+  for (const side of ['R', 'L'] as const) {
+    const c = CAVERNOUS_V1[side], s = side === 'R' ? 1 : -1;
+    it(`${side}: Z-Anatomy's sinus and carotid on its own side; the ten triangles, each a real triangle near the sinus`, () => {
+      expect(c.sinus.mm3).toBeGreaterThan(300);
+      expect(c.sinus.mm3).toBeLessThan(4000);
+      for (const p of c.carotid.line) expect(s * p[0]).toBeGreaterThan(0);
+      expect(c.landmarks.anteriorClinoid[1]).toBeGreaterThan(c.landmarks.posteriorClinoid[1]);
+      expect(Object.keys(c.triangles).length).toBe(10);
+      const mid = c.sinus.lo.map((v, i) => (v + c.sinus.hi[i]) / 2) as V;
+      for (const [k, t] of Object.entries(c.triangles)) {
+        const area = norm(cross(sub(t[1] as V, t[0] as V), sub(t[2] as V, t[0] as V))) / 2;
+        expect(area, k).toBeGreaterThan(1);
+        for (const p of t) expect(norm(sub(p as V, mid)), k).toBeLessThan(45);
+      }
     });
   }
 });

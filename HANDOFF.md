@@ -39,7 +39,7 @@ commit and push it.
   lateral (lateral suboccipital, foramen magnum rim, posterior third of the condyle; C1 is not modelled). New camera
   presets `orbitozygomatic` and `farLateral`. `skullbase_v3.py approaches` rewrites only the approach items from
   `approach.json`, so the whole v3 step need not run.
-- **Skull base v1 gets v3's views (phases 1 and 2 of 4 done: the approaches; the ear views and Kawase).** The user asked (2026-11-03) for everything
+- **Skull base v1 gets v3's views (phases 1–3 of 4 done: the approaches; the ear views and Kawase; the cavernous sinus, triangles and endonasal view).** The user asked (2026-11-03) for everything
   in the v3 module on v1, built from v1's own Z-Anatomy models, not v3's CT, template or ear. Where Z-Anatomy lacks
   something, it is drawn by rule on Z-Anatomy and labelled so. Built afresh on the desktop; the MacBook stash is not
   used. The phases: (1) the approaches, done; (2) the ear views, then Kawase (it needs the geniculate ganglion and
@@ -78,11 +78,20 @@ commit and push it.
     - `skullbase_v1_nerves.py`: the optic nerves and olfactory nerve off the arteries, the chiasm by
       `skullbase_v3_chiasm.draw`.
     - `V1_TEXT.retrosigmoid.add`: the tentorium.
+  - Phase 3:
+    - `skullbase_v1_cavernous.py`, then `skullbase_v1.py cavernous`: Z-Anatomy's sinus with drawn walls and the
+      triangles; `sb-cavernous.json`.
+    - `skullbase_v1_endonasal.py`: `public/assets/skullbase/endonasal.bin.gz` and `sb-endonasal.json`. The sinus by the
+      parity vote (both halves); the nose the enclosed air, its outside closed; each side's corridor aimed at its own
+      half; empty pieces left out.
+    - The front end picks the cavernous and endonasal data by `SB_MODEL`. The v3 endonasal tests set the page marker
+      (`vi.hoisted`); the v1 ones are in `endonasal-v1.test.ts`.
+    - `skullbase_v1_skull.py` now carves the sinuses' air (it never did: their meshes are open).
   - v1 chain: `skullbase_build.py`, `skullbase_v1_nerves.py`, `skullbase_v1_skull.py`, `skullbase_v1_ear.py`, `skullbase_v1.py ear`,
     `SB_PROFILE=v1 skullbase_v3_approach.py only pterional lso interhemispheric suboccipital retrosigmoid
     orbitozygomatic far_lateral kawase`, `skullbase_v1.py approaches`, `skullbase_v1_brain.py`,
-    `skullbase_v1_pfossa.py`, `skullbase_v1.py brain`, `node pipeline/compress.mjs skullbase`,
-    `skullbase_build.py finalize`. Compressing v1 left the untouched GLBs byte-identical here.
+    `skullbase_v1_pfossa.py`, `skullbase_v1.py brain`, `skullbase_v1_cavernous.py`, `skullbase_v1.py cavernous`, `skullbase_v1_endonasal.py`,
+    `node pipeline/compress.mjs skullbase`, `skullbase_build.py finalize`. Compressing v1 left the untouched GLBs byte-identical here.
 - **Pipeline data changed on the desktop:** `pipeline/data/build/skullbase` (the whole v1 port), `pipeline/data/build/skullbase-v3` (the clean-up's chain, the tumours, the
   two approaches in `approach.json`) and `pipeline/data/build/vascular`. Copy `pipeline/data/` back before rebuilding
   those on the MacBook.
@@ -194,7 +203,7 @@ commit and push it.
   14. `npm run build`
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
-  - `npx vitest run` (333 tests)
+  - `npx vitest run` (337 tests)
   - `npm run build`
   - `npx playwright test` (130 tests, about 7 minutes, preview on port 4173)
   - `npm run check:palette`

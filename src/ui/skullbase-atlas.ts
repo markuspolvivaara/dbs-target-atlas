@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { CameraPreset } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
 import { APPROACH_GEOM, definitionFor, isApproachPart, kindOf, LANDMARKS, LM, NOT_YET_SHOWN, REGIONS, SB, SB_MANIFEST, SB_MODEL, V1_FIT, V3_FIT, type Landmark, type SbModel } from '../skullbase';
-import { APPROACH, APPROACH_REF, CAVERNOUS_INFO, ENDONASAL_INFO, INSULA, V1_TEXT, type ApproachClaim, type ApproachSection } from '../skullbase/approaches';
+import { APPROACH, APPROACH_REF, CAVERNOUS_INFO, ENDONASAL_INFO, INSULA, V1_CAVERNOUS_NOT_SHOWN, V1_ENDONASAL_NOT_SHOWN, V1_TEXT, type ApproachClaim, type ApproachSection } from '../skullbase/approaches';
 import { measuredOn, TUMOUR_FAMILY, TUMOURS, tumourGroupId, type TumourFamily } from '../skullbase/tumours';
 import { CAVERNOUS } from '../skullbase/cavernous';
 import { TB_NOTES, TB_REF } from '../skullbase/temporal';
@@ -520,11 +520,15 @@ export class SkullbaseAtlasPage {
       h('dl', {},
         ...info.sections.map((x) => [h('dt', {}, x.title), h('dd', {}, this.claims(x.claims))]),
         which === 'cavernous' ? [h('dt', {}, 'Measured on this model'), h('dd', {}, h('ul', { class: 'plain' },
-          h('li', {}, `The sinus as modelled: ${Math.round(c.R.sinus.mm3)} mm³ on the right, ${Math.round(c.L.sinus.mm3)} mm³ on the left (the carotid in it included).`),
+          h('li', {}, `The sinus as ${SB_MODEL === 'zanatomy' ? 'Z-Anatomy models it' : 'modelled'}: ${Math.round(c.R.sinus.mm3)} mm³ on the right, ${Math.round(c.L.sinus.mm3)} mm³ on the left (the carotid in it included).`),
           h('li', {}, `The cavernous carotid, from the foramen lacerum to its anterior bend: ${fmtMm(c.R.carotid.lengthMm)} mm on the right, ${fmtMm(c.L.carotid.lengthMm)} mm on the left (along its centre line).`)))] : null,
-        h('dt', {}, 'Not shown'), h('dd', {}, info.notShown)),
+        h('dt', {}, 'Not shown'), h('dd', {}, SB_MODEL === 'zanatomy' ? (which === 'cavernous' ? V1_CAVERNOUS_NOT_SHOWN : V1_ENDONASAL_NOT_SHOWN) : info.notShown)),
       h('p', { class: 'aside schematic-note' }, which === 'endonasal'
-        ? 'Illustrative: one CT’s nasal cavity and sphenoid sinus, a scope and a burr drawn by rule from the published descriptions; not planned for a patient.'
+        ? (SB_MODEL === 'zanatomy'
+          ? 'Illustrative: the Z-Anatomy model’s nasal cavity and sphenoid sinus, a scope and a burr drawn by rule from the published descriptions; not planned for a patient.'
+          : 'Illustrative: one CT’s nasal cavity and sphenoid sinus, a scope and a burr drawn by rule from the published descriptions; not planned for a patient.')
+        : SB_MODEL === 'zanatomy'
+        ? 'Illustrative: Z-Anatomy’s sinus, carotid and nerves, with the walls and the triangles drawn by rule round them from the published descriptions; not measured on a dissection.'
         : 'Illustrative: the sinus, its walls, the nerves’ course through it and the triangles are drawn by rule round what one CT shows, from the published descriptions; not measured on a dissection.'),
     ];
   }

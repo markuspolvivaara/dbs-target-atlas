@@ -505,6 +505,12 @@ export const V1_TEXT: Record<string, { summary: string; notShown: string; camera
     hide: ['Insula'] },
 };
 
+/** v1's own "not shown" for the endonasal view (the Z-Anatomy model's bone, no soft tissue in the nose). */
+export const V1_ENDONASAL_NOT_SHOWN = 'The nasal mucosa and the septum’s cartilage (the Z-Anatomy model has neither: the lining is the bare bone, and the nose’s two sides join in front). The turbinates are Z-Anatomy’s bones; pushing them aside is drawn as a corridor opened through them. The mucosal flaps, the dura and its opening, bleeding and the tissue’s give are not drawn; the scope and burr are drawings, not a simulation.';
+
+/** v1's own "not shown" for the cavernous sinus view (Z-Anatomy's sinus, carotid and nerves). */
+export const V1_CAVERNOUS_NOT_SHOWN = 'Z-Anatomy models the sinus as one volume, without its walls or its venous spaces and trabeculae: the walls are drawn round it by rule. The carotid’s branches in it (the meningohypophyseal and inferolateral trunks) and the sympathetic plexus round it are not drawn. The nerves run where Z-Anatomy has them (not re-routed through the wall); their dural entries, the trigeminal ganglion (the point its divisions leave the nerve from) and the triangles are drawn by rule on them, and landmarks Z-Anatomy labels on one side only are mirrored from the other. The sphenoparietal sinus, the basilar plexus and the laterocavernous sinus are not part of the model.';
+
 export const ENDONASAL_INFO: { sections: ApproachSection[]; notShown: string } = {
   sections: [
     sec('The scope and the way in', [

@@ -3,34 +3,34 @@
   "cavityMl": 1736,
   "clear": {
    "R": {
-    "inBoneWayBefore": 3521,
+    "inBoneWayBefore": 3513,
     "inBoneWayAfter": 0,
     "rounds": 16,
-    "maxMovedMm": 6.37
+    "maxMovedMm": 6.18
    },
    "L": {
-    "inBoneWayBefore": 3667,
+    "inBoneWayBefore": 3637,
     "inBoneWayAfter": 0,
     "rounds": 16,
-    "maxMovedMm": 6.76
+    "maxMovedMm": 6.06
    }
   },
   "open": {
-   "lipsFrontal": 347,
-   "lipsTemporal": 200,
-   "heldBySkull": 1962,
-   "moved": 5987,
-   "maxMovedMm": 6.84,
-   "heldAtCavity": 195,
-   "outsideCavityAfter": 113
+   "lipsFrontal": 332,
+   "lipsTemporal": 205,
+   "heldBySkull": 1982,
+   "moved": 5953,
+   "maxMovedMm": 6.53,
+   "heldAtCavity": 200,
+   "outsideCavityAfter": 98
   },
   "lift": {
    "orbitalHandles": 879,
-   "insulaHandles": 10014,
-   "moved": 19845,
-   "maxMovedMm": 8.41,
-   "heldAtCavity": 37,
-   "outsideCavityAfter": 36,
+   "insulaHandles": 10013,
+   "moved": 19599,
+   "maxMovedMm": 8.85,
+   "heldAtCavity": 32,
+   "outsideCavityAfter": 33,
    "line": [
     [
      13.4,
@@ -50,12 +50,12 @@
    ]
   },
   "lsoLift": {
-   "orbitalHandles": 764,
-   "insulaHandles": 10014,
-   "moved": 19642,
-   "maxMovedMm": 13.35,
-   "heldAtCavity": 20,
-   "outsideCavityAfter": 36,
+   "orbitalHandles": 779,
+   "insulaHandles": 10013,
+   "moved": 19415,
+   "maxMovedMm": 12.27,
+   "heldAtCavity": 18,
+   "outsideCavityAfter": 33,
    "line": [
     [
      13.4,
@@ -70,10 +70,10 @@
    ]
   },
   "interhemispheric": {
-   "moved": 3736,
-   "fullyMoved": 451,
-   "maxMovedMm": 8.25,
-   "heldAtCavity": 138,
+   "moved": 3706,
+   "fullyMoved": 446,
+   "maxMovedMm": 8.26,
+   "heldAtCavity": 134,
    "outsideCavityAfter": 0,
    "span": [
     -11.8,
@@ -88,40 +88,40 @@
  },
  "pfossa": {
   "telovelarMaxMm": 8.75,
-  "retrosigmoidMaxMm": 12.37,
+  "retrosigmoidMaxMm": 12.23,
   "inBoneAtRest": {
-   "Anterior quadrangular lobule.l": 240,
-   "Anterior quadrangular lobule.r": 243,
-   "Posterior quadrangular lobule.l": 36,
-   "Posterior quadrangular lobule.r": 31,
-   "Superior semilunar lobule.l": 350,
-   "Superior semilunar lobule.r": 342,
-   "Inferior semilunar lobule.l": 585,
-   "Inferior semilunar lobule.r": 590,
+   "Anterior quadrangular lobule.l": 245,
+   "Anterior quadrangular lobule.r": 244,
+   "Posterior quadrangular lobule.l": 35,
+   "Posterior quadrangular lobule.r": 35,
+   "Superior semilunar lobule.l": 339,
+   "Superior semilunar lobule.r": 341,
+   "Inferior semilunar lobule.l": 588,
+   "Inferior semilunar lobule.r": 585,
    "Gracile lobule.l": 0,
    "Gracile lobule.r": 0,
-   "Biventral lobule.l": 16,
-   "Biventral lobule.r": 18,
+   "Biventral lobule.l": 19,
+   "Biventral lobule.r": 15,
    "Tonsil of cerebellum.l": 0,
    "Tonsil of cerebellum.r": 0,
    "Flocculus.l": 255,
    "Flocculus.r": 254,
    "Peduncle of flocculus.l": 66,
    "Peduncle of flocculus.r": 66,
-   "Wing of central lobule.l": 28,
-   "Wing of central lobule.r": 27,
+   "Wing of central lobule.l": 29,
+   "Wing of central lobule.r": 28,
    "Superior cerebellar peduncle.l": 0,
    "Superior cerebellar peduncle.r": 0,
    "Midbrain.l": 0,
    "Midbrain.r": 0,
-   "Pons.l": 697,
-   "Pons.r": 710,
-   "Medulla oblongata.l": 171,
-   "Medulla oblongata.r": 171,
+   "Pons.l": 687,
+   "Pons.r": 701,
+   "Medulla oblongata.l": 166,
+   "Medulla oblongata.r": 169,
    "Lingula of cerebellum": 0,
    "Central lobule": 0,
-   "Culmen": 60,
-   "Declive": 85,
+   "Culmen": 66,
+   "Declive": 91,
    "Folium of vermis": 0,
    "Tuber of vermis": 0,
    "Pyramis of vermis": 0,
@@ -130,12 +130,12 @@
    "Fourth ventricle": 0
   },
   "clear": {
-   "containedPushed": 0,
-   "inVesselBefore": 2912,
-   "inBoneBefore": 5041,
-   "inVesselAfter": 130,
-   "inBoneAfter": 14,
-   "maxMovedMm": 6.56
+   "containedPushed": 16,
+   "inVesselBefore": 2890,
+   "inBoneBefore": 5024,
+   "inVesselAfter": 133,
+   "inBoneAfter": 15,
+   "maxMovedMm": 6.52
   },
   "trigeminalRoot": [
    15.85,
@@ -143,34 +143,34 @@
    4.74
   ],
   "carried": {
-   "Anterior inferior cerebellar artery": 12.0,
-   "Posterior inferior cerebellar artery": 11.86,
-   "Superior cerebellar artery": 11.51
+   "Anterior inferior cerebellar artery": 12.08,
+   "Posterior inferior cerebellar artery": 11.87,
+   "Superior cerebellar artery": 11.32
   },
   "ontoSurface": {
    "Anterior inferior cerebellar artery.l": {
-    "points": 173,
-    "maxMm": 2.61
+    "points": 176,
+    "maxMm": 2.27
    },
    "Anterior inferior cerebellar artery.r": {
-    "points": 172,
-    "maxMm": 1.95
+    "points": 173,
+    "maxMm": 1.87
    },
    "Posterior inferior cerebellar artery.l": {
-    "points": 719,
+    "points": 679,
     "maxMm": 3.32
    },
    "Posterior inferior cerebellar artery.r": {
-    "points": 728,
+    "points": 713,
     "maxMm": 3.27
    },
    "Superior cerebellar artery.l": {
-    "points": 265,
-    "maxMm": 1.77
+    "points": 240,
+    "maxMm": 1.5
    },
    "Superior cerebellar artery.r": {
-    "points": 263,
-    "maxMm": 1.68
+    "points": 251,
+    "maxMm": 1.28
    }
   }
  },
@@ -179,7 +179,7 @@
    "facialCourseMm": 53.3,
    "toGeniculateMm": 25.1,
    "toSecondGenuMm": 38.4,
-   "gspnMm": 13.5,
+   "gspnMm": 13.6,
    "overCanalMm": 0.5,
    "arcuateEminenceToOverCanalMm": null
   },
@@ -191,5 +191,55 @@
    "overCanalMm": 0.5,
    "arcuateEminenceToOverCanalMm": 1.2
   }
+ },
+ "cavernous": {
+  "R": {
+   "entries": {
+    "Oculomotor nerve (III)": [
+     11.5,
+     1.9,
+     9.5
+    ],
+    "Trochlear nerve (IV)": [
+     8.4,
+     -8.1,
+     4.4
+    ],
+    "Abducens nerve (VI)": [
+     9.9,
+     -10.3,
+     -4.7
+    ]
+   },
+   "sinusMm3": 1521
+  },
+  "L": {
+   "entries": {
+    "Oculomotor nerve (III)": [
+     -11.5,
+     1.9,
+     9.5
+    ],
+    "Trochlear nerve (IV)": [
+     -8.4,
+     -8.1,
+     4.4
+    ],
+    "Abducens nerve (VI)": [
+     -9.9,
+     -10.3,
+     -4.7
+    ]
+   },
+   "sinusMm3": 1521
+  },
+  "mirrored": [
+   "Anterior clinoid process (right)",
+   "Posterior clinoid process (right)",
+   "Apex of petrous part (left)",
+   "Foramen rotundum (left)",
+   "Foramen ovale (right)",
+   "Optic canal (left)"
+  ]
  }
 }

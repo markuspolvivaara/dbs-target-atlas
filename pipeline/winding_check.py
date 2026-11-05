@@ -63,7 +63,16 @@ def closed_volume(parts: list[tuple[np.ndarray, np.ndarray]]) -> float | None:
     if (counts == 1).mean() > 0.001:
         return None
     tri = P[T] - P.mean(0)
-    return float(np.einsum("ij,ij->i", tri[:, 0], np.cross(tri[:, 1], tri[:, 2])).sum() / 6)
+    vol = float(np.einsum("ij,ij->i", tri[:, 0], np.cross(tri[:, 1], tri[:, 2])).sum() / 6)
+    # (a two-sided sheet, each face with its own copy turned the other way, closes on itself round no volume, its sign
+    # rounding noise: not a solid, its faces already checked against their normals)
+    area = float(np.linalg.norm(np.cross(tri[:, 1] - tri[:, 0], tri[:, 2] - tri[:, 0]), axis=1).sum() / 2)
+    if abs(vol) < SHEET_MM * area:
+        return None
+    return vol
+
+
+SHEET_MM = 1e-3     # a closed mesh enclosing less than this times its area (mm3 per mm2) is a two-sided sheet
 
 
 def main() -> int:

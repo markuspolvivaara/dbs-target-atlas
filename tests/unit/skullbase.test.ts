@@ -183,9 +183,10 @@ describe('e2e group list stays in step with the groups module', () => {
     for (const g of SB_GROUPS) if (g.kind === 'bone') expect(spec, g.name).toContain(`'${g.name}'`);
     // (the overview, the regions, three systems, six bone views and the surgical views cut on this model's skull)
     // (and the six temporal-bone views)
-    expect(SB_GROUPS.length).toBe(1 + REGIONS.length + 3 + 6 + Object.keys(APPROACH_GEOM).length + 6);
+    // (and the six temporal-bone views, the cavernous sinus and the endonasal view)
+    expect(SB_GROUPS.length).toBe(1 + REGIONS.length + 3 + 6 + Object.keys(APPROACH_GEOM).length + 6 + 2);
     expect(SB_GROUPS.filter((g) => g.kind === 'approach').map((g) => g.id).sort())
-      .toEqual(['far_lateral', 'interhemispheric', 'kawase', 'lso', 'orbitozygomatic', 'retrosigmoid', 'telovelar', 'transsylvian']);
+      .toEqual(['endonasal', 'far_lateral', 'interhemispheric', 'kawase', 'lso', 'orbitozygomatic', 'retrosigmoid', 'telovelar', 'transsylvian']);
     expect(SB_GROUPS.filter((g) => ['temporal', 'ear_r', 'ear_l', 'facial', 'inner_ear', 'middle_ear'].includes(g.id)).length).toBe(6);
     // the all-bones view draws every bone and every landmark
     const all = SB_GROUPS.find((g) => g.id === 'bone_all_bones')!;

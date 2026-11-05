@@ -8,7 +8,7 @@ landmark). Each is rasterised on one grid in that frame: a closed mesh filled (i
 nearly closed one (the frontal, occipital, sphenoid and ethmoid bones have a few dozen open edges) by the parity of
 crossings along each axis, where two of the three agree, with the voxels within SURF_MM of its surface (so its thin
 sheets stay whole). The paranasal sinuses' own meshes (Sinus of frontal bone, Sinus of sphenoid bone) are air,
-taken out of the bone. Gaps the meshes leave between neighbouring bones (close_sutures) are bridged. The field is that mask softened by a Gaussian of SOFT_MM, its surface at skullbase_ct.SURFACE_LEVEL
+taken out of the bone (their insides by the same parity vote; the sutures' bridging does not refill them). Gaps the meshes leave between neighbouring bones (close_sutures) are bridged. The field is that mask softened by a Gaussian of SOFT_MM, its surface at skullbase_ct.SURFACE_LEVEL
 as v2's and v3's are, so the same craniotomy code meshes the cut edge the same way.
 
 Writes pipeline/data/build/skullbase/skull_bone.npz (b: the field, a: grid -> frame), skull.json (bones: {name: verts,
@@ -67,29 +67,23 @@ def main() -> int:
             # (a sheet one voxel thick would fall below the surface level where the smoothing meets it obliquely, leaving
             # holes: the surface's voxels taken SURF_MM thick)
             surf = ndimage.binary_dilation(surf, iterations=max(1, int(round(SURF_MM / STEP))))
-            votes = np.zeros(shape, np.uint8)
-            for ax in range(3):
-                perm = [a for a in range(3) if a != ax] + [ax]            # the ray along axis ax
-                inv = np.argsort(perm)
-                f = fill(np.asarray(m.vertices)[:, perm], np.asarray(m.faces), lo[perm], tuple(np.array(shape)[perm]), STEP)
-                votes += np.transpose(f, inv).astype(np.uint8)
-            got = (votes >= 2) | surf
+            got = parity_inside(m, lo, shape) | surf
             how = "parity (3 axes, majority)"
         mask |= got
         rep[n] = {"how": how, "ml": round(float(got.sum()) * STEP ** 3 / 1000, 1)}
         print(n, rep[n])
-    for n in AIR:                # the sinuses' air
+    for n in AIR:                # the sinuses' air: their insides (not closed meshes: by the parity vote, as the bones)
         if n in ex["bones"]:
             b = ex["bones"][n]
             m = trimesh.Trimesh(np.array(b["verts"], float), np.array(b["tris"], int), process=True)
-            P = np.vstack([np.asarray(m.vertices), m.sample(int(m.area / (0.25 * STEP * STEP)))])
-            ijk = np.rint((P - lo) / STEP).astype(int)
-            s = np.zeros(shape, bool)
-            s[tuple(ijk.T)] = True
-            air = ndimage.binary_fill_holes(ndimage.binary_dilation(s, iterations=1)) & ~ndimage.binary_dilation(s, iterations=1)
+            air = parity_inside(m, lo, shape)
             mask &= ~air
             rep[n] = {"how": "air", "ml": round(float(air.sum()) * STEP ** 3 / 1000, 1)}
     mask, bridged = close_sutures(mask, lo, bones)
+    for n in AIR:                # (the bridging does not refill them)
+        if n in ex["bones"]:
+            b = ex["bones"][n]
+            mask &= ~parity_inside(trimesh.Trimesh(np.array(b["verts"], float), np.array(b["tris"], int), process=True), lo, shape)
     rep["suturesBridgedMl"] = round(float(bridged) * STEP ** 3 / 1000, 2)
     field = ndimage.gaussian_filter(mask.astype(np.float32), SOFT_MM / STEP)
     a = np.diag([STEP, STEP, STEP, 1.0])
@@ -99,6 +93,18 @@ def main() -> int:
     print("grid", shape, "bone", round(float(mask.sum()) * STEP ** 3 / 1000, 1), "ml")
     (BUILD / "sinuses.json").write_text(json.dumps(sinuses(ex)))
     return 0
+
+
+def parity_inside(m: trimesh.Trimesh, lo: np.ndarray, shape: tuple) -> np.ndarray:
+    """A nearly closed mesh's inside: the parity of crossings along each axis, kept where two of the three agree (a ray
+    through a small hole miscounts along one axis only)."""
+    votes = np.zeros(shape, np.uint8)
+    for ax in range(3):
+        perm = [a for a in range(3) if a != ax] + [ax]            # the ray along axis ax
+        inv = np.argsort(perm)
+        f = fill(np.asarray(m.vertices)[:, perm], np.asarray(m.faces), lo[perm], tuple(np.array(shape)[perm]), STEP)
+        votes += np.transpose(f, inv).astype(np.uint8)
+    return votes >= 2
 
 
 def close_sutures(mask: np.ndarray, lo: np.ndarray, bones: dict) -> tuple[np.ndarray, int]:

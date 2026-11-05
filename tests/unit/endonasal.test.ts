@@ -1,7 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import * as THREE from 'three';
 import { readFileSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';
+// (Skull base v3's data: the page's model marker set before the modules read it; each test file has its own modules)
+vi.hoisted(() => {
+  (globalThis as unknown as { document?: unknown }).document ??= { querySelector: (q: string) => (q.includes('sb-model') ? { content: 'v3' } : null) };
+});
 import { ENDO_STOPS, ENDO_STOP_MM, ENDO_TARGET, ENDONASAL, ScopePath, SinusVolume, type EndoSide } from '../../src/skullbase/endonasal';
 
 /** The volume as the browser loads it (the asset, decompressed). */

@@ -23,34 +23,34 @@
     "cavityMl": 1736,
     "clear": {
      "R": {
-      "inBoneWayBefore": 3521,
+      "inBoneWayBefore": 3513,
       "inBoneWayAfter": 0,
       "rounds": 16,
-      "maxMovedMm": 6.37
+      "maxMovedMm": 6.18
      },
      "L": {
-      "inBoneWayBefore": 3667,
+      "inBoneWayBefore": 3637,
       "inBoneWayAfter": 0,
       "rounds": 16,
-      "maxMovedMm": 6.76
+      "maxMovedMm": 6.06
      }
     },
     "open": {
-     "lipsFrontal": 347,
-     "lipsTemporal": 200,
-     "heldBySkull": 1962,
-     "moved": 5987,
-     "maxMovedMm": 6.84,
-     "heldAtCavity": 195,
-     "outsideCavityAfter": 113
+     "lipsFrontal": 332,
+     "lipsTemporal": 205,
+     "heldBySkull": 1982,
+     "moved": 5953,
+     "maxMovedMm": 6.53,
+     "heldAtCavity": 200,
+     "outsideCavityAfter": 98
     },
     "lift": {
      "orbitalHandles": 879,
-     "insulaHandles": 10014,
-     "moved": 19845,
-     "maxMovedMm": 8.41,
-     "heldAtCavity": 37,
-     "outsideCavityAfter": 36,
+     "insulaHandles": 10013,
+     "moved": 19599,
+     "maxMovedMm": 8.85,
+     "heldAtCavity": 32,
+     "outsideCavityAfter": 33,
      "line": [
       [
        13.4,
@@ -70,12 +70,12 @@
      ]
     },
     "lsoLift": {
-     "orbitalHandles": 764,
-     "insulaHandles": 10014,
-     "moved": 19642,
-     "maxMovedMm": 13.35,
-     "heldAtCavity": 20,
-     "outsideCavityAfter": 36,
+     "orbitalHandles": 779,
+     "insulaHandles": 10013,
+     "moved": 19415,
+     "maxMovedMm": 12.27,
+     "heldAtCavity": 18,
+     "outsideCavityAfter": 33,
      "line": [
       [
        13.4,
@@ -90,10 +90,10 @@
      ]
     },
     "interhemispheric": {
-     "moved": 3736,
-     "fullyMoved": 451,
-     "maxMovedMm": 8.25,
-     "heldAtCavity": 138,
+     "moved": 3706,
+     "fullyMoved": 446,
+     "maxMovedMm": 8.26,
+     "heldAtCavity": 134,
      "outsideCavityAfter": 0,
      "span": [
       -11.8,
@@ -114,7 +114,7 @@
      "inBoneWayAfter": 0
     }
    },
-   "revision": "bb9e150",
+   "revision": "193d0cb",
    "date": "2026-11-05"
   },
   {
@@ -158,7 +158,7 @@
      "Optic nerve (II)": 0.16
     }
    },
-   "revision": "bb9e150",
+   "revision": "193d0cb",
    "date": "2026-11-05"
   },
   {
@@ -202,49 +202,49 @@
    "metrics": {
     "ontoSurface": {
      "Anterior inferior cerebellar artery.l": {
-      "points": 173,
-      "maxMm": 2.61
+      "points": 176,
+      "maxMm": 2.27
      },
      "Anterior inferior cerebellar artery.r": {
-      "points": 172,
-      "maxMm": 1.95
+      "points": 173,
+      "maxMm": 1.87
      },
      "Posterior inferior cerebellar artery.l": {
-      "points": 719,
+      "points": 679,
       "maxMm": 3.32
      },
      "Posterior inferior cerebellar artery.r": {
-      "points": 728,
+      "points": 713,
       "maxMm": 3.27
      },
      "Superior cerebellar artery.l": {
-      "points": 265,
-      "maxMm": 1.77
+      "points": 240,
+      "maxMm": 1.5
      },
      "Superior cerebellar artery.r": {
-      "points": 263,
-      "maxMm": 1.68
+      "points": 251,
+      "maxMm": 1.28
      }
     },
     "clear": {
-     "containedPushed": 0,
-     "inVesselBefore": 2912,
-     "inBoneBefore": 5041,
-     "inVesselAfter": 130,
-     "inBoneAfter": 14,
-     "maxMovedMm": 6.56
+     "containedPushed": 16,
+     "inVesselBefore": 2890,
+     "inBoneBefore": 5024,
+     "inVesselAfter": 133,
+     "inBoneAfter": 15,
+     "maxMovedMm": 6.52
     },
     "carried": {
-     "Anterior inferior cerebellar artery": 12.0,
-     "Posterior inferior cerebellar artery": 11.86,
-     "Superior cerebellar artery": 11.51
+     "Anterior inferior cerebellar artery": 12.08,
+     "Posterior inferior cerebellar artery": 11.87,
+     "Superior cerebellar artery": 11.32
     }
    },
    "validation": {
-    "inBoneAfter": 14,
-    "inVesselAfter": 130
+    "inBoneAfter": 15,
+    "inVesselAfter": 133
    },
-   "revision": "bb9e150",
+   "revision": "193d0cb",
    "date": "2026-11-05"
   }
  ]

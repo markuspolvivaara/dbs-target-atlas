@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { SB } from '../skullbase';
+import { SB_MODEL } from '../skullbase';
 import { ENDO_BURR_MM, ENDO_SCOPE_ROOM_MM, ENDO_STANDOFF_MM, ENDO_STEP_MM, ENDO_STOP_MM, ENDO_STOPS, ENDONASAL, ScopePath, SinusVolume, type EndoLayer, type EndoPiece, type EndoSide, type EndoStop } from '../skullbase/endonasal';
 import { SB_GROUP } from '../skullbase/groups';
 import type { SkullState } from '../skullbase/state';
@@ -306,6 +307,7 @@ export class EndonasalPanel implements PointerTool {
   private measured(): Node {
     const s = ENDONASAL.sinus, icd = ENDONASAL.intercarotid;
     const narrow = icd.length ? icd.reduce((a, b) => (b.mm < a.mm ? b : a)) : null;
+    if (SB_MODEL === 'zanatomy') return this.measuredV1(narrow);
     return h('div', { class: 'aside' },
       h('h4', {}, 'Measured on this CT'),
       h('ul', { class: 'plain' },
@@ -319,6 +321,25 @@ export class EndonasalPanel implements PointerTool {
         h('li', {}, 'The hypophysis is modelled in this CT’s fossa: what is not bone there, a millimetre inside the bone (the dura, both its layers, which a CT does not tell from the gland: a drawing choice), under the diaphragma sellae taken as the plane from the tuberculum to the top of the dorsum, its upper surface a little concave, no more than about 6 mm from the midline and clear of the carotids. Its posterior lobe (an ellipsoid at its back) and its stalk (a tube up and back to behind the chiasm) are drawn by rule; its colours where the dura is opened are rendering choices.'),
         h('li', {}, `The pieces taken away step by step are regions drawn by rule on this CT (distances to its air spaces, the hypophysis and the midline): the walls between air spaces go whole, the sellar floor, planum and clivus only their bone and the mucosa on it, the dura over the sella the layer between the opened floor and the gland; each keeps ${fmtMm(ENDONASAL.params.pieceClearMm.vessel ?? 0.8)} mm off the carotids and ${fmtMm(ENDONASAL.params.pieceClearMm.nerve ?? 0.6)} mm off the nerves. Where they end is a drawing choice, not a measured extent of the operation.`),
         h('li', {}, `The burr is a round one ${ENDO_BURR_MM} mm across that takes away whatever it reaches. It goes right down onto the wall of the arteries TopBrain labels on this CT, never into them (an exercise in anatomy: in surgery the bone over the carotid is thinned and lifted off with care, not drilled down onto it), where the wall laid bare is drawn red; and it stops ${fmtMm(ENDO_STOP_MM)} mm from the optic nerves (TotalSegmentator’s) and chiasm (fitted), nerves III–VI (routed through this CT), the hypophysis modelled in its fossa, and the fitted intercavernous sinuses and brain, these only where the CT shows soft tissue.`),
+        h('li', {}, 'The view is drawn as the ventricles’ endoscope is: a wide field through a lens with barrel distortion, a light at the tip on wet walls, what lies close behind a thin wall showing through it; rendering choices, not measurements.')));
+  }
+
+  /** v1's: the Z-Anatomy model's own sinus, hypophysis, vessels and nerves. */
+  private measuredV1(narrow: { z: number; mm: number } | null): Node {
+    const s = ENDONASAL.sinus, icd = ENDONASAL.intercarotid, g = ENDONASAL.hypophysis;
+    return h('div', { class: 'aside' },
+      h('h4', {}, 'Measured on this model'),
+      h('ul', { class: 'plain' },
+        s.volumeMl !== undefined ? h('li', {}, `Sphenoid sinus: ${fmtMm(s.volumeMl)} ml of air (Z-Anatomy’s sinus)${s.backMm !== undefined && s.backMm < 0 ? `, reaching ${fmtMm(-s.backMm)} mm behind the front of the sella` : ''}.`) : '',
+        h('li', {}, `Z-Anatomy’s hypophysis: ${fmtMm(g.gland.widthMm)} mm across, ${fmtMm(g.gland.lengthMm)} mm front to back, ${fmtMm(g.gland.heightMm)} mm high (${Math.round(g.gland.mm3)} mm³), the posterior lobe ${Math.round(g.neuroMm3)} mm³ of it.`),
+        narrow ? h('li', {}, `Its carotids are ${fmtMm(narrow.mm)} mm apart at their nearest through the sella (${fmtMm(narrow.z)} mm above the fossa), ${icd.map((x) => fmtMm(x.mm)).join(', ')} mm at heights ${icd[0].z} to ${icd[icd.length - 1].z} mm.`) : ''),
+      h('h4', {}, 'How it is drawn'),
+      h('ul', { class: 'plain' },
+        h('li', {}, 'The Z-Anatomy model has bone but no mucosa or other soft tissue in the nose: the lining the scope sees is the bone’s surface, the sinus’s and the nose’s walls bare.'),
+        h('li', {}, `The scope starts at the front of the model’s nasal cavity (the air its bones enclose, split at the midline: the septum’s cartilage is not part of it). Its way is the path with the most room to the sinus’s opening; the turbinates are pushed aside to ${fmtMm(ENDONASAL.corridorMm)} mm across along it (a drawing choice), the sinus’s front wall left for the burr. From near its end the scope goes straight on the way it looks, where it has a clear core ${fmtMm(2 * ENDO_SCOPE_ROOM_MM)} mm across, and stops ${fmtMm(ENDO_STANDOFF_MM)} mm short of the bone ahead.`),
+        h('li', {}, 'The hypophysis is Z-Anatomy’s own (its anterior and posterior lobes); the diaphragma is taken from its tuberculum and dorsum sellae, and the cavernous sinuses’ medial walls from its own sinuses.'),
+        h('li', {}, `The pieces taken away step by step are regions drawn by rule, as on Skull base v3’s CT (distances to the air spaces, the hypophysis and the midline); each keeps ${fmtMm(ENDONASAL.params.pieceClearMm.vessel ?? 0.8)} mm off the carotids and ${fmtMm(ENDONASAL.params.pieceClearMm.nerve ?? 0.6)} mm off the nerves. Where they end is a drawing choice, not a measured extent of the operation.`),
+        h('li', {}, `The burr is a round one ${ENDO_BURR_MM} mm across that takes away whatever it reaches. It goes right down onto the wall of Z-Anatomy’s arteries, never into them (an exercise in anatomy), and stops ${fmtMm(ENDO_STOP_MM)} mm from its optic nerves and chiasm (as Skull base v1 draws them), nerves III–VI, its hypophysis and intercavernous sinuses and the brain.`),
         h('li', {}, 'The view is drawn as the ventricles’ endoscope is: a wide field through a lens with barrel distortion, a light at the tip on wet walls, what lies close behind a thin wall showing through it; rendering choices, not measurements.')));
   }
 

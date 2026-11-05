@@ -273,9 +273,45 @@ function v1EarGroups(): SbGroup[] {
   ];
 }
 
+/** v1's cavernous sinus view, as v3's: Z-Anatomy's sinus, carotid and nerves, the walls and the ten triangles drawn by
+ * rule on them (skullbase_v1_cavernous.py). */
+function v1CavernousGroup(): SbGroup {
+  const byName = (...names: string[]) => OWN.filter((s) => names.includes(s.name)).map((s) => s.id);
+  const lm = (...names: string[]) => LANDMARKS.filter((l) => names.includes(l.name)).map((l) => l.id);
+  return {
+    id: 'cavernous', kind: 'system', name: 'Cavernous sinus', camera: 'anterolateral', hemi: 'R', radius: 40, info: 'cavernous',
+    boneLook: 'ghost', cutAbove: 16,
+    focus: CAVERNOUS.R.sinus.lo.map((v, i) => (v + CAVERNOUS.R.sinus.hi[i]) / 2) as V3, focusIds: byName('Cavernous sinus'),
+    description: 'Z-Anatomy’s right cavernous sinus, see-through: its carotid in it, its oculomotor, trochlear, abducens and trigeminal nerves with the three divisions, the walls drawn round it by rule and the ten triangles round it as Chung 2016 defines them, drawn on its nerves and landmarks.',
+    structures: byName('Cavernous sinus', 'Walls of the cavernous sinus', 'Internal carotid artery', 'Ophthalmic artery', 'Optic nerve (II)', 'Optic chiasm',
+      'Oculomotor nerve (III)', 'Trochlear nerve (IV)', 'Trigeminal nerve (V)', 'Ophthalmic nerve (V1)', 'Maxillary nerve (V2)', 'Mandibular nerve (V3)',
+      'Abducens nerve (VI)', 'Greater petrosal nerve', 'Adenohypophysis', 'Neurohypophysis', 'Anterior intercavernous sinus', 'Posterior intercavernous sinus',
+      'Superior petrosal sinus', 'Inferior petrosal sinus', 'Superior ophthalmic vein', 'Inferior ophthalmic vein',
+      ...OWN.filter((s) => kindOf(s) === 'triangle').map((s) => s.name)),
+    ghost: byName('Cavernous sinus'), shell: byName('Walls of the cavernous sinus'),
+    landmarks: lm('Superior orbital fissure', 'Foramen rotundum', 'Foramen ovale', 'Foramen lacerum', 'Optic canal', 'Anterior clinoid process', 'Posterior clinoid process', 'Apex of petrous part'),
+  };
+}
+
+/** v1's endoscopic endonasal view, as v3's: the Z-Anatomy model's nose, sphenoid sinus and sella as fields the burr cuts
+ * (skullbase_v1_endonasal.py). */
+function v1EndonasalGroup(): SbGroup {
+  const byName = (...names: string[]) => OWN.filter((s) => names.includes(s.name)).map((s) => s.id);
+  return {
+    id: 'endonasal', kind: 'approach', name: 'Endoscopic endonasal (transsphenoidal)', camera: 'frontolateral', hemi: 'both', cutAbove: null,
+    focus: [0, 8, 0], radius: 45, boneLook: 'ghost', endonasal: true, info: 'endonasal',
+    description: 'A 0° endoscope through one side of the nose to the sphenoid sinus and the sella, on the Z-Anatomy model: its bare bone (it has no mucosa) as the scope sees it, and what lies behind thin walls showing through (the carotids, the optic nerves). The way is opened step by step (the sinus’s front wall, its septa, the sellar floor and the dura over it onto Z-Anatomy’s hypophysis, the tuberculum and planum, the upper clivus), each piece stopping short of the carotids and the nerves.',
+    structures: byName('Internal carotid artery', 'Optic nerve (II)', 'Optic chiasm', 'Adenohypophysis', 'Neurohypophysis', 'Cavernous sinus',
+      'Anterior intercavernous sinus', 'Posterior intercavernous sinus', 'Oculomotor nerve (III)', 'Trochlear nerve (IV)', 'Abducens nerve (VI)',
+      'Trigeminal nerve (V)', 'Ophthalmic artery', 'Basilar artery'),
+    landmarks: LANDMARKS.filter((l) => l.name === 'Optic canal').map((l) => l.id),
+  };
+}
+
 export const SB_GROUPS: SbGroup[] = SB_MODEL === 'v3' ? temporalGroups() : [
   ...(SB_MODEL === 'zanatomy' ? surgicalGroups() : []),
   ...(SB_MODEL === 'zanatomy' ? v1EarGroups() : []),
+  ...(SB_MODEL === 'zanatomy' ? [v1CavernousGroup(), v1EndonasalGroup()] : []),
   {
     id: 'floor', kind: 'overview', name: 'Cranial floor', camera: 'axial', hemi: 'both', cutAbove: FLOOR_CUT_MM, focus: null, radius: 75,
     description: `The cranial bones of the model with everything above ${FLOOR_CUT_MM} mm (over the hypophysial fossa) cut away, seen from above. Use the regions to see what passes each opening, and the bones for their labelled landmarks.`,

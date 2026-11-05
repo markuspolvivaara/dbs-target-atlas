@@ -1,13 +1,16 @@
 import * as THREE from 'three';
 import { z } from 'zod';
-import data from '../data/generated/sbv3-endonasal.json';
+import v3data from '../data/generated/sbv3-endonasal.json';
+import v1data from '../data/generated/sb-endonasal.json';
+import { SB_MODEL } from './index';
 import { gunzip } from '../spine/screw';
 import { assetUrl } from '../viewer/assets';
 import { meshChunk, CHUNK_VOX, type Colour, type FieldGrid } from '../viewer/surfacenets';
 
 /**
- * Skull base v3's endoscopic endonasal (transsphenoidal) view: the CT around the sphenoid as fields a burr cuts
- * (pipeline/skullbase_v3_endonasal.py writes them): the bone as the model draws it, and what is not air, whose surface
+ * The endoscopic endonasal (transsphenoidal) view: Skull base v3's CT around the sphenoid as fields a burr cuts
+ * (pipeline/skullbase_v3_endonasal.py writes them), or (Skull base v1) the Z-Anatomy model's as the same fields
+ * (pipeline/skullbase_v1_endonasal.py): the bone as the model draws it, and what is not air, whose surface
  * is the lining the endoscope sees (the nasal mucosa, the walls of the sphenoid sinus); the CT to colour them; and the
  * distance to what the burr stops at: the vessels (the carotids), the nerves (the optic nerves and chiasm, III to VI),
  * the sellar contents (the pituitary, the cavernous sinuses) and the brain. Anatomy, not a simulation of the tissue:
@@ -36,7 +39,7 @@ export const ENDONASAL = z.object({
     gland: z.object({ widthMm: z.number(), lengthMm: z.number(), heightMm: z.number(), mm3: z.number() }),
     adenoMm3: z.number(), neuroMm3: z.number(), stalkMm3: z.number(),
   }),
-}).parse(data);
+}).parse(SB_MODEL === 'v3' ? v3data : v1data);
 export type EndoPiece = (typeof ENDONASAL)['pieces'][number];
 
 /** the burr: a round diamond one, 3 mm (a drawing choice) */

@@ -443,7 +443,20 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
   - Kawase (anterior petrosectomy) on this skull: v3's flap and rhomboid. Its landmarks are Z-Anatomy's petrous apex,
     with the geniculate ganglion, the greater petrosal nerve and the bone over the superior canal drawn by rule (below).
     The drilling keeps off Z-Anatomy's cochlea, vestibule, carotid and nerves, and the temporal lobe is drawn held up.
-  - Not yet on v1: the cavernous sinus, triangles and endonasal view, and the tumours. v3's Sylvian veins, A3 and its variant, the trigeminal ganglion and the meatal bundle are
+  - The cavernous sinus view (`pipeline/skullbase_v1_cavernous.py`):
+    - Z-Anatomy's own: the sinus, carotid and nerves III–VI with V1–V3.
+    - Drawn by rule: its dural walls (as v3); the nerves' dural entries (where each first comes within 1.5 mm of the
+      sinus); the trigeminal ganglion (the point V1–V3 leave the nerve); and the ten Chung 2016 triangles, by v3's
+      rules on these.
+    - Landmarks Z-Anatomy labels on one side only are mirrored (the model's skull is symmetric).
+  - The endoscopic endonasal view (`pipeline/skullbase_v1_endonasal.py`): v3's fields, pieces, corridor and burr on
+    Z-Anatomy's model.
+    - Bone: Z-Anatomy's own; it has no mucosa, so the lining is bare bone.
+    - Nose: the air its bones enclose (outside that closed, as tissue would).
+    - Sphenoid sinus: Z-Anatomy's own.
+    - Hypophysis, cavernous sinuses, vessels and nerves: Z-Anatomy's own; the brain is v1's.
+    - The clivus step is absent: Z-Anatomy's sinus does not reach behind the sella.
+  - Not yet on v1: the tumours and the Grading page. v3's Sylvian veins, A3 and its variant, the trigeminal ganglion and the meatal bundle are
     not part of Z-Anatomy and are left out of the views.
 
 ### Skull base v2: the detailed model (`skullbase-ct/`)

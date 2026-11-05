@@ -142,6 +142,26 @@ def ear() -> int:
     return 0
 
 
+def cavernous() -> int:
+    """The cavernous sinus's walls and the triangles (skullbase_v1_cavernous.py) into v1's manifest, its report into
+    sb-v1fit.json."""
+    c = json.loads((BUILD / "cavernous.json").read_text())
+    p = GEN / f"{PREFIX}-manifest.json"
+    m = json.loads(p.read_text())
+    ids = {it["id"] for it in c["items"]}
+    for it in c["items"]:
+        f = REPO / "public" / it["file"]
+        it["bytes"] = f.stat().st_size if f.exists() else 0
+    m["structures"] = [s for s in m["structures"] if s["id"] not in ids] + c["items"]
+    p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
+    fp = GEN / f"{PREFIX}-v1fit.json"
+    fit = json.loads(fp.read_text()) if fp.exists() else {}
+    fit["cavernous"] = {**c["report"], "mirrored": c["mirrored"]}
+    fp.write_text(json.dumps(fit, indent=1, default=str))
+    print("cavernous items:", len(c["items"]))
+    return 0
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1:2]
     if cmd == ["approaches"]:
@@ -150,5 +170,7 @@ if __name__ == "__main__":
         sys.exit(brain())
     if cmd == ["ear"]:
         sys.exit(ear())
+    if cmd == ["cavernous"]:
+        sys.exit(cavernous())
     print(__doc__)
     sys.exit(2)
