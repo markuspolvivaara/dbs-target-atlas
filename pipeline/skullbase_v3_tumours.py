@@ -47,10 +47,19 @@ are not moved round the tumours.
 
 Writes v3's build (tm_*.glb, the pushed copies, tumour_items.json) and src/data/generated/sbv3-tumours.json (the Knosp
 plane and lines, each tumour's measures and its grade checked from the drawing).
+
+With SB_PROFILE=v1, the same rules on skull base v1 (Z-Anatomy's model; after skullbase_v1_endonasal.py, then
+compress.mjs skullbase and skullbase_build.py finalize): its bone (v1's bone field, skullbase_v1_skull.py) instead of the
+CT's; its arteries (the meshes v1 shows, and its internal carotids' centre lines with the radius it draws, as the label
+the Knosp section is found on) instead of TopBrain's labels; its cavernous sinus (skullbase_v1_cavernous.py) and
+endonasal grid; its own brain, cerebellum and brainstem (not fitted) pushed. Z-Anatomy's temporal bone is solid along
+the vestibulocochlear nerve (it has no meatal lumen), so Koos I's canal is drawn by rule there (V1_CANAL_MM round the
+line from the fundus to the porus) and taken out of the bone. Writes v1's build and sb-tumours.json.
 """
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -66,19 +75,33 @@ from glb import TRIANGLES, read_glb_full, write_glb  # noqa: E402
 
 REPO = ROOT.parent
 DATA = ROOT / "data" / "build"
-V3_BUILD = DATA / "skullbase-v3"
+V1 = os.environ.get("SB_PROFILE") == "v1"     # skull base v1, on Z-Anatomy's model (see the notes above)
+KIND = "skullbase" if V1 else "skullbase-v3"
+PREFIX = "sb" if V1 else "sbv3"
+V3_BUILD = DATA / KIND
 GEN = REPO / "src" / "data" / "generated"
 TM_ITEMS = V3_BUILD / "tumour_items.json"
-OUT_JSON = GEN / "sbv3-tumours.json"
+OUT_JSON = GEN / f"{PREFIX}-tumours.json"
 STEP = ENDO.GRID_MM
+V1_CANAL_MM = 2.0                    # v1: Koos I's canal drawn this far round the line from the fundus to the porus (illustrative)
+# the wording of the cards, by model
+HERE = "Z-Anatomy's model" if V1 else "this CT"
+ARTERIES_OWN = "Z-Anatomy's arteries" if V1 else "this CT's arteries"
+CAROTID_OWN = ("Z-Anatomy's own cavernous and supraclinoid carotid (its centre line with the radius it draws, as a lumen; the plane"
+               if V1 else "this CT's own cavernous and supraclinoid carotid (TopBrain's label; the plane")
 
 ICA_LABEL = {"R": 4, "L": 6}         # TopBrain's internal carotid arteries in this case (as skullbase_v3_cavernous.py)
-KNOSP_Y_MM = (-1.0, 5.0)             # the coronal section is looked for between these (mm in front of the fossa)
+KNOSP_Y_MM = (6.0, 9.0) if V1 else (-1.0, 5.0)     # the coronal section is looked for between these (mm in front of the
+#                                    # fossa; v1: Z-Anatomy's supraclinoid carotid runs back only to 6 mm in front of it)
 KNOSP_MIN_MM2 = 4.0                  # a cross-section of the label smaller than this is not one of the two
 KNOSP_WELL_MM2 = 8.0                 # the section taken nearest the hypophysis's middle where both are at least this
 ADENOMA_UP_MM = 2.5                  # the adenoma's ellipsoid: centred this far above the hypophysis's centre ...
 ADENOMA_AXES_MM = (7.0, 6.5, 6.5)    # ... with these semi-axes (x, y, z): a macroadenoma over the sella (illustrative)
 LOBE_AXES_MM = (9.0, 4.5, 3.0)       # its lobe towards the right, at the level between the two arteries (illustrative)
+#                                    # (v1: level with the gland's lower part; Z-Anatomy's cavernous carotid runs in the
+#                                    # sphenoid's body below its cavernous sinus, so the level between the arteries is bone)
+KNOSP_GRADES = ("0", "1", "2", "3A") if V1 else ("0", "1", "2", "3A", "3B", "4")
+#                                    # (v1: no inferior compartment or encasement: its carotid lies in the bone, below the sinus)
 KNOSP_REACH = {"0": ("medial", -0.8), "1": ("medial", 0.6), "2": ("intercarotid", 0.6)}   # cut back to: line + share of
 #                                    # the way to the next line (grade 0: this many mm short of the medial tangent)
 KNOSP_SPAN_MM = 5.0                  # grades 3-4: the cavernous sinus taken this far in front of and behind the plane
@@ -110,6 +133,7 @@ KOOS_LEVEL_MM = 6.0                  # ... and within this of the porus's height
 KOOS_BELOW_TENTORIUM = 0.4           # ... and this share of it off the cerebrum (mostly below the tentorium; cut there)
 
 MENINGIOMA_MM = {"olfactory": 30.0, "tuberculum": 20.0, "petroclival": 28.0, "foramen_magnum": 30.0}   # (illustrative)
+FM_RIM_IN_MM = 2.0                   # v1: the foramen magnum's site this far above the rim's lowest level
 MENINGIOMA_RISE = 0.55               # the ball's centre this share of its radius off the bone
 MENINGIOMA_INTRADURAL_MM = {"olfactory": 6.0, "tuberculum": 6.0, "petroclival": 6.0, "foramen_magnum": 16.0}
 #                                    # ... kept inside the dura: within this of the fitted brain (its cisterns; at the foramen
@@ -183,12 +207,44 @@ def file_of(item: dict) -> Path:
     return DATA / item["file"].replace("assets/", "")
 
 
+V1E_BOX = ((-24.0, 24.0), (-18.0, 88.0), (-44.0, 26.0))     # (skullbase_v1_endonasal.BOX)
+_V1 = {}
+
+
+def v1_grid(box: tuple) -> dict:
+    """v1's grid over box, as ENDO.ct_grid gives the CT's: Z-Anatomy's bone (v1's bone field, at the level
+    skullbase_v1_endonasal.py takes) and, as the label, its internal carotids (ICA_LABEL; their centre lines with the
+    radius Z-Anatomy draws)."""
+    import nibabel as nib
+    import skullbase_build as SB
+    if not _V1:
+        c = np.load(DATA / "skullbase" / "skull_bone.npz")
+        _V1["b"] = ndimage.gaussian_filter(c["b"].astype(np.float32), ENDO.BONE_SIGMA_VOX)
+        _V1["a"] = c["a"]
+        ex = json.loads((DATA / "skullbase" / "export.json").read_text())
+        _V1["ica"] = {s: np.vstack([SB.resample(np.array(r, float)) for r in ex["lines"][f"Internal carotid artery.{s.lower()}"]["runs"]])
+                      for s in ("R", "L")}
+    shape = tuple(int(round((h - l) / STEP)) + 1 for l, h in box)
+    a_crop = np.diag([STEP, STEP, STEP, 1.0])
+    a_crop[:3, 3] = [l for l, _ in box]
+    P = nib.affines.apply_affine(a_crop, np.indices(shape).reshape(3, -1).T)
+    bs = ndimage.map_coordinates(_V1["b"], nib.affines.apply_affine(np.linalg.inv(_V1["a"]), P).T, order=1, mode="constant",
+                                 cval=0.0).reshape(shape)
+    bone = np.clip(np.round(ENDO.FIELD_ISO + (bs - ENDO.BONE_LEVEL) * ENDO.BONE_SCALE), 0, 255).astype(np.uint8)
+    lab = np.zeros(shape, np.uint8)
+    for s, A in _V1["ica"].items():
+        d, j = cKDTree(A[:, :3]).query(P, distance_upper_bound=10.0)
+        inside = (d <= np.where(np.isfinite(d), A[np.minimum(j, len(A) - 1), 3], 0.0)).reshape(shape)
+        lab[inside] = ICA_LABEL[s]
+    return {"shape": shape, "a_crop": a_crop, "P": P, "bone": bone, "lab": lab}
+
+
 class Grid:
     """One tumour's grid: this CT's bone and labels (skullbase_v3_endonasal.ct_grid) over a box, and the manifest's
     structures rasterised on it as asked."""
 
     def __init__(self, box: tuple, man: list):
-        g = ENDO.ct_grid(box)
+        g = v1_grid(box) if V1 else ENDO.ct_grid(box)
         self.g, self.shape, self.a = g, g["shape"], g["a_crop"]
         self.P = g["P"].reshape(self.shape + (3,))
         self.lo = np.array([b[0] for b in box])
@@ -206,6 +262,8 @@ class Grid:
         for it in self.man:
             if not ((it.get("category") in kinds) or it["name"] in names) or it.get("pushedFrom") or it["id"].startswith("tm_"):
                 continue
+            if V1 and (it.get("replaces") or it.get("forView")):     # (v1: a view's own copy, as the Kawase temporal lobe)
+                continue
             c = np.array([v for s, v in it["centroid"].items() if s in sides] or [[0, 0, 0]])
             if not np.any(np.all((c > self.lo - 80) & (c < hi + 80), 1)):
                 continue
@@ -213,8 +271,10 @@ class Grid:
         return out
 
     def arteries(self) -> np.ndarray:
-        """This CT's own arteries (TopBrain's labels) and v3's traced carotid."""
+        """This CT's own arteries (TopBrain's labels) and v3's traced carotid (v1: Z-Anatomy's, as v1 shows them)."""
         art = self.lab > 0
+        if V1:
+            return art | self.of(kinds=("artery",))
         return art | self.of(names=("Internal carotid artery (petrous and lacerum parts)", "Internal carotid artery (cervical part)"))
 
     def at(self, p) -> tuple:
@@ -329,13 +389,14 @@ def knosp_grade(mask_slice: np.ndarray, Px: np.ndarray, Pz: np.ndarray, sec: dic
 
 def knosp(man: list) -> dict:
     import skullbase_v3_cavernous as CAV
-    cav = json.loads((GEN / "sbv3-cavernous.json").read_text())
-    gr = Grid(ENDO.BOX, man)                  # the endonasal grid, on which the cavernous sinus was modelled
-    assert gr.shape == tuple(np.load(ENDO.CS_COND)["R"].shape)
-    sinus = {s: np.load(ENDO.CS_COND)[s].astype(np.float32) <= 0 for s in ("R", "L")}
+    cav = json.loads((GEN / f"{PREFIX}-cavernous.json").read_text())
+    box, cs_cond = (V1E_BOX, DATA / "skullbase" / "cavernous_cond.npz") if V1 else (ENDO.BOX, ENDO.CS_COND)
+    gr = Grid(box, man)                       # the endonasal grid, on which the cavernous sinus was modelled
+    assert gr.shape == tuple(np.load(cs_cond)["R"].shape)
+    sinus = {s: np.load(cs_cond)[s].astype(np.float32) <= 0 for s in ("R", "L")}
     P = gr.P
     secs = {s: sections(gr, s) for s in ("R", "L")}
-    hyp = np.vstack([nd["positions"] for nd in read_glb_full(V3_BUILD / "tb_adenohypophysis.glb").values()])
+    hyp = np.vstack([nd["positions"] for nd in read_glb_full(V3_BUILD / ("sb_adenohypophysis.glb" if V1 else "tb_adenohypophysis.glb")).values()])
     gc = (hyp.min(0) + hyp.max(0)) / 2
     # the section nearest the hypophysis's middle where both arteries show well
     pick = {s: min([x for x in secs[s] if min(x["cavernous"]["area"], x["supraclinoid"]["area"]) >= KNOSP_WELL_MM2] or secs[s],
@@ -357,7 +418,8 @@ def knosp(man: list) -> dict:
     d_art, d_nerve = gr.dist(art), gr.dist(nerves)
     keep_out = gr.bone | (d_nerve <= NERVE_KEEP_MM)
     body = ellipsoid(P, (0.0, gc[1], gc[2] + ADENOMA_UP_MM), ADENOMA_AXES_MM)
-    lobe = ellipsoid(P, (LOBE_AXES_MM[0] * 0.9, y0, z_mid), LOBE_AXES_MM)
+    z_lobe = float(hyp[:, 2].min() + LOBE_AXES_MM[2]) if V1 else z_mid
+    lobe = ellipsoid(P, (LOBE_AXES_MM[0] * 0.9, y0, z_lobe), LOBE_AXES_MM)
     X, Z = P[..., 0], P[..., 2]
     left_cut = -X <= -line_x(lines["L"]["medial"], Z) - 0.8      # the left side: grade 0
 
@@ -372,7 +434,7 @@ def knosp(man: list) -> dict:
     off_plane = np.abs(P[..., 1] - y0) >= KNOSP_OFF_MM
     lateral = X > line_x(lines["R"]["intercarotid"], Z)
     out, grades = {}, {}
-    for g in ("0", "1", "2", "3A", "3B", "4"):
+    for g in KNOSP_GRADES:
         base = g if g in KNOSP_REACH else "2"
         t = (body | (lobe if base != "0" else False)) & (X <= reach_x(base)) & ((X >= 0) | left_cut)
         if g in ("3A", "3B", "4"):
@@ -394,7 +456,7 @@ def knosp(man: list) -> dict:
         a, b = (np.array([p[0], y0 - LINE_BEHIND_MM, p[1]]) for p in lines["R"][k])
         u = (b - a) / np.linalg.norm(b - a)
         seg.append(np.array([a - LINE_EXTEND_MM * u, b + LINE_EXTEND_MM * u]))
-    report = {"planeY": round(y0, 2), "zMid": round(z_mid, 2),
+    report = {"planeY": round(y0, 2), "zMid": round(z_mid, 2), "zLobe": round(z_lobe, 2),
               "sections": {s: {"y": round(pick[s]["y"], 2), **{k: {"c": np.round(pick[s][k]["c"], 2).tolist(), "r": round(pick[s][k]["r"], 2)}
                                                                 for k in ("cavernous", "supraclinoid")}} for s in ("R", "L")},
               "lines": {k: [np.round(p, 2).tolist() for p in v] for k, v in zip(("medial", "intercarotid", "lateral"), seg)},
@@ -490,7 +552,7 @@ def push(parts: dict, tumour: np.ndarray, gr: Grid, still: np.ndarray, label: st
 
 # ---------------------------------------------------------------- Koos and the meningiomas
 def landmark(name: str, side: str | None = None) -> np.ndarray:
-    for l in json.loads((GEN / "sbv3-landmarks.json").read_text()):
+    for l in json.loads((GEN / f"{PREFIX}-landmarks.json").read_text()):
         if l["name"] == name and (side is None or l.get("side") == side):
             return np.array(l["ras"])
     raise KeyError(name)
@@ -512,16 +574,20 @@ def koos(man: list) -> dict:
     stem = gr.of(names=STEM, sides=("R",))
     brain_ = gr.of(kinds=("brain",), sides=("R",))
     art = gr.arteries()
+    along = (P - fundus) @ axis
+    if V1:      # (Z-Anatomy's temporal bone has no meatal lumen: the canal drawn by rule and taken out of the bone)
+        drawn = (seg_dist(P, fundus, porus + PORUS_PAST_MM * axis) <= V1_CANAL_MM) & (along >= -0.5) & (((P - porus) @ axis) <= PORUS_PAST_MM)
+        gr.bone &= ~drawn
     d_bone, d_stem = gr.dist(gr.bone), gr.dist(stem)
     out_bone = ~gr.bone
-    along = (P - fundus) @ axis
     canal = (seg_dist(P, fundus, porus + PORUS_PAST_MM * axis) <= CANAL_MM) & out_bone & (along >= -0.5) & (((P - porus) @ axis) <= PORUS_PAST_MM)
     l, _ = ndimage.label(canal)
     mid = l[gr.at((fundus + porus) / 2)]
     canal = l == mid if mid else largest(canal)
     keep = gr.dist(art) <= VESSEL_KEEP_MM      # (the nerves are moved round it: displaced_nerves)
     out, rep, ways = {"1": smoothed(canal) & ~gr.bone & ~keep}, {}, {}
-    rep["1"] = {"ml": round(float(out["1"].sum()) * STEP ** 3 / 1000, 2), "canalMm": round(float(np.linalg.norm(porus - fundus)), 1)}
+    rep["1"] = {"ml": round(float(out["1"].sum()) * STEP ** 3 / 1000, 2), "canalMm": round(float(np.linalg.norm(porus - fundus)), 1),
+              "porusToBrainstemMm": round(float(d_stem[gr.at(porus)]), 1)}
     # the ball's centre: searched on a 1 mm lattice of open points in the posterior fossa (not in the cerebrum)
     # the posterior fossa's intradural space: the fitted cerebellum and brainstem and the cisterns round them
     fossa = ndimage.binary_dilation(gr.of(kinds=("hindbrain", "ventricle")), iterations=int(round(KOOS_CISTERN_MM / STEP))) & ~gr.bone & ~brain_
@@ -589,7 +655,7 @@ def koos(man: list) -> dict:
 
 def meningioma_site(site: str, gr: Grid) -> np.ndarray:
     """Where each meningioma sits on the dura: a point on the bone's surface (the dura over it)."""
-    cav = json.loads((GEN / "sbv3-cavernous.json").read_text())
+    cav = json.loads((GEN / f"{PREFIX}-cavernous.json").read_text())
     if site == "olfactory":     # the olfactory groove: the midline between the foramen caecum and the sphenoidal yoke
         p = (landmark("Foramen caecum of frontal bone") * 0.45 + landmark("Sphenoidal yoke") * 0.55) * np.array([0, 1, 1])
         down = np.array([0.0, 0.0, -1.0])
@@ -600,6 +666,18 @@ def meningioma_site(site: str, gr: Grid) -> np.ndarray:
         apex, jug = np.array(cav["landmarks"]["R"]["petrousApex"]), landmark("Jugular foramen", "R")
         p = apex + 0.35 * (jug - apex) + np.array([-3.0, 0.0, 0.0])
         down = np.array([0.0, 1.0, 0.0])
+    elif V1:     # (v1: from the foramen's centre, level, towards the right occipital condyle until the bone; at the rim's
+        #          level: the lowest at which that way meets the bone, FM_RIM_IN_MM above it)
+        fm, oc = landmark("Foramen magnum"), landmark("Occipital condyle", "R")
+        down = (oc - fm) * np.array([1.0, 1.0, 0.0])
+        down = down / np.linalg.norm(down)
+
+        def meets(z):
+            return any(gr.bone[gr.at(np.array([fm[0], fm[1], z]) + t * down)] for t in np.arange(0, 30, 0.5))
+        z = fm[2]
+        while not meets(z) and z < fm[2] + 20:
+            z += 0.5
+        p = np.array([fm[0], fm[1], z + FM_RIM_IN_MM]) + 15 * down
     else:                           # the foramen magnum's anterolateral rim on the right, in front of the hypoglossal canal
         fm, hc = landmark("Foramen magnum"), landmark("Hypoglossal canal", "R")
         p = fm + 0.45 * (hc - fm) + np.array([0.0, 4.0, 0.0])
@@ -653,9 +731,9 @@ def meningioma(site: str, man: list) -> dict:
 # ---------------------------------------------------------------- items
 def item_of(sid, name, colour, category, derivation, nodes, cent, extra=None) -> dict:
     write_glb(V3_BUILD / f"{sid}.glb", nodes, {"id": sid})
-    return {"id": sid, "name": name, "aliases": [], "type": "soft", "file": f"assets/skullbase-v3/{sid}.glb", "bytes": 0,
-            "colour": colour, "dataset": "rule", "source": "Drawn by rule on the TopBrain CT",
-            "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)", "citation": [], "citationUrls": [], "refIds": [],
+    return {"id": sid, "name": name, "aliases": [], "type": "soft", "file": f"assets/{KIND}/{sid}.glb", "bytes": 0,
+            "colour": colour, "dataset": "rule", "source": f"Drawn by rule on the {'Z-Anatomy model' if V1 else 'TopBrain CT'}",
+            "licence": f"GPL-3.0 (the project's own drawing, on the {'Z-Anatomy model' if V1 else 'TopBrain CT'})", "citation": [], "citationUrls": [], "refIds": [],
             "category": category, "schematic": True, "derivation": derivation, "centroid": cent, **(extra or {})}
 
 
@@ -722,7 +800,7 @@ def pushed_copies(view: str, tag: str, tumour: np.ndarray, gr: Grid, man: list, 
             cent[s] = V.mean(0).round(2).tolist()
         nid = f"{sid}__{tag}"
         write_glb(V3_BUILD / f"{nid}.glb", out, {"id": nid})
-        items.append({**{k: v for k, v in it.items() if k not in ("clearedFrom", "joinedFrom")}, "id": nid, "file": f"assets/skullbase-v3/{nid}.glb",
+        items.append({**{k: v for k, v in it.items() if k not in ("clearedFrom", "joinedFrom")}, "id": nid, "file": f"assets/{KIND}/{nid}.glb",
                       "bytes": 0, "replaces": sid, "pushedFrom": it["file"], "tumourView": tag, "centroid": cent,
                       "derivation": it["derivation"].rstrip() + f" Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most "
                       f"{res['report']['maxMovedMm']} mm): a shape, not a simulation of the tissue."})
@@ -737,8 +815,9 @@ FACIAL_WAY = np.array([0.0, 1.0, 0.0])    # the facial nerve moved forwards, ont
 FLAT = {"3": (1.8, 0.45), "4": (2.2, 0.35)}   # (III, IV) where it lies on the tumour, the facial nerve drawn this much
 #                             wider and thinner (a band; Starnoni 2020: the nerve thinned over large tumours; illustrative)
 MOVED_NERVES = ("Facial nerve (VII)", "Trigeminal nerve (V)", "Abducens nerve (VI)", "Glossopharyngeal nerve (IX)", "Vagus nerve (X)",
-                "Accessory nerve (XI)", "Anterior inferior cerebellar artery", "Superior cerebellar artery (fitted course)",
-                "Posterior inferior cerebellar artery (fitted course)")
+                "Accessory nerve (XI)", "Anterior inferior cerebellar artery",
+                *(("Superior cerebellar artery", "Posterior inferior cerebellar artery") if V1 else
+                  ("Superior cerebellar artery (fitted course)", "Posterior inferior cerebellar artery (fitted course)")))
 
 
 def tube_part(V: np.ndarray):
@@ -880,7 +959,92 @@ def displaced_nerves(g: str, tumour: np.ndarray, gr: Grid, man: list, porus: np.
         cent = dict(it["centroid"])
         cent["R"] = V.mean(0).round(2).tolist()
         items.append({**{k: v_ for k, v_ in it.items() if k not in ("clearedFrom", "joinedFrom")}, "id": nid,
-                      "file": f"assets/skullbase-v3/{nid}.glb", "bytes": 0, "replaces": it["id"], "pushedFrom": it["file"],
+                      "file": f"assets/{KIND}/{nid}.glb", "bytes": 0, "replaces": it["id"], "pushedFrom": it["file"],
+                      "tumourView": f"koos_{g}", "centroid": cent,
+                      "derivation": it["derivation"].rstrip() + f" In this view, where it ran through the vestibular schwannoma drawn here it is "
+                      f"{what} (skullbase_v3_tumours.py; at most {moved.max():.1f} mm), its course in the meatus kept: a shape, not a simulation."})
+        rep[it["name"]] = {"pointsInside": moved0, "leftInside": left, "maxMovedMm": round(float(moved.max()), 1)}
+    print("  nerves koos", g, rep)
+    return items, rep
+
+
+def displaced_meshes(g: str, tumour: np.ndarray, gr: Grid, man: list, porus: np.ndarray, axis: np.ndarray) -> tuple[list, dict]:
+    """v1: displaced_nerves for Z-Anatomy's nerves, which are meshes (not tubes): each vertex beyond the porus within
+    NERVE_GAP_MM of the tumour or inside it moved out (the facial nerve forwards, FACIAL_WAY, onto its anterior surface;
+    the others the shortest way out), the move spread over the mesh's vertices (a normalised Gaussian of their distance,
+    NERVE_SIGMA_MM), for up to NERVE_ROUNDS rounds; the vertices in the meatus stay. Its surgical shapes (morph targets:
+    the cerebellar arteries carried with the cerebellum) kept as they move it. Not flattened over the large grades."""
+    sd = ENDO.signed(tumour, STEP).astype(np.float32)
+    grad = [ndimage.gaussian_filter(x, 1.0) for x in np.gradient(sd, STEP)]
+    bone_d = gr.dist(gr.bone)
+
+    def sample(F, X):
+        return ndimage.map_coordinates(F, ((X - gr.lo) / STEP).T, order=1, mode="nearest")
+    items, rep = [], {}
+    for it in man:
+        if it["name"] not in MOVED_NERVES or it.get("pushedFrom") or it.get("replaces"):
+            continue
+        nodes = read_glb_full(file_of(it))
+        if "R" not in nodes:
+            continue
+        nd = nodes["R"]
+        V0 = nd["positions"]
+        out_canal = ((V0 - porus) @ axis) > 0.5
+        facial = it["name"] == "Facial nerve (VII)"
+        X = V0.copy()
+        moved0 = None
+        nb = cKDTree(V0).query_ball_point(V0, 3 * NERVE_SIGMA_MM)
+        rows = np.repeat(np.arange(len(V0)), [len(n) for n in nb])
+        cols = np.concatenate([np.asarray(n, int) for n in nb])
+        w = np.exp(-((V0[rows] - V0[cols]) ** 2).sum(1) / (2 * NERVE_SIGMA_MM ** 2))
+        for _ in range(NERVE_ROUNDS):
+            depth = NERVE_GAP_MM - sample(sd, X)
+            need = (depth > 0) & out_canal
+            if moved0 is None:
+                moved0 = int(need.sum())
+            if not need.any():
+                break
+            D = np.zeros_like(X)
+            idx = np.nonzero(need)[0]
+            gv = np.stack([sample(gg, X[idx]) for gg in grad], 1)
+            shortest = gv / (np.linalg.norm(gv, axis=1, keepdims=True) + 1e-9) * (depth[idx] + 0.1)[:, None]
+            if facial:      # forwards until clear of the tumour; where bone comes first, the shortest way out
+                D[idx] = shortest
+                todo = np.ones(len(idx), bool)
+                for t in np.arange(0.5, 40.0, 0.5):
+                    q = X[idx] + t * FACIAL_WAY
+                    clear = todo & (sample(sd, q) >= NERVE_GAP_MM)
+                    D[idx[clear]] = t * FACIAL_WAY
+                    todo &= ~clear & (sample(bone_d, q) >= 0.3)
+                    if not todo.any():
+                        break
+            else:
+                D[idx] = shortest
+            # spread over the mesh (a normalised Gaussian: an isolated push keeps its size)
+            src = need[cols]
+            num = np.zeros_like(X)
+            np.add.at(num, rows[src], w[src][:, None] * D[cols[src]])
+            den = np.bincount(rows[src], w[src], len(X))
+            step_ = num / np.maximum(den, 1.0)[:, None]
+            step_[~out_canal] = 0
+            X = X + step_
+        moved = np.linalg.norm(X - V0, axis=1)
+        if moved.max() < 0.2:
+            continue
+        left = int(((NERVE_GAP_MM - sample(sd, X) > 0.05) & out_canal).sum())
+        node_R = {"name": "R", "positions": X, "normals": trimesh.Trimesh(X, nd["indices"], process=False).vertex_normals,
+                  "indices": nd["indices"], "mode": TRIANGLES}
+        if nd.get("targets"):
+            node_R["targets"] = [{"name": t["name"], "positions": t["positions"],
+                                  "normals": t["normals"] if t["normals"] is not None else np.zeros_like(X)} for t in nd["targets"]]
+        nid = f"{it['id']}__koos_{g}"
+        write_glb(V3_BUILD / f"{nid}.glb", [node_R], {"id": nid})
+        what = ("moved forwards round it onto its anterior surface (Choi 2014: there in 5 of 11 tumours at surgery, anteroinferior in 3, "
+                "anterosuperior in 2, posteroinferior in 1)" if facial else "moved the shortest way out of it, onto its surface")
+        cent = dict(it["centroid"])
+        cent["R"] = X.mean(0).round(2).tolist()
+        items.append({**{k: v_ for k, v_ in it.items() if k not in ("clearedFrom", "joinedFrom")}, "id": nid,
+                      "file": f"assets/{KIND}/{nid}.glb", "bytes": 0, "replaces": it["id"], "pushedFrom": it["file"],
                       "tumourView": f"koos_{g}", "centroid": cent,
                       "derivation": it["derivation"].rstrip() + f" In this view, where it ran through the vestibular schwannoma drawn here it is "
                       f"{what} (skullbase_v3_tumours.py; at most {moved.max():.1f} mm), its course in the meatus kept: a shape, not a simulation."})
@@ -891,7 +1055,7 @@ def displaced_nerves(g: str, tumour: np.ndarray, gr: Grid, man: list, porus: np.
 
 def main() -> int:
     import skullbase_v3 as V3
-    man = json.loads((GEN / "sbv3-manifest.json").read_text())["structures"]
+    man = json.loads((GEN / f"{PREFIX}-manifest.json").read_text())["structures"]
     man = [it for it in man if not (it["id"].startswith("tm_") or it.get("tumourView"))]
     for f in V3_BUILD.glob("tm_*.glb"):
         f.unlink()
@@ -924,7 +1088,7 @@ def main() -> int:
         vv.append(v); nn.append(n_); tt.append(t + off); off += len(v)
     V = np.vstack(vv)
     items.append(item_of("tm_knosp_lines", "Knosp lines", V3.colour("sbGuide"), "guide",
-                         "Drawn on the coronal section through this CT's own cavernous and supraclinoid carotid (TopBrain's label; the plane "
+                         f"Drawn on the coronal section through {CAROTID_OWN} "
                          f"{K['report']['planeY']} mm in front of the hypophysial fossa, where the label shows both and each is largest): "
                          "the medial tangent along both arteries' medial walls, the intercarotid line through their centres and the lateral "
                          "tangent along their lateral walls, each cross-section taken as a circle of its area (the two circles drawn).",
@@ -942,13 +1106,13 @@ def main() -> int:
         sid = f"tm_koos_{g}"
         items.append(item_of(sid, f"Vestibular schwannoma (Koos {roman})", col, "tumour",
                              f"Drawn by rule to show Koos grade {roman} on the right (skullbase_v3_tumours.py), not a patient's tumour: "
-                             + KOOS_HOW[g].replace("{d}", f"{Q['report'][g].get('diameterMm', 0):g}") + f" {Q['report'][g]['ml']} ml.", nodes, cent, {"tumour": {"family": "koos", "grade": roman}}))
+                             + KOOS_HOW[g].replace("{d}", f"{Q['report'][g].get('diameterMm', 0):g}").replace("{p}", f"{Q['report']['1']['porusToBrainstemMm']:g}") + f" {Q['report'][g]['ml']} ml.", nodes, cent, {"tumour": {"family": "koos", "grade": roman}}))
         if g != "1":
             cp, rp = pushed_copies("koos", f"koos_{g}", mask, gr, man, ("hindbrain", "ventricle"), stem if g in ("2", "3") else None,
                                    way=Q["ways"][g], names_still=STEM + ("Fourth ventricle",) if g in ("2", "3") else ())
             items += cp
             Q["report"][g]["push"] = rp
-            dn, rn = displaced_nerves(g, mask, gr, man, Q["porus"], Q["axis"])
+            dn, rn = (displaced_meshes if V1 else displaced_nerves)(g, mask, gr, man, Q["porus"], Q["axis"])
             items += dn
             Q["report"][g]["nerves"] = rn
 
@@ -961,7 +1125,7 @@ def main() -> int:
         items.append(item_of(f"tm_men_{site}", SITE[site][0], col, "tumour",
                              f"Drawn by rule (skullbase_v3_tumours.py), not a patient's tumour: {MENINGIOMA_HOW[site]} A ball "
                              f"{MENINGIOMA_MM[site]:g} mm across (an illustrative size), its centre {MENINGIOMA_RISE:g} of its radius off the bone, "
-                             f"so that the bone cuts it to a broad base on the dura; kept {VESSEL_KEEP_MM} mm off this CT's arteries and "
+                             f"so that the bone cuts it to a broad base on the dura; kept {VESSEL_KEEP_MM} mm off {ARTERIES_OWN} and "
                              f"{NERVE_KEEP_MM} mm off the cranial nerves' routes, which run through it in channels. {M['report']['ml']} ml.",
                              nodes, cent, {"tumour": {"family": "meningioma", "grade": site}}))
         moving = ("Optic nerve (II)", "Optic chiasm") if site == "tuberculum" else ()
@@ -980,7 +1144,7 @@ def main() -> int:
 
 def merge() -> None:
     """The tumours' items into v3's manifest (skullbase_v3_endonasal.carry_sellar does this too when it is run again)."""
-    p = GEN / "sbv3-manifest.json"
+    p = GEN / f"{PREFIX}-manifest.json"
     m = json.loads(p.read_text())
     new = json.loads(TM_ITEMS.read_text()) if TM_ITEMS.exists() else []
     for it in new:
@@ -992,12 +1156,14 @@ def merge() -> None:
     p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
 
 
-def check(structures: list) -> list[tuple[bool, str]]:
-    """For skullbase_v3.validate: each tumour drawn and graded as it is meant to be; each pushed copy's part present."""
+def check(structures: list, prefix: str = "sbv3") -> list[tuple[bool, str]]:
+    """For skullbase_v3.validate (and skullbase_build.validate, prefix "sb"): each tumour drawn and graded as it is meant
+    to be; each pushed copy's part present."""
     out = []
-    if not OUT_JSON.exists():
-        return [(False, "sbv3-tumours.json missing")]
-    rep = json.loads(OUT_JSON.read_text())
+    path = GEN / f"{prefix}-tumours.json"
+    if not path.exists():
+        return [(False, f"{path.name} missing")]
+    rep = json.loads(path.read_text())
     for g, r in rep["knosp"]["grades"].items():
         out.append((r["grade"] == g, f"Knosp {g}: the drawing grades as {r['grade']}"))
     for g, r in rep["koos"].items():
@@ -1040,13 +1206,39 @@ KOOS_HOW = {
     "4": "the meatus's lumen and a ball {d} mm across in the angle, its surface at the porus and a neck joining them, reaching "
          f"{KOOS_INTO_MM[0]:g}-{KOOS_INTO_MM[1]:g} mm into where the brainstem lies: the brainstem and the cerebellum pushed aside.",
 }
+if V1:
+    LOBE_AT = ("level with the gland's lower part (Z-Anatomy's cavernous carotid runs in the sphenoid's body below its cavernous "
+               "sinus, so the level between the two arteries is bone)")
+    KNOSP_HOW["1"] = KNOSP_HOW["1"].replace("at the level between the two arteries", LOBE_AT)
+    KNOSP_HOW["2"] = KNOSP_HOW["2"].replace("right cavernous sinus,", f"right cavernous sinus {LOBE_AT},")
+    KNOSP_HOW["3A"] += (" (Grades 3B and 4 are not drawn on this model: below the cavernous carotid, and round it, lies the sphenoid's "
+                        "bone, not the sinus.)")
+    KOOS_HOW = {
+        "1": "the internal acoustic meatus drawn by rule (Z-Anatomy's temporal bone is solid along the vestibulocochlear nerve: it has "
+             f"no meatal lumen), within {V1_CANAL_MM:g} mm of the line from the fundus to the porus (an illustrative width), up to "
+             f"{PORUS_PAST_MM:g} mm past the porus, taken out of the bone.",
+        "2": "the meatus and a ball in the cerebellopontine angle, its surface at the porus and a neck joining them, kept "
+             f"{KOOS_CLEAR_MM:g} mm off the brainstem (a drawing choice, to keep it apart from grade III, which reaches it): {{d}} mm "
+             "across, as large as the model's angle allows there (Z-Anatomy's brainstem lies {p} mm from the porus).",
+        "3": "the meatus and a ball {d} mm across in the angle, its surface at the porus and a neck joining them, reaching the "
+             f"brainstem and moulded against it (cut at its surface where it would reach up to {KOOS_MOULD_MM:g} mm in: touching it, "
+             "not moving it; the model's angle leaves no room for a ball this size that only touches it), placed as far from the "
+             "brainstem as that allows; the cerebellum pushed aside.",
+        "4": KOOS_HOW["4"].replace("the meatus's lumen", "the meatus"),
+    }
+
+
 MENINGIOMA_HOW = {
-    "olfactory": "on the dura of the olfactory groove, at the midline between the foramen caecum and the sphenoidal yoke as located on this CT.",
-    "tuberculum": "on the dura of the tuberculum sellae as located on this CT, the optic nerves and chiasm pushed aside.",
+    "olfactory": f"on the dura of the olfactory groove, at the midline between the foramen caecum and the sphenoidal yoke as located on {HERE}.",
+    "tuberculum": f"on the dura of the tuberculum sellae as located on {HERE}, the optic nerves and chiasm pushed aside.",
     "petroclival": "on the dura of the petroclival junction on the right, a third of the way from the petrous apex to the jugular foramen.",
     "foramen_magnum": "on the dura of the foramen magnum's anterolateral rim on the right, in front of the hypoglossal canal; the medulla "
                       "and the cerebellum pushed aside.",
 }
+if V1:
+    MENINGIOMA_HOW["foramen_magnum"] = (f"on the dura of the foramen magnum's rim on the right, where the way from its centre towards the "
+                                        "right occipital condyle meets the bone ({FM_RIM_IN_MM:g} mm above the rim's lowest edge: its anterolateral rim); the medulla and the cerebellum "
+                                        "pushed aside.")
 
 
 if __name__ == "__main__":

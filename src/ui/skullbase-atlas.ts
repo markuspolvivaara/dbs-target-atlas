@@ -34,7 +34,7 @@ const KIND_PLURAL: Record<string, string> = { 'Tumour (drawn by rule)': 'Tumour 
 const GROUP_ROWS: [SbGroup['kind'], string][] = SB_MODEL === 'v3'
   ? [['overview', 'Overview'], ['region', 'Each side'], ['system', 'Systems'], ['approach', 'Surgical views'], ['tumour', 'Tumours']]
   : SB_MODEL === 'zanatomy'
-  ? [['overview', 'Overview'], ['region', 'Regions'], ['system', 'Systems'], ['approach', 'Surgical views'], ['bone', 'Bones and their landmarks']]
+  ? [['overview', 'Overview'], ['region', 'Regions'], ['system', 'Systems'], ['approach', 'Surgical views'], ['tumour', 'Tumours'], ['bone', 'Bones and their landmarks']]
   : [['overview', 'Overview'], ['region', 'Regions'], ['system', 'Systems'], ['bone', 'Bones and their landmarks']];
 /** the three models of the section: page folder and chip label */
 const MODELS: [SbModel, string, string][] = [['v3', 'skullbase', 'Skull base'], ['zanatomy', 'skullbase-v1', 'Skull base v1 (Z-Anatomy)'], ['ct', 'skullbase-ct', 'Skull base v2 (CT)']];
@@ -590,7 +590,7 @@ export class SkullbaseAtlasPage {
         host ? [h('dt', {}, 'The view'), h('dd', {}, `Drawn in the ${host.name.toLowerCase()} view of this model: `, h('a', { href: `#/atlas?g=${host.view}` }, 'open it without the tumour'), '.')] : null,
         h('dt', {}, 'Every grade'), h('dd', {}, h('a', { href: `#/grading` }, 'The Grading page'), ' has the table.'),
         h('dt', {}, 'Not shown'), h('dd', {}, fam.notShown)),
-      h('p', { class: 'aside schematic-note' }, 'Illustrative: a tumour drawn by rule on one CT, not a patient’s; the brain pushed aside by it is a shape, not a simulation of the tissue.'),
+      h('p', { class: 'aside schematic-note' }, `Illustrative: a tumour drawn by rule on ${SB_MODEL === 'v3' ? 'one CT' : 'one model'}, not a patient’s; the brain pushed aside by it is a shape, not a simulation of the tissue.`),
     ];
   }
 

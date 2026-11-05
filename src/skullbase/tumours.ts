@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import data from '../data/generated/sbv3-tumours.json';
+import v1data from '../data/generated/sb-tumours.json';
 import type { ApproachClaim, ApproachSection } from './approaches';
+import { SB_MODEL } from './index';
 
 /**
  * Skull base v3's tumours: a pituitary adenoma at each Knosp grade, a vestibular schwannoma at each Koos grade and
@@ -8,25 +10,31 @@ import type { ApproachClaim, ApproachSection } from './approaches';
  * the grades are, what they predict and how each site is reached come from open-access sources, checked against their
  * full texts: Araujo-Castro 2021 (PMC8810816), Gupta 2020 (PMC7669921), Starnoni 2020 (PMC7550309), Ius 2021
  * (PMC8198762), Muskens 2018 (PMC5735207), Bruneau 2008 (PMC2077911), Singh 2019 (PMC6417359). How each was drawn,
- * and its grade checked again from the drawing, is generated with the geometry (sbv3-tumours.json).
+ * and its grade checked again from the drawing, is generated with the geometry (sbv3-tumours.json). Skull base v1 draws
+ * them by the same rules on the Z-Anatomy model (SB_PROFILE=v1; sb-tumours.json), as far as its anatomy has room for them.
  */
 const V3 = z.tuple([z.number(), z.number(), z.number()]);
 const Push = z.object({ pointsInside: z.number(), leftInside: z.number(), rounds: z.number(), maxMovedMm: z.number() });
 const Circle = z.object({ c: z.tuple([z.number(), z.number()]), r: z.number() });
-export const TUMOUR_FIT = z.object({
+const Fit = z.object({
   knosp: z.object({
-    planeY: z.number(), zMid: z.number(),
+    planeY: z.number(), zMid: z.number(), zLobe: z.number().optional(),
     sections: z.record(z.object({ y: z.number(), cavernous: Circle, supraclinoid: Circle })),
     lines: z.record(z.array(V3).length(2)),
     grades: z.record(z.object({ grade: z.string(), pastMm: z.record(z.number()), encasedShare: z.number(), ml: z.number() })),
     carotidRadiusMm: z.number(),
   }),
   koos: z.record(z.object({
-    ml: z.number(), canalMm: z.number().optional(), centre: V3.optional(), diameterMm: z.number().optional(), extrameatalMaxMm: z.number().optional(),
+    ml: z.number(), canalMm: z.number().optional(), porusToBrainstemMm: z.number().optional(), centre: V3.optional(), diameterMm: z.number().optional(), extrameatalMaxMm: z.number().optional(),
     toBrainstemMm: z.number().optional(), fromBoneMm: z.number().optional(), push: Push.optional(),
   })),
   meningioma: z.record(z.object({ site: V3, centre: V3, diameterRuleMm: z.number(), ml: z.number(), normal: V3, push: Push.optional() })),
-}).parse(data);
+});
+export const TUMOUR_FIT_V3 = Fit.parse(data);
+export const TUMOUR_FIT_V1 = Fit.parse(v1data);
+export const TUMOUR_FIT = SB_MODEL === 'v3' ? TUMOUR_FIT_V3 : TUMOUR_FIT_V1;
+/** v1: the Z-Anatomy model (its own brain, nothing fitted) */
+const V1 = SB_MODEL !== 'v3';
 
 export type TumourFamily = 'knosp' | 'koos' | 'meningioma';
 export interface TumourGrade {
@@ -111,7 +119,9 @@ const MENINGIOMA_NOTES: Record<string, ApproachClaim[]> = {
 export const TUMOURS: TumourFamilyContent[] = [
   {
     family: 'knosp', name: 'Pituitary adenoma: Knosp grades', short: 'Pituitary adenoma (Knosp)', scale: 'Knosp grade',
-    summary: 'A pituitary macroadenoma drawn by rule in this CT’s sella at each Knosp grade, on the right, seen from the front and cut at the coronal section through this patient’s own cavernous and supraclinoid carotid, where the three Knosp lines are drawn.',
+    summary: V1
+      ? 'A pituitary macroadenoma drawn by rule over the Z-Anatomy model’s sella at each Knosp grade it has room for (0 to 3A), on the right, seen from the front and cut at the coronal section through the model’s own cavernous and supraclinoid carotid, where the three Knosp lines are drawn.'
+      : 'A pituitary macroadenoma drawn by rule in this CT’s sella at each Knosp grade, on the right, seen from the front and cut at the coronal section through this patient’s own cavernous and supraclinoid carotid, where the three Knosp lines are drawn.',
     sections: [
       sec('The grades', [
         c('Knosp (1993) graded cavernous sinus invasion on coronal MRI by the adenoma’s relation to the lines between the supraclinoid and the intracavernous internal carotid artery.', 'araujocastro2021'),
@@ -123,7 +133,9 @@ export const TUMOURS: TumourFamilyContent[] = [
         c('Grade 3B tended to be cured less often than 3A (30.0 % against 56.0 %, p = 0.164). The Knosp scale gave the best accuracy for predicting surgical cure (AUC 0.820), its best cut-off at grade 3.', 'araujocastro2021'),
       ]),
     ],
-    notShown: 'The adenoma is a shape drawn by rule, not a patient’s: a real one expands the sella and pushes the carotid, the gland and the optic apparatus; here the carotid stays where this CT shows it, the gland is not drawn, and the cavernous sinus is the one modelled round this CT, not compressed.',
+    notShown: V1
+      ? `The adenoma is a shape drawn by rule, not a patient’s: a real one expands the sella and pushes the carotid, the gland and the optic apparatus; here the carotid stays where Z-Anatomy draws it, the gland is not shown, and the cavernous sinus is Z-Anatomy’s, not compressed. Z-Anatomy’s cavernous carotid runs in the sphenoid’s body below its cavernous sinus: the section is taken where both of its segments show, ${TUMOUR_FIT_V1.knosp.planeY} mm in front of the hypophysial fossa, the adenoma’s lobe is drawn level with the gland’s lower part, and grades 3B (below the carotid) and 4 (round it) are not drawn, as there is bone there, not sinus. Skull base v3 draws all six.`
+      : 'The adenoma is a shape drawn by rule, not a patient’s: a real one expands the sella and pushes the carotid, the gland and the optic apparatus; here the carotid stays where this CT shows it, the gland is not drawn, and the cavernous sinus is the one modelled round this CT, not compressed.',
     grades: KNOSP_GRADES.map((g) => ({ id: g.id, label: g.id, structure: `tm_knosp_${g.id.toLowerCase()}`, definition: knospDef(g), view: null })),
   },
   {
@@ -145,19 +157,21 @@ export const TUMOURS: TumourFamilyContent[] = [
         c('Pooled data on large tumours removed through a retrosigmoid craniotomy: gross total resection in 79.1 %, a good facial nerve outcome (House–Brackmann I–II) in 62.9 %.', 'starnoni2020'),
       ]),
     ],
-    notShown: 'The schwannoma is a shape drawn by rule, not a patient’s. Its displacement of the nerves is drawn by rule too: the facial nerve moved forwards onto the tumour’s anterior surface (its commonest place) and drawn thinned and flattened over grades III and IV, the other nerves of the angle and the fitted small arteries moved the shortest way out onto its surface, the vestibulocochlear nerve, from which it grows, running into it. The petrosal veins are not drawn. This model’s fitted pons lies only about 4 mm from the porus, closer than in life, so grade II is small here and grade III is moulded against the brainstem rather than placed clear of it.',
+    notShown: V1
+      ? `The schwannoma is a shape drawn by rule, not a patient’s. Z-Anatomy’s temporal bone is solid along the vestibulocochlear nerve (it has no lumen in the internal acoustic meatus), so the meatus grade I fills is drawn by rule, 2 mm round the line from its fundus to its porus (an illustrative width), and taken out of the bone. Where a nerve of the angle or a cerebellar artery runs through the tumour it is moved round it by rule (the facial nerve forwards onto its anterior surface, its commonest place); the vestibulocochlear nerve, from which it grows, runs into it. The facial nerve is not drawn thinned over the large grades, as skull base v3 draws it (Z-Anatomy’s is a mesh, not a drawn tube). The petrosal veins are not drawn. Z-Anatomy’s brainstem lies ${TUMOUR_FIT_V1.koos['1']?.porusToBrainstemMm ?? '?'} mm from the porus, so grade II is small here and grade III is moulded against the brainstem rather than placed clear of it.`
+      : 'The schwannoma is a shape drawn by rule, not a patient’s. Its displacement of the nerves is drawn by rule too: the facial nerve moved forwards onto the tumour’s anterior surface (its commonest place) and drawn thinned and flattened over grades III and IV, the other nerves of the angle and the fitted small arteries moved the shortest way out onto its surface, the vestibulocochlear nerve, from which it grows, running into it. The petrosal veins are not drawn. This model’s fitted pons lies only about 4 mm from the porus, closer than in life, so grade II is small here and grade III is moulded against the brainstem rather than placed clear of it.',
     grades: KOOS_GRADES.map((g, i) => ({ id: g.id, label: g.id, structure: `tm_koos_${i + 1}`, definition: c(`Koos ${g.id}: ${g.definition.charAt(0).toLowerCase()}${g.definition.slice(1)}.`, 'gupta2020'), view: 'retrosigmoid' })),
   },
   {
     family: 'meningioma', name: 'Skull base meningiomas', short: 'Meningiomas (sites)', scale: 'Site',
-    summary: 'A meningioma drawn by rule on the dura of four sites of this CT’s skull base, each in the surgical view of this model that suits it, the brain pushed aside by it.',
+    summary: `A meningioma drawn by rule on the dura of four sites of ${V1 ? 'the Z-Anatomy model’s' : 'this CT’s'} skull base, each in the surgical view of this model that suits it, the brain pushed aside by it.`,
     sections: [
       sec('Choosing the approach', [
         c('The approach is chosen by the site, in interdisciplinary consultation; complete resection is the goal of skull base meningioma surgery, often limited by the tumour’s relation to the brainstem, vessels and cranial nerves.', 'ius2021'),
         c('Approaches can be extended and combined according to the tumour’s size and the surgeon’s choice; removing more bone does not always bring better manoeuvrability or less retraction.', 'ius2021'),
       ]),
     ],
-    notShown: 'The meningiomas are shapes drawn by rule (their sizes illustrative), not patients’ tumours: the bone they invade, a dural tail and the vessels they encase are not modelled. The cranial nerves and the fitted small arteries are not moved round them; they run through channels in the tumour.',
+    notShown: `The meningiomas are shapes drawn by rule (their sizes illustrative), not patients’ tumours: the bone they invade, a dural tail and the vessels they encase are not modelled. The cranial nerves and the ${V1 ? 'cerebellar' : 'fitted small'} arteries are not moved round them; they run through channels in the tumour.`,
     grades: MENINGIOMA_SITES.map((s) => ({ id: s.id, label: s.name, structure: `tm_men_${s.id}`, view: s.view,
       definition: c(`${s.name}: ${s.share} of skull base meningiomas. Approaches listed: ${s.approaches.charAt(0).toLowerCase()}${s.approaches.slice(1)}.`, 'ius2021'),
       notes: MENINGIOMA_NOTES[s.id] })),
@@ -190,12 +204,12 @@ export function measuredOn(family: TumourFamily, grade: string): string[] {
       r.canalMm ? `The meatus from the fundus to the porus: ${r.canalMm} mm.` : null,
       r.extrameatalMaxMm !== undefined ? `Largest extrameatal extent: ${r.extrameatalMaxMm} mm (the ball drawn ${r.diameterMm} mm across).` : null,
       r.toBrainstemMm !== undefined ? (r.toBrainstemMm >= 0 ? `${r.toBrainstemMm} mm off the brainstem.` : `Reaching ${-r.toBrainstemMm} mm into where the brainstem lies${k === '4' ? ' (pushed aside)' : ' (moulded against it)'}.`) : null,
-      r.push && r.push.maxMovedMm > 0 ? `The fitted hindbrain moved at most ${r.push.maxMovedMm} mm.` : null,
+      r.push && r.push.maxMovedMm > 0 ? `The ${V1 ? '' : 'fitted '}hindbrain moved at most ${r.push.maxMovedMm} mm.` : null,
       `${r.ml} ml.`,
     ].filter((x): x is string => !!x);
   }
   const r = fit.meningioma[grade];
   if (!r) return [];
   return [`A ball ${r.diameterRuleMm} mm across (illustrative), cut by the bone and the dura: ${r.ml} ml.`,
-    r.push && r.push.maxMovedMm > 0 ? `The fitted brain moved at most ${r.push.maxMovedMm} mm.` : 'It does not reach the fitted brain.'];
+    r.push && r.push.maxMovedMm > 0 ? `The ${V1 ? '' : 'fitted '}brain moved at most ${r.push.maxMovedMm} mm.` : `It does not reach the ${V1 ? '' : 'fitted '}brain.`];
 }

@@ -44,7 +44,7 @@ describe('skull-base data (Z-Anatomy export)', () => {
   it('the surgical views use Z-Anatomy\u2019s own brain and hindbrain, with the shapes; the cerebellar arteries move with them', () => {
     const by = (n: string) => SB_MANIFEST.structures.find((s) => s.name === n);
     // (six lobes, and the Kawase view's lifted copy of the temporal lobe)
-    const brain = SB_MANIFEST.structures.filter((s) => s.category === 'brain' && !s.forView);
+    const brain = SB_MANIFEST.structures.filter((s) => s.category === 'brain' && !s.forView && !s.pushedFrom);
     expect(brain.length).toBe(6);
     expect(SB_MANIFEST.structures.filter((s) => s.forView === 'kawase').map((s) => s.replaces)).toEqual(['br_temporal_lobe']);
     for (const b of brain) { expect(b.morph, b.name).toBe(true); expect(b.dataset).toBe('zanatomy'); }
@@ -77,7 +77,7 @@ describe('skull-base data (Z-Anatomy export)', () => {
     expect(defs.filter((d) => d.url?.startsWith('https://en.wikipedia.org/')).length / defs.length).toBeGreaterThan(0.75);
   });
   it('vessels and nerves are tube meshes; every nerve knows its cranial nerve, and I–XII are all there', async () => {
-    const tubes = SB_MANIFEST.structures.filter((s) => s.type === 'tube');
+    const tubes = SB_MANIFEST.structures.filter((s) => s.type === 'tube' && !s.pushedFrom);     // (not a tumour view's moved copy)
     expect(tubes.length).toBeGreaterThan(60);
     expect(SB_MANIFEST.structures.some((s) => s.type === 'tract')).toBe(false);
     const nerves = tubes.filter((s) => s.category === 'nerve');
@@ -183,8 +183,10 @@ describe('e2e group list stays in step with the groups module', () => {
     for (const g of SB_GROUPS) if (g.kind === 'bone') expect(spec, g.name).toContain(`'${g.name}'`);
     // (the overview, the regions, three systems, six bone views and the surgical views cut on this model's skull)
     // (and the six temporal-bone views)
-    // (and the six temporal-bone views, the cavernous sinus and the endonasal view)
-    expect(SB_GROUPS.length).toBe(1 + REGIONS.length + 3 + 6 + Object.keys(APPROACH_GEOM).length + 6 + 2);
+    // (and the six temporal-bone views, the cavernous sinus and the endonasal view; and the tumours: Knosp 0-3A, Koos I-IV, four sites)
+    expect(SB_GROUPS.length).toBe(1 + REGIONS.length + 3 + 6 + Object.keys(APPROACH_GEOM).length + 6 + 2 + 12);
+    expect(SB_GROUPS.filter((g) => g.kind === 'tumour').map((g) => g.id)).toEqual(['knosp_0', 'knosp_1', 'knosp_2', 'knosp_3a', 'koos_i', 'koos_ii',
+      'koos_iii', 'koos_iv', 'meningioma_olfactory', 'meningioma_tuberculum', 'meningioma_petroclival', 'meningioma_foramen_magnum']);
     expect(SB_GROUPS.filter((g) => g.kind === 'approach').map((g) => g.id).sort())
       .toEqual(['endonasal', 'far_lateral', 'interhemispheric', 'kawase', 'lso', 'orbitozygomatic', 'retrosigmoid', 'telovelar', 'transsylvian']);
     expect(SB_GROUPS.filter((g) => ['temporal', 'ear_r', 'ear_l', 'facial', 'inner_ear', 'middle_ear'].includes(g.id)).length).toBe(6);
@@ -661,6 +663,41 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     for (const r of used) expect(APPROACH_REF.has(r), r).toBe(true);
     expect(APPROACH_REFS.map((r) => r.id).filter((r) => !used.has(r))).toEqual([]);
     for (const a of APPROACHES) for (const n of a.context) expect(v3.structures.some((s) => s.name === n), n).toBe(true);
+  });
+});
+
+describe('v1 tumours: the same rules on the Z-Anatomy model, as far as it has room', async () => {
+  const { TUMOUR_FIT_V1: F } = await import('../../src/skullbase/tumours');
+  const byId = new Map(SB_MANIFEST.structures.map((s) => [s.id, s]));
+  it('Knosp 0 to 3A drawn and graded as meant; 3B and 4 not (its cavernous carotid lies in bone, below the sinus)', () => {
+    expect(Object.keys(F.knosp.grades).sort()).toEqual(['0', '1', '2', '3A']);
+    for (const [g, r] of Object.entries(F.knosp.grades)) expect(r.grade, g).toBe(g);
+    expect(byId.has('tm_knosp_3b') || byId.has('tm_knosp_4')).toBe(false);
+    const sec = F.knosp.sections.R;
+    expect(sec.cavernous.c[1]).toBeLessThan(sec.supraclinoid.c[1]);
+  });
+  it('Koos by the drawing, and the meningiomas each reach the brain; every tumour on Z-Anatomy, drawn by rule', () => {
+    expect(F.koos['2'].toBrainstemMm!).toBeGreaterThan(0);
+    expect(F.koos['2'].extrameatalMaxMm!).toBeLessThan(20);
+    expect(F.koos['3'].extrameatalMaxMm!).toBeLessThan(30);
+    expect(F.koos['4'].extrameatalMaxMm!).toBeGreaterThan(30);
+    for (const [site, r] of Object.entries(F.meningioma)) expect(r.push?.maxMovedMm ?? 0, site).toBeGreaterThan(0);
+    for (const s of SB_MANIFEST.structures.filter((x) => x.category === 'tumour')) {
+      expect(s.dataset, s.id).toBe('rule');
+      expect(s.source, s.id).toBe('Drawn by rule on the Z-Anatomy model');
+    }
+  });
+  it('a pushed or moved copy stands in for its part in its tumour view only', () => {
+    const pushed = SB_MANIFEST.structures.filter((s) => s.pushedFrom && s.tumourView);
+    expect(pushed.some((s) => s.name === 'Facial nerve (VII)')).toBe(true);
+    for (const p of pushed) {
+      expect(byId.has(p.replaces!), p.id).toBe(true);
+      for (const g of SB_GROUPS) {
+        if (!g.structures.includes(p.id)) continue;
+        expect(g.kind, `${p.id} in ${g.id}`).toBe('tumour');
+        expect(g.structures).not.toContain(p.replaces);
+      }
+    }
   });
 });
 

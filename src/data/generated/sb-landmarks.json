@@ -2064,126 +2064,6 @@
   ]
  },
  {
-  "id": "lm_geniculate_ganglion_l",
-  "name": "Geniculate ganglion",
-  "bone": "Temporal bone",
-  "part": null,
-  "ras": [
-   -42.536,
-   -14.53,
-   -8.431
-  ],
-  "side": "L",
-  "boneFrom": "drawn by rule",
-  "distanceToBoneMm": 0.0,
-  "placed": "Drawn by rule: Z-Anatomy has no geniculate ganglion. Placed at the first genu of its facial nerve, the sharpest turn on the nerve's course through the temporal bone (between the internal acoustic meatus and the stylomastoid foramen), in the course's first half."
- },
- {
-  "id": "lm_second_genu_of_facial_nerve_l",
-  "name": "Second genu of facial nerve",
-  "bone": "Temporal bone",
-  "part": null,
-  "ras": [
-   -43.53,
-   -25.815,
-   -13.812
-  ],
-  "side": "L",
-  "boneFrom": "drawn by rule",
-  "distanceToBoneMm": 0.0,
-  "placed": "Drawn by rule: the sharpest turn on Z-Anatomy's facial nerve, on its course through the temporal bone, beyond the first genu."
- },
- {
-  "id": "lm_oval_window_l",
-  "name": "Oval window",
-  "bone": "Temporal bone",
-  "part": null,
-  "ras": [
-   -41.533,
-   -19.542,
-   -12.592
-  ],
-  "side": "L",
-  "boneFrom": "drawn by rule",
-  "distanceToBoneMm": 0.0,
-  "placed": "Drawn by rule: the centre of the footplate of Z-Anatomy's stapes (its vertices farthest from the incus)."
- },
- {
-  "id": "lm_bone_over_the_superior_semicircular_canal_l",
-  "name": "Bone over the superior semicircular canal",
-  "bone": "Temporal bone",
-  "part": null,
-  "ras": [
-   -39.073,
-   -23.12,
-   -2.935
-  ],
-  "side": "L",
-  "boneFrom": "drawn by rule",
-  "distanceToBoneMm": 0.0,
-  "placed": "Drawn by rule: the bone's surface straight above the highest point of Z-Anatomy's vestibule mesh (the top of the superior semicircular canal)."
- },
- {
-  "id": "lm_geniculate_ganglion_r",
-  "name": "Geniculate ganglion",
-  "bone": "Temporal bone",
-  "part": null,
-  "ras": [
-   42.536,
-   -14.53,
-   -8.431
-  ],
-  "side": "R",
-  "boneFrom": "drawn by rule",
-  "distanceToBoneMm": 0.0,
-  "placed": "Drawn by rule: Z-Anatomy has no geniculate ganglion. Placed at the first genu of its facial nerve, the sharpest turn on the nerve's course through the temporal bone (between the internal acoustic meatus and the stylomastoid foramen), in the course's first half."
- },
- {
-  "id": "lm_second_genu_of_facial_nerve_r",
-  "name": "Second genu of facial nerve",
-  "bone": "Temporal bone",
-  "part": null,
-  "ras": [
-   43.53,
-   -25.815,
-   -13.812
-  ],
-  "side": "R",
-  "boneFrom": "drawn by rule",
-  "distanceToBoneMm": 0.0,
-  "placed": "Drawn by rule: the sharpest turn on Z-Anatomy's facial nerve, on its course through the temporal bone, beyond the first genu."
- },
- {
-  "id": "lm_oval_window_r",
-  "name": "Oval window",
-  "bone": "Temporal bone",
-  "part": null,
-  "ras": [
-   41.533,
-   -19.542,
-   -12.592
-  ],
-  "side": "R",
-  "boneFrom": "drawn by rule",
-  "distanceToBoneMm": 0.0,
-  "placed": "Drawn by rule: the centre of the footplate of Z-Anatomy's stapes (its vertices farthest from the incus)."
- },
- {
-  "id": "lm_bone_over_the_superior_semicircular_canal_r",
-  "name": "Bone over the superior semicircular canal",
-  "bone": "Temporal bone",
-  "part": null,
-  "ras": [
-   39.073,
-   -23.12,
-   -2.934
-  ],
-  "side": "R",
-  "boneFrom": "drawn by rule",
-  "distanceToBoneMm": 0.0,
-  "placed": "Drawn by rule: the bone's surface straight above the highest point of Z-Anatomy's vestibule mesh (the top of the superior semicircular canal)."
- },
- {
   "id": "lm_facial_colliculus_r",
   "name": "Facial colliculus",
   "bone": "Pons",
@@ -2332,5 +2212,155 @@
   "boneFrom": "the model's own (Z-Anatomy)",
   "distanceToBoneMm": 0.0,
   "placed": "Drawn by rule: the floor of Z-Anatomy's fourth ventricle at the midline at the level of the facial colliculi (approximate)."
+ },
+ {
+  "id": "lm_fundus_of_internal_acoustic_meatus_l",
+  "name": "Fundus of internal acoustic meatus",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   -34.727,
+   -16.876,
+   -10.892
+  ],
+  "side": "L",
+  "boneFrom": "drawn by rule",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: where Z-Anatomy's facial and vestibulocochlear nerves, which run through the meatus together, part (the last point of the facial nerve within 2.5 mm of the vestibulocochlear nerve), 15.1 mm from the porus."
+ },
+ {
+  "id": "lm_geniculate_ganglion_l",
+  "name": "Geniculate ganglion",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   -42.536,
+   -14.53,
+   -8.431
+  ],
+  "side": "L",
+  "boneFrom": "drawn by rule",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: Z-Anatomy has no geniculate ganglion. Placed at the first genu of its facial nerve, the sharpest turn on the nerve's course through the temporal bone (between the internal acoustic meatus and the stylomastoid foramen), in the course's first half."
+ },
+ {
+  "id": "lm_second_genu_of_facial_nerve_l",
+  "name": "Second genu of facial nerve",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   -43.53,
+   -25.815,
+   -13.812
+  ],
+  "side": "L",
+  "boneFrom": "drawn by rule",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: the sharpest turn on Z-Anatomy's facial nerve, on its course through the temporal bone, beyond the first genu."
+ },
+ {
+  "id": "lm_oval_window_l",
+  "name": "Oval window",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   -41.533,
+   -19.542,
+   -12.592
+  ],
+  "side": "L",
+  "boneFrom": "drawn by rule",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: the centre of the footplate of Z-Anatomy's stapes (its vertices farthest from the incus)."
+ },
+ {
+  "id": "lm_bone_over_the_superior_semicircular_canal_l",
+  "name": "Bone over the superior semicircular canal",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   -39.073,
+   -23.12,
+   -2.935
+  ],
+  "side": "L",
+  "boneFrom": "drawn by rule",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: the bone's surface straight above the highest point of Z-Anatomy's vestibule mesh (the top of the superior semicircular canal)."
+ },
+ {
+  "id": "lm_fundus_of_internal_acoustic_meatus_r",
+  "name": "Fundus of internal acoustic meatus",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   32.871,
+   -17.02,
+   -11.368
+  ],
+  "side": "R",
+  "boneFrom": "drawn by rule",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: where Z-Anatomy's facial and vestibulocochlear nerves, which run through the meatus together, part (the last point of the facial nerve within 2.5 mm of the vestibulocochlear nerve), 13.3 mm from the porus."
+ },
+ {
+  "id": "lm_geniculate_ganglion_r",
+  "name": "Geniculate ganglion",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   42.536,
+   -14.53,
+   -8.431
+  ],
+  "side": "R",
+  "boneFrom": "drawn by rule",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: Z-Anatomy has no geniculate ganglion. Placed at the first genu of its facial nerve, the sharpest turn on the nerve's course through the temporal bone (between the internal acoustic meatus and the stylomastoid foramen), in the course's first half."
+ },
+ {
+  "id": "lm_second_genu_of_facial_nerve_r",
+  "name": "Second genu of facial nerve",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   43.53,
+   -25.815,
+   -13.812
+  ],
+  "side": "R",
+  "boneFrom": "drawn by rule",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: the sharpest turn on Z-Anatomy's facial nerve, on its course through the temporal bone, beyond the first genu."
+ },
+ {
+  "id": "lm_oval_window_r",
+  "name": "Oval window",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   41.533,
+   -19.542,
+   -12.592
+  ],
+  "side": "R",
+  "boneFrom": "drawn by rule",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: the centre of the footplate of Z-Anatomy's stapes (its vertices farthest from the incus)."
+ },
+ {
+  "id": "lm_bone_over_the_superior_semicircular_canal_r",
+  "name": "Bone over the superior semicircular canal",
+  "bone": "Temporal bone",
+  "part": null,
+  "ras": [
+   39.073,
+   -23.12,
+   -2.934
+  ],
+  "side": "R",
+  "boneFrom": "drawn by rule",
+  "distanceToBoneMm": 0.0,
+  "placed": "Drawn by rule: the bone's surface straight above the highest point of Z-Anatomy's vestibule mesh (the top of the superior semicircular canal)."
  }
 ]

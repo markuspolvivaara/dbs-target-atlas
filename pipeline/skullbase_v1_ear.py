@@ -14,6 +14,7 @@ landmarks along the nerve. Drawn by rule, and said so in each derivation:
   Second genu of facial nerve   the sharpest turn beyond GENU_APART_MM past the first
   Bone over the superior semicircular canal   the bone's surface straight above the vestibule mesh's highest point (the
                                 superior canal's top), as v3 marks the arcuate eminence on the canal
+  Fundus of internal acoustic meatus   where the facial and vestibulocochlear nerves part (FUNDUS_APART_MM)
   Oval window                   the centre of the stapes' footplate (the stapes' vertices farthest from the incus)
   Greater petrosal nerve        v3's rule (skullbase_v3.gspn: Gupta 2013, Nguyen 2026's mean length) on this skull: from the
                                 geniculate ganglion towards the petrous carotid's anteromedial end, along the middle fossa
@@ -53,6 +54,7 @@ MESHES = [("Cochlea", "Cochlea", "labyrinth", "sbLabyrinth"),
           ("Malleus", "Malleus", "ossicle", "sbBone"), ("Incus", "Incus", "ossicle", "sbBone"), ("Stapes", "Stapes", "ossicle", "sbBone"),
           ("Tympanic membrane", "Tympanic membrane", "membrane", "sbMembrane")]
 GENU_SMOOTH_MM = 1.5
+FUNDUS_APART_MM = 2.5      # (the meatus's fundus: where VII and VIII part, further apart than this)
 GENU_APART_MM = 5.0        # (the second genu sought this far beyond the first)
 FOOTPLATE_SHARE = 0.15     # (the oval window: the centre of this share of the stapes' vertices farthest from the incus)
 
@@ -229,6 +231,17 @@ def main() -> int:
         inc = np.array(ear["meshes"]["Incus"][s]["verts"], float).mean(0)
         far = np.argsort(-np.linalg.norm(st - inc, axis=1))[:max(10, int(FOOTPLATE_SHARE * len(st)))]
         oval = st[far].mean(0)
+        # the fundus of the meatus: where the facial nerve and the vestibulocochlear nerve, which run through the meatus
+        # together, part (the last point of the facial nerve's course within FUNDUS_APART_MM of Z-Anatomy's VIII)
+        VIII = np.vstack([np.array(r, float)[:, :3] for k in (f"Vestibulocochlear nerve (VIII).{s.lower()}", f"Cochlear nerve.{s.lower()}",
+                                                              f"Vestibular nerve.{s.lower()}") if k in ex["lines"] for r in ex["lines"][k]["runs"]])
+        d8 = cKDTree(VIII).query(course)[0]
+        apart = int(np.argmax(d8 > FUNDUS_APART_MM)) if (d8 > FUNDUS_APART_MM).any() else len(course)
+        fundus = course[max(apart - 1, 0)]
+        new_lms.append(landmark("Fundus of internal acoustic meatus", s, fundus, "Temporal bone",
+                                f"Drawn by rule: where Z-Anatomy's facial and vestibulocochlear nerves, which run through the meatus together, part (the "
+                                f"last point of the facial nerve within {FUNDUS_APART_MM:g} mm of the vestibulocochlear nerve), "
+                                f"{np.linalg.norm(fundus - lms[('Internal acoustic meatus', s)]):.1f} mm from the porus."))
         new_lms += [landmark("Geniculate ganglion", s, gen, "Temporal bone", "Drawn by rule: Z-Anatomy has no geniculate ganglion. Placed at the first genu of its facial nerve, the sharpest turn on the nerve's course through the temporal bone (between the internal acoustic meatus and the stylomastoid foramen), in the course's first half."),
                     landmark("Second genu of facial nerve", s, genu2, "Temporal bone", "Drawn by rule: the sharpest turn on Z-Anatomy's facial nerve, on its course through the temporal bone, beyond the first genu."),
                     landmark("Oval window", s, oval, "Temporal bone", "Drawn by rule: the centre of the footplate of Z-Anatomy's stapes (its vertices farthest from the incus).")]

@@ -30,7 +30,7 @@ function sanitize(s: SkullState): SkullState {
 let state: SkullState = sanitize(decodeSkull(location.hash));
 
 // ---------------------------------------------------------------- shell
-const NAV: [SkullPage, string][] = SB_MODEL === 'v3'
+const NAV: [SkullPage, string][] = SB_MODEL === 'v3' || SB_MODEL === 'zanatomy'
   ? [['atlas', 'Atlas'], ['grading', 'Grading'], ['sources', 'Sources'], ['credits', 'Credits']]
   : [['atlas', 'Atlas'], ['sources', 'Sources'], ['credits', 'Credits']];
 const app = document.getElementById('app')!;

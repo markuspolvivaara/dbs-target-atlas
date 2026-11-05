@@ -33,7 +33,8 @@ export function skullPlan(grpId: string, sel: string | null, also: readonly stri
   if (st && !(isApproachPart(st) && !inGroup.has(st.id)) && !replaced.has(st.id)) looks.set(st.id, 'primary');
   // a cranial nerve's own trunk ('Trigeminal nerve (V)'): all of that nerve lights up (its divisions and branches)
   if (st?.cranialNerve && /\([IVX]+\)$/.test(st.name)) {
-    for (const x of SB_MANIFEST.structures) if (x.cranialNerve === st.cranialNerve) looks.set(x.id, 'primary');
+    // (not a tumour view's moved copy outside its view, nor the part a copy stands in for)
+    for (const x of SB_MANIFEST.structures) if (x.cranialNerve === st.cranialNerve && (!x.pushedFrom || inGroup.has(x.id)) && !replaced.has(x.id)) looks.set(x.id, 'primary');
   }
   return {
     title: g.name, accent: 'ctx', looks, tracts, parcels: new Map(),

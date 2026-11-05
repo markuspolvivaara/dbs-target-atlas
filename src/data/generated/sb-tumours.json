@@ -1,0 +1,358 @@
+{
+ "knosp": {
+  "planeY": 6.5,
+  "zMid": -0.8,
+  "zLobe": 5.21,
+  "sections": {
+   "R": {
+    "y": 6.5,
+    "cavernous": {
+     "c": [
+      13.63,
+      -10.04
+     ],
+     "r": 1.64
+    },
+    "supraclinoid": {
+     "c": [
+      11.17,
+      8.8
+     ],
+     "r": 1.99
+    }
+   },
+   "L": {
+    "y": 6.5,
+    "cavernous": {
+     "c": [
+      -13.63,
+      -10.04
+     ],
+     "r": 1.64
+    },
+    "supraclinoid": {
+     "c": [
+      -11.17,
+      8.8
+     ],
+     "r": 1.99
+    }
+   }
+  },
+  "lines": {
+   "medial": [
+    [
+     12.74,
+     6.3,
+     -15.23
+    ],
+    [
+     8.46,
+     6.3,
+     13.45
+    ]
+   ],
+   "intercarotid": [
+    [
+     14.28,
+     6.3,
+     -15.0
+    ],
+    [
+     10.52,
+     6.3,
+     13.76
+    ]
+   ],
+   "lateral": [
+    [
+     15.82,
+     6.3,
+     -14.83
+    ],
+    [
+     12.6,
+     6.3,
+     13.99
+    ]
+   ]
+  },
+  "grades": {
+   "0": {
+    "grade": "0",
+    "pastMm": {
+     "medial": -4.4,
+     "intercarotid": -6.4,
+     "lateral": -8.5
+    },
+    "encasedShare": 0.0,
+    "ml": 1.11
+   },
+   "1": {
+    "grade": "1",
+    "pastMm": {
+     "medial": 1.0,
+     "intercarotid": -1.0,
+     "lateral": -2.9
+    },
+    "encasedShare": 0.0,
+    "ml": 1.2
+   },
+   "2": {
+    "grade": "2",
+    "pastMm": {
+     "medial": 2.8,
+     "intercarotid": 0.8,
+     "lateral": -1.1
+    },
+    "encasedShare": 0.0,
+    "ml": 1.24
+   },
+   "3A": {
+    "grade": "3A",
+    "pastMm": {
+     "medial": 8.1,
+     "intercarotid": 6.2,
+     "lateral": 4.3
+    },
+    "encasedShare": 0.0,
+    "ml": 1.5
+   }
+  },
+  "carotidRadiusMm": 1.5
+ },
+ "koos": {
+  "1": {
+   "ml": 0.15,
+   "canalMm": 13.3,
+   "porusToBrainstemMm": 4.1
+  },
+  "2": {
+   "centre": [
+    22.5,
+    -25.5,
+    -13.5
+   ],
+   "diameterMm": 9.0,
+   "extrameatalMaxMm": 11.0,
+   "toBrainstemMm": 0.9,
+   "fromBoneMm": 0.5,
+   "ml": 0.34,
+   "push": {
+    "pointsInside": 168,
+    "leftInside": 0,
+    "rounds": 45,
+    "maxMovedMm": 21.93
+   },
+   "nerves": {
+    "Facial nerve (VII)": {
+     "pointsInside": 19,
+     "leftInside": 0,
+     "maxMovedMm": 1.4
+    }
+   }
+  },
+  "3": {
+   "centre": [
+    25.5,
+    -32.5,
+    -16.5
+   ],
+   "diameterMm": 25.0,
+   "extrameatalMaxMm": 26.8,
+   "toBrainstemMm": -4.9,
+   "fromBoneMm": 2.3,
+   "ml": 5.33,
+   "push": {
+    "pointsInside": 4160,
+    "leftInside": 0,
+    "rounds": 62,
+    "maxMovedMm": 31.69
+   },
+   "nerves": {
+    "Accessory nerve (XI)": {
+     "pointsInside": 41,
+     "leftInside": 0,
+     "maxMovedMm": 2.0
+    },
+    "Anterior inferior cerebellar artery": {
+     "pointsInside": 51,
+     "leftInside": 6,
+     "maxMovedMm": 3.8
+    },
+    "Facial nerve (VII)": {
+     "pointsInside": 72,
+     "leftInside": 0,
+     "maxMovedMm": 3.7
+    },
+    "Glossopharyngeal nerve (IX)": {
+     "pointsInside": 82,
+     "leftInside": 0,
+     "maxMovedMm": 2.4
+    },
+    "Posterior inferior cerebellar artery": {
+     "pointsInside": 14,
+     "leftInside": 0,
+     "maxMovedMm": 1.4
+    },
+    "Vagus nerve (X)": {
+     "pointsInside": 115,
+     "leftInside": 0,
+     "maxMovedMm": 2.2
+    }
+   }
+  },
+  "4": {
+   "centre": [
+    27.5,
+    -36.5,
+    -13.5
+   ],
+   "diameterMm": 34.0,
+   "extrameatalMaxMm": 33.0,
+   "toBrainstemMm": -9.0,
+   "fromBoneMm": 5.0,
+   "ml": 14.38,
+   "push": {
+    "pointsInside": 8389,
+    "leftInside": 0,
+    "rounds": 12,
+    "maxMovedMm": 44.78
+   },
+   "nerves": {
+    "Accessory nerve (XI)": {
+     "pointsInside": 46,
+     "leftInside": 0,
+     "maxMovedMm": 2.0
+    },
+    "Anterior inferior cerebellar artery": {
+     "pointsInside": 54,
+     "leftInside": 6,
+     "maxMovedMm": 2.3
+    },
+    "Facial nerve (VII)": {
+     "pointsInside": 93,
+     "leftInside": 0,
+     "maxMovedMm": 4.1
+    },
+    "Glossopharyngeal nerve (IX)": {
+     "pointsInside": 167,
+     "leftInside": 0,
+     "maxMovedMm": 3.3
+    },
+    "Posterior inferior cerebellar artery": {
+     "pointsInside": 37,
+     "leftInside": 9,
+     "maxMovedMm": 1.8
+    },
+    "Vagus nerve (X)": {
+     "pointsInside": 139,
+     "leftInside": 0,
+     "maxMovedMm": 2.2
+    }
+   }
+  }
+ },
+ "meningioma": {
+  "olfactory": {
+   "site": [
+    0.0,
+    34.29,
+    1.24
+   ],
+   "centre": [
+    0.0,
+    28.29,
+    19.0
+   ],
+   "diameterRuleMm": 30.0,
+   "ml": 9.7,
+   "normal": [
+    0.0,
+    -0.32,
+    0.95
+   ],
+   "push": {
+    "pointsInside": 400,
+    "leftInside": 0,
+    "rounds": 5,
+    "maxMovedMm": 18.16
+   }
+  },
+  "tuberculum": {
+   "site": [
+    0.0,
+    6.77,
+    8.15
+   ],
+   "centre": [
+    0.0,
+    2.57,
+    11.7
+   ],
+   "diameterRuleMm": 20.0,
+   "ml": 1.58,
+   "normal": [
+    0.0,
+    -0.76,
+    0.65
+   ],
+   "push": {
+    "pointsInside": 7,
+    "leftInside": 0,
+    "rounds": 3,
+    "maxMovedMm": 4.75
+   }
+  },
+  "petroclival": {
+   "site": [
+    14.27,
+    -18.52,
+    -16.42
+   ],
+   "centre": [
+    7.07,
+    -25.48,
+    -14.46
+   ],
+   "diameterRuleMm": 28.0,
+   "ml": 8.2,
+   "normal": [
+    -0.71,
+    -0.68,
+    0.19
+   ],
+   "push": {
+    "pointsInside": 4142,
+    "leftInside": 0,
+    "rounds": 5,
+    "maxMovedMm": 22.69
+   }
+  },
+  "foramen_magnum": {
+   "site": [
+    15.88,
+    -36.24,
+    -40.42
+   ],
+   "centre": [
+    8.42,
+    -39.76,
+    -40.42
+   ],
+   "diameterRuleMm": 30.0,
+   "ml": 11.47,
+   "normal": [
+    -0.9,
+    -0.43,
+    0.0
+   ],
+   "push": {
+    "pointsInside": 852,
+    "leftInside": 0,
+    "rounds": 5,
+    "maxMovedMm": 15.72
+   }
+  }
+ }
+}

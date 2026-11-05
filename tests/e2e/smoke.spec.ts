@@ -638,6 +638,29 @@ test('skull base tumours: grade chips, the Knosp section, opened views and the G
   expect(g.errors).toEqual([]);
 });
 
+test('skull base v1 tumours: Knosp 0 to 3A on Z-Anatomy, opened views and the Grading page', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./skullbase-v1/#/atlas?g=knosp_3a');
+  await settle(page);
+  await expect(page.locator('.grade-chips .chip')).toHaveCount(4);
+  await expect(page.locator('.pane:not([hidden]) article.card').first()).toContainText('Z-Anatomy');
+  expect(await canvasColours(page)).toBeGreaterThan(40);
+  for (const id of ['koos_iii', 'meningioma_petroclival', 'meningioma_foramen_magnum']) {
+    await page.goto(`./skullbase-v1/#/atlas?g=${id}`);
+    await settle(page);
+    await expect(page.locator('.pane:not([hidden]) article.card').first()).not.toContainText('this CT');
+    expect(await canvasColours(page), id).toBeGreaterThan(40);
+  }
+  await page.goto('./skullbase-v1/#/atlas?g=koos_iii');
+  await settle(page);
+  await expect(page.locator('input[data-morph="retrosigmoid"]')).toHaveValue('100');
+  await page.goto('./skullbase-v1/#/grading');
+  await expect(page.locator('.grade-table')).toHaveCount(5);
+  await expect(page.locator('#knosp .drawn-tag')).toHaveCount(4);
+  await expect(page.locator('#koos .drawn-tag')).toHaveCount(4);
+  expect(g.errors).toEqual([]);
+});
+
 test('skull base (temporal bone): the model switch, sourced cards, the other ears and the fit report', async ({ page }) => {
   const g = guard(page);
   await page.goto('./skullbase/#/atlas');

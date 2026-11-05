@@ -569,7 +569,8 @@ def validate() -> int:
             it = names.get(n_)
             check(it is not None and it["centroid"]["L"][0] < 0 < it["centroid"]["R"][0], f"ear: {n_} missing or on the wrong side")
         drawn = {(lm["name"], lm["side"]) for lm in lms if lm.get("placed", "").startswith("Drawn by rule")}
-        for n_ in ("Geniculate ganglion", "Second genu of facial nerve", "Oval window", "Bone over the superior semicircular canal"):
+        for n_ in ("Geniculate ganglion", "Second genu of facial nerve", "Oval window", "Bone over the superior semicircular canal",
+                   "Fundus of internal acoustic meatus"):
             check({(n_, "L"), (n_, "R")} <= drawn, f"ear: landmark {n_} not drawn on both sides")
         for sd, r in fit.get("ear", {}).items():
             check(abs(r["gspnMm"] - 13.78) <= 1.5, f"ear {sd}: greater petrosal nerve {r['gspnMm']} mm")
@@ -581,6 +582,15 @@ def validate() -> int:
         check(names.get("Optic chiasm", {}).get("dataset") == "rule" and "Optic tract" in names, "the optic chiasm not drawn by rule, or no optic tract")
         surf = fit["pfossa"].get("ontoSurface", {})
         check(len(surf) == 6 and all(v["maxMm"] <= 6 for v in surf.values()), f"cerebellar arteries onto the surface: {surf}")
+        # the tumours (skullbase_v3_tumours.py with SB_PROFILE=v1): each drawn and graded as meant, the pushed copies' parts present
+        import skullbase_v3_tumours as TM
+        for ok, msg in TM.check(m["structures"], prefix=PREFIX):
+            check(ok, msg)
+        knosp = json.loads((GEN / f"{PREFIX}-tumours.json").read_text())["knosp"]["grades"]
+        check(set(knosp) == {"0", "1", "2", "3A"}, f"Knosp grades drawn: {sorted(knosp)}")
+        for it in m["structures"]:
+            if it.get("category") in ("tumour", "guide"):
+                check(it["centroid"]["R"][0] > -5, f"{it['id']}: not on the right {it['centroid']}")
     print(f"skull base validation: {n - len(fails)}/{n} checks passed")
     for f in fails:
         print("FAIL", f)

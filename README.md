@@ -456,7 +456,14 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
     - Sphenoid sinus: Z-Anatomy's own.
     - Hypophysis, cavernous sinuses, vessels and nerves: Z-Anatomy's own; the brain is v1's.
     - The clivus step is absent: Z-Anatomy's sinus does not reach behind the sella.
-  - Not yet on v1: the tumours and the Grading page. v3's Sylvian veins, A3 and its variant, the trigeminal ganglion and the meatal bundle are
+  - The tumours and the Grading page (`SB_PROFILE=v1 pipeline/skullbase_v3_tumours.py`): v3's rules on Z-Anatomy's
+    bone, carotids, cavernous sinus and brain.
+    - Knosp 0–3A only: Z-Anatomy's cavernous carotid runs in the sphenoid's body below its cavernous sinus, so there is
+      bone, not sinus, below and round it (3B and 4). The section is taken where both of its segments show.
+    - Koos: Z-Anatomy's meatus has no lumen, so the canal is drawn by rule (2 mm round the fundus–porus line,
+      illustrative). Its nerves are meshes and are moved round the tumour by the same rule.
+    - The foramen magnum site is found at the rim's level, towards the right occipital condyle.
+  - v3's Sylvian veins, A3 and its variant, the trigeminal ganglion and the meatal bundle are
     not part of Z-Anatomy and are left out of the views.
 
 ### Skull base v2: the detailed model (`skullbase-ct/`)

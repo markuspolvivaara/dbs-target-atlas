@@ -38,7 +38,7 @@ export function skullGradingPage() {
   const kn = TUMOUR_FAMILY.get('knosp')!, ko = TUMOUR_FAMILY.get('koos')!, me = TUMOUR_FAMILY.get('meningioma')!;
   el.append(
     h('h1', {}, 'Grading'),
-    h('p', { class: 'lead' }, 'How pituitary adenomas and vestibular schwannomas are graded, what the grades predict, and which approaches suit meningiomas at four sites of the skull base. The rows marked “drawn here” are tumours this atlas draws on its CT, by rule; open them from the mark. For teaching: not for diagnosis or planning.'),
+    h('p', { class: 'lead' }, `How pituitary adenomas and vestibular schwannomas are graded, what the grades predict, and which approaches suit meningiomas at four sites of the skull base. The rows marked “drawn here” are tumours this atlas draws on its ${SB_MODEL === 'v3' ? 'CT' : 'model'}, by rule; open them from the mark. For teaching: not for diagnosis or planning.`),
     h('h2', {}, 'Pituitary adenoma: cavernous sinus invasion'),
     gradeTable('knosp', 'Knosp grade (revised)', ['araujocastro2021'], ['Grade', 'The adenoma on the coronal section', 'Surgical cure', 'Major complications'],
       KNOSP_GRADES.map((g) => ({ cells: [g.id, g.definition, g.cure, g.complications], view: view('knosp', g.id) })),

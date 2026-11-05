@@ -39,7 +39,7 @@ commit and push it.
   lateral (lateral suboccipital, foramen magnum rim, posterior third of the condyle; C1 is not modelled). New camera
   presets `orbitozygomatic` and `farLateral`. `skullbase_v3.py approaches` rewrites only the approach items from
   `approach.json`, so the whole v3 step need not run.
-- **Skull base v1 gets v3's views (phases 1–3 of 4 done: the approaches; the ear views and Kawase; the cavernous sinus, triangles and endonasal view).** The user asked (2026-11-03) for everything
+- **Skull base v1 gets v3's views (all 4 phases done: the approaches; the ear views and Kawase; the cavernous sinus, triangles and endonasal view; the tumours and the Grading page).** The user asked (2026-11-03) for everything
   in the v3 module on v1, built from v1's own Z-Anatomy models, not v3's CT, template or ear. Where Z-Anatomy lacks
   something, it is drawn by rule on Z-Anatomy and labelled so. Built afresh on the desktop; the MacBook stash is not
   used. The phases: (1) the approaches, done; (2) the ear views, then Kawase (it needs the geniculate ganglion and
@@ -87,11 +87,27 @@ commit and push it.
     - The front end picks the cavernous and endonasal data by `SB_MODEL`. The v3 endonasal tests set the page marker
       (`vi.hoisted`); the v1 ones are in `endonasal-v1.test.ts`.
     - `skullbase_v1_skull.py` now carves the sinuses' air (it never did: their meshes are open).
+  - Phase 4 (2026-11-05):
+    - `SB_PROFILE=v1 skullbase_v3_tumours.py` (about 4 minutes): v3's tumour rules on v1's grid (`v1_grid`: v1's bone
+      field, and Z-Anatomy's internal carotids' lines with their radius as the label), v1's cavernous sinus and
+      endonasal box, its own brain pushed. It merges into `sb-manifest.json` and writes `sb-tumours.json`.
+    - Z-Anatomy's cavernous carotid runs in the sphenoid's body about 10 mm below its cavernous sinus, and its
+      supraclinoid carotid reaches back only to 6 mm in front of the fossa. So on v1 the Knosp section is looked for
+      at 6–9 mm (`KNOSP_Y_MM`), the lobe is level with the gland's lower part, and only grades 0–3A are drawn
+      (`KNOSP_GRADES`); 3B and 4 would lie in bone. The cards say so.
+    - Koos I: Z-Anatomy's temporal bone has no meatal lumen, so the canal is drawn by rule (`V1_CANAL_MM`, 2 mm,
+      illustrative) and taken out of the bone. This needed a "Fundus of internal acoustic meatus" landmark
+      (`skullbase_v1_ear.py`, drawn by rule where the facial and vestibulocochlear nerves part).
+    - Z-Anatomy's nerves are meshes, so `displaced_meshes` moves their vertices (v3's `displaced_nerves` moves tubes).
+    - The foramen magnum site on v1 is found by a level walk from the foramen's centre towards the right occipital
+      condyle, at the rim's level (`FM_RIM_IN_MM`); v3's walk passes through Z-Anatomy's wider foramen.
+    - Front end: `tumourGroups()` serves both models; `TUMOUR_FIT_V1`/`_V3`; the Grading page is in v1's nav.
+      `ofKind` and the nerve highlight skip the tumour views' copies (the highlight bug was in v3 too).
   - v1 chain: `skullbase_build.py`, `skullbase_v1_nerves.py`, `skullbase_v1_skull.py`, `skullbase_v1_ear.py`, `skullbase_v1.py ear`,
     `SB_PROFILE=v1 skullbase_v3_approach.py only pterional lso interhemispheric suboccipital retrosigmoid
     orbitozygomatic far_lateral kawase`, `skullbase_v1.py approaches`, `skullbase_v1_brain.py`,
     `skullbase_v1_pfossa.py`, `skullbase_v1.py brain`, `skullbase_v1_cavernous.py`, `skullbase_v1.py cavernous`, `skullbase_v1_endonasal.py`,
-    `node pipeline/compress.mjs skullbase`, `skullbase_build.py finalize`. Compressing v1 left the untouched GLBs byte-identical here.
+    `SB_PROFILE=v1 skullbase_v3_tumours.py`, `node pipeline/compress.mjs skullbase`, `skullbase_build.py finalize`. Compressing v1 left the untouched GLBs byte-identical here.
 - **Pipeline data changed on the desktop:** `pipeline/data/build/skullbase` (the whole v1 port), `pipeline/data/build/skullbase-v3` (the clean-up's chain, the tumours, the
   two approaches in `approach.json`) and `pipeline/data/build/vascular`. Copy `pipeline/data/` back before rebuilding
   those on the MacBook.
