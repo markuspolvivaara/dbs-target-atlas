@@ -343,18 +343,50 @@ describe('the temporal-bone model (v3: OpenEar specimen registered onto the CT)'
   });
 });
 
-/** The section's modules as a v3 page loads them (its <meta name="sb-model" content="v3">). */
-async function v3Modules() {
+/** The section's modules as a page of one model loads them (its <meta name="sb-model" content="v3">, or "ct"). */
+async function modelModules(model: 'v3' | 'ct') {
   vi.resetModules();
   const g = globalThis as unknown as { document?: unknown };
   const had = 'document' in g;
-  g.document = { querySelector: (q: string) => (q.includes('sb-model') ? { content: 'v3' } : null) };
+  g.document = { querySelector: (q: string) => (q.includes('sb-model') ? { content: model } : null) };
   try {
     return { groups: await import('../../src/skullbase/groups'), scene: await import('../../src/skullbase/scene'), state: await import('../../src/skullbase/state') };
   } finally {
     if (!had) delete g.document;
   }
 }
+const v3Modules = () => modelModules('v3');
+
+describe('skull-base landmarks, in each model', () => {
+  it('none is a neighbouring bone’s landmark attached to the nearest cranial surface, and none carries such a text', async () => {
+    // (v1 and v2 once listed the atlas's "Lateral mass" on the occipital bone, with Wikipedia's text on the atlas)
+    for (const prefix of ['sb', 'sbct', 'sbv3']) {
+      const lms = (await import(`../../src/data/generated/${prefix}-landmarks.json`)).default as { id: string; name: string; boneFrom?: string }[];
+      const defs = (await import(`../../src/data/generated/${prefix}-definitions.json`)).default as Record<string, { text: string; url: string | null }>;
+      expect(lms.length, prefix).toBeGreaterThan(50);
+      expect(lms.filter((l) => l.boneFrom === 'nearest surface').map((l) => l.id), prefix).toEqual([]);
+      expect(lms.some((l) => l.name === 'Lateral mass'), prefix).toBe(false);
+      expect(Object.keys(defs), prefix).not.toContain('Lateral mass');
+      // no text is the lead of Wikipedia's page on the atlas or the axis
+      expect(Object.entries(defs).filter(([, d]) => /wiki\/(Atlas|Axis)_\(anatomy\)/.test(d.url ?? '')).map(([n]) => n), prefix).toEqual([]);
+    }
+  });
+});
+
+describe('skull-base views, in each model', async () => {
+  const models = { v1: await import('../../src/skullbase/groups'), v2: (await modelModules('ct')).groups, v3: (await v3Modules()).groups };
+  it('list each structure and each landmark once (a repeat shows twice in the panel and the legend)', () => {
+    for (const [name, G] of Object.entries(models)) {
+      expect(G.SB_GROUPS.length, name).toBeGreaterThan(10);
+      expect(G.crossCheckGroups(), name).toEqual([]);
+    }
+    // the three are different models, not one loaded three times
+    expect(new Set(Object.values(models).map((G) => G.SB_GROUPS.length)).size).toBeGreaterThan(1);
+    // v3's cranial floor lists the facial nerve once, though it is among both the nerves and the ear's parts
+    const floor = models.v3.SB_GROUP.get('floor')!;
+    expect(floor.structures.length).toBe(new Set(floor.structures).size);
+  });
+});
 
 describe('v3 cranial floor landmarks', async () => {
   const { groups: G3 } = await v3Modules();

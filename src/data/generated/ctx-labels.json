@@ -115,7 +115,7 @@
     "text": "The inferior or orbital surface of the frontal lobe is concave, and rests on the orbital plate of the frontal bone. It is divided into four orbital gyri by a well-marked H-shaped orbital sulcus. These are named, from their position, the medial, anterior, lateral, and posterior, orbital gyri. The medial orbital gyrus presents a well-marked antero-posterior sulcus, the olfactory sulcus, for the olfactory tract; the portion medial to this is named the straight gyrus, and is continuous with the superior frontal gyrus on the medial surface.",
     "url": "https://en.wikipedia.org/wiki/Orbital_gyri",
     "source": "Orbital gyri (Frontomarginal gyrus and sulcus*)",
-    "scope": "the orbital gyri"
+    "scope": "the orbital gyri, which this gyrus runs into at the edge of the orbital surface"
    }
   },
   {
@@ -396,7 +396,7 @@
     "text": "The paracentral sulcus is a sulcus of the brain. It forms the paracentral lobule's anterior border. It is part of the cingulate sulcus.",
     "url": "https://en.wikipedia.org/wiki/Paracentral_sulcus",
     "source": "Paracentral gyrus and sulcus*",
-    "scope": null
+    "scope": "the paracentral sulcus"
    }
   },
   {
@@ -1049,7 +1049,7 @@
     "text": "The cingulate sulcus is a sulcus (brain fold) on the cingulate cortex in the medial wall of the cerebral cortex. The frontal and parietal lobes are separated from the cingulate gyrus by the cingulate sulcus. It terminates as the marginal sulcus of the cingulate sulcus. It sends a ramus to separate the paracentral lobule from the frontal gyri, the paracentral sulcus.",
     "url": "https://en.wikipedia.org/wiki/Cingulate_sulcus",
     "source": "Cingulate gyrus and sulcus (Middle posterior part)",
-    "scope": "the cingulate cortex"
+    "scope": "the cingulate sulcus"
    }
   },
   {
@@ -1170,9 +1170,9 @@
    "parcels": [],
    "insula": false,
    "definition": {
-    "text": "The cingulate sulcus is a sulcus (brain fold) on the cingulate cortex in the medial wall of the cerebral cortex. The frontal and parietal lobes are separated from the cingulate gyrus by the cingulate sulcus. It terminates as the marginal sulcus of the cingulate sulcus. It sends a ramus to separate the paracentral lobule from the frontal gyri, the paracentral sulcus.",
-    "url": "https://en.wikipedia.org/wiki/Cingulate_sulcus",
-    "source": "Cingulate gyrus and sulcus (Middle posterior part)",
+    "text": "The cingulate cortex is a part of the brain situated in the medial aspect of the cerebral cortex. The cingulate cortex includes the entire cingulate gyrus, which lies immediately above the corpus callosum, and the continuation of this in the cingulate sulcus. The cingulate cortex is usually considered part of the limbic lobe. It receives inputs from the thalamus and the neocortex, and projects to the entorhinal cortex via the cingulum. It is an integral part of the limbic system, which is involved with emotion formation and processing, learning, and memory. The combination of these three functions makes the cingulate gyrus highly influential in linking motivational outcomes to behavior (e.g. a certain action induced a positive emotional response, which results in learning). This role makes the cingulate cortex highly important in disorders such as depression and schizophrenia.",
+    "url": "https://en.wikipedia.org/wiki/Cingulate_cortex",
+    "source": "Cingulate gyrus and sulcus (Middle anterior part)",
     "scope": "the cingulate cortex"
    }
   },
@@ -2463,9 +2463,9 @@
     "L": 14.23,
     "R": 20.03
    },
-   "lobe": "parietal",
-   "lobeShare": 0.717,
-   "lobeBy": "measure",
+   "lobe": "occipital",
+   "lobeShare": 0.283,
+   "lobeBy": "name",
    "lobes": [
     {
      "lobe": "parietal",
@@ -3191,10 +3191,17 @@
    "parcels": [],
    "insula": false,
    "definition": {
-    "text": "The angular gyrus is a region of the brain lying mainly in the anterolateral region of parietal lobe, that lies near the superior edge of the temporal lobe, and immediately posterior to the supramarginal gyrus. Its significance is in transferring visual information to Wernicke's area, in order to make meaning out of visually perceived words. It is also involved in a number of processes related to language, number processing and spatial cognition, memory retrieval, attention, and theory of mind. It is Brodmann area 39 of the human brain.",
+    "text": "The angular gyrus is a region of the brain lying in the posterior part of the inferior parietal lobule, near the superior edge of the temporal lobe, and immediately posterior to the supramarginal gyrus. Its significance is in transferring visual information to Wernicke's area, in order to make meaning out of visually perceived words. It is also involved in a number of processes related to language, number processing and spatial cognition, memory retrieval, attention, and theory of mind. It is Brodmann area 39 of the human brain.",
     "url": "https://en.wikipedia.org/wiki/Angular_gyrus",
     "source": "Angular gyrus",
-    "scope": null
+    "scope": null,
+    "edits": [
+     {
+      "from": "lying mainly in the anterolateral region of parietal lobe, that lies near",
+      "to": "lying in the posterior part of the inferior parietal lobule, near",
+      "why": "The sulcus intermedius primus divides the inferior parietal lobule into the supramarginal gyrus in front and the angular gyrus behind (Destrieux et al. 2010, section 2.4.1.4)"
+     }
+    ]
    }
   },
   {
@@ -7180,13 +7187,17 @@
     "L": 7.62,
     "R": 9.18
    },
-   "lobe": "parietal",
-   "lobeShare": 0.814,
-   "lobeBy": "measure",
+   "lobe": "occipital",
+   "lobeShare": 0.186,
+   "lobeBy": "name",
    "lobes": [
     {
      "lobe": "parietal",
      "share": 0.814
+    },
+    {
+     "lobe": "occipital",
+     "share": 0.186
     }
    ],
    "atlasColour": "#15148c",
@@ -7886,7 +7897,7 @@
     "text": "The olfactory tract is a bilateral bundle of afferent nerve fibers from the mitral and tufted cells of the olfactory bulb that connects to several target regions in the brain, including the piriform cortex, amygdala, and entorhinal cortex. It is a narrow white band, triangular on coronal section, the apex being directed upward.",
     "url": "https://en.wikipedia.org/wiki/Olfactory_tract",
     "source": "Olfactory sulcus",
-    "scope": null
+    "scope": "the olfactory tract, which lies just below this sulcus"
    }
   },
   {
@@ -9329,6 +9340,7 @@
     "ctx_s_calcarine",
     "ctx_s_collat_transv_post",
     "ctx_s_oc_middle_and_lunatus",
+    "ctx_s_oc_sup_and_transversal",
     "ctx_s_occipital_ant",
     "ctx_s_oc_temp_med_and_lingual"
    ]

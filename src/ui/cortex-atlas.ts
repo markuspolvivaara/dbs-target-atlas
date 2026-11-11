@@ -223,11 +223,14 @@ export class CortexAtlasPage {
     return this.s.colour === 'atlas' && l ? `--c: ${l.atlasColour}` : `--c: var(--c-${tokenOf(id)})`;
   }
 
-  private defBlock(def: { text: string; url: string | null; scope?: string | null } | null, what: string): HTMLElement[] {
+  private defBlock(def: { text: string; url: string | null; scope?: string | null; edits?: { from: string; to: string; why: string }[] } | null, what: string): HTMLElement[] {
     if (!def) return [h('dt', {}, 'Definition'), h('dd', {}, `Z-Anatomy ships no definition for ${what}.`)];
+    const edits = def.edits ?? [];
     return [h('dt', {}, def.scope ? `About ${def.scope}` : 'Definition'), h('dd', {}, h('p', {}, def.text),
-      h('p', { class: 'aside' }, 'From Wikipedia (CC BY-SA 3.0), as shipped with Z-Anatomy; not checked against the literature. ',
-        def.url ? h('a', { href: def.url, target: '_blank', rel: 'noopener' }, 'Source page') : null))];
+      h('p', { class: 'aside' }, `From Wikipedia (CC BY-SA 3.0), as shipped with Z-Anatomy; not checked against the literature${edits.length ? ', except as corrected below' : ''}. `,
+        def.url ? h('a', { href: def.url, target: '_blank', rel: 'noopener' }, 'Source page') : null),
+      // a text changed here says so, with what it said before and why (the licence asks for changes to be indicated)
+      ...edits.map((e) => h('p', { class: 'aside def-edit' }, `Corrected here: “${e.from}” now reads “${e.to}”. ${e.why}.`)))];
   }
 
   private card(id: string): HTMLElement {
@@ -238,7 +241,8 @@ export class CortexAtlasPage {
     const lobes = l.lobes.map((x) => `${lobeName(x.lobe).toLowerCase()} ${pct(x.share)}`).join(', ');
     const borders = l.borders.filter((b) => b.id !== MEDIAL_WALL);
     return h('article', { class: 'card sel', style: `--accent: var(--c-${tokenOf(id)})` }, close,
-      h('p', { class: 'eyebrow' }, `${KIND_LABEL[l.kind]} · ${l.lobes.map((x) => lobeName(x.lobe)).join(' / ')}`),
+      // the lobe it is shown with first, then any other lobe holding a quarter of it
+      h('p', { class: 'eyebrow' }, `${KIND_LABEL[l.kind]} · ${[l.lobe, ...l.lobes.map((x) => x.lobe).filter((x) => x !== l.lobe)].map((x) => lobeName(x)).join(' / ')}`),
       h('h2', {}, h('span', { class: 'swatch', style: this.swatchStyle(id) }), shortName(id)),
       h('p', { class: 'aside' }, `Destrieux name: ${l.name} (${l.short}).`),
       h('dl', {},

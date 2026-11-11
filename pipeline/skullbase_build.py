@@ -288,6 +288,9 @@ def definition(raw: str | None) -> dict | None:
 
 def main() -> int:
     ex = json.loads((BUILD / "export.json").read_text())
+    # a landmark the export could only attach to the nearest bone surface is a neighbour's, not a cranial bone's (the
+    # atlas's "Lateral mass" under the occipital condyle): not shown, nor its text (newer exports leave it out themselves)
+    ex["landmarks"] = [lm for lm in ex["landmarks"] if lm["boneFrom"] != "nearest surface"]
     BUILD.mkdir(parents=True, exist_ok=True)
     for old in BUILD.glob("*.glb"):  # structures can be renamed or merged between runs
         old.unlink()

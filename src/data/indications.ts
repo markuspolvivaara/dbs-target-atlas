@@ -6,7 +6,8 @@ import type { IndicationInput } from './schema';
  * Text fields (target, alternatives, why, howToChoose, imaging, caveat,
  * evidence) are verbatim. The structure / tract mapping translates the
  * schematic circuit nodes into 3D assets:
- *   stn -> stn, stn_motor   gpi -> gpi, gpi_sm   snr -> snr   ppn ("Brainstem") -> ppn
+ *   stn -> stn, stn_motor   gpi -> gpi, gpi_sm   snr -> snr   ppn ("Brainstem") -> ppn (left out of the Parkinson's
+ *   views by their `omit`, so the axial-signs note says the brainstem side is not drawn)
  *   vim -> vim   psa -> psa   vo -> vo   cm -> cm, pf   den -> dentate   str -> putamen, caudate
  *   premotor -> pmd, pmv   sma -> sma   m1 -> m1   s1 ("Sensorimotor") -> s1
  *   hyper -> hdp   pallthal -> al, lf   strpall -> rt_cerv   drtt -> drtt, ndrtt

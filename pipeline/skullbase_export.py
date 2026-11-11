@@ -391,6 +391,12 @@ for o in bpy.data.objects:
         bone, how = hooked.split('.')[0], 'hook'
     else:
         bone, how = bone_for(o.name[:-2], path, near)
+    if how == 'nearest surface':
+        # neither hooked to a cranial bone, named for one, nor in the cranium's collection: a neighbour's landmark that
+        # happens to lie close (the atlas's "Lateral mass" under the occipital condyle). Not a landmark of this model
+        export.setdefault('skippedLandmarks', []).append({'name': o.name[:-2], 'distanceToBoneMm': round(dist, 1),
+                                                          'why': 'not a landmark of a cranial bone (nearest: ' + near.split('.')[0] + ')'})
+        continue
     export['landmarks'].append({'name': o.name[:-2], 'ras': q, 'path': path, 'bone': bone, 'boneFrom': how, 'nearestSurface': near,
                                 'pinEnds': [ras(o.matrix_world @ v.co) for v in o.data.vertices],
                                 'distanceToBoneMm': round(dist, 2)})

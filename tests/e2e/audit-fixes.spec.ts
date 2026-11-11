@@ -98,3 +98,50 @@ test('vascular: the grading tables name the outcome their numbers are', async ({
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// B-001, B-002, B-004, B-015: a label named occipital coloured parietal; definition texts wrong or about a neighbour
+test('cortex: cards name their own lobe first, say what a text is about and list a correction', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './cortex/#/atlas?v=posterior&sel=ctx_g_occipital_sup');
+  const card = page.locator('.card.sel');
+  await expect(card.locator('.eyebrow')).toHaveText(/Gyrus · Occipital lobe \/ Parietal lobe/i);
+  await expect(card).toContainText('Shown with the occipital lobe, as its Destrieux name places it.');
+  await open(page, './cortex/#/atlas?v=lateral&sel=ctx_g_pariet_inf_angular');
+  // the text as shown is the corrected one; what it said before is only in the note under it
+  const shown = card.locator('dd p').first();
+  await expect(shown).toContainText('lying in the posterior part of the inferior parietal lobule');
+  await expect(shown).not.toContainText('anterolateral');
+  await expect(card.locator('.def-edit')).toContainText('Corrected here');
+  await expect(card.locator('.def-edit')).toContainText('Destrieux et al. 2010');
+  await open(page, './cortex/#/atlas?v=inferior&sel=ctx_s_orbital_med_olfact');
+  await expect(card.locator('dt').first()).toHaveText('About the olfactory tract, which lies just below this sulcus');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// P1-06: the cranial floor listed four nerves twice. C-002: v1 and v2 listed the atlas's "Lateral mass" on the occipital bone
+test('skull base: the cranial floor lists each nerve once; no landmark of the atlas on the occipital bone', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './skullbase/#/atlas?g=floor');
+  const panel = await page.locator('.panel').innerText();
+  for (const name of ['Chorda tympani', 'Greater petrosal nerve', 'Nerves in the internal acoustic meatus']) expect(panel.split(name).length - 1, name).toBe(1);
+  for (const model of ['skullbase-v1', 'skullbase-ct']) {
+    await open(page, `./${model}/#/atlas?g=bone_occipital_bone`);
+    const text = await page.locator('.panel').innerText();
+    expect(text, model).toContain('Occipital condyle');
+    expect(text, model).not.toContain('Lateral mass');
+  }
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// A-005: the axial-signs card said the brainstem "is represented by the PPN", which no Parkinson's view draws
+test('dbs: the axial-signs note does not point to a nucleus the view leaves out', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './dbs/#/atlas?i=pd&s=pd-axial');
+  const panel = await page.locator('.panel').innerText();
+  expect(panel).toContain('the brainstem side is not drawn in this view');
+  expect(panel).not.toMatch(/PPN|pedunculopontine/i);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

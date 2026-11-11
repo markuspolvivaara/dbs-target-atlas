@@ -848,9 +848,9 @@
    "file": "assets/cortex/ctx_g_occipital_sup.glb",
    "bytes": 45736,
    "colour": {
-    "token": "lobeParietal",
-    "light": "#E69F00",
-    "dark": "#E69F00"
+    "token": "lobeOccipital",
+    "light": "#CC79A7",
+    "dark": "#CC79A7"
    },
    "dataset": "destrieux",
    "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
@@ -2520,9 +2520,9 @@
    "file": "assets/cortex/ctx_s_oc_sup_and_transversal.glb",
    "bytes": 33340,
    "colour": {
-    "token": "lobeParietal",
-    "light": "#E69F00",
-    "dark": "#E69F00"
+    "token": "lobeOccipital",
+    "light": "#CC79A7",
+    "dark": "#CC79A7"
    },
    "dataset": "destrieux",
    "source": "Destrieux 2009 gyri and sulci on the Lead-DBS MNI 2009b template surface",
