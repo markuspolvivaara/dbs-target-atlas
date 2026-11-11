@@ -145,3 +145,46 @@ test('dbs: the axial-signs note does not point to a nucleus the view leaves out'
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// P1-01, UI-05: every section downloaded its whole mesh catalogue (the skull base 207 files) before drawing anything
+test('loading: a view downloads the meshes it draws, not the catalogue, and the next view loads its own', async ({ page }) => {
+  const g = guard(page);
+  const glbs = new Set<string>();
+  page.on('request', (r) => { if (r.url().endsWith('.glb')) glbs.add(new URL(r.url()).pathname); });
+  await open(page, './skullbase/');
+  const first = glbs.size;
+  // the cranial floor: its bones, nerves and ear, about 40 files of the model's 200 and more
+  expect(first).toBeGreaterThan(20);
+  expect(first).toBeLessThan(70);
+  for (const part of ['tb_facial_nerve_vii', 'tb_chorda_tympani']) expect(await drawnSides(page, part), part).not.toBeNull();
+  // a view with other structures fetches them when it is opened, and is complete when the viewer is idle again
+  await page.locator('.panel .chip', { hasText: 'Arteries' }).first().click();
+  await settle(page);
+  expect(glbs.size).toBeGreaterThan(first);
+  await expect(page.locator('.status')).toBeHidden();
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// P1-02, UI-06: a mesh that failed to load was left out without a word, and was not tried again
+test('loading: a structure that cannot be loaded is named in a notice that stays, and Retry loads it', async ({ page }) => {
+  let block = true;
+  await page.route('**/assets/meshes/stn_motor.glb', (route) => (block ? route.abort() : route.continue()));
+  await open(page, './dbs/#/atlas?i=pd');
+  const notice = page.locator('.status-failed');
+  await expect(notice).toBeVisible();
+  await expect(notice).toContainText('One structure of this view could not be loaded');
+  await expect(notice).toHaveAttribute('role', 'alert');
+  expect(await drawnSides(page, 'stn_motor')).toBeNull();
+  // it stays while the rest of the page goes on working
+  await page.locator('[data-hemi="L"]').click();
+  await settle(page);
+  await expect(notice).toBeVisible();
+  // the download works again: Retry fetches the file and the notice goes
+  block = false;
+  await notice.getByRole('button', { name: 'Retry' }).click();
+  await settle(page);
+  await expect(notice).toBeHidden();
+  await expect(page.locator('.status')).toBeHidden();
+  expect(await drawnSides(page, 'stn_motor')).toEqual({ L: true, R: false });
+});

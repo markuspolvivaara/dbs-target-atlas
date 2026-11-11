@@ -12,7 +12,7 @@ import { chips, clear, fmtMm, h, refLinks } from './dom';
 import { eyeIcon } from './widgets';
 import { clearAllLeadPrefs, clearLeadPref, isHidden, leadPrefFor, saveLeadDefault, saveLeadPref, visibleIndications } from './prefs';
 import { primaryTargetId } from '../viewer/selection';
-import { bindSheetDrag, buildSlicesPane, drawGizmo, layoutLabels, syncSlicesPane, type LabelItem } from './stage';
+import { bindSheetDrag, buildSlicesPane, drawGizmo, layoutLabels, syncSlicesPane, type LabelItem, stageStatus } from './stage';
 
 type Update = (fn: (s: AppState) => void, opts?: { camera?: boolean }) => void;
 
@@ -44,7 +44,7 @@ export class AtlasPage {
   /** Structure / marker whose legend row the pointer is over: labelled in 3D in "hover" mode. */
   private legendHover: string | null = null;
   private gizmo = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  private status = h('div', { class: 'status', role: 'status', 'aria-live': 'polite', hidden: true });
+  private status = stageStatus(() => { void this.viewer.retryFailed(); });
   private measureBtn!: HTMLButtonElement;
   private leadInfo = h('div', { class: 'lead-info' });
   private sheetState: 'peek' | 'full' = 'peek';
@@ -96,7 +96,7 @@ export class AtlasPage {
       h('div', { class: 'readout-box' }, this.measureOut, this.readout));
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
-    this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status);
+    this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
     this.readout.textContent = 'Point at a structure for MNI coordinates';
 
     this.viewer = new Viewer<AppState, Plan>(host, {
@@ -108,7 +108,8 @@ export class AtlasPage {
         s.cam = { preset: s.cam.preset, pos: [pos.x, pos.y, pos.z], tgt: [tgt.x, tgt.y, tgt.z] };
       }, { camera: false }),
       leadMoved: (d) => this.editLead((s) => { s.lead.depth = d; }),
-      status: (t) => { this.status.hidden = !t; this.status.textContent = t ?? ''; },
+      status: (t) => this.status.set(t),
+      loadFailed: (names) => this.status.failed(names),
       lead: (c) => this.showLead(c),
       moving: (on) => this.stage.classList.toggle('moving', on),
     }, dbsScene);

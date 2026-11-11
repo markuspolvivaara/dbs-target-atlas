@@ -52,6 +52,9 @@ export function loadStructure(file: string): Promise<MeshAsset | LineAsset> {
       return { kind: 'mesh', sides: meshes } as MeshAsset;
     });
     cache.set(file, p);
+    // a failed download is not kept: the next request for the file (a retry, the next view) tries again
+    const mine = p;
+    p.catch(() => { if (cache.get(file) === mine) cache.delete(file); });
   }
   return p;
 }

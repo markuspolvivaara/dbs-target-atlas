@@ -41,6 +41,32 @@ export function drawGizmo(svg: SVGSVGElement, ax: ScreenAxes): void {
   }
 }
 
+/**
+ * The stage's status line: what is loading (the viewer's status event), and under it, for as long as it is true, which
+ * structures of the view could not be loaded, with a button to try again (the viewer's loadFailed event). A view with a
+ * part missing must not pass for a complete one.
+ */
+export function stageStatus(retry: () => void): { el: HTMLElement; set(text: string | null): void; failed(names: string[]): void } {
+  const line = h('div', { class: 'status-line', role: 'status', 'aria-live': 'polite', hidden: true });
+  const what = h('span', {});
+  const again = h('button', { type: 'button', class: 'btn btn-small', onclick: () => retry() }, 'Retry');
+  const fail = h('div', { class: 'status-failed', role: 'alert', hidden: true }, what, again);
+  const el = h('div', { class: 'status' }, line, fail);
+  const sync = () => { el.hidden = line.hidden && fail.hidden; };
+  sync();
+  return {
+    el,
+    set(text) { line.hidden = !text; line.textContent = text ?? ''; sync(); },
+    failed(names) {
+      fail.hidden = !names.length;
+      // (names hold commas of their own: "STN, sensorimotor zone")
+      const shown = names.slice(0, 3).join('; ') + (names.length > 3 ? `; and ${names.length - 3} more` : '');
+      what.textContent = names.length ? `${names.length === 1 ? 'One structure' : `${names.length} structures`} of this view could not be loaded: ${shown}. ` : '';
+      sync();
+    },
+  };
+}
+
 export interface LabelItem { id: string; text: string; ax: number; ay: number; cls: string }
 
 /**

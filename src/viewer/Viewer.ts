@@ -75,6 +75,8 @@ export interface ViewerEvents {
   cameraChanged(pos: THREE.Vector3, tgt: THREE.Vector3): void;
   leadMoved(depth: number): void;
   status(text: string | null): void;
+  /** the structures of the view that could not be loaded changed (names; empty when all is well) */
+  loadFailed?(names: string[]): void;
   lead(contacts: Record<Side, THREE.Vector3[]> | null): void;
   /** The camera starts / stops moving (orbit, pan, zoom or preset animation). */
   moving(active: boolean): void;
@@ -85,6 +87,8 @@ export interface ViewerEvents {
 const DEG = Math.PI / 180;
 /** a layer the section's state does not have is drawn */
 const SHOWN = { on: true, opacity: 1 };
+/** the structure types drawn as meshes whenever a view's plan gives them a look (tracts and the DBS cortex have their own rules) */
+const MESH_TYPES = new Set(['nucleus', 'target', 'bone', 'soft', 'surface', 'tube']);
 const RAS_TO_WORLD = new THREE.Matrix4().makeRotationX(-Math.PI / 2); // (x, y, z) RAS -> (x, z, -y) three
 /** in the endoscope's view, what lies this close behind a wall is what the pointer is on (it shows through) */
 const ENDO_PICK_BEHIND_MM = 3;
@@ -163,6 +167,16 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   private reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   private disposed = false;
   private loadingCount = 0;
+  /** loads under way, by structure id (a second request for the same structure waits for the first) */
+  private pending = new Map<string, Promise<Item | null>>();
+  /** of the loads started since the viewer was last idle: how many, and how many have ended (the status line's count) */
+  private loadTotal = 0;
+  private loadDone = 0;
+  /** structures of the view whose file could not be loaded: id -> name, kept until a retry succeeds or the view changes */
+  private failed = new Map<string, string>();
+  /** the loads of the view applied last (the page waits for the first view's before it reports ready) */
+  private applied: Promise<unknown> = Promise.resolve();
+  private restyleQueued = false;
   private applySeq = 0;
   private moveTimer = 0;
   /** morph targets by name (a glTF mesh's extras.targetNames: the skull base's surgical shapes); an unnamed target 0
@@ -344,28 +358,70 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   }
 
   // ---------------------------------------------------------------- loading
-  private async ensure(id: string): Promise<Item | null> {
+  private ensure(id: string): Promise<Item | null> {
     const have = this.items.get(id);
-    if (have) return have;
+    if (have) return Promise.resolve(have);
     const meta = this.cat.byId.get(id);
-    if (!meta) return null;
+    if (!meta) return Promise.resolve(null);
+    let p = this.pending.get(id);
+    if (!p) {
+      p = this.load(meta).finally(() => this.pending.delete(id));
+      this.pending.set(id, p);
+    }
+    return p;
+  }
+
+  private async load(meta: ManifestStructure): Promise<Item | null> {
     this.loadingCount++;
-    this.ev.status('Loading anatomy…');
+    this.loadTotal++;
+    this.reportLoading();
     try {
       const asset = await loadStructure(meta.file);
-      if (this.items.has(id)) return this.items.get(id)!;
       const it = asset.kind === 'mesh' ? this.makeMeshItem(meta, asset) : this.makeLineItem(meta, asset);
-      this.items.set(id, it);
+      this.items.set(meta.id, it);
       this.endoDirty = true;
+      if (this.failed.delete(meta.id)) this.reportFailed();
+      // the scene builds up as its parts arrive
+      this.queueRestyle();
       return it;
     } catch (e) {
       console.error(e);
-      this.ev.status(`Could not load ${meta.name}.`);
+      // said in the status line until a retry succeeds: a view with a part missing must not look complete
+      this.failed.set(meta.id, meta.name);
+      this.reportFailed();
       return null;
     } finally {
       this.loadingCount--;
-      if (this.loadingCount === 0) this.ev.status(null);
+      this.loadDone++;
+      if (this.loadingCount === 0) { this.loadTotal = 0; this.loadDone = 0; }
+      this.reportLoading();
     }
+  }
+
+  private reportLoading(): void {
+    this.ev.status(!this.loadingCount ? null : this.loadTotal > 1 ? `Loading anatomy: ${this.loadDone} of ${this.loadTotal}` : 'Loading anatomy…');
+  }
+
+  private reportFailed(): void {
+    this.ev.loadFailed?.([...this.failed.values()]);
+  }
+
+  /** The structures of the view that could not be loaded (ids). */
+  failedIds(): string[] {
+    return [...this.failed.keys()];
+  }
+
+  /** Try again to load what could not be loaded (the status line's Retry button). */
+  async retryFailed(): Promise<void> {
+    await Promise.all([...this.failed.keys()].map((id) => this.ensure(id)));
+    this.restyle();
+  }
+
+  /** Redraw with what has arrived, once per frame at most. */
+  private queueRestyle(): void {
+    if (this.restyleQueued) return;
+    this.restyleQueued = true;
+    requestAnimationFrame(() => { this.restyleQueued = false; this.restyle(); });
   }
 
   private makeMeshItem(meta: ManifestStructure, a: MeshAsset): MeshItem {
@@ -498,11 +554,22 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     return { kind: 'lines', meta, nodes, mat, role: null, centroid: a.centroid };
   }
 
-  /** Load every nucleus (and skull-base bone / soft-tissue mesh) up front (small); cortex and tracts on demand. */
+  /** Resolves when the structures of the view applied last have arrived (or failed): the page's first view is then
+   * complete. Nothing is loaded here: a view loads what it draws (see apply), not the section's whole catalogue. */
   async preload(): Promise<void> {
-    const ids = this.cat.structures.filter((s) => ['nucleus', 'target', 'bone', 'soft', 'surface', 'tube'].includes(s.type)).map((s) => s.id);
-    await Promise.all(ids.map((id) => this.ensure(id)));
+    await this.applied;
     this.restyle();
+  }
+
+  /** The mesh structures a plan draws: every one whose look is not hidden (a cortical surface without a look is drawn
+   * muted). Layers and the legend's eyes are not counted, so switching them on shows the structure at once. */
+  private drawn(p: P): string[] {
+    const out: string[] = [];
+    for (const m of this.cat.structures) {
+      if (!MESH_TYPES.has(m.type)) continue;
+      if ((p.looks.get(m.id) ?? (m.type === 'surface' ? 'muted' : 'hidden')) !== 'hidden') out.push(m.id);
+    }
+    return out;
   }
 
   // ---------------------------------------------------------------- state
@@ -514,15 +581,21 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     if (planChanged) this.plan = this.source.plan(s);
     const p = this.plan!;
     const focusMeta = s.sel ? this.cat.byId.get(s.sel) : undefined;
-    const needed = [
+    const needed = [...new Set([
+      // what the view draws, and nothing else of the catalogue
+      ...this.drawn(p),
       ...[...p.tracts.keys()],
       // a structure selected from the index or legend is shown even if the view does not include it
-      ...(focusMeta && (focusMeta.type === 'tract' || focusMeta.type === 'cortex') ? [focusMeta.id] : []),
+      ...(focusMeta ? [focusMeta.id] : []),
       ...(s.layers.cortex.on && p.parcels.size ? ['cortex', ...p.parcels.keys()] : []),
       ...(s.layers.cortex.on && !p.parcels.size && (p.cortex || this.items.has('cortex')) ? ['cortex'] : []),
-    ];
-    await Promise.all(needed.map((id) => this.ensure(id)));
-    if (seq !== this.applySeq) return; // superseded while loading
+    ])];
+    // what could not be loaded for an earlier view and is not part of this one is no longer missing
+    const stale = [...this.failed.keys()].filter((id) => !needed.includes(id));
+    if (stale.length) { for (const id of stale) this.failed.delete(id); this.reportFailed(); }
+    const loads = Promise.all(needed.map((id) => this.ensure(id)));
+    this.applied = loads;
+    // the view is set up at once with what is already here; the rest is drawn as it arrives (ensure)
     this.updateMarkers();
     this.updateClip();
     this.restyle();
@@ -544,6 +617,10 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     }
     this.renderer.domElement.setAttribute('aria-label', this.describe());
     this.invalidate();
+    await loads;
+    if (seq !== this.applySeq) return; // superseded while loading
+    this.restyle();
+    this.renderer.domElement.setAttribute('aria-label', this.describe());
   }
 
   /** Outline these mesh structures (the selected one, or a plan's) and show their covered parts through what covers

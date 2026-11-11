@@ -8,7 +8,7 @@ import { VIEW, VIEWS, type ViewId } from '../cortex/views';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
 import { refLinksFrom } from './reflinks';
-import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem } from './stage';
+import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: CortexState) => void, opts?: { camera?: boolean }) => void;
@@ -41,7 +41,7 @@ export class CortexAtlasPage {
   private leaders = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   private legendHover: string | null = null;
   private gizmo = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  private status = h('div', { class: 'status', role: 'status', 'aria-live': 'polite', hidden: true });
+  private status = stageStatus(() => { void this.viewer.retryFailed(); });
   private measureBtn!: HTMLButtonElement;
   private sheetState: 'peek' | 'full' = 'peek';
   private measurePts: THREE.Vector3[] = [];
@@ -92,7 +92,7 @@ export class CortexAtlasPage {
       h('div', { class: 'readout-box' }, this.measureOut, this.readout));
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
-    this.stage.append(host, toolbar, this.surfLabels, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status);
+    this.stage.append(host, toolbar, this.surfLabels, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
     this.readout.textContent = 'Point at the surface for its MNI position';
 
     this.viewer = new Viewer<CortexState, CortexPlan>(host, {
@@ -104,7 +104,8 @@ export class CortexAtlasPage {
         s.cam = { preset: s.cam.preset, pos: [pos.x, pos.y, pos.z], tgt: [tgt.x, tgt.y, tgt.z] };
       }, { camera: false }),
       leadMoved: () => undefined,
-      status: (t) => { this.status.hidden = !t; this.status.textContent = t ?? ''; },
+      status: (t) => this.status.set(t),
+      loadFailed: (names) => this.status.failed(names),
       lead: () => undefined,
       moving: (on) => this.stage.classList.toggle('moving', on),
     }, cortexScene);

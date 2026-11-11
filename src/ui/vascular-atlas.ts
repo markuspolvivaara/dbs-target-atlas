@@ -10,7 +10,7 @@ import type { VaState } from '../vascular/state';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
 import { refLinksFrom } from './reflinks';
-import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem } from './stage';
+import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: VaState) => void, opts?: { camera?: boolean }) => void;
@@ -56,7 +56,7 @@ export class VascularAtlasPage {
   private labels = h('div', { class: 'labels', 'aria-hidden': 'true' });
   private leaders = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   private gizmo = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  private status = h('div', { class: 'status', role: 'status', 'aria-live': 'polite', hidden: true });
+  private status = stageStatus(() => { void this.viewer.retryFailed(); });
   private measureBtn!: HTMLButtonElement;
   private sheetState: 'peek' | 'full' = 'peek';
   private measurePts: THREE.Vector3[] = [];
@@ -119,7 +119,7 @@ export class VascularAtlasPage {
       h('div', { class: 'readout-box' }, this.measureOut, this.readout));
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
-    this.stage.append(host, toolbar, dsaBar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status);
+    this.stage.append(host, toolbar, dsaBar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
     this.readout.textContent = 'Point at a structure for its position';
 
     this.viewer = new Viewer<VaState, VaPlan>(host, {
@@ -131,7 +131,8 @@ export class VascularAtlasPage {
         s.cam = { preset: s.cam.preset, pos: [p.x, p.y, p.z], tgt: [t.x, t.y, t.z] };
       }, { camera: false }),
       leadMoved: () => undefined,
-      status: (t) => { this.status.hidden = !t; this.status.textContent = t ?? ''; },
+      status: (t) => this.status.set(t),
+      loadFailed: (names) => this.status.failed(names),
       lead: () => undefined,
       moving: (on) => this.stage.classList.toggle('moving', on),
     }, vaScene);

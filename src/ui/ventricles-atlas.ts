@@ -11,7 +11,7 @@ import { Viewer, type EndoscopeConfig, type PickInfo } from '../viewer/Viewer';
 import { ENDO_FOV_DEG, FLOOR_LAMBDA_MM } from '../viewer/endoscope';
 import { h } from './h';
 import { refLinksFrom } from './reflinks';
-import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem } from './stage';
+import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: VeState) => void, opts?: { camera?: boolean }) => void;
@@ -194,7 +194,7 @@ export class VentriclesAtlasPage {
   private labels = h('div', { class: 'labels', 'aria-hidden': 'true' });
   private leaders = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   private gizmo = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  private status = h('div', { class: 'status', role: 'status', 'aria-live': 'polite', hidden: true });
+  private status = stageStatus(() => { void this.viewer.retryFailed(); });
   private measureBtn!: HTMLButtonElement;
   private sheetState: 'peek' | 'full' = 'peek';
   private measurePts: THREE.Vector3[] = [];
@@ -254,7 +254,7 @@ export class VentriclesAtlasPage {
       h('div', { class: 'readout-box' }, this.measureOut, this.readout));
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
-    this.stage.append(host, this.endoMask, this.endoCompass.a, this.endoCompass.p, this.insetFrame, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status);
+    this.stage.append(host, this.endoMask, this.endoCompass.a, this.endoCompass.p, this.insetFrame, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
     this.bindSteering(host);
     this.readout.textContent = 'Point at a structure for its position';
 
@@ -267,7 +267,8 @@ export class VentriclesAtlasPage {
         s.cam = { preset: s.cam.preset, pos: [p.x, p.y, p.z], tgt: [t.x, t.y, t.z] };
       }, { camera: false }),
       leadMoved: () => undefined,
-      status: (t) => { this.status.hidden = !t; this.status.textContent = t ?? ''; },
+      status: (t) => this.status.set(t),
+      loadFailed: (names) => this.status.failed(names),
       lead: () => undefined,
       moving: (on) => this.stage.classList.toggle('moving', on),
       endoscope: () => this.renderScopeOut(),

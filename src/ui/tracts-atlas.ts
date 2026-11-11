@@ -8,7 +8,7 @@ import type { TractsState } from '../tracts/state';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
 import { refLinksFrom } from './reflinks';
-import { bindSheetDrag, buildSlicesPane, drawGizmo, layoutLabels, syncSlicesPane, type LabelItem } from './stage';
+import { bindSheetDrag, buildSlicesPane, drawGizmo, layoutLabels, syncSlicesPane, type LabelItem, stageStatus } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: TractsState) => void, opts?: { camera?: boolean }) => void;
@@ -45,7 +45,7 @@ export class TractsAtlasPage {
   private leaders = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   private legendHover: string | null = null;
   private gizmo = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  private status = h('div', { class: 'status', role: 'status', 'aria-live': 'polite', hidden: true });
+  private status = stageStatus(() => { void this.viewer.retryFailed(); });
   private measureBtn!: HTMLButtonElement;
   private sheetState: 'peek' | 'full' = 'peek';
   private measurePts: THREE.Vector3[] = [];
@@ -96,7 +96,7 @@ export class TractsAtlasPage {
       h('div', { class: 'readout-box' }, this.measureOut, this.readout));
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
-    this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status);
+    this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
     this.readout.textContent = 'Point at a tract for MNI coordinates';
 
     this.viewer = new Viewer<TractsState, TractPlan>(host, {
@@ -108,7 +108,8 @@ export class TractsAtlasPage {
         s.cam = { preset: s.cam.preset, pos: [pos.x, pos.y, pos.z], tgt: [tgt.x, tgt.y, tgt.z] };
       }, { camera: false }),
       leadMoved: () => undefined,
-      status: (t) => { this.status.hidden = !t; this.status.textContent = t ?? ''; },
+      status: (t) => this.status.set(t),
+      loadFailed: (names) => this.status.failed(names),
       lead: () => undefined,
       moving: (on) => this.stage.classList.toggle('moving', on),
     }, tractsScene);
