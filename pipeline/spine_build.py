@@ -877,13 +877,9 @@ def vertebral_artery(report: dict) -> tuple[list[dict], dict]:
         m = np.ceil(12 / vox).astype(int)
         b0, b1 = np.maximum(idx.min(0) - m, 0), np.minimum(idx.max(0) + m + 1, sel.shape)
         crp = tuple(slice(a, b) for a, b in zip(b0, b1))
-        # NOT YET the vertebra as drawn since the vertebrae were kept out of their neighbours' masks (bone_volume's
-        # `other`, audit MC-01): this bone still takes in up to MASK_REACH_MM of a neighbour's articular process.
-        # Passing `vm[crp] > 0` makes it the drawn bone and changes one measured value, shown as measured on this CT:
-        # the right C5 foramen's enclosed area, 24 -> 14 mm2 (the ring that encloses 24 mm2 is closed by C6's superior
-        # articular process), and with it the artery's path there by about 1 mm. It waits for a review with the
-        # pedicle values (spine_screw.py, which reads this artery).
-        vol = bone_volume(ct[crp].astype(np.float32), sel[crp], float(vox.mean()))
+        # (the vertebra as drawn, kept out of its neighbours' masks: a foramen's ring is closed by its own bone, not by
+        # the articular process of the vertebra below, as the right C5 foramen's was by C6's)
+        vol = bone_volume(ct[crp].astype(np.float32), sel[crp], float(vox.mean()), vm[crp] > 0)
         inside = ndimage.gaussian_filter(vol, SIGMA_VOX) > BONE_HU
         lab_i, n = ndimage.label(inside)
         if n > 1:

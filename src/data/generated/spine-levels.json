@@ -1143,14 +1143,14 @@
     "L": {
      "area": 28.0,
      "width": 6.5,
-     "depth": 6.0
+     "depth": 7.0
     },
     "R": {
-     "area": 24.0,
+     "area": 14.0,
      "width": 5.5,
-     "depth": 6.5
+     "depth": 5.0
     },
-    "medialGap": 29.6
+    "medialGap": 29.3
    },
    "C6": {
     "L": {

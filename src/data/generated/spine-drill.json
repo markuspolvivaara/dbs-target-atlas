@@ -25,7 +25,7 @@
    "root": "sp_root_c3",
    "artery": true,
    "file": "assets/spine/drill_c2_c3.bin.gz",
-   "bytes": 750939,
+   "bytes": 750848,
    "dims": [
     100,
     97,
@@ -161,7 +161,7 @@
    "root": "sp_root_c4",
    "artery": true,
    "file": "assets/spine/drill_c3_c4.bin.gz",
-   "bytes": 605245,
+   "bytes": 605465,
    "dims": [
     102,
     98,
@@ -297,7 +297,7 @@
    "root": "sp_root_c5",
    "artery": true,
    "file": "assets/spine/drill_c4_c5.bin.gz",
-   "bytes": 630781,
+   "bytes": 632371,
    "dims": [
     103,
     103,
@@ -433,7 +433,7 @@
    "root": "sp_root_c6",
    "artery": true,
    "file": "assets/spine/drill_c5_c6.bin.gz",
-   "bytes": 700777,
+   "bytes": 702254,
    "dims": [
     105,
     107,
@@ -569,7 +569,7 @@
    "root": "sp_root_c7",
    "artery": true,
    "file": "assets/spine/drill_c6_c7.bin.gz",
-   "bytes": 820770,
+   "bytes": 821742,
    "dims": [
     122,
     123,
@@ -705,7 +705,7 @@
    "root": "sp_root_c8",
    "artery": true,
    "file": "assets/spine/drill_c7_t1.bin.gz",
-   "bytes": 934612,
+   "bytes": 935145,
    "dims": [
     133,
     132,

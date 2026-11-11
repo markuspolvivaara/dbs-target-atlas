@@ -21,6 +21,9 @@ const LateralMassSchema = z.object({ width: z.number(), height: z.number(), face
 const StartSchema = z.object({
   entry: V3, dir: V3, chord: z.number().nullable().optional(), trajectory: z.number().optional(), promontory: V3.optional(), bodyDepth: z.number().optional(),
   sagittal: z.number().optional(), ventral: z.boolean().optional(), apex: V3.optional(),
+  /** a lateral mass start whose path leaves the vertebra's bone straight into a neighbour's: through the facet joint
+   * with that vertebra, this far (mm) from the entry */
+  joint: z.object({ with: z.string(), at: z.number() }).optional(),
   size: z.object({ diameter: z.number(), length: z.number() }),
 });
 const Side = z.object({ L: StartSchema, R: StartSchema });

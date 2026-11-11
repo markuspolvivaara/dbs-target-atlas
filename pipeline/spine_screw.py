@@ -3,8 +3,8 @@ positions and the bone distance fields the browser uses to find cortical breache
 
   pipeline/.venv/bin/python -I pipeline/spine_screw.py      (after spine_build.py, whose meshes it reads)
 
-For T1-T12 and L1-L5 (VerSe masks with the CT, the same bone as the drawn vertebrae) and S1 (TotalSegmentator sacrum,
-as drawn):
+For T1-T12 and L1-L5 (VerSe masks with the CT: the bone of the drawn vertebrae, each kept out of its neighbours' masks
+as there, and taken as one solid: solid()) and S1 (TotalSegmentator sacrum, as drawn):
   * a frame per vertebra: e_z normal to the superior endplate (plane fitted to its top surface), e_y from the canal
     centre to the body centre within that plane, e_x patient right;
   * per pedicle: the isthmus (the narrowest cross-section normal to the pedicle axis) with its width and height, the
@@ -62,6 +62,8 @@ RISK_IDS = ["sp_dural_sac", "sp_vertebral_artery", "sp_ica_left", "sp_ica_right"
 # leaves the lateral mass (bicortical), rounded down to the millimetre
 LM_TECHNIQUES = {"rc": (0.0, 0.0, 10.0, "perpendicular"), "mg": (1.0, 1.0, 25.0, "facets"), "an": (1.0, 0.0, 30.0, "plus15")}
 LM_DIAMETER = 3.5
+LM_MIN_LENGTH = 6.0  # the tool's shortest screw (SCREW_RANGE in src/spine/state.ts): no start screw is shorter
+JOINT_REACH_MM = 2.0  # a path that meets another vertebra's bone within this of leaving its own left through a facet joint
 C7_DIAMETER = 3.5    # Jiang 2024: 3.5 or 4.0 mm by the preoperative CT; the smaller as the start
 # Thoracic start sizes, Mandelka 2023 (reviewing the literature): diameter FILL_RATIO x the pedicle's measured outer
 # width (the screw diameter / pedicle width ratio with the fewest perforations, recommended for less experienced
@@ -121,6 +123,14 @@ def largest(mask: np.ndarray) -> np.ndarray:
         return mask
     sizes = ndimage.sum(mask, lab, range(1, n + 1))
     return lab == (int(np.argmax(sizes)) + 1)
+
+
+def solid(inside: np.ndarray) -> np.ndarray:
+    """A bone as one solid: its largest piece, with what that encloses. Where a pedicle is too thin for the mask's
+    core to cover it (spine_build.bone_volume), cancellous bone darker than BONE_HU leaves a hole inside it: a width
+    measured through the hole stops there, the largest sphere through the pedicle shrinks, and under a screw the hole
+    reads as a breach."""
+    return ndimage.binary_fill_holes(largest(inside))
 
 
 def endplate_normal(pts: np.ndarray, c: np.ndarray, ez0: np.ndarray, radius: float = 14.0, below: bool = False) -> np.ndarray:
@@ -466,9 +476,11 @@ def facet_inclination(grid, n: int, c: np.ndarray, F: np.ndarray, lm: dict, sg: 
     return float(np.degrees(np.arctan2(d @ F[2], d @ F[1])))
 
 
-def lm_start(bone: Bone, F: np.ndarray, lm: dict, sg: int, tech: str, facets: list[float]) -> dict:
+def lm_start(bone: Bone, F: np.ndarray, lm: dict, sg: int, tech: str, facets: list[float], labels=None, own: int = 0) -> dict:
     """A lateral mass screw's start: direction from LM_TECHNIQUES in the vertebra's frame; the entry offset from the
-    face's midpoint along the face (medial, cranial), then put on the bone surface along the screw."""
+    face's midpoint along the face (medial, cranial), then put on the bone surface along the screw. Where the path
+    leaves the vertebra's bone straight into a neighbour's (`labels`: the CT's bone by vertebra; `own`: this one), it
+    left through the facet joint between them: "joint" names the neighbour and how far from the entry that is."""
     med, cra, lateral, how = LM_TECHNIQUES[tech]
     n = lm["normal"]
     perp = float(np.degrees(np.arctan2(n @ F[2], n @ F[1])))      # the perpendicular's sagittal angle
@@ -481,8 +493,14 @@ def lm_start(bone: Bone, F: np.ndarray, lm: dict, sg: int, tech: str, facets: li
     t = first_entry(bone, far, d, 30.0)
     entry = far + (t if t is not None else 15.0) * d
     out = surface_along(bone, entry + 1.5 * d, d, 40.0)
-    return {"entry": entry.round(2).tolist(), "dir": d.round(4).tolist(), "chord": round(float(out + 1.5), 1) if out else None,
-            "sagittal": round(sag, 1)}
+    st = {"entry": entry.round(2).tolist(), "dir": d.round(4).tolist(), "chord": round(float(out + 1.5), 1) if out else None,
+          "sagittal": round(sag, 1)}
+    if out and labels is not None:
+        beyond = labels.sample(entry + (out + 1.5 + np.arange(0.25, JOINT_REACH_MM + 0.01, 0.25))[:, None] * d)
+        other = [int(x) for x in beyond if x and x != own]
+        if other:
+            st["joint"] = {"with": B.VERSE_LEVELS[other[0]], "at": st["chord"]}
+    return st
 
 
 # ---------------------------------------------------------------- the atlas and the axis (C1-C2 fixation)
@@ -861,7 +879,7 @@ def c1c2_bone(m: np.ndarray, ct: np.ndarray, aff: np.ndarray, vox: np.ndarray, o
     is meant to cross them."""
     sel = (m == B.LABEL_OF["C1"]) | (m == B.LABEL_OF["C2"])
     cr, lo = crop_of(sel, vox, CROP_MM)
-    vol = B.bone_volume(ct[cr].astype(np.float32), sel[cr], float(vox.mean()))   # (see the note at the other call)
+    vol = B.bone_volume(ct[cr].astype(np.float32), sel[cr], float(vox.mean()), m[cr] > 0)   # (kept out of C3's mask)
     inside = ndimage.gaussian_filter(vol, B.SIGMA_VOX) > B.BONE_HU
     it = max(1, int(round(3.0 / float(vox.mean()))))
     inside = largest(ndimage.binary_closing(np.pad(inside, it), iterations=it)[it:-it, it:-it, it:-it])
@@ -1117,14 +1135,10 @@ def level_data(lv: str, region_name: str, m: np.ndarray, ct: np.ndarray, body_ma
         lab = B.LABEL_OF[lv]
         sel = m == lab
         cr, lo = crop_of(sel, vox, CROP_MM)
-        # NOT YET as the vertebrae are drawn since they were kept out of their neighbours' masks (spine_build.bone_volume's
-        # `other`, audit MC-01): this bone still takes in up to MASK_REACH_MM of a neighbour's articular process at each
-        # facet joint. Passing `m[cr] > 0` here makes it the drawn bone, and changes what is measured on it: pedicle
-        # widths by up to 6 mm (L5 right 20.0 -> 14.2, T4 left 5.8 -> 2.5), and the lateral mass screws' start lengths
-        # (the Roy-Camille start at C3 leaves C3's own bone after 3-4 mm, which fails the check below). Those values are
-        # shown as measured on this CT, so the change waits for a review of them.
-        vol = B.bone_volume(ct[cr].astype(np.float32), sel[cr], float(vox.mean()))
-        inside = largest(ndimage.gaussian_filter(vol, B.SIGMA_VOX) > B.BONE_HU)
+        # the vertebra as it is drawn: the CT's bone within reach of its mask, kept out of its neighbours' masks
+        # (spine_build.bone_volume), and as one solid
+        vol = B.bone_volume(ct[cr].astype(np.float32), sel[cr], float(vox.mean()), m[cr] > 0)
+        inside = solid(ndimage.gaussian_filter(vol, B.SIGMA_VOX) > B.BONE_HU)
         a_s = aff.copy()
         a_s[:3, 3] = nib.affines.apply_affine(aff, lo) - o
         bone = Bone(inside, a_s)
@@ -1202,7 +1216,7 @@ def level_data(lv: str, region_name: str, m: np.ndarray, ct: np.ndarray, body_ma
                                    "facetInclination": [round(x, 1) for x in facets], "centre": lm["centre"].round(2).tolist()}
                               for sd, (lm, facets) in lms.items()}
         for tech in LM_TECHNIQUES:
-            starts[tech] = {sd: lm_start(bone, F, lms[sd][0], sg, tech, lms[sd][1]) for sd, sg in (("L", -1), ("R", 1))}
+            starts[tech] = {sd: lm_start(bone, F, lms[sd][0], sg, tech, lms[sd][1], labels, n) for sd, sg in (("L", -1), ("R", 1))}
     else:
         ped = {sd: pedicle(bone, c, F, can, sg, AXIS_SPAN[region_name], ISTHMUS_BACK[region_name]) for sd, sg in (("L", -1), ("R", 1))}
         lvl["pedicle"] = ped
@@ -1234,7 +1248,9 @@ def level_data(lv: str, region_name: str, m: np.ndarray, ct: np.ndarray, body_ma
                 ln = st["chord"] if tech == "c1lm" else min(st["chord"] - 1.0, CC_MAX_LENGTH.get(tech, 99.0))
                 dia, ln = CC_DIAMETER, float(np.floor(ln))
             elif tech in LM_TECHNIQUES:
-                dia, ln = LM_DIAMETER, float(np.floor(st["chord"]))
+                # (where the path leaves through a facet joint after less than the shortest screw, as the perpendicular
+                # Roy-Camille path does at C3 on this CT, the start screw is that shortest one: its tip lies in the joint)
+                dia, ln = LM_DIAMETER, max(float(np.floor(st["chord"])), LM_MIN_LENGTH)
             elif tech == "cp":
                 dia, ln = C7_DIAMETER, float(np.floor(st["chord"]))
             elif tech in ("st", "at"):

@@ -7,6 +7,7 @@ import { crossCheckContent, TECHNIQUES } from '../../src/spine/content';
 import { anglesOf, decodeField, direction, evaluate, grRobbins, movedEntry, SCREW_LEVELS, screwDefaults, screwKey, sdfAt, type ScrewSide, type TechniqueId, type V3 } from '../../src/spine/screw';
 import { decodeSpine, defaultSpineState, encodeSpine, SCREW_RANGE } from '../../src/spine/state';
 
+const DEEP_MAX = 5;   // vertices of a neighbour that may lie more than 1 mm inside a level's bone
 function field(level: string) {
   const lv = SCREW_LEVELS[level];
   const raw = gunzipSync(readFileSync(new URL(`../../public/${lv.file}`, import.meta.url)));
@@ -60,6 +61,28 @@ describe('virtual screw data (pipeline/spine_screw.py)', () => {
       }
     }
   });
+  it('a level’s bone is its own: the vertebra below does not lie inside it', async () => {
+    // (the bone a screw is judged in reached up to 2 mm into its neighbours at the facet joints: a screw crossing a
+    // joint read as still in bone, and widths measured across a joint took in the neighbour's articular process)
+    const { meshSoup } = await import('./glb');
+    const order = [...[1, 2, 3, 4, 5, 6, 7].map((i) => `C${i}`), ...Array.from({ length: 12 }, (_, i) => `T${i + 1}`), ...[1, 2, 3, 4, 5].map((i) => `L${i}`)];
+    let total = 0;
+    for (const lv of order.slice(0, -1)) {
+      if (!SCREW_LEVELS[lv]) continue;
+      const f = field(lv);
+      const { P } = await meshSoup(SP.get(`sp_${order[order.indexOf(lv) + 1].toLowerCase()}`)!.file);
+      const hi = f.origin.map((o, i) => o + (f.dims[i] - 1) * f.step);
+      let deep = 0;
+      for (let i = 0; i < P.length; i += 3) {
+        const p: V3 = [P[i], P[i + 1], P[i + 2]];
+        if (p.some((x, k) => x < f.origin[k] || x > hi[k])) continue;
+        if (sdfAt(f, p) < -1) deep++;   // more than 1 mm inside (the field's own grid is 1 mm)
+      }
+      expect(deep, `vertices of the vertebra below more than 1 mm inside ${lv}'s bone`).toBeLessThanOrEqual(DEEP_MAX);
+      total += deep;
+    }
+    expect(total).toBeLessThanOrEqual(3 * DEEP_MAX);
+  }, 60_000);
   it('lateral mass screws start inside their lateral mass, angled laterally as the techniques say, clear of the vertebral artery', () => {
     for (const lv of ['C3', 'C4', 'C5', 'C6']) {
       const L = SCREW_LEVELS[lv];
@@ -76,7 +99,21 @@ describe('virtual screw data (pipeline/spine_screw.py)', () => {
         }
         // An is 15 deg more cephalad than the perpendicular Roy-Camille screw
         expect(anglesOf(L, sd, L.start.an![sd].dir).cranial - anglesOf(L, sd, L.start.rc![sd].dir).cranial).toBeCloseTo(15, 1);
+        // on this CT the perpendicular (Roy-Camille) path leaves the vertebra through the facet joint with the one
+        // below, and the data says so; the Magerl path, parallel to the joints, does not. A start screw is as long
+        // as the vertebra's own bone along its path, and never shorter than the tool's shortest
+        expect(L.start.rc![sd].joint?.with, `${lv}${sd}`).toBe(`C${Number(lv.slice(1)) + 1}`);
+        expect(L.start.rc![sd].joint!.at, `${lv}${sd}`).toBe(L.start.rc![sd].chord);
+        expect(L.start.mg![sd].joint, `${lv}${sd}`).toBeUndefined();
+        for (const t of ['rc', 'mg', 'an'] as const) {
+          expect(L.start[t]![sd].size.length, `${lv}${sd} ${t}`).toBe(Math.max(Math.floor(L.start[t]![sd].chord!), SCREW_RANGE.length[0]));
+        }
       }
+    }
+    // at C3 the joint is met after less than the shortest screw: the start screw is that one, 6 mm
+    for (const sd of ['L', 'R'] as const) {
+      expect(SCREW_LEVELS.C3.start.rc![sd].joint!.at).toBeLessThan(SCREW_RANGE.length[0]);
+      expect(SCREW_LEVELS.C3.start.rc![sd].size.length).toBe(SCREW_RANGE.length[0]);
     }
     // C7: the measured pedicle axis sits within the published study means (Jiang 2024, Table 4: 27.1-41.1 deg)
     for (const sd of ['L', 'R'] as const) {
@@ -101,7 +138,11 @@ describe('virtual screw data (pipeline/spine_screw.py)', () => {
       // midline, wholly in bone early on
       expect(anglesOf(SCREW_LEVELS.C2, sd, SCREW_LEVELS.C2.start.c2p![sd].dir).medial).toBeCloseTo(45, 1);
       expect(Math.abs(anglesOf(SCREW_LEVELS.C2, sd, SCREW_LEVELS.C2.start.c2pars![sd].dir).medial)).toBeLessThan(0.5);
-      for (const t of ['c2p', 'c2pars'] as const) expect(SCREW_LEVELS.C2.check[`${t}.${sd}`].grade, `${t}.${sd}`).toBe('A');
+      // (the pars screw enters just above the C2-C3 joint: against C2's own bone, without the rim of C3's articular
+      // process that used to count as C2, its surface comes within half a millimetre of leaving it there)
+      expect(SCREW_LEVELS.C2.check[`c2p.${sd}`].grade, `c2p.${sd}`).toBe('A');
+      expect(['A', 'B'], `c2pars.${sd}`).toContain(SCREW_LEVELS.C2.check[`c2pars.${sd}`].grade);
+      for (const k of ['medial', 'lateral', 'superior', 'inferior']) expect(SCREW_LEVELS.C2.check[`c2pars.${sd}`].breach[k] ?? 0, `c2pars.${sd} ${k}`).toBeLessThan(1);
       const tl = -anglesOf(SCREW_LEVELS.C2, sd, SCREW_LEVELS.C2.start.c2tl![sd].dir).medial;
       expect(tl).toBeGreaterThanOrEqual(25);
       expect(tl).toBeLessThanOrEqual(65);

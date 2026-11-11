@@ -133,11 +133,23 @@ export class ScrewPanel {
         }, 'Cut along the screw')),
       this.readout,
       h('p', { class: 'aside schematic-note' }, 'Illustrative: one subject’s CT, not a plan for a patient.'),
-      this.stmt(t.start), this.stmt(t.size), t.note ? this.stmt(t.note) : '',
+      this.stmt(t.start), this.jointNote(level, c), this.stmt(t.size), t.note ? this.stmt(t.note) : '',
       SCREW_LEVELS[level].pedicle ? this.stmt(STATEMENTS.fill) : '',
       t.id === 'od' ? '' : this.stmt(!t.within ? STATEMENTS.grades : level === 'C1' || level === 'C2' ? STATEMENTS.hrva : STATEMENTS.lateralMassRisk),
       this.stmt(STATEMENTS.screwMethod),
     );
+  }
+
+  /** Where a start trajectory leaves the vertebra through a facet joint on this CT (the pipeline's finding, not a
+   * published one): said under the technique's start, for the side shown. */
+  private jointNote(level: string, c: ScrewState): HTMLElement | string {
+    const st = SCREW_LEVELS[screwKey(level, c.tech)].start[c.tech]?.[c.side];
+    if (!st?.joint) return '';
+    const short = st.size.length > st.joint.at;
+    return h('p', { class: 'aside joint-note' },
+      `On this CT the start trajectory leaves ${level} through its facet joint with ${st.joint.with} ${one(st.joint.at)} mm from the entry: ${level}’s own bone is no deeper along it. `,
+      short ? `The start screw is the tool’s shortest (${one(st.size.length)} mm) and ends ${one(st.size.length - st.joint.at)} mm beyond that; a longer one crosses into ${st.joint.with}.`
+        : `A screw longer than that crosses into ${st.joint.with}.`);
   }
 
   private refresh(s: SpineState): void {

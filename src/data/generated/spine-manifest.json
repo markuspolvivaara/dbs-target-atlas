@@ -4839,7 +4839,7 @@
   },
   {
    "aliases": [],
-   "bytes": 17768,
+   "bytes": 17772,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
