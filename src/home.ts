@@ -1,7 +1,7 @@
 import '@fontsource/atkinson-hyperlegible/latin-400.css';
 import '@fontsource/atkinson-hyperlegible/latin-700.css';
 import './styles.css';
-import { BRAND, SECTIONS, SITE_ROOT } from './brand';
+import { assetUrl, BRAND, SECTIONS, SITE_ROOT } from './brand';
 import { h } from './ui/h';
 import { disclaimerNote, siteHeader } from './ui/shell';
 import { applyTheme, injectPaletteCss, resolvedTheme, storeTheme, storedTheme, type ThemePref } from './ui/theme';
@@ -37,7 +37,7 @@ const nav = [
 const card = (s: (typeof SECTIONS)[number]) => {
   const live = s.status === 'live';
   // absolute: a url() inside a custom property resolves against the stylesheet that uses it, not this page
-  const style = `--img: url('${new URL(`${SITE_ROOT}assets/home/${s.id}.webp`, location.href).href}')`;
+  const style = `--img: url('${new URL(assetUrl(`assets/home/${s.id}.webp`), location.href).href}')`;
   const body = [
     h('h2', {}, s.name, live ? null : h('span', { class: 'badge' }, 'Coming soon')),
     h('p', {}, s.summary),

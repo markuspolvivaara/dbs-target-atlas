@@ -150,7 +150,7 @@ test('dbs: the axial-signs note does not point to a nucleus the view leaves out'
 test('loading: a view downloads the meshes it draws, not the catalogue, and the next view loads its own', async ({ page }) => {
   const g = guard(page);
   const glbs = new Set<string>();
-  page.on('request', (r) => { if (r.url().endsWith('.glb')) glbs.add(new URL(r.url()).pathname); });
+  page.on('request', (r) => { if (new URL(r.url()).pathname.endsWith('.glb')) glbs.add(new URL(r.url()).pathname); });
   await open(page, './skullbase/');
   const first = glbs.size;
   // the cranial floor: its bones, nerves and ear, about 40 files of the model's 200 and more
@@ -169,7 +169,7 @@ test('loading: a view downloads the meshes it draws, not the catalogue, and the 
 // P1-02, UI-06: a mesh that failed to load was left out without a word, and was not tried again
 test('loading: a structure that cannot be loaded is named in a notice that stays, and Retry loads it', async ({ page }) => {
   let block = true;
-  await page.route('**/assets/meshes/stn_motor.glb', (route) => (block ? route.abort() : route.continue()));
+  await page.route('**/assets/meshes/stn_motor.glb*', (route) => (block ? route.abort() : route.continue()));
   await open(page, './dbs/#/atlas?i=pd');
   const notice = page.locator('.status-failed');
   await expect(notice).toBeVisible();
