@@ -821,7 +821,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_cochlear_nerve.glb",
-   "bytes": 4356,
+   "bytes": 7564,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -838,7 +838,7 @@
    ],
    "refIds": [],
    "category": "nerve",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on the left only: the right one is its mirror image.",
    "centroid": {
     "L": [
      -30.56,
@@ -846,7 +846,7 @@
      -13.09
     ],
     "R": [
-     -30.56,
+     30.56,
      -16.74,
      -13.09
     ]

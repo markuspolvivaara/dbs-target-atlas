@@ -400,6 +400,9 @@ def main() -> int:
     import trimesh
     BUILD.mkdir(parents=True, exist_ok=True)
     ex = json.loads(ZEXPORT.read_text())
+    # one of a pair missing in Z-Anatomy (its right cochlear nerve): the mirror image, fitted like the rest
+    from skullbase_build import mirror_missing_sides
+    print("mirrored:", mirror_missing_sides(ex["lines"]))
     b, plain, a, lab = ct_bone()
     pts = surface_points(plain, a)
     s, R, t, warp, rep = fit(ex, pts)

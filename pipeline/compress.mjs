@@ -2,6 +2,8 @@
 // (KHR_mesh_quantization) and apply meshopt compression (EXT_meshopt_compression).
 // Input:  pipeline/data/build/{meshes,tracts,wm,skullbase,skullbase-ct,skullbase-v3,cortex,spine,brainstem,ventricles,vascular}/*.glb (or only the kind given as argument)
 // Output: public/assets/{meshes,tracts,wm,skullbase,skullbase-ct,skullbase-v3,cortex,spine,brainstem,ventricles,vascular}/*.glb
+// With file names after the kind, only those files of it: node pipeline/compress.mjs skullbase sb_cochlear_nerve.glb
+// (where a rebuild leaves rounding noise in meshes it did not mean to change, compress the ones it did).
 import { NodeIO, Logger } from '@gltf-transform/core';
 import { EXTMeshoptCompression, KHRMeshQuantization } from '@gltf-transform/extensions';
 import { meshopt, quantize, dedup, prune } from '@gltf-transform/functions';
@@ -24,7 +26,8 @@ for (const kind of (process.argv[2] ? [process.argv[2]] : ['meshes', 'tracts', '
   if (!existsSync(src)) continue; // a section not built yet
   const dst = join(repo, 'public', 'assets', kind);
   mkdirSync(dst, { recursive: true });
-  for (const f of readdirSync(src).filter((f) => f.endsWith('.glb')).sort()) {
+  const only = process.argv.slice(3);
+  for (const f of readdirSync(src).filter((f) => f.endsWith('.glb') && (!only.length || only.includes(f))).sort()) {
     const doc = await io.read(join(src, f));
     doc.setLogger(new Logger(Logger.Verbosity.WARN));
     await doc.transform(

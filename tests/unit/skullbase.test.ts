@@ -383,6 +383,29 @@ describe('skull-base data, in each model', () => {
   });
 });
 
+describe('skull-base nerves and vessels, in each model', () => {
+  it('everything paired is drawn on both sides (v1 and v2 had a left cochlear nerve and no right one)', async () => {
+    const { nodeExtentsX } = await import('./glb');
+    for (const prefix of ['sb', 'sbct', 'sbv3']) {
+      const m = (await import(`../../src/data/generated/${prefix}-manifest.json`)).default as { structures: { id: string; name: string; type: string; category?: string; file: string; pushedFrom?: string; tumourView?: string; approach?: string }[] };
+      const oneSided: string[] = [];
+      for (const s of m.structures) {
+        if (s.type !== 'tube' || !['nerve', 'artery', 'vein'].includes(s.category ?? '') || s.pushedFrom || s.tumourView || s.approach) continue;
+        const ext = await nodeExtentsX(s.file);
+        const sides = Object.keys(ext);
+        // a midline vessel is one node, across or on the midline; anything that lies wholly on one side has a twin
+        if (sides.length === 1 && (ext[sides[0]][0] > 2 || ext[sides[0]][1] < -2)) oneSided.push(`${prefix}: ${s.name} (${sides[0]} only)`);
+      }
+      expect(oneSided, prefix).toEqual([]);
+    }
+    const coch = await nodeExtentsX('assets/skullbase/sb_cochlear_nerve.glb');
+    expect(Object.keys(coch).sort()).toEqual(['L', 'R']);
+    // the model is symmetric: the right one is the left one's mirror image
+    expect(coch.R[0]).toBeCloseTo(-coch.L[1], 1);
+    expect(coch.R[1]).toBeCloseTo(-coch.L[0], 1);
+  }, 120_000);
+});
+
 describe('skull-base views, in each model', async () => {
   const models = { v1: await import('../../src/skullbase/groups'), v2: (await modelModules('ct')).groups, v3: (await v3Modules()).groups };
   it('list each structure and each landmark once (a repeat shows twice in the panel and the legend)', () => {

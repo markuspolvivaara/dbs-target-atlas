@@ -1,6 +1,26 @@
 {
  "steps": [
   {
+   "step": "skullbase_build_mirror",
+   "operation": "one side of a pair that Z-Anatomy draws on one side only, added as the mirror image of the other",
+   "structures": [
+    "sb_cochlear_nerve"
+   ],
+   "parameters": {
+    "plane": "x = 0 (the model is symmetric about it)"
+   },
+   "metrics": {
+    "added": {
+     "Cochlear nerve.r": "Cochlear nerve.l"
+    }
+   },
+   "validation": {
+    "check": "skullbase_build.py finalize: left and right centroids mirror-like"
+   },
+   "revision": "9c15dc7",
+   "date": "2026-11-11"
+  },
+  {
    "step": "skullbase_v1_brain",
    "operation": "the cortex remade as closed surfaces and pushed out of its bone by a smooth field; the opercula and the fissure's floor found from the model's arteries and white matter",
    "structures": [

@@ -732,7 +732,7 @@
    "type": "tube",
    "fitted": true,
    "file": "assets/skullbase-ct/sb_cochlear_nerve.glb",
-   "bytes": 4364,
+   "bytes": 7572,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -755,7 +755,7 @@
    ],
    "refIds": [],
    "category": "nerve",
-   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm.",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm. Z-Anatomy draws it on the left only: the right one is its mirror image, fitted onto this CT with the rest.",
    "centroid": {
     "L": [
      -28.31,
@@ -763,9 +763,9 @@
      -13.94
     ],
     "R": [
-     -28.31,
-     -15.46,
-     -13.94
+     29.16,
+     -15.31,
+     -14.79
     ]
    },
    "cranialNerve": 8,

@@ -167,6 +167,26 @@ def split_pair(name: str) -> tuple[str, str | None]:
     return name.rstrip("."), side  # one Z-Anatomy name ends in a stray full stop
 
 
+def mirror_missing_sides(lines: dict) -> list[str]:
+    """Z-Anatomy's model is symmetric about the midline, and its nerves and vessels are left and right objects. Where
+    it has only one of a pair (its cochlear nerve: a left object, no right one), the other side is that one's mirror
+    image: added to `lines` under the missing side's name, marked "mirroredFrom". Returns the names added."""
+    have: dict[str, dict[str, str]] = {}
+    for n in lines:
+        base, side = split_pair(n)
+        if side:
+            have.setdefault(base, {})[side] = n
+    made = []
+    for base, sides in sorted(have.items()):
+        if len(sides) != 1:
+            continue
+        (side, src), = sides.items()
+        new = src[:-2] + (".r" if side == "L" else ".l")
+        lines[new] = {**lines[src], "runs": [[[-p[0], *p[1:]] for p in r] for r in lines[src]["runs"]], "mirroredFrom": src}
+        made.append(new)
+    return made
+
+
 def colour(token: str) -> dict:
     return {"token": token, "light": PALETTE["light"][token], "dark": PALETTE["dark"][token]}
 
@@ -291,6 +311,16 @@ def main() -> int:
     # a landmark the export could only attach to the nearest bone surface is a neighbour's, not a cranial bone's (the
     # atlas's "Lateral mass" under the occipital condyle): not shown, nor its text (newer exports leave it out themselves)
     ex["landmarks"] = [lm for lm in ex["landmarks"] if lm["boneFrom"] != "nearest surface"]
+    # one of a pair missing in Z-Anatomy: its mirror image (the CT model's export has it already, fitted: skullbase_ct.py)
+    if not CT:
+        made = mirror_missing_sides(ex["lines"])
+        if made:
+            from modifications import record
+            record("sb", "skullbase_build_mirror", "one side of a pair that Z-Anatomy draws on one side only, added as the mirror image of the other",
+                   [slug(split_pair(n)[0]) for n in made], {"plane": "x = 0 (the model is symmetric about it)"},
+                   {"added": {n: ex["lines"][n]["mirroredFrom"] for n in made}},
+                   {"check": "skullbase_build.py finalize: left and right centroids mirror-like"})
+    mirrored = {split_pair(n)[0]: split_pair(n)[1] for n, ln in ex["lines"].items() if ln.get("mirroredFrom")}
     BUILD.mkdir(parents=True, exist_ok=True)
     for old in BUILD.glob("*.glb"):  # structures can be renamed or merged between runs
         old.unlink()
@@ -409,7 +439,9 @@ def main() -> int:
                              "neighbouring bone encloses it (baked ambient occlusion)." if g["type"] == "bone"
                              else "Mesh exported unchanged from Z-Anatomy." if g["type"] == "soft"
                              else "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point "
-                                  f"(its curve bevel: modelled, not measured), at least {TUBE_MIN_RADIUS_MM} mm; cropped to the head."),
+                                  f"(its curve bevel: modelled, not measured), at least {TUBE_MIN_RADIUS_MM} mm; cropped to the head.")
+                          + (f" Z-Anatomy draws it on the {'left' if mirrored[base] == 'R' else 'right'} only: the {'right' if mirrored[base] == 'R' else 'left'} "
+                             "one is its mirror image" + (", fitted onto this CT with the rest." if CT else ".") if base in mirrored else ""),
             "centroid": {"L": cent["L"], "R": cent["R"]},
             **({"cranialNerve": cn[base]} if base in cn else {}),
             **({"system": ARTERY_SYSTEM[base]} if g["kind"] == "artery" else {}),
