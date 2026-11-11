@@ -5,6 +5,7 @@ import { BRAND, SECTIONS } from './brand';
 import { GROUP, TOPIC } from './tracts';
 import { decodeTracts, defaultTractsState, encodeTracts, type TractsPage, type TractsState } from './tracts/state';
 import { h } from './ui/h';
+import { bindHelp, viewHelp } from './ui/help';
 import { disclaimerNote, siteHeader } from './ui/shell';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
 import { TractsAtlasPage } from './ui/tracts-atlas';
@@ -55,6 +56,7 @@ const pages: Record<TractsPage, { el: HTMLElement; render(s: TractsState): void 
 const main = h('main', { id: 'main' }, ...Object.values(pages).map((p) => p.el));
 new ResizeObserver(() => document.documentElement.style.setProperty('--disc-h', `${disclaimer.offsetHeight}px`)).observe(disclaimer);
 const help = buildHelp();
+bindHelp(help);
 app.append(h('a', { class: 'skip', href: '#main' }, 'Skip to content'), header, disclaimer, main, help);
 
 let pendingCamera = true;
@@ -115,9 +117,9 @@ function buildHelp(): HTMLDialogElement {
     ['N', 'Name labels: all → hover → off'], ['S', 'Toggle axial slice'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
   ];
   return h('dialog', { class: 'help', 'aria-labelledby': 'help-title' },
-    h('h2', { id: 'help-title' }, 'Keyboard shortcuts'),
+    h('h2', { id: 'help-title' }, 'Keys, mouse and touch'),
     h('dl', {}, ...rows.flatMap(([k, v]) => [h('dt', {}, h('kbd', {}, k)), h('dd', {}, v)])),
-    h('p', { class: 'aside' }, 'Touch: one finger rotates, two fingers pinch to zoom and drag to pan. Tap a tract for its card.'),
+    ...viewHelp('a tract'),
     h('form', { method: 'dialog' }, h('button', { class: 'btn' }, 'Close'))) as HTMLDialogElement;
 }
 

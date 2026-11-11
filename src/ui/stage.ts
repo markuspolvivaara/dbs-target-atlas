@@ -1,6 +1,7 @@
 import type { Axis } from '../state';
 import type { ViewState } from '../viewer/scene';
 import { h } from './h';
+import { requestHelp } from './help';
 import { fmtMm } from './widgets';
 
 /** Pieces of the 3D stage shared by every section: axis gizmo, name labels, slices panel, mobile sheet. */
@@ -65,6 +66,29 @@ export function stageStatus(retry: () => void): { el: HTMLElement; set(text: str
       sync();
     },
   };
+}
+
+/** The toolbar's last group, the same in every section: the camera back to where the view opens (key 0), and the help
+ * with the mouse, touch and keyboard controls (key ?), which until now only that key opened. */
+export function viewButtons(reset: () => void): HTMLElement {
+  return h('div', { class: 'tgroup' },
+    h('button', { type: 'button', class: 'tbtn', 'data-reset-view': '', title: 'Reset view: the camera back to where this view opens (0)', 'aria-label': 'Reset view', onclick: () => reset() },
+      h('span', { class: 'long' }, 'Reset view'), h('span', { class: 'short', 'aria-hidden': 'true' }, 'Reset')),
+    h('button', { type: 'button', class: 'tbtn help-btn', title: 'Help: mouse, touch and keyboard controls (?)', 'aria-label': 'Help: mouse, touch and keyboard controls', 'aria-haspopup': 'dialog', onclick: () => requestHelp() }, '?'));
+}
+
+/** Bring the card of the structure just selected to the top of the panel's scrolling pane: it is drawn after the
+ * view's lists, thousands of pixels down in the larger sections, and on a phone below the part of the sheet that
+ * shows. Called when the selection changes; waits for the panel to be drawn. */
+export function revealCard(panel: HTMLElement): void {
+  requestAnimationFrame(() => {
+    const card = panel.querySelector<HTMLElement>('.card.sel');
+    const pane = card?.closest<HTMLElement>('.pane');
+    if (!card || !pane || pane.hidden) return;
+    const top = card.getBoundingClientRect().top - pane.getBoundingClientRect().top + pane.scrollTop - 8;
+    const calm = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    pane.scrollTo({ top: Math.max(0, top), behavior: calm ? 'auto' : 'smooth' });
+  });
 }
 
 export interface LabelItem { id: string; text: string; ax: number; ay: number; cls: string }

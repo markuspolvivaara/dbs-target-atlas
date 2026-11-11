@@ -8,6 +8,7 @@ import { screwCut } from './spine/screw';
 import { REGION } from './spine/regions';
 import { decodeSpine, encodeSpine, type SpinePage, type SpineState } from './spine/state';
 import { h } from './ui/h';
+import { bindHelp, viewHelp } from './ui/help';
 import { disclaimerNote, siteHeader } from './ui/shell';
 import { SpineAtlasPage } from './ui/spine-atlas';
 import { spineCreditsPage, spineSourcesPage } from './ui/spine-pages';
@@ -60,6 +61,7 @@ const pages: Record<SpinePage, { el: HTMLElement; render(s: SpineState): void }>
 const main = h('main', { id: 'main' }, ...Object.values(pages).map((p) => p.el));
 new ResizeObserver(() => document.documentElement.style.setProperty('--disc-h', `${disclaimer.offsetHeight}px`)).observe(disclaimer);
 const help = buildHelp();
+bindHelp(help);
 app.append(h('a', { class: 'skip', href: '#main' }, 'Skip to content'), header, disclaimer, main, help);
 
 let pendingCamera = true;
@@ -119,9 +121,9 @@ function buildHelp(): HTMLDialogElement {
     ['N', 'Name labels: hover → all → off'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
   ];
   return h('dialog', { class: 'help', 'aria-labelledby': 'help-title' },
-    h('h2', { id: 'help-title' }, 'Keyboard shortcuts'),
+    h('h2', { id: 'help-title' }, 'Keys, mouse and touch'),
     h('dl', {}, ...rows.flatMap(([k, v]) => [h('dt', {}, h('kbd', {}, k)), h('dd', {}, v)])),
-    h('p', { class: 'aside' }, 'Touch: one finger rotates, two fingers pinch to zoom and drag to pan. Tap a structure for its card.'),
+    ...viewHelp('a structure'),
     h('form', { method: 'dialog' }, h('button', { class: 'btn' }, 'Close'))) as HTMLDialogElement;
 }
 

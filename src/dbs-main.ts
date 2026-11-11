@@ -5,6 +5,7 @@ import { IND, SYM } from './data';
 import { decode, defaultState, encode, type AppState, type Page } from './state';
 import { AtlasPage } from './ui/atlas';
 import { h } from './ui/dom';
+import { bindHelp, viewHelp } from './ui/help';
 import { coordsPage, creditsPage, imagingPage, refsPage, settingsPage } from './ui/pages';
 import { leadPrefFor, onPrefsChange, visibleIndications } from './ui/prefs';
 import { primaryTargetId } from './viewer/selection';
@@ -64,6 +65,7 @@ const main = h('main', { id: 'main' }, ...Object.values(pages).map((p) => p.el))
 // the stage height depends on the (wrapping) disclaimer height
 new ResizeObserver(() => document.documentElement.style.setProperty('--disc-h', `${disclaimer.offsetHeight}px`)).observe(disclaimer);
 const help = buildHelp();
+bindHelp(help);
 app.append(h('a', { class: 'skip', href: '#main' }, 'Skip to content'), header, disclaimer, main, help);
 
 let pendingCamera = true;
@@ -132,9 +134,9 @@ function buildHelp(): HTMLDialogElement {
     ['L', 'Show or hide the lead'], ['N', 'Name labels: hover → all → off'], ['S', 'Toggle axial slice'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
   ];
   const d = h('dialog', { class: 'help', 'aria-labelledby': 'help-title' },
-    h('h2', { id: 'help-title' }, 'Keyboard shortcuts'),
+    h('h2', { id: 'help-title' }, 'Keys, mouse and touch'),
     h('dl', {}, ...rows.flatMap(([k, v]) => [h('dt', {}, h('kbd', {}, k)), h('dd', {}, v)])),
-    h('p', { class: 'aside' }, 'Touch: one finger rotates, two fingers pinch to zoom and drag to pan. Tap a structure for its card.'),
+    ...viewHelp('a structure'),
     h('form', { method: 'dialog' }, h('button', { class: 'btn' }, 'Close')));
   return d as HTMLDialogElement;
 }

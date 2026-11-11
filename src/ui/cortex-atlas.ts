@@ -8,7 +8,7 @@ import { VIEW, VIEWS, type ViewId } from '../cortex/views';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
 import { refLinksFrom } from './reflinks';
-import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus } from './stage';
+import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: CortexState) => void, opts?: { camera?: boolean }) => void;
@@ -82,7 +82,7 @@ export class CortexAtlasPage {
       h('span', { class: 'tlabel' }, 'Labels'),
       ...([['all', 'All', 'Name every highlighted label that faces you'], ['hover', 'Hover', 'Name only what you point at, select or hover in the list'], ['off', 'Off', 'No name labels']] as const)
         .map(([v, label, title]) => h('button', { type: 'button', class: 'tbtn', 'data-labels': v, 'aria-pressed': 'false', title: `${title} (N cycles)`, onclick: () => this.update((s) => { s.labels = v; }) }, label)));
-    toolbar.append(presetGroup, hemiGroup, surfGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share));
+    toolbar.append(presetGroup, hemiGroup, surfGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share), viewButtons(() => this.resetView()));
     this.gizmo.setAttribute('viewBox', '-40 -40 80 80');
     this.gizmo.setAttribute('class', 'gizmo');
     this.gizmo.setAttribute('aria-hidden', 'true');
@@ -176,6 +176,8 @@ export class CortexAtlasPage {
     if (key !== this.lastKey || !prev) { this.lastKey = key; this.renderOverview(); }
     this.renderDisplay();
     if (prev && prev.sel !== s.sel && s.sel) this.selectTab('overview', false);
+    // the card of what was just selected (or of a link's selection) is brought to the top of the panel
+    if (s.sel && prev?.sel !== s.sel) revealCard(this.panel);
   }
 
   private pickView(id: ViewId): void {
@@ -426,7 +428,14 @@ export class CortexAtlasPage {
   }
 
   // ---------------------------------------------------------------- keyboard
+  /** The camera back to where this view opens (the toolbar's Reset view, key 0), on the side the view opens with (the
+   * medial camera shows one hemisphere, so it changes the side). */
+  private resetView(): void {
+    this.update((s) => { s.cam = { preset: null }; s.hemi = VIEW.get(s.view)!.hemi; }, { camera: true });
+  }
+
   handleKey(e: KeyboardEvent): boolean {
+    if (e.key === '0') { this.resetView(); return true; }
     const k = e.key;
     const preset = PRESETS.find((p) => p[2] === k);
     if (preset) { this.update((s) => { s.cam = { preset: preset[0] }; if (preset[0] === 'medial' && s.hemi === 'both') s.hemi = 'L'; }, { camera: true }); return true; }

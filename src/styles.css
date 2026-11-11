@@ -124,6 +124,7 @@ code { font-size: 0.92em; }
 .tbtn:hover { background: var(--soft); }
 .tbtn .short { display: none; }
 @media (max-width: 599px) { .tbtn .long { display: none; } .tbtn .short { display: inline; } .tbtn { padding: 6px 8px; } }
+.help-btn { min-width: 36px; font-weight: 700; }
 .tbtn[aria-pressed="true"], .tbtn[data-active] { background: var(--ink); color: var(--bg); font-weight: 700; }
 
 .labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
@@ -349,6 +350,7 @@ legend { font-weight: 700; padding: 0 4px; }
 .help { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--ink); max-width: 520px; width: calc(100% - 32px); }
 .help::backdrop { background: rgba(0, 0, 0, 0.4); }
 .help dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; }
+.help h3 { margin: 16px 0 6px; }
 .help dt { font-weight: 700; }
 .help dd { margin: 0; }
 kbd { font: inherit; font-size: 0.9em; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 6px; padding: 1px 6px; background: var(--bg); }

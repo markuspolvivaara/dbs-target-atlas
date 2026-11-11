@@ -188,3 +188,72 @@ test('loading: a structure that cannot be loaded is named in a notice that stays
   await expect(page.locator('.status')).toBeHidden();
   expect(await drawnSides(page, 'stn_motor')).toEqual({ L: true, R: false });
 });
+
+/** The camera's position, rounded (the viewer's own camera). */
+async function cameraAt(page: Page): Promise<number[]> {
+  return page.evaluate(() => {
+    const c = (window as unknown as { __atlas: { viewer: { camera: { position: { toArray(): number[] } } } } }).__atlas.viewer.camera;
+    return c.position.toArray().map((v) => Math.round(v));
+  });
+}
+
+// UI-02: a click on a structure opened its card thousands of pixels down the panel (3,400 px in the skull base)
+test('selection: the card of a clicked structure is brought to the top of the panel', async ({ page }) => {
+  const g = guard(page);
+  for (const [url, x, y] of [['./skullbase/', 420, 430], ['./cortex/', 400, 400], ['./brainstem/', 430, 420]] as const) {
+    await open(page, url);
+    await page.mouse.click(x, y);
+    const card = page.locator('.panel .card.sel');
+    await expect(card, url).toBeVisible();
+    // within the pane's visible part, not below the fold
+    await expect.poll(async () => {
+      const [c, p] = await Promise.all([card.boundingBox(), page.locator('.panel .pane:not([hidden])').boundingBox()]);
+      return c && p ? Math.round(c.y - p.y) : -1;
+    }, { message: url }).toBeLessThan(40);
+    expect((await card.boundingBox())!.y, url).toBeGreaterThan(0);
+  }
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// UI-02 on a phone: the card was below the part of the sheet that shows
+test('selection on a phone: a tapped structure’s card shows in the sheet @mobile', async ({ page }) => {
+  await open(page, './skullbase/');
+  const stage = (await page.locator('.stage').boundingBox())!;
+  await page.touchscreen.tap(stage.x + stage.width / 2, stage.y + stage.height * 0.55);
+  const card = page.locator('.panel .card.sel');
+  await expect(card).toBeVisible();
+  const vh = page.viewportSize()!.height;
+  await expect.poll(async () => (await card.locator('h2').boundingBox())?.y ?? 9999).toBeLessThan(vh - 30);
+});
+
+// UI-03, UI-21: no visible help and no way back to the view's own camera
+for (const url of ['./dbs/', './tracts/', './skullbase/', './skullbase-v1/', './skullbase-ct/', './cortex/', './spine/', './brainstem/', './ventricles/', './vascular/']) {
+  test(`toolbar (${url}): Reset view puts the camera back, the ? button opens the help with the mouse and touch controls`, async ({ page }) => {
+    const g = guard(page);
+    await open(page, url);
+    const start = await cameraAt(page);
+    await page.locator('.toolbar [data-preset]').nth(1).click();
+    await settle(page);
+    expect(await cameraAt(page)).not.toEqual(start);
+    await page.locator('.toolbar [data-reset-view]').click();
+    await settle(page);
+    expect(await cameraAt(page), 'Reset view').toEqual(start);
+    // the key does the same
+    await page.locator('.toolbar [data-preset]').nth(1).click();
+    await settle(page);
+    await page.keyboard.press('0');
+    await settle(page);
+    expect(await cameraAt(page), 'key 0').toEqual(start);
+    const help = page.locator('dialog.help');
+    await expect(help).toBeHidden();
+    await page.locator('.toolbar .help-btn').click();
+    await expect(help).toBeVisible();
+    await expect(help).toContainText('Drag to turn the view');
+    await expect(help).toContainText('One finger turns the view');
+    await help.getByRole('button', { name: 'Close' }).click();
+    await expect(help).toBeHidden();
+    expect(g.external).toEqual([]);
+    expect(g.errors).toEqual([]);
+  });
+}

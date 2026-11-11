@@ -6,6 +6,7 @@ import { LM, SB, SB_MODEL } from './skullbase';
 import { DEFAULT_GROUP, SB_GROUP, viewGroup } from './skullbase/groups';
 import { decodeSkull, encodeSkull, type SkullPage, type SkullState } from './skullbase/state';
 import { h } from './ui/h';
+import { bindHelp, viewHelp } from './ui/help';
 import { disclaimerNote, siteHeader } from './ui/shell';
 import { SkullbaseAtlasPage } from './ui/skullbase-atlas';
 import { skullCreditsPage, skullGradingPage, skullSourcesPage } from './ui/skullbase-pages';
@@ -59,6 +60,7 @@ const pages: Record<SkullPage, { el: HTMLElement; render(s: SkullState): void }>
 const main = h('main', { id: 'main' }, ...Object.values(pages).map((p) => p.el));
 new ResizeObserver(() => document.documentElement.style.setProperty('--disc-h', `${disclaimer.offsetHeight}px`)).observe(disclaimer);
 const help = buildHelp();
+bindHelp(help);
 app.append(h('a', { class: 'skip', href: '#main' }, 'Skip to content'), header, disclaimer, main, help);
 
 let pendingCamera = true;
@@ -121,9 +123,9 @@ function buildHelp(): HTMLDialogElement {
       ['T', 'Telovelar view: draw the tonsils apart / let go']] as [string, string][] : []),
   ];
   return h('dialog', { class: 'help', 'aria-labelledby': 'help-title' },
-    h('h2', { id: 'help-title' }, 'Keyboard shortcuts'),
+    h('h2', { id: 'help-title' }, 'Keys, mouse and touch'),
     h('dl', {}, ...rows.flatMap(([k, v]) => [h('dt', {}, h('kbd', {}, k)), h('dd', {}, v)])),
-    h('p', { class: 'aside' }, 'Touch: one finger rotates, two fingers pinch to zoom and drag to pan. Tap a structure or landmark for its card.'),
+    ...viewHelp('a structure or landmark'),
     h('form', { method: 'dialog' }, h('button', { class: 'btn' }, 'Close'))) as HTMLDialogElement;
 }
 
