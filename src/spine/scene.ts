@@ -2,7 +2,7 @@ import type { Look } from '../viewer/materials';
 import { viewPrefs } from '../viewer/viewprefs';
 import { drillPairFor, type DrillPair } from './drill';
 import { makeCatalog, type MarkerDef, type SceneSource, type ScenePlan } from '../viewer/scene';
-import { affectedRoot, LESION_ZONES, LUMBAR_GEOM } from './content';
+import { affectedRoot, CERVICAL_GEOM, discRegion, lesionZones, LUMBAR_GEOM } from './content';
 import { discBelow, LEVEL_ORDER, SP, SP_MANIFEST, vertebraOf } from './index';
 import { REGION } from './regions';
 import type { SpineState } from './state';
@@ -85,9 +85,10 @@ export function herniaDrawn(pair: DrillPair): string[] {
   return ['sp_dural_sac', ...(pair.region === 'lumbar' ? pair.id.split('-').map((lv) => `sp_root_${lv.toLowerCase()}`) : [pair.root])];
 }
 
-/** Schematic herniation positions at each lumbar disc, per kind and side (measured on this CT, see content.ts). */
-export const LESION_MARKERS: MarkerDef[] = LUMBAR_GEOM.flatMap((g) => !g.lesions ? [] : (['L', 'R'] as const).flatMap((sd) =>
-  LESION_ZONES.map(([z, name]) => ({
+/** Schematic herniation positions at each lumbar and cervical disc, per kind offered there and side (measured on this
+ * CT, see content.ts). */
+export const LESION_MARKERS: MarkerDef[] = [...LUMBAR_GEOM, ...CERVICAL_GEOM].flatMap((g) => !g.lesions ? [] : (['L', 'R'] as const).flatMap((sd) =>
+  lesionZones(discRegion(g.pair)).map(([z, name]) => ({
     id: lesionMarkerId(g.pair, z, sd), label: `${name} herniation ${g.pair} (${sd === 'L' ? 'left' : 'right'}, schematic position)`,
     structureId: '', mni: { left: g.lesions![sd][z], right: g.lesions![sd][z] }, sides: [sd], radius: 2.5, token: 'spRisk',
   }))));

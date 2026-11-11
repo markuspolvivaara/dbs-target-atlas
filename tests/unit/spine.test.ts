@@ -2,9 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { crossCheckSpine, discBelow, SP, SP_MANIFEST, SP_REFS, vertebraOf } from '../../src/spine';
 import published from '../../src/data/generated/spine-published.json';
 import {
-  ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, CCJ, CCJ_MEASURES, CERVICAL_GEOM, crossCheckContent, exitingRoot, exposureRegion, GEOM_BY_LEVEL,
-  LESION_ZONES, LUMBAR_GEOM, NECK_LANDMARKS, ROOT_FUNCTION, STATEMENTS, THORACIC_GEOM, VERTEBRAL_ARTERY,
+  ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, CCJ, CCJ_MEASURES, CERVICAL_GEOM, crossCheckContent, discRegion, exitingRoot, exposureRegion, GEOM_BY_LEVEL,
+  LESION_ZONES, lesionZones, LUMBAR_GEOM, NECK_LANDMARKS, ROOT_FUNCTION, STATEMENTS, THORACIC_GEOM, VERTEBRAL_ARTERY,
 } from '../../src/spine/content';
+import { HERNIA_ZONES, herniaRoot } from '../../src/spine/herniation';
 import { REGION, REGIONS } from '../../src/spine/regions';
 import { LESION_MARKERS, lesionMarkerId, spinePlan, spineScene } from '../../src/spine/scene';
 import { decodeSpine, defaultSpineState, encodeSpine } from '../../src/spine/state';
@@ -86,6 +87,13 @@ describe('spine scene and URL state', () => {
     // a lesion belongs to the disc below the selected level; anything else is dropped
     expect(decodeSpine('#/atlas?lv=L3&les=L4-L5.paracentral.L').lesion).toBeNull();
     expect(decodeSpine('#/atlas?lv=L4&les=L4-L5.central.L').lesion).toBeNull();
+    // the neck: its own zones (no far lateral), and only at a disc that has the tool
+    const neckLes = { ...defaultSpineState(), region: 'cervical' as const, level: 'C5', lesion: { pair: 'C5-C6', zone: 'foraminal' as const, side: 'R' as const } };
+    expect(decodeSpine(encodeSpine(neckLes))).toEqual(neckLes);
+    expect(decodeSpine('#/atlas?r=cervical&lv=C7&les=C7-T1.paracentral.L').lesion).toEqual({ pair: 'C7-T1', zone: 'paracentral', side: 'L' });
+    expect(decodeSpine('#/atlas?r=cervical&lv=C5&les=C5-C6.farlateral.L').lesion).toBeNull();
+    expect(decodeSpine('#/atlas?r=lumbar&lv=L4&les=L4-S1.paracentral.L').lesion).toBeNull();
+    expect(decodeSpine('#/atlas?r=thoracic&lv=T5&les=T5-T6.paracentral.L').lesion).toBeNull();
   });
 });
 
@@ -95,6 +103,34 @@ describe('lesion-to-root tool', () => {
     expect(affectedRoot('L4-L5', 'foraminal')).toBe('L4');
     expect(affectedRoot('L4-L5', 'farlateral')).toBe('L4');
     expect(affectedRoot('L5-S1', 'paracentral')).toBe('S1');
+  });
+  it('in the neck every herniation beside the midline affects the root that leaves at that disc (C8 at C7-T1)', () => {
+    expect(discRegion('C5-C6')).toBe('cervical');
+    expect(discRegion('C7-T1')).toBe('cervical');
+    expect(discRegion('T12-L1')).toBe('lumbar');
+    expect(affectedRoot('C5-C6', 'paracentral')).toBe('C6');
+    expect(affectedRoot('C5-C6', 'foraminal')).toBe('C6');
+    expect(affectedRoot('C2-C3', 'foraminal')).toBe('C3');
+    expect(affectedRoot('C7-T1', 'paracentral')).toBe('C8');
+    expect(affectedRoot('C7-T1', 'foraminal')).toBe('C8');
+    expect(lesionZones('cervical').map(([z]) => z)).toEqual(['paracentral', 'foraminal']);
+    expect(lesionZones('lumbar')).toEqual(LESION_ZONES);
+  });
+  it('at every disc with the tool, the level card names the root the drilled herniation names, the root the card lists as leaving there in the neck, and it exists', () => {
+    const discs = [...LUMBAR_GEOM, ...CERVICAL_GEOM].filter((g) => g.lesions);
+    expect(discs.map((g) => g.pair)).toEqual(['L1-L2', 'L2-L3', 'L3-L4', 'L4-L5', 'L5-S1', 'C2-C3', 'C3-C4', 'C4-C5', 'C5-C6', 'C6-C7', 'C7-T1']);
+    for (const g of discs) {
+      const region = discRegion(g.pair);
+      // the two tools offer the same zones beside the midline
+      expect(HERNIA_ZONES[region].filter(([z]) => z !== 'central')).toEqual(lesionZones(region));
+      for (const [zone] of lesionZones(region)) {
+        const root = affectedRoot(g.pair, zone);
+        expect(root, `${g.pair} ${zone}`).toBe(herniaRoot(g.pair, zone, region));
+        expect(SP.has(`sp_root_${root.toLowerCase()}`), `${g.pair} ${zone}: sp_root_${root.toLowerCase()}`).toBe(true);
+        if (region === 'cervical') expect(root, `${g.pair} ${zone}`).toBe(exitingRoot(g.level));
+        for (const sd of ['L', 'R'] as const) expect(spineScene.catalog.markers.has(lesionMarkerId(g.pair, zone, sd)), `${g.pair} ${zone} ${sd}`).toBe(true);
+      }
+    }
   });
   it('every lumbar disc below L1 has herniation positions on the correct side, ordered medial to lateral', () => {
     const pairs = LUMBAR_GEOM.filter((g) => g.lesions).map((g) => g.pair);
@@ -106,7 +142,15 @@ describe('lesion-to-root tool', () => {
       expect(x[1], `${g.pair} ${sd}`).toBeGreaterThan(x[0]);
       expect(x[2], `${g.pair} ${sd}`).toBeGreaterThan(x[1]);
     }
-    expect(LESION_MARKERS.length).toBe(pairs.length * 2 * 3);
+    // the neck's discs too, in the two zones offered there
+    const neck = CERVICAL_GEOM.filter((g) => g.lesions);
+    for (const g of neck) for (const sd of ['L', 'R'] as const) {
+      const sign = sd === 'L' ? -1 : 1;
+      const x = lesionZones('cervical').map(([z]) => sign * (g.lesions![sd][z][0] - g.discCentre[0]));
+      expect(x[0], `${g.pair} ${sd}`).toBeGreaterThan(0);
+      expect(x[1], `${g.pair} ${sd}`).toBeGreaterThan(x[0]);
+    }
+    expect(LESION_MARKERS.length).toBe(pairs.length * 2 * 3 + neck.length * 2 * 2);
   });
   it('the plan puts the affected root forward and marks the herniation', () => {
     const p = spinePlan({ region: 'lumbar', level: 'L4', sel: null, lesion: { pair: 'L4-L5', zone: 'paracentral', side: 'L' } });
@@ -114,6 +158,13 @@ describe('lesion-to-root tool', () => {
     expect(p.looks.get('sp_root_l4')).toBe('context');
     expect(p.markers).toEqual([{ targetId: lesionMarkerId('L4-L5', 'paracentral', 'L'), primary: true }]);
     expect(spineScene.catalog.markers.has(p.markers[0].targetId)).toBe(true);
+    // the neck: the root that leaves at the disc, whichever side of the foramen the herniation is on
+    for (const zone of ['paracentral', 'foraminal'] as const) {
+      const n = spinePlan({ region: 'cervical', level: 'C5', sel: null, lesion: { pair: 'C5-C6', zone, side: 'L' } });
+      expect(n.looks.get('sp_root_c6'), zone).toBe('primary');
+      expect(n.looks.get('sp_root_c5'), zone).toBe('context');
+      expect(spineScene.catalog.markers.has(n.markers[0].targetId), zone).toBe(true);
+    }
   });
   it('ISNCSCI function covers L1-S1, with a key muscle for L2-S1', () => {
     expect(Object.keys(ROOT_FUNCTION)).toEqual(['L1', 'L2', 'L3', 'L4', 'L5', 'S1']);

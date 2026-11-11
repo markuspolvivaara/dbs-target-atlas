@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import type { LesionZone } from './content';
+import { affectedRoot, lesionZones, type DiscRegion, type LesionZone } from './content';
 
 /**
  * A schematic disc herniation and what it does to the dural sac and the roots (there is none on this CT): its shape a
@@ -21,10 +21,10 @@ export interface HerniaSpec {
 }
 export const HERNIA_SIZE: [number, number, number] = [2, 15, 0.5];
 export const HERNIA_MIGRATE: [number, number, number] = [-10, 10, 1];
-/** the zones offered per region (in the neck, far lateral is where the vertebral artery runs: not offered) */
-export const HERNIA_ZONES: Record<'lumbar' | 'cervical', [HerniaZone, string][]> = {
-  lumbar: [['central', 'Central'], ['paracentral', 'Paracentral'], ['foraminal', 'Foraminal'], ['farlateral', 'Far lateral']],
-  cervical: [['central', 'Central'], ['paracentral', 'Paracentral'], ['foraminal', 'Foraminal']],
+/** the zones offered per region: central, then the level card's (content.ts lesionZones: no far lateral in the neck) */
+export const HERNIA_ZONES: Record<DiscRegion, [HerniaZone, string][]> = {
+  lumbar: [['central', 'Central'], ...lesionZones('lumbar')],
+  cervical: [['central', 'Central'], ...lesionZones('cervical')],
 };
 /** where each zone's size starts (mm; drawing choices): on this CT the lumbar dural sac and the schematic roots lie a few
  * mm behind the disc's margin, so a lumbar paracentral one must reach further to touch the traversing root; the cervical
@@ -37,11 +37,8 @@ export const HERNIA_DEFAULT_SIZE: Record<'lumbar' | 'cervical', Partial<Record<H
 /** The root a herniation presses on, if any (a central one: the dural sac, and in the neck the cord, alone). Lumbar:
  * paracentral the traversing (lower) root, foraminal and far lateral the exiting (upper) one; cervical: the root that
  * exits at that disc, named for the vertebra below (C8 at C7-T1). */
-export function herniaRoot(pair: string, zone: HerniaZone, region: 'lumbar' | 'cervical'): string | null {
-  const [up, down] = pair.split('-');
-  if (zone === 'central') return null;
-  if (region === 'cervical') return down === 'T1' ? 'C8' : down;
-  return zone === 'paracentral' ? down : up;
+export function herniaRoot(pair: string, zone: HerniaZone, region: DiscRegion): string | null {
+  return zone === 'central' ? null : affectedRoot(pair, zone, region);
 }
 
 /** a protrusion's base reaches at most this far to each side (mm; a drawing choice) */

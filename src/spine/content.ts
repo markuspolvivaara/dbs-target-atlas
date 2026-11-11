@@ -248,10 +248,22 @@ export const ROOT_FUNCTION: Record<string, RootFunction> = {
 
 export type LesionZone = 'paracentral' | 'foraminal' | 'farlateral';
 export const LESION_ZONES: [LesionZone, string][] = [['paracentral', 'Paracentral'], ['foraminal', 'Foraminal'], ['farlateral', 'Far lateral']];
-/** The root a lesion at a lumbar disc affects: paracentral -> the traversing (lower) root; foraminal or far lateral ->
- * the exiting (upper) root (STATEMENTS.rootRule, lesionParacentral, lesionLateral). */
-export function affectedRoot(pair: string, zone: LesionZone): string {
+/** Which root rule a disc follows: the neck's wherever the upper vertebra is cervical (C7-T1 too), else the lumbar one. */
+export type DiscRegion = 'lumbar' | 'cervical';
+export function discRegion(pair: string): DiscRegion {
+  return pair.startsWith('C') ? 'cervical' : 'lumbar';
+}
+/** The zones offered at a disc. In the neck far lateral is where the vertebral artery runs: not offered. */
+export function lesionZones(region: DiscRegion): [LesionZone, string][] {
+  return region === 'cervical' ? LESION_ZONES.filter(([z]) => z !== 'farlateral') : LESION_ZONES;
+}
+/** The root a herniation beside the midline affects: the one rule, used by the level card, the scene and the drilled
+ * herniation (herniaRoot). Lumbar: paracentral -> the traversing (lower) root; foraminal or far lateral -> the exiting
+ * (upper) root (STATEMENTS.rootRule, lesionParacentral, lesionLateral). Cervical: the root that leaves at that disc,
+ * numbered for the vertebra below, and C8 at C7-T1 (STATEMENTS.cervicalRootRule). */
+export function affectedRoot(pair: string, zone: LesionZone, region: DiscRegion = discRegion(pair)): string {
   const [up, down] = pair.split('-');
+  if (region === 'cervical') return down === 'T1' ? 'C8' : down;
   return zone === 'paracentral' ? down : up;
 }
 
@@ -380,7 +392,7 @@ export const TECHNIQUES: Record<Technique['id'], Technique> = {
       text: 'C2 pedicle screw: one description enters 7 mm lateral and 5 mm caudal to where lines along the lamina’s upper border and the canal’s lateral border cross, 30° medial and 20° cranial, to the pedicle’s anterior cortex; another 2 mm lateral to where the lamina’s upper border meets the pars’s mediolateral midline, 30–45° medial, aimed in the sagittal plane at the lower half of the atlas’s anterior tubercle. Start position here: 45° medial (the most convergent of 30–45°), the entry 5 mm caudal to the lamina’s upper border and as far lateral as keeps the most bone around the screw on this CT (10 mm lateral to the canal’s border, 3 mm lateral of the first description’s entry; the more lateral the entry, the more a screw can converge), cranially along the pedicle the same way (the AO entry at the lamina’s border itself would leave the pedicle superiorly on this CT).',
       refIds: ['kendirlioglu2026', 'aosurgeryref'],
     },
-    size: { text: 'Start size 3.5 mm, up to 27 mm (3D-printed models of 38 patients averaged 26.8 mm; a unicortical screw over 20 mm is typically adequate), the tip at least 1 mm short of where it would leave the bone on this CT.', refIds: ['kendirlioglu2026', 'aosurgeryref'] },
+    size: { text: 'Start size 3.5 mm, up to 27 mm (3D-printed models of 20 individuals averaged 26.8 ± 3.8 mm; a unicortical screw over 20 mm is typically adequate), the tip at least 1 mm short of where it would leave the bone on this CT.', refIds: ['kendirlioglu2026', 'aosurgeryref'] },
     note: { text: 'Up to 20% of people have C2 pedicles too small for a screw; with a high-riding vertebral artery the corridor narrows further.', refIds: ['joaquim2020', 'kucherina2026'] },
   },
   c2pars: {

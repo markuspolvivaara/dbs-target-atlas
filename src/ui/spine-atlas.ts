@@ -3,7 +3,7 @@ import type { CameraPreset } from '../data/schema';
 import type { Hemi } from '../state';
 import { discBelow, LEVEL_ORDER, SP, SP_MANIFEST, SP_REFS, vertebraOf } from '../spine';
 import {
-  ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, CCJ, CCJ_MEASURES, exitingRoot, exposureRegion, GEOM_BY_LEVEL, LESION_ZONES,
+  ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, CCJ, CCJ_MEASURES, discRegion, exitingRoot, exposureRegion, GEOM_BY_LEVEL, lesionZones,
   NECK_LANDMARKS, ROOT_FUNCTION, STATEMENTS, TECHNIQUES, VERTEBRAL_ARTERY, type ApproachId, type CcjMeasure, type CcjMeasureId, type LesionZone,
   type LevelGeom, type Statement,
 } from '../spine/content';
@@ -657,22 +657,25 @@ export class SpineAtlasPage {
     const les = this.s.lesion?.pair === g.pair ? this.s.lesion : null;
     const set = (zone: LesionZone | null, side: 'L' | 'R') => this.update((s) => { s.lesion = zone ? { pair: g.pair, zone, side } : null; });
     const side = les?.side ?? 'L';
+    // the neck has its own rule and its own zones (content.ts affectedRoot, lesionZones)
+    const region = discRegion(g.pair);
     const wrap = h('div', { class: 'lesion' },
       h('div', { class: 'lesion-row' },
-        chips<LesionZone | 'none'>([['none', 'None'], ...LESION_ZONES], les?.zone ?? 'none', (v) => set(v === 'none' ? null : v, side), { label: 'Herniation kind', cls: 'lesion-kind' })),
+        chips<LesionZone | 'none'>([['none', 'None'], ...lesionZones(region)], les?.zone ?? 'none', (v) => set(v === 'none' ? null : v, side), { label: 'Herniation kind', cls: 'lesion-kind' })),
       h('div', { class: 'lesion-row' },
         chips<'L' | 'R'>([['L', 'Left'], ['R', 'Right']], les ? side : null, (v) => set(les?.zone ?? 'paracentral', v), { label: 'Herniation side', cls: 'lesion-side' })));
     if (!les) {
       wrap.append(h('p', { class: 'aside' }, 'Choose a kind and side to see which root it affects.'));
       return wrap;
     }
-    const root = affectedRoot(g.pair, les.zone);
+    const root = affectedRoot(g.pair, les.zone, region);
+    const neck = region === 'cervical';
     const est = les.zone === 'foraminal' && g.lesions![les.side].foraminalEstimated;
     wrap.append(
       h('p', { class: 'lesion-result' }, 'Affected root: ', this.link(`sp_root_${root.toLowerCase()}`),
-        ` (${les.zone === 'paracentral' ? 'traversing' : 'exiting'}), ${les.side === 'L' ? 'left' : 'right'}.`),
-      this.stmt(les.zone === 'paracentral' ? STATEMENTS.lesionParacentral : STATEMENTS.lesionLateral),
-      h('p', { class: 'aside' }, `The pink marker is a schematic position on this CT${est ? '; this foramen was not captured by the measurement, so it is estimated' : ''}. Real herniations vary in size and position, and a large one can reach both roots.`),
+        ` (${neck ? 'the root that leaves at this disc' : les.zone === 'paracentral' ? 'traversing' : 'exiting'}), ${les.side === 'L' ? 'left' : 'right'}.`),
+      this.stmt(neck ? STATEMENTS.cervicalRootDisc : les.zone === 'paracentral' ? STATEMENTS.lesionParacentral : STATEMENTS.lesionLateral),
+      h('p', { class: 'aside' }, `The pink marker is a schematic position on this CT${est ? '; this foramen was not captured by the measurement, so it is estimated' : ''}. Real herniations vary in size and position${neck ? '' : ', and a large one can reach both roots'}.`),
       ...this.rootFunction(root, les.side));
     return wrap;
   }
