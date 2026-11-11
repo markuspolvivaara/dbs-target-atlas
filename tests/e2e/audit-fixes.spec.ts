@@ -216,6 +216,24 @@ test('selection: the card of a clicked structure is brought to the top of the pa
   expect(g.errors).toEqual([]);
 });
 
+// UI-02, a page opened on a link with a selection: the panel is still filling in when the card is first aligned
+test('selection: a link that opens with a selection shows the card from its top', async ({ page }) => {
+  const g = guard(page);
+  for (const url of ['./skullbase/#/atlas?g=floor&sel=tb_facial_nerve_vii', './brainstem/#/atlas?g=sez_floor&sel=sez_infrafacial', './cortex/#/atlas?v=lateral&sel=ctx_g_precentral']) {
+    await open(page, url);
+    const card = page.locator('.panel .card.sel');
+    await expect(card, url).toBeVisible();
+    await expect.poll(async () => {
+      const [c, p] = await Promise.all([card.locator('h2').boundingBox(), page.locator('.panel .pane:not([hidden])').boundingBox()]);
+      return c && p ? Math.round(c.y - p.y) : -999;
+    }, { message: url, timeout: 4000 }).toBeGreaterThanOrEqual(0);
+    const [c, p] = await Promise.all([card.boundingBox(), page.locator('.panel .pane:not([hidden])').boundingBox()]);
+    expect(Math.round(c!.y - p!.y), url).toBeLessThan(40);
+  }
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
 // UI-02 on a phone: the card was below the part of the sheet that shows
 test('selection on a phone: a tapped structure’s card shows in the sheet @mobile', async ({ page }) => {
   await open(page, './skullbase/');

@@ -126,16 +126,33 @@ export function keepFocus(list: HTMLElement, draw: () => void): void {
  * view's lists, thousands of pixels down in the larger sections, and on a phone below the part of the sheet that
  * shows. Called when the selection changes; waits for the panel to be drawn. */
 export function revealCard(panel: HTMLElement): void {
-  requestAnimationFrame(() => {
+  // the card's top to the top of its pane; returns the pane, or null when there is no card to show
+  const align = (smooth: boolean): HTMLElement | null => {
     const card = panel.querySelector<HTMLElement>('.card.sel');
     const pane = card?.closest<HTMLElement>('.pane');
-    if (!card || !pane || pane.hidden) return;
+    if (!card || !pane || pane.hidden) return null;
     const top = card.getBoundingClientRect().top - pane.getBoundingClientRect().top + pane.scrollTop - 8;
+    pane.scrollTo({ top: Math.max(0, top), behavior: smooth ? 'smooth' : 'auto' });
+    return pane;
+  };
+  requestAnimationFrame(() => {
     const calm = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
-    pane.scrollTo({ top: Math.max(0, top), behavior: calm ? 'auto' : 'smooth' });
+    const pane = align(!calm);
+    if (!pane) return;
     // said too, for who cannot see the panel change
-    const name = card.querySelector('h2')?.textContent?.trim();
+    const name = panel.querySelector('.card.sel h2')?.textContent?.trim();
     if (name) announce(`${name}: its card is shown in the panel.`);
+    // A page opened on a link with a selection is still filling its panel in (the view is loading, the lists above the
+    // card change their height), and the card slides out from under the first alignment: once more when it has
+    // settled, unless the reader has taken the panel over meanwhile.
+    let touched = false;
+    const touch = () => { touched = true; };
+    const events = ['wheel', 'touchstart', 'pointerdown', 'keydown'] as const;
+    for (const ev of events) pane.addEventListener(ev, touch, { passive: true, once: true });
+    setTimeout(() => {
+      for (const ev of events) pane.removeEventListener(ev, touch);
+      if (!touched) align(false);
+    }, 900);
   });
 }
 
