@@ -223,12 +223,13 @@ test('selection: a link that opens with a selection shows the card from its top'
     await open(page, url);
     const card = page.locator('.panel .card.sel');
     await expect(card, url).toBeVisible();
+    // (the panel scrolls to the card, then once more when it has settled: wait for the heading to come to rest just
+    // under the pane's top, neither cut off above it nor still on its way)
     await expect.poll(async () => {
       const [c, p] = await Promise.all([card.locator('h2').boundingBox(), page.locator('.panel .pane:not([hidden])').boundingBox()]);
-      return c && p ? Math.round(c.y - p.y) : -999;
-    }, { message: url, timeout: 4000 }).toBeGreaterThanOrEqual(0);
-    const [c, p] = await Promise.all([card.boundingBox(), page.locator('.panel .pane:not([hidden])').boundingBox()]);
-    expect(Math.round(c!.y - p!.y), url).toBeLessThan(40);
+      const dy = c && p ? Math.round(c.y - p.y) : -999;
+      return dy >= 0 && dy < 80;
+    }, { message: url, timeout: 6000 }).toBe(true);
   }
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
