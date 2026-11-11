@@ -3,7 +3,7 @@ import { APPROACH_GEOM, crossCheckSb, DEFINITIONS, definitionFor, LANDMARKS, NOT
 import { SB_GROUPS } from '../../src/skullbase/groups';
 import { skullPlan, skullScene } from '../../src/skullbase/scene';
 import { decodeSkull, defaultSkullState, encodeSkull } from '../../src/skullbase/state';
-import { nodeMeans } from './glb';
+import { nodeExtentsX, nodeMeans } from './glb';
 import { FORAMEN_CONTENTS } from '../../src/skullbase/foramina';
 import { TB_NOTES, TB_REF, TB_REFS } from '../../src/skullbase/temporal';
 import { APPROACH_REF, APPROACH_REFS, APPROACHES, CAVERNOUS_INFO, ENDONASAL_INFO } from '../../src/skullbase/approaches';
@@ -27,6 +27,35 @@ describe('skull-base data (Z-Anatomy export)', () => {
     expect(lm('Geniculate ganglion')[0]).toBeGreaterThan(lm('Internal acoustic meatus')[0] + 10);
     expect(lm('Second genu of facial nerve')[1]).toBeLessThan(lm('Geniculate ganglion')[1]);
   });
+  it('the cerebral arteries’ cortical branches are moved with the cortex out of the bone, and the shipped tubes are the moved ones', async () => {
+    // Z-Anatomy draws them on a cortex that reaches into its own bone: 982 mm of their centre lines lay inside it
+    const fit = (await import('../../src/data/generated/sb-v1fit.json')).default as unknown as
+      { brain: { arteries: Record<string, { lengthMm: number; inBoneBeforeMm: number; inBoneAfterMm: number; maxMovedMm: number; centroid: Record<'L' | 'R', number[]>; box: Record<'L' | 'R', number[][]> }> } };
+    const moved = Object.entries(fit.brain.arteries);
+    expect(moved.length).toBe(16);
+    expect(moved.reduce((a, [, r]) => a + r.inBoneBeforeMm, 0)).toBeGreaterThan(900);
+    expect(moved.reduce((a, [, r]) => a + r.inBoneAfterMm, 0)).toBeLessThan(2);
+    for (const [name, r] of moved) {
+      expect(r.inBoneAfterMm, name).toBeLessThanOrEqual(Math.max(1, 0.02 * r.lengthMm));
+      const s = SB_MANIFEST.structures.find((x) => x.name === name)!;
+      expect(s.category, name).toBe('artery');
+      expect(s.derivation, name).toMatch(/moved with that cortex/);
+      expect(s.centroid, name).toEqual(r.centroid);
+      // the file on the site is the moved tube: it reaches as far to each side as the moved tube's box says
+      const ext = await nodeExtentsX(s.file);
+      for (const side of ['L', 'R'] as const) {
+        expect(Math.abs(ext[side][0] - r.box[side][0][0]), `${name} ${side}`).toBeLessThan(0.1);
+        expect(Math.abs(ext[side][1] - r.box[side][1][0]), `${name} ${side}`).toBeLessThan(0.1);
+        expect(r.centroid[side][0] < 0, `${name} ${side}`).toBe(side === 'L');
+      }
+    }
+    // (Z-Anatomy's prefrontal artery reaches 60.9 mm from the midline, inside the frontal bone: the moved one stops short of it)
+    expect(fit.brain.arteries['Prefrontal artery'].box.R[1][0]).toBeLessThan(59.5);
+    expect(fit.brain.arteries['Prefrontal artery'].box.L[0][0]).toBeGreaterThan(-59.5);
+    // the trunks and the Sylvian arteries are not moved
+    for (const n of ['Middle cerebral artery (M1 segment)', 'Anterior cerebral artery', 'Posterior cerebral artery'])
+      if (SB_MANIFEST.structures.some((x) => x.name === n)) expect(fit.brain.arteries[n], n).toBeUndefined();
+  }, 60_000);
   it('the telovelar view has the floor’s landmarks, the retrosigmoid the tentorium, and the chiasm is a drawn crossing', () => {
     const tv = SB_GROUPS.find((g) => g.id === 'telovelar')!;
     const names = tv.landmarks.map((id) => LANDMARKS.find((l) => l.id === id)!.name);

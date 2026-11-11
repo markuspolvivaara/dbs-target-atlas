@@ -598,6 +598,16 @@ def validate() -> int:
         for sd, rc in fit["brain"]["clear"].items():
             check(rc["inBoneWayAfter"] <= 20, f"cortex {sd}: {rc['inBoneWayAfter']} vertices left in bone's way")
         check(fit["pfossa"]["clear"]["inBoneAfter"] <= 60, f"hindbrain: {fit['pfossa']['clear']['inBoneAfter']} vertices left in bone")
+        # the cortical arteries, moved with the cortex (skullbase_v1_brain.carry_arteries): out of the bone, each on its side
+        moved = fit["brain"].get("arteries", {})
+        check(len(moved) >= 12, f"{len(moved)} cortical arteries moved with the cortex")
+        for n_, r in moved.items():
+            check(r["inBoneAfterMm"] <= max(1.0, 0.02 * r["lengthMm"]), f"{n_}: {r['inBoneAfterMm']} mm of its centre line left in bone")
+            it = next((x for x in m["structures"] if x["name"] == n_), None)
+            check(it is not None and it["centroid"] == r["centroid"] and "moved with that cortex" in it.get("derivation", ""),
+                  f"{n_}: the manifest does not have it as moved")
+            check(set(r["centroid"]) == set(r["box"]) == {"L", "R"} and all((c[0] < 0) == (sd == "L") for sd, c in r["centroid"].items()),
+                  f"{n_}: not on both sides, or on the wrong side")
         # the temporal-bone views (skullbase_v1_ear.py): Z-Anatomy's ear, and what it lacks drawn by rule, on both sides
         names = {it["name"]: it for it in m["structures"]}
         for n_ in ("Cochlea", "Vestibule and semicircular canals", "Malleus", "Incus", "Stapes", "Tympanic membrane", "Greater petrosal nerve"):
