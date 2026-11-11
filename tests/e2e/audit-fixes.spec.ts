@@ -378,3 +378,92 @@ test('picking: a click goes through a see-through shell to the structure drawn i
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+/** The camera's distance from the point it looks at, and that point (rounded). */
+async function cameraFrame(page: Page): Promise<{ dist: number; tgt: number[] }> {
+  return page.evaluate(() => {
+    const v = (window as unknown as { __atlas: { viewer: { camera: { position: { distanceTo(p: unknown): number } }; controls: { target: { toArray(): number[] } } } } }).__atlas.viewer;
+    return { dist: Math.round(v.camera.position.distanceTo(v.controls.target)), tgt: v.controls.target.toArray().map((x: number) => Math.round(x)) };
+  });
+}
+
+// UI-09: the 3D view could not be turned, moved or zoomed from the keyboard
+test('keyboard: with the 3D view in focus the arrows turn it, Shift with arrows moves it, + and - zoom', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './skullbase/');
+  const canvas = page.locator('.viewer-host canvas');
+  await expect(canvas).toHaveAttribute('role', 'application');
+  await canvas.focus();
+  const p0 = await cameraAt(page), f0 = await cameraFrame(page);
+  await page.keyboard.press('ArrowLeft');
+  const p1 = await cameraAt(page), f1 = await cameraFrame(page);
+  expect(p1).not.toEqual(p0);
+  expect(f1).toEqual(f0);                       // turned about the same point, at the same distance
+  await page.keyboard.press('ArrowRight');
+  expect(await cameraAt(page)).toEqual(p0);
+  await page.keyboard.press('+');
+  expect((await cameraFrame(page)).dist).toBeLessThan(f0.dist);
+  await page.keyboard.press('-');
+  expect((await cameraFrame(page)).dist).toBe(f0.dist);
+  await page.keyboard.press('Shift+ArrowRight');
+  const f2 = await cameraFrame(page);
+  expect(f2.tgt).not.toEqual(f0.tgt);
+  expect(f2.dist).toBe(f0.dist);
+  // 0 puts the view back
+  await page.keyboard.press('0');
+  await settle(page);
+  expect(await cameraAt(page)).toEqual(p0);
+  // the link follows the camera
+  await page.keyboard.press('ArrowUp');
+  await expect.poll(() => new URL(page.url()).hash).toContain('c=');
+  // a section's own use of an arrow key comes first: the spine's levels
+  await open(page, './spine/#/atlas?r=lumbar&lv=L3');
+  await page.locator('.viewer-host canvas').focus();
+  await page.keyboard.press('ArrowDown');
+  await expect.poll(() => new URL(page.url()).hash).toContain('lv=L4');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// UI-11, UI-12, UI-20: tab stops, the way to the panel, focus after a legend choice, headings and landmarks
+test('keyboard and screen readers: one stop for the toolbar, a skip link to the panel, focus kept in the legend, a heading and landmarks', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './skullbase/');
+  // the toolbar is one tab stop; the arrow keys move inside it
+  const stops = await page.locator('.toolbar button').evaluateAll((bs) => bs.filter((b) => (b as HTMLButtonElement).tabIndex === 0).length);
+  expect(stops).toBe(1);
+  const cam0 = await cameraAt(page);
+  await page.locator('.toolbar button').first().focus();
+  await page.keyboard.press('ArrowRight');
+  expect(await page.evaluate(() => document.activeElement === document.querySelectorAll('.toolbar button')[1])).toBe(true);
+  await page.keyboard.press('End');
+  expect(await page.evaluate(() => document.activeElement?.classList.contains('help-btn'))).toBe(true);
+  // (and the arrow keys did not turn the view)
+  expect(await cameraAt(page)).toEqual(cam0);
+  // the second skip link goes to the panel, and leaves the address alone
+  const hash = new URL(page.url()).hash;
+  await page.locator('a.skip-panel').focus();
+  await page.keyboard.press('Enter');
+  expect(await page.evaluate(() => document.activeElement?.id)).toBe('panel');
+  expect(new URL(page.url()).hash).toBe(hash);
+  // hiding a legend row with the keyboard keeps focus on that row's button
+  const eye = page.locator('.legend-box .eye').nth(1);
+  await eye.focus();
+  await page.keyboard.press('Enter');
+  await settle(page);
+  expect(await page.evaluate(() => { const a = document.activeElement; return !!a && a.classList.contains('eye') && [...document.querySelectorAll('.legend-box .eye')].indexOf(a) === 1; })).toBe(true);
+  await expect(page.locator('.legend-box .eye').nth(1)).toHaveAttribute('aria-pressed', 'false');
+  // one heading for the page, the notice inside a landmark, a live region for the selection
+  // (the section's other pages are in the document but not displayed: their headings are not rendered)
+  const h1 = await page.locator('h1').evaluateAll((hs) => hs.filter((e) => e.getClientRects().length > 0).map((e) => e.textContent));
+  expect(h1).toEqual(['Skull base: 3D atlas']);
+  await expect(page.locator('aside[aria-label="Notice"] .disclaimer, aside.disclaimer[aria-label="Notice"]')).toHaveCount(1);
+  await page.mouse.click(420, 430);
+  await expect(page.locator('#atlas-live')).toContainText('its card is shown in the panel');
+  // no empty row headers in the grading tables
+  await open(page, './vascular/#/grading');
+  const empty = await page.locator('th[scope="row"]').evaluateAll((ths) => ths.filter((t) => !(t.textContent ?? '').trim()).length);
+  expect(empty).toBe(0);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

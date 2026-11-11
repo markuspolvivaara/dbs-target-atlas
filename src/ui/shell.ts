@@ -54,7 +54,8 @@ function viewSettings(): HTMLElement {
 }
 
 export function disclaimerNote(text = 'Atlas-based (MNI 2009b) group anatomy; individual anatomy varies. Not for surgical planning.'): HTMLElement {
-  return h('p', { class: 'disclaimer', role: 'note' }, h('strong', {}, 'Teaching tool. '), text);
+  // (a landmark of its own: it sat outside every landmark, which screen readers' landmark lists skip)
+  return h('aside', { class: 'disclaimer', 'aria-label': 'Notice' }, h('p', {}, h('strong', {}, 'Teaching tool. '), text));
 }
 
 /** The current section as a menu button: switch to another section or go to the home page. */

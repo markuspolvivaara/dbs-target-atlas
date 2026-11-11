@@ -11,7 +11,7 @@ import { Viewer, type EndoscopeConfig, type PickInfo } from '../viewer/Viewer';
 import { ENDO_FOV_DEG, FLOOR_LAMBDA_MM } from '../viewer/endoscope';
 import { h } from './h';
 import { refLinksFrom } from './reflinks';
-import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays } from './stage';
+import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: VeState) => void, opts?: { camera?: boolean }) => void;
@@ -214,7 +214,7 @@ export class VentriclesAtlasPage {
 
   constructor(private update: Update) {
     this.stage = h('section', { class: 'stage', 'aria-label': '3D viewer' });
-    this.panel = h('aside', { class: 'panel', 'aria-label': 'Anatomy and tools', 'data-sheet': 'peek' });
+    this.panel = h('aside', { class: 'panel', id: 'panel', tabindex: -1, 'aria-label': 'Anatomy and tools', 'data-sheet': 'peek' });
     this.el = h('div', { class: 'atlas' }, this.stage, this.panel);
     this.buildStage();
     this.buildPanel();
@@ -256,6 +256,7 @@ export class VentriclesAtlasPage {
     this.leaders.setAttribute('aria-hidden', 'true');
     this.stage.append(host, this.endoMask, this.endoCompass.a, this.endoCompass.p, this.insetFrame, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
     scrollHint(toolbar);
+    rovingToolbar(toolbar);
     this.bindSteering(host);
     this.readout.textContent = 'Point at a structure for its position';
 
@@ -658,7 +659,12 @@ export class VentriclesAtlasPage {
   }
 
   // ---------------------------------------------------------------- legend, labels, readout
+  /** (drawn again on every change: the keyboard keeps its place in it) */
   private renderLegend(): void {
+    keepFocus(this.legend, () => this.drawLegend());
+  }
+
+  private drawLegend(): void {
     const p = this.viewer.currentPlan();
     clear(this.legend);
     if (!p) return;

@@ -95,6 +95,9 @@ const RAS_TO_WORLD = new THREE.Matrix4().makeRotationX(-Math.PI / 2); // (x, y, 
 const TAP_MARKER_PX = 22;
 /** a mesh drawn at or under this opacity is looked through when picking (the context and shell looks, a layer turned down) */
 const SEE_THROUGH_OPACITY = 0.5;
+/** the keyboard in the 3D view: a turn per key press, a move as a share of the camera's distance, a zoom step */
+const KEY_TURN = Math.PI / 18, KEY_MOVE = 0.06, KEY_ZOOM = 1.15;
+let viewers = 0;
 const ENDO_PICK_BEHIND_MM = 3;
 /** ... and through the thin floor of the third ventricle, this close: what lies under it can be named before it is opened */
 const ENDO_PICK_FLOOR_MM = 14;
@@ -228,8 +231,16 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.localClippingEnabled = true;
     host.appendChild(this.renderer.domElement);
-    this.renderer.domElement.setAttribute('role', 'img');
+    // an application to assistive technology: its keys reach the page (handleKey), and it says which they are
+    this.renderer.domElement.setAttribute('role', 'application');
+    this.renderer.domElement.setAttribute('aria-roledescription', '3D view');
     this.renderer.domElement.tabIndex = 0;
+    const keys = document.createElement('span');
+    keys.id = `view-keys-${++viewers}`;
+    keys.className = 'vh';
+    keys.textContent = 'Arrow keys turn the view; with Shift they move it; plus and minus zoom; 0 puts it back. The structures are listed in the legend and in the panel.';
+    host.appendChild(keys);
+    this.renderer.domElement.setAttribute('aria-describedby', keys.id);
     this.camera = new THREE.PerspectiveCamera(35, 1, 0.5, 2000);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
@@ -1345,10 +1356,43 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   }
 
   // ---------------------------------------------------------------- misc
+  /** The keyboard in the 3D view: the arrow keys turn it, with Shift they move it, + and - zoom. The page calls this
+   * when the canvas has focus and the section has no use of its own for the key. */
+  handleKey(e: KeyboardEvent): boolean {
+    if (!this.state || this.endoCfg?.big) return false;
+    const k = e.key;
+    const arrow = k === 'ArrowLeft' ? [-1, 0] : k === 'ArrowRight' ? [1, 0] : k === 'ArrowUp' ? [0, 1] : k === 'ArrowDown' ? [0, -1] : null;
+    const zoom = k === '+' || k === '=' ? 1 / KEY_ZOOM : k === '-' || k === '_' ? KEY_ZOOM : 0;
+    if (!arrow && !zoom) return false;
+    this.anim = null; // a key takes the camera over from a preset's animation
+    const tgt = this.controls.target, off = this.camera.position.clone().sub(tgt);
+    if (zoom) {
+      off.setLength(Math.max(this.controls.minDistance, Math.min(this.controls.maxDistance, off.length() * zoom)));
+    } else if (e.shiftKey) {
+      // move what is drawn the way the arrow points: the camera and its centre go the other way, across the screen
+      const step = off.length() * KEY_MOVE;
+      tgt.addScaledVector(new THREE.Vector3().setFromMatrixColumn(this.camera.matrix, 0), -arrow![0] * step);
+      tgt.addScaledVector(new THREE.Vector3().setFromMatrixColumn(this.camera.matrix, 1), -arrow![1] * step);
+    } else {
+      // turn, as a drag does: left and right about the vertical, up and down over the top (never through the poles)
+      const sph = new THREE.Spherical().setFromVector3(off);
+      sph.theta += arrow![0] * KEY_TURN;
+      sph.phi = Math.max(0.02, Math.min(Math.PI - 0.02, sph.phi - arrow![1] * KEY_TURN));
+      off.setFromSpherical(sph);
+    }
+    this.camera.position.copy(tgt).add(off);
+    this.camera.lookAt(tgt);
+    this.controls.update();
+    this.ev.cameraChanged(this.toRas(this.camera.position), this.toRas(this.controls.target));
+    this.invalidate();
+    return true;
+  }
+
   describe(): string {
     const p = this.plan;
     if (!p) return '3D atlas';
-    const names = (ids: string[]) => ids.map((id) => this.cat.byId.get(id)?.name ?? id).join(', ');
+    // (a long list is no label: the first few names, then how many more; all are in the legend and the panel)
+    const names = (ids: string[]) => ids.slice(0, 6).map((id) => this.cat.byId.get(id)?.name ?? id).join(', ') + (ids.length > 6 ? ` and ${ids.length - 6} more` : '');
     const prim = [...p.looks].filter(([, l]) => l === 'primary').map(([id]) => id);
     const alt = [...p.looks].filter(([, l]) => l === 'alt').map(([id]) => id);
     return `3D atlas, ${p.title}. Highlighted: ${names(prim)}.` +

@@ -77,6 +77,51 @@ export function viewButtons(reset: () => void): HTMLElement {
     h('button', { type: 'button', class: 'tbtn help-btn', title: 'Help: mouse, touch and keyboard controls (?)', 'aria-label': 'Help: mouse, touch and keyboard controls', 'aria-haspopup': 'dialog', onclick: () => requestHelp() }, '?'));
 }
 
+/** One visually hidden live region for the page: what is said here is read out by a screen reader without moving focus. */
+export function announce(text: string): void {
+  let live = document.getElementById('atlas-live');
+  if (!live) {
+    live = h('div', { id: 'atlas-live', class: 'vh', role: 'status', 'aria-live': 'polite' });
+    document.body.append(live);
+  }
+  live.textContent = text;
+}
+
+/**
+ * A toolbar is one stop for the Tab key (the pattern its role promises): the arrow keys, Home and End move between
+ * its buttons, and Tab leaves it. Before, every button was a stop: 16 to 22 presses to pass each section's toolbar.
+ */
+export function rovingToolbar(toolbar: HTMLElement): void {
+  const buttons = () => [...toolbar.querySelectorAll<HTMLButtonElement>('button')].filter((b) => !b.disabled && b.offsetParent !== null);
+  const stop = (b: HTMLButtonElement | undefined) => { for (const x of toolbar.querySelectorAll<HTMLButtonElement>('button')) x.tabIndex = x === b ? 0 : -1; };
+  stop(toolbar.querySelector<HTMLButtonElement>('button') ?? undefined);
+  toolbar.addEventListener('focusin', (e) => { if (e.target instanceof HTMLButtonElement) stop(e.target); });
+  toolbar.addEventListener('keydown', (e) => {
+    const k = e.key;
+    if (k !== 'ArrowRight' && k !== 'ArrowLeft' && k !== 'Home' && k !== 'End') return;
+    const all = buttons(), i = all.indexOf(document.activeElement as HTMLButtonElement);
+    if (i < 0) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const to = all[k === 'Home' ? 0 : k === 'End' ? all.length - 1 : (i + (k === 'ArrowRight' ? 1 : -1) + all.length) % all.length];
+    to.focus();
+  });
+}
+
+/**
+ * Draw a list again without losing the keyboard's place in it: a legend is rebuilt on every change, so the button
+ * that had focus is gone afterwards and focus fell back to the top of the page. The button at the same place in the
+ * new list (the same row, as the lists keep their order) takes it.
+ */
+export function keepFocus(list: HTMLElement, draw: () => void): void {
+  const focusable = () => [...list.querySelectorAll<HTMLElement>('button, a[href], [tabindex]')];
+  const at = document.activeElement instanceof HTMLElement && list.contains(document.activeElement) ? focusable().indexOf(document.activeElement) : -1;
+  draw();
+  if (at < 0 || list.contains(document.activeElement)) return;
+  const now = focusable();
+  now[Math.min(at, now.length - 1)]?.focus();
+}
+
 /** Bring the card of the structure just selected to the top of the panel's scrolling pane: it is drawn after the
  * view's lists, thousands of pixels down in the larger sections, and on a phone below the part of the sheet that
  * shows. Called when the selection changes; waits for the panel to be drawn. */
@@ -88,6 +133,9 @@ export function revealCard(panel: HTMLElement): void {
     const top = card.getBoundingClientRect().top - pane.getBoundingClientRect().top + pane.scrollTop - 8;
     const calm = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
     pane.scrollTo({ top: Math.max(0, top), behavior: calm ? 'auto' : 'smooth' });
+    // said too, for who cannot see the panel change
+    const name = card.querySelector('h2')?.textContent?.trim();
+    if (name) announce(`${name}: its card is shown in the panel.`);
   });
 }
 

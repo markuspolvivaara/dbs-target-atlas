@@ -24,7 +24,7 @@ function gradeTable(id: string, title: string, refIds: string[], head: string[],
         h('thead', {}, h('tr', {}, ...head.map((x) => h('th', { scope: 'col' }, x)))),
         h('tbody', {}, ...rows.map((r) => {
           const shown = r.view && SB_GROUP.has(r.view) ? r.view : undefined;
-          return h('tr', shown ? { class: 'is-drawn' } : {}, ...r.cells.map((x, i) => (i === 0 ? h('th', { scope: 'row' }, x, shown ? [' ', drawn(shown)] : null) : h('td', {}, x))));
+          return h('tr', shown ? { class: 'is-drawn' } : {}, ...r.cells.map((x, i) => (i === 0 && (x || shown) ? h('th', { scope: 'row' }, x, shown ? [' ', drawn(shown)] : null) : h('td', {}, x))));
         })))),
     foot ? h('p', { class: 'aside' }, foot) : null,
     notes.length ? claimList(notes) : null);
