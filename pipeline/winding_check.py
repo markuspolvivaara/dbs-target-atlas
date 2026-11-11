@@ -76,7 +76,7 @@ SHEET_MM = 1e-3     # a closed mesh enclosing less than this times its area (mm3
 
 
 def main() -> int:
-    dirs = [Path(d) for d in sys.argv[1:]] or [d for d in BUILD.iterdir() if d.is_dir() and d.name in ("meshes", "spine", "skullbase", "skullbase-ct", "skullbase-v3", "cortex", "brainstem", "ventricles")]
+    dirs = [Path(d) for d in sys.argv[1:]] or [d for d in BUILD.iterdir() if d.is_dir() and d.name in ("meshes", "spine", "skullbase", "skullbase-ct", "skullbase-v3", "cortex", "brainstem", "ventricles", "vascular")]
     bad, n = [], 0
     for d in dirs:
         for f in sorted(d.glob("*.glb")):

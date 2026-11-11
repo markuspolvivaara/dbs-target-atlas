@@ -89,7 +89,14 @@ def implicit_mesh(sdf, lo: np.ndarray, hi: np.ndarray, step: float = 0.15):
     G = np.stack(np.meshgrid(*ax, indexing="ij"), -1)
     vol = sdf(G.reshape(-1, 3)).reshape(G.shape[:3])
     v, f, _, _ = marching_cubes(vol, 0.0, spacing=(step, step, step))
-    return v + lo, f[:, ::-1].copy()
+    v = v + lo
+    # wound outward whatever marching_cubes' convention is: the closed surface must enclose a positive volume. (Its
+    # faces were turned round here unconditionally, which left every sac, fistula and clip inside out: lit and culled
+    # from the wrong side.)
+    c = v.mean(0)
+    if np.einsum("ij,ij->i", v[f[:, 0]] - c, np.cross(v[f[:, 1]] - c, v[f[:, 2]] - c)).sum() < 0:
+        f = f[:, ::-1]
+    return v, f.copy()
 
 
 def smin(a, b, k):
