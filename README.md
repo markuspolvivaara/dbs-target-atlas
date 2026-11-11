@@ -869,7 +869,7 @@ npm run preview
 ### GitHub Pages
 
 `.github/workflows/pages.yml` runs the unit tests, builds the site and publishes `dist/` to
-GitHub Pages on every push to `main` (live at https://markuspolvivaara.github.io/dbs-target-atlas/, DBS section under `dbs/`).
+GitHub Pages on every push to `main` (live at https://openneuroatlas.net/, DBS section under `dbs/`).
 One-time setup: repository Settings → Pages → Source: **GitHub Actions**. A run can also be started
 by hand from the Actions tab ("Run workflow").
 

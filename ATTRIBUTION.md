@@ -323,6 +323,7 @@ Skull base v2's bone and Skull base v3's fitted brain, under their licences abov
 - Attribution: BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan
 - Attribution: Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0
 - Cite: Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.
+- Cite: Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).
 - Cite: Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.
 - Changes made: the lateral and third ventricles segmented from the CT by a threshold in its brain window
   (pipeline/ventricles_build.py); Z-Anatomy's ventricles, aqueduct included (exported by pipeline/ventricles_export.py)

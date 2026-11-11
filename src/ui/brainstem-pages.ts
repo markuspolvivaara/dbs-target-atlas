@@ -1,5 +1,6 @@
 import { BS_MANIFEST, BS_REFS, CONTEXT, DEFINITIONS } from '../brainstem';
 import { h } from './h';
+import { linkLicences } from './licences';
 
 /** Sources and Credits of the brainstem section. */
 
@@ -69,5 +70,7 @@ export function bsCreditsPage() {
       h('h2', {}, 'Software'),
       h('p', {}, 'three.js, zod, Vite and glTF-Transform (MIT), meshoptimizer (MIT); Blender (GPL) to read the model during the build. Font: Atkinson Hyperlegible, SIL Open Font License 1.1, self-hosted. The source code is GPL-3.0.')),
   );
+  // every licence named on the page links to its text, and every printed address is a link
+  linkLicences(el);
   return { el, render() { /* stateless */ } };
 }

@@ -6,6 +6,7 @@ import { refLinksFrom } from './reflinks';
 import { FORAMEN_REFS } from '../skullbase/foramina';
 import { TB_REFS } from '../skullbase/temporal';
 import { h } from './h';
+import { linkLicences } from './licences';
 
 /** Grading, Sources and Credits of the skull-base section. */
 
@@ -191,6 +192,8 @@ function temporalCreditsPage() {
       h('h2', {}, 'Software'),
       h('p', {}, 'three.js, zod, Vite and glTF-Transform (MIT), meshoptimizer (MIT); scikit-image, SciPy and trimesh for the build. Font: Atkinson Hyperlegible, SIL Open Font License 1.1, self-hosted. The source code is GPL-3.0.')),
   );
+  // every licence named on the page links to its text, and every printed address is a link
+  linkLicences(el);
   return { el, render() { /* stateless */ } };
 }
 
@@ -248,5 +251,7 @@ export function skullCreditsPage() {
       h('h2', {}, 'Software'),
       h('p', {}, 'three.js, zod, Vite and glTF-Transform (MIT), meshoptimizer (MIT); Blender (GPL) to read the model during the build. Font: Atkinson Hyperlegible, SIL Open Font License 1.1, self-hosted. The source code is GPL-3.0.')),
   );
+  // every licence named on the page links to its text, and every printed address is a link
+  linkLicences(el);
   return { el, render() { /* stateless */ } };
 }

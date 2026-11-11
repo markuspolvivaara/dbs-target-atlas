@@ -3,6 +3,7 @@ import { DSA, LESIONS, VA_MANIFEST, VA_REF, VA_REFS } from '../vascular';
 import { AVM_TABLES, DAVF_TABLES, SAH_TABLES, type GradeTable } from '../vascular/grading';
 import { VA_GROUP } from '../vascular/groups';
 import { h } from './h';
+import { linkLicences } from './licences';
 import { refLinksFrom } from './reflinks';
 
 /** Sources and Credits of the vascular section. */
@@ -81,5 +82,7 @@ export function vaCreditsPage() {
       h('h2', {}, 'Software'),
       h('p', {}, 'three.js, zod, Vite and glTF-Transform (MIT), meshoptimizer (MIT), scikit-image (BSD). Font: Atkinson Hyperlegible, SIL Open Font License 1.1, self-hosted. The source code is GPL-3.0.')),
   );
+  // every licence named on the page links to its text, and every printed address is a link
+  linkLicences(el);
   return { el, render() { /* stateless */ } };
 }

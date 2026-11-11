@@ -504,3 +504,29 @@ test('brainstem: the Sources page reports the fit against the template from both
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// P2S-09: no Credits page gave the address of the Creative Commons licences it names; dataset addresses were plain text
+for (const section of ['tracts', 'cortex', 'brainstem', 'ventricles', 'vascular', 'spine', 'skullbase', 'skullbase-v1', 'skullbase-ct']) {
+  test(`credits (${section}): every licence named links to its text, and every address is a link`, async ({ page }) => {
+    const g = guard(page);
+    await page.goto('about:blank');
+    await page.goto(`./${section}/#/credits`);
+    await page.waitForSelector('body[data-ready="1"]', { timeout: 30_000 });
+    const found = await page.evaluate(() => {
+      const el = [...document.querySelectorAll<HTMLElement>('.page')].find((e) => e.getClientRects().length)!;
+      const unlinked: string[] = [];
+      const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+      for (let n = walk.nextNode(); n; n = walk.nextNode()) {
+        if (n.parentElement?.closest('a, h1, h2, h3')) continue;
+        for (const m of (n.textContent ?? '').match(/CC[ -]BY(?:-SA)?[ -]\d\.\d(?: Japan)?|CC0 1\.0|https?:\/\/\S+/g) ?? []) unlinked.push(m);
+      }
+      const links = [...el.querySelectorAll('a')].map((a) => ({ text: a.textContent ?? '', href: a.href }));
+      return { unlinked, cc: links.filter((l) => /creativecommons\.org\/(licenses|publicdomain)\//.test(l.href)).map((l) => l.text) };
+    });
+    expect(found.unlinked).toEqual([]);
+    expect(found.cc.length).toBeGreaterThan(0);
+    for (const t of found.cc) expect(t).toMatch(/^CC/);
+    expect(g.external).toEqual([]);
+    expect(g.errors).toEqual([]);
+  });
+}

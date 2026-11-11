@@ -61,7 +61,7 @@ const main = h('main', { id: 'main', class: 'home wrap' },
   h('section', { class: 'card about' },
     h('h2', {}, 'About'),
     h('p', {}, 'All 3D anatomy comes from published atlases, converted by an open pipeline and checked against its sources. Every clinical statement links to its reference.'),
-    h('p', {}, 'Open source under GPL-3.0; the white-matter tract data are CC BY-SA 4.0. ', h('a', { href: BRAND.repo, target: '_blank', rel: 'noopener' }, 'Source code'), '.'),
+    h('p', {}, 'The code is open source under GPL-3.0. The anatomical data carry their sources’ own licences (GPL-3.0 with a non-commercial request, CC BY-SA 4.0, CC BY 4.0, non-commercial data terms): see each section’s Credits. ', h('a', { href: BRAND.repo, target: '_blank', rel: 'noopener' }, 'Source code'), '.'),
     h('p', {}, 'Data, licences and credits: ', ...SECTIONS.flatMap((s, i) => [i ? ' · ' : '', h('a', { href: `${SITE_ROOT}${s.path}#/credits` }, s.name)]), '.')),
 );
 

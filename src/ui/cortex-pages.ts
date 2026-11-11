@@ -1,5 +1,6 @@
 import { CTX_MANIFEST, LABELS, LOBES, METHOD } from '../cortex';
 import { h } from './h';
+import { linkLicences } from './licences';
 
 /** Sources and Credits of the cortex section. */
 
@@ -60,5 +61,7 @@ export function cortexCreditsPage() {
       h('h2', {}, 'Software'),
       h('p', {}, 'three.js, zod, Vite and glTF-Transform (MIT), meshoptimizer (MIT); trimesh, SciPy and NumPy in the build. Font: Atkinson Hyperlegible, SIL Open Font License 1.1, self-hosted. The source code is GPL-3.0.')),
   );
+  // every licence named on the page links to its text, and every printed address is a link
+  linkLicences(el);
   return { el, render() { /* stateless */ } };
 }

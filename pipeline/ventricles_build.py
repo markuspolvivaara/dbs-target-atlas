@@ -804,8 +804,9 @@ def write_manifest(cent: dict, vrep: dict, etv: dict) -> None:
     and the vessels and nerves of the endoscopic view by reference."""
     v2 = json.loads((GEN / "sbct-manifest.json").read_text())
     v3 = json.loads((GEN / "sbv3-manifest.json").read_text())
-    cite = [CITES[c]["citation"] for c in ("topbrain2025", "mitsuhashi2009")]
-    url = [CITES[c]["url"] for c in ("topbrain2025", "mitsuhashi2009")]
+    # (the TopBrain data's terms ask for the TopCoW paper to be cited with the TopBrain preprint)
+    cite = [CITES[c]["citation"] for c in ("topbrain2025", "topcow2023", "mitsuhashi2009")]
+    url = [CITES[c]["url"] for c in ("topbrain2025", "topcow2023", "mitsuhashi2009")]
     v, fit, d = vrep["volumeMl"], vrep["fit"], vrep["drawnMl"]
     aq = fit["aqueduct"]
     th = fit["temporalHorn"]

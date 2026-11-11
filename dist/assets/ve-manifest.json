@@ -16,10 +16,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -56,10 +58,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -98,10 +102,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -141,10 +147,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -181,10 +189,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -221,10 +231,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -262,10 +274,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -303,10 +317,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [
@@ -346,10 +362,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -387,10 +405,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -428,10 +448,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -469,10 +491,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -510,10 +534,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [
@@ -554,10 +580,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -595,10 +623,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -636,10 +666,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -677,10 +709,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -718,10 +752,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -759,10 +795,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -800,10 +838,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); the fitted model: Z-Anatomy CC BY-SA 4.0 (BodyParts3D CC BY-SA 2.1 Japan)",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -1549,10 +1589,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -1579,7 +1621,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_oculomotor_nerve_iii.glb",
-   "bytes": 16744,
+   "bytes": 18980,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1590,10 +1632,12 @@
    "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
    "citation": [
     "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
     "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
    ],
    "citationUrls": [
     "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
     "https://doi.org/10.1093/nar/gkn613"
    ],
    "refIds": [],
@@ -2012,10 +2056,12 @@
   ],
   "citation": [
    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+   "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
   ],
   "citationUrls": [
    "https://doi.org/10.64898/2026.05.28.26354312",
+   "https://doi.org/10.1056/AIdbp2500994",
    "https://doi.org/10.1093/nar/gkn613"
   ]
  }
