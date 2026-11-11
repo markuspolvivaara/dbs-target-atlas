@@ -8,7 +8,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_midbrain.glb",
-   "bytes": 81228,
+   "bytes": 56500,
    "colour": {
     "token": "bsSurface",
     "light": "#C9B8A6",
@@ -49,7 +49,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_pons.glb",
-   "bytes": 134832,
+   "bytes": 93172,
    "colour": {
     "token": "bsSurface",
     "light": "#C9B8A6",
@@ -90,7 +90,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_medulla.glb",
-   "bytes": 82236,
+   "bytes": 57868,
    "colour": {
     "token": "bsSurface",
     "light": "#C9B8A6",
@@ -131,7 +131,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_olive.glb",
-   "bytes": 16184,
+   "bytes": 12296,
    "colour": {
     "token": "bsFeature",
     "light": "#8E7155",
@@ -172,7 +172,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_pyramid.glb",
-   "bytes": 16320,
+   "bytes": 12424,
    "colour": {
     "token": "bsFeature",
     "light": "#8E7155",
@@ -213,7 +213,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_superior_colliculus.glb",
-   "bytes": 9516,
+   "bytes": 7632,
    "colour": {
     "token": "bsFeature",
     "light": "#8E7155",
@@ -254,7 +254,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_inferior_colliculus.glb",
-   "bytes": 9764,
+   "bytes": 7852,
    "colour": {
     "token": "bsFeature",
     "light": "#8E7155",
@@ -295,7 +295,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_crus.glb",
-   "bytes": 70576,
+   "bytes": 50096,
    "colour": {
     "token": "bsFeature",
     "light": "#8E7155",
@@ -336,7 +336,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_mgb.glb",
-   "bytes": 5880,
+   "bytes": 5068,
    "colour": {
     "token": "bsFeature",
     "light": "#8E7155",
@@ -377,7 +377,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_fourth_ventricle.glb",
-   "bytes": 42784,
+   "bytes": 30480,
    "colour": {
     "token": "bsCsf",
     "light": "#3A7FB5",
@@ -418,7 +418,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_aqueduct.glb",
-   "bytes": 6836,
+   "bytes": 5692,
    "colour": {
     "token": "bsCsf",
     "light": "#3A7FB5",
@@ -459,7 +459,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_oculomotor.glb",
-   "bytes": 13488,
+   "bytes": 10420,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -501,7 +501,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_edinger_westphal.glb",
-   "bytes": 13444,
+   "bytes": 10392,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -543,7 +543,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_trochlear.glb",
-   "bytes": 13980,
+   "bytes": 10844,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -585,7 +585,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_abducens.glb",
-   "bytes": 13884,
+   "bytes": 10788,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -627,7 +627,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_facial.glb",
-   "bytes": 13916,
+   "bytes": 10816,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -669,7 +669,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_sup_salivatory.glb",
-   "bytes": 13948,
+   "bytes": 10836,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -711,7 +711,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_cochlear_ant.glb",
-   "bytes": 5800,
+   "bytes": 5020,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -753,7 +753,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_cochlear_post.glb",
-   "bytes": 16392,
+   "bytes": 12604,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -795,7 +795,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_vestibular.glb",
-   "bytes": 23752,
+   "bytes": 17532,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -837,7 +837,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_inf_salivatory.glb",
-   "bytes": 13940,
+   "bytes": 10832,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -879,7 +879,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_ambiguus.glb",
-   "bytes": 13352,
+   "bytes": 10356,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -921,7 +921,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_dorsal_vagal.glb",
-   "bytes": 13052,
+   "bytes": 10108,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -963,7 +963,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_solitary.glb",
-   "bytes": 20272,
+   "bytes": 14852,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -1005,7 +1005,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_accessory.glb",
-   "bytes": 26088,
+   "bytes": 19104,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -1047,7 +1047,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_hypoglossal.glb",
-   "bytes": 13092,
+   "bytes": 10124,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -1091,7 +1091,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_dr.glb",
-   "bytes": 23928,
+   "bytes": 17364,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1134,7 +1134,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_mnr.glb",
-   "bytes": 14224,
+   "bytes": 11188,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1177,7 +1177,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_pag.glb",
-   "bytes": 24240,
+   "bytes": 17816,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1220,7 +1220,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_vta.glb",
-   "bytes": 24364,
+   "bytes": 18108,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1263,7 +1263,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_lc.glb",
-   "bytes": 13376,
+   "bytes": 10348,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1306,7 +1306,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_ldtg.glb",
-   "bytes": 4736,
+   "bytes": 4208,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1349,7 +1349,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_mrt.glb",
-   "bytes": 42484,
+   "bytes": 30280,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1392,7 +1392,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_pbc.glb",
-   "bytes": 15248,
+   "bytes": 11664,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1435,7 +1435,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_pno.glb",
-   "bytes": 22952,
+   "bytes": 17068,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1478,7 +1478,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_ptg.glb",
-   "bytes": 22464,
+   "bytes": 16624,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1519,7 +1519,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_oculomotor_nerve.glb",
-   "bytes": 16548,
+   "bytes": 11924,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1560,7 +1560,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_trochlear_nerve.glb",
-   "bytes": 13036,
+   "bytes": 9568,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1601,7 +1601,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_trigeminal_nerve.glb",
-   "bytes": 59608,
+   "bytes": 41532,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1642,7 +1642,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_abducens_nerve.glb",
-   "bytes": 13116,
+   "bytes": 9608,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1683,7 +1683,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_facial_nerve.glb",
-   "bytes": 13748,
+   "bytes": 10048,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1724,7 +1724,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_vestibulocochlear_nerve.glb",
-   "bytes": 9504,
+   "bytes": 7360,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1765,7 +1765,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_glossopharyngeal_nerve.glb",
-   "bytes": 22684,
+   "bytes": 16016,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1806,7 +1806,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_vagus_nerve.glb",
-   "bytes": 22468,
+   "bytes": 15864,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1847,7 +1847,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_accessory_nerve.glb",
-   "bytes": 19664,
+   "bytes": 13996,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1888,7 +1888,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_hypoglossal_nerve.glb",
-   "bytes": 28464,
+   "bytes": 19848,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1929,7 +1929,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_a_basilar_artery.glb",
-   "bytes": 3908,
+   "bytes": 3332,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1969,7 +1969,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_a_vertebral_artery.glb",
-   "bytes": 8384,
+   "bytes": 6592,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2009,7 +2009,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_a_posterior_cerebral_artery.glb",
-   "bytes": 46664,
+   "bytes": 31788,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2049,7 +2049,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_a_superior_cerebellar_artery.glb",
-   "bytes": 18500,
+   "bytes": 13216,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2089,7 +2089,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_a_anterior_inferior_cerebellar_artery.glb",
-   "bytes": 14980,
+   "bytes": 10868,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2129,7 +2129,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_a_posterior_inferior_cerebellar_artery.glb",
-   "bytes": 13780,
+   "bytes": 10148,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2169,7 +2169,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_a_posterior_communicating_artery.glb",
-   "bytes": 4768,
+   "bytes": 4228,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2209,7 +2209,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_perioculomotor.glb",
-   "bytes": 3384,
+   "bytes": 3288,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2251,7 +2251,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_lateral_mesencephalic_sulcus.glb",
-   "bytes": 4040,
+   "bytes": 3872,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2293,7 +2293,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_supracollicular.glb",
-   "bytes": 3320,
+   "bytes": 3216,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2335,7 +2335,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_infracollicular.glb",
-   "bytes": 3244,
+   "bytes": 3188,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2377,7 +2377,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_supratrigeminal.glb",
-   "bytes": 3280,
+   "bytes": 3168,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2419,7 +2419,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_peritrigeminal.glb",
-   "bytes": 3664,
+   "bytes": 3456,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2461,7 +2461,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_suprafacial.glb",
-   "bytes": 10436,
+   "bytes": 8468,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2503,7 +2503,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_infrafacial.glb",
-   "bytes": 6108,
+   "bytes": 5152,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2545,7 +2545,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_median_sulcus.glb",
-   "bytes": 8484,
+   "bytes": 6824,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2587,7 +2587,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_anterolateral_sulcus.glb",
-   "bytes": 4340,
+   "bytes": 4024,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2629,7 +2629,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_olivary.glb",
-   "bytes": 36556,
+   "bytes": 26912,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2671,7 +2671,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_postolivary_sulcus.glb",
-   "bytes": 4188,
+   "bytes": 3940,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2713,7 +2713,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_posterior_median_sulcus.glb",
-   "bytes": 3800,
+   "bytes": 3592,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2755,7 +2755,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_posterior_intermediate_sulcus.glb",
-   "bytes": 3932,
+   "bytes": 3700,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2797,7 +2797,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_posterolateral_sulcus.glb",
-   "bytes": 3252,
+   "bytes": 3164,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",

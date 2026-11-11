@@ -5,7 +5,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 1086200,
+   "bytes": 885912,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -47,7 +47,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 118228,
+   "bytes": 98360,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -91,7 +91,7 @@
     "Foramen of Monro"
    ],
    "type": "soft",
-   "bytes": 13816,
+   "bytes": 12204,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -136,7 +136,7 @@
     "Aqueduct of Sylvius"
    ],
    "type": "soft",
-   "bytes": 25824,
+   "bytes": 22004,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -178,7 +178,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 118556,
+   "bytes": 95008,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -220,7 +220,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 67544,
+   "bytes": 56692,
    "colour": {
     "token": "fx",
     "light": "#6E8888",
@@ -263,7 +263,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 84968,
+   "bytes": 71180,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -306,7 +306,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 475728,
+   "bytes": 394380,
    "colour": {
     "token": "veChoroid",
     "light": "#A85A78",
@@ -351,7 +351,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 108328,
+   "bytes": 90116,
    "colour": {
     "token": "thal",
     "light": "#8996A3",
@@ -394,7 +394,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 223068,
+   "bytes": 184976,
    "colour": {
     "token": "str",
     "light": "#8E5A84",
@@ -437,7 +437,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 96952,
+   "bytes": 81072,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -480,7 +480,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 50848,
+   "bytes": 42580,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -523,7 +523,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 16164,
+   "bytes": 13416,
    "colour": {
     "token": "mb",
     "light": "#8C7A5A",
@@ -569,7 +569,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 35972,
+   "bytes": 30512,
    "colour": {
     "token": "ot",
     "light": "#B9E3E8",
@@ -612,7 +612,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 87416,
+   "bytes": 72424,
    "colour": {
     "token": "ot",
     "light": "#B9E3E8",
@@ -655,7 +655,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 15548,
+   "bytes": 13700,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -698,7 +698,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 17760,
+   "bytes": 15484,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -741,7 +741,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 10128,
+   "bytes": 9200,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -784,7 +784,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 15704,
+   "bytes": 13824,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -827,7 +827,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 209352,
+   "bytes": 172812,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -873,7 +873,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_ethmoid_bone.glb",
-   "bytes": 212304,
+   "bytes": 153172,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -916,7 +916,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_frontal_bone.glb",
-   "bytes": 787968,
+   "bytes": 555232,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -959,7 +959,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_occipital_bone.glb",
-   "bytes": 616792,
+   "bytes": 439844,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -1002,7 +1002,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_parietal_bone.glb",
-   "bytes": 833928,
+   "bytes": 594100,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -1045,7 +1045,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_sphenoid_bone.glb",
-   "bytes": 516288,
+   "bytes": 365608,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -1088,7 +1088,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_temporal_bone.glb",
-   "bytes": 1015400,
+   "bytes": 733916,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -1131,7 +1131,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_anterior_cerebral_artery_a1_a2.glb",
-   "bytes": 116280,
+   "bytes": 80356,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1176,7 +1176,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_anterior_communicating_artery.glb",
-   "bytes": 11672,
+   "bytes": 9148,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1221,7 +1221,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_basal_vein_of_rosenthal.glb",
-   "bytes": 75896,
+   "bytes": 52564,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1265,7 +1265,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_basilar_artery.glb",
-   "bytes": 79524,
+   "bytes": 55072,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1310,7 +1310,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_great_cerebral_vein_of_galen.glb",
-   "bytes": 48052,
+   "bytes": 33656,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1354,7 +1354,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_internal_carotid_artery.glb",
-   "bytes": 156784,
+   "bytes": 107168,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1399,7 +1399,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_internal_cerebral_veins.glb",
-   "bytes": 81608,
+   "bytes": 56536,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1443,7 +1443,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_posterior_cerebral_artery_p1_p2.glb",
-   "bytes": 152144,
+   "bytes": 103832,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1488,7 +1488,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_posterior_communicating_artery.glb",
-   "bytes": 18052,
+   "bytes": 13480,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1533,7 +1533,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_superior_cerebellar_artery.glb",
-   "bytes": 37660,
+   "bytes": 26728,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1578,7 +1578,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_optic_nerve_ii.glb",
-   "bytes": 7820,
+   "bytes": 6448,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1621,7 +1621,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_oculomotor_nerve_iii.glb",
-   "bytes": 18980,
+   "bytes": 13868,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1664,7 +1664,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_frontal_lobe.glb",
-   "bytes": 731340,
+   "bytes": 601232,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -1707,7 +1707,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_parietal_lobe.glb",
-   "bytes": 328528,
+   "bytes": 245384,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -1750,7 +1750,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_temporal_lobe.glb",
-   "bytes": 265472,
+   "bytes": 201480,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -1793,7 +1793,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_occipital_lobe.glb",
-   "bytes": 155888,
+   "bytes": 112216,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -1836,7 +1836,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_insula.glb",
-   "bytes": 93856,
+   "bytes": 77956,
    "colour": {
     "token": "sbInsula",
     "light": "#4A3DA8",
@@ -1879,7 +1879,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_cingulate_gyrus.glb",
-   "bytes": 103876,
+   "bytes": 85868,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -1922,7 +1922,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_medial_wall.glb",
-   "bytes": 135036,
+   "bytes": 113108,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -1965,7 +1965,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_midbrain.glb",
-   "bytes": 81328,
+   "bytes": 56880,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -2007,7 +2007,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_pons.glb",
-   "bytes": 135372,
+   "bytes": 93772,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",

@@ -1,5 +1,8 @@
 // Compress pipeline GLBs for the web: quantize vertex attributes
-// (KHR_mesh_quantization) and apply meshopt compression (EXT_meshopt_compression).
+// (KHR_mesh_quantization) and apply meshopt compression (EXT_meshopt_compression), at its level "high": normals are
+// stored in 8-bit octahedral form with meshopt's filter (within about a degree of the 10-bit ones), which makes the
+// triangle meshes about a quarter smaller (a third after gzip). Positions, indices and morph targets are stored as at
+// "medium". To bring files already shipped to a changed encoding without their build caches: recompress.mjs.
 // Input:  pipeline/data/build/{meshes,tracts,wm,skullbase,skullbase-ct,skullbase-v3,cortex,spine,brainstem,ventricles,vascular}/*.glb (or only the kind given as argument)
 // Output: public/assets/{meshes,tracts,wm,skullbase,skullbase-ct,skullbase-v3,cortex,spine,brainstem,ventricles,vascular}/*.glb
 // With file names after the kind, only those files of it: node pipeline/compress.mjs skullbase sb_cochlear_nerve.glb
@@ -11,6 +14,7 @@ import { MeshoptEncoder, MeshoptDecoder } from 'meshoptimizer';
 import { readdirSync, mkdirSync, statSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { mendNormals } from './normals.mjs';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const repo = join(root, '..');
@@ -33,9 +37,10 @@ for (const kind of (process.argv[2] ? [process.argv[2]] : ['meshes', 'tracts', '
     await doc.transform(
       dedup(),
       prune({ keepExtras: true }),
+      mendNormals(),
       // 14-bit positions: < 0.02 mm error over the largest (cortex) bounding box
       quantize({ quantizePosition: 14, quantizeNormal: 10 }),
-      meshopt({ encoder: MeshoptEncoder, level: 'medium' }),
+      meshopt({ encoder: MeshoptEncoder, level: 'high' }),
     );
     await io.write(join(dst, f), doc);
     const kb = statSync(join(dst, f)).size / 1024;

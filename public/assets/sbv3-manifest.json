@@ -28,7 +28,7 @@
    "name": "Ethmoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_ethmoid_bone.glb",
-   "bytes": 172324,
+   "bytes": 125104,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 19 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
@@ -71,7 +71,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_frontal_bone.glb",
-   "bytes": 746804,
+   "bytes": 515840,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 47 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
@@ -114,7 +114,7 @@
    "name": "Inferior nasal concha bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_inferior_nasal_concha_bone.glb",
-   "bytes": 56748,
+   "bytes": 42136,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
@@ -157,7 +157,7 @@
    "name": "Lacrimal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_lacrimal_bone.glb",
-   "bytes": 33880,
+   "bytes": 25384,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
@@ -200,7 +200,7 @@
    "name": "Maxilla",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_maxilla.glb",
-   "bytes": 357428,
+   "bytes": 251192,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
@@ -243,7 +243,7 @@
    "name": "Nasal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_nasal_bone.glb",
-   "bytes": 57652,
+   "bytes": 41240,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
@@ -286,7 +286,7 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_occipital_bone.glb",
-   "bytes": 720120,
+   "bytes": 498156,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 21 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
@@ -329,7 +329,7 @@
    "name": "Palatine bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_palatine_bone.glb",
-   "bytes": 113124,
+   "bytes": 81772,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
@@ -372,7 +372,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_parietal_bone.glb",
-   "bytes": 853796,
+   "bytes": 586276,
    "refIds": [],
    "category": "bone",
    "derivation": "The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 25 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
@@ -415,7 +415,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_sphenoid_bone.glb",
-   "bytes": 589140,
+   "bytes": 413916,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 4 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
@@ -458,7 +458,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_temporal_bone.glb",
-   "bytes": 1017856,
+   "bytes": 717520,
    "refIds": [],
    "category": "bone",
    "derivation": "The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 31 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
@@ -501,7 +501,7 @@
    "name": "Vomer",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_vomer.glb",
-   "bytes": 98792,
+   "bytes": 71424,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
@@ -544,7 +544,7 @@
    "name": "Zygomatic bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_zygomatic_bone.glb",
-   "bytes": 149248,
+   "bytes": 103904,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
@@ -567,7 +567,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_anterior_cerebral_artery_a1_a2.glb",
-   "bytes": 116280,
+   "bytes": 80356,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -612,7 +612,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_anterior_cerebral_artery_a3.glb",
-   "bytes": 45772,
+   "bytes": 31876,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -657,7 +657,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_anterior_communicating_artery.glb",
-   "bytes": 11672,
+   "bytes": 9148,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -702,7 +702,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_basal_vein_of_rosenthal.glb",
-   "bytes": 75896,
+   "bytes": 52564,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -746,7 +746,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_basilar_artery.glb",
-   "bytes": 79524,
+   "bytes": 55072,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -791,7 +791,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_great_cerebral_vein_of_galen.glb",
-   "bytes": 48052,
+   "bytes": 33656,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -835,7 +835,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_internal_carotid_artery.glb",
-   "bytes": 156784,
+   "bytes": 107168,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -880,7 +880,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_internal_cerebral_veins.glb",
-   "bytes": 81608,
+   "bytes": 56536,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -924,7 +924,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_middle_cerebral_artery_m1_segment.glb",
-   "bytes": 150516,
+   "bytes": 103272,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -969,7 +969,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-v3/sb_middle_cerebral_artery_m2_segment.glb",
-   "bytes": 197852,
+   "bytes": 149124,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1015,7 +1015,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-v3/sb_middle_cerebral_artery_m3_segment.glb",
-   "bytes": 197360,
+   "bytes": 148376,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1061,7 +1061,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-v3/sb_ophthalmic_artery.joined.glb",
-   "bytes": 42560,
+   "bytes": 30016,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1107,7 +1107,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_posterior_cerebral_artery_p1_p2.glb",
-   "bytes": 152144,
+   "bytes": 103832,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1152,7 +1152,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_posterior_cerebral_artery_p3_p4.glb",
-   "bytes": 68124,
+   "bytes": 47388,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1197,7 +1197,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_posterior_communicating_artery.glb",
-   "bytes": 18052,
+   "bytes": 13480,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1242,7 +1242,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-v3/sb_posterior_inferior_cerebellar_artery.glb",
-   "bytes": 11232,
+   "bytes": 9720,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1288,7 +1288,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_straight_sinus.glb",
-   "bytes": 80740,
+   "bytes": 55952,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1332,7 +1332,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_superior_cerebellar_artery.glb",
-   "bytes": 37660,
+   "bytes": 26728,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1377,7 +1377,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_superior_sagittal_sinus.glb",
-   "bytes": 83724,
+   "bytes": 57808,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1421,7 +1421,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_third_anterior_cerebral_artery_a2.glb",
-   "bytes": 30928,
+   "bytes": 22196,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1466,7 +1466,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_third_anterior_cerebral_artery_a3.glb",
-   "bytes": 35136,
+   "bytes": 24996,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1511,7 +1511,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-ct/sb_vertebral_artery.glb",
-   "bytes": 156076,
+   "bytes": 107448,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1557,7 +1557,7 @@
    "type": "tube",
    "fitted": true,
    "file": "assets/skullbase-v3/sb_anterior_intercavernous_sinus.joined.glb",
-   "bytes": 10572,
+   "bytes": 8308,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1603,7 +1603,7 @@
    "type": "tube",
    "fitted": true,
    "file": "assets/skullbase-ct/sb_inferior_ophthalmic_vein.glb",
-   "bytes": 8300,
+   "bytes": 6484,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1648,7 +1648,7 @@
    "type": "tube",
    "fitted": true,
    "file": "assets/skullbase-v3/sb_inferior_petrosal_sinus.joined.glb",
-   "bytes": 19036,
+   "bytes": 13980,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1694,7 +1694,7 @@
    "type": "tube",
    "fitted": true,
    "file": "assets/skullbase-v3/sb_posterior_intercavernous_sinus.joined.glb",
-   "bytes": 10724,
+   "bytes": 8512,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1740,7 +1740,7 @@
    "type": "tube",
    "fitted": true,
    "file": "assets/skullbase-ct/sb_superior_ophthalmic_vein.glb",
-   "bytes": 10080,
+   "bytes": 7872,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1785,7 +1785,7 @@
    "type": "tube",
    "fitted": true,
    "file": "assets/skullbase-v3/sb_superior_petrosal_sinus.joined.glb",
-   "bytes": 32556,
+   "bytes": 23036,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1830,7 +1830,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_facial_nerve_vii.glb",
-   "bytes": 156608,
+   "bytes": 106576,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1869,7 +1869,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_chorda_tympani.glb",
-   "bytes": 26472,
+   "bytes": 19136,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1908,7 +1908,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_nerves_in_the_internal_acoustic_meatus_vii_viii.glb",
-   "bytes": 106544,
+   "bytes": 74164,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1947,7 +1947,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_scala_tympani.glb",
-   "bytes": 108604,
+   "bytes": 75988,
    "colour": {
     "token": "sbLabyrinth",
     "light": "#00838F",
@@ -1985,7 +1985,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_scala_vestibuli_vestibule_and_semicircular_canals.glb",
-   "bytes": 185504,
+   "bytes": 128400,
    "colour": {
     "token": "sbLabyrinth",
     "light": "#00838F",
@@ -2023,7 +2023,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_malleus.glb",
-   "bytes": 55036,
+   "bytes": 38900,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -2061,7 +2061,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_incus.glb",
-   "bytes": 56064,
+   "bytes": 39724,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -2099,7 +2099,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_stapes.glb",
-   "bytes": 30536,
+   "bytes": 22408,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -2137,7 +2137,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_tympanic_membrane.glb",
-   "bytes": 56768,
+   "bytes": 40820,
    "colour": {
     "token": "sbMembrane",
     "light": "#7B3FA0",
@@ -2177,7 +2177,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_greater_petrosal_nerve.glb",
-   "bytes": 5092,
+   "bytes": 4440,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2215,7 +2215,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_olfactory_nerve_i.glb",
-   "bytes": 9164,
+   "bytes": 7272,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2256,7 +2256,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_optic_nerve_ii.chiasm.glb",
-   "bytes": 7524,
+   "bytes": 6216,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2298,7 +2298,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_oculomotor_nerve_iii.glb",
-   "bytes": 18980,
+   "bytes": 13868,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2339,7 +2339,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_trochlear_nerve_iv.glb",
-   "bytes": 18780,
+   "bytes": 13784,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2380,7 +2380,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_trigeminal_nerve_v.glb",
-   "bytes": 8564,
+   "bytes": 6832,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2421,7 +2421,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_ophthalmic_nerve_v1.glb",
-   "bytes": 13156,
+   "bytes": 9964,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2462,7 +2462,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_maxillary_nerve_v2.glb",
-   "bytes": 9860,
+   "bytes": 7736,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2503,7 +2503,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_mandibular_nerve_v3.glb",
-   "bytes": 13368,
+   "bytes": 10092,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2544,7 +2544,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_abducens_nerve_vi.glb",
-   "bytes": 19936,
+   "bytes": 14520,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2585,7 +2585,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_vestibulocochlear_nerve_viii.glb",
-   "bytes": 8728,
+   "bytes": 6972,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2626,7 +2626,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_glossopharyngeal_nerve_ix.glb",
-   "bytes": 15344,
+   "bytes": 11476,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2667,7 +2667,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_vagus_nerve_x.glb",
-   "bytes": 13696,
+   "bytes": 10340,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2708,7 +2708,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_accessory_nerve_xi.glb",
-   "bytes": 16208,
+   "bytes": 12040,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2749,7 +2749,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_hypoglossal_nerve_xii.glb",
-   "bytes": 10284,
+   "bytes": 8016,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2790,7 +2790,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_middle_meningeal_artery.glb",
-   "bytes": 11792,
+   "bytes": 9040,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2834,7 +2834,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_trigeminal_ganglion.glb",
-   "bytes": 5512,
+   "bytes": 4752,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2872,7 +2872,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_sigmoid_sinus.glb",
-   "bytes": 8460,
+   "bytes": 6888,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -2915,7 +2915,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_confluence_of_sinuses.glb",
-   "bytes": 127620,
+   "bytes": 86548,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -2949,7 +2949,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_transverse_sinus.glb",
-   "bytes": 9652,
+   "bytes": 7640,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -2991,7 +2991,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_internal_carotid_artery_petrous_and_lacerum_parts.glb",
-   "bytes": 7300,
+   "bytes": 6128,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3032,7 +3032,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_accessory_branch_of_middle_meningeal_artery.glb",
-   "bytes": 12164,
+   "bytes": 9304,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3074,7 +3074,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_anterior_ethmoidal_artery.glb",
-   "bytes": 16552,
+   "bytes": 12272,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3116,7 +3116,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_anterior_inferior_cerebellar_artery.glb",
-   "bytes": 16592,
+   "bytes": 12324,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3158,7 +3158,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_anterior_spinal_artery.glb",
-   "bytes": 10748,
+   "bytes": 8360,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3200,7 +3200,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_distal_lateral_striate_branches.glb",
-   "bytes": 21324,
+   "bytes": 15768,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3242,7 +3242,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_lateral_pontine_branches_of_basilar_artery.glb",
-   "bytes": 15628,
+   "bytes": 11324,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3284,7 +3284,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_medial_pontine_branches_of_basilar_artery.glb",
-   "bytes": 9764,
+   "bytes": 7772,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3326,7 +3326,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_posterior_ethmoidal_artery.glb",
-   "bytes": 10844,
+   "bytes": 8424,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3368,7 +3368,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_proximal_lateral_striate_branches.glb",
-   "bytes": 16308,
+   "bytes": 12324,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3410,7 +3410,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_superior_cerebellar_artery_fitted_course.joined.glb",
-   "bytes": 20512,
+   "bytes": 14936,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3474,7 +3474,7 @@
    "id": "tb_posterior_inferior_cerebellar_artery_fitted_course",
    "name": "Posterior inferior cerebellar artery (fitted course)",
    "file": "assets/skullbase-v3/tb_posterior_inferior_cerebellar_artery_fitted_course.cleared.glb",
-   "bytes": 465424,
+   "bytes": 370172,
    "system": "Vertebral artery",
    "morph": true,
    "derivation": "The model's typical course on from this CT's PICA origin: a run drawn from the end of the labelled origin round the outside of the brainstem (12.6 mm on the right, 6.9 mm on the left) to the start of the Z-Anatomy PICA's trunk, then that trunk (lateral to the medulla, round the tonsil) and the branches that start on it, fitted onto this CT (the whole-skull fit, then the posterior fossa's) and kept clear of the fitted cerebellum and brainstem. It moves with the cerebellum in the telovelar and retrosigmoid views. Its course is approximate, not this patient's: this CT's own PICAs loop medially from long, tortuous vertebral arteries. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py).",
@@ -3498,7 +3498,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_internal_carotid_artery_cervical_part.glb",
-   "bytes": 38376,
+   "bytes": 27396,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3537,7 +3537,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_internal_jugular_vein.glb",
-   "bytes": 43652,
+   "bytes": 31152,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3576,7 +3576,7 @@
    "type": "soft",
    "fitted": true,
    "file": "assets/skullbase-ct/sb_falx_cerebri.glb",
-   "bytes": 100344,
+   "bytes": 69340,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -3619,7 +3619,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_frontal_lobe.glb",
-   "bytes": 731340,
+   "bytes": 601232,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -3662,7 +3662,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_parietal_lobe.glb",
-   "bytes": 328528,
+   "bytes": 245384,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -3705,7 +3705,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_temporal_lobe.glb",
-   "bytes": 265472,
+   "bytes": 201480,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -3748,7 +3748,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_occipital_lobe.glb",
-   "bytes": 155888,
+   "bytes": 112216,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -3791,7 +3791,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_insula.glb",
-   "bytes": 93856,
+   "bytes": 77956,
    "colour": {
     "token": "sbInsula",
     "light": "#4A3DA8",
@@ -3834,7 +3834,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_cingulate_gyrus.glb",
-   "bytes": 103876,
+   "bytes": 85868,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -3877,7 +3877,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_medial_wall.glb",
-   "bytes": 135036,
+   "bytes": 113108,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -3922,7 +3922,7 @@
    ],
    "type": "tube",
    "file": "assets/skullbase-v3/sb_superficial_middle_cerebral_vein.glb",
-   "bytes": 30832,
+   "bytes": 25304,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3959,7 +3959,7 @@
    ],
    "type": "tube",
    "file": "assets/skullbase-v3/sb_insular_veins.glb",
-   "bytes": 61344,
+   "bytes": 50336,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3996,7 +3996,7 @@
    ],
    "type": "tube",
    "file": "assets/skullbase-v3/sb_deep_middle_cerebral_vein.glb",
-   "bytes": 18340,
+   "bytes": 16184,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -4033,7 +4033,7 @@
    ],
    "type": "tube",
    "file": "assets/skullbase-v3/sb_vein_of_trolard.glb",
-   "bytes": 30660,
+   "bytes": 24544,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -4070,7 +4070,7 @@
    ],
    "type": "tube",
    "file": "assets/skullbase-v3/sb_vein_of_labbe.glb",
-   "bytes": 26604,
+   "bytes": 21240,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -4105,7 +4105,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_cerebellar_hemisphere.glb",
-   "bytes": 1051084,
+   "bytes": 841092,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -4147,7 +4147,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_tonsil.glb",
-   "bytes": 93644,
+   "bytes": 79124,
    "colour": {
     "token": "sbTonsil",
     "light": "#7D6DFF",
@@ -4189,7 +4189,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_vermis.glb",
-   "bytes": 125720,
+   "bytes": 96916,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -4231,7 +4231,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_superior_cerebellar_peduncle.glb",
-   "bytes": 112680,
+   "bytes": 77424,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -4273,7 +4273,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_midbrain.glb",
-   "bytes": 81328,
+   "bytes": 56880,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -4315,7 +4315,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_pons.glb",
-   "bytes": 135372,
+   "bytes": 93772,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -4357,7 +4357,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_medulla.glb",
-   "bytes": 296500,
+   "bytes": 201424,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -4399,7 +4399,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_fourth_ventricle.glb",
-   "bytes": 43012,
+   "bytes": 30572,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -4444,7 +4444,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_adenohypophysis.glb",
-   "bytes": 27480,
+   "bytes": 20336,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -4480,7 +4480,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_neurohypophysis.glb",
-   "bytes": 11780,
+   "bytes": 9220,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -4517,7 +4517,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_pituitary_stalk.glb",
-   "bytes": 8620,
+   "bytes": 7004,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -4553,7 +4553,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_cavernous_sinus.glb",
-   "bytes": 127284,
+   "bytes": 88872,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -4589,7 +4589,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_cavernous_sinus_walls.glb",
-   "bytes": 167876,
+   "bytes": 116536,
    "colour": {
     "token": "sbDura",
     "light": "#7E8294",
@@ -4625,7 +4625,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_triangle_superoposterior.glb",
-   "bytes": 3468,
+   "bytes": 3464,
    "colour": {
     "token": "sbTriMedial",
     "light": "#B8467A",
@@ -4664,7 +4664,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_triangle_superior.glb",
-   "bytes": 3640,
+   "bytes": 3632,
    "colour": {
     "token": "sbTriMedial",
     "light": "#B8467A",
@@ -4703,7 +4703,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_triangle_middle.glb",
-   "bytes": 3636,
+   "bytes": 3632,
    "colour": {
     "token": "sbTriMedial",
     "light": "#B8467A",
@@ -4742,7 +4742,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_triangle_inferior.glb",
-   "bytes": 3620,
+   "bytes": 3616,
    "colour": {
     "token": "sbTriMedial",
     "light": "#B8467A",
@@ -4781,7 +4781,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_triangle_anteromedial.glb",
-   "bytes": 3624,
+   "bytes": 3620,
    "colour": {
     "token": "sbTriLateral",
     "light": "#2C8F62",
@@ -4820,7 +4820,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_triangle_anterolateral.glb",
-   "bytes": 3644,
+   "bytes": 3640,
    "colour": {
     "token": "sbTriLateral",
     "light": "#2C8F62",
@@ -4859,7 +4859,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_triangle_posterolateral.glb",
-   "bytes": 3628,
+   "bytes": 3624,
    "colour": {
     "token": "sbTriLateral",
     "light": "#2C8F62",
@@ -4898,7 +4898,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_triangle_posteromedial.glb",
-   "bytes": 3648,
+   "bytes": 3644,
    "colour": {
     "token": "sbTriLateral",
     "light": "#2C8F62",
@@ -4937,7 +4937,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_triangle_lateral.glb",
-   "bytes": 3656,
+   "bytes": 3652,
    "colour": {
     "token": "sbTriPosterior",
     "light": "#B8621A",
@@ -4976,7 +4976,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_triangle_medial.glb",
-   "bytes": 3476,
+   "bytes": 3468,
    "colour": {
     "token": "sbTriPosterior",
     "light": "#B8621A",
@@ -5015,7 +5015,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_sphenoparietal_sinus.glb",
-   "bytes": 6724,
+   "bytes": 5696,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -5051,7 +5051,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_basilar_plexus.joined.glb",
-   "bytes": 14116,
+   "bytes": 10712,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -5085,7 +5085,7 @@
     "Chiasma opticum"
    ],
    "type": "soft",
-   "bytes": 98516,
+   "bytes": 67828,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -5121,7 +5121,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 4156,
+   "bytes": 3828,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -5160,7 +5160,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_knosp_0.glb",
-   "bytes": 43580,
+   "bytes": 31168,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -5198,7 +5198,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_knosp_1.glb",
-   "bytes": 46628,
+   "bytes": 33176,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -5236,7 +5236,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_knosp_2.glb",
-   "bytes": 51000,
+   "bytes": 36280,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -5274,7 +5274,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_knosp_3a.glb",
-   "bytes": 61728,
+   "bytes": 43500,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -5312,7 +5312,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_knosp_3b.glb",
-   "bytes": 85540,
+   "bytes": 59860,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -5350,7 +5350,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_knosp_4.glb",
-   "bytes": 85600,
+   "bytes": 59880,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -5388,7 +5388,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_knosp_lines.glb",
-   "bytes": 7952,
+   "bytes": 6224,
    "colour": {
     "token": "sbGuide",
     "light": "#1F2A36",
@@ -5422,7 +5422,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_koos_1.glb",
-   "bytes": 9248,
+   "bytes": 6992,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -5460,7 +5460,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_koos_2.glb",
-   "bytes": 12732,
+   "bytes": 9384,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -5498,7 +5498,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_facial_nerve_vii__koos_2.glb",
-   "bytes": 78596,
+   "bytes": 53636,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -5540,7 +5540,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_koos_3.glb",
-   "bytes": 277272,
+   "bytes": 190936,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -5578,7 +5578,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_cerebellar_hemisphere__koos_3.glb",
-   "bytes": 483988,
+   "bytes": 379216,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -5623,7 +5623,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_tonsil__koos_3.glb",
-   "bytes": 41472,
+   "bytes": 34196,
    "colour": {
     "token": "sbTonsil",
     "light": "#7D6DFF",
@@ -5668,7 +5668,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_vermis__koos_3.glb",
-   "bytes": 50692,
+   "bytes": 35704,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -5713,7 +5713,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_superior_cerebellar_peduncle__koos_3.glb",
-   "bytes": 57148,
+   "bytes": 39732,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -5758,7 +5758,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_facial_nerve_vii__koos_3.glb",
-   "bytes": 78228,
+   "bytes": 53376,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -5800,7 +5800,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_trigeminal_nerve_v__koos_3.glb",
-   "bytes": 4556,
+   "bytes": 3720,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -5844,7 +5844,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_koos_4.glb",
-   "bytes": 292932,
+   "bytes": 198192,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -5882,7 +5882,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_cerebellar_hemisphere__koos_4.glb",
-   "bytes": 483636,
+   "bytes": 379164,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -5927,7 +5927,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_tonsil__koos_4.glb",
-   "bytes": 41644,
+   "bytes": 34296,
    "colour": {
     "token": "sbTonsil",
     "light": "#7D6DFF",
@@ -5972,7 +5972,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_vermis__koos_4.glb",
-   "bytes": 50824,
+   "bytes": 35792,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -6017,7 +6017,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_superior_cerebellar_peduncle__koos_4.glb",
-   "bytes": 56032,
+   "bytes": 38972,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -6062,7 +6062,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_midbrain__koos_4.glb",
-   "bytes": 41344,
+   "bytes": 28932,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -6107,7 +6107,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_pons__koos_4.glb",
-   "bytes": 67264,
+   "bytes": 46564,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -6152,7 +6152,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_medulla__koos_4.glb",
-   "bytes": 149576,
+   "bytes": 101288,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -6197,7 +6197,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_fourth_ventricle__koos_4.glb",
-   "bytes": 22932,
+   "bytes": 16216,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -6242,7 +6242,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_facial_nerve_vii__koos_4.glb",
-   "bytes": 78232,
+   "bytes": 53376,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -6284,7 +6284,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_trigeminal_nerve_v__koos_4.glb",
-   "bytes": 4484,
+   "bytes": 3676,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -6328,7 +6328,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_abducens_nerve_vi__koos_4.glb",
-   "bytes": 9392,
+   "bytes": 6984,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -6372,7 +6372,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_glossopharyngeal_nerve_ix__koos_4.glb",
-   "bytes": 7736,
+   "bytes": 5880,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -6416,7 +6416,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_vagus_nerve_x__koos_4.glb",
-   "bytes": 6936,
+   "bytes": 5344,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -6460,7 +6460,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_men_olfactory.glb",
-   "bytes": 220744,
+   "bytes": 149620,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -6498,7 +6498,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_frontal_lobe__men_olfactory.glb",
-   "bytes": 434316,
+   "bytes": 347156,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -6544,7 +6544,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_cingulate_gyrus__men_olfactory.glb",
-   "bytes": 56716,
+   "bytes": 44732,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -6590,7 +6590,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_medial_wall__men_olfactory.glb",
-   "bytes": 79364,
+   "bytes": 65004,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -6636,7 +6636,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_men_tuberculum.glb",
-   "bytes": 127776,
+   "bytes": 88360,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -6674,7 +6674,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_frontal_lobe__men_tuberculum.glb",
-   "bytes": 438628,
+   "bytes": 351452,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -6720,7 +6720,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_insula__men_tuberculum.glb",
-   "bytes": 57404,
+   "bytes": 46668,
    "colour": {
     "token": "sbInsula",
     "light": "#4A3DA8",
@@ -6766,7 +6766,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_cingulate_gyrus__men_tuberculum.glb",
-   "bytes": 56488,
+   "bytes": 44516,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -6812,7 +6812,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_medial_wall__men_tuberculum.glb",
-   "bytes": 76932,
+   "bytes": 62564,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -6858,7 +6858,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_men_petroclival.glb",
-   "bytes": 200480,
+   "bytes": 136252,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -6896,7 +6896,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_cerebellar_hemisphere__men_petroclival.glb",
-   "bytes": 480520,
+   "bytes": 375432,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -6941,7 +6941,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_vermis__men_petroclival.glb",
-   "bytes": 50748,
+   "bytes": 35784,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -6986,7 +6986,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_superior_cerebellar_peduncle__men_petroclival.glb",
-   "bytes": 56988,
+   "bytes": 39344,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -7031,7 +7031,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_midbrain__men_petroclival.glb",
-   "bytes": 41412,
+   "bytes": 29068,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -7076,7 +7076,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_pons__men_petroclival.glb",
-   "bytes": 68280,
+   "bytes": 47472,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -7121,7 +7121,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_medulla__men_petroclival.glb",
-   "bytes": 149408,
+   "bytes": 101556,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -7166,7 +7166,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_fourth_ventricle__men_petroclival.glb",
-   "bytes": 23112,
+   "bytes": 16492,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -7211,7 +7211,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_men_foramen_magnum.glb",
-   "bytes": 187344,
+   "bytes": 127920,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7269,7 +7269,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__frontal_bone.glb",
-   "bytes": 763924,
+   "bytes": 526508,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -7314,7 +7314,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__parietal_bone.glb",
-   "bytes": 838628,
+   "bytes": 575896,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -7359,7 +7359,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__sphenoid_bone.glb",
-   "bytes": 598868,
+   "bytes": 420460,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -7404,7 +7404,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__temporal_bone.glb",
-   "bytes": 1012568,
+   "bytes": 713856,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -7429,7 +7429,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_pterional__removed.glb",
-   "bytes": 360776,
+   "bytes": 243864,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -7484,7 +7484,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_lso__frontal_bone.glb",
-   "bytes": 802400,
+   "bytes": 552556,
    "refIds": [],
    "category": "bone",
    "approach": "lso",
@@ -7529,7 +7529,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_lso__parietal_bone.glb",
-   "bytes": 863076,
+   "bytes": 592208,
    "refIds": [],
    "category": "bone",
    "approach": "lso",
@@ -7574,7 +7574,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_lso__sphenoid_bone.glb",
-   "bytes": 591440,
+   "bytes": 415504,
    "refIds": [],
    "category": "bone",
    "approach": "lso",
@@ -7599,7 +7599,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_lso__removed.glb",
-   "bytes": 208128,
+   "bytes": 142000,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -7654,7 +7654,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_interhemispheric__frontal_bone.glb",
-   "bytes": 770284,
+   "bytes": 531700,
    "refIds": [],
    "category": "bone",
    "approach": "interhemispheric",
@@ -7699,7 +7699,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_interhemispheric__parietal_bone.glb",
-   "bytes": 873340,
+   "bytes": 599012,
    "refIds": [],
    "category": "bone",
    "approach": "interhemispheric",
@@ -7724,7 +7724,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_interhemispheric__removed.glb",
-   "bytes": 367608,
+   "bytes": 248812,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -7779,7 +7779,7 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_suboccipital__occipital_bone.glb",
-   "bytes": 732424,
+   "bytes": 505672,
    "refIds": [],
    "category": "bone",
    "approach": "suboccipital",
@@ -7804,7 +7804,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_suboccipital__removed.glb",
-   "bytes": 364136,
+   "bytes": 245092,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -7859,7 +7859,7 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_retrosigmoid__occipital_bone.glb",
-   "bytes": 736868,
+   "bytes": 509652,
    "refIds": [],
    "category": "bone",
    "approach": "retrosigmoid",
@@ -7904,7 +7904,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_retrosigmoid__temporal_bone.glb",
-   "bytes": 1041076,
+   "bytes": 733512,
    "refIds": [],
    "category": "bone",
    "approach": "retrosigmoid",
@@ -7929,7 +7929,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_retrosigmoid__removed.glb",
-   "bytes": 160828,
+   "bytes": 110060,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -7984,7 +7984,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__frontal_bone.glb",
-   "bytes": 697028,
+   "bytes": 479904,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -8029,7 +8029,7 @@
    "name": "Maxilla",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__maxilla.glb",
-   "bytes": 362576,
+   "bytes": 254696,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -8074,7 +8074,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__parietal_bone.glb",
-   "bytes": 838320,
+   "bytes": 576052,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -8119,7 +8119,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__sphenoid_bone.glb",
-   "bytes": 604088,
+   "bytes": 424388,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -8164,7 +8164,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__temporal_bone.glb",
-   "bytes": 1014464,
+   "bytes": 715440,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -8209,7 +8209,7 @@
    "name": "Zygomatic bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__zygomatic_bone.glb",
-   "bytes": 107056,
+   "bytes": 74528,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -8234,7 +8234,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__removed.glb",
-   "bytes": 374068,
+   "bytes": 254716,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -8289,7 +8289,7 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_far_lateral__occipital_bone.glb",
-   "bytes": 732888,
+   "bytes": 507036,
    "refIds": [],
    "category": "bone",
    "approach": "far_lateral",
@@ -8334,7 +8334,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_far_lateral__temporal_bone.glb",
-   "bytes": 1033392,
+   "bytes": 728324,
    "refIds": [],
    "category": "bone",
    "approach": "far_lateral",
@@ -8359,7 +8359,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_far_lateral__removed.glb",
-   "bytes": 320904,
+   "bytes": 217112,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -8414,7 +8414,7 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_kawase__occipital_bone.glb",
-   "bytes": 735516,
+   "bytes": 508820,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -8459,7 +8459,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_kawase__parietal_bone.glb",
-   "bytes": 863272,
+   "bytes": 592520,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -8504,7 +8504,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_kawase__sphenoid_bone.glb",
-   "bytes": 611020,
+   "bytes": 429284,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -8549,7 +8549,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_kawase__temporal_bone.glb",
-   "bytes": 1107820,
+   "bytes": 782112,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -8574,7 +8574,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_kawase__removed.glb",
-   "bytes": 372896,
+   "bytes": 253152,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -8609,7 +8609,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_kawase__guide.glb",
-   "bytes": 5116,
+   "bytes": 4108,
    "colour": {
     "token": "sbGuide",
     "light": "#1F2A36",
@@ -8644,7 +8644,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_temporal_lobe__kawase.glb",
-   "bytes": 206808,
+   "bytes": 142936,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
