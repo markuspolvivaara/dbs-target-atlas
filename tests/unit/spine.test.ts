@@ -3,14 +3,14 @@ import { crossCheckSpine, discBelow, SP, SP_MANIFEST, SP_REFS, vertebraOf } from
 import published from '../../src/data/generated/spine-published.json';
 import {
   ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, CCJ, CCJ_MEASURES, CERVICAL_GEOM, crossCheckContent, discRegion, exitingRoot, exposureRegion, GEOM_BY_LEVEL,
-  LESION_ZONES, lesionZones, LUMBAR_GEOM, NECK_LANDMARKS, ROOT_FUNCTION, STATEMENTS, THORACIC_GEOM, VERTEBRAL_ARTERY,
+  LESION_ZONES, lesionZones, LUMBAR_GEOM, NECK_LANDMARKS, ROOT_FUNCTION, STATEMENTS, THORACIC_GEOM, VERTEBRA_NEIGHBOURS, VERTEBRAL_ARTERY,
 } from '../../src/spine/content';
 import { HERNIA_ZONES, herniaRoot } from '../../src/spine/herniation';
 import { REGION, REGIONS } from '../../src/spine/regions';
 import { LESION_MARKERS, lesionMarkerId, spinePlan, spineScene } from '../../src/spine/scene';
 import { decodeSpine, defaultSpineState, encodeSpine } from '../../src/spine/state';
 import { setViewPrefs } from '../../src/viewer/viewprefs';
-import { nodeMeans } from './glb';
+import { meshSoup, nodeMeans, pointsInside } from './glb';
 
 describe('spine data (VerSe CT + TotalSegmentator)', () => {
   it('generated files agree with each other; every statement reference resolves', () => {
@@ -47,6 +47,29 @@ describe('spine data (VerSe CT + TotalSegmentator)', () => {
       expect(g.discHeightMm, g.pair).toBeLessThan(20);
     }
   });
+  it('neighbouring vertebrae share no bone: no vertex of one lies inside the next', async () => {
+    // (each vertebra's surface reached up to 2 mm into its neighbours' masks: at every facet joint the two overlapped,
+    // 11,526 vertices of one inside the other from C1 to the sacrum, up to 3.7 mm deep)
+    const names = [...[1, 2, 3, 4, 5, 6, 7].map((i) => `C${i}`), ...Array.from({ length: 12 }, (_, i) => `T${i + 1}`), ...[1, 2, 3, 4, 5].map((i) => `L${i}`)];
+    const count = async (ids: string[]) => {
+      const soups = await Promise.all(ids.map((id) => meshSoup(SP.get(id)!.file)));
+      return ids.slice(1).map((_, i) => pointsInside(soups[i].P, soups[i + 1].P, soups[i + 1].T) + pointsInside(soups[i + 1].P, soups[i].P, soups[i].T));
+    };
+    const whole = await count([...names.map((n) => `sp_${n.toLowerCase()}`), 'sp_sacrum']);
+    whole.forEach((n, i) => {
+      // (L5 and the sacrum come from two segmentations: a few vertices of the one graze the other)
+      expect(n, `${names[i]} and the one below`).toBeLessThanOrEqual(i === names.length - 1 ? 8 : 3);
+    });
+    expect(whole.reduce((a, b) => a + b, 0)).toBeLessThanOrEqual(12);
+    // the junction's own CT: the skull, the atlas, the axis and C3
+    for (const n of await count(['sp_ccj_occiput', 'sp_ccj_c1', 'sp_ccj_c2', 'sp_ccj_c3'])) expect(n).toBeLessThanOrEqual(3);
+    // the build's own measure of the same (pipeline/spine_build.py neighbours): the bone inside both surfaces
+    expect(VERTEBRA_NEIGHBOURS.map((r) => r.pair)).toEqual([...names.slice(1).map((b, i) => `${names[i]}-${b}`), 'L5-S1']);
+    for (const r of VERTEBRA_NEIGHBOURS) {
+      expect(r.sharedMl, r.pair).toBeLessThanOrEqual(0.01);
+      expect(r.deepestMm, r.pair).toBeLessThanOrEqual(r.pair === 'L5-S1' ? 1 : 0.5);
+    }
+  }, 60_000);
   it('shipped GLBs decode with the left half left of the right half', async () => {
     const m = await nodeMeans(SP.get('sp_l3')!.file);
     expect(m.L[0]).toBeLessThan(m.R[0]);

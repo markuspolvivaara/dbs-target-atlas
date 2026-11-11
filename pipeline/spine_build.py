@@ -109,16 +109,57 @@ def origin() -> np.ndarray:
     return nib.affines.apply_affine(img.affine, [l5["X"], l5["Y"], l5["Z"]])
 
 
-def bone_volume(ct: np.ndarray, sel: np.ndarray, vox_mm: float) -> np.ndarray:
+def bone_volume(ct: np.ndarray, sel: np.ndarray, vox_mm: float, other: np.ndarray | None = None) -> np.ndarray:
     """Volume whose BONE_HU isosurface is the vertebra: the CT inside the mask dilated by MASK_REACH_MM, with the
     mask's eroded core held above the threshold (cancellous bone can be darker than BONE_HU) and everything
-    outside the dilated mask held below it (neighbouring vertebrae, ribs)."""
+    outside the dilated mask held below it (ribs). `other` is the other bones' masks on the same grid (the
+    neighbouring vertebrae): the dilated mask does not reach into them, and where it and theirs meet in unlabelled
+    space a voxel goes to the nearer mask (one as near to both goes to neither), so that two neighbours share no bone
+    and the joint between them is their boundary."""
     reach = max(1, int(round(MASK_REACH_MM / vox_mm)))
     near = ndimage.binary_dilation(sel, iterations=reach)
     core = ndimage.binary_erosion(sel, iterations=reach)
+    if other is not None:
+        other = other & ~sel
+        if other.any():
+            near &= ~other & (ndimage.distance_transform_edt(~sel) < ndimage.distance_transform_edt(~other))
     vol = np.where(near, ct, -1000.0).astype(np.float32)
     vol[core] = np.maximum(vol[core], BONE_HU + 400)
     return vol
+
+
+SHARED_DEPTH_MM = 0.5   # a vertex counts as inside its neighbour's bone from this depth (the meshes are simplified and
+                        # the depth is read off a voxel grid: less is their own tolerance)
+
+
+def neighbours(ct: np.ndarray, m: np.ndarray, crops: dict, aff_o: np.ndarray, vox: float, meshes: dict) -> list[dict]:
+    """Each vertebra and the next, as drawn: the bone inside both surfaces (ml), and the vertices of each that lie
+    inside the other's bone (how many deeper than SHARED_DEPTH_MM, and the deepest, mm). Two vertebrae that share
+    bone cannot show the joint between them, and a tool that drills one leaves the other's copy standing. (L5 and the
+    sacrum are added in vertebrae(): L5's vertices in the sacrum only.)"""
+    size = np.sqrt((aff_o[:3, :3] ** 2).sum(0))
+    out = []
+    labels = sorted(crops)
+    for la, lb in zip(labels, labels[1:]):
+        if lb != la + 1:
+            continue
+        lo, hi = np.minimum(crops[la][0], crops[lb][0]), np.maximum(crops[la][1], crops[lb][1])
+        crop = tuple(slice(a, b) for a, b in zip(lo, hi))
+        ins = [ndimage.gaussian_filter(bone_volume(ct[crop], m[crop] == l, vox, m[crop] > 0), SIGMA_VOX) > BONE_HU for l in (la, lb)]
+        a2 = aff_o.copy()
+        a2[:3, 3] = nib.affines.apply_affine(aff_o, lo)
+        inv = np.linalg.inv(a2)
+        count, deepest = 0, 0.0
+        for own, oth in ((la, 1), (lb, 0)):
+            depth = ndimage.distance_transform_edt(ins[oth], sampling=size)
+            q = nib.affines.apply_affine(inv, meshes[level_id(VERSE_LEVELS[own])].vertices).T
+            d = ndimage.map_coordinates(depth, q, order=1, mode="constant", cval=0.0)
+            count += int((d > SHARED_DEPTH_MM).sum())
+            deepest = max(deepest, float(d.max()))
+        out.append({"pair": f"{VERSE_LEVELS[la]}-{VERSE_LEVELS[lb]}", "sharedMl": round(float((ins[0] & ins[1]).sum() * np.prod(size)) / 1000, 3),
+                    "verticesInside": count, "deepestMm": round(deepest, 2)})
+        print(out[-1])
+    return out
 
 
 def vertebrae(report: dict) -> list[dict]:
@@ -138,6 +179,8 @@ def vertebrae(report: dict) -> list[dict]:
     aff_o[:3, 3] -= o
     items = []
     meshes = {}
+    crops = {}
+    sac_l5 = None
     for lab in labels:
         name = VERSE_LEVELS[lab]
         # crop to the vertebra (plus a margin) so the smoothing and marching cubes stay cheap
@@ -145,8 +188,13 @@ def vertebrae(report: dict) -> list[dict]:
         lo = np.maximum([b.start - 8 for b in box], 0)
         hi = np.minimum([b.stop + 8 for b in box], m.shape)
         crop = (slice(lo[0], hi[0]), slice(lo[1], hi[1]), slice(lo[2], hi[2]))
+        crops[lab] = (lo, hi)
         sel = m[crop] == lab
-        sub = bone_volume(ct[crop], sel, vox)
+        other = m[crop] > 0
+        if name == "L5":   # its lower neighbour is the sacrum, which is TotalSegmentator's (the drawn sacrum's mask)
+            sac_l5, _ = ts_mask("total", "sacrum+vertebrae_S1", tuple(slice(sp.start + a, sp.start + b) for sp, a, b in zip(span, lo, hi)))
+            other = other | sac_l5
+        sub = bone_volume(ct[crop], sel, vox, other)
         a2 = aff_o.copy()
         a2[:3, 3] = nib.affines.apply_affine(aff_o, lo)
         mesh = isosurface(sub, a2, BONE_HU, SIGMA_VOX, FACES[name[0]])
@@ -157,6 +205,20 @@ def vertebrae(report: dict) -> list[dict]:
                       "centroid": c.round(2).tolist(), "volumeMl": round(float(sel.sum() * abs(np.linalg.det(aff[:3, :3]))) / 1000, 1)})
         report[sid] = items[-1]
         print(f"{name:4s} faces {len(mesh.faces):6d} centroid {c.round(1)}")
+    report["neighbours"] = neighbours(ct, m, crops, aff_o, vox, meshes)
+    if sac_l5 is not None:   # L5 and the sacrum as drawn (its mask smoothed, as ts_structures takes its surface)
+        lo, hi = crops[LABEL_OF["L5"]]
+        crop = tuple(slice(a, b) for a, b in zip(lo, hi))
+        size = np.sqrt((aff_o[:3, :3] ** 2).sum(0))
+        l5 = ndimage.gaussian_filter(bone_volume(ct[crop], m[crop] == LABEL_OF["L5"], vox, (m[crop] > 0) | sac_l5), SIGMA_VOX) > BONE_HU
+        sac = ndimage.gaussian_filter(sac_l5.astype(np.float32), 1.0) > 0.5
+        a2 = aff_o.copy()
+        a2[:3, 3] = nib.affines.apply_affine(aff_o, lo)
+        d = ndimage.map_coordinates(ndimage.distance_transform_edt(sac, sampling=size),
+                                    nib.affines.apply_affine(np.linalg.inv(a2), meshes["sp_l5"].vertices).T, order=1, mode="constant", cval=0.0)
+        report["neighbours"].append({"pair": "L5-S1", "sharedMl": round(float((l5 & sac).sum() * np.prod(size)) / 1000, 3),
+                                     "verticesInside": int((d > SHARED_DEPTH_MM).sum()), "deepestMm": round(float(d.max()), 2)})
+        print(report["neighbours"][-1])
     occ = ndimage.gaussian_filter((m > 0).astype(np.float32), AO_SIGMA_MM / vox)
     inv_o = np.linalg.inv(aff_o)
     for sid, mesh in meshes.items():
@@ -815,6 +877,12 @@ def vertebral_artery(report: dict) -> tuple[list[dict], dict]:
         m = np.ceil(12 / vox).astype(int)
         b0, b1 = np.maximum(idx.min(0) - m, 0), np.minimum(idx.max(0) + m + 1, sel.shape)
         crp = tuple(slice(a, b) for a, b in zip(b0, b1))
+        # NOT YET the vertebra as drawn since the vertebrae were kept out of their neighbours' masks (bone_volume's
+        # `other`, audit MC-01): this bone still takes in up to MASK_REACH_MM of a neighbour's articular process.
+        # Passing `vm[crp] > 0` makes it the drawn bone and changes one measured value, shown as measured on this CT:
+        # the right C5 foramen's enclosed area, 24 -> 14 mm2 (the ring that encloses 24 mm2 is closed by C6's superior
+        # articular process), and with it the artery's path there by about 1 mm. It waits for a review with the
+        # pedicle values (spine_screw.py, which reads this artery).
         vol = bone_volume(ct[crp].astype(np.float32), sel[crp], float(vox.mean()))
         inside = ndimage.gaussian_filter(vol, SIGMA_VOX) > BONE_HU
         lab_i, n = ndimage.label(inside)
@@ -908,7 +976,7 @@ DATASET = {
     "cite": ["loffler2020", "liebl2021", "sekuboyina2021", "wasserthal2023"],
     "note": "One adult whole-body trauma CT from the VerSe 2020 dataset (0.72 x 0.72 x 0.7 mm), not an average and not in MNI "
             "space. Coordinates are millimetres from the centre of the L5 vertebral body. Vertebrae C1-L5: surfaces taken from the CT at "
-            f"{BONE_HU} HU within reach of VerSe's hand-corrected masks. Sacrum, pelvis, discs and spinal canal contents: "
+            f"{BONE_HU} HU within reach of VerSe's hand-corrected masks, each kept out of its neighbours' masks. Sacrum, pelvis, discs and spinal canal contents: "
             "TotalSegmentator segmentations of the same CT.",
 }
 
@@ -960,7 +1028,8 @@ def write_manifest(verts: list[dict], ts: list[dict], dsc: list[dict]) -> None:
     for v in verts:
         structures.append({**base, "id": v["id"], "name": f"{v['name']} vertebra", "type": "bone", "file": f"assets/spine/{v['id']}.glb",
                            "colour": colour("spBone"), "category": "vertebra", "level": v["name"], "region": v["region"],
-                           "derivation": f"CT surface at {BONE_HU} HU within {MASK_REACH_MM} mm of VerSe's hand-corrected mask for {v['name']}.",
+                           "derivation": f"CT surface at {BONE_HU} HU within {MASK_REACH_MM} mm of VerSe's hand-corrected mask for {v['name']}, kept out of "
+                                         "its neighbours' masks (bone between two masks goes to the nearer one).",
                            "centroid": {"L": v["centroid"], "R": v["centroid"]}})
     structures += manifest_entries([t for t in ts + dsc if t.get("region") != "ccj"])
     structures += manifest_entries([t for t in ts + dsc if t.get("region") == "ccj"], junction=True)
@@ -991,6 +1060,17 @@ def validate() -> int:
     names = [f"C{i}" for i in range(1, 8)] + [f"T{i}" for i in range(1, 13)] + [f"L{i}" for i in range(1, 6)]
     for a, b in zip(names, names[1:]):
         check(by[level_id(a)]["centroid"]["R"][2] > by[level_id(b)]["centroid"]["R"][2], f"{a} not above {b}")
+    # neighbouring vertebrae share no bone (bone_volume's `other`): nothing inside both surfaces, no vertex of one deep
+    # in the other (L5 against the sacrum: the sacrum's surface is its mask's, smoothed, so a little more is its own
+    # tolerance)
+    nb = {r["pair"]: r for r in json.loads((GEN / "spine-levels.json").read_text()).get("neighbours", [])}
+    for a, b in list(zip(names, names[1:])) + [("L5", "S1")]:
+        r = nb.get(f"{a}-{b}")
+        check(r is not None, f"{a}-{b}: no neighbour check")
+        if r:
+            check(r["sharedMl"] <= 0.01, f"{a}-{b}: {r['sharedMl']} ml of bone inside both")
+            check(r["deepestMm"] <= (1.0 if b == "S1" else SHARED_DEPTH_MM) and r["verticesInside"] <= (5 if b == "S1" else 0),
+                  f"{a}-{b}: {r['verticesInside']} vertices inside the neighbour, the deepest {r['deepestMm']} mm")
     # the origin is VerSe's L5 centroid, the centre of the vertebral body: the whole vertebra's centroid (with its
     # posterior arch) lies close to the midline and level with it, some 10-20 mm behind it
     c5 = by["sp_l5"]["centroid"]["R"]
@@ -1076,7 +1156,8 @@ def main() -> int:
     (BUILD / "report.json").write_text(json.dumps(report, indent=1, default=float))
     write_manifest(verts, ts, dsc + roots + roots_t + roots_c + soft + va + ccj)
     (GEN / "spine-levels.json").write_text(json.dumps({"lumbar": levels, "thoracic": levels_t, "cervical": levels_c,
-                                                       "vertebralArtery": va_data, "neckLandmarks": landmarks, "ccj": ccj_data},
+                                                       "vertebralArtery": va_data, "neckLandmarks": landmarks, "ccj": ccj_data,
+                                                       "neighbours": report["neighbours"]},
                                                       indent=1, default=float))
     return 0
 

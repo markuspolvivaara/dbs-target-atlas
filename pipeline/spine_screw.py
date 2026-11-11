@@ -861,7 +861,7 @@ def c1c2_bone(m: np.ndarray, ct: np.ndarray, aff: np.ndarray, vox: np.ndarray, o
     is meant to cross them."""
     sel = (m == B.LABEL_OF["C1"]) | (m == B.LABEL_OF["C2"])
     cr, lo = crop_of(sel, vox, CROP_MM)
-    vol = B.bone_volume(ct[cr].astype(np.float32), sel[cr], float(vox.mean()))
+    vol = B.bone_volume(ct[cr].astype(np.float32), sel[cr], float(vox.mean()))   # (see the note at the other call)
     inside = ndimage.gaussian_filter(vol, B.SIGMA_VOX) > B.BONE_HU
     it = max(1, int(round(3.0 / float(vox.mean()))))
     inside = largest(ndimage.binary_closing(np.pad(inside, it), iterations=it)[it:-it, it:-it, it:-it])
@@ -1117,6 +1117,12 @@ def level_data(lv: str, region_name: str, m: np.ndarray, ct: np.ndarray, body_ma
         lab = B.LABEL_OF[lv]
         sel = m == lab
         cr, lo = crop_of(sel, vox, CROP_MM)
+        # NOT YET as the vertebrae are drawn since they were kept out of their neighbours' masks (spine_build.bone_volume's
+        # `other`, audit MC-01): this bone still takes in up to MASK_REACH_MM of a neighbour's articular process at each
+        # facet joint. Passing `m[cr] > 0` here makes it the drawn bone, and changes what is measured on it: pedicle
+        # widths by up to 6 mm (L5 right 20.0 -> 14.2, T4 left 5.8 -> 2.5), and the lateral mass screws' start lengths
+        # (the Roy-Camille start at C3 leaves C3's own bone after 3-4 mm, which fails the check below). Those values are
+        # shown as measured on this CT, so the change waits for a review of them.
         vol = B.bone_volume(ct[cr].astype(np.float32), sel[cr], float(vox.mean()))
         inside = largest(ndimage.gaussian_filter(vol, B.SIGMA_VOX) > B.BONE_HU)
         a_s = aff.copy()

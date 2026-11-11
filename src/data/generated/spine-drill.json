@@ -25,7 +25,7 @@
    "root": "sp_root_c3",
    "artery": true,
    "file": "assets/spine/drill_c2_c3.bin.gz",
-   "bytes": 775690,
+   "bytes": 750939,
    "dims": [
     100,
     97,
@@ -59,12 +59,12 @@
    ],
    "check": {
     "C2": {
-     "medianMm": 0.241,
-     "p95Mm": 0.421
+     "medianMm": 0.238,
+     "p95Mm": 0.418
     },
     "C3": {
-     "medianMm": 0.225,
-     "p95Mm": 0.411
+     "medianMm": 0.224,
+     "p95Mm": 0.406
     }
    },
    "landmarks": [
@@ -161,7 +161,7 @@
    "root": "sp_root_c4",
    "artery": true,
    "file": "assets/spine/drill_c3_c4.bin.gz",
-   "bytes": 629816,
+   "bytes": 605245,
    "dims": [
     102,
     98,
@@ -195,12 +195,12 @@
    ],
    "check": {
     "C3": {
-     "medianMm": 0.225,
-     "p95Mm": 0.411
+     "medianMm": 0.224,
+     "p95Mm": 0.406
     },
     "C4": {
-     "medianMm": 0.225,
-     "p95Mm": 0.413
+     "medianMm": 0.22,
+     "p95Mm": 0.407
     }
    },
    "landmarks": [
@@ -297,7 +297,7 @@
    "root": "sp_root_c5",
    "artery": true,
    "file": "assets/spine/drill_c4_c5.bin.gz",
-   "bytes": 653971,
+   "bytes": 630781,
    "dims": [
     103,
     103,
@@ -331,12 +331,12 @@
    ],
    "check": {
     "C4": {
-     "medianMm": 0.225,
-     "p95Mm": 0.413
+     "medianMm": 0.22,
+     "p95Mm": 0.407
     },
     "C5": {
-     "medianMm": 0.235,
-     "p95Mm": 0.414
+     "medianMm": 0.232,
+     "p95Mm": 0.413
     }
    },
    "landmarks": [
@@ -433,7 +433,7 @@
    "root": "sp_root_c6",
    "artery": true,
    "file": "assets/spine/drill_c5_c6.bin.gz",
-   "bytes": 723112,
+   "bytes": 700777,
    "dims": [
     105,
     107,
@@ -467,12 +467,12 @@
    ],
    "check": {
     "C5": {
-     "medianMm": 0.235,
-     "p95Mm": 0.414
+     "medianMm": 0.232,
+     "p95Mm": 0.413
     },
     "C6": {
-     "medianMm": 0.234,
-     "p95Mm": 0.42
+     "medianMm": 0.231,
+     "p95Mm": 0.416
     }
    },
    "landmarks": [
@@ -569,7 +569,7 @@
    "root": "sp_root_c7",
    "artery": true,
    "file": "assets/spine/drill_c6_c7.bin.gz",
-   "bytes": 846696,
+   "bytes": 820770,
    "dims": [
     122,
     123,
@@ -603,12 +603,12 @@
    ],
    "check": {
     "C6": {
-     "medianMm": 0.234,
-     "p95Mm": 0.42
+     "medianMm": 0.231,
+     "p95Mm": 0.416
     },
     "C7": {
-     "medianMm": 0.237,
-     "p95Mm": 0.417
+     "medianMm": 0.236,
+     "p95Mm": 0.415
     }
    },
    "landmarks": [
@@ -705,7 +705,7 @@
    "root": "sp_root_c8",
    "artery": true,
    "file": "assets/spine/drill_c7_t1.bin.gz",
-   "bytes": 957891,
+   "bytes": 934612,
    "dims": [
     133,
     132,
@@ -739,11 +739,11 @@
    ],
    "check": {
     "C7": {
-     "medianMm": 0.237,
-     "p95Mm": 0.417
+     "medianMm": 0.236,
+     "p95Mm": 0.415
     },
     "T1": {
-     "medianMm": 0.239,
+     "medianMm": 0.233,
      "p95Mm": 0.419
     }
    },
@@ -841,7 +841,7 @@
    "root": "sp_root_l2",
    "artery": false,
    "file": "assets/spine/drill_l1_l2.bin.gz",
-   "bytes": 1505042,
+   "bytes": 1486274,
    "dims": [
     132,
     150,
@@ -876,11 +876,11 @@
    "check": {
     "L1": {
      "medianMm": 0.245,
-     "p95Mm": 0.422
+     "p95Mm": 0.418
     },
     "L2": {
-     "medianMm": 0.248,
-     "p95Mm": 0.418
+     "medianMm": 0.252,
+     "p95Mm": 0.423
     }
    },
    "landmarks": [
@@ -977,7 +977,7 @@
    "root": "sp_root_l3",
    "artery": false,
    "file": "assets/spine/drill_l2_l3.bin.gz",
-   "bytes": 1682709,
+   "bytes": 1661535,
    "dims": [
     150,
     156,
@@ -1011,8 +1011,8 @@
    ],
    "check": {
     "L2": {
-     "medianMm": 0.248,
-     "p95Mm": 0.418
+     "medianMm": 0.252,
+     "p95Mm": 0.423
     },
     "L3": {
      "medianMm": 0.248,
@@ -1113,7 +1113,7 @@
    "root": "sp_root_l4",
    "artery": false,
    "file": "assets/spine/drill_l3_l4.bin.gz",
-   "bytes": 1739882,
+   "bytes": 1711511,
    "dims": [
     154,
     153,
@@ -1151,8 +1151,8 @@
      "p95Mm": 0.424
     },
     "L4": {
-     "medianMm": 0.252,
-     "p95Mm": 0.426
+     "medianMm": 0.251,
+     "p95Mm": 0.428
     }
    },
    "landmarks": [
@@ -1249,7 +1249,7 @@
    "root": "sp_root_l5",
    "artery": false,
    "file": "assets/spine/drill_l4_l5.bin.gz",
-   "bytes": 1731234,
+   "bytes": 1713300,
    "dims": [
     156,
     149,
@@ -1283,12 +1283,12 @@
    ],
    "check": {
     "L4": {
-     "medianMm": 0.252,
-     "p95Mm": 0.426
+     "medianMm": 0.251,
+     "p95Mm": 0.428
     },
     "L5": {
-     "medianMm": 0.246,
-     "p95Mm": 0.424
+     "medianMm": 0.25,
+     "p95Mm": 0.428
     }
    },
    "landmarks": [
@@ -1385,7 +1385,7 @@
    "root": "sp_root_s1",
    "artery": false,
    "file": "assets/spine/drill_l5_s1.bin.gz",
-   "bytes": 1438371,
+   "bytes": 1421189,
    "dims": [
     150,
     149,
@@ -1419,7 +1419,7 @@
    ],
    "check": {
     "L5": {
-     "medianMm": 0.246,
+     "medianMm": 0.251,
      "p95Mm": 0.424
     },
     "S1": {

@@ -322,7 +322,7 @@
  "structures": [
   {
    "aliases": [],
-   "bytes": 69516,
+   "bytes": 69124,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -356,23 +356,23 @@
    "category": "vertebra",
    "level": "C1",
    "region": "cervical",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C1.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C1, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -9.79,
-     57.65,
-     525.86
+     -9.73,
+     57.59,
+     525.95
     ],
     "R": [
-     -9.79,
-     57.65,
-     525.86
+     -9.73,
+     57.59,
+     525.95
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 72288,
+   "bytes": 71864,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -406,23 +406,23 @@
    "category": "vertebra",
    "level": "C2",
    "region": "cervical",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C2.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C2, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -12.2,
-     50.31,
-     507.51
+     -12.22,
+     50.19,
+     507.66
     ],
     "R": [
-     -12.2,
-     50.31,
-     507.51
+     -12.22,
+     50.19,
+     507.66
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 72164,
+   "bytes": 71600,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -456,23 +456,23 @@
    "category": "vertebra",
    "level": "C3",
    "region": "cervical",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C3.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C3, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -10.69,
-     47.32,
-     490.42
+     -10.37,
+     47.58,
+     490.41
     ],
     "R": [
-     -10.69,
-     47.32,
-     490.42
+     -10.37,
+     47.58,
+     490.41
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 72232,
+   "bytes": 71520,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -506,23 +506,23 @@
    "category": "vertebra",
    "level": "C4",
    "region": "cervical",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C4.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C4, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -10.22,
-     41.77,
-     474.69
+     -10.25,
+     41.81,
+     474.52
     ],
     "R": [
-     -10.22,
-     41.77,
-     474.69
+     -10.25,
+     41.81,
+     474.52
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 72364,
+   "bytes": 72056,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -556,23 +556,23 @@
    "category": "vertebra",
    "level": "C5",
    "region": "cervical",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C5.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C5, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -10.65,
-     34.04,
-     460.19
+     -10.56,
+     33.98,
+     460.17
     ],
     "R": [
-     -10.65,
-     34.04,
-     460.19
+     -10.56,
+     33.98,
+     460.17
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 72580,
+   "bytes": 71888,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -606,23 +606,23 @@
    "category": "vertebra",
    "level": "C6",
    "region": "cervical",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C6.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C6, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -11.05,
-     25.5,
-     446.17
+     -11.1,
+     25.35,
+     446.21
     ],
     "R": [
-     -11.05,
-     25.5,
-     446.17
+     -11.1,
+     25.35,
+     446.21
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 73760,
+   "bytes": 73416,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -656,23 +656,23 @@
    "category": "vertebra",
    "level": "C7",
    "region": "cervical",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C7.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for C7, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -12.06,
-     12.01,
-     433.95
+     -12.07,
+     11.84,
+     434.06
     ],
     "R": [
-     -12.06,
-     12.01,
-     433.95
+     -12.07,
+     11.84,
+     434.06
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 87360,
+   "bytes": 87312,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -706,23 +706,23 @@
    "category": "vertebra",
    "level": "T1",
    "region": "thoracic",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T1.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T1, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -13.54,
-     -0.37,
-     418.87
+     -13.47,
+     -0.54,
+     418.79
     ],
     "R": [
-     -13.54,
-     -0.37,
-     418.87
+     -13.47,
+     -0.54,
+     418.79
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 87376,
+   "bytes": 86488,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -756,23 +756,23 @@
    "category": "vertebra",
    "level": "T2",
    "region": "thoracic",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T2.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T2, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
      -15.93,
-     -14.92,
-     400.76
+     -14.96,
+     400.88
     ],
     "R": [
      -15.93,
-     -14.92,
-     400.76
+     -14.96,
+     400.88
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 87592,
+   "bytes": 86912,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -806,23 +806,23 @@
    "category": "vertebra",
    "level": "T3",
    "region": "thoracic",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T3.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T3, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -17.98,
-     -29.15,
-     380.73
+     -18.03,
+     -29.43,
+     380.9
     ],
     "R": [
-     -17.98,
-     -29.15,
-     380.73
+     -18.03,
+     -29.43,
+     380.9
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 87516,
+   "bytes": 86884,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -856,23 +856,23 @@
    "category": "vertebra",
    "level": "T4",
    "region": "thoracic",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T4.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T4, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -18.08,
-     -39.73,
-     358.62
+     -18.18,
+     -39.9,
+     358.74
     ],
     "R": [
-     -18.08,
-     -39.73,
-     358.62
+     -18.18,
+     -39.9,
+     358.74
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 88752,
+   "bytes": 88036,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -906,23 +906,23 @@
    "category": "vertebra",
    "level": "T5",
    "region": "thoracic",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T5.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T5, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -15.48,
-     -46.61,
-     335.96
+     -15.47,
+     -46.75,
+     335.97
     ],
     "R": [
-     -15.48,
-     -46.61,
-     335.96
+     -15.47,
+     -46.75,
+     335.97
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 89852,
+   "bytes": 88592,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -956,23 +956,23 @@
    "category": "vertebra",
    "level": "T6",
    "region": "thoracic",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T6.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T6, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -13.39,
-     -49.32,
-     311.41
+     -13.38,
+     -49.89,
+     311.31
     ],
     "R": [
-     -13.39,
-     -49.32,
-     311.41
+     -13.38,
+     -49.89,
+     311.31
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 90052,
+   "bytes": 89392,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1006,23 +1006,23 @@
    "category": "vertebra",
    "level": "T7",
    "region": "thoracic",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T7.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T7, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -12.99,
-     -49.36,
-     287.01
+     -13.02,
+     -49.72,
+     286.79
     ],
     "R": [
-     -12.99,
-     -49.36,
-     287.01
+     -13.02,
+     -49.72,
+     286.79
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 90300,
+   "bytes": 89908,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1056,23 +1056,23 @@
    "category": "vertebra",
    "level": "T8",
    "region": "thoracic",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T8.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T8, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -13.29,
-     -48.05,
-     262.96
+     -13.31,
+     -48.22,
+     262.85
     ],
     "R": [
-     -13.29,
-     -48.05,
-     262.96
+     -13.31,
+     -48.22,
+     262.85
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 89644,
+   "bytes": 89080,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1106,23 +1106,23 @@
    "category": "vertebra",
    "level": "T9",
    "region": "thoracic",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T9.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T9, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -12.16,
-     -44.67,
-     238.94
+     -12.24,
+     -44.73,
+     238.91
     ],
     "R": [
-     -12.16,
-     -44.67,
-     238.94
+     -12.24,
+     -44.73,
+     238.91
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 88716,
+   "bytes": 88968,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1156,23 +1156,23 @@
    "category": "vertebra",
    "level": "T10",
    "region": "thoracic",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T10.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T10, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -9.57,
-     -40.12,
-     214.55
+     -9.71,
+     -40.99,
+     214.99
     ],
     "R": [
-     -9.57,
-     -40.12,
-     214.55
+     -9.71,
+     -40.99,
+     214.99
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 88844,
+   "bytes": 89544,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1206,23 +1206,23 @@
    "category": "vertebra",
    "level": "T11",
    "region": "thoracic",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T11.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T11, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -7.22,
-     -35.02,
-     190.15
+     -7.21,
+     -35.76,
+     189.05
     ],
     "R": [
-     -7.22,
-     -35.02,
-     190.15
+     -7.21,
+     -35.76,
+     189.05
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 90040,
+   "bytes": 89672,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1256,23 +1256,23 @@
    "category": "vertebra",
    "level": "T12",
    "region": "thoracic",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T12.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T12, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -5.73,
-     -30.35,
-     161.05
+     -5.72,
+     -29.99,
+     161.14
     ],
     "R": [
-     -5.73,
-     -30.35,
-     161.05
+     -5.72,
+     -29.99,
+     161.14
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 111280,
+   "bytes": 111216,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1306,23 +1306,23 @@
    "category": "vertebra",
    "level": "L1",
    "region": "lumbar",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for L1.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for L1, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -5.84,
-     -26.03,
-     130.82
+     -5.83,
+     -25.8,
+     130.85
     ],
     "R": [
-     -5.84,
-     -26.03,
-     130.82
+     -5.83,
+     -25.8,
+     130.85
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 109048,
+   "bytes": 108972,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1356,23 +1356,23 @@
    "category": "vertebra",
    "level": "L2",
    "region": "lumbar",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for L2.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for L2, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -5.91,
-     -21.61,
-     98.66
+     -5.85,
+     -21.4,
+     98.7
     ],
     "R": [
-     -5.91,
-     -21.61,
-     98.66
+     -5.85,
+     -21.4,
+     98.7
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 109144,
+   "bytes": 108476,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1406,23 +1406,23 @@
    "category": "vertebra",
    "level": "L3",
    "region": "lumbar",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for L3.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for L3, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -4.93,
-     -16.73,
-     64.91
+     -4.87,
+     -16.53,
+     65.07
     ],
     "R": [
-     -4.93,
-     -16.73,
-     64.91
+     -4.87,
+     -16.53,
+     65.07
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 110276,
+   "bytes": 109856,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1456,23 +1456,23 @@
    "category": "vertebra",
    "level": "L4",
    "region": "lumbar",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for L4.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for L4, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     -2.28,
-     -14.1,
-     32.86
+     -2.36,
+     -13.75,
+     33.06
     ],
     "R": [
-     -2.28,
-     -14.1,
-     32.86
+     -2.36,
+     -13.75,
+     33.06
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 108944,
+   "bytes": 108724,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1506,17 +1506,17 @@
    "category": "vertebra",
    "level": "L5",
    "region": "lumbar",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for L5.",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for L5, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
    "centroid": {
     "L": [
-     0.59,
-     -15.52,
-     4.54
+     0.44,
+     -15.17,
+     4.53
     ],
     "R": [
-     0.59,
-     -15.52,
-     4.54
+     0.44,
+     -15.17,
+     4.53
     ]
    }
   },
@@ -4890,7 +4890,7 @@
   },
   {
    "aliases": [],
-   "bytes": 199744,
+   "bytes": 199608,
    "dataset": "verse",
    "source": "VerSe cervical CT (sub-gl090) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4928,19 +4928,19 @@
    "centroid": {
     "L": [
      -0.55,
-     -9.95,
-     9.77
+     -9.99,
+     9.88
     ],
     "R": [
      -0.55,
-     -9.95,
-     9.77
+     -9.99,
+     9.88
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 63628,
+   "bytes": 63344,
    "dataset": "verse",
    "source": "VerSe cervical CT (sub-gl090) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4974,23 +4974,23 @@
    },
    "category": "bone",
    "region": "ccj",
-   "derivation": "CT surface at 200 HU within reach of VerSe's hand-corrected mask for C1, surface of the segmentation.",
+   "derivation": "CT surface at 200 HU within reach of VerSe's hand-corrected mask for C1, kept out of the other bones' masks, surface of the segmentation.",
    "centroid": {
     "L": [
-     0.37,
-     -7.59,
-     -9.51
+     0.4,
+     -7.77,
+     -9.57
     ],
     "R": [
-     0.37,
-     -7.59,
-     -9.51
+     0.4,
+     -7.77,
+     -9.57
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 64456,
+   "bytes": 64032,
    "dataset": "verse",
    "source": "VerSe cervical CT (sub-gl090) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -5024,23 +5024,23 @@
    },
    "category": "bone",
    "region": "ccj",
-   "derivation": "CT surface at 200 HU within reach of VerSe's hand-corrected mask for C2, surface of the segmentation.",
+   "derivation": "CT surface at 200 HU within reach of VerSe's hand-corrected mask for C2, kept out of the other bones' masks, surface of the segmentation.",
    "centroid": {
     "L": [
-     -0.87,
-     -9.47,
-     -25.71
+     -0.91,
+     -9.62,
+     -25.53
     ],
     "R": [
-     -0.87,
-     -9.47,
-     -25.71
+     -0.91,
+     -9.62,
+     -25.53
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 64528,
+   "bytes": 64424,
    "dataset": "verse",
    "source": "VerSe cervical CT (sub-gl090) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -5074,17 +5074,17 @@
    },
    "category": "bone",
    "region": "ccj",
-   "derivation": "CT surface at 200 HU within reach of VerSe's hand-corrected mask for C3, surface of the segmentation.",
+   "derivation": "CT surface at 200 HU within reach of VerSe's hand-corrected mask for C3, kept out of the other bones' masks, surface of the segmentation.",
    "centroid": {
     "L": [
-     -2.94,
-     -11.5,
-     -43.45
+     -3.09,
+     -11.4,
+     -43.54
     ],
     "R": [
-     -2.94,
-     -11.5,
-     -43.45
+     -3.09,
+     -11.4,
+     -43.54
     ]
    }
   },
@@ -5143,7 +5143,7 @@
   "name": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
   "url": "https://osf.io/4skx2/",
-  "note": "One adult whole-body trauma CT from the VerSe 2020 dataset (0.72 x 0.72 x 0.7 mm), not an average and not in MNI space. Coordinates are millimetres from the centre of the L5 vertebral body. Vertebrae C1-L5: surfaces taken from the CT at 200 HU within reach of VerSe's hand-corrected masks. Sacrum, pelvis, discs and spinal canal contents: TotalSegmentator segmentations of the same CT.",
+  "note": "One adult whole-body trauma CT from the VerSe 2020 dataset (0.72 x 0.72 x 0.7 mm), not an average and not in MNI space. Coordinates are millimetres from the centre of the L5 vertebral body. Vertebrae C1-L5: surfaces taken from the CT at 200 HU within reach of VerSe's hand-corrected masks, each kept out of its neighbours' masks. Sacrum, pelvis, discs and spinal canal contents: TotalSegmentator segmentations of the same CT.",
   "citation": [
    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",

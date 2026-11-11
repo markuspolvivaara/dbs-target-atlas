@@ -725,7 +725,6 @@
     60.16,
     494.89
    ],
-   "discHeightMm": 3.2,
    "lesions": {
     "L": {
      "paracentral": [
@@ -763,7 +762,8 @@
      ],
      "foraminalEstimated": false
     }
-   }
+   },
+   "discHeightMm": 3.2
   },
   {
    "level": "C3",
@@ -788,7 +788,6 @@
     54.14,
     477.06
    ],
-   "discHeightMm": 3.3,
    "lesions": {
     "L": {
      "paracentral": [
@@ -826,7 +825,8 @@
      ],
      "foraminalEstimated": false
     }
-   }
+   },
+   "discHeightMm": 3.3
   },
   {
    "level": "C4",
@@ -851,7 +851,6 @@
     47.03,
     460.05
    ],
-   "discHeightMm": 3.8,
    "lesions": {
     "L": {
      "paracentral": [
@@ -889,7 +888,8 @@
      ],
      "foraminalEstimated": false
     }
-   }
+   },
+   "discHeightMm": 3.8
   },
   {
    "level": "C5",
@@ -914,7 +914,6 @@
     39.01,
     444.99
    ],
-   "discHeightMm": 3.1,
    "lesions": {
     "L": {
      "paracentral": [
@@ -952,7 +951,8 @@
      ],
      "foraminalEstimated": false
     }
-   }
+   },
+   "discHeightMm": 3.1
   },
   {
    "level": "C6",
@@ -977,7 +977,6 @@
     30.85,
     429.31
    ],
-   "discHeightMm": 3.4,
    "lesions": {
     "L": {
      "paracentral": [
@@ -1015,7 +1014,8 @@
      ],
      "foraminalEstimated": false
     }
-   }
+   },
+   "discHeightMm": 3.4
   },
   {
    "level": "C7",
@@ -1040,7 +1040,6 @@
     19.75,
     414.76
    ],
-   "discHeightMm": 3.6,
    "lesions": {
     "L": {
      "paracentral": [
@@ -1078,7 +1077,8 @@
      ],
      "foraminalEstimated": false
     }
-   }
+   },
+   "discHeightMm": 3.6
   }
  ],
  "vertebralArtery": {
@@ -1315,5 +1315,151 @@
    "top": 28.0,
    "slab": 2.0
   }
- }
+ },
+ "neighbours": [
+  {
+   "pair": "C1-C2",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.12
+  },
+  {
+   "pair": "C2-C3",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.22
+  },
+  {
+   "pair": "C3-C4",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.17
+  },
+  {
+   "pair": "C4-C5",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.06
+  },
+  {
+   "pair": "C5-C6",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "C6-C7",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "C7-T1",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.26
+  },
+  {
+   "pair": "T1-T2",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "T2-T3",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "T3-T4",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "T4-T5",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.01
+  },
+  {
+   "pair": "T5-T6",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.39
+  },
+  {
+   "pair": "T6-T7",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.07
+  },
+  {
+   "pair": "T7-T8",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "T8-T9",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "T9-T10",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "T10-T11",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.13
+  },
+  {
+   "pair": "T11-T12",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "T12-L1",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "L1-L2",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "L2-L3",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "L3-L4",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.01
+  },
+  {
+   "pair": "L4-L5",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "L5-S1",
+   "sharedMl": 0.002,
+   "verticesInside": 2,
+   "deepestMm": 0.75
+  }
+ ]
 }

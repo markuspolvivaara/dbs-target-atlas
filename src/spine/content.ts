@@ -52,8 +52,12 @@ const LEVELS = z.object({
     /** each value's range with the plane moved up to 1 mm to either side */
     range: z.record(z.tuple([z.number(), z.number()])),
   }),
+  /** each vertebra against the next, as drawn (pipeline/spine_build.py neighbours): the bone inside both surfaces, and
+   * the vertices of one that lie more than 0.5 mm inside the other's bone. Neighbours share no bone. */
+  neighbours: z.array(z.object({ pair: z.string(), sharedMl: z.number(), verticesInside: z.number(), deepestMm: z.number() })),
 }).parse(levelsJson);
 export const CCJ = LEVELS.ccj;
+export const VERTEBRA_NEIGHBOURS = LEVELS.neighbours;
 export const LUMBAR_GEOM = LEVELS.lumbar;
 export const THORACIC_GEOM = LEVELS.thoracic;
 export const CERVICAL_GEOM = LEVELS.cervical;
