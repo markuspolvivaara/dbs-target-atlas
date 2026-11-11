@@ -16,7 +16,8 @@ import v3Landmarks from '../data/generated/sbv3-landmarks.json';
 import v3Manifest from '../data/generated/sbv3-manifest.json';
 import { SbManifestSchema, type ManifestStructure } from '../data/schema';
 import { APPROACH, APPROACH_REF, V1_ABSENT, V1_NAMES } from './approaches';
-import { FORAMEN_CONTENTS, FORAMEN_REF } from './foramina';
+import { FORAMEN_CONTENTS, FORAMEN_REF, PASSAGES } from './foramina';
+import { TB_NOTES } from './temporal';
 
 /**
  * Skull-base section data. Three models share the section's code: the Z-Anatomy model (BodyParts3D, CC BY-SA;
@@ -207,7 +208,13 @@ export function crossCheckSb(): string[] {
   const lmIds = LANDMARKS.map((l) => l.id);
   for (const id of lmIds) if (lmIds.indexOf(id) !== lmIds.lastIndexOf(id)) errs.push(`duplicate landmark id ${id}`);
   for (const n of NOT_YET_SHOWN) if (LANDMARKS.some((l) => l.name.toLowerCase() === n.toLowerCase())) errs.push(`${n} is now labelled: remove it from NOT_YET_SHOWN`);
-  for (const l of LANDMARKS) if (l.how && !FORAMEN_CONTENTS[l.name]) errs.push(`located foramen ${l.name}: no sourced contents`);
+  // a located opening says what passes through it: on the Z-Anatomy models' cards from FORAMEN_CONTENTS, on the default
+  // model's from PASSAGES or the temporal-bone notes (ui/skullbase-atlas.ts). (Checked against FORAMEN_CONTENTS alone,
+  // the default model gave 13 false alarms and was therefore never checked.)
+  const sourced = (name: string) => (SB_MODEL === 'v3' ? !!(PASSAGES[name] || TB_NOTES[name]) : !!FORAMEN_CONTENTS[name]);
+  // (Meckel's cave is located on the CT like the foramina, but it is a recess of the dura, not an opening)
+  const recess = new Set(['Meckel\'s cave']);
+  for (const l of LANDMARKS) if (l.how && !recess.has(l.name) && !sourced(l.name)) errs.push(`located foramen ${l.name} (${l.side}): no sourced contents`);
   for (const cl of Object.values(FORAMEN_CONTENTS).flat()) for (const r of cl.refIds) if (!FORAMEN_REF.has(r)) errs.push(`foramen claim: unknown refId ${r}`);
   for (const [aid, g] of Object.entries(APPROACH_GEOM)) {
     const c = APPROACH.get(aid);

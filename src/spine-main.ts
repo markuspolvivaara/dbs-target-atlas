@@ -9,6 +9,7 @@ import { REGION } from './spine/regions';
 import { decodeSpine, encodeSpine, type SpinePage, type SpineState } from './spine/state';
 import { h } from './ui/h';
 import { bindHelp, viewHelp } from './ui/help';
+import { bootFailed } from './ui/stage';
 import { disclaimerNote, siteHeader } from './ui/shell';
 import { SpineAtlasPage } from './ui/spine-atlas';
 import { spineCreditsPage, spineSourcesPage } from './ui/spine-pages';
@@ -147,5 +148,5 @@ atlas.viewer.preload().then(() => {
   pendingCamera = !state.cam.pos;
   pages.atlas.render(state);
   document.body.dataset.ready = '1';
-});
+}).catch(bootFailed);
 (window as unknown as { __atlas: unknown }).__atlas = { viewer: atlas.viewer, state: () => state };

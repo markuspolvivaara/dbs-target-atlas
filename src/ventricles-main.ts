@@ -9,6 +9,7 @@ import { VentriclesAtlasPage } from './ui/ventricles-atlas';
 import { veCreditsPage, veSourcesPage } from './ui/ventricles-pages';
 import { h } from './ui/h';
 import { bindHelp, viewHelp } from './ui/help';
+import { bootFailed } from './ui/stage';
 import { disclaimerNote, siteHeader } from './ui/shell';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
 
@@ -135,5 +136,5 @@ atlas.viewer.preload().then(() => {
   pendingCamera = !state.cam.pos;
   pages.atlas.render(state);
   document.body.dataset.ready = '1';
-});
+}).catch(bootFailed);
 (window as unknown as { __atlas: unknown }).__atlas = { viewer: atlas.viewer, state: () => state };

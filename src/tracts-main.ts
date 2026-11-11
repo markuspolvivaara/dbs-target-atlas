@@ -6,6 +6,7 @@ import { GROUP, TOPIC } from './tracts';
 import { decodeTracts, defaultTractsState, encodeTracts, type TractsPage, type TractsState } from './tracts/state';
 import { h } from './ui/h';
 import { bindHelp, viewHelp } from './ui/help';
+import { bootFailed } from './ui/stage';
 import { disclaimerNote, siteHeader } from './ui/shell';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
 import { TractsAtlasPage } from './ui/tracts-atlas';
@@ -143,5 +144,5 @@ atlas.viewer.preload().then(() => {
   pendingCamera = !state.cam.pos;
   pages.atlas.render(state);
   document.body.dataset.ready = '1';
-});
+}).catch(bootFailed);
 (window as unknown as { __atlas: unknown }).__atlas = { viewer: atlas.viewer, state: () => state };

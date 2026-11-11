@@ -7,6 +7,7 @@ import { DEFAULT_GROUP, SB_GROUP, viewGroup } from './skullbase/groups';
 import { decodeSkull, encodeSkull, type SkullPage, type SkullState } from './skullbase/state';
 import { h } from './ui/h';
 import { bindHelp, viewHelp } from './ui/help';
+import { bootFailed } from './ui/stage';
 import { disclaimerNote, siteHeader } from './ui/shell';
 import { SkullbaseAtlasPage } from './ui/skullbase-atlas';
 import { skullCreditsPage, skullGradingPage, skullSourcesPage } from './ui/skullbase-pages';
@@ -149,5 +150,5 @@ atlas.viewer.preload().then(() => {
   pendingCamera = !state.cam.pos;
   pages.atlas.render(state);
   document.body.dataset.ready = '1';
-});
+}).catch(bootFailed);
 (window as unknown as { __atlas: unknown }).__atlas = { viewer: atlas.viewer, state: () => state };

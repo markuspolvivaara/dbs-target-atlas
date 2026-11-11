@@ -6,6 +6,7 @@ import { decode, defaultState, encode, type AppState, type Page } from './state'
 import { AtlasPage } from './ui/atlas';
 import { h } from './ui/dom';
 import { bindHelp, viewHelp } from './ui/help';
+import { bootFailed } from './ui/stage';
 import { coordsPage, creditsPage, imagingPage, refsPage, settingsPage } from './ui/pages';
 import { leadPrefFor, onPrefsChange, visibleIndications } from './ui/prefs';
 import { primaryTargetId } from './viewer/selection';
@@ -161,5 +162,5 @@ atlas.viewer.preload().then(() => {
   pendingCamera = !state.cam.pos;
   pages.atlas.render(state);
   document.body.dataset.ready = '1';
-});
+}).catch(bootFailed);
 (window as unknown as { __atlas: unknown }).__atlas = { viewer: atlas.viewer, state: () => state };

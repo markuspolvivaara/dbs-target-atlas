@@ -1,10 +1,18 @@
 import { defineConfig, devices } from '@playwright/test';
 
-/** Visual smoke tests against the production build (vite preview of dist/). Run `npm run build` first. */
+/**
+ * Visual smoke tests against the production build (vite preview of dist/). Run `npm run build` first.
+ * In CI (Linux) the picture comparisons are skipped: the baselines are taken on macOS, and a picture rendered by another
+ * platform's software WebGL is not the same picture. Every other assertion runs there: no console error, no request
+ * leaving the site, card texts, links that survive a reload. One retry in CI, for a runner that stalls.
+ */
+const CI = !!process.env.CI;
 export default defineConfig({
   testDir: 'tests/e2e',
-  timeout: 60_000,
+  timeout: CI ? 120_000 : 60_000,
   expect: { toHaveScreenshot: { maxDiffPixelRatio: 0.01 } },
+  ignoreSnapshots: CI,
+  retries: CI ? 1 : 0,
   fullyParallel: false,
   workers: 2,
   reporter: [['list'], ['html', { open: 'never', outputFolder: 'playwright-report' }]],

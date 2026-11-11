@@ -7,6 +7,7 @@ import { VIEW } from './cortex/views';
 import { decodeCortex, encodeCortex, type CortexPage, type CortexState } from './cortex/state';
 import { h } from './ui/h';
 import { bindHelp, viewHelp } from './ui/help';
+import { bootFailed } from './ui/stage';
 import { disclaimerNote, siteHeader } from './ui/shell';
 import { CortexAtlasPage } from './ui/cortex-atlas';
 import { cortexCreditsPage, cortexSourcesPage } from './ui/cortex-pages';
@@ -135,5 +136,5 @@ atlas.viewer.preload().then(() => {
   pendingCamera = !state.cam.pos;
   pages.atlas.render(state);
   document.body.dataset.ready = '1';
-});
+}).catch(bootFailed);
 (window as unknown as { __atlas: unknown }).__atlas = { viewer: atlas.viewer, state: () => state };

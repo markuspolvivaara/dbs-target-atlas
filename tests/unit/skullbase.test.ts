@@ -350,7 +350,7 @@ async function modelModules(model: 'v3' | 'ct') {
   const had = 'document' in g;
   g.document = { querySelector: (q: string) => (q.includes('sb-model') ? { content: model } : null) };
   try {
-    return { groups: await import('../../src/skullbase/groups'), scene: await import('../../src/skullbase/scene'), state: await import('../../src/skullbase/state') };
+    return { index: await import('../../src/skullbase'), groups: await import('../../src/skullbase/groups'), scene: await import('../../src/skullbase/scene'), state: await import('../../src/skullbase/state') };
   } finally {
     if (!had) delete g.document;
   }
@@ -369,6 +369,16 @@ describe('skull-base landmarks, in each model', () => {
       expect(Object.keys(defs), prefix).not.toContain('Lateral mass');
       // no text is the lead of Wikipedia's page on the atlas or the axis
       expect(Object.entries(defs).filter(([, d]) => /wiki\/(Atlas|Axis)_\(anatomy\)/.test(d.url ?? '')).map(([n]) => n), prefix).toEqual([]);
+    }
+  });
+});
+
+describe('skull-base data, in each model', () => {
+  it('the generated files agree with each other in v2 and in the default model too (the check ran for v1 alone)', async () => {
+    for (const model of ['ct', 'v3'] as const) {
+      const { index } = await modelModules(model);
+      expect(index.SB_MODEL, model).toBe(model);
+      expect(index.crossCheckSb(), model).toEqual([]);
     }
   });
 });

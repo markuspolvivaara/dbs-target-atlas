@@ -77,6 +77,22 @@ export function viewButtons(reset: () => void): HTMLElement {
     h('button', { type: 'button', class: 'tbtn help-btn', title: 'Help: mouse, touch and keyboard controls (?)', 'aria-label': 'Help: mouse, touch and keyboard controls', 'aria-haspopup': 'dialog', onclick: () => requestHelp() }, '?'));
 }
 
+/** A view could not be drawn (its plan or its data threw): logged, and said in the stage's status line, instead of an
+ * unhandled rejection that leaves the legend empty without a word. */
+export function viewFailed(status: { set(text: string | null): void }, e: unknown): void {
+  console.error(e);
+  status.set('This view could not be drawn. Try another view, or reload the page.');
+}
+
+/** The page's first view could not be set up: logged and said on the page, which otherwise sits there, never ready,
+ * with no anatomy and no message. */
+export function bootFailed(e: unknown): void {
+  console.error(e);
+  document.body.dataset.ready = 'failed';
+  const where = document.querySelector('.stage') ?? document.body;
+  where.append(h('p', { class: 'boot-failed', role: 'alert' }, 'The 3D view could not be started. Reload the page; if it still does not start, this browser may not support WebGL.'));
+}
+
 /** One visually hidden live region for the page: what is said here is read out by a screen reader without moving focus. */
 export function announce(text: string): void {
   let live = document.getElementById('atlas-live');
