@@ -45,3 +45,29 @@ export async function nodeMeans(file: string) {
   }
   return out;
 }
+
+/** Each mesh node's extent along x (mm; x < 0 is the left): [min, max] by node name. */
+export async function nodeExtentsX(file: string) {
+  await MeshoptDecoder.ready;
+  const io = new NodeIO().registerExtensions([EXTMeshoptCompression, KHRMeshQuantization]).registerDependencies({ 'meshopt.decoder': MeshoptDecoder });
+  const doc = await io.readBinary(new Uint8Array(readFileSync(new URL(`../../public/${file}`, import.meta.url))));
+  const out: Record<string, [number, number]> = {};
+  for (const node of doc.getRoot().listNodes()) {
+    const mesh = node.getMesh();
+    if (!mesh) continue;
+    const m = node.getWorldMatrix();
+    let lo = Infinity, hi = -Infinity;
+    const el: number[] = [];
+    for (const prim of mesh.listPrimitives()) {
+      const acc = prim.getAttribute('POSITION')!;
+      for (let i = 0; i < acc.getCount(); i++) {
+        acc.getElement(i, el);
+        const x = m[0] * el[0] + m[4] * el[1] + m[8] * el[2] + m[12];
+        if (x < lo) lo = x;
+        if (x > hi) hi = x;
+      }
+    }
+    out[node.getName()] = [lo, hi];
+  }
+  return out;
+}

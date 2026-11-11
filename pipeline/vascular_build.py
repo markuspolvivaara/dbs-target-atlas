@@ -245,6 +245,21 @@ def timing(vessels: list[dict]) -> tuple[dict, dict, dict]:
 
 
 # ---------------------------------------------------------------- outputs
+def part_side(P: np.ndarray) -> str:
+    """The node name for a mesh that is one piece on one side: "L" when it lies wholly left of the midline (x < 0), else
+    "R", which is also where the midline vessels are kept. The viewer shows and hides a node by this name (Left, Right)."""
+    return "L" if float(P[:, 0].max()) < 0 else "R"
+
+
+def wrong_side(nodes: dict) -> list[str]:
+    """The nodes that lie wholly on the other side of the midline from their name (read_glb's nodes)."""
+    out = []
+    for n, (P, _) in nodes.items():
+        if (n == "R" and float(P[:, 0].max()) < 0) or (n == "L" and float(P[:, 0].min()) > 0):
+            out.append(n)
+    return out
+
+
 def write_vessel(vid: str, nodes: dict, arrival: dict, dwell: float) -> dict:
     """A vessel's GLB: its nodes as they are, with _ARRIVAL and _DWELL; returns its centroid by side."""
     gl, cent = [], {}
@@ -331,6 +346,14 @@ def finalize() -> int:
             fails.append(f"missing {it['file']}")
             continue
         it["bytes"] = f.stat().st_size
+    # a node is named for the side it lies on (the viewer's Left and Right show and hide by that name): none may lie
+    # wholly across the midline from its name. Checked on the build's own files, where they are (not on a computer
+    # that only has the compressed ones)
+    for it in m["structures"]:
+        b = BUILD / it["file"].split("/")[-1]
+        if it["file"].startswith(f"assets/{KIND}/") and b.exists():
+            for n in wrong_side(read_glb(b)):
+                fails.append(f"{it['id']}: its node {n} lies wholly on the other side of the midline")
     les = json.loads((GEN / "va-lesions.json").read_text())["lesions"]
     ids = {it["id"] for it in m["structures"]}
     for l in les:

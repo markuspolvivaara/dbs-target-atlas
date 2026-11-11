@@ -109,16 +109,23 @@ describe('vascular section', async () => {
       const n = (I.LESION.get(r.drawn!) as unknown as { nidus: { type: string } }).nidus;
       expect(r.cells[1]).toBe(n.type);
     }
-    // Hafez 2019: 200 patients in each table; each percentage is its count's
+    // Hafez 2019: 200 patients in each table; each percentage is its count's. The counts are the paper's Table 2,
+    // "favourable" at the last follow-up: 133 patients whose Modified Rankin Scale score was unchanged or improved
+    // (not the 138 with a score of 0-2), and the column and the footnotes say so
     for (const t of [T2.SM_GRADES, T2.SUPP_GRADES]) {
-      let total = 0;
+      let total = 0, favourable = 0;
       for (const r of t.rows) {
         const m = /(\d+) % \((\d+) of (\d+)\)/.exec(r.cells[r.cells.length - 1])!;
         expect(Math.round((100 * Number(m[2])) / Number(m[3])), `${t.id} ${r.cells[0]}`).toBe(Number(m[1]));
         total += Number(m[3]);
+        favourable += Number(m[2]);
       }
       expect(total, t.id).toBe(200);
+      expect(favourable, t.id).toBe(133);
+      expect(t.foot, t.id).toContain('unchanged or improved');
+      expect(`${t.head.join(' ')} ${t.foot}`, t.id).not.toMatch(/Rankin Scale 0.2/);
     }
+    expect(T2.SM_GRADES.head[3]).toContain('unchanged or improved');
     expect(T.decodeVa('#/grading').page).toBe('grading');
   });
 
@@ -149,6 +156,23 @@ describe('vascular section', async () => {
       expect(p.looks.get(`va_${grp}__${seg.slice(3)}`), grp).toBe('primary');
     }
   });
+
+  it('names every mesh node for the side it lies on: the viewer’s Left and Right show and hide by that name', async () => {
+    const { nodeExtentsX } = await import('./glb');
+    const wrong: string[] = [];
+    for (const st of I.VA_MANIFEST.structures) {
+      if (!st.file.startsWith('assets/vascular/')) continue;
+      const ext = await nodeExtentsX(st.file);
+      // no node lies wholly across the midline from its name (a midline vessel, and a lesion on it, is kept in R)
+      for (const [name, [lo, hi]] of Object.entries(ext)) if ((name === 'R' && hi < 0) || (name === 'L' && lo > 0)) wrong.push(`${st.id}: node ${name} spans x ${lo.toFixed(1)} to ${hi.toFixed(1)} mm`);
+    }
+    expect(wrong).toEqual([]);
+    // the lesions drawn on the left: the grade III AVM, the ophthalmic and PICA aneurysms, the flow diverter (on the
+    // ophthalmic one): each of their own parts is one node, L
+    for (const id of ['va_avm3__nidus', 'va_avm3__feeders', 'va_avm3__drainers', 'va_ophthalmic__sac', 'va_pica__sac', 'va_fd__sac', 'va_fd__device']) {
+      expect(Object.keys(await nodeExtentsX(I.VA.get(id)!.file)), id).toEqual(['L']);
+    }
+  }, 60_000);
 
   it('round-trips its state through the link', () => {
     const s = T.defaultVaState();

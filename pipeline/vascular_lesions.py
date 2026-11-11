@@ -519,13 +519,13 @@ class Out:
 
     def part(self, lesion: str, pid: str, name: str, cat: str, token: str, parts: list, dwell: float, derivation: str,
              replaces: str | None = None) -> str:
-        """A lesion's part: [(positions, triangles, arrival)] in one GLB (node R)."""
+        """A lesion's part: [(positions, triangles, arrival)] in one GLB, its one node named for the side it lies on."""
         vs, ts, arr, off = [], [], [], 0
         for v, t, a in parts:
             vs.append(v); ts.append(t + off); arr.append(np.broadcast_to(a, (len(v),))); off += len(v)
         V, T, A = np.vstack(vs), np.vstack(ts), np.concatenate(arr)
         vid = f"va_{lesion}__{pid}"
-        VB.write_glb(VB.BUILD / f"{vid}.glb", [{"name": "R", "positions": V, "normals": VB.normals(V, T), "indices": T, "mode": VB.TRIANGLES,
+        VB.write_glb(VB.BUILD / f"{vid}.glb", [{"name": VB.part_side(V), "positions": V, "normals": VB.normals(V, T), "indices": T, "mode": VB.TRIANGLES,
                                                 "scalars": {"_ARRIVAL": np.clip(A / VB.T_MAX_S, 0, 1).astype(np.float32),
                                                             "_DWELL": np.full(len(V), dwell / VB.T_MAX_S, np.float32)}}], {"id": vid})
         c = V.mean(0).round(2).tolist()

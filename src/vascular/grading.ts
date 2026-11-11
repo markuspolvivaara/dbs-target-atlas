@@ -39,7 +39,7 @@ export const SM_POINTS: GradeTable = {
 
 export const SM_GRADES: GradeTable = {
   id: 'sm-grades', title: 'Spetzler–Martin grade: the surgical risk it estimates',
-  head: ['Grade', 'Spetzler–Ponce class', 'Adverse outcomes of surgery, by class†', 'Modified Rankin Scale 0–2 after surgery*'],
+  head: ['Grade', 'Spetzler–Ponce class', 'Adverse outcomes of surgery, by class†', 'Modified Rankin Scale score unchanged or improved after surgery*'],
   rows: [
     { cells: ['I', 'A', 'about 10 %', '85 % (40 of 47)'], drawn: 'avm1' },
     { cells: ['II', 'A', 'about 10 %', '67 % (37 of 55)'] },
@@ -47,7 +47,7 @@ export const SM_GRADES: GradeTable = {
     { cells: ['IV', 'C', 'over 30 %', '54 % (25 of 46)'] },
     { cells: ['V', 'C', 'over 30 %', '60 % (6 of 10)'], drawn: 'avm5' },
   ],
-  foot: '† As reported for each Spetzler–Ponce class (Naranbhai 2023). * Modified Rankin Scale 0–2 at the last follow-up, in 200 patients operated on in Helsinki (Hafez 2019); few had grade V. The grade estimates the risk of an operation; it is not a treatment recommendation.',
+  foot: '† As reported for each Spetzler–Ponce class (Naranbhai 2023). * A Modified Rankin Scale score unchanged or improved, against the score before surgery, at the last follow-up, in 200 patients operated on in Helsinki (Hafez 2019); few had grade V. The grade estimates the risk of an operation; it is not a treatment recommendation.',
   refIds: ['assker2025', 'naranbhai2023', 'hofman2018', 'hafez2019'],
   notes: [
     c('The score aims to estimate the risk of an operation, in mortality and morbidity. Whether to operate also depends on the natural history, the patient’s other illnesses, the treatments available and the patient’s own expectations: the grade is a first step in judging operability.', 'assker2025'),
@@ -95,7 +95,7 @@ export const SUPP_GRADES: GradeTable = {
     { cells: ['9', '60 % (6 of 10)'] },
     { cells: ['10', '100 % (1 of 1)'] },
   ],
-  foot: '* Modified Rankin Scale 0–2 at the last follow-up, in the same 200 patients (Hafez 2019); the highest grades are few.',
+  foot: '* Favourable as the study defines it: a Modified Rankin Scale score unchanged or improved, against the score before surgery, at the last follow-up, in the same 200 patients (Hafez 2019); the highest grades are few.',
   refIds: ['hafez2019'],
   notes: [],
 };
