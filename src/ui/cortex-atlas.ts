@@ -8,7 +8,7 @@ import { VIEW, VIEWS, type ViewId } from '../cortex/views';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
 import { refLinksFrom } from './reflinks';
-import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons } from './stage';
+import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: CortexState) => void, opts?: { camera?: boolean }) => void;
@@ -93,6 +93,7 @@ export class CortexAtlasPage {
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
     this.stage.append(host, toolbar, this.surfLabels, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
+    scrollHint(toolbar);
     this.readout.textContent = 'Point at the surface for its MNI position';
 
     this.viewer = new Viewer<CortexState, CortexPlan>(host, {
@@ -111,6 +112,7 @@ export class CortexAtlasPage {
     }, cortexScene);
     const origRender = this.viewer.renderer.render.bind(this.viewer.renderer);
     this.viewer.renderer.render = (sc, cam) => { origRender(sc, cam); this.placeLabels(); };
+    watchOverlays(this.stage, () => this.viewer.invalidate());
   }
 
   private setInflate(v: number): void {
@@ -145,6 +147,7 @@ export class CortexAtlasPage {
       this.tabs[id] = h('div', { class: 'pane', role: 'tabpanel', id: `pane-${id}`, 'aria-labelledby': `ptab-${id}`, hidden: id !== 'overview' });
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
+    scrollHint(tablist);
   }
 
   private selectTab(id: string, expand = true): void {
@@ -357,7 +360,7 @@ export class CortexAtlasPage {
       const a = this.viewer.anchorFor(id);
       if (a) items.push({ id, text: shortName(id), ax: a.x, ay: a.y, cls: 'slabel primary' });
     }
-    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders);
+    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders, [this.legendHover, this.s?.sel]);
   }
 
   private showTip(info: PickInfo | null, x: number, y: number): void {

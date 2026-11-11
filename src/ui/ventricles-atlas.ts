@@ -11,7 +11,7 @@ import { Viewer, type EndoscopeConfig, type PickInfo } from '../viewer/Viewer';
 import { ENDO_FOV_DEG, FLOOR_LAMBDA_MM } from '../viewer/endoscope';
 import { h } from './h';
 import { refLinksFrom } from './reflinks';
-import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons } from './stage';
+import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: VeState) => void, opts?: { camera?: boolean }) => void;
@@ -255,6 +255,7 @@ export class VentriclesAtlasPage {
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
     this.stage.append(host, this.endoMask, this.endoCompass.a, this.endoCompass.p, this.insetFrame, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
+    scrollHint(toolbar);
     this.bindSteering(host);
     this.readout.textContent = 'Point at a structure for its position';
 
@@ -275,6 +276,7 @@ export class VentriclesAtlasPage {
     }, veScene);
     const origRender = this.viewer.renderer.render.bind(this.viewer.renderer);
     this.viewer.renderer.render = (sc, cam) => { origRender(sc, cam); this.placeLabels(); };
+    watchOverlays(this.stage, () => this.viewer.invalidate());
   }
 
   // ---------------------------------------------------------------- panel
@@ -305,6 +307,7 @@ export class VentriclesAtlasPage {
       this.tabs[id] = h('div', { class: 'pane', role: 'tabpanel', id: `pane-${id}`, 'aria-labelledby': `ptab-${id}`, hidden: id !== 'overview' });
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
+    scrollHint(tablist);
   }
 
   private selectTab(id: string, expand = true): void {
@@ -703,7 +706,7 @@ export class VentriclesAtlasPage {
       const a = this.viewer.anchorFor(this.s.sel);
       if (a) add(this.s.sel, nameOf(this.s.sel), a.x, a.y, 'slabel primary');
     }
-    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders);
+    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders, [this.s?.sel]);
   }
 
   private showTip(info: PickInfo | null, x: number, y: number): void {

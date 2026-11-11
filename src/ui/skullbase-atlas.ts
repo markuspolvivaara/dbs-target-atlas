@@ -12,7 +12,7 @@ import { skullScene, type SkullPlan } from '../skullbase/scene';
 import type { SkullState } from '../skullbase/state';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
-import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons } from './stage';
+import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 import { refLinksFrom } from './reflinks';
 import { FORAMEN_CONTENTS, FORAMEN_REF, PASSAGES } from '../skullbase/foramina';
@@ -202,6 +202,7 @@ export class SkullbaseAtlasPage {
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
     this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
+    scrollHint(toolbar);
     this.readout.textContent = 'Point at a structure for its position';
 
     this.viewer = new Viewer<SkullState, SkullPlan>(host, {
@@ -222,6 +223,7 @@ export class SkullbaseAtlasPage {
     this.endonasal = new EndonasalPanel(this.viewer);
     const origRender = this.viewer.renderer.render.bind(this.viewer.renderer);
     this.viewer.renderer.render = (sc, cam) => { origRender(sc, cam); this.placeLabels(); };
+    watchOverlays(this.stage, () => this.viewer.invalidate());
   }
 
   // ---------------------------------------------------------------- panel
@@ -251,6 +253,7 @@ export class SkullbaseAtlasPage {
       this.tabs[id] = h('div', { class: 'pane', role: 'tabpanel', id: `pane-${id}`, 'aria-labelledby': `ptab-${id}`, hidden: id !== 'overview' });
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
+    scrollHint(tablist);
   }
 
   private selectTab(id: string, expand = true): void {
@@ -725,7 +728,7 @@ export class SkullbaseAtlasPage {
       const a = this.viewer.anchorFor(id);
       if (a) add(id, nameOf(id), a.x, a.y, LM.has(id) ? 'mlabel' : 'slabel primary');
     }
-    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders);
+    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders, [this.legendHover, this.s?.sel]);
   }
 
   private showTip(info: PickInfo | null, x: number, y: number): void {

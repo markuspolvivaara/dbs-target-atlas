@@ -91,50 +91,99 @@ export function revealCard(panel: HTMLElement): void {
   });
 }
 
+/**
+ * A row that scrolls sideways on a narrow screen (the page tabs, the toolbar, the panel's tabs) shows where more of it
+ * lies: its edge fades on that side (styles.css, by data-more). Without it nothing says that the row scrolls.
+ */
+export function scrollHint(el: HTMLElement): void {
+  const sync = () => {
+    const left = el.scrollLeft > 4, right = el.scrollLeft + el.clientWidth < el.scrollWidth - 4;
+    el.dataset.more = left && right ? 'both' : left ? 'left' : right ? 'right' : 'none';
+  };
+  el.addEventListener('scroll', sync, { passive: true });
+  if (typeof ResizeObserver === 'function') new ResizeObserver(sync).observe(el);
+  window.addEventListener('resize', sync);
+  requestAnimationFrame(sync);
+}
+
 export interface LabelItem { id: string; text: string; ax: number; ay: number; cls: string }
 
+interface Box { x: number; y: number; w: number; h: number }
+/** What the page draws over the stage (toolbar, legend, read-out, compass, status, the angiogram's bar): a label under
+ * one of them cannot be read. Measured at most twice a second per stage. */
+const OVERLAYS = '.tgroup, .legend-box, .readout-box, .gizmo, .status-line, .status-failed, .dsa-bar';
+const overlayCache = new WeakMap<Element, { t: number; boxes: Box[] }>();
+function overlayBoxes(stage: Element | null): Box[] {
+  if (!stage) return [];
+  const now = performance.now();
+  const hit = overlayCache.get(stage);
+  if (hit && now - hit.t < 500) return hit.boxes;
+  const sr = stage.getBoundingClientRect();
+  const boxes = [...stage.querySelectorAll<HTMLElement>(OVERLAYS)].map((e) => e.getBoundingClientRect())
+    .filter((r) => r.width > 0 && r.height > 0).map((r) => ({ x: r.left - sr.left, y: r.top - sr.top, w: r.width, h: r.height }));
+  overlayCache.set(stage, { t: now, boxes });
+  return boxes;
+}
+
+/** Labels are laid out when a frame is drawn. When one of the page's overlays on the stage changes its size (the legend
+ * is filled or opened, the toolbar wraps, a status appears) they must be laid out again: the measured boxes are
+ * forgotten and a frame is asked for. */
+export function watchOverlays(stage: HTMLElement, redraw: () => void): void {
+  if (typeof ResizeObserver !== 'function') return;
+  const ro = new ResizeObserver(() => { overlayCache.delete(stage); redraw(); });
+  for (const e of stage.querySelectorAll(OVERLAYS)) ro.observe(e);
+}
+
 /**
- * Lay out name labels with leader lines. Labels sit a little away from their anchor, pushed
- * outwards from the view centre, and are nudged apart so they do not overlap.
+ * Lay out name labels with leader lines. Labels sit a little away from their anchor, pushed outwards from the view
+ * centre, and are nudged apart so they do not overlap each other or lie under the page's own overlays. A label that
+ * still finds no free place is left out rather than drawn over another (on a phone most of a crowded view's labels),
+ * except those of `keep` (the selected and the pointed-at structure), which are placed first and always drawn.
  */
-export function layoutLabels(items: LabelItem[], W: number, H: number, labels: HTMLElement, leaders: SVGSVGElement): void {
-  const placed: { x: number; y: number; w: number; h: number; left: boolean; ax: number; ay: number }[] = [];
-  for (const it of items) {
+export function layoutLabels(items: LabelItem[], W: number, H: number, labels: HTMLElement, leaders: SVGSVGElement, keep: (string | null | undefined)[] = []): void {
+  const kept = new Set(keep.filter((x): x is string => !!x));
+  const blocked = overlayBoxes(labels.parentElement);
+  const placed: { it: LabelItem; x: number; y: number; w: number; h: number; left: boolean }[] = [];
+  const over = (b: { x0: number; x1: number; y0: number; y1: number }, q: Box) => b.x0 < q.x + q.w && b.x1 > q.x && b.y0 < q.y + q.h && b.y1 > q.y;
+  for (const it of [...items.filter((i) => kept.has(i.id)), ...items.filter((i) => !kept.has(i.id))]) {
     let dx = it.ax - W / 2, dy = it.ay - H / 2;
     const len = Math.hypot(dx, dy);
     if (len < 24) { dx = 0.7; dy = -0.7; } else { dx /= len; dy /= len; }
-    const w = Math.min(220, it.text.length * 6.6 + 14), hgt = 20;
+    const w = Math.min(220, it.text.length * 7.2 + 14, Math.max(60, W - 8)), hgt = 21;
     const left = dx < 0; // label extends leftwards from its attach point
     let x = it.ax + dx * 44, y = it.ay + dy * 34 - hgt / 2;
+    // inside the stage: a label cut by its edge cannot be read
+    x = left ? Math.max(w + 4, Math.min(W - 4, x)) : Math.max(4, Math.min(W - w - 4, x));
     const box = () => ({ x0: left ? x - w : x, x1: left ? x : x + w, y0: y, y1: y + hgt });
+    const hitOf = () => { const b = box(); return placed.find((q) => over(b, q)) ?? blocked.find((q) => over(b, q)); };
     for (let guard = 0; guard < 12; guard++) {
-      const b = box();
-      const hit = placed.find((q) => b.x0 < q.x + q.w && b.x1 > q.x && b.y0 < q.y + q.h && b.y1 > q.y);
+      const hit = hitOf();
       if (!hit) break;
       y = dy >= 0 ? hit.y + hit.h + 4 : hit.y - hgt - 4;
     }
-    y = Math.max(46, Math.min(H - hgt - 4, y));
+    y = Math.max(4, Math.min(H - hgt - 4, y));
+    if (!kept.has(it.id) && hitOf()) continue;
     const b = box();
-    placed.push({ x: b.x0, y: b.y0, w, h: hgt, left, ax: it.ax, ay: it.ay });
+    placed.push({ it, x: b.x0, y: b.y0, w, h: hgt, left });
   }
-  while (labels.children.length < items.length) labels.append(h('span', {}));
+  while (labels.children.length < placed.length) labels.append(h('span', {}));
   [...labels.children].forEach((el, i) => {
     const e = el as HTMLElement;
-    const it = items[i], q = placed[i];
-    if (!it) { e.hidden = true; return; }
+    const q = placed[i];
+    if (!q) { e.hidden = true; return; }
     e.hidden = false;
-    e.className = it.cls;
-    e.textContent = it.text;
+    e.className = q.it.cls;
+    e.textContent = q.it.text;
     e.style.transform = `translate(${Math.round(q.x)}px, ${Math.round(q.y)}px)`;
     e.style.maxWidth = `${q.w + 20}px`;
   });
   while (leaders.firstChild) leaders.removeChild(leaders.firstChild);
   placed.forEach((q) => {
     const l = document.createElementNS(NS, 'line');
-    l.setAttribute('x1', String(q.ax)); l.setAttribute('y1', String(q.ay));
+    l.setAttribute('x1', String(q.it.ax)); l.setAttribute('y1', String(q.it.ay));
     l.setAttribute('x2', String(q.left ? q.x + q.w : q.x)); l.setAttribute('y2', String(q.y + q.h / 2));
     const c = document.createElementNS(NS, 'circle');
-    c.setAttribute('cx', String(q.ax)); c.setAttribute('cy', String(q.ay)); c.setAttribute('r', '2');
+    c.setAttribute('cx', String(q.it.ax)); c.setAttribute('cy', String(q.it.ay)); c.setAttribute('r', '2');
     leaders.append(l, c);
   });
 }

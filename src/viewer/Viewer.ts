@@ -91,6 +91,8 @@ const SHOWN = { on: true, opacity: 1 };
 const MESH_TYPES = new Set(['nucleus', 'target', 'bone', 'soft', 'surface', 'tube']);
 const RAS_TO_WORLD = new THREE.Matrix4().makeRotationX(-Math.PI / 2); // (x, y, z) RAS -> (x, z, -y) three
 /** in the endoscope's view, what lies this close behind a wall is what the pointer is on (it shows through) */
+/** a tap this near a marker's centre selects the marker (CSS pixels; half a 44 px finger target) */
+const TAP_MARKER_PX = 22;
 const ENDO_PICK_BEHIND_MM = 3;
 /** ... and through the thin floor of the third ventricle, this close: what lies under it can be named before it is opened */
 const ENDO_PICK_FLOOR_MM = 14;
@@ -1152,6 +1154,21 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     return this.pickWith(withLines);
   }
 
+  /** The marker drawn nearest a tap, within TAP_MARKER_PX of it (not in the endoscope's views, which pick their own way). */
+  private nearMarker(clientX: number, clientY: number): PickInfo | null {
+    if (this.endoscopeRects()) return null;
+    const r = this.renderer.domElement.getBoundingClientRect();
+    const x = clientX - r.left, y = clientY - r.top;
+    let best: { id: string; side: Side; d: number } | null = null;
+    for (const m of this.markerScreen()) {
+      const d = Math.hypot(m.x - x, m.y - y);
+      if (d <= TAP_MARKER_PX && (!best || d < best.d)) best = { id: m.id, side: m.side, d };
+    }
+    const t = best && this.cat.markers.get(best.id);
+    if (!best || !t) return null;
+    return { id: best.id, name: t.label, ras: new THREE.Vector3(...(best.side === 'L' ? t.mni.left : t.mni.right)), side: best.side, kind: 'marker' };
+  }
+
   private pickWith(withLines: boolean): PickInfo | null {
     this.raycaster.params.Line2 = { threshold: 6 } as never;
     (this.raycaster as unknown as { camera: THREE.Camera }).camera = this.camera;
@@ -1245,7 +1262,9 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);
       down = null;
       if (moved > 6) return;
-      const hit = this.pick(e.clientX, e.clientY, true);
+      let hit = this.pick(e.clientX, e.clientY, true);
+      // a finger is not a pointer: on a phone a landmark's dot is a few pixels wide, so a tap beside one means it
+      if (e.pointerType !== 'mouse' && !this.measuring && hit?.kind !== 'marker' && hit?.kind !== 'lead') hit = this.nearMarker(e.clientX, e.clientY) ?? hit;
       if (this.measuring) {
         if (!hit) return;
         if (this.measurePts.length >= 2) this.measurePts = [];

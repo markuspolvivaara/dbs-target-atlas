@@ -257,3 +257,89 @@ for (const url of ['./dbs/', './tracts/', './skullbase/', './skullbase-v1/', './
     expect(g.errors).toEqual([]);
   });
 }
+
+/** The boxes of the name labels drawn now, and of the page's overlays on the stage (relative to the page). */
+async function labelBoxes(page: Page) {
+  return page.evaluate(() => {
+    const box = (e: Element) => { const r = e.getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height, text: (e.textContent ?? '').trim() }; };
+    const stage = document.querySelector('.stage')!;
+    return {
+      stage: box(stage),
+      labels: [...stage.querySelectorAll('.labels > span')].filter((e) => !(e as HTMLElement).hidden).map(box),
+      overlays: [...stage.querySelectorAll('.tgroup, .legend-box, .readout-box, .gizmo')].map(box).filter((b) => b.w > 0 && b.h > 0),
+    };
+  });
+}
+const overlap = (a: { x: number; y: number; w: number; h: number }, b: { x: number; y: number; w: number; h: number }) =>
+  a.x < b.x + b.w - 1 && a.x + a.w > b.x + 1 && a.y < b.y + b.h - 1 && a.y + a.h > b.y + 1;
+
+// UI-08: with every name on, labels lay over each other, under the toolbar and the legend, and across the stage's edge
+test('labels: with all names on, none overlaps another, lies under an overlay or is cut by the edge', async ({ page }) => {
+  const g = guard(page);
+  for (const url of ['./skullbase/#/atlas?g=floor&lb=a', './skullbase/#/atlas?g=ear_r&lb=a', './brainstem/#/atlas?lb=a', './dbs/#/atlas?i=pd&lb=a']) {
+    await open(page, url);
+    const b = await labelBoxes(page);
+    expect(b.labels.length, url).toBeGreaterThan(2);
+    const clashes: string[] = [];
+    b.labels.forEach((l, i) => {
+      for (const m of b.labels.slice(i + 1)) if (overlap(l, m)) clashes.push(`${l.text} / ${m.text}`);
+      for (const o of b.overlays) if (overlap(l, o)) clashes.push(`${l.text} under an overlay`);
+      if (l.x < b.stage.x || l.x + l.w > b.stage.x + b.stage.w || l.y < b.stage.y || l.y + l.h > b.stage.y + b.stage.h) clashes.push(`${l.text} cut by the edge`);
+    });
+    expect(clashes, url).toEqual([]);
+  }
+  // the selected structure's name is always drawn
+  await open(page, './skullbase/#/atlas?g=floor&lb=a&sel=tb_facial_nerve_vii');
+  expect((await labelBoxes(page)).labels.map((l) => l.text)).toContain('Facial nerve (VII)');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// UI-08, UI-01, UI-17, UI-18 on a phone
+test('phone: names by tap, rows that show they scroll, targets a finger can hit, a tap beside a marker selects it @mobile', async ({ page }) => {
+  await open(page, './skullbase/');
+  // names are not all on by default on a phone (44 of them buried the model); a tap names a structure
+  await expect(page.locator('.toolbar [data-labels="hover"]')).toHaveAttribute('aria-pressed', 'true');
+  expect((await labelBoxes(page)).labels.length).toBe(0);
+  // the toolbar scrolls sideways and says so: faded on the right at first, on the left at its end
+  const toolbar = page.locator('.toolbar');
+  await expect(toolbar).toHaveAttribute('data-more', 'right');
+  await toolbar.evaluate((el) => { el.scrollLeft = el.scrollWidth; });
+  await expect(toolbar).toHaveAttribute('data-more', 'left');
+  await toolbar.evaluate((el) => { el.scrollLeft = 0; });
+  // toolbar buttons, the panel's tabs and the sheet's close button are at least 44 px high
+  for (const sel of ['.toolbar .tbtn', '.ptab']) {
+    const hgt = await page.locator(sel).first().evaluate((e) => e.getBoundingClientRect().height);
+    expect(hgt, sel).toBeGreaterThanOrEqual(44);
+  }
+  // a tap 12 px beside a landmark's dot selects the landmark, not the bone behind it: the dot farthest from its
+  // neighbours, tapped on the side away from the nearest one
+  const m = await page.evaluate(() => {
+    const v = (window as unknown as { __atlas: { viewer: { markerScreen(): { id: string; x: number; y: number }[] } } }).__atlas.viewer;
+    const r = document.querySelector('.viewer-host canvas')!.getBoundingClientRect();
+    const all = v.markerScreen();
+    let best: { id: string; x: number; y: number; d: number } | null = null;
+    for (const a of all) {
+      if (a.y < 150 || a.y > r.height - 120 || a.x < 40 || a.x > r.width - 60) continue;
+      let near = Infinity, nx = 1, ny = 0;
+      for (const b of all) { const d = Math.hypot(a.x - b.x, a.y - b.y); if (b !== a && d < near) { near = d; nx = (a.x - b.x) / (d || 1); ny = (a.y - b.y) / (d || 1); } }
+      if (!best || near > best.d) best = { id: a.id, x: r.left + a.x + nx * 12, y: r.top + a.y + ny * 12, d: near };
+    }
+    return best;
+  });
+  expect(m).not.toBeNull();
+  expect(m!.d).toBeGreaterThan(12);   // (the floor's 44 dots lie close on a phone: its nearest neighbour is then 12 px further from the tap)
+  await page.touchscreen.tap(m!.x, m!.y);
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __atlas: { state(): { sel: string | null } } }).__atlas.state().sel)).toBe(m!.id);
+  // and its name is drawn
+  await expect.poll(async () => (await labelBoxes(page)).labels.length).toBe(1);
+});
+
+// UI-01: the section's page tabs on a phone
+test('phone: the page tabs fade where more lie @mobile', async ({ page }) => {
+  await open(page, './dbs/');
+  const nav = page.locator('header .nav');
+  await expect(nav).toHaveAttribute('data-more', 'right');
+  await nav.evaluate((el) => { el.scrollLeft = el.scrollWidth; });
+  await expect(nav).toHaveAttribute('data-more', 'left');
+});

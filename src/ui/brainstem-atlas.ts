@@ -11,7 +11,7 @@ import { SITE_ROOT } from '../brand';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
 import { refLinksFrom } from './reflinks';
-import { bindSheetDrag, buildSlicesPane, drawGizmo, layoutLabels, syncSlicesPane, type LabelItem, stageStatus, revealCard, viewButtons } from './stage';
+import { bindSheetDrag, buildSlicesPane, drawGizmo, layoutLabels, syncSlicesPane, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: BsState) => void, opts?: { camera?: boolean }) => void;
@@ -106,6 +106,7 @@ export class BrainstemAtlasPage {
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
     this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
+    scrollHint(toolbar);
     this.readout.textContent = 'Point at a structure for its MNI position';
 
     this.viewer = new Viewer<BsState, BsPlan>(host, {
@@ -124,6 +125,7 @@ export class BrainstemAtlasPage {
     }, bsScene);
     const origRender = this.viewer.renderer.render.bind(this.viewer.renderer);
     this.viewer.renderer.render = (sc, cam) => { origRender(sc, cam); this.placeLabels(); };
+    watchOverlays(this.stage, () => this.viewer.invalidate());
   }
 
   // ---------------------------------------------------------------- panel
@@ -154,6 +156,7 @@ export class BrainstemAtlasPage {
       this.tabs[id] = h('div', { class: 'pane', role: 'tabpanel', id: `pane-${id}`, 'aria-labelledby': `ptab-${id}`, hidden: id !== 'overview' });
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
+    scrollHint(tablist);
   }
 
   private selectTab(id: string, expand = true): void {
@@ -373,7 +376,7 @@ export class BrainstemAtlasPage {
       const a = this.viewer.anchorFor(this.s.sel);
       if (a) add(this.s.sel, nameOf(this.s.sel), a.x, a.y, 'slabel primary');
     }
-    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders);
+    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders, [this.s?.sel]);
   }
 
   private showTip(info: PickInfo | null, x: number, y: number): void {

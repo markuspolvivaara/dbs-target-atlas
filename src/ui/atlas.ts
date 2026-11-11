@@ -12,7 +12,7 @@ import { chips, clear, fmtMm, h, refLinks } from './dom';
 import { eyeIcon } from './widgets';
 import { clearAllLeadPrefs, clearLeadPref, isHidden, leadPrefFor, saveLeadDefault, saveLeadPref, visibleIndications } from './prefs';
 import { primaryTargetId } from '../viewer/selection';
-import { bindSheetDrag, buildSlicesPane, drawGizmo, layoutLabels, syncSlicesPane, type LabelItem, stageStatus, revealCard, viewButtons } from './stage';
+import { bindSheetDrag, buildSlicesPane, drawGizmo, layoutLabels, syncSlicesPane, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays } from './stage';
 
 type Update = (fn: (s: AppState) => void, opts?: { camera?: boolean }) => void;
 
@@ -97,6 +97,7 @@ export class AtlasPage {
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
     this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
+    scrollHint(toolbar);
     this.readout.textContent = 'Point at a structure for MNI coordinates';
 
     this.viewer = new Viewer<AppState, Plan>(host, {
@@ -115,6 +116,7 @@ export class AtlasPage {
     }, dbsScene);
     const origRender = this.viewer.renderer.render.bind(this.viewer.renderer);
     this.viewer.renderer.render = (sc, cam) => { origRender(sc, cam); this.placeLabels(); };
+    watchOverlays(this.stage, () => this.viewer.invalidate());
   }
 
   // ---------------------------------------------------------------- panel
@@ -145,6 +147,7 @@ export class AtlasPage {
       this.tabs[id] = h('div', { class: 'pane', role: 'tabpanel', id: `pane-${id}`, 'aria-labelledby': `ptab-${id}`, hidden: id !== 'overview' });
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
+    scrollHint(tablist);
   }
 
   private selectTab(id: string, expand = true): void {
@@ -444,7 +447,7 @@ export class AtlasPage {
         if (a && name) add(id, name, a.x, a.y, TGT.has(id) ? 'mlabel' : 'slabel primary');
       }
     }
-    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders);
+    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders, [this.legendHover, this.s?.sel]);
     if (this.measurePts.length === 2) {
       const q = this.viewer.measureScreen();
       this.measureOut.dataset.x = q ? String(q.x) : '';

@@ -19,7 +19,7 @@ import { spineScene, type SpinePlan } from '../spine/scene';
 import type { SpineState } from '../spine/state';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
-import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons } from './stage';
+import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: SpineState) => void, opts?: { camera?: boolean }) => void;
@@ -221,6 +221,7 @@ export class SpineAtlasPage {
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
     this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
+    scrollHint(toolbar);
     this.readout.textContent = 'Point at a structure for its position';
 
     this.viewer = new Viewer<SpineState, SpinePlan>(host, {
@@ -239,6 +240,7 @@ export class SpineAtlasPage {
     }, spineScene);
     const origRender = this.viewer.renderer.render.bind(this.viewer.renderer);
     this.viewer.renderer.render = (sc, cam) => { origRender(sc, cam); this.placeLabels(); };
+    watchOverlays(this.stage, () => this.viewer.invalidate());
   }
 
   // ---------------------------------------------------------------- panel
@@ -268,6 +270,7 @@ export class SpineAtlasPage {
       this.tabs[id] = h('div', { class: 'pane', role: 'tabpanel', id: `pane-${id}`, 'aria-labelledby': `ptab-${id}`, hidden: id !== 'overview' });
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
+    scrollHint(tablist);
   }
 
   private selectTab(id: string, expand = true): void {
@@ -782,7 +785,7 @@ export class SpineAtlasPage {
     };
     if (mode === 'all') for (const id of REGION.get(this.s.region)!.structures) if (SP.get(id)?.category === 'vertebra' && !this.s.hidden.includes(id)) add(id);
     if (mode !== 'off') for (const id of [this.legendHover, this.s?.sel]) if (id) add(id);
-    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders);
+    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders, [this.legendHover, this.s?.sel]);
   }
 
   private showTip(info: PickInfo | null, x: number, y: number): void {
