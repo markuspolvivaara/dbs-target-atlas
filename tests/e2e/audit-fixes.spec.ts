@@ -343,3 +343,38 @@ test('phone: the page tabs fade where more lie @mobile', async ({ page }) => {
   await nav.evaluate((el) => { el.scrollLeft = el.scrollWidth; });
   await expect(nav).toHaveAttribute('data-more', 'left');
 });
+
+// UI-04: a click on a structure inside a see-through shell selected the shell (0 of 7 right in the temporal bone view)
+test('picking: a click goes through a see-through shell to the structure drawn in it', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './skullbase/#/atlas?g=ear_r');
+  const sel = () => page.evaluate(() => (window as unknown as { __atlas: { state(): { sel: string | null } } }).__atlas.state().sel);
+  // the shell is see-through here
+  const shell = await page.evaluate(() => {
+    const v = (window as unknown as { __atlas: { viewer: { currentPlan(): { looks: Map<string, string> } } } }).__atlas.viewer;
+    return [...v.currentPlan().looks].filter(([, l]) => l === 'shell' || l === 'context').map(([id]) => id);
+  });
+  expect(shell.length).toBeGreaterThan(0);
+  let tried = 0;
+  for (const id of ['tb_malleus', 'tb_incus', 'tb_tympanic_membrane']) {
+    const at = await page.evaluate((sid) => {
+      const v = (window as unknown as { __atlas: { viewer: { anchorFor(id: string): { x: number; y: number } | null } } }).__atlas.viewer;
+      const a = v.anchorFor(sid);
+      const r = document.querySelector('.viewer-host canvas')!.getBoundingClientRect();
+      return a ? { x: r.left + a.x, y: r.top + a.y } : null;
+    }, id);
+    if (!at) continue;
+    tried++;
+    await page.mouse.click(at.x, at.y);
+    await expect.poll(sel, { message: id }).not.toBeNull();
+    // what was clicked is a structure drawn solid (the ossicle, or a nerve or landmark in front of it), never the shell
+    expect(shell, id).not.toContain(await sel());
+    await page.keyboard.press('Escape');
+    await expect.poll(sel).toBeNull();
+  }
+  expect(tried).toBeGreaterThan(1);
+  // the shell is still picked where nothing solid lies behind it
+  await open(page, './skullbase/#/atlas?g=ear_r');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

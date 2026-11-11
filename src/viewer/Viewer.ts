@@ -93,6 +93,8 @@ const RAS_TO_WORLD = new THREE.Matrix4().makeRotationX(-Math.PI / 2); // (x, y, 
 /** in the endoscope's view, what lies this close behind a wall is what the pointer is on (it shows through) */
 /** a tap this near a marker's centre selects the marker (CSS pixels; half a 44 px finger target) */
 const TAP_MARKER_PX = 22;
+/** a mesh drawn at or under this opacity is looked through when picking (the context and shell looks, a layer turned down) */
+const SEE_THROUGH_OPACITY = 0.5;
 const ENDO_PICK_BEHIND_MM = 3;
 /** ... and through the thin floor of the third ventricle, this close: what lies under it can be named before it is opened */
 const ENDO_PICK_FLOOR_MM = 14;
@@ -1175,7 +1177,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     const objs = this.pickables().filter((o) => withLines || !(o as LineSegments2).isLineSegments2);
     const hits = this.raycaster.intersectObjects(objs, true).filter((h) => this.notClipped(h.point));
     if (!hits.length) return null;
-    // prefer: lead > marker > highlighted structures > faded > cortex/ghost > slice
+    // prefer: lead > marker > highlighted structures > see-through ones > faded > cortex/ghost > slice
     const rank = (h: THREE.Intersection) => {
       const o = h.object;
       if (o.userData.lead) return 0;
@@ -1188,7 +1190,11 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       // faded back round a selection: still seen, so before ghosts (the skull base's removed bone, barely drawn: a
       // click into an opening goes to what lies beyond it); faded bone, seen through, after what it encloses
       if (it.kind === 'mesh' && it.faded) return it.meta.type === 'bone' ? 3.2 : 3;
-      return it.look === 'ghost' ? 3.5 : 2;
+      if (it.look === 'ghost') return 3.5;
+      // a see-through shell or context (the temporal bone round the ossicles, the brainstem round its nuclei) is looked
+      // through, not at: whatever is drawn solid along the ray comes first, the shell itself only where nothing is
+      const m = it.kind === 'mesh' ? it.mats.solid : null;
+      return m && (o as THREE.Mesh).material === m && m.transparent && m.opacity <= SEE_THROUGH_OPACITY ? 2.6 : 2;
     };
     const best = hits.reduce((a, b) => (rank(b) < rank(a) || (rank(b) === rank(a) && b.distance < a.distance) ? b : a));
     const ras = this.toRas(best.point);
