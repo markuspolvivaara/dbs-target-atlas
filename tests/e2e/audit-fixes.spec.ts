@@ -485,3 +485,22 @@ test('keyboard and screen readers: one stop for the toolbar, a skip link to the 
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// MA-01: the brainstem was fitted to the far wall of the cisterns (about 3 mm too large); the fit is now checked from both sides
+test('brainstem: the Sources page reports the fit against the template from both sides', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('about:blank');
+  await page.goto('./brainstem/#/sources');
+  await page.waitForSelector('body[data-ready="1"]', { timeout: 30_000 });
+  const text = await page.locator('main').innerText();
+  expect(text).toContain('Not too large, and on the right wall');
+  const own = Number(/(\d+) % of the fitted surface lies within 1 mm of the brainstem’s own tissue–fluid boundary/.exec(text)?.[1]);
+  const far = Number(/and (\d+) % within 1 mm of the far wall of a cistern/.exec(text)?.[1]);
+  expect(own).toBeGreaterThan(40);
+  expect(far).toBeLessThan(15);
+  // the arousal network's nuclei (placed independently, in MNI space) lie in the model's tissue, not in its fourth ventricle
+  await open(page, './brainstem/#/atlas?g=arousal');
+  expect(await drawnSides(page, 'bs_aan_mnr')).not.toBeNull();
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

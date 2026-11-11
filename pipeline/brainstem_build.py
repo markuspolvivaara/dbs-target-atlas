@@ -615,6 +615,7 @@ def main() -> int:
     zones, measured = safe_entry_zones(ex, F, surf, fitted_meshes, nerve_exits, add)
     report = dict(F.report)
     report.update(tract_check(surf))
+    report.update(wall_check(surf, (fitted_meshes["Fourth ventricle"], orient(fitted_meshes["Fourth ventricle"], np.array(ex["meshes"]["Fourth ventricle"]["tris"])))))
 
     # definitions (Z-Anatomy's Wikipedia texts) for the structures shown
     names = {it["name"] for it in items}
@@ -667,6 +668,101 @@ def tract_check(surf: Surface) -> dict:
     P = np.vstack(pts)
     P = P[(P[:, 2] >= CST_LEVELS[0]) & (P[:, 2] < CST_LEVELS[1])]
     return {"cstInsideShare": round(float(surf.inside(P).mean()), 3), "cstLevels": list(CST_LEVELS)}
+
+
+# ---------------------------------------------------------------- which wall the fitted surface lies on
+WALL_REACH_MM, WALL_STEP_MM = 5.0, 0.25
+# MNI z of four cross-sections: the midbrain through the cerebral peduncles, the pons twice, the open medulla
+WIDTH_LEVELS = (("midbrain", -14.0), ("pons", -30.0), ("pons", -38.0), ("medulla", -55.0))
+
+
+def wall_check(surf: Surface, ventricle: tuple[np.ndarray, np.ndarray]) -> dict:
+    """A two-sided check of the fit against the T2 template itself, not against the fit's own target. Along the
+    outward normal of every vertex of the fitted outer surface: the nearest place where the template goes from tissue
+    to fluid (the brainstem's own surface) and the nearest where it goes from fluid to tissue (the far wall of the
+    cistern: the clivus, the cerebellum, the temporal lobe). A surface fitted to the wrong wall lies on the second
+    and millimetres outside the first, which a one-sided check (the tract inside the model) cannot see. Also: the
+    share of the fitted solid that is fluid on the template, the model's width against the template tissue's at
+    four levels, how much of the model's fourth ventricle is fluid on the template, and how much of any arousal
+    network nucleus (AAN 2.0: MNI-native labels, placed independently of the fit) falls inside that ventricle."""
+    import nibabel as nib
+    from scipy import ndimage
+    from brainstem_fit import FLUID_LEVEL, T2
+    img = nib.load(T2)
+    aff = img.affine
+    vox = float(np.sqrt((aff[:3, :3] ** 2).sum(0)).mean())
+    lo = np.floor(nib.affines.apply_affine(np.linalg.inv(aff), np.array([-45.0, -80.0, -72.0]))).astype(int)
+    hi = np.ceil(nib.affines.apply_affine(np.linalg.inv(aff), np.array([45.0, 20.0, 15.0]))).astype(int)
+    lo, hi = np.minimum(lo, hi), np.maximum(lo, hi)
+    sm = ndimage.gaussian_filter(np.asarray(img.dataobj[lo[0]:hi[0], lo[1]:hi[1], lo[2]:hi[2]], np.float32), 0.5 / vox)
+    inv = np.linalg.inv(aff)
+
+    def t2(p: np.ndarray) -> np.ndarray:
+        return ndimage.map_coordinates(sm, (nib.affines.apply_affine(inv, np.atleast_2d(p)) - lo).T, order=1, mode="nearest")
+
+    keep = surf.outer & (surf.V[:, 2] > -70)          # not the faces where the halves meet; inside the template's volume
+    V, N = surf.V[keep], surf.N[keep]
+    ts = np.arange(-WALL_REACH_MM, WALL_REACH_MM + 1e-6, WALL_STEP_MM)
+    prof = np.stack([t2(V + t * N) for t in ts], 1)
+
+    def nearest(cross: np.ndarray) -> np.ndarray:
+        step = prof[:, 1:] - prof[:, :-1]
+        tc = np.where(cross, ts[:-1] + (FLUID_LEVEL - prof[:, :-1]) / np.where(np.abs(step) < 1e-6, 1e-6, step) * WALL_STEP_MM, np.nan)
+        j = np.argmin(np.where(np.isnan(tc), 1e9, np.abs(tc)), axis=1)
+        return tc[np.arange(len(V)), j]
+    own = nearest((prof[:, :-1] < FLUID_LEVEL) & (prof[:, 1:] >= FLUID_LEVEL))
+    far = nearest((prof[:, :-1] >= FLUID_LEVEL) & (prof[:, 1:] < FLUID_LEVEL))
+    has_own = ~np.isnan(own)
+    mask, mlo, mstep = surf._solid if surf._solid is not None else surf._solid_mask()
+    surf._solid = (mask, mlo, mstep)
+    cells = np.argwhere(mask)
+    solid = mlo + mstep * cells
+    solid = solid[solid[:, 2] > -70]
+    widths = []
+    for part, z in WIDTH_LEVELS:
+        # the fitted surface's section at this level: where its triangles' edges cross the plane
+        tv = surf.V[surf.T]
+        pts = []
+        for a, b in ((0, 1), (1, 2), (2, 0)):
+            pa, pb = tv[:, a], tv[:, b]
+            cr = (pa[:, 2] - z) * (pb[:, 2] - z) < 0
+            w = (z - pa[cr, 2]) / (pb[cr, 2] - pa[cr, 2])
+            pts.append(pa[cr] + w[:, None] * (pb[cr] - pa[cr]))
+        P = np.vstack(pts)
+        cy = (P[:, 1].min() + P[:, 1].max()) / 2
+        near = P[np.abs(P[:, 1] - cy) < 0.6]
+        model = float(near[:, 0].max() - near[:, 0].min())
+        # the template's tissue across the same line: from the midline out to the first fluid on each side
+        xs = np.arange(-40.0, 40.01, 0.25)
+        tis = t2(np.stack([xs, np.full_like(xs, cy), np.full_like(xs, z)], 1)) < FLUID_LEVEL
+        c = len(xs) // 2
+        a = b = c
+        while a > 0 and tis[a - 1]:
+            a -= 1
+        while b < len(xs) - 1 and tis[b + 1]:
+            b += 1
+        widths.append({"part": part, "z": z, "modelMm": round(model, 1), "templateMm": round(float(xs[b] - xs[a]), 1) if tis[c] else None})
+    vent = Surface({"Fourth ventricle": ventricle})
+    vmask, vlo, vstep = vent._solid_mask()
+    vent._solid = (vmask, vlo, vstep)
+    vcells = vlo + vstep * np.argwhere(vmask)
+    aimg = nib.load(AAN_FILE)
+    lab = np.asarray(aimg.dataobj).astype(int)
+    in_vent = {}
+    for abbr, codes in [(a, [c]) for c, (_, a) in AAN_MIDLINE.items()] + [(a, [7300 + k, 7400 + k]) for k, (_, a) in AAN_PAIRED.items()]:
+        P = nib.affines.apply_affine(aimg.affine, np.argwhere(np.isin(lab, codes)))
+        in_vent[abbr] = round(float(vent.inside(P).mean()), 3) if len(P) else 0.0
+    worst = max(in_vent, key=lambda k: in_vent[k])
+    return {
+        "ventricleFluidShare": round(float((t2(vcells) >= FLUID_LEVEL).mean()), 3),
+        "aanInVentricleMaxShare": in_vent[worst], "aanInVentricleWorst": worst,
+        "ownWallWithin1mmShare": round(float((np.abs(own[has_own]) <= 1).sum() / len(V)), 3),
+        "farWallWithin1mmShare": round(float((np.abs(far[~np.isnan(far)]) <= 1).sum() / len(V)), 3),
+        "ownWallSignedMedianMm": round(float(np.median(own[has_own])), 2),
+        "surfaceInFluidShare": round(float((t2(V) >= FLUID_LEVEL).mean()), 3),
+        "solidFluidShare": round(float((t2(solid) >= FLUID_LEVEL).mean()), 3),
+        "widths": widths,
+    }
 
 
 # ---------------------------------------------------------------- safe entry zones
@@ -936,7 +1032,21 @@ def validate() -> int:
         check(-80 < c["R"][2] < 15 and -75 < c["R"][1] < 15, f"{it['id']}: centroid {c['R']} outside the brainstem region")
     fit = m["fit"]
     check(fit["warpedMedianMm"] < 1.0, f"fit median {fit['warpedMedianMm']} mm")
+    # not too small: the corticospinal tract (built separately) runs inside the fitted pons and medulla
     check(fit.get("cstInsideShare", 0) > 0.9, f"corticospinal tract inside the fitted pons and medulla: {fit.get('cstInsideShare')}")
+    # not too large, and on the right wall (wall_check, against the T2 template itself): a model fitted to the far wall
+    # of the cisterns passed the two checks above and failed every one of these
+    check(fit.get("ownWallWithin1mmShare", 0) >= 0.4, f"surface within 1 mm of the brainstem's own tissue-fluid boundary: {fit.get('ownWallWithin1mmShare')}")
+    check(fit.get("farWallWithin1mmShare", 1) <= 0.15, f"surface within 1 mm of the cistern's far wall: {fit.get('farWallWithin1mmShare')}")
+    check(abs(fit.get("ownWallSignedMedianMm", 9)) <= 1.0, f"surface to its own boundary, signed median: {fit.get('ownWallSignedMedianMm')} mm")
+    check(fit.get("solidFluidShare", 1) <= 0.12, f"share of the fitted solid that is fluid on the template: {fit.get('solidFluidShare')}")
+    check(fit.get("ventricleFluidShare", 0) >= 0.7, f"share of the model's fourth ventricle that is fluid on the template: {fit.get('ventricleFluidShare')}")
+    check(fit.get("aanInVentricleMaxShare", 1) <= 0.15,
+          f"arousal nucleus inside the model's fourth ventricle: {fit.get('aanInVentricleWorst')} {fit.get('aanInVentricleMaxShare')}")
+    for w in fit.get("widths", []):
+        if w["templateMm"]:
+            check(0.8 <= w["modelMm"] / w["templateMm"] <= 1.25, f"{w['part']} at z {w['z']}: model {w['modelMm']} mm wide, template tissue {w['templateMm']} mm")
+    check(len(fit.get("widths", [])) == len(WIDTH_LEVELS), "the widths at four levels")
     check(0.85 < fit["scale"] < 1.2, f"fit scale {fit['scale']}")
     check(len(z["zones"]) >= 14, f"{len(z['zones'])} zones")
     for zz in z["zones"]:

@@ -17,6 +17,18 @@ describe('brainstem data', () => {
     expect(f.warpedP90Mm).toBeLessThan(3);
     expect(f.scale).toBeGreaterThan(0.9);
     expect(f.scale).toBeLessThan(1.1);
+    // on the brainstem's own surface, not on the far wall of the cisterns (as it was until November 2026: about 3 mm
+    // too large, 7 % of the surface on its own boundary and 34 % on the far wall), and not too small either
+    expect(f.cstInsideShare).toBeGreaterThan(0.9);
+    expect(f.ownWallWithin1mmShare).toBeGreaterThan(0.4);
+    expect(f.farWallWithin1mmShare).toBeLessThan(0.15);
+    expect(Math.abs(f.ownWallSignedMedianMm)).toBeLessThan(1);
+    expect(f.solidFluidShare).toBeLessThan(0.12);
+    // the model's fourth ventricle is fluid on the template, and no arousal nucleus lies in it
+    expect(f.ventricleFluidShare).toBeGreaterThan(0.7);
+    expect(f.aanInVentricleMaxShare).toBeLessThan(0.15);
+    expect(f.widths).toHaveLength(4);
+    for (const w of f.widths) if (w.templateMm) expect(w.modelMm / w.templateMm, `${w.part} z ${w.z}`).toBeGreaterThan(0.8), expect(w.modelMm / w.templateMm, `${w.part} z ${w.z}`).toBeLessThan(1.25);
     // the fitted model is kept symmetric (the AAN atlas is MNI-native, its own midline at x = 0.5)
     for (const s of BS_MANIFEST.structures.filter((x) => x.dataset === 'zanatomy')) {
       const c = s.centroid!;

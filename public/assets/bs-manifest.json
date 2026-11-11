@@ -8,7 +8,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_midbrain.glb",
-   "bytes": 80656,
+   "bytes": 81228,
    "colour": {
     "token": "bsSurface",
     "light": "#C9B8A6",
@@ -29,14 +29,14 @@
    "derivation": "Z-Anatomy mesh fitted into MNI space (brainstem_fit.py: similarity, then smooth deformation, to the T2 template's tissue-fluid boundary).",
    "centroid": {
     "L": [
-     -5.45,
-     -30.17,
-     -14.49
+     -5.78,
+     -28.75,
+     -14.25
     ],
     "R": [
-     5.45,
-     -30.17,
-     -14.49
+     5.78,
+     -28.75,
+     -14.25
     ]
    },
    "category": "surface",
@@ -49,7 +49,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_pons.glb",
-   "bytes": 135312,
+   "bytes": 134832,
    "colour": {
     "token": "bsSurface",
     "light": "#C9B8A6",
@@ -70,14 +70,14 @@
    "derivation": "Z-Anatomy mesh fitted into MNI space (brainstem_fit.py: similarity, then smooth deformation, to the T2 template's tissue-fluid boundary).",
    "centroid": {
     "L": [
-     -10.07,
-     -24.92,
-     -37.32
+     -9.22,
+     -29.8,
+     -36.83
     ],
     "R": [
-     10.07,
-     -24.92,
-     -37.32
+     9.22,
+     -29.8,
+     -36.83
     ]
    },
    "category": "surface",
@@ -90,7 +90,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_medulla.glb",
-   "bytes": 82052,
+   "bytes": 82236,
    "colour": {
     "token": "bsSurface",
     "light": "#C9B8A6",
@@ -111,14 +111,14 @@
    "derivation": "Z-Anatomy mesh fitted into MNI space (brainstem_fit.py: similarity, then smooth deformation, to the T2 template's tissue-fluid boundary).",
    "centroid": {
     "L": [
-     -6.82,
-     -35.46,
-     -57.48
+     -5.13,
+     -40.62,
+     -55.89
     ],
     "R": [
-     6.82,
-     -35.46,
-     -57.48
+     5.13,
+     -40.62,
+     -55.89
     ]
    },
    "category": "surface",
@@ -131,7 +131,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_olive.glb",
-   "bytes": 16400,
+   "bytes": 16184,
    "colour": {
     "token": "bsFeature",
     "light": "#8E7155",
@@ -152,14 +152,14 @@
    "derivation": "Z-Anatomy mesh fitted into MNI space (brainstem_fit.py: similarity, then smooth deformation, to the T2 template's tissue-fluid boundary).",
    "centroid": {
     "L": [
-     -9.4,
-     -31.88,
-     -56.45
+     -6.93,
+     -38.32,
+     -54.56
     ],
     "R": [
-     9.4,
-     -31.88,
-     -56.45
+     6.93,
+     -38.32,
+     -54.56
     ]
    },
    "category": "feature",
@@ -172,7 +172,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_pyramid.glb",
-   "bytes": 16452,
+   "bytes": 16320,
    "colour": {
     "token": "bsFeature",
     "light": "#8E7155",
@@ -193,14 +193,14 @@
    "derivation": "Z-Anatomy mesh fitted into MNI space (brainstem_fit.py: similarity, then smooth deformation, to the T2 template's tissue-fluid boundary).",
    "centroid": {
     "L": [
-     -3.62,
-     -27.65,
-     -56.69
+     -2.73,
+     -34.79,
+     -56.16
     ],
     "R": [
-     3.62,
-     -27.65,
-     -56.69
+     2.73,
+     -34.79,
+     -56.16
     ]
    },
    "category": "feature",
@@ -213,7 +213,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_superior_colliculus.glb",
-   "bytes": 9520,
+   "bytes": 9516,
    "colour": {
     "token": "bsFeature",
     "light": "#8E7155",
@@ -234,14 +234,14 @@
    "derivation": "Z-Anatomy mesh fitted into MNI space (brainstem_fit.py: similarity, then smooth deformation, to the T2 template's tissue-fluid boundary).",
    "centroid": {
     "L": [
-     -9.44,
-     -38.14,
-     -11.45
+     -7.69,
+     -34.71,
+     -9.73
     ],
     "R": [
-     9.44,
-     -38.14,
-     -11.45
+     7.69,
+     -34.71,
+     -9.73
     ]
    },
    "category": "feature",
@@ -254,7 +254,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_inferior_colliculus.glb",
-   "bytes": 9716,
+   "bytes": 9764,
    "colour": {
     "token": "bsFeature",
     "light": "#8E7155",
@@ -275,14 +275,14 @@
    "derivation": "Z-Anatomy mesh fitted into MNI space (brainstem_fit.py: similarity, then smooth deformation, to the T2 template's tissue-fluid boundary).",
    "centroid": {
     "L": [
-     -8.24,
-     -36.86,
-     -15.78
+     -6.83,
+     -34.65,
+     -14.7
     ],
     "R": [
-     8.24,
-     -36.86,
-     -15.78
+     6.83,
+     -34.65,
+     -14.7
     ]
    },
    "category": "feature",
@@ -295,7 +295,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_crus.glb",
-   "bytes": 69544,
+   "bytes": 70576,
    "colour": {
     "token": "bsFeature",
     "light": "#8E7155",
@@ -316,14 +316,14 @@
    "derivation": "Z-Anatomy mesh fitted into MNI space (brainstem_fit.py: similarity, then smooth deformation, to the T2 template's tissue-fluid boundary).",
    "centroid": {
     "L": [
-     -12.14,
-     -17.5,
-     -14.39
+     -14.66,
+     -17.22,
+     -17.01
     ],
     "R": [
-     12.14,
-     -17.5,
-     -14.39
+     14.66,
+     -17.22,
+     -17.01
     ]
    },
    "category": "feature",
@@ -357,14 +357,14 @@
    "derivation": "Z-Anatomy mesh fitted into MNI space (brainstem_fit.py: similarity, then smooth deformation, to the T2 template's tissue-fluid boundary).",
    "centroid": {
     "L": [
-     -17.43,
-     -33.25,
-     -11.72
+     -14.51,
+     -31.06,
+     -11.39
     ],
     "R": [
-     17.43,
-     -33.25,
-     -11.72
+     14.51,
+     -31.06,
+     -11.39
     ]
    },
    "category": "feature",
@@ -377,7 +377,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_fourth_ventricle.glb",
-   "bytes": 43000,
+   "bytes": 42784,
    "colour": {
     "token": "bsCsf",
     "light": "#3A7FB5",
@@ -398,14 +398,14 @@
    "derivation": "Cut at the midline (x = 0) into left and right halves. Z-Anatomy mesh fitted into MNI space (brainstem_fit.py: similarity, then smooth deformation, to the T2 template's tissue-fluid boundary).",
    "centroid": {
     "L": [
-     -4.58,
-     -41.59,
-     -45.29
+     -3.96,
+     -46.97,
+     -42.12
     ],
     "R": [
-     4.57,
-     -41.58,
-     -45.28
+     3.95,
+     -46.96,
+     -42.11
     ]
    },
    "category": "csf",
@@ -418,7 +418,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/brainstem/bs_aqueduct.glb",
-   "bytes": 6928,
+   "bytes": 6836,
    "colour": {
     "token": "bsCsf",
     "light": "#3A7FB5",
@@ -439,14 +439,14 @@
    "derivation": "Cut at the midline (x = 0) into left and right halves. Z-Anatomy mesh fitted into MNI space (brainstem_fit.py: similarity, then smooth deformation, to the T2 template's tissue-fluid boundary).",
    "centroid": {
     "L": [
-     -0.52,
-     -31.14,
-     -12.89
+     -0.48,
+     -31.24,
+     -11.57
     ],
     "R": [
-     0.52,
-     -31.38,
-     -13.3
+     0.56,
+     -30.84,
+     -10.58
     ]
    },
    "category": "csf",
@@ -459,7 +459,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_oculomotor.glb",
-   "bytes": 13464,
+   "bytes": 13488,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -480,14 +480,14 @@
    "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate.",
    "centroid": {
     "L": [
-     -2.08,
-     -28.48,
-     -18.08
+     -1.98,
+     -29.78,
+     -17.66
     ],
     "R": [
-     2.08,
-     -28.48,
-     -18.08
+     1.98,
+     -29.78,
+     -17.66
     ]
    },
    "category": "cnNucleus",
@@ -501,7 +501,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_edinger_westphal.glb",
-   "bytes": 13472,
+   "bytes": 13444,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -522,14 +522,14 @@
    "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate.",
    "centroid": {
     "L": [
-     -0.82,
-     -27.69,
-     -15.36
+     -0.78,
+     -28.63,
+     -14.45
     ],
     "R": [
-     0.82,
-     -27.69,
-     -15.36
+     0.78,
+     -28.63,
+     -14.45
     ]
    },
    "category": "cnNucleus",
@@ -543,7 +543,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_trochlear.glb",
-   "bytes": 13904,
+   "bytes": 13980,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -565,13 +565,13 @@
    "centroid": {
     "L": [
      -1.33,
-     -28.43,
-     -23.46
+     -31.59,
+     -23.52
     ],
     "R": [
      1.33,
-     -28.43,
-     -23.46
+     -31.59,
+     -23.52
     ]
    },
    "category": "cnNucleus",
@@ -585,7 +585,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_abducens.glb",
-   "bytes": 13908,
+   "bytes": 13884,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -606,14 +606,14 @@
    "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate.",
    "centroid": {
     "L": [
-     -2.06,
-     -30.33,
-     -46.19
+     -1.55,
+     -38.91,
+     -41.27
     ],
     "R": [
-     2.06,
-     -30.33,
-     -46.19
+     1.55,
+     -38.91,
+     -41.27
     ]
    },
    "category": "cnNucleus",
@@ -648,14 +648,14 @@
    "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate.",
    "centroid": {
     "L": [
-     -6.04,
-     -26.11,
-     -46.22
+     -4.34,
+     -32.75,
+     -43.91
     ],
     "R": [
-     6.04,
-     -26.11,
-     -46.22
+     4.34,
+     -32.75,
+     -43.91
     ]
    },
    "category": "cnNucleus",
@@ -669,7 +669,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_sup_salivatory.glb",
-   "bytes": 13940,
+   "bytes": 13948,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -690,14 +690,14 @@
    "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate.",
    "centroid": {
     "L": [
-     -7.85,
-     -27.38,
-     -48.3
+     -5.77,
+     -34.12,
+     -45.54
     ],
     "R": [
-     7.85,
-     -27.38,
-     -48.3
+     5.77,
+     -34.12,
+     -45.54
     ]
    },
    "category": "cnNucleus",
@@ -732,14 +732,14 @@
    "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate.",
    "centroid": {
     "L": [
-     -8.76,
-     -26.09,
-     -46.69
+     -6.6,
+     -32.68,
+     -44.13
     ],
     "R": [
-     8.76,
-     -26.09,
-     -46.69
+     6.6,
+     -32.68,
+     -44.13
     ]
    },
    "category": "cnNucleus",
@@ -753,7 +753,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_cochlear_post.glb",
-   "bytes": 16460,
+   "bytes": 16392,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -774,14 +774,14 @@
    "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate.",
    "centroid": {
     "L": [
-     -11.4,
-     -31.42,
-     -50.73
+     -9.02,
+     -38.22,
+     -46.86
     ],
     "R": [
-     11.4,
-     -31.42,
-     -50.73
+     9.02,
+     -38.22,
+     -46.86
     ]
    },
    "category": "cnNucleus",
@@ -795,7 +795,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_vestibular.glb",
-   "bytes": 23456,
+   "bytes": 23752,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -816,14 +816,14 @@
    "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate.",
    "centroid": {
     "L": [
-     -5.04,
-     -26.65,
-     -36.79
+     -4.56,
+     -33.0,
+     -33.9
     ],
     "R": [
-     5.04,
-     -26.65,
-     -36.79
+     4.56,
+     -33.0,
+     -33.9
     ]
    },
    "category": "cnNucleus",
@@ -837,7 +837,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_inf_salivatory.glb",
-   "bytes": 13956,
+   "bytes": 13940,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -858,14 +858,14 @@
    "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate.",
    "centroid": {
     "L": [
-     -7.75,
-     -27.54,
-     -50.01
+     -5.61,
+     -34.38,
+     -47.45
     ],
     "R": [
-     7.75,
-     -27.54,
-     -50.01
+     5.61,
+     -34.38,
+     -47.45
     ]
    },
    "category": "cnNucleus",
@@ -879,7 +879,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_ambiguus.glb",
-   "bytes": 13540,
+   "bytes": 13352,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -900,14 +900,14 @@
    "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate.",
    "centroid": {
     "L": [
-     -4.49,
-     -31.44,
-     -54.85
+     -3.02,
+     -38.47,
+     -53.03
     ],
     "R": [
-     4.49,
-     -31.44,
-     -54.85
+     3.02,
+     -38.47,
+     -53.03
     ]
    },
    "category": "cnNucleus",
@@ -921,7 +921,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_dorsal_vagal.glb",
-   "bytes": 13640,
+   "bytes": 13052,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -942,14 +942,14 @@
    "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate.",
    "centroid": {
     "L": [
-     -2.36,
-     -35.43,
-     -54.13
+     -1.57,
+     -42.01,
+     -52.31
     ],
     "R": [
-     2.36,
-     -35.43,
-     -54.13
+     1.57,
+     -42.01,
+     -52.31
     ]
    },
    "category": "cnNucleus",
@@ -963,7 +963,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_solitary.glb",
-   "bytes": 20472,
+   "bytes": 20272,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -984,14 +984,14 @@
    "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate.",
    "centroid": {
     "L": [
-     -2.83,
-     -35.67,
-     -56.1
+     -1.88,
+     -41.62,
+     -54.87
     ],
     "R": [
-     2.83,
-     -35.67,
-     -56.1
+     1.88,
+     -41.62,
+     -54.87
     ]
    },
    "category": "cnNucleus",
@@ -1005,7 +1005,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_accessory.glb",
-   "bytes": 26684,
+   "bytes": 26088,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -1026,14 +1026,14 @@
    "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate.",
    "centroid": {
     "L": [
-     -4.87,
-     -38.01,
-     -66.03
+     -2.89,
+     -43.48,
+     -65.92
     ],
     "R": [
-     4.87,
-     -38.01,
-     -66.03
+     2.89,
+     -43.48,
+     -65.92
     ]
    },
    "category": "cnNucleus",
@@ -1047,7 +1047,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_hypoglossal.glb",
-   "bytes": 13728,
+   "bytes": 13092,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -1068,14 +1068,14 @@
    "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate.",
    "centroid": {
     "L": [
-     -0.99,
-     -33.77,
-     -54.15
+     -0.66,
+     -41.08,
+     -52.22
     ],
     "R": [
-     0.99,
-     -33.77,
-     -54.15
+     0.66,
+     -41.08,
+     -52.22
     ]
    },
    "category": "cnNucleus",
@@ -1519,7 +1519,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_oculomotor_nerve.glb",
-   "bytes": 16532,
+   "bytes": 16548,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1540,14 +1540,14 @@
    "derivation": "Tube around the Z-Anatomy nerve's centre line (radius as the model draws it, at least 0.3 mm), fitted into MNI space with the brainstem; kept to 20 mm outside the brainstem. Its course inside the brainstem is the model's: approximate.",
    "centroid": {
     "L": [
-     -4.69,
-     -16.97,
-     -18.14
+     -4.52,
+     -18.97,
+     -19.35
     ],
     "R": [
-     4.69,
-     -16.97,
-     -18.14
+     4.52,
+     -18.97,
+     -19.35
     ]
    },
    "category": "nerve",
@@ -1560,7 +1560,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_trochlear_nerve.glb",
-   "bytes": 14180,
+   "bytes": 13036,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1581,14 +1581,14 @@
    "derivation": "Tube around the Z-Anatomy nerve's centre line (radius as the model draws it, at least 0.3 mm), fitted into MNI space with the brainstem; kept to 20 mm outside the brainstem. Its course inside the brainstem is the model's: approximate.",
    "centroid": {
     "L": [
-     -10.11,
-     -17.87,
-     -25.92
+     -8.71,
+     -21.05,
+     -27.82
     ],
     "R": [
-     10.11,
-     -17.87,
-     -25.92
+     8.71,
+     -21.05,
+     -27.82
     ]
    },
    "category": "nerve",
@@ -1601,7 +1601,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_trigeminal_nerve.glb",
-   "bytes": 61188,
+   "bytes": 59608,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1622,14 +1622,14 @@
    "derivation": "Tube around the Z-Anatomy nerve's centre line (radius as the model draws it, at least 0.3 mm), fitted into MNI space with the brainstem; kept to 20 mm outside the brainstem. Its course inside the brainstem is the model's: approximate.",
    "centroid": {
     "L": [
-     -8.86,
-     -27.58,
-     -39.05
+     -7.49,
+     -32.34,
+     -37.61
     ],
     "R": [
-     8.86,
-     -27.58,
-     -39.05
+     7.49,
+     -32.34,
+     -37.61
     ]
    },
    "category": "nerve",
@@ -1642,7 +1642,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_abducens_nerve.glb",
-   "bytes": 13540,
+   "bytes": 13116,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1663,14 +1663,14 @@
    "derivation": "Tube around the Z-Anatomy nerve's centre line (radius as the model draws it, at least 0.3 mm), fitted into MNI space with the brainstem; kept to 20 mm outside the brainstem. Its course inside the brainstem is the model's: approximate.",
    "centroid": {
     "L": [
-     -10.51,
-     -9.64,
-     -39.74
+     -8.65,
+     -15.72,
+     -41.88
     ],
     "R": [
-     10.51,
-     -9.64,
-     -39.74
+     8.65,
+     -15.72,
+     -41.88
     ]
    },
    "category": "nerve",
@@ -1683,7 +1683,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_facial_nerve.glb",
-   "bytes": 14168,
+   "bytes": 13748,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1704,14 +1704,14 @@
    "derivation": "Tube around the Z-Anatomy nerve's centre line (radius as the model draws it, at least 0.3 mm), fitted into MNI space with the brainstem; kept to 20 mm outside the brainstem. Its course inside the brainstem is the model's: approximate.",
    "centroid": {
     "L": [
-     -16.07,
-     -25.21,
-     -45.81
+     -13.71,
+     -32.31,
+     -43.93
     ],
     "R": [
-     16.07,
-     -25.21,
-     -45.81
+     13.71,
+     -32.31,
+     -43.93
     ]
    },
    "category": "nerve",
@@ -1724,7 +1724,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_vestibulocochlear_nerve.glb",
-   "bytes": 9596,
+   "bytes": 9504,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1745,14 +1745,14 @@
    "derivation": "Tube around the Z-Anatomy nerve's centre line (radius as the model draws it, at least 0.3 mm), fitted into MNI space with the brainstem; kept to 20 mm outside the brainstem. Its course inside the brainstem is the model's: approximate.",
    "centroid": {
     "L": [
-     -16.02,
-     -27.22,
-     -48.39
+     -14.5,
+     -33.82,
+     -45.37
     ],
     "R": [
-     16.02,
-     -27.22,
-     -48.39
+     14.5,
+     -33.82,
+     -45.37
     ]
    },
    "category": "nerve",
@@ -1765,7 +1765,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_glossopharyngeal_nerve.glb",
-   "bytes": 24252,
+   "bytes": 22684,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1786,14 +1786,14 @@
    "derivation": "Tube around the Z-Anatomy nerve's centre line (radius as the model draws it, at least 0.3 mm), fitted into MNI space with the brainstem; kept to 20 mm outside the brainstem. Its course inside the brainstem is the model's: approximate.",
    "centroid": {
     "L": [
-     -13.67,
-     -34.42,
-     -56.07
+     -11.71,
+     -40.69,
+     -53.64
     ],
     "R": [
-     13.67,
-     -34.42,
-     -56.07
+     11.71,
+     -40.69,
+     -53.64
     ]
    },
    "category": "nerve",
@@ -1806,7 +1806,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_vagus_nerve.glb",
-   "bytes": 25228,
+   "bytes": 22468,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1827,14 +1827,14 @@
    "derivation": "Tube around the Z-Anatomy nerve's centre line (radius as the model draws it, at least 0.3 mm), fitted into MNI space with the brainstem; kept to 20 mm outside the brainstem. Its course inside the brainstem is the model's: approximate.",
    "centroid": {
     "L": [
-     -12.7,
-     -31.7,
-     -55.48
+     -10.2,
+     -38.8,
+     -52.19
     ],
     "R": [
-     12.7,
-     -31.7,
-     -55.48
+     10.2,
+     -38.8,
+     -52.19
     ]
    },
    "category": "nerve",
@@ -1847,7 +1847,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_accessory_nerve.glb",
-   "bytes": 20032,
+   "bytes": 19664,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1868,14 +1868,14 @@
    "derivation": "Tube around the Z-Anatomy nerve's centre line (radius as the model draws it, at least 0.3 mm), fitted into MNI space with the brainstem; kept to 20 mm outside the brainstem. Its course inside the brainstem is the model's: approximate.",
    "centroid": {
     "L": [
-     -15.24,
-     -37.2,
-     -63.37
+     -12.53,
+     -43.46,
+     -62.51
     ],
     "R": [
-     15.24,
-     -37.2,
-     -63.37
+     12.53,
+     -43.46,
+     -62.51
     ]
    },
    "category": "nerve",
@@ -1888,7 +1888,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_cn_hypoglossal_nerve.glb",
-   "bytes": 29700,
+   "bytes": 28464,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1909,14 +1909,14 @@
    "derivation": "Tube around the Z-Anatomy nerve's centre line (radius as the model draws it, at least 0.3 mm), fitted into MNI space with the brainstem; kept to 20 mm outside the brainstem. Its course inside the brainstem is the model's: approximate.",
    "centroid": {
     "L": [
-     -9.19,
-     -29.94,
-     -58.75
+     -7.5,
+     -36.86,
+     -57.82
     ],
     "R": [
-     9.19,
-     -29.94,
-     -58.75
+     7.5,
+     -36.86,
+     -57.82
     ]
    },
    "category": "nerve",
@@ -1929,7 +1929,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_a_basilar_artery.glb",
-   "bytes": 3912,
+   "bytes": 3908,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1951,13 +1951,13 @@
    "centroid": {
     "L": [
      0.0,
-     -13.31,
-     -35.53
+     -16.45,
+     -38.33
     ],
     "R": [
      0.0,
-     -13.31,
-     -35.53
+     -16.45,
+     -38.33
     ]
    },
    "category": "artery",
@@ -1969,7 +1969,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_a_vertebral_artery.glb",
-   "bytes": 8712,
+   "bytes": 8384,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1990,14 +1990,14 @@
    "derivation": "Tube around the Z-Anatomy artery's centre line (radius as the model draws it), fitted into MNI space with the brainstem and kept to its course within 12 mm of the brainstem: approximate, and arteries vary between people.",
    "centroid": {
     "L": [
-     -12.43,
-     -31.22,
-     -57.61
+     -9.93,
+     -38.21,
+     -56.7
     ],
     "R": [
-     12.43,
-     -31.22,
-     -57.61
+     9.93,
+     -38.21,
+     -56.7
     ]
    },
    "category": "artery",
@@ -2009,7 +2009,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_a_posterior_cerebral_artery.glb",
-   "bytes": 59956,
+   "bytes": 46664,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2030,14 +2030,14 @@
    "derivation": "Tube around the Z-Anatomy artery's centre line (radius as the model draws it), fitted into MNI space with the brainstem and kept to its course within 12 mm of the brainstem: approximate, and arteries vary between people.",
    "centroid": {
     "L": [
-     -15.8,
-     -34.56,
-     -14.08
+     -15.06,
+     -30.66,
+     -15.52
     ],
     "R": [
-     15.8,
-     -34.56,
-     -14.08
+     15.06,
+     -30.66,
+     -15.52
     ]
    },
    "category": "artery",
@@ -2049,7 +2049,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_a_superior_cerebellar_artery.glb",
-   "bytes": 21488,
+   "bytes": 18500,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2070,14 +2070,14 @@
    "derivation": "Tube around the Z-Anatomy artery's centre line (radius as the model draws it), fitted into MNI space with the brainstem and kept to its course within 12 mm of the brainstem: approximate, and arteries vary between people.",
    "centroid": {
     "L": [
-     -12.86,
-     -34.05,
-     -22.17
+     -13.04,
+     -33.96,
+     -23.18
     ],
     "R": [
-     12.86,
-     -34.05,
-     -22.17
+     13.04,
+     -33.96,
+     -23.18
     ]
    },
    "category": "artery",
@@ -2089,7 +2089,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_a_anterior_inferior_cerebellar_artery.glb",
-   "bytes": 15916,
+   "bytes": 14980,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2110,14 +2110,14 @@
    "derivation": "Tube around the Z-Anatomy artery's centre line (radius as the model draws it), fitted into MNI space with the brainstem and kept to its course within 12 mm of the brainstem: approximate, and arteries vary between people.",
    "centroid": {
     "L": [
-     -19.13,
-     -29.9,
-     -47.2
+     -20.06,
+     -35.63,
+     -45.53
     ],
     "R": [
-     19.13,
-     -29.9,
-     -47.2
+     20.06,
+     -35.63,
+     -45.53
     ]
    },
    "category": "artery",
@@ -2129,7 +2129,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_a_posterior_inferior_cerebellar_artery.glb",
-   "bytes": 13956,
+   "bytes": 13780,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2150,14 +2150,14 @@
    "derivation": "Tube around the Z-Anatomy artery's centre line (radius as the model draws it), fitted into MNI space with the brainstem and kept to its course within 12 mm of the brainstem: approximate, and arteries vary between people.",
    "centroid": {
     "L": [
-     -15.33,
-     -46.28,
-     -57.04
+     -12.77,
+     -49.01,
+     -55.11
     ],
     "R": [
-     15.33,
-     -46.28,
-     -57.04
+     12.77,
+     -49.01,
+     -55.11
     ]
    },
    "category": "artery",
@@ -2169,7 +2169,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/brainstem/bs_a_posterior_communicating_artery.glb",
-   "bytes": 5264,
+   "bytes": 4768,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2190,14 +2190,14 @@
    "derivation": "Tube around the Z-Anatomy artery's centre line (radius as the model draws it), fitted into MNI space with the brainstem and kept to its course within 12 mm of the brainstem: approximate, and arteries vary between people.",
    "centroid": {
     "L": [
-     -9.49,
-     -4.68,
-     -19.32
+     -8.52,
+     -5.58,
+     -23.07
     ],
     "R": [
-     9.49,
-     -4.68,
-     -19.32
+     8.52,
+     -5.58,
+     -23.07
     ]
    },
    "category": "artery",
@@ -2209,7 +2209,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_perioculomotor.glb",
-   "bytes": 3392,
+   "bytes": 3384,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2230,14 +2230,14 @@
    "derivation": "A vertical line 6 mm long on the front of the midbrain, 2 mm lateral to where the model's oculomotor nerve leaves it (an incision parallel and lateral to the nerve, medial to the corticospinal fibres of the crus).",
    "centroid": {
     "L": [
-     -6.77,
-     -15.23,
-     -16.94
+     -8.76,
+     -14.95,
+     -19.63
     ],
     "R": [
-     6.77,
-     -15.23,
-     -16.94
+     8.76,
+     -14.95,
+     -19.63
     ]
    },
    "category": "sez",
@@ -2251,7 +2251,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_lateral_mesencephalic_sulcus.glb",
-   "bytes": 3652,
+   "bytes": 4040,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2272,14 +2272,14 @@
    "derivation": "The groove on the side of the midbrain between the crus (in front) and the tegmentum (behind): the posterior edge of the model's crus on its lateral surface, from below the medial geniculate body down to the pons.",
    "centroid": {
     "L": [
-     -14.61,
-     -26.98,
-     -18.77
+     -14.32,
+     -26.66,
+     -19.77
     ],
     "R": [
-     14.61,
-     -26.98,
-     -18.77
+     14.32,
+     -26.66,
+     -19.77
     ]
    },
    "category": "sez",
@@ -2293,7 +2293,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_supracollicular.glb",
-   "bytes": 3352,
+   "bytes": 3320,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2314,14 +2314,14 @@
    "derivation": "A transverse line just above the upper edge of the model's superior colliculus, from the midline 5 mm to each side (the length is illustrative; the incision's depth is limited by the aqueduct).",
    "centroid": {
     "L": [
-     -2.72,
-     -40.43,
-     -8.96
+     -2.77,
+     -36.48,
+     -6.41
     ],
     "R": [
-     2.72,
-     -40.43,
-     -8.96
+     2.77,
+     -36.48,
+     -6.41
     ]
    },
    "category": "sez",
@@ -2335,7 +2335,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_infracollicular.glb",
-   "bytes": 3116,
+   "bytes": 3244,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2356,14 +2356,14 @@
    "derivation": "A transverse line midway between the lower edge of the model's inferior colliculus and its trochlear nerve where that runs furthest back (leaving the back of the midbrain), from the midline 5 mm to each side (the length is illustrative).",
    "centroid": {
     "L": [
-     -2.45,
-     -40.58,
-     -22.38
+     -2.82,
+     -40.29,
+     -20.77
     ],
     "R": [
-     2.45,
-     -40.58,
-     -22.38
+     2.82,
+     -40.29,
+     -20.77
     ]
    },
    "category": "sez",
@@ -2377,7 +2377,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_supratrigeminal.glb",
-   "bytes": 3268,
+   "bytes": 3280,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2398,14 +2398,14 @@
    "derivation": "A vertical line 4 mm long on the front of the pons, starting just below the pontomesencephalic sulcus (the top of the model's pons there), in the sagittal plane of the oculomotor nerve's exit.",
    "centroid": {
     "L": [
-     -5.13,
-     -10.43,
-     -23.52
+     -6.92,
+     -11.66,
+     -26.88
     ],
     "R": [
-     5.13,
-     -10.43,
-     -23.52
+     6.92,
+     -11.66,
+     -26.88
     ]
    },
    "category": "sez",
@@ -2419,7 +2419,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_peritrigeminal.glb",
-   "bytes": 3964,
+   "bytes": 3664,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2440,14 +2440,14 @@
    "derivation": "A vertical line on the anterolateral pons, 3.5 mm medial to where the model's trigeminal nerve enters it, from that level halfway down towards the facial nerve's exit (between the nerve and the corticospinal fibres).",
    "centroid": {
     "L": [
-     -12.24,
-     -10.49,
-     -33.11
+     -9.95,
+     -14.6,
+     -33.77
     ],
     "R": [
-     12.24,
-     -10.49,
-     -33.11
+     9.95,
+     -14.6,
+     -33.77
     ]
    },
    "category": "sez",
@@ -2461,7 +2461,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_suprafacial.glb",
-   "bytes": 10340,
+   "bytes": 10436,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2482,14 +2482,14 @@
    "derivation": "On the floor of the fourth ventricle: a triangle with its base on the rostral margin of the facial colliculus, from 0.5 mm off the median sulcus (the medial longitudinal fasciculus) to the sulcus limitans, and its apex at the top of the floor. The facial colliculus is placed by the proportions measured in 40 cadavers (Erginoglu 2026): its rostral margin 43.6 % of the floor's length below the aqueduct, its caudal margin 43.3 % above the obex; the sulcus limitans 3.1 mm (right) and 3.0 mm (left) from the median sulcus (the same study).",
    "centroid": {
     "L": [
-     -1.13,
-     -34.13,
-     -33.99
+     -1.11,
+     -39.61,
+     -33.23
     ],
     "R": [
-     1.16,
-     -34.13,
-     -34.0
+     1.14,
+     -39.71,
+     -33.16
     ]
    },
    "category": "sez",
@@ -2503,7 +2503,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_infrafacial.glb",
-   "bytes": 7368,
+   "bytes": 6108,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2524,14 +2524,14 @@
    "derivation": "On the floor of the fourth ventricle: a triangle with its base on the caudal margin of the facial colliculus (median sulcus to sulcus limitans, placed as for the suprafacial triangle) and its apex next to the median sulcus at the top of the model's hypoglossal nucleus (the hypoglossal trigone).",
    "centroid": {
     "L": [
-     -1.07,
-     -31.3,
-     -47.09
+     -1.09,
+     -39.01,
+     -45.53
     ],
     "R": [
-     1.09,
-     -31.31,
-     -47.11
+     1.11,
+     -39.17,
+     -45.51
     ]
    },
    "category": "sez",
@@ -2545,7 +2545,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_median_sulcus.glb",
-   "bytes": 8416,
+   "bytes": 8484,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2566,14 +2566,14 @@
    "derivation": "On the floor of the fourth ventricle: a strip 0.8 mm to each side of the median sulcus, from the rostral margin of the facial colliculus to the top of the floor.",
    "centroid": {
     "L": [
-     -0.37,
-     -35.29,
-     -31.39
+     -0.36,
+     -38.56,
+     -30.66
     ],
     "R": [
-     0.37,
-     -35.29,
-     -31.39
+     0.36,
+     -38.56,
+     -30.66
     ]
    },
    "category": "sez",
@@ -2587,7 +2587,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_anterolateral_sulcus.glb",
-   "bytes": 4584,
+   "bytes": 4340,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2608,14 +2608,14 @@
    "derivation": "The groove in front of the olive along which the model's hypoglossal rootlets leave the medulla, drawn from the lowest rootlet down to the lower end of the model's medulla (where the first cervical rootlets begin).",
    "centroid": {
     "L": [
-     -7.49,
-     -35.37,
-     -67.36
+     -5.95,
+     -41.17,
+     -66.26
     ],
     "R": [
-     7.49,
-     -35.37,
-     -67.36
+     5.95,
+     -41.17,
+     -66.26
     ]
    },
    "category": "sez",
@@ -2629,7 +2629,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_olivary.glb",
-   "bytes": 30876,
+   "bytes": 36556,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2650,14 +2650,14 @@
    "derivation": "The surface of the medulla over the model's olive, between the preolivary sulcus in front and the postolivary sulcus behind.",
    "centroid": {
     "L": [
-     -12.05,
-     -31.59,
-     -56.81
+     -9.32,
+     -37.97,
+     -54.77
     ],
     "R": [
-     12.05,
-     -31.59,
-     -56.81
+     9.32,
+     -37.97,
+     -54.77
     ]
    },
    "category": "sez",
@@ -2671,7 +2671,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_postolivary_sulcus.glb",
-   "bytes": 4204,
+   "bytes": 4188,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2692,14 +2692,14 @@
    "derivation": "The groove behind the model's olive: its posterior edge on the surface of the medulla, from its upper to its lower end.",
    "centroid": {
     "L": [
-     -13.41,
-     -35.53,
-     -55.8
+     -10.05,
+     -41.67,
+     -53.64
     ],
     "R": [
-     13.41,
-     -35.53,
-     -55.8
+     10.05,
+     -41.66,
+     -53.64
     ]
    },
    "category": "sez",
@@ -2713,7 +2713,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_posterior_median_sulcus.glb",
-   "bytes": 4200,
+   "bytes": 3800,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2734,14 +2734,14 @@
    "derivation": "The midline groove on the back of the medulla, from just below the obex (the lower tip of the model's fourth ventricle) to the lower end of its medulla.",
    "centroid": {
     "L": [
-     -0.35,
-     -52.68,
-     -65.94
+     -0.32,
+     -51.9,
+     -65.51
     ],
     "R": [
-     0.35,
-     -52.68,
-     -65.94
+     0.32,
+     -51.9,
+     -65.51
     ]
    },
    "category": "sez",
@@ -2755,7 +2755,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_posterior_intermediate_sulcus.glb",
-   "bytes": 4204,
+   "bytes": 3932,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2776,14 +2776,14 @@
    "derivation": "The groove between the gracile and cuneate fasciculi on the back of the medulla, midway between the model's gracile and cuneate tubercles, from below the obex to the lower end of its medulla.",
    "centroid": {
     "L": [
-     -7.39,
-     -49.13,
-     -66.34
+     -5.16,
+     -49.75,
+     -65.45
     ],
     "R": [
-     7.39,
-     -49.13,
-     -66.34
+     5.16,
+     -49.75,
+     -65.45
     ]
    },
    "category": "sez",
@@ -2797,7 +2797,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/brainstem/sez_posterolateral_sulcus.glb",
-   "bytes": 3456,
+   "bytes": 3252,
    "colour": {
     "token": "bsSez",
     "light": "#278A36",
@@ -2818,14 +2818,14 @@
    "derivation": "The groove between the cuneate fasciculus and the spinal trigeminal tract, midway between the model's cuneate and trigeminal tubercles, from below the obex to the lower end of its medulla.",
    "centroid": {
     "L": [
-     -11.46,
-     -42.54,
-     -61.8
+     -7.99,
+     -46.03,
+     -61.12
     ],
     "R": [
-     11.46,
-     -42.54,
-     -61.8
+     7.99,
+     -46.03,
+     -61.12
     ]
    },
    "category": "sez",
@@ -2835,17 +2835,51 @@
   }
  ],
  "fit": {
-  "scale": 0.988,
-  "rotationDeg": 1.9,
-  "similarityMatchedShare": 0.38,
-  "similarityMedianMm": 1.03,
-  "warpedMatchedShare": 0.4,
-  "warpedMedianMm": 0.83,
-  "warpedP90Mm": 2.61,
-  "cstInsideShare": 0.985,
+  "scale": 1.05,
+  "rotationDeg": 7.8,
+  "similarityMatchedShare": 0.42,
+  "similarityMedianMm": 1.07,
+  "warpedMatchedShare": 0.48,
+  "warpedMedianMm": 0.64,
+  "warpedP90Mm": 1.94,
+  "cstInsideShare": 0.993,
   "cstLevels": [
    -55.0,
    -30.0
+  ],
+  "ventricleFluidShare": 0.856,
+  "aanInVentricleMaxShare": 0.04,
+  "aanInVentricleWorst": "DR",
+  "ownWallWithin1mmShare": 0.505,
+  "farWallWithin1mmShare": 0.076,
+  "ownWallSignedMedianMm": -0.19,
+  "surfaceInFluidShare": 0.495,
+  "solidFluidShare": 0.069,
+  "widths": [
+   {
+    "part": "midbrain",
+    "z": -14.0,
+    "modelMm": 32.5,
+    "templateMm": 36.2
+   },
+   {
+    "part": "pons",
+    "z": -30.0,
+    "modelMm": 37.3,
+    "templateMm": 35.8
+   },
+   {
+    "part": "pons",
+    "z": -38.0,
+    "modelMm": 42.4,
+    "templateMm": 41.0
+   },
+   {
+    "part": "medulla",
+    "z": -55.0,
+    "modelMm": 20.4,
+    "templateMm": 17.0
+   }
   ]
  },
  "datasets": {
