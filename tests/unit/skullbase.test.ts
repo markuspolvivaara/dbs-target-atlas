@@ -6,6 +6,7 @@ import { decodeSkull, defaultSkullState, encodeSkull } from '../../src/skullbase
 import { meshSoup, nodeExtentsX, nodeMeans, pointsInside } from './glb';
 import sbModifications from '../../src/data/generated/sb-modifications.json';
 import { FORAMEN_CONTENTS } from '../../src/skullbase/foramina';
+import { inBoneNote } from '../../src/ui/skullbase-atlas';
 import { TB_NOTES, TB_REF, TB_REFS } from '../../src/skullbase/temporal';
 import { APPROACH_REF, APPROACH_REFS, APPROACHES, CAVERNOUS_INFO, ENDONASAL_INFO } from '../../src/skullbase/approaches';
 
@@ -90,6 +91,28 @@ describe('skull-base data (Z-Anatomy export)', () => {
     expect(pointsInside(nerve.P, bone.P, bone.T) / (nerve.P.length / 3)).toBeLessThan(0.01);
     expect(SB_MANIFEST.structures.find((x) => x.name === 'Hypoglossal nerve (XII)')!.derivation).toContain('Led through the canal');
   }, 60_000);
+  it('a vessel or nerve that runs inside the model’s bone says so on its card, with how much and where', () => {
+    // (the audit's finding MC-11: Z-Anatomy's bones have few canals and grooves, so its curves run through the bone
+    // meshes; pipeline/skullbase_v1_inbone.py measures every tube against every bone)
+    const noted = SB_MANIFEST.structures.filter((x) => x.inBone);
+    expect(noted.length).toBeGreaterThanOrEqual(20);
+    expect(noted.length).toBeLessThanOrEqual(40);
+    for (const x of noted) {
+      expect(x.type, x.name).toBe('tube');
+      expect(x.inBone!.share >= 0.05 || x.inBone!.deepestMm >= 2, x.name).toBe(true);
+      expect(x.inBone!.bones.length, x.name).toBeGreaterThan(0);
+      for (const b of x.inBone!.bones) expect(SB_MANIFEST.structures.some((y) => y.type === 'bone' && y.name === b), `${x.name}: ${b}`).toBe(true);
+    }
+    const of = (n: string) => SB_MANIFEST.structures.find((x) => x.name === n)!.inBone;
+    // the carotid through a petrous bone without a canal; the labyrinth's nerves inside the temporal bone
+    expect(of('Internal carotid artery')!.bones).toEqual(expect.arrayContaining(['Sphenoid bone', 'Temporal bone']));
+    expect(of('Cochlear nerve')!.share).toBeGreaterThan(0.5);
+    // what the project has moved out of the bone carries no note: the hypoglossal nerve, the cortical arteries
+    for (const n of ['Hypoglossal nerve (XII)', 'Pericallosal artery', 'Callosomarginal artery', 'Artery of central sulcus']) expect(of(n), n).toBeUndefined();
+    const note = inBoneNote(of('Internal carotid artery')!);
+    expect(note).toMatch(/^\d+% of this tube’s surface lies more than 0\.5 mm inside the sphenoid bone and the temporal bone as Z-Anatomy draws them \(up to \d+\.\d mm deep\)\./);
+    expect(inBoneNote({ share: 0.004, deepestMm: 2.1, bones: ['Sphenoid bone'] })).toMatch(/^A short stretch of this tube lies inside the sphenoid bone as Z-Anatomy draws it/);
+  });
   it('the telovelar view has the floor’s landmarks, the retrosigmoid the tentorium, and the chiasm is a drawn crossing', () => {
     const tv = SB_GROUPS.find((g) => g.id === 'telovelar')!;
     const names = tv.landmarks.map((id) => LANDMARKS.find((l) => l.id === id)!.name);

@@ -39,7 +39,15 @@
     ]
    },
    "cranialNerve": 6,
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.151,
+    "deepestMm": 1.4,
+    "bones": [
+     "Occipital bone",
+     "Sphenoid bone"
+    ]
+   }
   },
   {
    "id": "sb_accessory_branch_of_middle_meningeal_artery",
@@ -78,7 +86,14 @@
     ]
    },
    "system": "Middle meningeal artery",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.054,
+    "deepestMm": 1.0,
+    "bones": [
+     "Sphenoid bone"
+    ]
+   }
   },
   {
    "id": "sb_accessory_nerve_xi",
@@ -193,7 +208,15 @@
     ]
    },
    "system": "Middle cerebral artery",
-   "intracranialFraction": 0.09
+   "intracranialFraction": 0.09,
+   "inBone": {
+    "share": 0.081,
+    "deepestMm": 1.5,
+    "bones": [
+     "Maxilla",
+     "Frontal bone"
+    ]
+   }
   },
   {
    "id": "sb_angular_vein",
@@ -231,7 +254,14 @@
      -12.56
     ]
    },
-   "intracranialFraction": 0.06
+   "intracranialFraction": 0.06,
+   "inBone": {
+    "share": 0.176,
+    "deepestMm": 1.1,
+    "bones": [
+     "Maxilla"
+    ]
+   }
   },
   {
    "id": "sb_anterior_cerebral_artery",
@@ -386,7 +416,16 @@
     ]
    },
    "system": "Ethmoidal arteries",
-   "intracranialFraction": 0.86
+   "intracranialFraction": 0.86,
+   "inBone": {
+    "share": 0.272,
+    "deepestMm": 1.9,
+    "bones": [
+     "Frontal bone",
+     "Maxilla",
+     "Ethmoid bone"
+    ]
+   }
   },
   {
    "id": "sb_anterior_inferior_cerebellar_artery",
@@ -426,7 +465,14 @@
    },
    "system": "Basilar artery",
    "intracranialFraction": 1.0,
-   "morph": true
+   "morph": true,
+   "inBone": {
+    "share": 0.098,
+    "deepestMm": 2.4,
+    "bones": [
+     "Occipital bone"
+    ]
+   }
   },
   {
    "id": "sb_anterior_intercavernous_sinus",
@@ -698,7 +744,15 @@
     ]
    },
    "system": "Basilar artery",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.333,
+    "deepestMm": 1.9,
+    "bones": [
+     "Sphenoid bone",
+     "Occipital bone"
+    ]
+   }
   },
   {
    "id": "sb_branch_to_angular_gyrus",
@@ -852,7 +906,14 @@
     ]
    },
    "cranialNerve": 8,
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.916,
+    "deepestMm": 4.0,
+    "bones": [
+     "Temporal bone"
+    ]
+   }
   },
   {
    "id": "sb_distal_lateral_striate_branches",
@@ -1005,7 +1066,14 @@
     ]
    },
    "cranialNerve": 7,
-   "intracranialFraction": 0.39
+   "intracranialFraction": 0.39,
+   "inBone": {
+    "share": 0.092,
+    "deepestMm": 4.9,
+    "bones": [
+     "Temporal bone"
+    ]
+   }
   },
   {
    "id": "sb_facial_vein",
@@ -1385,7 +1453,15 @@
      -17.2
     ]
    },
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.071,
+    "deepestMm": 1.0,
+    "bones": [
+     "Occipital bone",
+     "Sphenoid bone"
+    ]
+   }
   },
   {
    "id": "sb_inferior_sagittal_sinus",
@@ -1501,7 +1577,15 @@
     ]
    },
    "system": "Internal carotid artery",
-   "intracranialFraction": 0.62
+   "intracranialFraction": 0.62,
+   "inBone": {
+    "share": 0.235,
+    "deepestMm": 4.5,
+    "bones": [
+     "Sphenoid bone",
+     "Temporal bone"
+    ]
+   }
   },
   {
    "id": "sb_lacrimal_bone",
@@ -1616,7 +1700,14 @@
     ]
    },
    "system": "Basilar artery",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.287,
+    "deepestMm": 1.5,
+    "bones": [
+     "Sphenoid bone"
+    ]
+   }
   },
   {
    "id": "sb_lingual_vein",
@@ -1769,7 +1860,14 @@
     ]
    },
    "system": "Maxillary artery",
-   "intracranialFraction": 0.22
+   "intracranialFraction": 0.22,
+   "inBone": {
+    "share": 0.566,
+    "deepestMm": 4.6,
+    "bones": [
+     "Maxilla"
+    ]
+   }
   },
   {
    "id": "sb_maxillary_nerve_v2",
@@ -1808,7 +1906,14 @@
     ]
    },
    "cranialNerve": 5,
-   "intracranialFraction": 0.46
+   "intracranialFraction": 0.46,
+   "inBone": {
+    "share": 0.071,
+    "deepestMm": 2.3,
+    "bones": [
+     "Maxilla"
+    ]
+   }
   },
   {
    "id": "sb_maxillary_veins",
@@ -1885,7 +1990,14 @@
     ]
    },
    "system": "Basilar artery",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.5,
+    "deepestMm": 2.2,
+    "bones": [
+     "Sphenoid bone"
+    ]
+   }
   },
   {
    "id": "sb_middle_cerebral_artery_m1_segment",
@@ -2002,7 +2114,14 @@
     ]
    },
    "system": "Middle meningeal artery",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.254,
+    "deepestMm": 2.5,
+    "bones": [
+     "Sphenoid bone"
+    ]
+   }
   },
   {
    "id": "sb_nasal_bone",
@@ -2151,7 +2270,14 @@
      -22.12
     ]
    },
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.22,
+    "deepestMm": 3.6,
+    "bones": [
+     "Occipital bone"
+    ]
+   }
   },
   {
    "id": "sb_occipital_vein",
@@ -2384,7 +2510,14 @@
     ]
    },
    "cranialNerve": 2,
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.035,
+    "deepestMm": 2.1,
+    "bones": [
+     "Sphenoid bone"
+    ]
+   }
   },
   {
    "id": "sb_orbitofrontal_branches_of_anterior_cerebral_artery",
@@ -2807,7 +2940,14 @@
     ]
    },
    "system": "Ethmoidal arteries",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.316,
+    "deepestMm": 1.7,
+    "bones": [
+     "Ethmoid bone"
+    ]
+   }
   },
   {
    "id": "sb_posterior_inferior_cerebellar_artery",
@@ -2924,7 +3064,17 @@
     ]
    },
    "system": "Maxillary artery",
-   "intracranialFraction": 0.54
+   "intracranialFraction": 0.54,
+   "inBone": {
+    "share": 0.178,
+    "deepestMm": 2.4,
+    "bones": [
+     "Palatine bone",
+     "Ethmoid bone",
+     "Inferior nasal concha bone",
+     "Maxilla"
+    ]
+   }
   },
   {
    "id": "sb_posterior_parietal_artery",
@@ -3002,7 +3152,14 @@
     ]
    },
    "system": "Maxillary artery",
-   "intracranialFraction": 0.23
+   "intracranialFraction": 0.23,
+   "inBone": {
+    "share": 0.112,
+    "deepestMm": 1.8,
+    "bones": [
+     "Maxilla"
+    ]
+   }
   },
   {
    "id": "sb_posterior_temporal_branch",
@@ -3195,7 +3352,14 @@
      -14.83
     ]
    },
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.346,
+    "deepestMm": 2.7,
+    "bones": [
+     "Temporal bone"
+    ]
+   }
   },
   {
    "id": "sb_sinus_of_frontal_bone",
@@ -3460,7 +3624,14 @@
    },
    "system": "Basilar artery",
    "intracranialFraction": 1.0,
-   "morph": true
+   "morph": true,
+   "inBone": {
+    "share": 0.026,
+    "deepestMm": 2.3,
+    "bones": [
+     "Sphenoid bone"
+    ]
+   }
   },
   {
    "id": "sb_superior_labial_vein",
@@ -3536,7 +3707,14 @@
      11.65
     ]
    },
-   "intracranialFraction": 0.99
+   "intracranialFraction": 0.99,
+   "inBone": {
+    "share": 0.126,
+    "deepestMm": 1.3,
+    "bones": [
+     "Frontal bone"
+    ]
+   }
   },
   {
    "id": "sb_superior_petrosal_sinus",
@@ -3574,7 +3752,14 @@
      -1.18
     ]
    },
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.208,
+    "deepestMm": 1.8,
+    "bones": [
+     "Temporal bone"
+    ]
+   }
   },
   {
    "id": "sb_superior_sagittal_sinus",
@@ -3612,7 +3797,17 @@
      51.11
     ]
    },
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.163,
+    "deepestMm": 1.9,
+    "bones": [
+     "Ethmoid bone",
+     "Occipital bone",
+     "Frontal bone",
+     "Parietal bone"
+    ]
+   }
   },
   {
    "id": "sb_temporal_bone",
@@ -3802,7 +3997,16 @@
      -4.85
     ]
    },
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.223,
+    "deepestMm": 1.7,
+    "bones": [
+     "Occipital bone",
+     "Temporal bone",
+     "Parietal bone"
+    ]
+   }
   },
   {
    "id": "sb_trigeminal_nerve_v",
@@ -3997,7 +4201,14 @@
     ]
    },
    "cranialNerve": 8,
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.682,
+    "deepestMm": 4.1,
+    "bones": [
+     "Temporal bone"
+    ]
+   }
   },
   {
    "id": "sb_vestibulocochlear_nerve_viii",

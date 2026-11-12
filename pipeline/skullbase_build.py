@@ -620,6 +620,15 @@ def validate() -> int:
             check(r["inBoneAfterMm"] <= 1.0, f"hypoglossal nerve {sd}: {r['inBoneAfterMm']} mm of its centre line in the occipital bone")
         it = next((x for x in m["structures"] if x["name"] == "Hypoglossal nerve (XII)"), None)
         check(it is not None and "Led through the canal" in it.get("derivation", ""), "the hypoglossal nerve's derivation does not say it was moved")
+        # every vessel and nerve measured against the bones (skullbase_v1_inbone.py, the last step: a rebuild that skips it
+        # leaves no entry). The ones the project has moved out of the bone carry no note; the carotid, which Z-Anatomy
+        # draws through a petrous bone without a canal, does (the audit's finding MC-11)
+        noted = {x["name"]: x["inBone"] for x in m["structures"] if x.get("inBone")}
+        check(10 <= len(noted) <= 45, f"{len(noted)} vessels and nerves noted as lying in the model's bone (skullbase_v1_inbone.py not run?)")
+        check("Hypoglossal nerve (XII)" not in noted and not any(n in noted for n in moved), "a structure moved out of the bone is still noted as lying in it")
+        check("Internal carotid artery" in noted and {"Sphenoid bone", "Temporal bone"} <= set(noted.get("Internal carotid artery", {}).get("bones", [])),
+              "the internal carotid artery is not noted as running in the sphenoid and temporal bones")
+        check(all(0 <= r["share"] <= 1 and r["deepestMm"] >= 0.5 and r["bones"] for r in noted.values()), "an in-bone note without a share, a depth or a bone")
         # the temporal-bone views (skullbase_v1_ear.py): Z-Anatomy's ear, and what it lacks drawn by rule, on both sides
         names = {it["name"]: it for it in m["structures"]}
         for n_ in ("Cochlea", "Vestibule and semicircular canals", "Malleus", "Incus", "Stapes", "Tympanic membrane", "Greater petrosal nerve"):

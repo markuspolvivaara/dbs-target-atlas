@@ -135,6 +135,17 @@ const subLabel = (g: Subgroup) => {
 const tokenOf = (id: string) => SB.get(id)?.colour.token ?? 'ctx';
 
 /** The 3D page of the skull-base section: groups, structure and landmark cards, layers and the cut-away. */
+/** A vessel or nerve of the Z-Anatomy model whose tube runs inside the model's bone meshes: how much, how deep, where
+ * (pipeline/skullbase_v1_inbone.py), and why (the model's bones have few canals and grooves). */
+export function inBoneNote(b: { share: number; deepestMm: number; bones: string[] }): string {
+  const pct = Math.round(100 * b.share);
+  const bones = b.bones.map((n) => `the ${n.toLowerCase()}`);
+  const where = bones.length > 1 ? `${bones.slice(0, -1).join(', ')} and ${bones[bones.length - 1]}` : bones[0] ?? 'a bone';
+  const much = pct >= 1 ? `${pct}% of this tube’s surface lies more than 0.5 mm inside` : 'A short stretch of this tube lies inside';
+  return `${much} ${where} as Z-Anatomy draws ${bones.length > 1 ? 'them' : 'it'} (up to ${b.deepestMm.toFixed(1)} mm deep). `
+    + 'Z-Anatomy draws its vessels and nerves and its bones separately, and its bones have few of the canals and grooves they run in: what is shown is the curve as drawn, not a course through a canal.';
+}
+
 export class SkullbaseAtlasPage {
   readonly el: HTMLElement;
   viewer!: Viewer<SkullState, SkullPlan>;
@@ -486,6 +497,7 @@ export class SkullbaseAtlasPage {
         notesList(st.name) ? [h('dt', {}, 'Notes'), h('dd', {}, notesList(st.name))] : null,
         SB_MODEL === 'v3' ? this.measured(st.name) : null,
         regions.length ? [h('dt', {}, 'Near (measured in the model)'), h('dd', {}, regions.join('; '))] : null,
+        st.inBone ? [h('dt', {}, 'In the model’s bone (measured)'), h('dd', {}, inBoneNote(st.inBone))] : null,
         st.type === 'bone' ? [h('dt', {}, 'Labelled landmarks'), h('dd', {}, `${LANDMARKS.filter((l) => l.bone === st.name).length}; open the bone’s group to see them.`)] : null,
         h('dt', {}, 'Geometry'), h('dd', {}, `${st.source}. ${st.derivation} `, h('a', { href: '#/credits' }, 'Licence and attribution'))));
   }

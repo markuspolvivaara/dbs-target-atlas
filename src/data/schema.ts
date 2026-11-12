@@ -157,6 +157,10 @@ export const ManifestStructureSchema = z.object({
   hcp: z.enum(['confirmed', 'likely']).optional(),
   /** skull-base section: share of the line inside the cranial bones' convex hull (measured) */
   intracranialFraction: z.number().optional(),
+  /** skull base, the Z-Anatomy model: how much of a vessel's or nerve's tube lies inside the model's bone meshes
+   * (pipeline/skullbase_v1_inbone.py): the share of its surface vertices more than 0.5 mm inside one, the deepest
+   * (mm), and the bones concerned. Present where the share is at least 5 % or the deepest at least 2 mm */
+  inBone: z.object({ share: z.number().min(0).max(1), deepestMm: z.number(), bones: z.array(z.string()) }).optional(),
   /** skull-base section: the cranial nerve (1-12) a nerve or nerve branch belongs to */
   cranialNerve: z.number().int().min(1).max(12).optional(),
   /** skull-base section: the arterial system an artery is listed under (its trunk's name) */

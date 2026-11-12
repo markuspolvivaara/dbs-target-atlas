@@ -456,6 +456,12 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
     is found as the open space the bone encloses beside its label (6 mm long, 2.5 mm across), the rootlets are
     gathered in front of its inner opening, and the trunk follows its axis and is back on Z-Anatomy's curve 8 mm
     beyond the bone (moved up to 9.1 mm). Beyond that, and at the medulla, it is as Z-Anatomy has it.
+  - Z-Anatomy's bones have few of the canals and grooves its vessels and nerves run in (no carotid canal through
+    the petrous bone, no facial canal, a cribriform plate without holes), so many of its curves run through the bone
+    meshes. Every tube is measured against every bone (`pipeline/skullbase_v1_inbone.py`, the last step of v1's
+    chain: each bone on a 0.4 mm grid), and the 28 that have 5% or more of their surface over 0.5 mm inside a bone,
+    or a point 2 mm deep, say so on their card with the share, the depth and the bones (the cochlear nerve 92%, the
+    maxillary artery 57%, the basilar artery 33%, the internal carotid 24%, up to 4.5 mm deep). They are not moved.
     Its chiasm, two pads, is redrawn by v3's rule (Mncube 2019's mean width and height) as a crossing, with the
     optic tracts' first part.
   - The retrosigmoid view is seen nearly level with the porus (on this skull the opening lies level with it).
