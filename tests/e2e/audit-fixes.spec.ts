@@ -531,3 +531,28 @@ for (const section of ['tracts', 'cortex', 'brainstem', 'ventricles', 'vascular'
     expect(g.errors).toEqual([]);
   });
 }
+
+// A write of the address that fell due just as the reader followed a link put the old view's hash back before the page
+// had heard of the change, and the link did nothing. Seen on a slow CI runner: Coordinates never came up after Imaging.
+test('a link followed just as the page is about to write its address is not undone', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './dbs/#/imaging?t=vim');
+  await expect(page.locator('.page:not([hidden]) .card h2')).toHaveText('Ventral intermediate nucleus');
+  for (const wait of [0, 3, 30, 60]) {
+    await page.evaluate((ms) => {
+      // another target: the page will write its address in a moment. It is kept busy until that write is due, and
+      // the address changes before the write can run
+      const chip = [...document.querySelectorAll<HTMLElement>('.page:not([hidden]) .chips .chip')].find((c) => c.getAttribute('aria-pressed') !== 'true')!;
+      chip.click();
+      const t = performance.now();
+      while (performance.now() - t < ms) { /* busy */ }
+      location.hash = '#/coords';
+    }, wait);
+    await expect(page.locator('body'), `link followed ${wait} ms after a change`).toHaveAttribute('data-page', 'coords');
+    await expect(page.locator('#acpc')).toBeVisible();
+    expect(new URL(page.url()).hash).toMatch(/^#\/coords/);
+    await page.evaluate(() => { location.hash = '#/imaging?t=vim'; });
+    await expect(page.locator('body')).toHaveAttribute('data-page', 'imaging');
+  }
+  expect(g.errors).toEqual([]);
+});
