@@ -163,17 +163,43 @@ export const V3_FIT = z.object({
     /** per artery and side: how far the opening and the lifts move it at most */
     vesselsMovedMaxMm: z.record(z.record(z.object({ open: z.number(), lift: z.number(), lsoLift: z.number() }))),
     m1LengthMm: z.record(z.number()),
+    /** the tentorium the cerebrum's fit and the hindbrain's share: a surface through this CT's own transverse sinuses,
+     * straight sinus and petrous ridges (pipeline/skullbase_v3_tentorium.py), and how far the fitted Z-Anatomy
+     * tentorium, which the fits used before, lies from those */
+    tentorium: z.object({
+      anchors: z.object({ transverseSinus: z.number(), straightSinus: z.number(), petrousRidge: z.number() }),
+      anchorMissMm: z.object({ median: z.number(), max: z.number() }),
+      fittedAboveTransverseSinusRMm: z.number(), fittedAboveTransverseSinusLMm: z.number(),
+      fittedBelowStraightSinusMm: z.object({ median: z.number(), max: z.number() }),
+    }).optional(),
+  }).optional(),
+  /** the petrosal sinuses laid onto this CT's bone (pipeline/skullbase_v3_petrosal.py), by sinus id and side */
+  petrosal: z.record(z.record(z.object({ lengthMm: z.number(), inBoneMm: z.number(), inBoneBeforeMm: z.number() }))).optional(),
+  /** the smoothed fitted courses' corners (turns of more than 70 degrees over 4 mm), by artery and side */
+  fittedCourses: z.record(z.record(z.object({ cornersOver70: z.number(), sharpestDeg: z.number() }))).optional(),
+  /** every vessel and nerve against the bone as drawn: the share of its surface vertices more than 0.25 mm inside it */
+  drawnBone: z.record(z.record(z.object({ share: z.number(), deepestMm: z.number() }))).optional(),
+  /** the cerebrum and the cerebellum as built, against each other and the tentorium between them (on a 1 mm grid) */
+  tentorium: z.object({
+    overlapMl: z.number(), cerebrumUnderSheetMl: z.number(), cerebellumOverSheetMl: z.number(),
+    sinusInCerebrumShare: z.number(), sinusInCerebellumShare: z.number(),
   }).optional(),
   /** the cerebellum, brainstem and fourth ventricle fitted into the posterior fossa, and the telovelar shape
    * (pipeline/skullbase_pfossa.py) */
   pfossa: z.object({
     fit: z.object({
       tableMedianMm: z.number(), vesselInsideShare: z.number(), boneInsideHullShare: z.number(), tentoriumInsideShare: z.number(),
+      /** how far the hull lies from its place under the tentorium (the median) */
+      tentoriumMedianMm: z.number().optional(),
+      /** the share of this CT's cistern points (fluid along the posterior fossa's bone) that lie inside the model */
+      cisternInsideShare: z.number().optional(),
       minRelativeVolume: z.number(), affineScale: z.array(z.number()),
-      before: z.object({ tableMedianMm: z.number(), vesselInsideShare: z.number() }),
+      before: z.object({ tableMedianMm: z.number(), vesselInsideShare: z.number(), cisternInsideShare: z.number().optional() }),
     }),
     clear: z.object({ inVesselBefore: z.number(), inBoneBefore: z.number(), inVesselAfter: z.number(), inBoneAfter: z.number(), maxMovedMm: z.number() }),
     modelMl: z.number(),
+    /** the fluid this CT shows within 8 mm of the posterior fossa's bone (its cisterns), ml */
+    cisternMl: z.number().optional(),
     telovelar: z.object({ maxMovedMm: z.number(), inBoneAfter: z.number(), inVesselAfter: z.number(),
       tonsilToMedullaMm: z.object({ rest: z.number(), moved: z.number() }), vermisLiftMm: z.number(),
       uvulaToMedullaMm: z.object({ rest: z.number(), moved: z.number() }), inVentricle: z.object({ rest: z.number(), moved: z.number() }) }),

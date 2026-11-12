@@ -11,11 +11,21 @@ const norm = (a: V) => Math.hypot(...a);
 const at = (P: V[], y: number) => P.reduce((b, p) => (Math.abs(p[1] - y) < Math.abs(b[1] - y) ? p : b));
 
 describe('the cavernous sinus modelled on this CT (Skull base v3)', () => {
+  it('the two sides are of like size (the right one was half as large again as the left, by the part of it in air)', () => {
+    const r = CAVERNOUS.R.sinus.mm3 / CAVERNOUS.L.sinus.mm3;
+    expect(r).toBeGreaterThan(0.75);
+    expect(r).toBeLessThan(1.33);
+  });
   for (const side of ['R', 'L'] as const) {
     const c = CAVERNOUS[side], s = side === 'R' ? 1 : -1;
     it(`${side}: a sinus and a cavernous carotid of plausible size, on its own side`, () => {
       expect(c.sinus.mm3).toBeGreaterThan(300);
       expect(c.sinus.mm3).toBeLessThan(3000);
+      // none of it in the sphenoid sinus's air (a third of the right one was: the sinus's lateral wall is too thin there
+      // for the CT's bone mask, and "off the bone" alone let the venous space run on into the air)
+      const sinus = (data as unknown as { sinus: Record<'R' | 'L', { airShare: number; offAirMm: number }> }).sinus[side];
+      expect(sinus.airShare).toBeLessThanOrEqual(0.01);
+      expect(sinus.offAirMm).toBeGreaterThan(0.5);
       expect(c.carotid.lengthMm).toBeGreaterThan(10);
       expect(c.carotid.lengthMm).toBeLessThan(35);
       for (const p of c.carotid.line) expect(s * p[0]).toBeGreaterThan(0);

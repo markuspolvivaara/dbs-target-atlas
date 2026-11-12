@@ -231,14 +231,14 @@ def resample(run: np.ndarray) -> np.ndarray:
     return run[keep]
 
 
-def tube(run: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+def tube(run: np.ndarray, sides: int | None = None) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Triangle tube around a centre line with per-point radius; closed with flat end caps.
-    Returns positions, normals, triangles."""
+    Returns positions, normals, triangles. `sides`: the rings' corners (8 from 0.8 mm radius on, else 6, if not given)."""
     run = resample(run)
     if len(run) < 2:
         return np.zeros((0, 3)), np.zeros((0, 3)), np.zeros((0, 3), int)
     P, R = run[:, :3], np.maximum(run[:, 3], TUBE_MIN_RADIUS_MM)
-    sides = 8 if R.max() >= 0.8 else 6
+    sides = sides or (8 if R.max() >= 0.8 else 6)
     T = np.gradient(P, axis=0)
     T /= np.linalg.norm(T, axis=1, keepdims=True) + 1e-12
     # parallel-transport frames (no twisting along the tube)

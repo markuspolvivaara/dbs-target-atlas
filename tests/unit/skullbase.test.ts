@@ -297,8 +297,15 @@ describe('the temporal-bone model (v3: OpenEar specimen registered onto the CT)'
   it('every carried-over structure has both ears, on their sides; vessels are the CT model\'s own files, bone this model\'s', () => {
     for (const s of v3.structures.filter((x) => !x.id.startsWith('tm_') && !x.pushedFrom)) {     // (the tumours have their own test)
       if (s.id.startsWith('tb_') || s.id.startsWith('br_') || s.id.startsWith('pf_')) {
-        expect(s.centroid!.L[0], s.id).toBeLessThan(0);
-        expect(s.centroid!.R[0], s.id).toBeGreaterThan(0);
+        if (s.id === 'tb_anterior_spinal_artery') {
+          // its two halves run together down the front of the medulla, on the fitted medulla's midline (which is not
+          // exactly the frame's): the left one left of the right one, the pair within 5 mm of the frame's midline
+          expect(s.centroid!.L[0], s.id).toBeLessThan(s.centroid!.R[0]);
+          expect(Math.abs(s.centroid!.L[0] + s.centroid!.R[0]) / 2, s.id).toBeLessThan(5);
+        } else {
+          expect(s.centroid!.L[0], s.id).toBeLessThan(0);
+          expect(s.centroid!.R[0], s.id).toBeGreaterThan(0);
+        }
         expect(s.file, s.id).toMatch(/^assets\/skullbase-v3\//);
       } else if (s.approach || s.morph || s.type === 'bone') {
         // the craniotomy's cut bones and the bone removed, the arteries that move with the opening, and v3's own skull

@@ -263,6 +263,7 @@ NIDUS_SPEED = 200.0    # mm/s through the nidus (illustrative)
 FEEDER_SPEED = 400.0   # mm/s along a feeder (illustrative: a high-flow shunt)
 NIDUS_MIDLINE_MM = 4.0  # a nidus is kept this far off the midline, in its own hemisphere
 CENTRAL_X_MM = 38.0    # the sensorimotor AVM's place on the central sulcus: this far from the midline (illustrative)
+CENTRAL_BAND_MM = 3.0  # ... within this
 
 
 class Brain:
@@ -288,7 +289,10 @@ class Brain:
             d = cKDTree(Pp).query(P)[0]
             k = np.nonzero(d < 2.5)[0]
             k = k[N[k] @ np.array([np.sign(P[k, 0]).mean(), 0, 0.5]) > 0.3]     # (the outer, convex surface)
-            i = int(k[np.argmin(np.abs(np.abs(P[k, 0]) - CENTRAL_X_MM))])
+            # the highest of the border's points at that distance from the midline: on the convexity. (The single nearest
+            # one can lie down in the sulcus, 30 mm lower, and which it is turned on a millimetre of the brain's fit)
+            band = k[np.abs(np.abs(P[k, 0]) - CENTRAL_X_MM) <= CENTRAL_BAND_MM]
+            i = int(band[np.argmax(P[band, 2])]) if len(band) else int(k[np.argmin(np.abs(np.abs(P[k, 0]) - CENTRAL_X_MM))])
         else:
             c = P.mean(0)
             i = int(np.argmin(np.linalg.norm(P - c, axis=1)))
@@ -532,7 +536,7 @@ class Out:
             vs.append(v); ts.append(t + off); arr.append(np.broadcast_to(a, (len(v),))); off += len(v)
         V, T, A = np.vstack(vs), np.vstack(ts), np.concatenate(arr)
         vid = f"va_{lesion}__{pid}"
-        VB.write_glb(VB.BUILD / f"{vid}.glb", [{"name": VB.part_side(V), "positions": V, "normals": VB.normals(V, T), "indices": T, "mode": VB.TRIANGLES,
+        VB.write_glb(VB.BUILD / f"{vid}.glb", [{"name": VB.lesion_side(V), "positions": V, "normals": VB.normals(V, T), "indices": T, "mode": VB.TRIANGLES,
                                                 "scalars": {"_ARRIVAL": np.clip(A / VB.T_MAX_S, 0, 1).astype(np.float32),
                                                             "_DWELL": np.full(len(V), dwell / VB.T_MAX_S, np.float32)}}], {"id": vid})
         c = V.mean(0).round(2).tolist()

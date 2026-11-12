@@ -145,6 +145,11 @@ class GridPhi:
         X = (V - self.b) @ np.linalg.inv(self.A).T
         for _ in range(iters):
             q, J = self(X, jac=True)
+            # (a point that a step carries out of the grid finds no gradient there, the grid's values being held beyond
+            # its edge, and the step could not be solved: the affine part's gradient stands in, so it stays finite; such
+            # a point's residual shows that it was not inverted)
+            flat = np.abs(np.linalg.det(J)) < 1e-9
+            J[flat] = self.A
             X = X - np.linalg.solve(J, (q - V)[:, :, None])[:, :, 0]
         return X, np.linalg.norm(self(X) - V, axis=1)
 

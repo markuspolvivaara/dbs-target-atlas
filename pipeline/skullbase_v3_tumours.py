@@ -590,7 +590,9 @@ def koos(man: list) -> dict:
               "porusToBrainstemMm": round(float(d_stem[gr.at(porus)]), 1)}
     # the ball's centre: searched on a 1 mm lattice of open points in the posterior fossa (not in the cerebrum)
     # the posterior fossa's intradural space: the fitted cerebellum and brainstem and the cisterns round them
-    fossa = ndimage.binary_dilation(gr.of(kinds=("hindbrain", "ventricle")), iterations=int(round(KOOS_CISTERN_MM / STEP))) & ~gr.bone & ~brain_
+    # (within KOOS_CISTERN_MM of them, measured straight: counted in grid steps along the axes it reached only 3 mm
+    # obliquely, and with the pons 5 mm from the porus, as this CT's cisterns put it, no grade II centre was left)
+    fossa = (gr.dist(gr.of(kinds=("hindbrain", "ventricle"))) <= KOOS_CISTERN_MM) & ~gr.bone & ~brain_
     cand = fossa
     sub = np.zeros_like(cand)
     sub[::2, ::2, ::2] = cand[::2, ::2, ::2]

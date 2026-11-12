@@ -5,6 +5,8 @@ its bone.
   pipeline/.venv/bin/python -I -W ignore pipeline/ventricles_build.py          (after skullbase_ct.py, skullbase_v3.py)
   node pipeline/compress.mjs ventricles
   pipeline/.venv/bin/python -I -W ignore pipeline/ventricles_build.py finalize
+  pipeline/.venv/bin/python -I -W ignore pipeline/ventricles_build.py refresh      (after a rebuild of Skull base v3 alone:
+                                                        the structures shown by reference, from its manifest again)
 
 The CT is Skull base v2's (TopBrain 2025 case 011, a CT angiogram). What comes from where:
   - The ventricles as this CT shows them. In its brain window the ventricular fluid is darker than the brain around
@@ -920,6 +922,22 @@ def write_manifest(cent: dict, vrep: dict, etv: dict) -> None:
     (GEN / f"{PREFIX}-manifest.json").write_text(json.dumps(m, indent=1, ensure_ascii=False))
 
 
+def refresh() -> int:
+    """The structures this section shows by reference (Skull base v3's brain, and ETV_REFERENCED), taken again from
+    v3's manifest as it is now: after a rebuild of v3 that leaves this section's own inputs alone. Then finalize."""
+    p = GEN / f"{PREFIX}-manifest.json"
+    m = json.loads(p.read_text())
+    v3 = {it["id"]: it for it in json.loads((GEN / "sbv3-manifest.json").read_text())["structures"]}
+    changed = 0
+    for i, it in enumerate(m["structures"]):
+        if it["file"].startswith("assets/skullbase-v3/") and it["id"] in v3 and it != v3[it["id"]]:
+            m["structures"][i] = {**v3[it["id"]]}
+            changed += 1
+    p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
+    print(changed, "referenced structures taken again from Skull base v3's manifest")
+    return finalize()
+
+
 def finalize() -> int:
     """After compress.mjs: file sizes, the manifest next to the assets; then the checks."""
     import shutil
@@ -998,4 +1016,4 @@ def validate() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(finalize() if sys.argv[1:] == ["finalize"] else main())
+    sys.exit(finalize() if sys.argv[1:] == ["finalize"] else refresh() if sys.argv[1:] == ["refresh"] else main())

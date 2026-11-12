@@ -112,7 +112,8 @@ def normal_vessels() -> list[dict]:
     """Skull base v3's arteries and veins: [{name, category, item (v3's), nodes {side: (P, T)}}]."""
     out = []
     for it in v3_manifest()["structures"]:
-        if it.get("category") not in ("artery", "vein") or it["name"] in SKIP or it.get("approach"):
+        # (not a view's own copy of a vessel: an approach's, or one a tumour view pushes aside, which has its vessel's name)
+        if it.get("category") not in ("artery", "vein") or it["name"] in SKIP or it.get("approach") or it.get("replaces") or it.get("tumourView"):
             continue
         path = DATA / it["file"].replace("assets/", "")
         out.append({"name": it["name"], "category": it["category"], "item": it, "nodes": read_glb(path)})
@@ -251,6 +252,17 @@ def part_side(P: np.ndarray) -> str:
     return "L" if float(P[:, 0].max()) < 0 else "R"
 
 
+LESION_SIDE_SHARE = 0.9   # a lesion's part is on the left when this share of its surface is
+
+
+def lesion_side(P: np.ndarray) -> str:
+    """The node name for a lesion's own part: "L" when nearly all of it (LESION_SIDE_SHARE of its vertices) lies left of
+    the midline, else "R" (where the midline lesions are kept, as the midline vessels are). A left lesion's veins that
+    reach the superior sagittal sinus just across the midline stay with their lesion: named wholly-left-or-R, they went
+    to R and were hidden with Left."""
+    return "L" if float((P[:, 0] < 0).mean()) >= LESION_SIDE_SHARE else "R"
+
+
 def wrong_side(nodes: dict) -> list[str]:
     """The nodes that lie wholly on the other side of the midline from their name (read_glb's nodes)."""
     out = []
@@ -290,6 +302,8 @@ def context_items() -> list[dict]:
     """The skull and the fitted brain, Skull base v3's files as they are (drawn faint, not in the angiogram)."""
     out = []
     for it in v3_manifest()["structures"]:
+        if it.get("replaces") or it.get("tumourView"):     # (a view's own copy of a piece: not this section's)
+            continue
         if (it.get("type") == "bone" and not it.get("approach")) or it.get("category") == "brain":
             out.append({**{k: v for k, v in it.items() if k not in ("morph", "layer")}, "id": "va_" + it["id"],
                         "layer": "nuclei" if it.get("type") == "bone" else "cortex"})

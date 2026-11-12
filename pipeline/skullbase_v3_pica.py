@@ -37,6 +37,8 @@ STUB_MM = 6.0              # this CT's labelled PICA kept from its origin on the
 STEP_MM = 0.5
 CLEAR_ROUNDS = 4           # the course cleared of the hindbrain and resampled in turn this many times
 ATTACH_MM = 3.0            # a branch is kept when it starts this near the tree
+FINAL_ROUNDINGS = 2        # after the last clearing the runs' corners are rounded this many times more ...
+FINAL_SETTLE = False       # ... (not then moved out again by smoothed pushes: tried, and it folds the lines as the clearing does)
 REACH_MM = 4.0             # a vessel point follows the cerebellum's vertices this near
 SHAPES = ("telovelar", "retrosigmoid")
 CEREBELLUM = ("pf_cerebellar_hemisphere", "pf_tonsil", "pf_vermis")
@@ -110,6 +112,19 @@ def resampled(P: np.ndarray, r: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     return np.stack([np.interp(t, d, P[:, k]) for k in range(3)], 1), np.interp(t, d, r)
 
 
+def rounded(P: np.ndarray) -> np.ndarray:
+    """A run's corners rounded: smoothed along its length (skullbase_v3_base.COURSE_SMOOTH_MM), its ends held, so a
+    branch stays on the tree. The model's branches have few points, and each clearing puts corners in them (the audit
+    of November 2026, finding MB-08: 34 and 29 corners over 70 deg, the sharpest 167 deg)."""
+    import skullbase_v3_base as BASE
+    if len(P) < 5:
+        return P
+    arc = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
+    w = np.clip(np.minimum(arc, arc[-1] - arc) / BASE.COURSE_ENDS_MM, 0, 1)[:, None]
+    S = ndimage.gaussian_filter1d(P, BASE.COURSE_SMOOTH_MM / STEP_MM, axis=0, mode="nearest")
+    return w * S + (1 - w) * P
+
+
 def continued(side: str, clear, start: np.ndarray, r0: float) -> tuple[list, dict]:
     """The course on from the labelled stub's end (start, radius r0): a joining run round the medulla to the model's
     trunk, then the trunk and its branches: [(P, r)] runs, and a report."""
@@ -145,13 +160,26 @@ def continued(side: str, clear, start: np.ndarray, r0: float) -> tuple[list, dic
     if clear is not None:
         # cleared and resampled in turn (a clearing pushes neighbours apart unevenly; the straight runs then drawn
         # between them could cut back in), then cleared once more: at the tube's own radius
+        # (its spurs cut out first, and its corners rounded before each clearing and after the last: a clearing pushes
+        # each point the shortest way out, neighbours on a ridge of the cerebellum to opposite sides, which folds the
+        # line; rounded once more it may touch the cerebellum's surface again, as a vessel in a fissure does)
+        import skullbase_v3_base as BASE
+        out = [BASE.despur(P, r) if len(P) > 4 else (P, r) for P, r in out]
         for _ in range(CLEAR_ROUNDS):
-            out = [resampled(clear(P, np.maximum(r, tube_r(r))), r) for P, r in out]
+            out = [resampled(clear(rounded(P), np.maximum(r, tube_r(r))), r) for P, r in out]
         out = [(clear(P, np.maximum(r, tube_r(r))), r) for P, r in out]
+        out = [BASE.despur(P, r) if len(P) > 4 else (P, r) for P, r in out]
+        for _ in range(FINAL_ROUNDINGS):
+            out = [(rounded(P), r) for P, r in out]
+        if FINAL_SETTLE:      # ... and what that put back inside moved out again, by smoothed pushes only (no point its
+            out = [(clear(P, np.maximum(r, tube_r(r)), soft=True), r) for P, r in out]      # whole push: no new corner)
         out[0] = (np.vstack([start, out[0][0][1:]]), out[0][1])     # (the stub's end kept: the course starts on it)
     length = float(sum(np.linalg.norm(np.diff(P, axis=0), axis=1).sum() for P, _ in out))
+    import skullbase_v3_base as BASE
+    ks = [BASE.kinks(P) for P, _ in out]
     return out, {"stubEnd": np.round(start, 1).tolist(), "joinMm": round(gap, 1),
-                 "branchesKept": kept, "branchesLeftOut": dropped, "lengthMm": round(length, 1)}
+                 "branchesKept": kept, "branchesLeftOut": dropped, "lengthMm": round(length, 1),
+                 "kinks": {"cornersOver70": sum(k["cornersOver70"] for k in ks), "sharpestDeg": max(k["sharpestDeg"] for k in ks)}}
 
 
 def hindbrain_shapes() -> tuple[np.ndarray, np.ndarray, dict]:
@@ -160,7 +188,7 @@ def hindbrain_shapes() -> tuple[np.ndarray, np.ndarray, dict]:
     from pygltflib import GLTF2
     V, follow, D = [], [], {s: [] for s in SHAPES}
     for f in sorted(BUILD.glob("pf_*.glb")):
-        if "fourth_ventricle" in f.name:
+        if "fourth_ventricle" in f.name or "__" in f.name or f.name.count(".") > 1:     # (skullbase_pfossa.py's own files only)
             continue
         g = GLTF2().load(str(f))
         blob = g.binary_blob()
@@ -259,6 +287,7 @@ def build(ex2: dict) -> dict:
     write_glb(BUILD / "tb_posterior_inferior_cerebellar_artery_fitted_course.glb", nodes,
               {"id": "tb_posterior_inferior_cerebellar_artery_fitted_course"})
     rep["centroid"] = cent
+    rep["kinks"] = {s: rep["continued"][s]["kinks"] for s in ("L", "R")}
     (BUILD / "pica.json").write_text(json.dumps(rep, indent=1))
     return rep
 

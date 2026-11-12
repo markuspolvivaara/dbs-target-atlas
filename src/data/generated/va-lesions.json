@@ -196,10 +196,10 @@
    "location": "the right frontal pole (not eloquent)",
    "nidusMm": 22.0,
    "nidus": {
-    "junctions": 262,
-    "plexiform": 488,
+    "junctions": 247,
+    "plexiform": 456,
     "fistulous": 1,
-    "measuredMm": 21.6,
+    "measuredMm": 21.4,
     "compact": true,
     "type": "compact"
    },
@@ -219,9 +219,9 @@
     }
    ],
    "centreMm": [
-    14.1,
+    12.9,
     41.9,
-    50.2
+    53.8
    ]
   },
   {
@@ -244,10 +244,10 @@
    "location": "the left sensorimotor cortex at the central sulcus (eloquent)",
    "nidusMm": 42.0,
    "nidus": {
-    "junctions": 225,
-    "plexiform": 402,
+    "junctions": 241,
+    "plexiform": 428,
     "fistulous": 1,
-    "measuredMm": 41.2,
+    "measuredMm": 41.8,
     "compact": true,
     "type": "compact"
    },
@@ -272,9 +272,9 @@
     }
    ],
    "centreMm": [
-    -27.1,
-    -32.9,
-    70.8
+    -19.9,
+    -34.6,
+    78.4
    ]
   },
   {
@@ -285,12 +285,10 @@
     "va_avm5__feeders",
     "va_avm5__nidus",
     "va_avm5__drainers",
-    "va_avm5__basal_vein_of_rosenthal",
     "va_avm5__confluence_of_sinuses",
     "va_avm5__great_cerebral_vein_of_galen",
     "va_avm5__inferior_anastomotic_vein_of_labbe",
     "va_avm5__inferior_petrosal_sinus",
-    "va_avm5__internal_cerebral_veins",
     "va_avm5__internal_jugular_vein",
     "va_avm5__sigmoid_sinus",
     "va_avm5__straight_sinus",
@@ -301,8 +299,8 @@
    "location": "the right occipital lobe, visual cortex (eloquent), reaching deep towards the vein of Galen",
    "nidusMm": 64.0,
    "nidus": {
-    "junctions": 317,
-    "plexiform": 558,
+    "junctions": 247,
+    "plexiform": 432,
     "fistulous": 2,
     "measuredMm": 64.0,
     "compact": false,
@@ -334,9 +332,9 @@
     }
    ],
    "centreMm": [
-    13.5,
-    -67.8,
-    4.6
+    13.2,
+    -71.4,
+    12.9
    ]
   },
   {
@@ -388,9 +386,9 @@
     "va_ccfa__superior_petrosal_sinus"
    ],
    "fistulaMm": [
-    10.1,
-    3.5,
-    1.9
+    12.0,
+    2.1,
+    3.3
    ]
   },
   {

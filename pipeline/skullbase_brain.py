@@ -12,12 +12,16 @@ template, found by minimising together (weights in STAGES):
   this patient's arteries and veins (TopBrain's labels, as centre lines with their radius): each outside the cortex; the
   M2 segments on the insula and the M3 segments in the Sylvian fissure (the insular and opercular segments: Gibo 1981,
   Tanriover 2004), which places the template's fissure where this patient's middle cerebral artery runs;
-  the falx and tentorium (the Z-Anatomy model fitted onto this CT in Skull base v2) outside the cortex;
+  the falx (the Z-Anatomy model's, fitted onto this CT in Skull base v2) and the tentorium (this CT's own: the surface
+  through its transverse sinuses, straight sinus and petrous ridges, skullbase_v3_tentorium.py) outside the cortex; the
+  cavity the hull is fitted into ends on the tentorium's sheet, so the hull lies TABLE_GAP_MM over it as it lies inside
+  the inner table;
   a penalty on any place where the deformation shrinks the local volume below JAC_MIN of the overall scale, so it never
   folds;
 in stages from an affine map to Gaussian radial basis functions on finer grids. The template surfaces (decimated) are
 carried through it, and the contacts left are pushed clear (ARAP on the surface: brain_deform.ARAP) to CLEAR_CAVITY_MM
-inside the cavity, CLEAR_VESSEL_MM off each vessel the model draws and CLEAR_FALX_MM on the hemisphere's own side of the
+inside the cavity (over the tentorium and off the sinuses in it, which the cavity leaves out), CLEAR_VESSEL_MM off each
+vessel the model draws and CLEAR_FALX_MM on the hemisphere's own side of the
 falx (where the falx is: the fit keeps the cortex off the dura only on average, and each hemisphere is carried alone).
 
 The opening is a shape deformation, not a simulation of tissue: the lips of the right fissure (the opercula near the
@@ -70,7 +74,6 @@ import scipy.io as sio
 import scipy.sparse as sp
 import trimesh
 from scipy import ndimage
-from scipy.interpolate import griddata
 from scipy.optimize import minimize
 from scipy.spatial import Delaunay, cKDTree
 from skimage.morphology import skeletonize
@@ -82,6 +85,7 @@ import cortex_build as CB  # noqa: E402
 import cortex_labels as CL  # noqa: E402
 from glb import TRIANGLES, write_glb  # noqa: E402
 from meshcheck import self_intersections  # noqa: E402
+import skullbase_v3_tentorium as TENT  # noqa: E402
 
 REPO = ROOT.parent
 RAW = ROOT / "data" / "raw"
@@ -288,8 +292,8 @@ class Template:
 
 # ---------------------------------------------------------------- the patient
 class Patient:
-    """The CT's intracranial cavity, the inner table and the bone just outside it, the vessels as centre lines and as the
-    surfaces the model draws, and the fitted falx and tentorium; all in the frame."""
+    """The CT's intracranial cavity over the tentorium, the inner table and the bone just outside it, the vessels as
+    centre lines and as the surfaces the model draws, the fitted falx and this CT's tentorium; all in the frame."""
 
     def __init__(self, ex2: dict):
         c = np.load(CT_BUILD / "bone.npz")
@@ -311,27 +315,31 @@ class Patient:
         cav = lab == lab[tuple(np.rint((np.array([0.0, -10.0, 35.0]) - lo) / st).astype(int))]
         cav = ndimage.binary_fill_holes(ndimage.binary_dilation(cav, ball(CAVITY_SEAL_MM)) & ~B)
         self.cavity_ml = float(cav.sum() * st ** 3 / 1000)
-        self.cavity = BD.Field(-sdf(cav, st), lo, st, -30.0)          # positive inside the cavity
+        # the tentorium: this CT's own (skullbase_v3_tentorium.py: through the traced transverse sinuses, the straight
+        # sinus and the petrous ridges). To the cerebrum it is a wall as the inner table is: its cavity ends on the
+        # sheet, and the inside of the sinuses in it is not its space either
+        self.tent = TENT.Tentorium(ex2)
+        whole = cav
+        cav = cav & ~self.tent.walls(lo, cav.shape, st, "above")
+        self.cavity = BD.Field(-sdf(cav, st), lo, st, -30.0)          # positive inside the cerebrum's cavity
         edge = cav & ~ndimage.binary_erosion(cav)
-        shell = ndimage.binary_dilation(cav, ball(2)) & ~cav & B
+        shell = ndimage.binary_dilation(whole, ball(2)) & ~whole & B
         rng = np.random.default_rng(0)
         T = lo + np.argwhere(edge) * st
         S = lo + np.argwhere(shell) * st
-        # the posterior fossa (below the fitted tentorium) and the sella's surroundings hold no cerebrum
-        tent = np.vstack([np.array(ex2["soft"][f"Tentorium cerebelli.{s}"]["verts"]) for s in "rl"])
+        # the posterior fossa (below the tentorium, the incisura's space with it) and the sella's surroundings hold no
+        # cerebrum; the sheet's own points stay (the hull is fitted onto it as onto the inner table)
         falx = np.array(ex2["soft"]["Falx cerebri"]["verts"])
 
         def supratentorial(P):
-            zt = griddata(tent[:, :2], tent[:, 2], P[:, :2], method="linear")
-            zn = griddata(tent[:, :2], tent[:, 2], P[:, :2], method="nearest")
-            below = (np.isfinite(zt) & (P[:, 2] < zt + 1.0)) | ((P[:, 1] < -10) & (P[:, 2] < zn))
+            below = self.tent.below(P, 0.5)
             sella = (np.abs(P[:, 0]) < 22) & (P[:, 2] < 8) & (P[:, 1] > -30) & (P[:, 1] < 22)
             return ~below & ~sella
         T = T[supratentorial(T)]
         S = S[supratentorial(S)]
         self.table = T[rng.choice(len(T), min(20000, len(T)), replace=False)]
         self.shell = S[rng.choice(len(S), min(15000, len(S)), replace=False)]
-        dura = np.vstack([falx, tent])
+        dura = np.vstack([falx, self.tent.sheet_points(2.0)])
         self.dura = dura[rng.choice(len(dura), min(3000, len(dura)), replace=False)]
         # TopBrain's labels as centre lines with radius
         img = nib.load(LABELS)
@@ -1139,6 +1147,7 @@ def params_hash(fit_only: bool = False) -> str:
     for k in ("PALETTE", "CITES", "OPENING_KEYS"):
         keys.pop(k, None)
     keys["bone"] = hashlib.sha1((CT_BUILD / "bone.npz").read_bytes()).hexdigest()
+    keys["tentorium"] = TENT.Tentorium().content_hash()
     return hashlib.sha1(json.dumps(keys, sort_keys=True, default=str).encode()).hexdigest()[:16]
 
 
@@ -1153,7 +1162,7 @@ def main() -> int:
     key = params_hash(fit_only=True)
     A, b, rbfs, W, rep = fit(tp, fields, pt, BUILD / f"brain_fit_{key}.npz")
     print("fit", rep, round(time.time() - t0), "s")
-    out, report = {}, {"fit": rep, "untangle": {s: tp.dec[s]["untangle"] for s in "RL"}}
+    out, report = {}, {"fit": rep, "untangle": {s: tp.dec[s]["untangle"] for s in "RL"}, "tentorium": pt.tent.report()}
     mesh_cache = BUILD / f"brain_mesh_{key}.npz"
     if mesh_cache.exists():
         z = np.load(mesh_cache, allow_pickle=False)

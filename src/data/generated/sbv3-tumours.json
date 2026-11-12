@@ -2,6 +2,7 @@
  "knosp": {
   "planeY": 1.5,
   "zMid": 8.37,
+  "zLobe": 8.37,
   "sections": {
    "R": {
     "y": 1.5,
@@ -125,17 +126,17 @@
      "lateral": 4.1
     },
     "encasedShare": 0.69,
-    "ml": 1.43
+    "ml": 1.4
    },
    "4": {
     "grade": "4",
     "pastMm": {
-     "medial": 9.6,
-     "intercarotid": 7.2,
-     "lateral": 4.9
+     "medial": 9.3,
+     "intercarotid": 6.7,
+     "lateral": 4.6
     },
     "encasedShare": 1.0,
-    "ml": 1.5
+    "ml": 1.47
    }
   },
   "carotidRadiusMm": 1.74
@@ -143,19 +144,20 @@
  "koos": {
   "1": {
    "ml": 0.05,
-   "canalMm": 15.9
+   "canalMm": 15.9,
+   "porusToBrainstemMm": 4.7
   },
   "2": {
    "centre": [
-    19.5,
-    -20.5,
-    -7.5
+    16.5,
+    -21.5,
+    -12.5
    ],
-   "diameterMm": 6.0,
-   "extrameatalMaxMm": 5.4,
+   "diameterMm": 9.0,
+   "extrameatalMaxMm": 10.0,
    "toBrainstemMm": 0.5,
-   "fromBoneMm": 0.7,
-   "ml": 0.09,
+   "fromBoneMm": 2.3,
+   "ml": 0.23,
    "push": {
     "pointsInside": 0,
     "leftInside": 0,
@@ -164,84 +166,94 @@
    },
    "nerves": {
     "Facial nerve (VII)": {
-     "pointsInside": 3,
+     "pointsInside": 14,
      "leftInside": 0,
-     "maxMovedMm": 1.5
+     "maxMovedMm": 8.9
     }
    }
   },
   "3": {
    "centre": [
-    14.5,
-    -31.5,
-    -5.5
+    19.5,
+    -28.5,
+    -14.5
    ],
    "diameterMm": 25.0,
-   "extrameatalMaxMm": 25.0,
-   "toBrainstemMm": -8.0,
-   "fromBoneMm": 9.2,
-   "ml": 6.63,
+   "extrameatalMaxMm": 24.2,
+   "toBrainstemMm": -7.0,
+   "fromBoneMm": 3.8,
+   "ml": 4.77,
    "push": {
-    "pointsInside": 5179,
+    "pointsInside": 3140,
     "leftInside": 0,
-    "rounds": 15,
-    "maxMovedMm": 17.88
+    "rounds": 41,
+    "maxMovedMm": 23.15
    },
    "nerves": {
     "Facial nerve (VII)": {
-     "pointsInside": 32,
+     "pointsInside": 29,
      "leftInside": 0,
-     "maxMovedMm": 5.6
+     "maxMovedMm": 10.1
     },
-    "Trigeminal nerve (V)": {
+    "Glossopharyngeal nerve (IX)": {
+     "pointsInside": 13,
+     "leftInside": 0,
+     "maxMovedMm": 3.1
+    },
+    "Vagus nerve (X)": {
      "pointsInside": 10,
      "leftInside": 0,
-     "maxMovedMm": 8.2
+     "maxMovedMm": 3.3
+    },
+    "Anterior inferior cerebellar artery": {
+     "pointsInside": 5,
+     "leftInside": 5,
+     "maxMovedMm": 2.3
     }
    }
   },
   "4": {
    "centre": [
     14.5,
-    -33.5,
-    -6.5
+    -32.5,
+    -3.5
    ],
    "diameterMm": 34.0,
-   "extrameatalMaxMm": 33.6,
-   "toBrainstemMm": -12.8,
+   "extrameatalMaxMm": 33.8,
+   "toBrainstemMm": -12.3,
    "fromBoneMm": 10.3,
-   "ml": 17.48,
+   "ml": 18.45,
    "push": {
-    "pointsInside": 23644,
+    "pointsInside": 17462,
     "leftInside": 0,
     "rounds": 5,
-    "maxMovedMm": 31.4
+    "maxMovedMm": 29.76
    },
    "nerves": {
     "Facial nerve (VII)": {
-     "pointsInside": 32,
+     "pointsInside": 37,
      "leftInside": 0,
-     "maxMovedMm": 10.3
+     "maxMovedMm": 11.0
     },
     "Trigeminal nerve (V)": {
-     "pointsInside": 14,
-     "leftInside": 2,
-     "maxMovedMm": 12.9
+     "pointsInside": 17,
+     "leftInside": 3,
+     "maxMovedMm": 18.3
     },
     "Abducens nerve (VI)": {
-     "pointsInside": 12,
+     "pointsInside": 14,
      "leftInside": 0,
-     "maxMovedMm": 4.7
-    },
-    "Glossopharyngeal nerve (IX)": {
-     "pointsInside": 7,
-     "leftInside": 0,
-     "maxMovedMm": 0.3
+     "maxMovedMm": 3.8
     },
     "Vagus nerve (X)": {
-     "pointsInside": 18,
+     "pointsInside": 11,
      "leftInside": 0,
-     "maxMovedMm": 2.7
+     "maxMovedMm": 0.7
+    },
+    "Anterior inferior cerebellar artery": {
+     "pointsInside": 5,
+     "leftInside": 0,
+     "maxMovedMm": 7.8
     }
    }
   }
@@ -259,17 +271,17 @@
     26.61
    ],
    "diameterRuleMm": 30.0,
-   "ml": 12.01,
+   "ml": 12.02,
    "normal": [
     0.0,
     -0.27,
     0.96
    ],
    "push": {
-    "pointsInside": 740,
+    "pointsInside": 797,
     "leftInside": 0,
     "rounds": 4,
-    "maxMovedMm": 22.21
+    "maxMovedMm": 22.41
    }
   },
   "tuberculum": {
@@ -284,7 +296,7 @@
     13.54
    ],
    "diameterRuleMm": 20.0,
-   "ml": 2.55,
+   "ml": 2.53,
    "normal": [
     0.0,
     -0.94,
@@ -294,50 +306,50 @@
     "pointsInside": 170,
     "leftInside": 0,
     "rounds": 6,
-    "maxMovedMm": 16.66
+    "maxMovedMm": 16.99
    }
   },
   "petroclival": {
    "site": [
-    13.63,
+    13.71,
     -15.16,
-    -12.88
+    -12.86
    ],
    "centre": [
-    8.01,
+    8.08,
     -20.06,
-    -10.97
+    -10.95
    ],
    "diameterRuleMm": 28.0,
-   "ml": 8.32,
+   "ml": 8.03,
    "normal": [
     -0.73,
     -0.64,
     0.25
    ],
    "push": {
-    "pointsInside": 6138,
+    "pointsInside": 6979,
     "leftInside": 0,
     "rounds": 5,
-    "maxMovedMm": 19.71
+    "maxMovedMm": 18.39
    }
   },
   "foramen_magnum": {
    "site": [
-    7.49,
-    -15.6,
-    -39.05
+    6.85,
+    -9.64,
+    -41.8
    ],
    "centre": [
-    0.08,
-    -19.22,
-    -39.05
+    -0.71,
+    -6.35,
+    -41.8
    ],
    "diameterRuleMm": 30.0,
-   "ml": 6.79,
+   "ml": 3.43,
    "normal": [
-    -0.9,
-    -0.44,
+    -0.92,
+    0.4,
     0.0
    ],
    "push": {

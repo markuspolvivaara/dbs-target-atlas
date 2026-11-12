@@ -64,6 +64,10 @@ CS_WALL_MM = 1.2                     # the lateral wall's thickness: its nerves 
 CS_BACK_MM = 1.5                     # behind the petrous apex
 CS_FRONT_MM = 2.0                    # in front of the carotid's anterior bend
 CS_LATERAL_SPACE_MM = 2.5
+CS_AIR_HU = -300.0                   # this CT below this value is air (the sphenoid sinus)
+CS_AIR_MM = 1.0                      # the sinus keeps this far off air: the wall between it and the sphenoid sinus (bone that
+                                     # is in places too thin for this CT's bone mask, and mucosa); a drawing choice
+CS_AIR_MAX_SHARE = 0.01              # at most this share of the sinus's volume may read as air on the CT
 CS_THIN_WALL_MM = 0.3                # the walls drawn round it: this thick medially, above and below (a drawing choice), and
                                      # CS_WALL_MM at the lateral wall (its two layers, the nerves between them)            # the lateral wall at least this far outside the carotid (the lateral venous space, VI in it)
 NERVE_DEPTH = {"Oculomotor nerve (III)": 0.18, "Trochlear nerve (IV)": 0.36, "Ophthalmic nerve (V1)": 0.6, "Maxillary nerve (V2)": 0.9}
@@ -249,8 +253,11 @@ def roof_z(lm: dict, y):
     return np.where(y < pc[1], np.minimum(level, fall), level) - 0.5
 
 
-def sinus(g: dict, side: str, lm: dict, ica: np.ndarray, ica_r: np.ndarray, wall: np.ndarray, gland_off: np.ndarray) -> np.ndarray:
-    """The sinus's condition on the grid (mm, <= 0 inside), the carotid in it included."""
+def sinus(g: dict, side: str, lm: dict, ica: np.ndarray, ica_r: np.ndarray, wall: np.ndarray, gland_off: np.ndarray,
+          off_air: np.ndarray) -> np.ndarray:
+    """The sinus's condition on the grid (mm, <= 0 inside), the carotid in it included. off_air: each grid point's
+    distance from this CT's air (mm): where the sphenoid sinus's lateral wall is too thin for the bone mask (on the
+    right in this CT), "off the bone" alone let the sinus run on into the air behind it."""
     shape = g["shape"]
     Pg = g["P"].reshape(shape + (3,))
     s = 1 if side == "R" else -1
@@ -261,6 +268,7 @@ def sinus(g: dict, side: str, lm: dict, ica: np.ndarray, ica_r: np.ndarray, wall
     lat = s * x - wall_x(wall, ica, ica_r, side, y, z)
     c = np.maximum.reduce([
         CS_MEDIAL_MM - off_bone, CS_MEDIAL_MM - gland_off,         # off the bone and the hypophysis
+        CS_AIR_MM - off_air,                                        # off the sphenoid sinus's air, by its wall
         lat,                                                        # medial to the lateral wall
         z - roof_z(lm, y),                                          # under the roof
         (lm["petrousApex"][1] - CS_BACK_MM) - y,                    # from the petrous apex
@@ -500,14 +508,19 @@ def main() -> int:
     lm = landmarks(g)
     names = ["Oculomotor nerve (III)", "Trochlear nerve (IV)", "Abducens nerve (VI)", "Ophthalmic nerve (V1)",
              "Maxillary nerve (V2)", "Mandibular nerve (V3)", "Optic nerve (II)", "Greater petrosal nerve"]
-    # the routes as skullbase_v3.py drew them (kept the first time: the meshes are rewritten here)
+    # the routes as skullbase_v3.py drew them, before any splice (it writes them out each time it runs: the meshes are
+    # rewritten here); a nerve it does not route (the greater petrosal nerve, drawn by rule and not re-routed here) from
+    # its mesh
     orig = V3_BUILD / "cavernous_routes.npz"
-    if orig.exists():
-        z = np.load(orig)
-        tubes = {n: {s: (z[f"{n}|{s}|P"], z[f"{n}|{s}|r"]) for s in ("L", "R")} for n in names}
-    else:
-        tubes = {n: centre_lines(V3_BUILD / f"{SB.slug(n).replace('sb_', 'tb_', 1)}.glb") for n in names}
-        np.savez_compressed(orig, **{f"{n}|{s}|{k}": tubes[n][s][i] for n in names for s in ("L", "R") for i, k in enumerate("Pr")})
+    z = np.load(orig) if orig.exists() else {}
+    tubes = {}
+    for n in names:
+        if f"{n}|R|P" in z:
+            tubes[n] = {s: (z[f"{n}|{s}|P"], z[f"{n}|{s}|r"]) for s in ("L", "R")}
+        else:
+            if n in REROUTE_NOTE:
+                raise SystemExit(f"{n}: its route is not in cavernous_routes.npz (run skullbase_v3.py first)")
+            tubes[n] = centre_lines(V3_BUILD / f"{SB.slug(n).replace('sb_', 'tb_', 1)}.glb")
     ica_low = centre_lines(V3_BUILD / "tb_internal_carotid_artery_petrous_and_lacerum_parts.glb")
     ganglion = {s: np.asarray(m.vertices) for s, m in trimesh.load(V3_BUILD / "tb_trigeminal_ganglion.glb", force="scene").geometry.items()}
     # the hypophysis modelled in this CT's fossa (skullbase_v3_endonasal.build_hypophysis), for the medial wall
@@ -515,6 +528,11 @@ def main() -> int:
     gland_off = ENDO.signed(hypo["gland"], ENDO.GRID_MM)
     bone_pts = Pg[g["bone"] >= ENDO.FIELD_ISO]
     bone_tree = cKDTree(bone_pts)
+    # this CT itself on the grid: where it shows air
+    img = nib.load(ENDO.CT_PATH)
+    hu = ndimage.map_coordinates(np.asanyarray(img.dataobj).astype(np.float32),
+                                 nib.affines.apply_affine(np.linalg.inv(img.affine), g["S"]).T, order=1, mode="nearest").reshape(shape)
+    off_air = ndimage.distance_transform_edt(hu >= CS_AIR_HU, sampling=ENDO.GRID_MM)
 
     out_json, splices_all, report = {"landmarks": {}, "carotid": {}, "sinus": {}, "triangles": {}}, {}, {}
     cs_conds, cs_meshes, wall_meshes, nerve_paths, tri_pts, spp = {}, {}, {}, {}, {}, {}
@@ -529,7 +547,7 @@ def main() -> int:
         ica_r = np.maximum(np.interp(np.arange(len(ica)), np.linspace(0, len(ica) - 1, len(low) - i_lac + len(up_r)),
                                      np.r_[ica_low[side][1][i_lac:], up_r]), 1.0)
         wall = lateral_wall(L, ganglion[side], side)
-        cs = sinus(g, side, L, ica, ica_r, wall, gland_off)
+        cs = sinus(g, side, L, ica, ica_r, wall, gland_off, off_air)
         cs_conds[side] = cs
         cs_meshes[side] = mesh_of(cs, a_crop)
         # its walls: a shell round it, CS_WALL_MM thick at the lateral wall, CS_THIN_WALL_MM elsewhere (thickening over
@@ -553,8 +571,12 @@ def main() -> int:
         out_json["carotid"][side] = {"line": np.round(ica, 2).tolist(), "radius": np.round(ica_r, 2).tolist(),
                                      "lengthMm": round(float(np.linalg.norm(np.diff(ica, axis=0), axis=1).sum()), 1)}
         cp = Pg[cs <= 0]
+        air_share = float((hu[cs <= 0] < CS_AIR_HU).mean())
+        if air_share > CS_AIR_MAX_SHARE:
+            raise SystemExit(f"cavernous sinus {side}: {100 * air_share:.1f} % of it reads as air on the CT")
         out_json["sinus"][side] = {"mm3": round(vol, 1), "lo": cp.min(0).round(1).tolist(), "hi": cp.max(0).round(1).tolist(),
-                                   "wall": np.round(wall, 4).tolist()}
+                                   "wall": np.round(wall, 4).tolist(), "airShare": round(air_share, 4),
+                                   "offAirMm": round(float(off_air[cs <= 0].min()), 2)}
         out_json["triangles"][side] = {k: [np.round(p, 2).tolist() for p in v] for k, v in tri_pts[side].items()}
         # the re-routed nerves' centre lines (1 mm apart), where they run by the sinus
         out_json.setdefault("nerves", {})[side] = {n: np.round(resample(new[n], 1.0), 2).tolist() for n in rr["splices"]}

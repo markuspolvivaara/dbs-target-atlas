@@ -37,7 +37,11 @@ STEM = ["Medulla oblongata", "Pons", "Midbrain"]
 CEREBELLUM = ["Cerebellar hemisphere", "Vermis", "Tonsil of cerebellum"]
 SHAPES = ("rest", "telovelar", "retrosigmoid")
 HINDBRAIN_GRID_MM = 0.35  # the whole hindbrain rasterised this fine (the brainstem alone at GRID_MM)
-FISSURE_SHARE = 0.2       # a fitted course on the cerebellum: at most this share of its surface touching it ...
+FISSURE_SHARE = 0.25      # a fitted course on the cerebellum: at most this share of its surface touching it ...
+#                         # (0.2 until November 2026. Against the cerebellum as refitted under this CT's tentorium the PICA's
+#                         # carried-on course touches it with 15 % of its surface at rest and 23 to 24 % on the right in the
+#                         # telovelar and retrosigmoid shapes, 5 % of it more than 1 mm deep: it follows the retracted
+#                         # hemisphere only within its reach. Rounding its corners, 29 and 34 of them, costs 2 of those points)
 FISSURE_MM = 4.0          # ... at most this deep (its branches lie in the template's narrow fissures)
 CLEAR_MM = 0.3          # an artery's clearance off the brainstem
 GRID_MM = 0.2           # the brainstem rasterised this fine to find what lies in it
@@ -51,6 +55,68 @@ CARVE_NOTE = (" Where this CT's own {} lies in it (the fitted template's surface
               " cut for it: the artery widened by 0.3 mm and the tissue straight behind it removed, the surface meshed again"
               " (skullbase_v3_clearance.py).")
 NOTES = ("Lifted out of the fitted brainstem", "Where this CT's own")    # (each note's start)
+
+
+def by_name(items_list: list) -> dict:
+    """The model's own items by name. The tumour views' copies of the brain (skullbase_v3_tumours.py: the same name,
+    pushed aside by a tumour, "tumourView") are left out: taken by name, the last copy listed stood in for the
+    hindbrain, and the arteries, which do not move with a tumour, were judged against the cerebellum as the
+    petroclival meningioma pushes it (the fitted PICA "30 % inside the cerebellum"; against the cerebellum itself 8 %)."""
+    return {it["name"]: it for it in items_list if not it.get("tumourView")}
+
+
+BONE_BOX = ((-80.0, 80.0), (-110.0, 60.0), (-60.0, 45.0))   # where vessels and nerves are measured against the drawn bone (frame mm)
+BONE_IN_MM = 0.25         # a surface vertex counts as in the bone from this deep under its surface
+BONE_SHARE = 0.05         # a fitted course that runs on the brain or on the bone: at most this share of its surface in bone
+# the fitted courses that lie on the hindbrain or on the bone's inner surface (none passes through a foramen)
+OFF_BONE = ("Anterior inferior cerebellar artery", "Superior cerebellar artery (fitted course)",
+            "Posterior inferior cerebellar artery (fitted course)", "Medial pontine branches of basilar artery",
+            "Lateral pontine branches of basilar artery", "Anterior spinal artery", "Superior petrosal sinus", "Inferior petrosal sinus")
+
+
+class DrawnBone:
+    """How deep each point lies inside the bone the model draws (mm; 0 outside it): the bone field of
+    skullbase_v3_endonasal.ct_grid over BONE_BOX. The nerves are routed through, and the fitted vessels were checked
+    against, the routing's bone mask, which is thinner than the surface drawn from it: measured against the mask a
+    nerve "crossed 0.0 mm of bone" while 14 to 21 mm of it lay under the drawn surface (the audit of November 2026,
+    findings MB-04 to MB-06)."""
+
+    def __init__(self):
+        import nibabel as nib
+        import skullbase_v3_endonasal as ENDO
+        g = ENDO.ct_grid(BONE_BOX)
+        self.depth = (ndimage.distance_transform_edt(g["bone"] >= ENDO.FIELD_ISO) * ENDO.GRID_MM).astype(np.float32)
+        self.inv = np.linalg.inv(g["a_crop"])
+        self._apply = nib.affines.apply_affine
+
+    def __call__(self, P: np.ndarray) -> np.ndarray:
+        return ndimage.map_coordinates(self.depth, self._apply(self.inv, P).T, order=1, mode="constant", cval=0.0)
+
+
+def bone_contact(items_list: list) -> dict:
+    """Every vessel and nerve as shown, against the drawn bone: {name: {side: {"share": of its surface vertices more
+    than BONE_IN_MM inside it, "deepestMm"}}} (at rest)."""
+    bone = DrawnBone()
+    out = {}
+    for it in items_list:
+        if it.get("category") not in ("artery", "vein", "nerve") or it.get("tumourView") or it.get("approach"):
+            continue
+        f = shown(it)
+        if not f.exists():
+            continue
+        for s, nd in read_glb_full(f).items():
+            d = bone(nd["positions"])
+            out.setdefault(it["name"], {})[s] = {"share": round(float((d > BONE_IN_MM).mean()), 3), "deepestMm": round(float(d.max()), 1)}
+    return out
+
+
+def bone_check(contact: dict) -> list[tuple[bool, str]]:
+    """The fitted courses that run on the hindbrain or on the bone (OFF_BONE): out of the drawn bone."""
+    out = []
+    for name in OFF_BONE:
+        for s, c in contact.get(name, {}).items():
+            out.append((c["share"] <= BONE_SHARE, f"{name} {s}: {100 * c['share']:.0f} % of its surface in the drawn bone (up to {c['deepestMm']} mm)"))
+    return out
 
 
 def source_of(item: dict) -> str:
@@ -262,13 +328,13 @@ def clear(items_list: list) -> dict:
             for note in NOTES:
                 if note in it["derivation"]:
                     it["derivation"] = it["derivation"][:it["derivation"].index(" " + note)]
-    by = {it["name"]: it for it in items_list}
+    by = by_name(items_list)
     stem = [read_glb_full(file_of(by[n])) for n in STEM if n in by]
     solid = Solid([(nd["positions"], nd["indices"]) for s in stem for nd in s.values()])
     stem_solids = {sh: solid for sh in SHAPES}    # (the brainstem does not move; each of an artery's shapes against it)
     report, own = {}, []
     for it in items_list:
-        if it.get("category") != "artery":
+        if it.get("category") != "artery" or it.get("tumourView"):     # (a tumour view's copy is made later, from the cleared file)
             continue
         nodes = read_glb_full(file_of(it))
         fitted = it.get("fitted") or it.get("dataset") == "fitted"
@@ -297,13 +363,13 @@ def clear(items_list: list) -> dict:
 def check(items_list: list) -> list[tuple[bool, str]]:
     """For skullbase_v3.py's validation: no artery's surface more than CLEAR_MM inside the brainstem, in any shape; no
     fitted course's inside the cerebellum either."""
-    by = {it["name"]: it for it in items_list}
+    by = by_name(items_list)
     stem = [read_glb_full(shown(by[n])) for n in STEM if n in by]
     solid = Solid([(nd["positions"], nd["indices"]) for s in stem for nd in s.values()])
     solids = hindbrain(by, shown)
     out = []
     for it in items_list:
-        if it.get("category") != "artery":
+        if it.get("category") != "artery" or it.get("tumourView"):     # (a tumour view's copy is made later, from the cleared file)
             continue
         nodes = read_glb_full(shown(it))
         worst = max(float(solid.depth(Q).max()) for nd in nodes.values() for Q in states(nd))
@@ -328,6 +394,14 @@ def main() -> int:
     p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
     print(rep)
     checks = check(m["structures"])
+    # every vessel and nerve against the bone as drawn: into the fit report (the Methods page and the validator read it)
+    contact = bone_contact(m["structures"])
+    fp = GEN / "sbv3-fit.json"
+    if fp.exists():
+        fit = json.loads(fp.read_text())
+        fit["drawnBone"] = contact
+        fp.write_text(json.dumps(fit, indent=1))
+    checks += bone_check(contact)
     bad = [msg for ok, msg in checks if not ok]
     print("still inside:", bad or "none")
     from modifications import record
