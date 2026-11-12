@@ -764,11 +764,24 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
   from TotalSegmentator.
 - **Discs** (TotalSegmentator, split by the two bones each disc touches) and the **dural sac** (TotalSegmentator's
   "spinal cord" class, which on CT follows the canal contents). The section is for the dorsal approaches: no great
-  vessels, psoas or psoas zones.
-- **Measured per level**: canal width, depth and area; foraminal height, antero-posterior extent and area (L1–L4
-  both sides; the plane method does not capture L5–S1 in this CT); disc height.
+  vessels, psoas or psoas zones. A disc much narrower than its neighbours is marked as drawn in part: of the T10–T11
+  disc the segmentation holds a 0.12 ml chip, and between those two bodies the CT is dense where a disc is dark (its
+  mean on 16-mm circles across the line joining the bodies' centres reaches 722 HU, against 219 and 214 HU at the
+  end plates of the discs above and below). The level's card says so, gives no disc height and does not offer the
+  dorsal approaches there; what the dense band is, is left open.
+- **Measured per level**: the canal between the pedicles (in the plane normal to the spine where it is narrowest
+  between them: the interpedicular width, the depth through its middle, the area); foraminal height,
+  antero-posterior extent and area (L1–L4 both sides; the plane method does not capture L5–S1 in this CT); disc
+  height. Until November 2026 the canal was the bounding box of a hole in a slab through the body centre, which at
+  L5 ran out into the lateral recesses (38.0 mm; 28.5 mm between the pedicles).
 - **Schematic, and labelled so**: roots L1–S1, each with its ganglion as one structure (sac at the disc above → lateral recess → upper part
-  of the foramen; L5 and S1 exits estimated).
+  of the foramen; L5 and S1 exits estimated). Every root (C3–S1) and the vertebral artery are kept out of the bone
+  as it is drawn (`pipeline/drawn_bone.py`: led round it where the rule's path runs through it, then pushed clear);
+  a ganglion is drawn smaller where the opening as drawn is narrower than it, and the artery thinner where a foramen
+  transversarium as drawn is (2 mm at C2 on the right and at C3 on the left, 1.5 mm at C3 on the right). The build
+  fails if a root reaches more than 0.5 mm, or the artery more than 1 mm, into the drawn bone. Before, six roots ran
+  4 to 5 mm deep through a pedicle and the artery 3.6 mm through C2: they had been cleared of the CT's bright
+  voxels only, and a pedicle's cancellous core is darker.
 - **Lesion-to-root tool** (level card): paracentral, foraminal or far-lateral herniation per side; the affected root,
   its ISNCSCI key muscle, other movements and key sensory point on a leg chart.
 - **Pedicles, measured beside published values** (T1–T12, L1–L5): narrowest width and height at the isthmus,

@@ -91,6 +91,38 @@ def canal(grid: Grid, label: int, c: np.ndarray, F: np.ndarray) -> dict | None:
             "centre": (c + cu * F[0] + cv * F[1]).tolist()}
 
 
+def canal_between_pedicles(grid: Grid, label: int, c: np.ndarray, F: np.ndarray, can: dict,
+                           lo: float = -8.0, hi: float = 16.0) -> dict | None:
+    """The canal where it is narrowest between the pedicles. In thin slabs (+-0.5 mm) normal to the spine, every
+    millimetre from lo to hi about the body centre c, the hole the vertebra's ring encloses around the canal's centre
+    (`can`, from canal()); the ring closes over the pedicles' height only, and there the hole's greatest side-to-side
+    extent is the distance between the pedicles' medial walls in that plane. The plane where that is smallest gives
+    width (the interpedicular distance), depth (front to back through the canal's centre), area and w (the plane's
+    offset from c along the spine); None if the ring closes in no plane.
+
+    canal()'s own width is the bounding width of the hole common to a 6 mm slab through the body centre, which lies
+    below the pedicles' middle: at L5 of this CT that hole runs out into the lateral recesses beneath the pedicles
+    (38.0 mm wide against 28.5 mm between them; the audit's finding MC-06)."""
+    us = np.arange(-35, 35 + STEP, STEP)
+    vs = np.arange(-65, 15 + STEP, STEP)
+    iu0, iv0 = int(np.argmin(np.abs(us - can["u"]))), int(np.argmin(np.abs(vs - can["v"])))
+    best = None
+    for w0 in np.arange(lo, hi + 0.01, 1.0):
+        ring = np.zeros((len(us), len(vs)), bool)
+        for w in (w0 - STEP, w0, w0 + STEP):
+            ring |= grid.sample(plane(c, F, us, vs, w)) == label
+        ring = ndimage.binary_closing(ring, iterations=2)
+        lab, _ = ndimage.label(ndimage.binary_fill_holes(ring) & ~ring)
+        if not lab[iu0, iv0]:
+            continue
+        m = lab == lab[iu0, iv0]
+        width = float(m.sum(0).max() * STEP)       # the widest antero-posterior row
+        if best is None or width < best["width"]:
+            best = {"width": round(width, 1), "depth": round(float(m[iu0].sum() * STEP), 1),
+                    "area": round(float(m.sum() * STEP * STEP), 0), "w": float(w0)}
+    return best
+
+
 def enclosed(solid: np.ndarray, reach: float = 6.0, ndir: int = 16, need: int = 14) -> np.ndarray:
     """Empty pixels of a plane that bone surrounds: rays in at least `need` of `ndir` directions meet bone within `reach`
     mm. Unlike filling holes, this tolerates the small gaps that thin cortex leaves at CT resolution."""
@@ -187,7 +219,7 @@ def foramen(grid: Grid, up: int, down: int, extra: set[int], mid: np.ndarray, F:
         cv, cw = vs[iv].mean(), ws[iw].mean()
         return {"height": round(float(np.ptp(ws[iw]) + STEP), 1), "width": round(float(np.ptp(vs[iv]) + STEP), 1),
                 "area": round(float(best.sum() * STEP * STEP), 0), "u": float(u), "v": float(cv), "w": float(cw),
-                "top": float(ws[iw].max()), "centre": (mid + u * F[0] + cv * F[1] + cw * F[2]).tolist()}
+                "top": float(ws[iw].max()), "planesOut": du, "centre": (mid + u * F[0] + cv * F[1] + cw * F[2]).tolist()}
     return None
 
 
@@ -215,8 +247,17 @@ def catmull(points: list[np.ndarray], per: int = 8) -> np.ndarray:
     return np.array(out)
 
 
-def tube(path: np.ndarray, radius: float, sides: int = 10) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Closed tube (positions, normals, triangles) along a polyline with a constant radius."""
+def resample(path: np.ndarray, step: float) -> np.ndarray:
+    """A polyline resampled along its length to points no more than `step` apart (the ends stay)."""
+    seg = np.linalg.norm(np.diff(path, axis=0), axis=1)
+    t = np.concatenate([[0], np.cumsum(seg)])
+    n = max(int(np.ceil(t[-1] / step)), 1)
+    return np.stack([np.interp(np.linspace(0, t[-1], n + 1), t, path[:, k]) for k in range(3)], 1)
+
+
+def tube(path: np.ndarray, radius: float | np.ndarray, sides: int = 10) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Closed tube (positions, normals, triangles) along a polyline, with one radius or a radius per point."""
+    radius = np.broadcast_to(np.asarray(radius, float), (len(path),))
     T = np.gradient(path, axis=0)
     T /= np.linalg.norm(T, axis=1, keepdims=True)
     a = np.array([0, 0, 1.0]) if abs(T[0, 2]) < 0.9 else np.array([1.0, 0, 0])
@@ -229,7 +270,7 @@ def tube(path: np.ndarray, radius: float, sides: int = 10) -> tuple[np.ndarray, 
     B = np.cross(T, N)
     ang = np.linspace(0, 2 * np.pi, sides, endpoint=False)
     dirs = np.cos(ang)[None, :, None] * N[:, None, :] + np.sin(ang)[None, :, None] * B[:, None, :]
-    pos = (path[:, None, :] + radius * dirs).reshape(-1, 3)
+    pos = (path[:, None, :] + radius[:, None, None] * dirs).reshape(-1, 3)
     nrm = dirs.reshape(-1, 3)
     tris = []
     for i in range(len(path) - 1):
@@ -241,7 +282,7 @@ def tube(path: np.ndarray, radius: float, sides: int = 10) -> tuple[np.ndarray, 
         c = len(pos) + len(caps_p)
         caps_p.append(path[end]); caps_n.append(sgn * T[end])
         for k in range(sides):
-            caps_p.append(path[end] + radius * dirs[end, k]); caps_n.append(sgn * T[end])
+            caps_p.append(path[end] + radius[end] * dirs[end, k]); caps_n.append(sgn * T[end])
         for k in range(sides):
             u, v = c + 1 + k, c + 1 + (k + 1) % sides
             tris.append([c, v, u] if sgn < 0 else [c, u, v])

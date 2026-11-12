@@ -1718,7 +1718,7 @@
   },
   {
    "aliases": [],
-   "bytes": 27472,
+   "bytes": 7408,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1740,36 +1740,36 @@
     "sekuboyina2021",
     "wasserthal2023"
    ],
-   "id": "sp_disc_l5_s1",
-   "name": "Intervertebral disc L5-S1",
+   "id": "sp_disc_c2_c3",
+   "name": "Intervertebral disc C2-C3",
    "type": "soft",
    "layer": "discs",
-   "file": "assets/spine/sp_disc_l5_s1.glb",
+   "file": "assets/spine/sp_disc_c2_c3.glb",
    "colour": {
     "token": "spDisc",
     "light": "#137A88",
     "dark": "#98DCE6"
    },
    "category": "disc",
-   "level": "L5-S1",
-   "region": "lumbar",
+   "level": "C2-C3",
+   "region": "cervical",
    "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
    "centroid": {
     "L": [
-     1.05,
-     -1.98,
-     -17.87
+     -10.4,
+     60.18,
+     494.9
     ],
     "R": [
-     1.05,
-     -1.98,
-     -17.87
+     -10.4,
+     60.18,
+     494.9
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 27256,
+   "bytes": 13552,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1791,36 +1791,36 @@
     "sekuboyina2021",
     "wasserthal2023"
    ],
-   "id": "sp_disc_l4_l5",
-   "name": "Intervertebral disc L4-L5",
+   "id": "sp_disc_c3_c4",
+   "name": "Intervertebral disc C3-C4",
    "type": "soft",
    "layer": "discs",
-   "file": "assets/spine/sp_disc_l4_l5.glb",
+   "file": "assets/spine/sp_disc_c3_c4.glb",
    "colour": {
     "token": "spDisc",
     "light": "#137A88",
     "dark": "#98DCE6"
    },
    "category": "disc",
-   "level": "L4-L5",
-   "region": "lumbar",
+   "level": "C3-C4",
+   "region": "cervical",
    "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
    "centroid": {
     "L": [
-     -0.49,
-     8.63,
-     14.13
+     -9.32,
+     54.13,
+     477.06
     ],
     "R": [
-     -0.49,
-     8.63,
-     14.13
+     -9.32,
+     54.13,
+     477.06
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 27068,
+   "bytes": 14408,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1842,36 +1842,36 @@
     "sekuboyina2021",
     "wasserthal2023"
    ],
-   "id": "sp_disc_l3_l4",
-   "name": "Intervertebral disc L3-L4",
+   "id": "sp_disc_c4_c5",
+   "name": "Intervertebral disc C4-C5",
    "type": "soft",
    "layer": "discs",
-   "file": "assets/spine/sp_disc_l3_l4.glb",
+   "file": "assets/spine/sp_disc_c4_c5.glb",
    "colour": {
     "token": "spDisc",
     "light": "#137A88",
     "dark": "#98DCE6"
    },
    "category": "disc",
-   "level": "L3-L4",
-   "region": "lumbar",
+   "level": "C4-C5",
+   "region": "cervical",
    "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
    "centroid": {
     "L": [
-     -2.73,
-     8.54,
-     49.22
+     -9.57,
+     47.1,
+     460.02
     ],
     "R": [
-     -2.73,
-     8.54,
-     49.22
+     -9.57,
+     47.1,
+     460.02
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 26820,
+   "bytes": 14932,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1893,36 +1893,36 @@
     "sekuboyina2021",
     "wasserthal2023"
    ],
-   "id": "sp_disc_l2_l3",
-   "name": "Intervertebral disc L2-L3",
+   "id": "sp_disc_c5_c6",
+   "name": "Intervertebral disc C5-C6",
    "type": "soft",
    "layer": "discs",
-   "file": "assets/spine/sp_disc_l2_l3.glb",
+   "file": "assets/spine/sp_disc_c5_c6.glb",
    "colour": {
     "token": "spDisc",
     "light": "#137A88",
     "dark": "#98DCE6"
    },
    "category": "disc",
-   "level": "L2-L3",
-   "region": "lumbar",
+   "level": "C5-C6",
+   "region": "cervical",
    "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
    "centroid": {
     "L": [
-     -5.09,
-     5.0,
-     84.46
+     -9.89,
+     39.02,
+     444.99
     ],
     "R": [
-     -5.09,
-     5.0,
-     84.46
+     -9.89,
+     39.02,
+     444.99
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 26908,
+   "bytes": 16508,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1944,30 +1944,591 @@
     "sekuboyina2021",
     "wasserthal2023"
    ],
-   "id": "sp_disc_l1_l2",
-   "name": "Intervertebral disc L1-L2",
+   "id": "sp_disc_c6_c7",
+   "name": "Intervertebral disc C6-C7",
    "type": "soft",
    "layer": "discs",
-   "file": "assets/spine/sp_disc_l1_l2.glb",
+   "file": "assets/spine/sp_disc_c6_c7.glb",
    "colour": {
     "token": "spDisc",
     "light": "#137A88",
     "dark": "#98DCE6"
    },
    "category": "disc",
-   "level": "L1-L2",
-   "region": "lumbar",
+   "level": "C6-C7",
+   "region": "cervical",
    "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
    "centroid": {
     "L": [
-     -5.86,
-     -1.55,
-     118.18
+     -10.59,
+     30.83,
+     429.34
     ],
     "R": [
-     -5.86,
-     -1.55,
-     118.18
+     -10.59,
+     30.83,
+     429.34
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 19348,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_c7_t1",
+   "name": "Intervertebral disc C7-T1",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_c7_t1.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "C7-T1",
+   "region": "cervical",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -12.04,
+     19.7,
+     414.79
+    ],
+    "R": [
+     -12.04,
+     19.7,
+     414.79
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 26396,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t1_t2",
+   "name": "Intervertebral disc T1-T2",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t1_t2.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T1-T2",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -14.6,
+     6.88,
+     398.44
+    ],
+    "R": [
+     -14.6,
+     6.88,
+     398.44
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 25044,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t2_t3",
+   "name": "Intervertebral disc T2-T3",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t2_t3.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T2-T3",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -16.38,
+     -5.76,
+     380.86
+    ],
+    "R": [
+     -16.38,
+     -5.76,
+     380.86
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 25888,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t3_t4",
+   "name": "Intervertebral disc T3-T4",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t3_t4.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T3-T4",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -17.36,
+     -14.82,
+     361.18
+    ],
+    "R": [
+     -17.36,
+     -14.82,
+     361.18
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 26808,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t4_t5",
+   "name": "Intervertebral disc T4-T5",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t4_t5.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T4-T5",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -14.98,
+     -23.32,
+     343.39
+    ],
+    "R": [
+     -14.98,
+     -23.32,
+     343.39
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 22800,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t5_t6",
+   "name": "Intervertebral disc T5-T6",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t5_t6.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T5-T6",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -12.37,
+     -30.09,
+     321.95
+    ],
+    "R": [
+     -12.37,
+     -30.09,
+     321.95
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 21096,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t6_t7",
+   "name": "Intervertebral disc T6-T7",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t6_t7.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T6-T7",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -11.8,
+     -31.15,
+     299.65
+    ],
+    "R": [
+     -11.8,
+     -31.15,
+     299.65
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 26144,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t7_t8",
+   "name": "Intervertebral disc T7-T8",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t7_t8.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T7-T8",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -12.18,
+     -29.69,
+     276.51
+    ],
+    "R": [
+     -12.18,
+     -29.69,
+     276.51
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 26712,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t8_t9",
+   "name": "Intervertebral disc T8-T9",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t8_t9.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T8-T9",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -12.22,
+     -27.32,
+     253.17
+    ],
+    "R": [
+     -12.22,
+     -27.32,
+     253.17
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 26200,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t9_t10",
+   "name": "Intervertebral disc T9-T10",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t9_t10.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T9-T10",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
+   "centroid": {
+    "L": [
+     -10.22,
+     -24.3,
+     229.61
+    ],
+    "R": [
+     -10.22,
+     -24.3,
+     229.61
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 6880,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t10_t11",
+   "name": "Intervertebral disc T10-T11",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t10_t11.glb",
+   "colour": {
+    "token": "spDisc",
+    "light": "#137A88",
+    "dark": "#98DCE6"
+   },
+   "category": "disc",
+   "level": "T10-T11",
+   "region": "thoracic",
+   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation. At this level the class holds only a chip (0.12 ml, 9 mm from side to side; the discs above and below 34 and 47 mm): the disc is not drawn in full here.",
+   "centroid": {
+    "L": [
+     -20.2,
+     -20.97,
+     204.14
+    ],
+    "R": [
+     -20.2,
+     -20.97,
+     204.14
     ]
    }
   },
@@ -2075,7 +2636,7 @@
   },
   {
    "aliases": [],
-   "bytes": 26200,
+   "bytes": 26908,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -2097,36 +2658,36 @@
     "sekuboyina2021",
     "wasserthal2023"
    ],
-   "id": "sp_disc_t9_t10",
-   "name": "Intervertebral disc T9-T10",
+   "id": "sp_disc_l1_l2",
+   "name": "Intervertebral disc L1-L2",
    "type": "soft",
    "layer": "discs",
-   "file": "assets/spine/sp_disc_t9_t10.glb",
+   "file": "assets/spine/sp_disc_l1_l2.glb",
    "colour": {
     "token": "spDisc",
     "light": "#137A88",
     "dark": "#98DCE6"
    },
    "category": "disc",
-   "level": "T9-T10",
-   "region": "thoracic",
+   "level": "L1-L2",
+   "region": "lumbar",
    "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
    "centroid": {
     "L": [
-     -10.22,
-     -24.3,
-     229.61
+     -5.86,
+     -1.55,
+     118.18
     ],
     "R": [
-     -10.22,
-     -24.3,
-     229.61
+     -5.86,
+     -1.55,
+     118.18
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 26712,
+   "bytes": 26820,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -2148,36 +2709,36 @@
     "sekuboyina2021",
     "wasserthal2023"
    ],
-   "id": "sp_disc_t8_t9",
-   "name": "Intervertebral disc T8-T9",
+   "id": "sp_disc_l2_l3",
+   "name": "Intervertebral disc L2-L3",
    "type": "soft",
    "layer": "discs",
-   "file": "assets/spine/sp_disc_t8_t9.glb",
+   "file": "assets/spine/sp_disc_l2_l3.glb",
    "colour": {
     "token": "spDisc",
     "light": "#137A88",
     "dark": "#98DCE6"
    },
    "category": "disc",
-   "level": "T8-T9",
-   "region": "thoracic",
+   "level": "L2-L3",
+   "region": "lumbar",
    "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
    "centroid": {
     "L": [
-     -12.22,
-     -27.32,
-     253.17
+     -5.09,
+     5.0,
+     84.46
     ],
     "R": [
-     -12.22,
-     -27.32,
-     253.17
+     -5.09,
+     5.0,
+     84.46
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 26144,
+   "bytes": 27068,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -2199,36 +2760,36 @@
     "sekuboyina2021",
     "wasserthal2023"
    ],
-   "id": "sp_disc_t7_t8",
-   "name": "Intervertebral disc T7-T8",
+   "id": "sp_disc_l3_l4",
+   "name": "Intervertebral disc L3-L4",
    "type": "soft",
    "layer": "discs",
-   "file": "assets/spine/sp_disc_t7_t8.glb",
+   "file": "assets/spine/sp_disc_l3_l4.glb",
    "colour": {
     "token": "spDisc",
     "light": "#137A88",
     "dark": "#98DCE6"
    },
    "category": "disc",
-   "level": "T7-T8",
-   "region": "thoracic",
+   "level": "L3-L4",
+   "region": "lumbar",
    "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
    "centroid": {
     "L": [
-     -12.18,
-     -29.69,
-     276.51
+     -2.73,
+     8.54,
+     49.22
     ],
     "R": [
-     -12.18,
-     -29.69,
-     276.51
+     -2.73,
+     8.54,
+     49.22
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 21096,
+   "bytes": 27256,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -2250,36 +2811,36 @@
     "sekuboyina2021",
     "wasserthal2023"
    ],
-   "id": "sp_disc_t6_t7",
-   "name": "Intervertebral disc T6-T7",
+   "id": "sp_disc_l4_l5",
+   "name": "Intervertebral disc L4-L5",
    "type": "soft",
    "layer": "discs",
-   "file": "assets/spine/sp_disc_t6_t7.glb",
+   "file": "assets/spine/sp_disc_l4_l5.glb",
    "colour": {
     "token": "spDisc",
     "light": "#137A88",
     "dark": "#98DCE6"
    },
    "category": "disc",
-   "level": "T6-T7",
-   "region": "thoracic",
+   "level": "L4-L5",
+   "region": "lumbar",
    "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
    "centroid": {
     "L": [
-     -11.8,
-     -31.15,
-     299.65
+     -0.49,
+     8.63,
+     14.13
     ],
     "R": [
-     -11.8,
-     -31.15,
-     299.65
+     -0.49,
+     8.63,
+     14.13
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 26396,
+   "bytes": 27472,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -2301,597 +2862,36 @@
     "sekuboyina2021",
     "wasserthal2023"
    ],
-   "id": "sp_disc_t1_t2",
-   "name": "Intervertebral disc T1-T2",
+   "id": "sp_disc_l5_s1",
+   "name": "Intervertebral disc L5-S1",
    "type": "soft",
    "layer": "discs",
-   "file": "assets/spine/sp_disc_t1_t2.glb",
+   "file": "assets/spine/sp_disc_l5_s1.glb",
    "colour": {
     "token": "spDisc",
     "light": "#137A88",
     "dark": "#98DCE6"
    },
    "category": "disc",
-   "level": "T1-T2",
-   "region": "thoracic",
+   "level": "L5-S1",
+   "region": "lumbar",
    "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
    "centroid": {
     "L": [
-     -14.6,
-     6.88,
-     398.44
+     1.05,
+     -1.98,
+     -17.87
     ],
     "R": [
-     -14.6,
-     6.88,
-     398.44
+     1.05,
+     -1.98,
+     -17.87
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 19348,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_disc_c7_t1",
-   "name": "Intervertebral disc C7-T1",
-   "type": "soft",
-   "layer": "discs",
-   "file": "assets/spine/sp_disc_c7_t1.glb",
-   "colour": {
-    "token": "spDisc",
-    "light": "#137A88",
-    "dark": "#98DCE6"
-   },
-   "category": "disc",
-   "level": "C7-T1",
-   "region": "cervical",
-   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
-   "centroid": {
-    "L": [
-     -12.04,
-     19.7,
-     414.79
-    ],
-    "R": [
-     -12.04,
-     19.7,
-     414.79
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 22800,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_disc_t5_t6",
-   "name": "Intervertebral disc T5-T6",
-   "type": "soft",
-   "layer": "discs",
-   "file": "assets/spine/sp_disc_t5_t6.glb",
-   "colour": {
-    "token": "spDisc",
-    "light": "#137A88",
-    "dark": "#98DCE6"
-   },
-   "category": "disc",
-   "level": "T5-T6",
-   "region": "thoracic",
-   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
-   "centroid": {
-    "L": [
-     -12.37,
-     -30.09,
-     321.95
-    ],
-    "R": [
-     -12.37,
-     -30.09,
-     321.95
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 26808,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_disc_t4_t5",
-   "name": "Intervertebral disc T4-T5",
-   "type": "soft",
-   "layer": "discs",
-   "file": "assets/spine/sp_disc_t4_t5.glb",
-   "colour": {
-    "token": "spDisc",
-    "light": "#137A88",
-    "dark": "#98DCE6"
-   },
-   "category": "disc",
-   "level": "T4-T5",
-   "region": "thoracic",
-   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
-   "centroid": {
-    "L": [
-     -14.98,
-     -23.32,
-     343.39
-    ],
-    "R": [
-     -14.98,
-     -23.32,
-     343.39
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 16508,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_disc_c6_c7",
-   "name": "Intervertebral disc C6-C7",
-   "type": "soft",
-   "layer": "discs",
-   "file": "assets/spine/sp_disc_c6_c7.glb",
-   "colour": {
-    "token": "spDisc",
-    "light": "#137A88",
-    "dark": "#98DCE6"
-   },
-   "category": "disc",
-   "level": "C6-C7",
-   "region": "cervical",
-   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
-   "centroid": {
-    "L": [
-     -10.59,
-     30.83,
-     429.34
-    ],
-    "R": [
-     -10.59,
-     30.83,
-     429.34
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 14932,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_disc_c5_c6",
-   "name": "Intervertebral disc C5-C6",
-   "type": "soft",
-   "layer": "discs",
-   "file": "assets/spine/sp_disc_c5_c6.glb",
-   "colour": {
-    "token": "spDisc",
-    "light": "#137A88",
-    "dark": "#98DCE6"
-   },
-   "category": "disc",
-   "level": "C5-C6",
-   "region": "cervical",
-   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
-   "centroid": {
-    "L": [
-     -9.89,
-     39.02,
-     444.99
-    ],
-    "R": [
-     -9.89,
-     39.02,
-     444.99
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 13552,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_disc_c3_c4",
-   "name": "Intervertebral disc C3-C4",
-   "type": "soft",
-   "layer": "discs",
-   "file": "assets/spine/sp_disc_c3_c4.glb",
-   "colour": {
-    "token": "spDisc",
-    "light": "#137A88",
-    "dark": "#98DCE6"
-   },
-   "category": "disc",
-   "level": "C3-C4",
-   "region": "cervical",
-   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
-   "centroid": {
-    "L": [
-     -9.32,
-     54.13,
-     477.06
-    ],
-    "R": [
-     -9.32,
-     54.13,
-     477.06
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 25044,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_disc_t2_t3",
-   "name": "Intervertebral disc T2-T3",
-   "type": "soft",
-   "layer": "discs",
-   "file": "assets/spine/sp_disc_t2_t3.glb",
-   "colour": {
-    "token": "spDisc",
-    "light": "#137A88",
-    "dark": "#98DCE6"
-   },
-   "category": "disc",
-   "level": "T2-T3",
-   "region": "thoracic",
-   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
-   "centroid": {
-    "L": [
-     -16.38,
-     -5.76,
-     380.86
-    ],
-    "R": [
-     -16.38,
-     -5.76,
-     380.86
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 14408,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_disc_c4_c5",
-   "name": "Intervertebral disc C4-C5",
-   "type": "soft",
-   "layer": "discs",
-   "file": "assets/spine/sp_disc_c4_c5.glb",
-   "colour": {
-    "token": "spDisc",
-    "light": "#137A88",
-    "dark": "#98DCE6"
-   },
-   "category": "disc",
-   "level": "C4-C5",
-   "region": "cervical",
-   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
-   "centroid": {
-    "L": [
-     -9.57,
-     47.1,
-     460.02
-    ],
-    "R": [
-     -9.57,
-     47.1,
-     460.02
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 25888,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_disc_t3_t4",
-   "name": "Intervertebral disc T3-T4",
-   "type": "soft",
-   "layer": "discs",
-   "file": "assets/spine/sp_disc_t3_t4.glb",
-   "colour": {
-    "token": "spDisc",
-    "light": "#137A88",
-    "dark": "#98DCE6"
-   },
-   "category": "disc",
-   "level": "T3-T4",
-   "region": "thoracic",
-   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
-   "centroid": {
-    "L": [
-     -17.36,
-     -14.82,
-     361.18
-    ],
-    "R": [
-     -17.36,
-     -14.82,
-     361.18
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 7408,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_disc_c2_c3",
-   "name": "Intervertebral disc C2-C3",
-   "type": "soft",
-   "layer": "discs",
-   "file": "assets/spine/sp_disc_c2_c3.glb",
-   "colour": {
-    "token": "spDisc",
-    "light": "#137A88",
-    "dark": "#98DCE6"
-   },
-   "category": "disc",
-   "level": "C2-C3",
-   "region": "cervical",
-   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
-   "centroid": {
-    "L": [
-     -10.4,
-     60.18,
-     494.9
-    ],
-    "R": [
-     -10.4,
-     60.18,
-     494.9
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 6880,
-   "dataset": "verse",
-   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
-   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
-   "citation": [
-    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
-    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
-    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1148/ryai.2020190138",
-    "https://doi.org/10.1038/s41597-021-01060-0",
-    "https://doi.org/10.1016/j.media.2021.102166",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "refIds": [
-    "loffler2020",
-    "liebl2021",
-    "sekuboyina2021",
-    "wasserthal2023"
-   ],
-   "id": "sp_disc_t10_t11",
-   "name": "Intervertebral disc T10-T11",
-   "type": "soft",
-   "layer": "discs",
-   "file": "assets/spine/sp_disc_t10_t11.glb",
-   "colour": {
-    "token": "spDisc",
-    "light": "#137A88",
-    "dark": "#98DCE6"
-   },
-   "category": "disc",
-   "level": "T10-T11",
-   "region": "thoracic",
-   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation.",
-   "centroid": {
-    "L": [
-     -20.2,
-     -20.97,
-     204.14
-    ],
-    "R": [
-     -20.2,
-     -20.97,
-     204.14
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "bytes": 14992,
+   "bytes": 24876,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -2927,7 +2927,7 @@
    "level": "L1",
    "region": "lumbar",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T12-L1 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at L1 and exits through the L1-L2 foramen (measured position); drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the T12-L1 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at L1 and exits through the L1-L2 foramen (measured position); kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      8.68,
@@ -2943,7 +2943,7 @@
   },
   {
    "aliases": [],
-   "bytes": 15012,
+   "bytes": 23336,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -2979,7 +2979,7 @@
    "level": "L2",
    "region": "lumbar",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L1-L2 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at L2 and exits through the L2-L3 foramen (measured position); drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L1-L2 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at L2 and exits through the L2-L3 foramen (measured position); kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      8.04,
@@ -2995,7 +2995,7 @@
   },
   {
    "aliases": [],
-   "bytes": 14960,
+   "bytes": 24256,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3031,7 +3031,7 @@
    "level": "L3",
    "region": "lumbar",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L2-L3 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at L3 and exits through the L3-L4 foramen (measured position); drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L2-L3 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at L3 and exits through the L3-L4 foramen (measured position); kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on the left to fit the opening as drawn (to 90 % at the least) (not to scale).",
    "centroid": {
     "L": [
      9.12,
@@ -3047,7 +3047,7 @@
   },
   {
    "aliases": [],
-   "bytes": 14960,
+   "bytes": 22340,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3083,7 +3083,7 @@
    "level": "L4",
    "region": "lumbar",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L3-L4 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at L4 and exits through the L4-L5 foramen (measured position); drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L3-L4 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at L4 and exits through the L4-L5 foramen (measured position); kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      12.18,
@@ -3099,7 +3099,7 @@
   },
   {
    "aliases": [],
-   "bytes": 14876,
+   "bytes": 25812,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3135,7 +3135,7 @@
    "level": "L5",
    "region": "lumbar",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L4-L5 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at L5 and exits through the L5-S1 foramen, whose position is estimated on L and R (not captured by the measurement); drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L4-L5 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at L5 and exits through the L5-S1 foramen, whose position is estimated on L and R (not captured by the measurement); kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      24.82,
@@ -3151,7 +3151,7 @@
   },
   {
    "aliases": [],
-   "bytes": 13672,
+   "bytes": 27240,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3187,7 +3187,7 @@
    "level": "S1",
    "region": "lumbar",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L5-S1 disc, runs in the lateral recess of S1 and leaves through the first sacral foramen, whose position is estimated (not captured by the measurement); drawn 3 mm thick, with its dorsal root ganglion inside the canal, where the S1 ganglion more often lies (Hasegawa 1996; not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac at the L5-S1 disc, runs in the lateral recess of S1 and leaves through the first sacral foramen, whose position is estimated (not captured by the measurement); kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion inside the canal, where the S1 ganglion more often lies (Hasegawa 1996), drawn smaller on the left to fit the opening as drawn (to 95 % at the least) (not to scale).",
    "centroid": {
     "L": [
      2.49,
@@ -3203,7 +3203,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12356,
+   "bytes": 17012,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3239,7 +3239,7 @@
    "level": "T1",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T1-T2 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T1-T2 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on the left to fit the opening as drawn (to 85 % at the least) (not to scale).",
    "centroid": {
     "L": [
      -0.65,
@@ -3255,7 +3255,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12368,
+   "bytes": 17040,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3291,7 +3291,7 @@
    "level": "T2",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T2-T3 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T2-T3 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on the left to fit the opening as drawn (to 90 % at the least) (not to scale).",
    "centroid": {
     "L": [
      -1.52,
@@ -3307,7 +3307,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12368,
+   "bytes": 16876,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3343,7 +3343,7 @@
    "level": "T3",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T3-T4 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T3-T4 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on both sides to fit the opening as drawn (to 90 % at the least) (not to scale).",
    "centroid": {
     "L": [
      -6.35,
@@ -3359,7 +3359,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12368,
+   "bytes": 16928,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3395,7 +3395,7 @@
    "level": "T4",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T4-T5 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T4-T5 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on the right to fit the opening as drawn (to 80 % at the least) (not to scale).",
    "centroid": {
     "L": [
      -5.35,
@@ -3411,7 +3411,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12396,
+   "bytes": 16576,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3447,7 +3447,7 @@
    "level": "T5",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T5-T6 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T5-T6 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      -6.55,
@@ -3463,7 +3463,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12396,
+   "bytes": 15176,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3499,7 +3499,7 @@
    "level": "T6",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T6-T7 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T6-T7 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on the right to fit the opening as drawn (to 90 % at the least) (not to scale).",
    "centroid": {
     "L": [
      -3.46,
@@ -3515,7 +3515,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12376,
+   "bytes": 14976,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3551,7 +3551,7 @@
    "level": "T7",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T7-T8 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T7-T8 foramen, whose position is estimated on L (not captured by the measurement), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on both sides to fit the opening as drawn (to 75 % at the least) (not to scale).",
    "centroid": {
     "L": [
      -4.05,
@@ -3567,7 +3567,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12352,
+   "bytes": 17768,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3603,23 +3603,23 @@
    "level": "T8",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T8-T9 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T8-T9 foramen, whose position is estimated on R (not captured by the measurement), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on the right to fit the opening as drawn (to 95 % at the least) (not to scale).",
    "centroid": {
     "L": [
-     0.84,
-     -49.09,
-     267.99
+     0.57,
+     -46.06,
+     258.97
     ],
     "R": [
-     0.84,
-     -49.09,
-     267.99
+     0.57,
+     -46.06,
+     258.97
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 12368,
+   "bytes": 14768,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3655,7 +3655,7 @@
    "level": "T9",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T9-T10 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T9-T10 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on both sides to fit the opening as drawn (to 60 % at the least) (not to scale).",
    "centroid": {
     "L": [
      -2.0,
@@ -3671,7 +3671,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12364,
+   "bytes": 16780,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3707,7 +3707,7 @@
    "level": "T10",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T10-T11 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T10-T11 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on both sides to fit the opening as drawn (to 80 % at the least) (not to scale).",
    "centroid": {
     "L": [
      1.98,
@@ -3723,7 +3723,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12380,
+   "bytes": 17548,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3759,7 +3759,7 @@
    "level": "T11",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T11-T12 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T11-T12 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on the left to fit the opening as drawn (to 90 % at the least) (not to scale).",
    "centroid": {
     "L": [
      3.42,
@@ -3775,7 +3775,7 @@
   },
   {
    "aliases": [],
-   "bytes": 12392,
+   "bytes": 17224,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3811,7 +3811,7 @@
    "level": "T12",
    "region": "thoracic",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T12-L1 foramen (measured position), then a short way along its intercostal course; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T12-L1 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
      6.35,
@@ -3827,7 +3827,7 @@
   },
   {
    "aliases": [],
-   "bytes": 13968,
+   "bytes": 18064,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3863,7 +3863,7 @@
    "level": "C3",
    "region": "cervical",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac level with its foramen's entrance and exits through the lower part of the C2-C3 foramen (measured position), then runs a short way forwards and out along the transverse process; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with its foramen's entrance and exits through the lower part of the C2-C3 foramen (measured position), then runs a short way forwards and out along the transverse process; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen, drawn smaller on the left to fit the opening as drawn (to 85 % at the least) (not to scale).",
    "centroid": {
     "L": [
      4.41,
@@ -3879,7 +3879,7 @@
   },
   {
    "aliases": [],
-   "bytes": 13976,
+   "bytes": 15376,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3915,7 +3915,7 @@
    "level": "C4",
    "region": "cervical",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac level with its foramen's entrance and exits through the lower part of the C3-C4 foramen (measured position), then runs a short way forwards and out along the transverse process; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with its foramen's entrance and exits through the lower part of the C3-C4 foramen (measured position), then runs a short way forwards and out along the transverse process; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen, drawn smaller on the left to fit the opening as drawn (to 95 % at the least) (not to scale).",
    "centroid": {
     "L": [
      5.13,
@@ -3931,7 +3931,7 @@
   },
   {
    "aliases": [],
-   "bytes": 13944,
+   "bytes": 17312,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -3967,7 +3967,7 @@
    "level": "C5",
    "region": "cervical",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac level with its foramen's entrance and exits through the lower part of the C4-C5 foramen (measured position), then runs a short way forwards and out along the transverse process; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with its foramen's entrance and exits through the lower part of the C4-C5 foramen (measured position), then runs a short way forwards and out along the transverse process; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen, drawn smaller on the right to fit the opening as drawn (to 95 % at the least) (not to scale).",
    "centroid": {
     "L": [
      5.32,
@@ -3983,7 +3983,7 @@
   },
   {
    "aliases": [],
-   "bytes": 13920,
+   "bytes": 17356,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4019,7 +4019,7 @@
    "level": "C6",
    "region": "cervical",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac level with its foramen's entrance and exits through the lower part of the C5-C6 foramen (measured position), then runs a short way forwards and out along the transverse process; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with its foramen's entrance and exits through the lower part of the C5-C6 foramen (measured position), then runs a short way forwards and out along the transverse process; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen (not to scale).",
    "centroid": {
     "L": [
      5.03,
@@ -4035,7 +4035,7 @@
   },
   {
    "aliases": [],
-   "bytes": 13972,
+   "bytes": 17124,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4071,7 +4071,7 @@
    "level": "C7",
    "region": "cervical",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac level with its foramen's entrance and exits through the lower part of the C6-C7 foramen (measured position), then runs a short way forwards and out along the transverse process; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with its foramen's entrance and exits through the lower part of the C6-C7 foramen (measured position), then runs a short way forwards and out along the transverse process; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen (not to scale).",
    "centroid": {
     "L": [
      4.93,
@@ -4087,7 +4087,7 @@
   },
   {
    "aliases": [],
-   "bytes": 13988,
+   "bytes": 16900,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4123,7 +4123,7 @@
    "level": "C8",
    "region": "cervical",
    "schematic": true,
-   "derivation": "Schematic: leaves the lateral wall of the dural sac level with its foramen's entrance and exits through the lower part of the C7-T1 foramen (measured position), then runs a short way forwards and out along the transverse process; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen (not to scale).",
+   "derivation": "Schematic: leaves the lateral wall of the dural sac level with its foramen's entrance and exits through the lower part of the C7-T1 foramen (measured position), then runs a short way forwards and out along the transverse process; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen (not to scale).",
    "centroid": {
     "L": [
      1.43,
@@ -4839,7 +4839,7 @@
   },
   {
    "aliases": [],
-   "bytes": 17772,
+   "bytes": 36304,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -4874,7 +4874,7 @@
    "category": "vessel",
    "region": "cervical",
    "schematic": true,
-   "derivation": "Schematic: from the subclavian artery (TotalSegmentator) into the foramen transversarium of C6 (left) and C6 (right), inferred from the foramina's size on this CT; up through the foramina measured on this CT to C1; behind the lateral mass of the atlas and over the groove on its posterior arch (measured surface); then a short way towards the foramen magnum. Drawn 4 mm thick.",
+   "derivation": "Schematic: from the subclavian artery (TotalSegmentator) into the foramen transversarium of C6 (left) and C6 (right), inferred from the foramina's size on this CT; up through the foramina measured on this CT to C1; behind the lateral mass of the atlas and over the groove on its posterior arch (measured surface); then a short way towards the foramen magnum; led round the bone as it is drawn. Drawn 4 mm thick, thinner where the foramen as drawn leaves less room (3.2 mm or more in the foramina, except 2 mm at C2 on the right; 2 mm at C3 on the left; 1.5 mm at C3 on the right) (not to scale).",
    "centroid": {
     "L": [
      -26.19,

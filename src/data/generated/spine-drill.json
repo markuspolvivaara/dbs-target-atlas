@@ -25,7 +25,7 @@
    "root": "sp_root_c3",
    "artery": true,
    "file": "assets/spine/drill_c2_c3.bin.gz",
-   "bytes": 750848,
+   "bytes": 774433,
    "dims": [
     100,
     97,
@@ -161,7 +161,7 @@
    "root": "sp_root_c4",
    "artery": true,
    "file": "assets/spine/drill_c3_c4.bin.gz",
-   "bytes": 605465,
+   "bytes": 636514,
    "dims": [
     102,
     98,
@@ -297,7 +297,7 @@
    "root": "sp_root_c5",
    "artery": true,
    "file": "assets/spine/drill_c4_c5.bin.gz",
-   "bytes": 632371,
+   "bytes": 654815,
    "dims": [
     103,
     103,
@@ -433,7 +433,7 @@
    "root": "sp_root_c6",
    "artery": true,
    "file": "assets/spine/drill_c5_c6.bin.gz",
-   "bytes": 702254,
+   "bytes": 720197,
    "dims": [
     105,
     107,
@@ -569,7 +569,7 @@
    "root": "sp_root_c7",
    "artery": true,
    "file": "assets/spine/drill_c6_c7.bin.gz",
-   "bytes": 821742,
+   "bytes": 829759,
    "dims": [
     122,
     123,
@@ -705,7 +705,7 @@
    "root": "sp_root_c8",
    "artery": true,
    "file": "assets/spine/drill_c7_t1.bin.gz",
-   "bytes": 935145,
+   "bytes": 936972,
    "dims": [
     133,
     132,
@@ -841,7 +841,7 @@
    "root": "sp_root_l2",
    "artery": false,
    "file": "assets/spine/drill_l1_l2.bin.gz",
-   "bytes": 1486274,
+   "bytes": 1478861,
    "dims": [
     132,
     150,
@@ -977,7 +977,7 @@
    "root": "sp_root_l3",
    "artery": false,
    "file": "assets/spine/drill_l2_l3.bin.gz",
-   "bytes": 1661535,
+   "bytes": 1654371,
    "dims": [
     150,
     156,
@@ -1113,7 +1113,7 @@
    "root": "sp_root_l4",
    "artery": false,
    "file": "assets/spine/drill_l3_l4.bin.gz",
-   "bytes": 1711511,
+   "bytes": 1701826,
    "dims": [
     154,
     153,
@@ -1249,7 +1249,7 @@
    "root": "sp_root_l5",
    "artery": false,
    "file": "assets/spine/drill_l4_l5.bin.gz",
-   "bytes": 1713300,
+   "bytes": 1699403,
    "dims": [
     156,
     149,
@@ -1287,8 +1287,8 @@
      "p95Mm": 0.428
     },
     "L5": {
-     "medianMm": 0.25,
-     "p95Mm": 0.428
+     "medianMm": 0.261,
+     "p95Mm": 0.464
     }
    },
    "landmarks": [
@@ -1385,7 +1385,7 @@
    "root": "sp_root_s1",
    "artery": false,
    "file": "assets/spine/drill_l5_s1.bin.gz",
-   "bytes": 1421189,
+   "bytes": 1411977,
    "dims": [
     150,
     149,

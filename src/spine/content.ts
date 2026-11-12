@@ -7,7 +7,10 @@ import { SP_MANIFEST } from './index';
  * Statements are paraphrased from the cited papers; every refId is a key of the manifest's references.
  */
 const V3 = z.tuple([z.number(), z.number(), z.number()]);
-const Dims = z.object({ width: z.number(), depth: z.number(), area: z.number() });
+/** the canal as the level's card gives it. betweenPedicles: measured in the plane normal to the spine where the canal is
+ * narrowest between the pedicles (width: the interpedicular distance; depth: front to back through its centre);
+ * otherwise the hole common to a 6 mm slab through the body centre (where the ring closes in no single plane) */
+const Dims = z.object({ width: z.number(), depth: z.number(), area: z.number(), betweenPedicles: z.boolean().optional() });
 const Foramen = z.object({ height: z.number(), width: z.number(), area: z.number() }).nullable();
 export const LevelGeomSchema = z.object({
   level: z.string(),
@@ -17,6 +20,14 @@ export const LevelGeomSchema = z.object({
   foramen: z.object({ L: Foramen, R: Foramen }),
   discCentre: V3,
   discHeightMm: z.number().optional(),
+  /** a disc drawn in part: the segmentation holds a chip much narrower than the discs above and below (their widths
+   * given), so no height is reported; spaceHu: the densest the CT gets between the two bodies (its mean on 16 mm
+   * circles across the line joining their centres, HU), beside the same at the discs above and below, where it is
+   * an end plate */
+  discPartial: z.object({
+    volumeMl: z.number(), widthMm: z.number(), neighbourWidthMm: z.array(z.number()),
+    spaceHu: z.number(), neighbourSpaceHu: z.array(z.number()),
+  }).optional(),
   /** false where the foramen's size is not reported (thoracic: the rib heads form part of its wall) */
   foramenMeasured: z.boolean().optional(),
   lesions: z.object({
@@ -25,7 +36,9 @@ export const LevelGeomSchema = z.object({
   }).optional(),
 });
 export type LevelGeom = z.infer<typeof LevelGeomSchema>;
-const TransverseForamen = z.object({ area: z.number(), width: z.number(), depth: z.number() }).nullable();
+/** area, width, depth: on the bone as drawn; areaUnsmoothed: the enclosed area on the same volume before the drawing's
+ * smoothing, which narrows small openings (null where no enclosed region is found there) */
+const TransverseForamen = z.object({ area: z.number(), width: z.number(), depth: z.number(), areaUnsmoothed: z.number().nullable() }).nullable();
 const LEVELS = z.object({
   lumbar: z.array(LevelGeomSchema), thoracic: z.array(LevelGeomSchema), cervical: z.array(LevelGeomSchema),
   /** the vertebral artery's entry level per side (inferred from the foramina's size) and the foramina transversaria
@@ -33,6 +46,19 @@ const LEVELS = z.object({
   vertebralArtery: z.object({
     entry: z.object({ L: z.string(), R: z.string() }),
     foramina: z.record(z.object({ L: TransverseForamen, R: TransverseForamen, medialGap: z.number().optional() })),
+    /** how thick (mm) the schematic artery is drawn in each foramen it passes: 4 mm, or less where the foramen as
+     * drawn is narrower */
+    drawnDiameter: z.object({ L: z.record(z.number()), R: z.record(z.number()) }),
+  }),
+  /** the structures placed by rule against the bone as drawn: how deep (mm) each root's tube and ganglion (keys like
+   * "T7L") and the vertebral artery still reach into it, and the scale each ganglion is drawn at */
+  placed: z.object({
+    rootInBoneMm: z.record(z.object({ root: z.number(), ganglion: z.number() })),
+    ganglionScale: z.record(z.number()),
+    vertebralArtery: z.object({
+      L: z.object({ inBoneMm: z.number(), ledRoundMm: z.number(), diameterAt: z.record(z.number()) }),
+      R: z.object({ inBoneMm: z.number(), ledRoundMm: z.number(), diameterAt: z.record(z.number()) }),
+    }),
   }),
   /** the level each laryngeal landmark projects to on this CT */
   neckLandmarks: z.object({
@@ -62,6 +88,8 @@ export const LUMBAR_GEOM = LEVELS.lumbar;
 export const THORACIC_GEOM = LEVELS.thoracic;
 export const CERVICAL_GEOM = LEVELS.cervical;
 export const VERTEBRAL_ARTERY = LEVELS.vertebralArtery;
+/** the roots, their ganglia and the vertebral artery (placed by rule) against the bone as drawn: see the schema */
+export const PLACED = LEVELS.placed;
 export const NECK_LANDMARKS = LEVELS.neckLandmarks;
 /** The craniocervical junction's measurements (Fidan 2026's definitions, on its midsagittal CT): what each is, its value
  * on this CT and the published normal values. The lines each draws are its landmarks in CCJ.landmarks. */

@@ -30,6 +30,18 @@ describe('virtual screw data (pipeline/spine_screw.py)', () => {
     for (const t of Object.values(TECHNIQUES)) for (const l of t.levels) expect(SCREW_LEVELS[screwKey(l, t.id)]?.start[t.id], `${t.id} ${l}`).toBeTruthy();
     expect(crossCheckContent()).toEqual([]);
   });
+  it('no start position has its screw in a nerve root or in the vertebral artery', () => {
+    // (the audit's AP-10: 49 of 108 start positions had the same level's root inside the screw, 18 of them graded A;
+    // the roots ran through the pedicles. They are kept out of the drawn bone now: pipeline/drawn_bone.py)
+    const touching: string[] = [];
+    let n = 0;
+    for (const [lv, d] of Object.entries(SCREW_LEVELS)) for (const [key, ck] of Object.entries(d.check)) {
+      n++;
+      for (const x of ck.nearest) if ((x.id.startsWith('sp_root_') || x.id === 'sp_vertebral_artery') && x.mm < 0) touching.push(`${lv} ${key}: ${x.id} ${x.mm} mm`);
+    }
+    expect(n).toBeGreaterThan(100);
+    expect(touching).toEqual([]);
+  });
   it('pedicle measurements sit near the published values (wide bounds: one subject)', () => {
     for (const lv of ['L1', 'L2', 'L3', 'L4', 'L5'] as const) {
       const pub = published.levels[lv];

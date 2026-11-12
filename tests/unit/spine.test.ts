@@ -3,7 +3,7 @@ import { crossCheckSpine, discBelow, SP, SP_MANIFEST, SP_REFS, vertebraOf } from
 import published from '../../src/data/generated/spine-published.json';
 import {
   ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, CCJ, CCJ_MEASURES, CERVICAL_GEOM, crossCheckContent, discRegion, exitingRoot, exposureRegion, GEOM_BY_LEVEL,
-  LESION_ZONES, lesionZones, LUMBAR_GEOM, NECK_LANDMARKS, ROOT_FUNCTION, STATEMENTS, THORACIC_GEOM, VERTEBRA_NEIGHBOURS, VERTEBRAL_ARTERY,
+  LESION_ZONES, lesionZones, LUMBAR_GEOM, NECK_LANDMARKS, PLACED, ROOT_FUNCTION, STATEMENTS, THORACIC_GEOM, VERTEBRA_NEIGHBOURS, VERTEBRAL_ARTERY,
 } from '../../src/spine/content';
 import { HERNIA_ZONES, herniaRoot } from '../../src/spine/herniation';
 import { REGION, REGIONS } from '../../src/spine/regions';
@@ -70,6 +70,87 @@ describe('spine data (VerSe CT + TotalSegmentator)', () => {
       expect(r.deepestMm, r.pair).toBeLessThanOrEqual(r.pair === 'L5-S1' ? 1 : 0.5);
     }
   }, 60_000);
+  it('the roots, their ganglia and the vertebral artery lie outside the bone as drawn (the build’s measure)', () => {
+    // (the audit’s findings MC-05 and MC-08: six roots ran 4 to 5 mm deep through a pedicle, the S1 roots 3 mm into the
+    // sacrum and the vertebral artery 3.6 mm through C2, while the build’s report called them clear: it measured
+    // against the CT’s bright voxels, not the solid the vertebrae are drawn from)
+    const halves = [...[3, 4, 5, 6, 7, 8].map((i) => `C${i}`), ...Array.from({ length: 12 }, (_, i) => `T${i + 1}`), ...[1, 2, 3, 4, 5].map((i) => `L${i}`), 'S1']
+      .flatMap((r) => [`${r}L`, `${r}R`]);
+    expect(Object.keys(PLACED.rootInBoneMm).sort()).toEqual([...halves].sort());
+    for (const k of halves) {
+      expect(PLACED.rootInBoneMm[k].root, k).toBeLessThanOrEqual(0.5);
+      expect(PLACED.rootInBoneMm[k].ganglion, k).toBeLessThanOrEqual(0.5);
+      // a ganglion is drawn smaller where the opening as drawn is narrower than it, to 60 % at the least
+      expect(PLACED.ganglionScale[k], k).toBeGreaterThanOrEqual(0.6);
+      expect(PLACED.ganglionScale[k], k).toBeLessThanOrEqual(1);
+    }
+    for (const sd of ['L', 'R'] as const) {
+      const a = PLACED.vertebralArtery[sd];
+      expect(a.inBoneMm, sd).toBeLessThanOrEqual(1);
+      // it runs in every foramen from its entry up to C1, 4 mm thick or thinner where the foramen as drawn is narrower
+      const order = ['C7', 'C6', 'C5', 'C4', 'C3', 'C2', 'C1'];
+      expect(Object.keys(a.diameterAt).sort()).toEqual(order.slice(order.indexOf(VERTEBRAL_ARTERY.entry[sd])).sort());
+      for (const d of Object.values(a.diameterAt)) { expect(d).toBeGreaterThanOrEqual(1.45); expect(d).toBeLessThanOrEqual(4.05); }
+      expect(VERTEBRAL_ARTERY.drawnDiameter[sd]).toEqual(a.diameterAt);
+    }
+  });
+  it('on the shipped files: hardly a vertex of a root or of the vertebral artery lies inside a vertebra', async () => {
+    // each root against the vertebrae its foramen lies between (and the sacrum for L5 and S1); the artery against C1-C7
+    const bone = new Map<string, { P: Float64Array; T: Uint32Array }>();
+    const soup = async (id: string) => { if (!bone.has(id)) bone.set(id, await meshSoup(SP.get(id)!.file)); return bone.get(id)!; };
+    const up = (r: string) => (r === 'C8' ? 'C7' : r.startsWith('C') ? `C${Number(r.slice(1)) - 1}` : r);
+    const down = (r: string) => (r === 'C8' ? 'T1' : r.startsWith('C') ? r : r === 'T12' ? 'L1' : r === 'L5' || r === 'S1' ? 'sacrum' : `${r[0]}${Number(r.slice(1)) + 1}`);
+    const roots = [...[3, 4, 5, 6, 7, 8].map((i) => `C${i}`), ...Array.from({ length: 12 }, (_, i) => `T${i + 1}`), ...[1, 2, 3, 4, 5].map((i) => `L${i}`), 'S1'];
+    let worst = 0, total = 0, inside = 0;
+    for (const r of roots) {
+      const q = await meshSoup(SP.get(`sp_root_${r.toLowerCase()}`)!.file);
+      let n = 0;
+      for (const b of new Set([up(r) === 'S1' ? 'L5' : up(r), down(r)])) {
+        const s = await soup(`sp_${b.toLowerCase()}`);
+        n += pointsInside(q.P, s.P, s.T);
+      }
+      // (before: 163 of T7's 664 vertices a side, 24 %, lay inside T7; the files' surfaces are simplified and
+      // quantized, so a ganglion drawn up to 0.3 mm into the bone can leave a few vertices just inside: 7 of 1,668
+      // at the most now)
+      expect(n / (q.P.length / 3), r).toBeLessThan(0.01);
+      worst = Math.max(worst, n / (q.P.length / 3)); total += q.P.length / 3; inside += n;
+    }
+    expect(inside / total).toBeLessThan(0.003);
+    const va = await meshSoup(SP.get('sp_vertebral_artery')!.file);
+    let n = 0;
+    for (let i = 1; i <= 7; i++) { const s = await soup(`sp_c${i}`); n += pointsInside(va.P, s.P, s.T); }
+    // (before: 128 of its 1,984 vertices, 6.5 %, up to 3.6 mm deep in C2; now 23 of 3,934, none deeper than 0.9 mm)
+    expect(n / (va.P.length / 3)).toBeLessThan(0.012);
+  }, 120_000);
+  it('the canal is measured between the pedicles, and its width does not jump between neighbours', () => {
+    // (the card gave the bounding width of a hole in a slab through the body centre: at L5 it ran out into the lateral
+    // recesses beneath the pedicles, 38.0 mm and 436 mm2 beside L4's 26.5 mm and 295 mm2; the audit's finding MC-06)
+    for (const geom of [CERVICAL_GEOM, THORACIC_GEOM, LUMBAR_GEOM]) {
+      for (const g of geom) expect(g.canal?.betweenPedicles, g.level).toBe(true);
+      geom.slice(1).forEach((g, i) => {
+        const r = g.canal!.width / geom[i].canal!.width;
+        expect(r, `${geom[i].level} to ${g.level}`).toBeGreaterThan(1 / 1.3);
+        expect(r, `${geom[i].level} to ${g.level}`).toBeLessThan(1.3);
+      });
+    }
+    const l5 = GEOM_BY_LEVEL.get('L5')!.canal!;
+    expect(l5.width).toBeGreaterThan(22); expect(l5.width).toBeLessThan(32);
+    expect(l5.area).toBeLessThan(360);
+  });
+  it('a disc drawn in part says so: the T10-T11 disc, a chip beside a dense band between the two bodies', () => {
+    // (the audit's finding MC-02: a 0.08 ml chip shown as a disc, with a "disc height" of 2.3 mm)
+    const partial = [...CERVICAL_GEOM, ...THORACIC_GEOM, ...LUMBAR_GEOM].filter((g) => g.discPartial);
+    expect([...new Set(partial.map((g) => g.pair))]).toEqual(['T10-T11']);
+    for (const g of partial) {
+      const p = g.discPartial!;
+      expect(g.discHeightMm).toBeUndefined();
+      expect(p.widthMm).toBeLessThan(0.5 * (p.neighbourWidthMm.reduce((a, b) => a + b, 0) / p.neighbourWidthMm.length));
+      // the CT between the bodies: far denser than the end plates of the discs above and below
+      expect(p.neighbourSpaceHu.length).toBe(2);
+      for (const hu of p.neighbourSpaceHu) expect(p.spaceHu).toBeGreaterThan(2 * hu);
+      expect(SP.get('sp_disc_t10_t11')!.derivation).toContain('not drawn in full');
+    }
+  });
   it('shipped GLBs decode with the left half left of the right half', async () => {
     const m = await nodeMeans(SP.get('sp_l3')!.file);
     expect(m.L[0]).toBeLessThan(m.R[0]);
@@ -215,7 +296,8 @@ describe('thoracic region (phase 3a)', () => {
       expect(g.canal, g.pair).toBeTruthy();
       expect(g.canal!.area, g.pair).toBeGreaterThan(120);
       expect(g.canal!.area, g.pair).toBeLessThan(400);
-      expect(g.discHeightMm, g.pair).toBeGreaterThan(1);
+      // (every disc but one drawn in part, which gets no height: see the test above)
+      if (!g.discPartial) expect(g.discHeightMm, g.pair).toBeGreaterThan(1);
       expect(g.foramenMeasured, g.pair).toBe(false);
       expect([g.foramen.L, g.foramen.R]).toEqual([null, null]);
       expect(g.lesions, g.pair).toBeUndefined();

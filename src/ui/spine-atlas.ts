@@ -456,11 +456,14 @@ export class SpineAtlasPage {
       h('dl', {},
         v ? [h('dt', {}, 'Bone'), h('dd', {}, this.link(v.id))] : null,
         d ? [h('dt', {}, 'Disc below'), h('dd', {}, this.link(d.id), g?.discHeightMm ? ` · ${mm(g.discHeightMm)} high at its centre (measured)` : '',
+          g?.discPartial ? this.partialDisc(g) : null,
           g ? h('p', {}, h('button', {
             type: 'button', class: 'chip disc-cut', 'aria-pressed': String(this.s.cut === 'disc'),
             onclick: () => this.update((s) => { s.cut = s.cut === 'disc' ? 'none' : 'disc'; if (s.cut === 'disc') s.cam = { preset: 'axial' }; }, { camera: this.s.cut !== 'disc' }),
           }, 'Cross-section at this disc, from above')) : null)] : null,
-        g?.canal ? [h('dt', {}, 'Vertebral canal (measured)'), h('dd', {}, `${mm(g.canal.width)} wide, ${mm(g.canal.depth)} deep, ${Math.round(g.canal.area)} mm², in planes through the body centre normal to the spine`)] : null,
+        g?.canal ? [h('dt', {}, 'Vertebral canal (measured)'), h('dd', {}, g.canal.betweenPedicles
+          ? `${mm(g.canal.width)} between the pedicles, ${mm(g.canal.depth)} front to back through its middle, ${Math.round(g.canal.area)} mm²: in the plane normal to the spine where the canal is narrowest between the pedicles`
+          : `${mm(g.canal.width)} wide, ${mm(g.canal.depth)} deep, ${Math.round(g.canal.area)} mm², in planes through the body centre normal to the spine`)] : null,
         g && g.foramenMeasured === false && cervical ? [h('dt', {}, `Foramen ${g.pair}`), h('dd', {}, this.stmt(STATEMENTS.cervicalForamen))]
           : g && g.foramenMeasured === false ? [h('dt', {}, `Foramen ${g.pair}`), h('dd', {}, this.stmt(STATEMENTS.thoracicForamen),
           h('p', { class: 'aside' }, 'Its size is not given here: the measurement works on the vertebrae and discs alone, without the rib heads.'))]
@@ -481,8 +484,24 @@ export class SpineAtlasPage {
             }, { camera: true }) }, 'craniocervical region'),
             ' (another CT, which reaches the clivus); the occiput, the foramen magnum and the arteries and nerves above the atlas in the ',
             h('a', { href: '../skullbase/' }, 'skull base section'), '.'))] : null,
-        thoracic && g ? [h('dt', {}, `Dorsal approach to the ${g.pair} disc`), h('dd', {}, this.approachTool(level, g))] : null,
+        // (not at a disc drawn in part: there is no disc to show the approaches on)
+        thoracic && g && !g.discPartial ? [h('dt', {}, `Dorsal approach to the ${g.pair} disc`), h('dd', {}, this.approachTool(level, g))] : null,
+        thoracic && g?.discPartial ? [h('dt', {}, `Dorsal approach to the ${g.pair} disc`), h('dd', {},
+          h('p', { class: 'aside' }, 'Not shown at this level: its disc is drawn only in part (see “Disc below”). The approaches are shown at the other thoracic levels.'))] : null,
         cervical && g ? [h('dt', {}, `Anterior approach (ACDF) to the ${g.pair} disc`), h('dd', {}, this.acdfTool(level, g))] : null));
+  }
+
+  /** A disc drawn in part (the T10-T11 disc of this CT): what the segmentation holds and what the CT shows between
+   * the two bodies, measured; what it is, is left open. */
+  private partialDisc(g: LevelGeom): HTMLElement {
+    const p = g.discPartial!;
+    const list = (xs: number[], f: (x: number) => string) => xs.map(f).join(' and ');
+    return h('p', { class: 'aside partial-disc' },
+      `Drawn in part: the segmentation holds only a chip of this disc (${p.volumeMl.toFixed(2)} ml, ${Math.round(p.widthMm)} mm from side to side; `
+      + `the discs above and below are ${list(p.neighbourWidthMm, (x) => String(Math.round(x)))} mm), so no height is given. `
+      + `On this CT the space between the two bodies is dense where a disc is dark: its mean density on 16-mm circles across the line joining the bodies’ centres reaches ${Math.round(p.spaceHu)} HU `
+      + `(${list(p.neighbourSpaceHu, (x) => String(Math.round(x)))} HU at the discs above and below, where the brightest part is an end plate). `
+      + 'Whether that is a calcified or ossified disc, or end plates that have grown together, is not established here.');
   }
 
   /** The pedicles measured on this CT beside published values (spine_screw.py, spine_published.py). */
@@ -600,7 +619,12 @@ export class SpineAtlasPage {
       const carries = order.indexOf(level) >= order.indexOf(va.entry[sd]);
       const name = sd === 'L' ? 'Left' : 'Right';
       if (!f) return `${name}: none found (the artery enters higher, at ${va.entry[sd]})`;
-      return `${name}: ${Math.round(f.area)} mm² enclosed, ${fmtMm(f.width)} × ${fmtMm(f.depth)} mm; ${carries ? (level === va.entry[sd] ? 'the artery enters here (inferred)' : 'carries the artery (inferred)') : 'below the artery’s entry'}`;
+      // the schematic artery is 4 mm thick where there is room; where the foramen as drawn is narrower it is drawn thinner
+      const drawn = va.drawnDiameter[sd][level];
+      const thin = carries && drawn !== undefined && drawn < 3.95 ? `, drawn ${fmtMm(drawn)} mm thick here (the foramen as drawn is narrower than its 4 mm)` : '';
+      // (the drawn bone is a smoothed surface, which narrows small openings: the area before the smoothing beside it)
+      const raw = f.areaUnsmoothed !== null && Math.abs(f.areaUnsmoothed - f.area) >= 5 ? ` on the bone as drawn (${Math.round(f.areaUnsmoothed)} mm² before its smoothing)` : '';
+      return `${name}: ${Math.round(f.area)} mm² enclosed, ${fmtMm(f.width)} × ${fmtMm(f.depth)} mm${raw}; ${carries ? (level === va.entry[sd] ? 'the artery enters here (inferred)' : 'carries the artery (inferred)') : 'below the artery’s entry'}${thin}`;
     };
     return h('div', {},
       h('ul', { class: 'plain' }, h('li', {}, side('L')), h('li', {}, side('R'))),
