@@ -12,6 +12,7 @@ import { bindHelp, viewHelp } from './ui/help';
 import { bootFailed } from './ui/stage';
 import { disclaimerNote, siteHeader } from './ui/shell';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
+import { addressSync } from './ui/address';
 
 const SECTION = SECTIONS.find((s) => s.id === 'brainstem')!;
 
@@ -57,16 +58,14 @@ app.append(h('a', { class: 'skip', href: '#main' }, 'Skip to content'), h('a', {
 
 let pendingCamera = true;
 let hashTimer = 0;
+const address = addressSync();   // (the address is written only over the hash this page last wrote or read)
 
 function setState(next: BsState, opts: { camera: boolean; fromCamera?: boolean }): void {
   const pageChanged = next.page !== state.page;
   state = next;
   pendingCamera = opts.camera;
   clearTimeout(hashTimer);
-  hashTimer = window.setTimeout(() => {
-    const hsh = encodeBs(state);
-    if (hsh !== location.hash) history.replaceState(null, '', hsh);
-  }, opts.fromCamera ? 400 : 0);
+  hashTimer = window.setTimeout(() => address.write(encodeBs(state)), opts.fromCamera ? 400 : 0);
   if (opts.fromCamera) return;
   render(pageChanged);
 }
@@ -84,6 +83,7 @@ function render(pageChanged = false): void {
 }
 
 window.addEventListener('hashchange', () => {
+  address.read();
   if (location.hash === encodeBs(state)) return;
   const bare = !location.hash.includes('?');
   const next = bare ? { ...structuredClone(state), page: decodeBs(location.hash).page } : sanitize(decodeBs(location.hash));
@@ -132,6 +132,7 @@ window.addEventListener('keydown', (e) => {
 syncTheme();
 render(true);
 history.replaceState(null, '', encodeBs(state));
+address.read();
 atlas.viewer.preload().then(() => {
   pendingCamera = !state.cam.pos;
   pages.atlas.render(state);

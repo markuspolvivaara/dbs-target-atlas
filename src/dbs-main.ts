@@ -13,6 +13,7 @@ import { primaryTargetId } from './viewer/selection';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
 import { BRAND, SECTIONS } from './brand';
 import { disclaimerNote, siteHeader } from './ui/shell';
+import { addressSync } from './ui/address';
 
 const SECTION = SECTIONS.find((s) => s.id === 'dbs')!;
 
@@ -73,6 +74,7 @@ app.append(h('a', { class: 'skip', href: '#main' }, 'Skip to content'), h('a', {
 
 let pendingCamera = true;
 let hashTimer = 0;
+const address = addressSync();   // (the address is written only over the hash this page last wrote or read)
 
 function setState(next: AppState, opts: { camera: boolean; fromCamera?: boolean }): void {
   const pageChanged = next.page !== state.page;
@@ -80,10 +82,7 @@ function setState(next: AppState, opts: { camera: boolean; fromCamera?: boolean 
   pendingCamera = opts.camera;
   // camera moves are frequent: debounce the URL write; skip re-rendering panels
   clearTimeout(hashTimer);
-  hashTimer = window.setTimeout(() => {
-    const hsh = encode(state);
-    if (hsh !== location.hash) history.replaceState(null, '', hsh);
-  }, opts.fromCamera ? 400 : 0);
+  hashTimer = window.setTimeout(() => address.write(encode(state)), opts.fromCamera ? 400 : 0);
   if (opts.fromCamera) return;
   render(pageChanged);
 }
@@ -100,6 +99,7 @@ function render(pageChanged = false): void {
 }
 
 window.addEventListener('hashchange', () => {
+  address.read();
   if (location.hash === encode(state)) return;
   // A link with parameters is a complete view description; a bare page link (#/atlas) keeps the current view.
   const bare = !location.hash.includes('?');
@@ -158,6 +158,7 @@ window.addEventListener('keydown', (e) => {
 syncTheme();
 render(true);
 history.replaceState(null, '', encode(state));
+address.read();
 atlas.viewer.preload().then(() => {
   pendingCamera = !state.cam.pos;
   pages.atlas.render(state);
