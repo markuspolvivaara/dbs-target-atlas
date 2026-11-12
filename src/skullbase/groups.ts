@@ -126,7 +126,8 @@ function temporalGroups(): SbGroup[] {
     {
       ...base, id: 'floor', kind: 'overview', name: 'Cranial floor', camera: 'axial', cutAbove: FLOOR_CUT_MM, focus: null, radius: 75, boneLook: undefined,
       description: `This CT’s skull base seen from above, everything over ${FLOOR_CUT_MM} mm cut away: the cranial nerves routed through its own foramina, the foramina and the floor’s landmarks (the clinoid processes, the sella, the petrous apex and others) located on it, and the temporal bones’ contents from a real ear. The arteries and veins have their own views.`,
-      structures: [...bonesV3, ...nerves, ...ear], landmarks: lm(...FORAMINA, ...FLOOR_POINTS),
+      // (the ear's own nerves are among the nerves too: each once)
+      structures: [...new Set([...bonesV3, ...nerves, ...ear])], landmarks: lm(...FORAMINA, ...FLOOR_POINTS),
     },
     {
       ...base, id: 'nerves', kind: 'system', name: 'Cranial nerves', camera: 'axial', cutAbove: FLOOR_CUT_MM, focus: null, radius: 75,
@@ -356,6 +357,19 @@ export const SB_GROUPS: SbGroup[] = SB_MODEL === 'v3' ? temporalGroups() : [
   })),
 ];
 export const SB_GROUP = new Map(SB_GROUPS.map((g) => [g.id, g]));
+
+/** A view lists each structure and each landmark once: a repeat shows twice in the panel and is counted twice in the
+ * legend. Returns what is repeated, per view (empty when all is well). */
+export function crossCheckGroups(): string[] {
+  const errs: string[] = [];
+  for (const g of SB_GROUPS) {
+    for (const [what, ids] of [['structure', g.structures], ['landmark', g.landmarks]] as const) {
+      const twice = [...new Set(ids.filter((id, i) => ids.indexOf(id) !== i))];
+      if (twice.length) errs.push(`view ${g.id}: ${what} listed twice: ${twice.join(', ')}`);
+    }
+  }
+  return errs;
+}
 /** the group a page opens on */
 export const DEFAULT_GROUP = SB_GROUPS[0].id;
 

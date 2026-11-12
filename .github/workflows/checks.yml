@@ -1,7 +1,11 @@
 # Checks the committed assets and the app on every push and pull request, without the anatomy pipeline (its raw data and
-# build caches are not in git: the pipeline's own validators run where it runs). Gated here: the typecheck, the unit tests
-# (content, references, manifests and their provenance fields, every shipped GLB's geometry and laterality, URL round
-# trips) and the palette's contrast rules.
+# build caches are not in git: the pipeline's own validators run where it runs).
+#   checks: the typecheck, the linter (errors only), the unit tests (content, references, manifests and their provenance
+#           fields, every shipped GLB's geometry, laterality and winding, URL round trips) and the palette's contrast rules.
+#   browser: the end-to-end tests against the production build, in headless Chromium with software WebGL. Their picture
+#           comparisons are skipped here (the baselines are taken on macOS; playwright.config.ts): what runs is every
+#           other assertion: no console error, no request leaving the site, card texts, links that survive a reload.
+# Actions are pinned to a commit (the tag in the comment); Dependabot keeps the pins current.
 name: Checks
 
 on:
@@ -16,12 +20,33 @@ jobs:
   checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           cache: npm
       - run: npm ci
       - run: npx tsc --noEmit
+      - run: npm run lint -- --quiet
       - run: npm test
       - run: npm run check:palette
+
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npx playwright test
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7

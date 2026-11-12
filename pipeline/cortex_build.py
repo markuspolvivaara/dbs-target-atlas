@@ -246,6 +246,22 @@ def smooth_mask(m: np.ndarray, F: np.ndarray, keep: np.ndarray, steps: int = 3) 
     return m & ~keep
 
 
+def label_definition(s: str, ztexts: dict) -> dict | None:
+    """A label's definition as the card shows it: the lead of the Z-Anatomy text chosen for it (cortex_labels.ZTEXT), what
+    that text is about where it is not the label itself (scope), and any correction made to it (ZTEXT_EDITS), listed."""
+    zt = CL.ZTEXT[s]
+    d = definition(ztexts[zt[0]]) if zt else None
+    if not d:
+        return None
+    edits = []
+    for old, new, why in CL.ZTEXT_EDITS.get(s, []):
+        if d["text"].count(old) != 1:
+            raise SystemExit(f"{s}: the words to correct are not in its text (once): {old!r}")
+        d["text"] = d["text"].replace(old, new)
+        edits.append({"from": old, "to": new, "why": why})
+    return {**d, "source": zt[0], "scope": zt[1], **({"edits": edits} if edits else {})}
+
+
 def main() -> int:
     ztexts = json.loads((BUILD / "ztexts.json").read_text())
     surf = sio.loadmat(RAW / "cortex" / "CortexHiRes.mat", simplify_cells=True)
@@ -434,8 +450,6 @@ def main() -> int:
         })
         if s == "MW":
             continue
-        zt = CL.ZTEXT[s]
-        d = definition(ztexts[zt[0]]) if zt else None
         borders = {}
         for (a_, b_), l_ in border_len.items():
             if a_ == s and b_ != s:
@@ -458,7 +472,7 @@ def main() -> int:
                                for pid, (n, _) in rel_parcel.get(cid, {}).items() if n / nv >= 0.05 or n / parcel_size[pid] >= 0.05),
                               key=lambda x: -x["parcelInLabel"]),
             "insula": s in CL.INSULA_LABELS,
-            "definition": ({**d, "source": zt[0], "scope": zt[1]} if d else None),
+            "definition": label_definition(s, ztexts),
         })
     functions = []
     for fid, name, grp, tok, rule, refs in FUNCTIONS:
@@ -538,6 +552,18 @@ def validate() -> int:
                     ("G_temporal_middle", "temporal"), ("G_insular_short", "insula"), ("G_and_S_cingul-Ant", "cingulate"),
                     ("S_central", "frontal"), ("S_central", "parietal")]:
         check(lobe in {y["lobe"] for y in by[s]["lobes"]}, f"{s}: not in the {lobe} lobe ({by[s]['lobes']})")
+    # a label named for a lobe is coloured as that lobe (the parieto-occipital sulcus is the limit between two)
+    for x in lab["labels"]:
+        if x["short"] in CL.NAMED_LOBE:
+            check(x["lobe"] == CL.NAMED_LOBE[x["short"]] and x["lobeBy"] == "name", f"{x['short']}: not shown with the {CL.NAMED_LOBE[x['short']]} lobe")
+        if re.search(r"\boccipital\b", x["name"], re.I) and x["short"] != "S_parieto_occipital":
+            check(x["lobe"] == "occipital", f"{x['short']}: named occipital, coloured {x['lobe']}")
+    # every correction to a shipped text is in the text shown and listed with it
+    for s, eds in CL.ZTEXT_EDITS.items():
+        d = by[s]["definition"]
+        for old, new, _ in eds:
+            check(bool(d) and new in d["text"] and old not in d["text"] and any(e["from"] == old and e["to"] == new for e in d.get("edits", [])),
+                  f"{s}: correction not applied or not listed")
     # the central sulcus borders the pre- and postcentral gyri
     cs = {b["id"] for b in by["S_central"]["borders"]}
     check({slug("G_precentral"), slug("G_postcentral")} <= cs, "central sulcus borders")

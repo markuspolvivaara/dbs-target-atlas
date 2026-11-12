@@ -1,8 +1,13 @@
-/** The 3D labels' default: on a touch screen (a coarse pointer, no hover) every name is shown, as hovering cannot reveal
- * them there; elsewhere names show for the hovered or selected structure. A link states its setting when it differs. */
+/** The 3D labels' default: on a touch screen with room for them (a tablet: a coarse pointer, no hover) every name is
+ * shown, as hovering cannot reveal them there; elsewhere names show for the pointed-at or selected structure. A phone
+ * is the exception among touch screens: every name at once buries the model there (44 labels on the skull base's
+ * cranial floor), so a tap names a structure. A link states its setting when it differs. */
 export function defaultLabels(): 'all' | 'hover' {
   try {
-    return typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches && !matchMedia('(pointer: fine)').matches ? 'all' : 'hover';
+    if (typeof matchMedia !== 'function') return 'hover';
+    const touch = matchMedia('(pointer: coarse)').matches && !matchMedia('(pointer: fine)').matches;
+    const phone = matchMedia('(max-width: 599px), (max-height: 599px)').matches;
+    return touch && !phone ? 'all' : 'hover';
   } catch {
     return 'hover';
   }

@@ -90,7 +90,19 @@ def fluid_boundary() -> tuple[np.ndarray, np.ndarray]:
     vol = (vol + mirrored) / 2
     zoom = float(np.sqrt((a[:3, :3] ** 2).sum(0)).mean())
     sm = ndimage.gaussian_filter(vol, SMOOTH_MM / zoom)
-    v, _, n, _ = measure.marching_cubes(sm, FLUID_LEVEL, gradient_direction="ascent")
+    v, _, n, _ = measure.marching_cubes(sm, FLUID_LEVEL)
+    # marching_cubes' normals point down the gradient, towards the lower values (on T2: into the tissue), whatever
+    # gradient_direction is (that sets the triangles' winding only). They are turned to point up the smoothed
+    # volume's own gradient, towards the fluid, and that is checked: with normals into the tissue the pairing rule
+    # ("the model's outer surface towards fluid") matched the model to the far wall of every cistern, and the fitted
+    # brainstem came out about 3 mm too large.
+    g = np.stack([ndimage.map_coordinates(gk, v.T, order=1) for gk in np.gradient(sm)], 1)
+    n = np.where((np.einsum("ij,ij->i", n, g) < 0)[:, None], -n, n)
+    n /= np.maximum(np.linalg.norm(n, axis=1, keepdims=True), 1e-9)
+    ahead = ndimage.map_coordinates(sm, (v + n).T, order=1) - ndimage.map_coordinates(sm, (v - n).T, order=1)
+    towards_fluid = float((ahead > 0).mean())
+    if towards_fluid < 0.99:
+        raise SystemExit(f"brainstem fit: only {towards_fluid:.3f} of the target's normals point towards the fluid")
     n = n @ np.linalg.inv(ac[:3, :3])   # gradient directions into world space (isotropic grid: a scaling)
     return nib.affines.apply_affine(ac, v), n / np.linalg.norm(n, axis=1, keepdims=True)
 

@@ -3,7 +3,7 @@ import { NodeIO } from '@gltf-transform/core';
 import { EXTMeshoptCompression, KHRMeshQuantization } from '@gltf-transform/extensions';
 import { MeshoptDecoder } from 'meshoptimizer';
 import { readFileSync } from 'node:fs';
-import { crossCheckCtx, CTX_MANIFEST, FUNCTIONS, LABEL, LABELS, LOBE, LOBES, MEDIAL_WALL, shortName } from '../../src/cortex';
+import { crossCheckCtx, CTX, CTX_MANIFEST, FUNCTIONS, LABEL, LABELS, LOBE, LOBES, MEDIAL_WALL, shortName } from '../../src/cortex';
 import { cortexPlan, cortexScene, viewLabels } from '../../src/cortex/scene';
 import { decodeCortex, defaultCortexState, encodeCortex } from '../../src/cortex/state';
 import { VIEW, VIEWS } from '../../src/cortex/views';
@@ -40,6 +40,41 @@ describe('cortex data (Destrieux on the Lead-DBS template surface)', () => {
     expect(borders).toEqual(expect.arrayContaining([byShort.get('G_precentral')!.id, byShort.get('G_postcentral')!.id]));
     for (const lb of LOBES) expect(lb.labels.length, lb.id).toBeGreaterThan(0);
     expect(LOBE.get('insula')!.labels).toEqual(expect.arrayContaining(LABELS.filter((l) => l.insula).map((l) => l.id)));
+  });
+  it('a label named occipital is coloured occipital (the parieto-occipital sulcus is the limit between two lobes)', () => {
+    // Destrieux 2010, section 2.3.3: the superior occipital gyrus and sulcus lie on the lateral aspect of the occipital
+    // lobe; Desikan-Killiany's parietal regions, which the measured shares follow, reach further back
+    const named = LABELS.filter((l) => /\boccipital\b/i.test(l.name) && l.short !== 'S_parieto_occipital');
+    expect(named.map((l) => l.short).sort()).toEqual(['G_and_S_occipital_inf', 'G_occipital_middle', 'G_occipital_sup', 'Pole_occipital', 'S_oc_middle_and_Lunatus', 'S_oc_sup_and_transversal', 'S_occipital_ant']);
+    for (const l of named) {
+      expect(l.lobe, l.short).toBe('occipital');
+      expect(CTX.get(l.id)!.colour.token, l.short).toBe('lobeOccipital');
+      expect(LOBE.get('occipital')!.labels, l.short).toContain(l.id);
+    }
+    for (const s of ['G_occipital_sup', 'S_oc_sup_and_transversal']) expect(byShort.get(s)!.lobeBy, s).toBe('name');
+    // the measured shares are still listed
+    expect(byShort.get('G_occipital_sup')!.lobes.map((x) => x.lobe)).toEqual(['parietal', 'occipital']);
+  });
+  it('a definition text says what it is about when that is not the label, and lists any correction made to it', () => {
+    const def = (s: string) => byShort.get(s)!.definition!;
+    // the text shipped as "Olfactory sulcus" is about the olfactory tract; the "Paracentral" one about the sulcus
+    expect(def('S_orbital_med-olfact').text).toMatch(/^The olfactory tract/);
+    expect(def('S_orbital_med-olfact').scope).toMatch(/^the olfactory tract/);
+    expect(def('G_and_S_paracentral').text).toMatch(/^The paracentral sulcus/);
+    expect(def('G_and_S_paracentral').scope).toBe('the paracentral sulcus');
+    // the cingulate sulcus's text is headed so, and is not shown for the label that is gyrus alone
+    expect(def('G_and_S_cingul-Mid-Post').text).toMatch(/^The cingulate sulcus/);
+    expect(def('G_and_S_cingul-Mid-Post').scope).toBe('the cingulate sulcus');
+    expect(byShort.get('G_cingul-Post-dorsal')!.kind).toBe('gyrus');
+    expect(def('G_cingul-Post-dorsal').text).toMatch(/^The cingulate cortex/);
+    // the angular gyrus: the posterior of the inferior parietal lobule's two gyri (Destrieux 2010, 2.4.1.4), not "anterolateral"
+    const ang = def('G_pariet_inf-Angular');
+    expect(ang.text).not.toMatch(/anterolateral/);
+    expect(ang.text).toContain('posterior part of the inferior parietal lobule');
+    expect(ang.edits).toHaveLength(1);
+    expect(ang.edits![0].from).toContain('anterolateral');
+    expect(ang.edits![0].why).toContain('Destrieux et al. 2010');
+    expect(LABELS.filter((l) => l.definition?.edits).map((l) => l.short)).toEqual(['G_pariet_inf-Angular']);
   });
   it('relates the DBS section’s motor areas to the central region, not the occipital lobe', () => {
     const m1 = (s: string) => byShort.get(s)!.parcels.find((p) => p.id === 'm1')?.parcelInLabel ?? 0;

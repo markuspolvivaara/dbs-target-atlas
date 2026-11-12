@@ -9,9 +9,10 @@
     164.08
    ],
    "canal": {
-    "width": 22.0,
-    "depth": 15.5,
-    "area": 233.0
+    "width": 21.0,
+    "depth": 14.0,
+    "area": 224.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": {
@@ -41,9 +42,10 @@
     133.77
    ],
    "canal": {
-    "width": 25.0,
-    "depth": 17.0,
-    "area": 280.0
+    "width": 24.0,
+    "depth": 16.0,
+    "area": 271.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": {
@@ -111,9 +113,10 @@
     101.36
    ],
    "canal": {
-    "width": 25.0,
-    "depth": 16.0,
-    "area": 290.0
+    "width": 23.5,
+    "depth": 15.5,
+    "area": 284.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": {
@@ -182,8 +185,9 @@
    ],
    "canal": {
     "width": 25.0,
-    "depth": 16.0,
-    "area": 284.0
+    "depth": 15.0,
+    "area": 285.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": {
@@ -252,8 +256,9 @@
    ],
    "canal": {
     "width": 26.5,
-    "depth": 16.5,
-    "area": 295.0
+    "depth": 17.0,
+    "area": 312.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": {
@@ -321,9 +326,10 @@
     0.0
    ],
    "canal": {
-    "width": 38.0,
-    "depth": 19.5,
-    "area": 436.0
+    "width": 28.5,
+    "depth": 17.5,
+    "area": 322.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -384,9 +390,10 @@
     423.51
    ],
    "canal": {
-    "width": 27.0,
-    "depth": 14.5,
-    "area": 257.0
+    "width": 25.0,
+    "depth": 15.0,
+    "area": 265.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -409,9 +416,10 @@
     407.97
    ],
    "canal": {
-    "width": 24.5,
-    "depth": 16.0,
-    "area": 254.0
+    "width": 22.0,
+    "depth": 16.5,
+    "area": 250.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -434,9 +442,10 @@
     390.12
    ],
    "canal": {
-    "width": 22.5,
+    "width": 20.0,
     "depth": 16.0,
-    "area": 238.0
+    "area": 230.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -459,9 +468,10 @@
     371.71
    ],
    "canal": {
-    "width": 22.0,
-    "depth": 16.5,
-    "area": 256.0
+    "width": 18.0,
+    "depth": 19.0,
+    "area": 242.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -484,9 +494,10 @@
     352.53
    ],
    "canal": {
-    "width": 23.5,
-    "depth": 17.0,
-    "area": 254.0
+    "width": 18.0,
+    "depth": 19.5,
+    "area": 245.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -509,9 +520,10 @@
     332.37
    ],
    "canal": {
-    "width": 17.5,
-    "depth": 18.0,
-    "area": 219.0
+    "width": 16.0,
+    "depth": 19.0,
+    "area": 217.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -534,9 +546,10 @@
     310.18
    ],
    "canal": {
-    "width": 20.0,
-    "depth": 18.0,
-    "area": 237.0
+    "width": 16.5,
+    "depth": 18.5,
+    "area": 226.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -559,9 +572,10 @@
     288.13
    ],
    "canal": {
-    "width": 18.5,
-    "depth": 16.0,
-    "area": 213.0
+    "width": 17.5,
+    "depth": 16.5,
+    "area": 209.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -584,9 +598,10 @@
     264.18
    ],
    "canal": {
-    "width": 23.5,
-    "depth": 16.5,
-    "area": 246.0
+    "width": 17.5,
+    "depth": 17.5,
+    "area": 204.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -609,9 +624,10 @@
     240.73
    ],
    "canal": {
-    "width": 20.0,
-    "depth": 15.5,
-    "area": 207.0
+    "width": 18.0,
+    "depth": 16.5,
+    "area": 200.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -634,9 +650,10 @@
     215.74
    ],
    "canal": {
-    "width": 22.0,
-    "depth": 14.5,
-    "area": 207.0
+    "width": 17.0,
+    "depth": 16.0,
+    "area": 183.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -648,7 +665,19 @@
     -21.19,
     204.11
    ],
-   "discHeightMm": 2.3
+   "discPartial": {
+    "volumeMl": 0.12,
+    "widthMm": 8.6,
+    "neighbourWidthMm": [
+     34.5,
+     46.7
+    ],
+    "spaceHu": 722,
+    "neighbourSpaceHu": [
+     219,
+     214
+    ]
+   }
   },
   {
    "level": "T11",
@@ -659,9 +688,10 @@
     192.78
    ],
    "canal": {
-    "width": 19.5,
-    "depth": 15.0,
-    "area": 198.0
+    "width": 19.0,
+    "depth": 15.5,
+    "area": 193.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -684,9 +714,10 @@
     164.08
    ],
    "canal": {
-    "width": 22.0,
-    "depth": 15.5,
-    "area": 233.0
+    "width": 21.0,
+    "depth": 14.0,
+    "area": 224.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -712,8 +743,9 @@
    ],
    "canal": {
     "width": 25.0,
-    "depth": 18.0,
-    "area": 350.0
+    "depth": 14.5,
+    "area": 332.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -725,7 +757,6 @@
     60.16,
     494.89
    ],
-   "discHeightMm": 3.2,
    "lesions": {
     "L": {
      "paracentral": [
@@ -763,7 +794,8 @@
      ],
      "foraminalEstimated": false
     }
-   }
+   },
+   "discHeightMm": 3.2
   },
   {
    "level": "C3",
@@ -774,9 +806,10 @@
     485.53
    ],
    "canal": {
-    "width": 24.0,
-    "depth": 15.0,
-    "area": 258.0
+    "width": 23.5,
+    "depth": 13.0,
+    "area": 260.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -788,7 +821,6 @@
     54.14,
     477.06
    ],
-   "discHeightMm": 3.3,
    "lesions": {
     "L": {
      "paracentral": [
@@ -826,7 +858,8 @@
      ],
      "foraminalEstimated": false
     }
-   }
+   },
+   "discHeightMm": 3.3
   },
   {
    "level": "C4",
@@ -837,9 +870,10 @@
     469.15
    ],
    "canal": {
-    "width": 25.5,
-    "depth": 15.5,
-    "area": 273.0
+    "width": 25.0,
+    "depth": 12.5,
+    "area": 282.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -851,7 +885,6 @@
     47.03,
     460.05
    ],
-   "discHeightMm": 3.8,
    "lesions": {
     "L": {
      "paracentral": [
@@ -889,7 +922,8 @@
      ],
      "foraminalEstimated": false
     }
-   }
+   },
+   "discHeightMm": 3.8
   },
   {
    "level": "C5",
@@ -900,9 +934,10 @@
     453.75
    ],
    "canal": {
-    "width": 27.0,
-    "depth": 15.0,
-    "area": 281.0
+    "width": 25.0,
+    "depth": 13.5,
+    "area": 281.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -914,7 +949,6 @@
     39.01,
     444.99
    ],
-   "discHeightMm": 3.1,
    "lesions": {
     "L": {
      "paracentral": [
@@ -952,7 +986,8 @@
      ],
      "foraminalEstimated": false
     }
-   }
+   },
+   "discHeightMm": 3.1
   },
   {
    "level": "C6",
@@ -963,9 +998,10 @@
     438.42
    ],
    "canal": {
-    "width": 26.5,
-    "depth": 16.5,
-    "area": 283.0
+    "width": 26.0,
+    "depth": 13.5,
+    "area": 278.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -977,7 +1013,6 @@
     30.85,
     429.31
    ],
-   "discHeightMm": 3.4,
    "lesions": {
     "L": {
      "paracentral": [
@@ -1015,7 +1050,8 @@
      ],
      "foraminalEstimated": false
     }
-   }
+   },
+   "discHeightMm": 3.4
   },
   {
    "level": "C7",
@@ -1026,9 +1062,10 @@
     423.51
    ],
    "canal": {
-    "width": 24.5,
-    "depth": 16.5,
-    "area": 270.0
+    "width": 24.0,
+    "depth": 16.0,
+    "area": 282.0,
+    "betweenPedicles": true
    },
    "foramen": {
     "L": null,
@@ -1040,7 +1077,6 @@
     19.75,
     414.76
    ],
-   "discHeightMm": 3.6,
    "lesions": {
     "L": {
      "paracentral": [
@@ -1078,7 +1114,8 @@
      ],
      "foraminalEstimated": false
     }
-   }
+   },
+   "discHeightMm": 3.6
   }
  ],
  "vertebralArtery": {
@@ -1091,12 +1128,14 @@
     "L": {
      "area": 28.0,
      "width": 6.5,
-     "depth": 7.0
+     "depth": 7.0,
+     "areaUnsmoothed": 28.0
     },
     "R": {
      "area": 31.0,
      "width": 8.5,
-     "depth": 6.5
+     "depth": 6.5,
+     "areaUnsmoothed": 36.0
     },
     "medialGap": 51.1
    },
@@ -1104,12 +1143,14 @@
     "L": {
      "area": 23.0,
      "width": 6.5,
-     "depth": 6.0
+     "depth": 6.0,
+     "areaUnsmoothed": 30.0
     },
     "R": {
      "area": 22.0,
      "width": 5.5,
-     "depth": 6.5
+     "depth": 6.5,
+     "areaUnsmoothed": 20.0
     },
     "medialGap": 30.0
    },
@@ -1117,12 +1158,14 @@
     "L": {
      "area": 12.0,
      "width": 5.0,
-     "depth": 3.5
+     "depth": 3.5,
+     "areaUnsmoothed": 24.0
     },
     "R": {
      "area": 7.0,
      "width": 4.0,
-     "depth": 3.5
+     "depth": 3.5,
+     "areaUnsmoothed": 18.0
     },
     "medialGap": 27.5
    },
@@ -1130,12 +1173,14 @@
     "L": {
      "area": 24.0,
      "width": 6.5,
-     "depth": 5.5
+     "depth": 5.5,
+     "areaUnsmoothed": 30.0
     },
     "R": {
      "area": 26.0,
      "width": 7.0,
-     "depth": 7.0
+     "depth": 7.0,
+     "areaUnsmoothed": 32.0
     },
     "medialGap": 27.9
    },
@@ -1143,31 +1188,53 @@
     "L": {
      "area": 28.0,
      "width": 6.5,
-     "depth": 6.0
+     "depth": 7.0,
+     "areaUnsmoothed": 31.0
     },
     "R": {
-     "area": 24.0,
+     "area": 14.0,
      "width": 5.5,
-     "depth": 6.5
+     "depth": 5.0,
+     "areaUnsmoothed": 30.0
     },
-    "medialGap": 29.6
+    "medialGap": 29.3
    },
    "C6": {
     "L": {
      "area": 28.0,
      "width": 6.0,
-     "depth": 6.5
+     "depth": 6.5,
+     "areaUnsmoothed": 28.0
     },
     "R": {
      "area": 27.0,
      "width": 5.0,
-     "depth": 8.5
+     "depth": 8.5,
+     "areaUnsmoothed": 22.0
     },
     "medialGap": 33.7
    },
    "C7": {
     "L": null,
     "R": null
+   }
+  },
+  "drawnDiameter": {
+   "L": {
+    "C1": 3.6,
+    "C2": 3.7,
+    "C3": 2.0,
+    "C4": 3.5,
+    "C5": 3.6,
+    "C6": 4.0
+   },
+   "R": {
+    "C1": 3.8,
+    "C2": 2.0,
+    "C3": 1.5,
+    "C4": 3.4,
+    "C5": 3.2,
+    "C6": 3.9
    }
   }
  },
@@ -1222,7 +1289,7 @@
      -11.25
     ],
     [
-     -0.39,
+     1.25,
      7.34,
      -11.25
     ]
@@ -1234,7 +1301,7 @@
      -8.75
     ],
     [
-     0.43,
+     0.7,
      -24.38,
      -13.75
     ]
@@ -1314,6 +1381,424 @@
    "left": 30.0,
    "top": 28.0,
    "slab": 2.0
+  }
+ },
+ "neighbours": [
+  {
+   "pair": "C1-C2",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.12
+  },
+  {
+   "pair": "C2-C3",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.22
+  },
+  {
+   "pair": "C3-C4",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.17
+  },
+  {
+   "pair": "C4-C5",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.06
+  },
+  {
+   "pair": "C5-C6",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "C6-C7",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "C7-T1",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.26
+  },
+  {
+   "pair": "T1-T2",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "T2-T3",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "T3-T4",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "T4-T5",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.01
+  },
+  {
+   "pair": "T5-T6",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.39
+  },
+  {
+   "pair": "T6-T7",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.07
+  },
+  {
+   "pair": "T7-T8",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "T8-T9",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "T9-T10",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "T10-T11",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.13
+  },
+  {
+   "pair": "T11-T12",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "T12-L1",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "L1-L2",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "L2-L3",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "L3-L4",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.01
+  },
+  {
+   "pair": "L4-L5",
+   "sharedMl": 0.0,
+   "verticesInside": 0,
+   "deepestMm": 0.0
+  },
+  {
+   "pair": "L5-S1",
+   "sharedMl": 0.002,
+   "verticesInside": 2,
+   "deepestMm": 0.75
+  }
+ ],
+ "placed": {
+  "rootInBoneMm": {
+   "L1L": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "L1R": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "L2L": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "L2R": {
+    "root": 0.0,
+    "ganglion": 0.29
+   },
+   "L3L": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "L3R": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "L4L": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "L4R": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "L5L": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "L5R": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "S1L": {
+    "root": 0.0,
+    "ganglion": 0.28
+   },
+   "S1R": {
+    "root": 0.0,
+    "ganglion": 0.29
+   },
+   "T1L": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "T1R": {
+    "root": 0.0,
+    "ganglion": 0.08
+   },
+   "T2L": {
+    "root": 0.0,
+    "ganglion": 0.02
+   },
+   "T2R": {
+    "root": 0.0,
+    "ganglion": 0.11
+   },
+   "T3L": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "T3R": {
+    "root": 0.0,
+    "ganglion": 0.2
+   },
+   "T4L": {
+    "root": 0.0,
+    "ganglion": 0.08
+   },
+   "T4R": {
+    "root": 0.0,
+    "ganglion": 0.02
+   },
+   "T5L": {
+    "root": 0.0,
+    "ganglion": 0.02
+   },
+   "T5R": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "T6L": {
+    "root": 0.0,
+    "ganglion": 0.06
+   },
+   "T6R": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "T7L": {
+    "root": 0.0,
+    "ganglion": 0.27
+   },
+   "T7R": {
+    "root": 0.0,
+    "ganglion": 0.23
+   },
+   "T8L": {
+    "root": 0.0,
+    "ganglion": 0.16
+   },
+   "T8R": {
+    "root": 0.0,
+    "ganglion": 0.19
+   },
+   "T9L": {
+    "root": 0.0,
+    "ganglion": 0.07
+   },
+   "T9R": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "T10L": {
+    "root": 0.0,
+    "ganglion": 0.16
+   },
+   "T10R": {
+    "root": 0.0,
+    "ganglion": 0.23
+   },
+   "T11L": {
+    "root": 0.09,
+    "ganglion": 0.12
+   },
+   "T11R": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "T12L": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "T12R": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "C3L": {
+    "root": 0.0,
+    "ganglion": 0.14
+   },
+   "C3R": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "C4L": {
+    "root": 0.0,
+    "ganglion": 0.25
+   },
+   "C4R": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "C5L": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "C5R": {
+    "root": 0.0,
+    "ganglion": 0.08
+   },
+   "C6L": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "C6R": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "C7L": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "C7R": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "C8L": {
+    "root": 0.0,
+    "ganglion": 0.0
+   },
+   "C8R": {
+    "root": 0.0,
+    "ganglion": 0.0
+   }
+  },
+  "ganglionScale": {
+   "L1L": 1.0,
+   "L1R": 1.0,
+   "L2L": 1.0,
+   "L2R": 1.0,
+   "L3L": 0.9,
+   "L3R": 1.0,
+   "L4L": 1.0,
+   "L4R": 1.0,
+   "L5L": 1.0,
+   "L5R": 1.0,
+   "S1L": 0.95,
+   "S1R": 1.0,
+   "T1L": 0.85,
+   "T1R": 1.0,
+   "T2L": 0.9,
+   "T2R": 1.0,
+   "T3L": 0.95,
+   "T3R": 0.9,
+   "T4L": 1.0,
+   "T4R": 0.8,
+   "T5L": 1.0,
+   "T5R": 1.0,
+   "T6L": 1.0,
+   "T6R": 0.9,
+   "T7L": 0.75,
+   "T7R": 0.95,
+   "T8L": 1.0,
+   "T8R": 0.95,
+   "T9L": 0.8,
+   "T9R": 0.6,
+   "T10L": 0.8,
+   "T10R": 0.8,
+   "T11L": 0.9,
+   "T11R": 1.0,
+   "T12L": 1.0,
+   "T12R": 1.0,
+   "C3L": 0.85,
+   "C3R": 1.0,
+   "C4L": 0.95,
+   "C4R": 1.0,
+   "C5L": 1.0,
+   "C5R": 0.95,
+   "C6L": 1.0,
+   "C6R": 1.0,
+   "C7L": 1.0,
+   "C7R": 1.0,
+   "C8L": 1.0,
+   "C8R": 1.0
+  },
+  "vertebralArtery": {
+   "L": {
+    "ledRoundMm": 27.9,
+    "inBoneMm": 0.69,
+    "diameterAt": {
+     "C1": 3.6,
+     "C2": 3.7,
+     "C3": 2.0,
+     "C4": 3.5,
+     "C5": 3.6,
+     "C6": 4.0
+    }
+   },
+   "R": {
+    "ledRoundMm": 41.9,
+    "inBoneMm": 0.86,
+    "diameterAt": {
+     "C1": 3.8,
+     "C2": 2.0,
+     "C3": 1.5,
+     "C4": 3.4,
+     "C5": 3.2,
+     "C6": 3.9
+    }
+   }
   }
  }
 }

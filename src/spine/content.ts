@@ -7,7 +7,10 @@ import { SP_MANIFEST } from './index';
  * Statements are paraphrased from the cited papers; every refId is a key of the manifest's references.
  */
 const V3 = z.tuple([z.number(), z.number(), z.number()]);
-const Dims = z.object({ width: z.number(), depth: z.number(), area: z.number() });
+/** the canal as the level's card gives it. betweenPedicles: measured in the plane normal to the spine where the canal is
+ * narrowest between the pedicles (width: the interpedicular distance; depth: front to back through its centre);
+ * otherwise the hole common to a 6 mm slab through the body centre (where the ring closes in no single plane) */
+const Dims = z.object({ width: z.number(), depth: z.number(), area: z.number(), betweenPedicles: z.boolean().optional() });
 const Foramen = z.object({ height: z.number(), width: z.number(), area: z.number() }).nullable();
 export const LevelGeomSchema = z.object({
   level: z.string(),
@@ -17,6 +20,14 @@ export const LevelGeomSchema = z.object({
   foramen: z.object({ L: Foramen, R: Foramen }),
   discCentre: V3,
   discHeightMm: z.number().optional(),
+  /** a disc drawn in part: the segmentation holds a chip much narrower than the discs above and below (their widths
+   * given), so no height is reported; spaceHu: the densest the CT gets between the two bodies (its mean on 16 mm
+   * circles across the line joining their centres, HU), beside the same at the discs above and below, where it is
+   * an end plate */
+  discPartial: z.object({
+    volumeMl: z.number(), widthMm: z.number(), neighbourWidthMm: z.array(z.number()),
+    spaceHu: z.number(), neighbourSpaceHu: z.array(z.number()),
+  }).optional(),
   /** false where the foramen's size is not reported (thoracic: the rib heads form part of its wall) */
   foramenMeasured: z.boolean().optional(),
   lesions: z.object({
@@ -25,7 +36,9 @@ export const LevelGeomSchema = z.object({
   }).optional(),
 });
 export type LevelGeom = z.infer<typeof LevelGeomSchema>;
-const TransverseForamen = z.object({ area: z.number(), width: z.number(), depth: z.number() }).nullable();
+/** area, width, depth: on the bone as drawn; areaUnsmoothed: the enclosed area on the same volume before the drawing's
+ * smoothing, which narrows small openings (null where no enclosed region is found there) */
+const TransverseForamen = z.object({ area: z.number(), width: z.number(), depth: z.number(), areaUnsmoothed: z.number().nullable() }).nullable();
 const LEVELS = z.object({
   lumbar: z.array(LevelGeomSchema), thoracic: z.array(LevelGeomSchema), cervical: z.array(LevelGeomSchema),
   /** the vertebral artery's entry level per side (inferred from the foramina's size) and the foramina transversaria
@@ -33,6 +46,19 @@ const LEVELS = z.object({
   vertebralArtery: z.object({
     entry: z.object({ L: z.string(), R: z.string() }),
     foramina: z.record(z.object({ L: TransverseForamen, R: TransverseForamen, medialGap: z.number().optional() })),
+    /** how thick (mm) the schematic artery is drawn in each foramen it passes: 4 mm, or less where the foramen as
+     * drawn is narrower */
+    drawnDiameter: z.object({ L: z.record(z.number()), R: z.record(z.number()) }),
+  }),
+  /** the structures placed by rule against the bone as drawn: how deep (mm) each root's tube and ganglion (keys like
+   * "T7L") and the vertebral artery still reach into it, and the scale each ganglion is drawn at */
+  placed: z.object({
+    rootInBoneMm: z.record(z.object({ root: z.number(), ganglion: z.number() })),
+    ganglionScale: z.record(z.number()),
+    vertebralArtery: z.object({
+      L: z.object({ inBoneMm: z.number(), ledRoundMm: z.number(), diameterAt: z.record(z.number()) }),
+      R: z.object({ inBoneMm: z.number(), ledRoundMm: z.number(), diameterAt: z.record(z.number()) }),
+    }),
   }),
   /** the level each laryngeal landmark projects to on this CT */
   neckLandmarks: z.object({
@@ -52,12 +78,18 @@ const LEVELS = z.object({
     /** each value's range with the plane moved up to 1 mm to either side */
     range: z.record(z.tuple([z.number(), z.number()])),
   }),
+  /** each vertebra against the next, as drawn (pipeline/spine_build.py neighbours): the bone inside both surfaces, and
+   * the vertices of one that lie more than 0.5 mm inside the other's bone. Neighbours share no bone. */
+  neighbours: z.array(z.object({ pair: z.string(), sharedMl: z.number(), verticesInside: z.number(), deepestMm: z.number() })),
 }).parse(levelsJson);
 export const CCJ = LEVELS.ccj;
+export const VERTEBRA_NEIGHBOURS = LEVELS.neighbours;
 export const LUMBAR_GEOM = LEVELS.lumbar;
 export const THORACIC_GEOM = LEVELS.thoracic;
 export const CERVICAL_GEOM = LEVELS.cervical;
 export const VERTEBRAL_ARTERY = LEVELS.vertebralArtery;
+/** the roots, their ganglia and the vertebral artery (placed by rule) against the bone as drawn: see the schema */
+export const PLACED = LEVELS.placed;
 export const NECK_LANDMARKS = LEVELS.neckLandmarks;
 /** The craniocervical junction's measurements (Fidan 2026's definitions, on its midsagittal CT): what each is, its value
  * on this CT and the published normal values. The lines each draws are its landmarks in CCJ.landmarks. */
@@ -248,10 +280,22 @@ export const ROOT_FUNCTION: Record<string, RootFunction> = {
 
 export type LesionZone = 'paracentral' | 'foraminal' | 'farlateral';
 export const LESION_ZONES: [LesionZone, string][] = [['paracentral', 'Paracentral'], ['foraminal', 'Foraminal'], ['farlateral', 'Far lateral']];
-/** The root a lesion at a lumbar disc affects: paracentral -> the traversing (lower) root; foraminal or far lateral ->
- * the exiting (upper) root (STATEMENTS.rootRule, lesionParacentral, lesionLateral). */
-export function affectedRoot(pair: string, zone: LesionZone): string {
+/** Which root rule a disc follows: the neck's wherever the upper vertebra is cervical (C7-T1 too), else the lumbar one. */
+export type DiscRegion = 'lumbar' | 'cervical';
+export function discRegion(pair: string): DiscRegion {
+  return pair.startsWith('C') ? 'cervical' : 'lumbar';
+}
+/** The zones offered at a disc. In the neck far lateral is where the vertebral artery runs: not offered. */
+export function lesionZones(region: DiscRegion): [LesionZone, string][] {
+  return region === 'cervical' ? LESION_ZONES.filter(([z]) => z !== 'farlateral') : LESION_ZONES;
+}
+/** The root a herniation beside the midline affects: the one rule, used by the level card, the scene and the drilled
+ * herniation (herniaRoot). Lumbar: paracentral -> the traversing (lower) root; foraminal or far lateral -> the exiting
+ * (upper) root (STATEMENTS.rootRule, lesionParacentral, lesionLateral). Cervical: the root that leaves at that disc,
+ * numbered for the vertebra below, and C8 at C7-T1 (STATEMENTS.cervicalRootRule). */
+export function affectedRoot(pair: string, zone: LesionZone, region: DiscRegion = discRegion(pair)): string {
   const [up, down] = pair.split('-');
+  if (region === 'cervical') return down === 'T1' ? 'C8' : down;
   return zone === 'paracentral' ? down : up;
 }
 
@@ -273,7 +317,7 @@ export interface Technique {
 }
 const LATERAL_MASS_LEVELS = ['C3', 'C4', 'C5', 'C6'];
 const LATERAL_MASS_SIZE: Statement = {
-  text: 'Start size: 3.5 mm screws, as in the series, long enough on this CT to reach the far cortex of the lateral mass (bicortical), rounded down to the millimetre. Published safe lengths: 14–15 mm for Roy-Camille and 15–16 mm for Magerl screws.',
+  text: 'Start size: 3.5 mm screws, as in the series, long enough on this CT to reach the far cortex of the lateral mass (bicortical), rounded down to the millimetre and no shorter than the tool’s shortest screw (6 mm). Published safe lengths: 14–15 mm for Roy-Camille and 15–16 mm for Magerl screws.',
   refIds: ['rathinavelu2021'],
 };
 const THORACIC_LEVELS = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'];
@@ -380,7 +424,7 @@ export const TECHNIQUES: Record<Technique['id'], Technique> = {
       text: 'C2 pedicle screw: one description enters 7 mm lateral and 5 mm caudal to where lines along the lamina’s upper border and the canal’s lateral border cross, 30° medial and 20° cranial, to the pedicle’s anterior cortex; another 2 mm lateral to where the lamina’s upper border meets the pars’s mediolateral midline, 30–45° medial, aimed in the sagittal plane at the lower half of the atlas’s anterior tubercle. Start position here: 45° medial (the most convergent of 30–45°), the entry 5 mm caudal to the lamina’s upper border and as far lateral as keeps the most bone around the screw on this CT (10 mm lateral to the canal’s border, 3 mm lateral of the first description’s entry; the more lateral the entry, the more a screw can converge), cranially along the pedicle the same way (the AO entry at the lamina’s border itself would leave the pedicle superiorly on this CT).',
       refIds: ['kendirlioglu2026', 'aosurgeryref'],
     },
-    size: { text: 'Start size 3.5 mm, up to 27 mm (3D-printed models of 38 patients averaged 26.8 mm; a unicortical screw over 20 mm is typically adequate), the tip at least 1 mm short of where it would leave the bone on this CT.', refIds: ['kendirlioglu2026', 'aosurgeryref'] },
+    size: { text: 'Start size 3.5 mm, up to 27 mm (3D-printed models of 20 individuals averaged 26.8 ± 3.8 mm; a unicortical screw over 20 mm is typically adequate), the tip at least 1 mm short of where it would leave the bone on this CT.', refIds: ['kendirlioglu2026', 'aosurgeryref'] },
     note: { text: 'Up to 20% of people have C2 pedicles too small for a screw; with a high-riding vertebral artery the corridor narrows further.', refIds: ['joaquim2020', 'kucherina2026'] },
   },
   c2pars: {

@@ -37,6 +37,7 @@ from skimage.morphology import skeletonize
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 import nrrd_read  # noqa: E402
+import skullbase_v3_tentorium as TENT  # noqa: E402
 from build import isosurface  # noqa: E402
 from glb import TRIANGLES, write_glb  # noqa: E402
 
@@ -544,8 +545,12 @@ def main() -> int:
     return 0
 
 
-CARRIED = ("Anterior inferior cerebellar artery", "Superior cerebellar artery")   # besides the nerves
+CARRIED = ("Anterior inferior cerebellar artery", "Superior cerebellar artery",   # besides the nerves
+           "Medial pontine branches of basilar artery", "Lateral pontine branches of basilar artery", "Anterior spinal artery")
 HINDBRAIN_CLEAR_MM = 0.3   # the carried arteries' surfaces kept this far outside the fitted cerebellum and brainstem
+MIDLINE_PAIRS = ("Anterior spinal artery",)   # left and right halves that lie together on the midline of the medulla
+COURSE_TURN_MAX_DEG = 100.0   # a smoothed fitted course turns by no more than this over 4 mm (it does not fold back on itself)
+PICA_CORNERS_MAX = 6       # the PICA's carried-on course (some 670 mm of branches a side): at most this many corners over 70 deg a side
 CLEAR_PASSES = 40
 CARRY_FADE_MM = 12.0       # the carried deformation fades out over this much inside its grid's edge (none beyond it)
 CARRY_NEAR_MM, CARRY_REACH_MM = 6.0, 16.0   # ... and in full only this near the fitted hindbrain, none beyond the reach
@@ -587,7 +592,10 @@ def hindbrain_meshes() -> list:
     from pygltflib import GLTF2
     meshes = []
     for f in sorted(BUILD.glob("pf_*.glb")):
-        if "fourth_ventricle" in f.name:
+        # (its own files only: not a tumour view's pushed copy (pf_x__koos_4.glb) nor a cleared one (pf_x.cleared.glb),
+        # which later steps leave in the build. Taken with the rest, the arteries were kept out of the cerebellum as
+        # the last run's tumours had pushed it, and came out differently from one run to the next)
+        if "fourth_ventricle" in f.name or "__" in f.name or f.name.count(".") > 1:
             continue
         g = GLTF2().load(str(f))
         blob = g.binary_blob()
@@ -631,8 +639,22 @@ def hindbrain_clearance():
     sd = (ndimage.distance_transform_edt(inside) - ndimage.distance_transform_edt(~inside)) * step   # positive inside
     grad = np.stack(np.gradient(ndimage.gaussian_filter(sd, 1.0)), -1)
 
-    def clear(P: np.ndarray, r: np.ndarray) -> np.ndarray:
+    def clear(P: np.ndarray, r: np.ndarray, onto: np.ndarray | None = None, soft: bool = False) -> np.ndarray:
+        """onto (mm, per point): a point lying off the surface is first drawn onto it (to its radius plus
+        HINDBRAIN_CLEAR_MM) from up to this far, its neighbours along the vessel with it: for branches that run on the
+        brainstem (skullbase_v3_base.ON_HINDBRAIN). soft: every point gets the smoothed push only, so the line keeps
+        its shape (after a rounding: a point may stay a little inside)."""
         P = np.array(P, float)
+        for _ in range(CLEAR_PASSES if onto is not None else 0):
+            g = nib.affines.apply_affine(inv, P).T
+            off = -(ndimage.map_coordinates(sd, g, order=1, mode="nearest") + r + HINDBRAIN_CLEAR_MM)   # how far off its place
+            pull = (off > 0.05) & (off < onto)
+            if not pull.any():
+                break
+            gv = np.stack([ndimage.map_coordinates(grad[..., k], g, order=1, mode="nearest") for k in range(3)], 1)
+            gv /= np.maximum(np.linalg.norm(gv, axis=1, keepdims=True), 1e-9)
+            D = np.where(pull[:, None], np.minimum(off, 1.0)[:, None] * gv, 0.0)
+            P = P + ndimage.gaussian_filter1d(D, 1.5, axis=0, mode="nearest")
         for _ in range(CLEAR_PASSES):
             g = nib.affines.apply_affine(inv, P).T
             need = ndimage.map_coordinates(sd, g, order=1, mode="nearest") + r + HINDBRAIN_CLEAR_MM   # how far to go out
@@ -644,9 +666,26 @@ def hindbrain_clearance():
             Ds = ndimage.gaussian_filter1d(D, 1.5, axis=0, mode="nearest")
             # (a point that must move gets its whole push, its neighbours the smoothed share: a vessel dipping in briefly
             # comes out too)
-            P = P + np.where((need > 0)[:, None], np.where(np.linalg.norm(Ds, axis=1, keepdims=True) > need[:, None], Ds, D), Ds)
+            P = P + (Ds if soft else np.where((need > 0)[:, None], np.where(np.linalg.norm(Ds, axis=1, keepdims=True) > need[:, None], Ds, D), Ds))
         return P
     return clear
+
+
+def fitted_courses(base: dict) -> dict:
+    """The smoothed fitted courses' corners (skullbase_v3_base.kinks), by artery and side: the worst of its runs; the
+    PICA's carried-on course with them (skullbase_v3_pica.py's report)."""
+    out = {}
+    for (name, side), info in base["small"].items():
+        if "kinks" in info:
+            out.setdefault(name, {})[side] = {"cornersOver70": sum(k["cornersOver70"] for k in info["kinks"]),
+                                              "sharpestDeg": max(k["sharpestDeg"] for k in info["kinks"]),
+                                              "lengthMm": round(sum(k["lengthMm"] for k in info["kinks"]), 1)}
+    p = BUILD / "pica.json"
+    if p.exists():
+        k = json.loads(p.read_text()).get("kinks")
+        if k:
+            out["Posterior inferior cerebellar artery (fitted course)"] = k
+    return out
 
 
 def porus_point(v: np.ndarray) -> np.ndarray:
@@ -758,10 +797,13 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
     cite_v2 = [CITES[c]["citation"] for c in ("topbrain2025", "mitsuhashi2009")]
     url_v2 = [CITES[c]["url"] for c in ("topbrain2025", "mitsuhashi2009")]
     names = [n for n, *_ in BASE.NERVES if n != "Facial nerve (VII)"] + [a for a, *_ in BASE.ARTERIES]
+    fresh_routes = {}     # (as routed here, before skullbase_v3_cavernous.py's splices: that step starts from these)
     for name in names:
         nodes, cent = [], {}
         for s in ("L", "R"):
             r_ = base["routes"][(name, s)]
+            fresh_routes[f"{name}|{s}|P"] = r_["path"]
+            fresh_routes[f"{name}|{s}|r"] = np.full(len(r_["path"]), float(r_["radius"]))
             v, n_, t = tube_mesh(cavernous_splice(name, s, r_["path"]), r_["radius"])
             nodes.append({"name": s, "positions": v, "normals": n_, "indices": t, "mode": TRIANGLES})
             cent[s] = r_["path"].mean(0).round(2).tolist()
@@ -792,6 +834,10 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
             import skullbase_v3_cavernous as CAV
             if name in CAV.REROUTE_NOTE:
                 items[-1]["derivation"] += " " + CAV.REROUTE_NOTE[name]
+    # (skullbase_v3_cavernous.py re-routes some of these through the cavernous sinus and writes their meshes again: it
+    # starts from the routes as drawn here. It kept them from its first run, so after a rebuild that moved the nerves at
+    # the brainstem it would have spliced the old courses: they are written out every time)
+    np.savez_compressed(BUILD / "cavernous_routes.npz", **fresh_routes)
     # the trigeminal ganglion, in Meckel's cave as placed on this CT
     nodes, cent = [], {}
     for s in ("L", "R"):
@@ -878,7 +924,10 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
         for s_ in sides_ok:
             vs, ns, ts, off = [], [], [], 0
             for P, r in base["small"][(name, s_)]["runs"]:
-                v, n_, t = tube_mesh_var(P, np.maximum(r, 0.3))
+                if "kinks" in base["small"][(name, s_)]:      # a smoothed course: a point every 0.5 mm, eight sides
+                    v, n_, t = SB.tube(np.c_[P, np.maximum(r, 0.3)], sides=8)
+                else:
+                    v, n_, t = tube_mesh_var(P, np.maximum(r, 0.3))
                 vs.append(v); ns.append(n_); ts.append(t + off); off += len(v)
             V = np.vstack(vs)
             nodes.append({"name": s_, "positions": V, "normals": np.vstack(ns), "indices": np.vstack(ts), "mode": TRIANGLES})
@@ -923,6 +972,9 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
         import skullbase_v3_pica as PICA
         PICA.build(ex2)
         PICA.items(items)
+    import skullbase_v3_petrosal as PET         # the petrosal sinuses laid onto this CT's bone
+    petrosal = PET.build(ex2, {s_: np.asarray(base["sinuses"][s_]["sigmoid"][0][0], float) for s_ in ("R", "L")})["report"]
+    PET.items(items)
     approach_items(items, ex2)
     for it in items:
         if it.get("cranialNerve") is None:
@@ -999,11 +1051,15 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
     (GEN / f"{PREFIX}-fit.json").write_text(json.dumps({"fit": fits, "crossCheck": cross, "facialSegmentsMm": seglen, "relationsMm": relations,
                                                    "nerves": base["report"], "nerveChecks": base["checks"],
                                                    "sinuses": {s_: base["sinuses"][s_]["report"] for s_ in ("R", "L")},
+                                                   "petrosal": petrosal,
+                                                   "fittedCourses": fitted_courses(base),
                                                    "carotids": {s_: base["carotids"][s_]["report"] for s_ in ("R", "L")},
                                                    **({"brain": json.loads((BUILD / "brain.json").read_text())["report"]}
                                                       if (BUILD / "brain.json").exists() else {}),
                                                    **({"pfossa": json.loads((BUILD / "pfossa.json").read_text())["report"]}
                                                       if (BUILD / "pfossa.json").exists() else {}),
+                                                   **({"tentorium": TENT.between()}
+                                                      if (BUILD / "brain.json").exists() and (BUILD / "pfossa.json").exists() else {}),
                                                    "trigeminal": {s_: {"meckel": base["trigeminal"][s_]["meckel"].round(1).tolist(),
                                                                        "spanMm": base["trigeminal"][s_]["spanMm"],
                                                                        "movedFromFittedMm": base["trigeminal"][s_]["movedFromFittedMm"]}
@@ -1390,6 +1446,11 @@ def validate() -> int:
                 check(c["R"][0] > 0, f"{it['id']}: not on the right {c}")
             elif it.get("category") in ("tumour", "guide"):     # drawn on the right, or across the midline
                 check(c["R"][0] > -5, f"{it['id']}: not on the right {c}")
+            elif it.get("tumourView") or it["name"] in MIDLINE_PAIRS:
+                # a piece pushed by a tumour may cross the midline, and a pair that runs together on the brainstem's
+                # midline lies where the fitted brainstem's is: each stays on its own side of its other half
+                check(c["L"][0] < c["R"][0], f"{it['id']}: sides {c}")
+                check(it.get("tumourView") or abs(c["R"][0] + c["L"][0]) / 2 < 5, f"{it['id']}: off the midline {c}")
             else:
                 check(c["L"][0] < 0 < c["R"][0], f"{it['id']}: sides {c}")
     for nerve, sides in fit["nerves"].items():
@@ -1412,6 +1473,17 @@ def validate() -> int:
         check(r["inLumenShare"] >= 0.9, f"{s}: carotid trace {r['inLumenShare']} in the lumen")
         check(r["medianFromSpecimenMm"] <= 3.5, f"{s}: carotid trace {r['medianFromSpecimenMm']} mm from the specimen's")
         check(1.5 <= r["medianRadiusMm"] <= 4, f"{s}: carotid radius {r['medianRadiusMm']}")
+    import skullbase_v3_petrosal as PET
+    check("petrosal" in fit, "the petrosal sinuses' report is missing")
+    for ok, msg in (PET.check(fit["petrosal"]) if "petrosal" in fit else []):
+        check(ok, msg)
+    for name, sides in fit.get("fittedCourses", {}).items():
+        for s, k in sides.items():
+            # (no course folds back on itself; the PICA's many small branches may keep a few tight bends)
+            if name.startswith("Posterior inferior"):
+                check(k["cornersOver70"] <= PICA_CORNERS_MAX, f"{name} {s}: {k['cornersOver70']} corners over 70 deg")
+            else:
+                check(k["sharpestDeg"] <= COURSE_TURN_MAX_DEG, f"{name} {s}: a turn of {k['sharpestDeg']} deg")
     for s, r in fit["sinuses"].items():
         check(r["inLumenShare"] >= 0.8, f"{s}: sinus trace {r['inLumenShare']} in the lumen")
         check(r["boneCrossedMm"] <= 1.0, f"{s}: sinus trace crosses {r['boneCrossedMm']} mm of bone")
@@ -1447,6 +1519,10 @@ def validate() -> int:
         check("trolard" in r_ and "labbe" in r_, f"{s_}: the veins of Trolard and Labbé drawn")
         if "labbeFromPoleMm" in r_:
             check(80 <= r_["labbeFromPoleMm"] <= 115, f"{s_}: Labbé joins {r_['labbeFromPoleMm']} mm over the cortex from the temporal pole")
+    # the cerebrum and the cerebellum either side of the tentorium (skullbase_v3_tentorium.py)
+    check("tentorium" in fit, "the report on the cerebrum and cerebellum at the tentorium is missing")
+    for ok, msg in (TENT.check(fit["tentorium"]) if "tentorium" in fit else []):
+        check(ok, msg)
     b = fit.get("brain")
     check(b is not None, "the brain's report is missing")
     if b:

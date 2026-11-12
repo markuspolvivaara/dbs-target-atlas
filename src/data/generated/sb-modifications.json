@@ -1,15 +1,51 @@
 {
  "steps": [
   {
-   "step": "skullbase_v1_brain",
-   "operation": "the cortex remade as closed surfaces and pushed out of its bone by a smooth field; the opercula and the fissure's floor found from the model's arteries and white matter",
+   "step": "skullbase_build_mirror",
+   "operation": "one side of a pair that Z-Anatomy draws on one side only, added as the mirror image of the other",
    "structures": [
+    "sb_cochlear_nerve"
+   ],
+   "parameters": {
+    "plane": "x = 0 (the model is symmetric about it)"
+   },
+   "metrics": {
+    "added": {
+     "Cochlear nerve.r": "Cochlear nerve.l"
+    }
+   },
+   "validation": {
+    "check": "skullbase_build.py finalize: left and right centroids mirror-like"
+   },
+   "revision": "9c15dc7",
+   "date": "2026-11-11"
+  },
+  {
+   "step": "skullbase_v1_brain",
+   "operation": "the cortex remade as closed surfaces and pushed out of its bone by a smooth field; the opercula and the fissure's floor found from the model's arteries and white matter; the cerebral arteries' cortical branches moved by the same field and kept inside the cranial cavity",
+   "structures": [
+    "Anterior temporal branch",
+    "Artery of central sulcus",
+    "Artery of precentral sulcus",
+    "Branch to angular gyrus",
+    "Callosomarginal artery",
     "Cingulate gyrus",
+    "Frontal branches of callosomarginal artery",
     "Frontal lobe",
     "Insula",
+    "Lateral frontobasal artery",
     "Occipital lobe",
+    "Orbitofrontal branches of anterior cerebral artery",
+    "Parietal branches of middle cerebral artery",
     "Parietal lobe",
-    "Temporal lobe"
+    "Pericallosal artery",
+    "Postcentral arterial branch",
+    "Posterior parietal artery",
+    "Posterior temporal branch",
+    "Prefrontal artery",
+    "Temporal branches of middle cerebral artery",
+    "Temporal lobe",
+    "Temporo-occipital branch"
    ],
    "parameters": {
     "remeshStepMm": 0.25,
@@ -17,7 +53,10 @@
     "clearSigmaMm": 4.0,
     "clearStepMm": 0.5,
     "operMcaMm": 10.0,
-    "insulaReachMm": 25.0
+    "insulaReachMm": 25.0,
+    "arteryGapMm": 0.1,
+    "arteryStepMm": 0.5,
+    "arterySmoothMm": 2.0
    },
    "metrics": {
     "cavityMl": 1736,
@@ -104,6 +143,712 @@
       46.0,
       60.5
      ]
+    },
+    "arteries": {
+     "Anterior temporal branch": {
+      "lengthMm": 347.2,
+      "inBoneBeforeMm": 219.5,
+      "inBoneAfterMm": 0.0,
+      "maxMovedMm": 5.2,
+      "centroid": {
+       "L": [
+        -58.18,
+        -5.42,
+        20.99
+       ],
+       "R": [
+        58.27,
+        -5.44,
+        21.02
+       ]
+      },
+      "box": {
+       "L": [
+        [
+         -65.77,
+         -30.11,
+         1.96
+        ],
+        [
+         -44.72,
+         11.57,
+         34.18
+        ]
+       ],
+       "R": [
+        [
+         44.8,
+         -30.11,
+         1.75
+        ],
+        [
+         65.78,
+         11.92,
+         34.18
+        ]
+       ]
+      }
+     },
+     "Artery of central sulcus": {
+      "lengthMm": 263.0,
+      "inBoneBeforeMm": 51.2,
+      "inBoneAfterMm": 0.0,
+      "maxMovedMm": 1.8,
+      "centroid": {
+       "L": [
+        -48.43,
+        -23.61,
+        70.68
+       ],
+       "R": [
+        48.43,
+        -23.6,
+        70.7
+       ]
+      },
+      "box": {
+       "L": [
+        [
+         -63.22,
+         -50.63,
+         27.88
+        ],
+        [
+         -14.58,
+         1.42,
+         101.38
+        ]
+       ],
+       "R": [
+        [
+         14.53,
+         -50.65,
+         27.88
+        ],
+        [
+         63.23,
+         1.42,
+         101.47
+        ]
+       ]
+      }
+     },
+     "Artery of precentral sulcus": {
+      "lengthMm": 415.9,
+      "inBoneBeforeMm": 65.1,
+      "inBoneAfterMm": 0.0,
+      "maxMovedMm": 5.3,
+      "centroid": {
+       "L": [
+        -43.87,
+        0.16,
+        73.84
+       ],
+       "R": [
+        43.95,
+        0.22,
+        73.87
+       ]
+      },
+      "box": {
+       "L": [
+        [
+         -61.28,
+         -17.05,
+         31.23
+        ],
+        [
+         -22.63,
+         16.71,
+         101.96
+        ]
+       ],
+       "R": [
+        [
+         22.7,
+         -16.96,
+         31.22
+        ],
+        [
+         61.34,
+         16.56,
+         102.01
+        ]
+       ]
+      }
+     },
+     "Branch to angular gyrus": {
+      "lengthMm": 28.6,
+      "inBoneBeforeMm": 29.0,
+      "inBoneAfterMm": 0.5,
+      "maxMovedMm": 3.1,
+      "centroid": {
+       "L": [
+        -57.82,
+        -77.26,
+        35.29
+       ],
+       "R": [
+        57.91,
+        -77.23,
+        35.24
+       ]
+      },
+      "box": {
+       "L": [
+        [
+         -59.04,
+         -79.45,
+         28.32
+        ],
+        [
+         -56.75,
+         -73.89,
+         40.19
+        ]
+       ],
+       "R": [
+        [
+         56.7,
+         -79.66,
+         28.51
+        ],
+        [
+         59.03,
+         -73.79,
+         40.08
+        ]
+       ]
+      }
+     },
+     "Callosomarginal artery": {
+      "lengthMm": 400.7,
+      "inBoneBeforeMm": 30.8,
+      "inBoneAfterMm": 0.0,
+      "maxMovedMm": 5.4,
+      "centroid": {
+       "L": [
+        -3.35,
+        21.64,
+        74.83
+       ],
+       "R": [
+        3.36,
+        21.63,
+        74.84
+       ]
+      },
+      "box": {
+       "L": [
+        [
+         -21.05,
+         -1.55,
+         25.03
+        ],
+        [
+         -0.02,
+         51.56,
+         102.62
+        ]
+       ],
+       "R": [
+        [
+         0.02,
+         -1.54,
+         25.03
+        ],
+        [
+         21.16,
+         51.56,
+         102.73
+        ]
+       ]
+      }
+     },
+     "Frontal branches of callosomarginal artery": {
+      "lengthMm": 68.4,
+      "inBoneBeforeMm": 3.6,
+      "inBoneAfterMm": 0.0,
+      "maxMovedMm": 1.2,
+      "centroid": {
+       "L": [
+        -5.62,
+        36.4,
+        75.3
+       ],
+       "R": [
+        5.63,
+        36.39,
+        75.28
+       ]
+      },
+      "box": {
+       "L": [
+        [
+         -14.34,
+         29.52,
+         65.22
+        ],
+        [
+         -0.69,
+         40.3,
+         87.7
+        ]
+       ],
+       "R": [
+        [
+         0.69,
+         29.52,
+         65.22
+        ],
+        [
+         14.34,
+         40.3,
+         87.67
+        ]
+       ]
+      }
+     },
+     "Lateral frontobasal artery": {
+      "lengthMm": 251.1,
+      "inBoneBeforeMm": 115.3,
+      "inBoneAfterMm": 0.0,
+      "maxMovedMm": 6.6,
+      "centroid": {
+       "L": [
+        -35.9,
+        41.0,
+        43.92
+       ],
+       "R": [
+        35.95,
+        40.97,
+        43.85
+       ]
+      },
+      "box": {
+       "L": [
+        [
+         -50.39,
+         2.14,
+         21.97
+        ],
+        [
+         -11.12,
+         59.95,
+         61.71
+        ]
+       ],
+       "R": [
+        [
+         11.04,
+         2.13,
+         21.97
+        ],
+        [
+         50.38,
+         59.86,
+         61.73
+        ]
+       ]
+      }
+     },
+     "Orbitofrontal branches of anterior cerebral artery": {
+      "lengthMm": 140.2,
+      "inBoneBeforeMm": 4.3,
+      "inBoneAfterMm": 0.0,
+      "maxMovedMm": 1.2,
+      "centroid": {
+       "L": [
+        -5.27,
+        47.64,
+        23.65
+       ],
+       "R": [
+        5.3,
+        47.64,
+        23.69
+       ]
+      },
+      "box": {
+       "L": [
+        [
+         -14.88,
+         19.17,
+         14.24
+        ],
+        [
+         -0.78,
+         62.07,
+         35.35
+        ]
+       ],
+       "R": [
+        [
+         0.79,
+         19.17,
+         14.24
+        ],
+        [
+         14.96,
+         61.96,
+         35.52
+        ]
+       ]
+      }
+     },
+     "Parietal branches of middle cerebral artery": {
+      "lengthMm": 173.3,
+      "inBoneBeforeMm": 41.5,
+      "inBoneAfterMm": 0.0,
+      "maxMovedMm": 2.9,
+      "centroid": {
+       "L": [
+        -58.33,
+        -52.88,
+        64.76
+       ],
+       "R": [
+        58.5,
+        -52.91,
+        64.81
+       ]
+      },
+      "box": {
+       "L": [
+        [
+         -68.18,
+         -68.78,
+         42.89
+        ],
+        [
+         -37.46,
+         -37.16,
+         83.55
+        ]
+       ],
+       "R": [
+        [
+         37.47,
+         -68.79,
+         42.9
+        ],
+        [
+         68.3,
+         -37.16,
+         83.58
+        ]
+       ]
+      }
+     },
+     "Pericallosal artery": {
+      "lengthMm": 968.7,
+      "inBoneBeforeMm": 19.0,
+      "inBoneAfterMm": 0.0,
+      "maxMovedMm": 1.7,
+      "centroid": {
+       "L": [
+        -5.19,
+        -29.68,
+        72.21
+       ],
+       "R": [
+        5.19,
+        -29.67,
+        72.21
+       ]
+      },
+      "box": {
+       "L": [
+        [
+         -29.69,
+         -80.61,
+         22.7
+        ],
+        [
+         0.89,
+         25.8,
+         107.16
+        ]
+       ],
+       "R": [
+        [
+         -0.89,
+         -80.61,
+         22.7
+        ],
+        [
+         29.73,
+         25.8,
+         107.17
+        ]
+       ]
+      }
+     },
+     "Postcentral arterial branch": {
+      "lengthMm": 232.0,
+      "inBoneBeforeMm": 18.0,
+      "inBoneAfterMm": 0.0,
+      "maxMovedMm": 1.6,
+      "centroid": {
+       "L": [
+        -55.18,
+        -38.94,
+        69.16
+       ],
+       "R": [
+        55.26,
+        -38.93,
+        69.26
+       ]
+      },
+      "box": {
+       "L": [
+        [
+         -67.17,
+         -65.27,
+         38.53
+        ],
+        [
+         -21.69,
+         -16.43,
+         93.82
+        ]
+       ],
+       "R": [
+        [
+         21.76,
+         -65.48,
+         38.53
+        ],
+        [
+         67.13,
+         -16.43,
+         93.9
+        ]
+       ]
+      }
+     },
+     "Posterior parietal artery": {
+      "lengthMm": 280.9,
+      "inBoneBeforeMm": 12.3,
+      "inBoneAfterMm": 0.0,
+      "maxMovedMm": 2.5,
+      "centroid": {
+       "L": [
+        -51.33,
+        -75.06,
+        56.91
+       ],
+       "R": [
+        51.41,
+        -75.16,
+        56.92
+       ]
+      },
+      "box": {
+       "L": [
+        [
+         -63.82,
+         -90.08,
+         39.01
+        ],
+        [
+         -37.59,
+         -46.91,
+         76.0
+        ]
+       ],
+       "R": [
+        [
+         37.73,
+         -90.28,
+         39.02
+        ],
+        [
+         63.8,
+         -46.91,
+         76.12
+        ]
+       ]
+      }
+     },
+     "Posterior temporal branch": {
+      "lengthMm": 167.3,
+      "inBoneBeforeMm": 57.4,
+      "inBoneAfterMm": 0.0,
+      "maxMovedMm": 7.9,
+      "centroid": {
+       "L": [
+        -57.16,
+        -70.02,
+        19.66
+       ],
+       "R": [
+        57.23,
+        -69.94,
+        19.62
+       ]
+      },
+      "box": {
+       "L": [
+        [
+         -68.05,
+         -85.23,
+         4.14
+        ],
+        [
+         -44.67,
+         -46.79,
+         42.66
+        ]
+       ],
+       "R": [
+        [
+         45.3,
+         -85.23,
+         4.03
+        ],
+        [
+         68.05,
+         -46.79,
+         42.66
+        ]
+       ]
+      }
+     },
+     "Prefrontal artery": {
+      "lengthMm": 236.1,
+      "inBoneBeforeMm": 213.6,
+      "inBoneAfterMm": 0.0,
+      "maxMovedMm": 5.7,
+      "centroid": {
+       "L": [
+        -44.44,
+        21.7,
+        62.02
+       ],
+       "R": [
+        44.53,
+        21.65,
+        62.07
+       ]
+      },
+      "box": {
+       "L": [
+        [
+         -57.8,
+         3.15,
+         32.02
+        ],
+        [
+         -31.3,
+         33.58,
+         86.01
+        ]
+       ],
+       "R": [
+        [
+         31.41,
+         3.15,
+         32.02
+        ],
+        [
+         58.2,
+         33.69,
+         86.09
+        ]
+       ]
+      }
+     },
+     "Temporal branches of middle cerebral artery": {
+      "lengthMm": 189.1,
+      "inBoneBeforeMm": 14.8,
+      "inBoneAfterMm": 0.0,
+      "maxMovedMm": 4.9,
+      "centroid": {
+       "L": [
+        -61.94,
+        -37.37,
+        22.41
+       ],
+       "R": [
+        61.93,
+        -37.43,
+        22.43
+       ]
+      },
+      "box": {
+       "L": [
+        [
+         -70.12,
+         -58.1,
+         -0.11
+        ],
+        [
+         -51.13,
+         -12.54,
+         44.37
+        ]
+       ],
+       "R": [
+        [
+         51.27,
+         -58.09,
+         -0.02
+        ],
+        [
+         70.04,
+         -12.54,
+         44.36
+        ]
+       ]
+      }
+     },
+     "Temporo-occipital branch": {
+      "lengthMm": 304.1,
+      "inBoneBeforeMm": 86.7,
+      "inBoneAfterMm": 0.0,
+      "maxMovedMm": 4.6,
+      "centroid": {
+       "L": [
+        -37.71,
+        -96.15,
+        30.59
+       ],
+       "R": [
+        37.73,
+        -96.16,
+        30.61
+       ]
+      },
+      "box": {
+       "L": [
+        [
+         -59.15,
+         -107.94,
+         2.28
+        ],
+        [
+         -14.43,
+         -69.8,
+         47.11
+        ]
+       ],
+       "R": [
+        [
+         14.47,
+         -107.93,
+         2.3
+        ],
+        [
+         59.25,
+         -69.8,
+         47.05
+        ]
+       ]
+      }
+     }
     }
    },
    "validation": {
@@ -112,10 +857,14 @@
     },
     "L": {
      "inBoneWayAfter": 0
+    },
+    "arteries": {
+     "inBoneBeforeMm": 982.1,
+     "inBoneAfterMm": 0.5
     }
    },
-   "revision": "193d0cb",
-   "date": "2026-11-05"
+   "revision": "82bd5bf",
+   "date": "2026-11-11"
   },
   {
    "step": "skullbase_v1_nerves",
@@ -246,6 +995,132 @@
    },
    "revision": "193d0cb",
    "date": "2026-11-05"
+  },
+  {
+   "step": "skullbase_v1_xii",
+   "operation": "the hypoglossal nerve led through the hypoglossal canal of the model's own occipital bone (its rootlets gathered in front of the canal, its trunk along the canal's axis); beyond the bone, and its branches, unchanged",
+   "structures": [
+    "Hypoglossal nerve (XII)"
+   ],
+   "parameters": {
+    "canalStepMm": 0.25,
+    "narrowMm": 2.2,
+    "enclosedMm": 4.0,
+    "enclosedDirs": 21,
+    "gatherMm": 1.5,
+    "beyondMm": 1.5,
+    "rejoinMm": 8.0,
+    "clearMm": 0.2
+   },
+   "metrics": {
+    "L": {
+     "canal": {
+      "centre": [
+       -18.62,
+       -30.2,
+       -30.27
+      ],
+      "axis": [
+       -0.63,
+       0.78,
+       0.03
+      ],
+      "inner": [
+       -16.79,
+       -32.45,
+       -30.37
+      ],
+      "outer": [
+       -20.76,
+       -27.57,
+       -30.15
+      ],
+      "lengthMm": 6.3,
+      "widthMm": 2.6,
+      "volumeMm3": 22.1,
+      "fromLabelMm": 0.15
+     },
+     "rootlets": 6,
+     "gatheredAt": [
+      -15.84,
+      -33.61,
+      -30.42
+     ],
+     "gatheredBefore": [
+      -10.77,
+      -26.94,
+      -27.05
+     ],
+     "rejoinsAtMm": 49.5,
+     "leftBoneAtMm": 41.4,
+     "maxMovedMm": 9.0,
+     "inBoneBeforeMm": 17.6,
+     "deepestBeforeMm": 4.3,
+     "inBoneAfterMm": 0.0,
+     "deepestAfterMm": 0.0,
+     "toCanalCentreMm": 0.06,
+     "toCanalCentreBeforeMm": 4.41,
+     "sharpestTurnDeg": 44,
+     "lengthMm": 122.7,
+     "lengthBeforeMm": 132.7
+    },
+    "R": {
+     "canal": {
+      "centre": [
+       18.61,
+       -30.22,
+       -30.26
+      ],
+      "axis": [
+       0.63,
+       0.77,
+       0.04
+      ],
+      "inner": [
+       16.68,
+       -32.58,
+       -30.38
+      ],
+      "outer": [
+       20.56,
+       -27.84,
+       -30.14
+      ],
+      "lengthMm": 6.1,
+      "widthMm": 2.5,
+      "volumeMm3": 22.2,
+      "fromLabelMm": 0.15
+     },
+     "rootlets": 6,
+     "gatheredAt": [
+      15.73,
+      -33.74,
+      -30.44
+     ],
+     "gatheredBefore": [
+      10.77,
+      -26.94,
+      -27.05
+     ],
+     "rejoinsAtMm": 49.5,
+     "leftBoneAtMm": 41.4,
+     "maxMovedMm": 9.1,
+     "inBoneBeforeMm": 17.6,
+     "deepestBeforeMm": 4.4,
+     "inBoneAfterMm": 0.0,
+     "deepestAfterMm": 0.0,
+     "toCanalCentreMm": 0.06,
+     "toCanalCentreBeforeMm": 4.44,
+     "sharpestTurnDeg": 45,
+     "lengthMm": 122.8,
+     "lengthBeforeMm": 132.7
+    }
+   },
+   "validation": {
+    "check": "skullbase_build.py finalize: the nerve passes within 0.5 mm of the canal's centre, under 1 mm of it in bone"
+   },
+   "revision": "0c860c0",
+   "date": "2026-11-12"
   }
  ]
 }

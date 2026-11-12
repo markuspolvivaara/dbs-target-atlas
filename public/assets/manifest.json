@@ -10,7 +10,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/stn.glb",
-   "bytes": 55212,
+   "bytes": 38828,
    "colour": {
     "token": "stn",
     "light": "#946609",
@@ -61,7 +61,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/stn_motor.glb",
-   "bytes": 30768,
+   "bytes": 22512,
    "colour": {
     "token": "stn",
     "light": "#946609",
@@ -109,7 +109,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/meshes/stn_assoc.glb",
-   "bytes": 30660,
+   "bytes": 22428,
    "colour": {
     "token": "stnAssoc",
     "light": "#E2C77E",
@@ -157,7 +157,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/meshes/stn_limbic.glb",
-   "bytes": 29880,
+   "bytes": 22008,
    "colour": {
     "token": "stnLimbic",
     "light": "#F1E3BC",
@@ -207,7 +207,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/gpi.glb",
-   "bytes": 55592,
+   "bytes": 39100,
    "colour": {
     "token": "gpi",
     "light": "#1F7F5A",
@@ -257,7 +257,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/gpi_sm.glb",
-   "bytes": 30504,
+   "bytes": 22452,
    "colour": {
     "token": "gpi",
     "light": "#1F7F5A",
@@ -307,7 +307,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/gpe.glb",
-   "bytes": 55008,
+   "bytes": 38588,
    "colour": {
     "token": "gpe",
     "light": "#6A8578",
@@ -357,7 +357,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/rn.glb",
-   "bytes": 56536,
+   "bytes": 40076,
    "colour": {
     "token": "rn",
     "light": "#6B2E22",
@@ -405,7 +405,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/meshes/thal.glb",
-   "bytes": 83884,
+   "bytes": 59644,
    "colour": {
     "token": "thal",
     "light": "#8996A3",
@@ -456,7 +456,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/vim.glb",
-   "bytes": 56972,
+   "bytes": 40832,
    "colour": {
     "token": "vim",
     "light": "#2D5FB0",
@@ -508,7 +508,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/vo.glb",
-   "bytes": 52448,
+   "bytes": 37108,
    "colour": {
     "token": "vo",
     "light": "#647514",
@@ -560,7 +560,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/cm.glb",
-   "bytes": 45364,
+   "bytes": 32356,
    "colour": {
     "token": "cm",
     "light": "#127C94",
@@ -612,7 +612,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/pf.glb",
-   "bytes": 39112,
+   "bytes": 27980,
    "colour": {
     "token": "cm",
     "light": "#127C94",
@@ -665,7 +665,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/psa.glb",
-   "bytes": 29896,
+   "bytes": 21908,
    "colour": {
     "token": "psa",
     "light": "#7448AD",
@@ -715,7 +715,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/snr.glb",
-   "bytes": 52788,
+   "bytes": 37212,
    "colour": {
     "token": "snr",
     "light": "#AD385D",
@@ -765,7 +765,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/snc.glb",
-   "bytes": 34220,
+   "bytes": 24720,
    "colour": {
     "token": "snc",
     "light": "#6B3550",
@@ -813,7 +813,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/meshes/putamen.glb",
-   "bytes": 79836,
+   "bytes": 55540,
    "colour": {
     "token": "str",
     "light": "#8E5A84",
@@ -861,7 +861,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/meshes/caudate.glb",
-   "bytes": 80512,
+   "bytes": 55992,
    "colour": {
     "token": "str",
     "light": "#8E5A84",
@@ -909,7 +909,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/meshes/nacc.glb",
-   "bytes": 30488,
+   "bytes": 22292,
    "colour": {
     "token": "str",
     "light": "#8E5A84",
@@ -959,7 +959,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/ppn.glb",
-   "bytes": 13836,
+   "bytes": 10780,
    "colour": {
     "token": "ppn",
     "light": "#6F675B",
@@ -1010,7 +1010,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/ant.glb",
-   "bytes": 43088,
+   "bytes": 31024,
    "colour": {
     "token": "ant",
     "light": "#C0461A",
@@ -1062,7 +1062,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/mtt.glb",
-   "bytes": 22668,
+   "bytes": 16564,
    "colour": {
     "token": "mtt",
     "light": "#2B4C9B",
@@ -1113,7 +1113,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/meshes/mamm.glb",
-   "bytes": 24144,
+   "bytes": 18092,
    "colour": {
     "token": "mb",
     "light": "#8C7A5A",
@@ -1161,7 +1161,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/meshes/fornix.glb",
-   "bytes": 29364,
+   "bytes": 21272,
    "colour": {
     "token": "fx",
     "light": "#6E8888",
@@ -1210,7 +1210,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/meshes/hippocampus.glb",
-   "bytes": 69356,
+   "bytes": 48844,
    "colour": {
     "token": "hip",
     "light": "#B88A12",
@@ -1260,7 +1260,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/optic_tract.glb",
-   "bytes": 36052,
+   "bytes": 25872,
    "colour": {
     "token": "ot",
     "light": "#B9E3E8",
@@ -1309,7 +1309,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/meshes/dentate.glb",
-   "bytes": 39872,
+   "bytes": 28640,
    "colour": {
     "token": "den",
     "light": "#4A6E7E",
@@ -1359,7 +1359,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/meshes/ss_pd.glb",
-   "bytes": 20632,
+   "bytes": 15188,
    "colour": {
     "token": "stn",
     "light": "#946609",
@@ -1409,7 +1409,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/meshes/ss_dyt.glb",
-   "bytes": 23668,
+   "bytes": 17568,
    "colour": {
     "token": "gpi",
     "light": "#1F7F5A",
@@ -1459,7 +1459,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/meshes/ss_ts.glb",
-   "bytes": 24040,
+   "bytes": 17916,
    "colour": {
     "token": "cm",
     "light": "#127C94",
@@ -1509,7 +1509,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/meshes/ss_gen.glb",
-   "bytes": 22952,
+   "bytes": 16784,
    "colour": {
     "token": "gpi",
     "light": "#1F7F5A",
@@ -1561,7 +1561,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/meshes/ss_cerv.glb",
-   "bytes": 23848,
+   "bytes": 17688,
    "colour": {
     "token": "gpi",
     "light": "#1F7F5A",
@@ -1613,7 +1613,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/meshes/ss_tremor.glb",
-   "bytes": 16188,
+   "bytes": 12392,
    "colour": {
     "token": "vim",
     "light": "#2D5FB0",
@@ -1661,7 +1661,7 @@
    "aliases": [],
    "type": "cortex",
    "file": "assets/meshes/cortex.glb",
-   "bytes": 784788,
+   "bytes": 541072,
    "colour": {
     "token": "cortex",
     "light": "#C4CBD3",
@@ -1690,7 +1690,7 @@
    ],
    "type": "cortex",
    "file": "assets/meshes/m1.glb",
-   "bytes": 27236,
+   "bytes": 19856,
    "colour": {
     "token": "ctxM1",
     "light": "#E3836B",
@@ -1741,7 +1741,7 @@
    ],
    "type": "cortex",
    "file": "assets/meshes/s1.glb",
-   "bytes": 25688,
+   "bytes": 18792,
    "colour": {
     "token": "ctxS1",
     "light": "#F0B79A",
@@ -1791,7 +1791,7 @@
    ],
    "type": "cortex",
    "file": "assets/meshes/sma.glb",
-   "bytes": 14432,
+   "bytes": 11084,
    "colour": {
     "token": "ctxSMA",
     "light": "#7E88E0",
@@ -1839,7 +1839,7 @@
    "aliases": [],
    "type": "cortex",
    "file": "assets/meshes/presma.glb",
-   "bytes": 14804,
+   "bytes": 11340,
    "colour": {
     "token": "ctxPreSMA",
     "light": "#B3B8EE",
@@ -1889,7 +1889,7 @@
    ],
    "type": "cortex",
    "file": "assets/meshes/pmd.glb",
-   "bytes": 28428,
+   "bytes": 20968,
    "colour": {
     "token": "ctxPM",
     "light": "#DDA6D2",
@@ -1939,7 +1939,7 @@
    ],
    "type": "cortex",
    "file": "assets/meshes/pmv.glb",
-   "bytes": 30576,
+   "bytes": 22452,
    "colour": {
     "token": "ctxPM",
     "light": "#DDA6D2",
@@ -1987,7 +1987,7 @@
    "aliases": [],
    "type": "cortex",
    "file": "assets/meshes/acc.glb",
-   "bytes": 19584,
+   "bytes": 14576,
    "colour": {
     "token": "ctxACC",
     "light": "#6CC3B4",
@@ -2037,7 +2037,7 @@
    "aliases": [],
    "type": "cortex",
    "file": "assets/meshes/vmpfc.glb",
-   "bytes": 22492,
+   "bytes": 16512,
    "colour": {
     "token": "ctxVMPFC",
     "light": "#E7A8C9",

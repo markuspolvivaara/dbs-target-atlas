@@ -756,20 +756,6 @@
   "distanceToBoneMm": 0.0
  },
  {
-  "id": "lm_lateral_mass",
-  "name": "Lateral mass",
-  "bone": "Occipital bone",
-  "part": null,
-  "ras": [
-   -22.854,
-   -26.865,
-   -44.549
-  ],
-  "side": "L",
-  "boneFrom": "nearest surface",
-  "distanceToBoneMm": 1.4
- },
- {
   "id": "lm_lateral_pterygoid_plate",
   "name": "Lateral pterygoid plate",
   "bone": "Sphenoid bone",

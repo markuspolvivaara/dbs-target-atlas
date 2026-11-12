@@ -23,10 +23,16 @@ inside the cavity first, by a smooth field in small steps (clear_smooth), which 
 surface in v1's own cranial cavity (Z-Anatomy's bones rasterised, skullbase_v1_skull.py): the right Sylvian fissure
 opened ("open"), the frontal lobe lifted along the pterional and the lateral supraorbital corridors ("lift",
 "lsoLift"), the right hemisphere held off the falx over the interhemispheric craniotomy ("interhemispheric", the
-callosum's top from Z-Anatomy's corpus callosum). Shapes, not simulations of the tissue. Z-Anatomy's arteries and veins
-stay where the model has them (they are not carried with the opened or lifted cortex).
+callosum's top from Z-Anatomy's corpus callosum). Shapes, not simulations of the tissue.
 
-Writes pipeline/data/build/skullbase/br_*.glb and brain.json (the manifest's items and the shapes' report).
+Z-Anatomy draws the cerebral arteries' cortical branches (CORTICAL) on that cortex, so where the cortex reaches into the
+bone they lie in the bone too. They are moved by the field that pushes the cortex back (clear_smooth's riders) and then
+kept inside the cranial cavity themselves (carry_arteries), and their tubes are written again. That is the model at
+rest; in the surgical views Z-Anatomy's arteries and veins stay where they are (they are not carried with the opened or
+lifted cortex).
+
+Writes pipeline/data/build/skullbase/br_*.glb, the cortical arteries' sb_*.glb again, and brain.json (the manifest's
+items, and the report of the shapes and of the arteries moved).
 """
 from __future__ import annotations
 
@@ -220,13 +226,15 @@ REMESH_SHELL_MM = 0.25   # (the surface lies about this far outside Z-Anatomy's 
 REMESH_FACES = 90_000
 
 
-def clear_smooth(V: np.ndarray, pt: V1Patient) -> tuple[np.ndarray, dict]:
+def clear_smooth(V: np.ndarray, pt: V1Patient, riders: np.ndarray | None = None) -> tuple[np.ndarray, dict, np.ndarray | None]:
     """Push the cortex out of the bone it reaches into, to SBB.CLEAR_CAVITY_MM inside the cavity, by a smooth field
     rather than vertex by vertex (Z-Anatomy's cortex reaches up to about 7 mm into its own bone, and pushing each vertex
     folds the sulci's walls into one another): in rounds, each vertex's push (along the cavity's gradient) spread over a
     grid by a Gaussian of CLEAR_SIGMA_MM, at most CLEAR_STEP_MM a round, every vertex moved by that field. Small, smooth
-    steps do not fold the surface."""
+    steps do not fold the surface. `riders` (points, here the cortical arteries' centre lines) are moved by the same
+    field in every round, as the cortex beside them is: returned as moved."""
     X = V.copy()
+    Rd = None if riders is None else np.array(riders, float)
     sc, _ = pt.cavity(X)
     first = int((sc < SBB.CLEAR_CAVITY_MM).sum())
     lo = X.min(0) - 3 * CLEAR_SIGMA_MM
@@ -249,9 +257,106 @@ def clear_smooth(V: np.ndarray, pt: V1Patient) -> tuple[np.ndarray, dict]:
         q = ((X - lo) / CLEAR_GRID_MM).T
         u = np.stack([ndimage.map_coordinates(acc[k] / w, q, order=1) for k in range(3)], axis=1)
         X = X + u
+        if Rd is not None and len(Rd):
+            qr = ((Rd - lo) / CLEAR_GRID_MM).T
+            Rd = Rd + np.stack([ndimage.map_coordinates(acc[k] / w, qr, order=1, mode="constant", cval=0.0) for k in range(3)], axis=1)
     sc, _ = pt.cavity(X)
     return X, {"inBoneWayBefore": first, "inBoneWayAfter": int((sc < SBB.CLEAR_CAVITY_MM - 0.3).sum()), "rounds": rounds,
-               "maxMovedMm": round(float(np.linalg.norm(X - V, axis=1).max()), 2)}
+               "maxMovedMm": round(float(np.linalg.norm(X - V, axis=1).max()), 2)}, Rd
+
+
+# ---------------------------------------------------------------- the cortical arteries, carried with the cortex
+# Z-Anatomy draws the cerebral arteries' cortical branches on its cortex, and where that cortex reaches into the model's
+# bone, so do they. When the cortex is pushed back into the cranial cavity (clear_smooth) they go with it, moved by the
+# same field, and are then kept inside the cavity themselves. The trunks and the arteries of the Sylvian fissure (M1 to
+# M3, from which the opercula are found), the perforators and the posterior cerebral artery are left where the model has
+# them: they do not reach the bone.
+CORTICAL = ("Lateral frontobasal artery", "Prefrontal artery", "Artery of precentral sulcus", "Artery of central sulcus",
+            "Postcentral arterial branch", "Posterior parietal artery", "Parietal branches of middle cerebral artery",
+            "Branch to angular gyrus", "Temporal branches of middle cerebral artery", "Anterior temporal branch",
+            "Posterior temporal branch", "Temporo-occipital branch", "Orbitofrontal branches of anterior cerebral artery",
+            "Pericallosal artery", "Callosomarginal artery", "Frontal branches of callosomarginal artery")
+ARTERY_GAP_MM = 0.1        # an artery's wall at least this far inside the cranial cavity
+ARTERY_STEP_MM = 0.5       # (pushed at most this a round)
+ARTERY_SMOOTH_MM = 2.0     # (a push spread along the artery's course over this, so that it does not kink)
+ARTERY_MAX_ROUNDS = 80
+ARTERY_MIN_MM = 0.3        # (an artery moved less than this anywhere is left as the model has it)
+
+
+def cortical_runs(ex: dict) -> dict[tuple[str, str], list[np.ndarray]]:
+    """{(artery, side): its centre-line runs (x, y, z, radius)} for the cortical branches (CORTICAL)."""
+    import skullbase_build as SBld
+    out: dict[tuple[str, str], list[np.ndarray]] = {}
+    for n, ln in ex["lines"].items():
+        base, side = SBld.split_pair(n)
+        if ln.get("kind") == "artery" and base in CORTICAL and side in ("L", "R"):
+            out.setdefault((base, side), []).extend(np.array(r, float) for r in ln["runs"])
+    return out
+
+
+def bone_length(runs: list[np.ndarray], bone) -> tuple[float, float]:
+    """(a centre line's length, its length inside bone), mm."""
+    total = inside = 0.0
+    for r in runs:
+        seg = np.linalg.norm(np.diff(r[:, :3], axis=0), axis=1)
+        w = np.r_[seg, 0] / 2 + np.r_[0, seg] / 2
+        total += float(w.sum())
+        inside += float((w * (bone(r[:, :3]) > 0.5)).sum())
+    return total, inside
+
+
+def carry_arteries(before: dict, moved: dict, pt: V1Patient) -> dict:
+    """The cortical arteries after the cortex's clearing (their runs as clear_smooth moved them): each kept inside the
+    cranial cavity (its wall ARTERY_GAP_MM clear of the bone at least: pushed along the cavity's gradient, the pushes
+    spread along its course), its tube built again as skullbase_build.py builds it and written over that one. Returns
+    {artery: its length, its length inside bone before and after, its largest move, its centroids and its tubes' boxes}."""
+    import skullbase_build as SBld
+    c = np.load(BUILD / "skull_bone.npz")
+    b, inv = c["b"].astype(np.float32), np.linalg.inv(c["a"])
+
+    def bone(P):
+        return ndimage.map_coordinates(b, (np.c_[P, np.ones(len(P))] @ inv.T)[:, :3].T, order=1, mode="constant", cval=0.0)
+    out = {}
+    for base in sorted({k[0] for k in before}):
+        nodes, rep = [], {"lengthMm": 0.0, "inBoneBeforeMm": 0.0, "inBoneAfterMm": 0.0, "maxMovedMm": 0.0, "centroid": {}, "box": {}}
+        for side in ("L", "R"):
+            if (base, side) not in before:
+                continue
+            runs0, runs = before[(base, side)], [r.copy() for r in moved[(base, side)]]
+            for r in runs:
+                if len(r) < 2:
+                    continue
+                k = max(int(round(ARTERY_SMOOTH_MM / max(float(np.linalg.norm(np.diff(r[:, :3], axis=0), axis=1).mean()), 1e-3))), 1)
+                for _ in range(ARTERY_MAX_ROUNDS):
+                    sc, gc = pt.cavity(r[:, :3])
+                    need = np.maximum(r[:, 3], SBld.TUBE_MIN_RADIUS_MM) + ARTERY_GAP_MM - sc
+                    if not (need > 0.02).any():
+                        break
+                    # (how far: each point's need, the largest within ARTERY_SMOOTH_MM along the course, smoothed; which
+                    # way: the cavity's gradient, smoothed along the course too. A stretch moves together, without a kink.)
+                    far = ndimage.gaussian_filter1d(ndimage.maximum_filter1d(np.clip(need, 0, ARTERY_STEP_MM), 2 * k + 1, mode="nearest"), k, mode="nearest")
+                    way = ndimage.gaussian_filter1d(gc / np.maximum(np.linalg.norm(gc, axis=1, keepdims=True), 1e-9), k, axis=0, mode="nearest")
+                    r[:, :3] += far[:, None] * way / np.maximum(np.linalg.norm(way, axis=1, keepdims=True), 1e-9)
+            l0, in0 = bone_length(runs0, bone)
+            l1, in1 = bone_length(runs, bone)
+            rep["lengthMm"] += l1
+            rep["inBoneBeforeMm"] += in0
+            rep["inBoneAfterMm"] += in1
+            rep["maxMovedMm"] = max(rep["maxMovedMm"], max(float(np.linalg.norm(a[:, :3] - b0[:, :3], axis=1).max()) for a, b0 in zip(runs, runs0)))
+            rep["centroid"][side] = np.vstack([r[:, :3] for r in runs]).mean(0).round(2).tolist()
+            vs, ns, ts, off = [], [], [], 0
+            for r in runs:
+                v_, n_, t_ = SBld.tube(r)
+                if len(t_):
+                    vs.append(v_); ns.append(n_); ts.append(t_ + off); off += len(v_)
+            if ts:
+                nodes.append({"name": side, "positions": np.vstack(vs), "normals": np.vstack(ns), "indices": np.vstack(ts), "mode": SBld.TRIANGLES})
+                rep["box"][side] = [np.vstack(vs).min(0).round(2).tolist(), np.vstack(vs).max(0).round(2).tolist()]
+        if rep["maxMovedMm"] < ARTERY_MIN_MM or not nodes:
+            continue
+        write_glb(BUILD / f"{SBld.slug(base)}.glb", nodes, {"id": SBld.slug(base)})
+        out[base] = {k: (round(v, 1) if isinstance(v, float) else v) for k, v in rep.items()}
+    return out
 
 
 CLEAR_GRID_MM = 1.0
@@ -289,11 +394,24 @@ def main() -> int:
     print("cavity", round(pt.cavity_ml), "ml", round(time.time() - t0), "s")
     hull = hull_field(hemis)
     report = {"cavityMl": round(pt.cavity_ml), "clear": {}}
+    art0 = cortical_runs(ex)
+    art1: dict = {}
     for s in "RL":      # Z-Anatomy's cortex reaches into its own bone in places: pushed CLEAR_CAVITY_MM inside the cavity
         h = hemis[s]
-        h["V"], rc = clear_smooth(h["V"], pt)
+        keys = [k for k in art0 if k[1] == s]
+        lens = [len(r) for k in keys for r in art0[k]]
+        h["V"], rc, moved = clear_smooth(h["V"], pt, np.vstack([r[:, :3] for k in keys for r in art0[k]]) if keys else None)
         report["clear"][s] = rc
+        parts = np.split(moved, np.cumsum(lens)[:-1]) if keys else []
+        i = 0
+        for k in keys:      # (each run again, with its radii, as the field moved it)
+            art1[k] = []
+            for r in art0[k]:
+                art1[k].append(np.c_[parts[i], r[:, 3]])
+                i += 1
         print(s, "cleared", rc, round(time.time() - t0), "s")
+    report["arteries"] = carry_arteries(art0, art1, pt)
+    print("cortical arteries carried:", {k: (v["inBoneBeforeMm"], v["inBoneAfterMm"], v["maxMovedMm"]) for k, v in report["arteries"].items()})
     d = hemis["R"]
     V = d["V"]
     X, ro = SBB.open_fissure(d, V, hull(V, grad=False), pt)
@@ -353,10 +471,15 @@ def main() -> int:
                       "centroid": {"L": cent["L"], "R": cent["R"]}})
     from modifications import record
     record("sb", "skullbase_v1_brain", "the cortex remade as closed surfaces and pushed out of its bone by a smooth field; the opercula and the "
-           "fissure's floor found from the model's arteries and white matter",
-           [it["name"] for it in items], {"remeshStepMm": REMESH_STEP, "remeshShellMm": REMESH_SHELL_MM, "clearSigmaMm": CLEAR_SIGMA_MM,
-                                          "clearStepMm": CLEAR_STEP_MM, "operMcaMm": OPER_MCA_MM, "insulaReachMm": INSULA_REACH_MM},
-           report, {s: {"inBoneWayAfter": report["clear"][s]["inBoneWayAfter"]} for s in report["clear"]})
+           "fissure's floor found from the model's arteries and white matter; the cerebral arteries' cortical branches moved by "
+           "the same field and kept inside the cranial cavity",
+           [it["name"] for it in items] + sorted(report["arteries"]),
+           {"remeshStepMm": REMESH_STEP, "remeshShellMm": REMESH_SHELL_MM, "clearSigmaMm": CLEAR_SIGMA_MM,
+            "clearStepMm": CLEAR_STEP_MM, "operMcaMm": OPER_MCA_MM, "insulaReachMm": INSULA_REACH_MM,
+            "arteryGapMm": ARTERY_GAP_MM, "arteryStepMm": ARTERY_STEP_MM, "arterySmoothMm": ARTERY_SMOOTH_MM},
+           report, {**{s: {"inBoneWayAfter": report["clear"][s]["inBoneWayAfter"]} for s in report["clear"]},
+                    "arteries": {"inBoneBeforeMm": round(sum(v["inBoneBeforeMm"] for v in report["arteries"].values()), 1),
+                                 "inBoneAfterMm": round(sum(v["inBoneAfterMm"] for v in report["arteries"].values()), 1)}})
     (BUILD / "brain.json").write_text(json.dumps({"items": items, "report": report}, indent=1, default=str))
     print("written", len(items), "pieces;", round(time.time() - t0), "s")
     return 0

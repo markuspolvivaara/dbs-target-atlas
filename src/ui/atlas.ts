@@ -12,7 +12,7 @@ import { chips, clear, fmtMm, h, refLinks } from './dom';
 import { eyeIcon } from './widgets';
 import { clearAllLeadPrefs, clearLeadPref, isHidden, leadPrefFor, saveLeadDefault, saveLeadPref, visibleIndications } from './prefs';
 import { primaryTargetId } from '../viewer/selection';
-import { bindSheetDrag, buildSlicesPane, drawGizmo, layoutLabels, syncSlicesPane, type LabelItem } from './stage';
+import { bindSheetDrag, buildSlicesPane, drawGizmo, layoutLabels, syncSlicesPane, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 
 type Update = (fn: (s: AppState) => void, opts?: { camera?: boolean }) => void;
 
@@ -44,7 +44,7 @@ export class AtlasPage {
   /** Structure / marker whose legend row the pointer is over: labelled in 3D in "hover" mode. */
   private legendHover: string | null = null;
   private gizmo = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  private status = h('div', { class: 'status', role: 'status', 'aria-live': 'polite', hidden: true });
+  private status = stageStatus(() => { void this.viewer.retryFailed(); });
   private measureBtn!: HTMLButtonElement;
   private leadInfo = h('div', { class: 'lead-info' });
   private sheetState: 'peek' | 'full' = 'peek';
@@ -53,7 +53,7 @@ export class AtlasPage {
 
   constructor(private update: Update) {
     this.stage = h('section', { class: 'stage', 'aria-label': '3D viewer' });
-    this.panel = h('aside', { class: 'panel', 'aria-label': 'Indication and tools', 'data-sheet': 'peek' });
+    this.panel = h('aside', { class: 'panel', id: 'panel', tabindex: -1, 'aria-label': 'Indication and tools', 'data-sheet': 'peek' });
     this.el = h('div', { class: 'atlas' }, this.stage, this.panel);
     this.buildStage();
     this.buildPanel();
@@ -81,12 +81,12 @@ export class AtlasPage {
       type: 'button', class: 'tbtn', 'aria-pressed': 'false', title: 'Measure distance between two points (M)',
       onclick: () => this.toggleMeasure(),
     }, 'Measure');
-    const share = h('button', { type: 'button', class: 'tbtn', title: 'Copy a link to this exact view', onclick: () => this.copyLink(share) }, 'Copy link');
+    const share = h('button', { type: 'button', class: 'tbtn', title: 'Copy a link to this exact view', onclick: () => { void this.copyLink(share); } }, 'Copy link');
     const labelGroup = h('div', { class: 'tgroup seg', role: 'group', 'aria-label': 'Name labels' },
       h('span', { class: 'tlabel' }, 'Labels'),
       ...([['all', 'All', 'Always show name labels'], ['hover', 'Hover', 'Label only what you point at, select or hover in the legend'], ['off', 'Off', 'No name labels (clean images)']] as const)
         .map(([v, label, title]) => h('button', { type: 'button', class: 'tbtn', 'data-labels': v, 'aria-pressed': 'false', title: `${title} (N cycles)`, onclick: () => this.update((s) => { s.labels = v; }) }, label)));
-    toolbar.append(presetGroup, hemiGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share));
+    toolbar.append(presetGroup, hemiGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share), viewButtons(() => this.resetView()));
     this.gizmo.setAttribute('viewBox', '-40 -40 80 80');
     this.gizmo.setAttribute('class', 'gizmo');
     this.gizmo.setAttribute('aria-hidden', 'true');
@@ -96,7 +96,9 @@ export class AtlasPage {
       h('div', { class: 'readout-box' }, this.measureOut, this.readout));
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
-    this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status);
+    this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
+    scrollHint(toolbar);
+    rovingToolbar(toolbar);
     this.readout.textContent = 'Point at a structure for MNI coordinates';
 
     this.viewer = new Viewer<AppState, Plan>(host, {
@@ -108,12 +110,14 @@ export class AtlasPage {
         s.cam = { preset: s.cam.preset, pos: [pos.x, pos.y, pos.z], tgt: [tgt.x, tgt.y, tgt.z] };
       }, { camera: false }),
       leadMoved: (d) => this.editLead((s) => { s.lead.depth = d; }),
-      status: (t) => { this.status.hidden = !t; this.status.textContent = t ?? ''; },
+      status: (t) => this.status.set(t),
+      loadFailed: (names) => this.status.failed(names),
       lead: (c) => this.showLead(c),
       moving: (on) => this.stage.classList.toggle('moving', on),
     }, dbsScene);
     const origRender = this.viewer.renderer.render.bind(this.viewer.renderer);
     this.viewer.renderer.render = (sc, cam) => { origRender(sc, cam); this.placeLabels(); };
+    watchOverlays(this.stage, () => this.viewer.invalidate());
   }
 
   // ---------------------------------------------------------------- panel
@@ -144,6 +148,7 @@ export class AtlasPage {
       this.tabs[id] = h('div', { class: 'pane', role: 'tabpanel', id: `pane-${id}`, 'aria-labelledby': `ptab-${id}`, hidden: id !== 'overview' });
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
+    scrollHint(tablist);
   }
 
   private selectTab(id: string, expand = true): void {
@@ -165,7 +170,7 @@ export class AtlasPage {
   render(s: AppState, opts: { camera: boolean }): void {
     const prev = this.s;
     this.s = s;
-    this.viewer.apply(s, { animateCamera: opts.camera }).then(() => this.renderLegend());
+    this.viewer.apply(s, { animateCamera: opts.camera }).then(() => this.renderLegend()).catch((e: unknown) => viewFailed(this.status, e));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-hemi]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.hemi === s.hemi)));
     this.stage.querySelectorAll<HTMLButtonElement>('.toolbar [data-labels]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.labels === s.labels)));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((b) => b.toggleAttribute('data-active', b.dataset.preset === s.cam.preset));
@@ -175,6 +180,8 @@ export class AtlasPage {
     this.renderSlices();
     this.renderLead();
     if (prev && prev.sel !== s.sel && s.sel) this.selectTab('overview', false);
+    // the card of what was just selected (or of a link's selection) is brought to the top of the panel
+    if (s.sel && prev?.sel !== s.sel) revealCard(this.panel);
   }
 
   private renderOverview(): void {
@@ -345,7 +352,12 @@ export class AtlasPage {
   }
 
   // ---------------------------------------------------------------- legend, labels, readout
+  /** (drawn again on every change: the keyboard keeps its place in it) */
   private renderLegend(): void {
+    keepFocus(this.legend, () => this.drawLegend());
+  }
+
+  private drawLegend(): void {
     const p: Plan | null = this.viewer.currentPlan();
     clear(this.legend);
     if (!p) return;
@@ -441,7 +453,7 @@ export class AtlasPage {
         if (a && name) add(id, name, a.x, a.y, TGT.has(id) ? 'mlabel' : 'slabel primary');
       }
     }
-    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders);
+    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders, [this.legendHover, this.s?.sel]);
     if (this.measurePts.length === 2) {
       const q = this.viewer.measureScreen();
       this.measureOut.dataset.x = q ? String(q.x) : '';
@@ -634,7 +646,13 @@ export class AtlasPage {
   }
 
   // ---------------------------------------------------------------- keyboard
+  /** The camera back to where this view opens (the toolbar's Reset view, key 0). */
+  private resetView(): void {
+    this.update((s) => { s.cam = { preset: null }; }, { camera: true });
+  }
+
   handleKey(e: KeyboardEvent): boolean {
+    if (e.key === '0') { this.resetView(); return true; }
     const k = e.key;
     const preset = PRESETS.find((p) => p[2] === k);
     if (preset) { this.update((s) => { s.cam = { preset: preset[0] }; }, { camera: true }); return true; }

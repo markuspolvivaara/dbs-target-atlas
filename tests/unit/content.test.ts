@@ -222,6 +222,8 @@ describe('Parkinson\'s view: the STN whole or as zones; the PPN and the optic tr
     expect(w.looks.get('stn')).toBe('primary');
     for (const id of ['stn_motor', 'stn_assoc', 'stn_limbic']) expect(w.looks.get(id), id).toBe('hidden');
     for (const p of [z, w, plan('pd', 'pd-axial', true)]) for (const id of ['ppn', 'optic_tract']) expect(p.looks.get(id), id).toBe('hidden');
+    // so no Parkinson's card may say the PPN stands for anything in its view
+    for (const sy of CONTENT.symptoms.filter((x) => x.indicationId === 'pd')) expect(`${sy.summary} ${sy.note ?? ''}`, sy.id).not.toMatch(/PPN|pedunculopontine/i);
     // other indications keep the optic tract as a GPi landmark
     const gpiInd = CONTENT.indications.find((i) => i.id !== 'pd' && [...i.primaryTargets, ...i.alternativeTargets].some((t) => t === 'gpi' || t === 'gpi_sm'))!;
     expect(plan(gpiInd.id, null, true).looks.get('optic_tract'), gpiInd.id).toBe('context');

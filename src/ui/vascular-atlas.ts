@@ -10,7 +10,7 @@ import type { VaState } from '../vascular/state';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
 import { refLinksFrom } from './reflinks';
-import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem } from './stage';
+import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: VaState) => void, opts?: { camera?: boolean }) => void;
@@ -56,7 +56,7 @@ export class VascularAtlasPage {
   private labels = h('div', { class: 'labels', 'aria-hidden': 'true' });
   private leaders = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   private gizmo = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  private status = h('div', { class: 'status', role: 'status', 'aria-live': 'polite', hidden: true });
+  private status = stageStatus(() => { void this.viewer.retryFailed(); });
   private measureBtn!: HTMLButtonElement;
   private sheetState: 'peek' | 'full' = 'peek';
   private measurePts: THREE.Vector3[] = [];
@@ -72,7 +72,7 @@ export class VascularAtlasPage {
 
   constructor(private update: Update) {
     this.stage = h('section', { class: 'stage', 'aria-label': '3D viewer' });
-    this.panel = h('aside', { class: 'panel', 'aria-label': 'Views and layers', 'data-sheet': 'peek' });
+    this.panel = h('aside', { class: 'panel', id: 'panel', tabindex: -1, 'aria-label': 'Views and layers', 'data-sheet': 'peek' });
     this.el = h('div', { class: 'atlas' }, this.stage, this.panel);
     this.buildStage();
     this.buildPanel();
@@ -97,12 +97,12 @@ export class VascularAtlasPage {
       }, h('span', { class: 'long' }, label), h('span', { class: 'short', 'aria-hidden': 'true' }, short)));
     }
     this.measureBtn = h('button', { type: 'button', class: 'tbtn', 'aria-pressed': 'false', title: 'Measure distance between two points (M)', onclick: () => this.toggleMeasure() }, 'Measure');
-    const share = h('button', { type: 'button', class: 'tbtn', title: 'Copy a link to this exact view', onclick: () => this.copyLink(share) }, 'Copy link');
+    const share = h('button', { type: 'button', class: 'tbtn', title: 'Copy a link to this exact view', onclick: () => { void this.copyLink(share); } }, 'Copy link');
     const labelGroup = h('div', { class: 'tgroup seg', role: 'group', 'aria-label': 'Name labels' },
       h('span', { class: 'tlabel' }, 'Labels'),
       ...([['all', 'All', 'Label everything highlighted in this view'], ['hover', 'Hover', 'Label only what you point at or select'], ['off', 'Off', 'No name labels']] as const)
         .map(([v, label, title]) => h('button', { type: 'button', class: 'tbtn', 'data-labels': v, 'aria-pressed': 'false', title: `${title} (N cycles)`, onclick: () => this.update((s) => { s.labels = v; }) }, label)));
-    toolbar.append(presetGroup, hemiGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share));
+    toolbar.append(presetGroup, hemiGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share), viewButtons(() => this.resetView()));
     this.gizmo.setAttribute('viewBox', '-40 -40 80 80');
     this.gizmo.setAttribute('class', 'gizmo');
     this.gizmo.setAttribute('aria-hidden', 'true');
@@ -119,7 +119,9 @@ export class VascularAtlasPage {
       h('div', { class: 'readout-box' }, this.measureOut, this.readout));
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
-    this.stage.append(host, toolbar, dsaBar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status);
+    this.stage.append(host, toolbar, dsaBar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
+    scrollHint(toolbar);
+    rovingToolbar(toolbar);
     this.readout.textContent = 'Point at a structure for its position';
 
     this.viewer = new Viewer<VaState, VaPlan>(host, {
@@ -131,12 +133,14 @@ export class VascularAtlasPage {
         s.cam = { preset: s.cam.preset, pos: [p.x, p.y, p.z], tgt: [t.x, t.y, t.z] };
       }, { camera: false }),
       leadMoved: () => undefined,
-      status: (t) => { this.status.hidden = !t; this.status.textContent = t ?? ''; },
+      status: (t) => this.status.set(t),
+      loadFailed: (names) => this.status.failed(names),
       lead: () => undefined,
       moving: (on) => this.stage.classList.toggle('moving', on),
     }, vaScene);
     const origRender = this.viewer.renderer.render.bind(this.viewer.renderer);
     this.viewer.renderer.render = (sc, cam) => { origRender(sc, cam); this.placeLabels(); };
+    watchOverlays(this.stage, () => this.viewer.invalidate());
   }
 
   // ---------------------------------------------------------------- the angiogram
@@ -195,6 +199,7 @@ export class VascularAtlasPage {
       this.tabs[id] = h('div', { class: 'pane', role: 'tabpanel', id: `pane-${id}`, 'aria-labelledby': `ptab-${id}`, hidden: id !== 'overview' });
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
+    scrollHint(tablist);
   }
 
   private selectTab(id: string, expand = true): void {
@@ -220,7 +225,7 @@ export class VascularAtlasPage {
     this.viewer.apply(s, { animateCamera: opts.camera }).then(() => {
       this.viewer.setDsa(this.s.dsa.on, this.playing ? this.playT : this.s.dsa.t, DSA.tMaxS);
       this.renderLegend();
-    });
+    }).catch((e: unknown) => viewFailed(this.status, e));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-hemi]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.hemi === s.hemi)));
     this.stage.querySelectorAll<HTMLButtonElement>('.toolbar [data-labels]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.labels === s.labels)));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((b) => b.toggleAttribute('data-active', b.dataset.preset === s.cam.preset));
@@ -232,6 +237,8 @@ export class VascularAtlasPage {
     if (key !== this.lastKey || !prev) { this.lastKey = key; this.renderOverview(); }
     this.renderLayers();
     if (prev && prev.sel !== s.sel && s.sel) this.selectTab('overview', false);
+    // the card of what was just selected (or of a link's selection) is brought to the top of the panel
+    if (s.sel && prev?.sel !== s.sel) revealCard(this.panel);
   }
 
   private pickGroup(id: string): void {
@@ -366,7 +373,12 @@ export class VascularAtlasPage {
   }
 
   // ---------------------------------------------------------------- legend, labels, readout
+  /** (drawn again on every change: the keyboard keeps its place in it) */
   private renderLegend(): void {
+    keepFocus(this.legend, () => this.drawLegend());
+  }
+
+  private drawLegend(): void {
     const p = this.viewer.currentPlan();
     clear(this.legend);
     if (!p) return;
@@ -404,7 +416,7 @@ export class VascularAtlasPage {
       const a = this.viewer.anchorFor(this.s.sel);
       if (a) add(this.s.sel, nameOf(this.s.sel), a.x, a.y, 'slabel primary');
     }
-    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders);
+    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders, [this.s?.sel]);
   }
 
   private showTip(info: PickInfo | null, x: number, y: number): void {
@@ -464,7 +476,13 @@ export class VascularAtlasPage {
   }
 
   // ---------------------------------------------------------------- keyboard
+  /** The camera back to where this view opens (the toolbar's Reset view, key 0). */
+  private resetView(): void {
+    this.update((s) => { s.cam = { preset: null }; }, { camera: true });
+  }
+
   handleKey(e: KeyboardEvent): boolean {
+    if (e.key === '0') { this.resetView(); return true; }
     const k = e.key;
     const preset = PRESETS.find((p) => p[2] === k);
     if (preset) { this.update((s) => { s.cam = { preset: preset[0] }; }, { camera: true }); return true; }

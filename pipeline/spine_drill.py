@@ -166,14 +166,16 @@ def main(only: list[str]) -> int:
         a = B.block_affine(aff, cr)
         a[:3, 3] -= o                                   # the spine frame
         fields = []
-        vol = ndimage.gaussian_filter(B.bone_volume(ct, m == lu, float(vox.mean())), B.SIGMA_VOX)
+        # (each vertebra's bone kept out of the other's mask, as spine_build.py draws them: L5 out of the sacrum's too)
+        other = (m > 0) | B.ts_mask("total", "sacrum+vertebrae_S1", cr)[0] if sacral else m > 0
+        vol = ndimage.gaussian_filter(B.bone_volume(ct, m == lu, float(vox.mean()), other), B.SIGMA_VOX)
         fields.append(np.clip(np.round(FIELD_ISO + (vol - B.BONE_HU) / FIELD_HU_STEP), 0, 255).astype(np.uint8))
         if sacral:   # S1: its segmentation, smoothed as the drawn sacrum is
             s1, _ = B.ts_mask("total", "vertebrae_S1", cr)
             vol = ndimage.gaussian_filter(s1.astype(np.float32), MASK_SIGMA_VOX)
             fields.append(np.clip(np.round(FIELD_ISO + (vol - 0.5) * MASK_FIELD_SCALE), 0, 255).astype(np.uint8))
         else:
-            vol = ndimage.gaussian_filter(B.bone_volume(ct, m == ll, float(vox.mean())), B.SIGMA_VOX)
+            vol = ndimage.gaussian_filter(B.bone_volume(ct, m == ll, float(vox.mean()), m > 0), B.SIGMA_VOX)
             fields.append(np.clip(np.round(FIELD_ISO + (vol - B.BONE_HU) / FIELD_HU_STEP), 0, 255).astype(np.uint8))
         dens = ndimage.gaussian_filter(ct, B.SIGMA_VOX)
         fields.append(np.clip(np.round((dens - DENSITY_MIN_HU) / DENSITY_STEP_HU), 0, 255).astype(np.uint8))

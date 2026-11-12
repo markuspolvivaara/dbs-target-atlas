@@ -8,7 +8,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_abducens_nerve_vi.glb",
-   "bytes": 19704,
+   "bytes": 13796,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -39,7 +39,15 @@
     ]
    },
    "cranialNerve": 6,
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.151,
+    "deepestMm": 1.4,
+    "bones": [
+     "Occipital bone",
+     "Sphenoid bone"
+    ]
+   }
   },
   {
    "id": "sb_accessory_branch_of_middle_meningeal_artery",
@@ -47,7 +55,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_accessory_branch_of_middle_meningeal_artery.glb",
-   "bytes": 10564,
+   "bytes": 7992,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -78,7 +86,14 @@
     ]
    },
    "system": "Middle meningeal artery",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.054,
+    "deepestMm": 1.0,
+    "bones": [
+     "Sphenoid bone"
+    ]
+   }
   },
   {
    "id": "sb_accessory_nerve_xi",
@@ -86,7 +101,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_accessory_nerve_xi.glb",
-   "bytes": 43292,
+   "bytes": 28840,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -125,7 +140,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_adenohypophysis.glb",
-   "bytes": 8488,
+   "bytes": 6860,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -162,7 +177,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_angular_artery.glb",
-   "bytes": 39924,
+   "bytes": 26568,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -193,7 +208,15 @@
     ]
    },
    "system": "Middle cerebral artery",
-   "intracranialFraction": 0.09
+   "intracranialFraction": 0.09,
+   "inBone": {
+    "share": 0.081,
+    "deepestMm": 1.5,
+    "bones": [
+     "Maxilla",
+     "Frontal bone"
+    ]
+   }
   },
   {
    "id": "sb_angular_vein",
@@ -201,7 +224,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_angular_vein.glb",
-   "bytes": 22340,
+   "bytes": 15472,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -231,7 +254,14 @@
      -12.56
     ]
    },
-   "intracranialFraction": 0.06
+   "intracranialFraction": 0.06,
+   "inBone": {
+    "share": 0.176,
+    "deepestMm": 1.1,
+    "bones": [
+     "Maxilla"
+    ]
+   }
   },
   {
    "id": "sb_anterior_cerebral_artery",
@@ -239,7 +269,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_cerebral_artery.glb",
-   "bytes": 6472,
+   "bytes": 5416,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -278,7 +308,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_communicating_artery.glb",
-   "bytes": 2972,
+   "bytes": 2916,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -317,7 +347,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_division_of_retromandibular_vein.glb",
-   "bytes": 5568,
+   "bytes": 4804,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -355,7 +385,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_ethmoidal_artery.glb",
-   "bytes": 13304,
+   "bytes": 9768,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -386,7 +416,16 @@
     ]
    },
    "system": "Ethmoidal arteries",
-   "intracranialFraction": 0.86
+   "intracranialFraction": 0.86,
+   "inBone": {
+    "share": 0.272,
+    "deepestMm": 1.9,
+    "bones": [
+     "Frontal bone",
+     "Maxilla",
+     "Ethmoid bone"
+    ]
+   }
   },
   {
    "id": "sb_anterior_inferior_cerebellar_artery",
@@ -394,7 +433,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_inferior_cerebellar_artery.glb",
-   "bytes": 24012,
+   "bytes": 19464,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -426,7 +465,14 @@
    },
    "system": "Basilar artery",
    "intracranialFraction": 1.0,
-   "morph": true
+   "morph": true,
+   "inBone": {
+    "share": 0.098,
+    "deepestMm": 2.4,
+    "bones": [
+     "Occipital bone"
+    ]
+   }
   },
   {
    "id": "sb_anterior_intercavernous_sinus",
@@ -434,7 +480,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_intercavernous_sinus.glb",
-   "bytes": 4436,
+   "bytes": 4076,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -472,7 +518,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_spinal_artery.glb",
-   "bytes": 9076,
+   "bytes": 7020,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -511,7 +557,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_temporal_branch.glb",
-   "bytes": 44688,
+   "bytes": 32216,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -528,17 +574,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -59.76,
-     -4.85,
-     20.47
+     -58.18,
+     -5.42,
+     20.99
     ],
     "R": [
-     59.76,
-     -4.85,
-     20.47
+     58.27,
+     -5.44,
+     21.02
     ]
    },
    "system": "Middle cerebral artery",
@@ -550,7 +596,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_artery_of_central_sulcus.glb",
-   "bytes": 29804,
+   "bytes": 22016,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -567,17 +613,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -48.9,
-     -23.53,
-     70.95
+     -48.43,
+     -23.61,
+     70.68
     ],
     "R": [
-     48.9,
-     -23.53,
-     70.95
+     48.43,
+     -23.6,
+     70.7
     ]
    },
    "system": "Middle cerebral artery",
@@ -589,7 +635,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_artery_of_precentral_sulcus.glb",
-   "bytes": 48112,
+   "bytes": 35344,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -606,17 +652,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -44.67,
-     0.59,
-     74.3
+     -43.87,
+     0.16,
+     73.84
     ],
     "R": [
-     44.67,
-     0.59,
-     74.3
+     43.95,
+     0.22,
+     73.87
     ]
    },
    "system": "Middle cerebral artery",
@@ -628,7 +674,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_artery_of_pterygoid_canal.glb",
-   "bytes": 7048,
+   "bytes": 5692,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -667,7 +713,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_basilar_artery.glb",
-   "bytes": 3892,
+   "bytes": 3316,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -698,7 +744,15 @@
     ]
    },
    "system": "Basilar artery",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.333,
+    "deepestMm": 1.9,
+    "bones": [
+     "Sphenoid bone",
+     "Occipital bone"
+    ]
+   }
   },
   {
    "id": "sb_branch_to_angular_gyrus",
@@ -706,7 +760,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_branch_to_angular_gyrus.glb",
-   "bytes": 6156,
+   "bytes": 5048,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -723,17 +777,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -60.29,
-     -78.34,
-     35.37
+     -57.82,
+     -77.26,
+     35.29
     ],
     "R": [
-     60.29,
-     -78.34,
-     35.37
+     57.91,
+     -77.23,
+     35.24
     ]
    },
    "system": "Middle cerebral artery",
@@ -745,7 +799,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_callosomarginal_artery.glb",
-   "bytes": 44544,
+   "bytes": 32884,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -762,17 +816,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -3.38,
-     21.79,
-     75.16
+     -3.35,
+     21.64,
+     74.83
     ],
     "R": [
-     3.38,
-     21.79,
-     75.16
+     3.36,
+     21.63,
+     74.84
     ]
    },
    "system": "Anterior cerebral artery",
@@ -784,7 +838,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_cavernous_sinus.glb",
-   "bytes": 112048,
+   "bytes": 70164,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -821,7 +875,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_cochlear_nerve.glb",
-   "bytes": 4356,
+   "bytes": 6052,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -838,7 +892,7 @@
    ],
    "refIds": [],
    "category": "nerve",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on the left only: the right one is its mirror image.",
    "centroid": {
     "L": [
      -30.56,
@@ -846,13 +900,20 @@
      -13.09
     ],
     "R": [
-     -30.56,
+     30.56,
      -16.74,
      -13.09
     ]
    },
    "cranialNerve": 8,
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.916,
+    "deepestMm": 4.0,
+    "bones": [
+     "Temporal bone"
+    ]
+   }
   },
   {
    "id": "sb_distal_lateral_striate_branches",
@@ -860,7 +921,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_distal_lateral_striate_branches.glb",
-   "bytes": 21340,
+   "bytes": 15368,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -899,7 +960,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_ethmoid_bone.glb",
-   "bytes": 151072,
+   "bytes": 110728,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -936,7 +997,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_external_jugular_vein.glb",
-   "bytes": 6792,
+   "bytes": 5536,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -974,7 +1035,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_facial_nerve_vii.glb",
-   "bytes": 125716,
+   "bytes": 81184,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1005,7 +1066,14 @@
     ]
    },
    "cranialNerve": 7,
-   "intracranialFraction": 0.39
+   "intracranialFraction": 0.39,
+   "inBone": {
+    "share": 0.092,
+    "deepestMm": 4.9,
+    "bones": [
+     "Temporal bone"
+    ]
+   }
   },
   {
    "id": "sb_facial_vein",
@@ -1013,7 +1081,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_facial_vein.glb",
-   "bytes": 14376,
+   "bytes": 10476,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1051,7 +1119,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_falx_cerebri.glb",
-   "bytes": 101212,
+   "bytes": 69580,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -1088,7 +1156,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_frontal_bone.glb",
-   "bytes": 156112,
+   "bytes": 115704,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -1125,7 +1193,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_frontal_branches_of_callosomarginal_artery.glb",
-   "bytes": 9104,
+   "bytes": 7680,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1142,17 +1210,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -5.72,
-     36.65,
-     75.64
+     -5.62,
+     36.4,
+     75.3
     ],
     "R": [
-     5.72,
-     36.65,
-     75.64
+     5.63,
+     36.39,
+     75.28
     ]
    },
    "system": "Anterior cerebral artery",
@@ -1164,7 +1232,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_glossopharyngeal_nerve_ix.glb",
-   "bytes": 44756,
+   "bytes": 29848,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1203,7 +1271,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_hypoglossal_nerve_xii.glb",
-   "bytes": 52076,
+   "bytes": 38660,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1220,17 +1288,17 @@
    ],
    "refIds": [],
    "category": "nerve",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy's curve ran through the occipital bone beside its own hypoglossal canal (17.6 mm of it in bone a side, 4.4 mm deep). Led through the canal instead (skullbase_v1_xii.py: the canal found as the open space the bone encloses beside its label, 6.1 mm long and 2.5 mm across; the rootlets gathered in front of its inner opening, the trunk along its axis and back on Z-Anatomy's curve 8.0 mm beyond the bone; moved up to 9.1 mm): a drawing choice, the bone as the model has it.",
    "centroid": {
     "L": [
-     -12.9,
-     -13.98,
-     -39.59
+     -14.1,
+     -13.62,
+     -41.83
     ],
     "R": [
-     12.9,
-     -13.98,
-     -39.59
+     14.09,
+     -13.58,
+     -41.88
     ]
    },
    "cranialNerve": 12,
@@ -1242,7 +1310,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_inferior_labial_veins.glb",
-   "bytes": 21596,
+   "bytes": 15232,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1280,7 +1348,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_inferior_nasal_concha_bone.glb",
-   "bytes": 23552,
+   "bytes": 18704,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -1317,7 +1385,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_inferior_ophthalmic_vein.glb",
-   "bytes": 8276,
+   "bytes": 6464,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1355,7 +1423,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_inferior_petrosal_sinus.glb",
-   "bytes": 10344,
+   "bytes": 7864,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1385,7 +1453,15 @@
      -17.2
     ]
    },
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.071,
+    "deepestMm": 1.0,
+    "bones": [
+     "Occipital bone",
+     "Sphenoid bone"
+    ]
+   }
   },
   {
    "id": "sb_inferior_sagittal_sinus",
@@ -1393,7 +1469,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_inferior_sagittal_sinus.glb",
-   "bytes": 11688,
+   "bytes": 8484,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1431,7 +1507,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_insular_branches_of_middle_cerebral_artery_m2_segment.glb",
-   "bytes": 8676,
+   "bytes": 6952,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1470,7 +1546,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_internal_carotid_artery.glb",
-   "bytes": 12632,
+   "bytes": 9308,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1501,7 +1577,15 @@
     ]
    },
    "system": "Internal carotid artery",
-   "intracranialFraction": 0.62
+   "intracranialFraction": 0.62,
+   "inBone": {
+    "share": 0.235,
+    "deepestMm": 4.5,
+    "bones": [
+     "Sphenoid bone",
+     "Temporal bone"
+    ]
+   }
   },
   {
    "id": "sb_lacrimal_bone",
@@ -1509,7 +1593,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_lacrimal_bone.glb",
-   "bytes": 28028,
+   "bytes": 22044,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -1546,7 +1630,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_lateral_frontobasal_artery.glb",
-   "bytes": 26636,
+   "bytes": 17508,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1563,17 +1647,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -38.6,
-     42.31,
-     43.5
+     -35.9,
+     41.0,
+     43.92
     ],
     "R": [
-     38.6,
-     42.31,
-     43.5
+     35.95,
+     40.97,
+     43.85
     ]
    },
    "system": "Middle cerebral artery",
@@ -1585,7 +1669,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_lateral_pontine_branches_of_basilar_artery.glb",
-   "bytes": 16052,
+   "bytes": 11580,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1616,7 +1700,14 @@
     ]
    },
    "system": "Basilar artery",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.287,
+    "deepestMm": 1.5,
+    "bones": [
+     "Sphenoid bone"
+    ]
+   }
   },
   {
    "id": "sb_lingual_vein",
@@ -1624,7 +1715,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_lingual_vein.glb",
-   "bytes": 9872,
+   "bytes": 7504,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1662,7 +1753,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_mandibular_nerve_v3.glb",
-   "bytes": 116524,
+   "bytes": 76136,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1701,7 +1792,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_maxilla.glb",
-   "bytes": 192208,
+   "bytes": 143208,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -1738,7 +1829,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_maxillary_artery.glb",
-   "bytes": 31132,
+   "bytes": 21480,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1769,7 +1860,14 @@
     ]
    },
    "system": "Maxillary artery",
-   "intracranialFraction": 0.22
+   "intracranialFraction": 0.22,
+   "inBone": {
+    "share": 0.566,
+    "deepestMm": 4.6,
+    "bones": [
+     "Maxilla"
+    ]
+   }
   },
   {
    "id": "sb_maxillary_nerve_v2",
@@ -1777,7 +1875,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_maxillary_nerve_v2.glb",
-   "bytes": 62720,
+   "bytes": 41084,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1808,7 +1906,14 @@
     ]
    },
    "cranialNerve": 5,
-   "intracranialFraction": 0.46
+   "intracranialFraction": 0.46,
+   "inBone": {
+    "share": 0.071,
+    "deepestMm": 2.3,
+    "bones": [
+     "Maxilla"
+    ]
+   }
   },
   {
    "id": "sb_maxillary_veins",
@@ -1816,7 +1921,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_maxillary_veins.glb",
-   "bytes": 16964,
+   "bytes": 12100,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -1854,7 +1959,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_medial_pontine_branches_of_basilar_artery.glb",
-   "bytes": 9296,
+   "bytes": 7272,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1885,7 +1990,14 @@
     ]
    },
    "system": "Basilar artery",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.5,
+    "deepestMm": 2.2,
+    "bones": [
+     "Sphenoid bone"
+    ]
+   }
   },
   {
    "id": "sb_middle_cerebral_artery_m1_segment",
@@ -1893,7 +2005,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_middle_cerebral_artery_m1_segment.glb",
-   "bytes": 6632,
+   "bytes": 5480,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1932,7 +2044,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_middle_cerebral_artery_m3_segment.glb",
-   "bytes": 15004,
+   "bytes": 10828,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1971,7 +2083,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_middle_meningeal_artery.glb",
-   "bytes": 9076,
+   "bytes": 6980,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2002,7 +2114,14 @@
     ]
    },
    "system": "Middle meningeal artery",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.254,
+    "deepestMm": 2.5,
+    "bones": [
+     "Sphenoid bone"
+    ]
+   }
   },
   {
    "id": "sb_nasal_bone",
@@ -2010,7 +2129,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_nasal_bone.glb",
-   "bytes": 15864,
+   "bytes": 12872,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -2047,7 +2166,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_neurohypophysis.glb",
-   "bytes": 7704,
+   "bytes": 6316,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -2084,7 +2203,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_occipital_bone.glb",
-   "bytes": 151672,
+   "bytes": 112660,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -2121,7 +2240,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_occipital_sinus.glb",
-   "bytes": 5700,
+   "bytes": 4500,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -2151,7 +2270,14 @@
      -22.12
     ]
    },
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.22,
+    "deepestMm": 3.6,
+    "bones": [
+     "Occipital bone"
+    ]
+   }
   },
   {
    "id": "sb_occipital_vein",
@@ -2159,7 +2285,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_occipital_vein.glb",
-   "bytes": 30880,
+   "bytes": 20820,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -2197,7 +2323,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_oculomotor_nerve_iii.glb",
-   "bytes": 37172,
+   "bytes": 24996,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2236,7 +2362,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_olfactory_nerve_i.glb",
-   "bytes": 64548,
+   "bytes": 43604,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2275,7 +2401,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_ophthalmic_artery.glb",
-   "bytes": 9904,
+   "bytes": 7540,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2314,7 +2440,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_ophthalmic_nerve_v1.glb",
-   "bytes": 32312,
+   "bytes": 21876,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2353,7 +2479,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_optic_nerve_ii.glb",
-   "bytes": 10916,
+   "bytes": 8232,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2384,7 +2510,14 @@
     ]
    },
    "cranialNerve": 2,
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.035,
+    "deepestMm": 2.1,
+    "bones": [
+     "Sphenoid bone"
+    ]
+   }
   },
   {
    "id": "sb_orbitofrontal_branches_of_anterior_cerebral_artery",
@@ -2392,7 +2525,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_orbitofrontal_branches_of_anterior_cerebral_artery.glb",
-   "bytes": 15636,
+   "bytes": 11064,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2409,17 +2542,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -5.29,
-     47.85,
-     23.42
+     -5.27,
+     47.64,
+     23.65
     ],
     "R": [
-     5.29,
-     47.85,
-     23.42
+     5.3,
+     47.64,
+     23.69
     ]
    },
    "system": "Anterior cerebral artery",
@@ -2431,7 +2564,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_palatine_bone.glb",
-   "bytes": 63584,
+   "bytes": 48672,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -2468,7 +2601,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_parietal_bone.glb",
-   "bytes": 266920,
+   "bytes": 197484,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -2505,7 +2638,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_parietal_branches_of_middle_cerebral_artery.glb",
-   "bytes": 19052,
+   "bytes": 14408,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2522,17 +2655,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -59.75,
-     -53.18,
-     65.15
+     -58.33,
+     -52.88,
+     64.76
     ],
     "R": [
-     59.75,
-     -53.18,
-     65.15
+     58.5,
+     -52.91,
+     64.81
     ]
    },
    "system": "Middle cerebral artery",
@@ -2544,7 +2677,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_pericallosal_artery.glb",
-   "bytes": 94776,
+   "bytes": 61648,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2561,17 +2694,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -5.23,
+     -5.19,
      -29.68,
-     72.28
+     72.21
     ],
     "R": [
-     5.23,
-     -29.68,
-     72.28
+     5.19,
+     -29.67,
+     72.21
     ]
    },
    "system": "Anterior cerebral artery",
@@ -2583,7 +2716,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_postcentral_arterial_branch.glb",
-   "bytes": 20720,
+   "bytes": 16028,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2600,17 +2733,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -55.61,
-     -38.89,
-     69.41
+     -55.18,
+     -38.94,
+     69.16
     ],
     "R": [
-     55.61,
-     -38.89,
-     69.41
+     55.26,
+     -38.93,
+     69.26
     ]
    },
    "system": "Middle cerebral artery",
@@ -2622,7 +2755,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_auricular_vein.glb",
-   "bytes": 14388,
+   "bytes": 10444,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -2660,7 +2793,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_cerebral_artery.glb",
-   "bytes": 101504,
+   "bytes": 66368,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2699,7 +2832,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_communicating_artery.glb",
-   "bytes": 5244,
+   "bytes": 4572,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2738,7 +2871,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_division_of_retromandibular_vein.glb",
-   "bytes": 5880,
+   "bytes": 4984,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -2776,7 +2909,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_ethmoidal_artery.glb",
-   "bytes": 5180,
+   "bytes": 4520,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2807,7 +2940,14 @@
     ]
    },
    "system": "Ethmoidal arteries",
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.316,
+    "deepestMm": 1.7,
+    "bones": [
+     "Ethmoid bone"
+    ]
+   }
   },
   {
    "id": "sb_posterior_inferior_cerebellar_artery",
@@ -2815,7 +2955,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_inferior_cerebellar_artery.glb",
-   "bytes": 134204,
+   "bytes": 100204,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2855,7 +2995,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_intercavernous_sinus.glb",
-   "bytes": 5884,
+   "bytes": 5100,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -2893,7 +3033,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_lateral_nasal_branches_of_sphenopalatine_artery.glb",
-   "bytes": 41204,
+   "bytes": 28004,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2924,7 +3064,17 @@
     ]
    },
    "system": "Maxillary artery",
-   "intracranialFraction": 0.54
+   "intracranialFraction": 0.54,
+   "inBone": {
+    "share": 0.178,
+    "deepestMm": 2.4,
+    "bones": [
+     "Palatine bone",
+     "Ethmoid bone",
+     "Inferior nasal concha bone",
+     "Maxilla"
+    ]
+   }
   },
   {
    "id": "sb_posterior_parietal_artery",
@@ -2932,7 +3082,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_parietal_artery.glb",
-   "bytes": 33544,
+   "bytes": 22780,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2949,17 +3099,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -52.6,
-     -75.83,
-     57.3
+     -51.33,
+     -75.06,
+     56.91
     ],
     "R": [
-     52.6,
-     -75.83,
-     57.3
+     51.41,
+     -75.16,
+     56.92
     ]
    },
    "system": "Middle cerebral artery",
@@ -2971,7 +3121,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_septal_branches_of_sphenopalatine_artery.glb",
-   "bytes": 16048,
+   "bytes": 11544,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3002,7 +3152,14 @@
     ]
    },
    "system": "Maxillary artery",
-   "intracranialFraction": 0.23
+   "intracranialFraction": 0.23,
+   "inBone": {
+    "share": 0.112,
+    "deepestMm": 1.8,
+    "bones": [
+     "Maxilla"
+    ]
+   }
   },
   {
    "id": "sb_posterior_temporal_branch",
@@ -3010,7 +3167,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_temporal_branch.glb",
-   "bytes": 18872,
+   "bytes": 14652,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3027,17 +3184,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -58.71,
-     -71.55,
-     18.7
+     -57.16,
+     -70.02,
+     19.66
     ],
     "R": [
-     58.71,
-     -71.55,
-     18.7
+     57.23,
+     -69.94,
+     19.62
     ]
    },
    "system": "Middle cerebral artery",
@@ -3049,7 +3206,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_prefrontal_artery.glb",
-   "bytes": 24452,
+   "bytes": 18024,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3066,17 +3223,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -46.82,
-     22.91,
-     62.98
+     -44.44,
+     21.7,
+     62.02
     ],
     "R": [
-     46.82,
-     22.91,
-     62.98
+     44.53,
+     21.65,
+     62.07
     ]
    },
    "system": "Middle cerebral artery",
@@ -3088,7 +3245,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_proximal_lateral_striate_branches.glb",
-   "bytes": 15932,
+   "bytes": 11692,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3127,7 +3284,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_retromandibular_vein.glb",
-   "bytes": 5404,
+   "bytes": 4656,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3165,7 +3322,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_sigmoid_sinus.glb",
-   "bytes": 6020,
+   "bytes": 5096,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3195,7 +3352,14 @@
      -14.83
     ]
    },
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.346,
+    "deepestMm": 2.7,
+    "bones": [
+     "Temporal bone"
+    ]
+   }
   },
   {
    "id": "sb_sinus_of_frontal_bone",
@@ -3203,7 +3367,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_sinus_of_frontal_bone.glb",
-   "bytes": 23608,
+   "bytes": 18472,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -3240,7 +3404,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_sinus_of_sphenoid_bone.glb",
-   "bytes": 12176,
+   "bytes": 10168,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -3277,7 +3441,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_sphenoid_bone.glb",
-   "bytes": 152468,
+   "bytes": 114572,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -3314,7 +3478,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_straight_sinus.glb",
-   "bytes": 9052,
+   "bytes": 6752,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3352,7 +3516,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_submental_vein.glb",
-   "bytes": 12340,
+   "bytes": 9100,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3390,7 +3554,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_superficial_temporal_veins.glb",
-   "bytes": 24672,
+   "bytes": 16872,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3428,7 +3592,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_superior_cerebellar_artery.glb",
-   "bytes": 63952,
+   "bytes": 47552,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3460,7 +3624,14 @@
    },
    "system": "Basilar artery",
    "intracranialFraction": 1.0,
-   "morph": true
+   "morph": true,
+   "inBone": {
+    "share": 0.026,
+    "deepestMm": 2.3,
+    "bones": [
+     "Sphenoid bone"
+    ]
+   }
   },
   {
    "id": "sb_superior_labial_vein",
@@ -3468,7 +3639,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_superior_labial_vein.glb",
-   "bytes": 8360,
+   "bytes": 6544,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3506,7 +3677,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_superior_ophthalmic_vein.glb",
-   "bytes": 9624,
+   "bytes": 7336,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3536,7 +3707,14 @@
      11.65
     ]
    },
-   "intracranialFraction": 0.99
+   "intracranialFraction": 0.99,
+   "inBone": {
+    "share": 0.126,
+    "deepestMm": 1.3,
+    "bones": [
+     "Frontal bone"
+    ]
+   }
   },
   {
    "id": "sb_superior_petrosal_sinus",
@@ -3544,7 +3722,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_superior_petrosal_sinus.glb",
-   "bytes": 15712,
+   "bytes": 11316,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3574,7 +3752,14 @@
      -1.18
     ]
    },
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.208,
+    "deepestMm": 1.8,
+    "bones": [
+     "Temporal bone"
+    ]
+   }
   },
   {
    "id": "sb_superior_sagittal_sinus",
@@ -3582,7 +3767,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_superior_sagittal_sinus.glb",
-   "bytes": 15048,
+   "bytes": 10824,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3612,7 +3797,17 @@
      51.11
     ]
    },
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.163,
+    "deepestMm": 1.9,
+    "bones": [
+     "Ethmoid bone",
+     "Occipital bone",
+     "Frontal bone",
+     "Parietal bone"
+    ]
+   }
   },
   {
    "id": "sb_temporal_bone",
@@ -3620,7 +3815,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_temporal_bone.glb",
-   "bytes": 540188,
+   "bytes": 395572,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -3657,7 +3852,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_temporal_branches_of_middle_cerebral_artery.glb",
-   "bytes": 22972,
+   "bytes": 16000,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3674,17 +3869,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -63.32,
-     -37.45,
-     21.3
+     -61.94,
+     -37.37,
+     22.41
     ],
     "R": [
-     63.32,
-     -37.45,
-     21.3
+     61.93,
+     -37.43,
+     22.43
     ]
    },
    "system": "Middle cerebral artery",
@@ -3696,7 +3891,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_temporo_occipital_branch.glb",
-   "bytes": 35264,
+   "bytes": 26620,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3713,17 +3908,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -38.38,
-     -97.28,
-     30.36
+     -37.71,
+     -96.15,
+     30.59
     ],
     "R": [
-     38.38,
-     -97.28,
-     30.36
+     37.73,
+     -96.16,
+     30.61
     ]
    },
    "system": "Middle cerebral artery",
@@ -3735,7 +3930,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_tentorium_cerebelli.glb",
-   "bytes": 57608,
+   "bytes": 40776,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -3772,7 +3967,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_transverse_sinus.glb",
-   "bytes": 11732,
+   "bytes": 8736,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3802,7 +3997,16 @@
      -4.85
     ]
    },
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.223,
+    "deepestMm": 1.7,
+    "bones": [
+     "Occipital bone",
+     "Temporal bone",
+     "Parietal bone"
+    ]
+   }
   },
   {
    "id": "sb_trigeminal_nerve_v",
@@ -3810,7 +4014,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_trigeminal_nerve_v.glb",
-   "bytes": 13320,
+   "bytes": 9832,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -3849,7 +4053,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_trochlear_nerve_iv.glb",
-   "bytes": 19160,
+   "bytes": 13408,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -3888,7 +4092,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_vagus_nerve_x.glb",
-   "bytes": 41332,
+   "bytes": 27860,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -3927,7 +4131,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_vertebral_artery.glb",
-   "bytes": 16760,
+   "bytes": 11996,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3966,7 +4170,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_vestibular_nerve.glb",
-   "bytes": 12404,
+   "bytes": 9276,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -3997,7 +4201,14 @@
     ]
    },
    "cranialNerve": 8,
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "inBone": {
+    "share": 0.682,
+    "deepestMm": 4.1,
+    "bones": [
+     "Temporal bone"
+    ]
+   }
   },
   {
    "id": "sb_vestibulocochlear_nerve_viii",
@@ -4005,7 +4216,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_vestibulocochlear_nerve_viii.glb",
-   "bytes": 10116,
+   "bytes": 7752,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -4044,7 +4255,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_vomer.glb",
-   "bytes": 24808,
+   "bytes": 19328,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -4081,7 +4292,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase/sb_zygomatic_bone.glb",
-   "bytes": 56256,
+   "bytes": 42620,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -4117,7 +4328,7 @@
     "Chiasma opticum"
    ],
    "type": "soft",
-   "bytes": 102916,
+   "bytes": 70384,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -4153,7 +4364,7 @@
   {
    "aliases": [],
    "type": "soft",
-   "bytes": 4600,
+   "bytes": 4136,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -4206,7 +4417,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_pterional__frontal_bone.glb",
-   "bytes": 216844,
+   "bytes": 155728,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -4245,7 +4456,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_pterional__parietal_bone.glb",
-   "bytes": 338464,
+   "bytes": 245836,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -4284,7 +4495,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_pterional__sphenoid_bone.glb",
-   "bytes": 209812,
+   "bytes": 153752,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -4323,7 +4534,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_pterional__temporal_bone.glb",
-   "bytes": 569608,
+   "bytes": 415136,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -4348,7 +4559,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_appr_pterional__removed.glb",
-   "bytes": 363076,
+   "bytes": 245600,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -4397,7 +4608,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_lso__frontal_bone.glb",
-   "bytes": 242516,
+   "bytes": 173304,
    "refIds": [],
    "category": "bone",
    "approach": "lso",
@@ -4436,7 +4647,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_lso__parietal_bone.glb",
-   "bytes": 302640,
+   "bytes": 221240,
    "refIds": [],
    "category": "bone",
    "approach": "lso",
@@ -4461,7 +4672,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_appr_lso__removed.glb",
-   "bytes": 255948,
+   "bytes": 174160,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -4510,7 +4721,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_interhemispheric__frontal_bone.glb",
-   "bytes": 238376,
+   "bytes": 170284,
    "refIds": [],
    "category": "bone",
    "approach": "interhemispheric",
@@ -4549,7 +4760,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_interhemispheric__parietal_bone.glb",
-   "bytes": 303916,
+   "bytes": 220760,
    "refIds": [],
    "category": "bone",
    "approach": "interhemispheric",
@@ -4574,7 +4785,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_appr_interhemispheric__removed.glb",
-   "bytes": 368584,
+   "bytes": 247208,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -4623,7 +4834,7 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_suboccipital__occipital_bone.glb",
-   "bytes": 259488,
+   "bytes": 184704,
    "refIds": [],
    "category": "bone",
    "approach": "suboccipital",
@@ -4648,7 +4859,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_appr_suboccipital__removed.glb",
-   "bytes": 265472,
+   "bytes": 178416,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -4697,7 +4908,7 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_retrosigmoid__occipital_bone.glb",
-   "bytes": 200652,
+   "bytes": 144976,
    "refIds": [],
    "category": "bone",
    "approach": "retrosigmoid",
@@ -4736,7 +4947,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_retrosigmoid__parietal_bone.glb",
-   "bytes": 271812,
+   "bytes": 200576,
    "refIds": [],
    "category": "bone",
    "approach": "retrosigmoid",
@@ -4775,7 +4986,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_retrosigmoid__temporal_bone.glb",
-   "bytes": 558284,
+   "bytes": 407276,
    "refIds": [],
    "category": "bone",
    "approach": "retrosigmoid",
@@ -4800,7 +5011,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_appr_retrosigmoid__removed.glb",
-   "bytes": 167176,
+   "bytes": 114228,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -4849,7 +5060,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_orbitozygomatic__frontal_bone.glb",
-   "bytes": 204136,
+   "bytes": 146204,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -4888,7 +5099,7 @@
    "name": "Maxilla",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_orbitozygomatic__maxilla.glb",
-   "bytes": 217368,
+   "bytes": 160396,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -4927,7 +5138,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_orbitozygomatic__parietal_bone.glb",
-   "bytes": 352260,
+   "bytes": 255108,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -4966,7 +5177,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_orbitozygomatic__sphenoid_bone.glb",
-   "bytes": 215212,
+   "bytes": 157008,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -5005,7 +5216,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_orbitozygomatic__temporal_bone.glb",
-   "bytes": 581564,
+   "bytes": 423192,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -5044,7 +5255,7 @@
    "name": "Zygomatic bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_orbitozygomatic__zygomatic_bone.glb",
-   "bytes": 50188,
+   "bytes": 37300,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -5069,7 +5280,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_appr_orbitozygomatic__removed.glb",
-   "bytes": 371440,
+   "bytes": 252132,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -5118,7 +5329,7 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_far_lateral__occipital_bone.glb",
-   "bytes": 309916,
+   "bytes": 218432,
    "refIds": [],
    "category": "bone",
    "approach": "far_lateral",
@@ -5157,7 +5368,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_far_lateral__parietal_bone.glb",
-   "bytes": 269508,
+   "bytes": 199188,
    "refIds": [],
    "category": "bone",
    "approach": "far_lateral",
@@ -5196,7 +5407,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_far_lateral__temporal_bone.glb",
-   "bytes": 564008,
+   "bytes": 411160,
    "refIds": [],
    "category": "bone",
    "approach": "far_lateral",
@@ -5221,7 +5432,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_appr_far_lateral__removed.glb",
-   "bytes": 372556,
+   "bytes": 250020,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -5270,7 +5481,7 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_kawase__occipital_bone.glb",
-   "bytes": 163624,
+   "bytes": 120724,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -5309,7 +5520,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_kawase__parietal_bone.glb",
-   "bytes": 305032,
+   "bytes": 223040,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -5348,7 +5559,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_kawase__sphenoid_bone.glb",
-   "bytes": 166920,
+   "bytes": 124580,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -5387,7 +5598,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_kawase__temporal_bone.glb",
-   "bytes": 635828,
+   "bytes": 459792,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -5412,7 +5623,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_appr_kawase__removed.glb",
-   "bytes": 361872,
+   "bytes": 246252,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -5447,7 +5658,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_appr_kawase__guide.glb",
-   "bytes": 5108,
+   "bytes": 4096,
    "colour": {
     "token": "sbGuide",
     "light": "#1F2A36",
@@ -5482,7 +5693,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_frontal_lobe.glb",
-   "bytes": 654704,
+   "bytes": 533000,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -5521,7 +5732,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_parietal_lobe.glb",
-   "bytes": 380052,
+   "bytes": 288864,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -5560,7 +5771,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_temporal_lobe.glb",
-   "bytes": 346900,
+   "bytes": 261076,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -5599,7 +5810,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_occipital_lobe.glb",
-   "bytes": 258068,
+   "bytes": 185724,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -5638,7 +5849,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_insula.glb",
-   "bytes": 580440,
+   "bytes": 447068,
    "colour": {
     "token": "sbInsula",
     "light": "#4A3DA8",
@@ -5677,7 +5888,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_cingulate_gyrus.glb",
-   "bytes": 54328,
+   "bytes": 41884,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -5716,7 +5927,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_cerebellar_hemisphere.glb",
-   "bytes": 1067156,
+   "bytes": 856376,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -5755,7 +5966,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_tonsil.glb",
-   "bytes": 93996,
+   "bytes": 79196,
    "colour": {
     "token": "sbTonsil",
     "light": "#7D6DFF",
@@ -5794,7 +6005,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_vermis.glb",
-   "bytes": 126548,
+   "bytes": 97668,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -5833,7 +6044,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_superior_cerebellar_peduncle.glb",
-   "bytes": 111812,
+   "bytes": 76580,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -5872,7 +6083,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_midbrain.glb",
-   "bytes": 81072,
+   "bytes": 56444,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -5911,7 +6122,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_pons.glb",
-   "bytes": 135924,
+   "bytes": 94556,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -5950,7 +6161,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_medulla.glb",
-   "bytes": 81960,
+   "bytes": 57496,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -5989,7 +6200,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_fourth_ventricle.glb",
-   "bytes": 43244,
+   "bytes": 30724,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -6028,7 +6239,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_temporal_lobe__kawase.glb",
-   "bytes": 277296,
+   "bytes": 191476,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -6071,7 +6282,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase/sb_cavernous_sinus_walls.glb",
-   "bytes": 158724,
+   "bytes": 110080,
    "colour": {
     "token": "sbDura",
     "light": "#7E8294",
@@ -6107,7 +6318,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase/sb_triangle_superoposterior.glb",
-   "bytes": 3644,
+   "bytes": 3640,
    "colour": {
     "token": "sbTriMedial",
     "light": "#B8467A",
@@ -6146,7 +6357,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase/sb_triangle_superior.glb",
-   "bytes": 3604,
+   "bytes": 3596,
    "colour": {
     "token": "sbTriMedial",
     "light": "#B8467A",
@@ -6185,7 +6396,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase/sb_triangle_middle.glb",
-   "bytes": 3624,
+   "bytes": 3620,
    "colour": {
     "token": "sbTriMedial",
     "light": "#B8467A",
@@ -6224,7 +6435,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase/sb_triangle_inferior.glb",
-   "bytes": 3580,
+   "bytes": 3576,
    "colour": {
     "token": "sbTriMedial",
     "light": "#B8467A",
@@ -6263,7 +6474,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase/sb_triangle_anteromedial.glb",
-   "bytes": 3640,
+   "bytes": 3636,
    "colour": {
     "token": "sbTriLateral",
     "light": "#2C8F62",
@@ -6302,7 +6513,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase/sb_triangle_anterolateral.glb",
-   "bytes": 3656,
+   "bytes": 3652,
    "colour": {
     "token": "sbTriLateral",
     "light": "#2C8F62",
@@ -6341,7 +6552,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase/sb_triangle_posterolateral.glb",
-   "bytes": 3640,
+   "bytes": 3636,
    "colour": {
     "token": "sbTriLateral",
     "light": "#2C8F62",
@@ -6380,7 +6591,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase/sb_triangle_posteromedial.glb",
-   "bytes": 3604,
+   "bytes": 3600,
    "colour": {
     "token": "sbTriLateral",
     "light": "#2C8F62",
@@ -6419,7 +6630,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase/sb_triangle_lateral.glb",
-   "bytes": 3572,
+   "bytes": 3568,
    "colour": {
     "token": "sbTriPosterior",
     "light": "#B8621A",
@@ -6458,7 +6669,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase/sb_triangle_medial.glb",
-   "bytes": 3620,
+   "bytes": 3612,
    "colour": {
     "token": "sbTriPosterior",
     "light": "#B8621A",
@@ -6495,7 +6706,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_cochlea.glb",
-   "bytes": 76328,
+   "bytes": 50872,
    "colour": {
     "token": "sbLabyrinth",
     "light": "#00838F",
@@ -6534,7 +6745,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase/sb_vestibule_and_semicircular_canals.glb",
-   "bytes": 104868,
+   "bytes": 69912,
    "colour": {
     "token": "sbLabyrinth",
     "light": "#00838F",
@@ -6571,7 +6782,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_malleus.glb",
-   "bytes": 54088,
+   "bytes": 37996,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -6608,7 +6819,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_incus.glb",
-   "bytes": 36744,
+   "bytes": 26492,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -6645,7 +6856,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_stapes.glb",
-   "bytes": 60284,
+   "bytes": 42588,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -6682,7 +6893,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_tympanic_membrane.glb",
-   "bytes": 24188,
+   "bytes": 17932,
    "colour": {
     "token": "sbMembrane",
     "light": "#7B3FA0",
@@ -6719,7 +6930,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_greater_petrosal_nerve.glb",
-   "bytes": 5808,
+   "bytes": 4900,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -6757,7 +6968,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_knosp_0.glb",
-   "bytes": 49876,
+   "bytes": 35284,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -6795,7 +7006,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_knosp_1.glb",
-   "bytes": 56980,
+   "bytes": 40264,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -6833,7 +7044,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_knosp_2.glb",
-   "bytes": 59480,
+   "bytes": 41904,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -6871,7 +7082,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_knosp_3a.glb",
-   "bytes": 76616,
+   "bytes": 53416,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -6909,7 +7120,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_knosp_lines.glb",
-   "bytes": 7932,
+   "bytes": 6144,
    "colour": {
     "token": "sbGuide",
     "light": "#1F2A36",
@@ -6943,7 +7154,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_koos_1.glb",
-   "bytes": 16060,
+   "bytes": 11656,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -6981,7 +7192,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_koos_2.glb",
-   "bytes": 29816,
+   "bytes": 21076,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7019,7 +7230,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_cerebellar_hemisphere__koos_2.glb",
-   "bytes": 486516,
+   "bytes": 381680,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -7061,7 +7272,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_tonsil__koos_2.glb",
-   "bytes": 42404,
+   "bytes": 35048,
    "colour": {
     "token": "sbTonsil",
     "light": "#7D6DFF",
@@ -7103,7 +7314,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_superior_cerebellar_peduncle__koos_2.glb",
-   "bytes": 55400,
+   "bytes": 38516,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -7145,7 +7356,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_facial_nerve_vii__koos_2.glb",
-   "bytes": 68768,
+   "bytes": 46460,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -7187,7 +7398,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_koos_3.glb",
-   "bytes": 180320,
+   "bytes": 123192,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7225,7 +7436,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_cerebellar_hemisphere__koos_3.glb",
-   "bytes": 486944,
+   "bytes": 382116,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -7267,7 +7478,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_tonsil__koos_3.glb",
-   "bytes": 42428,
+   "bytes": 35100,
    "colour": {
     "token": "sbTonsil",
     "light": "#7D6DFF",
@@ -7309,7 +7520,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_vermis__koos_3.glb",
-   "bytes": 48240,
+   "bytes": 34088,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -7351,7 +7562,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_superior_cerebellar_peduncle__koos_3.glb",
-   "bytes": 56808,
+   "bytes": 39636,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -7393,7 +7604,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_accessory_nerve_xi__koos_3.glb",
-   "bytes": 23864,
+   "bytes": 16612,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -7435,7 +7646,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_inferior_cerebellar_artery__koos_3.glb",
-   "bytes": 13108,
+   "bytes": 10764,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -7478,7 +7689,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_facial_nerve_vii__koos_3.glb",
-   "bytes": 68772,
+   "bytes": 46456,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -7520,7 +7731,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_glossopharyngeal_nerve_ix__koos_3.glb",
-   "bytes": 24740,
+   "bytes": 17168,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -7562,7 +7773,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_inferior_cerebellar_artery__koos_3.glb",
-   "bytes": 71824,
+   "bytes": 54744,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -7605,7 +7816,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_vagus_nerve_x__koos_3.glb",
-   "bytes": 22836,
+   "bytes": 16032,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -7647,7 +7858,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_koos_4.glb",
-   "bytes": 255880,
+   "bytes": 173632,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7685,7 +7896,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_cerebellar_hemisphere__koos_4.glb",
-   "bytes": 487608,
+   "bytes": 382524,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -7727,7 +7938,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_tonsil__koos_4.glb",
-   "bytes": 42544,
+   "bytes": 35224,
    "colour": {
     "token": "sbTonsil",
     "light": "#7D6DFF",
@@ -7769,7 +7980,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_superior_cerebellar_peduncle__koos_4.glb",
-   "bytes": 56868,
+   "bytes": 39244,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -7811,7 +8022,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_pons__koos_4.glb",
-   "bytes": 67684,
+   "bytes": 47004,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -7853,7 +8064,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_medulla__koos_4.glb",
-   "bytes": 41392,
+   "bytes": 29204,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -7895,7 +8106,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_fourth_ventricle__koos_4.glb",
-   "bytes": 23320,
+   "bytes": 16748,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -7937,7 +8148,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_accessory_nerve_xi__koos_4.glb",
-   "bytes": 23868,
+   "bytes": 16612,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -7979,7 +8190,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_inferior_cerebellar_artery__koos_4.glb",
-   "bytes": 13116,
+   "bytes": 10768,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -8022,7 +8233,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_facial_nerve_vii__koos_4.glb",
-   "bytes": 68804,
+   "bytes": 46468,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -8064,7 +8275,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_glossopharyngeal_nerve_ix__koos_4.glb",
-   "bytes": 24696,
+   "bytes": 17156,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -8106,7 +8317,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_inferior_cerebellar_artery__koos_4.glb",
-   "bytes": 71864,
+   "bytes": 54772,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -8149,7 +8360,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_vagus_nerve_x__koos_4.glb",
-   "bytes": 22852,
+   "bytes": 16036,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -8191,7 +8402,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_men_olfactory.glb",
-   "bytes": 262168,
+   "bytes": 178712,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -8229,7 +8440,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_frontal_lobe__men_olfactory.glb",
-   "bytes": 337584,
+   "bytes": 275636,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8271,7 +8482,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_insula__men_olfactory.glb",
-   "bytes": 365640,
+   "bytes": 277692,
    "colour": {
     "token": "sbInsula",
     "light": "#4A3DA8",
@@ -8313,7 +8524,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_men_tuberculum.glb",
-   "bytes": 111624,
+   "bytes": 77076,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -8351,7 +8562,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_frontal_lobe__men_tuberculum.glb",
-   "bytes": 336112,
+   "bytes": 274164,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8393,7 +8604,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_insula__men_tuberculum.glb",
-   "bytes": 350756,
+   "bytes": 262820,
    "colour": {
     "token": "sbInsula",
     "light": "#4A3DA8",
@@ -8435,7 +8646,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_men_petroclival.glb",
-   "bytes": 255848,
+   "bytes": 174672,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -8473,7 +8684,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_cerebellar_hemisphere__men_petroclival.glb",
-   "bytes": 485556,
+   "bytes": 380208,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8515,7 +8726,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_tonsil__men_petroclival.glb",
-   "bytes": 42536,
+   "bytes": 35212,
    "colour": {
     "token": "sbTonsil",
     "light": "#7D6DFF",
@@ -8557,7 +8768,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_vermis__men_petroclival.glb",
-   "bytes": 48120,
+   "bytes": 33936,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8599,7 +8810,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_superior_cerebellar_peduncle__men_petroclival.glb",
-   "bytes": 56888,
+   "bytes": 39280,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -8641,7 +8852,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_pons__men_petroclival.glb",
-   "bytes": 68476,
+   "bytes": 47804,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -8683,7 +8894,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_medulla__men_petroclival.glb",
-   "bytes": 41516,
+   "bytes": 29196,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -8725,7 +8936,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_fourth_ventricle__men_petroclival.glb",
-   "bytes": 22944,
+   "bytes": 16376,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -8767,7 +8978,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_men_foramen_magnum.glb",
-   "bytes": 247668,
+   "bytes": 168436,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -8805,7 +9016,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_cerebellar_hemisphere__men_foramen_magnum.glb",
-   "bytes": 324808,
+   "bytes": 219480,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8847,7 +9058,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_tonsil__men_foramen_magnum.glb",
-   "bytes": 26128,
+   "bytes": 18720,
    "colour": {
     "token": "sbTonsil",
     "light": "#7D6DFF",
@@ -8889,7 +9100,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_vermis__men_foramen_magnum.glb",
-   "bytes": 46444,
+   "bytes": 32216,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8931,7 +9142,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_medulla__men_foramen_magnum.glb",
-   "bytes": 41880,
+   "bytes": 29576,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -8973,7 +9184,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_fourth_ventricle__men_foramen_magnum.glb",
-   "bytes": 23100,
+   "bytes": 16516,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",

@@ -4,7 +4,7 @@ import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
 import type { RegionId } from './index';
-import { APPROACHES, CCJ_MEASURES, TECHNIQUES, type ApproachId, type CcjMeasureId, type LesionZone } from './content';
+import { APPROACHES, CCJ_MEASURES, discRegion, GEOM_BY_PAIR, lesionZones, TECHNIQUES, type ApproachId, type CcjMeasureId, type LesionZone } from './content';
 import type { TechniqueId } from './screw';
 import { REGION } from './regions';
 import { defaultLabels, labelsFrom, labelsParam } from '../labels';
@@ -18,7 +18,7 @@ export interface SpineState extends ViewState {
   /** selected vertebral level ('L4'), or null for the whole region */
   level: string | null;
   labels: 'all' | 'hover' | 'off';
-  /** lesion-to-root tool: a herniation at a lumbar disc, of a kind, on a side */
+  /** lesion-to-root tool: a herniation at a lumbar or cervical disc, of a kind offered there, on a side */
   lesion: { pair: string; zone: LesionZone; side: 'L' | 'R' } | null;
   /** cut away everything above the centre of the disc below the selected level, or above the screw's first third
    * (cutAbove follows it) */
@@ -171,12 +171,14 @@ export function decodeSpine(hash: string): SpineState {
   const lb = p.get('lb');
   s.labels = labelsFrom(lb);
   s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
-  const les = /^([LST]\d)-([LS]\d)\.(paracentral|foraminal|farlateral)\.([LR])$/.exec(p.get('les') ?? '');
+  const les = /^([CLT]\d{1,2})-([CLST]\d{1,2})\.(paracentral|foraminal|farlateral)\.([LR])$/.exec(p.get('les') ?? '');
   s.screw = decodeScrew(p.get('scr'), s.level);
   const x = p.get('x');
   s.cut = !s.level ? 'none' : x === 'd' ? 'disc' : x === 's' && s.screw ? 'screw' : 'none';
-  // a lesion belongs to the disc below the selected level
-  s.lesion = les && s.level && les[1] === s.level ? { pair: `${les[1]}-${les[2]}`, zone: les[3] as LesionZone, side: les[4] as 'L' | 'R' } : null;
+  // a lesion belongs to the disc below the selected level, where the tool is offered, in a zone offered there
+  const lesPair = les ? `${les[1]}-${les[2]}` : '';
+  s.lesion = les && s.level && les[1] === s.level && GEOM_BY_PAIR.get(lesPair)?.lesions && lesionZones(discRegion(lesPair)).some(([z]) => z === les[3])
+    ? { pair: lesPair, zone: les[3] as LesionZone, side: les[4] as 'L' | 'R' } : null;
   const ap = /^([a-z]+)\.([LR])$/.exec(p.get('ap') ?? '');
   s.approach = ap && s.level?.startsWith('T') && ap[1] in APPROACHES ? { id: ap[1] as ApproachId, side: ap[2] as 'L' | 'R' }
     : ap && s.level?.startsWith('C') && ap[1] === 'acdf' ? { id: 'acdf', side: ap[2] as 'L' | 'R' } : null;

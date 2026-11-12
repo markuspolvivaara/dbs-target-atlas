@@ -3,14 +3,12 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry.js';
 import type { VolumeInfo } from '../data/schema';
-import { SITE_ROOT } from '../brand';
+import { assetUrl } from '../brand';
 
 const loader = new GLTFLoader();
 loader.setMeshoptDecoder(MeshoptDecoder);
 
-
-/** Shared assets live at the site root (public/assets), whichever section page loads them. */
-export const assetUrl = (rel: string) => SITE_ROOT + rel;
+export { assetUrl };
 
 export interface MeshAsset { kind: 'mesh'; sides: Partial<Record<'L' | 'R', THREE.Mesh>> }
 export interface LineAsset { kind: 'lines'; sides: Partial<Record<'L' | 'R', LineSegmentsGeometry>>; centroid: Partial<Record<'L' | 'R', THREE.Vector3>> }
@@ -52,6 +50,9 @@ export function loadStructure(file: string): Promise<MeshAsset | LineAsset> {
       return { kind: 'mesh', sides: meshes } as MeshAsset;
     });
     cache.set(file, p);
+    // a failed download is not kept: the next request for the file (a retry, the next view) tries again
+    const mine = p;
+    p.catch(() => { if (cache.get(file) === mine) cache.delete(file); });
   }
   return p;
 }

@@ -157,6 +157,10 @@ export const ManifestStructureSchema = z.object({
   hcp: z.enum(['confirmed', 'likely']).optional(),
   /** skull-base section: share of the line inside the cranial bones' convex hull (measured) */
   intracranialFraction: z.number().optional(),
+  /** skull base, the Z-Anatomy model: how much of a vessel's or nerve's tube lies inside the model's bone meshes
+   * (pipeline/skullbase_v1_inbone.py): the share of its surface vertices more than 0.5 mm inside one, the deepest
+   * (mm), and the bones concerned. Present where the share is at least 5 % or the deepest at least 2 mm */
+  inBone: z.object({ share: z.number().min(0).max(1), deepestMm: z.number(), bones: z.array(z.string()) }).optional(),
   /** skull-base section: the cranial nerve (1-12) a nerve or nerve branch belongs to */
   cranialNerve: z.number().int().min(1).max(12).optional(),
   /** skull-base section: the arterial system an artery is listed under (its trunk's name) */
@@ -295,6 +299,15 @@ export const BsManifestSchema = z.object({
     warpedMatchedShare: z.number(), warpedMedianMm: z.number(), warpedP90Mm: z.number(),
     /** share of the HCP-1065 corticospinal tract inside the fitted pons and medulla between cstLevels (MNI z) */
     cstInsideShare: z.number(), cstLevels: z.tuple([z.number(), z.number()]),
+    /** the fitted surface against the T2 template itself (brainstem_build.py wall_check): the share of its vertices
+     * within 1 mm of the brainstem's own tissue-fluid boundary and of the far wall of the cistern, the signed median
+     * distance to its own boundary (mm, negative: the model outside it), the shares of the surface and of the solid
+     * that are fluid on the template, of the model's fourth ventricle that is fluid there, and the largest share of an
+     * arousal network nucleus inside that ventricle; the model's width against the template tissue's at four levels */
+    ownWallWithin1mmShare: z.number(), farWallWithin1mmShare: z.number(), ownWallSignedMedianMm: z.number(),
+    surfaceInFluidShare: z.number(), solidFluidShare: z.number(), ventricleFluidShare: z.number(),
+    aanInVentricleMaxShare: z.number(), aanInVentricleWorst: z.string(),
+    widths: z.array(z.object({ part: z.string(), z: z.number(), modelMm: z.number(), templateMm: z.number().nullable() })).min(1),
   }),
   datasets: z.record(DatasetInfoSchema),
   dataset: DatasetInfoSchema,

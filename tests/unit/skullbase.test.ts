@@ -3,8 +3,10 @@ import { APPROACH_GEOM, crossCheckSb, DEFINITIONS, definitionFor, LANDMARKS, NOT
 import { SB_GROUPS } from '../../src/skullbase/groups';
 import { skullPlan, skullScene } from '../../src/skullbase/scene';
 import { decodeSkull, defaultSkullState, encodeSkull } from '../../src/skullbase/state';
-import { nodeMeans } from './glb';
+import { meshSoup, nodeExtentsX, nodeMeans, pointsInside } from './glb';
+import sbModifications from '../../src/data/generated/sb-modifications.json';
 import { FORAMEN_CONTENTS } from '../../src/skullbase/foramina';
+import { inBoneNote } from '../../src/ui/skullbase-atlas';
 import { TB_NOTES, TB_REF, TB_REFS } from '../../src/skullbase/temporal';
 import { APPROACH_REF, APPROACH_REFS, APPROACHES, CAVERNOUS_INFO, ENDONASAL_INFO } from '../../src/skullbase/approaches';
 
@@ -26,6 +28,90 @@ describe('skull-base data (Z-Anatomy export)', () => {
     const lm = (n: string) => LANDMARKS.find((l) => l.name === n && l.side === 'R')!.ras;
     expect(lm('Geniculate ganglion')[0]).toBeGreaterThan(lm('Internal acoustic meatus')[0] + 10);
     expect(lm('Second genu of facial nerve')[1]).toBeLessThan(lm('Geniculate ganglion')[1]);
+  });
+  it('the cerebral arteries’ cortical branches are moved with the cortex out of the bone, and the shipped tubes are the moved ones', async () => {
+    // Z-Anatomy draws them on a cortex that reaches into its own bone: 982 mm of their centre lines lay inside it
+    const fit = (await import('../../src/data/generated/sb-v1fit.json')).default as unknown as
+      { brain: { arteries: Record<string, { lengthMm: number; inBoneBeforeMm: number; inBoneAfterMm: number; maxMovedMm: number; centroid: Record<'L' | 'R', number[]>; box: Record<'L' | 'R', number[][]> }> } };
+    const moved = Object.entries(fit.brain.arteries);
+    expect(moved.length).toBe(16);
+    expect(moved.reduce((a, [, r]) => a + r.inBoneBeforeMm, 0)).toBeGreaterThan(900);
+    expect(moved.reduce((a, [, r]) => a + r.inBoneAfterMm, 0)).toBeLessThan(2);
+    for (const [name, r] of moved) {
+      expect(r.inBoneAfterMm, name).toBeLessThanOrEqual(Math.max(1, 0.02 * r.lengthMm));
+      const s = SB_MANIFEST.structures.find((x) => x.name === name)!;
+      expect(s.category, name).toBe('artery');
+      expect(s.derivation, name).toMatch(/moved with that cortex/);
+      expect(s.centroid, name).toEqual(r.centroid);
+      // the file on the site is the moved tube: it reaches as far to each side as the moved tube's box says
+      const ext = await nodeExtentsX(s.file);
+      for (const side of ['L', 'R'] as const) {
+        expect(Math.abs(ext[side][0] - r.box[side][0][0]), `${name} ${side}`).toBeLessThan(0.1);
+        expect(Math.abs(ext[side][1] - r.box[side][1][0]), `${name} ${side}`).toBeLessThan(0.1);
+        expect(r.centroid[side][0] < 0, `${name} ${side}`).toBe(side === 'L');
+      }
+    }
+    // (Z-Anatomy's prefrontal artery reaches 60.9 mm from the midline, inside the frontal bone: the moved one stops short of it)
+    expect(fit.brain.arteries['Prefrontal artery'].box.R[1][0]).toBeLessThan(59.5);
+    expect(fit.brain.arteries['Prefrontal artery'].box.L[0][0]).toBeGreaterThan(-59.5);
+    // the trunks and the Sylvian arteries are not moved
+    for (const n of ['Middle cerebral artery (M1 segment)', 'Anterior cerebral artery', 'Posterior cerebral artery'])
+      if (SB_MANIFEST.structures.some((x) => x.name === n)) expect(fit.brain.arteries[n], n).toBeUndefined();
+  }, 60_000);
+  it('the hypoglossal nerve runs through the model’s own hypoglossal canal, not through the bone beside it', async () => {
+    // (the audit's finding MC-09: Z-Anatomy's curve ran through the occipital bone 5 mm from the canal, 17.6 mm of it
+    // in bone a side; pipeline/skullbase_v1_xii.py finds the canal in the bone and leads the nerve through it)
+    type Side = { canal: { centre: number[]; fromLabelMm: number; lengthMm: number; widthMm: number }; inBoneBeforeMm: number; inBoneAfterMm: number;
+      toCanalCentreMm: number; toCanalCentreBeforeMm: number; maxMovedMm: number; sharpestTurnDeg: number };
+    const step = (sbModifications as unknown as { steps: { step: string; metrics: Record<string, Side> }[] }).steps.find((x) => x.step === 'skullbase_v1_xii')!;
+    expect(Object.keys(step.metrics).sort()).toEqual(['L', 'R']);
+    const label = LANDMARKS.find((l) => l.name === 'Hypoglossal canal')!;
+    const nerve = await meshSoup(SB_MANIFEST.structures.find((x) => x.name === 'Hypoglossal nerve (XII)')!.file);
+    for (const [sd, r] of Object.entries(step.metrics)) {
+      // the canal, found beside Z-Anatomy's label for it
+      expect(r.canal.fromLabelMm, sd).toBeLessThan(1);
+      expect(r.canal.lengthMm, sd).toBeGreaterThan(4);
+      expect(r.canal.widthMm, sd).toBeGreaterThan(1.5);
+      const sign = sd === 'R' ? 1 : -1;
+      expect(Math.hypot(r.canal.centre[0] - sign * Math.abs(label.ras[0]), r.canal.centre[1] - label.ras[1], r.canal.centre[2] - label.ras[2]), sd).toBeLessThan(2);
+      // the nerve: through its middle, out of the bone
+      expect(r.toCanalCentreBeforeMm, sd).toBeGreaterThan(4);
+      expect(r.toCanalCentreMm, sd).toBeLessThan(0.5);
+      expect(r.inBoneBeforeMm, sd).toBeGreaterThan(15);
+      expect(r.inBoneAfterMm, sd).toBeLessThanOrEqual(1);
+      expect(r.maxMovedMm, sd).toBeLessThan(12);
+      expect(r.sharpestTurnDeg, sd).toBeLessThan(70);
+      // the shipped tube passes the canal's centre (its radius there is 0.3 to 0.5 mm)
+      let near = Infinity;
+      for (let i = 0; i < nerve.P.length; i += 3) near = Math.min(near, Math.hypot(nerve.P[i] - r.canal.centre[0], nerve.P[i + 1] - r.canal.centre[1], nerve.P[i + 2] - r.canal.centre[2]));
+      expect(near, sd).toBeLessThan(0.8);
+    }
+    // on the shipped files: hardly a vertex of the nerve inside the occipital bone (before: 413 of 4,424, 9 %; now 8 of 4,370)
+    const bone = await meshSoup(SB_MANIFEST.structures.find((x) => x.name === 'Occipital bone')!.file);
+    expect(pointsInside(nerve.P, bone.P, bone.T) / (nerve.P.length / 3)).toBeLessThan(0.01);
+    expect(SB_MANIFEST.structures.find((x) => x.name === 'Hypoglossal nerve (XII)')!.derivation).toContain('Led through the canal');
+  }, 60_000);
+  it('a vessel or nerve that runs inside the model’s bone says so on its card, with how much and where', () => {
+    // (the audit's finding MC-11: Z-Anatomy's bones have few canals and grooves, so its curves run through the bone
+    // meshes; pipeline/skullbase_v1_inbone.py measures every tube against every bone)
+    const noted = SB_MANIFEST.structures.filter((x) => x.inBone);
+    expect(noted.length).toBeGreaterThanOrEqual(20);
+    expect(noted.length).toBeLessThanOrEqual(40);
+    for (const x of noted) {
+      expect(x.type, x.name).toBe('tube');
+      expect(x.inBone!.share >= 0.05 || x.inBone!.deepestMm >= 2, x.name).toBe(true);
+      expect(x.inBone!.bones.length, x.name).toBeGreaterThan(0);
+      for (const b of x.inBone!.bones) expect(SB_MANIFEST.structures.some((y) => y.type === 'bone' && y.name === b), `${x.name}: ${b}`).toBe(true);
+    }
+    const of = (n: string) => SB_MANIFEST.structures.find((x) => x.name === n)!.inBone;
+    // the carotid through a petrous bone without a canal; the labyrinth's nerves inside the temporal bone
+    expect(of('Internal carotid artery')!.bones).toEqual(expect.arrayContaining(['Sphenoid bone', 'Temporal bone']));
+    expect(of('Cochlear nerve')!.share).toBeGreaterThan(0.5);
+    // what the project has moved out of the bone carries no note: the hypoglossal nerve, the cortical arteries
+    for (const n of ['Hypoglossal nerve (XII)', 'Pericallosal artery', 'Callosomarginal artery', 'Artery of central sulcus']) expect(of(n), n).toBeUndefined();
+    const note = inBoneNote(of('Internal carotid artery')!);
+    expect(note).toMatch(/^\d+% of this tube’s surface lies more than 0\.5 mm inside the sphenoid bone and the temporal bone as Z-Anatomy draws them \(up to \d+\.\d mm deep\)\./);
+    expect(inBoneNote({ share: 0.004, deepestMm: 2.1, bones: ['Sphenoid bone'] })).toMatch(/^A short stretch of this tube lies inside the sphenoid bone as Z-Anatomy draws it/);
   });
   it('the telovelar view has the floor’s landmarks, the retrosigmoid the tentorium, and the chiasm is a drawn crossing', () => {
     const tv = SB_GROUPS.find((g) => g.id === 'telovelar')!;
@@ -268,8 +354,15 @@ describe('the temporal-bone model (v3: OpenEar specimen registered onto the CT)'
   it('every carried-over structure has both ears, on their sides; vessels are the CT model\'s own files, bone this model\'s', () => {
     for (const s of v3.structures.filter((x) => !x.id.startsWith('tm_') && !x.pushedFrom)) {     // (the tumours have their own test)
       if (s.id.startsWith('tb_') || s.id.startsWith('br_') || s.id.startsWith('pf_')) {
-        expect(s.centroid!.L[0], s.id).toBeLessThan(0);
-        expect(s.centroid!.R[0], s.id).toBeGreaterThan(0);
+        if (s.id === 'tb_anterior_spinal_artery') {
+          // its two halves run together down the front of the medulla, on the fitted medulla's midline (which is not
+          // exactly the frame's): the left one left of the right one, the pair within 5 mm of the frame's midline
+          expect(s.centroid!.L[0], s.id).toBeLessThan(s.centroid!.R[0]);
+          expect(Math.abs(s.centroid!.L[0] + s.centroid!.R[0]) / 2, s.id).toBeLessThan(5);
+        } else {
+          expect(s.centroid!.L[0], s.id).toBeLessThan(0);
+          expect(s.centroid!.R[0], s.id).toBeGreaterThan(0);
+        }
         expect(s.file, s.id).toMatch(/^assets\/skullbase-v3\//);
       } else if (s.approach || s.morph || s.type === 'bone') {
         // the craniotomy's cut bones and the bone removed, the arteries that move with the opening, and v3's own skull
@@ -343,18 +436,83 @@ describe('the temporal-bone model (v3: OpenEar specimen registered onto the CT)'
   });
 });
 
-/** The section's modules as a v3 page loads them (its <meta name="sb-model" content="v3">). */
-async function v3Modules() {
+/** The section's modules as a page of one model loads them (its <meta name="sb-model" content="v3">, or "ct"). */
+async function modelModules(model: 'v3' | 'ct') {
   vi.resetModules();
   const g = globalThis as unknown as { document?: unknown };
   const had = 'document' in g;
-  g.document = { querySelector: (q: string) => (q.includes('sb-model') ? { content: 'v3' } : null) };
+  g.document = { querySelector: (q: string) => (q.includes('sb-model') ? { content: model } : null) };
   try {
-    return { groups: await import('../../src/skullbase/groups'), scene: await import('../../src/skullbase/scene'), state: await import('../../src/skullbase/state') };
+    return { index: await import('../../src/skullbase'), groups: await import('../../src/skullbase/groups'), scene: await import('../../src/skullbase/scene'), state: await import('../../src/skullbase/state') };
   } finally {
     if (!had) delete g.document;
   }
 }
+const v3Modules = () => modelModules('v3');
+
+describe('skull-base landmarks, in each model', () => {
+  it('none is a neighbouring bone’s landmark attached to the nearest cranial surface, and none carries such a text', async () => {
+    // (v1 and v2 once listed the atlas's "Lateral mass" on the occipital bone, with Wikipedia's text on the atlas)
+    for (const prefix of ['sb', 'sbct', 'sbv3']) {
+      const lms = (await import(`../../src/data/generated/${prefix}-landmarks.json`)).default as { id: string; name: string; boneFrom?: string }[];
+      const defs = (await import(`../../src/data/generated/${prefix}-definitions.json`)).default as Record<string, { text: string; url: string | null }>;
+      expect(lms.length, prefix).toBeGreaterThan(50);
+      expect(lms.filter((l) => l.boneFrom === 'nearest surface').map((l) => l.id), prefix).toEqual([]);
+      expect(lms.some((l) => l.name === 'Lateral mass'), prefix).toBe(false);
+      expect(Object.keys(defs), prefix).not.toContain('Lateral mass');
+      // no text is the lead of Wikipedia's page on the atlas or the axis
+      expect(Object.entries(defs).filter(([, d]) => /wiki\/(Atlas|Axis)_\(anatomy\)/.test(d.url ?? '')).map(([n]) => n), prefix).toEqual([]);
+    }
+  });
+});
+
+describe('skull-base data, in each model', () => {
+  it('the generated files agree with each other in v2 and in the default model too (the check ran for v1 alone)', async () => {
+    for (const model of ['ct', 'v3'] as const) {
+      const { index } = await modelModules(model);
+      expect(index.SB_MODEL, model).toBe(model);
+      expect(index.crossCheckSb(), model).toEqual([]);
+    }
+  });
+});
+
+describe('skull-base nerves and vessels, in each model', () => {
+  it('everything paired is drawn on both sides (v1 and v2 had a left cochlear nerve and no right one)', async () => {
+    const { nodeExtentsX } = await import('./glb');
+    for (const prefix of ['sb', 'sbct', 'sbv3']) {
+      const m = (await import(`../../src/data/generated/${prefix}-manifest.json`)).default as { structures: { id: string; name: string; type: string; category?: string; file: string; pushedFrom?: string; tumourView?: string; approach?: string }[] };
+      const oneSided: string[] = [];
+      for (const s of m.structures) {
+        if (s.type !== 'tube' || !['nerve', 'artery', 'vein'].includes(s.category ?? '') || s.pushedFrom || s.tumourView || s.approach) continue;
+        const ext = await nodeExtentsX(s.file);
+        const sides = Object.keys(ext);
+        // a midline vessel is one node, across or on the midline; anything that lies wholly on one side has a twin
+        if (sides.length === 1 && (ext[sides[0]][0] > 2 || ext[sides[0]][1] < -2)) oneSided.push(`${prefix}: ${s.name} (${sides[0]} only)`);
+      }
+      expect(oneSided, prefix).toEqual([]);
+    }
+    const coch = await nodeExtentsX('assets/skullbase/sb_cochlear_nerve.glb');
+    expect(Object.keys(coch).sort()).toEqual(['L', 'R']);
+    // the model is symmetric: the right one is the left one's mirror image
+    expect(coch.R[0]).toBeCloseTo(-coch.L[1], 1);
+    expect(coch.R[1]).toBeCloseTo(-coch.L[0], 1);
+  }, 120_000);
+});
+
+describe('skull-base views, in each model', async () => {
+  const models = { v1: await import('../../src/skullbase/groups'), v2: (await modelModules('ct')).groups, v3: (await v3Modules()).groups };
+  it('list each structure and each landmark once (a repeat shows twice in the panel and the legend)', () => {
+    for (const [name, G] of Object.entries(models)) {
+      expect(G.SB_GROUPS.length, name).toBeGreaterThan(10);
+      expect(G.crossCheckGroups(), name).toEqual([]);
+    }
+    // the three are different models, not one loaded three times
+    expect(new Set(Object.values(models).map((G) => G.SB_GROUPS.length)).size).toBeGreaterThan(1);
+    // v3's cranial floor lists the facial nerve once, though it is among both the nerves and the ear's parts
+    const floor = models.v3.SB_GROUP.get('floor')!;
+    expect(floor.structures.length).toBe(new Set(floor.structures).size);
+  });
+});
 
 describe('v3 cranial floor landmarks', async () => {
   const { groups: G3 } = await v3Modules();

@@ -326,12 +326,8 @@ def build(ex: dict, ct_fossa: np.ndarray, ct_R: np.ndarray, porus: dict, carotid
             landmarks.append({"name": "Foramen lacerum", "side": side, "ras": h["centre"], "from": [],
                               "how": f"The opening of the cranial floor beside the sella, medial to the foramen ovale, seen from above "
                                      f"({h['area']:.0f} mm²), at its rim's height."})
-    bulbs = {}
-    for side in ("R", "L"):
-        B = ts_points("headneck_bones_vessels/internal_jugular_vein_" + ("right" if side == "R" else "left"), ct_fossa, ct_R)
-        bulbs[side] = B[B[:, 2] > B[:, 2].max() - 2].mean(0)
     lum = Lumen(g)
-    sinuses = trace_sinuses(g, lum, ex, bulbs)
+    sinuses = traced_sinuses(ex, ct_fossa, ct_R, g, lum)
     # this patient's carotid between the cervical segment (TotalSegmentator) and the cavernous one (TopBrain)
     cstart, cend = {}, {}
     for side in ("R", "L"):
@@ -430,6 +426,18 @@ def trace_lumen(g: NV.Grid, depth: np.ndarray, guide: np.ndarray, start, end, si
     return P, rad, rep
 
 
+def traced_sinuses(ex: dict, ct_fossa: np.ndarray, ct_R: np.ndarray, g: NV.Grid | None = None, lum: Lumen | None = None) -> dict:
+    """trace_sinuses from each side's jugular bulb (the top of TotalSegmentator's internal jugular vein). It needs
+    only the CT and v2's fitted lines, so the tentorial surface (skullbase_v3_tentorium.py) can be built from it before
+    the brain is fitted."""
+    g = g or NV.Grid()
+    bulbs = {}
+    for side in ("R", "L"):
+        B = ts_points("headneck_bones_vessels/internal_jugular_vein_" + ("right" if side == "R" else "left"), ct_fossa, ct_R)
+        bulbs[side] = B[B[:, 2] > B[:, 2].max() - 2].mean(0)
+    return trace_sinuses(g, lum or Lumen(g), ex, bulbs)
+
+
 def trace_sinuses(g: NV.Grid, lum: Lumen, ex: dict, bulb: dict) -> dict:
     """Each side's sigmoid and transverse sinus, traced through this CT's own enhanced lumen (trace_lumen) from the
     jugular bulb (the top of TotalSegmentator's internal jugular vein) to the fitted transverse sinus' medial end, near
@@ -493,6 +501,97 @@ ROUTED_ARTERIES = [  # name, parent (TopBrain, or None), artery system
 ]
 
 
+# branches that run on the brainstem's surface: after the move onto their parent vessel they are laid onto the fitted
+# brainstem (skullbase_v3.hindbrain_clearance with `onto`): a point is drawn onto its surface from as far as it has run
+# from the origin, at most this many mm, and none stays inside it. Before November 2026 they kept the fitted model's
+# shape, unchanged: the right lateral pontine branches ran 34 mm through the petrous apex, and neither side touched the
+# pons (the audit's finding MB-04)
+ON_HINDBRAIN = {"Medial pontine branches of basilar artery": 12.0, "Lateral pontine branches of basilar artery": 12.0,
+                "Anterior spinal artery": 4.0}
+COURSE_STEP_MM = 0.5       # a smoothed course's points are this far apart ...
+COURSE_SMOOTH_MM = 1.5     # ... and it is smoothed along its length with a Gaussian this wide (its corners rounded to a
+                           # radius of a few tube radii), its ends held over COURSE_ENDS_MM, in COURSE_ROUNDS rounds, each
+COURSE_ENDS_MM = 3.0       # followed by the clearance (smoothing can cut a corner back into the hindbrain)
+COURSE_ROUNDS = 3
+KINK_SPAN_MM = 2.0         # a corner: the turn between a course's directions this far before and after a point ...
+KINK_DEG = 70.0            # ... of more than this
+SPUR_DEG = 140.0           # a spur: a turn of more than this, where the line doubles back ...
+SPUR_MM = 1.0              # ... its two legs this close to each other
+
+
+def dense(P: np.ndarray, r: np.ndarray, step: float = COURSE_STEP_MM) -> tuple[np.ndarray, np.ndarray]:
+    """A centre line and its radii resampled every `step` mm."""
+    d = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
+    if d[-1] < step:
+        return P, r
+    t = np.r_[np.arange(0.0, d[-1], step), d[-1]]
+    return np.stack([np.interp(t, d, P[:, k]) for k in range(3)], 1), np.interp(t, d, r)
+
+
+def despur(P: np.ndarray, r: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """A course without its spurs: where the line runs out and back along itself (a turn of more than SPUR_DEG, the two
+    legs within SPUR_MM of each other), the excursion is cut out. The fitted model's lines have such whiskers (a side
+    twig traced there and back), and a clearing can fold a line onto itself."""
+    P, r = dense(np.asarray(P, float), np.asarray(r, float))
+    k = int(round(KINK_SPAN_MM / COURSE_STEP_MM))
+    for _ in range(40):
+        if len(P) < 2 * k + 3:
+            break
+        a, b = P[k:-k] - P[:-2 * k], P[2 * k:] - P[k:-k]
+        c = (a * b).sum(1) / np.maximum(np.linalg.norm(a, axis=1) * np.linalg.norm(b, axis=1), 1e-9)
+        ang = np.degrees(np.arccos(np.clip(c, -1, 1)))
+        # the sharpest turn whose two legs lie together KINK_SPAN_MM from it: a spur's tip (a sharp corner between
+        # legs that part is no spur and stays)
+        tips = [j for j in np.argsort(-ang) if ang[j] > SPUR_DEG and np.linalg.norm(P[j] - P[j + 2 * k]) <= SPUR_MM]
+        if not tips:
+            break
+        i = int(tips[0]) + k
+        n = k
+        while i - n - 1 >= 0 and i + n + 1 < len(P) and np.linalg.norm(P[i - n - 1] - P[i + n + 1]) <= SPUR_MM:
+            n += 1
+        keep = np.r_[np.arange(0, i - n + 1), np.arange(i + n + 1, len(P))]
+        P, r = dense(P[keep], r[keep])
+    return P, r
+
+
+def smooth_course(P: np.ndarray, r: np.ndarray, clear=None) -> tuple[np.ndarray, np.ndarray]:
+    """A fitted course as a smooth line: resampled every COURSE_STEP_MM, its corners rounded (a Gaussian of
+    COURSE_SMOOTH_MM along it, the ends held), then cleared of the hindbrain again; COURSE_ROUNDS times. The fitted
+    model's lines have few points and the moves onto this CT put corners in them (up to 106 deg in the anterior
+    inferior cerebellar artery: the audit's finding MB-08)."""
+    P, r = despur(P, r)
+    for _ in range(COURSE_ROUNDS):
+        arc = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
+        w = np.clip(np.minimum(arc, arc[-1] - arc) / COURSE_ENDS_MM, 0, 1)[:, None]
+        S = ndimage.gaussian_filter1d(P, COURSE_SMOOTH_MM / COURSE_STEP_MM, axis=0, mode="nearest")
+        P = w * S + (1 - w) * P
+        if clear is not None:
+            P = clear(P, np.maximum(r, 0.3))
+        P, r = despur(P, r)        # (resampled; and a clearing can fold the line onto itself)
+    # (the last clearing's own corners rounded lightly: the tube may then touch the hindbrain's surface again, by less
+    # than the clearance step lifts its surface out)
+    arc = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
+    w = np.clip(np.minimum(arc, arc[-1] - arc) / COURSE_ENDS_MM, 0, 1)[:, None]
+    P = w * ndimage.gaussian_filter1d(P, 0.5 * COURSE_SMOOTH_MM / COURSE_STEP_MM, axis=0, mode="nearest") + (1 - w) * P
+    return P, r
+
+
+def kinks(P: np.ndarray) -> dict:
+    """A course's corners: how many points turn by more than KINK_DEG between the directions KINK_SPAN_MM before and
+    after them, and the sharpest turn (deg)."""
+    P, _ = dense(np.asarray(P, float), np.zeros(len(P)))
+    k = int(round(KINK_SPAN_MM / COURSE_STEP_MM))
+    if len(P) < 2 * k + 1:
+        return {"cornersOver70": 0, "sharpestDeg": 0.0}
+    a, b = P[k:-k] - P[:-2 * k], P[2 * k:] - P[k:-k]
+    c = (a * b).sum(1) / np.maximum(np.linalg.norm(a, axis=1) * np.linalg.norm(b, axis=1), 1e-9)
+    ang = np.degrees(np.arccos(np.clip(c, -1, 1)))
+    # (a corner is counted once: runs of points over the limit are one corner)
+    over = ang > KINK_DEG
+    n = int((over & ~np.r_[False, over[:-1]]).sum())
+    return {"cornersOver70": n, "sharpestDeg": round(float(ang.max()), 0), "lengthMm": round(float(np.linalg.norm(np.diff(P, axis=0), axis=1).sum()), 1)}
+
+
 def topbrain_surface(parent: str, side: str, ct_fossa, ct_R) -> np.ndarray:
     lab = nib.load(ROOT / "data" / "raw" / "topbrain" / "topcow_ct_011.nii.gz")
     L = np.asanyarray(lab.dataobj)
@@ -522,10 +621,24 @@ def small_arteries(g: NV.Grid, ex: dict, ct_fossa, ct_R, clear=None) -> dict:
                 d = [t.query(R[e, :3])[0] for e in ends]
                 origin = ends[int(np.argmin(d))]
                 shift = t.data[t.query(R[origin, :3])[1]] - R[origin, :3]
-                runs.append((R[:, :3] + shift, R[:, 3]))
+                Pn, rn = R[:, :3] + shift, R[:, 3]
+                if clear is not None and name in ON_HINDBRAIN:
+                    # laid onto the fitted brainstem, from its origin on
+                    if origin != 0:
+                        Pn, rn = Pn[::-1], rn[::-1]
+                    Pn, rn = dense(Pn, rn)
+                    arc = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(Pn, axis=0), axis=1))]
+                    Pn = clear(Pn, np.maximum(rn, 0.3), onto=np.minimum(arc, ON_HINDBRAIN[name]))
+                    Pn, rn = smooth_course(Pn, rn, clear)
+                runs.append((Pn, rn))
                 moves.append(float(np.linalg.norm(shift)))
+            on = clear is not None and name in ON_HINDBRAIN
             out[(name, side)] = {"runs": runs, "system": system, "moved": round(float(np.median(moves)), 1), "parent": parent,
-                                 "how": f"each branch moved, unchanged in shape, to start on this patient's {parent.lower()} (TopBrain's label)"}
+                                 "how": (f"each branch moved to start on this patient's {parent.lower()} (TopBrain's label), then laid onto the fitted "
+                                         f"brainstem's surface (drawn onto it from up to {ON_HINDBRAIN[name]:g} mm away, none of it left inside) and smoothed"
+                                         if on else
+                                         f"each branch moved, unchanged in shape, to start on this patient's {parent.lower()} (TopBrain's label)"),
+                                 **({"kinks": [kinks(P_) for P_, _ in runs]} if on else {})}
     for name, parent, system in FADED:
         for side in ("R", "L"):
             key = f"{name}.{side.lower()}"
@@ -540,10 +653,12 @@ def small_arteries(g: NV.Grid, ex: dict, ct_fossa, ct_R, clear=None) -> dict:
             f = np.clip(1 - arc / FADE_MM, 0, 1)
             f = f * f * (3 - 2 * f)                 # smooth
             P = R[:, :3] + f[:, None] * shift
-            out[(name, side)] = {"runs": [(clear(P, R[:, 3]) if clear else P, R[:, 3])], "system": system,
+            P, rr = smooth_course(clear(P, R[:, 3]) if clear else P, R[:, 3], clear)
+            out[(name, side)] = {"runs": [(P, rr)], "system": system,
                                  "moved": round(float(np.linalg.norm(shift)), 1), "parent": parent,
                                  "how": f"its origin moved onto this patient's {parent.lower()} (TopBrain's label), the move fading out "
-                                        f"over its first {FADE_MM:.0f} mm, the rest where the fit puts it"}
+                                        f"over its first {FADE_MM:.0f} mm, the rest where the fit puts it; its corners rounded",
+                                 "kinks": [kinks(P)]}
     for name, line, run, parent, system in CONTINUED:
         for side in ("R", "L"):
             key = f"{line}.{side.lower()}"
@@ -561,10 +676,12 @@ def small_arteries(g: NV.Grid, ex: dict, ct_fossa, ct_R, clear=None) -> dict:
             f = np.clip(1 - arc / FADE_MM, 0, 1)
             f = f * f * (3 - 2 * f)
             P = R[:, :3] + f[:, None] * shift
-            out[(name, side)] = {"runs": [(clear(P, R[:, 3]) if clear else P, R[:, 3])], "system": system,
+            P, rr = smooth_course(clear(P, R[:, 3]) if clear else P, R[:, 3], clear)
+            out[(name, side)] = {"runs": [(P, rr)], "system": system,
                                  "moved": round(float(np.linalg.norm(shift)), 1), "parent": parent,
                                  "how": f"carried on from the far end of this patient's {parent.lower()} as TopBrain labels it (its first "
-                                        f"part), the start moved there and the move fading out over {FADE_MM:.0f} mm"}
+                                        f"part), the start moved there and the move fading out over {FADE_MM:.0f} mm; its corners rounded",
+                                 "kinks": [kinks(P)]}
     for name, parent, system in ROUTED_ARTERIES:
         for side in ("R", "L"):
             R = np.vstack([np.array(r) for r in ex["lines"][f"{name}.{side.lower()}"]["runs"] if len(r) > 1])

@@ -49,7 +49,7 @@ export const SYMPTOMS: SymptomInput[] = [
       { claim: 'Symptom-specific tracts mapped in 237 patients from five centres', refIds: ['rajamani2024'] },
       { claim: 'Combined STN plus SNr may help freezing, with mixed results', refIds: ['weiss2013', 'artusi2025', 'mds2024'] },
     ],
-    note: `${RAJAMANI_NOTE} No brainstem-connected tract is distributed as a file; the brainstem side is represented by the PPN (Snijders 2016) only.`,
+    note: `${RAJAMANI_NOTE} No brainstem-connected tract is distributed as a file, so the brainstem side is not drawn in this view.`,
     noteRefIds: ['rajamani2024'],
     camera: 'coronal',
   },

@@ -5,12 +5,15 @@ import { IND, SYM } from './data';
 import { decode, defaultState, encode, type AppState, type Page } from './state';
 import { AtlasPage } from './ui/atlas';
 import { h } from './ui/dom';
+import { bindHelp, viewHelp } from './ui/help';
+import { bootFailed } from './ui/stage';
 import { coordsPage, creditsPage, imagingPage, refsPage, settingsPage } from './ui/pages';
 import { leadPrefFor, onPrefsChange, visibleIndications } from './ui/prefs';
 import { primaryTargetId } from './viewer/selection';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
 import { BRAND, SECTIONS } from './brand';
 import { disclaimerNote, siteHeader } from './ui/shell';
+import { addressSync } from './ui/address';
 
 const SECTION = SECTIONS.find((s) => s.id === 'dbs')!;
 
@@ -64,10 +67,14 @@ const main = h('main', { id: 'main' }, ...Object.values(pages).map((p) => p.el))
 // the stage height depends on the (wrapping) disclaimer height
 new ResizeObserver(() => document.documentElement.style.setProperty('--disc-h', `${disclaimer.offsetHeight}px`)).observe(disclaimer);
 const help = buildHelp();
-app.append(h('a', { class: 'skip', href: '#main' }, 'Skip to content'), header, disclaimer, main, help);
+bindHelp(help);
+// the atlas page's heading, for screen readers and outlines (its other pages have their own)
+atlas.el.prepend(h('h1', { class: 'vh' }, `${SECTION.name}: 3D atlas`));
+app.append(h('a', { class: 'skip', href: '#main' }, 'Skip to content'), h('a', { class: 'skip skip-panel', href: '#panel', onclick: (e: Event) => { e.preventDefault(); document.getElementById('panel')?.focus(); } }, 'Skip to the panel'), header, disclaimer, main, help);
 
 let pendingCamera = true;
 let hashTimer = 0;
+const address = addressSync();   // (the address is written only over the hash this page last wrote or read)
 
 function setState(next: AppState, opts: { camera: boolean; fromCamera?: boolean }): void {
   const pageChanged = next.page !== state.page;
@@ -75,10 +82,7 @@ function setState(next: AppState, opts: { camera: boolean; fromCamera?: boolean 
   pendingCamera = opts.camera;
   // camera moves are frequent: debounce the URL write; skip re-rendering panels
   clearTimeout(hashTimer);
-  hashTimer = window.setTimeout(() => {
-    const hsh = encode(state);
-    if (hsh !== location.hash) history.replaceState(null, '', hsh);
-  }, opts.fromCamera ? 400 : 0);
+  hashTimer = window.setTimeout(() => address.write(encode(state)), opts.fromCamera ? 400 : 0);
   if (opts.fromCamera) return;
   render(pageChanged);
 }
@@ -95,6 +99,7 @@ function render(pageChanged = false): void {
 }
 
 window.addEventListener('hashchange', () => {
+  address.read();
   if (location.hash === encode(state)) return;
   // A link with parameters is a complete view description; a bare page link (#/atlas) keeps the current view.
   const bare = !location.hash.includes('?');
@@ -132,9 +137,9 @@ function buildHelp(): HTMLDialogElement {
     ['L', 'Show or hide the lead'], ['N', 'Name labels: hover → all → off'], ['S', 'Toggle axial slice'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
   ];
   const d = h('dialog', { class: 'help', 'aria-labelledby': 'help-title' },
-    h('h2', { id: 'help-title' }, 'Keyboard shortcuts'),
+    h('h2', { id: 'help-title' }, 'Keys, mouse and touch'),
     h('dl', {}, ...rows.flatMap(([k, v]) => [h('dt', {}, h('kbd', {}, k)), h('dd', {}, v)])),
-    h('p', { class: 'aside' }, 'Touch: one finger rotates, two fingers pinch to zoom and drag to pan. Tap a structure for its card.'),
+    ...viewHelp('a structure'),
     h('form', { method: 'dialog' }, h('button', { class: 'btn' }, 'Close')));
   return d as HTMLDialogElement;
 }
@@ -145,16 +150,18 @@ window.addEventListener('keydown', (e) => {
   if (t.closest('input, select, textarea, [contenteditable]')) return;
   if (e.key === '?') { help.open ? help.close() : help.showModal(); e.preventDefault(); return; }
   if (state.page !== 'atlas' || help.open) return;
-  if (atlas.handleKey(e)) e.preventDefault();
+  // the section's own keys first; then, with the 3D view in focus, the viewer's (arrows turn it, + and - zoom)
+  if (atlas.handleKey(e) || (document.activeElement === atlas.viewer.renderer.domElement && atlas.viewer.handleKey(e))) e.preventDefault();
 });
 
 // ---------------------------------------------------------------- boot
 syncTheme();
 render(true);
 history.replaceState(null, '', encode(state));
+address.read();
 atlas.viewer.preload().then(() => {
   pendingCamera = !state.cam.pos;
   pages.atlas.render(state);
   document.body.dataset.ready = '1';
-});
+}).catch(bootFailed);
 (window as unknown as { __atlas: unknown }).__atlas = { viewer: atlas.viewer, state: () => state };

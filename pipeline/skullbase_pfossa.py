@@ -11,10 +11,14 @@ inside the brainstem. So the contents are fitted again, by a smooth deformation 
 Gaussian radial basis functions; phi: frame -> the carried model), found by minimising together (weights in STAGES):
   the posterior fossa: the contents' hull TABLE_GAP_MM inside the CT's cavity behind the petrous bones (the suboccipital
   surface, where the cerebellum lies against the bone; a modelling choice for the meninges), at least TABLE_MIN_MM inside
-  it everywhere, and never within BONE_GAP_MM of bone;
+  it everywhere and as far under the tentorium, and never within BONE_GAP_MM of bone; after the affine stage the hull
+  is also drawn up to TABLE_GAP_MM under the tentorium (the cerebellum's tentorial surface lies against it);
   this patient's arteries (TopBrain's labels as centre lines with their radius: basilar, vertebral, posterior cerebral
   P1-P2, superior and posterior inferior cerebellar) outside the brainstem and cerebellum;
-  the fitted tentorium above the cerebellum;
+  this CT's cisterns (the fluid it shows within CISTERN_WALL_MM of the posterior fossa's bone, darker than CISTERN_HU)
+  outside them too;
+  the tentorium over the cerebellum: this CT's own (the surface through its transverse sinuses, straight sinus and
+  petrous ridges, skullbase_v3_tentorium.py), its points with the wall's;
   a penalty wherever the local volume would shrink below JAC_MIN of the overall scale, so that it never folds.
 The model's meshes are carried through it (GridPhi inversion).
 
@@ -60,7 +64,6 @@ import numpy as np
 import trimesh
 import scipy.sparse as sp
 from scipy import ndimage
-from scipy.interpolate import griddata
 from scipy.optimize import minimize
 from scipy.spatial import cKDTree
 from skimage.morphology import skeletonize
@@ -71,15 +74,18 @@ import brain_deform as BD  # noqa: E402
 from glb import TRIANGLES, write_glb  # noqa: E402
 from meshcheck import signed_volume  # noqa: E402
 from skullbase_brain import ball, fill, sdf  # noqa: E402
+import skullbase_v3_tentorium as TENT  # noqa: E402
 
 KIND = "skullbase-v3"
 BUILD = ROOT / "data" / "build" / KIND
 CT_BUILD = ROOT / "data" / "build" / "skullbase-ct"
+CT_PATH = ROOT / "data" / "raw" / "topbrain" / "topcow_ct_011_0000.nii.gz"
 LABELS = ROOT / "data" / "raw" / "topbrain" / "topcow_ct_011.nii.gz"
 
 GRID_LO, GRID_HI = np.array([-75.0, -120.0, -80.0]), np.array([75.0, 20.0, 45.0])   # the posterior fossa (frame mm)
 TABLE_GAP_MM = 1.5         # the hull's distance inside the cavity behind the petrous bones (meninges, CSF): a modelling choice
 TABLE_MIN_MM = 1.0         # ... and its least distance inside it anywhere
+TENTORIAL_WALL_MM = 1.0    # the tentorium's points taken with the wall's: this far apart (as dense as the inner table's)
 BONE_GAP_MM = 1.0          # never within this of bone
 SUBOCCIPITAL_BEHIND_MM = 20.0   # "behind the petrous bones": this far behind the internal acoustic meatuses
 CAVITY_SEAL_MM = 5         # the bone dilated this much to close the foramina when the cavity is found
@@ -99,15 +105,26 @@ DENT_MARGIN_MM = 0.6       # then a groove in the back of the medulla where an a
 DENT_SIGMA_MM = 1.5        # labels) still lies in it: its surface moved forward by the artery's depth plus this, falling off
 DENT_ROUNDS = 40           # as a Gaussian this wide, in up to this many rounds (the best kept) ...
 DENT_STEP_MM = 0.6         # ... each moving it at most this (dent)
+CISTERN_HU = 27.0          # this CT's cerebrospinal fluid: below this once smoothed (ventricles_build.CSF_HU: the fluid reads
+                           # about 5-20 HU, the brain about 44)
+CISTERN_SMOOTH_MM = 1.0    # (the CT smoothed this much first)
+CISTERN_WALL_MM = 8.0      # the cisterns: fluid within this of the posterior fossa's bone (the cerebellopontine angles, the
+                           # prepontine cistern, the cisterna magna); the fourth ventricle, deep in the model, is not among them
+CISTERN_MIN_MM3 = 30       # a patch of fluid smaller than this is taken for noise
+CISTERN_MARGIN_MM = 0.3    # the model keeps this far out of a point of fluid
 JAC_MIN = 0.45
 JAC_WEIGHT = 20.0
 HULL_CLOSE_MM = 3
 STAGES = [  # (control grid spacing = Gaussian width in mm, or 'affine'; ridge; term weights)
-    ("affine", 0, dict(table=1.0, wall=1.0, bone=0.5, out=1.0, dura=0.2)),
-    (14.0, 1e-4, dict(table=1.0, wall=1.0, bone=1.0, out=2.0, dura=0.5)),
-    (9.0, 1e-4, dict(table=1.0, wall=2.0, bone=2.0, out=4.0, dura=0.5)),
-    (6.0, 3e-4, dict(table=1.0, wall=2.0, bone=2.0, out=4.0, dura=0.5)),
-    (4.0, 1e-3, dict(table=1.0, wall=2.0, bone=2.0, out=8.0, dura=0.5)),
+    # ("csf": the model out of this CT's cisterns, as "out" keeps it out of the arteries.)
+    # ("tent": the hull TABLE_GAP_MM under the tentorium, from both sides, as "table" is for the inner table. Not in the
+    # affine stage: there it sent the whole model 10 mm from where the bones' fit had carried it; the affine stage has
+    # the tentorium as a wall only, and the stages after it draw the cerebellum's tentorial surface up to it)
+    ("affine", 0, dict(table=1.0, wall=1.0, bone=0.5, out=1.0, dura=0.2, tent=0.0, csf=0.5)),
+    (14.0, 1e-4, dict(table=1.0, wall=1.0, bone=1.0, out=2.0, dura=0.5, tent=1.0, csf=1.0)),
+    (9.0, 1e-4, dict(table=1.0, wall=2.0, bone=2.0, out=4.0, dura=0.5, tent=1.0, csf=2.0)),
+    (6.0, 3e-4, dict(table=1.0, wall=2.0, bone=2.0, out=4.0, dura=0.5, tent=1.0, csf=2.0)),
+    (4.0, 1e-3, dict(table=1.0, wall=2.0, bone=2.0, out=8.0, dura=0.5, tent=1.0, csf=2.0)),
 ]
 TV_MM = 6.0                # illustrative: how far each tonsil is drawn aside
 TV_UP = 0.4                # ... laterally, and up by this share of it
@@ -123,6 +140,8 @@ assert 2 * RS_MM / RS_REACH_MM < 1, "the retrosigmoid shape could fold the cereb
 GEN = ROOT.parent / "src" / "data" / "generated"
 CARRY_STEP_MM = 2.0        # the deformation saved for the nerves' courses on this grid, in full ...
 CARRY_BONE_MM = 6.0        # ... except within this of bone, where it fades to none
+CARRY_RESIDUAL_MM = 0.5    # a grid point whose inversion misses by more than this takes its neighbour's move
+CARRY_MAX_RATIO = 2.0      # ... nor one that would move more than this times the model's own largest move
 
 STEM = ["Midbrain", "Pons", "Medulla oblongata", "Fourth ventricle", "Superior cerebellar peduncle"]
 HEMISPHERE = ["Anterior quadrangular lobule", "Posterior quadrangular lobule", "Superior semilunar lobule", "Inferior semilunar lobule",
@@ -152,7 +171,7 @@ def side_of(name: str, verts: np.ndarray) -> np.ndarray:
 
 # ---------------------------------------------------------------- the patient's posterior fossa
 class Fossa:
-    """The CT's posterior fossa on a 1 mm grid of the frame: the cavity below the fitted tentorium and above the foramen
+    """The CT's posterior fossa on a 1 mm grid of the frame: the cavity below this CT's tentorium and above the foramen
     magnum, its wall (the inner table, and the bone just outside it), and TopBrain's arteries there as centre lines."""
 
     def __init__(self, ex2: dict):
@@ -184,13 +203,14 @@ class Fossa:
         self.bone = BD.Field(sdf(B, st), GRID_LO, st, 30.0)              # positive outside bone
         edge = cav & ~ndimage.binary_erosion(cav)
         shell = ndimage.binary_dilation(cav, ball(2)) & ~cav & B
-        tent = np.vstack([np.array(ex2["soft"][f"Tentorium cerebelli.{s}"]["verts"]) for s in "rl"])
+        # the tentorium: this CT's own (skullbase_v3_tentorium.py: through the traced transverse sinuses, the straight
+        # sinus and the petrous ridges). To the cerebellum it is a wall as the bone is: everything over its sheet, and
+        # the inside of the sinuses in it (roof). The brainstem passes through the incisura and has the bone alone.
+        self.tent = TENT.Tentorium(ex2)
+        self.roof = BD.Field(sdf(B | self.tent.walls(GRID_LO, B.shape, st, "below"), st), GRID_LO, st, 30.0)   # positive outside
 
         def infratentorial(P):
-            zt = griddata(tent[:, :2], tent[:, 2], P[:, :2], method="linear")
-            zn = griddata(tent[:, :2], tent[:, 2], P[:, :2], method="nearest")
-            below = (np.isfinite(zt) & (P[:, 2] < zt - 1.0)) | (~np.isfinite(zt) & (P[:, 1] < -10) & (P[:, 2] < zn - 1.0))
-            return below & (P[:, 2] > self.fm[2]) & (P[:, 1] < -5)
+            return self.tent.below(P, 1.0) & (P[:, 2] > self.fm[2]) & (P[:, 1] < -5)
         rng = np.random.default_rng(0)
         T = GRID_LO + np.argwhere(edge) * st
         T = T[infratentorial(T)]
@@ -198,9 +218,37 @@ class Fossa:
         S = S[infratentorial(S)]
         behind = T[:, 1] < iam_y - SUBOCCIPITAL_BEHIND_MM
         self.table = T[behind][rng.choice(behind.sum(), min(8000, behind.sum()), replace=False)]
-        self.wall = T[rng.choice(len(T), min(8000, len(T)), replace=False)]
+        # the walls the hull keeps TABLE_MIN_MM inside of: the inner table, and the tentorium over the cerebellum (the
+        # sheet's points in the cavity, as dense as the table's); the same points serve the "tent" term (STAGES)
+        over = self.tent.sheet_points(TENTORIAL_WALL_MM)
+        over = over[self.cavity(over, grad=False) > 0]
+        wall = np.vstack([T, over])
+        self.wall = wall[rng.choice(len(wall), min(8000, len(wall)), replace=False)]
+        self.under = over[rng.choice(len(over), min(4000, len(over)), replace=False)]    # (the "tent" term's points)
         self.shell = S[rng.choice(len(S), min(8000, len(S)), replace=False)]
-        self.dura = tent[rng.choice(len(tent), min(2000, len(tent)), replace=False)]
+        sheet = self.tent.sheet_points(2.0)
+        self.dura = sheet[rng.choice(len(sheet), min(2000, len(sheet)), replace=False)]
+        # this CT's cisterns: the fluid it shows against the posterior fossa's bone (dark bands along the petrous
+        # bones, the clivus and the occipital squama). The fit had no evidence of where the brainstem's and the
+        # cerebellum's surfaces lie except the bone and the arteries, and put the pons 3 to 4 mm from the internal
+        # acoustic meatus, in the cerebellopontine angle's cistern
+        img = nib.load(CT_PATH)
+        vox = float(np.sqrt((img.affine[:3, :3] ** 2).sum(0)).mean())
+        ct = ndimage.gaussian_filter(np.asanyarray(img.dataobj).astype(np.float32), CISTERN_SMOOTH_MM / vox)
+        G = np.stack(np.meshgrid(*ax, indexing="ij"), -1).reshape(-1, 3)
+        hu = ndimage.map_coordinates(ct, nib.affines.apply_affine(np.linalg.inv(img.affine), G @ R.T + fossa).T, order=1, cval=-1000.0).reshape(B.shape)
+        del ct, G
+        fluid = cav & (hu < CISTERN_HU) & (hu > -200) & (ndimage.distance_transform_edt(~B) * st <= CISTERN_WALL_MM)
+        idx = np.argwhere(fluid)
+        keep = infratentorial(GRID_LO + idx * st)
+        fluid[tuple(idx[~keep].T)] = False
+        lab, n = ndimage.label(fluid)
+        if n:
+            size = ndimage.sum(fluid, lab, np.arange(1, n + 1))
+            fluid &= np.isin(lab, 1 + np.nonzero(size * st ** 3 >= CISTERN_MIN_MM3)[0])
+        C = GRID_LO + np.argwhere(fluid) * st
+        self.cistern_ml = float(fluid.sum() * st ** 3 / 1000)
+        self.cistern = C[rng.choice(len(C), min(6000, len(C)), replace=False)]
         # TopBrain's arteries around the brainstem and cerebellum, as centre lines with radius
         img = nib.load(LABELS)
         L = np.asarray(img.dataobj)
@@ -265,7 +313,7 @@ def fit(md: Model, fs: Fossa, cache: Path) -> tuple:
         return z["A"], z["b"], rbfs, [z[f"W{i}"] for i in range(len(rbfs))], json.loads(str(z["report"]))
     OUT = np.vstack(list(fs.lines.values()))
     r_out = np.maximum(OUT[:, 3], fs.vessel_tree.query(OUT[:, :3])[0])     # the drawn surface's radius there
-    groups = {"table": fs.table, "wall": fs.wall, "shell": fs.shell, "out": OUT[:, :3], "dura": fs.dura}
+    groups = {"table": fs.table, "wall": fs.wall, "shell": fs.shell, "out": OUT[:, :3], "dura": fs.dura, "tent": fs.under, "csf": fs.cistern}
     wts = dict(STAGES[-1][2])
 
     def energy(Q):
@@ -296,6 +344,14 @@ def fit(md: Model, fs: Fossa, cache: Path) -> tuple:
         v = np.maximum(0, 0.5 - s)
         add("dura", wts["dura"] * (v ** 2).mean(), wts["dura"] * (-2 * v / len(s))[:, None] * gs)
         rep["tentoriumInsideShare"] = float((s < 0).mean())
+        s, gs = md.hull(Q["tent"])
+        e, de = BD.huber(s - TABLE_GAP_MM, 3.0)
+        add("tent", wts["tent"] * e.mean(), wts["tent"] * (de / len(s))[:, None] * gs)
+        rep["tentoriumMedianMm"] = float(np.median(np.abs(s - TABLE_GAP_MM)))
+        s, gs = md.solid(Q["csf"])
+        v = np.maximum(0, CISTERN_MARGIN_MM - s)
+        add("csf", wts["csf"] * (v ** 2).mean(), wts["csf"] * (-2 * v / len(s))[:, None] * gs)
+        rep["cisternInsideShare"] = float((s < 0).mean())
         return E, G, rep
 
     _, _, rep0 = energy(groups)
@@ -412,6 +468,8 @@ def clear(parts: dict, fs: Fossa) -> dict:
         need_v = reach[j] - d
         Dv = np.where((need_v > 0)[:, None], (need_v + 0.1)[:, None] * (X - OUT[j, :3]) / np.maximum(d, 1e-6)[:, None], 0.0)
         sb, gb = fs.bone(X)
+        sr, gr = fs.roof(X)        # (the cerebellum: the tentorium and its sinuses are walls to it as the bone is)
+        sb, gb = np.where(group, sb, sr), np.where(group[:, None], gb, gr)
         need_b = BONE_GAP_MM - sb
         gbn = gb / np.maximum(np.linalg.norm(gb, axis=1, keepdims=True), 1e-9)
         Db = np.where((need_b > 0)[:, None], (need_b + 0.1)[:, None] * gbn, 0.0)
@@ -535,7 +593,7 @@ def telovelar(parts: dict, fs: Fossa) -> dict:
             D += TV_VERMIS_MM * w[:, None] * lift
         moved = np.abs(D).sum(1) > 0
         if moved.any():
-            sb, gb = fs.bone(v[moved] + D[moved])
+            sb, gb = fs.roof(v[moved] + D[moved])     # (cerebellar parts only: the bone and the tentorium)
             near = sb < BONE_GAP_MM
             gbn = gb / np.maximum(np.linalg.norm(gb, axis=1, keepdims=True), 1e-9)
             D[np.nonzero(moved)[0][near]] += (BONE_GAP_MM + 0.1 - sb[near])[:, None] * gbn[near]
@@ -572,13 +630,23 @@ def to_corridor(P: np.ndarray, a: np.ndarray, b: np.ndarray) -> np.ndarray:
 
 
 def trigeminal_root(ex2: dict, gp, parts: dict, side: str = "R") -> np.ndarray:
-    """Where the trigeminal nerve leaves the pons: its fitted course (Skull base v2's, carried by this fit) at the last
-    point within 2 mm of the fitted pons (skullbase_v3_base.py starts the nerve there)."""
+    """Where the trigeminal nerve leaves the pons: its fitted course (Skull base v2's, carried by this fit), followed
+    from the pons outwards, at the end of its first stretch within 2 mm of the fitted pons (skullbase_v3_base.py starts
+    the nerve there). (Not the last point of the whole course that near: on its way forwards the course can pass the
+    front of the pons again, and the root then started there, 9 mm forwards and 4 mm from the midline.)"""
     V, _ = gp.invert(np.array(ex2["lines"][f"Trigeminal nerve (V).{side.lower()}"]["runs"][0], float)[:, :3])
     pons = np.vstack([parts[n][0] for n in parts if n.startswith("Pons")])
+    c = pons.mean(0)
+    if np.linalg.norm(V[0] - c) > np.linalg.norm(V[-1] - c):
+        V = V[::-1]
     d = cKDTree(pons).query(V)[0]
-    near = np.nonzero(d <= 2.0)[0]
-    return V[near[-1] if len(near) else int(np.argmin(d))]
+    near = d <= 2.0
+    if not near.any():
+        return V[int(np.argmin(d))]
+    j = int(np.argmax(near))
+    while j + 1 < len(V) and near[j + 1]:
+        j += 1
+    return V[j]
 
 
 def corridors(root: np.ndarray) -> list:
@@ -609,7 +677,7 @@ def retrosigmoid(parts: dict, fs: Fossa, root: np.ndarray) -> dict:
             D[m] = RS_MM * num / np.maximum(1.0, sum(ws))[:, None]
             moved = np.abs(D).sum(1) > 0
             if moved.any():
-                sb, gb = fs.bone(v[moved] + D[moved])
+                sb, gb = fs.roof(v[moved] + D[moved])     # (the right hemisphere: the bone and the tentorium)
                 near = sb < BONE_GAP_MM
                 gbn = gb / np.maximum(np.linalg.norm(gb, axis=1, keepdims=True), 1e-9)
                 D[np.nonzero(moved)[0][near]] += (BONE_GAP_MM + 0.1 - sb[near])[:, None] * gbn[near]
@@ -637,6 +705,7 @@ def inside_ventricle(parts: dict):
 def params_hash() -> str:
     keys = {k: v for k, v in globals().items() if k.isupper() and isinstance(v, (int, float, str, list, dict, tuple)) and not k.startswith(("TV_", "RS_", "DENT_"))}
     keys["inputs"] = [hashlib.sha1(p.read_bytes()).hexdigest() for p in (CT_BUILD / "bone.npz", CT_BUILD / "pfossa.json")]
+    keys["tentorium"] = TENT.Tentorium().content_hash()
     return hashlib.sha1(json.dumps(keys, sort_keys=True, default=str).encode()).hexdigest()[:16]
 
 
@@ -655,11 +724,25 @@ def save_carry(md, gp, allv: np.ndarray, fs: Fossa) -> dict:
     w = np.clip(d / CARRY_BONE_MM, 0, 1)
     D = np.zeros_like(G)
     near = w > 0
-    X, _ = gp.invert(G[near])
+    X, res = gp.invert(G[near])
+    # where the deformation could not be inverted (points the inversion carries out of the fit's grid, or to a fold of
+    # the deformation far from the hindbrain: a move of more than CARRY_MAX_RATIO times the largest move of the model's
+    # own surface), the nearest inverted point's move is taken
+    Xv, _ = gp.invert(allv)
+    bound = CARRY_MAX_RATIO * float(np.linalg.norm(Xv - allv, axis=1).max())
+    lost = (res > CARRY_RESIDUAL_MM) | (np.linalg.norm(X - G[near], axis=1) > bound)
+    if lost.any() and not lost.all():      # (such a point moves as the nearest point that was inverted does)
+        Gn = G[near]
+        j = cKDTree(Gn[~lost]).query(Gn[lost])[1]
+        X[lost] = Gn[lost] + (X[~lost][j] - Gn[~lost][j])
     D[near] = (X - G[near]) * w[near, None]
     np.savez(BUILD / "pfossa_carry.npz", lo=lo, step=CARRY_STEP_MM, field=D.reshape(*[len(a) for a in ax], 3).astype(np.float32))
     mag = np.linalg.norm(X - G[near], axis=1)
-    return {"medianMm": round(float(np.median(mag)), 2), "maxMm": round(float(mag.max()), 2)}
+    out = {"medianMm": round(float(np.median(mag)), 2), "maxMm": round(float(mag.max()), 2), "notInverted": int(lost.sum()),
+           "boundMm": round(bound, 1)}
+    if lost.any():
+        out["notInvertedNearestMm"] = round(float(cKDTree(allv).query(G[near][lost])[0].min()), 1)
+    return out
 
 
 def retro_report(parts: dict, moves: dict, fs: Fossa, root: np.ndarray) -> dict:
@@ -743,8 +826,8 @@ def main() -> int:
     cereb = [n for n in parts if not any(n.startswith(m) for m in STEM)]
     in4 = inside_ventricle(parts)
     inferior = [n for n in parts if n in INFERIOR_VERMIS]
-    report = {"fit": rep, "inverseResidualMm": round(residual, 4), "clear": rc,
-              "modelMl": round(md.solid_ml, 1),
+    report = {"fit": rep, "inverseResidualMm": round(residual, 4), "carry": carry_rep, "clear": rc,
+              "modelMl": round(md.solid_ml, 1), "cisternMl": round(fs.cistern_ml, 1),
               "telovelar": {"maxMovedMm": round(float(np.linalg.norm(mv, axis=1).max()), 2), "moved": int(moved.sum()),
                             "inBoneAfter": int((fs.bone(Xm[moved], grad=False) < 0).sum()),
                             "inVesselAfter": int((fs.vessel_sdf(Xm[moved])[0] < 0).sum()),

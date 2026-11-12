@@ -12,7 +12,7 @@ import { skullScene, type SkullPlan } from '../skullbase/scene';
 import type { SkullState } from '../skullbase/state';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
-import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem } from './stage';
+import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 import { refLinksFrom } from './reflinks';
 import { FORAMEN_CONTENTS, FORAMEN_REF, PASSAGES } from '../skullbase/foramina';
@@ -135,6 +135,17 @@ const subLabel = (g: Subgroup) => {
 const tokenOf = (id: string) => SB.get(id)?.colour.token ?? 'ctx';
 
 /** The 3D page of the skull-base section: groups, structure and landmark cards, layers and the cut-away. */
+/** A vessel or nerve of the Z-Anatomy model whose tube runs inside the model's bone meshes: how much, how deep, where
+ * (pipeline/skullbase_v1_inbone.py), and why (the model's bones have few canals and grooves). */
+export function inBoneNote(b: { share: number; deepestMm: number; bones: string[] }): string {
+  const pct = Math.round(100 * b.share);
+  const bones = b.bones.map((n) => `the ${n.toLowerCase()}`);
+  const where = bones.length > 1 ? `${bones.slice(0, -1).join(', ')} and ${bones[bones.length - 1]}` : bones[0] ?? 'a bone';
+  const much = pct >= 1 ? `${pct}% of this tube’s surface lies more than 0.5 mm inside` : 'A short stretch of this tube lies inside';
+  return `${much} ${where} as Z-Anatomy draws ${bones.length > 1 ? 'them' : 'it'} (up to ${b.deepestMm.toFixed(1)} mm deep). `
+    + 'Z-Anatomy draws its vessels and nerves and its bones separately, and its bones have few of the canals and grooves they run in: what is shown is the curve as drawn, not a course through a canal.';
+}
+
 export class SkullbaseAtlasPage {
   readonly el: HTMLElement;
   viewer!: Viewer<SkullState, SkullPlan>;
@@ -151,7 +162,7 @@ export class SkullbaseAtlasPage {
   private leaders = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   private legendHover: string | null = null;
   private gizmo = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  private status = h('div', { class: 'status', role: 'status', 'aria-live': 'polite', hidden: true });
+  private status = stageStatus(() => { void this.viewer.retryFailed(); });
   private measureBtn!: HTMLButtonElement;
   private sheetState: 'peek' | 'full' = 'peek';
   private measurePts: THREE.Vector3[] = [];
@@ -161,7 +172,7 @@ export class SkullbaseAtlasPage {
 
   constructor(private update: Update) {
     this.stage = h('section', { class: 'stage', 'aria-label': '3D viewer' });
-    this.panel = h('aside', { class: 'panel', 'aria-label': 'Anatomy and tools', 'data-sheet': 'peek' });
+    this.panel = h('aside', { class: 'panel', id: 'panel', tabindex: -1, 'aria-label': 'Anatomy and tools', 'data-sheet': 'peek' });
     this.el = h('div', { class: 'atlas' }, this.stage, this.panel);
     this.buildStage();
     this.buildPanel();
@@ -186,12 +197,12 @@ export class SkullbaseAtlasPage {
       }, h('span', { class: 'long' }, label), h('span', { class: 'short', 'aria-hidden': 'true' }, short)));
     }
     this.measureBtn = h('button', { type: 'button', class: 'tbtn', 'aria-pressed': 'false', title: 'Measure distance between two points (M)', onclick: () => this.toggleMeasure() }, 'Measure');
-    const share = h('button', { type: 'button', class: 'tbtn', title: 'Copy a link to this exact view', onclick: () => this.copyLink(share) }, 'Copy link');
+    const share = h('button', { type: 'button', class: 'tbtn', title: 'Copy a link to this exact view', onclick: () => { void this.copyLink(share); } }, 'Copy link');
     const labelGroup = h('div', { class: 'tgroup seg', role: 'group', 'aria-label': 'Name labels' },
       h('span', { class: 'tlabel' }, 'Labels'),
       ...([['all', 'All', 'Label landmarks and, in regions, vessels and nerves'], ['hover', 'Hover', 'Label only what you point at, select or hover in the legend'], ['off', 'Off', 'No name labels']] as const)
         .map(([v, label, title]) => h('button', { type: 'button', class: 'tbtn', 'data-labels': v, 'aria-pressed': 'false', title: `${title} (N cycles)`, onclick: () => this.update((s) => { s.labels = v; }) }, label)));
-    toolbar.append(presetGroup, hemiGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share));
+    toolbar.append(presetGroup, hemiGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share), viewButtons(() => this.resetView()));
     this.gizmo.setAttribute('viewBox', '-40 -40 80 80');
     this.gizmo.setAttribute('class', 'gizmo');
     this.gizmo.setAttribute('aria-hidden', 'true');
@@ -201,7 +212,9 @@ export class SkullbaseAtlasPage {
       h('div', { class: 'readout-box' }, this.measureOut, this.readout));
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
-    this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status);
+    this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
+    scrollHint(toolbar);
+    rovingToolbar(toolbar);
     this.readout.textContent = 'Point at a structure for its position';
 
     this.viewer = new Viewer<SkullState, SkullPlan>(host, {
@@ -213,7 +226,8 @@ export class SkullbaseAtlasPage {
         s.cam = { preset: s.cam.preset, pos: [pos.x, pos.y, pos.z], tgt: [tgt.x, tgt.y, tgt.z] };
       }, { camera: false }),
       leadMoved: () => undefined,
-      status: (t) => { this.status.hidden = !t; this.status.textContent = t ?? ''; },
+      status: (t) => this.status.set(t),
+      loadFailed: (names) => this.status.failed(names),
       lead: () => undefined,
       moving: (on) => this.stage.classList.toggle('moving', on),
       endoscope: () => this.endonasal?.scopeMoved(),
@@ -221,6 +235,7 @@ export class SkullbaseAtlasPage {
     this.endonasal = new EndonasalPanel(this.viewer);
     const origRender = this.viewer.renderer.render.bind(this.viewer.renderer);
     this.viewer.renderer.render = (sc, cam) => { origRender(sc, cam); this.placeLabels(); };
+    watchOverlays(this.stage, () => this.viewer.invalidate());
   }
 
   // ---------------------------------------------------------------- panel
@@ -250,6 +265,7 @@ export class SkullbaseAtlasPage {
       this.tabs[id] = h('div', { class: 'pane', role: 'tabpanel', id: `pane-${id}`, 'aria-labelledby': `ptab-${id}`, hidden: id !== 'overview' });
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
+    scrollHint(tablist);
   }
 
   private selectTab(id: string, expand = true): void {
@@ -271,7 +287,7 @@ export class SkullbaseAtlasPage {
   render(s: SkullState, opts: { camera: boolean }): void {
     const prev = this.s;
     this.s = s;
-    this.viewer.apply(s, { animateCamera: opts.camera }).then(() => this.renderLegend());
+    this.viewer.apply(s, { animateCamera: opts.camera }).then(() => this.renderLegend()).catch((e: unknown) => viewFailed(this.status, e));
     this.endonasal.render(s);
     this.stage.querySelectorAll<HTMLButtonElement>('[data-hemi]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.hemi === s.hemi)));
     this.stage.querySelectorAll<HTMLButtonElement>('.toolbar [data-labels]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.labels === s.labels)));
@@ -288,6 +304,8 @@ export class SkullbaseAtlasPage {
     }
     this.renderLayers();
     if (prev && prev.sel !== s.sel && s.sel) this.selectTab('overview', false);
+    // the card of what was just selected (or of a link's selection) is brought to the top of the panel
+    if (s.sel && prev?.sel !== s.sel) revealCard(this.panel);
   }
 
   private pickGroup(id: string): void {
@@ -479,6 +497,7 @@ export class SkullbaseAtlasPage {
         notesList(st.name) ? [h('dt', {}, 'Notes'), h('dd', {}, notesList(st.name))] : null,
         SB_MODEL === 'v3' ? this.measured(st.name) : null,
         regions.length ? [h('dt', {}, 'Near (measured in the model)'), h('dd', {}, regions.join('; '))] : null,
+        st.inBone ? [h('dt', {}, 'In the model’s bone (measured)'), h('dd', {}, inBoneNote(st.inBone))] : null,
         st.type === 'bone' ? [h('dt', {}, 'Labelled landmarks'), h('dd', {}, `${LANDMARKS.filter((l) => l.bone === st.name).length}; open the bone’s group to see them.`)] : null,
         h('dt', {}, 'Geometry'), h('dd', {}, `${st.source}. ${st.derivation} `, h('a', { href: '#/credits' }, 'Licence and attribution'))));
   }
@@ -566,7 +585,7 @@ export class SkullbaseAtlasPage {
           : `Z-Anatomy’s own cortex (BodyParts3D), nothing fitted: its gyrus and sulcus patches (which overlap and cut through one another) remade as closed surfaces, the temporal lobe apart from the rest, each part keeping its lobe; the opercula are found along its middle cerebral artery’s course in the fissure, and with no insular cortex in the model, the opened fissure’s floor is its white matter; where it reached into this model’s bone (${V1_FIT.brain.clear.R.inBoneWayBefore} points on the right), pushed 1 mm inside the cranial cavity by a smooth field in small steps (${V1_FIT.brain.clear.R.inBoneWayAfter} left, at most ${fmtMm(V1_FIT.brain.clear.R.maxMovedMm)} mm moved). The cavity is this model’s skull, rasterised (${Math.round(V1_FIT.brain.cavityMl)} ml).`)] : null,
         !v1 && ap.brain === 'hindbrain' && V3_FIT.pfossa ? [h('dt', {}, 'How the cerebellum and brainstem are fitted'), h('dd', {}, (() => {
           const p = V3_FIT.pfossa!;
-          return `Z-Anatomy’s model (one adult) carried onto this CT by the fit of that model to its bones, then deformed smoothly to fit its posterior fossa: the hull ${fmtMm(p.params.tableGapMm)} mm inside the cavity behind the petrous bones (median error ${fmtMm(p.fit.tableMedianMm)} mm), this patient’s basilar, vertebral, superior and posterior inferior cerebellar arteries outside it (${pctOf(p.fit.before.vesselInsideShare)} of their centre-line points inside before, ${pctOf(p.fit.vesselInsideShare)} after), the tentorium above. The vertices still in an artery’s or the bone’s way were then pushed clear (${p.clear.inVesselAfter} left within an artery’s reach). Its folia and lobules are the model’s.`;
+          return `Z-Anatomy’s model (one adult) carried onto this CT by the fit of that model to its bones, then deformed smoothly to fit its posterior fossa: the hull ${fmtMm(p.params.tableGapMm)} mm inside the cavity behind the petrous bones (median error ${fmtMm(p.fit.tableMedianMm)} mm), this patient’s basilar, vertebral, superior and posterior inferior cerebellar arteries outside it (${pctOf(p.fit.before.vesselInsideShare)} of their centre-line points inside before, ${pctOf(p.fit.vesselInsideShare)} after), and the cisterns this CT shows along the bone outside it too. The tentorium over it is a surface through this CT’s own transverse sinuses, straight sinus and petrous ridges: the cerebellum’s upper surface is fitted up to it, and it is a wall to the cerebellum as the bone is. The vertices still in an artery’s or the bone’s way were then pushed clear (${p.clear.inVesselAfter} left within an artery’s reach). Its folia and lobules are the model’s.`;
         })())] : null,
         b && ap.brain !== 'hindbrain' ? [h('dt', {}, 'How the brain is fitted'), h('dd', {},
           `A template (the Lead-DBS MNI 2009b pial surface), deformed smoothly to fit this skull: its hull ${fmtMm(b.params.tableGapMm)} mm inside the cranial cavity (median error ${fmtMm(b.fit.tableMedianMm)} mm), every artery this CT labels outside the cortex (${pctOf(b.fit.vesselInCortexShare)} of their centre-line points still inside it before the final clearance, none after), the M2 segments on the insula (median ${fmtMm(b.fit.m2InsulaMedianMmR)} mm on the right) and the M3 segments in the Sylvian fissure (median ${fmtMm(b.fit.m3FissureMedianMmR)} mm). So the template’s fissure lies where this patient’s middle cerebral artery runs, but its gyri are the template’s.`)] : null,
@@ -670,7 +689,12 @@ export class SkullbaseAtlasPage {
   }
 
   // ---------------------------------------------------------------- legend, labels, readout
+  /** (drawn again on every change: the keyboard keeps its place in it) */
   private renderLegend(): void {
+    keepFocus(this.legend, () => this.drawLegend());
+  }
+
+  private drawLegend(): void {
     const p = this.viewer.currentPlan();
     clear(this.legend);
     if (!p) return;
@@ -722,7 +746,7 @@ export class SkullbaseAtlasPage {
       const a = this.viewer.anchorFor(id);
       if (a) add(id, nameOf(id), a.x, a.y, LM.has(id) ? 'mlabel' : 'slabel primary');
     }
-    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders);
+    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders, [this.legendHover, this.s?.sel]);
   }
 
   private showTip(info: PickInfo | null, x: number, y: number): void {
@@ -795,7 +819,13 @@ export class SkullbaseAtlasPage {
   }
 
   // ---------------------------------------------------------------- keyboard
+  /** The camera back to where this view opens (the toolbar's Reset view, key 0). */
+  private resetView(): void {
+    this.update((s) => { s.cam = { preset: null }; }, { camera: true });
+  }
+
   handleKey(e: KeyboardEvent): boolean {
+    if (e.key === '0') { this.resetView(); return true; }
     const k = e.key;
     const preset = PRESETS.find((p) => p[2] === k);
     if (preset) { this.update((s) => { s.cam = { preset: preset[0] }; }, { camera: true }); return true; }

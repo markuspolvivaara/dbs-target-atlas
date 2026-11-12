@@ -2,6 +2,7 @@ import { SECTIONS, SITE_ROOT } from '../brand';
 import { WM, WM_MANIFEST } from '../tracts';
 import { CONTEXT_STRUCTURES } from '../tracts/scene';
 import { h } from './h';
+import { linkLicences } from './licences';
 import { clear } from './widgets';
 
 /** References and Credits of the white-matter section. */
@@ -70,5 +71,7 @@ export function tractCreditsPage() {
       h('p', {}, 'three.js, zod, Vite and glTF-Transform (MIT), meshoptimizer (MIT). Pipeline: nibabel, NumPy, SciPy. Font: Atkinson Hyperlegible, SIL Open Font License 1.1, self-hosted. The source code is GPL-3.0.'),
       h('p', {}, h('a', { href: `${SITE_ROOT}THIRD_PARTY_LICENSES.txt`, target: '_blank', rel: 'noopener' }, 'Third-party licence texts'), '. Full details: LICENSE, NOTICE and ATTRIBUTION.md in the source repository.')),
   );
+  // every licence named on the page links to its text, and every printed address is a link
+  linkLicences(el);
   return { el, render() { /* stateless */ } };
 }

@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { gunzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import { BURR_MM, BURR_MM_BY_REGION, DRILL, DRILL_PAIRS, drillPairFor, DrillVolume, type DrillPair } from '../../src/spine/drill';
@@ -6,6 +8,7 @@ import { decodeSpine, encodeSpine } from '../../src/spine/state';
 import { spinePlan } from '../../src/spine/scene';
 
 type V = [number, number, number];
+const BOTH_MAX = 0;   // voxels of a pair that may be bone in both fields
 /** A pair whose upper "vertebra" is drawn by a signed distance (mm, + inside), on a small grid like the CT's (x
  * flipped, 0.72 x 0.72 x 0.7 mm); its body at `body`, its spinous process from `base` back to `tip` (the frame's
  * axes: back is -y). */
@@ -69,6 +72,26 @@ describe('virtual drilling', () => {
       expect(at(lm.spinous.tip)).toBeLessThan(at(lm.spinous.base) - 5);
     }
   });
+
+  it('the shipped fields: no bone is inside both vertebrae of a pair', () => {
+    // (the two fields overlapped at the facet joints, 7.1 ml over the eleven pairs: bone drilled from one vertebra
+    // left the other's copy of it standing, and the joint's share taken counted the slab twice)
+    const iso = DRILL.params.fieldIso;
+    for (const p of DRILL.pairs) {
+      const raw = gunzipSync(readFileSync(new URL(`../../public/${p.file}`, import.meta.url)));
+      const n = p.dims[0] * p.dims[1] * p.dims[2];
+      expect(raw.length, p.id).toBe(6 * n);
+      let both = 0, upper = 0, lower = 0;
+      for (let x = 0; x < n; x++) {
+        const a = raw[x] >= iso, b = raw[n + x] >= iso;
+        if (a) upper++;
+        if (b) lower++;
+        if (a && b) both++;
+      }
+      expect(Math.min(upper, lower), p.id).toBeGreaterThan(10_000);
+      expect(both, p.id).toBeLessThanOrEqual(BOTH_MAX);
+    }
+  }, 60_000);
 
   it('the surface lies at the bone field’s level, faces out, and its normals agree', () => {
     const R = 8;

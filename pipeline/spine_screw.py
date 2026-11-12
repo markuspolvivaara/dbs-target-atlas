@@ -3,8 +3,8 @@ positions and the bone distance fields the browser uses to find cortical breache
 
   pipeline/.venv/bin/python -I pipeline/spine_screw.py      (after spine_build.py, whose meshes it reads)
 
-For T1-T12 and L1-L5 (VerSe masks with the CT, the same bone as the drawn vertebrae) and S1 (TotalSegmentator sacrum,
-as drawn):
+For T1-T12 and L1-L5 (VerSe masks with the CT: the bone of the drawn vertebrae, each kept out of its neighbours' masks
+as there, and taken as one solid: solid()) and S1 (TotalSegmentator sacrum, as drawn):
   * a frame per vertebra: e_z normal to the superior endplate (plane fitted to its top surface), e_y from the canal
     centre to the body centre within that plane, e_x patient right;
   * per pedicle: the isthmus (the narrowest cross-section normal to the pedicle axis) with its width and height, the
@@ -62,6 +62,8 @@ RISK_IDS = ["sp_dural_sac", "sp_vertebral_artery", "sp_ica_left", "sp_ica_right"
 # leaves the lateral mass (bicortical), rounded down to the millimetre
 LM_TECHNIQUES = {"rc": (0.0, 0.0, 10.0, "perpendicular"), "mg": (1.0, 1.0, 25.0, "facets"), "an": (1.0, 0.0, 30.0, "plus15")}
 LM_DIAMETER = 3.5
+LM_MIN_LENGTH = 6.0  # the tool's shortest screw (SCREW_RANGE in src/spine/state.ts): no start screw is shorter
+JOINT_REACH_MM = 2.0  # a path that meets another vertebra's bone within this of leaving its own left through a facet joint
 C7_DIAMETER = 3.5    # Jiang 2024: 3.5 or 4.0 mm by the preoperative CT; the smaller as the start
 # Thoracic start sizes, Mandelka 2023 (reviewing the literature): diameter FILL_RATIO x the pedicle's measured outer
 # width (the screw diameter / pedicle width ratio with the fewest perforations, recommended for less experienced
@@ -76,6 +78,16 @@ AXIS_SPAN = {"lumbar": (14.0, 30.0), "thoracic": (5.0, 25.0), "cervical": (4.0, 
 # C7 the pedicle joins the lateral mass level with the canal: a pinch found further back lies in the pillar (its
 # "height" spans the facets, 20 mm on this CT), and the axis through it swings between 25 and 50 deg
 ISTHMUS_BACK = {"lumbar": 4.0, "thoracic": 4.0, "cervical": -4.0}
+# Pedicle axes fitted inside the range of the published study means (the reviewer's decision, 12 November 2026: T1 on
+# the left). The widest-channel fit is flat there: from 28.5 to 45.5 deg of convergence its score (best_axis: the
+# channel's smallest clearance + 0.1 x its mean clearance) stays within 0.25 mm of the best, a third of this CT's
+# 0.72 mm voxel, and the free fit lands at the far end of that plateau, at 42.5 deg: 7.1 deg beyond the largest
+# published study mean (35.4) and 11.5 deg from the right side (31.0). Inside the published means (27.0 to 35.4) the
+# fit gives 30.0 deg with 0.13 mm less of smallest clearance (3.38 against 3.51 mm). The free fit's angles and both
+# clearances stay in the data ("held") and are said on the card; a held axis may give up no more than
+# HELD_MAX_LOSS_MM of clearance (half a voxel).
+HELD_TO_PUBLISHED = {("T1", "L")}
+HELD_MAX_LOSS_MM = 0.36
 FILL_RATIO = 0.8
 DEPTH_RATIO = 0.8
 MIN_DIAMETER = 3.5
@@ -121,6 +133,14 @@ def largest(mask: np.ndarray) -> np.ndarray:
         return mask
     sizes = ndimage.sum(mask, lab, range(1, n + 1))
     return lab == (int(np.argmax(sizes)) + 1)
+
+
+def solid(inside: np.ndarray) -> np.ndarray:
+    """A bone as one solid: its largest piece, with what that encloses. Where a pedicle is too thin for the mask's
+    core to cover it (spine_build.bone_volume), cancellous bone darker than BONE_HU leaves a hole inside it: a width
+    measured through the hole stops there, the largest sphere through the pedicle shrinks, and under a screw the hole
+    reads as a breach."""
+    return ndimage.binary_fill_holes(largest(inside))
 
 
 def endplate_normal(pts: np.ndarray, c: np.ndarray, ez0: np.ndarray, radius: float = 14.0, below: bool = False) -> np.ndarray:
@@ -260,18 +280,31 @@ def isthmus_centre(bone: Bone, c: np.ndarray, F: np.ndarray, can: dict, sg: int,
     return (pts * w[:, None]).sum(0) / w.sum(), lo_r
 
 
-def best_axis(bone: Bone, centre: np.ndarray, F: np.ndarray, sg: int, back: float = 14.0, ahead: float = 30.0) -> np.ndarray:
+def channel_clearance(bone: Bone, centre: np.ndarray, d: np.ndarray, back: float, ahead: float) -> float:
+    """The smallest distance to the bone surface along the segment the axis is fitted on (best_axis), mm."""
+    ts = np.linspace(-back, ahead, 53)
+    return float((-bone(centre + ts[:, None] * d)).min())
+
+
+def best_axis(bone: Bone, centre: np.ndarray, F: np.ndarray, sg: int, back: float = 14.0, ahead: float = 30.0,
+              ta_lim: tuple[float, float] | None = None) -> np.ndarray:
     """The widest bony channel through the isthmus centre: the direction whose segment from `back` mm behind it to
     `ahead` mm into the body keeps the largest smallest distance to the bone surface (ties, common in wide pedicles,
-    go to the path with more bone around it on average)."""
+    go to the path with more bone around it on average). `ta_lim`: only directions whose transverse angle lies in
+    this range (deg) are tried."""
     ts = np.linspace(-back, ahead, 53)
 
     def score(ta: float, sa: float) -> float:
         clearance = -bone(centre + ts[:, None] * direction(F, sg, ta, sa))
         return float(clearance.min() + 0.1 * clearance.mean())
-    best = max(((score(ta, sa), ta, sa) for ta in np.arange(-15, 50, 2.0) for sa in np.arange(-30, 31, 2.0)))
+
+    def tas(values: np.ndarray) -> list[float]:
+        if ta_lim is None:
+            return [float(x) for x in values]
+        return sorted({float(x) for x in values if ta_lim[0] <= x <= ta_lim[1]} | {float(np.clip(x, *ta_lim)) for x in values[[0, -1]]})
+    best = max(((score(ta, sa), ta, sa) for ta in tas(np.arange(-15, 50, 2.0)) for sa in np.arange(-30, 31, 2.0)))
     _, ta0, sa0 = best
-    best = max(((score(ta, sa), ta, sa) for ta in np.arange(ta0 - 2, ta0 + 2.01, 0.25) for sa in np.arange(sa0 - 2, sa0 + 2.01, 0.25)))
+    best = max(((score(ta, sa), ta, sa) for ta in tas(np.arange(ta0 - 2, ta0 + 2.01, 0.25)) for sa in np.arange(sa0 - 2, sa0 + 2.01, 0.25)))
     return direction(F, sg, best[1], best[2])
 
 
@@ -294,11 +327,21 @@ def run_through(bone: Bone, p: np.ndarray, axis: np.ndarray, half: float = 15.0)
 
 
 def pedicle(bone: Bone, c: np.ndarray, F: np.ndarray, can: dict, sg: int, span: tuple[float, float] = (14.0, 30.0),
-            back: float = 4.0, body: np.ndarray | None = None) -> dict:
+            back: float = 4.0, body: np.ndarray | None = None, ta_lim: tuple[float, float] | None = None) -> dict:
     """Measure one pedicle (sg -1 left, +1 right); `span`: the axis is fitted from span[0] mm behind the isthmus centre
-    to span[1] mm into the body; the isthmus is sought in front of `back` mm behind the middle of the canal."""
+    to span[1] mm into the body; the isthmus is sought in front of `back` mm behind the middle of the canal. `ta_lim`:
+    the axis is fitted with its transverse angle inside this range (HELD_TO_PUBLISHED); the result then carries
+    "held": the range, the free fit's two angles and the channel's smallest clearance along each of the two axes."""
     centre, r = isthmus_centre(bone, c, F, can, sg, back, body)
     d = best_axis(bone, centre, F, sg, back=span[0], ahead=span[1])
+    held = None
+    if ta_lim is not None:
+        free = d
+        d = best_axis(bone, centre, F, sg, back=span[0], ahead=span[1], ta_lim=ta_lim)
+        ta_f, sa_f = angles(free, F, sg)
+        held = {"to": [float(ta_lim[0]), float(ta_lim[1])], "freeTransverseAngle": round(ta_f, 1), "freeSagittalAngle": round(sa_f, 1),
+                "clearance": round(channel_clearance(bone, centre, d, *span), 2),
+                "freeClearance": round(channel_clearance(bone, centre, free, *span), 2)}
     # cross-sections normal to the axis around the centre: the narrowest is the isthmus
     a1 = F[2] - (F[2] @ d) * d
     a1 /= np.linalg.norm(a1)
@@ -321,7 +364,7 @@ def pedicle(bone: Bone, c: np.ndarray, F: np.ndarray, can: dict, sg: int, span: 
     return {"width": round(isth["width"], 1), "height": round(isth["height"], 1), "transverseAngle": round(ta, 1),
             "sagittalAngle": round(sa, 1), "chord": round(back + front, 1), "inscribedRadius": round(r, 2),
             "isthmus": centre.round(2).tolist(), "isthmusUvw": [round(float(rel @ F[i]), 1) for i in range(3)],
-            "entry": entry.round(2).tolist(), "dir": d.round(4).tolist()}
+            "entry": entry.round(2).tolist(), "dir": d.round(4).tolist(), **({"held": held} if held else {})}
 
 
 def promontory_screw(bone: Bone, c: np.ndarray, F: np.ndarray, sg: int, r: float) -> dict:
@@ -466,9 +509,11 @@ def facet_inclination(grid, n: int, c: np.ndarray, F: np.ndarray, lm: dict, sg: 
     return float(np.degrees(np.arctan2(d @ F[2], d @ F[1])))
 
 
-def lm_start(bone: Bone, F: np.ndarray, lm: dict, sg: int, tech: str, facets: list[float]) -> dict:
+def lm_start(bone: Bone, F: np.ndarray, lm: dict, sg: int, tech: str, facets: list[float], labels=None, own: int = 0) -> dict:
     """A lateral mass screw's start: direction from LM_TECHNIQUES in the vertebra's frame; the entry offset from the
-    face's midpoint along the face (medial, cranial), then put on the bone surface along the screw."""
+    face's midpoint along the face (medial, cranial), then put on the bone surface along the screw. Where the path
+    leaves the vertebra's bone straight into a neighbour's (`labels`: the CT's bone by vertebra; `own`: this one), it
+    left through the facet joint between them: "joint" names the neighbour and how far from the entry that is."""
     med, cra, lateral, how = LM_TECHNIQUES[tech]
     n = lm["normal"]
     perp = float(np.degrees(np.arctan2(n @ F[2], n @ F[1])))      # the perpendicular's sagittal angle
@@ -481,8 +526,14 @@ def lm_start(bone: Bone, F: np.ndarray, lm: dict, sg: int, tech: str, facets: li
     t = first_entry(bone, far, d, 30.0)
     entry = far + (t if t is not None else 15.0) * d
     out = surface_along(bone, entry + 1.5 * d, d, 40.0)
-    return {"entry": entry.round(2).tolist(), "dir": d.round(4).tolist(), "chord": round(float(out + 1.5), 1) if out else None,
-            "sagittal": round(sag, 1)}
+    st = {"entry": entry.round(2).tolist(), "dir": d.round(4).tolist(), "chord": round(float(out + 1.5), 1) if out else None,
+          "sagittal": round(sag, 1)}
+    if out and labels is not None:
+        beyond = labels.sample(entry + (out + 1.5 + np.arange(0.25, JOINT_REACH_MM + 0.01, 0.25))[:, None] * d)
+        other = [int(x) for x in beyond if x and x != own]
+        if other:
+            st["joint"] = {"with": B.VERSE_LEVELS[other[0]], "at": st["chord"]}
+    return st
 
 
 # ---------------------------------------------------------------- the atlas and the axis (C1-C2 fixation)
@@ -861,7 +912,7 @@ def c1c2_bone(m: np.ndarray, ct: np.ndarray, aff: np.ndarray, vox: np.ndarray, o
     is meant to cross them."""
     sel = (m == B.LABEL_OF["C1"]) | (m == B.LABEL_OF["C2"])
     cr, lo = crop_of(sel, vox, CROP_MM)
-    vol = B.bone_volume(ct[cr].astype(np.float32), sel[cr], float(vox.mean()))
+    vol = B.bone_volume(ct[cr].astype(np.float32), sel[cr], float(vox.mean()), m[cr] > 0)   # (kept out of C3's mask)
     inside = ndimage.gaussian_filter(vol, B.SIGMA_VOX) > B.BONE_HU
     it = max(1, int(round(3.0 / float(vox.mean()))))
     inside = largest(ndimage.binary_closing(np.pad(inside, it), iterations=it)[it:-it, it:-it, it:-it])
@@ -1117,8 +1168,10 @@ def level_data(lv: str, region_name: str, m: np.ndarray, ct: np.ndarray, body_ma
         lab = B.LABEL_OF[lv]
         sel = m == lab
         cr, lo = crop_of(sel, vox, CROP_MM)
-        vol = B.bone_volume(ct[cr].astype(np.float32), sel[cr], float(vox.mean()))
-        inside = largest(ndimage.gaussian_filter(vol, B.SIGMA_VOX) > B.BONE_HU)
+        # the vertebra as it is drawn: the CT's bone within reach of its mask, kept out of its neighbours' masks
+        # (spine_build.bone_volume), and as one solid
+        vol = B.bone_volume(ct[cr].astype(np.float32), sel[cr], float(vox.mean()), m[cr] > 0)
+        inside = solid(ndimage.gaussian_filter(vol, B.SIGMA_VOX) > B.BONE_HU)
         a_s = aff.copy()
         a_s[:3, 3] = nib.affines.apply_affine(aff, lo) - o
         bone = Bone(inside, a_s)
@@ -1196,9 +1249,17 @@ def level_data(lv: str, region_name: str, m: np.ndarray, ct: np.ndarray, body_ma
                                    "facetInclination": [round(x, 1) for x in facets], "centre": lm["centre"].round(2).tolist()}
                               for sd, (lm, facets) in lms.items()}
         for tech in LM_TECHNIQUES:
-            starts[tech] = {sd: lm_start(bone, F, lms[sd][0], sg, tech, lms[sd][1]) for sd, sg in (("L", -1), ("R", 1))}
+            starts[tech] = {sd: lm_start(bone, F, lms[sd][0], sg, tech, lms[sd][1], labels, n) for sd, sg in (("L", -1), ("R", 1))}
     else:
-        ped = {sd: pedicle(bone, c, F, can, sg, AXIS_SPAN[region_name], ISTHMUS_BACK[region_name]) for sd, sg in (("L", -1), ("R", 1))}
+        def held_to(sd: str) -> tuple[float, float] | None:
+            if (lv, sd) not in HELD_TO_PUBLISHED:
+                return None
+            means = published_transverse(lv)
+            if not means:
+                raise SystemExit(f"{lv}{sd}: no published transverse angles to hold the axis to")
+            return min(means), max(means)
+        ped = {sd: pedicle(bone, c, F, can, sg, AXIS_SPAN[region_name], ISTHMUS_BACK[region_name], ta_lim=held_to(sd))
+               for sd, sg in (("L", -1), ("R", 1))}
         lvl["pedicle"] = ped
         if lv == "C7":
             # Abumi's principle for C5-C7 as in thoracic straight-forward: through the isthmus at the measured
@@ -1228,7 +1289,9 @@ def level_data(lv: str, region_name: str, m: np.ndarray, ct: np.ndarray, body_ma
                 ln = st["chord"] if tech == "c1lm" else min(st["chord"] - 1.0, CC_MAX_LENGTH.get(tech, 99.0))
                 dia, ln = CC_DIAMETER, float(np.floor(ln))
             elif tech in LM_TECHNIQUES:
-                dia, ln = LM_DIAMETER, float(np.floor(st["chord"]))
+                # (where the path leaves through a facet joint after less than the shortest screw, as the perpendicular
+                # Roy-Camille path does at C3 on this CT, the start screw is that shortest one: its tip lies in the joint)
+                dia, ln = LM_DIAMETER, max(float(np.floor(st["chord"])), LM_MIN_LENGTH)
             elif tech == "cp":
                 dia, ln = C7_DIAMETER, float(np.floor(st["chord"]))
             elif tech in ("st", "at"):
@@ -1289,6 +1352,15 @@ def validate(out: dict) -> list[str]:
                 for k, (lo, hi) in bounds.items():
                     if not lo <= p[k] <= hi:
                         fails.append(f"{lv}{sd}: pedicle {k} {p[k]}")
+                hd = p.get("held")
+                if ((lv, sd) in HELD_TO_PUBLISHED) != bool(hd):
+                    fails.append(f"{lv}{sd}: held axis {'missing' if not hd else 'not asked for'}")
+                if hd:
+                    # inside the range it was held to, and the channel no narrower than the CT can tell
+                    if not hd["to"][0] <= p["transverseAngle"] <= hd["to"][1]:
+                        fails.append(f"{lv}{sd}: held axis at {p['transverseAngle']} deg, outside {hd['to']}")
+                    if hd["freeClearance"] - hd["clearance"] > HELD_MAX_LOSS_MM:
+                        fails.append(f"{lv}{sd}: the held axis gives up {hd['freeClearance'] - hd['clearance']:.2f} mm of clearance")
             if lv in ("C1", "C2", "C1-C2"):
                 for tech, per in d["start"].items():
                     e = np.array(per[sd]["entry"]) - c

@@ -75,6 +75,8 @@ export interface ViewerEvents {
   cameraChanged(pos: THREE.Vector3, tgt: THREE.Vector3): void;
   leadMoved(depth: number): void;
   status(text: string | null): void;
+  /** the structures of the view that could not be loaded changed (names; empty when all is well) */
+  loadFailed?(names: string[]): void;
   lead(contacts: Record<Side, THREE.Vector3[]> | null): void;
   /** The camera starts / stops moving (orbit, pan, zoom or preset animation). */
   moving(active: boolean): void;
@@ -85,8 +87,17 @@ export interface ViewerEvents {
 const DEG = Math.PI / 180;
 /** a layer the section's state does not have is drawn */
 const SHOWN = { on: true, opacity: 1 };
+/** the structure types drawn as meshes whenever a view's plan gives them a look (tracts and the DBS cortex have their own rules) */
+const MESH_TYPES = new Set(['nucleus', 'target', 'bone', 'soft', 'surface', 'tube']);
 const RAS_TO_WORLD = new THREE.Matrix4().makeRotationX(-Math.PI / 2); // (x, y, z) RAS -> (x, z, -y) three
 /** in the endoscope's view, what lies this close behind a wall is what the pointer is on (it shows through) */
+/** a tap this near a marker's centre selects the marker (CSS pixels; half a 44 px finger target) */
+const TAP_MARKER_PX = 22;
+/** a mesh drawn at or under this opacity is looked through when picking (the context and shell looks, a layer turned down) */
+const SEE_THROUGH_OPACITY = 0.5;
+/** the keyboard in the 3D view: a turn per key press, a move as a share of the camera's distance, a zoom step */
+const KEY_TURN = Math.PI / 18, KEY_MOVE = 0.06, KEY_ZOOM = 1.15;
+let viewers = 0;
 const ENDO_PICK_BEHIND_MM = 3;
 /** ... and through the thin floor of the third ventricle, this close: what lies under it can be named before it is opened */
 const ENDO_PICK_FLOOR_MM = 14;
@@ -163,6 +174,16 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   private reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   private disposed = false;
   private loadingCount = 0;
+  /** loads under way, by structure id (a second request for the same structure waits for the first) */
+  private pending = new Map<string, Promise<Item | null>>();
+  /** of the loads started since the viewer was last idle: how many, and how many have ended (the status line's count) */
+  private loadTotal = 0;
+  private loadDone = 0;
+  /** structures of the view whose file could not be loaded: id -> name, kept until a retry succeeds or the view changes */
+  private failed = new Map<string, string>();
+  /** the loads of the view applied last (the page waits for the first view's before it reports ready) */
+  private applied: Promise<unknown> = Promise.resolve();
+  private restyleQueued = false;
   private applySeq = 0;
   private moveTimer = 0;
   /** morph targets by name (a glTF mesh's extras.targetNames: the skull base's surgical shapes); an unnamed target 0
@@ -210,8 +231,16 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.localClippingEnabled = true;
     host.appendChild(this.renderer.domElement);
-    this.renderer.domElement.setAttribute('role', 'img');
+    // an application to assistive technology: its keys reach the page (handleKey), and it says which they are
+    this.renderer.domElement.setAttribute('role', 'application');
+    this.renderer.domElement.setAttribute('aria-roledescription', '3D view');
     this.renderer.domElement.tabIndex = 0;
+    const keys = document.createElement('span');
+    keys.id = `view-keys-${++viewers}`;
+    keys.className = 'vh';
+    keys.textContent = 'Arrow keys turn the view; with Shift they move it; plus and minus zoom; 0 puts it back. The structures are listed in the legend and in the panel.';
+    host.appendChild(keys);
+    this.renderer.domElement.setAttribute('aria-describedby', keys.id);
     this.camera = new THREE.PerspectiveCamera(35, 1, 0.5, 2000);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
@@ -344,28 +373,70 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   }
 
   // ---------------------------------------------------------------- loading
-  private async ensure(id: string): Promise<Item | null> {
+  private ensure(id: string): Promise<Item | null> {
     const have = this.items.get(id);
-    if (have) return have;
+    if (have) return Promise.resolve(have);
     const meta = this.cat.byId.get(id);
-    if (!meta) return null;
+    if (!meta) return Promise.resolve(null);
+    let p = this.pending.get(id);
+    if (!p) {
+      p = this.load(meta).finally(() => this.pending.delete(id));
+      this.pending.set(id, p);
+    }
+    return p;
+  }
+
+  private async load(meta: ManifestStructure): Promise<Item | null> {
     this.loadingCount++;
-    this.ev.status('Loading anatomy…');
+    this.loadTotal++;
+    this.reportLoading();
     try {
       const asset = await loadStructure(meta.file);
-      if (this.items.has(id)) return this.items.get(id)!;
       const it = asset.kind === 'mesh' ? this.makeMeshItem(meta, asset) : this.makeLineItem(meta, asset);
-      this.items.set(id, it);
+      this.items.set(meta.id, it);
       this.endoDirty = true;
+      if (this.failed.delete(meta.id)) this.reportFailed();
+      // the scene builds up as its parts arrive
+      this.queueRestyle();
       return it;
     } catch (e) {
       console.error(e);
-      this.ev.status(`Could not load ${meta.name}.`);
+      // said in the status line until a retry succeeds: a view with a part missing must not look complete
+      this.failed.set(meta.id, meta.name);
+      this.reportFailed();
       return null;
     } finally {
       this.loadingCount--;
-      if (this.loadingCount === 0) this.ev.status(null);
+      this.loadDone++;
+      if (this.loadingCount === 0) { this.loadTotal = 0; this.loadDone = 0; }
+      this.reportLoading();
     }
+  }
+
+  private reportLoading(): void {
+    this.ev.status(!this.loadingCount ? null : this.loadTotal > 1 ? `Loading anatomy: ${this.loadDone} of ${this.loadTotal}` : 'Loading anatomy…');
+  }
+
+  private reportFailed(): void {
+    this.ev.loadFailed?.([...this.failed.values()]);
+  }
+
+  /** The structures of the view that could not be loaded (ids). */
+  failedIds(): string[] {
+    return [...this.failed.keys()];
+  }
+
+  /** Try again to load what could not be loaded (the status line's Retry button). */
+  async retryFailed(): Promise<void> {
+    await Promise.all([...this.failed.keys()].map((id) => this.ensure(id)));
+    this.restyle();
+  }
+
+  /** Redraw with what has arrived, once per frame at most. */
+  private queueRestyle(): void {
+    if (this.restyleQueued) return;
+    this.restyleQueued = true;
+    requestAnimationFrame(() => { this.restyleQueued = false; this.restyle(); });
   }
 
   private makeMeshItem(meta: ManifestStructure, a: MeshAsset): MeshItem {
@@ -498,11 +569,22 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     return { kind: 'lines', meta, nodes, mat, role: null, centroid: a.centroid };
   }
 
-  /** Load every nucleus (and skull-base bone / soft-tissue mesh) up front (small); cortex and tracts on demand. */
+  /** Resolves when the structures of the view applied last have arrived (or failed): the page's first view is then
+   * complete. Nothing is loaded here: a view loads what it draws (see apply), not the section's whole catalogue. */
   async preload(): Promise<void> {
-    const ids = this.cat.structures.filter((s) => ['nucleus', 'target', 'bone', 'soft', 'surface', 'tube'].includes(s.type)).map((s) => s.id);
-    await Promise.all(ids.map((id) => this.ensure(id)));
+    await this.applied;
     this.restyle();
+  }
+
+  /** The mesh structures a plan draws: every one whose look is not hidden (a cortical surface without a look is drawn
+   * muted). Layers and the legend's eyes are not counted, so switching them on shows the structure at once. */
+  private drawn(p: P): string[] {
+    const out: string[] = [];
+    for (const m of this.cat.structures) {
+      if (!MESH_TYPES.has(m.type)) continue;
+      if ((p.looks.get(m.id) ?? (m.type === 'surface' ? 'muted' : 'hidden')) !== 'hidden') out.push(m.id);
+    }
+    return out;
   }
 
   // ---------------------------------------------------------------- state
@@ -514,15 +596,21 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     if (planChanged) this.plan = this.source.plan(s);
     const p = this.plan!;
     const focusMeta = s.sel ? this.cat.byId.get(s.sel) : undefined;
-    const needed = [
+    const needed = [...new Set([
+      // what the view draws, and nothing else of the catalogue
+      ...this.drawn(p),
       ...[...p.tracts.keys()],
       // a structure selected from the index or legend is shown even if the view does not include it
-      ...(focusMeta && (focusMeta.type === 'tract' || focusMeta.type === 'cortex') ? [focusMeta.id] : []),
+      ...(focusMeta ? [focusMeta.id] : []),
       ...(s.layers.cortex.on && p.parcels.size ? ['cortex', ...p.parcels.keys()] : []),
       ...(s.layers.cortex.on && !p.parcels.size && (p.cortex || this.items.has('cortex')) ? ['cortex'] : []),
-    ];
-    await Promise.all(needed.map((id) => this.ensure(id)));
-    if (seq !== this.applySeq) return; // superseded while loading
+    ])];
+    // what could not be loaded for an earlier view and is not part of this one is no longer missing
+    const stale = [...this.failed.keys()].filter((id) => !needed.includes(id));
+    if (stale.length) { for (const id of stale) this.failed.delete(id); this.reportFailed(); }
+    const loads = Promise.all(needed.map((id) => this.ensure(id)));
+    this.applied = loads;
+    // the view is set up at once with what is already here; the rest is drawn as it arrives (ensure)
     this.updateMarkers();
     this.updateClip();
     this.restyle();
@@ -544,6 +632,10 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     }
     this.renderer.domElement.setAttribute('aria-label', this.describe());
     this.invalidate();
+    await loads;
+    if (seq !== this.applySeq) return; // superseded while loading
+    this.restyle();
+    this.renderer.domElement.setAttribute('aria-label', this.describe());
   }
 
   /** Outline these mesh structures (the selected one, or a plan's) and show their covered parts through what covers
@@ -1075,13 +1167,28 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     return this.pickWith(withLines);
   }
 
+  /** The marker drawn nearest a tap, within TAP_MARKER_PX of it (not in the endoscope's views, which pick their own way). */
+  private nearMarker(clientX: number, clientY: number): PickInfo | null {
+    if (this.endoscopeRects()) return null;
+    const r = this.renderer.domElement.getBoundingClientRect();
+    const x = clientX - r.left, y = clientY - r.top;
+    let best: { id: string; side: Side; d: number } | null = null;
+    for (const m of this.markerScreen()) {
+      const d = Math.hypot(m.x - x, m.y - y);
+      if (d <= TAP_MARKER_PX && (!best || d < best.d)) best = { id: m.id, side: m.side, d };
+    }
+    const t = best && this.cat.markers.get(best.id);
+    if (!best || !t) return null;
+    return { id: best.id, name: t.label, ras: new THREE.Vector3(...(best.side === 'L' ? t.mni.left : t.mni.right)), side: best.side, kind: 'marker' };
+  }
+
   private pickWith(withLines: boolean): PickInfo | null {
     this.raycaster.params.Line2 = { threshold: 6 } as never;
     (this.raycaster as unknown as { camera: THREE.Camera }).camera = this.camera;
     const objs = this.pickables().filter((o) => withLines || !(o as LineSegments2).isLineSegments2);
     const hits = this.raycaster.intersectObjects(objs, true).filter((h) => this.notClipped(h.point));
     if (!hits.length) return null;
-    // prefer: lead > marker > highlighted structures > faded > cortex/ghost > slice
+    // prefer: lead > marker > highlighted structures > see-through ones > faded > cortex/ghost > slice
     const rank = (h: THREE.Intersection) => {
       const o = h.object;
       if (o.userData.lead) return 0;
@@ -1094,7 +1201,11 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       // faded back round a selection: still seen, so before ghosts (the skull base's removed bone, barely drawn: a
       // click into an opening goes to what lies beyond it); faded bone, seen through, after what it encloses
       if (it.kind === 'mesh' && it.faded) return it.meta.type === 'bone' ? 3.2 : 3;
-      return it.look === 'ghost' ? 3.5 : 2;
+      if (it.look === 'ghost') return 3.5;
+      // a see-through shell or context (the temporal bone round the ossicles, the brainstem round its nuclei) is looked
+      // through, not at: whatever is drawn solid along the ray comes first, the shell itself only where nothing is
+      const m = it.kind === 'mesh' ? it.mats.solid : null;
+      return m && (o as THREE.Mesh).material === m && m.transparent && m.opacity <= SEE_THROUGH_OPACITY ? 2.6 : 2;
     };
     const best = hits.reduce((a, b) => (rank(b) < rank(a) || (rank(b) === rank(a) && b.distance < a.distance) ? b : a));
     const ras = this.toRas(best.point);
@@ -1168,7 +1279,9 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);
       down = null;
       if (moved > 6) return;
-      const hit = this.pick(e.clientX, e.clientY, true);
+      let hit = this.pick(e.clientX, e.clientY, true);
+      // a finger is not a pointer: on a phone a landmark's dot is a few pixels wide, so a tap beside one means it
+      if (e.pointerType !== 'mouse' && !this.measuring && hit?.kind !== 'marker' && hit?.kind !== 'lead') hit = this.nearMarker(e.clientX, e.clientY) ?? hit;
       if (this.measuring) {
         if (!hit) return;
         if (this.measurePts.length >= 2) this.measurePts = [];
@@ -1243,10 +1356,43 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   }
 
   // ---------------------------------------------------------------- misc
+  /** The keyboard in the 3D view: the arrow keys turn it, with Shift they move it, + and - zoom. The page calls this
+   * when the canvas has focus and the section has no use of its own for the key. */
+  handleKey(e: KeyboardEvent): boolean {
+    if (!this.state || this.endoCfg?.big) return false;
+    const k = e.key;
+    const arrow = k === 'ArrowLeft' ? [-1, 0] : k === 'ArrowRight' ? [1, 0] : k === 'ArrowUp' ? [0, 1] : k === 'ArrowDown' ? [0, -1] : null;
+    const zoom = k === '+' || k === '=' ? 1 / KEY_ZOOM : k === '-' || k === '_' ? KEY_ZOOM : 0;
+    if (!arrow && !zoom) return false;
+    this.anim = null; // a key takes the camera over from a preset's animation
+    const tgt = this.controls.target, off = this.camera.position.clone().sub(tgt);
+    if (zoom) {
+      off.setLength(Math.max(this.controls.minDistance, Math.min(this.controls.maxDistance, off.length() * zoom)));
+    } else if (e.shiftKey) {
+      // move what is drawn the way the arrow points: the camera and its centre go the other way, across the screen
+      const step = off.length() * KEY_MOVE;
+      tgt.addScaledVector(new THREE.Vector3().setFromMatrixColumn(this.camera.matrix, 0), -arrow![0] * step);
+      tgt.addScaledVector(new THREE.Vector3().setFromMatrixColumn(this.camera.matrix, 1), -arrow![1] * step);
+    } else {
+      // turn, as a drag does: left and right about the vertical, up and down over the top (never through the poles)
+      const sph = new THREE.Spherical().setFromVector3(off);
+      sph.theta += arrow![0] * KEY_TURN;
+      sph.phi = Math.max(0.02, Math.min(Math.PI - 0.02, sph.phi - arrow![1] * KEY_TURN));
+      off.setFromSpherical(sph);
+    }
+    this.camera.position.copy(tgt).add(off);
+    this.camera.lookAt(tgt);
+    this.controls.update();
+    this.ev.cameraChanged(this.toRas(this.camera.position), this.toRas(this.controls.target));
+    this.invalidate();
+    return true;
+  }
+
   describe(): string {
     const p = this.plan;
     if (!p) return '3D atlas';
-    const names = (ids: string[]) => ids.map((id) => this.cat.byId.get(id)?.name ?? id).join(', ');
+    // (a long list is no label: the first few names, then how many more; all are in the legend and the panel)
+    const names = (ids: string[]) => ids.slice(0, 6).map((id) => this.cat.byId.get(id)?.name ?? id).join(', ') + (ids.length > 6 ? ` and ${ids.length - 6} more` : '');
     const prim = [...p.looks].filter(([, l]) => l === 'primary').map(([id]) => id);
     const alt = [...p.looks].filter(([, l]) => l === 'alt').map(([id]) => id);
     return `3D atlas, ${p.title}. Highlighted: ${names(prim)}.` +

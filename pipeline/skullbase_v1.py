@@ -60,6 +60,11 @@ CARRIED_NOTE = ("In the telovelar and retrosigmoid views it is carried with the 
                 "shapes move it (skullbase_v1_pfossa.py).")
 
 
+CORTEX_NOTE = ("Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that "
+               "cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself "
+               "(skullbase_v1_brain.py).")
+
+
 def brain() -> int:
     """The cerebrum (skullbase_v1_brain.py) and the posterior fossa (skullbase_v1_pfossa.py) into v1's manifest, their
     definitions (Z-Anatomy's Wikipedia texts) into sb-definitions.json, and their reports into sb-v1fit.json."""
@@ -88,6 +93,12 @@ def brain() -> int:
             note = CARRIED_NOTE
             if note not in it.get("derivation", ""):
                 it["derivation"] = (it.get("derivation", "") + " " + note).strip()
+    moved = br["report"].get("arteries", {})
+    for it in m["structures"]:      # the cortical arteries, moved with the cortex out of the bone (skullbase_v1_brain.py)
+        if it["name"] in moved:
+            it["centroid"] = moved[it["name"]]["centroid"]
+            if CORTEX_NOTE not in it.get("derivation", ""):
+                it["derivation"] = (it.get("derivation", "") + " " + CORTEX_NOTE).strip()
     p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
     # the floor of the fourth ventricle's landmarks (skullbase_v1_pfossa.rhomboid)
     lp = GEN / f"{PREFIX}-landmarks.json"

@@ -2,14 +2,15 @@ import { describe, expect, it } from 'vitest';
 import { crossCheckSpine, discBelow, SP, SP_MANIFEST, SP_REFS, vertebraOf } from '../../src/spine';
 import published from '../../src/data/generated/spine-published.json';
 import {
-  ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, CCJ, CCJ_MEASURES, CERVICAL_GEOM, crossCheckContent, exitingRoot, exposureRegion, GEOM_BY_LEVEL,
-  LESION_ZONES, LUMBAR_GEOM, NECK_LANDMARKS, ROOT_FUNCTION, STATEMENTS, THORACIC_GEOM, VERTEBRAL_ARTERY,
+  ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, CCJ, CCJ_MEASURES, CERVICAL_GEOM, crossCheckContent, discRegion, exitingRoot, exposureRegion, GEOM_BY_LEVEL,
+  LESION_ZONES, lesionZones, LUMBAR_GEOM, NECK_LANDMARKS, PLACED, ROOT_FUNCTION, STATEMENTS, THORACIC_GEOM, VERTEBRA_NEIGHBOURS, VERTEBRAL_ARTERY,
 } from '../../src/spine/content';
+import { HERNIA_ZONES, herniaRoot } from '../../src/spine/herniation';
 import { REGION, REGIONS } from '../../src/spine/regions';
 import { LESION_MARKERS, lesionMarkerId, spinePlan, spineScene } from '../../src/spine/scene';
 import { decodeSpine, defaultSpineState, encodeSpine } from '../../src/spine/state';
 import { setViewPrefs } from '../../src/viewer/viewprefs';
-import { nodeMeans } from './glb';
+import { meshSoup, nodeMeans, pointsInside } from './glb';
 
 describe('spine data (VerSe CT + TotalSegmentator)', () => {
   it('generated files agree with each other; every statement reference resolves', () => {
@@ -44,6 +45,110 @@ describe('spine data (VerSe CT + TotalSegmentator)', () => {
     for (const g of LUMBAR_GEOM.filter((x) => x.pair !== 'L5-S1')) {
       expect(g.discHeightMm, g.pair).toBeGreaterThan(3);
       expect(g.discHeightMm, g.pair).toBeLessThan(20);
+    }
+  });
+  it('neighbouring vertebrae share no bone: no vertex of one lies inside the next', async () => {
+    // (each vertebra's surface reached up to 2 mm into its neighbours' masks: at every facet joint the two overlapped,
+    // 11,526 vertices of one inside the other from C1 to the sacrum, up to 3.7 mm deep)
+    const names = [...[1, 2, 3, 4, 5, 6, 7].map((i) => `C${i}`), ...Array.from({ length: 12 }, (_, i) => `T${i + 1}`), ...[1, 2, 3, 4, 5].map((i) => `L${i}`)];
+    const count = async (ids: string[]) => {
+      const soups = await Promise.all(ids.map((id) => meshSoup(SP.get(id)!.file)));
+      return ids.slice(1).map((_, i) => pointsInside(soups[i].P, soups[i + 1].P, soups[i + 1].T) + pointsInside(soups[i + 1].P, soups[i].P, soups[i].T));
+    };
+    const whole = await count([...names.map((n) => `sp_${n.toLowerCase()}`), 'sp_sacrum']);
+    whole.forEach((n, i) => {
+      // (L5 and the sacrum come from two segmentations: a few vertices of the one graze the other)
+      expect(n, `${names[i]} and the one below`).toBeLessThanOrEqual(i === names.length - 1 ? 8 : 3);
+    });
+    expect(whole.reduce((a, b) => a + b, 0)).toBeLessThanOrEqual(12);
+    // the junction's own CT: the skull, the atlas, the axis and C3
+    for (const n of await count(['sp_ccj_occiput', 'sp_ccj_c1', 'sp_ccj_c2', 'sp_ccj_c3'])) expect(n).toBeLessThanOrEqual(3);
+    // the build's own measure of the same (pipeline/spine_build.py neighbours): the bone inside both surfaces
+    expect(VERTEBRA_NEIGHBOURS.map((r) => r.pair)).toEqual([...names.slice(1).map((b, i) => `${names[i]}-${b}`), 'L5-S1']);
+    for (const r of VERTEBRA_NEIGHBOURS) {
+      expect(r.sharedMl, r.pair).toBeLessThanOrEqual(0.01);
+      expect(r.deepestMm, r.pair).toBeLessThanOrEqual(r.pair === 'L5-S1' ? 1 : 0.5);
+    }
+  }, 60_000);
+  it('the roots, their ganglia and the vertebral artery lie outside the bone as drawn (the build’s measure)', () => {
+    // (the audit’s findings MC-05 and MC-08: six roots ran 4 to 5 mm deep through a pedicle, the S1 roots 3 mm into the
+    // sacrum and the vertebral artery 3.6 mm through C2, while the build’s report called them clear: it measured
+    // against the CT’s bright voxels, not the solid the vertebrae are drawn from)
+    const halves = [...[3, 4, 5, 6, 7, 8].map((i) => `C${i}`), ...Array.from({ length: 12 }, (_, i) => `T${i + 1}`), ...[1, 2, 3, 4, 5].map((i) => `L${i}`), 'S1']
+      .flatMap((r) => [`${r}L`, `${r}R`]);
+    expect(Object.keys(PLACED.rootInBoneMm).sort()).toEqual([...halves].sort());
+    for (const k of halves) {
+      expect(PLACED.rootInBoneMm[k].root, k).toBeLessThanOrEqual(0.5);
+      expect(PLACED.rootInBoneMm[k].ganglion, k).toBeLessThanOrEqual(0.5);
+      // a ganglion is drawn smaller where the opening as drawn is narrower than it, to 60 % at the least
+      expect(PLACED.ganglionScale[k], k).toBeGreaterThanOrEqual(0.6);
+      expect(PLACED.ganglionScale[k], k).toBeLessThanOrEqual(1);
+    }
+    for (const sd of ['L', 'R'] as const) {
+      const a = PLACED.vertebralArtery[sd];
+      expect(a.inBoneMm, sd).toBeLessThanOrEqual(1);
+      // it runs in every foramen from its entry up to C1, 4 mm thick or thinner where the foramen as drawn is narrower
+      const order = ['C7', 'C6', 'C5', 'C4', 'C3', 'C2', 'C1'];
+      expect(Object.keys(a.diameterAt).sort()).toEqual(order.slice(order.indexOf(VERTEBRAL_ARTERY.entry[sd])).sort());
+      for (const d of Object.values(a.diameterAt)) { expect(d).toBeGreaterThanOrEqual(1.45); expect(d).toBeLessThanOrEqual(4.05); }
+      expect(VERTEBRAL_ARTERY.drawnDiameter[sd]).toEqual(a.diameterAt);
+    }
+  });
+  it('on the shipped files: hardly a vertex of a root or of the vertebral artery lies inside a vertebra', async () => {
+    // each root against the vertebrae its foramen lies between (and the sacrum for L5 and S1); the artery against C1-C7
+    const bone = new Map<string, { P: Float64Array; T: Uint32Array }>();
+    const soup = async (id: string) => { if (!bone.has(id)) bone.set(id, await meshSoup(SP.get(id)!.file)); return bone.get(id)!; };
+    const up = (r: string) => (r === 'C8' ? 'C7' : r.startsWith('C') ? `C${Number(r.slice(1)) - 1}` : r);
+    const down = (r: string) => (r === 'C8' ? 'T1' : r.startsWith('C') ? r : r === 'T12' ? 'L1' : r === 'L5' || r === 'S1' ? 'sacrum' : `${r[0]}${Number(r.slice(1)) + 1}`);
+    const roots = [...[3, 4, 5, 6, 7, 8].map((i) => `C${i}`), ...Array.from({ length: 12 }, (_, i) => `T${i + 1}`), ...[1, 2, 3, 4, 5].map((i) => `L${i}`), 'S1'];
+    let worst = 0, total = 0, inside = 0;
+    for (const r of roots) {
+      const q = await meshSoup(SP.get(`sp_root_${r.toLowerCase()}`)!.file);
+      let n = 0;
+      for (const b of new Set([up(r) === 'S1' ? 'L5' : up(r), down(r)])) {
+        const s = await soup(`sp_${b.toLowerCase()}`);
+        n += pointsInside(q.P, s.P, s.T);
+      }
+      // (before: 163 of T7's 664 vertices a side, 24 %, lay inside T7; the files' surfaces are simplified and
+      // quantized, so a ganglion drawn up to 0.3 mm into the bone can leave a few vertices just inside: 7 of 1,668
+      // at the most now)
+      expect(n / (q.P.length / 3), r).toBeLessThan(0.01);
+      worst = Math.max(worst, n / (q.P.length / 3)); total += q.P.length / 3; inside += n;
+    }
+    expect(inside / total).toBeLessThan(0.003);
+    const va = await meshSoup(SP.get('sp_vertebral_artery')!.file);
+    let n = 0;
+    for (let i = 1; i <= 7; i++) { const s = await soup(`sp_c${i}`); n += pointsInside(va.P, s.P, s.T); }
+    // (before: 128 of its 1,984 vertices, 6.5 %, up to 3.6 mm deep in C2; now 23 of 3,934, none deeper than 0.9 mm)
+    expect(n / (va.P.length / 3)).toBeLessThan(0.012);
+  }, 120_000);
+  it('the canal is measured between the pedicles, and its width does not jump between neighbours', () => {
+    // (the card gave the bounding width of a hole in a slab through the body centre: at L5 it ran out into the lateral
+    // recesses beneath the pedicles, 38.0 mm and 436 mm2 beside L4's 26.5 mm and 295 mm2; the audit's finding MC-06)
+    for (const geom of [CERVICAL_GEOM, THORACIC_GEOM, LUMBAR_GEOM]) {
+      for (const g of geom) expect(g.canal?.betweenPedicles, g.level).toBe(true);
+      geom.slice(1).forEach((g, i) => {
+        const r = g.canal!.width / geom[i].canal!.width;
+        expect(r, `${geom[i].level} to ${g.level}`).toBeGreaterThan(1 / 1.3);
+        expect(r, `${geom[i].level} to ${g.level}`).toBeLessThan(1.3);
+      });
+    }
+    const l5 = GEOM_BY_LEVEL.get('L5')!.canal!;
+    expect(l5.width).toBeGreaterThan(22); expect(l5.width).toBeLessThan(32);
+    expect(l5.area).toBeLessThan(360);
+  });
+  it('a disc drawn in part says so: the T10-T11 disc, a chip beside a dense band between the two bodies', () => {
+    // (the audit's finding MC-02: a 0.08 ml chip shown as a disc, with a "disc height" of 2.3 mm)
+    const partial = [...CERVICAL_GEOM, ...THORACIC_GEOM, ...LUMBAR_GEOM].filter((g) => g.discPartial);
+    expect([...new Set(partial.map((g) => g.pair))]).toEqual(['T10-T11']);
+    for (const g of partial) {
+      const p = g.discPartial!;
+      expect(g.discHeightMm).toBeUndefined();
+      expect(p.widthMm).toBeLessThan(0.5 * (p.neighbourWidthMm.reduce((a, b) => a + b, 0) / p.neighbourWidthMm.length));
+      // the CT between the bodies: far denser than the end plates of the discs above and below
+      expect(p.neighbourSpaceHu.length).toBe(2);
+      for (const hu of p.neighbourSpaceHu) expect(p.spaceHu).toBeGreaterThan(2 * hu);
+      expect(SP.get('sp_disc_t10_t11')!.derivation).toContain('not drawn in full');
     }
   });
   it('shipped GLBs decode with the left half left of the right half', async () => {
@@ -86,6 +191,13 @@ describe('spine scene and URL state', () => {
     // a lesion belongs to the disc below the selected level; anything else is dropped
     expect(decodeSpine('#/atlas?lv=L3&les=L4-L5.paracentral.L').lesion).toBeNull();
     expect(decodeSpine('#/atlas?lv=L4&les=L4-L5.central.L').lesion).toBeNull();
+    // the neck: its own zones (no far lateral), and only at a disc that has the tool
+    const neckLes = { ...defaultSpineState(), region: 'cervical' as const, level: 'C5', lesion: { pair: 'C5-C6', zone: 'foraminal' as const, side: 'R' as const } };
+    expect(decodeSpine(encodeSpine(neckLes))).toEqual(neckLes);
+    expect(decodeSpine('#/atlas?r=cervical&lv=C7&les=C7-T1.paracentral.L').lesion).toEqual({ pair: 'C7-T1', zone: 'paracentral', side: 'L' });
+    expect(decodeSpine('#/atlas?r=cervical&lv=C5&les=C5-C6.farlateral.L').lesion).toBeNull();
+    expect(decodeSpine('#/atlas?r=lumbar&lv=L4&les=L4-S1.paracentral.L').lesion).toBeNull();
+    expect(decodeSpine('#/atlas?r=thoracic&lv=T5&les=T5-T6.paracentral.L').lesion).toBeNull();
   });
 });
 
@@ -95,6 +207,34 @@ describe('lesion-to-root tool', () => {
     expect(affectedRoot('L4-L5', 'foraminal')).toBe('L4');
     expect(affectedRoot('L4-L5', 'farlateral')).toBe('L4');
     expect(affectedRoot('L5-S1', 'paracentral')).toBe('S1');
+  });
+  it('in the neck every herniation beside the midline affects the root that leaves at that disc (C8 at C7-T1)', () => {
+    expect(discRegion('C5-C6')).toBe('cervical');
+    expect(discRegion('C7-T1')).toBe('cervical');
+    expect(discRegion('T12-L1')).toBe('lumbar');
+    expect(affectedRoot('C5-C6', 'paracentral')).toBe('C6');
+    expect(affectedRoot('C5-C6', 'foraminal')).toBe('C6');
+    expect(affectedRoot('C2-C3', 'foraminal')).toBe('C3');
+    expect(affectedRoot('C7-T1', 'paracentral')).toBe('C8');
+    expect(affectedRoot('C7-T1', 'foraminal')).toBe('C8');
+    expect(lesionZones('cervical').map(([z]) => z)).toEqual(['paracentral', 'foraminal']);
+    expect(lesionZones('lumbar')).toEqual(LESION_ZONES);
+  });
+  it('at every disc with the tool, the level card names the root the drilled herniation names, the root the card lists as leaving there in the neck, and it exists', () => {
+    const discs = [...LUMBAR_GEOM, ...CERVICAL_GEOM].filter((g) => g.lesions);
+    expect(discs.map((g) => g.pair)).toEqual(['L1-L2', 'L2-L3', 'L3-L4', 'L4-L5', 'L5-S1', 'C2-C3', 'C3-C4', 'C4-C5', 'C5-C6', 'C6-C7', 'C7-T1']);
+    for (const g of discs) {
+      const region = discRegion(g.pair);
+      // the two tools offer the same zones beside the midline
+      expect(HERNIA_ZONES[region].filter(([z]) => z !== 'central')).toEqual(lesionZones(region));
+      for (const [zone] of lesionZones(region)) {
+        const root = affectedRoot(g.pair, zone);
+        expect(root, `${g.pair} ${zone}`).toBe(herniaRoot(g.pair, zone, region));
+        expect(SP.has(`sp_root_${root.toLowerCase()}`), `${g.pair} ${zone}: sp_root_${root.toLowerCase()}`).toBe(true);
+        if (region === 'cervical') expect(root, `${g.pair} ${zone}`).toBe(exitingRoot(g.level));
+        for (const sd of ['L', 'R'] as const) expect(spineScene.catalog.markers.has(lesionMarkerId(g.pair, zone, sd)), `${g.pair} ${zone} ${sd}`).toBe(true);
+      }
+    }
   });
   it('every lumbar disc below L1 has herniation positions on the correct side, ordered medial to lateral', () => {
     const pairs = LUMBAR_GEOM.filter((g) => g.lesions).map((g) => g.pair);
@@ -106,7 +246,15 @@ describe('lesion-to-root tool', () => {
       expect(x[1], `${g.pair} ${sd}`).toBeGreaterThan(x[0]);
       expect(x[2], `${g.pair} ${sd}`).toBeGreaterThan(x[1]);
     }
-    expect(LESION_MARKERS.length).toBe(pairs.length * 2 * 3);
+    // the neck's discs too, in the two zones offered there
+    const neck = CERVICAL_GEOM.filter((g) => g.lesions);
+    for (const g of neck) for (const sd of ['L', 'R'] as const) {
+      const sign = sd === 'L' ? -1 : 1;
+      const x = lesionZones('cervical').map(([z]) => sign * (g.lesions![sd][z][0] - g.discCentre[0]));
+      expect(x[0], `${g.pair} ${sd}`).toBeGreaterThan(0);
+      expect(x[1], `${g.pair} ${sd}`).toBeGreaterThan(x[0]);
+    }
+    expect(LESION_MARKERS.length).toBe(pairs.length * 2 * 3 + neck.length * 2 * 2);
   });
   it('the plan puts the affected root forward and marks the herniation', () => {
     const p = spinePlan({ region: 'lumbar', level: 'L4', sel: null, lesion: { pair: 'L4-L5', zone: 'paracentral', side: 'L' } });
@@ -114,6 +262,13 @@ describe('lesion-to-root tool', () => {
     expect(p.looks.get('sp_root_l4')).toBe('context');
     expect(p.markers).toEqual([{ targetId: lesionMarkerId('L4-L5', 'paracentral', 'L'), primary: true }]);
     expect(spineScene.catalog.markers.has(p.markers[0].targetId)).toBe(true);
+    // the neck: the root that leaves at the disc, whichever side of the foramen the herniation is on
+    for (const zone of ['paracentral', 'foraminal'] as const) {
+      const n = spinePlan({ region: 'cervical', level: 'C5', sel: null, lesion: { pair: 'C5-C6', zone, side: 'L' } });
+      expect(n.looks.get('sp_root_c6'), zone).toBe('primary');
+      expect(n.looks.get('sp_root_c5'), zone).toBe('context');
+      expect(spineScene.catalog.markers.has(n.markers[0].targetId), zone).toBe(true);
+    }
   });
   it('ISNCSCI function covers L1-S1, with a key muscle for L2-S1', () => {
     expect(Object.keys(ROOT_FUNCTION)).toEqual(['L1', 'L2', 'L3', 'L4', 'L5', 'S1']);
@@ -141,7 +296,8 @@ describe('thoracic region (phase 3a)', () => {
       expect(g.canal, g.pair).toBeTruthy();
       expect(g.canal!.area, g.pair).toBeGreaterThan(120);
       expect(g.canal!.area, g.pair).toBeLessThan(400);
-      expect(g.discHeightMm, g.pair).toBeGreaterThan(1);
+      // (every disc but one drawn in part, which gets no height: see the test above)
+      if (!g.discPartial) expect(g.discHeightMm, g.pair).toBeGreaterThan(1);
       expect(g.foramenMeasured, g.pair).toBe(false);
       expect([g.foramen.L, g.foramen.R]).toEqual([null, null]);
       expect(g.lesions, g.pair).toBeUndefined();

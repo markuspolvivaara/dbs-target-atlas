@@ -94,15 +94,19 @@ DESTRIEUX = [
 ]
 
 ZTEXT: dict[str, tuple[str, str | None] | None] = {
-    "G_and_S_frontomargin": ("Orbital gyri (Frontomarginal gyrus and sulcus*)", "the orbital gyri"),
+    # (Destrieux 2010, 2.1.2.3: the fronto-marginal gyrus "is continuous with the orbital gyri": not one of them)
+    "G_and_S_frontomargin": ("Orbital gyri (Frontomarginal gyrus and sulcus*)", "the orbital gyri, which this gyrus runs into at the edge of the orbital surface"),
     "G_and_S_occipital_inf": ("Inferior occipital gyrus and sulcus*", None),
-    "G_and_S_paracentral": ("Paracentral gyrus and sulcus*", None),
+    # (the text is Wikipedia's "Paracentral sulcus": the lobule's anterior limit, Destrieux 2010, 2.4.3)
+    "G_and_S_paracentral": ("Paracentral gyrus and sulcus*", "the paracentral sulcus"),
     "G_and_S_subcentral": None,
     "G_and_S_transv_frontopol": None,
     "G_and_S_cingul-Ant": ("Cingulate gyrus and sulcus (Middle anterior part)", "the cingulate cortex"),
     "G_and_S_cingul-Mid-Ant": ("Cingulate gyrus and sulcus (Middle anterior part)", "the cingulate cortex"),
-    "G_and_S_cingul-Mid-Post": ("Cingulate gyrus and sulcus (Middle posterior part)", "the cingulate cortex"),
-    "G_cingul-Post-dorsal": ("Cingulate gyrus and sulcus (Middle posterior part)", "the cingulate cortex"),
+    # (the "Middle posterior part" text is Wikipedia's "Cingulate sulcus": said so, and not shown for the label that is
+    # gyrus alone, which gets the text on the cingulate cortex as the anterior parts do)
+    "G_and_S_cingul-Mid-Post": ("Cingulate gyrus and sulcus (Middle posterior part)", "the cingulate sulcus"),
+    "G_cingul-Post-dorsal": ("Cingulate gyrus and sulcus (Middle anterior part)", "the cingulate cortex"),
     "G_cingul-Post-ventral": ("Isthmus of cingulate gyrus", None),
     "G_cuneus": ("Cuneus", None),
     "G_front_inf-Opercular": ("Opercular part of inferior frontal gyrus", None),
@@ -156,7 +160,9 @@ ZTEXT: dict[str, tuple[str, str | None] | None] = {
     "S_oc-temp_lat": None,
     "S_oc-temp_med_and_Lingual": ("Collateral sulcus", None),
     "S_orbital_lateral": ("Orbital sulci (Lateral Orbital sulcus*)", None),
-    "S_orbital_med-olfact": ("Olfactory sulcus", None),
+    # (the text Z-Anatomy ships under this name is Wikipedia's "Olfactory tract"; Destrieux 2010, 2.1.2.4: the sulcus
+    # "is located just superior to the olfactory bulb and tract")
+    "S_orbital_med-olfact": ("Olfactory sulcus", "the olfactory tract, which lies just below this sulcus"),
     "S_orbital-H_Shaped": ("Orbital sulci (H-shaped orbital sulci*)", None),
     "S_parieto_occipital": ("Parieto-occipital sulcus", None),
     "S_pericallosal": None,
@@ -168,6 +174,16 @@ ZTEXT: dict[str, tuple[str, str | None] | None] = {
     "S_temporal_inf": ("Inferior temporal sulcus", None),
     "S_temporal_sup": ("Superior temporal sulcus", None),
     "S_temporal_transverse": None,
+}
+# Corrections to a shipped text, by label: (the words as shipped, the words shown instead, why, with its source). The
+# card shows the corrected text and lists each change under it (the texts are CC BY-SA: changes are indicated).
+ZTEXT_EDITS: dict[str, list[tuple[str, str, str]]] = {
+    "G_pariet_inf-Angular": [(
+        "lying mainly in the anterolateral region of parietal lobe, that lies near",
+        "lying in the posterior part of the inferior parietal lobule, near",
+        "The sulcus intermedius primus divides the inferior parietal lobule into the supramarginal gyrus in front and "
+        "the angular gyrus behind (Destrieux et al. 2010, section 2.4.1.4)",
+    )],
 }
 # lobe-level texts for the group cards
 ZTEXT_LOBES = {"frontal": "Frontal lobe", "parietal": "Parietal lobe", "temporal": "Temporal lobe",
@@ -187,12 +203,15 @@ DK_LOBE = {
     **{r: "cingulate" for r in ["rostralanteriorcingulate", "caudalanteriorcingulate", "posteriorcingulate", "isthmuscingulate"]},
     "insula": "insula",
 }
-# labels whose Destrieux long name places them in the cingulate gyrus or the insula's circular sulcus: their colour
-# follows that name (the measured Desikan-Killiany shares are still listed)
+# labels whose Destrieux long name places them in the cingulate gyrus, the insula's circular sulcus or the occipital
+# lobe: their colour follows that name (the measured Desikan-Killiany shares are still listed). The superior occipital
+# gyrus and sulcus lie mostly in Desikan-Killiany's superior and inferior parietal regions, which reach further back
+# than Destrieux's parietal lobe: Destrieux 2010 (section 2.3.3) defines both on the lateral aspect of the occipital lobe
 NAMED_LOBE = {
     "G_and_S_cingul-Ant": "cingulate", "G_and_S_cingul-Mid-Ant": "cingulate", "G_and_S_cingul-Mid-Post": "cingulate",
     "G_cingul-Post-dorsal": "cingulate", "G_cingul-Post-ventral": "cingulate",
     "S_circular_insula_ant": "insula", "S_circular_insula_inf": "insula", "S_circular_insula_sup": "insula",
+    "G_occipital_sup": "occipital", "S_oc_sup_and_transversal": "occipital",
 }
 # the insular cortex and its circular sulcus (Destrieux labels); the insular view removes what lies lateral to them
 INSULA_LABELS = ["G_insular_short", "G_Ins_lg_and_S_cent_ins", "S_circular_insula_ant", "S_circular_insula_inf", "S_circular_insula_sup"]

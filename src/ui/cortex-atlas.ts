@@ -8,7 +8,7 @@ import { VIEW, VIEWS, type ViewId } from '../cortex/views';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
 import { refLinksFrom } from './reflinks';
-import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem } from './stage';
+import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: CortexState) => void, opts?: { camera?: boolean }) => void;
@@ -41,7 +41,7 @@ export class CortexAtlasPage {
   private leaders = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   private legendHover: string | null = null;
   private gizmo = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  private status = h('div', { class: 'status', role: 'status', 'aria-live': 'polite', hidden: true });
+  private status = stageStatus(() => { void this.viewer.retryFailed(); });
   private measureBtn!: HTMLButtonElement;
   private sheetState: 'peek' | 'full' = 'peek';
   private measurePts: THREE.Vector3[] = [];
@@ -49,7 +49,7 @@ export class CortexAtlasPage {
 
   constructor(private update: Update) {
     this.stage = h('section', { class: 'stage', 'aria-label': '3D viewer' });
-    this.panel = h('aside', { class: 'panel', 'aria-label': 'Anatomy and tools', 'data-sheet': 'peek' });
+    this.panel = h('aside', { class: 'panel', id: 'panel', tabindex: -1, 'aria-label': 'Anatomy and tools', 'data-sheet': 'peek' });
     this.el = h('div', { class: 'atlas' }, this.stage, this.panel);
     this.buildStage();
     this.buildPanel();
@@ -77,12 +77,12 @@ export class CortexAtlasPage {
       ...([[0, 'Pial', 'The brain surface as it is (pial surface)'], [1, 'Inflated', 'Smoothed so the sulci open up; light = gyral crown, dark = sulcal depth']] as const)
         .map(([v, label, title]) => h('button', { type: 'button', class: 'tbtn', 'data-inflate': String(v), 'aria-pressed': 'false', title: `${title} (I toggles)`, onclick: () => this.setInflate(v) }, label)));
     this.measureBtn = h('button', { type: 'button', class: 'tbtn', 'aria-pressed': 'false', title: 'Measure distance between two points on the pial surface (M)', onclick: () => this.toggleMeasure() }, 'Measure');
-    const share = h('button', { type: 'button', class: 'tbtn', title: 'Copy a link to this exact view', onclick: () => this.copyLink(share) }, 'Copy link');
+    const share = h('button', { type: 'button', class: 'tbtn', title: 'Copy a link to this exact view', onclick: () => { void this.copyLink(share); } }, 'Copy link');
     const labelGroup = h('div', { class: 'tgroup seg', role: 'group', 'aria-label': 'Name labels' },
       h('span', { class: 'tlabel' }, 'Labels'),
       ...([['all', 'All', 'Name every highlighted label that faces you'], ['hover', 'Hover', 'Name only what you point at, select or hover in the list'], ['off', 'Off', 'No name labels']] as const)
         .map(([v, label, title]) => h('button', { type: 'button', class: 'tbtn', 'data-labels': v, 'aria-pressed': 'false', title: `${title} (N cycles)`, onclick: () => this.update((s) => { s.labels = v; }) }, label)));
-    toolbar.append(presetGroup, hemiGroup, surfGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share));
+    toolbar.append(presetGroup, hemiGroup, surfGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share), viewButtons(() => this.resetView()));
     this.gizmo.setAttribute('viewBox', '-40 -40 80 80');
     this.gizmo.setAttribute('class', 'gizmo');
     this.gizmo.setAttribute('aria-hidden', 'true');
@@ -92,7 +92,9 @@ export class CortexAtlasPage {
       h('div', { class: 'readout-box' }, this.measureOut, this.readout));
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
-    this.stage.append(host, toolbar, this.surfLabels, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status);
+    this.stage.append(host, toolbar, this.surfLabels, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
+    scrollHint(toolbar);
+    rovingToolbar(toolbar);
     this.readout.textContent = 'Point at the surface for its MNI position';
 
     this.viewer = new Viewer<CortexState, CortexPlan>(host, {
@@ -104,12 +106,14 @@ export class CortexAtlasPage {
         s.cam = { preset: s.cam.preset, pos: [pos.x, pos.y, pos.z], tgt: [tgt.x, tgt.y, tgt.z] };
       }, { camera: false }),
       leadMoved: () => undefined,
-      status: (t) => { this.status.hidden = !t; this.status.textContent = t ?? ''; },
+      status: (t) => this.status.set(t),
+      loadFailed: (names) => this.status.failed(names),
       lead: () => undefined,
       moving: (on) => this.stage.classList.toggle('moving', on),
     }, cortexScene);
     const origRender = this.viewer.renderer.render.bind(this.viewer.renderer);
     this.viewer.renderer.render = (sc, cam) => { origRender(sc, cam); this.placeLabels(); };
+    watchOverlays(this.stage, () => this.viewer.invalidate());
   }
 
   private setInflate(v: number): void {
@@ -144,6 +148,7 @@ export class CortexAtlasPage {
       this.tabs[id] = h('div', { class: 'pane', role: 'tabpanel', id: `pane-${id}`, 'aria-labelledby': `ptab-${id}`, hidden: id !== 'overview' });
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
+    scrollHint(tablist);
   }
 
   private selectTab(id: string, expand = true): void {
@@ -165,7 +170,7 @@ export class CortexAtlasPage {
   render(s: CortexState, opts: { camera: boolean }): void {
     const prev = this.s;
     this.s = s;
-    this.viewer.apply(s, { animateCamera: opts.camera }).then(() => this.renderLegend());
+    this.viewer.apply(s, { animateCamera: opts.camera }).then(() => this.renderLegend()).catch((e: unknown) => viewFailed(this.status, e));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-hemi]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.hemi === s.hemi)));
     this.stage.querySelectorAll<HTMLButtonElement>('.toolbar [data-labels]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.labels === s.labels)));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-inflate]').forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.inflate) === s.inflate)));
@@ -175,6 +180,8 @@ export class CortexAtlasPage {
     if (key !== this.lastKey || !prev) { this.lastKey = key; this.renderOverview(); }
     this.renderDisplay();
     if (prev && prev.sel !== s.sel && s.sel) this.selectTab('overview', false);
+    // the card of what was just selected (or of a link's selection) is brought to the top of the panel
+    if (s.sel && prev?.sel !== s.sel) revealCard(this.panel);
   }
 
   private pickView(id: ViewId): void {
@@ -223,11 +230,14 @@ export class CortexAtlasPage {
     return this.s.colour === 'atlas' && l ? `--c: ${l.atlasColour}` : `--c: var(--c-${tokenOf(id)})`;
   }
 
-  private defBlock(def: { text: string; url: string | null; scope?: string | null } | null, what: string): HTMLElement[] {
+  private defBlock(def: { text: string; url: string | null; scope?: string | null; edits?: { from: string; to: string; why: string }[] } | null, what: string): HTMLElement[] {
     if (!def) return [h('dt', {}, 'Definition'), h('dd', {}, `Z-Anatomy ships no definition for ${what}.`)];
+    const edits = def.edits ?? [];
     return [h('dt', {}, def.scope ? `About ${def.scope}` : 'Definition'), h('dd', {}, h('p', {}, def.text),
-      h('p', { class: 'aside' }, 'From Wikipedia (CC BY-SA 3.0), as shipped with Z-Anatomy; not checked against the literature. ',
-        def.url ? h('a', { href: def.url, target: '_blank', rel: 'noopener' }, 'Source page') : null))];
+      h('p', { class: 'aside' }, `From Wikipedia (CC BY-SA 3.0), as shipped with Z-Anatomy; not checked against the literature${edits.length ? ', except as corrected below' : ''}. `,
+        def.url ? h('a', { href: def.url, target: '_blank', rel: 'noopener' }, 'Source page') : null),
+      // a text changed here says so, with what it said before and why (the licence asks for changes to be indicated)
+      ...edits.map((e) => h('p', { class: 'aside def-edit' }, `Corrected here: “${e.from}” now reads “${e.to}”. ${e.why}.`)))];
   }
 
   private card(id: string): HTMLElement {
@@ -238,7 +248,8 @@ export class CortexAtlasPage {
     const lobes = l.lobes.map((x) => `${lobeName(x.lobe).toLowerCase()} ${pct(x.share)}`).join(', ');
     const borders = l.borders.filter((b) => b.id !== MEDIAL_WALL);
     return h('article', { class: 'card sel', style: `--accent: var(--c-${tokenOf(id)})` }, close,
-      h('p', { class: 'eyebrow' }, `${KIND_LABEL[l.kind]} · ${l.lobes.map((x) => lobeName(x.lobe)).join(' / ')}`),
+      // the lobe it is shown with first, then any other lobe holding a quarter of it
+      h('p', { class: 'eyebrow' }, `${KIND_LABEL[l.kind]} · ${[l.lobe, ...l.lobes.map((x) => x.lobe).filter((x) => x !== l.lobe)].map((x) => lobeName(x)).join(' / ')}`),
       h('h2', {}, h('span', { class: 'swatch', style: this.swatchStyle(id) }), shortName(id)),
       h('p', { class: 'aside' }, `Destrieux name: ${l.name} (${l.short}).`),
       h('dl', {},
@@ -293,7 +304,12 @@ export class CortexAtlasPage {
   }
 
   // ---------------------------------------------------------------- legend, labels, readout
+  /** (drawn again on every change: the keyboard keeps its place in it) */
   private renderLegend(): void {
+    keepFocus(this.legend, () => this.drawLegend());
+  }
+
+  private drawLegend(): void {
     clear(this.legend);
     const s = this.s;
     const hidden = new Set(s.hidden);
@@ -350,7 +366,7 @@ export class CortexAtlasPage {
       const a = this.viewer.anchorFor(id);
       if (a) items.push({ id, text: shortName(id), ax: a.x, ay: a.y, cls: 'slabel primary' });
     }
-    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders);
+    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders, [this.legendHover, this.s?.sel]);
   }
 
   private showTip(info: PickInfo | null, x: number, y: number): void {
@@ -421,7 +437,14 @@ export class CortexAtlasPage {
   }
 
   // ---------------------------------------------------------------- keyboard
+  /** The camera back to where this view opens (the toolbar's Reset view, key 0), on the side the view opens with (the
+   * medial camera shows one hemisphere, so it changes the side). */
+  private resetView(): void {
+    this.update((s) => { s.cam = { preset: null }; s.hemi = VIEW.get(s.view)!.hemi; }, { camera: true });
+  }
+
   handleKey(e: KeyboardEvent): boolean {
+    if (e.key === '0') { this.resetView(); return true; }
     const k = e.key;
     const preset = PRESETS.find((p) => p[2] === k);
     if (preset) { this.update((s) => { s.cam = { preset: preset[0] }; if (preset[0] === 'medial' && s.hemi === 'both') s.hemi = 'L'; }, { camera: true }); return true; }

@@ -1,5 +1,6 @@
 import { ETV, TRAJ, VE_MANIFEST, VE_REFS } from '../ventricles';
 import { h } from './h';
+import { linkLicences } from './licences';
 
 /** Sources and Credits of the ventricles section. */
 
@@ -52,5 +53,7 @@ export function veCreditsPage() {
       h('h2', {}, 'Software'),
       h('p', {}, 'three.js, zod, Vite and glTF-Transform (MIT), meshoptimizer (MIT), scikit-image (BSD). Font: Atkinson Hyperlegible, SIL Open Font License 1.1, self-hosted. The source code is GPL-3.0.')),
   );
+  // every licence named on the page links to its text, and every printed address is a link
+  linkLicences(el);
   return { el, render() { /* stateless */ } };
 }

@@ -75,16 +75,17 @@ def block(arr: np.ndarray, sel: np.ndarray, margin: int) -> tuple:
     return tuple(slice(a, b) for a, b in zip(lo, hi))
 
 
-def mesh_of(ct: np.ndarray, sel: np.ndarray, aff: np.ndarray, faces: int, bone: bool):
+def mesh_of(ct: np.ndarray, sel: np.ndarray, aff: np.ndarray, faces: int, bone: bool, other: np.ndarray | None = None):
     """A surface from a mask: for bone the CT's BONE_HU surface within reach of the mask (as the vertebrae of the
-    whole-spine CT), otherwise the mask's own; on the resampled grid."""
+    whole-spine CT, and as there kept out of the other bones' masks, `other`), otherwise the mask's own; on the
+    resampled grid."""
     cr = block(sel, sel, 6)
     a = aff.copy()
     a[:3, 3] = nib.affines.apply_affine(aff, [s.start for s in cr])
     m, a2 = iso(sel[cr].astype(np.float32), a, 1)
     if bone:
         c, _ = iso(ct[cr], a, 1)
-        vol = B.bone_volume(c, m > 0.5, STEP)
+        vol = B.bone_volume(c, m > 0.5, STEP, None if other is None else iso(other[cr].astype(np.float32), a, 1)[0] > 0.5)
         return isosurface(vol, a2, B.BONE_HU, B.SIGMA_VOX, faces)
     return isosurface(m, a2, 0.5, 1.5, faces)
 
@@ -242,14 +243,15 @@ def build(report: dict) -> tuple[list[dict], dict, dict]:
               "TotalSegmentator craniofacial_structures: skull, within 50 mm of the middle of the foramen magnum, its CT surface")]
     for lab, name in VERTEBRAE.items():
         parts.append((f"sp_ccj_{name.lower()}", f"{name} (junction CT)", "spBone", "nuclei", "bone", m == lab, 9000, True,
-                      f"CT surface at {B.BONE_HU} HU within reach of VerSe's hand-corrected mask for {name}"))
+                      f"CT surface at {B.BONE_HU} HU within reach of VerSe's hand-corrected mask for {name}, kept out of the other bones' masks"))
     parts.append(("sp_ccj_dural_sac", "Dural sac (spinal canal contents, junction CT)", "spCord", "tracts", "neural",
                   cord, 6000, True, "TotalSegmentator total: spinal_cord"))
     items = []
     for sid, name, token, layer, cat, sel, faces, bone, src in parts:
         if sel.sum() < 50:
             raise SystemExit(f"{sid}: empty")
-        mesh = mesh_of(ct, sel, a_o, faces, bone and cat == "bone")
+        # (each bone kept out of the others' masks: the skull and the three vertebrae share no bone)
+        mesh = mesh_of(ct, sel, a_o, faces, bone and cat == "bone", (occ | (m > 0)) & ~sel if cat == "bone" else None)
         write_glb(B.BUILD / f"{sid}.glb", B.halves(mesh, 0.0), {"id": sid})
         items.append({"id": sid, "name": name, "token": token, "layer": layer, "category": cat, "region": "ccj",
                       "faces": int(len(mesh.faces)), "centroid": mesh.centroid.round(2).tolist(), "source": src})

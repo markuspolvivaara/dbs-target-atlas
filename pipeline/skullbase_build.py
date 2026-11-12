@@ -167,6 +167,26 @@ def split_pair(name: str) -> tuple[str, str | None]:
     return name.rstrip("."), side  # one Z-Anatomy name ends in a stray full stop
 
 
+def mirror_missing_sides(lines: dict) -> list[str]:
+    """Z-Anatomy's model is symmetric about the midline, and its nerves and vessels are left and right objects. Where
+    it has only one of a pair (its cochlear nerve: a left object, no right one), the other side is that one's mirror
+    image: added to `lines` under the missing side's name, marked "mirroredFrom". Returns the names added."""
+    have: dict[str, dict[str, str]] = {}
+    for n in lines:
+        base, side = split_pair(n)
+        if side:
+            have.setdefault(base, {})[side] = n
+    made = []
+    for base, sides in sorted(have.items()):
+        if len(sides) != 1:
+            continue
+        (side, src), = sides.items()
+        new = src[:-2] + (".r" if side == "L" else ".l")
+        lines[new] = {**lines[src], "runs": [[[-p[0], *p[1:]] for p in r] for r in lines[src]["runs"]], "mirroredFrom": src}
+        made.append(new)
+    return made
+
+
 def colour(token: str) -> dict:
     return {"token": token, "light": PALETTE["light"][token], "dark": PALETTE["dark"][token]}
 
@@ -211,14 +231,14 @@ def resample(run: np.ndarray) -> np.ndarray:
     return run[keep]
 
 
-def tube(run: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+def tube(run: np.ndarray, sides: int | None = None) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Triangle tube around a centre line with per-point radius; closed with flat end caps.
-    Returns positions, normals, triangles."""
+    Returns positions, normals, triangles. `sides`: the rings' corners (8 from 0.8 mm radius on, else 6, if not given)."""
     run = resample(run)
     if len(run) < 2:
         return np.zeros((0, 3)), np.zeros((0, 3)), np.zeros((0, 3), int)
     P, R = run[:, :3], np.maximum(run[:, 3], TUBE_MIN_RADIUS_MM)
-    sides = 8 if R.max() >= 0.8 else 6
+    sides = sides or (8 if R.max() >= 0.8 else 6)
     T = np.gradient(P, axis=0)
     T /= np.linalg.norm(T, axis=1, keepdims=True) + 1e-12
     # parallel-transport frames (no twisting along the tube)
@@ -288,6 +308,19 @@ def definition(raw: str | None) -> dict | None:
 
 def main() -> int:
     ex = json.loads((BUILD / "export.json").read_text())
+    # a landmark the export could only attach to the nearest bone surface is a neighbour's, not a cranial bone's (the
+    # atlas's "Lateral mass" under the occipital condyle): not shown, nor its text (newer exports leave it out themselves)
+    ex["landmarks"] = [lm for lm in ex["landmarks"] if lm["boneFrom"] != "nearest surface"]
+    # one of a pair missing in Z-Anatomy: its mirror image (the CT model's export has it already, fitted: skullbase_ct.py)
+    if not CT:
+        made = mirror_missing_sides(ex["lines"])
+        if made:
+            from modifications import record
+            record("sb", "skullbase_build_mirror", "one side of a pair that Z-Anatomy draws on one side only, added as the mirror image of the other",
+                   [slug(split_pair(n)[0]) for n in made], {"plane": "x = 0 (the model is symmetric about it)"},
+                   {"added": {n: ex["lines"][n]["mirroredFrom"] for n in made}},
+                   {"check": "skullbase_build.py finalize: left and right centroids mirror-like"})
+    mirrored = {split_pair(n)[0]: split_pair(n)[1] for n, ln in ex["lines"].items() if ln.get("mirroredFrom")}
     BUILD.mkdir(parents=True, exist_ok=True)
     for old in BUILD.glob("*.glb"):  # structures can be renamed or merged between runs
         old.unlink()
@@ -406,7 +439,9 @@ def main() -> int:
                              "neighbouring bone encloses it (baked ambient occlusion)." if g["type"] == "bone"
                              else "Mesh exported unchanged from Z-Anatomy." if g["type"] == "soft"
                              else "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point "
-                                  f"(its curve bevel: modelled, not measured), at least {TUBE_MIN_RADIUS_MM} mm; cropped to the head."),
+                                  f"(its curve bevel: modelled, not measured), at least {TUBE_MIN_RADIUS_MM} mm; cropped to the head.")
+                          + (f" Z-Anatomy draws it on the {'left' if mirrored[base] == 'R' else 'right'} only: the {'right' if mirrored[base] == 'R' else 'left'} "
+                             "one is its mirror image" + (", fitted onto this CT with the rest." if CT else ".") if base in mirrored else ""),
             "centroid": {"L": cent["L"], "R": cent["R"]},
             **({"cranialNerve": cn[base]} if base in cn else {}),
             **({"system": ARTERY_SYSTEM[base]} if g["kind"] == "artery" else {}),
@@ -563,6 +598,37 @@ def validate() -> int:
         for sd, rc in fit["brain"]["clear"].items():
             check(rc["inBoneWayAfter"] <= 20, f"cortex {sd}: {rc['inBoneWayAfter']} vertices left in bone's way")
         check(fit["pfossa"]["clear"]["inBoneAfter"] <= 60, f"hindbrain: {fit['pfossa']['clear']['inBoneAfter']} vertices left in bone")
+        # the cortical arteries, moved with the cortex (skullbase_v1_brain.carry_arteries): out of the bone, each on its side
+        moved = fit["brain"].get("arteries", {})
+        check(len(moved) >= 12, f"{len(moved)} cortical arteries moved with the cortex")
+        for n_, r in moved.items():
+            check(r["inBoneAfterMm"] <= max(1.0, 0.02 * r["lengthMm"]), f"{n_}: {r['inBoneAfterMm']} mm of its centre line left in bone")
+            it = next((x for x in m["structures"] if x["name"] == n_), None)
+            check(it is not None and it["centroid"] == r["centroid"] and "moved with that cortex" in it.get("derivation", ""),
+                  f"{n_}: the manifest does not have it as moved")
+            check(set(r["centroid"]) == set(r["box"]) == {"L", "R"} and all((c[0] < 0) == (sd == "L") for sd, c in r["centroid"].items()),
+                  f"{n_}: not on both sides, or on the wrong side")
+        # the hypoglossal nerve, led through the model's own hypoglossal canal (skullbase_v1_xii.py; Z-Anatomy's curve ran
+        # through the solid bone beside the canal, 17.6 mm of it a side: the audit's finding MC-09)
+        steps = {e["step"]: e for e in json.loads((GEN / f"{PREFIX}-modifications.json").read_text())["steps"]}
+        xii = steps.get("skullbase_v1_xii", {}).get("metrics", {})
+        check(set(xii) == {"L", "R"}, "the hypoglossal nerve is not led through its canal (skullbase_v1_xii.py not run)")
+        for sd, r in xii.items():
+            check(r["canal"]["fromLabelMm"] <= 1.0 and 1.5 <= r["canal"]["widthMm"] <= 5.0 and r["canal"]["lengthMm"] >= 3.0,
+                  f"hypoglossal canal {sd}: not found beside its label ({r['canal']})")
+            check(r["toCanalCentreMm"] <= 0.5, f"hypoglossal nerve {sd}: passes {r['toCanalCentreMm']} mm from its canal's centre")
+            check(r["inBoneAfterMm"] <= 1.0, f"hypoglossal nerve {sd}: {r['inBoneAfterMm']} mm of its centre line in the occipital bone")
+        it = next((x for x in m["structures"] if x["name"] == "Hypoglossal nerve (XII)"), None)
+        check(it is not None and "Led through the canal" in it.get("derivation", ""), "the hypoglossal nerve's derivation does not say it was moved")
+        # every vessel and nerve measured against the bones (skullbase_v1_inbone.py, the last step: a rebuild that skips it
+        # leaves no entry). The ones the project has moved out of the bone carry no note; the carotid, which Z-Anatomy
+        # draws through a petrous bone without a canal, does (the audit's finding MC-11)
+        noted = {x["name"]: x["inBone"] for x in m["structures"] if x.get("inBone")}
+        check(10 <= len(noted) <= 45, f"{len(noted)} vessels and nerves noted as lying in the model's bone (skullbase_v1_inbone.py not run?)")
+        check("Hypoglossal nerve (XII)" not in noted and not any(n in noted for n in moved), "a structure moved out of the bone is still noted as lying in it")
+        check("Internal carotid artery" in noted and {"Sphenoid bone", "Temporal bone"} <= set(noted.get("Internal carotid artery", {}).get("bones", [])),
+              "the internal carotid artery is not noted as running in the sphenoid and temporal bones")
+        check(all(0 <= r["share"] <= 1 and r["deepestMm"] >= 0.5 and r["bones"] for r in noted.values()), "an in-bone note without a share, a depth or a bone")
         # the temporal-bone views (skullbase_v1_ear.py): Z-Anatomy's ear, and what it lacks drawn by rule, on both sides
         names = {it["name"]: it for it in m["structures"]}
         for n_ in ("Cochlea", "Vestibule and semicircular canals", "Malleus", "Incus", "Stapes", "Tympanic membrane", "Greater petrosal nerve"):

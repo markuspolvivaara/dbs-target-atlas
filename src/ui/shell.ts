@@ -1,17 +1,21 @@
 import { BRAND, SECTIONS, SITE_ROOT, type Section } from '../brand';
 import { setViewPrefs, viewPrefs } from '../viewer/viewprefs';
 import { h } from './h';
+import { scrollHint } from './stage';
 
 /**
  * Header shared by every page of the Open Neuroanatomy Atlas: the brand (links to the
  * home page), the current section, that section's own tabs, the viewer's settings (in a section) and the theme button.
  */
 export function siteHeader(opts: { section: Section | null; nav: HTMLElement[]; themeBtn: HTMLElement }): HTMLElement {
+  const nav = opts.nav.length ? h('nav', { class: 'nav', 'aria-label': `${opts.section?.name ?? BRAND.name} pages` }, ...opts.nav) : h('span', { class: 'nav' });
+  // on a phone the page tabs scroll sideways: their edge fades where more lie
+  scrollHint(nav);
   return h('header', { class: 'top' },
     h('a', { class: 'brand', href: SITE_ROOT, title: `${BRAND.name}: home` },
       h('span', { class: 'brand-mark', 'aria-hidden': 'true' }), h('span', { class: 'brand-name' }, BRAND.name)),
     opts.section ? sectionSwitch(opts.section) : null,
-    opts.nav.length ? h('nav', { class: 'nav', 'aria-label': `${opts.section?.name ?? BRAND.name} pages` }, ...opts.nav) : h('span', { class: 'nav' }),
+    nav,
     opts.section ? viewSettings() : null,
     opts.themeBtn,
   );
@@ -50,7 +54,8 @@ function viewSettings(): HTMLElement {
 }
 
 export function disclaimerNote(text = 'Atlas-based (MNI 2009b) group anatomy; individual anatomy varies. Not for surgical planning.'): HTMLElement {
-  return h('p', { class: 'disclaimer', role: 'note' }, h('strong', {}, 'Teaching tool. '), text);
+  // (a landmark of its own: it sat outside every landmark, which screen readers' landmark lists skip)
+  return h('aside', { class: 'disclaimer', 'aria-label': 'Notice' }, h('p', {}, h('strong', {}, 'Teaching tool. '), text));
 }
 
 /** The current section as a menu button: switch to another section or go to the home page. */

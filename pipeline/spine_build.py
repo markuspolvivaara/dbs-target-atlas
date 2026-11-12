@@ -28,6 +28,7 @@ sys.path.insert(0, str(ROOT))
 from build import isosurface  # noqa: E402
 from glb import write_glb  # noqa: E402
 import spine_geom as G  # noqa: E402
+from drawn_bone import DrawnBone, PATH_STEP_MM  # noqa: E402
 
 REPO = ROOT.parent
 RAW = ROOT / "data" / "raw" / "verse" / "sub-verse823"
@@ -109,16 +110,75 @@ def origin() -> np.ndarray:
     return nib.affines.apply_affine(img.affine, [l5["X"], l5["Y"], l5["Z"]])
 
 
-def bone_volume(ct: np.ndarray, sel: np.ndarray, vox_mm: float) -> np.ndarray:
+def bone_volume(ct: np.ndarray, sel: np.ndarray, vox_mm: float, other: np.ndarray | None = None) -> np.ndarray:
     """Volume whose BONE_HU isosurface is the vertebra: the CT inside the mask dilated by MASK_REACH_MM, with the
     mask's eroded core held above the threshold (cancellous bone can be darker than BONE_HU) and everything
-    outside the dilated mask held below it (neighbouring vertebrae, ribs)."""
+    outside the dilated mask held below it (ribs). `other` is the other bones' masks on the same grid (the
+    neighbouring vertebrae): the dilated mask does not reach into them, and where it and theirs meet in unlabelled
+    space a voxel goes to the nearer mask (one as near to both goes to neither), so that two neighbours share no bone
+    and the joint between them is their boundary."""
     reach = max(1, int(round(MASK_REACH_MM / vox_mm)))
     near = ndimage.binary_dilation(sel, iterations=reach)
     core = ndimage.binary_erosion(sel, iterations=reach)
+    if other is not None:
+        other = other & ~sel
+        if other.any():
+            near &= ~other & (ndimage.distance_transform_edt(~sel) < ndimage.distance_transform_edt(~other))
     vol = np.where(near, ct, -1000.0).astype(np.float32)
     vol[core] = np.maximum(vol[core], BONE_HU + 400)
     return vol
+
+
+def drawn_solid(ct: np.ndarray, m: np.ndarray, vox_mm: float, sacrum: np.ndarray | None = None) -> np.ndarray:
+    """The vertebrae as they are drawn, as one solid on a block of the CT: each label's surface volume (bone_volume)
+    smoothed and cut at BONE_HU, exactly as vertebrae() cuts the meshes, and the sacrum's mask smoothed as its surface
+    is; cavities closed in on all sides are filled."""
+    out = np.zeros(m.shape, bool)
+    for lab, box in enumerate(ndimage.find_objects(m), 1):
+        if box is None or lab not in VERSE_LEVELS:
+            continue
+        crop = tuple(slice(max(b.start - 8, 0), min(b.stop + 8, n)) for b, n in zip(box, m.shape))
+        other = m[crop] > 0
+        if sacrum is not None:
+            other = other | sacrum[crop]
+        out[crop] |= ndimage.gaussian_filter(bone_volume(ct[crop], m[crop] == lab, vox_mm, other), SIGMA_VOX) > BONE_HU
+    if sacrum is not None:
+        out |= ndimage.gaussian_filter(sacrum.astype(np.float32), 1.0) > 0.5
+    return ndimage.binary_fill_holes(out)
+
+
+SHARED_DEPTH_MM = 0.5   # a vertex counts as inside its neighbour's bone from this depth (the meshes are simplified and
+                        # the depth is read off a voxel grid: less is their own tolerance)
+
+
+def neighbours(ct: np.ndarray, m: np.ndarray, crops: dict, aff_o: np.ndarray, vox: float, meshes: dict) -> list[dict]:
+    """Each vertebra and the next, as drawn: the bone inside both surfaces (ml), and the vertices of each that lie
+    inside the other's bone (how many deeper than SHARED_DEPTH_MM, and the deepest, mm). Two vertebrae that share
+    bone cannot show the joint between them, and a tool that drills one leaves the other's copy standing. (L5 and the
+    sacrum are added in vertebrae(): L5's vertices in the sacrum only.)"""
+    size = np.sqrt((aff_o[:3, :3] ** 2).sum(0))
+    out = []
+    labels = sorted(crops)
+    for la, lb in zip(labels, labels[1:]):
+        if lb != la + 1:
+            continue
+        lo, hi = np.minimum(crops[la][0], crops[lb][0]), np.maximum(crops[la][1], crops[lb][1])
+        crop = tuple(slice(a, b) for a, b in zip(lo, hi))
+        ins = [ndimage.gaussian_filter(bone_volume(ct[crop], m[crop] == l, vox, m[crop] > 0), SIGMA_VOX) > BONE_HU for l in (la, lb)]
+        a2 = aff_o.copy()
+        a2[:3, 3] = nib.affines.apply_affine(aff_o, lo)
+        inv = np.linalg.inv(a2)
+        count, deepest = 0, 0.0
+        for own, oth in ((la, 1), (lb, 0)):
+            depth = ndimage.distance_transform_edt(ins[oth], sampling=size)
+            q = nib.affines.apply_affine(inv, meshes[level_id(VERSE_LEVELS[own])].vertices).T
+            d = ndimage.map_coordinates(depth, q, order=1, mode="constant", cval=0.0)
+            count += int((d > SHARED_DEPTH_MM).sum())
+            deepest = max(deepest, float(d.max()))
+        out.append({"pair": f"{VERSE_LEVELS[la]}-{VERSE_LEVELS[lb]}", "sharedMl": round(float((ins[0] & ins[1]).sum() * np.prod(size)) / 1000, 3),
+                    "verticesInside": count, "deepestMm": round(deepest, 2)})
+        print(out[-1])
+    return out
 
 
 def vertebrae(report: dict) -> list[dict]:
@@ -138,6 +198,8 @@ def vertebrae(report: dict) -> list[dict]:
     aff_o[:3, 3] -= o
     items = []
     meshes = {}
+    crops = {}
+    sac_l5 = None
     for lab in labels:
         name = VERSE_LEVELS[lab]
         # crop to the vertebra (plus a margin) so the smoothing and marching cubes stay cheap
@@ -145,8 +207,13 @@ def vertebrae(report: dict) -> list[dict]:
         lo = np.maximum([b.start - 8 for b in box], 0)
         hi = np.minimum([b.stop + 8 for b in box], m.shape)
         crop = (slice(lo[0], hi[0]), slice(lo[1], hi[1]), slice(lo[2], hi[2]))
+        crops[lab] = (lo, hi)
         sel = m[crop] == lab
-        sub = bone_volume(ct[crop], sel, vox)
+        other = m[crop] > 0
+        if name == "L5":   # its lower neighbour is the sacrum, which is TotalSegmentator's (the drawn sacrum's mask)
+            sac_l5, _ = ts_mask("total", "sacrum+vertebrae_S1", tuple(slice(sp.start + a, sp.start + b) for sp, a, b in zip(span, lo, hi)))
+            other = other | sac_l5
+        sub = bone_volume(ct[crop], sel, vox, other)
         a2 = aff_o.copy()
         a2[:3, 3] = nib.affines.apply_affine(aff_o, lo)
         mesh = isosurface(sub, a2, BONE_HU, SIGMA_VOX, FACES[name[0]])
@@ -157,6 +224,20 @@ def vertebrae(report: dict) -> list[dict]:
                       "centroid": c.round(2).tolist(), "volumeMl": round(float(sel.sum() * abs(np.linalg.det(aff[:3, :3]))) / 1000, 1)})
         report[sid] = items[-1]
         print(f"{name:4s} faces {len(mesh.faces):6d} centroid {c.round(1)}")
+    report["neighbours"] = neighbours(ct, m, crops, aff_o, vox, meshes)
+    if sac_l5 is not None:   # L5 and the sacrum as drawn (its mask smoothed, as ts_structures takes its surface)
+        lo, hi = crops[LABEL_OF["L5"]]
+        crop = tuple(slice(a, b) for a, b in zip(lo, hi))
+        size = np.sqrt((aff_o[:3, :3] ** 2).sum(0))
+        l5 = ndimage.gaussian_filter(bone_volume(ct[crop], m[crop] == LABEL_OF["L5"], vox, (m[crop] > 0) | sac_l5), SIGMA_VOX) > BONE_HU
+        sac = ndimage.gaussian_filter(sac_l5.astype(np.float32), 1.0) > 0.5
+        a2 = aff_o.copy()
+        a2[:3, 3] = nib.affines.apply_affine(aff_o, lo)
+        d = ndimage.map_coordinates(ndimage.distance_transform_edt(sac, sampling=size),
+                                    nib.affines.apply_affine(np.linalg.inv(a2), meshes["sp_l5"].vertices).T, order=1, mode="constant", cval=0.0)
+        report["neighbours"].append({"pair": "L5-S1", "sharedMl": round(float((l5 & sac).sum() * np.prod(size)) / 1000, 3),
+                                     "verticesInside": int((d > SHARED_DEPTH_MM).sum()), "deepestMm": round(float(d.max()), 2)})
+        print(report["neighbours"][-1])
     occ = ndimage.gaussian_filter((m > 0).astype(np.float32), AO_SIGMA_MM / vox)
     inv_o = np.linalg.inv(aff_o)
     for sid, mesh in meshes.items():
@@ -249,6 +330,10 @@ def ts_structures(report: dict) -> list[dict]:
     return items
 
 
+DISC_PARTIAL = 0.5    # a disc narrower than this share of its neighbours' mean width is marked as drawn in part
+DISC_SPACE_MM = 8.0   # the CT between two bodies is read on circles of this radius across the line joining their centres
+
+
 def discs(report: dict, verts: list[dict]) -> list[dict]:
     """The vertebrae_body task's intervertebral_discs mask, split by level: each disc (connected component) belongs to
     the two bones it touches most within 2 mm (VerSe vertebrae, and TotalSegmentator's sacrum with S1 as S1)."""
@@ -293,10 +378,25 @@ def discs(report: dict, verts: list[dict]) -> list[dict]:
                       "category": "disc", "faces": int(len(mesh.faces)), "centroid": mesh.centroid.round(2).tolist(),
                       "region": REGION[up[0]],
                       "source": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches"})
-        report[sid] = items[-1]
+        report[sid] = {**items[-1], "volumeMl": round(float(comp.sum() * abs(np.linalg.det(aff[:3, :3]))) / 1000, 2),
+                       "widthMm": round(float(np.ptp(nib.affines.apply_affine(aff, idx)[:, 0])) + float(abs(aff[0, 0])), 1)}
     ids = [x["id"] for x in items]
     if len(ids) != len(set(ids)):
         raise SystemExit(f"two disc components assigned to one level: {sorted(ids)}")
+    # a disc much narrower than its neighbours is not a whole disc: the class has found a part of it, or there is
+    # little disc left to find (the T10-T11 disc of this CT, a 0.08 ml chip: the audit's finding MC-02). It stays
+    # drawn, and says so
+    rank = lambda x: (["C", "T", "L", "S"].index(x["level"][0]), int(x["level"].split("-")[0][1:]))   # noqa: E731
+    items.sort(key=rank)
+    for i, it in enumerate(items):
+        near = [report[items[j]["id"]]["widthMm"] for j in (i - 1, i + 1) if 0 <= j < len(items)]
+        me = report[it["id"]]
+        if near and me["widthMm"] < DISC_PARTIAL * float(np.mean(near)):
+            me["partial"] = {"volumeMl": me["volumeMl"], "widthMm": me["widthMm"], "neighbourWidthMm": near}
+            it["after"] = (f"At this level the class holds only a chip ({me['volumeMl']:g} ml, {me['widthMm']:.0f} mm from side to "
+                           f"side; the discs above and below {' and '.join(f'{w:.0f}' for w in near)} mm): the disc is not drawn "
+                           "in full here.")
+            print(f"disc {it['level']}: drawn in part {me['partial']}")
     print(f"discs: {len(items)} ({', '.join(x['level'] for x in items)})")
     return items
 
@@ -314,8 +414,13 @@ SEGMENTS = {
     # into the foramen, so its floor is taken across it (spine_geom.foramen, floor_clefts). The foramen's size is not
     # reported here: without the rib heads, which form part of its wall, the gap the plane method finds runs on into
     # the costotransverse region; its position still places the schematic roots.
+    # Where a thoracic foramen is no wider than the facet joint's line below it, nothing sets it apart in these planes,
+    # and the first gap the method finds lies further out: lateral to the pedicle, between it and the transverse
+    # process (the rib that fills it is not drawn), its roof above the pedicle. A gap first found more than
+    # foramen_within planes out is therefore not taken (T7 left and T8 right in this CT, found 4 and 3 planes out; every
+    # other within 2), and the root is aimed by the other side's foramen, mirrored (the audit's finding MC-05).
     "thoracic": {"chain": THORACIC, "roots": [f"T{i}" for i in range(1, 13)], "below": 40, "sacrum": False, "lesions": False,
-                 "course": "intercostal", "close": 3.0, "floor_clefts": True, "report_foramen": False},
+                 "course": "intercostal", "close": 3.0, "floor_clefts": True, "report_foramen": False, "foramen_within": 2},
     # cervical: eight roots for seven vertebrae; each leaves above the vertebra of its number, C8 between C7 and T1
     # (root_of "lower": the root at a motion segment is named for its lower vertebra), in the lower part of the
     # foramen (Moreno 2021). C1 and C2 have no disc and no foramen of this kind: the craniocervical junction follows
@@ -333,10 +438,13 @@ ROOT_IN_MM = 1.5      # each root starts this far inside the dural sac, so it le
 TAKEOFF_DEG = 55.0    # lumbar and thoracic roots leave the sac at this angle to its axis, running down and out
                       # (Silverstein 2015: 50.5-58.8 deg at L4 and L5, the largest), for TAKEOFF_LEG_MM
 TAKEOFF_LEG_MM = 5.0
-ROOT_CLEAR_MM = 0.4   # each root's surface kept this far out of the drawn bone (its path pushed out where it ran in:
-ROOT_PUSH_PASSES = 16 # the schematic paths are placed by rule and would otherwise cut through a lamina or a facet)
-DRG_CLEAR_MM = 2.0    # ... and each ganglion's centre this far
+ROOT_CLEAR_MM = 0.4   # each root's surface kept this far out of the drawn bone (its path led round and pushed out
+                      # where it ran in: the schematic paths are placed by rule and would otherwise cut through a
+                      # lamina or a facet)
 DRG_RADII = (3.0, 3.0, 5.0)
+DRG_SEEK_MM = 2.0     # each ganglion sits where the opening is widest within this distance of its place on the root,
+DRG_IN_MAX_MM = 0.3   # and is drawn smaller (in steps, down to DRG_MIN_SCALE) until none of its surface lies deeper
+DRG_MIN_SCALE = 0.6   # than this in the drawn bone: a foramen as drawn can be narrower than the schematic ganglion
 
 
 def mesh_nodes(parts: dict[str, tuple]) -> list[dict]:
@@ -372,6 +480,7 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
     hi = np.minimum(np.ceil(span.max(0)).astype(int) + 1, img.shape)
     cr = tuple(slice(a, b) for a, b in zip(lo, hi))
     vm, a2 = load_mask(cr)
+    vm_drawn = vm   # VerSe's labels as read: the vertebrae are drawn from these
     if cfg.get("ct_labels"):
         # each voxel of the CT's bone surface volume takes the label of the nearest VerSe mask within MASK_REACH_MM
         vox = np.abs(np.diag(a2)[:3])
@@ -382,46 +491,75 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
     disc, _ = ts_mask("vertebrae_body", "intervertebral_discs", cr)
     sacpts_mask, _ = ts_mask("total", "spinal_cord", cr)
     lab = vm.copy()
+    sac = None
     if cfg["sacrum"]:
         sac, _ = ts_mask("total", "sacrum+vertebrae_S1", cr)
         lab[sac & (lab == 0)] = LABEL_OF["S1"]
-        del sac
     lab[disc & (lab == 0)] = DISC_LABEL
     grid = G.Grid(lab, a2)
-    # the bone as the vertebrae are drawn (the CT's bone within reach of their masks; the sacrum's segmentation), its
-    # signed distance (mm, positive outside): the schematic roots are kept out of it
+    # the bone as the vertebrae and the sacrum are drawn (drawn_bone: the volume their surfaces are cut from, as one
+    # solid), its signed distance (mm, positive outside): the schematic roots are kept out of it
     vox_b = np.abs(np.diag(a2)[:3])
-    drawn_bone = (ndimage.gaussian_filter(read_block(CT, cr).astype(np.float32), SIGMA_VOX) > BONE_HU) & \
-        (ndimage.distance_transform_edt(vm == 0, sampling=vox_b) <= MASK_REACH_MM)
-    if cfg["sacrum"]:
-        drawn_bone |= lab == LABEL_OF["S1"]
-    bone_sd = (ndimage.distance_transform_edt(~drawn_bone, sampling=vox_b) - ndimage.distance_transform_edt(drawn_bone, sampling=vox_b)).astype(np.float32)
-    del drawn_bone
-    inv_b = np.linalg.inv(a2)
+    ct_block = read_block(CT, cr, np.float32)
+    bone = DrawnBone(drawn_solid(ct_block, vm_drawn, float(np.mean(vox_b)), sac), a2)
+    del sac
+    inv_block = np.linalg.inv(a2)
 
-    def bone_dist(P: np.ndarray) -> np.ndarray:
-        return ndimage.map_coordinates(bone_sd, nib.affines.apply_affine(inv_b, np.atleast_2d(P)).T, order=1, mode="nearest")
+    def space_hu(cu: np.ndarray, cd: np.ndarray, F: np.ndarray) -> float:
+        """The densest the CT gets between two bodies: its mean on circles of DISC_SPACE_MM radius across the line
+        joining their centres, the greatest over the middle half of that line (HU). At a disc that is the brighter of
+        its two end plates; where there is no disc gap, a single dense band."""
+        rr = np.arange(-DISC_SPACE_MM, DISC_SPACE_MM + 0.01, 1.0)
+        ring = np.array([[a, b] for a in rr for b in rr if a * a + b * b <= DISC_SPACE_MM ** 2 + 0.01])
+        hh = float(np.linalg.norm(cu - cd))
+        out = []
+        for w in np.arange(0.25 * hh, 0.75 * hh + 0.01, 0.5):
+            P = cu - w * F[2] + ring[:, :1] * F[0] + ring[:, 1:] * F[1]
+            out.append(float(ndimage.map_coordinates(ct_block, nib.affines.apply_affine(inv_block, P).T, order=1, mode="nearest").mean()))
+        return round(max(out))
+    bone_dist = bone.dist
 
     def clear_of_bone(P: np.ndarray, clearance: float, fixed: int = 0) -> tuple[np.ndarray, float]:
-        """Points (RAS) pushed out of the drawn bone to `clearance` mm from it, along its distance's gradient, the
-        pushes smoothed along the path (a root bends rather than kinks); the first `fixed` stay. Returns the points and
-        what intrusion is left (mm)."""
-        P = P.copy()
-        for _ in range(ROOT_PUSH_PASSES):
-            need = np.clip(clearance - bone_dist(P), 0, None)
-            need[:fixed] = 0
-            if need.max() < 0.05:
-                break
-            g = np.stack([(bone_dist(P + 0.3 * e) - bone_dist(P - 0.3 * e)) / 0.6 for e in np.eye(3)], 1)
-            g /= np.maximum(np.linalg.norm(g, axis=1, keepdims=True), 1e-6)
-            D = need[:, None] * g
-            for _ in range(3):   # spread along the path, each point still moved at least its own way out
-                D[1:-1] = 0.5 * D[1:-1] + 0.25 * (D[:-2] + D[2:])
-            D += np.clip(need - np.einsum("ij,ij->i", D, g), 0, None)[:, None] * g
-            D[:fixed] = 0
-            P += D
-        return P, float(np.clip(clearance - bone_dist(P), 0, None)[fixed:].max(initial=0.0))
-    intrusion = {}
+        """A path led round the bone where its centre line runs inside it (DrawnBone.thread), then pushed out to
+        `clearance` (DrawnBone.clear)."""
+        P, _ = bone.thread(G.resample(P, PATH_STEP_MM), clearance)
+        return bone.clear(P, clearance, fixed)
+    intrusion, depth, drg_scale = {}, {}, {}
+
+    def smaller(rname: str) -> str:
+        """For a root's source line: on which sides its ganglion is drawn smaller than DRG_RADII, and by how much."""
+        sc = {sd: drg_scale.get(f"{rname}{sd}", 1.0) for sd in ("L", "R")}
+        if min(sc.values()) >= 1:
+            return ""
+        where = "on both sides" if max(sc.values()) < 1 else "on the left" if sc["L"] < 1 else "on the right"
+        return f", drawn smaller {where} to fit the opening as drawn (to {round(100 * min(sc.values()))} % at the least)"
+
+    def ganglion(curve_ras: np.ndarray, at: np.ndarray, up_axis: np.ndarray) -> tuple[tuple, float]:
+        """A root's ganglion (mesh in model coordinates, and the scale it is drawn at): on the root as pushed, nearest
+        `at`, its long axis along the root there; moved up to DRG_SEEK_MM to where the opening is widest, and scaled
+        down until its surface is out of the drawn bone (DRG_IN_MAX_MM), DRG_MIN_SCALE at the least."""
+        k = int(np.argmin(np.linalg.norm(curve_ras - at, axis=1)))
+        ez = curve_ras[min(k + 3, len(curve_ras) - 1)] - curve_ras[max(k - 3, 0)]
+        ez /= np.linalg.norm(ez)
+        ex = np.cross(ez, up_axis); ex /= np.linalg.norm(ex)
+        axes = np.stack([ex, np.cross(ez, ex), ez])
+        want = DRG_RADII[0] + ROOT_CLEAR_MM
+        g = np.arange(-DRG_SEEK_MM, DRG_SEEK_MM + 0.01, 0.5)
+        off = np.array([[a, b, c] for a in g for b in g for c in g])
+        off = off[np.linalg.norm(off, axis=1) <= DRG_SEEK_MM + 1e-6]
+        off = off[np.argsort(np.linalg.norm(off, axis=1), kind="stable")]
+        room = np.minimum(bone_dist(curve_ras[k] + off), want)
+        gc = curve_ras[k] + off[int(np.argmax(room))]     # (the nearest of the roomiest: argmax takes the first)
+        scale = 1.0
+        while True:
+            mesh = G.ellipsoid(gc - o, axes, tuple(scale * r for r in DRG_RADII))
+            if bone.deepest(mesh[0] + o) <= DRG_IN_MAX_MM or scale <= DRG_MIN_SCALE + 1e-9:
+                return mesh, round(scale, 2)
+            scale -= 0.05
+
+    def deepest(mesh: tuple) -> float:
+        """How far the deepest vertex of a mesh (model coordinates) lies inside the drawn bone (mm; 0: none inside)."""
+        return bone.deepest(mesh[0] + o)
 
     def ras_of(mask: np.ndarray) -> np.ndarray:
         return nib.affines.apply_affine(a2, np.argwhere(mask))
@@ -444,7 +582,7 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
         C[LABEL_OF["S1"]] = 2 * disc_between("L5", "S1")[0] - C[LABEL_OF["L5"]]  # S1 body centre: L5 mirrored across the disc
 
     levels, roots = [], []
-    canals = {}
+    canals, space = {}, {}
     found = 0
     for up, down in zip(chain, chain[1:]):
         cu, cd = C[LABEL_OF[up]], C[LABEL_OF[down]]
@@ -458,6 +596,9 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
             if can:
                 break
         canals[up] = (can, F)
+        # what the level's card reports: the canal where it is narrowest between the pedicles (the slab's hole above
+        # still places the roots: its edge is the lateral recess)
+        ped = can and G.canal_between_pedicles(grid, LABEL_OF[up], cu, F, can)
         fors = {}
         for sd, sg in (("L", -1), ("R", 1)):
             fo = None
@@ -477,11 +618,14 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
                 fo = G.foramen(grid, LABEL_OF[up], LABEL_OF[down], {DISC_LABEL}, mid, F,
                                (can["uMin"] - 1) if sg < 0 else (can["uMax"] + 1), h, cfg["close"],
                                cfg.get("floor_clefts", False))
+                if fo and fo["planesOut"] > cfg.get("foramen_within", 99):
+                    fo = None   # (lateral to the pedicle: see SEGMENTS)
             fors[sd] = fo
             found += fo is not None
         dc, dpts = disc_between(up, down)
         levels.append({"level": up, "pair": f"{up}-{down}", "bodyCentre": (cu - o).round(2).tolist(),
-                       "canal": can and {k: can[k] for k in ("width", "depth", "area")},
+                       "canal": can and ({**{k: ped[k] for k in ("width", "depth", "area")}, "betweenPedicles": True} if ped
+                                         else {k: can[k] for k in ("width", "depth", "area")}),
                        "foramen": {sd: fo and {k: fo[k] for k in ("height", "width", "area")} if cfg["report_foramen"] else None
                                    for sd, fo in fors.items()},
                        **({} if cfg["report_foramen"] else {"foramenMeasured": False}),
@@ -525,9 +669,14 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
                     if p0 is not None and (p1 - p0) @ out < 1.0:  # the sac reaches out past the entrance: no kink back
                         p1 = None
                 else:
+                    other = fors["R" if sd == "L" else "L"]
                     if fo:
                         c = np.array(fo["centre"])
                         p2 = c + ((fo["top"] - fo["w"]) / 2) * F[2]  # upper part of the foramen, beneath the pedicle
+                    elif other and can:
+                        # not captured on this side: the other side's foramen mirrored across the canal's middle
+                        q = np.array(other["centre"]) + ((other["top"] - other["w"]) / 2) * F[2]
+                        p2 = q - 2 * (float((q - mid) @ F[0]) - can["u"]) * F[0]
                     else:
                         p2 = mid + (edge + sg * 6) * F[0] + ((can["v"] if can else -20)) * F[1] + 0.15 * h * F[2]
                     p0b = None
@@ -557,13 +706,10 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
                 curve_ras, left = clear_of_bone(G.catmull(path, 8), ROOT_RADIUS + ROOT_CLEAR_MM, fixed=1 if p0 is not None else 0)
                 curve = curve_ras - o
                 parts[sd] = G.tube(curve, ROOT_RADIUS)
-                ez = (p3 - p2) / np.linalg.norm(p3 - p2)
-                ex = np.cross(ez, F[2]); ex /= np.linalg.norm(ex)
-                # the ganglion rides on the root as pushed, its centre kept out of the bone too
-                gc = curve_ras[np.argmin(np.linalg.norm(curve_ras - (p2 + 2.0 * ez), axis=1))]
-                gc = clear_of_bone(gc[None], DRG_CLEAR_MM)[0][0]
-                drgs[sd] = G.ellipsoid(gc - o, np.stack([ex, np.cross(ez, ex), ez]), DRG_RADII)
+                # the ganglion rides on the root as pushed, just beyond the aim point
+                drgs[sd], drg_scale[f"{rname}{sd}"] = ganglion(curve_ras, p2 + 2.0 * (p3 - p2) / np.linalg.norm(p3 - p2), F[2])
                 intrusion[f"{rname}{sd}"] = round(left, 2)
+                depth[f"{rname}{sd}"] = {"root": deepest(parts[sd]), "ganglion": deepest(drgs[sd])}
             # the root and its dorsal root ganglion are one structure
             rid = f"sp_root_{rname.lower()}"
             write_glb(BUILD / f"{rid}.glb", mesh_nodes({sd: merge([parts[sd], drgs[sd]]) for sd in parts}), {"id": rid})
@@ -581,8 +727,9 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
             roots.append({"id": rid, "name": f"{rname} nerve root", "level": rname, "token": "spRoot", "layer": "tracts", "category": "root",
                           "region": region, "schematic": True, "estimated": [k for k, v in estimated.items() if v],
                           "centroid": (p2 - o).round(2).tolist(),
-                          "source": f"Schematic: {path_note}; drawn {2 * ROOT_RADIUS:g} mm thick, with its dorsal root ganglion "
-                                    f"{'just outside' if cervical else 'in the upper part of'} the foramen (not to scale)"})
+                          "source": f"Schematic: {path_note}; kept out of the bone as it is drawn; drawn {2 * ROOT_RADIUS:g} mm "
+                                    f"thick, with its dorsal root ganglion {'just outside' if cervical else 'in the upper part of'} "
+                                    f"the foramen{smaller(rname)} (not to scale)"})
 
         # ---- where a herniation of each kind sits at this disc (for the lesion-to-root tool; schematic positions):
         # paracentral = posterior edge of the disc halfway between the midline and the canal edge; foraminal = in the
@@ -606,13 +753,30 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
         # ---- the disc's height at its centre (measured): the spread of its points along the spine within 8 mm of it;
         # not at L5-S1, whose frame (towards an estimated S1 centre) runs obliquely through this wedge-shaped disc
         core = dpts[np.abs((dpts - dc) @ F[0]) < 8]
-        if len(core) and down != "S1":
+        part = report.get("sp_disc_" + f"{up}-{down}".lower().replace("-", "_"), {}).get("partial")
+        if down != "S1":
+            space[f"{up}-{down}"] = space_hu(cu, cd, F)
+        if part:
+            # the disc is drawn in part (discs()): no height is given, and what the CT shows between the two bodies
+            # is (filled in below, with the neighbours' for comparison)
+            levels[-1]["discPartial"] = dict(part)
+        elif len(core) and down != "S1":
             dw = (core - dc) @ F[2]
             levels[-1]["discHeightMm"] = round(float(np.percentile(dw, 95) - np.percentile(dw, 5)), 1)
+    for i, lv in enumerate(levels):
+        if "discPartial" in lv:
+            lv["discPartial"]["spaceHu"] = space[lv["pair"]]
+            lv["discPartial"]["neighbourSpaceHu"] = [space[levels[j]["pair"]] for j in (i - 1, i + 1)
+                                                     if 0 <= j < len(levels) and levels[j]["pair"] in space]
+            print(f"{lv['pair']}: disc drawn in part; the CT between the bodies {lv['discPartial']}")
     if not cfg["sacrum"]:
         print(f"{region}: {len(levels)} levels, {len(roots)} root parts; foramina found (placing the roots) {found}/{2 * len(levels)}")
         report.setdefault("rootIntrusionMm", {}).update(intrusion)
+        report.setdefault("rootInBoneMm", {}).update(depth)
+        report.setdefault("ganglionScale", {}).update(drg_scale)
         print(f"{region}: roots left in the bone (mm) {intrusion}")
+        print(f"{region}: deepest vertex in the drawn bone (mm) {depth}")
+        print(f"{region}: ganglia drawn smaller than {DRG_RADII} {({k: v for k, v in drg_scale.items() if v < 1})}")
         return levels, roots
     # ---- S1: leaves the sac at the L5-S1 disc, runs in the lateral recess of S1 and leaves through the first sacral
     # foramen, whose position the measurement does not capture (estimated); its ganglion is drawn inside the canal
@@ -633,22 +797,25 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
         curve_ras, left = clear_of_bone(G.catmull([q for q in (p0, p1, p2, p3, p4) if q is not None], 8), ROOT_RADIUS + ROOT_CLEAR_MM,
                                         fixed=1 if p0 is not None else 0)
         parts[sd] = G.tube(curve_ras - o, ROOT_RADIUS)
-        ez = (p2 - p1) / np.linalg.norm(p2 - p1)
-        ex = np.cross(ez, Fs[1]); ex /= np.linalg.norm(ex)
-        gc = clear_of_bone(((p1 + p2) / 2)[None], DRG_CLEAR_MM)[0][0]
-        drgs[sd] = G.ellipsoid(gc - o, np.stack([ex, np.cross(ez, ex), ez]), DRG_RADII)
+        drgs[sd], drg_scale[f"S1{sd}"] = ganglion(curve_ras, (p1 + p2) / 2, Fs[1])
         intrusion[f"S1{sd}"] = round(left, 2)
+        depth[f"S1{sd}"] = {"root": deepest(parts[sd]), "ganglion": deepest(drgs[sd])}
     write_glb(BUILD / "sp_root_s1.glb", mesh_nodes({sd: merge([parts[sd], drgs[sd]]) for sd in parts}), {"id": "sp_root_s1"})
     roots.append({"id": "sp_root_s1", "name": "S1 nerve root", "level": "S1", "token": "spRoot", "layer": "tracts", "category": "root",
                   "region": region, "schematic": True, "estimated": ["L", "R"], "centroid": (cs1 - o).round(2).tolist(),
                   "source": "Schematic: leaves the lateral wall of the dural sac at the L5-S1 disc, runs in the lateral recess "
                             "of S1 and leaves through the first sacral foramen, whose position is estimated (not captured by "
-                            f"the measurement); drawn {2 * ROOT_RADIUS:g} mm thick, with its dorsal root ganglion inside the "
-                            "canal, where the S1 ganglion more often lies (Hasegawa 1996; not to scale)"})
+                            f"the measurement); kept out of the bone as it is drawn; drawn {2 * ROOT_RADIUS:g} mm thick, with its "
+                            f"dorsal root ganglion inside the canal, where the S1 ganglion more often lies (Hasegawa 1996){smaller('S1')} "
+                            "(not to scale)"})
     print(f"{region}: {len(levels)} levels, {len(roots)} root parts; foramina measured "
           f"{sum(1 for lv in levels for v in lv['foramen'].values() if v)}/{2 * len(levels)}")
     report.setdefault("rootIntrusionMm", {}).update(intrusion)
+    report.setdefault("rootInBoneMm", {}).update(depth)
+    report.setdefault("ganglionScale", {}).update(drg_scale)
     print(f"{region}: roots left in the bone (mm) {intrusion}")
+    print(f"{region}: deepest vertex in the drawn bone (mm) {depth}")
+    print(f"{region}: ganglia drawn smaller than {DRG_RADII} {({k: v for k, v in drg_scale.items() if v < 1})}")
     return levels, roots
 
 
@@ -672,6 +839,12 @@ CERVICAL_TS = [
     ("headneck_muscles", "sternocleidomastoid_right", "sp_scm_right", "Sternocleidomastoid (right)", "spSoft", "viscera", "muscle", 4000),
 ]
 VA_RADIUS = 2.0       # schematic drawing size (mm), not a measurement
+VA_CLEAR_MM = 0.3     # the artery's surface kept this far out of the drawn bone: its path is led round the bone and
+VA_THREAD_NEAR = 0.5  # (through a narrow foramen rather than round the transverse process: see DrawnBone.thread)
+VA_MIN_RADIUS = 0.75  # pushed out of it, and where a foramen as drawn is narrower than the tube, the tube is drawn
+                      # thinner there, this at the least (the audit's finding MC-08: a spline through the foramina's
+                      # centres cut 3.6 mm deep through C2, whose foramen turns outwards, and was wider than C3's)
+VA_THIN_MM = 1.0      # the places where it is drawn thinner than this below 2 * VA_RADIUS are named in its source line
 # the neck's vessels where their segmentation breaks (this CT has no contrast): gaps up to this long bridged by a tube
 # from one piece's end to the next's start (schematic), and each common carotid on to its internal carotid
 BRIDGE_MAX_MM = 40.0
@@ -787,6 +960,19 @@ def cervical_soft(report: dict) -> list[dict]:
     return items
 
 
+def narrow_note(drawn: dict) -> str:
+    """Where the vertebral artery is drawn thinner than VA_RADIUS, in words (for its source line)."""
+    every = [(lv, sd, d) for sd in ("L", "R") for lv, d in drawn[sd]["diameterAt"].items()]
+    thin = sorted((x for x in every if x[2] < 2 * VA_RADIUS - VA_THIN_MM), key=lambda x: (int(x[0][1:]), x[1]))
+    rest = min((d for _, _, d in every if d >= 2 * VA_RADIUS - VA_THIN_MM), default=2 * VA_RADIUS)
+    if not thin and rest >= 2 * VA_RADIUS - 0.05:
+        return ""
+    side = {"L": "left", "R": "right"}
+    named = "; ".join(f"{d:g} mm at {lv} on the {side[sd]}" for lv, sd, d in thin)
+    return (", thinner where the foramen as drawn leaves less room (" + (f"{rest:g} mm or more in the foramina" if rest < 2 * VA_RADIUS - 0.05 else "")
+            + (f"{', except ' if rest < 2 * VA_RADIUS - 0.05 else ''}{named}" if thin else "") + ")")
+
+
 def vertebral_artery(report: dict) -> tuple[list[dict], dict]:
     """The vertebral artery, schematic, by side: V1 from the subclavian artery (TotalSegmentator) to the foramen
     transversarium where it enters, V2 through the foramina measured on this CT up to C1, V3 behind the lateral mass of
@@ -806,8 +992,9 @@ def vertebral_artery(report: dict) -> tuple[list[dict], dict]:
     cr = tuple(slice(a, b) for a, b in zip(lo, hi))
     vm, a2 = load_mask(cr)
     ct = read_block(CT, cr)
+    bone = DrawnBone(drawn_solid(ct.astype(np.float32), vm, float(vox.mean())), a2)
     levels = [f"C{i}" for i in range(1, 8)]
-    tf, frames, bone_pts = {}, {}, {}
+    tf, tf_raw, frames, bone_pts = {}, {}, {}, {}
     for lv in levels:
         lab = LABEL_OF[lv]
         sel = vm == lab
@@ -815,7 +1002,9 @@ def vertebral_artery(report: dict) -> tuple[list[dict], dict]:
         m = np.ceil(12 / vox).astype(int)
         b0, b1 = np.maximum(idx.min(0) - m, 0), np.minimum(idx.max(0) + m + 1, sel.shape)
         crp = tuple(slice(a, b) for a, b in zip(b0, b1))
-        vol = bone_volume(ct[crp].astype(np.float32), sel[crp], float(vox.mean()))
+        # (the vertebra as drawn, kept out of its neighbours' masks: a foramen's ring is closed by its own bone, not by
+        # the articular process of the vertebra below, as the right C5 foramen's was by C6's)
+        vol = bone_volume(ct[crp].astype(np.float32), sel[crp], float(vox.mean()), vm[crp] > 0)
         inside = ndimage.gaussian_filter(vol, SIGMA_VOX) > BONE_HU
         lab_i, n = ndimage.label(inside)
         if n > 1:
@@ -832,11 +1021,24 @@ def vertebral_artery(report: dict) -> tuple[list[dict], dict]:
             if can:
                 break
         tf[lv] = G.transverse_foramina(grid, 1, c, F, can["halfWidth"] + 2 if can else 14.0)
+        # the same on the volume before its smoothing: the drawn surface (smoothed, cut at BONE_HU) narrows small
+        # openings, so the enclosed area on the drawn bone understates a narrow foramen (C3 in this CT); given beside it
+        raw = vol > BONE_HU
+        lab_r, n_r = ndimage.label(raw)
+        if n_r > 1:
+            raw = lab_r == (int(np.argmax(ndimage.sum(raw, lab_r, range(1, n_r + 1)))) + 1)
+        grid_r = G.Grid(raw.astype(np.uint8), a3)
+        can_r = None
+        for dw in (0.0, 3.0, -3.0, 6.0):
+            can_r = G.canal(grid_r, 1, c + dw * F[2], F)
+            if can_r:
+                break
+        tf_raw[lv] = G.transverse_foramina(grid_r, 1, c, F, can_r["halfWidth"] + 2 if can_r else 14.0)
         frames[lv] = F
         if lv == "C1":
             bone_pts[lv] = nib.affines.apply_affine(a3, np.argwhere(inside))
     del vm, ct
-    entry, parts, areas = {}, {}, {}
+    entry, parts, areas, drawn = {}, {}, {}, {}
     for sd, sg in (("L", -1), ("R", 1)):
         area = {lv: (tf[lv][sd]["area"] if tf[lv][sd] else 0.0) for lv in levels}
         areas[sd] = area
@@ -874,8 +1076,23 @@ def vertebral_artery(report: dict) -> tuple[list[dict], dict]:
         dura = c1 + sg * 10 * F1[0] + (best[1] + 4) * F1[1] + (best[2] + 8) * F1[2]
         v4 = c1 + sg * 7 * F1[0] + (best[1] + 12) * F1[1] + (best[2] + 18) * F1[2]
         path = [origin_pt, below] + v2 + [q1, q2, g, dura, v4]
-        curve = G.catmull([q - o for q in path], 8)
-        parts[sd] = G.tube(curve, VA_RADIUS)
+        # led round the drawn bone where the spline through these points runs inside it (C2 above all: its foramen
+        # turns outwards under the superior articular facet), pushed clear of it, and drawn no thicker than the room
+        # (it must still pass each foramen's centre and the groove on the atlas: the cheapest way round a narrow
+        # foramen is otherwise past it, outside the transverse process)
+        spline = G.resample(G.catmull(path, 8), PATH_STEP_MM)
+        pins = tuple(int(np.argmin(np.linalg.norm(spline - q, axis=1))) for q in v2 + [g])
+        curve, led = bone.thread(spline, VA_RADIUS + VA_CLEAR_MM, pins, near=VA_THREAD_NEAR)
+        curve, _ = bone.clear(curve, VA_RADIUS + VA_CLEAR_MM, fixed=1)
+        curve = G.resample(curve, PATH_STEP_MM)
+        room = np.clip(bone.dist(curve) - VA_CLEAR_MM, VA_MIN_RADIUS, VA_RADIUS)
+        radius = room.copy()
+        for _ in range(4):   # tapering into and out of a narrow place, never wider than the room
+            radius[1:-1] = np.minimum(room[1:-1], 0.5 * radius[1:-1] + 0.25 * (radius[:-2] + radius[2:]))
+        parts[sd] = G.tube(curve - o, radius)
+        at = {lv: int(np.argmin(np.linalg.norm(curve - np.array(tf[lv][sd]["centre"]), axis=1))) for lv in levels[:levels.index(e) + 1]}
+        drawn[sd] = {"ledRoundMm": led, "inBoneMm": bone.deepest(parts[sd][0] + o),
+                     "diameterAt": {lv: round(2 * float(radius[max(k - 2, 0):k + 3].min()), 1) for lv, k in at.items()}}
     write_glb(BUILD / "sp_vertebral_artery.glb", mesh_nodes(parts), {"id": "sp_vertebral_artery"})
     c4 = [np.array(tf[lv]["L"]["centre"]) for lv in ("C3", "C4") if tf[lv]["L"]] or [C[LABEL_OF["C4"]]]
     va = {"id": "sp_vertebral_artery", "name": "Vertebral artery", "token": "spArtery", "layer": "vessels", "category": "vessel",
@@ -883,10 +1100,16 @@ def vertebral_artery(report: dict) -> tuple[list[dict], dict]:
           "source": f"Schematic: from the subclavian artery (TotalSegmentator) into the foramen transversarium of {entry['L']} (left) "
                     f"and {entry['R']} (right), inferred from the foramina's size on this CT; up through the foramina measured "
                     f"on this CT to C1; behind the lateral mass of the atlas and over the groove on its posterior arch (measured "
-                    f"surface); then a short way towards the foramen magnum. Drawn {2 * VA_RADIUS:g} mm thick"}
-    report["vertebralArtery"] = {"entry": entry, "areas": areas}
-    data = {"entry": entry, "foramina": {lv: {sd: tf[lv][sd] and {k: tf[lv][sd][k] for k in ("area", "width", "depth")} for sd in ("L", "R")}
-                                         for lv in levels}}
+                    f"surface); then a short way towards the foramen magnum; led round the bone as it is drawn. Drawn "
+                    f"{2 * VA_RADIUS:g} mm thick{narrow_note(drawn)} (not to scale)"}
+    report["vertebralArtery"] = {"entry": entry, "areas": areas, "drawn": drawn}
+    print(f"vertebral artery: as drawn {drawn}")
+    data = {"entry": entry, "foramina": {lv: {sd: tf[lv][sd] and {**{k: tf[lv][sd][k] for k in ("area", "width", "depth")},
+                                                                  "areaUnsmoothed": tf_raw[lv][sd] and tf_raw[lv][sd]["area"]}
+                                              for sd in ("L", "R")} for lv in levels},
+            # how thick the schematic artery is drawn in each foramen it passes (2 * VA_RADIUS, or less where the
+            # foramen as drawn is narrower)
+            "drawnDiameter": {sd: drawn[sd]["diameterAt"] for sd in ("L", "R")}}
     # the width between the foramina's medial edges (a vertebral artery runs in each from its entry level up)
     for lv in levels:
         L_, R_ = tf[lv]["L"], tf[lv]["R"]
@@ -908,7 +1131,7 @@ DATASET = {
     "cite": ["loffler2020", "liebl2021", "sekuboyina2021", "wasserthal2023"],
     "note": "One adult whole-body trauma CT from the VerSe 2020 dataset (0.72 x 0.72 x 0.7 mm), not an average and not in MNI "
             "space. Coordinates are millimetres from the centre of the L5 vertebral body. Vertebrae C1-L5: surfaces taken from the CT at "
-            f"{BONE_HU} HU within reach of VerSe's hand-corrected masks. Sacrum, pelvis, discs and spinal canal contents: "
+            f"{BONE_HU} HU within reach of VerSe's hand-corrected masks, each kept out of its neighbours' masks. Sacrum, pelvis, discs and spinal canal contents: "
             "TotalSegmentator segmentations of the same CT.",
 }
 
@@ -948,7 +1171,8 @@ def manifest_entries(items: list[dict], junction: bool = False) -> list[dict]:
              "category": t["category"], **({"level": t["level"]} if "level" in t else {}),
              **({"region": t["region"]} if "region" in t else {}),
              **({"schematic": True} if t.get("schematic") else {}),
-             "derivation": t["source"] + ("." if t.get("schematic") else ", surface of the segmentation."),
+             "derivation": t["source"] + ("." if t.get("schematic") else ", surface of the segmentation.")
+                           + (" " + t["after"] if t.get("after") else ""),
              "centroid": {"L": t["centroid"], "R": t["centroid"]}} for t in items]
 
 
@@ -960,7 +1184,8 @@ def write_manifest(verts: list[dict], ts: list[dict], dsc: list[dict]) -> None:
     for v in verts:
         structures.append({**base, "id": v["id"], "name": f"{v['name']} vertebra", "type": "bone", "file": f"assets/spine/{v['id']}.glb",
                            "colour": colour("spBone"), "category": "vertebra", "level": v["name"], "region": v["region"],
-                           "derivation": f"CT surface at {BONE_HU} HU within {MASK_REACH_MM} mm of VerSe's hand-corrected mask for {v['name']}.",
+                           "derivation": f"CT surface at {BONE_HU} HU within {MASK_REACH_MM} mm of VerSe's hand-corrected mask for {v['name']}, kept out of "
+                                         "its neighbours' masks (bone between two masks goes to the nearer one).",
                            "centroid": {"L": v["centroid"], "R": v["centroid"]}})
     structures += manifest_entries([t for t in ts + dsc if t.get("region") != "ccj"])
     structures += manifest_entries([t for t in ts + dsc if t.get("region") == "ccj"], junction=True)
@@ -977,6 +1202,12 @@ def write_manifest(verts: list[dict], ts: list[dict], dsc: list[dict]) -> None:
     print(f"spine: {len(structures)} structures")
 
 
+PLACED_IN_MAX_MM = 0.5   # a root's tube or ganglion may reach this far into the drawn bone at most (they are placed
+                         # 0.4 mm clear and 0.3 mm in at most: the rest is the grid's tolerance),
+VA_IN_MAX_MM = 1.0       # and the vertebral artery this far (a foramen as drawn can be narrower than its thinnest tube)
+CANAL_STEP_MAX = 1.3     # the canal's width between the pedicles changes by less than this factor between neighbours
+
+
 def validate() -> int:
     m = json.loads((GEN / "spine-manifest.json").read_text())
     fails, n = [], 0
@@ -991,6 +1222,52 @@ def validate() -> int:
     names = [f"C{i}" for i in range(1, 8)] + [f"T{i}" for i in range(1, 13)] + [f"L{i}" for i in range(1, 6)]
     for a, b in zip(names, names[1:]):
         check(by[level_id(a)]["centroid"]["R"][2] > by[level_id(b)]["centroid"]["R"][2], f"{a} not above {b}")
+    # neighbouring vertebrae share no bone (bone_volume's `other`): nothing inside both surfaces, no vertex of one deep
+    # in the other (L5 against the sacrum: the sacrum's surface is its mask's, smoothed, so a little more is its own
+    # tolerance)
+    nb = {r["pair"]: r for r in json.loads((GEN / "spine-levels.json").read_text()).get("neighbours", [])}
+    for a, b in list(zip(names, names[1:])) + [("L5", "S1")]:
+        r = nb.get(f"{a}-{b}")
+        check(r is not None, f"{a}-{b}: no neighbour check")
+        if r:
+            check(r["sharedMl"] <= 0.01, f"{a}-{b}: {r['sharedMl']} ml of bone inside both")
+            check(r["deepestMm"] <= (1.0 if b == "S1" else SHARED_DEPTH_MM) and r["verticesInside"] <= (5 if b == "S1" else 0),
+                  f"{a}-{b}: {r['verticesInside']} vertices inside the neighbour, the deepest {r['deepestMm']} mm")
+    # the structures placed by rule lie outside the bone as drawn (the audit's findings MC-05 and MC-08: six roots ran
+    # 4 to 5 mm deep through a pedicle and the vertebral artery 3.6 mm deep through C2, while the build's own report
+    # called them clear): every root's tube and ganglion, and the artery, measured on the same solid the vertebrae
+    # are cut from
+    levels_json = json.loads((GEN / "spine-levels.json").read_text())
+    placed = levels_json.get("placed")
+    check(placed is not None, "no record of the placed structures against the drawn bone")
+    if placed:
+        roots = [f"{r}{sd}" for r in [f"C{i}" for i in range(3, 9)] + [f"T{i}" for i in range(1, 13)] + [f"L{i}" for i in range(1, 6)] + ["S1"]
+                 for sd in ("L", "R")]
+        for r in roots:
+            d = placed["rootInBoneMm"].get(r)
+            check(d is not None, f"root {r}: not measured against the drawn bone")
+            if d:
+                check(d["root"] <= PLACED_IN_MAX_MM, f"root {r}: its tube {d['root']} mm inside the drawn bone")
+                check(d["ganglion"] <= PLACED_IN_MAX_MM, f"root {r}: its ganglion {d['ganglion']} mm inside the drawn bone")
+            check(DRG_MIN_SCALE - 1e-6 <= placed["ganglionScale"].get(r, 0) <= 1, f"root {r}: ganglion scale {placed['ganglionScale'].get(r)}")
+        for sd in ("L", "R"):
+            a = placed["vertebralArtery"][sd]
+            check(a["inBoneMm"] <= VA_IN_MAX_MM, f"vertebral artery {sd}: {a['inBoneMm']} mm inside the drawn bone")
+            check(all(2 * VA_MIN_RADIUS - 0.05 <= d <= 2 * VA_RADIUS + 0.05 for d in a["diameterAt"].values()),
+                  f"vertebral artery {sd}: drawn diameters {a['diameterAt']}")
+    # the canal's width does not jump between neighbours (L5's was given as 38.0 mm beside L4's 26.5: the hole
+    # measured ran out into the lateral recesses, MC-06), and a disc drawn in part says so and gives no height (MC-02)
+    for region in ("cervical", "thoracic", "lumbar"):
+        lv = levels_json[region]
+        for a, b in zip(lv, lv[1:]):
+            if a["canal"] and b["canal"]:
+                r = b["canal"]["width"] / a["canal"]["width"]
+                check(1 / CANAL_STEP_MAX <= r <= CANAL_STEP_MAX, f"canal width {a['level']} {a['canal']['width']} mm, {b['level']} {b['canal']['width']} mm")
+        for g in lv:
+            if "discPartial" in g:
+                sid = "sp_disc_" + g["pair"].lower().replace("-", "_")
+                check("discHeightMm" not in g, f"{g['pair']}: a height is given for a disc drawn in part")
+                check("not drawn in full" in by.get(sid, {}).get("derivation", ""), f"{sid}: drawn in part, and its derivation does not say so")
     # the origin is VerSe's L5 centroid, the centre of the vertebral body: the whole vertebra's centroid (with its
     # posterior arch) lies close to the midline and level with it, some 10-20 mm behind it
     c5 = by["sp_l5"]["centroid"]["R"]
@@ -1075,8 +1352,13 @@ def main() -> int:
     ccj, ccj_data, _ = spine_ccj.build(report)
     (BUILD / "report.json").write_text(json.dumps(report, indent=1, default=float))
     write_manifest(verts, ts, dsc + roots + roots_t + roots_c + soft + va + ccj)
+    # the structures placed by rule, against the bone as drawn: how deep each root's tube and ganglion and the
+    # vertebral artery still reach into it, and the scale each ganglion is drawn at (validate() holds them to limits)
+    placed = {"rootInBoneMm": report["rootInBoneMm"], "ganglionScale": report["ganglionScale"],
+              "vertebralArtery": report["vertebralArtery"]["drawn"]}
     (GEN / "spine-levels.json").write_text(json.dumps({"lumbar": levels, "thoracic": levels_t, "cervical": levels_c,
-                                                       "vertebralArtery": va_data, "neckLandmarks": landmarks, "ccj": ccj_data},
+                                                       "vertebralArtery": va_data, "neckLandmarks": landmarks, "ccj": ccj_data,
+                                                       "neighbours": report["neighbours"], "placed": placed},
                                                       indent=1, default=float))
     return 0
 

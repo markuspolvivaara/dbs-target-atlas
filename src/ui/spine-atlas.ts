@@ -3,7 +3,7 @@ import type { CameraPreset } from '../data/schema';
 import type { Hemi } from '../state';
 import { discBelow, LEVEL_ORDER, SP, SP_MANIFEST, SP_REFS, vertebraOf } from '../spine';
 import {
-  ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, CCJ, CCJ_MEASURES, exitingRoot, exposureRegion, GEOM_BY_LEVEL, LESION_ZONES,
+  ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, CCJ, CCJ_MEASURES, discRegion, exitingRoot, exposureRegion, GEOM_BY_LEVEL, lesionZones,
   NECK_LANDMARKS, ROOT_FUNCTION, STATEMENTS, TECHNIQUES, VERTEBRAL_ARTERY, type ApproachId, type CcjMeasure, type CcjMeasureId, type LesionZone,
   type LevelGeom, type Statement,
 } from '../spine/content';
@@ -19,7 +19,7 @@ import { spineScene, type SpinePlan } from '../spine/scene';
 import type { SpineState } from '../spine/state';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
-import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem } from './stage';
+import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: SpineState) => void, opts?: { camera?: boolean }) => void;
@@ -165,7 +165,7 @@ export class SpineAtlasPage {
   private labels = h('div', { class: 'labels', 'aria-hidden': 'true' });
   private leaders = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   private gizmo = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  private status = h('div', { class: 'status', role: 'status', 'aria-live': 'polite', hidden: true });
+  private status = stageStatus(() => { void this.viewer.retryFailed(); });
   private measureBtn!: HTMLButtonElement;
   private sheetState: 'peek' | 'full' = 'peek';
   private measurePts: THREE.Vector3[] = [];
@@ -178,7 +178,7 @@ export class SpineAtlasPage {
 
   constructor(private update: Update) {
     this.stage = h('section', { class: 'stage', 'aria-label': '3D viewer' });
-    this.panel = h('aside', { class: 'panel', 'aria-label': 'Anatomy and tools', 'data-sheet': 'peek' });
+    this.panel = h('aside', { class: 'panel', id: 'panel', tabindex: -1, 'aria-label': 'Anatomy and tools', 'data-sheet': 'peek' });
     this.el = h('div', { class: 'atlas' }, this.stage, this.panel);
     this.buildStage();
     this.buildPanel();
@@ -205,12 +205,12 @@ export class SpineAtlasPage {
       }, h('span', { class: 'long' }, label), h('span', { class: 'short', 'aria-hidden': 'true' }, short)));
     }
     this.measureBtn = h('button', { type: 'button', class: 'tbtn', 'aria-pressed': 'false', title: 'Measure distance between two points (M)', onclick: () => this.toggleMeasure() }, 'Measure');
-    const share = h('button', { type: 'button', class: 'tbtn', title: 'Copy a link to this exact view', onclick: () => this.copyLink(share) }, 'Copy link');
+    const share = h('button', { type: 'button', class: 'tbtn', title: 'Copy a link to this exact view', onclick: () => { void this.copyLink(share); } }, 'Copy link');
     const labelGroup = h('div', { class: 'tgroup seg', role: 'group', 'aria-label': 'Name labels' },
       h('span', { class: 'tlabel' }, 'Labels'),
       ...([['all', 'All', 'Name the vertebrae of the region'], ['hover', 'Hover', 'Name only what you point at or select'], ['off', 'Off', 'No name labels']] as const)
         .map(([v, label, title]) => h('button', { type: 'button', class: 'tbtn', 'data-labels': v, 'aria-pressed': 'false', title: `${title} (N cycles)`, onclick: () => this.update((s) => { s.labels = v; }) }, label)));
-    toolbar.append(presetGroup, hemiGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share));
+    toolbar.append(presetGroup, hemiGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share), viewButtons(() => this.resetView()));
     this.gizmo.setAttribute('viewBox', '-40 -40 80 80');
     this.gizmo.setAttribute('class', 'gizmo');
     this.gizmo.setAttribute('aria-hidden', 'true');
@@ -220,7 +220,9 @@ export class SpineAtlasPage {
       h('div', { class: 'readout-box' }, this.measureOut, this.readout));
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
-    this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status);
+    this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
+    scrollHint(toolbar);
+    rovingToolbar(toolbar);
     this.readout.textContent = 'Point at a structure for its position';
 
     this.viewer = new Viewer<SpineState, SpinePlan>(host, {
@@ -232,12 +234,14 @@ export class SpineAtlasPage {
         s.cam = { preset: s.cam.preset, pos: [pos.x, pos.y, pos.z], tgt: [tgt.x, tgt.y, tgt.z] };
       }, { camera: false }),
       leadMoved: () => undefined,
-      status: (t) => { this.status.hidden = !t; this.status.textContent = t ?? ''; },
+      status: (t) => this.status.set(t),
+      loadFailed: (names) => this.status.failed(names),
       lead: () => undefined,
       moving: (on) => this.stage.classList.toggle('moving', on),
     }, spineScene);
     const origRender = this.viewer.renderer.render.bind(this.viewer.renderer);
     this.viewer.renderer.render = (sc, cam) => { origRender(sc, cam); this.placeLabels(); };
+    watchOverlays(this.stage, () => this.viewer.invalidate());
   }
 
   // ---------------------------------------------------------------- panel
@@ -267,6 +271,7 @@ export class SpineAtlasPage {
       this.tabs[id] = h('div', { class: 'pane', role: 'tabpanel', id: `pane-${id}`, 'aria-labelledby': `ptab-${id}`, hidden: id !== 'overview' });
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
+    scrollHint(tablist);
   }
 
   private selectTab(id: string, expand = true): void {
@@ -288,7 +293,7 @@ export class SpineAtlasPage {
   render(s: SpineState, opts: { camera: boolean }): void {
     const prev = this.s;
     this.s = s;
-    this.viewer.apply(s, { animateCamera: opts.camera }).then(() => this.renderLegend());
+    this.viewer.apply(s, { animateCamera: opts.camera }).then(() => this.renderLegend()).catch((e: unknown) => viewFailed(this.status, e));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-hemi]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.hemi === s.hemi)));
     this.stage.querySelectorAll<HTMLButtonElement>('.toolbar [data-labels]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.labels === s.labels)));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((b) => b.toggleAttribute('data-active', b.dataset.preset === s.cam.preset));
@@ -299,6 +304,8 @@ export class SpineAtlasPage {
     this.drawCcj(s);
     this.renderLayers();
     if (prev && prev.sel !== s.sel && s.sel) this.selectTab('overview', false);
+    // the card of what was just selected (or of a link's selection) is brought to the top of the panel
+    if (s.sel && prev?.sel !== s.sel) revealCard(this.panel);
   }
 
   private ccjDrawn = '';
@@ -449,11 +456,14 @@ export class SpineAtlasPage {
       h('dl', {},
         v ? [h('dt', {}, 'Bone'), h('dd', {}, this.link(v.id))] : null,
         d ? [h('dt', {}, 'Disc below'), h('dd', {}, this.link(d.id), g?.discHeightMm ? ` · ${mm(g.discHeightMm)} high at its centre (measured)` : '',
+          g?.discPartial ? this.partialDisc(g) : null,
           g ? h('p', {}, h('button', {
             type: 'button', class: 'chip disc-cut', 'aria-pressed': String(this.s.cut === 'disc'),
             onclick: () => this.update((s) => { s.cut = s.cut === 'disc' ? 'none' : 'disc'; if (s.cut === 'disc') s.cam = { preset: 'axial' }; }, { camera: this.s.cut !== 'disc' }),
           }, 'Cross-section at this disc, from above')) : null)] : null,
-        g?.canal ? [h('dt', {}, 'Vertebral canal (measured)'), h('dd', {}, `${mm(g.canal.width)} wide, ${mm(g.canal.depth)} deep, ${Math.round(g.canal.area)} mm², in planes through the body centre normal to the spine`)] : null,
+        g?.canal ? [h('dt', {}, 'Vertebral canal (measured)'), h('dd', {}, g.canal.betweenPedicles
+          ? `${mm(g.canal.width)} between the pedicles, ${mm(g.canal.depth)} front to back through its middle, ${Math.round(g.canal.area)} mm²: in the plane normal to the spine where the canal is narrowest between the pedicles`
+          : `${mm(g.canal.width)} wide, ${mm(g.canal.depth)} deep, ${Math.round(g.canal.area)} mm², in planes through the body centre normal to the spine`)] : null,
         g && g.foramenMeasured === false && cervical ? [h('dt', {}, `Foramen ${g.pair}`), h('dd', {}, this.stmt(STATEMENTS.cervicalForamen))]
           : g && g.foramenMeasured === false ? [h('dt', {}, `Foramen ${g.pair}`), h('dd', {}, this.stmt(STATEMENTS.thoracicForamen),
           h('p', { class: 'aside' }, 'Its size is not given here: the measurement works on the vertebrae and discs alone, without the rib heads.'))]
@@ -474,8 +484,24 @@ export class SpineAtlasPage {
             }, { camera: true }) }, 'craniocervical region'),
             ' (another CT, which reaches the clivus); the occiput, the foramen magnum and the arteries and nerves above the atlas in the ',
             h('a', { href: '../skullbase/' }, 'skull base section'), '.'))] : null,
-        thoracic && g ? [h('dt', {}, `Dorsal approach to the ${g.pair} disc`), h('dd', {}, this.approachTool(level, g))] : null,
+        // (not at a disc drawn in part: there is no disc to show the approaches on)
+        thoracic && g && !g.discPartial ? [h('dt', {}, `Dorsal approach to the ${g.pair} disc`), h('dd', {}, this.approachTool(level, g))] : null,
+        thoracic && g?.discPartial ? [h('dt', {}, `Dorsal approach to the ${g.pair} disc`), h('dd', {},
+          h('p', { class: 'aside' }, 'Not shown at this level: its disc is drawn only in part (see “Disc below”). The approaches are shown at the other thoracic levels.'))] : null,
         cervical && g ? [h('dt', {}, `Anterior approach (ACDF) to the ${g.pair} disc`), h('dd', {}, this.acdfTool(level, g))] : null));
+  }
+
+  /** A disc drawn in part (the T10-T11 disc of this CT): what the segmentation holds and what the CT shows between
+   * the two bodies, measured; what it is, is left open. */
+  private partialDisc(g: LevelGeom): HTMLElement {
+    const p = g.discPartial!;
+    const list = (xs: number[], f: (x: number) => string) => xs.map(f).join(' and ');
+    return h('p', { class: 'aside partial-disc' },
+      `Drawn in part: the segmentation holds only a chip of this disc (${p.volumeMl.toFixed(2)} ml, ${Math.round(p.widthMm)} mm from side to side; `
+      + `the discs above and below are ${list(p.neighbourWidthMm, (x) => String(Math.round(x)))} mm), so no height is given. `
+      + `On this CT the space between the two bodies is dense where a disc is dark: its mean density on 16-mm circles across the line joining the bodies’ centres reaches ${Math.round(p.spaceHu)} HU `
+      + `(${list(p.neighbourSpaceHu, (x) => String(Math.round(x)))} HU at the discs above and below, where the brightest part is an end plate). `
+      + 'Whether that is a calcified or ossified disc, or end plates that have grown together, is not established here.');
   }
 
   /** The pedicles measured on this CT beside published values (spine_screw.py, spine_published.py). */
@@ -488,6 +514,15 @@ export class SpineAtlasPage {
     const head = h('thead', {}, h('tr', {}, h('th', {}, ''), h('th', { scope: 'col' }, 'Left'), h('th', { scope: 'col' }, 'Right'), h('th', { scope: 'col' }, 'Published')));
     const measured = (k: 'width' | 'height') => [`${fmtMm(ped.L[k])} mm`, `${fmtMm(ped.R[k])} mm`] as const;
     const chord = row('Chord, entry to anterior cortex', `${fmtMm(ped.L.chord)} mm`, `${fmtMm(ped.R.chord)} mm`, '—');
+    // a pedicle whose axis was fitted inside the published range, not freely: said under the table, with the free fit
+    const held = (['L', 'R'] as const).filter((sd) => ped[sd].held).map((sd) => {
+      const k = ped[sd].held!;
+      return h('p', { class: 'aside held-note' },
+        `${sd === 'L' ? 'Left' : 'Right'} pedicle: its axis is not the free fit. Fitted freely it converges ${deg(k.freeTransverseAngle)} (${sag(k.freeSagittalAngle)}), `
+        + `outside the published study means, but the fit is flat here: the channel’s smallest clearance is ${k.freeClearance.toFixed(1)} mm along that axis and ${k.clearance.toFixed(1)} mm along this one, `
+        + `a difference of ${(k.freeClearance - k.clearance).toFixed(1)} mm that this CT (0.72 mm voxels) does not resolve. `
+        + `In review the axis was therefore fitted inside the published means (${k.to[0].toFixed(1)} to ${k.to[1].toFixed(1)}°); the width, height, chord and the anatomic start screw follow this axis.`);
+    });
     if (level === 'C7') {
       const pub = published.cervical.C7;
       const ax = pub.axisJiang;
@@ -523,7 +558,7 @@ export class SpineAtlasPage {
             row('Transverse angle', deg(ped.L.transverseAngle), deg(ped.R.transverseAngle), span(pub.transverseAngleStudyMeans, degf, ' to ').replace(' (', '° (')),
             row('Sagittal angle', sag(ped.L.sagittalAngle), sag(ped.R.sagittalAngle), span(pub.sagittalAngleStudyMeans, degf, ' to ').replace(' (', '° (')),
             chord)),
-        this.stmt(STATEMENTS.pedicleMethod), this.stmt(STATEMENTS.publishedThoracic));
+        ...held, this.stmt(STATEMENTS.pedicleMethod), this.stmt(STATEMENTS.publishedThoracic));
     }
     const pub = (published.levels as Record<string, (typeof published.levels)['L1']>)[level];
     const range = (o: Record<string, number>) => `${fmtMm(Math.min(...Object.values(o)))}–${fmtMm(Math.max(...Object.values(o)))} mm`;
@@ -584,7 +619,12 @@ export class SpineAtlasPage {
       const carries = order.indexOf(level) >= order.indexOf(va.entry[sd]);
       const name = sd === 'L' ? 'Left' : 'Right';
       if (!f) return `${name}: none found (the artery enters higher, at ${va.entry[sd]})`;
-      return `${name}: ${Math.round(f.area)} mm² enclosed, ${fmtMm(f.width)} × ${fmtMm(f.depth)} mm; ${carries ? (level === va.entry[sd] ? 'the artery enters here (inferred)' : 'carries the artery (inferred)') : 'below the artery’s entry'}`;
+      // the schematic artery is 4 mm thick where there is room; where the foramen as drawn is narrower it is drawn thinner
+      const drawn = va.drawnDiameter[sd][level];
+      const thin = carries && drawn !== undefined && drawn < 3.95 ? `, drawn ${fmtMm(drawn)} mm thick here (the foramen as drawn is narrower than its 4 mm)` : '';
+      // (the drawn bone is a smoothed surface, which narrows small openings: the area before the smoothing beside it)
+      const raw = f.areaUnsmoothed !== null && Math.abs(f.areaUnsmoothed - f.area) >= 5 ? ` on the bone as drawn (${Math.round(f.areaUnsmoothed)} mm² before its smoothing)` : '';
+      return `${name}: ${Math.round(f.area)} mm² enclosed, ${fmtMm(f.width)} × ${fmtMm(f.depth)} mm${raw}; ${carries ? (level === va.entry[sd] ? 'the artery enters here (inferred)' : 'carries the artery (inferred)') : 'below the artery’s entry'}${thin}`;
     };
     return h('div', {},
       h('ul', { class: 'plain' }, h('li', {}, side('L')), h('li', {}, side('R'))),
@@ -657,22 +697,25 @@ export class SpineAtlasPage {
     const les = this.s.lesion?.pair === g.pair ? this.s.lesion : null;
     const set = (zone: LesionZone | null, side: 'L' | 'R') => this.update((s) => { s.lesion = zone ? { pair: g.pair, zone, side } : null; });
     const side = les?.side ?? 'L';
+    // the neck has its own rule and its own zones (content.ts affectedRoot, lesionZones)
+    const region = discRegion(g.pair);
     const wrap = h('div', { class: 'lesion' },
       h('div', { class: 'lesion-row' },
-        chips<LesionZone | 'none'>([['none', 'None'], ...LESION_ZONES], les?.zone ?? 'none', (v) => set(v === 'none' ? null : v, side), { label: 'Herniation kind', cls: 'lesion-kind' })),
+        chips<LesionZone | 'none'>([['none', 'None'], ...lesionZones(region)], les?.zone ?? 'none', (v) => set(v === 'none' ? null : v, side), { label: 'Herniation kind', cls: 'lesion-kind' })),
       h('div', { class: 'lesion-row' },
         chips<'L' | 'R'>([['L', 'Left'], ['R', 'Right']], les ? side : null, (v) => set(les?.zone ?? 'paracentral', v), { label: 'Herniation side', cls: 'lesion-side' })));
     if (!les) {
       wrap.append(h('p', { class: 'aside' }, 'Choose a kind and side to see which root it affects.'));
       return wrap;
     }
-    const root = affectedRoot(g.pair, les.zone);
+    const root = affectedRoot(g.pair, les.zone, region);
+    const neck = region === 'cervical';
     const est = les.zone === 'foraminal' && g.lesions![les.side].foraminalEstimated;
     wrap.append(
       h('p', { class: 'lesion-result' }, 'Affected root: ', this.link(`sp_root_${root.toLowerCase()}`),
-        ` (${les.zone === 'paracentral' ? 'traversing' : 'exiting'}), ${les.side === 'L' ? 'left' : 'right'}.`),
-      this.stmt(les.zone === 'paracentral' ? STATEMENTS.lesionParacentral : STATEMENTS.lesionLateral),
-      h('p', { class: 'aside' }, `The pink marker is a schematic position on this CT${est ? '; this foramen was not captured by the measurement, so it is estimated' : ''}. Real herniations vary in size and position, and a large one can reach both roots.`),
+        ` (${neck ? 'the root that leaves at this disc' : les.zone === 'paracentral' ? 'traversing' : 'exiting'}), ${les.side === 'L' ? 'left' : 'right'}.`),
+      this.stmt(neck ? STATEMENTS.cervicalRootDisc : les.zone === 'paracentral' ? STATEMENTS.lesionParacentral : STATEMENTS.lesionLateral),
+      h('p', { class: 'aside' }, `The pink marker is a schematic position on this CT${est ? '; this foramen was not captured by the measurement, so it is estimated' : ''}. Real herniations vary in size and position${neck ? '' : ', and a large one can reach both roots'}.`),
       ...this.rootFunction(root, les.side));
     return wrap;
   }
@@ -745,7 +788,12 @@ export class SpineAtlasPage {
   }
 
   // ---------------------------------------------------------------- legend, labels, readout
+  /** (drawn again on every change: the keyboard keeps its place in it) */
   private renderLegend(): void {
+    keepFocus(this.legend, () => this.drawLegend());
+  }
+
+  private drawLegend(): void {
     const p = this.viewer.currentPlan();
     clear(this.legend);
     if (!p) return;
@@ -776,7 +824,7 @@ export class SpineAtlasPage {
     };
     if (mode === 'all') for (const id of REGION.get(this.s.region)!.structures) if (SP.get(id)?.category === 'vertebra' && !this.s.hidden.includes(id)) add(id);
     if (mode !== 'off') for (const id of [this.legendHover, this.s?.sel]) if (id) add(id);
-    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders);
+    layoutLabels(items, this.stage.clientWidth, this.stage.clientHeight, this.labels, this.leaders, [this.legendHover, this.s?.sel]);
   }
 
   private showTip(info: PickInfo | null, x: number, y: number): void {
@@ -842,7 +890,13 @@ export class SpineAtlasPage {
   }
 
   // ---------------------------------------------------------------- keyboard
+  /** The camera back to where this view opens (the toolbar's Reset view, key 0). */
+  private resetView(): void {
+    this.update((s) => { s.cam = { preset: null }; }, { camera: true });
+  }
+
   handleKey(e: KeyboardEvent): boolean {
+    if (e.key === '0') { this.resetView(); return true; }
     const k = e.key;
     const preset = PRESETS.find((p) => p[2] === k);
     if (preset) { this.update((s) => { s.cam = { preset: preset[0] }; }, { camera: true }); return true; }

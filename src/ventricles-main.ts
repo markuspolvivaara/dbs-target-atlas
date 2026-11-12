@@ -8,8 +8,11 @@ import { decodeVe, encodeVe, type VePage, type VeState } from './ventricles/stat
 import { VentriclesAtlasPage } from './ui/ventricles-atlas';
 import { veCreditsPage, veSourcesPage } from './ui/ventricles-pages';
 import { h } from './ui/h';
+import { bindHelp, viewHelp } from './ui/help';
+import { bootFailed } from './ui/stage';
 import { disclaimerNote, siteHeader } from './ui/shell';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
+import { addressSync } from './ui/address';
 
 const SECTION = SECTIONS.find((s) => s.id === 'ventricles')!;
 
@@ -48,20 +51,21 @@ const pages: Record<VePage, { el: HTMLElement; render(s: VeState): void }> = {
 const main = h('main', { id: 'main' }, ...Object.values(pages).map((p) => p.el));
 new ResizeObserver(() => document.documentElement.style.setProperty('--disc-h', `${disclaimer.offsetHeight}px`)).observe(disclaimer);
 const help = buildHelp();
-app.append(h('a', { class: 'skip', href: '#main' }, 'Skip to content'), header, disclaimer, main, help);
+bindHelp(help);
+// the atlas page's heading, for screen readers and outlines (its other pages have their own)
+atlas.el.prepend(h('h1', { class: 'vh' }, `${SECTION.name}: 3D atlas`));
+app.append(h('a', { class: 'skip', href: '#main' }, 'Skip to content'), h('a', { class: 'skip skip-panel', href: '#panel', onclick: (e: Event) => { e.preventDefault(); document.getElementById('panel')?.focus(); } }, 'Skip to the panel'), header, disclaimer, main, help);
 
 let pendingCamera = true;
 let hashTimer = 0;
+const address = addressSync();   // (the address is written only over the hash this page last wrote or read)
 
 function setState(next: VeState, opts: { camera: boolean; fromCamera?: boolean }): void {
   const pageChanged = next.page !== state.page;
   state = next;
   pendingCamera = opts.camera;
   clearTimeout(hashTimer);
-  hashTimer = window.setTimeout(() => {
-    const hsh = encodeVe(state);
-    if (hsh !== location.hash) history.replaceState(null, '', hsh);
-  }, opts.fromCamera ? 400 : 0);
+  hashTimer = window.setTimeout(() => address.write(encodeVe(state)), opts.fromCamera ? 400 : 0);
   if (opts.fromCamera) return;
   render(pageChanged);
 }
@@ -79,6 +83,7 @@ function render(pageChanged = false): void {
 }
 
 window.addEventListener('hashchange', () => {
+  address.read();
   if (location.hash === encodeVe(state)) return;
   const bare = !location.hash.includes('?');
   const next = bare ? { ...structuredClone(state), page: decodeVe(location.hash).page } : sanitize(decodeVe(location.hash));
@@ -107,9 +112,9 @@ function buildHelp(): HTMLDialogElement {
     ['N', 'Name labels: hover → all → off'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
   ];
   return h('dialog', { class: 'help', 'aria-labelledby': 'help-title' },
-    h('h2', { id: 'help-title' }, 'Keyboard shortcuts'),
+    h('h2', { id: 'help-title' }, 'Keys, mouse and touch'),
     h('dl', {}, ...rows.flatMap(([k, v]) => [h('dt', {}, h('kbd', {}, k)), h('dd', {}, v)])),
-    h('p', { class: 'aside' }, 'Touch: one finger rotates, two fingers pinch to zoom and drag to pan. Tap a structure for its card.'),
+    ...viewHelp('a structure'),
     h('form', { method: 'dialog' }, h('button', { class: 'btn' }, 'Close'))) as HTMLDialogElement;
 }
 
@@ -119,16 +124,18 @@ window.addEventListener('keydown', (e) => {
   if (t.closest('input, select, textarea, [contenteditable]')) return;
   if (e.key === '?') { help.open ? help.close() : help.showModal(); e.preventDefault(); return; }
   if (state.page !== 'atlas' || help.open) return;
-  if (atlas.handleKey(e)) e.preventDefault();
+  // the section's own keys first; then, with the 3D view in focus, the viewer's (arrows turn it, + and - zoom)
+  if (atlas.handleKey(e) || (document.activeElement === atlas.viewer.renderer.domElement && atlas.viewer.handleKey(e))) e.preventDefault();
 });
 
 // ---------------------------------------------------------------- boot
 syncTheme();
 render(true);
 history.replaceState(null, '', encodeVe(state));
+address.read();
 atlas.viewer.preload().then(() => {
   pendingCamera = !state.cam.pos;
   pages.atlas.render(state);
   document.body.dataset.ready = '1';
-});
+}).catch(bootFailed);
 (window as unknown as { __atlas: unknown }).__atlas = { viewer: atlas.viewer, state: () => state };

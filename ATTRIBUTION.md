@@ -323,6 +323,7 @@ Skull base v2's bone and Skull base v3's fitted brain, under their licences abov
 - Attribution: BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan
 - Attribution: Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0
 - Cite: Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.
+- Cite: Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).
 - Cite: Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.
 - Changes made: the lateral and third ventricles segmented from the CT by a threshold in its brain window
   (pipeline/ventricles_build.py); Z-Anatomy's ventricles, aqueduct included (exported by pipeline/ventricles_export.py)
@@ -377,7 +378,7 @@ The meshes in `public/assets/spine/` and the files `spine-manifest.json` and `sp
 one CT of the VerSe 2020 dataset. They are **not** GPL-licensed: CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT.
 
 - Source: https://osf.io/4skx2/
-- Note: One adult whole-body trauma CT from the VerSe 2020 dataset (0.72 x 0.72 x 0.7 mm), not an average and not in MNI space. Coordinates are millimetres from the centre of the L5 vertebral body. Vertebrae C1-L5: surfaces taken from the CT at 200 HU within reach of VerSe's hand-corrected masks. Sacrum, pelvis, discs and spinal canal contents: TotalSegmentator segmentations of the same CT.
+- Note: One adult whole-body trauma CT from the VerSe 2020 dataset (0.72 x 0.72 x 0.7 mm), not an average and not in MNI space. Coordinates are millimetres from the centre of the L5 vertebral body. Vertebrae C1-L5: surfaces taken from the CT at 200 HU within reach of VerSe's hand-corrected masks, each kept out of its neighbours' masks. Sacrum, pelvis, discs and spinal canal contents: TotalSegmentator segmentations of the same CT.
 - Cite: Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.
 - Cite: Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.
 - Cite: Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.

@@ -1,5 +1,6 @@
 import { CTX_MANIFEST, LABELS, LOBES, METHOD } from '../cortex';
 import { h } from './h';
+import { linkLicences } from './licences';
 
 /** Sources and Credits of the cortex section. */
 
@@ -9,6 +10,7 @@ export function cortexSourcesPage() {
   const el = h('div', { class: 'page wrap' });
   const d = CTX_MANIFEST.dataset;
   const defs = LABELS.filter((l) => l.definition).length;
+  const edited = LABELS.filter((l) => l.definition?.edits?.length);
   const urls = [...new Set([...LABELS.map((l) => l.definition?.url), ...LOBES.map((l) => l.definition?.url)].filter((u): u is string => !!u))].sort();
   el.append(
     h('h1', {}, 'Sources'),
@@ -24,14 +26,14 @@ export function cortexSourcesPage() {
       h('h2', {}, 'Measured on the template'),
       h('p', {}, 'Lobes, borders, areas and overlaps are measured by the pipeline on this one surface and say nothing about other brains:'),
       h('ul', {},
-        h('li', {}, 'Lobe: the share of a label’s vertices in Desikan-Killiany regions (FreeSurfer aparc, also shipped with Lead-DBS) of each lobe, with the regions grouped into lobes as in Klein & Tourville 2012 (Table 2; the insula on its own). A label belongs to every lobe holding at least 25% of it and is coloured by the largest, except the five parts of the cingulate gyrus and the three segments of the circular sulcus of the insula, which are shown with the cingulate cortex and the insula as their Destrieux names place them.'),
+        h('li', {}, 'Lobe: the share of a label’s vertices in Desikan-Killiany regions (FreeSurfer aparc, also shipped with Lead-DBS) of each lobe, with the regions grouped into lobes as in Klein & Tourville 2012 (Table 2; the insula on its own). A label belongs to every lobe holding at least 25% of it and is coloured by the largest, except the five parts of the cingulate gyrus, the three segments of the circular sulcus of the insula, and the superior occipital gyrus and sulcus, which are shown with the cingulate cortex, the insula and the occipital lobe as their Destrieux names place them (Desikan-Killiany’s parietal regions reach further back than the parietal lobe of Destrieux et al. 2010, who define both on the lateral aspect of the occipital lobe).'),
         h('li', {}, 'Borders: the share of a label’s outline it shares with each neighbour (at least 3%).'),
         h('li', {}, `Overlap with the DBS section’s cortical areas: HMAT (Mayka 2006) labels within ${METHOD.hmatMaxDistMm} mm of the surface, and Desikan-Killiany regions, as the DBS section draws them.`),
         h('li', {}, `Insular view: on the pial surface, triangles lying at least ${METHOD.operLateralMm} mm lateral of the insula within its outline seen from the side (plus ${METHOD.operMarginMm} mm) are left out.`),
         h('li', {}, `Inflated surface: ${METHOD.inflateIterations} smoothing steps of the decimated pial surface, rescaled to its size; the shading is how far the pial surface lies inside it (sulcal depth).`))),
     h('section', { class: 'card' },
       h('h2', {}, 'Definitions'),
-      h('p', {}, `${defs} of the ${LABELS.length} labels have a definition: the Wikipedia text Z-Anatomy ships for the matching structure (CC BY-SA 3.0), shortened to its lead. Where the text describes a larger structure (the whole cingulate cortex, the insula, the superior temporal gyrus), the card says so. They have not been checked against the literature yet.`),
+      h('p', {}, `${defs} of the ${LABELS.length} labels have a definition: the Wikipedia text Z-Anatomy ships for the matching structure (CC BY-SA 3.0), shortened to its lead. Where the text describes a larger structure (the whole cingulate cortex, the insula, the superior temporal gyrus) or a neighbouring one (the olfactory tract under the olfactory sulcus), the card says so. They have not been checked against the literature yet${edited.length ? `, except for ${edited.length === 1 ? 'one passage' : `${edited.length} passages`} found to be wrong and corrected (${edited.map((l) => l.name.toLowerCase()).join(', ')}): the card shows the corrected text and says what was changed and why` : ''}.`),
       h('details', { class: 'more' }, h('summary', {}, `Wikipedia source pages (${urls.length})`),
         h('ul', { class: 'refs' }, ...urls.map((u) => h('li', {}, a(u, decodeURIComponent(u.replace(/^https?:\/\/en\.wikipedia\.org\/wiki\//, '')).replace(/_/g, ' '))))))),
   );
@@ -59,5 +61,7 @@ export function cortexCreditsPage() {
       h('h2', {}, 'Software'),
       h('p', {}, 'three.js, zod, Vite and glTF-Transform (MIT), meshoptimizer (MIT); trimesh, SciPy and NumPy in the build. Font: Atkinson Hyperlegible, SIL Open Font License 1.1, self-hosted. The source code is GPL-3.0.')),
   );
+  // every licence named on the page links to its text, and every printed address is a link
+  linkLicences(el);
   return { el, render() { /* stateless */ } };
 }

@@ -18,6 +18,8 @@ const Anchor = z.object({ pial: V3, inflated: V3, nPial: V3, nInflated: V3 });
 const LobeId = z.enum(['frontal', 'parietal', 'temporal', 'occipital', 'cingulate', 'insula']);
 export type LobeId = z.infer<typeof LobeId>;
 const Definition = z.object({ text: z.string().min(1), url: z.string().url().nullable(), source: z.string() });
+/** A correction made to a shipped text: the words as shipped, the words shown instead, and why (with its source). */
+const DefinitionEdit = z.object({ from: z.string().min(1), to: z.string().min(1), why: z.string().min(1) });
 export const LabelSchema = z.object({
   id: z.string().regex(/^ctx_[a-z0-9_]+$/),
   short: z.string(),
@@ -29,7 +31,8 @@ export const LabelSchema = z.object({
   areaCm2: z.object({ L: z.number(), R: z.number() }),
   lobe: LobeId,
   lobeShare: z.number(),
-  /** the colour lobe comes from the measured shares, or from the Destrieux name (cingulate gyrus, circular sulcus of the insula) */
+  /** the colour lobe comes from the measured shares, or from the Destrieux name (cingulate gyrus, circular sulcus of the
+   * insula, superior occipital gyrus and sulcus) */
   lobeBy: z.enum(['measure', 'name']),
   lobes: z.array(z.object({ lobe: LobeId, share: z.number() })).min(1),
   atlasColour: z.string().regex(/^#[0-9a-f]{6}$/),
@@ -38,7 +41,8 @@ export const LabelSchema = z.object({
   dk: z.array(z.object({ region: z.string(), labelInRegion: z.number(), regionInLabel: z.number() })),
   parcels: z.array(z.object({ id: z.string(), labelInParcel: z.number(), parcelInLabel: z.number() })),
   insula: z.boolean(),
-  definition: Definition.extend({ scope: z.string().nullable() }).nullable(),
+  /** scope: what the text is about, where that is not the label itself; edits: corrections made to it, each listed on the card */
+  definition: Definition.extend({ scope: z.string().nullable(), edits: z.array(DefinitionEdit).min(1).optional() }).nullable(),
 });
 export type CtxLabel = z.infer<typeof LabelSchema>;
 /** A functional area drawn over the labels: HMAT's (motor, somatosensory) or the Destrieux labels its definition names. */
@@ -135,6 +139,8 @@ export function crossCheckCtx(): string[] {
     for (const p of l.parcels) if (!DBS_PARCEL.has(p.id)) errs.push(`${l.id}: DBS parcel ${p.id} unknown`);
     for (const r of l.dk) if (!DK_NAMES[r.region]) errs.push(`${l.id}: Desikan-Killiany region ${r.region} unnamed`);
     if (!l.lobes.some((x) => x.lobe === l.lobe)) errs.push(`${l.id}: main lobe not among its lobes`);
+    // a correction is in the text shown, and the words it replaced are not
+    for (const e of l.definition?.edits ?? []) if (!l.definition!.text.includes(e.to) || l.definition!.text.includes(e.from)) errs.push(`${l.id}: a listed correction is not in its text`);
   }
   for (const lb of LOBES) for (const id of lb.labels) if (!LABEL.has(id)) errs.push(`lobe ${lb.id}: unknown label ${id}`);
   const fns = new Set(FUNCTIONS.map((f) => f.id));

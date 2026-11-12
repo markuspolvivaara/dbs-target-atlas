@@ -71,3 +71,17 @@ export const SECTIONS: Section[] = [
  */
 export const SITE_ROOT: string =
   (typeof document !== 'undefined' && document.querySelector<HTMLMetaElement>('meta[name="site-root"]')?.content) || './';
+
+/** Each folder of public/assets, and each file directly in it, with a short hash of its contents (vite.config.ts). */
+declare const __ASSET_VERSIONS__: Record<string, string> | undefined;
+export const ASSET_VERSIONS: Record<string, string> = typeof __ASSET_VERSIONS__ === 'undefined' ? {} : __ASSET_VERSIONS__;
+
+/**
+ * The address of a shared asset ('assets/spine/sp_l3.glb'): at the site root (public/assets), whichever section page
+ * loads it, with its folder's version as a query (?v=…). A mesh keeps its file name when its contents change; its
+ * address does not, so a server may let browsers keep a versioned address for as long as it likes.
+ */
+export function assetUrl(rel: string): string {
+  const v = ASSET_VERSIONS[/^assets\/([^/?#]+)/.exec(rel)?.[1] ?? ''];
+  return SITE_ROOT + rel + (v ? `?v=${v}` : '');
+}

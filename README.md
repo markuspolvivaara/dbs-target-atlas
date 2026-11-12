@@ -140,8 +140,13 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   least 1.5 mm inside it, a median 2.1–2.3 mm from the registered specimen's carotid, which only guides it), so the
   carotid runs continuously from TotalSegmentator's cervical segment to TopBrain's cavernous one. Branches this CT
   cannot show (lateral striate and pontine branches, anterior spinal artery) are the fitted Z-Anatomy branches moved to
-  start on this patient's own parent vessel; the ethmoidal arteries and the accessory meningeal branch are routed from
-  it through the CT's openings; all marked approximate.
+  start on this patient's own parent vessel; the pontine branches and the anterior spinal artery, which run on the
+  brainstem, are then laid onto the fitted brainstem's surface (`skullbase_v3_base.py`, `ON_HINDBRAIN`). The ethmoidal
+  arteries and the accessory meningeal branch are routed from their parent vessel through the CT's openings. The fitted
+  cerebellar arteries' courses are resampled every 0.5 mm and their corners rounded. All marked approximate. Every vessel
+  and nerve is also measured against the bone as drawn (`skullbase_v3_clearance.py`, `sbv3-fit.json`: `drawnBone`):
+  the routing's bone mask is thinner than the surface drawn from it, so a nerve can lie under the drawn surface where it
+  passes its foramen or runs along the bone.
 - **The surgical views** (Surgical views: "Pterional transsylvian approach", "Lateral supraorbital approach",
   "Interhemispheric transcallosal approach", "Telovelar approach", "Retrosigmoid approach"). The
   lateral supraorbital (LSO) craniotomy is a frontolateral flap over the orbital roof with one burr hole posteriorly below
@@ -158,8 +163,12 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   deformation (affine, then Gaussian radial basis functions from 18 to 5 mm, a penalty against folding) puts its hull
   2 mm inside the CT's cranial cavity, every artery TopBrain labels outside the cortex, the M2 segments on the insula
   and the M3 segments in the Sylvian fissure (medians 1.0 and 1.1 mm on the right); what still touches bone or a vessel,
-  or lies across the falx, is pushed clear (as-rigid-as-possible surface deformation; off the falx sideways, the falx
-  taken as a height field over the sagittal plane). The slider opens the right Sylvian fissure: a shape
+  lies under the tentorium or across the falx, is pushed clear (as-rigid-as-possible surface deformation; off the falx
+  sideways, the falx taken as a height field over the sagittal plane). The tentorium is a surface through this CT's own
+  structures (`pipeline/skullbase_v3_tentorium.py`): the transverse sinuses traced through their lumen, the straight
+  sinus as TopBrain labels it and the crests of the petrous ridges, the smoothest sheet between them; its free edge is
+  Z-Anatomy's. The cerebrum's fit and the cerebellum's both take it as a wall, so the two share no space and neither
+  holds the sinuses that run in it. The slider opens the right Sylvian fissure: a shape
   deformation (ARAP, facing sulcal banks held together, cortex against the inner table held, the insula fixed) that
   lifts the frontal and parietal lips and lowers the temporal one by 6 mm each (illustrative), stored as morph
   target 0. A second slider (morph target 1, solved on top of the opening) lifts the frontal lobe off the orbital roof
@@ -188,9 +197,10 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   posterior rim of the foramen magnum (C1 left, Cho 2024). The cerebellum by lobule, the brainstem and the fourth
   ventricle are Z-Anatomy's (`pipeline/skullbase_pfossa_export.py`), carried onto the CT by v2's fit
   (`skullbase_ct.py` writes them) and fitted again into its posterior fossa (`pipeline/skullbase_pfossa.py`: the hull
-  inside the cavity behind the petrous bones, this patient's basilar, vertebral, superior and posterior inferior
-  cerebellar arteries outside, the tentorium above, no folding; then what still touches an artery or bone pushed
-  clear). Its slider draws both tonsils 6 mm apart and lifts the nodule and uvula 5 mm up and back (illustrative), the
+  inside the cavity behind the petrous bones and under the tentorium, nowhere less than 1 mm from its walls, this
+  patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside, and the cisterns this CT
+  shows along the bone (fluid within 8 mm of it) outside too, no folding; then what
+  still touches an artery, bone or, of the cerebellum, the tentorium pushed clear). Its slider draws both tonsils 6 mm apart and lifts the nodule and uvula 5 mm up and back (illustrative), the
   rest of the cerebellum following less with distance (each shift under 1 mm per mm together, so nothing folds),
   opening the cerebellomedullary fissure onto the fourth ventricle; sources: Pettersson 2023, Wang 2023, Liu 2014,
   Longatti 2026, Cho 2024, Pantu 2026, Cavalheiro 2015.
@@ -255,8 +265,11 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   carotid's posterior vertical segment and on medial to V1 (Wysiadecki 2021): their v3 meshes are spliced (kept in
   `cavernous.json`, which `skullbase_v3.py` applies again when it routes them). The ten triangles of Chung 2016 are
   drawn as flat patches between those structures, and the sinus's walls as a translucent shell of dura round it (1.2 mm
-  at the lateral wall, its nerves inside it, 0.3 mm elsewhere: drawing choices); v2's fitted superior and inferior petrosal sinuses and ophthalmic
-  veins are carried over, the sphenoparietal sinus and the basilar plexus drawn by rule (Tanoue 2020). Its own view
+  at the lateral wall, its nerves inside it, 0.3 mm elsewhere: drawing choices). The sinus keeps 1 mm off the sphenoid sinus's air (a drawing choice for the wall between them, which is too thin on the right for the CT's bone mask). v2's fitted ophthalmic
+  veins are carried over; its fitted superior and inferior petrosal sinuses are laid onto this CT's bone
+  (`pipeline/skullbase_v3_petrosal.py`: the superior along the crest of the petrous ridge to the sigmoid-transverse
+  junction, the inferior on the bone's inner surface along its fitted course); the sphenoparietal sinus and the basilar
+  plexus are drawn by rule (Tanoue 2020). Its own view
   (Systems: Cavernous sinus) draws the right sinus see-through with all of it; in the endonasal view, a step per side
   opens its medial wall (the bone between it and the sphenoid sinus and its venous space, up to the carotid's wall,
   clear of its nerves), the carotid's wall laid bare drawn red and the abducens nerve seen inside.
@@ -306,7 +319,8 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
     rates per grade).
   - **Vestibular schwannoma, Koos I–IV,** in the retrosigmoid view (opened with the cerebellum retracted): the
     meatus's lumen, and a ball in the cerebellopontine angle joined to the porus. This model's fitted pons lies about
-    4 mm from the porus, closer than in life, so grade II is small (6 mm) and grade III is moulded against the brainstem;
+    5 mm from the porus on the right (the fit keeps it out of the cistern this CT shows there; the pons's own surface a
+    CT does not show), so grade II is small (9 mm) and grade III is moulded against the brainstem;
     grade IV pushes it aside. The nerves of the angle are moved round the tumour: the facial nerve forwards onto its
     anterior surface (Choi 2014: its commonest place), thinned and flattened over grades III and IV; the others and the
     fitted small arteries the shortest way out. Sources: Gupta 2020, Starnoni 2020 (EANS), Choi 2014.
@@ -437,6 +451,17 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
     median sulcus and the obex.
   - Z-Anatomy's optic nerves and olfactory tracts and striae ran through its arteries (and the striae through the
     optic nerves). They are moved just clear (`pipeline/skullbase_v1_nerves.py`; up to about 2.4 mm, their ends stay).
+  - Z-Anatomy's hypoglossal nerve ran through its occipital bone beside that bone's own hypoglossal canal (17.6 mm
+    of it in bone a side, up to 4.4 mm deep). It is led through the canal (`pipeline/skullbase_v1_xii.py`): the canal
+    is found as the open space the bone encloses beside its label (6 mm long, 2.5 mm across), the rootlets are
+    gathered in front of its inner opening, and the trunk follows its axis and is back on Z-Anatomy's curve 8 mm
+    beyond the bone (moved up to 9.1 mm). Beyond that, and at the medulla, it is as Z-Anatomy has it.
+  - Z-Anatomy's bones have few of the canals and grooves its vessels and nerves run in (no carotid canal through
+    the petrous bone, no facial canal, a cribriform plate without holes), so many of its curves run through the bone
+    meshes. Every tube is measured against every bone (`pipeline/skullbase_v1_inbone.py`, the last step of v1's
+    chain: each bone on a 0.4 mm grid), and the 28 that have 5% or more of their surface over 0.5 mm inside a bone,
+    or a point 2 mm deep, say so on their card with the share, the depth and the bones (the cochlear nerve 92%, the
+    maxillary artery 57%, the basilar artery 33%, the internal carotid 24%, up to 4.5 mm deep). They are not moved.
     Its chiasm, two pads, is redrawn by v3's rule (Mncube 2019's mean width and height) as a crossing, with the
     optic tracts' first part.
   - The retrosigmoid view is seen nearly level with the porus (on this skull the opening lies level with it).
@@ -750,11 +775,24 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
   from TotalSegmentator.
 - **Discs** (TotalSegmentator, split by the two bones each disc touches) and the **dural sac** (TotalSegmentator's
   "spinal cord" class, which on CT follows the canal contents). The section is for the dorsal approaches: no great
-  vessels, psoas or psoas zones.
-- **Measured per level**: canal width, depth and area; foraminal height, antero-posterior extent and area (L1–L4
-  both sides; the plane method does not capture L5–S1 in this CT); disc height.
+  vessels, psoas or psoas zones. A disc much narrower than its neighbours is marked as drawn in part: of the T10–T11
+  disc the segmentation holds a 0.12 ml chip, and between those two bodies the CT is dense where a disc is dark (its
+  mean on 16-mm circles across the line joining the bodies' centres reaches 722 HU, against 219 and 214 HU at the
+  end plates of the discs above and below). The level's card says so, gives no disc height and does not offer the
+  dorsal approaches there; what the dense band is, is left open.
+- **Measured per level**: the canal between the pedicles (in the plane normal to the spine where it is narrowest
+  between them: the interpedicular width, the depth through its middle, the area); foraminal height,
+  antero-posterior extent and area (L1–L4 both sides; the plane method does not capture L5–S1 in this CT); disc
+  height. Until November 2026 the canal was the bounding box of a hole in a slab through the body centre, which at
+  L5 ran out into the lateral recesses (38.0 mm; 28.5 mm between the pedicles).
 - **Schematic, and labelled so**: roots L1–S1, each with its ganglion as one structure (sac at the disc above → lateral recess → upper part
-  of the foramen; L5 and S1 exits estimated).
+  of the foramen; L5 and S1 exits estimated). Every root (C3–S1) and the vertebral artery are kept out of the bone
+  as it is drawn (`pipeline/drawn_bone.py`: led round it where the rule's path runs through it, then pushed clear);
+  a ganglion is drawn smaller where the opening as drawn is narrower than it, and the artery thinner where a foramen
+  transversarium as drawn is (2 mm at C2 on the right and at C3 on the left, 1.5 mm at C3 on the right). The build
+  fails if a root reaches more than 0.5 mm, or the artery more than 1 mm, into the drawn bone. Before, six roots ran
+  4 to 5 mm deep through a pedicle and the artery 3.6 mm through C2: they had been cleared of the CT's bright
+  voxels only, and a pedicle's cancellous core is darker.
 - **Lesion-to-root tool** (level card): paracentral, foraminal or far-lateral herniation per side; the affected root,
   its ISNCSCI key muscle, other movements and key sensory point on a leg chart.
 - **Pedicles, measured beside published values** (T1–T12, L1–L5): narrowest width and height at the isthmus,
@@ -869,7 +907,7 @@ npm run preview
 ### GitHub Pages
 
 `.github/workflows/pages.yml` runs the unit tests, builds the site and publishes `dist/` to
-GitHub Pages on every push to `main` (live at https://markuspolvivaara.github.io/dbs-target-atlas/, DBS section under `dbs/`).
+GitHub Pages on every push to `main` (live at https://openneuroatlas.net/, DBS section under `dbs/`).
 One-time setup: repository Settings → Pages → Source: **GitHub Actions**. A run can also be started
 by hand from the Actions tab ("Run workflow").
 
