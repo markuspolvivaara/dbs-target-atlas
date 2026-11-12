@@ -1203,7 +1203,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_hypoglossal_nerve_xii.glb",
-   "bytes": 34680,
+   "bytes": 38660,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1220,17 +1220,17 @@
    ],
    "refIds": [],
    "category": "nerve",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy's curve ran through the occipital bone beside its own hypoglossal canal (17.6 mm of it in bone a side, 4.4 mm deep). Led through the canal instead (skullbase_v1_xii.py: the canal found as the open space the bone encloses beside its label, 6.1 mm long and 2.5 mm across; the rootlets gathered in front of its inner opening, the trunk along its axis and back on Z-Anatomy's curve 8.0 mm beyond the bone; moved up to 9.1 mm): a drawing choice, the bone as the model has it.",
    "centroid": {
     "L": [
-     -12.9,
-     -13.98,
-     -39.59
+     -14.1,
+     -13.62,
+     -41.83
     ],
     "R": [
-     12.9,
-     -13.98,
-     -39.59
+     14.09,
+     -13.58,
+     -41.88
     ]
    },
    "cranialNerve": 12,

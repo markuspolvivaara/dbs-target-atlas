@@ -451,6 +451,11 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
     median sulcus and the obex.
   - Z-Anatomy's optic nerves and olfactory tracts and striae ran through its arteries (and the striae through the
     optic nerves). They are moved just clear (`pipeline/skullbase_v1_nerves.py`; up to about 2.4 mm, their ends stay).
+  - Z-Anatomy's hypoglossal nerve ran through its occipital bone beside that bone's own hypoglossal canal (17.6 mm
+    of it in bone a side, up to 4.4 mm deep). It is led through the canal (`pipeline/skullbase_v1_xii.py`): the canal
+    is found as the open space the bone encloses beside its label (6 mm long, 2.5 mm across), the rootlets are
+    gathered in front of its inner opening, and the trunk follows its axis and is back on Z-Anatomy's curve 8 mm
+    beyond the bone (moved up to 9.1 mm). Beyond that, and at the medulla, it is as Z-Anatomy has it.
     Its chiasm, two pads, is redrawn by v3's rule (Mncube 2019's mean width and height) as a crossing, with the
     optic tracts' first part.
   - The retrosigmoid view is seen nearly level with the porus (on this skull the opening lies level with it).

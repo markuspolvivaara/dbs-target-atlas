@@ -3,7 +3,8 @@ import { APPROACH_GEOM, crossCheckSb, DEFINITIONS, definitionFor, LANDMARKS, NOT
 import { SB_GROUPS } from '../../src/skullbase/groups';
 import { skullPlan, skullScene } from '../../src/skullbase/scene';
 import { decodeSkull, defaultSkullState, encodeSkull } from '../../src/skullbase/state';
-import { nodeExtentsX, nodeMeans } from './glb';
+import { meshSoup, nodeExtentsX, nodeMeans, pointsInside } from './glb';
+import sbModifications from '../../src/data/generated/sb-modifications.json';
 import { FORAMEN_CONTENTS } from '../../src/skullbase/foramina';
 import { TB_NOTES, TB_REF, TB_REFS } from '../../src/skullbase/temporal';
 import { APPROACH_REF, APPROACH_REFS, APPROACHES, CAVERNOUS_INFO, ENDONASAL_INFO } from '../../src/skullbase/approaches';
@@ -55,6 +56,39 @@ describe('skull-base data (Z-Anatomy export)', () => {
     // the trunks and the Sylvian arteries are not moved
     for (const n of ['Middle cerebral artery (M1 segment)', 'Anterior cerebral artery', 'Posterior cerebral artery'])
       if (SB_MANIFEST.structures.some((x) => x.name === n)) expect(fit.brain.arteries[n], n).toBeUndefined();
+  }, 60_000);
+  it('the hypoglossal nerve runs through the model’s own hypoglossal canal, not through the bone beside it', async () => {
+    // (the audit's finding MC-09: Z-Anatomy's curve ran through the occipital bone 5 mm from the canal, 17.6 mm of it
+    // in bone a side; pipeline/skullbase_v1_xii.py finds the canal in the bone and leads the nerve through it)
+    type Side = { canal: { centre: number[]; fromLabelMm: number; lengthMm: number; widthMm: number }; inBoneBeforeMm: number; inBoneAfterMm: number;
+      toCanalCentreMm: number; toCanalCentreBeforeMm: number; maxMovedMm: number; sharpestTurnDeg: number };
+    const step = (sbModifications as unknown as { steps: { step: string; metrics: Record<string, Side> }[] }).steps.find((x) => x.step === 'skullbase_v1_xii')!;
+    expect(Object.keys(step.metrics).sort()).toEqual(['L', 'R']);
+    const label = LANDMARKS.find((l) => l.name === 'Hypoglossal canal')!;
+    const nerve = await meshSoup(SB_MANIFEST.structures.find((x) => x.name === 'Hypoglossal nerve (XII)')!.file);
+    for (const [sd, r] of Object.entries(step.metrics)) {
+      // the canal, found beside Z-Anatomy's label for it
+      expect(r.canal.fromLabelMm, sd).toBeLessThan(1);
+      expect(r.canal.lengthMm, sd).toBeGreaterThan(4);
+      expect(r.canal.widthMm, sd).toBeGreaterThan(1.5);
+      const sign = sd === 'R' ? 1 : -1;
+      expect(Math.hypot(r.canal.centre[0] - sign * Math.abs(label.ras[0]), r.canal.centre[1] - label.ras[1], r.canal.centre[2] - label.ras[2]), sd).toBeLessThan(2);
+      // the nerve: through its middle, out of the bone
+      expect(r.toCanalCentreBeforeMm, sd).toBeGreaterThan(4);
+      expect(r.toCanalCentreMm, sd).toBeLessThan(0.5);
+      expect(r.inBoneBeforeMm, sd).toBeGreaterThan(15);
+      expect(r.inBoneAfterMm, sd).toBeLessThanOrEqual(1);
+      expect(r.maxMovedMm, sd).toBeLessThan(12);
+      expect(r.sharpestTurnDeg, sd).toBeLessThan(70);
+      // the shipped tube passes the canal's centre (its radius there is 0.3 to 0.5 mm)
+      let near = Infinity;
+      for (let i = 0; i < nerve.P.length; i += 3) near = Math.min(near, Math.hypot(nerve.P[i] - r.canal.centre[0], nerve.P[i + 1] - r.canal.centre[1], nerve.P[i + 2] - r.canal.centre[2]));
+      expect(near, sd).toBeLessThan(0.8);
+    }
+    // on the shipped files: hardly a vertex of the nerve inside the occipital bone (before: 413 of 4,424, 9 %; now 8 of 4,370)
+    const bone = await meshSoup(SB_MANIFEST.structures.find((x) => x.name === 'Occipital bone')!.file);
+    expect(pointsInside(nerve.P, bone.P, bone.T) / (nerve.P.length / 3)).toBeLessThan(0.01);
+    expect(SB_MANIFEST.structures.find((x) => x.name === 'Hypoglossal nerve (XII)')!.derivation).toContain('Led through the canal');
   }, 60_000);
   it('the telovelar view has the floor’s landmarks, the retrosigmoid the tentorium, and the chiasm is a drawn crossing', () => {
     const tv = SB_GROUPS.find((g) => g.id === 'telovelar')!;

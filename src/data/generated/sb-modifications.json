@@ -995,6 +995,132 @@
    },
    "revision": "193d0cb",
    "date": "2026-11-05"
+  },
+  {
+   "step": "skullbase_v1_xii",
+   "operation": "the hypoglossal nerve led through the hypoglossal canal of the model's own occipital bone (its rootlets gathered in front of the canal, its trunk along the canal's axis); beyond the bone, and its branches, unchanged",
+   "structures": [
+    "Hypoglossal nerve (XII)"
+   ],
+   "parameters": {
+    "canalStepMm": 0.25,
+    "narrowMm": 2.2,
+    "enclosedMm": 4.0,
+    "enclosedDirs": 21,
+    "gatherMm": 1.5,
+    "beyondMm": 1.5,
+    "rejoinMm": 8.0,
+    "clearMm": 0.2
+   },
+   "metrics": {
+    "L": {
+     "canal": {
+      "centre": [
+       -18.62,
+       -30.2,
+       -30.27
+      ],
+      "axis": [
+       -0.63,
+       0.78,
+       0.03
+      ],
+      "inner": [
+       -16.79,
+       -32.45,
+       -30.37
+      ],
+      "outer": [
+       -20.76,
+       -27.57,
+       -30.15
+      ],
+      "lengthMm": 6.3,
+      "widthMm": 2.6,
+      "volumeMm3": 22.1,
+      "fromLabelMm": 0.15
+     },
+     "rootlets": 6,
+     "gatheredAt": [
+      -15.84,
+      -33.61,
+      -30.42
+     ],
+     "gatheredBefore": [
+      -10.77,
+      -26.94,
+      -27.05
+     ],
+     "rejoinsAtMm": 49.5,
+     "leftBoneAtMm": 41.4,
+     "maxMovedMm": 9.0,
+     "inBoneBeforeMm": 17.6,
+     "deepestBeforeMm": 4.3,
+     "inBoneAfterMm": 0.0,
+     "deepestAfterMm": 0.0,
+     "toCanalCentreMm": 0.06,
+     "toCanalCentreBeforeMm": 4.41,
+     "sharpestTurnDeg": 44,
+     "lengthMm": 122.7,
+     "lengthBeforeMm": 132.7
+    },
+    "R": {
+     "canal": {
+      "centre": [
+       18.61,
+       -30.22,
+       -30.26
+      ],
+      "axis": [
+       0.63,
+       0.77,
+       0.04
+      ],
+      "inner": [
+       16.68,
+       -32.58,
+       -30.38
+      ],
+      "outer": [
+       20.56,
+       -27.84,
+       -30.14
+      ],
+      "lengthMm": 6.1,
+      "widthMm": 2.5,
+      "volumeMm3": 22.2,
+      "fromLabelMm": 0.15
+     },
+     "rootlets": 6,
+     "gatheredAt": [
+      15.73,
+      -33.74,
+      -30.44
+     ],
+     "gatheredBefore": [
+      10.77,
+      -26.94,
+      -27.05
+     ],
+     "rejoinsAtMm": 49.5,
+     "leftBoneAtMm": 41.4,
+     "maxMovedMm": 9.1,
+     "inBoneBeforeMm": 17.6,
+     "deepestBeforeMm": 4.4,
+     "inBoneAfterMm": 0.0,
+     "deepestAfterMm": 0.0,
+     "toCanalCentreMm": 0.06,
+     "toCanalCentreBeforeMm": 4.44,
+     "sharpestTurnDeg": 45,
+     "lengthMm": 122.8,
+     "lengthBeforeMm": 132.7
+    }
+   },
+   "validation": {
+    "check": "skullbase_build.py finalize: the nerve passes within 0.5 mm of the canal's centre, under 1 mm of it in bone"
+   },
+   "revision": "0c860c0",
+   "date": "2026-11-12"
   }
  ]
 }

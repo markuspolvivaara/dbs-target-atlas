@@ -1,5 +1,5 @@
 """The bone as drawn, as a field a structure placed by rule is kept out of: a schematic root or artery of the spine
-(spine_build.py).
+(spine_build.py), a nerve of the Z-Anatomy model led through its canal (skullbase_v1_xii.py).
 
 A path is first led round the bone where its centre line runs inside it (thread: the cheapest way through open space
 on the grid), then pushed clear of it (clear)."""

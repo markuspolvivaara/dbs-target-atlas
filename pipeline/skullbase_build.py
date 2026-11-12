@@ -608,6 +608,18 @@ def validate() -> int:
                   f"{n_}: the manifest does not have it as moved")
             check(set(r["centroid"]) == set(r["box"]) == {"L", "R"} and all((c[0] < 0) == (sd == "L") for sd, c in r["centroid"].items()),
                   f"{n_}: not on both sides, or on the wrong side")
+        # the hypoglossal nerve, led through the model's own hypoglossal canal (skullbase_v1_xii.py; Z-Anatomy's curve ran
+        # through the solid bone beside the canal, 17.6 mm of it a side: the audit's finding MC-09)
+        steps = {e["step"]: e for e in json.loads((GEN / f"{PREFIX}-modifications.json").read_text())["steps"]}
+        xii = steps.get("skullbase_v1_xii", {}).get("metrics", {})
+        check(set(xii) == {"L", "R"}, "the hypoglossal nerve is not led through its canal (skullbase_v1_xii.py not run)")
+        for sd, r in xii.items():
+            check(r["canal"]["fromLabelMm"] <= 1.0 and 1.5 <= r["canal"]["widthMm"] <= 5.0 and r["canal"]["lengthMm"] >= 3.0,
+                  f"hypoglossal canal {sd}: not found beside its label ({r['canal']})")
+            check(r["toCanalCentreMm"] <= 0.5, f"hypoglossal nerve {sd}: passes {r['toCanalCentreMm']} mm from its canal's centre")
+            check(r["inBoneAfterMm"] <= 1.0, f"hypoglossal nerve {sd}: {r['inBoneAfterMm']} mm of its centre line in the occipital bone")
+        it = next((x for x in m["structures"] if x["name"] == "Hypoglossal nerve (XII)"), None)
+        check(it is not None and "Led through the canal" in it.get("derivation", ""), "the hypoglossal nerve's derivation does not say it was moved")
         # the temporal-bone views (skullbase_v1_ear.py): Z-Anatomy's ear, and what it lacks drawn by rule, on both sides
         names = {it["name"]: it for it in m["structures"]}
         for n_ in ("Cochlea", "Vestibule and semicircular canals", "Malleus", "Incus", "Stapes", "Tympanic membrane", "Greater petrosal nerve"):
