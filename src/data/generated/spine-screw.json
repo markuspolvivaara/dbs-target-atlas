@@ -2607,11 +2607,11 @@
    },
    "pedicle": {
     "L": {
-     "width": 9.8,
-     "height": 11.5,
-     "transverseAngle": 42.5,
-     "sagittalAngle": 1.5,
-     "chord": 44.3,
+     "width": 10.0,
+     "height": 12.0,
+     "transverseAngle": 30.0,
+     "sagittalAngle": 4.5,
+     "chord": 40.6,
      "inscribedRadius": 3.94,
      "isthmus": [
       -29.64,
@@ -2619,20 +2619,30 @@
       421.87
      ],
      "isthmusUvw": [
-      -12.5,
-      -11.1,
-      3.2
+      -15.0,
+      -12.9,
+      3.3
      ],
      "entry": [
-      -36.88,
-      -1.62,
-      427.59
+      -34.48,
+      -2.36,
+      427.42
      ],
      "dir": [
-      0.677,
-      0.5055,
-      -0.535
-     ]
+      0.5046,
+      0.6411,
+      -0.5783
+     ],
+     "held": {
+      "to": [
+       27.0,
+       35.4
+      ],
+      "freeTransverseAngle": 42.5,
+      "freeSagittalAngle": 1.5,
+      "clearance": 3.38,
+      "freeClearance": 3.51
+     }
     },
     "R": {
      "width": 9.5,
@@ -2667,19 +2677,19 @@
     "st": {
      "L": {
       "entry": [
-       -34.89,
-       -2.3,
-       428.47
+       -34.84,
+       -2.32,
+       428.48
       ],
       "dir": [
-       0.5044,
-       0.5859,
-       -0.6343
+       0.5004,
+       0.5877,
+       -0.6357
       ],
-      "chord": 41.9,
+      "chord": 41.8,
       "bodyDepth": 22.8,
       "size": {
-       "diameter": 7.5,
+       "diameter": 8.0,
        "length": 35.0
       }
      },
@@ -2705,19 +2715,19 @@
     "at": {
      "L": {
       "entry": [
-       -36.88,
-       -1.62,
-       427.59
+       -34.48,
+       -2.36,
+       427.42
       ],
       "dir": [
-       0.677,
-       0.5055,
-       -0.535
+       0.5046,
+       0.6411,
+       -0.5783
       ],
-      "chord": 44.3,
-      "bodyDepth": 23.4,
+      "chord": 40.6,
+      "bodyDepth": 22.3,
       "size": {
-       "diameter": 7.5,
+       "diameter": 8.0,
        "length": 35.0
       }
      },
@@ -2744,22 +2754,24 @@
    "check": {
     "st.L": {
      "grade": "B",
-     "seated": 6.5,
+     "seated": 7.0,
      "breach": {
-      "lateral": 0.16
+      "anterior": 0.22,
+      "inferior": 0.04,
+      "lateral": 0.44
      },
      "nearest": [
       {
        "id": "sp_root_t1",
-       "mm": 0.83
+       "mm": 0.57
       },
       {
        "id": "sp_dural_sac",
-       "mm": 1.62
+       "mm": 1.38
       },
       {
        "id": "sp_root_c8",
-       "mm": 2.03
+       "mm": 1.78
       }
      ]
     },
@@ -2784,23 +2796,24 @@
     },
     "at.L": {
      "grade": "B",
-     "seated": 6.5,
+     "seated": 6.0,
      "breach": {
-      "medial": 0.22,
-      "superior": 0.21
+      "anterior": 0.35,
+      "lateral": 0.49,
+      "superior": 0.62
      },
      "nearest": [
       {
-       "id": "sp_dural_sac",
-       "mm": 0.55
-      },
-      {
        "id": "sp_root_t1",
-       "mm": 0.95
+       "mm": 0.94
       },
       {
        "id": "sp_root_c8",
-       "mm": 2.22
+       "mm": 1.4
+      },
+      {
+       "id": "sp_dural_sac",
+       "mm": 1.5
       }
      ]
     },

@@ -12,6 +12,13 @@ export type V3 = z.infer<typeof V3>;
 const PedicleSchema = z.object({
   width: z.number(), height: z.number(), transverseAngle: z.number(), sagittalAngle: z.number(), chord: z.number(),
   inscribedRadius: z.number(), isthmus: V3, isthmusUvw: V3, entry: V3, dir: V3,
+  /** an axis fitted with its transverse angle inside the range of the published study means (`to`, degrees), a
+   * decision made in review (spine_screw.py, HELD_TO_PUBLISHED): the angles of the free fit, and the channel's smallest
+   * clearance (mm) along this axis and along the free one */
+  held: z.object({
+    to: z.tuple([z.number(), z.number()]), freeTransverseAngle: z.number(), freeSagittalAngle: z.number(),
+    clearance: z.number(), freeClearance: z.number(),
+  }).optional(),
 });
 const Isthmus = z.object({
   isthmusHeight: z.number(),

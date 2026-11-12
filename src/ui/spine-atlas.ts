@@ -495,6 +495,15 @@ export class SpineAtlasPage {
     const head = h('thead', {}, h('tr', {}, h('th', {}, ''), h('th', { scope: 'col' }, 'Left'), h('th', { scope: 'col' }, 'Right'), h('th', { scope: 'col' }, 'Published')));
     const measured = (k: 'width' | 'height') => [`${fmtMm(ped.L[k])} mm`, `${fmtMm(ped.R[k])} mm`] as const;
     const chord = row('Chord, entry to anterior cortex', `${fmtMm(ped.L.chord)} mm`, `${fmtMm(ped.R.chord)} mm`, '—');
+    // a pedicle whose axis was fitted inside the published range, not freely: said under the table, with the free fit
+    const held = (['L', 'R'] as const).filter((sd) => ped[sd].held).map((sd) => {
+      const k = ped[sd].held!;
+      return h('p', { class: 'aside held-note' },
+        `${sd === 'L' ? 'Left' : 'Right'} pedicle: its axis is not the free fit. Fitted freely it converges ${deg(k.freeTransverseAngle)} (${sag(k.freeSagittalAngle)}), `
+        + `outside the published study means, but the fit is flat here: the channel’s smallest clearance is ${k.freeClearance.toFixed(1)} mm along that axis and ${k.clearance.toFixed(1)} mm along this one, `
+        + `a difference of ${(k.freeClearance - k.clearance).toFixed(1)} mm that this CT (0.72 mm voxels) does not resolve. `
+        + `In review the axis was therefore fitted inside the published means (${k.to[0].toFixed(1)} to ${k.to[1].toFixed(1)}°); the width, height, chord and the anatomic start screw follow this axis.`);
+    });
     if (level === 'C7') {
       const pub = published.cervical.C7;
       const ax = pub.axisJiang;
@@ -530,7 +539,7 @@ export class SpineAtlasPage {
             row('Transverse angle', deg(ped.L.transverseAngle), deg(ped.R.transverseAngle), span(pub.transverseAngleStudyMeans, degf, ' to ').replace(' (', '° (')),
             row('Sagittal angle', sag(ped.L.sagittalAngle), sag(ped.R.sagittalAngle), span(pub.sagittalAngleStudyMeans, degf, ' to ').replace(' (', '° (')),
             chord)),
-        this.stmt(STATEMENTS.pedicleMethod), this.stmt(STATEMENTS.publishedThoracic));
+        ...held, this.stmt(STATEMENTS.pedicleMethod), this.stmt(STATEMENTS.publishedThoracic));
     }
     const pub = (published.levels as Record<string, (typeof published.levels)['L1']>)[level];
     const range = (o: Record<string, number>) => `${fmtMm(Math.min(...Object.values(o)))}–${fmtMm(Math.max(...Object.values(o)))} mm`;

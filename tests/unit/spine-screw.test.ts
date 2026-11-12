@@ -42,6 +42,25 @@ describe('virtual screw data (pipeline/spine_screw.py)', () => {
       }
     }
   });
+  it('an axis held to the published range lies inside it, says what the free fit gave, and costs less clearance than half a voxel', () => {
+    // (the reviewer's decision of 12 November 2026: T1 on the left, and no other pedicle)
+    const held = Object.entries(SCREW_LEVELS).flatMap(([lv, d]) => (['L', 'R'] as const).filter((sd) => d.pedicle?.[sd].held).map((sd) => `${lv}${sd}`));
+    expect(held).toEqual(['T1L']);
+    const p = SCREW_LEVELS.T1.pedicle!.L, k = p.held!;
+    const means = Object.values((published.thoracic as Record<string, Record<string, Record<string, number>>>).T1.transverseAngleStudyMeans);
+    expect(k.to).toEqual([Math.min(...means), Math.max(...means)]);
+    expect(p.transverseAngle).toBeGreaterThanOrEqual(k.to[0]);
+    expect(p.transverseAngle).toBeLessThanOrEqual(k.to[1]);
+    // the free fit was outside the range (or there was nothing to hold), and its channel is the wider one, by little
+    expect(k.freeTransverseAngle < k.to[0] || k.freeTransverseAngle > k.to[1]).toBe(true);
+    expect(k.freeClearance).toBeGreaterThanOrEqual(k.clearance);
+    expect(k.freeClearance - k.clearance).toBeLessThan(0.36);
+    // the anatomic start screw runs along the held axis, as the card says
+    expect(SCREW_LEVELS.T1.start.at!.L.dir).toEqual(p.dir);
+    expect(SCREW_LEVELS.T1.start.at!.L.entry).toEqual(p.entry);
+    // and the two sides of T1 now agree within a few degrees
+    expect(Math.abs(p.transverseAngle - SCREW_LEVELS.T1.pedicle!.R.transverseAngle)).toBeLessThan(5);
+  });
   it('thoracic pedicles sit near the published study means, and the start sizes follow the 80% rules', () => {
     for (let i = 1; i <= 12; i++) {
       const lv = `T${i}`;
