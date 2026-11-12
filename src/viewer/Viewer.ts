@@ -102,6 +102,9 @@ const ENDO_PICK_BEHIND_MM = 3;
 /** ... and through the thin floor of the third ventricle, this close: what lies under it can be named before it is opened */
 const ENDO_PICK_FLOOR_MM = 14;
 
+/** How long a lost WebGL context may take to come back before the stage offers a reload (ms). */
+const CONTEXT_WAIT_MS = 5000;
+
 /** Shared 3D viewer. What to draw comes from the section's SceneSource (catalogue + planner). */
 /** True when this browser can give the 3D viewer a WebGL context. */
 export function webglAvailable(): boolean {
@@ -241,6 +244,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     keys.textContent = 'Arrow keys turn the view; with Shift they move it; plus and minus zoom; 0 puts it back. The structures are listed in the legend and in the panel.';
     host.appendChild(keys);
     this.renderer.domElement.setAttribute('aria-describedby', keys.id);
+    this.watchContext();
     this.camera = new THREE.PerspectiveCamera(35, 1, 0.5, 2000);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
@@ -278,6 +282,44 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.resize();
     this.bindPointer();
     this.loop();
+  }
+
+  // ---------------------------------------------------------------- a lost WebGL context
+  /** A browser can take the WebGL context away (a tab long in the background, a driver reset, many 3D tabs) and give it
+   * back later. three.js rebuilds its state on the restore event, but this viewer draws on demand, so nothing asked
+   * for a frame and the stage stayed blank until the reader touched it; while the context was gone nothing said so.
+   * Now: a note while it is lost, a frame as soon as it is back, and if it does not come back within
+   * CONTEXT_WAIT_MS, the note offers to reload the page. */
+  private lostNote: HTMLElement | null = null;
+  private lostTimer = 0;
+  private watchContext(): void {
+    const el = this.renderer.domElement;
+    el.addEventListener('webglcontextlost', () => {
+      if (this.disposed || this.lostNote) return;
+      const note = document.createElement('div');
+      note.className = 'no-webgl webgl-lost';
+      note.setAttribute('role', 'status');
+      note.textContent = 'The 3D view was interrupted. Restoring it…';
+      this.host.appendChild(note);
+      this.lostNote = note;
+      this.lostTimer = window.setTimeout(() => {
+        if (this.lostNote !== note) return;
+        const again = document.createElement('button');
+        again.type = 'button';
+        again.className = 'chip';
+        again.textContent = 'Reload the page';
+        again.addEventListener('click', () => window.location.reload());
+        note.textContent = 'The 3D view was interrupted and has not come back. The lists, cards, sources and credits still work. ';
+        note.appendChild(again);
+      }, CONTEXT_WAIT_MS);
+    });
+    el.addEventListener('webglcontextrestored', () => {
+      window.clearTimeout(this.lostTimer);
+      this.lostNote?.remove();
+      this.lostNote = null;
+      if (this.disposed) return;
+      this.resize();        // (the drawing buffer is new: sizes, the outline's resolution; it also asks for a frame)
+    });
   }
 
   // ---------------------------------------------------------------- frame

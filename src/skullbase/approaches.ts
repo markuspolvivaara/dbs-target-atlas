@@ -250,7 +250,7 @@ export const APPROACHES: ApproachContent[] = [
   },
   {
     id: 'lso', view: 'lso', name: 'Lateral supraorbital approach', camera: 'supraorbital',
-    summary: 'A right lateral supraorbital (LSO) craniotomy cut out of this CT’s bone, drawn larger than usual to show the anatomy, over the same fitted brain. The fissure lies at the craniotomy’s lower edge; the lift raises the frontal lobe off the lateral orbital roof, opening a corridor under it to the carotid, the optic nerve and M1, and the other slider opens the fissure.',
+    summary: 'A right lateral supraorbital (LSO) craniotomy cut out of this CT’s bone, over the same fitted brain. The fissure lies at the craniotomy’s lower edge; the lift raises the frontal lobe off the lateral orbital roof, opening a corridor under it to the carotid, the optic nerve and M1, and the other slider opens the fissure.',
     sections: [sec('The craniotomy', [
       c('A more aesthetic variant of the classic pterional approach, developed in Helsinki and the approach used most there: a curved frontotemporal skin incision behind the hairline, stopping 2–3 cm above the zygoma, and the temporalis muscle opened only a little, near its upper insertion.', 'choquevelasquez2018'),
       c('One burr hole posteriorly, just below the insertion line of the temporalis muscle; the bone flap is cut mainly with the side-cutting craniotome and its basal part drilled off before it is lifted; about 3 × 4 cm.', 'cha2012'),
@@ -269,7 +269,7 @@ export const APPROACHES: ApproachContent[] = [
       c('In a phantom model of middle cerebral artery aneurysm clipping (22 participants), the LSO had success rates comparable with the pterional approach; the authors suggest it may suit patients whose M1 is shorter than average.', 'amini2024'),
     ], 'm1'), sec('Insula', INSULA), sec('Care points', [VEINS])],
     context: [...CONTEXT, 'Olfactory nerve (I)'],
-    notShown: `${NOT_SHOWN} The craniotomy is drawn larger than the usual LSO, its outline placed by hand on this skull.`,
+    notShown: `${NOT_SHOWN} The craniotomy’s outline is placed by hand on this skull; the opening as cut is measured beside the published mean under “How the craniotomy is drawn”.`,
     // framed on the corridor's far end (the carotid, optic nerve and M1) and its opening, closer than the other views
     focus: ['Middle cerebral artery (M1 segment)', 'Optic nerve (II)', 'Internal carotid artery'],
     radius: 48,
@@ -487,8 +487,8 @@ export const V1_ABSENT = new Set([
 export const V1_TEXT: Record<string, { summary: string; notShown: string; camera?: CameraPreset; hide?: string[]; add?: string[] }> = {
   pterional: { summary: 'The right pterional craniotomy cut out of Z-Anatomy’s skull, over Z-Anatomy’s own brain. One slider opens the Sylvian fissure onto the insula and the model’s middle cerebral artery; another lifts the frontal lobe off the orbital roof to look under it, at the carotid and the optic nerve.',
     notShown: `The scalp, temporalis muscle, dura and arachnoid; the Sylvian veins. ${V1_BRAIN}` },
-  lso: { summary: 'A right lateral supraorbital (LSO) craniotomy cut out of Z-Anatomy’s skull, drawn larger than usual to show the anatomy, over the same brain. The fissure lies at the craniotomy’s lower edge; the lift raises the frontal lobe off the lateral orbital roof.',
-    notShown: `The scalp, dura and arachnoid; the Sylvian veins. The craniotomy is drawn larger than the usual LSO, its outline placed by rule. ${V1_BRAIN}` },
+  lso: { summary: 'A right lateral supraorbital (LSO) craniotomy cut out of Z-Anatomy’s skull, over the same brain. The fissure lies at the craniotomy’s lower edge; the lift raises the frontal lobe off the lateral orbital roof.',
+    notShown: `The scalp, dura and arachnoid; the Sylvian veins. The craniotomy’s outline is placed by rule; the opening as cut is measured beside the published mean under “How the craniotomy is drawn”. ${V1_BRAIN}` },
   interhemispheric: { summary: 'A right parasagittal craniotomy at the coronal suture cut out of Z-Anatomy’s skull, over its brain. The slider holds the right hemisphere off the falx, opening the interhemispheric fissure down to the corpus callosum.',
     notShown: `The scalp, dura and arachnoid; the bridging veins. ${V1_BRAIN}` },
   suboccipital: { summary: 'A midline suboccipital craniotomy cut out of Z-Anatomy’s skull, with its cerebellum, brainstem and fourth ventricle. The slider draws the cerebellar tonsils apart and lifts the inferior vermis, opening the cerebellomedullary fissure.',

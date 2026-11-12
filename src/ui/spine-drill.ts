@@ -338,7 +338,17 @@ export class DrillPanel implements PointerTool {
       this.vols.set(pair.id, p);
     }
     this.out.replaceChildren(h('p', { class: 'aside' }, 'Loading the bone…'));
-    const vol = await p;
+    let vol: DrillVolume;
+    try {
+      vol = await p;
+    } catch {
+      // (the download failed: the panel said "Loading the bone…" for the rest of the visit, with an unhandled
+      // rejection in the console; the failed download is forgotten above, so Retry fetches it again)
+      if (this.key !== key) return;
+      this.out.replaceChildren(h('p', { class: 'aside drill-failed', role: 'alert' }, 'The bone for this tool could not be loaded (the download failed). ',
+        h('button', { type: 'button', class: 'chip', onclick: () => { if (this.key === key) void this.start(pair, mode); } }, 'Retry')));
+      return;
+    }
     if (this.key !== key) return;   // left meanwhile
     this.clearMeshes();
     this.rest.clear();   // (its geometry is the loader's, shared: not disposed)

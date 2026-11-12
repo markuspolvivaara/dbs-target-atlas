@@ -151,8 +151,14 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   "Interhemispheric transcallosal approach", "Telovelar approach", "Retrosigmoid approach"). The
   lateral supraorbital (LSO) craniotomy is a frontolateral flap over the orbital roof with one burr hole posteriorly below
   the temporal line, cut down to the anterior fossa floor and kept to the frontal bone (Cha 2012, Choque-Velasquez 2018),
-  its outline placed by hand and drawn wider than the mean LSO (about 1450 against 1275 mm², Cha 2012) to show the
-  anatomy; it shares the brain and its two sliders. The right pterional craniotomy is
+  its outline placed by hand; the bone it removes covers about 1180 mm² seen face on, 8% less than the mean LSO
+  craniotomy of 1275 mm² (Cha 2012); it shares the brain and its two sliders. What a craniotomy's card says of its
+  opening is measured on the bone removed as it is drawn (`skullbase_v3_approach.py`, `Removed`: the area seen face
+  on, the volume, how near it comes to the anterior clinoid process or the sinuses), not taken from the outline or
+  the rule's distances the cut was drawn with; `skullbase_v3_approach.py measure` writes the descriptions again
+  without cutting anew. On this CT the pterional's ridge drilling removes bone to 36 mm from the anterior clinoid
+  process, not to the 12 mm its rule aims at (the rule drills along a straight line from the pterion towards the
+  process; the cut itself is not changed yet). The right pterional craniotomy is
   cut out of the CT's own bone (`pipeline/skullbase_v3_approach.py`: burr holes placed from the fitted landmarks as
   Yilmaz 2025 and Sevgi 2026 describe, the skull's thickness removed inside an oval drawn through them with its sides
   bowed out, behind the zygomatic bone, which stays; the corners where the cranial floor is kept are rounded over 2.5 mm

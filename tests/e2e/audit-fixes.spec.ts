@@ -560,3 +560,56 @@ test('a link followed just as the page is about to write its address is not undo
   }
   expect(g.errors).toEqual([]);
 });
+
+// P1-04: after the browser restored a lost WebGL context the stage stayed blank until the reader touched it, and
+// while the context was lost nothing told the reader
+test('loading: a lost WebGL context is announced, and the picture comes back by itself with the context', async ({ page }) => {
+  await open(page, './dbs/#/atlas?i=pd');
+  /** how many different colours the 3D canvas shows (sampled) */
+  const colours = () => page.evaluate(() => {
+    const src = document.querySelector<HTMLCanvasElement>('canvas[role="application"]')!;
+    const c = document.createElement('canvas');
+    c.width = 200; c.height = 150;
+    const g = c.getContext('2d')!;
+    g.drawImage(src, 0, 0, c.width, c.height);
+    const d = g.getImageData(0, 0, c.width, c.height).data;
+    const seen = new Set<number>();
+    for (let i = 0; i < d.length; i += 4) seen.add((d[i] << 16) | (d[i + 1] << 8) | d[i + 2]);
+    return seen.size;
+  });
+  const before = await colours();
+  expect(before).toBeGreaterThan(20);
+  type Lose = { loseContext(): void; restoreContext(): void };
+  await page.evaluate(() => {
+    const a = (window as unknown as { __atlas: { viewer: { renderer: { getContext(): WebGLRenderingContext } } } }).__atlas;
+    const w = window as unknown as { __lose: Lose };
+    w.__lose = a.viewer.renderer.getContext().getExtension('WEBGL_lose_context') as unknown as Lose;
+    w.__lose.loseContext();
+  });
+  const note = page.locator('.webgl-lost');
+  await expect(note).toBeVisible();
+  await expect(note).toHaveAttribute('role', 'status');
+  await expect(note).toContainText('The 3D view was interrupted');
+  // it has not come back after a while: the note offers a reload
+  await expect(note.getByRole('button', { name: 'Reload the page' })).toBeVisible({ timeout: 12_000 });
+  // the context comes back: the note goes and the picture is drawn again without a touch
+  await page.evaluate(() => (window as unknown as { __lose: Lose }).__lose.restoreContext());
+  await expect(note).toBeHidden();
+  await expect.poll(colours, { timeout: SETTLED }).toBeGreaterThan(20);
+});
+
+// P1-05 (the drilling tool): with the bone's file not downloadable the panel said "Loading the bone…" for good
+test('loading: the drilling tool says when its bone could not be loaded, and Retry loads it', async ({ page }) => {
+  let block = true;
+  await page.route('**/assets/spine/drill_*.bin.gz*', (route) => (block ? route.abort() : route.continue()));
+  await open(page, './spine/#/atlas?r=cervical&lv=C5&dr=1');
+  const failed = page.locator('.drill-failed');
+  await expect(failed).toBeVisible();
+  await expect(failed).toHaveAttribute('role', 'alert');
+  await expect(failed).toContainText('could not be loaded');
+  await expect(page.locator('.drill-out')).not.toContainText('Loading the bone');
+  block = false;
+  await failed.getByRole('button', { name: 'Retry' }).click();
+  await expect(failed).toBeHidden();
+  await expect(page.locator('.drill-out')).toContainText('Bone removed');
+});

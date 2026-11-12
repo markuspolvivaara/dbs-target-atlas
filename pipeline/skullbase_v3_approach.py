@@ -659,22 +659,31 @@ def pterional(S: Skull) -> dict:
     drill = S.region(near_ridge, (ridge0 + stop) / 2, np.linalg.norm(seg) / 2 + RIDGE_RADIUS_MM + 1)
     if PROFILE == "v1":      # Z-Anatomy's ridge lies lower than that line: found from the skull itself
         drill |= ridge_between_fossae(S, whole | drill, n_p, acp)
+    # (what the card says of the holes and of the ridge is measured: each hole is put onto the bone's surface after its
+    # offsets, and how near the bone removed comes to the clinoid process is read off the removed piece: Removed)
     how = ("A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture "
-           "(Yilmaz 2025, Sevgi 2026; the model's zygomatic process of the frontal bone, raised 6 mm); a frontal hole near the "
-           f"superior orbital rim (Yilmaz 2025; here 20 mm above and 10 mm lateral to the supraorbital notch, "
+           "(Yilmaz 2025, Sevgi 2026; placed from the model's zygomatic process of the frontal bone, 6 mm up and 3 mm back, then "
+           f"onto the bone's surface: {np.linalg.norm(keyhole - zyg):.0f} mm from that landmark); a frontal hole near the "
+           "superior orbital rim (Yilmaz 2025; placed 20 mm above, 10 mm lateral to and 8 mm behind the supraorbital notch, then "
+           f"onto the bone's surface: {np.linalg.norm(frontal - so):.0f} mm from the notch, "
            f"{np.linalg.norm(frontal - keyhole):.0f} mm from the keyhole); a temporal hole on the squama near the zygomatic root "
            "(Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal "
            "line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the "
-           f"lateral sphenoid ridge drilled (a {RIDGE_RADIUS_MM:.0f} mm radius along the ridge), stopping {RIDGE_STOP_MM:.0f} mm "
-           "short of the anterior clinoid process (illustrative: Yilmaz 2025 limits this resection at the meningo-orbital artery "
-           "in the orbitozygomatic approach, which the model does not show). "
+           f"lateral sphenoid ridge drilled: the bone within {RIDGE_RADIUS_MM:.0f} mm of a line from the pterion towards the anterior "
+           f"clinoid process, to {RIDGE_STOP_MM:.0f} mm short of it"
+           + (", and the ridge between the fossae as found on this skull" if PROFILE == "v1" else "")
+           + "; as cut, the bone removed ends <<clinoid>> mm from the process (illustrative: Yilmaz 2025 limits this resection "
+           "at the meningo-orbital artery in the orbitozygomatic approach, which the model does not show). "
            f"The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome "
            f"cuts it, behind the zygomatic bone (which stays), leaving no slot under bone it keeps narrower than "
            f"{2 * SLOT_MM:g} mm, the "
            f"corners where the cranial floor is kept rounded over {PT_ROUND_MM:g} mm and its edge smoothed over {PT_SOFT_MM:.0f} mm (illustrative). "
            f"Burr holes: {fmt(keyhole)}, {fmt(frontal)}, {fmt(root)}, {fmt(post)}.")
     return {"id": "pterional", "name": "Pterional (frontotemporal) craniotomy", "cut": m | drill, "drill": drill, "how": how, "softMm": PT_SOFT_MM, "guard": ~free,
-            "burrHoles": [keyhole.round(1).tolist(), frontal.round(1).tolist(), root.round(1).tolist(), post.round(1).tolist()]}
+            "burrHoles": [keyhole.round(1).tolist(), frontal.round(1).tolist(), root.round(1).tolist(), post.round(1).tolist()],
+            "measured": {"keyholeFromLandmarkMm": round(float(np.linalg.norm(keyhole - zyg)), 1),
+                         "frontalHoleFromNotchMm": round(float(np.linalg.norm(frontal - so)), 1)},
+            "measure": lambda M: {"<<clinoid>>": f"{M.nearest(acp):.0f}", "removedToClinoidMm": round(M.nearest(acp), 1)}}
 
 
 def ridge_between_fossae(S: "Skull", opened: np.ndarray, n: np.ndarray, acp: np.ndarray) -> np.ndarray:
@@ -853,6 +862,91 @@ def outline_area(outline: np.ndarray, n: np.ndarray) -> float:
     return float(0.5 * abs(np.dot(x, np.roll(y, 1)) - np.dot(y, np.roll(x, 1))))
 
 
+class Removed:
+    """The bone a craniotomy removes, as it is drawn (the removed piece's mesh), measured: what its card says of the
+    opening is read off this, after the cut, not off the outline or the rule's parameters it was drawn with. The two
+    differ where the outline reaches past the bone, the cut keeps to one bone or stops at the floor, or the smoothed
+    edge and the meshing drop a small piece (the audit's findings AP-04, AP-05 and AP-09: an LSO flap given as 1482 mm2
+    "larger than the published mean" that measures less than it; a sphenoid ridge "drilled to 12 mm from the anterior
+    clinoid process" whose drilled bone ends 38 mm from it). A maker writes tokens (<<...>>) into its description and
+    gives `measure`, which turns this into their values."""
+
+    def __init__(self, V: np.ndarray, T: np.ndarray):
+        self.V, self.T = np.asarray(V, float), np.asarray(T, int)
+        c = self.V.mean(0)
+        # its own axis: the direction it is thinnest along (a flap is a shell), pointing outwards from the head's middle
+        _, _, vt = np.linalg.svd(self.V - c, full_matrices=False)
+        self.axis = vt[2] if vt[2] @ c > 0 else -vt[2]
+        self.area = self.seen(self.axis)
+        self.ml = mesh_ml(self.V, self.T)
+
+    def seen(self, n: np.ndarray, part: np.ndarray | None = None) -> float:
+        """The area (mm2) the piece covers seen along n: its surface (vertices, edge midpoints, face centres) projected
+        onto the plane across n on a 0.5 mm grid, pinholes closed. `part`: only the faces all of whose vertices it
+        marks (a flap without the drilling that goes with it)."""
+        n = unit(n)
+        e1 = unit(np.cross(n, [0, 0, 1.0]) if abs(n[2]) < 0.95 else np.cross(n, [0, 1.0, 0]))
+        e2 = np.cross(n, e1)
+        T = self.T if part is None else self.T[part[self.T].all(1)]
+        a, b, c = self.V[T[:, 0]], self.V[T[:, 1]], self.V[T[:, 2]]
+        P = np.vstack([a, b, c, (a + b) / 2, (b + c) / 2, (c + a) / 2, (a + b + c) / 3])
+        if not len(P):
+            return 0.0
+        u, v = P @ e1, P @ e2
+        i, j = np.floor((u - u.min()) / 0.5).astype(int), np.floor((v - v.min()) / 0.5).astype(int)
+        img = np.zeros((i.max() + 5, j.max() + 5), bool)
+        img[i + 2, j + 2] = True
+        img = ndimage.binary_fill_holes(ndimage.binary_closing(img, iterations=1))
+        # (a cell is marked by any point in it, so the outline's cells count whole: the mean with the same picture
+        # one cell smaller takes them as half)
+        return float((img.sum() + ndimage.binary_erosion(img).sum()) / 2 * 0.25)
+
+    def nearest(self, p: np.ndarray) -> float:
+        """How near the piece comes to a point (mm)."""
+        return float(np.linalg.norm(self.V - p, axis=1).min())
+
+    def off(self, path: np.ndarray, rad: np.ndarray) -> float:
+        """How near the piece comes to a tube (its centre line and radii): mm from its wall."""
+        d, j = cKDTree(path).query(self.V)
+        return max(float((d - rad[j]).min()), 0.0)
+
+    def below_horizontal(self) -> float:
+        return float(np.degrees(np.arcsin(np.clip(-self.axis[2], -1, 1))))
+
+
+def mesh_ml(V: np.ndarray, T: np.ndarray) -> float:
+    """A closed surface's volume (ml)."""
+    a, b, c = V[T[:, 0]], V[T[:, 1]], V[T[:, 2]]
+    return round(abs(float(np.einsum("ij,ij->i", a, np.cross(b, c)).sum())) / 6000, 1)
+
+
+def measured_how(ap: dict, M: Removed) -> None:
+    """A maker's description with its tokens filled from the removed piece as drawn, and its measured numbers kept."""
+    vals = ap["measure"](M) if "measure" in ap else {}
+    for k, v in vals.items():
+        if isinstance(v, str):
+            assert k in ap["how"], f"{ap['id']}: token {k} not in its description"
+            ap["how"] = ap["how"].replace(k, v)
+    assert "<<" not in ap["how"], f"{ap['id']}: a token is left in its description"
+    ap["measured"] = {**ap.get("measured", {}), "faceOnMm2": round(M.area), **{k: v for k, v in vals.items() if not isinstance(v, str)}}
+
+
+def beside_sinuses(t: float, g: float) -> str:
+    """How near the bone removed comes to the transverse and the sigmoid sinus (mm from their walls as drawn), in words."""
+    if t < 0.05 and g < 0.05:
+        return "meets the transverse and the sigmoid sinus as they are drawn"
+    if t < 0.05 or g < 0.05:
+        return (f"meets the {'transverse' if t < 0.05 else 'sigmoid'} sinus as it is drawn and comes within {max(t, g):.1f} mm of the "
+                f"{'sigmoid' if t < 0.05 else 'transverse sinus'}")
+    return f"comes within {t:.1f} mm of the transverse sinus and {g:.1f} mm of the sigmoid"
+
+
+def against_mean(area: float, mean: float) -> str:
+    """A measured area beside a published mean, in words."""
+    r = area / mean
+    return "about the size of" if abs(r - 1) < 0.05 else f"{abs(100 * (r - 1)):.0f} % {'smaller' if r < 1 else 'larger'} than"
+
+
 def lateral_supraorbital(S: Skull) -> dict:
     """One burr hole posteriorly below the temporal line, a frontolateral flap over the orbital roof down to the anterior
     fossa floor (Cha 2012, Choque-Velasquez 2018); no sphenoid ridge drilling (that is the pterional's)."""
@@ -869,12 +963,14 @@ def lateral_supraorbital(S: Skull) -> dict:
     area = outline_area(outline, n)
     how = ("A frontolateral flap over the orbital roof, with one burr hole posteriorly just below the temporal line (Cha 2012, "
            "Choque-Velasquez 2018), cut down to the anterior fossa floor (the basal part drilled off, Cha 2012); the sphenoid "
-           f"ridge is not drilled. Its outline is placed by hand on this skull: about {area:.0f} mm² seen face on, larger than the "
-           f"mean LSO craniotomy of {LSO_MEAN_AREA:.0f} mm² (Cha 2012) on purpose, to show the anatomy (illustrative), its basal edge "
-           f"at the level of the orbital roof. The outline is a smooth curve through those points and the cut's edge is smoothed over "
+           f"ridge is not drilled. Its outline is placed by hand on this skull ({area:.0f} mm² seen face on as drawn), its basal "
+           "edge at the level of the orbital roof; the cut keeps to the frontal bone and stops at the floor, and the bone removed "
+           "covers about <<flap>> mm² seen face on, <<against>> the mean LSO craniotomy of "
+           f"{LSO_MEAN_AREA:.0f} mm² (Cha 2012) (illustrative). The outline is a smooth curve through those points and the cut's edge is smoothed over "
            f"{LSO_SOFT_MM:.0f} mm (illustrative). Burr hole: {fmt(outline[LSO_BURR_HOLE])}.")
     return {"id": "lso", "name": "Lateral supraorbital craniotomy", "cut": m, "how": how, "burrHoles": [outline[LSO_BURR_HOLE].round(1).tolist()],
-            "outline": outline.round(1).tolist(), "areaMm2": round(area), "softMm": LSO_SOFT_MM}
+            "outline": outline.round(1).tolist(), "areaMm2": round(area), "softMm": LSO_SOFT_MM, "measured": {"outlineMm2": round(area)},
+            "measure": lambda M: {"<<flap>>": f"{M.area:.0f}", "<<against>>": against_mean(M.area, LSO_MEAN_AREA)}}
 
 
 def retrosigmoid(S: Skull) -> dict:
@@ -931,12 +1027,15 @@ def retrosigmoid(S: Skull) -> dict:
            f"front edge along the sigmoid sinus' posterior margin for {RS_FLAP_MM[1]:.0f} mm (Jian 2021: the window's upper and front margins "
            "against the two sinuses), closed behind and below by straight edges, its corners rounded; larger than Jian 2021's keyhole "
            "(18-20 x 20-25 mm), about the size of the craniotomies in Tang 2025 (a mean 3.8 cm across), the shape drawn by hand "
-           "(illustrative). The sinuses are " + SINUSES_OWN + f", the edges {RS_SINUS_GAP_MM:.0f} mm off their margins, drawn on the inner table and carried out "
-           "through the bone. The keypoint is where the two margins meet (Jian 2021, 2022, 2024); the burr hole "
-           f"{RS_DRILL_BEHIND_MM} mm behind and below it (Jian 2021). About {area:.0f} mm² seen face on; its edge smoothed over "
+           "(illustrative). The sinuses are " + SINUSES_OWN + ", the edges drawn on their margins on the inner table and carried out "
+           "through the bone; as cut, the bone removed <<sinuses>>. "
+           "The keypoint is where the two margins meet (Jian 2021, 2022, 2024); the burr hole "
+           f"{RS_DRILL_BEHIND_MM} mm behind and below it (Jian 2021). The bone removed covers about <<flap>> mm² seen face on; its edge smoothed over "
            f"{RS_SOFT_MM:.0f} mm (illustrative). Keypoint: {fmt(key)}; burr hole: {fmt(drill)}.")
     return {"id": "retrosigmoid", "name": "Retrosigmoid craniotomy", "cut": m, "how": how, "burrHoles": [drill.round(1).tolist()],
-            "keypoint": key.round(1).tolist(), "outline": outline.round(1).tolist(), "areaMm2": round(area), "softMm": RS_SOFT_MM}
+            "keypoint": key.round(1).tolist(), "outline": outline.round(1).tolist(), "areaMm2": round(area), "softMm": RS_SOFT_MM,
+            "measure": lambda M: {"<<flap>>": f"{M.area:.0f}", "<<sinuses>>": beside_sinuses(M.off(trn, r_t), M.off(sig, r_s)),
+                                  "toTransverseSinusMm": round(M.off(trn, r_t), 1), "toSigmoidSinusMm": round(M.off(sig, r_s), 1)}}
 
 
 def bregma(S: Skull) -> np.ndarray:
@@ -968,12 +1067,12 @@ def interhemispheric(S: Skull) -> dict:
     m[tuple(idx[nib.affines.apply_affine(S.a, idx)[:, 0] < -1.0].T)] = False
     area = outline_area(outline, n)
     how = (f"A right parasagittal flap at the coronal suture, its medial edge on the midline (over the superior sagittal sinus): "
-           f"from {IH_FRONT_MM:.0f} mm in front of bregma to {IH_BACK_MM:.0f} mm behind it and {IH_WIDTH_MM:.0f} mm wide, about "
-           f"{area:.0f} mm² seen from above (illustrative: the sources describe a right precoronal parasagittal or frontoparietal "
+           f"from {IH_FRONT_MM:.0f} mm in front of bregma to {IH_BACK_MM:.0f} mm behind it and {IH_WIDTH_MM:.0f} mm wide; the bone removed covers about "
+           "<<flap>> mm² seen face on (illustrative: the sources describe a right precoronal parasagittal or frontoparietal "
            f"midline craniotomy without giving its size). Bregma here: {fmt(b)}, where this skull's frontal and parietal bones meet at the midline.")
     return {"id": "interhemispheric", "name": "Right parasagittal craniotomy", "cut": m, "how": how, "burrHoles": [b.round(1).tolist()],
             "bregma": b.round(1).tolist(), "span": [round(float(b[1]) - IH_BACK_MM, 1), round(float(b[1]) + IH_FRONT_MM, 1)],
-            "areaMm2": round(area)}
+            "areaMm2": round(area), "measure": lambda M: {"<<flap>>": f"{M.area:.0f}"}}
 
 
 def foramen_rim(S: Skull, x: float) -> np.ndarray:
@@ -1015,10 +1114,14 @@ def suboccipital(S: Skull) -> dict:
     area = outline_area(outline, n)
     how = (f"A midline suboccipital flap from {SO_BELOW_IOP_MM:.0f} mm below the internal occipital protuberance (the confluence of "
            f"the sinuses) down to the foramen magnum, its posterior rim taken {SO_RIM_HALF_MM:.0f} mm to each side of the midline; "
-           f"{SO_HALF_WIDTH_MM:.0f} mm to each side above, "
-           f"about {area:.0f} mm² seen from behind (illustrative: the sources describe a median suboccipital craniotomy or "
+           "above, it reaches <<left>> mm to the left and <<right>> mm to the right of the midline at its widest. The bone "
+           "removed covers about <<flap>> mm² seen face on (the flap faces <<below>>° below the horizontal here) (illustrative: "
+           "the sources describe a median suboccipital craniotomy or "
            "craniectomy without one size; a keyhole of about 2 cm in Wang 2023). The posterior arch of C1 is left (Cho 2024).")
-    return {"id": "suboccipital", "name": "Midline suboccipital craniotomy", "side": "M", "cut": m, "how": how, "burrHoles": [], "areaMm2": round(area)}
+    return {"id": "suboccipital", "name": "Midline suboccipital craniotomy", "side": "M", "cut": m, "how": how, "burrHoles": [], "areaMm2": round(area),
+            "measure": lambda M: {"<<flap>>": f"{M.area:.0f}", "<<left>>": f"{-M.V[:, 0].min():.0f}", "<<right>>": f"{M.V[:, 0].max():.0f}",
+                                  "<<below>>": f"{M.below_horizontal():.0f}", "leftMm": round(float(-M.V[:, 0].min()), 1),
+                                  "rightMm": round(float(M.V[:, 0].max()), 1), "facesBelowHorizontalDeg": round(M.below_horizontal())}}
 
 
 def orbitozygomatic(S: Skull) -> dict:
@@ -1062,7 +1165,8 @@ def orbitozygomatic(S: Skull) -> dict:
            f"{OZ_ARCH_FRONT_MM:g} mm in front of the zygomatic bone's back end back to its root in front of the articular tubercle "
            f"(y = {OZ_ARCH_ROOT_Y:g} mm here; illustrative).")
     return {"id": "orbitozygomatic", "name": "Orbitozygomatic craniotomy", "cut": pt["cut"] | orbit | zyg, "how": how,
-            "softMm": pt["softMm"], "guard": pt["guard"] & ~orbit & ~zyg, "burrHoles": pt["burrHoles"]}
+            "softMm": pt["softMm"], "guard": pt["guard"] & ~orbit & ~zyg, "burrHoles": pt["burrHoles"],
+            "measured": pt["measured"], "measure": pt["measure"]}
 
 
 def far_lateral(S: Skull) -> dict:
@@ -1126,10 +1230,11 @@ def far_lateral(S: Skull) -> dict:
            f"transverse sinus' lower margin for {FL_TRANSVERSE_MM:g} mm from the junction, its lateral edge along the sigmoid sinus' "
            f"posterior margin for {FL_SIGMOID_MM:g} mm down towards the jugular bulb, and below, the foramen magnum's posterior rim taken "
            f"from x = {FL_RIM_MM[0]:g} to {FL_RIM_MM[1]:g} mm, so that the opening runs into the foramen; its medial edge bowed outwards "
-           f"and its corners rounded (the extents and shape illustrative), about {area:.0f} mm² seen face on. Then the posterior third of the right occipital condyle drilled "
+           "and its corners rounded (the extents and shape illustrative); the bone removed, the condyle's part with it, covers about <<flap>> mm² seen face on. Then the posterior third of the right occipital condyle drilled "
            f"(Pai 2018: the posterior 30-40 %; here the third of the condyle's bone within {FL_CONDYLE_MM:g} mm of its fitted landmark "
            "that lies furthest back). The hemilaminectomy of C1 that goes with it is not shown: the atlas is not part of this model.")
-    return {"id": "far_lateral", "name": "Far lateral craniectomy", "cut": m | drill, "how": how, "burrHoles": [], "areaMm2": round(area)}
+    return {"id": "far_lateral", "name": "Far lateral craniectomy", "cut": m | drill, "how": how, "burrHoles": [], "areaMm2": round(area),
+            "measure": lambda M: {"<<flap>>": f"{M.area:.0f}"}}
 
 
 def structure_points(names, side: str = "R", step: float = 0.4) -> dict:
@@ -1145,7 +1250,8 @@ def structure_points(names, side: str = "R", step: float = 0.4) -> dict:
             if nd is None:
                 continue
             m = _tm.Trimesh(nd["positions"], nd["indices"], process=False)
-            out[it["name"]] = np.vstack([nd["positions"], m.sample(max(1, int(m.area / (step * step))))])
+            # (seeded: the same points on every run, so the cut kept off them is the same cut)
+            out[it["name"]] = np.vstack([nd["positions"], m.sample(max(1, int(m.area / (step * step))), seed=0)])
     return out
 
 
@@ -1240,7 +1346,8 @@ def kawase(S: Skull) -> dict:
     dist = lambda a_, b_: float(np.linalg.norm(a_ - b_))   # noqa: E731
     measured = {"aeToGgMm": round(dist(ae, gg), 1), "ggToMeetMm": round(dist(gg, meet), 1), "meetToApexMm": round(dist(meet, apex), 1),
                 "apexToAeMm": round(dist(apex, ae), 1), "drilledMl": round(float(drill.sum()) * STEP ** 3 / 1000, 2), "flapMm2": round(area)}
-    how = (f"A right temporal flap {L:g} × {H:g} mm (about {area:.0f} mm² seen from the side; Signoretti 2025 measured a mean 1272 mm²), its base "
+    how = (f"A right temporal flap drawn {L:g} × {H:g} mm ({area:.0f} mm² seen from the side as drawn; Signoretti 2025 measured a mean 1272 mm²; "
+           "the bone removed, the drilled apex with it, covers about <<side>> mm² seen from the side), its base "
            "at the middle fossa floor's level (the tegmen, as located on this " + ("model" if PROFILE == "v1" else "CT") + "), two thirds of it in front of the external auditory canal "
            "and one third behind (Flores-Justa 2021; the canal's line taken from " + EAR_OWN + "'s tympanic membrane), cut down flush "
            "with the floor. Then the petrous apex drilled within the rhomboid of four landmarks (Signoretti 2025): the petrous apex, "
@@ -1263,7 +1370,9 @@ def kawase(S: Skull) -> dict:
         how += f" The cut's edge smoothed over {KW_V1_SOFT_MM:g} mm (illustrative)."
     return {"id": "kawase", "name": "Anterior petrosectomy (Kawase)", "cut": m | drill, "how": how, "burrHoles": [],
             **({"softMm": KW_V1_SOFT_MM} if PROFILE == "v1" else {}),
-            "areaMm2": round(area), "measured": measured, "corners": np.round(quad, 2).tolist(),
+            "areaMm2": round(area), "measured": measured,
+            "measure": lambda M: {"<<side>>": f"{M.seen(lat):.0f}", "sideMm2": round(M.seen(lat))},
+            "corners": np.round(quad, 2).tolist(),
             "guide": {"name": "Kawase rhomboid", "points": np.round(np.array(edge + edge[:1]), 2).tolist()}}
 
 
@@ -1279,13 +1388,44 @@ def preview(path: str) -> int:
     return 0
 
 
+MAKERS = {"pterional": pterional, "lso": lateral_supraorbital, "interhemispheric": interhemispheric,
+          "suboccipital": suboccipital, "retrosigmoid": retrosigmoid, "orbitozygomatic": orbitozygomatic, "far_lateral": far_lateral,
+          "kawase": kawase}
+
+
+def remeasure() -> int:
+    """The cuts' descriptions and measured numbers written again without meshing anything: the makers cut again (the
+    same cuts: nothing they read has changed, or `only` is run for the one whose input has), and `how`, `measured` and
+    the removed bone's volume go into approach.json and, with the same words skullbase_v3.py and skullbase_v1.py use,
+    into <prefix>-approaches.json and the removed bones' entries in the manifest."""
+    S = Skull()
+    res = json.loads((BUILD / "approach.json").read_text())
+    gen = REPO / "src" / "data" / "generated"
+    summary = json.loads((gen / f"{GEN_PREFIX}-approaches.json").read_text())
+    mp = gen / f"{GEN_PREFIX}-manifest.json"
+    man = json.loads(mp.read_text())
+    items = {it["id"]: it for it in man["structures"]}
+    for k, mk in MAKERS.items():
+        ap = mk(S)
+        r = res[k]
+        M = Removed(np.array(r["removed"]["verts"], float), np.array(r["removed"]["tris"], int))
+        measured_how(ap, M)
+        r["how"], r["measured"], r["removedMl"] = ap["how"], ap["measured"], M.ml
+        summary[k]["how"], summary[k]["measured"], summary[k]["removedMl"] = r["how"], r["measured"], r["removedMl"]
+        it = items[summary[k]["removed"]]
+        it["derivation"] = f"The bone the {r['name'].lower()} removes: {r['removedMl']} ml. {r['how']}"
+        print(k, r["removedMl"], "ml;", r["measured"])
+    (BUILD / "approach.json").write_text(json.dumps(res))
+    (gen / f"{GEN_PREFIX}-approaches.json").write_text(json.dumps(summary, indent=1, ensure_ascii=False))
+    mp.write_text(json.dumps(man, indent=1, ensure_ascii=False))
+    return 0
+
+
 def main(only: list[str] | None = None) -> int:
     """All the approaches, or (only) those named, the others' entries in approach.json kept as they are."""
     S = Skull()
     res = json.loads((BUILD / "approach.json").read_text()) if only and (BUILD / "approach.json").exists() else {}
-    makers = {"pterional": pterional, "lso": lateral_supraorbital, "interhemispheric": interhemispheric,
-              "suboccipital": suboccipital, "retrosigmoid": retrosigmoid, "orbitozygomatic": orbitozygomatic, "far_lateral": far_lateral,
-              "kawase": kawase}
+    makers = MAKERS
     for ap in (makers[k](S) for k in makers if not only or k in only):
         cut, soft, guard = ap["cut"], ap.get("softMm", 0.0), ap.get("guard")
         if PROFILE == "v1":
@@ -1300,11 +1440,15 @@ def main(only: list[str] | None = None) -> int:
         # the bone removed: where the cut takes more than half of the bone (its smoothed edge, as the cut bones have it)
         removed = isosurface(np.minimum(S.b, S.soft(cut, soft, guard, keep)) if soft else cut.astype(np.float32), S.a,
                              K.SURFACE_LEVEL if soft else 0.5, 0.6, 60_000)
-        res[ap["id"]] = {"name": ap["name"], "how": ap["how"], "side": ap.get("side", "R"), "bones": bones, "cutBones": sorted(cutb),
+        res[ap["id"]] = {"name": ap["name"], "side": ap.get("side", "R"), "bones": bones, "cutBones": sorted(cutb),
                          "burrHoles": ap["burrHoles"],
-                         **{k: ap[k] for k in ("bregma", "span", "keypoint", "measured", "corners", "guide") if k in ap},
-                         "removed": {"verts": np.asarray(removed.vertices).round(3).tolist(), "tris": np.asarray(removed.faces).tolist()},
-                         "removedMl": round(float(cut.sum()) * STEP ** 3 / 1000, 1)}
+                         "removed": {"verts": np.asarray(removed.vertices).round(3).tolist(), "tris": np.asarray(removed.faces).tolist()}}
+        # what the card says of the opening: measured on the removed piece as drawn (its volume too: the cut's voxels
+        # count the bone its smoothed edge leaves standing)
+        M = Removed(np.asarray(removed.vertices).round(3), np.asarray(removed.faces))
+        measured_how(ap, M)
+        res[ap["id"]].update({"how": ap["how"], "removedMl": M.ml,
+                              **{k: ap[k] for k in ("bregma", "span", "keypoint", "measured", "corners", "guide") if k in ap}})
         print(ap["id"], ": bones", sorted(cutb), "remeshed with them", sorted(touched - cutb), "removed", res[ap["id"]]["removedMl"], "ml")
     BUILD.mkdir(parents=True, exist_ok=True)
     (BUILD / "approach.json").write_text(json.dumps(res))
@@ -1312,4 +1456,5 @@ def main(only: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(preview(sys.argv[2]) if sys.argv[1:2] == ["preview"] else main(sys.argv[2:]) if sys.argv[1:2] == ["only"] else main())
+    sys.exit(preview(sys.argv[2]) if sys.argv[1:2] == ["preview"] else remeasure() if sys.argv[1:2] == ["measure"]
+             else main(sys.argv[2:]) if sys.argv[1:2] == ["only"] else main())
