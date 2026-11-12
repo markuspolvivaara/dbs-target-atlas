@@ -15,6 +15,10 @@ function guard(page: Page) {
   return { external, errors };
 }
 
+/** How long the panel may take to come to rest after a selection: the card is aligned on the next frame and once more
+ * 900 ms later. Longer in CI, where a frame can be seconds away (playwright.config.ts). */
+const SETTLED = process.env.CI ? 20_000 : 6_000;
+
 async function settle(page: Page) {
   await page.waitForSelector('body[data-ready="1"]', { timeout: 30_000 });
   await page.waitForFunction(() => {
@@ -229,7 +233,7 @@ test('selection: a link that opens with a selection shows the card from its top'
       const [c, p] = await Promise.all([card.locator('h2').boundingBox(), page.locator('.panel .pane:not([hidden])').boundingBox()]);
       const dy = c && p ? Math.round(c.y - p.y) : -999;
       return dy >= 0 && dy < 80;
-    }, { message: url, timeout: 6000 }).toBe(true);
+    }, { message: url, timeout: SETTLED }).toBe(true);
   }
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
