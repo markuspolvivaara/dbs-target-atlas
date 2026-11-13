@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../zod';
 
 /** White-matter section content. Every claim carries the references it was checked against. */
 

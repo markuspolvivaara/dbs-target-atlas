@@ -9,6 +9,7 @@ import { Lead, contactCentres, trajectoryDir } from './lead';
 import { applyLook, lineMaterial, outlineMaterial, rimMaterial, solidMaterial, xrayMaterial, type Look, type MeshMaterials, type OutlineUniforms } from './materials';
 import { onViewPrefs, viewPrefs } from './viewprefs';
 import { geometryOf, RayGridCache, type RayHit } from './endoray';
+import { fastRaycast } from './pickbvh';
 import { Endoscope, type EndoMesh } from './endoscope';
 import type { SceneSource, ScenePlan, TractRole, ViewState } from './scene';
 import { Slices } from './slices';
@@ -516,6 +517,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         mats.solid.customProgramCacheKey = () => 'cortex-interior';
       }
       for (const [name, i] of Object.entries(m.morphTargetDictionary ?? {})) if (m.morphTargetInfluences) m.morphTargetInfluences[i] = this.morph[name] ?? 0;
+      // picked through a tree of its triangles, built the first time it is picked (pickbvh.ts)
+      m.raycast = fastRaycast;
       nodes[side] = m;
       this.root.add(m);
     }
@@ -1298,6 +1301,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
           this.hoverQueued = false;
           const pe = this.lastPointer;
           if (!pe || this.anim) return;
+          // a button held down turns the view (or pans it): no hover then, and no pick on every frame of it
+          if (pe.buttons) { if (pe.pointerType === 'mouse') this.ev.hover(null, pe.clientX, pe.clientY); return; }
           const hit = this.pick(pe.clientX, pe.clientY, false);
           this.ev.readout(hit ? hit.ras : null);
           if (pe.pointerType === 'mouse') this.ev.hover(hit && hit.kind !== 'slice' ? hit : null, pe.clientX, pe.clientY);

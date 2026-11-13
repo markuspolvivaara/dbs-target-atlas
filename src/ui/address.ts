@@ -20,7 +20,8 @@ export function addressSync(win: { location: { hash: string }; history: { replac
     read() { known = win.location.hash; },
     write(hash) {
       if (win.location.hash !== known) return;
-      if (hash !== win.location.hash) win.history.replaceState(null, '', hash);
+      // (a browser may refuse: Safari allows 100 in 30 seconds. The view is not held up for it; the next write catches up.)
+      try { if (hash !== win.location.hash) win.history.replaceState(null, '', hash); } catch { /* refused */ }
       known = win.location.hash;   // (as the browser gives it back, which need not be letter for letter what was written)
     },
   };

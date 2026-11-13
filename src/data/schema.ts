@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../zod';
 
 /** Identifier: lowercase, digits, dash, underscore, colon. */
 const Id = z.string().regex(/^[a-z0-9_:-]+$/);
@@ -221,10 +221,10 @@ export const ManifestSchema = z.object({
   space: z.string(),
   generatedBy: z.string(),
   structures: z.array(ManifestStructureSchema),
-  volumes: z.record(VolumeSchema),
+  volumes: z.record(z.string(), VolumeSchema),
   hcpAcknowledgement: z.string(),
-  volumeSource: z.object({ source: z.string(), scaling: z.union([z.string(), z.record(z.string())]), licence: z.string(), citation: z.array(z.string()) }).passthrough(),
-  datasets: z.record(z.object({
+  volumeSource: z.object({ source: z.string(), scaling: z.union([z.string(), z.record(z.string(), z.string())]), licence: z.string(), citation: z.array(z.string()) }).passthrough(),
+  datasets: z.record(z.string(), z.object({
     name: z.string(), licence: z.string(), url: z.string(), citation: z.array(z.string()),
     citationUrls: z.array(z.string()), note: z.string().optional(), todo: z.string().optional(),
     refIds: z.array(z.string()).optional(),
@@ -309,7 +309,7 @@ export const BsManifestSchema = z.object({
     aanInVentricleMaxShare: z.number(), aanInVentricleWorst: z.string(),
     widths: z.array(z.object({ part: z.string(), z: z.number(), modelMm: z.number(), templateMm: z.number().nullable() })).min(1),
   }),
-  datasets: z.record(DatasetInfoSchema),
+  datasets: z.record(z.string(), DatasetInfoSchema),
   dataset: DatasetInfoSchema,
 });
 export type BsManifest = z.infer<typeof BsManifestSchema>;
@@ -330,7 +330,7 @@ export type CtxManifest = z.infer<typeof CtxManifestSchema>;
 export const SpineManifestSchema = z.object({
   space: z.string(),
   /** content references by key (Crossref/PubMed-checked citations from pipeline/sources/citations.json) */
-  references: z.record(z.object({ citation: z.string(), url: z.string().url() })),
+  references: z.record(z.string(), z.object({ citation: z.string(), url: z.string().url() })),
   generatedBy: z.string(),
   structures: z.array(ManifestStructureSchema),
   dataset: z.object({

@@ -41,6 +41,12 @@ export default defineConfig({
       // one page per section; shared code and assets
       input: { home: resolve(__dirname, 'index.html'), dbs: resolve(__dirname, 'dbs/index.html'), tracts: resolve(__dirname, 'tracts/index.html'), skullbase: resolve(__dirname, 'skullbase/index.html'), skullbaseV1: resolve(__dirname, 'skullbase-v1/index.html'), skullbaseCt: resolve(__dirname, 'skullbase-ct/index.html'), cortex: resolve(__dirname, 'cortex/index.html'), spine: resolve(__dirname, 'spine/index.html'), brainstem: resolve(__dirname, 'brainstem/index.html'), ventricles: resolve(__dirname, 'ventricles/index.html'), vascular: resolve(__dirname, 'vascular/index.html') },
       output: { manualChunks: { three: ['three'] } },
+      // zod 4 puts two of its "pure" annotations where Rollup cannot read them; Rollup drops those comments and the
+      // build is the same, so the two warnings say nothing about this project
+      onwarn(warning: { code?: string; id?: string }, warn: (w: unknown) => void) {
+        if (warning.code === 'INVALID_ANNOTATION' && /[\\/]node_modules[\\/]zod[\\/]/.test(warning.id ?? '')) return;
+        warn(warning);
+      },
     },
   },
   test: {

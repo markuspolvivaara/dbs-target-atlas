@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { z } from 'zod';
+import { z } from '../zod';
 import v3data from '../data/generated/sbv3-endonasal.json';
 import v1data from '../data/generated/sb-endonasal.json';
 import { SB_MODEL } from './index';
@@ -18,7 +18,7 @@ import { meshChunk, CHUNK_VOX, type Colour, type FieldGrid } from '../viewer/sur
  */
 const V3 = z.tuple([z.number(), z.number(), z.number()]);
 export const ENDONASAL = z.object({
-  params: z.object({ fieldIso: z.number(), airHu: z.number(), pieceStepMm: z.number(), pieceClearMm: z.record(z.number()), densityMinHu: z.number(), densityStepHu: z.number(), distStepMm: z.number(), fields: z.array(z.string()) }),
+  params: z.object({ fieldIso: z.number(), airHu: z.number(), pieceStepMm: z.number(), pieceClearMm: z.record(z.string(), z.number()), densityMinHu: z.number(), densityStepHu: z.number(), distStepMm: z.number(), fields: z.array(z.string()) }),
   file: z.string(), bytes: z.number(), dims: V3, affine: z.array(z.array(z.number()).length(4)).length(4),
   box: z.array(z.tuple([z.number(), z.number()])),
   /** the scope's entry in each nostril, as far forward as the scan reaches */

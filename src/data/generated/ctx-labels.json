@@ -242,10 +242,22 @@
    "parcels": [],
    "insula": false,
    "definition": {
-    "text": "The occipital gyri (OcG) are three gyri in parallel, along the lateral portion of the occipital lobe, also referred to as a composite structure in the brain. The gyri are the superior occipital gyrus, the middle occipital gyrus, and the inferior occipital gyrus, and these are also known as the occipital face area. The superior and inferior occipital sulci separates the three occipital gyri. The intraoccipital sulcus, also known as the superior occipital sulcus, stems from the intraparietal sulcus and continues until the sulcus reaches the transverse occipital sulcus, separating the superior occipital gyrus from the middle occipital gyrus. The transverse occipital sulcus comes down along the lateral occipital surface or the inferior occipital sulcus.",
+    "text": "The occipital gyri (OcG) are three gyri in parallel, along the lateral portion of the occipital lobe, also referred to as a composite structure in the brain. The gyri are the superior occipital gyrus, the middle occipital gyrus, and the inferior occipital gyrus. The superior and inferior occipital sulci separates the three occipital gyri. The intraoccipital sulcus, also known as the superior occipital sulcus, stems from the intraparietal sulcus and continues until the sulcus reaches the transverse occipital sulcus, separating the superior occipital gyrus from the middle occipital gyrus.",
     "url": "https://en.wikipedia.org/wiki/Occipital_gyri",
     "source": "Inferior occipital gyrus and sulcus*",
-    "scope": null
+    "scope": null,
+    "edits": [
+     {
+      "from": ", and these are also known as the occipital face area",
+      "to": "",
+      "why": "The occipital face area is a face-selective region of the lateral occipital cortex found by functional imaging (Pitcher, Walsh and Duchaine 2011, Exp Brain Res 209:481–493; Pitcher 2014, J Neurosci 34:9173–9177), not a name for these gyri"
+     },
+     {
+      "from": " The transverse occipital sulcus comes down along the lateral occipital surface or the inferior occipital sulcus.",
+      "to": "",
+      "why": "The short transverse occipital sulcus crosses the superior occipital sulcus at right angles and reaches into the superior and middle occipital gyri (Destrieux et al. 2010, section 2.3.3)"
+     }
+    ]
    }
   },
   {
@@ -2438,10 +2450,22 @@
    "parcels": [],
    "insula": false,
    "definition": {
-    "text": "The occipital gyri (OcG) are three gyri in parallel, along the lateral portion of the occipital lobe, also referred to as a composite structure in the brain. The gyri are the superior occipital gyrus, the middle occipital gyrus, and the inferior occipital gyrus, and these are also known as the occipital face area. The superior and inferior occipital sulci separates the three occipital gyri. The intraoccipital sulcus, also known as the superior occipital sulcus, stems from the intraparietal sulcus and continues until the sulcus reaches the transverse occipital sulcus, separating the superior occipital gyrus from the middle occipital gyrus. The transverse occipital sulcus comes down along the lateral occipital surface or the inferior occipital sulcus.",
+    "text": "The occipital gyri (OcG) are three gyri in parallel, along the lateral portion of the occipital lobe, also referred to as a composite structure in the brain. The gyri are the superior occipital gyrus, the middle occipital gyrus, and the inferior occipital gyrus. The superior and inferior occipital sulci separates the three occipital gyri. The intraoccipital sulcus, also known as the superior occipital sulcus, stems from the intraparietal sulcus and continues until the sulcus reaches the transverse occipital sulcus, separating the superior occipital gyrus from the middle occipital gyrus.",
     "url": "https://en.wikipedia.org/wiki/Occipital_gyri",
     "source": "Lateral occipital gyrus (Middle occipital gyrus*)",
-    "scope": null
+    "scope": null,
+    "edits": [
+     {
+      "from": ", and these are also known as the occipital face area",
+      "to": "",
+      "why": "The occipital face area is a face-selective region of the lateral occipital cortex found by functional imaging (Pitcher, Walsh and Duchaine 2011, Exp Brain Res 209:481–493; Pitcher 2014, J Neurosci 34:9173–9177), not a name for these gyri"
+     },
+     {
+      "from": " The transverse occipital sulcus comes down along the lateral occipital surface or the inferior occipital sulcus.",
+      "to": "",
+      "why": "The short transverse occipital sulcus crosses the superior occipital sulcus at right angles and reaches into the superior and middle occipital gyri (Destrieux et al. 2010, section 2.3.3)"
+     }
+    ]
    }
   },
   {
@@ -2568,10 +2592,22 @@
    "parcels": [],
    "insula": false,
    "definition": {
-    "text": "The occipital gyri (OcG) are three gyri in parallel, along the lateral portion of the occipital lobe, also referred to as a composite structure in the brain. The gyri are the superior occipital gyrus, the middle occipital gyrus, and the inferior occipital gyrus, and these are also known as the occipital face area. The superior and inferior occipital sulci separates the three occipital gyri. The intraoccipital sulcus, also known as the superior occipital sulcus, stems from the intraparietal sulcus and continues until the sulcus reaches the transverse occipital sulcus, separating the superior occipital gyrus from the middle occipital gyrus. The transverse occipital sulcus comes down along the lateral occipital surface or the inferior occipital sulcus.",
+    "text": "The occipital gyri (OcG) are three gyri in parallel, along the lateral portion of the occipital lobe, also referred to as a composite structure in the brain. The gyri are the superior occipital gyrus, the middle occipital gyrus, and the inferior occipital gyrus. The superior and inferior occipital sulci separates the three occipital gyri. The intraoccipital sulcus, also known as the superior occipital sulcus, stems from the intraparietal sulcus and continues until the sulcus reaches the transverse occipital sulcus, separating the superior occipital gyrus from the middle occipital gyrus.",
     "url": "https://en.wikipedia.org/wiki/Occipital_gyri",
     "source": "Superior occipital gyri",
-    "scope": null
+    "scope": null,
+    "edits": [
+     {
+      "from": ", and these are also known as the occipital face area",
+      "to": "",
+      "why": "The occipital face area is a face-selective region of the lateral occipital cortex found by functional imaging (Pitcher, Walsh and Duchaine 2011, Exp Brain Res 209:481–493; Pitcher 2014, J Neurosci 34:9173–9177), not a name for these gyri"
+     },
+     {
+      "from": " The transverse occipital sulcus comes down along the lateral occipital surface or the inferior occipital sulcus.",
+      "to": "",
+      "why": "The short transverse occipital sulcus crosses the superior occipital sulcus at right angles and reaches into the superior and middle occipital gyri (Destrieux et al. 2010, section 2.3.3)"
+     }
+    ]
    }
   },
   {
@@ -4196,10 +4232,17 @@
    "parcels": [],
    "insula": false,
    "definition": {
-    "text": "The transverse temporal gyri, also called Heschl's gyri () or Heschl's convolutions, are gyri found in the area of primary auditory cortex buried within the lateral sulcus of the human brain, occupying Brodmann areas 41 and 42. Transverse temporal gyri are superior to and separated from the planum temporale (cortex involved in language production) by Heschl’s sulcus. Transverse temporal gyri are found in varying numbers in both the right and left hemispheres of the brain and one study found that this number is not related to the hemisphere or dominance of hemisphere studied in subjects. Transverse temporal gyri can be viewed in the sagittal plane as either an omega shape (if one gyrus is present) or a heart shape (if two gyri and a sulcus are present).Transverse temporal gyri are the first cortical structures to process incoming auditory information.",
+    "text": "The transverse temporal gyri, also called Heschl's gyri () or Heschl's convolutions, are gyri found in the area of primary auditory cortex buried within the lateral sulcus of the human brain, occupying Brodmann areas 41 and 42. Transverse temporal gyri lie in front of the planum temporale, from which the transverse temporal (Heschl’s) sulcus separates them. Transverse temporal gyri are found in varying numbers in both the right and left hemispheres of the brain and one study found that this number is not related to the hemisphere or dominance of hemisphere studied in subjects. Transverse temporal gyri can be viewed in the sagittal plane as either an omega shape (if one gyrus is present) or a heart shape (if two gyri and a sulcus are present).Transverse temporal gyri are the first cortical structures to process incoming auditory information.",
     "url": "https://en.wikipedia.org/wiki/Transverse_temporal_gyrus",
     "source": "Transverse temporal gyri",
-    "scope": null
+    "scope": null,
+    "edits": [
+     {
+      "from": "are superior to and separated from the planum temporale (cortex involved in language production) by Heschl’s sulcus",
+      "to": "lie in front of the planum temporale, from which the transverse temporal (Heschl’s) sulcus separates them",
+      "why": "The transverse temporal sulcus divides the planum temporale, behind it, from the transverse temporal gyrus, in front (Destrieux et al. 2010, section 2.3.2); the planum temporale lies behind the transverse temporal gyri, the primary auditory cortex (Kiernan 2012). The words on language production had no source and are left out"
+     }
+    ]
    }
   },
   {

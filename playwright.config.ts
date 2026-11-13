@@ -8,6 +8,12 @@ import { defineConfig, devices } from '@playwright/test';
  * the wait in every assertion: a runner whose cores are shared with the other worker's software WebGL has gone four
  * seconds without drawing a frame after a click, and the usual five seconds ran out while the panel was still
  * scrolling to the card (the retry, on the same runner, failed the same way).
+ *
+ * The browser is Chromium itself in its new headless mode (channel 'chromium'), not Playwright's default headless shell.
+ * The shell of Chromium 158 (Playwright 1.65) gives a page its next animation frame without waiting for software WebGL
+ * to finish the last one: on two cores the DBS view queued 23 frames of about a second each in two seconds, and the next
+ * snapshot waited 30 to 60 s for them. Chromium 130's shell (Playwright 1.48) and Chromium 158 in new headless mode
+ * hold the page back (3 and 6 frames; the snapshot 2.5 s).
  */
 const CI = !!process.env.CI;
 export default defineConfig({
@@ -21,6 +27,7 @@ export default defineConfig({
   reporter: [['list'], ['html', { open: 'never', outputFolder: 'playwright-report' }]],
   use: {
     baseURL: 'http://localhost:4173/',
+    channel: 'chromium',
     launchOptions: { args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] },
   },
   projects: [

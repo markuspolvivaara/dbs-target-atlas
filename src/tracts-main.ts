@@ -71,8 +71,11 @@ function setState(next: TractsState, opts: { camera: boolean; fromCamera?: boole
   const pageChanged = next.page !== state.page;
   state = next;
   pendingCamera = opts.camera;
+  // the address follows a change at once, and the camera, which moves in bursts, a moment after its last move (with a
+  // timer for every change, the camera's moves put off another change's while the view was still settling)
   clearTimeout(hashTimer);
-  hashTimer = window.setTimeout(() => address.write(encodeTracts(state)), opts.fromCamera ? 400 : 0);
+  if (opts.fromCamera) hashTimer = window.setTimeout(() => address.write(encodeTracts(state)), 400);
+  else address.write(encodeTracts(state));
   if (opts.fromCamera) return;
   render(pageChanged);
 }

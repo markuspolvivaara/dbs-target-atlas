@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../zod';
 import vaManifestJson from '../data/generated/va-manifest.json';
 import vaLesionsJson from '../data/generated/va-lesions.json';
 import { VaManifestSchema } from '../data/schema';

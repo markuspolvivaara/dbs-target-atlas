@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { z } from 'zod';
+import { z } from '../zod';
 import drillJson from '../data/generated/spine-drill.json';
 import { assetUrl } from '../viewer/assets';
 import { gunzip } from './screw';
@@ -21,7 +21,7 @@ const PairSchema = z.object({
   id: z.string(), region: z.enum(['cervical', 'lumbar']), upper: z.string(), lower: z.string(), disc: z.string(), root: z.string(),
   artery: z.boolean(), file: z.string(), bytes: z.number(),
   dims: z.tuple([z.number(), z.number(), z.number()]), affine: z.array(z.array(z.number()).length(4)).length(4),
-  check: z.record(z.object({ medianMm: z.number(), p95Mm: z.number() })),
+  check: z.record(z.string(), z.object({ medianMm: z.number(), p95Mm: z.number() })),
   landmarks: z.tuple([LandmarkSchema, LandmarkSchema]),
   /** L5-S1: the drilled lower bone is S1 alone, and the rest of the sacrum is drawn from this while drilling */
   lowerRest: z.string().optional(),

@@ -925,6 +925,8 @@ Server notes:
   server adds `Content-Encoding: gzip` for `.gz` files, that works too: the app detects
   already-decoded data.
 - WebGL 2 is required (all current desktop and mobile browsers).
+- A Content-Security-Policy need not allow `'unsafe-eval'`: the data is validated by zod in its jitless mode
+  (`src/zod.ts`), which builds no code at run time.
 
 Load budget (mobile): about 2.6 MB for the first view of the DBS section (app 0.23 MB gzip, fonts,
 all nuclei, and the cortex and tracts of the default Parkinson's view) and about 3 MB for the
@@ -1083,6 +1085,8 @@ npm run check:palette
   plus assertions that no request leaves the local server and no console errors occur.
   Baselines were recorded on macOS with SwiftShader. On another platform, regenerate them with
   `npx playwright test --update-snapshots`.
+- CI (`.github/workflows/checks.yml`) also runs the typecheck, the linter (errors only), the palette check and
+  `npm audit --omit=dev --audit-level=high`: a known advisory in a dependency that ships to readers fails it.
 
 ## Licence
 

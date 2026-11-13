@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../zod';
 import veLandmarks from '../data/generated/ve-landmarks.json';
 import veManifestJson from '../data/generated/ve-manifest.json';
 import veTrajectories from '../data/generated/ve-trajectories.json';
@@ -42,9 +42,9 @@ const TrajFileSchema = z.object({
     /** the Z-Anatomy model's fit onto the CT's ventricles, and checks of it on the CT */
     fit: z.object({
       fitMedianMm: z.number(), fitP90Mm: z.number(), jacobianMin: z.number(), monroRadiusMm: z.number(),
-      monro: z.record(z.object({ gapMm: z.number() })),
-      temporalHorn: z.record(z.object({ insideHu: z.number(), aroundHu: z.number() })),
-      monroCt: z.record(z.object({ insideHu: z.number(), aroundHu: z.number() })),
+      monro: z.record(z.string(), z.object({ gapMm: z.number() })),
+      temporalHorn: z.record(z.string(), z.object({ insideHu: z.number(), aroundHu: z.number() })),
+      monroCt: z.record(z.string(), z.object({ insideHu: z.number(), aroundHu: z.number() })),
       aqueduct: z.object({ modelLengthMm: z.number(), courseMm: z.number(), gapToThirdMm: z.number(), gapToFourthMm: z.number() }),
       aqueductCt: z.object({ insideHu: z.number(), aroundHu: z.number() }),
       fourthCt: z.object({ insideHu: z.number(), aroundHu: z.number() }),
@@ -53,7 +53,7 @@ const TrajFileSchema = z.object({
   }),
   canthusMm: z.number(),
   params: z.object({
-    csfHu: z.number(), smoothMm: z.number(), depthMm: z.number(), kocher: z.record(z.number()), kocherAnteriorMm: z.number(), apOffsets: z.array(z.number()), maxDepthMm: z.number(),
+    csfHu: z.number(), smoothMm: z.number(), depthMm: z.number(), kocher: z.record(z.string(), z.number()), kocherAnteriorMm: z.number(), apOffsets: z.array(z.number()), maxDepthMm: z.number(),
     fitPairMm: z.number(), fitBackMm: z.number(), monroAreaMm2: z.number(), aqueductMm: z.tuple([z.number(), z.number(), z.number()]), softMm: z.number(), drawOutMm: z.number(),
   }),
   trajectories: z.array(TrajectorySchema),
@@ -74,7 +74,7 @@ const YZ = z.tuple([z.number(), z.number()]);
 export const ETV = z.object({
   mammillary: z.object({ modelAcpcMm: YZ, placedAcpcMm: YZ, daSilvaAcpcMm: YZ, movedMm: z.number(), volumeMm3: z.number(), diameterMm: z.number(), drawnScale: z.number(), drawnDiameterMm: z.number() }),
   acpcLengthMm: z.number(),
-  wallsMovedMm: z.record(z.number()),
+  wallsMovedMm: z.record(z.string(), z.number()),
   infundibularRecessAcpcMm: YZ, targetAcpcMm: YZ, basilarApexAcpcMm: YZ, targetToBasilarApexMm: z.number(),
   frame: z.object({ origin: V3, y: V3, z: V3 }),
   points: z.object({ target: V3, infundibularRecess: V3, basilarApex: V3, mammillaryBodies: V3, monro: z.object({ R: V3, L: V3 }) }),

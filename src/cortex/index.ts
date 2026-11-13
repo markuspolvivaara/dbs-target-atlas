@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../zod';
 import dbsManifestJson from '../data/generated/manifest.json';
 import labelsJson from '../data/generated/ctx-labels.json';
 import manifestJson from '../data/generated/ctx-manifest.json';
@@ -19,7 +19,8 @@ const LobeId = z.enum(['frontal', 'parietal', 'temporal', 'occipital', 'cingulat
 export type LobeId = z.infer<typeof LobeId>;
 const Definition = z.object({ text: z.string().min(1), url: z.string().url().nullable(), source: z.string() });
 /** A correction made to a shipped text: the words as shipped, the words shown instead, and why (with its source). */
-const DefinitionEdit = z.object({ from: z.string().min(1), to: z.string().min(1), why: z.string().min(1) });
+/** a correction to a shipped text: the words as shipped, the words shown instead ('' when they are left out), and why */
+const DefinitionEdit = z.object({ from: z.string().min(1), to: z.string(), why: z.string().min(1) });
 export const LabelSchema = z.object({
   id: z.string().regex(/^ctx_[a-z0-9_]+$/),
   short: z.string(),
@@ -56,13 +57,13 @@ export type FnGroupId = CtxFunction['group'];
 const FileSchema = z.object({
   labels: z.array(LabelSchema),
   functions: z.array(FunctionSchema),
-  references: z.record(z.object({ citation: z.string(), url: z.string().url() })),
+  references: z.record(z.string(), z.object({ citation: z.string(), url: z.string().url() })),
   lobes: z.array(z.object({ id: LobeId, name: z.string(), token: z.string(), definition: Definition.nullable(), labels: z.array(z.string()) })),
   method: z.object({
     faces: z.number(), inflateIterations: z.number(), inflateStep: z.number(), midlineGapMm: z.number(),
     operMarginMm: z.number(), operLateralMm: z.number(), hmatMaxDistMm: z.number(),
   }),
-  report: z.record(z.unknown()),
+  report: z.record(z.string(), z.unknown()),
 });
 const FILE = FileSchema.parse(labelsJson);
 export const LABELS = FILE.labels;

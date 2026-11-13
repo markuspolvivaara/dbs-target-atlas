@@ -1,7 +1,8 @@
 # Checks the committed assets and the app on every push and pull request, without the anatomy pipeline (its raw data and
 # build caches are not in git: the pipeline's own validators run where it runs).
 #   checks: the typecheck, the linter (errors only), the unit tests (content, references, manifests and their provenance
-#           fields, every shipped GLB's geometry, laterality and winding, URL round trips) and the palette's contrast rules.
+#           fields, every shipped GLB's geometry, laterality and winding, URL round trips), the palette's contrast rules and
+#           `npm audit` of the runtime dependencies.
 #   browser: the end-to-end tests against the production build, in headless Chromium with software WebGL. Their picture
 #           comparisons are skipped here (the baselines are taken on macOS; playwright.config.ts): what runs is every
 #           other assertion: no console error, no request leaving the site, card texts, links that survive a reload.
@@ -30,6 +31,8 @@ jobs:
       - run: npm run lint -- --quiet
       - run: npm test
       - run: npm run check:palette
+      # a known advisory in anything shipped to readers (the build's runtime dependencies) fails the checks
+      - run: npm audit --omit=dev --audit-level=high
 
   browser:
     runs-on: ubuntu-latest

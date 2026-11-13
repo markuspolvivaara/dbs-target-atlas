@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../zod';
 import screwJson from '../data/generated/spine-screw.json';
 import { assetUrl } from '../viewer/assets';
 
@@ -35,7 +35,7 @@ const StartSchema = z.object({
 });
 const Side = z.object({ L: StartSchema, R: StartSchema });
 const CheckSchema = z.object({
-  grade: z.enum(['A', 'B', 'C', 'D', 'E']), seated: z.number(), breach: z.record(z.number()),
+  grade: z.enum(['A', 'B', 'C', 'D', 'E']), seated: z.number(), breach: z.record(z.string(), z.number()),
   nearest: z.array(z.object({ id: z.string(), mm: z.number() })),
 });
 const LevelSchema = z.object({
@@ -49,7 +49,7 @@ const LevelSchema = z.object({
   }),
   isthmus: z.object({ L: Isthmus, R: Isthmus }).optional(),
   lateralMass: z.object({ L: LateralMassSchema, R: LateralMassSchema }).optional(),
-  check: z.record(CheckSchema),
+  check: z.record(z.string(), CheckSchema),
   risk: z.array(z.object({ id: z.string(), offset: z.number().int(), count: z.number().int() })),
   sdf: z.object({ origin: V3, dims: V3, step: z.number(), scale: z.number(), clamp: z.number(), offset: z.number() }),
   file: z.string(), bytes: z.number(),
@@ -57,7 +57,7 @@ const LevelSchema = z.object({
 export type ScrewLevel = z.infer<typeof LevelSchema>;
 export type Pedicle = z.infer<typeof PedicleSchema>;
 export type Check = z.infer<typeof CheckSchema>;
-export const SCREW_LEVELS: Record<string, ScrewLevel> = z.object({ levels: z.record(LevelSchema) }).parse(screwJson).levels;
+export const SCREW_LEVELS: Record<string, ScrewLevel> = z.object({ levels: z.record(z.string(), LevelSchema) }).parse(screwJson).levels;
 
 export type TechniqueId = 'tt' | 'cbt' | 's1' | 'st' | 'at' | 'rc' | 'mg' | 'an' | 'cp' | 'c1lm' | 'c2p' | 'c2pars' | 'c2tl' | 'ta' | 'od';
 /** The data a technique's screw is checked against: its level's, except the transarticular screw, which crosses the

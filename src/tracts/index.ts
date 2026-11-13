@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../zod';
 import connectomeJson from '../data/generated/wm-connectome.json';
 import wmManifestJson from '../data/generated/wm-manifest.json';
 import { WmManifestSchema } from '../data/schema';
@@ -12,7 +12,7 @@ const ConnectomeSchema = z.object({
   source: z.string(),
   parcellation: z.string(),
   min: z.number(),
-  tracts: z.record(z.object({ L: z.record(z.number()), R: z.record(z.number()) })),
+  tracts: z.record(z.string(), z.object({ L: z.record(z.string(), z.number()), R: z.record(z.string(), z.number()) })),
 });
 /** Published tract-to-region probabilities (Yeh 2022), Brodmann areas, per tract and side. */
 export const CONNECTOME = ConnectomeSchema.parse(connectomeJson);

@@ -39,4 +39,15 @@ describe('a section page’s address', () => {
     a.write('#/a?s=x~2');
     expect(w.written).toEqual(['#/a?s=x~1', '#/a?s=x~2']);
   });
+  it('a write the browser refuses (Safari: more than 100 in 30 seconds) does not throw into the change that made it; the next one is made', () => {
+    const w = fakeWindow('#/a');
+    const ok = w.history.replaceState;
+    w.history.replaceState = () => { throw new DOMException('Attempt to use history.replaceState() more than 100 times per 30 seconds', 'SecurityError'); };
+    const a = addressSync(w);
+    expect(() => a.write('#/a?x=1')).not.toThrow();
+    expect(w.location.hash).toBe('#/a');
+    w.history.replaceState = ok;
+    a.write('#/a?x=2');
+    expect(w.location.hash).toBe('#/a?x=2');
+  });
 });

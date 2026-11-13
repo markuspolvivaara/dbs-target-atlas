@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../zod';
 import data from '../data/generated/sbv3-tumours.json';
 import v1data from '../data/generated/sb-tumours.json';
 import type { ApproachClaim, ApproachSection } from './approaches';
@@ -19,16 +19,16 @@ const Circle = z.object({ c: z.tuple([z.number(), z.number()]), r: z.number() })
 const Fit = z.object({
   knosp: z.object({
     planeY: z.number(), zMid: z.number(), zLobe: z.number().optional(),
-    sections: z.record(z.object({ y: z.number(), cavernous: Circle, supraclinoid: Circle })),
-    lines: z.record(z.array(V3).length(2)),
-    grades: z.record(z.object({ grade: z.string(), pastMm: z.record(z.number()), encasedShare: z.number(), ml: z.number() })),
+    sections: z.record(z.string(), z.object({ y: z.number(), cavernous: Circle, supraclinoid: Circle })),
+    lines: z.record(z.string(), z.array(V3).length(2)),
+    grades: z.record(z.string(), z.object({ grade: z.string(), pastMm: z.record(z.string(), z.number()), encasedShare: z.number(), ml: z.number() })),
     carotidRadiusMm: z.number(),
   }),
-  koos: z.record(z.object({
+  koos: z.record(z.string(), z.object({
     ml: z.number(), canalMm: z.number().optional(), porusToBrainstemMm: z.number().optional(), centre: V3.optional(), diameterMm: z.number().optional(), extrameatalMaxMm: z.number().optional(),
     toBrainstemMm: z.number().optional(), fromBoneMm: z.number().optional(), push: Push.optional(),
   })),
-  meningioma: z.record(z.object({ site: V3, centre: V3, diameterRuleMm: z.number(), ml: z.number(), normal: V3, push: Push.optional() })),
+  meningioma: z.record(z.string(), z.object({ site: V3, centre: V3, diameterRuleMm: z.number(), ml: z.number(), normal: V3, push: Push.optional() })),
 });
 export const TUMOUR_FIT_V3 = Fit.parse(data);
 export const TUMOUR_FIT_V1 = Fit.parse(v1data);
