@@ -829,6 +829,24 @@
     "lifted": 12.4
    }
   },
+  "farLateralBack": {
+   "maxMovedMm": 8.0,
+   "moved": 21382,
+   "inBoneAfter": 0,
+   "inVesselAfter": 0,
+   "tonsilFrontYMm": {
+    "rest": -34.4,
+    "back": -42.4
+   },
+   "medullaGapMm": {
+    "rest": 2.2,
+    "back": 8.7
+   },
+   "vertebralGapMm": {
+    "rest": 8.2,
+    "back": 12.4
+   }
+  },
   "trigeminalRoots": {
    "R": [
     16.59,
@@ -847,6 +865,7 @@
    "flMm": 8.0,
    "flMedial": 0.5,
    "flReachMm": 20.0,
+   "flBackMm": 8.0,
    "tableGapMm": 1.5,
    "tableMinMm": 1.0,
    "boneGapMm": 1.0,

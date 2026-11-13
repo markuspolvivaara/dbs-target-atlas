@@ -47,8 +47,11 @@ export interface ApproachContent {
   radius?: number;
   /** false: frame on the focus alone, not the bone removed too (a corridor that looks past the opening's middle) */
   frameOpening?: boolean;
-  /** the shapes of the brain the view offers (named morph targets: open, lift, lsoLift, interhemispheric, telovelar), a slider each */
+  /** the shapes of the brain the view offers (named morph targets: open, lift, lsoLift, interhemispheric, telovelar,
+   * retrosigmoid, farLateral, farLateralBack), a slider each */
   morphs: string[];
+  /** the shapes the view opens with full on (default: all of them) */
+  opened?: string[];
   /** landmarks (names) the view labels */
   landmarks?: string[];
 }
@@ -404,7 +407,7 @@ export const APPROACHES: ApproachContent[] = [
   },
   {
     id: 'far_lateral', view: 'far_lateral', name: 'Far lateral approach', camera: 'farLateralLow', hemi: 'R', brain: 'hindbrain',
-    summary: 'A right far lateral (lateral suboccipital) craniectomy cut out of this CT’s bone down through the foramen magnum’s rim, the posterior third of the occipital condyle drilled, with the cerebellum, brainstem and fourth ventricle of the fitted model: the view along the side of the medulla to the front of the foramen magnum, past the vertebral artery and the lower cranial nerves. The slider lifts the right tonsil and biventral lobule up and towards the midline, as the approach’s retraction holds them, off the vertebral artery and the lower cranial nerves.',
+    summary: 'A right far lateral (lateral suboccipital) craniectomy cut out of this CT’s bone down through the foramen magnum’s rim, the posterior third of the occipital condyle drilled, with the cerebellum, brainstem and fourth ventricle of the fitted model: the view along the side of the medulla to the front of the foramen magnum, past the vertebral artery and the lower cranial nerves. The slider lifts the right tonsil and biventral lobule up and towards the midline, as the approach’s retraction holds them, off the vertebral artery and the lower cranial nerves; a second one draws them straight back, a view aid that together with the first can hold the cerebellum where no retractor would.',
     sections: [sec('The craniectomy', [
       c('A lateral suboccipital craniectomy and a hemilaminectomy of C1 (of C2 and C3 too when the lesion reaches lower); the transverse–sigmoid junction may be exposed. The posterior 30–40 % of the occipital condyle is drilled extradurally, widening the angle onto the ventral and ventrolateral craniovertebral junction.', 'pai2018'),
       c('The craniectomy should take in the whole lesion, reach the sigmoid sinus laterally and take the rim of the foramen magnum below. Heros’s basic far lateral approach is a low suboccipital approach up to the condyle, not into it.', 'pai2018'),
@@ -425,7 +428,8 @@ export const APPROACHES: ApproachContent[] = [
     notShown: 'The atlas and axis are not part of this model, so the hemilaminectomy of C1 is not shown, nor the vertebral artery outside the skull. The craniectomy’s outline is placed by rule (illustrative). The muscles, the dura and the arachnoid. The cerebellum, brainstem and fourth ventricle are one adult’s anatomical model (Z-Anatomy) fitted into this skull, not this patient’s own.',
     focus: ['Medulla oblongata', 'Hypoglossal nerve (XII)'],
     radius: 50,
-    morphs: ['farLateral'],
+    morphs: ['farLateral', 'farLateralBack'],
+    opened: ['farLateral'],      // (the second slider, the cerebellum drawn straight back, is a view aid: it opens at 0)
   },
   {
     id: 'kawase', view: 'kawase', name: 'Anterior petrosectomy (Kawase approach)', camera: 'subtemporal',

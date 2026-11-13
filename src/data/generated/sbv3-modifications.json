@@ -15,7 +15,8 @@
      "rest",
      "telovelar",
      "retrosigmoid",
-     "farLateral"
+     "farLateral",
+     "farLateralBack"
     ],
     "fissureShare": 0.25,
     "fissureMm": 4.0
@@ -42,7 +43,7 @@
     "checks": 58,
     "failed": []
    },
-   "revision": "eff0493",
+   "revision": "e9c16a5",
    "date": "2026-11-13"
   },
   {

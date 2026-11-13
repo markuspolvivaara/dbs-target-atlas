@@ -1232,6 +1232,7 @@ def pfossa_items(items: list) -> None:
                              f"draws the right hemisphere up to {tv['rsMm']:.0f} mm away from the corridor along the back of the petrous bone"
                              + (f"; the far lateral slider lifts the right tonsil and biventral lobule {tv['flMm']:.0f} mm up and "
                                 f"{tv['flMm'] * tv['flMedial']:.0f} mm towards the midline" if "flMm" in tv else "")
+                             + (f", and its second slider draws them {tv['flBackMm']:.0f} mm straight back" if "flBackMm" in tv else "")
                              + "; shapes, not a simulation of the tissue." if b["morph"] else ""),
             "centroid": b["centroid"],
         })
@@ -1592,6 +1593,14 @@ def validate() -> int:
             check(0.5 * tp_["flMm"] <= rise <= tp_["flMm"] + 1.5, f"the far lateral shape lifts the right tonsil {rise:.1f} mm, not about {tp_['flMm']} {fl_}")
             g_ = fl_.get("vertebralGapMm")
             check(g_ is None or g_["lifted"] > g_["rest"], f"the far lateral shape brings the cerebellum nearer the vertebral artery {fl_}")
+        fb_ = pr.get("farLateralBack")
+        check(fb_ is not None, "the far lateral view's second shape's report is missing")
+        if fb_:
+            back = fb_["tonsilFrontYMm"]["rest"] - fb_["tonsilFrontYMm"]["back"]
+            check(fb_["maxMovedMm"] <= tp_["flBackMm"] + 1.5 and fb_["inBoneAfter"] == 0 and fb_["inVesselAfter"] == 0,
+                  f"far lateral (back) shape {fb_}")
+            check(0.5 * tp_["flBackMm"] <= back <= tp_["flBackMm"] + 1.5, f"the second far lateral shape draws the right tonsil {back:.1f} mm back, not about {tp_['flBackMm']} {fb_}")
+            check(fb_["medullaGapMm"]["back"] > fb_["medullaGapMm"]["rest"], f"the second far lateral shape does not draw the cerebellum off the medulla {fb_}")
     aica = ids.get("tb_anterior_inferior_cerebellar_artery")
     check(aica is not None and aica.get("fitted"), "the anterior inferior cerebellar artery (fitted) is missing")
     print(f"skull base v3 validation: {n - len(fails)}/{n} checks passed")

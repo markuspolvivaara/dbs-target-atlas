@@ -152,7 +152,7 @@ VIEWS = {
     "olfactory": {"hemi": "R", "morphs": ["lsoLift", "open"]},
     "tuberculum": {"hemi": "R", "morphs": ["open", "lift"]},
     "petroclival": {"hemi": "R", "morphs": ["retrosigmoid"]},
-    "foramen_magnum": {"hemi": "R", "morphs": ["farLateral"]},
+    "foramen_magnum": {"hemi": "R", "morphs": ["farLateral", "farLateralBack"]},
 }
 STEM = ("Medulla oblongata", "Pons", "Midbrain")
 SITE = {   # the meningiomas: name, where (by the landmarks of v3 and the cavernous model), what the push may move

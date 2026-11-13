@@ -48,7 +48,11 @@ hemisphere and tonsil retracted superomedially to expose the vertebral artery's 
 the lower cranial nerves; Luzzi 2022: the tonsil retracted upwards): each of their points moved FL_MM up and FL_MEDIAL of
 that towards the midline, the rest of the right hemisphere following with a weight that falls from 1 at them to 0
 FL_REACH_MM from them (it changes by at most its size over FL_REACH_MM per mm, below 1: it cannot fold); then kept off bone and
-the arteries as the telovelar shape is. The vermis, the left side, the brainstem and the fourth ventricle stay.
+the arteries as the telovelar shape is. The vermis, the left side, the brainstem and the fourth ventricle stay. A second
+shape (morph target "farLateralBack") draws the same parts FLB_MM straight back (posteriorly), the rest of the right
+hemisphere following as in the lift: a view aid the owner asked for, not a step a source describes, and with the lift
+on too it can hold the cerebellum where no retractor would (each is kept clear of bone and arteries on its own, and
+together they still cannot fold it).
 
 The fit also moves the model's brainstem away from where Skull base v2's fit left the Z-Anatomy model, from which the
 cranial nerves' and the anterior inferior cerebellar artery's courses come (it widens the brainstem to fill this
@@ -150,6 +154,10 @@ FL_MM = 8.0                # illustrative: how far they are lifted ...
 FL_MEDIAL = 0.5            # ... and moved towards the midline this share as far (superomedially)
 FL_REACH_MM = 20.0         # the rest of the right hemisphere follows, none this far from them
 assert FL_MM * np.hypot(1, FL_MEDIAL) / FL_REACH_MM < 1, "the far lateral shape could fold the cerebellum"
+FLB_MM = 8.0               # illustrative: how far the far lateral view's second shape draws them straight back ...
+FLB_SMOOTH = 20            # ... each point's move cut short where it would reach bone or the tentorium, the cut spread
+                           # over the surface by this many rounds of neighbour minima-of-means (never past the cut)
+assert (FL_MM * np.hypot(1, FL_MEDIAL) + FLB_MM) / FL_REACH_MM < 1, "the two far lateral shapes together could fold the cerebellum"
 GEN = ROOT.parent / "src" / "data" / "generated"
 CARRY_STEP_MM = 2.0        # the deformation saved for the nerves' courses on this grid, in full ...
 CARRY_BONE_MM = 6.0        # ... except within this of bone, where it fades to none
@@ -731,6 +739,81 @@ def far_lateral(parts: dict, fs) -> dict:
     return out
 
 
+def far_lateral_back(parts: dict, fs) -> dict:
+    """Each part's displacement for the far lateral view's second shape: the same parts drawn FLB_MM straight back, the
+    rest of the right hemisphere following as in the lift. Straight back the hemisphere meets the occipital bone, too
+    deep for the other shapes' push off it: each point's move is cut short instead, to the share of it (found by
+    bisection) that keeps the point BONE_GAP_MM off bone and the tentorium, and the cut spread over the part's surface
+    (FLB_SMOOTH rounds, each point taking the lesser of its own share and its neighbours' mean) so that neighbours move
+    alike; then kept off the arteries as the other shapes are."""
+    def lifted(n: str) -> bool:
+        return any(n == p or n.startswith(p + ".") for p in FL_PARTS)
+    tree = cKDTree(np.vstack([v[side == "R"] for n, (v, _, side) in parts.items() if lifted(n)]))
+    dirn = np.array([0.0, -1.0, 0.0])
+    out = {}
+    for n, (v, tri, side) in parts.items():
+        D = np.zeros_like(v)
+        if n.startswith("Tonsil of cerebellum") or any(n.startswith(h) for h in HEMISPHERE):
+            m = side == "R"
+            if m.any():
+                w = np.clip(1 - tree.query(v[m])[0] / FL_REACH_MM, 0, 1)
+                D[m] = FLB_MM * w[:, None] * dirn
+            moved = np.nonzero(np.abs(D).sum(1) > 0)[0]
+            if len(moved):
+                share = np.ones(len(v))
+                clear = lambda t: fs.roof(v[moved] + t[:, None] * D[moved], grad=False) >= BONE_GAP_MM   # noqa: E731
+                bad = ~clear(np.ones(len(moved)))
+                lo, hi = np.zeros(len(moved)), np.ones(len(moved))
+                for _ in range(12):
+                    mid = (lo + hi) / 2
+                    ok = clear(mid)
+                    lo = np.where(ok, mid, lo)
+                    hi = np.where(ok, hi, mid)
+                share[moved] = np.where(bad, lo, 1.0)
+                A = BD.adjacency(np.asarray(tri, int), len(v))
+                deg = np.maximum(np.asarray(A.sum(1)).ravel(), 1)
+                cut = share.copy()
+                for _ in range(FLB_SMOOTH):
+                    share = np.minimum(cut, (A @ share + share) / (deg + 1))
+                D *= share[:, None]
+                mv = np.abs(D).sum(1) > 0
+                if mv.any():
+                    sv, nv = fs.vessel_sdf(v[mv] + D[mv])
+                    hit = sv < VESSEL_MARGIN_MM
+                    D[np.nonzero(mv)[0][hit]] += (VESSEL_MARGIN_MM + 0.1 - sv[hit])[:, None] * nv[hit]
+        out[n] = D
+    return out
+
+
+def far_lateral_back_report(parts: dict, moves: dict, fs) -> dict:
+    """How far the second far lateral shape moves the right hemisphere, whether it stays clear, how far back the front
+    of the right tonsil goes, and how far the drawn-back parts are from the medulla (and this CT's right vertebral
+    artery, where the fossa has it) at rest and drawn back."""
+    mv = np.vstack([moves[n] for n in parts])
+    Xm = np.vstack([parts[n][0] + moves[n] for n in parts])
+    moved = np.linalg.norm(mv, axis=1) > 0.1
+    tons = [n for n in parts if n.startswith("Tonsil of cerebellum") and (parts[n][2] == "R").any()]
+    front = lambda f: round(float(max(f(n)[parts[n][2] == "R", 1].max() for n in tons)), 1)   # noqa: E731
+    lift = [n for n in parts if any(n == p or n.startswith(p + ".") for p in FL_PARTS) and (parts[n][2] == "R").any()]
+    medulla = cKDTree(np.vstack([parts[n][0] for n in parts if n.startswith("Medulla oblongata")]))
+    def to_medulla(f):
+        return round(float(medulla.query(np.vstack([f(n)[parts[n][2] == "R"] for n in lift]))[0].min()), 1)
+    out = {"maxMovedMm": round(float(np.linalg.norm(mv, axis=1).max()), 2), "moved": int(moved.sum()),
+           "inBoneAfter": int((fs.bone(Xm[moved], grad=False) < 0).sum()),
+           "inVesselAfter": int((fs.vessel_sdf(Xm[moved])[0] < 0).sum()),
+           "tonsilFrontYMm": {"rest": front(lambda n: parts[n][0]), "back": front(lambda n: parts[n][0] + moves[n])},
+           "medullaGapMm": {"rest": to_medulla(lambda n: parts[n][0]), "back": to_medulla(lambda n: parts[n][0] + moves[n])}}
+    va = getattr(fs, "lines", {}).get(23)
+    if va is not None:
+        tree = cKDTree(va[:, :3])
+        def gap(f):
+            P = np.vstack([f(n)[parts[n][2] == "R"] for n in lift])
+            d, j = tree.query(P)
+            return round(float((d - va[j, 3]).min()), 1)
+        out["vertebralGapMm"] = {"rest": gap(lambda n: parts[n][0]), "back": gap(lambda n: parts[n][0] + moves[n])}
+    return out
+
+
 def far_lateral_report(parts: dict, moves: dict, fs) -> dict:
     """How far the far lateral shape moves the right hemisphere, whether it stays clear, how far the right tonsil's
     lowest point rises, and (where the fossa has this CT's arteries) how far the lifted parts are from the right
@@ -771,7 +854,7 @@ def inside_ventricle(parts: dict):
 
 
 def params_hash() -> str:
-    keys = {k: v for k, v in globals().items() if k.isupper() and isinstance(v, (int, float, str, list, dict, tuple)) and not k.startswith(("TV_", "RS_", "DENT_", "FL_"))}
+    keys = {k: v for k, v in globals().items() if k.isupper() and isinstance(v, (int, float, str, list, dict, tuple)) and not k.startswith(("TV_", "RS_", "DENT_", "FL_", "FLB_"))}
     keys["inputs"] = [hashlib.sha1(p.read_bytes()).hexdigest() for p in (CT_BUILD / "bone.npz", CT_BUILD / "pfossa.json")]
     keys["tentorium"] = TENT.Tentorium().content_hash()
     return hashlib.sha1(json.dumps(keys, sort_keys=True, default=str).encode()).hexdigest()[:16]
@@ -854,6 +937,7 @@ def main() -> int:
     root = trigeminal_root(ex2, gp, parts)
     rs_moves = retrosigmoid(parts, fs, root)
     fl_moves = far_lateral(parts, fs)
+    flb_moves = far_lateral_back(parts, fs)
     carry_rep = save_carry(md, gp, allv, fs)
     print("carry", carry_rep, flush=True)
     # GLBs: each piece as L and R nodes
@@ -870,18 +954,19 @@ def main() -> int:
                     continue
                 used, inv = np.unique(t[fsel], return_inverse=True)
                 Vs.append(X[used])
-                Ds.append(np.c_[moves[n][used], rs_moves[n][used], fl_moves[n][used]])
+                Ds.append(np.c_[moves[n][used], rs_moves[n][used], fl_moves[n][used], flb_moves[n][used]])
                 Ts.append(inv.reshape(-1, 3) + off)
                 off += len(used)
             if not Vs:
                 continue
             v, tt, DD = np.vstack(Vs), np.vstack(Ts), np.vstack(Ds)
-            D, DR, DF = DD[:, :3], DD[:, 3:6], DD[:, 6:]
+            D, DR, DF, DB = DD[:, :3], DD[:, 3:6], DD[:, 6:9], DD[:, 9:]
             node = {"name": s, "positions": v, "normals": normals(v, tt), "indices": tt, "mode": TRIANGLES}
             if moving:
                 node["targets"] = [{"name": "telovelar", "positions": D, "normals": normals(v + D, tt) - node["normals"]},
                                    {"name": "retrosigmoid", "positions": DR, "normals": normals(v + DR, tt) - node["normals"]},
-                                   {"name": "farLateral", "positions": DF, "normals": normals(v + DF, tt) - node["normals"]}]
+                                   {"name": "farLateral", "positions": DF, "normals": normals(v + DF, tt) - node["normals"]},
+                                   {"name": "farLateralBack", "positions": DB, "normals": normals(v + DB, tt) - node["normals"]}]
             nodes.append(node)
             cent[s] = v.mean(0).round(2).tolist()
         write_glb(BUILD / f"{pid}.glb", nodes, {"id": pid})
@@ -910,12 +995,13 @@ def main() -> int:
                                             "moved": int(sum(in4(parts[n][0] + moves[n]).sum() for n in cereb))}},
               "retrosigmoid": retro_report(parts, rs_moves, fs, root),
               "farLateral": far_lateral_report(parts, fl_moves, fs),
+              "farLateralBack": far_lateral_back_report(parts, flb_moves, fs),
               "trigeminalRoots": {s: trigeminal_root(ex2, gp, parts, s).round(2).tolist() for s in "RL"},
-              "params": {"rsMm": RS_MM, "rsReachMm": RS_REACH_MM, "flMm": FL_MM, "flMedial": FL_MEDIAL, "flReachMm": FL_REACH_MM, "tableGapMm": TABLE_GAP_MM, "tableMinMm": TABLE_MIN_MM, "boneGapMm": BONE_GAP_MM, "tvMm": TV_MM, "tvUp": TV_UP,
+              "params": {"rsMm": RS_MM, "rsReachMm": RS_REACH_MM, "flMm": FL_MM, "flMedial": FL_MEDIAL, "flReachMm": FL_REACH_MM, "flBackMm": FLB_MM, "tableGapMm": TABLE_GAP_MM, "tableMinMm": TABLE_MIN_MM, "boneGapMm": BONE_GAP_MM, "tvMm": TV_MM, "tvUp": TV_UP,
                          "tvReachMm": TV_REACH_MM, "tvVermisMm": TV_VERMIS_MM, "tvVermisBack": TV_VERMIS_BACK,
                          "tvVermisReachMm": TV_VERMIS_REACH_MM, "jacMin": JAC_MIN}}
     (BUILD / "pfossa.json").write_text(json.dumps({"items": items, "texts": md.texts, "report": report}, indent=1))
-    print("posterior fossa done", report["telovelar"], report["retrosigmoid"], report["farLateral"], round(time.time() - t0), "s")
+    print("posterior fossa done", report["telovelar"], report["retrosigmoid"], report["farLateral"], report["farLateralBack"], round(time.time() - t0), "s")
     return 0
 
 

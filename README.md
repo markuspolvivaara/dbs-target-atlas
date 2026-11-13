@@ -308,7 +308,11 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   hemisphere following less the further it lies from them (none 20 mm away), as the approach's retraction holds them
   superomedially off the vertebral artery and the lower cranial nerves (Sriamornrattanakul 2023, Luzzi 2022); a shape
   (morph target "farLateral", `skullbase_pfossa.far_lateral`), kept off bone and the arteries, and the posterior inferior
-  cerebellar artery's course on the cerebellum moves with it. The foramen magnum meningioma is drawn in it.
+  cerebellar artery's course on the cerebellum moves with it. A second slider (morph target "farLateralBack",
+  `skullbase_pfossa.far_lateral_back`) draws the same parts 8 mm straight back, each point's move cut short where it
+  would meet the occipital bone (the cut spread smoothly over the surface): a view aid, not a sourced step, which opens
+  at 0 and works together with the lift, even into positions no retractor would hold. The foramen magnum meningioma
+  is drawn in it.
 - **Anterior petrosectomy (Kawase)** (`skullbase_v3_approach.py`, `skullbase_v3.py approaches`). A right temporal flap
   flush with the middle fossa floor, two thirds in front of the external auditory canal (Flores-Justa 2021); the petrous
   apex drilled within the rhomboid of four landmarks on this model (Signoretti 2025: the petrous apex, where the greater

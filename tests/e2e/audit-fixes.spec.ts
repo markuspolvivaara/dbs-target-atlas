@@ -631,6 +631,13 @@ test('surgical views open opened; from one tumour to another of the same view th
   await page.keyboard.press('f');
   await settle(page);
   await expect.poll(hash).toContain('fl=0');
+  // the second slider (the cerebellum drawn back) opens at 0 and works with the first
+  expect(hash()).not.toContain('fb=');
+  await page.keyboard.press('f');
+  await page.keyboard.press('b');
+  await settle(page);
+  await expect.poll(hash).toContain('fb=100');
+  expect(hash()).toContain('fl=100');
   await open(page, './skullbase/#/atlas?g=koos_i');
   await expect.poll(cam).toMatch(/^-?\d/);
   expect(hash()).toContain('rs=100');

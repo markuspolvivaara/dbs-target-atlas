@@ -816,13 +816,17 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
   });
   it('the far lateral view: the right tonsil and biventral lobule lifted superomedially, the PICA with them', async () => {
     const g = G3.SB_GROUP.get('far_lateral')!;
-    expect(g.morphs).toEqual(['farLateral']);
-    expect(g.morphDefault).toEqual({ farLateral: 1 });
+    expect(g.morphs).toEqual(['farLateral', 'farLateralBack']);
+    expect(g.morphDefault).toEqual({ farLateral: 1 });                 // the second, a view aid, opens at 0
     expect(G3.SB_GROUP.get('meningioma_foramen_magnum')!.morphDefault).toEqual({ farLateral: 1 });   // its tumour opens so too
     expect(SB_GROUPS.find((x) => x.id === 'far_lateral')!.morphs).toEqual([]);   // (v1: the shape is not built on its cerebellum yet)
     expect(T3.decodeSkull('#/atlas?g=far_lateral&fl=40&rs=60').morphs).toEqual({ farLateral: 0.4 });
+    const both = T3.decodeSkull('#/atlas?g=far_lateral&fl=40&fb=70');   // the two together
+    expect(both.morphs).toEqual({ farLateral: 0.4, farLateralBack: 0.7 });
+    expect(T3.encodeSkull(both)).toContain('fb=70');
     const pf = ((await import('../../src/data/generated/sbv3-fit.json')).default as unknown as { pfossa: {
       farLateral: { maxMovedMm: number; inBoneAfter: number; inVesselAfter: number; tonsilLowestZMm: { rest: number; lifted: number }; vertebralGapMm: { rest: number; lifted: number } };
+      farLateralBack: { maxMovedMm: number; inBoneAfter: number; inVesselAfter: number; tonsilFrontYMm: { rest: number; back: number }; medullaGapMm: { rest: number; back: number } };
       params: Record<string, number> } }).pfossa;
     const { flMm, flMedial, flReachMm } = pf.params;
     expect(flMm * Math.hypot(1, flMedial) / flReachMm).toBeLessThan(1);          // cannot fold the cerebellum
@@ -832,6 +836,16 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(rise).toBeGreaterThan(0.5 * flMm);                                       // the tonsil rises about as far as the rule says ...
     expect(rise).toBeLessThan(flMm + 1.5);                                          // ... and no further
     expect(pf.farLateral.vertebralGapMm.lifted).toBeGreaterThan(pf.farLateral.vertebralGapMm.rest);   // off the vertebral artery
+    // the second shape: the same parts straight back, cut short at the bone, never further than the rule
+    const fb = pf.farLateralBack, { flBackMm } = pf.params;
+    expect((flMm * Math.hypot(1, flMedial) + flBackMm) / flReachMm).toBeLessThan(1);   // the two together cannot fold it
+    expect(fb.inBoneAfter).toBe(0);
+    expect(fb.inVesselAfter).toBe(0);
+    expect(fb.maxMovedMm).toBeLessThan(flBackMm + 1.5);
+    const back = fb.tonsilFrontYMm.rest - fb.tonsilFrontYMm.back;
+    expect(back).toBeGreaterThan(0.5 * flBackMm);
+    expect(back).toBeLessThan(flBackMm + 1.5);
+    expect(fb.medullaGapMm.back).toBeGreaterThan(fb.medullaGapMm.rest);              // off the medulla
     // the shipped right tonsil goes up and in; the left stays
     const tonsil = await nodeMorphs('assets/skullbase-v3/pf_tonsil.glb');
     expect(tonsil.R.farLateral.max).toBeGreaterThan(flMm - 0.5);
@@ -839,16 +853,23 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(tonsil.R.farLateral.mean[2]).toBeGreaterThan(0);
     expect(tonsil.R.farLateral.mean[0]).toBeLessThan(0);
     expect(tonsil.L.farLateral.max).toBeLessThan(0.2);
+    expect(tonsil.R.farLateralBack.mean[1]).toBeLessThan(0);                        // back
+    expect(tonsil.L.farLateralBack.max).toBeLessThan(0.2);
     // the PICA's fitted course lying on it is carried with it; the left one stays
     const pica = await nodeMorphs('assets/skullbase-v3/tb_posterior_inferior_cerebellar_artery_fitted_course.cleared.glb');
     expect(pica.R.farLateral.max).toBeGreaterThan(flMm - 0.5);
     expect(pica.R.farLateral.mean[2]).toBeGreaterThan(0);
     expect(pica.L.farLateral.max).toBeLessThan(0.2);
+    expect(pica.R.farLateralBack.max).toBeGreaterThan(1);
   });
   it('a surgical view opens with its shapes full on, and a link that closes one keeps it closed', () => {
     const views = G3.SB_GROUPS.filter((g) => g.kind === 'approach' && g.morphs?.length);
     expect(views.map((g) => g.id).sort()).toEqual(['far_lateral', 'interhemispheric', 'lso', 'orbitozygomatic', 'retrosigmoid', 'telovelar', 'transsylvian']);
-    for (const g of views) expect(T3.decodeSkull(`#/atlas?g=${g.id}`).morphs, g.id).toEqual(Object.fromEntries(g.morphs!.map((m) => [m, 1])));
+    for (const g of views) {
+      // every shape full on, but the far lateral view's second one (a view aid, which opens at 0)
+      expect(g.morphDefault, g.id).toEqual(Object.fromEntries(g.morphs!.filter((m) => m !== 'farLateralBack').map((m) => [m, 1])));
+      expect(T3.decodeSkull(`#/atlas?g=${g.id}`).morphs, g.id).toEqual(g.morphDefault);
+    }
     const closed = T3.decodeSkull('#/atlas?g=transsylvian&op=0&lf=0');
     expect(closed.morphs).toEqual({});
     expect(T3.encodeSkull(closed)).toContain('op=0');

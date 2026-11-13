@@ -80,6 +80,14 @@ const MORPH_UI: Record<string, { label: string; key: string; note: () => string 
       return `At 100 % the right tonsil and biventral lobule are ${fmtMm(p.params.flMm)} mm higher and ${fmtMm(p.params.flMm * p.params.flMedial)} mm nearer the midline, the rest of the right hemisphere following less the further it lies from them (none ${fmtMm(p.params.flReachMm)} mm away; it cannot fold the cerebellum).${gap} The posterior inferior cerebellar artery’s course on the cerebellum moves with it; the vermis, the left side, the brainstem, the nerves and the vertebral artery stay.`;
     },
   },
+  farLateralBack: {
+    label: 'Retract the cerebellum backwards', key: 'b', note: () => {
+      const p = V3_FIT.pfossa;
+      const f = p?.farLateralBack;
+      if (!p || !f) return null;
+      return `At 100 % the right tonsil and biventral lobule are ${fmtMm(p.params.flBackMm)} mm further back, the rest of the right hemisphere following less the further it lies from them (none ${fmtMm(p.params.flReachMm)} mm away); they are then ${fmtMm(f.medullaGapMm.back)} mm from the medulla, ${fmtMm(f.medullaGapMm.rest)} mm at rest. A view aid, not a step the sources describe: with the lift on too, the cerebellum can be held where no retractor would hold it. The posterior inferior cerebellar artery’s course on the cerebellum moves with it.`;
+    },
+  },
   telovelar: {
     label: 'Draw the tonsils apart, lift the vermis', key: 't', note: () => {
       const p = V3_FIT.pfossa;
