@@ -19,7 +19,8 @@ const LobeId = z.enum(['frontal', 'parietal', 'temporal', 'occipital', 'cingulat
 export type LobeId = z.infer<typeof LobeId>;
 const Definition = z.object({ text: z.string().min(1), url: z.string().url().nullable(), source: z.string() });
 /** A correction made to a shipped text: the words as shipped, the words shown instead, and why (with its source). */
-const DefinitionEdit = z.object({ from: z.string().min(1), to: z.string().min(1), why: z.string().min(1) });
+/** a correction to a shipped text: the words as shipped, the words shown instead ('' when they are left out), and why */
+const DefinitionEdit = z.object({ from: z.string().min(1), to: z.string(), why: z.string().min(1) });
 export const LabelSchema = z.object({
   id: z.string().regex(/^ctx_[a-z0-9_]+$/),
   short: z.string(),

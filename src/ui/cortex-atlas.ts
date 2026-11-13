@@ -237,7 +237,9 @@ export class CortexAtlasPage {
       h('p', { class: 'aside' }, `From Wikipedia (CC BY-SA 3.0), as shipped with Z-Anatomy; not checked against the literature${edits.length ? ', except as corrected below' : ''}. `,
         def.url ? h('a', { href: def.url, target: '_blank', rel: 'noopener' }, 'Source page') : null),
       // a text changed here says so, with what it said before and why (the licence asks for changes to be indicated)
-      ...edits.map((e) => h('p', { class: 'aside def-edit' }, `Corrected here: “${e.from}” now reads “${e.to}”. ${e.why}.`)))];
+      ...edits.map((e) => h('p', { class: 'aside def-edit' }, e.to
+        ? `Corrected here: “${e.from.trim()}” now reads “${e.to}”. ${e.why}.`
+        : `Corrected here: “${e.from.replace(/^[\s,]+/, '')}” is left out. ${e.why}.`)))];
   }
 
   private card(id: string): HTMLElement {

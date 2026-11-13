@@ -74,7 +74,22 @@ describe('cortex data (Destrieux on the Lead-DBS template surface)', () => {
     expect(ang.edits).toHaveLength(1);
     expect(ang.edits![0].from).toContain('anterolateral');
     expect(ang.edits![0].why).toContain('Destrieux et al. 2010');
-    expect(LABELS.filter((l) => l.definition?.edits).map((l) => l.short)).toEqual(['G_pariet_inf-Angular']);
+    // Heschl's gyri in front of the planum temporale, not above it (Destrieux 2010, 2.3.2), without the unsourced
+    // "language production" (the audit's B-003)
+    const hg = def('G_temp_sup-G_T_transv');
+    expect(hg.text).toContain('lie in front of the planum temporale, from which the transverse temporal (Heschl’s) sulcus separates them');
+    expect(hg.text).not.toMatch(/superior to and separated|language production/);
+    expect(hg.edits![0].why).toContain('section 2.3.2');
+    // the occipital gyri are not "the occipital face area", a face-selective region found by imaging; the sentence on
+    // the transverse occipital sulcus that made no sense is left out (B-005)
+    for (const s of ['G_and_S_occipital_inf', 'G_occipital_middle', 'G_occipital_sup']) {
+      const d = def(s);
+      expect(d.text, s).not.toMatch(/face area|comes down along/);
+      expect(d.text, s).toContain('the middle occipital gyrus, and the inferior occipital gyrus. ');
+      expect(d.edits!.map((e) => e.to), s).toEqual(['', '']);
+    }
+    expect(LABELS.filter((l) => l.definition?.edits).map((l) => l.short).sort())
+      .toEqual(['G_and_S_occipital_inf', 'G_occipital_middle', 'G_occipital_sup', 'G_pariet_inf-Angular', 'G_temp_sup-G_T_transv']);
   });
   it('relates the DBS section’s motor areas to the central region, not the occipital lobe', () => {
     const m1 = (s: string) => byShort.get(s)!.parcels.find((p) => p.id === 'm1')?.parcelInLabel ?? 0;

@@ -176,7 +176,18 @@ ZTEXT: dict[str, tuple[str, str | None] | None] = {
     "S_temporal_transverse": None,
 }
 # Corrections to a shipped text, by label: (the words as shipped, the words shown instead, why, with its source). The
-# card shows the corrected text and lists each change under it (the texts are CC BY-SA: changes are indicated).
+# card shows the corrected text and lists each change under it (the texts are CC BY-SA: changes are indicated). Words
+# shown instead as "" are left out.
+# (the three occipital gyri share Wikipedia's "Occipital gyri" text: the audit's finding B-005)
+_OCCIPITAL_EDITS = [
+    (", and these are also known as the occipital face area", "",
+     "The occipital face area is a face-selective region of the lateral occipital cortex found by functional imaging "
+     "(Pitcher, Walsh and Duchaine 2011, Exp Brain Res 209:481–493; Pitcher 2014, J Neurosci 34:9173–9177), not a "
+     "name for these gyri"),
+    (" The transverse occipital sulcus comes down along the lateral occipital surface or the inferior occipital sulcus.", "",
+     "The short transverse occipital sulcus crosses the superior occipital sulcus at right angles and reaches into the "
+     "superior and middle occipital gyri (Destrieux et al. 2010, section 2.3.3)"),
+]
 ZTEXT_EDITS: dict[str, list[tuple[str, str, str]]] = {
     "G_pariet_inf-Angular": [(
         "lying mainly in the anterolateral region of parietal lobe, that lies near",
@@ -184,6 +195,17 @@ ZTEXT_EDITS: dict[str, list[tuple[str, str, str]]] = {
         "The sulcus intermedius primus divides the inferior parietal lobule into the supramarginal gyrus in front and "
         "the angular gyrus behind (Destrieux et al. 2010, section 2.4.1.4)",
     )],
+    # (the audit's finding B-003: the gyri are in front of the planum temporale, not above it)
+    "G_temp_sup-G_T_transv": [(
+        "are superior to and separated from the planum temporale (cortex involved in language production) by Heschl’s sulcus",
+        "lie in front of the planum temporale, from which the transverse temporal (Heschl’s) sulcus separates them",
+        "The transverse temporal sulcus divides the planum temporale, behind it, from the transverse temporal gyrus, in "
+        "front (Destrieux et al. 2010, section 2.3.2); the planum temporale lies behind the transverse temporal gyri, the "
+        "primary auditory cortex (Kiernan 2012). The words on language production had no source and are left out",
+    )],
+    "G_and_S_occipital_inf": _OCCIPITAL_EDITS,
+    "G_occipital_middle": _OCCIPITAL_EDITS,
+    "G_occipital_sup": _OCCIPITAL_EDITS,
 }
 # lobe-level texts for the group cards
 ZTEXT_LOBES = {"frontal": "Frontal lobe", "parietal": "Parietal lobe", "temporal": "Temporal lobe",
