@@ -77,6 +77,13 @@ SLOT_MM = 1.5           # a slot or pocket narrower than about twice this, left 
 SEAL_APART_MM = 1.5     # (a pinhole: open to the outside this far or more from the opening)
 SEAL_MM = 2.0           # a pinhole the smoothed cut edge would wear through thin bone beside a flap: the bone this far round it kept
 RIDGE_RADIUS_MM = 6.0   # the lateral sphenoid ridge is drilled this far around its line (illustrative)
+EDGE_SHARE = 0.5        # basal drilling: the opening's edge where the ridge starts taken back towards the cavity, over this
+                        # share of the ridge drilling's reach from the pterion (the residual sphenoid wing and temporal squama:
+                        # Yilmaz 2025) ...
+EDGE_FROM_OPENING_MM = 6.0   # ... the bone within this of the opening ...
+EDGE_FROM_CAVITY_MM = 6.0    # ... and of the cranial cavity ...
+EDGE_FROM_LINE_MM = 14.0     # ... and of the drilling's line (illustrative) ...
+EDGE_KEEP_MM = 1.5           # ... keeping this much bone over the orbit (and anything else outside but the opening)
 CLINOID_TIP_MM = 5.0    # the clinoidectomy (a switch in the pterional and orbitozygomatic views): the bone within this of the
                         # anterior clinoid process's tip ...
 CLINOID_PAST_MM = 2.0   # ... and the rest of the ridge between the fossae, from where the drilling stops to this past the tip
@@ -664,6 +671,9 @@ def pterional(S: Skull) -> dict:
     drill = S.region(near_ridge, (ridge0 + stop) / 2, np.linalg.norm(seg) / 2 + RIDGE_RADIUS_MM + 1)
     # (the ridge itself rarely lies on that line, on this CT nor on Z-Anatomy's skull: it is found from the skull too)
     drill |= ridge_between_fossae(S, whole | drill, n_p, ridge0, acp, reach)
+    # basal drilling where the ridge starts: the flap's edge there, the thick base of the sphenoid wing and the residual
+    # temporal squama, taken back towards the cavity (a thick wedge, neither on the line nor a ridge between the fossae)
+    drill |= basal_edge(S, m | drill, ridge0, acp, reach)
     # (a thin shelf of bone with the cavity or air on both sides: the smoothed cut averages the drilled bone with what lies
     # round it, so the air and cavity next to it count as drilled too, or the smoothing would leave the shelf standing,
     # as v1's cuts do throughout: Skull.soft)
@@ -688,9 +698,14 @@ def pterional(S: Skull) -> dict:
            "lateral two-thirds of the sphenoid ridge drilled, as in Yasargil's modification (Yilmaz 2025): the ridge between the "
            f"anterior and middle fossae as found on this skull, and the bone within {RIDGE_RADIUS_MM:.0f} mm of a line from the "
            "pterion towards the anterior clinoid process, each to two-thirds of the way from the pterion to the process's tip "
-           f"({reach:.0f} of {np.linalg.norm(acp - ridge0):.0f} mm); as cut, the bone removed ends <<clinoid>> mm from the process "
+           f"({reach:.0f} of {np.linalg.norm(acp - ridge0):.0f} mm); and, over the first half of that, the opening's edge where "
+           "the ridge starts taken back towards the cavity, as the basal drilling takes the residual sphenoid wing and temporal "
+           f"squama (Yilmaz 2025; here the sphenoid, frontal and temporal bone within {EDGE_FROM_OPENING_MM:.0f} mm of both the "
+           f"opening and the cavity and {EDGE_FROM_LINE_MM:.0f} mm of the line, illustrative, keeping {EDGE_KEEP_MM:g} mm of bone over "
+           "the orbit). As cut, the bone removed ends <<clinoid>> mm from the process "
            "(Yilmaz 2025 limits this resection at the meningo-orbital artery, at the superior orbital fissure's superolateral "
-           "corner, which the model does not show). With the anterior clinoidectomy switched on, the anterior clinoid process "
+           "corner, which the model does not show). The drilled bone is a piece of its own: with the switch for the ridge off it "
+           "is drawn back, the ridge intact (<<ridgeMl>> ml). With the anterior clinoidectomy switched on, the anterior clinoid process "
            "is taken too (<<clinoidMl>> ml, drawn by rule): the rest of the ridge between the fossae, from where the drilling "
            f"stops to the process's tip, and the bone within {CLINOID_TIP_MM:.0f} mm of the tip"
            + (" as found on this CT" if PROFILE == "v3" else "") + "; the optic canal's roof and the optic strut, which are "
@@ -701,11 +716,51 @@ def pterional(S: Skull) -> dict:
            f"corners where the cranial floor is kept rounded over {PT_ROUND_MM:g} mm and its edge smoothed over {PT_SOFT_MM:.0f} mm (illustrative). "
            f"Burr holes: {fmt(keyhole)}, {fmt(frontal)}, {fmt(root)}, {fmt(post)}.")
     return {"id": "pterional", "name": "Pterional (frontotemporal) craniotomy", "cut": m | drill, "drill": drill, "clinoid": clinoid,
+            "ridge": drill & ~m,
             "how": how, "softMm": PT_SOFT_MM, "guard": ~free,
             "burrHoles": [keyhole.round(1).tolist(), frontal.round(1).tolist(), root.round(1).tolist(), post.round(1).tolist()],
             "measured": {"keyholeFromLandmarkMm": round(float(np.linalg.norm(keyhole - zyg)), 1),
                          "frontalHoleFromNotchMm": round(float(np.linalg.norm(frontal - so)), 1)},
             "measure": lambda M: {"<<clinoid>>": f"{M.nearest(acp):.0f}", "removedToClinoidMm": round(M.nearest(acp), 1)}}
+
+
+def basal_edge(S: "Skull", opening: np.ndarray, start: np.ndarray, acp: np.ndarray, reach: float) -> np.ndarray:
+    """The opening's edge where the sphenoid ridge starts, taken back towards the cavity: bone within EDGE_FROM_OPENING_MM
+    of the opening and EDGE_FROM_CAVITY_MM of the cranial cavity, within EDGE_FROM_LINE_MM of the line from `start` (the
+    pterion) towards the anterior clinoid process, over its first EDGE_SHARE of `reach`, and not within EDGE_KEEP_MM of
+    anything outside the skull but the opening (the orbit); of the sphenoid, frontal and temporal bones only (each voxel's
+    bone: its nearest model vertex's), so the zygoma and the parietal bone stay."""
+    ax = unit(acp - start)
+    span = EDGE_SHARE * reach
+    c = start + ax * span / 2
+    ijk = np.rint(nib.affines.apply_affine(S.inv, c)).astype(int)
+    r = int(np.ceil((span / 2 + EDGE_FROM_LINE_MM + EDGE_FROM_OPENING_MM + 2) / STEP))
+    lo = np.maximum(ijk - r, 0)
+    hi = np.minimum(ijk + r + 1, S.b.shape)
+    box = tuple(slice(a, b) for a, b in zip(lo, hi))
+    bone = (S.b[box] > K.SURFACE_LEVEL) & ~opening[box]
+    near_opening = ndimage.distance_transform_edt(~opening[box]) * STEP <= EDGE_FROM_OPENING_MM
+    near_cavity = ndimage.distance_transform_edt(~S.cavity[box]) * STEP <= EDGE_FROM_CAVITY_MM
+    # (a shell kept over what lies outside the skull other than the opening: the orbit's periorbita is not opened)
+    outside = (S.b[box] <= K.SURFACE_LEVEL) & ~S.cavity[box] & ~ndimage.binary_dilation(opening[box], iterations=int(round(3.0 / STEP)))
+    clear_of_outside = ndimage.distance_transform_edt(~outside) * STEP >= EDGE_KEEP_MM
+    sel = bone & near_opening & near_cavity & clear_of_outside
+    idx = np.argwhere(sel)
+    P = nib.affines.apply_affine(S.a, idx + lo)
+    t = (P - start) @ ax
+    perp = np.linalg.norm(P - (start + np.clip(t, 0, span)[:, None] * ax), axis=1)
+    keep = (t >= -EDGE_FROM_OPENING_MM) & (t <= span) & (perp <= EDGE_FROM_LINE_MM)
+    out = np.zeros(S.b.shape, bool)
+    out[tuple((idx[keep] + lo).T)] = True
+    # (the sphenoid wing, the frontal bone where the ridge starts at the pterion, and the temporal squama, as basal
+    # drilling takes them; the zygomatic and parietal bones stay)
+    idx = np.argwhere(out)
+    if len(idx):
+        _, j = cKDTree(S.zp).query(nib.affines.apply_affine(S.a, idx))
+        names = np.array(S.znames)[S.zl[j]].astype(str)
+        other = ~(np.char.startswith(names, "Sphenoid bone") | np.char.startswith(names, "Temporal bone") | np.char.startswith(names, "Frontal bone"))
+        out[tuple(idx[other].T)] = False
+    return out
 
 
 def clinoid_tip(S: "Skull", acp: np.ndarray) -> np.ndarray:
@@ -1200,7 +1255,8 @@ def orbitozygomatic(S: Skull) -> dict:
            f"(y = {OZ_ARCH_ROOT_Y:g} mm here; illustrative).")
     return {"id": "orbitozygomatic", "name": "Orbitozygomatic craniotomy", "cut": pt["cut"] | orbit | zyg, "how": how,
             "softMm": pt["softMm"], "guard": pt["guard"] & ~orbit & ~zyg, "burrHoles": pt["burrHoles"],
-            "measured": pt["measured"], "measure": pt["measure"], "clinoid": pt["clinoid"] & ~(orbit | zyg)}
+            "measured": pt["measured"], "measure": pt["measure"], "clinoid": pt["clinoid"] & ~(orbit | zyg),
+            "ridge": pt["ridge"] & ~(orbit | zyg)}
 
 
 def far_lateral(S: Skull) -> dict:
@@ -1490,6 +1546,14 @@ def main(only: list[str] | None = None) -> int:
             res[ap["id"]]["clinoid"] = {"verts": np.asarray(piece.vertices).round(3).tolist(), "tris": np.asarray(piece.faces).tolist(),
                                         "ml": Mc.ml}
             ap["how"] = ap["how"].replace("<<clinoidMl>>", f"{Mc.ml:.1f}")
+        rg = ap.get("ridge")
+        if rg is not None:      # the drilled ridge: the bone the ridge switch puts back
+            piece = isosurface(np.minimum(S.b, S.soft(rg, soft, guard, keep)) if soft else rg.astype(np.float32), S.a,
+                               K.SURFACE_LEVEL if soft else 0.5, 0.6, 40_000)
+            Mr = Removed(np.asarray(piece.vertices).round(3), np.asarray(piece.faces))
+            res[ap["id"]]["ridge"] = {"verts": np.asarray(piece.vertices).round(3).tolist(), "tris": np.asarray(piece.faces).tolist(),
+                                      "ml": Mr.ml}
+            ap["how"] = ap["how"].replace("<<ridgeMl>>", f"{Mr.ml:.1f}")
         measured_how(ap, M)
         res[ap["id"]].update({"how": ap["how"], "removedMl": M.ml,
                               **{k: ap[k] for k in ("bregma", "span", "keypoint", "measured", "corners", "guide") if k in ap}})

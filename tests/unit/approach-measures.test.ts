@@ -75,7 +75,7 @@ describe.each(MODELS)('craniotomies on %s: the cards give what the cut measures'
       const m = geom[id].measured!;
       // (whole millimetres in the text: within half a millimetre of the measure, whichever way a half is rounded)
       const said = (re: RegExp) => Number(re.exec(geom[id].how)?.[1] ?? NaN);
-      expect(Math.abs(said(/as cut, the bone removed ends (\d+) mm from the process/) - m.removedToClinoidMm), id).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(said(/as cut, the bone removed ends (\d+) mm from the process/i) - m.removedToClinoidMm), id).toBeLessThanOrEqual(0.5);
       expect(Math.abs(said(/(\d+) mm from the notch/) - m.frontalHoleFromNotchMm), id).toBeLessThanOrEqual(0.5);
       expect(Math.abs(said(/(\d+) mm from that landmark/) - m.keyholeFromLandmarkMm), id).toBeLessThanOrEqual(0.5);
     }

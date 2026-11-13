@@ -88,6 +88,9 @@ const ApproachGeomSchema = z.object({
   /** a view with an anterior clinoidectomy switch: the clinoid process's own piece (bone until the switch takes it), ml */
   clinoid: z.string().optional(),
   clinoidMl: z.number().positive().optional(),
+  /** a view with a switch for its sphenoid ridge: the drilled ridge's own piece (bone removed until the switch puts it back), ml */
+  ridge: z.string().optional(),
+  ridgeMl: z.number().positive().optional(),
   /** what this model measures for it (the Kawase rhomboid's sides, the bone drilled) */
   measured: z.record(z.string(), z.number()).optional(),
 });

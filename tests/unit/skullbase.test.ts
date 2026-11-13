@@ -879,12 +879,27 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
       const on = T3.decodeSkull(`#/atlas?g=${id}&ac=100`);
       expect(on.morphs.clinoid).toBe(1);
       expect(T3.encodeSkull(on)).toContain('ac=100');
+      // the sphenoid ridge: drilled as the view opens (its own piece drawn as the bone removed), intact by link or switch
+      const ridge = v3.structures.find((s) => s.id === `sb_appr_${g.approach}__ridge`)!;
+      expect(ridge, id).toBeTruthy();
+      expect(ridge.ridge).toBe(true);
+      expect(g.structures).toContain(ridge.id);
+      expect(g.morphDefault?.ridge, id).toBe(1);
+      expect(T3.decodeSkull(`#/atlas?g=${id}`).morphs.ridge).toBe(1);
+      expect(S3.skullPlan(id, null).looks.get(ridge.id)).toBe('ghost');
+      expect(S3.skullPlan(id, null, [], false, false).looks.get(ridge.id)).toBe('primary');
+      const intact = T3.decodeSkull(`#/atlas?g=${id}&sr=0`);
+      expect(intact.morphs.ridge ?? 0).toBe(0);
+      expect(T3.encodeSkull(intact)).toContain('sr=0');
+      expect(S3.skullScene.plan(intact).looks.get(ridge.id)).toBe('primary');
     }
-    const geom = (await import('../../src/data/generated/sbv3-approaches.json')).default as unknown as Record<string, { clinoid?: string; clinoidMl?: number; how: string }>;
+    const geom = (await import('../../src/data/generated/sbv3-approaches.json')).default as unknown as Record<string, { clinoid?: string; clinoidMl?: number; ridgeMl?: number; how: string }>;
     for (const a of ['pterional', 'orbitozygomatic']) {
       expect(geom[a].clinoidMl, a).toBeGreaterThan(0.05);      // the size of a clinoid process, not more
       expect(geom[a].clinoidMl, a).toBeLessThan(2);
       expect(geom[a].how, a).toContain(`(${geom[a].clinoidMl!.toFixed(1)} ml, drawn by rule)`);
+      expect(geom[a].ridgeMl, a).toBeGreaterThan(0.2);
+      expect(geom[a].how, a).toContain(`the ridge intact (${geom[a].ridgeMl!.toFixed(1)} ml)`);
     }
   });
   it('a surgical view opens with its shapes full on, and a link that closes one keeps it closed', () => {
@@ -896,9 +911,9 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
       expect(T3.decodeSkull(`#/atlas?g=${g.id}`).morphs, g.id).toEqual(g.morphDefault);
     }
     const closed = T3.decodeSkull('#/atlas?g=transsylvian&op=0&lf=0');
-    expect(closed.morphs).toEqual({});
+    expect(closed.morphs).toEqual({ ridge: 1 });               // (the ridge's switch, not in the link, stays as the view opens)
     expect(T3.encodeSkull(closed)).toContain('op=0');
-    expect(T3.decodeSkull(T3.encodeSkull(closed)).morphs).toEqual({});
+    expect(T3.decodeSkull(T3.encodeSkull(closed)).morphs).toEqual({ ridge: 1 });
   });
   it('the cameras: v3\'s surgical views their own directions (the telovelar view its earlier one), the tumours of a view framed alike', () => {
     const cam = Object.fromEntries(G3.SB_GROUPS.filter((g) => g.kind === 'approach').map((g) => [g.id, g.camera]));

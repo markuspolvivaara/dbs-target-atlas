@@ -1381,6 +1381,23 @@ def approach_items(items: list, ex2: dict, build: Path | None = None, kind: str 
                                          "the process's tip, and the bone round the tip, drawn by rule (pipeline/skullbase_v3_approach.py)."),
                           "centroid": {"L": cc, "R": cc}})
             summary[aid].update({"clinoid": cid, "clinoidMl": ap["clinoid"]["ml"]})
+        if ap.get("ridge"):     # the drilled sphenoid ridge, as a piece of its own: bone removed until the view's switch puts it back
+            rv, rt = np.array(ap["ridge"]["verts"], float), np.array(ap["ridge"]["tris"], int)
+            rt = orient_outward(rv, rt)
+            rid = f"sb_appr_{aid}__ridge"
+            write_glb(build / f"{rid}.glb", [{"name": "R", "positions": rv, "normals": SB.normals(rv, rt), "indices": rt, "mode": TRIANGLES}], {"id": rid})
+            rc = rv.mean(0).round(2).tolist()
+            sph = cut_of[SB.slug("Sphenoid bone")]
+            items.append({**{k: sph[k] for k in ("colour", "dataset", "source", "licence", "citation", "citationUrls")},
+                          "id": rid, "name": "Sphenoid ridge (drilled)", "aliases": [], "type": "bone", "file": f"assets/{kind}/{rid}.glb",
+                          "bytes": 0, "refIds": [], "category": "bone", "approach": aid, "ridge": True,
+                          "derivation": (f"The bone the {ap['name'].lower()}'s drilling of the lateral sphenoid ridge takes, as a piece of its own "
+                                         f"({ap['ridge']['ml']} ml): drawn as the bone removed, or as bone with the view's switch for the ridge off. "
+                                         "The ridge between the anterior and middle fossae and the bone round the line from the pterion "
+                                         "towards the anterior clinoid process, to two-thirds of the way, and the opening's edge where the "
+                                         "ridge starts, drawn by rule (pipeline/skullbase_v3_approach.py)."),
+                          "centroid": {"L": rc, "R": rc}})
+            summary[aid].update({"ridge": rid, "ridgeMl": ap["ridge"]["ml"]})
         if ap.get("guide"):     # an outline drawn on the bone (the Kawase rhomboid)
             gid = f"sb_appr_{aid}__guide"
             gv, gn, gt = SB.tube(np.c_[np.array(ap["guide"]["points"]), np.full(len(ap["guide"]["points"]), 0.35)])
@@ -1461,7 +1478,7 @@ def validate() -> int:
             c = it["centroid"]
             if it.get("category") == "removed" and aps[it["approach"]]["side"] == "M":     # a midline craniotomy
                 check(abs(c["R"][0]) < 5, f"{it['id']}: not on the midline {c}")
-            elif it.get("category") == "removed" or it.get("clinoid"):     # one side only: the craniotomy is on the right
+            elif it.get("category") == "removed" or it.get("clinoid") or it.get("ridge"):     # one side only: the craniotomy is on the right
                 check(c["R"][0] > 0, f"{it['id']}: not on the right {c}")
             elif it.get("category") in ("tumour", "guide"):     # drawn on the right, or across the midline
                 check(c["R"][0] > -5, f"{it['id']}: not on the right {c}")
@@ -1475,6 +1492,7 @@ def validate() -> int:
     for aid in ("pterional", "orbitozygomatic"):    # the anterior clinoidectomy's piece: there, and the size of a clinoid process
         a_ = aps.get(aid, {})
         check(a_.get("clinoid") is not None and 0.05 <= a_.get("clinoidMl", 0) <= 2.0, f"{aid}: the clinoid process's piece {a_.get('clinoidMl')} ml")
+        check(a_.get("ridge") is not None and 0.2 <= a_.get("ridgeMl", 0) <= 6.0, f"{aid}: the drilled ridge's piece {a_.get('ridgeMl')} ml")
     for nerve, sides in fit["nerves"].items():
         for s, r in sides.items():
             check(r["boneCrossedMm"] <= 2.0, f"{nerve} {s}: crosses {r['boneCrossedMm']} mm of bone")

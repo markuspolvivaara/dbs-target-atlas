@@ -267,8 +267,9 @@ export const APPROACHES: ApproachContent[] = [
     context: CONTEXT,
     notShown: NOT_SHOWN,
     focus: ['Middle cerebral artery (M2 segment)'],
-    morphs: ['open', 'lift', 'clinoid'],
-    opened: ['open', 'lift'],      // (the anterior clinoidectomy is a switch, off until the reader turns it on)
+    morphs: ['open', 'lift', 'ridge', 'clinoid'],
+    // (the ridge opens drilled; the anterior clinoidectomy is a switch, off until the reader turns it on)
+    opened: ['open', 'lift', 'ridge'],
   },
   {
     id: 'lso', view: 'lso', name: 'Lateral supraorbital approach', camera: 'supraorbital',
@@ -418,8 +419,9 @@ export const APPROACHES: ApproachContent[] = [
     context: CONTEXT,
     notShown: 'The orbital piece’s and the arch’s extents are drawn by rule on this skull (illustrative). The temporalis and masseter muscles, the periorbita and the orbit’s contents, and the facial nerve’s frontal branch are not modelled. ' + NOT_SHOWN,
     focus: ['Middle cerebral artery (M2 segment)'],
-    morphs: ['open', 'lift', 'clinoid'],
-    opened: ['open', 'lift'],      // (the anterior clinoidectomy is a switch, off until the reader turns it on)
+    morphs: ['open', 'lift', 'ridge', 'clinoid'],
+    // (the ridge opens drilled; the anterior clinoidectomy is a switch, off until the reader turns it on)
+    opened: ['open', 'lift', 'ridge'],
   },
   {
     id: 'far_lateral', view: 'far_lateral', name: 'Far lateral approach', camera: 'farLateralLow', hemi: 'R', brain: 'hindbrain',

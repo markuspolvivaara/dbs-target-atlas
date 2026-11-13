@@ -160,8 +160,13 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   removed two-thirds of the sphenoid wing (Yilmaz 2025): the ridge between the anterior and middle fossae as found on the
   skull, to two-thirds of the way from the pterion to the anterior clinoid process's tip; on this CT the bone removed
   ends 17 mm from the process (before November 2026 the drilling followed a straight line that this CT's ridge does not
-  lie on, and the smoothed cut left the thin ridge standing: it ended 36 mm away). The pterional and orbitozygomatic
-  views have an anterior clinoidectomy switch (key A, `ac=` in the link, off by default): the clinoid process is a piece
+  lie on, and the smoothed cut left the thin ridge standing: it ended 36 mm away). Over the first half of that, the
+  opening's edge where the ridge starts is taken back towards the cavity (the sphenoid, frontal and temporal bone within
+  6 mm of both the opening and the cavity and 14 mm of the line, keeping 1.5 mm of bone over the orbit; illustrative):
+  the thick base of the sphenoid wing by the pterion and the residual temporal squama that basal drilling takes
+  (Yilmaz 2025). The drilled bone is a piece of its own, and a switch "Sphenoid ridge drilled"
+  (key D, on as the view opens, `sr=0` in the link when off) draws it back, the ridge intact. The pterional and
+  orbitozygomatic views also have an anterior clinoidectomy switch (key A, `ac=` in the link, off by default): the clinoid process is a piece
   of its own (the rest of the ridge from where the drilling stops to the tip, and the bone within 5 mm of the tip as
   found on this CT; 0.2 ml), drawn as bone until the switch takes it (Auricchio 2024, Sevgi 2026, Sulaimanov 2025,
   Aladdam 2026); the optic canal's roof and the optic strut, drilled in practice to free it, are not drawn taken. The

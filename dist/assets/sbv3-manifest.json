@@ -7316,7 +7316,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__frontal_bone.glb",
-   "bytes": 538344,
+   "bytes": 538788,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -7324,14 +7324,14 @@
    "derivation": "The CT's frontal bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -24.01,
+     -24.0,
      32.57,
-     42.01
+     42.02
     ],
     "R": [
-     24.09,
-     36.36,
-     40.46
+     23.99,
+     36.46,
+     40.32
     ]
    }
   },
@@ -7361,7 +7361,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__parietal_bone.glb",
-   "bytes": 575896,
+   "bytes": 584904,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -7374,9 +7374,9 @@
      53.71
     ],
     "R": [
-     39.85,
-     -44.73,
-     59.56
+     40.64,
+     -45.13,
+     58.73
     ]
    }
   },
@@ -7406,7 +7406,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__sphenoid_bone.glb",
-   "bytes": 426268,
+   "bytes": 427088,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -7419,9 +7419,9 @@
      -5.77
     ],
     "R": [
-     20.19,
-     9.23,
-     -4.49
+     20.08,
+     9.31,
+     -4.65
     ]
    }
   },
@@ -7451,7 +7451,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__temporal_bone.glb",
-   "bytes": 713856,
+   "bytes": 717248,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -7464,9 +7464,54 @@
      -12.6
     ],
     "R": [
-     47.2,
-     -22.76,
-     -16.93
+     47.43,
+     -22.78,
+     -16.62
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_pterional__zygomatic_bone",
+   "name": "Zygomatic bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_pterional__zygomatic_bone.glb",
+   "bytes": 105084,
+   "refIds": [],
+   "category": "bone",
+   "approach": "pterional",
+   "replaces": "sb_zygomatic_bone",
+   "derivation": "The CT's zygomatic bone, which the pterional (frontotemporal) craniotomy does not cut, remeshed within a few millimetres of the cut so that it meets the cut bone on one surface (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -42.19,
+     23.06,
+     -6.5
+    ],
+    "R": [
+     44.62,
+     28.8,
+     -7.52
     ]
    }
   },
@@ -7476,7 +7521,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_pterional__removed.glb",
-   "bytes": 243404,
+   "bytes": 243812,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -7491,17 +7536,17 @@
    "category": "removed",
    "approach": "pterional",
    "layer": "nuclei",
-   "derivation": "The bone the pterional (frontotemporal) craniotomy removes: 11.8 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; placed from the model's zygomatic process of the frontal bone, 6 mm up and 3 mm back, then onto the bone's surface: 11 mm from that landmark); a frontal hole near the superior orbital rim (Yilmaz 2025; placed 20 mm above, 10 mm lateral to and 8 mm behind the supraorbital notch, then onto the bone's surface: 29 mm from the notch, 28 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral two-thirds of the sphenoid ridge drilled, as in Yasargil's modification (Yilmaz 2025): the ridge between the anterior and middle fossae as found on this skull, and the bone within 6 mm of a line from the pterion towards the anterior clinoid process, each to two-thirds of the way from the pterion to the process's tip (31 of 47 mm); as cut, the bone removed ends 17 mm from the process (Yilmaz 2025 limits this resection at the meningo-orbital artery, at the superior orbital fissure's superolateral corner, which the model does not show). With the anterior clinoidectomy switched on, the anterior clinoid process is taken too (0.2 ml, drawn by rule): the rest of the ridge between the fossae, from where the drilling stops to the process's tip, and the bone within 5 mm of the tip as found on this CT; the optic canal's roof and the optic strut, which are drilled to free it, are not drawn taken. The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone (which stays), leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (46, 39, 30) mm, (36, 54, 52) mm, (62, -7, -1) mm, (66, -10, 40) mm.",
+   "derivation": "The bone the pterional (frontotemporal) craniotomy removes: 12.8 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; placed from the model's zygomatic process of the frontal bone, 6 mm up and 3 mm back, then onto the bone's surface: 11 mm from that landmark); a frontal hole near the superior orbital rim (Yilmaz 2025; placed 20 mm above, 10 mm lateral to and 8 mm behind the supraorbital notch, then onto the bone's surface: 29 mm from the notch, 28 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral two-thirds of the sphenoid ridge drilled, as in Yasargil's modification (Yilmaz 2025): the ridge between the anterior and middle fossae as found on this skull, and the bone within 6 mm of a line from the pterion towards the anterior clinoid process, each to two-thirds of the way from the pterion to the process's tip (31 of 47 mm); and, over the first half of that, the opening's edge where the ridge starts taken back towards the cavity, as the basal drilling takes the residual sphenoid wing and temporal squama (Yilmaz 2025; here the sphenoid, frontal and temporal bone within 6 mm of both the opening and the cavity and 14 mm of the line, illustrative, keeping 1.5 mm of bone over the orbit). As cut, the bone removed ends 17 mm from the process (Yilmaz 2025 limits this resection at the meningo-orbital artery, at the superior orbital fissure's superolateral corner, which the model does not show). The drilled bone is a piece of its own: with the switch for the ridge off it is drawn back, the ridge intact (1.2 ml). With the anterior clinoidectomy switched on, the anterior clinoid process is taken too (0.2 ml, drawn by rule): the rest of the ridge between the fossae, from where the drilling stops to the process's tip, and the bone within 5 mm of the tip as found on this CT; the optic canal's roof and the optic strut, which are drilled to free it, are not drawn taken. The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone (which stays), leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (46, 39, 30) mm, (36, 54, 52) mm, (62, -7, -1) mm, (66, -10, 40) mm.",
    "centroid": {
     "L": [
-     54.67,
-     14.0,
-     31.23
+     53.83,
+     14.93,
+     30.35
     ],
     "R": [
-     54.67,
-     14.0,
-     31.23
+     53.83,
+     14.93,
+     30.35
     ]
    }
   },
@@ -7547,6 +7592,51 @@
      16.19,
      7.5,
      10.72
+    ]
+   }
+  },
+  {
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_pterional__ridge",
+   "name": "Sphenoid ridge (drilled)",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_pterional__ridge.glb",
+   "bytes": 65252,
+   "refIds": [],
+   "category": "bone",
+   "approach": "pterional",
+   "ridge": true,
+   "derivation": "The bone the pterional (frontotemporal) craniotomy's drilling of the lateral sphenoid ridge takes, as a piece of its own (1.2 ml): drawn as the bone removed, or as bone with the view's switch for the ridge off. The ridge between the anterior and middle fossae and the bone round the line from the pterion towards the anterior clinoid process, to two-thirds of the way, and the opening's edge where the ridge starts, drawn by rule (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     47.81,
+     13.94,
+     18.46
+    ],
+    "R": [
+     47.81,
+     13.94,
+     18.46
     ]
    }
   },
@@ -8076,7 +8166,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__frontal_bone.glb",
-   "bytes": 486156,
+   "bytes": 486480,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -8089,8 +8179,8 @@
      42.02
     ],
     "R": [
-     20.32,
-     37.29,
+     20.3,
+     37.3,
      43.45
     ]
    }
@@ -8166,7 +8256,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__parietal_bone.glb",
-   "bytes": 576052,
+   "bytes": 584684,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -8179,9 +8269,9 @@
      53.71
     ],
     "R": [
-     39.81,
-     -44.95,
-     59.67
+     40.62,
+     -45.11,
+     58.76
     ]
    }
   },
@@ -8211,7 +8301,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__sphenoid_bone.glb",
-   "bytes": 427284,
+   "bytes": 426972,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -8224,9 +8314,9 @@
      -5.77
     ],
     "R": [
-     20.2,
-     9.32,
-     -5.06
+     20.15,
+     9.34,
+     -5.11
     ]
    }
   },
@@ -8256,7 +8346,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__temporal_bone.glb",
-   "bytes": 715440,
+   "bytes": 719040,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -8269,9 +8359,9 @@
      -12.6
     ],
     "R": [
-     46.99,
+     47.21,
      -23.02,
-     -16.88
+     -16.6
     ]
    }
   },
@@ -8301,7 +8391,7 @@
    "name": "Zygomatic bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__zygomatic_bone.glb",
-   "bytes": 74528,
+   "bytes": 74476,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -8314,9 +8404,9 @@
      -6.5
     ],
     "R": [
-     37.13,
-     27.23,
-     -16.35
+     37.11,
+     27.24,
+     -16.63
     ]
    }
   },
@@ -8326,7 +8416,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__removed.glb",
-   "bytes": 254780,
+   "bytes": 254748,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -8341,17 +8431,17 @@
    "category": "removed",
    "approach": "orbitozygomatic",
    "layer": "nuclei",
-   "derivation": "The bone the orbitozygomatic craniotomy removes: 19.2 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; placed from the model's zygomatic process of the frontal bone, 6 mm up and 3 mm back, then onto the bone's surface: 11 mm from that landmark); a frontal hole near the superior orbital rim (Yilmaz 2025; placed 20 mm above, 10 mm lateral to and 8 mm behind the supraorbital notch, then onto the bone's surface: 29 mm from the notch, 28 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral two-thirds of the sphenoid ridge drilled, as in Yasargil's modification (Yilmaz 2025): the ridge between the anterior and middle fossae as found on this skull, and the bone within 6 mm of a line from the pterion towards the anterior clinoid process, each to two-thirds of the way from the pterion to the process's tip (31 of 47 mm); as cut, the bone removed ends 17 mm from the process (Yilmaz 2025 limits this resection at the meningo-orbital artery, at the superior orbital fissure's superolateral corner, which the model does not show). With the anterior clinoidectomy switched on, the anterior clinoid process is taken too (0.2 ml, drawn by rule): the rest of the ridge between the fossae, from where the drilling stops to the process's tip, and the bone within 5 mm of the tip as found on this CT; the optic canal's roof and the optic strut, which are drilled to free it, are not drawn taken. The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone, leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (46, 39, 30) mm, (36, 54, 52) mm, (62, -7, -1) mm, (66, -10, 40) mm. Then the orbitozygomatic piece (the two-piece craniotomy, Yilmaz 2025): the superolateral orbital rim from 4 mm lateral to the supraorbital notch to 5 mm lateral to the frontozygomatic suture (the model's zygomatic process of the frontal bone), with the orbital roof 25 mm back from the rim (illustrative), the zygoma's frontal process and its body down to 5 mm below the arch's level (Yilmaz 2025: the cut from the zygomatic body to the inferior orbital fissure about 1 cm below its frontal and temporal processes; its medial part with the infraorbital rim, medial of x = 33 mm, kept; illustrative), and the zygomatic arch from 8 mm in front of the zygomatic bone's back end back to its root in front of the articular tubercle (y = 0 mm here; illustrative).",
+   "derivation": "The bone the orbitozygomatic craniotomy removes: 19.8 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; placed from the model's zygomatic process of the frontal bone, 6 mm up and 3 mm back, then onto the bone's surface: 11 mm from that landmark); a frontal hole near the superior orbital rim (Yilmaz 2025; placed 20 mm above, 10 mm lateral to and 8 mm behind the supraorbital notch, then onto the bone's surface: 29 mm from the notch, 28 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral two-thirds of the sphenoid ridge drilled, as in Yasargil's modification (Yilmaz 2025): the ridge between the anterior and middle fossae as found on this skull, and the bone within 6 mm of a line from the pterion towards the anterior clinoid process, each to two-thirds of the way from the pterion to the process's tip (31 of 47 mm); and, over the first half of that, the opening's edge where the ridge starts taken back towards the cavity, as the basal drilling takes the residual sphenoid wing and temporal squama (Yilmaz 2025; here the sphenoid, frontal and temporal bone within 6 mm of both the opening and the cavity and 14 mm of the line, illustrative, keeping 1.5 mm of bone over the orbit). As cut, the bone removed ends 17 mm from the process (Yilmaz 2025 limits this resection at the meningo-orbital artery, at the superior orbital fissure's superolateral corner, which the model does not show). The drilled bone is a piece of its own: with the switch for the ridge off it is drawn back, the ridge intact (0.6 ml). With the anterior clinoidectomy switched on, the anterior clinoid process is taken too (0.2 ml, drawn by rule): the rest of the ridge between the fossae, from where the drilling stops to the process's tip, and the bone within 5 mm of the tip as found on this CT; the optic canal's roof and the optic strut, which are drilled to free it, are not drawn taken. The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone, leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (46, 39, 30) mm, (36, 54, 52) mm, (62, -7, -1) mm, (66, -10, 40) mm. Then the orbitozygomatic piece (the two-piece craniotomy, Yilmaz 2025): the superolateral orbital rim from 4 mm lateral to the supraorbital notch to 5 mm lateral to the frontozygomatic suture (the model's zygomatic process of the frontal bone), with the orbital roof 25 mm back from the rim (illustrative), the zygoma's frontal process and its body down to 5 mm below the arch's level (Yilmaz 2025: the cut from the zygomatic body to the inferior orbital fissure about 1 cm below its frontal and temporal processes; its medial part with the infraorbital rim, medial of x = 33 mm, kept; illustrative), and the zygomatic arch from 8 mm in front of the zygomatic bone's back end back to its root in front of the articular tubercle (y = 0 mm here; illustrative).",
    "centroid": {
     "L": [
-     47.74,
-     20.85,
-     19.98
+     47.68,
+     20.83,
+     19.81
     ],
     "R": [
-     47.74,
-     20.85,
-     19.98
+     47.68,
+     20.83,
+     19.81
     ]
    }
   },
@@ -8397,6 +8487,51 @@
      16.19,
      7.5,
      10.72
+    ]
+   }
+  },
+  {
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_orbitozygomatic__ridge",
+   "name": "Sphenoid ridge (drilled)",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__ridge.glb",
+   "bytes": 48372,
+   "refIds": [],
+   "category": "bone",
+   "approach": "orbitozygomatic",
+   "ridge": true,
+   "derivation": "The bone the orbitozygomatic craniotomy's drilling of the lateral sphenoid ridge takes, as a piece of its own (0.6 ml): drawn as the bone removed, or as bone with the view's switch for the ridge off. The ridge between the anterior and middle fossae and the bone round the line from the pterion towards the anterior clinoid process, to two-thirds of the way, and the opening's edge where the ridge starts, drawn by rule (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     51.25,
+     10.99,
+     18.15
+    ],
+    "R": [
+     51.25,
+     10.99,
+     18.15
     ]
    }
   },

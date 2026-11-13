@@ -666,7 +666,7 @@ test('surgical views open opened; from one tumour to another of the same view th
 
 // AP-04 (the owner's decision of 13 November 2026): the pterional drills the classic two-thirds of the sphenoid ridge, and
 // the pterional and orbitozygomatic views have an anterior clinoidectomy switch, off by default
-test('pterional: the anterior clinoidectomy switch takes the clinoid process, by key and by link', async ({ page }) => {
+test('pterional: the anterior clinoidectomy and sphenoid ridge switches, by key and by link', async ({ page }) => {
   const g = guard(page);
   const hash = () => decodeURIComponent(new URL(page.url()).hash);
   await open(page, './skullbase/#/atlas?g=transsylvian');
@@ -691,6 +691,23 @@ test('pterional: the anterior clinoidectomy switch takes the clinoid process, by
   await settle(page);
   await expect.poll(hash).not.toContain('ac=');
   expect(await opaque()).toBe(1);
+  // the sphenoid ridge opens drilled (its piece see-through); the key puts it back, intact, and the link says so
+  const ridge = page.locator('#sb-m-ridge');
+  await expect(ridge).toBeChecked();
+  const ridgeOpacity = () => page.evaluate(() => {
+    let o = -1;
+    (window as unknown as { __atlas: { viewer: { scene: { traverse: (f: (x: { userData?: { id?: string }; material?: { opacity?: number; transparent?: boolean }; visible: boolean }) => void) => void } } } }).__atlas.viewer.scene
+      .traverse((x) => { if (x.userData?.id === 'sb_appr_pterional__ridge' && x.material && x.visible) o = x.material.transparent ? x.material.opacity ?? 1 : 1; });
+    return o;
+  });
+  expect(await ridgeOpacity()).toBeLessThan(1);
+  // (the page's keys are not taken while a form field has the focus, as the checkbox just used has)
+  await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+  await page.keyboard.press('d');
+  await settle(page);
+  await expect.poll(hash).toContain('sr=0');
+  await expect(ridge).not.toBeChecked();
+  expect(await ridgeOpacity()).toBe(1);
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });

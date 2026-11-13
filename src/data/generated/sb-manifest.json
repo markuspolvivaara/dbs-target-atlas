@@ -7909,7 +7909,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_pterional__frontal_bone.glb",
-   "bytes": 155728,
+   "bytes": 155936,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -7922,8 +7922,8 @@
      39.9
     ],
     "R": [
-     34.29,
-     39.83,
+     34.21,
+     39.87,
      36.91
     ]
    }
@@ -7987,7 +7987,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_pterional__sphenoid_bone.glb",
-   "bytes": 151320,
+   "bytes": 150492,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -7995,14 +7995,14 @@
    "derivation": "Z-Anatomy's sphenoid bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -21.86,
+     -21.88,
      11.56,
-     -4.6
+     -4.61
     ],
     "R": [
-     23.46,
-     15.03,
-     0.64
+     23.18,
+     14.93,
+     0.36
     ]
    }
   },
@@ -8051,7 +8051,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_appr_pterional__removed.glb",
-   "bytes": 245492,
+   "bytes": 245032,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -8066,17 +8066,17 @@
    "category": "removed",
    "approach": "pterional",
    "layer": "nuclei",
-   "derivation": "The bone the pterional (frontotemporal) craniotomy removes: 18.1 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; placed from the model's zygomatic process of the frontal bone, 6 mm up and 3 mm back, then onto the bone's surface: 6 mm from that landmark); a frontal hole near the superior orbital rim (Yilmaz 2025; placed 20 mm above, 10 mm lateral to and 8 mm behind the supraorbital notch, then onto the bone's surface: 23 mm from the notch, 20 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral two-thirds of the sphenoid ridge drilled, as in Yasargil's modification (Yilmaz 2025): the ridge between the anterior and middle fossae as found on this skull, and the bone within 6 mm of a line from the pterion towards the anterior clinoid process, each to two-thirds of the way from the pterion to the process's tip (31 of 47 mm); as cut, the bone removed ends 11 mm from the process (Yilmaz 2025 limits this resection at the meningo-orbital artery, at the superior orbital fissure's superolateral corner, which the model does not show). With the anterior clinoidectomy switched on, the anterior clinoid process is taken too (0.6 ml, drawn by rule): the rest of the ridge between the fossae, from where the drilling stops to the process's tip, and the bone within 5 mm of the tip; the optic canal's roof and the optic strut, which are drilled to free it, are not drawn taken. The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone (which stays), leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (49, 51, 26) mm, (40, 60, 41) mm, (58, -7, -2) mm, (69, -10, 46) mm.",
+   "derivation": "The bone the pterional (frontotemporal) craniotomy removes: 18.2 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; placed from the model's zygomatic process of the frontal bone, 6 mm up and 3 mm back, then onto the bone's surface: 6 mm from that landmark); a frontal hole near the superior orbital rim (Yilmaz 2025; placed 20 mm above, 10 mm lateral to and 8 mm behind the supraorbital notch, then onto the bone's surface: 23 mm from the notch, 20 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral two-thirds of the sphenoid ridge drilled, as in Yasargil's modification (Yilmaz 2025): the ridge between the anterior and middle fossae as found on this skull, and the bone within 6 mm of a line from the pterion towards the anterior clinoid process, each to two-thirds of the way from the pterion to the process's tip (31 of 47 mm); and, over the first half of that, the opening's edge where the ridge starts taken back towards the cavity, as the basal drilling takes the residual sphenoid wing and temporal squama (Yilmaz 2025; here the sphenoid, frontal and temporal bone within 6 mm of both the opening and the cavity and 14 mm of the line, illustrative, keeping 1.5 mm of bone over the orbit). As cut, the bone removed ends 11 mm from the process (Yilmaz 2025 limits this resection at the meningo-orbital artery, at the superior orbital fissure's superolateral corner, which the model does not show). The drilled bone is a piece of its own: with the switch for the ridge off it is drawn back, the ridge intact (0.6 ml). With the anterior clinoidectomy switched on, the anterior clinoid process is taken too (0.6 ml, drawn by rule): the rest of the ridge between the fossae, from where the drilling stops to the process's tip, and the bone within 5 mm of the tip; the optic canal's roof and the optic strut, which are drilled to free it, are not drawn taken. The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone (which stays), leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (49, 51, 26) mm, (40, 60, 41) mm, (58, -7, -2) mm, (69, -10, 46) mm.",
    "centroid": {
     "L": [
-     51.54,
-     20.21,
-     27.95
+     51.5,
+     20.26,
+     27.96
     ],
     "R": [
-     51.54,
-     20.21,
-     27.95
+     51.5,
+     20.26,
+     27.96
     ]
    }
   },
@@ -8116,6 +8116,45 @@
      36.47,
      -14.94,
      5.9
+    ]
+   }
+  },
+  {
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_pterional__ridge",
+   "name": "Sphenoid ridge (drilled)",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_pterional__ridge.glb",
+   "bytes": 37816,
+   "refIds": [],
+   "category": "bone",
+   "approach": "pterional",
+   "ridge": true,
+   "derivation": "The bone the pterional (frontotemporal) craniotomy's drilling of the lateral sphenoid ridge takes, as a piece of its own (0.6 ml): drawn as the bone removed, or as bone with the view's switch for the ridge off. The ridge between the anterior and middle fossae and the bone round the line from the pterion towards the anterior clinoid process, to two-thirds of the way, and the opening's edge where the ridge starts, drawn by rule (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     39.8,
+     15.11,
+     19.52
+    ],
+    "R": [
+     39.8,
+     15.11,
+     19.52
     ]
    }
   },
@@ -8591,7 +8630,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_orbitozygomatic__frontal_bone.glb",
-   "bytes": 146204,
+   "bytes": 146232,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -8604,9 +8643,9 @@
      39.9
     ],
     "R": [
-     31.35,
-     41.01,
-     39.78
+     31.33,
+     41.1,
+     39.97
     ]
    }
   },
@@ -8708,7 +8747,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_orbitozygomatic__sphenoid_bone.glb",
-   "bytes": 154844,
+   "bytes": 153968,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -8716,14 +8755,14 @@
    "derivation": "Z-Anatomy's sphenoid bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -21.87,
+     -21.88,
      11.56,
-     -4.6
+     -4.61
     ],
     "R": [
-     23.57,
-     15.43,
-     -0.21
+     23.33,
+     15.35,
+     -0.49
     ]
    }
   },
@@ -8811,7 +8850,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_appr_orbitozygomatic__removed.glb",
-   "bytes": 252460,
+   "bytes": 252304,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -8826,17 +8865,17 @@
    "category": "removed",
    "approach": "orbitozygomatic",
    "layer": "nuclei",
-   "derivation": "The bone the orbitozygomatic craniotomy removes: 30.4 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; placed from the model's zygomatic process of the frontal bone, 6 mm up and 3 mm back, then onto the bone's surface: 6 mm from that landmark); a frontal hole near the superior orbital rim (Yilmaz 2025; placed 20 mm above, 10 mm lateral to and 8 mm behind the supraorbital notch, then onto the bone's surface: 23 mm from the notch, 20 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral two-thirds of the sphenoid ridge drilled, as in Yasargil's modification (Yilmaz 2025): the ridge between the anterior and middle fossae as found on this skull, and the bone within 6 mm of a line from the pterion towards the anterior clinoid process, each to two-thirds of the way from the pterion to the process's tip (31 of 47 mm); as cut, the bone removed ends 11 mm from the process (Yilmaz 2025 limits this resection at the meningo-orbital artery, at the superior orbital fissure's superolateral corner, which the model does not show). With the anterior clinoidectomy switched on, the anterior clinoid process is taken too (0.6 ml, drawn by rule): the rest of the ridge between the fossae, from where the drilling stops to the process's tip, and the bone within 5 mm of the tip; the optic canal's roof and the optic strut, which are drilled to free it, are not drawn taken. The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone, leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (49, 51, 26) mm, (40, 60, 41) mm, (58, -7, -2) mm, (69, -10, 46) mm. Then the orbitozygomatic piece (the two-piece craniotomy, Yilmaz 2025): the superolateral orbital rim from 4 mm lateral to the supraorbital notch to 5 mm lateral to the frontozygomatic suture (the model's zygomatic process of the frontal bone), with the orbital roof 25 mm back from the rim (illustrative), the zygoma's frontal process and its body down to 5 mm below the arch's level (Yilmaz 2025: the cut from the zygomatic body to the inferior orbital fissure about 1 cm below its frontal and temporal processes; its medial part with the infraorbital rim, medial of x = 33 mm, kept; illustrative), and the zygomatic arch from 8 mm in front of the zygomatic bone's back end back to its root in front of the articular tubercle (y = 0 mm here; illustrative).",
+   "derivation": "The bone the orbitozygomatic craniotomy removes: 30.4 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; placed from the model's zygomatic process of the frontal bone, 6 mm up and 3 mm back, then onto the bone's surface: 6 mm from that landmark); a frontal hole near the superior orbital rim (Yilmaz 2025; placed 20 mm above, 10 mm lateral to and 8 mm behind the supraorbital notch, then onto the bone's surface: 23 mm from the notch, 20 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral two-thirds of the sphenoid ridge drilled, as in Yasargil's modification (Yilmaz 2025): the ridge between the anterior and middle fossae as found on this skull, and the bone within 6 mm of a line from the pterion towards the anterior clinoid process, each to two-thirds of the way from the pterion to the process's tip (31 of 47 mm); and, over the first half of that, the opening's edge where the ridge starts taken back towards the cavity, as the basal drilling takes the residual sphenoid wing and temporal squama (Yilmaz 2025; here the sphenoid, frontal and temporal bone within 6 mm of both the opening and the cavity and 14 mm of the line, illustrative, keeping 1.5 mm of bone over the orbit). As cut, the bone removed ends 11 mm from the process (Yilmaz 2025 limits this resection at the meningo-orbital artery, at the superior orbital fissure's superolateral corner, which the model does not show). The drilled bone is a piece of its own: with the switch for the ridge off it is drawn back, the ridge intact (0.5 ml). With the anterior clinoidectomy switched on, the anterior clinoid process is taken too (0.6 ml, drawn by rule): the rest of the ridge between the fossae, from where the drilling stops to the process's tip, and the bone within 5 mm of the tip; the optic canal's roof and the optic strut, which are drilled to free it, are not drawn taken. The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone, leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (49, 51, 26) mm, (40, 60, 41) mm, (58, -7, -2) mm, (69, -10, 46) mm. Then the orbitozygomatic piece (the two-piece craniotomy, Yilmaz 2025): the superolateral orbital rim from 4 mm lateral to the supraorbital notch to 5 mm lateral to the frontozygomatic suture (the model's zygomatic process of the frontal bone), with the orbital roof 25 mm back from the rim (illustrative), the zygoma's frontal process and its body down to 5 mm below the arch's level (Yilmaz 2025: the cut from the zygomatic body to the inferior orbital fissure about 1 cm below its frontal and temporal processes; its medial part with the infraorbital rim, medial of x = 33 mm, kept; illustrative), and the zygomatic arch from 8 mm in front of the zygomatic bone's back end back to its root in front of the articular tubercle (y = 0 mm here; illustrative).",
    "centroid": {
     "L": [
-     48.92,
-     26.1,
-     15.03
+     48.96,
+     26.14,
+     15.0
     ],
     "R": [
-     48.92,
-     26.1,
-     15.03
+     48.96,
+     26.14,
+     15.0
     ]
    }
   },
@@ -8876,6 +8915,45 @@
      36.47,
      -14.94,
      5.9
+    ]
+   }
+  },
+  {
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_orbitozygomatic__ridge",
+   "name": "Sphenoid ridge (drilled)",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_orbitozygomatic__ridge.glb",
+   "bytes": 33980,
+   "refIds": [],
+   "category": "bone",
+   "approach": "orbitozygomatic",
+   "ridge": true,
+   "derivation": "The bone the orbitozygomatic craniotomy's drilling of the lateral sphenoid ridge takes, as a piece of its own (0.5 ml): drawn as the bone removed, or as bone with the view's switch for the ridge off. The ridge between the anterior and middle fossae and the bone round the line from the pterion towards the anterior clinoid process, to two-thirds of the way, and the opening's edge where the ridge starts, drawn by rule (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     39.45,
+     13.45,
+     19.23
+    ],
+    "R": [
+     39.45,
+     13.45,
+     19.23
     ]
    }
   },

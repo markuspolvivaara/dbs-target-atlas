@@ -42,6 +42,12 @@ const SIDE_NAME = { R: 'right', L: 'left' } as const;
 /** the surgical views' shapes: slider label, key, and what full means on this model; a switch (toggle) is on or off: the
  * anterior clinoidectomy takes the view's own piece of the clinoid process (drawn as bone, or as bone removed) */
 const MORPH_UI: Record<string, { label: string; key: string; toggle?: boolean; note: (g?: SbGroup) => string | null }> = {
+  ridge: {
+    label: 'Sphenoid ridge drilled', key: 'd', toggle: true, note: (g) => {
+      const geom = g?.approach ? APPROACH_GEOM[g.approach] : undefined;
+      return geom?.ridgeMl ? `On (as the view opens), the lateral sphenoid ridge is drawn drilled: the ridge between the anterior and middle fossae to two-thirds of the way to the anterior clinoid process, and the opening’s edge where the ridge starts (${fmtMm(geom.ridgeMl)} ml on this model, drawn by rule). Off, that bone is drawn back, the ridge intact.` : null;
+    },
+  },
   clinoid: {
     label: 'Anterior clinoidectomy (extradural)', key: 'a', toggle: true, note: (g) => {
       const geom = g?.approach ? APPROACH_GEOM[g.approach] : undefined;
