@@ -291,6 +291,13 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   straight behind it removed up to 3 mm, the part meshed again). Each changed mesh is its
   own file (`<id>.joined.glb`, `<id>.cleared.glb`), its source's untouched; its card says what was drawn. Validation
   checks every junction closed and no artery inside the brainstem in any shape of the brain.
+- **How a surgical view opens**: with its shapes full on (the fissure opened and the frontal lobe lifted, the hemisphere
+  held off the falx, the tonsils drawn apart, the cerebellum drawn back), the anatomy its text describes; the sliders
+  take it back to the brain at rest. The pterional, orbitozygomatic, interhemispheric, retrosigmoid and far lateral views
+  look in from the direction that showed the most of the structures each view's text names (a search of 642 directions
+  round each opening in the site audit of November 2026, then chosen by eye; `Viewer.goPreset`); the telovelar view
+  keeps its own, and v1 its views' earlier ones. The tumours drawn in one view are framed alike, and going from one to
+  another leaves the camera and the sliders where the reader left them.
 - **Orbitozygomatic and far lateral views** (`pipeline/skullbase_v3_approach.py`; `skullbase_v3.py approaches` writes
   their items into the manifest without the rest of that step). The orbitozygomatic craniotomy is the pterional flap and a
   second piece, the superolateral orbital rim and roof and the zygomatic arch (Yilmaz 2025, Rodriguez Rubio 2019), over

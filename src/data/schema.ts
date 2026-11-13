@@ -32,9 +32,11 @@ export type Evidence = z.infer<typeof EvidenceSchema>;
  * petrous bone into the cerebellopontine angle; 'orbitozygomatic' from the side and in front but lower than
  * 'anterolateral', up under the frontal lobe; 'farLateral' from behind, the side and below, along the medulla to the front
  * of the foramen magnum; 'subtemporal' from the side and above, under the lifted temporal lobe onto the middle fossa floor
- * (skull-base section, surgical views).
+ * (skull-base section, surgical views). Skull base v3's surgical views have their own: 'pterional', 'orbitozygomaticFront',
+ * 'vertexFront', 'retrosigmoidLateral' and 'farLateralLow' (Viewer.goPreset).
  */
-export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon', 'lateral', 'medial', 'inferior', 'posterior', 'anterolateral', 'frontolateral', 'supraorbital', 'vertex', 'suboccipital', 'retrosigmoid', 'orbitozygomatic', 'farLateral', 'subtemporal', 'retrosigmoidLevel']);
+export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon', 'lateral', 'medial', 'inferior', 'posterior', 'anterolateral', 'frontolateral', 'supraorbital', 'vertex', 'suboccipital', 'retrosigmoid', 'orbitozygomatic', 'farLateral', 'subtemporal', 'retrosigmoidLevel',
+  'pterional', 'orbitozygomaticFront', 'vertexFront', 'retrosigmoidLateral', 'farLateralLow']);
 export type CameraPreset = z.infer<typeof CameraPresetSchema>;
 
 /** A rendered structure: nucleus, cortical area, tract or sweet-spot volume. */

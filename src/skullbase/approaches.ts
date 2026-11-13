@@ -220,7 +220,7 @@ const NOT_SHOWN = 'The scalp, temporalis muscle, dura and arachnoid; the Sylvian
 
 export const APPROACHES: ApproachContent[] = [
   {
-    id: 'pterional', view: 'transsylvian', name: 'Pterional transsylvian approach', camera: 'anterolateral',
+    id: 'pterional', view: 'transsylvian', name: 'Pterional transsylvian approach', camera: 'pterional',
     summary: 'The right pterional craniotomy cut out of this CT’s bone, and a template brain fitted into the skull. One slider opens its Sylvian fissure onto the insula and this patient’s middle cerebral artery; another lifts the frontal lobe off the orbital roof to look under it, at the carotid and the optic nerve.',
     sections: [sec('The craniotomy', [
       c('Four burr holes: the keyhole (McCarty) anterior to the superior temporal line and above the frontozygomatic suture; one in the frontal bone near the superior orbital rim, avoiding the frontal sinus, 3–4 cm from the first; one below the superior temporal line, near or just anterior to the coronal suture; and one in the temporal squama behind the sphenotemporal suture. Osteotomies join them.', 'yilmaz2025'),
@@ -276,7 +276,7 @@ export const APPROACHES: ApproachContent[] = [
     morphs: ['lsoLift', 'open'],
   },
   {
-    id: 'interhemispheric', view: 'interhemispheric', name: 'Interhemispheric transcallosal approach', camera: 'vertex', hemi: 'both',
+    id: 'interhemispheric', view: 'interhemispheric', name: 'Interhemispheric transcallosal approach', camera: 'vertexFront', hemi: 'both',
     summary: 'A right parasagittal craniotomy at the coronal suture cut out of this CT’s bone, over the same fitted brain. The slider holds the right hemisphere off the falx, opening the interhemispheric fissure down to the corpus callosum and this patient’s anterior cerebral arteries on it.',
     sections: [sec('The craniotomy', [
       c('In 80 patients with colloid cysts of the third ventricle, all through a right frontoparietal midline craniotomy and an anterior transcallosal transforaminal approach.', 'symss2014'),
@@ -343,7 +343,7 @@ export const APPROACHES: ApproachContent[] = [
     morphs: ['telovelar'],
   },
   {
-    id: 'retrosigmoid', view: 'retrosigmoid', name: 'Retrosigmoid approach', camera: 'retrosigmoid', hemi: 'R', brain: 'hindbrain',
+    id: 'retrosigmoid', view: 'retrosigmoid', name: 'Retrosigmoid approach', camera: 'retrosigmoidLateral', hemi: 'R', brain: 'hindbrain',
     summary: 'A right retrosigmoid craniotomy cut out of this CT’s bone against this patient’s own transverse and sigmoid sinuses, drawn larger than a keyhole to show the anatomy, with the cerebellum, brainstem and fourth ventricle of an anatomical model fitted into the posterior fossa. The slider draws the right cerebellar hemisphere back from the petrous bone, opening the cerebellopontine angle onto the trigeminal nerve, the facial and vestibulocochlear nerves at the internal acoustic meatus, the lower cranial nerves and the arteries among them.',
     sections: [sec('The craniotomy', [
       c('The keypoint is the point on the outer surface over the junction of the transverse sinus’ lower margin with the sigmoid sinus’ posterior margin. A straight vertical incision about 4 cm long runs 1.5 cm behind the posterior margin of the mastoid process; the burr hole (about 6 mm) is centred 12 mm above the top of the digastric groove, on a line perpendicular to the baseline, and the keypoint lies 3–4 mm anterosuperior to it. The oval bone flap measured 18–20 × 20–25 mm.', 'jian2021'),
@@ -379,7 +379,7 @@ export const APPROACHES: ApproachContent[] = [
     morphs: ['retrosigmoid'],
   },
   {
-    id: 'orbitozygomatic', view: 'orbitozygomatic', name: 'Orbitozygomatic approach', camera: 'orbitozygomatic',
+    id: 'orbitozygomatic', view: 'orbitozygomatic', name: 'Orbitozygomatic approach', camera: 'orbitozygomaticFront',
     summary: 'This model’s pterional craniotomy extended by an orbitozygomatic piece: the superolateral orbital rim with the orbital roof behind it, and the zygomatic arch, cut out of this CT’s bone, over the same fitted brain. The view looks up from lower down, under the frontal lobe; the sliders open the Sylvian fissure and lift the frontal lobe.',
     sections: [sec('The craniotomy', [
       c('An extension of the pterional craniotomy for anterior skull base and orbital lesions, reaching vascular and oncological lesions without adding morbidity; Hakuba described the orbitozygomatic infratemporal approach in 1986, Al-Mefty the cranio-orbitozygomatic approach after him.', 'yilmaz2025'),
@@ -399,7 +399,7 @@ export const APPROACHES: ApproachContent[] = [
     morphs: ['open', 'lift'],
   },
   {
-    id: 'far_lateral', view: 'far_lateral', name: 'Far lateral approach', camera: 'farLateral', hemi: 'R', brain: 'hindbrain',
+    id: 'far_lateral', view: 'far_lateral', name: 'Far lateral approach', camera: 'farLateralLow', hemi: 'R', brain: 'hindbrain',
     summary: 'A right far lateral (lateral suboccipital) craniectomy cut out of this CT’s bone down through the foramen magnum’s rim, the posterior third of the occipital condyle drilled, with the cerebellum, brainstem and fourth ventricle of the fitted model: the view along the side of the medulla to the front of the foramen magnum, past the vertebral artery and the lower cranial nerves.',
     sections: [sec('The craniectomy', [
       c('A lateral suboccipital craniectomy and a hemilaminectomy of C1 (of C2 and C3 too when the lesion reaches lower); the transverse–sigmoid junction may be exposed. The posterior 30–40 % of the occipital condyle is drilled extradurally, widening the angle onto the ventral and ventrolateral craniovertebral junction.', 'pai2018'),
@@ -482,24 +482,25 @@ export const V1_ABSENT = new Set([
   'Internal cerebral veins', 'Trigeminal ganglion',
 ]);
 
-/** v1's own wording for a view; camera: its own view direction; hide: structures left out of that view; add: the model's
+/** v1's own wording for a view; camera: its own view direction (v1 keeps the presets its views opened with before v3's were
+ * chosen by eye: v3's openings and brain lie differently); hide: structures left out of that view; add: the model's
  * own structures added to it */
 export const V1_TEXT: Record<string, { summary: string; notShown: string; camera?: CameraPreset; hide?: string[]; add?: string[] }> = {
   pterional: { summary: 'The right pterional craniotomy cut out of Z-Anatomy’s skull, over Z-Anatomy’s own brain. One slider opens the Sylvian fissure onto the insula and the model’s middle cerebral artery; another lifts the frontal lobe off the orbital roof to look under it, at the carotid and the optic nerve.',
-    notShown: `The scalp, temporalis muscle, dura and arachnoid; the Sylvian veins. ${V1_BRAIN}` },
+    notShown: `The scalp, temporalis muscle, dura and arachnoid; the Sylvian veins. ${V1_BRAIN}`, camera: 'anterolateral' },
   lso: { summary: 'A right lateral supraorbital (LSO) craniotomy cut out of Z-Anatomy’s skull, over the same brain. The fissure lies at the craniotomy’s lower edge; the lift raises the frontal lobe off the lateral orbital roof.',
     notShown: `The scalp, dura and arachnoid; the Sylvian veins. The craniotomy’s outline is placed by rule; the opening as cut is measured beside the published mean under “How the craniotomy is drawn”. ${V1_BRAIN}` },
   interhemispheric: { summary: 'A right parasagittal craniotomy at the coronal suture cut out of Z-Anatomy’s skull, over its brain. The slider holds the right hemisphere off the falx, opening the interhemispheric fissure down to the corpus callosum.',
-    notShown: `The scalp, dura and arachnoid; the bridging veins. ${V1_BRAIN}` },
+    notShown: `The scalp, dura and arachnoid; the bridging veins. ${V1_BRAIN}`, camera: 'vertex' },
   suboccipital: { summary: 'A midline suboccipital craniotomy cut out of Z-Anatomy’s skull, with its cerebellum, brainstem and fourth ventricle. The slider draws the cerebellar tonsils apart and lifts the inferior vermis, opening the cerebellomedullary fissure.',
     notShown: `The skin, muscles, dura and arachnoid; the tela choroidea, inferior medullary velum and choroid plexus. ${V1_HIND}` },
   retrosigmoid: { summary: 'A right retrosigmoid craniotomy cut out of Z-Anatomy’s skull against its own transverse and sigmoid sinuses, drawn larger than a keyhole, with its cerebellum, brainstem and fourth ventricle. The slider draws the right cerebellar hemisphere back from the petrous bone, opening the cerebellopontine angle.',
     notShown: `The skin, muscles, dura and arachnoid (Z-Anatomy’s tentorium is shown, the rest of the dura not); the superior petrosal vein and the labyrinthine artery; the nervus intermedius. ${V1_HIND}`,
     camera: 'retrosigmoidLevel', add: ['Tentorium cerebelli'] },
   orbitozygomatic: { summary: 'The pterional craniotomy extended by an orbitozygomatic piece (the superolateral orbital rim and roof, the zygoma and its arch), cut out of Z-Anatomy’s skull, over the same brain, seen from lower down.',
-    notShown: `The orbital piece’s and the arch’s extents are drawn by rule on this skull. The temporalis and masseter muscles, the periorbita and the facial nerve’s frontal branch. ${V1_BRAIN}` },
+    notShown: `The orbital piece’s and the arch’s extents are drawn by rule on this skull. The temporalis and masseter muscles, the periorbita and the facial nerve’s frontal branch. ${V1_BRAIN}`, camera: 'orbitozygomatic' },
   far_lateral: { summary: 'A right far lateral (lateral suboccipital) craniectomy cut out of Z-Anatomy’s skull down through the foramen magnum, the posterior third of the occipital condyle drilled, with its cerebellum, brainstem and fourth ventricle.',
-    notShown: `The atlas and axis are not part of this model, so the hemilaminectomy of C1 is not shown. The craniectomy’s outline is placed by rule. The muscles, the dura and the arachnoid. ${V1_HIND}` },
+    notShown: `The atlas and axis are not part of this model, so the hemilaminectomy of C1 is not shown. The craniectomy’s outline is placed by rule. The muscles, the dura and the arachnoid. ${V1_HIND}`, camera: 'farLateral' },
   kawase: { summary: 'A right temporal flap flush with the middle fossa floor, cut out of Z-Anatomy’s skull, and the petrous apex drilled within the Kawase rhomboid down to the inferior petrosal sinus, kept off Z-Anatomy’s cochlea, labyrinth, carotid and nerves; the temporal lobe drawn held up.',
     notShown: `The dura: the middle fossa dura and its layers, the tentorium and the dura of the posterior fossa and the meatus are not modelled; the lesser petrosal nerve, the temporalis muscle and the optional zygomatic osteotomy are not drawn. Of the rhomboid’s landmarks the geniculate ganglion (at the facial nerve’s first genu), the greater petrosal nerve and the bone over the superior canal are drawn by rule on Z-Anatomy’s ear and nerves, which do not have them; the petrous apex, the cochlea, the vestibule and canals, V3 and the carotid are Z-Anatomy’s own; the trigeminal ganglion is part of its trigeminal nerve; the margins kept off them are drawing choices. The insula, which lies above and medial to the lifted temporal lobe under dura the model does not have, is left out of this view. ${V1_BRAIN}`,
     hide: ['Insula'] },

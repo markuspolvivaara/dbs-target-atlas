@@ -309,10 +309,14 @@ export class SkullbaseAtlasPage {
   }
 
   private pickGroup(id: string): void {
+    const from = SB_GROUP.get(this.s.grp), g = SB_GROUP.get(id)!;
+    // from one tumour to another drawn in the same view, the camera and the sliders stay as the reader left them (the
+    // tumours of a view are framed alike: groups.ts)
+    const keep = !!(from?.tumour && g.tumour && from.approach === g.approach);
     this.update((st) => {
-      const g = SB_GROUP.get(id)!;
-      st.grp = id; st.also = []; st.hemi = g.hemi; st.cutAbove = g.cutAbove; st.cam = { preset: null }; st.hidden = []; st.sel = null; st.morphs = { ...(g.morphDefault ?? {}) };
-    }, { camera: true });
+      st.grp = id; st.also = []; st.hemi = g.hemi; st.cutAbove = g.cutAbove; st.hidden = []; st.sel = null;
+      if (!keep) { st.cam = { preset: null }; st.morphs = { ...(g.morphDefault ?? {}) }; }
+    }, keep ? {} : { camera: true });
   }
 
   /** Systems combine: with a system shown, a tap adds another or removes one (the last one stays); from any other view

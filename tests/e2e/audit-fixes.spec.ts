@@ -613,3 +613,41 @@ test('loading: the drilling tool says when its bone could not be loaded, and Ret
   await expect(failed).toBeHidden();
   await expect(page.locator('.drill-out')).toContainText('Bone removed');
 });
+
+// AP-01 to AP-03 (the owner's decisions of 13 November 2026): a surgical view opens with its shapes full on, in the
+// direction chosen for it; going from one tumour to another drawn in the same view keeps the camera and the sliders
+test('surgical views open opened; from one tumour to another of the same view the camera and the sliders stay', async ({ page }) => {
+  const g = guard(page);
+  const hash = () => decodeURIComponent(new URL(page.url()).hash);
+  const cam = () => hash().match(/[?&]c=([^&]+)/)?.[1] ?? '';
+  await open(page, './skullbase/#/atlas?g=far_lateral');
+  await expect.poll(cam).toMatch(/^-?\d/);
+  // far lateral: steeper from below than before (the camera's direction from its target, in the CT's frame)
+  const [x, y, z, tx, ty, tz] = cam().split(',').map(Number);
+  const d = [x - tx, y - ty, z - tz], n = Math.hypot(...d);
+  expect(d[2] / n).toBeLessThan(-0.7);
+  await open(page, './skullbase/#/atlas?g=koos_i');
+  await expect.poll(cam).toMatch(/^-?\d/);
+  expect(hash()).toContain('rs=100');
+  const first = cam();
+  for (const v of ['koos_iii', 'koos_iv']) {
+    await page.locator(`.grade-chips .chip[data-v="${v}"]`).click();
+    await settle(page);
+    await expect.poll(hash).toContain(`g=${v}`);
+    expect(cam(), v).toBe(first);
+  }
+  // a slider moved by the reader stays too
+  await page.locator('#sb-m-retrosigmoid').evaluate((el: HTMLInputElement) => { el.value = '40'; el.dispatchEvent(new Event('input', { bubbles: true })); });
+  await settle(page);
+  await page.locator('.grade-chips .chip[data-v="koos_ii"]').click();
+  await settle(page);
+  await expect.poll(hash).toContain('g=koos_ii');
+  expect(hash()).toContain('rs=40');
+  expect(cam()).toBe(first);
+  // the petroclival meningioma, drawn in the same view, opens framed alike
+  await open(page, './skullbase/#/atlas?g=meningioma_petroclival');
+  await expect.poll(cam).toMatch(/^-?\d/);
+  expect(cam()).toBe(first);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

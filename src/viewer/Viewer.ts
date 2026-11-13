@@ -1090,6 +1090,21 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       // subtemporal: from the side and above, under the lifted temporal lobe down onto the middle fossa floor (Kawase)
       case 'subtemporal': dir = new THREE.Vector3(0.97 * sideSign, -0.08, 0.22); break;
       case 'farLateral': dir = new THREE.Vector3(0.5 * sideSign, -0.82, -0.28); break;
+      // Skull base v3's surgical views (v1 keeps the presets above): each the direction, near the opening's own axis,
+      // from which the default camera saw the most of the structures the view's text names, its shapes full on (a search
+      // of 642 directions in the site audit of November 2026, findings AP-01 to AP-03), chosen by eye from renders.
+      // pterional: lower than anterolateral, under the lifted frontal lobe to the carotid and the optic nerve
+      case 'pterional': dir = new THREE.Vector3(0.89 * sideSign, 0.39, 0.24); break;
+      // orbitozygomaticFront: more from in front than orbitozygomatic, past the removed orbital rim
+      case 'orbitozygomaticFront': dir = new THREE.Vector3(0.65 * sideSign, 0.70, 0.30); break;
+      // vertexFront: from above and a little in front, down the flap's axis (two thirds of it lie in front of the
+      // coronal suture) to the pericallosal arteries
+      case 'vertexFront': dir = new THREE.Vector3(0.13 * sideSign, 0.36, 0.92); break;
+      // retrosigmoidLateral: as retrosigmoid but more from the side, further into the cerebellopontine angle
+      case 'retrosigmoidLateral': dir = new THREE.Vector3(0.59 * sideSign, -0.69, -0.43); break;
+      // farLateralLow: steeper from below than farLateral, past the lifted tonsil to the vertebral artery and the lower
+      // cranial nerves on the side of the medulla
+      case 'farLateralLow': dir = new THREE.Vector3(0.35 * sideSign, -0.52, -0.78); break;
       case 'surgeon': {
         const side: Side = hemi === 'L' ? 'L' : 'R';
         const l = this.state!.lead;

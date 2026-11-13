@@ -666,7 +666,7 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     for (const id of ap.bones) { expect(p.looks.get(id), id).toBe('primary'); expect(p.looks.get(byId.get(id)!.replaces!), id).toBe('hidden'); }
     expect(p.looks.get(ap.removed)).toBe('ghost');
     for (const s of v3.structures.filter((x) => x.category === 'brain' && !x.pushedFrom)) expect(p.looks.get(s.id), s.id).toBe('primary');
-    expect(p.camera).toBe('anterolateral');
+    expect(p.camera).toBe('pterional');
     // (a tumour's view is drawn in its approach's view: there, that approach's own parts)
     for (const g of G3.SB_GROUPS.filter((x) => x.kind !== 'approach' && !(x.kind === 'tumour' && x.approach))) {
       const q = S3.skullPlan(g.id, null);
@@ -679,7 +679,7 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(ih.side).toBe('R');
     expect(ih.removedMl).toBeGreaterThan(4);
     const p = S3.skullPlan('interhemispheric', null);
-    expect(p.camera).toBe('vertex');
+    expect(p.camera).toBe('vertexFront');
     expect(G3.SB_GROUP.get('interhemispheric')!.hemi).toBe('both');
     for (const id of [...ih.bones]) expect(p.looks.get(id), id).toBe('primary');
     expect(p.looks.get(ih.removed)).toBe('ghost');
@@ -756,7 +756,7 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(rs.bones.map((id) => byId.get(id)!.name)).toEqual(expect.arrayContaining(['Occipital bone']));
     for (const p of rs.burrHoles) { expect(p[0]).toBeGreaterThan(30); expect(p[1]).toBeLessThan(-20); }   // behind the right ear
     const p = S3.skullPlan('retrosigmoid', null);
-    expect(p.camera).toBe('retrosigmoid');
+    expect(p.camera).toBe('retrosigmoidLateral');
     expect(G3.SB_GROUP.get('retrosigmoid')!.hemi).toBe('R');
     for (const id of [...rs.bones, rs.removed]) expect(p.looks.get(id), id).not.toBe('hidden');
     const aica = v3.structures.find((x) => x.name === 'Anterior inferior cerebellar artery')!;
@@ -813,6 +813,34 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     const l = T3.decodeSkull('#/atlas?g=lso&ll=80&lf=70&op=20');
     expect(l.morphs).toEqual({ lsoLift: 0.8, open: 0.2 });
     expect(T3.encodeSkull(l)).toContain('ll=80');
+  });
+  it('a surgical view opens with its shapes full on, and a link that closes one keeps it closed', () => {
+    const views = G3.SB_GROUPS.filter((g) => g.kind === 'approach' && g.morphs?.length);
+    expect(views.map((g) => g.id).sort()).toEqual(['interhemispheric', 'lso', 'orbitozygomatic', 'retrosigmoid', 'telovelar', 'transsylvian']);
+    for (const g of views) expect(T3.decodeSkull(`#/atlas?g=${g.id}`).morphs, g.id).toEqual(Object.fromEntries(g.morphs!.map((m) => [m, 1])));
+    const closed = T3.decodeSkull('#/atlas?g=transsylvian&op=0&lf=0');
+    expect(closed.morphs).toEqual({});
+    expect(T3.encodeSkull(closed)).toContain('op=0');
+    expect(T3.decodeSkull(T3.encodeSkull(closed)).morphs).toEqual({});
+  });
+  it('the cameras: v3\'s surgical views their own directions (the telovelar view its earlier one), the tumours of a view framed alike', () => {
+    const cam = Object.fromEntries(G3.SB_GROUPS.filter((g) => g.kind === 'approach').map((g) => [g.id, g.camera]));
+    expect(cam).toMatchObject({ transsylvian: 'pterional', orbitozygomatic: 'orbitozygomaticFront', interhemispheric: 'vertexFront',
+      retrosigmoid: 'retrosigmoidLateral', far_lateral: 'farLateralLow', telovelar: 'suboccipital' });
+    // v1 (this file's default model) keeps the directions its views opened with
+    expect(Object.fromEntries(SB_GROUPS.filter((g) => g.kind === 'approach').map((g) => [g.id, g.camera]))).toMatchObject({
+      transsylvian: 'anterolateral', orbitozygomatic: 'orbitozygomatic', interhemispheric: 'vertex', retrosigmoid: 'retrosigmoidLevel',
+      far_lateral: 'farLateral', telovelar: 'suboccipital' });
+    // every tumour drawn in one view is framed on the same structures, so that going from one to another keeps the camera
+    const tumours = G3.SB_GROUPS.filter((g) => g.tumour);
+    const byView = new Map<string, typeof tumours>();
+    for (const g of tumours) byView.set(g.approach ?? 'knosp', [...(byView.get(g.approach ?? 'knosp') ?? []), g]);
+    expect(byView.get('retrosigmoid')!.map((g) => g.id)).toEqual(expect.arrayContaining(['koos_i', 'koos_iv', 'meningioma_petroclival']));
+    for (const [view, gs] of byView) for (const g of gs) {
+      expect(g.focusIds, `${view}: ${g.id}`).toEqual(gs[0].focusIds);
+      expect(g.radius, `${view}: ${g.id}`).toBe(gs[0].radius);
+      expect(g.camera, `${view}: ${g.id}`).toBe(gs[0].camera);
+    }
   });
   it('sourced content: references exist and are used, context structures exist', async () => {
     const { TUMOURS } = await import('../../src/skullbase/tumours');
