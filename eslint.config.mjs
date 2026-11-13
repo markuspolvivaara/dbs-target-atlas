@@ -22,8 +22,11 @@ export default tseslint.config(
       '@typescript-eslint/no-misused-promises': 'error',
       'eqeqeq': 'warn',
       'no-console': ['warn', { allow: ['warn', 'error'] }],
+      // zod comes through src/zod.ts, which sets it to validate without `new Function` before any schema is made
+      'no-restricted-imports': ['error', { paths: [{ name: 'zod', message: "Import { z } from src/zod.ts (it sets zod's jitless mode first)." }] }],
     },
   },
+  { files: ['src/zod.ts'], rules: { 'no-restricted-imports': 'off' } },
   // tests read values out of the page as `any` (page.evaluate): the unsafe-any family says nothing useful there
   {
     files: ['tests/**'],

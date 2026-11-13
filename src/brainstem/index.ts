@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../zod';
 import bsDefinitions from '../data/generated/bs-definitions.json';
 import bsManifestJson from '../data/generated/bs-manifest.json';
 import bsZones from '../data/generated/bs-zones.json';
@@ -36,7 +36,7 @@ const ZoneGeomSchema = z.object({
   id: z.string(), name: z.string(), region: z.enum(['midbrain', 'pons', 'floor', 'medulla']), kind: z.enum(['line', 'area']),
   construction: z.string(), anchor: z.object({ L: V3, R: V3 }),
 });
-const ZonesFileSchema = z.object({ zones: z.array(ZoneGeomSchema), measured: z.record(z.unknown()) });
+const ZonesFileSchema = z.object({ zones: z.array(ZoneGeomSchema), measured: z.record(z.string(), z.unknown()) });
 const ZF = ZonesFileSchema.parse(bsZones);
 export const ZONE_GEOM = new Map(ZF.zones.map((g) => [g.id, g]));
 export const MEASURED = ZF.measured;
@@ -47,7 +47,7 @@ export const ZONE_TEXT = new Map(z.array(ZoneContentSchema).parse(ZONES).map((t)
 
 const DefinitionSchema = z.object({ text: z.string().min(1), url: z.string().url().nullable() });
 /** Wikipedia-derived definitions shipped in Z-Anatomy (CC BY-SA 3.0), by structure name. */
-export const DEFINITIONS = z.record(DefinitionSchema).parse(bsDefinitions);
+export const DEFINITIONS = z.record(z.string(), DefinitionSchema).parse(bsDefinitions);
 
 export type Kind = 'surface' | 'feature' | 'csf' | 'cnNucleus' | 'aan' | 'nerve' | 'artery' | 'sez' | 'dbs' | 'tract';
 export function kindOf(id: string): Kind {

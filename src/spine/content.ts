@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../zod';
 import levelsJson from '../data/generated/spine-levels.json';
 import { SP_MANIFEST } from './index';
 
@@ -45,19 +45,19 @@ const LEVELS = z.object({
    * measured at C1-C7 (the enclosed area, an underestimate; width and depth) */
   vertebralArtery: z.object({
     entry: z.object({ L: z.string(), R: z.string() }),
-    foramina: z.record(z.object({ L: TransverseForamen, R: TransverseForamen, medialGap: z.number().optional() })),
+    foramina: z.record(z.string(), z.object({ L: TransverseForamen, R: TransverseForamen, medialGap: z.number().optional() })),
     /** how thick (mm) the schematic artery is drawn in each foramen it passes: 4 mm, or less where the foramen as
      * drawn is narrower */
-    drawnDiameter: z.object({ L: z.record(z.number()), R: z.record(z.number()) }),
+    drawnDiameter: z.object({ L: z.record(z.string(), z.number()), R: z.record(z.string(), z.number()) }),
   }),
   /** the structures placed by rule against the bone as drawn: how deep (mm) each root's tube and ganglion (keys like
    * "T7L") and the vertebral artery still reach into it, and the scale each ganglion is drawn at */
   placed: z.object({
-    rootInBoneMm: z.record(z.object({ root: z.number(), ganglion: z.number() })),
-    ganglionScale: z.record(z.number()),
+    rootInBoneMm: z.record(z.string(), z.object({ root: z.number(), ganglion: z.number() })),
+    ganglionScale: z.record(z.string(), z.number()),
     vertebralArtery: z.object({
-      L: z.object({ inBoneMm: z.number(), ledRoundMm: z.number(), diameterAt: z.record(z.number()) }),
-      R: z.object({ inBoneMm: z.number(), ledRoundMm: z.number(), diameterAt: z.record(z.number()) }),
+      L: z.object({ inBoneMm: z.number(), ledRoundMm: z.number(), diameterAt: z.record(z.string(), z.number()) }),
+      R: z.object({ inBoneMm: z.number(), ledRoundMm: z.number(), diameterAt: z.record(z.string(), z.number()) }),
     }),
   }),
   /** the level each laryngeal landmark projects to on this CT */
@@ -76,7 +76,7 @@ const LEVELS = z.object({
     }),
     measurements: z.object({ adi: z.number(), padi: z.number(), mcrae: z.number(), densBelowMcRae: z.number(), bdi: z.number(), bai: z.number(), cca: z.number() }),
     /** each value's range with the plane moved up to 1 mm to either side */
-    range: z.record(z.tuple([z.number(), z.number()])),
+    range: z.record(z.string(), z.tuple([z.number(), z.number()])),
   }),
   /** each vertebra against the next, as drawn (pipeline/spine_build.py neighbours): the bone inside both surfaces, and
    * the vertices of one that lie more than 0.5 mm inside the other's bone. Neighbours share no bone. */

@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../zod';
 import dbsManifestJson from '../data/generated/manifest.json';
 import labelsJson from '../data/generated/ctx-labels.json';
 import manifestJson from '../data/generated/ctx-manifest.json';
@@ -56,13 +56,13 @@ export type FnGroupId = CtxFunction['group'];
 const FileSchema = z.object({
   labels: z.array(LabelSchema),
   functions: z.array(FunctionSchema),
-  references: z.record(z.object({ citation: z.string(), url: z.string().url() })),
+  references: z.record(z.string(), z.object({ citation: z.string(), url: z.string().url() })),
   lobes: z.array(z.object({ id: LobeId, name: z.string(), token: z.string(), definition: Definition.nullable(), labels: z.array(z.string()) })),
   method: z.object({
     faces: z.number(), inflateIterations: z.number(), inflateStep: z.number(), midlineGapMm: z.number(),
     operMarginMm: z.number(), operLateralMm: z.number(), hmatMaxDistMm: z.number(),
   }),
-  report: z.record(z.unknown()),
+  report: z.record(z.string(), z.unknown()),
 });
 const FILE = FileSchema.parse(labelsJson);
 export const LABELS = FILE.labels;

@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../zod';
 
 /** Brainstem section content. Every claim carries the references it was checked against. */
 

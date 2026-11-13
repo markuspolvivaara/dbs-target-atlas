@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from '../zod';
 import { IMAGING } from './imaging';
 import { INDICATIONS } from './indications';
 import { REFERENCES } from './references';

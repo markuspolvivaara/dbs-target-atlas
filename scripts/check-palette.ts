@@ -4,7 +4,7 @@
  *
  * CVD simulation: Machado, Oliveira & Fernandes 2009 (IEEE TVCG 15:1291),
  * severity 1.0 matrices, applied in linear RGB. Distance: CIEDE2000.
- * Run: npx vite-node scripts/check-palette.ts   (exit 1 on contrast failures)
+ * Run: npm run check:palette   (exit 1 on contrast failures)
  */
 import palette from '../src/data/palette.json';
 import { CONTENT, MAN, TGT } from '../src/data';
