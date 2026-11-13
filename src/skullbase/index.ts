@@ -1,19 +1,8 @@
 import { z } from '../zod';
-import zaDefinitions from '../data/generated/sb-definitions.json';
-import zaLandmarks from '../data/generated/sb-landmarks.json';
-import zaManifest from '../data/generated/sb-manifest.json';
-import zaRegions from '../data/generated/sb-regions.json';
-import ctDefinitions from '../data/generated/sbct-definitions.json';
-import ctLandmarks from '../data/generated/sbct-landmarks.json';
-import ctManifest from '../data/generated/sbct-manifest.json';
-import ctRegions from '../data/generated/sbct-regions.json';
 import v3Approaches from '../data/generated/sbv3-approaches.json';
 import zaApproaches from '../data/generated/sb-approaches.json';
 import zaV1Fit from '../data/generated/sb-v1fit.json';
-import v3Definitions from '../data/generated/sbv3-definitions.json';
 import v3Fit from '../data/generated/sbv3-fit.json';
-import v3Landmarks from '../data/generated/sbv3-landmarks.json';
-import v3Manifest from '../data/generated/sbv3-manifest.json';
 import { SbManifestSchema, type ManifestStructure } from '../data/schema';
 import { APPROACH, APPROACH_REF, V1_ABSENT, V1_NAMES } from './approaches';
 import { FORAMEN_CONTENTS, FORAMEN_REF, PASSAGES } from './foramina';
@@ -31,10 +20,14 @@ const META = typeof document !== 'undefined' ? document.querySelector<HTMLMetaEl
 export const SB_MODEL: SbModel = META === 'ct' || META === 'v3' ? META : 'zanatomy';
 const CT = SB_MODEL === 'ct';
 const V3M = SB_MODEL === 'v3';
-const manifestJson = V3M ? v3Manifest : CT ? ctManifest : zaManifest;
-const landmarksJson = V3M ? v3Landmarks : CT ? ctLandmarks : zaLandmarks;
-const definitionsJson = V3M ? v3Definitions : CT ? ctDefinitions : zaDefinitions;
-const regionsJson = V3M ? [] : CT ? ctRegions : zaRegions;
+// The page's own model's manifest, landmarks, definitions and regions: a chunk per model, so that a page does not
+// load (and validate) the other two models' (they were 60 to 77 % of the data in its script; the audit's P1-07). The
+// smaller files read across models (the fits, cavernous sinus, endonasal and tumour data) stay in the page's script.
+const PAGE_DATA = await (V3M ? import('./data-v3') : CT ? import('./data-ct') : import('./data-v1'));
+const manifestJson = PAGE_DATA.default.manifest;
+const landmarksJson = PAGE_DATA.default.landmarks;
+const definitionsJson = PAGE_DATA.default.definitions;
+const regionsJson = PAGE_DATA.default.regions;
 export const SB_MANIFEST = SbManifestSchema.parse(manifestJson);
 export const SB = new Map(SB_MANIFEST.structures.map((s) => [s.id, s]));
 
