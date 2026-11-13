@@ -156,9 +156,16 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   opening is measured on the bone removed as it is drawn (`skullbase_v3_approach.py`, `Removed`: the area seen face
   on, the volume, how near it comes to the anterior clinoid process or the sinuses), not taken from the outline or
   the rule's distances the cut was drawn with; `skullbase_v3_approach.py measure` writes the descriptions again
-  without cutting anew. On this CT the pterional's ridge drilling removes bone to 36 mm from the anterior clinoid
-  process, not to the 12 mm its rule aims at (the rule drills along a straight line from the pterion towards the
-  process; the cut itself is not changed yet). The right pterional craniotomy is
+  without cutting anew. The pterional drills the lateral two-thirds of the sphenoid ridge, as Yaşargil's modification
+  removed two-thirds of the sphenoid wing (Yilmaz 2025): the ridge between the anterior and middle fossae as found on the
+  skull, to two-thirds of the way from the pterion to the anterior clinoid process's tip; on this CT the bone removed
+  ends 17 mm from the process (before November 2026 the drilling followed a straight line that this CT's ridge does not
+  lie on, and the smoothed cut left the thin ridge standing: it ended 36 mm away). The pterional and orbitozygomatic
+  views have an anterior clinoidectomy switch (key A, `ac=` in the link, off by default): the clinoid process is a piece
+  of its own (the rest of the ridge from where the drilling stops to the tip, and the bone within 5 mm of the tip as
+  found on this CT; 0.2 ml), drawn as bone until the switch takes it (Auricchio 2024, Sevgi 2026, Sulaimanov 2025,
+  Aladdam 2026); the optic canal's roof and the optic strut, drilled in practice to free it, are not drawn taken. The
+  right pterional craniotomy is
   cut out of the CT's own bone (`pipeline/skullbase_v3_approach.py`: burr holes placed from the fitted landmarks as
   Yilmaz 2025 and Sevgi 2026 describe, the skull's thickness removed inside an oval drawn through them with its sides
   bowed out, behind the zygomatic bone, which stays; the corners where the cranial floor is kept are rounded over 2.5 mm

@@ -85,6 +85,9 @@ const ApproachGeomSchema = z.object({
   burrHoles: z.array(V3),
   /** outlines drawn on the bone in its view (the Kawase rhomboid) */
   guides: z.array(z.string()).optional(),
+  /** a view with an anterior clinoidectomy switch: the clinoid process's own piece (bone until the switch takes it), ml */
+  clinoid: z.string().optional(),
+  clinoidMl: z.number().positive().optional(),
   /** what this model measures for it (the Kawase rhomboid's sides, the bone drilled) */
   measured: z.record(z.string(), z.number()).optional(),
 });

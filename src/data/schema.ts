@@ -180,6 +180,9 @@ export const ManifestStructureSchema = z.object({
   approach: z.string().optional(),
   /** skull base v3: the bone a cut bone replaces in its approach's view */
   replaces: z.string().optional(),
+  /** skull base: the anterior clinoid process of a view with an anterior clinoidectomy switch, a piece of its own (bone
+   *  until the switch takes it) */
+  clinoid: z.boolean().optional(),
   /** skull base v3: carries morph target 0, the transsylvian opening (the brain, and the arteries that move with it) */
   morph: z.boolean().optional(),
   /** skull base v3: a tumour drawn by rule (its family and grade or site) */

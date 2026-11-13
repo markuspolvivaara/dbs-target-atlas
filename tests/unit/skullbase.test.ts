@@ -862,12 +862,37 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(pica.L.farLateral.max).toBeLessThan(0.2);
     expect(pica.R.farLateralBack.max).toBeGreaterThan(1);
   });
+  it('the pterional and orbitozygomatic views: an anterior clinoidectomy switch, off by default, taking the clinoid process\'s own piece', async () => {
+    for (const id of ['transsylvian', 'orbitozygomatic']) {
+      const g = G3.SB_GROUP.get(id)!;
+      expect(g.morphs, id).toContain('clinoid');
+      expect(g.morphDefault?.clinoid, id).toBeUndefined();
+      const piece = v3.structures.find((s) => s.id === `sb_appr_${g.approach}__clinoid`)!;
+      expect(piece, id).toBeTruthy();
+      expect(piece.clinoid).toBe(true);
+      expect(piece.type).toBe('bone');
+      expect(g.structures).toContain(piece.id);
+      // drawn as bone until the switch takes it, then as the bone removed is
+      expect(S3.skullPlan(id, null).looks.get(piece.id)).toBe('primary');
+      expect(S3.skullPlan(id, null, [], true).looks.get(piece.id)).toBe('ghost');
+      expect(T3.decodeSkull(`#/atlas?g=${id}`).morphs.clinoid).toBeUndefined();
+      const on = T3.decodeSkull(`#/atlas?g=${id}&ac=100`);
+      expect(on.morphs.clinoid).toBe(1);
+      expect(T3.encodeSkull(on)).toContain('ac=100');
+    }
+    const geom = (await import('../../src/data/generated/sbv3-approaches.json')).default as unknown as Record<string, { clinoid?: string; clinoidMl?: number; how: string }>;
+    for (const a of ['pterional', 'orbitozygomatic']) {
+      expect(geom[a].clinoidMl, a).toBeGreaterThan(0.05);      // the size of a clinoid process, not more
+      expect(geom[a].clinoidMl, a).toBeLessThan(2);
+      expect(geom[a].how, a).toContain(`(${geom[a].clinoidMl!.toFixed(1)} ml, drawn by rule)`);
+    }
+  });
   it('a surgical view opens with its shapes full on, and a link that closes one keeps it closed', () => {
     const views = G3.SB_GROUPS.filter((g) => g.kind === 'approach' && g.morphs?.length);
     expect(views.map((g) => g.id).sort()).toEqual(['far_lateral', 'interhemispheric', 'lso', 'orbitozygomatic', 'retrosigmoid', 'telovelar', 'transsylvian']);
     for (const g of views) {
-      // every shape full on, but the far lateral view's second one (a view aid, which opens at 0)
-      expect(g.morphDefault, g.id).toEqual(Object.fromEntries(g.morphs!.filter((m) => m !== 'farLateralBack').map((m) => [m, 1])));
+      // every shape full on, but the far lateral view's second one (a view aid) and the clinoidectomy switch, which open at 0
+      expect(g.morphDefault, g.id).toEqual(Object.fromEntries(g.morphs!.filter((m) => m !== 'farLateralBack' && m !== 'clinoid').map((m) => [m, 1])));
       expect(T3.decodeSkull(`#/atlas?g=${g.id}`).morphs, g.id).toEqual(g.morphDefault);
     }
     const closed = T3.decodeSkull('#/atlas?g=transsylvian&op=0&lf=0');

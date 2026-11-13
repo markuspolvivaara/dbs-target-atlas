@@ -183,6 +183,12 @@ export const APPROACH_REFS: ApproachRef[] = [
     citation: 'Luzzi S, Giotta Lucifero A, Bruno N, Baldoncini M, Campero A, Galzio R. Far lateral approach. Acta Biomed. 2022;92(S4):e2021352. doi:10.23750/abm.v92iS4.12823.' },
   { id: 'sriamornrattanakul2023', pmid: '37251244', pmcid: 'PMC10209739', shortLabel: 'Sriamornrattanakul 2023', url: doi('10.1016/j.wnsx.2023.100216'),
     citation: 'Sriamornrattanakul K, Akharathammachote N, Chonhenchob A, Mongkolratnan A, Niljianskul N, Phoominaonin IS, et al. Far-lateral approach without C1 laminectomy for microsurgical treatment of vertebral artery and proximal posterior inferior cerebellar artery aneurysms: experience from 48 patients. World Neurosurg X. 2023;19:100216. doi:10.1016/j.wnsx.2023.100216.' },
+  { id: 'auricchio2024', pmid: '38283810', pmcid: 'PMC10821650', shortLabel: 'Auricchio 2024', url: doi('10.3171/2023.10.FOCVID23118'),
+    citation: 'Auricchio AM, Calvanese F, Lehecka M. Exoscopic extradural anterior clinoidectomy. Neurosurg Focus Video. 2024;10(1):V4. doi:10.3171/2023.10.FOCVID23118.' },
+  { id: 'aladdam2026', pmid: '42104188', pmcid: 'PMC13156079', shortLabel: 'Aladdam 2026', url: doi('10.1007/s10143-026-04320-y'),
+    citation: 'Aladdam M, Gürbüz MS, İshakoğlu G, Esen F, Tombul T, Çalış F. Evaluation of functional, structural, and electrophysiological optic nerve changes following extradural anterior clinoidectomy in patients without preoperative optic canal compression. Neurosurg Rev. 2026;49(1):400. doi:10.1007/s10143-026-04320-y.' },
+  { id: 'sulaimanov2025', pmid: '41403404', pmcid: 'PMC12705240', shortLabel: 'Sulaimanov 2025', url: doi('10.1055/a-2765-5582'),
+    citation: 'Sulaimanov U, An J, Erginoglu U, Ataoglu C, Serikkanov Y, Keles A, et al. Microsurgical resection of a diaphragma sellae meningioma via extradural clinoidectomy with preservation of superior hypophyseal arteries. J Neurol Surg Rep. 2025;86(4):e260–e262. doi:10.1055/a-2765-5582.' },
   { id: 'pai2018', pmid: '30283520', pmcid: 'PMC6159062', shortLabel: 'Pai 2018', url: doi('10.4103/ajns.ajns_273_16'),
     citation: 'Pai SB, Raghuram G, Keshav GC, Rodrigues E. Far-lateral transcondylar approach to anterior foramen magnum lesions—our experience. Asian J Neurosurg. 2018;13(3):651–655. doi:10.4103/ajns.ajns_273_16.' },
   { id: 'floresjusta2021', pmid: '33921434', pmcid: 'PMC8069204', shortLabel: 'Flores-Justa 2021', url: doi('10.3390/brainsci11040488'),
@@ -220,6 +226,14 @@ const SYLVIAN_VEINS: ApproachClaim[] = [
   c('The precentral, central and posterior insular veins, in the insula’s precentral, central and posterior limiting sulci, run down and forward to its pole, where they join as the deep middle cerebral vein; it flows into the first segment of the basal vein of Rosenthal.', 'ota2024'),
 ];
 const CISTERN = c('Opening the carotid cistern lets cerebrospinal fluid drain, which relaxes the brain, and exposes the internal carotid artery for proximal control; the dissection then goes medially to the chiasmatic and lamina terminalis cisterns.', 'yilmaz2025');
+/** the anterior clinoidectomy (the pterional and orbitozygomatic views' switch) */
+const CLINOIDECTOMY = sec('Anterior clinoidectomy (the switch)', [
+  c('An extradural anterior clinoidectomy decompresses the optic nerve and widens the exposure of the parasellar region in extensive approaches. Drilled from lateral to medial along the nerve, it unroofs the optic canal over nearly 180° before the tip of the process is taken.', 'auricchio2024'),
+  c('The process is freed by drilling its three attachments, the sphenoid wing, the roof of the optic canal and the optic strut, and then detached from the optic canal’s lateral wall; this exposes the distal dural ring and the clinoidal segment of the internal carotid artery.', 'sevgi2026'),
+  c('With the optic canal unroofed, the clinoidectomy widens the optico-carotid triangle and the working angle below and lateral to the optic nerve.', 'sulaimanov2025'),
+  c('Dolenc’s extradural technique takes the process before the dura is opened, which lowers the risk to the structures beside it: the optic nerve, the clinoidal internal carotid artery and the oculomotor nerve. The optic nerve, running through the optic canal below and medial to the process, remains at risk.', 'aladdam2026'),
+]);
+
 const CONTEXT = ['Internal carotid artery', 'Middle cerebral artery (M1 segment)', 'Middle cerebral artery (M2 segment)', 'Middle cerebral artery (M3 segment)',
   'Anterior cerebral artery (A1–A2)', 'Proximal lateral striate branches', 'Distal lateral striate branches', 'Optic nerve (II)', 'Oculomotor nerve (III)',
   'Superficial middle cerebral vein', 'Sphenoparietal sinus', 'Insular veins', 'Deep middle cerebral vein', 'Basal vein (of Rosenthal)'];
@@ -249,11 +263,12 @@ export const APPROACHES: ApproachContent[] = [
       VEINS,
       c('The superficial Sylvian veins are preserved, especially those draining into the temporal lobe; frontal draining veins may be sacrificed if necessary.', 'yilmaz2025'),
       c('The orbital meningeal artery, met at the superolateral edge of the superior orbital fissure during sphenoid wing resection, often bleeds and is coagulated.', 'yilmaz2025'),
-    ])],
+    ]), CLINOIDECTOMY],
     context: CONTEXT,
     notShown: NOT_SHOWN,
     focus: ['Middle cerebral artery (M2 segment)'],
-    morphs: ['open', 'lift'],
+    morphs: ['open', 'lift', 'clinoid'],
+    opened: ['open', 'lift'],      // (the anterior clinoidectomy is a switch, off until the reader turns it on)
   },
   {
     id: 'lso', view: 'lso', name: 'Lateral supraorbital approach', camera: 'supraorbital',
@@ -399,11 +414,12 @@ export const APPROACHES: ApproachContent[] = [
       FISSURE,
     ]), sec('Care points', [
       c('The facial nerve is preserved by interfascial or subfascial dissection, as in the pterional approach; the temporalis muscle is lifted leaving a cuff at the superior temporal line for reattaching it, and the subperiosteal dissection continues down along the zygomatic arch.', 'yilmaz2025'),
-    ])],
+    ]), CLINOIDECTOMY],
     context: CONTEXT,
     notShown: 'The orbital piece’s and the arch’s extents are drawn by rule on this skull (illustrative). The temporalis and masseter muscles, the periorbita and the orbit’s contents, and the facial nerve’s frontal branch are not modelled. ' + NOT_SHOWN,
     focus: ['Middle cerebral artery (M2 segment)'],
-    morphs: ['open', 'lift'],
+    morphs: ['open', 'lift', 'clinoid'],
+    opened: ['open', 'lift'],      // (the anterior clinoidectomy is a switch, off until the reader turns it on)
   },
   {
     id: 'far_lateral', view: 'far_lateral', name: 'Far lateral approach', camera: 'farLateralLow', hemi: 'R', brain: 'hindbrain',

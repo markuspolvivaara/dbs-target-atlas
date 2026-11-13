@@ -39,8 +39,15 @@ const GROUP_ROWS: [SbGroup['kind'], string][] = SB_MODEL === 'v3'
 /** the three models of the section: page folder and chip label */
 const MODELS: [SbModel, string, string][] = [['v3', 'skullbase', 'Skull base'], ['zanatomy', 'skullbase-v1', 'Skull base v1 (Z-Anatomy)'], ['ct', 'skullbase-ct', 'Skull base v2 (CT)']];
 const SIDE_NAME = { R: 'right', L: 'left' } as const;
-/** the surgical views' shapes: slider label, key, and what full means on this model */
-const MORPH_UI: Record<string, { label: string; key: string; note: () => string | null }> = {
+/** the surgical views' shapes: slider label, key, and what full means on this model; a switch (toggle) is on or off: the
+ * anterior clinoidectomy takes the view's own piece of the clinoid process (drawn as bone, or as bone removed) */
+const MORPH_UI: Record<string, { label: string; key: string; toggle?: boolean; note: (g?: SbGroup) => string | null }> = {
+  clinoid: {
+    label: 'Anterior clinoidectomy (extradural)', key: 'a', toggle: true, note: (g) => {
+      const geom = g?.approach ? APPROACH_GEOM[g.approach] : undefined;
+      return geom?.clinoidMl ? `When on, the anterior clinoid process is drawn taken: the rest of the sphenoid ridge from where this view’s drilling stops to the process’s tip, and the bone round the tip (${fmtMm(geom.clinoidMl)} ml on this model, drawn by rule). The optic canal’s roof and the optic strut, which are drilled to free it, are not drawn taken.` : null;
+    },
+  },
   open: {
     label: 'Open the Sylvian fissure', key: 'o', note: () => {
       const b = V3_FIT.brain;
@@ -314,6 +321,7 @@ export class SkullbaseAtlasPage {
     // the surgical view's sliders follow the state (keys move them too)
     for (const slider of this.tabs.overview.querySelectorAll<HTMLInputElement>('input[data-morph]')) {
       const v = Math.round((s.morphs[slider.dataset.morph!] ?? 0) * 100);
+      if (slider.type === 'checkbox') { slider.checked = v >= 50; continue; }
       if (Number(slider.value) === v) continue;
       slider.value = String(v);
       const out = slider.parentElement?.querySelector('output');
@@ -533,6 +541,15 @@ export class SkullbaseAtlasPage {
     const slider = (name: string) => {
       const ui = MORPH_UI[name];
       const id = `sb-m-${name}`;
+      if (ui.toggle) {      // a switch: on or off
+        const box = h('input', {
+          type: 'checkbox', id, checked: (this.s.morphs[name] ?? 0) >= 0.5, 'aria-describedby': `${id}-note`, 'data-morph': name,
+          onchange: (e: Event) => { const on = (e.target as HTMLInputElement).checked; this.update((st) => { st.morphs = { ...st.morphs, [name]: on ? 1 : 0 }; }); },
+        });
+        const note = ui.note(g);
+        return [h('label', { for: id, class: 'chips-label open-toggle' }, box, ` ${ui.label} (${ui.key.toUpperCase()})`),
+          note ? h('p', { class: 'aside', id: `${id}-note` }, note) : null];
+      }
       const pct = Math.round((this.s.morphs[name] ?? 0) * 100);
       const out = h('output', { for: id, class: 'open-out' }, `${pct} %`);
       const input = h('input', {
@@ -543,7 +560,7 @@ export class SkullbaseAtlasPage {
           this.update((st) => { st.morphs = { ...st.morphs, [name]: v / 100 }; });
         },
       });
-      const note = ui.note();
+      const note = ui.note(g);
       return [h('label', { for: id, class: 'chips-label' }, `${ui.label} (${ui.key.toUpperCase()})`), h('div', { class: 'open-row' }, input, out),
         note ? h('p', { class: 'aside', id: `${id}-note` }, note) : null];
     };

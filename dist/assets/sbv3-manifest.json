@@ -4438,1446 +4438,6 @@
    }
   },
   {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_pterional__frontal_bone",
-   "name": "Frontal bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_pterional__frontal_bone.glb",
-   "bytes": 526508,
-   "refIds": [],
-   "category": "bone",
-   "approach": "pterional",
-   "replaces": "sb_frontal_bone",
-   "derivation": "The CT's frontal bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -24.1,
-     32.5,
-     41.94
-    ],
-    "R": [
-     24.25,
-     36.54,
-     40.65
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_pterional__parietal_bone",
-   "name": "Parietal bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_pterional__parietal_bone.glb",
-   "bytes": 575896,
-   "refIds": [],
-   "category": "bone",
-   "approach": "pterional",
-   "replaces": "sb_parietal_bone",
-   "derivation": "The CT's parietal bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -41.59,
-     -43.71,
-     53.71
-    ],
-    "R": [
-     39.85,
-     -44.73,
-     59.56
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_pterional__sphenoid_bone",
-   "name": "Sphenoid bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_pterional__sphenoid_bone.glb",
-   "bytes": 420460,
-   "refIds": [],
-   "category": "bone",
-   "approach": "pterional",
-   "replaces": "sb_sphenoid_bone",
-   "derivation": "The CT's sphenoid bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -18.59,
-     7.18,
-     -5.77
-    ],
-    "R": [
-     20.84,
-     9.32,
-     -4.55
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_pterional__temporal_bone",
-   "name": "Temporal bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_pterional__temporal_bone.glb",
-   "bytes": 713856,
-   "refIds": [],
-   "category": "bone",
-   "approach": "pterional",
-   "replaces": "sb_temporal_bone",
-   "derivation": "The CT's temporal bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -49.06,
-     -23.25,
-     -12.6
-    ],
-    "R": [
-     47.2,
-     -22.76,
-     -16.93
-    ]
-   }
-  },
-  {
-   "id": "sb_appr_pterional__removed",
-   "name": "Bone removed",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase-v3/sb_appr_pterional__removed.glb",
-   "bytes": 243864,
-   "colour": {
-    "token": "sbRemoved",
-    "light": "#5F81DD",
-    "dark": "#9ABEF4"
-   },
-   "dataset": "rule",
-   "source": "Cut out of the CT's bone by rule",
-   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
-   "citation": [],
-   "citationUrls": [],
-   "refIds": [],
-   "category": "removed",
-   "approach": "pterional",
-   "layer": "nuclei",
-   "derivation": "The bone the pterional (frontotemporal) craniotomy removes: 11.5 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; placed from the model's zygomatic process of the frontal bone, 6 mm up and 3 mm back, then onto the bone's surface: 11 mm from that landmark); a frontal hole near the superior orbital rim (Yilmaz 2025; placed 20 mm above, 10 mm lateral to and 8 mm behind the supraorbital notch, then onto the bone's surface: 29 mm from the notch, 28 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral sphenoid ridge drilled: the bone within 6 mm of a line from the pterion towards the anterior clinoid process, to 12 mm short of it; as cut, the bone removed ends 36 mm from the process (illustrative: Yilmaz 2025 limits this resection at the meningo-orbital artery in the orbitozygomatic approach, which the model does not show). The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone (which stays), leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (46, 39, 30) mm, (36, 54, 52) mm, (62, -7, -1) mm, (66, -10, 40) mm.",
-   "centroid": {
-    "L": [
-     54.7,
-     15.32,
-     31.92
-    ],
-    "R": [
-     54.7,
-     15.32,
-     31.92
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_lso__frontal_bone",
-   "name": "Frontal bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_lso__frontal_bone.glb",
-   "bytes": 552556,
-   "refIds": [],
-   "category": "bone",
-   "approach": "lso",
-   "replaces": "sb_frontal_bone",
-   "derivation": "The CT's frontal bone with the bone of the lateral supraorbital craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -24.1,
-     32.5,
-     41.94
-    ],
-    "R": [
-     25.62,
-     35.87,
-     40.72
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_lso__parietal_bone",
-   "name": "Parietal bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_lso__parietal_bone.glb",
-   "bytes": 592208,
-   "refIds": [],
-   "category": "bone",
-   "approach": "lso",
-   "replaces": "sb_parietal_bone",
-   "derivation": "The CT's parietal bone, which the lateral supraorbital craniotomy does not cut, remeshed within a few millimetres of the cut so that it meets the cut bone on one surface (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -41.59,
-     -43.71,
-     53.71
-    ],
-    "R": [
-     40.73,
-     -41.14,
-     57.9
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_lso__sphenoid_bone",
-   "name": "Sphenoid bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_lso__sphenoid_bone.glb",
-   "bytes": 415504,
-   "refIds": [],
-   "category": "bone",
-   "approach": "lso",
-   "replaces": "sb_sphenoid_bone",
-   "derivation": "The CT's sphenoid bone, which the lateral supraorbital craniotomy does not cut, remeshed within a few millimetres of the cut so that it meets the cut bone on one surface (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -18.59,
-     7.18,
-     -5.77
-    ],
-    "R": [
-     20.71,
-     9.12,
-     -4.89
-    ]
-   }
-  },
-  {
-   "id": "sb_appr_lso__removed",
-   "name": "Bone removed",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase-v3/sb_appr_lso__removed.glb",
-   "bytes": 142000,
-   "colour": {
-    "token": "sbRemoved",
-    "light": "#5F81DD",
-    "dark": "#9ABEF4"
-   },
-   "dataset": "rule",
-   "source": "Cut out of the CT's bone by rule",
-   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
-   "citation": [],
-   "citationUrls": [],
-   "refIds": [],
-   "category": "removed",
-   "approach": "lso",
-   "layer": "nuclei",
-   "derivation": "The bone the lateral supraorbital craniotomy removes: 6.6 ml. A frontolateral flap over the orbital roof, with one burr hole posteriorly just below the temporal line (Cha 2012, Choque-Velasquez 2018), cut down to the anterior fossa floor (the basal part drilled off, Cha 2012); the sphenoid ridge is not drilled. Its outline is placed by hand on this skull (1482 mm² seen face on as drawn), its basal edge at the level of the orbital roof; the cut keeps to the frontal bone and stops at the floor, and the bone removed covers about 1178 mm² seen face on, 8 % smaller than the mean LSO craniotomy of 1275 mm² (Cha 2012) (illustrative). The outline is a smooth curve through those points and the cut's edge is smoothed over 1 mm (illustrative). Burr hole: (61, 8, 37) mm.",
-   "centroid": {
-    "L": [
-     47.45,
-     32.49,
-     54.05
-    ],
-    "R": [
-     47.45,
-     32.49,
-     54.05
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_interhemispheric__frontal_bone",
-   "name": "Frontal bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_interhemispheric__frontal_bone.glb",
-   "bytes": 531700,
-   "refIds": [],
-   "category": "bone",
-   "approach": "interhemispheric",
-   "replaces": "sb_frontal_bone",
-   "derivation": "The CT's frontal bone with the bone of the right parasagittal craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -22.56,
-     32.18,
-     45.2
-    ],
-    "R": [
-     25.47,
-     37.18,
-     39.33
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_interhemispheric__parietal_bone",
-   "name": "Parietal bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_interhemispheric__parietal_bone.glb",
-   "bytes": 599012,
-   "refIds": [],
-   "category": "bone",
-   "approach": "interhemispheric",
-   "replaces": "sb_parietal_bone",
-   "derivation": "The CT's parietal bone with the bone of the right parasagittal craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -40.9,
-     -43.07,
-     54.51
-    ],
-    "R": [
-     40.51,
-     -41.93,
-     58.96
-    ]
-   }
-  },
-  {
-   "id": "sb_appr_interhemispheric__removed",
-   "name": "Bone removed",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase-v3/sb_appr_interhemispheric__removed.glb",
-   "bytes": 248812,
-   "colour": {
-    "token": "sbRemoved",
-    "light": "#5F81DD",
-    "dark": "#9ABEF4"
-   },
-   "dataset": "rule",
-   "source": "Cut out of the CT's bone by rule",
-   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
-   "citation": [],
-   "citationUrls": [],
-   "refIds": [],
-   "category": "removed",
-   "approach": "interhemispheric",
-   "layer": "nuclei",
-   "derivation": "The bone the right parasagittal craniotomy removes: 16.8 ml. A right parasagittal flap at the coronal suture, its medial edge on the midline (over the superior sagittal sinus): from 40 mm in front of bregma to 20 mm behind it and 40 mm wide; the bone removed covers about 2356 mm² seen face on (illustrative: the sources describe a right precoronal parasagittal or frontoparietal midline craniotomy without giving its size). Bregma here: (0, 6, 100) mm, where this skull's frontal and parietal bones meet at the midline.",
-   "centroid": {
-    "L": [
-     18.1,
-     14.29,
-     87.97
-    ],
-    "R": [
-     18.1,
-     14.29,
-     87.97
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_suboccipital__occipital_bone",
-   "name": "Occipital bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_suboccipital__occipital_bone.glb",
-   "bytes": 505672,
-   "refIds": [],
-   "category": "bone",
-   "approach": "suboccipital",
-   "replaces": "sb_occipital_bone",
-   "derivation": "The CT's occipital bone with the bone of the midline suboccipital craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -24.47,
-     -61.6,
-     -20.7
-    ],
-    "R": [
-     22.78,
-     -58.77,
-     -21.48
-    ]
-   }
-  },
-  {
-   "id": "sb_appr_suboccipital__removed",
-   "name": "Bone removed",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase-v3/sb_appr_suboccipital__removed.glb",
-   "bytes": 245092,
-   "colour": {
-    "token": "sbRemoved",
-    "light": "#5F81DD",
-    "dark": "#9ABEF4"
-   },
-   "dataset": "rule",
-   "source": "Cut out of the CT's bone by rule",
-   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
-   "citation": [],
-   "citationUrls": [],
-   "refIds": [],
-   "category": "removed",
-   "approach": "suboccipital",
-   "layer": "nuclei",
-   "derivation": "The bone the midline suboccipital craniotomy removes: 11.1 ml. A midline suboccipital flap from 10 mm below the internal occipital protuberance (the confluence of the sinuses) down to the foramen magnum, its posterior rim taken 12 mm to each side of the midline; above, it reaches 30 mm to the left and 30 mm to the right of the midline at its widest. The bone removed covers about 1867 mm² seen face on (the flap faces 74° below the horizontal here) (illustrative: the sources describe a median suboccipital craniotomy or craniectomy without one size; a keyhole of about 2 cm in Wang 2023). The posterior arch of C1 is left (Cho 2024).",
-   "centroid": {
-    "L": [
-     -0.35,
-     -68.97,
-     -39.83
-    ],
-    "R": [
-     -0.35,
-     -68.97,
-     -39.83
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_retrosigmoid__occipital_bone",
-   "name": "Occipital bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_retrosigmoid__occipital_bone.glb",
-   "bytes": 509652,
-   "refIds": [],
-   "category": "bone",
-   "approach": "retrosigmoid",
-   "replaces": "sb_occipital_bone",
-   "derivation": "The CT's occipital bone with the bone of the retrosigmoid craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -23.68,
-     -61.19,
-     -20.64
-    ],
-    "R": [
-     22.66,
-     -58.28,
-     -21.66
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_retrosigmoid__temporal_bone",
-   "name": "Temporal bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_retrosigmoid__temporal_bone.glb",
-   "bytes": 733512,
-   "refIds": [],
-   "category": "bone",
-   "approach": "retrosigmoid",
-   "replaces": "sb_temporal_bone",
-   "derivation": "The CT's temporal bone with the bone of the retrosigmoid craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -49.06,
-     -23.25,
-     -12.6
-    ],
-    "R": [
-     47.45,
-     -23.31,
-     -16.62
-    ]
-   }
-  },
-  {
-   "id": "sb_appr_retrosigmoid__removed",
-   "name": "Bone removed",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase-v3/sb_appr_retrosigmoid__removed.glb",
-   "bytes": 110060,
-   "colour": {
-    "token": "sbRemoved",
-    "light": "#5F81DD",
-    "dark": "#9ABEF4"
-   },
-   "dataset": "rule",
-   "source": "Cut out of the CT's bone by rule",
-   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
-   "citation": [],
-   "citationUrls": [],
-   "refIds": [],
-   "category": "removed",
-   "approach": "retrosigmoid",
-   "layer": "nuclei",
-   "derivation": "The bone the retrosigmoid craniotomy removes: 4.1 ml. A right retrosigmoid craniotomy: its upper edge along the transverse sinus' lower margin for 28 mm and its front edge along the sigmoid sinus' posterior margin for 35 mm (Jian 2021: the window's upper and front margins against the two sinuses), closed behind and below by straight edges, its corners rounded; larger than Jian 2021's keyhole (18-20 x 20-25 mm), about the size of the craniotomies in Tang 2025 (a mean 3.8 cm across), the shape drawn by hand (illustrative). The sinuses are this CT's own (traced through its lumen), the edges drawn on their margins on the inner table and carried out through the bone; as cut, the bone removed comes within 2.0 mm of the transverse sinus and 1.5 mm of the sigmoid. The keypoint is where the two margins meet (Jian 2021, 2022, 2024); the burr hole 3.5 mm behind and below it (Jian 2021). The bone removed covers about 728 mm² seen face on; its edge smoothed over 1 mm (illustrative). Keypoint: (55, -57, -25) mm; burr hole: (53, -59, -26) mm.",
-   "centroid": {
-    "L": [
-     43.19,
-     -57.2,
-     -30.21
-    ],
-    "R": [
-     43.19,
-     -57.2,
-     -30.21
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_orbitozygomatic__frontal_bone",
-   "name": "Frontal bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__frontal_bone.glb",
-   "bytes": 479904,
-   "refIds": [],
-   "category": "bone",
-   "approach": "orbitozygomatic",
-   "replaces": "sb_frontal_bone",
-   "derivation": "The CT's frontal bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -24.1,
-     32.5,
-     41.94
-    ],
-    "R": [
-     20.46,
-     37.26,
-     43.23
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_orbitozygomatic__maxilla",
-   "name": "Maxilla",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__maxilla.glb",
-   "bytes": 254696,
-   "refIds": [],
-   "category": "bone",
-   "approach": "orbitozygomatic",
-   "replaces": "sb_maxilla",
-   "derivation": "The CT's maxilla with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -14.39,
-     36.91,
-     -28.02
-    ],
-    "R": [
-     16.2,
-     36.19,
-     -29.34
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_orbitozygomatic__parietal_bone",
-   "name": "Parietal bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__parietal_bone.glb",
-   "bytes": 576052,
-   "refIds": [],
-   "category": "bone",
-   "approach": "orbitozygomatic",
-   "replaces": "sb_parietal_bone",
-   "derivation": "The CT's parietal bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -41.59,
-     -43.71,
-     53.71
-    ],
-    "R": [
-     39.81,
-     -44.95,
-     59.67
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_orbitozygomatic__sphenoid_bone",
-   "name": "Sphenoid bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__sphenoid_bone.glb",
-   "bytes": 424388,
-   "refIds": [],
-   "category": "bone",
-   "approach": "orbitozygomatic",
-   "replaces": "sb_sphenoid_bone",
-   "derivation": "The CT's sphenoid bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -18.59,
-     7.18,
-     -5.77
-    ],
-    "R": [
-     20.85,
-     9.52,
-     -5.01
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_orbitozygomatic__temporal_bone",
-   "name": "Temporal bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__temporal_bone.glb",
-   "bytes": 715440,
-   "refIds": [],
-   "category": "bone",
-   "approach": "orbitozygomatic",
-   "replaces": "sb_temporal_bone",
-   "derivation": "The CT's temporal bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -49.06,
-     -23.25,
-     -12.6
-    ],
-    "R": [
-     46.99,
-     -23.02,
-     -16.88
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_orbitozygomatic__zygomatic_bone",
-   "name": "Zygomatic bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__zygomatic_bone.glb",
-   "bytes": 74528,
-   "refIds": [],
-   "category": "bone",
-   "approach": "orbitozygomatic",
-   "replaces": "sb_zygomatic_bone",
-   "derivation": "The CT's zygomatic bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -42.19,
-     23.06,
-     -6.5
-    ],
-    "R": [
-     37.13,
-     27.23,
-     -16.35
-    ]
-   }
-  },
-  {
-   "id": "sb_appr_orbitozygomatic__removed",
-   "name": "Bone removed",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__removed.glb",
-   "bytes": 254716,
-   "colour": {
-    "token": "sbRemoved",
-    "light": "#5F81DD",
-    "dark": "#9ABEF4"
-   },
-   "dataset": "rule",
-   "source": "Cut out of the CT's bone by rule",
-   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
-   "citation": [],
-   "citationUrls": [],
-   "refIds": [],
-   "category": "removed",
-   "approach": "orbitozygomatic",
-   "layer": "nuclei",
-   "derivation": "The bone the orbitozygomatic craniotomy removes: 18.9 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; placed from the model's zygomatic process of the frontal bone, 6 mm up and 3 mm back, then onto the bone's surface: 11 mm from that landmark); a frontal hole near the superior orbital rim (Yilmaz 2025; placed 20 mm above, 10 mm lateral to and 8 mm behind the supraorbital notch, then onto the bone's surface: 29 mm from the notch, 28 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral sphenoid ridge drilled: the bone within 6 mm of a line from the pterion towards the anterior clinoid process, to 12 mm short of it; as cut, the bone removed ends 19 mm from the process (illustrative: Yilmaz 2025 limits this resection at the meningo-orbital artery in the orbitozygomatic approach, which the model does not show). The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone, leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (46, 39, 30) mm, (36, 54, 52) mm, (62, -7, -1) mm, (66, -10, 40) mm. Then the orbitozygomatic piece (the two-piece craniotomy, Yilmaz 2025): the superolateral orbital rim from 4 mm lateral to the supraorbital notch to 5 mm lateral to the frontozygomatic suture (the model's zygomatic process of the frontal bone), with the orbital roof 25 mm back from the rim (illustrative), the zygoma's frontal process and its body down to 5 mm below the arch's level (Yilmaz 2025: the cut from the zygomatic body to the inferior orbital fissure about 1 cm below its frontal and temporal processes; its medial part with the infraorbital rim, medial of x = 33 mm, kept; illustrative), and the zygomatic arch from 8 mm in front of the zygomatic bone's back end back to its root in front of the articular tubercle (y = 0 mm here; illustrative).",
-   "centroid": {
-    "L": [
-     47.56,
-     21.88,
-     19.99
-    ],
-    "R": [
-     47.56,
-     21.88,
-     19.99
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_far_lateral__occipital_bone",
-   "name": "Occipital bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_far_lateral__occipital_bone.glb",
-   "bytes": 507036,
-   "refIds": [],
-   "category": "bone",
-   "approach": "far_lateral",
-   "replaces": "sb_occipital_bone",
-   "derivation": "The CT's occipital bone with the bone of the far lateral craniectomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -23.58,
-     -61.15,
-     -20.74
-    ],
-    "R": [
-     22.36,
-     -57.92,
-     -20.95
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_far_lateral__temporal_bone",
-   "name": "Temporal bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_far_lateral__temporal_bone.glb",
-   "bytes": 728324,
-   "refIds": [],
-   "category": "bone",
-   "approach": "far_lateral",
-   "replaces": "sb_temporal_bone",
-   "derivation": "The CT's temporal bone with the bone of the far lateral craniectomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -49.06,
-     -23.25,
-     -12.6
-    ],
-    "R": [
-     47.32,
-     -22.98,
-     -16.57
-    ]
-   }
-  },
-  {
-   "id": "sb_appr_far_lateral__removed",
-   "name": "Bone removed",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase-v3/sb_appr_far_lateral__removed.glb",
-   "bytes": 217112,
-   "colour": {
-    "token": "sbRemoved",
-    "light": "#5F81DD",
-    "dark": "#9ABEF4"
-   },
-   "dataset": "rule",
-   "source": "Cut out of the CT's bone by rule",
-   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
-   "citation": [],
-   "citationUrls": [],
-   "refIds": [],
-   "category": "removed",
-   "approach": "far_lateral",
-   "layer": "nuclei",
-   "derivation": "The bone the far lateral craniectomy removes: 7.7 ml. A right lateral suboccipital craniectomy (Pai 2018: lateral suboccipital, reaching the sigmoid sinus, the foramen magnum's rim taken), its outline following this CT's own sinuses (traced through their lumen): its upper edge along the transverse sinus' lower margin for 30 mm from the junction, its lateral edge along the sigmoid sinus' posterior margin for 35 mm down towards the jugular bulb, and below, the foramen magnum's posterior rim taken from x = 3 to 16 mm, so that the opening runs into the foramen; its medial edge bowed outwards and its corners rounded (the extents and shape illustrative); the bone removed, the condyle's part with it, covers about 1583 mm² seen face on. Then the posterior third of the right occipital condyle drilled (Pai 2018: the posterior 30-40 %; here the third of the condyle's bone within 11 mm of its fitted landmark that lies furthest back). The hemilaminectomy of C1 that goes with it is not shown: the atlas is not part of this model.",
-   "centroid": {
-    "L": [
-     27.81,
-     -54.83,
-     -38.83
-    ],
-    "R": [
-     27.81,
-     -54.83,
-     -38.83
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_kawase__occipital_bone",
-   "name": "Occipital bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_kawase__occipital_bone.glb",
-   "bytes": 505436,
-   "refIds": [],
-   "category": "bone",
-   "approach": "kawase",
-   "replaces": "sb_occipital_bone",
-   "derivation": "The CT's occipital bone with the bone of the anterior petrosectomy (kawase) removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -23.68,
-     -61.19,
-     -20.64
-    ],
-    "R": [
-     22.17,
-     -57.48,
-     -21.38
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_kawase__parietal_bone",
-   "name": "Parietal bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_kawase__parietal_bone.glb",
-   "bytes": 592716,
-   "refIds": [],
-   "category": "bone",
-   "approach": "kawase",
-   "replaces": "sb_parietal_bone",
-   "derivation": "The CT's parietal bone with the bone of the anterior petrosectomy (kawase) removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -41.59,
-     -43.71,
-     53.71
-    ],
-    "R": [
-     40.83,
-     -41.83,
-     57.55
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_kawase__sphenoid_bone",
-   "name": "Sphenoid bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_kawase__sphenoid_bone.glb",
-   "bytes": 429912,
-   "refIds": [],
-   "category": "bone",
-   "approach": "kawase",
-   "replaces": "sb_sphenoid_bone",
-   "derivation": "The CT's sphenoid bone with the bone of the anterior petrosectomy (kawase) removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -18.59,
-     7.18,
-     -5.77
-    ],
-    "R": [
-     20.56,
-     8.0,
-     -5.59
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
-    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1056/AIdbp2500994",
-    "https://doi.org/10.1093/nar/gkn613",
-    "https://doi.org/10.1148/ryai.230024"
-   ],
-   "id": "sb_appr_kawase__temporal_bone",
-   "name": "Temporal bone",
-   "type": "bone",
-   "file": "assets/skullbase-v3/sb_appr_kawase__temporal_bone.glb",
-   "bytes": 787568,
-   "refIds": [],
-   "category": "bone",
-   "approach": "kawase",
-   "replaces": "sb_temporal_bone",
-   "derivation": "The CT's temporal bone with the bone of the anterior petrosectomy (kawase) removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -49.06,
-     -23.25,
-     -12.6
-    ],
-    "R": [
-     45.11,
-     -21.6,
-     -16.84
-    ]
-   }
-  },
-  {
-   "id": "sb_appr_kawase__removed",
-   "name": "Bone removed",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase-v3/sb_appr_kawase__removed.glb",
-   "bytes": 253532,
-   "colour": {
-    "token": "sbRemoved",
-    "light": "#5F81DD",
-    "dark": "#9ABEF4"
-   },
-   "dataset": "rule",
-   "source": "Cut out of the CT's bone by rule",
-   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
-   "citation": [],
-   "citationUrls": [],
-   "refIds": [],
-   "category": "removed",
-   "approach": "kawase",
-   "layer": "nuclei",
-   "derivation": "The bone the anterior petrosectomy (kawase) removes: 8.3 ml. A right temporal flap drawn 40 × 32 mm (1280 mm² seen from the side as drawn; Signoretti 2025 measured a mean 1272 mm²; the bone removed, the drilled apex with it, covers about 1566 mm² seen from the side), its base at the middle fossa floor's level (the tegmen, as located on this CT), two thirds of it in front of the external auditory canal and one third behind (Flores-Justa 2021; the canal's line taken from the registered ear's tympanic membrane), cut down flush with the floor. Then the petrous apex drilled within the rhomboid of four landmarks (Signoretti 2025): the petrous apex, where the greater petrosal nerve meets V3 (seen from above), the geniculate ganglion and the arcuate eminence (the bone over the superior semicircular canal, from the registered ear), seen from above and drilled straight down to the level of the inferior petrosal sinus, the ridge and the pyramid behind it taken through to the posterior fossa's dura (up to 12 mm behind the line from the apex to the eminence, from the apex to the porus: not medial to the apex, not behind the internal acoustic canal), kept 1.5 mm off the internal carotid artery (petrous and lacerum parts), 1.5 mm off the scala tympani, 1.5 mm off the scala vestibuli, vestibule and semicircular canals, 1 mm off the nerves in the internal acoustic meatus (VII, VIII), 1.5 mm off the facial nerve (VII), 1 mm off the mandibular nerve (V3), 1 mm off the trigeminal ganglion, 0.5 mm off the greater petrosal nerve, 1 mm off the abducens nerve (VI) (the margins illustrative): 2.58 ml (Signoretti 2025: 2.83 ± 0.28 cm³). On this model the arcuate eminence lies 10.5 mm from the geniculate ganglion, that 13.9 mm from the nerves' meeting, that 16.9 mm from the petrous apex, and the apex 34.1 mm (straight) from the eminence.",
-   "centroid": {
-    "L": [
-     47.17,
-     -12.75,
-     -2.47
-    ],
-    "R": [
-     47.17,
-     -12.75,
-     -2.47
-    ]
-   }
-  },
-  {
-   "id": "sb_appr_kawase__guide",
-   "name": "Kawase rhomboid",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase-v3/sb_appr_kawase__guide.glb",
-   "bytes": 4108,
-   "colour": {
-    "token": "sbGuide",
-    "light": "#1F2A36",
-    "dark": "#F2F4F7"
-   },
-   "dataset": "rule",
-   "source": "Drawn by rule",
-   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
-   "citation": [],
-   "citationUrls": [],
-   "refIds": [],
-   "category": "guide",
-   "approach": "kawase",
-   "schematic": true,
-   "centroid": {
-    "L": [
-     26.89,
-     -15.21,
-     -5.42
-    ],
-    "R": [
-     26.89,
-     -15.21,
-     -5.42
-    ]
-   },
-   "derivation": "The rhomboid drawn on the middle fossa floor between its four landmarks on this model (Signoretti 2025): the petrous apex, where the greater petrosal nerve meets V3 seen from above, the geniculate ganglion and the arcuate eminence (the bone over the superior semicircular canal)."
-  },
-  {
-   "id": "br_temporal_lobe__kawase",
-   "name": "Temporal lobe",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase-v3/br_temporal_lobe__kawase.glb",
-   "bytes": 142600,
-   "colour": {
-    "token": "sbBrain",
-    "light": "#9E625E",
-    "dark": "#A86A66"
-   },
-   "dataset": "template",
-   "source": "Lead-DBS MNI 2009b template surface, fitted into this CT",
-   "licence": "GPL-3.0, non-commercial (the Lead-DBS template surface and the FreeSurfer labels shipped with it; FreeSurfer: research use); its fit into this CT uses the TopBrain data (non-commercial)",
-   "citation": [
-    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862.",
-    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1016/j.neuroimage.2023.119862",
-    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
-    "https://doi.org/10.64898/2026.05.28.26354312"
-   ],
-   "refIds": [],
-   "category": "brain",
-   "layer": "cortex",
-   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.703 mm), this patient's arteries outside the cortex, each hemisphere on its own side of the falx, the M2 segments on the insula (median 1.051 mm on the right) and the M3 segments in the Sylvian fissure (median 1.096 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital view 12 mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue. In the Kawase view held up off the middle fossa floor (extradurally, with its dura) by up to 15 mm over the petrous apex (skullbase_v3.py: lift_temporal_lobe; illustrative): a shape, not a simulation.",
-   "centroid": {
-    "L": [
-     -42.83,
-     -30.71,
-     10.36
-    ],
-    "R": [
-     42.69,
-     -32.08,
-     10.8
-    ]
-   },
-   "replaces": "br_temporal_lobe",
-   "pushedFrom": "assets/skullbase-v3/br_temporal_lobe.glb",
-   "forView": "kawase"
-  },
-  {
    "id": "tb_adenohypophysis",
    "name": "Adenohypophysis (anterior lobe)",
    "aliases": [
@@ -8729,6 +7289,1536 @@
     "family": "meningioma",
     "grade": "foramen_magnum"
    }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_pterional__frontal_bone",
+   "name": "Frontal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_pterional__frontal_bone.glb",
+   "bytes": 538344,
+   "refIds": [],
+   "category": "bone",
+   "approach": "pterional",
+   "replaces": "sb_frontal_bone",
+   "derivation": "The CT's frontal bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -24.01,
+     32.57,
+     42.01
+    ],
+    "R": [
+     24.09,
+     36.36,
+     40.46
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_pterional__parietal_bone",
+   "name": "Parietal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_pterional__parietal_bone.glb",
+   "bytes": 575896,
+   "refIds": [],
+   "category": "bone",
+   "approach": "pterional",
+   "replaces": "sb_parietal_bone",
+   "derivation": "The CT's parietal bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -41.59,
+     -43.71,
+     53.71
+    ],
+    "R": [
+     39.85,
+     -44.73,
+     59.56
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_pterional__sphenoid_bone",
+   "name": "Sphenoid bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_pterional__sphenoid_bone.glb",
+   "bytes": 426268,
+   "refIds": [],
+   "category": "bone",
+   "approach": "pterional",
+   "replaces": "sb_sphenoid_bone",
+   "derivation": "The CT's sphenoid bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -18.59,
+     7.18,
+     -5.77
+    ],
+    "R": [
+     20.19,
+     9.23,
+     -4.49
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_pterional__temporal_bone",
+   "name": "Temporal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_pterional__temporal_bone.glb",
+   "bytes": 713856,
+   "refIds": [],
+   "category": "bone",
+   "approach": "pterional",
+   "replaces": "sb_temporal_bone",
+   "derivation": "The CT's temporal bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -49.06,
+     -23.25,
+     -12.6
+    ],
+    "R": [
+     47.2,
+     -22.76,
+     -16.93
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_pterional__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/sb_appr_pterional__removed.glb",
+   "bytes": 243404,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of the CT's bone by rule",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "pterional",
+   "layer": "nuclei",
+   "derivation": "The bone the pterional (frontotemporal) craniotomy removes: 11.8 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; placed from the model's zygomatic process of the frontal bone, 6 mm up and 3 mm back, then onto the bone's surface: 11 mm from that landmark); a frontal hole near the superior orbital rim (Yilmaz 2025; placed 20 mm above, 10 mm lateral to and 8 mm behind the supraorbital notch, then onto the bone's surface: 29 mm from the notch, 28 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral two-thirds of the sphenoid ridge drilled, as in Yasargil's modification (Yilmaz 2025): the ridge between the anterior and middle fossae as found on this skull, and the bone within 6 mm of a line from the pterion towards the anterior clinoid process, each to two-thirds of the way from the pterion to the process's tip (31 of 47 mm); as cut, the bone removed ends 17 mm from the process (Yilmaz 2025 limits this resection at the meningo-orbital artery, at the superior orbital fissure's superolateral corner, which the model does not show). With the anterior clinoidectomy switched on, the anterior clinoid process is taken too (0.2 ml, drawn by rule): the rest of the ridge between the fossae, from where the drilling stops to the process's tip, and the bone within 5 mm of the tip as found on this CT; the optic canal's roof and the optic strut, which are drilled to free it, are not drawn taken. The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone (which stays), leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (46, 39, 30) mm, (36, 54, 52) mm, (62, -7, -1) mm, (66, -10, 40) mm.",
+   "centroid": {
+    "L": [
+     54.67,
+     14.0,
+     31.23
+    ],
+    "R": [
+     54.67,
+     14.0,
+     31.23
+    ]
+   }
+  },
+  {
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_pterional__clinoid",
+   "name": "Anterior clinoid process",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_pterional__clinoid.glb",
+   "bytes": 16436,
+   "refIds": [],
+   "category": "bone",
+   "approach": "pterional",
+   "clinoid": true,
+   "derivation": "The CT's sphenoid bone's anterior clinoid process, as a piece of its own in the pterional (frontotemporal) craniotomy's view: bone until the view's anterior clinoidectomy (a switch) takes it, 0.2 ml. The rest of the ridge between the anterior and middle fossae from where the view's drilling stops to the process's tip, and the bone round the tip, drawn by rule (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     16.19,
+     7.5,
+     10.72
+    ],
+    "R": [
+     16.19,
+     7.5,
+     10.72
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_lso__frontal_bone",
+   "name": "Frontal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_lso__frontal_bone.glb",
+   "bytes": 552556,
+   "refIds": [],
+   "category": "bone",
+   "approach": "lso",
+   "replaces": "sb_frontal_bone",
+   "derivation": "The CT's frontal bone with the bone of the lateral supraorbital craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -24.1,
+     32.5,
+     41.94
+    ],
+    "R": [
+     25.62,
+     35.87,
+     40.72
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_lso__parietal_bone",
+   "name": "Parietal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_lso__parietal_bone.glb",
+   "bytes": 592208,
+   "refIds": [],
+   "category": "bone",
+   "approach": "lso",
+   "replaces": "sb_parietal_bone",
+   "derivation": "The CT's parietal bone, which the lateral supraorbital craniotomy does not cut, remeshed within a few millimetres of the cut so that it meets the cut bone on one surface (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -41.59,
+     -43.71,
+     53.71
+    ],
+    "R": [
+     40.73,
+     -41.14,
+     57.9
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_lso__sphenoid_bone",
+   "name": "Sphenoid bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_lso__sphenoid_bone.glb",
+   "bytes": 415504,
+   "refIds": [],
+   "category": "bone",
+   "approach": "lso",
+   "replaces": "sb_sphenoid_bone",
+   "derivation": "The CT's sphenoid bone, which the lateral supraorbital craniotomy does not cut, remeshed within a few millimetres of the cut so that it meets the cut bone on one surface (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -18.59,
+     7.18,
+     -5.77
+    ],
+    "R": [
+     20.71,
+     9.12,
+     -4.89
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_lso__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/sb_appr_lso__removed.glb",
+   "bytes": 142000,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of the CT's bone by rule",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "lso",
+   "layer": "nuclei",
+   "derivation": "The bone the lateral supraorbital craniotomy removes: 6.6 ml. A frontolateral flap over the orbital roof, with one burr hole posteriorly just below the temporal line (Cha 2012, Choque-Velasquez 2018), cut down to the anterior fossa floor (the basal part drilled off, Cha 2012); the sphenoid ridge is not drilled. Its outline is placed by hand on this skull (1482 mm² seen face on as drawn), its basal edge at the level of the orbital roof; the cut keeps to the frontal bone and stops at the floor, and the bone removed covers about 1178 mm² seen face on, 8 % smaller than the mean LSO craniotomy of 1275 mm² (Cha 2012) (illustrative). The outline is a smooth curve through those points and the cut's edge is smoothed over 1 mm (illustrative). Burr hole: (61, 8, 37) mm.",
+   "centroid": {
+    "L": [
+     47.45,
+     32.49,
+     54.05
+    ],
+    "R": [
+     47.45,
+     32.49,
+     54.05
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_interhemispheric__frontal_bone",
+   "name": "Frontal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_interhemispheric__frontal_bone.glb",
+   "bytes": 531700,
+   "refIds": [],
+   "category": "bone",
+   "approach": "interhemispheric",
+   "replaces": "sb_frontal_bone",
+   "derivation": "The CT's frontal bone with the bone of the right parasagittal craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -22.56,
+     32.18,
+     45.2
+    ],
+    "R": [
+     25.47,
+     37.18,
+     39.33
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_interhemispheric__parietal_bone",
+   "name": "Parietal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_interhemispheric__parietal_bone.glb",
+   "bytes": 599012,
+   "refIds": [],
+   "category": "bone",
+   "approach": "interhemispheric",
+   "replaces": "sb_parietal_bone",
+   "derivation": "The CT's parietal bone with the bone of the right parasagittal craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -40.9,
+     -43.07,
+     54.51
+    ],
+    "R": [
+     40.51,
+     -41.93,
+     58.96
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_interhemispheric__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/sb_appr_interhemispheric__removed.glb",
+   "bytes": 248812,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of the CT's bone by rule",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "interhemispheric",
+   "layer": "nuclei",
+   "derivation": "The bone the right parasagittal craniotomy removes: 16.8 ml. A right parasagittal flap at the coronal suture, its medial edge on the midline (over the superior sagittal sinus): from 40 mm in front of bregma to 20 mm behind it and 40 mm wide; the bone removed covers about 2356 mm² seen face on (illustrative: the sources describe a right precoronal parasagittal or frontoparietal midline craniotomy without giving its size). Bregma here: (0, 6, 100) mm, where this skull's frontal and parietal bones meet at the midline.",
+   "centroid": {
+    "L": [
+     18.1,
+     14.29,
+     87.97
+    ],
+    "R": [
+     18.1,
+     14.29,
+     87.97
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_suboccipital__occipital_bone",
+   "name": "Occipital bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_suboccipital__occipital_bone.glb",
+   "bytes": 505672,
+   "refIds": [],
+   "category": "bone",
+   "approach": "suboccipital",
+   "replaces": "sb_occipital_bone",
+   "derivation": "The CT's occipital bone with the bone of the midline suboccipital craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -24.47,
+     -61.6,
+     -20.7
+    ],
+    "R": [
+     22.78,
+     -58.77,
+     -21.48
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_suboccipital__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/sb_appr_suboccipital__removed.glb",
+   "bytes": 245092,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of the CT's bone by rule",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "suboccipital",
+   "layer": "nuclei",
+   "derivation": "The bone the midline suboccipital craniotomy removes: 11.1 ml. A midline suboccipital flap from 10 mm below the internal occipital protuberance (the confluence of the sinuses) down to the foramen magnum, its posterior rim taken 12 mm to each side of the midline; above, it reaches 30 mm to the left and 30 mm to the right of the midline at its widest. The bone removed covers about 1867 mm² seen face on (the flap faces 74° below the horizontal here) (illustrative: the sources describe a median suboccipital craniotomy or craniectomy without one size; a keyhole of about 2 cm in Wang 2023). The posterior arch of C1 is left (Cho 2024).",
+   "centroid": {
+    "L": [
+     -0.35,
+     -68.97,
+     -39.83
+    ],
+    "R": [
+     -0.35,
+     -68.97,
+     -39.83
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_retrosigmoid__occipital_bone",
+   "name": "Occipital bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_retrosigmoid__occipital_bone.glb",
+   "bytes": 509652,
+   "refIds": [],
+   "category": "bone",
+   "approach": "retrosigmoid",
+   "replaces": "sb_occipital_bone",
+   "derivation": "The CT's occipital bone with the bone of the retrosigmoid craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -23.68,
+     -61.19,
+     -20.64
+    ],
+    "R": [
+     22.66,
+     -58.28,
+     -21.66
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_retrosigmoid__temporal_bone",
+   "name": "Temporal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_retrosigmoid__temporal_bone.glb",
+   "bytes": 733512,
+   "refIds": [],
+   "category": "bone",
+   "approach": "retrosigmoid",
+   "replaces": "sb_temporal_bone",
+   "derivation": "The CT's temporal bone with the bone of the retrosigmoid craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -49.06,
+     -23.25,
+     -12.6
+    ],
+    "R": [
+     47.45,
+     -23.31,
+     -16.62
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_retrosigmoid__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/sb_appr_retrosigmoid__removed.glb",
+   "bytes": 110060,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of the CT's bone by rule",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "retrosigmoid",
+   "layer": "nuclei",
+   "derivation": "The bone the retrosigmoid craniotomy removes: 4.1 ml. A right retrosigmoid craniotomy: its upper edge along the transverse sinus' lower margin for 28 mm and its front edge along the sigmoid sinus' posterior margin for 35 mm (Jian 2021: the window's upper and front margins against the two sinuses), closed behind and below by straight edges, its corners rounded; larger than Jian 2021's keyhole (18-20 x 20-25 mm), about the size of the craniotomies in Tang 2025 (a mean 3.8 cm across), the shape drawn by hand (illustrative). The sinuses are this CT's own (traced through its lumen), the edges drawn on their margins on the inner table and carried out through the bone; as cut, the bone removed comes within 2.0 mm of the transverse sinus and 1.5 mm of the sigmoid. The keypoint is where the two margins meet (Jian 2021, 2022, 2024); the burr hole 3.5 mm behind and below it (Jian 2021). The bone removed covers about 728 mm² seen face on; its edge smoothed over 1 mm (illustrative). Keypoint: (55, -57, -25) mm; burr hole: (53, -59, -26) mm.",
+   "centroid": {
+    "L": [
+     43.19,
+     -57.2,
+     -30.21
+    ],
+    "R": [
+     43.19,
+     -57.2,
+     -30.21
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_orbitozygomatic__frontal_bone",
+   "name": "Frontal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__frontal_bone.glb",
+   "bytes": 486156,
+   "refIds": [],
+   "category": "bone",
+   "approach": "orbitozygomatic",
+   "replaces": "sb_frontal_bone",
+   "derivation": "The CT's frontal bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -24.0,
+     32.57,
+     42.02
+    ],
+    "R": [
+     20.32,
+     37.29,
+     43.45
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_orbitozygomatic__maxilla",
+   "name": "Maxilla",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__maxilla.glb",
+   "bytes": 254696,
+   "refIds": [],
+   "category": "bone",
+   "approach": "orbitozygomatic",
+   "replaces": "sb_maxilla",
+   "derivation": "The CT's maxilla with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -14.39,
+     36.91,
+     -28.02
+    ],
+    "R": [
+     16.2,
+     36.19,
+     -29.34
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_orbitozygomatic__parietal_bone",
+   "name": "Parietal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__parietal_bone.glb",
+   "bytes": 576052,
+   "refIds": [],
+   "category": "bone",
+   "approach": "orbitozygomatic",
+   "replaces": "sb_parietal_bone",
+   "derivation": "The CT's parietal bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -41.59,
+     -43.71,
+     53.71
+    ],
+    "R": [
+     39.81,
+     -44.95,
+     59.67
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_orbitozygomatic__sphenoid_bone",
+   "name": "Sphenoid bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__sphenoid_bone.glb",
+   "bytes": 427284,
+   "refIds": [],
+   "category": "bone",
+   "approach": "orbitozygomatic",
+   "replaces": "sb_sphenoid_bone",
+   "derivation": "The CT's sphenoid bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -18.59,
+     7.18,
+     -5.77
+    ],
+    "R": [
+     20.2,
+     9.32,
+     -5.06
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_orbitozygomatic__temporal_bone",
+   "name": "Temporal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__temporal_bone.glb",
+   "bytes": 715440,
+   "refIds": [],
+   "category": "bone",
+   "approach": "orbitozygomatic",
+   "replaces": "sb_temporal_bone",
+   "derivation": "The CT's temporal bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -49.06,
+     -23.25,
+     -12.6
+    ],
+    "R": [
+     46.99,
+     -23.02,
+     -16.88
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_orbitozygomatic__zygomatic_bone",
+   "name": "Zygomatic bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__zygomatic_bone.glb",
+   "bytes": 74528,
+   "refIds": [],
+   "category": "bone",
+   "approach": "orbitozygomatic",
+   "replaces": "sb_zygomatic_bone",
+   "derivation": "The CT's zygomatic bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -42.19,
+     23.06,
+     -6.5
+    ],
+    "R": [
+     37.13,
+     27.23,
+     -16.35
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_orbitozygomatic__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__removed.glb",
+   "bytes": 254780,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of the CT's bone by rule",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "orbitozygomatic",
+   "layer": "nuclei",
+   "derivation": "The bone the orbitozygomatic craniotomy removes: 19.2 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; placed from the model's zygomatic process of the frontal bone, 6 mm up and 3 mm back, then onto the bone's surface: 11 mm from that landmark); a frontal hole near the superior orbital rim (Yilmaz 2025; placed 20 mm above, 10 mm lateral to and 8 mm behind the supraorbital notch, then onto the bone's surface: 29 mm from the notch, 28 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral two-thirds of the sphenoid ridge drilled, as in Yasargil's modification (Yilmaz 2025): the ridge between the anterior and middle fossae as found on this skull, and the bone within 6 mm of a line from the pterion towards the anterior clinoid process, each to two-thirds of the way from the pterion to the process's tip (31 of 47 mm); as cut, the bone removed ends 17 mm from the process (Yilmaz 2025 limits this resection at the meningo-orbital artery, at the superior orbital fissure's superolateral corner, which the model does not show). With the anterior clinoidectomy switched on, the anterior clinoid process is taken too (0.2 ml, drawn by rule): the rest of the ridge between the fossae, from where the drilling stops to the process's tip, and the bone within 5 mm of the tip as found on this CT; the optic canal's roof and the optic strut, which are drilled to free it, are not drawn taken. The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone, leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (46, 39, 30) mm, (36, 54, 52) mm, (62, -7, -1) mm, (66, -10, 40) mm. Then the orbitozygomatic piece (the two-piece craniotomy, Yilmaz 2025): the superolateral orbital rim from 4 mm lateral to the supraorbital notch to 5 mm lateral to the frontozygomatic suture (the model's zygomatic process of the frontal bone), with the orbital roof 25 mm back from the rim (illustrative), the zygoma's frontal process and its body down to 5 mm below the arch's level (Yilmaz 2025: the cut from the zygomatic body to the inferior orbital fissure about 1 cm below its frontal and temporal processes; its medial part with the infraorbital rim, medial of x = 33 mm, kept; illustrative), and the zygomatic arch from 8 mm in front of the zygomatic bone's back end back to its root in front of the articular tubercle (y = 0 mm here; illustrative).",
+   "centroid": {
+    "L": [
+     47.74,
+     20.85,
+     19.98
+    ],
+    "R": [
+     47.74,
+     20.85,
+     19.98
+    ]
+   }
+  },
+  {
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_orbitozygomatic__clinoid",
+   "name": "Anterior clinoid process",
+   "aliases": [],
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__clinoid.glb",
+   "bytes": 16444,
+   "refIds": [],
+   "category": "bone",
+   "approach": "orbitozygomatic",
+   "clinoid": true,
+   "derivation": "The CT's sphenoid bone's anterior clinoid process, as a piece of its own in the orbitozygomatic craniotomy's view: bone until the view's anterior clinoidectomy (a switch) takes it, 0.2 ml. The rest of the ridge between the anterior and middle fossae from where the view's drilling stops to the process's tip, and the bone round the tip, drawn by rule (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     16.19,
+     7.5,
+     10.72
+    ],
+    "R": [
+     16.19,
+     7.5,
+     10.72
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_far_lateral__occipital_bone",
+   "name": "Occipital bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_far_lateral__occipital_bone.glb",
+   "bytes": 507036,
+   "refIds": [],
+   "category": "bone",
+   "approach": "far_lateral",
+   "replaces": "sb_occipital_bone",
+   "derivation": "The CT's occipital bone with the bone of the far lateral craniectomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -23.58,
+     -61.15,
+     -20.74
+    ],
+    "R": [
+     22.36,
+     -57.92,
+     -20.95
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_far_lateral__temporal_bone",
+   "name": "Temporal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_far_lateral__temporal_bone.glb",
+   "bytes": 728324,
+   "refIds": [],
+   "category": "bone",
+   "approach": "far_lateral",
+   "replaces": "sb_temporal_bone",
+   "derivation": "The CT's temporal bone with the bone of the far lateral craniectomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -49.06,
+     -23.25,
+     -12.6
+    ],
+    "R": [
+     47.32,
+     -22.98,
+     -16.57
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_far_lateral__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/sb_appr_far_lateral__removed.glb",
+   "bytes": 217112,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of the CT's bone by rule",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "far_lateral",
+   "layer": "nuclei",
+   "derivation": "The bone the far lateral craniectomy removes: 7.7 ml. A right lateral suboccipital craniectomy (Pai 2018: lateral suboccipital, reaching the sigmoid sinus, the foramen magnum's rim taken), its outline following this CT's own sinuses (traced through their lumen): its upper edge along the transverse sinus' lower margin for 30 mm from the junction, its lateral edge along the sigmoid sinus' posterior margin for 35 mm down towards the jugular bulb, and below, the foramen magnum's posterior rim taken from x = 3 to 16 mm, so that the opening runs into the foramen; its medial edge bowed outwards and its corners rounded (the extents and shape illustrative); the bone removed, the condyle's part with it, covers about 1583 mm² seen face on. Then the posterior third of the right occipital condyle drilled (Pai 2018: the posterior 30-40 %; here the third of the condyle's bone within 11 mm of its fitted landmark that lies furthest back). The hemilaminectomy of C1 that goes with it is not shown: the atlas is not part of this model.",
+   "centroid": {
+    "L": [
+     27.81,
+     -54.83,
+     -38.83
+    ],
+    "R": [
+     27.81,
+     -54.83,
+     -38.83
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_kawase__occipital_bone",
+   "name": "Occipital bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_kawase__occipital_bone.glb",
+   "bytes": 505436,
+   "refIds": [],
+   "category": "bone",
+   "approach": "kawase",
+   "replaces": "sb_occipital_bone",
+   "derivation": "The CT's occipital bone with the bone of the anterior petrosectomy (kawase) removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -23.68,
+     -61.19,
+     -20.64
+    ],
+    "R": [
+     22.17,
+     -57.48,
+     -21.38
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_kawase__parietal_bone",
+   "name": "Parietal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_kawase__parietal_bone.glb",
+   "bytes": 592716,
+   "refIds": [],
+   "category": "bone",
+   "approach": "kawase",
+   "replaces": "sb_parietal_bone",
+   "derivation": "The CT's parietal bone with the bone of the anterior petrosectomy (kawase) removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -41.59,
+     -43.71,
+     53.71
+    ],
+    "R": [
+     40.83,
+     -41.83,
+     57.55
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_kawase__sphenoid_bone",
+   "name": "Sphenoid bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_kawase__sphenoid_bone.glb",
+   "bytes": 429912,
+   "refIds": [],
+   "category": "bone",
+   "approach": "kawase",
+   "replaces": "sb_sphenoid_bone",
+   "derivation": "The CT's sphenoid bone with the bone of the anterior petrosectomy (kawase) removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -18.59,
+     7.18,
+     -5.77
+    ],
+    "R": [
+     20.56,
+     8.0,
+     -5.59
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "TopBrain 2025 CT angiogram (case 011) with the Z-Anatomy model fitted onto it",
+   "licence": "TopBrain data: open use with attribution, non-commercial (commercial use needs the data owner's permission; University Hospital Zurich); Z-Anatomy CC BY-SA 4.0, BodyParts3D CC BY-SA 2.1 Japan; definitions Wikipedia CC BY-SA 3.0",
+   "citation": [
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
+    "Yang K, Musio F, Ma Y, Juchler N, Paetzold JC, Al-Maskari R, et al. The TopCoW challenge: topology-aware Circle of Willis segmentation for CT and MR angiography. NEJM AI. 2026;3(8). doi:10.1056/AIdbp2500994 (preprint arXiv:2312.17670).",
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.64898/2026.05.28.26354312",
+    "https://doi.org/10.1056/AIdbp2500994",
+    "https://doi.org/10.1093/nar/gkn613",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "id": "sb_appr_kawase__temporal_bone",
+   "name": "Temporal bone",
+   "type": "bone",
+   "file": "assets/skullbase-v3/sb_appr_kawase__temporal_bone.glb",
+   "bytes": 787568,
+   "refIds": [],
+   "category": "bone",
+   "approach": "kawase",
+   "replaces": "sb_temporal_bone",
+   "derivation": "The CT's temporal bone with the bone of the anterior petrosectomy (kawase) removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -49.06,
+     -23.25,
+     -12.6
+    ],
+    "R": [
+     45.11,
+     -21.6,
+     -16.84
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_kawase__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/sb_appr_kawase__removed.glb",
+   "bytes": 253532,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of the CT's bone by rule",
+   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "kawase",
+   "layer": "nuclei",
+   "derivation": "The bone the anterior petrosectomy (kawase) removes: 8.3 ml. A right temporal flap drawn 40 × 32 mm (1280 mm² seen from the side as drawn; Signoretti 2025 measured a mean 1272 mm²; the bone removed, the drilled apex with it, covers about 1566 mm² seen from the side), its base at the middle fossa floor's level (the tegmen, as located on this CT), two thirds of it in front of the external auditory canal and one third behind (Flores-Justa 2021; the canal's line taken from the registered ear's tympanic membrane), cut down flush with the floor. Then the petrous apex drilled within the rhomboid of four landmarks (Signoretti 2025): the petrous apex, where the greater petrosal nerve meets V3 (seen from above), the geniculate ganglion and the arcuate eminence (the bone over the superior semicircular canal, from the registered ear), seen from above and drilled straight down to the level of the inferior petrosal sinus, the ridge and the pyramid behind it taken through to the posterior fossa's dura (up to 12 mm behind the line from the apex to the eminence, from the apex to the porus: not medial to the apex, not behind the internal acoustic canal), kept 1.5 mm off the internal carotid artery (petrous and lacerum parts), 1.5 mm off the scala tympani, 1.5 mm off the scala vestibuli, vestibule and semicircular canals, 1 mm off the nerves in the internal acoustic meatus (VII, VIII), 1.5 mm off the facial nerve (VII), 1 mm off the mandibular nerve (V3), 1 mm off the trigeminal ganglion, 0.5 mm off the greater petrosal nerve, 1 mm off the abducens nerve (VI) (the margins illustrative): 2.58 ml (Signoretti 2025: 2.83 ± 0.28 cm³). On this model the arcuate eminence lies 10.5 mm from the geniculate ganglion, that 13.9 mm from the nerves' meeting, that 16.9 mm from the petrous apex, and the apex 34.1 mm (straight) from the eminence.",
+   "centroid": {
+    "L": [
+     47.17,
+     -12.75,
+     -2.47
+    ],
+    "R": [
+     47.17,
+     -12.75,
+     -2.47
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_kawase__guide",
+   "name": "Kawase rhomboid",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/sb_appr_kawase__guide.glb",
+   "bytes": 4108,
+   "colour": {
+    "token": "sbGuide",
+    "light": "#1F2A36",
+    "dark": "#F2F4F7"
+   },
+   "dataset": "rule",
+   "source": "Drawn by rule",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "guide",
+   "approach": "kawase",
+   "schematic": true,
+   "centroid": {
+    "L": [
+     26.89,
+     -15.21,
+     -5.42
+    ],
+    "R": [
+     26.89,
+     -15.21,
+     -5.42
+    ]
+   },
+   "derivation": "The rhomboid drawn on the middle fossa floor between its four landmarks on this model (Signoretti 2025): the petrous apex, where the greater petrosal nerve meets V3 seen from above, the geniculate ganglion and the arcuate eminence (the bone over the superior semicircular canal)."
+  },
+  {
+   "id": "br_temporal_lobe__kawase",
+   "name": "Temporal lobe",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase-v3/br_temporal_lobe__kawase.glb",
+   "bytes": 142600,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "template",
+   "source": "Lead-DBS MNI 2009b template surface, fitted into this CT",
+   "licence": "GPL-3.0, non-commercial (the Lead-DBS template surface and the FreeSurfer labels shipped with it; FreeSurfer: research use); its fit into this CT uses the TopBrain data (non-commercial)",
+   "citation": [
+    "Neudorfer C, Butenko K, Oxenford S, Rajamani N, Achtzehn J, Goede L, et al. Lead-DBS v3.0: Mapping deep brain stimulation effects to local anatomy and global networks. NeuroImage. 2023;268:119862. doi:10.1016/j.neuroimage.2023.119862.",
+    "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1016/j.neuroimage.2023.119862",
+    "https://doi.org/10.1016/j.neuroimage.2010.06.010",
+    "https://doi.org/10.64898/2026.05.28.26354312"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.703 mm), this patient's arteries outside the cortex, each hemisphere on its own side of the falx, the M2 segments on the insula (median 1.051 mm on the right) and the M3 segments in the Sylvian fissure (median 1.096 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital view 12 mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue. In the Kawase view held up off the middle fossa floor (extradurally, with its dura) by up to 15 mm over the petrous apex (skullbase_v3.py: lift_temporal_lobe; illustrative): a shape, not a simulation.",
+   "centroid": {
+    "L": [
+     -42.83,
+     -30.71,
+     10.36
+    ],
+    "R": [
+     42.69,
+     -32.08,
+     10.8
+    ]
+   },
+   "replaces": "br_temporal_lobe",
+   "pushedFrom": "assets/skullbase-v3/br_temporal_lobe.glb",
+   "forView": "kawase"
   }
  ],
  "arterySystems": [

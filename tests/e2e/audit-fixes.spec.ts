@@ -663,3 +663,34 @@ test('surgical views open opened; from one tumour to another of the same view th
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// AP-04 (the owner's decision of 13 November 2026): the pterional drills the classic two-thirds of the sphenoid ridge, and
+// the pterional and orbitozygomatic views have an anterior clinoidectomy switch, off by default
+test('pterional: the anterior clinoidectomy switch takes the clinoid process, by key and by link', async ({ page }) => {
+  const g = guard(page);
+  const hash = () => decodeURIComponent(new URL(page.url()).hash);
+  await open(page, './skullbase/#/atlas?g=transsylvian');
+  const box = page.locator('#sb-m-clinoid');
+  await expect(box).toHaveCount(1);
+  await expect(box).not.toBeChecked();
+  expect(hash()).not.toContain('ac=');
+  await expect(page.locator('.pane:not([hidden]) article.card').last()).toContainText('Anterior clinoidectomy');
+  await page.keyboard.press('a');
+  await settle(page);
+  await expect.poll(hash).toContain('ac=100');
+  await expect(box).toBeChecked();
+  // the clinoid process's own piece is drawn as the bone removed (see-through), not as bone
+  const opaque = () => page.evaluate(() => {
+    let o = -1;
+    (window as unknown as { __atlas: { viewer: { scene: { traverse: (f: (x: { userData?: { id?: string }; material?: { opacity?: number; transparent?: boolean }; visible: boolean }) => void) => void } } } }).__atlas.viewer.scene
+      .traverse((x) => { if (x.userData?.id === 'sb_appr_pterional__clinoid' && x.material && x.visible) o = x.material.transparent ? x.material.opacity ?? 1 : 1; });
+    return o;
+  });
+  expect(await opaque()).toBeLessThan(1);
+  await box.uncheck();
+  await settle(page);
+  await expect.poll(hash).not.toContain('ac=');
+  expect(await opaque()).toBe(1);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

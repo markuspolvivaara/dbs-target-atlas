@@ -1365,6 +1365,22 @@ def approach_items(items: list, ex2: dict, build: Path | None = None, kind: str 
         cut_ids = [f"sb_appr_{aid}__{SB.slug(b)[3:]}" for b in sorted({SB.split_pair(c)[0] for c in ap.get("cutBones", ap["bones"])})]
         summary[aid] = {"name": ap["name"], "side": ap["side"], "how": ap["how"], "removedMl": ap["removedMl"], "bones": ids, "cutBones": cut_ids,
                         "removed": sid, "burrHoles": ap["burrHoles"], **{k: ap[k] for k in ("measured", "corners") if k in ap}}
+        if ap.get("clinoid"):   # the anterior clinoid process, as a piece of its own: bone until the view's clinoidectomy takes it
+            cv, ct = np.array(ap["clinoid"]["verts"], float), np.array(ap["clinoid"]["tris"], int)
+            ct = orient_outward(cv, ct)
+            cid = f"sb_appr_{aid}__clinoid"
+            write_glb(build / f"{cid}.glb", [{"name": "R", "positions": cv, "normals": SB.normals(cv, ct), "indices": ct, "mode": TRIANGLES}], {"id": cid})
+            cc = cv.mean(0).round(2).tolist()
+            sph = cut_of[SB.slug("Sphenoid bone")]
+            items.append({**{k: sph[k] for k in ("colour", "dataset", "source", "licence", "citation", "citationUrls")},
+                          "id": cid, "name": "Anterior clinoid process", "aliases": [], "type": "bone", "file": f"assets/{kind}/{cid}.glb",
+                          "bytes": 0, "refIds": [], "category": "bone", "approach": aid, "clinoid": True,
+                          "derivation": (f"{owner} sphenoid bone's anterior clinoid process, as a piece of its own in the {ap['name'].lower()}'s "
+                                         f"view: bone until the view's anterior clinoidectomy (a switch) takes it, {ap['clinoid']['ml']} ml. "
+                                         "The rest of the ridge between the anterior and middle fossae from where the view's drilling stops to "
+                                         "the process's tip, and the bone round the tip, drawn by rule (pipeline/skullbase_v3_approach.py)."),
+                          "centroid": {"L": cc, "R": cc}})
+            summary[aid].update({"clinoid": cid, "clinoidMl": ap["clinoid"]["ml"]})
         if ap.get("guide"):     # an outline drawn on the bone (the Kawase rhomboid)
             gid = f"sb_appr_{aid}__guide"
             gv, gn, gt = SB.tube(np.c_[np.array(ap["guide"]["points"]), np.full(len(ap["guide"]["points"]), 0.35)])
@@ -1445,7 +1461,7 @@ def validate() -> int:
             c = it["centroid"]
             if it.get("category") == "removed" and aps[it["approach"]]["side"] == "M":     # a midline craniotomy
                 check(abs(c["R"][0]) < 5, f"{it['id']}: not on the midline {c}")
-            elif it.get("category") == "removed":     # one side only: the craniotomy is on the right
+            elif it.get("category") == "removed" or it.get("clinoid"):     # one side only: the craniotomy is on the right
                 check(c["R"][0] > 0, f"{it['id']}: not on the right {c}")
             elif it.get("category") in ("tumour", "guide"):     # drawn on the right, or across the midline
                 check(c["R"][0] > -5, f"{it['id']}: not on the right {c}")
@@ -1456,6 +1472,9 @@ def validate() -> int:
                 check(it.get("tumourView") or abs(c["R"][0] + c["L"][0]) / 2 < 5, f"{it['id']}: off the midline {c}")
             else:
                 check(c["L"][0] < 0 < c["R"][0], f"{it['id']}: sides {c}")
+    for aid in ("pterional", "orbitozygomatic"):    # the anterior clinoidectomy's piece: there, and the size of a clinoid process
+        a_ = aps.get(aid, {})
+        check(a_.get("clinoid") is not None and 0.05 <= a_.get("clinoidMl", 0) <= 2.0, f"{aid}: the clinoid process's piece {a_.get('clinoidMl')} ml")
     for nerve, sides in fit["nerves"].items():
         for s, r in sides.items():
             check(r["boneCrossedMm"] <= 2.0, f"{nerve} {s}: crosses {r['boneCrossedMm']} mm of bone")

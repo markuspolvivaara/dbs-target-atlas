@@ -94,9 +94,13 @@ describe.each(MODELS)('craniotomies on %s: the cards give what the cut measures'
 
 describe('craniotomies on the default model: what the audit measured', () => {
   const g = v3 as unknown as Record<string, Geom>;
-  it('the LSO opening is not larger than the published mean; the ridge drilling stops far from the clinoid process', () => {
+  it('the LSO opening is not larger than the published mean; the ridge is drilled two-thirds of the way to the clinoid process', () => {
     expect(g.lso.measured!.faceOnMm2).toBeLessThan(LSO_MEAN);
-    expect(g.pterional.measured!.removedToClinoidMm).toBeGreaterThan(30);
+    // (the audit found it ending 36 mm from the process: the line it followed missed this CT's ridge, and the smoothed cut
+    // left the thin ridge standing; drilled to two-thirds of the way along a 47 mm ridge it ends about 16 mm short)
+    expect(g.pterional.measured!.removedToClinoidMm).toBeGreaterThan(10);
+    expect(g.pterional.measured!.removedToClinoidMm).toBeLessThan(25);
+    expect(g.pterional.how).toContain('lateral two-thirds of the sphenoid ridge');
     expect(g.orbitozygomatic.removedMl).toBeLessThan(20);
     expect(g.suboccipital.measured!.leftMm).toBeGreaterThan(28);
   });
