@@ -85,7 +85,7 @@ const MORPH_UI: Record<string, { label: string; key: string; note: () => string 
       const p = V3_FIT.pfossa;
       const f = p?.farLateralBack;
       if (!p || !f) return null;
-      return `At 100 % the right tonsil and biventral lobule are ${fmtMm(p.params.flBackMm)} mm further back, the rest of the right hemisphere following less the further it lies from them (none ${fmtMm(p.params.flReachMm)} mm away); they are then ${fmtMm(f.medullaGapMm.back)} mm from the medulla, ${fmtMm(f.medullaGapMm.rest)} mm at rest. A view aid, not a step the sources describe: with the lift on too, the cerebellum can be held where no retractor would hold it. The posterior inferior cerebellar artery’s course on the cerebellum moves with it.`;
+      return `At 100 % the right tonsil, biventral lobule and inferior semilunar lobule (the hemisphere’s lower outer corner) are up to ${fmtMm(p.params.flBackMm)} mm further back, each point stopping short of the occipital bone, the rest of the right hemisphere following less the further it lies from them (none ${fmtMm(p.params.flReachMm)} mm away); the tonsil and biventral lobule are then ${fmtMm(f.medullaGapMm.back)} mm from the medulla, ${fmtMm(f.medullaGapMm.rest)} mm at rest. A view aid, not a step the sources describe: with the lift on too, the cerebellum can be held where no retractor would hold it. The posterior inferior cerebellar artery’s course on the cerebellum moves with it.`;
     },
   },
   telovelar: {

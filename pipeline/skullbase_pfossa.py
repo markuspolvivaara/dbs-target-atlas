@@ -49,8 +49,9 @@ the lower cranial nerves; Luzzi 2022: the tonsil retracted upwards): each of the
 that towards the midline, the rest of the right hemisphere following with a weight that falls from 1 at them to 0
 FL_REACH_MM from them (it changes by at most its size over FL_REACH_MM per mm, below 1: it cannot fold); then kept off bone and
 the arteries as the telovelar shape is. The vermis, the left side, the brainstem and the fourth ventricle stay. A second
-shape (morph target "farLateralBack") draws the same parts FLB_MM straight back (posteriorly), the rest of the right
-hemisphere following as in the lift: a view aid the owner asked for, not a step a source describes, and with the lift
+shape (morph target "farLateralBack") draws them and the inferior semilunar lobule (the hemisphere's lower outer corner,
+which the view otherwise looks past) FLB_MM straight back (posteriorly), the rest of the right hemisphere following as in
+the lift: a view aid the owner asked for, not a step a source describes, and with the lift
 on too it can hold the cerebellum where no retractor would (each is kept clear of bone and arteries on its own, and
 together they still cannot fold it).
 
@@ -154,6 +155,8 @@ FL_MM = 8.0                # illustrative: how far they are lifted ...
 FL_MEDIAL = 0.5            # ... and moved towards the midline this share as far (superomedially)
 FL_REACH_MM = 20.0         # the rest of the right hemisphere follows, none this far from them
 assert FL_MM * np.hypot(1, FL_MEDIAL) / FL_REACH_MM < 1, "the far lateral shape could fold the cerebellum"
+FLB_PARTS = FL_PARTS + ["Inferior semilunar lobule"]   # drawn back in its second shape (the right ones): with the
+                           # inferior semilunar lobule, the hemisphere's lower outer corner the view looks past (the owner)
 FLB_MM = 8.0               # illustrative: how far the far lateral view's second shape draws them straight back ...
 FLB_SMOOTH = 20            # ... each point's move cut short where it would reach bone or the tentorium, the cut spread
                            # over the surface by this many rounds of neighbour minima-of-means (never past the cut)
@@ -740,15 +743,15 @@ def far_lateral(parts: dict, fs) -> dict:
 
 
 def far_lateral_back(parts: dict, fs) -> dict:
-    """Each part's displacement for the far lateral view's second shape: the same parts drawn FLB_MM straight back, the
-    rest of the right hemisphere following as in the lift. Straight back the hemisphere meets the occipital bone, too
-    deep for the other shapes' push off it: each point's move is cut short instead, to the share of it (found by
-    bisection) that keeps the point BONE_GAP_MM off bone and the tentorium, and the cut spread over the part's surface
-    (FLB_SMOOTH rounds, each point taking the lesser of its own share and its neighbours' mean) so that neighbours move
-    alike; then kept off the arteries as the other shapes are."""
-    def lifted(n: str) -> bool:
-        return any(n == p or n.startswith(p + ".") for p in FL_PARTS)
-    tree = cKDTree(np.vstack([v[side == "R"] for n, (v, _, side) in parts.items() if lifted(n)]))
+    """Each part's displacement for the far lateral view's second shape: the right tonsil, biventral lobule and inferior
+    semilunar lobule (FLB_PARTS) drawn FLB_MM straight back, the rest of the right hemisphere following as in the lift.
+    Straight back the hemisphere meets the occipital bone, too deep for the other shapes' push off it: each point's move
+    is cut short instead, to the share of it (found by bisection) that keeps the point BONE_GAP_MM off bone and the
+    tentorium, and the cut spread over the part's surface (FLB_SMOOTH rounds, each point taking the lesser of its own
+    share and its neighbours' mean) so that neighbours move alike; then kept off the arteries as the other shapes are."""
+    def drawn(n: str) -> bool:
+        return any(n == p or n.startswith(p + ".") for p in FLB_PARTS)
+    tree = cKDTree(np.vstack([v[side == "R"] for n, (v, _, side) in parts.items() if drawn(n)]))
     dirn = np.array([0.0, -1.0, 0.0])
     out = {}
     for n, (v, tri, side) in parts.items():

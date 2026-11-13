@@ -3476,7 +3476,7 @@
    "id": "tb_posterior_inferior_cerebellar_artery_fitted_course",
    "name": "Posterior inferior cerebellar artery (fitted course)",
    "file": "assets/skullbase-v3/tb_posterior_inferior_cerebellar_artery_fitted_course.cleared.glb",
-   "bytes": 292064,
+   "bytes": 295372,
    "system": "Vertebral artery",
    "morph": true,
    "derivation": "The model's typical course on from this CT's PICA origin: a run drawn from the end of the labelled origin round the outside of the brainstem (11.4 mm on the right, 12.7 mm on the left) to the start of the Z-Anatomy PICA's trunk, then that trunk (lateral to the medulla, round the tonsil) and the branches that start on it, fitted onto this CT (the whole-skull fit, then the posterior fossa's) and kept clear of the fitted cerebellum and brainstem. It moves with the cerebellum in the telovelar and retrosigmoid views. Its course is approximate, not this patient's: this CT's own PICAs loop medially from long, tortuous vertebral arteries. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py).",
@@ -4107,7 +4107,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_cerebellar_hemisphere.glb",
-   "bytes": 839676,
+   "bytes": 849416,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
