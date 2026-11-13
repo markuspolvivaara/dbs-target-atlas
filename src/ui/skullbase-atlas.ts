@@ -71,6 +71,15 @@ const MORPH_UI: Record<string, { label: string; key: string; note: () => string 
       return p ? `At 100 % the right cerebellar hemisphere is drawn ${fmtMm(p.params.rsMm)} mm away from the corridor along the back of the petrous bone (from the internal acoustic meatus out through the craniotomy, just inside its corner at the sinuses’ junction), the movement falling to none ${fmtMm(p.params.rsReachMm)} mm from it (it cannot fold the cerebellum); the cerebellum is then ${fmtMm(p.retrosigmoid.meatusToCerebellumMm.moved)} mm from the meatus, ${fmtMm(p.retrosigmoid.meatusToCerebellumMm.rest)} mm at rest. The brainstem, the nerves and the arteries stay.` : null;
     },
   },
+  farLateral: {
+    label: 'Lift the tonsil and biventral lobule', key: 'f', note: () => {
+      const p = V3_FIT.pfossa;
+      const f = p?.farLateral;
+      if (!p || !f) return null;
+      const gap = f.vertebralGapMm ? ` They are then ${fmtMm(f.vertebralGapMm.lifted)} mm from the vertebral artery, ${fmtMm(f.vertebralGapMm.rest)} mm at rest.` : '';
+      return `At 100 % the right tonsil and biventral lobule are ${fmtMm(p.params.flMm)} mm higher and ${fmtMm(p.params.flMm * p.params.flMedial)} mm nearer the midline, the rest of the right hemisphere following less the further it lies from them (none ${fmtMm(p.params.flReachMm)} mm away; it cannot fold the cerebellum).${gap} The posterior inferior cerebellar artery’s course on the cerebellum moves with it; the vermis, the left side, the brainstem, the nerves and the vertebral artery stay.`;
+    },
+  },
   telovelar: {
     label: 'Draw the tonsils apart, lift the vermis', key: 't', note: () => {
       const p = V3_FIT.pfossa;

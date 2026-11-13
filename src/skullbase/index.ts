@@ -199,7 +199,11 @@ export const V3_FIT = z.object({
     /** the retrosigmoid shape: the right hemisphere drawn back from the petrous bone */
     retrosigmoid: z.object({ maxMovedMm: z.number(), moved: z.number(), inBoneAfter: z.number(), inVesselAfter: z.number(),
       meatusToCerebellumMm: z.object({ rest: z.number(), moved: z.number() }), inCorridor: z.object({ rest: z.number(), moved: z.number() }) }),
-    params: z.object({ rsMm: z.number(), rsReachMm: z.number(), tableGapMm: z.number(), tableMinMm: z.number(), boneGapMm: z.number(), tvMm: z.number(), tvUp: z.number(), tvReachMm: z.number(),
+    /** the far lateral shape: the right tonsil and biventral lobule lifted superomedially */
+    farLateral: z.object({ maxMovedMm: z.number(), moved: z.number(), inBoneAfter: z.number(), inVesselAfter: z.number(),
+      tonsilLowestZMm: z.object({ rest: z.number(), lifted: z.number() }),
+      vertebralGapMm: z.object({ rest: z.number(), lifted: z.number() }).optional() }),
+    params: z.object({ rsMm: z.number(), rsReachMm: z.number(), flMm: z.number(), flMedial: z.number(), flReachMm: z.number(), tableGapMm: z.number(), tableMinMm: z.number(), boneGapMm: z.number(), tvMm: z.number(), tvUp: z.number(), tvReachMm: z.number(),
       tvVermisMm: z.number(), tvVermisBack: z.number(), tvVermisReachMm: z.number() }),
   }).optional(),
   /** the skull completed beyond the CT's field of view, the face from the fitted model (pipeline/skullbase_v3_skull.py) */

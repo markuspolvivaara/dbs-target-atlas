@@ -35,7 +35,7 @@ DATA = ROOT / "data" / "build"
 GEN = ROOT.parent / "src" / "data" / "generated"
 STEM = ["Medulla oblongata", "Pons", "Midbrain"]
 CEREBELLUM = ["Cerebellar hemisphere", "Vermis", "Tonsil of cerebellum"]
-SHAPES = ("rest", "telovelar", "retrosigmoid")
+SHAPES = ("rest", "telovelar", "retrosigmoid", "farLateral")
 HINDBRAIN_GRID_MM = 0.35  # the whole hindbrain rasterised this fine (the brainstem alone at GRID_MM)
 FISSURE_SHARE = 0.25      # a fitted course on the cerebellum: at most this share of its surface touching it ...
 #                         # (0.2 until November 2026. Against the cerebellum as refitted under this CT's tentorium the PICA's

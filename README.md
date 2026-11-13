@@ -292,7 +292,7 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   own file (`<id>.joined.glb`, `<id>.cleared.glb`), its source's untouched; its card says what was drawn. Validation
   checks every junction closed and no artery inside the brainstem in any shape of the brain.
 - **How a surgical view opens**: with its shapes full on (the fissure opened and the frontal lobe lifted, the hemisphere
-  held off the falx, the tonsils drawn apart, the cerebellum drawn back), the anatomy its text describes; the sliders
+  held off the falx, the tonsils drawn apart, the cerebellum drawn back or lifted), the anatomy its text describes; the sliders
   take it back to the brain at rest. The pterional, orbitozygomatic, interhemispheric, retrosigmoid and far lateral views
   look in from the direction that showed the most of the structures each view's text names (a search of 642 directions
   round each opening in the site audit of November 2026, then chosen by eye; `Viewer.goPreset`); the telovelar view
@@ -303,8 +303,12 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   second piece, the superolateral orbital rim and roof and the zygomatic arch (Yilmaz 2025, Rodriguez Rubio 2019), over
   the same fitted brain (the fissure and frontal-lobe sliders), seen from lower down. The far lateral craniectomy is a
   right lateral suboccipital one down through the foramen magnum's rim, the posterior third of the occipital condyle
-  drilled (Pai 2018, Bruneau 2008); the atlas is not modelled, so the C1 hemilaminectomy is not shown. The foramen
-  magnum meningioma is drawn in it.
+  drilled (Pai 2018, Bruneau 2008); the atlas is not modelled, so the C1 hemilaminectomy is not shown. Its slider lifts
+  the right tonsil and biventral lobule 8 mm up and 4 mm towards the midline (illustrative), the rest of the right
+  hemisphere following less the further it lies from them (none 20 mm away), as the approach's retraction holds them
+  superomedially off the vertebral artery and the lower cranial nerves (Sriamornrattanakul 2023, Luzzi 2022); a shape
+  (morph target "farLateral", `skullbase_pfossa.far_lateral`), kept off bone and the arteries, and the posterior inferior
+  cerebellar artery's course on the cerebellum moves with it. The foramen magnum meningioma is drawn in it.
 - **Anterior petrosectomy (Kawase)** (`skullbase_v3_approach.py`, `skullbase_v3.py approaches`). A right temporal flap
   flush with the middle fossa floor, two thirds in front of the external auditory canal (Flores-Justa 2021); the petrous
   apex drilled within the rhomboid of four landmarks on this model (Signoretti 2025: the petrous apex, where the greater
@@ -454,7 +458,7 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
   - The patch Z-Anatomy files as "Insula (subcentral gyrus …)" is the subcentral gyrus, taken as frontal.
   - The cerebellum, brainstem and fourth ventricle are Z-Anatomy's (`pipeline/skullbase_v1_pfossa.py`). They are
     pushed out of its bone and back inside the cranial cavity, through which the cerebellum passes in places
-    (except at the foramen magnum), then shaped by v3's telovelar and retrosigmoid rules.
+    (except at the foramen magnum), then shaped by v3's telovelar and retrosigmoid rules (not yet the far lateral one).
   - The superior, anterior inferior and posterior inferior cerebellar arteries move with the cerebellum. The trunks
     and the posterior cerebral artery stay. Where Z-Anatomy's own cerebellar arteries ran inside its cerebellum, they
     are moved out onto its surface (up to about 3.4 mm). The hindbrain is kept under Z-Anatomy's tentorium, which the

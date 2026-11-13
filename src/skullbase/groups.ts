@@ -93,11 +93,12 @@ function surgicalGroups(): SbGroup[] {
     const replaced = new Set(geom.bones.map((id) => SB.get(id)?.replaces));
     // copies for this view only (the Kawase view's lifted temporal lobe) stand in for their parts
     const own = new Map(PUSHED.filter((s) => s.forView === a.view && s.replaces).map((s) => [s.replaces!, s.id]));
+    const morphs = (SB_MODEL === 'zanatomy' ? V1_TEXT[a.id]?.morphs : undefined) ?? a.morphs;
     return {
       id: a.view, kind: 'approach', name: a.name, camera: (SB_MODEL === 'zanatomy' ? V1_TEXT[a.id]?.camera : undefined) ?? a.camera, hemi: a.hemi ?? (geom.side === 'M' ? 'both' : geom.side), cutAbove: null, boneLook: undefined,
       // framed on the craniotomy and what it is for: the view looks in through the one onto the other
-      focus: null, focusIds: [...(a.frameOpening === false ? [] : [geom.removed]), ...byName(...a.focus)], radius: a.radius ?? 60, approach: a.id, morphs: a.morphs,
-      morphDefault: Object.fromEntries(a.morphs.map((m) => [m, 1])),
+      focus: null, focusIds: [...(a.frameOpening === false ? [] : [geom.removed]), ...byName(...a.focus)], radius: a.radius ?? 60, approach: a.id, morphs,
+      morphDefault: Object.fromEntries(morphs.map((m) => [m, 1])),
       description: SB_MODEL === 'zanatomy' ? V1_TEXT[a.id]?.summary ?? a.summary : a.summary,
       structures: [...bones.filter((id) => !replaced.has(id)), ...geom.bones, geom.removed, ...(geom.guides ?? []),
         ...[...brainOf(a.brain ?? 'cerebrum'), ...byName(...a.context, ...(SB_MODEL === 'zanatomy' ? V1_TEXT[a.id]?.add ?? [] : []))].map((id) => own.get(id) ?? id)]
@@ -235,7 +236,7 @@ function tumourGroups(surgical: SbGroup[]): SbGroup[] {
       description: t.summary, focusIds: [...inView(gr.view), ...(host.focusIds ?? []).slice(0, 1)], radius: Math.max(host.radius, 55),
       structures: [...host.structures.map((x) => swap.get(x) ?? x), gr.structure], tumour: { family: t.family, grade: gr.id },
       // (opened onto the tumour: the cerebellum retracted, the frontal lobe lifted)
-      morphDefault: Object.fromEntries((host.morphs ?? []).filter((m) => ['retrosigmoid', 'lsoLift', 'lift', 'open', 'telovelar'].includes(m)).map((m) => [m, 1])),
+      morphDefault: Object.fromEntries((host.morphs ?? []).filter((m) => ['retrosigmoid', 'lsoLift', 'lift', 'open', 'telovelar', 'farLateral'].includes(m)).map((m) => [m, 1])),
     };
   }));
 }

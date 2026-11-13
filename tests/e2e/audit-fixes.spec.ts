@@ -626,6 +626,11 @@ test('surgical views open opened; from one tumour to another of the same view th
   const [x, y, z, tx, ty, tz] = cam().split(',').map(Number);
   const d = [x - tx, y - ty, z - tz], n = Math.hypot(...d);
   expect(d[2] / n).toBeLessThan(-0.7);
+  // ... opened with the right tonsil and biventral lobule lifted; the key lets them back
+  expect(hash()).toContain('fl=100');
+  await page.keyboard.press('f');
+  await settle(page);
+  await expect.poll(hash).toContain('fl=0');
   await open(page, './skullbase/#/atlas?g=koos_i');
   await expect.poll(cam).toMatch(/^-?\d/);
   expect(hash()).toContain('rs=100');

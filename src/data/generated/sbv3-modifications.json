@@ -14,7 +14,8 @@
     "shapes": [
      "rest",
      "telovelar",
-     "retrosigmoid"
+     "retrosigmoid",
+     "farLateral"
     ],
     "fissureShare": 0.25,
     "fissureMm": 4.0
@@ -33,16 +34,16 @@
      "movedMm": 0.99
     },
     "Posterior inferior cerebellar artery (fitted course)": {
-     "insidePoints": 18,
-     "movedMm": 1.45
+     "insidePoints": 96,
+     "movedMm": 1.43
     }
    },
    "validation": {
     "checks": 58,
     "failed": []
    },
-   "revision": "f3d288a",
-   "date": "2026-11-12"
+   "revision": "eff0493",
+   "date": "2026-11-13"
   },
   {
    "step": "skullbase_v3_junctions",

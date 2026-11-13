@@ -40,7 +40,7 @@ ATTACH_MM = 3.0            # a branch is kept when it starts this near the tree
 FINAL_ROUNDINGS = 2        # after the last clearing the runs' corners are rounded this many times more ...
 FINAL_SETTLE = False       # ... (not then moved out again by smoothed pushes: tried, and it folds the lines as the clearing does)
 REACH_MM = 4.0             # a vessel point follows the cerebellum's vertices this near
-SHAPES = ("telovelar", "retrosigmoid")
+SHAPES = ("telovelar", "retrosigmoid", "farLateral")
 CEREBELLUM = ("pf_cerebellar_hemisphere", "pf_tonsil", "pf_vermis")
 
 

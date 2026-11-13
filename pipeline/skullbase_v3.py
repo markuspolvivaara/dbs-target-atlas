@@ -1229,8 +1229,10 @@ def pfossa_items(items: list) -> None:
                           f"{c['inVesselBefore']} vertices still in an artery's way and the {c['inBoneBefore']} in bone's pushed clear."
                           + (f" The telovelar slider draws the tonsils {tv['tvMm']:.0f} mm apart (laterally, a little up) and lifts the nodule "
                              f"and uvula {tv['tvVermisMm']:.0f} mm up and back, the rest of the cerebellum following; the retrosigmoid slider "
-                             f"draws the right hemisphere up to {tv['rsMm']:.0f} mm away from the corridor along the back of the petrous bone; shapes, not a "
-                             "simulation of the tissue." if b["morph"] else ""),
+                             f"draws the right hemisphere up to {tv['rsMm']:.0f} mm away from the corridor along the back of the petrous bone"
+                             + (f"; the far lateral slider lifts the right tonsil and biventral lobule {tv['flMm']:.0f} mm up and "
+                                f"{tv['flMm'] * tv['flMedial']:.0f} mm towards the midline" if "flMm" in tv else "")
+                             + "; shapes, not a simulation of the tissue." if b["morph"] else ""),
             "centroid": b["centroid"],
         })
 
@@ -1581,6 +1583,15 @@ def validate() -> int:
               f"retrosigmoid shape {r_}")
         check(r_["meatusToCerebellumMm"]["moved"] > r_["meatusToCerebellumMm"]["rest"] + 2 and r_["inCorridor"]["moved"] <= 0.01 * r_["inCorridor"]["rest"],
               f"the retrosigmoid shape does not clear the corridor {r_}")
+        fl_ = pr.get("farLateral")
+        check(fl_ is not None, "the far lateral shape's report is missing")
+        if fl_:
+            rise = fl_["tonsilLowestZMm"]["lifted"] - fl_["tonsilLowestZMm"]["rest"]
+            check(fl_["maxMovedMm"] <= tp_["flMm"] * float(np.hypot(1, tp_["flMedial"])) + 1.5 and fl_["inBoneAfter"] == 0 and fl_["inVesselAfter"] == 0,
+                  f"far lateral shape {fl_}")
+            check(0.5 * tp_["flMm"] <= rise <= tp_["flMm"] + 1.5, f"the far lateral shape lifts the right tonsil {rise:.1f} mm, not about {tp_['flMm']} {fl_}")
+            g_ = fl_.get("vertebralGapMm")
+            check(g_ is None or g_["lifted"] > g_["rest"], f"the far lateral shape brings the cerebellum nearer the vertebral artery {fl_}")
     aica = ids.get("tb_anterior_inferior_cerebellar_artery")
     check(aica is not None and aica.get("fitted"), "the anterior inferior cerebellar artery (fitted) is missing")
     print(f"skull base v3 validation: {n - len(fails)}/{n} checks passed")

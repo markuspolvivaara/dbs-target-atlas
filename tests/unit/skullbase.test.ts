@@ -3,7 +3,7 @@ import { APPROACH_GEOM, crossCheckSb, DEFINITIONS, definitionFor, LANDMARKS, NOT
 import { SB_GROUPS } from '../../src/skullbase/groups';
 import { skullPlan, skullScene } from '../../src/skullbase/scene';
 import { decodeSkull, defaultSkullState, encodeSkull } from '../../src/skullbase/state';
-import { meshSoup, nodeExtentsX, nodeMeans, pointsInside } from './glb';
+import { meshSoup, nodeExtentsX, nodeMeans, nodeMorphs, pointsInside } from './glb';
 import sbModifications from '../../src/data/generated/sb-modifications.json';
 import { FORAMEN_CONTENTS } from '../../src/skullbase/foramina';
 import { inBoneNote } from '../../src/ui/skullbase-atlas';
@@ -814,9 +814,40 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(l.morphs).toEqual({ lsoLift: 0.8, open: 0.2 });
     expect(T3.encodeSkull(l)).toContain('ll=80');
   });
+  it('the far lateral view: the right tonsil and biventral lobule lifted superomedially, the PICA with them', async () => {
+    const g = G3.SB_GROUP.get('far_lateral')!;
+    expect(g.morphs).toEqual(['farLateral']);
+    expect(g.morphDefault).toEqual({ farLateral: 1 });
+    expect(G3.SB_GROUP.get('meningioma_foramen_magnum')!.morphDefault).toEqual({ farLateral: 1 });   // its tumour opens so too
+    expect(SB_GROUPS.find((x) => x.id === 'far_lateral')!.morphs).toEqual([]);   // (v1: the shape is not built on its cerebellum yet)
+    expect(T3.decodeSkull('#/atlas?g=far_lateral&fl=40&rs=60').morphs).toEqual({ farLateral: 0.4 });
+    const pf = ((await import('../../src/data/generated/sbv3-fit.json')).default as unknown as { pfossa: {
+      farLateral: { maxMovedMm: number; inBoneAfter: number; inVesselAfter: number; tonsilLowestZMm: { rest: number; lifted: number }; vertebralGapMm: { rest: number; lifted: number } };
+      params: Record<string, number> } }).pfossa;
+    const { flMm, flMedial, flReachMm } = pf.params;
+    expect(flMm * Math.hypot(1, flMedial) / flReachMm).toBeLessThan(1);          // cannot fold the cerebellum
+    expect(pf.farLateral.inBoneAfter).toBe(0);
+    expect(pf.farLateral.inVesselAfter).toBe(0);
+    const rise = pf.farLateral.tonsilLowestZMm.lifted - pf.farLateral.tonsilLowestZMm.rest;
+    expect(rise).toBeGreaterThan(0.5 * flMm);                                       // the tonsil rises about as far as the rule says ...
+    expect(rise).toBeLessThan(flMm + 1.5);                                          // ... and no further
+    expect(pf.farLateral.vertebralGapMm.lifted).toBeGreaterThan(pf.farLateral.vertebralGapMm.rest);   // off the vertebral artery
+    // the shipped right tonsil goes up and in; the left stays
+    const tonsil = await nodeMorphs('assets/skullbase-v3/pf_tonsil.glb');
+    expect(tonsil.R.farLateral.max).toBeGreaterThan(flMm - 0.5);
+    expect(tonsil.R.farLateral.max).toBeLessThan(flMm * Math.hypot(1, flMedial) + 1.5);
+    expect(tonsil.R.farLateral.mean[2]).toBeGreaterThan(0);
+    expect(tonsil.R.farLateral.mean[0]).toBeLessThan(0);
+    expect(tonsil.L.farLateral.max).toBeLessThan(0.2);
+    // the PICA's fitted course lying on it is carried with it; the left one stays
+    const pica = await nodeMorphs('assets/skullbase-v3/tb_posterior_inferior_cerebellar_artery_fitted_course.cleared.glb');
+    expect(pica.R.farLateral.max).toBeGreaterThan(flMm - 0.5);
+    expect(pica.R.farLateral.mean[2]).toBeGreaterThan(0);
+    expect(pica.L.farLateral.max).toBeLessThan(0.2);
+  });
   it('a surgical view opens with its shapes full on, and a link that closes one keeps it closed', () => {
     const views = G3.SB_GROUPS.filter((g) => g.kind === 'approach' && g.morphs?.length);
-    expect(views.map((g) => g.id).sort()).toEqual(['interhemispheric', 'lso', 'orbitozygomatic', 'retrosigmoid', 'telovelar', 'transsylvian']);
+    expect(views.map((g) => g.id).sort()).toEqual(['far_lateral', 'interhemispheric', 'lso', 'orbitozygomatic', 'retrosigmoid', 'telovelar', 'transsylvian']);
     for (const g of views) expect(T3.decodeSkull(`#/atlas?g=${g.id}`).morphs, g.id).toEqual(Object.fromEntries(g.morphs!.map((m) => [m, 1])));
     const closed = T3.decodeSkull('#/atlas?g=transsylvian&op=0&lf=0');
     expect(closed.morphs).toEqual({});
