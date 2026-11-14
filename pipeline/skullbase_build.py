@@ -631,12 +631,49 @@ def validate() -> int:
             check(r["inBoneAfterMm"] <= 1.0, f"hypoglossal nerve {sd}: {r['inBoneAfterMm']} mm of its centre line in the occipital bone")
         it = next((x for x in m["structures"] if x["name"] == "Hypoglossal nerve (XII)"), None)
         check(it is not None and "Led through the canal" in it.get("derivation", ""), "the hypoglossal nerve's derivation does not say it was moved")
+        # four vessels put where the model's bone and brain say they lie (skullbase_v1_vessels.py): the straight and
+        # occipital sinuses back at the confluence (Z-Anatomy's file has them 44.5 mm in front of it), the basilar artery
+        # off the clivus with what is joined to it, the middle meningeal artery through the model's own foramen spinosum
+        vs = steps.get("skullbase_v1_vessels", {}).get("metrics", {})
+        check(set(vs) >= {"sinuses", "basilar", "meningeal", "carried", "joins", "nerves"}, "skullbase_v1_vessels.py not run")
+        if vs:
+            sn = vs["sinuses"]
+            check(40 <= sn["offsetLengthMm"] <= 50 and sn["straight"]["toConfluenceMm"] <= 0.5 and sn["straight"]["toInferiorSagittalMm"] <= 2.0,
+                  f"straight sinus: not at the confluence and the inferior sagittal sinus ({sn['straight']}, offset {sn['offsetLengthMm']} mm)")
+            oc = sn["occipital"]
+            check(oc["toConfluenceMm"] <= 0.5 and oc["inBoneAfterMm"] == 0 and -0.1 <= oc["offCrestMinMm"] and oc["offCrestMaxMm"] <= 0.5,
+                  f"occipital sinus: not from the confluence along the crest ({oc})")
+            ba = vs["basilar"]["basilar"]
+            check(ba["inBoneAfterMm"] == 0 and ba["wallAfterMm"] >= -0.1 and ba["toBrainstemAfterMm"] >= -0.3 and ba["maxMovedMm"] <= 3.0,
+                  f"basilar artery: not moved clear of the clivus ({ba})")
+            for n_, sides in vs["basilar"]["branches"].items():
+                for sd, r in sides.items():
+                    check(r["inBoneAfterMm"] <= 0.5, f"{n_} {sd}: {r['inBoneAfterMm']} mm left in bone")
+            for sid, (b0, a0) in vs["joins"].items():
+                check(a0 <= b0 + 0.1, f"{sid}: {a0} mm from the basilar artery after its move, {b0} before")
+            for k, (b0, a0) in vs["nerves"].items():
+                check(a0 >= min(b0, 0.5) - 0.1, f"{k}: {a0} mm apart after the basilar artery's move, {b0} before")
+            check({"sb_vertebral_artery", "sb_posterior_cerebral_artery", "sb_superior_cerebellar_artery", "sb_anterior_inferior_cerebellar_artery"}
+                  <= set(vs["carried"]) and all(r["maxMovedMm"] <= 3.0 for r in vs["carried"].values()),
+                  f"the arteries joined to the basilar artery not carried with it: {sorted(vs['carried'])}")
+            for sd, r in vs["meningeal"].items():
+                check(r["canal"]["fromLabelMm"] <= 1.0 and 1.5 <= r["canal"]["widthMm"] <= 5.0 and r["canal"]["lengthMm"] >= 3.0,
+                      f"foramen spinosum {sd}: not found beside its label ({r['canal']})")
+                check(r["toCanalCentreMm"] <= 0.5 and r["inBoneAfterMm"] <= 1.0 and r["originMovedMm"] == 0,
+                      f"middle meningeal artery {sd}: {r['toCanalCentreMm']} mm from its foramen's centre, {r['inBoneAfterMm']} mm in bone")
+            moved_v = ["Straight sinus", "Occipital sinus", "Basilar artery", "Medial pontine branches of basilar artery",
+                       "Lateral pontine branches of basilar artery", "Middle meningeal artery"]
+            for n_ in moved_v:
+                it = next((x for x in m["structures"] if x["name"] == n_), None)
+                check(it is not None and "Corrected position (skullbase_v1_vessels.py)" in it.get("derivation", ""), f"{n_}: the derivation does not say it was moved")
         # every vessel and nerve measured against the bones (skullbase_v1_inbone.py, the last step: a rebuild that skips it
         # leaves no entry). The ones the project has moved out of the bone carry no note; the carotid, which Z-Anatomy
         # draws through a petrous bone without a canal, does (the audit's finding MC-11)
         noted = {x["name"]: x["inBone"] for x in m["structures"] if x.get("inBone")}
         check(10 <= len(noted) <= 45, f"{len(noted)} vessels and nerves noted as lying in the model's bone (skullbase_v1_inbone.py not run?)")
-        check("Hypoglossal nerve (XII)" not in noted and not any(n in noted for n in moved), "a structure moved out of the bone is still noted as lying in it")
+        check("Hypoglossal nerve (XII)" not in noted and not any(n in noted for n in moved)
+              and not any(n in noted for n in ("Basilar artery", "Occipital sinus", "Middle meningeal artery", "Medial pontine branches of basilar artery")),
+              "a structure moved out of the bone is still noted as lying in it")
         check("Internal carotid artery" in noted and {"Sphenoid bone", "Temporal bone"} <= set(noted.get("Internal carotid artery", {}).get("bones", [])),
               "the internal carotid artery is not noted as running in the sphenoid and temporal bones")
         check(all(0 <= r["share"] <= 1 and r["deepestMm"] >= 0.5 and r["bones"] for r in noted.values()), "an in-bone note without a share, a depth or a bone")

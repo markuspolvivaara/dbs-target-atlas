@@ -496,12 +496,31 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
     is found as the open space the bone encloses beside its label (6 mm long, 2.5 mm across), the rootlets are
     gathered in front of its inner opening, and the trunk follows its axis and is back on Z-Anatomy's curve 8 mm
     beyond the bone (moved up to 9.1 mm). Beyond that, and at the medulla, it is as Z-Anatomy has it.
+  - Four vessels are put where the model's own bone and brain say they lie (`pipeline/skullbase_v1_vessels.py`, after
+    the tumours and before the in-bone measurement):
+    - The straight and occipital sinuses. In Z-Anatomy's Blender file both start 44.5 mm in front of the confluence of
+      the sinuses: the straight sinus ran from above the hypophysis into the posterior fossa, the occipital sinus
+      through the medulla into the clivus. Both are moved back by that offset, which is measured from the file: the
+      confluence less their common first point. The straight sinus's far end then meets the inferior sagittal sinus
+      (0.9 mm apart). The occipital sinus, which then lay about 5 mm above the internal occipital crest, is laid onto
+      the crest.
+    - The basilar artery, which Z-Anatomy draws pressed into the clivus and the dorsum sellae (12.5 mm of its centre
+      line in the bone, its wall up to 2.1 mm deep), is moved off the bone towards the pons (0.3 to 2.4 mm) until its
+      wall is 0.2 mm clear. The arteries joined to it (vertebral, anterior inferior and superior cerebellar, posterior
+      cerebral, posterior communicating, pontine branches) are moved with it where they lie near it, less with
+      distance, none 8 mm from it. Every junction stays, and no nerve comes more than 0.05 mm nearer an artery. The pontine branches,
+      also drawn along the clivus, are pushed out of what bone is left. The endonasal view's distances are measured
+      on Z-Anatomy's curves, so it keeps the basilar artery where Z-Anatomy drew it.
+    - The middle meningeal artery ran through the sphenoid 2.6 mm from the model's own foramen spinosum (12.7 mm of
+      it in bone a side). It is led through the foramen, which is found as the hypoglossal canal is (6 mm long, 2.8 mm
+      across), and is back on Z-Anatomy's curve 4 mm above the bone.
   - Z-Anatomy's bones have few of the canals and grooves its vessels and nerves run in (no carotid canal through
     the petrous bone, no facial canal, a cribriform plate without holes), so many of its curves run through the bone
     meshes. Every tube is measured against every bone (`pipeline/skullbase_v1_inbone.py`, the last step of v1's
-    chain: each bone on a 0.4 mm grid), and the 28 that have 5% or more of their surface over 0.5 mm inside a bone,
+    chain: each bone on a 0.4 mm grid), and the 23 that have 5% or more of their surface over 0.5 mm inside a bone,
     or a point 2 mm deep, say so on their card with the share, the depth and the bones (the cochlear nerve 92%, the
-    maxillary artery 57%, the basilar artery 33%, the internal carotid 24%, up to 4.5 mm deep). They are not moved.
+    maxillary artery 57%, whose branches run in the maxilla's canals in life, the internal carotid 24%, up to 4.5 mm
+    deep). They are not moved.
     Its chiasm, two pads, is redrawn by v3's rule (Mncube 2019's mean width and height) as a crossing, with the
     optic tracts' first part.
   - The retrosigmoid view is seen nearly level with the porus (on this skull the opening lies level with it).

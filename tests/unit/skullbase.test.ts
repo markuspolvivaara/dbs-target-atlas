@@ -91,6 +91,89 @@ describe('skull-base data (Z-Anatomy export)', () => {
     expect(pointsInside(nerve.P, bone.P, bone.T) / (nerve.P.length / 3)).toBeLessThan(0.01);
     expect(SB_MANIFEST.structures.find((x) => x.name === 'Hypoglossal nerve (XII)')!.derivation).toContain('Led through the canal');
   }, 60_000);
+  it('the straight and occipital sinuses start at the confluence, the basilar artery lies off the clivus, the middle meningeal artery passes its foramen', async () => {
+    // (decision 5 on the audit's MC-11, pipeline/skullbase_v1_vessels.py: Z-Anatomy's file has both sinuses 44.5 mm in
+    // front of the confluence; it draws the basilar artery pressed into the clivus and the middle meningeal artery
+    // through solid bone 2.6 mm from the model's own foramen spinosum)
+    type M = {
+      sinuses: { offsetLengthMm: number; straight: { toConfluenceMm: number; toInferiorSagittalMm: number; toConfluenceBeforeMm: number };
+        occipital: { toConfluenceMm: number; inBoneBeforeMm: number; inBoneAfterMm: number; offCrestMaxMm: number } };
+      basilar: { basilar: { inBoneBeforeMm: number; inBoneAfterMm: number; wallAfterMm: number; toBrainstemAfterMm: number; maxMovedMm: number };
+        branches: Record<string, Record<string, { inBoneBeforeMm: number; inBoneAfterMm: number }>> };
+      meningeal: Record<string, { canal: { centre: number[]; fromLabelMm: number; lengthMm: number; widthMm: number }; inBoneBeforeMm: number;
+        inBoneAfterMm: number; toCanalCentreBeforeMm: number; toCanalCentreMm: number; originMovedMm: number; sharpestTurnDeg: number }>;
+      carried: Record<string, { maxMovedMm: number }>; joins: Record<string, [number, number]>; nerves: Record<string, [number, number]>;
+    };
+    const m = (sbModifications as unknown as { steps: { step: string; metrics: M }[] }).steps.find((x) => x.step === 'skullbase_v1_vessels')!.metrics;
+    const file = (n: string) => SB_MANIFEST.structures.find((x) => x.name === n && !x.replaces)!.file;
+    const nearest = (a: Float64Array, b: Float64Array) => {
+      let best = Infinity;
+      for (let i = 0; i < a.length; i += 3) for (let j = 0; j < b.length; j += 3)
+        best = Math.min(best, Math.hypot(a[i] - b[j], a[i + 1] - b[j + 1], a[i + 2] - b[j + 2]));
+      return best;
+    };
+    // the sinuses: moved back by the offset, the straight sinus meets the transverse sinuses and the inferior sagittal sinus
+    expect(m.sinuses.offsetLengthMm).toBeGreaterThan(40);
+    expect(m.sinuses.offsetLengthMm).toBeLessThan(50);
+    expect(m.sinuses.straight.toConfluenceBeforeMm).toBeGreaterThan(40);
+    expect(m.sinuses.straight.toConfluenceMm).toBeLessThan(0.5);
+    expect(m.sinuses.straight.toInferiorSagittalMm).toBeLessThan(2);
+    const straight = (await meshSoup(file('Straight sinus'))).P;
+    expect(nearest(straight, (await meshSoup(file('Transverse sinus'))).P)).toBeLessThan(2);
+    expect(nearest(straight, (await meshSoup(file('Inferior sagittal sinus'))).P)).toBeLessThan(2.5);
+    expect(m.sinuses.occipital.toConfluenceMm).toBeLessThan(0.5);
+    expect(m.sinuses.occipital.inBoneBeforeMm).toBeGreaterThan(5);
+    expect(m.sinuses.occipital.inBoneAfterMm).toBe(0);
+    expect(m.sinuses.occipital.offCrestMaxMm).toBeLessThan(0.5);
+    // the basilar artery off the bone, not into the pons; what is joined to it still meets it; the nerves no nearer
+    const b = m.basilar.basilar;
+    expect(b.inBoneBeforeMm).toBeGreaterThan(10);
+    expect(b.inBoneAfterMm).toBe(0);
+    expect(b.wallAfterMm).toBeGreaterThan(-0.1);
+    expect(b.toBrainstemAfterMm).toBeGreaterThan(-0.3);
+    expect(b.maxMovedMm).toBeLessThan(3);
+    for (const [n, sides] of Object.entries(m.basilar.branches)) for (const [sd, r] of Object.entries(sides)) {
+      expect(r.inBoneBeforeMm, `${n} ${sd}`).toBeGreaterThan(10);
+      expect(r.inBoneAfterMm, `${n} ${sd}`).toBeLessThanOrEqual(0.5);
+    }
+    for (const id of ['sb_vertebral_artery', 'sb_anterior_inferior_cerebellar_artery', 'sb_superior_cerebellar_artery', 'sb_posterior_cerebral_artery'])
+      expect(m.carried[id], id).toBeDefined();
+    for (const [id, [before, after]] of Object.entries(m.joins)) expect(after, id).toBeLessThanOrEqual(before + 0.1);
+    for (const [k, [before, after]] of Object.entries(m.nerves)) expect(after, k).toBeGreaterThanOrEqual(Math.min(before, 0.5) - 0.1);
+    const basilar = (await meshSoup(file('Basilar artery'))).P;
+    let inside = 0;
+    for (const bone of ['Sphenoid bone', 'Occipital bone']) {
+      const s = await meshSoup(file(bone));
+      inside += pointsInside(basilar, s.P, s.T);
+    }
+    expect(inside / (basilar.length / 3)).toBeLessThan(0.03);
+    expect(nearest(basilar, (await meshSoup(file('Vertebral artery'))).P)).toBeLessThan(0.5);
+    // the middle meningeal artery through the foramen spinosum, found beside Z-Anatomy's label for it
+    const label = LANDMARKS.find((l) => l.name === 'Foramen spinosum')!;
+    const mma = (await meshSoup(file('Middle meningeal artery'))).P;
+    expect(Object.keys(m.meningeal).sort()).toEqual(['L', 'R']);
+    for (const [sd, r] of Object.entries(m.meningeal)) {
+      expect(r.canal.fromLabelMm, sd).toBeLessThan(1);
+      expect(r.canal.lengthMm, sd).toBeGreaterThan(4);
+      expect(r.canal.widthMm, sd).toBeGreaterThan(1.5);
+      const sign = sd === 'R' ? 1 : -1;
+      expect(Math.hypot(r.canal.centre[0] - sign * Math.abs(label.ras[0]), r.canal.centre[1] - label.ras[1], r.canal.centre[2] - label.ras[2]), sd).toBeLessThan(2);
+      expect(r.toCanalCentreBeforeMm, sd).toBeGreaterThan(2);
+      expect(r.toCanalCentreMm, sd).toBeLessThan(0.5);
+      expect(r.inBoneBeforeMm, sd).toBeGreaterThan(10);
+      expect(r.inBoneAfterMm, sd).toBeLessThanOrEqual(1);
+      expect(r.originMovedMm, sd).toBe(0);
+      expect(r.sharpestTurnDeg, sd).toBeLessThan(70);
+      expect(nearest(mma, new Float64Array(r.canal.centre)), sd).toBeLessThan(0.8);
+    }
+    // the cards: no in-bone note on what was moved out of the bone, and each says what was done
+    for (const n of ['Basilar artery', 'Occipital sinus', 'Middle meningeal artery', 'Medial pontine branches of basilar artery', 'Lateral pontine branches of basilar artery']) {
+      const it = SB_MANIFEST.structures.find((x) => x.name === n && !x.replaces)!;
+      expect(it.inBone, n).toBeUndefined();
+      expect(it.derivation, n).toContain('Corrected position (skullbase_v1_vessels.py)');
+    }
+    expect(SB_MANIFEST.structures.find((x) => x.name === 'Straight sinus')!.derivation).toMatch(/starts 44\.5 mm in front of the confluence/);
+  }, 120_000);
   it('a vessel or nerve that runs inside the model’s bone says so on its card, with how much and where', () => {
     // (the audit's finding MC-11: Z-Anatomy's bones have few canals and grooves, so its curves run through the bone
     // meshes; pipeline/skullbase_v1_inbone.py measures every tube against every bone)

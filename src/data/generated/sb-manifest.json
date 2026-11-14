@@ -433,7 +433,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_inferior_cerebellar_artery.glb",
-   "bytes": 19464,
+   "bytes": 19336,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -450,25 +450,25 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py).",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py). Corrected position (skullbase_v1_vessels.py): moved with the basilar artery off the clivus where it lies near it (up to 1.14 mm, less with distance from it, none 8 mm from it), so it meets it where it did.",
    "centroid": {
     "L": [
      -18.07,
-     -30.69,
-     -13.83
+     -30.87,
+     -13.72
     ],
     "R": [
      18.07,
-     -30.69,
-     -13.83
+     -30.84,
+     -13.74
     ]
    },
    "system": "Basilar artery",
    "intracranialFraction": 1.0,
    "morph": true,
    "inBone": {
-    "share": 0.098,
-    "deepestMm": 2.4,
+    "share": 0.077,
+    "deepestMm": 2.1,
     "bones": [
      "Occipital bone"
     ]
@@ -713,7 +713,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_basilar_artery.glb",
-   "bytes": 3316,
+   "bytes": 3248,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -730,29 +730,21 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Corrected position (skullbase_v1_vessels.py): Z-Anatomy draws it pressed into the clivus and the dorsum sellae (12.5 mm of its centre line in the bone, its wall up to 2.1 mm deep); in life it lies on the pons. Moved off the bone towards the pons until its wall is 0.2 mm clear of it (0.25 to 2.35 mm, in the midline); the arteries joined to it are moved with it where they lie near it, less with distance, none 8 mm from it.",
    "centroid": {
-    "L": [
-     0.0,
-     -11.43,
-     -3.55
-    ],
     "R": [
      0.0,
-     -11.43,
-     -3.55
+     -12.56,
+     -3.08
+    ],
+    "L": [
+     0.0,
+     -12.56,
+     -3.08
     ]
    },
    "system": "Basilar artery",
-   "intracranialFraction": 1.0,
-   "inBone": {
-    "share": 0.333,
-    "deepestMm": 1.9,
-    "bones": [
-     "Sphenoid bone",
-     "Occipital bone"
-    ]
-   }
+   "intracranialFraction": 1.0
   },
   {
    "id": "sb_branch_to_angular_gyrus",
@@ -1669,7 +1661,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_lateral_pontine_branches_of_basilar_artery.glb",
-   "bytes": 11580,
+   "bytes": 10060,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1686,28 +1678,21 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Corrected position (skullbase_v1_vessels.py): moved with the basilar artery off the clivus, and what was left of it in the bone pushed 0.2 mm out of it (19.5 mm of it in bone a side before, 0.0 after; moved up to 1.96 mm).",
    "centroid": {
     "L": [
-     -13.21,
-     -16.17,
-     -7.62
+     -13.13,
+     -16.7,
+     -7.08
     ],
     "R": [
-     13.21,
-     -16.17,
-     -7.62
+     13.13,
+     -16.7,
+     -7.08
     ]
    },
    "system": "Basilar artery",
-   "intracranialFraction": 1.0,
-   "inBone": {
-    "share": 0.287,
-    "deepestMm": 1.5,
-    "bones": [
-     "Sphenoid bone"
-    ]
-   }
+   "intracranialFraction": 1.0
   },
   {
    "id": "sb_lingual_vein",
@@ -1959,7 +1944,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_medial_pontine_branches_of_basilar_artery.glb",
-   "bytes": 7272,
+   "bytes": 6144,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1976,28 +1961,21 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Corrected position (skullbase_v1_vessels.py): moved with the basilar artery off the clivus, and what was left of it in the bone pushed 0.2 mm out of it (16.2 mm of it in bone a side before, 0.0 after; moved up to 2.34 mm).",
    "centroid": {
     "L": [
-     -5.88,
-     -9.94,
-     -1.17
+     -5.49,
+     -11.12,
+     -0.9
     ],
     "R": [
-     5.88,
-     -9.94,
-     -1.17
+     5.49,
+     -11.12,
+     -0.9
     ]
    },
    "system": "Basilar artery",
-   "intracranialFraction": 1.0,
-   "inBone": {
-    "share": 0.5,
-    "deepestMm": 2.2,
-    "bones": [
-     "Sphenoid bone"
-    ]
-   }
+   "intracranialFraction": 1.0
   },
   {
    "id": "sb_middle_cerebral_artery_m1_segment",
@@ -2083,7 +2061,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_middle_meningeal_artery.glb",
-   "bytes": 6980,
+   "bytes": 7500,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2100,28 +2078,21 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Corrected position (skullbase_v1_vessels.py): Z-Anatomy's curve ran through the sphenoid bone beside the model's own foramen spinosum (12.7 mm of it in bone a side, 2.3 mm deep, 2.58 mm from the foramen's centre at the nearest). Led through the foramen instead: found as the open space the bone encloses beside its label (6.0 mm long, 2.8 mm across), the artery along its axis and back on Z-Anatomy's curve 4 mm above the bone (moved up to 3.2 mm). Its origin and its end are Z-Anatomy's.",
    "centroid": {
     "L": [
-     -29.33,
-     -6.69,
-     -19.57
+     -29.89,
+     -6.76,
+     -17.57
     ],
     "R": [
-     29.33,
-     -6.69,
-     -19.57
+     29.9,
+     -6.75,
+     -17.59
     ]
    },
    "system": "Middle meningeal artery",
-   "intracranialFraction": 1.0,
-   "inBone": {
-    "share": 0.254,
-    "deepestMm": 2.5,
-    "bones": [
-     "Sphenoid bone"
-    ]
-   }
+   "intracranialFraction": 1.0
   },
   {
    "id": "sb_nasal_bone",
@@ -2240,7 +2211,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_occipital_sinus.glb",
-   "bytes": 4500,
+   "bytes": 4520,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -2257,27 +2228,20 @@
    ],
    "refIds": [],
    "category": "vein",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Corrected position (skullbase_v1_vessels.py): in Z-Anatomy's file this sinus starts 44.5 mm in front of the confluence of the sinuses, so it ran from in front of the cerebellum through the medulla into the clivus (7.2 mm of it in the bone). Moved back by that much, it starts at the confluence but lay a median 5.3 mm above the internal occipital crest; it is laid onto the crest, where the falx cerebelli holds it (moved up to 8.1 mm further).",
    "centroid": {
-    "L": [
-     0.0,
-     -30.55,
-     -22.12
-    ],
     "R": [
      0.0,
-     -30.55,
-     -22.12
+     -79.17,
+     -24.71
+    ],
+    "L": [
+     0.0,
+     -79.17,
+     -24.71
     ]
    },
-   "intracranialFraction": 1.0,
-   "inBone": {
-    "share": 0.22,
-    "deepestMm": 3.6,
-    "bones": [
-     "Occipital bone"
-    ]
-   }
+   "intracranialFraction": 1.0
   },
   {
    "id": "sb_occipital_vein",
@@ -2793,7 +2757,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_cerebral_artery.glb",
-   "bytes": 66368,
+   "bytes": 66396,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2810,17 +2774,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Corrected position (skullbase_v1_vessels.py): moved with the basilar artery off the clivus where it lies near it (up to 1.02 mm, less with distance from it, none 8 mm from it), so it meets it where it did.",
    "centroid": {
     "L": [
      -19.78,
      -33.65,
-     15.15
+     15.18
     ],
     "R": [
      19.78,
      -33.65,
-     15.15
+     15.18
     ]
    },
    "system": "Posterior cerebral artery",
@@ -2832,7 +2796,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_communicating_artery.glb",
-   "bytes": 4572,
+   "bytes": 4592,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2849,17 +2813,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Corrected position (skullbase_v1_vessels.py): moved with the basilar artery off the clivus where it lies near it (up to 0.3 mm, less with distance from it, none 8 mm from it), so it meets it where it did.",
    "centroid": {
     "L": [
      -8.27,
      -1.41,
-     11.71
+     11.83
     ],
     "R": [
      8.27,
      -1.41,
-     11.71
+     11.83
     ]
    },
    "system": "Internal carotid artery",
@@ -3478,7 +3442,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_straight_sinus.glb",
-   "bytes": 6752,
+   "bytes": 6748,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3495,16 +3459,16 @@
    ],
    "refIds": [],
    "category": "vein",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Corrected position (skullbase_v1_vessels.py): in Z-Anatomy's file this sinus starts 44.5 mm in front of the confluence of the sinuses (where the superior sagittal and transverse sinuses meet), so it ran from above the hypophysis down into the posterior fossa. Moved back by that much, it starts at the confluence and its far end meets the inferior sagittal sinus (0.89 mm apart). Its shape is Z-Anatomy's.",
    "centroid": {
-    "L": [
-     0.0,
-     -22.47,
-     11.09
-    ],
     "R": [
      0.0,
-     -22.47,
+     -66.98,
+     11.09
+    ],
+    "L": [
+     0.0,
+     -66.98,
      11.09
     ]
    },
@@ -3592,7 +3556,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_superior_cerebellar_artery.glb",
-   "bytes": 47552,
+   "bytes": 47072,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3609,16 +3573,16 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py).",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py). Corrected position (skullbase_v1_vessels.py): moved with the basilar artery off the clivus where it lies near it (up to 1.22 mm, less with distance from it, none 8 mm from it), so it meets it where it did.",
    "centroid": {
     "L": [
      -18.9,
-     -51.4,
+     -51.49,
      6.23
     ],
     "R": [
      18.9,
-     -51.4,
+     -51.49,
      6.23
     ]
    },
@@ -3626,8 +3590,8 @@
    "intracranialFraction": 1.0,
    "morph": true,
    "inBone": {
-    "share": 0.026,
-    "deepestMm": 2.3,
+    "share": 0.016,
+    "deepestMm": 2.0,
     "bones": [
      "Sphenoid bone"
     ]
@@ -4131,7 +4095,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_vertebral_artery.glb",
-   "bytes": 11996,
+   "bytes": 12024,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -4148,17 +4112,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Corrected position (skullbase_v1_vessels.py): moved with the basilar artery off the clivus where it lies near it (up to 0.27 mm, less with distance from it, none 8 mm from it), so it meets it where it did.",
    "centroid": {
     "L": [
      -18.34,
-     -32.01,
-     -43.37
+     -32.05,
+     -43.34
     ],
     "R": [
      18.34,
-     -32.01,
-     -43.37
+     -32.05,
+     -43.34
     ]
    },
    "system": "Vertebral artery",
@@ -6315,7 +6279,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_inferior_cerebellar_artery__koos_3.glb",
-   "bytes": 10764,
+   "bytes": 10708,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -6332,17 +6296,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py). In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 3.8 mm), its course in the meatus kept: a shape, not a simulation.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py). In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 3.8 mm), its course in the meatus kept: a shape, not a simulation. Corrected position (skullbase_v1_vessels.py): moved with the basilar artery off the clivus where it lies near it (up to 0.87 mm, less with distance from it, none 8 mm from it), so it meets it where it did.",
    "centroid": {
     "L": [
      -18.07,
-     -30.69,
-     -13.83
+     -30.84,
+     -13.74
     ],
     "R": [
      18.16,
-     -30.88,
-     -13.58
+     -31.03,
+     -13.49
     ]
    },
    "system": "Basilar artery",
@@ -6859,7 +6823,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_inferior_cerebellar_artery__koos_4.glb",
-   "bytes": 10768,
+   "bytes": 10716,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -6876,17 +6840,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py). In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 2.3 mm), its course in the meatus kept: a shape, not a simulation.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py). In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 2.3 mm), its course in the meatus kept: a shape, not a simulation. Corrected position (skullbase_v1_vessels.py): moved with the basilar artery off the clivus where it lies near it (up to 0.87 mm, less with distance from it, none 8 mm from it), so it meets it where it did.",
    "centroid": {
     "L": [
      -18.07,
-     -30.69,
-     -13.83
+     -30.84,
+     -13.74
     ],
     "R": [
      18.63,
-     -30.93,
-     -13.67
+     -31.08,
+     -13.58
     ]
    },
    "system": "Basilar artery",
