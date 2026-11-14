@@ -6,7 +6,7 @@ import { decodeSkull, defaultSkullState, encodeSkull } from '../../src/skullbase
 import { meshSoup, nodeExtentsX, nodeMeans, nodeMorphs, pointsInside } from './glb';
 import sbModifications from '../../src/data/generated/sb-modifications.json';
 import { FORAMEN_CONTENTS } from '../../src/skullbase/foramina';
-import { inBoneNote } from '../../src/ui/skullbase-atlas';
+import { atOpeningNote, inBoneNote } from '../../src/ui/skullbase-atlas';
 import { TB_NOTES, TB_REF, TB_REFS } from '../../src/skullbase/temporal';
 import { APPROACH_REF, APPROACH_REFS, APPROACHES, CAVERNOUS_INFO, ENDONASAL_INFO } from '../../src/skullbase/approaches';
 
@@ -303,6 +303,27 @@ describe('the detailed model (TopBrain CT angiogram, Z-Anatomy fitted onto it)',
     }
     for (const n of ['Optic nerve (II)', 'Middle meningeal artery', 'Cavernous sinus']) expect(by(n)?.fitted, n).toBe(true);
     for (const s of ct.structures) if (s.type === 'bone') expect(s.fitted, s.name).toBeUndefined();
+    // every cranial nerve is fitted, the trigeminal divisions too (they gather Z-Anatomy's branches under a new name)
+    for (const s of ct.structures) if (s.category === 'nerve') expect(s.fitted, s.name).toBe(true);
+  });
+  it('says where a fitted nerve crosses the skull base off the CT\u2019s opening (MC-10), and links the routed one', async () => {
+    const v3 = new Set(SbManifestSchema.parse((await import('../../src/data/generated/sbv3-manifest.json')).default).structures.map((s) => s.id));
+    const noted = new Map(ct.structures.filter((s) => s.atOpening).map((s) => [s.name, s.atOpening!]));
+    // the audit's cases: the right XII in the condylar bone, the left IX in the jugular foramen's wall, the left optic
+    // nerve in sinus air, both V2
+    for (const n of ['Hypoglossal nerve (XII)', 'Glossopharyngeal nerve (IX)', 'Optic nerve (II)', 'Maxillary nerve (V2)']) expect(noted.has(n), n).toBe(true);
+    expect(noted.get('Hypoglossal nerve (XII)')!.R.solidMm).toBeGreaterThan(5);
+    expect(noted.get('Glossopharyngeal nerve (IX)')!.L.solidMm).toBeGreaterThan(3);
+    expect(noted.get('Optic nerve (II)')!.L.airMm).toBeGreaterThan(3);
+    for (const n of ['Facial nerve (VII)', 'Vestibulocochlear nerve (VIII)', 'Trigeminal nerve (V)']) expect(noted.has(n), n).toBe(false);
+    for (const [n, o] of noted) {
+      expect(v3.has(o.routedId), n).toBe(true);
+      for (const s of ['R', 'L'] as const) expect(o[s].solidMm, `${n} ${s}`).toBeLessThanOrEqual(o[s].boneMm);
+    }
+    const xii = atOpeningNote(noted.get('Hypoglossal nerve (XII)')!);
+    expect(xii).toMatch(/^Over the first 40 mm of its fitted course, from inside the skull to just past its base: on the right, 11\.2 mm through the bone shown \(10\.5 mm of it at 400 HU or more\); on the left, 2\.2 mm through the bone shown \(none of it at 400 HU or more\)\./);
+    expect(xii).toMatch(/that route lies a median 3\.1 mm on the right and 6\.2 mm on the left from it\.$/);
+    expect(atOpeningNote(noted.get('Vagus nerve (X)')!)).toMatch(/on the right, clear of both;.* a median 0\.9 mm on the left from it\.$/);
   });
   it('keeps the frame: origin at the hypophysial fossa, the landmarks on or near the bone', () => {
     expect(lms.find((l) => l.name === 'Hypophysial fossa')!.ras).toEqual([0, 0, 0]);

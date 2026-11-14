@@ -138,6 +138,8 @@ export const ImagingSchema = z.object({
 export type Imaging = z.infer<typeof ImagingSchema>;
 
 // ---- generated pipeline output
+/** one side of a v2 nerve's skull-base measure (ManifestStructureSchema.atOpening), mm */
+const atOpeningSide = z.object({ boneMm: z.number().min(0), solidMm: z.number().min(0), airMm: z.number().min(0), apartMm: z.number().nullable() });
 export const ManifestStructureSchema = z.object({
   id: Id,
   name: z.string(),
@@ -163,6 +165,11 @@ export const ManifestStructureSchema = z.object({
    * (pipeline/skullbase_v1_inbone.py): the share of its surface vertices more than 0.5 mm inside one, the deepest
    * (mm), and the bones concerned. Present where the share is at least 5 % or the deepest at least 2 mm */
   inBone: z.object({ share: z.number().min(0).max(1), deepestMm: z.number(), bones: z.array(z.string()) }).optional(),
+  /** skull base v2 (the CT model): a fitted nerve measured against the CT where it crosses the skull base
+   * (pipeline/skullbase_ct_openings.py). Over the first stretchMm of its course, by side: the length in the bone the
+   * model draws (solidMm of it at 400 HU or more), in a sinus's air, and there the median distance to the default
+   * model's nerve (routedId), routed through the CT's openings. Present where bone and air reach 2 mm on a side */
+  atOpening: z.object({ stretchMm: z.number(), routedId: z.string(), R: atOpeningSide, L: atOpeningSide }).optional(),
   /** skull-base section: the cranial nerve (1-12) a nerve or nerve branch belongs to */
   cranialNerve: z.number().int().min(1).max(12).optional(),
   /** skull-base section: the arterial system an artery is listed under (its trunk's name) */

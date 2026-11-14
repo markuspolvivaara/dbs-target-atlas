@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import type { CameraPreset } from '../data/schema';
+import type { CameraPreset, ManifestStructure } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
 import { APPROACH_GEOM, definitionFor, isApproachPart, kindOf, LANDMARKS, LM, NOT_YET_SHOWN, REGIONS, SB, SB_MANIFEST, SB_MODEL, V1_FIT, V3_FIT, type Landmark, type SbModel } from '../skullbase';
 import { APPROACH, APPROACH_REF, CAVERNOUS_INFO, ENDONASAL_INFO, INSULA, V1_CAVERNOUS_NOT_SHOWN, V1_ENDONASAL_NOT_SHOWN, V1_TEXT, type ApproachClaim, type ApproachSection } from '../skullbase/approaches';
@@ -174,6 +174,28 @@ export function inBoneNote(b: { share: number; deepestMm: number; bones: string[
   const much = pct >= 1 ? `${pct}% of this tube’s surface lies more than 0.5 mm inside` : 'A short stretch of this tube lies inside';
   return `${much} ${where} as Z-Anatomy draws ${bones.length > 1 ? 'them' : 'it'} (up to ${b.deepestMm.toFixed(1)} mm deep). `
     + 'Z-Anatomy draws its vessels and nerves and its bones separately, and its bones have few of the canals and grooves they run in: what is shown is the curve as drawn, not a course through a canal.';
+}
+
+/** A fitted nerve of Skull base v2 where it crosses the skull base, measured on the CT (pipeline/skullbase_ct_openings.py):
+ * how much of it runs through the bone shown or a sinus's air, and how far the default model's nerve, routed through the
+ * CT's openings, lies from it there. */
+export function atOpeningNote(o: NonNullable<ManifestStructure['atOpening']>): string {
+  const sides = [['R', 'right'], ['L', 'left']] as const;
+  const side = (s: 'R' | 'L', word: string) => {
+    const r = o[s];
+    const parts = [
+      r.boneMm >= 0.5 ? `${fmtMm(r.boneMm)} mm through the bone shown (${r.solidMm >= 0.5 ? `${fmtMm(r.solidMm)} mm of it` : 'none of it'} at 400 HU or more)` : '',
+      r.airMm >= 0.5 ? `${fmtMm(r.airMm)} mm through the air of a sinus` : '',
+    ].filter(Boolean);
+    return `on the ${word}, ${parts.length ? parts.join(' and ') : 'clear of both'}`;
+  };
+  const apart = sides.filter(([s]) => o[s].boneMm + o[s].airMm >= 0.5 && o[s].apartMm !== null)
+    .map(([s, word]) => `${fmtMm(o[s].apartMm!)} mm on the ${word}`).join(' and ');
+  const thin = sides.some(([s]) => o[s].boneMm - o[s].solidMm >= 0.5);
+  return `Over the first ${o.stretchMm} mm of its fitted course, from inside the skull to just past its base: ${sides.map(([s, w]) => side(s, w)).join('; ')}. `
+    + (thin ? 'Bone shown below 400 HU is what this model’s rules add: thin bone next to solid bone (down to 170 HU, which takes in some of the contrast in the veins beside it) and the walls of the sinuses. ' : '')
+    + 'Z-Anatomy’s curve, fitted onto this skull, does not follow the CT’s own canals. The default model routes this nerve through them on the same CT'
+    + (apart ? `; where this course is in bone or air, that route lies a median ${apart} from it.` : '.');
 }
 
 export class SkullbaseAtlasPage {
@@ -533,6 +555,8 @@ export class SkullbaseAtlasPage {
         SB_MODEL === 'v3' ? this.measured(st.name) : null,
         regions.length ? [h('dt', {}, 'Near (measured in the model)'), h('dd', {}, regions.join('; '))] : null,
         st.inBone ? [h('dt', {}, 'In the model’s bone (measured)'), h('dd', {}, inBoneNote(st.inBone))] : null,
+        st.atOpening ? [h('dt', {}, 'At the skull base (measured on this CT)'), h('dd', {}, atOpeningNote(st.atOpening), ' ',
+          h('a', { href: `../skullbase/#/atlas?g=floor&sel=${st.atOpening.routedId}` }, 'See the routed nerve in the default model'))] : null,
         st.type === 'bone' ? [h('dt', {}, 'Labelled landmarks'), h('dd', {}, `${LANDMARKS.filter((l) => l.bone === st.name).length}; open the bone’s group to see them.`)] : null,
         h('dt', {}, 'Geometry'), h('dd', {}, `${st.source}. ${st.derivation} `, h('a', { href: '#/credits' }, 'Licence and attribution'))));
   }

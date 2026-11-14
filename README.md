@@ -556,9 +556,20 @@ Zurich, open use with the source given, non-commercial), fetched member by membe
   arteries TopBrain does not label (middle meningeal, maxillary, ethmoidal...), the soft tissue and the landmark
   names. Z-Anatomy is scaled onto the CT skull by ICP, then deformed by a smooth field (Gaussian-weighted
   closest-point moves, 24 → 6 mm): its bone ends a median 1.5 mm (90% within 3.6 mm) from the CT's.
+- **The nerves where they cross the skull base** (`pipeline/skullbase_ct_openings.py`): the fit does not find the CT's
+  own canals, so a fitted nerve can run through the wall of its foramen, or through a sinus, a few millimetres from the
+  opening. v2 keeps them as fitted; each nerve's card says how much, measured on the CT over the stretch the default
+  model routes (from inside the skull to just past its base): the length through the bone shown (and how much of it
+  is at 400 HU or more, solid bone), through a sinus's air, and how far the default model's nerve, routed through the
+  CT's openings on the same scan, lies from it there, with a link to it. The worst: the right hypoglossal nerve, 11 mm
+  in the condylar bone 3 mm from its canal; the left glossopharyngeal, vagus and accessory nerves 8–10 mm in the
+  jugular foramen's wall; the left optic nerve 7 mm in sinus air and 9 mm in bone below its canal. The facial and
+  vestibulocochlear nerves, in bone in life, are left out. The step reads the default model's built nerves, so it runs
+  after that model's chain.
 - The CT is moved rigidly (true size) into the Z-Anatomy frame, origin at the fitted hypophysial fossa, so the
   groups, cut-aways and cameras work unchanged. Pipeline: `pipeline/skullbase_ct.py`, then
-  `pipeline/skullbase_build.py ct`, `node pipeline/compress.mjs skullbase-ct`, `pipeline/skullbase_build.py ct finalize`.
+  `pipeline/skullbase_build.py ct`, `node pipeline/compress.mjs skullbase-ct`, `pipeline/skullbase_ct_openings.py`
+  (after the default model's chain), `pipeline/skullbase_build.py ct finalize`.
 
 ## Brainstem
 

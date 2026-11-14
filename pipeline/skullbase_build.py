@@ -345,6 +345,7 @@ def main() -> int:
         base, side = split_pair(n)
         add(n, b["kind"], "vmesh", side, (np.array(b["verts"]), np.array(b["tris"]), np.ones(len(b["verts"]))))
     fitted = {split_pair(n)[0] for part in ("lines", "soft") for n, x in ex.get(part, {}).items() if x.get("fitted")}
+    fitted |= {NERVE_MERGE[n] for n in fitted if n in NERVE_MERGE}   # V1-V3 shown under their merged names
     cn: dict[str, int] = {}
     arteries = {split_pair(n)[0] for n, ln in ex["lines"].items() if ln["kind"] == "artery"}
     arteries |= {split_pair(n)[0] for n, m in ex.get("meshes", {}).items() if m["kind"] == "artery"}
@@ -567,6 +568,16 @@ def validate() -> int:
     if CT:   # the orbital roofs' holes closed by rule (skullbase_ct.fill_orbital_roofs): on both sides, small
         roof = json.loads((BUILD / "export.json").read_text()).get("roofFillMm2", {})
         check(set(roof) == {"L", "R"} and all(0 <= v <= 300 for v in roof.values()), f"orbital roof fill {roof} mm2")
+        # the fitted nerves measured where they cross the skull base (skullbase_ct_openings.py, before finalize: a rebuild
+        # that skips it leaves no entry). The audit's cases (MC-10) are noted: the right XII in the condylar bone, the left
+        # IX in the jugular foramen's wall, the left optic nerve in sinus air, both V2
+        noted = {x["name"]: x["atOpening"] for x in m["structures"] if x.get("atOpening")}
+        check({"Hypoglossal nerve (XII)", "Glossopharyngeal nerve (IX)", "Optic nerve (II)", "Maxillary nerve (V2)"} <= set(noted),
+              f"nerves noted at the skull base: {sorted(noted)} (skullbase_ct_openings.py not run?)")
+        check(noted.get("Hypoglossal nerve (XII)", {}).get("R", {}).get("solidMm", 0) >= 5, "the right hypoglossal nerve not measured in solid bone")
+        check(all(r["routedId"].startswith("tb_") and all(0 <= r[s]["solidMm"] <= r[s]["boneMm"] for s in ("R", "L")) for r in noted.values()),
+              "a skull-base note without a routed nerve, or with more solid bone than bone")
+        check(all(it.get("fitted") for it in m["structures"] if it.get("category") == "nerve"), "a fitted nerve not marked as fitted")
     frontal = next(i for i in m["structures"] if i["id"] == "sb_frontal_bone")
     occipital = next(i for i in m["structures"] if i["id"] == "sb_occipital_bone")
     check(frontal["centroid"]["R"][1] > occipital["centroid"]["R"][1], "frontal bone should lie anterior (+y) of the occipital bone")
