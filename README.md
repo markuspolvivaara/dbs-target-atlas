@@ -96,7 +96,13 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   beyond, blended over the last 6 mm inside the edge, the face blended in across the sutures over 1.5 mm, all voxels
   softened by about one voxel so gently sloping surfaces show no grid steps) gives one surface, split into bones as v2
   splits it. On the skull's outer surface, v2's rule-drawn walls around enclosed air (they made ridges and a shelf over
-  the frontal sinus) and the CT's bone within 5 mm of them give way to the model too. The craniotomies are cut out of it. Each bone's card says how much of it is the model. No mandible.
+  the frontal sinus) and the CT's bone within 5 mm of them give way to the model too. Inside the cavernous sinuses the
+  CT's thin-bone rule (170–400 HU next to bone) is left out: there it took the contrast-filled venous blood for bone.
+  The skull is carved round the maxillary and abducens nerves (their tube plus 0.5 mm) and the petrosal sinuses (plus
+  0.3 mm), which are routed or laid on the CT's thinner bone and lay partly under it (V2 50–70 %, VI 25–30 %; audit
+  finding MB-06); the carving keeps 1 mm off the air sinuses. Those structures come from the cavernous and petrosal
+  steps' last run, so after a change that moves them this step runs again; the clearance step's check against the skull
+  as shown fails until it has. The craniotomies are cut out of it. Each bone's card says how much of it is the model. No mandible.
 - **Registration** (`pipeline/skullbase_v3.py`): each specimen's bone, blurred to the CT's resolution, is matched to
   the CT's bone within 14 mm of the labyrinth by a similarity transform (1500 rotations, as is and mirrored, then a
   local optimisation of the best twelve), started from the labyrinth picked by hand on the CT's slices. Specimen ALPHA

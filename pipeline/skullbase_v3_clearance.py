@@ -72,22 +72,44 @@ BONE_SHARE = 0.05         # a fitted course that runs on the brain or on the bon
 OFF_BONE = ("Anterior inferior cerebellar artery", "Superior cerebellar artery (fitted course)",
             "Posterior inferior cerebellar artery (fitted course)", "Medial pontine branches of basilar artery",
             "Lateral pontine branches of basilar artery", "Anterior spinal artery", "Superior petrosal sinus", "Inferior petrosal sinus")
+# the nerves the skull is carved round (skullbase_v3_skull.CLEAR_COURSES, with the petrosal sinuses above): out of it too
+CARVED = ("Maxillary nerve (V2)", "Abducens nerve (VI)")
 
 
 class DrawnBone:
-    """How deep each point lies inside the bone the model draws (mm; 0 outside it): the bone field of
-    skullbase_v3_endonasal.ct_grid over BONE_BOX. The nerves are routed through, and the fitted vessels were checked
-    against, the routing's bone mask, which is thinner than the surface drawn from it: measured against the mask a
-    nerve "crossed 0.0 mm of bone" while 14 to 21 mm of it lay under the drawn surface (the audit of November 2026,
-    findings MB-04 to MB-06)."""
+    """How deep each point lies inside the bone the model shows (mm; 0 outside it): v3's skull (skullbase_v3_skull.py,
+    skull_bone.npz, its field smoothed and at its surface level as the surface is taken from it) over BONE_BOX; before
+    that is built, the CT's bone as Skull base v2 draws it (skullbase_v3_endonasal.ct_grid). The nerves are routed
+    through, and the fitted vessels were checked against, the routing's bone mask, which is thinner than the surface
+    drawn from it: measured against the mask a nerve "crossed 0.0 mm of bone" while 14 to 21 mm of it lay under the
+    drawn surface (the audit of November 2026, findings MB-04 to MB-06). v3's skull is fuller again than v2's surface
+    (its CT bone softened and rescaled so thin plates keep their surface): against v2's, V2 lay 37 to 49 % under the
+    bone, against the skull shown 49 to 71 %."""
 
     def __init__(self):
         import nibabel as nib
+        import skullbase_ct as K
+        self._apply = nib.affines.apply_affine
+        sk = DATA / "skullbase-v3" / "skull_bone.npz"
+        if sk.exists():
+            c = np.load(sk)
+            a = c["a"]
+            corners = np.array([[x, y, z] for x in BONE_BOX[0] for y in BONE_BOX[1] for z in BONE_BOX[2]])
+            ijk = self._apply(np.linalg.inv(a), corners)
+            lo = np.maximum(np.floor(ijk.min(0)).astype(int) - 2, 0)
+            hi = np.minimum(np.ceil(ijk.max(0)).astype(int) + 3, c["b"].shape)
+            sm = ndimage.gaussian_filter(c["b"][tuple(slice(x, y) for x, y in zip(lo, hi))].astype(np.float32), 0.6)
+            self.depth = (ndimage.distance_transform_edt(sm >= K.SURFACE_LEVEL) * K.GRID_MM).astype(np.float32)
+            a_crop = a.copy()
+            a_crop[:3, 3] = self._apply(a, lo)
+            self.inv = np.linalg.inv(a_crop)
+            self.source = "v3's skull"
+            return
         import skullbase_v3_endonasal as ENDO
         g = ENDO.ct_grid(BONE_BOX)
         self.depth = (ndimage.distance_transform_edt(g["bone"] >= ENDO.FIELD_ISO) * ENDO.GRID_MM).astype(np.float32)
         self.inv = np.linalg.inv(g["a_crop"])
-        self._apply = nib.affines.apply_affine
+        self.source = "the CT's bone (v2's surface)"
 
     def __call__(self, P: np.ndarray) -> np.ndarray:
         return ndimage.map_coordinates(self.depth, self._apply(self.inv, P).T, order=1, mode="constant", cval=0.0)
@@ -95,13 +117,16 @@ class DrawnBone:
 
 def bone_contact(items_list: list) -> dict:
     """Every vessel and nerve as shown, against the drawn bone: {name: {side: {"share": of its surface vertices more
-    than BONE_IN_MM inside it, "deepestMm"}}} (at rest)."""
+    than BONE_IN_MM inside it, "deepestMm"}}} (at rest). A vessel skullbase_v3_junctions.py has joined to the sinuses it
+    drains to is measured as it was before (its junctions pass through the bone's openings), so this gives the same
+    whether or not the junctions have run."""
     bone = DrawnBone()
+    print("drawn bone:", bone.source)
     out = {}
     for it in items_list:
         if it.get("category") not in ("artery", "vein", "nerve") or it.get("tumourView") or it.get("approach"):
             continue
-        f = shown(it)
+        f = DATA / (it.get("joinedFrom") or it["file"]).replace("assets/", "")
         if not f.exists():
             continue
         for s, nd in read_glb_full(f).items():
@@ -111,9 +136,10 @@ def bone_contact(items_list: list) -> dict:
 
 
 def bone_check(contact: dict) -> list[tuple[bool, str]]:
-    """The fitted courses that run on the hindbrain or on the bone (OFF_BONE): out of the drawn bone."""
+    """The fitted courses that run on the hindbrain or on the bone (OFF_BONE), and the nerves the skull is carved round
+    (CARVED: this fails when they have moved since skullbase_v3_skull.py carved it): out of the drawn bone."""
     out = []
-    for name in OFF_BONE:
+    for name in OFF_BONE + CARVED:
         for s, c in contact.get(name, {}).items():
             out.append((c["share"] <= BONE_SHARE, f"{name} {s}: {100 * c['share']:.0f} % of its surface in the drawn bone (up to {c['deepestMm']} mm)"))
     return out

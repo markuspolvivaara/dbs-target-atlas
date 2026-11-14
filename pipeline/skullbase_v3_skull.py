@@ -34,6 +34,19 @@ How:
      bone envelope, its holes closed over ENVELOPE_MM) the rule-drawn walls are not this patient's surface but ridges and
      a shelf over the frontal sinus: there, and within PATCH_REACH_MM of them, the fitted model stands in for the CT,
      blended in over PATCH_MM.
+     Two corrections near the nerves of the cavernous sinus (the audit of November 2026, finding MB-06: the maxillary
+     and abducens nerves lay 50 to 70 % and 25 to 30 % under the bone drawn here):
+       inside the cavernous sinuses (as skullbase_v3_cavernous.py draws them, grown THIN_SINUS_GROW_MM) the CT's
+       thin-bone rule (skullbase_ct.bone_mask: 170 to 400 HU next to bone counts as bone) is dropped: there those
+       voxels are the contrast-filled venous blood (about 220 HU here), not bone;
+       the courses that must lie clear of the bone drawn here (CLEAR_COURSES: V2 and VI, and the petrosal sinuses,
+       which skullbase_v3_petrosal.py seats off v2's thinner bone) are carved out of the field, each tube with a
+       margin, but never within CLEAR_AIR_MM of air the bone encloses (a sinus they pass keeps its wall). Where the bone
+       is thick the nerve then runs in a canal (V2 in the foramen rotundum), where it is thin in a groove.
+     Both read those structures from the cavernous and petrosal steps' last run (skullbase_v3.py,
+     skullbase_v3_cavernous.py, which come after this step). They are drawn on the CT, not on this skull, so after a
+     change that moves them this step runs again (then skullbase_v3_approach.py and the v3 chain);
+     skullbase_v3_clearance.py's check of the courses against the bone drawn here fails until it has.
   5. That surface is split into bones by the nearest bone of the fitted model (as v2 splits the CT's).
 It also carries Z-Anatomy vessels v2 leaves out (FITTED_LINES: the anterior inferior cerebellar arteries, which TopBrain
 labels in other cases but not in this one, and the superior cerebellar arteries, of which it labels only the first
@@ -90,6 +103,13 @@ SINUSES = ("Sinus of frontal bone", "Sinus of sphenoid bone")
 FITTED_LINES = ["Anterior inferior cerebellar artery.r", "Anterior inferior cerebellar artery.l",
                 "Superior cerebellar artery.r", "Superior cerebellar artery.l"]
 LINE_SIGMA_MM = 8.0         # a line point moves as the model's bone within about twice this moved
+THIN_SINUS = "tb_cavernous_sinus"   # inside these (skullbase_v3_cavernous.py), grown by ...
+THIN_SINUS_GROW_MM = 1.5    # ... this, the CT's thin-bone rule does not make bone (the venous blood's contrast)
+# the courses kept clear of the bone drawn here (their files as the v3 chain wrote them): a margin (mm) round each tube
+CLEAR_COURSES = {"tb_maxillary_nerve_v2": 0.5, "tb_abducens_nerve_vi": 0.5,
+                 "sb_superior_petrosal_sinus": 0.3, "sb_inferior_petrosal_sinus": 0.3}   # (skullbase_v3_petrosal.GAP_MM)
+CLEAR_AIR_MM = 1.0          # ... never carved within this of air the bone encloses (else the maxillary sinus opens)
+CLEAR_NOTE_START = "The skull is carved round it"
 
 
 def frame_affine(a: np.ndarray, R: np.ndarray, fossa: np.ndarray) -> np.ndarray:
@@ -269,6 +289,136 @@ def rasterise(V: np.ndarray, T: np.ndarray, inv: np.ndarray, shape: tuple) -> tu
     return occ, box
 
 
+def soften(p: np.ndarray, walls: np.ndarray) -> np.ndarray:
+    """The CT's bone mask as the field draws it: its own bone and its rule-drawn walls softened and rescaled."""
+    return np.maximum(np.clip(ndimage.gaussian_filter(p, CT_SOFT_MM / STEP) * CT_GAIN, 0, 1),
+                      np.clip(ndimage.gaussian_filter(walls.astype(np.float32), WALL_SOFT_MM / STEP) * WALL_GAIN, 0, 1))
+
+
+def thin_rule_out_of_sinuses(b: np.ndarray, p: np.ndarray, walls: np.ndarray, a_f: np.ndarray) -> dict:
+    """In the cavernous sinuses (THIN_SINUS, grown THIN_SINUS_GROW_MM), the voxels that only the CT's thin-bone rule made
+    bone (in the mask, under BONE_HU on the CT) taken out of the softened field b (in place, on the CT's grid; the rest
+    of the field as before). Returns the report."""
+    from glb import read_glb_full
+    f = BUILD / f"{THIN_SINUS}.glb"
+    if not f.exists():
+        return {"note": f"{THIN_SINUS}.glb not built: run again after skullbase_v3_cavernous.py"}
+    inv_f = np.linalg.inv(a_f)
+    cs = np.zeros(p.shape, bool)
+    for nd in read_glb_full(f).values():
+        occ, box = rasterise(nd["positions"], nd["indices"], inv_f, p.shape)
+        cs[box] |= occ >= 0.5
+    grow = int(round(THIN_SINUS_GROW_MM / STEP))
+    nz = np.argwhere(cs)
+    lo = np.maximum(nz.min(0) - grow - 12, 0)               # (a margin for the dilation and the Gaussians)
+    hi = np.minimum(nz.max(0) + grow + 13, p.shape)
+    box = tuple(slice(x, y) for x, y in zip(lo, hi))
+    csb = ndimage.binary_dilation(cs[box], iterations=grow)
+    # the CT's values on the grid, as skullbase_ct.resample puts them there (ndimage.zoom, linear, grid_mode off)
+    ct, _ = K.load_ct()
+    scale = (np.array(ct.shape) - 1) / (np.array(p.shape) - 1)
+    idx = np.indices(hi - lo, dtype=np.float32).reshape(3, -1) + lo[:, None]
+    hu = ndimage.map_coordinates(ct, idx * scale[:, None], order=1, mode="nearest").reshape(hi - lo)
+    del ct, idx
+    pb = p[box]
+    thin = (pb >= 0.5) & (hu < K.BONE_HU) & csb
+    lean = np.where(thin, 0.0, pb).astype(np.float32)
+    delta = soften(lean, walls[box]) - soften(pb, walls[box])      # (the same box both ways: its edges cancel)
+    b[box] += delta
+    return {"sinusGrowMm": THIN_SINUS_GROW_MM, "droppedMl": round(float(thin.sum()) * STEP ** 3 / 1000, 2),
+            "medianHU": round(float(np.median(hu[thin])), 0) if thin.any() else None}
+
+
+def courses_to_clear() -> list:
+    """CLEAR_COURSES as the v3 chain last wrote them: [(id, side, points every 0.1 mm, radius + margin there)]."""
+    import skullbase_v3_cavernous as CAV
+    out = []
+    for sid, margin in CLEAR_COURSES.items():
+        f = BUILD / f"{sid}.glb"
+        if not f.exists():
+            continue
+        for s, (C, r) in sorted(CAV.centre_lines(f).items()):
+            L = np.r_[0, np.cumsum(np.linalg.norm(np.diff(C, axis=0), axis=1))]
+            t = np.r_[np.arange(0, L[-1], 0.1), L[-1]]
+            out.append((sid, s, np.stack([np.interp(t, L, C[:, k]) for k in range(3)], 1), np.interp(t, L, r) + margin))
+    return out
+
+
+def inside_share(field: np.ndarray, inv: np.ndarray, sid: str, side: str) -> float:
+    """The share of a course's tube surface (its file) inside the surface drawn from the field (as isosurface smooths it)."""
+    from glb import read_glb_full
+    V = read_glb_full(BUILD / f"{sid}.glb")[side]["positions"]
+    ijk = nib.affines.apply_affine(inv, V)
+    lo = np.maximum(np.floor(ijk.min(0)).astype(int) - 4, 0)
+    hi = np.minimum(np.ceil(ijk.max(0)).astype(int) + 5, field.shape)
+    sm = ndimage.gaussian_filter(field[tuple(slice(x, y) for x, y in zip(lo, hi))], 0.6)
+    return round(float(np.mean(ndimage.map_coordinates(sm, (ijk - lo).T, order=1) >= K.SURFACE_LEVEL)), 3)
+
+
+def clear_courses(field: np.ndarray, a_x: np.ndarray) -> dict:
+    """CLEAR_COURSES carved out of the field (in place): every voxel within a course's radius and margin taken out,
+    with a soft edge a voxel wide, except within CLEAR_AIR_MM of air the bone encloses (its components other than the
+    one outside, and the cranial cavity joined to it). Returns the report: per course and side, the share of its tube
+    surface inside the drawn bone before and after, and the bone carved (ml)."""
+    inv = np.linalg.inv(a_x)
+    courses = courses_to_clear()
+    if not courses:
+        return {"note": "the courses are not built: run again after skullbase_v3_cavernous.py"}
+    before = {(sid, s): inside_share(field, inv, sid, s) for sid, s, _, _ in courses}
+    # the air the bone encloses (the field as isosurface smooths it): its components but the largest (the air outside
+    # the head and the cranial cavity, joined through the foramen magnum)
+    air = ndimage.gaussian_filter(field, 0.6) < K.SURFACE_LEVEL
+    lab, _ = ndimage.label(air)
+    del air
+    outside = np.bincount(lab.ravel())[1:].argmax() + 1
+    # each course's cut on its own box of the grid (a voxel near two courses: the deeper cut)
+    cuts, rep = {}, {}
+    for sid, s, P, R in courses:
+        ijk = nib.affines.apply_affine(inv, P)
+        pad = int(np.ceil(R.max() / STEP)) + 3
+        lo = np.maximum(np.floor(ijk.min(0)).astype(int) - pad, 0)
+        hi = np.minimum(np.ceil(ijk.max(0)).astype(int) + pad + 1, field.shape)
+        idx = np.indices(hi - lo).reshape(3, -1).T + lo
+        d, j = cKDTree(P).query(nib.affines.apply_affine(a_x, idx), distance_upper_bound=R.max() + 2 * STEP)
+        near = np.isfinite(d)
+        idx, cut = idx[near], np.clip((R[j[near]] - d[near]) / STEP + 0.5, 0, 1)
+        box = tuple(slice(x, y) for x, y in zip(lo, hi))
+        void = (lab[box] > 0) & (lab[box] != outside)
+        off = (ndimage.distance_transform_edt(~void) * STEP <= CLEAR_AIR_MM)[tuple((idx - lo).T)] if void.any() else np.zeros(len(idx), bool)
+        kept = off & (cut > 0)
+        cut[kept] = 0
+        rep.setdefault(sid, {})[s] = {"marginMm": CLEAR_COURSES[sid], "insideBefore": before[(sid, s)],
+                                      "carvedMl": round(float((field[tuple(idx.T)] * cut).sum()) * STEP ** 3 / 1000, 3),
+                                      "keptOffAirVoxels": int(kept.sum())}
+        for v, c in zip(map(tuple, idx[cut > 0]), cut[cut > 0]):
+            cuts[v] = max(cuts.get(v, 0.0), float(c))
+    del lab
+    if cuts:
+        idx = np.array(list(cuts))
+        field[tuple(idx.T)] *= 1 - np.array(list(cuts.values()), np.float32)
+    for sid, s, _, _ in courses:
+        rep[sid][s]["insideAfter"] = inside_share(field, inv, sid, s)
+    return rep
+
+
+def clear_note(sid: str) -> str | None:
+    """What a carved course's card says of it (from the last run's report), or None."""
+    p = BUILD / "skull.json"
+    if sid not in CLEAR_COURSES or not p.exists():
+        return None
+    rep = json.loads(p.read_text())["report"].get("cleared", {}).get(sid)
+    if not rep or not all(s in rep for s in ("R", "L")):
+        return None
+    r0, l0, r1, l1 = (round(100 * rep[s][k]) for k in ("insideBefore", "insideAfter") for s in ("R", "L"))
+    before = f"{r0} % of its surface on each side" if r0 == l0 else f"{r0} % of its surface on the right and {l0} % on the left"
+    after = ("none of it does" if r1 == l1 == 0 else f"{r1} % on each side" if r1 == l1 else
+             f"{r1} % on the right and {l1} % on the left")
+    where = ("Where the bone is thick it runs in a canal of its own, where it is thin in a groove." if sid.startswith("tb_") else
+             "It lies on the bone, in a shallow groove of it.")
+    return (f"{CLEAR_NOTE_START} ({CLEAR_COURSES[sid]:g} mm beyond its surface; skullbase_v3_skull.py): before it was carved, "
+            f"{before} lay under the bone shown; now {after}. {where}")
+
+
 def main() -> int:
     BUILD.mkdir(parents=True, exist_ok=True)
     ex = json.loads(ZEXPORT.read_text())
@@ -276,8 +426,7 @@ def main() -> int:
     b, p, a = c["b"].astype(np.float32), c["p"].astype(np.float32), c["a"]
     # the CT's rule-drawn bone (walls around enclosed air, the orbital roofs' plates) softened; its own bone as it is
     walls = (b > 0.5) & (p < 0.5)
-    b = np.maximum(np.clip(ndimage.gaussian_filter(p, CT_SOFT_MM / STEP) * CT_GAIN, 0, 1),
-                   np.clip(ndimage.gaussian_filter(walls.astype(np.float32), WALL_SOFT_MM / STEP) * WALL_GAIN, 0, 1))
+    b = soften(p, walls)
     fr = np.load(CT_BUILD / "frame.npz")
     R, fossa = fr["R"], fr["fossa"]
     a_f = frame_affine(a, R, fossa)
@@ -311,6 +460,9 @@ def main() -> int:
                 "medianBeforeMm": round(float(np.median(near_b)), 2), "medianAfterMm": round(float(np.median(near_a)), 2),
                 "p90BeforeMm": round(float(np.percentile(near_b, 90)), 2), "p90AfterMm": round(float(np.percentile(near_a, 90)), 2)}
     print("edge fit", edge_rep)
+    # (after the fits, which read the CT's bone as it is) the thin-bone rule out of the cavernous sinuses
+    thin_rep = thin_rule_out_of_sinuses(b, p, walls, a_f)
+    print("thin-bone rule out of the cavernous sinuses", thin_rep)
 
     # ---- 3. the grid extended to hold the model, and the model rasterised on it
     allt = np.vstack([tuned[n] for n in names])
@@ -369,6 +521,10 @@ def main() -> int:
     beyond |= face > 0.5
     del face
 
+    # the courses kept clear of it
+    clear_rep = clear_courses(field, a_x)
+    print("courses cleared", clear_rep)
+
     # ---- 5. its surface, split into bones by the nearest bone of the fitted model
     mesh = isosurface(field, a_x, K.SURFACE_LEVEL, 0.6, FACES)
     V, F = np.asarray(mesh.vertices), np.asarray(mesh.faces)
@@ -391,7 +547,7 @@ def main() -> int:
         share[n] = round(float(v_beyond[used].mean()), 3)
     print("bones", {n: (len(bones[n]["tris"]), share[n]) for n in bones})
     report = {"fit": fit_rep, "face": face_rep, "edge": edge_rep, "faceBones": list(FACE_BONES), "seamMm": SEAM_MM, "blendMm": BLEND_MM, "edgeFitMm": EDGE_FIT_MM, "edgeSigmasMm": list(EDGE_SIGMAS),
-              "beyondScanShare": share, "faces": int(len(F))}
+              "beyondScanShare": share, "faces": int(len(F)), "thinRuleOutOfSinuses": thin_rep, "cleared": clear_rep}
     (BUILD / "skull.json").write_text(json.dumps({"bones": bones, "lines": carry_lines(ex, model0), "report": report}))
     np.savez_compressed(BUILD / "skull_bone.npz", b=field.astype(np.float16), a=a_x)
     return 0

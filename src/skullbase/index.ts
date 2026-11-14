@@ -222,6 +222,10 @@ export const V3_FIT = z.object({
     face: z.object({ medianBeforeMm: z.number(), medianAfterMm: z.number(), withinBefore: z.number(), withinAfter: z.number() }),
     edge: z.object({ medianBeforeMm: z.number(), medianAfterMm: z.number(), p90BeforeMm: z.number(), p90AfterMm: z.number() }),
     faceBones: z.array(z.string()), seamMm: z.number(), blendMm: z.number(), edgeFitMm: z.number(),
+    /** the CT's thin-bone rule left out inside the cavernous sinuses (finding MB-06) */
+    thinRuleOutOfSinuses: z.object({ droppedMl: z.number() }).passthrough().optional(),
+    /** the courses the skull is carved round: per file and side, the share of the tube's surface under the bone before and after */
+    cleared: z.record(z.string(), z.record(z.string(), z.object({ marginMm: z.number(), insideBefore: z.number(), insideAfter: z.number(), carvedMl: z.number() }).passthrough())).optional(),
   }).optional(),
 }).parse(v3Fit);
 

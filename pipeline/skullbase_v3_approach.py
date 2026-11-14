@@ -1031,7 +1031,8 @@ def beside_sinuses(t: float, g: float) -> str:
 
 
 def against_mean(area: float, mean: float) -> str:
-    """A measured area beside a published mean, in words."""
+    """A measured area beside a published mean, in words (given the two as the card states them, rounded, so that the
+    words agree with the numbers beside them: 1179.6 against 1275.4 mm2 is 7.5 % smaller, 1180 against 1275 7.45 %)."""
     r = area / mean
     return "about the size of" if abs(r - 1) < 0.05 else f"{abs(100 * (r - 1)):.0f} % {'smaller' if r < 1 else 'larger'} than"
 
@@ -1059,7 +1060,7 @@ def lateral_supraorbital(S: Skull) -> dict:
            f"{LSO_SOFT_MM:.0f} mm (illustrative). Burr hole: {fmt(outline[LSO_BURR_HOLE])}.")
     return {"id": "lso", "name": "Lateral supraorbital craniotomy", "cut": m, "how": how, "burrHoles": [outline[LSO_BURR_HOLE].round(1).tolist()],
             "outline": outline.round(1).tolist(), "areaMm2": round(area), "softMm": LSO_SOFT_MM, "measured": {"outlineMm2": round(area)},
-            "measure": lambda M: {"<<flap>>": f"{M.area:.0f}", "<<against>>": against_mean(M.area, LSO_MEAN_AREA)}}
+            "measure": lambda M: {"<<flap>>": f"{M.area:.0f}", "<<against>>": against_mean(round(M.area), round(LSO_MEAN_AREA))}}
 
 
 def retrosigmoid(S: Skull) -> dict:
@@ -1499,6 +1500,9 @@ def remeasure() -> int:
         ap = mk(S)
         r = res[k]
         M = Removed(np.array(r["removed"]["verts"], float), np.array(r["removed"]["tris"], int))
+        for piece, token in (("clinoid", "<<clinoidMl>>"), ("ridge", "<<ridgeMl>>")):    # (the switches' pieces, as main() meshed them)
+            if piece in r:
+                ap["how"] = ap["how"].replace(token, f"{r[piece]['ml']:.1f}")
         measured_how(ap, M)
         r["how"], r["measured"], r["removedMl"] = ap["how"], ap["measured"], M.ml
         summary[k]["how"], summary[k]["measured"], summary[k]["removedMl"] = r["how"], r["measured"], r["removedMl"]

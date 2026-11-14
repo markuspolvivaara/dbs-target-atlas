@@ -40,11 +40,11 @@
     }
    },
    "validation": {
-    "checks": 58,
+    "checks": 62,
     "failed": []
    },
-   "revision": "60cea95",
-   "date": "2026-11-13"
+   "revision": "0e9845e",
+   "date": "2026-11-14"
   },
   {
    "step": "skullbase_v3_junctions",
@@ -171,8 +171,8 @@
     "checks": 24,
     "failed": []
    },
-   "revision": "f3d288a",
-   "date": "2026-11-12"
+   "revision": "0e9845e",
+   "date": "2026-11-14"
   }
  ]
 }
