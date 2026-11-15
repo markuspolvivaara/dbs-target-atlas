@@ -38,8 +38,11 @@ commit and push it.
   9. P1-03, the per-view copies (56 % of the default skull base's mesh bytes, 49 % of v1's): left as they are, the
      user's choice (2026-11-15). Loading per view keeps them out of readers' downloads; sharing a copy's untouched
      side would save about 7 MB of deploy but make a direct visit to an approach load the whole original too.
-- Still open: v1's posterior fossa rebuilt with the far lateral sliders (previewed, not committed: the user is to
-  say keep or not) and v1's cameras.
+- v1's posterior fossa: `1044aff` (the far lateral view's two sliders on v1 too; its step's samples seeded, so a
+  rebuild repeats; the cerebellar arteries' tubes no longer fold). Its brainstem moved at most 0.35 mm, and
+  `skullbase_v1_endonasal.py`, which reads it, was not rerun: the user's endonasal rework replaces that data.
+- Still open: v1's cameras (v1 keeps its old view directions). `skullbase_v1_brain.py` still samples surfaces
+  unseeded (two `m.sample` calls): seed them (`seed=0`) when v1's cortex is next rebuilt, or a rebuild will not repeat.
 - Pipeline data: the worktree has its own `pipeline/data/build` (its `raw` is a link to the main checkout's). These
   fixes changed `skullbase` (v1), `skullbase-v3` and `skullbase-ct` there; copy from the worktree, not the main
   checkout, before rebuilding those on the MacBook.
