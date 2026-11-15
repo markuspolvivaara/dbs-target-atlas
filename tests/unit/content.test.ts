@@ -7,6 +7,7 @@ import { rows, words, signed, validate, fmt, CALC_NOTE, CALC_LEDE } from '../../
 import { loadSource } from './source';
 import { EPILEPSY_INDICATION, EPILEPSY_REFERENCES } from '../../src/data/epilepsy';
 import { ADDITION_REFERENCES } from '../../src/data/additions';
+import { SIDE_EFFECTS } from '../../src/data/sideeffects';
 import { plan, primaryTargetId } from '../../src/viewer/selection';
 import { decode, defaultState, encode } from '../../src/state';
 import { mniToAcpc, TEMPLATE_ACPC_LENGTH } from '../../src/data/acpc';
@@ -34,8 +35,43 @@ describe('references resolve', () => {
       ...IMAGING_ASIDE.flatMap((a) => a.refIds),
       ...CALC_NOTE.preRefs, ...CALC_NOTE.midRefs,
       ...MANIFEST.structures.flatMap((s) => s.refIds),
+      ...Object.values(SIDE_EFFECTS).flatMap((t) => [...t.items.flatMap((x) => x.refIds), ...(t.note?.refIds ?? [])]),
     ];
     expect(used.filter((r) => !ids.has(r))).toEqual([]);
+  });
+});
+
+// A-013: what stimulation does when current reaches the structures around each target
+describe('stimulation side effects', () => {
+  const drawn = new Set(MANIFEST.structures.map((s) => s.id));
+  it('are given for the STN, GPi, Vim and PSA, each linking only drawn landmarks and naming what is not drawn', () => {
+    expect(Object.keys(SIDE_EFFECTS).sort()).toEqual(['gpi', 'psa', 'stn', 'vim']);
+    for (const [t, se] of Object.entries(SIDE_EFFECTS)) {
+      expect(drawn.has(t), t).toBe(true);
+      expect(se.items.length, t).toBeGreaterThan(0);
+      for (const x of se.items) {
+        if (x.drawnId) expect(['cst', 'ml', 'optic_tract', 'rn', 'drtt'], `${t}: ${x.drawnId}`).toContain(x.drawnId);
+        if (x.drawnId) expect(drawn.has(x.drawnId), x.drawnId).toBe(true);
+        // a structure with no mesh in this section is said to be not drawn
+        if (/hypothalamus|third-nerve|frontal eye field|sensory nuclei/.test(x.cause ?? '')) expect(x.cause, `${t}: ${x.effect}`).toMatch(/not drawn/);
+      }
+    }
+  });
+  it('quote Kim 2021’s Table 5 for the Vim and the PSA (93 patients)', () => {
+    const text = (t: string) => SIDE_EFFECTS[t].items.map((x) => x.effect).join(' | ');
+    expect(text('psa')).toMatch(/Gait disturbance .*: 14% of 93 patients with PSA stimulation, none with Vim/);
+    expect(text('psa')).toMatch(/Paraesthesiae: 14%, against 6\.5%/);
+    expect(text('psa')).toMatch(/Dysarthria: 4%, against 15%/);
+    expect(text('vim')).toMatch(/Dysarthria: 15% of 93 patients with Vim stimulation, against 4%/);
+    expect(SIDE_EFFECTS.psa.items.every((x) => x.refIds.includes('kim2021'))).toBe(true);
+  });
+  it('the landmarks’ cards say what current reaching them does', () => {
+    const st = (id: string) => CONTENT.structures.find((s) => s.id === id)!;
+    expect(st('cst').description).toMatch(/muscle contractions and strained or spastic dysarthria/);
+    expect(st('ml').description).toMatch(/paraesthesiae on the opposite side during STN stimulation/);
+    expect(st('optic_tract').description).toMatch(/phosphenes/);
+    expect(st('rn').description).toMatch(/Third-nerve fibres \(not drawn\)/);
+    for (const id of ['cst', 'ml', 'optic_tract', 'rn']) expect(st(id).refIds, id).toContain('koeglsperger2019');
   });
 });
 

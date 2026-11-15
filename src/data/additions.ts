@@ -60,6 +60,11 @@ export const ADDITION_REFERENCES: Reference[] = [
     citation: 'Andrade-Souza YM, Schwalb JM, Hamani C, et al. Comparison of three methods of targeting the subthalamic nucleus for chronic stimulation in Parkinson’s disease. Neurosurgery. 2005;56(2 Suppl):360–368. doi:10.1227/01.neu.0000156547.24603.ee.' },
   { id: 'danish2006', topic: 'img', shortLabel: 'Danish 2006', url: 'https://doi.org/10.1159/000092682',
     citation: 'Danish SF, Jaggi JL, Moyer JT, Finkel L, Baltuch GH. Conventional MRI is inadequate to delineate the relationship between the red nucleus and subthalamic nucleus in Parkinson’s disease. Stereotact Funct Neurosurg. 2006;84(1):12–18. doi:10.1159/000092682.' },
+  // (A-013: stimulation-induced side effects per target and landmark, sideeffects.ts)
+  { id: 'koeglsperger2019', topic: 'pd', shortLabel: 'Koeglsperger 2019', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC6558426/',
+    citation: 'Koeglsperger T, Palleis C, Hell F, Mehrkens JH, Bötzel K. Deep brain stimulation programming for movement disorders: current concepts and evidence-based strategies. Front Neurol. 2019;10:410. doi:10.3389/fneur.2019.00410.' },
+  { id: 'kim2021', topic: 'tremor', shortLabel: 'Kim 2021', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8220085/',
+    citation: 'Kim MJ, Chang KW, Park SH, Chang WS, Jung HH, Chang JW. Stimulation-induced side effects of deep brain stimulation in the ventralis intermedius and posterior subthalamic area for essential tremor. Front Neurol. 2021;12:678592. doi:10.3389/fneur.2021.678592.' },
 ];
 
 export const ADDITION_DESCRIPTIONS: Record<string, { text: string; refIds: string[] }> = {
@@ -67,9 +72,10 @@ export const ADDITION_DESCRIPTIONS: Record<string, { text: string; refIds: strin
   al: { text: 'In dystonia, the best stimulation volume extends from the posteroventral GPi into the subpallidal white matter; one peak of the generalized-dystonia sweet spot lay ventral to the pallidum, possibly on the ansa lenticularis\'s course. In Parkinson\'s disease, the fibres linked to pallidal stimulation\'s relief of levodopa-induced dyskinesia ran beneath the GPi, like the ansa lenticularis.', refIds: ['reich2019', 'horn2022', 'dsouza2026'] },
   // (B2: Reich 2019's abstract names subpallidal white matter, not the ansa lenticularis)
   gpi_sm: { text: 'The best stimulation volume sits in posteroventral GPi and extends into subpallidal white matter.', refIds: ['reich2019'] },
-  // (B2: the pyramidal tract and medial lemniscus as the Vim's lateral and posterior borders, Sammartino 2016)
-  cst: { text: 'In tractography-based Vim targeting, the pyramidal tract marks the Vim\'s lateral border.', refIds: ['sammartino2016'] },
-  ml: { text: 'In tractography-based Vim targeting, the medial lemniscus marks the Vim\'s posterior border; stimulating it gave hemibody paraesthesias.', refIds: ['sammartino2016'] },
+  // (B2: the pyramidal tract and medial lemniscus as the Vim's lateral and posterior borders, Sammartino 2016; A-013:
+  // what current reaching each landmark does, Koeglsperger 2019)
+  cst: { text: 'In tractography-based Vim targeting, the pyramidal tract marks the Vim\'s lateral border. Current that spreads into the internal capsule\'s motor fibres, lateral and anterior to the STN, lateral to the Vim or medial and posterior to the GPi, causes muscle contractions and strained or spastic dysarthria.', refIds: ['sammartino2016', 'koeglsperger2019'] },
+  ml: { text: 'In tractography-based Vim targeting, the medial lemniscus marks the Vim\'s posterior border; stimulating it gave hemibody paraesthesias. It lies ventroposterior to the STN, and current spreading into it is a likely cause of paraesthesiae on the opposite side during STN stimulation.', refIds: ['sammartino2016', 'koeglsperger2019'] },
   // (B2: Voa pallidal, most of Vop cerebellar, Ilinsky 2018; the mesh is Morel's VLa)
   vo: { text: 'Drawn: Morel\'s VLa, approximately Hassler\'s Voa. Voa, with a narrow anterior strip of Vop, receives pallidal input; the bulk of Vop, like the Vim, belongs to the cerebellar territory (nomenclatures differ between atlases). For hand dystonia, surgeons target the Voa–Vop junction.', refIds: ['ilinsky2018', 'shimizu2018'] },
   // (B2: combined STN and SNr stimulation is investigational; its trials were negative on their primary outcomes)
@@ -81,11 +87,11 @@ export const ADDITION_DESCRIPTIONS: Record<string, { text: string; refIds: strin
   sw_ts: { text: 'From subthalamic DBS in 14 patients with Tourette syndrome: the streamlines linked to benefit connected the STN\'s associative territory with M1 and the SMA. Not drawn in the Tourette views, whose targets are the CM-Pf and GPi.', refIds: ['hollunder2024'] },
   s1: { text: 'After subthalamic DBS for dystonia (56 patients), the benefit followed connections with sensorimotor cortex, S1 and M1.', refIds: ['hollunder2024'] },
   optic_tract: {
-    text: 'The optic tract runs beneath the posteroventral GPi and is a landmark for pallidal targeting. During surgery it is identified by stimulation-evoked flashes of light, so the lesion or lead can spare it; hyperactive GPi cells lay medial to its lateral border and at least 5.1 mm above its dorsal surface. Visual field defects after posterior pallidotomy were linked to lesions adjacent to the tract. An inversion-recovery MRI sequence can show the GPi and the optic tract directly.',
-    refIds: ['vitek1998', 'yokoyama2002', 'biousse1998', 'reich2000'],
+    text: 'The optic tract runs beneath the posteroventral GPi and is a landmark for pallidal targeting. During surgery it is identified by stimulation-evoked flashes of light, so the lesion or lead can spare it; hyperactive GPi cells lay medial to its lateral border and at least 5.1 mm above its dorsal surface. Visual field defects after posterior pallidotomy were linked to lesions adjacent to the tract. With a lead in place, current spreading into the tract from the GPi causes phosphenes. An inversion-recovery MRI sequence can show the GPi and the optic tract directly.',
+    refIds: ['vitek1998', 'yokoyama2002', 'biousse1998', 'koeglsperger2019', 'reich2000'],
   },
   rn: {
-    text: 'The red nucleus is a landmark for STN targeting: its anterior border on T2-weighted MRI was introduced as a reference for locating the STN centre relative to the AC–PC line. A red-nucleus-based target came closest to the clinically optimal contact and was the most precise of three targeting methods compared. On conventional MRI, however, the RN–STN relationship was inconsistent, and the authors recommend combining several anatomical measurements.',
-    refIds: ['bejjani2000', 'andradesouza2005', 'danish2006'],
+    text: 'The red nucleus is a landmark for STN targeting: its anterior border on T2-weighted MRI was introduced as a reference for locating the STN centre relative to the AC–PC line. A red-nucleus-based target came closest to the clinically optimal contact and was the most precise of three targeting methods compared. On conventional MRI, however, the RN–STN relationship was inconsistent, and the authors recommend combining several anatomical measurements. Third-nerve fibres (not drawn) run inferomedial to the STN and through the red nucleus below it: current reaching them can cause deviation of one eye and diplopia. Nausea and sweating are put down to spread medially and anteriorly, presumably to the hypothalamus and the red nucleus.',
+    refIds: ['bejjani2000', 'andradesouza2005', 'danish2006', 'koeglsperger2019'],
   },
 };

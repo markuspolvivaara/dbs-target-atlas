@@ -101,6 +101,16 @@ commit and push it.
     studies' unsigned sagittal angles dropped.
   Ten references added to `pipeline/sources/citations.json` and `REF_KEYS` (`spine_build.py refs`, no rebuild).
   Pushed at the user's word with B1–B7 opened as one pull request (`fix/b1-dbs-views` → `main`, 2026-11-15).
+  PR 12 merged (2026-11-15) once the CI checks passed: `main` now requires the jobs `checks` and `browser`, and the
+  repository allows auto-merge (both set at the user's request).
+- A-013, stimulation side effects (the roadmap's next item), the user's choices, on `fix/a013-side-effects`:
+  `src/data/sideeffects.ts` gives a "Stimulation side effects" block on the STN, GPi, Vim and PSA cards: what the
+  patient has, the structure current is thought to reach and its direction from the target, a link to it where it is
+  drawn (corticospinal tract for the internal capsule, medial lemniscus, optic tract, red nucleus, DRTT). Structures
+  with no mesh here (third-nerve fibres, the hypothalamus, the sensory thalamus, frontal eye field fibres) are named
+  and said to be not drawn. Sources, full text: Koeglsperger 2019 (STN, GPi, Vim) and Kim 2021 (Vim and PSA rates,
+  93 patients). The four landmark cards gained a line each on what current reaching them does. ANT keeps SANTE's
+  caveat. Pushed with its own pull request at the user's word (2026-11-16), set to merge once the checks pass.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -373,7 +383,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (428 tests on `fix/b1-dbs-views`)
+  - `npx vitest run` (431 tests on `fix/a013-side-effects`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`
