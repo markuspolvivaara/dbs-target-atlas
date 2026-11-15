@@ -47,7 +47,9 @@ commit and push it.
   SCA given shapes). Both validators now hold every pose to under 3 % inside and 1 mm deep. Upstream,
   `skullbase_v3.hindbrain_clearance` still fills each pf file half whole (its overlapping lobules cancel out); the
   clearance step lifts what that leaves, so a full rebuild converges, but fixing it there too would be cleaner.
-- Still open: v1's cameras (v1 keeps its old view directions). `skullbase_v1_brain.py` still samples surfaces
+- v1's cameras: the default model's for the pterional, interhemispheric, orbitozygomatic and far lateral views; the
+  retrosigmoid keeps v1's own (from below it meets Z-Anatomy's mastoid).
+- Still open from this round: `skullbase_v1_brain.py` still samples surfaces
   unseeded (two `m.sample` calls): seed them (`seed=0`) when v1's cortex is next rebuilt, or a rebuild will not repeat.
 - Pipeline data: the worktree has its own `pipeline/data/build` (its `raw` is a link to the main checkout's). These
   fixes changed `skullbase` (v1), `skullbase-v3` and `skullbase-ct` there; copy from the worktree, not the main
