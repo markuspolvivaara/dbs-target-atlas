@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { SP, SP_REFS } from '../spine';
 import { CERVICAL_GEOM, HERNIA_STATEMENTS, LUMBAR_GEOM, STATEMENTS, type Statement } from '../spine/content';
 import type { DrillPair, DrillVolume } from '../spine/drill';
-import { HERNIA_DEFAULT_SIZE, HERNIA_MIGRATE, HERNIA_SIZE, HERNIA_ZONES, herniaRoot, herniaShape, meshSdf, pushOut, sectionArea, type HerniaShape, type HerniaSpec } from '../spine/herniation';
+import { HERNIA_DEFAULT_SIZE, HERNIA_MIGRATE, HERNIA_SIZE, HERNIA_ZONES, herniaRoot, herniaShape, meshSdf, migratedToExiting, pushOut, sectionArea, type HerniaShape, type HerniaSpec } from '../spine/herniation';
 import type { DrillMode } from '../spine/state';
 import { herniaDrawn } from '../spine/scene';
 import type { SpineState } from '../spine/state';
@@ -125,7 +125,10 @@ export class HerniaSection {
         region === 'lumbar' && spec.zone === 'paracentral' ? this.retractControl() : null,
         this.out);
     }
-    if (region === 'lumbar') nodes.push(st(HERNIA_STATEMENTS.types), st(spec?.zone === 'paracentral' || !spec ? STATEMENTS.lesionParacentral : STATEMENTS.lesionLateral),
+    // lumbar: what the zone presses on (a central one: the cauda equina in the sac), and where a fragment can migrate to
+    if (region === 'lumbar') nodes.push(st(HERNIA_STATEMENTS.types),
+      st(spec?.zone === 'central' ? HERNIA_STATEMENTS.caudaEquina : spec?.zone === 'paracentral' || !spec ? STATEMENTS.lesionParacentral : STATEMENTS.lesionLateral),
+      ...(spec?.type === 'extrusion' ? [st(HERNIA_STATEMENTS.migrated)] : []),
       ...(spec?.zone === 'paracentral' ? [st(HERNIA_STATEMENTS.retract)] : []),
       st(STATEMENTS.rootRule), st(HERNIA_STATEMENTS.area), st(HERNIA_STATEMENTS.drawn));
     else nodes.push(st(HERNIA_STATEMENTS.types), st(HERNIA_STATEMENTS.cervicalApproach), st(STATEMENTS.cervicalRootRule), st(STATEMENTS.cervicalRootDisc),
@@ -276,15 +279,19 @@ export class HerniaSection {
    * them), the pinned parts of the roots red; or, taken out, put them back. */
   private pinnedMm = 0;
   private movedMm = 0;
+  /** the same for the exiting root, when a lumbar paracentral fragment has migrated up to it (migratedToExiting) */
+  private alsoPinnedMm = 0;
+  private alsoMovedMm = 0;
   private areaNow = 0;
   private deform(): void {
     if (!this.shape || !this.pair) return;
     const blocked = this.vol ? this.vol.boneTest() : undefined;
-    this.pinnedMm = 0; this.movedMm = 0;
+    this.pinnedMm = 0; this.movedMm = 0; this.alsoPinnedMm = 0; this.alsoMovedMm = 0;
     const rootName = herniaRoot(this.pair.id, this.spec!.zone, this.pair.region);
     const target = rootName ? `sp_root_${rootName.toLowerCase()}` : '';
     const traversing = `sp_root_${this.pair.id.split('-')[1].toLowerCase()}`;
     const geom0 = this.geom()!;
+    const also = migratedToExiting(this.spec!, this.pair.region, geom0.discHeightMm ?? 8) ? `sp_root_${this.pair.id.split('-')[0].toLowerCase()}` : '';
     const [lat, , up] = this.pair.landmarks[0].axes.map((a) => new THREE.Vector3(...a));
     const disc = new THREE.Vector3(...geom0.discCentre), sideSign = this.spec!.side === 'L' ? -1 : 1;
     const retract = this.pair.region === 'lumbar' && this.spec!.zone === 'paracentral' && !this.removed ? this.retract : 0;
@@ -310,6 +317,7 @@ export class HerniaSection {
           ? { clear: CLEAR_MM, spread: SPREAD.root, reach: 10, blocked, rigid: ROOT_RIGID_MM }
           : { clear: CLEAR_MM, spread: SPREAD.sac, reach: 6, inward: c.normals });
         pinned = r.pinned;
+        if (also && c.id === also) { this.alsoPinnedMm = Math.max(this.alsoPinnedMm, ...r.pinned); this.alsoMovedMm = Math.max(this.alsoMovedMm, ...r.moved); }
         if (c.id === target && !(retract > 0 && c.id === traversing && c.side === this.spec!.side)) {
           this.pinnedMm = Math.max(this.pinnedMm, ...r.pinned); this.movedMm = Math.max(this.movedMm, ...r.moved);
         } else if (c.id === target) {   // (retracted: what the herniation does to the root where it lies, without the retraction)
@@ -402,15 +410,23 @@ export class HerniaSection {
     const access = this.removed ? 'open' : this.reachable(), reach = !this.removed && access === 'open';
     const retracted = !this.removed && this.retract > 0 && region === 'lumbar' && zone === 'paracentral';
     const sacName = region === 'cervical' ? 'Dural sac (the cord and fluid: not told apart on this CT)' : 'Dural sac';
-    const rootLine = !root ? `A central herniation presses on the dural sac${region === 'cervical' ? ' and the cord in it' : ''}, not on a root.`
+    const rootLine = !root ? (region === 'cervical' ? 'A central herniation presses on the dural sac and the cord in it, not on a root.'
+      : 'A central herniation presses on the dural sac and the cauda equina roots in it (not drawn), not on a single root beside the sac.')
       : this.pinnedMm > 0.2 ? h('span', { class: 'facet-over' }, `The herniation pins the ${root} root (${kind}) against bone: flattened by ${one(this.pinnedMm)} mm where it cannot give way.`)
         : this.movedMm > 0.2 ? `The herniation pushes the ${root} root (${kind}) aside by up to ${one(this.movedMm)} mm.` : `The herniation does not reach the ${root} root (${kind}).`;
     const why = access === 'neural'
       ? (region === 'lumbar' ? `The bone is out of the way, but the dural sac or the ${root} root lies over it: retract them medially.`
         : 'From behind, the dural sac and the cord lie over it, and the cord is not retracted: take it out from the front (an anterior discectomy), or, if it lies far enough out, through the foramen.')
       : `It can be taken out once some of it lies open ${this.mode === 'acdf' ? 'to the front, through the disc space (drill away the back lips of the vertebral bodies, or osteophytes, where they overhang it; distraction helps)' : 'to the back'}: a corridor ${CORRIDOR_MM[region]} mm wide with no bone in it${region === 'lumbar' && zone === 'paracentral' ? ', the dural sac and the traversing root retracted out of it' : region === 'cervical' && this.mode !== 'acdf' ? ', clear of the dural sac and the cord' : ''} (the ligamentum flavum${this.mode === 'acdf' ? ' and the posterior longitudinal ligament are' : ' is'} not drawn).`;
+    // a paracentral fragment migrated up past the disc's upper margin: the exiting root too (what the drawn one does to it)
+    const up = this.pair.id.split('-')[0];
+    const alsoLine = this.removed || !migratedToExiting(this.spec, region, this.geom()?.discHeightMm ?? 8) ? ''
+      : h('p', {}, `Migrated up past the disc’s upper margin, it can reach the exiting ${up} root as well: `,
+        this.alsoPinnedMm > 0.2 ? h('span', { class: 'facet-over' }, `here it pins it against bone, flattened by ${one(this.alsoPinnedMm)} mm.`)
+          : this.alsoMovedMm > 0.2 ? `here it pushes it aside by up to ${one(this.alsoMovedMm)} mm.` : 'here it does not reach it.');
     this.out.append(
       h('p', {}, this.removed ? `Taken out: ${root ? `the ${root} root and ` : ''}the dural sac lie where they did.` : rootLine),
+      alsoLine,
       retracted ? h('p', {}, `The dural sac and the ${root} root are retracted ${this.retract} mm medially.`) : '',
       h('p', {}, `${sacName} at the ${this.pair.id} disc: ${Math.round(this.areaBefore)} mm² as drawn, now ${Math.round(this.areaNow)} mm²${change ? ` (${change > 0 ? '+' : ''}${change}%)` : ''}${retracted ? ', narrowed by the retraction too' : ''}.`),
       this.removed ? h('div', { class: 'chips' }, h('button', { type: 'button', class: 'chip', onclick: () => { this.removed = false; this.deform(); this.panelKey = ''; } }, 'Put it back'))

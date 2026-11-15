@@ -13,6 +13,8 @@
   Jiang 2024 (CT, 53 patients, CC BY 4.0), Tables 1 and 4: the C7 pedicle axis (transverse and sagittal angle, screw
     length, width and sagittal height, mean +- SD per side) and the C7 transverse and sagittal angles of nine earlier
     studies.
+  Chanplakorn 2014 (CT, 74 patients, CC BY 2.0), Table 2: the C7 pedicle's outer width and height at its isthmus (outer
+    cortex to outer cortex), mean +- SD per side.
 Downloads are cached in pipeline/data/raw/papers/ (untrusted input: parsed as XML only). Writes
 src/data/generated/spine-published.json.
 """
@@ -29,7 +31,7 @@ ROOT = Path(__file__).resolve().parent
 RAW = ROOT / "data" / "raw" / "papers"
 OUT = ROOT.parent / "src" / "data" / "generated" / "spine-published.json"
 PAPERS = {"wang2023": "PMC9832728", "moncadahabib2025": "PMC12504117", "nkwerem2024": "PMC11412596", "verma2020": "PMC7294881",
-          "jiang2024": "PMC10903032"}
+          "jiang2024": "PMC10903032", "chanplakorn2014": "PMC3991875"}
 LEVELS = ["L1", "L2", "L3", "L4", "L5"]
 THORACIC = [f"T{i}" for i in range(1, 13)]
 VERMA_KEYS = ("width", "height", "transverseAngle", "sagittalAngle")  # Tables 1-4, in this order
@@ -137,7 +139,16 @@ def main() -> int:
     if set(c7) != set(keys.values()) or any(len(v) != 2 for v in c7.values()) or len(lit["transverseAngle"]) < 5:
         print(f"FAIL Jiang 2024: {sorted(c7)}, {len(lit['transverseAngle'])} studies")
         return 1
-    out["cervical"] = {"C7": {"axisJiang": {**c7, "n": 53}, "studyMeans": lit}}
+    # Chanplakorn 2014: Table 2, the C7 block's "Overall" row: OPW, IPW, OPH, IPH, each right, left and a p value
+    ct = next(t for t in tables(PAPERS["chanplakorn2014"]) if any(r and r[0] == "C7" for r in t))
+    i7 = next(i for i, r in enumerate(ct) if r and r[0] == "C7")
+    ov = ct[i7 + 1]
+    if ov[0] != "Overall" or len(ov) != 13:
+        print(f"FAIL Chanplakorn 2014: C7 row {ov}")
+        return 1
+    outer = {"width": {"R": mean_sd(ov[1]), "L": mean_sd(ov[2])}, "height": {"R": mean_sd(ov[7]), "L": mean_sd(ov[8])}, "n": 74}
+    out["cervical"] = {"C7": {"axisJiang": {**c7, "n": 53}, "studyMeans": lit, "outerChanplakorn": outer}}
+    out["sources"]["chanplakorn2014"] = "Table 2: the C7 pedicle's outer width and outer height (mm) per side, mean +- SD"
     out["sources"]["jiang2024"] = ("Table 1: the C7 pedicle axis (trajectory A) per side, mean +- SD; Table 4: C7 transverse and "
                                    "sagittal angles of earlier studies (means)")
     out["sources"]["verma2020"] = ("Tables 1-4: thoracic pedicle width, height (mm), transverse and sagittal angle (deg) "

@@ -38,7 +38,7 @@ commit and push it.
     - the tremor hotspot keeps its place; its card says it is on or 1.5 mm outside the drawn Vim, inside the drawn
       Vo, 8 to 9 mm from Guiot's Vim target.
   - B1 is complete (A-001..A-003), and the STN is drawn whole by default (the user's request; `stn=z` asks for the
-    zones). Pushed to `origin/fix/b1-dbs-views` (2026-11-15) at the user's word; no pull request yet.
+    zones). Pushed to `origin/fix/b1-dbs-views` (2026-11-15) at the user's word.
 - B2, DBS statements and references (A-004, A-006..A-011, A-015, A-016), the user's choices: A-004 Liu 2014 in place
   of a meeting abstract; A-009 Voa pallidal, most of Vop cerebellar (Ilinsky 2018; the mesh is named "VLa (Morel),
   approximately Voa"); A-010 the Vim at 3/12 with the 2/12–3/12 range printed; A-011 the SNr as investigational
@@ -81,7 +81,26 @@ commit and push it.
   drainage "superficial only" / "any deep", Hofman 2018's rule kept as one series' on the card; Spetzler–Ponce "for
   cerebral AVMs" (Spetzler 2011's abstract); the brainstem's "Supratrigeminal zone (Cavalheiro 2015)" (renamed in
   `brainstem_build.py` and in `bs-zones.json` / `bs-manifest.json` by the same string), the Cavalcanti line replaced
-  by Al-Afif 2026's other use of the name. Local commit, not pushed.
+  by Al-Afif 2026's other use of the name. Pushed at the user's word.
+- B7, the spine texts (E-002, E-005..E-011), the user's choices:
+  - each root's picture in radiculopathy first: L1–S1 from Bateman 2025's Table 1 (pain, sensory loss, weakness,
+    reflex), C4–T1 from Hasan 2025's Table 3 (`RADICULOPATHY`). The ISNCSCI key muscle and sensory point follow under
+    their own heading; the "Reflexes: to be added" placeholder is gone. Root cards show both, cervical and T1 too;
+  - a central herniation on the level card as well as in the drilling tool (`herniaZones`, `zoneRoot`; links
+    `les=…central…`). At a lumbar disc it names the cauda equina in the dural sac and cites Aduri 2026 on cauda equina
+    syndrome. A lumbar paracentral extrusion migrated up past the disc's upper margin also names the exiting root
+    (`migratedToExiting`; Ikuta 2013, Ahn 2022's grades), with how far the drawn fragment pushes it;
+  - craniocervical limits: ADI under 3 mm in adults and 5 mm in children (Li 2025, Yang 2014); PADI under 14 mm
+    predicts paralysis (Yang 2014), the unverifiable 19 mm sentence dropped; Harris's 12 mm for BDI and BAI with
+    WFNS 2020's note on poor reader agreement (Alves 2020); the clivus–canal angle's sex difference and Botelho
+    2013's controls against basilar invagination. Chamberlain and McGregor were not added (the CT here does not reach
+    the hard palate);
+  - published pedicle columns: thoracic shows the median of the study means and names the study at each end, with
+    the material and sign notes (Singh 2011: negative = pointing outwards); C7 width and height from Chanplakorn
+    2014's outer measures (read by `spine_published.py`), Jiang 2024's screw path in the statement, the earlier
+    studies' unsigned sagittal angles dropped.
+  Ten references added to `pipeline/sources/citations.json` and `REF_KEYS` (`spine_build.py refs`, no rebuild).
+  Pushed at the user's word with B1–B7 opened as one pull request (`fix/b1-dbs-views` → `main`, 2026-11-15).
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -354,7 +373,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (424 tests on `fix/b1-dbs-views`)
+  - `npx vitest run` (428 tests on `fix/b1-dbs-views`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`
