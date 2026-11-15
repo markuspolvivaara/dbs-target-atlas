@@ -7,7 +7,8 @@ import { rows, words, signed, validate, fmt, CALC_NOTE, CALC_LEDE } from '../../
 import { loadSource } from './source';
 import { EPILEPSY_INDICATION, EPILEPSY_REFERENCES } from '../../src/data/epilepsy';
 import { ADDITION_REFERENCES } from '../../src/data/additions';
-import { plan } from '../../src/viewer/selection';
+import { plan, primaryTargetId } from '../../src/viewer/selection';
+import { mniToAcpc, TEMPLATE_ACPC_LENGTH } from '../../src/data/acpc';
 
 const src = loadSource();
 
@@ -26,7 +27,7 @@ describe('references resolve', () => {
     const used = [
       ...CONTENT.indications.flatMap((i) => [...i.evidence.flatMap((e) => e.refIds), ...i.caveatRefIds]),
       ...CONTENT.symptoms.flatMap((s) => [...s.evidence.flatMap((e) => e.refIds), ...s.noteRefIds]),
-      ...CONTENT.targets.map((t) => t.refId),
+      ...CONTENT.targets.flatMap((t) => [t.refId, ...t.moreRefIds]),
       ...CONTENT.structures.flatMap((s) => s.refIds),
       ...CONTENT.imaging.flatMap((m) => m.refIds),
       ...IMAGING_ASIDE.flatMap((a) => a.refIds),
@@ -198,6 +199,34 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
     }
     expect(CONTENT.symptoms.find((x) => x.id === 'ts-tics')!.note).toMatch(/subthalamic DBS in 14 patients/);
   });
+  it('says which markers are centroids, and puts published targets and printed peaks where the papers print them (audit A-003)', () => {
+    const tg = (id: string) => CONTENT.targets.find((t) => t.id === id)!;
+    const ind = (id: string) => CONTENT.indications.find((i) => i.id === id)!;
+    for (const t of CONTENT.targets.filter((x) => x.kind === 'atlasCoordinate')) expect(t.label, t.id).toMatch(/centroid/);
+    // the printed AC-PC targets come back out of the template's frame as printed, the left side mirrored
+    const printed: Record<string, [number, number, number]> = {
+      't-pub-vo': [13.5, -2, 1], 't-pub-ant-mtt': [6.2, 3.8, 8.7], 't-pub-vim': [15, -0.25 * TEMPLATE_ACPC_LENGTH, 0],
+    };
+    for (const [id, a] of Object.entries(printed)) {
+      expect(tg(id).kind, id).toBe('publishedTarget');
+      mniToAcpc(tg(id).mni.right).forEach((v, k) => expect(v, `${id} R ${k}`).toBeCloseTo(a[k], 6));
+      mniToAcpc(tg(id).mni.left).forEach((v, k) => expect(v, `${id} L ${k}`).toBeCloseTo(k === 0 ? -a[k] : a[k], 6));
+    }
+    expect(tg('t-pub-vo').moreRefIds).toEqual(['horisawa2019']);
+    // the views and the lead use them
+    expect(ind('fhd').targetMarkers).toEqual(['t-pub-vo']);
+    expect(CONTENT.symptoms.find((s) => s.indicationId === 'fhd')!.targetId).toBe('t-pub-vo');
+    expect(ind('epi').targetMarkers).toEqual(['t-pub-ant-mtt']);
+    expect(ind('holmes').targetMarkers[0]).toBe('t-pub-vim');
+    expect(ind('md').alternativeMarkers).toEqual(['t-pub-vim']);
+    expect(primaryTargetId('fhd', null)).toBe('t-pub-vo');
+    // Horn 2022's printed peaks, mirrored
+    expect(tg('t-ss-gen').mni.right).toEqual([21.1, -9.1, -0.14]);
+    expect(tg('t-ss-gen').mni.left).toEqual([-21.1, -9.1, -0.14]);
+    expect(tg('t-ss-cerv').mni.right).toEqual([20.4, -12.4, -5.2]);
+    // the tremor hotspot kept, its card saying where it lies
+    expect(tg('t-ss-tremor').note).toMatch(/outside it on the right.*Guiot/);
+  });
   it('keeps the calculator logic and text', () => {
     expect(src.html).toContain(CALC_LEDE);
     expect(src.html).toContain('lat:half + 11.5');
@@ -248,19 +277,24 @@ describe('manifest', () => {
 });
 
 describe('targets', () => {
-  it('every target has a source and a kind, and no hand-typed coordinate', () => {
+  it('every target has a source and a kind; a typed coordinate only where a paper prints it, which its method names', () => {
     for (const t of CONTENT.targets) {
-      expect(['sweetSpot', 'atlasCoordinate']).toContain(t.kind);
+      expect(['sweetSpot', 'publishedTarget', 'atlasCoordinate']).toContain(t.kind);
       expect(t.method.length).toBeGreaterThan(20);
       expect(t.mni.left[0]).toBeLessThan(0);
       expect(t.mni.right[0]).toBeGreaterThan(0);
+      // computed points come from the pipeline; printed ones (published targets, Horn 2022's peaks) name their paper
+      if (t.kind === 'atlasCoordinate') expect(t.coordKey, t.id).toBeTruthy();
+      if (!t.coordKey) expect(t.method, t.id).toMatch(/Shimizu|Schaper|Sammartino|Horn 2022/);
     }
   });
   it('sweet-spot markers sit inside or near their published map region', () => {
     for (const t of CONTENT.targets.filter((x) => x.kind === 'sweetSpot')) {
       const m = MANIFEST.structures.find((s) => s.id === t.structureId)!;
       const d = Math.hypot(...t.mni.left.map((v, i) => v - m.centroid!.L[i]));
-      expect(d, t.id).toBeLessThan(0.01); // marker = centroid of the same map
+      // a computed marker is the centroid of the same map; a printed peak (Horn 2022) lies within 1 to 2.5 mm of the
+      // map's maximum, and 4 to 5 mm from the largest region's centroid
+      expect(d, t.id).toBeLessThan(t.coordKey ? 0.01 : 6);
     }
   });
 });
@@ -294,8 +328,9 @@ describe('epilepsy (researched addition)', () => {
       expect(Math.abs(hip[side][0])).toBeGreaterThan(Math.abs(ant[side][0]) + 10);
       expect(hip[side][2]).toBeLessThan(ant[side][2]);
     }
-    const j = CONTENT.targets.find((t) => t.id === 't-ant-mtt')!;
-    expect(j.kind).toBe('atlasCoordinate');
+    // (Schaper 2020's printed junction since the site audit's A-003; it had been where the drawn tract meets the drawn ANT)
+    const j = CONTENT.targets.find((t) => t.id === 't-pub-ant-mtt')!;
+    expect(j.kind).toBe('publishedTarget');
     // junction lies below the ANT centroid (the tract enters the ANT from below)
     expect(j.mni.left[2]).toBeLessThan(ant.L[2]);
   });

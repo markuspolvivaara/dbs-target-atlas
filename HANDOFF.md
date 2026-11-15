@@ -25,7 +25,19 @@ commit and push it.
       (`alternativeTracts`, and a new `alternativeVolumes` field for the sweet spot);
     - all four named ", STN DBS (Hollunder 2024)" and drawn in the STN's colour (`pipeline/config.py`, then
       `manifest.py`); their cards and S1's say so.
-  - Next: A-003 (centroid markers).
+  - A-003, markers (the user's choices: relabel and add published targets; Horn 2022's printed peaks; keep the
+    tremor hotspot and explain it):
+    - centroids are badged "Nucleus centroid, not a surgical target" (card eyebrow "Nucleus centroid"); the lead tool
+      says "marker", and says when its marker is a centroid;
+    - new kind `publishedTarget` (`targets.ts`: printed AC-PC millimetres placed with `acpcToMni`): the Voa–Vop
+      junction (Shimizu 2018, Horisawa 2019; focal hand dystonia only: Holmes tremor keeps the Vo centroid), the
+      ANT–MTT junction (Schaper 2020; epilepsy), Guiot's indirect Vim target (Sammartino 2016; Holmes tremor,
+      myoclonus-dystonia); each card says where it lies against the drawn nuclei (computed with the audit's mesh
+      helpers: scratch `b1/a003/targets_check.py`);
+    - the two Horn 2022 markers at the printed peaks (the maps' maxima lie within 1 to 2.5 mm);
+    - the tremor hotspot keeps its place; its card says it is on or 1.5 mm outside the drawn Vim, inside the drawn
+      Vo, 8 to 9 mm from Guiot's Vim target.
+  - B1 is complete (A-001..A-003).
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -298,7 +310,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (411 tests on `fix/b1-dbs-views`)
+  - `npx vitest run` (412 tests on `fix/b1-dbs-views`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`

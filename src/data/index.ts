@@ -76,6 +76,7 @@ export function crossCheck(c: Content): string[] {
   for (const t of c.targets) {
     has(`target ${t.id}`, t.structureId, ids, 'structure');
     ref(`target ${t.id}`, t.refId);
+    t.moreRefIds.forEach((r) => ref(`target ${t.id}`, r));
     if (t.kind === 'sweetSpot' && !MANIFEST.structures.find((s) => s.id === t.structureId && s.type === 'target'))
       errs.push(`target ${t.id}: sweetSpot must point to a sweet-spot volume`);
   }

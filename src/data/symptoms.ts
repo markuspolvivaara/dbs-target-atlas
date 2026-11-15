@@ -136,7 +136,7 @@ export const SYMPTOMS: SymptomInput[] = [
   {
     id: 'fhd-hand', indicationId: 'fhd', name: 'Focal hand dystonia',
     summary: 'Vo is the main pallidal-receiving thalamus. Lesioning or stimulating it can give long-term remission of task-specific hand dystonia.',
-    structures: ['vo'], tracts: ['al', 'lf'], corticalAreas: ['s1', 'sma'], targetId: 't-atlas-vo',
+    structures: ['vo'], tracts: ['al', 'lf'], corticalAreas: ['s1', 'sma'], targetId: 't-pub-vo',
     evidence: [
       { claim: '171 consecutive Vo thalamotomies for task-specific hand dystonia', refIds: ['horisawa2019'] },
       { claim: 'Vo targeted at the Voa/Vop junction from published coordinates', refIds: ['vocoords'] },

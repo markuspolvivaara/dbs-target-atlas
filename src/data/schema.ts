@@ -58,12 +58,18 @@ export const TargetSchema = z.object({
   id: Id,
   label: z.string(),
   structureId: Id,
-  /** Key into generated/coordinates.json; coordinates are never typed by hand. */
-  coordKey: z.string(),
+  /** Key into generated/coordinates.json, for the coordinates the pipeline computes (absent for published ones). */
+  coordKey: z.string().optional(),
   mni: z.object({ left: Vec3, right: Vec3 }),
-  kind: z.enum(['sweetSpot', 'atlasCoordinate']),
+  /** sweetSpot: a published stimulation map's point; publishedTarget: a surgical target a cited paper prints;
+   *  atlasCoordinate: a nucleus centroid, for orientation, not a surgical target. */
+  kind: z.enum(['sweetSpot', 'publishedTarget', 'atlasCoordinate']),
   refId: z.string(),
+  /** Further sources of the same point (the Voa/Vop junction: two papers). */
+  moreRefIds: z.array(z.string()).default([]),
   method: z.string(),
+  /** Where the point lies against what is drawn, when that needs saying (the tremor hotspot outside the Vim). */
+  note: z.string().optional(),
   /** Absent until a sourced typical trajectory is available (see TODO in README). */
   trajectory: z.object({ ringDeg: z.number(), arcDeg: z.number(), refId: z.string() }).optional(),
 });

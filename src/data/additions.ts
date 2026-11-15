@@ -16,10 +16,14 @@ import type { Reference } from './schema';
  * A-002: the cards of Hollunder 2024's dystonia and Tourette maps, and of S1, which carried its dystonia claim, say that
  * the maps come from subthalamic DBS (full text, PMC10917675: every cohort STN DBS; dystonia 56 of 70 patients in the
  * maps, of several forms; Tourette 14).
+ * A-003: Sammartino 2016 (full text) for Guiot's indirect Vim target, one of the published targets that replace
+ * nucleus centroids as markers (targets.ts).
  */
 export const ADDITION_REFERENCES: Reference[] = [
   { id: 'tsuboi2021', topic: 'pd', shortLabel: 'Tsuboi 2021', url: 'https://pubmed.ncbi.nlm.nih.gov/33002233/',
     citation: "Tsuboi T, Charbel M, Peterside DT, Rana M, Elkouzi A, Deeb W, et al. Pallidal connectivity profiling of stimulation-induced dyskinesia in Parkinson's disease. Mov Disord. 2021;36(2):380–388. doi:10.1002/mds.28324. Checked against its abstract: the full text is not open access." },
+  { id: 'sammartino2016', topic: 'tremor', shortLabel: 'Sammartino 2016', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC5089633/',
+    citation: 'Sammartino F, Krishna V, King NK, Lozano AM, Schwartz ML, Huang Y, Hodaie M. Tractography-based ventral intermediate nucleus targeting: novel methodology and intraoperative validation. Mov Disord. 2016;31(8):1217–1225. doi:10.1002/mds.26633.' },
   { id: 'fan2020', topic: 'pd', shortLabel: 'Fan 2020', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC6952311/',
     citation: 'Fan SY, Wang KL, Hu W, Eisinger RS, Han A, Han CL, et al. Pallidal versus subthalamic nucleus deep brain stimulation for levodopa-induced dyskinesia. Ann Clin Transl Neurol. 2020;7(1):59–68. doi:10.1002/acn3.50961.' },
   { id: 'krack1998', topic: 'pd', shortLabel: 'Krack 1998', url: 'https://pubmed.ncbi.nlm.nih.gov/9485059/',
