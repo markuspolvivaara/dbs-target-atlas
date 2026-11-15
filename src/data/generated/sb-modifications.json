@@ -912,7 +912,7 @@
   },
   {
    "step": "skullbase_v1_pfossa",
-   "operation": "the cerebellar arteries onto the cerebellum's surface; the hindbrain pushed off bone, the tentorium and the arteries; the arteries carried with the telovelar and retrosigmoid shapes",
+   "operation": "the cerebellar arteries onto the cerebellum's surface; the hindbrain pushed off bone, the tentorium and the arteries; the arteries carried with the telovelar, retrosigmoid and far lateral shapes",
    "structures": [
     "Anterior inferior cerebellar artery",
     "Anterior quadrangular lobule",
@@ -951,50 +951,50 @@
    "metrics": {
     "ontoSurface": {
      "Anterior inferior cerebellar artery.l": {
-      "points": 176,
-      "maxMm": 2.27
+      "points": 171,
+      "maxMm": 2.1
      },
      "Anterior inferior cerebellar artery.r": {
-      "points": 173,
-      "maxMm": 1.87
+      "points": 171,
+      "maxMm": 2.69
      },
      "Posterior inferior cerebellar artery.l": {
-      "points": 679,
+      "points": 662,
       "maxMm": 3.32
      },
      "Posterior inferior cerebellar artery.r": {
-      "points": 713,
+      "points": 686,
       "maxMm": 3.27
      },
      "Superior cerebellar artery.l": {
-      "points": 240,
-      "maxMm": 1.5
+      "points": 258,
+      "maxMm": 1.53
      },
      "Superior cerebellar artery.r": {
-      "points": 251,
-      "maxMm": 1.28
+      "points": 253,
+      "maxMm": 1.48
      }
     },
     "clear": {
      "containedPushed": 16,
-     "inVesselBefore": 2890,
-     "inBoneBefore": 5024,
-     "inVesselAfter": 133,
-     "inBoneAfter": 15,
-     "maxMovedMm": 6.52
+     "inVesselBefore": 2823,
+     "inBoneBefore": 5016,
+     "inVesselAfter": 136,
+     "inBoneAfter": 14,
+     "maxMovedMm": 6.38
     },
     "carried": {
-     "Anterior inferior cerebellar artery": 12.08,
-     "Posterior inferior cerebellar artery": 11.87,
-     "Superior cerebellar artery": 11.32
+     "Anterior inferior cerebellar artery": 16.84,
+     "Posterior inferior cerebellar artery": 15.97,
+     "Superior cerebellar artery": 11.98
     }
    },
    "validation": {
-    "inBoneAfter": 15,
-    "inVesselAfter": 133
+    "inBoneAfter": 14,
+    "inVesselAfter": 136
    },
-   "revision": "193d0cb",
-   "date": "2026-11-05"
+   "revision": "d18ac37",
+   "date": "2026-11-15"
   },
   {
    "step": "skullbase_v1_vessels",
@@ -1194,16 +1194,16 @@
     },
     "carried": {
      "sb_anterior_inferior_cerebellar_artery": {
-      "maxMovedMm": 1.14,
-      "vertsMoved": 212,
-      "verts": 1156,
+      "maxMovedMm": 1.13,
+      "vertsMoved": 186,
+      "verts": 1060,
       "deepInBone": [
-       110,
-       87
+       104,
+       84
       ],
       "inBrainstem": [
-       10,
-       25
+       11,
+       16
       ]
      },
      "sb_posterior_cerebral_artery": {
@@ -1233,12 +1233,12 @@
       ]
      },
      "sb_superior_cerebellar_artery": {
-      "maxMovedMm": 1.22,
+      "maxMovedMm": 1.31,
       "vertsMoved": 170,
-      "verts": 4124,
+      "verts": 4108,
       "deepInBone": [
-       106,
-       57
+       103,
+       49
       ],
       "inBrainstem": [
        0,
@@ -1261,8 +1261,8 @@
     },
     "joins": {
      "sb_anterior_inferior_cerebellar_artery": [
-      0.27,
-      0.16
+      0.25,
+      0.26
      ],
      "sb_posterior_cerebral_artery": [
       0.0,
@@ -1273,8 +1273,8 @@
       4.81
      ],
      "sb_superior_cerebellar_artery": [
-      0.3,
-      0.24
+      0.26,
+      0.14
      ],
      "sb_vertebral_artery": [
       0.0,
@@ -1295,12 +1295,12 @@
       0.34
      ],
      "Trigeminal nerve (V) / Superior cerebellar artery": [
-      1.31,
-      1.31
+      1.38,
+      1.38
      ],
      "Abducens nerve (VI) / Anterior inferior cerebellar artery": [
-      0.12,
-      0.16
+      0.13,
+      0.1
      ],
      "Abducens nerve (VI) / Vertebral artery": [
       0.28,
@@ -1311,7 +1311,7 @@
    "validation": {
     "check": "skullbase_build.py finalize: the sinuses at the confluence, the basilar artery and the middle meningeal artery out of the bone, the latter through its foramen, every junction with the basilar kept"
    },
-   "revision": "b4628b0",
+   "revision": "d18ac37",
    "date": "2026-11-15"
   },
   {

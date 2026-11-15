@@ -481,11 +481,14 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
   - The patch Z-Anatomy files as "Insula (subcentral gyrus …)" is the subcentral gyrus, taken as frontal.
   - The cerebellum, brainstem and fourth ventricle are Z-Anatomy's (`pipeline/skullbase_v1_pfossa.py`). They are
     pushed out of its bone and back inside the cranial cavity, through which the cerebellum passes in places
-    (except at the foramen magnum), then shaped by v3's telovelar and retrosigmoid rules (not yet the far lateral one).
+    (except at the foramen magnum), then shaped by v3's telovelar, retrosigmoid and far lateral rules (the far lateral
+    view's two sliders: the right tonsil and biventral lobule lifted, and drawn straight back). The step's surface
+    samples are seeded, so a rebuild gives the same files.
   - The superior, anterior inferior and posterior inferior cerebellar arteries move with the cerebellum. The trunks
     and the posterior cerebral artery stay. Where Z-Anatomy's own cerebellar arteries ran inside its cerebellum, they
-    are moved out onto its surface (up to about 3.4 mm). The hindbrain is kept under Z-Anatomy's tentorium, which the
-    retrosigmoid view shows.
+    are moved out onto its surface (up to about 3.4 mm); the path is blended back where smoothing let it sink in, and
+    bends tighter than its tube are relaxed, so the tube does not fold over itself. The hindbrain is kept under
+    Z-Anatomy's tentorium, which the retrosigmoid view shows.
   - The telovelar view has v3's landmarks on the floor of the fourth ventricle, placed by v3's rule over Z-Anatomy's
     own cranial nerve nuclei: the facial colliculi, the vestibular areas, the hypoglossal and vagal trigones, the
     median sulcus and the obex.

@@ -918,12 +918,35 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(l.morphs).toEqual({ lsoLift: 0.8, open: 0.2 });
     expect(T3.encodeSkull(l)).toContain('ll=80');
   });
+  it('v1’s far lateral shapes: the tonsil lifted, the medulla opened, no more of the cerebellum in bone than at rest', async () => {
+    type Fl = { inBoneAfter: number; inVesselAfter: number; maxMovedMm: number };
+    const pf = ((await import('../../src/data/generated/sb-v1fit.json')).default as unknown as { pfossa: {
+      clear: { inBoneAfter: number; inVesselAfter: number };
+      farLateral: Fl & { tonsilLowestZMm: { rest: number; lifted: number } };
+      farLateralBack: Fl & { tonsilFrontYMm: { rest: number; back: number }; medullaGapMm: { rest: number; back: number } } } }).pfossa;
+    // (Z-Anatomy's cerebellum keeps a few vertices in its bone at rest; the shapes add none)
+    for (const s of [pf.farLateral, pf.farLateralBack]) {
+      expect(s.inBoneAfter).toBeLessThanOrEqual(pf.clear.inBoneAfter);
+      expect(s.inVesselAfter).toBeLessThanOrEqual(pf.clear.inVesselAfter);
+      expect(s.maxMovedMm).toBeLessThan(12);
+    }
+    expect(pf.farLateral.tonsilLowestZMm.lifted - pf.farLateral.tonsilLowestZMm.rest).toBeGreaterThan(5);
+    expect(pf.farLateralBack.tonsilFrontYMm.rest - pf.farLateralBack.tonsilFrontYMm.back).toBeGreaterThan(5);
+    expect(pf.farLateralBack.medullaGapMm.back).toBeGreaterThan(pf.farLateralBack.medullaGapMm.rest + 3);
+  });
   it('the far lateral view: the right tonsil and biventral lobule lifted superomedially, the PICA with them', async () => {
     const g = G3.SB_GROUP.get('far_lateral')!;
     expect(g.morphs).toEqual(['farLateral', 'farLateralBack']);
     expect(g.morphDefault).toEqual({ farLateral: 1 });                 // the second, a view aid, opens at 0
     expect(G3.SB_GROUP.get('meningioma_foramen_magnum')!.morphDefault).toEqual({ farLateral: 1 });   // its tumour opens so too
-    expect(SB_GROUPS.find((x) => x.id === 'far_lateral')!.morphs).toEqual([]);   // (v1: the shape is not built on its cerebellum yet)
+    // v1: the same shapes, built on Z-Anatomy's cerebellum (skullbase_v1_pfossa.py)
+    const v1 = SB_GROUPS.find((x) => x.id === 'far_lateral')!;
+    expect(v1.morphs).toEqual(['farLateral', 'farLateralBack']);
+    expect(v1.morphDefault).toEqual({ farLateral: 1 });
+    for (const id of ['pf_tonsil', 'pf_cerebellar_hemisphere', 'pf_vermis']) {
+      const m = await nodeMorphs(SB_MANIFEST.structures.find((x) => x.id === id)!.file);
+      expect(Object.keys(m.R ?? m[Object.keys(m)[0]]), id).toEqual(expect.arrayContaining(['farLateral', 'farLateralBack']));
+    }
     expect(T3.decodeSkull('#/atlas?g=far_lateral&fl=40&rs=60').morphs).toEqual({ farLateral: 0.4 });
     const both = T3.decodeSkull('#/atlas?g=far_lateral&fl=40&fb=70');   // the two together
     expect(both.morphs).toEqual({ farLateral: 0.4, farLateralBack: 0.7 });

@@ -433,7 +433,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_inferior_cerebellar_artery.glb",
-   "bytes": 19336,
+   "bytes": 21912,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -450,12 +450,12 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py). Corrected position (skullbase_v1_vessels.py): moved with the basilar artery off the clivus where it lies near it (up to 1.14 mm, less with distance from it, none 8 mm from it), so it meets it where it did.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py). Corrected position (skullbase_v1_vessels.py): moved with the basilar artery off the clivus where it lies near it (up to 1.13 mm, less with distance from it, none 8 mm from it), so it meets it where it did.",
    "centroid": {
     "L": [
      -18.07,
-     -30.75,
-     -13.79
+     -30.73,
+     -13.81
     ],
     "R": [
      18.07,
@@ -467,8 +467,8 @@
    "intracranialFraction": 1.0,
    "morph": true,
    "inBone": {
-    "share": 0.077,
-    "deepestMm": 2.1,
+    "share": 0.089,
+    "deepestMm": 2.2,
     "bones": [
      "Occipital bone"
     ]
@@ -2919,7 +2919,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_inferior_cerebellar_artery.glb",
-   "bytes": 100204,
+   "bytes": 116624,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3556,7 +3556,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_superior_cerebellar_artery.glb",
-   "bytes": 47072,
+   "bytes": 54640,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3573,7 +3573,7 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py). Corrected position (skullbase_v1_vessels.py): moved with the basilar artery off the clivus where it lies near it (up to 1.22 mm, less with distance from it, none 8 mm from it), so it meets it where it did.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py). Corrected position (skullbase_v1_vessels.py): moved with the basilar artery off the clivus where it lies near it (up to 1.31 mm, less with distance from it, none 8 mm from it), so it meets it where it did.",
    "centroid": {
     "L": [
      -18.9,
@@ -3590,7 +3590,7 @@
    "intracranialFraction": 1.0,
    "morph": true,
    "inBone": {
-    "share": 0.016,
+    "share": 0.013,
     "deepestMm": 2.0,
     "bones": [
      "Sphenoid bone"
@@ -4360,552 +4360,6 @@
      23.36
     ]
    }
-  },
-  {
-   "id": "br_frontal_lobe",
-   "name": "Frontal lobe",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase/br_frontal_lobe.glb",
-   "bytes": 533000,
-   "colour": {
-    "token": "sbBrain",
-    "light": "#9E625E",
-    "dark": "#A86A66"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "brain",
-   "layer": "cortex",
-   "morph": true,
-   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
-   "centroid": {
-    "L": [
-     -30.12,
-     5.15,
-     60.89
-    ],
-    "R": [
-     29.28,
-     2.95,
-     62.14
-    ]
-   }
-  },
-  {
-   "id": "br_parietal_lobe",
-   "name": "Parietal lobe",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase/br_parietal_lobe.glb",
-   "bytes": 288864,
-   "colour": {
-    "token": "sbBrain",
-    "light": "#9E625E",
-    "dark": "#A86A66"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "brain",
-   "layer": "cortex",
-   "morph": true,
-   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
-   "centroid": {
-    "L": [
-     -36.67,
-     -62.88,
-     64.9
-    ],
-    "R": [
-     36.48,
-     -63.01,
-     65.18
-    ]
-   }
-  },
-  {
-   "id": "br_temporal_lobe",
-   "name": "Temporal lobe",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase/br_temporal_lobe.glb",
-   "bytes": 261076,
-   "colour": {
-    "token": "sbBrain",
-    "light": "#9E625E",
-    "dark": "#A86A66"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "brain",
-   "layer": "cortex",
-   "morph": true,
-   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
-   "centroid": {
-    "L": [
-     -42.9,
-     -40.36,
-     21.24
-    ],
-    "R": [
-     42.86,
-     -40.3,
-     21.16
-    ]
-   }
-  },
-  {
-   "id": "br_occipital_lobe",
-   "name": "Occipital lobe",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase/br_occipital_lobe.glb",
-   "bytes": 185724,
-   "colour": {
-    "token": "sbBrain",
-    "light": "#9E625E",
-    "dark": "#A86A66"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "brain",
-   "layer": "cortex",
-   "morph": true,
-   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
-   "centroid": {
-    "L": [
-     -21.65,
-     -86.72,
-     23.01
-    ],
-    "R": [
-     21.47,
-     -86.84,
-     23.12
-    ]
-   }
-  },
-  {
-   "id": "br_insula",
-   "name": "Insula",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase/br_insula.glb",
-   "bytes": 447068,
-   "colour": {
-    "token": "sbInsula",
-    "light": "#4A3DA8",
-    "dark": "#8A7BE0"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "brain",
-   "layer": "cortex",
-   "morph": true,
-   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Z-Anatomy has no insular cortex: this is its circular sulcus of the insula, with its white matter of the telencephalon under the Sylvian fissure as the floor of the opened fissure. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
-   "centroid": {
-    "L": [
-     -39.59,
-     0.75,
-     33.23
-    ],
-    "R": [
-     44.59,
-     -21.98,
-     37.29
-    ]
-   }
-  },
-  {
-   "id": "br_cingulate_gyrus",
-   "name": "Cingulate gyrus",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase/br_cingulate_gyrus.glb",
-   "bytes": 41884,
-   "colour": {
-    "token": "sbBrain",
-    "light": "#9E625E",
-    "dark": "#A86A66"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "brain",
-   "layer": "cortex",
-   "morph": true,
-   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
-   "centroid": {
-    "L": [
-     -7.58,
-     -32.76,
-     57.29
-    ],
-    "R": [
-     7.48,
-     -32.49,
-     57.51
-    ]
-   }
-  },
-  {
-   "id": "pf_cerebellar_hemisphere",
-   "name": "Cerebellar hemisphere",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase/pf_cerebellar_hemisphere.glb",
-   "bytes": 856376,
-   "colour": {
-    "token": "sbBrain",
-    "light": "#9E625E",
-    "dark": "#A86A66"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "hindbrain",
-   "layer": "cortex",
-   "morph": true,
-   "centroid": {
-    "L": [
-     -19.54,
-     -55.41,
-     -9.94
-    ],
-    "R": [
-     19.53,
-     -55.41,
-     -9.93
-    ]
-   },
-   "derivation": "Z-Anatomy's (BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue."
-  },
-  {
-   "id": "pf_tonsil",
-   "name": "Tonsil of cerebellum",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase/pf_tonsil.glb",
-   "bytes": 79196,
-   "colour": {
-    "token": "sbTonsil",
-    "light": "#7D6DFF",
-    "dark": "#6262C3"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "hindbrain",
-   "layer": "cortex",
-   "morph": true,
-   "centroid": {
-    "L": [
-     -11.26,
-     -48.86,
-     -21.76
-    ],
-    "R": [
-     11.26,
-     -48.87,
-     -21.74
-    ]
-   },
-   "derivation": "Z-Anatomy's (BodyParts3D: tonsil of cerebellum); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue."
-  },
-  {
-   "id": "pf_vermis",
-   "name": "Vermis",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase/pf_vermis.glb",
-   "bytes": 97668,
-   "colour": {
-    "token": "sbBrain",
-    "light": "#9E625E",
-    "dark": "#A86A66"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "hindbrain",
-   "layer": "cortex",
-   "morph": true,
-   "centroid": {
-    "L": [
-     -2.64,
-     -58.48,
-     -4.95
-    ],
-    "R": [
-     2.56,
-     -59.37,
-     -4.57
-    ]
-   },
-   "derivation": "Z-Anatomy's (BodyParts3D: lingula of cerebellum, central lobule, culmen, declive, folium of vermis, tuber of vermis, pyramis of vermis, uvula of vermis, nodule of vermis); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue."
-  },
-  {
-   "id": "pf_superior_cerebellar_peduncle",
-   "name": "Superior cerebellar peduncle",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase/pf_superior_cerebellar_peduncle.glb",
-   "bytes": 76580,
-   "colour": {
-    "token": "sbBrainstem",
-    "light": "#51474C",
-    "dark": "#92929D"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "hindbrain",
-   "layer": "cortex",
-   "morph": false,
-   "centroid": {
-    "L": [
-     -7.7,
-     -42.88,
-     -3.25
-    ],
-    "R": [
-     7.7,
-     -42.88,
-     -3.25
-    ]
-   },
-   "derivation": "Z-Anatomy's (BodyParts3D: superior cerebellar peduncle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity)."
-  },
-  {
-   "id": "pf_midbrain",
-   "name": "Midbrain",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase/pf_midbrain.glb",
-   "bytes": 56444,
-   "colour": {
-    "token": "sbBrainstem",
-    "light": "#51474C",
-    "dark": "#92929D"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "hindbrain",
-   "layer": "cortex",
-   "morph": false,
-   "centroid": {
-    "L": [
-     -5.2,
-     -25.79,
-     16.31
-    ],
-    "R": [
-     5.2,
-     -25.79,
-     16.31
-    ]
-   },
-   "derivation": "Z-Anatomy's (BodyParts3D: midbrain); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity)."
-  },
-  {
-   "id": "pf_pons",
-   "name": "Pons",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase/pf_pons.glb",
-   "bytes": 94556,
-   "colour": {
-    "token": "sbBrainstem",
-    "light": "#51474C",
-    "dark": "#92929D"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "hindbrain",
-   "layer": "cortex",
-   "morph": false,
-   "centroid": {
-    "L": [
-     -9.07,
-     -24.99,
-     -4.9
-    ],
-    "R": [
-     9.07,
-     -24.99,
-     -4.9
-    ]
-   },
-   "derivation": "Z-Anatomy's (BodyParts3D: pons); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity)."
-  },
-  {
-   "id": "pf_medulla",
-   "name": "Medulla oblongata",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase/pf_medulla.glb",
-   "bytes": 57496,
-   "colour": {
-    "token": "sbBrainstem",
-    "light": "#51474C",
-    "dark": "#92929D"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "hindbrain",
-   "layer": "cortex",
-   "morph": false,
-   "centroid": {
-    "L": [
-     -5.61,
-     -34.9,
-     -26.66
-    ],
-    "R": [
-     5.61,
-     -34.9,
-     -26.66
-    ]
-   },
-   "derivation": "Z-Anatomy's (BodyParts3D: medulla oblongata); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity)."
-  },
-  {
-   "id": "pf_fourth_ventricle",
-   "name": "Fourth ventricle",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase/pf_fourth_ventricle.glb",
-   "bytes": 30724,
-   "colour": {
-    "token": "sbCsf",
-    "light": "#0B8D9D",
-    "dark": "#51EFEF"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "ventricle",
-   "layer": "cortex",
-   "morph": false,
-   "centroid": {
-    "L": [
-     -3.99,
-     -40.49,
-     -13.18
-    ],
-    "R": [
-     3.56,
-     -40.47,
-     -13.2
-    ]
-   },
-   "derivation": "Z-Anatomy's (BodyParts3D: fourth ventricle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity)."
   },
   {
    "id": "sb_cavernous_sinus_walls",
@@ -7042,6 +6496,552 @@
    "derivation": "The rhomboid drawn on the middle fossa floor between its four landmarks on this model (Signoretti 2025): the petrous apex, where the greater petrosal nerve meets V3 seen from above, the geniculate ganglion and the arcuate eminence (the bone over the superior semicircular canal)."
   },
   {
+   "id": "br_frontal_lobe",
+   "name": "Frontal lobe",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/br_frontal_lobe.glb",
+   "bytes": 533000,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
+   "centroid": {
+    "L": [
+     -30.12,
+     5.15,
+     60.89
+    ],
+    "R": [
+     29.28,
+     2.95,
+     62.14
+    ]
+   }
+  },
+  {
+   "id": "br_parietal_lobe",
+   "name": "Parietal lobe",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/br_parietal_lobe.glb",
+   "bytes": 288864,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
+   "centroid": {
+    "L": [
+     -36.67,
+     -62.88,
+     64.9
+    ],
+    "R": [
+     36.48,
+     -63.01,
+     65.18
+    ]
+   }
+  },
+  {
+   "id": "br_temporal_lobe",
+   "name": "Temporal lobe",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/br_temporal_lobe.glb",
+   "bytes": 261076,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
+   "centroid": {
+    "L": [
+     -42.9,
+     -40.36,
+     21.24
+    ],
+    "R": [
+     42.86,
+     -40.3,
+     21.16
+    ]
+   }
+  },
+  {
+   "id": "br_occipital_lobe",
+   "name": "Occipital lobe",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/br_occipital_lobe.glb",
+   "bytes": 185724,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
+   "centroid": {
+    "L": [
+     -21.65,
+     -86.72,
+     23.01
+    ],
+    "R": [
+     21.47,
+     -86.84,
+     23.12
+    ]
+   }
+  },
+  {
+   "id": "br_insula",
+   "name": "Insula",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/br_insula.glb",
+   "bytes": 447068,
+   "colour": {
+    "token": "sbInsula",
+    "light": "#4A3DA8",
+    "dark": "#8A7BE0"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Z-Anatomy has no insular cortex: this is its circular sulcus of the insula, with its white matter of the telencephalon under the Sylvian fissure as the floor of the opened fissure. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
+   "centroid": {
+    "L": [
+     -39.59,
+     0.75,
+     33.23
+    ],
+    "R": [
+     44.59,
+     -21.98,
+     37.29
+    ]
+   }
+  },
+  {
+   "id": "br_cingulate_gyrus",
+   "name": "Cingulate gyrus",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/br_cingulate_gyrus.glb",
+   "bytes": 41884,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "morph": true,
+   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
+   "centroid": {
+    "L": [
+     -7.58,
+     -32.76,
+     57.29
+    ],
+    "R": [
+     7.48,
+     -32.49,
+     57.51
+    ]
+   }
+  },
+  {
+   "id": "pf_cerebellar_hemisphere",
+   "name": "Cerebellar hemisphere",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/pf_cerebellar_hemisphere.glb",
+   "bytes": 863944,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": true,
+   "centroid": {
+    "L": [
+     -19.54,
+     -55.41,
+     -9.91
+    ],
+    "R": [
+     19.54,
+     -55.41,
+     -9.92
+    ]
+   },
+   "derivation": "Z-Anatomy's (BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue."
+  },
+  {
+   "id": "pf_tonsil",
+   "name": "Tonsil of cerebellum",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/pf_tonsil.glb",
+   "bytes": 68944,
+   "colour": {
+    "token": "sbTonsil",
+    "light": "#7D6DFF",
+    "dark": "#6262C3"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": true,
+   "centroid": {
+    "L": [
+     -11.26,
+     -48.87,
+     -21.75
+    ],
+    "R": [
+     11.25,
+     -48.86,
+     -21.75
+    ]
+   },
+   "derivation": "Z-Anatomy's (BodyParts3D: tonsil of cerebellum); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue."
+  },
+  {
+   "id": "pf_vermis",
+   "name": "Vermis",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/pf_vermis.glb",
+   "bytes": 92344,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": true,
+   "centroid": {
+    "L": [
+     -2.64,
+     -58.49,
+     -4.94
+    ],
+    "R": [
+     2.58,
+     -59.39,
+     -4.53
+    ]
+   },
+   "derivation": "Z-Anatomy's (BodyParts3D: lingula of cerebellum, central lobule, culmen, declive, folium of vermis, tuber of vermis, pyramis of vermis, uvula of vermis, nodule of vermis); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue."
+  },
+  {
+   "id": "pf_superior_cerebellar_peduncle",
+   "name": "Superior cerebellar peduncle",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/pf_superior_cerebellar_peduncle.glb",
+   "bytes": 76580,
+   "colour": {
+    "token": "sbBrainstem",
+    "light": "#51474C",
+    "dark": "#92929D"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": false,
+   "centroid": {
+    "L": [
+     -7.7,
+     -42.88,
+     -3.25
+    ],
+    "R": [
+     7.7,
+     -42.88,
+     -3.25
+    ]
+   },
+   "derivation": "Z-Anatomy's (BodyParts3D: superior cerebellar peduncle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity)."
+  },
+  {
+   "id": "pf_midbrain",
+   "name": "Midbrain",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/pf_midbrain.glb",
+   "bytes": 56448,
+   "colour": {
+    "token": "sbBrainstem",
+    "light": "#51474C",
+    "dark": "#92929D"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": false,
+   "centroid": {
+    "L": [
+     -5.2,
+     -25.79,
+     16.31
+    ],
+    "R": [
+     5.2,
+     -25.78,
+     16.31
+    ]
+   },
+   "derivation": "Z-Anatomy's (BodyParts3D: midbrain); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity)."
+  },
+  {
+   "id": "pf_pons",
+   "name": "Pons",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/pf_pons.glb",
+   "bytes": 94580,
+   "colour": {
+    "token": "sbBrainstem",
+    "light": "#51474C",
+    "dark": "#92929D"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": false,
+   "centroid": {
+    "L": [
+     -9.06,
+     -24.99,
+     -4.9
+    ],
+    "R": [
+     9.06,
+     -24.99,
+     -4.9
+    ]
+   },
+   "derivation": "Z-Anatomy's (BodyParts3D: pons); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity)."
+  },
+  {
+   "id": "pf_medulla",
+   "name": "Medulla oblongata",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/pf_medulla.glb",
+   "bytes": 57500,
+   "colour": {
+    "token": "sbBrainstem",
+    "light": "#51474C",
+    "dark": "#92929D"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "hindbrain",
+   "layer": "cortex",
+   "morph": false,
+   "centroid": {
+    "L": [
+     -5.61,
+     -34.9,
+     -26.66
+    ],
+    "R": [
+     5.61,
+     -34.9,
+     -26.66
+    ]
+   },
+   "derivation": "Z-Anatomy's (BodyParts3D: medulla oblongata); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity)."
+  },
+  {
+   "id": "pf_fourth_ventricle",
+   "name": "Fourth ventricle",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/pf_fourth_ventricle.glb",
+   "bytes": 30724,
+   "colour": {
+    "token": "sbCsf",
+    "light": "#0B8D9D",
+    "dark": "#51EFEF"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "ventricle",
+   "layer": "cortex",
+   "morph": false,
+   "centroid": {
+    "L": [
+     -3.99,
+     -40.49,
+     -13.18
+    ],
+    "R": [
+     3.56,
+     -40.47,
+     -13.2
+    ]
+   },
+   "derivation": "Z-Anatomy's (BodyParts3D: fourth ventricle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity)."
+  },
+  {
    "id": "br_temporal_lobe__kawase",
    "name": "Temporal lobe",
    "aliases": [],
@@ -7326,7 +7326,7 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule to show Koos grade II on the right (skullbase_v3_tumours.py), not a patient's tumour: the meatus and a ball in the cerebellopontine angle, its surface at the porus and a neck joining them, kept 0.5 mm off the brainstem (a drawing choice, to keep it apart from grade III, which reaches it): 9 mm across, as large as the model's angle allows there (Z-Anatomy's brainstem lies 4 mm from the porus). 0.36 ml.",
+   "derivation": "Drawn by rule to show Koos grade II on the right (skullbase_v3_tumours.py), not a patient's tumour: the meatus and a ball in the cerebellopontine angle, its surface at the porus and a neck joining them, kept 0.5 mm off the brainstem (a drawing choice, to keep it apart from grade III, which reaches it): 9 mm across, as large as the model's angle allows there (Z-Anatomy's brainstem lies 4.1 mm from the porus). 0.36 ml.",
    "centroid": {
     "R": [
      23.88,
@@ -7350,7 +7350,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_cerebellar_hemisphere__koos_2.glb",
-   "bytes": 323868,
+   "bytes": 323572,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -7373,15 +7373,15 @@
     "L": [
      -19.54,
      -55.41,
-     -9.94
+     -9.91
     ],
     "R": [
-     19.26,
-     -56.98,
-     -11.12
+     19.34,
+     -57.06,
+     -10.97
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 22.65 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 24.23 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_cerebellar_hemisphere",
    "pushedFrom": "assets/skullbase/pf_cerebellar_hemisphere.glb",
    "tumourView": "koos_2"
@@ -7392,7 +7392,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_tonsil__koos_2.glb",
-   "bytes": 29696,
+   "bytes": 29752,
    "colour": {
     "token": "sbTonsil",
     "light": "#7D6DFF",
@@ -7414,16 +7414,16 @@
    "centroid": {
     "L": [
      -11.26,
-     -48.86,
-     -21.76
+     -48.87,
+     -21.75
     ],
     "R": [
-     11.05,
-     -49.18,
-     -22.24
+     11.16,
+     -49.1,
+     -22.2
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: tonsil of cerebellum); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 22.65 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: tonsil of cerebellum); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 24.23 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_tonsil",
    "pushedFrom": "assets/skullbase/pf_tonsil.glb",
    "tumourView": "koos_2"
@@ -7434,7 +7434,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_superior_cerebellar_peduncle__koos_2.glb",
-   "bytes": 39524,
+   "bytes": 38512,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -7460,12 +7460,12 @@
      -3.25
     ],
     "R": [
-     8.58,
-     -49.84,
-     -5.64
+     8.69,
+     -49.87,
+     -5.69
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: superior cerebellar peduncle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 22.65 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: superior cerebellar peduncle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 24.23 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_superior_cerebellar_peduncle",
    "pushedFrom": "assets/skullbase/pf_superior_cerebellar_peduncle.glb",
    "tumourView": "koos_2"
@@ -7518,7 +7518,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_koos_3.glb",
-   "bytes": 126264,
+   "bytes": 125408,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7532,17 +7532,17 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule to show Koos grade III on the right (skullbase_v3_tumours.py), not a patient's tumour: the meatus and a ball 25 mm across in the angle, its surface at the porus and a neck joining them, reaching the brainstem and moulded against it (cut at its surface where it would reach up to 8 mm in: touching it, not moving it; the model's angle leaves no room for a ball this size that only touches it), placed as far from the brainstem as that allows; the cerebellum pushed aside. 5.58 ml.",
+   "derivation": "Drawn by rule to show Koos grade III on the right (skullbase_v3_tumours.py), not a patient's tumour: the meatus and a ball 25 mm across in the angle, its surface at the porus and a neck joining them, reaching the brainstem and moulded against it (cut at its surface where it would reach up to 8 mm in: touching it, not moving it; the model's angle leaves no room for a ball this size that only touches it), placed as far from the brainstem as that allows; the cerebellum pushed aside. 5.59 ml.",
    "centroid": {
     "R": [
-     24.17,
+     24.19,
      -33.11,
-     -14.7
+     -14.71
     ],
     "L": [
-     24.17,
+     24.19,
      -33.11,
-     -14.7
+     -14.71
     ]
    },
    "tumour": {
@@ -7556,7 +7556,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_cerebellar_hemisphere__koos_3.glb",
-   "bytes": 324560,
+   "bytes": 324168,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -7579,15 +7579,15 @@
     "L": [
      -19.54,
      -55.41,
-     -9.94
+     -9.91
     ],
     "R": [
-     20.77,
-     -58.96,
-     -11.9
+     20.62,
+     -58.74,
+     -11.75
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 32.62 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 25.46 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_cerebellar_hemisphere",
    "pushedFrom": "assets/skullbase/pf_cerebellar_hemisphere.glb",
    "tumourView": "koos_3"
@@ -7598,7 +7598,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_tonsil__koos_3.glb",
-   "bytes": 29772,
+   "bytes": 29796,
    "colour": {
     "token": "sbTonsil",
     "light": "#7D6DFF",
@@ -7620,16 +7620,16 @@
    "centroid": {
     "L": [
      -11.26,
-     -48.86,
-     -21.76
+     -48.87,
+     -21.75
     ],
     "R": [
-     12.12,
-     -50.94,
-     -22.77
+     12.1,
+     -50.89,
+     -22.76
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: tonsil of cerebellum); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 32.62 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: tonsil of cerebellum); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 25.46 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_tonsil",
    "pushedFrom": "assets/skullbase/pf_tonsil.glb",
    "tumourView": "koos_3"
@@ -7640,7 +7640,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_vermis__koos_3.glb",
-   "bytes": 33792,
+   "bytes": 33832,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -7662,16 +7662,16 @@
    "centroid": {
     "L": [
      -2.64,
-     -58.48,
-     -4.95
+     -58.49,
+     -4.94
     ],
     "R": [
-     2.81,
-     -60.35,
-     -4.95
+     2.76,
+     -60.31,
+     -5.22
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: lingula of cerebellum, central lobule, culmen, declive, folium of vermis, tuber of vermis, pyramis of vermis, uvula of vermis, nodule of vermis); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 32.62 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: lingula of cerebellum, central lobule, culmen, declive, folium of vermis, tuber of vermis, pyramis of vermis, uvula of vermis, nodule of vermis); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 25.46 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_vermis",
    "pushedFrom": "assets/skullbase/pf_vermis.glb",
    "tumourView": "koos_3"
@@ -7682,7 +7682,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_superior_cerebellar_peduncle__koos_3.glb",
-   "bytes": 38704,
+   "bytes": 39392,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -7708,12 +7708,12 @@
      -3.25
     ],
     "R": [
-     8.72,
-     -49.7,
-     -5.76
+     8.26,
+     -49.14,
+     -6.88
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: superior cerebellar peduncle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 32.62 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: superior cerebellar peduncle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 25.46 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_superior_cerebellar_peduncle",
    "pushedFrom": "assets/skullbase/pf_superior_cerebellar_peduncle.glb",
    "tumourView": "koos_3"
@@ -7766,7 +7766,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_inferior_cerebellar_artery__koos_3.glb",
-   "bytes": 10680,
+   "bytes": 12980,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -7783,17 +7783,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py). Corrected position (skullbase_v1_vessels.py): moved with the basilar artery off the clivus where it lies near it (up to 1.14 mm, less with distance from it, none 8 mm from it), so it meets it where it did. In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 1.4 mm), its course in the meatus kept: a shape, not a simulation.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py). Corrected position (skullbase_v1_vessels.py): moved with the basilar artery off the clivus where it lies near it (up to 1.13 mm, less with distance from it, none 8 mm from it), so it meets it where it did. In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 1.2 mm), its course in the meatus kept: a shape, not a simulation.",
    "centroid": {
     "L": [
      -18.07,
-     -30.75,
-     -13.79
+     -30.73,
+     -13.81
     ],
     "R": [
-     18.55,
-     -30.99,
-     -13.6
+     18.54,
+     -30.83,
+     -13.64
     ]
    },
    "system": "Basilar artery",
@@ -7851,7 +7851,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_glossopharyngeal_nerve_ix__koos_3.glb",
-   "bytes": 17168,
+   "bytes": 17164,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -7868,7 +7868,7 @@
    ],
    "refIds": [],
    "category": "nerve",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 3.6 mm), its course in the meatus kept: a shape, not a simulation.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 3.9 mm), its course in the meatus kept: a shape, not a simulation.",
    "centroid": {
     "L": [
      -19.19,
@@ -7876,9 +7876,9 @@
      -41.83
     ],
     "R": [
-     22.79,
-     -22.35,
-     -51.17
+     22.78,
+     -22.34,
+     -51.18
     ]
    },
    "cranialNerve": 9,
@@ -7893,7 +7893,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_inferior_cerebellar_artery__koos_3.glb",
-   "bytes": 54236,
+   "bytes": 69324,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -7910,7 +7910,7 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py). In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 1.9 mm), its course in the meatus kept: a shape, not a simulation.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py). In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 1.1 mm), its course in the meatus kept: a shape, not a simulation.",
    "centroid": {
     "L": [
      -24.91,
@@ -7918,9 +7918,9 @@
      -21.64
     ],
     "R": [
-     25.12,
-     -63.49,
-     -21.72
+     25.23,
+     -63.39,
+     -21.73
     ]
    },
    "system": "Vertebral artery",
@@ -7978,7 +7978,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_koos_4.glb",
-   "bytes": 194228,
+   "bytes": 193776,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7995,12 +7995,12 @@
    "derivation": "Drawn by rule to show Koos grade IV on the right (skullbase_v3_tumours.py), not a patient's tumour: the meatus and a ball 34 mm across in the angle, its surface at the porus and a neck joining them, reaching 9-14 mm into where the brainstem lies: the brainstem and the cerebellum pushed aside. 15.73 ml.",
    "centroid": {
     "R": [
-     26.36,
+     26.38,
      -37.3,
      -12.85
     ],
     "L": [
-     26.36,
+     26.38,
      -37.3,
      -12.85
     ]
@@ -8016,7 +8016,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_cerebellar_hemisphere__koos_4.glb",
-   "bytes": 324168,
+   "bytes": 323728,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8039,15 +8039,15 @@
     "L": [
      -19.54,
      -55.41,
-     -9.94
+     -9.91
     ],
     "R": [
-     22.1,
-     -60.81,
-     -10.88
+     22.11,
+     -60.79,
+     -10.85
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 44.32 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 43.89 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_cerebellar_hemisphere",
    "pushedFrom": "assets/skullbase/pf_cerebellar_hemisphere.glb",
    "tumourView": "koos_4"
@@ -8058,7 +8058,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_tonsil__koos_4.glb",
-   "bytes": 29880,
+   "bytes": 29936,
    "colour": {
     "token": "sbTonsil",
     "light": "#7D6DFF",
@@ -8080,16 +8080,16 @@
    "centroid": {
     "L": [
      -11.26,
-     -48.86,
-     -21.76
+     -48.87,
+     -21.75
     ],
     "R": [
-     13.38,
-     -53.3,
+     13.35,
+     -53.23,
      -22.51
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: tonsil of cerebellum); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 44.32 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: tonsil of cerebellum); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 43.89 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_tonsil",
    "pushedFrom": "assets/skullbase/pf_tonsil.glb",
    "tumourView": "koos_4"
@@ -8100,7 +8100,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_superior_cerebellar_peduncle__koos_4.glb",
-   "bytes": 39256,
+   "bytes": 39288,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -8126,12 +8126,12 @@
      -3.25
     ],
     "R": [
-     8.34,
-     -44.23,
-     -3.49
+     8.37,
+     -44.28,
+     -3.5
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: superior cerebellar peduncle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 44.32 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: superior cerebellar peduncle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 43.89 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_superior_cerebellar_peduncle",
    "pushedFrom": "assets/skullbase/pf_superior_cerebellar_peduncle.glb",
    "tumourView": "koos_4"
@@ -8142,7 +8142,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_pons__koos_4.glb",
-   "bytes": 47000,
+   "bytes": 47056,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -8163,17 +8163,17 @@
    "morph": false,
    "centroid": {
     "L": [
-     -9.07,
+     -9.06,
      -24.99,
      -4.9
     ],
     "R": [
-     13.96,
-     -35.21,
-     -6.67
+     13.86,
+     -34.99,
+     -6.63
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: pons); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 44.32 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: pons); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 43.89 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_pons",
    "pushedFrom": "assets/skullbase/pf_pons.glb",
    "tumourView": "koos_4"
@@ -8184,7 +8184,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_medulla__koos_4.glb",
-   "bytes": 29280,
+   "bytes": 29284,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -8210,12 +8210,12 @@
      -26.66
     ],
     "R": [
-     10.41,
-     -44.92,
-     -28.4
+     10.23,
+     -44.55,
+     -28.33
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: medulla oblongata); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 44.32 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: medulla oblongata); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 43.89 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_medulla",
    "pushedFrom": "assets/skullbase/pf_medulla.glb",
    "tumourView": "koos_4"
@@ -8226,7 +8226,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_fourth_ventricle__koos_4.glb",
-   "bytes": 16776,
+   "bytes": 16756,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -8252,12 +8252,12 @@
      -13.18
     ],
     "R": [
-     5.75,
-     -45.04,
-     -13.99
+     5.73,
+     -44.99,
+     -13.98
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: fourth ventricle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 44.32 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: fourth ventricle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 43.89 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_fourth_ventricle",
    "pushedFrom": "assets/skullbase/pf_fourth_ventricle.glb",
    "tumourView": "koos_4"
@@ -8268,7 +8268,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_accessory_nerve_xi__koos_4.glb",
-   "bytes": 16612,
+   "bytes": 16608,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -8310,7 +8310,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_inferior_cerebellar_artery__koos_4.glb",
-   "bytes": 10680,
+   "bytes": 12984,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -8327,17 +8327,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py). Corrected position (skullbase_v1_vessels.py): moved with the basilar artery off the clivus where it lies near it (up to 1.14 mm, less with distance from it, none 8 mm from it), so it meets it where it did. In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 2.1 mm), its course in the meatus kept: a shape, not a simulation.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py). Corrected position (skullbase_v1_vessels.py): moved with the basilar artery off the clivus where it lies near it (up to 1.13 mm, less with distance from it, none 8 mm from it), so it meets it where it did. In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 1.5 mm), its course in the meatus kept: a shape, not a simulation.",
    "centroid": {
     "L": [
      -18.07,
-     -30.75,
-     -13.79
+     -30.73,
+     -13.81
     ],
     "R": [
-     18.64,
-     -30.86,
-     -13.66
+     18.68,
+     -30.74,
+     -13.73
     ]
    },
    "system": "Basilar artery",
@@ -8395,7 +8395,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_glossopharyngeal_nerve_ix__koos_4.glb",
-   "bytes": 17168,
+   "bytes": 17160,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -8412,7 +8412,7 @@
    ],
    "refIds": [],
    "category": "nerve",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 4.3 mm), its course in the meatus kept: a shape, not a simulation.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 4.4 mm), its course in the meatus kept: a shape, not a simulation.",
    "centroid": {
     "L": [
      -19.19,
@@ -8420,9 +8420,9 @@
      -41.83
     ],
     "R": [
-     22.73,
-     -22.18,
-     -51.2
+     22.72,
+     -22.17,
+     -51.19
     ]
    },
    "cranialNerve": 9,
@@ -8437,7 +8437,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_inferior_cerebellar_artery__koos_4.glb",
-   "bytes": 54232,
+   "bytes": 69320,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -8454,7 +8454,7 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py). In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 3.8 mm), its course in the meatus kept: a shape, not a simulation.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. In the telovelar and retrosigmoid views it is carried with the cerebellum it lies on, as the cerebellum's shapes move it (skullbase_v1_pfossa.py). In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 4.3 mm), its course in the meatus kept: a shape, not a simulation.",
    "centroid": {
     "L": [
      -24.91,
@@ -8462,9 +8462,9 @@
      -21.64
     ],
     "R": [
-     25.08,
-     -63.53,
-     -21.75
+     25.2,
+     -63.45,
+     -21.76
     ]
    },
    "system": "Vertebral artery",
@@ -8480,7 +8480,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_vagus_nerve_x__koos_4.glb",
-   "bytes": 16024,
+   "bytes": 16036,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -8506,8 +8506,8 @@
     ],
     "R": [
      16.6,
-     -20.58,
-     -44.5
+     -20.59,
+     -44.49
     ]
    },
    "cranialNerve": 10,
@@ -8644,7 +8644,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_men_tuberculum.glb",
-   "bytes": 77084,
+   "bytes": 77276,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -8662,13 +8662,13 @@
    "centroid": {
     "L": [
      -4.11,
-     2.13,
-     14.95
+     2.12,
+     14.94
     ],
     "R": [
-     4.12,
-     2.15,
-     14.96
+     4.13,
+     2.13,
+     14.95
     ]
    },
    "tumour": {
@@ -8766,7 +8766,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_men_petroclival.glb",
-   "bytes": 170948,
+   "bytes": 171216,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -8780,16 +8780,16 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule (skullbase_v3_tumours.py), not a patient's tumour: on the dura of the petroclival junction on the right, a third of the way from the petrous apex to the jugular foramen. A ball 28 mm across (an illustrative size), its centre 0.55 of its radius off the bone, so that the bone cuts it to a broad base on the dura; kept 0.4 mm off Z-Anatomy's arteries and 0.3 mm off the cranial nerves' routes, which run through it in channels. 8.21 ml.",
+   "derivation": "Drawn by rule (skullbase_v3_tumours.py), not a patient's tumour: on the dura of the petroclival junction on the right, a third of the way from the petrous apex to the jugular foramen. A ball 28 mm across (an illustrative size), its centre 0.55 of its radius off the bone, so that the bone cuts it to a broad base on the dura; kept 0.4 mm off Z-Anatomy's arteries and 0.3 mm off the cranial nerves' routes, which run through it in channels. 8.22 ml.",
    "centroid": {
     "R": [
-     6.93,
-     -27.61,
+     6.9,
+     -27.6,
      -13.91
     ],
     "L": [
-     6.93,
-     -27.61,
+     6.9,
+     -27.6,
      -13.91
     ]
    },
@@ -8804,7 +8804,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_cerebellar_hemisphere__men_petroclival.glb",
-   "bytes": 321940,
+   "bytes": 322016,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8827,15 +8827,15 @@
     "L": [
      -19.54,
      -55.41,
-     -9.94
+     -9.91
     ],
     "R": [
-     18.72,
+     18.73,
      -56.19,
-     -9.71
+     -9.7
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 22.76 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 22.65 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_cerebellar_hemisphere",
    "pushedFrom": "assets/skullbase/pf_cerebellar_hemisphere.glb",
    "tumourView": "men_petroclival"
@@ -8846,7 +8846,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_tonsil__men_petroclival.glb",
-   "bytes": 29884,
+   "bytes": 29920,
    "colour": {
     "token": "sbTonsil",
     "light": "#7D6DFF",
@@ -8868,16 +8868,16 @@
    "centroid": {
     "L": [
      -11.26,
-     -48.86,
-     -21.76
+     -48.87,
+     -21.75
     ],
     "R": [
      10.61,
-     -49.49,
-     -21.57
+     -49.48,
+     -21.58
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: tonsil of cerebellum); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 22.76 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: tonsil of cerebellum); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 22.65 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_tonsil",
    "pushedFrom": "assets/skullbase/pf_tonsil.glb",
    "tumourView": "men_petroclival"
@@ -8888,7 +8888,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_vermis__men_petroclival.glb",
-   "bytes": 33716,
+   "bytes": 33696,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8910,16 +8910,16 @@
    "centroid": {
     "L": [
      -2.64,
-     -58.48,
-     -4.95
+     -58.49,
+     -4.94
     ],
     "R": [
-     2.56,
-     -59.37,
-     -4.57
+     2.58,
+     -59.39,
+     -4.53
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: lingula of cerebellum, central lobule, culmen, declive, folium of vermis, tuber of vermis, pyramis of vermis, uvula of vermis, nodule of vermis); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 22.76 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: lingula of cerebellum, central lobule, culmen, declive, folium of vermis, tuber of vermis, pyramis of vermis, uvula of vermis, nodule of vermis); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 22.65 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_vermis",
    "pushedFrom": "assets/skullbase/pf_vermis.glb",
    "tumourView": "men_petroclival"
@@ -8961,7 +8961,7 @@
      -3.14
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: superior cerebellar peduncle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 22.76 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: superior cerebellar peduncle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 22.65 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_superior_cerebellar_peduncle",
    "pushedFrom": "assets/skullbase/pf_superior_cerebellar_peduncle.glb",
    "tumourView": "men_petroclival"
@@ -8972,7 +8972,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_pons__men_petroclival.glb",
-   "bytes": 47780,
+   "bytes": 47784,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -8993,17 +8993,17 @@
    "morph": false,
    "centroid": {
     "L": [
-     -9.07,
+     -9.06,
      -24.99,
      -4.9
     ],
     "R": [
-     2.55,
-     -31.3,
-     -3.13
+     2.53,
+     -31.31,
+     -3.12
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: pons); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 22.76 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: pons); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 22.65 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_pons",
    "pushedFrom": "assets/skullbase/pf_pons.glb",
    "tumourView": "men_petroclival"
@@ -9014,7 +9014,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_medulla__men_petroclival.glb",
-   "bytes": 29168,
+   "bytes": 29188,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -9045,7 +9045,7 @@
      -25.09
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: medulla oblongata); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 22.76 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: medulla oblongata); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 22.65 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_medulla",
    "pushedFrom": "assets/skullbase/pf_medulla.glb",
    "tumourView": "men_petroclival"
@@ -9087,7 +9087,7 @@
      -12.21
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: fourth ventricle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 22.76 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: fourth ventricle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 22.65 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_fourth_ventricle",
    "pushedFrom": "assets/skullbase/pf_fourth_ventricle.glb",
    "tumourView": "men_petroclival"
@@ -9098,7 +9098,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_men_foramen_magnum.glb",
-   "bytes": 170212,
+   "bytes": 170264,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -9117,12 +9117,12 @@
     "R": [
      7.21,
      -39.85,
-     -39.88
+     -39.87
     ],
     "L": [
      7.21,
      -39.85,
-     -39.88
+     -39.87
     ]
    },
    "tumour": {
@@ -9136,7 +9136,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_cerebellar_hemisphere__men_foramen_magnum.glb",
-   "bytes": 219484,
+   "bytes": 369536,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -9159,15 +9159,15 @@
     "L": [
      -19.54,
      -55.41,
-     -9.94
+     -9.91
     ],
     "R": [
-     19.39,
-     -55.47,
-     -9.93
+     19.4,
+     -55.48,
+     -9.92
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 15.75 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 15.75 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_cerebellar_hemisphere",
    "pushedFrom": "assets/skullbase/pf_cerebellar_hemisphere.glb",
    "tumourView": "men_foramen_magnum"
@@ -9178,7 +9178,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_tonsil__men_foramen_magnum.glb",
-   "bytes": 18720,
+   "bytes": 20964,
    "colour": {
     "token": "sbTonsil",
     "light": "#7D6DFF",
@@ -9200,16 +9200,16 @@
    "centroid": {
     "L": [
      -11.26,
-     -48.86,
-     -21.76
+     -48.87,
+     -21.75
     ],
     "R": [
-     8.71,
-     -50.07,
-     -21.74
+     8.6,
+     -50.12,
+     -21.75
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: tonsil of cerebellum); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 15.75 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: tonsil of cerebellum); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 15.75 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_tonsil",
    "pushedFrom": "assets/skullbase/pf_tonsil.glb",
    "tumourView": "men_foramen_magnum"
@@ -9220,7 +9220,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_vermis__men_foramen_magnum.glb",
-   "bytes": 32216,
+   "bytes": 35132,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -9242,16 +9242,16 @@
    "centroid": {
     "L": [
      -2.64,
-     -58.48,
-     -4.95
+     -58.49,
+     -4.94
     ],
     "R": [
-     2.53,
-     -59.38,
-     -4.57
+     2.55,
+     -59.4,
+     -4.53
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: lingula of cerebellum, central lobule, culmen, declive, folium of vermis, tuber of vermis, pyramis of vermis, uvula of vermis, nodule of vermis); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 15.75 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: lingula of cerebellum, central lobule, culmen, declive, folium of vermis, tuber of vermis, pyramis of vermis, uvula of vermis, nodule of vermis); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 15.75 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_vermis",
    "pushedFrom": "assets/skullbase/pf_vermis.glb",
    "tumourView": "men_foramen_magnum"

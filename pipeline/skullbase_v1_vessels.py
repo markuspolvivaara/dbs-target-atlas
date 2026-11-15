@@ -304,14 +304,25 @@ def unmoved(sid: str) -> Path:
 
 
 def kept_centroids() -> dict:
-    """The carried items' centroids as the steps before this one left them (kept when this step first carried them)."""
+    """The carried items' centroids as the steps before this one left them ("unmoved", kept when this step first carried
+    them) and as this step last wrote them ("written")."""
     return json.loads(PRE_CENTROIDS.read_text()) if PRE_CENTROIDS.exists() else {}
 
 
 def kept_centroid(sid: str, kept: dict) -> dict:
     if sid not in kept:
         raise SystemExit(f"{sid}: carried by an earlier run, and its unmoved centroid is missing ({PRE_CENTROIDS})")
-    return kept[sid]
+    return kept[sid]["unmoved"] if "unmoved" in kept[sid] else kept[sid]
+
+
+def unmoved_centroid(sid: str, item: dict, kept: dict) -> dict:
+    """An artery's centroid before this step, when an earlier step has written its file afresh (skullbase_v1_pfossa.py
+    reshapes the cerebellar arteries but leaves their centroids): the kept one while the manifest still holds what this
+    step wrote, else the manifest's (a step before it has rewritten the item)."""
+    k = kept.get(sid)
+    if isinstance(k, dict) and "unmoved" in k and item["centroid"] == k.get("written"):
+        return k["unmoved"]
+    return item["centroid"]
 
 
 def basilar(ex: dict, solids: Solids) -> tuple[dict, dict, dict, Carry]:
@@ -392,6 +403,8 @@ def carried(man: dict, carry: Carry, fields: dict) -> tuple[dict, dict]:
         if mv.max() < 1e-3:
             if src != f:                 # (carried before, out of reach now: its file and centroid as they were)
                 it["centroid"] = kept_centroid(it["id"], kept_centroids())
+            elif it["id"] in kept_centroids():   # (written afresh by an earlier step, out of reach now)
+                it["centroid"] = unmoved_centroid(it["id"], it, kept_centroids())
                 shutil.copy(src, f)
             continue
         nodes, k, cshift = [], 0, {}
@@ -517,12 +530,14 @@ def main() -> int:
     PRE.mkdir(exist_ok=True)
     kept = kept_centroids()
     for sid, (nodes, cshift, src) in car.items():
-        if src == BUILD / f"{sid}.glb":  # (first carried: the unmoved file and centroid kept; a rerun shifts those)
-            shutil.copy(src, PRE / f"{sid}.glb")
-            kept[sid] = items[sid]["centroid"]
+        if src == BUILD / f"{sid}.glb":  # (first carried, or written afresh by an earlier step: the unmoved file and
+            shutil.copy(src, PRE / f"{sid}.glb")    # centroid kept; a rerun shifts those)
+            kept[sid] = {"unmoved": unmoved_centroid(sid, items[sid], kept)}
         c = kept_centroid(sid, kept)
         write_glb(BUILD / f"{sid}.glb", nodes, {"id": sid, STAMP: True})
         cents[sid] = {s: (np.array(c[s]) + cshift.get(s, next(iter(cshift.values())))).round(2).tolist() for s in c}
+    for sid in car:
+        kept[sid] = {"unmoved": kept_centroid(sid, kept), "written": cents[sid]}
     PRE_CENTROIDS.write_text(json.dumps(kept, indent=1))
     after_g = {sid: read_glb_full(BUILD / f"{sid}.glb") for sid in [*car, "sb_basilar_artery"]}
     report["joins"] = joins(before_g, after_g, list(car))
