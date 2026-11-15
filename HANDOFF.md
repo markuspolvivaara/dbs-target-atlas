@@ -19,7 +19,13 @@ commit and push it.
       GPi) and the lenticular fasciculus (above the STN), no marker, no cortex; from Fan 2020 and Aquino 2019 (full
       texts), Krack 1998, D'Souza 2026 and Katayama 2006 (abstracts). D'Souza 2026's below-average zone (GPe, dorsal
       GPi) is also a line in the stimulation-induced view.
-  - Next: A-002 (Hollunder 2024's STN-derived sweet spots in the CM-Pf and GPi views), A-003 (centroid markers).
+  - A-002, Hollunder 2024's dystonia and Tourette maps (all from subthalamic DBS), the user's choices:
+    - Tourette: not drawn in the Tourette views (no STN target there); the Tics card says why;
+    - generalized dystonia: shown with the STN, the alternative target, in the alternative look
+      (`alternativeTracts`, and a new `alternativeVolumes` field for the sweet spot);
+    - all four named ", STN DBS (Hollunder 2024)" and drawn in the STN's colour (`pipeline/config.py`, then
+      `manifest.py`); their cards and S1's say so.
+  - Next: A-003 (centroid markers).
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -292,7 +298,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (410 tests on `fix/b1-dbs-views`)
+  - `npx vitest run` (411 tests on `fix/b1-dbs-views`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`

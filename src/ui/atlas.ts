@@ -410,6 +410,8 @@ export class AtlasPage {
       const m = MAN.get(id);
       if (m?.type === 'target' && look === 'context' && !p.markers.some((mk) => TGT.get(mk.targetId)?.structureId === id))
         this.legend.append(li('patch', m.colour.token, `${m.name} (published map, no single target point)`, id));
+      else if (m?.type === 'target' && look === 'alt' && !p.markers.some((mk) => TGT.get(mk.targetId)?.structureId === id))
+        this.legend.append(li('outline', m.colour.token, `${m.name} (published map for the alternative target, no single target point)`, id));
     }
     if (this.s.layers.tracts.on) for (const [id, role] of p.tracts) {
       const m = MAN.get(id)!;

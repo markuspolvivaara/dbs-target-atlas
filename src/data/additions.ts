@@ -13,6 +13,9 @@ import type { Reference } from './schema';
  * which had carried that view's claim, from Horn 2022 (full text). Then, the owner's choice: a view of what DBS does for
  * levodopa-induced dyskinesia, from Fan 2020 (full text), Aquino 2019 (the author manuscript in PMC), and Krack 1998,
  * D'Souza 2026 and Katayama 2006 (their abstracts: the full texts are not open access).
+ * A-002: the cards of Hollunder 2024's dystonia and Tourette maps, and of S1, which carried its dystonia claim, say that
+ * the maps come from subthalamic DBS (full text, PMC10917675: every cohort STN DBS; dystonia 56 of 70 patients in the
+ * maps, of several forms; Tourette 14).
  */
 export const ADDITION_REFERENCES: Reference[] = [
   { id: 'tsuboi2021', topic: 'pd', shortLabel: 'Tsuboi 2021', url: 'https://pubmed.ncbi.nlm.nih.gov/33002233/',
@@ -49,6 +52,11 @@ export const ADDITION_DESCRIPTIONS: Record<string, { text: string; refIds: strin
   lf: { text: 'With the ansa lenticularis, one of the pallidothalamic projections that cross the GPi. In generalized dystonia both were associated with optimal outcome; in cervical dystonia the lenticular fasciculus was associated with a worse one. In Parkinson\'s disease, stimulation from STN leads above and lateral to the STN, where the pallidothalamic fibres run, suppressed dyskinesia directly.', refIds: ['horn2022', 'aquino2019'] },
   al: { text: 'In dystonia, the best stimulation volume sits in posteroventral GPi and extends into subpallidal white matter, implicating the ansa lenticularis. In Parkinson\'s disease, the fibres linked to pallidal stimulation\'s relief of levodopa-induced dyskinesia ran beneath the GPi, like the ansa lenticularis.', refIds: ['reich2019', 'dsouza2026'] },
   gpe: { text: 'After pallidal DBS for Parkinson\'s disease, the contacts that induced dyskinesia lay mainly in the dorsal GPi and GPe.', refIds: ['tsuboi2021'] },
+  ss_dyt: { text: 'From subthalamic DBS, not pallidal: the sweet spot of 56 patients with dystonia of several forms. The benefit followed connections with sensorimotor cortex (S1 and M1).', refIds: ['hollunder2024'] },
+  sw_dyt: { text: 'From subthalamic DBS, not pallidal: in 56 patients with dystonia of several forms, the streamlines linked to benefit connected the STN\'s sensorimotor territory with sensorimotor cortex (S1 and M1).', refIds: ['hollunder2024'] },
+  ss_ts: { text: 'From subthalamic DBS in 14 patients with Tourette syndrome, not from the CM-Pf or GPi, the targets of this atlas\'s Tourette views, so it is not drawn there. The benefit followed connections with M1 and the SMA.', refIds: ['hollunder2024'] },
+  sw_ts: { text: 'From subthalamic DBS in 14 patients with Tourette syndrome: the streamlines linked to benefit connected the STN\'s associative territory with M1 and the SMA. Not drawn in the Tourette views, whose targets are the CM-Pf and GPi.', refIds: ['hollunder2024'] },
+  s1: { text: 'After subthalamic DBS for dystonia (56 patients), the benefit followed connections with sensorimotor cortex, S1 and M1.', refIds: ['hollunder2024'] },
   optic_tract: {
     text: 'The optic tract runs beneath the posteroventral GPi and is a landmark for pallidal targeting. During surgery it is identified by stimulation-evoked flashes of light, so the lesion or lead can spare it; hyperactive GPi cells lay medial to its lateral border and at least 5.1 mm above its dorsal surface. Visual field defects after posterior pallidotomy were linked to lesions adjacent to the tract. An inversion-recovery MRI sequence can show the GPi and the optic tract directly.',
     refIds: ['vitek1998', 'yokoyama2002', 'biousse1998', 'reich2000'],

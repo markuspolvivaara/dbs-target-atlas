@@ -51,13 +51,26 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
   });
   // review of 3–4 Nov 2026, C8: "No level I studies exist" no longer holds (Gruber 2018, a sham-controlled RCT);
   // site audit, A-001 (November 2026): stimulation-induced dyskinesia arose in the dorsal GPi and GPe (Tsuboi 2021),
-  // not "from GPi linked to lenticular-fasciculus connectivity" as the original read its conference abstract
+  // not "from GPi linked to lenticular-fasciculus connectivity" as the original read its conference abstract;
+  // A-002: Hollunder 2024's dystonia and Tourette maps come from subthalamic DBS (full text), not the views' targets
   type Ev = { claim: string; refIds: string[] };
   const CORRECTED: Record<string, { caveat?: string; caveatRefIds?: string[]; addEvidence?: Ev[]; replaceEvidence?: Record<string, Ev> }> = {
     pd: {
       replaceEvidence: {
         'Stimulation-induced dyskinesia from GPi linked to lenticular-fasciculus connectivity':
           { claim: 'Stimulation-induced dyskinesia after pallidal DBS arose from contacts in the dorsal GPi and GPe (20 of 68 patients)', refIds: ['tsuboi2021'] },
+      },
+    },
+    gdys: {
+      replaceEvidence: {
+        'Dystonia response maps to sensorimotor-connected circuits':
+          { claim: 'From subthalamic DBS (the alternative target), in 56 patients with dystonia of several forms: the benefit followed connections with sensorimotor cortex (S1 and M1)', refIds: ['hollunder2024'] },
+      },
+    },
+    ts: {
+      replaceEvidence: {
+        'Tourette response maps to M1-connected circuits':
+          { claim: 'From subthalamic DBS, not these targets: in 14 patients, the benefit followed connections with M1 and the SMA', refIds: ['hollunder2024'] },
       },
     },
     tard: {
@@ -154,6 +167,36 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
     for (const id of ['krack1998', 'dsouza2026', 'katayama2006'])
       expect(CONTENT.references.find((r) => r.id === id)!.citation, id).toMatch(/abstract: the full text is not open access/);
     expect(CONTENT.symptoms.find((x) => x.id === 'pd-dyskinesia')!.evidence.at(-1)!.refIds).toEqual(['dsouza2026']);
+  });
+  it('shows Hollunder 2024\u2019s dystonia maps with the STN and not its Tourette maps, all named as STN DBS (audit A-002)', () => {
+    const ind = (id: string) => CONTENT.indications.find((i) => i.id === id)!;
+    const man = (id: string) => MANIFEST.structures.find((s) => s.id === id)!;
+    // every Hollunder 2024 map comes from subthalamic DBS: named so, in the STN's colour
+    for (const id of ['ss_dyt', 'sw_dyt', 'ss_ts', 'sw_ts']) {
+      expect(man(id).name, id).toMatch(/, STN DBS \(Hollunder 2024\)$/);
+      expect(man(id).colour.token, id).toBe('stn');
+      expect(CONTENT.structures.find((s) => s.id === id)!.description, id).toMatch(/subthalamic DBS/);
+    }
+    // generalized dystonia: with the STN, the alternative target, in the alternative look
+    const g = ind('gdys');
+    expect(g.alternativeTargets).toContain('stn');
+    expect(g.keyTracts).not.toContain('sw_dyt');
+    expect(g.alternativeTracts).toEqual(['sw_dyt']);
+    expect(g.extraVolumes).not.toContain('ss_dyt');
+    expect(g.alternativeVolumes).toEqual(['ss_dyt']);
+    const pg = plan('gdys', null, true);
+    expect(pg.looks.get('ss_dyt')).toBe('alt');
+    expect(pg.tracts.get('sw_dyt')).toBe('alt');
+    // Tourette: not drawn, the Tics card says why
+    const ts = ind('ts');
+    expect([...ts.keyTracts, ...ts.alternativeTracts, ...ts.extraVolumes, ...ts.alternativeVolumes]).toEqual([]);
+    for (const s of CONTENT.symptoms.filter((x) => x.indicationId === 'ts')) expect(s.tracts, s.id).toEqual([]);
+    for (const sym of [null, 'ts-tics', 'ts-ocb']) {
+      const pt = plan('ts', sym, true);
+      expect(pt.tracts.has('sw_ts'), String(sym)).toBe(false);
+      expect(['hidden', undefined]).toContain(pt.looks.get('ss_ts'));
+    }
+    expect(CONTENT.symptoms.find((x) => x.id === 'ts-tics')!.note).toMatch(/subthalamic DBS in 14 patients/);
   });
   it('keeps the calculator logic and text', () => {
     expect(src.html).toContain(CALC_LEDE);

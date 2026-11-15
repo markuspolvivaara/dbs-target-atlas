@@ -100,10 +100,12 @@ export const INDICATIONS: IndicationInput[] = [
     id: 'gdys', label: 'Generalized dystonia', name: 'Generalized dystonia', accent: 'gpi',
     symptomIds: ['gdys-generalized'],
     primaryTargets: ['gpi', 'gpi_sm'], alternativeTargets: ['stn'], contextStructures: ['vo'],
-    keyTracts: ['rt_gen', 'al', 'lf', 'sw_dyt'], alternativeTracts: [],
+    // (Hollunder 2024's dystonia sweet spot and streamlines come from subthalamic DBS: shown with the STN, the alternative
+    // target, not as pallidal; the site audit's finding A-002)
+    keyTracts: ['rt_gen', 'al', 'lf'], alternativeTracts: ['sw_dyt'],
     corticalAreas: ['s1'],
     targetMarkers: ['t-ss-gen'], alternativeMarkers: ['t-atlas-stn'],
-    extraVolumes: ['ss_dyt'],
+    alternativeVolumes: ['ss_dyt'],
     target: 'Posteroventral GPi, including the subpallidal white matter below it.',
     alternatives: 'STN.',
     why: 'The best stimulation volume sits in posteroventral GPi and extends into subpallidal white matter, implicating the ansa lenticularis. In generalized dystonia, benefit followed the pallidothalamic bundles.',
@@ -112,7 +114,7 @@ export const INDICATIONS: IndicationInput[] = [
     evidence: [
       { claim: 'Sweet spot in posteroventral GPi bordering subpallidal white matter predicted individual outcome', refIds: ['reich2019'] },
       { claim: 'Generalized dystonia responded to the pallidothalamic bundles', refIds: ['horn2022'] },
-      { claim: 'Dystonia response maps to sensorimotor-connected circuits', refIds: ['hollunder2024'] },
+      { claim: 'From subthalamic DBS (the alternative target), in 56 patients with dystonia of several forms: the benefit followed connections with sensorimotor cortex (S1 and M1)', refIds: ['hollunder2024'] },
     ],
     caveat: 'Sweet-spot maps come from retrospective cohorts in normative space.',
     caveatRefIds: [],
@@ -202,10 +204,11 @@ export const INDICATIONS: IndicationInput[] = [
     id: 'ts', label: 'Tourette', name: 'Tourette syndrome', accent: 'cm',
     symptomIds: ['ts-tics', 'ts-ocb'],
     primaryTargets: ['cm', 'pf'], alternativeTargets: ['gpi'], contextStructures: ['putamen', 'caudate', 'dentate'],
-    keyTracts: ['sw_ts'], alternativeTracts: [],
+    // (Hollunder 2024's Tourette sweet spot and streamlines come from subthalamic DBS in 14 patients, not from these
+    // targets: not drawn; the site audit's finding A-002, the owner's choice)
+    keyTracts: [], alternativeTracts: [],
     corticalAreas: ['s1', 'm1'],
     targetMarkers: ['t-atlas-cm'], alternativeMarkers: ['t-atlas-gpi'],
-    extraVolumes: ['ss_ts'],
     target: 'Centromedian–parafascicular (CM-Pf) thalamus.',
     alternatives: 'Anteromedial GPi, posteroventral GPi, or ALIC/nucleus accumbens.',
     why: 'Response follows the connectivity of the stimulated tissue. CM connectivity to sensorimotor cortex, putamen and cerebellum predicted tic improvement.',
@@ -215,7 +218,7 @@ export const INDICATIONS: IndicationInput[] = [
       { claim: 'No difference between targets in 110 patients; benefit builds over months', refIds: ['johnson2019'] },
       { claim: 'CM connectivity predicted tic improvement under cross-validation', refIds: ['johnson2020'] },
       { claim: 'Pathway modelling of pallidal DBS in 35 patients', refIds: ['johnson2021'] },
-      { claim: 'Tourette response maps to M1-connected circuits', refIds: ['hollunder2024'] },
+      { claim: 'From subthalamic DBS, not these targets: in 14 patients, the benefit followed connections with M1 and the SMA', refIds: ['hollunder2024'] },
     ],
     caveat: 'Overlap with the best-connected CM region did not predict response by itself.',
     caveatRefIds: ['johnson2020'],

@@ -147,13 +147,13 @@ export const SYMPTOMS: SymptomInput[] = [
   {
     id: 'ts-tics', indicationId: 'ts', name: 'Tics',
     summary: 'CM connectivity to sensorimotor cortex, putamen and cerebellum predicted tic improvement.',
-    structures: ['cm', 'pf'], contextStructures: ['putamen'], tracts: ['sw_ts'], corticalAreas: ['m1', 's1'], targetId: 't-atlas-cm',
+    structures: ['cm', 'pf'], contextStructures: ['putamen'], tracts: [], corticalAreas: ['m1', 's1'], targetId: 't-atlas-cm',
     evidence: [
       { claim: 'CM connectivity predicted tic improvement under cross-validation', refIds: ['johnson2020'] },
-      { claim: 'Tourette response maps to M1-connected circuits', refIds: ['hollunder2024'] },
     ],
-    note: 'Streamlines: Tourette sweet streamlines (Hollunder 2024). The CM-specific connectivity of Johnson 2020 is not distributed as a file. Overlap with the best-connected CM region did not predict response by itself.',
-    noteRefIds: ['johnson2020'],
+    // (the site audit's finding A-002: Hollunder 2024's Tourette maps, from subthalamic DBS, were this view's only tract)
+    note: 'No tract is drawn: the CM-specific connectivity of Johnson 2020 is not distributed as a file, and Hollunder 2024\'s Tourette sweet spot and streamlines come from subthalamic DBS in 14 patients, not from the CM-Pf. Overlap with the best-connected CM region did not predict response by itself.',
+    noteRefIds: ['johnson2020', 'hollunder2024'],
     camera: 'coronal',
   },
   {

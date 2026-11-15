@@ -60,7 +60,7 @@ export function crossCheck(c: Content): string[] {
     i.corticalAreas.forEach((a) => has(w, a, cortex, 'cortical area'));
     [...i.targetMarkers, ...i.alternativeMarkers].forEach((t) => has(w, t, targets, 'target'));
     i.symptomIds.forEach((s) => has(w, s, syms, 'symptom'));
-    i.extraVolumes.forEach((v) => { if (MAN.get(v)?.type !== 'target') errs.push(`${w}: extra volume '${v}' is not a sweet-spot volume`); });
+    [...i.extraVolumes, ...i.alternativeVolumes].forEach((v) => { if (MAN.get(v)?.type !== 'target') errs.push(`${w}: extra volume '${v}' is not a sweet-spot volume`); });
   }
   for (const s of c.symptoms) {
     const w = `symptom ${s.id}`;

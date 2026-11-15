@@ -27,9 +27,7 @@ const DESCRIPTIONS: Record<string, { text: string; refIds: string[] }> = {
   sma: { text: 'Each cardinal sign maps to its own tracts: tremor to M1 and cerebellum, bradykinesia to SMA, rigidity to premotor cortex, axial signs to SMA and brainstem.', refIds: ['rajamani2024'] },
   pmd: { text: 'Each cardinal sign maps to its own tracts: tremor to M1 and cerebellum, bradykinesia to SMA, rigidity to premotor cortex, axial signs to SMA and brainstem.', refIds: ['rajamani2024'] },
   pmv: { text: 'Each cardinal sign maps to its own tracts: tremor to M1 and cerebellum, bradykinesia to SMA, rigidity to premotor cortex, axial signs to SMA and brainstem.', refIds: ['rajamani2024'] },
-  s1: { text: 'Dystonia response maps to sensorimotor-connected circuits.', refIds: ['hollunder2024'] },
   hdp: { text: 'Benefit follows the hyperdirect pathway from SMA and M1 into the supero-lateral STN.', refIds: ['akram2017', 'peeters2024'] },
-  al: { text: 'The best stimulation volume sits in posteroventral GPi and extends into subpallidal white matter, implicating the ansa lenticularis.', refIds: ['reich2019'] },
   drtt: { text: 'Efficacy at both Vim and PSA tracks how close the active contact is to the DRTT.', refIds: ['poster'] },
   ndrtt: { text: 'Efficacy at both Vim and PSA tracks how close the active contact is to the DRTT.', refIds: ['poster'] },
   cst: { text: 'DRTT, with the pyramidal tract and medial lemniscus as borders in dual-tract models.', refIds: ['jns2021'] },
@@ -37,16 +35,12 @@ const DESCRIPTIONS: Record<string, { text: string; refIds: string[] }> = {
   rt_gen: { text: 'In generalized dystonia, benefit followed the pallidothalamic bundles.', refIds: ['horn2022'] },
   rt_cerv: { text: 'Cervical dystonia responded best to modulation of the striatopallidofugal axis.', refIds: ['horn2022'] },
   sw_pd: { text: "Symptom-specific tracts mapped in 237 patients from five centres. (Streamlines shown: PD sweet streamlines of the Human Dysfunctome Atlas.)", refIds: ['hollunder2024', 'rajamani2024'] },
-  sw_dyt: { text: 'Dystonia response maps to sensorimotor-connected circuits.', refIds: ['hollunder2024'] },
-  sw_ts: { text: 'Tourette response maps to M1-connected circuits.', refIds: ['hollunder2024'] },
   sw_pd_m1: { text: 'Tremor maps to tracts to M1 and cerebellum.', refIds: ['rajamani2024'] },
   sw_pd_sma: { text: 'Bradykinesia maps to SMA; axial signs to SMA and brainstem.', refIds: ['rajamani2024'] },
   sw_pd_pm: { text: 'Rigidity maps to premotor cortex.', refIds: ['rajamani2024'] },
   ss_pd: { text: 'Supero-lateral STN was the most effective site; hyperdirect connectivity predicted improvement.', refIds: ['akram2017', 'hollunder2024'] },
   ss_gen: { text: 'Generalized dystonia responded to the pallidothalamic bundles.', refIds: ['horn2022'] },
   ss_cerv: { text: 'Striatopallidofugal axis linked to optimal cervical outcomes in 80 patients.', refIds: ['horn2022'] },
-  ss_dyt: { text: 'Dystonia response maps to sensorimotor-connected circuits.', refIds: ['hollunder2024'] },
-  ss_ts: { text: 'Tourette response maps to M1-connected circuits.', refIds: ['hollunder2024'] },
 };
 
 Object.assign(DESCRIPTIONS, EPILEPSY_DESCRIPTIONS, ADDITION_DESCRIPTIONS);

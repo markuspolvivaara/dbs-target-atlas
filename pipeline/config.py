@@ -232,12 +232,14 @@ NUCLEI: list[Volume] = [
 
 # Sweet spots: signed maps; the mesh is the isosurface at 50 % of the positive
 # maximum and the marker is the value-weighted centroid of that region.
+# (Hollunder 2024's maps all come from subthalamic DBS, the dystonia and Tourette ones too: named so and drawn in the
+# STN's colour; the site audit's finding A-002)
 SWEETSPOTS: list[Volume] = [
     Volume("ss_pd", "PD sweet spot (Hollunder 2024)", "target", "stn", "hollunder2024",
            lr("Human Dysfunctome Atlas (Hollunder 2024)", "Sweet_Spot_PD"), faces=1500),
-    Volume("ss_dyt", "Dystonia sweet spot (Hollunder 2024)", "target", "gpi", "hollunder2024",
+    Volume("ss_dyt", "Dystonia sweet spot, STN DBS (Hollunder 2024)", "target", "stn", "hollunder2024",
            lr("Human Dysfunctome Atlas (Hollunder 2024)", "Sweet_Spot_DYT"), faces=1500),
-    Volume("ss_ts", "Tourette sweet spot (Hollunder 2024)", "target", "cm", "hollunder2024",
+    Volume("ss_ts", "Tourette sweet spot, STN DBS (Hollunder 2024)", "target", "stn", "hollunder2024",
            lr("Human Dysfunctome Atlas (Hollunder 2024)", "Sweet_Spot_TS"), faces=1500),
     Volume("ss_gen", "Generalized dystonia sweet spot (Horn 2022)", "target", "gpi", "horn2022",
            lr("Dystonia Response Tract Atlas (Horn 2022)", "Sweetspot_generalized"), faces=1500),
@@ -331,9 +333,9 @@ TRACTS: list[Tract] = [
           derivation="Positively weighted streamlines of the thresholded tract file."),
     Tract("sw_pd", "PD sweet streamlines (Hollunder 2024)", "stn", "hollunder2024",
           {"midline": HOL + "Sweet_Streamline_PD.mat"}, positive_only=True, role="response", hcp="confirmed"),
-    Tract("sw_dyt", "Dystonia sweet streamlines (Hollunder 2024)", "gpi", "hollunder2024",
+    Tract("sw_dyt", "Dystonia sweet streamlines, STN DBS (Hollunder 2024)", "stn", "hollunder2024",
           {"midline": HOL + "Sweet_Streamline_DYT.mat"}, positive_only=True, role="response", hcp="confirmed"),
-    Tract("sw_ts", "Tourette sweet streamlines (Hollunder 2024)", "cm", "hollunder2024",
+    Tract("sw_ts", "Tourette sweet streamlines, STN DBS (Hollunder 2024)", "stn", "hollunder2024",
           {"midline": HOL + "Sweet_Streamline_TS.mat"}, positive_only=True, role="response", hcp="confirmed"),
     # Derived subsets for the PD symptom view. The Rajamani 2024 symptom tracts
     # are not distributed as files; these partitions only show where the
