@@ -1363,12 +1363,12 @@
   },
   "Optic nerve (II)": {
    "L": {
-    "share": 0.152,
+    "share": 0.117,
     "deepestMm": 1.4
    },
    "R": {
-    "share": 0.165,
-    "deepestMm": 1.8
+    "share": 0.16,
+    "deepestMm": 1.9
    }
   },
   "Oculomotor nerve (III)": {
@@ -1521,6 +1521,16 @@
     "deepestMm": 0.8
    }
   },
+  "Confluence of sinuses": {
+   "L": {
+    "share": 0.162,
+    "deepestMm": 3.7
+   },
+   "R": {
+    "share": 0.197,
+    "deepestMm": 3.7
+   }
+  },
   "Transverse sinus": {
    "L": {
     "share": 0.11,
@@ -1643,12 +1653,12 @@
   },
   "Posterior inferior cerebellar artery (fitted course)": {
    "L": {
-    "share": 0.008,
-    "deepestMm": 1.0
+    "share": 0.0,
+    "deepestMm": 0.0
    },
    "R": {
-    "share": 0.013,
-    "deepestMm": 1.0
+    "share": 0.0,
+    "deepestMm": 0.0
    }
   },
   "Internal carotid artery (cervical part)": {
@@ -1749,6 +1759,26 @@
    "R": {
     "share": 0.452,
     "deepestMm": 0.8
+   }
+  },
+  "Optic chiasm": {
+   "L": {
+    "share": 0.0,
+    "deepestMm": 0.0
+   },
+   "R": {
+    "share": 0.0,
+    "deepestMm": 0.0
+   }
+  },
+  "Optic tract": {
+   "R": {
+    "share": 0.0,
+    "deepestMm": 0.0
+   },
+   "L": {
+    "share": 0.0,
+    "deepestMm": 0.0
    }
   }
  }

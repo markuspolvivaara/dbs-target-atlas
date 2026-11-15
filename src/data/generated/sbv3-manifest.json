@@ -3116,7 +3116,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_anterior_inferior_cerebellar_artery.cleared.glb",
-   "bytes": 12152,
+   "bytes": 22128,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3159,7 +3159,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_anterior_spinal_artery.cleared.glb",
-   "bytes": 8464,
+   "bytes": 10576,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3244,7 +3244,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_lateral_pontine_branches_of_basilar_artery.cleared.glb",
-   "bytes": 11848,
+   "bytes": 11844,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3286,8 +3286,8 @@
    "name": "Medial pontine branches of basilar artery",
    "aliases": [],
    "type": "soft",
-   "file": "assets/skullbase-v3/tb_medial_pontine_branches_of_basilar_artery.glb",
-   "bytes": 7156,
+   "file": "assets/skullbase-v3/tb_medial_pontine_branches_of_basilar_artery.cleared.glb",
+   "bytes": 7148,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3309,7 +3309,7 @@
    "layer": "tracts",
    "system": "Basilar artery",
    "fitted": true,
-   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), each branch moved to start on this patient's basilar artery (TopBrain's label), then laid onto the fitted brainstem's surface (drawn onto it from up to 12 mm away, none of it left inside) and smoothed (a median 2.6 mm on the right, 2.5 mm on the left). Its course is approximate.",
+   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), each branch moved to start on this patient's basilar artery (TopBrain's label), then laid onto the fitted brainstem's surface (drawn onto it from up to 12 mm away, none of it left inside) and smoothed (a median 2.6 mm on the right, 2.5 mm on the left). Its course is approximate. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py).",
    "centroid": {
     "L": [
      -2.25,
@@ -3321,7 +3321,8 @@
      -13.55,
      -1.97
     ]
-   }
+   },
+   "clearedFrom": "assets/skullbase-v3/tb_medial_pontine_branches_of_basilar_artery.glb"
   },
   {
    "id": "tb_posterior_ethmoidal_artery",
@@ -3413,7 +3414,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_superior_cerebellar_artery_fitted_course.joined.glb",
-   "bytes": 16260,
+   "bytes": 19884,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3435,7 +3436,7 @@
    "layer": "tracts",
    "system": "Basilar artery",
    "fitted": true,
-   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), carried on from the far end of this patient's superior cerebellar artery as TopBrain labels it (its first part), the start moved there and the move fading out over 15 mm; its corners rounded (a median 4.1 mm on the right, 10.9 mm on the left). Its course is approximate. Joined to the superior cerebellar artery by a drawn segment across a 1.5 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py).",
+   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), carried on from the far end of this patient's superior cerebellar artery as TopBrain labels it (its first part), the start moved there and the move fading out over 15 mm; its corners rounded (a median 4.1 mm on the right, 10.9 mm on the left). Its course is approximate. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py). Joined to the superior cerebellar artery by a drawn segment across a 1.5 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py).",
    "centroid": {
     "L": [
      -28.54,
@@ -3448,7 +3449,8 @@
      -0.05
     ]
    },
-   "joinedFrom": "assets/skullbase-v3/tb_superior_cerebellar_artery_fitted_course.glb"
+   "clearedFrom": "assets/skullbase-v3/tb_superior_cerebellar_artery_fitted_course.glb",
+   "joinedFrom": "assets/skullbase-v3/tb_superior_cerebellar_artery_fitted_course.cleared.glb"
   },
   {
    "aliases": [],
@@ -3476,7 +3478,7 @@
    "id": "tb_posterior_inferior_cerebellar_artery_fitted_course",
    "name": "Posterior inferior cerebellar artery (fitted course)",
    "file": "assets/skullbase-v3/tb_posterior_inferior_cerebellar_artery_fitted_course.cleared.glb",
-   "bytes": 295372,
+   "bytes": 347664,
    "system": "Vertebral artery",
    "morph": true,
    "derivation": "The model's typical course on from this CT's PICA origin: a run drawn from the end of the labelled origin round the outside of the brainstem (11.4 mm on the right, 12.7 mm on the left) to the start of the Z-Anatomy PICA's trunk, then that trunk (lateral to the medulla, round the tonsil) and the branches that start on it, fitted onto this CT (the whole-skull fit, then the posterior fossa's) and kept clear of the fitted cerebellum and brainstem. It moves with the cerebellum in the telovelar and retrosigmoid views. Its course is approximate, not this patient's: this CT's own PICAs loop medially from long, tortuous vertebral arteries. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py).",
@@ -7550,51 +7552,6 @@
    "tumourView": "koos_3"
   },
   {
-   "id": "tb_anterior_inferior_cerebellar_artery__koos_3",
-   "name": "Anterior inferior cerebellar artery",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase-v3/tb_anterior_inferior_cerebellar_artery__koos_3.glb",
-   "bytes": 5256,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "fitted",
-   "source": "Z-Anatomy, fitted onto the TopBrain CT and anchored to it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "layer": "tracts",
-   "system": "Basilar artery",
-   "fitted": true,
-   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), its origin moved onto this patient's basilar artery (TopBrain's label), the move fading out over its first 15 mm, the rest where the fit puts it; its corners rounded (a median 6.4 mm on the right, 6.5 mm on the left). Its course is approximate. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py). In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 2.0 mm), its course in the meatus kept: a shape, not a simulation.",
-   "centroid": {
-    "L": [
-     -15.78,
-     -33.39,
-     -7.84
-    ],
-    "R": [
-     15.65,
-     -31.34,
-     -14.1
-    ]
-   },
-   "replaces": "tb_anterior_inferior_cerebellar_artery",
-   "pushedFrom": "assets/skullbase-v3/tb_anterior_inferior_cerebellar_artery.cleared.glb",
-   "tumourView": "koos_3"
-  },
-  {
    "id": "tm_koos_4",
    "name": "Vestibular schwannoma (Koos IV)",
    "aliases": [],
@@ -8164,51 +8121,6 @@
    },
    "replaces": "tb_vagus_nerve_x",
    "pushedFrom": "assets/skullbase-v3/tb_vagus_nerve_x.glb",
-   "tumourView": "koos_4"
-  },
-  {
-   "id": "tb_anterior_inferior_cerebellar_artery__koos_4",
-   "name": "Anterior inferior cerebellar artery",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase-v3/tb_anterior_inferior_cerebellar_artery__koos_4.glb",
-   "bytes": 5292,
-   "colour": {
-    "token": "sbArtery",
-    "light": "#C0392B",
-    "dark": "#F07A6A"
-   },
-   "dataset": "fitted",
-   "source": "Z-Anatomy, fitted onto the TopBrain CT and anchored to it",
-   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "artery",
-   "layer": "tracts",
-   "system": "Basilar artery",
-   "fitted": true,
-   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), its origin moved onto this patient's basilar artery (TopBrain's label), the move fading out over its first 15 mm, the rest where the fit puts it; its corners rounded (a median 6.4 mm on the right, 6.5 mm on the left). Its course is approximate. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py). In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 7.8 mm), its course in the meatus kept: a shape, not a simulation.",
-   "centroid": {
-    "L": [
-     -15.78,
-     -33.39,
-     -7.84
-    ],
-    "R": [
-     15.73,
-     -31.93,
-     -14.64
-    ]
-   },
-   "replaces": "tb_anterior_inferior_cerebellar_artery",
-   "pushedFrom": "assets/skullbase-v3/tb_anterior_inferior_cerebellar_artery.cleared.glb",
    "tumourView": "koos_4"
   },
   {

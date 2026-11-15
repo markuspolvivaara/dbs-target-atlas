@@ -306,9 +306,15 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   transverse sinuses meet, the superior sagittal and straight sinuses run on into it. Where an artery runs into the
   fitted brainstem, the fitted courses (anterior inferior and superior cerebellar arteries) are lifted out onto its
   surface (and should one of this CT's own arteries lie in it, a channel is cut in the brainstem for it: the tissue
-  straight behind it removed up to 3 mm, the part meshed again). Each changed mesh is its
+  straight behind it removed up to 3 mm, the part meshed again). The fitted courses (the PICA's, the AICA, the SCA's,
+  the pontine branches) are pushed out of the fitted cerebellum too, pose by pose: at rest against it at rest, and in
+  each of the brain's shapes against it as that shape poses it, the push kept as the course's own shape (the AICA and
+  the SCA's course, which had none, get one: the cerebellum drawn aside pushes them ahead of it), the drawn bone kept
+  to as well. Its lobules are filled one by one: filled together, two fitted lobules that overlap (about 5 ml a side)
+  cancel out, which had left 30 % of the PICA's course inside them, up to 6.5 mm deep. Each changed mesh is its
   own file (`<id>.joined.glb`, `<id>.cleared.glb`), its source's untouched; its card says what was drawn. Validation
-  checks every junction closed and no artery inside the brainstem in any shape of the brain.
+  checks every junction closed, no artery inside the brainstem in any shape of the brain, and no fitted course more
+  than 3 % (more than 0.3 mm in) or deeper than 1 mm inside the cerebellum in any pose.
 - **How a surgical view opens**: with its shapes full on (the fissure opened and the frontal lobe lifted, the hemisphere
   held off the falx, the tonsils drawn apart, the cerebellum drawn back or lifted), the anatomy its text describes; the sliders
   take it back to the brain at rest. The pterional, orbitozygomatic, interhemispheric, retrosigmoid and far lateral views

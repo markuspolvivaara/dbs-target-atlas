@@ -204,11 +204,6 @@
      "pointsInside": 10,
      "leftInside": 0,
      "maxMovedMm": 3.3
-    },
-    "Anterior inferior cerebellar artery": {
-     "pointsInside": 5,
-     "leftInside": 5,
-     "maxMovedMm": 2.0
     }
    }
   },
@@ -249,11 +244,6 @@
      "pointsInside": 11,
      "leftInside": 0,
      "maxMovedMm": 0.7
-    },
-    "Anterior inferior cerebellar artery": {
-     "pointsInside": 5,
-     "leftInside": 0,
-     "maxMovedMm": 7.8
     }
    }
   }
