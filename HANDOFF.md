@@ -32,8 +32,10 @@ commit and push it.
      the largest ball; it had been cut open at the grid's lateral edge).
   7. MC-02: `a6b5798` (the T10–T11 disc is calcified on this CT, as the user reads it: drawn by rule in the dense band,
      the two bodies cut back to it, its calcification from the CT inside it; `CALCIFIED_DISCS` in `spine_build.py`).
-- Still open, in order: 8 whether the C3 foramina transversaria are reported on the unsmoothed CT, 9 P1-03 (the
-  views' shared copies). Also: v1's posterior fossa rebuilt with the far lateral sliders
+  8. Foramina transversaria: `73cb75e` (the cards lead with the CT's own bone at 200 HU, the drawn bone's beside where
+     they differ by 5 mm² or more; opening the foramina in the drawn bone was tried and left: at C3 the CT's thin,
+     grainy ring gives no stable edge).
+- Still open: 9 P1-03 (the views' shared copies). Also: v1's posterior fossa rebuilt with the far lateral sliders
   (previewed, not committed: the user is to say keep or not) and v1's cameras.
 - Pipeline data: the worktree has its own `pipeline/data/build` (its `raw` is a link to the main checkout's). These
   fixes changed `skullbase` (v1), `skullbase-v3` and `skullbase-ct` there; copy from the worktree, not the main
