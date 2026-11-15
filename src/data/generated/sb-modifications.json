@@ -1257,32 +1257,6 @@
        0,
        0
       ]
-     },
-     "sb_anterior_inferior_cerebellar_artery__koos_3": {
-      "maxMovedMm": 0.87,
-      "vertsMoved": 106,
-      "verts": 594,
-      "deepInBone": [
-       52,
-       42
-      ],
-      "inBrainstem": [
-       78,
-       85
-      ]
-     },
-     "sb_anterior_inferior_cerebellar_artery__koos_4": {
-      "maxMovedMm": 0.87,
-      "vertsMoved": 106,
-      "verts": 594,
-      "deepInBone": [
-       52,
-       42
-      ],
-      "inBrainstem": [
-       5,
-       12
-      ]
      }
     },
     "joins": {
@@ -1305,14 +1279,6 @@
      "sb_vertebral_artery": [
       0.0,
       0.0
-     ],
-     "sb_anterior_inferior_cerebellar_artery__koos_3": [
-      0.42,
-      0.28
-     ],
-     "sb_anterior_inferior_cerebellar_artery__koos_4": [
-      0.42,
-      0.28
      ]
     },
     "nerves": {
@@ -1339,22 +1305,14 @@
      "Abducens nerve (VI) / Vertebral artery": [
       0.28,
       0.23
-     ],
-     "Abducens nerve (VI) / Anterior inferior cerebellar artery (koos_3)": [
-      0.19,
-      0.19
-     ],
-     "Abducens nerve (VI) / Anterior inferior cerebellar artery (koos_4)": [
-      0.19,
-      0.19
      ]
     }
    },
    "validation": {
     "check": "skullbase_build.py finalize: the sinuses at the confluence, the basilar artery and the middle meningeal artery out of the bone, the latter through its foramen, every junction with the basilar kept"
    },
-   "revision": "b57bce7",
-   "date": "2026-11-14"
+   "revision": "b4628b0",
+   "date": "2026-11-15"
   },
   {
    "step": "skullbase_v1_xii",

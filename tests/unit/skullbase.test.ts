@@ -1128,6 +1128,19 @@ describe('v3 tumours drawn by rule: Knosp, Koos and meningioma sites', async () 
     expect(TUMOUR_FIT.koos['4'].extrameatalMaxMm!).toBeGreaterThan(30);
     expect(TUMOUR_FIT.koos['4'].toBrainstemMm!).toBeLessThan(0);
   });
+  it('each tumour card quotes the drawing the Grading page measures (one run of the tumours on each model)', async () => {
+    // (the tumour step drew a different Koos II on each run, 8 or 9 mm, until its surface samples were seeded: the card
+    // and the report must come from the same run)
+    const { TUMOUR_FIT_V1, TUMOUR_FIT_V3 } = await import('../../src/skullbase/tumours');
+    for (const [model, structures, fit] of [['v3', v3.structures, TUMOUR_FIT_V3], ['v1', SB_MANIFEST.structures, TUMOUR_FIT_V1]] as const) {
+      const card = new Map(structures.map((s) => [s.id, s.derivation ?? '']));
+      const ml = (id: string) => Number(/([\d.]+) ml\.$/.exec(card.get(id) ?? '')?.[1]);
+      for (const [g, r] of Object.entries(fit.koos)) expect(ml(`tm_koos_${g}`), `${model} Koos ${g}`).toBe(r.ml);
+      for (const [g, r] of Object.entries(fit.knosp.grades)) expect(ml(`tm_knosp_${g.toLowerCase()}`), `${model} Knosp ${g}`).toBe(r.ml);
+      for (const [site, r] of Object.entries(fit.meningioma)) expect(ml(`tm_men_${site}`), `${model} ${site}`).toBe(r.ml);
+      expect(card.get('tm_koos_2'), model).toContain(`${fit.koos['2'].diameterMm} mm across`);
+    }
+  });
   it('the Knosp view is cut at its section while the reader keeps it; tumour views open onto the tumour', () => {
     const s = T3.decodeSkull('#/atlas?g=knosp_3b');
     expect(s.section).toBe(true);

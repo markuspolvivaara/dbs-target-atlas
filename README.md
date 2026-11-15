@@ -360,7 +360,7 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   - **Vestibular schwannoma, Koos I–IV,** in the retrosigmoid view (opened with the cerebellum retracted): the
     meatus's lumen, and a ball in the cerebellopontine angle joined to the porus. This model's fitted pons lies about
     5 mm from the porus on the right (the fit keeps it out of the cistern this CT shows there; the pons's own surface a
-    CT does not show), so grade II is small (9 mm) and grade III is moulded against the brainstem;
+    CT does not show), so grade II is small (8 mm) and grade III is moulded against the brainstem;
     grade IV pushes it aside. The nerves of the angle are moved round the tumour: the facial nerve forwards onto its
     anterior surface (Choi 2014: its commonest place), thinned and flattened over grades III and IV; the others and the
     fitted small arteries the shortest way out. Sources: Gupta 2020, Starnoni 2020 (EANS), Choi 2014.
@@ -497,7 +497,7 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
     gathered in front of its inner opening, and the trunk follows its axis and is back on Z-Anatomy's curve 8 mm
     beyond the bone (moved up to 9.1 mm). Beyond that, and at the medulla, it is as Z-Anatomy has it.
   - Four vessels are put where the model's own bone and brain say they lie (`pipeline/skullbase_v1_vessels.py`, after
-    the tumours and before the in-bone measurement):
+    the endonasal view and before the tumours, so their pushed copies start from the arteries as moved):
     - The straight and occipital sinuses. In Z-Anatomy's Blender file both start 44.5 mm in front of the confluence of
       the sinuses: the straight sinus ran from above the hypophysis into the posterior fossa, the occipital sinus
       through the medulla into the clivus. Both are moved back by that offset, which is measured from the file: the

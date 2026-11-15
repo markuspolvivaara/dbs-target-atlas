@@ -48,13 +48,14 @@ are not moved round the tumours.
 Writes v3's build (tm_*.glb, the pushed copies, tumour_items.json) and src/data/generated/sbv3-tumours.json (the Knosp
 plane and lines, each tumour's measures and its grade checked from the drawing).
 
-With SB_PROFILE=v1, the same rules on skull base v1 (Z-Anatomy's model; after skullbase_v1_endonasal.py, then
-compress.mjs skullbase and skullbase_build.py finalize): its bone (v1's bone field, skullbase_v1_skull.py) instead of the
-CT's; its arteries (the meshes v1 shows, and its internal carotids' centre lines with the radius it draws, as the label
-the Knosp section is found on) instead of TopBrain's labels; its cavernous sinus (skullbase_v1_cavernous.py) and
-endonasal grid; its own brain, cerebellum and brainstem (not fitted) pushed. Z-Anatomy's temporal bone is solid along
-the vestibulocochlear nerve (it has no meatal lumen), so Koos I's canal is drawn by rule there (V1_CANAL_MM round the
-line from the fundus to the porus) and taken out of the bone. Writes v1's build and sb-tumours.json.
+With SB_PROFILE=v1, the same rules on skull base v1 (Z-Anatomy's model; after skullbase_v1_vessels.py, then
+skullbase_v1_inbone.py, compress.mjs skullbase and skullbase_build.py finalize): its bone (v1's bone field,
+skullbase_v1_skull.py) instead of the CT's; its arteries (the meshes v1 shows, and its internal carotids' centre
+lines with the radius it draws, as the label the Knosp section is found on) instead of TopBrain's labels; its cavernous
+sinus (skullbase_v1_cavernous.py) and endonasal grid; its own brain, cerebellum and brainstem (not fitted) pushed.
+Z-Anatomy's temporal bone is solid along the vestibulocochlear nerve (it has no meatal lumen), so Koos I's canal is
+drawn by rule there (V1_CANAL_MM round the line from the fundus to the porus) and taken out of the bone. Writes v1's
+build and sb-tumours.json.
 """
 from __future__ import annotations
 
@@ -194,7 +195,9 @@ def mesh_mask(path: Path, lo: np.ndarray, shape: tuple, sides=("L", "R")) -> np.
             out |= fill_in(V, T, lo, shape)
         else:
             m = trimesh.Trimesh(V, T, process=False)
-            P = np.vstack([V, m.sample(max(1, int(m.area / 0.05)))])
+            # (seeded: trimesh samples a surface at random, and a different sample closes the mask differently, which
+            # moved the Koos tumours' centres by up to 6 mm from one run to the next)
+            P = np.vstack([V, m.sample(max(1, int(m.area / 0.05)), seed=0)])
             ijk = np.rint((P - lo) / STEP).astype(int)
             ok = np.all((ijk >= 0) & (ijk < np.array(shape)), 1)
             v = np.zeros(shape, bool)

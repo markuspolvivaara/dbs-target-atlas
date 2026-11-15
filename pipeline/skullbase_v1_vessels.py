@@ -1,8 +1,9 @@
 """Skull base v1 (the Z-Anatomy model): four of its vessels put where the model's own bone and brain say they lie.
 
   pipeline/.venv/bin/python -I -W ignore pipeline/skullbase_v1_vessels.py
-  (after SB_PROFILE=v1 skullbase_v3_tumours.py, the last step that writes v1's arteries; then skullbase_v1_inbone.py,
-   which measures the tubes as moved, compress.mjs skullbase and skullbase_build.py finalize)
+  (after skullbase_v1_endonasal.py, when every step that shapes v1's arteries has run; then
+   SB_PROFILE=v1 skullbase_v3_tumours.py, whose pushed copies start from the arteries as moved here,
+   skullbase_v1_inbone.py, which measures the tubes as moved, compress.mjs skullbase and skullbase_build.py finalize)
 
 Z-Anatomy draws its vessels as curves and its bones and brain as meshes, each on its own (skullbase_v1_inbone.py). Four
 of the vessels lie where the model's own bone and brain show they cannot (the audit's finding MC-11, and what its
@@ -35,11 +36,12 @@ follow-up found):
   REJOIN_MM after that left the bone; it is kept CLEAR_MM out of the bone (skullbase_v1_xii.kept_clear).
 
 The moved curves are rebuilt into tubes as skullbase_build.py builds them. The carried arteries were reshaped by
-earlier steps (the cerebellar arteries by skullbase_v1_pfossa.py, their pushed copies by the tumours) and carry the
-approaches' shapes, so their vertices are moved instead and the shapes' offsets kept. Each carried file is stamped and
-its unmoved copy kept in BUILD/pre_vessels, so the step can run again. Z-Anatomy's export is not changed:
-skullbase_v1_endonasal.py measures its distances to the arteries on Z-Anatomy's curves, so the endonasal view keeps the
-basilar artery where Z-Anatomy drew it.
+earlier steps (the cerebellar arteries by skullbase_v1_pfossa.py) and carry the approaches' shapes, so their vertices
+are moved instead and the shapes' offsets kept. A tumour's pushed copy of an artery is left to the tumours, which run
+after this step and make it from the artery as moved. Each carried file is stamped and its unmoved copy kept in
+BUILD/pre_vessels, its centroid in pre_vessels/centroids.json, so the step can run again with the same result.
+Z-Anatomy's export is not changed: skullbase_v1_endonasal.py measures its distances to the arteries on Z-Anatomy's
+curves, so the endonasal view keeps the basilar artery where Z-Anatomy drew it.
 
 Writes the moved and carried tubes, their derivations and centroids in v1's manifest, and the step's record.
 """
@@ -66,6 +68,7 @@ REPO = ROOT.parent
 BUILD = ROOT / "data" / "build" / "skullbase"
 GEN = REPO / "src" / "data" / "generated"
 PRE = BUILD / "pre_vessels"
+PRE_CENTROIDS = PRE / "centroids.json"
 GRID_MM = 0.25           # the bone and the brainstem are filled on this grid (skullbase_v1_xii.bone_inside)
 CLEAR_MM = 0.2           # a moved vessel's wall kept this far out of the bone
 MARGIN_MM = 14.0         # the bone is taken on a block this much larger than what is moved
@@ -300,6 +303,17 @@ def unmoved(sid: str) -> Path:
     return f
 
 
+def kept_centroids() -> dict:
+    """The carried items' centroids as the steps before this one left them (kept when this step first carried them)."""
+    return json.loads(PRE_CENTROIDS.read_text()) if PRE_CENTROIDS.exists() else {}
+
+
+def kept_centroid(sid: str, kept: dict) -> dict:
+    if sid not in kept:
+        raise SystemExit(f"{sid}: carried by an earlier run, and its unmoved centroid is missing ({PRE_CENTROIDS})")
+    return kept[sid]
+
+
 def basilar(ex: dict, solids: Solids) -> tuple[dict, dict, dict, Carry]:
     R = [np.array(r, float) for r in ex["lines"][BASILAR]["runs"]]
     if len(R) != 1:
@@ -365,7 +379,7 @@ def carried(man: dict, carry: Carry, fields: dict) -> tuple[dict, dict]:
     out, rep = {}, {}
     skip = {SB.slug(n) for n in (BASILAR, *BRANCHES)}
     for it in man["structures"]:
-        if it["type"] != "tube" or it.get("category") != "artery" or it["id"] in skip or it.get("forView"):
+        if it["type"] != "tube" or it.get("category") != "artery" or it["id"] in skip or it.get("forView") or it.get("replaces"):
             continue
         f = BUILD / f"{it['id']}.glb"
         if not f.exists():
@@ -376,7 +390,8 @@ def carried(man: dict, carry: Carry, fields: dict) -> tuple[dict, dict]:
         D = carry(P)
         mv = np.linalg.norm(D, axis=1)
         if mv.max() < 1e-3:
-            if src != f:                 # (carried before, out of reach now)
+            if src != f:                 # (carried before, out of reach now: its file and centroid as they were)
+                it["centroid"] = kept_centroid(it["id"], kept_centroids())
                 shutil.copy(src, f)
             continue
         nodes, k, cshift = [], 0, {}
@@ -500,12 +515,15 @@ def main() -> int:
         write_glb(BUILD / f"{sid}.glb", nodes, {"id": sid})
         cents[sid] = cent
     PRE.mkdir(exist_ok=True)
+    kept = kept_centroids()
     for sid, (nodes, cshift, src) in car.items():
-        if src == BUILD / f"{sid}.glb":
+        if src == BUILD / f"{sid}.glb":  # (first carried: the unmoved file and centroid kept; a rerun shifts those)
             shutil.copy(src, PRE / f"{sid}.glb")
+            kept[sid] = items[sid]["centroid"]
+        c = kept_centroid(sid, kept)
         write_glb(BUILD / f"{sid}.glb", nodes, {"id": sid, STAMP: True})
-        c = items[sid]["centroid"]
         cents[sid] = {s: (np.array(c[s]) + cshift.get(s, next(iter(cshift.values())))).round(2).tolist() for s in c}
+    PRE_CENTROIDS.write_text(json.dumps(kept, indent=1))
     after_g = {sid: read_glb_full(BUILD / f"{sid}.glb") for sid in [*car, "sb_basilar_artery"]}
     report["joins"] = joins(before_g, after_g, list(car))
     nv = {}
