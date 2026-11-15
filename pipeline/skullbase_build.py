@@ -695,7 +695,12 @@ def validate() -> int:
         check(len(floor_lms) == 10, f"{len(floor_lms)} landmarks on the floor of the fourth ventricle")
         check(names.get("Optic chiasm", {}).get("dataset") == "rule" and "Optic tract" in names, "the optic chiasm not drawn by rule, or no optic tract")
         surf = fit["pfossa"].get("ontoSurface", {})
-        check(len(surf) == 6 and all(v["maxMm"] <= 6 for v in surf.values()), f"cerebellar arteries onto the surface: {surf}")
+        # (moved up to 8.5 mm: the PICA ran deep in Z-Anatomy's lobules, which the step had filled as a shell)
+        check(len(surf) == 6 and all(v["maxMm"] <= 10 for v in surf.values()), f"cerebellar arteries onto the surface: {surf}")
+        inh = fit["pfossa"].get("arteriesInHindbrain", {})
+        check(len(inh) == 3 and all(share < 0.03 and deep < 1.0 for sides in inh.values() for poses in sides.values()
+                                    for share, deep in poses.values()),
+              f"cerebellar arteries inside the hindbrain (share of the tube > 0.3 mm in, deepest mm, per pose): {inh}")
         # the tumours (skullbase_v3_tumours.py with SB_PROFILE=v1): each drawn and graded as meant, the pushed copies' parts present
         import skullbase_v3_tumours as TM
         for ok, msg in TM.check(m["structures"], prefix=PREFIX):

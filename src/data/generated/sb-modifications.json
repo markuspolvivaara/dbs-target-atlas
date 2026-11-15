@@ -951,49 +951,49 @@
    "metrics": {
     "ontoSurface": {
      "Anterior inferior cerebellar artery.l": {
-      "points": 171,
-      "maxMm": 2.1
+      "points": 164,
+      "maxMm": 2.28
      },
      "Anterior inferior cerebellar artery.r": {
-      "points": 171,
-      "maxMm": 2.69
+      "points": 165,
+      "maxMm": 3.12
      },
      "Posterior inferior cerebellar artery.l": {
-      "points": 662,
-      "maxMm": 3.32
+      "points": 1211,
+      "maxMm": 8.38
      },
      "Posterior inferior cerebellar artery.r": {
-      "points": 686,
-      "maxMm": 3.27
+      "points": 1218,
+      "maxMm": 8.46
      },
      "Superior cerebellar artery.l": {
-      "points": 258,
-      "maxMm": 1.53
+      "points": 363,
+      "maxMm": 4.98
      },
      "Superior cerebellar artery.r": {
-      "points": 253,
-      "maxMm": 1.48
+      "points": 363,
+      "maxMm": 4.97
      }
     },
     "clear": {
-     "containedPushed": 16,
-     "inVesselBefore": 2823,
+     "containedPushed": 0,
+     "inVesselBefore": 4994,
      "inBoneBefore": 5016,
-     "inVesselAfter": 136,
-     "inBoneAfter": 14,
-     "maxMovedMm": 6.38
+     "inVesselAfter": 34,
+     "inBoneAfter": 16,
+     "maxMovedMm": 6.47
     },
     "carried": {
-     "Anterior inferior cerebellar artery": 16.84,
-     "Posterior inferior cerebellar artery": 15.97,
-     "Superior cerebellar artery": 11.98
+     "Anterior inferior cerebellar artery": 16.82,
+     "Posterior inferior cerebellar artery": 16.76,
+     "Superior cerebellar artery": 12.49
     }
    },
    "validation": {
-    "inBoneAfter": 14,
-    "inVesselAfter": 136
+    "inBoneAfter": 16,
+    "inVesselAfter": 34
    },
-   "revision": "d18ac37",
+   "revision": "5d4e8f4",
    "date": "2026-11-15"
   },
   {
@@ -1194,16 +1194,16 @@
     },
     "carried": {
      "sb_anterior_inferior_cerebellar_artery": {
-      "maxMovedMm": 1.13,
-      "vertsMoved": 186,
-      "verts": 1060,
+      "maxMovedMm": 0.89,
+      "vertsMoved": 184,
+      "verts": 1068,
       "deepInBone": [
-       104,
-       84
+       92,
+       66
       ],
       "inBrainstem": [
-       11,
-       16
+       0,
+       0
       ]
      },
      "sb_posterior_cerebral_artery": {
@@ -1233,12 +1233,12 @@
       ]
      },
      "sb_superior_cerebellar_artery": {
-      "maxMovedMm": 1.31,
-      "vertsMoved": 170,
-      "verts": 4108,
+      "maxMovedMm": 1.26,
+      "vertsMoved": 167,
+      "verts": 4204,
       "deepInBone": [
-       103,
-       49
+       83,
+       36
       ],
       "inBrainstem": [
        0,
@@ -1261,8 +1261,8 @@
     },
     "joins": {
      "sb_anterior_inferior_cerebellar_artery": [
-      0.25,
-      0.26
+      0.31,
+      0.18
      ],
      "sb_posterior_cerebral_artery": [
       0.0,
@@ -1273,8 +1273,8 @@
       4.81
      ],
      "sb_superior_cerebellar_artery": [
-      0.26,
-      0.14
+      0.23,
+      0.24
      ],
      "sb_vertebral_artery": [
       0.0,
@@ -1291,16 +1291,16 @@
       0.44
      ],
      "Trochlear nerve (IV) / Superior cerebellar artery": [
-      0.37,
-      0.34
+      0.69,
+      0.68
      ],
      "Trigeminal nerve (V) / Superior cerebellar artery": [
-      1.38,
-      1.38
+      1.11,
+      1.11
      ],
      "Abducens nerve (VI) / Anterior inferior cerebellar artery": [
-      0.13,
-      0.1
+      0.2,
+      0.2
      ],
      "Abducens nerve (VI) / Vertebral artery": [
       0.28,
@@ -1311,7 +1311,7 @@
    "validation": {
     "check": "skullbase_build.py finalize: the sinuses at the confluence, the basilar artery and the middle meningeal artery out of the bone, the latter through its foramen, every junction with the basilar kept"
    },
-   "revision": "d18ac37",
+   "revision": "5d4e8f4",
    "date": "2026-11-15"
   },
   {

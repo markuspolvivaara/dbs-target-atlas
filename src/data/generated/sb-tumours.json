@@ -125,7 +125,7 @@
   "1": {
    "ml": 0.15,
    "canalMm": 13.3,
-   "porusToBrainstemMm": 4.1
+   "porusToBrainstemMm": 4.0
   },
   "2": {
    "centre": [
@@ -141,8 +141,8 @@
    "push": {
     "pointsInside": 168,
     "leftInside": 0,
-    "rounds": 50,
-    "maxMovedMm": 24.23
+    "rounds": 41,
+    "maxMovedMm": 21.7
    },
    "nerves": {
     "Facial nerve (VII)": {
@@ -154,51 +154,51 @@
   },
   "3": {
    "centre": [
-    25.5,
-    -32.5,
+    24.5,
+    -29.5,
     -16.5
    ],
    "diameterMm": 25.0,
-   "extrameatalMaxMm": 26.8,
-   "toBrainstemMm": -5.1,
-   "fromBoneMm": 2.3,
-   "ml": 5.59,
+   "extrameatalMaxMm": 24.1,
+   "toBrainstemMm": -5.0,
+   "fromBoneMm": 0.9,
+   "ml": 4.54,
    "push": {
-    "pointsInside": 4180,
+    "pointsInside": 3264,
     "leftInside": 0,
-    "rounds": 56,
-    "maxMovedMm": 25.46
+    "rounds": 38,
+    "maxMovedMm": 30.6
    },
    "nerves": {
     "Accessory nerve (XI)": {
-     "pointsInside": 46,
+     "pointsInside": 34,
      "leftInside": 0,
-     "maxMovedMm": 1.9
+     "maxMovedMm": 1.8
     },
     "Anterior inferior cerebellar artery": {
-     "pointsInside": 45,
-     "leftInside": 10,
-     "maxMovedMm": 1.2
+     "pointsInside": 47,
+     "leftInside": 26,
+     "maxMovedMm": 2.4
     },
     "Facial nerve (VII)": {
-     "pointsInside": 78,
+     "pointsInside": 84,
      "leftInside": 0,
-     "maxMovedMm": 4.0
+     "maxMovedMm": 7.3
     },
     "Glossopharyngeal nerve (IX)": {
-     "pointsInside": 82,
+     "pointsInside": 78,
      "leftInside": 0,
      "maxMovedMm": 3.9
     },
     "Posterior inferior cerebellar artery": {
-     "pointsInside": 13,
+     "pointsInside": 2,
      "leftInside": 0,
-     "maxMovedMm": 1.1
+     "maxMovedMm": 0.2
     },
     "Vagus nerve (X)": {
-     "pointsInside": 126,
+     "pointsInside": 138,
      "leftInside": 0,
-     "maxMovedMm": 2.2
+     "maxMovedMm": 3.4
     }
    }
   },
@@ -214,21 +214,21 @@
    "fromBoneMm": 5.0,
    "ml": 15.73,
    "push": {
-    "pointsInside": 8561,
+    "pointsInside": 8557,
     "leftInside": 0,
-    "rounds": 7,
-    "maxMovedMm": 43.89
+    "rounds": 8,
+    "maxMovedMm": 43.76
    },
    "nerves": {
     "Accessory nerve (XI)": {
-     "pointsInside": 60,
+     "pointsInside": 62,
      "leftInside": 0,
      "maxMovedMm": 2.0
     },
     "Anterior inferior cerebellar artery": {
      "pointsInside": 48,
-     "leftInside": 0,
-     "maxMovedMm": 1.5
+     "leftInside": 13,
+     "maxMovedMm": 1.8
     },
     "Facial nerve (VII)": {
      "pointsInside": 94,
@@ -238,12 +238,12 @@
     "Glossopharyngeal nerve (IX)": {
      "pointsInside": 167,
      "leftInside": 0,
-     "maxMovedMm": 4.4
+     "maxMovedMm": 4.3
     },
     "Posterior inferior cerebellar artery": {
-     "pointsInside": 49,
-     "leftInside": 6,
-     "maxMovedMm": 4.3
+     "pointsInside": 9,
+     "leftInside": 0,
+     "maxMovedMm": 0.3
     },
     "Vagus nerve (X)": {
      "pointsInside": 149,
@@ -291,7 +291,7 @@
     11.7
    ],
    "diameterRuleMm": 20.0,
-   "ml": 1.58,
+   "ml": 1.6,
    "normal": [
     0.0,
     -0.76,
@@ -316,17 +316,17 @@
     -14.46
    ],
    "diameterRuleMm": 28.0,
-   "ml": 8.22,
+   "ml": 8.24,
    "normal": [
     -0.71,
     -0.68,
     0.19
    ],
    "push": {
-    "pointsInside": 4179,
+    "pointsInside": 4198,
     "leftInside": 0,
     "rounds": 5,
-    "maxMovedMm": 22.65
+    "maxMovedMm": 22.59
    }
   },
   "foramen_magnum": {
@@ -348,7 +348,7 @@
     0.0
    ],
    "push": {
-    "pointsInside": 850,
+    "pointsInside": 854,
     "leftInside": 0,
     "rounds": 5,
     "maxMovedMm": 15.75

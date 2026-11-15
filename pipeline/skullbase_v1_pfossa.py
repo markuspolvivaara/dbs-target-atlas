@@ -179,14 +179,11 @@ def onto_surface(ex: dict, parts: dict) -> dict:
     shape = tuple(np.ceil((allv.max(0) + 6 - lo) / SURFACE_STEP).astype(int) + 1)
     solid = np.zeros(shape, bool)
     for v, t, _ in parts.values():
-        m = trimesh.Trimesh(v, t, process=False)
-        if m.is_watertight:
-            solid |= fill(v, t, lo, shape, SURFACE_STEP)
-        else:      # (an open part: what its surface, a voxel thick, encloses)
-            P = np.vstack([v, m.sample(int(m.area / (0.25 * SURFACE_STEP ** 2)), seed=0)])
-            sh = np.zeros(shape, bool)
-            sh[tuple(np.clip(np.rint((P - lo) / SURFACE_STEP).astype(int), 0, np.array(shape) - 1).T)] = True
-            solid |= ndimage.binary_fill_holes(sh)
+        # (by parity: most of Z-Anatomy's parts are not closed as stored, their seams' vertices doubled, yet each
+        # encloses a clear volume, which the parity fill finds; filling the holes of a one-voxel shell of their surface
+        # found a fifth of it or less (the inferior semilunar lobule 2.5 of its 18.1 ml), so the arteries running
+        # through the lobules were left there: half of the PICA)
+        solid |= fill(v, t, lo, shape, SURFACE_STEP)
     sd = SBB2.sdf(solid, SURFACE_STEP)                # (positive outside)
     grad = np.stack(np.gradient(sd, SURFACE_STEP))
 
@@ -274,6 +271,13 @@ def carry_arteries(ex: dict, parts: dict, moves: dict, rs_moves: dict, fl_moves:
     P = np.vstack([parts[n][0] for n in parts])
     D = np.vstack([np.c_[moves[n], rs_moves[n], fl_moves[n], flb_moves[n]] for n in parts])
     tree = cKDTree(P)
+    # the hindbrain at rest and as each shape poses it, its distance field: the carried tubes are pushed out of it where
+    # the nearest-vertex carry left them inside (the shapes move the cerebellum unevenly near an artery). The far
+    # lateral view's second shape is used with the first: its pose is the two together
+    sh = {n: np.c_[moves[n], rs_moves[n], fl_moves[n], flb_moves[n]] for n in parts}
+    rest = hindbrain_field({n: (parts[n][0], parts[n][1]) for n in parts})
+    posed = [hindbrain_field({n: (parts[n][0] + sh[n][:, 3 * k:3 * k + 3] + (sh[n][:, 6:9] if k == 3 else 0), parts[n][1])
+                              for n in parts}) for k in range(4)]
     out = {}
     for base in sorted({n.rsplit(".", 1)[0] for n, ln in ex["lines"].items() if ln.get("kind") == "artery"} & set(CARRIED)):
         f = BUILD / f"{SBld.slug(base)}.glb"
@@ -287,15 +291,27 @@ def carry_arteries(ex: dict, parts: dict, moves: dict, rs_moves: dict, fl_moves:
             if not ts:
                 continue
             pos, nrm, tri = np.vstack(vs), np.vstack(ns), np.vstack(ts)
+            A = BD.adjacency(np.array(tri, int), len(pos)) + sp.identity(len(pos))
+            deg = np.asarray(A.sum(1)).ravel()[:, None]
+            pos = pos + out_of(pos, *rest, A, deg)       # (at rest too, where the path's bends were eased)
             d, j = tree.query(pos, k=CARRY_K)
             w = np.clip((CARRY_FAR_MM - d.mean(1)) / (CARRY_FAR_MM - CARRY_NEAR_MM), 0, 1)
             M = D[j].mean(1) * w[:, None]
             # (each cross-section moved as one: the moves averaged over the tube's own mesh, CARRY_SMOOTH rounds)
-            A = BD.adjacency(np.array(tri, int), len(pos)) + sp.identity(len(pos))
-            deg = np.asarray(A.sum(1)).ravel()[:, None]
             for _ in range(CARRY_SMOOTH):
                 M = (A @ M) / deg
+            for k, (lo_, sd_, gr_) in enumerate(posed):
+                base_ = pos + M[:, 3 * k:3 * k + 3] + (M[:, 6:9] if k == 3 else 0)
+                M[:, 3 * k:3 * k + 3] += out_of(base_, lo_, sd_, gr_, A, deg)
             nodes.append({"name": name, "positions": pos, "normals": nrm, "indices": np.array(tri, int), "mode": TRIANGLES, "M": M})
+        # how much of the tube lies inside the hindbrain (more than 0.3 mm), at rest and as each shape poses it
+        def inside(X, fld):
+            v = ndimage.map_coordinates(fld[1], ((X - fld[0]) / SURFACE_STEP).T, order=1, mode="nearest")
+            return [round(float(np.mean(v < -0.3)), 4), round(float(max(0.0, -v.min())), 2)]
+        IN_HINDBRAIN[base] = {nd["name"]: {"rest": inside(nd["positions"], rest),
+                                           **{nm: inside(nd["positions"] + nd["M"][:, 3 * k:3 * k + 3] + (nd["M"][:, 6:9] if k == 3 else 0), posed[k])
+                                              for k, nm in enumerate(("telovelar", "retrosigmoid", "farLateral", "farLateralBack"))}}
+                              for nd in nodes}
         big = max((float(np.linalg.norm(nd["M"], axis=1).max()) for nd in nodes), default=0.0)
         if big < CARRY_MIN_MM:
             continue
@@ -311,6 +327,47 @@ def carry_arteries(ex: dict, parts: dict, moves: dict, rs_moves: dict, fl_moves:
     return out
 
 
+def hindbrain_field(parts: dict) -> tuple:
+    """The hindbrain's parts (each by parity, as onto_surface fills them) as one solid, its signed distance (positive
+    outside) and gradient, on a SURFACE_STEP grid."""
+    import skullbase_brain as SBB2
+    from skullbase_brain import fill
+    allv = np.vstack([v for v, _ in parts.values()])
+    lo = allv.min(0) - 6
+    shape = tuple(np.ceil((allv.max(0) + 6 - lo) / SURFACE_STEP).astype(int) + 1)
+    solid = np.zeros(shape, bool)
+    for v, t in parts.values():
+        solid |= fill(v, t, lo, shape, SURFACE_STEP)
+    sd = SBB2.sdf(solid, SURFACE_STEP)
+    return lo, sd, np.stack(np.gradient(sd, SURFACE_STEP))
+
+
+def out_of(Q: np.ndarray, lo: np.ndarray, sd: np.ndarray, grad: np.ndarray, A, deg) -> np.ndarray:
+    """A carried tube's vertices (Q, as posed) pushed out of the posed hindbrain to SURFACE_GAP_MM, the push spread over
+    the tube's own mesh (so a cross-section moves as one; a vertex's push may only grow), POSED_ROUNDS rounds."""
+    def at(F, X):
+        return ndimage.map_coordinates(F, ((X - lo) / SURFACE_STEP).T, order=1, mode="nearest")
+    Dp = np.zeros_like(Q)
+    for _ in range(POSED_ROUNDS):
+        X = Q + Dp
+        s_ = at(sd, X)
+        bad = s_ < SURFACE_GAP_MM
+        if not bad.any():
+            break
+        g = np.stack([at(grad[k], X) for k in range(3)], 1)
+        g /= np.maximum(np.linalg.norm(g, axis=1, keepdims=True), 1e-9)
+        step = np.zeros_like(Q)
+        step[bad] = ((SURFACE_GAP_MM - s_)[bad] + 0.05)[:, None] * g[bad]
+        for _ in range(POSED_SMOOTH):
+            sm = (A @ step) / deg
+            step = np.where((np.linalg.norm(sm, axis=1) >= np.linalg.norm(step, axis=1))[:, None], sm, step)
+        Dp = Dp + step
+    return Dp
+
+
+IN_HINDBRAIN: dict = {}  # (carry_arteries: per artery and side, per pose, [share of the tube > 0.3 mm in, deepest mm])
+POSED_ROUNDS = 8
+POSED_SMOOTH = 6
 CARRIED = ("Superior cerebellar artery", "Anterior inferior cerebellar artery", "Posterior inferior cerebellar artery")
 CARRY_K = 4
 CARRY_SMOOTH = 12
@@ -335,6 +392,10 @@ def main() -> int:
     # Z-Anatomy's hindbrain reaches into its own bone in places (the pons into the clivus): pushed clear as v3 clears its
     # fitted one (skullbase_pfossa.clear: off bone by BONE_GAP_MM and off the drawn arteries, the pushes spread)
     rc = PF.clear(parts, fs)
+    # the arteries again onto the hindbrain's surface as cleared: the clearance moves it (out of the bone, up to some
+    # 9 mm), back over arteries already moved out of it, and its own check reads the hindbrain's vertices, between which
+    # a thin artery passes (half of the PICA lay inside the cerebellum, up to 4.7 mm deep)
+    surf_after = onto_surface(ex, parts)
     # the retrosigmoid corridor from v1's own meatus to v1's own craniotomy
     PF.BUILD = BUILD
     PF.meatus_r = meatus_r
@@ -393,7 +454,7 @@ def main() -> int:
               "farLateral": PF.far_lateral_report(parts, fl_moves, fs),
               "farLateralBack": PF.far_lateral_back_report(parts, flb_moves, fs),
               "inBoneAtRest": in_bone, "clear": rc, "trigeminalRoot": root.round(2).tolist(), "carried": carried,
-              "ontoSurface": surf}
+              "ontoSurface": surf, "ontoSurfaceAfterClear": surf_after, "arteriesInHindbrain": IN_HINDBRAIN}
     from modifications import record
     record("sb", "skullbase_v1_pfossa", "the cerebellar arteries onto the cerebellum's surface; the hindbrain pushed off bone, the tentorium and "
            "the arteries; the arteries carried with the telovelar, retrosigmoid and far lateral shapes",

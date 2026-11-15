@@ -486,8 +486,12 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
     samples are seeded, so a rebuild gives the same files.
   - The superior, anterior inferior and posterior inferior cerebellar arteries move with the cerebellum. The trunks
     and the posterior cerebral artery stay. Where Z-Anatomy's own cerebellar arteries ran inside its cerebellum, they
-    are moved out onto its surface (up to about 3.4 mm); the path is blended back where smoothing let it sink in, and
-    bends tighter than its tube are relaxed, so the tube does not fold over itself. The hindbrain is kept under
+    are moved out onto its surface (up to about 8.5 mm, the PICA), once onto Z-Anatomy's own cerebellum and again
+    after the cerebellum is pushed out of the bone; each part is filled by parity (most of Z-Anatomy's lobules are not
+    closed as stored, and filling a shell of their surface had left half of the PICA inside them). The path is blended
+    back where smoothing let it sink in, and bends tighter than its tube are relaxed, so the tube does not fold over
+    itself. Carried with each shape, the tubes are pushed out of the cerebellum as that shape poses it (the far lateral
+    view's two together): in every pose under 2 % of a tube lies more than 0.3 mm inside, none deeper than 0.6 mm. The hindbrain is kept under
     Z-Anatomy's tentorium, which the retrosigmoid view shows.
   - The telovelar view has v3's landmarks on the floor of the fourth ventricle, placed by v3's rule over Z-Anatomy's
     own cranial nerve nuclei: the facial colliculi, the vestibular areas, the hypoglossal and vagal trigones, the

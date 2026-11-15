@@ -918,6 +918,22 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(l.morphs).toEqual({ lsoLift: 0.8, open: 0.2 });
     expect(T3.encodeSkull(l)).toContain('ll=80');
   });
+  it('v1’s cerebellar arteries lie on the cerebellum, not inside it, at rest and in every shape', async () => {
+    // (half of the PICA ran inside Z-Anatomy's lobules, up to 4.7 mm deep: the step's fill took an open lobule for a shell)
+    const pf = ((await import('../../src/data/generated/sb-v1fit.json')).default as unknown as { pfossa: {
+      arteriesInHindbrain: Record<string, Record<string, Record<string, [number, number]>>> } }).pfossa;
+    const arts = Object.keys(pf.arteriesInHindbrain);
+    expect(arts.sort()).toEqual(['Anterior inferior cerebellar artery', 'Posterior inferior cerebellar artery', 'Superior cerebellar artery']);
+    for (const [a, sides] of Object.entries(pf.arteriesInHindbrain)) {
+      for (const [sd, poses] of Object.entries(sides)) {
+        expect(Object.keys(poses).sort(), `${a} ${sd}`).toEqual(['farLateral', 'farLateralBack', 'rest', 'retrosigmoid', 'telovelar']);
+        for (const [pose, [share, deepest]] of Object.entries(poses)) {
+          expect(share, `${a} ${sd} ${pose}: share of the tube inside`).toBeLessThan(0.03);
+          expect(deepest, `${a} ${sd} ${pose}: deepest`).toBeLessThan(1.0);
+        }
+      }
+    }
+  });
   it('v1’s far lateral shapes: the tonsil lifted, the medulla opened, no more of the cerebellum in bone than at rest', async () => {
     type Fl = { inBoneAfter: number; inVesselAfter: number; maxMovedMm: number };
     const pf = ((await import('../../src/data/generated/sb-v1fit.json')).default as unknown as { pfossa: {
