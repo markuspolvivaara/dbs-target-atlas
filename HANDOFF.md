@@ -35,8 +35,11 @@ commit and push it.
   8. Foramina transversaria: `73cb75e` (the cards lead with the CT's own bone at 200 HU, the drawn bone's beside where
      they differ by 5 mm² or more; opening the foramina in the drawn bone was tried and left: at C3 the CT's thin,
      grainy ring gives no stable edge).
-- Still open: 9 P1-03 (the views' shared copies). Also: v1's posterior fossa rebuilt with the far lateral sliders
-  (previewed, not committed: the user is to say keep or not) and v1's cameras.
+  9. P1-03, the per-view copies (56 % of the default skull base's mesh bytes, 49 % of v1's): left as they are, the
+     user's choice (2026-11-15). Loading per view keeps them out of readers' downloads; sharing a copy's untouched
+     side would save about 7 MB of deploy but make a direct visit to an approach load the whole original too.
+- Still open: v1's posterior fossa rebuilt with the far lateral sliders (previewed, not committed: the user is to
+  say keep or not) and v1's cameras.
 - Pipeline data: the worktree has its own `pipeline/data/build` (its `raw` is a link to the main checkout's). These
   fixes changed `skullbase` (v1), `skullbase-v3` and `skullbase-ct` there; copy from the worktree, not the main
   checkout, before rebuilding those on the MacBook.
