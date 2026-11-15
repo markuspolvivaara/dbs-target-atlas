@@ -30,8 +30,10 @@ commit and push it.
   6. Tumours run to run: `652c4c9` (the tumour step seeded, so every rebuild draws the same; v3's Koos II is now 8 mm;
      v1's vessels step moved before the tumours) and `af08633` (v1's Koos IV closed: the Koos grid reaches past
      the largest ball; it had been cut open at the grid's lateral edge).
-- Still open, in order: 7 the T10–T11 band (MC-02), 8 whether the C3 foramina transversaria are reported on the
-  unsmoothed CT, 9 P1-03 (the views' shared copies). Also: v1's posterior fossa rebuilt with the far lateral sliders
+  7. MC-02: `a6b5798` (the T10–T11 disc is calcified on this CT, as the user reads it: drawn by rule in the dense band,
+     the two bodies cut back to it, its calcification from the CT inside it; `CALCIFIED_DISCS` in `spine_build.py`).
+- Still open, in order: 8 whether the C3 foramina transversaria are reported on the unsmoothed CT, 9 P1-03 (the
+  views' shared copies). Also: v1's posterior fossa rebuilt with the far lateral sliders
   (previewed, not committed: the user is to say keep or not) and v1's cameras.
 - Pipeline data: the worktree has its own `pipeline/data/build` (its `raw` is a link to the main checkout's). These
   fixes changed `skullbase` (v1), `skullbase-v3` and `skullbase-ct` there; copy from the worktree, not the main
