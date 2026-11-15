@@ -320,7 +320,9 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   take it back to the brain at rest. The pterional, orbitozygomatic, interhemispheric, retrosigmoid and far lateral views
   look in from the direction that showed the most of the structures each view's text names (a search of 642 directions
   round each opening in the site audit of November 2026, then chosen by eye; `Viewer.goPreset`); the telovelar view
-  keeps its own, and v1 its views' earlier ones. The tumours drawn in one view are framed alike, and going from one to
+  keeps its own. v1 opens its views from the same directions (checked on renders of both models), except the
+  retrosigmoid: on Z-Anatomy's skull the opening lies level with the porus and the view from below meets the mastoid,
+  so v1 looks in level with it. The tumours drawn in one view are framed alike, and going from one to
   another leaves the camera and the sliders where the reader left them.
 - **Orbitozygomatic and far lateral views** (`pipeline/skullbase_v3_approach.py`; `skullbase_v3.py approaches` writes
   their items into the manifest without the rest of that step). The orbitozygomatic craniotomy is the pterional flap and a

@@ -1062,10 +1062,11 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     const cam = Object.fromEntries(G3.SB_GROUPS.filter((g) => g.kind === 'approach').map((g) => [g.id, g.camera]));
     expect(cam).toMatchObject({ transsylvian: 'pterional', orbitozygomatic: 'orbitozygomaticFront', interhemispheric: 'vertexFront',
       retrosigmoid: 'retrosigmoidLateral', far_lateral: 'farLateralLow', telovelar: 'suboccipital' });
-    // v1 (this file's default model) keeps the directions its views opened with
+    // v1 (this file's default model) opens its views as v3 does, except the retrosigmoid: on Z-Anatomy's skull v3's view
+    // from below meets the mastoid, so it keeps its level one
     expect(Object.fromEntries(SB_GROUPS.filter((g) => g.kind === 'approach').map((g) => [g.id, g.camera]))).toMatchObject({
-      transsylvian: 'anterolateral', orbitozygomatic: 'orbitozygomatic', interhemispheric: 'vertex', retrosigmoid: 'retrosigmoidLevel',
-      far_lateral: 'farLateral', telovelar: 'suboccipital' });
+      transsylvian: 'pterional', orbitozygomatic: 'orbitozygomaticFront', interhemispheric: 'vertexFront', retrosigmoid: 'retrosigmoidLevel',
+      far_lateral: 'farLateralLow', telovelar: 'suboccipital' });
     // every tumour drawn in one view is framed on the same structures, so that going from one to another keeps the camera
     const tumours = G3.SB_GROUPS.filter((g) => g.tumour);
     const byView = new Map<string, typeof tumours>();
