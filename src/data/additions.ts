@@ -7,8 +7,14 @@ import type { Reference } from './schema';
  * Optic tract as a GPi landmark. (The optic *radiation* runs from the lateral
  * geniculate to occipital cortex and is not near the pallidum.)
  * Red nucleus as an STN landmark (with a dissenting study for balance).
+ *
+ * The site audit's review (November 2026), A-001: the Parkinson's view of stimulation-induced dyskinesia rebuilt from
+ * Tsuboi 2021 (checked against its abstract; the full text is not open access), and the lenticular fasciculus's card,
+ * which had carried that view's claim, from Horn 2022 (full text).
  */
 export const ADDITION_REFERENCES: Reference[] = [
+  { id: 'tsuboi2021', topic: 'pd', shortLabel: 'Tsuboi 2021', url: 'https://pubmed.ncbi.nlm.nih.gov/33002233/',
+    citation: "Tsuboi T, Charbel M, Peterside DT, Rana M, Elkouzi A, Deeb W, et al. Pallidal connectivity profiling of stimulation-induced dyskinesia in Parkinson's disease. Mov Disord. 2021;36(2):380–388. doi:10.1002/mds.28324. Checked against its abstract: the full text is not open access." },
   { id: 'gruber2018', topic: 'dyst', shortLabel: 'Gruber 2018', url: 'https://doi.org/10.1016/j.brs.2018.08.006',
     citation: 'Gruber D, Südmeyer M, Deuschl G, Falk D, Krauss JK, Mueller J, et al. Neurostimulation in tardive dystonia/dyskinesia: a delayed start, sham stimulation-controlled randomized trial. Brain Stimul. 2018;11(6):1368–1377. doi:10.1016/j.brs.2018.08.006. (Abstract only: not open access.)' },
   { id: 'vitek1998', topic: 'img', shortLabel: 'Vitek 1998', url: 'https://doi.org/10.3171/jns.1998.88.6.1027',
@@ -28,6 +34,8 @@ export const ADDITION_REFERENCES: Reference[] = [
 ];
 
 export const ADDITION_DESCRIPTIONS: Record<string, { text: string; refIds: string[] }> = {
+  lf: { text: 'With the ansa lenticularis, one of the pallidothalamic projections that cross the GPi. In generalized dystonia both were associated with optimal outcome; in cervical dystonia the lenticular fasciculus was associated with a worse one.', refIds: ['horn2022'] },
+  gpe: { text: 'After pallidal DBS for Parkinson\'s disease, the contacts that induced dyskinesia lay mainly in the dorsal GPi and GPe.', refIds: ['tsuboi2021'] },
   optic_tract: {
     text: 'The optic tract runs beneath the posteroventral GPi and is a landmark for pallidal targeting. During surgery it is identified by stimulation-evoked flashes of light, so the lesion or lead can spare it; hyperactive GPi cells lay medial to its lateral border and at least 5.1 mm above its dorsal surface. Visual field defects after posterior pallidotomy were linked to lesions adjacent to the tract. An inversion-recovery MRI sequence can show the GPi and the optic tract directly.',
     refIds: ['vitek1998', 'yokoyama2002', 'biousse1998', 'reich2000'],

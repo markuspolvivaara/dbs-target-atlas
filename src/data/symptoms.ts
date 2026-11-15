@@ -54,11 +54,19 @@ export const SYMPTOMS: SymptomInput[] = [
     camera: 'coronal',
   },
   {
-    id: 'pd-dyskinesia', indicationId: 'pd', name: 'Dyskinesia',
-    summary: 'Stimulation-induced dyskinesia from GPi linked to lenticular-fasciculus connectivity.',
-    structures: ['gpi', 'gpi_sm'], tracts: ['lf', 'al'], corticalAreas: [], targetId: 't-atlas-gpi-sm',
-    evidence: [{ claim: 'Stimulation-induced dyskinesia from GPi linked to lenticular-fasciculus connectivity', refIds: ['sid'] }],
-    note: 'Pallidofugal fibres shown with the ansa lenticularis and lenticular fasciculus of the DBS Tractography Atlas (Middlebrooks 2020). The marker is the DISTAL sensorimotor GPi centroid (atlas coordinate).',
+    // (a side effect of pallidal stimulation, not a symptom it treats: where it arose, so no target marker; the audit's
+    // finding A-001: the view had put it in the sensorimotor GPi with the ansa lenticularis as a dyskinesia tract,
+    // against its own source)
+    id: 'pd-dyskinesia', indicationId: 'pd', name: 'Stimulation-induced dyskinesia',
+    summary: 'A side effect of pallidal stimulation: in 20 of 68 patients, the contacts that induced dyskinesia lay more dorsally and anteriorly than those that did not, mainly in the dorsal GPi and GPe, and connected more to associative cortex and SMA/premotor cortex.',
+    structures: ['gpi', 'gpe'], tracts: [], corticalAreas: ['sma', 'pmd', 'pmv'], targetId: null,
+    evidence: [
+      { claim: 'Stimulation-induced dyskinesia in 20 of 68 patients (29 %) after pallidal DBS; the contacts that induced it lay more dorsally and anteriorly than those that did not, mainly in the dorsal GPi and GPe', refIds: ['tsuboi2021'] },
+      { claim: 'Those contacts connected more to associative cortex and SMA/premotor cortex; those that did not, more to primary sensory cortex, cerebellum, STN and motor thalamus', refIds: ['tsuboi2021'] },
+      { claim: 'Preliminary, in 16 patients: the contacts that induced dyskinesia connected less through the ansa lenticularis, whose involvement may suppress it', refIds: ['sid'] },
+    ],
+    note: 'Where stimulation induced dyskinesia, not a target: the view has no target marker. The GPi and GPe are shown whole; the contacts lay in their dorsal, anterior parts. Tsuboi 2021 was read as its abstract (the full text is not open access); the ansa lenticularis finding is from the same group\'s conference abstract and preliminary, so no tract is drawn as the dyskinesia tract.',
+    noteRefIds: ['tsuboi2021', 'sid'],
     camera: 'coronal',
   },
   {

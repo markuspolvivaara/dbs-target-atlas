@@ -7,9 +7,16 @@ commit and push it.
 
 - The site audit of 10–11 Nov is on branch `audit/2026-11-10` (`audit/README.md`: findings, questions for an expert,
   a fix order). Batches 1–6 of its fixes are merged (`main` = `95b0b09`, 2026-11-13).
-- Now: the audit's decisions on the models, one at a time with the user, on branch `fix/surgical-views` (off `main` at
-  `95b0b09`) in the worktree `.claude/worktrees/audit-fixes`. **Local commits only: not pushed, no pull request.** Push
-  or open one only when the user asks.
+- The audit's decisions on the models were made one at a time with the user on branch `fix/surgical-views` and are
+  merged (PR 11, `main` = `f140650`, 2026-11-15; then Dependabot's PR 7, `bcd1a12`).
+- Now: B1, the DBS views review (audit A-001..A-003), on branch `fix/b1-dbs-views` (off `main` at `bcd1a12`) in the
+  same worktree `.claude/worktrees/audit-fixes`. **Local commits only: not pushed, no pull request.** Push or open one
+  only when the user asks.
+  - A-001, the PD dyskinesia view (the user's choice, C = both):
+    - A: the view is now "Stimulation-induced dyskinesia" (Tsuboi 2021: dorsal GPi and GPe, associative and
+      SMA/premotor connectivity), a side effect with no target marker and no tract;
+    - B: a separate view of how DBS treats levodopa-induced dyskinesia, built only after its sources are checked
+      and shown to the user.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -282,7 +289,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (404 tests on `fix/surgical-views`)
+  - `npx vitest run` (409 tests on `fix/b1-dbs-views`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`

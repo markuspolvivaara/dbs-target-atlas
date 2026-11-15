@@ -49,8 +49,17 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
       expect(r.topic, k).toBe(src.R[k].g);
     }
   });
-  // review of 3–4 Nov 2026, C8: "No level I studies exist" no longer holds (Gruber 2018, a sham-controlled RCT)
-  const CORRECTED: Record<string, { caveat?: string; caveatRefIds?: string[]; addEvidence?: { claim: string; refIds: string[] }[] }> = {
+  // review of 3–4 Nov 2026, C8: "No level I studies exist" no longer holds (Gruber 2018, a sham-controlled RCT);
+  // site audit, A-001 (November 2026): stimulation-induced dyskinesia arose in the dorsal GPi and GPe (Tsuboi 2021),
+  // not "from GPi linked to lenticular-fasciculus connectivity" as the original read its conference abstract
+  type Ev = { claim: string; refIds: string[] };
+  const CORRECTED: Record<string, { caveat?: string; caveatRefIds?: string[]; addEvidence?: Ev[]; replaceEvidence?: Record<string, Ev> }> = {
+    pd: {
+      replaceEvidence: {
+        'Stimulation-induced dyskinesia from GPi linked to lenticular-fasciculus connectivity':
+          { claim: 'Stimulation-induced dyskinesia after pallidal DBS arose from contacts in the dorsal GPi and GPe (20 of 68 patients)', refIds: ['tsuboi2021'] },
+      },
+    },
     tard: {
       caveat: 'Mostly uncontrolled series. The one randomized, sham-controlled trial did not reach its primary endpoint (most likely, its authors judge, because recruitment was incomplete); its secondary endpoints and open extension favoured stimulation.',
       caveatRefIds: ['macerollo2018', 'gruber2018'],
@@ -74,7 +83,7 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
       const fix = CORRECTED[o.id];
       expect(n.caveat).toBe(fix?.caveat ?? o.caveat);
       expect(n.caveatRefIds).toEqual(fix?.caveatRefIds ?? o.cref);
-      expect(n.evidence).toEqual([...o.ev.map((e) => ({ claim: e[0], refIds: e.slice(1) })), ...(fix?.addEvidence ?? [])]);
+      expect(n.evidence).toEqual([...o.ev.map((e) => fix?.replaceEvidence?.[e[0]] ?? { claim: e[0], refIds: e.slice(1) }), ...(fix?.addEvidence ?? [])]);
     }
   });
   it('maps every schematic node of an indication to a 3D structure', () => {
@@ -106,10 +115,25 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
   it('symptom summaries, notes and claims quote existing content or are labelled stand-ins', () => {
     const corpus = src.html;
     const epiClaims = new Set(EPILEPSY_INDICATION.evidence.map((e) => e.claim));
+    // views rebuilt in the site audit's review, each claim checked against these sources (A-001: Tsuboi 2021's abstract,
+    // the conference abstract read in full)
+    const REVIEWED: Record<string, string[]> = { 'pd-dyskinesia': ['tsuboi2021', 'sid'] };
     for (const s of CONTENT.symptoms) for (const e of s.evidence) {
-      const ok = s.indicationId === 'epi' ? epiClaims.has(e.claim) : corpus.includes(e.claim);
+      const ok = s.indicationId === 'epi' ? epiClaims.has(e.claim)
+        : REVIEWED[s.id] ? e.refIds.every((r) => REVIEWED[s.id].includes(r)) : corpus.includes(e.claim);
       expect(ok, `${s.id}: ${e.claim}`).toBe(true);
     }
+  });
+  it('shows stimulation-induced dyskinesia where Tsuboi 2021 found it, as a side effect with no target (audit A-001)', () => {
+    const s = CONTENT.symptoms.find((x) => x.id === 'pd-dyskinesia')!;
+    expect(s.name).toBe('Stimulation-induced dyskinesia');
+    expect(s.structures).toEqual(['gpi', 'gpe']);
+    expect(s.tracts).toEqual([]);                  // (the ansa lenticularis was drawn as a dyskinesia tract; its source says the opposite)
+    expect(s.targetId).toBeNull();
+    expect(s.summary).toMatch(/dorsal GPi and GPe/);
+    expect(s.evidence[0].refIds).toEqual(['tsuboi2021']);
+    expect(CONTENT.references.find((r) => r.id === 'tsuboi2021')!.citation).toMatch(/abstract/);
+    expect(CONTENT.structures.find((x) => x.id === 'lf')!.refIds).toEqual(['horn2022']);
   });
   it('keeps the calculator logic and text', () => {
     expect(src.html).toContain(CALC_LEDE);

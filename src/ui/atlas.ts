@@ -419,7 +419,9 @@ export class AtlasPage {
       const m = MAN.get(id)!;
       this.legend.append(li('patch', m.colour.token, m.name, id));
     }
-    if (!p.tracts.size) this.legend.append(h('li', { class: 'none' }, 'No tract has been mapped at scale for this indication yet.'));
+    // (a view drawn without tracts on purpose says why on its card: stimulation-induced dyskinesia, whose source names none)
+    const symNote = this.s.sym ? SYM.get(this.s.sym)?.note : undefined;
+    if (!p.tracts.size) this.legend.append(h('li', { class: 'none' }, symNote ? 'No tract is drawn for this view: its card says why.' : 'No tract has been mapped at scale for this indication yet.'));
     if (this.s.hidden.length || this.s.sel) {
       this.legend.append(h('li', { class: 'lg-actions' },
         this.s.hidden.length ? h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.hidden = []; }) }, `Show all (${this.s.hidden.length} hidden)`) : null,

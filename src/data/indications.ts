@@ -38,7 +38,7 @@ export const INDICATIONS: IndicationInput[] = [
       { claim: 'GPi improved ON-medication disability more; STN allowed larger levodopa reduction', refIds: ['meta2014'] },
       { claim: 'STN carries more risk to speech and mood', refIds: ['review2013'] },
       { claim: 'Tremor responds whichever target is used', refIds: ['wong'] },
-      { claim: 'Stimulation-induced dyskinesia from GPi linked to lenticular-fasciculus connectivity', refIds: ['sid'] },
+      { claim: 'Stimulation-induced dyskinesia after pallidal DBS arose from contacts in the dorsal GPi and GPe (20 of 68 patients)', refIds: ['tsuboi2021'] },
       { claim: 'Combined STN plus SNr may help freezing, with mixed results', refIds: ['weiss2013', 'artusi2025', 'mds2024'] },
       { claim: 'Adaptive DBS approved in 2025; ADAPT-PD met its primary endpoint', refIds: ['adapt', 'fda2025'] },
     ],

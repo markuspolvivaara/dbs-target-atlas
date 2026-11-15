@@ -30,7 +30,6 @@ const DESCRIPTIONS: Record<string, { text: string; refIds: string[] }> = {
   s1: { text: 'Dystonia response maps to sensorimotor-connected circuits.', refIds: ['hollunder2024'] },
   hdp: { text: 'Benefit follows the hyperdirect pathway from SMA and M1 into the supero-lateral STN.', refIds: ['akram2017', 'peeters2024'] },
   al: { text: 'The best stimulation volume sits in posteroventral GPi and extends into subpallidal white matter, implicating the ansa lenticularis.', refIds: ['reich2019'] },
-  lf: { text: 'Stimulation-induced dyskinesia from GPi linked to lenticular-fasciculus connectivity.', refIds: ['sid'] },
   drtt: { text: 'Efficacy at both Vim and PSA tracks how close the active contact is to the DRTT.', refIds: ['poster'] },
   ndrtt: { text: 'Efficacy at both Vim and PSA tracks how close the active contact is to the DRTT.', refIds: ['poster'] },
   cst: { text: 'DRTT, with the pyramidal tract and medial lemniscus as borders in dual-tract models.', refIds: ['jns2021'] },
