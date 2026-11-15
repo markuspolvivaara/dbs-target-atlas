@@ -110,13 +110,15 @@ def origin() -> np.ndarray:
     return nib.affines.apply_affine(img.affine, [l5["X"], l5["Y"], l5["Z"]])
 
 
-def bone_volume(ct: np.ndarray, sel: np.ndarray, vox_mm: float, other: np.ndarray | None = None) -> np.ndarray:
+def bone_volume(ct: np.ndarray, sel: np.ndarray, vox_mm: float, other: np.ndarray | None = None,
+                cut: np.ndarray | None = None) -> np.ndarray:
     """Volume whose BONE_HU isosurface is the vertebra: the CT inside the mask dilated by MASK_REACH_MM, with the
     mask's eroded core held above the threshold (cancellous bone can be darker than BONE_HU) and everything
     outside the dilated mask held below it (ribs). `other` is the other bones' masks on the same grid (the
     neighbouring vertebrae): the dilated mask does not reach into them, and where it and theirs meet in unlabelled
     space a voxel goes to the nearer mask (one as near to both goes to neither), so that two neighbours share no bone
-    and the joint between them is their boundary."""
+    and the joint between them is their boundary. `cut`: voxels held below the threshold whatever the CT (a calcified
+    disc drawn between two bodies, disc_cut)."""
     reach = max(1, int(round(MASK_REACH_MM / vox_mm)))
     near = ndimage.binary_dilation(sel, iterations=reach)
     core = ndimage.binary_erosion(sel, iterations=reach)
@@ -126,14 +128,19 @@ def bone_volume(ct: np.ndarray, sel: np.ndarray, vox_mm: float, other: np.ndarra
             near &= ~other & (ndimage.distance_transform_edt(~sel) < ndimage.distance_transform_edt(~other))
     vol = np.where(near, ct, -1000.0).astype(np.float32)
     vol[core] = np.maximum(vol[core], BONE_HU + 400)
+    if cut is not None:
+        vol[cut] = -1000.0
     return vol
 
 
-def drawn_solid(ct: np.ndarray, m: np.ndarray, vox_mm: float, sacrum: np.ndarray | None = None) -> np.ndarray:
+def drawn_solid(ct: np.ndarray, m: np.ndarray, vox_mm: float, sacrum: np.ndarray | None = None,
+                aff: np.ndarray | None = None) -> np.ndarray:
     """The vertebrae as they are drawn, as one solid on a block of the CT: each label's surface volume (bone_volume)
     smoothed and cut at BONE_HU, exactly as vertebrae() cuts the meshes, and the sacrum's mask smoothed as its surface
-    is; cavities closed in on all sides are filled."""
+    is; cavities closed in on all sides are filled. `aff` (the block's voxels to RAS mm): the bodies cut back to a
+    calcified disc as vertebrae() cuts them."""
     out = np.zeros(m.shape, bool)
+    cut_all = disc_cut(m.shape, aff) if aff is not None else None
     for lab, box in enumerate(ndimage.find_objects(m), 1):
         if box is None or lab not in VERSE_LEVELS:
             continue
@@ -141,7 +148,8 @@ def drawn_solid(ct: np.ndarray, m: np.ndarray, vox_mm: float, sacrum: np.ndarray
         other = m[crop] > 0
         if sacrum is not None:
             other = other | sacrum[crop]
-        out[crop] |= ndimage.gaussian_filter(bone_volume(ct[crop], m[crop] == lab, vox_mm, other), SIGMA_VOX) > BONE_HU
+        cut = cut_all[crop] if cut_all is not None else None
+        out[crop] |= ndimage.gaussian_filter(bone_volume(ct[crop], m[crop] == lab, vox_mm, other, cut), SIGMA_VOX) > BONE_HU
     if sacrum is not None:
         out |= ndimage.gaussian_filter(sacrum.astype(np.float32), 1.0) > 0.5
     return ndimage.binary_fill_holes(out)
@@ -149,6 +157,13 @@ def drawn_solid(ct: np.ndarray, m: np.ndarray, vox_mm: float, sacrum: np.ndarray
 
 SHARED_DEPTH_MM = 0.5   # a vertex counts as inside its neighbour's bone from this depth (the meshes are simplified and
                         # the depth is read off a voxel grid: less is their own tolerance)
+
+
+def _unshift(aff_o: np.ndarray) -> np.ndarray:
+    """A block affine moved to the origin (L5's centre) back to the CT's RAS millimetres."""
+    a = aff_o.copy()
+    a[:3, 3] += origin()
+    return a
 
 
 def neighbours(ct: np.ndarray, m: np.ndarray, crops: dict, aff_o: np.ndarray, vox: float, meshes: dict) -> list[dict]:
@@ -164,9 +179,10 @@ def neighbours(ct: np.ndarray, m: np.ndarray, crops: dict, aff_o: np.ndarray, vo
             continue
         lo, hi = np.minimum(crops[la][0], crops[lb][0]), np.maximum(crops[la][1], crops[lb][1])
         crop = tuple(slice(a, b) for a, b in zip(lo, hi))
-        ins = [ndimage.gaussian_filter(bone_volume(ct[crop], m[crop] == l, vox, m[crop] > 0), SIGMA_VOX) > BONE_HU for l in (la, lb)]
         a2 = aff_o.copy()
         a2[:3, 3] = nib.affines.apply_affine(aff_o, lo)
+        cut = disc_cut(tuple(b - a for a, b in zip(lo, hi)), _unshift(a2))
+        ins = [ndimage.gaussian_filter(bone_volume(ct[crop], m[crop] == l, vox, m[crop] > 0, cut), SIGMA_VOX) > BONE_HU for l in (la, lb)]
         inv = np.linalg.inv(a2)
         count, deepest = 0, 0.0
         for own, oth in ((la, 1), (lb, 0)):
@@ -213,9 +229,9 @@ def vertebrae(report: dict) -> list[dict]:
         if name == "L5":   # its lower neighbour is the sacrum, which is TotalSegmentator's (the drawn sacrum's mask)
             sac_l5, _ = ts_mask("total", "sacrum+vertebrae_S1", tuple(slice(sp.start + a, sp.start + b) for sp, a, b in zip(span, lo, hi)))
             other = other | sac_l5
-        sub = bone_volume(ct[crop], sel, vox, other)
         a2 = aff_o.copy()
         a2[:3, 3] = nib.affines.apply_affine(aff_o, lo)
+        sub = bone_volume(ct[crop], sel, vox, other, disc_cut(sel.shape, _unshift(a2)))
         mesh = isosurface(sub, a2, BONE_HU, SIGMA_VOX, FACES[name[0]])
         sid = level_id(name)
         c = mesh.centroid
@@ -330,8 +346,135 @@ def ts_structures(report: dict) -> list[dict]:
     return items
 
 
-DISC_PARTIAL = 0.5    # a disc narrower than this share of its neighbours' mean width is marked as drawn in part
+DISC_PARTIAL = 0.5    # a disc narrower than this share of its neighbours' mean width is not the whole disc
 DISC_SPACE_MM = 8.0   # the CT between two bodies is read on circles of this radius across the line joining their centres
+
+# Calcified discs. TotalSegmentator's disc class holds only a chip of the T10-T11 disc of this CT (0.12 ml, 9 mm from
+# side to side, where the discs above and below are 35 and 47 mm wide: the audit's finding MC-02). Between the two
+# bodies the CT shows one dense band where the neighbours show two end plates with a dark disc between them (on the
+# line joining the bodies' centres it reaches 700 HU, against end plates of about 210 HU and a disc of 90 HU at
+# T9-T10 and T11-T12), and across the spine the band is a lumpy dense mass in the middle of the disc, its ring round
+# it. Read as a calcified disc (the user, 2026-11-15). VerSe's hand-corrected masks count the band as bone, so the two
+# bodies as drawn meet there. The disc is drawn by rule instead (calcified_disc): in a frame along the line joining
+# the two bodies' centres, on the bodies' footprint (TotalSegmentator's vertebral body class, where the two masks
+# meet), round the dense band's centre (column by column, the CT's peak within CALC_SEARCH_MM of where the masks
+# meet), as thick as the band (its width at half height above the bodies' cancellous bone, the columns of the
+# footprint's middle averaged); the two bodies are cut back to it (bone_volume's `cut`). The calcification is the CT
+# above CALC_HU inside that disc, more than CALC_RIM_MM inside the bodies' edge (their cortical rim is as dense), in
+# pieces of at least CALC_MIN_ML.
+CALCIFIED_DISCS = ("T10-T11",)
+CALC_STEP_MM = 0.5          # the frame's grid
+CALC_ACROSS_MM = 30.0       # the frame reaches this far from the line joining the centres, across the spine
+CALC_ALONG_MM = 12.0        # ... and this far up and down from their midpoint
+CALC_SEARCH_MM = 4.0
+CALC_CORE_MM = 4.0          # the band's thickness is read over the footprint less this rim
+CALC_HU = 500.0
+CALC_RIM_MM = 3.0
+CALC_MIN_ML = 0.05
+_CALCIFIED: dict = {}
+
+
+def calcified_disc(pair: str) -> dict:
+    """A calcified disc drawn by rule (see CALCIFIED_DISCS), on a grid in its frame: `affine` (frame voxel -> RAS mm
+    of the CT, not moved to the origin), `disc` and `calcification` (bool), and its measures."""
+    if pair in _CALCIFIED:
+        return _CALCIFIED[pair]
+    up, down = pair.split("-")
+    img = nib.load(MASK)
+    C = centroids()
+    cu, cd = C[LABEL_OF[up]], C[LABEL_OF[down]]
+    f = (cu - cd) / np.linalg.norm(cu - cd)                                     # up the spine
+    u = np.cross(f, [0.0, 1.0, 0.0])
+    u /= np.linalg.norm(u)
+    u = u if u[0] > 0 else -u                                                   # towards the patient's right
+    w = np.cross(f, u)
+    w = w if w[1] > 0 else -w                                                   # forwards
+    mid = (cu + cd) / 2
+    n_a, n_s = int(round(2 * CALC_ACROSS_MM / CALC_STEP_MM)) + 1, int(round(2 * CALC_ALONG_MM / CALC_STEP_MM)) + 1
+    aff_f = np.eye(4)
+    aff_f[:3, :3] = np.c_[u, w, f] * CALC_STEP_MM
+    aff_f[:3, 3] = mid - CALC_ACROSS_MM * (u + w) - CALC_ALONG_MM * f
+    I, J, K = np.meshgrid(np.arange(n_a), np.arange(n_a), np.arange(n_s), indexing="ij")
+    P = nib.affines.apply_affine(aff_f, np.c_[I.ravel(), J.ravel(), K.ravel()])
+    inv = np.linalg.inv(img.affine)
+    q = nib.affines.apply_affine(inv, P)
+    lo = np.maximum(np.floor(q.min(0)).astype(int) - 2, 0)
+    hi = np.minimum(np.ceil(q.max(0)).astype(int) + 3, img.shape)
+    cr = tuple(slice(a, b) for a, b in zip(lo, hi))
+    q = (q - lo).T
+    vm, _ = load_mask(cr)
+    body, _ = ts_mask("vertebrae_body", "vertebrae_body", cr)
+    ct = ndimage.gaussian_filter(read_block(CT, cr, np.float32), 0.7)
+    lab = ndimage.map_coordinates(vm, q, order=0, mode="constant").reshape(I.shape)
+    bod = ndimage.map_coordinates(body.astype(np.uint8), q, order=0, mode="constant").reshape(I.shape) > 0
+    hu = ndimage.map_coordinates(ct, q, order=1, mode="nearest").reshape(I.shape)
+    del vm, body, ct
+    # where the two bodies' masks meet, column by column: the lower one's top and the upper one's bottom
+    s = (K - (n_s - 1) / 2) * CALC_STEP_MM
+    lower, upper = (lab == LABEL_OF[down]) & bod, (lab == LABEL_OF[up]) & bod
+    top = np.max(np.where(lower & (s < CALC_ALONG_MM / 2), K, -1), axis=2)
+    bottom = np.min(np.where(upper & (s > -CALC_ALONG_MM / 2), K, n_s), axis=2)
+    both = ndimage.binary_opening((top >= 0) & (bottom < n_s) & (bottom > top - 4), iterations=2)
+    lb, _ = ndimage.label(both)
+    c0 = lb[n_a // 2, n_a // 2]
+    if not c0:
+        raise SystemExit(f"{pair}: the two bodies' masks do not meet on the line joining their centres")
+    fp = lb == c0
+    meet = ndimage.gaussian_filter(np.where(fp, (top + bottom) / 2, np.median(((top + bottom) / 2)[fp])), 2)
+    # the band's centre: the CT (smoothed across the columns) at its densest near where the masks meet
+    hs = ndimage.gaussian_filter(hu, (1.5 / CALC_STEP_MM, 1.5 / CALC_STEP_MM, 0))
+    near = np.abs(K - meet[..., None]) <= CALC_SEARCH_MM / CALC_STEP_MM
+    pk = np.argmax(np.where(near, hs, -1e9), axis=2).astype(float)
+    base = float(np.median(hs[fp][:, :8]))
+    clear = fp & (np.take_along_axis(hs, pk.astype(int)[..., None], 2)[..., 0] > base + 80)
+    off = float(np.median((pk - meet)[clear]))
+    cen = ndimage.gaussian_filter(np.where(clear, pk, meet + off), 2.0 / CALC_STEP_MM)
+    # its thickness: width at half height above the bodies' cancellous bone, the footprint's middle averaged
+    core = ndimage.binary_erosion(fp, iterations=int(round(CALC_CORE_MM / CALC_STEP_MM)))
+    rel = np.arange(-8.0, 8.01, CALC_STEP_MM)
+    prof = np.array([np.take_along_axis(hu, np.clip(np.round(cen + r / CALC_STEP_MM).astype(int), 0, n_s - 1)[..., None], 2)[..., 0][core].mean()
+                     for r in rel])
+    floor_ = float(np.mean([prof[:4].mean(), prof[-4:].mean()]))
+    above = rel[prof >= floor_ + (prof.max() - floor_) / 2]
+    height = float(above.max() - above.min() + CALC_STEP_MM)
+    disc = fp[..., None] & (np.abs(K - cen[..., None]) * CALC_STEP_MM <= height / 2)
+    inner = ndimage.distance_transform_edt(fp) * CALC_STEP_MM
+    dense = disc & (hu > CALC_HU) & (inner[..., None] > CALC_RIM_MM)
+    pieces, n = ndimage.label(dense)
+    vox_ml = CALC_STEP_MM ** 3 / 1000
+    big = 1 + np.flatnonzero(np.bincount(pieces.ravel(), minlength=n + 1)[1:] * vox_ml >= CALC_MIN_ML)
+    calc = np.isin(pieces, big)
+    out = {"affine": aff_f, "disc": disc, "calcification": calc, "heightMm": round(height, 1),
+           "footprintMm2": round(float(fp.sum()) * CALC_STEP_MM ** 2), "discMl": round(float(disc.sum()) * vox_ml, 2),
+           "calcificationMl": round(float(calc.sum()) * vox_ml, 2), "calcificationPieces": int(len(big)),
+           "bandPeakHu": round(float(prof.max())), "cancellousHu": round(floor_),
+           "bandAboveMasksMm": round(off * CALC_STEP_MM, 1)}
+    print(f"{pair}: calcified disc drawn {({k: v for k, v in out.items() if k not in ('affine', 'disc', 'calcification')})}")
+    _CALCIFIED[pair] = out
+    return out
+
+
+def disc_cut(shape: tuple, aff_block: np.ndarray) -> np.ndarray | None:
+    """The calcified discs as drawn, on a block of the CT (`aff_block`: its voxels to RAS mm, not moved to the origin),
+    or None where the block meets none: the bodies are cut back to them."""
+    out = None
+    for pair in CALCIFIED_DISCS:
+        d = calcified_disc(pair)
+        idx = np.argwhere(d["disc"])
+        ras = nib.affines.apply_affine(d["affine"], idx)
+        q = nib.affines.apply_affine(np.linalg.inv(aff_block), ras)
+        if (q.max(0) < -1).any() or (q.min(0) > np.array(shape)).any():
+            continue
+        # every block voxel whose centre falls inside the disc's frame grid cells
+        lo = np.maximum(np.floor(q.min(0)).astype(int) - 1, 0)
+        hi = np.minimum(np.ceil(q.max(0)).astype(int) + 2, shape)
+        G_ = np.stack(np.meshgrid(*[np.arange(a, b) for a, b in zip(lo, hi)], indexing="ij"), -1).reshape(-1, 3)
+        fq = nib.affines.apply_affine(np.linalg.inv(d["affine"]), nib.affines.apply_affine(aff_block, G_))
+        inside = ndimage.map_coordinates(d["disc"].astype(np.uint8), fq.T, order=0, mode="constant") > 0
+        if out is None:
+            out = np.zeros(shape, bool)
+        out[tuple(G_[inside].T)] = True
+    return out
 
 
 def discs(report: dict, verts: list[dict]) -> list[dict]:
@@ -383,21 +526,55 @@ def discs(report: dict, verts: list[dict]) -> list[dict]:
     ids = [x["id"] for x in items]
     if len(ids) != len(set(ids)):
         raise SystemExit(f"two disc components assigned to one level: {sorted(ids)}")
-    # a disc much narrower than its neighbours is not a whole disc: the class has found a part of it, or there is
-    # little disc left to find (the T10-T11 disc of this CT, a 0.08 ml chip: the audit's finding MC-02). It stays
-    # drawn, and says so
+    # a disc much narrower than its neighbours is not a whole disc: the class has found a part of it (the T10-T11 disc
+    # of this CT, a chip: the audit's finding MC-02). That is allowed only at a calcified disc, which is drawn by rule
+    # in its place (CALCIFIED_DISCS)
     rank = lambda x: (["C", "T", "L", "S"].index(x["level"][0]), int(x["level"].split("-")[0][1:]))   # noqa: E731
     items.sort(key=rank)
     for i, it in enumerate(items):
         near = [report[items[j]["id"]]["widthMm"] for j in (i - 1, i + 1) if 0 <= j < len(items)]
         me = report[it["id"]]
         if near and me["widthMm"] < DISC_PARTIAL * float(np.mean(near)):
-            me["partial"] = {"volumeMl": me["volumeMl"], "widthMm": me["widthMm"], "neighbourWidthMm": near}
-            it["after"] = (f"At this level the class holds only a chip ({me['volumeMl']:g} ml, {me['widthMm']:.0f} mm from side to "
-                           f"side; the discs above and below {' and '.join(f'{w:.0f}' for w in near)} mm): the disc is not drawn "
-                           "in full here.")
-            print(f"disc {it['level']}: drawn in part {me['partial']}")
-    print(f"discs: {len(items)} ({', '.join(x['level'] for x in items)})")
+            if it["level"] not in CALCIFIED_DISCS:
+                raise SystemExit(f"disc {it['level']}: the class holds only {me['volumeMl']} ml, {me['widthMm']} mm wide "
+                                 f"(neighbours {near} mm): read the CT there (CALCIFIED_DISCS)")
+            me["chip"] = {"volumeMl": me["volumeMl"], "widthMm": me["widthMm"], "neighbourWidthMm": near}
+    for pair in CALCIFIED_DISCS:
+        sid = "sp_disc_" + pair.lower().replace("-", "_")
+        k = next(i for i, x in enumerate(items) if x["id"] == sid)
+        chip = report[sid].get("chip")
+        d = calcified_disc(pair)
+        a2 = shifted(d["affine"], o)
+        mesh = isosurface(d["disc"].astype(np.float32), a2, 0.5, 1.0, 5000)
+        write_glb(BUILD / f"{sid}.glb", halves(mesh, float(mesh.centroid[0])), {"id": sid})
+        up, down = pair.split("-")
+        chip_note = (f" TotalSegmentator's disc class holds only a chip of it ({chip['volumeMl']:g} ml, {chip['widthMm']:.0f} mm from "
+                     f"side to side; the discs above and below {' and '.join(f'{w:.0f}' for w in chip['neighbourWidthMm'])} mm)."
+                     if chip else "")
+        items[k] = {"id": sid, "name": f"Intervertebral disc {pair}, calcified", "level": pair, "token": "spDisc", "layer": "discs",
+                    "category": "disc", "faces": int(len(mesh.faces)), "centroid": mesh.centroid.round(2).tolist(),
+                    "region": REGION[up[0]], "schematic": True,
+                    "source": (f"Drawn by rule: this disc is calcified on this CT (one dense band between the {up} and {down} bodies, "
+                               f"{d['bandPeakHu']} HU at its densest against {d['cancellousHu']} HU in the bodies' cancellous bone, which "
+                               "VerSe's masks count as bone). It is drawn in the band, as thick as the band is "
+                               f"({d['heightMm']:g} mm, its width at half height), on the bodies' footprint where their masks meet "
+                               f"({d['footprintMm2']} mm2), and the two bodies are cut back to it"),
+                    "after": chip_note.strip()}
+        report[sid] = {**items[k], "volumeMl": d["discMl"], "calcified": {**{x: d[x] for x in ("heightMm", "discMl", "calcificationMl",
+                       "calcificationPieces", "bandPeakHu", "cancellousHu", "footprintMm2")}, **({"chipMl": chip["volumeMl"],
+                       "chipWidthMm": chip["widthMm"], "neighbourWidthMm": chip["neighbourWidthMm"]} if chip else {})}}
+        cmesh = isosurface(d["calcification"].astype(np.float32), a2, 0.5, 1.0, 3000)
+        cid = f"{sid}_calcification"
+        write_glb(BUILD / f"{cid}.glb", halves(cmesh, float(mesh.centroid[0])), {"id": cid})
+        items.insert(k + 1, {"id": cid, "name": f"Calcification in the {pair} disc", "level": pair, "token": "spBone", "layer": "discs",
+                             "category": "calcification", "faces": int(len(cmesh.faces)), "centroid": cmesh.centroid.round(2).tolist(),
+                             "region": REGION[up[0]],
+                             "source": f"This CT above {CALC_HU:g} HU inside the calcified disc as drawn ({d['calcificationMl']:g} ml), "
+                                       f"more than {CALC_RIM_MM:g} mm inside the bodies' edge (their cortical rim is as dense), in "
+                                       f"pieces of at least {CALC_MIN_ML:g} ml",
+                             "derivation": "Its surface is the CT's, where it is that dense."})
+        report[cid] = items[k + 1]
+    print(f"discs: {len(items)} ({', '.join(x['level'] for x in items if x['category'] == 'disc')})")
     return items
 
 
@@ -496,12 +673,16 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
         sac, _ = ts_mask("total", "sacrum+vertebrae_S1", cr)
         lab[sac & (lab == 0)] = LABEL_OF["S1"]
     lab[disc & (lab == 0)] = DISC_LABEL
+    dcut = disc_cut(disc.shape, a2)     # a calcified disc as drawn (CALCIFIED_DISCS): the bodies are cut back to it
+    if dcut is not None:
+        disc |= dcut
+        lab[dcut] = DISC_LABEL
     grid = G.Grid(lab, a2)
     # the bone as the vertebrae and the sacrum are drawn (drawn_bone: the volume their surfaces are cut from, as one
     # solid), its signed distance (mm, positive outside): the schematic roots are kept out of it
     vox_b = np.abs(np.diag(a2)[:3])
     ct_block = read_block(CT, cr, np.float32)
-    bone = DrawnBone(drawn_solid(ct_block, vm_drawn, float(np.mean(vox_b)), sac), a2)
+    bone = DrawnBone(drawn_solid(ct_block, vm_drawn, float(np.mean(vox_b)), sac, a2), a2)
     del sac
     inv_block = np.linalg.inv(a2)
 
@@ -753,22 +934,23 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
         # ---- the disc's height at its centre (measured): the spread of its points along the spine within 8 mm of it;
         # not at L5-S1, whose frame (towards an estimated S1 centre) runs obliquely through this wedge-shaped disc
         core = dpts[np.abs((dpts - dc) @ F[0]) < 8]
-        part = report.get("sp_disc_" + f"{up}-{down}".lower().replace("-", "_"), {}).get("partial")
+        calc = report.get("sp_disc_" + f"{up}-{down}".lower().replace("-", "_"), {}).get("calcified")
         if down != "S1":
             space[f"{up}-{down}"] = space_hu(cu, cd, F)
-        if part:
-            # the disc is drawn in part (discs()): no height is given, and what the CT shows between the two bodies
-            # is (filled in below, with the neighbours' for comparison)
-            levels[-1]["discPartial"] = dict(part)
+        if calc:
+            # a calcified disc, drawn by rule (discs()): its height is the dense band's, and what the CT shows between
+            # the two bodies is given with the neighbours' for comparison (filled in below)
+            levels[-1]["discCalcified"] = dict(calc)
+            levels[-1]["discHeightMm"] = calc["heightMm"]
         elif len(core) and down != "S1":
             dw = (core - dc) @ F[2]
             levels[-1]["discHeightMm"] = round(float(np.percentile(dw, 95) - np.percentile(dw, 5)), 1)
     for i, lv in enumerate(levels):
-        if "discPartial" in lv:
-            lv["discPartial"]["spaceHu"] = space[lv["pair"]]
-            lv["discPartial"]["neighbourSpaceHu"] = [space[levels[j]["pair"]] for j in (i - 1, i + 1)
-                                                     if 0 <= j < len(levels) and levels[j]["pair"] in space]
-            print(f"{lv['pair']}: disc drawn in part; the CT between the bodies {lv['discPartial']}")
+        if "discCalcified" in lv:
+            lv["discCalcified"]["spaceHu"] = space[lv["pair"]]
+            lv["discCalcified"]["neighbourSpaceHu"] = [space[levels[j]["pair"]] for j in (i - 1, i + 1)
+                                                       if 0 <= j < len(levels) and levels[j]["pair"] in space]
+            print(f"{lv['pair']}: calcified disc; the CT between the bodies {lv['discCalcified']}")
     if not cfg["sacrum"]:
         print(f"{region}: {len(levels)} levels, {len(roots)} root parts; foramina found (placing the roots) {found}/{2 * len(levels)}")
         report.setdefault("rootIntrusionMm", {}).update(intrusion)
@@ -992,7 +1174,7 @@ def vertebral_artery(report: dict) -> tuple[list[dict], dict]:
     cr = tuple(slice(a, b) for a, b in zip(lo, hi))
     vm, a2 = load_mask(cr)
     ct = read_block(CT, cr)
-    bone = DrawnBone(drawn_solid(ct.astype(np.float32), vm, float(vox.mean())), a2)
+    bone = DrawnBone(drawn_solid(ct.astype(np.float32), vm, float(vox.mean()), aff=a2), a2)
     levels = [f"C{i}" for i in range(1, 8)]
     tf, tf_raw, frames, bone_pts = {}, {}, {}, {}
     for lv in levels:
@@ -1171,8 +1353,9 @@ def manifest_entries(items: list[dict], junction: bool = False) -> list[dict]:
              "category": t["category"], **({"level": t["level"]} if "level" in t else {}),
              **({"region": t["region"]} if "region" in t else {}),
              **({"schematic": True} if t.get("schematic") else {}),
-             "derivation": t["source"] + ("." if t.get("schematic") else ", surface of the segmentation.")
-                           + (" " + t["after"] if t.get("after") else ""),
+             "derivation": (t["source"] + (". " + t["derivation"] if t.get("derivation") else "." if t.get("schematic")
+                                                   else ", surface of the segmentation.")
+                            + (" " + t["after"] if t.get("after") else "")),
              "centroid": {"L": t["centroid"], "R": t["centroid"]}} for t in items]
 
 
@@ -1182,10 +1365,13 @@ def write_manifest(verts: list[dict], ts: list[dict], dsc: list[dict]) -> None:
             "citation": [c["citation"] for c in cites], "citationUrls": [c["url"] for c in cites], "refIds": DATASET["cite"]}
     structures = []
     for v in verts:
+        cut = next((pr for pr in CALCIFIED_DISCS if v["name"] in pr.split("-")), None)
+        cut_note = (f" Its {'lower' if cut.split('-')[0] == v['name'] else 'upper'} end plate is drawn at the edge of the calcified {cut} "
+                    "disc, drawn by rule in the dense band that the mask counts as bone." if cut else "")
         structures.append({**base, "id": v["id"], "name": f"{v['name']} vertebra", "type": "bone", "file": f"assets/spine/{v['id']}.glb",
                            "colour": colour("spBone"), "category": "vertebra", "level": v["name"], "region": v["region"],
                            "derivation": f"CT surface at {BONE_HU} HU within {MASK_REACH_MM} mm of VerSe's hand-corrected mask for {v['name']}, kept out of "
-                                         "its neighbours' masks (bone between two masks goes to the nearer one).",
+                                         "its neighbours' masks (bone between two masks goes to the nearer one)." + cut_note,
                            "centroid": {"L": v["centroid"], "R": v["centroid"]}})
     structures += manifest_entries([t for t in ts + dsc if t.get("region") != "ccj"])
     structures += manifest_entries([t for t in ts + dsc if t.get("region") == "ccj"], junction=True)
@@ -1256,7 +1442,8 @@ def validate() -> int:
             check(all(2 * VA_MIN_RADIUS - 0.05 <= d <= 2 * VA_RADIUS + 0.05 for d in a["diameterAt"].values()),
                   f"vertebral artery {sd}: drawn diameters {a['diameterAt']}")
     # the canal's width does not jump between neighbours (L5's was given as 38.0 mm beside L4's 26.5: the hole
-    # measured ran out into the lateral recesses, MC-06), and a disc drawn in part says so and gives no height (MC-02)
+    # measured ran out into the lateral recesses, MC-06), and a calcified disc is drawn whole, says so, and has its
+    # calcification (MC-02)
     for region in ("cervical", "thoracic", "lumbar"):
         lv = levels_json[region]
         for a, b in zip(lv, lv[1:]):
@@ -1264,10 +1451,21 @@ def validate() -> int:
                 r = b["canal"]["width"] / a["canal"]["width"]
                 check(1 / CANAL_STEP_MAX <= r <= CANAL_STEP_MAX, f"canal width {a['level']} {a['canal']['width']} mm, {b['level']} {b['canal']['width']} mm")
         for g in lv:
-            if "discPartial" in g:
+            if "discCalcified" in g:
                 sid = "sp_disc_" + g["pair"].lower().replace("-", "_")
-                check("discHeightMm" not in g, f"{g['pair']}: a height is given for a disc drawn in part")
-                check("not drawn in full" in by.get(sid, {}).get("derivation", ""), f"{sid}: drawn in part, and its derivation does not say so")
+                c = g["discCalcified"]
+                check(g["pair"] in CALCIFIED_DISCS, f"{g['pair']}: calcified, and not in CALCIFIED_DISCS")
+                check(1.5 <= g.get("discHeightMm", 0) <= 6.0, f"{g['pair']}: calcified disc {g.get('discHeightMm')} mm high")
+                check(by.get(sid, {}).get("schematic") is True and "calcified" in by.get(sid, {}).get("derivation", ""),
+                      f"{sid}: calcified, and its card does not say it is drawn by rule")
+                check(by.get(sid + "_calcification", {}).get("category") == "calcification" and c["calcificationMl"] >= CALC_MIN_ML,
+                      f"{sid}: its calcification is missing ({c['calcificationMl']} ml)")
+                check(c["footprintMm2"] > 600, f"{sid}: drawn on {c['footprintMm2']} mm2")
+                check(c["spaceHu"] > 2 * max(c["neighbourSpaceHu"]), f"{sid}: the CT between the bodies {c['spaceHu']} HU, "
+                      f"neighbours {c['neighbourSpaceHu']}: not a dense band")
+        for pair in CALCIFIED_DISCS:
+            if pair.split("-")[0] in [g["level"] for g in lv]:
+                check(any(g["pair"] == pair and "discCalcified" in g for g in lv), f"{pair}: listed as calcified, not drawn so")
     # the origin is VerSe's L5 centroid, the centre of the vertebral body: the whole vertebra's centroid (with its
     # posterior arch) lies close to the midline and level with it, some 10-20 mm behind it
     c5 = by["sp_l5"]["centroid"]["R"]

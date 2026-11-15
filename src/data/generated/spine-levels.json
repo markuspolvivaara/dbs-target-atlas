@@ -661,13 +661,20 @@
    },
    "foramenMeasured": false,
    "discCentre": [
-    -20.23,
-    -21.19,
-    204.11
+    -7.63,
+    -22.26,
+    205.27
    ],
-   "discPartial": {
-    "volumeMl": 0.12,
-    "widthMm": 8.6,
+   "discCalcified": {
+    "heightMm": 3.5,
+    "discMl": 4.32,
+    "calcificationMl": 0.49,
+    "calcificationPieces": 1,
+    "bandPeakHu": 405,
+    "cancellousHu": 96,
+    "footprintMm2": 1234,
+    "chipMl": 0.12,
+    "chipWidthMm": 8.6,
     "neighbourWidthMm": [
      34.5,
      46.7
@@ -677,7 +684,8 @@
      219,
      214
     ]
-   }
+   },
+   "discHeightMm": 3.5
   },
   {
    "level": "T11",
@@ -1484,7 +1492,7 @@
    "pair": "T10-T11",
    "sharedMl": 0.0,
    "verticesInside": 0,
-   "deepestMm": 0.13
+   "deepestMm": 0.0
   },
   {
    "pair": "T11-T12",

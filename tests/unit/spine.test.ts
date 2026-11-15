@@ -23,10 +23,10 @@ describe('spine data (VerSe CT + TotalSegmentator)', () => {
     for (const lv of ['L1', 'L2', 'L3', 'L4', 'L5']) expect(discBelow(lv), lv).toBeTruthy();
     expect(SP.get('sp_dural_sac')?.layer).toBe('tracts');
   });
-  it('every schematic element is flagged (the card shows the flag): roots (each with its ganglion), the vertebral artery; vessels and soft tissue only in the neck', () => {
+  it('every schematic element is flagged (the card shows the flag): roots (each with its ganglion), the vertebral artery, the calcified disc; vessels and soft tissue only in the neck', () => {
     for (const s of SP_MANIFEST.structures) {
       expect(s.category, s.id).not.toBe('ganglion');   // a root and its ganglion are one structure
-      if (s.category === 'root' || s.id === 'sp_vertebral_artery') expect(s.schematic, s.id).toBe(true);
+      if (s.category === 'root' || s.id === 'sp_vertebral_artery' || s.id === 'sp_disc_t10_t11') expect(s.schematic, s.id).toBe(true);
       else expect(s.schematic, s.id).toBeUndefined();
       expect(['zone', 'artery', 'vein'], s.id).not.toContain(s.category);
       // dorsal focus in the lumbar and thoracic regions: vessels, viscera and muscles are drawn in the cervical one only
@@ -137,19 +137,37 @@ describe('spine data (VerSe CT + TotalSegmentator)', () => {
     expect(l5.width).toBeGreaterThan(22); expect(l5.width).toBeLessThan(32);
     expect(l5.area).toBeLessThan(360);
   });
-  it('a disc drawn in part says so: the T10-T11 disc, a chip beside a dense band between the two bodies', () => {
-    // (the audit's finding MC-02: a 0.08 ml chip shown as a disc, with a "disc height" of 2.3 mm)
-    const partial = [...CERVICAL_GEOM, ...THORACIC_GEOM, ...LUMBAR_GEOM].filter((g) => g.discPartial);
-    expect([...new Set(partial.map((g) => g.pair))]).toEqual(['T10-T11']);
-    for (const g of partial) {
-      const p = g.discPartial!;
-      expect(g.discHeightMm).toBeUndefined();
-      expect(p.widthMm).toBeLessThan(0.5 * (p.neighbourWidthMm.reduce((a, b) => a + b, 0) / p.neighbourWidthMm.length));
-      // the CT between the bodies: far denser than the end plates of the discs above and below
-      expect(p.neighbourSpaceHu.length).toBe(2);
-      for (const hu of p.neighbourSpaceHu) expect(p.spaceHu).toBeGreaterThan(2 * hu);
-      expect(SP.get('sp_disc_t10_t11')!.derivation).toContain('not drawn in full');
+  it('a calcified disc is drawn whole and says so: the T10-T11 disc, a dense band between the two bodies', () => {
+    // (the audit's finding MC-02: the segmentation's chip was shown as the disc; the user reads the band as a calcified
+    // disc: drawn by rule in the band, its calcification from the CT inside it, the two bodies cut back to it)
+    const calcified = [...CERVICAL_GEOM, ...THORACIC_GEOM, ...LUMBAR_GEOM].filter((g) => g.discCalcified);
+    expect([...new Set(calcified.map((g) => g.pair))]).toEqual(['T10-T11']);
+    for (const g of calcified) {
+      const c = g.discCalcified!;
+      expect(g.discHeightMm).toBe(c.heightMm);
+      expect(c.heightMm).toBeGreaterThan(2); expect(c.heightMm).toBeLessThan(5);
+      expect(c.footprintMm2).toBeGreaterThan(900);
+      // the band: far denser than the end plates of the discs above and below, and than the bodies' cancellous bone
+      expect(c.neighbourSpaceHu.length).toBe(2);
+      for (const hu of c.neighbourSpaceHu) expect(c.spaceHu).toBeGreaterThan(2 * hu);
+      expect(c.bandPeakHu).toBeGreaterThan(2 * c.cancellousHu);
+      // the segmentation's chip, much narrower than the neighbours
+      expect(c.chipWidthMm!).toBeLessThan(0.5 * (c.neighbourWidthMm!.reduce((a, b) => a + b, 0) / c.neighbourWidthMm!.length));
+      const disc = SP.get('sp_disc_t10_t11')!;
+      expect(disc.schematic).toBe(true);
+      expect(disc.derivation).toContain('calcified');
+      const calc = SP.get('sp_disc_t10_t11_calcification')!;
+      expect(calc.category).toBe('calcification');
+      expect(calc.level).toBe('T10-T11');
+      expect(c.calcificationMl).toBeGreaterThan(0.05);
+      for (const v of ['sp_t10', 'sp_t11']) expect(SP.get(v)!.derivation, v).toContain('calcified T10-T11 disc');
     }
+  });
+  it('the calcified disc is see-through so its calcification shows; it is listed with the discs', () => {
+    const plan = spinePlan({ region: 'thoracic', level: 'T10', sel: null });
+    expect(plan.looks.get('sp_disc_t10_t11')).toBe('context');
+    expect(plan.looks.get('sp_disc_t10_t11_calcification')).toBe('primary');
+    expect(plan.looks.get('sp_disc_t9_t10')).toBe('primary');
   });
   it('shipped GLBs decode with the left half left of the right half', async () => {
     const m = await nodeMeans(SP.get('sp_l3')!.file);
@@ -296,8 +314,8 @@ describe('thoracic region (phase 3a)', () => {
       expect(g.canal, g.pair).toBeTruthy();
       expect(g.canal!.area, g.pair).toBeGreaterThan(120);
       expect(g.canal!.area, g.pair).toBeLessThan(400);
-      // (every disc but one drawn in part, which gets no height: see the test above)
-      if (!g.discPartial) expect(g.discHeightMm, g.pair).toBeGreaterThan(1);
+      // (the calcified disc's height is its dense band's: see the test above)
+      expect(g.discHeightMm, g.pair).toBeGreaterThan(1);
       expect(g.foramenMeasured, g.pair).toBe(false);
       expect([g.foramen.L, g.foramen.R]).toEqual([null, null]);
       expect(g.lesions, g.pair).toBeUndefined();

@@ -845,11 +845,16 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
   from TotalSegmentator.
 - **Discs** (TotalSegmentator, split by the two bones each disc touches) and the **dural sac** (TotalSegmentator's
   "spinal cord" class, which on CT follows the canal contents). The section is for the dorsal approaches: no great
-  vessels, psoas or psoas zones. A disc much narrower than its neighbours is marked as drawn in part: of the T10–T11
-  disc the segmentation holds a 0.12 ml chip, and between those two bodies the CT is dense where a disc is dark (its
-  mean on 16-mm circles across the line joining the bodies' centres reaches 722 HU, against 219 and 214 HU at the
-  end plates of the discs above and below). The level's card says so, gives no disc height and does not offer the
-  dorsal approaches there; what the dense band is, is left open.
+  vessels, psoas or psoas zones. The T10–T11 disc of this CT is calcified (read so on 15 Nov 2026; `CALCIFIED_DISCS`
+  in `pipeline/spine_build.py`). The segmentation holds a 0.12 ml chip of it, and between the two bodies the CT shows
+  one dense band where the discs above and below show two end plates with a dark disc between them (its mean on 16-mm
+  circles across the line joining the bodies' centres reaches 722 HU, against 219 and 214 HU at the end plates of
+  the discs above and below); across the spine the band is a lumpy mass in the middle of the disc. VerSe's masks
+  count the band as bone. The disc is drawn by rule in the band (`calcified_disc`: on the bodies' footprint where
+  their masks meet, round the band's centre column by column, as thick as the band at half height, 3.5 mm), the two
+  bodies are cut back to it, and its calcification is the CT above 500 HU inside it away from the bodies' cortical
+  rim (0.5 ml), drawn in bone colour inside the see-through disc. The level's card says so and does not offer the
+  dorsal approaches there. A disc much narrower than its neighbours that is not listed as calcified stops the build.
 - **Measured per level**: the canal between the pedicles (in the plane normal to the spine where it is narrowest
   between them: the interpedicular width, the depth through its middle, the area); foraminal height,
   antero-posterior extent and area (L1–L4 both sides; the plane method does not capture L5–S1 in this CT); disc

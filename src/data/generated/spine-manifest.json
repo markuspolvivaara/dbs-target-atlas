@@ -1122,7 +1122,7 @@
   },
   {
    "aliases": [],
-   "bytes": 66104,
+   "bytes": 66092,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1156,23 +1156,23 @@
    "category": "vertebra",
    "level": "T10",
    "region": "thoracic",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T10, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T10, kept out of its neighbours' masks (bone between two masks goes to the nearer one). Its lower end plate is drawn at the edge of the calcified T10-T11 disc, drawn by rule in the dense band that the mask counts as bone.",
    "centroid": {
     "L": [
-     -9.71,
-     -40.99,
-     214.99
+     -9.92,
+     -41.63,
+     215.47
     ],
     "R": [
-     -9.71,
-     -40.99,
-     214.99
+     -9.92,
+     -41.63,
+     215.47
     ]
    }
   },
   {
    "aliases": [],
-   "bytes": 66608,
+   "bytes": 66576,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1206,17 +1206,17 @@
    "category": "vertebra",
    "level": "T11",
    "region": "thoracic",
-   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T11, kept out of its neighbours' masks (bone between two masks goes to the nearer one).",
+   "derivation": "CT surface at 200 HU within 2.0 mm of VerSe's hand-corrected mask for T11, kept out of its neighbours' masks (bone between two masks goes to the nearer one). Its upper end plate is drawn at the edge of the calcified T10-T11 disc, drawn by rule in the dense band that the mask counts as bone.",
    "centroid": {
     "L": [
-     -7.21,
-     -35.76,
-     189.05
+     -7.07,
+     -36.04,
+     188.7
     ],
     "R": [
-     -7.21,
-     -35.76,
-     189.05
+     -7.07,
+     -36.04,
+     188.7
     ]
    }
   },
@@ -2483,7 +2483,7 @@
   },
   {
    "aliases": [],
-   "bytes": 6880,
+   "bytes": 26936,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -2506,7 +2506,7 @@
     "wasserthal2023"
    ],
    "id": "sp_disc_t10_t11",
-   "name": "Intervertebral disc T10-T11",
+   "name": "Intervertebral disc T10-T11, calcified",
    "type": "soft",
    "layer": "discs",
    "file": "assets/spine/sp_disc_t10_t11.glb",
@@ -2518,17 +2518,69 @@
    "category": "disc",
    "level": "T10-T11",
    "region": "thoracic",
-   "derivation": "TotalSegmentator vertebrae_body: intervertebral_discs, split by the two bones each disc touches, surface of the segmentation. At this level the class holds only a chip (0.12 ml, 9 mm from side to side; the discs above and below 34 and 47 mm): the disc is not drawn in full here.",
+   "schematic": true,
+   "derivation": "Drawn by rule: this disc is calcified on this CT (one dense band between the T10 and T11 bodies, 405 HU at its densest against 96 HU in the bodies' cancellous bone, which VerSe's masks count as bone). It is drawn in the band, as thick as the band is (3.5 mm, its width at half height), on the bodies' footprint where their masks meet (1234 mm2), and the two bodies are cut back to it. TotalSegmentator's disc class holds only a chip of it (0.12 ml, 9 mm from side to side; the discs above and below 34 and 47 mm).",
    "centroid": {
     "L": [
-     -20.2,
-     -20.97,
-     204.14
+     -7.61,
+     -22.38,
+     205.25
     ],
     "R": [
-     -20.2,
-     -20.97,
-     204.14
+     -7.61,
+     -22.38,
+     205.25
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "bytes": 17516,
+   "dataset": "verse",
+   "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
+   "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
+   "citation": [
+    "Löffler MT, Sekuboyina A, Jacob A, Grau AL, Scharr A, El Husseini M, et al. A Vertebral Segmentation Dataset with Fracture Grading. Radiol Artif Intell. 2020;2(4):e190138. doi:10.1148/ryai.2020190138.",
+    "Liebl H, Schinz D, Sekuboyina A, Malagutti L, Löffler MT, Bayat A, et al. A computed tomography vertebral segmentation dataset with anatomical variations and multi-vendor scanner data. Sci Data. 2021;8(1):284. doi:10.1038/s41597-021-01060-0.",
+    "Sekuboyina A, Husseini ME, Bayat A, Löffler M, Liebl H, Li H, et al. VerSe: A Vertebrae labelling and segmentation benchmark for multi-detector CT images. Med Image Anal. 2021;73:102166. doi:10.1016/j.media.2021.102166.",
+    "Wasserthal J, Breit HC, Meyer MT, Pradella M, Hinck D, Sauter AW, et al. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiol Artif Intell. 2023;5(5):e230024. doi:10.1148/ryai.230024."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1148/ryai.2020190138",
+    "https://doi.org/10.1038/s41597-021-01060-0",
+    "https://doi.org/10.1016/j.media.2021.102166",
+    "https://doi.org/10.1148/ryai.230024"
+   ],
+   "refIds": [
+    "loffler2020",
+    "liebl2021",
+    "sekuboyina2021",
+    "wasserthal2023"
+   ],
+   "id": "sp_disc_t10_t11_calcification",
+   "name": "Calcification in the T10-T11 disc",
+   "type": "soft",
+   "layer": "discs",
+   "file": "assets/spine/sp_disc_t10_t11_calcification.glb",
+   "colour": {
+    "token": "spBone",
+    "light": "#CDBF9C",
+    "dark": "#D8CCAE"
+   },
+   "category": "calcification",
+   "level": "T10-T11",
+   "region": "thoracic",
+   "derivation": "This CT above 500 HU inside the calcified disc as drawn (0.49 ml), more than 3 mm inside the bodies' edge (their cortical rim is as dense), in pieces of at least 0.05 ml. Its surface is the CT's, where it is that dense.",
+   "centroid": {
+    "L": [
+     -8.79,
+     -23.84,
+     204.94
+    ],
+    "R": [
+     -8.79,
+     -23.84,
+     204.94
     ]
    }
   },

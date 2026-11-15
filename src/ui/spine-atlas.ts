@@ -32,7 +32,7 @@ const PRESETS: [CameraPreset, string, string, string][] = [
 const LAYERS: [SpineLayer, string][] = [['nuclei', 'Bone'], ['discs', 'Discs'], ['tracts', 'Neural'], ['vessels', 'Vessels'], ['viscera', 'Viscera and muscles']];
 /** list sections of the panel and legend, by category */
 const GROUPS: [string, string, string[]][] = [
-  ['bone', 'Bone', ['vertebra', 'bone']], ['disc', 'Discs', ['disc']], ['neural', 'Neural', ['neural']],
+  ['bone', 'Bone', ['vertebra', 'bone']], ['disc', 'Discs', ['disc', 'calcification']], ['neural', 'Neural', ['neural']],
   ['root', 'Nerve roots (schematic)', ['root']], ['vessel', 'Vessels', ['vessel']],
   ['soft', 'Viscera and muscles', ['viscera', 'muscle']],
 ];
@@ -455,8 +455,9 @@ export class SpineAtlasPage {
       h('h2', {}, level),
       h('dl', {},
         v ? [h('dt', {}, 'Bone'), h('dd', {}, this.link(v.id))] : null,
-        d ? [h('dt', {}, 'Disc below'), h('dd', {}, this.link(d.id), g?.discHeightMm ? ` · ${mm(g.discHeightMm)} high at its centre (measured)` : '',
-          g?.discPartial ? this.partialDisc(g) : null,
+        d ? [h('dt', {}, 'Disc below'), h('dd', {}, this.link(d.id), g?.discCalcified ? ` · ${mm(g.discHeightMm!)} high (the calcified band, measured)`
+          : g?.discHeightMm ? ` · ${mm(g.discHeightMm)} high at its centre (measured)` : '',
+          g?.discCalcified ? this.calcifiedDisc(g) : null,
           g ? h('p', {}, h('button', {
             type: 'button', class: 'chip disc-cut', 'aria-pressed': String(this.s.cut === 'disc'),
             onclick: () => this.update((s) => { s.cut = s.cut === 'disc' ? 'none' : 'disc'; if (s.cut === 'disc') s.cam = { preset: 'axial' }; }, { camera: this.s.cut !== 'disc' }),
@@ -484,24 +485,27 @@ export class SpineAtlasPage {
             }, { camera: true }) }, 'craniocervical region'),
             ' (another CT, which reaches the clivus); the occiput, the foramen magnum and the arteries and nerves above the atlas in the ',
             h('a', { href: '../skullbase/' }, 'skull base section'), '.'))] : null,
-        // (not at a disc drawn in part: there is no disc to show the approaches on)
-        thoracic && g && !g.discPartial ? [h('dt', {}, `Dorsal approach to the ${g.pair} disc`), h('dd', {}, this.approachTool(level, g))] : null,
-        thoracic && g?.discPartial ? [h('dt', {}, `Dorsal approach to the ${g.pair} disc`), h('dd', {},
-          h('p', { class: 'aside' }, 'Not shown at this level: its disc is drawn only in part (see “Disc below”). The approaches are shown at the other thoracic levels.'))] : null,
+        // (not at a calcified disc: the approaches are shown on a disc of normal height)
+        thoracic && g && !g.discCalcified ? [h('dt', {}, `Dorsal approach to the ${g.pair} disc`), h('dd', {}, this.approachTool(level, g))] : null,
+        thoracic && g?.discCalcified ? [h('dt', {}, `Dorsal approach to the ${g.pair} disc`), h('dd', {},
+          h('p', { class: 'aside' }, 'Not shown at this level: its disc is calcified and narrowed on this CT (see “Disc below”). The approaches are shown at the other thoracic levels.'))] : null,
         cervical && g ? [h('dt', {}, `Anterior approach (ACDF) to the ${g.pair} disc`), h('dd', {}, this.acdfTool(level, g))] : null));
   }
 
-  /** A disc drawn in part (the T10-T11 disc of this CT): what the segmentation holds and what the CT shows between
-   * the two bodies, measured; what it is, is left open. */
-  private partialDisc(g: LevelGeom): HTMLElement {
-    const p = g.discPartial!;
+  /** A calcified disc (the T10-T11 disc of this CT): what the CT shows between the two bodies, measured, and how the
+   * disc and its calcification are drawn. */
+  private calcifiedDisc(g: LevelGeom): HTMLElement {
+    const c = g.discCalcified!;
     const list = (xs: number[], f: (x: number) => string) => xs.map(f).join(' and ');
-    return h('p', { class: 'aside partial-disc' },
-      `Drawn in part: the segmentation holds only a chip of this disc (${p.volumeMl.toFixed(2)} ml, ${Math.round(p.widthMm)} mm from side to side; `
-      + `the discs above and below are ${list(p.neighbourWidthMm, (x) => String(Math.round(x)))} mm), so no height is given. `
-      + `On this CT the space between the two bodies is dense where a disc is dark: its mean density on 16-mm circles across the line joining the bodies’ centres reaches ${Math.round(p.spaceHu)} HU `
-      + `(${list(p.neighbourSpaceHu, (x) => String(Math.round(x)))} HU at the discs above and below, where the brightest part is an end plate). `
-      + 'Whether that is a calcified or ossified disc, or end plates that have grown together, is not established here.');
+    return h('p', { class: 'aside calcified-disc' },
+      'Calcified on this CT: in place of a dark disc between two end plates, the space between the two bodies is one dense band. '
+      + `Its mean density on 16-mm circles across the line joining the bodies’ centres reaches ${Math.round(c.spaceHu)} HU `
+      + `(${list(c.neighbourSpaceHu, (x) => String(Math.round(x)))} HU at the discs above and below, where the brightest part is an end plate), `
+      + 'and across the spine it is a lumpy mass in the middle of the disc. '
+      + `The disc is drawn by rule in that band, as thick as it is (${fmtMm(c.heightMm)} mm), and the two bodies are cut back to it: `
+      + (c.chipMl !== undefined ? `the disc segmentation holds only a chip of it (${c.chipMl.toFixed(2)} ml), and ` : '')
+      + 'the vertebra masks count the band as bone. '
+      + `The calcification inside it is the CT’s own, where it is denser than 500 HU away from the bodies’ cortical rim (${c.calcificationMl.toFixed(2)} ml), drawn in bone colour inside the see-through disc.`);
   }
 
   /** The pedicles measured on this CT beside published values (spine_screw.py, spine_published.py). */
