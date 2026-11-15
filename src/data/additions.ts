@@ -18,12 +18,22 @@ import type { Reference } from './schema';
  * maps, of several forms; Tourette 14).
  * A-003: Sammartino 2016 (full text) for Guiot's indirect Vim target, one of the published targets that replace
  * nucleus centroids as markers (targets.ts).
+ * B2 (statements their citation did not support): Liu 2014 (abstract) for the GPi-STN comparison in place of a
+ * meeting abstract; Horisawa 2021 (full text), the pilot study a cited protocol rested on; Ilinsky 2018 (full text)
+ * for which part of Vo is pallidal; Sammartino 2016 again for the pyramidal tract and medial lemniscus as the Vim's
+ * borders; the SNr as investigational.
  */
 export const ADDITION_REFERENCES: Reference[] = [
   { id: 'tsuboi2021', topic: 'pd', shortLabel: 'Tsuboi 2021', url: 'https://pubmed.ncbi.nlm.nih.gov/33002233/',
     citation: "Tsuboi T, Charbel M, Peterside DT, Rana M, Elkouzi A, Deeb W, et al. Pallidal connectivity profiling of stimulation-induced dyskinesia in Parkinson's disease. Mov Disord. 2021;36(2):380–388. doi:10.1002/mds.28324. Checked against its abstract: the full text is not open access." },
   { id: 'sammartino2016', topic: 'tremor', shortLabel: 'Sammartino 2016', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC5089633/',
     citation: 'Sammartino F, Krishna V, King NK, Lozano AM, Schwartz ML, Huang Y, Hodaie M. Tractography-based ventral intermediate nucleus targeting: novel methodology and intraoperative validation. Mov Disord. 2016;31(8):1217–1225. doi:10.1002/mds.26633.' },
+  { id: 'liu2014', topic: 'pd', shortLabel: 'Liu 2014', url: 'https://doi.org/10.3171/2014.4.JNS131711',
+    citation: 'Liu Y, Li W, Tan C, Liu X, Wang X, Gui Y, et al. Meta-analysis comparing deep brain stimulation of the globus pallidus and subthalamic nucleus to treat advanced Parkinson disease. J Neurosurg. 2014;121(3):709–718. doi:10.3171/2014.4.JNS131711. Checked against its abstract: the full text is not open access.' },
+  { id: 'horisawa2021', topic: 'dyst', shortLabel: 'Horisawa 2021', url: 'https://doi.org/10.1002/mds.28613',
+    citation: 'Horisawa S, Yamaguchi T, Abe K, Hori H, Fukui A, Iijima M, et al. Magnetic resonance-guided focused ultrasound thalamotomy for focal hand dystonia: a pilot study. Mov Disord. 2021;36(8):1955–1959. doi:10.1002/mds.28613.' },
+  { id: 'ilinsky2018', topic: 'dyst', shortLabel: 'Ilinsky 2018', url: 'https://doi.org/10.1523/ENEURO.0060-18.2018',
+    citation: 'Ilinsky I, Horn A, Paul-Gilloteaux P, Gressens P, Verney C, Kultas-Ilinsky K. Human motor thalamus reconstructed in 3D from continuous sagittal sections with identified subcortical afferent territories. eNeuro. 2018;5(3):ENEURO.0060-18.2018. doi:10.1523/ENEURO.0060-18.2018.' },
   { id: 'fan2020', topic: 'pd', shortLabel: 'Fan 2020', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC6952311/',
     citation: 'Fan SY, Wang KL, Hu W, Eisinger RS, Han A, Han CL, et al. Pallidal versus subthalamic nucleus deep brain stimulation for levodopa-induced dyskinesia. Ann Clin Transl Neurol. 2020;7(1):59–68. doi:10.1002/acn3.50961.' },
   { id: 'krack1998', topic: 'pd', shortLabel: 'Krack 1998', url: 'https://pubmed.ncbi.nlm.nih.gov/9485059/',
@@ -54,7 +64,16 @@ export const ADDITION_REFERENCES: Reference[] = [
 
 export const ADDITION_DESCRIPTIONS: Record<string, { text: string; refIds: string[] }> = {
   lf: { text: 'With the ansa lenticularis, one of the pallidothalamic projections that cross the GPi. In generalized dystonia both were associated with optimal outcome; in cervical dystonia the lenticular fasciculus was associated with a worse one. In Parkinson\'s disease, stimulation from STN leads above and lateral to the STN, where the pallidothalamic fibres run, suppressed dyskinesia directly.', refIds: ['horn2022', 'aquino2019'] },
-  al: { text: 'In dystonia, the best stimulation volume sits in posteroventral GPi and extends into subpallidal white matter, implicating the ansa lenticularis. In Parkinson\'s disease, the fibres linked to pallidal stimulation\'s relief of levodopa-induced dyskinesia ran beneath the GPi, like the ansa lenticularis.', refIds: ['reich2019', 'dsouza2026'] },
+  al: { text: 'In dystonia, the best stimulation volume extends from the posteroventral GPi into the subpallidal white matter; one peak of the generalized-dystonia sweet spot lay ventral to the pallidum, possibly on the ansa lenticularis\'s course. In Parkinson\'s disease, the fibres linked to pallidal stimulation\'s relief of levodopa-induced dyskinesia ran beneath the GPi, like the ansa lenticularis.', refIds: ['reich2019', 'horn2022', 'dsouza2026'] },
+  // (B2: Reich 2019's abstract names subpallidal white matter, not the ansa lenticularis)
+  gpi_sm: { text: 'The best stimulation volume sits in posteroventral GPi and extends into subpallidal white matter.', refIds: ['reich2019'] },
+  // (B2: the pyramidal tract and medial lemniscus as the Vim's lateral and posterior borders, Sammartino 2016)
+  cst: { text: 'In tractography-based Vim targeting, the pyramidal tract marks the Vim\'s lateral border.', refIds: ['sammartino2016'] },
+  ml: { text: 'In tractography-based Vim targeting, the medial lemniscus marks the Vim\'s posterior border; stimulating it gave hemibody paraesthesias.', refIds: ['sammartino2016'] },
+  // (B2: Voa pallidal, most of Vop cerebellar, Ilinsky 2018; the mesh is Morel's VLa)
+  vo: { text: 'Drawn: Morel\'s VLa, approximately Hassler\'s Voa. Voa, with a narrow anterior strip of Vop, receives pallidal input; the bulk of Vop, like the Vim, belongs to the cerebellar territory (nomenclatures differ between atlases). For hand dystonia, surgeons target the Voa–Vop junction.', refIds: ['ilinsky2018', 'shimizu2018'] },
+  // (B2: combined STN and SNr stimulation is investigational; its trials were negative on their primary outcomes)
+  snr: { text: 'Investigational: deep contacts at the STN/SNr border, combined with STN stimulation, for freezing of gait. The trials were negative on their primary outcomes.', refIds: ['weiss2013', 'artusi2025', 'mds2024'] },
   gpe: { text: 'After pallidal DBS for Parkinson\'s disease, the contacts that induced dyskinesia lay mainly in the dorsal GPi and GPe.', refIds: ['tsuboi2021'] },
   ss_dyt: { text: 'From subthalamic DBS, not pallidal: the sweet spot of 56 patients with dystonia of several forms. The benefit followed connections with sensorimotor cortex (S1 and M1).', refIds: ['hollunder2024'] },
   sw_dyt: { text: 'From subthalamic DBS, not pallidal: in 56 patients with dystonia of several forms, the streamlines linked to benefit connected the STN\'s sensorimotor territory with sensorimotor cortex (S1 and M1).', refIds: ['hollunder2024'] },

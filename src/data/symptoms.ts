@@ -42,12 +42,12 @@ export const SYMPTOMS: SymptomInput[] = [
   },
   {
     id: 'pd-axial', indicationId: 'pd', name: 'Axial signs and gait',
-    summary: 'Axial signs map to SMA and brainstem. For freezing of gait, deep contacts at the STN/SNr border.',
-    structures: ['stn', 'stn_motor'], alternativeStructures: ['snr'],
+    summary: 'Axial signs map to SMA and brainstem. Combined STN and SNr stimulation for freezing of gait is investigational: its trials were negative on their primary outcomes.',
+    structures: ['stn', 'stn_motor'], contextStructures: ['snr'],
     tracts: ['sw_pd_sma'], corticalAreas: ['sma'], targetId: 't-ss-pd',
     evidence: [
       { claim: 'Symptom-specific tracts mapped in 237 patients from five centres', refIds: ['rajamani2024'] },
-      { claim: 'Combined STN plus SNr may help freezing, with mixed results', refIds: ['weiss2013', 'artusi2025', 'mds2024'] },
+      { claim: 'Combined STN and SNr stimulation for freezing of gait is investigational: the trials were negative on their primary outcomes', refIds: ['weiss2013', 'artusi2025', 'mds2024'] },
     ],
     note: `${RAJAMANI_NOTE} No brainstem-connected tract is distributed as a file, so the brainstem side is not drawn in this view.`,
     noteRefIds: ['rajamani2024'],
@@ -114,7 +114,7 @@ export const SYMPTOMS: SymptomInput[] = [
   },
   {
     id: 'gdys-generalized', indicationId: 'gdys', name: 'Generalized dystonia',
-    summary: 'The best stimulation volume sits in posteroventral GPi and extends into subpallidal white matter, implicating the ansa lenticularis. In generalized dystonia, benefit followed the pallidothalamic bundles.',
+    summary: 'The best stimulation volume sits in posteroventral GPi and extends into subpallidal white matter. In generalized dystonia, benefit followed the pallidothalamic bundles.',
     structures: ['gpi', 'gpi_sm'], tracts: ['rt_gen', 'al', 'lf'], corticalAreas: ['s1'], targetId: 't-ss-gen',
     evidence: [
       { claim: 'Sweet spot in posteroventral GPi bordering subpallidal white matter predicted individual outcome', refIds: ['reich2019'] },
@@ -135,13 +135,15 @@ export const SYMPTOMS: SymptomInput[] = [
   },
   {
     id: 'fhd-hand', indicationId: 'fhd', name: 'Focal hand dystonia',
-    summary: 'Vo is the main pallidal-receiving thalamus. Lesioning or stimulating it can give long-term remission of task-specific hand dystonia.',
+    summary: 'Voa, with the anterior edge of Vop, receives pallidal input; most of Vop receives cerebellar input, like the Vim. Lesioning or stimulating the Vo complex can give long-term remission of task-specific hand dystonia.',
     structures: ['vo'], tracts: ['al', 'lf'], corticalAreas: ['s1', 'sma'], targetId: 't-pub-vo',
     evidence: [
       { claim: '171 consecutive Vo thalamotomies for task-specific hand dystonia', refIds: ['horisawa2019'] },
       { claim: 'Vo targeted at the Voa/Vop junction from published coordinates', refIds: ['vocoords'] },
     ],
-    note: 'Marker: centroid of the Morel VLa label shown as Vo (atlas coordinate). The published Voa/Vop junction coordinates are not included; see the referenced series.',
+    // (the marker's description since A-003's published target)
+    note: 'Marker: the Voa–Vop junction at the coordinates Shimizu 2018 and Horisawa 2019 target: 13.5 mm lateral, 2 mm behind the mid-commissural point, 1 mm above the AC–PC line. The VLa drawn (Morel’s) is approximately Voa.',
+    noteRefIds: ['shimizu2018', 'horisawa2019'],
     camera: 'sagittal',
   },
   {

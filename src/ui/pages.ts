@@ -115,7 +115,8 @@ export function refsPage() {
     render();
   }, { label: 'Topic' });
   el.append(h('h1', {}, 'References'), h('label', { class: 'search' }, 'Search references', q), chipRow, count, list, empty,
-    h('p', { class: 'aside' }, '"Atlases and datasets" lists the sources of the 3D geometry; their citations are Crossref records for each DOI. "Epilepsy" references were added after the original teaching page (checked against PubMed). All other references come from the original teaching page.'));
+    // (the site audit's A-016: the note had said every non-epilepsy reference came from the original page)
+    h('p', { class: 'aside' }, '"Atlases and datasets" lists the sources of this section’s 3D geometry; their citations are Crossref records for each DOI. The original teaching page’s references are given from each paper’s Europe PMC record, linked by DOI; meeting abstracts, preprints and the slides say what they are. References added later, after checking against PubMed or Europe PMC: epilepsy; dystonia (Gruber 2018, Ilinsky 2018, Horisawa 2021); the optic-tract and red-nucleus landmarks; Parkinson’s dyskinesia (Tsuboi 2021, Fan 2020, Krack 1998, D’Souza 2026, Aquino 2019, Katayama 2006) and Liu 2014; Sammartino 2016. Where a paper is not open access, its citation says that only its abstract was checked.'));
   function render() {
     const s = q.value.trim().toLowerCase();
     const items = CONTENT.references

@@ -59,7 +59,8 @@ export const EPILEPSY_INDICATION: IndicationInput = {
   contextStructures: ['mtt', 'mamm', 'fornix'],
   keyTracts: [], alternativeTracts: [], corticalAreas: [],
   targetMarkers: ['t-pub-ant-mtt'], alternativeMarkers: ['t-atlas-cm', 't-atlas-hip'],
-  target: 'Anterior nucleus of the thalamus (ANT), for focal epilepsy that is multifocal or poorly localized.',
+  // (B2: "multifocal or poorly localized" was in none of the abstracts; SANTE treated drug-resistant partial epilepsy)
+  target: 'Anterior nucleus of the thalamus (ANT), for drug-resistant focal epilepsy.',
   alternatives: 'Centromedian thalamus (CM) for generalized seizures; hippocampus for temporal lobe seizures.',
   why: 'Bilateral ANT stimulation reduced seizures in a double-blind randomized trial, and the reduction grew over years of follow-up. Outcome depends on where the contacts sit: responders’ contacts lie in the anterior ANT, close to where the mammillothalamic tract ends.',
   howToChoose: 'Seizure type points to the target: ANT for focal seizures, CM for generalized seizures, hippocampus for temporal lobe seizures. The best evidence is for ANT; CM and hippocampal stimulation still need further randomized trials.',
@@ -78,7 +79,8 @@ export const EPILEPSY_SYMPTOMS: SymptomInput[] = [
     summary: 'For focal epilepsy that is multifocal or poorly localized, the ANT is the target with randomized evidence. Stimulation at the junction of the ANT and the mammillothalamic tract correlated with better seizure control.',
     structures: ['ant', 'mtt'], contextStructures: ['mamm', 'fornix'], tracts: [], corticalAreas: [], targetId: 't-pub-ant-mtt',
     evidence: [EVIDENCE.sante, EVIDENCE.sante10, EVIDENCE.schaper, EVIDENCE.ilyas, EVIDENCE.lehtimaki],
-    note: 'Marker: atlas-derived ANT–MTT junction (Morel atlas labels), not a published sweet spot. No ANT outcome map is distributed as a file.',
+    note: 'Marker: the ANT–MTT junction at the coordinates Schaper 2020 gives for indirect targeting (means of 20 patients), not a published sweet spot. No ANT outcome map is distributed as a file.',
+    noteRefIds: ['schaper2020'],
     camera: 'sagittal',
   },
   {

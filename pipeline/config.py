@@ -192,9 +192,11 @@ NUCLEI: list[Volume] = [
     Volume("rn", "Red nucleus", "nucleus", "rn", "distal", lr(DM, "RN"), aliases=["RN"]),
     Volume("thal", "Thalamus", "nucleus", "thal", "distal", lr(DM, "Thal"), faces=6000),
     Volume("vim", "Ventral intermediate nucleus (Vim)", "nucleus", "vim", "distal", lr(DM, "VIM"), aliases=["Vim", "VLp"]),
-    Volume("vo", "Ventral oral complex (Vo)", "nucleus", "vo", "morel", lr(MOREL, "VLa"),
-           aliases=["Vo", "Voa/Vop", "VLa (Morel)"],
-           derivation="Morel VLa label displayed as Vo, following the brief's nomenclature mapping (Vo = VA/VLa)."),
+    # (Morel's VLa is approximately Hassler's Voa; the bulk of Vop is cerebellar territory, with the Vim: Ilinsky 2018;
+    # the site audit's A-009, the owner's choice)
+    Volume("vo", "VLa (Morel), approximately Voa", "nucleus", "vo", "morel", lr(MOREL, "VLa"),
+           aliases=["Vo", "Voa", "VLa (Morel)"],
+           derivation="Morel's VLa label, approximately Hassler's Voa (Ilinsky 2018); the bulk of Hassler's Vop lies in the cerebellar territory, with the Vim."),
     Volume("cm", "Centromedian nucleus (CM)", "nucleus", "cm", "morel", lr(MOREL, "CM"), aliases=["CM"]),
     Volume("pf", "Parafascicular nucleus (Pf)", "nucleus", "cm", "morel", lr(MOREL, "Pf"), aliases=["Pf"]),
     Volume("psa", "Caudal zona incerta (PSA)", "nucleus", "psa", "lau2020", lr("Zona Incerta Atlas (Lau 2020)", "cZI"),

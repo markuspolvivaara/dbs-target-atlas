@@ -500,10 +500,10 @@
   },
   {
    "id": "vo",
-   "name": "Ventral oral complex (Vo)",
+   "name": "VLa (Morel), approximately Voa",
    "aliases": [
     "Vo",
-    "Voa/Vop",
+    "Voa",
     "VLa (Morel)"
    ],
    "type": "nucleus",
@@ -526,7 +526,7 @@
     "https://doi.org/10.1016/j.neuroimage.2009.10.042"
    ],
    "refIds": [],
-   "derivation": "Morel VLa label displayed as Vo, following the brief's nomenclature mapping (Vo = VA/VLa).",
+   "derivation": "Morel's VLa label, approximately Hassler's Voa (Ilinsky 2018); the bulk of Hassler's Vop lies in the cerebellar territory, with the Vim.",
    "centroid": {
     "L": [
      -14.599,

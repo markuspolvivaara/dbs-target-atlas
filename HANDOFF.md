@@ -37,7 +37,18 @@ commit and push it.
     - the two Horn 2022 markers at the printed peaks (the maps' maxima lie within 1 to 2.5 mm);
     - the tremor hotspot keeps its place; its card says it is on or 1.5 mm outside the drawn Vim, inside the drawn
       Vo, 8 to 9 mm from Guiot's Vim target.
-  - B1 is complete (A-001..A-003).
+  - B1 is complete (A-001..A-003), and the STN is drawn whole by default (the user's request; `stn=z` asks for the
+    zones). Pushed to `origin/fix/b1-dbs-views` (2026-11-15) at the user's word; no pull request yet.
+- B2, DBS statements and references (A-004, A-006..A-011, A-015, A-016), the user's choices: A-004 Liu 2014 in place
+  of a meeting abstract; A-009 Voa pallidal, most of Vop cerebellar (Ilinsky 2018; the mesh is named "VLa (Morel),
+  approximately Voa"); A-010 the Vim at 3/12 with the 2/12–3/12 range printed; A-011 the SNr as investigational
+  context. The rest from the sources: Reich 2019's abstract (volume, not electrode position; no ansa lenticularis),
+  Horisawa 2021's pilot for MRgFUS Vo thalamotomy, Sammartino 2016 for the pyramidal tract and lemniscus as the Vim's
+  borders, the SWI, 7T FGATIR, MRgFUS preprint and epilepsy texts to their sources. The 52 original references are
+  rebuilt from Europe PMC records with DOIs (barbe2018 and barrow had pointed to other papers); the References page
+  lists only this section's datasets (107 references, was 197). The name labels' layout now tries the other
+  direction and side before it drops a name (the SNr's move re-framed the Parkinson's view and hid "STN"). Local
+  commit on `fix/b1-dbs-views`, not pushed.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -310,7 +321,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (412 tests on `fix/b1-dbs-views`)
+  - `npx vitest run` (413 tests on `fix/b1-dbs-views`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`

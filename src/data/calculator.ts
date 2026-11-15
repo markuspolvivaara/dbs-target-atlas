@@ -33,7 +33,8 @@ export function rows(acpcLength: number, v3Width: number): CalcRow[] {
   return [
     { k: 'STN', c: 'stn', lat: 12, latR: '11–13 from midline', ap: -3.5, apR: '3–4 posterior', z: -4.5, zR: '4–5 below' },
     { k: 'GPi', c: 'gpi', lat: 20, latR: '19–21 from midline', ap: 2.5, apR: '2–3 anterior', z: -4.5, zR: '4–5 below' },
-    { k: 'Vim', c: 'vim', lat: half + 11.5, latR: '11–12 from ventricle wall', ap: -0.25 * L, apR: fmt(0.25 * L) + ' anterior to PC', z: 0, zR: 'AC–PC plane' },
+    // (the point at 3/12, the anterior end of Guiot's 2/12 to 3/12; the range printed, as for the STN and GPi: B2, A-010)
+    { k: 'Vim', c: 'vim', lat: half + 11.5, latR: '11–12 from ventricle wall', ap: -0.25 * L, apR: fmt(L / 6) + '–' + fmt(0.25 * L) + ' anterior to PC (2/12 to 3/12 of AC–PC)', z: 0, zR: 'AC–PC plane' },
   ];
 }
 
@@ -52,8 +53,8 @@ export function signed(t: CalcRow, side: Side): [number, number, number] {
 
 export const CALC_NOTE = {
   pre: 'Ranges follow standard teaching coordinates',
-  preRefs: ['calgary'],
-  mid: '. The Vim anteroposterior fraction is approximate. Atrophy, ventricle size and AC–PC length shift where the STN really lies',
+  preRefs: ['calgary', 'sammartino2016'],
+  mid: '. The Vim point is the anterior end of its range (3/12 of the AC–PC length in front of the PC), and the fraction is approximate. Atrophy, ventricle size and AC–PC length shift where the STN really lies',
   midRefs: ['stnanat2025'],
   post: ', so confirm every target on direct imaging and with physiology.',
 };
