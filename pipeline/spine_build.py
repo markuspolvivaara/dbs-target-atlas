@@ -1286,8 +1286,10 @@ def vertebral_artery(report: dict) -> tuple[list[dict], dict]:
                     f"{2 * VA_RADIUS:g} mm thick{narrow_note(drawn)} (not to scale)"}
     report["vertebralArtery"] = {"entry": entry, "areas": areas, "drawn": drawn}
     print(f"vertebral artery: as drawn {drawn}")
+    # each foramen as the bone is drawn, and as the CT's own bone at BONE_HU leaves it before the drawing's smoothing
+    # (`ct`: what the cards lead with; the smoothing narrows a thin-walled foramen, C3's above all)
     data = {"entry": entry, "foramina": {lv: {sd: tf[lv][sd] and {**{k: tf[lv][sd][k] for k in ("area", "width", "depth")},
-                                                                  "areaUnsmoothed": tf_raw[lv][sd] and tf_raw[lv][sd]["area"]}
+                                                                  "ct": tf_raw[lv][sd] and {k: tf_raw[lv][sd][k] for k in ("area", "width", "depth")}}
                                               for sd in ("L", "R")} for lv in levels},
             # how thick the schematic artery is drawn in each foramen it passes (2 * VA_RADIUS, or less where the
             # foramen as drawn is narrower)
@@ -1441,6 +1443,11 @@ def validate() -> int:
             check(a["inBoneMm"] <= VA_IN_MAX_MM, f"vertebral artery {sd}: {a['inBoneMm']} mm inside the drawn bone")
             check(all(2 * VA_MIN_RADIUS - 0.05 <= d <= 2 * VA_RADIUS + 0.05 for d in a["diameterAt"].values()),
                   f"vertebral artery {sd}: drawn diameters {a['diameterAt']}")
+        # each foramen transversarium also measured on the CT's own bone, which the cards lead with (decision 8)
+        for lv, fo in levels_json["vertebralArtery"]["foramina"].items():
+            for sd in ("L", "R"):
+                if fo[sd]:
+                    check(fo[sd].get("ct") is not None, f"foramen transversarium {lv} {sd}: not measured on the CT's own bone")
     # the canal's width does not jump between neighbours (L5's was given as 38.0 mm beside L4's 26.5: the hole
     # measured ran out into the lateral recesses, MC-06), and a calcified disc is drawn whole, says so, and has its
     # calcification (MC-02)

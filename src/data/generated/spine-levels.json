@@ -1137,13 +1137,21 @@
      "area": 28.0,
      "width": 6.5,
      "depth": 7.0,
-     "areaUnsmoothed": 28.0
+     "ct": {
+      "area": 28.0,
+      "width": 6.5,
+      "depth": 9.0
+     }
     },
     "R": {
      "area": 31.0,
      "width": 8.5,
      "depth": 6.5,
-     "areaUnsmoothed": 36.0
+     "ct": {
+      "area": 36.0,
+      "width": 7.5,
+      "depth": 8.5
+     }
     },
     "medialGap": 51.1
    },
@@ -1152,13 +1160,21 @@
      "area": 23.0,
      "width": 6.5,
      "depth": 6.0,
-     "areaUnsmoothed": 30.0
+     "ct": {
+      "area": 30.0,
+      "width": 7.0,
+      "depth": 9.0
+     }
     },
     "R": {
      "area": 22.0,
      "width": 5.5,
      "depth": 6.5,
-     "areaUnsmoothed": 20.0
+     "ct": {
+      "area": 20.0,
+      "width": 6.5,
+      "depth": 6.0
+     }
     },
     "medialGap": 30.0
    },
@@ -1167,13 +1183,21 @@
      "area": 12.0,
      "width": 5.0,
      "depth": 3.5,
-     "areaUnsmoothed": 24.0
+     "ct": {
+      "area": 24.0,
+      "width": 6.5,
+      "depth": 9.0
+     }
     },
     "R": {
      "area": 7.0,
      "width": 4.0,
      "depth": 3.5,
-     "areaUnsmoothed": 18.0
+     "ct": {
+      "area": 18.0,
+      "width": 10.0,
+      "depth": 4.5
+     }
     },
     "medialGap": 27.5
    },
@@ -1182,13 +1206,21 @@
      "area": 24.0,
      "width": 6.5,
      "depth": 5.5,
-     "areaUnsmoothed": 30.0
+     "ct": {
+      "area": 30.0,
+      "width": 6.5,
+      "depth": 6.5
+     }
     },
     "R": {
      "area": 26.0,
      "width": 7.0,
      "depth": 7.0,
-     "areaUnsmoothed": 32.0
+     "ct": {
+      "area": 32.0,
+      "width": 8.0,
+      "depth": 8.0
+     }
     },
     "medialGap": 27.9
    },
@@ -1197,13 +1229,21 @@
      "area": 28.0,
      "width": 6.5,
      "depth": 7.0,
-     "areaUnsmoothed": 31.0
+     "ct": {
+      "area": 31.0,
+      "width": 7.0,
+      "depth": 8.0
+     }
     },
     "R": {
      "area": 14.0,
      "width": 5.5,
      "depth": 5.0,
-     "areaUnsmoothed": 30.0
+     "ct": {
+      "area": 30.0,
+      "width": 9.0,
+      "depth": 8.5
+     }
     },
     "medialGap": 29.3
    },
@@ -1212,13 +1252,21 @@
      "area": 28.0,
      "width": 6.0,
      "depth": 6.5,
-     "areaUnsmoothed": 28.0
+     "ct": {
+      "area": 28.0,
+      "width": 7.0,
+      "depth": 7.0
+     }
     },
     "R": {
      "area": 27.0,
      "width": 5.0,
      "depth": 8.5,
-     "areaUnsmoothed": 22.0
+     "ct": {
+      "area": 22.0,
+      "width": 6.5,
+      "depth": 8.5
+     }
     },
     "medialGap": 33.7
    },

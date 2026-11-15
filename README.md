@@ -807,7 +807,9 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
 - **Cervical** (phase 2a): vertebrae C1–C7, discs C2–C3 to C7–T1, canal contents, canal and disc height per level;
   schematic roots C3–C8 by the cervical rule (each above the vertebra of its number, C8 between C7 and T1; Moreno
   2021), through the lower part of foramina found in planes turned 30° forwards (their size is not reported); the
-  foramina transversaria C1–C7 measured, and a schematic vertebral artery from the subclavian artery through them
+  foramina transversaria C1–C7 measured (on the CT's own bone at 200 HU; the drawn bone's smoothing narrows a
+  thin-walled foramen, C3's to 12 and 7 mm² against 24 and 18, and the card gives that beside it), and a schematic
+  vertebral artery from the subclavian artery through them
   (entry level inferred from their size, C6 on both sides here), behind the lateral mass of the atlas and over the
   groove on its posterior arch. The neck from TotalSegmentator (common and internal carotids, internal jugular veins,
   trachea, oesophagus, thyroid, larynx, prevertebral muscles, sternocleidomastoids) on two layers of their own,

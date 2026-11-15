@@ -403,6 +403,14 @@ describe('cervical region (phase 2a)', () => {
     expect(m.L[0]).toBeLessThan(m.R[0]);
     for (const k of ['vaSegments', 'vaEntry', 'vaGroove', 'vaHighRiding', 'cervicalRootRule', 'cervicalRootDisc'] as const) expect(STATEMENTS[k].refIds.length, k).toBeGreaterThan(0);
   });
+  it('the foramina transversaria are given as the CT’s own bone leaves them, the drawn bone’s beside where it differs (C3)', () => {
+    // (decision 8: the drawn bone's smoothing narrows a thin-walled foramen; the cards lead with the CT's measure)
+    for (const [lv, fo] of Object.entries(VERTEBRAL_ARTERY.foramina)) {
+      for (const sd of ['L', 'R'] as const) if (fo[sd]) expect(fo[sd]!.ct, `${lv}${sd}`).not.toBeNull();
+    }
+    const c3 = VERTEBRAL_ARTERY.foramina.C3;
+    for (const sd of ['L', 'R'] as const) expect(c3[sd]!.ct!.area - c3[sd]!.area, sd).toBeGreaterThanOrEqual(5);
+  });
   it('the anterior approach (ACDF) shows the disc, the carotid sheath, the viscera and the prevertebral muscles; the link round-trips', () => {
     const s = decodeSpine('#/atlas?r=cervical&lv=C5&ap=acdf.L');
     expect(s.approach).toEqual({ id: 'acdf', side: 'L' });

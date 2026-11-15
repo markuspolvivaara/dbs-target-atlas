@@ -40,9 +40,10 @@ export const LevelGeomSchema = z.object({
   }).optional(),
 });
 export type LevelGeom = z.infer<typeof LevelGeomSchema>;
-/** area, width, depth: on the bone as drawn; areaUnsmoothed: the enclosed area on the same volume before the drawing's
- * smoothing, which narrows small openings (null where no enclosed region is found there) */
-const TransverseForamen = z.object({ area: z.number(), width: z.number(), depth: z.number(), areaUnsmoothed: z.number().nullable() }).nullable();
+/** area, width, depth: on the bone as drawn; ct: the same on the CT's own bone at 200 HU before the drawing's
+ * smoothing, which narrows a thin-walled foramen (null where no enclosed region is found there): the cards lead with it */
+const ForamenDims = z.object({ area: z.number(), width: z.number(), depth: z.number() });
+const TransverseForamen = ForamenDims.extend({ ct: ForamenDims.nullable() }).nullable();
 const LEVELS = z.object({
   lumbar: z.array(LevelGeomSchema), thoracic: z.array(LevelGeomSchema), cervical: z.array(LevelGeomSchema),
   /** the vertebral artery's entry level per side (inferred from the foramina's size) and the foramina transversaria

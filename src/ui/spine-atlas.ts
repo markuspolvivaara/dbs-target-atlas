@@ -626,9 +626,12 @@ export class SpineAtlasPage {
       // the schematic artery is 4 mm thick where there is room; where the foramen as drawn is narrower it is drawn thinner
       const drawn = va.drawnDiameter[sd][level];
       const thin = carries && drawn !== undefined && drawn < 3.95 ? `, drawn ${fmtMm(drawn)} mm thick here (the foramen as drawn is narrower than its 4 mm)` : '';
-      // (the drawn bone is a smoothed surface, which narrows small openings: the area before the smoothing beside it)
-      const raw = f.areaUnsmoothed !== null && Math.abs(f.areaUnsmoothed - f.area) >= 5 ? ` on the bone as drawn (${Math.round(f.areaUnsmoothed)} mm² before its smoothing)` : '';
-      return `${name}: ${Math.round(f.area)} mm² enclosed, ${fmtMm(f.width)} × ${fmtMm(f.depth)} mm${raw}; ${carries ? (level === va.entry[sd] ? 'the artery enters here (inferred)' : 'carries the artery (inferred)') : 'below the artery’s entry'}${thin}`;
+      // the CT's own bone first; the bone as drawn is a smoothed surface, which narrows a thin-walled foramen: its
+      // area beside where it differs
+      const m = f.ct ?? f;
+      const drawnNote = f.ct && Math.abs(f.ct.area - f.area) >= 5
+        ? ` (${Math.round(f.area)} mm² on the bone as drawn${f.area < f.ct.area ? ', whose smoothing narrows it' : ''})` : '';
+      return `${name}: ${Math.round(m.area)} mm² enclosed, ${fmtMm(m.width)} × ${fmtMm(m.depth)} mm${drawnNote}; ${carries ? (level === va.entry[sd] ? 'the artery enters here (inferred)' : 'carries the artery (inferred)') : 'below the artery’s entry'}${thin}`;
     };
     return h('div', {},
       h('ul', { class: 'plain' }, h('li', {}, side('L')), h('li', {}, side('R'))),
