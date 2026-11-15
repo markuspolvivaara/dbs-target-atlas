@@ -3,6 +3,7 @@ import { CONTENT, IND, MAN, MANIFEST, STRUCT, SYM, TGT } from '../data';
 import { mniToAcpc } from '../data/acpc';
 import type { CameraPreset, Evidence, Target } from '../data/schema';
 import { IMAGING } from '../data/imaging';
+import { SIDE_EFFECTS } from '../data/sideeffects';
 import type { AppState, Hemi, LayerKey } from '../state';
 import { DEFAULT_LEAD, LEAD_ANCHORS, type LeadAnchor } from '../state';
 import { LEAD } from '../viewer/lead';
@@ -328,6 +329,16 @@ export class AtlasPage {
       if (r) roles.push(h('li', {}, h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.ind = ind.id; s.sym = null; s.cam = { preset: null }; }, { camera: true }) }, ind.name), `: ${r}`));
     }
     const img = IMAGING.find((x) => x.structureId === id);
+    // a target's stimulation side effects: what the patient has, and the structure current is thought to reach (its card
+    // linked where it is drawn)
+    const se = SIDE_EFFECTS[id];
+    const effects = se ? [h('dt', {}, 'Stimulation side effects'), h('dd', {},
+      h('ul', { class: 'side-effects' }, ...se.items.map((x) => {
+        const d = x.drawnId ? MAN.get(x.drawnId) : undefined;
+        const link = d ? h('span', { style: 'white-space: nowrap' }, ' (', h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.sel = d.id; }) }, d.name), ')') : '';
+        return h('li', {}, x.effect, x.cause ? h('span', { class: 'se-cause' }, ' — from ', x.cause, link) : '', '. ', refLinks(x.refIds));
+      })),
+      se.note ? h('p', { class: 'aside' }, se.note.text, ' ', refLinks(se.note.refIds)) : null)] : null;
     const stream = m.streamlines ? `${m.streamlines.L + m.streamlines.R} of ${m.sourceStreamlines!.L + m.sourceStreamlines!.R} source streamlines shown.` : '';
     return h('article', { class: 'card sel', style: `--accent: var(--c-${m.colour.token})` }, close,
       h('p', { class: 'eyebrow' }, m.category ?? { nucleus: 'Nucleus', cortex: 'Cortical area', tract: 'Tract', target: 'Sweet-spot volume', bone: 'Bone', soft: 'Soft tissue', surface: 'Cortical label', tube: 'Vessel or nerve' }[m.type]),
@@ -336,6 +347,7 @@ export class AtlasPage {
       h('dl', {},
         h('dt', {}, 'Role and DBS relevance'),
         h('dd', {}, st.description ?? 'Not discussed in the source content; shown for anatomical context.', ' ', refLinks(st.refIds.filter((r) => CONTENT.references.find((x) => x.id === r)?.topic !== 'atlas'))),
+        effects,
         roles.length ? [h('dt', {}, 'In this atlas'), h('dd', {}, h('ul', { class: 'roles' }, ...roles))] : null,
         img ? [h('dt', {}, 'Imaging'), h('dd', {}, h('a', { href: `#/imaging?t=${img.id}` }, `Sequences and tractography for ${img.label}`))] : null,
         h('dt', {}, 'Geometry'),
@@ -518,7 +530,7 @@ export class AtlasPage {
           h('input', { type: 'range', min: 0, max: 1, step: 0.05, oninput: (e: Event) => this.update((st) => { st.layers[k].opacity = parseFloat((e.target as HTMLInputElement).value); }) }))));
       pane.append(h('h3', {}, 'Layers'), ...rows,
         h('label', { class: 'check' }, h('input', { type: 'checkbox', 'data-borders': '1', onchange: (e: Event) => this.update((st) => { st.borders = (e.target as HTMLInputElement).checked; }) }),
-          'Show landmarks: corticospinal tract and medial lemniscus around Vim/PSA targets, optic tract beneath GPi targets, red nucleus beside STN targets'),
+          'Show landmarks: corticospinal tract and medial lemniscus around Vim/PSA targets, optic tract beneath GPi targets, red nucleus beside STN targets (their cards and the targets’ say which stimulation side effects they explain)'),
         h('p', { class: 'aside' }, 'Unselected nuclei stay as faint ghosts for orientation. Tracts and cortex load when first needed.'),
         h('h3', {}, 'All structures'), this.structureIndex());
     }

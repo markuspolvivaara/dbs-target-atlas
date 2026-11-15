@@ -64,6 +64,25 @@ test('spine: at a cervical disc the level card names the root that leaves there,
   expect(g.errors).toEqual([]);
 });
 
+// A-013: what stimulation does when current reaches the structures around a target, on the target's card
+test('dbs: the STN card lists stimulation side effects and links the drawn landmark each one names', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './dbs/#/atlas?i=pd&sel=stn');
+  const card = page.locator('.card.sel');
+  await expect(card.locator('dt', { hasText: 'Stimulation side effects' })).toBeVisible();
+  await expect(card.locator('.side-effects')).toContainText('Deviation of one eye and diplopia');
+  await expect(card.locator('.side-effects')).toContainText('third-nerve fibres');
+  await expect(card.locator('.side-effects')).toContainText('Koeglsperger 2019');
+  await card.locator('.side-effects button', { hasText: 'Medial lemniscus' }).first().click();
+  await expect(page.locator('.card.sel h2')).toContainText('Medial lemniscus');
+  await expect(page.locator('.card.sel')).toContainText('paraesthesiae on the opposite side during STN stimulation');
+  // the PSA: Kim 2021's rates
+  await open(page, './dbs/#/atlas?i=et&sel=psa');
+  await expect(page.locator('.card.sel .side-effects')).toContainText('14% of 93 patients with PSA stimulation');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
 // E-002, E-005, E-010: a central herniation presses on the cauda equina, not on no root; a root's picture in radiculopathy
 test('spine: the level card offers a central herniation and gives each root its picture in radiculopathy', async ({ page }) => {
   const g = guard(page);
