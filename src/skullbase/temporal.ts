@@ -34,6 +34,20 @@ export const TB_REFS: TbRef[] = [
     citation: 'Chaware P, Kumar V, Srivastava A, Raj S, Rathinam BAD. Neurovascular structures at risk during surgical access to trigeminal ganglion and Meckel’s cave: an anatomical study. Adv Biomed Res. 2023;12:62. doi:10.4103/abr.abr_261_20.' },
   { id: 'mncube2019', pmid: '31754545', pmcid: 'PMC6851876', shortLabel: 'Mncube 2019', url: doi('10.4102/sajr.v23i1.1772'),
     citation: 'Mncube SS, Goodier MD. Normal measurements of the optic nerve, optic nerve sheath and optic chiasm in the adult population. SA J Radiol. 2019;23(1):1772. doi:10.4102/sajr.v23i1.1772.' },
+  { id: 'raut2012', pmid: '23833423', pmcid: 'PMC3698894', shortLabel: 'Raut 2012', url: doi('10.4103/0971-3026.111485'),
+    citation: "Raut AA, Naphade PS, Chawla A. Imaging of skull base: Pictorial essay. Indian J Radiol Imaging. 2012;22(4):305–316. doi:10.4103/0971-3026.111485." },
+  { id: 'kalthur2023', pmid: '36930271', pmcid: 'PMC10130107', shortLabel: 'Kalthur 2023', url: doi('10.1007/s00276-023-03126-7'),
+    citation: "Kalthur SG, Padmashali S, Bhattarai C, Gupta C. Surgical anatomy of hypoglossal canal for various skull base surgeries. Surg Radiol Anat. 2023;45(5):537–543. doi:10.1007/s00276-023-03126-7." },
+  { id: 'katsuta1997', pmid: '9218307', pmcid: '', shortLabel: 'Katsuta 1997', url: doi('10.1097/00006123-199707000-00030'),
+    citation: "Katsuta T, Rhoton AL, Matsushima T. The jugular foramen: microsurgical anatomy and operative approaches. Neurosurgery. 1997;41(1):149–201; discussion 201–2. doi:10.1097/00006123-199707000-00030. Checked against its abstract: the full text is not open access." },
+  { id: 'triantafyllou2025fo', pmid: '40025319', pmcid: 'PMC12043748', shortLabel: 'Triantafyllou 2025', url: doi('10.1007/s12565-025-00826-5'),
+    citation: "Triantafyllou G, Papadopoulos-Manolarakis P, Luzzi S, Olewnik Ł, Tsakotos G, Zielinska N, et al. Foramen ovale morphology and relationship with the lateral pterygoid process plate: proposal for a new classification system. Anat Sci Int. 2025;100(3):354–365. doi:10.1007/s12565-025-00826-5." },
+  { id: 'kempa2025', pmid: '41446453', pmcid: 'PMC12725769', shortLabel: 'Kempa 2025', url: doi('10.7759/cureus.97572'),
+    citation: "Kempa A, Sinou N, Sinou N, Filippou D, Shihada A. Anatomical Variations of the Foramen Ovale and Trigeminal Neuralgia. Cureus. 2025;17(11):e97572. doi:10.7759/cureus.97572." },
+  { id: 'trimble2023', pmid: '37070686', pmcid: 'PMC10550638', shortLabel: 'Trimble 2023', url: doi('10.3171/case2375'),
+    citation: "Trimble DJ, Dawes BH, Zeineddine HA, Guttenberg KB, Yao WC, Bhattacharjee M, et al. Neurofibroma of the internal carotid artery cavernous sympathetic plexus: illustrative case. J Neurosurg Case Lessons. 2023;5(16):CASE2375. doi:10.3171/case2375." },
+  { id: 'jeican2026', pmid: '42356086', pmcid: 'PMC13302864', shortLabel: 'Jeican 2026', url: doi('10.3390/medicina62061073'),
+    citation: 'Jeican II, Siserman CV, Toader C, Trombitaș VE. Microsurgical anatomy of the labyrinthine artery: a cadaveric microdissection study of number, origin and course at the cerebellopontine angle. Medicina (Kaunas). 2026;62(6):1073. doi:10.3390/medicina62061073.' },
 ];
 export const TB_REF = new Map(TB_REFS.map((r) => [r.id, r]));
 
@@ -85,26 +99,44 @@ export const TB_NOTES: Record<string, TbClaim[]> = {
   'Accessory nerve (XI)': [c('Its spinal roots rise through the foramen magnum; joined with the cranial roots it leaves through the jugular foramen, behind the glossopharyngeal and vagus nerves.', 'romano2019')],
   'Hypoglossal nerve (XII)': [c('From the ventrolateral sulcus of the medulla it crosses the lateral cerebellomedullary cistern, near the vertebral and posterior inferior cerebellar arteries, and leaves the skull through the hypoglossal canal.', 'romano2019')],
   'Middle meningeal artery': [c('A branch of the first part of the maxillary artery, it enters the skull through the foramen spinosum.', 'sugano2022')],
-  'Optic canal': [c('The optic nerve’s passage between the orbit and the cranial cavity.', 'romano2019')],
+  // (the site audit's C-003: the vessels and the neuraxis beside the cranial nerves; C-004: the jugular foramen's three
+  // compartments first, its classical two parts after; C-010: the carotid passes over the foramen lacerum)
+  'Optic canal': [c('The optic nerve’s passage between the orbit and the cranial cavity.', 'romano2019'), c('It transmits the optic nerve and the ophthalmic artery.', 'raut2012')],
   'Superior orbital fissure': [c('The oculomotor, trochlear, ophthalmic and abducens nerves and the superior ophthalmic vein pass through it.', 'romano2019')],
   'Foramen rotundum': [c('The maxillary nerve leaves the skull through it to the pterygopalatine fossa.', 'romano2019')],
-  'Foramen ovale': [c('The mandibular nerve leaves the skull through it to the infratemporal fossa.', 'romano2019')],
+  'Foramen ovale': [
+    c('The mandibular nerve leaves the skull through it to the infratemporal fossa.', 'romano2019'),
+    c('The accessory meningeal artery passes with it, and an emissary vein joining the cavernous sinus to the pterygoid venous plexus; sometimes the lesser petrosal nerve.', 'triantafyllou2025fo', 'kempa2025'),
+  ],
   'Foramen spinosum': [
     c('In the greater wing of the sphenoid, posterolateral to the foramen ovale; it transmits the middle meningeal artery and vein and the meningeal branch of the mandibular nerve.', 'sugano2022'),
   ],
-  'Jugular foramen': [c('The glossopharyngeal nerve passes through its pars nervosa; the vagus and accessory nerves through its pars vascularis.', 'romano2019')],
-  'Hypoglossal canal': [c('The hypoglossal nerve leaves the skull through it.', 'romano2019')],
-  'Foramen magnum': [c('The spinal roots of the accessory nerve rise through it into the skull.', 'romano2019')],
-  'Internal acoustic meatus': [c('The facial and vestibulocochlear nerves pass through it into the temporal bone.', 'romano2019')],
+  'Jugular foramen': [
+    c('Microsurgically it has three compartments: a larger posterolateral sigmoid part receiving the sigmoid sinus, a smaller anteromedial petrosal part receiving the inferior petrosal sinus, and between them a neural (intrajugular) part through which the glossopharyngeal, vagus and accessory nerves run.', 'katsuta1997'),
+    c('In the older two-part scheme the pars nervosa holds the glossopharyngeal nerve and the inferior petrosal sinus, the pars vascularis the internal jugular vein, the vagus and accessory nerves and the posterior meningeal artery; sometimes the vagus too runs through the pars nervosa.', 'raut2012'),
+  ],
+  'Hypoglossal canal': [c('It transmits the hypoglossal nerve, the meningeal branch of the ascending pharyngeal artery and an emissary vein.', 'kalthur2023')],
+  'Foramen magnum': [
+    c('The medulla oblongata, the vertebral arteries, the anterior and posterior spinal arteries and the spinal accessory nerve pass through it.', 'raut2012'),
+    c('The spinal roots of the accessory nerve rise through it into the skull.', 'romano2019'),
+  ],
+  'Internal acoustic meatus': [
+    c('The facial and vestibulocochlear nerves pass through it into the temporal bone.', 'romano2019'),
+    c('The labyrinthine artery runs with them to the meatus, where it divides.', 'jeican2026'),
+  ],
   'Foramen lacerum': [
     c('Bordered in front by the body of the sphenoid, behind by the basilar part of the occipital bone, and laterally by the petrous part of the temporal bone and the carotid canal.', 'muslu2025'),
     c('The segment of the internal carotid artery immediately above it is the lacerum segment.', 'muslu2025'),
+    c('It is not a true foramen: in life fibrocartilage covers its upper surface, and the internal carotid artery runs over that tissue, not through it.', 'muslu2025'),
   ],
   'Internal carotid artery (petrous and lacerum parts)': [
     c('The carotid canal surrounds the petrous segment of the internal carotid artery and opens at the posterolateral margin of the foramen lacerum.', 'muslu2025'),
     c('The segment immediately above the foramen lacerum is the lacerum segment.', 'muslu2025'),
   ],
-  'External opening of carotid canal': [c('The carotid canal surrounds the petrous segment of the internal carotid artery and opens at the posterolateral margin of the foramen lacerum.', 'muslu2025')],
+  'External opening of carotid canal': [
+    c('The carotid canal surrounds the petrous segment of the internal carotid artery and opens at the posterolateral margin of the foramen lacerum.', 'muslu2025'),
+    c('Postganglionic sympathetic fibres from the superior cervical ganglion accompany the artery through its petrous and cavernous segments.', 'trimble2023'),
+  ],
   // ---- the temporal bone
   'Facial nerve (VII)': [
     c('Its bony canal has three segments: labyrinthine, tympanic and mastoid.', 'gupta2013'),

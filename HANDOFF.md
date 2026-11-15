@@ -63,7 +63,18 @@ commit and push it.
     token is now `wmNDRTT`;
   - SLF I without the "dorsal SLF" alias, with the Wang 2016 / Komaitis 2020 dispute; the arcuate sentence (Duffau
     2008), the posterior corticostriatal tract (parietal and occipital), and "Brodmann areas the bundle touches"
-    with Yeh 2022's caveat. Local commit, not pushed.
+    with Yeh 2022's caveat. Pushed at the user's word.
+- B5, the skull base texts (C-001..C-011), the user's choices: meningioma shares "of all intracranial meningiomas" from
+  papers that state it (Calvanese 2024, Cuellar-Hernandez 2021, Hammed 2021), petroclival Singh 2019's 5–11 % of
+  posterior fossa ones; the foramen notes with vessels and neuraxis (Raut 2012, Kalthur 2023, Trimble 2023, Jeican
+  2026; the foramen ovale from Triantafyllou 2025 and Kempa 2025, Khairnar 2013 removed); the jugular foramen's three
+  compartments first (Katsuta 1997), the two parts after (Raut 2012); Koos by the brainstem (Koos 1998, sizes
+  approximate), Knosp from Knosp 1993 and Micko 2015 with its invasion rates and the grade 3 row. From the sources:
+  the carotid over, not through, the foramen lacerum (Muslu 2025); the sphenoid ostium with its paper's caveat and
+  mean ± SD; the LSO and minipterional about equal at the carotid bifurcation (Mosteiro 2026's table). C-002 was
+  already fixed (1eae262). C-009: `DEFINITION_EDITS` in `src/skullbase/index.ts` corrects shipped definitions in the
+  front end (facial nerve; the callosomarginal artery's text withdrawn), so the pipeline files the user's endonasal
+  work touches stay as they are. Local commit, not pushed.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -336,7 +347,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (415 tests on `fix/b1-dbs-views`)
+  - `npx vitest run` (420 tests on `fix/b1-dbs-views`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`

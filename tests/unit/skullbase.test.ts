@@ -1248,3 +1248,57 @@ describe('what passes through a foramen (review C11)', async () => {
     for (const p of ov) for (const n of p.model) expect(SB_MANIFEST.structures.some((s) => s.name === n), n).toBe(true);
   });
 });
+
+describe('the site audit’s B5: the skull base texts against their sources', async () => {
+  const { MENINGIOMA_SITES, KOOS_GRADES, KNOSP_GRADES, KNOSP_GRADE_3, TUMOURS } = await import('../../src/skullbase/tumours');
+  const { PASSAGES, FORAMEN_REFS } = await import('../../src/skullbase/foramina');
+  const { DEFINITION_EDITS } = await import('../../src/skullbase');
+  const raw = [
+    (await import('../../src/data/generated/sb-definitions.json')).default,
+    (await import('../../src/data/generated/sbct-definitions.json')).default,
+    (await import('../../src/data/generated/sbv3-definitions.json')).default,
+  ] as Record<string, { text: string }>[];
+  it('meningioma shares carry their own denominator and source (C-001)', () => {
+    for (const s of MENINGIOMA_SITES) {
+      expect(s.share, s.id).toMatch(/of (all|all intracranial|posterior fossa) meningiomas$/);
+      for (const r of s.shareRefs) expect(APPROACH_REF.has(r), r).toBe(true);
+    }
+    expect(MENINGIOMA_SITES.find((s) => s.id === 'petroclival')!.share).toBe('5–11 % of posterior fossa meningiomas');
+    const defs = TUMOURS.find((t) => t.family === 'meningioma')!.grades.map((g) => g.definition.text);
+    for (const d of defs) expect(d).not.toMatch(/of skull base meningiomas/);
+  });
+  it('Koos grades by the brainstem; Knosp with its original papers and the invasion found at surgery (C-005, C-006)', () => {
+    expect(KOOS_GRADES.find((g) => g.id === 'II')!.definition).toMatch(/without contacting the brainstem/);
+    for (const g of KOOS_GRADES) expect(g.definition, g.id).not.toMatch(/[<>] ?\d/);
+    expect(KNOSP_GRADES.map((g) => g.invasion)).toEqual(['–', '1.5 %', '9.9 %', '26.5 %', '70.6 %', '100 %']);
+    expect([KNOSP_GRADE_3.cure, KNOSP_GRADE_3.complications]).toEqual(['46.0 % (17/37)', '8.1 % (3/37)']);
+    const kn = TUMOURS.find((t) => t.family === 'knosp')!.sections.flatMap((s) => s.claims);
+    expect(kn.flatMap((c) => c.refIds)).toEqual(expect.arrayContaining(['knosp1993', 'micko2015']));
+    // "3–4 invasive" is that cohort's threshold, not part of the scale
+    expect(kn.find((c) => c.text.startsWith('Knosp 0'))!.text).not.toMatch(/invasive/);
+    for (const r of ['knosp1993', 'micko2015', 'koos1998']) expect(APPROACH_REF.get(r)!.citation, r).toMatch(/abstract/);
+  });
+  it('the foramina: vessels and neuraxis beside the nerves, the jugular foramen’s compartments first, the carotid over the lacerum (C-003, C-004, C-010, C-011)', () => {
+    expect(TB_NOTES['Foramen magnum'].map((c) => c.text).join(' ')).toMatch(/medulla oblongata, the vertebral arteries/);
+    expect(TB_NOTES['Optic canal'].map((c) => c.text).join(' ')).toMatch(/ophthalmic artery/);
+    expect(TB_NOTES['Hypoglossal canal'][0].refIds).toEqual(['kalthur2023']);
+    expect(TB_NOTES['Jugular foramen'][0].refIds).toEqual(['katsuta1997']);
+    expect(FORAMEN_CONTENTS['Jugular foramen'][0].refIds).toEqual(['katsuta1997']);
+    expect(TB_NOTES['Foramen lacerum'].map((c) => c.text).join(' ')).toMatch(/not through it/);
+    for (const g of SB_GROUPS) expect(JSON.stringify(g), g.id).not.toMatch(/through the carotid canal and foramen lacerum/);
+    expect(FORAMEN_REFS.map((r) => r.id)).not.toContain('khairnar2013');
+    for (const p of PASSAGES['Foramen ovale']) expect(p.refIds.length, p.structure).toBeGreaterThan(0);
+  });
+  it('two shipped definitions corrected in every model, the edit said on the card (C-009)', () => {
+    // the words to replace are still in each model's generated file that has the structure (a rebuild would show here)
+    for (const d of raw) for (const [name, e] of Object.entries(DEFINITION_EDITS)) if (d[name] && e.old) expect(d[name].text, name).toContain(e.old);
+    expect(definitionFor('Facial nerve (VII)')!.text).not.toMatch(/labyrinthine segment\) is/);
+    expect(definitionFor('Facial nerve (VII)')!.edited).toMatch(/segments of the nerve’s bony canal/);
+    expect(definitionFor('Callosomarginal artery')).toBeNull();
+  });
+  it('approach texts as their papers report them (C-007, C-008)', () => {
+    const all = APPROACHES.flatMap((a) => a.sections.flatMap((s) => s.claims)).concat(ENDONASAL_INFO.sections.flatMap((s) => s.claims));
+    expect(all.find((c) => c.refIds.includes('mosteiro2026') && /bifurcation/.test(c.text))!.text).toMatch(/about the same through the LSO and the minipterional/);
+    expect(all.find((c) => c.refIds.includes('nguyen2026') && /sphenoid sinus had a single natural ostium/.test(c.text))!.text).toMatch(/smaller, the authors note, than the 3–4 mm/);
+  });
+});

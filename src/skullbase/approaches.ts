@@ -199,6 +199,18 @@ export const APPROACH_REFS: ApproachRef[] = [
     citation: 'Voormolen EH, Diederen S, Cebula H, Woerdeman PA, Noordmans HJ, Viergever MA, et al. Distance control and virtual drilling improves anatomical orientation during anterior petrosectomy. Oper Neurosurg. 2020;18(1):83–91. doi:10.1093/ons/opz064.' },
   { id: 'singh2019', pmid: '30937033', pmcid: 'PMC6417359', shortLabel: 'Singh 2019', url: doi('10.4103/ajns.ajns_192_18'),
     citation: 'Singh N, Singh DK, Ahmad F, Kumar R. The retrosigmoid approach: workhorse for petroclival meningioma surgery. Asian J Neurosurg. 2019;14(1):188–192. doi:10.4103/ajns.ajns_192_18.' },
+  { id: 'calvanese2024', pmid: '38283807', pmcid: 'PMC10821648', shortLabel: 'Calvanese 2024', url: doi('10.3171/2023.10.focvid23125'),
+    citation: "Calvanese F, Auricchio AM, Lehecka M. Exoscopic resection of giant olfactory groove meningioma. Neurosurg Focus Video. 2024;10(1):V6. doi:10.3171/2023.10.focvid23125." },
+  { id: 'cuellar2021', pmid: '33500820', pmcid: 'PMC7827506', shortLabel: 'Cuellar-Hernandez 2021', url: doi('10.25259/sni_731_2020'),
+    citation: "Cuellar-Hernandez JJ, Olivas-Campos JR, Tabera-Tarello PM, Anokwute M, Valadez-Rodriguez A. Supraorbital transciliary keyhole approach for removal of tuberculum sellae meningioma: 3D surgical video. Surg Neurol Int. 2021;12:5. doi:10.25259/sni_731_2020." },
+  { id: 'hammed2021', pmid: '33996057', pmcid: 'PMC8100088', shortLabel: 'Hammed 2021', url: doi('10.1016/j.amsu.2021.102325'),
+    citation: "Hammed A, Mahfoud M, Sulaiman A, Najm A, Hammed S. Pure posterior chordoid foramen magnum meningioma: A case report and review of literature. Ann Med Surg (Lond). 2021;65:102325. doi:10.1016/j.amsu.2021.102325." },
+  { id: 'koos1998', pmid: '9488305', pmcid: '', shortLabel: 'Koos 1998', url: doi('10.3171/jns.1998.88.3.0506'),
+    citation: "Koos WT, Day JD, Matula C, Levy DI. Neurotopographic considerations in the microsurgical treatment of small acoustic neurinomas. J Neurosurg. 1998;88(3):506–512. doi:10.3171/jns.1998.88.3.0506. Checked against its abstract: the full text is not open access." },
+  { id: 'knosp1993', pmid: '8232800', pmcid: '', shortLabel: 'Knosp 1993', url: doi('10.1227/00006123-199310000-00008'),
+    citation: "Knosp E, Steiner E, Kitz K, Matula C. Pituitary adenomas with invasion of the cavernous sinus space: a magnetic resonance imaging classification compared with surgical findings. Neurosurgery. 1993;33(4):610–7; discussion 617–8. doi:10.1227/00006123-199310000-00008. Checked against its abstract: the full text is not open access." },
+  { id: 'micko2015', pmid: '25658782', pmcid: '', shortLabel: 'Micko 2015', url: doi('10.3171/2014.12.jns141083'),
+    citation: "Micko AS, Wöhrer A, Wolfsberger S, Knosp E. Invasion of the cavernous sinus space in pituitary adenomas: endoscopic verification and its correlation with an MRI-based classification. J Neurosurg. 2015;122(4):803–811. doi:10.3171/2014.12.jns141083. Checked against its abstract: the full text is not open access." },
 ];
 export const APPROACH_REF = new Map(APPROACH_REFS.map((r) => [r.id, r]));
 
@@ -286,7 +298,7 @@ export const APPROACHES: ApproachContent[] = [
       c('After the fissure is opened a little, a single spatula on the frontal lobe moves the brain.', 'cha2012'),
     ]), sec('Lifting the frontal lobe', [
       CISTERN,
-      c('In eight cadaver sides per approach, the surgical freedom at the internal carotid bifurcation was largest through the LSO (85 cm², against the minipterional and transorbital routes); at the posterior communicating artery it was 71 cm², against 102 cm² through the minipterional; at M1 the approaches did not differ.', 'mosteiro2026'),
+      c('In eight cadaver sides per approach, the surgical freedom at the internal carotid bifurcation was about the same through the LSO and the minipterional approach (medians 85 and 87 cm²), both more than through the transorbital route (29 cm²); at the posterior communicating artery it was 71 cm² through the LSO against 102 cm² through the minipterional; at M1 the approaches did not differ.', 'mosteiro2026'),
     ]), sec('Middle cerebral artery', [
       ...ARTERY,
       c('In a phantom model of middle cerebral artery aneurysm clipping (22 participants), the LSO had success rates comparable with the pterional approach; the authors suggest it may suit patients whose M1 is shorter than average.', 'amini2024'),
@@ -550,7 +562,7 @@ export const ENDONASAL_INFO: { sections: ApproachSection[]; notShown: string } =
       c('Extended approaches make more room: one middle turbinate removed, the other pushed aside, the back of the nasal septum taken out, and a wider sphenoidotomy.', 'solari2012'),
     ]),
     sec('The sphenoid ostium', [
-      c('In 181 adults on CT, each sphenoid sinus had a single natural ostium, on average 1.25 mm wide and 1.8 mm high, most often in the medial third of the sinus’s front wall (58 %) and in its middle third in height (73 %): its lower edge about 10–12 mm above the upper border of the choana, its medial edge 3–5 mm from the septum.', 'nguyen2026'),
+      c('In 181 adults on CT, each sphenoid sinus had a single natural ostium, on average 1.25 ± 0.59 mm wide and 1.82 ± 1.01 mm high: smaller, the authors note, than the 3–4 mm other series report. It lay most often in the medial third of the sinus’s front wall (58 %) and in its middle third in height (73 %), its lower edge 10.7 ± 3.5 mm above the upper border of the choana and its medial edge 4.0 ± 1.5 mm from the septum.', 'nguyen2026'),
       c('Where the ostium is in plain view, orientation and the way into the sinus are straightforward. An Onodi (sphenoethmoidal) cell, a posterior ethmoid cell above and lateral to the sinus, can be taken for the sphenoid sinus once entered: it is reported in 8.4–9 % of people (and was found beside 39 % of the sinuses on Nguyen’s CTs).', 'vanlindert2010', 'nguyen2026'),
       c('Bleeding after the anterior sphenoidotomy usually comes from a branch of the sphenopalatine artery at the inferolateral border of the middle turbinate.', 'vanlindert2010'),
     ]),

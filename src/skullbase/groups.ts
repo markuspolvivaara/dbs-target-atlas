@@ -166,7 +166,7 @@ function temporalGroups(): SbGroup[] {
     },
     {
       ...base, id: 'arteries', kind: 'system', name: 'Arteries', camera: 'axial', focus: null, radius: 85,
-      description: 'This CT’s own arteries: the circle of Willis and its branches from TopBrain’s expert labels of the angiogram, the carotid traced through the carotid canal and foramen lacerum, the cervical carotids from TotalSegmentator; the small branches this CT cannot show anchored to them (approximate). Show or hide each in the list.',
+      description: 'This CT’s own arteries: the circle of Willis and its branches from TopBrain’s expert labels of the angiogram, the carotid traced through the carotid canal and over the foramen lacerum, the cervical carotids from TotalSegmentator; the small branches this CT cannot show anchored to them (approximate). Show or hide each in the list.',
       structures: arteries, landmarks: [],
     },
     {

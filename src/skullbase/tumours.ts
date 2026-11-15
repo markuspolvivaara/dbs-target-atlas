@@ -64,31 +64,37 @@ export interface TumourFamilyContent {
 const c = (text: string, ...refIds: string[]): ApproachClaim => ({ text, refIds });
 const sec = (title: string, claims: ApproachClaim[]): ApproachSection => ({ title, claims });
 
-/** Knosp's grades on the coronal section (Araujo-Castro 2021, stating Knosp 1993 and the revised scale) */
-export const KNOSP_GRADES: { id: string; definition: string; cure: string; complications: string }[] = [
-  { id: '0', definition: 'Medial to the medial tangent', cure: '86.5 % (45/52)', complications: '0 % (0/52)' },
-  { id: '1', definition: 'Between the medial tangent and the intercarotid line', cure: '88.6 % (31/35)', complications: '2.9 % (1/35)' },
-  { id: '2', definition: 'Between the intercarotid line and the lateral tangent', cure: '77.1 % (47/61)', complications: '6.6 % (4/61)' },
-  { id: '3A', definition: 'Lateral to the lateral tangent, above the intracavernous carotid (the superior compartment)', cure: '56.0 % (14/25)', complications: '8.0 % (2/25)' },
-  { id: '3B', definition: 'Lateral to the lateral tangent, below the intracavernous carotid (the inferior compartment)', cure: '30.0 % (3/10)', complications: '10.0 % (1/10)' },
-  { id: '4', definition: 'Complete encasement of the intracavernous carotid', cure: '14.0 % (6/43)', complications: '18.6 % (8/43)' },
+/** Knosp's grades on the coronal section (Knosp 1993; the revised scale's 3A and 3B, Micko 2015), each with the cure and
+ * complication rates of Araujo-Castro 2021 and the invasion found at endoscopic surgery by Micko 2015 (the site audit's
+ * C-006: the original and revised papers cited, the invasion rates added) */
+export const KNOSP_GRADES: { id: string; definition: string; cure: string; complications: string; invasion: string }[] = [
+  { id: '0', definition: 'Medial to the medial tangent', cure: '86.5 % (45/52)', complications: '0 % (0/52)', invasion: '–' },
+  { id: '1', definition: 'Between the medial tangent and the intercarotid line', cure: '88.6 % (31/35)', complications: '2.9 % (1/35)', invasion: '1.5 %' },
+  { id: '2', definition: 'Between the intercarotid line and the lateral tangent', cure: '77.1 % (47/61)', complications: '6.6 % (4/61)', invasion: '9.9 %' },
+  { id: '3A', definition: 'Lateral to the lateral tangent, above the intracavernous carotid (the superior compartment)', cure: '56.0 % (14/25)', complications: '8.0 % (2/25)', invasion: '26.5 %' },
+  { id: '3B', definition: 'Lateral to the lateral tangent, below the intracavernous carotid (the inferior compartment)', cure: '30.0 % (3/10)', complications: '10.0 % (1/10)', invasion: '70.6 %' },
+  { id: '4', definition: 'Complete encasement of the intracavernous carotid', cure: '14.0 % (6/43)', complications: '18.6 % (8/43)', invasion: '100 %' },
 ];
-/** Koos's grades (Gupta 2020's table) */
-export const KOOS_GRADES: { id: string; definition: string }[] = [
-  { id: 'I', definition: 'Intracanalicular' },
-  { id: 'II', definition: 'Extension into the cerebellopontine angle, < 2 cm' },
-  { id: 'III', definition: 'Occupies the cerebellopontine angle, no brainstem displacement, < 3 cm' },
-  { id: 'IV', definition: 'Brainstem displacement, > 3 cm' },
+/** grade 3 as a whole, on the Grading page only (not a drawn grade): two of its 37 tumours were not subclassified */
+export const KNOSP_GRADE_3 = { id: '3 (all)', definition: 'Lateral to the lateral tangent (3A, 3B and two not subclassified)', cure: '46.0 % (17/37)', complications: '8.1 % (3/37)', invasion: '37.9 %' };
+/** Koos's grades by the tumour's relation to the brainstem: I and II as Koos 1998 defines them, III and IV from Gupta
+ * 2020's table; the sizes of later tables are approximate (the site audit's C-005) */
+export const KOOS_GRADES: { id: string; definition: string; size: string; refIds: string[] }[] = [
+  { id: 'I', definition: 'Purely intracanalicular', size: '–', refIds: ['koos1998'] },
+  { id: 'II', definition: 'Protruding into the cerebellopontine angle without contacting the brainstem (IIA under 1 cm, IIB 1–1.8 cm)', size: 'under about 2 cm', refIds: ['koos1998'] },
+  { id: 'III', definition: 'Occupies the cerebellopontine angle, no brainstem displacement', size: 'under about 3 cm', refIds: ['gupta2020'] },
+  { id: 'IV', definition: 'Displaces the brainstem', size: 'over about 3 cm', refIds: ['gupta2020'] },
 ];
-/** the skull base meningiomas' sites in Ius 2021's table: share of skull base meningiomas and the approaches listed */
-export const MENINGIOMA_SITES: { id: string; name: string; share: string; approaches: string; view: string; viewName: string }[] = [
-  { id: 'olfactory', name: 'Olfactory groove', share: '8–13 %', view: 'lso', viewName: 'Lateral supraorbital',
+/** the skull base meningiomas' sites in Ius 2021's table, with the approaches listed there; each share with its own
+ * denominator and source (Ius's table gives none: the site audit's C-001) */
+export const MENINGIOMA_SITES: { id: string; name: string; share: string; shareRefs: string[]; approaches: string; view: string; viewName: string }[] = [
+  { id: 'olfactory', name: 'Olfactory groove', share: '8–13 % of all intracranial meningiomas', shareRefs: ['calvanese2024'], view: 'lso', viewName: 'Lateral supraorbital',
     approaches: 'Subfrontal, transbasal, pterional, fronto-lateral, supraorbital keyhole, endoscopic endonasal (alone, or with a bifrontal craniotomy for wide tumours invading the cribriform plate), transfacial' },
-  { id: 'tuberculum', name: 'Tuberculum sellae / planum', share: '5–10 %', view: 'transsylvian', viewName: 'Pterional',
+  { id: 'tuberculum', name: 'Tuberculum sellae / planum', share: '5–10 % of all intracranial meningiomas', shareRefs: ['cuellar2021'], view: 'transsylvian', viewName: 'Pterional',
     approaches: 'Pterional, endoscopic endonasal, supraorbital keyhole' },
-  { id: 'petroclival', name: 'Petroclival', share: '2 % of posterior fossa meningiomas', view: 'retrosigmoid', viewName: 'Retrosigmoid',
+  { id: 'petroclival', name: 'Petroclival', share: '5–11 % of posterior fossa meningiomas', shareRefs: ['singh2019'], view: 'retrosigmoid', viewName: 'Retrosigmoid',
     approaches: 'Retrosigmoid, combined transpetrosal, retrolabyrinthine, translabyrinthine' },
-  { id: 'foramen_magnum', name: 'Foramen magnum', share: '2.5 %', view: 'far_lateral', viewName: 'Far lateral',
+  { id: 'foramen_magnum', name: 'Foramen magnum', share: '1.8–3.2 % of all meningiomas', shareRefs: ['hammed2021'], view: 'far_lateral', viewName: 'Far lateral',
     approaches: 'Posterior suboccipital with C1 laminectomy, far lateral, extreme lateral' },
 ];
 export const MENINGIOMA_EEA: { site: string; gtr: [string, string]; csf: [string, string] }[] = [
@@ -97,7 +103,7 @@ export const MENINGIOMA_EEA: { site: string; gtr: [string, string]; csf: [string
 ];
 
 const fit = TUMOUR_FIT;
-const knospDef = (g: (typeof KNOSP_GRADES)[number]) => c(`Knosp ${g.id}: ${g.definition.toLowerCase()}.`, 'araujocastro2021');
+const knospDef = (g: (typeof KNOSP_GRADES)[number]) => c(`Knosp ${g.id}: ${g.definition.toLowerCase()}.`, 'knosp1993', 'araujocastro2021');
 const MENINGIOMA_NOTES: Record<string, ApproachClaim[]> = {
   olfactory: [
     c('A meta-analysis of 64 case series found gross total resection of olfactory groove meningiomas less often through the endoscopic endonasal approach than through a microsurgical transcranial one (70.9 % against 88.5 %) and cerebrospinal fluid leaks more often (25.1 % against 10.5 %); it concluded the endonasal approach was not superior.', 'muskens2018'),
@@ -124,12 +130,16 @@ export const TUMOURS: TumourFamilyContent[] = [
       : 'A pituitary macroadenoma drawn by rule in this CT’s sella at each Knosp grade, on the right, seen from the front and cut at the coronal section through this patient’s own cavernous and supraclinoid carotid, where the three Knosp lines are drawn.',
     sections: [
       sec('The grades', [
-        c('Knosp (1993) graded cavernous sinus invasion on coronal MRI by the adenoma’s relation to the lines between the supraclinoid and the intracavernous internal carotid artery.', 'araujocastro2021'),
-        c('Knosp 0: medial to the medial tangent; 1: into the space between the medial tangent and the intercarotid line; 2: between the intercarotid line and the lateral tangent; 3: lateral to the lateral tangent; 4: complete encasement of the intracavernous carotid. Grades 3–4 were taken as invasive.', 'araujocastro2021'),
-        c('The revised scale divides grade 3: 3A above the intracavernous carotid, into the superior compartment of the cavernous sinus; 3B below it, into the inferior compartment.', 'araujocastro2021'),
+        c('Knosp (1993) graded the parasellar growth of pituitary adenomas on coronal MRI by its relation to the intra- and supracavernous internal carotid artery: a medial tangent, the intercarotid line through the vessels’ centres, and a lateral tangent.', 'knosp1993'),
+        c('Knosp 0: medial to the medial tangent; 1: into the space between the medial tangent and the intercarotid line; 2: between the intercarotid line and the lateral tangent; 3: lateral to the lateral tangent; 4: complete encasement of the intracavernous carotid.', 'knosp1993', 'araujocastro2021'),
+        c('The revised scale divides grade 3: 3A above the intracavernous carotid, into the superior compartment of the cavernous sinus; 3B below it, into the inferior compartment.', 'micko2015', 'araujocastro2021'),
+      ]),
+      sec('Invasion', [
+        c('In Knosp’s series (25 adenomas proven at surgery to invade the cavernous sinus space) invasion was present in every grade 3 and 4 case and all but one grade 2 case, and in none of grades 0 and 1: grade 2 is the critical zone.', 'knosp1993'),
+        c('At endoscopic surgery on 137 macroadenomas, invasion was found in 1.5 % of grade 1, 9.9 % of grade 2, 26.5 % of grade 3A, 70.6 % of grade 3B and all grade 4 adenomas.', 'micko2015'),
       ]),
       sec('What they predict', [
-        c('In 228 patients after a first endoscopic endonasal operation (2009–2020), surgical cure fell from 86.5 % at grade 0 and 88.6 % at grade 1 to 14.0 % at grade 4, and major complications rose from 0 % to 18.6 % (the Grading page has each grade).', 'araujocastro2021'),
+        c('In 228 patients after a first endoscopic endonasal operation (2009–2020), surgical cure fell from 86.5 % at grade 0 and 88.6 % at grade 1 to 14.0 % at grade 4, and major complications rose from 0 % to 18.6 % (the Grading page has each grade). That series took grades 3–4 as invasive.', 'araujocastro2021'),
         c('Grade 3B tended to be cured less often than 3A (30.0 % against 56.0 %, p = 0.164). The Knosp scale gave the best accuracy for predicting surgical cure (AUC 0.820), its best cut-off at grade 3.', 'araujocastro2021'),
       ]),
     ],
@@ -143,7 +153,8 @@ export const TUMOURS: TumourFamilyContent[] = [
     summary: 'A right vestibular schwannoma drawn by rule at each Koos grade, from the internal acoustic meatus into the cerebellopontine angle, in the retrosigmoid view: the cerebellum (and at grade IV the brainstem) pushed aside by it.',
     sections: [
       sec('The grades', [
-        c('The Koos scale grades a vestibular schwannoma by its extension from the meatus and its relation to the brainstem: I intracanalicular; II into the cerebellopontine angle, under 2 cm; III occupying the angle without displacing the brainstem, under 3 cm; IV displacing the brainstem, over 3 cm.', 'gupta2020'),
+        c('The Koos scale grades a vestibular schwannoma by its extension from the meatus and its relation to the brainstem: I purely intracanalicular; II protruding into the cerebellopontine angle without contacting the brainstem (IIA under 1 cm, IIB 1–1.8 cm).', 'koos1998'),
+        c('III occupies the angle without displacing the brainstem; IV displaces it. Later tables add approximate sizes: II under 2 cm, III under 3 cm, IV over 3 cm.', 'gupta2020'),
         c('It combines the extrameatal size with the anatomy; tumours over 30 mm in the largest extrameatal diameter are “large” and over 40 mm “giant” (the 2003 consensus on reporting: linear measurement on post-contrast axial MRI).', 'starnoni2020'),
       ]),
       sec('The facial nerve', [
@@ -160,7 +171,7 @@ export const TUMOURS: TumourFamilyContent[] = [
     notShown: V1
       ? `The schwannoma is a shape drawn by rule, not a patient’s. Z-Anatomy’s temporal bone is solid along the vestibulocochlear nerve (it has no lumen in the internal acoustic meatus), so the meatus grade I fills is drawn by rule, 2 mm round the line from its fundus to its porus (an illustrative width), and taken out of the bone. Where a nerve of the angle or a cerebellar artery runs through the tumour it is moved round it by rule (the facial nerve forwards onto its anterior surface, its commonest place); the vestibulocochlear nerve, from which it grows, runs into it. The facial nerve is not drawn thinned over the large grades, as skull base v3 draws it (Z-Anatomy’s is a mesh, not a drawn tube). The petrosal veins are not drawn. Z-Anatomy’s brainstem lies ${TUMOUR_FIT_V1.koos['1']?.porusToBrainstemMm ?? '?'} mm from the porus, so grade II is small here and grade III is moulded against the brainstem rather than placed clear of it.`
       : 'The schwannoma is a shape drawn by rule, not a patient’s. Its displacement of the nerves is drawn by rule too: the facial nerve moved forwards onto the tumour’s anterior surface (its commonest place) and drawn thinned and flattened over grades III and IV, the other nerves of the angle and the fitted small arteries moved the shortest way out onto its surface, the vestibulocochlear nerve, from which it grows, running into it. The petrosal veins are not drawn. This model’s fitted pons lies only about 5 mm from the porus (the fit keeps it out of the cistern this CT shows there; a CT does not show the pons’s own surface), so grade II is small here and grade III is moulded against the brainstem rather than placed clear of it.',
-    grades: KOOS_GRADES.map((g, i) => ({ id: g.id, label: g.id, structure: `tm_koos_${i + 1}`, definition: c(`Koos ${g.id}: ${g.definition.charAt(0).toLowerCase()}${g.definition.slice(1)}.`, 'gupta2020'), view: 'retrosigmoid' })),
+    grades: KOOS_GRADES.map((g, i) => ({ id: g.id, label: g.id, structure: `tm_koos_${i + 1}`, definition: c(`Koos ${g.id}: ${g.definition.charAt(0).toLowerCase()}${g.definition.slice(1)}.`, ...g.refIds), view: 'retrosigmoid' })),
   },
   {
     family: 'meningioma', name: 'Skull base meningiomas', short: 'Meningiomas (sites)', scale: 'Site',
@@ -173,7 +184,7 @@ export const TUMOURS: TumourFamilyContent[] = [
     ],
     notShown: `The meningiomas are shapes drawn by rule (their sizes illustrative), not patients’ tumours: the bone they invade, a dural tail and the vessels they encase are not modelled. The cranial nerves and the ${V1 ? 'cerebellar' : 'fitted small'} arteries are not moved round them; they run through channels in the tumour.`,
     grades: MENINGIOMA_SITES.map((s) => ({ id: s.id, label: s.name, structure: `tm_men_${s.id}`, view: s.view,
-      definition: c(`${s.name}: ${s.share} of skull base meningiomas. Approaches listed: ${s.approaches.charAt(0).toLowerCase()}${s.approaches.slice(1)}.`, 'ius2021'),
+      definition: c(`${s.name}: ${s.share}. Approaches listed: ${s.approaches.charAt(0).toLowerCase()}${s.approaches.slice(1)}.`, ...s.shareRefs, 'ius2021'),
       notes: MENINGIOMA_NOTES[s.id] })),
   },
 ];
