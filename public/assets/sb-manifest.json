@@ -7787,8 +7787,8 @@
    "centroid": {
     "L": [
      -18.07,
-     -30.93,
-     -13.68
+     -30.75,
+     -13.79
     ],
     "R": [
      18.55,
@@ -7978,7 +7978,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_koos_4.glb",
-   "bytes": 174084,
+   "bytes": 194228,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7992,17 +7992,17 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule to show Koos grade IV on the right (skullbase_v3_tumours.py), not a patient's tumour: the meatus and a ball 34 mm across in the angle, its surface at the porus and a neck joining them, reaching 9-14 mm into where the brainstem lies: the brainstem and the cerebellum pushed aside. 14.99 ml.",
+   "derivation": "Drawn by rule to show Koos grade IV on the right (skullbase_v3_tumours.py), not a patient's tumour: the meatus and a ball 34 mm across in the angle, its surface at the porus and a neck joining them, reaching 9-14 mm into where the brainstem lies: the brainstem and the cerebellum pushed aside. 15.73 ml.",
    "centroid": {
     "R": [
-     24.61,
-     -36.95,
-     -12.81
+     26.36,
+     -37.3,
+     -12.85
     ],
     "L": [
-     24.61,
-     -36.95,
-     -12.81
+     26.36,
+     -37.3,
+     -12.85
     ]
    },
    "tumour": {
@@ -8016,7 +8016,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_cerebellar_hemisphere__koos_4.glb",
-   "bytes": 324372,
+   "bytes": 324168,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8042,9 +8042,9 @@
      -9.94
     ],
     "R": [
-     22.11,
-     -60.79,
-     -10.87
+     22.1,
+     -60.81,
+     -10.88
     ]
    },
    "derivation": "Z-Anatomy's (BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 44.32 mm): a shape, not a simulation of the tissue.",
@@ -8058,7 +8058,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/pf_tonsil__koos_4.glb",
-   "bytes": 29884,
+   "bytes": 29880,
    "colour": {
     "token": "sbTonsil",
     "light": "#7D6DFF",
@@ -8084,9 +8084,9 @@
      -21.76
     ],
     "R": [
-     13.37,
-     -53.28,
-     -22.5
+     13.38,
+     -53.3,
+     -22.51
     ]
    },
    "derivation": "Z-Anatomy's (BodyParts3D: tonsil of cerebellum); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 44.32 mm): a shape, not a simulation of the tissue.",
@@ -8331,8 +8331,8 @@
    "centroid": {
     "L": [
      -18.07,
-     -30.93,
-     -13.68
+     -30.75,
+     -13.79
     ],
     "R": [
      18.64,

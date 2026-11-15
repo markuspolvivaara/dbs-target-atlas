@@ -1141,6 +1141,29 @@ describe('v3 tumours drawn by rule: Knosp, Koos and meningioma sites', async () 
       expect(card.get('tm_koos_2'), model).toContain(`${fit.koos['2'].diameterMm} mm across`);
     }
   });
+  it('every tumour is a closed surface on both models: no edge of the grid it is drawn on cuts it open', async () => {
+    // (v1's Koos IV reached past its grid's lateral edge and was shipped open there, a hole 16 x 25 mm; a tumour across
+    // the midline is split into its left and right halves there, so an open edge within 0.25 mm of it is allowed)
+    for (const [model, structures] of [['v3', v3.structures], ['v1', SB_MANIFEST.structures]] as const) {
+      for (const s of structures.filter((x) => x.category === 'tumour')) {
+        const { P, T } = await meshSoup(s.file);
+        const key = (i: number) => `${P[3 * i].toFixed(3)},${P[3 * i + 1].toFixed(3)},${P[3 * i + 2].toFixed(3)}`;
+        const at = new Map<string, number>();
+        const v = Array.from({ length: P.length / 3 }, (_, i) => { const k = key(i); if (!at.has(k)) at.set(k, at.size); return at.get(k)!; });
+        const uses = new Map<string, { n: number; a: number; b: number }>();
+        for (let t = 0; t < T.length; t += 3) {
+          for (const [a, b] of [[T[t], T[t + 1]], [T[t + 1], T[t + 2]], [T[t + 2], T[t]]]) {
+            const e = v[a] < v[b] ? `${v[a]} ${v[b]}` : `${v[b]} ${v[a]}`;
+            const u = uses.get(e) ?? { n: 0, a, b };
+            u.n++;
+            uses.set(e, u);
+          }
+        }
+        const open = [...uses.values()].filter((u) => u.n !== 2 && !(Math.abs(P[3 * u.a]) < 0.25 && Math.abs(P[3 * u.b]) < 0.25));
+        expect(open.length, `${model} ${s.id}: edges off the midline not shared by two triangles`).toBe(0);
+      }
+    }
+  }, 60_000);
   it('the Knosp view is cut at its section while the reader keeps it; tumour views open onto the tumour', () => {
     const s = T3.decodeSkull('#/atlas?g=knosp_3b');
     expect(s.section).toBe(true);
