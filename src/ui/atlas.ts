@@ -197,11 +197,11 @@ export class AtlasPage {
       pane.append(h('p', { class: 'chips-label' }, 'Symptom'));
       pane.append(chips(items, s.sym ?? '', (v) => this.update((st) => { st.sym = v || null; st.sel = null; st.cam = { preset: null }; }, { camera: true }), { label: 'Symptom', cls: 'sym-chips' }));
     }
-    // where the view shows the STN: its three zones, or the nucleus as one
+    // where the view shows the STN: the nucleus as one (the default), or its three zones
     const p = plan(s.ind, s.sym, s.borders);
     if ([...STN_ZONES, 'stn'].some((id) => ['primary', 'alt', 'context'].includes(p.looks.get(id) ?? ''))) {
       pane.append(h('p', { class: 'chips-label' }, 'Subthalamic nucleus'),
-        chips<'zones' | 'whole'>([['zones', 'Functional zones'], ['whole', 'Whole nucleus']], s.stn, (v) => this.update((st) => { st.stn = v; }), { label: 'Subthalamic nucleus', cls: 'stn-chips' }));
+        chips<'zones' | 'whole'>([['whole', 'Whole nucleus'], ['zones', 'Functional zones']], s.stn, (v) => this.update((st) => { st.stn = v; }), { label: 'Subthalamic nucleus', cls: 'stn-chips' }));
     }
     if (s.sel) pane.append(this.selectionCard(s.sel));
     const sym = s.sym ? SYM.get(s.sym) : null;

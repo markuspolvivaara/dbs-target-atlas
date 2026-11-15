@@ -174,7 +174,8 @@ test('loading: a view downloads the meshes it draws, not the catalogue, and the 
 test('loading: a structure that cannot be loaded is named in a notice that stays, and Retry loads it', async ({ page }) => {
   let block = true;
   await page.route('**/assets/meshes/stn_motor.glb*', (route) => (block ? route.abort() : route.continue()));
-  await open(page, './dbs/#/atlas?i=pd');
+  // (the STN's zones asked for: the whole nucleus is the default)
+  await open(page, './dbs/#/atlas?i=pd&stn=z');
   const notice = page.locator('.status-failed');
   await expect(notice).toBeVisible();
   await expect(notice).toContainText('One structure of this view could not be loaded');

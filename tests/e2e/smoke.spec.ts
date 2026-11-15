@@ -322,7 +322,8 @@ test('labels: all / hover / off, legend hover, fade while moving', async ({ page
   await page.locator('.toolbar [data-labels="all"]').click();
   await expect.poll(async () => (await shown()).length).toBeGreaterThan(2);
   const all = await shown();
-  expect(all).toEqual(expect.arrayContaining(['PD sweet spot', 'dorsolateral STN']));
+  // (the STN whole, the default: its zones' 'dorsolateral STN' label appears only with stn=z)
+  expect(all).toEqual(expect.arrayContaining(['PD sweet spot', 'STN']));
   expect(await lines()).toBe(all.length);
   expect(new URL(page.url()).hash).toContain('lb=a');
   // fade while the camera moves
@@ -1060,17 +1061,18 @@ test('cortex: the Function selector draws the areas with their sources and keeps
   expect(g.errors).toEqual([]);
 });
 
-test('dbs: the STN as its zones or as one nucleus; the Parkinson\'s view without the PPN and the optic tract', async ({ page }) => {
+test('dbs: the STN as one nucleus or as its zones; the Parkinson\'s view without the PPN and the optic tract', async ({ page }) => {
   const g = guard(page);
   await page.goto('./dbs/#/atlas?i=pd');
   await settle(page);
   await expect(page.locator('.legend3d')).not.toContainText('Pedunculopontine');
   await expect(page.locator('.legend3d')).not.toContainText('Optic tract');
-  await expect(page.locator('.legend3d')).toContainText('STN, sensorimotor zone');
-  await page.locator('.stn-chips .chip[data-v="whole"]').click();
-  await expect.poll(() => new URL(page.url()).hash).toContain('stn=w');
+  // the whole nucleus by default
   await expect(page.locator('.legend3d')).toContainText('Subthalamic nucleus');
   await expect(page.locator('.legend3d')).not.toContainText('STN, sensorimotor zone');
+  await page.locator('.stn-chips .chip[data-v="zones"]').click();
+  await expect.poll(() => new URL(page.url()).hash).toContain('stn=z');
+  await expect(page.locator('.legend3d')).toContainText('STN, sensorimotor zone');
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });

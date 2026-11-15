@@ -8,6 +8,7 @@ import { loadSource } from './source';
 import { EPILEPSY_INDICATION, EPILEPSY_REFERENCES } from '../../src/data/epilepsy';
 import { ADDITION_REFERENCES } from '../../src/data/additions';
 import { plan, primaryTargetId } from '../../src/viewer/selection';
+import { decode, defaultState, encode } from '../../src/state';
 import { mniToAcpc, TEMPLATE_ACPC_LENGTH } from '../../src/data/acpc';
 
 const src = loadSource();
@@ -337,7 +338,13 @@ describe('epilepsy (researched addition)', () => {
 });
 
 describe('Parkinson\'s view: the STN whole or as zones; the PPN and the optic tract left out', () => {
-  it('draws the zones by default and the nucleus whole when asked, and never the PPN or the optic tract', () => {
+  it('draws the nucleus whole by default and the zones when asked, and never the PPN or the optic tract', () => {
+    // the app's default is the whole nucleus; old links' "stn=w" still reads as whole, "stn=z" asks for the zones
+    expect(defaultState().stn).toBe('whole');
+    expect(encode(defaultState())).not.toContain('stn=');
+    expect(decode('#/atlas?i=pd&stn=w').stn).toBe('whole');
+    expect(decode('#/atlas?i=pd&stn=z').stn).toBe('zones');
+    expect(encode({ ...defaultState(), stn: 'zones' })).toContain('stn=z');
     const z = plan('pd', null, true);
     expect(z.looks.get('stn_motor')).toBe('primary');
     const w = plan('pd', null, true, true);
