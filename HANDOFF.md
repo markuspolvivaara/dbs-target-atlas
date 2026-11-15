@@ -111,6 +111,17 @@ commit and push it.
   and said to be not drawn. Sources, full text: Koeglsperger 2019 (STN, GPi, Vim) and Kim 2021 (Vim and PSA rates,
   93 patients). The four landmark cards gained a line each on what current reaching them does. ANT keeps SANTE's
   caveat. Pushed with its own pull request at the user's word (2026-11-16), set to merge once the checks pass.
+- A-014, the circuits explained (the user's choices: a paragraph and a schematic per circuit; the basal ganglia, tremor
+  and Papez circuits; both misleading texts fixed), on `fix/a014-circuits` (made on top of A-013):
+  `src/data/circuits.ts` holds three circuits (nodes, connections, sourced sentences) and which indication shows which
+  (`CIRCUITS_FOR`: Holmes both tremor and basal ganglia; epilepsy Papez); `src/ui/circuit.ts` draws each as an SVG on the
+  indication's card, a box or arrow standing for a drawn structure or tract being a button that opens its card; a
+  dashed box is not drawn. Excitatory / inhibitory only where the sources give it (basal ganglia: Galvan 2015, Chiken
+  2016); the PD rate-model sentence on PD alone. Tremor: Gallay 2008, Akram 2018, Coenen 2020; Papez: Senova 2020,
+  Schaper 2020 (now open in PMC), Piper 2022. Fixed: the Vim, dentate, non-decussating DRTT and hyperdirect cards (the
+  drawn tract ends mostly in pre-SMA/SMA); "hyperdirect" defined in PD's "Why here" (CORRECTED in content.test.ts).
+  A layout test checks every box lies inside its drawing, apart from the others, and every arrow runs edge to edge.
+  Local commit.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -383,7 +394,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (431 tests on `fix/a013-side-effects`)
+  - `npx vitest run` (435 tests on `fix/a014-circuits`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`

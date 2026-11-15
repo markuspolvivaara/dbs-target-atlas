@@ -65,6 +65,19 @@ export const ADDITION_REFERENCES: Reference[] = [
     citation: 'Koeglsperger T, Palleis C, Hell F, Mehrkens JH, Bötzel K. Deep brain stimulation programming for movement disorders: current concepts and evidence-based strategies. Front Neurol. 2019;10:410. doi:10.3389/fneur.2019.00410.' },
   { id: 'kim2021', topic: 'tremor', shortLabel: 'Kim 2021', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8220085/',
     citation: 'Kim MJ, Chang KW, Park SH, Chang WS, Jung HH, Chang JW. Stimulation-induced side effects of deep brain stimulation in the ventralis intermedius and posterior subthalamic area for essential tremor. Front Neurol. 2021;12:678592. doi:10.3389/fneur.2021.678592.' },
+  // (A-014: the circuits explained, circuits.ts)
+  { id: 'galvan2015', topic: 'net', shortLabel: 'Galvan 2015', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC4318426/',
+    citation: "Galvan A, Devergnas A, Wichmann T. Alterations in neuronal activity in basal ganglia-thalamocortical circuits in the parkinsonian state. Front Neuroanat. 2015;9:5. doi:10.3389/fnana.2015.00005." },
+  { id: 'chiken2016', topic: 'net', shortLabel: 'Chiken 2016', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC4871171/',
+    citation: "Chiken S, Nambu A. Mechanism of Deep Brain Stimulation: Inhibition, Excitation, or Disruption? Neuroscientist. 2016;22(3):313–322. doi:10.1177/1073858415581986." },
+  { id: 'gallay2008', topic: 'net', shortLabel: 'Gallay 2008', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC2494572/',
+    citation: "Gallay MN, Jeanmonod D, Liu J, Morel A. Human pallidothalamic and cerebellothalamic tracts: anatomical basis for functional stereotactic neurosurgery. Brain Struct Funct. 2008;212(6):443–463. doi:10.1007/s00429-007-0170-0." },
+  { id: 'coenen2020', topic: 'tremor', shortLabel: 'Coenen 2020', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC7156360/',
+    citation: "Coenen VA, Sajonz B, Prokop T, Reisert M, Piroth T, Urbach H, et al. The dentato-rubro-thalamic tract as the potential common deep brain stimulation target for tremor of various origin: an observational case series. Acta Neurochir (Wien). 2020;162(5):1053–1066. doi:10.1007/s00701-020-04248-2." },
+  { id: 'senova2020', topic: 'net', shortLabel: 'Senova 2020', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC7231447/',
+    citation: "Senova S, Fomenko A, Gondard E, Lozano AM. Anatomy and function of the fornix in the context of its potential as a therapeutic target. J Neurol Neurosurg Psychiatry. 2020;91(5):547–559. doi:10.1136/jnnp-2019-322375." },
+  { id: 'piper2022', topic: 'net', shortLabel: 'Piper 2022', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC9586548/',
+    citation: "Piper RJ, Richardson RM, Worrell G, Carmichael DW, Baldeweg T, Litt B, et al. Towards network-guided neuromodulation for epilepsy. Brain. 2022;145(10):3347–3362. doi:10.1093/brain/awac234." },
 ];
 
 export const ADDITION_DESCRIPTIONS: Record<string, { text: string; refIds: string[] }> = {
@@ -76,6 +89,12 @@ export const ADDITION_DESCRIPTIONS: Record<string, { text: string; refIds: strin
   // what current reaching each landmark does, Koeglsperger 2019)
   cst: { text: 'In tractography-based Vim targeting, the pyramidal tract marks the Vim\'s lateral border. Current that spreads into the internal capsule\'s motor fibres, lateral and anterior to the STN, lateral to the Vim or medial and posterior to the GPi, causes muscle contractions and strained or spastic dysarthria.', refIds: ['sammartino2016', 'koeglsperger2019'] },
   ml: { text: 'In tractography-based Vim targeting, the medial lemniscus marks the Vim\'s posterior border; stimulating it gave hemibody paraesthesias. It lies ventroposterior to the STN, and current spreading into it is a likely cause of paraesthesiae on the opposite side during STN stimulation.', refIds: ['sammartino2016', 'koeglsperger2019'] },
+  // (A-014: the Vim, dentate and non-decussating DRTT cards from their sources, not one unsourced relay sentence; the
+  // hyperdirect pathway defined, and the drawn tract's cortical ends said)
+  vim: { text: 'The Vim lies on the cerebello-thalamo-cortical network that links the primary motor cortex with the dentate nucleus of the opposite cerebellum through the DRTT. Good tremor responses came from contacts in the thalamic area most connected with that dentate nucleus.', refIds: ['akram2018'] },
+  dentate: { text: 'The dentate is the chief origin of the cerebellothalamic tract: its fibres leave through the superior cerebellar peduncle, most cross at the peduncle\'s decussation, and they enter the motor thalamus, mainly the VLp (Hassler\'s Vim).', refIds: ['gallay2008'] },
+  ndrtt: { text: 'Part of the dentato-rubro-thalamic tract does not cross: this bundle reaches the thalamus from the dentate nucleus on its own side. At both the Vim and the PSA, tremor control tracks how close the active contact is to the DRTT.', refIds: ['coenen2020', 'poster'] },
+  hdp: { text: 'The hyperdirect pathway runs from the cortex straight to the STN and on to the GPi/SNr, reaching the output nuclei sooner than the pathways through the striatum. The tract drawn here, a motor STN tract, ends mostly in the pre-SMA and SMA. In Parkinson\'s disease, benefit followed hyperdirect connections from the SMA and M1 into the supero-lateral STN, and the P3 evoked-potential hotspot matched hyperdirect stimulation.', refIds: ['galvan2015', 'akram2017', 'peeters2024'] },
   // (B2: Voa pallidal, most of Vop cerebellar, Ilinsky 2018; the mesh is Morel's VLa)
   vo: { text: 'Drawn: Morel\'s VLa, approximately Hassler\'s Voa. Voa, with a narrow anterior strip of Vop, receives pallidal input; the bulk of Vop, like the Vim, belongs to the cerebellar territory (nomenclatures differ between atlases). For hand dystonia, surgeons target the Voa–Vop junction.', refIds: ['ilinsky2018', 'shimizu2018'] },
   // (B2: combined STN and SNr stimulation is investigational; its trials were negative on their primary outcomes)
