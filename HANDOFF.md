@@ -15,8 +15,11 @@ commit and push it.
   - A-001, the PD dyskinesia view (the user's choice, C = both):
     - A: the view is now "Stimulation-induced dyskinesia" (Tsuboi 2021: dorsal GPi and GPe, associative and
       SMA/premotor connectivity), a side effect with no target marker and no tract;
-    - B: a separate view of how DBS treats levodopa-induced dyskinesia, built only after its sources are checked
-      and shown to the user.
+    - B: a new view, "Levodopa-induced dyskinesia" (`pd-lid`): GPi and STN with the ansa lenticularis (beneath the
+      GPi) and the lenticular fasciculus (above the STN), no marker, no cortex; from Fan 2020 and Aquino 2019 (full
+      texts), Krack 1998, D'Souza 2026 and Katayama 2006 (abstracts). D'Souza 2026's below-average zone (GPe, dorsal
+      GPi) is also a line in the stimulation-induced view.
+  - Next: A-002 (Hollunder 2024's STN-derived sweet spots in the CM-Pf and GPi views), A-003 (centroid markers).
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -289,7 +292,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (409 tests on `fix/b1-dbs-views`)
+  - `npx vitest run` (410 tests on `fix/b1-dbs-views`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`

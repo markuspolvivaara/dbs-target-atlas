@@ -16,7 +16,7 @@ import type { IndicationInput } from './schema';
 export const INDICATIONS: IndicationInput[] = [
   {
     id: 'pd', label: "Parkinson's", name: "Parkinson's disease", accent: 'stn',
-    symptomIds: ['pd-tremor', 'pd-bradykinesia', 'pd-rigidity', 'pd-axial', 'pd-dyskinesia'],
+    symptomIds: ['pd-tremor', 'pd-bradykinesia', 'pd-rigidity', 'pd-axial', 'pd-lid', 'pd-dyskinesia'],
     primaryTargets: ['stn', 'stn_motor'], alternativeTargets: ['gpi', 'snr'],
     contextStructures: [],
     // the pedunculopontine nucleus and the optic tract (a GPi landmark) are left out of the Parkinson's views

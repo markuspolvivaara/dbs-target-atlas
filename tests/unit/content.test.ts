@@ -115,9 +115,12 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
   it('symptom summaries, notes and claims quote existing content or are labelled stand-ins', () => {
     const corpus = src.html;
     const epiClaims = new Set(EPILEPSY_INDICATION.evidence.map((e) => e.claim));
-    // views rebuilt in the site audit's review, each claim checked against these sources (A-001: Tsuboi 2021's abstract,
-    // the conference abstract read in full)
-    const REVIEWED: Record<string, string[]> = { 'pd-dyskinesia': ['tsuboi2021', 'sid'] };
+    // views rebuilt or added in the site audit's review, each claim checked against these sources (A-001: Tsuboi 2021,
+    // D'Souza 2026, Krack 1998 and Katayama 2006 as their abstracts, the conference abstract, Fan 2020 and Aquino 2019 in full)
+    const REVIEWED: Record<string, string[]> = {
+      'pd-dyskinesia': ['tsuboi2021', 'sid', 'dsouza2026'],
+      'pd-lid': ['fan2020', 'krack1998', 'dsouza2026', 'aquino2019', 'katayama2006'],
+    };
     for (const s of CONTENT.symptoms) for (const e of s.evidence) {
       const ok = s.indicationId === 'epi' ? epiClaims.has(e.claim)
         : REVIEWED[s.id] ? e.refIds.every((r) => REVIEWED[s.id].includes(r)) : corpus.includes(e.claim);
@@ -133,7 +136,24 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
     expect(s.summary).toMatch(/dorsal GPi and GPe/);
     expect(s.evidence[0].refIds).toEqual(['tsuboi2021']);
     expect(CONTENT.references.find((r) => r.id === 'tsuboi2021')!.citation).toMatch(/abstract/);
-    expect(CONTENT.structures.find((x) => x.id === 'lf')!.refIds).toEqual(['horn2022']);
+    // (the lenticular fasciculus's card no longer carries the conference abstract's claim)
+    expect(CONTENT.structures.find((x) => x.id === 'lf')!.refIds).not.toContain('sid');
+  });
+  it('shows where DBS relieves levodopa-induced dyskinesia, from GPi and from above the STN, with no target (audit A-001)', () => {
+    const s = CONTENT.symptoms.find((x) => x.id === 'pd-lid')!;
+    expect(s.name).toBe('Levodopa-induced dyskinesia');
+    const pd = CONTENT.indications.find((i) => i.id === 'pd')!;
+    // (beside the view of the dyskinesia stimulation induces: the same pallidum, ventral against dorsal)
+    expect(pd.symptomIds.slice(-2)).toEqual(['pd-lid', 'pd-dyskinesia']);
+    expect(s.structures).toEqual(['gpi', 'stn']);
+    expect(s.tracts).toEqual(['al', 'lf']);        // beneath the GPi (D'Souza 2026), above the STN (Aquino 2019)
+    expect(s.corticalAreas).toEqual([]);           // SMA and premotor synchrony went with worse outcomes
+    expect(s.targetId).toBeNull();                 // the sweet spot's abstract gives no coordinates
+    expect(s.summary).toMatch(/ventral posterior GPi/);
+    expect(s.evidence.flatMap((e) => e.refIds)).toContain('fan2020');
+    for (const id of ['krack1998', 'dsouza2026', 'katayama2006'])
+      expect(CONTENT.references.find((r) => r.id === id)!.citation, id).toMatch(/abstract: the full text is not open access/);
+    expect(CONTENT.symptoms.find((x) => x.id === 'pd-dyskinesia')!.evidence.at(-1)!.refIds).toEqual(['dsouza2026']);
   });
   it('keeps the calculator logic and text', () => {
     expect(src.html).toContain(CALC_LEDE);
