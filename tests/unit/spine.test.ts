@@ -3,9 +3,10 @@ import { crossCheckSpine, discBelow, SP, SP_MANIFEST, SP_REFS, vertebraOf } from
 import published from '../../src/data/generated/spine-published.json';
 import {
   ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, CCJ, CCJ_MEASURES, CERVICAL_GEOM, crossCheckContent, discRegion, exitingRoot, exposureRegion, GEOM_BY_LEVEL,
-  LESION_ZONES, lesionZones, LUMBAR_GEOM, NECK_LANDMARKS, PLACED, ROOT_FUNCTION, STATEMENTS, THORACIC_GEOM, VERTEBRA_NEIGHBOURS, VERTEBRAL_ARTERY,
+  HERNIA_STATEMENTS, herniaZones, LESION_ZONES, lesionZones, LUMBAR_GEOM, NECK_LANDMARKS, PLACED, RADICULOPATHY, ROOT_FUNCTION, STATEMENTS, THORACIC_GEOM,
+  VERTEBRA_NEIGHBOURS, VERTEBRAL_ARTERY, zoneRoot,
 } from '../../src/spine/content';
-import { HERNIA_ZONES, herniaRoot } from '../../src/spine/herniation';
+import { HERNIA_ZONES, herniaRoot, migratedToExiting, type HerniaSpec } from '../../src/spine/herniation';
 import { REGION, REGIONS } from '../../src/spine/regions';
 import { LESION_MARKERS, lesionMarkerId, spinePlan, spineScene } from '../../src/spine/scene';
 import { decodeSpine, defaultSpineState, encodeSpine } from '../../src/spine/state';
@@ -208,7 +209,9 @@ describe('spine scene and URL state', () => {
     expect(decodeSpine(encodeSpine(les))).toEqual(les);
     // a lesion belongs to the disc below the selected level; anything else is dropped
     expect(decodeSpine('#/atlas?lv=L3&les=L4-L5.paracentral.L').lesion).toBeNull();
-    expect(decodeSpine('#/atlas?lv=L4&les=L4-L5.central.L').lesion).toBeNull();
+    // (a central one is offered on the level card too: audit E-010)
+    expect(decodeSpine('#/atlas?r=lumbar&lv=L4&les=L4-L5.central.L').lesion).toEqual({ pair: 'L4-L5', zone: 'central', side: 'L' });
+    expect(decodeSpine('#/atlas?r=cervical&lv=C5&les=C5-C6.central.R').lesion).toEqual({ pair: 'C5-C6', zone: 'central', side: 'R' });
     // the neck: its own zones (no far lateral), and only at a disc that has the tool
     const neckLes = { ...defaultSpineState(), region: 'cervical' as const, level: 'C5', lesion: { pair: 'C5-C6', zone: 'foraminal' as const, side: 'R' as const } };
     expect(decodeSpine(encodeSpine(neckLes))).toEqual(neckLes);
@@ -272,7 +275,8 @@ describe('lesion-to-root tool', () => {
       expect(x[0], `${g.pair} ${sd}`).toBeGreaterThan(0);
       expect(x[1], `${g.pair} ${sd}`).toBeGreaterThan(x[0]);
     }
-    expect(LESION_MARKERS.length).toBe(pairs.length * 2 * 3 + neck.length * 2 * 2);
+    // (and a central one at each, midway between the two paracentral positions)
+    expect(LESION_MARKERS.length).toBe(pairs.length * 2 * 4 + neck.length * 2 * 3);
   });
   it('the plan puts the affected root forward and marks the herniation', () => {
     const p = spinePlan({ region: 'lumbar', level: 'L4', sel: null, lesion: { pair: 'L4-L5', zone: 'paracentral', side: 'L' } });
@@ -292,6 +296,44 @@ describe('lesion-to-root tool', () => {
     expect(Object.keys(ROOT_FUNCTION)).toEqual(['L1', 'L2', 'L3', 'L4', 'L5', 'S1']);
     for (const r of ['L2', 'L3', 'L4', 'L5', 'S1']) expect(ROOT_FUNCTION[r].keyMuscle, r).toBeTruthy();
     expect(ROOT_FUNCTION.L1.keyMuscle).toBeNull();
+  });
+  // audit E-005: the clinical picture of a radiculopathy, not only the spinal cord injury worksheet
+  it('radiculopathy covers L1-S1 (Bateman 2025) and C4-T1 (Hasan 2025); each cervical root leaves at the disc the tool names for it', () => {
+    expect(Object.keys(RADICULOPATHY)).toEqual(['L1', 'L2', 'L3', 'L4', 'L5', 'S1', 'C4', 'C5', 'C6', 'C7', 'C8', 'T1']);
+    for (const r of ['L1', 'L2', 'L3', 'L4', 'L5', 'S1']) expect(RADICULOPATHY[r].pain && !RADICULOPATHY[r].disc, r).toBe(true);
+    // foot drop belongs to L5 here (the worksheet gives ankle dorsiflexion to L4 alone)
+    expect(RADICULOPATHY.L5.weakness).toMatch(/^Ankle dorsiflexion/);
+    expect(RADICULOPATHY.S1.reflex).toMatch(/Achilles/);
+    for (const g of CERVICAL_GEOM.filter((x) => x.lesions)) {
+      const root = affectedRoot(g.pair, 'foraminal');
+      if (RADICULOPATHY[root]) expect(RADICULOPATHY[root].disc, root).toBe(g.pair.replace('-', '–'));
+    }
+    expect(STATEMENTS.radiculopathyLumbar.refIds).toEqual(['bateman2025']);
+    expect(STATEMENTS.radiculopathyCervical.refIds).toEqual(['hasan2025']);
+  });
+  it('a central herniation (both tools) presses on no single root; at a lumbar disc the card cites cauda equina syndrome', () => {
+    for (const region of ['lumbar', 'cervical'] as const) {
+      expect(herniaZones(region)[0]).toEqual(['central', 'Central']);
+      expect(HERNIA_ZONES[region]).toEqual(herniaZones(region));
+    }
+    expect(zoneRoot('L4-L5', 'central')).toBeNull();
+    expect(zoneRoot('L4-L5', 'paracentral')).toBe('L5');
+    expect(HERNIA_STATEMENTS.caudaEquina.refIds).toEqual(['aduri2026']);
+    const p = spinePlan({ region: 'lumbar', level: 'L4', sel: null, lesion: { pair: 'L4-L5', zone: 'central', side: 'L' } });
+    expect(p.looks.get('sp_root_l5')).toBe('primary');   // no root steps back or forward
+    expect(spineScene.catalog.markers.has(p.markers[0].targetId)).toBe(true);
+    const g = GEOM_BY_LEVEL.get('L4')!, m = LESION_MARKERS.find((x) => x.id === lesionMarkerId('L4-L5', 'central', 'L'))!;
+    expect(m.mni.left[0]).toBeCloseTo((g.lesions!.L.paracentral[0] + g.lesions!.R.paracentral[0]) / 2, 5);
+  });
+  it('a lumbar paracentral extrusion migrated up past the disc’s upper margin names the exiting root too (Ikuta 2013)', () => {
+    const x = (o: Partial<HerniaSpec>): HerniaSpec => ({ zone: 'paracentral', side: 'L', type: 'extrusion', sizeMm: 8, migrateMm: 0, ...o });
+    expect(migratedToExiting(x({ migrateMm: 6 }), 'lumbar', 10)).toBe(true);
+    expect(migratedToExiting(x({ migrateMm: 5 }), 'lumbar', 10)).toBe(false);    // still within the disc's height
+    expect(migratedToExiting(x({ migrateMm: -8 }), 'lumbar', 10)).toBe(false);   // down: the traversing root alone
+    expect(migratedToExiting(x({ migrateMm: 8, type: 'protrusion' }), 'lumbar', 10)).toBe(false);
+    expect(migratedToExiting(x({ migrateMm: 8, zone: 'foraminal' }), 'lumbar', 10)).toBe(false);   // already the exiting root
+    expect(migratedToExiting(x({ migrateMm: 8 }), 'cervical', 6)).toBe(false);
+    expect(HERNIA_STATEMENTS.migrated.refIds).toEqual(['ahn2022', 'ikuta2013']);
   });
 });
 
@@ -467,6 +509,14 @@ describe('spine craniocervical junction (its own CT)', () => {
     expect(Math.hypot(L.basion[1] - L.densTip[1], L.basion[2] - L.densTip[2])).toBeCloseTo(m.bdi, 0);
     expect(CCJ_MEASURES.map((x) => x.id).sort()).toEqual(['adi', 'bai', 'bdi', 'cca', 'mcrae', 'padi']);
     for (const x of CCJ_MEASURES) for (const st of [x.definition, x.normal]) expect(st.refIds.every((r) => SP_REFS.has(r)), x.id).toBe(true);
+    // audit E-006, E-007, E-011: the usual limits, sourced; no unverified 19 mm
+    const normal = Object.fromEntries(CCJ_MEASURES.map((x) => [x.id, x.normal]));
+    expect(normal.adi.text).toMatch(/under 3 mm in adults and under 5 mm in children/);
+    expect(normal.adi.refIds).toEqual(['fidan2026', 'li2025', 'yang2014']);
+    expect(normal.padi.text).toMatch(/less than 14 mm predicts paralysis/);
+    expect(normal.padi.text).not.toMatch(/19 mm/);
+    for (const k of ['bdi', 'bai']) expect(normal[k].text, k).toMatch(/Harris’s limit on radiographs.*12 mm or less/);
+    expect(normal.cca.refIds).toEqual(['fidan2026', 'botelho2013']);
     expect(CCJ.image.file).toBe('assets/spine/ccj_midsag.png');
   });
 

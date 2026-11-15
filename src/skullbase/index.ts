@@ -52,8 +52,24 @@ export const LANDMARKS = z.array(LandmarkSchema).parse(landmarksJson);
 export const LM = new Map(LANDMARKS.map((l) => [l.id, l]));
 
 const DefinitionSchema = z.object({ text: z.string().min(1), url: z.string().url().nullable() });
-/** Wikipedia-derived definitions shipped in Z-Anatomy (CC BY-SA 3.0), keyed by structure name. */
-export const DEFINITIONS = z.record(z.string(), DefinitionSchema).parse(definitionsJson);
+/**
+ * Shipped definitions that are wrong on their face, corrected here for every model (the site audit's C-009): the words
+ * replaced, or the text withdrawn, and why. The texts are CC BY-SA, so the card says what was changed.
+ */
+export const DEFINITION_EDITS: Record<string, { old?: string; new?: string; withdraw?: boolean; why: string }> = {
+  'Facial nerve (VII)': { old: 'The facial nerve (the labyrinthine segment) is', new: 'The facial nerve is',
+    why: '“(the labyrinthine segment)” removed after “The facial nerve”: that is one of the three segments of the nerve’s bony canal, not the nerve.' },
+  'Callosomarginal artery': { withdraw: true,
+    why: 'The text shipped for this artery described the A2 segment of the anterior cerebral artery, not the callosomarginal artery; it is not shown.' },
+};
+/** Wikipedia-derived definitions shipped in Z-Anatomy (CC BY-SA 3.0), keyed by structure name, with DEFINITION_EDITS applied. */
+export const DEFINITIONS: Record<string, { text: string; url: string | null; edited?: string }> = Object.fromEntries(
+  Object.entries(z.record(z.string(), DefinitionSchema).parse(definitionsJson)).flatMap(([name, d]) => {
+    const e = DEFINITION_EDITS[name];
+    if (!e) return [[name, d]];
+    if (e.withdraw) return [];
+    return d.text.includes(e.old!) ? [[name, { ...d, text: d.text.replace(e.old!, e.new!), edited: e.why }]] : [[name, d]];
+  }));
 
 const RegionSchema = z.object({
   landmark: z.string(),
@@ -230,7 +246,7 @@ export const V3_FIT = z.object({
 }).parse(v3Fit);
 
 /** Definition for a structure or landmark name (paired structures use their base name). */
-export function definitionFor(name: string): { text: string; url: string | null } | null {
+export function definitionFor(name: string): { text: string; url: string | null; edited?: string } | null {
   return DEFINITIONS[name] ?? DEFINITIONS[name.trim()] ?? null;
 }
 

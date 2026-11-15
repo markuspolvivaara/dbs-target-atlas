@@ -102,6 +102,7 @@ export function plan(indId: string, symId: string | null, borders: boolean, stnW
     ind.alternativeMarkers.forEach((t) => markers.push({ targetId: t, primary: false }));
   }
   if (!sym) for (const v of ind.extraVolumes) looks.set(v, 'context');
+  if (!sym) for (const v of ind.alternativeVolumes) looks.set(v, 'alt');
   // the STN as one nucleus: as prominent as its most prominent zone, the zones not drawn
   const STRENGTH: Look[] = ['primary', 'alt', 'context', 'shell', 'ghost'];
   if (stnWhole && [...STN_ZONES, 'stn'].some((id) => ['primary', 'alt', 'context', 'shell'].includes(looks.get(id) ?? ''))) {

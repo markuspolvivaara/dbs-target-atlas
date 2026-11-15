@@ -73,6 +73,13 @@ describe('virtual screw data (pipeline/spine_screw.py)', () => {
     // and the two sides of T1 now agree within a few degrees
     expect(Math.abs(p.transverseAngle - SCREW_LEVELS.T1.pedicle!.R.transverseAngle)).toBeLessThan(5);
   });
+  // audit E-009: like with like (Jiang 2024's 5.5 mm is a screw path, not the pedicle's outer width)
+  it('C7: the published width and height beside the measured ones are outer measures, read from Chanplakorn 2014’s Table 2', () => {
+    const oc = published.cervical.C7.outerChanplakorn;
+    expect(oc.n).toBe(74);
+    expect(oc.width).toEqual({ R: [6.54, 0.99], L: [6.6, 1.0] });
+    expect(oc.height).toEqual({ R: [6.83, 0.82], L: [6.72, 0.91] });
+  });
   it('thoracic pedicles sit near the published study means, and the start sizes follow the 80% rules', () => {
     for (let i = 1; i <= 12; i++) {
       const lv = `T${i}`;

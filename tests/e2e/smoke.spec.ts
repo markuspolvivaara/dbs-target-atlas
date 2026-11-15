@@ -322,7 +322,8 @@ test('labels: all / hover / off, legend hover, fade while moving', async ({ page
   await page.locator('.toolbar [data-labels="all"]').click();
   await expect.poll(async () => (await shown()).length).toBeGreaterThan(2);
   const all = await shown();
-  expect(all).toEqual(expect.arrayContaining(['PD sweet spot', 'dorsolateral STN']));
+  // (the STN whole, the default: its zones' 'dorsolateral STN' label appears only with stn=z)
+  expect(all).toEqual(expect.arrayContaining(['PD sweet spot', 'STN']));
   expect(await lines()).toBe(all.length);
   expect(new URL(page.url()).hash).toContain('lb=a');
   // fade while the camera moves
@@ -446,7 +447,7 @@ test('tract card: sourced sections, measured connections, highlight and the URL'
   await page.locator('.tract-btn[data-tract="wm_ifof"]').click();
   const card = page.locator('.card.sel');
   await expect(card.locator('h2')).toHaveText('Inferior fronto-occipital fasciculus (IFOF)');
-  for (const dt of ['Course', 'Connections', 'Cortical connections measured in the atlas', 'Function', 'Surgical relevance', 'Geometry']) await expect(card.locator('dt', { hasText: dt }).first()).toBeVisible();
+  for (const dt of ['Course', 'Connections', 'Brodmann areas the bundle touches', 'Function', 'Surgical relevance', 'Geometry']) await expect(card.locator('dt', { hasText: dt }).first()).toBeVisible();
   await expect(card.locator('.areas')).toContainText('Left: BA');
   // every list item carries at least one source link
   const items = card.locator('.evidence li');
@@ -507,7 +508,8 @@ test('core and extended tracts stay separate; the switch moves between them', as
   await page.locator('.tier-btn[data-tier="extended"]').click();
   await settle(page);
   expect(new URL(page.url()).hash).toContain('g=ext_language');
-  await expect(page.locator('.tract-btn')).toHaveCount(4);
+  // (three since the acoustic radiation was withdrawn: the site audit's B4)
+  await expect(page.locator('.tract-btn')).toHaveCount(3);
   // only extended groups are offered while the extended set is open
   await expect(page.locator('.grp-chips .chip', { hasText: 'Vision' })).toHaveCount(0);
   // "All" is offered first in the function row of each set
@@ -1060,17 +1062,18 @@ test('cortex: the Function selector draws the areas with their sources and keeps
   expect(g.errors).toEqual([]);
 });
 
-test('dbs: the STN as its zones or as one nucleus; the Parkinson\'s view without the PPN and the optic tract', async ({ page }) => {
+test('dbs: the STN as one nucleus or as its zones; the Parkinson\'s view without the PPN and the optic tract', async ({ page }) => {
   const g = guard(page);
   await page.goto('./dbs/#/atlas?i=pd');
   await settle(page);
   await expect(page.locator('.legend3d')).not.toContainText('Pedunculopontine');
   await expect(page.locator('.legend3d')).not.toContainText('Optic tract');
-  await expect(page.locator('.legend3d')).toContainText('STN, sensorimotor zone');
-  await page.locator('.stn-chips .chip[data-v="whole"]').click();
-  await expect.poll(() => new URL(page.url()).hash).toContain('stn=w');
+  // the whole nucleus by default
   await expect(page.locator('.legend3d')).toContainText('Subthalamic nucleus');
   await expect(page.locator('.legend3d')).not.toContainText('STN, sensorimotor zone');
+  await page.locator('.stn-chips .chip[data-v="zones"]').click();
+  await expect.poll(() => new URL(page.url()).hash).toContain('stn=z');
+  await expect(page.locator('.legend3d')).toContainText('STN, sensorimotor zone');
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });

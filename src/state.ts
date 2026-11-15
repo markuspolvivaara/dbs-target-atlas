@@ -59,7 +59,8 @@ export function defaultState(): AppState {
       electrode: { on: false, opacity: 1 },
     },
     borders: true,
-    stn: 'zones',
+    // (the STN drawn whole unless its functional zones are asked for: the owner's choice, 2026-11-15)
+    stn: 'whole',
     labels: defaultLabels(),
     clip: {
       axial: { on: false, mm: -4 },
@@ -95,7 +96,7 @@ export function encode(s: AppState): string {
     const dly = LAYER_CODES.map(([k, c]) => `${c}${d.layers[k].on ? 1 : 0}`).join(',');
     if (ly !== dly) p.set('ly', ly);
     if (!s.borders) p.set('b', '0');
-    if (s.stn === 'whole') p.set('stn', 'w');
+    if (s.stn === 'zones') p.set('stn', 'z');
     { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
     for (const [a, code] of AXES) {
       const c = s.clip[a];
@@ -143,7 +144,8 @@ export function decode(hash: string, base: AppState = defaultState()): AppState 
     s.layers[e[0]] = { on: on === '1', opacity: Math.min(1, Math.max(0, num(op ?? null, 1))) };
   }
   s.borders = p.get('b') !== '0';
-  s.stn = p.get('stn') === 'w' ? 'whole' : 'zones';
+  // ('w', for whole, is what links wrote while the zones were the default)
+  s.stn = p.get('stn') === 'z' ? 'zones' : 'whole';
   const cut = p.get('cut');
   s.cutSide = cut === 'L' || cut === 'R' ? cut : 'none';
   const seq = p.get('seq');

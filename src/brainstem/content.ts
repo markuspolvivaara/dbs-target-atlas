@@ -87,7 +87,8 @@ export const ZONES: ZoneContentInput[] = [
     summary: 'Into the front of the upper pons, below the pontomesencephalic sulcus.',
     borders: [
       c('A 4 mm vertical incision below the pontomesencephalic sulcus, in a line from the oculomotor to the trigeminal nerve, at the sagittal level of the oculomotor nerve’s exit; proposed for anterior and superior pontine lesions and used in three children without morbidity.', 'cavalheiro2015'),
-      c('Listed among the zones validated in cadaver dissections.', 'cavalcanti2016'),
+      // (the site audit's D-007: the name is used for another place too; this zone is Cavalheiro's)
+      c('Other authors give the name to a different place: the peritrigeminal (supratrigeminal) zone on the anterolateral pons, rostral to the trigeminal root entry zone.', 'alafif2026'),
     ],
     approach: [c('Reached through a fronto-orbito-zygomatic route; the presigmoid approach also exposes it.', 'cavalheiro2015')],
     risks: [],

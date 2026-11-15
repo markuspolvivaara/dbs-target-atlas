@@ -7,9 +7,100 @@ commit and push it.
 
 - The site audit of 10–11 Nov is on branch `audit/2026-11-10` (`audit/README.md`: findings, questions for an expert,
   a fix order). Batches 1–6 of its fixes are merged (`main` = `95b0b09`, 2026-11-13).
-- Now: the audit's decisions on the models, one at a time with the user, on branch `fix/surgical-views` (off `main` at
-  `95b0b09`) in the worktree `.claude/worktrees/audit-fixes`. **Local commits only: not pushed, no pull request.** Push
-  or open one only when the user asks.
+- The audit's decisions on the models were made one at a time with the user on branch `fix/surgical-views` and are
+  merged (PR 11, `main` = `f140650`, 2026-11-15; then Dependabot's PR 7, `bcd1a12`).
+- Now: B1, the DBS views review (audit A-001..A-003), on branch `fix/b1-dbs-views` (off `main` at `bcd1a12`) in the
+  same worktree `.claude/worktrees/audit-fixes`. **Local commits only: not pushed, no pull request.** Push or open one
+  only when the user asks.
+  - A-001, the PD dyskinesia view (the user's choice, C = both):
+    - A: the view is now "Stimulation-induced dyskinesia" (Tsuboi 2021: dorsal GPi and GPe, associative and
+      SMA/premotor connectivity), a side effect with no target marker and no tract;
+    - B: a new view, "Levodopa-induced dyskinesia" (`pd-lid`): GPi and STN with the ansa lenticularis (beneath the
+      GPi) and the lenticular fasciculus (above the STN), no marker, no cortex; from Fan 2020 and Aquino 2019 (full
+      texts), Krack 1998, D'Souza 2026 and Katayama 2006 (abstracts). D'Souza 2026's below-average zone (GPe, dorsal
+      GPi) is also a line in the stimulation-induced view.
+  - A-002, Hollunder 2024's dystonia and Tourette maps (all from subthalamic DBS), the user's choices:
+    - Tourette: not drawn in the Tourette views (no STN target there); the Tics card says why;
+    - generalized dystonia: shown with the STN, the alternative target, in the alternative look
+      (`alternativeTracts`, and a new `alternativeVolumes` field for the sweet spot);
+    - all four named ", STN DBS (Hollunder 2024)" and drawn in the STN's colour (`pipeline/config.py`, then
+      `manifest.py`); their cards and S1's say so.
+  - A-003, markers (the user's choices: relabel and add published targets; Horn 2022's printed peaks; keep the
+    tremor hotspot and explain it):
+    - centroids are badged "Nucleus centroid, not a surgical target" (card eyebrow "Nucleus centroid"); the lead tool
+      says "marker", and says when its marker is a centroid;
+    - new kind `publishedTarget` (`targets.ts`: printed AC-PC millimetres placed with `acpcToMni`): the Voa–Vop
+      junction (Shimizu 2018, Horisawa 2019; focal hand dystonia only: Holmes tremor keeps the Vo centroid), the
+      ANT–MTT junction (Schaper 2020; epilepsy), Guiot's indirect Vim target (Sammartino 2016; Holmes tremor,
+      myoclonus-dystonia); each card says where it lies against the drawn nuclei (computed with the audit's mesh
+      helpers: scratch `b1/a003/targets_check.py`);
+    - the two Horn 2022 markers at the printed peaks (the maps' maxima lie within 1 to 2.5 mm);
+    - the tremor hotspot keeps its place; its card says it is on or 1.5 mm outside the drawn Vim, inside the drawn
+      Vo, 8 to 9 mm from Guiot's Vim target.
+  - B1 is complete (A-001..A-003), and the STN is drawn whole by default (the user's request; `stn=z` asks for the
+    zones). Pushed to `origin/fix/b1-dbs-views` (2026-11-15) at the user's word.
+- B2, DBS statements and references (A-004, A-006..A-011, A-015, A-016), the user's choices: A-004 Liu 2014 in place
+  of a meeting abstract; A-009 Voa pallidal, most of Vop cerebellar (Ilinsky 2018; the mesh is named "VLa (Morel),
+  approximately Voa"); A-010 the Vim at 3/12 with the 2/12–3/12 range printed; A-011 the SNr as investigational
+  context. The rest from the sources: Reich 2019's abstract (volume, not electrode position; no ansa lenticularis),
+  Horisawa 2021's pilot for MRgFUS Vo thalamotomy, Sammartino 2016 for the pyramidal tract and lemniscus as the Vim's
+  borders, the SWI, 7T FGATIR, MRgFUS preprint and epilepsy texts to their sources. The 52 original references are
+  rebuilt from Europe PMC records with DOIs (barbe2018 and barrow had pointed to other papers); the References page
+  lists only this section's datasets (107 references, was 197). The name labels' layout now tries the other
+  direction and side before it drops a name (the SNr's move re-framed the Parkinson's view and hid "STN"). Local
+  commit on `fix/b1-dbs-views`; pushed at the user's word.
+- B4, the white-matter tract cards (B-006..B-010, MA-02..MA-04, MA-14), the user's choices, on the same branch:
+  - the optic radiation keeps "Meyer's loop": rechecked at the user's question, the atlas bundle does have a shallow
+    loop (41 % / 12 % of streamlines run > 5 mm forward of their thalamic end; front 44–46 mm behind the temporal
+    pole); the audit's "no loop" was wrong. Its card says the loop is shallow and the bundle starts in the posterior
+    thalamus, not at the lateral geniculate body;
+  - medial lemniscus, reticulospinal tract, extreme capsule, anterior commissure: kept, each card says what the bundle
+    connects (ends re-measured from the source files: scratch `b4/ends.py`);
+  - the DRTT is two tracts, `wm_drtt` (crossed) and `wm_ndrtt` (uncrossed): `WmTract.keep`; split tracts draw from
+    their own random stream and `replays` keeps the shared stream as it was, so no other tract changed (checked
+    byte for byte);
+  - the acoustic radiation is withdrawn (`withdrawn=True`: replayed, not written or listed; `C.WM_SHOWN`); its colour
+    token is now `wmNDRTT`;
+  - SLF I without the "dorsal SLF" alias, with the Wang 2016 / Komaitis 2020 dispute; the arcuate sentence (Duffau
+    2008), the posterior corticostriatal tract (parietal and occipital), and "Brodmann areas the bundle touches"
+    with Yeh 2022's caveat. Pushed at the user's word.
+- B5, the skull base texts (C-001..C-011), the user's choices: meningioma shares "of all intracranial meningiomas" from
+  papers that state it (Calvanese 2024, Cuellar-Hernandez 2021, Hammed 2021), petroclival Singh 2019's 5–11 % of
+  posterior fossa ones; the foramen notes with vessels and neuraxis (Raut 2012, Kalthur 2023, Trimble 2023, Jeican
+  2026; the foramen ovale from Triantafyllou 2025 and Kempa 2025, Khairnar 2013 removed); the jugular foramen's three
+  compartments first (Katsuta 1997), the two parts after (Raut 2012); Koos by the brainstem (Koos 1998, sizes
+  approximate), Knosp from Knosp 1993 and Micko 2015 with its invasion rates and the grade 3 row. From the sources:
+  the carotid over, not through, the foramen lacerum (Muslu 2025); the sphenoid ostium with its paper's caveat and
+  mean ± SD; the LSO and minipterional about equal at the carotid bifurcation (Mosteiro 2026's table). C-002 was
+  already fixed (1eae262). C-009: `DEFINITION_EDITS` in `src/skullbase/index.ts` corrects shipped definitions in the
+  front end (facial nerve; the callosomarginal artery's text withdrawn), so the pipeline files the user's endonasal
+  work touches stay as they are. Pushed at the user's word.
+- B6, the vascular and brainstem tables (D-003..D-007), the user's choices: Hunt and Hess in its fuller wording
+  (Patel 2021, Marcolini 2019: a cranial nerve palsy stays grade 2); modified Fisher thin / thick, the footnote
+  quoting Claassen 2001's thick clot and both-ventricle blood (Frontera 2006's full text not read); Spetzler–Martin's
+  drainage "superficial only" / "any deep", Hofman 2018's rule kept as one series' on the card; Spetzler–Ponce "for
+  cerebral AVMs" (Spetzler 2011's abstract); the brainstem's "Supratrigeminal zone (Cavalheiro 2015)" (renamed in
+  `brainstem_build.py` and in `bs-zones.json` / `bs-manifest.json` by the same string), the Cavalcanti line replaced
+  by Al-Afif 2026's other use of the name. Pushed at the user's word.
+- B7, the spine texts (E-002, E-005..E-011), the user's choices:
+  - each root's picture in radiculopathy first: L1–S1 from Bateman 2025's Table 1 (pain, sensory loss, weakness,
+    reflex), C4–T1 from Hasan 2025's Table 3 (`RADICULOPATHY`). The ISNCSCI key muscle and sensory point follow under
+    their own heading; the "Reflexes: to be added" placeholder is gone. Root cards show both, cervical and T1 too;
+  - a central herniation on the level card as well as in the drilling tool (`herniaZones`, `zoneRoot`; links
+    `les=…central…`). At a lumbar disc it names the cauda equina in the dural sac and cites Aduri 2026 on cauda equina
+    syndrome. A lumbar paracentral extrusion migrated up past the disc's upper margin also names the exiting root
+    (`migratedToExiting`; Ikuta 2013, Ahn 2022's grades), with how far the drawn fragment pushes it;
+  - craniocervical limits: ADI under 3 mm in adults and 5 mm in children (Li 2025, Yang 2014); PADI under 14 mm
+    predicts paralysis (Yang 2014), the unverifiable 19 mm sentence dropped; Harris's 12 mm for BDI and BAI with
+    WFNS 2020's note on poor reader agreement (Alves 2020); the clivus–canal angle's sex difference and Botelho
+    2013's controls against basilar invagination. Chamberlain and McGregor were not added (the CT here does not reach
+    the hard palate);
+  - published pedicle columns: thoracic shows the median of the study means and names the study at each end, with
+    the material and sign notes (Singh 2011: negative = pointing outwards); C7 width and height from Chanplakorn
+    2014's outer measures (read by `spine_published.py`), Jiang 2024's screw path in the statement, the earlier
+    studies' unsigned sagittal angles dropped.
+  Ten references added to `pipeline/sources/citations.json` and `REF_KEYS` (`spine_build.py refs`, no rebuild).
+  Pushed at the user's word with B1–B7 opened as one pull request (`fix/b1-dbs-views` → `main`, 2026-11-15).
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -282,7 +373,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (404 tests on `fix/surgical-views`)
+  - `npx vitest run` (428 tests on `fix/b1-dbs-views`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`

@@ -517,6 +517,7 @@ export class SkullbaseAtlasPage {
     const def = definitionFor(lm ? lm.name : st?.name ?? '');
     const defBlock = def
       ? [h('dt', {}, 'Definition'), h('dd', {}, h('p', {}, def.text), h('p', { class: 'aside' }, 'From Wikipedia (CC BY-SA 3.0), as shipped with Z-Anatomy; not checked against the literature. ',
+        def.edited ? `Changed here: ${def.edited} ` : null,
         def.url ? h('a', { href: def.url, target: '_blank', rel: 'noopener' }, 'Source page') : null))]
       : [h('dt', {}, 'Definition'), h('dd', {}, 'Z-Anatomy ships no definition for this structure.')];
     const regions = REGIONS.filter((r) => lm ? r.landmarks.includes(lm.name) : r.structures.some((x) => x.id === id))

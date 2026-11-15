@@ -7,7 +7,7 @@ export const IMAGING: Imaging[] = [
     id: 'stn', structureId: 'stn', label: 'STN', title: 'Subthalamic nucleus', accent: 'stn',
     sequences: [
       { name: 'T2w', note: 'Rated highest for STN' },
-      { name: 'SWI', note: 'Highest STN contrast; runs on most scanners' },
+      { name: 'SWI', note: 'Most versions rated highest for STN; near-isotropic voxels rated better' },
       { name: 'QSM', note: 'Rated highest for STN' },
       { name: 'T2-FLAIR', note: 'Rated highest for STN' },
     ],
@@ -32,9 +32,9 @@ export const IMAGING: Imaging[] = [
       { name: 'FGATIR', note: 'The only sequence all raters preferred' },
       { name: 'PD-weighted', note: 'Combined with DRTT tractography for intersectional targeting' },
     ],
-    tract: 'DRTT, with the pyramidal tract and medial lemniscus as borders in dual-tract models.',
+    tract: 'DRTT, with the pyramidal tract and medial lemniscus as the Vim’s lateral and posterior borders.',
     note: 'Directly targeted leads sat more lateral and anterior and needed lower amplitudes, but had more symptomatic haemorrhages in one series.',
-    refIds: ['protocol2025', 'jns2021', 'vimma2026', 'barrow'],
+    refIds: ['protocol2025', 'jns2021', 'sammartino2016', 'vimma2026', 'barrow'],
   },
   {
     id: 'psa', structureId: 'psa', label: 'PSA / cZi', title: 'Posterior subthalamic area', accent: 'psa',
@@ -53,9 +53,9 @@ export const IMAGING: Imaging[] = [
   {
     id: 'vo', structureId: 'vo', label: 'Vo', title: 'Ventral oral thalamus', accent: 'vo',
     sequences: [], noSequences: 'Not covered by the 2025 sequence survey.',
-    tract: 'Receives pallidal output through the pallidothalamic bundles.',
+    tract: 'Voa receives pallidal output through the pallidothalamic bundles; most of Vop receives cerebellar input.',
     note: 'Often planned from published coordinates at the junction of Voa and Vop.',
-    refIds: ['vocoords', 'bmjno'],
+    refIds: ['vocoords', 'ilinsky2018', 'shimizu2018'],
   },
   // researched addition (epilepsy)
   EPILEPSY_IMAGING,
@@ -64,6 +64,6 @@ export const IMAGING: Imaging[] = [
 /** Aside paragraph under the imaging cards (verbatim, with its reference ids). */
 export const IMAGING_ASIDE: { text: string; refIds: string[] }[] = [
   { text: 'Ratings come from 12 surgeons at 11 centres scoring 22 sequences', refIds: ['protocol2025'] },
-  { text: 'At 7T, transmit-field inhomogeneity degrades contrast; optimized FGATIR or synthetic FGATIR from MP2RAGE helps', refIds: ['fgatir7t'] },
+  { text: 'At 7T, transmit-field (B1+) inhomogeneity can degrade FGATIR’s contrast; optimizing the sequence with it taken into account improved thalamic contrast', refIds: ['fgatir7t'] },
   { text: 'FGATIR itself dates from 2009', refIds: ['sudhyadhom2009'] },
 ];

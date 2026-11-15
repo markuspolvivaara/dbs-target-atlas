@@ -2,7 +2,7 @@ import type { Look } from '../viewer/materials';
 import { viewPrefs } from '../viewer/viewprefs';
 import { drillPairFor, type DrillPair } from './drill';
 import { makeCatalog, type MarkerDef, type SceneSource, type ScenePlan } from '../viewer/scene';
-import { affectedRoot, CERVICAL_GEOM, discRegion, lesionZones, LUMBAR_GEOM } from './content';
+import { CERVICAL_GEOM, discRegion, herniaZones, LUMBAR_GEOM, zoneRoot } from './content';
 import { discBelow, LEVEL_ORDER, SP, SP_MANIFEST, vertebraOf } from './index';
 import { REGION } from './regions';
 import type { SpineState } from './state';
@@ -32,7 +32,9 @@ export function spinePlan(s: Pick<SpineState, 'region' | 'level' | 'sel'> & Part
     looks.set(st.id, !s.level || focus.has(st.id) || !bone || !fade ? 'primary' : 'context');
   }
   // a lesion: the root it affects stands out, the other roots step back, and the herniation is marked
-  const lesionRoot = s.lesion ? `sp_root_${affectedRoot(s.lesion.pair, s.lesion.zone).toLowerCase()}` : null;
+  // (a central one: no single root, none stands out)
+  const lr = s.lesion ? zoneRoot(s.lesion.pair, s.lesion.zone) : null;
+  const lesionRoot = lr ? `sp_root_${lr.toLowerCase()}` : null;
   if (lesionRoot) for (const st of SP_MANIFEST.structures) {
     if (inRegion.has(st.id) && st.category === 'root') looks.set(st.id, st.id === lesionRoot ? 'primary' : 'context');
   }
@@ -92,12 +94,17 @@ export function herniaDrawn(pair: DrillPair): string[] {
 }
 
 /** Schematic herniation positions at each lumbar and cervical disc, per kind offered there and side (measured on this
- * CT, see content.ts). */
+ * CT, see content.ts); a central one midway between the two paracentral positions (a drawing choice), the same for
+ * either side. */
 export const LESION_MARKERS: MarkerDef[] = [...LUMBAR_GEOM, ...CERVICAL_GEOM].flatMap((g) => !g.lesions ? [] : (['L', 'R'] as const).flatMap((sd) =>
-  lesionZones(discRegion(g.pair)).map(([z, name]) => ({
-    id: lesionMarkerId(g.pair, z, sd), label: `${name} herniation ${g.pair} (${sd === 'L' ? 'left' : 'right'}, schematic position)`,
-    structureId: '', mni: { left: g.lesions![sd][z], right: g.lesions![sd][z] }, sides: [sd], radius: 2.5, token: 'spRisk',
-  }))));
+  herniaZones(discRegion(g.pair)).map(([z, name]): MarkerDef => {
+    const les = g.lesions!;
+    const at: [number, number, number] = z === 'central' ? [0, 1, 2].map((i) => (les.L.paracentral[i] + les.R.paracentral[i]) / 2) as [number, number, number] : les[sd][z];
+    return {
+      id: lesionMarkerId(g.pair, z, sd), label: `${name} herniation ${g.pair} (${z === 'central' ? 'midline' : sd === 'L' ? 'left' : 'right'}, schematic position)`,
+      structureId: '', mni: { left: at, right: at }, sides: [sd], radius: 2.5, token: 'spRisk',
+    };
+  })));
 export function lesionMarkerId(pair: string, zone: string, side: string): string {
   return `sp_les_${pair.toLowerCase().replace('-', '_')}_${zone}_${side.toLowerCase()}`;
 }

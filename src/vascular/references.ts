@@ -1,6 +1,7 @@
 import type { BsReference } from '../brainstem/schema';
 
-/** Sources of the vascular section, each checked against its open-access full text (Europe PMC). */
+/** Sources of the vascular section, each checked against its open-access full text (Europe PMC); the few with none
+ * (added in the site audit's B6) say so in their citation and were checked against their abstracts. */
 const doi = (d: string) => `https://doi.org/${d}`;
 export const VA_REFERENCES: BsReference[] = [
   { id: 'zheng2019', pmid: '30514102', pmcid: 'PMC6686434', shortLabel: 'Zheng 2019', url: doi('10.1177/0963689718817227'),
@@ -45,4 +46,14 @@ export const VA_REFERENCES: BsReference[] = [
     citation: 'Shakeel M, Rehman A, Haq TU, Syed HS. Endovascular embolization of dural arteriovenous fistulas: an 8-year single-centre experience and comparison with contemporary literature. Pol J Radiol. 2025;90:e591–e601. doi:10.5114/pjr/210253.' },
   { id: 'mishra2022', pmid: '36480822', pmcid: 'PMC9829563', shortLabel: 'Mishra 2022', url: doi('10.7461/jcen.2022.E2022.05.004'),
     citation: 'Mishra K, Kumar V, Vinay, Gandhi A, Srivastava T. Carotid cavernous fistula: redefining the angioarchitecture. J Cerebrovasc Endovasc Neurosurg. 2022;24(4):356–365. doi:10.7461/jcen.2022.E2022.05.004.' },
+  { id: 'patel2021', pmid: '33980142', pmcid: 'PMC8117305', shortLabel: 'Patel 2021', url: doi('10.1186/s12245-021-00353-w'),
+    citation: "Patel S, Parikh A, Okorie ON. Subarachnoid hemorrhage in the emergency department. Int J Emerg Med. 2021;14(1):31. doi:10.1186/s12245-021-00353-w." },
+  { id: 'marcolini2019', pmid: '30881537', pmcid: 'PMC6404699', shortLabel: 'Marcolini 2019', url: doi('10.5811/westjem.2019.1.37352'),
+    citation: "Marcolini E, Hine J. Approach to the Diagnosis and Management of Subarachnoid Hemorrhage. West J Emerg Med. 2019;20(2):203–211. doi:10.5811/westjem.2019.1.37352." },
+  { id: 'claassen2001', pmid: '11546890', shortLabel: 'Claassen 2001', url: doi('10.1161/hs0901.095677'),
+    citation: "Claassen J, Bernardini GL, Kreiter K, Bates J, Du YE, Copeland D, et al. Effect of cisternal and ventricular blood on risk of delayed cerebral ischemia after subarachnoid hemorrhage: the Fisher scale revisited. Stroke. 2001;32(9):2012–2020. doi:10.1161/hs0901.095677. Checked against its abstract: the full text is not open access." },
+  { id: 'frontera2006', pmid: '16823296', shortLabel: 'Frontera 2006', url: doi('10.1227/01.neu.0000243277.86222.6c'),
+    citation: "Frontera JA, Claassen J, Schmidt JM, Wartenberg KE, Temes R, Connolly ES, et al. Prediction of symptomatic vasospasm after subarachnoid hemorrhage: the modified fisher scale. Neurosurgery. 2006;59(1):21–7; discussion 21–7. doi:10.1227/01.neu.0000243277.86222.6c. Checked against its abstract: the full text is not open access." },
+  { id: 'spetzler2011', pmid: '20932095', shortLabel: 'Spetzler 2011', url: doi('10.3171/2010.8.jns10663'),
+    citation: "Spetzler RF, Ponce FA. A 3-tier classification of cerebral arteriovenous malformations. Clinical article. J Neurosurg. 2011;114(3):842–849. doi:10.3171/2010.8.jns10663. Checked against its abstract: the full text is not open access." },
 ];

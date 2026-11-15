@@ -316,6 +316,46 @@
   "angileri2026": {
    "citation": "Angileri SA, Lanza C, Carriero S, Platì M, Perazzo C, Girlando MF, et al. Interventional radiology management of disc herniation: a narrative review. Radiol Med. 2026;131(8):1382-1394. doi:10.1007/s11547-026-02236-7.",
    "url": "https://doi.org/10.1007/s11547-026-02236-7"
+  },
+  "bateman2025": {
+   "citation": "Bateman EA, Fortin CD, Guo M. Musculoskeletal mimics of lumbosacral radiculopathy. Muscle Nerve. 2025;71(5):816-832. doi:10.1002/mus.28106.",
+   "url": "https://doi.org/10.1002/mus.28106"
+  },
+  "aduri2026": {
+   "citation": "Aduri TT, Mishra PK, Verma V, Jain N, Prasad SS. Cauda Equina Syndrome: A Narrative Review Exploring the Pathophysiology, Clinical Spectrum, Diagnostic Strategies, and Time-Critical Management. Cureus. 2026;18(5):e108930. doi:10.7759/cureus.108930.",
+   "url": "https://doi.org/10.7759/cureus.108930"
+  },
+  "ikuta2013": {
+   "citation": "Ikuta K, Tono O, Senba H, Kitamura T, Komiya N, Oga M, et al. Translaminar microendoscopic herniotomy for cranially migrated lumbar disc herniations encroaching on the exiting nerve root in the preforaminal and foraminal zones. Asian Spine J. 2013;7(3):190-195. doi:10.4184/asj.2013.7.3.190.",
+   "url": "https://doi.org/10.4184/asj.2013.7.3.190"
+  },
+  "ahn2022": {
+   "citation": "Ahn Y, Kim JE, Yoo BR, Jeong YM. A New Grading System for Migrated Lumbar Disc Herniation on Sagittal Magnetic Resonance Imaging: An Agreement Study. J Clin Med. 2022;11(7):1750. doi:10.3390/jcm11071750.",
+   "url": "https://doi.org/10.3390/jcm11071750"
+  },
+  "li2025": {
+   "citation": "Li G, Zhang H, Wang Q. Imaging and classifications of atlantoaxial dislocation: a narrative review. EFORT Open Rev. 2025;10(7):551-561. doi:10.1530/eor-2024-0061.",
+   "url": "https://doi.org/10.1530/eor-2024-0061"
+  },
+  "yang2014": {
+   "citation": "Yang SY, Boniello AJ, Poorman CE, Chang AL, Wang S, Passias PG. A review of the diagnosis and treatment of atlantoaxial dislocations. Global Spine J. 2014;4(3):197-210. doi:10.1055/s-0034-1376371.",
+   "url": "https://doi.org/10.1055/s-0034-1376371"
+  },
+  "botelho2013": {
+   "citation": "Botelho RV, Ferreira ED. Angular craniometry in craniocervical junction malformation. Neurosurg Rev. 2013;36(4):603-10; discussion 610. doi:10.1007/s10143-013-0471-0.",
+   "url": "https://doi.org/10.1007/s10143-013-0471-0"
+  },
+  "alves2020": {
+   "citation": "Alves OL, Pereira L, Kim SH, Grin A, Shimokawa N, Konovalov N, et al. Upper Cervical Spine Trauma: WFNS Spine Committee Recommendations. Neurospine. 2020;17(4):723-736. doi:10.14245/ns.2040226.113.",
+   "url": "https://doi.org/10.14245/ns.2040226.113"
+  },
+  "chanplakorn2014": {
+   "citation": "Chanplakorn P, Kraiwattanapong C, Aroonjarattham K, Leelapattana P, Keorochana G, Jaovisidha S, et al. Morphometric evaluation of subaxial cervical spine using multi-detector computerized tomography (MD-CT) scan: the consideration for cervical pedicle screws fixation. BMC Musculoskelet Disord. 2014;15:125. doi:10.1186/1471-2474-15-125.",
+   "url": "https://doi.org/10.1186/1471-2474-15-125"
+  },
+  "singh2011": {
+   "citation": "Singh R, Srivastva SK, Prasath CS, Rohilla RK, Siwach R, Magu NK. Morphometric measurements of cadaveric thoracic spine in Indian population and its clinical applications. Asian Spine J. 2011;5(1):20-34. doi:10.4184/asj.2011.5.1.20.",
+   "url": "https://doi.org/10.4184/asj.2011.5.1.20"
   }
  },
  "generatedBy": "pipeline/spine_segment.py (TotalSegmentator) + pipeline/spine_build.py + pipeline/compress.mjs",

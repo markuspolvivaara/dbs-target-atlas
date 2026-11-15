@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { CONTENT, IND, MAN, MANIFEST, STRUCT, SYM, TGT } from '../data';
 import { mniToAcpc } from '../data/acpc';
-import type { CameraPreset, Evidence } from '../data/schema';
+import type { CameraPreset, Evidence, Target } from '../data/schema';
 import { IMAGING } from '../data/imaging';
 import type { AppState, Hemi, LayerKey } from '../state';
 import { DEFAULT_LEAD, LEAD_ANCHORS, type LeadAnchor } from '../state';
@@ -197,11 +197,11 @@ export class AtlasPage {
       pane.append(h('p', { class: 'chips-label' }, 'Symptom'));
       pane.append(chips(items, s.sym ?? '', (v) => this.update((st) => { st.sym = v || null; st.sel = null; st.cam = { preset: null }; }, { camera: true }), { label: 'Symptom', cls: 'sym-chips' }));
     }
-    // where the view shows the STN: its three zones, or the nucleus as one
+    // where the view shows the STN: the nucleus as one (the default), or its three zones
     const p = plan(s.ind, s.sym, s.borders);
     if ([...STN_ZONES, 'stn'].some((id) => ['primary', 'alt', 'context'].includes(p.looks.get(id) ?? ''))) {
       pane.append(h('p', { class: 'chips-label' }, 'Subthalamic nucleus'),
-        chips<'zones' | 'whole'>([['zones', 'Functional zones'], ['whole', 'Whole nucleus']], s.stn, (v) => this.update((st) => { st.stn = v; }), { label: 'Subthalamic nucleus', cls: 'stn-chips' }));
+        chips<'zones' | 'whole'>([['whole', 'Whole nucleus'], ['zones', 'Functional zones']], s.stn, (v) => this.update((st) => { st.stn = v; }), { label: 'Subthalamic nucleus', cls: 'stn-chips' }));
     }
     if (s.sel) pane.append(this.selectionCard(s.sel));
     const sym = s.sym ? SYM.get(s.sym) : null;
@@ -241,15 +241,17 @@ export class AtlasPage {
       h('p', { class: 'eyebrow' }, ind.name),
       h('h2', {}, d.name),
       h('p', { class: 'lead-text' }, d.summary),
-      t ? h('p', {}, h('strong', {}, 'Marker: '), t.label, ' ', this.kindBadge(t.kind), ' ', refLinks([t.refId])) : null,
+      t ? h('p', {}, h('strong', {}, 'Marker: '), t.label, ' ', this.kindBadge(t.kind), ' ', refLinks([t.refId, ...t.moreRefIds])) : null,
       h('dl', {}, h('dt', {}, 'Evidence'), h('dd', {}, this.evidenceList(d.evidence))),
       d.note ? h('p', { class: 'caveat' }, h('strong', {}, 'Shown here. '), d.note, d.noteRefIds.length ? ' ' : '', refLinks(d.noteRefIds)) : null,
       this.shownList(),
     );
   }
 
-  private kindBadge(kind: 'sweetSpot' | 'atlasCoordinate'): HTMLElement {
-    return h('span', { class: `badge ${kind}` }, kind === 'sweetSpot' ? 'Published sweet spot' : 'Atlas coordinate');
+  /** (a centroid is said to be one, not a target: the site audit's finding A-003) */
+  private kindBadge(kind: Target['kind']): HTMLElement {
+    const text = { sweetSpot: 'Published sweet spot', publishedTarget: 'Published target', atlasCoordinate: 'Nucleus centroid, not a surgical target' }[kind];
+    return h('span', { class: `badge ${kind}` }, text);
   }
 
   private imagingLinks(ids: string[]): DocumentFragment {
@@ -305,12 +307,13 @@ export class AtlasPage {
           h('td', {}, v.map(fmtMm).join(', ')), h('td', {}, a.map(fmtMm).join(', ')));
       };
       return h('article', { class: 'card sel', style: `--accent: var(--c-${m?.colour.token ?? 'ctx'})` }, close,
-        h('p', { class: 'eyebrow' }, 'Target marker'),
-        h('h2', {}, t.label), h('p', {}, this.kindBadge(t.kind), ' ', refLinks([t.refId])),
+        h('p', { class: 'eyebrow' }, t.kind === 'atlasCoordinate' ? 'Nucleus centroid' : 'Target marker'),
+        h('h2', {}, t.label), h('p', {}, this.kindBadge(t.kind), ' ', refLinks([t.refId, ...t.moreRefIds])),
         h('table', { class: 'coords' },
           h('thead', {}, h('tr', {}, h('th', {}, ''), h('th', { scope: 'col' }, 'MNI 2009b x, y, z (mm)'), h('th', { scope: 'col' }, 'AC–PC ≈ (mm, from MCP)'))),
           h('tbody', {}, row('left'), row('right'))),
         h('p', { class: 'aside' }, t.method),
+        t.note ? h('p', { class: 'aside' }, t.note) : null,
         h('p', { class: 'aside' }, 'AC–PC values are approximate: template-space conversion with the Lead-DBS method (see Credits). Individual anatomy varies.'),
       );
     }
@@ -410,6 +413,8 @@ export class AtlasPage {
       const m = MAN.get(id);
       if (m?.type === 'target' && look === 'context' && !p.markers.some((mk) => TGT.get(mk.targetId)?.structureId === id))
         this.legend.append(li('patch', m.colour.token, `${m.name} (published map, no single target point)`, id));
+      else if (m?.type === 'target' && look === 'alt' && !p.markers.some((mk) => TGT.get(mk.targetId)?.structureId === id))
+        this.legend.append(li('outline', m.colour.token, `${m.name} (published map for the alternative target, no single target point)`, id));
     }
     if (this.s.layers.tracts.on) for (const [id, role] of p.tracts) {
       const m = MAN.get(id)!;
@@ -419,7 +424,9 @@ export class AtlasPage {
       const m = MAN.get(id)!;
       this.legend.append(li('patch', m.colour.token, m.name, id));
     }
-    if (!p.tracts.size) this.legend.append(h('li', { class: 'none' }, 'No tract has been mapped at scale for this indication yet.'));
+    // (a view drawn without tracts on purpose says why on its card: stimulation-induced dyskinesia, whose source names none)
+    const symNote = this.s.sym ? SYM.get(this.s.sym)?.note : undefined;
+    if (!p.tracts.size) this.legend.append(h('li', { class: 'none' }, symNote ? 'No tract is drawn for this view: its card says why.' : 'No tract has been mapped at scale for this indication yet.'));
     if (this.s.hidden.length || this.s.sel) {
       this.legend.append(h('li', { class: 'lg-actions' },
         this.s.hidden.length ? h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.hidden = []; }) }, `Show all (${this.s.hidden.length} hidden)`) : null,
@@ -559,11 +566,11 @@ export class AtlasPage {
           h('input', { type: 'range', min, max, step, 'data-k': k, oninput: (e: Event) => (k === 'depth' ? this.editLead.bind(this) : this.update)((st) => { st.lead[k] = parseFloat((e.target as HTMLInputElement).value); }) }));
       pane.append(
         h('h3', {}, 'Generic quadripolar lead'),
-        h('label', { class: 'check' }, h('input', { type: 'checkbox', 'data-k': 'on', onchange: (e: Event) => this.update((st) => { st.layers.electrode.on = (e.target as HTMLInputElement).checked; }) }), 'Show lead at the selected target'),
+        h('label', { class: 'check' }, h('input', { type: 'checkbox', 'data-k': 'on', onchange: (e: Event) => this.update((st) => { st.layers.electrode.on = (e.target as HTMLInputElement).checked; }) }), 'Show lead at the primary marker'),
         h('p', { class: 'aside' }, `${LEAD.diameter} mm diameter, four ${LEAD.contactLength} mm contacts, contact 0 at the tip. Choose which part of the lead sits on the primary target marker, then fine-tune with the offset or by dragging the lead along its axis in the viewer.`),
         h('fieldset', { class: 'seg-field' }, h('legend', {}, 'Contact spacing'),
           ...([0.5, 1.5] as const).map((v) => h('label', { class: 'radio' }, h('input', { type: 'radio', name: 'spacing', value: v, onchange: () => this.editLead((st) => { st.lead.spacing = v; }) }), `${v} mm`))),
-        h('label', { class: 'select' }, 'On the target: ', h('select', { 'data-k': 'anchor', onchange: (e: Event) => this.editLead((st) => { st.lead.anchor = (e.target as HTMLSelectElement).value as LeadAnchor; }) },
+        h('label', { class: 'select' }, 'On the marker: ', h('select', { 'data-k': 'anchor', onchange: (e: Event) => this.editLead((st) => { st.lead.anchor = (e.target as HTMLSelectElement).value as LeadAnchor; }) },
           ...LEAD_ANCHORS.map((a) => h('option', { value: a }, ANCHOR_LABEL[a])))),
         num('depth', -15, 15, 0.5, 'Offset from that point (+ deeper)'),
         h('div', { class: 'lead-pref', 'aria-live': 'polite' }),
@@ -612,15 +619,15 @@ export class AtlasPage {
     const { pref, source } = leadPrefFor(t);
     const l = this.s.lead;
     const matches = pref.anchor === l.anchor && pref.depth === l.depth && pref.spacing === l.spacing;
-    const what = `${ANCHOR_LABEL[l.anchor]} on the target${l.depth ? `, ${fmtMm(Math.abs(l.depth))} mm ${l.depth > 0 ? 'deeper' : 'shallower'}` : ''}, ${l.spacing} mm spacing`;
+    const what = `${ANCHOR_LABEL[l.anchor]} on the marker${l.depth ? `, ${fmtMm(Math.abs(l.depth))} mm ${l.depth > 0 ? 'deeper' : 'shallower'}` : ''}, ${l.spacing} mm spacing`;
     box.append(h('p', { class: 'aside' },
-      !t ? 'This view has no primary target, so nothing is remembered here.' :
+      !t ? 'This view has no primary marker, so nothing is remembered here.' :
         matches && source === 'target' ? `Remembered for ${label} in this browser: ${what}.` :
           matches && source === 'default' ? `Using your default placement (nothing saved for ${label} yet): ${what}.` :
-            matches ? `Built-in placement (array centre on ${label}). Change it and it is remembered for this target.` :
+            matches ? `Built-in placement (array centre on ${label}). Change it and it is remembered for this marker.` :
               `From the link: ${what}. Change it here to remember it for ${label}.`));
     box.append(h('div', { class: 'set-actions' },
-      h('button', { type: 'button', class: 'btn', onclick: () => saveLeadDefault({ anchor: l.anchor, depth: l.depth, spacing: l.spacing }) }, 'Use as default for other targets'),
+      h('button', { type: 'button', class: 'btn', onclick: () => saveLeadDefault({ anchor: l.anchor, depth: l.depth, spacing: l.spacing }) }, 'Use as default for other markers'),
       t && source === 'target' ? h('button', { type: 'button', class: 'btn', onclick: () => { clearLeadPref(t); const p = leadPrefFor(t).pref; this.update((st) => { st.lead = { ...st.lead, ...p }; }); } }, `Forget for ${label}`) : null,
       h('button', { type: 'button', class: 'btn', onclick: () => { if (confirm('Forget all remembered lead placements in this browser?')) { clearAllLeadPrefs(); this.update((st) => { st.lead = { ...st.lead, anchor: 'centre', depth: 0, spacing: 0.5 }; }); } } }, 'Forget all')));
   }
@@ -628,7 +635,7 @@ export class AtlasPage {
   private showLead(c: Record<'L' | 'R', THREE.Vector3[]> | null): void {
     clear(this.leadInfo);
     if (!c) {
-      if (this.s?.layers.electrode.on) this.leadInfo.append(h('p', { class: 'aside' }, 'This view has no primary target marker to place the lead on.'));
+      if (this.s?.layers.electrode.on) this.leadInfo.append(h('p', { class: 'aside' }, 'This view has no primary marker to place the lead on.'));
       return;
     }
     const tbl = h('table', { class: 'coords' }, h('thead', {}, h('tr', {}, h('th', {}, 'Contact'), h('th', {}, 'MNI x, y, z'), h('th', {}, 'AC–PC ≈'))));
@@ -642,7 +649,9 @@ export class AtlasPage {
       });
     }
     tbl.append(body);
-    this.leadInfo.append(tbl, h('p', { class: 'aside' }, 'AC–PC values approximate (template-space Lead-DBS method).'));
+    const tg = TGT.get(primaryTargetId(this.s.ind, this.s.sym) ?? '');
+    this.leadInfo.append(tbl, h('p', { class: 'aside' }, 'AC–PC values approximate (template-space Lead-DBS method).',
+      tg?.kind === 'atlasCoordinate' ? ` The marker here is the centroid of ${MAN.get(tg.structureId)?.name ?? 'a nucleus'}, not a surgical target.` : ''));
   }
 
   // ---------------------------------------------------------------- keyboard

@@ -78,7 +78,7 @@
   },
   {
    "id": "sez_supratrigeminal",
-   "name": "Supratrigeminal zone",
+   "name": "Supratrigeminal zone (Cavalheiro 2015)",
    "region": "pons",
    "kind": "line",
    "construction": "A vertical line 4 mm long on the front of the pons, starting just below the pontomesencephalic sulcus (the top of the model's pons there), in the sagittal plane of the oculomotor nerve's exit.",

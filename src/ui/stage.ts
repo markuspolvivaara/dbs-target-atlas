@@ -231,21 +231,33 @@ export function layoutLabels(items: LabelItem[], W: number, H: number, labels: H
     const len = Math.hypot(dx, dy);
     if (len < 24) { dx = 0.7; dy = -0.7; } else { dx /= len; dy /= len; }
     const w = Math.min(220, it.text.length * 7.2 + 14, Math.max(60, W - 8)), hgt = 21;
-    const left = dx < 0; // label extends leftwards from its attach point
-    let x = it.ax + dx * 44, y = it.ay + dy * 34 - hgt / 2;
-    // inside the stage: a label cut by its edge cannot be read
-    x = left ? Math.max(w + 4, Math.min(W - 4, x)) : Math.max(4, Math.min(W - w - 4, x));
-    const box = () => ({ x0: left ? x - w : x, x1: left ? x : x + w, y0: y, y1: y + hgt });
-    const hitOf = () => { const b = box(); return placed.find((q) => over(b, q)) ?? blocked.find((q) => over(b, q)); };
-    for (let guard = 0; guard < 12; guard++) {
-      const hit = hitOf();
-      if (!hit) break;
-      y = dy >= 0 ? hit.y + hit.h + 4 : hit.y - hgt - 4;
+    // one try: the label on one side of its attach point, stepping down or up past what it meets
+    const attempt = (flip: boolean, down: boolean) => {
+      const sx = flip ? -dx : dx;
+      const left = sx < 0; // label extends leftwards from its attach point
+      let x = it.ax + sx * 44, y = it.ay + dy * 34 - hgt / 2;
+      // inside the stage: a label cut by its edge cannot be read
+      x = left ? Math.max(w + 4, Math.min(W - 4, x)) : Math.max(4, Math.min(W - w - 4, x));
+      const box = () => ({ x0: left ? x - w : x, x1: left ? x : x + w, y0: y, y1: y + hgt });
+      const hitOf = () => { const b = box(); return placed.find((q) => over(b, q)) ?? blocked.find((q) => over(b, q)); };
+      for (let guard = 0; guard < 12; guard++) {
+        const hit = hitOf();
+        if (!hit) break;
+        y = down ? hit.y + hit.h + 4 : hit.y - hgt - 4;
+      }
+      y = Math.max(4, Math.min(H - hgt - 4, y));
+      return { left, b: box(), hit: !!hitOf() };
+    };
+    // the natural place first; before a label is dropped, the other direction and the other side (a marker inside its
+    // nucleus, as the PD sweet spot in the STN, would otherwise hide the nucleus's name)
+    let pick = attempt(false, dy >= 0);
+    for (const [flip, down] of [[false, dy < 0], [true, dy >= 0], [true, dy < 0]] as const) {
+      if (!pick.hit) break;
+      const a = attempt(flip, down);
+      if (!a.hit) pick = a;
     }
-    y = Math.max(4, Math.min(H - hgt - 4, y));
-    if (!kept.has(it.id) && hitOf()) continue;
-    const b = box();
-    placed.push({ it, x: b.x0, y: b.y0, w, h: hgt, left });
+    if (!kept.has(it.id) && pick.hit) continue;
+    placed.push({ it, x: pick.b.x0, y: pick.b.y0, w, h: hgt, left: pick.left });
   }
   while (labels.children.length < placed.length) labels.append(h('span', {}));
   [...labels.children].forEach((el, i) => {

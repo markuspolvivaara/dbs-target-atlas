@@ -7,7 +7,9 @@ import { rows, words, signed, validate, fmt, CALC_NOTE, CALC_LEDE } from '../../
 import { loadSource } from './source';
 import { EPILEPSY_INDICATION, EPILEPSY_REFERENCES } from '../../src/data/epilepsy';
 import { ADDITION_REFERENCES } from '../../src/data/additions';
-import { plan } from '../../src/viewer/selection';
+import { plan, primaryTargetId } from '../../src/viewer/selection';
+import { decode, defaultState, encode } from '../../src/state';
+import { mniToAcpc, TEMPLATE_ACPC_LENGTH } from '../../src/data/acpc';
 
 const src = loadSource();
 
@@ -26,7 +28,7 @@ describe('references resolve', () => {
     const used = [
       ...CONTENT.indications.flatMap((i) => [...i.evidence.flatMap((e) => e.refIds), ...i.caveatRefIds]),
       ...CONTENT.symptoms.flatMap((s) => [...s.evidence.flatMap((e) => e.refIds), ...s.noteRefIds]),
-      ...CONTENT.targets.map((t) => t.refId),
+      ...CONTENT.targets.flatMap((t) => [t.refId, ...t.moreRefIds]),
       ...CONTENT.structures.flatMap((s) => s.refIds),
       ...CONTENT.imaging.flatMap((m) => m.refIds),
       ...IMAGING_ASIDE.flatMap((a) => a.refIds),
@@ -38,19 +40,78 @@ describe('references resolve', () => {
 });
 
 describe('ported verbatim from the attached dbs-targets.html', () => {
-  it('keeps every reference with identical citation, label, url and topic', () => {
+  it('keeps every reference and its topic; each citation rebuilt from its record, linked by DOI (audit A-015)', () => {
     const keys = Object.keys(src.R);
     expect(CONTENT_REFERENCE_IDS.sort()).toEqual([...keys].sort());
+    // (no record with a DOI: meeting abstracts on the congress site, the FDA approval, the trial registration, slides)
+    const NO_DOI = new Set(['mds2024', 'sid', 'fda2025', 'nct', 'calgary']);
     for (const k of keys) {
       const r = CONTENT.references.find((x) => x.id === k)!;
-      expect(r.citation, k).toBe(src.R[k].t);
-      expect(r.shortLabel, k).toBe(src.R[k].s);
-      expect(r.url, k).toBe(src.R[k].u);
       expect(r.topic, k).toBe(src.R[k].g);
+      if (NO_DOI.has(k)) { expect(r.citation, k).not.toMatch(/doi:/); continue; }
+      const doi = /doi:(\S+?)\.?$/.exec(r.citation.replace(/ (Meeting abstract|$).*$/, ''))?.[1] ?? /doi:(10\.\S+?)\. /.exec(r.citation)?.[1];
+      expect(doi, k).toBeTruthy();
+      expect(r.url, k).toBe(`https://doi.org/${doi}`);
+      // authors first, then a year
+      expect(r.citation, k).toMatch(/^[A-ZÀ-ža-z' -]+ [A-Z]{1,3}[,.]/);
+      expect(r.citation, k).toMatch(/(19|20)\d\d/);
     }
+    // the two that had pointed to other papers, and the meeting abstract a claim had rested on (A-004)
+    expect(CONTENT.references.find((x) => x.id === 'barbe2018')!.citation).toMatch(/^Barbe MT.*randomized, double-blind, crossover trial/);
+    expect(CONTENT.references.find((x) => x.id === 'barrow')!.citation).toMatch(/^Wakim AA/);
+    expect(CONTENT.references.find((x) => x.id === 'meta2014')!.citation).toMatch(/Meeting abstract/);
   });
-  // review of 3–4 Nov 2026, C8: "No level I studies exist" no longer holds (Gruber 2018, a sham-controlled RCT)
-  const CORRECTED: Record<string, { caveat?: string; caveatRefIds?: string[]; addEvidence?: { claim: string; refIds: string[] }[] }> = {
+  it('lists only the datasets this section is built from (audit A-016)', () => {
+    const atlas = CONTENT.references.filter((r) => r.topic === 'atlas').map((r) => r.id);
+    expect(atlas.length).toBeGreaterThan(15);
+    expect(atlas.length).toBeLessThan(30);
+    expect(atlas).toEqual(expect.arrayContaining(['ewert2018', 'krauth2010', 'middlebrooks2020', 'elias2021']));
+  });
+  // review of 3–4 Nov 2026, C8: "No level I studies exist" no longer holds (Gruber 2018, a sham-controlled RCT);
+  // site audit, A-001 (November 2026): stimulation-induced dyskinesia arose in the dorsal GPi and GPe (Tsuboi 2021),
+  // not "from GPi linked to lenticular-fasciculus connectivity" as the original read its conference abstract;
+  // A-002: Hollunder 2024's dystonia and Tourette maps come from subthalamic DBS (full text), not the views' targets;
+  // B2: statements their citation did not support (A-004, A-006 to A-011), each checked against its source
+  type Ev = { claim: string; refIds: string[] };
+  const CORRECTED: Record<string, { caveat?: string; caveatRefIds?: string[]; addEvidence?: Ev[]; replaceEvidence?: Record<string, Ev>; alternatives?: string; why?: string; howToChoose?: string }> = {
+    pd: {
+      alternatives: 'Posterolateral GPi. Combined STN and SNr stimulation for freezing of gait is investigational: its trials were negative on their primary outcomes.',
+      replaceEvidence: {
+        'GPi improved ON-medication disability more; STN allowed larger levodopa reduction':
+          { claim: 'Motor function and on-medication activities of daily living improved equally; STN allowed more medication reduction, GPi gave more relief of psychiatric symptoms (6 trials, 563 patients)', refIds: ['liu2014'] },
+        'Combined STN plus SNr may help freezing, with mixed results':
+          { claim: 'Combined STN and SNr stimulation for freezing of gait is investigational: the trials were negative on their primary outcomes', refIds: ['weiss2013', 'artusi2025', 'mds2024'] },
+        'Stimulation-induced dyskinesia from GPi linked to lenticular-fasciculus connectivity':
+          { claim: 'Stimulation-induced dyskinesia after pallidal DBS arose from contacts in the dorsal GPi and GPe (20 of 68 patients)', refIds: ['tsuboi2021'] },
+      },
+    },
+    et: {
+      replaceEvidence: {
+        'Direct MRgFUS targeting on FGATIR with dentate, lemniscal and capsular tracts':
+          { claim: 'FGATIR-guided direct MRgFUS targeting (64 patients against 52 targeted indirectly, retrospective; a preprint): fewer sonications, smaller lesions impinging less on the internal capsule and medial lemniscus, similar tremor relief', refIds: ['mrgfus2025'] },
+      },
+    },
+    fhd: {
+      why: 'Voa, with the anterior edge of Vop, receives pallidal input; most of Vop receives cerebellar input, like the Vim (nomenclatures differ). Lesioning or stimulating the Vo complex can give long-term remission of task-specific hand dystonia.',
+      replaceEvidence: {
+        'MRgFUS Vo thalamotomy is feasible':
+          { claim: 'In an open-label pilot study of 10 patients, MRgFUS Vo thalamotomy improved focal hand dystonia at 12 months; three had symptoms return by 3 months, one had mild dysarthria at 12 months', refIds: ['horisawa2021'] },
+      },
+    },
+    gdys: {
+      why: 'The best stimulation volume sits in posteroventral GPi and extends into subpallidal white matter. In generalized dystonia, benefit followed the pallidothalamic bundles.',
+      howToChoose: 'Up to 25% of selected patients do not respond. Outcome followed where the stimulated volume lay, not the electrode’s position alone.',
+      replaceEvidence: {
+        'Dystonia response maps to sensorimotor-connected circuits':
+          { claim: 'From subthalamic DBS (the alternative target), in 56 patients with dystonia of several forms: the benefit followed connections with sensorimotor cortex (S1 and M1)', refIds: ['hollunder2024'] },
+      },
+    },
+    ts: {
+      replaceEvidence: {
+        'Tourette response maps to M1-connected circuits':
+          { claim: 'From subthalamic DBS, not these targets: in 14 patients, the benefit followed connections with M1 and the SMA', refIds: ['hollunder2024'] },
+      },
+    },
     tard: {
       caveat: 'Mostly uncontrolled series. The one randomized, sham-controlled trial did not reach its primary endpoint (most likely, its authors judge, because recruitment was incomplete); its secondary endpoints and open extension favoured stimulation.',
       caveatRefIds: ['macerollo2018', 'gruber2018'],
@@ -66,15 +127,17 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
       expect(n.name).toBe(o.title);
       expect(n.accent).toBe(o.accent);
       expect(n.target).toBe(o.target);
-      expect(n.alternatives).toBe(o.alt);
-      expect(n.why).toBe(o.why);
-      expect(n.howToChoose).toBe(o.choose);
+      // (corrected after review, each against its source: the original's wording no longer holds)
+      const fx = CORRECTED[o.id];
+      expect(n.alternatives).toBe(fx?.alternatives ?? o.alt);
+      expect(n.why).toBe(fx?.why ?? o.why);
+      expect(n.howToChoose).toBe(fx?.howToChoose ?? o.choose);
       expect(n.imaging).toBe(o.imaging);
       // (corrected after review, each against its source: the original's wording no longer holds)
       const fix = CORRECTED[o.id];
       expect(n.caveat).toBe(fix?.caveat ?? o.caveat);
       expect(n.caveatRefIds).toEqual(fix?.caveatRefIds ?? o.cref);
-      expect(n.evidence).toEqual([...o.ev.map((e) => ({ claim: e[0], refIds: e.slice(1) })), ...(fix?.addEvidence ?? [])]);
+      expect(n.evidence).toEqual([...o.ev.map((e) => fix?.replaceEvidence?.[e[0]] ?? { claim: e[0], refIds: e.slice(1) }), ...(fix?.addEvidence ?? [])]);
     }
   });
   it('maps every schematic node of an indication to a 3D structure', () => {
@@ -90,26 +153,134 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
         expect(map[node].some((id) => all.has(id)), `${o.id}: ${node}`).toBe(true);
       }
       for (const node of o.nodes.primary) expect(map[node].some((id) => n.primaryTargets.includes(id)), `${o.id} primary ${node}`).toBe(true);
-      for (const node of o.nodes.alt) expect(map[node].some((id) => n.alternativeTargets.includes(id)), `${o.id} alt ${node}`).toBe(true);
+      // (B2, A-011: the SNr, an alternative in the original, is drawn as investigational context, the owner's choice)
+      const DEMOTED: Record<string, string[]> = { pd: ['snr'] };
+      for (const node of o.nodes.alt) {
+        const where = DEMOTED[o.id]?.includes(node) ? n.contextStructures : n.alternativeTargets;
+        expect(map[node].some((id) => where.includes(id)), `${o.id} alt ${node}`).toBe(true);
+      }
     }
   });
-  it('keeps imaging cards verbatim', () => {
+  it('keeps imaging cards verbatim, but for what B2 corrected against the sources', () => {
+    // (B2, A-008/A-009: SWI's note to what the protocol study rated; the pyramidal tract and lemniscus as the Vim's
+    // borders, Sammartino 2016; Voa pallidal, most of Vop cerebellar, Ilinsky 2018)
+    const IMG_FIX: Record<string, { tract?: string; refIds?: string[]; seq?: Record<string, string> }> = {
+      stn: { seq: { SWI: 'Most versions rated highest for STN; near-isotropic voxels rated better' } },
+      vim: { tract: 'DRTT, with the pyramidal tract and medial lemniscus as the Vim’s lateral and posterior borders.', refIds: ['protocol2025', 'jns2021', 'sammartino2016', 'vimma2026', 'barrow'] },
+      vo: { tract: 'Voa receives pallidal output through the pallidothalamic bundles; most of Vop receives cerebellar input.', refIds: ['vocoords', 'ilinsky2018', 'shimizu2018'] },
+    };
     expect(CONTENT.imaging.map((m) => m.id)).toEqual([...src.IMG.map((m) => m.id), 'ant']);
     for (const o of src.IMG) {
       const n = CONTENT.imaging.find((m) => m.id === o.id)!;
-      expect([n.label, n.title, n.accent, n.tract, n.note]).toEqual([o.label, o.title, o.accent, o.tract, o.note]);
-      expect(n.sequences).toEqual(o.seq.map(([name, note]) => ({ name, note })));
+      const fx = IMG_FIX[o.id];
+      expect([n.label, n.title, n.accent, n.tract, n.note]).toEqual([o.label, o.title, o.accent, fx?.tract ?? o.tract, o.note]);
+      expect(n.sequences).toEqual(o.seq.map(([name, note]) => ({ name, note: fx?.seq?.[name] ?? note })));
       expect(n.noSequences).toBe(o.noseq);
-      expect(n.refIds).toEqual(o.refs);
+      expect(n.refIds).toEqual(fx?.refIds ?? o.refs);
     }
   });
   it('symptom summaries, notes and claims quote existing content or are labelled stand-ins', () => {
     const corpus = src.html;
     const epiClaims = new Set(EPILEPSY_INDICATION.evidence.map((e) => e.claim));
+    // views rebuilt or added in the site audit's review, each claim checked against these sources (A-001: Tsuboi 2021,
+    // D'Souza 2026, Krack 1998 and Katayama 2006 as their abstracts, the conference abstract, Fan 2020 and Aquino 2019 in full)
+    const REVIEWED: Record<string, string[]> = {
+      // (B2, A-011: the SNr's claim reworded as investigational, the same three sources)
+      'pd-axial': ['rajamani2024', 'weiss2013', 'artusi2025', 'mds2024'],
+      'pd-dyskinesia': ['tsuboi2021', 'sid', 'dsouza2026'],
+      'pd-lid': ['fan2020', 'krack1998', 'dsouza2026', 'aquino2019', 'katayama2006'],
+    };
     for (const s of CONTENT.symptoms) for (const e of s.evidence) {
-      const ok = s.indicationId === 'epi' ? epiClaims.has(e.claim) : corpus.includes(e.claim);
+      const ok = s.indicationId === 'epi' ? epiClaims.has(e.claim)
+        : REVIEWED[s.id] ? e.refIds.every((r) => REVIEWED[s.id].includes(r)) : corpus.includes(e.claim);
       expect(ok, `${s.id}: ${e.claim}`).toBe(true);
     }
+  });
+  it('shows stimulation-induced dyskinesia where Tsuboi 2021 found it, as a side effect with no target (audit A-001)', () => {
+    const s = CONTENT.symptoms.find((x) => x.id === 'pd-dyskinesia')!;
+    expect(s.name).toBe('Stimulation-induced dyskinesia');
+    expect(s.structures).toEqual(['gpi', 'gpe']);
+    expect(s.tracts).toEqual([]);                  // (the ansa lenticularis was drawn as a dyskinesia tract; its source says the opposite)
+    expect(s.targetId).toBeNull();
+    expect(s.summary).toMatch(/dorsal GPi and GPe/);
+    expect(s.evidence[0].refIds).toEqual(['tsuboi2021']);
+    expect(CONTENT.references.find((r) => r.id === 'tsuboi2021')!.citation).toMatch(/abstract/);
+    // (the lenticular fasciculus's card no longer carries the conference abstract's claim)
+    expect(CONTENT.structures.find((x) => x.id === 'lf')!.refIds).not.toContain('sid');
+  });
+  it('shows where DBS relieves levodopa-induced dyskinesia, from GPi and from above the STN, with no target (audit A-001)', () => {
+    const s = CONTENT.symptoms.find((x) => x.id === 'pd-lid')!;
+    expect(s.name).toBe('Levodopa-induced dyskinesia');
+    const pd = CONTENT.indications.find((i) => i.id === 'pd')!;
+    // (beside the view of the dyskinesia stimulation induces: the same pallidum, ventral against dorsal)
+    expect(pd.symptomIds.slice(-2)).toEqual(['pd-lid', 'pd-dyskinesia']);
+    expect(s.structures).toEqual(['gpi', 'stn']);
+    expect(s.tracts).toEqual(['al', 'lf']);        // beneath the GPi (D'Souza 2026), above the STN (Aquino 2019)
+    expect(s.corticalAreas).toEqual([]);           // SMA and premotor synchrony went with worse outcomes
+    expect(s.targetId).toBeNull();                 // the sweet spot's abstract gives no coordinates
+    expect(s.summary).toMatch(/ventral posterior GPi/);
+    expect(s.evidence.flatMap((e) => e.refIds)).toContain('fan2020');
+    for (const id of ['krack1998', 'dsouza2026', 'katayama2006'])
+      expect(CONTENT.references.find((r) => r.id === id)!.citation, id).toMatch(/abstract: the full text is not open access/);
+    expect(CONTENT.symptoms.find((x) => x.id === 'pd-dyskinesia')!.evidence.at(-1)!.refIds).toEqual(['dsouza2026']);
+  });
+  it('shows Hollunder 2024\u2019s dystonia maps with the STN and not its Tourette maps, all named as STN DBS (audit A-002)', () => {
+    const ind = (id: string) => CONTENT.indications.find((i) => i.id === id)!;
+    const man = (id: string) => MANIFEST.structures.find((s) => s.id === id)!;
+    // every Hollunder 2024 map comes from subthalamic DBS: named so, in the STN's colour
+    for (const id of ['ss_dyt', 'sw_dyt', 'ss_ts', 'sw_ts']) {
+      expect(man(id).name, id).toMatch(/, STN DBS \(Hollunder 2024\)$/);
+      expect(man(id).colour.token, id).toBe('stn');
+      expect(CONTENT.structures.find((s) => s.id === id)!.description, id).toMatch(/subthalamic DBS/);
+    }
+    // generalized dystonia: with the STN, the alternative target, in the alternative look
+    const g = ind('gdys');
+    expect(g.alternativeTargets).toContain('stn');
+    expect(g.keyTracts).not.toContain('sw_dyt');
+    expect(g.alternativeTracts).toEqual(['sw_dyt']);
+    expect(g.extraVolumes).not.toContain('ss_dyt');
+    expect(g.alternativeVolumes).toEqual(['ss_dyt']);
+    const pg = plan('gdys', null, true);
+    expect(pg.looks.get('ss_dyt')).toBe('alt');
+    expect(pg.tracts.get('sw_dyt')).toBe('alt');
+    // Tourette: not drawn, the Tics card says why
+    const ts = ind('ts');
+    expect([...ts.keyTracts, ...ts.alternativeTracts, ...ts.extraVolumes, ...ts.alternativeVolumes]).toEqual([]);
+    for (const s of CONTENT.symptoms.filter((x) => x.indicationId === 'ts')) expect(s.tracts, s.id).toEqual([]);
+    for (const sym of [null, 'ts-tics', 'ts-ocb']) {
+      const pt = plan('ts', sym, true);
+      expect(pt.tracts.has('sw_ts'), String(sym)).toBe(false);
+      expect(['hidden', undefined]).toContain(pt.looks.get('ss_ts'));
+    }
+    expect(CONTENT.symptoms.find((x) => x.id === 'ts-tics')!.note).toMatch(/subthalamic DBS in 14 patients/);
+  });
+  it('says which markers are centroids, and puts published targets and printed peaks where the papers print them (audit A-003)', () => {
+    const tg = (id: string) => CONTENT.targets.find((t) => t.id === id)!;
+    const ind = (id: string) => CONTENT.indications.find((i) => i.id === id)!;
+    for (const t of CONTENT.targets.filter((x) => x.kind === 'atlasCoordinate')) expect(t.label, t.id).toMatch(/centroid/);
+    // the printed AC-PC targets come back out of the template's frame as printed, the left side mirrored
+    const printed: Record<string, [number, number, number]> = {
+      't-pub-vo': [13.5, -2, 1], 't-pub-ant-mtt': [6.2, 3.8, 8.7], 't-pub-vim': [15, -0.25 * TEMPLATE_ACPC_LENGTH, 0],
+    };
+    for (const [id, a] of Object.entries(printed)) {
+      expect(tg(id).kind, id).toBe('publishedTarget');
+      mniToAcpc(tg(id).mni.right).forEach((v, k) => expect(v, `${id} R ${k}`).toBeCloseTo(a[k], 6));
+      mniToAcpc(tg(id).mni.left).forEach((v, k) => expect(v, `${id} L ${k}`).toBeCloseTo(k === 0 ? -a[k] : a[k], 6));
+    }
+    expect(tg('t-pub-vo').moreRefIds).toEqual(['horisawa2019']);
+    // the views and the lead use them
+    expect(ind('fhd').targetMarkers).toEqual(['t-pub-vo']);
+    expect(CONTENT.symptoms.find((s) => s.indicationId === 'fhd')!.targetId).toBe('t-pub-vo');
+    expect(ind('epi').targetMarkers).toEqual(['t-pub-ant-mtt']);
+    expect(ind('holmes').targetMarkers[0]).toBe('t-pub-vim');
+    expect(ind('md').alternativeMarkers).toEqual(['t-pub-vim']);
+    expect(primaryTargetId('fhd', null)).toBe('t-pub-vo');
+    // Horn 2022's printed peaks, mirrored
+    expect(tg('t-ss-gen').mni.right).toEqual([21.1, -9.1, -0.14]);
+    expect(tg('t-ss-gen').mni.left).toEqual([-21.1, -9.1, -0.14]);
+    expect(tg('t-ss-cerv').mni.right).toEqual([20.4, -12.4, -5.2]);
+    // the tremor hotspot kept, its card saying where it lies
+    expect(tg('t-ss-tremor').note).toMatch(/outside it on the right.*Guiot/);
   });
   it('keeps the calculator logic and text', () => {
     expect(src.html).toContain(CALC_LEDE);
@@ -119,7 +290,7 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
     expect(validate(25, 30)).toMatch(/third-ventricle/);
     const r = rows(25, 6);
     expect(r.map((x) => [x.k, x.lat, x.ap, x.z])).toEqual([['STN', 12, -3.5, -4.5], ['GPi', 20, 2.5, -4.5], ['Vim', 14.5, -6.25, 0]]);
-    expect(r[2].apR).toBe('6.3 anterior to PC');
+    expect(r[2].apR).toBe('4.2–6.3 anterior to PC (2/12 to 3/12 of AC–PC)');  // (B2, A-010: the range printed)
     expect(words(r[0], 'Left')).toBe('12.0 mm left of midline, 3.5 mm behind the MCP, 4.5 mm below the AC–PC plane.');
     expect(signed(r[1], 'Left')).toEqual([-20, 2.5, -4.5]);
     expect(fmt(-3.26)).toBe('−3.3');
@@ -161,19 +332,24 @@ describe('manifest', () => {
 });
 
 describe('targets', () => {
-  it('every target has a source and a kind, and no hand-typed coordinate', () => {
+  it('every target has a source and a kind; a typed coordinate only where a paper prints it, which its method names', () => {
     for (const t of CONTENT.targets) {
-      expect(['sweetSpot', 'atlasCoordinate']).toContain(t.kind);
+      expect(['sweetSpot', 'publishedTarget', 'atlasCoordinate']).toContain(t.kind);
       expect(t.method.length).toBeGreaterThan(20);
       expect(t.mni.left[0]).toBeLessThan(0);
       expect(t.mni.right[0]).toBeGreaterThan(0);
+      // computed points come from the pipeline; printed ones (published targets, Horn 2022's peaks) name their paper
+      if (t.kind === 'atlasCoordinate') expect(t.coordKey, t.id).toBeTruthy();
+      if (!t.coordKey) expect(t.method, t.id).toMatch(/Shimizu|Schaper|Sammartino|Horn 2022/);
     }
   });
   it('sweet-spot markers sit inside or near their published map region', () => {
     for (const t of CONTENT.targets.filter((x) => x.kind === 'sweetSpot')) {
       const m = MANIFEST.structures.find((s) => s.id === t.structureId)!;
       const d = Math.hypot(...t.mni.left.map((v, i) => v - m.centroid!.L[i]));
-      expect(d, t.id).toBeLessThan(0.01); // marker = centroid of the same map
+      // a computed marker is the centroid of the same map; a printed peak (Horn 2022) lies within 1 to 2.5 mm of the
+      // map's maximum, and 4 to 5 mm from the largest region's centroid
+      expect(d, t.id).toBeLessThan(t.coordKey ? 0.01 : 6);
     }
   });
 });
@@ -207,15 +383,22 @@ describe('epilepsy (researched addition)', () => {
       expect(Math.abs(hip[side][0])).toBeGreaterThan(Math.abs(ant[side][0]) + 10);
       expect(hip[side][2]).toBeLessThan(ant[side][2]);
     }
-    const j = CONTENT.targets.find((t) => t.id === 't-ant-mtt')!;
-    expect(j.kind).toBe('atlasCoordinate');
+    // (Schaper 2020's printed junction since the site audit's A-003; it had been where the drawn tract meets the drawn ANT)
+    const j = CONTENT.targets.find((t) => t.id === 't-pub-ant-mtt')!;
+    expect(j.kind).toBe('publishedTarget');
     // junction lies below the ANT centroid (the tract enters the ANT from below)
     expect(j.mni.left[2]).toBeLessThan(ant.L[2]);
   });
 });
 
 describe('Parkinson\'s view: the STN whole or as zones; the PPN and the optic tract left out', () => {
-  it('draws the zones by default and the nucleus whole when asked, and never the PPN or the optic tract', () => {
+  it('draws the nucleus whole by default and the zones when asked, and never the PPN or the optic tract', () => {
+    // the app's default is the whole nucleus; old links' "stn=w" still reads as whole, "stn=z" asks for the zones
+    expect(defaultState().stn).toBe('whole');
+    expect(encode(defaultState())).not.toContain('stn=');
+    expect(decode('#/atlas?i=pd&stn=w').stn).toBe('whole');
+    expect(decode('#/atlas?i=pd&stn=z').stn).toBe('zones');
+    expect(encode({ ...defaultState(), stn: 'zones' })).toContain('stn=z');
     const z = plan('pd', null, true);
     expect(z.looks.get('stn_motor')).toBe('primary');
     const w = plan('pd', null, true, true);

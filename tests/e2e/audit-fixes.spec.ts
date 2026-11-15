@@ -40,8 +40,8 @@ test('spine: at a cervical disc the level card names the root that leaves there,
   const g = guard(page);
   await open(page, './spine/#/atlas?r=cervical&lv=C5');
   const card = page.locator('.card.sel');
-  // no far lateral zone in the neck (the vertebral artery runs there), as in the drilling tool
-  await expect(card.locator('.lesion-kind .chip')).toHaveText(['None', 'Paracentral', 'Foraminal']);
+  // no far lateral zone in the neck (the vertebral artery runs there), as in the drilling tool; a central one (E-010)
+  await expect(card.locator('.lesion-kind .chip')).toHaveText(['None', 'Central', 'Paracentral', 'Foraminal']);
   await card.locator('.lesion-kind .chip[data-v="foraminal"]').click();
   await expect(card.locator('.lesion-result')).toContainText('C6 nerve root (the root that leaves at this disc), left');
   await card.locator('.lesion-kind .chip[data-v="paracentral"]').click();
@@ -60,6 +60,64 @@ test('spine: at a cervical disc the level card names the root that leaves there,
   // the lumbar rule is unchanged
   await open(page, './spine/#/atlas?r=lumbar&lv=L4&les=L4-L5.foraminal.L');
   await expect(page.locator('.card.sel .lesion-result')).toContainText('L4 nerve root (exiting), left');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// E-002, E-005, E-010: a central herniation presses on the cauda equina, not on no root; a root's picture in radiculopathy
+test('spine: the level card offers a central herniation and gives each root its picture in radiculopathy', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './spine/#/atlas?r=lumbar&lv=L4');
+  const card = page.locator('.card.sel');
+  await expect(card.locator('.lesion-kind .chip')).toHaveText(['None', 'Central', 'Paracentral', 'Foraminal', 'Far lateral']);
+  await card.locator('.lesion-kind .chip[data-v="central"]').click();
+  await expect(card.locator('.lesion-result')).toContainText('the cauda equina roots in it');
+  await expect(card).toContainText('commonest cause of cauda equina syndrome');
+  await expect(card.locator('.lesion-side')).toHaveCount(0);
+  await expect.poll(() => new URL(page.url()).hash).toContain('les=L4-L5.central.');
+  // paracentral: L5, foot drop first, then the worksheet's key muscle; no placeholder
+  await card.locator('.lesion-kind .chip[data-v="paracentral"]').click();
+  await expect(card.locator('.lesion-result')).toContainText('L5 nerve root (traversing), left');
+  await expect(card).toContainText('In radiculopathy');
+  await expect(card).toContainText('Ankle dorsiflexion, toe extension');
+  await expect(card).toContainText('In the spinal cord injury standard (ISNCSCI)');
+  await expect(card).toContainText('Long toe extensors');
+  await expect(card).not.toContainText('to be added');
+  // the neck: C6 leaves at C5-C6; its reflexes
+  await open(page, './spine/#/atlas?r=cervical&lv=C5&les=C5-C6.foraminal.L');
+  await expect(page.locator('.card.sel')).toContainText('Biceps, brachioradialis');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// E-002, E-010: the drilling tool's readout
+test('spine: the drilled herniation names the cauda equina when central and the exiting root once migrated up past the disc', async ({ page }) => {
+  const g = guard(page);
+  // (the herniation's panel is in the drilling tool's box, beside the level card)
+  const panel = page.locator('.drill-panel');
+  await open(page, './spine/#/atlas?r=lumbar&lv=L4&dr=o&hz=central.L.p.8.0');
+  await expect(panel).toContainText('presses on the dural sac and the cauda equina roots in it');
+  await expect(panel).toContainText('commonest cause of cauda equina syndrome');
+  await open(page, './spine/#/atlas?r=lumbar&lv=L4&dr=o&hz=paracentral.L.e.10.8');
+  await expect(panel).toContainText('Migrated up past the disc’s upper margin, it can reach the exiting L4 root as well');
+  await open(page, './spine/#/atlas?r=lumbar&lv=L4&dr=o&hz=paracentral.L.e.10.-8');
+  await expect(panel).toContainText('The herniation');
+  await expect(panel).not.toContainText('Migrated up past');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// E-008, E-009: published pedicle values like with like, and which study sets each end of a range
+test('spine: published pedicle values are outer measures at C7, and a median with the study at each end in the thoracic spine', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './spine/#/atlas?r=cervical&lv=C7');
+  const c7 = page.locator('.card.sel .morph').first();
+  await expect(c7).toContainText('(outer, n = 74)');
+  await expect(c7).not.toContainText('screw width');
+  await open(page, './spine/#/atlas?r=thoracic&lv=T9');
+  const t9 = page.locator('.card.sel .morph').first();
+  await expect(t9).toContainText('median');
+  await expect(t9).toContainText('0.9° (Chaynes et al.)');
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
@@ -174,7 +232,8 @@ test('loading: a view downloads the meshes it draws, not the catalogue, and the 
 test('loading: a structure that cannot be loaded is named in a notice that stays, and Retry loads it', async ({ page }) => {
   let block = true;
   await page.route('**/assets/meshes/stn_motor.glb*', (route) => (block ? route.abort() : route.continue()));
-  await open(page, './dbs/#/atlas?i=pd');
+  // (the STN's zones asked for: the whole nucleus is the default)
+  await open(page, './dbs/#/atlas?i=pd&stn=z');
   const notice = page.locator('.status-failed');
   await expect(notice).toBeVisible();
   await expect(notice).toContainText('One structure of this view could not be loaded');

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { affectedRoot, lesionZones, type DiscRegion, type LesionZone } from './content';
+import { herniaZones, zoneRoot, type DiscRegion, type HerniaZone } from './content';
 
 /**
  * A schematic disc herniation and what it does to the dural sac and the roots (there is none on this CT): its shape a
@@ -8,8 +8,8 @@ import { affectedRoot, lesionZones, type DiscRegion, type LesionZone } from './c
  * simulation of the tissue. Independent of the drilling: whatever draws it gives it the disc and, optionally, the bone.
  */
 export type HerniaType = 'protrusion' | 'extrusion';
-/** where it lies: in the midline, beside it, in the foramen or beyond it */
-export type HerniaZone = 'central' | LesionZone;
+/** where it lies: in the midline, beside it, in the foramen or beyond it (content.ts) */
+export type { HerniaZone };
 export interface HerniaSpec {
   zone: HerniaZone;
   side: 'L' | 'R';
@@ -21,10 +21,10 @@ export interface HerniaSpec {
 }
 export const HERNIA_SIZE: [number, number, number] = [2, 15, 0.5];
 export const HERNIA_MIGRATE: [number, number, number] = [-10, 10, 1];
-/** the zones offered per region: central, then the level card's (content.ts lesionZones: no far lateral in the neck) */
+/** the zones offered per region, as on the level card (content.ts herniaZones: no far lateral in the neck) */
 export const HERNIA_ZONES: Record<DiscRegion, [HerniaZone, string][]> = {
-  lumbar: [['central', 'Central'], ...lesionZones('lumbar')],
-  cervical: [['central', 'Central'], ...lesionZones('cervical')],
+  lumbar: herniaZones('lumbar'),
+  cervical: herniaZones('cervical'),
 };
 /** where each zone's size starts (mm; drawing choices): on this CT the lumbar dural sac and the schematic roots lie a few
  * mm behind the disc's margin, so a lumbar paracentral one must reach further to touch the traversing root; the cervical
@@ -38,7 +38,14 @@ export const HERNIA_DEFAULT_SIZE: Record<'lumbar' | 'cervical', Partial<Record<H
  * paracentral the traversing (lower) root, foraminal and far lateral the exiting (upper) one; cervical: the root that
  * exits at that disc, named for the vertebra below (C8 at C7-T1). */
 export function herniaRoot(pair: string, zone: HerniaZone, region: DiscRegion): string | null {
-  return zone === 'central' ? null : affectedRoot(pair, zone, region);
+  return zoneRoot(pair, zone, region);
+}
+
+/** A lumbar paracentral extrusion whose fragment has moved up past the disc's upper margin (its centre more than half
+ * the disc's height above the disc's middle, where it leaves the disc): it can press on the exiting root as well as the
+ * traversing one (HERNIA_STATEMENTS.migrated). */
+export function migratedToExiting(spec: HerniaSpec, region: DiscRegion, discHeight: number): boolean {
+  return region === 'lumbar' && spec.zone === 'paracentral' && spec.type === 'extrusion' && spec.migrateMm > discHeight / 2;
 }
 
 /** a protrusion's base reaches at most this far to each side (mm; a drawing choice) */

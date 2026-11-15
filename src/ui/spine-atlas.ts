@@ -3,8 +3,8 @@ import type { CameraPreset } from '../data/schema';
 import type { Hemi } from '../state';
 import { discBelow, LEVEL_ORDER, SP, SP_MANIFEST, SP_REFS, vertebraOf } from '../spine';
 import {
-  ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, CCJ, CCJ_MEASURES, discRegion, exitingRoot, exposureRegion, GEOM_BY_LEVEL, lesionZones,
-  NECK_LANDMARKS, ROOT_FUNCTION, STATEMENTS, TECHNIQUES, VERTEBRAL_ARTERY, type ApproachId, type CcjMeasure, type CcjMeasureId, type LesionZone,
+  ACDF_STATEMENTS, APPROACH_STATEMENTS, APPROACHES, CCJ, CCJ_MEASURES, discRegion, exitingRoot, exposureRegion, GEOM_BY_LEVEL, HERNIA_STATEMENTS, herniaZones,
+  NECK_LANDMARKS, RADICULOPATHY, ROOT_FUNCTION, STATEMENTS, TECHNIQUES, VERTEBRAL_ARTERY, zoneRoot, type ApproachId, type CcjMeasure, type CcjMeasureId, type HerniaZone,
   type LevelGeom, type Statement,
 } from '../spine/content';
 import { bodyChart } from './body-chart';
@@ -518,6 +518,14 @@ export class SpineAtlasPage {
     const head = h('thead', {}, h('tr', {}, h('th', {}, ''), h('th', { scope: 'col' }, 'Left'), h('th', { scope: 'col' }, 'Right'), h('th', { scope: 'col' }, 'Published')));
     const measured = (k: 'width' | 'height') => [`${fmtMm(ped.L[k])} mm`, `${fmtMm(ped.R[k])} mm`] as const;
     const chord = row('Chord, entry to anterior cortex', `${fmtMm(ped.L.chord)} mm`, `${fmtMm(ped.R.chord)} mm`, '—');
+    // several studies' means: their median, and each end of their range with the study that reported it (one study's
+    // value can set an end)
+    const spread = (o: Record<string, number>, f: (x: number) => string, unit: string) => {
+      const e = Object.entries(o).sort((a, b) => a[1] - b[1]), v = e.map(([, x]) => x), n = v.length;
+      const med = n % 2 ? v[(n - 1) / 2] : (v[n / 2 - 1] + v[n / 2]) / 2;
+      const who = (x: number) => e.filter(([, y]) => y === x).map(([k]) => k).join(', ');
+      return `median ${f(med)}${unit}; ${f(v[0])}${unit} (${who(v[0])}) to ${f(v[n - 1])}${unit} (${who(v[n - 1])}); ${n} studies`;
+    };
     // a pedicle whose axis was fitted inside the published range, not freely: said under the table, with the free fit
     const held = (['L', 'R'] as const).filter((sd) => ped[sd].held).map((sd) => {
       const k = ped[sd].held!;
@@ -528,39 +536,37 @@ export class SpineAtlasPage {
         + `In review the axis was therefore fitted inside the published means (${k.to[0].toFixed(1)} to ${k.to[1].toFixed(1)}°); the width, height, chord and the anatomic start screw follow this axis.`);
     });
     if (level === 'C7') {
+      // like with like: the outer width and height (Chanplakorn 2014) beside the measured ones; Jiang 2024's axis for the
+      // angles and the length (its sagittal angle is to the image's horizontal, not shown; nor the earlier studies', whose
+      // sign Jiang's table does not give)
       const pub = published.cervical.C7;
-      const ax = pub.axisJiang;
+      const ax = pub.axisJiang, oc = pub.outerChanplakorn;
       const ms = ([m, sd]: number[]) => `${m.toFixed(1)} ± ${sd.toFixed(1)}`;
-      const both = (k: 'width' | 'height' | 'length' | 'transverseAngle' | 'sagittalAngle', unit: string) => `${ms(ax[k].L)}${unit} left, ${ms(ax[k].R)}${unit} right (n = ${ax.n})`;
-      const tr = Object.values(pub.studyMeans.transverseAngle);
-      const sa = Object.values(pub.studyMeans.sagittalAngle);
+      const both = (k: 'length' | 'transverseAngle', unit: string) => `${ms(ax[k].L)}${unit} left, ${ms(ax[k].R)}${unit} right (n = ${ax.n})`;
+      const outer = (k: 'width' | 'height') => `${ms(oc[k].L)} mm left, ${ms(oc[k].R)} mm right (outer, n = ${oc.n})`;
       return h('div', {},
         h('table', { class: 'morph' }, head,
           h('tbody', {},
-            row('Width', ...measured('width'), `screw width ${both('width', ' mm')}`),
-            row('Height', ...measured('height'), `sagittal height ${both('height', ' mm')}`),
+            row('Width', ...measured('width'), outer('width')),
+            row('Height', ...measured('height'), outer('height')),
             row('Transverse angle', deg(ped.L.transverseAngle), deg(ped.R.transverseAngle),
-              `${both('transverseAngle', '°')}; ${Math.min(...tr).toFixed(1)} to ${Math.max(...tr).toFixed(1)}° (${tr.length} studies)`),
-            row('Sagittal angle', sag(ped.L.sagittalAngle), sag(ped.R.sagittalAngle), `${Math.min(...sa).toFixed(1)} to ${Math.max(...sa).toFixed(1)}° (${sa.length} studies)`),
+              `${both('transverseAngle', '°')}; earlier studies: ${spread(pub.studyMeans.transverseAngle, (x) => x.toFixed(1), '°')}`),
+            row('Sagittal angle', sag(ped.L.sagittalAngle), sag(ped.R.sagittalAngle), '—'),
             row('Chord, entry to anterior cortex', `${fmtMm(ped.L.chord)} mm`, `${fmtMm(ped.R.chord)} mm`, `screw length ${both('length', ' mm')}`))),
         this.stmt(STATEMENTS.pedicleMethod), this.stmt(STATEMENTS.publishedC7));
     }
     if (level.startsWith('T')) {
       type StudyMeans = Record<'widthStudyMeans' | 'heightStudyMeans' | 'transverseAngleStudyMeans' | 'sagittalAngleStudyMeans', Record<string, number>>;
       const pub = (published.thoracic as Record<string, StudyMeans>)[level];
-      const span = (o: Record<string, number>, f: (x: number) => string, sep: string) => {
-        const v = Object.values(o);
-        return `${f(Math.min(...v))}${sep}${f(Math.max(...v))} (${v.length} studies)`;
-      };
       const mmf = (x: number) => fmtMm(x);
       const degf = (x: number) => x.toFixed(1);
       return h('div', {},
         h('table', { class: 'morph' }, head,
           h('tbody', {},
-            row('Width', ...measured('width'), span(pub.widthStudyMeans, mmf, '–').replace(' (', ' mm (')),
-            row('Height', ...measured('height'), span(pub.heightStudyMeans, mmf, '–').replace(' (', ' mm (')),
-            row('Transverse angle', deg(ped.L.transverseAngle), deg(ped.R.transverseAngle), span(pub.transverseAngleStudyMeans, degf, ' to ').replace(' (', '° (')),
-            row('Sagittal angle', sag(ped.L.sagittalAngle), sag(ped.R.sagittalAngle), span(pub.sagittalAngleStudyMeans, degf, ' to ').replace(' (', '° (')),
+            row('Width', ...measured('width'), spread(pub.widthStudyMeans, mmf, ' mm')),
+            row('Height', ...measured('height'), spread(pub.heightStudyMeans, mmf, ' mm')),
+            row('Transverse angle', deg(ped.L.transverseAngle), deg(ped.R.transverseAngle), spread(pub.transverseAngleStudyMeans, degf, '°')),
+            row('Sagittal angle', sag(ped.L.sagittalAngle), sag(ped.R.sagittalAngle), spread(pub.sagittalAngleStudyMeans, degf, '°')),
             chord)),
         ...held, this.stmt(STATEMENTS.pedicleMethod), this.stmt(STATEMENTS.publishedThoracic));
     }
@@ -699,24 +705,33 @@ export class SpineAtlasPage {
       this.stmt(APPROACH_STATEMENTS.view));
   }
 
-  /** Lesion-to-root: pick a herniation's kind and side at this disc; the affected root and its function follow. */
+  /** Lesion-to-root: pick a herniation's kind and side at this disc; the affected root and its function follow (a central
+   * one: no single root, the dural sac and what it holds). */
   private lesionTool(g: LevelGeom): HTMLElement {
     const les = this.s.lesion?.pair === g.pair ? this.s.lesion : null;
-    const set = (zone: LesionZone | null, side: 'L' | 'R') => this.update((s) => { s.lesion = zone ? { pair: g.pair, zone, side } : null; });
+    const set = (zone: HerniaZone | null, side: 'L' | 'R') => this.update((s) => { s.lesion = zone ? { pair: g.pair, zone, side } : null; });
     const side = les?.side ?? 'L';
-    // the neck has its own rule and its own zones (content.ts affectedRoot, lesionZones)
+    // the neck has its own rule and its own zones (content.ts affectedRoot, lesionZones); a central one has no side
     const region = discRegion(g.pair);
+    const neck = region === 'cervical';
     const wrap = h('div', { class: 'lesion' },
       h('div', { class: 'lesion-row' },
-        chips<LesionZone | 'none'>([['none', 'None'], ...lesionZones(region)], les?.zone ?? 'none', (v) => set(v === 'none' ? null : v, side), { label: 'Herniation kind', cls: 'lesion-kind' })),
-      h('div', { class: 'lesion-row' },
+        chips<HerniaZone | 'none'>([['none', 'None'], ...herniaZones(region)], les?.zone ?? 'none', (v) => set(v === 'none' ? null : v, side), { label: 'Herniation kind', cls: 'lesion-kind' })),
+      les?.zone === 'central' ? '' : h('div', { class: 'lesion-row' },
         chips<'L' | 'R'>([['L', 'Left'], ['R', 'Right']], les ? side : null, (v) => set(les?.zone ?? 'paracentral', v), { label: 'Herniation side', cls: 'lesion-side' })));
     if (!les) {
       wrap.append(h('p', { class: 'aside' }, 'Choose a kind and side to see which root it affects.'));
       return wrap;
     }
-    const root = affectedRoot(g.pair, les.zone, region);
-    const neck = region === 'cervical';
+    const root = zoneRoot(g.pair, les.zone, region);
+    if (!root) {
+      wrap.append(
+        h('p', { class: 'lesion-result' }, neck ? 'No single root: a central herniation presses on the dural sac and the cord in it.'
+          : 'No single root: a central herniation presses on the dural sac and the cauda equina roots in it (not drawn).'),
+        ...(neck ? [] : [this.stmt(HERNIA_STATEMENTS.caudaEquina)]),
+        h('p', { class: 'aside' }, 'The pink marker is a schematic position on this CT, midway between the two paracentral ones. Real herniations vary in size and position.'));
+      return wrap;
+    }
     const est = les.zone === 'foraminal' && g.lesions![les.side].foraminalEstimated;
     wrap.append(
       h('p', { class: 'lesion-result' }, 'Affected root: ', this.link(`sp_root_${root.toLowerCase()}`),
@@ -727,18 +742,23 @@ export class SpineAtlasPage {
     return wrap;
   }
 
-  /** What a root does, from the ISNCSCI worksheet, with its key sensory point on the chart. */
+  /** What a root does: its picture in radiculopathy (L1-S1 and C4-T1, from two reviews' tables), then for L1-S1 what the
+   * ISNCSCI worksheet lists for it, with its key sensory point on the chart. */
   private rootFunction(root: string, side: 'L' | 'R'): (HTMLElement | SVGSVGElement)[] {
-    const f = ROOT_FUNCTION[root];
-    if (!f) return [];
-    return [
-      h('p', {}, h('strong', {}, 'Key muscle: '), f.keyMuscle ?? 'none listed for this root on the worksheet'),
-      f.otherMovements.length ? h('p', {}, h('strong', {}, 'Other movements: '), f.otherMovements.join('; ')) : h('p', {}),
+    const r = RADICULOPATHY[root], f = ROOT_FUNCTION[root];
+    const line = (k: string, v: string) => h('p', {}, h('strong', {}, `${k}: `), v);
+    const out: (HTMLElement | SVGSVGElement)[] = [];
+    if (r) out.push(h('p', { class: 'fn-head' }, h('strong', {}, 'In radiculopathy')),
+      ...(r.disc ? [line('Leaves at disc', r.disc)] : []), ...(r.pain ? [line('Pain', r.pain)] : []),
+      line('Sensory', r.sensory), line('Weakness', r.weakness), line('Reflex', r.reflex ?? 'none listed for this root'),
+      this.stmt(r.disc ? STATEMENTS.radiculopathyCervical : STATEMENTS.radiculopathyLumbar));
+    if (f) out.push(h('p', { class: 'fn-head' }, h('strong', {}, 'In the spinal cord injury standard (ISNCSCI)')),
+      line('Key muscle', f.keyMuscle ?? 'none listed for this root on the worksheet'),
+      ...(f.otherMovements.length ? [line('Other movements', f.otherMovements.join('; '))] : []),
       bodyChart(root, side),
       this.stmt(STATEMENTS.isncsci),
-      this.stmt(STATEMENTS.dermatomes),
-      h('p', { class: 'aside' }, 'Reflexes: to be added from a source whose text can be checked.'),
-    ];
+      this.stmt(STATEMENTS.dermatomes));
+    return out;
   }
 
   private card(id: string): HTMLElement {
@@ -761,10 +781,17 @@ export class SpineAtlasPage {
     const add = (dt: string, ...dd: (Element | string | null)[]) => out.push(h('dt', {}, dt), h('dd', {}, ...dd));
     const thoracic = (level ?? '').startsWith('T');
     const cervical = (level ?? '').startsWith('C');
+    // a root's function (radiculopathy, and for L1-S1 the ISNCSCI worksheet), on the side of a herniation chosen for it
+    const fn = () => {
+      if (!level || !(ROOT_FUNCTION[level] || RADICULOPATHY[level])) return;
+      const les = this.s.lesion && zoneRoot(this.s.lesion.pair, this.s.lesion.zone) === level ? this.s.lesion : null;
+      add('Function', ...this.rootFunction(level, les?.side ?? 'L'));
+    };
     if (category === 'root' && cervical) {
       add('Exit', this.stmt(STATEMENTS.cervicalRootRule));
       add('Root and disc', this.stmt(STATEMENTS.cervicalRootDisc));
       add('Rootlets', this.stmt(STATEMENTS.cervicalRootlets));
+      fn();
     }
     if (category === 'root' && !cervical) add('Take-off', this.stmt(STATEMENTS.lumbarTakeoff));
     if (id === 'sp_vertebral_artery') {
@@ -776,14 +803,12 @@ export class SpineAtlasPage {
     if (category === 'root' && thoracic) {
       add('Exit', this.stmt(STATEMENTS.thoracicNerve));
       add('Its foramen', this.stmt(STATEMENTS.thoracicForamen));
+      fn();
     }
     if (category === 'root' && !thoracic && !cervical) {
       add('Exit', this.stmt(STATEMENTS.rootRule));
       add('Ganglion and take-off', this.stmt(STATEMENTS.ganglia));
-      if (level && ROOT_FUNCTION[level]) {
-        const les = this.s.lesion && affectedRoot(this.s.lesion.pair, this.s.lesion.zone) === level ? this.s.lesion : null;
-        add('Function (ISNCSCI)', ...this.rootFunction(level, les?.side ?? 'L'));
-      }
+      fn();
       const g = level ? GEOM_BY_LEVEL.get(level) : undefined;
       if (g && (g.foramen.L || g.foramen.R)) add(`Its foramen (${g.pair}, measured)`, ['L', 'R'].map((sd) => {
         const f = g.foramen[sd as 'L' | 'R'];

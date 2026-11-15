@@ -1,7 +1,7 @@
 import { APPROACH_GEOM, DEFINITIONS, LANDMARKS, SB_MANIFEST, SB_MODEL, V3_FIT } from '../skullbase';
 import { APPROACH_REF, APPROACH_REFS, type ApproachClaim } from '../skullbase/approaches';
 import { SB_GROUP } from '../skullbase/groups';
-import { KNOSP_GRADES, KOOS_GRADES, MENINGIOMA_EEA, MENINGIOMA_SITES, TUMOUR_FAMILY, tumourGroupId, type TumourFamily } from '../skullbase/tumours';
+import { KNOSP_GRADES, KNOSP_GRADE_3, KOOS_GRADES, MENINGIOMA_EEA, MENINGIOMA_SITES, TUMOUR_FAMILY, tumourGroupId, type TumourFamily } from '../skullbase/tumours';
 import { refLinksFrom } from './reflinks';
 import { FORAMEN_REFS } from '../skullbase/foramina';
 import { TB_REFS } from '../skullbase/temporal';
@@ -41,18 +41,18 @@ export function skullGradingPage() {
     h('h1', {}, 'Grading'),
     h('p', { class: 'lead' }, `How pituitary adenomas and vestibular schwannomas are graded, what the grades predict, and which approaches suit meningiomas at four sites of the skull base. The rows marked “drawn here” are tumours this atlas draws on its ${SB_MODEL === 'v3' ? 'CT' : 'model'}, by rule; open them from the mark. For teaching: not for diagnosis or planning.`),
     h('h2', {}, 'Pituitary adenoma: cavernous sinus invasion'),
-    gradeTable('knosp', 'Knosp grade (revised)', ['araujocastro2021'], ['Grade', 'The adenoma on the coronal section', 'Surgical cure', 'Major complications'],
-      KNOSP_GRADES.map((g) => ({ cells: [g.id, g.definition, g.cure, g.complications], view: view('knosp', g.id) })),
-      '228 patients after a first endoscopic endonasal operation, 2009–2020 (surgical cure: total resection of a non-functioning adenoma, biochemical remission of a functioning one). The lines join the supraclinoid and the intracavernous carotid on the coronal section: the medial tangent along their medial walls, the intercarotid line through their centres, the lateral tangent along their lateral walls.',
+    gradeTable('knosp', 'Knosp grade (revised)', ['knosp1993', 'micko2015', 'araujocastro2021'], ['Grade', 'The adenoma on the coronal section', 'Invasion found at endoscopic surgery', 'Surgical cure', 'Major complications'],
+      [...KNOSP_GRADES.slice(0, 3), KNOSP_GRADE_3, ...KNOSP_GRADES.slice(3)].map((g) => ({ cells: [g.id, g.definition, g.invasion, g.cure, g.complications], view: g === KNOSP_GRADE_3 ? undefined : view('knosp', g.id) })),
+      'Definitions: Knosp 1993, the revised grades 3A and 3B as Micko 2015 uses them. Invasion: Micko 2015, 137 macroadenomas at endoscopic surgery (grade 0 not studied). Cure and complications: Araujo-Castro 2021, 228 patients after a first endoscopic endonasal operation, 2009–2020 (its outcome table reports complete resection of non-functioning and biochemical cure of functioning adenomas; that series took grades 3–4 as invasive). The lines join the supraclinoid and the intracavernous carotid on the coronal section: the medial tangent along their medial walls, the intercarotid line through their centres, the lateral tangent along their lateral walls.',
       kn.sections.flatMap((x) => x.claims).slice(2)),
     h('h2', {}, 'Vestibular schwannoma'),
-    gradeTable('koos', 'Koos grade', ['gupta2020'], ['Grade', 'Description'],
-      KOOS_GRADES.map((g) => ({ cells: [g.id, g.definition], view: view('koos', g.id) })),
-      undefined, ko.sections.flatMap((x) => x.claims).slice(1)),
+    gradeTable('koos', 'Koos grade', ['koos1998', 'gupta2020'], ['Grade', 'Description', 'Approximate size'],
+      KOOS_GRADES.map((g) => ({ cells: [g.id, g.definition, g.size], view: view('koos', g.id) })),
+      'Grades I and II as Koos 1998 defines them; III and IV, and the sizes, from Gupta 2020’s table. The relation to the brainstem sets the grade; the sizes are those later tables give.', ko.sections.flatMap((x) => x.claims).slice(2)),
     h('h2', {}, 'Skull base meningiomas'),
-    gradeTable('meningioma-sites', 'Sites and the approaches listed for them', ['ius2021'], ['Site', 'Share', 'Approaches', 'Drawn in this model’s'],
+    gradeTable('meningioma-sites', 'Sites and the approaches listed for them', ['ius2021', 'calvanese2024', 'cuellar2021', 'singh2019', 'hammed2021'], ['Site', 'Share', 'Approaches', 'Drawn in this model’s'],
       MENINGIOMA_SITES.map((x) => ({ cells: [x.name, x.share, x.approaches, `${x.viewName} view`], view: view('meningioma', x.id) })),
-      'Share: of skull base meningiomas (petroclival: of posterior fossa meningiomas), from the review’s table, which collects other series.', me.sections.flatMap((x) => x.claims)),
+      'Approaches: the review’s table (Ius 2021), which collects other series. Shares: from papers that state their denominator (olfactory groove Calvanese 2024, tuberculum sellae Cuellar-Hernandez 2021, petroclival Singh 2019, foramen magnum Hammed 2021); the review’s table gives none.', me.sections.flatMap((x) => x.claims)),
     gradeTable('eea', 'Endoscopic endonasal against transcranial, anterior skull base', ['muskens2018'], ['Site', 'Gross total resection (endonasal / transcranial)', 'Cerebrospinal fluid leak (endonasal / transcranial)'],
       MENINGIOMA_EEA.map((x) => ({ cells: [x.site, x.gtr.join(' / '), x.csf.join(' / ')] })),
       'A meta-analysis of 64 case series (fixed-effects pooled rates); the difference in gross total resection was significant for olfactory groove meningiomas, not for tuberculum sellae ones.'),
@@ -116,7 +116,7 @@ function temporalSourcesPage() {
         `IX–XI pass ${Math.min(...Object.values(f.nerveChecks.jugularNervesToBulbMm.R), ...Object.values(f.nerveChecks.jugularNervesToBulbMm.L))}–${Math.max(...Object.values(f.nerveChecks.jugularNervesToBulbMm.R), ...Object.values(f.nerveChecks.jugularNervesToBulbMm.L))} mm from the jugular bulb (they run beside it).`),
       h('p', {}, 'The sigmoid and transverse sinuses are traced through this CT’s own contrast-filled lumen, from the jugular bulb to the transverse sinus near the midline, along the middle of the enhanced channel: ',
         sides.map((sd) => `${sideName[sd].toLowerCase()} ${Math.round(f.sinuses[sd].inLumenShare * 100)} % of the trace at least 1.5 mm inside the lumen, median radius ${f.sinuses[sd].medianRadiusMm} mm`).join('; '), '. The middle meningeal artery is routed like the nerves, through the foramen spinosum; the cervical carotids and jugular veins are TotalSegmentator’s (headneck_bones_vessels).'),
-      h('p', {}, 'Arteries: the circle of Willis and its large branches are TopBrain’s expert labels of this angiogram. This patient’s carotid between the cervical segment and the cavernous one is traced the same way as the sinuses, through its contrast-filled lumen in the carotid canal and foramen lacerum: ',
+      h('p', {}, 'Arteries: the circle of Willis and its large branches are TopBrain’s expert labels of this angiogram. This patient’s carotid between the cervical segment and the cavernous one is traced the same way as the sinuses, through its contrast-filled lumen in the carotid canal and over the foramen lacerum: ',
         sides.map((sd) => `${sideName[sd].toLowerCase()} ${Math.round(f.carotids[sd].inLumenShare * 100)} % of the trace at least 1.5 mm inside the lumen, median radius ${f.carotids[sd].medianRadiusMm} mm, a median ${f.carotids[sd].medianFromSpecimenMm} mm from the registered specimen’s carotid`).join('; '),
         '. Branches too small for this CT to show (the lateral striate and pontine branches, the anterior spinal artery) are the fitted Z-Anatomy branches moved to start on this patient’s own parent vessel; the pontine branches and the anterior spinal artery, which run on the brainstem, are then laid onto the fitted brainstem’s surface. The ethmoidal arteries and the accessory meningeal branch are routed from their parent vessel through the CT like the nerves. Their courses are approximate and their cards say so.',
         f.petrosal ? ` The superior and inferior petrosal sinuses are Z-Anatomy’s too, and a CT angiogram does not show them. As fitted they lay inside the petrous bone for ${Math.min(...Object.values(f.petrosal).flatMap((x) => Object.values(x).map((r) => r.inBoneBeforeMm)))} to ${Math.max(...Object.values(f.petrosal).flatMap((x) => Object.values(x).map((r) => r.inBoneBeforeMm)))} mm of their length, so they are laid onto this CT’s bone (pipeline/skullbase_v3_petrosal.py): the superior along the crest of the petrous ridge and on to the sigmoid–transverse junction, the inferior on the bone’s inner surface along its fitted course. The bone is this patient’s, the course along it a model’s.` : '',

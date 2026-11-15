@@ -20,8 +20,9 @@ describe('white-matter content', () => {
     const abbr = (tier: string) => WM.topics.filter((t) => t.tier === tier).map((t) => t.abbr).sort();
     expect(abbr('core')).toEqual(
       ['AF', 'CBT', 'CC', 'CST', 'Cingulum (dorsal)', 'Cingulum (parahippocampal)', 'FAT', 'Fornix', 'IFOF', 'ILF', 'OR', 'SLF I', 'SLF II', 'SLF III', 'UF'].sort());
-    expect(abbr('extended')).toEqual(['AC', 'AR', 'ATR', 'CStr-A', 'CStr-P', 'CStr-S', 'EmC', 'MdLF', 'PTR', 'STR', 'TPAT', 'VOF'].sort());
-    expect(abbr('fossa')).toEqual(['CPT-F', 'CPT-O', 'CPT-P', 'DRTT', 'ICP', 'MCP', 'ML', 'RST', 'SCP'].sort());
+    // (B4: the acoustic radiation withdrawn; the DRTT as two tracts, crossed and uncrossed)
+    expect(abbr('extended')).toEqual(['AC', 'ATR', 'CStr-A', 'CStr-P', 'CStr-S', 'EmC', 'MdLF', 'PTR', 'STR', 'TPAT', 'VOF'].sort());
+    expect(abbr('fossa')).toEqual(['CPT-F', 'CPT-O', 'CPT-P', 'DRTT', 'ICP', 'MCP', 'ML', 'RST', 'SCP', 'nDRTT'].sort());
   });
   it('every group stays within one tier, and each tier opens on a function group', () => {
     for (const g of WM.groups) for (const id of g.tractIds) expect(TOPIC.get(id)!.tier, `${g.id}: ${id}`).toBe(g.tier);
@@ -33,9 +34,33 @@ describe('white-matter content', () => {
   });
 });
 
+describe('the site audit\u2019s B4: what each atlas bundle shows', () => {
+  it('splits the DRTT into crossed and uncrossed tracts and withdraws the acoustic radiation', () => {
+    const man = (id: string) => WM_MANIFEST.structures.find((s) => s.id === id);
+    expect(man('wm_ar')).toBeUndefined();
+    expect(TOPIC.has('wm_ar')).toBe(false);
+    // every streamline of the atlas file is in one of the two (counted from the source by the build)
+    expect(man('wm_drtt')!.sourceStreamlines).toEqual({ L: 1727, R: 652 });
+    expect(man('wm_ndrtt')!.sourceStreamlines).toEqual({ L: 1971, R: 6332 });
+    expect(TOPIC.get('wm_drtt')!.name).toMatch(/decussating$/);
+    expect(TOPIC.get('wm_ndrtt')!.name).toMatch(/non-decussating$/);
+    // the loop group (the cerebellum returns to contralateral cortex) keeps only the crossed tract
+    expect(GROUP.get('fossa_loop')!.tractIds).not.toContain('wm_ndrtt');
+    expect(GROUP.get('fossa_all')!.tractIds).toEqual(expect.arrayContaining(['wm_drtt', 'wm_ndrtt']));
+  });
+  it('says on the cards what the bundles drawn connect, from their measured ends', () => {
+    expect(TOPIC.get('wm_or')!.aliases).toContain('Meyer’s loop');          // a shallow loop is there (rechecked)
+    expect(TOPIC.get('wm_or')!.measured.join(' ')).toMatch(/shallow Meyer’s loop.*not at the lateral geniculate body/);
+    for (const id of ['wm_ml', 'wm_rst', 'wm_emc', 'wm_ac']) expect(TOPIC.get(id)!.measured.length, id).toBeGreaterThan(0);
+    expect(TOPIC.get('wm_slf1')!.aliases).toEqual([]);                      // "dorsal SLF" names SLF II elsewhere
+    expect(TOPIC.get('wm_slf1')!.connections.flatMap((c) => c.refIds)).toEqual(expect.arrayContaining(['wang2016', 'komaitis2020']));
+    expect(TOPIC.get('wm_cs_p')!.summary).not.toMatch(/temporal/);
+  });
+});
+
 describe('cortical connections from the published tract-to-region table', () => {
-  it('covers every tract the table has a column for (not CC, EmC, AC, AR or the posterior fossa tracts)', () => {
-    const missing = ['wm_cc', 'wm_emc', 'wm_ac', 'wm_ar', ...WM.topics.filter((t) => t.tier === 'fossa').map((t) => t.id)];
+  it('covers every tract the table has a column for (not CC, EmC, AC or the posterior fossa tracts)', () => {
+    const missing = ['wm_cc', 'wm_emc', 'wm_ac', ...WM.topics.filter((t) => t.tier === 'fossa').map((t) => t.id)];
     expect(Object.keys(CONNECTOME.tracts).sort()).toEqual(WM.topics.map((t) => t.id).filter((id) => !missing.includes(id)).sort());
   });
   it('known values survive the conversion (spot checks against the spreadsheet)', () => {

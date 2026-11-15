@@ -35,7 +35,7 @@ export const TOPICS: TractTopicInput[] = [
       c('Lesion of the classical arcuate pathway was held to cause conduction aphasia; the varied presentations of conduction aphasia fit the two parallel (direct and indirect) pathways better.', 'catani2005'),
     ],
     surgery: [
-      c('In 115 awake patients with grade II glioma of the left hemisphere, the AF (phonemic paraphasia) was among the subcortical pathways found in every patient and kept as a resection limit; 98% returned to baseline or better.', 'duffau2008'),
+      c('In 115 awake patients with grade II glioma of the left hemisphere, one or more of five subcortical language pathways, the AF (phonemic paraphasia) among them, were found in every patient and kept as resection limits; 98% returned to baseline or better.', 'duffau2008'),
       c('In left inferior parietal gliomas, phonemic paraphasia came from the posterosuperior AF, deeper and more superior than the SLF III fibres that gave articulatory errors.', 'maldonado2011a'),
     ],
     atlas: [
@@ -43,7 +43,7 @@ export const TOPICS: TractTopicInput[] = [
     ],
   },
   {
-    id: 'wm_slf1', name: 'Superior longitudinal fasciculus I', abbr: 'SLF I', aliases: ['dorsal SLF'], type: 'association', tier: 'core',
+    id: 'wm_slf1', name: 'Superior longitudinal fasciculus I', abbr: 'SLF I', aliases: [], type: 'association', tier: 'core',
     summary: 'The most dorsal SLF branch, in the superior parietal and superior frontal white matter next to the cingulum.',
     course: [
       c('Lies in the white matter of the superior parietal and superior frontal lobes and extends to the dorsal premotor and dorsolateral prefrontal regions.', 'makris2005'),
@@ -52,6 +52,7 @@ export const TOPICS: TractTopicInput[] = [
     connections: [
       c('Diffusion imaging defines only the stem of each SLF branch; its origins and terminations were extrapolated from tract-tracing in non-human primates.', 'makris2005'),
       c('By its cortical connections it groups with the cingulum pathways rather than with SLF II and III.', 'yeh2022'),
+      c('Whether it is a tract of its own is disputed: in a tractography and dissection study the fibres corresponding to SLF I proved part of the cingulum system in all cases, while a focused dissection study separated it from the cingulum by a clear cleavage plane. (“Dorsal SLF” names SLF II in the first study and SLF I in the second.)', 'wang2016', 'komaitis2020'),
     ],
     functions: [
       c('Not counted among the language-eloquent tracts: studies cited in the atlas paper found no significant language function for SLF I.', 'yeh2022'),
@@ -256,6 +257,7 @@ export const TOPICS: TractTopicInput[] = [
       c('Direct subcortical stimulation in awake patients identifies the optic radiation by transient visual disturbance: of 14 glioma patients, only one had a permanent hemianopia although quadrantanopia was expected in 12.', 'grascombe2012'),
     ],
     atlas: [],
+    measured: ['The atlas bundle shows a shallow Meyer’s loop: 41% of streamlines on the left and 12% on the right run more than 5 mm forward of their thalamic end, about 30 mm from the midline, before turning back; the most anterior lie 44–46 mm behind this template’s temporal pole, at the posterior end of the published range. It starts in the posterior thalamus, about 9 mm from the midline, not at the lateral geniculate body.'],
   },
   {
     id: 'wm_cst', name: 'Corticospinal tract', abbr: 'CST', aliases: ['pyramidal tract'], type: 'projection', tier: 'core', parcels: ['m1'],
@@ -430,6 +432,7 @@ export const TOPICS: TractTopicInput[] = [
     deficits: [],
     surgery: [],
     atlas: [],
+    measured: ['The atlas bundle links the insula (front ends) with the postcentral gyrus and superior parietal lobule (left) or the superior parietal lobule (right); it does not reach pars triangularis or the superior temporal gyrus.'],
   },
   {
     id: 'wm_ac', name: 'Anterior commissure', abbr: 'AC', aliases: [], type: 'commissural', tier: 'extended',
@@ -447,6 +450,7 @@ export const TOPICS: TractTopicInput[] = [
     ],
     surgery: [],
     atlas: [],
+    measured: ['Each half of the atlas bundle runs on to the occipital lobe: its far ends lie in the lingual gyrus, occipital pole and calcarine sulcus (left) and the occipital pole (right, 78%; temporal pole 11%), about 270 mm from end to end.'],
   },
   {
     id: 'wm_atr', name: 'Anterior thalamic radiation', abbr: 'ATR', aliases: ['anterior corticothalamic tract'], type: 'projection', tier: 'extended',
@@ -505,24 +509,6 @@ export const TOPICS: TractTopicInput[] = [
     measured: ['The atlas file holds only 84 (left) and 94 (right) streamlines, all shown; its shape is less certain than that of the other tracts.'],
   },
   {
-    id: 'wm_ar', name: 'Acoustic radiation', abbr: 'AR', aliases: ['auditory radiation'], type: 'projection', tier: 'extended',
-    summary: 'Auditory thalamocortical projection from the medial geniculate nucleus to Heschl’s gyrus, running transversely across the temporal lobe.',
-    course: [
-      c('A compact bundle running transversely from the midline to the lateral convexity of the posterior temporal lobe; dissection divides it into a genu, stem and fan, each closely related to neighbouring association and projection pathways.', 'maffei2018'),
-    ],
-    connections: [
-      c('Medial geniculate nucleus of the thalamus to the transverse temporal (Heschl’s) gyrus.', 'maffei2019'),
-    ],
-    functions: [
-      c('The thalamocortical projection of the auditory system, relevant to audition and language perception.', 'maffei2019'),
-    ],
-    deficits: [],
-    surgery: [],
-    atlas: [
-      c('Hard to reconstruct with tractography because of the crossings around it; the atlas authors noted it had not been reported in tractography before.', 'maffei2019', 'yeh2018'),
-    ],
-  },
-  {
     id: 'wm_cs_a', name: 'Corticostriatal tract, anterior', abbr: 'CStr-A', aliases: ['fronto-striatal fibres'], type: 'projection', tier: 'extended',
     summary: 'Prefrontal projections to the caudate nucleus and anterior striatum.',
     course: [
@@ -556,18 +542,18 @@ export const TOPICS: TractTopicInput[] = [
   },
   {
     id: 'wm_cs_p', name: 'Corticostriatal tract, posterior', abbr: 'CStr-P', aliases: [], type: 'projection', tier: 'extended',
-    summary: 'Posterior (parietal, temporal and occipital) projections to the striatum.',
+    summary: 'Parietal and occipital projections to the striatum.',
     course: [
       c('The occipital connections of the corticostriatal tract had to be tracked separately to complete it in the atlas.', 'yeh2018'),
     ],
     connections: [
-      c('Diffusion tractography links the caudate nucleus with the inferior and middle temporal gyri.', 'leh2007'),
+      c('Diffusion tractography links the caudate nucleus with the inferior and middle temporal gyri (not part of the bundle shown).', 'leh2007'),
     ],
     functions: [],
     deficits: [],
     surgery: [],
     atlas: [],
-    measured: ['The atlas file holds only 123 (left) and 165 (right) streamlines, all shown.'],
+    measured: ['The atlas file holds only 123 (left) and 165 (right) streamlines, all shown. By the atlas’s own table the bundle reaches parietal and occipital areas (BA 5, 7, 17–19, 39), not the temporal ones.'],
   },
   // ---------------------------------------------------------------- posterior fossa tier
   {
@@ -631,7 +617,7 @@ export const TOPICS: TractTopicInput[] = [
     atlas: [],
   },
   {
-    id: 'wm_drtt', name: 'Dentato-rubro-thalamic tract', abbr: 'DRTT', aliases: ['dentato-rubro-thalamo-cortical tract', 'cerebello-thalamo-cortical pathway'], type: 'projection', tier: 'fossa',
+    id: 'wm_drtt', name: 'Dentato-rubro-thalamic tract, decussating', abbr: 'DRTT', aliases: ['dentato-rubro-thalamo-cortical tract', 'cerebello-thalamo-cortical pathway'], type: 'projection', tier: 'fossa',
     summary: 'Main cerebellar output pathway to the thalamus and cortex; a targeting tract in tremor surgery.',
     course: [
       c('From the dentate nucleus through the superior cerebellar peduncle and red nucleus to the ventrolateral thalamus and on to contralateral cortex.', 'palesi2015'),
@@ -649,6 +635,25 @@ export const TOPICS: TractTopicInput[] = [
       c('Tractographic display of the tract is used to plan stereotactic tremor surgery. The uncrossed part can be shown reliably with about 2 mm mean displacement, which should be allowed for; the crossed (decussating) part could not be reconstructed reliably in single subjects.', 'coenen2021'),
     ],
     atlas: [],
+    measured: ['The atlas file holds crossed and uncrossed streamlines; this tract shows the crossed ones, whose upper and lower ends lie on opposite sides of the midline: 1,727 of 3,698 (left) and 652 of 6,984 (right). Left and right are the side of the upper (thalamic and cortical) end. The uncrossed ones are the non-decussating DRTT.'],
+  },
+  {
+    // (the site audit's B4: the atlas file's DRTT split by crossing, as the DBS section shows it; the owner's choice)
+    id: 'wm_ndrtt', name: 'Dentato-rubro-thalamic tract, non-decussating', abbr: 'nDRTT', aliases: ['uncrossed DRTT'], type: 'projection', tier: 'fossa',
+    summary: 'The uncrossed part of the atlas’s dentato-rubro-thalamic tract: from the dentate nucleus to the thalamus and cortex of the same side.',
+    course: [
+      c('Tractography renders an uncrossed dentato-rubro-thalamic tract beside the crossed one; the uncrossed one can be depicted with good quality.', 'coenen2021'),
+    ],
+    connections: [
+      c('In stereotactic tractography it is tracked from the dentate nucleus, past the posterolateral red nucleus of the same side, to the precentral gyrus of the same side; the crossed tract goes to the opposite one.', 'coenen2021'),
+    ],
+    functions: [],
+    deficits: [],
+    surgery: [
+      c('Tractographic display of the tract is used to plan stereotactic tremor surgery. The uncrossed part can be shown reliably with about 2 mm mean displacement, which should be allowed for; the crossed (decussating) part could not be reconstructed reliably in single subjects.', 'coenen2021'),
+    ],
+    atlas: [],
+    measured: ['The uncrossed streamlines of the atlas’s DRTT file, whose upper and lower ends lie on the same side: 1,971 of 3,698 (left) and 6,332 of 6,984 (right). The crossed ones are the decussating DRTT.'],
   },
   {
     id: 'wm_ml', name: 'Medial lemniscus', abbr: 'ML', aliases: [], type: 'projection', tier: 'fossa',
@@ -667,6 +672,7 @@ export const TOPICS: TractTopicInput[] = [
       c('Brainstem surgical approaches (supracollicular, infracollicular, lateral mesencephalic, perioculomotor, peritrigeminal, anterolateral medullary and retro-olivary) have been mapped against the medial lemniscus and the other brainstem pathways in a tractography atlas.', 'meola2016'),
     ],
     atlas: [],
+    measured: ['Every streamline of the atlas bundle runs on past the thalamus to the cortex around the central sulcus (precentral and postcentral gyri, paracentral lobule), about 138 mm from the medulla: it includes the thalamocortical continuation of the lemniscal pathway.'],
   },
   {
     id: 'wm_rst', name: 'Reticulospinal tract', abbr: 'RST', aliases: ['corticoreticulospinal pathway'], type: 'projection', tier: 'fossa',
@@ -684,7 +690,7 @@ export const TOPICS: TractTopicInput[] = [
     deficits: [],
     surgery: [],
     atlas: [],
-    measured: ['In this atlas the tract’s streamlines run up to the cerebral cortex (mean length about 140 mm), so it includes the cortical (corticoreticular) limb.'],
+    measured: ['In this atlas the tract’s streamlines run up to the cerebral cortex (mean length about 140 mm), so it includes the cortical (corticoreticular) limb: their upper ends lie in prefrontal cortex (superior and middle frontal gyri; on the right also orbital), not in the motor cortex.'],
   },
   {
     id: 'wm_cpt_f', name: 'Corticopontine tract, frontal', abbr: 'CPT-F', aliases: ['frontopontine tract'], type: 'projection', tier: 'fossa',
@@ -817,7 +823,7 @@ export const GROUPS: TractGroup[] = [
   // ---------------------------------------------------------------- extended tier
   {
     id: 'ext_language', kind: 'function', tier: 'extended', name: 'Language and hearing', hemi: 'L', camera: 'lateral',
-    tractIds: ['wm_emc', 'wm_mdlf', 'wm_tpat', 'wm_ar'],
+    tractIds: ['wm_emc', 'wm_mdlf', 'wm_tpat'],
     rationale: [
       c('The extreme capsule and middle longitudinal fasciculus are among the pathways proposed to support language; their roles are debated.', 'dick2012'),
       c('Stimulating and resecting the left MdLF did not disturb language, so it is not essential for it.', 'dewitthamer2011'),
@@ -834,7 +840,7 @@ export const GROUPS: TractGroup[] = [
   },
   {
     id: 'ext_thalamic', kind: 'anatomy', tier: 'extended', name: 'Thalamic radiations', hemi: 'L', camera: 'lateral',
-    tractIds: ['wm_atr', 'wm_str', 'wm_ptr', 'wm_ar'],
+    tractIds: ['wm_atr', 'wm_str', 'wm_ptr'],
     rationale: [
       c('Diffusion tractography maps the connections between thalamus and cortex, reproducibly between individuals.', 'behrens2003'),
       c('The acoustic radiation is the auditory thalamocortical projection, from the medial geniculate nucleus.', 'maffei2019'),
@@ -856,7 +862,7 @@ export const GROUPS: TractGroup[] = [
   },
   {
     id: 'ext_all', kind: 'all', tier: 'extended', name: 'All extended tracts', hemi: 'L', camera: 'lateral',
-    tractIds: ['wm_mdlf', 'wm_tpat', 'wm_vof', 'wm_emc', 'wm_ac', 'wm_atr', 'wm_str', 'wm_ptr', 'wm_ar', 'wm_cs_a', 'wm_cs_s', 'wm_cs_p'],
+    tractIds: ['wm_mdlf', 'wm_tpat', 'wm_vof', 'wm_emc', 'wm_ac', 'wm_atr', 'wm_str', 'wm_ptr', 'wm_cs_a', 'wm_cs_s', 'wm_cs_p'],
     rationale: [],
   },
   // ---------------------------------------------------------------- posterior fossa tier
@@ -878,7 +884,7 @@ export const GROUPS: TractGroup[] = [
   },
   {
     id: 'fossa_brainstem', kind: 'anatomy', tier: 'fossa', name: 'Brainstem long tracts', hemi: 'both', camera: 'coronal',
-    tractIds: ['wm_ml', 'wm_rst', 'wm_drtt'],
+    tractIds: ['wm_ml', 'wm_rst', 'wm_drtt', 'wm_ndrtt'],
     rationale: [
       c('The brainstem leaves little room between nuclei and tracts; a population tractography atlas maps its pathways against the classic surgical approaches.', 'meola2016'),
       c('The corticospinal tract, a core tract, also runs through the brainstem: most of its axons cross at the pyramidal decussation.', 'welniarz2017'),
@@ -886,7 +892,7 @@ export const GROUPS: TractGroup[] = [
   },
   {
     id: 'fossa_all', kind: 'all', tier: 'fossa', name: 'All posterior fossa tracts', hemi: 'both', camera: 'posteriorOblique',
-    tractIds: ['wm_scp', 'wm_mcp', 'wm_icp', 'wm_drtt', 'wm_ml', 'wm_rst', 'wm_cpt_f', 'wm_cpt_p', 'wm_cpt_o'],
+    tractIds: ['wm_scp', 'wm_mcp', 'wm_icp', 'wm_drtt', 'wm_ndrtt', 'wm_ml', 'wm_rst', 'wm_cpt_f', 'wm_cpt_p', 'wm_cpt_o'],
     rationale: [],
   },
 ];

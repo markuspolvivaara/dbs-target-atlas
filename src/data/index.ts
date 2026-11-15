@@ -60,7 +60,7 @@ export function crossCheck(c: Content): string[] {
     i.corticalAreas.forEach((a) => has(w, a, cortex, 'cortical area'));
     [...i.targetMarkers, ...i.alternativeMarkers].forEach((t) => has(w, t, targets, 'target'));
     i.symptomIds.forEach((s) => has(w, s, syms, 'symptom'));
-    i.extraVolumes.forEach((v) => { if (MAN.get(v)?.type !== 'target') errs.push(`${w}: extra volume '${v}' is not a sweet-spot volume`); });
+    [...i.extraVolumes, ...i.alternativeVolumes].forEach((v) => { if (MAN.get(v)?.type !== 'target') errs.push(`${w}: extra volume '${v}' is not a sweet-spot volume`); });
   }
   for (const s of c.symptoms) {
     const w = `symptom ${s.id}`;
@@ -76,6 +76,7 @@ export function crossCheck(c: Content): string[] {
   for (const t of c.targets) {
     has(`target ${t.id}`, t.structureId, ids, 'structure');
     ref(`target ${t.id}`, t.refId);
+    t.moreRefIds.forEach((r) => ref(`target ${t.id}`, r));
     if (t.kind === 'sweetSpot' && !MANIFEST.structures.find((s) => s.id === t.structureId && s.type === 'target'))
       errs.push(`target ${t.id}: sweetSpot must point to a sweet-spot volume`);
   }

@@ -105,12 +105,12 @@ export const CCJ_MEASURES: CcjMeasure[] = [
   {
     id: 'adi', name: 'Atlanto-dens interval (ADI)', short: 'ADI', unit: 'mm',
     definition: { text: 'From the anterior arch of C1 to the closest anterior point of the dens, in the midsagittal plane.', refIds: FIDAN },
-    normal: { text: 'In 500 healthy adults on CT: median 1.45 mm (0.36–2.92 mm), a little higher in women (mean 1.54 against 1.36 mm); earlier studies of healthy controls report means of 1.10–2.29 mm. The paper also quotes, without the setting they come from, up to 3.5 mm as normal in adults and over 10 mm as pointing to rupture of the transverse ligament: such limits depend on the setting (trauma, inflammatory disease, children) and the imaging, and the atlas does not apply them as diagnostic thresholds.', refIds: FIDAN },
+    normal: { text: 'In 500 healthy adults on CT: median 1.45 mm (0.36–2.92 mm), a little higher in women (mean 1.54 against 1.36 mm); earlier studies of healthy controls report means of 1.10–2.29 mm. On radiographs the interval is normally under 3 mm in adults and under 5 mm in children; more than that suggests an anterior atlantoaxial dislocation. Children’s values differ, and the adult values on this page do not apply to them. Fidan 2026 also quotes, without the setting they come from, up to 3.5 mm as normal in adults and over 10 mm as pointing to rupture of the transverse ligament. Such limits depend on the setting (trauma, inflammatory disease, children) and the imaging; the atlas does not apply them as diagnostic thresholds.', refIds: ['fidan2026', 'li2025', 'yang2014'] },
   },
   {
     id: 'padi', name: 'Posterior atlanto-dens interval (PADI)', short: 'PADI', unit: 'mm',
     definition: { text: 'From the posterior border of the dens to the closest point of the posterior arch of C1: the space for the cord at C1–C2.', refIds: FIDAN },
-    normal: { text: 'In 500 adults on CT: median 19.31 mm (13.11–26.81 mm), larger in men. A threshold of more than 14 mm (on radiographs) is quoted, and values under 19 mm have been linked with neurological symptoms.', refIds: FIDAN },
+    normal: { text: 'In 500 adults on CT: median 19.31 mm (13.11–26.81 mm), larger in men. On radiographs more than 14 mm is quoted as the adult reference; in atlantoaxial dislocation a space for the cord (this interval) of less than 14 mm predicts paralysis.', refIds: ['fidan2026', 'yang2014'] },
   },
   {
     id: 'mcrae', name: 'McRae’s line (foramen magnum)', short: 'McRae', unit: 'mm',
@@ -120,17 +120,17 @@ export const CCJ_MEASURES: CcjMeasure[] = [
   {
     id: 'bdi', name: 'Basion–dens interval (BDI)', short: 'BDI', unit: 'mm',
     definition: { text: 'From the basion to the tip of the dens.', refIds: FIDAN },
-    normal: { text: 'In 500 adults on CT: median 5.33 mm (1.66–9.34 mm), no difference between the sexes. Over 9 mm has been taken to suggest injury (controls 4.7 ± 1.7 mm).', refIds: FIDAN },
+    normal: { text: 'In 500 adults on CT: median 5.33 mm (1.66–9.34 mm), no difference between the sexes. Over 9 mm has been taken to suggest injury (controls 4.7 ± 1.7 mm). Harris’s limit on radiographs (400 adults, 50 children): 12 mm or less in adults; in children the interval is unreliable. For atlanto-occipital dissociation after trauma, the basion–dens and basion–axial intervals depend on a stable C1–C2 complex, and readers agreed on them poorly (kappa 0.57 and 0.25); the condyle–C1 interval on CT was the reliable measure.', refIds: ['fidan2026', 'alves2020'] },
   },
   {
     id: 'bai', name: 'Basion–axial interval (BAI)', short: 'BAI', unit: 'mm',
     definition: { text: 'From the basion to the rostral extension of the posterior axial line, the line along the back of the C2 body; used to assess vertical translocation.', refIds: FIDAN },
-    normal: { text: 'In 500 adults on CT: median 7.14 mm (2.54–11.34 mm), slightly larger in men.', refIds: FIDAN },
+    normal: { text: 'In 500 adults on CT: median 7.14 mm (2.54–11.34 mm), slightly larger in men. Harris’s limit on radiographs: 12 mm or less, as in 98% of the adults measured. As a sign of atlanto-occipital dissociation after trauma it depends on a stable C1–C2 complex and readers agreed on it poorly; the condyle–C1 interval on CT was the reliable measure.', refIds: ['fidan2026', 'alves2020'] },
   },
   {
     id: 'cca', name: 'Clivus–canal angle (Wackenheim)', short: 'Clivus–canal', unit: '°',
     definition: { text: 'Between the posterior surface of the clivus and the posterior axial line along the back of the dens; used to assess the risk of brainstem compression.', refIds: FIDAN },
-    normal: { text: 'In 500 adults on CT: median 154.14° (116.03–179.62°).', refIds: FIDAN },
+    normal: { text: 'In 500 adults on CT: median 154.14° (116.03–179.62°), a little larger in women (mean 155.8° against 153.5°). On MRI, 33 normal subjects averaged 148° (129–175°), against 119° in 24 patients with basilar invagination (a sharper angle).', refIds: ['fidan2026', 'botelho2013'] },
   },
 ];
 
@@ -173,6 +173,14 @@ export const STATEMENTS = {
   isncsci: {
     text: 'Key muscles and other movements by root as listed on the ISNCSCI worksheet (the standard for neurological examination in spinal cord injury).',
     refIds: ['isncsci2019', 'rupp2021'],
+  },
+  radiculopathyLumbar: {
+    text: 'A lumbosacral radiculopathy by root, from a review’s table: where the pain runs, where sensation is lost or altered, which movements weaken and which reflex may be reduced. Most muscles receive more than one root, so a single root’s lesion may cause no weakness.',
+    refIds: ['bateman2025'],
+  },
+  radiculopathyCervical: {
+    text: 'Each cervical root with the disc it leaves at, its sensory area, the movements it serves and its reflex, from a review’s table (adapted from Bartleson 2006).',
+    refIds: ['hasan2025'],
   },
   thoracicForamen: {
     text: 'The heads of the ribs and their joint capsules form part of the anteroinferior wall of the T1–T10 foramina; a rib head can seem to form the foramen’s floor (a “false foramen”), and the true foramen shows only once the rib head and its facet are removed.',
@@ -235,8 +243,8 @@ export const STATEMENTS = {
     refIds: [],
   },
   publishedC7: {
-    text: 'Published: the C7 pedicle axis on CT in 53 patients (the sagittal angle there to the horizontal of the image, not to the endplate) and the means of nine earlier studies.',
-    refIds: ['jiang2024'],
+    text: 'Published: the C7 pedicle’s outer width and height on CT in 74 patients, outer cortex to outer cortex as here (Chanplakorn 2014); the pedicle axis on CT in 53 patients, with the transverse angles of nine earlier studies (Jiang 2024). Jiang takes the sagittal angle to the horizontal of the image, not to the endplate, and its table gives no sign for the earlier studies’ sagittal angles, so none is shown beside the one measured here. Jiang’s widest screw path along the axis (a cylinder that breaches no cortex) averaged 5.5 mm on each side.',
+    refIds: ['chanplakorn2014', 'jiang2024'],
   },
   grades: {
     text: 'Breach grades after Gertzbein and Robbins: A no breach, B up to 2 mm, C 2–4 mm, D 4–6 mm, E more than 6 mm; the direction is medial, lateral, cranial or caudal.',
@@ -255,8 +263,8 @@ export const STATEMENTS = {
     refIds: ['wang2023', 'moncadahabib2025', 'nkwerem2024'],
   },
   publishedThoracic: {
-    text: 'Published: the range of the mean values of the studies that Verma 2020 tabulates beside its own 20 dry vertebral columns (3 to 9 studies per value and level). There the sagittal angle is the angle between the pedicle axis and the upper border of the vertebral body.',
-    refIds: ['verma2020'],
+    text: 'Published: the mean values of the studies that Verma 2020 tabulates beside its own 20 dry vertebral columns (3 to 9 studies per value and level), as their median and the smallest and largest, each with the study that reported it. The studies measured dry vertebrae, cadavers or CT, in different populations. A negative transverse angle means the pedicle points outwards, as at T12 in a cadaver study (−10.0°). The sagittal angle there is the angle between the pedicle axis and the upper border of the vertebral body.',
+    refIds: ['verma2020', 'singh2011'],
   },
   fill: {
     text: 'Recommended ratios of screw diameter to pedicle width range from 80% to 125%; perforations were fewest at 80%, the ratio recommended for less experienced surgeons.',
@@ -283,6 +291,25 @@ export const ROOT_FUNCTION: Record<string, RootFunction> = {
   S1: { keyMuscle: 'Ankle plantar flexors', otherMovements: ['Hallux adduction'], sensoryPoint: { view: 'back', x: 44, y: 94 } },
 };
 
+/** A root's picture in radiculopathy, from two reviews' tables: L1-S1 from Bateman 2025 (Table 1: pain, sensory loss,
+ * weakness, the reflex that may be reduced), C4-T1 from Hasan 2025 (Table 3, after Bartleson 2006: the disc the root
+ * leaves at, sensory area, motor function, reflex). A reflex of null: none listed for the root. */
+export interface Radiculopathy { pain?: string; disc?: string; sensory: string; weakness: string; reflex: string | null }
+export const RADICULOPATHY: Record<string, Radiculopathy> = {
+  L1: { pain: 'Inguinal region', sensory: 'Inguinal region', weakness: 'Hip flexion', reflex: null },
+  L2: { pain: 'Anterior groin, anterior proximal thigh', sensory: 'Anterior proximal thigh', weakness: 'Hip flexion', reflex: null },
+  L3: { pain: 'Anterior mid-thigh, medial knee', sensory: 'Medial thigh, medial knee', weakness: 'Knee extension, hip adduction', reflex: 'Patellar, may be reduced or absent' },
+  L4: { pain: 'Medial leg', sensory: 'Medial leg', weakness: 'Knee extension, hip adduction, ankle dorsiflexion', reflex: 'Patellar, may be reduced or absent' },
+  L5: { pain: 'Anterolateral leg, dorsum of the foot', sensory: 'Anterolateral leg, dorsum of the foot', weakness: 'Ankle dorsiflexion, toe extension, ankle inversion and eversion, knee flexion, hip abduction', reflex: 'Medial hamstring and ankle evertor, may be reduced or absent' },
+  S1: { pain: 'Posterior thigh, posterior leg, sole of the foot', sensory: 'Sole of the foot', weakness: 'Ankle plantar flexion, toe flexion, knee flexion, hip extension', reflex: 'Achilles, may be reduced or absent' },
+  C4: { disc: 'C3–C4', sensory: 'Suprascapular and supraclavicular area, top of the shoulder', weakness: 'Usually none', reflex: 'None' },
+  C5: { disc: 'C4–C5', sensory: 'Lateral arm and forearm', weakness: 'Shoulder abduction, elbow flexion', reflex: 'Biceps, brachioradialis' },
+  C6: { disc: 'C5–C6', sensory: 'Anterolateral arm, forearm and hand, thumb and index finger', weakness: 'Shoulder abduction, elbow flexion, forearm pronation', reflex: 'Biceps, brachioradialis' },
+  C7: { disc: 'C6–C7', sensory: 'Dorsolateral forearm and hand, index and middle fingers', weakness: 'Elbow, wrist and finger extension', reflex: 'Triceps' },
+  C8: { disc: 'C7–T1', sensory: 'Medial forearm and hand, ring and little fingers', weakness: 'Finger abduction, adduction and flexion', reflex: 'None, or finger flexor' },
+  T1: { disc: 'T1–T2', sensory: 'Medial arm and forearm', weakness: 'Finger abduction, adduction and flexion', reflex: 'None, or finger flexor' },
+};
+
 export type LesionZone = 'paracentral' | 'foraminal' | 'farlateral';
 export const LESION_ZONES: [LesionZone, string][] = [['paracentral', 'Paracentral'], ['foraminal', 'Foraminal'], ['farlateral', 'Far lateral']];
 /** Which root rule a disc follows: the neck's wherever the upper vertebra is cervical (C7-T1 too), else the lumbar one. */
@@ -302,6 +329,17 @@ export function affectedRoot(pair: string, zone: LesionZone, region: DiscRegion 
   const [up, down] = pair.split('-');
   if (region === 'cervical') return down === 'T1' ? 'C8' : down;
   return zone === 'paracentral' ? down : up;
+}
+/** Where a herniation lies: in the midline, or in one of the zones beside it. */
+export type HerniaZone = 'central' | LesionZone;
+/** The zones offered at a disc by the level card and the drilling tool: central, then the zones beside the midline. */
+export function herniaZones(region: DiscRegion): [HerniaZone, string][] {
+  return [['central', 'Central'], ...lesionZones(region)];
+}
+/** The root a herniation in a zone presses on: none for a central one (it presses on the dural sac and what the sac
+ * holds: lumbar the cauda equina, cervical the cord), else affectedRoot's. */
+export function zoneRoot(pair: string, zone: HerniaZone, region: DiscRegion = discRegion(pair)): string | null {
+  return zone === 'central' ? null : affectedRoot(pair, zone, region);
 }
 
 /** Virtual-screw techniques: how the start position and the start size are set (spine_screw.py does it). */
@@ -624,6 +662,14 @@ export const HERNIA_STATEMENTS = {
   types: {
     text: 'Four descriptions, each on its own: shape — a protrusion’s base is wider than the displaced material in at least one plane, an extrusion’s displaced fragment wider than its neck; containment — a contained herniation is covered by the posterior longitudinal ligament and/or outer annulus fibres, an uncontained one is not (extrusions are usually uncontained); continuity — a sequestration has lost continuity with the disc of origin; and migration — the fragment displaced from where it arose, whatever its continuity.',
     refIds: ['angileri2026', 'eslami2026'],
+  },
+  caudaEquina: {
+    text: 'A massive central lumbar disc herniation is the commonest cause of cauda equina syndrome (about 45–55% of cases), most often at L4–L5 and L5–S1. Its classic picture: radicular pain in both legs, saddle anaesthesia, bladder and bowel dysfunction, and varying weakness or loss of reflexes in the legs.',
+    refIds: ['aduri2026'],
+  },
+  migrated: {
+    text: 'A fragment can migrate up or down from its disc. Migration is graded from just past the disc’s upper or lower margin (low grade) to beyond the lower margin of the pedicle above or below (very high grade). A cranially migrated lumbar herniation can press on the exiting root, in the zone just inside the foramen (preforaminal) and in the foramen.',
+    refIds: ['ahn2022', 'ikuta2013'],
   },
   retract: {
     text: 'In an open microdiscectomy a hemilaminectomy and partial medial facetectomy are done with a high-speed drill and Kerrison rongeurs, and the ligamentum flavum is removed, exposing the root crossing over the disc; the root and the thecal sac are then retracted medially and the annulus exposed.',

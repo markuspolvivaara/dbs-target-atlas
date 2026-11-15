@@ -21,6 +21,7 @@ import gzip
 import io
 import json
 import sys
+import zlib
 from pathlib import Path
 
 import h5py
@@ -414,6 +415,11 @@ def read_trk_gz(path: Path) -> list[np.ndarray]:
     return [np.asarray(s, float) for s in t.streamlines]
 
 
+def crossed(sl: np.ndarray) -> bool:
+    """A streamline whose highest and lowest points lie on opposite sides of the midline (the decussating DRTT)."""
+    return bool(sl[np.argmax(sl[:, 2]), 0] * sl[np.argmin(sl[:, 2]), 0] < 0)
+
+
 def split_midline(sl: np.ndarray) -> dict[str, list[np.ndarray]]:
     """Cut a commissural streamline at x = 0 so each hemisphere can be shown on its own."""
     out: dict[str, list[np.ndarray]] = {"L": [], "R": []}
@@ -509,13 +515,21 @@ def build_wm(report: dict) -> dict:
                     per_side[side].extend(p for p in pieces if len(p) >= 2)
         else:
             per_side = {s: read_trk_gz(base / t.files[s]) for s in ("L", "R")}
-        nodes, rep = line_nodes(per_side, C.WM_BUDGET, rng)
+        if t.replays or t.withdrawn:
+            line_nodes(per_side, C.WM_BUDGET, rng)  # the draw as before the split or withdrawal (C.WmTract.replays)
+        if t.withdrawn:
+            continue
+        if t.keep:
+            per_side = {s: [sl for sl in v if crossed(sl) == (t.keep == "crossed")] for s, v in per_side.items()}
+            nodes, rep = line_nodes(per_side, C.WM_BUDGET, np.random.default_rng([C.RANDOM_SEED, zlib.crc32(t.id.encode())]))
+        else:
+            nodes, rep = line_nodes(per_side, C.WM_BUDGET, rng)
         write_glb(BUILD / "wm" / f"{t.id}.glb", nodes, {"id": t.id})
         report[t.id] = rep
         print(f"wm {t.id:11s} L {rep['L']['streamlines']}/{rep['L']['sourceStreamlines']}  R {rep['R']['streamlines']}/{rep['R']['sourceStreamlines']}")
     table = read_connectome(RAW / "hcp1065" / C.HCP1065_CONNECTOME)
     conn = {}
-    for t in C.WM_TRACTS:
+    for t in C.WM_SHOWN:
         if not t.connectome:
             continue
         col = table[t.connectome]

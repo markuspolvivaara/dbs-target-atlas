@@ -500,10 +500,10 @@
   },
   {
    "id": "vo",
-   "name": "Ventral oral complex (Vo)",
+   "name": "VLa (Morel), approximately Voa",
    "aliases": [
     "Vo",
-    "Voa/Vop",
+    "Voa",
     "VLa (Morel)"
    ],
    "type": "nucleus",
@@ -526,7 +526,7 @@
     "https://doi.org/10.1016/j.neuroimage.2009.10.042"
    ],
    "refIds": [],
-   "derivation": "Morel VLa label displayed as Vo, following the brief's nomenclature mapping (Vo = VA/VLa).",
+   "derivation": "Morel's VLa label, approximately Hassler's Voa (Ilinsky 2018); the bulk of Hassler's Vop lies in the cerebellar territory, with the Vim.",
    "centroid": {
     "L": [
      -14.599,
@@ -1405,15 +1405,15 @@
   },
   {
    "id": "ss_dyt",
-   "name": "Dystonia sweet spot (Hollunder 2024)",
+   "name": "Dystonia sweet spot, STN DBS (Hollunder 2024)",
    "aliases": [],
    "type": "target",
    "file": "assets/meshes/ss_dyt.glb",
    "bytes": 17568,
    "colour": {
-    "token": "gpi",
-    "light": "#1F7F5A",
-    "dark": "#52B98E"
+    "token": "stn",
+    "light": "#946609",
+    "dark": "#E3AC3A"
    },
    "dataset": "hollunder2024",
    "source": "Human Dysfunctome Atlas (Hollunder 2024)",
@@ -1455,15 +1455,15 @@
   },
   {
    "id": "ss_ts",
-   "name": "Tourette sweet spot (Hollunder 2024)",
+   "name": "Tourette sweet spot, STN DBS (Hollunder 2024)",
    "aliases": [],
    "type": "target",
    "file": "assets/meshes/ss_ts.glb",
    "bytes": 17916,
    "colour": {
-    "token": "cm",
-    "light": "#127C94",
-    "dark": "#4FB8D1"
+    "token": "stn",
+    "light": "#946609",
+    "dark": "#E3AC3A"
    },
    "dataset": "hollunder2024",
    "source": "Human Dysfunctome Atlas (Hollunder 2024)",
@@ -2567,16 +2567,16 @@
   },
   {
    "id": "sw_dyt",
-   "name": "Dystonia sweet streamlines (Hollunder 2024)",
+   "name": "Dystonia sweet streamlines, STN DBS (Hollunder 2024)",
    "aliases": [],
    "type": "tract",
    "role": "response",
    "file": "assets/tracts/sw_dyt.glb",
    "bytes": 162952,
    "colour": {
-    "token": "gpi",
-    "light": "#1F7F5A",
-    "dark": "#52B98E"
+    "token": "stn",
+    "light": "#946609",
+    "dark": "#E3AC3A"
    },
    "dataset": "hollunder2024",
    "source": "Human Dysfunctome Atlas (Hollunder 2024)",
@@ -2615,16 +2615,16 @@
   },
   {
    "id": "sw_ts",
-   "name": "Tourette sweet streamlines (Hollunder 2024)",
+   "name": "Tourette sweet streamlines, STN DBS (Hollunder 2024)",
    "aliases": [],
    "type": "tract",
    "role": "response",
    "file": "assets/tracts/sw_ts.glb",
    "bytes": 184192,
    "colour": {
-    "token": "cm",
-    "light": "#127C94",
-    "dark": "#4FB8D1"
+    "token": "stn",
+    "light": "#946609",
+    "dark": "#E3AC3A"
    },
    "dataset": "hollunder2024",
    "source": "Human Dysfunctome Atlas (Hollunder 2024)",

@@ -1212,8 +1212,6 @@ Tracked here and in the final report:
   subsets of the Hollunder 2024 PD sweet streamlines instead.
 - **Circuit edges without a tract file.** STN to GPi/SNr, nigral output to the brainstem, Vim to
   M1, Vo to SMA, CM to striatum and to sensorimotor cortex. Each card lists these.
-- **Published Vo coordinates** (Voa/Vop junction). Not in the attached content; the Vo marker is
-  the Morel VLa centroid.
 - **vmPFC.** Shown with the Desikan-Killiany medial orbitofrontal label as a proxy.
 - **Spine, later phases.** Reflexes per root (no source with checkable text yet); S2-alar-iliac screw (needs the
   dorsal sacral foramina located on this CT); Kambin's triangle and lumbar approach presets. Cervical: the vertebral

@@ -116,7 +116,7 @@ def main() -> int:
 def write_wm_manifest(rep: dict) -> dict:
     """wm-manifest.json: the white-matter section's tracts (HCP-1065), kept apart from the DBS assets."""
     items = []
-    for t in C.WM_TRACTS:
+    for t in C.WM_SHOWN:
         f = f"assets/wm/{t.id}.glb"
         r = rep[t.id]
         items.append({

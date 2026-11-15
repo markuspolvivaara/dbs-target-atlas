@@ -186,6 +186,7 @@
   "moncadahabib2025": "Table 2: pedicle transverse angle (angle between the pedicle axis and the vertebral midline), mean +- SD",
   "nkwerem2024": "Table 1: transverse angle per level, mean +- SD",
   "kshettry2015": "Abstract, results: share of the ventral canal's width exposed after each successive resection, per region (%)",
+  "chanplakorn2014": "Table 2: the C7 pedicle's outer width and outer height (mm) per side, mean +- SD",
   "jiang2024": "Table 1: the C7 pedicle axis (trajectory A) per side, mean +- SD; Table 4: C7 transverse and sagittal angles of earlier studies (means)",
   "verma2020": "Tables 1-4: thoracic pedicle width, height (mm), transverse and sagittal angle (deg) per level, mean of each study compared (the last column: Verma 2020's own)"
  },
@@ -691,6 +692,29 @@
      "Lee 2010": -2.0,
      "Mahiphot 2019": -5.6
     }
+   },
+   "outerChanplakorn": {
+    "width": {
+     "R": [
+      6.54,
+      0.99
+     ],
+     "L": [
+      6.6,
+      1.0
+     ]
+    },
+    "height": {
+     "R": [
+      6.83,
+      0.82
+     ],
+     "L": [
+      6.72,
+      0.91
+     ]
+    },
+    "n": 74
    }
   }
  }
