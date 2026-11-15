@@ -41,6 +41,12 @@ commit and push it.
 - v1's posterior fossa: `1044aff` (the far lateral view's two sliders on v1 too; its step's samples seeded, so a
   rebuild repeats; the cerebellar arteries' tubes no longer fold). Its brainstem moved at most 0.35 mm, and
   `skullbase_v1_endonasal.py`, which reads it, was not rerun: the user's endonasal rework replaces that data.
+- The cerebellar arteries out of the cerebellum (the user saw the PICA running through it): v1 `c269048` (its
+  onto-the-surface step filled open lobules as a shell: half of the PICA lay inside), the default model `03a4bfb`
+  (`skullbase_v3_clearance.py`: lobules filled one by one, the fitted courses pushed out pose by pose, the AICA and
+  SCA given shapes). Both validators now hold every pose to under 3 % inside and 1 mm deep. Upstream,
+  `skullbase_v3.hindbrain_clearance` still fills each pf file half whole (its overlapping lobules cancel out); the
+  clearance step lifts what that leaves, so a full rebuild converges, but fixing it there too would be cleaner.
 - Still open: v1's cameras (v1 keeps its old view directions). `skullbase_v1_brain.py` still samples surfaces
   unseeded (two `m.sample` calls): seed them (`seed=0`) when v1's cortex is next rebuilt, or a rebuild will not repeat.
 - Pipeline data: the worktree has its own `pipeline/data/build` (its `raw` is a link to the main checkout's). These
