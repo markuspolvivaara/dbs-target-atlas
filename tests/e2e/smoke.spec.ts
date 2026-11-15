@@ -447,7 +447,7 @@ test('tract card: sourced sections, measured connections, highlight and the URL'
   await page.locator('.tract-btn[data-tract="wm_ifof"]').click();
   const card = page.locator('.card.sel');
   await expect(card.locator('h2')).toHaveText('Inferior fronto-occipital fasciculus (IFOF)');
-  for (const dt of ['Course', 'Connections', 'Cortical connections measured in the atlas', 'Function', 'Surgical relevance', 'Geometry']) await expect(card.locator('dt', { hasText: dt }).first()).toBeVisible();
+  for (const dt of ['Course', 'Connections', 'Brodmann areas the bundle touches', 'Function', 'Surgical relevance', 'Geometry']) await expect(card.locator('dt', { hasText: dt }).first()).toBeVisible();
   await expect(card.locator('.areas')).toContainText('Left: BA');
   // every list item carries at least one source link
   const items = card.locator('.evidence li');
@@ -508,7 +508,8 @@ test('core and extended tracts stay separate; the switch moves between them', as
   await page.locator('.tier-btn[data-tier="extended"]').click();
   await settle(page);
   expect(new URL(page.url()).hash).toContain('g=ext_language');
-  await expect(page.locator('.tract-btn')).toHaveCount(4);
+  // (three since the acoustic radiation was withdrawn: the site audit's B4)
+  await expect(page.locator('.tract-btn')).toHaveCount(3);
   // only extended groups are offered while the extended set is open
   await expect(page.locator('.grp-chips .chip', { hasText: 'Vision' })).toHaveCount(0);
   // "All" is offered first in the function row of each set

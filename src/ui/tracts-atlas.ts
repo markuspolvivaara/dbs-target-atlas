@@ -225,12 +225,18 @@ export class TractsAtlasPage {
     const m = WM_MAN.get(t.id)!;
     const close = h('button', { type: 'button', class: 'close', 'aria-label': 'Close', onclick: () => this.update((s) => { s.sel = null; }) }, '×');
     const section = (title: string, cl: Claim[]) => (cl.length ? [h('dt', {}, title), h('dd', {}, claimList(cl))] : null);
-    const areas = (side: 'L' | 'R') => connectedAreas(t.id, side).map((a) => a.area.replace(/^BA/, '')).join(', ');
+    // (the site audit's B-007: an area is listed when the bundle overlaps it, which is not the same as connecting to it;
+    // an empty side says so instead of printing "BA" alone)
+    const pct = Math.round(CONNECTOME.min * 100);
+    const areas = (side: 'L' | 'R') => {
+      const a = connectedAreas(t.id, side).map((x) => x.area.replace(/^BA/, ''));
+      return a.length ? `BA ${a.join(', ')}` : `none in at least ${pct}% of subjects`;
+    };
     const measured = CONNECTOME.tracts[t.id]
-      ? [h('dt', {}, 'Cortical connections measured in the atlas'),
+      ? [h('dt', {}, 'Brodmann areas the bundle touches'),
         h('dd', {},
-          h('p', { class: 'areas' }, h('strong', {}, 'Left: '), `BA ${areas('L')}`, h('br'), h('strong', {}, 'Right: '), `BA ${areas('R')}`),
-          h('p', { class: 'aside' }, `Brodmann areas the tract reached in at least ${Math.round(CONNECTOME.min * 100)}% of the 1065 subjects, from the published tract-to-region table. Group-level tractography can include false connections.`, ' ', refs(['yeh2022'])))]
+          h('p', { class: 'areas' }, h('strong', {}, 'Left: '), areas('L'), h('br'), h('strong', {}, 'Right: '), areas('R')),
+          h('p', { class: 'aside' }, `From the published tract-to-region table: an area is listed when the bundle overlaps it in at least ${pct}% of the 1065 subjects. Some are only passed on the way, not connected: by the atlas paper’s own account, the insula for the IFOF.`, ' ', refs(['yeh2022'])))]
       : null;
     const groups = WM.groups.filter((g) => g.kind !== 'all' && g.tractIds.includes(t.id));
     return h('article', { class: 'card sel', style: `--accent: var(--c-${m.colour.token})` }, close,

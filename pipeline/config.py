@@ -393,6 +393,16 @@ class WmTract:
     files: dict[str, str]  # side -> path inside the zip, or {"midline": path} (split at x = 0)
     connectome: str | None = None  # column in the tract-to-region table (Brodmann sheet)
     tier: str = "core"  # core | extended | fossa (posterior fossa); shown separately in the app
+    # Only the streamlines that cross the midline ("crossed": upper and lower ends on opposite sides) or that do not
+    # ("uncrossed"): the DRTT shown as two tracts, as the DBS section does (the site audit's B4, the owner's choice).
+    # A split tract draws from a random stream of its own.
+    keep: str | None = None
+    # The tract's draw from the shared random stream is still made as it was before the split or withdrawal, so the
+    # tracts after it keep their streamlines.
+    replays: bool = False
+    # Not written or listed (the acoustic radiation: its atlas bundle ends beside the atrium, about 22 mm from
+    # Heschl's gyrus; B4, the owner's choice), but its draw is replayed.
+    withdrawn: bool = False
 
 
 def _lr(folder: str, stem: str) -> dict[str, str]:
@@ -424,7 +434,7 @@ WM_TRACTS: list[WmTract] = [
     WmTract("wm_atr", "Anterior thalamic radiation", "ATR", "wmATR", "projection", _lr("projection", "TR_A"), "CTh_A", "extended"),
     WmTract("wm_str", "Superior thalamic radiation", "STR", "wmSTR", "projection", _lr("projection", "TR_S"), "CTh_S", "extended"),
     WmTract("wm_ptr", "Posterior thalamic radiation", "PTR", "wmPTR", "projection", _lr("projection", "TR_P"), "CTh_P", "extended"),
-    WmTract("wm_ar", "Acoustic radiation", "AR", "wmAR", "projection", _lr("projection", "AR"), None, "extended"),
+    WmTract("wm_ar", "Acoustic radiation", "AR", "wmAR", "projection", _lr("projection", "AR"), None, "extended", withdrawn=True),
     WmTract("wm_cs_a", "Corticostriatal tract, anterior", "CStr-A", "wmCSA", "projection", _lr("projection", "CS_A"), "CStr_A", "extended"),
     WmTract("wm_cs_s", "Corticostriatal tract, superior", "CStr-S", "wmCSS", "projection", _lr("projection", "CS_S"), "CStr_S", "extended"),
     WmTract("wm_cs_p", "Corticostriatal tract, posterior", "CStr-P", "wmCSP", "projection", _lr("projection", "CS_P"), "CStr_P", "extended"),
@@ -432,13 +442,19 @@ WM_TRACTS: list[WmTract] = [
     WmTract("wm_scp", "Superior cerebellar peduncle", "SCP", "wmSCP", "cerebellar", {"midline": "cerebellum/SCP.trk.gz"}, None, "fossa"),
     WmTract("wm_mcp", "Middle cerebellar peduncle", "MCP", "wmMCP", "cerebellar", {"midline": "cerebellum/MCP.trk.gz"}, None, "fossa"),
     WmTract("wm_icp", "Inferior cerebellar peduncle", "ICP", "wmICP", "cerebellar", _lr("cerebellum", "ICP"), None, "fossa"),
-    WmTract("wm_drtt", "Dentato-rubro-thalamic tract", "DRTT", "wmDRTT", "projection", _lr("projection", "DRTT"), None, "fossa"),
+    WmTract("wm_drtt", "Dentato-rubro-thalamic tract, decussating", "DRTT", "wmDRTT", "projection", _lr("projection", "DRTT"), None, "fossa",
+            keep="crossed", replays=True),
+    WmTract("wm_ndrtt", "Dentato-rubro-thalamic tract, non-decussating", "nDRTT", "wmNDRTT", "projection", _lr("projection", "DRTT"), None, "fossa",
+            keep="uncrossed"),
     WmTract("wm_ml", "Medial lemniscus", "ML", "wmML", "projection", _lr("projection", "ML"), None, "fossa"),
     WmTract("wm_rst", "Reticulospinal tract", "RST", "wmRST", "projection", _lr("projection", "RST"), None, "fossa"),
     WmTract("wm_cpt_f", "Corticopontine tract, frontal", "CPT-F", "wmCPTF", "projection", _lr("projection", "CPT_F"), None, "fossa"),
     WmTract("wm_cpt_p", "Corticopontine tract, parietal", "CPT-P", "wmCPTP", "projection", _lr("projection", "CPT_P"), None, "fossa"),
     WmTract("wm_cpt_o", "Corticopontine tract, occipital", "CPT-O", "wmCPTO", "projection", _lr("projection", "CPT_O"), None, "fossa"),
 ]
+
+# the tracts written and listed (the withdrawn one is only replayed)
+WM_SHOWN: list[WmTract] = [t for t in WM_TRACTS if not t.withdrawn]
 # a connectome entry counts as a connection of the tract when at least this fraction of the
 # 1065 individuals showed it (Yeh 2022: ~85% of entries are >95% or <5%)
 CONNECTOME_MIN = 0.95

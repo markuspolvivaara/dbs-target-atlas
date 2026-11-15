@@ -1199,58 +1199,6 @@
    }
   },
   {
-   "id": "wm_ar",
-   "name": "Acoustic radiation",
-   "aliases": [
-    "AR"
-   ],
-   "type": "tract",
-   "role": "tract",
-   "file": "assets/wm/wm_ar.glb",
-   "bytes": 133328,
-   "colour": {
-    "token": "wmAR",
-    "light": "#C2384B",
-    "dark": "#E8B0B7"
-   },
-   "dataset": "hcp1065",
-   "source": "HCP-1065 population-averaged tractography atlas (Yeh 2022)",
-   "licence": "CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
-   "citation": [
-    "Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.",
-    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1038/s41467-022-32595-4",
-    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
-   ],
-   "refIds": [],
-   "derivation": "Up to 300 streamlines per hemisphere (fixed seed, the same number on both sides, so on-screen density says nothing about tract size or asymmetry), resampled to 2 mm.",
-   "hcp": "confirmed",
-   "category": "projection",
-   "tier": "extended",
-   "streamlines": {
-    "L": 300,
-    "R": 300
-   },
-   "sourceStreamlines": {
-    "L": 2252,
-    "R": 654
-   },
-   "centroid": {
-    "L": [
-     -27.4,
-     -32.18,
-     7.65
-    ],
-    "R": [
-     29.69,
-     -32.63,
-     9.02
-    ]
-   }
-  },
-  {
    "id": "wm_cs_a",
    "name": "Corticostriatal tract, anterior",
    "aliases": [
@@ -1564,14 +1512,14 @@
   },
   {
    "id": "wm_drtt",
-   "name": "Dentato-rubro-thalamic tract",
+   "name": "Dentato-rubro-thalamic tract, decussating",
    "aliases": [
     "DRTT"
    ],
    "type": "tract",
    "role": "tract",
    "file": "assets/wm/wm_drtt.glb",
-   "bytes": 292848,
+   "bytes": 306776,
    "colour": {
     "token": "wmDRTT",
     "light": "#235C42",
@@ -1598,19 +1546,71 @@
     "R": 300
    },
    "sourceStreamlines": {
-    "L": 3698,
-    "R": 6984
+    "L": 1727,
+    "R": 652
    },
    "centroid": {
     "L": [
-     -11.39,
-     -14.07,
-     9.08
+     -8.4,
+     -8.31,
+     8.24
     ],
     "R": [
-     14.55,
-     -21.66,
-     10.19
+     8.8,
+     -8.0,
+     6.76
+    ]
+   }
+  },
+  {
+   "id": "wm_ndrtt",
+   "name": "Dentato-rubro-thalamic tract, non-decussating",
+   "aliases": [
+    "nDRTT"
+   ],
+   "type": "tract",
+   "role": "tract",
+   "file": "assets/wm/wm_ndrtt.glb",
+   "bytes": 289308,
+   "colour": {
+    "token": "wmNDRTT",
+    "light": "#C2384B",
+    "dark": "#E8B0B7"
+   },
+   "dataset": "hcp1065",
+   "source": "HCP-1065 population-averaged tractography atlas (Yeh 2022)",
+   "licence": "CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+   "citation": [
+    "Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.",
+    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1038/s41467-022-32595-4",
+    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
+   ],
+   "refIds": [],
+   "derivation": "Up to 300 streamlines per hemisphere (fixed seed, the same number on both sides, so on-screen density says nothing about tract size or asymmetry), resampled to 2 mm.",
+   "hcp": "confirmed",
+   "category": "projection",
+   "tier": "fossa",
+   "streamlines": {
+    "L": 300,
+    "R": 300
+   },
+   "sourceStreamlines": {
+    "L": 1971,
+    "R": 6332
+   },
+   "centroid": {
+    "L": [
+     -14.25,
+     -19.74,
+     10.42
+    ],
+    "R": [
+     14.94,
+     -22.29,
+     10.36
     ]
    }
   },

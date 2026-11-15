@@ -145,7 +145,7 @@ def main() -> int:
     t1d = np.asanyarray(t1.dataobj).astype(np.float32)
     wm_ref = float(np.percentile(t1d[head], 75))
     shifts = [np.array(v, float) for v in np.ndindex(3, 3, 3)]
-    for t in C.WM_TRACTS:
+    for t in C.WM_SHOWN:
         r = rep[t.id]
         for side in ("L", "R"):
             x = r[side]["meanX"]

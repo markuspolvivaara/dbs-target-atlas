@@ -48,7 +48,22 @@ commit and push it.
   rebuilt from Europe PMC records with DOIs (barbe2018 and barrow had pointed to other papers); the References page
   lists only this section's datasets (107 references, was 197). The name labels' layout now tries the other
   direction and side before it drops a name (the SNr's move re-framed the Parkinson's view and hid "STN"). Local
-  commit on `fix/b1-dbs-views`, not pushed.
+  commit on `fix/b1-dbs-views`; pushed at the user's word.
+- B4, the white-matter tract cards (B-006..B-010, MA-02..MA-04, MA-14), the user's choices, on the same branch:
+  - the optic radiation keeps "Meyer's loop": rechecked at the user's question, the atlas bundle does have a shallow
+    loop (41 % / 12 % of streamlines run > 5 mm forward of their thalamic end; front 44–46 mm behind the temporal
+    pole); the audit's "no loop" was wrong. Its card says the loop is shallow and the bundle starts in the posterior
+    thalamus, not at the lateral geniculate body;
+  - medial lemniscus, reticulospinal tract, extreme capsule, anterior commissure: kept, each card says what the bundle
+    connects (ends re-measured from the source files: scratch `b4/ends.py`);
+  - the DRTT is two tracts, `wm_drtt` (crossed) and `wm_ndrtt` (uncrossed): `WmTract.keep`; split tracts draw from
+    their own random stream and `replays` keeps the shared stream as it was, so no other tract changed (checked
+    byte for byte);
+  - the acoustic radiation is withdrawn (`withdrawn=True`: replayed, not written or listed; `C.WM_SHOWN`); its colour
+    token is now `wmNDRTT`;
+  - SLF I without the "dorsal SLF" alias, with the Wang 2016 / Komaitis 2020 dispute; the arcuate sentence (Duffau
+    2008), the posterior corticostriatal tract (parietal and occipital), and "Brodmann areas the bundle touches"
+    with Yeh 2022's caveat. Local commit, not pushed.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -321,7 +336,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (413 tests on `fix/b1-dbs-views`)
+  - `npx vitest run` (415 tests on `fix/b1-dbs-views`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`
