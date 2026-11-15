@@ -3,6 +3,60 @@
 Read this first when continuing on another computer. Before handing back, overwrite this file with a new handoff, then
 commit and push it.
 
+## Audit fixes in progress (desktop, updated 2026-11-15)
+
+- The site audit of 10–11 Nov is on branch `audit/2026-11-10` (`audit/README.md`: findings, questions for an expert,
+  a fix order). Batches 1–6 of its fixes are merged (`main` = `95b0b09`, 2026-11-13).
+- Now: the audit's decisions on the models, one at a time with the user, on branch `fix/surgical-views` (off `main` at
+  `95b0b09`) in the worktree `.claude/worktrees/audit-fixes`. **Local commits only: not pushed, no pull request.** Push
+  or open one only when the user asks.
+- The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
+  `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
+  the desktop only (`.claude/` is ignored by git).
+- The main checkout stays on `audit/2026-11-10` with the user's uncommitted v1 endonasal rework (this file's
+  `skullbase_v1_endonasal.py` paragraph among it). The fix branches leave that work alone.
+- Decisions done:
+  1. Surgical views (AP-01..03): `eff0493` (views open opened, new cameras, the camera kept from one tumour to
+     another); far lateral sliders `e9c16a5` (tonsil and biventral lobule lifted), `60cea95` (cerebellum drawn back),
+     `a12cef6`.
+  2. Pterional ridge (AP-04): `9e79e00` (two-thirds of the sphenoid ridge drilled, an anterior clinoidectomy switch),
+     `0e9845e` (the ridge's start drilled; a switch shows the ridge intact).
+  3. MB-06: `de3b6b5` (v3's skull carved round V2, VI and the petrosal sinuses; no thin-bone rule in the cavernous
+     sinus).
+  4. MC-10: `b57bce7` (v2's nerve cards say where each crosses the skull base off the CT's opening:
+     `skullbase_ct_openings.py`).
+  5. MC-11: `b4628b0` (v1's straight and occipital sinuses at the confluence, the basilar artery off the clivus, the
+     middle meningeal artery through the foramen spinosum: `skullbase_v1_vessels.py`).
+  6. Tumours run to run: `652c4c9` (the tumour step seeded, so every rebuild draws the same; v3's Koos II is now 8 mm;
+     v1's vessels step moved before the tumours) and `af08633` (v1's Koos IV closed: the Koos grid reaches past
+     the largest ball; it had been cut open at the grid's lateral edge).
+  7. MC-02: `a6b5798` (the T10–T11 disc is calcified on this CT, as the user reads it: drawn by rule in the dense band,
+     the two bodies cut back to it, its calcification from the CT inside it; `CALCIFIED_DISCS` in `spine_build.py`).
+  8. Foramina transversaria: `73cb75e` (the cards lead with the CT's own bone at 200 HU, the drawn bone's beside where
+     they differ by 5 mm² or more; opening the foramina in the drawn bone was tried and left: at C3 the CT's thin,
+     grainy ring gives no stable edge).
+  9. P1-03, the per-view copies (56 % of the default skull base's mesh bytes, 49 % of v1's): left as they are, the
+     user's choice (2026-11-15). Loading per view keeps them out of readers' downloads; sharing a copy's untouched
+     side would save about 7 MB of deploy but make a direct visit to an approach load the whole original too.
+- v1's posterior fossa: `1044aff` (the far lateral view's two sliders on v1 too; its step's samples seeded, so a
+  rebuild repeats; the cerebellar arteries' tubes no longer fold). Its brainstem moved at most 0.35 mm, and
+  `skullbase_v1_endonasal.py`, which reads it, was not rerun: the user's endonasal rework replaces that data.
+- The cerebellar arteries out of the cerebellum (the user saw the PICA running through it): v1 `c269048` (its
+  onto-the-surface step filled open lobules as a shell: half of the PICA lay inside), the default model `03a4bfb`
+  (`skullbase_v3_clearance.py`: lobules filled one by one, the fitted courses pushed out pose by pose, the AICA and
+  SCA given shapes). Both validators now hold every pose to under 3 % inside and 1 mm deep. Upstream,
+  `skullbase_v3.hindbrain_clearance` still fills each pf file half whole (its overlapping lobules cancel out); the
+  clearance step lifts what that leaves, so a full rebuild converges, but fixing it there too would be cleaner.
+- v1's cameras: the default model's for the pterional, interhemispheric, orbitozygomatic and far lateral views; the
+  retrosigmoid keeps v1's own (from below it meets Z-Anatomy's mastoid).
+- Still open from this round: `skullbase_v1_brain.py` still samples surfaces
+  unseeded (two `m.sample` calls): seed them (`seed=0`) when v1's cortex is next rebuilt, or a rebuild will not repeat.
+- Pipeline data: the worktree has its own `pipeline/data/build` (its `raw` is a link to the main checkout's). These
+  fixes changed `skullbase` (v1), `skullbase-v3` and `skullbase-ct` there; copy from the worktree, not the main
+  checkout, before rebuilding those on the MacBook.
+- Browser tests on the desktop: `CI=1 npx playwright test` (182 tests). Without `CI=1` the untracked Linux picture
+  baselines from 11 Nov fail; the tracked ones are macOS ones.
+
 ## Where things stand
 
 - `main` on GitHub has everything below (commit `e212a99`, after `c7cd2d1`: vessel junctions, confluence of the
@@ -25,7 +79,8 @@ commit and push it.
     drawing is graded again from its section (validation checks it). The view is cut at the section (`sec=0` turns
     the cut off).
   - Koos I–IV in the retrosigmoid view (opened with the cerebellum retracted). This model's fitted pons lies about
-    4 mm from the porus, so II is small (6 mm) and III is moulded against the brainstem; IV pushes it.
+    4 mm from the porus, so II is small (8 mm since the step was seeded, 2026-11-15) and III is moulded against the
+    brainstem; IV pushes it.
   - Meningiomas of the olfactory groove (LSO view), tuberculum sellae (pterional), petroclival (retrosigmoid) and
     foramen magnum (far lateral).
   - The fitted brain is pushed out of each tumour, written as `<part>__<view>.glb` copies with `replaces` and
@@ -103,11 +158,16 @@ commit and push it.
       condyle, at the rim's level (`FM_RIM_IN_MM`); v3's walk passes through Z-Anatomy's wider foramen.
     - Front end: `tumourGroups()` serves both models; `TUMOUR_FIT_V1`/`_V3`; the Grading page is in v1's nav.
       `ofKind` and the nerve highlight skip the tumour views' copies (the highlight bug was in v3 too).
-  - v1 chain: `skullbase_build.py`, `skullbase_v1_nerves.py`, `skullbase_v1_skull.py`, `skullbase_v1_ear.py`, `skullbase_v1.py ear`,
+  - v1 chain (updated 2026-11-15): `skullbase_build.py`, `skullbase_v1_xii.py`, `skullbase_v1_nerves.py`,
+    `skullbase_v1_skull.py`, `skullbase_v1_ear.py`, `skullbase_v1.py ear`,
     `SB_PROFILE=v1 skullbase_v3_approach.py only pterional lso interhemispheric suboccipital retrosigmoid
     orbitozygomatic far_lateral kawase`, `skullbase_v1.py approaches`, `skullbase_v1_brain.py`,
-    `skullbase_v1_pfossa.py`, `skullbase_v1.py brain`, `skullbase_v1_cavernous.py`, `skullbase_v1.py cavernous`, `skullbase_v1_endonasal.py`,
-    `SB_PROFILE=v1 skullbase_v3_tumours.py`, `node pipeline/compress.mjs skullbase`, `skullbase_build.py finalize`. Compressing v1 left the untouched GLBs byte-identical here.
+    `skullbase_v1_pfossa.py`, `skullbase_v1.py brain`, `skullbase_v1_cavernous.py`, `skullbase_v1.py cavernous`,
+    `skullbase_v1_endonasal.py`, `skullbase_v1_vessels.py` (before the tumours: their pushed copies of the AICA start
+    from it as moved), `SB_PROFILE=v1 skullbase_v3_tumours.py`, `skullbase_v1_inbone.py` (last: it measures the tubes as
+    built), `node pipeline/compress.mjs skullbase <the changed files>`, `skullbase_build.py finalize`.
+  - Compress v1 by file list (`node pipeline/compress.mjs skullbase a.glb b.glb …`), not whole: the desktop's v1 build
+    cache holds stale GLBs, and compressing all of it on 2026-11-15 changed 213 shipped files and added 43.
 - **Pipeline data changed on the desktop:** `pipeline/data/build/skullbase` (the whole v1 port), `pipeline/data/build/skullbase-v3` (the clean-up's chain, the tumours, the
   two approaches in `approach.json`) and `pipeline/data/build/vascular`. Copy `pipeline/data/` back before rebuilding
   those on the MacBook.
@@ -116,6 +176,8 @@ commit and push it.
     `node pipeline/compress.mjs skullbase-v3`, restore the noise GLBs on the desktop (memory note), then
     `skullbase_v3.py finalize`. New craniotomies: `skullbase_v3_approach.py only <id>`, then
     `skullbase_v3.py approaches`, then the tumours step (its views copy the approach views), compress and finalize.
+  - Skull base v2: `skullbase_ct.py`, `skullbase_build.py ct`, `node pipeline/compress.mjs skullbase-ct`, then, after
+    v3's chain (it reads v3's routed nerves), `skullbase_ct_openings.py`, then `skullbase_build.py ct finalize`.
   - Vascular: `vascular_build.py`, then `node pipeline/compress.mjs vascular`, then `vascular_build.py finalize`.
 
 ## Open items
@@ -219,9 +281,10 @@ commit and push it.
   14. `npm run build`
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
-  - `npx vitest run` (337 tests)
+  - `npx eslint . --quiet`
+  - `npx vitest run` (404 tests on `fix/surgical-views`)
   - `npm run build`
-  - `npx playwright test` (130 tests, about 7 minutes, preview on port 4173)
+  - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`
   - `pipeline/winding_check.py`
   - each section's `finalize` validation

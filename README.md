@@ -96,7 +96,13 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   beyond, blended over the last 6 mm inside the edge, the face blended in across the sutures over 1.5 mm, all voxels
   softened by about one voxel so gently sloping surfaces show no grid steps) gives one surface, split into bones as v2
   splits it. On the skull's outer surface, v2's rule-drawn walls around enclosed air (they made ridges and a shelf over
-  the frontal sinus) and the CT's bone within 5 mm of them give way to the model too. The craniotomies are cut out of it. Each bone's card says how much of it is the model. No mandible.
+  the frontal sinus) and the CT's bone within 5 mm of them give way to the model too. Inside the cavernous sinuses the
+  CT's thin-bone rule (170–400 HU next to bone) is left out: there it took the contrast-filled venous blood for bone.
+  The skull is carved round the maxillary and abducens nerves (their tube plus 0.5 mm) and the petrosal sinuses (plus
+  0.3 mm), which are routed or laid on the CT's thinner bone and lay partly under it (V2 50–70 %, VI 25–30 %; audit
+  finding MB-06); the carving keeps 1 mm off the air sinuses. Those structures come from the cavernous and petrosal
+  steps' last run, so after a change that moves them this step runs again; the clearance step's check against the skull
+  as shown fails until it has. The craniotomies are cut out of it. Each bone's card says how much of it is the model. No mandible.
 - **Registration** (`pipeline/skullbase_v3.py`): each specimen's bone, blurred to the CT's resolution, is matched to
   the CT's bone within 14 mm of the labyrinth by a similarity transform (1500 rotations, as is and mirrored, then a
   local optimisation of the best twelve), started from the labyrinth picked by hand on the CT's slices. Specimen ALPHA
@@ -156,9 +162,21 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   opening is measured on the bone removed as it is drawn (`skullbase_v3_approach.py`, `Removed`: the area seen face
   on, the volume, how near it comes to the anterior clinoid process or the sinuses), not taken from the outline or
   the rule's distances the cut was drawn with; `skullbase_v3_approach.py measure` writes the descriptions again
-  without cutting anew. On this CT the pterional's ridge drilling removes bone to 36 mm from the anterior clinoid
-  process, not to the 12 mm its rule aims at (the rule drills along a straight line from the pterion towards the
-  process; the cut itself is not changed yet). The right pterional craniotomy is
+  without cutting anew. The pterional drills the lateral two-thirds of the sphenoid ridge, as Yaşargil's modification
+  removed two-thirds of the sphenoid wing (Yilmaz 2025): the ridge between the anterior and middle fossae as found on the
+  skull, to two-thirds of the way from the pterion to the anterior clinoid process's tip; on this CT the bone removed
+  ends 17 mm from the process (before November 2026 the drilling followed a straight line that this CT's ridge does not
+  lie on, and the smoothed cut left the thin ridge standing: it ended 36 mm away). Over the first half of that, the
+  opening's edge where the ridge starts is taken back towards the cavity (the sphenoid, frontal and temporal bone within
+  6 mm of both the opening and the cavity and 14 mm of the line, keeping 1.5 mm of bone over the orbit; illustrative):
+  the thick base of the sphenoid wing by the pterion and the residual temporal squama that basal drilling takes
+  (Yilmaz 2025). The drilled bone is a piece of its own, and a switch "Sphenoid ridge drilled"
+  (key D, on as the view opens, `sr=0` in the link when off) draws it back, the ridge intact. The pterional and
+  orbitozygomatic views also have an anterior clinoidectomy switch (key A, `ac=` in the link, off by default): the clinoid process is a piece
+  of its own (the rest of the ridge from where the drilling stops to the tip, and the bone within 5 mm of the tip as
+  found on this CT; 0.2 ml), drawn as bone until the switch takes it (Auricchio 2024, Sevgi 2026, Sulaimanov 2025,
+  Aladdam 2026); the optic canal's roof and the optic strut, drilled in practice to free it, are not drawn taken. The
+  right pterional craniotomy is
   cut out of the CT's own bone (`pipeline/skullbase_v3_approach.py`: burr holes placed from the fitted landmarks as
   Yilmaz 2025 and Sevgi 2026 describe, the skull's thickness removed inside an oval drawn through them with its sides
   bowed out, behind the zygomatic bone, which stays; the corners where the cranial floor is kept are rounded over 2.5 mm
@@ -288,16 +306,40 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   transverse sinuses meet, the superior sagittal and straight sinuses run on into it. Where an artery runs into the
   fitted brainstem, the fitted courses (anterior inferior and superior cerebellar arteries) are lifted out onto its
   surface (and should one of this CT's own arteries lie in it, a channel is cut in the brainstem for it: the tissue
-  straight behind it removed up to 3 mm, the part meshed again). Each changed mesh is its
+  straight behind it removed up to 3 mm, the part meshed again). The fitted courses (the PICA's, the AICA, the SCA's,
+  the pontine branches) are pushed out of the fitted cerebellum too, pose by pose: at rest against it at rest, and in
+  each of the brain's shapes against it as that shape poses it, the push kept as the course's own shape (the AICA and
+  the SCA's course, which had none, get one: the cerebellum drawn aside pushes them ahead of it), the drawn bone kept
+  to as well. Its lobules are filled one by one: filled together, two fitted lobules that overlap (about 5 ml a side)
+  cancel out, which had left 30 % of the PICA's course inside them, up to 6.5 mm deep. Each changed mesh is its
   own file (`<id>.joined.glb`, `<id>.cleared.glb`), its source's untouched; its card says what was drawn. Validation
-  checks every junction closed and no artery inside the brainstem in any shape of the brain.
+  checks every junction closed, no artery inside the brainstem in any shape of the brain, and no fitted course more
+  than 3 % (more than 0.3 mm in) or deeper than 1 mm inside the cerebellum in any pose.
+- **How a surgical view opens**: with its shapes full on (the fissure opened and the frontal lobe lifted, the hemisphere
+  held off the falx, the tonsils drawn apart, the cerebellum drawn back or lifted), the anatomy its text describes; the sliders
+  take it back to the brain at rest. The pterional, orbitozygomatic, interhemispheric, retrosigmoid and far lateral views
+  look in from the direction that showed the most of the structures each view's text names (a search of 642 directions
+  round each opening in the site audit of November 2026, then chosen by eye; `Viewer.goPreset`); the telovelar view
+  keeps its own. v1 opens its views from the same directions (checked on renders of both models), except the
+  retrosigmoid: on Z-Anatomy's skull the opening lies level with the porus and the view from below meets the mastoid,
+  so v1 looks in level with it. The tumours drawn in one view are framed alike, and going from one to
+  another leaves the camera and the sliders where the reader left them.
 - **Orbitozygomatic and far lateral views** (`pipeline/skullbase_v3_approach.py`; `skullbase_v3.py approaches` writes
   their items into the manifest without the rest of that step). The orbitozygomatic craniotomy is the pterional flap and a
   second piece, the superolateral orbital rim and roof and the zygomatic arch (Yilmaz 2025, Rodriguez Rubio 2019), over
   the same fitted brain (the fissure and frontal-lobe sliders), seen from lower down. The far lateral craniectomy is a
   right lateral suboccipital one down through the foramen magnum's rim, the posterior third of the occipital condyle
-  drilled (Pai 2018, Bruneau 2008); the atlas is not modelled, so the C1 hemilaminectomy is not shown. The foramen
-  magnum meningioma is drawn in it.
+  drilled (Pai 2018, Bruneau 2008); the atlas is not modelled, so the C1 hemilaminectomy is not shown. Its slider lifts
+  the right tonsil and biventral lobule 8 mm up and 4 mm towards the midline (illustrative), the rest of the right
+  hemisphere following less the further it lies from them (none 20 mm away), as the approach's retraction holds them
+  superomedially off the vertebral artery and the lower cranial nerves (Sriamornrattanakul 2023, Luzzi 2022); a shape
+  (morph target "farLateral", `skullbase_pfossa.far_lateral`), kept off bone and the arteries, and the posterior inferior
+  cerebellar artery's course on the cerebellum moves with it. A second slider (morph target "farLateralBack",
+  `skullbase_pfossa.far_lateral_back`) draws them and the inferior semilunar lobule (the hemisphere's lower outer corner,
+  which the view otherwise looks past) 8 mm straight back, each point's move cut short where it
+  would meet the occipital bone (the cut spread smoothly over the surface): a view aid, not a sourced step, which opens
+  at 0 and works together with the lift, even into positions no retractor would hold. The foramen magnum meningioma
+  is drawn in it.
 - **Anterior petrosectomy (Kawase)** (`skullbase_v3_approach.py`, `skullbase_v3.py approaches`). A right temporal flap
   flush with the middle fossa floor, two thirds in front of the external auditory canal (Flores-Justa 2021); the petrous
   apex drilled within the rhomboid of four landmarks on this model (Signoretti 2025: the petrous apex, where the greater
@@ -326,7 +368,7 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   - **Vestibular schwannoma, Koos I–IV,** in the retrosigmoid view (opened with the cerebellum retracted): the
     meatus's lumen, and a ball in the cerebellopontine angle joined to the porus. This model's fitted pons lies about
     5 mm from the porus on the right (the fit keeps it out of the cistern this CT shows there; the pons's own surface a
-    CT does not show), so grade II is small (9 mm) and grade III is moulded against the brainstem;
+    CT does not show), so grade II is small (8 mm) and grade III is moulded against the brainstem;
     grade IV pushes it aside. The nerves of the angle are moved round the tumour: the facial nerve forwards onto its
     anterior surface (Choi 2014: its commonest place), thinned and flattened over grades III and IV; the others and the
     fitted small arteries the shortest way out. Sources: Gupta 2020, Starnoni 2020 (EANS), Choi 2014.
@@ -447,11 +489,18 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
   - The patch Z-Anatomy files as "Insula (subcentral gyrus …)" is the subcentral gyrus, taken as frontal.
   - The cerebellum, brainstem and fourth ventricle are Z-Anatomy's (`pipeline/skullbase_v1_pfossa.py`). They are
     pushed out of its bone and back inside the cranial cavity, through which the cerebellum passes in places
-    (except at the foramen magnum), then shaped by v3's telovelar and retrosigmoid rules.
+    (except at the foramen magnum), then shaped by v3's telovelar, retrosigmoid and far lateral rules (the far lateral
+    view's two sliders: the right tonsil and biventral lobule lifted, and drawn straight back). The step's surface
+    samples are seeded, so a rebuild gives the same files.
   - The superior, anterior inferior and posterior inferior cerebellar arteries move with the cerebellum. The trunks
     and the posterior cerebral artery stay. Where Z-Anatomy's own cerebellar arteries ran inside its cerebellum, they
-    are moved out onto its surface (up to about 3.4 mm). The hindbrain is kept under Z-Anatomy's tentorium, which the
-    retrosigmoid view shows.
+    are moved out onto its surface (up to about 8.5 mm, the PICA), once onto Z-Anatomy's own cerebellum and again
+    after the cerebellum is pushed out of the bone; each part is filled by parity (most of Z-Anatomy's lobules are not
+    closed as stored, and filling a shell of their surface had left half of the PICA inside them). The path is blended
+    back where smoothing let it sink in, and bends tighter than its tube are relaxed, so the tube does not fold over
+    itself. Carried with each shape, the tubes are pushed out of the cerebellum as that shape poses it (the far lateral
+    view's two together): in every pose under 2 % of a tube lies more than 0.3 mm inside, none deeper than 0.6 mm. The hindbrain is kept under
+    Z-Anatomy's tentorium, which the retrosigmoid view shows.
   - The telovelar view has v3's landmarks on the floor of the fourth ventricle, placed by v3's rule over Z-Anatomy's
     own cranial nerve nuclei: the facial colliculi, the vestibular areas, the hypoglossal and vagal trigones, the
     median sulcus and the obex.
@@ -462,12 +511,31 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
     is found as the open space the bone encloses beside its label (6 mm long, 2.5 mm across), the rootlets are
     gathered in front of its inner opening, and the trunk follows its axis and is back on Z-Anatomy's curve 8 mm
     beyond the bone (moved up to 9.1 mm). Beyond that, and at the medulla, it is as Z-Anatomy has it.
+  - Four vessels are put where the model's own bone and brain say they lie (`pipeline/skullbase_v1_vessels.py`, after
+    the endonasal view and before the tumours, so their pushed copies start from the arteries as moved):
+    - The straight and occipital sinuses. In Z-Anatomy's Blender file both start 44.5 mm in front of the confluence of
+      the sinuses: the straight sinus ran from above the hypophysis into the posterior fossa, the occipital sinus
+      through the medulla into the clivus. Both are moved back by that offset, which is measured from the file: the
+      confluence less their common first point. The straight sinus's far end then meets the inferior sagittal sinus
+      (0.9 mm apart). The occipital sinus, which then lay about 5 mm above the internal occipital crest, is laid onto
+      the crest.
+    - The basilar artery, which Z-Anatomy draws pressed into the clivus and the dorsum sellae (12.5 mm of its centre
+      line in the bone, its wall up to 2.1 mm deep), is moved off the bone towards the pons (0.3 to 2.4 mm) until its
+      wall is 0.2 mm clear. The arteries joined to it (vertebral, anterior inferior and superior cerebellar, posterior
+      cerebral, posterior communicating, pontine branches) are moved with it where they lie near it, less with
+      distance, none 8 mm from it. Every junction stays, and no nerve comes more than 0.05 mm nearer an artery. The pontine branches,
+      also drawn along the clivus, are pushed out of what bone is left. The endonasal view's distances are measured
+      on Z-Anatomy's curves, so it keeps the basilar artery where Z-Anatomy drew it.
+    - The middle meningeal artery ran through the sphenoid 2.6 mm from the model's own foramen spinosum (12.7 mm of
+      it in bone a side). It is led through the foramen, which is found as the hypoglossal canal is (6 mm long, 2.8 mm
+      across), and is back on Z-Anatomy's curve 4 mm above the bone.
   - Z-Anatomy's bones have few of the canals and grooves its vessels and nerves run in (no carotid canal through
     the petrous bone, no facial canal, a cribriform plate without holes), so many of its curves run through the bone
     meshes. Every tube is measured against every bone (`pipeline/skullbase_v1_inbone.py`, the last step of v1's
-    chain: each bone on a 0.4 mm grid), and the 28 that have 5% or more of their surface over 0.5 mm inside a bone,
+    chain: each bone on a 0.4 mm grid), and the 23 that have 5% or more of their surface over 0.5 mm inside a bone,
     or a point 2 mm deep, say so on their card with the share, the depth and the bones (the cochlear nerve 92%, the
-    maxillary artery 57%, the basilar artery 33%, the internal carotid 24%, up to 4.5 mm deep). They are not moved.
+    maxillary artery 57%, whose branches run in the maxilla's canals in life, the internal carotid 24%, up to 4.5 mm
+    deep). They are not moved.
     Its chiasm, two pads, is redrawn by v3's rule (Mncube 2019's mean width and height) as a crossing, with the
     optic tracts' first part.
   - The retrosigmoid view is seen nearly level with the porus (on this skull the opening lies level with it).
@@ -522,9 +590,20 @@ Zurich, open use with the source given, non-commercial), fetched member by membe
   arteries TopBrain does not label (middle meningeal, maxillary, ethmoidal...), the soft tissue and the landmark
   names. Z-Anatomy is scaled onto the CT skull by ICP, then deformed by a smooth field (Gaussian-weighted
   closest-point moves, 24 → 6 mm): its bone ends a median 1.5 mm (90% within 3.6 mm) from the CT's.
+- **The nerves where they cross the skull base** (`pipeline/skullbase_ct_openings.py`): the fit does not find the CT's
+  own canals, so a fitted nerve can run through the wall of its foramen, or through a sinus, a few millimetres from the
+  opening. v2 keeps them as fitted; each nerve's card says how much, measured on the CT over the stretch the default
+  model routes (from inside the skull to just past its base): the length through the bone shown (and how much of it
+  is at 400 HU or more, solid bone), through a sinus's air, and how far the default model's nerve, routed through the
+  CT's openings on the same scan, lies from it there, with a link to it. The worst: the right hypoglossal nerve, 11 mm
+  in the condylar bone 3 mm from its canal; the left glossopharyngeal, vagus and accessory nerves 8–10 mm in the
+  jugular foramen's wall; the left optic nerve 7 mm in sinus air and 9 mm in bone below its canal. The facial and
+  vestibulocochlear nerves, in bone in life, are left out. The step reads the default model's built nerves, so it runs
+  after that model's chain.
 - The CT is moved rigidly (true size) into the Z-Anatomy frame, origin at the fitted hypophysial fossa, so the
   groups, cut-aways and cameras work unchanged. Pipeline: `pipeline/skullbase_ct.py`, then
-  `pipeline/skullbase_build.py ct`, `node pipeline/compress.mjs skullbase-ct`, `pipeline/skullbase_build.py ct finalize`.
+  `pipeline/skullbase_build.py ct`, `node pipeline/compress.mjs skullbase-ct`, `pipeline/skullbase_ct_openings.py`
+  (after the default model's chain), `pipeline/skullbase_build.py ct finalize`.
 
 ## Brainstem
 
@@ -743,7 +822,9 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
 - **Cervical** (phase 2a): vertebrae C1–C7, discs C2–C3 to C7–T1, canal contents, canal and disc height per level;
   schematic roots C3–C8 by the cervical rule (each above the vertebra of its number, C8 between C7 and T1; Moreno
   2021), through the lower part of foramina found in planes turned 30° forwards (their size is not reported); the
-  foramina transversaria C1–C7 measured, and a schematic vertebral artery from the subclavian artery through them
+  foramina transversaria C1–C7 measured (on the CT's own bone at 200 HU; the drawn bone's smoothing narrows a
+  thin-walled foramen, C3's to 12 and 7 mm² against 24 and 18, and the card gives that beside it), and a schematic
+  vertebral artery from the subclavian artery through them
   (entry level inferred from their size, C6 on both sides here), behind the lateral mass of the atlas and over the
   groove on its posterior arch. The neck from TotalSegmentator (common and internal carotids, internal jugular veins,
   trachea, oesophagus, thyroid, larynx, prevertebral muscles, sternocleidomastoids) on two layers of their own,
@@ -781,11 +862,16 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
   from TotalSegmentator.
 - **Discs** (TotalSegmentator, split by the two bones each disc touches) and the **dural sac** (TotalSegmentator's
   "spinal cord" class, which on CT follows the canal contents). The section is for the dorsal approaches: no great
-  vessels, psoas or psoas zones. A disc much narrower than its neighbours is marked as drawn in part: of the T10–T11
-  disc the segmentation holds a 0.12 ml chip, and between those two bodies the CT is dense where a disc is dark (its
-  mean on 16-mm circles across the line joining the bodies' centres reaches 722 HU, against 219 and 214 HU at the
-  end plates of the discs above and below). The level's card says so, gives no disc height and does not offer the
-  dorsal approaches there; what the dense band is, is left open.
+  vessels, psoas or psoas zones. The T10–T11 disc of this CT is calcified (read so on 15 Nov 2026; `CALCIFIED_DISCS`
+  in `pipeline/spine_build.py`). The segmentation holds a 0.12 ml chip of it, and between the two bodies the CT shows
+  one dense band where the discs above and below show two end plates with a dark disc between them (its mean on 16-mm
+  circles across the line joining the bodies' centres reaches 722 HU, against 219 and 214 HU at the end plates of
+  the discs above and below); across the spine the band is a lumpy mass in the middle of the disc. VerSe's masks
+  count the band as bone. The disc is drawn by rule in the band (`calcified_disc`: on the bodies' footprint where
+  their masks meet, round the band's centre column by column, as thick as the band at half height, 3.5 mm), the two
+  bodies are cut back to it, and its calcification is the CT above 500 HU inside it away from the bodies' cortical
+  rim (0.5 ml), drawn in bone colour inside the see-through disc. The level's card says so and does not offer the
+  dorsal approaches there. A disc much narrower than its neighbours that is not listed as calcified stops the build.
 - **Measured per level**: the canal between the pedicles (in the plane normal to the spine where it is narrowest
   between them: the interpedicular width, the depth through its middle, the area); foraminal height,
   antero-posterior extent and area (L1–L4 both sides; the plane method does not capture L5–S1 in this CT); disc

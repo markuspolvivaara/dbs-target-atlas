@@ -138,3 +138,37 @@ export function pointsInside(Q: Float64Array, P: Float64Array, T: Uint32Array, c
   }
   return inside;
 }
+
+/** Each mesh node's morph targets, by name (the mesh's extras.targetNames): the largest displacement in the world
+ * (mm), and the mean displacement of the vertices it moves more than 0.1 mm. */
+export async function nodeMorphs(file: string) {
+  await MeshoptDecoder.ready;
+  const io = new NodeIO().registerExtensions([EXTMeshoptCompression, KHRMeshQuantization]).registerDependencies({ 'meshopt.decoder': MeshoptDecoder });
+  const doc = await io.readBinary(new Uint8Array(readFileSync(new URL(`../../public/${file}`, import.meta.url))));
+  const out: Record<string, Record<string, { max: number; mean: [number, number, number] }>> = {};
+  for (const node of doc.getRoot().listNodes()) {
+    const mesh = node.getMesh();
+    if (!mesh) continue;
+    const m = node.getWorldMatrix();
+    const names = ((mesh.getExtras() as { targetNames?: string[] }).targetNames) ?? [];
+    const prim = mesh.listPrimitives()[0];
+    const per: Record<string, { max: number; mean: [number, number, number] }> = {};
+    prim.listTargets().forEach((t, i) => {
+      const acc = t.getAttribute('POSITION')!;
+      const el: number[] = [];
+      let max = 0, n = 0;
+      const s = [0, 0, 0];
+      for (let j = 0; j < acc.getCount(); j++) {
+        acc.getElement(j, el);
+        const [x, y, z] = el;   // (a displacement: the node's linear part only)
+        const d = [m[0] * x + m[4] * y + m[8] * z, m[1] * x + m[5] * y + m[9] * z, m[2] * x + m[6] * y + m[10] * z];
+        const len = Math.hypot(d[0], d[1], d[2]);
+        max = Math.max(max, len);
+        if (len > 0.1) { n++; for (let k = 0; k < 3; k++) s[k] += d[k]; }
+      }
+      per[names[i] ?? `#${i}`] = { max, mean: s.map((v) => (n ? v / n : 0)) as [number, number, number] };
+    });
+    out[node.getName()] = per;
+  }
+  return out;
+}

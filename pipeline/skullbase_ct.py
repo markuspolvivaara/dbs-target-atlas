@@ -101,12 +101,19 @@ def bone_mask(ct: np.ndarray, lab: np.ndarray, skull: np.ndarray, zooms: np.ndar
 
 
 def sinus_walls(ct: np.ndarray, lab: np.ndarray, zooms: np.ndarray) -> np.ndarray:
-    """A shell around the air enclosed in the skull (sinuses, air cells): its walls, bone even where they are thinner
-    than a voxel. Enclosed air: the components of the air, with narrow openings closed (an erosion), that do not reach
-    the edge of the scan and are no larger than a sinus; grown back within the air inside the head (grown back through
-    all the air, the thin layer of it around the head would join them and the skin get a wall: a shell drawn as bone
-    around the scalp)."""
+    """A shell around the air enclosed in the skull (sinuses, air cells: enclosed_air): its walls, bone even where they
+    are thinner than a voxel."""
     vessels = ndimage.binary_dilation(lab > 0, iterations=2)
+    sinus = enclosed_air(ct, zooms)
+    shell_it = max(1, int(round(SINUS_SHELL_MM / float(zooms.min()))))
+    return ndimage.binary_dilation(sinus, iterations=shell_it) & ~sinus & ~vessels & (ct > SHELL_MIN_HU)
+
+
+def enclosed_air(ct: np.ndarray, zooms: np.ndarray) -> np.ndarray:
+    """The air enclosed in the skull (sinuses, air cells): the components of the air, with narrow openings closed (an
+    erosion), that do not reach the edge of the scan and are no larger than a sinus; grown back within the air inside
+    the head (grown back through all the air, the thin layer of it around the head would join them and the skin get a
+    wall: a shell drawn as bone around the scalp). Also skullbase_ct_openings.py's sinus air."""
     air = ct < SINUS_AIR_HU
     it = max(1, int(round(SINUS_OPEN_MM / float(zooms.min()))))
     core = ndimage.binary_erosion(air, iterations=it)
@@ -119,9 +126,7 @@ def sinus_walls(ct: np.ndarray, lab: np.ndarray, zooms: np.ndarray) -> np.ndarra
     ball = np.linalg.norm(np.mgrid[-r:r + 1, -r:r + 1, -r:r + 1], axis=0) <= r
     pad = r + 2
     head = ndimage.binary_fill_holes(ndimage.binary_closing(np.pad(~air, pad), ball)[pad:-pad, pad:-pad, pad:-pad])
-    sinus = ndimage.binary_propagation(np.isin(cl, keep), mask=air & head)
-    shell_it = max(1, int(round(SINUS_SHELL_MM / float(zooms.min()))))
-    return ndimage.binary_dilation(sinus, iterations=shell_it) & ~sinus & ~vessels & (ct > SHELL_MIN_HU)
+    return ndimage.binary_propagation(np.isin(cl, keep), mask=air & head)
 
 
 def similarity(src: np.ndarray, dst: np.ndarray) -> tuple[float, np.ndarray, np.ndarray]:

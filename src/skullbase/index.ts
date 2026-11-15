@@ -85,6 +85,12 @@ const ApproachGeomSchema = z.object({
   burrHoles: z.array(V3),
   /** outlines drawn on the bone in its view (the Kawase rhomboid) */
   guides: z.array(z.string()).optional(),
+  /** a view with an anterior clinoidectomy switch: the clinoid process's own piece (bone until the switch takes it), ml */
+  clinoid: z.string().optional(),
+  clinoidMl: z.number().positive().optional(),
+  /** a view with a switch for its sphenoid ridge: the drilled ridge's own piece (bone removed until the switch puts it back), ml */
+  ridge: z.string().optional(),
+  ridgeMl: z.number().positive().optional(),
   /** what this model measures for it (the Kawase rhomboid's sides, the bone drilled) */
   measured: z.record(z.string(), z.number()).optional(),
 });
@@ -199,7 +205,15 @@ export const V3_FIT = z.object({
     /** the retrosigmoid shape: the right hemisphere drawn back from the petrous bone */
     retrosigmoid: z.object({ maxMovedMm: z.number(), moved: z.number(), inBoneAfter: z.number(), inVesselAfter: z.number(),
       meatusToCerebellumMm: z.object({ rest: z.number(), moved: z.number() }), inCorridor: z.object({ rest: z.number(), moved: z.number() }) }),
-    params: z.object({ rsMm: z.number(), rsReachMm: z.number(), tableGapMm: z.number(), tableMinMm: z.number(), boneGapMm: z.number(), tvMm: z.number(), tvUp: z.number(), tvReachMm: z.number(),
+    /** the far lateral shape: the right tonsil and biventral lobule lifted superomedially */
+    farLateral: z.object({ maxMovedMm: z.number(), moved: z.number(), inBoneAfter: z.number(), inVesselAfter: z.number(),
+      tonsilLowestZMm: z.object({ rest: z.number(), lifted: z.number() }),
+      vertebralGapMm: z.object({ rest: z.number(), lifted: z.number() }).optional() }),
+    /** the far lateral view's second shape: the same parts drawn straight back */
+    farLateralBack: z.object({ maxMovedMm: z.number(), moved: z.number(), inBoneAfter: z.number(), inVesselAfter: z.number(),
+      tonsilFrontYMm: z.object({ rest: z.number(), back: z.number() }), medullaGapMm: z.object({ rest: z.number(), back: z.number() }),
+      vertebralGapMm: z.object({ rest: z.number(), back: z.number() }).optional() }),
+    params: z.object({ rsMm: z.number(), rsReachMm: z.number(), flMm: z.number(), flMedial: z.number(), flReachMm: z.number(), flBackMm: z.number(), tableGapMm: z.number(), tableMinMm: z.number(), boneGapMm: z.number(), tvMm: z.number(), tvUp: z.number(), tvReachMm: z.number(),
       tvVermisMm: z.number(), tvVermisBack: z.number(), tvVermisReachMm: z.number() }),
   }).optional(),
   /** the skull completed beyond the CT's field of view, the face from the fitted model (pipeline/skullbase_v3_skull.py) */
@@ -208,6 +222,10 @@ export const V3_FIT = z.object({
     face: z.object({ medianBeforeMm: z.number(), medianAfterMm: z.number(), withinBefore: z.number(), withinAfter: z.number() }),
     edge: z.object({ medianBeforeMm: z.number(), medianAfterMm: z.number(), p90BeforeMm: z.number(), p90AfterMm: z.number() }),
     faceBones: z.array(z.string()), seamMm: z.number(), blendMm: z.number(), edgeFitMm: z.number(),
+    /** the CT's thin-bone rule left out inside the cavernous sinuses (finding MB-06) */
+    thinRuleOutOfSinuses: z.object({ droppedMl: z.number() }).passthrough().optional(),
+    /** the courses the skull is carved round: per file and side, the share of the tube's surface under the bone before and after */
+    cleared: z.record(z.string(), z.record(z.string(), z.object({ marginMm: z.number(), insideBefore: z.number(), insideAfter: z.number(), carvedMl: z.number() }).passthrough())).optional(),
   }).optional(),
 }).parse(v3Fit);
 

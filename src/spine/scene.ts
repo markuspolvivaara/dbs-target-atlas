@@ -55,6 +55,12 @@ export function spinePlan(s: Pick<SpineState, 'region' | 'level' | 'sel'> & Part
   const screwBone = s.screw && s.level ? vertebraOf(s.level) : undefined;
   if (screwBone) looks.set(screwBone.id, s.cut === 'screw' ? 'primary' : 'context');
   if (s.sel && SP.has(s.sel)) looks.set(s.sel, 'primary');
+  // a calcified disc is drawn see-through, so that its calcification (in bone colour, inside it) shows
+  for (const st of SP_MANIFEST.structures) {
+    if (st.category !== 'calcification' || !inRegion.has(st.id)) continue;
+    const disc = st.id.replace(/_calcification$/, '');
+    if (looks.get(disc) === 'primary') looks.set(disc, 'context');
+  }
   // drilling: the bone drilled is drawn by the drill (as cut): both vertebrae, or at a laminectomy the upper alone; at a
   // foraminotomy and a discectomy the disc is taken out
   const drill = s.drill ? drillPairFor(s.level) : undefined;

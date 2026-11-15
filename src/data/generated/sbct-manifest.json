@@ -46,7 +46,23 @@
     ]
    },
    "cranialNerve": 6,
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "atOpening": {
+    "stretchMm": 65,
+    "routedId": "tb_abducens_nerve_vi",
+    "R": {
+     "boneMm": 18.2,
+     "solidMm": 4.5,
+     "airMm": 0.0,
+     "apartMm": 1.8
+    },
+    "L": {
+     "boneMm": 24.2,
+     "solidMm": 5.2,
+     "airMm": 0.0,
+     "apartMm": 1.2
+    }
+   }
   },
   {
    "id": "sb_accessory_branch_of_middle_meningeal_artery",
@@ -138,7 +154,23 @@
     ]
    },
    "cranialNerve": 11,
-   "intracranialFraction": 0.6
+   "intracranialFraction": 0.6,
+   "atOpening": {
+    "stretchMm": 50,
+    "routedId": "tb_accessory_nerve_xi",
+    "R": {
+     "boneMm": 11.5,
+     "solidMm": 5.0,
+     "airMm": 0.0,
+     "apartMm": 0.9
+    },
+    "L": {
+     "boneMm": 7.8,
+     "solidMm": 5.2,
+     "airMm": 0.0,
+     "apartMm": 3.6
+    }
+   }
   },
   {
    "id": "sb_adenohypophysis",
@@ -1127,7 +1159,23 @@
     ]
    },
    "cranialNerve": 9,
-   "intracranialFraction": 0.69
+   "intracranialFraction": 0.69,
+   "atOpening": {
+    "stretchMm": 45,
+    "routedId": "tb_glossopharyngeal_nerve_ix",
+    "R": {
+     "boneMm": 0.2,
+     "solidMm": 0.0,
+     "airMm": 0.0,
+     "apartMm": 0.3
+    },
+    "L": {
+     "boneMm": 9.5,
+     "solidMm": 6.8,
+     "airMm": 0.0,
+     "apartMm": 1.9
+    }
+   }
   },
   {
    "id": "sb_great_cerebral_vein_of_galen",
@@ -1217,7 +1265,23 @@
     ]
    },
    "cranialNerve": 12,
-   "intracranialFraction": 0.71
+   "intracranialFraction": 0.71,
+   "atOpening": {
+    "stretchMm": 40,
+    "routedId": "tb_hypoglossal_nerve_xii",
+    "R": {
+     "boneMm": 11.2,
+     "solidMm": 10.5,
+     "airMm": 0.0,
+     "apartMm": 3.1
+    },
+    "L": {
+     "boneMm": 2.2,
+     "solidMm": 0.0,
+     "airMm": 0.0,
+     "apartMm": 6.2
+    }
+   }
   },
   {
    "id": "sb_inferior_labial_veins",
@@ -1584,6 +1648,7 @@
    "name": "Mandibular nerve (V3)",
    "aliases": [],
    "type": "tube",
+   "fitted": true,
    "file": "assets/skullbase-ct/sb_mandibular_nerve_v3.glb",
    "bytes": 81460,
    "colour": {
@@ -1608,7 +1673,7 @@
    ],
    "refIds": [],
    "category": "nerve",
-   "derivation": "a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm.",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm.",
    "centroid": {
     "L": [
      -19.54,
@@ -1622,7 +1687,23 @@
     ]
    },
    "cranialNerve": 5,
-   "intracranialFraction": 0.09
+   "intracranialFraction": 0.09,
+   "atOpening": {
+    "stretchMm": 60,
+    "routedId": "tb_mandibular_nerve_v3",
+    "R": {
+     "boneMm": 5.0,
+     "solidMm": 4.0,
+     "airMm": 0.0,
+     "apartMm": 2.3
+    },
+    "L": {
+     "boneMm": 6.8,
+     "solidMm": 2.8,
+     "airMm": 0.0,
+     "apartMm": 2.6
+    }
+   }
   },
   {
    "id": "sb_maxillary_artery",
@@ -1675,6 +1756,7 @@
    "name": "Maxillary nerve (V2)",
    "aliases": [],
    "type": "tube",
+   "fitted": true,
    "file": "assets/skullbase-ct/sb_maxillary_nerve_v2.glb",
    "bytes": 43868,
    "colour": {
@@ -1699,7 +1781,7 @@
    ],
    "refIds": [],
    "category": "nerve",
-   "derivation": "a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm.",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm.",
    "centroid": {
     "L": [
      -34.27,
@@ -1713,7 +1795,23 @@
     ]
    },
    "cranialNerve": 5,
-   "intracranialFraction": 0.49
+   "intracranialFraction": 0.49,
+   "atOpening": {
+    "stretchMm": 45,
+    "routedId": "tb_maxillary_nerve_v2",
+    "R": {
+     "boneMm": 7.8,
+     "solidMm": 0.0,
+     "airMm": 10.8,
+     "apartMm": 1.9
+    },
+    "L": {
+     "boneMm": 10.8,
+     "solidMm": 0.0,
+     "airMm": 6.8,
+     "apartMm": 2.7
+    }
+   }
   },
   {
    "id": "sb_maxillary_veins",
@@ -2208,7 +2306,23 @@
     ]
    },
    "cranialNerve": 3,
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "atOpening": {
+    "stretchMm": 55,
+    "routedId": "tb_oculomotor_nerve_iii",
+    "R": {
+     "boneMm": 6.0,
+     "solidMm": 1.8,
+     "airMm": 0.0,
+     "apartMm": 4.5
+    },
+    "L": {
+     "boneMm": 7.8,
+     "solidMm": 4.0,
+     "airMm": 0.0,
+     "apartMm": 4.0
+    }
+   }
   },
   {
    "id": "sb_olfactory_nerve_i",
@@ -2254,7 +2368,23 @@
     ]
    },
    "cranialNerve": 1,
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "atOpening": {
+    "stretchMm": 32,
+    "routedId": "tb_olfactory_nerve_i",
+    "R": {
+     "boneMm": 15.2,
+     "solidMm": 1.5,
+     "airMm": 0.5,
+     "apartMm": 5.4
+    },
+    "L": {
+     "boneMm": 17.2,
+     "solidMm": 0.5,
+     "airMm": 0.0,
+     "apartMm": 5.1
+    }
+   }
   },
   {
    "id": "sb_ophthalmic_artery",
@@ -2306,6 +2436,7 @@
    "name": "Ophthalmic nerve (V1)",
    "aliases": [],
    "type": "tube",
+   "fitted": true,
    "file": "assets/skullbase-ct/sb_ophthalmic_nerve_v1.glb",
    "bytes": 22528,
    "colour": {
@@ -2330,7 +2461,7 @@
    ],
    "refIds": [],
    "category": "nerve",
-   "derivation": "a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm.",
+   "derivation": "Fitted from the Z-Anatomy model onto this CT's skull (approximate position): a tube around its curve, with the radius Z-Anatomy models, at least 0.3 mm.",
    "centroid": {
     "L": [
      -18.88,
@@ -2434,7 +2565,23 @@
     ]
    },
    "cranialNerve": 2,
-   "intracranialFraction": 1.0
+   "intracranialFraction": 1.0,
+   "atOpening": {
+    "stretchMm": 44,
+    "routedId": "tb_optic_nerve_ii",
+    "R": {
+     "boneMm": 9.8,
+     "solidMm": 0.5,
+     "airMm": 1.0,
+     "apartMm": 4.2
+    },
+    "L": {
+     "boneMm": 9.2,
+     "solidMm": 5.5,
+     "airMm": 6.8,
+     "apartMm": 6.7
+    }
+   }
   },
   {
    "id": "sb_parietal_bone",
@@ -3827,7 +3974,23 @@
     ]
    },
    "cranialNerve": 10,
-   "intracranialFraction": 0.6
+   "intracranialFraction": 0.6,
+   "atOpening": {
+    "stretchMm": 44,
+    "routedId": "tb_vagus_nerve_x",
+    "R": {
+     "boneMm": 0.0,
+     "solidMm": 0.0,
+     "airMm": 0.0,
+     "apartMm": null
+    },
+    "L": {
+     "boneMm": 10.2,
+     "solidMm": 5.2,
+     "airMm": 0.0,
+     "apartMm": 0.9
+    }
+   }
   },
   {
    "id": "sb_vertebral_artery",

@@ -732,13 +732,13 @@ test('skull base (temporal bone): the surgical view opens the Sylvian fissure wi
   await expect(card).toContainText('How the brain is fitted');
   await expect(page.locator('.legend3d')).toContainText('Bone removed');
   await expect(page.locator('.legend3d')).toContainText('Brain');
-  // the slider: the opening goes into the link and into the brain's morph
+  // the sliders: a surgical view opens with its shapes full on (the fissure opened, the frontal lobe lifted), in the
+  // link and in the brain's morphs
   const slider = page.locator('#sb-m-open');
-  await expect(slider).toHaveValue('0');
-  await slider.evaluate((el: HTMLInputElement) => { el.value = '100'; el.dispatchEvent(new Event('input', { bubbles: true })); });
-  await settle(page);
+  await expect(slider).toHaveValue('100');
   await expect.poll(() => new URL(page.url()).hash).toContain('op=100');
-  await expect(page.locator('.stage')).toHaveScreenshot('skullv3-transsylvian-open.png');
+  expect(new URL(page.url()).hash).toContain('lf=100');
+  await expect(page.locator('.stage')).toHaveScreenshot('skullv3-transsylvian-lifted.png');
   // the largest value a visible mesh gives this named shape
   const morph = (name: string) => page.evaluate((n) => {
     type M = { morphTargetInfluences?: number[]; morphTargetDictionary?: Record<string, number>; visible: boolean };
@@ -748,19 +748,24 @@ test('skull base (temporal bone): the surgical view opens the Sylvian fissure wi
     return m;
   }, name);
   expect(await morph('open')).toBe(1);
-  // the second slider lifts the frontal lobe: morph target 1, in the link too
-  await page.locator('#sb-m-lift').evaluate((el: HTMLInputElement) => { el.value = '100'; el.dispatchEvent(new Event('input', { bubbles: true })); });
-  await settle(page);
-  await expect.poll(() => new URL(page.url()).hash).toContain('lf=100');
-  await expect(page.locator('.stage')).toHaveScreenshot('skullv3-transsylvian-lifted.png');
   expect(await morph('lift')).toBe(1);
-  // the keys close both again; another view always opens closed
+  // the keys close each again, and the link keeps them closed: the frontal lobe at rest over the opened fissure, then
+  // the fissure closed too
   await page.keyboard.press('l');
+  await settle(page);
+  await expect.poll(() => new URL(page.url()).hash).toContain('lf=0');
+  expect(await morph('lift')).toBe(0);
+  await expect(page.locator('.stage')).toHaveScreenshot('skullv3-transsylvian-open.png');
   await page.keyboard.press('o');
   await settle(page);
-  await expect.poll(() => new URL(page.url()).hash).not.toContain('op=');
-  expect(new URL(page.url()).hash).not.toContain('lf=');
+  await expect.poll(() => new URL(page.url()).hash).toContain('op=0');
   await expect(slider).toHaveValue('0');
+  expect(await morph('open')).toBe(0);
+  // the slider opens it again
+  await slider.evaluate((el: HTMLInputElement) => { el.value = '100'; el.dispatchEvent(new Event('input', { bubbles: true })); });
+  await settle(page);
+  await expect.poll(() => new URL(page.url()).hash).toContain('op=100');
+  expect(await morph('open')).toBe(1);
   await page.goto('./skullbase/#/atlas?g=arteries&op=60');
   await settle(page);
   expect(new URL(page.url()).hash).not.toContain('op=');
@@ -782,26 +787,28 @@ test('skull base (temporal bone): the surgical view opens the Sylvian fissure wi
   await expect.poll(() => new URL(page.url()).hash).toContain('ih=100');
   expect(await morph('interhemispheric')).toBe(1);
   await expect(page.locator('.stage')).toHaveScreenshot('skullv3-interhemispheric-retracted.png');
-  // the telovelar view: the posterior fossa's contents, the tonsils drawn apart by key
+  // the telovelar view: the posterior fossa's contents, opened with the tonsils drawn apart; the key closes them
   await page.locator('.grp-chips[aria-label="Surgical views"] .chip[data-v="telovelar"]').click();
   await settle(page);
   await expect(page.locator('.pane:not([hidden]) article.card').last()).toContainText('Longatti 2026');
   await expect(page.locator('.pane:not([hidden]) article.card').last()).toContainText('How the cerebellum and brainstem are fitted');
   await expect(page.locator('.legend3d')).toContainText('Cerebellum and brainstem');
+  expect(await morph('telovelar')).toBe(1);
   await page.keyboard.press('t');
   await settle(page);
-  await expect.poll(() => new URL(page.url()).hash).toContain('tv=');
-  expect(await morph('telovelar')).toBeGreaterThan(0);
-  // the retrosigmoid view: its own sourced card, the right hemisphere drawn back by key
+  await expect.poll(() => new URL(page.url()).hash).toContain('tv=0');
+  expect(await morph('telovelar')).toBe(0);
+  // the retrosigmoid view: its own sourced card, opened with the right hemisphere drawn back; the key lets it back
   await page.locator('.grp-chips[aria-label="Surgical views"] .chip[data-v="retrosigmoid"]').click();
   await settle(page);
   await expect(page.locator('.pane:not([hidden]) article.card').last()).toContainText('Jian 2021');
   await expect(page.locator('.pane:not([hidden]) article.card').last()).toContainText('Meybodi 2023');
   await expect(page.locator('#sb-m-retrosigmoid')).toHaveCount(1);
+  expect(await morph('retrosigmoid')).toBe(1);
   await page.keyboard.press('r');
   await settle(page);
-  await expect.poll(() => new URL(page.url()).hash).toContain('rs=');
-  expect(await morph('retrosigmoid')).toBeGreaterThan(0);
+  await expect.poll(() => new URL(page.url()).hash).toContain('rs=0');
+  expect(await morph('retrosigmoid')).toBe(0);
   // a cut bone's card says what it is
   await page.goto('./skullbase/#/atlas?g=transsylvian&sel=sb_appr_pterional__removed');
   await settle(page);

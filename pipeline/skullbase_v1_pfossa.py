@@ -1,12 +1,13 @@
-"""Skull base v1 (the Z-Anatomy model): its own cerebellum, brainstem and fourth ventricle, with the telovelar and
-retrosigmoid shapes Skull base v3 gives its fitted posterior fossa (skullbase_pfossa.py).
+"""Skull base v1 (the Z-Anatomy model): its own cerebellum, brainstem and fourth ventricle, with the telovelar,
+retrosigmoid and far lateral shapes Skull base v3 gives its fitted posterior fossa (skullbase_pfossa.py).
 
   pipeline/.venv/bin/python -I -W ignore pipeline/skullbase_v1_pfossa.py
   (after skullbase_pfossa_export.py, skullbase_v1_skull.py and SB_PROFILE=v1 skullbase_v3_approach.py, which gives the
   retrosigmoid craniotomy; then skullbase_v1.py brain)
 
 The parts are Z-Anatomy's (pfossa_export.json, already in v1's frame): nothing is fitted. The shapes are v3's
-(skullbase_pfossa.telovelar, retrosigmoid) with their parameters: the tonsils drawn apart and the inferior vermis lifted;
+(skullbase_pfossa.telovelar, retrosigmoid, far_lateral) with their parameters: the tonsils drawn apart and the inferior
+vermis lifted; the right tonsil and biventral lobule lifted superomedially;
 the right hemisphere drawn back along the corridors from the internal acoustic meatus (v1's located one) and from where
 the trigeminal nerve leaves the pons (Z-Anatomy's own nerve) out to the retrosigmoid craniotomy cut on v1's skull; each
 kept off bone (Z-Anatomy's, rasterised) and off the arteries Z-Anatomy draws; the arteries lying on the cerebellum
@@ -58,7 +59,7 @@ def tentorium(ex: dict, a: np.ndarray, shape: tuple) -> np.ndarray:
         if not k.startswith("Tentorium cerebelli"):
             continue
         m = trimesh.Trimesh(np.array(m_["verts"], float), np.array(m_["tris"], int), process=False)
-        P = np.vstack([m.vertices, m.sample(int(m.area / 0.05))])
+        P = np.vstack([m.vertices, m.sample(int(m.area / 0.05), seed=0)])
         ijk = np.rint((P - a[:3, 3]) / a[0, 0]).astype(int)
         ok = np.all((ijk >= 0) & (ijk < np.array(shape)), 1)
         out[tuple(ijk[ok].T)] = True
@@ -90,6 +91,9 @@ class V1Fossa:
         canal = ((X[0] - fm[0]) ** 2 + (X[1] - fm[1]) ** 2 <= FM_RADIUS_MM ** 2) & (X[2] <= fm[2] + FM_ABOVE_MM)
         B = ((b > 0.4) | (~cav & ~canal) | tentorium(ex, a, b.shape))[::k, ::k, ::k]
         self.bone = BD.Field(PF.sdf(B, 1.0), a[:3, 3], 1.0, 30.0)
+        # (skullbase_pfossa's clearance and shapes keep the cerebellum off the "roof", the bone and the tentorium: here
+        # the bone field holds Z-Anatomy's tentorium already)
+        self.roof = self.bone
         pts, nrm, self.lines = [], [], {}
         for n, ln in ex["lines"].items():
             if ln.get("kind") != "artery" or n.rsplit(".", 1)[0] not in PF.DRAWN_VESSELS:
@@ -175,14 +179,11 @@ def onto_surface(ex: dict, parts: dict) -> dict:
     shape = tuple(np.ceil((allv.max(0) + 6 - lo) / SURFACE_STEP).astype(int) + 1)
     solid = np.zeros(shape, bool)
     for v, t, _ in parts.values():
-        m = trimesh.Trimesh(v, t, process=False)
-        if m.is_watertight:
-            solid |= fill(v, t, lo, shape, SURFACE_STEP)
-        else:      # (an open part: what its surface, a voxel thick, encloses)
-            P = np.vstack([v, m.sample(int(m.area / (0.25 * SURFACE_STEP ** 2)))])
-            sh = np.zeros(shape, bool)
-            sh[tuple(np.clip(np.rint((P - lo) / SURFACE_STEP).astype(int), 0, np.array(shape) - 1).T)] = True
-            solid |= ndimage.binary_fill_holes(sh)
+        # (by parity: most of Z-Anatomy's parts are not closed as stored, their seams' vertices doubled, yet each
+        # encloses a clear volume, which the parity fill finds; filling the holes of a one-voxel shell of their surface
+        # found a fifth of it or less (the inferior semilunar lobule 2.5 of its 18.1 ml), so the arteries running
+        # through the lobules were left there: half of the PICA)
+        solid |= fill(v, t, lo, shape, SURFACE_STEP)
     sd = SBB2.sdf(solid, SURFACE_STEP)                # (positive outside)
     grad = np.stack(np.gradient(sd, SURFACE_STEP))
 
@@ -213,13 +214,25 @@ def onto_surface(ex: dict, parts: dict) -> dict:
                 D = np.where(keep[:, None], Ds, D)
                 P = P0 + D
             # (the moved path smoothed, its ends kept, so its tube does not fold over itself where neighbouring points
-            # went different ways; then clear again, unsmoothed, where the smoothing let it back in)
+            # went different ways; where the smoothing let it back in, the unsmoothed path again, blended in along the
+            # vessel: a switch from one to the other point by point left bends tighter than the tube, which folded it)
             if (np.linalg.norm(P - P0, axis=1) > 0.05).any() and len(P) > 4:
                 Ps = ndimage.gaussian_filter1d(P, SURFACE_PATH_SMOOTH, axis=0, mode="nearest")
                 Ps[[0, -1]] = P[[0, -1]]
-                s_ = at(sd, Ps)
-                back = s_ < np.maximum(r, 0.3) + SURFACE_GAP_MM
-                P = np.where(back[:, None], P, Ps)
+                need = np.maximum(r, 0.3) + SURFACE_GAP_MM
+                back = (at(sd, Ps) < need).astype(float)
+                w = np.clip(ndimage.gaussian_filter1d(back, SURFACE_BLEND_PTS, mode="nearest") * 2.5, 0, 1)
+                w = np.maximum(w, back)
+                P = w[:, None] * P + (1 - w[:, None]) * Ps
+                # bends still tighter than the tube relaxed towards their neighbours, where that keeps it clear
+                for _ in range(SURFACE_RELAX_ROUNDS):
+                    k = np.flatnonzero(_bend_radius(P) < SURFACE_BEND_X * r[1:-1]) + 1
+                    if not len(k):
+                        break
+                    Q = P.copy()
+                    Q[k] = 0.5 * P[k] + 0.25 * (P[k - 1] + P[k + 1])
+                    ok = at(sd, Q[k]) >= need[k] - SURFACE_RELAX_SLACK_MM
+                    P[k[ok]] = Q[k[ok]]
             d = np.linalg.norm(P - P0, axis=1)
             moved += int((d > 0.1).sum())
             big = max(big, float(d.max()))
@@ -234,9 +247,21 @@ SURFACE_GAP_MM = 0.2      # (an artery moved out of the cerebellum: its surface 
 SURFACE_ROUNDS = 8
 SURFACE_SMOOTH_PTS = 3.0
 SURFACE_PATH_SMOOTH = 1.5
+SURFACE_BLEND_PTS = 2.0      # the unsmoothed path blended back in over this many points (Gaussian) either side
+SURFACE_BEND_X = 1.2         # a bend tighter than this times the tube's radius is relaxed ...
+SURFACE_RELAX_ROUNDS = 30    # ... a point at a time towards its neighbours, for at most this many rounds,
+SURFACE_RELAX_SLACK_MM = 0.1 # ... where that leaves it no more than this short of its clearance
 
 
-def carry_arteries(ex: dict, parts: dict, moves: dict, rs_moves: dict) -> dict:
+def _bend_radius(P: np.ndarray) -> np.ndarray:
+    """The radius of the circle through each point and its two neighbours (mm; interior points)."""
+    a, b = P[1:-1] - P[:-2], P[2:] - P[1:-1]
+    la, lb = np.linalg.norm(a, axis=1), np.linalg.norm(b, axis=1)
+    ang = np.arccos(np.clip(np.einsum("ij,ij->i", a, b) / np.maximum(la * lb, 1e-9), -1, 1))
+    return np.where(ang > 1e-6, 0.5 * (la + lb) / np.maximum(2 * np.sin(ang / 2), 1e-9), 1e9)
+
+
+def carry_arteries(ex: dict, parts: dict, moves: dict, rs_moves: dict, fl_moves: dict, flb_moves: dict) -> dict:
     """Z-Anatomy draws the cerebellar arteries' branches on the cerebellum's surface: each one's tube (CARRIED; as
     skullbase_build.py wrote it) given the shapes' morph targets, each tube vertex moved as the hindbrain's nearest
     vertex is (its mean over CARRY_K of them), in full within CARRY_NEAR_MM of the hindbrain, fading to nothing at
@@ -244,8 +269,15 @@ def carry_arteries(ex: dict, parts: dict, moves: dict, rs_moves: dict) -> dict:
     basilar) and the posterior cerebral artery (above the tentorium) are not carried. Returns {artery: its largest move, mm}."""
     import skullbase_build as SBld
     P = np.vstack([parts[n][0] for n in parts])
-    D = np.vstack([np.c_[moves[n], rs_moves[n]] for n in parts])
+    D = np.vstack([np.c_[moves[n], rs_moves[n], fl_moves[n], flb_moves[n]] for n in parts])
     tree = cKDTree(P)
+    # the hindbrain at rest and as each shape poses it, its distance field: the carried tubes are pushed out of it where
+    # the nearest-vertex carry left them inside (the shapes move the cerebellum unevenly near an artery). The far
+    # lateral view's second shape is used with the first: its pose is the two together
+    sh = {n: np.c_[moves[n], rs_moves[n], fl_moves[n], flb_moves[n]] for n in parts}
+    rest = hindbrain_field({n: (parts[n][0], parts[n][1]) for n in parts})
+    posed = [hindbrain_field({n: (parts[n][0] + sh[n][:, 3 * k:3 * k + 3] + (sh[n][:, 6:9] if k == 3 else 0), parts[n][1])
+                              for n in parts}) for k in range(4)]
     out = {}
     for base in sorted({n.rsplit(".", 1)[0] for n, ln in ex["lines"].items() if ln.get("kind") == "artery"} & set(CARRIED)):
         f = BUILD / f"{SBld.slug(base)}.glb"
@@ -259,15 +291,27 @@ def carry_arteries(ex: dict, parts: dict, moves: dict, rs_moves: dict) -> dict:
             if not ts:
                 continue
             pos, nrm, tri = np.vstack(vs), np.vstack(ns), np.vstack(ts)
+            A = BD.adjacency(np.array(tri, int), len(pos)) + sp.identity(len(pos))
+            deg = np.asarray(A.sum(1)).ravel()[:, None]
+            pos = pos + out_of(pos, *rest, A, deg)       # (at rest too, where the path's bends were eased)
             d, j = tree.query(pos, k=CARRY_K)
             w = np.clip((CARRY_FAR_MM - d.mean(1)) / (CARRY_FAR_MM - CARRY_NEAR_MM), 0, 1)
             M = D[j].mean(1) * w[:, None]
             # (each cross-section moved as one: the moves averaged over the tube's own mesh, CARRY_SMOOTH rounds)
-            A = BD.adjacency(np.array(tri, int), len(pos)) + sp.identity(len(pos))
-            deg = np.asarray(A.sum(1)).ravel()[:, None]
             for _ in range(CARRY_SMOOTH):
                 M = (A @ M) / deg
+            for k, (lo_, sd_, gr_) in enumerate(posed):
+                base_ = pos + M[:, 3 * k:3 * k + 3] + (M[:, 6:9] if k == 3 else 0)
+                M[:, 3 * k:3 * k + 3] += out_of(base_, lo_, sd_, gr_, A, deg)
             nodes.append({"name": name, "positions": pos, "normals": nrm, "indices": np.array(tri, int), "mode": TRIANGLES, "M": M})
+        # how much of the tube lies inside the hindbrain (more than 0.3 mm), at rest and as each shape poses it
+        def inside(X, fld):
+            v = ndimage.map_coordinates(fld[1], ((X - fld[0]) / SURFACE_STEP).T, order=1, mode="nearest")
+            return [round(float(np.mean(v < -0.3)), 4), round(float(max(0.0, -v.min())), 2)]
+        IN_HINDBRAIN[base] = {nd["name"]: {"rest": inside(nd["positions"], rest),
+                                           **{nm: inside(nd["positions"] + nd["M"][:, 3 * k:3 * k + 3] + (nd["M"][:, 6:9] if k == 3 else 0), posed[k])
+                                              for k, nm in enumerate(("telovelar", "retrosigmoid", "farLateral", "farLateralBack"))}}
+                              for nd in nodes}
         big = max((float(np.linalg.norm(nd["M"], axis=1).max()) for nd in nodes), default=0.0)
         if big < CARRY_MIN_MM:
             continue
@@ -275,12 +319,55 @@ def carry_arteries(ex: dict, parts: dict, moves: dict, rs_moves: dict) -> dict:
             M = nd.pop("M")
             # (a tube's normals barely turn under a move this smooth: kept)
             nd["targets"] = [{"name": "telovelar", "positions": M[:, :3], "normals": np.zeros_like(M[:, :3])},
-                             {"name": "retrosigmoid", "positions": M[:, 3:], "normals": np.zeros_like(M[:, :3])}]
+                             {"name": "retrosigmoid", "positions": M[:, 3:6], "normals": np.zeros_like(M[:, :3])},
+                             {"name": "farLateral", "positions": M[:, 6:9], "normals": np.zeros_like(M[:, :3])},
+                             {"name": "farLateralBack", "positions": M[:, 9:], "normals": np.zeros_like(M[:, :3])}]
         write_glb(f, nodes, {"id": SBld.slug(base)})
         out[base] = round(big, 2)
     return out
 
 
+def hindbrain_field(parts: dict) -> tuple:
+    """The hindbrain's parts (each by parity, as onto_surface fills them) as one solid, its signed distance (positive
+    outside) and gradient, on a SURFACE_STEP grid."""
+    import skullbase_brain as SBB2
+    from skullbase_brain import fill
+    allv = np.vstack([v for v, _ in parts.values()])
+    lo = allv.min(0) - 6
+    shape = tuple(np.ceil((allv.max(0) + 6 - lo) / SURFACE_STEP).astype(int) + 1)
+    solid = np.zeros(shape, bool)
+    for v, t in parts.values():
+        solid |= fill(v, t, lo, shape, SURFACE_STEP)
+    sd = SBB2.sdf(solid, SURFACE_STEP)
+    return lo, sd, np.stack(np.gradient(sd, SURFACE_STEP))
+
+
+def out_of(Q: np.ndarray, lo: np.ndarray, sd: np.ndarray, grad: np.ndarray, A, deg) -> np.ndarray:
+    """A carried tube's vertices (Q, as posed) pushed out of the posed hindbrain to SURFACE_GAP_MM, the push spread over
+    the tube's own mesh (so a cross-section moves as one; a vertex's push may only grow), POSED_ROUNDS rounds."""
+    def at(F, X):
+        return ndimage.map_coordinates(F, ((X - lo) / SURFACE_STEP).T, order=1, mode="nearest")
+    Dp = np.zeros_like(Q)
+    for _ in range(POSED_ROUNDS):
+        X = Q + Dp
+        s_ = at(sd, X)
+        bad = s_ < SURFACE_GAP_MM
+        if not bad.any():
+            break
+        g = np.stack([at(grad[k], X) for k in range(3)], 1)
+        g /= np.maximum(np.linalg.norm(g, axis=1, keepdims=True), 1e-9)
+        step = np.zeros_like(Q)
+        step[bad] = ((SURFACE_GAP_MM - s_)[bad] + 0.05)[:, None] * g[bad]
+        for _ in range(POSED_SMOOTH):
+            sm = (A @ step) / deg
+            step = np.where((np.linalg.norm(sm, axis=1) >= np.linalg.norm(step, axis=1))[:, None], sm, step)
+        Dp = Dp + step
+    return Dp
+
+
+IN_HINDBRAIN: dict = {}  # (carry_arteries: per artery and side, per pose, [share of the tube > 0.3 mm in, deepest mm])
+POSED_ROUNDS = 8
+POSED_SMOOTH = 6
 CARRIED = ("Superior cerebellar artery", "Anterior inferior cerebellar artery", "Posterior inferior cerebellar artery")
 CARRY_K = 4
 CARRY_SMOOTH = 12
@@ -290,7 +377,7 @@ CARRY_MIN_MM = 0.5      # (an artery moved less than this anywhere is left as it
 
 
 def main() -> int:
-    np.random.seed(0)        # (trimesh samples surfaces at random: seeded, so a run gives the same files)
+    np.random.seed(0)        # (and trimesh's surface samples are seeded where they are taken: it ignores this seed)
     ex = json.loads((BUILD / "export.json").read_text())
     pf = json.loads((BUILD / "pfossa_export.json").read_text())
     parts = {}
@@ -305,12 +392,18 @@ def main() -> int:
     # Z-Anatomy's hindbrain reaches into its own bone in places (the pons into the clivus): pushed clear as v3 clears its
     # fitted one (skullbase_pfossa.clear: off bone by BONE_GAP_MM and off the drawn arteries, the pushes spread)
     rc = PF.clear(parts, fs)
+    # the arteries again onto the hindbrain's surface as cleared: the clearance moves it (out of the bone, up to some
+    # 9 mm), back over arteries already moved out of it, and its own check reads the hindbrain's vertices, between which
+    # a thin artery passes (half of the PICA lay inside the cerebellum, up to 4.7 mm deep)
+    surf_after = onto_surface(ex, parts)
     # the retrosigmoid corridor from v1's own meatus to v1's own craniotomy
     PF.BUILD = BUILD
     PF.meatus_r = meatus_r
     moves = PF.telovelar(parts, fs)
     root = trigeminal_root(ex, parts)
     rs_moves = PF.retrosigmoid(parts, fs, root)
+    fl_moves = PF.far_lateral(parts, fs)
+    flb_moves = PF.far_lateral_back(parts, fs)
     lic = "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0"
     cite = "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
     items = []
@@ -326,17 +419,19 @@ def main() -> int:
                     continue
                 used, inv = np.unique(t[fsel], return_inverse=True)
                 Vs.append(X[used])
-                Ds.append(np.c_[moves[n][used], rs_moves[n][used]])
+                Ds.append(np.c_[moves[n][used], rs_moves[n][used], fl_moves[n][used], flb_moves[n][used]])
                 Ts.append(inv.reshape(-1, 3) + off)
                 off += len(used)
             if not Vs:
                 continue
             v, tt, DD = np.vstack(Vs), np.vstack(Ts), np.vstack(Ds)
-            D, DR = DD[:, :3], DD[:, 3:]
+            D, DR, DF, DB = DD[:, :3], DD[:, 3:6], DD[:, 6:9], DD[:, 9:]
             node = {"name": s, "positions": v, "normals": PF.normals(v, tt), "indices": tt, "mode": TRIANGLES}
             if moving:
                 node["targets"] = [{"name": "telovelar", "positions": D, "normals": PF.normals(v + D, tt) - node["normals"]},
-                                   {"name": "retrosigmoid", "positions": DR, "normals": PF.normals(v + DR, tt) - node["normals"]}]
+                                   {"name": "retrosigmoid", "positions": DR, "normals": PF.normals(v + DR, tt) - node["normals"]},
+                                   {"name": "farLateral", "positions": DF, "normals": PF.normals(v + DF, tt) - node["normals"]},
+                                   {"name": "farLateralBack", "positions": DB, "normals": PF.normals(v + DB, tt) - node["normals"]}]
             nodes.append(node)
             cent[s] = v.mean(0).round(2).tolist()
         write_glb(BUILD / f"{pid}.glb", nodes, {"id": pid})
@@ -348,24 +443,26 @@ def main() -> int:
                       "derivation": (f"Z-Anatomy's (BodyParts3D: {', '.join(members).lower()}); where it reached into or through this model's "
                                      "bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity)."
                                      + (" Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right "
-                                        "hemisphere drawn back from the petrous bone) are Skull base v3's rules, run on this model "
+                                        "hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model "
                                         "(skullbase_v1_pfossa.py): shapes, not simulations of the tissue." if moving else ""))})
-    carried = carry_arteries(ex, parts, moves, rs_moves)
+    carried = carry_arteries(ex, parts, moves, rs_moves, fl_moves, flb_moves)
     lms = rhomboid(parts)
     mv = np.vstack([moves[n] for n in parts])
     rv = np.vstack([rs_moves[n] for n in parts])
     report = {"telovelarMaxMm": round(float(np.linalg.norm(mv, axis=1).max()), 2),
               "retrosigmoidMaxMm": round(float(np.linalg.norm(rv, axis=1).max()), 2),
+              "farLateral": PF.far_lateral_report(parts, fl_moves, fs),
+              "farLateralBack": PF.far_lateral_back_report(parts, flb_moves, fs),
               "inBoneAtRest": in_bone, "clear": rc, "trigeminalRoot": root.round(2).tolist(), "carried": carried,
-              "ontoSurface": surf}
+              "ontoSurface": surf, "ontoSurfaceAfterClear": surf_after, "arteriesInHindbrain": IN_HINDBRAIN}
     from modifications import record
     record("sb", "skullbase_v1_pfossa", "the cerebellar arteries onto the cerebellum's surface; the hindbrain pushed off bone, the tentorium and "
-           "the arteries; the arteries carried with the telovelar and retrosigmoid shapes",
+           "the arteries; the arteries carried with the telovelar, retrosigmoid and far lateral shapes",
            [*CARRIED, *[n.split(".")[0] for n in parts]], {"surfaceGapMm": SURFACE_GAP_MM, "tentoriumMm": TENTORIUM_MM, "carryNearMm": CARRY_NEAR_MM,
                                                           "carryFarMm": CARRY_FAR_MM},
            {"ontoSurface": surf, "clear": rc, "carried": carried}, {"inBoneAfter": rc["inBoneAfter"], "inVesselAfter": rc["inVesselAfter"]})
     (BUILD / "pfossa.json").write_text(json.dumps({"items": items, "texts": pf["texts"], "report": report, "landmarks": lms}, indent=1))
-    print("posterior fossa (v1)", report["telovelarMaxMm"], report["retrosigmoidMaxMm"], "cleared", rc)
+    print("posterior fossa (v1)", report["telovelarMaxMm"], report["retrosigmoidMaxMm"], report["farLateral"], "cleared", rc)
     return 0
 
 

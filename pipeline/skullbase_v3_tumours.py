@@ -27,11 +27,12 @@ routes where it says so.
     KOOS_CISTERN_MM round them), level with the porus (KOOS_LEVEL_MM) and not behind the brainstem (KOOS_MEDIAL_MM):
     II kept KOOS_CLEAR_MM off the brainstem (as large as that allows), III reaching it and moulded against it (cut at its
     surface, up to KOOS_MOULD_MM in), IV reaching KOOS_INTO_MM into where it lies (the brainstem pushed aside); of the
-    centres allowed, the one furthest off the brainstem. This model's fitted pons lies about 4 mm from the porus, closer
-    than in life, which is why II is small and III moulded. The nerves of the angle are moved round it
-    (displaced_nerves): the facial nerve forwards onto its anterior surface (Choi 2014), thinned and flattened over
-    grades III and IV (Starnoni 2020), the others and the fitted small arteries the shortest way out; the
-    vestibulocochlear nerve, from which it grows, runs into it.
+    centres allowed (searched within KOOS_SEARCH_MM of the meatus), the one furthest off the brainstem; on v1 the grid
+    reaches the largest ball's radius and KOOS_PAD_MM past that, so that no ball is cut by its edge. This model's
+    fitted pons lies about 4 mm from the porus, closer than in life, which is why II is small and III moulded. The
+    nerves of the angle are moved round it (displaced_nerves): the facial nerve forwards onto its anterior surface
+    (Choi 2014), thinned and flattened over grades III and IV (Starnoni 2020), the others and the fitted small arteries
+    the shortest way out; the vestibulocochlear nerve, from which it grows, runs into it.
   * Meningiomas (sites and approaches from Ius 2021's table of skull base meningiomas): a ball of MENINGIOMA_MM
     diameter on the dura of each site (its centre MENINGIOMA_RISE of its radius off the bone along the way out of it, so
     the bone cuts it to a broad base), kept inside the dura (within MENINGIOMA_INTRADURAL_MM of the fitted brain, on the
@@ -48,13 +49,14 @@ are not moved round the tumours.
 Writes v3's build (tm_*.glb, the pushed copies, tumour_items.json) and src/data/generated/sbv3-tumours.json (the Knosp
 plane and lines, each tumour's measures and its grade checked from the drawing).
 
-With SB_PROFILE=v1, the same rules on skull base v1 (Z-Anatomy's model; after skullbase_v1_endonasal.py, then
-compress.mjs skullbase and skullbase_build.py finalize): its bone (v1's bone field, skullbase_v1_skull.py) instead of the
-CT's; its arteries (the meshes v1 shows, and its internal carotids' centre lines with the radius it draws, as the label
-the Knosp section is found on) instead of TopBrain's labels; its cavernous sinus (skullbase_v1_cavernous.py) and
-endonasal grid; its own brain, cerebellum and brainstem (not fitted) pushed. Z-Anatomy's temporal bone is solid along
-the vestibulocochlear nerve (it has no meatal lumen), so Koos I's canal is drawn by rule there (V1_CANAL_MM round the
-line from the fundus to the porus) and taken out of the bone. Writes v1's build and sb-tumours.json.
+With SB_PROFILE=v1, the same rules on skull base v1 (Z-Anatomy's model; after skullbase_v1_vessels.py, then
+skullbase_v1_inbone.py, compress.mjs skullbase and skullbase_build.py finalize): its bone (v1's bone field,
+skullbase_v1_skull.py) instead of the CT's; its arteries (the meshes v1 shows, and its internal carotids' centre
+lines with the radius it draws, as the label the Knosp section is found on) instead of TopBrain's labels; its cavernous
+sinus (skullbase_v1_cavernous.py) and endonasal grid; its own brain, cerebellum and brainstem (not fitted) pushed.
+Z-Anatomy's temporal bone is solid along the vestibulocochlear nerve (it has no meatal lumen), so Koos I's canal is
+drawn by rule there (V1_CANAL_MM round the line from the fundus to the porus) and taken out of the bone. Writes v1's
+build and sb-tumours.json.
 """
 from __future__ import annotations
 
@@ -131,6 +133,8 @@ KOOS_CISTERN_MM = 5.0                # the angle: the fitted cerebellum and brai
 KOOS_MEDIAL_MM = 6.0                 # ... and no more than this medial to the porus (the ball in the angle, not behind the brainstem)
 KOOS_LEVEL_MM = 6.0                  # ... and within this of the porus's height (the angle's level)
 KOOS_BELOW_TENTORIUM = 0.4           # ... and this share of it off the cerebrum (mostly below the tentorium; cut there)
+KOOS_SEARCH_MM = ((34.0, 34.0, 30.0), (6.0, 26.0, 26.0))   # the centres searched this far below and above the meatus's ends (x, y, z)
+KOOS_PAD_MM = 2.0                    # the grid this much past the largest ball round that (in whole mm: the centres' 1 mm lattice kept)
 
 MENINGIOMA_MM = {"olfactory": 30.0, "tuberculum": 20.0, "petroclival": 28.0, "foramen_magnum": 30.0}   # (illustrative)
 FM_RIM_IN_MM = 2.0                   # v1: the foramen magnum's site this far above the rim's lowest level
@@ -152,7 +156,7 @@ VIEWS = {
     "olfactory": {"hemi": "R", "morphs": ["lsoLift", "open"]},
     "tuberculum": {"hemi": "R", "morphs": ["open", "lift"]},
     "petroclival": {"hemi": "R", "morphs": ["retrosigmoid"]},
-    "foramen_magnum": {"hemi": "R", "morphs": []},
+    "foramen_magnum": {"hemi": "R", "morphs": ["farLateral", "farLateralBack"]},
 }
 STEM = ("Medulla oblongata", "Pons", "Midbrain")
 SITE = {   # the meningiomas: name, where (by the landmarks of v3 and the cavernous model), what the push may move
@@ -194,7 +198,9 @@ def mesh_mask(path: Path, lo: np.ndarray, shape: tuple, sides=("L", "R")) -> np.
             out |= fill_in(V, T, lo, shape)
         else:
             m = trimesh.Trimesh(V, T, process=False)
-            P = np.vstack([V, m.sample(max(1, int(m.area / 0.05)))])
+            # (seeded: trimesh samples a surface at random, and a different sample closes the mask differently, which
+            # moved the Koos tumours' centres by up to 6 mm from one run to the next)
+            P = np.vstack([V, m.sample(max(1, int(m.area / 0.05)), seed=0)])
             ijk = np.rint((P - lo) / STEP).astype(int)
             ok = np.all((ijk >= 0) & (ijk < np.array(shape)), 1)
             v = np.zeros(shape, bool)
@@ -567,10 +573,16 @@ def seg_dist(P: np.ndarray, a: np.ndarray, b: np.ndarray) -> np.ndarray:
 def koos(man: list) -> dict:
     fundus, porus = landmark("Fundus of internal acoustic meatus", "R"), landmark("Internal acoustic meatus", "R")
     axis = (porus - fundus) / np.linalg.norm(porus - fundus)
-    lo = np.minimum(fundus, porus) - np.array([34.0, 34.0, 30.0])
-    hi = np.maximum(fundus, porus) + np.array([6.0, 26.0, 26.0])
-    gr = Grid(box_round(lo, hi), man)
+    lo = np.minimum(fundus, porus) - np.array(KOOS_SEARCH_MM[0])
+    hi = np.maximum(fundus, porus) + np.array(KOOS_SEARCH_MM[1])
+    # (v1: the grid reaches past the box the centres are searched in by the largest ball's radius: it ended at that box,
+    # and v1's Koos IV, whose ball reached 5.5 mm past it laterally, was cut open by the grid's edge. v3's balls stay
+    # inside the box, and a larger grid would change how its brain is pushed, so v3 keeps its grid)
+    pad = float(np.ceil(max(max(d) for d in KOOS_DIAMETER_MM.values()) / 2 + KOOS_PAD_MM)) if V1 else 0.0
+    search = np.array(box_round(lo, hi))
+    gr = Grid(box_round(lo - pad, hi + pad), man)
     P = gr.P
+    in_search = np.all((P >= search[:, 0] - 1e-6) & (P <= search[:, 1] + 1e-6), -1)
     stem = gr.of(names=STEM, sides=("R",))
     brain_ = gr.of(kinds=("brain",), sides=("R",))
     art = gr.arteries()
@@ -593,7 +605,7 @@ def koos(man: list) -> dict:
     # (within KOOS_CISTERN_MM of them, measured straight: counted in grid steps along the axes it reached only 3 mm
     # obliquely, and with the pons 5 mm from the porus, as this CT's cisterns put it, no grade II centre was left)
     fossa = (gr.dist(gr.of(kinds=("hindbrain", "ventricle"))) <= KOOS_CISTERN_MM) & ~gr.bone & ~brain_
-    cand = fossa
+    cand = fossa & in_search
     sub = np.zeros_like(cand)
     sub[::2, ::2, ::2] = cand[::2, ::2, ::2]
     C = P[sub]

@@ -615,9 +615,9 @@
   "bone": "Sphenoid bone",
   "part": "Lesser wing",
   "ras": [
-   11.15,
-   0.56,
-   9.11
+   11.18,
+   0.64,
+   8.62
   ],
   "side": "R",
   "boneFrom": "located on this CT",
@@ -630,9 +630,9 @@
   "bone": "Sphenoid bone",
   "part": "Lesser wing",
   "ras": [
-   -12.59,
-   3.01,
-   10.44
+   -12.16,
+   3.57,
+   10.56
   ],
   "side": "L",
   "boneFrom": "located on this CT",
@@ -675,9 +675,9 @@
   "bone": "Temporal bone",
   "part": null,
   "ras": [
-   10.7,
-   -7.5,
-   -2.34
+   10.77,
+   -7.35,
+   -3.32
   ],
   "side": "R",
   "boneFrom": "located on this CT",
@@ -690,9 +690,9 @@
   "bone": "Temporal bone",
   "part": null,
   "ras": [
-   -10.1,
-   -7.57,
-   -1.72
+   -9.61,
+   -7.51,
+   -1.68
   ],
   "side": "L",
   "boneFrom": "located on this CT",

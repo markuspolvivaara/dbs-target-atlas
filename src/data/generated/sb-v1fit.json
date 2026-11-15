@@ -794,13 +794,37 @@
  },
  "pfossa": {
   "telovelarMaxMm": 8.75,
-  "retrosigmoidMaxMm": 12.23,
+  "retrosigmoidMaxMm": 12.33,
+  "farLateral": {
+   "maxMovedMm": 8.94,
+   "moved": 21673,
+   "inBoneAfter": 2,
+   "inVesselAfter": 1,
+   "tonsilLowestZMm": {
+    "rest": -33.1,
+    "lifted": -25.1
+   }
+  },
+  "farLateralBack": {
+   "maxMovedMm": 8.46,
+   "moved": 25513,
+   "inBoneAfter": 10,
+   "inVesselAfter": 0,
+   "tonsilFrontYMm": {
+    "rest": -36.6,
+    "back": -44.6
+   },
+   "medullaGapMm": {
+    "rest": 2.2,
+    "back": 7.8
+   }
+  },
   "inBoneAtRest": {
-   "Anterior quadrangular lobule.l": 245,
-   "Anterior quadrangular lobule.r": 244,
-   "Posterior quadrangular lobule.l": 35,
-   "Posterior quadrangular lobule.r": 35,
-   "Superior semilunar lobule.l": 339,
+   "Anterior quadrangular lobule.l": 241,
+   "Anterior quadrangular lobule.r": 241,
+   "Posterior quadrangular lobule.l": 33,
+   "Posterior quadrangular lobule.r": 33,
+   "Superior semilunar lobule.l": 340,
    "Superior semilunar lobule.r": 341,
    "Inferior semilunar lobule.l": 588,
    "Inferior semilunar lobule.r": 585,
@@ -815,19 +839,19 @@
    "Peduncle of flocculus.l": 66,
    "Peduncle of flocculus.r": 66,
    "Wing of central lobule.l": 29,
-   "Wing of central lobule.r": 28,
+   "Wing of central lobule.r": 29,
    "Superior cerebellar peduncle.l": 0,
    "Superior cerebellar peduncle.r": 0,
    "Midbrain.l": 0,
    "Midbrain.r": 0,
-   "Pons.l": 687,
-   "Pons.r": 701,
+   "Pons.l": 692,
+   "Pons.r": 704,
    "Medulla oblongata.l": 166,
    "Medulla oblongata.r": 169,
    "Lingula of cerebellum": 0,
    "Central lobule": 0,
-   "Culmen": 66,
-   "Declive": 91,
+   "Culmen": 60,
+   "Declive": 90,
    "Folium of vermis": 0,
    "Tuber of vermis": 0,
    "Pyramis of vermis": 0,
@@ -836,47 +860,213 @@
    "Fourth ventricle": 0
   },
   "clear": {
-   "containedPushed": 16,
-   "inVesselBefore": 2890,
-   "inBoneBefore": 5024,
-   "inVesselAfter": 133,
-   "inBoneAfter": 15,
-   "maxMovedMm": 6.52
+   "containedPushed": 0,
+   "inVesselBefore": 4994,
+   "inBoneBefore": 5016,
+   "inVesselAfter": 34,
+   "inBoneAfter": 16,
+   "maxMovedMm": 6.47
   },
   "trigeminalRoot": [
-   15.85,
-   -22.81,
-   4.74
+   15.63,
+   -21.85,
+   4.96
   ],
   "carried": {
-   "Anterior inferior cerebellar artery": 12.08,
-   "Posterior inferior cerebellar artery": 11.87,
-   "Superior cerebellar artery": 11.32
+   "Anterior inferior cerebellar artery": 16.82,
+   "Posterior inferior cerebellar artery": 16.76,
+   "Superior cerebellar artery": 12.49
   },
   "ontoSurface": {
    "Anterior inferior cerebellar artery.l": {
-    "points": 176,
-    "maxMm": 2.27
+    "points": 164,
+    "maxMm": 2.28
    },
    "Anterior inferior cerebellar artery.r": {
-    "points": 173,
-    "maxMm": 1.87
+    "points": 165,
+    "maxMm": 3.12
    },
    "Posterior inferior cerebellar artery.l": {
-    "points": 679,
-    "maxMm": 3.32
+    "points": 1211,
+    "maxMm": 8.38
    },
    "Posterior inferior cerebellar artery.r": {
-    "points": 713,
-    "maxMm": 3.27
+    "points": 1218,
+    "maxMm": 8.46
    },
    "Superior cerebellar artery.l": {
-    "points": 240,
-    "maxMm": 1.5
+    "points": 363,
+    "maxMm": 4.98
    },
    "Superior cerebellar artery.r": {
-    "points": 251,
-    "maxMm": 1.28
+    "points": 363,
+    "maxMm": 4.97
+   }
+  },
+  "ontoSurfaceAfterClear": {
+   "Anterior inferior cerebellar artery.l": {
+    "points": 29,
+    "maxMm": 0.54
+   },
+   "Anterior inferior cerebellar artery.r": {
+    "points": 27,
+    "maxMm": 0.52
+   },
+   "Posterior inferior cerebellar artery.l": {
+    "points": 175,
+    "maxMm": 2.09
+   },
+   "Posterior inferior cerebellar artery.r": {
+    "points": 167,
+    "maxMm": 2.27
+   },
+   "Superior cerebellar artery.l": {
+    "points": 108,
+    "maxMm": 2.58
+   },
+   "Superior cerebellar artery.r": {
+    "points": 133,
+    "maxMm": 2.4
+   }
+  },
+  "arteriesInHindbrain": {
+   "Anterior inferior cerebellar artery": {
+    "L": {
+     "rest": [
+      0.0,
+      0.0
+     ],
+     "telovelar": [
+      0.0,
+      0.0
+     ],
+     "retrosigmoid": [
+      0.0,
+      0.0
+     ],
+     "farLateral": [
+      0.0,
+      0.0
+     ],
+     "farLateralBack": [
+      0.0,
+      0.0
+     ]
+    },
+    "R": {
+     "rest": [
+      0.0,
+      0.0
+     ],
+     "telovelar": [
+      0.0,
+      0.0
+     ],
+     "retrosigmoid": [
+      0.0,
+      0.0
+     ],
+     "farLateral": [
+      0.0,
+      0.12
+     ],
+     "farLateralBack": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "Posterior inferior cerebellar artery": {
+    "L": {
+     "rest": [
+      0.0152,
+      0.55
+     ],
+     "telovelar": [
+      0.0066,
+      0.55
+     ],
+     "retrosigmoid": [
+      0.0093,
+      0.52
+     ],
+     "farLateral": [
+      0.0093,
+      0.52
+     ],
+     "farLateralBack": [
+      0.0052,
+      0.52
+     ]
+    },
+    "R": {
+     "rest": [
+      0.0043,
+      0.52
+     ],
+     "telovelar": [
+      0.0041,
+      0.55
+     ],
+     "retrosigmoid": [
+      0.0014,
+      0.52
+     ],
+     "farLateral": [
+      0.0036,
+      0.49
+     ],
+     "farLateralBack": [
+      0.0,
+      0.27
+     ]
+    }
+   },
+   "Superior cerebellar artery": {
+    "L": {
+     "rest": [
+      0.0,
+      0.0
+     ],
+     "telovelar": [
+      0.0,
+      0.0
+     ],
+     "retrosigmoid": [
+      0.0,
+      0.0
+     ],
+     "farLateral": [
+      0.0,
+      0.0
+     ],
+     "farLateralBack": [
+      0.0,
+      0.0
+     ]
+    },
+    "R": {
+     "rest": [
+      0.0,
+      0.0
+     ],
+     "telovelar": [
+      0.0,
+      0.0
+     ],
+     "retrosigmoid": [
+      0.0,
+      0.24
+     ],
+     "farLateral": [
+      0.0,
+      0.0
+     ],
+     "farLateralBack": [
+      0.0,
+      0.0
+     ]
+    }
    }
   }
  },

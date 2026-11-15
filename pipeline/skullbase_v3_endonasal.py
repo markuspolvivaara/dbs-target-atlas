@@ -382,6 +382,16 @@ def carry_sellar() -> None:
             note = CAV.REROUTE_NOTE.get(it["name"])
             if note and note not in it["derivation"]:
                 it["derivation"] = it["derivation"].rstrip() + " " + note
+    # the courses the skull is carved round (skullbase_v3_skull.py) say so, before what skullbase_v3_junctions.py adds
+    # (it keeps what comes before its " Joined ...")
+    import skullbase_v3_skull as SKULL
+    for it in man["structures"]:
+        note = SKULL.clear_note(it["id"])
+        if note is not None:
+            head, sep, tail = it["derivation"].partition(" Joined ")
+            if SKULL.CLEAR_NOTE_START in head:
+                head = head[:head.index(SKULL.CLEAR_NOTE_START)]
+            it["derivation"] = head.rstrip() + " " + note + (sep + tail if sep else "")
     p.write_text(json.dumps(man, indent=1, ensure_ascii=False))
 
 

@@ -7,8 +7,15 @@ has no fissures for them to lie in).
   The fitted courses give way: each point inside the brainstem, in each of the artery's shapes (the brainstem does not
   move), is lifted out along the shortest way by its depth plus CLEAR_MM, its neighbours along the vessel with it (a
   Gaussian, LIFT_SIGMA_MM), in rounds of at most LIFT_STEP_MM, so that the tube keeps its shape and comes to lie on the
-  surface (lift). Out of the cerebellum they are kept upstream, as centre lines (skullbase_v3.hindbrain_clearance, the
-  PICA's in skullbase_v3_pica.py): checked here to lie on it or in its fissures.
+  surface (lift). Out of the cerebellum they are kept upstream too, as centre lines (skullbase_v3.hindbrain_clearance,
+  the PICA's in skullbase_v3_pica.py), but against the cerebellum filled whole: its fitted lobules overlap one another,
+  and a parity fill of them together counts the overlaps as outside, so the fitted PICA's branches still ran through
+  them (30 % of it, up to 6.5 mm deep), the AICA and the SCA in places. Here each lobule is filled on its own (the
+  pieces OR-ed, fill_pieces), and the courses are lifted out of the cerebellum as well (lift_posed): at rest against
+  it at rest, and in each of the brain's shapes against it as that shape poses it, the lift kept as the course's own
+  shape (made for a course that had none: the cerebellum, drawn aside, pushes the AICA and SCA lying on it ahead of
+  it), so that in every pose under CEREBELLUM_SHARE of a course lies more than CEREBELLUM_IN_MM inside it, none deeper
+  than CEREBELLUM_MM.
   This CT's own arteries: the brainstem gives way, should one lie in it (carve: a channel cut, the tissue straight
   behind it removed, the part meshed again).
 
@@ -35,14 +42,12 @@ DATA = ROOT / "data" / "build"
 GEN = ROOT.parent / "src" / "data" / "generated"
 STEM = ["Medulla oblongata", "Pons", "Midbrain"]
 CEREBELLUM = ["Cerebellar hemisphere", "Vermis", "Tonsil of cerebellum"]
-SHAPES = ("rest", "telovelar", "retrosigmoid")
+SHAPES = ("rest", "telovelar", "retrosigmoid", "farLateral", "farLateralBack")
 HINDBRAIN_GRID_MM = 0.35  # the whole hindbrain rasterised this fine (the brainstem alone at GRID_MM)
-FISSURE_SHARE = 0.25      # a fitted course on the cerebellum: at most this share of its surface touching it ...
-#                         # (0.2 until November 2026. Against the cerebellum as refitted under this CT's tentorium the PICA's
-#                         # carried-on course touches it with 15 % of its surface at rest and 23 to 24 % on the right in the
-#                         # telovelar and retrosigmoid shapes, 5 % of it more than 1 mm deep: it follows the retracted
-#                         # hemisphere only within its reach. Rounding its corners, 29 and 34 of them, costs 2 of those points)
-FISSURE_MM = 4.0          # ... at most this deep (its branches lie in the template's narrow fissures)
+CEREBELLUM_IN_MM = 0.3    # a fitted course's surface point counts as inside the cerebellum from this deep ...
+CEREBELLUM_SHARE = 0.03   # ... and at most this share of its surface may be, in any pose,
+CEREBELLUM_MM = 1.0       # ... none deeper than this (until November 2026: 25 % of it touching, up to 4 mm, allowed as
+#                         # "in its fissures"; measured with the lobules filled together, which undercounted)
 CLEAR_MM = 0.3          # an artery's clearance off the brainstem
 GRID_MM = 0.2           # the brainstem rasterised this fine to find what lies in it
 LIFT_SIGMA_MM = 1.5     # a fitted course lifted with its neighbours along it (Gaussian)
@@ -72,22 +77,44 @@ BONE_SHARE = 0.05         # a fitted course that runs on the brain or on the bon
 OFF_BONE = ("Anterior inferior cerebellar artery", "Superior cerebellar artery (fitted course)",
             "Posterior inferior cerebellar artery (fitted course)", "Medial pontine branches of basilar artery",
             "Lateral pontine branches of basilar artery", "Anterior spinal artery", "Superior petrosal sinus", "Inferior petrosal sinus")
+# the nerves the skull is carved round (skullbase_v3_skull.CLEAR_COURSES, with the petrosal sinuses above): out of it too
+CARVED = ("Maxillary nerve (V2)", "Abducens nerve (VI)")
 
 
 class DrawnBone:
-    """How deep each point lies inside the bone the model draws (mm; 0 outside it): the bone field of
-    skullbase_v3_endonasal.ct_grid over BONE_BOX. The nerves are routed through, and the fitted vessels were checked
-    against, the routing's bone mask, which is thinner than the surface drawn from it: measured against the mask a
-    nerve "crossed 0.0 mm of bone" while 14 to 21 mm of it lay under the drawn surface (the audit of November 2026,
-    findings MB-04 to MB-06)."""
+    """How deep each point lies inside the bone the model shows (mm; 0 outside it): v3's skull (skullbase_v3_skull.py,
+    skull_bone.npz, its field smoothed and at its surface level as the surface is taken from it) over BONE_BOX; before
+    that is built, the CT's bone as Skull base v2 draws it (skullbase_v3_endonasal.ct_grid). The nerves are routed
+    through, and the fitted vessels were checked against, the routing's bone mask, which is thinner than the surface
+    drawn from it: measured against the mask a nerve "crossed 0.0 mm of bone" while 14 to 21 mm of it lay under the
+    drawn surface (the audit of November 2026, findings MB-04 to MB-06). v3's skull is fuller again than v2's surface
+    (its CT bone softened and rescaled so thin plates keep their surface): against v2's, V2 lay 37 to 49 % under the
+    bone, against the skull shown 49 to 71 %."""
 
     def __init__(self):
         import nibabel as nib
+        import skullbase_ct as K
+        self._apply = nib.affines.apply_affine
+        sk = DATA / "skullbase-v3" / "skull_bone.npz"
+        if sk.exists():
+            c = np.load(sk)
+            a = c["a"]
+            corners = np.array([[x, y, z] for x in BONE_BOX[0] for y in BONE_BOX[1] for z in BONE_BOX[2]])
+            ijk = self._apply(np.linalg.inv(a), corners)
+            lo = np.maximum(np.floor(ijk.min(0)).astype(int) - 2, 0)
+            hi = np.minimum(np.ceil(ijk.max(0)).astype(int) + 3, c["b"].shape)
+            sm = ndimage.gaussian_filter(c["b"][tuple(slice(x, y) for x, y in zip(lo, hi))].astype(np.float32), 0.6)
+            self.depth = (ndimage.distance_transform_edt(sm >= K.SURFACE_LEVEL) * K.GRID_MM).astype(np.float32)
+            a_crop = a.copy()
+            a_crop[:3, 3] = self._apply(a, lo)
+            self.inv = np.linalg.inv(a_crop)
+            self.source = "v3's skull"
+            return
         import skullbase_v3_endonasal as ENDO
         g = ENDO.ct_grid(BONE_BOX)
         self.depth = (ndimage.distance_transform_edt(g["bone"] >= ENDO.FIELD_ISO) * ENDO.GRID_MM).astype(np.float32)
         self.inv = np.linalg.inv(g["a_crop"])
-        self._apply = nib.affines.apply_affine
+        self.source = "the CT's bone (v2's surface)"
 
     def __call__(self, P: np.ndarray) -> np.ndarray:
         return ndimage.map_coordinates(self.depth, self._apply(self.inv, P).T, order=1, mode="constant", cval=0.0)
@@ -95,13 +122,16 @@ class DrawnBone:
 
 def bone_contact(items_list: list) -> dict:
     """Every vessel and nerve as shown, against the drawn bone: {name: {side: {"share": of its surface vertices more
-    than BONE_IN_MM inside it, "deepestMm"}}} (at rest)."""
+    than BONE_IN_MM inside it, "deepestMm"}}} (at rest). A vessel skullbase_v3_junctions.py has joined to the sinuses it
+    drains to is measured as it was before (its junctions pass through the bone's openings), so this gives the same
+    whether or not the junctions have run."""
     bone = DrawnBone()
+    print("drawn bone:", bone.source)
     out = {}
     for it in items_list:
         if it.get("category") not in ("artery", "vein", "nerve") or it.get("tumourView") or it.get("approach"):
             continue
-        f = shown(it)
+        f = DATA / (it.get("joinedFrom") or it["file"]).replace("assets/", "")
         if not f.exists():
             continue
         for s, nd in read_glb_full(f).items():
@@ -111,9 +141,10 @@ def bone_contact(items_list: list) -> dict:
 
 
 def bone_check(contact: dict) -> list[tuple[bool, str]]:
-    """The fitted courses that run on the hindbrain or on the bone (OFF_BONE): out of the drawn bone."""
+    """The fitted courses that run on the hindbrain or on the bone (OFF_BONE), and the nerves the skull is carved round
+    (CARVED: this fails when they have moved since skullbase_v3_skull.py carved it): out of the drawn bone."""
     out = []
-    for name in OFF_BONE:
+    for name in OFF_BONE + CARVED:
         for s, c in contact.get(name, {}).items():
             out.append((c["share"] <= BONE_SHARE, f"{name} {s}: {100 * c['share']:.0f} % of its surface in the drawn bone (up to {c['deepestMm']} mm)"))
     return out
@@ -152,19 +183,35 @@ def normals(P: np.ndarray, T: np.ndarray) -> np.ndarray:
     return VB.normals(P, T)
 
 
+def fill_pieces(P: np.ndarray, T: np.ndarray, lo: np.ndarray, shape: tuple, grid: float) -> np.ndarray:
+    """A mesh's inside on a grid: its doubled seam vertices merged, each connected piece (a lobule) filled by parity on
+    its own, the pieces OR-ed. Filled together, two lobules that overlap (as fitted, by about 5 ml a side) cancel out
+    where they overlap."""
+    import trimesh
+    from skullbase_brain import fill
+    out = np.zeros(shape, bool)
+    for piece in trimesh.Trimesh(P, np.asarray(T).reshape(-1, 3), process=True).split(only_watertight=False):
+        v, f = np.asarray(piece.vertices), np.asarray(piece.faces)
+        a = np.maximum(np.floor((v.min(0) - lo) / grid).astype(int) - 1, 0)
+        b = np.minimum(np.ceil((v.max(0) - lo) / grid).astype(int) + 2, np.array(shape))
+        if (b <= a).any():
+            continue
+        out[a[0]:b[0], a[1]:b[1], a[2]:b[2]] |= fill(v, f, lo + a * grid, tuple(b - a), grid)
+    return out
+
+
 class Solid:
-    """The brainstem rasterised (each part, each half on its own: their fills are OR-ed): depth inside it, and its
-    surface's outward normals."""
+    """The brainstem (or the hindbrain) rasterised (each part, each half, each lobule on its own: their fills are
+    OR-ed, fill_pieces): depth inside it, and its surface's outward normals."""
 
     def __init__(self, parts: list[tuple[np.ndarray, np.ndarray]], grid: float = GRID_MM):
-        from skullbase_brain import fill
         self.grid = grid
         allv = np.vstack([P for P, _ in parts])
         self.lo = allv.min(0) - 3
         self.shape = tuple(np.ceil((allv.max(0) + 3 - self.lo) / grid).astype(int) + 1)
         solid = np.zeros(self.shape, bool)
         for P, T in parts:
-            solid |= fill(P, T, self.lo, self.shape, grid)
+            solid |= fill_pieces(P, T, self.lo, self.shape, grid)
         dep, near = ndimage.distance_transform_edt(solid, return_indices=True)
         self.dep = (dep * grid).astype(np.float32)
         self.near = near.astype(np.int32)        # each voxel's nearest voxel outside
@@ -262,6 +309,91 @@ def lift(art: dict, solids: dict) -> int:
     return first
 
 
+class Field:
+    """A solid's signed distance (mm, positive outside, smoothed a little) and its gradient on the solid's grid, with
+    the drawn bone counted as solid too: a course pushed out of the hindbrain goes into the space between it and the
+    bone, not into the bone (lifted along the nearest way out, the PICA's branches went 11 % into it, and the push did
+    not settle: points between overlapping lobules were sent one way and then the other)."""
+
+    def __init__(self, solid: "Solid", bone: "DrawnBone | None" = None):
+        mask = solid.dep > 0
+        if bone is not None:
+            ii, jj = np.meshgrid(np.arange(mask.shape[0]), np.arange(mask.shape[1]), indexing="ij")
+            for k in range(mask.shape[2]):
+                P = solid.lo + np.c_[ii.ravel(), jj.ravel(), np.full(ii.size, k)] * solid.grid
+                mask[:, :, k] |= (bone(P) > 0).reshape(ii.shape)
+        sd = (ndimage.distance_transform_edt(~mask) - ndimage.distance_transform_edt(mask)) * solid.grid
+        self.sd = ndimage.gaussian_filter(sd.astype(np.float32), 1.0)
+        self.grad = [np.gradient(self.sd, solid.grid, axis=k).astype(np.float32) for k in range(3)]
+        self.lo, self.grid = solid.lo, solid.grid
+
+    def at(self, F: np.ndarray, X: np.ndarray) -> np.ndarray:
+        return ndimage.map_coordinates(F, ((X - self.lo) / self.grid).T, order=1, mode="nearest")
+
+
+def push_out(Q: np.ndarray, field: Field, A, deg, goal: np.ndarray | float = None) -> np.ndarray:
+    """A course's surface points (Q) pushed out of a field to `goal` (PUSH_GAP_MM; per point) along its gradient, each
+    round's push spread over the course's own mesh (A: its adjacency; a cross-section moves as one; a point's push may
+    only grow). Returns the displacement."""
+    goal = PUSH_GAP_MM if goal is None else goal
+    Dp = np.zeros_like(Q)
+    for _ in range(PUSH_ROUNDS):
+        X = Q + Dp
+        s_ = field.at(field.sd, X)
+        bad = s_ < goal
+        if not bad.any():
+            break
+        g = np.stack([field.at(field.grad[k], X) for k in range(3)], 1)
+        g /= np.maximum(np.linalg.norm(g, axis=1, keepdims=True), 1e-9)
+        step = np.zeros_like(Q)
+        step[bad] = ((goal - s_)[bad] + 0.05)[:, None] * g[bad]
+        for _ in range(PUSH_SMOOTH):
+            sm = (A @ step) / deg
+            step = np.where((np.linalg.norm(sm, axis=1) >= np.linalg.norm(step, axis=1))[:, None], sm, step)
+        Dp = Dp + step
+    return Dp
+
+
+def lift_posed(art: dict, fields: dict) -> dict:
+    """A fitted course pushed out of the hindbrain (brainstem and cerebellum, the drawn bone kept to as well) pose by
+    pose: at rest against it at rest, then in each of the brain's shapes its pose there (its own shape, or at rest if it
+    has none) against the hindbrain as that shape poses it, the push kept as its shape (made where it had none and the
+    push moves it). Returns {pose: points inside at first}."""
+    import scipy.sparse as sp
+    import brain_deform as BD
+    out = {}
+    for nd in art.values():
+        T = np.asarray(nd["indices"]).reshape(-1, 3)
+        A = BD.adjacency(T, len(nd["positions"])) + sp.identity(len(nd["positions"]))
+        deg = np.asarray(A.sum(1)).ravel()[:, None]
+        P = nd["positions"]
+        out["rest"] = max(out.get("rest", 0), int((fields["rest"].at(fields["rest"].sd, P) < 0).sum()))
+        P0 = P + push_out(P, fields["rest"], A, deg)
+        nd["positions"] = P0
+        # (in a shape, a point is pushed no further out than it came at rest: where no room was found at rest, between
+        # the cerebellum and the bone, the shapes that leave that side as it is would push it on, a little each)
+        goal = np.minimum(PUSH_GAP_MM, fields["rest"].at(fields["rest"].sd, P0))
+        n0 = normals(P0, nd["indices"])
+        tg = {t["name"]: t for t in nd["targets"]}
+        for sh in SHAPES[1:]:
+            Q = P0 + (tg[sh]["positions"] if sh in tg else 0)
+            out[sh] = max(out.get(sh, 0), int((fields[sh].at(fields[sh].sd, Q) < 0).sum()))
+            Q = Q + push_out(Q, fields[sh], A, deg, goal)
+            d = Q - P0
+            if sh in tg:
+                tg[sh]["positions"], tg[sh]["normals"] = d, normals(Q, nd["indices"]) - n0
+            elif np.abs(d).max() > 1e-3:
+                nd["targets"].append({"name": sh, "positions": d, "normals": normals(Q, nd["indices"]) - n0})
+        order = {sh: i for i, sh in enumerate(SHAPES)}
+        nd["targets"].sort(key=lambda t: order.get(t["name"], 99))
+    return out
+
+
+PUSH_GAP_MM = 0.2         # a course's surface pushed this far out of the hindbrain and the drawn bone
+PUSH_ROUNDS = 40
+PUSH_SMOOTH = 6
+
+
 def carve(stem: dict, arteries: list[dict]) -> dict:
     """A brainstem part with this CT's own arteries carved out of it (rasterised at GRID_MM): each artery, in every shape,
     widened by CLEAR_MM, and the part's tissue straight behind it (posteriorly, its loops lying on the back of the
@@ -332,6 +464,9 @@ def clear(items_list: list) -> dict:
     stem = [read_glb_full(file_of(by[n])) for n in STEM if n in by]
     solid = Solid([(nd["positions"], nd["indices"]) for s in stem for nd in s.values()])
     stem_solids = {sh: solid for sh in SHAPES}    # (the brainstem does not move; each of an artery's shapes against it)
+    hind = hindbrain(by)                          # (the brainstem and the cerebellum, in each shape of the brain)
+    bone = DrawnBone()
+    fields = {sh: Field(sol, bone) for sh, sol in hind.items()}
     report, own = {}, []
     for it in items_list:
         if it.get("category") != "artery" or it.get("tumourView"):     # (a tumour view's copy is made later, from the cleared file)
@@ -342,13 +477,15 @@ def clear(items_list: list) -> dict:
             if any((solid.depth(Q) > 0).any() for nd in nodes.values() for Q in states(nd)):
                 own.append((it, nodes))           # this CT's own: the brainstem gives way (below)
             continue
-        if not any((solid.depth(shaped(nd, sh)) > 0).any() for sh in SHAPES for nd in nodes.values()):
+        if not any((hind[sh].depth(shaped(nd, sh)) > 0).any() for sh in SHAPES for nd in nodes.values()):
             continue
         rest = {s: nd["positions"].copy() for s, nd in nodes.items()}
         n = lift(nodes, stem_solids)
+        posed = lift_posed(nodes, fields)
         moved = max(float(np.linalg.norm(nodes[s]["positions"] - rest[s], axis=1).max()) for s in nodes)
         cleared(it, nodes, LIFT_NOTE)
-        report[it["name"]] = {"insidePoints": n, "movedMm": round(moved, 2)}
+        report[it["name"]] = {"insidePoints": n, "insideHindbrainPoints": posed, "movedMm": round(moved, 2),
+                              "shapes": sorted({t["name"] for nd in nodes.values() for t in nd["targets"]})}
     for name in STEM:
         if name not in by or not own:
             continue
@@ -378,12 +515,12 @@ def check(items_list: list) -> list[tuple[bool, str]]:
             # on the cerebellum or in its fissures (the template's narrow slits, where its branches lie: the tube's wall
             # may touch their sides), not through it
             # (in its own shapes: a vessel that does not move with the cerebellum is judged at rest)
-            own_shapes = {"rest"} | {t["name"] for nd in nodes.values() for t in nd["targets"]}
-            d = [sd.depth(shaped(nd, sh)) for sh, sd in solids.items() if sh in own_shapes for nd in nodes.values()]
-            share = max(float((x > 0).mean()) for x in d)
+            # (in every shape of the brain: one that does not move with it is judged there at rest, as it is drawn)
+            d = [sd.depth(shaped(nd, sh)) for sh, sd in solids.items() for nd in nodes.values()]
+            share = max(float((x > CEREBELLUM_IN_MM).mean()) for x in d)
             w2 = max(float(x.max()) for x in d)
-            out.append((share <= FISSURE_SHARE and w2 <= FISSURE_MM,
-                        f"{it['name']}: {100 * share:.0f} % of it, up to {w2:.1f} mm, inside the cerebellum"))
+            out.append((share <= CEREBELLUM_SHARE and w2 <= CEREBELLUM_MM,
+                        f"{it['name']}: {100 * share:.1f} % of it more than {CEREBELLUM_IN_MM} mm, up to {w2:.1f} mm, inside the cerebellum"))
     return out
 
 
@@ -406,7 +543,8 @@ def main() -> int:
     print("still inside:", bad or "none")
     from modifications import record
     record("sbv3", "skullbase_v3_clearance", "the fitted arteries lifted off the brainstem; the brainstem carved for the CT's own",
-           list(rep), {"clearMm": CLEAR_MM, "shapes": list(SHAPES), "fissureShare": FISSURE_SHARE, "fissureMm": FISSURE_MM},
+           list(rep), {"clearMm": CLEAR_MM, "shapes": list(SHAPES), "cerebellumInMm": CEREBELLUM_IN_MM,
+                       "cerebellumShare": CEREBELLUM_SHARE, "cerebellumMm": CEREBELLUM_MM},
            rep, {"checks": len(checks), "failed": bad})
     return 1 if bad else 0
 

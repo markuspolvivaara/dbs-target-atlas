@@ -90,7 +90,8 @@ describe('skull base (default model): fitted vessels lie on the bone and the bra
   it('every vessel and nerve is measured against the bone as drawn; the courses that run on the brain or the bone are out of it', () => {
     const b = V3_FIT.drawnBone!;
     expect(Object.keys(b).length).toBeGreaterThan(60);
-    for (const name of OFF_BONE) for (const side of ['R', 'L']) {
+    // (and V2 and VI, which the skull is carved round: 37 to 71 % and 18 to 28 % of them lay under it, MB-06)
+    for (const name of [...OFF_BONE, 'Maxillary nerve (V2)', 'Abducens nerve (VI)']) for (const side of ['R', 'L']) {
       expect(b[name]?.[side], `${name} ${side}`).toBeTruthy();
       // (the right lateral pontine branches had 52 % of their surface in the petrous apex)
       expect(b[name][side].share, `${name} ${side}`).toBeLessThanOrEqual(0.05);

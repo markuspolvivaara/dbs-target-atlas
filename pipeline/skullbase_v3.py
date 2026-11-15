@@ -1229,8 +1229,11 @@ def pfossa_items(items: list) -> None:
                           f"{c['inVesselBefore']} vertices still in an artery's way and the {c['inBoneBefore']} in bone's pushed clear."
                           + (f" The telovelar slider draws the tonsils {tv['tvMm']:.0f} mm apart (laterally, a little up) and lifts the nodule "
                              f"and uvula {tv['tvVermisMm']:.0f} mm up and back, the rest of the cerebellum following; the retrosigmoid slider "
-                             f"draws the right hemisphere up to {tv['rsMm']:.0f} mm away from the corridor along the back of the petrous bone; shapes, not a "
-                             "simulation of the tissue." if b["morph"] else ""),
+                             f"draws the right hemisphere up to {tv['rsMm']:.0f} mm away from the corridor along the back of the petrous bone"
+                             + (f"; the far lateral slider lifts the right tonsil and biventral lobule {tv['flMm']:.0f} mm up and "
+                                f"{tv['flMm'] * tv['flMedial']:.0f} mm towards the midline" if "flMm" in tv else "")
+                             + (f", and its second slider draws them {tv['flBackMm']:.0f} mm straight back" if "flBackMm" in tv else "")
+                             + "; shapes, not a simulation of the tissue." if b["morph"] else ""),
             "centroid": b["centroid"],
         })
 
@@ -1362,6 +1365,39 @@ def approach_items(items: list, ex2: dict, build: Path | None = None, kind: str 
         cut_ids = [f"sb_appr_{aid}__{SB.slug(b)[3:]}" for b in sorted({SB.split_pair(c)[0] for c in ap.get("cutBones", ap["bones"])})]
         summary[aid] = {"name": ap["name"], "side": ap["side"], "how": ap["how"], "removedMl": ap["removedMl"], "bones": ids, "cutBones": cut_ids,
                         "removed": sid, "burrHoles": ap["burrHoles"], **{k: ap[k] for k in ("measured", "corners") if k in ap}}
+        if ap.get("clinoid"):   # the anterior clinoid process, as a piece of its own: bone until the view's clinoidectomy takes it
+            cv, ct = np.array(ap["clinoid"]["verts"], float), np.array(ap["clinoid"]["tris"], int)
+            ct = orient_outward(cv, ct)
+            cid = f"sb_appr_{aid}__clinoid"
+            write_glb(build / f"{cid}.glb", [{"name": "R", "positions": cv, "normals": SB.normals(cv, ct), "indices": ct, "mode": TRIANGLES}], {"id": cid})
+            cc = cv.mean(0).round(2).tolist()
+            sph = cut_of[SB.slug("Sphenoid bone")]
+            items.append({**{k: sph[k] for k in ("colour", "dataset", "source", "licence", "citation", "citationUrls")},
+                          "id": cid, "name": "Anterior clinoid process", "aliases": [], "type": "bone", "file": f"assets/{kind}/{cid}.glb",
+                          "bytes": 0, "refIds": [], "category": "bone", "approach": aid, "clinoid": True,
+                          "derivation": (f"{owner} sphenoid bone's anterior clinoid process, as a piece of its own in the {ap['name'].lower()}'s "
+                                         f"view: bone until the view's anterior clinoidectomy (a switch) takes it, {ap['clinoid']['ml']} ml. "
+                                         "The rest of the ridge between the anterior and middle fossae from where the view's drilling stops to "
+                                         "the process's tip, and the bone round the tip, drawn by rule (pipeline/skullbase_v3_approach.py)."),
+                          "centroid": {"L": cc, "R": cc}})
+            summary[aid].update({"clinoid": cid, "clinoidMl": ap["clinoid"]["ml"]})
+        if ap.get("ridge"):     # the drilled sphenoid ridge, as a piece of its own: bone removed until the view's switch puts it back
+            rv, rt = np.array(ap["ridge"]["verts"], float), np.array(ap["ridge"]["tris"], int)
+            rt = orient_outward(rv, rt)
+            rid = f"sb_appr_{aid}__ridge"
+            write_glb(build / f"{rid}.glb", [{"name": "R", "positions": rv, "normals": SB.normals(rv, rt), "indices": rt, "mode": TRIANGLES}], {"id": rid})
+            rc = rv.mean(0).round(2).tolist()
+            sph = cut_of[SB.slug("Sphenoid bone")]
+            items.append({**{k: sph[k] for k in ("colour", "dataset", "source", "licence", "citation", "citationUrls")},
+                          "id": rid, "name": "Sphenoid ridge (drilled)", "aliases": [], "type": "bone", "file": f"assets/{kind}/{rid}.glb",
+                          "bytes": 0, "refIds": [], "category": "bone", "approach": aid, "ridge": True,
+                          "derivation": (f"The bone the {ap['name'].lower()}'s drilling of the lateral sphenoid ridge takes, as a piece of its own "
+                                         f"({ap['ridge']['ml']} ml): drawn as the bone removed, or as bone with the view's switch for the ridge off. "
+                                         "The ridge between the anterior and middle fossae and the bone round the line from the pterion "
+                                         "towards the anterior clinoid process, to two-thirds of the way, and the opening's edge where the "
+                                         "ridge starts, drawn by rule (pipeline/skullbase_v3_approach.py)."),
+                          "centroid": {"L": rc, "R": rc}})
+            summary[aid].update({"ridge": rid, "ridgeMl": ap["ridge"]["ml"]})
         if ap.get("guide"):     # an outline drawn on the bone (the Kawase rhomboid)
             gid = f"sb_appr_{aid}__guide"
             gv, gn, gt = SB.tube(np.c_[np.array(ap["guide"]["points"]), np.full(len(ap["guide"]["points"]), 0.35)])
@@ -1442,7 +1478,7 @@ def validate() -> int:
             c = it["centroid"]
             if it.get("category") == "removed" and aps[it["approach"]]["side"] == "M":     # a midline craniotomy
                 check(abs(c["R"][0]) < 5, f"{it['id']}: not on the midline {c}")
-            elif it.get("category") == "removed":     # one side only: the craniotomy is on the right
+            elif it.get("category") == "removed" or it.get("clinoid") or it.get("ridge"):     # one side only: the craniotomy is on the right
                 check(c["R"][0] > 0, f"{it['id']}: not on the right {c}")
             elif it.get("category") in ("tumour", "guide"):     # drawn on the right, or across the midline
                 check(c["R"][0] > -5, f"{it['id']}: not on the right {c}")
@@ -1453,6 +1489,10 @@ def validate() -> int:
                 check(it.get("tumourView") or abs(c["R"][0] + c["L"][0]) / 2 < 5, f"{it['id']}: off the midline {c}")
             else:
                 check(c["L"][0] < 0 < c["R"][0], f"{it['id']}: sides {c}")
+    for aid in ("pterional", "orbitozygomatic"):    # the anterior clinoidectomy's piece: there, and the size of a clinoid process
+        a_ = aps.get(aid, {})
+        check(a_.get("clinoid") is not None and 0.05 <= a_.get("clinoidMl", 0) <= 2.0, f"{aid}: the clinoid process's piece {a_.get('clinoidMl')} ml")
+        check(a_.get("ridge") is not None and 0.2 <= a_.get("ridgeMl", 0) <= 6.0, f"{aid}: the drilled ridge's piece {a_.get('ridgeMl')} ml")
     for nerve, sides in fit["nerves"].items():
         for s, r in sides.items():
             check(r["boneCrossedMm"] <= 2.0, f"{nerve} {s}: crosses {r['boneCrossedMm']} mm of bone")
@@ -1581,6 +1621,23 @@ def validate() -> int:
               f"retrosigmoid shape {r_}")
         check(r_["meatusToCerebellumMm"]["moved"] > r_["meatusToCerebellumMm"]["rest"] + 2 and r_["inCorridor"]["moved"] <= 0.01 * r_["inCorridor"]["rest"],
               f"the retrosigmoid shape does not clear the corridor {r_}")
+        fl_ = pr.get("farLateral")
+        check(fl_ is not None, "the far lateral shape's report is missing")
+        if fl_:
+            rise = fl_["tonsilLowestZMm"]["lifted"] - fl_["tonsilLowestZMm"]["rest"]
+            check(fl_["maxMovedMm"] <= tp_["flMm"] * float(np.hypot(1, tp_["flMedial"])) + 1.5 and fl_["inBoneAfter"] == 0 and fl_["inVesselAfter"] == 0,
+                  f"far lateral shape {fl_}")
+            check(0.5 * tp_["flMm"] <= rise <= tp_["flMm"] + 1.5, f"the far lateral shape lifts the right tonsil {rise:.1f} mm, not about {tp_['flMm']} {fl_}")
+            g_ = fl_.get("vertebralGapMm")
+            check(g_ is None or g_["lifted"] > g_["rest"], f"the far lateral shape brings the cerebellum nearer the vertebral artery {fl_}")
+        fb_ = pr.get("farLateralBack")
+        check(fb_ is not None, "the far lateral view's second shape's report is missing")
+        if fb_:
+            back = fb_["tonsilFrontYMm"]["rest"] - fb_["tonsilFrontYMm"]["back"]
+            check(fb_["maxMovedMm"] <= tp_["flBackMm"] + 1.5 and fb_["inBoneAfter"] == 0 and fb_["inVesselAfter"] == 0,
+                  f"far lateral (back) shape {fb_}")
+            check(0.5 * tp_["flBackMm"] <= back <= tp_["flBackMm"] + 1.5, f"the second far lateral shape draws the right tonsil {back:.1f} mm back, not about {tp_['flBackMm']} {fb_}")
+            check(fb_["medullaGapMm"]["back"] > fb_["medullaGapMm"]["rest"], f"the second far lateral shape does not draw the cerebellum off the medulla {fb_}")
     aica = ids.get("tb_anterior_inferior_cerebellar_artery")
     check(aica is not None and aica.get("fitted"), "the anterior inferior cerebellar artery (fitted) is missing")
     print(f"skull base v3 validation: {n - len(fails)}/{n} checks passed")

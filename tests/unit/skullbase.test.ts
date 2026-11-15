@@ -3,10 +3,10 @@ import { APPROACH_GEOM, crossCheckSb, DEFINITIONS, definitionFor, LANDMARKS, NOT
 import { SB_GROUPS } from '../../src/skullbase/groups';
 import { skullPlan, skullScene } from '../../src/skullbase/scene';
 import { decodeSkull, defaultSkullState, encodeSkull } from '../../src/skullbase/state';
-import { meshSoup, nodeExtentsX, nodeMeans, pointsInside } from './glb';
+import { meshSoup, nodeExtentsX, nodeMeans, nodeMorphs, pointsInside } from './glb';
 import sbModifications from '../../src/data/generated/sb-modifications.json';
 import { FORAMEN_CONTENTS } from '../../src/skullbase/foramina';
-import { inBoneNote } from '../../src/ui/skullbase-atlas';
+import { atOpeningNote, inBoneNote } from '../../src/ui/skullbase-atlas';
 import { TB_NOTES, TB_REF, TB_REFS } from '../../src/skullbase/temporal';
 import { APPROACH_REF, APPROACH_REFS, APPROACHES, CAVERNOUS_INFO, ENDONASAL_INFO } from '../../src/skullbase/approaches';
 
@@ -91,6 +91,89 @@ describe('skull-base data (Z-Anatomy export)', () => {
     expect(pointsInside(nerve.P, bone.P, bone.T) / (nerve.P.length / 3)).toBeLessThan(0.01);
     expect(SB_MANIFEST.structures.find((x) => x.name === 'Hypoglossal nerve (XII)')!.derivation).toContain('Led through the canal');
   }, 60_000);
+  it('the straight and occipital sinuses start at the confluence, the basilar artery lies off the clivus, the middle meningeal artery passes its foramen', async () => {
+    // (decision 5 on the audit's MC-11, pipeline/skullbase_v1_vessels.py: Z-Anatomy's file has both sinuses 44.5 mm in
+    // front of the confluence; it draws the basilar artery pressed into the clivus and the middle meningeal artery
+    // through solid bone 2.6 mm from the model's own foramen spinosum)
+    type M = {
+      sinuses: { offsetLengthMm: number; straight: { toConfluenceMm: number; toInferiorSagittalMm: number; toConfluenceBeforeMm: number };
+        occipital: { toConfluenceMm: number; inBoneBeforeMm: number; inBoneAfterMm: number; offCrestMaxMm: number } };
+      basilar: { basilar: { inBoneBeforeMm: number; inBoneAfterMm: number; wallAfterMm: number; toBrainstemAfterMm: number; maxMovedMm: number };
+        branches: Record<string, Record<string, { inBoneBeforeMm: number; inBoneAfterMm: number }>> };
+      meningeal: Record<string, { canal: { centre: number[]; fromLabelMm: number; lengthMm: number; widthMm: number }; inBoneBeforeMm: number;
+        inBoneAfterMm: number; toCanalCentreBeforeMm: number; toCanalCentreMm: number; originMovedMm: number; sharpestTurnDeg: number }>;
+      carried: Record<string, { maxMovedMm: number }>; joins: Record<string, [number, number]>; nerves: Record<string, [number, number]>;
+    };
+    const m = (sbModifications as unknown as { steps: { step: string; metrics: M }[] }).steps.find((x) => x.step === 'skullbase_v1_vessels')!.metrics;
+    const file = (n: string) => SB_MANIFEST.structures.find((x) => x.name === n && !x.replaces)!.file;
+    const nearest = (a: Float64Array, b: Float64Array) => {
+      let best = Infinity;
+      for (let i = 0; i < a.length; i += 3) for (let j = 0; j < b.length; j += 3)
+        best = Math.min(best, Math.hypot(a[i] - b[j], a[i + 1] - b[j + 1], a[i + 2] - b[j + 2]));
+      return best;
+    };
+    // the sinuses: moved back by the offset, the straight sinus meets the transverse sinuses and the inferior sagittal sinus
+    expect(m.sinuses.offsetLengthMm).toBeGreaterThan(40);
+    expect(m.sinuses.offsetLengthMm).toBeLessThan(50);
+    expect(m.sinuses.straight.toConfluenceBeforeMm).toBeGreaterThan(40);
+    expect(m.sinuses.straight.toConfluenceMm).toBeLessThan(0.5);
+    expect(m.sinuses.straight.toInferiorSagittalMm).toBeLessThan(2);
+    const straight = (await meshSoup(file('Straight sinus'))).P;
+    expect(nearest(straight, (await meshSoup(file('Transverse sinus'))).P)).toBeLessThan(2);
+    expect(nearest(straight, (await meshSoup(file('Inferior sagittal sinus'))).P)).toBeLessThan(2.5);
+    expect(m.sinuses.occipital.toConfluenceMm).toBeLessThan(0.5);
+    expect(m.sinuses.occipital.inBoneBeforeMm).toBeGreaterThan(5);
+    expect(m.sinuses.occipital.inBoneAfterMm).toBe(0);
+    expect(m.sinuses.occipital.offCrestMaxMm).toBeLessThan(0.5);
+    // the basilar artery off the bone, not into the pons; what is joined to it still meets it; the nerves no nearer
+    const b = m.basilar.basilar;
+    expect(b.inBoneBeforeMm).toBeGreaterThan(10);
+    expect(b.inBoneAfterMm).toBe(0);
+    expect(b.wallAfterMm).toBeGreaterThan(-0.1);
+    expect(b.toBrainstemAfterMm).toBeGreaterThan(-0.3);
+    expect(b.maxMovedMm).toBeLessThan(3);
+    for (const [n, sides] of Object.entries(m.basilar.branches)) for (const [sd, r] of Object.entries(sides)) {
+      expect(r.inBoneBeforeMm, `${n} ${sd}`).toBeGreaterThan(10);
+      expect(r.inBoneAfterMm, `${n} ${sd}`).toBeLessThanOrEqual(0.5);
+    }
+    for (const id of ['sb_vertebral_artery', 'sb_anterior_inferior_cerebellar_artery', 'sb_superior_cerebellar_artery', 'sb_posterior_cerebral_artery'])
+      expect(m.carried[id], id).toBeDefined();
+    for (const [id, [before, after]] of Object.entries(m.joins)) expect(after, id).toBeLessThanOrEqual(before + 0.1);
+    for (const [k, [before, after]] of Object.entries(m.nerves)) expect(after, k).toBeGreaterThanOrEqual(Math.min(before, 0.5) - 0.1);
+    const basilar = (await meshSoup(file('Basilar artery'))).P;
+    let inside = 0;
+    for (const bone of ['Sphenoid bone', 'Occipital bone']) {
+      const s = await meshSoup(file(bone));
+      inside += pointsInside(basilar, s.P, s.T);
+    }
+    expect(inside / (basilar.length / 3)).toBeLessThan(0.03);
+    expect(nearest(basilar, (await meshSoup(file('Vertebral artery'))).P)).toBeLessThan(0.5);
+    // the middle meningeal artery through the foramen spinosum, found beside Z-Anatomy's label for it
+    const label = LANDMARKS.find((l) => l.name === 'Foramen spinosum')!;
+    const mma = (await meshSoup(file('Middle meningeal artery'))).P;
+    expect(Object.keys(m.meningeal).sort()).toEqual(['L', 'R']);
+    for (const [sd, r] of Object.entries(m.meningeal)) {
+      expect(r.canal.fromLabelMm, sd).toBeLessThan(1);
+      expect(r.canal.lengthMm, sd).toBeGreaterThan(4);
+      expect(r.canal.widthMm, sd).toBeGreaterThan(1.5);
+      const sign = sd === 'R' ? 1 : -1;
+      expect(Math.hypot(r.canal.centre[0] - sign * Math.abs(label.ras[0]), r.canal.centre[1] - label.ras[1], r.canal.centre[2] - label.ras[2]), sd).toBeLessThan(2);
+      expect(r.toCanalCentreBeforeMm, sd).toBeGreaterThan(2);
+      expect(r.toCanalCentreMm, sd).toBeLessThan(0.5);
+      expect(r.inBoneBeforeMm, sd).toBeGreaterThan(10);
+      expect(r.inBoneAfterMm, sd).toBeLessThanOrEqual(1);
+      expect(r.originMovedMm, sd).toBe(0);
+      expect(r.sharpestTurnDeg, sd).toBeLessThan(70);
+      expect(nearest(mma, new Float64Array(r.canal.centre)), sd).toBeLessThan(0.8);
+    }
+    // the cards: no in-bone note on what was moved out of the bone, and each says what was done
+    for (const n of ['Basilar artery', 'Occipital sinus', 'Middle meningeal artery', 'Medial pontine branches of basilar artery', 'Lateral pontine branches of basilar artery']) {
+      const it = SB_MANIFEST.structures.find((x) => x.name === n && !x.replaces)!;
+      expect(it.inBone, n).toBeUndefined();
+      expect(it.derivation, n).toContain('Corrected position (skullbase_v1_vessels.py)');
+    }
+    expect(SB_MANIFEST.structures.find((x) => x.name === 'Straight sinus')!.derivation).toMatch(/starts 44\.5 mm in front of the confluence/);
+  }, 120_000);
   it('a vessel or nerve that runs inside the model’s bone says so on its card, with how much and where', () => {
     // (the audit's finding MC-11: Z-Anatomy's bones have few canals and grooves, so its curves run through the bone
     // meshes; pipeline/skullbase_v1_inbone.py measures every tube against every bone)
@@ -303,6 +386,27 @@ describe('the detailed model (TopBrain CT angiogram, Z-Anatomy fitted onto it)',
     }
     for (const n of ['Optic nerve (II)', 'Middle meningeal artery', 'Cavernous sinus']) expect(by(n)?.fitted, n).toBe(true);
     for (const s of ct.structures) if (s.type === 'bone') expect(s.fitted, s.name).toBeUndefined();
+    // every cranial nerve is fitted, the trigeminal divisions too (they gather Z-Anatomy's branches under a new name)
+    for (const s of ct.structures) if (s.category === 'nerve') expect(s.fitted, s.name).toBe(true);
+  });
+  it('says where a fitted nerve crosses the skull base off the CT\u2019s opening (MC-10), and links the routed one', async () => {
+    const v3 = new Set(SbManifestSchema.parse((await import('../../src/data/generated/sbv3-manifest.json')).default).structures.map((s) => s.id));
+    const noted = new Map(ct.structures.filter((s) => s.atOpening).map((s) => [s.name, s.atOpening!]));
+    // the audit's cases: the right XII in the condylar bone, the left IX in the jugular foramen's wall, the left optic
+    // nerve in sinus air, both V2
+    for (const n of ['Hypoglossal nerve (XII)', 'Glossopharyngeal nerve (IX)', 'Optic nerve (II)', 'Maxillary nerve (V2)']) expect(noted.has(n), n).toBe(true);
+    expect(noted.get('Hypoglossal nerve (XII)')!.R.solidMm).toBeGreaterThan(5);
+    expect(noted.get('Glossopharyngeal nerve (IX)')!.L.solidMm).toBeGreaterThan(3);
+    expect(noted.get('Optic nerve (II)')!.L.airMm).toBeGreaterThan(3);
+    for (const n of ['Facial nerve (VII)', 'Vestibulocochlear nerve (VIII)', 'Trigeminal nerve (V)']) expect(noted.has(n), n).toBe(false);
+    for (const [n, o] of noted) {
+      expect(v3.has(o.routedId), n).toBe(true);
+      for (const s of ['R', 'L'] as const) expect(o[s].solidMm, `${n} ${s}`).toBeLessThanOrEqual(o[s].boneMm);
+    }
+    const xii = atOpeningNote(noted.get('Hypoglossal nerve (XII)')!);
+    expect(xii).toMatch(/^Over the first 40 mm of its fitted course, from inside the skull to just past its base: on the right, 11\.2 mm through the bone shown \(10\.5 mm of it at 400 HU or more\); on the left, 2\.2 mm through the bone shown \(none of it at 400 HU or more\)\./);
+    expect(xii).toMatch(/that route lies a median 3\.1 mm on the right and 6\.2 mm on the left from it\.$/);
+    expect(atOpeningNote(noted.get('Vagus nerve (X)')!)).toMatch(/on the right, clear of both;.* a median 0\.9 mm on the left from it\.$/);
   });
   it('keeps the frame: origin at the hypophysial fossa, the landmarks on or near the bone', () => {
     expect(lms.find((l) => l.name === 'Hypophysial fossa')!.ras).toEqual([0, 0, 0]);
@@ -666,7 +770,7 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     for (const id of ap.bones) { expect(p.looks.get(id), id).toBe('primary'); expect(p.looks.get(byId.get(id)!.replaces!), id).toBe('hidden'); }
     expect(p.looks.get(ap.removed)).toBe('ghost');
     for (const s of v3.structures.filter((x) => x.category === 'brain' && !x.pushedFrom)) expect(p.looks.get(s.id), s.id).toBe('primary');
-    expect(p.camera).toBe('anterolateral');
+    expect(p.camera).toBe('pterional');
     // (a tumour's view is drawn in its approach's view: there, that approach's own parts)
     for (const g of G3.SB_GROUPS.filter((x) => x.kind !== 'approach' && !(x.kind === 'tumour' && x.approach))) {
       const q = S3.skullPlan(g.id, null);
@@ -679,7 +783,7 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(ih.side).toBe('R');
     expect(ih.removedMl).toBeGreaterThan(4);
     const p = S3.skullPlan('interhemispheric', null);
-    expect(p.camera).toBe('vertex');
+    expect(p.camera).toBe('vertexFront');
     expect(G3.SB_GROUP.get('interhemispheric')!.hemi).toBe('both');
     for (const id of [...ih.bones]) expect(p.looks.get(id), id).toBe('primary');
     expect(p.looks.get(ih.removed)).toBe('ghost');
@@ -756,7 +860,7 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(rs.bones.map((id) => byId.get(id)!.name)).toEqual(expect.arrayContaining(['Occipital bone']));
     for (const p of rs.burrHoles) { expect(p[0]).toBeGreaterThan(30); expect(p[1]).toBeLessThan(-20); }   // behind the right ear
     const p = S3.skullPlan('retrosigmoid', null);
-    expect(p.camera).toBe('retrosigmoid');
+    expect(p.camera).toBe('retrosigmoidLateral');
     expect(G3.SB_GROUP.get('retrosigmoid')!.hemi).toBe('R');
     for (const id of [...rs.bones, rs.removed]) expect(p.looks.get(id), id).not.toBe('hidden');
     const aica = v3.structures.find((x) => x.name === 'Anterior inferior cerebellar artery')!;
@@ -813,6 +917,166 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     const l = T3.decodeSkull('#/atlas?g=lso&ll=80&lf=70&op=20');
     expect(l.morphs).toEqual({ lsoLift: 0.8, open: 0.2 });
     expect(T3.encodeSkull(l)).toContain('ll=80');
+  });
+  it('v1’s cerebellar arteries lie on the cerebellum, not inside it, at rest and in every shape', async () => {
+    // (half of the PICA ran inside Z-Anatomy's lobules, up to 4.7 mm deep: the step's fill took an open lobule for a shell)
+    const pf = ((await import('../../src/data/generated/sb-v1fit.json')).default as unknown as { pfossa: {
+      arteriesInHindbrain: Record<string, Record<string, Record<string, [number, number]>>> } }).pfossa;
+    const arts = Object.keys(pf.arteriesInHindbrain);
+    expect(arts.sort()).toEqual(['Anterior inferior cerebellar artery', 'Posterior inferior cerebellar artery', 'Superior cerebellar artery']);
+    for (const [a, sides] of Object.entries(pf.arteriesInHindbrain)) {
+      for (const [sd, poses] of Object.entries(sides)) {
+        expect(Object.keys(poses).sort(), `${a} ${sd}`).toEqual(['farLateral', 'farLateralBack', 'rest', 'retrosigmoid', 'telovelar']);
+        for (const [pose, [share, deepest]] of Object.entries(poses)) {
+          expect(share, `${a} ${sd} ${pose}: share of the tube inside`).toBeLessThan(0.03);
+          expect(deepest, `${a} ${sd} ${pose}: deepest`).toBeLessThan(1.0);
+        }
+      }
+    }
+  });
+  it('v1’s far lateral shapes: the tonsil lifted, the medulla opened, no more of the cerebellum in bone than at rest', async () => {
+    type Fl = { inBoneAfter: number; inVesselAfter: number; maxMovedMm: number };
+    const pf = ((await import('../../src/data/generated/sb-v1fit.json')).default as unknown as { pfossa: {
+      clear: { inBoneAfter: number; inVesselAfter: number };
+      farLateral: Fl & { tonsilLowestZMm: { rest: number; lifted: number } };
+      farLateralBack: Fl & { tonsilFrontYMm: { rest: number; back: number }; medullaGapMm: { rest: number; back: number } } } }).pfossa;
+    // (Z-Anatomy's cerebellum keeps a few vertices in its bone at rest; the shapes add none)
+    for (const s of [pf.farLateral, pf.farLateralBack]) {
+      expect(s.inBoneAfter).toBeLessThanOrEqual(pf.clear.inBoneAfter);
+      expect(s.inVesselAfter).toBeLessThanOrEqual(pf.clear.inVesselAfter);
+      expect(s.maxMovedMm).toBeLessThan(12);
+    }
+    expect(pf.farLateral.tonsilLowestZMm.lifted - pf.farLateral.tonsilLowestZMm.rest).toBeGreaterThan(5);
+    expect(pf.farLateralBack.tonsilFrontYMm.rest - pf.farLateralBack.tonsilFrontYMm.back).toBeGreaterThan(5);
+    expect(pf.farLateralBack.medullaGapMm.back).toBeGreaterThan(pf.farLateralBack.medullaGapMm.rest + 3);
+  });
+  it('the far lateral view: the right tonsil and biventral lobule lifted superomedially, the PICA with them', async () => {
+    const g = G3.SB_GROUP.get('far_lateral')!;
+    expect(g.morphs).toEqual(['farLateral', 'farLateralBack']);
+    expect(g.morphDefault).toEqual({ farLateral: 1 });                 // the second, a view aid, opens at 0
+    expect(G3.SB_GROUP.get('meningioma_foramen_magnum')!.morphDefault).toEqual({ farLateral: 1 });   // its tumour opens so too
+    // v1: the same shapes, built on Z-Anatomy's cerebellum (skullbase_v1_pfossa.py)
+    const v1 = SB_GROUPS.find((x) => x.id === 'far_lateral')!;
+    expect(v1.morphs).toEqual(['farLateral', 'farLateralBack']);
+    expect(v1.morphDefault).toEqual({ farLateral: 1 });
+    for (const id of ['pf_tonsil', 'pf_cerebellar_hemisphere', 'pf_vermis']) {
+      const m = await nodeMorphs(SB_MANIFEST.structures.find((x) => x.id === id)!.file);
+      expect(Object.keys(m.R ?? m[Object.keys(m)[0]]), id).toEqual(expect.arrayContaining(['farLateral', 'farLateralBack']));
+    }
+    expect(T3.decodeSkull('#/atlas?g=far_lateral&fl=40&rs=60').morphs).toEqual({ farLateral: 0.4 });
+    const both = T3.decodeSkull('#/atlas?g=far_lateral&fl=40&fb=70');   // the two together
+    expect(both.morphs).toEqual({ farLateral: 0.4, farLateralBack: 0.7 });
+    expect(T3.encodeSkull(both)).toContain('fb=70');
+    const pf = ((await import('../../src/data/generated/sbv3-fit.json')).default as unknown as { pfossa: {
+      farLateral: { maxMovedMm: number; inBoneAfter: number; inVesselAfter: number; tonsilLowestZMm: { rest: number; lifted: number }; vertebralGapMm: { rest: number; lifted: number } };
+      farLateralBack: { maxMovedMm: number; inBoneAfter: number; inVesselAfter: number; tonsilFrontYMm: { rest: number; back: number }; medullaGapMm: { rest: number; back: number } };
+      params: Record<string, number> } }).pfossa;
+    const { flMm, flMedial, flReachMm } = pf.params;
+    expect(flMm * Math.hypot(1, flMedial) / flReachMm).toBeLessThan(1);          // cannot fold the cerebellum
+    expect(pf.farLateral.inBoneAfter).toBe(0);
+    expect(pf.farLateral.inVesselAfter).toBe(0);
+    const rise = pf.farLateral.tonsilLowestZMm.lifted - pf.farLateral.tonsilLowestZMm.rest;
+    expect(rise).toBeGreaterThan(0.5 * flMm);                                       // the tonsil rises about as far as the rule says ...
+    expect(rise).toBeLessThan(flMm + 1.5);                                          // ... and no further
+    expect(pf.farLateral.vertebralGapMm.lifted).toBeGreaterThan(pf.farLateral.vertebralGapMm.rest);   // off the vertebral artery
+    // the second shape: the same parts straight back, cut short at the bone, never further than the rule
+    const fb = pf.farLateralBack, { flBackMm } = pf.params;
+    expect((flMm * Math.hypot(1, flMedial) + flBackMm) / flReachMm).toBeLessThan(1);   // the two together cannot fold it
+    expect(fb.inBoneAfter).toBe(0);
+    expect(fb.inVesselAfter).toBe(0);
+    expect(fb.maxMovedMm).toBeLessThan(flBackMm + 1.5);
+    const back = fb.tonsilFrontYMm.rest - fb.tonsilFrontYMm.back;
+    expect(back).toBeGreaterThan(0.5 * flBackMm);
+    expect(back).toBeLessThan(flBackMm + 1.5);
+    expect(fb.medullaGapMm.back).toBeGreaterThan(fb.medullaGapMm.rest);              // off the medulla
+    // the shipped right tonsil goes up and in; the left stays
+    const tonsil = await nodeMorphs('assets/skullbase-v3/pf_tonsil.glb');
+    expect(tonsil.R.farLateral.max).toBeGreaterThan(flMm - 0.5);
+    expect(tonsil.R.farLateral.max).toBeLessThan(flMm * Math.hypot(1, flMedial) + 1.5);
+    expect(tonsil.R.farLateral.mean[2]).toBeGreaterThan(0);
+    expect(tonsil.R.farLateral.mean[0]).toBeLessThan(0);
+    expect(tonsil.L.farLateral.max).toBeLessThan(0.2);
+    expect(tonsil.R.farLateralBack.mean[1]).toBeLessThan(0);                        // back
+    expect(tonsil.L.farLateralBack.max).toBeLessThan(0.2);
+    // the PICA's fitted course lying on it is carried with it; the left one stays
+    const pica = await nodeMorphs('assets/skullbase-v3/tb_posterior_inferior_cerebellar_artery_fitted_course.cleared.glb');
+    expect(pica.R.farLateral.max).toBeGreaterThan(flMm - 0.5);
+    expect(pica.R.farLateral.mean[2]).toBeGreaterThan(0);
+    expect(pica.L.farLateral.max).toBeLessThan(0.2);
+    expect(pica.R.farLateralBack.max).toBeGreaterThan(1);
+  });
+  it('the pterional and orbitozygomatic views: an anterior clinoidectomy switch, off by default, taking the clinoid process\'s own piece', async () => {
+    for (const id of ['transsylvian', 'orbitozygomatic']) {
+      const g = G3.SB_GROUP.get(id)!;
+      expect(g.morphs, id).toContain('clinoid');
+      expect(g.morphDefault?.clinoid, id).toBeUndefined();
+      const piece = v3.structures.find((s) => s.id === `sb_appr_${g.approach}__clinoid`)!;
+      expect(piece, id).toBeTruthy();
+      expect(piece.clinoid).toBe(true);
+      expect(piece.type).toBe('bone');
+      expect(g.structures).toContain(piece.id);
+      // drawn as bone until the switch takes it, then as the bone removed is
+      expect(S3.skullPlan(id, null).looks.get(piece.id)).toBe('primary');
+      expect(S3.skullPlan(id, null, [], true).looks.get(piece.id)).toBe('ghost');
+      expect(T3.decodeSkull(`#/atlas?g=${id}`).morphs.clinoid).toBeUndefined();
+      const on = T3.decodeSkull(`#/atlas?g=${id}&ac=100`);
+      expect(on.morphs.clinoid).toBe(1);
+      expect(T3.encodeSkull(on)).toContain('ac=100');
+      // the sphenoid ridge: drilled as the view opens (its own piece drawn as the bone removed), intact by link or switch
+      const ridge = v3.structures.find((s) => s.id === `sb_appr_${g.approach}__ridge`)!;
+      expect(ridge, id).toBeTruthy();
+      expect(ridge.ridge).toBe(true);
+      expect(g.structures).toContain(ridge.id);
+      expect(g.morphDefault?.ridge, id).toBe(1);
+      expect(T3.decodeSkull(`#/atlas?g=${id}`).morphs.ridge).toBe(1);
+      expect(S3.skullPlan(id, null).looks.get(ridge.id)).toBe('ghost');
+      expect(S3.skullPlan(id, null, [], false, false).looks.get(ridge.id)).toBe('primary');
+      const intact = T3.decodeSkull(`#/atlas?g=${id}&sr=0`);
+      expect(intact.morphs.ridge ?? 0).toBe(0);
+      expect(T3.encodeSkull(intact)).toContain('sr=0');
+      expect(S3.skullScene.plan(intact).looks.get(ridge.id)).toBe('primary');
+    }
+    const geom = (await import('../../src/data/generated/sbv3-approaches.json')).default as unknown as Record<string, { clinoid?: string; clinoidMl?: number; ridgeMl?: number; how: string }>;
+    for (const a of ['pterional', 'orbitozygomatic']) {
+      expect(geom[a].clinoidMl, a).toBeGreaterThan(0.05);      // the size of a clinoid process, not more
+      expect(geom[a].clinoidMl, a).toBeLessThan(2);
+      expect(geom[a].how, a).toContain(`(${geom[a].clinoidMl!.toFixed(1)} ml, drawn by rule)`);
+      expect(geom[a].ridgeMl, a).toBeGreaterThan(0.2);
+      expect(geom[a].how, a).toContain(`the ridge intact (${geom[a].ridgeMl!.toFixed(1)} ml)`);
+    }
+  });
+  it('a surgical view opens with its shapes full on, and a link that closes one keeps it closed', () => {
+    const views = G3.SB_GROUPS.filter((g) => g.kind === 'approach' && g.morphs?.length);
+    expect(views.map((g) => g.id).sort()).toEqual(['far_lateral', 'interhemispheric', 'lso', 'orbitozygomatic', 'retrosigmoid', 'telovelar', 'transsylvian']);
+    for (const g of views) {
+      // every shape full on, but the far lateral view's second one (a view aid) and the clinoidectomy switch, which open at 0
+      expect(g.morphDefault, g.id).toEqual(Object.fromEntries(g.morphs!.filter((m) => m !== 'farLateralBack' && m !== 'clinoid').map((m) => [m, 1])));
+      expect(T3.decodeSkull(`#/atlas?g=${g.id}`).morphs, g.id).toEqual(g.morphDefault);
+    }
+    const closed = T3.decodeSkull('#/atlas?g=transsylvian&op=0&lf=0');
+    expect(closed.morphs).toEqual({ ridge: 1 });               // (the ridge's switch, not in the link, stays as the view opens)
+    expect(T3.encodeSkull(closed)).toContain('op=0');
+    expect(T3.decodeSkull(T3.encodeSkull(closed)).morphs).toEqual({ ridge: 1 });
+  });
+  it('the cameras: v3\'s surgical views their own directions (the telovelar view its earlier one), the tumours of a view framed alike', () => {
+    const cam = Object.fromEntries(G3.SB_GROUPS.filter((g) => g.kind === 'approach').map((g) => [g.id, g.camera]));
+    expect(cam).toMatchObject({ transsylvian: 'pterional', orbitozygomatic: 'orbitozygomaticFront', interhemispheric: 'vertexFront',
+      retrosigmoid: 'retrosigmoidLateral', far_lateral: 'farLateralLow', telovelar: 'suboccipital' });
+    // v1 (this file's default model) opens its views as v3 does, except the retrosigmoid: on Z-Anatomy's skull v3's view
+    // from below meets the mastoid, so it keeps its level one
+    expect(Object.fromEntries(SB_GROUPS.filter((g) => g.kind === 'approach').map((g) => [g.id, g.camera]))).toMatchObject({
+      transsylvian: 'pterional', orbitozygomatic: 'orbitozygomaticFront', interhemispheric: 'vertexFront', retrosigmoid: 'retrosigmoidLevel',
+      far_lateral: 'farLateralLow', telovelar: 'suboccipital' });
+    // every tumour drawn in one view is framed on the same structures, so that going from one to another keeps the camera
+    const tumours = G3.SB_GROUPS.filter((g) => g.tumour);
+    const byView = new Map<string, typeof tumours>();
+    for (const g of tumours) byView.set(g.approach ?? 'knosp', [...(byView.get(g.approach ?? 'knosp') ?? []), g]);
+    expect(byView.get('retrosigmoid')!.map((g) => g.id)).toEqual(expect.arrayContaining(['koos_i', 'koos_iv', 'meningioma_petroclival']));
+    for (const [view, gs] of byView) for (const g of gs) {
+      expect(g.focusIds, `${view}: ${g.id}`).toEqual(gs[0].focusIds);
+      expect(g.radius, `${view}: ${g.id}`).toBe(gs[0].radius);
+      expect(g.camera, `${view}: ${g.id}`).toBe(gs[0].camera);
+    }
   });
   it('sourced content: references exist and are used, context structures exist', async () => {
     const { TUMOURS } = await import('../../src/skullbase/tumours');
@@ -904,6 +1168,42 @@ describe('v3 tumours drawn by rule: Knosp, Koos and meningioma sites', async () 
     expect(TUMOUR_FIT.koos['4'].extrameatalMaxMm!).toBeGreaterThan(30);
     expect(TUMOUR_FIT.koos['4'].toBrainstemMm!).toBeLessThan(0);
   });
+  it('each tumour card quotes the drawing the Grading page measures (one run of the tumours on each model)', async () => {
+    // (the tumour step drew a different Koos II on each run, 8 or 9 mm, until its surface samples were seeded: the card
+    // and the report must come from the same run)
+    const { TUMOUR_FIT_V1, TUMOUR_FIT_V3 } = await import('../../src/skullbase/tumours');
+    for (const [model, structures, fit] of [['v3', v3.structures, TUMOUR_FIT_V3], ['v1', SB_MANIFEST.structures, TUMOUR_FIT_V1]] as const) {
+      const card = new Map(structures.map((s) => [s.id, s.derivation ?? '']));
+      const ml = (id: string) => Number(/([\d.]+) ml\.$/.exec(card.get(id) ?? '')?.[1]);
+      for (const [g, r] of Object.entries(fit.koos)) expect(ml(`tm_koos_${g}`), `${model} Koos ${g}`).toBe(r.ml);
+      for (const [g, r] of Object.entries(fit.knosp.grades)) expect(ml(`tm_knosp_${g.toLowerCase()}`), `${model} Knosp ${g}`).toBe(r.ml);
+      for (const [site, r] of Object.entries(fit.meningioma)) expect(ml(`tm_men_${site}`), `${model} ${site}`).toBe(r.ml);
+      expect(card.get('tm_koos_2'), model).toContain(`${fit.koos['2'].diameterMm} mm across`);
+    }
+  });
+  it('every tumour is a closed surface on both models: no edge of the grid it is drawn on cuts it open', async () => {
+    // (v1's Koos IV reached past its grid's lateral edge and was shipped open there, a hole 16 x 25 mm; a tumour across
+    // the midline is split into its left and right halves there, so an open edge within 0.25 mm of it is allowed)
+    for (const [model, structures] of [['v3', v3.structures], ['v1', SB_MANIFEST.structures]] as const) {
+      for (const s of structures.filter((x) => x.category === 'tumour')) {
+        const { P, T } = await meshSoup(s.file);
+        const key = (i: number) => `${P[3 * i].toFixed(3)},${P[3 * i + 1].toFixed(3)},${P[3 * i + 2].toFixed(3)}`;
+        const at = new Map<string, number>();
+        const v = Array.from({ length: P.length / 3 }, (_, i) => { const k = key(i); if (!at.has(k)) at.set(k, at.size); return at.get(k)!; });
+        const uses = new Map<string, { n: number; a: number; b: number }>();
+        for (let t = 0; t < T.length; t += 3) {
+          for (const [a, b] of [[T[t], T[t + 1]], [T[t + 1], T[t + 2]], [T[t + 2], T[t]]]) {
+            const e = v[a] < v[b] ? `${v[a]} ${v[b]}` : `${v[b]} ${v[a]}`;
+            const u = uses.get(e) ?? { n: 0, a, b };
+            u.n++;
+            uses.set(e, u);
+          }
+        }
+        const open = [...uses.values()].filter((u) => u.n !== 2 && !(Math.abs(P[3 * u.a]) < 0.25 && Math.abs(P[3 * u.b]) < 0.25));
+        expect(open.length, `${model} ${s.id}: edges off the midline not shared by two triangles`).toBe(0);
+      }
+    }
+  }, 60_000);
   it('the Knosp view is cut at its section while the reader keeps it; tumour views open onto the tumour', () => {
     const s = T3.decodeSkull('#/atlas?g=knosp_3b');
     expect(s.section).toBe(true);

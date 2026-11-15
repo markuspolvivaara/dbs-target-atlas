@@ -150,14 +150,14 @@
   "2": {
    "centre": [
     16.5,
-    -21.5,
-    -12.5
+    -18.5,
+    -10.5
    ],
-   "diameterMm": 9.0,
-   "extrameatalMaxMm": 10.0,
-   "toBrainstemMm": 0.5,
-   "fromBoneMm": 2.3,
-   "ml": 0.23,
+   "diameterMm": 8.0,
+   "extrameatalMaxMm": 8.2,
+   "toBrainstemMm": 0.9,
+   "fromBoneMm": 1.1,
+   "ml": 0.17,
    "push": {
     "pointsInside": 0,
     "leftInside": 0,
@@ -166,9 +166,9 @@
    },
    "nerves": {
     "Facial nerve (VII)": {
-     "pointsInside": 14,
+     "pointsInside": 5,
      "leftInside": 0,
-     "maxMovedMm": 8.9
+     "maxMovedMm": 2.0
     }
    }
   },
@@ -179,15 +179,15 @@
     -14.5
    ],
    "diameterMm": 25.0,
-   "extrameatalMaxMm": 24.2,
-   "toBrainstemMm": -7.0,
+   "extrameatalMaxMm": 24.1,
+   "toBrainstemMm": -7.2,
    "fromBoneMm": 3.8,
    "ml": 4.77,
    "push": {
-    "pointsInside": 3140,
+    "pointsInside": 3146,
     "leftInside": 0,
-    "rounds": 41,
-    "maxMovedMm": 23.15
+    "rounds": 34,
+    "maxMovedMm": 22.97
    },
    "nerves": {
     "Facial nerve (VII)": {
@@ -204,11 +204,6 @@
      "pointsInside": 10,
      "leftInside": 0,
      "maxMovedMm": 3.3
-    },
-    "Anterior inferior cerebellar artery": {
-     "pointsInside": 5,
-     "leftInside": 5,
-     "maxMovedMm": 2.3
     }
    }
   },
@@ -222,12 +217,12 @@
    "extrameatalMaxMm": 33.8,
    "toBrainstemMm": -12.3,
    "fromBoneMm": 10.3,
-   "ml": 18.45,
+   "ml": 18.44,
    "push": {
     "pointsInside": 17462,
     "leftInside": 0,
     "rounds": 5,
-    "maxMovedMm": 29.76
+    "maxMovedMm": 29.77
    },
    "nerves": {
     "Facial nerve (VII)": {
@@ -237,8 +232,8 @@
     },
     "Trigeminal nerve (V)": {
      "pointsInside": 17,
-     "leftInside": 3,
-     "maxMovedMm": 18.3
+     "leftInside": 2,
+     "maxMovedMm": 18.5
     },
     "Abducens nerve (VI)": {
      "pointsInside": 14,
@@ -249,11 +244,6 @@
      "pointsInside": 11,
      "leftInside": 0,
      "maxMovedMm": 0.7
-    },
-    "Anterior inferior cerebellar artery": {
-     "pointsInside": 5,
-     "leftInside": 0,
-     "maxMovedMm": 7.8
     }
    }
   }
@@ -296,7 +286,7 @@
     13.54
    ],
    "diameterRuleMm": 20.0,
-   "ml": 2.53,
+   "ml": 2.52,
    "normal": [
     0.0,
     -0.94,
@@ -306,7 +296,7 @@
     "pointsInside": 170,
     "leftInside": 0,
     "rounds": 6,
-    "maxMovedMm": 16.99
+    "maxMovedMm": 16.05
    }
   },
   "petroclival": {
@@ -321,17 +311,17 @@
     -10.95
    ],
    "diameterRuleMm": 28.0,
-   "ml": 8.03,
+   "ml": 8.02,
    "normal": [
     -0.73,
     -0.64,
     0.25
    ],
    "push": {
-    "pointsInside": 6979,
+    "pointsInside": 6976,
     "leftInside": 0,
     "rounds": 5,
-    "maxMovedMm": 18.39
+    "maxMovedMm": 18.32
    }
   },
   "foramen_magnum": {

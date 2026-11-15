@@ -912,7 +912,7 @@
   },
   {
    "step": "skullbase_v1_pfossa",
-   "operation": "the cerebellar arteries onto the cerebellum's surface; the hindbrain pushed off bone, the tentorium and the arteries; the arteries carried with the telovelar and retrosigmoid shapes",
+   "operation": "the cerebellar arteries onto the cerebellum's surface; the hindbrain pushed off bone, the tentorium and the arteries; the arteries carried with the telovelar, retrosigmoid and far lateral shapes",
    "structures": [
     "Anterior inferior cerebellar artery",
     "Anterior quadrangular lobule",
@@ -951,50 +951,368 @@
    "metrics": {
     "ontoSurface": {
      "Anterior inferior cerebellar artery.l": {
-      "points": 176,
-      "maxMm": 2.27
+      "points": 164,
+      "maxMm": 2.28
      },
      "Anterior inferior cerebellar artery.r": {
-      "points": 173,
-      "maxMm": 1.87
+      "points": 165,
+      "maxMm": 3.12
      },
      "Posterior inferior cerebellar artery.l": {
-      "points": 679,
-      "maxMm": 3.32
+      "points": 1211,
+      "maxMm": 8.38
      },
      "Posterior inferior cerebellar artery.r": {
-      "points": 713,
-      "maxMm": 3.27
+      "points": 1218,
+      "maxMm": 8.46
      },
      "Superior cerebellar artery.l": {
-      "points": 240,
-      "maxMm": 1.5
+      "points": 363,
+      "maxMm": 4.98
      },
      "Superior cerebellar artery.r": {
-      "points": 251,
-      "maxMm": 1.28
+      "points": 363,
+      "maxMm": 4.97
      }
     },
     "clear": {
-     "containedPushed": 16,
-     "inVesselBefore": 2890,
-     "inBoneBefore": 5024,
-     "inVesselAfter": 133,
-     "inBoneAfter": 15,
-     "maxMovedMm": 6.52
+     "containedPushed": 0,
+     "inVesselBefore": 4994,
+     "inBoneBefore": 5016,
+     "inVesselAfter": 34,
+     "inBoneAfter": 16,
+     "maxMovedMm": 6.47
     },
     "carried": {
-     "Anterior inferior cerebellar artery": 12.08,
-     "Posterior inferior cerebellar artery": 11.87,
-     "Superior cerebellar artery": 11.32
+     "Anterior inferior cerebellar artery": 16.82,
+     "Posterior inferior cerebellar artery": 16.76,
+     "Superior cerebellar artery": 12.49
     }
    },
    "validation": {
-    "inBoneAfter": 15,
-    "inVesselAfter": 133
+    "inBoneAfter": 16,
+    "inVesselAfter": 34
    },
-   "revision": "193d0cb",
-   "date": "2026-11-05"
+   "revision": "5d4e8f4",
+   "date": "2026-11-15"
+  },
+  {
+   "step": "skullbase_v1_vessels",
+   "operation": "the straight and occipital sinuses moved back to the confluence (Z-Anatomy's file has them in front of it), the occipital sinus laid onto the internal occipital crest; the basilar artery moved off the clivus with the arteries joined to it; the middle meningeal artery led through the model's own foramen spinosum",
+   "structures": [
+    "Anterior inferior cerebellar artery",
+    "Basilar artery",
+    "Lateral pontine branches of basilar artery",
+    "Medial pontine branches of basilar artery",
+    "Middle meningeal artery",
+    "Occipital sinus",
+    "Posterior cerebral artery",
+    "Posterior communicating artery",
+    "Straight sinus",
+    "Superior cerebellar artery",
+    "Vertebral artery"
+   ],
+   "parameters": {
+    "gridMm": 0.25,
+    "clearMm": 0.2,
+    "meetsMm": 2.0,
+    "crestGapMm": 0.1,
+    "crestFreeMm": 6.0,
+    "falloffMm": 8.0,
+    "touchMm": 0.3,
+    "leaveMm": 1.5,
+    "beyondMm": 1.5,
+    "rejoinMm": 4.0
+   },
+   "metrics": {
+    "sinuses": {
+     "offsetMm": [
+      0.0,
+      -44.51,
+      0.0
+     ],
+     "offsetLengthMm": 44.5,
+     "confluence": [
+      -0.0,
+      -92.57,
+      -11.67
+     ],
+     "straight": {
+      "toConfluenceMm": 0.0,
+      "toInferiorSagittalMm": 0.89,
+      "toConfluenceBeforeMm": 44.5
+     },
+     "occipital": {
+      "toConfluenceMm": 0.0,
+      "inBoneBeforeMm": 7.2,
+      "deepestBeforeMm": 3.7,
+      "inBoneAfterMm": 0.0,
+      "deepestAfterMm": 0.2,
+      "offCrestBeforeMm": 5.3,
+      "offCrestMaxMm": 0.13,
+      "offCrestMinMm": 0.07,
+      "laidMaxMm": 8.1,
+      "lengthMm": 37.1,
+      "lengthBeforeMm": 37.0
+     }
+    },
+    "basilar": {
+     "basilar": {
+      "inBoneBeforeMm": 12.5,
+      "deepestBeforeMm": 1.0,
+      "wallBeforeMm": -2.13,
+      "inBoneAfterMm": 0.0,
+      "deepestAfterMm": 0.0,
+      "wallAfterMm": -0.04,
+      "toBrainstemBeforeMm": 1.09,
+      "toBrainstemAfterMm": 0.47,
+      "lengthMm": 26.2,
+      "radiusMm": 1.1,
+      "maxMovedMm": 2.35,
+      "minMovedMm": 0.25
+     },
+     "branches": {
+      "Medial pontine branches of basilar artery": {
+       "L": {
+        "inBoneBeforeMm": 16.2,
+        "deepestBeforeMm": 1.9,
+        "inBoneAfterMm": 0.0,
+        "deepestAfterMm": 0.0,
+        "maxMovedMm": 2.34
+       },
+       "R": {
+        "inBoneBeforeMm": 16.2,
+        "deepestBeforeMm": 1.9,
+        "inBoneAfterMm": 0.0,
+        "deepestAfterMm": 0.0,
+        "maxMovedMm": 2.34
+       }
+      },
+      "Lateral pontine branches of basilar artery": {
+       "L": {
+        "inBoneBeforeMm": 19.5,
+        "deepestBeforeMm": 1.2,
+        "inBoneAfterMm": 0.0,
+        "deepestAfterMm": 0.0,
+        "maxMovedMm": 1.96
+       },
+       "R": {
+        "inBoneBeforeMm": 19.5,
+        "deepestBeforeMm": 1.2,
+        "inBoneAfterMm": 0.0,
+        "deepestAfterMm": 0.0,
+        "maxMovedMm": 1.96
+       }
+      }
+     }
+    },
+    "meningeal": {
+     "L": {
+      "canal": {
+       "centre": [
+        -28.83,
+        -7.38,
+        -17.39
+       ],
+       "axis": [
+        0.0,
+        -0.02,
+        1.0
+       ],
+       "inner": [
+        -28.83,
+        -7.45,
+        -14.5
+       ],
+       "outer": [
+        -28.83,
+        -7.3,
+        -20.75
+       ],
+       "lengthMm": 6.2,
+       "widthMm": 2.8,
+       "volumeMm3": 18.1,
+       "fromLabelMm": 0.14
+      },
+      "leftCurveAtMm": 4.5,
+      "rejoinsAtMm": 26.8,
+      "inBoneBeforeMm": 12.7,
+      "deepestBeforeMm": 2.3,
+      "inBoneAfterMm": 0.0,
+      "deepestAfterMm": 0.0,
+      "wallAfterMm": 0.23,
+      "toCanalCentreBeforeMm": 2.58,
+      "toCanalCentreMm": 0.09,
+      "maxMovedMm": 3.2,
+      "sharpestTurnDeg": 47,
+      "lengthMm": 30.9,
+      "lengthBeforeMm": 30.9,
+      "originMovedMm": 0.0
+     },
+     "R": {
+      "canal": {
+       "centre": [
+        28.83,
+        -7.39,
+        -17.41
+       ],
+       "axis": [
+        -0.02,
+        -0.02,
+        1.0
+       ],
+       "inner": [
+        28.77,
+        -7.44,
+        -14.73
+       ],
+       "outer": [
+        28.9,
+        -7.32,
+        -20.77
+       ],
+       "lengthMm": 6.0,
+       "widthMm": 2.8,
+       "volumeMm3": 17.9,
+       "fromLabelMm": 0.14
+      },
+      "leftCurveAtMm": 4.5,
+      "rejoinsAtMm": 26.8,
+      "inBoneBeforeMm": 12.7,
+      "deepestBeforeMm": 2.3,
+      "inBoneAfterMm": 0.0,
+      "deepestAfterMm": 0.0,
+      "wallAfterMm": 0.23,
+      "toCanalCentreBeforeMm": 2.58,
+      "toCanalCentreMm": 0.1,
+      "maxMovedMm": 3.2,
+      "sharpestTurnDeg": 47,
+      "lengthMm": 30.7,
+      "lengthBeforeMm": 30.9,
+      "originMovedMm": 0.0
+     }
+    },
+    "carried": {
+     "sb_anterior_inferior_cerebellar_artery": {
+      "maxMovedMm": 0.89,
+      "vertsMoved": 184,
+      "verts": 1068,
+      "deepInBone": [
+       92,
+       66
+      ],
+      "inBrainstem": [
+       0,
+       0
+      ]
+     },
+     "sb_posterior_cerebral_artery": {
+      "maxMovedMm": 1.02,
+      "vertsMoved": 286,
+      "verts": 8872,
+      "deepInBone": [
+       0,
+       0
+      ],
+      "inBrainstem": [
+       30,
+       30
+      ]
+     },
+     "sb_posterior_communicating_artery": {
+      "maxMovedMm": 0.3,
+      "vertsMoved": 64,
+      "verts": 196,
+      "deepInBone": [
+       0,
+       0
+      ],
+      "inBrainstem": [
+       0,
+       0
+      ]
+     },
+     "sb_superior_cerebellar_artery": {
+      "maxMovedMm": 1.26,
+      "vertsMoved": 167,
+      "verts": 4204,
+      "deepInBone": [
+       83,
+       36
+      ],
+      "inBrainstem": [
+       0,
+       0
+      ]
+     },
+     "sb_vertebral_artery": {
+      "maxMovedMm": 0.27,
+      "vertsMoved": 136,
+      "verts": 1204,
+      "deepInBone": [
+       571,
+       565
+      ],
+      "inBrainstem": [
+       0,
+       0
+      ]
+     }
+    },
+    "joins": {
+     "sb_anterior_inferior_cerebellar_artery": [
+      0.31,
+      0.18
+     ],
+     "sb_posterior_cerebral_artery": [
+      0.0,
+      0.0
+     ],
+     "sb_posterior_communicating_artery": [
+      5.48,
+      4.81
+     ],
+     "sb_superior_cerebellar_artery": [
+      0.23,
+      0.24
+     ],
+     "sb_vertebral_artery": [
+      0.0,
+      0.0
+     ]
+    },
+    "nerves": {
+     "Oculomotor nerve (III) / Posterior cerebral artery": [
+      0.13,
+      0.13
+     ],
+     "Oculomotor nerve (III) / Posterior communicating artery": [
+      0.44,
+      0.44
+     ],
+     "Trochlear nerve (IV) / Superior cerebellar artery": [
+      0.69,
+      0.68
+     ],
+     "Trigeminal nerve (V) / Superior cerebellar artery": [
+      1.11,
+      1.11
+     ],
+     "Abducens nerve (VI) / Anterior inferior cerebellar artery": [
+      0.2,
+      0.2
+     ],
+     "Abducens nerve (VI) / Vertebral artery": [
+      0.28,
+      0.23
+     ]
+    }
+   },
+   "validation": {
+    "check": "skullbase_build.py finalize: the sinuses at the confluence, the basilar artery and the middle meningeal artery out of the bone, the latter through its foramen, every junction with the basilar kept"
+   },
+   "revision": "5d4e8f4",
+   "date": "2026-11-15"
   },
   {
    "step": "skullbase_v1_xii",

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import type { CameraPreset } from '../data/schema';
+import type { CameraPreset, ManifestStructure } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
 import { APPROACH_GEOM, definitionFor, isApproachPart, kindOf, LANDMARKS, LM, NOT_YET_SHOWN, REGIONS, SB, SB_MANIFEST, SB_MODEL, V1_FIT, V3_FIT, type Landmark, type SbModel } from '../skullbase';
 import { APPROACH, APPROACH_REF, CAVERNOUS_INFO, ENDONASAL_INFO, INSULA, V1_CAVERNOUS_NOT_SHOWN, V1_ENDONASAL_NOT_SHOWN, V1_TEXT, type ApproachClaim, type ApproachSection } from '../skullbase/approaches';
@@ -39,8 +39,21 @@ const GROUP_ROWS: [SbGroup['kind'], string][] = SB_MODEL === 'v3'
 /** the three models of the section: page folder and chip label */
 const MODELS: [SbModel, string, string][] = [['v3', 'skullbase', 'Skull base'], ['zanatomy', 'skullbase-v1', 'Skull base v1 (Z-Anatomy)'], ['ct', 'skullbase-ct', 'Skull base v2 (CT)']];
 const SIDE_NAME = { R: 'right', L: 'left' } as const;
-/** the surgical views' shapes: slider label, key, and what full means on this model */
-const MORPH_UI: Record<string, { label: string; key: string; note: () => string | null }> = {
+/** the surgical views' shapes: slider label, key, and what full means on this model; a switch (toggle) is on or off: the
+ * anterior clinoidectomy takes the view's own piece of the clinoid process (drawn as bone, or as bone removed) */
+const MORPH_UI: Record<string, { label: string; key: string; toggle?: boolean; note: (g?: SbGroup) => string | null }> = {
+  ridge: {
+    label: 'Sphenoid ridge drilled', key: 'd', toggle: true, note: (g) => {
+      const geom = g?.approach ? APPROACH_GEOM[g.approach] : undefined;
+      return geom?.ridgeMl ? `On (as the view opens), the lateral sphenoid ridge is drawn drilled: the ridge between the anterior and middle fossae to two-thirds of the way to the anterior clinoid process, and the opening’s edge where the ridge starts (${fmtMm(geom.ridgeMl)} ml on this model, drawn by rule). Off, that bone is drawn back, the ridge intact.` : null;
+    },
+  },
+  clinoid: {
+    label: 'Anterior clinoidectomy (extradural)', key: 'a', toggle: true, note: (g) => {
+      const geom = g?.approach ? APPROACH_GEOM[g.approach] : undefined;
+      return geom?.clinoidMl ? `When on, the anterior clinoid process is drawn taken: the rest of the sphenoid ridge from where this view’s drilling stops to the process’s tip, and the bone round the tip (${fmtMm(geom.clinoidMl)} ml on this model, drawn by rule). The optic canal’s roof and the optic strut, which are drilled to free it, are not drawn taken.` : null;
+    },
+  },
   open: {
     label: 'Open the Sylvian fissure', key: 'o', note: () => {
       const b = V3_FIT.brain;
@@ -69,6 +82,23 @@ const MORPH_UI: Record<string, { label: string; key: string; note: () => string 
     label: 'Draw the cerebellum back', key: 'r', note: () => {
       const p = V3_FIT.pfossa;
       return p ? `At 100 % the right cerebellar hemisphere is drawn ${fmtMm(p.params.rsMm)} mm away from the corridor along the back of the petrous bone (from the internal acoustic meatus out through the craniotomy, just inside its corner at the sinuses’ junction), the movement falling to none ${fmtMm(p.params.rsReachMm)} mm from it (it cannot fold the cerebellum); the cerebellum is then ${fmtMm(p.retrosigmoid.meatusToCerebellumMm.moved)} mm from the meatus, ${fmtMm(p.retrosigmoid.meatusToCerebellumMm.rest)} mm at rest. The brainstem, the nerves and the arteries stay.` : null;
+    },
+  },
+  farLateral: {
+    label: 'Lift the tonsil and biventral lobule', key: 'f', note: () => {
+      const p = V3_FIT.pfossa;
+      const f = p?.farLateral;
+      if (!p || !f) return null;
+      const gap = f.vertebralGapMm ? ` They are then ${fmtMm(f.vertebralGapMm.lifted)} mm from the vertebral artery, ${fmtMm(f.vertebralGapMm.rest)} mm at rest.` : '';
+      return `At 100 % the right tonsil and biventral lobule are ${fmtMm(p.params.flMm)} mm higher and ${fmtMm(p.params.flMm * p.params.flMedial)} mm nearer the midline, the rest of the right hemisphere following less the further it lies from them (none ${fmtMm(p.params.flReachMm)} mm away; it cannot fold the cerebellum).${gap} The posterior inferior cerebellar artery’s course on the cerebellum moves with it; the vermis, the left side, the brainstem, the nerves and the vertebral artery stay.`;
+    },
+  },
+  farLateralBack: {
+    label: 'Retract the cerebellum backwards', key: 'b', note: () => {
+      const p = V3_FIT.pfossa;
+      const f = p?.farLateralBack;
+      if (!p || !f) return null;
+      return `At 100 % the right tonsil, biventral lobule and inferior semilunar lobule (the hemisphere’s lower outer corner) are up to ${fmtMm(p.params.flBackMm)} mm further back, each point stopping short of the occipital bone, the rest of the right hemisphere following less the further it lies from them (none ${fmtMm(p.params.flReachMm)} mm away); the tonsil and biventral lobule are then ${fmtMm(f.medullaGapMm.back)} mm from the medulla, ${fmtMm(f.medullaGapMm.rest)} mm at rest. A view aid, not a step the sources describe: with the lift on too, the cerebellum can be held where no retractor would hold it. The posterior inferior cerebellar artery’s course on the cerebellum moves with it.`;
     },
   },
   telovelar: {
@@ -144,6 +174,28 @@ export function inBoneNote(b: { share: number; deepestMm: number; bones: string[
   const much = pct >= 1 ? `${pct}% of this tube’s surface lies more than 0.5 mm inside` : 'A short stretch of this tube lies inside';
   return `${much} ${where} as Z-Anatomy draws ${bones.length > 1 ? 'them' : 'it'} (up to ${b.deepestMm.toFixed(1)} mm deep). `
     + 'Z-Anatomy draws its vessels and nerves and its bones separately, and its bones have few of the canals and grooves they run in: what is shown is the curve as drawn, not a course through a canal.';
+}
+
+/** A fitted nerve of Skull base v2 where it crosses the skull base, measured on the CT (pipeline/skullbase_ct_openings.py):
+ * how much of it runs through the bone shown or a sinus's air, and how far the default model's nerve, routed through the
+ * CT's openings, lies from it there. */
+export function atOpeningNote(o: NonNullable<ManifestStructure['atOpening']>): string {
+  const sides = [['R', 'right'], ['L', 'left']] as const;
+  const side = (s: 'R' | 'L', word: string) => {
+    const r = o[s];
+    const parts = [
+      r.boneMm >= 0.5 ? `${fmtMm(r.boneMm)} mm through the bone shown (${r.solidMm >= 0.5 ? `${fmtMm(r.solidMm)} mm of it` : 'none of it'} at 400 HU or more)` : '',
+      r.airMm >= 0.5 ? `${fmtMm(r.airMm)} mm through the air of a sinus` : '',
+    ].filter(Boolean);
+    return `on the ${word}, ${parts.length ? parts.join(' and ') : 'clear of both'}`;
+  };
+  const apart = sides.filter(([s]) => o[s].boneMm + o[s].airMm >= 0.5 && o[s].apartMm !== null)
+    .map(([s, word]) => `${fmtMm(o[s].apartMm!)} mm on the ${word}`).join(' and ');
+  const thin = sides.some(([s]) => o[s].boneMm - o[s].solidMm >= 0.5);
+  return `Over the first ${o.stretchMm} mm of its fitted course, from inside the skull to just past its base: ${sides.map(([s, w]) => side(s, w)).join('; ')}. `
+    + (thin ? 'Bone shown below 400 HU is what this model’s rules add: thin bone next to solid bone (down to 170 HU, which takes in some of the contrast in the veins beside it) and the walls of the sinuses. ' : '')
+    + 'Z-Anatomy’s curve, fitted onto this skull, does not follow the CT’s own canals. The default model routes this nerve through them on the same CT'
+    + (apart ? `; where this course is in bone or air, that route lies a median ${apart} from it.` : '.');
 }
 
 export class SkullbaseAtlasPage {
@@ -297,6 +349,7 @@ export class SkullbaseAtlasPage {
     // the surgical view's sliders follow the state (keys move them too)
     for (const slider of this.tabs.overview.querySelectorAll<HTMLInputElement>('input[data-morph]')) {
       const v = Math.round((s.morphs[slider.dataset.morph!] ?? 0) * 100);
+      if (slider.type === 'checkbox') { slider.checked = v >= 50; continue; }
       if (Number(slider.value) === v) continue;
       slider.value = String(v);
       const out = slider.parentElement?.querySelector('output');
@@ -309,10 +362,14 @@ export class SkullbaseAtlasPage {
   }
 
   private pickGroup(id: string): void {
+    const from = SB_GROUP.get(this.s.grp), g = SB_GROUP.get(id)!;
+    // from one tumour to another drawn in the same view, the camera and the sliders stay as the reader left them (the
+    // tumours of a view are framed alike: groups.ts)
+    const keep = !!(from?.tumour && g.tumour && from.approach === g.approach);
     this.update((st) => {
-      const g = SB_GROUP.get(id)!;
-      st.grp = id; st.also = []; st.hemi = g.hemi; st.cutAbove = g.cutAbove; st.cam = { preset: null }; st.hidden = []; st.sel = null; st.morphs = { ...(g.morphDefault ?? {}) };
-    }, { camera: true });
+      st.grp = id; st.also = []; st.hemi = g.hemi; st.cutAbove = g.cutAbove; st.hidden = []; st.sel = null;
+      if (!keep) { st.cam = { preset: null }; st.morphs = { ...(g.morphDefault ?? {}) }; }
+    }, keep ? {} : { camera: true });
   }
 
   /** Systems combine: with a system shown, a tap adds another or removes one (the last one stays); from any other view
@@ -498,6 +555,8 @@ export class SkullbaseAtlasPage {
         SB_MODEL === 'v3' ? this.measured(st.name) : null,
         regions.length ? [h('dt', {}, 'Near (measured in the model)'), h('dd', {}, regions.join('; '))] : null,
         st.inBone ? [h('dt', {}, 'In the model’s bone (measured)'), h('dd', {}, inBoneNote(st.inBone))] : null,
+        st.atOpening ? [h('dt', {}, 'At the skull base (measured on this CT)'), h('dd', {}, atOpeningNote(st.atOpening), ' ',
+          h('a', { href: `../skullbase/#/atlas?g=floor&sel=${st.atOpening.routedId}` }, 'See the routed nerve in the default model'))] : null,
         st.type === 'bone' ? [h('dt', {}, 'Labelled landmarks'), h('dd', {}, `${LANDMARKS.filter((l) => l.bone === st.name).length}; open the bone’s group to see them.`)] : null,
         h('dt', {}, 'Geometry'), h('dd', {}, `${st.source}. ${st.derivation} `, h('a', { href: '#/credits' }, 'Licence and attribution'))));
   }
@@ -512,6 +571,15 @@ export class SkullbaseAtlasPage {
     const slider = (name: string) => {
       const ui = MORPH_UI[name];
       const id = `sb-m-${name}`;
+      if (ui.toggle) {      // a switch: on or off
+        const box = h('input', {
+          type: 'checkbox', id, checked: (this.s.morphs[name] ?? 0) >= 0.5, 'aria-describedby': `${id}-note`, 'data-morph': name,
+          onchange: (e: Event) => { const on = (e.target as HTMLInputElement).checked; this.update((st) => { st.morphs = { ...st.morphs, [name]: on ? 1 : 0 }; }); },
+        });
+        const note = ui.note(g);
+        return [h('label', { for: id, class: 'chips-label open-toggle' }, box, ` ${ui.label} (${ui.key.toUpperCase()})`),
+          note ? h('p', { class: 'aside', id: `${id}-note` }, note) : null];
+      }
       const pct = Math.round((this.s.morphs[name] ?? 0) * 100);
       const out = h('output', { for: id, class: 'open-out' }, `${pct} %`);
       const input = h('input', {
@@ -522,7 +590,7 @@ export class SkullbaseAtlasPage {
           this.update((st) => { st.morphs = { ...st.morphs, [name]: v / 100 }; });
         },
       });
-      const note = ui.note();
+      const note = ui.note(g);
       return [h('label', { for: id, class: 'chips-label' }, `${ui.label} (${ui.key.toUpperCase()})`), h('div', { class: 'open-row' }, input, out),
         note ? h('p', { class: 'aside', id: `${id}-note` }, note) : null];
     };

@@ -47,8 +47,11 @@ export interface ApproachContent {
   radius?: number;
   /** false: frame on the focus alone, not the bone removed too (a corridor that looks past the opening's middle) */
   frameOpening?: boolean;
-  /** the shapes of the brain the view offers (named morph targets: open, lift, lsoLift, interhemispheric, telovelar), a slider each */
+  /** the shapes of the brain the view offers (named morph targets: open, lift, lsoLift, interhemispheric, telovelar,
+   * retrosigmoid, farLateral, farLateralBack), a slider each */
   morphs: string[];
+  /** the shapes the view opens with full on (default: all of them) */
+  opened?: string[];
   /** landmarks (names) the view labels */
   landmarks?: string[];
 }
@@ -176,6 +179,16 @@ export const APPROACH_REFS: ApproachRef[] = [
     citation: 'Bruneau M, George B. Foramen magnum meningiomas: detailed surgical approaches and technical aspects at Lariboisière Hospital and review of the literature. Neurosurg Rev. 2008;31(1):19–32. doi:10.1007/s10143-007-0097-1.' },
   { id: 'rodriguezrubio2019', pmid: '31929953', pmcid: 'PMC6945284', shortLabel: 'Rodriguez Rubio 2019', url: doi('10.7759/cureus.6053'),
     citation: 'Rodriguez Rubio R, Chae R, Kournoutas I, Abla A, McDermott M. Immersive surgical anatomy of the frontotemporal-orbitozygomatic approach. Cureus. 2019;11(11):e6053. doi:10.7759/cureus.6053.' },
+  { id: 'luzzi2022', pmid: '35441601', pmcid: 'PMC9179055', shortLabel: 'Luzzi 2022', url: doi('10.23750/abm.v92iS4.12823'),
+    citation: 'Luzzi S, Giotta Lucifero A, Bruno N, Baldoncini M, Campero A, Galzio R. Far lateral approach. Acta Biomed. 2022;92(S4):e2021352. doi:10.23750/abm.v92iS4.12823.' },
+  { id: 'sriamornrattanakul2023', pmid: '37251244', pmcid: 'PMC10209739', shortLabel: 'Sriamornrattanakul 2023', url: doi('10.1016/j.wnsx.2023.100216'),
+    citation: 'Sriamornrattanakul K, Akharathammachote N, Chonhenchob A, Mongkolratnan A, Niljianskul N, Phoominaonin IS, et al. Far-lateral approach without C1 laminectomy for microsurgical treatment of vertebral artery and proximal posterior inferior cerebellar artery aneurysms: experience from 48 patients. World Neurosurg X. 2023;19:100216. doi:10.1016/j.wnsx.2023.100216.' },
+  { id: 'auricchio2024', pmid: '38283810', pmcid: 'PMC10821650', shortLabel: 'Auricchio 2024', url: doi('10.3171/2023.10.FOCVID23118'),
+    citation: 'Auricchio AM, Calvanese F, Lehecka M. Exoscopic extradural anterior clinoidectomy. Neurosurg Focus Video. 2024;10(1):V4. doi:10.3171/2023.10.FOCVID23118.' },
+  { id: 'aladdam2026', pmid: '42104188', pmcid: 'PMC13156079', shortLabel: 'Aladdam 2026', url: doi('10.1007/s10143-026-04320-y'),
+    citation: 'Aladdam M, Gürbüz MS, İshakoğlu G, Esen F, Tombul T, Çalış F. Evaluation of functional, structural, and electrophysiological optic nerve changes following extradural anterior clinoidectomy in patients without preoperative optic canal compression. Neurosurg Rev. 2026;49(1):400. doi:10.1007/s10143-026-04320-y.' },
+  { id: 'sulaimanov2025', pmid: '41403404', pmcid: 'PMC12705240', shortLabel: 'Sulaimanov 2025', url: doi('10.1055/a-2765-5582'),
+    citation: 'Sulaimanov U, An J, Erginoglu U, Ataoglu C, Serikkanov Y, Keles A, et al. Microsurgical resection of a diaphragma sellae meningioma via extradural clinoidectomy with preservation of superior hypophyseal arteries. J Neurol Surg Rep. 2025;86(4):e260–e262. doi:10.1055/a-2765-5582.' },
   { id: 'pai2018', pmid: '30283520', pmcid: 'PMC6159062', shortLabel: 'Pai 2018', url: doi('10.4103/ajns.ajns_273_16'),
     citation: 'Pai SB, Raghuram G, Keshav GC, Rodrigues E. Far-lateral transcondylar approach to anterior foramen magnum lesions—our experience. Asian J Neurosurg. 2018;13(3):651–655. doi:10.4103/ajns.ajns_273_16.' },
   { id: 'floresjusta2021', pmid: '33921434', pmcid: 'PMC8069204', shortLabel: 'Flores-Justa 2021', url: doi('10.3390/brainsci11040488'),
@@ -213,6 +226,14 @@ const SYLVIAN_VEINS: ApproachClaim[] = [
   c('The precentral, central and posterior insular veins, in the insula’s precentral, central and posterior limiting sulci, run down and forward to its pole, where they join as the deep middle cerebral vein; it flows into the first segment of the basal vein of Rosenthal.', 'ota2024'),
 ];
 const CISTERN = c('Opening the carotid cistern lets cerebrospinal fluid drain, which relaxes the brain, and exposes the internal carotid artery for proximal control; the dissection then goes medially to the chiasmatic and lamina terminalis cisterns.', 'yilmaz2025');
+/** the anterior clinoidectomy (the pterional and orbitozygomatic views' switch) */
+const CLINOIDECTOMY = sec('Anterior clinoidectomy (the switch)', [
+  c('An extradural anterior clinoidectomy decompresses the optic nerve and widens the exposure of the parasellar region in extensive approaches. Drilled from lateral to medial along the nerve, it unroofs the optic canal over nearly 180° before the tip of the process is taken.', 'auricchio2024'),
+  c('The process is freed by drilling its three attachments, the sphenoid wing, the roof of the optic canal and the optic strut, and then detached from the optic canal’s lateral wall; this exposes the distal dural ring and the clinoidal segment of the internal carotid artery.', 'sevgi2026'),
+  c('With the optic canal unroofed, the clinoidectomy widens the optico-carotid triangle and the working angle below and lateral to the optic nerve.', 'sulaimanov2025'),
+  c('Dolenc’s extradural technique takes the process before the dura is opened, which lowers the risk to the structures beside it: the optic nerve, the clinoidal internal carotid artery and the oculomotor nerve. The optic nerve, running through the optic canal below and medial to the process, remains at risk.', 'aladdam2026'),
+]);
+
 const CONTEXT = ['Internal carotid artery', 'Middle cerebral artery (M1 segment)', 'Middle cerebral artery (M2 segment)', 'Middle cerebral artery (M3 segment)',
   'Anterior cerebral artery (A1–A2)', 'Proximal lateral striate branches', 'Distal lateral striate branches', 'Optic nerve (II)', 'Oculomotor nerve (III)',
   'Superficial middle cerebral vein', 'Sphenoparietal sinus', 'Insular veins', 'Deep middle cerebral vein', 'Basal vein (of Rosenthal)'];
@@ -220,7 +241,7 @@ const NOT_SHOWN = 'The scalp, temporalis muscle, dura and arachnoid; the Sylvian
 
 export const APPROACHES: ApproachContent[] = [
   {
-    id: 'pterional', view: 'transsylvian', name: 'Pterional transsylvian approach', camera: 'anterolateral',
+    id: 'pterional', view: 'transsylvian', name: 'Pterional transsylvian approach', camera: 'pterional',
     summary: 'The right pterional craniotomy cut out of this CT’s bone, and a template brain fitted into the skull. One slider opens its Sylvian fissure onto the insula and this patient’s middle cerebral artery; another lifts the frontal lobe off the orbital roof to look under it, at the carotid and the optic nerve.',
     sections: [sec('The craniotomy', [
       c('Four burr holes: the keyhole (McCarty) anterior to the superior temporal line and above the frontozygomatic suture; one in the frontal bone near the superior orbital rim, avoiding the frontal sinus, 3–4 cm from the first; one below the superior temporal line, near or just anterior to the coronal suture; and one in the temporal squama behind the sphenotemporal suture. Osteotomies join them.', 'yilmaz2025'),
@@ -242,11 +263,13 @@ export const APPROACHES: ApproachContent[] = [
       VEINS,
       c('The superficial Sylvian veins are preserved, especially those draining into the temporal lobe; frontal draining veins may be sacrificed if necessary.', 'yilmaz2025'),
       c('The orbital meningeal artery, met at the superolateral edge of the superior orbital fissure during sphenoid wing resection, often bleeds and is coagulated.', 'yilmaz2025'),
-    ])],
+    ]), CLINOIDECTOMY],
     context: CONTEXT,
     notShown: NOT_SHOWN,
     focus: ['Middle cerebral artery (M2 segment)'],
-    morphs: ['open', 'lift'],
+    morphs: ['open', 'lift', 'ridge', 'clinoid'],
+    // (the ridge opens drilled; the anterior clinoidectomy is a switch, off until the reader turns it on)
+    opened: ['open', 'lift', 'ridge'],
   },
   {
     id: 'lso', view: 'lso', name: 'Lateral supraorbital approach', camera: 'supraorbital',
@@ -276,7 +299,7 @@ export const APPROACHES: ApproachContent[] = [
     morphs: ['lsoLift', 'open'],
   },
   {
-    id: 'interhemispheric', view: 'interhemispheric', name: 'Interhemispheric transcallosal approach', camera: 'vertex', hemi: 'both',
+    id: 'interhemispheric', view: 'interhemispheric', name: 'Interhemispheric transcallosal approach', camera: 'vertexFront', hemi: 'both',
     summary: 'A right parasagittal craniotomy at the coronal suture cut out of this CT’s bone, over the same fitted brain. The slider holds the right hemisphere off the falx, opening the interhemispheric fissure down to the corpus callosum and this patient’s anterior cerebral arteries on it.',
     sections: [sec('The craniotomy', [
       c('In 80 patients with colloid cysts of the third ventricle, all through a right frontoparietal midline craniotomy and an anterior transcallosal transforaminal approach.', 'symss2014'),
@@ -343,7 +366,7 @@ export const APPROACHES: ApproachContent[] = [
     morphs: ['telovelar'],
   },
   {
-    id: 'retrosigmoid', view: 'retrosigmoid', name: 'Retrosigmoid approach', camera: 'retrosigmoid', hemi: 'R', brain: 'hindbrain',
+    id: 'retrosigmoid', view: 'retrosigmoid', name: 'Retrosigmoid approach', camera: 'retrosigmoidLateral', hemi: 'R', brain: 'hindbrain',
     summary: 'A right retrosigmoid craniotomy cut out of this CT’s bone against this patient’s own transverse and sigmoid sinuses, drawn larger than a keyhole to show the anatomy, with the cerebellum, brainstem and fourth ventricle of an anatomical model fitted into the posterior fossa. The slider draws the right cerebellar hemisphere back from the petrous bone, opening the cerebellopontine angle onto the trigeminal nerve, the facial and vestibulocochlear nerves at the internal acoustic meatus, the lower cranial nerves and the arteries among them.',
     sections: [sec('The craniotomy', [
       c('The keypoint is the point on the outer surface over the junction of the transverse sinus’ lower margin with the sigmoid sinus’ posterior margin. A straight vertical incision about 4 cm long runs 1.5 cm behind the posterior margin of the mastoid process; the burr hole (about 6 mm) is centred 12 mm above the top of the digastric groove, on a line perpendicular to the baseline, and the keypoint lies 3–4 mm anterosuperior to it. The oval bone flap measured 18–20 × 20–25 mm.', 'jian2021'),
@@ -379,7 +402,7 @@ export const APPROACHES: ApproachContent[] = [
     morphs: ['retrosigmoid'],
   },
   {
-    id: 'orbitozygomatic', view: 'orbitozygomatic', name: 'Orbitozygomatic approach', camera: 'orbitozygomatic',
+    id: 'orbitozygomatic', view: 'orbitozygomatic', name: 'Orbitozygomatic approach', camera: 'orbitozygomaticFront',
     summary: 'This model’s pterional craniotomy extended by an orbitozygomatic piece: the superolateral orbital rim with the orbital roof behind it, and the zygomatic arch, cut out of this CT’s bone, over the same fitted brain. The view looks up from lower down, under the frontal lobe; the sliders open the Sylvian fissure and lift the frontal lobe.',
     sections: [sec('The craniotomy', [
       c('An extension of the pterional craniotomy for anterior skull base and orbital lesions, reaching vascular and oncological lesions without adding morbidity; Hakuba described the orbitozygomatic infratemporal approach in 1986, Al-Mefty the cranio-orbitozygomatic approach after him.', 'yilmaz2025'),
@@ -392,20 +415,25 @@ export const APPROACHES: ApproachContent[] = [
       FISSURE,
     ]), sec('Care points', [
       c('The facial nerve is preserved by interfascial or subfascial dissection, as in the pterional approach; the temporalis muscle is lifted leaving a cuff at the superior temporal line for reattaching it, and the subperiosteal dissection continues down along the zygomatic arch.', 'yilmaz2025'),
-    ])],
+    ]), CLINOIDECTOMY],
     context: CONTEXT,
     notShown: 'The orbital piece’s and the arch’s extents are drawn by rule on this skull (illustrative). The temporalis and masseter muscles, the periorbita and the orbit’s contents, and the facial nerve’s frontal branch are not modelled. ' + NOT_SHOWN,
     focus: ['Middle cerebral artery (M2 segment)'],
-    morphs: ['open', 'lift'],
+    morphs: ['open', 'lift', 'ridge', 'clinoid'],
+    // (the ridge opens drilled; the anterior clinoidectomy is a switch, off until the reader turns it on)
+    opened: ['open', 'lift', 'ridge'],
   },
   {
-    id: 'far_lateral', view: 'far_lateral', name: 'Far lateral approach', camera: 'farLateral', hemi: 'R', brain: 'hindbrain',
-    summary: 'A right far lateral (lateral suboccipital) craniectomy cut out of this CT’s bone down through the foramen magnum’s rim, the posterior third of the occipital condyle drilled, with the cerebellum, brainstem and fourth ventricle of the fitted model: the view along the side of the medulla to the front of the foramen magnum, past the vertebral artery and the lower cranial nerves.',
+    id: 'far_lateral', view: 'far_lateral', name: 'Far lateral approach', camera: 'farLateralLow', hemi: 'R', brain: 'hindbrain',
+    summary: 'A right far lateral (lateral suboccipital) craniectomy cut out of this CT’s bone down through the foramen magnum’s rim, the posterior third of the occipital condyle drilled, with the cerebellum, brainstem and fourth ventricle of the fitted model: the view along the side of the medulla to the front of the foramen magnum, past the vertebral artery and the lower cranial nerves. The slider lifts the right tonsil and biventral lobule up and towards the midline, as the approach’s retraction holds them, off the vertebral artery and the lower cranial nerves; a second draws them and the hemisphere’s lower outer corner straight back, a view aid that together with the first can hold the cerebellum where no retractor would.',
     sections: [sec('The craniectomy', [
       c('A lateral suboccipital craniectomy and a hemilaminectomy of C1 (of C2 and C3 too when the lesion reaches lower); the transverse–sigmoid junction may be exposed. The posterior 30–40 % of the occipital condyle is drilled extradurally, widening the angle onto the ventral and ventrolateral craniovertebral junction.', 'pai2018'),
       c('The craniectomy should take in the whole lesion, reach the sigmoid sinus laterally and take the rim of the foramen magnum below. Heros’s basic far lateral approach is a low suboccipital approach up to the condyle, not into it.', 'pai2018'),
       c('In a modified park-bench position the two outer muscle layers are reflected together onto the suboccipital triangle; the vertebral artery is exposed and controlled from C2 to where it enters the dura over the groove of C1.', 'pai2018'),
       c('Rhoton’s far lateral approach is a lateral suboccipital approach behind the sternocleidomastoid and the vertebral artery, just medial to the occipital and atlantal condyles; the extreme lateral approach goes deep to the front of the sternocleidomastoid.', 'bruneau2008'),
+    ]), sec('Opening onto the medulla', [
+      c('Opening the arachnoid of the cisterna magna and retracting the cerebellar tonsil upwards exposes the lateral medullary cistern and the intradural corridors to the vertebrobasilar junction, the vertebral artery–PICA junction and the proximal PICA.', 'luzzi2022'),
+      c('In a series of 48 patients with vertebral artery and proximal PICA aneurysms, once the dura was open the cerebellar hemisphere and tonsil on that side were retracted superomedially to expose the vertebral artery’s intradural (V4) segment, the proximal PICA and the lower cranial nerves.', 'sriamornrattanakul2023'),
     ]), sec('What it reaches', [
       c('Lesions ventrolateral and even ventral to the brainstem and upper cervical cord, with little or no retraction: the tumour–brain interface is met early, and the vertebral artery is controlled early.', 'pai2018'),
       c('In 8 patients with lesions in front of the brainstem and upper cord (2 meningiomas, 3 epidermoids, a chordoma, 2 vascular lesions): total excision of 5 of the 6 tumours; one patient died suddenly 18 hours after surgery, one had a cerebrospinal fluid leak.', 'pai2018'),
@@ -418,7 +446,8 @@ export const APPROACHES: ApproachContent[] = [
     notShown: 'The atlas and axis are not part of this model, so the hemilaminectomy of C1 is not shown, nor the vertebral artery outside the skull. The craniectomy’s outline is placed by rule (illustrative). The muscles, the dura and the arachnoid. The cerebellum, brainstem and fourth ventricle are one adult’s anatomical model (Z-Anatomy) fitted into this skull, not this patient’s own.',
     focus: ['Medulla oblongata', 'Hypoglossal nerve (XII)'],
     radius: 50,
-    morphs: [],
+    morphs: ['farLateral', 'farLateralBack'],
+    opened: ['farLateral'],      // (the second slider, the cerebellum drawn straight back, is a view aid: it opens at 0)
   },
   {
     id: 'kawase', view: 'kawase', name: 'Anterior petrosectomy (Kawase approach)', camera: 'subtemporal',
@@ -482,9 +511,11 @@ export const V1_ABSENT = new Set([
   'Internal cerebral veins', 'Trigeminal ganglion',
 ]);
 
-/** v1's own wording for a view; camera: its own view direction; hide: structures left out of that view; add: the model's
- * own structures added to it */
-export const V1_TEXT: Record<string, { summary: string; notShown: string; camera?: CameraPreset; hide?: string[]; add?: string[] }> = {
+/** v1's own wording for a view; camera: its own view direction where v3's does not suit it (the retrosigmoid: on
+ * Z-Anatomy's skull the opening lies level with the porus, and v3's view from below meets the mastoid; v1's other views
+ * open as v3's do, checked on renders of both, November 2026); morphs: its own shapes, where it does not have v3's;
+ * hide: structures left out of that view; add: the model's own structures added to it */
+export const V1_TEXT: Record<string, { summary: string; notShown: string; camera?: CameraPreset; morphs?: string[]; hide?: string[]; add?: string[] }> = {
   pterional: { summary: 'The right pterional craniotomy cut out of Z-Anatomy’s skull, over Z-Anatomy’s own brain. One slider opens the Sylvian fissure onto the insula and the model’s middle cerebral artery; another lifts the frontal lobe off the orbital roof to look under it, at the carotid and the optic nerve.',
     notShown: `The scalp, temporalis muscle, dura and arachnoid; the Sylvian veins. ${V1_BRAIN}` },
   lso: { summary: 'A right lateral supraorbital (LSO) craniotomy cut out of Z-Anatomy’s skull, over the same brain. The fissure lies at the craniotomy’s lower edge; the lift raises the frontal lobe off the lateral orbital roof.',
@@ -498,7 +529,7 @@ export const V1_TEXT: Record<string, { summary: string; notShown: string; camera
     camera: 'retrosigmoidLevel', add: ['Tentorium cerebelli'] },
   orbitozygomatic: { summary: 'The pterional craniotomy extended by an orbitozygomatic piece (the superolateral orbital rim and roof, the zygoma and its arch), cut out of Z-Anatomy’s skull, over the same brain, seen from lower down.',
     notShown: `The orbital piece’s and the arch’s extents are drawn by rule on this skull. The temporalis and masseter muscles, the periorbita and the facial nerve’s frontal branch. ${V1_BRAIN}` },
-  far_lateral: { summary: 'A right far lateral (lateral suboccipital) craniectomy cut out of Z-Anatomy’s skull down through the foramen magnum, the posterior third of the occipital condyle drilled, with its cerebellum, brainstem and fourth ventricle.',
+  far_lateral: { summary: 'A right far lateral (lateral suboccipital) craniectomy cut out of Z-Anatomy’s skull down through the foramen magnum, the posterior third of the occipital condyle drilled, with its cerebellum, brainstem and fourth ventricle. The slider lifts the right tonsil and biventral lobule up and towards the midline, as the approach’s retraction holds them, off the vertebral artery and the lower cranial nerves; a second draws them and the hemisphere’s lower outer corner straight back, a view aid that together with the first can hold the cerebellum where no retractor would.',
     notShown: `The atlas and axis are not part of this model, so the hemilaminectomy of C1 is not shown. The craniectomy’s outline is placed by rule. The muscles, the dura and the arachnoid. ${V1_HIND}` },
   kawase: { summary: 'A right temporal flap flush with the middle fossa floor, cut out of Z-Anatomy’s skull, and the petrous apex drilled within the Kawase rhomboid down to the inferior petrosal sinus, kept off Z-Anatomy’s cochlea, labyrinth, carotid and nerves; the temporal lobe drawn held up.',
     notShown: `The dura: the middle fossa dura and its layers, the tentorium and the dura of the posterior fossa and the meatus are not modelled; the lesser petrosal nerve, the temporalis muscle and the optional zygomatic osteotomy are not drawn. Of the rhomboid’s landmarks the geniculate ganglion (at the facial nerve’s first genu), the greater petrosal nerve and the bone over the superior canal are drawn by rule on Z-Anatomy’s ear and nerves, which do not have them; the petrous apex, the cochlea, the vestibule and canals, V3 and the carotid are Z-Anatomy’s own; the trigeminal ganglion is part of its trigeminal nerve; the margins kept off them are drawing choices. The insula, which lies above and medial to the lifted temporal lobe under dura the model does not have, is left out of this view. ${V1_BRAIN}`,

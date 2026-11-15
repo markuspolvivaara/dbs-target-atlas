@@ -7,42 +7,117 @@
     "Anterior inferior cerebellar artery",
     "Anterior spinal artery",
     "Lateral pontine branches of basilar artery",
-    "Posterior inferior cerebellar artery (fitted course)"
+    "Medial pontine branches of basilar artery",
+    "Posterior inferior cerebellar artery (fitted course)",
+    "Superior cerebellar artery (fitted course)"
    ],
    "parameters": {
     "clearMm": 0.3,
     "shapes": [
      "rest",
      "telovelar",
-     "retrosigmoid"
+     "retrosigmoid",
+     "farLateral",
+     "farLateralBack"
     ],
-    "fissureShare": 0.25,
-    "fissureMm": 4.0
+    "cerebellumInMm": 0.3,
+    "cerebellumShare": 0.03,
+    "cerebellumMm": 1.0
    },
    "metrics": {
     "Anterior inferior cerebellar artery": {
      "insidePoints": 13,
-     "movedMm": 1.33
+     "insideHindbrainPoints": {
+      "rest": 108,
+      "telovelar": 88,
+      "retrosigmoid": 0,
+      "farLateral": 253,
+      "farLateralBack": 57
+     },
+     "movedMm": 2.71,
+     "shapes": [
+      "farLateral",
+      "farLateralBack",
+      "telovelar"
+     ]
     },
     "Anterior spinal artery": {
      "insidePoints": 1,
-     "movedMm": 0.5
+     "insideHindbrainPoints": {
+      "rest": 0,
+      "telovelar": 0,
+      "retrosigmoid": 0,
+      "farLateral": 0,
+      "farLateralBack": 0
+     },
+     "movedMm": 0.5,
+     "shapes": [
+      "farLateralBack"
+     ]
     },
     "Lateral pontine branches of basilar artery": {
      "insidePoints": 9,
-     "movedMm": 0.99
+     "insideHindbrainPoints": {
+      "rest": 0,
+      "telovelar": 0,
+      "retrosigmoid": 0,
+      "farLateral": 0,
+      "farLateralBack": 0
+     },
+     "movedMm": 0.99,
+     "shapes": []
+    },
+    "Medial pontine branches of basilar artery": {
+     "insidePoints": 0,
+     "insideHindbrainPoints": {
+      "rest": 0,
+      "telovelar": 0,
+      "retrosigmoid": 0,
+      "farLateral": 0,
+      "farLateralBack": 0
+     },
+     "movedMm": 0.15,
+     "shapes": []
+    },
+    "Superior cerebellar artery (fitted course)": {
+     "insidePoints": 0,
+     "insideHindbrainPoints": {
+      "rest": 70,
+      "telovelar": 0,
+      "retrosigmoid": 0,
+      "farLateral": 0,
+      "farLateralBack": 9
+     },
+     "movedMm": 5.68,
+     "shapes": [
+      "farLateral",
+      "farLateralBack"
+     ]
     },
     "Posterior inferior cerebellar artery (fitted course)": {
-     "insidePoints": 18,
-     "movedMm": 1.45
+     "insidePoints": 96,
+     "insideHindbrainPoints": {
+      "rest": 3636,
+      "telovelar": 779,
+      "retrosigmoid": 663,
+      "farLateral": 1309,
+      "farLateralBack": 3110
+     },
+     "movedMm": 10.66,
+     "shapes": [
+      "farLateral",
+      "farLateralBack",
+      "retrosigmoid",
+      "telovelar"
+     ]
     }
    },
    "validation": {
-    "checks": 58,
+    "checks": 62,
     "failed": []
    },
-   "revision": "f3d288a",
-   "date": "2026-11-12"
+   "revision": "c269048",
+   "date": "2026-11-15"
   },
   {
    "step": "skullbase_v3_junctions",
@@ -169,8 +244,8 @@
     "checks": 24,
     "failed": []
    },
-   "revision": "f3d288a",
-   "date": "2026-11-12"
+   "revision": "c269048",
+   "date": "2026-11-15"
   }
  ]
 }

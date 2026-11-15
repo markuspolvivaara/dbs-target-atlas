@@ -43,7 +43,8 @@ export interface SbGroup {
   info?: 'endonasal' | 'cavernous';
   /** a tumour's view: its family and grade (or site; skullbase/tumours.ts) */
   tumour?: { family: TumourFamily; grade: string };
-  /** shapes of the brain the view opens with (a tumour seen past the retracted cerebellum) */
+  /** shapes of the brain the view opens with: a surgical view opens with every shape full on (the anatomy as the approach
+   * exposes it, which its text describes; the sliders take it back to the brain at rest), and so does a tumour's view */
   morphDefault?: Record<string, number>;
   /** a section the view is cut at (everything on the normal's side of the point removed), while the reader keeps it on */
   section?: { normal: V3; point: V3 };
@@ -92,12 +93,14 @@ function surgicalGroups(): SbGroup[] {
     const replaced = new Set(geom.bones.map((id) => SB.get(id)?.replaces));
     // copies for this view only (the Kawase view's lifted temporal lobe) stand in for their parts
     const own = new Map(PUSHED.filter((s) => s.forView === a.view && s.replaces).map((s) => [s.replaces!, s.id]));
+    const morphs = (SB_MODEL === 'zanatomy' ? V1_TEXT[a.id]?.morphs : undefined) ?? a.morphs;
     return {
       id: a.view, kind: 'approach', name: a.name, camera: (SB_MODEL === 'zanatomy' ? V1_TEXT[a.id]?.camera : undefined) ?? a.camera, hemi: a.hemi ?? (geom.side === 'M' ? 'both' : geom.side), cutAbove: null, boneLook: undefined,
       // framed on the craniotomy and what it is for: the view looks in through the one onto the other
-      focus: null, focusIds: [...(a.frameOpening === false ? [] : [geom.removed]), ...byName(...a.focus)], radius: a.radius ?? 60, approach: a.id, morphs: a.morphs,
+      focus: null, focusIds: [...(a.frameOpening === false ? [] : [geom.removed]), ...byName(...a.focus)], radius: a.radius ?? 60, approach: a.id, morphs,
+      morphDefault: Object.fromEntries(morphs.filter((m) => a.opened?.includes(m) ?? true).map((m) => [m, 1])),
       description: SB_MODEL === 'zanatomy' ? V1_TEXT[a.id]?.summary ?? a.summary : a.summary,
-      structures: [...bones.filter((id) => !replaced.has(id)), ...geom.bones, geom.removed, ...(geom.guides ?? []),
+      structures: [...bones.filter((id) => !replaced.has(id)), ...geom.bones, geom.removed, ...(geom.guides ?? []), ...(geom.clinoid ? [geom.clinoid] : []), ...(geom.ridge ? [geom.ridge] : []),
         ...[...brainOf(a.brain ?? 'cerebrum'), ...byName(...a.context, ...(SB_MODEL === 'zanatomy' ? V1_TEXT[a.id]?.add ?? [] : []))].map((id) => own.get(id) ?? id)]
         .filter((id) => !(SB_MODEL === 'zanatomy' && V1_TEXT[a.id]?.hide?.includes(SB.get(id)?.name ?? ''))),
       landmarks: lm(...(a.landmarks ?? [])),
@@ -207,6 +210,9 @@ function tumourGroups(surgical: SbGroup[]): SbGroup[] {
   const base = { boneLook: 'shell' as Look, cutAbove: null, hemi: 'both' as const };
   const sbIds = new Set(OWN.map((s) => s.id));
   const pushedFor = (tag: string) => new Map(PUSHED.filter((s) => s.tumourView === tag && s.replaces).map((s) => [s.replaces!, s.id]));
+  // the tumours drawn in one view (the Knosp grades: their coronal view) are framed alike, on all of them together, so
+  // that going from one to another leaves the camera where it is (skullbase-atlas.ts pickGroup)
+  const inView = (view: string | null) => TUMOURS.flatMap((t) => t.grades.filter((gr) => sbIds.has(gr.structure) && gr.view === view).map((gr) => gr.structure));
   const knospStructs = byName('Internal carotid artery', 'Internal carotid artery (petrous and lacerum parts)', 'Ophthalmic artery', 'Anterior cerebral artery',
     'Optic nerve (II)', 'Optic chiasm', 'Pituitary stalk', 'Cavernous sinus', 'Walls of the cavernous sinus', 'Oculomotor nerve (III)', 'Trochlear nerve (IV)',
     'Ophthalmic nerve (V1)', 'Maxillary nerve (V2)', 'Abducens nerve (VI)', 'Trigeminal ganglion', 'Anterior intercavernous sinus', 'Posterior intercavernous sinus', 'Knosp lines');
@@ -217,7 +223,7 @@ function tumourGroups(surgical: SbGroup[]): SbGroup[] {
       const y0 = TUMOUR_FIT.knosp.planeY;
       return {
         ...base, id, kind: 'tumour', name: `Pituitary adenoma, Knosp ${gr.id}`, camera: 'coronal', hemi: 'both', cutAbove: null, boneLook: 'ghost',
-        focus: null, focusIds: [gr.structure], radius: 24, description: t.summary,
+        focus: null, focusIds: inView(null), radius: 24, description: t.summary,
         structures: [...knospStructs, gr.structure], landmarks: [], ghost: byName('Cavernous sinus'), shell: byName('Walls of the cavernous sinus'),
         tumour: { family: t.family, grade: gr.id }, section: { normal: [0, 1, 0], point: [0, y0, 0] },
       };
@@ -227,10 +233,10 @@ function tumourGroups(surgical: SbGroup[]): SbGroup[] {
     const swap = pushedFor(tag);
     return {
       ...host, id, kind: 'tumour', name: t.family === 'koos' ? `Vestibular schwannoma, Koos ${gr.id}` : `${gr.label} meningioma`,
-      description: t.summary, focusIds: [gr.structure, ...(host.focusIds ?? []).slice(0, 1)], radius: Math.max(host.radius, 55),
+      description: t.summary, focusIds: [...inView(gr.view), ...(host.focusIds ?? []).slice(0, 1)], radius: Math.max(host.radius, 55),
       structures: [...host.structures.map((x) => swap.get(x) ?? x), gr.structure], tumour: { family: t.family, grade: gr.id },
       // (opened onto the tumour: the cerebellum retracted, the frontal lobe lifted)
-      morphDefault: Object.fromEntries((host.morphs ?? []).filter((m) => ['retrosigmoid', 'lsoLift', 'lift', 'open', 'telovelar'].includes(m)).map((m) => [m, 1])),
+      morphDefault: { ...host.morphDefault },
     };
   }));
 }

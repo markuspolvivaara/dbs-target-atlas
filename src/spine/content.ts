@@ -20,12 +20,16 @@ export const LevelGeomSchema = z.object({
   foramen: z.object({ L: Foramen, R: Foramen }),
   discCentre: V3,
   discHeightMm: z.number().optional(),
-  /** a disc drawn in part: the segmentation holds a chip much narrower than the discs above and below (their widths
-   * given), so no height is reported; spaceHu: the densest the CT gets between the two bodies (its mean on 16 mm
-   * circles across the line joining their centres, HU), beside the same at the discs above and below, where it is
-   * an end plate */
-  discPartial: z.object({
-    volumeMl: z.number(), widthMm: z.number(), neighbourWidthMm: z.array(z.number()),
+  /** a calcified disc (T10-T11 of this CT), drawn by rule in the dense band between the two bodies, which are cut back
+   * to it (spine_build.calcified_disc): heightMm the band's width at half height, the calcification the CT above
+   * 500 HU inside it; bandPeakHu and cancellousHu the band's peak and the bodies' cancellous bone on the profile that
+   * width is read from; chipMl and chipWidthMm what the disc segmentation holds of it (its neighbours' widths given);
+   * spaceHu the densest the CT gets between the two bodies (its mean on 16 mm circles across the line joining their
+   * centres), beside the same at the discs above and below, where it is an end plate */
+  discCalcified: z.object({
+    heightMm: z.number(), discMl: z.number(), calcificationMl: z.number(), calcificationPieces: z.number(),
+    bandPeakHu: z.number(), cancellousHu: z.number(), footprintMm2: z.number(),
+    chipMl: z.number().optional(), chipWidthMm: z.number().optional(), neighbourWidthMm: z.array(z.number()).optional(),
     spaceHu: z.number(), neighbourSpaceHu: z.array(z.number()),
   }).optional(),
   /** false where the foramen's size is not reported (thoracic: the rib heads form part of its wall) */
@@ -36,9 +40,10 @@ export const LevelGeomSchema = z.object({
   }).optional(),
 });
 export type LevelGeom = z.infer<typeof LevelGeomSchema>;
-/** area, width, depth: on the bone as drawn; areaUnsmoothed: the enclosed area on the same volume before the drawing's
- * smoothing, which narrows small openings (null where no enclosed region is found there) */
-const TransverseForamen = z.object({ area: z.number(), width: z.number(), depth: z.number(), areaUnsmoothed: z.number().nullable() }).nullable();
+/** area, width, depth: on the bone as drawn; ct: the same on the CT's own bone at 200 HU before the drawing's
+ * smoothing, which narrows a thin-walled foramen (null where no enclosed region is found there): the cards lead with it */
+const ForamenDims = z.object({ area: z.number(), width: z.number(), depth: z.number() });
+const TransverseForamen = ForamenDims.extend({ ct: ForamenDims.nullable() }).nullable();
 const LEVELS = z.object({
   lumbar: z.array(LevelGeomSchema), thoracic: z.array(LevelGeomSchema), cervical: z.array(LevelGeomSchema),
   /** the vertebral artery's entry level per side (inferred from the foramina's size) and the foramina transversaria

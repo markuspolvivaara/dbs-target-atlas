@@ -345,6 +345,7 @@ def main() -> int:
         base, side = split_pair(n)
         add(n, b["kind"], "vmesh", side, (np.array(b["verts"]), np.array(b["tris"]), np.ones(len(b["verts"]))))
     fitted = {split_pair(n)[0] for part in ("lines", "soft") for n, x in ex.get(part, {}).items() if x.get("fitted")}
+    fitted |= {NERVE_MERGE[n] for n in fitted if n in NERVE_MERGE}   # V1-V3 shown under their merged names
     cn: dict[str, int] = {}
     arteries = {split_pair(n)[0] for n, ln in ex["lines"].items() if ln["kind"] == "artery"}
     arteries |= {split_pair(n)[0] for n, m in ex.get("meshes", {}).items() if m["kind"] == "artery"}
@@ -567,6 +568,16 @@ def validate() -> int:
     if CT:   # the orbital roofs' holes closed by rule (skullbase_ct.fill_orbital_roofs): on both sides, small
         roof = json.loads((BUILD / "export.json").read_text()).get("roofFillMm2", {})
         check(set(roof) == {"L", "R"} and all(0 <= v <= 300 for v in roof.values()), f"orbital roof fill {roof} mm2")
+        # the fitted nerves measured where they cross the skull base (skullbase_ct_openings.py, before finalize: a rebuild
+        # that skips it leaves no entry). The audit's cases (MC-10) are noted: the right XII in the condylar bone, the left
+        # IX in the jugular foramen's wall, the left optic nerve in sinus air, both V2
+        noted = {x["name"]: x["atOpening"] for x in m["structures"] if x.get("atOpening")}
+        check({"Hypoglossal nerve (XII)", "Glossopharyngeal nerve (IX)", "Optic nerve (II)", "Maxillary nerve (V2)"} <= set(noted),
+              f"nerves noted at the skull base: {sorted(noted)} (skullbase_ct_openings.py not run?)")
+        check(noted.get("Hypoglossal nerve (XII)", {}).get("R", {}).get("solidMm", 0) >= 5, "the right hypoglossal nerve not measured in solid bone")
+        check(all(r["routedId"].startswith("tb_") and all(0 <= r[s]["solidMm"] <= r[s]["boneMm"] for s in ("R", "L")) for r in noted.values()),
+              "a skull-base note without a routed nerve, or with more solid bone than bone")
+        check(all(it.get("fitted") for it in m["structures"] if it.get("category") == "nerve"), "a fitted nerve not marked as fitted")
     frontal = next(i for i in m["structures"] if i["id"] == "sb_frontal_bone")
     occipital = next(i for i in m["structures"] if i["id"] == "sb_occipital_bone")
     check(frontal["centroid"]["R"][1] > occipital["centroid"]["R"][1], "frontal bone should lie anterior (+y) of the occipital bone")
@@ -620,12 +631,49 @@ def validate() -> int:
             check(r["inBoneAfterMm"] <= 1.0, f"hypoglossal nerve {sd}: {r['inBoneAfterMm']} mm of its centre line in the occipital bone")
         it = next((x for x in m["structures"] if x["name"] == "Hypoglossal nerve (XII)"), None)
         check(it is not None and "Led through the canal" in it.get("derivation", ""), "the hypoglossal nerve's derivation does not say it was moved")
+        # four vessels put where the model's bone and brain say they lie (skullbase_v1_vessels.py): the straight and
+        # occipital sinuses back at the confluence (Z-Anatomy's file has them 44.5 mm in front of it), the basilar artery
+        # off the clivus with what is joined to it, the middle meningeal artery through the model's own foramen spinosum
+        vs = steps.get("skullbase_v1_vessels", {}).get("metrics", {})
+        check(set(vs) >= {"sinuses", "basilar", "meningeal", "carried", "joins", "nerves"}, "skullbase_v1_vessels.py not run")
+        if vs:
+            sn = vs["sinuses"]
+            check(40 <= sn["offsetLengthMm"] <= 50 and sn["straight"]["toConfluenceMm"] <= 0.5 and sn["straight"]["toInferiorSagittalMm"] <= 2.0,
+                  f"straight sinus: not at the confluence and the inferior sagittal sinus ({sn['straight']}, offset {sn['offsetLengthMm']} mm)")
+            oc = sn["occipital"]
+            check(oc["toConfluenceMm"] <= 0.5 and oc["inBoneAfterMm"] == 0 and -0.1 <= oc["offCrestMinMm"] and oc["offCrestMaxMm"] <= 0.5,
+                  f"occipital sinus: not from the confluence along the crest ({oc})")
+            ba = vs["basilar"]["basilar"]
+            check(ba["inBoneAfterMm"] == 0 and ba["wallAfterMm"] >= -0.1 and ba["toBrainstemAfterMm"] >= -0.3 and ba["maxMovedMm"] <= 3.0,
+                  f"basilar artery: not moved clear of the clivus ({ba})")
+            for n_, sides in vs["basilar"]["branches"].items():
+                for sd, r in sides.items():
+                    check(r["inBoneAfterMm"] <= 0.5, f"{n_} {sd}: {r['inBoneAfterMm']} mm left in bone")
+            for sid, (b0, a0) in vs["joins"].items():
+                check(a0 <= b0 + 0.1, f"{sid}: {a0} mm from the basilar artery after its move, {b0} before")
+            for k, (b0, a0) in vs["nerves"].items():
+                check(a0 >= min(b0, 0.5) - 0.1, f"{k}: {a0} mm apart after the basilar artery's move, {b0} before")
+            check({"sb_vertebral_artery", "sb_posterior_cerebral_artery", "sb_superior_cerebellar_artery", "sb_anterior_inferior_cerebellar_artery"}
+                  <= set(vs["carried"]) and all(r["maxMovedMm"] <= 3.0 for r in vs["carried"].values()),
+                  f"the arteries joined to the basilar artery not carried with it: {sorted(vs['carried'])}")
+            for sd, r in vs["meningeal"].items():
+                check(r["canal"]["fromLabelMm"] <= 1.0 and 1.5 <= r["canal"]["widthMm"] <= 5.0 and r["canal"]["lengthMm"] >= 3.0,
+                      f"foramen spinosum {sd}: not found beside its label ({r['canal']})")
+                check(r["toCanalCentreMm"] <= 0.5 and r["inBoneAfterMm"] <= 1.0 and r["originMovedMm"] == 0,
+                      f"middle meningeal artery {sd}: {r['toCanalCentreMm']} mm from its foramen's centre, {r['inBoneAfterMm']} mm in bone")
+            moved_v = ["Straight sinus", "Occipital sinus", "Basilar artery", "Medial pontine branches of basilar artery",
+                       "Lateral pontine branches of basilar artery", "Middle meningeal artery"]
+            for n_ in moved_v:
+                it = next((x for x in m["structures"] if x["name"] == n_), None)
+                check(it is not None and "Corrected position (skullbase_v1_vessels.py)" in it.get("derivation", ""), f"{n_}: the derivation does not say it was moved")
         # every vessel and nerve measured against the bones (skullbase_v1_inbone.py, the last step: a rebuild that skips it
         # leaves no entry). The ones the project has moved out of the bone carry no note; the carotid, which Z-Anatomy
         # draws through a petrous bone without a canal, does (the audit's finding MC-11)
         noted = {x["name"]: x["inBone"] for x in m["structures"] if x.get("inBone")}
         check(10 <= len(noted) <= 45, f"{len(noted)} vessels and nerves noted as lying in the model's bone (skullbase_v1_inbone.py not run?)")
-        check("Hypoglossal nerve (XII)" not in noted and not any(n in noted for n in moved), "a structure moved out of the bone is still noted as lying in it")
+        check("Hypoglossal nerve (XII)" not in noted and not any(n in noted for n in moved)
+              and not any(n in noted for n in ("Basilar artery", "Occipital sinus", "Middle meningeal artery", "Medial pontine branches of basilar artery")),
+              "a structure moved out of the bone is still noted as lying in it")
         check("Internal carotid artery" in noted and {"Sphenoid bone", "Temporal bone"} <= set(noted.get("Internal carotid artery", {}).get("bones", [])),
               "the internal carotid artery is not noted as running in the sphenoid and temporal bones")
         check(all(0 <= r["share"] <= 1 and r["deepestMm"] >= 0.5 and r["bones"] for r in noted.values()), "an in-bone note without a share, a depth or a bone")
@@ -647,7 +695,12 @@ def validate() -> int:
         check(len(floor_lms) == 10, f"{len(floor_lms)} landmarks on the floor of the fourth ventricle")
         check(names.get("Optic chiasm", {}).get("dataset") == "rule" and "Optic tract" in names, "the optic chiasm not drawn by rule, or no optic tract")
         surf = fit["pfossa"].get("ontoSurface", {})
-        check(len(surf) == 6 and all(v["maxMm"] <= 6 for v in surf.values()), f"cerebellar arteries onto the surface: {surf}")
+        # (moved up to 8.5 mm: the PICA ran deep in Z-Anatomy's lobules, which the step had filled as a shell)
+        check(len(surf) == 6 and all(v["maxMm"] <= 10 for v in surf.values()), f"cerebellar arteries onto the surface: {surf}")
+        inh = fit["pfossa"].get("arteriesInHindbrain", {})
+        check(len(inh) == 3 and all(share < 0.03 and deep < 1.0 for sides in inh.values() for poses in sides.values()
+                                    for share, deep in poses.values()),
+              f"cerebellar arteries inside the hindbrain (share of the tube > 0.3 mm in, deepest mm, per pose): {inh}")
         # the tumours (skullbase_v3_tumours.py with SB_PROFILE=v1): each drawn and graded as meant, the pushed copies' parts present
         import skullbase_v3_tumours as TM
         for ok, msg in TM.check(m["structures"], prefix=PREFIX):
