@@ -29,11 +29,12 @@ export const SM_POINTS: GradeTable = {
     { cells: ['', 'over 6 cm', '3'] },
     { cells: ['Eloquence of the brain next to it', 'not eloquent', '0'] },
     { cells: ['', 'eloquent: sensorimotor, language or visual cortex, hypothalamus, thalamus, internal capsule, brainstem, cerebellar peduncles, deep cerebellar nuclei', '1'] },
-    { cells: ['Venous drainage', 'superficial only (the superior sagittal or transverse sinus)', '0'] },
+    // (the site audit's D-005: one series' working rule for superficial drainage had stood in the table)
+    { cells: ['Venous drainage', 'superficial only', '0'] },
     { cells: ['', 'any deep (the internal cerebral veins, basal veins, precentral cerebellar veins)', '1'] },
   ],
-  foot: 'The points add up to the grade, I to V; grade VI is kept for lesions no treatment can reach.',
-  refIds: ['naranbhai2023', 'hofman2018'],
+  foot: 'The points add up to the grade, I to V; grade VI is kept for lesions no treatment can reach. One series counted only drainage to the superior sagittal or transverse sinus as superficial (see the card).',
+  refIds: ['naranbhai2023'],
   notes: [],
 };
 
@@ -105,13 +106,14 @@ export const HUNT_HESS: GradeTable = {
   id: 'hunt-hess', title: 'Hunt and Hess grade',
   head: ['Grade', 'The patient'],
   rows: [
-    { cells: ['1', 'no symptoms, or a mild headache'] },
-    { cells: ['2', 'a moderate to severe headache, a stiff neck'] },
-    { cells: ['3', 'drowsy or confused, a mild focal neurological deficit'] },
-    { cells: ['4', 'stupor, hemiparesis'] },
-    { cells: ['5', 'coma, decerebrate posturing'] },
+    // (the site audit's D-003: the fuller wording, which keeps a cranial nerve palsy in grade 2)
+    { cells: ['1', 'asymptomatic, or minimal headache and slight nuchal rigidity'] },
+    { cells: ['2', 'moderate or severe headache, nuchal rigidity, no neurological deficit other than a cranial nerve palsy'] },
+    { cells: ['3', 'drowsiness, confusion, or a mild focal deficit'] },
+    { cells: ['4', 'stupor, moderate to severe hemiparesis, possibly early decerebrate rigidity and vegetative disturbance'] },
+    { cells: ['5', 'deep coma, decerebrate posturing, moribund appearance'] },
   ],
-  refIds: ['thilak2024'],
+  refIds: ['patel2021', 'marcolini2019'],
   notes: [
     c('A clinical grade from 1 to 5, from the symptoms and signs: from a mild headache to coma.', 'robba2024'),
   ],
@@ -138,12 +140,14 @@ export const MOD_FISHER: GradeTable = {
   head: ['Grade', 'Subarachnoid blood', 'Intraventricular blood'],
   rows: [
     { cells: ['0', 'none', 'none'] },
-    { cells: ['1', 'focal or diffuse, under 1 mm thick', 'none'] },
-    { cells: ['2', 'focal or diffuse, under 1 mm thick', 'present'] },
-    { cells: ['3', 'focal or diffuse, over 1 mm thick', 'none'] },
-    { cells: ['4', 'focal or diffuse, over 1 mm thick', 'present'] },
+    // (the site audit's D-004: thin and thick, not the original Fisher scale's 1 mm)
+    { cells: ['1', 'focal or diffuse, thin', 'none'] },
+    { cells: ['2', 'focal or diffuse, thin', 'present'] },
+    { cells: ['3', 'focal or diffuse, thick', 'none'] },
+    { cells: ['4', 'focal or diffuse, thick', 'present'] },
   ],
-  refIds: ['thilak2024'],
+  foot: 'The scale is graded on the cisternal and the intraventricular blood. In the same group’s earlier study the best predictors of delayed cerebral ischaemia were a thick clot completely filling any cistern or fissure and blood in both lateral ventricles. The 1 mm cut-off belongs to the original Fisher scale. The full text of the modified scale’s paper, with its own definitions, was not read.',
+  refIds: ['patel2021', 'frontera2006', 'claassen2001'],
   notes: [
     c('Imaging scales such as the modified Fisher grade quantify the subarachnoid, intraventricular and intraparenchymal blood and are associated with outcome.', 'robba2024'),
     c('A poor clinical grade (Hunt and Hess or WFNS) and a poor radiographic grade (modified Fisher) are established predictors of delayed cerebral ischaemia; a higher clinical and radiological grade is also among the risk factors for needing a ventriculoperitoneal shunt.', 'robba2024'),

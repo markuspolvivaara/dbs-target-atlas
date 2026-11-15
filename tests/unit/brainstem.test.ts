@@ -140,3 +140,12 @@ describe('e2e brainstem group list stays in step with the groups module', () => 
     for (const g of BS_GROUPS) expect(spec, g.id).toContain(`{ id: '${g.id}', name: '${g.name}' }`);
   });
 });
+
+describe('the site audit’s B6: the supratrigeminal zone drawn is Cavalheiro’s (D-007)', () => {
+  it('is named for its source and says that others use the name elsewhere', () => {
+    expect(ZONE_GEOM.get('sez_supratrigeminal')!.name).toBe('Supratrigeminal zone (Cavalheiro 2015)');
+    const refs = ZONE_TEXT.get('sez_supratrigeminal')!.borders.flatMap((c) => c.refIds);
+    expect(refs).not.toContain('cavalcanti2016');
+    expect(refs).toContain('alafif2026');
+  });
+});

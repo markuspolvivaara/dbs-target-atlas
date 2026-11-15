@@ -187,3 +187,24 @@ describe('vascular section', async () => {
     expect(t.sel).toBe('va_ccfa__fistula');
   });
 });
+
+describe('the site audit’s B6: the grading tables as their scales define them', async () => {
+  const { HUNT_HESS, MOD_FISHER, SM_POINTS } = await import('../../src/vascular/grading');
+  const { SPETZLER_PONCE, SPETZLER_MARTIN } = await import('../../src/vascular/content');
+  it('Hunt and Hess keeps a cranial nerve palsy in grade 2 and the fuller grades 4 and 5 (D-003)', () => {
+    const cell = (g: string) => HUNT_HESS.rows.find((r) => r.cells[0] === g)!.cells[1];
+    expect(cell('2')).toMatch(/no neurological deficit other than a cranial nerve palsy/);
+    expect(cell('4')).toMatch(/decerebrate rigidity and vegetative disturbance/);
+    expect(HUNT_HESS.refIds).toEqual(['patel2021', 'marcolini2019']);
+  });
+  it('the modified Fisher grade is thin or thick, not the original Fisher scale’s 1 mm (D-004)', () => {
+    for (const r of MOD_FISHER.rows) expect(r.cells.join(' ')).not.toMatch(/1 mm/);
+    expect(MOD_FISHER.foot).toMatch(/completely filling any cistern or fissure.*both lateral ventricles/);
+  });
+  it('Spetzler–Martin’s superficial drainage without one series’ rule; Spetzler–Ponce for cerebral AVMs (D-005, D-006)', () => {
+    expect(SM_POINTS.rows.find((r) => r.cells[0] === 'Venous drainage')!.cells[1]).toBe('superficial only');
+    expect(SPETZLER_MARTIN.find((c) => c.refIds.includes('hofman2018'))!.text).toMatch(/^One series/);
+    expect(SPETZLER_PONCE.map((c) => c.text).join(' ')).not.toMatch(/supratentorial/);
+    expect(SPETZLER_PONCE.find((c) => c.refIds.includes('spetzler2011'))!.text).toMatch(/cerebral AVMs/);
+  });
+});

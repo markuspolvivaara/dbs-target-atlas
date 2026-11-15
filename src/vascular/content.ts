@@ -58,11 +58,13 @@ export const AVM_NIDUS: Claim[] = [
 ];
 export const SPETZLER_MARTIN: Claim[] = [
   c('Spetzler–Martin grading gives 1, 2 or 3 points for size (under 3 cm, 3–6 cm, over 6 cm); 1 point for an eloquent location (sensorimotor, language or visual cortex, hypothalamus, thalamus, internal capsule, brainstem, cerebellar peduncles, deep cerebellar nuclei); and 1 point for deep venous drainage (the internal cerebral veins, basal veins, precentral cerebellar veins). The points add up to the grade, I to V; a grade VI is kept for lesions no treatment can reach.', 'naranbhai2023'),
-  c('Superficial venous drainage was taken as drainage to the superior sagittal or transverse sinus; any other, the sigmoid sinus included, as deep. A superficial AVM was a pial one with no part of the nidus deeper than 1 cm.', 'hofman2018'),
+  c('One series took superficial venous drainage as drainage to the superior sagittal or transverse sinus, and any other, the sigmoid sinus included, as deep; a superficial AVM was a pial one with no part of the nidus deeper than 1 cm.', 'hofman2018'),
 ];
 export const SPETZLER_PONCE: Claim[] = [
   c('The Spetzler–Ponce classes condense the grades: class A is grades I and II, class B grade III, class C grades IV and V.', 'hofman2018'),
-  c('Spetzler and Ponce introduced this three-tier classification in 2011, for supratentorial AVMs; it keeps the original factors (size, eloquence, deep venous drainage) and is quick to work out.', 'assker2025'),
+  // (the site audit's D-006: proposed for cerebral AVMs, not only supratentorial ones)
+  c('Spetzler and Ponce proposed the three-tier classification in 2011 for cerebral AVMs: surgery for class A, several treatments combined for class B, observation for class C, with exceptions such as recurrent haemorrhages and progressive deficits.', 'spetzler2011'),
+  c('It keeps the original factors (size, eloquence, deep venous drainage) and is quick to work out.', 'assker2025'),
 ];
 export const AVM_OTHER: Claim[] = [
   c('The Lawton–Young (supplemented Spetzler–Martin) grade adds the patient’s age, a history of haemorrhage and the type of nidus to the Spetzler–Martin factors.', 'assker2025'),

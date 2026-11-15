@@ -74,7 +74,14 @@ commit and push it.
   mean ± SD; the LSO and minipterional about equal at the carotid bifurcation (Mosteiro 2026's table). C-002 was
   already fixed (1eae262). C-009: `DEFINITION_EDITS` in `src/skullbase/index.ts` corrects shipped definitions in the
   front end (facial nerve; the callosomarginal artery's text withdrawn), so the pipeline files the user's endonasal
-  work touches stay as they are. Local commit, not pushed.
+  work touches stay as they are. Pushed at the user's word.
+- B6, the vascular and brainstem tables (D-003..D-007), the user's choices: Hunt and Hess in its fuller wording
+  (Patel 2021, Marcolini 2019: a cranial nerve palsy stays grade 2); modified Fisher thin / thick, the footnote
+  quoting Claassen 2001's thick clot and both-ventricle blood (Frontera 2006's full text not read); Spetzler–Martin's
+  drainage "superficial only" / "any deep", Hofman 2018's rule kept as one series' on the card; Spetzler–Ponce "for
+  cerebral AVMs" (Spetzler 2011's abstract); the brainstem's "Supratrigeminal zone (Cavalheiro 2015)" (renamed in
+  `brainstem_build.py` and in `bs-zones.json` / `bs-manifest.json` by the same string), the Cavalcanti line replaced
+  by Al-Afif 2026's other use of the name. Local commit, not pushed.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -347,7 +354,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (420 tests on `fix/b1-dbs-views`)
+  - `npx vitest run` (424 tests on `fix/b1-dbs-views`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`

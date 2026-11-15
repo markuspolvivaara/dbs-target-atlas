@@ -30,4 +30,6 @@ export const BS_REFERENCES: BsReference[] = [
     citation: 'Edlow BL, Olchanyi M, Freeman HJ, Li J, Maffei C, Snider SB, et al. Multimodal MRI reveals brainstem connections that sustain wakefulness in human consciousness. Sci Transl Med. 2024;16(745):eadj4303. doi:10.1126/scitranslmed.adj4303.' },
   { id: 'kim2020', pmid: '36238638', pmcid: 'PMC9431917', shortLabel: 'Kim 2020', url: doi('10.3348/jksr.2020.81.3.501'),
     citation: 'Kim HJ, Seong M, Kim Y. Normal anatomy of cranial nerves III–XII on magnetic resonance imaging. Taehan Yongsang Uihakhoe Chi (J Korean Soc Radiol). 2020;81(3):501–529. doi:10.3348/jksr.2020.81.3.501.' },
+  { id: 'alafif2026', pmid: '42776330', pmcid: 'PMC13601307', shortLabel: 'Al-Afif 2026', url: doi('10.1007/s00701-026-07043-7'),
+    citation: "Al-Afif S, Hermann EJ, Früh A, Oltmanns J, Woitzik J, Vajkoczy P, et al. The retrosigmoid trans-middle cerebellar peduncle approach for pontine cavernous malformations: multicenter experience. Acta Neurochir (Wien). 2026;168(1):219. doi:10.1007/s00701-026-07043-7." },
 ];

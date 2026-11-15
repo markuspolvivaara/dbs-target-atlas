@@ -870,7 +870,7 @@ def safe_entry_zones(ex, F, surf: Surface, fm: dict[str, np.ndarray], nerve_exit
         y = V[ventral][np.argmax(V[ventral, 2]), 1]
         per[sd] = line_zone([np.array([x, y, z_top - 0.5]), np.array([x, y, z_top - 4.5])], ant, pons, 1.0)
         measured[f"pontomesencephalicSulcusZ{sd}"] = round(float(z_top), 1)
-    zone("sez_supratrigeminal", "Supratrigeminal zone", "pons", per,
+    zone("sez_supratrigeminal", "Supratrigeminal zone (Cavalheiro 2015)", "pons", per,
          "A vertical line 4 mm long on the front of the pons, starting just below the pontomesencephalic sulcus (the top of the "
          "model's pons there), in the sagittal plane of the oculomotor nerve's exit.", "line")
 
