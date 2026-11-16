@@ -288,7 +288,10 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   lateral wall in their order from above (Corvino 2023), the abducens nerve from under Gruber's ligament against the
   carotid's posterior vertical segment and on medial to V1 (Wysiadecki 2021): their v3 meshes are spliced (kept in
   `cavernous.json`, which `skullbase_v3.py` applies again when it routes them). The ten triangles of Chung 2016 are
-  drawn as flat patches between those structures, and the sinus's walls as a translucent shell of dura round it (1.2 mm
+  drawn as flat patches between those structures; each triangle's card and the view's text say what it holds
+  (Chavez-Herrera 2023, Drazin 2017) and, for the five anterior ones, what a transcranial, a transorbital and an
+  endonasal route show through it (Corvino 2023): `TRIANGLES` in `src/skullbase/approaches.ts`. The sinus's walls are
+  drawn as a translucent shell of dura round it (1.2 mm
   at the lateral wall, its nerves inside it, 0.3 mm elsewhere: drawing choices). The sinus keeps 1 mm off the sphenoid sinus's air (a drawing choice for the wall between them, which is too thin on the right for the CT's bone mask). v2's fitted ophthalmic
   veins are carried over; its fitted superior and inferior petrosal sinuses are laid onto this CT's bone
   (`pipeline/skullbase_v3_petrosal.py`: the superior along the crest of the petrous ridge to the sigmoid-transverse

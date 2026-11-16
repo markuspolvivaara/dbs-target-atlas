@@ -155,6 +155,10 @@ export const APPROACH_REFS: ApproachRef[] = [
     citation: 'Chung BS, Ahn YH, Park JS. Ten triangles around cavernous sinus for surgical approach, described by schematic diagram and three dimensional models with the sectioned images. J Korean Med Sci. 2016;31(9):1455–1463. doi:10.3346/jkms.2016.31.9.1455.' },
   { id: 'corvino2023', pmid: '37626571', pmcid: 'PMC10452901', shortLabel: 'Corvino 2023', url: doi('10.3390/brainsci13081215'),
     citation: 'Corvino S, Villanueva-Solórzano PL, Offi M, Armocida D, Nonaka M, Iaconetta G, et al. A new perspective on the cavernous sinus as seen through multiple surgical corridors: anatomical study comparing the transorbital, endonasal, and transcranial routes and the relative coterminous spatial regions. Brain Sci. 2023;13(8):1215. doi:10.3390/brainsci13081215.' },
+  { id: 'chavezherrera2023', pmid: '36853414', pmcid: 'PMC10039822', shortLabel: 'Chavez-Herrera 2023', url: doi('10.1007/s00276-023-03105-y'),
+    citation: 'Chavez-Herrera VR, Campero Á, Ballesteros-Herrera D, Sandoval-Bonilla BA, Perez-Carrillo CA, Soto-Rubio DT, et al. Microsurgical and illustrative anatomy of the cavernous sinus, middle fossa, and paraclival triangles: a straightforward, comprehensive review. Surg Radiol Anat. 2023;45(4):389–400. doi:10.1007/s00276-023-03105-y.' },
+  { id: 'drazin2017', pmid: '29218256', pmcid: 'PMC5714398', shortLabel: 'Drazin 2017', url: doi('10.7759/cureus.1741'),
+    citation: 'Drazin D, Wang JM, Alonso F, Patel DM, Granger A, Shoja MM, et al. Intracranial anatomical triangles: a comprehensive illustrated review. Cureus. 2017;9(10):e1741. doi:10.7759/cureus.1741.' },
   { id: 'chotai2018', pmid: '29492113', pmcid: 'PMC5820859', shortLabel: 'Chotai 2018', url: doi('10.4103/ajns.AJNS_26_16'),
     citation: 'Chotai S, Liu Y, Qi S. Review of surgical anatomy of the tumors involving cavernous sinus. Asian J Neurosurg. 2018;13(1):1–8. doi:10.4103/ajns.AJNS_26_16.' },
   { id: 'wysiadecki2021', pmid: '34065668', pmcid: 'PMC8156379', shortLabel: 'Wysiadecki 2021', url: doi('10.3390/brainsci11050649'),
@@ -191,6 +195,10 @@ export const APPROACH_REFS: ApproachRef[] = [
     citation: 'Sulaimanov U, An J, Erginoglu U, Ataoglu C, Serikkanov Y, Keles A, et al. Microsurgical resection of a diaphragma sellae meningioma via extradural clinoidectomy with preservation of superior hypophyseal arteries. J Neurol Surg Rep. 2025;86(4):e260–e262. doi:10.1055/a-2765-5582.' },
   { id: 'pai2018', pmid: '30283520', pmcid: 'PMC6159062', shortLabel: 'Pai 2018', url: doi('10.4103/ajns.ajns_273_16'),
     citation: 'Pai SB, Raghuram G, Keshav GC, Rodrigues E. Far-lateral transcondylar approach to anterior foramen magnum lesions—our experience. Asian J Neurosurg. 2018;13(3):651–655. doi:10.4103/ajns.ajns_273_16.' },
+  { id: 'luzzi2022', pmid: '35441601', pmcid: 'PMC9179055', shortLabel: 'Luzzi 2022', url: doi('10.23750/abm.v92is4.12823'),
+    citation: 'Luzzi S, Giotta Lucifero A, Bruno N, Baldoncini M, Campero A, Galzio R. Far lateral approach. Acta Biomed. 2022;92(S4):e2021352. doi:10.23750/abm.v92is4.12823.' },
+  { id: 'payman2022', pmid: '36514632', pmcid: 'PMC9733796', shortLabel: 'Payman 2022', url: doi('10.7759/cureus.31257'),
+    citation: 'Payman A, Rios Zermeno J, Hirpara A, El-Sayed IH, Abla A, Rodriguez Rubio R. Immersive surgical anatomy of the far-lateral approach. Cureus. 2022;14(11):e31257. doi:10.7759/cureus.31257.' },
   { id: 'floresjusta2021', pmid: '33921434', pmcid: 'PMC8069204', shortLabel: 'Flores-Justa 2021', url: doi('10.3390/brainsci11040488'),
     citation: 'Flores-Justa A, Luzzi S, Giotta Lucifero A, Villalonga JF, Saenz A, Santin-Amo JM, et al. Use of neuroanatomic knowledge and neuronavigation system for a safe anterior petrosectomy. Brain Sci. 2021;11(4):488. doi:10.3390/brainsci11040488.' },
   { id: 'signoretti2025', pmid: '40002437', pmcid: 'PMC11853630', shortLabel: 'Signoretti 2025', url: doi('10.3390/brainsci15020104'),
@@ -440,6 +448,7 @@ export const APPROACHES: ApproachContent[] = [
     summary: 'A right far lateral (lateral suboccipital) craniectomy cut out of this CT’s bone down through the foramen magnum’s rim, the posterior third of the occipital condyle drilled, with the cerebellum, brainstem and fourth ventricle of the fitted model: the view along the side of the medulla to the front of the foramen magnum, past the vertebral artery and the lower cranial nerves. The slider lifts the right tonsil and biventral lobule up and towards the midline, as the approach’s retraction holds them, off the vertebral artery and the lower cranial nerves; a second draws them and the hemisphere’s lower outer corner straight back, a view aid that together with the first can hold the cerebellum where no retractor would.',
     sections: [sec('The craniectomy', [
       c('A lateral suboccipital craniectomy and a hemilaminectomy of C1 (of C2 and C3 too when the lesion reaches lower); the transverse–sigmoid junction may be exposed. The posterior 30–40 % of the occipital condyle is drilled extradurally, widening the angle onto the ventral and ventrolateral craniovertebral junction.', 'pai2018'),
+      c('The hypoglossal canal is the anterior limit of the condylar drilling. Drilling the posterior third leaves the craniovertebral junction’s mechanics unchanged; drilling the posterior half or more generally makes it unstable and calls for fixation.', 'luzzi2022', 'payman2022', 'pai2018'),
       c('The craniectomy should take in the whole lesion, reach the sigmoid sinus laterally and take the rim of the foramen magnum below. Heros’s basic far lateral approach is a low suboccipital approach up to the condyle, not into it.', 'pai2018'),
       c('In a modified park-bench position the two outer muscle layers are reflected together onto the suboccipital triangle; the vertebral artery is exposed and controlled from C2 to where it enters the dura over the groove of C1.', 'pai2018'),
       c('Rhoton’s far lateral approach is a lateral suboccipital approach behind the sternocleidomastoid and the vertebral artery, just medial to the occipital and atlantal condyles; the extreme lateral approach goes deep to the front of the sternocleidomastoid.', 'bruneau2008'),
@@ -584,9 +593,60 @@ export const ENDONASAL_INFO: { sections: ApproachSection[]; notShown: string } =
 };
 
 /**
+ * What each of the ten triangles round the cavernous sinus holds or leads to (the site audit's C-019; the owner's choice
+ * of 16 November 2026: an open review's list for all ten, and for the five anterior ones what each exposes from three
+ * routes). Keyed by the end of the triangle's structure id (tb_triangle_<key> on the CT, sb_triangle_<key> on Z-Anatomy).
+ * `holds`: Chavez-Herrera 2023 (PMC10039822), each triangle's paragraph, with Drazin 2017 (PMC5714398) where named.
+ * `byRoute`: Corvino 2023 (PMC10452901), Table 1 (rows "Surgical maneuvers for the exposition" and "Content") and its
+ * discussion of the endonasal route.
+ */
+export const TRIANGLES: Record<string, { holds: ApproachClaim; byRoute?: ApproachClaim }> = {
+  superoposterior: {
+    holds: c('The oculomotor (superoposterior) triangle surrounds the point where the oculomotor nerve enters the roof of the sinus, and holds the horizontal part of the cavernous carotid. Through it tumours of the medial part of the sinus and interpeduncular lesions are reached.', 'chavezherrera2023', 'drazin2017'),
+  },
+  superior: {
+    holds: c('The clinoidal (superior, Dolenc’s) triangle shows in full only once the anterior clinoid process is drilled away. It holds the optic strut in front, the clinoid segment of the carotid medially and the roof of the sinus behind.', 'chavezherrera2023'),
+    byRoute: c('Clinoidal triangle by route: transcranially and transorbitally, after an anterior clinoidectomy, the clinoid carotid between its upper and lower dural rings; endonasally the optic strut or optico-carotid recess.', 'corvino2023'),
+  },
+  middle: {
+    holds: c('The supratrochlear (middle) triangle leads to the posterior bend of the cavernous carotid and, in some cases, to the origin of the meningohypophyseal trunk, to the inferolateral trunk and, less often, to the carotid’s medial loop.', 'chavezherrera2023'),
+    byRoute: c('Supratrochlear triangle by route, after the sinus’s lateral wall is peeled: transcranially the horizontal cavernous carotid with the meningohypophyseal and inferolateral trunks; transorbitally the horizontal cavernous carotid; endonasally only the triangle’s apex, and only with the carotid displaced medially or the nerves laterally.', 'corvino2023'),
+  },
+  inferior: {
+    holds: c('Parkinson’s (inferior, infratrochlear) triangle generally holds the origin of the meningohypophyseal trunk and the cavernous part of the abducens nerve.', 'chavezherrera2023'),
+    byRoute: c('Parkinson’s triangle by route: transcranially, after the lateral wall is peeled, the posterior bend of the cavernous carotid with the meningohypophyseal trunk, and the abducens nerve; transorbitally the upper half and posterior bend of the carotid’s posterior segment with the trunk; endonasally the inferolateral trunk and the abducens nerve, the horizontal carotid and the nerve partly in the way.', 'corvino2023'),
+  },
+  anteromedial: {
+    holds: c('Mullan’s (anteromedial) triangle exposes the superior orbital and ophthalmic veins, the abducens nerve and the sphenoid sinus; further dissection in it gives access to carotid-cavernous fistulas.', 'chavezherrera2023'),
+    byRoute: c('Mullan’s triangle by route: transcranially, after the lateral wall is peeled, the sphenoid sinus; transorbitally the lower half of the cavernous carotid’s posterior segment and the abducens nerve; endonasally, after the sphenoid sinus’s lateral wall is removed, venous structures.', 'corvino2023'),
+  },
+  anterolateral: {
+    holds: c('The anterolateral triangle holds the lateral wing of the sphenoid sinus, the Vidian nerve and the pterygoid region; it exposes the sphenoidal emissary vein and the venous connection between the cavernous sinus and the pterygoid plexus.', 'chavezherrera2023'),
+    byRoute: c('Anterolateral triangle by route: transcranially, after the lateral wall is peeled, the sphenoid sinus; transorbitally the lacerum segment of the carotid with its sympathetic plexus, the foramen lacerum, the petrolingual ligament and the Vidian nerve and artery; endonasally its upper part, after the sphenoid sinus’s lateral wall is removed.', 'corvino2023'),
+  },
+  posterolateral: {
+    holds: c('Glasscock’s (posterolateral) triangle holds the petrous carotid (its posterior and lateral loops), the greater and lesser petrosal nerves, the tensor tympani, the Eustachian tube and the middle meningeal artery at the foramen spinosum. Drilling it exposes the horizontal petrous carotid, for proximal control; opening its floor exposes the infratemporal fossa.', 'chavezherrera2023', 'drazin2017'),
+  },
+  posteromedial: {
+    holds: c('Kawase’s (posteromedial) triangle holds the back of the cavernous sinus and, once its bone is removed (an anterior petrosectomy), the way into the posterior fossa: to the root of the trigeminal nerve, the vertebrobasilar junction and the anterolateral brainstem. Round it lie the cochlea and the front wall of the internal acoustic meatus laterally, the petrous carotid in front, and the clivus and inferior petrosal sinus medially.', 'chavezherrera2023', 'drazin2017'),
+  },
+  lateral: {
+    holds: c('The inferolateral (lateral) triangle holds the porus trigeminus, where the trigeminal nerve enters Meckel’s cave.', 'chavezherrera2023'),
+  },
+  medial: {
+    holds: c('The inferomedial (medial) triangle holds the posterior genu of the carotid and the dorsal meningeal artery; drilling its medial part exposes the edge of the dorsum sellae, the petroclival fissure and Dorello’s canal.', 'chavezherrera2023', 'drazin2017'),
+  },
+};
+/** a triangle's claims for its card, by structure id */
+export const triangleClaims = (id: string): ApproachClaim[] => {
+  const t = TRIANGLES[id.replace(/^(tb|sb)_triangle_/, '')];
+  return t ? [t.holds, ...(t.byRoute ? [t.byRoute] : [])] : [];
+};
+
+/**
  * The cavernous sinus view (Skull base v3, pipeline/skullbase_v3_cavernous.py): what the sources say, checked against
  * their open-access full texts: Chotai 2018 (PMC5820859), Corvino 2023 (PMC10452901), Wysiadecki 2021 (PMC8156379),
- * Chung 2016 (PMC4974189), Tanoue 2020 (PMC10370663).
+ * Chung 2016 (PMC4974189), Tanoue 2020 (PMC10370663); the triangles' contents from TRIANGLES above.
  */
 export const CAVERNOUS_INFO: { sections: ApproachSection[]; notShown: string } = {
   sections: [
@@ -603,6 +663,11 @@ export const CAVERNOUS_INFO: { sections: ApproachSection[]; notShown: string } =
       c('Ten triangles round the sinus in three groups. Medial: the superoposterior (oculomotor) triangle between the anterior and posterior clinoids and the petrous apex; the superior (clinoidal, Dolenc’s) between the optic and oculomotor nerves; the middle (supratrochlear) between the oculomotor and trochlear nerves; the inferior (Parkinson’s) between the trochlear and ophthalmic nerves.', 'chung2016cs'),
       c('Lateral: the anteromedial (Mullan’s) between the ophthalmic and maxillary nerves; the anterolateral between the maxillary and mandibular nerves; the posterolateral (Glasscock’s) between the mandibular and greater petrosal nerves; the posteromedial (Kawase’s) between the trigeminal ganglion, the greater petrosal nerve and the petrous apex.', 'chung2016cs'),
       c('Posterior: the lateral (inferolateral) triangle between the dural entries of the trochlear and abducens nerves and the petrous apex; the medial (inferomedial) between those entries and the posterior clinoid.', 'chung2016cs'),
+    ]),
+    sec('What each triangle holds', Object.values(TRIANGLES).map((t) => t.holds)),
+    sec('The anterior triangles by route', [
+      c('Three routes to the sinus were compared on five specimens (10 sides): a frontotemporal orbitozygomatic craniotomy (transcranial), the endoscopic route through the upper eyelid and orbit (transorbital), and the extended endoscopic route through the nose (endonasal). From the nose the carotid comes into view before the lateral wall and hides its back part, mainly the supratrochlear and Parkinson’s triangles.', 'corvino2023'),
+      ...Object.values(TRIANGLES).flatMap((t) => (t.byRoute ? [t.byRoute] : [])),
     ]),
     sec('The veins', [
       c('It receives the facial and orbital veins in front through the ophthalmic veins, the meningeal and osseous drainage laterally through the sphenoparietal sinus, the brain’s through the superficial middle cerebral and uncal veins, and connects with the other side through the intercavernous sinus; it drains to the jugular vein through the inferior petrosal sinus and to the pterygoid plexus through emissary veins.', 'tanoue2020'),

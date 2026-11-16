@@ -160,6 +160,16 @@ commit and push it.
   - A unit test checks that every listed spine reference is cited by some statement.
   - Seen on the way: the dev preview answered a mesh's address with the page itself after a rebuild had rewritten the
     file (a "could not be loaded" notice for the L4 vertebra); restarting the dev server cleared it.
+  Merged with its own pull request (PR 16) at the user's word (2026-11-16).
+- C-019, what the cavernous sinus triangles hold (the user's choices: an open review's list for all ten, plus what the
+  five anterior ones show from three routes; on each triangle's card and in the view's text; the hypoglossal canal as
+  the limit of the condylar drilling, with stability), on `fix/c019-triangles` (made on top of the spine branch):
+  `TRIANGLES` in `src/skullbase/approaches.ts`, keyed by the end of the triangle's structure id (`tb_triangle_<key>`
+  on the CT, `sb_triangle_<key>` on Z-Anatomy), each with `holds` (Chavez-Herrera 2023, with Drazin 2017 where named)
+  and, for the anterior five, `byRoute` (Corvino 2023, Table 1). The view's text gains "What each triangle holds" and
+  "The anterior triangles by route"; a triangle's card shows "Contents" in place of "Z-Anatomy ships no definition".
+  The far lateral text names the hypoglossal canal as the anterior limit of the condylar drilling and what drilling
+  half or more costs (Luzzi 2022, Payman 2022, Pai 2018). Front end only: `pipeline/skullbase_build.py` is untouched.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -432,7 +442,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (445 tests on `fix/spine-e012-e018`)
+  - `npx vitest run` (449 tests on `fix/c019-triangles`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`
