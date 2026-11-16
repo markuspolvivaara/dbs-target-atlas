@@ -200,6 +200,39 @@ test('spine: published pedicle values are outer measures at C7, and a median wit
   expect(g.errors).toEqual([]);
 });
 
+// E-012 to E-018 (the owner's choices of 16 November 2026): what a thoracic herniation compresses, published chords, C5
+// palsy by operation, abbreviations written out, and a Sources page that says what each link and each reference is
+test('spine: thoracic herniation statement, published chords, C5 palsy by operation; Sources names each link and each abstract-only reference', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './spine/#/atlas?r=thoracic&lv=T9');
+  const t9 = page.locator('.card.sel');
+  await expect(t9).toContainText('Disc herniation at T9-T10');
+  await expect(t9).toContainText('in the Dural sac (spinal canal contents); one further out can reach the root that leaves at this disc, T9 (linked above).');
+  await expect(t9).toContainText('71% had myelopathy and 64% radiculopathy');
+  await expect(t9.locator('.morph').first()).toContainText('screw path length 45.4 ± 5.1 mm (MRI, 168 vertebrae)');
+  await expect(t9).toContainText('do not read the measured chord as a screw length');
+  await open(page, './spine/#/atlas?r=lumbar&lv=L3');
+  await expect(page.locator('.card.sel .morph').first()).toContainText('50.9 ± 2.9 mm (CT, n = 300)');
+  // the neck: ACDF written out in the heading; C5 palsy by operation once a side is picked
+  await open(page, './spine/#/atlas?r=cervical&lv=C5');
+  const c5 = page.locator('.card.sel');
+  await expect(c5).toContainText('Anterior approach to the C5-C6 disc (as for an anterior cervical discectomy and fusion, ACDF)');
+  await c5.locator('.acdf-chips .chip[data-v="L"]').click();
+  await expect(c5).toContainText('4% after anterior decompression and fusion, against 6% after laminoplasty and 10% after laminectomy and fusion');
+  await expect(c5).not.toContainText('C5 palsy 4.6–10%');
+  // Sources: a PDF and two web pages are not called DOI; abstract-only references say so; no uncited Zindrick 1987
+  await open(page, './spine/#/sources');
+  const refs = page.locator('.refs li');
+  await expect(refs.filter({ hasText: 'ISNCSCI) worksheet' }).locator('a')).toHaveText('PDF');
+  await expect(refs.filter({ hasText: 'C2 pedicle screw insertion' }).locator('a')).toHaveText('Web page');
+  await expect(refs.filter({ hasText: 'C2 pars screw insertion' }).locator('a')).toHaveText('Web page');
+  await expect(refs.filter({ hasText: 'Checked against its abstract: the full text is not open access.' })).toHaveCount(11);
+  await expect(refs.filter({ hasText: 'Zindrick' })).toHaveCount(0);
+  await expect(page.locator('.page:not([hidden])')).toContainText('A reference that could be checked only against its abstract, or in another way, says so after its citation.');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
 /** Which sides of a structure's mesh are drawn now (the viewer's own nodes, by their names L and R). */
 async function drawnSides(page: Page, id: string): Promise<Record<string, boolean> | null> {
   return page.evaluate((sid) => {

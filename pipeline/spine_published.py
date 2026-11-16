@@ -15,6 +15,10 @@
     studies.
   Chanplakorn 2014 (CT, 74 patients, CC BY 2.0), Table 2: the C7 pedicle's outer width and height at its isthmus (outer
     cortex to outer cortex), mean +- SD per side.
+  Soh 2021 (MRI, 400 patients, 3324 thoracic pedicles), Table 1: the pedicle screw path length per level, mean +- SD
+    (from the posterior cortex of the lamina along the pedicle's axis).
+  Arockiaraj 2025 (CT, 300 adults, 1500 lumbar vertebrae), Table 2: the chord length per level, mean +- SD of both sexes
+    (from the pedicle's posterior cortical entry point to the anterior vertebral cortex along the pedicle's mid-axis).
 Downloads are cached in pipeline/data/raw/papers/ (untrusted input: parsed as XML only). Writes
 src/data/generated/spine-published.json.
 """
@@ -31,7 +35,7 @@ ROOT = Path(__file__).resolve().parent
 RAW = ROOT / "data" / "raw" / "papers"
 OUT = ROOT.parent / "src" / "data" / "generated" / "spine-published.json"
 PAPERS = {"wang2023": "PMC9832728", "moncadahabib2025": "PMC12504117", "nkwerem2024": "PMC11412596", "verma2020": "PMC7294881",
-          "jiang2024": "PMC10903032", "chanplakorn2014": "PMC3991875"}
+          "jiang2024": "PMC10903032", "chanplakorn2014": "PMC3991875", "soh2021": "PMC8119906", "arockiaraj2025": "PMC12459938"}
 LEVELS = ["L1", "L2", "L3", "L4", "L5"]
 THORACIC = [f"T{i}" for i in range(1, 13)]
 VERMA_KEYS = ("width", "height", "transverseAngle", "sagittalAngle")  # Tables 1-4, in this order
@@ -153,8 +157,25 @@ def main() -> int:
                                    "sagittal angles of earlier studies (means)")
     out["sources"]["verma2020"] = ("Tables 1-4: thoracic pedicle width, height (mm), transverse and sagittal angle (deg) "
                                    "per level, mean of each study compared (the last column: Verma 2020's own)")
+    # Soh 2021: Table 1, one row per level, "T1 (n = 45)": the number of vertebrae measured at that level
+    st = tables(PAPERS["soh2021"])[0]
+    col = next((i for i, x in enumerate(st[0]) if x.startswith("Pedicle Screw Path Length (mm)")), None)
+    for row in st[1:]:
+        m = re.fullmatch(r"(T\d+) \(n = (\d+)\)", row[0])
+        if m and col is not None:
+            out["thoracic"][m.group(1)]["chordSoh"] = {"meanSd": mean_sd(row[col]), "n": int(m.group(2))}
+    out["sources"]["soh2021"] = "Table 1: pedicle screw path length per level (mm), mean +- SD, and the vertebrae measured at each"
+    # Arockiaraj 2025: Table 2, the block headed "CL (mm)": level, female, male, mean of both, p
+    at = tables(PAPERS["arockiaraj2025"])[1]
+    block = None
+    for row in at[1:]:
+        if len(row) > 1 and not any(row[1:]):
+            block = row[0]
+        elif block == "CL (mm)" and row[0] in out["levels"] and at[0][3] == "Mean":
+            out["levels"][row[0]]["chordSaudi"] = {"meanSd": mean_sd(row[3]), "n": 300}
+    out["sources"]["arockiaraj2025"] = "Table 2: chord length per level (mm), mean +- SD of 150 women and 150 men together"
     for lv, d in out["levels"].items():
-        missing = {"widthRegionalMeans", "heightRegionalMeans", "transverseAngleMexico", "transverseAngleNigeria"} - set(d)
+        missing = {"widthRegionalMeans", "heightRegionalMeans", "transverseAngleMexico", "transverseAngleNigeria", "chordSaudi"} - set(d)
         if missing:
             print(f"FAIL {lv}: missing {sorted(missing)}")
             return 1
@@ -164,6 +185,9 @@ def main() -> int:
             if len(got) < 3 or "Verma et al." not in got:
                 print(f"FAIL {lv}: {k} has {len(got)} studies ({sorted(got)})")
                 return 1
+        if "chordSoh" not in d:
+            print(f"FAIL {lv}: no screw path length (Soh 2021)")
+            return 1
     OUT.write_text(json.dumps(out, indent=1))
     print(f"spine published values: {len(out['levels'])} lumbar and {len(out['thoracic'])} thoracic levels from {len(PAPERS)} papers"
           f" -> {OUT.relative_to(ROOT.parent)}")

@@ -130,8 +130,36 @@ commit and push it.
   read through openFDA (api.fda.gov) and accessdata.fda.gov (which sometimes shows a "please wait" page: not
   bypassed). EU from Amon 2017 (CE marks per device, by disease) and Frey 2022. Note: the FDA approved bilateral GPi
   for primary dystonia on 22 November 2025 (S482); before that dystonia had the 2003 exemption only. The status
-  needs re-checking now and then: change the date when you do. Pushed with its own pull request (PR 15) at the
-  user's word (2026-11-16), set to merge once the checks pass.
+  needs re-checking now and then: change the date when you do. Merged with its own pull request (PR 15) at the
+  user's word (2026-11-16).
+- The spine's small items, E-012 to E-018 (the user's choices: C5 palsy by operation; a sourced statement on thoracic
+  cards, no tool; published chords added and the measured ones said to be longer; abstract-only references marked), on
+  `fix/spine-e012-e018` (made on top of A-012):
+  - E-012: `ACDF_STATEMENTS.nerves` gives C5 palsy by operation (Muthu 2026: 4% anterior, 6% laminoplasty, 10%
+    laminectomy and fusion), no longer "4.6–10%" as an injury of the anterior approach.
+  - E-013: a reference checked only against its abstract says so after its citation (`ACCESS_NOTES` in
+    `pipeline/spine_build.py`; `python pipeline/spine_build.py refs` refreshes the manifest's references without a
+    rebuild). Eleven say "not open access"; Valenzuela 2026, Rupp 2021 and Fardon 2014 have their own notes. Tudose
+    2026 is open at Springer and was read there. The publishers' pages of Fardon 2014 and Valenzuela 2026, and PubMed
+    Central for Rupp 2021, showed bot checks or refused: not passed. The breach grades' millimetre bands are credited
+    to Miyamoto 2025, which gives them.
+  - E-014: Zindrick 1987 (cited nowhere) is gone; Fardon 2014 is cited at the herniation terms, as Eslami 2026 quotes
+    it. The chord row has published values, read from the papers' tables by `pipeline/spine_published.py`: thoracic
+    screw path length (Soh 2021, MRI), lumbar chord (Arockiaraj 2025, CT). The chords measured on this CT are longer
+    (lumbar by 12 to 19 mm than the mean): `STATEMENTS.publishedChord` says so, how the chord is measured here, and
+    that the reason is not established. **Open:** look into the measurement (`pedicle()` in `pipeline/spine_screw.py`:
+    the line is followed dorsally until it has left the bone for 3 mm, so bone behind the pedicle counts).
+  - E-015: the Sources page calls a link what it is (DOI, PDF, Web page); the AO Surgery Reference's two pages are two
+    references (`aosurgeryref`, `aosurgeryrefpedicle`).
+  - E-016: the corridor's width, the hinge's remaining bone and the caps on the C2 screws' start lengths say they are
+    drawing choices.
+  - E-017: ACDF, JOA and ISNCSCI written out; "far lateral" is the lateral zone's one name, the others given beside
+    it; the prevertebral muscles' card names the longus colli (Liu 2017).
+  - E-018: each thoracic card has "Disc herniation at …": the cord in the dural sac, the root leaving at that disc,
+    and `HERNIA_STATEMENTS.thoracic` (Yurtluk 2025, Corazzelli 2024, Hamid 2023, Khan 2026).
+  - A unit test checks that every listed spine reference is cited by some statement.
+  - Seen on the way: the dev preview answered a mesh's address with the page itself after a rebuild had rewritten the
+    file (a "could not be loaded" notice for the L4 vertebra); restarting the dev server cleared it.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -404,7 +432,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (438 tests on `fix/a012-regulatory`)
+  - `npx vitest run` (445 tests on `fix/spine-e012-e018`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`

@@ -34,6 +34,13 @@
      4.45
     ],
     "n": 287
+   },
+   "chordSaudi": {
+    "meanSd": [
+     49.18,
+     3.29
+    ],
+    "n": 300
    }
   },
   "L2": {
@@ -70,6 +77,13 @@
      3.89
     ],
     "n": 287
+   },
+   "chordSaudi": {
+    "meanSd": [
+     50.39,
+     3.09
+    ],
+    "n": 300
    }
   },
   "L3": {
@@ -106,6 +120,13 @@
      4.25
     ],
     "n": 287
+   },
+   "chordSaudi": {
+    "meanSd": [
+     50.92,
+     2.86
+    ],
+    "n": 300
    }
   },
   "L4": {
@@ -142,6 +163,13 @@
      4.9
     ],
     "n": 287
+   },
+   "chordSaudi": {
+    "meanSd": [
+     50.15,
+     3.31
+    ],
+    "n": 300
    }
   },
   "L5": {
@@ -178,6 +206,13 @@
      5.0
     ],
     "n": 287
+   },
+   "chordSaudi": {
+    "meanSd": [
+     47.63,
+     3.45
+    ],
+    "n": 300
    }
   }
  },
@@ -188,7 +223,9 @@
   "kshettry2015": "Abstract, results: share of the ventral canal's width exposed after each successive resection, per region (%)",
   "chanplakorn2014": "Table 2: the C7 pedicle's outer width and outer height (mm) per side, mean +- SD",
   "jiang2024": "Table 1: the C7 pedicle axis (trajectory A) per side, mean +- SD; Table 4: C7 transverse and sagittal angles of earlier studies (means)",
-  "verma2020": "Tables 1-4: thoracic pedicle width, height (mm), transverse and sagittal angle (deg) per level, mean of each study compared (the last column: Verma 2020's own)"
+  "verma2020": "Tables 1-4: thoracic pedicle width, height (mm), transverse and sagittal angle (deg) per level, mean of each study compared (the last column: Verma 2020's own)",
+  "soh2021": "Table 1: pedicle screw path length per level (mm), mean +- SD, and the vertebrae measured at each",
+  "arockiaraj2025": "Table 2: chord length per level (mm), mean +- SD of 150 women and 150 men together"
  },
  "thoracic": {
   "T1": {
@@ -221,6 +258,13 @@
     "Zindrick et al.": 12.6,
     "Singh et al.": 15.03,
     "Verma et al.": 14.0
+   },
+   "chordSoh": {
+    "meanSd": [
+     34.0,
+     4.6
+    ],
+    "n": 45
    }
   },
   "T2": {
@@ -250,6 +294,13 @@
     "Zindrick et al.": 17.5,
     "Singh et al.": 16.9,
     "Verma et al.": 19.2
+   },
+   "chordSoh": {
+    "meanSd": [
+     36.0,
+     5.7
+    ],
+    "n": 86
    }
   },
   "T3": {
@@ -282,6 +333,13 @@
     "Zindrick et al.": 17.3,
     "Singh et al.": 17.6,
     "Verma et al.": 16.5
+   },
+   "chordSoh": {
+    "meanSd": [
+     37.0,
+     5.5
+    ],
+    "n": 122
    }
   },
   "T4": {
@@ -314,6 +372,13 @@
     "Zindrick et al.": 16.3,
     "Singh et al.": 16.7,
     "Verma et al.": 17.5
+   },
+   "chordSoh": {
+    "meanSd": [
+     38.6,
+     5.0
+    ],
+    "n": 159
    }
   },
   "T5": {
@@ -346,6 +411,13 @@
     "Zindrick et al.": 15.0,
     "Singh et al.": 16.2,
     "Verma et al.": 15.4
+   },
+   "chordSoh": {
+    "meanSd": [
+     40.4,
+     5.1
+    ],
+    "n": 174
    }
   },
   "T6": {
@@ -381,6 +453,13 @@
     "Zindrick et al.": 15.0,
     "Singh et al.": 15.2,
     "Verma et al.": 16.8
+   },
+   "chordSoh": {
+    "meanSd": [
+     42.1,
+     5.4
+    ],
+    "n": 180
    }
   },
   "T7": {
@@ -413,6 +492,13 @@
     "Zindrick et al.": 15.7,
     "Singh et al.": 16.2,
     "Verma et al.": 14.4
+   },
+   "chordSoh": {
+    "meanSd": [
+     43.5,
+     4.9
+    ],
+    "n": 170
    }
   },
   "T8": {
@@ -445,6 +531,13 @@
     "Zindrick et al.": 16.6,
     "Singh et al.": 15.6,
     "Verma et al.": 13.8
+   },
+   "chordSoh": {
+    "meanSd": [
+     44.8,
+     5.3
+    ],
+    "n": 179
    }
   },
   "T9": {
@@ -482,6 +575,13 @@
     "Zindrick et al.": 16.0,
     "Singh et al.": 14.8,
     "Verma et al.": 12.7
+   },
+   "chordSoh": {
+    "meanSd": [
+     45.4,
+     5.1
+    ],
+    "n": 168
    }
   },
   "T10": {
@@ -516,6 +616,13 @@
     "Zindrick et al.": 16.8,
     "Singh et al.": 10.7,
     "Verma et al.": 13.1
+   },
+   "chordSoh": {
+    "meanSd": [
+     44.9,
+     4.9
+    ],
+    "n": 165
    }
   },
   "T11": {
@@ -550,6 +657,13 @@
     "Zindrick et al.": 15.4,
     "Singh et al.": 7.77,
     "Verma et al.": 12.4
+   },
+   "chordSoh": {
+    "meanSd": [
+     45.1,
+     4.8
+    ],
+    "n": 127
    }
   },
   "T12": {
@@ -587,6 +701,13 @@
     "Zindrick et al.": 11.6,
     "Singh et al.": 3.92,
     "Verma et al.": 9.5
+   },
+   "chordSoh": {
+    "meanSd": [
+     47.0,
+     4.6
+    ],
+    "n": 87
    }
   }
  },

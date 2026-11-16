@@ -59,7 +59,7 @@ describe('virtual screw data (pipeline/spine_screw.py)', () => {
     const held = Object.entries(SCREW_LEVELS).flatMap(([lv, d]) => (['L', 'R'] as const).filter((sd) => d.pedicle?.[sd].held).map((sd) => `${lv}${sd}`));
     expect(held).toEqual(['T1L']);
     const p = SCREW_LEVELS.T1.pedicle!.L, k = p.held!;
-    const means = Object.values((published.thoracic as Record<string, Record<string, Record<string, number>>>).T1.transverseAngleStudyMeans);
+    const means = Object.values((published.thoracic as unknown as Record<string, Record<string, Record<string, number>>>).T1.transverseAngleStudyMeans);
     expect(k.to).toEqual([Math.min(...means), Math.max(...means)]);
     expect(p.transverseAngle).toBeGreaterThanOrEqual(k.to[0]);
     expect(p.transverseAngle).toBeLessThanOrEqual(k.to[1]);
@@ -83,7 +83,7 @@ describe('virtual screw data (pipeline/spine_screw.py)', () => {
   it('thoracic pedicles sit near the published study means, and the start sizes follow the 80% rules', () => {
     for (let i = 1; i <= 12; i++) {
       const lv = `T${i}`;
-      const pub = (published.thoracic as Record<string, Record<string, Record<string, number>>>)[lv];
+      const pub = (published.thoracic as unknown as Record<string, Record<string, Record<string, number>>>)[lv];
       const lo = (k: string) => Math.min(...Object.values(pub[k])), hi = (k: string) => Math.max(...Object.values(pub[k]));
       for (const sd of ['L', 'R'] as const) {
         const p = SCREW_LEVELS[lv].pedicle![sd];

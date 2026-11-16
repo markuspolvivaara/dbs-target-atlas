@@ -1,15 +1,18 @@
+import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { crossCheckSpine, discBelow, SP, SP_MANIFEST, SP_REFS, vertebraOf } from '../../src/spine';
 import published from '../../src/data/generated/spine-published.json';
 import {
-  ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, CCJ, CCJ_MEASURES, CERVICAL_GEOM, crossCheckContent, discRegion, exitingRoot, exposureRegion, GEOM_BY_LEVEL,
-  HERNIA_STATEMENTS, herniaZones, LESION_ZONES, lesionZones, LUMBAR_GEOM, NECK_LANDMARKS, PLACED, RADICULOPATHY, ROOT_FUNCTION, STATEMENTS, THORACIC_GEOM,
+  ACDF_DRILL_STATEMENTS, ACDF_STATEMENTS, affectedRoot, APPROACH_STATEMENTS, APPROACHES, CCJ, CCJ_MEASURES, CERVICAL_GEOM, crossCheckContent, discRegion, exitingRoot, exposureRegion, GEOM_BY_LEVEL,
+  HERNIA_STATEMENTS, herniaZones, LAMINOPLASTY_STATEMENTS, LESION_ZONES, lesionZones, LUMBAR_GEOM, NECK_LANDMARKS, PLACED, RADICULOPATHY, ROOT_FUNCTION, STATEMENTS, TECHNIQUES, THORACIC_GEOM,
   VERTEBRA_NEIGHBOURS, VERTEBRAL_ARTERY, zoneRoot,
 } from '../../src/spine/content';
 import { HERNIA_ZONES, herniaRoot, migratedToExiting, type HerniaSpec } from '../../src/spine/herniation';
 import { REGION, REGIONS } from '../../src/spine/regions';
 import { LESION_MARKERS, lesionMarkerId, spinePlan, spineScene } from '../../src/spine/scene';
+import { SCREW_LEVELS } from '../../src/spine/screw';
 import { decodeSpine, defaultSpineState, encodeSpine } from '../../src/spine/state';
+import { linkLabel } from '../../src/ui/spine-pages';
 import { setViewPrefs } from '../../src/viewer/viewprefs';
 import { meshSoup, nodeMeans, pointsInside } from './glb';
 
@@ -525,5 +528,97 @@ describe('spine craniocervical junction (its own CT)', () => {
     expect(decodeSpine(encodeSpine(s)).measure).toBe('bdi');
     expect(decodeSpine('#/atlas?r=cervical&cm=bdi').measure).toBeNull();
     expect(decodeSpine('#/atlas?r=ccj&cm=nonsense').measure).toBeNull();
+  });
+});
+
+// The site audit's E-012 to E-018 (the owner's choices of 16 November 2026).
+describe('spine texts and sources (audit E-012 to E-018)', () => {
+  const refs = SP_MANIFEST.references;
+  const NOT_OPEN = 'Checked against its abstract: the full text is not open access.';
+
+  it('E-012: C5 palsy is given by operation, not as an injury of the anterior approach', () => {
+    const t = ACDF_STATEMENTS.nerves;
+    expect(t.text).not.toMatch(/4\.6–10%/);
+    expect(t.text).toMatch(/C5 palsy .* follows cervical decompression from the front or from behind/);
+    expect(t.text).toMatch(/21,231 patients .* 4% after anterior decompression and fusion, against 6% after laminoplasty and 10% after laminectomy and fusion/);
+    expect(t.refIds).toEqual(['hasan2025', 'muthu2026']);
+  });
+
+  it('E-013: a reference checked only against its abstract says so; the breach grades rest on the open paper that gives them', () => {
+    const abstractOnly = ['merckaert2015', 'hasegawa1996', 'downs2011', 'lee2008', 'gertzbein1990', 'lehman2003', 'lehmankuklo2003', 'kshettry2015', 'tanaka2000', 'hong2008', 'bruneau2006'];
+    for (const k of abstractOnly) expect(refs[k].citation.endsWith(NOT_OPEN), k).toBe(true);
+    expect(refs.valenzuela2026.citation).toMatch(/Checked against its abstract\.$/);
+    expect(refs.rupp2021.citation).toMatch(/the values shown come from its worksheet\. Free to read in PubMed Central\.$/);
+    expect(refs.fardon2014.citation).toMatch(/Checked against its abstract; its definitions are given as two open reviews quote them \(Eslami 2026, Ahn 2022\)\.$/);
+    // no other reference carries a note (Tudose 2026 is open at its publisher and was read there)
+    const noted = Object.entries(refs).filter(([, r]) => /Checked against|Free to read/.test(r.citation)).map(([k]) => k).sort();
+    expect(noted).toEqual([...abstractOnly, 'valenzuela2026', 'rupp2021', 'fardon2014'].sort());
+    expect(STATEMENTS.grades.refIds).toEqual(['miyamoto2025', 'gertzbein1990']);
+    expect(STATEMENTS.grades.text).toMatch(/A no breach, B up to 2 mm, C 2–4 mm, D 4–6 mm, E more than 6 mm/);
+  });
+
+  it('E-014: every listed reference is cited; the chord has published values, and the text says by how much this CT’s are longer', () => {
+    // (Zindrick 1987 was cited nowhere and is gone; Fardon 2014 is cited for the terms)
+    expect(refs.zindrick1987).toBeUndefined();
+    expect(HERNIA_STATEMENTS.types.refIds).toContain('fardon2014');
+    const dirs = ['src/spine', 'src/ui'].map((d) => new URL(`../../${d}/`, import.meta.url));
+    const src = dirs.flatMap((d) => readdirSync(d).filter((f) => (d.pathname.endsWith('/ui/') ? f.startsWith('spine-') : true) && f.endsWith('.ts'))
+      .map((f) => readFileSync(new URL(f, d), 'utf8'))).join('\n');
+    const uncited = Object.keys(refs).filter((k) => !src.includes(`'${k}'`));
+    expect(uncited).toEqual([]);
+    // read from the papers' tables (pipeline/spine_published.py)
+    expect(published.levels.L1.chordSaudi).toEqual({ meanSd: [49.18, 3.29], n: 300 });
+    expect(published.levels.L5.chordSaudi).toEqual({ meanSd: [47.63, 3.45], n: 300 });
+    expect(published.thoracic.T1.chordSoh).toEqual({ meanSd: [34.0, 4.6], n: 45 });
+    expect(published.thoracic.T12.chordSoh).toEqual({ meanSd: [47.0, 4.6], n: 87 });
+    // the statement's figures, from the data: lumbar 12 to 19 mm longer than the mean, thoracic up to 13 mm
+    const diffs = (levels: string[], mean: (lv: string) => number) => levels.flatMap((lv) => (['L', 'R'] as const).map((sd) => SCREW_LEVELS[lv].pedicle![sd].chord - mean(lv)));
+    const lum = diffs(['L1', 'L2', 'L3', 'L4', 'L5'], (lv) => (published.levels as Record<string, { chordSaudi: { meanSd: number[] } }>)[lv].chordSaudi.meanSd[0]);
+    const tho = diffs(Array.from({ length: 12 }, (_, i) => `T${i + 1}`), (lv) => (published.thoracic as unknown as Record<string, { chordSoh: { meanSd: number[] } }>)[lv].chordSoh.meanSd[0]);
+    expect([Math.round(Math.min(...lum)), Math.round(Math.max(...lum))]).toEqual([12, 19]);
+    expect(Math.min(...tho)).toBeGreaterThanOrEqual(0);
+    expect(Math.round(Math.max(...tho))).toBe(13);
+    expect(STATEMENTS.publishedChord.text).toMatch(/by 12 to 19 mm than the published mean at every lumbar level, and by up to 13 mm at the thoracic ones/);
+    expect(STATEMENTS.publishedChord.text).toMatch(/do not read the measured chord as a screw length/);
+    expect(STATEMENTS.publishedChord.refIds).toEqual(['soh2021', 'arockiaraj2025']);
+  });
+
+  it('E-015: a reference’s link is called what it is, and the two AO pages are two references', () => {
+    expect(linkLabel(refs.hasan2025.url)).toBe('DOI');
+    expect(linkLabel(refs.isncsci2019.url)).toBe('PDF');
+    expect(linkLabel(refs.aosurgeryref.url)).toBe('Web page');
+    expect(Object.values(refs).filter((r) => linkLabel(r.url) !== 'DOI').length).toBe(3);
+    expect(refs.aosurgeryref.url).toMatch(/c2-pars-screw-insertion$/);
+    expect(refs.aosurgeryrefpedicle.url).toMatch(/c2-pedicle-screw-insertion$/);
+    expect(refs.aosurgeryref.citation).not.toMatch(/pedicle/);
+    expect(TECHNIQUES.c2p.start.refIds).toContain('aosurgeryrefpedicle');
+    expect(TECHNIQUES.c2p.size.refIds).toContain('aosurgeryrefpedicle');
+    expect(TECHNIQUES.c2pars.start.refIds).toContain('aosurgeryref');
+    expect(JSON.stringify(TECHNIQUES.c2p)).not.toMatch(/'aosurgeryref'|"aosurgeryref"/);
+  });
+
+  it('E-016: the caps on the C2 screws’ start lengths are said to be drawing choices', () => {
+    for (const k of ['c2p', 'c2pars', 'c2tl'] as const) expect(TECHNIQUES[k].size.text, k).toMatch(/the cap is .*, a drawing choice and not a limit/);
+  });
+
+  it('E-017: abbreviations are written out and the lateral zone has one name', () => {
+    expect(LAMINOPLASTY_STATEMENTS.angle.text).toMatch(/Japanese Orthopaedic Association, JOA, score/);
+    expect(STATEMENTS.isncsci.text).toMatch(/International Standards for Neurological Classification of Spinal Cord Injury \(ISNCSCI\)/);
+    expect(HERNIA_STATEMENTS.cervicalApproach.text).toMatch(/anterior cervical discectomy and fusion \(ACDF\)/);
+    expect(ACDF_DRILL_STATEMENTS.drawn.text).toMatch(/anterior cervical discectomy and fusion \(ACDF\); the fusion \(cage, graft or plate\) is not drawn/);
+    expect(LESION_ZONES.map(([, label]) => label)).toContain('Far lateral');
+    expect(STATEMENTS.lesionLateral.text).toMatch(/^A foraminal or far lateral herniation .*“extreme lateral”/);
+    expect(STATEMENTS.prevertebral.text).toMatch(/longus colli, a deep prevertebral muscle/);
+  });
+
+  it('E-018: the thoracic levels say what a disc herniation there compresses', () => {
+    const t = HERNIA_STATEMENTS.thoracic;
+    expect(t.text).toMatch(/0\.1–5% of all disc herniations.*below T7–T8, most often at T11–T12/);
+    expect(t.text).toMatch(/Most are central or centrolateral.*30–70% are calcified.*in front of the spinal cord/);
+    expect(t.text).toMatch(/71% had myelopathy and 64% radiculopathy \(42% both\)/);
+    expect(t.text).toMatch(/the root of the upper vertebra.*T9–T10 herniation compressed the cord and the exiting T9 root/);
+    expect(t.refIds).toEqual(['yurtluk2025', 'corazzelli2024', 'hamid2023', 'khan2026']);
+    // the rule the card links by: the root of the upper vertebra leaves at the disc below it
+    expect(exitingRoot('T9')).toBe('T9');
   });
 });
