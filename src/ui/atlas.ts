@@ -4,6 +4,8 @@ import { mniToAcpc } from '../data/acpc';
 import type { CameraPreset, Evidence, Target } from '../data/schema';
 import { IMAGING } from '../data/imaging';
 import { SIDE_EFFECTS } from '../data/sideeffects';
+import { CIRCUITS, CIRCUITS_FOR, type Circuit } from '../data/circuits';
+import { circuitLegend, circuitSvg } from './circuit';
 import type { AppState, Hemi, LayerKey } from '../state';
 import { DEFAULT_LEAD, LEAD_ANCHORS, type LeadAnchor } from '../state';
 import { LEAD } from '../viewer/lead';
@@ -222,6 +224,7 @@ export class AtlasPage {
       h('dt', {}, 'Target'), h('dd', {}, d.target),
       h('dt', {}, 'Alternatives'), h('dd', {}, d.alternatives),
       h('dt', {}, 'Why here'), h('dd', {}, d.why),
+      (CIRCUITS_FOR[d.id] ?? []).length ? [h('dt', {}, 'Circuit'), h('dd', {}, ...CIRCUITS_FOR[d.id].map((c) => this.circuit(CIRCUITS[c], d.id)))] : null,
       d.howToChoose ? [h('dt', {}, 'How to choose'), h('dd', {}, d.howToChoose)] : null,
       h('dt', {}, 'Imaging'), h('dd', {}, d.imaging, ' ', this.imagingLinks(d.primaryTargets)),
       h('dt', {}, 'Evidence'), h('dd', {}, this.evidenceList(d.evidence)),
@@ -232,6 +235,18 @@ export class AtlasPage {
       this.shownList(), this.missing(d.missingTracts),
     );
     return card;
+  }
+
+  /** A circuit explained (data/circuits.ts, audit A-014): its schematic, whose boxes and arrows open the structures they
+   * stand for, a legend, and the sourced paragraph (with the sentences meant for this indication). */
+  private circuit(c: Circuit, indId: string): HTMLElement {
+    const select = (id: string) => this.update((s) => { s.sel = id; });
+    return h('section', { class: 'circuit', 'data-circuit': c.id },
+      h('h3', {}, c.name),
+      circuitSvg(c, select, (id) => MAN.get(id)?.name, this.s.sel),
+      circuitLegend(c),
+      ...c.text.filter((t) => !t.only || t.only.includes(indId)).map((t) => h('p', {}, t.text, t.refIds.length ? ' ' : '', refLinks(t.refIds))),
+      h('p', { class: 'aside' }, 'A schematic, not anatomy. Select a box or an arrow to show the structure it stands for; a dashed box is not drawn here.'));
   }
 
   private symptomCard(id: string): HTMLElement {

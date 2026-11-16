@@ -64,6 +64,38 @@ test('spine: at a cervical disc the level card names the root that leaves there,
   expect(g.errors).toEqual([]);
 });
 
+// A-014: each indication's circuit explained, with a schematic whose boxes and arrows open what they stand for
+test('dbs: the circuit schematics open the structures they stand for', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './dbs/#/atlas?i=pd');
+  const bg = page.locator('.card .circuit[data-circuit="bg"]');
+  await expect(bg.locator('h3')).toHaveText('Basal ganglia: direct, indirect and hyperdirect pathways');
+  await expect(bg).toContainText('classic rate model of Parkinson’s disease');
+  await bg.getByRole('button', { name: 'STN: show Subthalamic nucleus' }).click();
+  await expect(page.locator('.card.sel h2')).toContainText('Subthalamic nucleus');
+  // an arrow, from the keyboard (a curved arrow's middle is not on its line): the hyperdirect pathway opens the drawn
+  // tract, whose card says where it ends
+  await page.locator('.card .circuit[data-circuit="bg"]').getByRole('button', { name: /^Hyperdirect pathway: cortex to STN/ }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('.card.sel h2')).toContainText('Hyperdirect pathway');
+  await expect(page.locator('.card.sel')).toContainText('ends mostly in the pre-SMA and SMA');
+  // a box that is not drawn is no button
+  await open(page, './dbs/#/atlas?i=epi');
+  const papez = page.locator('.card .circuit[data-circuit="papez"]');
+  await expect(papez.locator('.cx-node.undrawn')).toHaveCount(1);
+  await expect(papez.locator('.cx-node.undrawn[role="button"]')).toHaveCount(0);
+  await papez.getByRole('button', { name: /^Mammillothalamic tract: show/ }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('.card.sel h2')).toContainText('Mammillothalamic tract');
+  // Holmes tremor: both circuits, the tremor one first; the rate model is Parkinson's alone
+  await open(page, './dbs/#/atlas?i=holmes');
+  await expect(page.locator('.card .circuit')).toHaveCount(2);
+  await expect(page.locator('.card .circuit').first()).toHaveAttribute('data-circuit', 'tremor');
+  await expect(page.locator('.card .circuit[data-circuit="bg"]')).not.toContainText('rate model');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
 // A-013: what stimulation does when current reaches the structures around a target, on the target's card
 test('dbs: the STN card lists stimulation side effects and links the drawn landmark each one names', async ({ page }) => {
   const g = guard(page);

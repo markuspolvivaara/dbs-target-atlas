@@ -8,6 +8,7 @@ import { loadSource } from './source';
 import { EPILEPSY_INDICATION, EPILEPSY_REFERENCES } from '../../src/data/epilepsy';
 import { ADDITION_REFERENCES } from '../../src/data/additions';
 import { SIDE_EFFECTS } from '../../src/data/sideeffects';
+import { boxHeight, CIRCUITS, CIRCUITS_FOR } from '../../src/data/circuits';
 import { plan, primaryTargetId } from '../../src/viewer/selection';
 import { decode, defaultState, encode } from '../../src/state';
 import { mniToAcpc, TEMPLATE_ACPC_LENGTH } from '../../src/data/acpc';
@@ -36,8 +37,61 @@ describe('references resolve', () => {
       ...CALC_NOTE.preRefs, ...CALC_NOTE.midRefs,
       ...MANIFEST.structures.flatMap((s) => s.refIds),
       ...Object.values(SIDE_EFFECTS).flatMap((t) => [...t.items.flatMap((x) => x.refIds), ...(t.note?.refIds ?? [])]),
+      ...Object.values(CIRCUITS).flatMap((c) => c.text.flatMap((t) => t.refIds)),
     ];
     expect(used.filter((r) => !ids.has(r))).toEqual([]);
+  });
+});
+
+// A-014: the circuits explained, with a schematic each
+describe('circuits', () => {
+  const drawn = new Set(MANIFEST.structures.map((s) => s.id));
+  it('every indication has its circuit, every box and arrow links only drawn structures', () => {
+    expect(Object.keys(CIRCUITS_FOR).sort()).toEqual(CONTENT.indications.map((i) => i.id).sort());
+    for (const c of Object.values(CIRCUITS)) {
+      const ids = new Set(c.nodes.map((n) => n.id));
+      for (const n of c.nodes) for (const l of n.links) expect(drawn.has(l), `${c.id} ${n.id}: ${l}`).toBe(true);
+      for (const e of c.edges) {
+        expect(ids.has(e.from) && ids.has(e.to), `${c.id} ${e.name}`).toBe(true);
+        for (const l of e.links ?? []) expect(drawn.has(l), `${c.id} ${e.name}: ${l}`).toBe(true);
+      }
+      // a box with no drawn structure is shown as not drawn (no colour of a structure)
+      for (const n of c.nodes) if (!n.links.length) expect(n.token, `${c.id} ${n.id}`).toBeUndefined();
+    }
+  });
+  it('a connection is marked excitatory or inhibitory only in the basal ganglia, whose signs the sources give', () => {
+    for (const id of ['tremor', 'papez'] as const) expect(CIRCUITS[id].edges.every((e) => e.kind === 'plain'), id).toBe(true);
+    const bg = Object.fromEntries(CIRCUITS.bg.edges.map((e) => [`${e.from}>${e.to}`, e.kind]));
+    expect(bg).toMatchObject({ 'ctx>stn': 'excitatory', 'd1>gpi': 'inhibitory', 'd2>gpe': 'inhibitory', 'gpe>stn': 'inhibitory', 'stn>gpi': 'excitatory', 'gpi>thal': 'inhibitory', 'thal>ctx': 'plain' });
+  });
+  it('the schematics are laid out: boxes inside the drawing and apart, each arrow from the edge of one box to the edge of the other', () => {
+    for (const c of Object.values(CIRCUITS)) {
+      const box = Object.fromEntries(c.nodes.map((n) => [n.id, { x0: n.x, y0: n.y, x1: n.x + n.w, y1: n.y + boxHeight(n) }]));
+      for (const b of Object.values(box)) expect(b.x0 >= 0 && b.y0 >= 0 && b.x1 <= c.width && b.y1 <= c.height, `${c.id} ${JSON.stringify(b)}`).toBe(true);
+      const list = Object.entries(box);
+      for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
+        const [a, p] = list[i], [b, q] = list[j];
+        expect(p.x1 <= q.x0 || q.x1 <= p.x0 || p.y1 <= q.y0 || q.y1 <= p.y0, `${c.id}: ${a} and ${b} overlap`).toBe(true);
+      }
+      const onEdge = (pt: number[], b: { x0: number; y0: number; x1: number; y1: number }) => {
+        const [x, y] = pt, inX = x >= b.x0 - 1 && x <= b.x1 + 1, inY = y >= b.y0 - 1 && y <= b.y1 + 1;
+        return inX && inY && (Math.abs(x - b.x0) <= 1 || Math.abs(x - b.x1) <= 1 || Math.abs(y - b.y0) <= 1 || Math.abs(y - b.y1) <= 1);
+      };
+      for (const e of c.edges) {
+        const n = e.d.match(/-?\d+(\.\d+)?/g)!.map(Number);
+        expect(onEdge(n.slice(0, 2), box[e.from]), `${c.id} ${e.from}>${e.to} starts on ${e.from}`).toBe(true);
+        expect(onEdge(n.slice(-2), box[e.to]), `${c.id} ${e.from}>${e.to} ends on ${e.to}`).toBe(true);
+      }
+    }
+  });
+  it('the Vim, dentate, non-decussating DRTT and hyperdirect cards say what their sources do (A-014)', () => {
+    const st = (id: string) => CONTENT.structures.find((s) => s.id === id)!;
+    expect(st('vim').refIds).toContain('akram2018');
+    expect(st('dentate').description).toMatch(/chief origin of the cerebellothalamic tract/);
+    expect(st('dentate').refIds).toContain('gallay2008');
+    expect(st('ndrtt').description).not.toBe(st('drtt').description);
+    expect(st('hdp').description).toMatch(/ends mostly in the pre-SMA and SMA/);
+    expect(CONTENT.indications.find((i) => i.id === 'pd')!.why).toMatch(/hyperdirect pathway \(cortex straight to the STN\)/);
   });
 });
 
@@ -111,6 +165,8 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
   type Ev = { claim: string; refIds: string[] };
   const CORRECTED: Record<string, { caveat?: string; caveatRefIds?: string[]; addEvidence?: Ev[]; replaceEvidence?: Record<string, Ev>; alternatives?: string; why?: string; howToChoose?: string }> = {
     pd: {
+      // (A-014: the hyperdirect pathway defined where it is first named)
+      why: 'Benefit follows the hyperdirect pathway (cortex straight to the STN) from SMA and M1 into the supero-lateral STN. Each cardinal sign maps to its own tracts: tremor to M1 and cerebellum, bradykinesia to SMA, rigidity to premotor cortex, axial signs to SMA and brainstem.',
       alternatives: 'Posterolateral GPi. Combined STN and SNr stimulation for freezing of gait is investigational: its trials were negative on their primary outcomes.',
       replaceEvidence: {
         'GPi improved ON-medication disability more; STN allowed larger levodopa reduction':

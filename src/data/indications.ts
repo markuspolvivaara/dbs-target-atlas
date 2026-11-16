@@ -27,7 +27,8 @@ export const INDICATIONS: IndicationInput[] = [
     targetMarkers: ['t-ss-pd'], alternativeMarkers: ['t-atlas-gpi-sm'],
     target: 'Dorsolateral (motor) STN.',
     alternatives: 'Posterolateral GPi. Combined STN and SNr stimulation for freezing of gait is investigational: its trials were negative on their primary outcomes.',
-    why: 'Benefit follows the hyperdirect pathway from SMA and M1 into the supero-lateral STN. Each cardinal sign maps to its own tracts: tremor to M1 and cerebellum, bradykinesia to SMA, rigidity to premotor cortex, axial signs to SMA and brainstem.',
+    // (A-014: "hyperdirect" defined where first used)
+    why: 'Benefit follows the hyperdirect pathway (cortex straight to the STN) from SMA and M1 into the supero-lateral STN. Each cardinal sign maps to its own tracts: tremor to M1 and cerebellum, bradykinesia to SMA, rigidity to premotor cortex, axial signs to SMA and brainstem.',
     howToChoose: 'STN and GPi give similar motor benefit. STN allows more levodopa reduction and longer battery life; GPi carries less risk to speech and mood and is favoured when only one side will be implanted.',
     imaging: 'STN on T2w, SWI, QSM or T2-FLAIR; GPi on FGATIR or PDw. Patient-specific 7T tractography of the motor STN improved outcomes in a prospective study.',
     evidence: [
