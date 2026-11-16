@@ -9,6 +9,7 @@ import { EPILEPSY_INDICATION, EPILEPSY_REFERENCES } from '../../src/data/epileps
 import { ADDITION_REFERENCES } from '../../src/data/additions';
 import { SIDE_EFFECTS } from '../../src/data/sideeffects';
 import { boxHeight, CIRCUITS, CIRCUITS_FOR } from '../../src/data/circuits';
+import { REGULATORY, REGULATORY_CHECKED } from '../../src/data/regulatory';
 import { plan, primaryTargetId } from '../../src/viewer/selection';
 import { decode, defaultState, encode } from '../../src/state';
 import { mniToAcpc, TEMPLATE_ACPC_LENGTH } from '../../src/data/acpc';
@@ -38,8 +39,45 @@ describe('references resolve', () => {
       ...MANIFEST.structures.flatMap((s) => s.refIds),
       ...Object.values(SIDE_EFFECTS).flatMap((t) => [...t.items.flatMap((x) => x.refIds), ...(t.note?.refIds ?? [])]),
       ...Object.values(CIRCUITS).flatMap((c) => c.text.flatMap((t) => t.refIds)),
+      ...Object.values(REGULATORY).flatMap((r) => [...r.rows.flatMap((x) => [...x.usRefIds, ...x.euRefIds]), ...(r.note?.refIds ?? [])]),
     ];
     expect(used.filter((r) => !ids.has(r))).toEqual([]);
+  });
+});
+
+// A-012: the regulatory status of each indication and target, US and EU
+describe('regulatory status', () => {
+  const row = (ind: string, targets: RegExp) => REGULATORY[ind].rows.find((r) => targets.test(r.targets))!;
+  it('covers every indication, with the date checked', () => {
+    for (const ind of CONTENT.indications) expect(REGULATORY[ind.id]?.rows.length, ind.id).toBeGreaterThan(0);
+    expect(REGULATORY_CHECKED).toMatch(/^\d{1,2} [A-Z][a-z]+ 20\d\d$/);
+    // (the dystonias share one entry, so the References table gives them one group)
+    expect(REGULATORY.cdys).toBe(REGULATORY.gdys);
+  });
+  it('words what no approval names as the owner chose, and only that', () => {
+    for (const [id, reg] of Object.entries(REGULATORY)) for (const r of reg.rows) {
+      const not = r.us.startsWith('Not an approved');
+      expect(not, `${id} ${r.targets}`).toBe(r.usShort === 'Not approved');
+      if (not) expect(r.us, id).toMatch(/^Not an approved (indication|target): no FDA approval or exemption names /);
+      else expect(r.usRefIds.filter((x) => x.startsWith('fda')).length, `${id} ${r.targets}`).toBeGreaterThan(0);
+      // the EU side always cites the review it rests on
+      expect(r.euRefIds, `${id} ${r.targets}`).toContain('amon2017');
+    }
+    for (const id of ['holmes', 'md', 'tard', 'ts', 'chorea']) expect(REGULATORY[id].rows.every((r) => r.us.startsWith('Not an approved indication')), id).toBe(true);
+  });
+  it('gives the FDA records’ years and scope', () => {
+    expect(row('pd', /^STN or GPi/).us).toMatch(/advanced disease since 2002.*at least 4 years’ duration since 2015/);
+    expect(row('et', /^Vim$/).us).toMatch(/since 1997 on one side/);
+    expect(row('et', /^PSA/).usShort).toBe('Not approved');
+    expect(row('gdys', /^GPi or STN/).us).toMatch(/^Humanitarian device exemption since 2003.*from age 7\. An exemption does not require effectiveness/);
+    expect(row('gdys', /^GPi, both/).us).toMatch(/^Approved since November 2025.*from age 12/);
+    expect(row('epi', /^ANT/).us).toMatch(/^Approved since 2018.*three or more antiepileptic drugs/);
+    expect(row('epi', /^CM/).usShort).toBe('Not approved');
+    expect(REGULATORY.epi.note!.text).toMatch(/^Responsive neurostimulation, a different device, is approved in the US since 2013/);
+    expect(REGULATORY.epi.note!.refIds).toEqual(['fdarns', 'sun2014']);
+    const cite = (id: string) => CONTENT.references.find((r) => r.id === id)!.citation;
+    expect(cite('fda2025dys')).toMatch(/Decision 22 November 2025/);
+    expect(cite('fda2003hde')).toMatch(/Humanitarian device exemption H020007.*Decision 15 April 2003/);
   });
 });
 

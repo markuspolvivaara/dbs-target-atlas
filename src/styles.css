@@ -300,6 +300,23 @@ body[data-page="atlas"] .page { display: none; }
 .prov { padding-left: 1.1em; font-size: 0.92rem; margin: 4px 0; }
 .prov li { margin: 4px 0; }
 .roles { padding-left: 1.1em; margin: 0; }
+/* regulatory status per indication (data/regulatory.ts): on the card, and the summary table on the References page */
+.regulatory { list-style: none; padding: 0; margin: 2px 0 6px; }
+.regulatory li { margin: 4px 0 10px; }
+.regulatory p { margin: 2px 0; }
+.reg-side { display: inline-block; min-width: 1.9em; font-size: 0.78em; font-weight: 700; letter-spacing: 0.04em; color: var(--muted); }
+.reg-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; margin: 8px 0; }
+.reg-table th, .reg-table td { text-align: left; vertical-align: top; padding: 6px 8px; border-top: 1px solid var(--line); }
+.reg-table thead th { border-top: 0; color: var(--muted); font-size: 0.85em; }
+.reg-table tbody th { font-weight: 700; }
+@media (max-width: 640px) {
+  .reg-table thead { display: none; }
+  .reg-table, .reg-table tbody, .reg-table tr, .reg-table th, .reg-table td { display: block; }
+  .reg-table tbody th { border-top: 2px solid var(--line); padding-top: 10px; }
+  .reg-table td { border-top: 0; padding: 2px 8px; }
+  .reg-table td[data-label="Target"] { padding-top: 8px; font-weight: 600; }
+  .reg-table td::before { content: attr(data-label) ": "; color: var(--muted); font-size: 0.85em; }
+}
 /* DBS circuits (data/circuits.ts, ui/circuit.ts): a schematic per circuit on the indication's card */
 .circuit { margin: 4px 0 12px; }
 .circuit h3 { font-size: 0.95em; margin: 2px 0 6px; }

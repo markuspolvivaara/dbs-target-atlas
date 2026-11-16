@@ -5,6 +5,7 @@ import type { CameraPreset, Evidence, Target } from '../data/schema';
 import { IMAGING } from '../data/imaging';
 import { SIDE_EFFECTS } from '../data/sideeffects';
 import { CIRCUITS, CIRCUITS_FOR, type Circuit } from '../data/circuits';
+import { REGULATORY, REGULATORY_CHECKED } from '../data/regulatory';
 import { circuitLegend, circuitSvg } from './circuit';
 import type { AppState, Hemi, LayerKey } from '../state';
 import { DEFAULT_LEAD, LEAD_ANCHORS, type LeadAnchor } from '../state';
@@ -228,6 +229,7 @@ export class AtlasPage {
       d.howToChoose ? [h('dt', {}, 'How to choose'), h('dd', {}, d.howToChoose)] : null,
       h('dt', {}, 'Imaging'), h('dd', {}, d.imaging, ' ', this.imagingLinks(d.primaryTargets)),
       h('dt', {}, 'Evidence'), h('dd', {}, this.evidenceList(d.evidence)),
+      this.regulatory(d.id),
     );
     const card = h('article', { class: 'card', style: `--accent: var(--c-${d.accent})` },
       h('h2', {}, d.name), dl,
@@ -235,6 +237,19 @@ export class AtlasPage {
       this.shownList(), this.missing(d.missingTracts),
     );
     return card;
+  }
+
+  /** The indication's regulatory status, US and EU, per target (data/regulatory.ts, audit A-012). */
+  private regulatory(id: string): HTMLElement[] | null {
+    const r = REGULATORY[id];
+    if (!r) return null;
+    const side = (label: string, text: string, refIds: string[]) => h('p', {}, h('span', { class: 'reg-side' }, label), ' ', text, refIds.length ? ' ' : '', refLinks(refIds));
+    return [h('dt', {}, 'Regulatory status'), h('dd', {},
+      h('ul', { class: 'regulatory' }, ...r.rows.map((row) => h('li', {}, h('strong', {}, row.targets),
+        side('US', row.us, row.usRefIds), side('EU', row.eu, row.euRefIds)))),
+      r.note ? h('p', {}, r.note.text, ' ', refLinks(r.note.refIds)) : null,
+      h('p', { class: 'aside' }, `Checked ${REGULATORY_CHECKED}. “Not named” means no record was found, not proof that none exists. Every indication in one table: `,
+        h('a', { href: '#/refs' }, 'References'), '.'))];
   }
 
   /** A circuit explained (data/circuits.ts, audit A-014): its schematic, whose boxes and arrows open the structures they
