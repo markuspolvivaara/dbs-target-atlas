@@ -7,16 +7,20 @@ import type { VeState } from './state';
 export interface VePlan extends ScenePlan { group: string }
 
 const boneOf = (name: string) => VE_MANIFEST.structures.find((s) => s.name === name)?.id ?? '';
-/** the skull's landmarks as one-sided points (Kocher's points, the meatus, the projected canthi, bregma) */
+/** the bone a landmark lies on (the marker is drawn with it) */
+const boneFor = (id: string) => (id.startsWith('lm_meatus') ? 'Temporal bone' : id.startsWith('lm_frazier') ? 'Parietal bone' : id === 'lm_inion' ? 'Occipital bone' : 'Frontal bone');
+/** the skull's landmarks as one-sided points (Kocher's points, the meatus, the projected canthi, bregma, the inion and
+ * Frazier's points) */
 const markers: MarkerDef[] = LANDMARKS.map((l) => ({
-  id: l.id, label: l.name, structureId: boneOf(l.id.startsWith('lm_meatus') ? 'Temporal bone' : 'Frontal bone'),
+  id: l.id, label: l.name, structureId: boneOf(boneFor(l.id)),
   mni: { left: l.ras, right: l.ras }, sides: [l.side === 'L' ? 'L' : 'R'], radius: 1.6,
 }));
 
-/** the landmarks a catheter view draws: its Kocher's point, both meatus and canthi, bregma */
+/** the landmarks a catheter view draws: its Kocher's point, both meatus and canthi, bregma; and, at the back of the
+ * head, the inion and Frazier's point on the catheter's side */
 export function catheterMarkers(s: VeState): string[] {
   const side = s.cath.side.toLowerCase();
-  return ['lm_bregma', `lm_kocher_${s.cath.kocher}_${side}`, 'lm_meatus_r', 'lm_meatus_l', 'lm_canthus_r', 'lm_canthus_l'];
+  return ['lm_bregma', `lm_kocher_${s.cath.kocher}_${side}`, 'lm_meatus_r', 'lm_meatus_l', 'lm_canthus_r', 'lm_canthus_l', 'lm_inion', `lm_frazier_${side}`];
 }
 
 export function vePlan(s: VeState): VePlan {

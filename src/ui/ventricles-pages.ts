@@ -1,4 +1,4 @@
-import { ETV, TRAJ, VE_MANIFEST, VE_REFS } from '../ventricles';
+import { ETV, LM, TRAJ, VE_MANIFEST, VE_REFS } from '../ventricles';
 import { h } from './h';
 import { linkLicences } from './licences';
 
@@ -15,7 +15,7 @@ export function veSourcesPage() {
     h('h1', {}, 'Sources'),
     h('section', { class: 'card' },
       h('h2', {}, 'References'),
-      h('p', {}, 'Every statement on the cards cites its source, checked against the open-access full text (PMC); Jean 2019, which has none, against its abstract.'),
+      h('p', {}, 'Every statement on the cards cites its source, checked against the open-access full text (PMC); Jean 2019 and Kulkarni 2009, which have none, against their abstracts.'),
       h('ul', { class: 'refs' }, ...VE_REFS.map((r) => h('li', {}, r.citation, ' ', link(r.url, 'DOI'), ' · ',
         link(`https://pubmed.ncbi.nlm.nih.gov/${r.pmid}/`, 'PubMed'),
         r.pmcid ? [' · ', link(`https://pmc.ncbi.nlm.nih.gov/articles/${r.pmcid}/`, 'full text')] : null)))),
@@ -31,6 +31,7 @@ export function veSourcesPage() {
       h('p', {}, h('strong', {}, 'Hydrocephalus: '), `a shape on the ventricles and everything around them: at full extent Evans’ index ${ETV.hydrocephalus.hydrocephalus.evansIndex.toFixed(2)} and the third ventricle ${fmt(ETV.hydrocephalus.hydrocephalus.thirdWidthMm)} mm wide (Roşu 2026’s medians, 0.42 and 23.5 mm; this patient’s as drawn ${ETV.hydrocephalus.rest.evansIndex.toFixed(2)} and ${fmt(ETV.hydrocephalus.rest.thirdWidthMm)} mm), triventricular, and the floor ${fmt(ETV.hydrocephalus.hydrocephalus.floorToApexMm)} mm from the basilar apex (Aydin 2009 as da Silva 2024 cites it: 2.75 mm; ${fmt(ETV.hydrocephalus.rest.floorToApexMm)} mm here at rest). Each wall moves out along its normal, the septum and the lateral ventricles’ floors staying (and, at the foramina of Monro, the columns of the fornix: the foramina grow backwards and outwards, from Jean 2019’s 5.23 to 32.6 mm²), the walls are draped over this CT’s arteries at the skull base, which do not move (the basilar artery and its branches, the carotids, the A1 segments; kept 1.5 mm clear of them, or as clear as they were: the floor comes down over the P1 segments, not through them, and is wrapped onto the mammillary bodies, placed where da Silva measured them in hydrocephalus), and everything around follows a smooth field (its smallest Jacobian over the structures around the ventricles ${ETV.hydrocephalus.jacobianMinAround.toFixed(2)}: it does not fold them).`),
       h('p', {}, h('strong', {}, 'The brain around them: '), 'the template (Lead-DBS MNI 2009b pial surface) fitted into this CT in Skull base v3; see its Sources.'),
       h('p', {}, h('strong', {}, 'Landmarks: '), `the coronal suture where this CT’s frontal and parietal bones meet (named after the Z-Anatomy model fitted onto it, v2); Kocher’s point ${p.kocherAnteriorMm} mm in front of it along the outer table, ${p.kocher.chen} mm (Chen) or ${p.kocher.park} mm (Park) from the midline; the external acoustic meatus where the ear canal, the shortest way through air from the registered tympanic membrane (OpenEar, Skull base v3) to outside, leaves the bone. The CT stops at the forehead, so the medial canthi are placed ${TRAJ.canthusMm} mm from the midline, half Chen’s mean intercanthal distance (206 CTs), and projected onto the line between the two meatus as Chen does: only their distance from the midline matters.`),
+      h('p', {}, h('strong', {}, 'Frazier’s point and the inion: '), `${LM.get('lm_inion')!.how} Frazier’s point: ${LM.get('lm_frazier_r')!.how} Keen’s point is not placed: it is defined from the pinna, and this CT’s field ends at the scalp above the ear (“pipeline/ventricles_build.py landmarks” takes the two again without a rebuild).`),
       h('p', {}, h('strong', {}, 'Trajectories: '), `from Kocher’s point (and from points ${p.apOffsets.filter((x) => x).map((x) => Math.abs(x)).filter((x, i, a) => a.indexOf(x) === i).join(', ')} mm in front of and behind it) towards each target, followed ${p.maxDepthMm} mm from the outer table (Chen: with no fluid by 65 mm the catheter is withdrawn and re-aimed) to the first lateral ventricle, as drawn, it meets: which side, the depth from the outer table, and its course inside; if it meets none, how close it passes. The perpendicular trajectory follows the outer table’s normal at the entry.`)),
   );
   return { el, render() { /* stateless */ } };

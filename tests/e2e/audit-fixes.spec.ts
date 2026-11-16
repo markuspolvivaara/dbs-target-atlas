@@ -264,6 +264,47 @@ for (const section of ['skullbase', 'skullbase-v1']) {
   });
 }
 
+// D-009 (the owner's choices of 16 November 2026): the ETV Success Score as a table, Frazier's point with its marker,
+// the third ventricle's other walls and the temporal horn's, and whom Chen's percentages come from
+test('ventricles: the ETV Success Score table, Frazier’s point, the third ventricle’s other walls and Chen’s cohort', async ({ page }) => {
+  const g = guard(page);
+  const pane = page.locator('.panel .pane:not([hidden])');
+  await open(page, './ventricles/#/atlas?g=etv');
+  const score = pane.locator('.etv-score');
+  await expect(score.locator('caption')).toHaveText('ETV Success Score: add one line from each block');
+  await expect(score.locator('tbody')).toHaveCount(3);
+  await expect(score.locator('tbody tr')).toHaveCount(10);
+  await expect(score.locator('tbody').nth(0).locator('tr').last()).toContainText('10 years or more');
+  await expect(score.locator('tbody').nth(0).locator('tr').last().locator('td').last()).toHaveText('50');
+  await expect(score).toContainText('618 ventriculostomies in children at 12 centres');
+  await expect(score).toContainText('The largest sum the table allows is 90.');
+  await expect(score).toContainText('not a calculator');
+  // the access view: Frazier's point described, and marked on the catheter's side with the inion
+  await open(page, './ventricles/#/atlas?g=evd');
+  await expect(pane).toContainText('Another way in: Frazier’s point');
+  await expect(pane).toContainText('about 6 cm above the inion and 3–4 cm from the midline');
+  await expect(pane).toContainText('Keen’s point, above and behind the ear, is not marked');
+  await expect(pane.locator('.catheter')).toContainText('Chen’s 206 CTs were of patients older than 16');
+  const marked = () => page.evaluate(() => (window as unknown as { __atlas: { viewer: { currentPlan(): { markers: { targetId: string }[] } } } }).__atlas.viewer.currentPlan().markers.map((m) => m.targetId));
+  expect(await marked()).toEqual(expect.arrayContaining(['lm_inion', 'lm_frazier_r']));
+  await pane.locator('.cath-side .chip[data-v="L"]').click();
+  await expect.poll(marked).toEqual(expect.arrayContaining(['lm_inion', 'lm_frazier_l']));
+  // with all labels on, the skull's landmarks are named on screen
+  await open(page, './ventricles/#/atlas?g=evd&lb=a');
+  await expect(page.locator('.labels .mlabel', { hasText: 'Frazier\'s point' })).toHaveCount(1);
+  await expect(page.locator('.labels .mlabel', { hasText: 'Inion' })).toHaveCount(1);
+  // the anatomy view: the walls
+  await open(page, './ventricles/#/atlas?g=ventricles');
+  await expect(pane).toContainText('The third ventricle’s roof and other walls');
+  await expect(pane).toContainText('Posterior wall, from above down: the habenular commissure');
+  await expect(pane).toContainText('Temporal horn: its roof and lateral wall are formed by the tapetum');
+  // Sources: the original score paper says it was checked against its abstract
+  await open(page, './ventricles/#/sources');
+  await expect(page.locator('.refs li', { hasText: 'Kulkarni AV' })).toContainText('Checked against its abstract: the full text is not open access.');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
 /** Which sides of a structure's mesh are drawn now (the viewer's own nodes, by their names L and R). */
 async function drawnSides(page: Page, id: string): Promise<Record<string, boolean> | null> {
   return page.evaluate((sid) => {

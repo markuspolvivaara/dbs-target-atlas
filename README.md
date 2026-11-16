@@ -697,6 +697,18 @@ shape.
   posterior communicating and superior cerebellar arteries, the internal cerebral veins and the veins of Galen and
   Rosenthal) are this CT angiogram's; the oculomotor and optic nerves are routed through it and the midbrain and pons
   are the fitted model (Skull base v3).
+- **Frazier's point and the inion** (the access view, at the back of the skull): the inion is the fitted Z-Anatomy
+  model's external occipital protuberance moved onto this CT's outer table at the midline (this skull's own
+  protuberance is slight); Frazier's point lies 60 mm up the outer table from it along the midline and, at that
+  height, 35 mm from the midline (the published 3 to 4 cm; a drawing choice), on the parietal bone. The card gives
+  its definition and use (ElBadway 2026) and what a catheter from it passes (Kara 2026); no catheter is drawn from
+  it. Keen's point is not placed: it is defined from the pinna, and this CT's field ends at the scalp above the ear.
+  With all labels on, the skull's landmarks are named on screen.
+- **ETV Success Score** (the endoscopic view's card): the three factors and their points as a table, not a
+  calculator; what it is from Kulkarni 2009's abstract (the paper is not open access), the points as Krause 2024
+  reprints them.
+- **Walls**: the third ventricle's roof, anterior, posterior and lateral walls (Azab 2014, da Silva 2024) and the
+  temporal horn's walls (Kucukyuruk 2012), beside the lateral ventricle's and the floor.
 - **Endoscopic third ventriculostomy**: the target is the midline floor halfway between the infundibular recess and
   the mammillary bodies (fenestrated behind the recess, in front of the mammillary bodies and the basilar artery: da
   Silva 2024); the endoscope starts from Sousa 2025's line, from the target through the middle of the foramen of
@@ -736,7 +748,8 @@ shape.
   tympanic membrane), and `pipeline/ventricles_export.py` in Blender: `pipeline/ventricles_build.py`,
   `node pipeline/compress.mjs ventricles`,
   `pipeline/ventricles_build.py finalize` (checks sizes, the model's fit, the foramina, landmark positions and every
-  trajectory).
+  trajectory). `pipeline/ventricles_build.py landmarks` takes the inion and Frazier's point again into the landmark
+  files without rebuilding anything else.
 
 ## Vascular
 

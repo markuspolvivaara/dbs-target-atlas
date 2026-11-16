@@ -1,7 +1,7 @@
 import type { BsReference } from '../brainstem/schema';
 
-/** Sources of the ventricles section, each checked against its open-access full text (Europe PMC); Jean 2019, which has
- * none, against its abstract (PubMed). */
+/** Sources of the ventricles section, each checked against its open-access full text (Europe PMC); Jean 2019 and
+ * Kulkarni 2009, which have none, against their abstracts (PubMed). */
 const doi = (d: string) => `https://doi.org/${d}`;
 export const VE_REFERENCES: BsReference[] = [
   { id: 'chen2025', pmid: '39627172', pmcid: 'PMC12333769', shortLabel: 'Chen 2025', url: doi('10.1227/ons.0000000000001467'),
@@ -32,4 +32,15 @@ export const VE_REFERENCES: BsReference[] = [
     citation: 'Roşu AI, Ghenciu LA, Roşu DC, Iacob ER, Stoicescu ER, Stoicescu R, et al. Ventricular anatomy across CT and MRI in hydrocephalus: a retrospective study. Diagnostics (Basel). 2026;16(3):491. doi:10.3390/diagnostics16030491.' },
   { id: 'longatti2026', pmid: '41784833', pmcid: 'PMC12963120', shortLabel: 'Longatti 2026', url: doi('10.1007/s00381-026-07188-x'),
     citation: 'Longatti P, Fiorindi A, Siddi F, Boaro A, Canova G, Feletti A. The telovelar approach reshaped: a new perspective from inside the fourth ventricle. Childs Nerv Syst. 2026;42(1):96. doi:10.1007/s00381-026-07188-x.' },
+  // (the site audit's D-009: the ETV Success Score, Frazier's point, the third ventricle's other walls, the temporal horn)
+  { id: 'kulkarni2009', pmid: '19446842', shortLabel: 'Kulkarni 2009', url: doi('10.1016/j.jpeds.2009.02.048'),
+    citation: 'Kulkarni AV, Drake JM, Mallucci CL, Sgouros S, Roth J, Constantini S, et al. Endoscopic third ventriculostomy in the treatment of childhood hydrocephalus. J Pediatr. 2009;155(2):254–9.e1. doi:10.1016/j.jpeds.2009.02.048. Checked against its abstract: the full text is not open access.' },
+  { id: 'krause2024', pmid: '39731585', pmcid: 'PMC11681997', shortLabel: 'Krause 2024', url: doi('10.1007/s00381-024-06728-7'),
+    citation: 'Krause M, Gräfe D, Metzger R, Griessenauer CJ, Gburek-Augustat J. Evaluation of the ETV success score and its predictive value in pediatric occlusive hydrocephalus: implications for patient counseling. Childs Nerv Syst. 2024;41(1):72. doi:10.1007/s00381-024-06728-7.' },
+  { id: 'elbadway2026', pmid: '42326210', pmcid: 'PMC13277701', shortLabel: 'ElBadway 2026', url: doi('10.7759/cureus.109187'),
+    citation: 'ElBadway MM, Khan MM, Al-Maraghi S, Msheik A, Yousaf J, Al-Rumaihi G. Anatomical approaches for insertion sites of external ventricular drainage catheters. Cureus. 2026;18(5):e109187. doi:10.7759/cureus.109187.' },
+  { id: 'kara2026', pmid: '42891732', pmcid: 'PMC13676506', shortLabel: 'Kara 2026', url: doi('10.1007/s10143-026-04528-y'),
+    citation: 'Kara CF, Akyüz ME, Elveren M, Temtek U, Zeynal M, Kapakin S, et al. Anatomical and radiological analysis of ventricular catheter trajectories: neuronavigation-guided dissection and tractography-based 3D visualization. Neurosurg Rev. 2026;49(1):612. doi:10.1007/s10143-026-04528-y.' },
+  { id: 'kucukyuruk2012', pmid: '22957242', pmcid: 'PMC3420566', shortLabel: 'Kucukyuruk 2012', url: doi('10.1155/2012/769825'),
+    citation: 'Kucukyuruk B, Richardson RM, Wen HT, Fernandez-Miranda JC, Rhoton AL. Microsurgical anatomy of the temporal lobe and its implications on temporal lobe epilepsy surgery. Epilepsy Res Treat. 2012;2012:769825. doi:10.1155/2012/769825.' },
 ];

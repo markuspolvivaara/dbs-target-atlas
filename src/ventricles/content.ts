@@ -16,6 +16,12 @@ export const LATERAL_WALLS: Claim[] = [
   c('The caudate nucleus follows the lateral ventricle from the frontal horn into the temporal horn: superolateral to the thalamus in the body, posterolateral to it in the atrium and inferolateral to it in the temporal horn.', 'gangal2026'),
 ];
 
+/** the temporal horn's walls (the site audit's D-009) */
+export const TEMPORAL_HORN: Claim[] = [
+  c('Temporal horn: its roof and lateral wall are formed by the tapetum of the corpus callosum, covered outside by the optic radiations except at the front of the lateral wall; the foremost bundle of the optic radiations curves forward over the roof as Meyer’s loop.', 'kucukyuruk2012'),
+  c('The amygdala forms its anterior wall. Its floor carries the collateral eminence, raised by the collateral sulcus; the hippocampus lies in it, and the choroid plexus is attached along the choroidal fissure, between the fimbria and the thalamus.', 'kucukyuruk2012'),
+];
+
 /** the foramina of Monro, between the lateral ventricles and the third */
 export const MONRO: Claim[] = [
   c('The frontal horn is the part of the lateral ventricle in front of the foramen of Monro; the body extends from the foramen’s posterior limit to where the septum disappears and the corpus callosum and fornix meet.', 'gangal2026'),
@@ -45,11 +51,31 @@ export const THIRD_FLOOR: Claim[] = [
   c('Among 180 patients the floor was thinned in 22 %, thickened in 53 %, globose in 6 %, partly erased in 7 % and narrow in 12 %; a thinned floor was found in 37 % of those with chronic hydrocephalus.', 'abdalavargas2022'),
 ];
 
+/** the third ventricle's other walls (the site audit's D-009) */
+export const THIRD_WALLS: Claim[] = [
+  c('Roof: the body and crura of the fornix and the two layers of tela choroidea, with the velum interpositum between them, which encloses the internal cerebral veins and the medial posterior choroidal arteries.', 'azab2014'),
+  c('Anterior wall: from the foramina of Monro down to the supraoptic recess run the anterior commissure and the lamina terminalis, which stretches from the optic chiasm up to the rostrum of the corpus callosum.', 'dasilva2024'),
+  c('Posterior wall, from above down: the habenular commissure, the pineal gland, the pineal recess and the posterior commissure.', 'dasilva2024'),
+  c('Lateral walls: the thalami above, the hypothalamus and subthalamus below; an interthalamic adhesion joins the two thalami in some brains, not in all.', 'dasilva2024'),
+];
+
 /** freehand frontal ventriculostomy: where it enters and where it is aimed */
 export const KOCHER: Claim[] = [
   c('Kocher’s point is commonly located 1 cm in front of the coronal suture and 2.5 cm from the midline; 10 mm in front of the coronal suture in the midpupillary line; or 10 cm behind the nasion and 3 cm from the midline.', 'chen2025'),
   c('From Kocher’s point the catheter is aimed at the external auditory canal in the sagittal plane, and in the coronal plane at the ipsilateral medial canthus (IMC), the midpoint between the two external acoustic meatus (MAM), the contralateral medial canthus (CMC), or perpendicular to the skull (P).', 'chen2025'),
   c('Park placed Kocher’s point 30 mm from the sagittal suture and 10 mm in front of the coronal suture.', 'park2020'),
+];
+
+/** whom Chen's percentages come from (shown above them; the site audit's D-009) */
+export const CHEN_COHORT: Claim[] = [
+  c('Chen’s 206 CTs were of patients older than 16 (median age 64, interquartile range 53–73) with normal ventricles, the frontal horns 21.7–53.7 mm across at their widest: the percentages below are for ventricles of normal size.', 'chen2025'),
+];
+
+/** another way in, when the frontal route is ruled out: Frazier's point (the site audit's D-009; the owner's choice of
+ * 16 November 2026: Frazier's point with a marker on the skull; Keen's point left out, as the CT does not show the ear) */
+export const FRAZIER: Claim[] = [
+  c('Frazier’s point lies about 6 cm above the inion and 3–4 cm from the midline. It gives access to the occipital horn, aimed at the trigone of the lateral ventricle, and is used when the frontal route is ruled out, for example by a frontal tumour or injury; the venous sinuses and cortical veins nearby add to the risk of bleeding.', 'elbadway2026'),
+  c('In six dissected heads a catheter from Frazier’s point passed through the parietal bone above the lambdoid suture, entered the ventricle at the atrium and ended in the middle of the body, above the choroid plexus. On its way it crossed the angular gyrus and, beneath it, the superior longitudinal fasciculus and the sagittal stratum.', 'kara2026'),
 ];
 
 /** published accuracy of the trajectories, by target (for the result card) */
@@ -98,6 +124,26 @@ export const ETV_ANATOMY: Claim[] = [
   c('In 24 MRIs with non-obstructive hydrocephalus every point studied lay further back than in normal brains: the mammillary bodies’ anterosuperior point a median 11.30 mm behind the anterior commissure and 7.05 mm below it.', 'dasilva2024'),
   c('With dilated ventricles the distance from the basilar apex to the floor was 2.75 mm, against 6.54 mm in controls (Aydin 2009, as cited); in hydrocephalus the floor may be pushed down, but the apex not.', 'dasilva2024'),
 ];
+
+/**
+ * The ETV Success Score (the site audit's D-009): a table, not a calculator. What it is and how it was derived from
+ * Kulkarni 2009's abstract (the paper is not open access); the points from Krause 2024's Table 1, which reprints them.
+ * The largest sum the table allows is 90.
+ */
+export const ETV_SCORE = {
+  intro: [
+    c('The ETV Success Score estimates, before the operation, a child’s chance that an endoscopic third ventriculostomy will work, from three things: age, the cause of the hydrocephalus and whether a shunt was placed before. It was derived from 618 ventriculostomies in children at 12 centres, success judged at 6 months: 67 % of the 455 procedures the model was built on were successful, and 64 % of the 163 it was then tested on.', 'kulkarni2009'),
+    c('The three scores are added. The sum closely approximates the predicted probability of success: the higher it is, the likelier the ventriculostomy is to work.', 'kulkarni2009', 'krause2024'),
+  ] as Claim[],
+  /** [factor, [what, points][]] */
+  rows: [
+    ['Age', [['Under 1 month', 0], ['1 to under 6 months', 10], ['6 months to under 1 year', 30], ['1 to under 10 years', 40], ['10 years or more', 50]]],
+    ['Cause', [['Postinfectious', 0], ['Myelomeningocele, intraventricular haemorrhage, non-tectal brain tumour', 20], ['Aqueductal stenosis, tectal tumour, other', 30]]],
+    ['Previous shunt', [['Yes', 0], ['No', 10]]],
+  ] as [string, [string, number][]][],
+  refIds: ['krause2024'],
+  note: 'The score was derived in children. A table for reading, not a calculator: it does not decide for a patient.',
+};
 
 /** the endoscope's trajectory: through the foramen of Monro to the tuber cinereum */
 export const ETV_TRAJECTORY: Claim[] = [

@@ -36,6 +36,12 @@ The CT is Skull base v2's (TopBrain 2025 case 011, a CT angiogram). What comes f
     (Chen 2025: 25 mm; Park 2020: 30 mm).
   - The external acoustic meatus: the ear canal is the shortest way through air from the tympanic membrane (OpenEar's,
     registered into each temporal bone in Skull base v3) to outside the head; the meatus is where it leaves the bone.
+  - The inion and Frazier's point (the site audit's D-009): the inion is the fitted Z-Anatomy model's external occipital
+    protuberance moved onto this CT's outer table at the midline (this skull's own protuberance is slight: its midline
+    profile stands out about 1 mm, 3 to 4 mm lower); Frazier's point FRAZIER_UP_MM up the outer table from it along the
+    midline and, at that height, FRAZIER_LATERAL_MM from the midline. `ventricles_build.py landmarks` takes these two
+    again without rebuilding anything else. Keen's point is not placed: it is defined from the pinna, and this CT's
+    field ends at the scalp above the ear.
   - The medial canthi: this CT stops at the forehead, so they are placed CANTHUS_MM to each side of the midline (half
     the mean intercanthal distance of Chen 2025's 206 CTs). Only their distance from the midline is used: Chen
     projects them onto the line between the two external acoustic meatus.
@@ -98,6 +104,8 @@ KOCHER = {"chen": 25.0, "park": 30.0}    # Kocher's point: this far lateral to t
 KOCHER_ANTERIOR_MM = 10.0  # ... and this far in front of the coronal suture (both)
 AP_OFFSETS = [-10.0, 0.0, 10.0]          # the entry moved this far forward (+) or back from Kocher's point (teaching)
 CANTHUS_MM = 32.7 / 2      # half Chen 2025's mean intercanthal distance (206 CTs): this CT has no face
+FRAZIER_UP_MM = 60.0       # Frazier's point: this far above the inion (ElBadway 2026: 6 cm), along the outer table ...
+FRAZIER_LATERAL_MM = 35.0  # ... and this far from the midline (3-4 cm: the middle of that, a drawing choice)
 TARGETS = ["IMC", "MAM", "CMC", "P"]
 THIRD_ML = (0.1, 3.0)      # the third ventricle's body of fluid: this large ...
 THIRD_HALF_MM = 5.0        # ... and within this of the midline
@@ -508,6 +516,50 @@ def ear_canal(S: A.Skull, side: str) -> tuple[np.ndarray, list]:
     return meatus, P[:: max(1, len(P) // 24)].round(2).tolist()
 
 
+def bone_name(S: A.Skull, p: np.ndarray) -> str:
+    """The named bone (from the fitted Z-Anatomy model) nearest a point of this CT's skull."""
+    _, j = cKDTree(S.zp).query(p)
+    return S.znames[int(S.zl[j])]
+
+
+def access_landmarks(S: A.Skull, midline: float) -> list[dict]:
+    """The inion and Frazier's point on each side (see the module's notes), as landmark entries."""
+    back = np.array([0.0, -1.0, 0.0])
+    e = S.lms["External occipital protuberance"]
+    inion = S.surface(np.array([midline, e[1], e[2]]), back, reach=20.0)
+    up = along_surface(S, inion, np.array([0.0, 0.0, 1.0]), FRAZIER_UP_MM)
+    if abs(up[0] - midline) > 3.0:
+        raise SystemExit(f"the way up from the inion left the midline: {up.round(1)}")
+    out = [{"id": "lm_inion", "name": "Inion", "ras": inion.round(2).tolist(), "side": "M",
+            "how": "The fitted Z-Anatomy model's external occipital protuberance, moved onto this CT's outer table at the midline. "
+                   "This skull's own protuberance is slight: its midline profile stands out about 1 mm, 3 to 4 mm lower."}]
+    for s in ("R", "L"):
+        x = midline + (FRAZIER_LATERAL_MM if s == "R" else -FRAZIER_LATERAL_MM)
+        p = S.surface(np.array([x, up[1], up[2]]), back, reach=25.0)
+        bone = bone_name(S, p)
+        if not bone.startswith("Parietal bone"):
+            raise SystemExit(f"Frazier's point ({s}) lies on the {bone}, not on the parietal bone: {p.round(1)}")
+        out.append({"id": f"lm_frazier_{s.lower()}", "name": "Frazier's point", "ras": p.round(2).tolist(), "side": s,
+                    "how": f"{FRAZIER_UP_MM:.0f} mm up the outer table from the inion along the midline and, at that height, "
+                           f"{FRAZIER_LATERAL_MM:.0f} mm from the midline (the published 3 to 4 cm: {FRAZIER_LATERAL_MM:.0f} mm is a drawing choice). "
+                           "It lies on this CT's parietal bone (named from the fitted model), as in the dissections."})
+    return out
+
+
+def landmarks_only() -> int:
+    """The inion and Frazier's point taken again into the landmark files, nothing else rebuilt; then the checks."""
+    S = A.Skull()
+    midline = float(np.median(np.array(S.ex["soft"]["Falx cerebri"]["verts"], float)[:, 0]))
+    new = access_landmarks(S, midline)
+    ids = {l["id"] for l in new}
+    for path, kw in ((BUILD / "landmarks.json", {}), (GEN / f"{PREFIX}-landmarks.json", {"ensure_ascii": False})):
+        cur = [l for l in json.loads(path.read_text()) if l["id"] not in ids]
+        path.write_text(json.dumps(cur + new, indent=1, **kw))
+    for l in new:
+        print(l["id"], l["ras"])
+    return validate()
+
+
 # ---------------------------------------------------------------- the trajectories
 def trajectory(entry: np.ndarray, d: np.ndarray, vent: dict[str, np.ndarray], g: Grid, bone_at) -> dict:
     """Follow the line from the entry on the outer table: the bone crossed, then the first ventricle met (its side, the
@@ -753,6 +805,7 @@ def main() -> int:
                               "how": f"{KOCHER_ANTERIOR_MM:.0f} mm in front of the coronal suture along the outer table, {d:.0f} mm from the midline."})
         landmarks.append({"id": f"lm_canthus_{s.lower()}", "name": "Medial canthus (projected)", "ras": on_line(midline + (CANTHUS_MM if s == "R" else -CANTHUS_MM)).round(2).tolist(),
                           "side": s, "how": f"Not in this CT (it stops at the forehead): {CANTHUS_MM:.2f} mm from the midline (half Chen 2025's mean intercanthal distance), on the line between the external acoustic meatus, as Chen projects it."})
+    landmarks += access_landmarks(S, midline)
     # the endoscopic third ventriculostomy: its target, the landmarks around it, Sousa 2025's line through each foramen
     mb_pts = np.vstack([V for _, V, _ in deep["ve_mammillary_body"]])
     etv.update(trep)
@@ -999,6 +1052,15 @@ def validate() -> int:
             k = np.array(lms[f"lm_kocher_{name}_{s}"]["ras"])
             check(abs(abs(k[0] - t["midline"]) - d) < 2.0, f"Kocher ({name}, {s}) {abs(k[0] - t['midline']):.1f} mm from the midline")
             check(0 < k[1] - br[1] < 25, f"Kocher ({name}, {s}) {k[1] - br[1]:.1f} mm in front of bregma")
+    # the inion on the occipital bone at the midline; Frazier's point above it, FRAZIER_LATERAL_MM to each side, the two alike
+    io = np.array(lms["lm_inion"]["ras"])
+    check(abs(io[0] - t["midline"]) < 1.0 and io[1] < -80, f"the inion is not at the back of the skull on the midline: {io}")
+    fz = {s: np.array(lms[f"lm_frazier_{s}"]["ras"]) for s in ("r", "l")}
+    for s, p in fz.items():
+        check(abs(abs(p[0] - t["midline"]) - FRAZIER_LATERAL_MM) < 0.5, f"Frazier ({s}) {abs(p[0] - t['midline']):.1f} mm from the midline")
+        check(0.6 * FRAZIER_UP_MM < p[2] - io[2] < FRAZIER_UP_MM, f"Frazier ({s}) {p[2] - io[2]:.1f} mm higher than the inion")
+        check(p[1] < br[1] - 100, f"Frazier ({s}) is not at the back of the head: {p}")
+    check(abs(fz["r"][1] - fz["l"][1]) < 6 and abs(fz["r"][2] - fz["l"][2]) < 1, f"the two Frazier's points are not mirror images: {fz}")
     rows = t["trajectories"]
     check(len(rows) == len(KOCHER) * 2 * len(AP_OFFSETS) * len(TARGETS), f"{len(rows)} trajectories")
     for r in rows:
@@ -1016,4 +1078,5 @@ def validate() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(finalize() if sys.argv[1:] == ["finalize"] else refresh() if sys.argv[1:] == ["refresh"] else main())
+    sys.exit(finalize() if sys.argv[1:] == ["finalize"] else refresh() if sys.argv[1:] == ["refresh"]
+             else landmarks_only() if sys.argv[1:] == ["landmarks"] else main())

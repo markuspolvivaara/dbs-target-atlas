@@ -170,6 +170,26 @@ commit and push it.
   "The anterior triangles by route"; a triangle's card shows "Contents" in place of "Z-Anatomy ships no definition".
   The far lateral text names the hypoglossal canal as the anterior limit of the condylar drilling and what drilling
   half or more costs (Luzzi 2022, Payman 2022, Pai 2018). Front end only: `pipeline/skullbase_build.py` is untouched.
+  Merged with its own pull request (PR 17) at the user's word (2026-11-16).
+- D-009, the ventricles' additions (the user's choices: the ETV Success Score as a table; Frazier's point with a
+  marker on the skull; Keen's point left out), on `fix/d009-ventricles` (made on top of the triangles branch):
+  - The ETV Success Score (`ETV_SCORE` in `src/ventricles/content.ts`, shown on the endoscopic view's card): what it
+    is from Kulkarni 2009's abstract (not open access, marked so on the Sources page), the points from Krause 2024's
+    Table 1, which reprints them. A table, not a calculator. The table sums to at most 90 (Krause's caption says 0 to
+    100; the page gives the table's own sum).
+  - Frazier's point: `access_landmarks()` in `pipeline/ventricles_build.py` adds `lm_inion` and `lm_frazier_r/l` to
+    `ve-landmarks.json`; `ventricles_build.py landmarks` takes them again without a rebuild (run here; no mesh
+    changed). The inion is the fitted model's external occipital protuberance on this CT's outer table at the
+    midline: this skull's own protuberance stands out about 1 mm, 3 to 4 mm lower (probed, scripts in the session's
+    scratch folder only). Frazier's point is 60 mm up the outer table and 35 mm from the midline; the build fails if
+    it does not land on the parietal bone (Kara 2026: through the parietal bone above the lambdoid suture). The
+    catheter view marks both on the catheter's side; no catheter is drawn from Frazier's point.
+  - **Keen's point is not placed, and not described**: it is defined from the pinna, and this CT's field ends at
+    the scalp above the ear (seen on axial and coronal slices through the ear). The user said to skip it.
+  - With all labels on, the ventricles section now names its skull landmarks on screen (it named none before).
+    The access view's picture baseline gains two markers, drawn through the skull like the others.
+  - The third ventricle's roof and other walls (Azab 2014, da Silva 2024, both already cited) and the temporal
+    horn's walls (Kucukyuruk 2012); whom Chen 2025's percentages come from, above them on the result card.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -442,7 +462,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (449 tests on `fix/c019-triangles`)
+  - `npx vitest run` (452 tests on `fix/d009-ventricles`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`
