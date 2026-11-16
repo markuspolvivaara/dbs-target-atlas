@@ -3,7 +3,7 @@ import type { CameraPreset } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
 import type { Claim } from '../brainstem/schema';
 import { ETV, KIND_LABEL, kindOf, LM, TARGETS, TRAJ, trajectoryFor, VE, VE_REF, type Trajectory } from '../ventricles';
-import { ACCURACY, AQUEDUCT, ETV_ANATOMY, ETV_TRAJECTORY, FOURTH, HYDRO, IDEAL, KOCHER, LATERAL_WALLS, MONRO, PRACTICE, TARGET_NAME, THIRD_FLOOR } from '../ventricles/content';
+import { ACCURACY, AQUEDUCT, CHEN_COHORT, ETV_ANATOMY, ETV_SCORE, ETV_TRAJECTORY, FOURTH, FRAZIER, HYDRO, IDEAL, KOCHER, LATERAL_WALLS, MONRO, PRACTICE, TARGET_NAME, TEMPORAL_HORN, THIRD_FLOOR, THIRD_WALLS } from '../ventricles/content';
 import { VE_GROUP, VE_GROUPS, type VeGroup } from '../ventricles/groups';
 import { veScene, type VePlan } from '../ventricles/scene';
 import { defaultScope, defaultScopeDepth, ETV_DEFAULT, etvLine, SCOPE_ENTRY_MAX, SCOPE_TILT_MAX, scopeMaxDepth, type Catheter, type Scope, type VeState } from '../ventricles/state';
@@ -28,6 +28,17 @@ const nameOf = (id: string) => VE.get(id)?.name ?? LM.get(id)?.name ?? id;
 const tokenOf = (id: string) => VE.get(id)?.colour.token ?? 'ctx';
 const refs = (ids: string[]) => refLinksFrom(VE_REF, ids);
 const claimList = (cl: Claim[]) => h('ul', { class: 'evidence' }, ...cl.map((c) => h('li', {}, c.text, ' ', refs(c.refIds))));
+/** The ETV Success Score as a table (content.ts ETV_SCORE): what it is, the points by factor, and what it is not. */
+const etvScore = () => h('div', { class: 'etv-score' },
+  claimList(ETV_SCORE.intro),
+  h('table', { class: 'morph' },
+    h('caption', {}, 'ETV Success Score: add one line from each block'),
+    h('thead', {}, h('tr', {}, h('th', { scope: 'col' }, 'Factor'), h('th', { scope: 'col' }, 'Patient'), h('th', { scope: 'col' }, 'Points'))),
+    ...ETV_SCORE.rows.map(([factor, items]) => h('tbody', {}, ...items.map(([what, pts], i) => h('tr', {},
+      i === 0 ? h('th', { scope: 'rowgroup', rowspan: items.length }, factor) : null, h('td', {}, what), h('td', {}, String(pts))))))),
+  h('p', {}, 'The points as an open paper reprints them from the original ', refs(ETV_SCORE.refIds),
+    `. The largest sum the table allows is ${ETV_SCORE.rows.reduce((n, [, items]) => n + Math.max(...items.map(([, x]) => x)), 0)}.`),
+  h('p', { class: 'aside' }, ETV_SCORE.note));
 const offsetLabel = (o: number) => (o === 0 ? 'At Kocher’s point' : `${Math.abs(o)} mm ${o > 0 ? 'forward' : 'back'}`);
 
 /** The catheter as drawn: a tube from the entry on the outer table to past where it meets a ventricle (or to its
@@ -528,21 +539,26 @@ export class VentriclesAtlasPage {
         h('dt', {}, 'Kocher’s point'), h('dd', {}, claimList(KOCHER)),
         h('dt', {}, 'Aiming between the canthi'), h('dd', {}, claimList(IDEAL)),
         h('dt', {}, 'In practice'), h('dd', {}, claimList(PRACTICE)),
+        h('dt', {}, 'Another way in: Frazier’s point'), h('dd', {}, claimList(FRAZIER),
+          h('p', { class: 'aside' }, `Marked at the back of this skull, with the inion (turn the view): ${LM.get('lm_frazier_r')!.how} The inion: ${LM.get('lm_inion')!.how} No catheter is drawn from it. Keen’s point, above and behind the ear, is not marked: this CT’s field ends at the scalp above the ear, and the point is defined from the pinna.`)),
         h('dt', {}, 'How it is drawn here'), h('dd', {},
           `On this CT: the coronal suture is placed where its frontal and parietal bones meet; Kocher’s point ${fmtMm(TRAJ.params.kocherAnteriorMm)} mm in front of it along the outer table. The external acoustic meatus is where each ear canal leaves the bone. The CT stops at the forehead, so the medial canthi are put ${fmtMm(TRAJ.canthusMm)} mm from the midline (half Chen’s mean intercanthal distance) and, as in Chen, projected onto the line between the two meatus: the catheter aims at that point. Depths are measured from the outer table along the catheter.`)) : null,
       g.kind === 'endoscopic' ? h('dl', {},
         h('dt', {}, 'What the endoscope passes and spares'), h('dd', {}, claimList(ETV_ANATOMY)),
         h('dt', {}, 'The line to the floor'), h('dd', {}, claimList(ETV_TRAJECTORY)),
         h('dt', {}, 'Hydrocephalus'), h('dd', {}, claimList(HYDRO)),
+        h('dt', {}, 'Who is likely to benefit'), h('dd', {}, etvScore()),
         h('dt', {}, 'How it is drawn here'), h('dd', {}, this.etvMethod())) : null,
       g.kind === 'anatomy' && g.id !== 'ventricles' ? h('dl', {},
         h('dt', {}, 'Around the foramen of Monro'), h('dd', {}, claimList(ETV_ANATOMY.slice(0, 1))),
         h('dt', {}, 'The floor of the third ventricle'), h('dd', {}, claimList(THIRD_FLOOR)),
+        h('dt', {}, 'Its roof and other walls'), h('dd', {}, claimList(THIRD_WALLS)),
         h('dt', {}, 'How it is drawn here'), h('dd', {}, this.etvMethod())) : null,
       g.id === 'ventricles' ? h('dl', {},
-        h('dt', {}, 'The lateral ventricle’s walls'), h('dd', {}, claimList(LATERAL_WALLS)),
+        h('dt', {}, 'The lateral ventricle’s walls'), h('dd', {}, claimList([...LATERAL_WALLS, ...TEMPORAL_HORN])),
         h('dt', {}, 'The foramina of Monro'), h('dd', {}, claimList(MONRO)),
         h('dt', {}, 'The floor of the third ventricle'), h('dd', {}, claimList(THIRD_FLOOR), h('p', { class: 'aside' }, 'This CT shows the third ventricle only in part: its floor is the fitted model’s.')),
+        h('dt', {}, 'The third ventricle’s roof and other walls'), h('dd', {}, claimList(THIRD_WALLS)),
         h('dt', {}, 'The aqueduct'), h('dd', {}, claimList(AQUEDUCT)),
         h('dt', {}, 'The fourth ventricle'), h('dd', {}, claimList(FOURTH))) : null,
       h('p', { class: 'aside schematic-note' }, 'One young adult’s CT: the ventricles are this patient’s and narrow, completed by a fitted model where the CT cannot show them; the brain around them is a template fitted into the skull. For teaching, not for planning.'));
@@ -633,7 +649,7 @@ export class VentriclesAtlasPage {
     box.append(h('div', { class: `cath-result ${t.ventricle ? (ipsi ? 'ok' : 'warn') : 'miss'}`, role: 'status' },
       h('p', {}, h('strong', {}, 'On this CT: '), verdict),
       h('p', { class: 'aside' }, `Skull ${fmtMm(t.boneMm)} mm thick at the entry; the catheter is ${fmtMm(t.angleToNormalDeg)}° from the perpendicular. This patient’s frontal horns are ${fmtMm(TRAJ.ventricles.frontalHorns.widthMm)} mm wide across both (Evans’ index ${TRAJ.ventricles.frontalHorns.evansIndex.toFixed(2)}).`)),
-      h('h4', {}, `Published: ${TARGET_NAME[c.target]}`), claimList(ACCURACY[c.target]));
+      h('h4', {}, `Published: ${TARGET_NAME[c.target]}`), claimList([...CHEN_COHORT, ...ACCURACY[c.target]]));
     return box;
   }
 
@@ -650,8 +666,8 @@ export class VentriclesAtlasPage {
         id === 've_lateral_ventricle' ? [h('dt', {}, 'Measured on this CT'), h('dd', {}, h('ul', { class: 'plain' },
           h('li', {}, `Volume: ${fmtMm(TRAJ.ventricles.volumeMl.R)} ml right, ${fmtMm(TRAJ.ventricles.volumeMl.L)} ml left as far as the CT shows them; ${fmtMm(TRAJ.ventricles.drawnMl.R)} and ${fmtMm(TRAJ.ventricles.drawnMl.L)} ml as drawn`),
           h('li', {}, `Frontal horns: ${fmtMm(fh.widthMm)} mm across both at their widest, against an inner skull width of ${fmtMm(fh.innerSkullMm)} mm on that slice (Evans’ index ${fh.evansIndex.toFixed(2)})`))),
-        h('dt', {}, 'Walls'), h('dd', {}, claimList(LATERAL_WALLS))] : null,
-        id === 've_third_ventricle' ? [h('dt', {}, 'Its floor'), h('dd', {}, claimList(THIRD_FLOOR))] : null,
+        h('dt', {}, 'Walls'), h('dd', {}, claimList([...LATERAL_WALLS, ...TEMPORAL_HORN]))] : null,
+        id === 've_third_ventricle' ? [h('dt', {}, 'Its floor'), h('dd', {}, claimList(THIRD_FLOOR)), h('dt', {}, 'Its roof and other walls'), h('dd', {}, claimList(THIRD_WALLS))] : null,
         id === 've_interventricular_foramen' ? [h('dt', {}, 'The foramen'), h('dd', {}, claimList(MONRO))] : null,
         id === 've_cerebral_aqueduct' ? [h('dt', {}, 'The aqueduct'), h('dd', {}, claimList(AQUEDUCT))] : null,
         id === 've_fourth_ventricle' ? [h('dt', {}, 'The fourth ventricle'), h('dd', {}, claimList(FOURTH))] : null,
@@ -707,6 +723,8 @@ export class VentriclesAtlasPage {
       const g = VE_GROUP.get(this.s.grp);
       const key = new Set(g?.key ?? []);
       for (const p of this.viewer.structureScreen()) if (key.has(p.id)) add(p.id, nameOf(p.id), p.x, p.y, 'slabel primary');
+      // the skull's landmarks the view marks (Kocher's point, bregma, the meatus, the inion, Frazier's point ...)
+      for (const m of this.viewer.markerScreen()) add(m.id, nameOf(m.id), m.x, m.y, 'mlabel');
     }
     if (mode !== 'off' && this.s?.sel) {
       const a = this.viewer.anchorFor(this.s.sel);

@@ -97,5 +97,38 @@
   ],
   "side": "L",
   "how": "Not in this CT (it stops at the forehead): 16.35 mm from the midline (half Chen 2025's mean intercanthal distance), on the line between the external acoustic meatus, as Chen projects it."
+ },
+ {
+  "id": "lm_inion",
+  "name": "Inion",
+  "ras": [
+   0.52,
+   -97.55,
+   -25.98
+  ],
+  "side": "M",
+  "how": "The fitted Z-Anatomy model's external occipital protuberance, moved onto this CT's outer table at the midline. This skull's own protuberance is slight: its midline profile stands out about 1 mm, 3 to 4 mm lower."
+ },
+ {
+  "id": "lm_frazier_r",
+  "name": "Frazier's point",
+  "ras": [
+   35.52,
+   -95.69,
+   30.48
+  ],
+  "side": "R",
+  "how": "60 mm up the outer table from the inion along the midline and, at that height, 35 mm from the midline (the published 3 to 4 cm: 35 mm is a drawing choice). It lies on this CT's parietal bone (named from the fitted model), as in the dissections."
+ },
+ {
+  "id": "lm_frazier_l",
+  "name": "Frazier's point",
+  "ras": [
+   -34.48,
+   -99.44,
+   30.48
+  ],
+  "side": "L",
+  "how": "60 mm up the outer table from the inion along the midline and, at that height, 35 mm from the midline (the published 3 to 4 cm: 35 mm is a drawing choice). It lies on this CT's parietal bone (named from the fitted model), as in the dissections."
  }
 ]

@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { crossCheckVe, ETV, LANDMARKS, TARGETS, TRAJ, trajectoryFor, VE, VE_MANIFEST } from '../../src/ventricles';
+import { ACCURACY, CHEN_COHORT, ETV_SCORE, FRAZIER, TEMPORAL_HORN, THIRD_WALLS } from '../../src/ventricles/content';
+import { VE_REFERENCES } from '../../src/ventricles/references';
 import { VE_GROUPS } from '../../src/ventricles/groups';
 import { catheterMarkers, vePlan } from '../../src/ventricles/scene';
 import { decodeVe, defaultScopeDepth, defaultVeState, encodeVe, ETV_DEFAULT, etvLine, SCOPE_ENTRY_MAX } from '../../src/ventricles/state';
@@ -168,3 +170,69 @@ describe('ventricles section', () => {
     expect(p.looks.get('ve_fornix')).toBe('primary');
   });
 });
+
+// The site audit's D-009 (the owner's choices of 16 November 2026: the ETV Success Score as a table; Frazier's point with
+// a marker on the skull; Keen's point left out, as this CT does not show the ear).
+describe('ventricles additions (audit D-009)', () => {
+  const lm = new Map(LANDMARKS.map((l) => [l.id, l]));
+
+  it('the inion at the back of the skull on the midline, and Frazier’s point above it, 35 mm to each side', () => {
+    const inion = lm.get('lm_inion')!, bregma = lm.get('lm_bregma')!.ras;
+    expect(inion.side).toBe('M');
+    expect(Math.abs(inion.ras[0] - TRAJ.midline)).toBeLessThan(1);
+    expect(inion.ras[1]).toBeLessThan(bregma[1] - 90);
+    for (const s of ['r', 'l'] as const) {
+      const p = lm.get(`lm_frazier_${s}`)!;
+      expect(p.name).toBe('Frazier\'s point');
+      expect(Math.abs(Math.abs(p.ras[0] - TRAJ.midline) - 35), s).toBeLessThan(0.5);
+      expect(Math.sign(p.ras[0] - TRAJ.midline), s).toBe(s === 'r' ? 1 : -1);
+      // 60 mm up a curved surface: higher than the inion by somewhat less
+      expect(p.ras[2] - inion.ras[2], s).toBeGreaterThan(40);
+      expect(p.ras[2] - inion.ras[2], s).toBeLessThan(60);
+      expect(p.how).toMatch(/^60 mm up the outer table from the inion along the midline and, at that height, 35 mm from the midline/);
+      expect(p.how).toMatch(/parietal bone/);
+    }
+    // no Keen's point: the CT's field ends above the ear
+    expect(LANDMARKS.some((l) => /keen/i.test(l.id + l.name))).toBe(false);
+    // the catheter view marks them, on the catheter's side
+    for (const side of ['L', 'R'] as const) {
+      const st = defaultVeState(); st.grp = 'evd'; st.cath.side = side;
+      expect(catheterMarkers(st)).toEqual(expect.arrayContaining(['lm_inion', `lm_frazier_${side.toLowerCase()}`]));
+      expect(catheterMarkers(st)).not.toContain(`lm_frazier_${side === 'L' ? 'r' : 'l'}`);
+    }
+    expect(FRAZIER[0].text).toMatch(/about 6 cm above the inion and 3–4 cm from the midline/);
+    expect(FRAZIER[0].refIds).toEqual(['elbadway2026']);
+    expect(FRAZIER[1].text).toMatch(/parietal bone above the lambdoid suture, entered the ventricle at the atrium/);
+    expect(FRAZIER[1].refIds).toEqual(['kara2026']);
+  });
+
+  it('the ETV Success Score: the three factors and their points, a sum of at most 90, its two sources', () => {
+    expect(ETV_SCORE.rows.map(([f]) => f)).toEqual(['Age', 'Cause', 'Previous shunt']);
+    const pts = Object.fromEntries(ETV_SCORE.rows.map(([f, items]) => [f, items.map(([, x]) => x)]));
+    expect(pts).toEqual({ Age: [0, 10, 30, 40, 50], Cause: [0, 20, 30], 'Previous shunt': [0, 10] });
+    expect(ETV_SCORE.rows[0][1][0][0]).toBe('Under 1 month');
+    expect(ETV_SCORE.rows[1][1][0][0]).toBe('Postinfectious');
+    expect(ETV_SCORE.rows[2][1]).toEqual([['Yes', 0], ['No', 10]]);
+    expect(Object.values(pts).reduce((n, v) => n + Math.max(...v), 0)).toBe(90);
+    expect(ETV_SCORE.refIds).toEqual(['krause2024']);
+    expect(ETV_SCORE.intro[0].text).toMatch(/618 ventriculostomies in children at 12 centres, success judged at 6 months/);
+    expect(ETV_SCORE.intro[0].refIds).toEqual(['kulkarni2009']);
+    expect(ETV_SCORE.note).toMatch(/derived in children.*not a calculator/);
+    // the original paper is not open access, and says so
+    const k = VE_REFERENCES.find((r) => r.id === 'kulkarni2009')!;
+    expect(k.pmcid).toBeUndefined();
+    expect(k.citation).toMatch(/Checked against its abstract: the full text is not open access\.$/);
+  });
+
+  it('the third ventricle’s roof and other walls, the temporal horn’s walls, and whom Chen’s percentages come from', () => {
+    expect(THIRD_WALLS.map((c) => c.text.split(':')[0])).toEqual(['Roof', 'Anterior wall', 'Posterior wall, from above down', 'Lateral walls']);
+    expect(THIRD_WALLS[0].refIds).toEqual(['azab2014']);
+    expect(THIRD_WALLS[2].text).toMatch(/habenular commissure, the pineal gland, the pineal recess and the posterior commissure/);
+    expect(TEMPORAL_HORN.every((c) => c.refIds.join() === 'kucukyuruk2012')).toBe(true);
+    expect(TEMPORAL_HORN[0].text).toMatch(/roof and lateral wall are formed by the tapetum/);
+    expect(TEMPORAL_HORN[1].text).toMatch(/amygdala forms its anterior wall/);
+    expect(CHEN_COHORT[0].text).toMatch(/older than 16 \(median age 64, interquartile range 53–73\) with normal ventricles, the frontal horns 21\.7–53\.7 mm/);
+    expect(Object.keys(ACCURACY)).toEqual(TARGETS);
+  });
+});
+

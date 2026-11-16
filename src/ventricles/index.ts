@@ -5,7 +5,7 @@ import veTrajectories from '../data/generated/ve-trajectories.json';
 import veEtv from '../data/generated/ve-etv.json';
 import { VeManifestSchema } from '../data/schema';
 import { BsReferenceSchema, ClaimSchema, type Claim } from '../brainstem/schema';
-import { ACCURACY, AQUEDUCT, ETV_ANATOMY, ETV_TRAJECTORY, FOURTH, HYDRO, IDEAL, KOCHER, LATERAL_WALLS, MONRO, PRACTICE, THIRD_FLOOR } from './content';
+import { ACCURACY, AQUEDUCT, CHEN_COHORT, ETV_ANATOMY, ETV_SCORE, ETV_TRAJECTORY, FOURTH, FRAZIER, HYDRO, IDEAL, KOCHER, LATERAL_WALLS, MONRO, PRACTICE, TEMPORAL_HORN, THIRD_FLOOR, THIRD_WALLS } from './content';
 import { VE_REFERENCES } from './references';
 
 /**
@@ -116,13 +116,16 @@ export function crossCheckVe(): string[] {
   const errs: string[] = [];
   const used = new Set<string>();
   const all: Claim[] = [...LATERAL_WALLS, ...MONRO, ...THIRD_FLOOR, ...AQUEDUCT, ...FOURTH, ...KOCHER, ...IDEAL, ...PRACTICE, ...Object.values(ACCURACY).flat(),
-    ...ETV_ANATOMY, ...ETV_TRAJECTORY, ...HYDRO];
+    ...ETV_ANATOMY, ...ETV_TRAJECTORY, ...HYDRO, ...TEMPORAL_HORN, ...THIRD_WALLS, ...CHEN_COHORT, ...FRAZIER, ...ETV_SCORE.intro,
+    { text: 'ETV Success Score: the points', refIds: ETV_SCORE.refIds }];
   for (const cl of all) {
     ClaimSchema.parse(cl);
     for (const r of cl.refIds) { used.add(r); if (!VE_REF.has(r)) errs.push(`unknown refId ${r}`); }
   }
   for (const r of VE_REFS) if (!used.has(r.id)) errs.push(`reference ${r.id} is never cited`);
   for (const t of TARGETS) if (!ACCURACY[t]?.length) errs.push(`no published accuracy for ${t}`);
+  // the landmarks the catheter view marks at the back of the head
+  for (const id of ['lm_inion', 'lm_frazier_r', 'lm_frazier_l']) if (!LM.has(id)) errs.push(`missing landmark ${id}`);
   for (const k of Object.keys(TRAJ.params.kocher)) for (const s of ['L', 'R']) for (const o of TRAJ.params.apOffsets) for (const t of TARGETS) {
     if (!trajectoryFor(k, s, o, t)) errs.push(`no trajectory ${k} ${s} ${o} ${t}`);
   }
