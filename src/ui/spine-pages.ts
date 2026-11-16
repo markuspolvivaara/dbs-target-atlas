@@ -5,6 +5,8 @@ import { linkLicences } from './licences';
 /** Sources and Credits of the spine section. */
 
 const a = (href: string, text: string) => h('a', { href, target: '_blank', rel: 'noopener' }, text);
+/** what a reference's link opens: a DOI, a PDF or a web page */
+export const linkLabel = (url: string) => (url.startsWith('https://doi.org/') ? 'DOI' : /\.pdf($|[?#])/i.test(url) ? 'PDF' : 'Web page');
 
 export function spineSourcesPage() {
   const el = h('div', { class: 'page wrap' });
@@ -41,7 +43,8 @@ export function spineSourcesPage() {
       h('p', {}, 'The vertebral artery is not segmented either (the CT has no contrast): it is drawn from the subclavian artery through the foramina transversaria measured on the CT, from the level inferred from their size, then behind the lateral mass of the atlas and over the groove on its posterior arch, and a short way towards the foramen magnum. It is kept out of the drawn bone like the roots, passing each foramen’s measured centre (in C2 the foramen turns outwards, and a curve drawn straight through the centres cut 3.6 mm deep through the bone). It is drawn 4 mm thick where there is room and thinner where a foramen as drawn is narrower (1.5 mm at the least); the level cards give the thickness drawn in each foramen. The drawn bone is the 200 HU surface of a smoothed CT, and the smoothing narrows small openings: the C3 foramina enclose 12 and 7 mm² on the drawn bone and 24 and 18 mm² on the same volume before smoothing (the level cards give both where they differ by 5 mm² or more). The thin places show that limit of the drawing; they say nothing about the artery’s calibre, which this CT does not show.')),
     h('section', { class: 'card' },
       h('h2', {}, 'References'),
-      h('ul', { class: 'refs' }, ...Object.values(SP_MANIFEST.references).map((r) => h('li', {}, r.citation, ' ', a(r.url, 'DOI'))))),
+      h('p', { class: 'aside' }, 'Each statement was checked against the open-access full text of its sources where there is one. A reference that could be checked only against its abstract, or in another way, says so after its citation.'),
+      h('ul', { class: 'refs' }, ...Object.values(SP_MANIFEST.references).map((r) => h('li', {}, r.citation, ' ', a(r.url, linkLabel(r.url)))))),
   );
   return { el, render() { /* stateless */ } };
 }

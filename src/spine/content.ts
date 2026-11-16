@@ -163,7 +163,7 @@ export const STATEMENTS = {
     refIds: ['osman2021'],
   },
   lesionLateral: {
-    text: 'A herniation in or beyond the foramen (extreme lateral, intra- or extraforaminal) lies in front of the exiting root.',
+    text: 'A foraminal or far lateral herniation (in or beyond the foramen; “extreme lateral” is used for both, intra- and extraforaminal) lies in front of the exiting root.',
     refIds: ['luebbers2025'],
   },
   dermatomes: {
@@ -171,7 +171,7 @@ export const STATEMENTS = {
     refIds: ['downs2011', 'lee2008', 'isncsci2019'],
   },
   isncsci: {
-    text: 'Key muscles and other movements by root as listed on the ISNCSCI worksheet (the standard for neurological examination in spinal cord injury).',
+    text: 'Key muscles and other movements by root as listed on the worksheet of the International Standards for Neurological Classification of Spinal Cord Injury (ISNCSCI), the standard for neurological examination in spinal cord injury.',
     refIds: ['isncsci2019', 'rupp2021'],
   },
   radiculopathyLumbar: {
@@ -247,8 +247,8 @@ export const STATEMENTS = {
     refIds: ['chanplakorn2014', 'jiang2024'],
   },
   grades: {
-    text: 'Breach grades after Gertzbein and Robbins: A no breach, B up to 2 mm, C 2–4 mm, D 4–6 mm, E more than 6 mm; the direction is medial, lateral, cranial or caudal.',
-    refIds: ['gertzbein1990', 'miyamoto2025'],
+    text: 'Breach grades named after Gertzbein and Robbins, who measured on CT after surgery how far pedicle screws encroached on the canal from the pedicle’s medial border. As studies now apply them: A no breach, B up to 2 mm, C 2–4 mm, D 4–6 mm, E more than 6 mm; the direction is medial, lateral, cranial or caudal.',
+    refIds: ['miyamoto2025', 'gertzbein1990'],
   },
   screwMethod: {
     text: 'Breach here: how far the screw’s surface reaches beyond the bone surface of this CT (the surface drawn), once the screw is wholly inside the bone; the entry through the dorsal cortex does not count, and a tip through the anterior cortex is listed apart. Distances run from the screw’s surface to the surfaces of the structures at risk; the roots and ganglia are schematic, and so are the distances to them. Only structures drawn here are checked: no pleura, lung or vessels.',
@@ -265,6 +265,14 @@ export const STATEMENTS = {
   publishedThoracic: {
     text: 'Published: the mean values of the studies that Verma 2020 tabulates beside its own 20 dry vertebral columns (3 to 9 studies per value and level), as their median and the smallest and largest, each with the study that reported it. The studies measured dry vertebrae, cadavers or CT, in different populations. A negative transverse angle means the pedicle points outwards, as at T12 in a cadaver study (−10.0°). The sagittal angle there is the angle between the pedicle axis and the upper border of the vertebral body.',
     refIds: ['verma2020', 'singh2011'],
+  },
+  publishedChord: {
+    text: 'Published chord: thoracic, the pedicle screw path length on MRI in 400 patients (from the posterior cortex of the lamina along the pedicle’s axis; mean ± SD and the vertebrae measured at that level); lumbar, the chord length on CT in 300 adults (from the pedicle’s posterior cortical entry point to the anterior vertebral cortex along its mid-axis; mean ± SD). The chord measured on this CT is longer: by 12 to 19 mm than the published mean at every lumbar level, and by up to 13 mm at the thoracic ones. Here it is the length in three dimensions along the fitted axis, from where that line leaves the dorsal bone for good (gaps under 3 mm are bridged, so any bone on the line behind the pedicle counts) to where it leaves the anterior cortex, in one person. Which of these accounts for the difference has not been worked out: do not read the measured chord as a screw length.',
+    refIds: ['soh2021', 'arockiaraj2025'],
+  },
+  prevertebral: {
+    text: 'The longus colli, a deep prevertebral muscle, is the muscle the anterior approach lifts off the vertebral bodies on either side of the midline. The segmentation gives the prevertebral muscles as one mass on each side and does not separate it.',
+    refIds: ['liu2017', 'hasan2025', 'arumalla2021'],
   },
   fill: {
     text: 'Recommended ratios of screw diameter to pedicle width range from 80% to 125%; perforations were fewest at 80%, the ratio recommended for less experienced surgeons.',
@@ -465,9 +473,9 @@ export const TECHNIQUES: Record<Technique['id'], Technique> = {
     id: 'c2p', name: 'C2 pedicle', levels: ['C2'],
     start: {
       text: 'C2 pedicle screw: one description enters 7 mm lateral and 5 mm caudal to where lines along the lamina’s upper border and the canal’s lateral border cross, 30° medial and 20° cranial, to the pedicle’s anterior cortex; another 2 mm lateral to where the lamina’s upper border meets the pars’s mediolateral midline, 30–45° medial, aimed in the sagittal plane at the lower half of the atlas’s anterior tubercle. Start position here: 45° medial (the most convergent of 30–45°), the entry 5 mm caudal to the lamina’s upper border and as far lateral as keeps the most bone around the screw on this CT (10 mm lateral to the canal’s border, 3 mm lateral of the first description’s entry; the more lateral the entry, the more a screw can converge), cranially along the pedicle the same way (the AO entry at the lamina’s border itself would leave the pedicle superiorly on this CT).',
-      refIds: ['kendirlioglu2026', 'aosurgeryref'],
+      refIds: ['kendirlioglu2026', 'aosurgeryrefpedicle'],
     },
-    size: { text: 'Start size 3.5 mm, up to 27 mm (3D-printed models of 20 individuals averaged 26.8 ± 3.8 mm; a unicortical screw over 20 mm is typically adequate), the tip at least 1 mm short of where it would leave the bone on this CT.', refIds: ['kendirlioglu2026', 'aosurgeryref'] },
+    size: { text: 'Start size 3.5 mm, up to 27 mm: the cap is a published mean, rounded (3D-printed models of 20 individuals averaged 26.8 ± 3.8 mm), a drawing choice and not a limit; a unicortical screw over 20 mm is typically adequate. The tip stays at least 1 mm short of where it would leave the bone on this CT.', refIds: ['kendirlioglu2026', 'aosurgeryrefpedicle'] },
     note: { text: 'Up to 20% of people have C2 pedicles too small for a screw; with a high-riding vertebral artery the corridor narrows further.', refIds: ['joaquim2020', 'kucherina2026'] },
   },
   c2pars: {
@@ -476,7 +484,7 @@ export const TECHNIQUES: Record<Technique['id'], Technique> = {
       text: 'C2 pars screw: the entry 3–4 mm above the C2–C3 facet joint at the midpoint of the pars mediolaterally, the trajectory as dorsal as possible without perforating the pars’s dorsal cortex — essentially a short transarticular screw. Start position here: that entry as measured on this CT, straight forward, cranially along the pars’s own axis (the angle that keeps the most bone around the screw on this CT; hugging the dorsal cortex would be about 20° steeper). Other descriptions angle it 10–23° medially and 42–45° cranially from a more medial entry.',
       refIds: ['aosurgeryref', 'singh2022', 'kendirlioglu2026'],
     },
-    size: { text: 'Start size 3.5 mm, up to 18 mm (a unicortical screw over 16 mm is typically adequate; series used 14–18 mm), the tip at least 1 mm short of where it would leave the bone on this CT.', refIds: ['aosurgeryref', 'singh2022'] },
+    size: { text: 'Start size 3.5 mm, up to 18 mm: the cap is the longest screw of the published series (14–18 mm), a drawing choice and not a limit; a unicortical screw over 16 mm is typically adequate. The tip stays at least 1 mm short of where it would leave the bone on this CT.', refIds: ['aosurgeryref', 'singh2022'] },
     note: { text: 'With its shorter, more medial course a pars screw avoids the vertebral artery’s groove in many cases, which makes it a common choice with a high-riding artery; some pars are too small to take a screw.', refIds: ['kucherina2026', 'aosurgeryref'] },
   },
   c2tl: {
@@ -485,7 +493,7 @@ export const TECHNIQUES: Record<Technique['id'], Technique> = {
       text: 'C2 translaminar (Wright): each screw enters at the junction of the spinous process and the opposite lamina — the left screw’s entry higher, the right one’s lower, so they cross — and runs from dorsal to ventral along the lamina. The laminar angle (the lamina’s axis to the midline) measured 49.4 ± 3.0° on CT in 357 laminae. Start position here: the lamina’s own axis on this CT, the line through its core that keeps the most bone around it, entered where it meets the bone across the midline.',
       refIds: ['singh2022', 'zhou2022'],
     },
-    size: { text: 'Start size 3.5 mm (two 3.5 mm screws need a C2 spinous process about 9 mm high), up to 32 mm, the laminar length measured from the opposite junction to the lateral mass’s cortex (31.8 mm), the tip at least 1 mm short of where it would leave the bone on this CT; the laminae were 6.1 mm thick on average.', refIds: ['singh2022', 'zhou2022'] },
+    size: { text: 'Start size 3.5 mm (two 3.5 mm screws need a C2 spinous process about 9 mm high), up to 32 mm: the cap is a published mean, rounded (the laminar length from the opposite junction to the lateral mass’s cortex averaged 31.8 mm), a drawing choice and not a limit. The tip stays at least 1 mm short of where it would leave the bone on this CT; the laminae were 6.1 mm thick on average.', refIds: ['singh2022', 'zhou2022'] },
     note: { text: 'Translaminar screws avoid the pedicle and the vertebral artery entirely.', refIds: ['kucherina2026'] },
   },
   ta: {
@@ -590,8 +598,8 @@ export const ACDF_STATEMENTS = {
     refIds: ['hasan2025', 'arumalla2021'],
   },
   nerves: {
-    text: 'Nerve injuries of the anterior approach: recurrent laryngeal nerve 0.9–8.3% transient and under 1% permanent; C5 palsy 4.6–10%; Horner’s syndrome (the sympathetic chain, with dissection too far lateral) 0.1–0.5%; the superior laryngeal nerve with high (C2–C4) exposures. The nerves and the sympathetic chain are not drawn here.',
-    refIds: ['hasan2025'],
+    text: 'Nerve injuries of the anterior approach: recurrent laryngeal nerve 0.9–8.3% transient and under 1% permanent; Horner’s syndrome (the sympathetic chain, with dissection too far lateral) 0.1–0.5%; the superior laryngeal nerve with high (C2–C4) exposures. C5 palsy (weakness of the deltoid and biceps, the hand spared) follows cervical decompression from the front or from behind: in a meta-analysis of 21,231 patients operated for degenerative cervical myelopathy, 4% after anterior decompression and fusion, against 6% after laminoplasty and 10% after laminectomy and fusion. The nerves and the sympathetic chain are not drawn here.',
+    refIds: ['hasan2025', 'muthu2026'],
   },
   landmarks: {
     text: 'Classic landmarks (Hoppenfeld): the hyoid at C3, the thyroid cartilage at the C4–C5 disc, the cricoid at C6. With the neck slightly extended, as in surgery, they lay most often at C2–C3, C4 and C5–C6, and on MRI the hyoid ranged from C2–C3 to C4–C5 and the cricoid’s lower margin from C4–C5 to C7–T1: a level should be checked on the patient’s imaging.',
@@ -627,7 +635,7 @@ export const FORAMINOTOMY_STATEMENTS = {
   },
 } satisfies Record<string, Statement>;
 
-/** Drilling at an anterior cervical discectomy (ACDF), on this CT's two vertebrae at a disc. */
+/** Drilling at an anterior cervical discectomy (the discectomy of an ACDF), on this CT's two vertebrae at a disc. */
 export const ACDF_DRILL_STATEMENTS = {
   distraction: {
     text: 'Distracting the disc space opens the foramina: 2–3 mm beyond the patient’s own disc height was reported as the most useful for the foramen’s size, while more distraction loads the endplates and can contribute to graft failure, subsidence and non-union.',
@@ -638,7 +646,7 @@ export const ACDF_DRILL_STATEMENTS = {
     refIds: ['cheung2016', 'sugawara2015'],
   },
   drawn: {
-    text: 'Here: the disc is not drawn (taken out), a round 4-mm burr (a drawing choice) takes bone away from this CT’s two vertebrae, and they can be drawn apart along the spine to widen the space between them (each half the distance; the vertebrae beyond them are not moved). Clearances are to the dural sac (segmented) and to the roots and vertebral arteries (schematic), where they lie undistracted. Bone is simply taken away: nothing of the tissue’s behaviour is simulated.',
+    text: 'Here: the discectomy of an anterior cervical discectomy and fusion (ACDF); the fusion (cage, graft or plate) is not drawn. The disc is not drawn (taken out), a round 4-mm burr (a drawing choice) takes bone away from this CT’s two vertebrae, and they can be drawn apart along the spine to widen the space between them (each half the distance; the vertebrae beyond them are not moved). Clearances are to the dural sac (segmented) and to the roots and vertebral arteries (schematic), where they lie undistracted. Bone is simply taken away: nothing of the tissue’s behaviour is simulated.',
     refIds: [],
   },
 } satisfies Record<string, Statement>;
@@ -660,8 +668,8 @@ export const LAMINECTOMY_STATEMENTS = {
 
 export const HERNIA_STATEMENTS = {
   types: {
-    text: 'Four descriptions, each on its own: shape — a protrusion’s base is wider than the displaced material in at least one plane, an extrusion’s displaced fragment wider than its neck; containment — a contained herniation is covered by the posterior longitudinal ligament and/or outer annulus fibres, an uncontained one is not (extrusions are usually uncontained); continuity — a sequestration has lost continuity with the disc of origin; and migration — the fragment displaced from where it arose, whatever its continuity.',
-    refIds: ['angileri2026', 'eslami2026'],
+    text: 'Four descriptions, each on its own: shape — a protrusion’s base is wider than the displaced material in at least one plane, an extrusion’s displaced fragment wider than its neck; containment — a contained herniation is covered by the posterior longitudinal ligament and/or outer annulus fibres, an uncontained one is not (extrusions are usually uncontained); continuity — a sequestration has lost continuity with the disc of origin; and migration — the fragment displaced from where it arose, whatever its continuity. The terms are those of the lumbar disc nomenclature of the combined task forces of three spine and radiology societies (2001; version 2.0 in 2014), which Eslami 2026 cites for them.',
+    refIds: ['angileri2026', 'eslami2026', 'fardon2014'],
   },
   caudaEquina: {
     text: 'A massive central lumbar disc herniation is the commonest cause of cauda equina syndrome (about 45–55% of cases), most often at L4–L5 and L5–S1. Its classic picture: radicular pain in both legs, saddle anaesthesia, bladder and bowel dysfunction, and varying weakness or loss of reflexes in the legs.',
@@ -671,12 +679,16 @@ export const HERNIA_STATEMENTS = {
     text: 'A fragment can migrate up or down from its disc. Migration is graded from just past the disc’s upper or lower margin (low grade) to beyond the lower margin of the pedicle above or below (very high grade). A cranially migrated lumbar herniation can press on the exiting root, in the zone just inside the foramen (preforaminal) and in the foramen.',
     refIds: ['ahn2022', 'ikuta2013'],
   },
+  thoracic: {
+    text: 'A thoracic disc herniation is rare (0.1–5% of all disc herniations); three quarters lie below T7–T8, most often at T11–T12. Most are central or centrolateral, fewer truly lateral, and 30–70% are calcified: most lie in front of the spinal cord and can compress it. Back pain is the commonest presenting complaint, and pain can run along the intercostal space; among patients operated on (four series of a transfacet approach), 71% had myelopathy and 64% radiculopathy (42% both). A herniation off the midline can also reach the root that leaves at that disc, the root of the upper vertebra: in one reported case a paracentral T9–T10 herniation compressed the cord and the exiting T9 root.',
+    refIds: ['yurtluk2025', 'corazzelli2024', 'hamid2023', 'khan2026'],
+  },
   retract: {
     text: 'In an open microdiscectomy a hemilaminectomy and partial medial facetectomy are done with a high-speed drill and Kerrison rongeurs, and the ligamentum flavum is removed, exposing the root crossing over the disc; the root and the thecal sac are then retracted medially and the annulus exposed.',
     refIds: ['berry2019'],
   },
   cervicalApproach: {
-    text: 'A posterior cervical foraminotomy has relatively narrow indications, commonly a radiculopathy on one side at one or two levels, from a soft disc or an osteophyte; it is avoided when the spinal cord is compressed. An anterior discectomy (ACDF) is done for persistent arm pain or numbness despite conventional treatment or for neurological deficits, with axial imaging that matches. Here a central or paracentral herniation, lying against the cord, cannot be taken out from behind (the cord is not retracted); from the front, through the disc space, it can.',
+    text: 'A posterior cervical foraminotomy has relatively narrow indications, commonly a radiculopathy on one side at one or two levels, from a soft disc or an osteophyte; it is avoided when the spinal cord is compressed. An anterior cervical discectomy and fusion (ACDF) is done for persistent arm pain or numbness despite conventional treatment or for neurological deficits, with axial imaging that matches. Here a central or paracentral herniation, lying against the cord, cannot be taken out from behind (the cord is not retracted); from the front, through the disc space, it can.',
     refIds: ['kang2022'],
   },
   area: {
@@ -706,7 +718,7 @@ export const LAMINOPLASTY_STATEMENTS = {
     refIds: ['mitsunaga2012', 'cho2026'],
   },
   angle: {
-    text: 'In 124 patients the lamina open angle, measured on CT at C4–C6 a week after open-door laminoplasty, averaged 40.2° ± 11.3° (20–69°). Recovery was alike below and above 40° (JOA recovery rate 58.7% and 56.6%), but neck (axial) pain at 6 months was more frequent at 40° or more (32.1% against 14.1%); by the final follow-up the difference was no longer significant.',
+    text: 'In 124 patients the lamina open angle, measured on CT at C4–C6 a week after open-door laminoplasty, averaged 40.2° ± 11.3° (20–69°). Recovery was alike below and above 40° (recovery rate of the Japanese Orthopaedic Association, JOA, score 58.7% and 56.6%), but neck (axial) pain at 6 months was more frequent at 40° or more (32.1% against 14.1%); by the final follow-up the difference was no longer significant.',
     refIds: ['wang2018'],
   },
   drawn: {

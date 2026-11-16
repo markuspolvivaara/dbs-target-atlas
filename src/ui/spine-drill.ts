@@ -289,7 +289,7 @@ export class DrillPanel implements PointerTool {
           const at = vol.attachment(0);
           const openJoined = at ? (this.side === 'L' ? at.L : at.R) : false, hingeJoined = at ? (this.side === 'L' ? at.R : at.L) : false;
           rows.push(h('p', {}, !at ? `There is no lamina of ${lvl} left to open.`
-            : `Open side (${openSide}): ${openJoined ? 'still joined' : 'through'}. Hinge side (${hingeSide}): ${hingeJoined ? `joined, the hinge (the door opens once at most ${HINGE_MAX_MM} mm of bone is left under its trough)` : 'through as well'}.`),
+            : `Open side (${openSide}): ${openJoined ? 'still joined' : 'through'}. Hinge side (${hingeSide}): ${hingeJoined ? `joined, the hinge (the door opens once at most ${HINGE_MAX_MM} mm of bone is left under its trough: a drawing choice)` : 'through as well'}.`),
           ...(this.doorWhy ? [h('p', { class: 'drill-stop' }, this.doorWhy)] : []));
           chips.push(btn('Open the door', () => this.openDoor(), !!at && !openJoined && hingeJoined));
         }

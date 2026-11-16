@@ -475,6 +475,11 @@ export class SpineAtlasPage {
           this.stmt(thoracic ? STATEMENTS.thoracicNerve : cervical ? STATEMENTS.cervicalRootRule : STATEMENTS.rootRule))] : null,
         cervical ? [h('dt', {}, 'Foramina transversaria (measured)'), h('dd', {}, this.transverseForamina(level))] : null,
         g?.lesions ? [h('dt', {}, `Disc herniation at ${g.pair}`), h('dd', {}, this.lesionTool(g))] : null,
+        // thoracic: no tool, a statement (what a herniation here compresses) with the structures it names
+        thoracic && g ? [h('dt', {}, `Disc herniation at ${g.pair}`), h('dd', {},
+          h('p', {}, 'A central or centrolateral one lies in front of the spinal cord, in the ', this.link('sp_dural_sac'),
+            `; one further out can reach the root that leaves at this disc, ${exitingRoot(level)} (linked above).`),
+          this.stmt(HERNIA_STATEMENTS.thoracic))] : null,
         SCREW_LEVELS[level]?.pedicle ? [h('dt', {}, 'Pedicles (measured) and published values'), h('dd', {}, this.morphometry(level))] : null,
         SCREW_LEVELS[level]?.lateralMass ? [h('dt', {}, 'Lateral masses (measured)'), h('dd', {}, this.lateralMasses(level))] : null,
         SCREW_LEVELS[level]?.isthmus ? [h('dt', {}, 'High-riding vertebral artery? (measured)'), h('dd', {}, this.highRiding(level))] : null,
@@ -489,7 +494,7 @@ export class SpineAtlasPage {
         thoracic && g && !g.discCalcified ? [h('dt', {}, `Dorsal approach to the ${g.pair} disc`), h('dd', {}, this.approachTool(level, g))] : null,
         thoracic && g?.discCalcified ? [h('dt', {}, `Dorsal approach to the ${g.pair} disc`), h('dd', {},
           h('p', { class: 'aside' }, 'Not shown at this level: its disc is calcified and narrowed on this CT (see “Disc below”). The approaches are shown at the other thoracic levels.'))] : null,
-        cervical && g ? [h('dt', {}, `Anterior approach (ACDF) to the ${g.pair} disc`), h('dd', {}, this.acdfTool(level, g))] : null));
+        cervical && g ? [h('dt', {}, `Anterior approach to the ${g.pair} disc (as for an anterior cervical discectomy and fusion, ACDF)`), h('dd', {}, this.acdfTool(level, g))] : null));
   }
 
   /** A calcified disc (the T10-T11 disc of this CT): what the CT shows between the two bodies, measured, and how the
@@ -517,7 +522,7 @@ export class SpineAtlasPage {
     const sag = (x: number) => (Math.abs(x) < 0.05 ? '0°' : `${Math.abs(x).toFixed(1)}° ${x > 0 ? 'cranial' : 'caudal'}`);
     const head = h('thead', {}, h('tr', {}, h('th', {}, ''), h('th', { scope: 'col' }, 'Left'), h('th', { scope: 'col' }, 'Right'), h('th', { scope: 'col' }, 'Published')));
     const measured = (k: 'width' | 'height') => [`${fmtMm(ped.L[k])} mm`, `${fmtMm(ped.R[k])} mm`] as const;
-    const chord = row('Chord, entry to anterior cortex', `${fmtMm(ped.L.chord)} mm`, `${fmtMm(ped.R.chord)} mm`, '—');
+    const chord = (p: string) => row('Chord, entry to anterior cortex', `${fmtMm(ped.L.chord)} mm`, `${fmtMm(ped.R.chord)} mm`, p);
     // several studies' means: their median, and each end of their range with the study that reported it (one study's
     // value can set an end)
     const spread = (o: Record<string, number>, f: (x: number) => string, unit: string) => {
@@ -556,8 +561,10 @@ export class SpineAtlasPage {
         this.stmt(STATEMENTS.pedicleMethod), this.stmt(STATEMENTS.publishedC7));
     }
     if (level.startsWith('T')) {
-      type StudyMeans = Record<'widthStudyMeans' | 'heightStudyMeans' | 'transverseAngleStudyMeans' | 'sagittalAngleStudyMeans', Record<string, number>>;
+      type StudyMeans = Record<'widthStudyMeans' | 'heightStudyMeans' | 'transverseAngleStudyMeans' | 'sagittalAngleStudyMeans', Record<string, number>>
+        & { chordSoh: { meanSd: number[]; n: number } };
       const pub = (published.thoracic as Record<string, StudyMeans>)[level];
+      const path = pub.chordSoh;
       const mmf = (x: number) => fmtMm(x);
       const degf = (x: number) => x.toFixed(1);
       return h('div', {},
@@ -567,8 +574,8 @@ export class SpineAtlasPage {
             row('Height', ...measured('height'), spread(pub.heightStudyMeans, mmf, ' mm')),
             row('Transverse angle', deg(ped.L.transverseAngle), deg(ped.R.transverseAngle), spread(pub.transverseAngleStudyMeans, degf, '°')),
             row('Sagittal angle', sag(ped.L.sagittalAngle), sag(ped.R.sagittalAngle), spread(pub.sagittalAngleStudyMeans, degf, '°')),
-            chord)),
-        ...held, this.stmt(STATEMENTS.pedicleMethod), this.stmt(STATEMENTS.publishedThoracic));
+            chord(`screw path length ${path.meanSd[0].toFixed(1)} ± ${path.meanSd[1].toFixed(1)} mm (MRI, ${path.n} vertebrae)`))),
+        ...held, this.stmt(STATEMENTS.pedicleMethod), this.stmt(STATEMENTS.publishedThoracic), this.stmt(STATEMENTS.publishedChord));
     }
     const pub = (published.levels as Record<string, (typeof published.levels)['L1']>)[level];
     const range = (o: Record<string, number>) => `${fmtMm(Math.min(...Object.values(o)))}–${fmtMm(Math.max(...Object.values(o)))} mm`;
@@ -582,8 +589,8 @@ export class SpineAtlasPage {
           row('Transverse angle', deg(ped.L.transverseAngle), deg(ped.R.transverseAngle),
             `${ms(mx.L)} left, ${ms(mx.R)} right (n = ${mx.n}); ${ms(pub.transverseAngleNigeria.meanSd)} (n = ${pub.transverseAngleNigeria.n})`),
           row('Sagittal angle', sag(ped.L.sagittalAngle), sag(ped.R.sagittalAngle), '—'),
-          chord)),
-      this.stmt(STATEMENTS.pedicleMethod), this.stmt(STATEMENTS.published));
+          chord(`${pub.chordSaudi.meanSd[0].toFixed(1)} ± ${pub.chordSaudi.meanSd[1].toFixed(1)} mm (CT, n = ${pub.chordSaudi.n})`))),
+      this.stmt(STATEMENTS.pedicleMethod), this.stmt(STATEMENTS.published), this.stmt(STATEMENTS.publishedChord));
   }
 
   /** The C2 isthmus height and the bone over the vertebral artery's groove, beside the usual definition of a
@@ -816,6 +823,7 @@ export class SpineAtlasPage {
       }).join(', ') + '.');
     }
     if (id === 'sp_dural_sac') add('What this is', this.stmt(STATEMENTS.sac));
+    if (id.startsWith('sp_prevertebral')) add('What this is', this.stmt(STATEMENTS.prevertebral));
     return out;
   }
 

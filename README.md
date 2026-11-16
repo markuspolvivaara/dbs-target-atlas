@@ -886,11 +886,14 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
   4 to 5 mm deep through a pedicle and the artery 3.6 mm through C2: they had been cleared of the CT's bright
   voxels only, and a pedicle's cancellous core is darker.
 - **Lesion-to-root tool** (level card): paracentral, foraminal or far-lateral herniation per side; the affected root,
-  its ISNCSCI key muscle, other movements and key sensory point on a leg chart.
+  its ISNCSCI key muscle, other movements and key sensory point on a leg chart. Thoracic cards have no tool: a sourced
+  statement says what a herniation there compresses (mostly the cord; off the midline, the root leaving at that disc).
 - **Pedicles, measured beside published values** (T1–T12, L1–L5): narrowest width and height at the isthmus,
   transverse and sagittal angle, chord; published lumbar regional means (Wang 2023) and transverse angles
-  (Moncada-Habib 2025, Nkwerem 2024), and the range of the thoracic study means tabulated by Verma 2020, read from
-  the papers' tables by `pipeline/spine_published.py`.
+  (Moncada-Habib 2025, Nkwerem 2024), the range of the thoracic study means tabulated by Verma 2020, and a published
+  chord (thoracic screw path length on MRI, Soh 2021; lumbar chord length on CT, Arockiaraj 2025), read from the
+  papers' tables by `pipeline/spine_published.py`. The chord measured on this CT is longer than the published means
+  (lumbar by 12 to 19 mm); the card says so and that the reason is not established.
 - **Virtual screw** (a box of its own under the level chips, closed at first; it stays while structures are picked):
   the pedicle screw at T1–T12 (the straight-forward trajectory; the anatomic one is kept in the code; Lehman 2003;
   at the published mean transverse angle where a narrow pedicle's measured axis falls outside the study means; start size

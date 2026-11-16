@@ -1325,7 +1325,7 @@ def colour(token: str) -> dict:
 
 
 # references the spine section's cards cite (src/spine/content.ts), besides the datasets'
-REF_KEYS = ("hwang2019", "merckaert2015", "hasegawa1996", "zindrick1987", "fardon2014",
+REF_KEYS = ("hwang2019", "merckaert2015", "hasegawa1996", "fardon2014",
             "osman2021", "luebbers2025", "downs2011", "lee2008", "isncsci2019", "rupp2021",
             "matsukawa2017", "zhao2021", "koeck2026", "jenkins2026", "gertzbein1990", "miyamoto2025", "wang2023",
             "moncadahabib2025", "nkwerem2024", "gkasdaris2016", "wangr2021", "verma2020", "avila2016", "lehman2003",
@@ -1333,16 +1333,33 @@ REF_KEYS = ("hwang2019", "merckaert2015", "hasegawa1996", "zindrick1987", "fardo
             "epstein2023", "taterra2019", "moreno2021", "tanaka2000", "tudose2023", "hong2008", "bruneau2006", "vigo2020",
             "valenzuela2026", "tudose2026", "joaquim2018", "rathinavelu2021", "jiang2024", "joaquim2020", "singh2022",
             "kucherina2026", "jannelli2025", "hasan2025", "arumalla2021", "alicandri2020", "siribumrungwong2018",
-            "kendirlioglu2026", "zhou2022", "aosurgeryref",
+            "kendirlioglu2026", "zhou2022", "aosurgeryref", "aosurgeryrefpedicle",
             "figa2025", "sung2018", "gonzalezvargas2026", "loganathan2023", "fidan2026", "kang2022", "zhang2020", "kong2022", "silverstein2015", "sugawara2015", "cheung2016",
             "chang2014", "dave2020", "immanuelrajan2026", "ma2025",
             "mitsunaga2012", "wang2018", "cho2026", "li2026",
             "eslami2026", "sobanski2023", "berry2019", "angileri2026",
-            "bateman2025", "aduri2026", "ikuta2013", "ahn2022", "li2025", "yang2014", "botelho2013", "alves2020", "chanplakorn2014", "singh2011")
+            "bateman2025", "aduri2026", "ikuta2013", "ahn2022", "li2025", "yang2014", "botelho2013", "alves2020", "chanplakorn2014", "singh2011",
+            "muthu2026", "soh2021", "arockiaraj2025", "yurtluk2025", "corazzelli2024", "hamid2023", "khan2026", "liu2017")
+
+# What a reference was checked against where that was not an open-access full text (the site audit's E-013): the note
+# follows its citation on the Sources page, in the words the other sections use. Europe PMC's record on 16 November
+# 2026: no open-access full text for these. Tudose 2026 is open at its publisher (CC BY 4.0) and was read there.
+ABSTRACT_ONLY = "Checked against its abstract: the full text is not open access."
+ACCESS_NOTES = {
+    **{k: ABSTRACT_ONLY for k in ("merckaert2015", "hasegawa1996", "downs2011", "lee2008", "gertzbein1990", "lehman2003",
+                                  "lehmankuklo2003", "kshettry2015", "tanaka2000", "hong2008", "bruneau2006")},
+    # Europe PMC gives it a CC BY licence, but the publisher's page could not be read when this was checked
+    "valenzuela2026": "Checked against its abstract.",
+    # the record has no abstract; the values come from the worksheet (isncsci2019)
+    "rupp2021": "Cited as the standard’s own publication: the values shown come from its worksheet. Free to read in PubMed Central.",
+    # the publisher's page shows a bot check, which was not passed
+    "fardon2014": "Checked against its abstract; its definitions are given as two open reviews quote them (Eslami 2026, Ahn 2022).",
+}
 
 
 def references() -> dict:
-    return {k: {"citation": CITES[k]["citation"], "url": CITES[k]["url"]} for k in REF_KEYS}
+    return {k: {"citation": CITES[k]["citation"] + (f" {ACCESS_NOTES[k]}" if k in ACCESS_NOTES else ""), "url": CITES[k]["url"]}
+            for k in REF_KEYS}
 
 
 def manifest_entries(items: list[dict], junction: bool = False) -> list[dict]:
