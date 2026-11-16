@@ -305,6 +305,37 @@ test('ventricles: the ETV Success Score table, Frazier’s point, the third vent
   expect(g.errors).toEqual([]);
 });
 
+// D-010 (the owner's choices of 16 November 2026): what is known of aneurysms and AVMs that have not bled, on the
+// Grading page; the supplementary grade's own paper beside the later series
+test('vascular: the Grading page gives ISUIA and PHASES for unruptured aneurysms, ARUBA and the natural history for unruptured AVMs', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('about:blank');
+  await page.goto('./vascular/#/grading');
+  const pg = page.locator('.page.grading');
+  await expect(pg.locator('h2')).toHaveText(['Aneurysmal subarachnoid haemorrhage', 'Unruptured aneurysms', 'Arteriovenous malformations', 'Dural arteriovenous fistulas']);
+  const isuia = pg.locator('#isuia');
+  await expect(isuia.locator('tbody tr')).toHaveCount(4);
+  await expect(isuia.locator('tbody tr').nth(1)).toContainText('7–12 mm');
+  await expect(isuia.locator('tbody tr').nth(1).locator('td')).toHaveText(['2.6 %', '14.5 %']);
+  await expect(isuia).toContainText('PHASES pooled 8382 people from six prospective cohorts');
+  const aruba = pg.locator('#aruba');
+  await expect(aruba.locator('h3')).toContainText('Unruptured AVMs: treated or watched (the ARUBA trial)');
+  await expect(aruba.locator('tbody tr').first()).toContainText('35 of 114 (30.7 %)');
+  await expect(aruba).toContainText('5 were treated by neurosurgery alone');
+  await expect(aruba).toContainText('it does not say whether an AVM that has not bled should be treated');
+  await expect(aruba).toContainText('1.3 % of those unruptured when found');
+  // the supplemented grade: the original series beside Helsinki's
+  await expect(pg.locator('#supp-grades thead th')).toHaveText(['Supplemented grade', 'Unchanged or improved after surgery, the original series†', 'Favourable outcome after surgery, Helsinki*']);
+  await expect(pg.locator('#supp-grades tbody tr').nth(4)).toContainText('73 % (51 of 70)');
+  await expect(pg.locator('#supp-points')).toContainText('Lawton 2010');
+  // Sources: what was read of each new reference
+  await page.goto('./vascular/#/sources');
+  await expect(page.locator('.refs li', { hasText: 'Wiebers DO' })).toContainText('Checked against its abstract: the full text is not open access.');
+  await expect(page.locator('.refs li', { hasText: 'A supplementary grading scale' })).not.toContainText('Checked against');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
 /** Which sides of a structure's mesh are drawn now (the viewer's own nodes, by their names L and R). */
 async function drawnSides(page: Page, id: string): Promise<Record<string, boolean> | null> {
   return page.evaluate((sid) => {

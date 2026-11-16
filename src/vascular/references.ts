@@ -1,7 +1,8 @@
 import type { BsReference } from '../brainstem/schema';
 
 /** Sources of the vascular section, each checked against its open-access full text (Europe PMC); the few with none
- * (added in the site audit's B6) say so in their citation and were checked against their abstracts. */
+ * (added in the site audit's B6 and D-010) say so in their citation and were checked against their abstracts. Lawton
+ * 2010 and Mohr 2014 were read in full as the authors' manuscripts in PubMed Central (through NCBI's BioC service). */
 const doi = (d: string) => `https://doi.org/${d}`;
 export const VA_REFERENCES: BsReference[] = [
   { id: 'zheng2019', pmid: '30514102', pmcid: 'PMC6686434', shortLabel: 'Zheng 2019', url: doi('10.1177/0963689718817227'),
@@ -56,4 +57,17 @@ export const VA_REFERENCES: BsReference[] = [
     citation: "Frontera JA, Claassen J, Schmidt JM, Wartenberg KE, Temes R, Connolly ES, et al. Prediction of symptomatic vasospasm after subarachnoid hemorrhage: the modified fisher scale. Neurosurgery. 2006;59(1):21–7; discussion 21–7. doi:10.1227/01.neu.0000243277.86222.6c. Checked against its abstract: the full text is not open access." },
   { id: 'spetzler2011', pmid: '20932095', shortLabel: 'Spetzler 2011', url: doi('10.3171/2010.8.jns10663'),
     citation: "Spetzler RF, Ponce FA. A 3-tier classification of cerebral arteriovenous malformations. Clinical article. J Neurosurg. 2011;114(3):842–849. doi:10.3171/2010.8.jns10663. Checked against its abstract: the full text is not open access." },
+  // (the site audit's D-010: the supplementary grade's own paper; what is known of unruptured AVMs and aneurysms)
+  { id: 'lawton2010', pmid: '20190666', pmcid: 'PMC2847513', shortLabel: 'Lawton 2010', url: doi('10.1227/01.neu.0000367555.16733.e1'),
+    citation: 'Lawton MT, Kim H, McCulloch CE, Mikhak B, Young WL. A supplementary grading scale for selecting patients with brain arteriovenous malformations for surgery. Neurosurgery. 2010;66(4):702–13; discussion 713. doi:10.1227/01.neu.0000367555.16733.e1.' },
+  { id: 'mohr2014', pmid: '24268105', pmcid: 'PMC4119885', shortLabel: 'Mohr 2014', url: doi('10.1016/s0140-6736(13)62302-8'),
+    citation: 'Mohr JP, Parides MK, Stapf C, Moquete E, Moy CS, Overbey JR, et al. Medical management with or without interventional therapy for unruptured brain arteriovenous malformations (ARUBA): a multicentre, non-blinded, randomised trial. Lancet. 2014;383(9917):614–621. doi:10.1016/s0140-6736(13)62302-8.' },
+  { id: 'mohr2020', pmid: '32562682', shortLabel: 'Mohr 2020', url: doi('10.1016/s1474-4422(20)30181-2'),
+    citation: 'Mohr JP, Overbey JR, Hartmann A, Kummer RV, Al-Shahi Salman R, Kim H, et al. Medical management with interventional therapy versus medical management alone for unruptured brain arteriovenous malformations (ARUBA): final follow-up of a multicentre, non-blinded, randomised controlled trial. Lancet Neurol. 2020;19(7):573–581. doi:10.1016/s1474-4422(20)30181-2. Checked against its abstract: the full text is not open access.' },
+  { id: 'kim2014', pmid: '25015366', pmcid: 'PMC4141996', shortLabel: 'Kim 2014', url: doi('10.1212/wnl.0000000000000688'),
+    citation: 'Kim H, Al-Shahi Salman R, McCulloch CE, Stapf C, Young WL, MARS Coinvestigators. Untreated brain arteriovenous malformation: patient-level meta-analysis of hemorrhage predictors. Neurology. 2014;83(7):590–597. doi:10.1212/wnl.0000000000000688. Checked against its abstract.' },
+  { id: 'wiebers2003', pmid: '12867109', shortLabel: 'Wiebers 2003', url: doi('10.1016/s0140-6736(03)13860-3'),
+    citation: 'Wiebers DO, Whisnant JP, Huston J, Meissner I, Brown RD, Piepgras DG, et al. Unruptured intracranial aneurysms: natural history, clinical outcome, and risks of surgical and endovascular treatment. Lancet. 2003;362(9378):103–110. doi:10.1016/s0140-6736(03)13860-3. Checked against its abstract: the full text is not open access.' },
+  { id: 'greving2014', pmid: '24290159', shortLabel: 'Greving 2014', url: doi('10.1016/s1474-4422(13)70263-1'),
+    citation: 'Greving JP, Wermer MJ, Brown RD, Morita A, Juvela S, Yonekura M, et al. Development of the PHASES score for prediction of risk of rupture of intracranial aneurysms: a pooled analysis of six prospective cohort studies. Lancet Neurol. 2014;13(1):59–66. doi:10.1016/s1474-4422(13)70263-1. Checked against its abstract: the full text is not open access.' },
 ];

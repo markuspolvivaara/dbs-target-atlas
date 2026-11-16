@@ -129,6 +129,57 @@ describe('vascular section', async () => {
     expect(T.decodeVa('#/grading').page).toBe('grading');
   });
 
+  // The site audit's D-010 (the owner's choices of 16 November 2026: ARUBA with its final follow-up and the pooled
+  // natural history for AVMs; ISUIA and PHASES for aneurysms; Lawton 2010 as the supplementary grade's own source).
+  it('unruptured lesions: ARUBA and the natural history for AVMs, ISUIA and PHASES for aneurysms, each with its source', async () => {
+    const T2 = await import('../../src/vascular/grading');
+    const { VA_REFERENCES } = await import('../../src/vascular/references');
+    const ref = new Map(VA_REFERENCES.map((r) => [r.id, r]));
+    // ARUBA: each row's percentage is its count's; the two analyses
+    expect(T2.ARUBA.refIds).toEqual(['mohr2014', 'mohr2020']);
+    const [early, late] = T2.ARUBA.rows.map((r) => r.cells);
+    for (const cell of early.slice(1, 3)) {
+      const m = /(\d+) of (\d+) \((\d+\.\d) %\)/.exec(cell)!;
+      expect(Math.round((1000 * Number(m[1])) / Number(m[2])) / 10, cell).toBe(Number(m[3]));
+    }
+    expect(early[3]).toBe('0.27 (95 % CI 0.14–0.54)');
+    expect(late.slice(1)).toEqual(['15 of 110 (3.39 per 100 patient-years)', '41 of 116 (12.32 per 100 patient-years)', '0.31 (95 % CI 0.17–0.56)']);
+    expect(T2.ARUBA.foot).toMatch(/does not say whether an AVM that has not bled should be treated/);
+    const aruba = T2.ARUBA.notes.map((n) => n.text).join(' ');
+    // the treated arm adds up: 5 + 30 + 31 + 28 treated and 20 not yet, of 114
+    expect(aruba).toMatch(/of the 114 patients assigned to it, 5 were treated by neurosurgery alone, 30 by embolisation alone, 31 by radiotherapy alone and 28 by a combination; 20 had not begun/);
+    expect(5 + 30 + 31 + 28 + 20).toBe(114);
+    expect(aruba).toMatch(/1\.3 % of those unruptured when found against 4\.8 % of those that had already bled/);
+    expect(T2.ARUBA.notes.at(-1)!.refIds).toEqual(['kim2014']);
+    // ISUIA: four sizes, two groups of sites, rising with size in each
+    expect(T2.ISUIA.refIds).toEqual(['wiebers2003']);
+    expect(T2.ISUIA.rows.map((r) => r.cells)).toEqual([['under 7 mm', '0 %', '2.5 %'], ['7–12 mm', '2.6 %', '14.5 %'], ['13–24 mm', '14.5 %', '18.4 %'], ['25 mm or more', '40 %', '50 %']]);
+    for (const col of [1, 2]) {
+      const v = T2.ISUIA.rows.map((r) => parseFloat(r.cells[col]));
+      expect([...v].sort((a, b) => a - b)).toEqual(v);
+    }
+    expect(T2.ISUIA.notes.slice(1).every((n) => n.refIds.join() === 'greving2014')).toBe(true);
+    expect(T2.ISUIA.notes[1].text).toMatch(/1\.4 % in the first year and 3\.4 % over 5 years/);
+    // the page's order: the unruptured tables after their haemorrhage and grade tables
+    expect(T2.GRADE_TABLES.map((t) => t.id)).toEqual(['hunt-hess', 'wfns', 'modified-fisher', 'isuia', 'sm-points', 'sm-grades', 'supp-points', 'supp-grades', 'aruba', 'borden', 'cognard']);
+    // Lawton 2010 is the supplementary grade's own source; its series beside Helsinki's: 300 patients, 227 unchanged or improved
+    expect(T2.SUPP_POINTS.refIds[0]).toBe('lawton2010');
+    let n = 0, ok = 0;
+    for (const r of T2.SUPP_GRADES.rows) {
+      const m = /(\d+) % \((\d+) of (\d+)\)/.exec(r.cells[1]);
+      if (!m) { expect(r.cells).toEqual(['10', 'no patients', '100 % (1 of 1)']); continue; }
+      expect(Math.round((100 * Number(m[2])) / Number(m[3])), r.cells[0]).toBe(Number(m[1]));
+      n += Number(m[3]); ok += Number(m[2]);
+    }
+    expect([n, ok]).toEqual([300, 227]);
+    expect(Math.round((100 * ok) / n)).toBe(76);
+    expect(T2.SUPP_POINTS.notes[0].text).toMatch(/300 patients operated on by one surgeon.*76 % were unchanged or improved, 18 % worse, and 6 % died.*0\.73 against 0\.65/);
+    // what was read: the two authors' manuscripts in full, the rest as abstracts, and the citations say so
+    for (const id of ['mohr2020', 'wiebers2003', 'greving2014']) expect(ref.get(id)!.citation, id).toMatch(/Checked against its abstract: the full text is not open access\.$/);
+    expect(ref.get('kim2014')!.citation).toMatch(/Checked against its abstract\.$/);
+    for (const id of ['lawton2010', 'mohr2014']) { expect(ref.get(id)!.citation, id).not.toMatch(/Checked against/); expect(ref.get(id)!.pmcid, id).toMatch(/^PMC/); }
+  });
+
   it('shows a treatment in place of its aneurysm: clip and coils stop the filling, a flow diverter slows it', () => {
     const s = T.defaultVaState();
     s.grp = 'aneurysms';

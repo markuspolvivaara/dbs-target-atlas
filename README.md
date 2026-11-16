@@ -798,9 +798,13 @@ base fits or draws), with vascular lesions drawn onto them by rule, none of them
 - **Grading page** (`src/vascular/grading.ts`): the Hunt and Hess, WFNS and modified Fisher grades of a subarachnoid
   haemorrhage (Thilak 2024; what they predict: Robba 2024), tables of the Spetzler–Martin grade (its points; each grade's
   Spetzler–Ponce class, usual treatment and favourable outcome after surgery: Assker 2025, Naranbhai 2023, Hafez 2019),
-  the supplementary (Lawton–Young) grade (its points, the cut-off of 6, outcome by grade: Hafez 2019), and the Borden and
-  Cognard types of dural fistulas (drainage, sinus flow, cortical venous reflux, course and treatment: Li 2015,
-  Baharvahdat 2020, Shakeel 2025). The rows this atlas draws are marked and open their views.
+  the supplementary (Lawton–Young) grade (its points, the cut-off of 6, outcome by grade in the series it was derived
+  from, Lawton 2010, beside Helsinki's, Hafez 2019), and the Borden and Cognard types of dural fistulas (drainage, sinus
+  flow, cortical venous reflux, course and treatment: Li 2015, Baharvahdat 2020, Shakeel 2025). For lesions that have
+  not bled: the 5-year rupture rates of unruptured aneurysms by size and site (ISUIA: Wiebers 2003) with the PHASES
+  pooled analysis (Greving 2014), and for unruptured AVMs the ARUBA trial (Mohr 2014, with its final follow-up, Mohr
+  2020) and the pooled natural history (Kim 2014). Lawton 2010 and Mohr 2014 were read in full; the other four have no
+  open-access full text and say so. The rows this atlas draws are marked and open their views.
 - Pipeline: `pipeline/vascular_build.py` (after `skullbase_v3.py`), `node pipeline/compress.mjs vascular`,
   `pipeline/vascular_build.py finalize`.
 
