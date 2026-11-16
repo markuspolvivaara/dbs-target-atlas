@@ -96,6 +96,33 @@ test('dbs: the circuit schematics open the structures they stand for', async ({ 
   expect(g.errors).toEqual([]);
 });
 
+// A-012: the regulatory status of each indication, on its card and in one table on the References page
+test('dbs: each indication card gives its regulatory status; the References page has them all in one table', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './dbs/#/atlas?i=et');
+  const card = page.locator('article.card', { has: page.locator('h2', { hasText: 'Essential tremor' }) });
+  await expect(card.locator('dt', { hasText: 'Regulatory status' })).toBeVisible();
+  const items = card.locator('.regulatory > li');
+  await expect(items).toHaveCount(2);
+  await expect(items.first()).toContainText('Approved since 1997 on one side');
+  await expect(items.first()).toContainText('FDA 1997');
+  await expect(items.nth(1)).toContainText('Not an approved target: no FDA approval or exemption names it');
+  await expect(card).toContainText('Checked 16 November 2026');
+  await open(page, './dbs/#/atlas?i=epi');
+  const epi = page.locator('article.card', { has: page.locator('h2', { hasText: 'Drug-resistant epilepsy' }) });
+  await expect(epi.locator('dd', { hasText: 'Responsive neurostimulation, a different device' })).toBeVisible();
+  await epi.getByRole('link', { name: 'References', exact: true }).click();
+  await expect(page.locator('#regulatory h2')).toHaveText('Regulatory status of each indication');
+  // pd 3, et 2, holmes 1, the dystonias 2 (shared), fhd 2, md 1, tard 1, ts 1, chorea 1, epi 2
+  await expect(page.locator('.reg-table tbody tr')).toHaveCount(16);
+  await expect(page.locator('.reg-table tbody th', { hasText: 'Generalized dystonia' })).toContainText('Cervical dystonia');
+  await expect(page.locator('.reg-table tbody tr', { hasText: 'ANT, both sides' })).toContainText('Approved, 2018');
+  await page.locator('.reg-table').getByRole('link', { name: 'Tourette syndrome' }).click();
+  await expect(page.locator('article.card h2', { hasText: 'Tourette syndrome' })).toBeVisible();
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
 // A-013: what stimulation does when current reaches the structures around a target, on the target's card
 test('dbs: the STN card lists stimulation side effects and links the drawn landmark each one names', async ({ page }) => {
   const g = guard(page);

@@ -121,7 +121,17 @@ commit and push it.
   Schaper 2020 (now open in PMC), Piper 2022. Fixed: the Vim, dentate, non-decussating DRTT and hyperdirect cards (the
   drawn tract ends mostly in pre-SMA/SMA); "hyperdirect" defined in PD's "Why here" (CORRECTED in content.test.ts).
   A layout test checks every box lies inside its drawing, apart from the others, and every arrow runs edge to edge.
-  Local commit.
+  Merged with its own pull request (PR 14) at the user's word (2026-11-16).
+- A-012, regulatory status (the user's choices: a line on each indication card and a table on the References page;
+  the EU by disease from the reviews; "Not an approved indication" where no record names it; a note on responsive
+  neurostimulation on the epilepsy card), on `fix/a012-regulatory`: `src/data/regulatory.ts`
+  gives each indication rows per target, US and EU, with the date checked (`REGULATORY_CHECKED`, 16 November 2026).
+  US from the FDA's records (P960009 and its supplements S007, S229, S219, S482; H020007; P140009; P150031; P100026),
+  read through openFDA (api.fda.gov) and accessdata.fda.gov (which sometimes shows a "please wait" page: not
+  bypassed). EU from Amon 2017 (CE marks per device, by disease) and Frey 2022. Note: the FDA approved bilateral GPi
+  for primary dystonia on 22 November 2025 (S482); before that dystonia had the 2003 exemption only. The status
+  needs re-checking now and then: change the date when you do. Pushed with its own pull request (PR 15) at the
+  user's word (2026-11-16), set to merge once the checks pass.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -394,7 +404,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (435 tests on `fix/a014-circuits`)
+  - `npx vitest run` (438 tests on `fix/a012-regulatory`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`

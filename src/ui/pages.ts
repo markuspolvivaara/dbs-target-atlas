@@ -4,6 +4,7 @@ import { ACPC, MCP, TEMPLATE_ACPC_LENGTH } from '../data/acpc';
 import { CALC_LEDE, CALC_NOTE, fmt, rows, signed, validate, words, type Side } from '../data/calculator';
 import { IMAGING, IMAGING_ASIDE } from '../data/imaging';
 import { TOPICS } from '../data/references';
+import { REGULATORY, REGULATORY_CHECKED, type IndicationRegulatory } from '../data/regulatory';
 import type { Topic } from '../data/schema';
 import type { AppState } from '../state';
 import { chips, clear, fmtMm, h, refLinks } from './dom';
@@ -114,9 +115,9 @@ export function refsPage() {
     chipRow.querySelectorAll('.chip').forEach((c) => c.setAttribute('aria-pressed', String((c as HTMLElement).dataset.v === v)));
     render();
   }, { label: 'Topic' });
-  el.append(h('h1', {}, 'References'), h('label', { class: 'search' }, 'Search references', q), chipRow, count, list, empty,
+  el.append(h('h1', {}, 'References'), regulatoryTable(), h('h2', {}, 'Literature and records'), h('label', { class: 'search' }, 'Search references', q), chipRow, count, list, empty,
     // (the site audit's A-016: the note had said every non-epilepsy reference came from the original page)
-    h('p', { class: 'aside' }, '"Atlases and datasets" lists the sources of this section’s 3D geometry; their citations are Crossref records for each DOI. The original teaching page’s references are given from each paper’s Europe PMC record, linked by DOI; meeting abstracts, preprints and the slides say what they are. References added later, after checking against PubMed or Europe PMC: epilepsy; dystonia (Gruber 2018, Ilinsky 2018, Horisawa 2021); the optic-tract and red-nucleus landmarks; Parkinson’s dyskinesia (Tsuboi 2021, Fan 2020, Krack 1998, D’Souza 2026, Aquino 2019, Katayama 2006) and Liu 2014; Sammartino 2016. Where a paper is not open access, its citation says that only its abstract was checked.'));
+    h('p', { class: 'aside' }, '"Atlases and datasets" lists the sources of this section’s 3D geometry; their citations are Crossref records for each DOI. The original teaching page’s references are given from each paper’s Europe PMC record, linked by DOI; meeting abstracts, preprints and the slides say what they are. References added later, after checking against PubMed or Europe PMC: epilepsy; dystonia (Gruber 2018, Ilinsky 2018, Horisawa 2021); the optic-tract and red-nucleus landmarks; Parkinson’s dyskinesia (Tsuboi 2021, Fan 2020, Krack 1998, D’Souza 2026, Aquino 2019, Katayama 2006) and Liu 2014; Sammartino 2016; stimulation side effects (Koeglsperger 2019, Kim 2021); the circuits (Galvan 2015, Chiken 2016, Gallay 2008, Coenen 2020, Senova 2020, Piper 2022); the regulatory status (the FDA’s records, Amon 2017, Frey 2022, Wu 2021, Sun 2014). Where a paper is not open access, its citation says that only its abstract was checked.'));
   function render() {
     const s = q.value.trim().toLowerCase();
     const items = CONTENT.references
@@ -131,6 +132,37 @@ export function refsPage() {
   q.addEventListener('input', render);
   render();
   return { el, render() { /* stateless */ } };
+}
+
+/**
+ * The regulatory status of every indication in one table (data/regulatory.ts, the site audit's A-012); each card holds
+ * the full text. Indications that share an entry (the dystonias) share rows.
+ */
+function regulatoryTable(): HTMLElement {
+  const groups: { inds: { id: string; name: string }[]; reg: IndicationRegulatory }[] = [];
+  for (const ind of CONTENT.indications) {
+    const reg = REGULATORY[ind.id];
+    if (!reg) continue;
+    const g = groups.find((x) => x.reg === reg);
+    if (g) g.inds.push(ind); else groups.push({ inds: [ind], reg });
+  }
+  const body = h('tbody', {});
+  for (const g of groups) {
+    g.reg.rows.forEach((row, i) => body.append(h('tr', {},
+      i === 0 ? h('th', { scope: 'rowgroup', rowspan: String(g.reg.rows.length) },
+        ...g.inds.flatMap((ind, j) => [j ? '; ' : '', h('a', { href: `#/atlas?i=${ind.id}` }, ind.name)])) : null,
+      h('td', { 'data-label': 'Target' }, row.targets),
+      h('td', { 'data-label': 'United States' }, row.usShort, row.usRefIds.length ? ' ' : '', refLinks(row.usRefIds)),
+      h('td', { 'data-label': 'European Union' }, row.euShort, row.euRefIds.length ? ' ' : '', refLinks(row.euRefIds)))));
+  }
+  return h('section', { class: 'card reg-summary', id: 'regulatory' },
+    h('h2', {}, 'Regulatory status of each indication'),
+    h('p', {}, `Checked ${REGULATORY_CHECKED}. United States: the FDA’s premarket approvals and humanitarian device exemptions; an exemption does not require effectiveness to be shown `,
+      refLinks(['wu2021']), '. European Union: CE marks by disease, as two reviews give them ', refLinks(['amon2017', 'frey2022']),
+      '; no current instructions for use were found. “Not named” means no record was found, not proof that none exists. Each indication’s card has the full wording.'),
+    h('table', { class: 'reg-table' },
+      h('thead', {}, h('tr', {}, h('th', { scope: 'col' }, 'Indication'), h('th', { scope: 'col' }, 'Target'), h('th', { scope: 'col' }, 'United States'), h('th', { scope: 'col' }, 'European Union'))),
+      body));
 }
 
 // ---------------------------------------------------------------- credits
