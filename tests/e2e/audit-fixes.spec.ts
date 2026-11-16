@@ -233,6 +233,37 @@ test('spine: thoracic herniation statement, published chords, C5 palsy by operat
   expect(g.errors).toEqual([]);
 });
 
+// C-019 (the owner's choices of 16 November 2026): what each triangle holds, on its card and in the view's text; the
+// limit of the far lateral approach's condylar drilling
+for (const section of ['skullbase', 'skullbase-v1']) {
+  test(`${section}: a triangle’s card and the cavernous sinus view say what the triangle holds; the far lateral text names the hypoglossal canal`, async ({ page }) => {
+    const g = guard(page);
+    const id = `${section === 'skullbase' ? 'tb' : 'sb'}_triangle_inferior`;
+    await open(page, `./${section}/#/atlas?g=cavernous&sel=${id}`);
+    const card = page.locator('.card.sel');
+    await expect(card.locator('h2')).toContainText('Inferior (Parkinson\'s) triangle');
+    await expect(card).toContainText('Contents');
+    await expect(card).toContainText('generally holds the origin of the meningohypophyseal trunk and the cavernous part of the abducens nerve');
+    await expect(card).toContainText('endonasally the inferolateral trunk and the abducens nerve');
+    await expect(card).toContainText('Chavez-Herrera 2023');
+    await expect(card).not.toContainText('Z-Anatomy ships no definition');
+    // a posterior triangle: contents, no routes
+    await open(page, `./${section}/#/atlas?g=cavernous&sel=${id.replace('inferior', 'posterolateral')}`);
+    await expect(page.locator('.card.sel')).toContainText('Drilling it exposes the horizontal petrous carotid, for proximal control');
+    await expect(page.locator('.card.sel')).not.toContainText('by route');
+    // the view's own text
+    await open(page, `./${section}/#/atlas?g=cavernous`);
+    const pane = page.locator('.panel .pane:not([hidden])');
+    await expect(pane).toContainText('What each triangle holds');
+    await expect(pane).toContainText('The anterior triangles by route');
+    await expect(pane).toContainText('The inferolateral (lateral) triangle holds the porus trigeminus');
+    await open(page, `./${section}/#/atlas?g=far_lateral`);
+    await expect(pane).toContainText('The hypoglossal canal is the anterior limit of the condylar drilling.');
+    expect(g.external).toEqual([]);
+    expect(g.errors).toEqual([]);
+  });
+}
+
 /** Which sides of a structure's mesh are drawn now (the viewer's own nodes, by their names L and R). */
 async function drawnSides(page: Page, id: string): Promise<Record<string, boolean> | null> {
   return page.evaluate((sid) => {

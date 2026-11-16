@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { CameraPreset, ManifestStructure } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
 import { APPROACH_GEOM, definitionFor, isApproachPart, kindOf, LANDMARKS, LM, NOT_YET_SHOWN, REGIONS, SB, SB_MANIFEST, SB_MODEL, V1_FIT, V3_FIT, type Landmark, type SbModel } from '../skullbase';
-import { APPROACH, APPROACH_REF, CAVERNOUS_INFO, ENDONASAL_INFO, INSULA, V1_CAVERNOUS_NOT_SHOWN, V1_ENDONASAL_NOT_SHOWN, V1_TEXT, type ApproachClaim, type ApproachSection } from '../skullbase/approaches';
+import { APPROACH, APPROACH_REF, CAVERNOUS_INFO, ENDONASAL_INFO, INSULA, triangleClaims, V1_CAVERNOUS_NOT_SHOWN, V1_ENDONASAL_NOT_SHOWN, V1_TEXT, type ApproachClaim, type ApproachSection } from '../skullbase/approaches';
 import { measuredOn, TUMOUR_FAMILY, TUMOURS, tumourGroupId, type TumourFamily } from '../skullbase/tumours';
 import { CAVERNOUS } from '../skullbase/cavernous';
 import { TB_NOTES, TB_REF } from '../skullbase/temporal';
@@ -551,7 +551,9 @@ export class SkullbaseAtlasPage {
       h('h2', {}, h('span', { class: 'swatch', style: `--c: var(--c-${st.colour.token})` }), st.name),
       st.fitted ? h('p', { class: 'aside schematic-note' }, 'Approximate position: carried over from the Z-Anatomy model fitted onto this CT’s skull.') : '',
       st.schematic ? h('p', { class: 'aside schematic-note' }, 'Drawn by rule, not segmented: its course is illustrative.') : '',
-      h('dl', {}, ...defBlock,
+      h('dl', {}, ...(k === 'triangle' ? [] : defBlock),
+        // a surgical triangle: what it holds or leads to, and for the anterior five what each route shows through it
+        k === 'triangle' && triangleClaims(id).length ? [h('dt', {}, 'Contents'), h('dd', {}, this.claims(triangleClaims(id)))] : null,
         notesList(st.name) ? [h('dt', {}, 'Notes'), h('dd', {}, notesList(st.name))] : null,
         SB_MODEL === 'v3' ? this.measured(st.name) : null,
         regions.length ? [h('dt', {}, 'Near (measured in the model)'), h('dd', {}, regions.join('; '))] : null,
