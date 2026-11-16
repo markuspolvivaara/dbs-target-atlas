@@ -190,6 +190,18 @@ commit and push it.
     The access view's picture baseline gains two markers, drawn through the skull like the others.
   - The third ventricle's roof and other walls (Azab 2014, da Silva 2024, both already cited) and the temporal
     horn's walls (Kucukyuruk 2012); whom Chen 2025's percentages come from, above them on the result card.
+  Merged with its own pull request (PR 18) at the user's word (2026-11-16).
+- D-010, what is known of lesions that have not bled (the user's choices: ARUBA with its final follow-up and the
+  pooled natural history for AVMs; ISUIA and PHASES for aneurysms; not the Scottish cohort, not UCAS Japan), on
+  `fix/d010-vascular-unruptured` (made on top of the ventricles branch): two tables in `src/vascular/grading.ts`,
+  `ISUIA` (under a new heading "Unruptured aneurysms") and `ARUBA` (after the AVM grades), each with its notes; the
+  supplementary grade now cites its own paper (Lawton 2010), whose series stands beside Helsinki's in the outcome
+  table. Read in full: Lawton 2010 and Mohr 2014, as authors' manuscripts through NCBI's BioC service
+  (`https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/PMCxxxx/unicode`: it serves manuscripts
+  that Europe PMC's full-text XML refuses, and it rate-limits). Abstracts only, and marked so: Mohr 2020, Kim 2014
+  (its manuscript is in PubMed Central but neither service gave it), Wiebers 2003, Greving 2014. ISUIA's rates are
+  its abstract's; PubMed's copy has lost their decimal points, and two open papers that quote them (Golshani 2010,
+  Chen 2018) give them as on the page. PHASES has no points table: the abstract does not give the points.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -462,7 +474,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (452 tests on `fix/d009-ventricles`)
+  - `npx vitest run` (453 tests on `fix/d010-vascular-unruptured`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`

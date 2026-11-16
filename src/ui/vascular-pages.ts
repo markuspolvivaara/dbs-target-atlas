@@ -1,6 +1,6 @@
 import type { Claim } from '../brainstem/schema';
 import { DSA, LESIONS, VA_MANIFEST, VA_REF, VA_REFS } from '../vascular';
-import { AVM_TABLES, DAVF_TABLES, SAH_TABLES, type GradeTable } from '../vascular/grading';
+import { AVM_TABLES, DAVF_TABLES, SAH_TABLES, UNRUPTURED_ANEURYSM_TABLES, UNRUPTURED_AVM_TABLES, type GradeTable } from '../vascular/grading';
 import { VA_GROUP } from '../vascular/groups';
 import { h } from './h';
 import { linkLicences } from './licences';
@@ -33,11 +33,14 @@ export function vaGradingPage() {
   const el = h('div', { class: 'page wrap grading' });
   el.append(
     h('h1', {}, 'Grading'),
-    h('p', { class: 'lead' }, 'How a subarachnoid haemorrhage from an aneurysm, arteriovenous malformations and dural arteriovenous fistulas are graded, and what the grades mean for treatment. The rows marked “drawn here” are the lesions this atlas draws; open them from the mark. For teaching: not for diagnosis or planning.'),
+    h('p', { class: 'lead' }, 'How a subarachnoid haemorrhage from an aneurysm, arteriovenous malformations and dural arteriovenous fistulas are graded, and what the grades mean for treatment; and, for aneurysms and arteriovenous malformations that have not bled, what is known of their course untreated. The rows marked “drawn here” are the lesions this atlas draws; open them from the mark. For teaching: not for diagnosis or planning.'),
     h('h2', {}, 'Aneurysmal subarachnoid haemorrhage'),
     ...SAH_TABLES.map(gradeTable),
+    h('h2', {}, 'Unruptured aneurysms'),
+    ...UNRUPTURED_ANEURYSM_TABLES.map(gradeTable),
     h('h2', {}, 'Arteriovenous malformations'),
     ...AVM_TABLES.map(gradeTable),
+    ...UNRUPTURED_AVM_TABLES.map(gradeTable),
     h('h2', {}, 'Dural arteriovenous fistulas'),
     ...DAVF_TABLES.map(gradeTable),
   );
@@ -51,7 +54,7 @@ export function vaSourcesPage() {
     h('h1', {}, 'Sources'),
     h('section', { class: 'card' },
       h('h2', {}, 'References'),
-      h('p', {}, 'Every statement on the cards cites its source, checked against the open-access full text (PMC).'),
+      h('p', {}, 'Every statement on the cards cites its source, checked against the open-access full text (PMC). A source that has none says so in its citation and was checked against its abstract.'),
       h('ul', { class: 'refs' }, ...VA_REFS.map((r) => h('li', {}, r.citation, ' ', link(r.url, 'DOI'), ' · ',
         link(`https://pubmed.ncbi.nlm.nih.gov/${r.pmid}/`, 'PubMed'),
         r.pmcid ? [' · ', link(`https://pmc.ncbi.nlm.nih.gov/articles/${r.pmcid}/`, 'full text')] : null)))),
