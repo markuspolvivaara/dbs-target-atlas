@@ -912,8 +912,10 @@ its own space (mm from the centre of the L5 vertebral body), except the cranioce
   transverse and sagittal angle, chord; published lumbar regional means (Wang 2023) and transverse angles
   (Moncada-Habib 2025, Nkwerem 2024), the range of the thoracic study means tabulated by Verma 2020, and a published
   chord (thoracic screw path length on MRI, Soh 2021; lumbar chord length on CT, Arockiaraj 2025), read from the
-  papers' tables by `pipeline/spine_published.py`. The chord measured on this CT is longer than the published means
-  (lumbar by 12 to 19 mm); the card says so and that the reason is not established.
+  papers' tables by `pipeline/spine_published.py`. The chord is measured as those two studies measure theirs: in
+  the vertebra's own axial plane through the pedicle's centre, from the dorsal cortex to the anterior cortex (not
+  along the fitted axis, which tilts out of that plane). On this CT the lumbar chord is 2 to 11 mm above the
+  published mean; the card says so, and how much the chord changes with the height of the line in the pedicle.
 - **Virtual screw** (a box of its own under the level chips, closed at first; it stays while structures are picked):
   the pedicle screw at T1–T12 (the straight-forward trajectory; the anatomic one is kept in the code; Lehman 2003;
   at the published mean transverse angle where a narrow pedicle's measured axis falls outside the study means; start size

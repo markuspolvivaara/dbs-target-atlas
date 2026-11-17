@@ -2362,7 +2362,12 @@
      "height": 8.5,
      "transverseAngle": 38.2,
      "sagittalAngle": -1.3,
-     "chord": 39.1,
+     "chord": 38.5,
+     "chordBand": [
+      38.2,
+      40.5
+     ],
+     "axisChord": 39.1,
      "inscribedRadius": 3.24,
      "isthmus": [
       -25.2,
@@ -2390,7 +2395,12 @@
      "height": 9.8,
      "transverseAngle": 36.5,
      "sagittalAngle": -0.8,
-     "chord": 37.2,
+     "chord": 37.0,
+     "chordBand": [
+      36.5,
+      37.8
+     ],
+     "axisChord": 37.2,
      "inscribedRadius": 3.24,
      "isthmus": [
       3.75,
@@ -2611,7 +2621,12 @@
      "height": 12.0,
      "transverseAngle": 30.0,
      "sagittalAngle": 4.5,
-     "chord": 40.6,
+     "chord": 41.8,
+     "chordBand": [
+      39.0,
+      41.8
+     ],
+     "axisChord": 40.6,
      "inscribedRadius": 3.94,
      "isthmus": [
       -29.64,
@@ -2649,7 +2664,12 @@
      "height": 10.5,
      "transverseAngle": 31.0,
      "sagittalAngle": 5.0,
-     "chord": 42.4,
+     "chord": 42.2,
+     "chordBand": [
+      42.2,
+      43.0
+     ],
+     "axisChord": 42.4,
      "inscribedRadius": 4.06,
      "isthmus": [
       2.56,
@@ -2949,7 +2969,12 @@
      "height": 13.5,
      "transverseAngle": 22.8,
      "sagittalAngle": -14.5,
-     "chord": 45.6,
+     "chord": 44.0,
+     "chordBand": [
+      42.8,
+      44.2
+     ],
+     "axisChord": 45.6,
      "inscribedRadius": 3.51,
      "isthmus": [
       -28.42,
@@ -2977,7 +3002,12 @@
      "height": 12.2,
      "transverseAngle": 22.2,
      "sagittalAngle": -15.2,
-     "chord": 47.0,
+     "chord": 45.0,
+     "chordBand": [
+      44.0,
+      45.8
+     ],
+     "axisChord": 47.0,
      "inscribedRadius": 3.24,
      "isthmus": [
       -2.09,
@@ -3272,7 +3302,12 @@
      "height": 14.8,
      "transverseAngle": 22.5,
      "sagittalAngle": -14.5,
-     "chord": 48.8,
+     "chord": 47.5,
+     "chordBand": [
+      47.0,
+      47.5
+     ],
+     "axisChord": 48.8,
      "inscribedRadius": 2.52,
      "isthmus": [
       -29.28,
@@ -3300,7 +3335,12 @@
      "height": 14.5,
      "transverseAngle": 17.2,
      "sagittalAngle": -15.2,
-     "chord": 50.3,
+     "chord": 48.2,
+     "chordBand": [
+      47.5,
+      49.0
+     ],
+     "axisChord": 50.3,
      "inscribedRadius": 1.8,
      "isthmus": [
       -6.13,
@@ -3595,7 +3635,12 @@
      "height": 13.5,
      "transverseAngle": 6.8,
      "sagittalAngle": -13.5,
-     "chord": 43.9,
+     "chord": 43.5,
+     "chordBand": [
+      41.5,
+      44.2
+     ],
+     "axisChord": 43.9,
      "inscribedRadius": 2.52,
      "isthmus": [
       -28.72,
@@ -3623,7 +3668,12 @@
      "height": 13.0,
      "transverseAngle": 12.8,
      "sagittalAngle": -11.2,
-     "chord": 47.5,
+     "chord": 45.5,
+     "chordBand": [
+      43.5,
+      47.8
+     ],
+     "axisChord": 47.5,
      "inscribedRadius": 1.8,
      "isthmus": [
       -7.46,
@@ -3914,7 +3964,12 @@
      "height": 13.8,
      "transverseAngle": 13.8,
      "sagittalAngle": -15.8,
-     "chord": 50.5,
+     "chord": 50.0,
+     "chordBand": [
+      48.8,
+      50.2
+     ],
+     "axisChord": 50.5,
      "inscribedRadius": 2.21,
      "isthmus": [
       -26.6,
@@ -3943,6 +3998,11 @@
      "transverseAngle": 7.0,
      "sagittalAngle": -17.0,
      "chord": 45.2,
+     "chordBand": [
+      44.5,
+      45.8
+     ],
+     "axisChord": 45.2,
      "inscribedRadius": 1.8,
      "isthmus": [
       -6.04,
@@ -4232,7 +4292,12 @@
      "height": 14.0,
      "transverseAngle": -2.7,
      "sagittalAngle": -28.0,
-     "chord": 42.8,
+     "chord": 40.2,
+     "chordBand": [
+      39.2,
+      42.0
+     ],
+     "axisChord": 42.8,
      "inscribedRadius": 1.91,
      "isthmus": [
       -24.77,
@@ -4260,7 +4325,12 @@
      "height": 13.8,
      "transverseAngle": 3.0,
      "sagittalAngle": -24.5,
-     "chord": 44.2,
+     "chord": 43.8,
+     "chordBand": [
+      42.8,
+      45.0
+     ],
+     "axisChord": 44.2,
      "inscribedRadius": 2.21,
      "isthmus": [
       -3.77,
@@ -4543,7 +4613,12 @@
      "height": 14.8,
      "transverseAngle": 11.3,
      "sagittalAngle": -24.5,
-     "chord": 46.6,
+     "chord": 51.2,
+     "chordBand": [
+      50.8,
+      51.2
+     ],
+     "axisChord": 46.6,
      "inscribedRadius": 2.52,
      "isthmus": [
       -23.84,
@@ -4571,7 +4646,12 @@
      "height": 15.0,
      "transverseAngle": 9.0,
      "sagittalAngle": -12.8,
-     "chord": 52.1,
+     "chord": 49.5,
+     "chordBand": [
+      48.0,
+      49.8
+     ],
+     "axisChord": 52.1,
      "inscribedRadius": 2.6,
      "isthmus": [
       -2.6,
@@ -4845,7 +4925,12 @@
      "height": 15.8,
      "transverseAngle": 11.0,
      "sagittalAngle": -16.8,
-     "chord": 50.6,
+     "chord": 50.5,
+     "chordBand": [
+      47.8,
+      51.2
+     ],
+     "axisChord": 50.6,
      "inscribedRadius": 2.52,
      "isthmus": [
       -24.77,
@@ -4873,7 +4958,12 @@
      "height": 14.8,
      "transverseAngle": 13.5,
      "sagittalAngle": -22.0,
-     "chord": 49.5,
+     "chord": 54.0,
+     "chordBand": [
+      52.5,
+      54.5
+     ],
+     "axisChord": 49.5,
      "inscribedRadius": 2.52,
      "isthmus": [
       -3.17,
@@ -5145,7 +5235,12 @@
      "height": 16.8,
      "transverseAngle": 10.8,
      "sagittalAngle": -17.2,
-     "chord": 50.3,
+     "chord": 52.0,
+     "chordBand": [
+      51.5,
+      52.2
+     ],
+     "axisChord": 50.3,
      "inscribedRadius": 2.52,
      "isthmus": [
       -24.97,
@@ -5173,7 +5268,12 @@
      "height": 15.5,
      "transverseAngle": 14.3,
      "sagittalAngle": -16.0,
-     "chord": 51.9,
+     "chord": 55.8,
+     "chordBand": [
+      55.8,
+      57.8
+     ],
+     "axisChord": 51.9,
      "inscribedRadius": 2.6,
      "isthmus": [
       -1.52,
@@ -5442,7 +5542,12 @@
      "height": 18.5,
      "transverseAngle": 0.5,
      "sagittalAngle": -22.0,
-     "chord": 44.9,
+     "chord": 47.0,
+     "chordBand": [
+      46.2,
+      47.0
+     ],
+     "axisChord": 44.9,
      "inscribedRadius": 2.92,
      "isthmus": [
       -21.93,
@@ -5471,6 +5576,11 @@
      "transverseAngle": -1.0,
      "sagittalAngle": -1.3,
      "chord": 47.0,
+     "chordBand": [
+      47.0,
+      47.5
+     ],
+     "axisChord": 47.0,
      "inscribedRadius": 2.52,
      "isthmus": [
       0.67,
@@ -5750,7 +5860,12 @@
      "height": 17.5,
      "transverseAngle": 1.0,
      "sagittalAngle": -26.3,
-     "chord": 49.6,
+     "chord": 46.2,
+     "chordBand": [
+      45.8,
+      46.5
+     ],
+     "axisChord": 49.6,
      "inscribedRadius": 3.5,
      "isthmus": [
       -20.29,
@@ -5778,7 +5893,12 @@
      "height": 20.5,
      "transverseAngle": -1.7,
      "sagittalAngle": -31.0,
-     "chord": 47.4,
+     "chord": 45.8,
+     "chordBand": [
+      45.2,
+      46.0
+     ],
+     "axisChord": 47.4,
      "inscribedRadius": 3.24,
      "isthmus": [
       5.01,
@@ -6051,7 +6171,12 @@
      "height": 19.2,
      "transverseAngle": 4.2,
      "sagittalAngle": -15.8,
-     "chord": 47.1,
+     "chord": 50.8,
+     "chordBand": [
+      49.5,
+      51.8
+     ],
+     "axisChord": 47.1,
      "inscribedRadius": 4.18,
      "isthmus": [
       -20.29,
@@ -6079,7 +6204,12 @@
      "height": 18.2,
      "transverseAngle": 6.2,
      "sagittalAngle": -22.8,
-     "chord": 54.8,
+     "chord": 53.0,
+     "chordBand": [
+      52.0,
+      53.8
+     ],
+     "axisChord": 54.8,
      "inscribedRadius": 3.81,
      "isthmus": [
       8.74,
@@ -6349,7 +6479,12 @@
      "height": 16.8,
      "transverseAngle": 16.8,
      "sagittalAngle": -9.5,
-     "chord": 68.5,
+     "chord": 58.5,
+     "chordBand": [
+      57.2,
+      60.2
+     ],
+     "axisChord": 68.5,
      "inscribedRadius": 3.24,
      "isthmus": [
       -20.16,
@@ -6377,7 +6512,12 @@
      "height": 17.5,
      "transverseAngle": 13.5,
      "sagittalAngle": -2.8,
-     "chord": 61.0,
+     "chord": 59.2,
+     "chordBand": [
+      57.8,
+      61.8
+     ],
+     "axisChord": 61.0,
      "inscribedRadius": 3.24,
      "isthmus": [
       8.16,
@@ -6642,7 +6782,12 @@
      "height": 16.5,
      "transverseAngle": 18.2,
      "sagittalAngle": -16.7,
-     "chord": 67.3,
+     "chord": 59.0,
+     "chordBand": [
+      57.2,
+      60.2
+     ],
+     "axisChord": 67.3,
      "inscribedRadius": 3.24,
      "isthmus": [
       -20.4,
@@ -6670,7 +6815,12 @@
      "height": 16.0,
      "transverseAngle": 16.0,
      "sagittalAngle": -12.0,
-     "chord": 65.6,
+     "chord": 61.0,
+     "chordBand": [
+      58.5,
+      61.8
+     ],
+     "axisChord": 65.6,
      "inscribedRadius": 3.2,
      "isthmus": [
       8.18,
@@ -6934,7 +7084,12 @@
      "height": 16.0,
      "transverseAngle": 14.0,
      "sagittalAngle": -7.0,
-     "chord": 62.6,
+     "chord": 58.2,
+     "chordBand": [
+      55.2,
+      60.5
+     ],
+     "axisChord": 62.6,
      "inscribedRadius": 4.19,
      "isthmus": [
       -21.08,
@@ -6962,7 +7117,12 @@
      "height": 15.2,
      "transverseAngle": 9.8,
      "sagittalAngle": -5.0,
-     "chord": 63.7,
+     "chord": 58.2,
+     "chordBand": [
+      54.8,
+      62.5
+     ],
+     "axisChord": 63.7,
      "inscribedRadius": 4.4,
      "isthmus": [
       11.33,
@@ -7218,7 +7378,12 @@
      "height": 15.0,
      "transverseAngle": 16.0,
      "sagittalAngle": -13.5,
-     "chord": 66.9,
+     "chord": 57.0,
+     "chordBand": [
+      56.0,
+      59.2
+     ],
+     "axisChord": 66.9,
      "inscribedRadius": 4.66,
      "isthmus": [
       -21.39,
@@ -7246,7 +7411,12 @@
      "height": 14.8,
      "transverseAngle": 7.3,
      "sagittalAngle": -13.3,
-     "chord": 64.3,
+     "chord": 53.8,
+     "chordBand": [
+      51.2,
+      56.0
+     ],
+     "axisChord": 64.3,
      "inscribedRadius": 5.29,
      "isthmus": [
       16.01,
@@ -7507,7 +7677,12 @@
      "height": 15.8,
      "transverseAngle": 16.8,
      "sagittalAngle": -9.8,
-     "chord": 60.5,
+     "chord": 56.5,
+     "chordBand": [
+      46.5,
+      58.5
+     ],
+     "axisChord": 60.5,
      "inscribedRadius": 4.2,
      "isthmus": [
       -24.13,
@@ -7535,7 +7710,12 @@
      "height": 16.0,
      "transverseAngle": 8.0,
      "sagittalAngle": -16.0,
-     "chord": 62.2,
+     "chord": 49.5,
+     "chordBand": [
+      42.5,
+      52.5
+     ],
+     "axisChord": 62.2,
      "inscribedRadius": 3.96,
      "isthmus": [
       22.95,

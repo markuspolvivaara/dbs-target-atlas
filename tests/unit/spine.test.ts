@@ -571,14 +571,38 @@ describe('spine texts and sources (audit E-012 to E-018)', () => {
     expect(published.levels.L5.chordSaudi).toEqual({ meanSd: [47.63, 3.45], n: 300 });
     expect(published.thoracic.T1.chordSoh).toEqual({ meanSd: [34.0, 4.6], n: 45 });
     expect(published.thoracic.T12.chordSoh).toEqual({ meanSd: [47.0, 4.6], n: 87 });
-    // the statement's figures, from the data: lumbar 12 to 19 mm longer than the mean, thoracic up to 13 mm
-    const diffs = (levels: string[], mean: (lv: string) => number) => levels.flatMap((lv) => (['L', 'R'] as const).map((sd) => SCREW_LEVELS[lv].pedicle![sd].chord - mean(lv)));
-    const lum = diffs(['L1', 'L2', 'L3', 'L4', 'L5'], (lv) => (published.levels as Record<string, { chordSaudi: { meanSd: number[] } }>)[lv].chordSaudi.meanSd[0]);
-    const tho = diffs(Array.from({ length: 12 }, (_, i) => `T${i + 1}`), (lv) => (published.thoracic as unknown as Record<string, { chordSoh: { meanSd: number[] } }>)[lv].chordSoh.meanSd[0]);
-    expect([Math.round(Math.min(...lum)), Math.round(Math.max(...lum))]).toEqual([12, 19]);
-    expect(Math.min(...tho)).toBeGreaterThanOrEqual(0);
-    expect(Math.round(Math.max(...tho))).toBe(13);
-    expect(STATEMENTS.publishedChord.text).toMatch(/by 12 to 19 mm than the published mean at every lumbar level, and by up to 13 mm at the thoracic ones/);
+    // the statement's figures, from the data. The chord is measured as the two studies measure theirs (the owner's
+    // choice of 17 November 2026: in the axial plane only; until then it ran along the fitted axis and was 12 to 19 mm
+    // longer than the lumbar means): lumbar 2 to 11 mm above the mean, thoracic from 2 mm below it to 11 mm above
+    const LUMBAR = ['L1', 'L2', 'L3', 'L4', 'L5'], THORACIC = Array.from({ length: 12 }, (_, i) => `T${i + 1}`);
+    const peds = (levels: string[]) => levels.flatMap((lv) => (['L', 'R'] as const).map((sd) => ({ lv, sd, p: SCREW_LEVELS[lv].pedicle![sd] })));
+    const lumPub = (lv: string) => (published.levels as Record<string, { chordSaudi: { meanSd: number[] } }>)[lv].chordSaudi.meanSd;
+    const thoPub = (lv: string) => (published.thoracic as unknown as Record<string, { chordSoh: { meanSd: number[] } }>)[lv].chordSoh.meanSd;
+    const span = (v: number[]) => [Math.min(...v), Math.max(...v)];
+    const lum = peds(LUMBAR).map(({ lv, p }) => p.chord - lumPub(lv)[0]), tho = peds(THORACIC).map(({ lv, p }) => p.chord - thoPub(lv)[0]);
+    expect(span(lum).map(Math.round)).toEqual([2, 11]);
+    expect(span(tho).map(Math.round)).toEqual([-2, 11]);
+    // in the studies' own standard deviations
+    expect(Math.max(...peds(LUMBAR).map(({ lv, p }) => (p.chord - lumPub(lv)[0]) / lumPub(lv)[1])).toFixed(1)).toBe('3.4');
+    expect(Math.max(...peds(THORACIC).map(({ lv, p }) => Math.abs(p.chord - thoPub(lv)[0]) / thoPub(lv)[1])).toFixed(1)).toBe('2.0');
+    expect(STATEMENTS.publishedChord.text).toMatch(/the lumbar chord is 2 to 11 mm longer than the published mean, up to 3\.4 of that study’s standard deviations; the thoracic one lies from 2 mm below the mean to 11 mm above it, up to 2\.0 standard deviations/);
+    // how much the chord changes with the line's height (the same line up to 2 mm lower and higher): each chord lies in
+    // its band, and the bands are wide in the lumbar spine
+    for (const { lv, sd, p } of peds([...THORACIC, ...LUMBAR, 'C7'])) {
+      expect(p.chordBand[0], `${lv}${sd}`).toBeLessThanOrEqual(p.chord);
+      expect(p.chordBand[1], `${lv}${sd}`).toBeGreaterThanOrEqual(p.chord);
+    }
+    const widths = (levels: string[]) => span(peds(levels).map(({ p }) => p.chordBand[1] - p.chordBand[0]));
+    expect(widths(LUMBAR).map(Math.round)).toEqual([3, 12]);
+    expect(widths(THORACIC).map((x) => x.toFixed(1))).toEqual(['0.4', '4.3']);
+    expect(STATEMENTS.publishedChord.text).toMatch(/the chord changes by 3 to 12 mm at the lumbar levels and by 0\.4 to 4\.3 mm at the thoracic ones/);
+    // the length along the fitted axis stays in the data (the thoracic anatomic start's path), off the card: in the
+    // lumbar spine it is 2 to 13 mm longer than the chord
+    expect(span(peds(LUMBAR).map(({ p }) => p.axisChord - p.chord)).map(Math.round)).toEqual([2, 13]);
+    for (const { lv, sd, p } of peds(THORACIC)) expect(SCREW_LEVELS[lv].start.at![sd].chord, `${lv}${sd}`).toBe(p.axisChord);
+    expect(STATEMENTS.pedicleMethod.text).toMatch(/in the vertebra’s own axial plane \(parallel to its upper endplate\) through the centre of the isthmus/);
+    expect(STATEMENTS.pedicleMethod.text).toMatch(/it is not the length along the fitted axis/);
+    expect(STATEMENTS.publishedChord.text).not.toMatch(/has not been worked out/);
     expect(STATEMENTS.publishedChord.text).toMatch(/do not read the measured chord as a screw length/);
     expect(STATEMENTS.publishedChord.refIds).toEqual(['soh2021', 'arockiaraj2025']);
   });

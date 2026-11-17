@@ -9,7 +9,8 @@ as there, and taken as one solid: solid()) and S1 (TotalSegmentator sacrum, as d
     centre to the body centre within that plane, e_x patient right;
   * per pedicle: the isthmus (the narrowest cross-section normal to the pedicle axis) with its width and height, the
     axis (line through the cross-section centroids), its transverse and sagittal angles, the entry point (where the axis
-    leaves the dorsal bone surface) and the chord (entry to the anterior cortex);
+    leaves the dorsal bone surface), the chord (dorsal cortex to anterior cortex in the vertebra's axial plane, as the
+    published studies measure it: CHORD_BAND) and the length along the axis itself;
   * technique start positions (see TECHNIQUES in src/spine/content.ts for the sources): lumbar traditional trajectory
     through the isthmus at the measured transverse angle; cortical bone trajectory from the inferomedial border of the
     pedicle at the published angles; S1 tricortical parallel to the endplate with medial convergence towards the
@@ -88,6 +89,18 @@ ISTHMUS_BACK = {"lumbar": 4.0, "thoracic": 4.0, "cervical": -4.0}
 # HELD_MAX_LOSS_MM of clearance (half a voxel).
 HELD_TO_PUBLISHED = {("T1", "L")}
 HELD_MAX_LOSS_MM = 0.36
+# The chord, as the studies shown beside it measure theirs (Arockiaraj 2025 and Soh 2021, each paper's Figure 1): on an
+# axial image, along the pedicle's axis in that image, from the dorsal cortex to the anterior cortex of the body. Here
+# in the vertebra's own axial plane (parallel to its superior endplate) through the isthmus centre, at the pedicle's
+# measured transverse angle, as the one run of bone on that line (no gap is bridged). Until 17 November 2026 the chord
+# was the length along the fitted axis in three dimensions, which tilts towards the superior articular process: 2 to
+# 13 mm longer in the lumbar spine (that length stays in the data as axisChord, the anatomic start's path).
+# The dorsal surface behind a lumbar pedicle is steep (the superior articular process rises there), so the height of
+# the line matters: the same line is also measured up to CHORD_BAND mm lower and higher, a millimetre apart, and the
+# shortest and the longest are kept (chordBand). 2 mm: less than one slice of the lumbar study (2.5 mm), and inside
+# every pedicle here (further up, a line through a thoracic pedicle runs out above the rim of the body)
+CHORD_BAND = 2
+CHORD_REACH = 80.0  # mm either way along the line
 FILL_RATIO = 0.8
 DEPTH_RATIO = 0.8
 MIN_DIAMETER = 3.5
@@ -360,9 +373,16 @@ def pedicle(bone: Bone, c: np.ndarray, F: np.ndarray, can: dict, sg: int, span: 
     front = surface_along(bone, centre, d)
     entry = centre - back * d
     ta, sa = angles(d, F, sg)
+    # the chord in the axial plane (CHORD_BAND): at the centre's height, and the lines beside it
+    d_ax = direction(F, sg, ta, 0.0)
+    axial = {dz: run_through(bone, centre + dz * F[2], d_ax, CHORD_REACH) for dz in range(-CHORD_BAND, CHORD_BAND + 1)}
+    if not axial[0]:
+        raise SystemExit("the isthmus centre is not in bone: no chord")
+    band = [v for v in axial.values() if v]
     rel = isth["centre"] - c
     return {"width": round(isth["width"], 1), "height": round(isth["height"], 1), "transverseAngle": round(ta, 1),
-            "sagittalAngle": round(sa, 1), "chord": round(back + front, 1), "inscribedRadius": round(r, 2),
+            "sagittalAngle": round(sa, 1), "chord": round(axial[0], 1), "chordBand": [round(min(band), 1), round(max(band), 1)],
+            "axisChord": round(back + front, 1), "inscribedRadius": round(r, 2),
             "isthmus": centre.round(2).tolist(), "isthmusUvw": [round(float(rel @ F[i]), 1) for i in range(3)],
             "entry": entry.round(2).tolist(), "dir": d.round(4).tolist(), **({"held": held} if held else {})}
 
@@ -1269,7 +1289,7 @@ def level_data(lv: str, region_name: str, m: np.ndarray, ct: np.ndarray, body_ma
             # straight-forward: as the lumbar traditional start (through the isthmus at the measured transverse angle,
             # parallel to the superior endplate); anatomic: along the measured pedicle axis
             starts["st"] = {sd: tt_start(bone, F, ped[sd], sg, lv) for sd, sg in (("L", -1), ("R", 1))}
-            starts["at"] = {sd: {"entry": ped[sd]["entry"], "dir": ped[sd]["dir"], "chord": ped[sd]["chord"]} for sd in ("L", "R")}
+            starts["at"] = {sd: {"entry": ped[sd]["entry"], "dir": ped[sd]["dir"], "chord": ped[sd]["axisChord"]} for sd in ("L", "R")}
         else:
             starts["tt"] = {sd: tt_start(bone, F, ped[sd], sg) for sd, sg in (("L", -1), ("R", 1))}
             starts["cbt"] = {sd: cbt_start(bone, F, ped[sd], sg, lv) for sd, sg in (("L", -1), ("R", 1))}
@@ -1352,6 +1372,11 @@ def validate(out: dict) -> list[str]:
                 for k, (lo, hi) in bounds.items():
                     if not lo <= p[k] <= hi:
                         fails.append(f"{lv}{sd}: pedicle {k} {p[k]}")
+                # the chord lies among the lines beside it, and the axis's own length is no shorter than the body allows
+                if not p["chordBand"][0] <= p["chord"] <= p["chordBand"][1]:
+                    fails.append(f"{lv}{sd}: chord {p['chord']} outside its band {p['chordBand']}")
+                if not bounds["chord"][0] <= p["axisChord"] <= bounds["chord"][1]:
+                    fails.append(f"{lv}{sd}: length along the axis {p['axisChord']}")
                 hd = p.get("held")
                 if ((lv, sd) in HELD_TO_PUBLISHED) != bool(hd):
                     fails.append(f"{lv}{sd}: held axis {'missing' if not hd else 'not asked for'}")
