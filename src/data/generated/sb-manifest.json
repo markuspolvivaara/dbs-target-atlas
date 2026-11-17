@@ -518,7 +518,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_spinal_artery.glb",
-   "bytes": 7020,
+   "bytes": 6964,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -535,17 +535,17 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head.",
+   "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Cut where the drawn medulla ends: it runs on down the spinal cord, which this model does not show (vessel_end.py).",
    "centroid": {
     "L": [
-     -5.2,
-     -34.95,
-     -37.73
+     -5.27,
+     -34.86,
+     -37.34
     ],
     "R": [
-     5.2,
-     -34.95,
-     -37.73
+     5.28,
+     -34.86,
+     -37.33
     ]
    },
    "system": "Vertebral artery",

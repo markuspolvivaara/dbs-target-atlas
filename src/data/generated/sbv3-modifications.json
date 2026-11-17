@@ -120,6 +120,58 @@
    "date": "2026-11-15"
   },
   {
+   "step": "skullbase_v3_ends",
+   "operation": "a vessel that runs on down the spinal cord, which the model does not draw, cut where the drawn medulla is cut",
+   "structures": [
+    "Anterior spinal artery"
+   ],
+   "parameters": {
+    "vessels": [
+     "Anterior spinal artery"
+    ],
+    "pastMm": 0.05
+   },
+   "metrics": {
+    "Anterior spinal artery": {
+     "cut": {
+      "point": [
+       -2.63,
+       -29.76,
+       -54.86
+      ],
+      "normal": [
+       -0.0621,
+       0.5881,
+       -0.8064
+      ],
+      "areaMm2": 120.6,
+      "rmsMm": 0.14
+     },
+     "L": {
+      "pastMm": 5.53,
+      "pointsPast": 74,
+      "points": 306,
+      "loops": 1,
+      "pointsAfter": 253,
+      "pastAfterMm": 0.0
+     },
+     "R": {
+      "pastMm": 9.02,
+      "pointsPast": 110,
+      "points": 330,
+      "loops": 1,
+      "pointsAfter": 239,
+      "pastAfterMm": 0.0
+     }
+    }
+   },
+   "validation": {
+    "check": "skullbase_v3_clearance.check: none of it past the medulla's cut end"
+   },
+   "revision": "0d0159f",
+   "date": "2026-11-17"
+  },
+  {
    "step": "skullbase_v3_junctions",
    "operation": "vessels joined where their sources stop short (drawn segments); the confluence of the sinuses drawn",
    "structures": [

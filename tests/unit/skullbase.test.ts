@@ -1128,6 +1128,41 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     // the three anterolateral summaries say they are there to find
     for (const id of ['pterional', 'lso', 'orbitozygomatic']) expect(APPROACHES.find((a) => a.id === id)!.summary, id).toMatch(/both communicating arteries.*the basilar artery.*turn the view to find them/);
   });
+  // the owner's word of 17 November 2026, once the far lateral view drew it: the anterior spinal artery is cut where the
+  // medulla is cut (the models draw no spinal cord, and it ran on past the medulla's end into empty space)
+  it('AP-08: the anterior spinal artery ends where the drawn medulla ends, on both models', async () => {
+    type Half = { pastMm: number; pastAfterMm: number; loops: number };
+    type Cut = { cut: { point: number[]; normal: number[]; areaMm2: number; rmsMm: number }; L: Half; R: Half };
+    const steps = (mods: unknown) => (mods as { steps: { step: string; metrics: Record<string, Cut> }[] }).steps;
+    const v3Mods = (await import('../../src/data/generated/sbv3-modifications.json')).default;
+    const named = (list: { name: string; file: string; derivation?: string; pushedFrom?: string }[], n: string) => list.find((x) => x.name === n && !x.pushedFrom)!;
+    const cases: [string, Cut, typeof v3.structures, [number, number]][] = [
+      ['v3', steps(v3Mods).find((x) => x.step === 'skullbase_v3_ends')!.metrics['Anterior spinal artery'], v3.structures, [5.53, 9.02]],
+      ['v1', steps(sbModifications).find((x) => x.step === 'skullbase_v1_ends')!.metrics['Anterior spinal artery'], SB_MANIFEST.structures, [1.98, 1.98]],
+    ];
+    // the furthest a surface reaches past the cut's plane (mm; negative: it stops short of it)
+    const past = (P: Float64Array, c: number[], n: number[]) => {
+      let m = -Infinity;
+      for (let i = 0; i < P.length; i += 3) m = Math.max(m, (P[i] - c[0]) * n[0] + (P[i + 1] - c[1]) * n[1] + (P[i + 2] - c[2]) * n[2]);
+      return m;
+    };
+    for (const [model, cut, list, ran] of cases) {
+      const artery = named(list, 'Anterior spinal artery'), medulla = named(list, 'Medulla oblongata');
+      // the plane is the medulla's own cut end: a flat face of it, which nothing of the medulla passes
+      expect(cut.cut.areaMm2, model).toBeGreaterThan(100);
+      expect(cut.cut.rmsMm, model).toBeLessThan(0.2);
+      expect(Math.abs(past((await meshSoup(medulla.file)).P, cut.cut.point, cut.cut.normal)), model).toBeLessThan(0.3);
+      // the artery ran past it, and now reaches it and stops there (the shipped file's positions are stored to 0.02 mm)
+      expect([cut.L.pastMm, cut.R.pastMm], model).toEqual(ran);
+      expect([cut.L.pastAfterMm, cut.R.pastAfterMm, cut.L.loops, cut.R.loops], model).toEqual([0, 0, 1, 1]);
+      expect(Math.abs(past((await meshSoup(artery.file)).P, cut.cut.point, cut.cut.normal)), model).toBeLessThan(0.05);
+      expect(artery.derivation, model).toMatch(/Cut where the drawn medulla ends: it runs on down the spinal cord, which this model does not show/);
+    }
+    // the far lateral view says so on both models
+    const { V1_TEXT } = await import('../../src/skullbase/approaches');
+    for (const text of [APPROACHES.find((a) => a.id === 'far_lateral')!.notShown, V1_TEXT.far_lateral.notShown])
+      expect(text).toMatch(/The spinal cord is not drawn either: the medulla is cut about a centimetre below the foramen magnum, and the anterior spinal artery is cut with it/);
+  });
 });
 
 describe('v1 tumours: the same rules on the Z-Anatomy model, as far as it has room', async () => {

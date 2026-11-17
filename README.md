@@ -249,7 +249,9 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   superior cerebellar arteries and the trochlear nerve in the orbitozygomatic view; the hypoglossal and trochlear
   nerves and the superior petrosal sinus in the retrosigmoid view; the oculomotor and trochlear nerves in the Kawase
   view; the anterior spinal artery in the far lateral view. Most of these do not show from the view's opening camera:
-  the summaries say to turn the view.
+  the summaries say to turn the view. The anterior spinal artery is cut where the drawn medulla is cut
+  (`pipeline/vessel_end.py`, used by `skullbase_v3_clearance.py` and `skullbase_v1_ends.py`): the models draw no
+  spinal cord, and the artery ran on past the medulla's end into empty space.
 - **The endoscopic endonasal (transsphenoidal) view** (`pipeline/skullbase_v3_endonasal.py`,
   `src/skullbase/endonasal.ts`, `src/ui/skullbase-endonasal.ts`): a 0° endoscope through one nostril into the sphenoid
   sinus, the way opened step by step, onto the hypophysis. The CT around the sphenoid is cropped to fields on a 0.5-mm grid
