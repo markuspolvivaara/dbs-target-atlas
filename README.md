@@ -362,6 +362,19 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   and the ganglion, the abducens nerve; margins illustrative); the rhomboid outlined on the floor; the temporal lobe drawn
   held up off the floor for its view (`br_temporal_lobe__kawase`, `forView`). The card lists the limits and what is at
   risk (Flores-Justa 2021, Signoretti 2025, Voormolen 2020) and this model's rhomboid measurements.
+- **Subtemporal approach** (`skullbase_v3_approach.py`, `skullbase_v3.py approaches`; on both models). A right temporal
+  flap of 5 × 5 cm centred front to back over the root of the zygomatic arch and cut flush with the middle fossa floor
+  (Nakov 2017). The root is found on the skull from the side (`zygomatic_root`): where, going back, the arch last
+  stands free of the squama. Only the wall of the cranial cavity is taken, of the temporal, sphenoid and parietal
+  bones, so the zygoma, its arch and the orbit's lateral wall stay; nothing is drilled. A slider lifts the temporal
+  lobe off the floor (`temporal_lobe_shape` in `skullbase_v3.py`): the shape is a morph target on a copy of the lobe
+  drawn in this view only (`br_temporal_lobe__subtemporal`, `forView`), so no brain step is rerun for it and no other
+  view's file changes; 15 mm under the flap's middle, falling off front and back, towards the midline and with
+  height (the Kawase view's values, illustrative). Nothing else moves. The view looks along the floor under the lobe
+  (camera `subtemporalLow`) to the oculomotor and trochlear nerves, the posterior cerebral and superior cerebellar
+  arteries and the top of the basilar artery; the default model draws the vein of Labbé (by rule), the Z-Anatomy
+  model its tentorium. The card's sections are sourced from Nakov 2017, Choque-Velasquez 2018c (a video article's
+  abstract), Li 2022, Sanchez Correa 2019, Mincă 2022 and Signoretti 2025.
 - **Greater petrosal nerve** seated on the drawn skull past the facial hiatus (`seat_on_skull` in `skullbase_v3.py`;
   `skullbase_v3.py gspn` re-seats it alone): it was lifted onto the CT's bone, which lies up to a millimetre below the
   completed skull the viewer draws, so it ran inside the drawn bone.
@@ -474,7 +487,7 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
     - the bone over the superior semicircular canal;
     - the greater petrosal nerve, by v3's rule (Gupta 2013; Nguyen 2026's mean length) on this skull.
 - **Surgical views**: Skull base v3's craniotomies are cut on Z-Anatomy's own skull (pterional transsylvian, lateral
-  supraorbital, interhemispheric, telovelar, retrosigmoid, orbitozygomatic, far lateral and Kawase), over Z-Anatomy's own brain
+  supraorbital, interhemispheric, telovelar, retrosigmoid, orbitozygomatic, far lateral, Kawase and subtemporal), over Z-Anatomy's own brain
   and hindbrain, with v3's sourced cards and sliders. Nothing comes from the CT, the template brain or the registered
   ear. How each part is made:
   - The bones are rasterised at 0.5 mm (`pipeline/skullbase_v1_skull.py`). A closed mesh is filled; a nearly closed one

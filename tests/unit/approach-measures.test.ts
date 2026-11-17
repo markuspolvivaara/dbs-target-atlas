@@ -18,7 +18,7 @@ const MODELS: [string, Record<string, Geom>, { structures: { id: string; file: s
   ['the default model (this CT)', v3 as unknown as Record<string, Geom>, v3Manifest as never],
   ['the Z-Anatomy model', v1 as unknown as Record<string, Geom>, v1Manifest as never],
 ];
-const IDS = ['pterional', 'lso', 'interhemispheric', 'suboccipital', 'retrosigmoid', 'orbitozygomatic', 'far_lateral', 'kawase'];
+const IDS = ['pterional', 'lso', 'interhemispheric', 'suboccipital', 'retrosigmoid', 'orbitozygomatic', 'far_lateral', 'kawase', 'subtemporal'];
 const LSO_MEAN = 1275;   // mm², Cha 2012
 
 /** A closed surface's volume (ml). */
@@ -40,7 +40,9 @@ describe.each(MODELS)('craniotomies on %s: the cards give what the cut measures'
       expect(g.measured?.faceOnMm2, id).toBeGreaterThan(400);
       // the removed bone's own card carries the same words
       const it_ = manifest.structures.find((s) => s.id === g.removed)!;
-      expect(it_.derivation, id).toBe(`The bone the ${(geom[id] as unknown as { name: string }).name.toLowerCase()} removes: ${g.removedMl} ml. ${g.how}`);
+      // (the pipeline writes a whole number of millilitres with its decimal: "11.0 ml")
+      const ml = Number.isInteger(g.removedMl) ? g.removedMl.toFixed(1) : String(g.removedMl);
+      expect(it_.derivation, id).toBe(`The bone the ${(geom[id] as unknown as { name: string }).name.toLowerCase()} removes: ${ml} ml. ${g.how}`);
     }
   });
 

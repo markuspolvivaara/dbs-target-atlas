@@ -1413,6 +1413,10 @@ def approach_items(items: list, ex2: dict, build: Path | None = None, kind: str 
             summary[aid]["guides"] = [gid]
         if aid == "kawase":
             lift_temporal_lobe(items, ap, build, kind)
+        if aid == "subtemporal":    # its slider's shape, on a copy of the temporal lobe drawn in that view; what the shape measures
+            lift = temporal_lobe_shape(items, ap, build, kind)
+            if lift:
+                summary[aid]["measured"] = {**summary[aid].get("measured", {}), **lift}
     (GEN / f"{prefix}-approaches.json").write_text(json.dumps(summary, indent=1, ensure_ascii=False))
 
 
@@ -1680,6 +1684,54 @@ def lift_temporal_lobe(items: list, ap: dict, build: Path | None = None, kind: s
                   "replaces": src["id"], "pushedFrom": src["file"], "forView": "kawase", "centroid": cent,
                   "derivation": src["derivation"].rstrip() + f" In the Kawase view held up off the middle fossa floor (extradurally, with its dura) "
                   f"by up to {moved:.0f} mm over the petrous apex (skullbase_v3.py: lift_temporal_lobe; illustrative): a shape, not a simulation."})
+
+
+ST_LIFT_MM = 15.0        # the subtemporal view's slider: at full, the temporal lobe's basal surface is this far up ...
+ST_LIFT_SPAN_MM = 16.0   # ... the lift falling off with a Gaussian of this width front to back from the flap's middle ...
+ST_LIFT_FALL_MM = 18.0   # ... and exponentially over this height above the middle fossa floor (all three illustrative: the
+#                          Kawase view's values). ST_LIFT_MM / ST_LIFT_FALL_MM is below 1: no point overtakes the one above
+#                          it, so the lobe cannot fold
+ST_LIFT_MEDIAL_MM = (8.0, 18.0)   # none of it nearer the midline than the first, all of it beyond the second (as the Kawase view's)
+ST_SHAPE = "subtemporal"  # the shape's name: the morph target the viewer's slider moves (MORPH_PARAMS in src/skullbase/state.ts)
+
+
+def temporal_lobe_shape(items: list, ap: dict, build: Path | None = None, kind: str = KIND) -> dict | None:
+    """The temporal lobe as the subtemporal view draws it: a copy that stands in for it there, at rest as the lobe is, with
+    one shape of the brain (ST_SHAPE, a morph target: the view's slider): each point of the right lobe lifted ST_LIFT_MM
+    times a weight that falls off front to back from the flap's middle (the zygomatic arch's root; ST_LIFT_SPAN_MM), towards
+    the midline (ST_LIFT_MEDIAL_MM) and with height above the middle fossa floor (ST_LIFT_FALL_MM). The Kawase view's
+    lift (lift_temporal_lobe) is the same kind of field, fixed; this one is a slider. Nothing else is moved: the arteries
+    and nerves at the tentorial edge stay, and the vein of Labbe lies behind the lift's reach. A shape, not a simulation.
+    Returns what the card says of it."""
+    src = next((it for it in items if it["id"] == "br_temporal_lobe"), None)
+    if src is None or "root" not in ap:
+        return None
+    from glb import read_glb_full
+    build = build or BUILD
+    nodes = read_glb_full(build / Path(src["file"]).name)
+    c = np.array(ap["root"], float)
+    out, moved, n_moved = [], 0.0, 0
+    for s_, nd in nodes.items():
+        V = nd["positions"]
+        node = {"name": s_, "positions": V, "normals": mesh_normals(V, nd["indices"]), "indices": nd["indices"], "mode": TRIANGLES}
+        if s_ == "R":
+            w = (np.exp(-((V[:, 1] - c[1]) ** 2) / (2 * ST_LIFT_SPAN_MM ** 2))
+                 * np.clip((V[:, 0] - ST_LIFT_MEDIAL_MM[0]) / (ST_LIFT_MEDIAL_MM[1] - ST_LIFT_MEDIAL_MM[0]), 0, 1)
+                 * np.exp(-np.maximum(0.0, V[:, 2] - c[2]) / ST_LIFT_FALL_MM))
+            D = np.zeros_like(V)
+            D[:, 2] = ST_LIFT_MM * w
+            moved, n_moved = float(D[:, 2].max()), int((D[:, 2] > 0.5).sum())
+            node["targets"] = [{"name": ST_SHAPE, "positions": D, "normals": mesh_normals(V + D, nd["indices"]) - node["normals"]}]
+        out.append(node)
+    assert ST_LIFT_MM / ST_LIFT_FALL_MM < 1, "the subtemporal lift would fold the lobe"
+    nid = "br_temporal_lobe__subtemporal"
+    write_glb(build / f"{nid}.glb", out, {"id": nid})
+    items.append({**{k: v for k, v in src.items() if k not in ("morph",)}, "id": nid, "file": f"assets/{kind}/{nid}.glb", "bytes": 0,
+                  "replaces": src["id"], "pushedFrom": src["file"], "forView": "subtemporal", "morph": True, "centroid": dict(src["centroid"]),
+                  "derivation": src["derivation"].rstrip() + f" In the subtemporal view its slider lifts it off the middle fossa floor by up to "
+                  f"{moved:.0f} mm at the flap's middle, less front and back of it, towards the midline and with height above the floor "
+                  "(skullbase_v3.py: temporal_lobe_shape; illustrative): a shape, not a simulation."})
+    return {"liftMm": ST_LIFT_MM, "liftSpanMm": ST_LIFT_SPAN_MM, "liftFallMm": ST_LIFT_FALL_MM, "liftedMaxMm": round(moved, 1)}
 
 
 def approaches_only() -> int:

@@ -277,5 +277,36 @@
   "guides": [
    "sb_appr_kawase__guide"
   ]
+ },
+ "subtemporal": {
+  "name": "Subtemporal craniotomy",
+  "side": "R",
+  "how": "A right temporal flap drawn 50 × 50 mm (2500 mm² seen from the side as drawn; Nakov 2017: 5 × 5 cm, below the superior temporal line and centred above the root of the zygoma; the bone removed covers about 2160 mm² seen from the side), centred front to back over the zygomatic arch's root as found on this skull (where, going back, the arch last stands free of the squama: 2.0 mm in front of the frame's origin; its upper surface there lies 2.6 mm above the level of the middle fossa floor, taken at the tegmen as located on this CT; Nakov 2017: the floor is level with the root's upper surface), its base at that level, cut down flush with the floor. Only the wall of the cranial cavity is taken, of the temporal, sphenoid and parietal bones: the zygoma, its arch and the orbit's lateral wall stay. The petrous apex is not drilled.",
+  "removedMl": 9.9,
+  "bones": [
+   "sb_appr_subtemporal__frontal_bone",
+   "sb_appr_subtemporal__parietal_bone",
+   "sb_appr_subtemporal__sphenoid_bone",
+   "sb_appr_subtemporal__temporal_bone"
+  ],
+  "cutBones": [
+   "sb_appr_subtemporal__parietal_bone",
+   "sb_appr_subtemporal__sphenoid_bone",
+   "sb_appr_subtemporal__temporal_bone"
+  ],
+  "removed": "sb_appr_subtemporal__removed",
+  "burrHoles": [],
+  "measured": {
+   "archRootY": 2.0,
+   "archTopZ": -6.6,
+   "floorZ": -9.2,
+   "flapMm2": 2500,
+   "faceOnMm2": 2433,
+   "sideMm2": 2160,
+   "liftMm": 15.0,
+   "liftSpanMm": 16.0,
+   "liftFallMm": 18.0,
+   "liftedMaxMm": 15.0
+  }
  }
 }

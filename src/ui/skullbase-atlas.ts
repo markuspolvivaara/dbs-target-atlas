@@ -101,6 +101,13 @@ const MORPH_UI: Record<string, { label: string; key: string; toggle?: boolean; n
       return `At 100 % the right tonsil, biventral lobule and inferior semilunar lobule (the hemisphere’s lower outer corner) are up to ${fmtMm(p.params.flBackMm)} mm further back, each point stopping short of the occipital bone, the rest of the right hemisphere following less the further it lies from them (none ${fmtMm(p.params.flReachMm)} mm away); the tonsil and biventral lobule are then ${fmtMm(f.medullaGapMm.back)} mm from the medulla, ${fmtMm(f.medullaGapMm.rest)} mm at rest. A view aid, not a step the sources describe: with the lift on too, the cerebellum can be held where no retractor would hold it. The posterior inferior cerebellar artery’s course on the cerebellum moves with it.`;
     },
   },
+  subtemporal: {
+    // (its numbers come with the craniotomy, on either model: skullbase_v3.py, temporal_lobe_shape)
+    label: 'Lift the temporal lobe', key: 'l', note: (g) => {
+      const k = g?.approach ? APPROACH_GEOM[g.approach]?.measured : undefined;
+      return k?.liftedMaxMm ? `At 100 % the temporal lobe’s under surface is ${fmtMm(k.liftedMaxMm)} mm higher under the middle of the flap: less in front of and behind it (about 60 % of that ${fmtMm(k.liftSpanMm)} mm away), less higher up (about a third of it ${fmtMm(k.liftFallMm)} mm above the middle fossa floor), and none within 8 mm of the midline. The arteries and nerves at the tentorial edge stay where they are.` : null;
+    },
+  },
   telovelar: {
     label: 'Draw the tonsils apart, lift the vermis', key: 't', note: () => {
       const p = V3_FIT.pfossa;

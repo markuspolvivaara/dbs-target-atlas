@@ -33,9 +33,11 @@ export type Evidence = z.infer<typeof EvidenceSchema>;
  * 'anterolateral', up under the frontal lobe; 'farLateral' from behind, the side and below, along the medulla to the front
  * of the foramen magnum; 'subtemporal' from the side and above, under the lifted temporal lobe onto the middle fossa floor
  * (skull-base section, surgical views). Skull base v3's surgical views have their own: 'pterional', 'orbitozygomaticFront',
- * 'vertexFront', 'retrosigmoidLateral' and 'farLateralLow' (Viewer.goPreset).
+ * 'vertexFront', 'retrosigmoidLateral' and 'farLateralLow' (Viewer.goPreset); 'subtemporalLow' looks from the side, a
+ * little behind and below, along the middle fossa floor under the lifted temporal lobe to the tentorial edge (the
+ * subtemporal view, both models).
  */
-export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon', 'lateral', 'medial', 'inferior', 'posterior', 'anterolateral', 'frontolateral', 'supraorbital', 'vertex', 'suboccipital', 'retrosigmoid', 'orbitozygomatic', 'farLateral', 'subtemporal', 'retrosigmoidLevel',
+export const CameraPresetSchema = z.enum(['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon', 'lateral', 'medial', 'inferior', 'posterior', 'anterolateral', 'frontolateral', 'supraorbital', 'vertex', 'suboccipital', 'retrosigmoid', 'orbitozygomatic', 'farLateral', 'subtemporal', 'retrosigmoidLevel', 'subtemporalLow',
   'pterional', 'orbitozygomaticFront', 'vertexFront', 'retrosigmoidLateral', 'farLateralLow']);
 export type CameraPreset = z.infer<typeof CameraPresetSchema>;
 
