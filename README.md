@@ -242,6 +242,14 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   Pipeline: `pipeline/skullbase_v3_approach.py`, then `pipeline/skullbase_brain.py` (it reads the interhemispheric
   craniotomy's span) and `pipeline/skullbase_pfossa.py`, before `pipeline/skullbase_v3.py` (it takes their items);
   the fits are cached in `pipeline/data/build/skullbase-v3/`.
+  Each view draws, with its brain, the structures its text names and its opening reaches (the `context` lists in
+  `src/skullbase/approaches.ts`). Since November 2026 that includes what lies beyond the carotid and the optic nerve
+  in the three anterolateral views: the optic chiasm, the pituitary stalk, both communicating arteries and the basilar
+  artery (whose tip the openings reach; it is one mesh, so the trunk is drawn whole), with the posterior cerebral and
+  superior cerebellar arteries and the trochlear nerve in the orbitozygomatic view; the hypoglossal and trochlear
+  nerves and the superior petrosal sinus in the retrosigmoid view; the oculomotor and trochlear nerves in the Kawase
+  view; the anterior spinal artery in the far lateral view. Most of these do not show from the view's opening camera:
+  the summaries say to turn the view.
 - **The endoscopic endonasal (transsphenoidal) view** (`pipeline/skullbase_v3_endonasal.py`,
   `src/skullbase/endonasal.ts`, `src/ui/skullbase-endonasal.ts`): a 0° endoscope through one nostril into the sphenoid
   sinus, the way opened step by step, onto the hypophysis. The CT around the sphenoid is cropped to fields on a 0.5-mm grid

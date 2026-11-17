@@ -221,6 +221,24 @@ commit and push it.
   - The figure packages are in `pipeline/data/raw/papers/figures/<PMCID>/` (git-ignored), from Europe PMC's API
     (`.../rest/<PMCID>/supplementaryFiles?includeInlineImage=true`); Europe PMC's website showed a bot check for the
     same pictures, which was not passed.
+  Merged with its own pull request (PR 20) at the user's word (2026-11-17).
+- AP-08, structures the surgical views' texts name and their openings reach but the views did not draw (17 November
+  2026; the user's choices, made on the audit's reachable shares for the default model), on
+  `fix/ap08-approach-structures`. Front end only: names added to the views' `context` lists in
+  `src/skullbase/approaches.ts` (a name there is all a view needs; v1 through `V1_NAMES` and `V1_ABSENT`).
+  - Pterional, lateral supraorbital and orbitozygomatic (`BEYOND`): optic chiasm, pituitary stalk, both communicating
+    arteries, basilar artery (one mesh: the whole trunk is drawn for its tip).
+  - Orbitozygomatic only: posterior cerebral artery (P1 to P2), superior cerebellar artery, trochlear nerve. Not in the
+    other two, where 5% and 2% of P1 are reachable.
+  - Pterional: the olfactory nerve (the supraorbital view had it). Retrosigmoid: hypoglossal nerve, superior petrosal
+    sinus, trochlear nerve. Kawase: oculomotor and trochlear nerves. Far lateral: anterior spinal artery (from the
+    audit's table for that view, not AP-08's summary).
+  - The three anterolateral summaries say these are drawn deeper in and to turn the view to find them: most do not
+    show from the opening camera.
+  - v1 (Z-Anatomy) gets the same where it has the structure: no pituitary stalk; the posterior cerebral artery whole.
+    **Told to the user:** on v1 the audit found little of some of these reachable (basilar tip 3%, 1% and 15% through
+    the pterional, orbitozygomatic and supraorbital openings; superior cerebellar artery 12% through the
+    orbitozygomatic; trochlear nerve 2% through the retrosigmoid); they are drawn there all the same, as on v3.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -493,7 +511,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (453 tests on `fix/spine-pedicle-chord`)
+  - `npx vitest run` (454 tests on `fix/ap08-approach-structures`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`

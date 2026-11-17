@@ -257,12 +257,21 @@ const CLINOIDECTOMY = sec('Anterior clinoidectomy (the switch)', [
 const CONTEXT = ['Internal carotid artery', 'Middle cerebral artery (M1 segment)', 'Middle cerebral artery (M2 segment)', 'Middle cerebral artery (M3 segment)',
   'Anterior cerebral artery (A1–A2)', 'Proximal lateral striate branches', 'Distal lateral striate branches', 'Optic nerve (II)', 'Oculomotor nerve (III)',
   'Superficial middle cerebral vein', 'Sphenoparietal sinus', 'Insular veins', 'Deep middle cerebral vein', 'Basal vein (of Rosenthal)'];
+/** What the anterolateral corridors reach beyond the carotid and the optic nerve, and their texts name (the chiasmatic
+ * cistern, the sellar and suprasellar regions, the basilar apex). Audit AP-08: each has a free line out through the
+ * pterional, lateral supraorbital and orbitozygomatic openings with the sliders full (the basilar tip 71, 55 and
+ * 100 %), and none was drawn. The owner's choices of 17 November 2026: these in all three views; the posterior
+ * cerebral and superior cerebellar arteries and the trochlear nerve in the orbitozygomatic view only (85, 100 and 93 %
+ * there; 5 and 2 % of P1 through the other two); the olfactory nerve in the pterional view as in the supraorbital one;
+ * the hypoglossal and trochlear nerves and the superior petrosal sinus in the retrosigmoid view; the oculomotor and
+ * trochlear nerves in the Kawase view; the anterior spinal artery in the far lateral view. */
+const BEYOND = ['Optic chiasm', 'Pituitary stalk', 'Anterior communicating artery', 'Posterior communicating artery', 'Basilar artery'];
 const NOT_SHOWN = 'The scalp, temporalis muscle, dura and arachnoid; the Sylvian veins’ tributaries and bridging veins (the veins themselves are drawn by rule, one superficial trunk of the many patterns, since this angiogram labels none near the fissure); the cortical (M4) branches of the middle cerebral artery, which the labels stop short of. The brain is a template fitted to this skull and its arteries, not this patient’s own, and its opening and lift are shapes, not a simulation of the tissue.';
 
 export const APPROACHES: ApproachContent[] = [
   {
     id: 'pterional', view: 'transsylvian', name: 'Pterional transsylvian approach', camera: 'pterional',
-    summary: 'The right pterional craniotomy cut out of this CT’s bone, and a template brain fitted into the skull. One slider opens its Sylvian fissure onto the insula and this patient’s middle cerebral artery; another lifts the frontal lobe off the orbital roof to look under it, at the carotid and the optic nerve.',
+    summary: 'The right pterional craniotomy cut out of this CT’s bone, and a template brain fitted into the skull. One slider opens its Sylvian fissure onto the insula and this patient’s middle cerebral artery; another lifts the frontal lobe off the orbital roof to look under it, at the carotid and the optic nerve. Deeper in, the optic chiasm, the pituitary stalk, both communicating arteries and the basilar artery are drawn too: turn the view to find them.',
     sections: [sec('The craniotomy', [
       c('Four burr holes: the keyhole (McCarty) anterior to the superior temporal line and above the frontozygomatic suture; one in the frontal bone near the superior orbital rim, avoiding the frontal sinus, 3–4 cm from the first; one below the superior temporal line, near or just anterior to the coronal suture; and one in the temporal squama behind the sphenotemporal suture. Osteotomies join them.', 'yilmaz2025'),
       c('Three burr holes in another description: over the keyhole, behind the superior temporal line, and on the temporal squama near the upper zygomatic root.', 'sevgi2026'),
@@ -284,7 +293,7 @@ export const APPROACHES: ApproachContent[] = [
       c('The superficial Sylvian veins are preserved, especially those draining into the temporal lobe; frontal draining veins may be sacrificed if necessary.', 'yilmaz2025'),
       c('The orbital meningeal artery, met at the superolateral edge of the superior orbital fissure during sphenoid wing resection, often bleeds and is coagulated.', 'yilmaz2025'),
     ]), CLINOIDECTOMY],
-    context: CONTEXT,
+    context: [...CONTEXT, ...BEYOND, 'Olfactory nerve (I)'],
     notShown: NOT_SHOWN,
     focus: ['Middle cerebral artery (M2 segment)'],
     morphs: ['open', 'lift', 'ridge', 'clinoid'],
@@ -293,7 +302,7 @@ export const APPROACHES: ApproachContent[] = [
   },
   {
     id: 'lso', view: 'lso', name: 'Lateral supraorbital approach', camera: 'supraorbital',
-    summary: 'A right lateral supraorbital (LSO) craniotomy cut out of this CT’s bone, over the same fitted brain. The fissure lies at the craniotomy’s lower edge; the lift raises the frontal lobe off the lateral orbital roof, opening a corridor under it to the carotid, the optic nerve and M1, and the other slider opens the fissure.',
+    summary: 'A right lateral supraorbital (LSO) craniotomy cut out of this CT’s bone, over the same fitted brain. The fissure lies at the craniotomy’s lower edge; the lift raises the frontal lobe off the lateral orbital roof, opening a corridor under it to the carotid, the optic nerve and M1, and the other slider opens the fissure. Deeper in, the optic chiasm, the pituitary stalk, both communicating arteries and the basilar artery are drawn too: turn the view to find them.',
     sections: [sec('The craniotomy', [
       c('A more aesthetic variant of the classic pterional approach, developed in Helsinki and the approach used most there: a curved frontotemporal skin incision behind the hairline, stopping 2–3 cm above the zygoma, and the temporalis muscle opened only a little, near its upper insertion.', 'choquevelasquez2018'),
       c('One burr hole posteriorly, just below the insertion line of the temporalis muscle; the bone flap is cut mainly with the side-cutting craniotome and its basal part drilled off before it is lifted; about 3 × 4 cm.', 'cha2012'),
@@ -311,7 +320,7 @@ export const APPROACHES: ApproachContent[] = [
       ...ARTERY,
       c('In a phantom model of middle cerebral artery aneurysm clipping (22 participants), the LSO had success rates comparable with the pterional approach; the authors suggest it may suit patients whose M1 is shorter than average.', 'amini2024'),
     ], 'm1'), sec('Insula', INSULA), sec('Care points', [VEINS])],
-    context: [...CONTEXT, 'Olfactory nerve (I)'],
+    context: [...CONTEXT, ...BEYOND, 'Olfactory nerve (I)'],
     notShown: `${NOT_SHOWN} The craniotomy’s outline is placed by hand on this skull; the opening as cut is measured beside the published mean under “How the craniotomy is drawn”.`,
     // framed on the corridor's far end (the carotid, optic nerve and M1) and its opening, closer than the other views
     focus: ['Middle cerebral artery (M1 segment)', 'Optic nerve (II)', 'Internal carotid artery'],
@@ -412,7 +421,8 @@ export const APPROACHES: ApproachContent[] = [
     context: ['Trigeminal nerve (V)', 'Trigeminal ganglion', 'Abducens nerve (VI)', 'Facial nerve (VII)', 'Vestibulocochlear nerve (VIII)', 'Nerves in the internal acoustic meatus (VII, VIII)',
       'Glossopharyngeal nerve (IX)', 'Vagus nerve (X)', 'Accessory nerve (XI)', 'Anterior inferior cerebellar artery', 'Superior cerebellar artery',
       'Superior cerebellar artery (fitted course)',
-      'Posterior inferior cerebellar artery', 'Posterior inferior cerebellar artery (fitted course)', 'Basilar artery', 'Vertebral artery', 'Sigmoid sinus', 'Transverse sinus'],
+      'Posterior inferior cerebellar artery', 'Posterior inferior cerebellar artery (fitted course)', 'Basilar artery', 'Vertebral artery', 'Sigmoid sinus', 'Transverse sinus',
+      'Hypoglossal nerve (XII)', 'Superior petrosal sinus', 'Trochlear nerve (IV)'],
     notShown: 'The craniotomy is drawn larger than a keyhole, its outline placed by hand. The skin, muscles, dura and arachnoid; the superior petrosal vein and its tributaries and the labyrinthine artery (this angiogram labels neither); the nervus intermedius. The anterior inferior cerebellar artery is the fitted model’s (this angiogram does not label it), its origin moved onto this patient’s basilar artery; this angiogram labels only the first part of the superior cerebellar artery, and its course beyond is the fitted model’s, carried on from there: both approximate. The trigeminal nerve’s course from the pons to the ganglion, and the ganglion, are drawn by rule from published measurements, not traced. The cerebellum, brainstem and fourth ventricle are one adult’s anatomical model (Z-Anatomy) fitted into this skull, not this patient’s own, and drawing the hemisphere back is a shape, not a simulation of the tissue.',
     // framed on the cerebellopontine angle (between the trigeminal and the vestibulocochlear nerve), seen along the
     // corridor (the camera preset): the opening around the line of sight
@@ -423,7 +433,7 @@ export const APPROACHES: ApproachContent[] = [
   },
   {
     id: 'orbitozygomatic', view: 'orbitozygomatic', name: 'Orbitozygomatic approach', camera: 'orbitozygomaticFront',
-    summary: 'This model’s pterional craniotomy extended by an orbitozygomatic piece: the superolateral orbital rim with the orbital roof behind it, and the zygomatic arch, cut out of this CT’s bone, over the same fitted brain. The view looks up from lower down, under the frontal lobe; the sliders open the Sylvian fissure and lift the frontal lobe.',
+    summary: 'This model’s pterional craniotomy extended by an orbitozygomatic piece: the superolateral orbital rim with the orbital roof behind it, and the zygomatic arch, cut out of this CT’s bone, over the same fitted brain. The view looks up from lower down, under the frontal lobe; the sliders open the Sylvian fissure and lift the frontal lobe. Deeper in, the optic chiasm, the pituitary stalk, both communicating arteries, the basilar artery with the posterior cerebral and superior cerebellar arteries, and the trochlear nerve are drawn too: turn the view to find them.',
     sections: [sec('The craniotomy', [
       c('An extension of the pterional craniotomy for anterior skull base and orbital lesions, reaching vascular and oncological lesions without adding morbidity; Hakuba described the orbitozygomatic infratemporal approach in 1986, Al-Mefty the cranio-orbitozygomatic approach after him.', 'yilmaz2025'),
       c('One piece: three burr holes (the McCarty keyhole, one in the temporal squama above the zygomatic root, one in the frontal bone lateral to the supraorbital notch or behind the superior temporal line), then six osteotomies through the orbit’s walls and roof, the zygoma’s body and the zygomatic root in front of the articular tubercle, the flap coming away whole.', 'yilmaz2025'),
@@ -436,7 +446,7 @@ export const APPROACHES: ApproachContent[] = [
     ]), sec('Care points', [
       c('The facial nerve is preserved by interfascial or subfascial dissection, as in the pterional approach; the temporalis muscle is lifted leaving a cuff at the superior temporal line for reattaching it, and the subperiosteal dissection continues down along the zygomatic arch.', 'yilmaz2025'),
     ]), CLINOIDECTOMY],
-    context: CONTEXT,
+    context: [...CONTEXT, ...BEYOND, 'Posterior cerebral artery (P1–P2)', 'Superior cerebellar artery', 'Trochlear nerve (IV)'],
     notShown: 'The orbital piece’s and the arch’s extents are drawn by rule on this skull (illustrative). The temporalis and masseter muscles, the periorbita and the orbit’s contents, and the facial nerve’s frontal branch are not modelled. ' + NOT_SHOWN,
     focus: ['Middle cerebral artery (M2 segment)'],
     morphs: ['open', 'lift', 'ridge', 'clinoid'],
@@ -463,7 +473,7 @@ export const APPROACHES: ApproachContent[] = [
       c('Permanent morbidity in published series: 0–17 % through a far lateral approach, 21–56 % through an extreme lateral transcondylar one.', 'bruneau2008'),
     ])],
     context: ['Vertebral artery', 'Posterior inferior cerebellar artery', 'Posterior inferior cerebellar artery (fitted course)', 'Basilar artery',
-      'Glossopharyngeal nerve (IX)', 'Vagus nerve (X)', 'Accessory nerve (XI)', 'Hypoglossal nerve (XII)', 'Sigmoid sinus', 'Transverse sinus'],
+      'Glossopharyngeal nerve (IX)', 'Vagus nerve (X)', 'Accessory nerve (XI)', 'Hypoglossal nerve (XII)', 'Sigmoid sinus', 'Transverse sinus', 'Anterior spinal artery'],
     notShown: 'The atlas and axis are not part of this model, so the hemilaminectomy of C1 is not shown, nor the vertebral artery outside the skull. The craniectomy’s outline is placed by rule (illustrative). The muscles, the dura and the arachnoid. The cerebellum, brainstem and fourth ventricle are one adult’s anatomical model (Z-Anatomy) fitted into this skull, not this patient’s own.',
     focus: ['Medulla oblongata', 'Hypoglossal nerve (XII)'],
     radius: 50,
@@ -492,7 +502,8 @@ export const APPROACHES: ApproachContent[] = [
     context: ['Greater petrosal nerve', 'Mandibular nerve (V3)', 'Trigeminal ganglion', 'Trigeminal nerve (V)', 'Ophthalmic nerve (V1)', 'Maxillary nerve (V2)',
       'Internal carotid artery (petrous and lacerum parts)', 'Internal carotid artery', 'Nerves in the internal acoustic meatus (VII, VIII)', 'Facial nerve (VII)',
       'Scala tympani', 'Scala vestibuli, vestibule and semicircular canals', 'Abducens nerve (VI)', 'Superior petrosal sinus', 'Inferior petrosal sinus',
-      'Middle meningeal artery', 'Basilar artery', 'Superior cerebellar artery', 'Anterior inferior cerebellar artery', 'Pons'],
+      'Middle meningeal artery', 'Basilar artery', 'Superior cerebellar artery', 'Anterior inferior cerebellar artery', 'Pons',
+      'Oculomotor nerve (III)', 'Trochlear nerve (IV)'],
     notShown: 'The dura: the middle fossa dura and its layers, the tentorium and the dura of the posterior fossa and the meatus are not modelled; the temporal lobe is drawn held up (a shape, not a simulation), and the lesser petrosal nerve, the temporalis muscle and the optional zygomatic osteotomy are not drawn. The rhomboid’s landmarks and the structures that limit the drilling are this model’s: the greater petrosal nerve, V3 and the ganglion drawn by rule, the cochlea, labyrinth, geniculate ganglion and meatus from the registered ear, the carotid this CT’s own; the margins kept off them are drawing choices.',
     focus: ['Trigeminal ganglion', 'Greater petrosal nerve', 'Geniculate ganglion'],
     frameOpening: false,
@@ -523,6 +534,7 @@ export const V1_NAMES: Record<string, string> = {
   'Scala tympani': 'Cochlea',
   'Scala vestibuli, vestibule and semicircular canals': 'Vestibule and semicircular canals',
   'Nerves in the internal acoustic meatus (VII, VIII)': 'Vestibulocochlear nerve (VIII)',
+  'Posterior cerebral artery (P1–P2)': 'Posterior cerebral artery',
 };
 /** What v3 draws from other data (TopBrain's segments, its drawn veins, the ganglion, the meatal bundle, a variant
  * artery) and v1's Z-Anatomy model does not have: left out of v1's views. */
@@ -530,6 +542,7 @@ export const V1_ABSENT = new Set([
   'Anterior cerebral artery (A3)', 'Third anterior cerebral artery (A2)', 'Third anterior cerebral artery (A3)',
   'Superficial middle cerebral vein', 'Sphenoparietal sinus', 'Insular veins', 'Deep middle cerebral vein', 'Basal vein (of Rosenthal)',
   'Internal cerebral veins', 'Trigeminal ganglion',
+  'Pituitary stalk',   // (Z-Anatomy has the two lobes of the gland, no stalk)
 ]);
 
 /** v1's own wording for a view; camera: its own view direction where v3's does not suit it (the retrosigmoid: on
@@ -537,9 +550,9 @@ export const V1_ABSENT = new Set([
  * open as v3's do, checked on renders of both, November 2026); morphs: its own shapes, where it does not have v3's;
  * hide: structures left out of that view; add: the model's own structures added to it */
 export const V1_TEXT: Record<string, { summary: string; notShown: string; camera?: CameraPreset; morphs?: string[]; hide?: string[]; add?: string[] }> = {
-  pterional: { summary: 'The right pterional craniotomy cut out of Z-Anatomy’s skull, over Z-Anatomy’s own brain. One slider opens the Sylvian fissure onto the insula and the model’s middle cerebral artery; another lifts the frontal lobe off the orbital roof to look under it, at the carotid and the optic nerve.',
+  pterional: { summary: 'The right pterional craniotomy cut out of Z-Anatomy’s skull, over Z-Anatomy’s own brain. One slider opens the Sylvian fissure onto the insula and the model’s middle cerebral artery; another lifts the frontal lobe off the orbital roof to look under it, at the carotid and the optic nerve. Deeper in, the optic chiasm, both communicating arteries and the basilar artery are drawn too: turn the view to find them.',
     notShown: `The scalp, temporalis muscle, dura and arachnoid; the Sylvian veins. ${V1_BRAIN}` },
-  lso: { summary: 'A right lateral supraorbital (LSO) craniotomy cut out of Z-Anatomy’s skull, over the same brain. The fissure lies at the craniotomy’s lower edge; the lift raises the frontal lobe off the lateral orbital roof.',
+  lso: { summary: 'A right lateral supraorbital (LSO) craniotomy cut out of Z-Anatomy’s skull, over the same brain. The fissure lies at the craniotomy’s lower edge; the lift raises the frontal lobe off the lateral orbital roof. Deeper in, the optic chiasm, both communicating arteries and the basilar artery are drawn too: turn the view to find them.',
     notShown: `The scalp, dura and arachnoid; the Sylvian veins. The craniotomy’s outline is placed by rule; the opening as cut is measured beside the published mean under “How the craniotomy is drawn”. ${V1_BRAIN}` },
   interhemispheric: { summary: 'A right parasagittal craniotomy at the coronal suture cut out of Z-Anatomy’s skull, over its brain. The slider holds the right hemisphere off the falx, opening the interhemispheric fissure down to the corpus callosum.',
     notShown: `The scalp, dura and arachnoid; the bridging veins. ${V1_BRAIN}` },
@@ -548,7 +561,7 @@ export const V1_TEXT: Record<string, { summary: string; notShown: string; camera
   retrosigmoid: { summary: 'A right retrosigmoid craniotomy cut out of Z-Anatomy’s skull against its own transverse and sigmoid sinuses, drawn larger than a keyhole, with its cerebellum, brainstem and fourth ventricle. The slider draws the right cerebellar hemisphere back from the petrous bone, opening the cerebellopontine angle.',
     notShown: `The skin, muscles, dura and arachnoid (Z-Anatomy’s tentorium is shown, the rest of the dura not); the superior petrosal vein and the labyrinthine artery; the nervus intermedius. ${V1_HIND}`,
     camera: 'retrosigmoidLevel', add: ['Tentorium cerebelli'] },
-  orbitozygomatic: { summary: 'The pterional craniotomy extended by an orbitozygomatic piece (the superolateral orbital rim and roof, the zygoma and its arch), cut out of Z-Anatomy’s skull, over the same brain, seen from lower down.',
+  orbitozygomatic: { summary: 'The pterional craniotomy extended by an orbitozygomatic piece (the superolateral orbital rim and roof, the zygoma and its arch), cut out of Z-Anatomy’s skull, over the same brain, seen from lower down. Deeper in, the optic chiasm, both communicating arteries, the basilar artery with the posterior cerebral and superior cerebellar arteries, and the trochlear nerve are drawn too: turn the view to find them.',
     notShown: `The orbital piece’s and the arch’s extents are drawn by rule on this skull. The temporalis and masseter muscles, the periorbita and the facial nerve’s frontal branch. ${V1_BRAIN}` },
   far_lateral: { summary: 'A right far lateral (lateral suboccipital) craniectomy cut out of Z-Anatomy’s skull down through the foramen magnum, the posterior third of the occipital condyle drilled, with its cerebellum, brainstem and fourth ventricle. The slider lifts the right tonsil and biventral lobule up and towards the midline, as the approach’s retraction holds them, off the vertebral artery and the lower cranial nerves; a second draws them and the hemisphere’s lower outer corner straight back, a view aid that together with the first can hold the cerebellum where no retractor would.',
     notShown: `The atlas and axis are not part of this model, so the hemilaminectomy of C1 is not shown. The craniectomy’s outline is placed by rule. The muscles, the dura and the arachnoid. ${V1_HIND}` },

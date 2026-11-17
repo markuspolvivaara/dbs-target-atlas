@@ -1086,6 +1086,48 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(APPROACH_REFS.map((r) => r.id).filter((r) => !used.has(r))).toEqual([]);
     for (const a of APPROACHES) for (const n of a.context) expect(v3.structures.some((s) => s.name === n), n).toBe(true);
   });
+  // audit AP-08 (the owner's choices of 17 November 2026): what a view's text names and its opening reaches is drawn in it
+  it('AP-08: the views draw what their texts name beyond the opening, on both models', () => {
+    const BEYOND = ['Optic chiasm', 'Pituitary stalk', 'Anterior communicating artery', 'Posterior communicating artery', 'Basilar artery'];
+    const ORBITOZYGOMATIC_ONLY = ['Posterior cerebral artery (P1–P2)', 'Superior cerebellar artery', 'Trochlear nerve (IV)'];
+    const want: Record<string, string[]> = {
+      transsylvian: [...BEYOND, 'Olfactory nerve (I)'],
+      lso: [...BEYOND, 'Olfactory nerve (I)'],
+      orbitozygomatic: [...BEYOND, ...ORBITOZYGOMATIC_ONLY],
+      retrosigmoid: ['Hypoglossal nerve (XII)', 'Superior petrosal sinus', 'Trochlear nerve (IV)'],
+      kawase: ['Oculomotor nerve (III)', 'Trochlear nerve (IV)'],
+      far_lateral: ['Anterior spinal artery'],
+    };
+    // v3: each is in the view's list and not hidden in its plan
+    for (const [view, names] of Object.entries(want)) {
+      const g = G3.SB_GROUP.get(view)!, plan = S3.skullPlan(view, null);
+      for (const n of names) {
+        const st = v3.structures.find((x) => x.name === n && !x.pushedFrom);
+        expect(st, `${view}: ${n}`).toBeDefined();
+        expect(g.structures, `${view}: ${n}`).toContain(st!.id);
+        expect(plan.looks.get(st!.id), `${view}: ${n}`).not.toBe('hidden');
+      }
+    }
+    // P1 and the superior cerebellar artery are not in the pterional and supraorbital views (5 and 2 % of P1 reachable)
+    for (const view of ['transsylvian', 'lso']) for (const n of ['Posterior cerebral artery (P1–P2)', 'Superior cerebellar artery'])
+      expect(G3.SB_GROUP.get(view)!.structures, `${view}: ${n}`).not.toContain(v3.structures.find((x) => x.name === n)!.id);
+    // v1 (Z-Anatomy): the same under its own names; it has no pituitary stalk and draws the posterior cerebral artery whole
+    const own: Record<string, string | null> = { 'Pituitary stalk': null, 'Posterior cerebral artery (P1–P2)': 'Posterior cerebral artery' };
+    expect(SB_MANIFEST.structures.some((x) => x.name === 'Pituitary stalk')).toBe(false);
+    for (const [view, names] of Object.entries(want)) {
+      const g = SB_GROUPS.find((x) => x.id === view)!, plan = skullPlan(view, null);
+      for (const n of names) {
+        const name = n in own ? own[n] : n;
+        if (name === null) continue;
+        const st = SB_MANIFEST.structures.find((x) => x.name === name && !x.pushedFrom);
+        expect(st, `v1 ${view}: ${name}`).toBeDefined();
+        expect(g.structures, `v1 ${view}: ${name}`).toContain(st!.id);
+        expect(plan.looks.get(st!.id), `v1 ${view}: ${name}`).not.toBe('hidden');
+      }
+    }
+    // the three anterolateral summaries say they are there to find
+    for (const id of ['pterional', 'lso', 'orbitozygomatic']) expect(APPROACHES.find((a) => a.id === id)!.summary, id).toMatch(/both communicating arteries.*the basilar artery.*turn the view to find them/);
+  });
 });
 
 describe('v1 tumours: the same rules on the Z-Anatomy model, as far as it has room', async () => {
