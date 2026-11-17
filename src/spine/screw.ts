@@ -10,7 +10,14 @@ import { assetUrl } from '../viewer/assets';
 const V3 = z.tuple([z.number(), z.number(), z.number()]);
 export type V3 = z.infer<typeof V3>;
 const PedicleSchema = z.object({
-  width: z.number(), height: z.number(), transverseAngle: z.number(), sagittalAngle: z.number(), chord: z.number(),
+  width: z.number(), height: z.number(), transverseAngle: z.number(), sagittalAngle: z.number(),
+  /** dorsal cortex to anterior cortex in the vertebra's axial plane through the isthmus centre, along the pedicle's
+   * transverse angle: as the published studies measure it on an axial image (spine_screw.py, CHORD_BAND) */
+  chord: z.number(),
+  /** the shortest and the longest chord of the same line up to 2 mm lower and higher in the pedicle */
+  chordBand: z.tuple([z.number(), z.number()]),
+  /** the length along the fitted axis itself, from `entry` to the anterior cortex (the anatomic start's path) */
+  axisChord: z.number(),
   inscribedRadius: z.number(), isthmus: V3, isthmusUvw: V3, entry: V3, dir: V3,
   /** an axis fitted with its transverse angle inside the range of the published study means (`to`, degrees), a
    * decision made in review (spine_screw.py, HELD_TO_PUBLISHED): the angles of the free fit, and the channel's smallest

@@ -146,9 +146,8 @@ commit and push it.
   - E-014: Zindrick 1987 (cited nowhere) is gone; Fardon 2014 is cited at the herniation terms, as Eslami 2026 quotes
     it. The chord row has published values, read from the papers' tables by `pipeline/spine_published.py`: thoracic
     screw path length (Soh 2021, MRI), lumbar chord (Arockiaraj 2025, CT). The chords measured on this CT are longer
-    (lumbar by 12 to 19 mm than the mean): `STATEMENTS.publishedChord` says so, how the chord is measured here, and
-    that the reason is not established. **Open:** look into the measurement (`pedicle()` in `pipeline/spine_screw.py`:
-    the line is followed dorsally until it has left the bone for 3 mm, so bone behind the pedicle counts).
+    (lumbar by 12 to 19 mm than the mean): `STATEMENTS.publishedChord` said so and that the reason was not
+    established. Looked into on 17 November 2026: see "The pedicle chord" below.
   - E-015: the Sources page calls a link what it is (DOI, PDF, Web page); the AO Surgery Reference's two pages are two
     references (`aosurgeryref`, `aosurgeryrefpedicle`).
   - E-016: the corridor's width, the hinge's remaining bone and the caps on the C2 screws' start lengths say they are
@@ -202,6 +201,26 @@ commit and push it.
   (its manuscript is in PubMed Central but neither service gave it), Wiebers 2003, Greving 2014. ISUIA's rates are
   its abstract's; PubMed's copy has lost their decimal points, and two open papers that quote them (Golshani 2010,
   Chen 2018) give them as on the page. PHASES has no points table: the abstract does not give the points.
+  Merged with its own pull request (PR 19) at the user's word (2026-11-16).
+- The pedicle chord (17 November 2026; the user's choices: the chord in the axial plane only; the two papers'
+  figures downloaded to see their landmarks), on `fix/spine-pedicle-chord`:
+  - What was wrong: nothing in the tracing (the line stays in bone, its ends lie on the cortex, the scale is right),
+    but the chord ran along the fitted axis in three dimensions, which in the lumbar spine tilts 3 to 17° towards
+    the superior articular process. The two studies beside it measure on one axial image (Arockiaraj 2025 and Soh
+    2021, each paper's Figure 1: from the dorsal cortex along the pedicle's axis to the front of the body).
+  - `pedicle()` in `pipeline/spine_screw.py` now gives `chord` in the vertebra's own axial plane (parallel to the
+    upper endplate, through the isthmus centre, at the measured transverse angle, the one run of bone on that line:
+    no gap bridged), `chordBand` (the shortest and longest chord of the same line up to 2 mm lower and higher) and
+    `axisChord` (the old length along the axis: the thoracic anatomic start's path, no longer on the card). The
+    screw data was rebuilt in full; no `screw_*.bin.gz` changed, only `spine-screw.json`.
+  - On this CT the lumbar chord is now 2 to 11 mm above the published mean (it was 12 to 19), the thoracic one from
+    2 mm below to 11 mm above. What remains is one person against two populations' means, and the height of the
+    line: behind a lumbar pedicle the dorsal cortex is steep (about 1 mm of chord per mm of height at L1 to L3,
+    where the published mean is reached 4 to 7 mm or more below the pedicle's centre: from the analysis done for
+    this, not in the shipped data). Neither paper says at which height of the pedicle its image lay. The card gives each level's band and `STATEMENTS.publishedChord` says all this.
+  - The figure packages are in `pipeline/data/raw/papers/figures/<PMCID>/` (git-ignored), from Europe PMC's API
+    (`.../rest/<PMCID>/supplementaryFiles?includeInlineImage=true`); Europe PMC's website showed a bot check for the
+    same pictures, which was not passed.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -474,7 +493,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (453 tests on `fix/d010-vascular-unruptured`)
+  - `npx vitest run` (453 tests on `fix/spine-pedicle-chord`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`

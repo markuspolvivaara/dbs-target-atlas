@@ -211,8 +211,17 @@ test('spine: thoracic herniation statement, published chords, C5 palsy by operat
   await expect(t9).toContainText('71% had myelopathy and 64% radiculopathy');
   await expect(t9.locator('.morph').first()).toContainText('screw path length 45.4 ± 5.1 mm (MRI, 168 vertebrae)');
   await expect(t9).toContainText('do not read the measured chord as a screw length');
+  // the chord is measured as the two studies measure theirs (17 November 2026): in the axial plane, with how much it
+  // changes a little lower and higher in the pedicle
+  await expect(t9.locator('.morph').first()).toContainText('Chord in the axial plane');
+  await expect(t9.locator('.chord-band')).toContainText(/for lines up to 2 mm below and above its centre it runs from \d+(\.\d)? to \d+(\.\d)? mm on the left and from \d+(\.\d)? to \d+(\.\d)? mm on the right/);
   await open(page, './spine/#/atlas?r=lumbar&lv=L3');
-  await expect(page.locator('.card.sel .morph').first()).toContainText('50.9 ± 2.9 mm (CT, n = 300)');
+  const l3 = page.locator('.card.sel .morph').first();
+  await expect(l3).toContainText('50.9 ± 2.9 mm (CT, n = 300)');
+  await expect(l3).toContainText('Chord in the axial plane');
+  await expect(l3).not.toContainText('entry to anterior cortex');
+  await expect(page.locator('.card.sel .chord-band')).toHaveCount(1);
+  await expect(page.locator('.card.sel')).toContainText('it is not the length along the fitted axis');
   // the neck: ACDF written out in the heading; C5 palsy by operation once a side is picked
   await open(page, './spine/#/atlas?r=cervical&lv=C5');
   const c5 = page.locator('.card.sel');

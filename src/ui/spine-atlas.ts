@@ -522,7 +522,12 @@ export class SpineAtlasPage {
     const sag = (x: number) => (Math.abs(x) < 0.05 ? '0°' : `${Math.abs(x).toFixed(1)}° ${x > 0 ? 'cranial' : 'caudal'}`);
     const head = h('thead', {}, h('tr', {}, h('th', {}, ''), h('th', { scope: 'col' }, 'Left'), h('th', { scope: 'col' }, 'Right'), h('th', { scope: 'col' }, 'Published')));
     const measured = (k: 'width' | 'height') => [`${fmtMm(ped.L[k])} mm`, `${fmtMm(ped.R[k])} mm`] as const;
-    const chord = (p: string) => row('Chord, entry to anterior cortex', `${fmtMm(ped.L.chord)} mm`, `${fmtMm(ped.R.chord)} mm`, p);
+    // dorsal cortex to anterior cortex in the vertebra's axial plane, as the studies beside it measure theirs
+    const chord = (p: string) => row('Chord in the axial plane', `${fmtMm(ped.L.chord)} mm`, `${fmtMm(ped.R.chord)} mm`, p);
+    // the same line a little lower and higher in the pedicle: how much the chord depends on where the image lies
+    const band = (sd: 'L' | 'R') => `${fmtMm(ped[sd].chordBand[0])} to ${fmtMm(ped[sd].chordBand[1])} mm on the ${sd === 'L' ? 'left' : 'right'}`;
+    const chordBand = h('p', { class: 'aside chord-band' },
+      `The chord depends on the height of the line in the pedicle: for lines up to 2 mm below and above its centre it runs from ${band('L')} and from ${band('R')}.`);
     // several studies' means: their median, and each end of their range with the study that reported it (one study's
     // value can set an end)
     const spread = (o: Record<string, number>, f: (x: number) => string, unit: string) => {
@@ -557,8 +562,8 @@ export class SpineAtlasPage {
             row('Transverse angle', deg(ped.L.transverseAngle), deg(ped.R.transverseAngle),
               `${both('transverseAngle', '°')}; earlier studies: ${spread(pub.studyMeans.transverseAngle, (x) => x.toFixed(1), '°')}`),
             row('Sagittal angle', sag(ped.L.sagittalAngle), sag(ped.R.sagittalAngle), '—'),
-            row('Chord, entry to anterior cortex', `${fmtMm(ped.L.chord)} mm`, `${fmtMm(ped.R.chord)} mm`, `screw length ${both('length', ' mm')}`))),
-        this.stmt(STATEMENTS.pedicleMethod), this.stmt(STATEMENTS.publishedC7));
+            chord(`screw length ${both('length', ' mm')}`))),
+        chordBand, this.stmt(STATEMENTS.pedicleMethod), this.stmt(STATEMENTS.publishedC7));
     }
     if (level.startsWith('T')) {
       type StudyMeans = Record<'widthStudyMeans' | 'heightStudyMeans' | 'transverseAngleStudyMeans' | 'sagittalAngleStudyMeans', Record<string, number>>
@@ -575,7 +580,7 @@ export class SpineAtlasPage {
             row('Transverse angle', deg(ped.L.transverseAngle), deg(ped.R.transverseAngle), spread(pub.transverseAngleStudyMeans, degf, '°')),
             row('Sagittal angle', sag(ped.L.sagittalAngle), sag(ped.R.sagittalAngle), spread(pub.sagittalAngleStudyMeans, degf, '°')),
             chord(`screw path length ${path.meanSd[0].toFixed(1)} ± ${path.meanSd[1].toFixed(1)} mm (MRI, ${path.n} vertebrae)`))),
-        ...held, this.stmt(STATEMENTS.pedicleMethod), this.stmt(STATEMENTS.publishedThoracic), this.stmt(STATEMENTS.publishedChord));
+        ...held, chordBand, this.stmt(STATEMENTS.pedicleMethod), this.stmt(STATEMENTS.publishedThoracic), this.stmt(STATEMENTS.publishedChord));
     }
     const pub = (published.levels as Record<string, (typeof published.levels)['L1']>)[level];
     const range = (o: Record<string, number>) => `${fmtMm(Math.min(...Object.values(o)))}–${fmtMm(Math.max(...Object.values(o)))} mm`;
@@ -590,7 +595,7 @@ export class SpineAtlasPage {
             `${ms(mx.L)} left, ${ms(mx.R)} right (n = ${mx.n}); ${ms(pub.transverseAngleNigeria.meanSd)} (n = ${pub.transverseAngleNigeria.n})`),
           row('Sagittal angle', sag(ped.L.sagittalAngle), sag(ped.R.sagittalAngle), '—'),
           chord(`${pub.chordSaudi.meanSd[0].toFixed(1)} ± ${pub.chordSaudi.meanSd[1].toFixed(1)} mm (CT, n = ${pub.chordSaudi.n})`))),
-      this.stmt(STATEMENTS.pedicleMethod), this.stmt(STATEMENTS.published), this.stmt(STATEMENTS.publishedChord));
+      chordBand, this.stmt(STATEMENTS.pedicleMethod), this.stmt(STATEMENTS.published), this.stmt(STATEMENTS.publishedChord));
   }
 
   /** The C2 isthmus height and the bone over the vertebral artery's groove, beside the usual definition of a
