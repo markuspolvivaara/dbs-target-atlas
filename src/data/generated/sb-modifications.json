@@ -867,6 +867,59 @@
    "date": "2026-11-11"
   },
   {
+   "step": "skullbase_v1_ends",
+   "operation": "a vessel that runs on down the spinal cord, which the model does not draw, cut where the drawn medulla is cut",
+   "structures": [
+    "Anterior spinal artery"
+   ],
+   "parameters": {
+    "vessels": [
+     "Anterior spinal artery"
+    ],
+    "pastMm": 0.05
+   },
+   "metrics": {
+    "Anterior spinal artery": {
+     "cut": {
+      "point": [
+       -0.0,
+       -44.78,
+       -54.08
+      ],
+      "normal": [
+       0.0,
+       0.0897,
+       -0.996
+      ],
+      "areaMm2": 139.3,
+      "rmsMm": 0.01
+     },
+     "L": {
+      "pastMm": 1.98,
+      "pointsPast": 24,
+      "points": 266,
+      "loops": 1,
+      "pointsAfter": 261,
+      "pastAfterMm": 0.0
+     },
+     "R": {
+      "pastMm": 1.98,
+      "pointsPast": 24,
+      "points": 266,
+      "loops": 1,
+      "pointsAfter": 261,
+      "pastAfterMm": 0.0
+     },
+     "file": "sb_anterior_spinal_artery.glb"
+    }
+   },
+   "validation": {
+    "check": "skullbase_v1_ends.check: none of it past the medulla's cut end"
+   },
+   "revision": "0d0159f",
+   "date": "2026-11-17"
+  },
+  {
    "step": "skullbase_v1_nerves",
    "operation": "the optic and olfactory nerves moved clear of the arteries (ends kept); the chiasm drawn by rule",
    "structures": [

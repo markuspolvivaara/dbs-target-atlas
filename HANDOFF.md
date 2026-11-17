@@ -221,6 +221,32 @@ commit and push it.
   - The figure packages are in `pipeline/data/raw/papers/figures/<PMCID>/` (git-ignored), from Europe PMC's API
     (`.../rest/<PMCID>/supplementaryFiles?includeInlineImage=true`); Europe PMC's website showed a bot check for the
     same pictures, which was not passed.
+  Merged with its own pull request (PR 20) at the user's word (2026-11-17).
+- AP-08, structures the surgical views' texts name and their openings reach but the views did not draw (17 November
+  2026; the user's choices, made on the audit's reachable shares for the default model), on
+  `fix/ap08-approach-structures`. Front end only: names added to the views' `context` lists in
+  `src/skullbase/approaches.ts` (a name there is all a view needs; v1 through `V1_NAMES` and `V1_ABSENT`).
+  - Pterional, lateral supraorbital and orbitozygomatic (`BEYOND`): optic chiasm, pituitary stalk, both communicating
+    arteries, basilar artery (one mesh: the whole trunk is drawn for its tip).
+  - Orbitozygomatic only: posterior cerebral artery (P1 to P2), superior cerebellar artery, trochlear nerve. Not in the
+    other two, where 5% and 2% of P1 are reachable.
+  - Pterional: the olfactory nerve (the supraorbital view had it). Retrosigmoid: hypoglossal nerve, superior petrosal
+    sinus, trochlear nerve. Kawase: oculomotor and trochlear nerves. Far lateral: anterior spinal artery (from the
+    audit's table for that view, not AP-08's summary).
+  - The three anterolateral summaries say these are drawn deeper in and to turn the view to find them: most do not
+    show from the opening camera.
+  - v1 (Z-Anatomy) gets the same where it has the structure: no pituitary stalk; the posterior cerebral artery whole.
+    **Told to the user:** on v1 the audit found little of some of these reachable (basilar tip 3%, 1% and 15% through
+    the pterional, orbitozygomatic and supraorbital openings; superior cerebellar artery 12% through the
+    orbitozygomatic; trochlear nerve 2% through the retrosigmoid); they are drawn there all the same, as on v3
+    (the user: fine as it is).
+  - The anterior spinal artery is cut where the medulla is cut (the user's word, once the far lateral view drew it:
+    it ran on into empty space, 5.5 and 9.0 mm past the cut on v3, 2.0 mm on v1; the models have no spinal cord).
+    `pipeline/vessel_end.py` finds the medulla's cut end as a plane and cuts the tube there, with a cap; v3 through
+    `skullbase_v3_clearance.py` (in the full run, and alone as `skullbase_v3_clearance.py ends`), v1 through the new
+    `skullbase_v1_ends.py`. Each was run alone, the one file compressed (`compress.mjs <kind> <file>`) and the
+    section's `finalize` run (v3 816 of 816 checks, v1 648 of 648): only the two artery files, their manifest entries
+    (size, centroid, card text) and the modification records changed. Run again, both change nothing.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -375,7 +401,8 @@ commit and push it.
     orbitozygomatic far_lateral kawase`, `skullbase_v1.py approaches`, `skullbase_v1_brain.py`,
     `skullbase_v1_pfossa.py`, `skullbase_v1.py brain`, `skullbase_v1_cavernous.py`, `skullbase_v1.py cavernous`,
     `skullbase_v1_endonasal.py`, `skullbase_v1_vessels.py` (before the tumours: their pushed copies of the AICA start
-    from it as moved), `SB_PROFILE=v1 skullbase_v3_tumours.py`, `skullbase_v1_inbone.py` (last: it measures the tubes as
+    from it as moved), `skullbase_v1_ends.py` (the anterior spinal artery cut where the medulla is cut),
+    `SB_PROFILE=v1 skullbase_v3_tumours.py`, `skullbase_v1_inbone.py` (last: it measures the tubes as
     built), `node pipeline/compress.mjs skullbase <the changed files>`, `skullbase_build.py finalize`.
   - Compress v1 by file list (`node pipeline/compress.mjs skullbase a.glb b.glb …`), not whole: the desktop's v1 build
     cache holds stale GLBs, and compressing all of it on 2026-11-15 changed 213 shipped files and added 43.
@@ -478,7 +505,9 @@ commit and push it.
   2. `skullbase_pfossa.py`
   3. `skullbase_v3.py` (it deletes and rewrites its own `tb_*.glb`, the next two steps' included, so run them after it)
   4. `skullbase_v3_cavernous.py`
-  5. `skullbase_v3_endonasal.py` (it ends by running `skullbase_v3_clearance.py` and `skullbase_v3_junctions.py`)
+  5. `skullbase_v3_endonasal.py` (it ends by running `skullbase_v3_clearance.py` and `skullbase_v3_junctions.py`;
+     the clearance also cuts the anterior spinal artery where the medulla is cut, and `skullbase_v3_clearance.py ends`
+     makes only that cut on a built model)
   6. `skullbase_v3_chiasm.py` (the optic chiasm and tracts drawn by rule, the optic nerves joined to it)
   7. `skullbase_v3_tumours.py` (the tumours and the brain pushed by them; it merges its items into the manifest)
   8. `node pipeline/compress.mjs skullbase-v3`, then restore the noise GLBs on the desktop (see the memory note),
@@ -493,7 +522,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (453 tests on `fix/spine-pedicle-chord`)
+  - `npx vitest run` (455 tests on `fix/ap08-approach-structures`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`

@@ -3159,7 +3159,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_anterior_spinal_artery.cleared.glb",
-   "bytes": 10576,
+   "bytes": 9284,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3181,17 +3181,17 @@
    "layer": "tracts",
    "system": "Vertebral artery",
    "fitted": true,
-   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), each branch moved to start on this patient's vertebral artery (TopBrain's label), then laid onto the fitted brainstem's surface (drawn onto it from up to 4 mm away, none of it left inside) and smoothed (a median 7.8 mm on the right, 6.3 mm on the left). Its course is approximate. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py).",
+   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), each branch moved to start on this patient's vertebral artery (TopBrain's label), then laid onto the fitted brainstem's surface (drawn onto it from up to 4 mm away, none of it left inside) and smoothed (a median 7.8 mm on the right, 6.3 mm on the left). Its course is approximate. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py). Cut where the drawn medulla ends: it runs on down the spinal cord, which this model does not show (vessel_end.py).",
    "centroid": {
     "L": [
-     -3.0,
-     -20.8,
-     -38.93
+     -3.44,
+     -21.14,
+     -36.03
     ],
     "R": [
-     -1.07,
-     -20.98,
-     -42.41
+     0.27,
+     -21.91,
+     -37.95
     ]
    },
    "clearedFrom": "assets/skullbase-v3/tb_anterior_spinal_artery.glb"

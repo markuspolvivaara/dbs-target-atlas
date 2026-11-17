@@ -19,6 +19,11 @@ has no fissures for them to lie in).
   This CT's own arteries: the brainstem gives way, should one lie in it (carve: a channel cut, the tissue straight
   behind it removed, the part meshed again).
 
+  A vessel that runs on down the spinal cord, which the model does not draw, is cut where the drawn medulla is cut
+  (ENDS_WITH_MEDULLA, vessel_end.py: the anterior spinal artery, which ran 5.5 and 9 mm past it into empty space).
+  `skullbase_v3_clearance.py ends` makes only that cut, on the files as they are shown, for a model whose other
+  clearances stand (then compress that file and run `skullbase_v3.py finalize`).
+
 A changed mesh is written as a file of its own (<id>.cleared.glb) and v3's item points to it; the file its source wrote
 is never changed, so running this again changes nothing. skullbase_v3_endonasal.py (the last of v3's steps to write its
 manifest) runs this and then skullbase_v3_junctions.py, which joins the cleared files; on their own, run this and then
@@ -37,6 +42,7 @@ from scipy.spatial import cKDTree
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 from glb import TRIANGLES, read_glb_full, write_glb  # noqa: E402
+import vessel_end as VE  # noqa: E402
 
 DATA = ROOT / "data" / "build"
 GEN = ROOT.parent / "src" / "data" / "generated"
@@ -59,7 +65,10 @@ LIFT_NOTE = " Lifted out of the fitted brainstem and cerebellum where this cours
 CARVE_NOTE = (" Where this CT's own {} lies in it (the fitted template's surface reaching past the artery), a channel is"
               " cut for it: the artery widened by 0.3 mm and the tissue straight behind it removed, the surface meshed again"
               " (skullbase_v3_clearance.py).")
-NOTES = ("Lifted out of the fitted brainstem", "Where this CT's own")    # (each note's start)
+# Vessels that run on down the spinal cord, which this model does not draw: cut where the drawn medulla is cut
+# (vessel_end.py; the owner's decision of 17 November 2026, when the far lateral view began to draw the artery)
+ENDS_WITH_MEDULLA, END_NOTE, END_PAST_MM = VE.VESSELS, VE.NOTE, VE.PAST_MM
+NOTES = ("Lifted out of the fitted brainstem", "Where this CT's own", "Cut where the drawn medulla ends")    # (each note's start)
 
 
 def by_name(items_list: list) -> dict:
@@ -176,6 +185,24 @@ def cleared(item: dict, nodes: dict, note: str) -> None:
 def shown(item: dict) -> Path:
     """The file the viewer shows."""
     return DATA / item["file"].replace("assets/", "")
+
+
+def medulla_end(by: dict) -> tuple[np.ndarray, np.ndarray, dict]:
+    """The drawn medulla's cut end (vessel_end.end_plane), on the file its source wrote: the cut is not carved."""
+    return VE.end_plane(read_glb_full(file_of(by["Medulla oblongata"])))
+
+
+def end_at_medulla(item: dict, nodes: dict, by: dict) -> dict | None:
+    """Cut a vessel's mesh where the medulla is cut (in place) and put the item's centroid at what is left of it: a
+    report, or None if the vessel does not reach the cut (as when it has been cut already)."""
+    c0, n, plane = medulla_end(by)
+    cut = VE.trim(nodes, c0, n)
+    if not any(r["pointsPast"] for r in cut.values()):
+        return None
+    for s, r in cut.items():
+        if r["pointsPast"] and s in item.get("centroid", {}):
+            item["centroid"][s] = np.round(nodes[s]["positions"].mean(0), 2).tolist()
+    return {"cut": plane, **cut}
 
 
 def normals(P: np.ndarray, T: np.ndarray) -> np.ndarray:
@@ -477,15 +504,27 @@ def clear(items_list: list) -> dict:
             if any((solid.depth(Q) > 0).any() for nd in nodes.values() for Q in states(nd)):
                 own.append((it, nodes))           # this CT's own: the brainstem gives way (below)
             continue
-        if not any((hind[sh].depth(shaped(nd, sh)) > 0).any() for sh in SHAPES for nd in nodes.values()):
+        runs_in = any((hind[sh].depth(shaped(nd, sh)) > 0).any() for sh in SHAPES for nd in nodes.values())
+        ends = it["name"] in ENDS_WITH_MEDULLA
+        if not runs_in and not ends:
             continue
-        rest = {s: nd["positions"].copy() for s, nd in nodes.items()}
-        n = lift(nodes, stem_solids)
-        posed = lift_posed(nodes, fields)
-        moved = max(float(np.linalg.norm(nodes[s]["positions"] - rest[s], axis=1).max()) for s in nodes)
-        cleared(it, nodes, LIFT_NOTE)
-        report[it["name"]] = {"insidePoints": n, "insideHindbrainPoints": posed, "movedMm": round(moved, 2),
-                              "shapes": sorted({t["name"] for nd in nodes.values() for t in nd["targets"]})}
+        note, rep = "", {}
+        if runs_in:
+            rest = {s: nd["positions"].copy() for s, nd in nodes.items()}
+            n = lift(nodes, stem_solids)
+            posed = lift_posed(nodes, fields)
+            moved = max(float(np.linalg.norm(nodes[s]["positions"] - rest[s], axis=1).max()) for s in nodes)
+            note = LIFT_NOTE
+            rep = {"insidePoints": n, "insideHindbrainPoints": posed, "movedMm": round(moved, 2),
+                   "shapes": sorted({t["name"] for nd in nodes.values() for t in nd["targets"]})}
+        if ends:                                  # (after the lift: the vessel as it lies on the brainstem)
+            cut = end_at_medulla(it, nodes, by)
+            if cut:
+                note += END_NOTE
+                rep["endsWithMedulla"] = cut
+        if note:
+            cleared(it, nodes, note)
+            report[it["name"]] = rep
     for name in STEM:
         if name not in by or not own:
             continue
@@ -521,7 +560,58 @@ def check(items_list: list) -> list[tuple[bool, str]]:
             w2 = max(float(x.max()) for x in d)
             out.append((share <= CEREBELLUM_SHARE and w2 <= CEREBELLUM_MM,
                         f"{it['name']}: {100 * share:.1f} % of it more than {CEREBELLUM_IN_MM} mm, up to {w2:.1f} mm, inside the cerebellum"))
+    return out + end_check(by)
+
+
+def end_check(by: dict) -> list[tuple[bool, str]]:
+    """None of a vessel of ENDS_WITH_MEDULLA lies past the medulla's cut end, in any of its shapes."""
+    c0, n, _ = medulla_end(by)
+    out = []
+    for name in ENDS_WITH_MEDULLA:
+        if name in by:
+            past = max(float(((Q - c0) @ n).max()) for nd in read_glb_full(shown(by[name])).values() for Q in states(nd))
+            out.append((past <= END_PAST_MM, f"{name}: {max(past, 0.0):.1f} mm past the medulla's cut end"))
     return out
+
+
+def record_ends(rep: dict) -> None:
+    """The cut at the medulla's end, as its own entry in the modification record: per vessel the cut's plane and, per
+    half, how far the vessel ran past it."""
+    from modifications import record
+    record("sbv3", "skullbase_v3_ends", "a vessel that runs on down the spinal cord, which the model does not draw, cut where the drawn medulla is cut",
+           list(rep), {"vessels": list(ENDS_WITH_MEDULLA), "pastMm": END_PAST_MM}, rep,
+           {"check": "skullbase_v3_clearance.check: none of it past the medulla's cut end"})
+
+
+def ends_only() -> int:
+    """Only the cut at the medulla's end, on the files as they are shown (a full run makes the same cut; run again,
+    this changes nothing). For a model whose other clearances stand."""
+    p = GEN / "sbv3-manifest.json"
+    m = json.loads(p.read_text())
+    by = by_name(m["structures"])
+    rep = {}
+    for name in ENDS_WITH_MEDULLA:
+        it = by[name]
+        if it.get("joinedFrom"):
+            raise SystemExit(f"{name}: joined by skullbase_v3_junctions.py; run the clearance in full, then the junctions")
+        nodes = read_glb_full(shown(it))
+        cut = end_at_medulla(it, nodes, by)
+        if not cut:
+            continue
+        if it.get("clearedFrom"):                 # (already a file of this step's: written again, its note added)
+            write(shown(it), nodes, it["id"])
+            if END_NOTE not in it["derivation"]:
+                it["derivation"] += END_NOTE
+        else:
+            cleared(it, nodes, END_NOTE)
+        rep[name] = cut
+    p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
+    print(json.dumps(rep, indent=1) if rep else "nothing past the medulla's cut end")
+    if rep:
+        record_ends(rep)
+    bad = [msg for ok, msg in end_check(by) if not ok]
+    print("still past it:", bad or "none")
+    return 1 if bad else 0
 
 
 def main() -> int:
@@ -546,8 +636,11 @@ def main() -> int:
            list(rep), {"clearMm": CLEAR_MM, "shapes": list(SHAPES), "cerebellumInMm": CEREBELLUM_IN_MM,
                        "cerebellumShare": CEREBELLUM_SHARE, "cerebellumMm": CEREBELLUM_MM},
            rep, {"checks": len(checks), "failed": bad})
+    ends = {k: v["endsWithMedulla"] for k, v in rep.items() if "endsWithMedulla" in v}
+    if ends:
+        record_ends(ends)
     return 1 if bad else 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(ends_only() if sys.argv[1:] == ["ends"] else main())

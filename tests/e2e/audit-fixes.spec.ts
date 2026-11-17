@@ -993,3 +993,34 @@ test('pterional: the anterior clinoidectomy and sphenoid ridge switches, by key 
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// AP-08 (the owner's choices of 17 November 2026): what a surgical view's text names and its opening reaches is drawn in
+// it, on both models (Z-Anatomy has no pituitary stalk and draws the posterior cerebral artery whole)
+test('skull base: the surgical views draw what their texts name beyond the opening', async ({ page }) => {
+  const g = guard(page);
+  const drawn = async (id: string) => Object.values((await drawnSides(page, id)) ?? {}).some(Boolean);
+  const views: [string, string, string[], string[]][] = [
+    ['skullbase', 'orbitozygomatic', ['tb_optic_chiasm', 'tb_pituitary_stalk', 'sb_anterior_communicating_artery', 'sb_posterior_communicating_artery', 'sb_basilar_artery',
+      'sb_posterior_cerebral_artery_p1_p2', 'sb_superior_cerebellar_artery', 'tb_trochlear_nerve_iv'], []],
+    ['skullbase', 'transsylvian', ['tb_optic_chiasm', 'tb_pituitary_stalk', 'sb_anterior_communicating_artery', 'sb_posterior_communicating_artery', 'sb_basilar_artery', 'tb_olfactory_nerve_i'],
+      ['sb_posterior_cerebral_artery_p1_p2', 'sb_superior_cerebellar_artery']],
+    ['skullbase', 'retrosigmoid', ['tb_hypoglossal_nerve_xii', 'sb_superior_petrosal_sinus', 'tb_trochlear_nerve_iv'], []],
+    ['skullbase', 'kawase', ['tb_oculomotor_nerve_iii', 'tb_trochlear_nerve_iv'], []],
+    ['skullbase', 'far_lateral', ['tb_anterior_spinal_artery'], []],
+    ['skullbase-v1', 'orbitozygomatic', ['sb_optic_chiasm', 'sb_anterior_communicating_artery', 'sb_posterior_communicating_artery', 'sb_basilar_artery', 'sb_posterior_cerebral_artery',
+      'sb_superior_cerebellar_artery', 'sb_trochlear_nerve_iv'], []],
+    ['skullbase-v1', 'lso', ['sb_optic_chiasm', 'sb_anterior_communicating_artery', 'sb_posterior_communicating_artery', 'sb_basilar_artery'], ['sb_posterior_cerebral_artery']],
+  ];
+  for (const [model, view, ids, absent] of views) {
+    await open(page, `./${model}/#/atlas?g=${view}`);
+    for (const id of ids) expect(await drawn(id), `${model} ${view}: ${id}`).toBe(true);
+    for (const id of absent) expect(await drawn(id), `${model} ${view}: ${id}`).toBe(false);
+  }
+  // the summary says they are there to find, and the legend lists them
+  await open(page, './skullbase/#/atlas?g=orbitozygomatic');
+  await expect(page.locator('.pane:not([hidden]) article.card').first()).toContainText('turn the view to find them');
+  await expect(page.locator('.legend-box')).toContainText('Basilar artery');
+  await expect(page.locator('.legend-box')).toContainText('Trochlear nerve');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
