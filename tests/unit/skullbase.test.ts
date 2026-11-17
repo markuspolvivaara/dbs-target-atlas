@@ -357,7 +357,7 @@ describe('e2e group list stays in step with the groups module', () => {
     expect(SB_GROUPS.filter((g) => g.kind === 'tumour').map((g) => g.id)).toEqual(['knosp_0', 'knosp_1', 'knosp_2', 'knosp_3a', 'koos_i', 'koos_ii',
       'koos_iii', 'koos_iv', 'meningioma_olfactory', 'meningioma_tuberculum', 'meningioma_petroclival', 'meningioma_foramen_magnum']);
     expect(SB_GROUPS.filter((g) => g.kind === 'approach').map((g) => g.id).sort())
-      .toEqual(['endonasal', 'far_lateral', 'interhemispheric', 'kawase', 'lso', 'orbitozygomatic', 'retrosigmoid', 'telovelar', 'transsylvian']);
+      .toEqual(['endonasal', 'far_lateral', 'interhemispheric', 'kawase', 'lso', 'orbitozygomatic', 'retrosigmoid', 'subtemporal', 'telovelar', 'transsylvian']);
     expect(SB_GROUPS.filter((g) => ['temporal', 'ear_r', 'ear_l', 'facial', 'inner_ear', 'middle_ear'].includes(g.id)).length).toBe(6);
     // the all-bones view draws every bone and every landmark
     const all = SB_GROUPS.find((g) => g.id === 'bone_all_bones')!;
@@ -1047,7 +1047,7 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
   });
   it('a surgical view opens with its shapes full on, and a link that closes one keeps it closed', () => {
     const views = G3.SB_GROUPS.filter((g) => g.kind === 'approach' && g.morphs?.length);
-    expect(views.map((g) => g.id).sort()).toEqual(['far_lateral', 'interhemispheric', 'lso', 'orbitozygomatic', 'retrosigmoid', 'telovelar', 'transsylvian']);
+    expect(views.map((g) => g.id).sort()).toEqual(['far_lateral', 'interhemispheric', 'lso', 'orbitozygomatic', 'retrosigmoid', 'subtemporal', 'telovelar', 'transsylvian']);
     for (const g of views) {
       // every shape full on, but the far lateral view's second one (a view aid) and the clinoidectomy switch, which open at 0
       expect(g.morphDefault, g.id).toEqual(Object.fromEntries(g.morphs!.filter((m) => m !== 'farLateralBack' && m !== 'clinoid').map((m) => [m, 1])));
@@ -1061,12 +1061,12 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
   it('the cameras: v3\'s surgical views their own directions (the telovelar view its earlier one), the tumours of a view framed alike', () => {
     const cam = Object.fromEntries(G3.SB_GROUPS.filter((g) => g.kind === 'approach').map((g) => [g.id, g.camera]));
     expect(cam).toMatchObject({ transsylvian: 'pterional', orbitozygomatic: 'orbitozygomaticFront', interhemispheric: 'vertexFront',
-      retrosigmoid: 'retrosigmoidLateral', far_lateral: 'farLateralLow', telovelar: 'suboccipital' });
+      retrosigmoid: 'retrosigmoidLateral', far_lateral: 'farLateralLow', telovelar: 'suboccipital', subtemporal: 'subtemporalLow' });
     // v1 (this file's default model) opens its views as v3 does, except the retrosigmoid: on Z-Anatomy's skull v3's view
     // from below meets the mastoid, so it keeps its level one
     expect(Object.fromEntries(SB_GROUPS.filter((g) => g.kind === 'approach').map((g) => [g.id, g.camera]))).toMatchObject({
       transsylvian: 'pterional', orbitozygomatic: 'orbitozygomaticFront', interhemispheric: 'vertexFront', retrosigmoid: 'retrosigmoidLevel',
-      far_lateral: 'farLateralLow', telovelar: 'suboccipital' });
+      far_lateral: 'farLateralLow', telovelar: 'suboccipital', subtemporal: 'subtemporalLow' });
     // every tumour drawn in one view is framed on the same structures, so that going from one to another keeps the camera
     const tumours = G3.SB_GROUPS.filter((g) => g.tumour);
     const byView = new Map<string, typeof tumours>();
@@ -1162,6 +1162,91 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     const { V1_TEXT } = await import('../../src/skullbase/approaches');
     for (const text of [APPROACHES.find((a) => a.id === 'far_lateral')!.notShown, V1_TEXT.far_lateral.notShown])
       expect(text).toMatch(/The spinal cord is not drawn either: the medulla is cut about a centimetre below the foramen magnum, and the anterior spinal artery is cut with it/);
+  });
+  // the roadmap's last surgical view (the owner's choices of 17 November 2026: a 5 x 5 cm flap over the zygomatic root
+  // as Nakov 2017 has it, the temporal lobe's lift as a slider, both models)
+  it('the subtemporal view: its flap over the zygomatic arch’s root, and a slider that lifts a copy of the temporal lobe, on both models', async () => {
+    const v1Geom = (await import('../../src/data/generated/sb-approaches.json')).default as unknown as typeof geom;
+    const models: [string, typeof geom, typeof v3.structures, { SB_GROUP: typeof G3.SB_GROUP }][] = [
+      ['v3', geom, v3.structures, G3], ['v1', v1Geom, SB_MANIFEST.structures, { SB_GROUP: new Map(SB_GROUPS.map((g) => [g.id, g])) as typeof G3.SB_GROUP }]];
+    for (const [model, ge, list, groups] of models) {
+      const ap = ge.subtemporal as unknown as { how: string; removedMl: number; cutBones: string[]; burrHoles: number[][]; measured: Record<string, number> };
+      const k = ap.measured;
+      // the flap: 50 x 50 mm as drawn, a little less as cut (it keeps to the cavity's wall and the floor); nothing drilled
+      expect(k.flapMm2, model).toBe(2500);
+      expect(k.sideMm2, model).toBeGreaterThan(2000);
+      expect(k.sideMm2, model).toBeLessThanOrEqual(2500);
+      expect(ap.removedMl, model).toBeGreaterThan(8);
+      expect(ap.removedMl, model).toBeLessThan(13);
+      expect(ap.how, model).toMatch(/Nakov 2017: 5 × 5 cm, below the superior temporal line and centred above the root of the zygoma/);
+      expect(ap.how, model).toMatch(/The petrous apex is not drilled/);
+      // the zygomatic arch's root as found on the skull: near the frame's origin front to back, its upper surface within
+      // 3 mm of the middle fossa floor's level (Nakov 2017: level with it)
+      expect(Math.abs(k.archRootY), model).toBeLessThan(5);
+      expect(Math.abs(k.archTopZ - k.floorZ), model).toBeLessThan(3);
+      // the bone removed lies over the root front to back, and above the floor's level
+      const removed = list.find((x) => x.id === 'sb_appr_subtemporal__removed')!;
+      const { P } = await meshSoup(removed.file);
+      let y0 = Infinity, y1 = -Infinity, z0 = Infinity, z1 = -Infinity;
+      for (let i = 0; i < P.length; i += 3) { y0 = Math.min(y0, P[i + 1]); y1 = Math.max(y1, P[i + 1]); z0 = Math.min(z0, P[i + 2]); z1 = Math.max(z1, P[i + 2]); }
+      expect(Math.abs((y0 + y1) / 2 - k.archRootY), model).toBeLessThan(2);
+      // (the cut bone reaches a little past the 50 mm outline on v1, where the thin bone the flap leaves beside it goes with it)
+      expect(y1 - y0, model).toBeGreaterThan(46);
+      expect(y1 - y0, model).toBeLessThan(model === 'v1' ? 54 : 52);
+      expect(z0, model).toBeGreaterThan(k.floorZ - 3);       // (flush with the floor, which under the flap lies a little below the tegmen's level)
+      expect(z1, model).toBeLessThan(k.floorZ + (model === 'v1' ? 54 : 52));
+      // the zygomatic bone stays whole: the view draws no cut copy of it
+      expect(list.some((x) => x.id.startsWith('sb_appr_subtemporal__zygomatic')), model).toBe(false);
+      // the slider: one shape, on a copy of the temporal lobe drawn in this view only; the right lobe lifted, straight
+      // up, by the stated amount; the left one and everything else left alone
+      const copy = list.find((x) => x.id === 'br_temporal_lobe__subtemporal')!;
+      expect(copy, model).toMatchObject({ replaces: 'br_temporal_lobe', forView: 'subtemporal', morph: true });
+      const shapes = await nodeMorphs(copy.file);
+      expect(Object.keys(shapes.R), model).toEqual(['subtemporal']);
+      expect(Object.keys(shapes.L ?? {}), model).toEqual([]);
+      expect(shapes.R.subtemporal.max, model).toBeGreaterThan(k.liftMm - 0.3);
+      expect(shapes.R.subtemporal.max, model).toBeLessThanOrEqual(k.liftMm + 0.05);
+      expect(shapes.R.subtemporal.mean[2], model).toBeGreaterThan(1);
+      expect(Math.abs(shapes.R.subtemporal.mean[0]) + Math.abs(shapes.R.subtemporal.mean[1]), model).toBeLessThan(0.05);
+      expect([k.liftMm, k.liftSpanMm, k.liftFallMm, k.liftedMaxMm], model).toEqual([15, 16, 18, 15]);
+      expect(k.liftMm / k.liftFallMm, model).toBeLessThan(1);          // (it cannot fold the lobe)
+      // at rest the copy is the lobe itself
+      const lobe = list.find((x) => x.id === 'br_temporal_lobe')!;
+      const [a, b] = [await nodeMeans(copy.file), await nodeMeans(lobe.file)];
+      for (const side of ['L', 'R']) for (let i = 0; i < 3; i++) expect(Math.abs(a[side][i] - b[side][i]), `${model} ${side}`).toBeLessThan(0.05);
+      // the view: the copy in the lobe's place, one slider, open as the view opens, looking along the floor
+      const g = groups.SB_GROUP.get('subtemporal')!;
+      expect(g.structures, model).toContain(copy.id);
+      expect(g.structures, model).not.toContain(lobe.id);
+      expect(g.structures, model).toContain(removed.id);
+      expect([g.morphs, g.morphDefault, g.camera, g.hemi], model).toEqual([['subtemporal'], { subtemporal: 1 }, 'subtemporalLow', 'R']);
+    }
+    // what it draws: v3 the vein of Labbé (drawn by rule) and no tentorium; v1 Z-Anatomy's tentorium, no vein, the insula left out
+    const names3 = new Set(G3.SB_GROUP.get('subtemporal')!.structures.map((id) => v3.structures.find((x) => x.id === id)?.name));
+    for (const n of ['Posterior cerebral artery (P1–P2)', 'Superior cerebellar artery', 'Basilar artery', 'Posterior communicating artery', 'Oculomotor nerve (III)',
+      'Trochlear nerve (IV)', 'Midbrain', 'Pons', 'Inferior anastomotic vein (of Labbé)', 'Superior petrosal sinus']) expect(names3.has(n), n).toBe(true);
+    expect(v3.structures.some((x) => x.name === 'Tentorium cerebelli')).toBe(false);
+    const names1 = new Set(SB_GROUPS.find((x) => x.id === 'subtemporal')!.structures.map((id) => SB_MANIFEST.structures.find((x) => x.id === id)?.name));
+    for (const n of ['Posterior cerebral artery', 'Superior cerebellar artery', 'Basilar artery', 'Oculomotor nerve (III)', 'Trochlear nerve (IV)', 'Midbrain', 'Pons',
+      'Tentorium cerebelli']) expect(names1.has(n), `v1 ${n}`).toBe(true);
+    expect(names1.has('Insula')).toBe(false);
+    expect(SB_MANIFEST.structures.some((x) => /Labb/.test(x.name))).toBe(false);
+    // its address: the slider's own parameter, kept in a link
+    expect(T3.MORPH_PARAMS.subtemporal).toBe('st');
+    const st = T3.defaultSkullState();
+    st.grp = 'subtemporal';
+    st.morphs = { subtemporal: 0.4 };
+    expect(T3.encodeSkull(st)).toContain('st=40');
+    expect(T3.decodeSkull(T3.encodeSkull(st)).morphs).toEqual({ subtemporal: 0.4 });
+    // its text: every section sourced, the five new references among them
+    const ap = APPROACHES.find((x) => x.id === 'subtemporal')!;
+    expect(ap.sections.map((x) => x.title)).toEqual(['The craniotomy', 'Lifting the temporal lobe', 'The vein of Labbé', 'The tentorial edge and the nerves', 'What it reaches', 'Care points']);
+    const cited = new Set(ap.sections.flatMap((x) => x.claims).flatMap((x) => x.refIds));
+    expect([...cited].sort()).toEqual(['choquevelasquez2018st', 'li2022', 'minca2022', 'nakov2017', 'sanchezcorrea2019', 'signoretti2025']);
+    for (const cl of ap.sections.flatMap((x) => x.claims)) expect(cl.refIds.length, cl.text).toBeGreaterThan(0);
+    // a video article read in its abstract only says so
+    for (const cl of ap.sections.flatMap((x) => x.claims).filter((x) => x.refIds.includes('choquevelasquez2018st'))) expect(cl.text).toMatch(/\((Checked against the abstract: a video article|Abstract)\.\)$/);
+    expect(ap.notShown).toMatch(/the tentorium, which this model does not have/);
   });
 });
 

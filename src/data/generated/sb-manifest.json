@@ -7083,6 +7083,239 @@
    "forView": "kawase"
   },
   {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_subtemporal__frontal_bone",
+   "name": "Frontal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_subtemporal__frontal_bone.glb",
+   "bytes": 136404,
+   "refIds": [],
+   "category": "bone",
+   "approach": "subtemporal",
+   "replaces": "sb_frontal_bone",
+   "derivation": "Z-Anatomy's frontal bone with the bone of the subtemporal craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -27.7,
+     34.9,
+     39.9
+    ],
+    "R": [
+     34.91,
+     32.47,
+     37.42
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_subtemporal__parietal_bone",
+   "name": "Parietal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_subtemporal__parietal_bone.glb",
+   "bytes": 225016,
+   "refIds": [],
+   "category": "bone",
+   "approach": "subtemporal",
+   "replaces": "sb_parietal_bone",
+   "derivation": "Z-Anatomy's parietal bone with the bone of the subtemporal craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -25.92,
+     -50.8,
+     68.47
+    ],
+    "R": [
+     40.35,
+     -39.86,
+     60.84
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_subtemporal__sphenoid_bone",
+   "name": "Sphenoid bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_subtemporal__sphenoid_bone.glb",
+   "bytes": 133436,
+   "refIds": [],
+   "category": "bone",
+   "approach": "subtemporal",
+   "replaces": "sb_sphenoid_bone",
+   "derivation": "Z-Anatomy's sphenoid bone with the bone of the subtemporal craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -21.9,
+     11.57,
+     -4.62
+    ],
+    "R": [
+     28.32,
+     14.76,
+     -0.18
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_subtemporal__temporal_bone",
+   "name": "Temporal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_subtemporal__temporal_bone.glb",
+   "bytes": 412648,
+   "refIds": [],
+   "category": "bone",
+   "approach": "subtemporal",
+   "replaces": "sb_temporal_bone",
+   "derivation": "Z-Anatomy's temporal bone with the bone of the subtemporal craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -44.43,
+     -25.12,
+     -14.03
+    ],
+    "R": [
+     45.56,
+     -23.95,
+     -13.52
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_subtemporal__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/sb_appr_subtemporal__removed.glb",
+   "bytes": 245940,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of Z-Anatomy's bone by rule",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "subtemporal",
+   "layer": "nuclei",
+   "derivation": "The bone the subtemporal craniotomy removes: 11.0 ml. A right temporal flap drawn 50 × 50 mm (2500 mm² seen from the side as drawn; Nakov 2017: 5 × 5 cm, below the superior temporal line and centred above the root of the zygoma; the bone removed covers about 2491 mm² seen from the side), centred front to back over the zygomatic arch's root as found on this skull (where, going back, the arch last stands free of the squama: 1.0 mm in front of the frame's origin; its upper surface there lies 1.5 mm below the level of the middle fossa floor, taken at the tegmen as located on this model; Nakov 2017: the floor is level with the root's upper surface), its base at that level, cut down flush with the floor. Only the wall of the cranial cavity is taken, of the temporal, sphenoid and parietal bones: the zygoma, its arch and the orbit's lateral wall stay. The petrous apex is not drilled. On this model the thin bone the flap leaves beside it goes with it, as at its other flaps: a rim of the frontal bone at the pterion among it. The cut's edge smoothed over 1 mm (illustrative).",
+   "centroid": {
+    "L": [
+     59.11,
+     0.06,
+     19.77
+    ],
+    "R": [
+     59.11,
+     0.06,
+     19.77
+    ]
+   }
+  },
+  {
+   "id": "br_temporal_lobe__subtemporal",
+   "name": "Temporal lobe",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/br_temporal_lobe__subtemporal.glb",
+   "bytes": 214224,
+   "colour": {
+    "token": "sbBrain",
+    "light": "#9E625E",
+    "dark": "#A86A66"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "brain",
+   "layer": "cortex",
+   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue. In the subtemporal view its slider lifts it off the middle fossa floor by up to 15 mm at the flap's middle, less front and back of it, towards the midline and with height above the floor (skullbase_v3.py: temporal_lobe_shape; illustrative): a shape, not a simulation.",
+   "centroid": {
+    "L": [
+     -42.9,
+     -40.36,
+     21.24
+    ],
+    "R": [
+     42.86,
+     -40.3,
+     21.16
+    ]
+   },
+   "replaces": "br_temporal_lobe",
+   "pushedFrom": "assets/skullbase/br_temporal_lobe.glb",
+   "forView": "subtemporal",
+   "morph": true
+  },
+  {
    "id": "tm_knosp_0",
    "name": "Pituitary adenoma (Knosp 0)",
    "aliases": [],

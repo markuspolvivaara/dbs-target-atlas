@@ -1089,6 +1089,10 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       // farLateral: from behind, the side and below, along the side of the medulla to the front of the foramen magnum
       // subtemporal: from the side and above, under the lifted temporal lobe down onto the middle fossa floor (Kawase)
       case 'subtemporal': dir = new THREE.Vector3(0.97 * sideSign, -0.08, 0.22); break;
+      // subtemporalLow: from the side, a little behind and below, along the middle fossa floor under the lifted temporal
+      // lobe to the tentorial edge (the subtemporal view; chosen by eye from renders of both models, November 2026: from
+      // above the floor hides the incisura, from lower the zygomatic arch and the mastoid stand in the way)
+      case 'subtemporalLow': dir = new THREE.Vector3(0.97 * sideSign, -0.12, -0.18); break;
       case 'farLateral': dir = new THREE.Vector3(0.5 * sideSign, -0.82, -0.28); break;
       // Skull base v3's surgical views (v1 keeps the presets above): each the direction, near the opening's own axis,
       // from which the default camera saw the most of the structures the view's text names, its shapes full on (a search

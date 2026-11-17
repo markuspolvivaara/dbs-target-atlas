@@ -247,6 +247,35 @@ commit and push it.
     `skullbase_v1_ends.py`. Each was run alone, the one file compressed (`compress.mjs <kind> <file>`) and the
     section's `finalize` run (v3 816 of 816 checks, v1 648 of 648): only the two artery files, their manifest entries
     (size, centroid, card text) and the modification records changed. Run again, both change nothing.
+  Merged with its own pull request (PR 21) at the user's word (2026-11-17).
+- The subtemporal view (17 November 2026; the roadmap's last surgical view; the user's choices: Nakov's 5 × 5 cm
+  flap over the zygomatic root, the temporal lobe's lift as a slider, both models), on `feat/subtemporal-view`:
+  - The cut: `subtemporal()` in `pipeline/skullbase_v3_approach.py`. The zygomatic arch's root is found on the skull
+    from the side (`zygomatic_root`: y = 2.0 mm on v3, 1.0 on v1); the flap is 50 × 50 mm centred on it, its base at
+    the tegmen's level, kept to bone that lies on the cranial cavity and to the temporal, sphenoid and parietal
+    bones (9.9 ml on v3, 11.0 ml on v1, where the thin bone beside the flap goes with it, a rim of the frontal bone
+    among it).
+  - The slider: `temporal_lobe_shape()` in `pipeline/skullbase_v3.py` writes `br_temporal_lobe__subtemporal`, a copy
+    of the lobe for this view only (`forView`, `replaces`) with one morph target, `subtemporal` (15 mm, span 16,
+    fall 18, none within 8 mm of the midline: the Kawase view's values). **No brain step was rerun**: v1's brain step
+    does not give the same cortex twice on the desktop, and a target on a view-only copy leaves every other file as
+    it was. The lift's numbers go into the approach's `measured` (both models' `*-approaches.json`), which the
+    slider's note reads.
+  - How it was built, on each model: `skullbase_v3_approach.py only subtemporal` (v1: with `SB_PROFILE=v1`), then
+    `skullbase_v3.py approaches` (v1: `skullbase_v1.py approaches`), `compress.mjs <kind> <the six new files>`,
+    `finalize` (v3 839 of 839 checks, v1 664 of 664). The approaches step puts the approach items at the end of the
+    manifest and, on v1, writes six pterional and orbitozygomatic bone entries' centroids from `approach.json`,
+    whose meshes are newer than the shipped files: the manifests were put back in their committed order with the
+    new items after the Kawase view's, and those six entries kept as committed. The manifests' diffs are additions
+    only; no shipped file other than the twelve new ones changed.
+  - Front end: the view's entry and five references in `src/skullbase/approaches.ts` (full texts read, but
+    Choque-Velasquez 2018c: a video article's abstract, marked so), `V1_TEXT.subtemporal` (Z-Anatomy's tentorium
+    added, its insula left out as in the Kawase view, no vein of Labbé), `MORPH_PARAMS.subtemporal = 'st'`, the
+    slider's label and note in `MORPH_UI`, a camera preset `subtemporalLow` (from the side, a little behind and
+    below, along the floor: from above the floor hides the incisura, from lower the arch and the mastoid stand in
+    the way; chosen by eye on both models).
+  - Tests: the view is covered in `tests/unit/skullbase.test.ts` and `tests/e2e/audit-fixes.spec.ts`, not in
+    `smoke.spec.ts` (the user's uncommitted work touches that file).
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -398,7 +427,7 @@ commit and push it.
   - v1 chain (updated 2026-11-15): `skullbase_build.py`, `skullbase_v1_xii.py`, `skullbase_v1_nerves.py`,
     `skullbase_v1_skull.py`, `skullbase_v1_ear.py`, `skullbase_v1.py ear`,
     `SB_PROFILE=v1 skullbase_v3_approach.py only pterional lso interhemispheric suboccipital retrosigmoid
-    orbitozygomatic far_lateral kawase`, `skullbase_v1.py approaches`, `skullbase_v1_brain.py`,
+    orbitozygomatic far_lateral kawase subtemporal`, `skullbase_v1.py approaches`, `skullbase_v1_brain.py`,
     `skullbase_v1_pfossa.py`, `skullbase_v1.py brain`, `skullbase_v1_cavernous.py`, `skullbase_v1.py cavernous`,
     `skullbase_v1_endonasal.py`, `skullbase_v1_vessels.py` (before the tumours: their pushed copies of the AICA start
     from it as moved), `skullbase_v1_ends.py` (the anterior spinal artery cut where the medulla is cut),
@@ -450,8 +479,9 @@ commit and push it.
     (fitted course): 30 % of it, up to 3.7 mm, inside the cerebellum"; the limit is 20 %). Since T1 the endonasal
     step stops on it. To fix before v3 is rebuilt.
 - **Kawase (anterior petrosectomy) is done** (see the README); the temporal lobe is a fixed lifted copy for that view,
-  not a slider. **A plain subtemporal approach** is still open: it could reuse the Kawase flap and lift without the apex
-  drilling. Neither the dura nor the tentorium is modelled, so the tentorial cut is not shown.
+  not a slider. **The plain subtemporal approach is done too** (17 November 2026, see "The subtemporal view" above):
+  its own flap, and its lift as a slider. Neither the dura nor the tentorium is modelled on the default model, so the
+  tentorial cut is not shown.
 - **Koos geometry.** The fitted pons fills more of the cerebellopontine angle than in life. A narrower brainstem fit
   near the porus would let grades II and III be drawn at their usual sizes.
 - **Orbitozygomatic cut.** Thin strands of the zygomatic arch's surface remain at its cut ends; the orbital piece's and
@@ -522,7 +552,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (455 tests on `fix/ap08-approach-structures`)
+  - `npx vitest run` (458 tests on `feat/subtemporal-view`)
   - `npm run build`
   - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`

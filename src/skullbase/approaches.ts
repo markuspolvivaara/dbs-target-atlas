@@ -48,7 +48,7 @@ export interface ApproachContent {
   /** false: frame on the focus alone, not the bone removed too (a corridor that looks past the opening's middle) */
   frameOpening?: boolean;
   /** the shapes of the brain the view offers (named morph targets: open, lift, lsoLift, interhemispheric, telovelar,
-   * retrosigmoid, farLateral, farLateralBack), a slider each */
+   * retrosigmoid, farLateral, farLateralBack, subtemporal), a slider each */
   morphs: string[];
   /** the shapes the view opens with full on (default: all of them) */
   opened?: string[];
@@ -219,6 +219,17 @@ export const APPROACH_REFS: ApproachRef[] = [
     citation: "Knosp E, Steiner E, Kitz K, Matula C. Pituitary adenomas with invasion of the cavernous sinus space: a magnetic resonance imaging classification compared with surgical findings. Neurosurgery. 1993;33(4):610–7; discussion 617–8. doi:10.1227/00006123-199310000-00008. Checked against its abstract: the full text is not open access." },
   { id: 'micko2015', pmid: '25658782', pmcid: '', shortLabel: 'Micko 2015', url: doi('10.3171/2014.12.jns141083'),
     citation: "Micko AS, Wöhrer A, Wolfsberger S, Knosp E. Invasion of the cavernous sinus space in pituitary adenomas: endoscopic verification and its correlation with an MRI-based classification. J Neurosurg. 2015;122(4):803–811. doi:10.3171/2014.12.jns141083. Checked against its abstract: the full text is not open access." },
+  // the subtemporal approach (full texts read, November 2026, except Choque-Velasquez 2018c: a video article's abstract)
+  { id: 'nakov2017', pmid: '28217394', pmcid: 'PMC5309464', shortLabel: 'Nakov 2017', url: doi('10.4103/2152-7806.199555'),
+    citation: 'Nakov VS, Spiriev TY, Todorov IT, Simeonov P. Technical nuances of subtemporal approach for the treatment of basilar tip aneurysm. Surg Neurol Int. 2017;8:15. doi:10.4103/2152-7806.199555.' },
+  { id: 'choquevelasquez2018st', pmid: '30186665', pmcid: 'PMC6108166', shortLabel: 'Choque-Velasquez 2018c', url: doi('10.4103/sni.sni_187_18'),
+    citation: 'Choque-Velasquez J, Hernesniemi J. One burr-hole craniotomy: Subtemporal approach in helsinki neurosurgery. Surg Neurol Int. 2018;9:164. doi:10.4103/sni.sni_187_18.' },
+  { id: 'li2022', pmid: '35872953', pmcid: 'PMC9303107', shortLabel: 'Li 2022', url: doi('10.1155/2022/6436542'),
+    citation: 'Li D, Zeng M, Yao Y, Zhang N, Yang T, Xia C. Retractorless surgery for petroclival meningiomas via the subtemporal approach: a try to reduce brain retraction injury. Comput Math Methods Med. 2022;2022:6436542. doi:10.1155/2022/6436542.' },
+  { id: 'sanchezcorrea2019', pmid: '36285068', pmcid: 'PMC9541776', shortLabel: 'Sanchez Correa 2019', url: doi('10.3171/2019.7.FocusVid.19135'),
+    citation: 'Sanchez Correa TE, Ceja DG, Mendez-Rosito D. Subtemporal approach for the resection of a midbrain cavernous malformation: evaluation of safe surgical corridors. Neurosurg Focus Video. 2019;1(1):V1. doi:10.3171/2019.7.FocusVid.19135.' },
+  { id: 'minca2022', pmid: '36136879', pmcid: 'PMC9498553', shortLabel: 'Mincă 2022', url: doi('10.3390/tomography8050183'),
+    citation: 'Mincă DI, Rusu MC, Rădoi PM, Hostiuc S, Toader C. A new classification of the anatomical variations of Labbé’s inferior anastomotic vein. Tomography. 2022;8(5):2182–2192. doi:10.3390/tomography8050183.' },
 ];
 export const APPROACH_REF = new Map(APPROACH_REFS.map((r) => [r.id, r]));
 
@@ -511,6 +522,48 @@ export const APPROACHES: ApproachContent[] = [
     landmarks: ['Geniculate ganglion', 'Apex of petrous part', 'Bone over the superior semicircular canal', 'Foramen ovale', 'Foramen spinosum', 'Internal acoustic meatus'],
     morphs: [],
   },
+  {
+    // (the roadmap's last surgical view; the owner's choices of 17 November 2026: Nakov's 5 x 5 cm flap, the temporal
+    // lobe's lift as a slider, both models)
+    id: 'subtemporal', view: 'subtemporal', name: 'Subtemporal approach', camera: 'subtemporalLow',
+    summary: 'A right temporal craniotomy cut out of this CT’s bone, 5 × 5 cm over the root of the zygomatic arch and down flush with the middle fossa floor, over the same fitted brain. The slider lifts the temporal lobe off the floor and opens the way under it to the tentorial incisura: the oculomotor and trochlear nerves, the posterior cerebral and superior cerebellar arteries and the top of the basilar artery. Nothing is drilled: the anterior petrosectomy is the view that takes the petrous apex.',
+    sections: [sec('The craniotomy', [
+      c('The patient lies on the side, the head above the heart, the sagittal suture parallel to the floor and the vertex tilted 10–15° down. The craniotomy measures 5 × 5 cm, below the superior temporal line and centred above the root of the zygoma; punches and the drill then take it down to the floor of the middle fossa and forward to the temporal pole, and the height of the zygomatic arch is reduced with the drill so that it does not stand in the corridor.', 'nakov2017'),
+      c('The floor of the middle fossa lies level with the upper surface of the zygomatic root. Centred this far forward, further than the standard subtemporal craniotomy, it may ask for more retraction of the temporal lobe, but it lowers the risk to the vein of Labbé and turns the view forwards, so that the opposite P1 may be seen earlier.', 'nakov2017'),
+      c('In Helsinki’s one burr-hole subtemporal craniotomy (park-bench position) the skin incision starts in front of the tragus and crosses the zygomatic line, the landmark of the middle fossa floor; the burr hole is made at the flap’s upper border, and the dura is opened based on the zygomatic line. (Checked against the abstract: a video article.)', 'choquevelasquez2018st'),
+      c('The bone window’s lower margin is taken down to the bottom of the middle fossa to keep the retraction of the temporal lobe small; the patient lies with the zygomatic arch horizontal.', 'li2022'),
+    ]), sec('Lifting the temporal lobe', [
+      c('A spinal drain is placed routinely, for brain relaxation and to spare the temporal lobe. After about 40 ml of cerebrospinal fluid has been let out the lobe is retracted gradually, with a 1.2 cm spatula at the level of the zygomatic root; incising the arachnoid of the ambient cistern releases more and lessens the retraction further.', 'nakov2017'),
+      c('In the Helsinki technique the spinal drain releases 50–100 ml of cerebrospinal fluid. (Abstract.)', 'choquevelasquez2018st'),
+      c('Postoperative temporal lobe injury is associated with this approach; it can cause seizures and aphasia. In 29 petroclival meningiomas removed through it without a fixed retractor (a handheld sucker over a three-layer pad on the cortex, lumbar drainage, hyperventilation), the temporal lobe was injured in one patient (3.4 %).', 'li2022'),
+    ]), sec('The vein of Labbé', [
+      c('The inferior anastomotic vein (of Labbé) runs on the temporal lobe from the Sylvian fissure towards the tentorium and ends at the transverse sinus; the name is used for the largest vein on the lobe’s lateral surface.', 'minca2022'),
+      c('On 50 CT angiograms it was absent on both sides in 6 %; its commonest course was temporoparietal (on both sides in 46 %, on one in 36 %), and in 24 % it was doubled. On 78 sides it drained into a tentorial sinus or into the transverse sinus.', 'minca2022'),
+      c('With the craniotomy centred over the zygomatic root, the vein lies behind the working field, far enough not to be retracted or exposed to injury.', 'nakov2017'),
+      c('The arachnoid attachments of the vein’s complex are freed before the lobe is lifted: they can tear during retraction.', 'sanchezcorrea2019'),
+    ]), sec('The tentorial edge and the nerves', [
+      c('With the ambient cistern open, P2 and the superior cerebellar artery are identified, and the oculomotor nerve between them. The posterior cerebral artery lies above the tentorium and the superior cerebellar artery below it, their origins 1–3 mm apart.', 'nakov2017'),
+      c('The trochlear nerve runs parallel to the oculomotor nerve, dorsal and lateral to it. The oculomotor nerve enters the dura in the oculomotor triangle; the trochlear nerve pierces the under surface of the tentorium about 9 mm behind that point and runs on in the tentorial edge.', 'nakov2017'),
+      c('The tentorial edge limits the space below the oculomotor nerve. Two sutures through the edge pull the tentorium laterally, and it can be split between them, which exposes the posterior clinoid process.', 'nakov2017'),
+      c('In the Helsinki technique the tentorium is cut behind the trochlear nerve’s entry into it. (Abstract.)', 'choquevelasquez2018st'),
+    ]), sec('What it reaches', [
+      c('Basilar tip aneurysms lying between the level of the sellar floor and 1 cm above the dorsum sellae. The interpeduncular cistern lies between the two oculomotor nerves, from the pontomesencephalic sulcus to the mammillary bodies; seen from the side it projects onto the temporomandibular joint.', 'nakov2017'),
+      c('Its particular advantage for these aneurysms, in the authors’ view, is the position it gives for placing the clip once the perforating arteries behind the aneurysm are dissected free. A major disadvantage, when the aneurysm points forwards, is that the opposite P1 is not seen until the pilot clip is on.', 'nakov2017'),
+      c('In eight cadaveric dissections a standard intradural subtemporal approach exposed 6.7 ± 1.5 mm of the basilar artery measured from its tip (6.9 mm elsewhere in the same paper) and 3.4 ± 0.6 mm of the clivus; dividing the tentorium raised that to 13.1 ± 1.9 mm and 11.4 ± 1.2 mm, and an anterior petrosectomy to 22.1 ± 1.7 mm of the artery.', 'signoretti2025'),
+      c('Petroclival meningiomas of the middle fossa and those invading the cavernous sinus, from the upper two-thirds of the clivus to the petrous bone.', 'li2022'),
+      c('The lateral corridor into the midbrain: the lateral mesencephalic sulcus and vein, seen beside the cerebral peduncle, are the landmarks of the safe entry zone. Entering there can injure the medial lemniscus and the spinothalamic tract.', 'sanchezcorrea2019'),
+    ]), sec('Care points', [
+      c('On average 8 (3–18) perforating arteries arise from the back and sides of the basilar artery, and about 4 from the upper and back surface of P1: they are dissected free over enough of their length not to be bent or kinked by the clip.', 'nakov2017'),
+      c('After 29 petroclival meningioma resections through this approach: gross total removal in 82.8 %, a cranial nerve palsy in 58.6 %, meningitis in 17.2 % and hemiparesis in 6.9 %.', 'li2022'),
+    ])],
+    context: ['Posterior cerebral artery (P1–P2)', 'Superior cerebellar artery', 'Basilar artery', 'Posterior communicating artery', 'Internal carotid artery',
+      'Oculomotor nerve (III)', 'Trochlear nerve (IV)', 'Midbrain', 'Pons', 'Inferior anastomotic vein (of Labbé)', 'Transverse sinus', 'Superior petrosal sinus'],
+    notShown: 'The scalp, temporalis muscle, dura and arachnoid; the tentorium, which this model does not have: its edge, the sutures through it and its division are not drawn; the perforating arteries; the lowering of the zygomatic arch with the drill. The craniotomy’s outline is placed by rule on this skull. The vein of Labbé is drawn by rule, not traced (its card says how). The brain is a template fitted to this skull and its arteries, not this patient’s own; lifting the temporal lobe is a shape, not a simulation of the tissue, and the arteries and nerves do not move with it.',
+    focus: ['Oculomotor nerve (III)', 'Posterior cerebral artery (P1–P2)'],
+    frameOpening: false,
+    radius: 50,
+    morphs: ['subtemporal'],
+  },
 ];
 export const APPROACH = new Map(APPROACHES.map((a) => [a.id, a]));
 
@@ -543,6 +596,7 @@ export const V1_ABSENT = new Set([
   'Superficial middle cerebral vein', 'Sphenoparietal sinus', 'Insular veins', 'Deep middle cerebral vein', 'Basal vein (of Rosenthal)',
   'Internal cerebral veins', 'Trigeminal ganglion',
   'Pituitary stalk',   // (Z-Anatomy has the two lobes of the gland, no stalk)
+  'Inferior anastomotic vein (of Labbé)',
 ]);
 
 /** v1's own wording for a view; camera: its own view direction where v3's does not suit it (the retrosigmoid: on
@@ -568,6 +622,9 @@ export const V1_TEXT: Record<string, { summary: string; notShown: string; camera
   kawase: { summary: 'A right temporal flap flush with the middle fossa floor, cut out of Z-Anatomy’s skull, and the petrous apex drilled within the Kawase rhomboid down to the inferior petrosal sinus, kept off Z-Anatomy’s cochlea, labyrinth, carotid and nerves; the temporal lobe drawn held up.',
     notShown: `The dura: the middle fossa dura and its layers, the tentorium and the dura of the posterior fossa and the meatus are not modelled; the lesser petrosal nerve, the temporalis muscle and the optional zygomatic osteotomy are not drawn. Of the rhomboid’s landmarks the geniculate ganglion (at the facial nerve’s first genu), the greater petrosal nerve and the bone over the superior canal are drawn by rule on Z-Anatomy’s ear and nerves, which do not have them; the petrous apex, the cochlea, the vestibule and canals, V3 and the carotid are Z-Anatomy’s own; the trigeminal ganglion is part of its trigeminal nerve; the margins kept off them are drawing choices. The insula, which lies above and medial to the lifted temporal lobe under dura the model does not have, is left out of this view. ${V1_BRAIN}`,
     hide: ['Insula'] },
+  subtemporal: { summary: 'A right temporal craniotomy cut out of Z-Anatomy’s skull, 5 × 5 cm over the root of the zygomatic arch and down flush with the middle fossa floor, over Z-Anatomy’s own brain. The slider lifts the temporal lobe off the floor and opens the way under it to the tentorial edge, which this model draws: the oculomotor and trochlear nerves, the posterior cerebral and superior cerebellar arteries and the top of the basilar artery. Nothing is drilled.',
+    notShown: `The scalp, temporalis muscle, dura and arachnoid (Z-Anatomy’s tentorium is shown, the rest of the dura not; the sutures through its edge and its division are not drawn); the vein of Labbé, which the model does not have; the perforating arteries; the lowering of the zygomatic arch with the drill. The craniotomy’s outline is placed by rule. The insula, which lies above and medial to the lifted temporal lobe, is left out of this view. ${V1_BRAIN}`,
+    add: ['Tentorium cerebelli'], hide: ['Insula'] },
 };
 
 /** v1's own "not shown" for the endonasal view (the Z-Anatomy model's bone, no soft tissue in the nose). */

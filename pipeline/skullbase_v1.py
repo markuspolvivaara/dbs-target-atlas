@@ -85,6 +85,10 @@ def brain() -> int:
     if "kawase" in aps:
         m["structures"] = [s for s in m["structures"] if s.get("forView") != "kawase"]
         V3.lift_temporal_lobe(m["structures"], aps["kawase"], build=BUILD, kind=KIND)
+    # the subtemporal view's copy of it, with that view's slider's shape, likewise
+    if "subtemporal" in aps:
+        m["structures"] = [s for s in m["structures"] if s.get("forView") != "subtemporal"]
+        V3.temporal_lobe_shape(m["structures"], aps["subtemporal"], build=BUILD, kind=KIND)
     carried = pf["report"].get("carried", {})
     for it in m["structures"]:      # the arteries on the cerebellum, carried with its shapes (skullbase_v1_pfossa.py)
         if it["name"] in carried:

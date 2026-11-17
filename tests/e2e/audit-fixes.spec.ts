@@ -1024,3 +1024,61 @@ test('skull base: the surgical views draw what their texts name beyond the openi
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// The subtemporal view (the owner's choices of 17 November 2026): a 5 x 5 cm flap over the zygomatic arch's root, the
+// temporal lobe's lift as a slider, on both models
+test('skull base: the subtemporal view opens with the temporal lobe lifted; its slider, its key and its link', async ({ page }) => {
+  const g = guard(page);
+  const hash = () => decodeURIComponent(new URL(page.url()).hash);
+  const drawn = async (id: string) => Object.values((await drawnSides(page, id)) ?? {}).some(Boolean);
+  // how far the slider's shape is on, on the right temporal lobe as drawn
+  const lifted = () => page.evaluate(() => {
+    let w = -1;
+    type Node = { name?: string; userData?: { id?: string }; morphTargetDictionary?: Record<string, number>; morphTargetInfluences?: number[]; visible: boolean; parent?: Node | null };
+    (window as unknown as { __atlas: { viewer: { scene: { traverse: (f: (x: Node) => void) => void } } } }).__atlas.viewer.scene.traverse((x) => {
+      const i = x.morphTargetDictionary?.subtemporal;
+      if (i !== undefined && x.morphTargetInfluences && x.visible) w = Math.max(w, x.morphTargetInfluences[i]);
+    });
+    return w;
+  });
+  for (const model of ['skullbase', 'skullbase-v1']) {
+    await open(page, `./${model}/#/atlas?g=subtemporal`);
+    const card = page.locator('.pane:not([hidden]) article.card').first();
+    await expect(page.locator('.pane:not([hidden]) .card h2').first()).toHaveText('Subtemporal approach');
+    // the view's own copy of the temporal lobe stands in for the lobe; the flap's bone is drawn removed
+    expect(await drawn('br_temporal_lobe__subtemporal'), model).toBe(true);
+    expect(await drawn('br_temporal_lobe'), model).toBe(false);
+    expect(await drawn('sb_appr_subtemporal__removed'), model).toBe(true);
+    // it opens lifted; the link says so
+    const slider = page.locator('#sb-m-subtemporal');
+    await expect(slider).toHaveValue('100');
+    expect(await lifted(), model).toBe(1);
+    expect(hash()).toContain('st=100');
+    await expect(page.locator('.open-slider')).toContainText('Lift the temporal lobe (L)');
+    await expect(page.locator('#sb-m-subtemporal-note')).toContainText('15.0 mm higher under the middle of the flap');
+    // the key puts the lobe back, and the link keeps it there after a reload
+    await page.keyboard.press('l');
+    await settle(page);
+    await expect.poll(hash).toContain('st=0');
+    await expect(slider).toHaveValue('0');
+    expect(await lifted(), model).toBe(0);
+    await page.reload();
+    await settle(page);
+    await expect(page.locator('#sb-m-subtemporal')).toHaveValue('0');
+    expect(await lifted(), model).toBe(0);
+    // its text is sourced, and says what the model cannot show
+    await expect(card).toContainText('5 × 5 cm');
+    await expect(page.locator('.pane:not([hidden])')).toContainText('Nakov 2017');
+    await expect(page.locator('.pane:not([hidden])')).toContainText('The vein of Labbé');
+  }
+  // what each model draws at the tentorial edge: the default model the vein of Labbé, the Z-Anatomy model its tentorium
+  await open(page, './skullbase/#/atlas?g=subtemporal');
+  for (const id of ['sb_vein_of_labbe', 'tb_oculomotor_nerve_iii', 'tb_trochlear_nerve_iv', 'sb_posterior_cerebral_artery_p1_p2', 'sb_superior_cerebellar_artery', 'sb_basilar_artery'])
+    expect(await drawn(id), id).toBe(true);
+  await open(page, './skullbase-v1/#/atlas?g=subtemporal');
+  for (const id of ['sb_tentorium_cerebelli', 'sb_oculomotor_nerve_iii', 'sb_trochlear_nerve_iv', 'sb_posterior_cerebral_artery', 'sb_superior_cerebellar_artery'])
+    expect(await drawn(id), id).toBe(true);
+  expect(await drawn('br_insula'), 'the insula is left out on the Z-Anatomy model').toBe(false);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

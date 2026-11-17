@@ -171,6 +171,20 @@ if PROFILE == "v1":         # (v1's names for them: Z-Anatomy draws the carotid 
         "Greater petrosal nerve": 0.5, "Abducens nerve (VI)": 1.0,
     }
 KW_V1_SOFT_MM = 1.0
+ST_FLAP_MM = (50.0, 50.0)   # the subtemporal approach's temporal flap: this long (front to back) and high, centred front to
+#                             back over the zygomatic arch's root (Nakov 2017: 5 x 5 cm, centred above the root of the zygoma)
+ST_WALL_MM = 12.0           # ... of the bone that lies on the cranial cavity (within this of it, straight inwards): the
+#                             lateral wall of the orbit, in front of the middle fossa, stays
+ST_BONES = ("Temporal bone", "Sphenoid bone", "Parietal bone")   # ... and of these bones only: the zygoma and its arch stay
+# the zygomatic arch's root, found on the skull from the side: going back from the front, the arch is a bar of bone at
+# least ARCH_BAR_MM high (within ARCH_BAND_MM below and above the middle fossa floor's level), ARCH_THICK_MM thick,
+# standing ARCH_GAP_MM or more off the skull's wall; its root is where that bar ends, joined to the squama
+ARCH_BAR_MM = 4.0
+ARCH_BAND_MM = (12.0, 4.0)
+ARCH_THICK_MM = (1.5, 14.0)
+ARCH_GAP_MM = 3.0
+ARCH_Y_MM = (30.0, -10.0)   # looked for from this far in front of the frame's origin back to this (y; the arch lies between)
+ARCH_MIN_MM = 5.0           # a bar shorter than this, front to back, is not the arch
 KW_ABOVE_MM = 1.0           # (the rhomboid's prism reaches this far above its highest corner)
 KW_WALL_MM = 12.0           # the pyramid behind the apex-eminence line drilled through to the posterior fossa, up to this far
 KW_APEX_MEDIAL_MM = 1.0     # ... but not more than this medial to the petrous apex (the clivus stays)
@@ -1467,6 +1481,105 @@ def kawase(S: Skull) -> dict:
             "guide": {"name": "Kawase rhomboid", "points": np.round(np.array(edge + edge[:1]), 2).tolist()}}
 
 
+def zygomatic_root(S: Skull, floor_z: float) -> dict:
+    """The zygomatic arch's root on the right, found on the skull from the side (ARCH_BAR_MM and the constants with it):
+    where, going back, the arch last stands free of the squama (y), and the arch's upper surface there (z)."""
+    xs = np.arange(100.0, 25.0, -STEP / 2)
+    zs = np.arange(floor_z - ARCH_BAND_MM[0], floor_z + ARCH_BAND_MM[1] + 0.5, 1.0)
+
+    def bar(y: float) -> tuple[float, float]:
+        """The tallest run of levels at which a free bar of bone is met from the side: its height and its top (mm)."""
+        free = []
+        for z in zs:
+            hit = S.bone_at(np.c_[xs, np.full(len(xs), y), np.full(len(xs), z)])
+            ok = False
+            if hit.any():
+                i0 = int(np.argmax(hit))
+                if (~hit[i0:]).any():
+                    j = i0 + int(np.argmax(~hit[i0:]))
+                    if hit[j:].any():
+                        k = j + int(np.argmax(hit[j:]))
+                        ok = ARCH_THICK_MM[0] <= xs[i0] - xs[j] <= ARCH_THICK_MM[1] and xs[j] - xs[k] >= ARCH_GAP_MM
+            free.append(ok)
+        best, top, run = 0, float("nan"), 0
+        for z, ok in zip(zs, free):
+            run = run + 1 if ok else 0
+            if run > best:
+                best, top = run, float(z)
+        return float(best), top
+    ys = np.arange(ARCH_Y_MM[0], ARCH_Y_MM[1] - 0.25, -0.5)
+    bars = [bar(float(y)) for y in ys]
+    is_arch = np.array([h >= ARCH_BAR_MM for h, _ in bars])
+    i = 0
+    while i < len(ys):      # the first stretch of it, coming from the front, that is long enough to be the arch
+        if is_arch[i]:
+            j = i
+            while j + 1 < len(ys) and is_arch[j + 1]:
+                j += 1
+            if ys[i] - ys[j] >= ARCH_MIN_MM:
+                tops = [t for (_, t) in bars[max(i, j - 4):j + 1]]      # (its upper surface over its last 2 mm)
+                return {"y": float(ys[j]), "topZ": round(float(np.median(tops)) + 0.5, 1), "frontY": float(ys[i])}
+            i = j
+        i += 1
+    raise SystemExit("subtemporal: no zygomatic arch found on the skull's right side")
+
+
+def subtemporal(S: Skull) -> dict:
+    """The subtemporal approach, right: a temporal flap of ST_FLAP_MM centred front to back over the zygomatic arch's root
+    and taken down flush with the middle fossa floor (Nakov 2017). Nothing is drilled: the petrous apex stays (the anterior
+    petrosectomy, kawase(), is the view that drills it)."""
+    gen = REPO / "src" / "data" / "generated"
+    lms = {l["name"]: np.array(l["ras"]) for l in json.loads((gen / f"{GEN_PREFIX}-landmarks.json").read_text()) if l.get("side") == "R"}
+    z0 = float(lms["Tegmen tympani"][2])            # the middle fossa floor's level, as the Kawase flap takes it
+    root = zygomatic_root(S, z0)
+    L, H = ST_FLAP_MM
+    y_back, y_front = root["y"] - L / 2, root["y"] + L / 2
+    lat = np.array([1.0, 0.0, 0.0])
+    corners = [(y_back, z0), (y_front, z0), (y_front, z0 + H), (y_back, z0 + H)]
+    outline = []
+    for (ya, za), (yb, zb) in zip(corners, corners[1:] + corners[:1]):
+        for t in np.linspace(0, 1, 6, endpoint=False):
+            outline.append(np.array([70.0, ya + t * (yb - ya), za + t * (zb - za)]))
+    outline = np.array([S.surface(p_, lat, reach=60.0) for p_ in outline])
+    m = S.flap(outline, lat, floor=True, smooth=True)
+    # only the wall of the cranial cavity, and of the temporal, sphenoid and parietal bones: in front of the middle fossa a
+    # line of sight meets the orbit's lateral wall, and outside the squama the zygoma and its arch
+    idx = np.argwhere(m)
+    P = nib.affines.apply_affine(S.a, idx)
+    on_cavity = np.zeros(len(idx), bool)
+    for t in np.arange(STEP, ST_WALL_MM + STEP, STEP):
+        todo = ~on_cavity
+        if not todo.any():
+            break
+        on_cavity[todo] = S.cavity_at(P[todo] - t * lat)
+    _, j = cKDTree(S.zp).query(P)
+    names = np.array([n[:-2] if n.endswith((".r", ".l")) else n for n in S.znames])[S.zl[j]]    # (a bone's name without its side)
+    keep = on_cavity & np.isin(names, ST_BONES)
+    m = np.zeros(S.b.shape, bool)
+    m[tuple(idx[keep].T)] = True
+    area = outline_area(outline, lat)
+    measured = {"archRootY": root["y"], "archTopZ": root["topZ"], "floorZ": round(z0, 1), "flapMm2": round(area)}
+    own = "model" if PROFILE == "v1" else "CT"
+    how = (f"A right temporal flap drawn {L:g} × {H:g} mm ({area:.0f} mm² seen from the side as drawn; Nakov 2017: 5 × 5 cm, "
+           "below the superior temporal line and centred above the root of the zygoma; the bone removed covers about <<side>> mm² "
+           "seen from the side), centred front to back over the zygomatic arch's root as found on this skull (where, going "
+           f"back, the arch last stands free of the squama: {abs(root['y']):.1f} mm {'behind' if root['y'] < 0 else 'in front of'} the "
+           f"frame's origin; its upper surface there lies {abs(root['topZ'] - z0):.1f} mm {'above' if root['topZ'] > z0 else 'below'} "
+           f"the level of the middle fossa floor, taken at the tegmen as located on this {own}; Nakov 2017: the floor is level with "
+           "the root's upper surface), its base at that level, cut down flush with the floor. Only the wall of the cranial cavity "
+           "is taken, of the temporal, sphenoid and parietal bones: the zygoma, its arch and the orbit's lateral wall stay. "
+           "The petrous apex is not drilled.")
+    if PROFILE == "v1":     # (main() adds thin_by_cut's bone to a v1 cut: here 0.4 ml, 0.17 ml of it the frontal bone's)
+        how += (" On this model the thin bone the flap leaves beside it goes with it, as at its other flaps: a rim of the frontal "
+                f"bone at the pterion among it. The cut's edge smoothed over {KW_V1_SOFT_MM:g} mm (illustrative).")
+    return {"id": "subtemporal", "name": "Subtemporal craniotomy", "cut": m, "how": how, "burrHoles": [],
+            **({"softMm": KW_V1_SOFT_MM} if PROFILE == "v1" else {}),
+            "areaMm2": round(area), "measured": measured,
+            "measure": lambda M: {"<<side>>": f"{M.seen(lat):.0f}", "sideMm2": round(M.seen(lat))},
+            # where the temporal lobe is lifted from (skullbase_v3.py: temporal_lobe_shape): the floor under the flap's middle
+            "root": [round(float(outline[:, 0].mean()), 2), root["y"], round(z0, 2)]}
+
+
 def preview(path: str) -> int:
     """The cuts only (no meshing): each approach's removed voxels in the frame, for checking (npz)."""
     S = Skull()
@@ -1481,7 +1594,7 @@ def preview(path: str) -> int:
 
 MAKERS = {"pterional": pterional, "lso": lateral_supraorbital, "interhemispheric": interhemispheric,
           "suboccipital": suboccipital, "retrosigmoid": retrosigmoid, "orbitozygomatic": orbitozygomatic, "far_lateral": far_lateral,
-          "kawase": kawase}
+          "kawase": kawase, "subtemporal": subtemporal}
 
 
 def remeasure() -> int:
@@ -1560,7 +1673,7 @@ def main(only: list[str] | None = None) -> int:
             ap["how"] = ap["how"].replace("<<ridgeMl>>", f"{Mr.ml:.1f}")
         measured_how(ap, M)
         res[ap["id"]].update({"how": ap["how"], "removedMl": M.ml,
-                              **{k: ap[k] for k in ("bregma", "span", "keypoint", "measured", "corners", "guide") if k in ap}})
+                              **{k: ap[k] for k in ("bregma", "span", "keypoint", "measured", "corners", "guide", "root") if k in ap}})
         print(ap["id"], ": bones", sorted(cutb), "remeshed with them", sorted(touched - cutb), "removed", res[ap["id"]]["removedMl"], "ml")
     BUILD.mkdir(parents=True, exist_ok=True)
     (BUILD / "approach.json").write_text(json.dumps(res))
