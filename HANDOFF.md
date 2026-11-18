@@ -5,7 +5,7 @@ commit and push it.
 
 ## White-matter tract colours (desktop, 2026-11-17)
 
-- Branch `fix/wm-mcp-colour` (off `main` at `4d58cf8`). **Local commit only: not pushed, no pull request.**
+- Branch `fix/wm-mcp-colour` (off `main` at `4d58cf8`), pushed on 18 Nov as pull request 24.
 - The middle cerebellar peduncle (`wmMCP`) and the corticospinal tract (`wmCST`) had the same light colour
   (`#0B847C`), and the reticulospinal tract (`wmRST`) was close to both (CIEDE2000 6.8; 2.5 under tritanopia). No
   white-matter group draws them together, but the brainstem section's "Tracts and deep nuclei" view does.
