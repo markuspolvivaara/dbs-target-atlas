@@ -38,8 +38,7 @@ export function bsPlan(grpId: string, sel: string | null): BsPlan {
   return {
     title: g.name, accent: 'bsSez', looks, tracts, parcels: new Map(), markers: [],
     camera: g.camera, focusIds: g.kind === 'zones' ? g.key : SURFACE,
-    // the tracts view draws twelve tracts through one another: a chosen one is seen among them only if the rest fade
-    minRadius: g.radius, labelTracts: true, fadeOtherTracts: true, group: g.id,
+    minRadius: g.radius, labelTracts: true, group: g.id,
   };
 }
 

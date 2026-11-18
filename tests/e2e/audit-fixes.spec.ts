@@ -1239,3 +1239,27 @@ test('brainstem: the HCP-YA tracts, the nuclei shared between nerves and the tri
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// the owner, 18 November 2026: a chosen tract should be seen among the others, in every section that draws tracts
+// (the brainstem's and the DBS section's tests cover theirs: above, and smoke.spec.ts's legend test)
+test('tracts: a chosen tract fades the other tracts back, whatever the "Fade the rest" setting', async ({ page }) => {
+  const g = guard(page);
+  const opacityOf = (id: string) => page.evaluate((sid) => (window as unknown as { __atlas: { viewer: { items: Map<string, { mat: { opacity: number; linewidth: number } }> } } }).__atlas.viewer.items.get(sid)!.mat.opacity, id);
+  await open(page, './tracts/#/atlas?g=language');
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('atlas-view-prefs') ?? '{}').fadeOthers ?? false)).toBe(false);
+  const before = { af: await opacityOf('wm_af'), ifof: await opacityOf('wm_ifof') };
+  await open(page, './tracts/#/atlas?g=language&sel=wm_af');
+  await expect(page.locator('.card.sel h2')).toContainText('Arcuate fasciculus');
+  expect(await opacityOf('wm_af')).toBe(1);
+  expect(await opacityOf('wm_ifof')).toBeLessThan(before.ifof * 0.5);
+  // another tract chosen: the first fades with the rest
+  await open(page, './tracts/#/atlas?g=language&sel=wm_ifof');
+  expect(await opacityOf('wm_ifof')).toBe(1);
+  expect(await opacityOf('wm_af')).toBeLessThan(before.af * 0.5);
+  // nothing chosen: all as they were
+  await open(page, './tracts/#/atlas?g=language');
+  expect(await opacityOf('wm_af')).toBe(before.af);
+  expect(await opacityOf('wm_ifof')).toBe(before.ifof);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

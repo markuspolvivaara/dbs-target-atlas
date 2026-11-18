@@ -676,10 +676,10 @@ entry zones for brainstem surgery.
   - The fasciculus is also in the view of the fourth ventricle's floor: choosing it (or a nucleus under the floor)
     from that view's card draws the surface see-through. Under a solid surface none of the four is drawn (`bsPlan`):
     the parts that lie outside the fitted surface would show on it as stray lines.
-  - A chosen tract fades the other tracts back in this section and in the DBS section, whatever the viewer's "Fade
-    the rest" setting (`ScenePlan.fadeOtherTracts`): tracts run through one another, and a tract cannot be outlined
-    or shown through what covers it as a mesh is. The white-matter section leaves the tracts as they are unless
-    the setting is on.
+  - A chosen tract fades the other tracts back, here and in the DBS and white-matter sections, whatever the viewer's
+    "Fade the rest" setting (`Viewer.restyle`): tracts run through one another, and a tract cannot be outlined or
+    shown through what covers it as a mesh is. Nuclei and other meshes are left as they are unless the setting is
+    on.
 - **Safe entry zones** (15): perioculomotor (anterior mesencephalic), lateral mesencephalic sulcus, supra- and
   infracollicular; supratrigeminal and peritrigeminal; suprafacial and infrafacial triangles and the median sulcus
   on the floor of the fourth ventricle; anterolateral (preolivary) sulcus, olivary zone, postolivary sulcus, and the

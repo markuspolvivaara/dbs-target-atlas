@@ -123,8 +123,6 @@ export function plan(indId: string, symId: string | null, borders: boolean, stnW
     looks, tracts, parcels, markers,
     camera: sym ? sym.camera : ind.camera,
     focusIds: [...primary, ...alts],
-    // a view's tracts run through one another: a chosen one is seen among them only if the others fade back
-    fadeOtherTracts: true,
     indication: ind,
     symptom: sym,
   };

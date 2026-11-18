@@ -36,9 +36,6 @@ export interface ScenePlan {
   /** structures outlined as a selected one is, while nothing is selected (a section's focus, when the viewer's
    * setting leaves the rest unfaded) */
   outline?: string[];
-  /** a selected tract fades the other tracts back, whatever the viewer's setting: a tract cannot be outlined or
-   * shown through the tracts that cover it, as a mesh is (a view that draws many tracts together) */
-  fadeOtherTracts?: boolean;
 }
 
 /** Where to put a label on a cortical surface, on the pial and on the inflated surface (RAS mm, unit normals). */

@@ -189,8 +189,6 @@ describe('brainstem scene and URL state', () => {
     expect(inside.looks.get('bs_n_abducens')).toBe('primary');
     const tracts = bsPlan('tracts', null);
     expect(tracts.tracts.get('wm_cst')).toBe('key');
-    // twelve tracts run through one another here: a chosen tract fades the others back, whatever the viewer's setting
-    for (const g of BS_GROUPS) expect(bsPlan(g.id, null).fadeOtherTracts, g.id).toBe(true);
     // the section's own tracts are streamlines too: drawn as lines, not as meshes
     for (const id of OWN_TRACTS) {
       expect(tracts.tracts.get(id), id).toBe('key');

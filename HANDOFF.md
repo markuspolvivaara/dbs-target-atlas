@@ -368,12 +368,13 @@ commit and push it.
     atlas's fasciculus outside the fitted floor showed on it. The floor view's card lists what lies under the
     surface; choosing one (a nucleus too) draws the surface as a shell (`liesInside`; the user: "See through is
     great"), and an entry zone chosen there puts the solid surface back.
-  - A chosen tract fades the other tracts to a quarter of their opacity in this section and in the DBS section,
-    whatever the viewer's "Fade the rest" setting (the user's requests of 18 November, on seeing the lateral
-    lemniscus among the others): a new `fadeOtherTracts` on `ScenePlan`, set by `bsPlan` and by the DBS section's
-    `plan`. The white-matter section is as before; the flag could be set there too. For the DBS section a few lines
-    of the legend test in `tests/e2e/smoke.spec.ts` changed (near line 240; the user's uncommitted work in the main
-    checkout adds a test near line 639 of that file, in another place).
+  - A chosen tract fades the other tracts to a quarter of their opacity, whatever the viewer's "Fade the rest"
+    setting, in every section that draws tracts: the brainstem, DBS and white-matter sections (the user's requests
+    of 18 November, on seeing the lateral lemniscus among the others; asked for one section after the other). It is
+    the viewer's own rule (`Viewer.restyle`: the selection is a structure of type `tract`), not a switch of the
+    plans. Meshes are left as they are unless the setting is on. For the DBS section a few lines of the legend test
+    in `tests/e2e/smoke.spec.ts` changed (near line 240; the user's uncommitted work in the main checkout adds a
+    test near line 639 of that file, in another place).
   - Cards: a tract card has sourced text, published measurements (Li 2021 for the fasciculus) and the measured fit;
     the trigeminal nerve's card has `NUCLEI_NOT_MODELLED`; the nucleus ambiguus (IX, X, XI) and the nucleus of the
     solitary tract (VII, IX, X) carry `cranialNerves` in the manifest and a sourced sentence per nerve
@@ -435,7 +436,7 @@ commit and push it.
 - Pipeline data: the worktree has its own `pipeline/data/build` (its `raw` is a link to the main checkout's). These
   fixes changed `skullbase` (v1), `skullbase-v3` and `skullbase-ct` there; copy from the worktree, not the main
   checkout, before rebuilding those on the MacBook.
-- Browser tests on the desktop: `CI=1 npx playwright test` (197 tests). Without `CI=1` the untracked Linux picture
+- Browser tests on the desktop: `CI=1 npx playwright test` (198 tests). Without `CI=1` the untracked Linux picture
   baselines from 11 Nov fail; the tracked ones are macOS ones.
 
 ## Where things stand
@@ -667,9 +668,9 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (466 tests on `fix/d008-brainstem`)
+  - `npx vitest run` (465 tests on `fix/d008-brainstem`)
   - `npm run build`
-  - `npx playwright test` (197 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
+  - `npx playwright test` (198 tests, about 7 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`
   - `pipeline/winding_check.py`
   - each section's `finalize` validation
