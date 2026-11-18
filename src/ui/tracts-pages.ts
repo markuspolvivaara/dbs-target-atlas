@@ -1,4 +1,5 @@
 import { SECTIONS, SITE_ROOT } from '../brand';
+import { END_PATCHES, WM_ENDS } from '../data/ends';
 import { WM, WM_MANIFEST } from '../tracts';
 import { CONTEXT_STRUCTURES } from '../tracts/scene';
 import { h } from './h';
@@ -20,6 +21,8 @@ export function tractRefsPage() {
       for (const r of c.refIds) { if (!citedBy.has(r)) citedBy.set(r, new Set()); citedBy.get(r)!.add(t.abbr); }
     }
   }
+  // (cited on every tract card, under where its streamlines end)
+  for (const c of WM.endsCaveats) for (const r of c.refIds) { if (!citedBy.has(r)) citedBy.set(r, new Set()); citedBy.get(r)!.add('streamline ends'); }
   el.append(h('h1', {}, 'References'), h('label', { class: 'search' }, 'Search references', q), count, list, empty,
     h('p', { class: 'aside' }, 'Every statement on the tract cards cites one of these papers. Each record was retrieved from PubMed and the statements were checked against its abstract (or open-access full text).'));
   function render() {
@@ -54,9 +57,14 @@ export function tractCreditsPage() {
       h('p', {}, h('strong', {}, 'Licence: '), d.licence, '. These files are not under the GPL like the rest of the project: adapted versions must stay under CC BY-SA 4.0 with attribution.'),
       h('p', { class: 'aside' }, d.note),
       ...d.citation.map((c, i) => h('p', { class: 'cite' }, c, ' ', h('a', { href: d.citationUrls[i], target: '_blank', rel: 'noopener' }, 'DOI'))),
-      h('p', { class: 'aside' }, 'Changes made: the streamlines’ points moved by half a voxel (the files give them from the first voxel’s centre), streamlines subsampled (the same number per hemisphere) and resampled to 2 mm, the tracts stored as one file across the midline (the corpus callosum, the anterior commissure, the superior and middle cerebellar peduncles) cut at the midline, files converted to compressed glTF. The atlas’s volumes of the same tracts were used only to check the streamline files. The cortical connections on the tract cards are the published Brodmann-area probabilities, unchanged.'),
+      h('p', { class: 'aside' }, 'Changes made: the streamlines’ points moved by half a voxel (the files give them from the first voxel’s centre), streamlines subsampled (the same number per hemisphere) and resampled to 2 mm, the tracts stored as one file across the midline (the corpus callosum, the anterior commissure, the superior and middle cerebellar peduncles) cut at the midline, files converted to compressed glTF. The atlas’s volumes of the same tracts were used only to check the streamline files. Where each bundle’s streamlines end on the cortex (the tract cards, and the patches below) is measured by this project’s pipeline on all streamlines of each bundle (pipeline/wm_ends.py).'),
       h('p', {}, h('a', { href: d.url, target: '_blank', rel: 'noopener' }, 'Atlas page')),
     ),
+    h('section', { class: 'card', id: 'wm-ends' },
+      h('h2', {}, 'Where the tracts end: the patches of cortex'),
+      h('p', {}, `Choosing a tract draws the patch of cortex where its streamlines end (${END_PATCHES.length} tracts have one). `, WM_ENDS.patches.derivation),
+      h('p', {}, h('strong', {}, 'Licence: '), WM_ENDS.patches.licence, '. The files are public/assets/wm-ends/*.glb.'),
+      h('p', { class: 'aside' }, `Source: ${WM_ENDS.patches.source}.`)),
     h('section', { class: 'card', id: 'hcp' },
       h('h2', {}, 'Human Connectome Project'),
       h('p', {}, 'The atlas is derived from HCP data, so these tracts are also subject to the WU-Minn HCP Open Access Data Use Terms: redistribution only under the same terms, acknowledgement when presenting results, and no attempt to identify or contact participants.'),

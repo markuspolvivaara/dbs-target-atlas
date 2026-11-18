@@ -384,6 +384,9 @@ shipped with it. Licence: GPL-3.0, non-commercial (derived from the Lead-DBS tem
 - Definitions: Wikipedia - CC-BY-SA 3.0, as shipped with Z-Anatomy (each links its source page).
 - Changes made: surfaces decimated and split by label, an inflated surface and sulcal-depth shading computed,
   files converted to compressed glTF; definitions shortened to their lead section.
+- Tract ends: the 32 patches in `public/assets/wm-ends/` and `wm-ends.json` (pipeline/wm_ends.py). Licence:
+  GPL-3.0, non-commercial: cut from the cortex section's surface, under its licence; where they lie is derived from the HCP-1065 tractography atlas (CC BY-SA 4.0; derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms).
+  The part of the cortex section's surface where the ends of this tract's streamlines are densest: the ends within 5 mm of the surface are counted at their nearest point of it, the counts spread over the surface, and the patch holds 80% of them. Where the streamlines of an averaged bundle end, not where the tract connects.
 
 ## Spine section (VerSe CT with TotalSegmentator segmentations)
 

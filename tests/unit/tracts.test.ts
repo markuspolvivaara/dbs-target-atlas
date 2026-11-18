@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import MEASURED from '../../src/data/generated/wm-measured.json';
-import { connectedAreas, CONNECTOME, crossCheckWm, GROUP, parseWmContent, TOPIC, WM, WM_MANIFEST } from '../../src/tracts';
+import { areaName, END_PATCH, endsOn, patchOf, WM_ENDS } from '../../src/data/ends';
+import { crossCheckWm, GROUP, parseWmContent, TOPIC, WM, WM_MANIFEST } from '../../src/tracts';
 import { CONTEXT_STRUCTURES, tractPlan, tractsScene } from '../../src/tracts/scene';
 import { decodeTracts, defaultTractsState, encodeTracts } from '../../src/tracts/state';
 import { nodeMeans } from './glb';
@@ -125,25 +126,66 @@ describe('the site audit\u2019s B4: what each atlas bundle shows', () => {
   });
 });
 
-describe('cortical connections from the published tract-to-region table', () => {
-  it('covers every tract the table has a column for (not CC, EmC, AC or the posterior fossa tracts)', () => {
-    const missing = ['wm_cc', 'wm_emc', 'wm_ac', ...WM.topics.filter((t) => t.tier === 'fossa').map((t) => t.id)];
-    expect(Object.keys(CONNECTOME.tracts).sort()).toEqual(WM.topics.map((t) => t.id).filter((id) => !missing.includes(id)).sort());
+// the site audit's B-007: where the bundles' streamlines end on the cortex (pipeline/wm_ends.py), in place of the
+// published table of the areas a bundle overlaps (which lists areas it only passes)
+describe('where the bundles end on the cortex', () => {
+  const end = (tid: string, key: 'L' | 'R' | 'M', name: string) => {
+    const t = WM_ENDS.tracts[tid]!;
+    return t.bundles[key]!.ends[t.ends.indexOf(name)]!;
+  };
+  const share = (e: { areas: { id: string; share: number }[] }, id: string) => e.areas.filter((a) => a.id === id).reduce((x, a) => x + a.share, 0);
+  it('every tract is measured, both its ends, with shares that add up', () => {
+    expect(Object.keys(WM_ENDS.tracts).sort()).toEqual(WM_MANIFEST.structures.map((s) => s.id).sort());
+    for (const [id, t] of Object.entries(WM_ENDS.tracts)) {
+      const keys = Object.keys(t.bundles);
+      expect(keys.length === 1 ? keys : keys.sort(), id).toEqual(keys.length === 1 ? ['M'] : ['L', 'R']);
+      for (const b of Object.values(t.bundles)) for (const e of b!.ends) {
+        if (e.areas.length) expect(e.areas.reduce((x, a) => x + a.share, 0) + e.rest, id).toBeCloseTo(1, 2);
+        expect(e.areas.length > 0, id).toBe(e.atCortex >= WM_ENDS.rule.endMinShare);
+        for (const a of e.areas) expect(WM_ENDS.areas[a.id], `${id}: ${a.id}`).toBeTruthy();
+      }
+    }
   });
-  it('known values survive the conversion (spot checks against the spreadsheet)', () => {
-    // raw cells: FAT (left) / BA1/3 = 0.98403755868544596, SLF_I (left) / BA4 = 0.90422535211267596,
-    // SLF_III (left) / BA1/3 = 1; the right-hemisphere block starts after the left one
-    expect(CONNECTOME.tracts.wm_fat.L['BA1/3']).toBe(0.984);
-    expect(CONNECTOME.tracts.wm_slf1.L.BA4).toBe(0.904);
-    expect(CONNECTOME.tracts.wm_slf3.L['BA1/3']).toBe(1);
-    expect(CONNECTOME.tracts.wm_fat.R['BA1/3']).toBe(0.027);
-    expect(connectedAreas('wm_or', 'L').map((a) => a.area)).toContain('BA17');
+  it('the measured ends where the anatomy is known', () => {
+    for (const sd of ['L', 'R'] as const) {
+      // the corticospinal tract: the upper end on the precentral gyrus, the lower end not at the cerebral cortex
+      expect(end('wm_cst', sd, 'upper').areas[0].id).toBe('ctx_g_precentral');
+      expect(end('wm_cst', sd, 'lower').atCortex).toBeLessThan(0.02);
+      // the arcuate fasciculus: the opercular part of the inferior frontal gyrus in front, the temporal lobe behind
+      expect(share(end('wm_af', sd, 'front'), 'ctx_g_front_inf_opercular')).toBeGreaterThan(0.3);
+      expect(end('wm_af', sd, 'back').areas.every((a) => /_temp/.test(a.id))).toBe(true);
+      // the IFOF passes the insula (the published table lists it), it does not end there
+      for (const e of WM_ENDS.tracts.wm_ifof.bundles[sd]!.ends) expect(e.areas.some((a) => /insula/.test(a.id))).toBe(false);
+      // the optic radiation's front end is in the thalamus, near the medial wall, not at the cortex
+      expect(end('wm_or', sd, 'front').atCortex).toBeLessThan(0.02);
+    }
+    // the cerebellar peduncles and the fornix do not end at the cerebral cortex, and get no patch
+    for (const id of ['wm_scp', 'wm_mcp', 'wm_icp', 'wm_fx']) {
+      for (const b of Object.values(WM_ENDS.tracts[id].bundles)) for (const e of b!.ends) expect(e.atCortex, id).toBeLessThan(0.05);
+      expect(patchOf(id), id).toBeNull();
+    }
+    // the corpus callosum: one bundle, its two ends on the two hemispheres
+    expect(WM_ENDS.tracts.wm_cc.ends).toEqual(['left', 'right']);
+    expect(end('wm_cc', 'M', 'left').areas.every((a) => a.side === 'L')).toBe(true);
+    expect(end('wm_cc', 'M', 'right').areas.every((a) => a.side === 'R')).toBe(true);
   });
-  it('lists areas in numeric order at or above the threshold', () => {
-    const a = connectedAreas('wm_af', 'L');
-    expect(a.every((x) => x.p >= CONNECTOME.min)).toBe(true);
-    const n = a.map((x) => parseInt(x.area.slice(2), 10));
-    expect(n).toEqual([...n].sort((p, q) => p - q));
+  it('names areas as the cortex section does, and finds the tracts that end on one', () => {
+    expect(areaName('ctx_g_oc_temp_med_lingual')).toBe('Lingual gyrus');
+    expect(areaName('ctx_g_front_inf_opercular')).toBe('Opercular part of the inferior frontal gyrus');
+    const pre = endsOn('ctx_g_precentral');
+    expect(pre.find((e) => e.tract === 'wm_cst' && e.end === 'upper' && e.side === 'L')!.share).toBeGreaterThan(0.5);
+    expect(pre.map((e) => e.share)).toEqual([...pre.map((e) => e.share)].sort((a, b) => b - a));
+    expect(endsOn('ctx_g_precentral').some((e) => e.tract === 'wm_cc' && e.end === null)).toBe(true);
+  });
+  it('a chosen tract draws its patch of cortex; the patches are cortical areas in the tract\'s colour', () => {
+    const p = tractPlan('language', 'wm_af');
+    expect(p.parcels.get('wm_af__ends')).toBe('key');
+    expect(tractPlan('language', null).parcels.size).toBe(0);
+    expect(tractPlan('fossa_peduncles', 'wm_mcp').parcels.size).toBe(0);
+    for (const [id, s] of END_PATCH) {
+      expect(tractsScene.catalog.byId.get(id), id).toBe(s);
+      expect([s.type, s.colour.token], id).toEqual(['cortex', WM_MANIFEST.structures.find((x) => `${x.id}__ends` === id)!.colour.token]);
+    }
   });
 });
 
@@ -156,7 +198,8 @@ describe('white-matter scene and URL state', () => {
     }
     const p = tractPlan('visual', 'wm_fat');
     expect(p.tracts.get('wm_fat')).toBe('key');
-    expect([...p.parcels.keys()].sort()).toEqual(['presma', 'sma']);
+    // (the HMAT areas its card names, and the patch where its streamlines end)
+    expect([...p.parcels.keys()].sort()).toEqual(['presma', 'sma', 'wm_fat__ends']);
     expect(p.focusIds).toEqual(['wm_fat']);
   });
   it('round-trips a teaching link', () => {
@@ -170,6 +213,10 @@ describe('white-matter scene and URL state', () => {
   it('a link without a hemisphere says so (the group decides)', () => {
     expect(decodeTracts('#/atlas?g=slf').hasHemi).toBe(false);
     expect(GROUP.get('slf')!.hemi).toBe('R');
+  });
+  it('a link that names a tract but no group says so (the page opens a group that holds the tract)', () => {
+    expect(decodeTracts('#/atlas?sel=wm_cst').hasGroup).toBe(false);
+    expect(decodeTracts('#/atlas?g=motor&sel=wm_cst').hasGroup).toBe(true);
   });
 });
 

@@ -759,6 +759,13 @@ export const GENERAL: Claim[] = [
   c('Direct electrical stimulation of white matter in awake patients maps the connectivity behind sensorimotor, visuospatial, language and social-cognitive function in real time.', 'duffau2015'),
 ];
 
+/** What the measured ends of a bundle's streamlines can and cannot say (the tract cards' "Where its streamlines end"). */
+export const ENDS_CAVEATS: Claim[] = [
+  c('Tractography streamlines end preferentially on the crowns of gyri rather than on the banks of sulci: shown against myelin-stained histology of a macaque brain, for deterministic and probabilistic tracking, several diffusion models and diffusion weightings, and in very high-resolution data.', 'schilling2018'),
+  c('In a tractography challenge on a simulated brain with known tracts (96 submissions from 20 research groups), no submission produced streamlines that kept exactly to the true bundles and ended exactly in their end regions; the authors note that earlier reports had found tract terminations in grey matter to be inaccurate.', 'maierhein2017'),
+  c('Tractography cannot confirm that a bundle innervates a region. The atlas paper’s own tract-to-region table counts a region when the bundle overlaps it, to make up for the bias against the banks of sulci, and so also counts regions a bundle only passes: the insula for the IFOF, by its own account.', 'yeh2022'),
+];
+
 export const GROUPS: TractGroup[] = [
   {
     id: 'language', kind: 'function', tier: 'core', name: 'Language', hemi: 'L', camera: 'lateral',

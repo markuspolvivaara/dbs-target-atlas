@@ -373,7 +373,7 @@ commit and push it.
   18 Nov).
 - D-008, the brainstem (17 and 18 November 2026; the user's choices: the four tracts from Yeh's HCP-YA atlas, drawn
   "tract like" as the others are; the trigeminal nuclei said to be not modelled, with sourced text; the nuclei shared
-  between nerves), on `fix/d008-brainstem` (off `09e12d2`). **Local commits only: not pushed, no pull request.**
+  between nerves), on `fix/d008-brainstem` (off `09e12d2`); merged as PR 25 (below).
   - Tracts: the medial longitudinal fasciculus, the central tegmental tract, the spinothalamic tract and the lateral
     lemniscus (`bs_t_mlf`, `bs_t_ctt`, `bs_t_stt`, `bs_t_ll`), each the HCP-YA (HCP842) atlas's own streamlines,
     drawn like the white-matter section's tracts (`type: 'tract'`, line GLBs). First built as the surfaces of the
@@ -455,6 +455,39 @@ commit and push it.
     `brainstem-tracts-desktop-darwin.png` (the view has four new tracts and legend rows); the floor view's picture
     does not change.
   - Not done, by the user's choice: the arterial territories (text only was offered).
+- D-008 was merged with its own pull request (PR 25) at the user's word (2026-11-18; `main` = `8ca4552`).
+- B-007, where the white-matter tracts end on the cortex (18 and 19 November 2026; the user's choices: the tract
+  cards show the measured ends only, replacing the published Brodmann table; patches of cortex in 3D; the cortex
+  section's label cards list the tracts that end there), on `feat/b007-tract-ends` (off `8ca4552`). **Local
+  commit only: not pushed, no pull request.**
+  - Pipeline: `pipeline/wm_ends.py` (its docstring states the rule), then `compress.mjs wm-ends`, then
+    `wm_ends.py finalize` (591 checks). It reads every streamline of each HCP-1065 bundle with `build.py`'s
+    `read_trk_gz` and the cortex section's built surface (`pipeline/data/build/cortex/ctx_*.glb`), and writes
+    `src/data/generated/wm-ends.json` and 32 patches in `public/assets/wm-ends/` (0.6 MB; none for the fornix and
+    the three cerebellar peduncles). Run again it writes the same files. **Rerun it** after a cortex rebuild, or
+    when `build.py`'s `read_trk_gz` changes. It was run again after PR 26 (the half voxel) was merged into this
+    branch, with the outside limit raised from 1.0 to 1.5 mm (below): against the first figures, an end's share at
+    the cortex changed by up to 14 points (the left cingulum's front end, 85 % to 99 %), an area's share by up to 17
+    (the left uncinate's front end on the H-shaped orbital sulci, 42 % to 59 %), and six ends' first area changed.
+  - The rule: a bundle's streamlines turned the same way round (its main direction; a midline bundle left to
+    right), so it has two named ends; an end is at the cortex within 5 mm of the surface, not more than
+    1.5 mm outside it (keeps the cerebellar peduncles' ends, which lie just outside the occipital and temporal base,
+    out; at 1.0 mm, first used, ends on gyral crowns just outside the surface were lost)
+    and not on the medial wall; areas with 5 % or more of an end's cortical ends are listed. The patch: the counts
+    spread over the surface, the densest part holding 80 % of a hemisphere's cortical ends.
+  - Front end: `src/data/ends.ts` (shared: `WM_ENDS`, `areaName`, `END_PATCHES`, `endsOn`); the tract card's
+    "Where its streamlines end (measured)" with the areas linked to the cortex section and three sourced caveats
+    (`ENDS_CAVEATS`: Schilling 2018 and Maier-Hein 2017, both read in full text; Yeh 2022); the patch drawn with a
+    chosen tract (a parcel of the plan, its colour the tract's); the cortex label card's "Tracts whose streamlines
+    end here (measured)". A tracts link with a tract but no group opens a group that holds it; a cortex link with a
+    label but no view opens a view that shows it.
+  - `src/data/generated/wm-connectome.json` (the published table) is still written by `build.py` and listed in
+    NOTICE and ATTRIBUTION.md, but the front end no longer reads it. Removing it would need a `build.py` change.
+  - `tests/e2e/smoke.spec.ts`: two lines of the tract-card test changed (near line 455); the
+    user's uncommitted work in the main checkout adds a test near line 639 of that file.
+  - Licence of the patches, as written (the user to confirm): GPL-3.0, non-commercial, like the cortex surface they
+    are cut from; where they lie comes from the HCP-1065 atlas (CC BY-SA 4.0, HCP terms).
+  - On the MacBook: no picture baseline shows a selected tract, so none should change.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -499,7 +532,7 @@ commit and push it.
 - Pipeline data: the worktree has its own `pipeline/data/build` (its `raw` is a link to the main checkout's). These
   fixes changed `skullbase` (v1), `skullbase-v3` and `skullbase-ct` there; copy from the worktree, not the main
   checkout, before rebuilding those on the MacBook.
-- Browser tests on the desktop: `CI=1 npx playwright test` (198 tests). Without `CI=1` the untracked Linux picture
+- Browser tests on the desktop: `CI=1 npx playwright test` (199 tests). Without `CI=1` the untracked Linux picture
   baselines from 11 Nov fail; the tracked ones are macOS ones.
 
 ## Where things stand
@@ -731,9 +764,9 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (466 tests on `fix/wm-half-voxel`)
+  - `npx vitest run` (469 tests on `feat/b007-tract-ends`)
   - `npm run build`
-  - `npx playwright test` (198 tests, about 7 minutes, preview on port 4173; `CI=1` on the desktop, see above)
+  - `npx playwright test` (199 tests, about 7 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`
   - `pipeline/winding_check.py`
   - each section's `finalize` validation

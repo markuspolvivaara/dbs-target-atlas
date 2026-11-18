@@ -108,6 +108,11 @@ What is covered by which terms
    an inflated surface and sulcal-depth shading computed, converted to compressed
    glTF. Destrieux C, Fischl B, Dale A, Halgren E. NeuroImage. 2010;53:1-15.
    doi:10.1016/j.neuroimage.2010.06.010.
+   The patches of cortex where the white-matter tracts end (public/assets/wm-ends/,
+   src/data/generated/wm-ends.json) are cut from this surface, under the same
+   terms; where they lie, and the shares on the tract and label cards, are measured
+   on the streamlines of the HCP-1065 tractography atlas (section 6), so the HCP
+   terms and acknowledgement in section 5 apply to them as well.
 
 9. Spine section (public/assets/spine/, public/assets/spine-manifest.json,
    src/data/generated/spine-*.json) is derived from one CT of the VerSe 2020

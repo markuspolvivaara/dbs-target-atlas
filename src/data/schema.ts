@@ -274,6 +274,43 @@ export const WmManifestSchema = z.object({
 });
 export type WmManifest = z.infer<typeof WmManifestSchema>;
 
+/** One end of a white-matter bundle (pipeline/wm_ends.py): the share of its streamlines' ends at the cerebral cortex and
+ * at the medial wall (which is not cortex), and of those at the cortex, the share on each Destrieux label holding at
+ * least the rule's minShare (the rest summed). */
+const BundleEndSchema = z.object({
+  atCortex: z.number().min(0).max(1), atMedialWall: z.number().min(0).max(1),
+  areas: z.array(z.object({ id: Id, side: z.enum(['L', 'R']), share: z.number().min(0).max(1) })),
+  rest: z.number().min(0).max(1),
+});
+const BundleSchema = z.object({ streamlines: z.number().int().positive(), ends: z.tuple([BundleEndSchema, BundleEndSchema]) });
+const EndPatchSideSchema = z.object({ ends: z.number().int().positive(), endsInPatch: z.number().min(0).max(1), areaCm2: z.number().positive(), faces: z.number().int().positive() });
+/** wm-ends.json: where the white-matter section's bundles end on the cortex section's surface (pipeline/wm_ends.py, the
+ * site audit's B-007). A tract's bundles are a side's (L, R) or one across the midline (M); each has two ends, named
+ * in `ends` (front and back, upper and lower ...). `patch`: the cortex where a tract's ends are densest, drawn in 3D. */
+export const WmEndsSchema = z.object({
+  generatedBy: z.string(),
+  source: z.string(),
+  patches: z.object({ source: z.string(), licence: z.string(), citation: z.array(z.string()), citationUrls: z.array(z.string()), derivation: z.string() }),
+  rule: z.object({
+    reachMm: z.number(), outsideMm: z.number(), minShare: z.number(), endMinShare: z.number(), patchShare: z.number(),
+    patchMinEnds: z.number(), patchMinShare: z.number(), smoothSteps: z.number(), surfaceEdgeMm: z.number(),
+  }),
+  /** the Destrieux labels named, with their names */
+  areas: z.record(Id, z.string()),
+  tracts: z.record(Id, z.object({
+    name: z.string(), abbr: z.string(), ends: z.tuple([z.string(), z.string()]),
+    bundles: z.object({ L: BundleSchema.optional(), R: BundleSchema.optional(), M: BundleSchema.optional() }),
+    patch: z.object({
+      id: Id, file: z.string(), bytes: z.number().int().positive(),
+      colour: z.object({ token: z.string(), light: z.string(), dark: z.string() }),
+      centroid: z.object({ L: Vec3, R: Vec3 }),
+      L: EndPatchSideSchema.optional(), R: EndPatchSideSchema.optional(),
+    }).nullable(),
+  })),
+});
+export type WmEnds = z.infer<typeof WmEndsSchema>;
+export type BundleEnd = z.infer<typeof BundleEndSchema>;
+
 /** sb-manifest.json: the skull-base section's structures (Z-Anatomy / BodyParts3D), in their own space. */
 export const SbManifestSchema = z.object({
   space: z.string(),

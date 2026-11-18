@@ -452,8 +452,8 @@ test('tract card: sourced sections, measured connections, highlight and the URL'
   await page.locator('.tract-btn[data-tract="wm_ifof"]').click();
   const card = page.locator('.card.sel');
   await expect(card.locator('h2')).toHaveText('Inferior fronto-occipital fasciculus (IFOF)');
-  for (const dt of ['Course', 'Connections', 'Brodmann areas the bundle touches', 'Function', 'Surgical relevance', 'Geometry']) await expect(card.locator('dt', { hasText: dt }).first()).toBeVisible();
-  await expect(card.locator('.areas')).toContainText('Left: BA');
+  for (const dt of ['Course', 'Connections', 'Where its streamlines end (measured)', 'Function', 'Surgical relevance', 'Geometry']) await expect(card.locator('dt', { hasText: dt }).first()).toBeVisible();
+  await expect(card.locator('.tract-ends')).toContainText('Left: ');
   // every list item carries at least one source link
   const items = card.locator('.evidence li');
   const n = await items.count();

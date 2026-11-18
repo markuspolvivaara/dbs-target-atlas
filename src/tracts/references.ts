@@ -178,4 +178,9 @@ export const WM_REFERENCES: WmReference[] = [
     citation: 'Brownstone RM, Chopek JW. Reticulospinal systems for tuning motor commands. Front Neural Circuits. 2018;12:30. doi:10.3389/fncir.2018.00030.' },
   { id: 'jang2022', pmid: '35721363', shortLabel: 'Jang & Cho 2022', url: doi('10.3389/fnhum.2022.896367'),
     citation: 'Jang SH, Cho MJ. Role of the contra-lesional corticoreticular tract in motor recovery of the paretic leg in stroke: a mini-narrative review. Front Hum Neurosci. 2022;16:896367. doi:10.3389/fnhum.2022.896367.' },
+  // the ends of the bundles' streamlines on the cortex (the site audit's B-007): both read in full text
+  { id: 'schilling2018', pmid: '29266522', shortLabel: 'Schilling 2018', url: doi('10.1002/hbm.23936'),
+    citation: 'Schilling K, Gao Y, Janve V, Stepniewska I, Landman BA, Anderson AW. Confirmation of a gyral bias in diffusion MRI fiber tractography. Hum Brain Mapp. 2018;39(3):1449–1466. doi:10.1002/hbm.23936.' },
+  { id: 'maierhein2017', pmid: '29116093', shortLabel: 'Maier-Hein 2017', url: doi('10.1038/s41467-017-01285-x'),
+    citation: 'Maier-Hein KH, Neher PF, Houde JC, Côté MA, Garyfallidis E, Zhong J, et al. The challenge of mapping the human connectome based on diffusion tractography. Nat Commun. 2017;8(1):1349. doi:10.1038/s41467-017-01285-x.' },
 ];

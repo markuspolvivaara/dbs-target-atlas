@@ -349,7 +349,22 @@ def cortex_attribution() -> list[str]:
         "- Definitions: Wikipedia - CC-BY-SA 3.0, as shipped with Z-Anatomy (each links its source page).",
         "- Changes made: surfaces decimated and split by label, an inflated surface and sulcal-depth shading computed,",
         "  files converted to compressed glTF; definitions shortened to their lead section.",
+        *wm_ends_attribution(),
         "",
+    ]
+
+
+def wm_ends_attribution() -> list[str]:
+    """The patches of cortex where the white-matter tracts end (pipeline/wm_ends.py): lines of the cortex section."""
+    p = GEN / "wm-ends.json"
+    if not p.exists():
+        return []
+    d = json.loads(p.read_text())
+    n = sum(1 for t in d["tracts"].values() if t["patch"])
+    return [
+        f"- Tract ends: the {n} patches in `public/assets/wm-ends/` and `wm-ends.json` (pipeline/wm_ends.py). Licence:",
+        f"  {d['patches']['licence']}.",
+        f"  {d['patches']['derivation']}",
     ]
 
 

@@ -1,3 +1,4 @@
+import { END_PATCHES, patchOf } from '../data/ends';
 import manifestJson from '../data/generated/manifest.json';
 import { ManifestSchema } from '../data/schema';
 import type { Look } from '../viewer/materials';
@@ -8,7 +9,8 @@ import type { TractsState } from './state';
 /**
  * The white-matter section as a scene source for the shared viewer: the HCP-1065 tracts,
  * plus from the DBS assets the cortex (ghost), the HMAT motor parcels named in the cards,
- * and a few deep nuclei as faint orientation landmarks.
+ * and a few deep nuclei as faint orientation landmarks; and, with a tract chosen, the patch of cortex where its
+ * streamlines end (pipeline/wm_ends.py).
  */
 const DBS = ManifestSchema.parse(manifestJson);
 /** deep grey matter shown as ghosts for orientation */
@@ -29,6 +31,8 @@ export function tractPlan(grpId: string, sel: string | null): TractPlan {
   if (t) {
     if (!tracts.has(t.id)) tracts.set(t.id, 'key');
     for (const p of t.parcels) parcels.set(p, 'key');
+    const ends = patchOf(t.id);
+    if (ends) parcels.set(ends, 'key');
   }
   return {
     title: t ? `${t.name} (${g.name})` : g.name,
@@ -39,7 +43,7 @@ export function tractPlan(grpId: string, sel: string | null): TractPlan {
 }
 
 export const tractsScene: SceneSource<TractsState, TractPlan> = {
-  catalog: makeCatalog([...CONTEXT, ...WM_MANIFEST.structures], DBS.volumes, []),
+  catalog: makeCatalog([...CONTEXT, ...WM_MANIFEST.structures, ...END_PATCHES], DBS.volumes, []),
   plan: (s) => tractPlan(s.grp, s.sel),
   planKey: (s) => `${s.grp}|${s.sel}`,
 };
