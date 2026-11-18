@@ -3,6 +3,33 @@
 Read this first when continuing on another computer. Before handing back, overwrite this file with a new handoff, then
 commit and push it.
 
+## White-matter tract colours (desktop, 2026-11-17)
+
+- Branch `fix/wm-mcp-colour` (off `main` at `4d58cf8`), pushed on 18 Nov as pull request 24 and merged that day
+  (`main` = `a4a731f`).
+- The middle cerebellar peduncle (`wmMCP`) and the corticospinal tract (`wmCST`) had the same light colour
+  (`#0B847C`), and the reticulospinal tract (`wmRST`) was close to both (CIEDE2000 6.8; 2.5 under tritanopia). No
+  white-matter group draws them together, but the brainstem section's "Tracts and deep nuclei" view does.
+- The user's choice (17 Nov): `wmMCP` blue (`#0E81EC` light, `#9FD0FF` dark) and `wmRST` lavender (`#8978A9` light,
+  `#A69CD4` dark); `wmCST` stays. Every pair of these with a tract drawn beside it in a checked view is now at 10 or
+  more in normal vision and under the three simulated deficiencies (smallest: 10.3 light, 10.1 dark).
+- Changed by hand in `src/data/palette.json` and in both copies of `wm-manifest.json` (the `colour` entries of `wm_mcp`
+  and `wm_rst` only). The white-matter pipeline was not rerun; a later run reads the palette and writes the same values.
+- `scripts/check-palette.ts` now lists the brainstem tracts view (`brainstem: tracts`).
+  - `fix/d008-brainstem` added the same row with its four tracts: main was merged into that branch on 18 Nov and
+    its longer row kept.
+  - Its `bsStt` (violet) was 4.2 (light) and 5.2 (dark) from the new `wmMCP` under deuteranopia, and 6.4 from the new
+    `wmRST` in the dark theme under protanopia: chosen again on that branch, a dark maroon (see D-008 below).
+  - The new row also lists `wmML`/`wmSCP` at 9.0 (dark theme, protanopia). Both colours are as they were; not changed.
+  - Not in the row: the deep nuclei drawn in the same view. In the dark theme the new `wmRST` is 7.5 from the dentate
+    nucleus under deuteranopia.
+  - The check leaves out the "all" groups. In "All posterior fossa tracts" the dark `wmRST` is 6.9 from `wmCPTP`
+    under deuteranopia.
+- **Picture baselines to retake on the MacBook** (`tests/e2e/smoke.spec.ts-snapshots/`, `*-desktop-darwin.png`):
+  `tracts-fossa-loop`, `tracts-fossa-peduncles`, `tracts-fossa-brainstem`, `tracts-fossa-all` and `brainstem-tracts`.
+  Delete each old PNG, run its test with `-u`, and look at the new image. The Linux copies of the same five are stale
+  too and were left as they are.
+
 ## Audit fixes in progress (desktop, updated 2026-11-18)
 
 - The site audit of 10–11 Nov is on branch `audit/2026-11-10` (`audit/README.md`: findings, questions for an expert,
@@ -278,7 +305,8 @@ commit and push it.
     `smoke.spec.ts` (the user's uncommitted work touches that file).
   Merged with its own pull request (PR 22) at the user's word (2026-11-17; `main` = `4d58cf8`). One of its two
   browser runs failed on a test that depends on timing ("a link that opens with a selection shows the card from its
-  top"); the failed job was run again and passed. That test is steadied on `fix/reveal-card-settles` (PR 23, open).
+  top"); the failed job was run again and passed. That test is steadied on `fix/reveal-card-settles` (PR 23, merged
+  18 Nov).
 - D-008, the brainstem (17 and 18 November 2026; the user's choices: the four tracts from Yeh's HCP-YA atlas, drawn
   "tract like" as the others are; the trigeminal nuclei said to be not modelled, with sourced text; the nuclei shared
   between nerves), on `fix/d008-brainstem` (off `09e12d2`). **Local commits only: not pushed, no pull request.**
@@ -351,8 +379,8 @@ commit and push it.
     (`wmMCP` blue, `wmRST` lavender): 10 or more (CIEDE2000) from every tract in the view, in normal vision and
     under the three simulated deficiencies. The violet first chosen was 4 to 5 from PR 24's `wmMCP`. Three pairs
     stay under 10, all the lateral lemniscus's red in the light theme: 8.5 and 8.3 from `wmICP` and `wmDRTT`
-    (protanopia), 8.2 from `wmCBT` (deuteranopia). **When this branch and PR 24 meet**, both add a
-    `brainstem: tracts` row to `scripts/check-palette.ts`: keep this branch's longer one.
+    (protanopia), 8.2 from `wmCBT` (deuteranopia). PR 24 was merged on 18 Nov and `main` merged into this branch:
+    of the two `brainstem: tracts` rows in `scripts/check-palette.ts` this branch's longer one is kept.
   - Tests: `tests/unit/brainstem.test.ts` and one test in `tests/e2e/audit-fixes.spec.ts`. On the MacBook, retake
     `brainstem-tracts-desktop-darwin.png` (the view has four new tracts and legend rows); the floor view's picture
     does not change.
@@ -401,7 +429,7 @@ commit and push it.
 - Pipeline data: the worktree has its own `pipeline/data/build` (its `raw` is a link to the main checkout's). These
   fixes changed `skullbase` (v1), `skullbase-v3` and `skullbase-ct` there; copy from the worktree, not the main
   checkout, before rebuilding those on the MacBook.
-- Browser tests on the desktop: `CI=1 npx playwright test` (196 tests). Without `CI=1` the untracked Linux picture
+- Browser tests on the desktop: `CI=1 npx playwright test` (197 tests). Without `CI=1` the untracked Linux picture
   baselines from 11 Nov fail; the tracked ones are macOS ones.
 
 ## Where things stand
@@ -635,7 +663,7 @@ commit and push it.
   - `npx eslint . --quiet`
   - `npx vitest run` (465 tests on `fix/d008-brainstem`)
   - `npm run build`
-  - `npx playwright test` (196 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
+  - `npx playwright test` (197 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`
   - `pipeline/winding_check.py`
   - each section's `finalize` validation

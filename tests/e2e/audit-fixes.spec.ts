@@ -15,9 +15,29 @@ function guard(page: Page) {
   return { external, errors };
 }
 
-/** How long the panel may take to come to rest after a selection: the card is aligned on the next frame and once more
- * 900 ms later. Longer in CI, where a frame can be seconds away (playwright.config.ts). */
+/** How long the panel may take to come to rest after a selection: it is moved to the card frame by frame, for a second
+ * at most, from the next frame on. Longer in CI, where a frame can be seconds away (playwright.config.ts). */
 const SETTLED = process.env.CI ? 20_000 : 6_000;
+
+/** How far the selected card's heading lies below the top of the panel's pane, in px (negative: cut off above it). */
+async function headingBelowPaneTop(page: Page): Promise<number> {
+  const [c, p] = await Promise.all([page.locator('.panel .card.sel h2').boundingBox(), page.locator('.panel .pane:not([hidden])').boundingBox()]);
+  return c && p ? Math.round(c.y - p.y) : -999;
+}
+
+/** The card's heading comes to rest just under the pane's top, neither cut off above it nor still on its way, and is
+ * still there a second later (a heading on its way past is under the top for a moment too). */
+async function expectCardAtTop(page: Page, what: string) {
+  const measured = `${what}: the heading's distance below the pane's top, in px`;
+  const there = async () => {
+    const dy = await headingBelowPaneTop(page);
+    expect(dy, measured).toBeGreaterThanOrEqual(0);
+    expect(dy, measured).toBeLessThan(80);
+  };
+  await expect(there).toPass({ timeout: SETTLED });
+  await page.waitForTimeout(1000);
+  await there();
+}
 
 async function settle(page: Page) {
   await page.waitForSelector('body[data-ready="1"]', { timeout: 30_000 });
@@ -502,21 +522,38 @@ test('selection: the card of a clicked structure is brought to the top of the pa
   expect(g.errors).toEqual([]);
 });
 
-// UI-02, a page opened on a link with a selection: the panel is still filling in when the card is first aligned
+// UI-02, a page opened on a link with a selection: the panel is first laid out in the fallback font, and the lists
+// above the card change their height when the page's own font arrives (226 px in the skull base, on Linux).
+// This test failed now and then in CI (pull request 22, 17 November 2026: the heading never came to rest, 20 s). The
+// pane was then scrolled by the browser's smooth scroll and aligned once more 900 ms later; on a slow runner that
+// landed inside the smooth scroll, which Chromium did not stop but carried on from the place just set. To see it on a
+// fast machine, hold the browsers to one core: `CI=1 taskset -c 0 npx playwright test -g "card from its top"
+// --repeat-each 12 --workers 2 --retries 0` failed 5 times in 12 before the fix.
 test('selection: a link that opens with a selection shows the card from its top', async ({ page }) => {
   const g = guard(page);
   for (const url of ['./skullbase/#/atlas?g=floor&sel=tb_facial_nerve_vii', './brainstem/#/atlas?g=sez_floor&sel=sez_infrafacial', './cortex/#/atlas?v=lateral&sel=ctx_g_precentral']) {
     await open(page, url);
-    const card = page.locator('.panel .card.sel');
-    await expect(card, url).toBeVisible();
-    // (the panel scrolls to the card, then once more when it has settled: wait for the heading to come to rest just
-    // under the pane's top, neither cut off above it nor still on its way)
-    await expect.poll(async () => {
-      const [c, p] = await Promise.all([card.locator('h2').boundingBox(), page.locator('.panel .pane:not([hidden])').boundingBox()]);
-      const dy = c && p ? Math.round(c.y - p.y) : -999;
-      return dy >= 0 && dy < 80;
-    }, { message: url, timeout: SETTLED }).toBe(true);
+    await expect(page.locator('.panel .card.sel'), url).toBeVisible();
+    await expectCardAtTop(page, url);
   }
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// UI-02, the same when the font arrives after the pane has come to rest (a slow connection). Chromium and Firefox then
+// take the pane along with what it shows (scroll anchoring); that is switched off here, as in a browser without it.
+test('selection: the card stays at the pane’s top when the page’s font arrives late', async ({ page }) => {
+  const g = guard(page);
+  await page.addInitScript(() => {
+    const sheet = new CSSStyleSheet();
+    sheet.replaceSync('.pane { overflow-anchor: none }');
+    document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+  });
+  await page.route(/\.woff2?$/, async (route) => { await new Promise((ok) => setTimeout(ok, 2500)); await route.continue(); });
+  await open(page, './skullbase/#/atlas?g=floor&sel=tb_facial_nerve_vii');
+  await expect(page.locator('.panel .card.sel')).toBeVisible();
+  await page.waitForFunction(() => document.fonts.status === 'loaded' && [...document.fonts].some((f) => f.status === 'loaded'));
+  await expectCardAtTop(page, 'after the font');
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
