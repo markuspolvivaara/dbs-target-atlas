@@ -368,11 +368,12 @@ commit and push it.
     atlas's fasciculus outside the fitted floor showed on it. The floor view's card lists what lies under the
     surface; choosing one (a nucleus too) draws the surface as a shell (`liesInside`; the user: "See through is
     great"), and an entry zone chosen there puts the solid surface back.
-  - A chosen tract fades the other tracts to a quarter of their opacity in this section, whatever the viewer's
-    "Fade the rest" setting (the user's request on seeing the lateral lemniscus among the others, 18 November): a
-    new `fadeOtherTracts` on `ScenePlan`, set by `bsPlan` only. The DBS and white-matter sections are as before
-    (`smoke.spec.ts`, which the user's uncommitted work touches, tests that there a chosen tract leaves the others
-    as they are); the flag could be set there too.
+  - A chosen tract fades the other tracts to a quarter of their opacity in this section and in the DBS section,
+    whatever the viewer's "Fade the rest" setting (the user's requests of 18 November, on seeing the lateral
+    lemniscus among the others): a new `fadeOtherTracts` on `ScenePlan`, set by `bsPlan` and by the DBS section's
+    `plan`. The white-matter section is as before; the flag could be set there too. For the DBS section a few lines
+    of the legend test in `tests/e2e/smoke.spec.ts` changed (near line 240; the user's uncommitted work in the main
+    checkout adds a test near line 639 of that file, in another place).
   - Cards: a tract card has sourced text, published measurements (Li 2021 for the fasciculus) and the measured fit;
     the trigeminal nerve's card has `NUCLEI_NOT_MODELLED`; the nucleus ambiguus (IX, X, XI) and the nucleus of the
     solitary tract (VII, IX, X) carry `cranialNerves` in the manifest and a sourced sentence per nerve
@@ -666,7 +667,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (465 tests on `fix/d008-brainstem`)
+  - `npx vitest run` (466 tests on `fix/d008-brainstem`)
   - `npm run build`
   - `npx playwright test` (197 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`

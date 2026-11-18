@@ -27,6 +27,14 @@ describe('scene source contract (shared viewer)', () => {
     expect(dbsScene.planKey({ ...s, ind: 'et' })).not.toBe(k);
     expect(dbsScene.planKey({ ...s, borders: false })).not.toBe(k);
   });
+  it('a chosen tract fades the other tracts back in the DBS and brainstem sections, not in the white-matter section', async () => {
+    const { plan } = await import('../../src/viewer/selection');
+    const { bsPlan } = await import('../../src/brainstem/scene');
+    const { tractPlan } = await import('../../src/tracts/scene');
+    expect(plan('et', null, true).fadeOtherTracts).toBe(true);
+    expect(bsPlan('tracts', null).fadeOtherTracts).toBe(true);
+    expect(tractPlan('language', null).fadeOtherTracts).toBeUndefined();
+  });
   it('makeCatalog indexes structures and markers', () => {
     const c = makeCatalog(MANIFEST.structures.slice(0, 2), {}, [{ id: 'm1', label: 'x', structureId: MANIFEST.structures[0].id, mni: { left: [-1, 0, 0], right: [1, 0, 0] } }], ['a']);
     expect(c.byId.size).toBe(2);
