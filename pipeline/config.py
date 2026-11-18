@@ -359,7 +359,8 @@ RANDOM_SEED = 20261014
 # HCP-1065 population-averaged tractography atlas (Yeh 2022), in ICBM 2009a nonlinear
 # asymmetric space according to the atlas page. Shown on the 2009b templates because its
 # tracts sit in white matter on the 2009b T1 and no shift of up to 2 mm improves the fit
-# (checked per tract by pipeline/validate.py).
+# (checked per tract by pipeline/validate.py; the fornix against the Neudorfer 2020 label instead).
+# Its streamline files are read with a half voxel added (build.read_trk).
 HCP1065_LICENCE = (
     "CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome "
     "Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms"
@@ -371,12 +372,22 @@ DATASETS["hcp1065"] = {
     "url": "https://brain.labsolver.org/hcp_trk_atlas.html",
     "note": "Files from the 'hcp1065' release of github.com/data-others/atlas (hcp1065_avg_tracts_trk.zip; "
             "tract_to_region_connectome_BM_KL.xlsx). Space: ICBM 2009a nonlinear asymmetric (atlas page), shown here on the "
-            "2009b templates after an alignment check: along every tract the 2009b T1 is white-matter bright, and no "
-            "shift of up to 2 mm in any direction raises it by more than 5% (pipeline/validate.py).",
+            "2009b templates after an alignment check: along every tract but the fornix the 2009b T1 is white-matter "
+            "bright, and no shift of up to 2 mm in any direction raises it by more than 5%; the fornix, thin and beside "
+            "the ventricle, is held instead to the fornix label of the Neudorfer 2020 hypothalamus atlas (median distance "
+            "under 4 mm) (pipeline/validate.py). The streamline files "
+            "give their points from the centre of the first voxel, not from its corner as the TrackVis format has it, so "
+            "every point is moved by half a voxel (0.5 mm on each axis); the same check holds each file to at least 97% "
+            "of its points inside the atlas's own volume of the tract (hcp1065_avg_tracts_nifti.zip of the same release, "
+            "used for this check only).",
 }
 HCP1065_RELEASE = "https://github.com/data-others/atlas/releases/download/hcp1065/"
 HCP1065_TRK_ZIP = "hcp1065_avg_tracts_trk.zip"
 HCP1065_TRK_SHA256 = "344aad4394f18b8926ed5e1bda911ad56e328c6cf75faa45e1302512ad779c67"  # as downloaded 2026-10-17
+# The atlas's own volume of each tract (0.5 mm): not shown, only what validate.py checks the streamlines' coordinates
+# against (build.read_trk's half voxel).
+HCP1065_NIFTI_ZIP = "hcp1065_avg_tracts_nifti.zip"
+HCP1065_NIFTI_SHA256 = "81e0ad75add35c96a5bfd9dc6ede10e5482a8dd180eafcdf2d79249926194510"  # as downloaded 2026-11-18
 HCP1065_CONNECTOME = "tract_to_region_connectome_BM_KL.xlsx"
 WM_BUDGET = 300  # streamlines per hemisphere, the same on both sides
 

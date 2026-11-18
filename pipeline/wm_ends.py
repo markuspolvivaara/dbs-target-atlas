@@ -65,7 +65,9 @@ PUBLIC = REPO / "public" / "assets"
 PALETTE = json.loads((REPO / "src" / "data" / "palette.json").read_text())
 
 REACH_MM = 5.0            # an end is at the cortex within this distance of the surface ...
-OUTSIDE_MM = 1.0          # ... and not further than this outside it
+OUTSIDE_MM = 1.5          # ... and not further than this outside it: the cerebellar peduncles' ends lie further out
+                          # (none within 1.5 mm); at 1.0 mm ends on gyral crowns just outside the surface were lost
+                          # (the right SLF I's front end: 61 % at 1.0 mm, 90 % at 1.5, 99 % at 2.0; measured 19 Nov 2026)
 MIN_SHARE = 0.05          # an area is listed for an end when it holds at least this share of the end's cortical ends
 END_MIN_SHARE = 0.05      # an end of a bundle is said to reach the cortex when at least this share of its ends does
 PATCH_SHARE = 0.8         # a patch holds this share of a hemisphere's cortical ends of the tract: where they are densest

@@ -409,7 +409,7 @@ export class TractsAtlasPage {
     if (!pane.childElementCount) {
       buildSlicesPane<TractsState>(pane, this.update, {
         cut: 'Removes everything on that side of the midline (x = 0): tracts, cortex and nuclei. The slices stay whole.',
-        seq: 'ICBM 2009b templates. The tracts come from an atlas built in ICBM 2009a space; along each tract the 2009b T1 is white-matter bright and no 2 mm shift improves the fit (see Credits). Each sequence loads on first use (about 3 MB).',
+        seq: 'ICBM 2009b templates. The tracts come from an atlas built in ICBM 2009a space; along each tract but the fornix the 2009b T1 is white-matter bright and no 2 mm shift improves the fit (see Credits). Each sequence loads on first use (about 3 MB).',
         footer: 'Slices show the ICBM 2009b nonlinear asymmetric templates: 0.5 mm inside a subcortical box, 1.5 mm elsewhere.',
       });
     }

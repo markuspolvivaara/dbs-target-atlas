@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import MEASURED from '../../src/data/generated/wm-measured.json';
 import { areaName, END_PATCH, endsOn, patchOf, WM_ENDS } from '../../src/data/ends';
 import { crossCheckWm, GROUP, parseWmContent, TOPIC, WM, WM_MANIFEST } from '../../src/tracts';
 import { CONTEXT_STRUCTURES, tractPlan, tractsScene } from '../../src/tracts/scene';
@@ -56,6 +57,72 @@ describe('the site audit\u2019s B4: what each atlas bundle shows', () => {
     expect(TOPIC.get('wm_slf1')!.aliases).toEqual([]);                      // "dorsal SLF" names SLF II elsewhere
     expect(TOPIC.get('wm_slf1')!.connections.flatMap((c) => c.refIds)).toEqual(expect.arrayContaining(['wang2016', 'komaitis2020']));
     expect(TOPIC.get('wm_cs_p')!.summary).not.toMatch(/temporal/);
+  });
+  it('holds what those sentences say to the pipeline’s measurements (wm-measured.json, pipeline/wm_measure.py)', () => {
+    const text = (id: string) => TOPIC.get(id)!.measured.join(' ');
+    const top = (labels: Record<string, number>, n: number) => Object.entries(labels).sort((a, b) => b[1] - a[1]).slice(0, n).map(([k]) => k);
+    const pct = (share: number) => `${Math.round(share * 100)}%`;
+    // the two sides' values as one whole number, or as a range: "9", "44–46"
+    const span = (a: number, b: number) => {
+      const [lo, hi] = [Math.round(Math.min(a, b)), Math.round(Math.max(a, b))];
+      return lo === hi ? `${lo}` : `${lo}–${hi}`;
+    };
+    // a shift in whole millimetres (x to the right, y anterior, z superior) in the card's words
+    const shiftWords = ([x, y, z]: number[]) => {
+      const parts = [
+        x ? `${Math.abs(x)} mm to the ${x > 0 ? 'right' : 'left'}` : '',
+        y ? `${Math.abs(y)} mm ${y > 0 ? 'anterior' : 'posterior'}` : '',
+        z ? `${Math.abs(z)} mm ${z > 0 ? 'superior' : 'inferior'}` : '',
+      ].filter(Boolean);
+      return `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}`;
+    };
+    const sides = ['L', 'R'] as const;
+    // the optic radiation: every figure of the sentence, and the loop's front inside the range the card quotes (24 to
+    // 47 mm, mean 35: "at the posterior end of the published range")
+    const or = MEASURED.opticRadiation;
+    expect(text('wm_or')).toContain(`${pct(or.L.loopShare)} of streamlines on the left and ${pct(or.R.loopShare)} on the right run more than `
+      + `${MEASURED.loopForwardMm} mm forward of their thalamic end, ${span(Math.abs(or.L.loopApex[0]), Math.abs(or.R.loopApex[0]))} mm from the midline`);
+    expect(text('wm_or')).toContain(`the most anterior lie ${span(or.L.behindTemporalPoleMm, or.R.behindTemporalPoleMm)} mm behind this template’s temporal pole`);
+    expect(text('wm_or')).toContain(`about ${span(Math.abs(or.L.thalamicEnd[0]), Math.abs(or.R.thalamicEnd[0]))} mm from the midline, not at`);
+    for (const s of sides) {
+      expect(or[s].behindTemporalPoleMm, s).toBeGreaterThan(35);
+      expect(or[s].behindTemporalPoleMm, s).toBeLessThanOrEqual(47);
+    }
+    // the fornix: the medians and the closest shifts as printed
+    const fx = MEASURED.fornix;
+    expect(text('wm_fx')).toContain(`a median ${fx.L.medianMm.toFixed(1)} mm (left) and ${fx.R.medianMm.toFixed(1)} mm (right)`);
+    expect(text('wm_fx')).toContain(`is ${shiftWords(fx.L.bestShiftMm)} on the left, and ${shiftWords(fx.R.bestShiftMm)} on the right.`);
+    // the medial lemniscus: every streamline reaches the cortex, around the central sulcus; its length
+    const central = ['G_precentral', 'G_postcentral', 'G_and_S_paracentral', 'S_central'];
+    const ml = MEASURED.ends.wm_ml;
+    for (const s of sides) {
+      expect(ml[s].upper.nearCortexShare, s).toBe(1);
+      for (const l of top(ml[s].upper.labels, 3)) expect(central, `${s} ${l}`).toContain(l);
+    }
+    expect(text('wm_ml')).toContain(`about ${span(ml.L.lengthMedianMm, ml.R.lengthMedianMm)} mm from the medulla`);
+    // the reticulospinal tract: prefrontal upper ends, on the right also orbital, none listed in the precentral gyrus
+    const rst = MEASURED.ends.wm_rst;
+    for (const s of sides) {
+      expect(rst[s].upper.nearCortexShare, s).toBeGreaterThan(0.99);
+      expect(Object.keys(rst[s].upper.labels), s).not.toContain('G_precentral');
+    }
+    expect(text('wm_rst')).toContain(`mean length about ${span(rst.L.lengthMeanMm, rst.R.lengthMeanMm)} mm`);
+    expect(top(rst.L.upper.labels, 2).sort()).toEqual(['G_front_middle', 'G_front_sup']);
+    expect(top(rst.R.upper.labels, 3)).toEqual(expect.arrayContaining(['G_front_middle', 'G_front_sup', 'G_orbital']));
+    // the extreme capsule fasciculus: the insula in front; behind, the postcentral gyrus and the superior parietal lobule
+    const emc = MEASURED.ends.wm_emc;
+    for (const s of sides) {
+      for (const l of Object.keys(emc[s].front.labels)) expect(l, s).toMatch(/ins/i);
+      for (const l of [...Object.keys(emc[s].front.labels), ...Object.keys(emc[s].back.labels)]) expect(l, s).not.toMatch(/triangul|temp_sup/i);
+    }
+    expect(top(emc.L.back.labels, 2)).toEqual(['G_postcentral', 'G_parietal_sup']);
+    expect(top(emc.R.back.labels, 1)).toEqual(['G_parietal_sup']);
+    // the anterior commissure: the regions in the card's order, the right side's shares as printed
+    const ac = MEASURED.anteriorCommissure;
+    expect(top(ac.L.labels, 3)).toEqual(['Pole_occipital', 'G_oc-temp_med-Lingual', 'S_calcarine']);
+    expect(top(ac.R.labels, 2)).toEqual(['Pole_occipital', 'Pole_temporal']);
+    expect(text('wm_ac')).toContain(`(right, ${pct(ac.R.labels.Pole_occipital)}; temporal pole ${pct(ac.R.labels.Pole_temporal)}), `
+      + `about ${Math.round(ac.lengthMedianMm / 10) * 10} mm from end to end`);
   });
 });
 

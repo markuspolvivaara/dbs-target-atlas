@@ -8,6 +8,11 @@ import type { Claim, TractGroup, TractTopicInput } from './schema';
  *
  * Cortical connections measured in the atlas population are not written here: they come
  * from the published tract-to-region table (src/data/generated/wm-connectome.json).
+ *
+ * What the cards say of the atlas bundles' own shape (`measured`) is measured by pipeline/wm_measure.py
+ * (src/data/generated/wm-measured.json). The figures are written out here, because the browser tests
+ * import this file and cannot load JSON through it; tests/unit/tracts.test.ts holds every one of them,
+ * and the regions the sentences name, to that file. After a rebuild that moves them, that test says which.
  */
 
 const c = (text: string, ...refIds: string[]): Claim => ({ text, refIds });
@@ -257,7 +262,7 @@ export const TOPICS: TractTopicInput[] = [
       c('Direct subcortical stimulation in awake patients identifies the optic radiation by transient visual disturbance: of 14 glioma patients, only one had a permanent hemianopia although quadrantanopia was expected in 12.', 'grascombe2012'),
     ],
     atlas: [],
-    measured: ['The atlas bundle shows a shallow Meyer’s loop: 41% of streamlines on the left and 12% on the right run more than 5 mm forward of their thalamic end, about 30 mm from the midline, before turning back; the most anterior lie 44–46 mm behind this template’s temporal pole, at the posterior end of the published range. It starts in the posterior thalamus, about 9 mm from the midline, not at the lateral geniculate body.'],
+    measured: ['The atlas bundle shows a shallow Meyer’s loop: 41% of streamlines on the left and 12% on the right run more than 5 mm forward of their thalamic end, 29–31 mm from the midline, before turning back; the most anterior lie 44–46 mm behind this template’s temporal pole, at the posterior end of the published range. It starts in the posterior thalamus, about 9 mm from the midline, not at the lateral geniculate body.'],
   },
   {
     id: 'wm_cst', name: 'Corticospinal tract', abbr: 'CST', aliases: ['pyramidal tract'], type: 'projection', tier: 'core', parcels: ['m1'],
@@ -354,7 +359,7 @@ export const TOPICS: TractTopicInput[] = [
     ],
     atlas: [],
     measured: [
-      'Near the hypothalamus this atlas’s fornix lies a median 2.8 mm (left) and 3.7 mm (right) from the fornix label of the Neudorfer 2020 hypothalamus atlas shown in the DBS section; a 2 mm anterior and 2 mm superior shift brings them closest. No other tract showed such an offset. The T1 sampled along it is darker than along the other tracts (cerebrospinal fluid next to a thin tract). For millimetre questions near the fornix columns, use the DBS section’s fornix.',
+      'Near the hypothalamus this atlas’s fornix lies a median 3.1 mm (left) and 3.9 mm (right) from the fornix label of the Neudorfer 2020 hypothalamus atlas shown in the DBS section; the whole-millimetre shift that brings them closest (up to 2 mm tried on each axis) is 1 mm to the right, 2 mm anterior and 2 mm superior on the left, and 2 mm to the left, 2 mm anterior and 2 mm superior on the right. No other tract showed such an offset. The T1 sampled along it is darker than along the other tracts (cerebrospinal fluid next to a thin tract). For millimetre questions near the fornix columns, use the DBS section’s fornix.',
     ],
   },
   // ---------------------------------------------------------------- extended tier
@@ -450,7 +455,7 @@ export const TOPICS: TractTopicInput[] = [
     ],
     surgery: [],
     atlas: [],
-    measured: ['Each half of the atlas bundle runs on to the occipital lobe: its far ends lie in the lingual gyrus, occipital pole and calcarine sulcus (left) and the occipital pole (right, 78%; temporal pole 11%), about 270 mm from end to end.'],
+    measured: ['Each half of the atlas bundle runs on to the occipital lobe: its far ends lie at the occipital pole, in the lingual gyrus and in the calcarine sulcus (left) and at the occipital pole (right, 74%; temporal pole 11%), about 270 mm from end to end.'],
   },
   {
     id: 'wm_atr', name: 'Anterior thalamic radiation', abbr: 'ATR', aliases: ['anterior corticothalamic tract'], type: 'projection', tier: 'extended',

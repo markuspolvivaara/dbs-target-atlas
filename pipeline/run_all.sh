@@ -17,6 +17,7 @@ fi
 [ -n "$BLENDER" ] || { echo "Blender not found: set BLENDER=/path/to/blender" >&2; exit 1; }
 "$PY" -I pipeline/fetch_sources.py
 "$PY" -I -W ignore pipeline/build.py
+"$PY" -I -W ignore pipeline/wm_measure.py       # what the white-matter cards say of the atlas bundles, from the atlas's files
 node pipeline/compress.mjs
 "$PY" -I -W ignore pipeline/manifest.py
 "$PY" -I -W ignore pipeline/validate.py

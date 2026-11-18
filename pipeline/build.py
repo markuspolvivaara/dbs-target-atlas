@@ -408,11 +408,24 @@ def build_tracts(report: dict) -> None:
 
 
 # ---------------------------------------------------------------- white-matter section (HCP-1065)
-def read_trk_gz(path: Path) -> list[np.ndarray]:
-    """Streamlines of a gzipped TrackVis file, in RAS mm (nibabel applies the header affine)."""
+def read_trk(path: Path) -> tuple[list[np.ndarray], np.ndarray]:
+    """Streamlines of one of the HCP-1065 atlas's gzipped TrackVis files, in RAS mm, and the half voxel (mm) they were
+    moved by.
+
+    nibabel reads a TrackVis file's points as measured from the corner of the first voxel, as the format has it, and
+    applies the header's affine. These files, written by DSI Studio, give their points from that voxel's centre, so
+    every point is moved by half a voxel: (-0.5, -0.5, +0.5) mm on the atlas's grid (1 mm, voxel order LPS). Read
+    that way the points lie in the atlas's own volume of the tract; as nibabel reads them, many do not (validate.py,
+    own-volume)."""
     with gzip.open(path, "rb") as g:
         t = nib.streamlines.TrkFile.load(io.BytesIO(g.read()), lazy_load=False)
-    return [np.asarray(s, float) for s in t.streamlines]
+    half = np.asarray(t.header["voxel_to_rasmm"], float)[:3, :3] @ np.full(3, 0.5)
+    return [np.asarray(s, float) + half for s in t.streamlines], half
+
+
+def read_trk_gz(path: Path) -> list[np.ndarray]:
+    """Streamlines of one of the HCP-1065 atlas's files, in RAS mm (read_trk: with its half voxel)."""
+    return read_trk(path)[0]
 
 
 def crossed(sl: np.ndarray) -> bool:

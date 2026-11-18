@@ -3,6 +3,70 @@
 Read this first when continuing on another computer. Before handing back, overwrite this file with a new handoff, then
 commit and push it.
 
+## White-matter tracts moved by half a voxel (desktop, 2026-11-18)
+
+- Branch `fix/wm-half-voxel` (off `main` at `8ca4552`, after PR 25), in the worktree
+  `.claude/worktrees/interesting-almeida-6ff762`. Pushed on 18 Nov at the user's word as pull request 26.
+- What was wrong: `read_trk_gz` in `pipeline/build.py` read the HCP-1065 atlas's TrackVis files as nibabel does,
+  from the corner of the first voxel; the files (DSI Studio's) give their points from its centre. Every white-matter
+  tract was drawn (+0.5, +0.5, −0.5) mm from where the atlas has it (0.87 mm): the fault found on the HCP-YA files
+  in D-008, below.
+- Verified first (the user allowed the download): the atlas's own volumes of its tracts,
+  `hcp1065_avg_tracts_nifti.zip` (3,372,106 bytes, the same GitHub release; a 0.5 mm grid; dated 2020, the streamline
+  files 2023). Over the 68 files the section reads, the share of a file's points inside its own volume:
+  - as nibabel reads them, 30.9 to 97.3 % (median 85.8 %);
+  - moved by `voxel_to_rasmm[:3, :3] @ [0.5, 0.5, 0.5]` = (−0.5, −0.5, +0.5) mm, 97.80 to 99.99 % (median 99.90 %);
+  - of 125 shifts (−1 to +1 mm in 0.5 mm steps on each axis) the half voxel is the best in 68 of 68 files, and a
+    search in 0.1 mm steps along each axis peaks at exactly −0.5, −0.5, +0.5 mm in every file;
+  - twelve files stay under 99 % (the thalamic radiations and the corticostriatal tracts, 97.8 to 98.7 %): why is
+    not established;
+  - the 2009b T1 cannot tell the two readings apart (median change of the mean T1 along a file −0.05 %), which is
+    why `validate.py` never saw it.
+- The fix (the user's choice: in the reader, before the midline cut): `read_trk` in `build.py` adds the half voxel;
+  `read_trk_gz` returns its streamlines. 32 of the 36 tracts keep their streamlines and move by exactly
+  (−0.5, −0.5, +0.5) mm. The four cut at x = 0 (`wm_cc`, `wm_ac`, `wm_scp`, `wm_mcp`) draw other streamlines: the
+  cut now falls on the atlas's midline, so the pool of pieces changes (the corpus callosum's from 32,212 and 32,258
+  to 32,202 and 32,211).
+- Checks added: `fetch_sources.py` fetches and pins the volumes zip (`HCP1065_NIFTI_SHA256`, and the lock file);
+  `validate.py` has `own-volume` (every file at 97 % or more, and better than without the half voxel): 566 of 566.
+- **The fornix** (the user's choice, 18 November): with the half voxel a 2 mm shift raises the T1 along it by 6.5 %
+  (4.1 % before; the limit is 5 %; every other tract is at 3 % or less). Its T1 rule is dropped (its check already
+  said "brightness test not applied") and it is held to the Neudorfer 2020 fornix label only: a median 3.1 mm
+  (left) and 3.9 mm (right) from it, against a tolerance of 4.0 mm, so **the right side has 0.1 mm to spare**. The
+  dataset note, the Credits page and the slices pane say the fornix is the exception.
+- Card figures are now pipeline code: `pipeline/wm_measure.py` writes `src/data/generated/wm-measured.json` (the
+  optic radiation's loop, the ends of the medial lemniscus, reticulospinal tract, extreme capsule fasciculus and
+  anterior commissure, the fornix against the label). They were measured by two scratch scripts before
+  (`b4/or_loop.py`, `b4/ends.py`). The card texts in `src/tracts/content.ts` are written out (the browser tests
+  import that file and cannot load JSON through it); `tests/unit/tracts.test.ts` holds every figure and named
+  region to the JSON. What changed on the cards:
+  - fornix: 2.8 and 3.7 mm are now 3.1 and 3.9 mm, and the closest shift is given for each side;
+  - anterior commissure: the right ends' 78 % at the occipital pole is now 74 %, and the left's regions are named
+    in their new order (occipital pole first). Of that, 79 to 74 is the half voxel; 78 to 79 is the template's pial
+    surface, which the pipeline script uses in place of the cortex section's decimated meshes;
+  - optic radiation: "about 30 mm from the midline" is now "29–31 mm"; the rest of the sentence holds;
+  - the medial lemniscus's and the reticulospinal tract's sentences hold as they were.
+- The brainstem's Sources page: the corticospinal tract inside the fitted pons and medulla is 99.4 % (was 99.3 %).
+  `brainstem_build.py cst` is a new step that takes only that figure again (the fit came out identical to the cached
+  one); then `brainstem_build.py finalize` (322 of 322). The README's figure there was stale (98.5 %) and is 99.4 %.
+- How it was built, in this order: `build.py wm`, `wm_measure.py`, `compress.mjs wm`, `manifest.py`, `validate.py`,
+  `brainstem_build.py cst`, `brainstem_build.py finalize`, `npm run build`. Before the change, `build.py wm` and
+  `compress.mjs wm` gave all 36 shipped files byte for byte in this worktree, so the diff is the fix's own.
+- Changed files: the 36 `public/assets/wm/*.glb`, `wm-manifest.json` (centroids, sizes, the four tracts' source
+  counts, the note), `manifest.json` and `ATTRIBUTION.md` (the note, the changes made), `bs-manifest.json` (one
+  figure), `NOTICE`, `README.md`, and `dist/`.
+- Pipeline data: this worktree has its own `pipeline/data` (`raw`: links into the main checkout's, with the volumes
+  zip beside them in `raw/hcp1065/`; `build`: `wm`, `report.json`, the brainstem's export and fit). The main
+  checkout's raw folder does not have the volumes zip: `fetch_sources.py` fetches it, or copy it, before
+  `validate.py` is run elsewhere.
+- **Picture baselines to retake on the MacBook**: all 20 `tracts-*-desktop-darwin.png` and
+  `brainstem-tracts-desktop-darwin.png` (the five of the colour change below are among them). The Linux copies are
+  stale too and were left. The home page's `public/assets/home/tracts.webp` was not retaken.
+- Not checked: the DBS section's tracts. They are Lead-DBS `.mat` files and do not come through this reader;
+  whether any of those atlases carried the same half voxel when it was converted is not known.
+- The verification's scripts and full table: `.claude/half-voxel-check/` in this worktree (ignored by git;
+  `RESULTS.md` first).
+
 ## White-matter tract colours (desktop, 2026-11-17)
 
 - Branch `fix/wm-mcp-colour` (off `main` at `4d58cf8`), pushed on 18 Nov as pull request 24 and merged that day
@@ -327,10 +391,9 @@ commit and push it.
     voxel; these files (DSI Studio's) give them from its centre. `hcp_streamlines` moves every point by half a voxel
     ((−0.5, −0.5, +0.5) mm). So read, 99.9 % or more of each bundle's points in the atlas's grid lie in the atlas's
     own volume of the tract (`inOwnVolumeShare`, held to 0.99 by `validate` and the schema); as nibabel reads them,
-    67 to 95 % (`cornerReadShare`). **Not checked, and worth checking:** `build.py`'s `read_trk_gz` reads the
-    HCP-1065 files of the white-matter section the same uncorrected way; if those files are written the same way,
-    every white-matter tract on the site is half a voxel off. The check needs that atlas's volumes
-    (`hcp1065_avg_tracts_nifti.zip`, 3 MB, on the atlas's GitHub release: a download to ask the user for).
+    67 to 95 % (`cornerReadShare`). `build.py`'s `read_trk_gz` read the HCP-1065 files of the white-matter section
+    the same uncorrected way: **checked on 18 November and found to be so; fixed on `fix/wm-half-voxel`** (see
+    "White-matter tracts moved by half a voxel" at the top of this file).
   - Streamlines drawn (left / right; all the atlas has but those shorter than 10 mm, which are single points or a
     millimetre long): MLF 10 / 9, CTT 15 / 21, STT 195 / 199, LL 54 / 43 (its left file holds 76). Resampled to 1 mm.
   - The atlas is in ICBM-152 space as FSL's FA template has it, not on ICBM 2009b; its grid ends at z = −50.5 mm
@@ -402,11 +465,14 @@ commit and push it.
     `read_trk_gz` and the cortex section's built surface (`pipeline/data/build/cortex/ctx_*.glb`), and writes
     `src/data/generated/wm-ends.json` and 32 patches in `public/assets/wm-ends/` (0.6 MB; none for the fornix and
     the three cerebellar peduncles). Run again it writes the same files. **Rerun it** after a cortex rebuild, or
-    when the half-voxel question about `read_trk_gz` (the task session on `fix/wm-half-voxel`) changes how the
-    files are read: the ends would move by half a millimetre.
+    when `build.py`'s `read_trk_gz` changes. It was run again after PR 26 (the half voxel) was merged into this
+    branch, with the outside limit raised from 1.0 to 1.5 mm (below): against the first figures, an end's share at
+    the cortex changed by up to 14 points (the left cingulum's front end, 85 % to 99 %), an area's share by up to 17
+    (the left uncinate's front end on the H-shaped orbital sulci, 42 % to 59 %), and six ends' first area changed.
   - The rule: a bundle's streamlines turned the same way round (its main direction; a midline bundle left to
-    right), so it has two named ends; an end is at the cortex within 5 mm of the surface, not more than 1 mm
-    outside it (keeps the cerebellar peduncles' ends, which lie just outside the occipital and temporal base, out)
+    right), so it has two named ends; an end is at the cortex within 5 mm of the surface, not more than
+    1.5 mm outside it (keeps the cerebellar peduncles' ends, which lie just outside the occipital and temporal base,
+    out; at 1.0 mm, first used, ends on gyral crowns just outside the surface were lost)
     and not on the medial wall; areas with 5 % or more of an end's cortical ends are listed. The patch: the counts
     spread over the surface, the densest part holding 80 % of a hemisphere's cortical ends.
   - Front end: `src/data/ends.ts` (shared: `WM_ENDS`, `areaName`, `END_PATCHES`, `endsOn`); the tract card's
@@ -698,7 +764,7 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (468 tests on `feat/b007-tract-ends`)
+  - `npx vitest run` (469 tests on `feat/b007-tract-ends`)
   - `npm run build`
   - `npx playwright test` (199 tests, about 7 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`

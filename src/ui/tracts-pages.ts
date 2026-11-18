@@ -57,7 +57,7 @@ export function tractCreditsPage() {
       h('p', {}, h('strong', {}, 'Licence: '), d.licence, '. These files are not under the GPL like the rest of the project: adapted versions must stay under CC BY-SA 4.0 with attribution.'),
       h('p', { class: 'aside' }, d.note),
       ...d.citation.map((c, i) => h('p', { class: 'cite' }, c, ' ', h('a', { href: d.citationUrls[i], target: '_blank', rel: 'noopener' }, 'DOI'))),
-      h('p', { class: 'aside' }, 'Changes made: streamlines subsampled (the same number per hemisphere) and resampled to 2 mm, the corpus callosum cut at the midline, files converted to compressed glTF. Where each bundle’s streamlines end on the cortex (the tract cards, and the patches below) is measured by this project’s pipeline on all streamlines of each bundle (pipeline/wm_ends.py).'),
+      h('p', { class: 'aside' }, 'Changes made: the streamlines’ points moved by half a voxel (the files give them from the first voxel’s centre), streamlines subsampled (the same number per hemisphere) and resampled to 2 mm, the tracts stored as one file across the midline (the corpus callosum, the anterior commissure, the superior and middle cerebellar peduncles) cut at the midline, files converted to compressed glTF. The atlas’s volumes of the same tracts were used only to check the streamline files. Where each bundle’s streamlines end on the cortex (the tract cards, and the patches below) is measured by this project’s pipeline on all streamlines of each bundle (pipeline/wm_ends.py).'),
       h('p', {}, h('a', { href: d.url, target: '_blank', rel: 'noopener' }, 'Atlas page')),
     ),
     h('section', { class: 'card', id: 'wm-ends' },

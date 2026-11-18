@@ -20,7 +20,7 @@
  },
  "rule": {
   "reachMm": 5.0,
-  "outsideMm": 1.0,
+  "outsideMm": 1.5,
   "minShare": 0.05,
   "endMinShare": 0.05,
   "patchShare": 0.8,
@@ -38,9 +38,11 @@
   "ctx_g_and_s_paracentral": "Paracentral lobule and sulcus",
   "ctx_g_and_s_subcentral": "Subcentral gyrus (central operculum) and sulci",
   "ctx_g_and_s_transv_frontopol": "Transverse frontopolar gyri and sulci",
+  "ctx_g_cingul_post_dorsal": "Posterior-dorsal part of the cingulate gyrus (dPCC)",
   "ctx_g_cingul_post_ventral": "Posterior-ventral part of the cingulate gyrus (vPCC, isthmus of the cingulate gyrus)",
   "ctx_g_cuneus": "Cuneus (O6)",
   "ctx_g_front_inf_opercular": "Opercular part of the inferior frontal gyrus",
+  "ctx_g_front_inf_orbital": "Orbital part of the inferior frontal gyrus",
   "ctx_g_front_inf_triangul": "Triangular part of the inferior frontal gyrus",
   "ctx_g_front_middle": "Middle frontal gyrus (F2)",
   "ctx_g_front_sup": "Superior frontal gyrus (F1)",
@@ -71,6 +73,7 @@
   "ctx_s_calcarine": "Calcarine sulcus",
   "ctx_s_central": "Central sulcus (Rolando’s fissure)",
   "ctx_s_cingul_marginalis": "Marginal branch (or part) of the cingulate sulcus",
+  "ctx_s_circular_insula_ant": "Anterior segment of the circular sulcus of the insula",
   "ctx_s_circular_insula_inf": "Inferior segment of the circular sulcus of the insula",
   "ctx_s_circular_insula_sup": "Superior segment of the circular sulcus of the insula",
   "ctx_s_collat_transv_ant": "Anterior transverse collateral sulcus",
@@ -89,6 +92,7 @@
   "ctx_s_orbital_lateral": "Lateral orbital sulcus",
   "ctx_s_orbital_med_olfact": "Medial orbital sulcus (olfactory sulcus)",
   "ctx_s_parieto_occipital": "Parieto-occipital sulcus (or fissure)",
+  "ctx_s_pericallosal": "Pericallosal sulcus (S of corpus callosum)",
   "ctx_s_postcentral": "Postcentral sulcus",
   "ctx_s_precentral_inf_part": "Inferior part of the precentral sulcus",
   "ctx_s_precentral_sup_part": "Superior part of the precentral sulcus",
@@ -109,58 +113,58 @@
      "streamlines": 34156,
      "ends": [
       {
-       "atCortex": 0.984,
+       "atCortex": 0.999,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_inf_opercular",
          "side": "L",
-         "share": 0.456
+         "share": 0.463
         },
         {
          "id": "ctx_g_front_middle",
          "side": "L",
-         "share": 0.34
+         "share": 0.338
         },
         {
          "id": "ctx_g_precentral",
          "side": "L",
-         "share": 0.093
+         "share": 0.095
         }
        ],
-       "rest": 0.111
+       "rest": 0.104
       },
       {
-       "atCortex": 0.826,
+       "atCortex": 0.828,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_s_temporal_inf",
          "side": "L",
-         "share": 0.442
+         "share": 0.413
         },
         {
          "id": "ctx_g_temporal_inf",
          "side": "L",
-         "share": 0.246
+         "share": 0.239
         },
         {
          "id": "ctx_g_temporal_middle",
          "side": "L",
-         "share": 0.15
+         "share": 0.18
         },
         {
          "id": "ctx_s_temporal_sup",
          "side": "L",
-         "share": 0.082
+         "share": 0.08
         },
         {
          "id": "ctx_g_temp_sup_plan_tempo",
          "side": "L",
-         "share": 0.056
+         "share": 0.05
         }
        ],
-       "rest": 0.024
+       "rest": 0.038
       }
      ]
     },
@@ -168,58 +172,58 @@
      "streamlines": 3356,
      "ends": [
       {
-       "atCortex": 0.94,
+       "atCortex": 0.894,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_inf_opercular",
          "side": "R",
-         "share": 0.411
+         "share": 0.378
         },
         {
          "id": "ctx_g_front_middle",
          "side": "R",
-         "share": 0.252
+         "share": 0.262
         },
         {
          "id": "ctx_s_precentral_inf_part",
          "side": "R",
-         "share": 0.152
+         "share": 0.162
         },
         {
          "id": "ctx_s_front_inf",
          "side": "R",
-         "share": 0.135
+         "share": 0.138
         }
        ],
-       "rest": 0.049
+       "rest": 0.06
       },
       {
-       "atCortex": 0.929,
+       "atCortex": 0.921,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_s_temporal_inf",
          "side": "R",
-         "share": 0.633
-        },
-        {
-         "id": "ctx_g_temporal_middle",
-         "side": "R",
-         "share": 0.139
+         "share": 0.627
         },
         {
          "id": "ctx_g_temporal_inf",
          "side": "R",
-         "share": 0.135
+         "share": 0.132
+        },
+        {
+         "id": "ctx_g_temporal_middle",
+         "side": "R",
+         "share": 0.113
         },
         {
          "id": "ctx_s_oc_temp_lat",
          "side": "R",
-         "share": 0.062
+         "share": 0.071
         }
        ],
-       "rest": 0.032
+       "rest": 0.057
       }
      ]
     }
@@ -227,7 +231,7 @@
    "patch": {
     "id": "wm_af__ends",
     "file": "assets/wm-ends/wm_af__ends.glb",
-    "bytes": 17388,
+    "bytes": 18328,
     "colour": {
      "token": "wmAF",
      "light": "#A8246A",
@@ -235,27 +239,27 @@
     },
     "centroid": {
      "L": [
-      -55.77,
-      -8.02,
-      1.44
+      -56.2,
+      -9.3,
+      1.74
      ],
      "R": [
-      51.33,
-      -16.02,
-      4.9
+      50.82,
+      -16.74,
+      5.48
      ]
     },
     "L": {
-     "ends": 61821,
+     "ends": 62422,
      "endsInPatch": 0.8,
-     "areaCm2": 14.0,
-     "faces": 1496
+     "areaCm2": 15.4,
+     "faces": 1630
     },
     "R": {
-     "ends": 6272,
-     "endsInPatch": 0.802,
-     "areaCm2": 6.7,
-     "faces": 979
+     "ends": 6091,
+     "endsInPatch": 0.803,
+     "areaCm2": 6.6,
+     "faces": 1000
     }
    }
   },
@@ -271,21 +275,21 @@
      "streamlines": 2514,
      "ends": [
       {
-       "atCortex": 0.883,
+       "atCortex": 0.929,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_sup",
          "side": "L",
-         "share": 0.62
+         "share": 0.648
         },
         {
          "id": "ctx_g_and_s_cingul_mid_ant",
          "side": "L",
-         "share": 0.375
+         "share": 0.348
         }
        ],
-       "rest": 0.005
+       "rest": 0.003
       },
       {
        "atCortex": 0.999,
@@ -294,15 +298,15 @@
         {
          "id": "ctx_s_cingul_marginalis",
          "side": "L",
-         "share": 0.914
+         "share": 0.92
         },
         {
          "id": "ctx_g_precuneus",
          "side": "L",
-         "share": 0.074
+         "share": 0.066
         }
        ],
-       "rest": 0.011
+       "rest": 0.014
       }
      ]
     },
@@ -310,43 +314,43 @@
      "streamlines": 4668,
      "ends": [
       {
-       "atCortex": 0.88,
+       "atCortex": 0.903,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_sup",
          "side": "R",
-         "share": 0.975
+         "share": 0.976
         }
        ],
-       "rest": 0.025
+       "rest": 0.024
       },
       {
-       "atCortex": 0.999,
+       "atCortex": 1.0,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_and_s_paracentral",
          "side": "R",
-         "share": 0.334
+         "share": 0.336
         },
         {
          "id": "ctx_g_precuneus",
          "side": "R",
-         "share": 0.276
+         "share": 0.278
         },
         {
          "id": "ctx_s_cingul_marginalis",
          "side": "R",
-         "share": 0.203
+         "share": 0.199
         },
         {
          "id": "ctx_g_parietal_sup",
          "side": "R",
-         "share": 0.12
+         "share": 0.132
         }
        ],
-       "rest": 0.068
+       "rest": 0.055
       }
      ]
     }
@@ -354,7 +358,7 @@
    "patch": {
     "id": "wm_slf1__ends",
     "file": "assets/wm-ends/wm_slf1__ends.glb",
-    "bytes": 9816,
+    "bytes": 9292,
     "colour": {
      "token": "wmSLF1",
      "light": "#7E6430",
@@ -362,27 +366,27 @@
     },
     "centroid": {
      "L": [
-      -7.3,
-      -6.18,
-      52.57
+      -7.21,
+      -4.42,
+      53.2
      ],
      "R": [
-      7.47,
-      -20.08,
-      63.99
+      6.81,
+      -19.51,
+      64.83
      ]
     },
     "L": {
-     "ends": 4724,
-     "endsInPatch": 0.8,
-     "areaCm2": 4.3,
-     "faces": 447
+     "ends": 4848,
+     "endsInPatch": 0.804,
+     "areaCm2": 4.2,
+     "faces": 424
     },
     "R": {
-     "ends": 8781,
-     "endsInPatch": 0.801,
-     "areaCm2": 7.6,
-     "faces": 695
+     "ends": 8880,
+     "endsInPatch": 0.802,
+     "areaCm2": 7.4,
+     "faces": 644
     }
    }
   },
@@ -398,53 +402,58 @@
      "streamlines": 12687,
      "ends": [
       {
-       "atCortex": 0.923,
+       "atCortex": 0.968,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_middle",
          "side": "L",
-         "share": 0.713
+         "share": 0.717
         },
         {
          "id": "ctx_g_precentral",
          "side": "L",
-         "share": 0.208
+         "share": 0.207
         }
        ],
-       "rest": 0.079
+       "rest": 0.076
       },
       {
-       "atCortex": 0.91,
+       "atCortex": 0.952,
        "atMedialWall": 0.0,
        "areas": [
         {
-         "id": "ctx_g_precentral",
-         "side": "L",
-         "share": 0.31
-        },
-        {
          "id": "ctx_g_pariet_inf_angular",
          "side": "L",
-         "share": 0.303
+         "share": 0.302
+        },
+        {
+         "id": "ctx_g_precentral",
+         "side": "L",
+         "share": 0.297
         },
         {
          "id": "ctx_g_front_sup",
          "side": "L",
-         "share": 0.101
+         "share": 0.098
         },
         {
          "id": "ctx_g_postcentral",
          "side": "L",
-         "share": 0.085
+         "share": 0.081
         },
         {
          "id": "ctx_s_intrapariet_and_p_trans",
          "side": "L",
-         "share": 0.07
+         "share": 0.065
+        },
+        {
+         "id": "ctx_g_parietal_sup",
+         "side": "L",
+         "share": 0.056
         }
        ],
-       "rest": 0.132
+       "rest": 0.102
       }
      ]
     },
@@ -452,53 +461,53 @@
      "streamlines": 11528,
      "ends": [
       {
-       "atCortex": 0.965,
+       "atCortex": 0.957,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_middle",
          "side": "R",
-         "share": 0.668
+         "share": 0.655
         },
         {
          "id": "ctx_s_front_inf",
          "side": "R",
-         "share": 0.099
+         "share": 0.109
         },
         {
          "id": "ctx_g_front_sup",
          "side": "R",
-         "share": 0.064
+         "share": 0.065
         }
        ],
-       "rest": 0.169
+       "rest": 0.171
       },
       {
-       "atCortex": 0.966,
+       "atCortex": 0.964,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_pariet_inf_angular",
          "side": "R",
-         "share": 0.643
+         "share": 0.634
         },
         {
          "id": "ctx_s_intrapariet_and_p_trans",
          "side": "R",
-         "share": 0.148
+         "share": 0.155
         },
         {
          "id": "ctx_g_pariet_inf_supramar",
          "side": "R",
-         "share": 0.055
+         "share": 0.061
         },
         {
          "id": "ctx_g_precentral",
          "side": "R",
-         "share": 0.055
+         "share": 0.054
         }
        ],
-       "rest": 0.099
+       "rest": 0.096
       }
      ]
     }
@@ -506,7 +515,7 @@
    "patch": {
     "id": "wm_slf2__ends",
     "file": "assets/wm-ends/wm_slf2__ends.glb",
-    "bytes": 24656,
+    "bytes": 24484,
     "colour": {
      "token": "wmSLF2",
      "light": "#7C24A8",
@@ -514,27 +523,27 @@
     },
     "centroid": {
      "L": [
-      -42.29,
-      -5.01,
-      49.07
+      -42.84,
+      -7.66,
+      49.19
      ],
      "R": [
-      42.28,
-      -7.26,
-      38.19
+      41.91,
+      -7.38,
+      37.77
      ]
     },
     "L": {
-     "ends": 23254,
-     "endsInPatch": 0.8,
-     "areaCm2": 17.1,
-     "faces": 1547
+     "ends": 24355,
+     "endsInPatch": 0.801,
+     "areaCm2": 18.0,
+     "faces": 1529
     },
     "R": {
-     "ends": 22262,
-     "endsInPatch": 0.801,
+     "ends": 22137,
+     "endsInPatch": 0.8,
      "areaCm2": 20.5,
-     "faces": 2154
+     "faces": 2141
     }
    }
   },
@@ -550,48 +559,48 @@
      "streamlines": 2637,
      "ends": [
       {
-       "atCortex": 0.977,
+       "atCortex": 1.0,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_and_s_subcentral",
          "side": "L",
-         "share": 0.533
+         "share": 0.537
         },
         {
          "id": "ctx_g_precentral",
          "side": "L",
-         "share": 0.338
+         "share": 0.347
         },
         {
          "id": "ctx_s_central",
          "side": "L",
-         "share": 0.079
+         "share": 0.07
         }
        ],
-       "rest": 0.05
+       "rest": 0.046
       },
       {
-       "atCortex": 0.97,
+       "atCortex": 0.99,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_pariet_inf_supramar",
          "side": "L",
-         "share": 0.685
+         "share": 0.657
         },
         {
          "id": "ctx_g_pariet_inf_angular",
          "side": "L",
-         "share": 0.147
+         "share": 0.183
         },
         {
          "id": "ctx_g_temp_sup_plan_tempo",
          "side": "L",
-         "share": 0.076
+         "share": 0.07
         }
        ],
-       "rest": 0.091
+       "rest": 0.09
       }
      ]
     },
@@ -599,50 +608,50 @@
      "streamlines": 17028,
      "ends": [
       {
-       "atCortex": 0.892,
+       "atCortex": 0.863,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_and_s_subcentral",
          "side": "R",
-         "share": 0.461
+         "share": 0.482
         },
         {
          "id": "ctx_g_front_inf_opercular",
          "side": "R",
-         "share": 0.302
+         "share": 0.271
         },
         {
          "id": "ctx_lat_fis_ant_vertical",
          "side": "R",
-         "share": 0.114
+         "share": 0.11
         },
         {
          "id": "ctx_s_precentral_inf_part",
          "side": "R",
-         "share": 0.056
+         "share": 0.074
         }
        ],
-       "rest": 0.067
+       "rest": 0.062
       },
       {
-       "atCortex": 0.818,
+       "atCortex": 0.81,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_pariet_inf_supramar",
          "side": "R",
-         "share": 0.729
+         "share": 0.72
         },
         {
          "id": "ctx_s_intrapariet_and_p_trans",
          "side": "R",
-         "share": 0.155
+         "share": 0.174
         },
         {
          "id": "ctx_g_pariet_inf_angular",
          "side": "R",
-         "share": 0.089
+         "share": 0.078
         }
        ],
        "rest": 0.027
@@ -653,7 +662,7 @@
    "patch": {
     "id": "wm_slf3__ends",
     "file": "assets/wm-ends/wm_slf3__ends.glb",
-    "bytes": 10552,
+    "bytes": 10156,
     "colour": {
      "token": "wmSLF3",
      "light": "#348961",
@@ -661,27 +670,27 @@
     },
     "centroid": {
      "L": [
-      -61.75,
-      -20.73,
-      26.24
+      -62.13,
+      -20.36,
+      26.59
      ],
      "R": [
-      54.45,
-      -11.94,
-      25.39
+      53.86,
+      -12.4,
+      25.55
      ]
     },
     "L": {
-     "ends": 5135,
+     "ends": 5248,
      "endsInPatch": 0.801,
-     "areaCm2": 7.6,
-     "faces": 704
+     "areaCm2": 7.9,
+     "faces": 668
     },
     "R": {
-     "ends": 29130,
-     "endsInPatch": 0.802,
-     "areaCm2": 2.7,
-     "faces": 546
+     "ends": 28483,
+     "endsInPatch": 0.801,
+     "areaCm2": 2.6,
+     "faces": 524
     }
    }
   },
@@ -697,68 +706,83 @@
      "streamlines": 30856,
      "ends": [
       {
-       "atCortex": 0.856,
+       "atCortex": 0.918,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_and_s_frontomargin",
          "side": "L",
-         "share": 0.359
+         "share": 0.351
         },
         {
          "id": "ctx_g_front_inf_triangul",
          "side": "L",
-         "share": 0.192
-        },
-        {
-         "id": "ctx_lat_fis_ant_horizont",
-         "side": "L",
-         "share": 0.105
-        },
-        {
-         "id": "ctx_g_orbital",
-         "side": "L",
-         "share": 0.088
+         "share": 0.183
         },
         {
          "id": "ctx_g_front_sup",
          "side": "L",
-         "share": 0.075
+         "share": 0.11
+        },
+        {
+         "id": "ctx_lat_fis_ant_horizont",
+         "side": "L",
+         "share": 0.106
+        },
+        {
+         "id": "ctx_g_orbital",
+         "side": "L",
+         "share": 0.083
+        },
+        {
+         "id": "ctx_g_and_s_transv_frontopol",
+         "side": "L",
+         "share": 0.062
+        },
+        {
+         "id": "ctx_g_front_inf_orbital",
+         "side": "L",
+         "share": 0.055
         }
        ],
-       "rest": 0.18
+       "rest": 0.05
       },
       {
-       "atCortex": 0.97,
+       "atCortex": 0.992,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_pole_occipital",
          "side": "L",
-         "share": 0.439
+         "share": 0.497
         },
         {
          "id": "ctx_g_oc_temp_med_lingual",
          "side": "L",
-         "share": 0.219
+         "share": 0.174
         },
         {
          "id": "ctx_g_occipital_sup",
          "side": "L",
-         "share": 0.11
+         "share": 0.111
         },
         {
          "id": "ctx_g_cuneus",
          "side": "L",
-         "share": 0.078
+         "share": 0.065
         },
         {
          "id": "ctx_s_calcarine",
          "side": "L",
-         "share": 0.062
+         "share": 0.063
+        },
+        {
+         "id": "ctx_g_occipital_middle",
+         "side": "L",
+         "share": 0.055
         }
        ],
-       "rest": 0.092
+       "rest": 0.035
       }
      ]
     },
@@ -766,13 +790,13 @@
      "streamlines": 11167,
      "ends": [
       {
-       "atCortex": 0.92,
+       "atCortex": 0.935,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_orbital",
          "side": "R",
-         "share": 0.477
+         "share": 0.448
         },
         {
          "id": "ctx_g_and_s_transv_frontopol",
@@ -782,62 +806,57 @@
         {
          "id": "ctx_g_and_s_frontomargin",
          "side": "R",
-         "share": 0.126
+         "share": 0.133
         },
         {
          "id": "ctx_lat_fis_ant_horizont",
          "side": "R",
-         "share": 0.06
+         "share": 0.062
         },
         {
          "id": "ctx_g_front_middle",
          "side": "R",
-         "share": 0.06
+         "share": 0.058
         },
         {
          "id": "ctx_s_orbital_lateral",
          "side": "R",
-         "share": 0.051
+         "share": 0.053
         }
        ],
-       "rest": 0.065
+       "rest": 0.084
       },
       {
-       "atCortex": 0.807,
-       "atMedialWall": 0.029,
+       "atCortex": 0.739,
+       "atMedialWall": 0.087,
        "areas": [
         {
          "id": "ctx_pole_occipital",
          "side": "R",
-         "share": 0.532
-        },
-        {
-         "id": "ctx_s_collat_transv_post",
-         "side": "R",
-         "share": 0.106
-        },
-        {
-         "id": "ctx_s_oc_temp_med_and_lingual",
-         "side": "R",
-         "share": 0.096
-        },
-        {
-         "id": "ctx_s_oc_sup_and_transversal",
-         "side": "R",
-         "share": 0.077
+         "share": 0.576
         },
         {
          "id": "ctx_g_occipital_sup",
          "side": "R",
-         "share": 0.077
+         "share": 0.11
+        },
+        {
+         "id": "ctx_s_collat_transv_post",
+         "side": "R",
+         "share": 0.099
+        },
+        {
+         "id": "ctx_s_oc_sup_and_transversal",
+         "side": "R",
+         "share": 0.065
         },
         {
          "id": "ctx_g_oc_temp_med_lingual",
          "side": "R",
-         "share": 0.063
+         "share": 0.062
         }
        ],
-       "rest": 0.049
+       "rest": 0.087
       }
      ]
     }
@@ -845,7 +864,7 @@
    "patch": {
     "id": "wm_ifof__ends",
     "file": "assets/wm-ends/wm_ifof__ends.glb",
-    "bytes": 21144,
+    "bytes": 21224,
     "colour": {
      "token": "wmIFOF",
      "light": "#687D12",
@@ -853,27 +872,27 @@
     },
     "centroid": {
      "L": [
-      -21.03,
-      -25.47,
-      -3.28
+      -21.64,
+      -22.03,
+      -2.54
      ],
      "R": [
-      25.48,
-      -6.89,
-      -1.06
+      25.17,
+      -6.48,
+      -0.23
      ]
     },
     "L": {
-     "ends": 56341,
-     "endsInPatch": 0.801,
-     "areaCm2": 8.9,
-     "faces": 1559
+     "ends": 58923,
+     "endsInPatch": 0.8,
+     "areaCm2": 8.8,
+     "faces": 1488
     },
     "R": {
-     "ends": 19281,
-     "endsInPatch": 0.8,
-     "areaCm2": 9.1,
-     "faces": 1628
+     "ends": 18698,
+     "endsInPatch": 0.801,
+     "areaCm2": 9.5,
+     "faces": 1703
     }
    }
   },
@@ -889,58 +908,53 @@
      "streamlines": 21209,
      "ends": [
       {
-       "atCortex": 0.829,
+       "atCortex": 0.836,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_s_temporal_sup",
          "side": "L",
-         "share": 0.526
+         "share": 0.512
         },
         {
          "id": "ctx_g_temp_sup_lateral",
          "side": "L",
-         "share": 0.206
+         "share": 0.216
         },
         {
          "id": "ctx_s_collat_transv_ant",
          "side": "L",
-         "share": 0.165
+         "share": 0.176
         }
        ],
-       "rest": 0.104
+       "rest": 0.096
       },
       {
-       "atCortex": 0.976,
+       "atCortex": 0.987,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_pole_occipital",
          "side": "L",
-         "share": 0.378
+         "share": 0.407
         },
         {
          "id": "ctx_g_occipital_sup",
          "side": "L",
-         "share": 0.202
+         "share": 0.204
         },
         {
          "id": "ctx_g_oc_temp_med_lingual",
          "side": "L",
-         "share": 0.136
-        },
-        {
-         "id": "ctx_s_oc_sup_and_transversal",
-         "side": "L",
-         "share": 0.061
+         "share": 0.109
         },
         {
          "id": "ctx_s_calcarine",
          "side": "L",
-         "share": 0.06
+         "share": 0.069
         }
        ],
-       "rest": 0.163
+       "rest": 0.211
       }
      ]
     },
@@ -948,48 +962,58 @@
      "streamlines": 14596,
      "ends": [
       {
-       "atCortex": 0.782,
-       "atMedialWall": 0.013,
+       "atCortex": 0.713,
+       "atMedialWall": 0.026,
        "areas": [
         {
          "id": "ctx_s_collat_transv_ant",
          "side": "R",
-         "share": 0.39
+         "share": 0.384
         },
         {
          "id": "ctx_g_temp_sup_lateral",
          "side": "R",
-         "share": 0.264
+         "share": 0.219
         },
         {
          "id": "ctx_s_temporal_sup",
          "side": "R",
-         "share": 0.193
+         "share": 0.174
+        },
+        {
+         "id": "ctx_g_oc_temp_med_parahip",
+         "side": "R",
+         "share": 0.078
+        },
+        {
+         "id": "ctx_s_oc_temp_med_and_lingual",
+         "side": "R",
+         "share": 0.06
         }
        ],
-       "rest": 0.153
+       "rest": 0.084
       },
       {
-       "atCortex": 0.798,
-       "atMedialWall": 0.002,
+       "atCortex": 0.807,
+       "atMedialWall": 0.003,
        "areas": [
         {
          "id": "ctx_g_occipital_sup",
          "side": "R",
-         "share": 0.536
+         "share": 0.573
         },
         {
          "id": "ctx_pole_occipital",
          "side": "R",
-         "share": 0.144
+         "share": 0.15
         },
         {
          "id": "ctx_s_oc_sup_and_transversal",
          "side": "R",
-         "share": 0.104
+         "share": 0.091
         }
        ],
-       "rest": 0.216
+       "rest": 0.186
       }
      ]
     }
@@ -997,7 +1021,7 @@
    "patch": {
     "id": "wm_ilf__ends",
     "file": "assets/wm-ends/wm_ilf__ends.glb",
-    "bytes": 22768,
+    "bytes": 23136,
     "colour": {
      "token": "wmILF",
      "light": "#705010",
@@ -1005,27 +1029,27 @@
     },
     "centroid": {
      "L": [
-      -26.23,
-      -61.91,
-      -3.06
+      -27.06,
+      -61.41,
+      -3.6
      ],
      "R": [
-      30.57,
-      -47.23,
-      -0.13
+      29.61,
+      -50.28,
+      1.46
      ]
     },
     "L": {
-     "ends": 38275,
-     "endsInPatch": 0.801,
-     "areaCm2": 12.9,
-     "faces": 1916
+     "ends": 38656,
+     "endsInPatch": 0.8,
+     "areaCm2": 14.3,
+     "faces": 1875
     },
     "R": {
-     "ends": 23069,
+     "ends": 22184,
      "endsInPatch": 0.8,
-     "areaCm2": 10.5,
-     "faces": 1535
+     "areaCm2": 12.6,
+     "faces": 1671
     }
    }
   },
@@ -1041,53 +1065,58 @@
      "streamlines": 5672,
      "ends": [
       {
-       "atCortex": 0.438,
+       "atCortex": 0.398,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_s_orbital_h_shaped",
          "side": "L",
-         "share": 0.423
+         "share": 0.588
         },
         {
          "id": "ctx_g_orbital",
          "side": "L",
-         "share": 0.357
+         "share": 0.262
         },
         {
          "id": "ctx_s_orbital_med_olfact",
          "side": "L",
-         "share": 0.148
+         "share": 0.064
+        },
+        {
+         "id": "ctx_s_circular_insula_ant",
+         "side": "L",
+         "share": 0.054
         }
        ],
-       "rest": 0.072
+       "rest": 0.032
       },
       {
-       "atCortex": 0.489,
+       "atCortex": 0.472,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_temp_sup_lateral",
          "side": "L",
-         "share": 0.541
+         "share": 0.639
         },
         {
          "id": "ctx_pole_temporal",
          "side": "L",
-         "share": 0.225
+         "share": 0.136
         },
         {
          "id": "ctx_g_temp_sup_plan_polar",
          "side": "L",
-         "share": 0.143
+         "share": 0.133
         },
         {
          "id": "ctx_g_orbital",
          "side": "L",
-         "share": 0.084
+         "share": 0.079
         }
        ],
-       "rest": 0.008
+       "rest": 0.012
       }
      ]
     },
@@ -1095,43 +1124,38 @@
      "streamlines": 9425,
      "ends": [
       {
-       "atCortex": 0.792,
+       "atCortex": 0.679,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_and_s_frontomargin",
          "side": "R",
-         "share": 0.592
+         "share": 0.66
         },
         {
          "id": "ctx_s_orbital_med_olfact",
          "side": "R",
-         "share": 0.247
-        },
-        {
-         "id": "ctx_g_orbital",
-         "side": "R",
-         "share": 0.112
+         "share": 0.304
         }
        ],
-       "rest": 0.049
+       "rest": 0.036
       },
       {
-       "atCortex": 0.512,
+       "atCortex": 0.484,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_pole_temporal",
          "side": "R",
-         "share": 0.622
+         "share": 0.521
         },
         {
          "id": "ctx_g_temp_sup_plan_polar",
          "side": "R",
-         "share": 0.338
+         "share": 0.454
         }
        ],
-       "rest": 0.041
+       "rest": 0.025
       }
      ]
     }
@@ -1139,7 +1163,7 @@
    "patch": {
     "id": "wm_uf__ends",
     "file": "assets/wm-ends/wm_uf__ends.glb",
-    "bytes": 7712,
+    "bytes": 7048,
     "colour": {
      "token": "wmUF",
      "light": "#B51FDB",
@@ -1147,27 +1171,27 @@
     },
     "centroid": {
      "L": [
-      -30.56,
-      28.13,
-      -24.82
+      -32.14,
+      27.33,
+      -24.25
      ],
      "R": [
-      24.52,
-      40.21,
-      -22.85
+      25.2,
+      36.54,
+      -23.16
      ]
     },
     "L": {
-     "ends": 5262,
-     "endsInPatch": 0.801,
-     "areaCm2": 1.9,
-     "faces": 463
+     "ends": 4936,
+     "endsInPatch": 0.803,
+     "areaCm2": 1.7,
+     "faces": 387
     },
     "R": {
-     "ends": 12282,
-     "endsInPatch": 0.823,
-     "areaCm2": 1.2,
-     "faces": 287
+     "ends": 10958,
+     "endsInPatch": 0.8,
+     "areaCm2": 1.0,
+     "faces": 245
     }
    }
   },
@@ -1183,38 +1207,38 @@
      "streamlines": 12708,
      "ends": [
       {
-       "atCortex": 0.937,
+       "atCortex": 0.999,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_sup",
          "side": "L",
-         "share": 0.979
+         "share": 0.98
         }
        ],
-       "rest": 0.021
+       "rest": 0.02
       },
       {
-       "atCortex": 0.881,
+       "atCortex": 0.984,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_inf_opercular",
          "side": "L",
-         "share": 0.572
+         "share": 0.6
         },
         {
          "id": "ctx_g_precentral",
          "side": "L",
-         "share": 0.287
+         "share": 0.276
         },
         {
          "id": "ctx_lat_fis_ant_vertical",
          "side": "L",
-         "share": 0.077
+         "share": 0.061
         }
        ],
-       "rest": 0.064
+       "rest": 0.063
       }
      ]
     },
@@ -1228,37 +1252,37 @@
         {
          "id": "ctx_g_front_sup",
          "side": "R",
-         "share": 0.992
+         "share": 0.993
         }
        ],
-       "rest": 0.008
+       "rest": 0.007
       },
       {
-       "atCortex": 0.982,
+       "atCortex": 0.997,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_inf_opercular",
          "side": "R",
-         "share": 0.648
+         "share": 0.624
         },
         {
          "id": "ctx_lat_fis_ant_vertical",
          "side": "R",
-         "share": 0.114
+         "share": 0.123
         },
         {
          "id": "ctx_s_precentral_inf_part",
          "side": "R",
-         "share": 0.104
+         "share": 0.113
         },
         {
          "id": "ctx_g_precentral",
          "side": "R",
-         "share": 0.076
+         "share": 0.084
         }
        ],
-       "rest": 0.058
+       "rest": 0.057
       }
      ]
     }
@@ -1266,7 +1290,7 @@
    "patch": {
     "id": "wm_fat__ends",
     "file": "assets/wm-ends/wm_fat__ends.glb",
-    "bytes": 11716,
+    "bytes": 11776,
     "colour": {
      "token": "wmFAT",
      "light": "#195742",
@@ -1274,27 +1298,27 @@
     },
     "centroid": {
      "L": [
-      -33.14,
-      12.52,
-      40.4
+      -33.77,
+      12.34,
+      40.46
      ],
      "R": [
-      39.76,
-      16.36,
-      38.53
+      40.19,
+      16.22,
+      37.32
      ]
     },
     "L": {
-     "ends": 23104,
-     "endsInPatch": 0.8,
+     "ends": 25196,
+     "endsInPatch": 0.801,
      "areaCm2": 11.9,
-     "faces": 917
+     "faces": 892
     },
     "R": {
-     "ends": 10022,
-     "endsInPatch": 0.801,
+     "ends": 10098,
+     "endsInPatch": 0.802,
      "areaCm2": 7.1,
-     "faces": 596
+     "faces": 636
     }
    }
   },
@@ -1310,53 +1334,53 @@
      "streamlines": 10806,
      "ends": [
       {
-       "atCortex": 0.847,
+       "atCortex": 0.987,
        "atMedialWall": 0.0,
        "areas": [
         {
-         "id": "ctx_g_and_s_cingul_mid_ant",
-         "side": "L",
-         "share": 0.434
-        },
-        {
          "id": "ctx_g_front_sup",
          "side": "L",
-         "share": 0.311
+         "share": 0.408
+        },
+        {
+         "id": "ctx_g_and_s_cingul_mid_ant",
+         "side": "L",
+         "share": 0.364
         },
         {
          "id": "ctx_g_and_s_cingul_ant",
          "side": "L",
-         "share": 0.179
+         "share": 0.152
         },
         {
          "id": "ctx_g_and_s_cingul_mid_post",
          "side": "L",
-         "share": 0.077
+         "share": 0.076
         }
        ],
        "rest": 0.0
       },
       {
-       "atCortex": 0.918,
+       "atCortex": 0.949,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_s_subparietal",
          "side": "L",
-         "share": 0.521
+         "share": 0.541
         },
         {
          "id": "ctx_g_precuneus",
          "side": "L",
-         "share": 0.269
+         "share": 0.236
         },
         {
          "id": "ctx_s_cingul_marginalis",
          "side": "L",
-         "share": 0.184
+         "share": 0.187
         }
        ],
-       "rest": 0.026
+       "rest": 0.037
       }
      ]
     },
@@ -1370,42 +1394,47 @@
         {
          "id": "ctx_g_and_s_cingul_mid_ant",
          "side": "R",
-         "share": 0.681
+         "share": 0.693
         },
         {
          "id": "ctx_g_and_s_cingul_ant",
          "side": "R",
-         "share": 0.194
+         "share": 0.176
         },
         {
          "id": "ctx_g_front_sup",
          "side": "R",
-         "share": 0.102
+         "share": 0.111
         }
        ],
-       "rest": 0.023
+       "rest": 0.019
       },
       {
-       "atCortex": 0.86,
+       "atCortex": 0.896,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_s_subparietal",
          "side": "R",
-         "share": 0.321
+         "share": 0.329
         },
         {
          "id": "ctx_g_precuneus",
          "side": "R",
-         "share": 0.309
+         "share": 0.318
         },
         {
          "id": "ctx_s_cingul_marginalis",
          "side": "R",
-         "share": 0.304
+         "share": 0.28
+        },
+        {
+         "id": "ctx_g_cingul_post_dorsal",
+         "side": "R",
+         "share": 0.062
         }
        ],
-       "rest": 0.067
+       "rest": 0.011
       }
      ]
     }
@@ -1413,7 +1442,7 @@
    "patch": {
     "id": "wm_cing_fp__ends",
     "file": "assets/wm-ends/wm_cing_fp__ends.glb",
-    "bytes": 14972,
+    "bytes": 14628,
     "colour": {
      "token": "wmCingD",
      "light": "#535719",
@@ -1421,27 +1450,27 @@
     },
     "centroid": {
      "L": [
-      -7.04,
-      -5.16,
-      33.33
+      -7.3,
+      2.01,
+      33.2
      ],
      "R": [
-      6.43,
-      -13.89,
-      33.79
+      6.07,
+      -17.63,
+      34.79
      ]
     },
     "L": {
-     "ends": 19081,
-     "endsInPatch": 0.803,
-     "areaCm2": 6.0,
-     "faces": 768
+     "ends": 20936,
+     "endsInPatch": 0.804,
+     "areaCm2": 5.7,
+     "faces": 716
     },
     "R": {
-     "ends": 16484,
-     "endsInPatch": 0.801,
-     "areaCm2": 10.9,
-     "faces": 1275
+     "ends": 16806,
+     "endsInPatch": 0.8,
+     "areaCm2": 11.1,
+     "faces": 1271
     }
    }
   },
@@ -1457,30 +1486,30 @@
      "streamlines": 1022,
      "ends": [
       {
-       "atCortex": 0.341,
-       "atMedialWall": 0.468,
+       "atCortex": 0.326,
+       "atMedialWall": 0.47,
        "areas": [
         {
          "id": "ctx_g_cingul_post_ventral",
          "side": "L",
-         "share": 0.394
-        },
-        {
-         "id": "ctx_g_oc_temp_med_parahip",
-         "side": "L",
-         "share": 0.353
+         "share": 0.369
         },
         {
          "id": "ctx_s_calcarine",
          "side": "L",
-         "share": 0.241
+         "share": 0.318
+        },
+        {
+         "id": "ctx_g_oc_temp_med_parahip",
+         "side": "L",
+         "share": 0.303
         }
        ],
-       "rest": 0.011
+       "rest": 0.009
       },
       {
-       "atCortex": 0.903,
-       "atMedialWall": 0.096,
+       "atCortex": 0.895,
+       "atMedialWall": 0.105,
        "areas": [
         {
          "id": "ctx_g_oc_temp_med_parahip",
@@ -1497,44 +1526,49 @@
      "ends": [
       {
        "atCortex": 0.16,
-       "atMedialWall": 0.739,
+       "atMedialWall": 0.751,
        "areas": [
         {
          "id": "ctx_g_oc_temp_med_parahip",
          "side": "R",
-         "share": 0.513
+         "share": 0.497
         },
         {
          "id": "ctx_g_cingul_post_ventral",
          "side": "R",
-         "share": 0.281
-        },
-        {
-         "id": "ctx_s_oc_temp_med_and_lingual",
-         "side": "R",
-         "share": 0.106
+         "share": 0.302
         },
         {
          "id": "ctx_s_calcarine",
          "side": "R",
-         "share": 0.055
-        }
-       ],
-       "rest": 0.045
-      },
-      {
-       "atCortex": 0.867,
-       "atMedialWall": 0.124,
-       "areas": [
+         "share": 0.065
+        },
         {
-         "id": "ctx_g_oc_temp_med_parahip",
+         "id": "ctx_s_pericallosal",
          "side": "R",
-         "share": 0.894
+         "share": 0.065
         },
         {
          "id": "ctx_s_oc_temp_med_and_lingual",
          "side": "R",
-         "share": 0.106
+         "share": 0.05
+        }
+       ],
+       "rest": 0.02
+      },
+      {
+       "atCortex": 0.838,
+       "atMedialWall": 0.139,
+       "areas": [
+        {
+         "id": "ctx_g_oc_temp_med_parahip",
+         "side": "R",
+         "share": 0.929
+        },
+        {
+         "id": "ctx_s_oc_temp_med_and_lingual",
+         "side": "R",
+         "share": 0.071
         }
        ],
        "rest": 0.0
@@ -1545,7 +1579,7 @@
    "patch": {
     "id": "wm_cing_ph__ends",
     "file": "assets/wm-ends/wm_cing_ph__ends.glb",
-    "bytes": 5732,
+    "bytes": 5816,
     "colour": {
      "token": "wmCingPH",
      "light": "#1D5E63",
@@ -1553,27 +1587,27 @@
     },
     "centroid": {
      "L": [
-      -20.77,
-      -25.43,
-      -21.32
+      -21.4,
+      -25.36,
+      -21.78
      ],
      "R": [
-      25.53,
-      -16.11,
-      -31.14
+      25.35,
+      -16.92,
+      -30.44
      ]
     },
     "L": {
-     "ends": 1271,
-     "endsInPatch": 0.803,
-     "areaCm2": 3.5,
-     "faces": 249
+     "ends": 1248,
+     "endsInPatch": 0.811,
+     "areaCm2": 3.6,
+     "faces": 254
     },
     "R": {
-     "ends": 1279,
-     "endsInPatch": 0.801,
-     "areaCm2": 2.1,
-     "faces": 183
+     "ends": 1242,
+     "endsInPatch": 0.804,
+     "areaCm2": 2.6,
+     "faces": 195
     }
    }
   },
@@ -1590,36 +1624,36 @@
      "ends": [
       {
        "atCortex": 0.0,
-       "atMedialWall": 0.91,
+       "atMedialWall": 0.935,
        "areas": [],
        "rest": 0.0
       },
       {
-       "atCortex": 0.936,
+       "atCortex": 0.973,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_cuneus",
          "side": "L",
-         "share": 0.439
+         "share": 0.436
         },
         {
          "id": "ctx_s_calcarine",
          "side": "L",
-         "share": 0.222
-        },
-        {
-         "id": "ctx_g_oc_temp_med_lingual",
-         "side": "L",
-         "share": 0.172
+         "share": 0.231
         },
         {
          "id": "ctx_pole_occipital",
          "side": "L",
-         "share": 0.137
+         "share": 0.211
+        },
+        {
+         "id": "ctx_g_oc_temp_med_lingual",
+         "side": "L",
+         "share": 0.088
         }
        ],
-       "rest": 0.03
+       "rest": 0.033
       }
      ]
     },
@@ -1628,26 +1662,26 @@
      "ends": [
       {
        "atCortex": 0.0,
-       "atMedialWall": 0.97,
+       "atMedialWall": 0.976,
        "areas": [],
        "rest": 0.0
       },
       {
-       "atCortex": 0.982,
+       "atCortex": 0.988,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_pole_occipital",
          "side": "R",
-         "share": 0.857
+         "share": 0.839
         },
         {
          "id": "ctx_g_oc_temp_med_lingual",
          "side": "R",
-         "share": 0.131
+         "share": 0.154
         }
        ],
-       "rest": 0.012
+       "rest": 0.007
       }
      ]
     }
@@ -1655,7 +1689,7 @@
    "patch": {
     "id": "wm_or__ends",
     "file": "assets/wm-ends/wm_or__ends.glb",
-    "bytes": 7024,
+    "bytes": 7212,
     "colour": {
      "token": "wmOR",
      "light": "#1F4FA8",
@@ -1663,27 +1697,27 @@
     },
     "centroid": {
      "L": [
-      -4.22,
-      -95.99,
-      0.0
+      -5.19,
+      -96.68,
+      0.18
      ],
      "R": [
-      13.67,
-      -94.89,
-      -6.11
+      12.98,
+      -95.4,
+      -6.02
      ]
     },
     "L": {
-     "ends": 1842,
-     "endsInPatch": 0.801,
-     "areaCm2": 2.0,
-     "faces": 323
+     "ends": 1915,
+     "endsInPatch": 0.8,
+     "areaCm2": 1.4,
+     "faces": 352
     },
     "R": {
-     "ends": 1213,
-     "endsInPatch": 0.803,
-     "areaCm2": 1.6,
-     "faces": 286
+     "ends": 1220,
+     "endsInPatch": 0.8,
+     "areaCm2": 1.9,
+     "faces": 284
     }
    }
   },
@@ -1699,26 +1733,26 @@
      "streamlines": 5577,
      "ends": [
       {
-       "atCortex": 0.839,
+       "atCortex": 0.896,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_precentral",
          "side": "L",
-         "share": 0.628
+         "share": 0.684
         },
         {
          "id": "ctx_g_front_sup",
          "side": "L",
-         "share": 0.182
+         "share": 0.17
         },
         {
          "id": "ctx_s_precentral_sup_part",
          "side": "L",
-         "share": 0.15
+         "share": 0.119
         }
        ],
-       "rest": 0.039
+       "rest": 0.026
       },
       {
        "atCortex": 0.0,
@@ -1732,31 +1766,31 @@
      "streamlines": 2397,
      "ends": [
       {
-       "atCortex": 0.913,
+       "atCortex": 0.93,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_precentral",
          "side": "R",
-         "share": 0.64
+         "share": 0.634
         },
         {
          "id": "ctx_s_precentral_sup_part",
          "side": "R",
-         "share": 0.229
+         "share": 0.23
         },
         {
          "id": "ctx_s_central",
          "side": "R",
-         "share": 0.064
+         "share": 0.068
         },
         {
          "id": "ctx_g_front_sup",
          "side": "R",
-         "share": 0.061
+         "share": 0.066
         }
        ],
-       "rest": 0.005
+       "rest": 0.002
       },
       {
        "atCortex": 0.0,
@@ -1770,7 +1804,7 @@
    "patch": {
     "id": "wm_cst__ends",
     "file": "assets/wm-ends/wm_cst__ends.glb",
-    "bytes": 11176,
+    "bytes": 10684,
     "colour": {
      "token": "wmCST",
      "light": "#0B847C",
@@ -1778,27 +1812,27 @@
     },
     "centroid": {
      "L": [
-      -22.13,
-      -13.35,
-      69.42
+      -22.48,
+      -13.69,
+      69.46
      ],
      "R": [
-      27.65,
-      -14.34,
-      67.63
+      27.32,
+      -14.61,
+      67.86
      ]
     },
     "L": {
-     "ends": 4680,
-     "endsInPatch": 0.8,
-     "areaCm2": 7.9,
-     "faces": 703
+     "ends": 4998,
+     "endsInPatch": 0.803,
+     "areaCm2": 7.7,
+     "faces": 645
     },
     "R": {
-     "ends": 2189,
-     "endsInPatch": 0.802,
-     "areaCm2": 5.5,
-     "faces": 620
+     "ends": 2229,
+     "endsInPatch": 0.808,
+     "areaCm2": 5.2,
+     "faces": 587
     }
    }
   },
@@ -1814,26 +1848,26 @@
      "streamlines": 165,
      "ends": [
       {
-       "atCortex": 0.994,
+       "atCortex": 1.0,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_inf_opercular",
          "side": "L",
-         "share": 0.5
-        },
-        {
-         "id": "ctx_s_precentral_inf_part",
-         "side": "L",
-         "share": 0.226
+         "share": 0.515
         },
         {
          "id": "ctx_g_precentral",
          "side": "L",
-         "share": 0.22
+         "share": 0.242
+        },
+        {
+         "id": "ctx_s_precentral_inf_part",
+         "side": "L",
+         "share": 0.182
         }
        ],
-       "rest": 0.055
+       "rest": 0.061
       },
       {
        "atCortex": 0.0,
@@ -1847,31 +1881,31 @@
      "streamlines": 631,
      "ends": [
       {
-       "atCortex": 0.865,
+       "atCortex": 0.862,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_and_s_subcentral",
          "side": "R",
-         "share": 0.385
-        },
-        {
-         "id": "ctx_g_front_inf_opercular",
-         "side": "R",
-         "share": 0.284
+         "share": 0.382
         },
         {
          "id": "ctx_g_precentral",
          "side": "R",
-         "share": 0.247
+         "share": 0.283
+        },
+        {
+         "id": "ctx_g_front_inf_opercular",
+         "side": "R",
+         "share": 0.248
         },
         {
          "id": "ctx_s_circular_insula_sup",
          "side": "R",
-         "share": 0.068
+         "share": 0.074
         }
        ],
-       "rest": 0.016
+       "rest": 0.013
       },
       {
        "atCortex": 0.0,
@@ -1885,7 +1919,7 @@
    "patch": {
     "id": "wm_cbt__ends",
     "file": "assets/wm-ends/wm_cbt__ends.glb",
-    "bytes": 6536,
+    "bytes": 6372,
     "colour": {
      "token": "wmCBT",
      "light": "#847C0B",
@@ -1893,27 +1927,27 @@
     },
     "centroid": {
      "L": [
-      -56.34,
-      7.94,
-      11.71
+      -56.43,
+      7.89,
+      12.72
      ],
      "R": [
-      58.85,
-      8.29,
-      13.62
+      57.87,
+      7.65,
+      13.91
      ]
     },
     "L": {
-     "ends": 164,
-     "endsInPatch": 0.805,
-     "areaCm2": 2.4,
-     "faces": 270
+     "ends": 165,
+     "endsInPatch": 0.8,
+     "areaCm2": 2.5,
+     "faces": 266
     },
     "R": {
-     "ends": 546,
-     "endsInPatch": 0.804,
-     "areaCm2": 2.0,
-     "faces": 280
+     "ends": 544,
+     "endsInPatch": 0.801,
+     "areaCm2": 1.8,
+     "faces": 254
     }
    }
   },
@@ -1929,18 +1963,18 @@
      "streamlines": 32200,
      "ends": [
       {
-       "atCortex": 0.806,
-       "atMedialWall": 0.015,
+       "atCortex": 0.839,
+       "atMedialWall": 0.018,
        "areas": [
         {
          "id": "ctx_g_front_sup",
          "side": "L",
-         "share": 0.119
+         "share": 0.136
         },
         {
          "id": "ctx_s_temporal_sup",
          "side": "L",
-         "share": 0.095
+         "share": 0.101
         },
         {
          "id": "ctx_g_precentral",
@@ -1950,47 +1984,47 @@
         {
          "id": "ctx_s_parieto_occipital",
          "side": "L",
-         "share": 0.057
+         "share": 0.056
         },
         {
          "id": "ctx_g_parietal_sup",
          "side": "L",
-         "share": 0.051
+         "share": 0.055
         },
         {
-         "id": "ctx_s_intrapariet_and_p_trans",
+         "id": "ctx_s_temporal_inf",
          "side": "L",
-         "share": 0.051
+         "share": 0.054
         }
        ],
-       "rest": 0.561
+       "rest": 0.532
       },
       {
-       "atCortex": 0.877,
+       "atCortex": 0.89,
        "atMedialWall": 0.017,
        "areas": [
         {
-         "id": "ctx_s_temporal_sup",
-         "side": "R",
-         "share": 0.144
-        },
-        {
          "id": "ctx_g_front_sup",
          "side": "R",
-         "share": 0.143
+         "share": 0.147
+        },
+        {
+         "id": "ctx_s_temporal_sup",
+         "side": "R",
+         "share": 0.14
+        },
+        {
+         "id": "ctx_s_intrapariet_and_p_trans",
+         "side": "R",
+         "share": 0.051
         },
         {
          "id": "ctx_s_temporal_inf",
          "side": "R",
-         "share": 0.057
-        },
-        {
-         "id": "ctx_s_intrapariet_and_p_trans",
-         "side": "R",
          "share": 0.05
         }
        ],
-       "rest": 0.606
+       "rest": 0.612
       }
      ]
     }
@@ -1998,7 +2032,7 @@
    "patch": {
     "id": "wm_cc__ends",
     "file": "assets/wm-ends/wm_cc__ends.glb",
-    "bytes": 140656,
+    "bytes": 141496,
     "colour": {
      "token": "wmCC",
      "light": "#4581B5",
@@ -2006,27 +2040,27 @@
     },
     "centroid": {
      "L": [
-      -27.74,
-      -29.71,
-      26.72
+      -27.82,
+      -28.81,
+      27.15
      ],
      "R": [
-      29.65,
-      -31.13,
-      26.12
+      29.45,
+      -30.62,
+      26.79
      ]
     },
     "L": {
-     "ends": 25946,
+     "ends": 27026,
      "endsInPatch": 0.8,
-     "areaCm2": 87.3,
-     "faces": 10435
+     "areaCm2": 90.2,
+     "faces": 10510
     },
     "R": {
-     "ends": 28258,
+     "ends": 28676,
      "endsInPatch": 0.8,
-     "areaCm2": 114.2,
-     "faces": 14095
+     "areaCm2": 117.1,
+     "faces": 14273
     }
    }
   },
@@ -2042,14 +2076,14 @@
      "streamlines": 600,
      "ends": [
       {
-       "atCortex": 0.028,
-       "atMedialWall": 0.7,
+       "atCortex": 0.027,
+       "atMedialWall": 0.755,
        "areas": [],
        "rest": 0.0
       },
       {
        "atCortex": 0.017,
-       "atMedialWall": 0.858,
+       "atMedialWall": 0.905,
        "areas": [],
        "rest": 0.0
       }
@@ -2060,13 +2094,13 @@
      "ends": [
       {
        "atCortex": 0.034,
-       "atMedialWall": 0.799,
+       "atMedialWall": 0.886,
        "areas": [],
        "rest": 0.0
       },
       {
        "atCortex": 0.014,
-       "atMedialWall": 0.29,
+       "atMedialWall": 0.208,
        "areas": [],
        "rest": 0.0
       }
@@ -2087,13 +2121,13 @@
      "streamlines": 1674,
      "ends": [
       {
-       "atCortex": 0.905,
+       "atCortex": 0.946,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_temp_sup_lateral",
          "side": "L",
-         "share": 0.914
+         "share": 0.915
         },
         {
          "id": "ctx_g_temp_sup_g_t_transv",
@@ -2101,19 +2135,19 @@
          "share": 0.071
         }
        ],
-       "rest": 0.015
+       "rest": 0.014
       },
       {
-       "atCortex": 0.988,
+       "atCortex": 0.999,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_parietal_sup",
          "side": "L",
-         "share": 0.993
+         "share": 0.999
         }
        ],
-       "rest": 0.007
+       "rest": 0.001
       }
      ]
     },
@@ -2121,13 +2155,13 @@
      "streamlines": 3244,
      "ends": [
       {
-       "atCortex": 0.874,
+       "atCortex": 0.888,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_temp_sup_lateral",
          "side": "R",
-         "share": 0.874
+         "share": 0.861
         },
         {
          "id": "ctx_g_temp_sup_g_t_transv",
@@ -2135,21 +2169,21 @@
          "share": 0.068
         }
        ],
-       "rest": 0.058
+       "rest": 0.071
       },
       {
-       "atCortex": 0.972,
+       "atCortex": 0.988,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_s_intrapariet_and_p_trans",
          "side": "R",
-         "share": 0.549
+         "share": 0.535
         },
         {
          "id": "ctx_g_parietal_sup",
          "side": "R",
-         "share": 0.451
+         "share": 0.465
         }
        ],
        "rest": 0.0
@@ -2160,7 +2194,7 @@
    "patch": {
     "id": "wm_mdlf__ends",
     "file": "assets/wm-ends/wm_mdlf__ends.glb",
-    "bytes": 6316,
+    "bytes": 6568,
     "colour": {
      "token": "wmMdLF",
      "light": "#893456",
@@ -2168,27 +2202,27 @@
     },
     "centroid": {
      "L": [
-      -37.68,
-      -35.44,
-      33.85
+      -38.02,
+      -35.65,
+      34.07
      ],
      "R": [
-      41.56,
-      -34.71,
-      35.38
+      41.12,
+      -35.36,
+      35.98
      ]
     },
     "L": {
-     "ends": 3169,
-     "endsInPatch": 0.802,
+     "ends": 3256,
+     "endsInPatch": 0.8,
      "areaCm2": 2.2,
-     "faces": 224
+     "faces": 228
     },
     "R": {
-     "ends": 5989,
-     "endsInPatch": 0.801,
-     "areaCm2": 2.8,
-     "faces": 327
+     "ends": 6086,
+     "endsInPatch": 0.8,
+     "areaCm2": 3.2,
+     "faces": 366
     }
    }
   },
@@ -2204,58 +2238,58 @@
      "streamlines": 4357,
      "ends": [
       {
-       "atCortex": 0.875,
+       "atCortex": 0.856,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_s_interm_prim_jensen",
          "side": "L",
-         "share": 0.44
+         "share": 0.443
         },
         {
          "id": "ctx_g_pariet_inf_angular",
          "side": "L",
-         "share": 0.25
+         "share": 0.276
         },
         {
          "id": "ctx_g_pariet_inf_supramar",
          "side": "L",
-         "share": 0.163
+         "share": 0.164
         },
         {
          "id": "ctx_s_temporal_sup",
          "side": "L",
-         "share": 0.131
+         "share": 0.108
         }
        ],
-       "rest": 0.015
+       "rest": 0.009
       },
       {
-       "atCortex": 0.838,
+       "atCortex": 0.814,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_s_temporal_inf",
          "side": "L",
-         "share": 0.605
-        },
-        {
-         "id": "ctx_g_temporal_inf",
-         "side": "L",
-         "share": 0.14
+         "share": 0.619
         },
         {
          "id": "ctx_g_temporal_middle",
          "side": "L",
-         "share": 0.116
+         "share": 0.16
+        },
+        {
+         "id": "ctx_g_temporal_inf",
+         "side": "L",
+         "share": 0.124
         },
         {
          "id": "ctx_s_oc_temp_lat",
          "side": "L",
-         "share": 0.106
+         "share": 0.069
         }
        ],
-       "rest": 0.033
+       "rest": 0.028
       }
      ]
     },
@@ -2263,53 +2297,53 @@
      "streamlines": 6213,
      "ends": [
       {
-       "atCortex": 0.964,
+       "atCortex": 0.962,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_s_temporal_sup",
          "side": "R",
-         "share": 0.595
-        },
-        {
-         "id": "ctx_s_interm_prim_jensen",
-         "side": "R",
-         "share": 0.197
+         "share": 0.58
         },
         {
          "id": "ctx_g_pariet_inf_angular",
          "side": "R",
-         "share": 0.189
+         "share": 0.199
+        },
+        {
+         "id": "ctx_s_interm_prim_jensen",
+         "side": "R",
+         "share": 0.198
         }
        ],
-       "rest": 0.02
+       "rest": 0.024
       },
       {
-       "atCortex": 0.865,
+       "atCortex": 0.862,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_s_temporal_inf",
          "side": "R",
-         "share": 0.461
+         "share": 0.425
         },
         {
          "id": "ctx_g_temporal_middle",
          "side": "R",
-         "share": 0.31
+         "share": 0.287
         },
         {
          "id": "ctx_g_temporal_inf",
          "side": "R",
-         "share": 0.131
+         "share": 0.162
         },
         {
          "id": "ctx_s_temporal_sup",
          "side": "R",
-         "share": 0.061
+         "share": 0.072
         }
        ],
-       "rest": 0.037
+       "rest": 0.054
       }
      ]
     }
@@ -2325,27 +2359,27 @@
     },
     "centroid": {
      "L": [
-      -52.78,
-      -56.28,
-      16.47
+      -53.17,
+      -56.93,
+      17.07
      ],
      "R": [
-      53.06,
-      -52.37,
-      18.04
+      52.54,
+      -52.78,
+      18.9
      ]
     },
     "L": {
-     "ends": 7460,
-     "endsInPatch": 0.802,
-     "areaCm2": 3.5,
-     "faces": 749
+     "ends": 7278,
+     "endsInPatch": 0.8,
+     "areaCm2": 3.6,
+     "faces": 739
     },
     "R": {
-     "ends": 11362,
-     "endsInPatch": 0.8,
-     "areaCm2": 7.5,
-     "faces": 1225
+     "ends": 11331,
+     "endsInPatch": 0.801,
+     "areaCm2": 7.3,
+     "faces": 1241
     }
    }
   },
@@ -2361,53 +2395,53 @@
      "streamlines": 1756,
      "ends": [
       {
-       "atCortex": 0.855,
+       "atCortex": 0.928,
        "atMedialWall": 0.0,
        "areas": [
         {
-         "id": "ctx_s_oc_sup_and_transversal",
-         "side": "L",
-         "share": 0.411
-        },
-        {
          "id": "ctx_g_occipital_sup",
          "side": "L",
-         "share": 0.368
+         "share": 0.45
+        },
+        {
+         "id": "ctx_s_oc_sup_and_transversal",
+         "side": "L",
+         "share": 0.306
         },
         {
          "id": "ctx_g_occipital_middle",
          "side": "L",
-         "share": 0.117
+         "share": 0.176
         },
         {
          "id": "ctx_s_parieto_occipital",
          "side": "L",
-         "share": 0.097
+         "share": 0.065
         }
        ],
-       "rest": 0.008
+       "rest": 0.003
       },
       {
-       "atCortex": 0.825,
+       "atCortex": 0.832,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_and_s_occipital_inf",
          "side": "L",
-         "share": 0.684
+         "share": 0.688
         },
         {
          "id": "ctx_s_occipital_ant",
          "side": "L",
-         "share": 0.141
+         "share": 0.142
         },
         {
          "id": "ctx_s_oc_middle_and_lunatus",
          "side": "L",
-         "share": 0.107
+         "share": 0.111
         }
        ],
-       "rest": 0.068
+       "rest": 0.06
       }
      ]
     },
@@ -2415,43 +2449,43 @@
      "streamlines": 1074,
      "ends": [
       {
-       "atCortex": 0.885,
+       "atCortex": 0.915,
        "atMedialWall": 0.0,
        "areas": [
         {
-         "id": "ctx_s_oc_sup_and_transversal",
-         "side": "R",
-         "share": 0.564
-        },
-        {
          "id": "ctx_g_occipital_sup",
          "side": "R",
-         "share": 0.401
+         "share": 0.511
+        },
+        {
+         "id": "ctx_s_oc_sup_and_transversal",
+         "side": "R",
+         "share": 0.475
         }
        ],
-       "rest": 0.036
+       "rest": 0.014
       },
       {
-       "atCortex": 0.825,
+       "atCortex": 0.829,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_s_collat_transv_post",
          "side": "R",
-         "share": 0.479
+         "share": 0.467
         },
         {
          "id": "ctx_g_and_s_occipital_inf",
          "side": "R",
-         "share": 0.252
+         "share": 0.248
         },
         {
          "id": "ctx_s_oc_middle_and_lunatus",
          "side": "R",
-         "share": 0.19
+         "share": 0.22
         }
        ],
-       "rest": 0.08
+       "rest": 0.064
       }
      ]
     }
@@ -2459,7 +2493,7 @@
    "patch": {
     "id": "wm_vof__ends",
     "file": "assets/wm-ends/wm_vof__ends.glb",
-    "bytes": 9972,
+    "bytes": 10136,
     "colour": {
      "token": "wmVOF",
      "light": "#616808",
@@ -2467,27 +2501,27 @@
     },
     "centroid": {
      "L": [
-      -29.12,
-      -85.12,
-      11.31
+      -28.28,
+      -86.82,
+      15.21
      ],
      "R": [
-      29.7,
-      -85.54,
-      9.42
+      28.47,
+      -86.88,
+      11.32
      ]
     },
     "L": {
-     "ends": 2949,
+     "ends": 3091,
      "endsInPatch": 0.801,
-     "areaCm2": 2.8,
-     "faces": 642
+     "areaCm2": 4.3,
+     "faces": 706
     },
     "R": {
-     "ends": 1837,
-     "endsInPatch": 0.808,
-     "areaCm2": 2.9,
-     "faces": 486
+     "ends": 1873,
+     "endsInPatch": 0.804,
+     "areaCm2": 3.1,
+     "faces": 452
     }
    }
   },
@@ -2503,35 +2537,35 @@
      "streamlines": 7265,
      "ends": [
       {
-       "atCortex": 0.975,
+       "atCortex": 0.999,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_postcentral",
          "side": "L",
-         "share": 0.583
+         "share": 0.578
         },
         {
          "id": "ctx_g_parietal_sup",
          "side": "L",
-         "share": 0.406
+         "share": 0.413
         }
        ],
-       "rest": 0.011
+       "rest": 0.009
       },
       {
-       "atCortex": 0.968,
+       "atCortex": 0.995,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_ins_lg_and_s_cent_ins",
          "side": "L",
-         "share": 0.546
+         "share": 0.533
         },
         {
          "id": "ctx_g_insular_short",
          "side": "L",
-         "share": 0.434
+         "share": 0.446
         }
        ],
        "rest": 0.02
@@ -2542,38 +2576,43 @@
      "streamlines": 12874,
      "ends": [
       {
-       "atCortex": 0.967,
+       "atCortex": 0.996,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_parietal_sup",
          "side": "R",
-         "share": 0.923
+         "share": 0.917
+        },
+        {
+         "id": "ctx_s_postcentral",
+         "side": "R",
+         "share": 0.063
         }
        ],
-       "rest": 0.077
+       "rest": 0.02
       },
       {
-       "atCortex": 0.928,
+       "atCortex": 0.97,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_ins_lg_and_s_cent_ins",
          "side": "R",
-         "share": 0.521
+         "share": 0.557
         },
         {
          "id": "ctx_s_circular_insula_inf",
          "side": "R",
-         "share": 0.297
+         "share": 0.275
         },
         {
          "id": "ctx_g_insular_short",
          "side": "R",
-         "share": 0.18
+         "share": 0.167
         }
        ],
-       "rest": 0.002
+       "rest": 0.001
       }
      ]
     }
@@ -2581,7 +2620,7 @@
    "patch": {
     "id": "wm_emc__ends",
     "file": "assets/wm-ends/wm_emc__ends.glb",
-    "bytes": 6424,
+    "bytes": 6672,
     "colour": {
      "token": "wmEMC",
      "light": "#0D83A0",
@@ -2589,27 +2628,27 @@
     },
     "centroid": {
      "L": [
-      -34.11,
-      -13.11,
-      27.43
+      -34.45,
+      -13.68,
+      27.62
      ],
      "R": [
-      36.9,
-      -15.3,
-      14.32
+      35.83,
+      -17.45,
+      17.46
      ]
     },
     "L": {
-     "ends": 14118,
-     "endsInPatch": 0.812,
-     "areaCm2": 1.8,
-     "faces": 230
+     "ends": 14484,
+     "endsInPatch": 0.802,
+     "areaCm2": 1.9,
+     "faces": 231
     },
     "R": {
-     "ends": 24402,
-     "endsInPatch": 0.8,
-     "areaCm2": 2.7,
-     "faces": 352
+     "ends": 25306,
+     "endsInPatch": 0.806,
+     "areaCm2": 2.9,
+     "faces": 393
     }
    }
   },
@@ -2625,18 +2664,18 @@
      "streamlines": 10302,
      "ends": [
       {
-       "atCortex": 0.94,
+       "atCortex": 0.969,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_pole_occipital",
          "side": "L",
-         "share": 0.338
+         "share": 0.401
         },
         {
          "id": "ctx_g_oc_temp_med_lingual",
          "side": "L",
-         "share": 0.315
+         "share": 0.264
         },
         {
          "id": "ctx_s_calcarine",
@@ -2646,32 +2685,32 @@
         {
          "id": "ctx_pole_temporal",
          "side": "L",
-         "share": 0.086
+         "share": 0.082
         }
        ],
-       "rest": 0.09
+       "rest": 0.081
       },
       {
-       "atCortex": 0.9,
+       "atCortex": 0.872,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_pole_occipital",
          "side": "R",
-         "share": 0.772
-        },
-        {
-         "id": "ctx_pole_temporal",
-         "side": "R",
-         "share": 0.113
+         "share": 0.72
         },
         {
          "id": "ctx_g_oc_temp_med_lingual",
          "side": "R",
-         "share": 0.067
+         "share": 0.124
+        },
+        {
+         "id": "ctx_pole_temporal",
+         "side": "R",
+         "share": 0.105
         }
        ],
-       "rest": 0.049
+       "rest": 0.051
       }
      ]
     }
@@ -2679,7 +2718,7 @@
    "patch": {
     "id": "wm_ac__ends",
     "file": "assets/wm-ends/wm_ac__ends.glb",
-    "bytes": 7756,
+    "bytes": 8000,
     "colour": {
      "token": "wmAC",
      "light": "#A57618",
@@ -2687,27 +2726,27 @@
     },
     "centroid": {
      "L": [
-      -11.06,
-      -86.02,
-      -8.34
+      -11.34,
+      -88.04,
+      -7.36
      ],
      "R": [
-      19.68,
-      -74.24,
-      -15.78
+      18.84,
+      -77.39,
+      -14.54
      ]
     },
     "L": {
-     "ends": 9688,
-     "endsInPatch": 0.802,
-     "areaCm2": 1.9,
-     "faces": 491
+     "ends": 9979,
+     "endsInPatch": 0.801,
+     "areaCm2": 1.7,
+     "faces": 476
     },
     "R": {
-     "ends": 9273,
-     "endsInPatch": 0.811,
-     "areaCm2": 1.9,
-     "faces": 332
+     "ends": 8981,
+     "endsInPatch": 0.807,
+     "areaCm2": 1.8,
+     "faces": 388
     }
    }
   },
@@ -2723,50 +2762,50 @@
      "streamlines": 602,
      "ends": [
       {
-       "atCortex": 0.92,
+       "atCortex": 0.945,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_middle",
          "side": "L",
-         "share": 0.209
+         "share": 0.22
         },
         {
          "id": "ctx_g_front_sup",
          "side": "L",
-         "share": 0.19
+         "share": 0.186
         },
         {
          "id": "ctx_s_front_middle",
          "side": "L",
-         "share": 0.123
-        },
-        {
-         "id": "ctx_s_front_sup",
-         "side": "L",
-         "share": 0.087
+         "share": 0.132
         },
         {
          "id": "ctx_g_and_s_frontomargin",
          "side": "L",
-         "share": 0.079
+         "share": 0.083
         },
         {
-         "id": "ctx_s_front_inf",
+         "id": "ctx_s_front_sup",
          "side": "L",
-         "share": 0.06
+         "share": 0.079
         },
         {
          "id": "ctx_g_orbital",
          "side": "L",
-         "share": 0.058
+         "share": 0.056
+        },
+        {
+         "id": "ctx_s_front_inf",
+         "side": "L",
+         "share": 0.053
         }
        ],
-       "rest": 0.195
+       "rest": 0.192
       },
       {
        "atCortex": 0.0,
-       "atMedialWall": 0.538,
+       "atMedialWall": 0.453,
        "areas": [],
        "rest": 0.0
       }
@@ -2776,50 +2815,50 @@
      "streamlines": 414,
      "ends": [
       {
-       "atCortex": 0.908,
+       "atCortex": 0.92,
        "atMedialWall": 0.0,
        "areas": [
         {
-         "id": "ctx_g_front_middle",
-         "side": "R",
-         "share": 0.234
-        },
-        {
          "id": "ctx_s_front_middle",
          "side": "R",
-         "share": 0.184
+         "share": 0.199
+        },
+        {
+         "id": "ctx_g_front_middle",
+         "side": "R",
+         "share": 0.194
         },
         {
          "id": "ctx_g_front_sup",
          "side": "R",
-         "share": 0.173
+         "share": 0.194
         },
         {
          "id": "ctx_s_front_sup",
+         "side": "R",
+         "share": 0.071
+        },
+        {
+         "id": "ctx_s_front_inf",
          "side": "R",
          "share": 0.066
         },
         {
          "id": "ctx_g_and_s_transv_frontopol",
          "side": "R",
-         "share": 0.059
+         "share": 0.052
         },
         {
-         "id": "ctx_s_front_inf",
+         "id": "ctx_lat_fis_ant_horizont",
          "side": "R",
-         "share": 0.056
-        },
-        {
-         "id": "ctx_g_and_s_frontomargin",
-         "side": "R",
-         "share": 0.051
+         "share": 0.052
         }
        ],
-       "rest": 0.178
+       "rest": 0.171
       },
       {
        "atCortex": 0.0,
-       "atMedialWall": 0.357,
+       "atMedialWall": 0.408,
        "areas": [],
        "rest": 0.0
       }
@@ -2829,7 +2868,7 @@
    "patch": {
     "id": "wm_atr__ends",
     "file": "assets/wm-ends/wm_atr__ends.glb",
-    "bytes": 40440,
+    "bytes": 40872,
     "colour": {
      "token": "wmATR",
      "light": "#514E1F",
@@ -2837,27 +2876,27 @@
     },
     "centroid": {
      "L": [
-      -26.32,
-      50.66,
-      13.16
+      -26.39,
+      50.36,
+      13.77
      ],
      "R": [
-      28.21,
-      51.31,
-      11.55
+      27.54,
+      51.21,
+      12.05
      ]
     },
     "L": {
-     "ends": 554,
+     "ends": 569,
      "endsInPatch": 0.801,
-     "areaCm2": 20.4,
-     "faces": 3644
+     "areaCm2": 20.9,
+     "faces": 3606
     },
     "R": {
-     "ends": 376,
+     "ends": 381,
      "endsInPatch": 0.801,
-     "areaCm2": 11.7,
-     "faces": 2437
+     "areaCm2": 11.1,
+     "faces": 2543
     }
    }
   },
@@ -2873,7 +2912,7 @@
      "streamlines": 1210,
      "ends": [
       {
-       "atCortex": 0.885,
+       "atCortex": 0.905,
        "atMedialWall": 0.0,
        "areas": [
         {
@@ -2884,44 +2923,44 @@
         {
          "id": "ctx_g_front_middle",
          "side": "L",
-         "share": 0.121
+         "share": 0.132
         },
         {
          "id": "ctx_s_front_sup",
          "side": "L",
-         "share": 0.096
-        },
-        {
-         "id": "ctx_g_front_inf_opercular",
-         "side": "L",
-         "share": 0.075
+         "share": 0.089
         },
         {
          "id": "ctx_s_postcentral",
          "side": "L",
-         "share": 0.071
+         "share": 0.072
         },
         {
-         "id": "ctx_s_central",
+         "id": "ctx_g_front_inf_opercular",
          "side": "L",
-         "share": 0.063
+         "share": 0.07
         },
         {
          "id": "ctx_g_precentral",
          "side": "L",
-         "share": 0.053
+         "share": 0.066
+        },
+        {
+         "id": "ctx_s_central",
+         "side": "L",
+         "share": 0.058
         },
         {
          "id": "ctx_s_precentral_inf_part",
          "side": "L",
-         "share": 0.053
+         "share": 0.052
         }
        ],
-       "rest": 0.277
+       "rest": 0.27
       },
       {
        "atCortex": 0.0,
-       "atMedialWall": 0.083,
+       "atMedialWall": 0.068,
        "areas": [],
        "rest": 0.0
       }
@@ -2931,50 +2970,50 @@
      "streamlines": 1159,
      "ends": [
       {
-       "atCortex": 0.865,
+       "atCortex": 0.872,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_sup",
          "side": "R",
-         "share": 0.219
+         "share": 0.224
         },
         {
          "id": "ctx_g_pariet_inf_supramar",
          "side": "R",
-         "share": 0.107
-        },
-        {
-         "id": "ctx_s_central",
-         "side": "R",
-         "share": 0.074
-        },
-        {
-         "id": "ctx_g_precentral",
-         "side": "R",
-         "share": 0.073
-        },
-        {
-         "id": "ctx_g_front_middle",
-         "side": "R",
-         "share": 0.071
+         "share": 0.104
         },
         {
          "id": "ctx_s_postcentral",
          "side": "R",
-         "share": 0.07
+         "share": 0.073
+        },
+        {
+         "id": "ctx_g_precentral",
+         "side": "R",
+         "share": 0.072
+        },
+        {
+         "id": "ctx_s_central",
+         "side": "R",
+         "share": 0.069
+        },
+        {
+         "id": "ctx_g_front_middle",
+         "side": "R",
+         "share": 0.064
         },
         {
          "id": "ctx_s_precentral_inf_part",
          "side": "R",
-         "share": 0.051
+         "share": 0.057
         }
        ],
        "rest": 0.336
       },
       {
        "atCortex": 0.0,
-       "atMedialWall": 0.034,
+       "atMedialWall": 0.043,
        "areas": [],
        "rest": 0.0
       }
@@ -2984,7 +3023,7 @@
    "patch": {
     "id": "wm_str__ends",
     "file": "assets/wm-ends/wm_str__ends.glb",
-    "bytes": 51040,
+    "bytes": 50184,
     "colour": {
      "token": "wmSTR",
      "light": "#12767D",
@@ -2992,27 +3031,27 @@
     },
     "centroid": {
      "L": [
-      -33.39,
-      -1.22,
-      44.68
+      -33.47,
+      -1.43,
+      45.6
      ],
      "R": [
-      34.62,
-      -9.57,
-      47.41
+      34.24,
+      -9.35,
+      47.12
      ]
     },
     "L": {
-     "ends": 1071,
+     "ends": 1095,
      "endsInPatch": 0.8,
-     "areaCm2": 34.4,
-     "faces": 4538
+     "areaCm2": 32.5,
+     "faces": 4459
     },
     "R": {
-     "ends": 1002,
+     "ends": 1011,
      "endsInPatch": 0.8,
-     "areaCm2": 26.6,
-     "faces": 3551
+     "areaCm2": 26.8,
+     "faces": 3524
     }
    }
   },
@@ -3034,36 +3073,41 @@
        "rest": 0.0
       },
       {
-       "atCortex": 0.905,
+       "atCortex": 0.976,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_s_intrapariet_and_p_trans",
          "side": "L",
-         "share": 0.382
-        },
-        {
-         "id": "ctx_s_oc_sup_and_transversal",
-         "side": "L",
-         "share": 0.158
-        },
-        {
-         "id": "ctx_g_precuneus",
-         "side": "L",
-         "share": 0.145
+         "share": 0.366
         },
         {
          "id": "ctx_g_parietal_sup",
          "side": "L",
-         "share": 0.132
+         "share": 0.159
+        },
+        {
+         "id": "ctx_s_oc_sup_and_transversal",
+         "side": "L",
+         "share": 0.146
+        },
+        {
+         "id": "ctx_g_precuneus",
+         "side": "L",
+         "share": 0.122
         },
         {
          "id": "ctx_s_parieto_occipital",
          "side": "L",
-         "share": 0.118
+         "share": 0.098
+        },
+        {
+         "id": "ctx_g_pariet_inf_angular",
+         "side": "L",
+         "share": 0.061
         }
        ],
-       "rest": 0.066
+       "rest": 0.049
       }
      ]
     },
@@ -3077,31 +3121,31 @@
        "rest": 0.0
       },
       {
-       "atCortex": 0.894,
+       "atCortex": 0.915,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_s_oc_sup_and_transversal",
          "side": "R",
-         "share": 0.417
+         "share": 0.407
         },
         {
          "id": "ctx_s_intrapariet_and_p_trans",
          "side": "R",
-         "share": 0.274
+         "share": 0.267
         },
         {
          "id": "ctx_g_pariet_inf_angular",
          "side": "R",
-         "share": 0.107
+         "share": 0.105
         },
         {
          "id": "ctx_g_parietal_sup",
          "side": "R",
-         "share": 0.06
+         "share": 0.058
         }
        ],
-       "rest": 0.143
+       "rest": 0.163
       }
      ]
     }
@@ -3109,7 +3153,7 @@
    "patch": {
     "id": "wm_ptr__ends",
     "file": "assets/wm-ends/wm_ptr__ends.glb",
-    "bytes": 9696,
+    "bytes": 10056,
     "colour": {
      "token": "wmPTR",
      "light": "#412CCE",
@@ -3117,27 +3161,27 @@
     },
     "centroid": {
      "L": [
-      -20.87,
-      -69.28,
-      41.53
+      -22.01,
+      -68.1,
+      43.95
      ],
      "R": [
-      30.89,
-      -71.41,
-      35.92
+      30.17,
+      -73.24,
+      34.66
      ]
     },
     "L": {
-     "ends": 76,
-     "endsInPatch": 0.803,
-     "areaCm2": 2.6,
-     "faces": 518
+     "ends": 82,
+     "endsInPatch": 0.805,
+     "areaCm2": 2.7,
+     "faces": 562
     },
     "R": {
-     "ends": 84,
-     "endsInPatch": 0.81,
-     "areaCm2": 2.6,
-     "faces": 505
+     "ends": 86,
+     "endsInPatch": 0.802,
+     "areaCm2": 2.8,
+     "faces": 496
     }
    }
   },
@@ -3153,50 +3197,50 @@
      "streamlines": 959,
      "ends": [
       {
-       "atCortex": 0.891,
+       "atCortex": 0.911,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_sup",
          "side": "L",
-         "share": 0.237
+         "share": 0.238
         },
         {
          "id": "ctx_g_front_middle",
          "side": "L",
-         "share": 0.144
+         "share": 0.151
         },
         {
          "id": "ctx_s_front_middle",
          "side": "L",
-         "share": 0.111
+         "share": 0.114
         },
         {
          "id": "ctx_g_and_s_frontomargin",
          "side": "L",
-         "share": 0.104
-        },
-        {
-         "id": "ctx_g_orbital",
-         "side": "L",
-         "share": 0.071
+         "share": 0.096
         },
         {
          "id": "ctx_s_front_sup",
          "side": "L",
-         "share": 0.067
+         "share": 0.077
+        },
+        {
+         "id": "ctx_g_orbital",
+         "side": "L",
+         "share": 0.063
         }
        ],
-       "rest": 0.266
+       "rest": 0.261
       },
       {
-       "atCortex": 0.091,
-       "atMedialWall": 0.008,
+       "atCortex": 0.081,
+       "atMedialWall": 0.007,
        "areas": [
         {
          "id": "ctx_g_subcallosal",
          "side": "L",
-         "share": 0.851
+         "share": 0.846
         },
         {
          "id": "ctx_s_orbital_med_olfact",
@@ -3204,7 +3248,7 @@
          "share": 0.103
         }
        ],
-       "rest": 0.046
+       "rest": 0.051
       }
      ]
     },
@@ -3212,50 +3256,45 @@
      "streamlines": 734,
      "ends": [
       {
-       "atCortex": 0.899,
+       "atCortex": 0.896,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_sup",
          "side": "R",
-         "share": 0.256
+         "share": 0.271
         },
         {
          "id": "ctx_s_front_middle",
          "side": "R",
-         "share": 0.133
+         "share": 0.138
         },
         {
          "id": "ctx_g_front_middle",
          "side": "R",
-         "share": 0.133
+         "share": 0.132
         },
         {
          "id": "ctx_s_front_sup",
          "side": "R",
-         "share": 0.098
+         "share": 0.099
         },
         {
          "id": "ctx_g_and_s_frontomargin",
          "side": "R",
-         "share": 0.098
+         "share": 0.087
         },
         {
          "id": "ctx_g_and_s_transv_frontopol",
          "side": "R",
-         "share": 0.077
-        },
-        {
-         "id": "ctx_g_orbital",
-         "side": "R",
-         "share": 0.05
+         "share": 0.071
         }
        ],
-       "rest": 0.153
+       "rest": 0.202
       },
       {
        "atCortex": 0.053,
-       "atMedialWall": 0.003,
+       "atMedialWall": 0.005,
        "areas": [
         {
          "id": "ctx_g_oc_temp_med_parahip",
@@ -3276,7 +3315,7 @@
    "patch": {
     "id": "wm_cs_a__ends",
     "file": "assets/wm-ends/wm_cs_a__ends.glb",
-    "bytes": 45372,
+    "bytes": 45424,
     "colour": {
      "token": "wmCSA",
      "light": "#5C5123",
@@ -3284,27 +3323,27 @@
     },
     "centroid": {
      "L": [
-      -24.83,
-      49.37,
-      10.13
+      -24.89,
+      49.43,
+      11.0
      ],
      "R": [
-      22.52,
-      51.25,
-      12.15
+      22.33,
+      50.84,
+      12.76
      ]
     },
     "L": {
-     "ends": 941,
+     "ends": 952,
      "endsInPatch": 0.8,
-     "areaCm2": 22.7,
-     "faces": 3845
+     "areaCm2": 21.2,
+     "faces": 3737
     },
     "R": {
-     "ends": 699,
+     "ends": 697,
      "endsInPatch": 0.801,
-     "areaCm2": 17.2,
-     "faces": 3184
+     "areaCm2": 17.5,
+     "faces": 3251
     }
    }
   },
@@ -3320,41 +3359,46 @@
      "streamlines": 954,
      "ends": [
       {
-       "atCortex": 0.842,
+       "atCortex": 0.857,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_sup",
          "side": "L",
-         "share": 0.35
+         "share": 0.345
         },
         {
          "id": "ctx_s_front_sup",
          "side": "L",
-         "share": 0.144
+         "share": 0.142
         },
         {
          "id": "ctx_g_front_middle",
          "side": "L",
-         "share": 0.106
-        },
-        {
-         "id": "ctx_s_central",
-         "side": "L",
-         "share": 0.092
+         "share": 0.111
         },
         {
          "id": "ctx_s_postcentral",
          "side": "L",
-         "share": 0.077
+         "share": 0.082
+        },
+        {
+         "id": "ctx_s_central",
+         "side": "L",
+         "share": 0.081
+        },
+        {
+         "id": "ctx_g_precentral",
+         "side": "L",
+         "share": 0.053
         },
         {
          "id": "ctx_s_precentral_sup_part",
          "side": "L",
-         "share": 0.06
+         "share": 0.051
         }
        ],
-       "rest": 0.171
+       "rest": 0.136
       },
       {
        "atCortex": 0.013,
@@ -3368,44 +3412,44 @@
      "streamlines": 1077,
      "ends": [
       {
-       "atCortex": 0.826,
+       "atCortex": 0.846,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_sup",
          "side": "R",
-         "share": 0.275
+         "share": 0.285
         },
         {
          "id": "ctx_s_front_sup",
          "side": "R",
-         "share": 0.143
+         "share": 0.139
         },
         {
          "id": "ctx_g_front_middle",
          "side": "R",
-         "share": 0.113
+         "share": 0.112
         },
         {
          "id": "ctx_s_central",
          "side": "R",
-         "share": 0.102
+         "share": 0.098
         },
         {
          "id": "ctx_s_postcentral",
          "side": "R",
-         "share": 0.064
+         "share": 0.069
         },
         {
          "id": "ctx_g_precentral",
          "side": "R",
-         "share": 0.062
+         "share": 0.064
         }
        ],
-       "rest": 0.24
+       "rest": 0.233
       },
       {
-       "atCortex": 0.034,
+       "atCortex": 0.026,
        "atMedialWall": 0.0,
        "areas": [],
        "rest": 0.0
@@ -3416,7 +3460,7 @@
    "patch": {
     "id": "wm_cs_s__ends",
     "file": "assets/wm-ends/wm_cs_s__ends.glb",
-    "bytes": 46564,
+    "bytes": 46836,
     "colour": {
      "token": "wmCSS",
      "light": "#A06F0D",
@@ -3424,27 +3468,27 @@
     },
     "centroid": {
      "L": [
-      -25.12,
-      1.51,
-      53.37
+      -25.19,
+      1.03,
+      54.11
      ],
      "R": [
-      28.04,
-      0.45,
-      50.78
+      27.24,
+      -0.09,
+      52.06
      ]
     },
     "L": {
-     "ends": 815,
+     "ends": 830,
      "endsInPatch": 0.8,
-     "areaCm2": 28.8,
-     "faces": 3528
+     "areaCm2": 29.5,
+     "faces": 3689
     },
     "R": {
-     "ends": 927,
-     "endsInPatch": 0.8,
-     "areaCm2": 28.2,
-     "faces": 3774
+     "ends": 939,
+     "endsInPatch": 0.801,
+     "areaCm2": 28.6,
+     "faces": 3688
     }
    }
   },
@@ -3460,52 +3504,52 @@
      "streamlines": 123,
      "ends": [
       {
-       "atCortex": 0.0,
+       "atCortex": 0.008,
        "atMedialWall": 0.0,
        "areas": [],
        "rest": 0.0
       },
       {
-       "atCortex": 0.878,
+       "atCortex": 0.911,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_parietal_sup",
          "side": "L",
-         "share": 0.361
+         "share": 0.393
         },
         {
          "id": "ctx_s_intrapariet_and_p_trans",
          "side": "L",
-         "share": 0.213
+         "share": 0.223
         },
         {
          "id": "ctx_s_oc_sup_and_transversal",
          "side": "L",
-         "share": 0.093
-        },
-        {
-         "id": "ctx_g_precuneus",
-         "side": "L",
-         "share": 0.083
-        },
-        {
-         "id": "ctx_s_postcentral",
-         "side": "L",
-         "share": 0.083
+         "share": 0.089
         },
         {
          "id": "ctx_s_parieto_occipital",
          "side": "L",
-         "share": 0.074
+         "share": 0.071
+        },
+        {
+         "id": "ctx_s_postcentral",
+         "side": "L",
+         "share": 0.071
+        },
+        {
+         "id": "ctx_g_precuneus",
+         "side": "L",
+         "share": 0.062
         },
         {
          "id": "ctx_s_cingul_marginalis",
          "side": "L",
-         "share": 0.074
+         "share": 0.062
         }
        ],
-       "rest": 0.019
+       "rest": 0.027
       }
      ]
     },
@@ -3519,36 +3563,36 @@
        "rest": 0.0
       },
       {
-       "atCortex": 0.921,
+       "atCortex": 0.952,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_s_intrapariet_and_p_trans",
          "side": "R",
-         "share": 0.27
+         "share": 0.255
         },
         {
          "id": "ctx_s_temporal_sup",
          "side": "R",
-         "share": 0.178
+         "share": 0.172
         },
         {
          "id": "ctx_s_oc_sup_and_transversal",
          "side": "R",
-         "share": 0.164
+         "share": 0.166
         },
         {
          "id": "ctx_s_parieto_occipital",
          "side": "R",
-         "share": 0.112
+         "share": 0.115
         },
         {
          "id": "ctx_g_pariet_inf_angular",
          "side": "R",
-         "share": 0.053
+         "share": 0.064
         }
        ],
-       "rest": 0.224
+       "rest": 0.229
       }
      ]
     }
@@ -3556,7 +3600,7 @@
    "patch": {
     "id": "wm_cs_p__ends",
     "file": "assets/wm-ends/wm_cs_p__ends.glb",
-    "bytes": 13580,
+    "bytes": 13568,
     "colour": {
      "token": "wmCSP",
      "light": "#105BCB",
@@ -3564,27 +3608,27 @@
     },
     "centroid": {
      "L": [
-      -21.12,
-      -60.22,
-      49.55
+      -20.65,
+      -60.43,
+      50.45
      ],
      "R": [
-      30.81,
-      -65.84,
-      36.7
+      30.65,
+      -66.15,
+      37.66
      ]
     },
     "L": {
-     "ends": 108,
-     "endsInPatch": 0.806,
-     "areaCm2": 2.6,
-     "faces": 484
+     "ends": 113,
+     "endsInPatch": 0.805,
+     "areaCm2": 2.2,
+     "faces": 433
     },
     "R": {
-     "ends": 152,
+     "ends": 157,
      "endsInPatch": 0.803,
-     "areaCm2": 6.2,
-     "faces": 1168
+     "areaCm2": 6.0,
+     "faces": 1167
     }
    }
   },
@@ -3601,13 +3645,13 @@
      "ends": [
       {
        "atCortex": 0.0,
-       "atMedialWall": 0.541,
+       "atMedialWall": 0.565,
        "areas": [],
        "rest": 0.0
       },
       {
        "atCortex": 0.0,
-       "atMedialWall": 0.252,
+       "atMedialWall": 0.271,
        "areas": [],
        "rest": 0.0
       }
@@ -3628,13 +3672,13 @@
      "streamlines": 2780,
      "ends": [
       {
-       "atCortex": 0.0,
+       "atCortex": 0.001,
        "atMedialWall": 0.0,
        "areas": [],
        "rest": 0.0
       },
       {
-       "atCortex": 0.0,
+       "atCortex": 0.001,
        "atMedialWall": 0.0,
        "areas": [],
        "rest": 0.0
@@ -3701,7 +3745,7 @@
      "streamlines": 1727,
      "ends": [
       {
-       "atCortex": 0.999,
+       "atCortex": 0.998,
        "atMedialWall": 0.0,
        "areas": [
         {
@@ -3724,16 +3768,16 @@
      "streamlines": 652,
      "ends": [
       {
-       "atCortex": 0.933,
+       "atCortex": 0.966,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_sup",
          "side": "R",
-         "share": 0.988
+         "share": 0.99
         }
        ],
-       "rest": 0.012
+       "rest": 0.01
       },
       {
        "atCortex": 0.0,
@@ -3747,7 +3791,7 @@
    "patch": {
     "id": "wm_drtt__ends",
     "file": "assets/wm-ends/wm_drtt__ends.glb",
-    "bytes": 5088,
+    "bytes": 4948,
     "colour": {
      "token": "wmDRTT",
      "light": "#235C42",
@@ -3755,27 +3799,27 @@
     },
     "centroid": {
      "L": [
-      -3.13,
-      20.49,
-      65.36
+      -3.26,
+      20.16,
+      65.85
      ],
      "R": [
-      8.7,
-      19.69,
-      65.27
+      8.34,
+      19.12,
+      65.41
      ]
     },
     "L": {
-     "ends": 1725,
-     "endsInPatch": 0.816,
-     "areaCm2": 1.1,
-     "faces": 84
+     "ends": 1724,
+     "endsInPatch": 0.818,
+     "areaCm2": 1.0,
+     "faces": 79
     },
     "R": {
-     "ends": 608,
-     "endsInPatch": 0.811,
-     "areaCm2": 2.7,
-     "faces": 247
+     "ends": 630,
+     "endsInPatch": 0.819,
+     "areaCm2": 2.2,
+     "faces": 225
     }
    }
   },
@@ -3791,26 +3835,26 @@
      "streamlines": 1971,
      "ends": [
       {
-       "atCortex": 0.985,
+       "atCortex": 0.987,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_sup",
          "side": "L",
-         "share": 0.531
+         "share": 0.522
         },
         {
          "id": "ctx_g_precentral",
          "side": "L",
-         "share": 0.356
+         "share": 0.379
         },
         {
          "id": "ctx_s_precentral_sup_part",
          "side": "L",
-         "share": 0.065
+         "share": 0.07
         }
        ],
-       "rest": 0.047
+       "rest": 0.028
       },
       {
        "atCortex": 0.0,
@@ -3824,26 +3868,26 @@
      "streamlines": 6332,
      "ends": [
       {
-       "atCortex": 0.984,
+       "atCortex": 0.993,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_precentral",
          "side": "R",
-         "share": 0.646
+         "share": 0.634
         },
         {
          "id": "ctx_s_precentral_sup_part",
          "side": "R",
-         "share": 0.146
+         "share": 0.144
         },
         {
          "id": "ctx_g_front_sup",
          "side": "R",
-         "share": 0.132
+         "share": 0.134
         }
        ],
-       "rest": 0.076
+       "rest": 0.087
       },
       {
        "atCortex": 0.0,
@@ -3857,7 +3901,7 @@
    "patch": {
     "id": "wm_ndrtt__ends",
     "file": "assets/wm-ends/wm_ndrtt__ends.glb",
-    "bytes": 6844,
+    "bytes": 6496,
     "colour": {
      "token": "wmNDRTT",
      "light": "#C2384B",
@@ -3865,27 +3909,27 @@
     },
     "centroid": {
      "L": [
-      -8.83,
-      -5.59,
-      71.8
+      -8.85,
+      -6.09,
+      71.91
      ],
      "R": [
-      17.21,
-      -17.37,
-      73.5
+      17.13,
+      -17.46,
+      73.73
      ]
     },
     "L": {
-     "ends": 1941,
-     "endsInPatch": 0.815,
-     "areaCm2": 3.8,
-     "faces": 350
+     "ends": 1945,
+     "endsInPatch": 0.801,
+     "areaCm2": 3.6,
+     "faces": 302
     },
     "R": {
-     "ends": 6229,
-     "endsInPatch": 0.805,
-     "areaCm2": 2.1,
-     "faces": 264
+     "ends": 6290,
+     "endsInPatch": 0.803,
+     "areaCm2": 2.2,
+     "faces": 263
     }
    }
   },
@@ -3901,18 +3945,18 @@
      "streamlines": 6621,
      "ends": [
       {
-       "atCortex": 0.991,
+       "atCortex": 0.985,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_precentral",
          "side": "L",
-         "share": 0.242
+         "share": 0.275
         },
         {
          "id": "ctx_g_and_s_paracentral",
          "side": "L",
-         "share": 0.206
+         "share": 0.194
         },
         {
          "id": "ctx_g_postcentral",
@@ -3922,22 +3966,22 @@
         {
          "id": "ctx_s_central",
          "side": "L",
-         "share": 0.158
+         "share": 0.148
         },
         {
          "id": "ctx_s_cingul_marginalis",
          "side": "L",
-         "share": 0.099
-        },
-        {
-         "id": "ctx_g_precuneus",
-         "side": "L",
-         "share": 0.071
+         "share": 0.1
         },
         {
          "id": "ctx_g_parietal_sup",
          "side": "L",
-         "share": 0.05
+         "share": 0.058
+        },
+        {
+         "id": "ctx_g_precuneus",
+         "side": "L",
+         "share": 0.051
         }
        ],
        "rest": 0.0
@@ -3960,30 +4004,30 @@
         {
          "id": "ctx_g_postcentral",
          "side": "R",
-         "share": 0.298
+         "share": 0.29
         },
         {
          "id": "ctx_g_precentral",
          "side": "R",
-         "share": 0.255
+         "share": 0.231
         },
         {
          "id": "ctx_s_central",
          "side": "R",
-         "share": 0.223
-        },
-        {
-         "id": "ctx_s_postcentral",
-         "side": "R",
-         "share": 0.137
+         "share": 0.215
         },
         {
          "id": "ctx_g_and_s_paracentral",
          "side": "R",
-         "share": 0.082
+         "share": 0.155
+        },
+        {
+         "id": "ctx_s_postcentral",
+         "side": "R",
+         "share": 0.104
         }
        ],
-       "rest": 0.004
+       "rest": 0.005
       },
       {
        "atCortex": 0.0,
@@ -3997,7 +4041,7 @@
    "patch": {
     "id": "wm_ml__ends",
     "file": "assets/wm-ends/wm_ml__ends.glb",
-    "bytes": 7164,
+    "bytes": 7236,
     "colour": {
      "token": "wmML",
      "light": "#6231AA",
@@ -4005,27 +4049,27 @@
     },
     "centroid": {
      "L": [
-      -12.31,
-      -36.01,
-      72.23
+      -12.75,
+      -36.21,
+      73.11
      ],
      "R": [
-      14.38,
-      -29.64,
-      72.33
+      13.28,
+      -30.58,
+      73.4
      ]
     },
     "L": {
-     "ends": 6564,
-     "endsInPatch": 0.803,
-     "areaCm2": 2.5,
-     "faces": 332
+     "ends": 6523,
+     "endsInPatch": 0.806,
+     "areaCm2": 2.3,
+     "faces": 331
     },
     "R": {
      "ends": 5817,
-     "endsInPatch": 0.801,
-     "areaCm2": 2.8,
-     "faces": 309
+     "endsInPatch": 0.8,
+     "areaCm2": 2.7,
+     "faces": 318
     }
    }
   },
@@ -4041,26 +4085,26 @@
      "streamlines": 2382,
      "ends": [
       {
-       "atCortex": 0.874,
+       "atCortex": 0.972,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_sup",
          "side": "L",
-         "share": 0.595
+         "share": 0.631
         },
         {
          "id": "ctx_g_front_middle",
          "side": "L",
-         "share": 0.234
+         "share": 0.225
         },
         {
          "id": "ctx_s_front_sup",
          "side": "L",
-         "share": 0.121
+         "share": 0.099
         }
        ],
-       "rest": 0.05
+       "rest": 0.044
       },
       {
        "atCortex": 0.0,
@@ -4074,36 +4118,36 @@
      "streamlines": 3249,
      "ends": [
       {
-       "atCortex": 0.986,
+       "atCortex": 0.983,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_middle",
          "side": "R",
-         "share": 0.438
+         "share": 0.458
         },
         {
          "id": "ctx_g_front_sup",
          "side": "R",
-         "share": 0.184
+         "share": 0.185
         },
         {
          "id": "ctx_g_orbital",
          "side": "R",
-         "share": 0.173
+         "share": 0.152
         },
         {
          "id": "ctx_g_and_s_transv_frontopol",
          "side": "R",
-         "share": 0.075
+         "share": 0.071
         },
         {
          "id": "ctx_s_orbital_lateral",
          "side": "R",
-         "share": 0.059
+         "share": 0.064
         }
        ],
-       "rest": 0.071
+       "rest": 0.069
       },
       {
        "atCortex": 0.0,
@@ -4117,7 +4161,7 @@
    "patch": {
     "id": "wm_rst__ends",
     "file": "assets/wm-ends/wm_rst__ends.glb",
-    "bytes": 10368,
+    "bytes": 10148,
     "colour": {
      "token": "wmRST",
      "light": "#8978A9",
@@ -4125,27 +4169,27 @@
     },
     "centroid": {
      "L": [
-      -15.13,
-      46.03,
-      43.79
+      -15.06,
+      45.31,
+      44.6
      ],
      "R": [
-      30.18,
-      54.51,
-      18.7
+      29.2,
+      53.81,
+      21.17
      ]
     },
     "L": {
-     "ends": 2081,
-     "endsInPatch": 0.8,
-     "areaCm2": 5.7,
-     "faces": 645
+     "ends": 2316,
+     "endsInPatch": 0.801,
+     "areaCm2": 6.1,
+     "faces": 647
     },
     "R": {
-     "ends": 3202,
-     "endsInPatch": 0.809,
-     "areaCm2": 6.0,
-     "faces": 548
+     "ends": 3195,
+     "endsInPatch": 0.802,
+     "areaCm2": 5.2,
+     "faces": 508
     }
    }
   },
@@ -4161,18 +4205,18 @@
      "streamlines": 1038,
      "ends": [
       {
-       "atCortex": 0.802,
+       "atCortex": 0.836,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_sup",
          "side": "L",
-         "share": 0.775
+         "share": 0.783
         },
         {
          "id": "ctx_s_front_sup",
          "side": "L",
-         "share": 0.109
+         "share": 0.099
         },
         {
          "id": "ctx_g_front_middle",
@@ -4180,7 +4224,7 @@
          "share": 0.094
         }
        ],
-       "rest": 0.022
+       "rest": 0.023
       },
       {
        "atCortex": 0.0,
@@ -4194,26 +4238,26 @@
      "streamlines": 4576,
      "ends": [
       {
-       "atCortex": 0.864,
+       "atCortex": 0.887,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_front_sup",
          "side": "R",
-         "share": 0.751
+         "share": 0.753
         },
         {
          "id": "ctx_g_front_middle",
          "side": "R",
-         "share": 0.11
+         "share": 0.111
         },
         {
          "id": "ctx_s_front_sup",
          "side": "R",
-         "share": 0.1
+         "share": 0.097
         }
        ],
-       "rest": 0.038
+       "rest": 0.039
       },
       {
        "atCortex": 0.0,
@@ -4227,7 +4271,7 @@
    "patch": {
     "id": "wm_cpt_f__ends",
     "file": "assets/wm-ends/wm_cpt_f__ends.glb",
-    "bytes": 18384,
+    "bytes": 18196,
     "colour": {
      "token": "wmCPTF",
      "light": "#C2385D",
@@ -4235,27 +4279,27 @@
     },
     "centroid": {
      "L": [
-      -14.43,
-      20.45,
-      58.62
+      -15.79,
+      19.37,
+      58.61
      ],
      "R": [
-      18.02,
-      17.06,
-      60.66
+      17.48,
+      16.48,
+      61.1
      ]
     },
     "L": {
-     "ends": 832,
+     "ends": 869,
      "endsInPatch": 0.802,
-     "areaCm2": 9.4,
-     "faces": 1022
+     "areaCm2": 9.3,
+     "faces": 1046
     },
     "R": {
-     "ends": 3955,
-     "endsInPatch": 0.801,
-     "areaCm2": 17.1,
-     "faces": 1606
+     "ends": 4057,
+     "endsInPatch": 0.8,
+     "areaCm2": 17.7,
+     "faces": 1572
     }
    }
   },
@@ -4271,36 +4315,31 @@
      "streamlines": 3064,
      "ends": [
       {
-       "atCortex": 0.963,
+       "atCortex": 0.981,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_parietal_sup",
          "side": "L",
-         "share": 0.461
+         "share": 0.503
         },
         {
          "id": "ctx_g_precuneus",
          "side": "L",
-         "share": 0.232
+         "share": 0.204
         },
         {
          "id": "ctx_s_postcentral",
          "side": "L",
-         "share": 0.076
+         "share": 0.069
         },
         {
          "id": "ctx_g_and_s_paracentral",
          "side": "L",
          "share": 0.061
-        },
-        {
-         "id": "ctx_s_cingul_marginalis",
-         "side": "L",
-         "share": 0.055
         }
        ],
-       "rest": 0.115
+       "rest": 0.163
       },
       {
        "atCortex": 0.0,
@@ -4314,36 +4353,36 @@
      "streamlines": 3393,
      "ends": [
       {
-       "atCortex": 0.966,
+       "atCortex": 0.983,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_g_postcentral",
          "side": "R",
-         "share": 0.268
+         "share": 0.272
         },
         {
          "id": "ctx_g_precentral",
          "side": "R",
-         "share": 0.224
+         "share": 0.227
         },
         {
          "id": "ctx_g_parietal_sup",
          "side": "R",
-         "share": 0.16
+         "share": 0.162
         },
         {
          "id": "ctx_s_postcentral",
          "side": "R",
-         "share": 0.15
+         "share": 0.147
         },
         {
          "id": "ctx_s_precentral_sup_part",
          "side": "R",
-         "share": 0.086
+         "share": 0.079
         }
        ],
-       "rest": 0.112
+       "rest": 0.114
       },
       {
        "atCortex": 0.0,
@@ -4357,7 +4396,7 @@
    "patch": {
     "id": "wm_cpt_p__ends",
     "file": "assets/wm-ends/wm_cpt_p__ends.glb",
-    "bytes": 13932,
+    "bytes": 14096,
     "colour": {
      "token": "wmCPTP",
      "light": "#8413E7",
@@ -4365,27 +4404,27 @@
     },
     "centroid": {
      "L": [
-      -17.02,
-      -51.91,
-      66.82
+      -17.17,
+      -51.81,
+      67.63
      ],
      "R": [
-      24.08,
-      -32.66,
-      68.5
+      23.49,
+      -33.08,
+      68.83
      ]
     },
     "L": {
-     "ends": 2951,
+     "ends": 3005,
      "endsInPatch": 0.801,
-     "areaCm2": 5.9,
-     "faces": 645
+     "areaCm2": 6.7,
+     "faces": 672
     },
     "R": {
-     "ends": 3279,
-     "endsInPatch": 0.802,
-     "areaCm2": 9.5,
-     "faces": 1141
+     "ends": 3335,
+     "endsInPatch": 0.8,
+     "areaCm2": 9.9,
+     "faces": 1132
     }
    }
   },
@@ -4401,36 +4440,36 @@
      "streamlines": 324,
      "ends": [
       {
-       "atCortex": 0.88,
+       "atCortex": 0.904,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_s_oc_sup_and_transversal",
          "side": "L",
-         "share": 0.288
+         "share": 0.27
         },
         {
          "id": "ctx_s_temporal_sup",
          "side": "L",
-         "share": 0.242
+         "share": 0.253
         },
         {
          "id": "ctx_s_parieto_occipital",
          "side": "L",
-         "share": 0.165
+         "share": 0.15
         },
         {
          "id": "ctx_s_calcarine",
          "side": "L",
-         "share": 0.119
+         "share": 0.133
         },
         {
          "id": "ctx_s_intrapariet_and_p_trans",
          "side": "L",
-         "share": 0.077
+         "share": 0.082
         }
        ],
-       "rest": 0.109
+       "rest": 0.113
       },
       {
        "atCortex": 0.0,
@@ -4444,36 +4483,36 @@
      "streamlines": 242,
      "ends": [
       {
-       "atCortex": 0.942,
+       "atCortex": 0.967,
        "atMedialWall": 0.0,
        "areas": [
         {
          "id": "ctx_s_temporal_sup",
          "side": "R",
-         "share": 0.39
+         "share": 0.38
         },
         {
          "id": "ctx_s_intrapariet_and_p_trans",
          "side": "R",
-         "share": 0.197
+         "share": 0.175
         },
         {
          "id": "ctx_s_oc_sup_and_transversal",
          "side": "R",
-         "share": 0.18
+         "share": 0.175
         },
         {
          "id": "ctx_s_parieto_occipital",
          "side": "R",
-         "share": 0.101
+         "share": 0.111
         },
         {
          "id": "ctx_s_occipital_ant",
          "side": "R",
-         "share": 0.053
+         "share": 0.06
         }
        ],
-       "rest": 0.079
+       "rest": 0.098
       },
       {
        "atCortex": 0.0,
@@ -4487,7 +4526,7 @@
    "patch": {
     "id": "wm_cpt_o__ends",
     "file": "assets/wm-ends/wm_cpt_o__ends.glb",
-    "bytes": 9000,
+    "bytes": 9652,
     "colour": {
      "token": "wmCPTO",
      "light": "#7C840B",
@@ -4495,27 +4534,27 @@
     },
     "centroid": {
      "L": [
-      -23.93,
-      -79.96,
-      22.27
+      -25.17,
+      -79.68,
+      22.97
      ],
      "R": [
-      36.09,
-      -67.09,
-      28.14
+      35.73,
+      -68.03,
+      27.75
      ]
     },
     "L": {
-     "ends": 285,
-     "endsInPatch": 0.8,
-     "areaCm2": 3.3,
-     "faces": 521
+     "ends": 293,
+     "endsInPatch": 0.805,
+     "areaCm2": 3.6,
+     "faces": 602
     },
     "R": {
-     "ends": 228,
+     "ends": 234,
      "endsInPatch": 0.803,
-     "areaCm2": 2.6,
-     "faces": 392
+     "areaCm2": 2.7,
+     "faces": 423
     }
    }
   }
