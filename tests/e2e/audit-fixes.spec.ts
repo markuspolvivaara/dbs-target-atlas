@@ -1083,36 +1083,44 @@ test('skull base: the subtemporal view opens with the temporal lobe lifted; its 
   expect(g.errors).toEqual([]);
 });
 
-// D-008 (the owner's choices of 17 November 2026): four tracts the white-matter atlas lacks are drawn as surfaces from
-// the HCP-YA atlas, the medial longitudinal fasciculus also under the floor of the fourth ventricle; a nucleus that
+// D-008 (the owner's choices of 17 and 18 November 2026): four tracts the white-matter atlas lacks are drawn from the
+// HCP-YA atlas's streamlines, the medial longitudinal fasciculus also under the floor of the fourth ventricle; a nucleus that
 // serves several nerves says so on its card and on each nerve's; the trigeminal nerve's card says its nuclei are not
 // modelled instead of "the model has none"
 test('brainstem: the HCP-YA tracts, the nuclei shared between nerves and the trigeminal nuclei', async ({ page }) => {
   const g = guard(page);
   const drawn = async (id: string) => Object.values((await drawnSides(page, id)) ?? {}).some(Boolean);
   const lookOf = (id: string) => page.evaluate((sid) => (window as unknown as { __atlas: { viewer: { items: Map<string, { look?: string }> } } }).__atlas.viewer.items.get(sid)?.look ?? null, id);
+  // (a streamline tract has a kind and a role where a mesh has a look)
+  const lineOf = (id: string) => page.evaluate((sid) => {
+    const it = (window as unknown as { __atlas: { viewer: { items: Map<string, { kind: string; role?: string | null }> } } }).__atlas.viewer.items.get(sid);
+    return it ? `${it.kind} ${it.role ?? null}` : null;
+  }, id);
   const card = page.locator('.card.sel');
-  // the tracts view lists and draws the four, as surfaces
+  // the tracts view lists and draws the four, as streamlines like the white-matter section's tracts beside them
   await open(page, './brainstem/#/atlas?g=tracts');
+  expect(await lineOf('wm_ml')).toBe('lines key');
   for (const id of ['bs_t_mlf', 'bs_t_ctt', 'bs_t_stt', 'bs_t_ll']) {
     expect(await drawn(id), id).toBe(true);
-    expect(await lookOf(id), id).toBe('primary');
+    expect(await lineOf(id), id).toBe('lines key');
     await expect(page.locator(`.sb-item[data-id="${id}"]`)).toBeVisible();
   }
-  await expect(page.locator('.pane:not([hidden]) article.card').first()).toContainText('That atlas ends at z = −50 mm');
+  await expect(page.locator('.legend3d .sw.line')).toHaveCount(12);
+  await expect(page.locator('.pane:not([hidden]) article.card').first()).toContainText('That atlas ends near z = −50 mm');
   // a tract's card: what it is from sources, the published distances, and how it sits on this template, measured
   await page.locator('.sb-item[data-id="bs_t_mlf"]').click();
   await expect(card.locator('h2')).toHaveText('Medial longitudinal fasciculus (MLF)');
   await expect(card.locator('.eyebrow')).toHaveText('Tract · HCP-YA atlas');
-  await expect(card.locator('.schematic-note')).toContainText('It stops at z = −50 mm because the atlas does');
+  await expect(card.locator('.schematic-note')).toContainText('They stop near z = −50 mm because the atlas does');
   await expect(card).toContainText('0.50 mm (left) and 0.48 mm (right) from the median sulcus');
   await expect(card.locator('a.src', { hasText: 'Li 2021' }).first()).toHaveAttribute('href', 'https://doi.org/10.1002/hbm.25670');
   await expect(card.locator('a.src', { hasText: 'Yeh 2018' }).first()).toHaveAttribute('href', 'https://doi.org/10.1016/j.neuroimage.2018.05.027');
   const fit = await card.locator('.tract-fit').innerText();
-  expect(fit).toContain('Drawn from z = −50.0 mm, the atlas’s lower edge');
-  const inside = /Inside the fitted brainstem: (\d+) % \(left\) and (\d+) % \(right\)/.exec(fit);
-  expect(Number(inside?.[1])).toBeGreaterThan(65);
-  expect(Number(inside?.[2])).toBeGreaterThan(65);
+  expect(fit).toMatch(/Streamlines drawn: \d+ \(left\) and \d+ \(right\)/);
+  expect(fit).toMatch(/They run from z = −50\.\d mm \(left\) and −50\.\d mm \(right\), the atlas’s lower edge/);
+  const inside = /Inside the fitted brainstem: (\d+) % \(left\) and (\d+) % \(right\) of their length/.exec(fit);
+  expect(Number(inside?.[1])).toBeGreaterThan(80);
+  expect(Number(inside?.[2])).toBeGreaterThan(80);
   expect(fit).toMatch(/Fluid on the T2 template: \d+ % \(left\) and \d+ % \(right\)/);
   expect(fit).toContain('drawn without a shift');
   // the lateral lemniscus, from another source
@@ -1121,10 +1129,9 @@ test('brainstem: the HCP-YA tracts, the nuclei shared between nerves and the tri
   await expect(card).toContainText('inferior colliculus');
   await expect(card.locator('a.src', { hasText: 'Sitek 2019' }).first()).toHaveAttribute('href', 'https://doi.org/10.7554/elife.48932');
   // the floor view: the fasciculus lies under the solid floor and is not drawn there (parts of it lie outside the
-  // fitted surface and would show as patches); chosen from the view's card it is seen through the surface
+  // fitted surface and would show as stray lines); chosen from the view's card it is seen through the surface
   await open(page, './brainstem/#/atlas?g=sez_floor');
   expect(await lookOf('bs_pons')).toBe('primary');
-  expect(await lookOf('bs_t_mlf')).toBeNull();          // hidden in the plan: the viewer does not load it
   expect(await drawn('bs_t_mlf')).toBe(false);
   const under = page.locator('.under-surface');
   await expect(under).toContainText('Medial longitudinal fasciculus (MLF)');
@@ -1133,7 +1140,8 @@ test('brainstem: the HCP-YA tracts, the nuclei shared between nerves and the tri
   await settle(page);
   await expect(card.locator('h2')).toHaveText('Medial longitudinal fasciculus (MLF)');
   expect(await lookOf('bs_pons')).toBe('shell');
-  expect(await lookOf('bs_t_mlf')).toBe('primary');
+  expect(await lineOf('bs_t_mlf')).toBe('lines key');
+  expect(await drawn('bs_t_mlf')).toBe(true);
   expect(await lookOf('sez_suprafacial')).toBe('primary');
   // an entry zone chosen there puts the solid surface back
   await page.locator('.sb-item[data-id="sez_suprafacial"]').click();
@@ -1171,8 +1179,10 @@ test('brainstem: the HCP-YA tracts, the nuclei shared between nerves and the tri
   await expect(page.locator('#hcp842')).toContainText('CC BY-SA 4.0');
   await expect(page.locator('#hcp842')).toContainText('WU-Minn HCP Open Access Data Use Terms');
   await expect(page.locator('#hcp842 a[href="https://doi.org/10.5281/zenodo.3627772"]').first()).toBeVisible();
+  await expect(page.locator('#hcp842 a[href="https://brain.labsolver.org/hcp_trk_atlas.html"]', { hasText: 'Source page' })).toBeVisible();
   await page.goto('./brainstem/#/sources');
-  await expect(page.locator('#hcp-tracts')).toContainText('The volumes end at z = -50 mm');
+  await expect(page.locator('#hcp-tracts')).toContainText("The atlas's grid ends at z = -50.5 mm");
+  await expect(page.locator('.page:not([hidden])')).toContainText('from the centre of the atlas’s first voxel');
   await expect(page.locator('.page:not([hidden])')).toContainText('No shift was applied');
   await expect(page.locator('.page:not([hidden])')).toContainText('Sitek KR');
   expect(g.external).toEqual([]);

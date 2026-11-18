@@ -13,7 +13,7 @@ import { BsReferenceSchema, ClaimSchema, ZoneContentSchema, type Claim } from '.
  * Brainstem section data. Its own structures (pipeline/brainstem_build.py) are in MNI space like the DBS and
  * white-matter sections, so it also shows a few of their structures: the red nucleus, substantia nigra,
  * subthalamic nucleus, thalamus and dentate nucleus (DBS atlases) and the brainstem tracts (HCP-1065). Four tracts
- * the HCP-1065 atlas lacks are its own structures, surfaces from the HCP-YA atlas (`category: 'tract'`).
+ * the HCP-1065 atlas lacks are its own structures, streamlines of the HCP-YA atlas (`category: 'tract'`).
  */
 export const BS_MANIFEST = BsManifestSchema.parse(bsManifestJson);
 const DBS = ManifestSchema.parse(manifestJson);
@@ -31,7 +31,7 @@ export const VOLUMES = DBS.volumes;
 export const ALL: ManifestStructure[] = [...BS_MANIFEST.structures, ...CONTEXT];
 export const BS = new Map(ALL.map((s) => [s.id, s]));
 export const OWN = new Set(BS_MANIFEST.structures.map((s) => s.id));
-/** the section's own tracts: surfaces of the HCP-YA atlas's tract volumes (the others are the white-matter section's streamlines) */
+/** the section's own tracts: streamlines of the HCP-YA atlas (the others are the white-matter section's, of HCP-1065) */
 export const OWN_TRACTS = BS_MANIFEST.structures.filter((s) => s.category === 'tract').map((s) => s.id);
 /** how each of them sits on this section's template, by side (measured by the build) */
 export const TRACT_FIT = BS_MANIFEST.fit.tracts;

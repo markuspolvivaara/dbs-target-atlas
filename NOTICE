@@ -140,9 +140,10 @@ What is covered by which terms
    HC, 2023, Dryad, doi:10.5061/dryad.zw3r228d2), dedicated to the public domain
    (CC0 1.0). Four tracts (bs_t_*.glb: the medial longitudinal fasciculus, the
    central tegmental tract, the spinothalamic tract and the lateral lemniscus) are
-   derived from the HCP-YA Tractography Atlas, NIFTI files (Yeh FC, 2018, Zenodo,
-   doi:10.5281/zenodo.3627772; Yeh FC et al., NeuroImage 2018;178:57-68), under
-   CC BY-SA 4.0; the atlas is built from Human Connectome Project data, so the HCP
+   derived from the streamline files of the HCP-YA (HCP842) tractography atlas
+   (Yeh FC, 2018, brain.labsolver.org/hcp_trk_atlas.html; Yeh FC et al., NeuroImage
+   2018;178:57-68; checked against the atlas's NIFTI files, Zenodo,
+   doi:10.5281/zenodo.3627772), under CC BY-SA 4.0; the atlas is built from Human Connectome Project data, so the HCP
    terms and acknowledgement in section 5 apply to these files as well. Everything
    else is derived from Z-Anatomy (as in section 7) and is
    distributed under CC BY-SA 4.0 (Z-Anatomy), CC BY-SA 2.1 Japan (BodyParts3D) and

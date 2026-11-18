@@ -288,7 +288,7 @@ vessel files (TopBrain, see above). They are **not** GPL-licensed: TopBrain data
 
 The meshes in `public/assets/brainstem/` and the files `bs-manifest.json`, `bs-zones.json` and `bs-definitions.json`
 are **not** GPL-licensed. The arousal network nuclei (`bs_aan_*.glb`) are derived from the Harvard Ascending Arousal
-Network atlas 2.0 (CC0 1.0); four tracts (`bs_t_*.glb`) from the HCP-YA tractography atlas (CC BY-SA 4.0 (Zenodo record 10.5281/zenodo.3627772); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms);
+Network atlas 2.0 (CC0 1.0); four tracts (`bs_t_*.glb`) from the HCP-YA tractography atlas (CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html; the volumes: Zenodo record 10.5281/zenodo.3627772); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms);
 everything else from Z-Anatomy, itself based on BodyParts3D (CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0).
 The section also shows the white-matter section's tracts and the DBS section's deep nuclei, under their licences above.
 
@@ -304,9 +304,11 @@ The section also shows the white-matter section's tracts and the DBS section's d
 - Attribution: Edlow BL, Kinney HC (2023). Harvard Ascending Arousal Network Atlas - Version 2.0. Dryad. CC0 1.0
 - Cite: Edlow BL, Kinney HC. Harvard Ascending Arousal Network Atlas – Version 2.0 [dataset]. Dryad; 2023. doi:10.5061/dryad.zw3r228d2.
 - Cite: Olchanyi MD, Augustinack J, Haynes RL, et al. Automated MRI segmentation of brainstem nuclei critical to consciousness. Hum Brain Mapp. 2025;46(14):e70357. doi:10.1002/hbm.70357.
-- Source: https://doi.org/10.5281/zenodo.3627772
-- Note: One binary volume per tract and side at 1 mm, from tractography on the averaged diffusion MRI of 842 Human Connectome Project participants, the streamlines labelled by neuroanatomists. Space: ICBM-152 as FSL's fractional anisotropy template has it (Yeh 2018), not the ICBM 2009b template this section is drawn on; the volumes are drawn where the atlas has them, without a shift, and each tract's card states how it sits in the fitted brainstem and on the T2 template. The volumes end at z = -50 mm, the atlas's lower edge: about where this model's pons meets its medulla, so no tract of the atlas is drawn in the medulla.
+- Source: https://brain.labsolver.org/hcp_trk_atlas.html
+- Note: The atlas's streamlines of each tract and side, from tractography on the averaged diffusion MRI of 842 Human Connectome Project participants, labelled by neuroanatomists. Space: ICBM-152 as FSL's fractional anisotropy template has it (Yeh 2018), not the ICBM 2009b template this section is drawn on; the streamlines are drawn where the atlas has them, without a shift, and each tract's card states how they sit in the fitted brainstem and on the T2 template. The atlas's grid ends at z = -50.5 mm, about where this model's pons meets its medulla, and its streamlines end there (the spinothalamic tract's about 2 mm lower), so no tract of the atlas is drawn through the medulla. The streamline files were checked against the atlas's volumes of the same tracts (NIfTI files, Zenodo).
+- Attribution: Yeh FC (2018). HCP-YA (HCP842) tractography atlas: streamline files, brain.labsolver.org/hcp_trk_atlas.html. CC BY-SA 4.0
 - Attribution: Yeh FC (2018). HCP-YA Tractography Atlas (NIFTI Files). Zenodo. CC BY-SA 4.0
+- Cite: Yeh FC. HCP842 population-averaged tractography atlas (Yeh 2018): streamline files [dataset]. brain.labsolver.org/hcp_trk_atlas.html; files of 18 July 2023, retrieved 18 November 2026.
 - Cite: Yeh FC. HCP-YA Tractography Atlas (NIFTI Files) [dataset]. Zenodo; 2018. doi:10.5281/zenodo.3627772.
 - Cite: Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027.
 - Changes made: the brainstem, its surface features, ventricles, cranial nerve nuclei, cranial nerves III-XII and the

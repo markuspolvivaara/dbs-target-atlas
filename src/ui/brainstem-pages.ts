@@ -11,6 +11,7 @@ export function bsSourcesPage() {
   const za = BS_MANIFEST.datasets.zanatomy;
   const aan = BS_MANIFEST.datasets.aan;
   const hcp = BS_MANIFEST.datasets.hcp842;
+  const sides = OWN_TRACTS.flatMap((id) => [TRACT_FIT[id].L, TRACT_FIT[id].R]);
   const f = BS_MANIFEST.fit;
   const urls = [...new Set(Object.values(DEFINITIONS).map((x) => x.url).filter((u): u is string => !!u))].sort();
   el.append(
@@ -33,12 +34,13 @@ export function bsSourcesPage() {
         'Until November 2026 the model was fitted to the far wall of the cisterns and was about 3 mm too large all round; the positions of the entry zones on the floor of the fourth ventricle changed with the correction.'),
       h('p', {}, h('strong', {}, 'Arousal network nuclei: '), aan.name, '. ', aan.note),
       h('p', { id: 'hcp-tracts' }, h('strong', {}, 'Medial longitudinal fasciculus, central tegmental tract, spinothalamic tract, lateral lemniscus: '), hcp.name, '. ', hcp.note),
-      h('p', {}, 'How each of the four sits on this template (pipeline/brainstem_build.py tract_fit), left and right: the share of its voxels at the fitted brainstem’s levels that lie inside the fitted brainstem, how far outside it the farthest lies, and the share of all its voxels that are fluid on the T2 template (measured against the template itself, not against the fit).'),
+      h('p', {}, 'How each of the four sits on this template (pipeline/brainstem_build.py tract_fit), left and right: the streamlines drawn, the share of their length at the fitted brainstem’s levels that lies inside the fitted brainstem, how far outside it the farthest point lies, and the share of all their length that is fluid on the T2 template (measured against the template itself, not against the fit).'),
       h('ul', {}, ...OWN_TRACTS.map((id) => {
         const t = TRACT_FIT[id];
-        return h('li', {}, `${BS.get(id)!.name}: inside ${pct(t.L.insideShare)} and ${pct(t.R.insideShare)}; farthest outside ${t.L.outsideMaxMm} and ${t.R.outsideMaxMm} mm; fluid on the template ${pct(t.L.fluidShare)} and ${pct(t.R.fluidShare)}.`);
+        return h('li', {}, `${BS.get(id)!.name}: ${t.L.streamlines} and ${t.R.streamlines} streamlines; inside ${pct(t.L.insideShare)} and ${pct(t.R.insideShare)}; farthest outside ${t.L.outsideMaxMm} and ${t.R.outsideMaxMm} mm; fluid on the template ${pct(t.L.fluidShare)} and ${pct(t.R.fluidShare)}.`);
       })),
       h('p', {}, 'No shift was applied: these figures say how well the atlas’s space and this template agree for each tract.'),
+      h('p', {}, `The streamline files give their points from the centre of the atlas’s first voxel, not from its corner as the TrackVis format has it. Read from the centre, ${(Math.min(...sides.map((x) => x.inOwnVolumeShare)) * 100).toFixed(1)} % or more of each bundle’s points within the atlas’s grid lie in the atlas’s own volume of the same tract (its NIfTI files); read from the corner, ${pct(Math.min(...sides.map((x) => x.cornerReadShare)))} to ${pct(Math.max(...sides.map((x) => x.cornerReadShare)))} would. Up to ${pct(Math.max(...sides.map((x) => x.belowGridShare)))} of a bundle’s points lie below the grid, where the spinothalamic tract’s streamlines run on.`),
       h('p', {}, h('strong', {}, 'From the other sections: '), CONTEXT.map((s) => s.name).join(', '), '. See those sections for their sources.'),
       h('p', {}, h('strong', {}, 'Safe entry zones: '), 'drawn by rule on the fitted surface from the published definitions (the rule for each is on its card); the facial colliculus and the sulcus limitans on the floor of the fourth ventricle are placed by the proportions measured by Erginoglu et al. 2026.')),
     h('section', { class: 'card' },
@@ -74,10 +76,10 @@ export function bsCreditsPage() {
     h('section', { class: 'card', id: 'hcp842' },
       h('h2', {}, hcp.name),
       h('p', {}, h('strong', {}, 'Licence: '), hcp.licence, '. The four tract files (public/assets/brainstem/bs_t_*.glb) are not under the GPL like the project’s code: adapted versions must stay under CC BY-SA with attribution.'),
-      h('p', {}, 'The atlas is derived from HCP data, so these tracts are also subject to the WU-Minn HCP Open Access Data Use Terms: redistribution only under the same terms, acknowledgement when presenting results, and no attempt to identify or contact participants.'),
+      h('p', {}, 'Those terms: redistribution only under the same terms, acknowledgement when presenting results, and no attempt to identify or contact participants.'),
       h('ul', {}, ...hcp.attribution.map((a) => h('li', {}, a))),
-      h('p', { class: 'aside' }, 'Changes made: of the record’s files, the volumes of four tracts were used (the medial longitudinal fasciculus, the central tegmental tract, the spinothalamic tract and the lateral lemniscus, both sides); each volume’s surface taken after linear resampling to 0.5 mm and light smoothing, drawn where the atlas has it; files converted to compressed glTF.'),
-      ...hcp.citation.map((c, i) => h('p', { class: 'cite' }, c, ' ', h('a', { href: hcp.citationUrls[i], target: '_blank', rel: 'noopener' }, 'DOI')))),
+      h('p', { class: 'aside' }, 'Changes made: of the atlas’s streamline files, those of four tracts were used (the medial longitudinal fasciculus, the central tegmental tract, the spinothalamic tract and the lateral lemniscus, both sides); their points moved by half a voxel (the files give them from the first voxel’s centre), streamlines shorter than 10 mm left out, the rest resampled to 1 mm and drawn where the atlas has them; files converted to compressed glTF. The atlas’s volumes of the same tracts were used only to check the streamline files.'),
+      ...hcp.citation.map((c, i) => h('p', { class: 'cite' }, c, ' ', h('a', { href: hcp.citationUrls[i], target: '_blank', rel: 'noopener' }, /doi\.org/.test(hcp.citationUrls[i]) ? 'DOI' : 'Source page')))),
     h('section', { class: 'card' },
       h('h2', {}, 'Template'),
       h('p', {}, 'The fit and the slices use the ICBM 2009b nonlinear asymmetric templates (McGill University, Montreal Neurological Institute), under their own notice: see the DBS section’s credits.')),

@@ -318,16 +318,20 @@ export const VaManifestSchema = z.object({
 export type VaManifest = z.infer<typeof VaManifestSchema>;
 
 /** How one side of a tract of the HCP-YA atlas sits on this section's template (brainstem_build.py tract_fit): the
- * atlas is in another ICBM-152 space and is drawn without a shift, so this is measured. Of the volume's voxels: how
- * many lie at the fitted brainstem's levels, the share of those inside the fitted brainstem, more than 1 mm outside
- * it, the farthest outside (mm) and the share in the model's fourth ventricle or aqueduct; the share of all of them
- * that are fluid on the T2 template; the volume's extent along z (mm), its cross-section by level (mm2: smallest,
- * median, largest) and the share of its volume that the smoothed surface encloses. */
+ * atlas is in another ICBM-152 space and its streamlines are drawn without a shift, so this is measured. The
+ * streamlines drawn and the number the atlas's file holds; of their points (one per millimetre, so a share of points
+ * is a share of length): how many lie at the fitted brainstem's levels, the share of those inside the fitted
+ * brainstem, more than 1 mm outside it, the farthest outside (mm) and the share in the model's fourth ventricle or
+ * aqueduct; the share of all of them that are fluid on the T2 template; the streamlines' extent along z (mm) and
+ * their lengths (mm: shortest, median, longest); and the check of the file's coordinates: the share of the points
+ * in the atlas's grid that lie in the atlas's own volume of the tract, the same share had they been read from the
+ * voxel's corner as the TrackVis format has it, and the share below the grid. */
 const TractFitSchema = z.object({
-  voxels: z.number().int().positive(), zMm: z.tuple([z.number(), z.number()]), sectionMm2: z.tuple([z.number(), z.number(), z.number()]),
+  streamlines: z.number().int().positive(), sourceStreamlines: z.number().int().positive(), points: z.number().int().positive(),
+  zMm: z.tuple([z.number(), z.number()]), lengthMm: z.tuple([z.number(), z.number(), z.number()]),
   atBrainstemLevels: z.number().int().positive(), insideShare: z.number().min(0).max(1), outsideOver1mmShare: z.number().min(0).max(1),
   outsideMaxMm: z.number().min(0), inVentricleShare: z.number().min(0).max(1), fluidShare: z.number().min(0).max(1),
-  surfaceVolumeShare: z.number().min(0),
+  inOwnVolumeShare: z.number().min(0.99).max(1), cornerReadShare: z.number().min(0).max(1), belowGridShare: z.number().min(0).max(1),
 });
 export type TractFit = z.infer<typeof TractFitSchema>;
 

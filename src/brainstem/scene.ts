@@ -33,8 +33,8 @@ export function bsPlan(grpId: string, sel: string | null): BsPlan {
     if (liesInside(st.id) && g.surface === 'solid') for (const id of SURFACE) looks.set(id, 'shell');
   }
   // one of the section's own tracts lies partly outside the fitted surface (its card says how far): under a solid
-  // surface only those parts would show, as patches on it, so it is drawn only where the surface is seen through
-  if (looks.get(SURFACE[0]!) === 'primary') for (const id of OWN_TRACTS) if (looks.has(id)) looks.set(id, 'hidden');
+  // surface only those parts would show, as stray lines on it, so it is drawn only where the surface is seen through
+  if (looks.get(SURFACE[0]!) === 'primary') for (const id of OWN_TRACTS) tracts.delete(id);
   return {
     title: g.name, accent: 'bsSez', looks, tracts, parcels: new Map(), markers: [],
     camera: g.camera, focusIds: g.kind === 'zones' ? g.key : SURFACE,

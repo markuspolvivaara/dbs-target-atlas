@@ -111,36 +111,47 @@ describe('brainstem data', () => {
     for (const name of ['Principal sensory nucleus', 'Motor nucleus', 'Mesencephalic nucleus', 'Spinal nucleus']) expect(text, name).toContain(name);
     for (const cl of t.claims) for (const r of cl.refIds) expect(BS_REF.get(r)?.pmcid, r).toMatch(/^PMC\d+$/);
   });
-  it('four tracts of the HCP-YA atlas are drawn as surfaces where the atlas has them, each measured against this template', () => {
+  it('four tracts of the HCP-YA atlas are drawn as its streamlines where the atlas has them, each measured against this template', () => {
     expect(OWN_TRACTS).toEqual(['bs_t_mlf', 'bs_t_ctt', 'bs_t_stt', 'bs_t_ll']);
     expect(BS_MANIFEST.datasets.hcp842.licence).toMatch(/^CC BY-SA 4\.0/);
-    expect(BS_MANIFEST.datasets.hcp842.url).toBe('https://doi.org/10.5281/zenodo.3627772');
+    expect(BS_MANIFEST.datasets.hcp842.url).toBe('https://brain.labsolver.org/hcp_trk_atlas.html');
     expect(HCP_ATLAS.every((c) => c.refIds.includes('yeh2018'))).toBe(true);
     for (const id of OWN_TRACTS) {
       const s = BS.get(id)!, t = TRACT_TEXT[id];
-      expect([s.type, s.category, s.layer, s.dataset], id).toEqual(['soft', 'tract', 'tracts', 'hcp842']);
+      // streamlines, as the white-matter section's tracts are
+      expect([s.type, s.role, s.category, s.dataset], id).toEqual(['tract', 'tract', 'tract', 'hcp842']);
       expect(kindOf(id), id).toBe('tract');
-      expect(s.derivation, id).toMatch(/without a shift[\s\S]*z = -50 mm/);
+      expect(s.derivation, id).toMatch(/without a shift[\s\S]*near z = -50 mm/);
       expect(t.claims.length, id).toBeGreaterThan(1);
       for (const cl of [...t.claims, ...t.measures]) for (const r of cl.refIds) expect(BS_REF.get(r)?.pmcid, `${id}: ${r}`).toMatch(/^PMC\d+$/);
       for (const side of ['L', 'R'] as const) {
         const f = TRACT_FIT[id][side];
         const where = `${id} ${side}`;
-        // the atlas's lower edge; the tract runs up to the top of the midbrain or just past it
-        expect(f.zMm[0], where).toBe(-50);
+        // every streamline the atlas's file holds is drawn but the few shorter than 10 mm
+        expect(s.streamlines![side], where).toBe(f.streamlines);
+        expect(s.sourceStreamlines![side], where).toBe(f.sourceStreamlines);
+        expect(f.streamlines, where).toBeGreaterThanOrEqual(9);
+        expect(f.streamlines, where).toBeLessThanOrEqual(f.sourceStreamlines);
+        expect(f.lengthMm[0], where).toBeGreaterThanOrEqual(10);
+        // the atlas's lower edge (the spinothalamic tract's streamlines run 2 mm on); up to the top of the midbrain or just past it
+        expect(f.zMm[0], where).toBeLessThanOrEqual(-50);
+        expect(f.zMm[0], where).toBeGreaterThan(-53.5);
         expect(f.zMm[1], where).toBeGreaterThan(-10);
         expect(f.zMm[1], where).toBeLessThan(5);
-        // drawn without a shift from another ICBM-152 space: most of it lies inside the fitted brainstem, none of it far
-        // outside, little of it in the model's ventricle (the bounds are what the build measured, with room)
-        expect(f.insideShare, where).toBeGreaterThan(0.65);
+        // drawn without a shift from another ICBM-152 space: most of their length lies inside the fitted brainstem, none
+        // of it far outside, little of it in the model's ventricle (the bounds are what the build measured, with room)
+        expect(f.insideShare, where).toBeGreaterThan(0.5);
         expect(f.outsideMaxMm, where).toBeLessThan(5);
         expect(f.inVentricleShare, where).toBeLessThan(0.1);
-        expect(f.fluidShare, where).toBeLessThan(0.45);
-        expect(f.surfaceVolumeShare, where).toBeGreaterThan(0.6);
-        expect(f.surfaceVolumeShare, where).toBeLessThan(1.05);
-        expect(f.sectionMm2[0], where).toBeLessThanOrEqual(f.sectionMm2[1]);
-        expect(f.sectionMm2[1], where).toBeLessThanOrEqual(f.sectionMm2[2]);
+        expect(f.fluidShare, where).toBeLessThan(0.55);
+        // the streamline file's coordinates: read from the voxel's centre its points lie in the atlas's own volume of
+        // the tract; read from the corner, as the format has it, fewer do
+        expect(f.inOwnVolumeShare, where).toBeGreaterThanOrEqual(0.99);
+        expect(f.cornerReadShare, where).toBeLessThan(f.inOwnVolumeShare);
+        expect(f.belowGridShare, where).toBeLessThan(0.03);
       }
+      // only the right lateral lemniscus lies as much as two-fifths outside the fitted brainstem
+      if (id !== 'bs_t_ll') expect(Math.min(TRACT_FIT[id].L.insideShare, TRACT_FIT[id].R.insideShare), id).toBeGreaterThan(0.8);
       // left of the midline on the left
       expect(s.centroid!.L[0], id).toBeLessThan(0);
       expect(s.centroid!.R[0], id).toBeGreaterThan(0);
@@ -178,22 +189,22 @@ describe('brainstem scene and URL state', () => {
     expect(inside.looks.get('bs_n_abducens')).toBe('primary');
     const tracts = bsPlan('tracts', null);
     expect(tracts.tracts.get('wm_cst')).toBe('key');
-    // the section's own tracts are surfaces: drawn as meshes, not as streamlines
+    // the section's own tracts are streamlines too: drawn as lines, not as meshes
     for (const id of OWN_TRACTS) {
-      expect(tracts.looks.get(id), id).toBe('primary');
-      expect(tracts.tracts.has(id), id).toBe(false);
+      expect(tracts.tracts.get(id), id).toBe('key');
+      expect(tracts.looks.has(id), id).toBe(false);
     }
     // the fasciculus lies under the floor, and partly outside the fitted surface: under the solid floor it is not
-    // drawn (only patches of it would show); it is seen through the surface once it (or a nucleus under the floor)
-    // is chosen; an entry zone chosen there leaves the surface solid
-    expect(floor.looks.get('bs_t_mlf')).toBe('hidden');
+    // drawn (only stray lines of it would show); it is seen through the surface once it (or a nucleus under the
+    // floor) is chosen; an entry zone chosen there leaves the surface solid
+    expect(floor.tracts.has('bs_t_mlf')).toBe(false);
     expect(floor.looks.get('bs_n_abducens')).toBe('context');
-    expect(bsPlan('sez_floor', 'bs_n_abducens').looks.get('bs_t_mlf')).toBe('context');
-    expect(bsPlan('sez_floor', 'sez_suprafacial').looks.get('bs_t_mlf')).toBe('hidden');
+    expect(bsPlan('sez_floor', 'bs_n_abducens').tracts.get('bs_t_mlf')).toBe('border');
+    expect(bsPlan('sez_floor', 'sez_suprafacial').tracts.has('bs_t_mlf')).toBe(false);
     expect(liesInside('bs_t_mlf') && liesInside('bs_n_abducens') && liesInside('bs_aan_lc')).toBe(true);
     expect(liesInside('sez_suprafacial') || liesInside('bs_cn_facial_nerve') || liesInside('wm_cst') || liesInside('bs_olive')).toBe(false);
     expect(bsPlan('sez_floor', 'bs_t_mlf').looks.get('bs_pons')).toBe('shell');
-    expect(bsPlan('sez_floor', 'bs_t_mlf').looks.get('bs_t_mlf')).toBe('primary');
+    expect(bsPlan('sez_floor', 'bs_t_mlf').tracts.get('bs_t_mlf')).toBe('key');
     expect(bsPlan('sez_floor', 'bs_n_abducens').looks.get('bs_pons')).toBe('shell');
     expect(bsPlan('sez_floor', 'sez_suprafacial').looks.get('bs_pons')).toBe('primary');
     // a zone selected from an inside view still sits on a solid surface

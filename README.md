@@ -653,19 +653,29 @@ entry zones for brainstem surgery.
   substantia nigra, STN, thalamus and dentate nucleus come from the DBS section's atlases instead.
 - **Ascending arousal network**: the ten brainstem nuclei of the Harvard AAN atlas 2.0 (CC0; MNI-native).
 - **Tracts**: the brainstem tracts of the white-matter section (HCP-1065), drawn as streamlines. Four tracts that
-  atlas lacks are the section's own (`bs_t_*.glb`): the medial longitudinal fasciculus, the central tegmental tract,
-  the spinothalamic tract and the lateral lemniscus, drawn as the surfaces of their volumes in the HCP-YA tractography
-  atlas (Yeh 2018; NIfTI files, Zenodo 10.5281/zenodo.3627772, CC BY-SA 4.0; `pipeline/data/raw/hcp842/`, pinned in
-  `fetch_sources.py`). Z-Anatomy has none of the four. That atlas is in ICBM-152 space as FSL's FA template has it,
-  not on the ICBM 2009b template, and its volumes end at z = −50 mm (about where this model's pons meets its
-  medulla), so the tracts are drawn where the atlas has them, without a shift, and not in the medulla; the build
-  measures each side against the fitted brainstem and the T2 template (`tract_fit`: `fit.tracts` in the manifest) and
-  each tract's card and the Sources page state the result. Inside the fitted brainstem, of the voxels at its levels:
-  fasciculus 97 % (left) and 93 % (right), central tegmental tract 93 % and 94 %, spinothalamic tract 91 % and 86 %,
-  lateral lemniscus 82 % and 73 %; fluid on the T2 template: 2 % and 16 %, 5 % and 0 %, 3 % and 10 %, 21 % and 38 %.
-  The fasciculus is also in the view of the fourth ventricle's floor: choosing it (or a nucleus under the floor) from
-  that view's card draws the surface see-through. Under a solid surface none of the four is drawn (`bsPlan`): the
-  parts that lie outside the fitted surface would show on it as patches.
+  atlas lacks are the section's own (`bs_t_*.glb`), drawn the same way: the medial longitudinal fasciculus, the central
+  tegmental tract, the spinothalamic tract and the lateral lemniscus, from the streamline files of the HCP-YA (HCP842)
+  tractography atlas (Yeh 2018; brain.labsolver.org/hcp_trk_atlas.html, CC BY-SA 4.0;
+  `pipeline/data/raw/hcp842/tracks/`, pinned in `fetch_sources.py`). Z-Anatomy has none of the four. Every streamline
+  the atlas has is drawn but the few shorter than 10 mm: 10 and 9 (left and right) for the fasciculus, 15 and 21 for
+  the central tegmental tract, 195 and 199 for the spinothalamic tract, 54 and 43 for the lateral lemniscus; their
+  number is the atlas's, not a measure of a tract's size.
+  - The files give their points from the centre of the atlas's first voxel, not from its corner as the TrackVis
+    format (and nibabel) has it: `hcp_streamlines` moves them by half a voxel, and the build checks each bundle
+    against the atlas's own volume of the same tract (NIfTI files, Zenodo 10.5281/zenodo.3627772, in
+    `pipeline/data/raw/hcp842/`). Read from the centre, 99.9 % or more of the points in the atlas's grid lie in that
+    volume; read from the corner, 67 to 95 %.
+  - That atlas is in ICBM-152 space as FSL's FA template has it, not on the ICBM 2009b template, and its grid ends at
+    z = −50.5 mm (about where this model's pons meets its medulla; the spinothalamic tract's streamlines run 2 mm
+    on), so the tracts are drawn where the atlas has them, without a shift, and not through the medulla. The build
+    measures each side against the fitted brainstem and the T2 template (`tract_fit`: `fit.tracts` in the manifest)
+    and each tract's card and the Sources page state the result. Inside the fitted brainstem, of the streamlines'
+    length at its levels: fasciculus 98 % (left) and 96 % (right), central tegmental tract 92 % and 95 %,
+    spinothalamic tract 91 % and 85 %, lateral lemniscus 76 % and 59 %; fluid on the T2 template: 0 % and 10 %,
+    2 % and 0 %, 2 % and 13 %, 22 % and 47 %. The right lateral lemniscus fits worst.
+  - The fasciculus is also in the view of the fourth ventricle's floor: choosing it (or a nucleus under the floor)
+    from that view's card draws the surface see-through. Under a solid surface none of the four is drawn (`bsPlan`):
+    the parts that lie outside the fitted surface would show on it as stray lines.
 - **Safe entry zones** (15): perioculomotor (anterior mesencephalic), lateral mesencephalic sulcus, supra- and
   infracollicular; supratrigeminal and peritrigeminal; suprafacial and infrafacial triangles and the median sulcus
   on the floor of the fourth ventricle; anterolateral (preolivary) sulcus, olivary zone, postolivary sulcus, and the

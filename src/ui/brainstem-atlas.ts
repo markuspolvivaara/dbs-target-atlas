@@ -252,7 +252,7 @@ export class BrainstemAtlasPage {
       under.length ? h('p', { class: 'aside under-surface' }, 'Under the surface here (choose one to see it through the surface): ',
         ...under.flatMap((id, i) => [i ? ', ' : '', h('button', { type: 'button', class: 'linklike', 'data-id': id, onclick: () => this.update((st) => { st.sel = id; }) }, nameOf(id))]), '.') : null,
       g.id === 'arousal' ? [h('h3', {}, 'The network'), claimList(AAN_GENERAL)] : null,
-      g.id === 'tracts' ? [h('h3', {}, 'The four tracts drawn as surfaces'), claimList(HCP_ATLAS)] : null,
+      g.id === 'tracts' ? [h('h3', {}, 'The four tracts from the HCP-YA atlas'), claimList(HCP_ATLAS)] : null,
       g.kind === 'overview' && g.id === 'overview' ? h('p', { class: 'aside' },
         `Model fitted to the ICBM 2009b template’s brainstem: the surface lies within ${fmtMm(BS_MANIFEST.fit.warpedMedianMm)} mm (median; 90 % within ${fmtMm(BS_MANIFEST.fit.warpedP90Mm)} mm) of the template’s tissue–fluid boundary where both are matched. Nerves, arteries and the model’s nuclei are carried along: approximate.`) : null);
     if (s.sel) pane.append(h('details', { class: 'more' }, h('summary', {}, `About ${g.name}`), groupCard));
@@ -319,24 +319,23 @@ export class BrainstemAtlasPage {
           ...(defBlock ?? []), ...this.measuredRows(id), ...geometry));
     }
     if (k === 'tract' && OWN.has(id)) {
-      // a tract drawn as the surface of the HCP-YA atlas's volume: what it is, and how it sits on this template
+      // a tract drawn as the HCP-YA atlas's streamlines: what it is, and how it sits on this template
       const t = TRACT_TEXT[id];
       const f = TRACT_FIT[id];
       const both = (fn: (x: (typeof f)['L']) => string) => `${fn(f.L)} (left) and ${fn(f.R)} (right)`;
       const rows = [
-        `Drawn from z = ${fmtMm(f.L.zMm[0])} mm, the atlas’s lower edge, up to z = ${both((x) => `${fmtMm(x.zMm[1])} mm`)}.`,
-        `Inside the fitted brainstem: ${both((x) => pct(x.insideShare))} of its voxels at the brainstem’s levels; the farthest lies ${both((x) => `${fmtMm(x.outsideMaxMm)} mm`)} outside it.`,
-        `Fluid on the T2 template: ${both((x) => pct(x.fluidShare))} of its voxels; in the model’s fourth ventricle or aqueduct: ${both((x) => pct(x.inVentricleShare))}.`,
-        `Cross-section in the atlas, by level: a median ${both((x) => `${fmtMm(x.sectionMm2[1])} mm² (${fmtMm(x.sectionMm2[0])} to ${fmtMm(x.sectionMm2[2])})`)}.`,
-        `The smoothed surface encloses ${both((x) => pct(x.surfaceVolumeShare))} of the atlas’s volume for the tract.`,
+        `Streamlines drawn: ${both((x) => String(x.streamlines))}, every one the atlas has for the tract${f.L.streamlines + f.R.streamlines < f.L.sourceStreamlines + f.R.sourceStreamlines ? ' but those shorter than 10 mm' : ''}; a median ${both((x) => `${fmtMm(x.lengthMm[1])} mm`)} long.`,
+        `They run from z = ${both((x) => `${fmtMm(x.zMm[0])} mm`)}, the atlas’s lower edge, up to z = ${both((x) => `${fmtMm(x.zMm[1])} mm`)}.`,
+        `Inside the fitted brainstem: ${both((x) => pct(x.insideShare))} of their length at the brainstem’s levels; the farthest point lies ${both((x) => `${fmtMm(x.outsideMaxMm)} mm`)} outside it.`,
+        `Fluid on the T2 template: ${both((x) => pct(x.fluidShare))} of their length; in the model’s fourth ventricle or aqueduct: ${both((x) => pct(x.inVentricleShare))}.`,
       ];
       return h('article', { class: 'card sel', style }, ...head('Tract · HCP-YA atlas'),
-        h('p', { class: 'aside schematic-note' }, 'The surface of a tractography atlas’s region for this tract, drawn where that atlas has it: a guide to where the tract runs, not its outline. It stops at z = −50 mm because the atlas does; the tract itself runs on.'),
+        h('p', { class: 'aside schematic-note' }, 'Streamlines of a tractography atlas, drawn where that atlas has them: a guide to where the tract runs, not its outline, and their number is not its size. They stop near z = −50 mm because the atlas does; the tract itself runs on.'),
         h('p', {}, t.summary),
         h('dl', {}, ...(section('What the sources say', t.claims) ?? []), ...(section('Published measurements', t.measures) ?? []),
           h('dt', {}, 'How it sits on this template (measured)'),
           h('dd', { class: 'tract-fit' }, h('ul', { class: 'plain' }, ...rows.map((r) => h('li', {}, r))),
-            h('p', { class: 'aside' }, 'The atlas is in ICBM-152 space as FSL’s fractional anisotropy template has it; this section is drawn on the ICBM 2009b template. The tract is drawn without a shift, so these figures say how well the two agree here.')),
+            h('p', { class: 'aside' }, 'The atlas is in ICBM-152 space as FSL’s fractional anisotropy template has it; this section is drawn on the ICBM 2009b template. The streamlines are drawn without a shift, so these figures say how well the two agree here.')),
           h('dt', {}, 'The atlas'), h('dd', {}, claimList(HCP_ATLAS)),
           ...geometry));
     }
@@ -404,8 +403,7 @@ export class BrainstemAtlasPage {
     for (const k of LIST_ORDER) {
       const ids = shown.get(k);
       if (!ids?.length) continue;
-      // (the white-matter section's tracts are streamlines; the section's own are surfaces)
-      if (k === 'tract' || k === 'dbs') { for (const id of ids) this.legend.append(row(k === 'tract' && !OWN.has(id) ? 'line' : 'solid', tokenOf(id), nameOf(id), [id])); continue; }
+      if (k === 'tract' || k === 'dbs') { for (const id of ids) this.legend.append(row(k === 'tract' ? 'line' : 'solid', tokenOf(id), nameOf(id), [id])); continue; }
       this.legend.append(row(k === 'sez' || k === 'feature' || k === 'csf' ? 'patch' : 'solid', tokenOf(ids[0]), `${LIST_LABEL[k]} (${ids.length})`, ids));
     }
     if (this.s.hidden.length) this.legend.append(h('li', { class: 'lg-actions' }, h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.hidden = []; }) }, `Show all (${this.s.hidden.length} hidden)`)));
