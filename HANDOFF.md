@@ -6,7 +6,7 @@ commit and push it.
 ## White-matter tracts moved by half a voxel (desktop, 2026-11-18)
 
 - Branch `fix/wm-half-voxel` (off `main` at `8ca4552`, after PR 25), in the worktree
-  `.claude/worktrees/interesting-almeida-6ff762`. **One local commit: not pushed, no pull request.**
+  `.claude/worktrees/interesting-almeida-6ff762`. Pushed on 18 Nov at the user's word as pull request 26.
 - What was wrong: `read_trk_gz` in `pipeline/build.py` read the HCP-1065 atlas's TrackVis files as nibabel does,
   from the corner of the first voxel; the files (DSI Studio's) give their points from its centre. Every white-matter
   tract was drawn (+0.5, +0.5, −0.5) mm from where the atlas has it (0.87 mm): the fault found on the HCP-YA files
