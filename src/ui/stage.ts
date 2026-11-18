@@ -138,37 +138,66 @@ export function keepFocus(list: HTMLElement, draw: () => void): void {
   now[Math.min(at, now.length - 1)]?.focus();
 }
 
-/** Bring the card of the structure just selected to the top of the panel's scrolling pane: it is drawn after the
+/** What stops a panel's pane on its way to a card (a newer selection does). */
+const revealing = new WeakMap<HTMLElement, () => void>();
+
+/**
+ * Bring the card of the structure just selected to the top of the panel's scrolling pane: it is drawn after the
  * view's lists, thousands of pixels down in the larger sections, and on a phone below the part of the sheet that
- * shows. Called when the selection changes; waits for the panel to be drawn. */
+ * shows. Called when the selection changes; waits for the panel to be drawn.
+ *
+ * The pane is moved there in this function's own steps, one a frame, each aimed at where the card lies in that frame,
+ * and not by the browser's smooth scroll. The aim moves: a page opened on a link with a selection lays its lists out
+ * in the fallback font, and they change their height when the page's own font arrives (on Linux the skull base's card
+ * then lies 226 px higher). A smooth scroll keeps the aim it was given, and it cannot be put right while it runs: on a
+ * slow machine Chromium does not stop it for a place set meanwhile but adds what is left of it to that place, and it
+ * does not always say when it has ended (no scrollend). A second alignment 900 ms after the first, as there was,
+ * landed inside the smooth scroll there, and the card's heading stayed up to 426 px above the pane's top with nothing
+ * to put it right (measured with the browser held to one core; the browser test of this failed that way in CI).
+ * The reader's own wheel, touch, press or key in the pane stops the steps, as does a newer selection.
+ */
 export function revealCard(panel: HTMLElement): void {
-  // the card's top to the top of its pane; returns the pane, or null when there is no card to show
-  const align = (smooth: boolean): HTMLElement | null => {
+  revealing.get(panel)?.();
+  // where the pane has to be scrolled for the card's top to lie at its top; null when there is no card to show
+  const aim = (): { pane: HTMLElement; top: number } | null => {
     const card = panel.querySelector<HTMLElement>('.card.sel');
     const pane = card?.closest<HTMLElement>('.pane');
     if (!card || !pane || pane.hidden) return null;
     const top = card.getBoundingClientRect().top - pane.getBoundingClientRect().top + pane.scrollTop - 8;
-    pane.scrollTo({ top: Math.max(0, top), behavior: smooth ? 'smooth' : 'auto' });
-    return pane;
+    return { pane, top: Math.max(0, Math.min(top, pane.scrollHeight - pane.clientHeight)) };
   };
-  requestAnimationFrame(() => {
-    const calm = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const pane = align(!calm);
-    if (!pane) return;
+  const watch = new AbortController();
+  let frame = 0;
+  const end = (): void => {
+    watch.abort();
+    cancelAnimationFrame(frame);
+    if (revealing.get(panel) === end) revealing.delete(panel);
+  };
+  revealing.set(panel, end);
+  frame = requestAnimationFrame((began) => {
+    const first = aim();
+    if (!first) { end(); return; }
+    const pane = first.pane, from = pane.scrollTop;
     // said too, for who cannot see the panel change
     const name = panel.querySelector('.card.sel h2')?.textContent?.trim();
     if (name) announce(`${name}: its card is shown in the panel.`);
-    // A page opened on a link with a selection is still filling its panel in (the view is loading, the lists above the
-    // card change their height), and the card slides out from under the first alignment: once more when it has
-    // settled, unless the reader has taken the panel over meanwhile.
-    let touched = false;
-    const touch = () => { touched = true; };
-    const events = ['wheel', 'touchstart', 'pointerdown', 'keydown'] as const;
-    for (const ev of events) pane.addEventListener(ev, touch, { passive: true, once: true });
-    setTimeout(() => {
-      for (const ev of events) pane.removeEventListener(ev, touch);
-      if (!touched) align(false);
-    }, 900);
+    for (const ev of ['wheel', 'touchstart', 'pointerdown', 'keydown']) pane.addEventListener(ev, end, { passive: true, signal: watch.signal });
+    // (about as long as the browser's own smooth scroll takes: a third of a second for 600 px, a second at most)
+    const calm = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const ms = calm ? 0 : Math.min(1000, 200 + Math.abs(first.top - from) / 5);
+    let fontWaits = 0;
+    const step = (now: number): void => {
+      const to = aim();
+      if (!to || to.pane !== pane) { end(); return; }
+      const k = ms ? Math.min(1, Math.max(0, (now - began) / ms)) : 1;
+      pane.scrollTop = from + (to.top - from) * (k < 0.5 ? 4 * k ** 3 : 1 - (2 - 2 * k) ** 3 / 2);
+      if (k < 1) { frame = requestAnimationFrame(step); return; }
+      // There. A font still on its way moves the card when it arrives: once more then (a browser that anchors its
+      // scrolling has taken the pane along already; not every browser does).
+      if (document.fonts?.status === 'loading' && fontWaits++ < 4) void document.fonts.ready.then(() => { if (!watch.signal.aborted) step(Infinity); });
+      else end();
+    };
+    step(began);
   });
 }
 
