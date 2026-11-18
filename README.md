@@ -61,8 +61,19 @@ Tracts from the HCP-1065 population-averaged tractography atlas (Yeh 2022), in t
   surgical relevance and notes on the atlas version of the tract. Every sentence cites a paper
   retrieved from PubMed and was checked against its abstract or open-access full text
   (`src/tracts/content.ts`, `src/tracts/references.ts`). Nothing is written from memory.
-- **Cortical connections measured in the atlas**: the Brodmann areas each tract reached in at
-  least 95% of the 1065 subjects, straight from the published tract-to-region table.
+- **Where its streamlines end** (the site audit's B-007, November 2026), measured on all streamlines of
+  each bundle by `pipeline/wm_ends.py`: each of a bundle's two ends (front and back, upper and lower, left
+  and right), per side, the share of its ends at the cerebral cortex and, of those, the share on each
+  gyrus or sulcus of the cortex section (5% or more), linked to that label. Choosing a tract also draws
+  the patch of cortex where its ends are densest (80% of a hemisphere's ends at the cortex), in the
+  tract's colour (`public/assets/wm-ends/`). An end is at the cortex within 5 mm of the cortex section's
+  surface, not more than 1 mm outside it (this keeps the cerebellar peduncles' ends out) and not on the
+  medial wall. The card says, with sources, that these are where an averaged bundle's streamlines end,
+  not connections: streamlines end preferentially on gyral crowns (Schilling 2018), terminations in grey
+  matter are inaccurate (Maier-Hein 2017), tractography cannot confirm innervation (Yeh 2022). This
+  replaces the published tract-to-region table (Brodmann areas a bundle overlaps in 95% of subjects),
+  which listed areas a bundle only passes, the insula for the IFOF among them; `wm-connectome.json` is
+  still written by `build.py` but no longer shown.
 - Same viewer as the DBS section: slices (T1/T2/PD), cut-away, labels, legend highlight, measure,
   shareable links. Camera presets: lateral and medial (relative to the shown hemisphere), coronal,
   axial, posterior-oblique.
@@ -885,9 +896,13 @@ The 74 gyri and sulci of FreeSurfer's Destrieux 2009 parcellation (Destrieux et 
 - **Cards**: Destrieux name and views, the Z-Anatomy/Wikipedia definition (CC BY-SA 3.0, labelled as such), and
   measured facts: lobe shares (via Desikan-Killiany, lobes as in Klein & Tourville 2012), borders, overlap with
   Desikan-Killiany regions and with the DBS section's cortical areas (HMAT motor areas, ACC, vmPFC proxy), and
-  the area on the template next to the paper's mean.
+  the area on the template next to the paper's mean; and the white-matter tracts whose streamlines end on the
+  label (`wm-ends.json`, see the white-matter section), each linked to its tract card. A link from a tract card
+  that names a label but no view opens a view that shows the label.
 - Pipeline: `pipeline/cortex_texts.py` (in Blender) reads the definition texts, `pipeline/cortex_build.py` writes
-  the assets and checks them.
+  the assets and checks them. `pipeline/wm_ends.py` reads the built surface (`pipeline/data/build/cortex/`):
+  run it again after a cortex rebuild, or after a change to how `build.py` reads the HCP-1065 files
+  (`read_trk_gz`), then `node pipeline/compress.mjs wm-ends` and `wm_ends.py finalize` (591 checks).
 
 ## Spine (craniocervical junction, cervical, thoracic, lumbar)
 
@@ -1217,7 +1232,8 @@ npm run pipeline
    - T1, T2 and PD templates → 1.5 mm whole head plus a 0.5 mm subcortical crop each (uint8, gzip)
    - white-matter tracts (HCP-1065 `.trk.gz`) → the same subsample of 300 streamlines per
      hemisphere on both sides (the corpus callosum cut at x = 0) → `public/assets/wm/`; the
-     Brodmann block of the tract-to-region table → `src/data/generated/wm-connectome.json`
+     Brodmann block of the tract-to-region table → `src/data/generated/wm-connectome.json` (no longer
+     shown; the tract cards show where the streamlines end instead: `wm_ends.py`, under the cortex section)
 3. `compress.mjs`: quantization plus meshopt compression (glTF-Transform).
 4. `manifest.py`: `manifest.json` (id, name, type, file, colour, source, licence, citation,
    derivation, centroids), `wm-manifest.json` for the white-matter tracts, and `ATTRIBUTION.md`.
@@ -1301,8 +1317,8 @@ Tracked here and in the final report:
   artery is drawn by rule (no open segmentation; this CT has no contrast), and the cord cannot be told from CSF on
   CT (the PAM50 cord atlas has no stated licence), so the cord cross-section is the canal's. Thoracic: the ribs, the
   pleura and the aorta are not drawn, so the screw tool checks lateral and anterior breaches only against the bone.
-- **Cortex overlays (later phase).** Functional areas (HCPex), arterial territories (Liu 2023), the
-  direct-stimulation points of Sarubbo et al. 2020 (CC BY 4.0) and tract terminations. Julich-Brain
+- **Cortex overlays (later phase).** Functional areas (HCPex), arterial territories (Liu 2023) and the
+  direct-stimulation points of Sarubbo et al. 2020 (CC BY 4.0); tract terminations are done (B-007). Julich-Brain
   cytoarchitecture is left out for now (CC BY-NC-SA 4.0; its insular subdivisions are the main gain).
 - **Morel atlas citation.** Confirm the "Jakab 2008" publication Lead-DBS credits for the MNI
   version.

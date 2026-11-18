@@ -7,9 +7,19 @@ import { crossCheckCtx, CTX, CTX_MANIFEST, FUNCTIONS, LABEL, LABELS, LOBE, LOBES
 import { cortexPlan, cortexScene, viewLabels } from '../../src/cortex/scene';
 import { decodeCortex, defaultCortexState, encodeCortex } from '../../src/cortex/state';
 import { VIEW, VIEWS } from '../../src/cortex/views';
+import { areaName, WM_ENDS } from '../../src/data/ends';
 import { nodeMeans } from './glb';
 
 const byShort = new Map(LABELS.map((l) => [l.short, l]));
+
+describe('the tracts that end on a label (B-007)', () => {
+  it('names the areas as the label cards do, and every area named is a label of this section', () => {
+    for (const id of Object.keys(WM_ENDS.areas)) {
+      expect(LABEL.has(id), id).toBe(true);
+      expect(areaName(id), id).toBe(shortName(id));
+    }
+  });
+});
 
 describe('cortex data (Destrieux on the Lead-DBS template surface)', () => {
   it('generated files agree with each other', () => {

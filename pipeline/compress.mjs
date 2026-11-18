@@ -3,8 +3,8 @@
 // stored in 8-bit octahedral form with meshopt's filter (within about a degree of the 10-bit ones), which makes the
 // triangle meshes about a quarter smaller (a third after gzip). Positions, indices and morph targets are stored as at
 // "medium". To bring files already shipped to a changed encoding without their build caches: recompress.mjs.
-// Input:  pipeline/data/build/{meshes,tracts,wm,skullbase,skullbase-ct,skullbase-v3,cortex,spine,brainstem,ventricles,vascular}/*.glb (or only the kind given as argument)
-// Output: public/assets/{meshes,tracts,wm,skullbase,skullbase-ct,skullbase-v3,cortex,spine,brainstem,ventricles,vascular}/*.glb
+// Input:  pipeline/data/build/{meshes,tracts,wm,wm-ends,skullbase,skullbase-ct,skullbase-v3,cortex,spine,brainstem,ventricles,vascular}/*.glb (or only the kind given as argument)
+// Output: public/assets/{meshes,tracts,wm,wm-ends,skullbase,skullbase-ct,skullbase-v3,cortex,spine,brainstem,ventricles,vascular}/*.glb
 // With file names after the kind, only those files of it: node pipeline/compress.mjs skullbase sb_cochlear_nerve.glb
 // (where a rebuild leaves rounding noise in meshes it did not mean to change, compress the ones it did).
 import { NodeIO, Logger } from '@gltf-transform/core';
@@ -25,7 +25,7 @@ const io = new NodeIO()
   .registerDependencies({ 'meshopt.encoder': MeshoptEncoder, 'meshopt.decoder': MeshoptDecoder });
 
 let total = 0;
-for (const kind of (process.argv[2] ? [process.argv[2]] : ['meshes', 'tracts', 'wm', 'skullbase', 'skullbase-ct', 'skullbase-v3', 'cortex', 'spine', 'brainstem', 'ventricles', 'vascular'])) {
+for (const kind of (process.argv[2] ? [process.argv[2]] : ['meshes', 'tracts', 'wm', 'wm-ends', 'skullbase', 'skullbase-ct', 'skullbase-v3', 'cortex', 'spine', 'brainstem', 'ventricles', 'vascular'])) {
   const src = join(root, 'data', 'build', kind);
   if (!existsSync(src)) continue; // a section not built yet
   const dst = join(repo, 'public', 'assets', kind);

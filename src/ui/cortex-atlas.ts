@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { SITE_ROOT } from '../brand';
+import { endsOn, type EndHere } from '../data/ends';
 import type { CameraPreset } from '../data/schema';
 import type { Hemi } from '../state';
 import { CTX, CTX_REFS, DBS_PARCEL, DK_NAMES, FN_GROUPS, FUNCTIONS, LABEL, LOBE, LOBES, MEDIAL_WALL, METHOD, shortName, type CtxLabel, type FnGroupId, type LobeId } from '../cortex';
@@ -267,8 +269,27 @@ export class CortexAtlasPage {
         l.parcels.length ? [h('dt', {}, 'DBS section’s cortical areas (measured)'), h('dd', {}, h('ul', { class: 'plain' },
           ...l.parcels.map((p) => h('li', {}, `${DBS_PARCEL.get(p.id)!.name}: ${pct(p.labelInParcel)} of this label lies in it; ${pct(p.parcelInLabel)} of that area lies here`))),
           h('p', { class: 'aside' }, 'Overlap only: the DBS section’s motor areas come from HMAT (Mayka 2006), the cingulate and orbitofrontal ones from Desikan-Killiany; neither is the same thing as a Destrieux gyrus or sulcus.'))] : null,
+        ...this.tractEnds(id),
         h('dt', {}, 'Surface area'), h('dd', {}, `Left ${fmtMm(l.areaCm2.L)} cm², right ${fmtMm(l.areaCm2.R)} cm² on this template; mean left ${fmtMm(l.paperAreaCm2.L)}, right ${fmtMm(l.paperAreaCm2.R)} cm² in the 12 manually labelled brains of Destrieux et al. 2010 (Table 1).`),
         h('dt', {}, 'Source'), h('dd', {}, 'Destrieux et al. 2010 parcellation (FreeSurfer aparc.a2009s) on the Lead-DBS template surface. ', h('a', { href: '#/credits' }, 'Licence and attribution'))));
+  }
+
+  /** The white-matter tracts whose streamlines end on this label (pipeline/wm_ends.py, the site audit's B-007): per
+   * tract end, the share of its ends at the cortex that fall here, by side, linked to the tract's card. */
+  private tractEnds(id: string): HTMLElement[] {
+    const by = new Map<string, EndHere[]>();
+    for (const e of endsOn(id)) {
+      const k = `${e.tract}|${e.end ?? ''}`;
+      by.set(k, [...(by.get(k) ?? []), e]);
+    }
+    if (!by.size) return [];
+    const side = (es: EndHere[], sd: 'L' | 'R') => es.find((e) => e.side === sd);
+    return [h('dt', {}, 'Tracts whose streamlines end here (measured)'),
+      h('dd', {}, h('ul', { class: 'plain tract-ends-here' }, ...[...by.values()].map((es) => h('li', {},
+        h('a', { href: `${SITE_ROOT}tracts/#/atlas?sel=${es[0].tract}` }, es[0].name), es[0].end ? `, ${es[0].end} end` : '', ': ',
+        (['L', 'R'] as const).filter((sd) => side(es, sd)).map((sd) => `${sd === 'L' ? 'left' : 'right'} ${pct(side(es, sd)!.share)}`).join(', ')))),
+      h('p', { class: 'aside' }, 'Of a tract end’s streamline ends at the cortex, the share on this label: measured by this project’s pipeline on the bundles of the ',
+        h('a', { href: `${SITE_ROOT}tracts/` }, 'white-matter section'), ' (HCP-1065 atlas). Where the streamlines of an averaged bundle end, not where a tract connects: a tract’s card says why.'))];
   }
 
   private medialWallCard(): HTMLElement {

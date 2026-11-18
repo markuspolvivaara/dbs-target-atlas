@@ -1,27 +1,20 @@
 import { z } from '../zod';
-import connectomeJson from '../data/generated/wm-connectome.json';
+import { WM_ENDS } from '../data/ends';
 import wmManifestJson from '../data/generated/wm-manifest.json';
 import { WmManifestSchema } from '../data/schema';
-import { GENERAL, GROUPS, TOPICS } from './content';
+import { ENDS_CAVEATS, GENERAL, GROUPS, TOPICS } from './content';
 import { WM_REFERENCES } from './references';
 import { ClaimSchema, TractGroupSchema, TractTopicSchema, WmReferenceSchema, type Claim, type TractGroup, type TractTopic, type WmReference } from './schema';
 
 export const WM_MANIFEST = WmManifestSchema.parse(wmManifestJson);
-
-const ConnectomeSchema = z.object({
-  source: z.string(),
-  parcellation: z.string(),
-  min: z.number(),
-  tracts: z.record(z.string(), z.object({ L: z.record(z.string(), z.number()), R: z.record(z.string(), z.number()) })),
-});
-/** Published tract-to-region probabilities (Yeh 2022), Brodmann areas, per tract and side. */
-export const CONNECTOME = ConnectomeSchema.parse(connectomeJson);
 
 export interface WmContent {
   references: WmReference[];
   topics: TractTopic[];
   groups: TractGroup[];
   general: Claim[];
+  /** what the measured ends of a bundle's streamlines can and cannot say */
+  endsCaveats: Claim[];
 }
 
 export function parseWmContent(): WmContent {
@@ -30,6 +23,7 @@ export function parseWmContent(): WmContent {
     topics: z.array(TractTopicSchema).parse(TOPICS),
     groups: z.array(TractGroupSchema).parse(GROUPS),
     general: z.array(ClaimSchema).parse(GENERAL),
+    endsCaveats: z.array(ClaimSchema).parse(ENDS_CAVEATS),
   };
 }
 
@@ -71,8 +65,11 @@ export function crossCheckWm(c: WmContent): string[] {
     if (m && m.tier !== t.tier) errs.push(`topic ${t.id}: tier ${t.tier} but the pipeline built it as ${m.tier}`);
   }
   c.general.forEach((cl) => ref('general', cl));
+  c.endsCaveats.forEach((cl) => ref('ends', cl));
   for (const r of c.references) if (!used.has(r.id)) errs.push(`reference ${r.id} is never cited`);
-  for (const id of Object.keys(CONNECTOME.tracts)) if (!topics.has(id)) errs.push(`connectome: unknown tract '${id}'`);
+  // every tract's ends are measured (pipeline/wm_ends.py), and no other's
+  for (const id of tracts) if (!WM_ENDS.tracts[id]) errs.push(`tract ${id}: its ends are not measured (wm-ends.json)`);
+  for (const id of Object.keys(WM_ENDS.tracts)) if (!tracts.has(id)) errs.push(`wm-ends.json: unknown tract '${id}'`);
   return errs;
 }
 
@@ -85,10 +82,3 @@ export const TOPIC = new Map(WM.topics.map((t) => [t.id, t]));
 export const GROUP = new Map(WM.groups.map((g) => [g.id, g]));
 export const WM_MAN = new Map(WM_MANIFEST.structures.map((s) => [s.id, s]));
 
-/** Brodmann areas reached by the tract in at least `min` of the 1065 atlas subjects, in numeric order. */
-export function connectedAreas(tractId: string, side: 'L' | 'R', min = CONNECTOME.min): { area: string; p: number }[] {
-  const row = CONNECTOME.tracts[tractId]?.[side];
-  if (!row) return [];
-  const num = (a: string) => parseInt(a.replace(/^BA/, ''), 10);
-  return Object.entries(row).filter(([, p]) => p >= min).map(([area, p]) => ({ area, p })).sort((a, b) => num(a.area) - num(b.area));
-}

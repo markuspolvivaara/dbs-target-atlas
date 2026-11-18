@@ -67,8 +67,9 @@ export function encodeTracts(s: TractsState): string {
   return `#/${s.page}${q ? '?' + q : ''}`;
 }
 
-/** Decode a hash. A missing `h` means "use the group's own hemisphere" and is left to the caller. */
-export function decodeTracts(hash: string, base: TractsState = defaultTractsState()): { state: TractsState; hasHemi: boolean } {
+/** Decode a hash. A missing `h` means "use the group's own hemisphere", and a missing `g` with a tract named "a group
+ * that holds the tract" (a link from another section): both are left to the caller. */
+export function decodeTracts(hash: string, base: TractsState = defaultTractsState()): { state: TractsState; hasHemi: boolean; hasGroup: boolean } {
   const s: TractsState = structuredClone(base);
   const m = hash.replace(/^#\/?/, '').split('?');
   s.page = PAGES.includes(m[0] as TractsPage) ? (m[0] as TractsPage) : 'atlas';
@@ -102,5 +103,5 @@ export function decodeTracts(hash: string, base: TractsState = defaultTractsStat
   const seq = p.get('seq');
   s.sliceSeq = seq === 't2' || seq === 'pd' ? seq : 't1';
   s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
-  return { state: s, hasHemi: h !== null };
+  return { state: s, hasHemi: h !== null, hasGroup: p.has('g') };
 }

@@ -2,7 +2,7 @@ import '@fontsource/atkinson-hyperlegible/latin-400.css';
 import '@fontsource/atkinson-hyperlegible/latin-700.css';
 import './styles.css';
 import { BRAND, SECTIONS } from './brand';
-import { GROUP, TOPIC } from './tracts';
+import { GROUP, TOPIC, WM } from './tracts';
 import { decodeTracts, defaultTractsState, encodeTracts, type TractsPage, type TractsState } from './tracts/state';
 import { h } from './ui/h';
 import { bindHelp, viewHelp } from './ui/help';
@@ -19,10 +19,15 @@ injectPaletteCss();
 let theme: ThemePref = storedTheme();
 let resolved = applyTheme(theme);
 
-/** A link without `h` uses the group's own hemisphere (language: left, SLF complex: right ...). */
+/** A link without `h` uses the group's own hemisphere (language: left, SLF complex: right ...); one that names a tract
+ * but no group (from the cortex section's cards) opens a group that holds the tract, the "all" group of its tier last. */
 function fromHash(hash: string, base: TractsState): TractsState {
-  const { state, hasHemi } = decodeTracts(hash, base);
+  const { state, hasHemi, hasGroup } = decodeTracts(hash, base);
   const s = sanitize(state);
+  if (!hasGroup && s.sel && !GROUP.get(s.grp)!.tractIds.includes(s.sel)) {
+    const holds = WM.groups.filter((g) => g.tractIds.includes(s.sel!));
+    s.grp = (holds.find((g) => g.kind !== 'all') ?? holds[0] ?? GROUP.get(s.grp)!).id;
+  }
   if (!hasHemi) s.hemi = GROUP.get(s.grp)!.hemi;
   return s;
 }

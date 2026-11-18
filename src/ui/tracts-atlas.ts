@@ -1,7 +1,10 @@
 import * as THREE from 'three';
 import type { CameraPreset } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
-import { connectedAreas, CONNECTOME, GROUP, TOPIC, WM, WM_MAN, WM_REF } from '../tracts';
+import { SITE_ROOT } from '../brand';
+import { areaName, END_PATCH, WM_ENDS, type BundleKey } from '../data/ends';
+import type { BundleEnd } from '../data/schema';
+import { GROUP, TOPIC, WM, WM_MAN, WM_REF } from '../tracts';
 import type { Claim, TractTopic } from '../tracts/schema';
 import { CONTEXT_STRUCTURES, ORIENTATION_NUCLEI, tractsScene, type TractPlan } from '../tracts/scene';
 import type { TractsState } from '../tracts/state';
@@ -25,8 +28,11 @@ const CONTEXT = new Map(CONTEXT_STRUCTURES.map((m) => [m.id, m]));
 
 const refs = (ids: string[]) => refLinksFrom(WM_REF, ids);
 const claimList = (cl: Claim[]) => h('ul', { class: 'evidence' }, ...cl.map((c) => h('li', {}, c.text, ' ', refs(c.refIds))));
-const nameOf = (id: string) => WM_MAN.get(id)?.name ?? CONTEXT.get(id)?.name ?? id;
-const tokenOf = (id: string) => WM_MAN.get(id)?.colour.token ?? CONTEXT.get(id)?.colour.token ?? 'ctx';
+const nameOf = (id: string) => WM_MAN.get(id)?.name ?? CONTEXT.get(id)?.name ?? END_PATCH.get(id)?.name ?? id;
+const tokenOf = (id: string) => WM_MAN.get(id)?.colour.token ?? CONTEXT.get(id)?.colour.token ?? END_PATCH.get(id)?.colour.token ?? 'ctx';
+const percent = (x: number) => `${Math.round(x * 100)}%`;
+const cap = (w: string) => w.charAt(0).toUpperCase() + w.slice(1);
+const SIDE_WORD: Record<BundleKey, string> = { L: 'Left', R: 'Right', M: 'Across the midline' };
 
 /** The 3D page of the white-matter section: tract groups, tract cards, layers and slices. */
 export class TractsAtlasPage {
@@ -225,19 +231,7 @@ export class TractsAtlasPage {
     const m = WM_MAN.get(t.id)!;
     const close = h('button', { type: 'button', class: 'close', 'aria-label': 'Close', onclick: () => this.update((s) => { s.sel = null; }) }, '×');
     const section = (title: string, cl: Claim[]) => (cl.length ? [h('dt', {}, title), h('dd', {}, claimList(cl))] : null);
-    // (the site audit's B-007: an area is listed when the bundle overlaps it, which is not the same as connecting to it;
-    // an empty side says so instead of printing "BA" alone)
-    const pct = Math.round(CONNECTOME.min * 100);
-    const areas = (side: 'L' | 'R') => {
-      const a = connectedAreas(t.id, side).map((x) => x.area.replace(/^BA/, ''));
-      return a.length ? `BA ${a.join(', ')}` : `none in at least ${pct}% of subjects`;
-    };
-    const measured = CONNECTOME.tracts[t.id]
-      ? [h('dt', {}, 'Brodmann areas the bundle touches'),
-        h('dd', {},
-          h('p', { class: 'areas' }, h('strong', {}, 'Left: '), areas('L'), h('br'), h('strong', {}, 'Right: '), areas('R')),
-          h('p', { class: 'aside' }, `From the published tract-to-region table: an area is listed when the bundle overlaps it in at least ${pct}% of the 1065 subjects. Some are only passed on the way, not connected: by the atlas paper’s own account, the insula for the IFOF.`, ' ', refs(['yeh2022'])))]
-      : null;
+    const measured = this.endsBlock(t.id);
     const groups = WM.groups.filter((g) => g.kind !== 'all' && g.tractIds.includes(t.id));
     return h('article', { class: 'card sel', style: `--accent: var(--c-${m.colour.token})` }, close,
       h('p', { class: 'eyebrow' }, `${TYPE_LABEL[t.type]} · ${TIER_LABEL[t.tier]}`),
@@ -261,6 +255,36 @@ export class TractsAtlasPage {
           h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.grp = g.id; s.hemi = g.hemi; s.cam = { preset: null }; }, { camera: true }) }, g.name)]))] : null,
       ),
     );
+  }
+
+  /** Where the bundle's streamlines end on the cortex (pipeline/wm_ends.py; the site audit's B-007, replacing the
+   * published table of the areas a bundle overlaps, which lists areas it only passes): each of its two ends, per side,
+   * with the areas linked to the cortex section; the patch drawn in 3D; the rule and what it cannot say. */
+  private endsBlock(id: string): HTMLElement[] {
+    const t = WM_ENDS.tracts[id]!;
+    const r = WM_ENDS.rule;
+    const bundles = (Object.entries(t.bundles) as [BundleKey, { ends: [BundleEnd, BundleEnd] }][]);
+    const where = (e: BundleEnd, start: (w: string) => string): (string | HTMLElement)[] => {
+      if (e.atCortex < r.endMinShare) {
+        return [start(`not at the cerebral cortex (${percent(e.atCortex)} of its ends)`),
+          e.atMedialWall >= r.endMinShare ? `; ${percent(e.atMedialWall)} at the medial wall, which is not cortex` : '', '.'];
+      }
+      return [start(`${percent(e.atCortex)} of its ends at the cortex, there: `),
+        ...e.areas.flatMap((a, i) => [i ? ', ' : '', h('a', { href: `${SITE_ROOT}cortex/#/atlas?sel=${a.id}&h=${a.side}`, class: 'area' }, areaName(a.id)), ` ${percent(a.share)}`]),
+        e.rest >= 0.005 ? `, other areas ${percent(e.rest)}` : '', '.'];
+    };
+    const p = t.patch;
+    const patchText = p
+      ? `Drawn in 3D with the tract: the patch of cortex where its ends are densest, holding ${percent(r.patchShare)} of a hemisphere’s ends at the cortex (${(['L', 'R'] as const).filter((sd) => p[sd]).map((sd) => `${sd === 'L' ? 'left' : 'right'} ${p[sd]!.areaCm2.toFixed(1)} cm²`).join(', ')}).`
+      : 'No patch is drawn in 3D: too few of its ends reach the cerebral cortex.';
+    return [h('dt', {}, 'Where its streamlines end (measured)'),
+      h('dd', { class: 'tract-ends' },
+        ...t.ends.map((name, i) => h('div', { class: 'tract-end' },
+          h('p', {}, h('strong', {}, `${cap(name)} end`)),
+          h('ul', { class: 'plain' }, ...bundles.map(([k, b]) => h('li', {}, bundles.length > 1 ? h('strong', {}, `${SIDE_WORD[k]}: `) : '', ...where(b.ends[i], bundles.length > 1 ? (w) => w : cap)))))),
+        h('p', { class: 'aside' }, patchText),
+        h('p', { class: 'aside' }, `Measured by this project’s pipeline on all streamlines of the atlas’s bundle, turned the same way round: an end counts as at the cortex when it lies within ${r.reachMm} mm of the cortex section’s surface, not more than ${r.outsideMm} mm outside it, and not on the medial wall; an area is listed with at least ${percent(r.minShare)} of an end’s ends at the cortex. The names open the area in the cortex section.`),
+        h('details', { class: 'more' }, h('summary', {}, 'Where streamlines end is not where a tract connects'), claimList(WM.endsCaveats)))];
   }
 
   // ---------------------------------------------------------------- legend, labels, readout
@@ -294,7 +318,10 @@ export class TractsAtlasPage {
         }, text));
     };
     if (this.s.layers.tracts.on) for (const id of p.tracts.keys()) this.legend.append(li('line key', id, `${TOPIC.get(id)?.abbr ?? ''} · ${nameOf(id)}`));
-    if (this.s.layers.cortex.on) for (const id of p.parcels.keys()) this.legend.append(li('patch', id, nameOf(id)));
+    if (this.s.layers.cortex.on) for (const id of p.parcels.keys()) {
+      const ends = END_PATCH.get(id);
+      this.legend.append(li('patch', id, ends ? `${TOPIC.get(id.replace(/__ends$/, ''))?.abbr ?? ''}: where its streamlines end` : nameOf(id)));
+    }
     if (this.s.hidden.length || this.s.sel) {
       this.legend.append(h('li', { class: 'lg-actions' },
         this.s.hidden.length ? h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.hidden = []; }) }, `Show all (${this.s.hidden.length} hidden)`) : null,

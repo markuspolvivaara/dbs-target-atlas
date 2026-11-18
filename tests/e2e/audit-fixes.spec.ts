@@ -1263,3 +1263,53 @@ test('tracts: a chosen tract fades the other tracts back, whatever the "Fade the
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// B-007 (the owner's choices of 18 November 2026): a tract card says where the bundle's streamlines end on the cortex,
+// measured (in place of the published table of the areas it overlaps); choosing a tract draws the patch where its
+// ends are densest; the cortex section's label cards list the tracts that end there; the two link to each other
+test('tracts: where the streamlines end, on the card, in 3D and on the cortex cards', async ({ page }) => {
+  const g = guard(page);
+  type Items = { __atlas: { viewer: { items: Map<string, { look?: string; nodes: Record<string, { visible: boolean } | undefined> }> } } };
+  const shown = (id: string) => page.evaluate((sid) => {
+    const it = (window as unknown as Items).__atlas.viewer.items.get(sid);
+    return it ? Object.values(it.nodes).some((n) => n?.visible) : false;
+  }, id);
+  await open(page, './tracts/#/atlas?g=language');
+  expect(await shown('wm_af__ends')).toBe(false);
+  await open(page, './tracts/#/atlas?g=language&sel=wm_af');
+  const card = page.locator('.card.sel');
+  const ends = card.locator('.tract-ends');
+  await expect(card.locator('dt', { hasText: 'Where its streamlines end (measured)' })).toBeVisible();
+  await expect(card.locator('dt', { hasText: 'Brodmann areas' })).toHaveCount(0);
+  await expect(ends).toContainText('Front end');
+  await expect(ends).toContainText('Back end');
+  await expect(ends.locator('a.area', { hasText: 'Opercular part of the inferior frontal gyrus' }).first()).toHaveAttribute('href', '../cortex/#/atlas?sel=ctx_g_front_inf_opercular&h=L');
+  await expect(ends).toContainText('Drawn in 3D with the tract');
+  await ends.locator('summary', { hasText: 'Where streamlines end is not where a tract connects' }).click();
+  await expect(ends.locator('a.src', { hasText: 'Schilling 2018' }).first()).toHaveAttribute('href', 'https://doi.org/10.1002/hbm.23936');
+  await expect(ends.locator('a.src', { hasText: 'Maier-Hein 2017' }).first()).toHaveAttribute('href', 'https://doi.org/10.1038/s41467-017-01285-x');
+  // the patch is drawn, in the legend, and goes with the selection
+  expect(await shown('wm_af__ends')).toBe(true);
+  await expect(page.locator('.legend3d li', { hasText: 'AF: where its streamlines end' })).toBeVisible();
+  // the IFOF passes the insula (the published table listed it): it does not end there
+  await open(page, './tracts/#/atlas?g=language&sel=wm_ifof');
+  await expect(card.locator('.tract-end')).toHaveCount(2);
+  for (const t of await card.locator('.tract-end').allInnerTexts()) expect(t).not.toMatch(/insula/i);
+  // a tract that does not reach the cerebral cortex says so, and has no patch
+  await open(page, './tracts/#/atlas?g=fossa_peduncles&sel=wm_mcp');
+  await expect(card.locator('.tract-ends')).toContainText('Not at the cerebral cortex');
+  await expect(card.locator('.tract-ends')).toContainText('No patch is drawn');
+  // a cortex label card lists the tracts that end on it; a label linked without a view opens a view that shows it
+  await open(page, './cortex/#/atlas?sel=ctx_g_oc_temp_med_lingual&h=L');
+  expect(new URL(page.url()).hash).toContain('v=medial');
+  const here = page.locator('.card.sel .tract-ends-here');
+  await expect(here).toContainText('Optic radiation, back end');
+  await expect(here.locator('a', { hasText: 'Optic radiation' })).toHaveAttribute('href', '../tracts/#/atlas?sel=wm_or');
+  // ... and the link back opens a group that holds the tract, with its card
+  await open(page, './tracts/#/atlas?sel=wm_or');
+  expect(new URL(page.url()).hash).toContain('g=visual');
+  await expect(card.locator('h2')).toContainText('Optic radiation');
+  expect(await shown('wm_or__ends')).toBe(true);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

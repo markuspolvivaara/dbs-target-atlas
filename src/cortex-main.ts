@@ -3,7 +3,7 @@ import '@fontsource/atkinson-hyperlegible/latin-700.css';
 import './styles.css';
 import { BRAND, SECTIONS } from './brand';
 import { CTX, shortName } from './cortex';
-import { VIEW } from './cortex/views';
+import { VIEW, VIEWS } from './cortex/views';
 import { decodeCortex, encodeCortex, type CortexPage, type CortexState } from './cortex/state';
 import { h } from './ui/h';
 import { bindHelp, viewHelp } from './ui/help';
@@ -20,13 +20,15 @@ injectPaletteCss();
 let theme: ThemePref = storedTheme();
 let resolved = applyTheme(theme);
 
-function sanitize(s: CortexState): CortexState {
+/** A link that names a label but no view (from the white-matter section's tract cards) opens a view that shows it. */
+function sanitize(s: CortexState, hash: string | null = null): CortexState {
   if (!VIEW.has(s.view)) s.view = 'lateral';
   if (s.sel && !CTX.has(s.sel)) s.sel = null;
+  if (hash !== null && s.sel && !/[?&]v=/.test(hash)) s.view = (VIEWS.find((v) => v.labels.includes(s.sel!)) ?? VIEW.get(s.view)!).id;
   return s;
 }
 
-let state: CortexState = sanitize(decodeCortex(location.hash));
+let state: CortexState = sanitize(decodeCortex(location.hash), location.hash);
 
 // ---------------------------------------------------------------- shell
 const NAV: [CortexPage, string][] = [['atlas', 'Atlas'], ['sources', 'Sources'], ['credits', 'Credits']];
@@ -89,7 +91,7 @@ window.addEventListener('hashchange', () => {
   address.read();
   if (location.hash === encodeCortex(state)) return;
   const bare = !location.hash.includes('?');
-  const next = bare ? { ...structuredClone(state), page: decodeCortex(location.hash).page } : sanitize(decodeCortex(location.hash));
+  const next = bare ? { ...structuredClone(state), page: decodeCortex(location.hash).page } : sanitize(decodeCortex(location.hash), location.hash);
   setState(next, { camera: !bare || next.page !== state.page });
 });
 
