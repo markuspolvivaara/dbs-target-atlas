@@ -8,6 +8,10 @@ Inputs
   pipeline/data/build/brainstem/export.json   the Z-Anatomy export (brainstem_export.py, in Blender)
   pipeline/data/raw/t2.nii                    the ICBM 2009b T2 template (the fit's target: brainstem_fit.py)
   pipeline/data/raw/aan/                      Harvard Ascending Arousal Network atlas 2.0 (CC0)
+  pipeline/data/raw/hcp842/tracks/            four tracts of the HCP-YA tractography atlas (Yeh 2018): its streamline
+                                              files (CC BY-SA 4.0; fetch_sources.py), checked against HCP_TRK_MD5
+  pipeline/data/raw/hcp842/                   the same tracts' volumes (NIfTI files, Zenodo 10.5281/zenodo.3627772,
+                                              checked against HCP_MD5): what the streamline files are checked against
 Writes
   pipeline/data/build/brainstem/*.glb         uncompressed GLBs (compress.mjs -> public/assets/brainstem/)
   src/data/generated/bs-manifest.json         structures (the section also shows DBS nuclei and HCP-1065 tracts)
@@ -19,11 +23,22 @@ What comes from where
     nerves III-XII and the arteries around it: the Z-Anatomy model (one adult), fitted into MNI space by
     brainstem_fit.py. Positions are approximate; internal nuclei most of all (the model's are simple shapes).
   - The ascending arousal network nuclei: surfaces of the AAN 2.0 labels (MNI152, 1 mm), which are MNI-native.
+  - The medial longitudinal fasciculus, the central tegmental tract, the spinothalamic tract and the lateral
+    lemniscus (the audit's D-008, November 2026): the streamlines of the HCP-YA tractography atlas (ICBM-152 space as
+    FSL's FA template has it), drawn as the white-matter section draws its tracts. Neither Z-Anatomy nor the HCP-1065
+    atlas has them. They are drawn where the atlas has them, without a shift: tract_fit measures each against the
+    fitted brainstem and the T2 template, and the cards state what it found. The atlas's grid ends at z = -50.5 mm,
+    and its streamlines with it (the spinothalamic tract's run 2 mm on). The streamline files give their points from
+    the centre of the grid's first voxel, not from its corner as the TrackVis format has it: hcp_streamlines moves
+    them by half a voxel and checks them against the atlas's own volumes of the same tracts.
   - Safe entry zones: drawn by rule on the fitted surface from the published definitions (src/brainstem/content.ts
     carries the claims and their sources); each zone's construction is stated in bs-zones.json.
 """
 from __future__ import annotations
 
+import gzip
+import hashlib
+import io
 import json
 import re
 import shutil
@@ -38,8 +53,8 @@ from scipy.spatial import cKDTree
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 from brainstem_fit import EXPORT, PARTS, Fitted, vertex_normals  # noqa: E402
-from build import isosurface  # noqa: E402
-from glb import TRIANGLES, write_glb  # noqa: E402
+from build import isosurface, resample  # noqa: E402
+from glb import LINES, TRIANGLES, write_glb  # noqa: E402
 from skullbase_build import TUBE_MIN_RADIUS_MM, definition, mesh_split, tube  # noqa: E402
 
 REPO = ROOT.parent
@@ -56,6 +71,11 @@ ZA = {"name": "Z-Anatomy (based on BodyParts3D), fitted into MNI space",
       "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
       "cite": ["mitsuhashi2009", "fonov2011"]}
 AAN = {"name": "Harvard Ascending Arousal Network Atlas 2.0", "licence": "CC0 1.0", "cite": ["edlow2023aan", "olchanyi2025"]}
+HCP_DIR = ROOT / "data" / "raw" / "hcp842"
+HCP = {"name": "HCP-YA tractography atlas (Yeh 2018)",
+       "licence": "CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html; the volumes: Zenodo record 10.5281/zenodo.3627772); "
+                  "derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+       "cite": ["yeh2018hcpyatrk", "yeh2018hcpya", "yeh2018"]}
 DATASETS = {
     "zanatomy": {"name": ZA["name"], "licence": ZA["licence"], "url": "https://github.com/Z-Anatomy/Models-of-human-anatomy",
                  "attribution": ["BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan",
@@ -70,6 +90,18 @@ DATASETS = {
             "attribution": ["Edlow BL, Kinney HC (2023). Harvard Ascending Arousal Network Atlas - Version 2.0. Dryad. CC0 1.0"],
             "cite": AAN["cite"],
             "note": "Ten brainstem nuclei of the ascending arousal network, annotated on ex vivo MRI with histology, in MNI152 space at 1 mm."},
+    "hcp842": {"name": HCP["name"], "licence": HCP["licence"], "url": "https://brain.labsolver.org/hcp_trk_atlas.html",
+               "attribution": ["Yeh FC (2018). HCP-YA (HCP842) tractography atlas: streamline files, brain.labsolver.org/hcp_trk_atlas.html. CC BY-SA 4.0",
+                               "Yeh FC (2018). HCP-YA Tractography Atlas (NIFTI Files). Zenodo. CC BY-SA 4.0"],
+               "cite": HCP["cite"],
+               "note": "The atlas's streamlines of each tract and side, from tractography on the averaged diffusion MRI of 842 "
+                       "Human Connectome Project participants, labelled by neuroanatomists. Space: ICBM-152 as FSL's "
+                       "fractional anisotropy template has it (Yeh 2018), not the ICBM 2009b template this section is drawn on; "
+                       "the streamlines are drawn where the atlas has them, without a shift, and each tract's card states how "
+                       "they sit in the fitted brainstem and on the T2 template. The atlas's grid ends at z = -50.5 mm, about "
+                       "where this model's pons meets its medulla, and its streamlines end there (the spinothalamic tract's "
+                       "about 2 mm lower), so no tract of the atlas is drawn through the medulla. The streamline files were "
+                       "checked against the atlas's volumes of the same tracts (NIfTI files, Zenodo)."},
 }
 
 # ---------------------------------------------------------------- what is built
@@ -95,6 +127,33 @@ CN_NUCLEI = [
     ("Nucleus of accessory nerve", "bs_n_accessory", 11),
     ("Nucleus of hypoglossal nerve", "bs_n_hypoglossal", 12),
 ]
+# nuclei that serve more than one cranial nerve (the audit's D-008): every nerve, in order. The sources are with the
+# claims in src/brainstem/content.ts (SHARED_NUCLEI); `cranialNerve` above stays the one the list is sorted by
+SHARED_NUCLEI = {"bs_n_ambiguus": [9, 10, 11], "bs_n_solitary": [7, 9, 10]}
+# tracts of the HCP-YA tractography atlas: (id, name, abbreviation, the volume files' stem, colour token); the streamline
+# files are named by the abbreviation
+HCP_TRACTS = [
+    ("bs_t_mlf", "Medial longitudinal fasciculus", "MLF", "Medial_Longitudinal_Fasciculus", "bsMlf"),
+    ("bs_t_ctt", "Central tegmental tract", "CTT", "Central_Tegmental_Tract", "bsCtt"),
+    ("bs_t_stt", "Spinothalamic tract", "STT", "Spinothalamic_Tract", "bsStt"),
+    ("bs_t_ll", "Lateral lemniscus", "LL", "Lateral_Lemniscus", "bsLl"),
+]
+HCP_STEP_MM = 1.0         # the streamlines are resampled to this step (the files' own steps are 0.5 to 2 mm)
+HCP_MIN_LENGTH_MM = 10.0  # a streamline shorter than this is left out (the files hold a few of one point or a millimetre)
+# md5 of each streamline file as downloaded on 18 November 2026 (its folder lists no checksums)
+HCP_TRK_MD5 = {
+    "MLF_L": "48a2f794403457e7d4ebc7f5f93aacd6", "MLF_R": "68f0e17427291e519af13db235e11d87",
+    "CTT_L": "7708e9956f37d9793e6e152d4753af0d", "CTT_R": "c6a8f240d803f8654d7d30a6d3f81c55",
+    "STT_L": "bfae216317ae985c4f23991aa22fd448", "STT_R": "21de05d61a5f302f3f0af8aaa869254a",
+    "LL_L": "bac48ee213d7fe6e112a26f1780f5742", "LL_R": "a34aefe441f8a57f035ebe1ab942c500",
+}
+# md5 of each volume file, as the Zenodo record lists it
+HCP_MD5 = {
+    "Medial_Longitudinal_Fasciculus_L": "e72cd27fc0f1d2e0bcb6bb62ee9d7f02", "Medial_Longitudinal_Fasciculus_R": "96174fa252a7bba2ceacab993152f4ed",
+    "Central_Tegmental_Tract_L": "b6399ce5733a7cf15d02713f608cbf45", "Central_Tegmental_Tract_R": "64a3c25541efce93d4406e6725c64327",
+    "Spinothalamic_Tract_L": "3def58e4028e3fc81531247fea1b74d8", "Spinothalamic_Tract_R": "78097a51f56a8bae36e60909856cf148",
+    "Lateral_Lemniscus_L": "65c5825c93933fbb8b91398724c60cbc", "Lateral_Lemniscus_R": "897d5b4b4c013175cc507bba99f7c4ac",
+}
 NERVES = {"Oculomotor nerve (III)": 3, "Trochlear nerve (IV)": 4, "Trigeminal nerve (V)": 5, "Abducens nerve (VI)": 6,
           "Facial nerve (VII)": 7, "Vestibulocochlear nerve (VIII)": 8, "Glossopharyngeal nerve (IX)": 9, "Vagus nerve (X)": 10,
           "Accessory nerve (XI)": 11, "Hypoglossal nerve (XII)": 12}
@@ -190,6 +249,7 @@ class Surface:
         self.tree = cKDTree(self.V[self.oi])
         self._meshes: dict = {}
         self._solid: tuple[np.ndarray, np.ndarray, float] | None = None
+        self._outside: np.ndarray | None = None
 
     def nearest(self, p: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
         d, j = self.tree.query(np.atleast_2d(p))
@@ -205,6 +265,17 @@ class Surface:
         out = np.zeros(len(ijk), bool)
         out[ok] = mask[ijk[ok, 0], ijk[ok, 1], ijk[ok, 2]]
         return out
+
+    def outside_mm(self, p: np.ndarray) -> np.ndarray:
+        """How far outside the brainstem points lie (mm; 0 inside it), from the same 0.5 mm solid mask."""
+        if self._solid is None:
+            self._solid = self._solid_mask()
+        mask, lo, step = self._solid
+        if self._outside is None:
+            self._outside = ndimage.distance_transform_edt(~mask) * step
+        ijk = np.rint((np.atleast_2d(p) - lo) / step).astype(int)
+        ijk = np.clip(ijk, 0, np.array(mask.shape) - 1)      # (a point beyond the grid: as far as the grid's edge is)
+        return self._outside[ijk[:, 0], ijk[:, 1], ijk[:, 2]]
 
     def _solid_mask(self, step: float = 0.5) -> tuple[np.ndarray, np.ndarray, float]:
         """Scanline fill: for each closed part, every grid line along x is filled between successive crossings of the
@@ -454,6 +525,186 @@ def label_surface(mask: np.ndarray, aff: np.ndarray, faces: int = 3000):
     return np.asarray(m.vertices), np.asarray(m.faces)
 
 
+# ---------------------------------------------------------------- a structure's file and manifest entry
+def structure(sid: str, name: str, mtype: str, token: str, nodes: list[dict], derivation: str, *, dataset="zanatomy", **extra) -> dict:
+    """Write a structure's GLB into the build folder and return its manifest entry."""
+    nodes = [n for n in nodes if len(n["indices"])]
+    if not nodes:
+        raise SystemExit(f"{sid}: no geometry")
+    write_glb(BUILD / f"{sid}.glb", nodes, {"id": sid})
+    cent = {n["name"]: np.asarray(n["positions"]).mean(0).round(2).tolist() for n in nodes}
+    for sd in ("L", "R"):
+        cent.setdefault(sd, cent.get("R" if sd == "L" else "L"))
+    cits, urls = cite(DATASETS[dataset]["cite"])
+    return {"id": sid, "name": name, "aliases": extra.pop("aliases", []), "type": mtype,
+            "file": f"assets/{KIND}/{sid}.glb", "bytes": 0, "colour": colour(token), "dataset": dataset,
+            "source": DATASETS[dataset]["name"], "licence": DATASETS[dataset]["licence"],
+            "citation": cits, "citationUrls": urls, "refIds": [], "derivation": derivation,
+            "centroid": {"L": cent["L"], "R": cent["R"]}, **extra}
+
+
+def dataset_infos() -> dict:
+    """The manifest's record of each dataset."""
+    return {k: {"name": d["name"], "licence": d["licence"], "url": d["url"], "note": d["note"], "attribution": d["attribution"],
+                "citation": cite(d["cite"])[0], "citationUrls": cite(d["cite"])[1]} for k, d in DATASETS.items()}
+
+
+# ---------------------------------------------------------------- tracts of the HCP-YA atlas
+HCP_DERIVATION = ("The streamlines of the atlas's bundle for this tract ({L} on the left, {R} on the right: all but those "
+                  "shorter than 10 mm), resampled to 1 mm. Drawn where the atlas has them, in its own ICBM-152 space, without a shift onto this section's ICBM "
+                  "2009b template. They end where the atlas's grid does, near z = -50 mm, so the tract is not drawn through "
+                  "the medulla. On-screen density is the atlas's count of streamlines, not a measure of the tract's size.")
+
+
+def hcp_volume(stem: str, sd: str) -> tuple[np.ndarray, np.ndarray]:
+    """One tract's volume of the HCP-YA atlas (a side): its voxels and the affine; the file checked against the md5
+    the Zenodo record lists."""
+    f = HCP_DIR / f"{stem}_{sd}.nii.gz"
+    if not f.exists():
+        raise SystemExit(f"{f} missing: the HCP-YA tractography atlas's NIfTI files, https://doi.org/10.5281/zenodo.3627772")
+    if hashlib.md5(f.read_bytes()).hexdigest() != HCP_MD5[f"{stem}_{sd}"]:
+        raise SystemExit(f"{f}: not the file the Zenodo record lists (md5)")
+    img = nib.load(f)
+    # the atlas's grid: 1 mm, its lowest layer of voxels centred on z = -50 mm (so the grid ends at z = -50.5 mm)
+    if not (np.allclose(np.abs(np.diag(img.affine)[:3]), 1.0) and np.isclose(img.affine[2, 3], -50.0)):
+        raise SystemExit(f"{f}: not on the atlas's grid ({img.affine.tolist()})")
+    return np.asarray(img.dataobj) > 0, img.affine
+
+
+def hcp_streamlines(abbr: str, sd: str, grid: tuple[int, ...]) -> tuple[list[np.ndarray], int, np.ndarray]:
+    """One tract's streamlines of the HCP-YA atlas (a side), in the atlas's millimetres, how many the file holds, and
+    the half voxel (mm) they were moved by.
+
+    The file is a TrackVis one written by DSI Studio on the atlas's grid (the volumes' grid: checked). nibabel reads a
+    TrackVis file's points as measured from the corner of the first voxel, as the format has it; these files give
+    them from that voxel's centre, so every point is moved by half a voxel. Read that way, every point that lies in
+    the atlas's grid lies in the atlas's own volume of the tract (tract_fit's inOwnVolumeShare, held to 0.99 by
+    validate); as nibabel reads them, 68 to 94 % did (cornerReadShare). Streamlines of a single point or shorter than
+    HCP_MIN_LENGTH_MM are left out."""
+    f = HCP_DIR / "tracks" / f"{abbr}_{sd}.trk.gz"
+    if not f.exists():
+        raise SystemExit(f"{f} missing: the HCP-YA tractography atlas's streamline files (fetch_sources.py; https://brain.labsolver.org/hcp_trk_atlas.html)")
+    raw = f.read_bytes()
+    if hashlib.md5(raw).hexdigest() != HCP_TRK_MD5[f"{abbr}_{sd}"]:
+        raise SystemExit(f"{f}: not the file downloaded on 18 November 2026 (md5)")
+    trk = nib.streamlines.TrkFile.load(io.BytesIO(gzip.decompress(raw)), lazy_load=False)
+    hd = trk.header
+    if tuple(int(d) for d in hd["dimensions"]) != tuple(grid) or not np.allclose(hd["voxel_sizes"], 1.0) or bytes(hd["voxel_order"]).strip(b"\x00") != b"LPS":
+        raise SystemExit(f"{f}: not on the atlas's grid ({hd['dimensions']}, {hd['voxel_sizes']}, {hd['voxel_order']})")
+    half = np.asarray(hd["voxel_to_rasmm"], float)[:3, :3] @ np.full(3, 0.5)
+    sls = [np.asarray(sl, float) + half for sl in trk.streamlines]
+    keep = [sl for sl in sls if len(sl) >= 2 and np.linalg.norm(np.diff(sl, axis=0), axis=1).sum() >= HCP_MIN_LENGTH_MM]
+    return keep, len(sls), half
+
+
+def tract_fit(lines: list[np.ndarray], held: int, half: np.ndarray, mask: np.ndarray, aff: np.ndarray, surf: Surface, csf: Surface, t2) -> dict:
+    """How one side of an HCP-YA tract sits on this section's template. The atlas is in ICBM-152 space as FSL's FA
+    template has it, this section on ICBM 2009b, and the streamlines are drawn without a shift, so this is measured
+    and shown on the tract's card rather than assumed. Of the drawn streamlines' points (one per HCP_STEP_MM, so a
+    share of points is a share of length): how many lie at the fitted brainstem's levels (below its upper end; the
+    tracts run on into the diencephalon), the share of those inside the fitted brainstem, the share more than 1 mm
+    outside it and the farthest (mm), the share inside the model's fourth ventricle or aqueduct; and, against the T2
+    template itself (independent of the fit), the share of all points that are fluid there. Also the streamlines'
+    number (drawn, and held by the file), their extent along z and their lengths (the shortest, the median and the
+    longest), and the check of the file's coordinates: the share of the points inside the atlas's grid that lie in
+    the atlas's own volume of the tract, the same share had the points been read from the voxel's corner (without
+    hcp_streamlines' half voxel), and the share below the grid."""
+    from brainstem_fit import FLUID_LEVEL
+    P = np.vstack(lines)
+    length = np.array([np.linalg.norm(np.diff(sl, axis=0), axis=1).sum() for sl in lines])
+    at = P[P[:, 2] <= surf.V[:, 2].max()]
+    out = surf.outside_mm(at)
+    def own(Q: np.ndarray) -> tuple[np.ndarray, float]:
+        ijk = np.rint(nib.affines.apply_affine(np.linalg.inv(aff), Q)).astype(int)
+        ok = np.all((ijk >= 0) & (ijk < mask.shape), axis=1)
+        return ijk, float(mask[tuple(ijk[ok].T)].mean())
+    ijk, in_own = own(P)
+    return {
+        "streamlines": int(len(lines)), "sourceStreamlines": int(held), "points": int(len(P)),
+        "zMm": [round(float(P[:, 2].min()), 1), round(float(P[:, 2].max()), 1)],
+        "lengthMm": [round(float(length.min()), 1), round(float(np.median(length)), 1), round(float(length.max()), 1)],
+        "atBrainstemLevels": int(len(at)),
+        "insideShare": round(float(surf.inside(at).mean()), 3),
+        "outsideOver1mmShare": round(float((out > 1).mean()), 3), "outsideMaxMm": round(float(out.max()), 1),
+        "inVentricleShare": round(float(csf.inside(at).mean()), 3),
+        "fluidShare": round(float((t2(P) >= FLUID_LEVEL).mean()), 3),
+        "inOwnVolumeShare": round(in_own, 3), "cornerReadShare": round(own(P - half)[1], 3),
+        "belowGridShare": round(float((ijk[:, 2] < 0).mean()), 3),
+    }
+
+
+def line_node(side: str, lines: list[np.ndarray], held: int) -> dict:
+    """Streamlines as one glTF node of line segments (as build.py's line_nodes writes the white-matter tracts)."""
+    idx, off = [], 0
+    for sl in lines:
+        k = len(sl)
+        idx.append(np.column_stack([np.arange(off, off + k - 1), np.arange(off + 1, off + k)]))
+        off += k
+    return {"name": side, "positions": np.vstack(lines), "normals": None, "indices": np.vstack(idx), "mode": LINES,
+            "extras": {"streamlines": len(lines), "sourceStreamlines": held}}
+
+
+def hcp_tracts(surf: Surface, csf_meshes: dict[str, tuple[np.ndarray, np.ndarray]]) -> tuple[list[dict], dict]:
+    """The four tracts of the HCP-YA atlas: each side's streamlines (written to the build folder as line segments),
+    their manifest entries, and how each side sits on this template (tract_fit)."""
+    t2 = template_t2()
+    csf = Surface(csf_meshes)
+    items, report = [], {}
+    for sid, name, abbr, stem, token in HCP_TRACTS:
+        nodes, sides = [], {}
+        for sd in ("L", "R"):
+            mask, aff = hcp_volume(stem, sd)
+            raw, held, half = hcp_streamlines(abbr, sd, mask.shape)
+            lines = [resample(sl, HCP_STEP_MM) for sl in raw]
+            if (np.vstack(lines)[:, 0].mean() < 0) != (sd == "L"):
+                raise SystemExit(f"{abbr}_{sd}: on the other side of the midline")
+            nodes.append(line_node(sd, lines, held))
+            sides[sd] = tract_fit(lines, held, half, mask, aff, surf, csf, t2)
+        report[sid] = sides
+        n = {sd: sides[sd]["streamlines"] for sd in sides}
+        items.append(structure(sid, name, "tract", token, nodes, HCP_DERIVATION.format(**n), dataset="hcp842", category="tract", abbr=abbr,
+                               aliases=[abbr], role="tract", streamlines=n, sourceStreamlines={sd: sides[sd]["sourceStreamlines"] for sd in sides}))
+    return items, report
+
+
+def tracts_only() -> int:
+    """Add (or redo) the HCP-YA tracts and the shared nuclei's lists of nerves in the manifest as built, leaving every
+    other structure and file as it is: what a full build would write for them, without redoing the rest (a full build
+    rewrites the arousal network's surfaces with small differences).
+
+      pipeline/.venv/bin/python -I -W ignore pipeline/brainstem_build.py tracts
+      node pipeline/compress.mjs brainstem bs_t_mlf.glb bs_t_ctt.glb bs_t_stt.glb bs_t_ll.glb
+      pipeline/.venv/bin/python -I -W ignore pipeline/brainstem_build.py finalize
+    """
+    ex = json.loads(EXPORT.read_text())
+    F = Fitted(ex)
+    BUILD.mkdir(parents=True, exist_ok=True)
+
+    def fitted(name: str) -> tuple[np.ndarray, np.ndarray]:
+        m = ex["meshes"][name]
+        return F(m["verts"]), np.array(m["tris"])
+    parts = {}
+    for base in SURFACE:
+        for suf in (".l", ".r"):
+            v, t = fitted(base + suf)
+            parts[base + suf] = (v, orient(v, t))
+    tract_items, tract_report = hcp_tracts(Surface(parts), {b: fitted(b) for b in CSF})
+    p = GEN / "bs-manifest.json"
+    m = json.loads(p.read_text())
+    rest = [it for it in m["structures"] if it["dataset"] != "hcp842"]
+    after = max(i for i, it in enumerate(rest) if it.get("category") == "aan") + 1     # where a full build puts them
+    for it in rest:
+        if it["id"] in SHARED_NUCLEI:
+            it["cranialNerves"] = SHARED_NUCLEI[it["id"]]
+    m["structures"] = rest[:after] + tract_items + rest[after:]
+    m["fit"]["tracts"] = tract_report
+    m["datasets"] = dataset_infos()
+    p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
+    (BUILD / "tracts-report.json").write_text(json.dumps(tract_report, indent=1))
+    print(f"brainstem tracts: {len(tract_items)} tracts of the HCP-YA atlas; {json.dumps(tract_report)}")
+    return 0
+
+
 # ---------------------------------------------------------------- main
 def main() -> int:
     ex = json.loads(EXPORT.read_text())
@@ -462,7 +713,6 @@ def main() -> int:
     for old in BUILD.glob("*.glb"):
         old.unlink()
     za_cit, za_urls = cite(ZA["cite"])
-    aan_cit, aan_urls = cite(AAN["cite"])
     items: list[dict] = []
     fitted_meshes: dict[str, np.ndarray] = {}
 
@@ -473,19 +723,7 @@ def main() -> int:
         return v, orient(v, np.array(m["tris"]))
 
     def add(sid: str, name: str, mtype: str, token: str, nodes: list[dict], derivation: str, *, dataset="zanatomy", **extra):
-        nodes = [n for n in nodes if len(n["indices"])]
-        if not nodes:
-            raise SystemExit(f"{sid}: no geometry")
-        write_glb(BUILD / f"{sid}.glb", nodes, {"id": sid})
-        cent = {n["name"]: np.asarray(n["positions"]).mean(0).round(2).tolist() for n in nodes}
-        for sd in ("L", "R"):
-            cent.setdefault(sd, cent.get("R" if sd == "L" else "L"))
-        cits, urls = (za_cit, za_urls) if dataset == "zanatomy" else (aan_cit, aan_urls)
-        items.append({"id": sid, "name": name, "aliases": extra.pop("aliases", []), "type": mtype,
-                      "file": f"assets/{KIND}/{sid}.glb", "bytes": 0, "colour": colour(token), "dataset": dataset,
-                      "source": DATASETS[dataset]["name"], "licence": DATASETS[dataset]["licence"],
-                      "citation": cits, "citationUrls": urls, "refIds": [], "derivation": derivation,
-                      "centroid": {"L": cent["L"], "R": cent["R"]}, **extra})
+        items.append(structure(sid, name, mtype, token, nodes, derivation, dataset=dataset, **extra))
 
     fit_note = "Z-Anatomy mesh fitted into MNI space (brainstem_fit.py: similarity, then smooth deformation, to the T2 template's tissue-fluid boundary)."
     # the brainstem and its surface features
@@ -515,9 +753,10 @@ def main() -> int:
             if len(t) < 4:
                 continue
             nodes.append(node(sd, v, t))
+        shared = {"cranialNerves": SHARED_NUCLEI[sid]} if sid in SHARED_NUCLEI else {}
         add(sid, base, "nucleus", "bsNucleus", nodes,
             "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the "
-            "brainstem: approximate.", category="cnNucleus", cranialNerve=cn, fitted=True, layer="nuclei")
+            "brainstem: approximate.", category="cnNucleus", cranialNerve=cn, fitted=True, layer="nuclei", **shared)
     # ascending arousal network (AAN 2.0)
     img = nib.load(AAN_FILE)
     lab = np.asarray(img.dataobj).astype(int)
@@ -531,6 +770,9 @@ def main() -> int:
         nodes = [node(sd, *label_surface(lab == code, img.affine)) for sd, code in (("L", 7300 + k), ("R", 7400 + k))]
         add(f"bs_aan_{abbr.lower()}", name, "nucleus", "bsAan", nodes, aan_d, dataset="aan", category="aan", abbr=abbr,
             aliases=[abbr], layer="nuclei")
+    # four tracts of the HCP-YA tractography atlas
+    tract_items, tract_report = hcp_tracts(surf, {b: (fitted_meshes[b], np.array(ex["meshes"][b]["tris"])) for b in CSF})
+    items += tract_items
 
     # nerves and arteries: tubes around the fitted centre lines, kept near the brainstem
     def fitted_runs(names: list[str], reach: float) -> dict[str, list[np.ndarray]]:
@@ -616,6 +858,7 @@ def main() -> int:
     report = dict(F.report)
     report.update(tract_check(surf))
     report.update(wall_check(surf, (fitted_meshes["Fourth ventricle"], orient(fitted_meshes["Fourth ventricle"], np.array(ex["meshes"]["Fourth ventricle"]["tris"])))))
+    report["tracts"] = tract_report
 
     # definitions (Z-Anatomy's Wikipedia texts) for the structures shown
     names = {it["name"] for it in items}
@@ -630,8 +873,7 @@ def main() -> int:
         "generatedBy": "pipeline/brainstem_export.py (Blender) + pipeline/brainstem_fit.py + pipeline/brainstem_build.py + pipeline/compress.mjs",
         "structures": items,
         "fit": report,
-        "datasets": {k: {"name": d["name"], "licence": d["licence"], "url": d["url"], "note": d["note"], "attribution": d["attribution"],
-                         "citation": cite(d["cite"])[0], "citationUrls": cite(d["cite"])[1]} for k, d in DATASETS.items()},
+        "datasets": dataset_infos(),
         "dataset": {"name": za["name"], "licence": za["licence"], "url": za["url"], "note": za["note"], "attribution": za["attribution"],
                     "citation": za_cit, "citationUrls": za_urls},
     }
@@ -676,18 +918,9 @@ WALL_REACH_MM, WALL_STEP_MM = 5.0, 0.25
 WIDTH_LEVELS = (("midbrain", -14.0), ("pons", -30.0), ("pons", -38.0), ("medulla", -55.0))
 
 
-def wall_check(surf: Surface, ventricle: tuple[np.ndarray, np.ndarray]) -> dict:
-    """A two-sided check of the fit against the T2 template itself, not against the fit's own target. Along the
-    outward normal of every vertex of the fitted outer surface: the nearest place where the template goes from tissue
-    to fluid (the brainstem's own surface) and the nearest where it goes from fluid to tissue (the far wall of the
-    cistern: the clivus, the cerebellum, the temporal lobe). A surface fitted to the wrong wall lies on the second
-    and millimetres outside the first, which a one-sided check (the tract inside the model) cannot see. Also: the
-    share of the fitted solid that is fluid on the template, the model's width against the template tissue's at
-    four levels, how much of the model's fourth ventricle is fluid on the template, and how much of any arousal
-    network nucleus (AAN 2.0: MNI-native labels, placed independently of the fit) falls inside that ventricle."""
-    import nibabel as nib
-    from scipy import ndimage
-    from brainstem_fit import FLUID_LEVEL, T2
+def template_t2():
+    """The ICBM 2009b T2 template around the brainstem, smoothed a little (0.5 mm): a function of MNI points (mm)."""
+    from brainstem_fit import T2
     img = nib.load(T2)
     aff = img.affine
     vox = float(np.sqrt((aff[:3, :3] ** 2).sum(0)).mean())
@@ -699,6 +932,20 @@ def wall_check(surf: Surface, ventricle: tuple[np.ndarray, np.ndarray]) -> dict:
 
     def t2(p: np.ndarray) -> np.ndarray:
         return ndimage.map_coordinates(sm, (nib.affines.apply_affine(inv, np.atleast_2d(p)) - lo).T, order=1, mode="nearest")
+    return t2
+
+
+def wall_check(surf: Surface, ventricle: tuple[np.ndarray, np.ndarray]) -> dict:
+    """A two-sided check of the fit against the T2 template itself, not against the fit's own target. Along the
+    outward normal of every vertex of the fitted outer surface: the nearest place where the template goes from tissue
+    to fluid (the brainstem's own surface) and the nearest where it goes from fluid to tissue (the far wall of the
+    cistern: the clivus, the cerebellum, the temporal lobe). A surface fitted to the wrong wall lies on the second
+    and millimetres outside the first, which a one-sided check (the tract inside the model) cannot see. Also: the
+    share of the fitted solid that is fluid on the template, the model's width against the template tissue's at
+    four levels, how much of the model's fourth ventricle is fluid on the template, and how much of any arousal
+    network nucleus (AAN 2.0: MNI-native labels, placed independently of the fit) falls inside that ventricle."""
+    from brainstem_fit import FLUID_LEVEL
+    t2 = template_t2()
 
     keep = surf.outer & (surf.V[:, 2] > -70)          # not the faces where the halves meet; inside the template's volume
     V, N = surf.V[keep], surf.N[keep]
@@ -1053,6 +1300,29 @@ def validate() -> int:
         check(set(zz["anchor"]) == {"L", "R"}, f"{zz['id']}: both sides")
     ids = {it["id"] for it in m["structures"]}
     check(all(x["id"] in ids for x in z["zones"]), "every zone has a structure")
+    # the HCP-YA tracts: each drawn on both sides, measured, and where the atlas has it (these bounds are what the
+    # build measured in November 2026, with room: a change of space or of file would break them)
+    by_id = {it["id"]: it for it in m["structures"]}
+    for sid, name, _, _, _ in HCP_TRACTS:
+        check(sid in by_id and by_id[sid]["dataset"] == "hcp842", f"{sid}: the tract of the HCP-YA atlas")
+        for sd in ("L", "R"):
+            f = fit.get("tracts", {}).get(sid, {}).get(sd)
+            check(f is not None, f"{sid} {sd}: not measured")
+            if f is None:
+                continue
+            check(by_id[sid]["type"] == "tract" and by_id[sid]["streamlines"][sd] == f["streamlines"] >= 5, f"{sid} {sd}: {f['streamlines']} streamlines")
+            check(-53.5 <= f["zMm"][0] <= -50.0 and -10 <= f["zMm"][1] <= 5, f"{sid} {sd}: z from {f['zMm'][0]} to {f['zMm'][1]} mm")
+            check(f["insideShare"] >= 0.5, f"{sid} {sd}: {f['insideShare']} of its points inside the fitted brainstem")
+            check(f["outsideMaxMm"] <= 5.0, f"{sid} {sd}: {f['outsideMaxMm']} mm outside the fitted brainstem")
+            check(f["inVentricleShare"] <= 0.1, f"{sid} {sd}: {f['inVentricleShare']} of its points in the model's ventricle or aqueduct")
+            check(f["fluidShare"] <= 0.55, f"{sid} {sd}: {f['fluidShare']} of its points fluid on the T2 template")
+            # the streamline file read in the atlas's own coordinates: its points lie in the atlas's volume of the tract
+            check(f["inOwnVolumeShare"] >= 0.99, f"{sid} {sd}: {f['inOwnVolumeShare']} of its points in the atlas's own volume of the tract")
+            check(f["belowGridShare"] <= 0.03, f"{sid} {sd}: {f['belowGridShare']} of its points below the atlas's grid")
+    # a nucleus that serves several nerves lists them, the one it is sorted by among them
+    for sid, cns in SHARED_NUCLEI.items():
+        it = by_id.get(sid, {})
+        check(it.get("cranialNerves") == cns and it.get("cranialNerve") in cns, f"{sid}: serves {cns}")
     print(f"brainstem validation: {n - len(fails)}/{n} checks passed")
     for f in fails:
         print("FAIL", f)
@@ -1078,4 +1348,6 @@ if __name__ == "__main__":
     if sys.argv[1:] == ["finalize"]:
         finalize()
         sys.exit(validate())
+    if sys.argv[1:] == ["tracts"]:
+        sys.exit(tracts_only())
     sys.exit(main())

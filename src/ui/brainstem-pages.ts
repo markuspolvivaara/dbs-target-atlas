@@ -1,13 +1,17 @@
-import { BS_MANIFEST, BS_REFS, CONTEXT, DEFINITIONS } from '../brainstem';
+import { BS, BS_MANIFEST, BS_REFS, CONTEXT, DEFINITIONS, OWN_TRACTS, TRACT_FIT } from '../brainstem';
 import { h } from './h';
 import { linkLicences } from './licences';
 
 /** Sources and Credits of the brainstem section. */
 
+const pct = (share: number) => `${Math.round(share * 100)} %`;
+
 export function bsSourcesPage() {
   const el = h('div', { class: 'page wrap' });
   const za = BS_MANIFEST.datasets.zanatomy;
   const aan = BS_MANIFEST.datasets.aan;
+  const hcp = BS_MANIFEST.datasets.hcp842;
+  const sides = OWN_TRACTS.flatMap((id) => [TRACT_FIT[id].L, TRACT_FIT[id].R]);
   const f = BS_MANIFEST.fit;
   const urls = [...new Set(Object.values(DEFINITIONS).map((x) => x.url).filter((u): u is string => !!u))].sort();
   el.append(
@@ -29,6 +33,14 @@ export function bsSourcesPage() {
         `Width of the model against the template’s tissue: ${f.widths.filter((w) => w.templateMm).map((w) => `${w.part} at z ${w.z} mm, ${w.modelMm} against ${w.templateMm} mm`).join('; ')}. `,
         'Until November 2026 the model was fitted to the far wall of the cisterns and was about 3 mm too large all round; the positions of the entry zones on the floor of the fourth ventricle changed with the correction.'),
       h('p', {}, h('strong', {}, 'Arousal network nuclei: '), aan.name, '. ', aan.note),
+      h('p', { id: 'hcp-tracts' }, h('strong', {}, 'Medial longitudinal fasciculus, central tegmental tract, spinothalamic tract, lateral lemniscus: '), hcp.name, '. ', hcp.note),
+      h('p', {}, 'How each of the four sits on this template (pipeline/brainstem_build.py tract_fit), left and right: the streamlines drawn, the share of their length at the fitted brainstem’s levels that lies inside the fitted brainstem, how far outside it the farthest point lies, and the share of all their length that is fluid on the T2 template (measured against the template itself, not against the fit).'),
+      h('ul', {}, ...OWN_TRACTS.map((id) => {
+        const t = TRACT_FIT[id];
+        return h('li', {}, `${BS.get(id)!.name}: ${t.L.streamlines} and ${t.R.streamlines} streamlines; inside ${pct(t.L.insideShare)} and ${pct(t.R.insideShare)}; farthest outside ${t.L.outsideMaxMm} and ${t.R.outsideMaxMm} mm; fluid on the template ${pct(t.L.fluidShare)} and ${pct(t.R.fluidShare)}.`);
+      })),
+      h('p', {}, 'No shift was applied: these figures say how well the atlas’s space and this template agree for each tract.'),
+      h('p', {}, `The streamline files give their points from the centre of the atlas’s first voxel, not from its corner as the TrackVis format has it. Read from the centre, ${(Math.min(...sides.map((x) => x.inOwnVolumeShare)) * 100).toFixed(1)} % or more of each bundle’s points within the atlas’s grid lie in the atlas’s own volume of the same tract (its NIfTI files); read from the corner, ${pct(Math.min(...sides.map((x) => x.cornerReadShare)))} to ${pct(Math.max(...sides.map((x) => x.cornerReadShare)))} would. Up to ${pct(Math.max(...sides.map((x) => x.belowGridShare)))} of a bundle’s points lie below the grid, where the spinothalamic tract’s streamlines run on.`),
       h('p', {}, h('strong', {}, 'From the other sections: '), CONTEXT.map((s) => s.name).join(', '), '. See those sections for their sources.'),
       h('p', {}, h('strong', {}, 'Safe entry zones: '), 'drawn by rule on the fitted surface from the published definitions (the rule for each is on its card); the facial colliculus and the sulcus limitans on the floor of the fourth ventricle are placed by the proportions measured by Erginoglu et al. 2026.')),
     h('section', { class: 'card' },
@@ -44,11 +56,12 @@ export function bsCreditsPage() {
   const el = h('div', { class: 'page wrap' });
   const za = BS_MANIFEST.datasets.zanatomy;
   const aan = BS_MANIFEST.datasets.aan;
+  const hcp = BS_MANIFEST.datasets.hcp842;
   el.append(
     h('h1', {}, 'Credits and licences'),
     h('section', { class: 'card', id: 'zanatomy' },
       h('h2', {}, 'Z-Anatomy (BodyParts3D)'),
-      h('p', {}, h('strong', {}, 'Licence: '), za.licence, '. These files (public/assets/brainstem/ except the arousal network nuclei, bs-*.json) are not under the GPL like the project’s code: adapted versions must stay under CC BY-SA with attribution.'),
+      h('p', {}, h('strong', {}, 'Licence: '), za.licence, '. These files (public/assets/brainstem/ except the arousal network nuclei and the four tracts of the HCP-YA atlas, bs-*.json) are not under the GPL like the project’s code: adapted versions must stay under CC BY-SA with attribution.'),
       h('p', {}, 'Attribution, as the authors ask:'),
       h('ul', {}, ...za.attribution.map((a) => h('li', {}, a))),
       h('p', { class: 'aside' }, 'Authors of the original model: Kousaku Okubo (BodyParts3D); Gauthier Kervyn (Z-Anatomy design, 3D, anatomy); Marcin Zielinski (Blender add-on); Lluis Vinent (Unity development).'),
@@ -60,6 +73,13 @@ export function bsCreditsPage() {
       h('p', {}, h('strong', {}, 'Licence: '), aan.licence, ' (public domain dedication). Changes made: each label’s surface taken after linear resampling to 0.5 mm; midline nuclei cut at the midline.'),
       h('ul', {}, ...aan.attribution.map((a) => h('li', {}, a))),
       ...aan.citation.map((c, i) => h('p', { class: 'cite' }, c, ' ', h('a', { href: aan.citationUrls[i], target: '_blank', rel: 'noopener' }, 'DOI')))),
+    h('section', { class: 'card', id: 'hcp842' },
+      h('h2', {}, hcp.name),
+      h('p', {}, h('strong', {}, 'Licence: '), hcp.licence, '. The four tract files (public/assets/brainstem/bs_t_*.glb) are not under the GPL like the project’s code: adapted versions must stay under CC BY-SA with attribution.'),
+      h('p', {}, 'Those terms: redistribution only under the same terms, acknowledgement when presenting results, and no attempt to identify or contact participants.'),
+      h('ul', {}, ...hcp.attribution.map((a) => h('li', {}, a))),
+      h('p', { class: 'aside' }, 'Changes made: of the atlas’s streamline files, those of four tracts were used (the medial longitudinal fasciculus, the central tegmental tract, the spinothalamic tract and the lateral lemniscus, both sides); their points moved by half a voxel (the files give them from the first voxel’s centre), streamlines shorter than 10 mm left out, the rest resampled to 1 mm and drawn where the atlas has them; files converted to compressed glTF. The atlas’s volumes of the same tracts were used only to check the streamline files.'),
+      ...hcp.citation.map((c, i) => h('p', { class: 'cite' }, c, ' ', h('a', { href: hcp.citationUrls[i], target: '_blank', rel: 'noopener' }, /doi\.org/.test(hcp.citationUrls[i]) ? 'DOI' : 'Source page')))),
     h('section', { class: 'card' },
       h('h2', {}, 'Template'),
       h('p', {}, 'The fit and the slices use the ICBM 2009b nonlinear asymmetric templates (McGill University, Montreal Neurological Institute), under their own notice: see the DBS section’s credits.')),

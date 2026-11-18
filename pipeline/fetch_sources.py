@@ -125,12 +125,16 @@ def main() -> int:
     verse = fetch_verse()
     verse_ccj = fetch_verse(VERSE_CCJ_SUBJECT, VERSE_CCJ_FILES)
     aan = fetch_aan()
+    hcpya = fetch_hcpya()
+    hcpya_trk = fetch_hcpya_tracks()
     lock = {"archive": LEADDBS_DATA_ZIP, "files": record,
             "hcp1065": {"release": C.HCP1065_RELEASE, "files": hcp},
             "zanatomy": {"source": ZANATOMY_URL, "files": zan},
             "verse": {"subject": VERSE_SUBJECT, "files": verse},
             "verseCcj": {"subject": VERSE_CCJ_SUBJECT, "files": verse_ccj},
-            "aan": {"source": AAN_URL.format(""), "files": aan}}
+            "aan": {"source": AAN_URL.format(""), "files": aan},
+            "hcpya": {"source": HCPYA_URL.format(""), "files": hcpya},
+            "hcpyaTracks": {"source": HCPYA_TRK_SHARE, "files": hcpya_trk}}
     (RAW / "sources.lock.json").write_text(json.dumps(lock, indent=1))
     # the inputs pinned in the repository: every file fetched must match its recorded SHA-256 (--relock records them anew,
     # on purpose, after a source changes)
@@ -228,6 +232,80 @@ AAN_FILES = {
     "AAN_Brainstem_v2p0_Color_LUT_FreeSurfer.txt": "b6cc5d69748965de155bd68065ff9b0160083318d071d7ae301032eef7770b88",
     "README.md": "9c170b938deaa02571e4869225e52cd2ac271b7023cace1a7035abead46e4007",
 }
+
+
+# Brainstem section: four tracts of the HCP-YA tractography atlas (Yeh 2018; "HCP-YA Tractography Atlas (NIFTI Files)",
+# Zenodo doi:10.5281/zenodo.3627772, CC BY-SA 4.0), pinned by SHA-256 as downloaded 2026-11-17 (the build also checks
+# each against the md5 the record lists: brainstem_build.py HCP_MD5)
+HCPYA_URL = "https://zenodo.org/records/3627772/files/{}?download=1"
+HCPYA_FILES = {
+    "Medial_Longitudinal_Fasciculus_L.nii.gz": "3bc815415c53f395ab22100566e9c6198c5fafbbb25c768f777fc8c8113f85a5",
+    "Medial_Longitudinal_Fasciculus_R.nii.gz": "a3ec974748fd1e3a341b48716438e635c7ed6dbc20ee9acccfdfd02cefe5c16c",
+    "Central_Tegmental_Tract_L.nii.gz": "d09df02db2e3e69d854362c111bbdc1c14866e9d1c523ed35ca178ab85ee91c3",
+    "Central_Tegmental_Tract_R.nii.gz": "2116e6ab7afe7806fd6c798bbaf0af1ede9e7e3ccd884654825e8e35743be73a",
+    "Spinothalamic_Tract_L.nii.gz": "509fa1d29a40fcc9a26ca1e778c55a3b31cffdeb3b39a41087902aa76dc86b4f",
+    "Spinothalamic_Tract_R.nii.gz": "f42b72a27f2b8d9e9d9c8ec3a0aee4b8190214fc0139ff59d22746d1cec4c973",
+    "Lateral_Lemniscus_L.nii.gz": "99138df05095ac08d70d1fd59b84c059a77cc1913df3144fba9772445e53b173",
+    "Lateral_Lemniscus_R.nii.gz": "e59a32da55d43915ff698490594121e0b1a25c8e4c5fb26f7beb8ee2b8231964",
+}
+
+
+# ... and the atlas's streamline files of the same four tracts, which the brainstem section draws (the atlas's page,
+# brain.labsolver.org/hcp_trk_atlas.html, links a shared OneDrive folder of its author's at the University of
+# Pittsburgh; CC BY-SA 4.0), pinned by SHA-256 as downloaded 2026-11-18. The folder is served to a visitor's session:
+# the share link is opened first (it sets the session's cookie), then each file is asked for by its path.
+HCPYA_TRK_SHARE = "https://pitt-my.sharepoint.com/:f:/g/personal/yehfc_pitt_edu/EvV49cgSEWpFmJOwtRO28moB7b_yXTDUIx5lnP0opd-waA?e=6w2v4J"
+HCPYA_TRK_URL = ("https://pitt-my.sharepoint.com/personal/yehfc_pitt_edu/_layouts/15/download.aspx?SourceUrl="
+                 "%2Fpersonal%2Fyehfc%5Fpitt%5Fedu%2FDocuments%2Fpublic%2FTemplate%5FAtlas%2FHCP%5FYA842%5Ftractography%5Fatlas%2Ftracks%2Fbrainstem%2F{}")
+HCPYA_TRK_FILES = {
+    "MLF_L.trk.gz": "2f3a8ad00539a28c30568cb603da0e1784daf65910d7a582f632a3680ba2113e",
+    "MLF_R.trk.gz": "c9fbfa895940ab45638b5faf129ff3958ec5834632445446d07e20aa7d51d0d5",
+    "CTT_L.trk.gz": "702b6cf3de032e5d40f8d3aeb83b5b726668430e0d0cc71ac0db689d8359f016",
+    "CTT_R.trk.gz": "5de7ebbc7fb1b469a47351f23897a67784359a955ddbe0b4710a166d577e5b1e",
+    "STT_L.trk.gz": "feef4199fffc2fcc386481d72cbb5e4dd07c9c2ac5eb2434d92f1cbc3996e73c",
+    "STT_R.trk.gz": "631c8503113a59409f6ddec2a006b113e132db501776836f8eabdd71131b9aaf",
+    "LL_L.trk.gz": "6f6dc685a611be6b42a410aa9a7ec74b885629952502f1ba263e25a102af26bb",
+    "LL_R.trk.gz": "e38454edee3696ce31f4247cb797ffe60b2f56869c212cc9b48c035491b3e1a6",
+}
+
+
+def fetch_hcpya_tracks() -> dict[str, str]:
+    import http.cookiejar
+    out = RAW / "hcp842" / "tracks"
+    out.mkdir(parents=True, exist_ok=True)
+    record, opener = {}, None
+    for name, sha in HCPYA_TRK_FILES.items():
+        dest = out / name
+        if not dest.exists():
+            if opener is None:
+                opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
+                opener.addheaders = [("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) open-neuroanatomy-atlas fetch_sources.py")]
+                opener.open(HCPYA_TRK_SHARE, timeout=60).read()
+            print(f"fetch {name}")
+            dest.write_bytes(opener.open(HCPYA_TRK_URL.format(name), timeout=120).read())
+        digest = hashlib.sha256(dest.read_bytes()).hexdigest()
+        if digest != sha:
+            print(f"{name}: SHA-256 {digest} does not match the pinned {sha}", file=sys.stderr)
+            raise SystemExit(1)
+        record[name] = digest
+    return record
+
+
+def fetch_hcpya() -> dict[str, str]:
+    out = RAW / "hcp842"
+    out.mkdir(parents=True, exist_ok=True)
+    record = {}
+    for name, sha in HCPYA_FILES.items():
+        dest = out / name
+        if not dest.exists():
+            print(f"fetch {name}")
+            urllib.request.urlretrieve(HCPYA_URL.format(name), dest)
+        digest = hashlib.sha256(dest.read_bytes()).hexdigest()
+        if digest != sha:
+            print(f"{name}: SHA-256 {digest} does not match the pinned {sha}", file=sys.stderr)
+            raise SystemExit(1)
+        record[name] = digest
+    return record
 
 
 def fetch_aan() -> dict[str, str]:

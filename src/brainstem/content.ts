@@ -6,6 +6,12 @@ import type { Claim, ZoneContentInput } from './schema';
  * (PMC12967451), Olchanyi 2025 (PMC12514455) and Kim 2020 (PMC9431917, Table 1), and the abstracts of the others.
  * Nothing is added from memory: zones the sources here name without a definition that could be placed are listed
  * as not drawn.
+ *
+ * November 2026 (the audit's D-008): the trigeminal nuclei (not modelled), the nuclei that serve several nerves and
+ * the four tracts drawn from the HCP-YA atlas. Each sentence paraphrases the open-access full text of its source:
+ * Turnbull 2025 (PMC12838919), Kaya 2023 (PMC9921240), Henssen 2019a (PMC6373363), Henssen 2019b (PMC6643160),
+ * García Santos 2018 (PMC6108977), Stephani 2011 (PMC3097350), Li 2021 (PMC8596984), Donatelli 2023 (PMC10651583),
+ * Sitek 2019 (PMC6707786), Kim 2020 (its Korean text) and Yeh 2018 (the author manuscript, PMC6921501).
  */
 
 const c = (text: string, ...refIds: string[]): Claim => ({ text, refIds });
@@ -232,4 +238,88 @@ export const NERVE_COMPONENTS: Record<number, Claim> = {
   10: c('General somatic afferent: outer ear. Special visceral afferent: taste from the epiglottis. General visceral afferent: thoracic and abdominal viscera, mucous membrane of the larynx and hypopharynx. General visceral efferent: thoracic and abdominal viscera. Special visceral efferent: muscles of the larynx and pharynx, palatoglossus.', 'kim2020'),
   11: c('Special visceral efferent: sternocleidomastoid and trapezius.', 'kim2020'),
   12: c('Somatic efferent: intrinsic and extrinsic tongue muscles except palatoglossus.', 'kim2020'),
+};
+
+/**
+ * Nuclei a nerve has that the model does not: said on the nerve's card in place of a list of nuclei. The Z-Anatomy
+ * model this section is built from has no trigeminal nucleus (all 7,184 of its objects were listed), so none is drawn.
+ */
+export const NUCLEI_NOT_MODELLED: Record<number, { lead: string; claims: Claim[] }> = {
+  5: {
+    lead: 'Not modelled: the model this section is built from has no trigeminal nucleus, so none is drawn. What the sources say of the four:',
+    claims: [
+      c('The trigeminal nuclei are unusually long for a brainstem nucleus: the only one that runs from the caudal medulla through the pons, where its largest part lies, to the midbrain. Caudally it reaches the cervical cord, where it is arguably contiguous with the substantia gelatinosa of the dorsal horn.', 'turnbull2025'),
+      c('Principal sensory nucleus: in the mid-pons, the largest part of the complex. It receives discriminative sensation, light touch and pressure from the face, and some proprioception of the jaw’s position.', 'turnbull2025'),
+      c('Motor nucleus: in the pons. Through the mandibular branch it controls most of the muscles of mastication: temporalis, masseter and the medial and lateral pterygoids.', 'kaya2023'),
+      c('Mesencephalic nucleus: the upward extension of the complex into the midbrain, at the edge of the periaqueductal grey. It is the one exception to the rule that sensory neurons have their cell bodies outside the central nervous system: an internal ganglion for proprioception of the jaw and the oral cavity.', 'turnbull2025'),
+      c('Spinal nucleus: nociceptive and thermoreceptive input.', 'turnbull2025'),
+      c('Other nerves end in the spinal nucleus too: general sensation carried by the glossopharyngeal nerve joins the spinal trigeminal tract and ends there, and it is one of the four nuclei of the vagus nerve in the medulla.', 'garciasantos2018', 'henssen2019vagus'),
+      c('Orofacial nociceptive afferents synapse in the trigeminal sensory nuclear complex of the same side; second-order neurons cross the midline and ascend as the trigeminothalamic tract to the ventral posteromedial nucleus of the opposite thalamus.', 'henssen2019'),
+    ],
+  },
+};
+
+/**
+ * Nuclei that serve more than one cranial nerve, by structure id: what each nerve has in the nucleus. The nerves
+ * themselves are listed in the manifest (`cranialNerves`, from pipeline/brainstem_build.py SHARED_NUCLEI).
+ */
+export const SHARED_NUCLEI: Record<string, Claim[]> = {
+  bs_n_ambiguus: [
+    c('Glossopharyngeal nerve: it shares its motor nucleus with the vagus nerve; the upper end of the nucleus ambiguus supplies the stylopharyngeus.', 'garciasantos2018'),
+    c('Vagus nerve: one of its four nuclei in the medulla, with the nucleus of the solitary tract, the spinal trigeminal nucleus and the dorsal motor nucleus.', 'henssen2019vagus'),
+    c('Accessory nerve: its cranial part arises from the nucleus ambiguus in the lower medulla, and its fibres join the vagus nerve for the muscles of the soft palate and the larynx. The spinal part, for the sternocleidomastoid and the trapezius, arises from a spinal nucleus at C1 to C5.', 'kim2020'),
+  ],
+  bs_n_solitary: [
+    c('Taste reaches the nucleus of the solitary tract through the facial nerve (the chorda tympani and the greater petrosal nerve), the glossopharyngeal nerve (its lingual branch) and the vagus nerve (its superior laryngeal branch): the facial nerve’s fibres end in its rostral part, the vagus nerve’s in its caudal part. The pathway has been well studied in animals.', 'stephani2011'),
+    c('Glossopharyngeal nerve: besides taste, the afferents of the carotid sinus end in it.', 'garciasantos2018'),
+    c('Vagus nerve: one of its four nuclei in the medulla, with the nucleus ambiguus, the spinal trigeminal nucleus and the dorsal motor nucleus.', 'henssen2019vagus'),
+  ],
+};
+
+/** The HCP-YA tractography atlas the four tracts are drawn from: how it was made, and what its authors say of its limits. */
+export const HCP_ATLAS: Claim[] = [
+  c('The atlas was made from the diffusion MRI of 842 participants of the Human Connectome Project, reconstructed in ICBM-152 space (FSL’s fractional anisotropy template standing for that space) and averaged at 1 mm. Fibre tracking on the average gave clusters of streamlines, which neuroanatomists labelled and checked for false connections.', 'yeh2018'),
+  c('Minor pathways the clustering had missed, the spinothalamic tract and the lateral lemniscus among them, were tracked afterwards by the senior neuroanatomists with a region-based approach. The authors note that tracts may be missing from the atlas and that expert examination has its own errors, especially for minor pathways and branches.', 'yeh2018'),
+  c('The white-matter mask removed streamlines to and from the spinal cord, so a further round of tracking let streamlines end at the lowest section of the brainstem.', 'yeh2018'),
+];
+
+/** The four tracts drawn from the HCP-YA atlas, by structure id: what each is, from sources read in full. */
+export const TRACT_TEXT: Record<string, { summary: string; claims: Claim[]; measures: Claim[] }> = {
+  bs_t_mlf: {
+    summary: 'A bundle of ascending and descending fibres close to the midline, under the aqueduct and the floor of the fourth ventricle, that links the vestibular nuclei with the nuclei of the eye muscles.',
+    claims: [
+      c('Most of its fibres come from the vestibular nuclei and the nuclei of the extraocular muscles (oculomotor, trochlear and abducens); some arise from the nucleus of Darkschewitsch, the interstitial nucleus of Cajal and the rostral interstitial nucleus of the fasciculus.', 'li2021'),
+      c('It runs ventrolateral to the aqueduct in the midbrain, ventral to the floor of the fourth ventricle and lateral to the median sulcus in the pons, and ventral to the central grey matter in the medulla, on into the anterior funiculus of the spinal cord.', 'li2021'),
+      c('Internuclear neurons of the abducens nucleus cross the midline and ascend in the opposite fasciculus to the oculomotor nucleus, where they excite the motor neurons of that side’s medial rectus. The fasciculus is also essential for the vestibulo-ocular reflex.', 'li2021'),
+      c('Injury gives internuclear ophthalmoplegia: alone, with a trochlear syndrome, with a one-and-a-half syndrome, or on both sides (wall-eyed).', 'li2021'),
+    ],
+    measures: [
+      c('Tracked on the HCP-1065 template, the fasciculus lay a mean 0.50 mm (left) and 0.48 mm (right) from the median sulcus and 1.41 mm and 1.51 mm from the floor of the fourth ventricle; it was 43.4 mm and 40.0 mm long, with a mean diameter of 2.60 mm and 2.16 mm. The tracking ended above the gracile tubercle, at the template’s lower edge.', 'li2021'),
+    ],
+  },
+  bs_t_ctt: {
+    summary: 'The path from the red nucleus down to the inferior olive of the same side: one side of the triangle of Mollaret.',
+    claims: [
+      c('Efferent fibres of the red nucleus descend on the same side in the central tegmental tract and reach the inferior olivary nucleus.', 'donatelli2023'),
+      c('It is part of the dentato-rubro-olivary pathway (the triangle of Mollaret), which with the corticospinal tract takes part in the regulation of automatic movements: dentate fibres ascend in the superior cerebellar peduncle to the parvicellular part of the opposite red nucleus, and crossing fibres from the inferior olive return through the inferior cerebellar peduncle to the dentate nucleus.', 'donatelli2023'),
+    ],
+    measures: [],
+  },
+  bs_t_stt: {
+    summary: 'The anterolateral system’s path through the brainstem to the thalamus: pain, temperature and crude touch from the body.',
+    claims: [
+      c('The anterolateral system conveys crude touch, pain and temperature from the body. Its second-order neurons cross the midline in the spinal cord, form the spinothalamic tract and project to the ventral posterolateral nucleus of the thalamus.', 'donatelli2023'),
+      c('On 7 T MRI the tract was visible for most of its course; at the level of the caudal medulla it could not be told from the ventral and dorsal spinocerebellar tracts.', 'donatelli2023'),
+    ],
+    measures: [],
+  },
+  bs_t_ll: {
+    summary: 'The main ascending auditory tract of the brainstem, ending in the inferior colliculus.',
+    claims: [
+      c('The lateral lemniscus is the major ascending auditory white-matter tract: the inferior colliculus receives its ascending input from the auditory brainstem through it.', 'sitek2019'),
+      c('At its caudal end tractography streamlines pass through the superior olivary complex. The medial superior olive, which receives input from the anteroventral cochlear nuclei of both sides, sends its output into the lateral lemniscus of its own side.', 'sitek2019'),
+      c('From the inferior colliculus the pathway goes on through the brachium of the inferior colliculus to the medial geniculate body.', 'sitek2019'),
+    ],
+    measures: [],
+  },
 };

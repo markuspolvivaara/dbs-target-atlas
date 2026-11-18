@@ -5,7 +5,8 @@ commit and push it.
 
 ## White-matter tract colours (desktop, 2026-11-17)
 
-- Branch `fix/wm-mcp-colour` (off `main` at `4d58cf8`), pushed on 18 Nov as pull request 24.
+- Branch `fix/wm-mcp-colour` (off `main` at `4d58cf8`), pushed on 18 Nov as pull request 24 and merged that day
+  (`main` = `a4a731f`).
 - The middle cerebellar peduncle (`wmMCP`) and the corticospinal tract (`wmCST`) had the same light colour
   (`#0B847C`), and the reticulospinal tract (`wmRST`) was close to both (CIEDE2000 6.8; 2.5 under tritanopia). No
   white-matter group draws them together, but the brainstem section's "Tracts and deep nuclei" view does.
@@ -15,9 +16,10 @@ commit and push it.
 - Changed by hand in `src/data/palette.json` and in both copies of `wm-manifest.json` (the `colour` entries of `wm_mcp`
   and `wm_rst` only). The white-matter pipeline was not rerun; a later run reads the palette and writes the same values.
 - `scripts/check-palette.ts` now lists the brainstem tracts view (`brainstem: tracts`).
-  - `fix/d008-brainstem` adds the same row with its four tract surfaces: when the two meet, keep its longer row.
-  - Its `bsStt` (violet) is 4.2 (light) and 5.2 (dark) from the new `wmMCP` under deuteranopia, and 6.4 from the new
-    `wmRST` in the dark theme under protanopia: choose `bsStt` again on that branch.
+  - `fix/d008-brainstem` added the same row with its four tracts: main was merged into that branch on 18 Nov and
+    its longer row kept.
+  - Its `bsStt` (violet) was 4.2 (light) and 5.2 (dark) from the new `wmMCP` under deuteranopia, and 6.4 from the new
+    `wmRST` in the dark theme under protanopia: chosen again on that branch, a dark maroon (see D-008 below).
   - The new row also lists `wmML`/`wmSCP` at 9.0 (dark theme, protanopia). Both colours are as they were; not changed.
   - Not in the row: the deep nuclei drawn in the same view. In the dark theme the new `wmRST` is 7.5 from the dentate
     nucleus under deuteranopia.
@@ -28,7 +30,7 @@ commit and push it.
   Delete each old PNG, run its test with `-u`, and look at the new image. The Linux copies of the same five are stale
   too and were left as they are.
 
-## Audit fixes in progress (desktop, updated 2026-11-15)
+## Audit fixes in progress (desktop, updated 2026-11-18)
 
 - The site audit of 10–11 Nov is on branch `audit/2026-11-10` (`audit/README.md`: findings, questions for an expert,
   a fix order). Batches 1–6 of its fixes are merged (`main` = `95b0b09`, 2026-11-13).
@@ -301,6 +303,95 @@ commit and push it.
     the way; chosen by eye on both models).
   - Tests: the view is covered in `tests/unit/skullbase.test.ts` and `tests/e2e/audit-fixes.spec.ts`, not in
     `smoke.spec.ts` (the user's uncommitted work touches that file).
+  Merged with its own pull request (PR 22) at the user's word (2026-11-17; `main` = `4d58cf8`). One of its two
+  browser runs failed on a test that depends on timing ("a link that opens with a selection shows the card from its
+  top"); the failed job was run again and passed. That test is steadied on `fix/reveal-card-settles` (PR 23, merged
+  18 Nov).
+- D-008, the brainstem (17 and 18 November 2026; the user's choices: the four tracts from Yeh's HCP-YA atlas, drawn
+  "tract like" as the others are; the trigeminal nuclei said to be not modelled, with sourced text; the nuclei shared
+  between nerves), on `fix/d008-brainstem` (off `09e12d2`). **Local commits only: not pushed, no pull request.**
+  - Tracts: the medial longitudinal fasciculus, the central tegmental tract, the spinothalamic tract and the lateral
+    lemniscus (`bs_t_mlf`, `bs_t_ctt`, `bs_t_stt`, `bs_t_ll`), each the HCP-YA (HCP842) atlas's own streamlines,
+    drawn like the white-matter section's tracts (`type: 'tract'`, line GLBs). First built as the surfaces of the
+    atlas's volumes (commit `cb7e236`); the user then asked for streamlines, and allowed the download.
+    HCP-1065, the white-matter section's atlas, has none of the four, and neither has Z-Anatomy.
+  - The data, both CC BY-SA 4.0 with the HCP data use terms, both pinned in `fetch_sources.py` (**copy or fetch them
+    on the MacBook before building**):
+    - the streamline files, eight `*.trk.gz` (298 KB) in `pipeline/data/raw/hcp842/tracks/`, from the atlas author's
+      shared OneDrive folder at the University of Pittsburgh, which the atlas's page links
+      (brain.labsolver.org/hcp_trk_atlas.html). The folder serves a visitor's session: `fetch_hcpya_tracks` opens
+      the share link first (it sets a cookie), then asks for each file by its path. Zenodo has no streamline files.
+    - the volumes of the same tracts, eight NIfTI files in `pipeline/data/raw/hcp842/` (Zenodo
+      10.5281/zenodo.3627772): now only what the streamline files are checked against.
+  - **The streamline files' coordinates.** nibabel reads a TrackVis file's points from the corner of the first
+    voxel; these files (DSI Studio's) give them from its centre. `hcp_streamlines` moves every point by half a voxel
+    ((−0.5, −0.5, +0.5) mm). So read, 99.9 % or more of each bundle's points in the atlas's grid lie in the atlas's
+    own volume of the tract (`inOwnVolumeShare`, held to 0.99 by `validate` and the schema); as nibabel reads them,
+    67 to 95 % (`cornerReadShare`). **Not checked, and worth checking:** `build.py`'s `read_trk_gz` reads the
+    HCP-1065 files of the white-matter section the same uncorrected way; if those files are written the same way,
+    every white-matter tract on the site is half a voxel off. The check needs that atlas's volumes
+    (`hcp1065_avg_tracts_nifti.zip`, 3 MB, on the atlas's GitHub release: a download to ask the user for).
+  - Streamlines drawn (left / right; all the atlas has but those shorter than 10 mm, which are single points or a
+    millimetre long): MLF 10 / 9, CTT 15 / 21, STT 195 / 199, LL 54 / 43 (its left file holds 76). Resampled to 1 mm.
+  - The atlas is in ICBM-152 space as FSL's FA template has it, not on ICBM 2009b; its grid ends at z = −50.5 mm
+    (about where this model's pons meets its medulla) and the streamlines end there, the spinothalamic tract's at
+    −52.8 mm. They are drawn where the atlas has them, **without a shift**. `tract_fit` in `brainstem_build.py`
+    measures each side on the streamlines' points and writes `fit.tracts` to the manifest; the cards, the Sources
+    page and the README print those figures. Inside the fitted brainstem, of the length at its levels (left /
+    right): MLF 98 % / 96 %, CTT 92 % / 95 %, STT 91 % / 85 %, LL 76 % / 59 %; fluid on the T2 template: 0 % / 10 %,
+    2 % / 0 %, 2 % / 13 %, 22 % / 47 %. **The right lateral lemniscus fits worst** (told to the user).
+    - Shifts were tried twice, scratch only (on the volumes, then on the streamlines, ±3 mm): no sideways shift
+      helps both sides (each side wants to move towards the midline), and the fluid share only falls steadily as
+      the tracts are moved forwards and down into the bulk, to the search's edge, (−0.5, +3, −3) mm. That is not a
+      registration, so none is applied.
+    - An offset between the two atlases' spaces was then looked for in tracts both have (the user's choice, 18
+      November; scratch only): HCP842's medial lemniscus and reticulospinal tract (`ML_L/R.trk.gz`,
+      `RST_L/R.trk.gz` from the same folder, 214 KB, downloaded with the user's leave, kept in the scratchpad, not
+      in the raw data) against HCP-1065's, both read with the half voxel; per 2 mm level from z = −49 to −9 mm, the
+      median x and y of each bundle, HCP-1065 minus HCP842. **They do not agree, so nothing is shifted.** Medians
+      over the levels: lemniscus left (−3.1, −1.5) and right (+1.4, −1.7) mm, reticulospinal tract left (+2.2, −3.0)
+      and right (−4.0, −3.1) mm. Sideways the two sides differ in sign and the two tracts from each other (HCP-1065's
+      lemniscus lies up to 5 mm further from the midline in the lower pons, its reticulospinal tract up to 6 mm
+      nearer it): the bundles are drawn differently in the two atlases. Front to back all four medians put HCP-1065
+      1.5 to 3 mm behind HCP842, but by level the difference runs from +1.7 to −5.8 mm, HCP-1065's lemniscus is 4 to
+      6 mm deep there against HCP842's 2 mm, and moving the four tracts back by 1.5 to 3 mm raises their mean fluid
+      share on the T2 template from 12 % to 29 to 41 % (forwards by 2 mm: 7 %).
+  - How it was built: `brainstem_build.py tracts` (a step of its own: the four tracts and the shared nuclei's lists
+    into the manifest as built, nothing else), `compress.mjs brainstem bs_t_mlf.glb bs_t_ctt.glb bs_t_stt.glb
+    bs_t_ll.glb`, `brainstem_build.py finalize` (322 of 322 checks). Against `main`, the manifest's diff is
+    additions only. **Do not run the full `brainstem_build.py` on the desktop for this**: it rewrites seven
+    arousal-network files and four of their centroids with small differences. The three steps repeat: run again,
+    the four files come out byte for byte the same. (The session's permission check refused the build script twice
+    on 17 November; the user ran the steps themself, and later runs went through.)
+  - Views: the four are in "Tracts and deep nuclei" with the HCP-1065 tracts. The fasciculus is also in the floor
+    view's set, but under a solid surface none of the section's own tracts is drawn (`bsPlan`): the parts of the
+    atlas's fasciculus outside the fitted floor showed on it. The floor view's card lists what lies under the
+    surface; choosing one (a nucleus too) draws the surface as a shell (`liesInside`; the user: "See through is
+    great"), and an entry zone chosen there puts the solid surface back.
+  - A chosen tract fades the other tracts to a quarter of their opacity, whatever the viewer's "Fade the rest"
+    setting, in every section that draws tracts: the brainstem, DBS and white-matter sections (the user's requests
+    of 18 November, on seeing the lateral lemniscus among the others; asked for one section after the other). It is
+    the viewer's own rule (`Viewer.restyle`: the selection is a structure of type `tract`), not a switch of the
+    plans. Meshes are left as they are unless the setting is on. For the DBS section a few lines of the legend test
+    in `tests/e2e/smoke.spec.ts` changed (near line 240; the user's uncommitted work in the main checkout adds a
+    test near line 639 of that file, in another place).
+  - Cards: a tract card has sourced text, published measurements (Li 2021 for the fasciculus) and the measured fit;
+    the trigeminal nerve's card has `NUCLEI_NOT_MODELLED`; the nucleus ambiguus (IX, X, XI) and the nucleus of the
+    solitary tract (VII, IX, X) carry `cranialNerves` in the manifest and a sourced sentence per nerve
+    (`SHARED_NUCLEI`), and each of those nerves' cards lists them. Ten new references in
+    `src/brainstem/references.ts`, each read in full text (Yeh 2018 as its author manuscript, through NCBI's BioC
+    service: Europe PMC's full text gave an error).
+  - Colours: `bsMlf`, `bsCtt`, `bsStt`, `bsLl`. `bsStt` is a dark maroon (`#422428` light, `#95505A` dark; the user
+    likes it), chosen to hold against the white-matter colours both as they are on `main` and as PR 24 makes them
+    (`wmMCP` blue, `wmRST` lavender): 10 or more (CIEDE2000) from every tract in the view, in normal vision and
+    under the three simulated deficiencies. The violet first chosen was 4 to 5 from PR 24's `wmMCP`. Three pairs
+    stay under 10, all the lateral lemniscus's red in the light theme: 8.5 and 8.3 from `wmICP` and `wmDRTT`
+    (protanopia), 8.2 from `wmCBT` (deuteranopia). PR 24 was merged on 18 Nov and `main` merged into this branch:
+    of the two `brainstem: tracts` rows in `scripts/check-palette.ts` this branch's longer one is kept.
+  - Tests: `tests/unit/brainstem.test.ts` and one test in `tests/e2e/audit-fixes.spec.ts`. On the MacBook, retake
+    `brainstem-tracts-desktop-darwin.png` (the view has four new tracts and legend rows); the floor view's picture
+    does not change.
+  - Not done, by the user's choice: the arterial territories (text only was offered).
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).
@@ -345,7 +436,7 @@ commit and push it.
 - Pipeline data: the worktree has its own `pipeline/data/build` (its `raw` is a link to the main checkout's). These
   fixes changed `skullbase` (v1), `skullbase-v3` and `skullbase-ct` there; copy from the worktree, not the main
   checkout, before rebuilding those on the MacBook.
-- Browser tests on the desktop: `CI=1 npx playwright test` (182 tests). Without `CI=1` the untracked Linux picture
+- Browser tests on the desktop: `CI=1 npx playwright test` (198 tests). Without `CI=1` the untracked Linux picture
   baselines from 11 Nov fail; the tracked ones are macOS ones.
 
 ## Where things stand
@@ -577,9 +668,9 @@ commit and push it.
 - **Full checks before a commit:**
   - `npx tsc --noEmit`
   - `npx eslint . --quiet`
-  - `npx vitest run` (458 tests on `feat/subtemporal-view`)
+  - `npx vitest run` (465 tests on `fix/d008-brainstem`)
   - `npm run build`
-  - `npx playwright test` (182 tests, about 6 minutes, preview on port 4173; `CI=1` on the desktop, see above)
+  - `npx playwright test` (198 tests, about 7 minutes, preview on port 4173; `CI=1` on the desktop, see above)
   - `npm run check:palette`
   - `pipeline/winding_check.py`
   - each section's `finalize` validation

@@ -731,6 +731,9 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     // viewer's setting asks for it, everything else fades back
     const focus = s.sel && this.cat.byId.has(s.sel) && s.sel !== 'cortex' ? s.sel : null;
     const fade = viewPrefs().fadeOthers;
+    // a selected tract fades the other tracts back whatever the setting: a tract cannot be outlined or shown through
+    // the tracts that cover it, as a mesh is, and tracts are drawn running through one another
+    const fadeTracts = fade || (!!focus && this.cat.byId.get(focus)?.type === 'tract');
     for (const it of this.items.values()) {
       if (it.kind === 'mesh' && it.surface) {
         // cortical labels stay opaque: a selection mutes the others instead of fading them
@@ -800,7 +803,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         it.mat.opacity = (role === 'border' ? 0.22 : role === 'alt' ? 0.6 : response ? 0.32 : 0.62) * layer.opacity;
         it.mat.linewidth = role === 'border' ? 1 : role === 'alt' ? 1.2 : response ? 1 : 1.4;
         if (focused) { it.mat.opacity = 1; it.mat.linewidth = 3; }
-        else if (focus && fade) it.mat.opacity *= 0.25;
+        else if (focus && fadeTracts) it.mat.opacity *= 0.25;
         const dashed = role === 'alt';
         if (it.mat.dashed !== dashed) { it.mat.dashed = dashed; it.mat.needsUpdate = true; }
         it.mat.clippingPlanes = this.clipPlanes;

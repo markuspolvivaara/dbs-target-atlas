@@ -119,6 +119,15 @@
   "doi": "10.1016/j.neuroimage.2018.05.027",
   "url": "https://doi.org/10.1016/j.neuroimage.2018.05.027"
  },
+ "yeh2018hcpyatrk": {
+  "citation": "Yeh FC. HCP842 population-averaged tractography atlas (Yeh 2018): streamline files [dataset]. brain.labsolver.org/hcp_trk_atlas.html; files of 18 July 2023, retrieved 18 November 2026.",
+  "url": "https://brain.labsolver.org/hcp_trk_atlas.html"
+ },
+ "yeh2018hcpya": {
+  "citation": "Yeh FC. HCP-YA Tractography Atlas (NIFTI Files) [dataset]. Zenodo; 2018. doi:10.5281/zenodo.3627772.",
+  "doi": "10.5281/zenodo.3627772",
+  "url": "https://doi.org/10.5281/zenodo.3627772"
+ },
  "mitsuhashi2009": {
   "citation": "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613.",
   "doi": "10.1093/nar/gkn613",
