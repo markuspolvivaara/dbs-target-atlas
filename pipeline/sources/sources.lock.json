@@ -180,7 +180,8 @@
    "hcp1065_avg_tracts_trk.zip:projection/TR_P_R.trk.gz": "2cf793d7c4921f7a6560842c10247de607ad6383ffd03def6930309a2bc36357",
    "hcp1065_avg_tracts_trk.zip:projection/TR_S_L.trk.gz": "888a81b9aa7d54e75ae76a648b957ca608488dfb1af1c39e3fbaeecb02e9aed5",
    "hcp1065_avg_tracts_trk.zip:projection/TR_S_R.trk.gz": "5d627d1ff9b699c53fc633d4c5ea6d5eed6ee507d949a097d847a7f490faeccd",
-   "tract_to_region_connectome_BM_KL.xlsx": "8baaf81429c563b1043e078c0ed7a521424577287735847d6aa5646aba98ada5"
+   "tract_to_region_connectome_BM_KL.xlsx": "8baaf81429c563b1043e078c0ed7a521424577287735847d6aa5646aba98ada5",
+   "hcp1065_avg_tracts_nifti.zip": "81e0ad75add35c96a5bfd9dc6ede10e5482a8dd180eafcdf2d79249926194510"
   }
  },
  "zanatomy": {

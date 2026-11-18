@@ -56,7 +56,13 @@ Tracts from the HCP-1065 population-averaged tractography atlas (Yeh 2022), in t
   posterior fossa: cerebellar peduncles, brainstem long tracts). Each group opens on its own hemisphere and view (language:
   left lateral; SLF complex: right).
 - The fornix card also reports a pipeline check: near the hypothalamus this atlas's fornix lies
-  about 3 mm from the independent fornix label used in the DBS section.
+  a median 3.1 mm (left) and 3.9 mm (right) from the independent fornix label used in the DBS
+  section.
+- The atlas's streamline files (TrackVis files written by DSI Studio) give their points from the
+  centre of the first voxel, not from its corner as the format and nibabel have it. The build moves
+  every point by half a voxel, (−0.5, −0.5, +0.5) mm, and `validate.py` holds every file to the
+  atlas's own volume of the same tract: with the half voxel 97.8 to 99.99 % of a file's points lie
+  in it, without it 31 to 97 % (68 files, measured on 18 November 2026).
 - Each **tract card** gives course, connections, function, effects of damage and stimulation,
   surgical relevance and notes on the atlas version of the tract. Every sentence cites a paper
   retrieved from PubMed and was checked against its abstract or open-access full text
@@ -647,7 +653,7 @@ entry zones for brainstem surgery.
   boundary (cisterns, aqueduct, fourth ventricle); the model's brainstem and ventricle walls are matched to it where
   their normals agree, by a similarity transform kept on the midline (pitch, shift, one scale) and then a smooth,
   left–right symmetric deformation. The matched surface lies a median 0.8 mm (90 % within 2.6 mm) from the
-  template's boundary, and 98.5 % of the HCP-1065 corticospinal tract's points between z −55 and −30 mm (built
+  template's boundary, and 99.4 % of the HCP-1065 corticospinal tract's points between z −55 and −30 mm (built
   independently) lie inside the fitted pons and medulla. Nerves, arteries and the model's nuclei (simple shapes) are carried along, so the cards call
   them approximate; the model's red nucleus, for one, sits about 5 mm below the Lead-DBS one, so the red nucleus,
   substantia nigra, STN, thalamus and dentate nucleus come from the DBS section's atlases instead.
@@ -1203,7 +1209,8 @@ npm run pipeline
    (an 8.5 GB zip) with HTTP range requests into `pipeline/data/raw/` (git-ignored), and records
    SHA-256 hashes in `sources.lock.json`. For the white-matter section it downloads the HCP-1065
    tract archive once (590 MB, checked against a pinned SHA-256), extracts the 69 needed files
-   and fetches the tract-to-region table.
+   and fetches the tract-to-region table and the atlas's volumes of its tracts (3.4 MB, pinned too:
+   only what the streamline files are checked against).
 2. `build.py`:
    - label volumes → Gaussian pre-smoothing → marching cubes → affine to MNI mm → Taubin
      smoothing → quadric decimation (one GLB per structure, nodes `L` and `R`)
@@ -1215,9 +1222,15 @@ npm run pipeline
    - streamlines → filtered → resampled to 2 mm → fixed-seed subsample of up to 300 per
      hemisphere → line geometry
    - T1, T2 and PD templates → 1.5 mm whole head plus a 0.5 mm subcortical crop each (uint8, gzip)
-   - white-matter tracts (HCP-1065 `.trk.gz`) → the same subsample of 300 streamlines per
-     hemisphere on both sides (the corpus callosum cut at x = 0) → `public/assets/wm/`; the
-     Brodmann block of the tract-to-region table → `src/data/generated/wm-connectome.json`
+   - white-matter tracts (HCP-1065 `.trk.gz`) → every point moved by half a voxel, (−0.5, −0.5,
+     +0.5) mm (the files, written by DSI Studio, give their points from the centre of the first
+     voxel, not from its corner as the TrackVis format and nibabel have it: `read_trk`) → the same
+     subsample of 300 streamlines per hemisphere on both sides (the corpus callosum and the other
+     one-file tracts cut at x = 0) → `public/assets/wm/`; the Brodmann block of the tract-to-region
+     table → `src/data/generated/wm-connectome.json`
+   - `wm_measure.py` (run after it): what the white-matter cards say of the atlas bundles
+     themselves (the optic radiation's loop, where four bundles end, the fornix against the
+     Neudorfer 2020 label), measured from the atlas's files → `src/data/generated/wm-measured.json`
 3. `compress.mjs`: quantization plus meshopt compression (glTF-Transform).
 4. `manifest.py`: `manifest.json` (id, name, type, file, colour, source, licence, citation,
    derivation, centroids), `wm-manifest.json` for the white-matter tracts, and `ATTRIBUTION.md`.
@@ -1226,7 +1239,9 @@ npm run pipeline
    an independent volumetric parcellation); everything inside the head; white-matter tracts lie
    in white matter on the 2009b T1 and no 2 mm shift improves that (the atlas is built in ICBM
    2009a space); the thin fornix, whose T1 samples include CSF, is instead compared with the
-   Neudorfer 2020 fornix label (median distance under 4 mm). Exits 1 on any failure.
+   Neudorfer 2020 fornix label (median distance under 4 mm); at least 97% of every white-matter
+   streamline file's points lie in the atlas's own volume of the tract (as nibabel reads the
+   files, without the half voxel, 31 to 97% do). Exits 1 on any failure.
 
 What goes in is declared in `pipeline/config.py`. Dataset citations in
 `pipeline/sources/citations.json` are Crossref records looked up by DOI.
