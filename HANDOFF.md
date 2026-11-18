@@ -315,8 +315,19 @@ commit and push it.
     - Shifts were tried twice, scratch only (on the volumes, then on the streamlines, ±3 mm): no sideways shift
       helps both sides (each side wants to move towards the midline), and the fluid share only falls steadily as
       the tracts are moved forwards and down into the bulk, to the search's edge, (−0.5, +3, −3) mm. That is not a
-      registration, so none is applied. A sounder way, not done: compare tracts both atlases have (the medial
-      lemniscus, the corticospinal tract) between HCP842 and HCP-1065; needs more of the HCP842 files.
+      registration, so none is applied.
+    - An offset between the two atlases' spaces was then looked for in tracts both have (the user's choice, 18
+      November; scratch only): HCP842's medial lemniscus and reticulospinal tract (`ML_L/R.trk.gz`,
+      `RST_L/R.trk.gz` from the same folder, 214 KB, downloaded with the user's leave, kept in the scratchpad, not
+      in the raw data) against HCP-1065's, both read with the half voxel; per 2 mm level from z = −49 to −9 mm, the
+      median x and y of each bundle, HCP-1065 minus HCP842. **They do not agree, so nothing is shifted.** Medians
+      over the levels: lemniscus left (−3.1, −1.5) and right (+1.4, −1.7) mm, reticulospinal tract left (+2.2, −3.0)
+      and right (−4.0, −3.1) mm. Sideways the two sides differ in sign and the two tracts from each other (HCP-1065's
+      lemniscus lies up to 5 mm further from the midline in the lower pons, its reticulospinal tract up to 6 mm
+      nearer it): the bundles are drawn differently in the two atlases. Front to back all four medians put HCP-1065
+      1.5 to 3 mm behind HCP842, but by level the difference runs from +1.7 to −5.8 mm, HCP-1065's lemniscus is 4 to
+      6 mm deep there against HCP842's 2 mm, and moving the four tracts back by 1.5 to 3 mm raises their mean fluid
+      share on the T2 template from 12 % to 29 to 41 % (forwards by 2 mm: 7 %).
   - How it was built: `brainstem_build.py tracts` (a step of its own: the four tracts and the shared nuclei's lists
     into the manifest as built, nothing else), `compress.mjs brainstem bs_t_mlf.glb bs_t_ctt.glb bs_t_stt.glb
     bs_t_ll.glb`, `brainstem_build.py finalize` (322 of 322 checks). Against `main`, the manifest's diff is
