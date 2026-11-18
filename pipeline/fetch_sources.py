@@ -165,7 +165,8 @@ def mismatches(pinned: dict, now: dict, path: str = "") -> list[str]:
 
 
 def fetch_hcp1065() -> dict[str, str]:
-    """White-matter section: the listed .trk.gz members of the HCP-1065 release, plus its connectome table.
+    """White-matter section: the listed .trk.gz members of the HCP-1065 release, plus its connectome table and its
+    volumes of the tracts (a 3.4 MB zip, hash-checked, kept whole).
 
     The release CDN rejects the suffix byte ranges remotezip needs, so the zip is downloaded once
     (590 MB), checked against its pinned SHA-256 and only the listed members are extracted.
@@ -199,6 +200,16 @@ def fetch_hcp1065() -> dict[str, str]:
     if not dest.exists():
         urllib.request.urlretrieve(C.HCP1065_RELEASE + C.HCP1065_CONNECTOME, dest)
     record[C.HCP1065_CONNECTOME] = hashlib.sha256(dest.read_bytes()).hexdigest()
+    # the atlas's own volumes of the tracts: read in place by validate.py, which checks the streamlines against them
+    vz = out / C.HCP1065_NIFTI_ZIP
+    if not vz.exists():
+        print(f"fetch {C.HCP1065_NIFTI_ZIP} (3.4 MB)")
+        urllib.request.urlretrieve(C.HCP1065_RELEASE + C.HCP1065_NIFTI_ZIP, vz)
+    digest = hashlib.sha256(vz.read_bytes()).hexdigest()
+    if digest != C.HCP1065_NIFTI_SHA256:
+        print(f"{C.HCP1065_NIFTI_ZIP}: SHA-256 {digest} does not match the pinned {C.HCP1065_NIFTI_SHA256}", file=sys.stderr)
+        raise SystemExit(1)
+    record[C.HCP1065_NIFTI_ZIP] = digest
     return record
 
 # Skull-base section: Z-Anatomy Blender package (CC BY-SA 4.0), downloaded once and hash-checked

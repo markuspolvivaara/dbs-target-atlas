@@ -43,14 +43,14 @@
    },
    "centroid": {
     "L": [
-     -41.63,
-     -20.24,
-     16.72
+     -42.13,
+     -20.74,
+     17.22
     ],
     "R": [
-     37.46,
-     -19.67,
-     20.31
+     36.96,
+     -20.17,
+     20.81
     ]
    }
   },
@@ -95,14 +95,14 @@
    },
    "centroid": {
     "L": [
-     -12.85,
-     -8.15,
-     39.91
+     -13.35,
+     -8.65,
+     40.41
     ],
     "R": [
-     12.37,
-     -7.88,
-     46.42
+     11.87,
+     -8.38,
+     46.92
     ]
    }
   },
@@ -147,14 +147,14 @@
    },
    "centroid": {
     "L": [
-     -33.2,
-     -4.66,
-     39.35
+     -33.7,
+     -5.16,
+     39.85
     ],
     "R": [
-     33.95,
-     -7.33,
-     31.77
+     33.45,
+     -7.83,
+     32.27
     ]
    }
   },
@@ -199,14 +199,14 @@
    },
    "centroid": {
     "L": [
-     -49.22,
-     -21.1,
-     27.63
+     -49.72,
+     -21.6,
+     28.13
     ],
     "R": [
-     45.09,
-     -14.02,
-     27.15
+     44.59,
+     -14.52,
+     27.65
     ]
    }
   },
@@ -251,14 +251,14 @@
    },
    "centroid": {
     "L": [
-     -29.63,
-     -21.4,
-     -0.26
+     -30.13,
+     -21.9,
+     0.24
     ],
     "R": [
-     30.72,
-     -15.77,
-     -1.37
+     30.22,
+     -16.27,
+     -0.87
     ]
    }
   },
@@ -303,14 +303,14 @@
    },
    "centroid": {
     "L": [
-     -34.44,
-     -49.65,
-     -0.98
+     -34.94,
+     -50.15,
+     -0.48
     ],
     "R": [
-     34.76,
-     -45.66,
-     1.35
+     34.26,
+     -46.16,
+     1.85
     ]
    }
   },
@@ -355,14 +355,14 @@
    },
    "centroid": {
     "L": [
-     -26.98,
-     16.62,
-     -16.02
+     -27.48,
+     16.12,
+     -15.52
     ],
     "R": [
-     25.79,
-     20.62,
-     -15.16
+     25.29,
+     20.12,
+     -14.66
     ]
    }
   },
@@ -407,14 +407,14 @@
    },
    "centroid": {
     "L": [
-     -30.24,
-     8.26,
-     35.58
+     -30.74,
+     7.76,
+     36.08
     ],
     "R": [
-     30.66,
-     11.02,
-     34.04
+     30.16,
+     10.52,
+     34.54
     ]
    }
   },
@@ -427,7 +427,7 @@
    "type": "tract",
    "role": "tract",
    "file": "assets/wm/wm_cing_fp.glb",
-   "bytes": 179804,
+   "bytes": 179808,
    "colour": {
     "token": "wmCingD",
     "light": "#535719",
@@ -459,14 +459,14 @@
    },
    "centroid": {
     "L": [
-     -9.5,
-     -2.02,
-     30.76
+     -10.0,
+     -2.52,
+     31.26
     ],
     "R": [
-     9.35,
-     -8.35,
-     31.21
+     8.85,
+     -8.85,
+     31.71
     ]
    }
   },
@@ -511,14 +511,14 @@
    },
    "centroid": {
     "L": [
-     -20.41,
-     -29.01,
-     -15.34
+     -20.91,
+     -29.51,
+     -14.84
     ],
     "R": [
-     21.85,
-     -26.24,
-     -16.01
+     21.35,
+     -26.74,
+     -15.51
     ]
    }
   },
@@ -563,14 +563,14 @@
    },
    "centroid": {
     "L": [
-     -24.8,
-     -56.06,
-     3.41
+     -25.3,
+     -56.56,
+     3.91
     ],
     "R": [
-     25.99,
-     -56.55,
-     4.79
+     25.49,
+     -57.05,
+     5.29
     ]
    }
   },
@@ -615,14 +615,14 @@
    },
    "centroid": {
     "L": [
-     -18.02,
-     -17.02,
-     8.45
+     -18.52,
+     -17.52,
+     8.95
     ],
     "R": [
-     19.65,
-     -16.41,
-     7.15
+     19.15,
+     -16.91,
+     7.65
     ]
    }
   },
@@ -635,7 +635,7 @@
    "type": "tract",
    "role": "tract",
    "file": "assets/wm/wm_cbt.glb",
-   "bytes": 199628,
+   "bytes": 199624,
    "colour": {
     "token": "wmCBT",
     "light": "#847C0B",
@@ -667,14 +667,14 @@
    },
    "centroid": {
     "L": [
-     -22.37,
-     -12.67,
-     -4.87
+     -22.87,
+     -13.17,
+     -4.37
     ],
     "R": [
-     23.45,
-     -12.27,
-     -3.86
+     22.95,
+     -12.77,
+     -3.36
     ]
    }
   },
@@ -687,7 +687,7 @@
    "type": "tract",
    "role": "tract",
    "file": "assets/wm/wm_cc.glb",
-   "bytes": 138052,
+   "bytes": 138076,
    "colour": {
     "token": "wmCC",
     "light": "#4581B5",
@@ -714,19 +714,19 @@
     "R": 300
    },
    "sourceStreamlines": {
-    "L": 32212,
-    "R": 32258
+    "L": 32202,
+    "R": 32211
    },
    "centroid": {
     "L": [
-     -21.89,
-     -27.73,
-     17.67
+     -22.41,
+     -27.7,
+     18.25
     ],
     "R": [
-     22.03,
-     -29.0,
-     19.01
+     21.51,
+     -29.51,
+     20.5
     ]
    }
   },
@@ -771,14 +771,14 @@
    },
    "centroid": {
     "L": [
-     -12.89,
-     -19.54,
-     3.77
+     -13.39,
+     -20.04,
+     4.27
     ],
     "R": [
-     15.64,
-     -17.79,
-     3.38
+     15.14,
+     -18.29,
+     3.88
     ]
    }
   },
@@ -791,7 +791,7 @@
    "type": "tract",
    "role": "tract",
    "file": "assets/wm/wm_mdlf.glb",
-   "bytes": 221084,
+   "bytes": 221080,
    "colour": {
     "token": "wmMdLF",
     "light": "#893456",
@@ -823,14 +823,14 @@
    },
    "centroid": {
     "L": [
-     -35.11,
-     -33.99,
-     19.96
+     -35.61,
+     -34.49,
+     20.46
     ],
     "R": [
-     36.84,
-     -33.18,
-     22.12
+     36.34,
+     -33.68,
+     22.62
     ]
    }
   },
@@ -875,14 +875,14 @@
    },
    "centroid": {
     "L": [
-     -43.98,
-     -51.84,
-     15.93
+     -44.48,
+     -52.34,
+     16.43
     ],
     "R": [
-     44.68,
-     -49.19,
-     14.66
+     44.18,
+     -49.69,
+     15.16
     ]
    }
   },
@@ -927,14 +927,14 @@
    },
    "centroid": {
     "L": [
-     -27.12,
-     -81.15,
-     10.65
+     -27.62,
+     -81.65,
+     11.15
     ],
     "R": [
-     28.12,
-     -81.27,
-     8.87
+     27.62,
+     -81.77,
+     9.37
     ]
    }
   },
@@ -947,7 +947,7 @@
    "type": "tract",
    "role": "tract",
    "file": "assets/wm/wm_emc.glb",
-   "bytes": 215836,
+   "bytes": 215840,
    "colour": {
     "token": "wmEMC",
     "light": "#0D83A0",
@@ -979,14 +979,14 @@
    },
    "centroid": {
     "L": [
-     -30.68,
-     -22.5,
-     24.92
+     -31.18,
+     -23.0,
+     25.42
     ],
     "R": [
-     30.31,
-     -27.53,
-     23.08
+     29.81,
+     -28.03,
+     23.58
     ]
    }
   },
@@ -999,7 +999,7 @@
    "type": "tract",
    "role": "tract",
    "file": "assets/wm/wm_ac.glb",
-   "bytes": 250640,
+   "bytes": 250764,
    "colour": {
     "token": "wmAC",
     "light": "#A57618",
@@ -1026,19 +1026,19 @@
     "R": 300
    },
    "sourceStreamlines": {
-    "L": 10302,
-    "R": 10300
+    "L": 10303,
+    "R": 10301
    },
    "centroid": {
     "L": [
-     -26.51,
-     -37.83,
-     -4.04
+     -26.95,
+     -38.24,
+     -3.36
     ],
     "R": [
-     27.05,
-     -33.4,
-     -4.26
+     26.73,
+     -33.98,
+     -3.85
     ]
    }
   },
@@ -1083,14 +1083,14 @@
    },
    "centroid": {
     "L": [
-     -17.33,
-     21.54,
-     8.22
+     -17.83,
+     21.04,
+     8.72
     ],
     "R": [
-     19.33,
-     21.38,
-     7.79
+     18.83,
+     20.88,
+     8.29
     ]
    }
   },
@@ -1135,14 +1135,14 @@
    },
    "centroid": {
     "L": [
-     -23.29,
-     -6.21,
-     26.66
+     -23.79,
+     -6.71,
+     27.16
     ],
     "R": [
-     25.89,
-     -10.78,
-     28.11
+     25.39,
+     -11.28,
+     28.61
     ]
    }
   },
@@ -1187,14 +1187,14 @@
    },
    "centroid": {
     "L": [
-     -25.32,
-     -47.05,
-     21.85
+     -25.82,
+     -47.55,
+     22.35
     ],
     "R": [
-     29.16,
-     -46.59,
-     17.9
+     28.66,
+     -47.09,
+     18.4
     ]
    }
   },
@@ -1239,14 +1239,14 @@
    },
    "centroid": {
     "L": [
-     -21.64,
-     32.41,
-     6.75
+     -22.14,
+     31.91,
+     7.25
     ],
     "R": [
-     23.25,
-     33.35,
-     8.29
+     22.75,
+     32.85,
+     8.79
     ]
    }
   },
@@ -1291,14 +1291,14 @@
    },
    "centroid": {
     "L": [
-     -23.99,
-     -1.55,
-     31.58
+     -24.49,
+     -2.05,
+     32.08
     ],
     "R": [
-     27.07,
-     -0.93,
-     30.31
+     26.57,
+     -1.43,
+     30.81
     ]
    }
   },
@@ -1343,14 +1343,14 @@
    },
    "centroid": {
     "L": [
-     -26.47,
-     -38.16,
-     21.83
+     -26.97,
+     -38.66,
+     22.33
     ],
     "R": [
-     31.07,
-     -42.49,
-     16.93
+     30.57,
+     -42.99,
+     17.43
     ]
    }
   },
@@ -1363,7 +1363,7 @@
    "type": "tract",
    "role": "tract",
    "file": "assets/wm/wm_scp.glb",
-   "bytes": 100652,
+   "bytes": 100968,
    "colour": {
     "token": "wmSCP",
     "light": "#7E3064",
@@ -1390,19 +1390,19 @@
     "R": 300
    },
    "sourceStreamlines": {
-    "L": 1247,
-    "R": 2123
+    "L": 1265,
+    "R": 2107
    },
    "centroid": {
     "L": [
-     -5.18,
-     -34.18,
-     -20.38
+     -5.78,
+     -34.71,
+     -19.94
     ],
     "R": [
-     6.44,
-     -37.6,
-     -21.46
+     6.02,
+     -38.27,
+     -20.92
     ]
    }
   },
@@ -1415,7 +1415,7 @@
    "type": "tract",
    "role": "tract",
    "file": "assets/wm/wm_mcp.glb",
-   "bytes": 116252,
+   "bytes": 119976,
    "colour": {
     "token": "wmMCP",
     "light": "#0E81EC",
@@ -1442,19 +1442,19 @@
     "R": 300
    },
    "sourceStreamlines": {
-    "L": 2250,
-    "R": 2371
+    "L": 2269,
+    "R": 2351
    },
    "centroid": {
     "L": [
-     -16.12,
-     -49.38,
-     -35.79
+     -16.46,
+     -50.13,
+     -35.19
     ],
     "R": [
-     15.74,
-     -43.46,
-     -37.75
+     15.21,
+     -45.09,
+     -36.89
     ]
    }
   },
@@ -1499,14 +1499,14 @@
    },
    "centroid": {
     "L": [
-     -12.22,
-     -58.73,
-     -33.6
+     -12.72,
+     -59.23,
+     -33.1
     ],
     "R": [
-     11.85,
-     -58.3,
-     -32.8
+     11.35,
+     -58.8,
+     -32.3
     ]
    }
   },
@@ -1519,7 +1519,7 @@
    "type": "tract",
    "role": "tract",
    "file": "assets/wm/wm_drtt.glb",
-   "bytes": 306776,
+   "bytes": 306780,
    "colour": {
     "token": "wmDRTT",
     "light": "#235C42",
@@ -1551,14 +1551,14 @@
    },
    "centroid": {
     "L": [
-     -8.4,
-     -8.31,
-     8.24
+     -8.9,
+     -8.81,
+     8.74
     ],
     "R": [
-     8.8,
-     -8.0,
-     6.76
+     8.3,
+     -8.5,
+     7.26
     ]
    }
   },
@@ -1603,14 +1603,14 @@
    },
    "centroid": {
     "L": [
-     -14.25,
-     -19.74,
-     10.42
+     -14.75,
+     -20.24,
+     10.92
     ],
     "R": [
-     14.94,
-     -22.29,
-     10.36
+     14.44,
+     -22.79,
+     10.86
     ]
    }
   },
@@ -1655,14 +1655,14 @@
    },
    "centroid": {
     "L": [
-     -16.22,
-     -29.45,
-     11.3
+     -16.72,
+     -29.95,
+     11.8
     ],
     "R": [
-     16.75,
-     -26.7,
-     11.23
+     16.25,
+     -27.2,
+     11.73
     ]
    }
   },
@@ -1675,7 +1675,7 @@
    "type": "tract",
    "role": "tract",
    "file": "assets/wm/wm_rst.glb",
-   "bytes": 283420,
+   "bytes": 283416,
    "colour": {
     "token": "wmRST",
     "light": "#8978A9",
@@ -1707,14 +1707,14 @@
    },
    "centroid": {
     "L": [
-     -12.86,
-     1.48,
-     2.93
+     -13.36,
+     0.98,
+     3.43
     ],
     "R": [
-     13.95,
-     2.2,
-     -3.11
+     13.45,
+     1.7,
+     -2.61
     ]
    }
   },
@@ -1759,14 +1759,14 @@
    },
    "centroid": {
     "L": [
-     -14.97,
-     -0.12,
-     9.25
+     -15.47,
+     -0.62,
+     9.75
     ],
     "R": [
-     17.16,
-     -2.24,
-     9.85
+     16.66,
+     -2.74,
+     10.35
     ]
    }
   },
@@ -1779,7 +1779,7 @@
    "type": "tract",
    "role": "tract",
    "file": "assets/wm/wm_cpt_p.glb",
-   "bytes": 251080,
+   "bytes": 251084,
    "colour": {
     "token": "wmCPTP",
     "light": "#8413E7",
@@ -1811,14 +1811,14 @@
    },
    "centroid": {
     "L": [
-     -20.18,
-     -30.35,
-     13.7
+     -20.68,
+     -30.85,
+     14.2
     ],
     "R": [
-     20.35,
-     -22.89,
-     12.29
+     19.85,
+     -23.39,
+     12.79
     ]
    }
   },
@@ -1863,14 +1863,14 @@
    },
    "centroid": {
     "L": [
-     -22.86,
-     -40.24,
-     -0.87
+     -23.36,
+     -40.74,
+     -0.37
     ],
     "R": [
-     24.61,
-     -35.62,
-     0.33
+     24.11,
+     -36.12,
+     0.83
     ]
    }
   }
@@ -1879,7 +1879,7 @@
   "name": "HCP-1065 population-averaged tractography atlas (Yeh 2022)",
   "licence": "CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
   "url": "https://brain.labsolver.org/hcp_trk_atlas.html",
-  "note": "Files from the 'hcp1065' release of github.com/data-others/atlas (hcp1065_avg_tracts_trk.zip; tract_to_region_connectome_BM_KL.xlsx). Space: ICBM 2009a nonlinear asymmetric (atlas page), shown here on the 2009b templates after an alignment check: along every tract the 2009b T1 is white-matter bright, and no shift of up to 2 mm in any direction raises it by more than 5% (pipeline/validate.py).",
+  "note": "Files from the 'hcp1065' release of github.com/data-others/atlas (hcp1065_avg_tracts_trk.zip; tract_to_region_connectome_BM_KL.xlsx). Space: ICBM 2009a nonlinear asymmetric (atlas page), shown here on the 2009b templates after an alignment check: along every tract but the fornix the 2009b T1 is white-matter bright, and no shift of up to 2 mm in any direction raises it by more than 5%; the fornix, thin and beside the ventricle, is held instead to the fornix label of the Neudorfer 2020 hypothalamus atlas (median distance under 4 mm) (pipeline/validate.py). The streamline files give their points from the centre of the first voxel, not from its corner as the TrackVis format has it, so every point is moved by half a voxel (0.5 mm on each axis); the same check holds each file to at least 97% of its points inside the atlas's own volume of the tract (hcp1065_avg_tracts_nifti.zip of the same release, used for this check only).",
   "citation": [
    "Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.",
    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."

@@ -10,14 +10,20 @@ Checks
                 independent volumetric parcellation (Mindboggle-101)
   in-brain      every centroid falls inside the T1 head volume
   alignment     white-matter section (HCP-1065, 2009a space): the 2009b T1 is bright
-                along each tract and no 2 mm shift improves it by more than 5%
+                along each tract and no 2 mm shift improves it by more than 5%; the thin
+                fornix is held to the Neudorfer 2020 fornix label instead
+  own-volume    white-matter section: the points of every streamline file lie in the
+                atlas's own volume of the tract (catches a wrong reading of the files'
+                coordinates: half a voxel is too little for the T1 to show)
 
 Exit code 1 if any check fails. Writes pipeline/data/build/validation.json.
 """
 from __future__ import annotations
 
+import gzip
 import json
 import sys
+import zipfile
 from pathlib import Path
 
 import nibabel as nib
@@ -28,6 +34,7 @@ from scipy import ndimage
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build as build_mod  # noqa: E402
 import config as C  # noqa: E402
+from wm_measure import fornix_offset  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent
 RAW = ROOT / "data" / "raw"
@@ -39,9 +46,15 @@ CENTROID_MM = 1.0   # mesh vs source centroid (watertight nuclei)
 CORTEX_AGREE = 0.6
 WM_SYM_X_MM = 6.0   # white-matter tracts: association tracts are not symmetric (e.g. arcuate)
 # The fornix is a thin tract along the lateral ventricles, so T1 samples along it include CSF and
-# the white-matter brightness test does not apply. It is instead compared with the independent
-# fornix label of the Neudorfer 2020 atlas (DBS section) inside that label's bounding box.
-WM_FORNIX_MEDIAN_MM = 4.0  # minimum fraction of vertices agreeing with the volume labels
+# the white-matter brightness test does not apply, neither its level nor its 2 mm shift rule (with build.read_trk's
+# half voxel a 2 mm shift raises the fornix's T1 by 6.5 %; without it, 4.1 %: the owner's choice, 18 November 2026).
+# It is instead compared with the independent fornix label of the Neudorfer 2020 atlas (DBS section) inside that
+# label's bounding box.
+WM_FORNIX_MEDIAN_MM = 4.0  # the median distance of its points to that label
+# Of a streamline file's points (those inside the volume's grid), the share inside the atlas's own volume of the tract.
+# Measured on 18 November 2026: 0.978 to 1.000 over the 68 files; as nibabel reads them, without build.read_trk's half
+# voxel, 0.309 to 0.973.
+WM_OWN_VOLUME_SHARE = 0.97
 
 # Structures whose source atlases are not symmetric by construction may differ
 # more; widen tolerance only where the source itself differs (recorded here).
@@ -123,25 +136,31 @@ def main() -> int:
     # white-matter section (HCP-1065, 2009a space): sides, symmetry and alignment with the 2009b T1
     report_fx: dict = {}
 
-    def fornix_offset(side: str, hemi: str) -> tuple[float, list[int]]:
-        sls = build_mod.read_trk_gz(RAW / "hcp1065" / "tracts" / f"projection/F_{side}.trk.gz")
-        pts = np.vstack(sls[::max(1, len(sls) // 300)])
-        m = nib.load(RAW / f"atlases/Atlas of the Human Hypothalamus (Neudorfer & Germann 2020)/{hemi}/fornix.nii.gz")
-        md = np.asanyarray(m.dataobj) > 0.5
-        dist = ndimage.distance_transform_edt(~md, sampling=np.abs(np.diag(m.affine)[:3]))
-        minv = np.linalg.inv(m.affine)
-        ijk = np.array(np.nonzero(md))
-        a, b = nib.affines.apply_affine(m.affine, ijk.min(1)), nib.affines.apply_affine(m.affine, ijk.max(1))
-        pts = pts[np.all((pts >= np.minimum(a, b) - 2) & (pts <= np.maximum(a, b) + 2), axis=1)]
+    # every streamline file the section reads, once: its points against the atlas's own volume of the tract (with
+    # build.read_trk's half voxel, and without it), and a sample of its streamlines for the T1 check below
+    vz = RAW / "hcp1065" / C.HCP1065_NIFTI_ZIP
+    if not vz.exists():
+        raise SystemExit(f"{vz} missing: the HCP-1065 atlas's volumes of its tracts (pipeline/fetch_sources.py)")
+    own: dict = {}
+    sample: dict[str, list[np.ndarray]] = {}
+    with zipfile.ZipFile(vz) as z:
+        for f in sorted({f for t in C.WM_TRACTS for f in t.files.values()}):
+            vol = nib.Nifti1Image.from_bytes(gzip.decompress(z.read("nifti/" + f.replace(".trk.gz", ".nii.gz"))))
+            mask = np.asanyarray(vol.dataobj) > 0
+            vinv = np.linalg.inv(vol.affine)
+            sls, half = build_mod.read_trk(RAW / "hcp1065" / "tracts" / f)
+            sample[f] = sls[::max(1, len(sls) // 200)]
+            p = np.vstack(sls)
 
-        def med(off):
-            q = np.rint(nib.affines.apply_affine(minv, pts + off)).astype(int)
-            q = q[np.all((q >= 0) & (q < md.shape), axis=1)]
-            dd = dist[tuple(q.T)]
-            return float(np.median(dd[dd < 15]))
-        offs = [np.array(v, float) - 2 for v in np.ndindex(5, 5, 5)]
-        best = min(offs, key=med)
-        return med(np.zeros(3)), [int(v) for v in best]
+            def share(q: np.ndarray) -> float:
+                ijk = np.rint(nib.affines.apply_affine(vinv, q)).astype(int)
+                ijk = ijk[np.all((ijk >= 0) & (ijk < mask.shape), axis=1)]
+                return float(mask[tuple(ijk.T)].mean())
+            s, raw = share(p), share(p - half)
+            own[f] = {"share": round(s, 4), "asNibabelReads": round(raw, 4), "points": int(len(p))}
+            check("own-volume", s >= WM_OWN_VOLUME_SHARE and s > raw,
+                  f"wm {f}: {s:.2%} of its points lie in the atlas's own volume of the tract (min {WM_OWN_VOLUME_SHARE:.0%}; "
+                  f"as nibabel reads the file, without the half voxel: {raw:.1%})")
     t1d = np.asanyarray(t1.dataobj).astype(np.float32)
     wm_ref = float(np.percentile(t1d[head], 75))
     shifts = [np.array(v, float) for v in np.ndindex(3, 3, 3)]
@@ -152,22 +171,19 @@ def main() -> int:
             check("orientation", (x < 0) == (side == "L"), f"wm {t.id}/{side} mean x={x:.1f}")
         a, b = r["L"]["centroid"], r["R"]["centroid"]
         check("symmetry", abs(a[0] + b[0]) <= WM_SYM_X_MM, f"wm {t.id}: centroid x L {a[0]} R {b[0]}")
-        pts = []
-        for f in t.files.values():
-            sls = build_mod.read_trk_gz(RAW / "hcp1065" / "tracts" / f)
-            pts.extend(sls[::max(1, len(sls) // 200)])
-        p = np.vstack(pts)
+        p = np.vstack([sl for f in t.files.values() for sl in sample[f]])
         def mean_t1(off):
             ijk = nib.affines.apply_affine(inv, p + off)
             return float(ndimage.map_coordinates(t1d, ijk.T, order=1).mean())
         base = mean_t1(np.zeros(3))
         best = max(mean_t1((s - 1) * 2.0) for s in shifts)
         if t.id == "wm_fx":
-            check("alignment", best <= base * 1.05, f"wm {t.id}: best 2 mm shift raises T1 from {base:.0f} to {best:.0f} (thin, CSF-bordered; brightness test not applied)")
+            # held to the fornix label only (WM_FORNIX_MEDIAN_MM); its T1 figures are printed, not checked
             for side, hemi in (("L", "lh"), ("R", "rh")):
                 med, shift = fornix_offset(side, hemi)
                 check("alignment", med <= WM_FORNIX_MEDIAN_MM,
-                      f"wm_fx/{side}: median distance to the Neudorfer 2020 fornix {med:.1f} mm (tol {WM_FORNIX_MEDIAN_MM}); best shift {shift} mm")
+                      f"wm_fx/{side}: median distance to the Neudorfer 2020 fornix {med:.1f} mm (tol {WM_FORNIX_MEDIAN_MM}); best shift {shift} mm "
+                      f"(not held: the best 2 mm shift raises the T1 along both sides from {base:.0f} to {best:.0f}, {best / base - 1:+.1%})")
                 report_fx[side] = {"medianMm": round(med, 2), "bestShiftMm": shift}
             continue
         check("alignment", base >= wm_ref and best <= base * 1.05,
@@ -205,6 +221,7 @@ def main() -> int:
 
     (BUILD / "validation.json").write_text(json.dumps(results, indent=1))
     (BUILD / "fornix-offset.json").write_text(json.dumps(report_fx, indent=1))
+    (BUILD / "wm-own-volume.json").write_text(json.dumps(own, indent=1))
     n = sum(len(v) for v in results.values())
     print(f"{n - len(failures)}/{n} checks passed")
     for k, v in results.items():

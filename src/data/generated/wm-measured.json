@@ -1,0 +1,273 @@
+{
+ "generatedBy": "pipeline/wm_measure.py",
+ "endReachMm": 8.0,
+ "loopForwardMm": 5.0,
+ "opticRadiation": {
+  "L": {
+   "streamlines": 1968,
+   "loopShare": 0.41,
+   "loopApex": [
+    -31.1,
+    -25.0,
+    -2.2
+   ],
+   "thalamicEnd": [
+    -9.3,
+    -31.1,
+    2.0
+   ],
+   "mostAnteriorY": -18.6,
+   "temporalPoleY": 25.5,
+   "behindTemporalPoleMm": 44.1
+  },
+  "R": {
+   "streamlines": 1235,
+   "loopShare": 0.117,
+   "loopApex": [
+    28.8,
+    -24.2,
+    -0.6
+   ],
+   "thalamicEnd": [
+    9.0,
+    -30.2,
+    3.7
+   ],
+   "mostAnteriorY": -19.0,
+   "temporalPoleY": 27.1,
+   "behindTemporalPoleMm": 46.1
+  }
+ },
+ "ends": {
+  "wm_ml": {
+   "L": {
+    "streamlines": 6621,
+    "lengthMedianMm": 138,
+    "lengthMeanMm": 137,
+    "upper": {
+     "centroid": [
+      -12.8,
+      -36.7,
+      72.5
+     ],
+     "nearCortexShare": 1.0,
+     "labels": {
+      "G_precentral": 0.251,
+      "G_and_S_paracentral": 0.234,
+      "S_central": 0.168,
+      "G_postcentral": 0.115,
+      "S_cingul-Marginalis": 0.087,
+      "G_precuneus": 0.082,
+      "G_parietal_sup": 0.063
+     }
+    },
+    "lower": {
+     "centroid": [
+      -7.5,
+      -38.8,
+      -48.6
+     ],
+     "nearCortexShare": 0.0,
+     "labels": {}
+    }
+   },
+   "R": {
+    "streamlines": 5817,
+    "lengthMedianMm": 138,
+    "lengthMeanMm": 136,
+    "upper": {
+     "centroid": [
+      13.3,
+      -30.9,
+      72.5
+     ],
+     "nearCortexShare": 1.0,
+     "labels": {
+      "G_postcentral": 0.286,
+      "G_precentral": 0.247,
+      "S_central": 0.224,
+      "G_and_S_paracentral": 0.142,
+      "S_postcentral": 0.095
+     }
+    },
+    "lower": {
+     "centroid": [
+      7.5,
+      -38.0,
+      -47.9
+     ],
+     "nearCortexShare": 0.0,
+     "labels": {}
+    }
+   }
+  },
+  "wm_rst": {
+   "L": {
+    "streamlines": 2382,
+    "lengthMedianMm": 140,
+    "lengthMeanMm": 140,
+    "upper": {
+     "centroid": [
+      -18.2,
+      46.3,
+      40.7
+     ],
+     "nearCortexShare": 1.0,
+     "labels": {
+      "G_front_sup": 0.624,
+      "G_front_middle": 0.232,
+      "S_front_sup": 0.1
+     }
+    },
+    "lower": {
+     "centroid": [
+      -4.2,
+      -43.1,
+      -38.9
+     ],
+     "nearCortexShare": 0.0,
+     "labels": {}
+    }
+   },
+   "R": {
+    "streamlines": 3249,
+    "lengthMedianMm": 140,
+    "lengthMeanMm": 140,
+    "upper": {
+     "centroid": [
+      30.3,
+      50.5,
+      20.2
+     ],
+     "nearCortexShare": 0.999,
+     "labels": {
+      "G_front_middle": 0.451,
+      "G_front_sup": 0.182,
+      "G_orbital": 0.152,
+      "G_and_S_transv_frontopol": 0.072,
+      "S_orbital_lateral": 0.069
+     }
+    },
+    "lower": {
+     "centroid": [
+      1.6,
+      -43.5,
+      -42.7
+     ],
+     "nearCortexShare": 0.0,
+     "labels": {}
+    }
+   }
+  },
+  "wm_emc": {
+   "L": {
+    "streamlines": 7265,
+    "lengthMedianMm": 106,
+    "lengthMeanMm": 108,
+    "front": {
+     "centroid": [
+      -41.7,
+      6.9,
+      -11.1
+     ],
+     "nearCortexShare": 1.0,
+     "labels": {
+      "G_Ins_lg_and_S_cent_ins": 0.532,
+      "G_insular_short": 0.446
+     }
+    },
+    "back": {
+     "centroid": [
+      -24.7,
+      -39.4,
+      71.6
+     ],
+     "nearCortexShare": 1.0,
+     "labels": {
+      "G_postcentral": 0.578,
+      "G_parietal_sup": 0.413
+     }
+    }
+   },
+   "R": {
+    "streamlines": 12874,
+    "lengthMedianMm": 100,
+    "lengthMeanMm": 102,
+    "front": {
+     "centroid": [
+      41.9,
+      1.1,
+      -8.8
+     ],
+     "nearCortexShare": 1.0,
+     "labels": {
+      "G_Ins_lg_and_S_cent_ins": 0.602,
+      "S_circular_insula_inf": 0.207,
+      "G_insular_short": 0.186
+     }
+    },
+    "back": {
+     "centroid": [
+      24.5,
+      -50.9,
+      65.5
+     ],
+     "nearCortexShare": 1.0,
+     "labels": {
+      "G_parietal_sup": 0.921,
+      "S_postcentral": 0.054
+     }
+    }
+   }
+  }
+ },
+ "anteriorCommissure": {
+  "streamlines": 10302,
+  "lengthMedianMm": 274,
+  "L": {
+   "centroid": [
+    -12.2,
+    -80.7,
+    -9.6
+   ],
+   "nearCortexShare": 1.0,
+   "labels": {
+    "Pole_occipital": 0.384,
+    "G_oc-temp_med-Lingual": 0.25,
+    "S_calcarine": 0.193,
+    "Pole_temporal": 0.099
+   }
+  },
+  "R": {
+   "centroid": [
+    19.6,
+    -75.3,
+    -12.9
+   ],
+   "nearCortexShare": 1.0,
+   "labels": {
+    "Pole_occipital": 0.742,
+    "Pole_temporal": 0.108,
+    "G_oc-temp_med-Lingual": 0.097
+   }
+  }
+ },
+ "fornix": {
+  "L": {
+   "medianMm": 3.1,
+   "bestShiftMm": [
+    1,
+    2,
+    2
+   ]
+  },
+  "R": {
+   "medianMm": 3.9,
+   "bestShiftMm": [
+    -2,
+    2,
+    2
+   ]
+  }
+ }
+}

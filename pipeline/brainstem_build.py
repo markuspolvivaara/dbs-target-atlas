@@ -705,6 +705,34 @@ def tracts_only() -> int:
     return 0
 
 
+def cst_only() -> int:
+    """Take tract_check again (the white-matter section's corticospinal tract inside the fitted pons and medulla) after
+    that section's tracts were rebuilt, leaving every structure and file as it is.
+
+      pipeline/.venv/bin/python -I -W ignore pipeline/build.py wm
+      pipeline/.venv/bin/python -I -W ignore pipeline/brainstem_build.py cst
+      pipeline/.venv/bin/python -I -W ignore pipeline/brainstem_build.py finalize
+    """
+    ex = json.loads(EXPORT.read_text())
+    F = Fitted(ex)
+    parts = {}
+    for base in SURFACE:
+        for suf in (".l", ".r"):
+            m = ex["meshes"][base + suf]
+            v = F(m["verts"])
+            parts[base + suf] = (v, orient(v, np.array(m["tris"])))
+    found = tract_check(Surface(parts))
+    if not found:
+        raise SystemExit(f"{CST_GLB} missing: pipeline/build.py wm")
+    p = GEN / "bs-manifest.json"
+    m = json.loads(p.read_text())
+    was = m["fit"].get("cstInsideShare")
+    m["fit"].update(found)
+    p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
+    print(f"brainstem: corticospinal tract inside the fitted pons and medulla {found['cstInsideShare']} (was {was})")
+    return 0
+
+
 # ---------------------------------------------------------------- main
 def main() -> int:
     ex = json.loads(EXPORT.read_text())
@@ -1350,4 +1378,6 @@ if __name__ == "__main__":
         sys.exit(validate())
     if sys.argv[1:] == ["tracts"]:
         sys.exit(tracts_only())
+    if sys.argv[1:] == ["cst"]:
+        sys.exit(cst_only())
     sys.exit(main())
