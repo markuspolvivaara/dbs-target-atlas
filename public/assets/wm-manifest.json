@@ -1418,8 +1418,8 @@
    "bytes": 116252,
    "colour": {
     "token": "wmMCP",
-    "light": "#0B847C",
-    "dark": "#A1F7F2"
+    "light": "#0E81EC",
+    "dark": "#9FD0FF"
    },
    "dataset": "hcp1065",
    "source": "HCP-1065 population-averaged tractography atlas (Yeh 2022)",
@@ -1678,8 +1678,8 @@
    "bytes": 283420,
    "colour": {
     "token": "wmRST",
-    "light": "#1E888F",
-    "dark": "#92E2E8"
+    "light": "#8978A9",
+    "dark": "#A69CD4"
    },
    "dataset": "hcp1065",
    "source": "HCP-1065 population-averaged tractography atlas (Yeh 2022)",

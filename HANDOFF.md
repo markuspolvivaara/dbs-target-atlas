@@ -3,6 +3,31 @@
 Read this first when continuing on another computer. Before handing back, overwrite this file with a new handoff, then
 commit and push it.
 
+## White-matter tract colours (desktop, 2026-11-17)
+
+- Branch `fix/wm-mcp-colour` (off `main` at `4d58cf8`), pushed on 18 Nov as pull request 24.
+- The middle cerebellar peduncle (`wmMCP`) and the corticospinal tract (`wmCST`) had the same light colour
+  (`#0B847C`), and the reticulospinal tract (`wmRST`) was close to both (CIEDE2000 6.8; 2.5 under tritanopia). No
+  white-matter group draws them together, but the brainstem section's "Tracts and deep nuclei" view does.
+- The user's choice (17 Nov): `wmMCP` blue (`#0E81EC` light, `#9FD0FF` dark) and `wmRST` lavender (`#8978A9` light,
+  `#A69CD4` dark); `wmCST` stays. Every pair of these with a tract drawn beside it in a checked view is now at 10 or
+  more in normal vision and under the three simulated deficiencies (smallest: 10.3 light, 10.1 dark).
+- Changed by hand in `src/data/palette.json` and in both copies of `wm-manifest.json` (the `colour` entries of `wm_mcp`
+  and `wm_rst` only). The white-matter pipeline was not rerun; a later run reads the palette and writes the same values.
+- `scripts/check-palette.ts` now lists the brainstem tracts view (`brainstem: tracts`).
+  - `fix/d008-brainstem` adds the same row with its four tract surfaces: when the two meet, keep its longer row.
+  - Its `bsStt` (violet) is 4.2 (light) and 5.2 (dark) from the new `wmMCP` under deuteranopia, and 6.4 from the new
+    `wmRST` in the dark theme under protanopia: choose `bsStt` again on that branch.
+  - The new row also lists `wmML`/`wmSCP` at 9.0 (dark theme, protanopia). Both colours are as they were; not changed.
+  - Not in the row: the deep nuclei drawn in the same view. In the dark theme the new `wmRST` is 7.5 from the dentate
+    nucleus under deuteranopia.
+  - The check leaves out the "all" groups. In "All posterior fossa tracts" the dark `wmRST` is 6.9 from `wmCPTP`
+    under deuteranopia.
+- **Picture baselines to retake on the MacBook** (`tests/e2e/smoke.spec.ts-snapshots/`, `*-desktop-darwin.png`):
+  `tracts-fossa-loop`, `tracts-fossa-peduncles`, `tracts-fossa-brainstem`, `tracts-fossa-all` and `brainstem-tracts`.
+  Delete each old PNG, run its test with `-u`, and look at the new image. The Linux copies of the same five are stale
+  too and were left as they are.
+
 ## Audit fixes in progress (desktop, updated 2026-11-15)
 
 - The site audit of 10–11 Nov is on branch `audit/2026-11-10` (`audit/README.md`: findings, questions for an expert,
