@@ -1,5 +1,5 @@
 import type { CameraPreset } from '../data/schema';
-import { BS_MANIFEST, DBS_NUCLEI, ofKind, TRACTS } from './index';
+import { BS_MANIFEST, DBS_NUCLEI, ofKind, OWN_TRACTS, TRACTS } from './index';
 
 /**
  * Views of the brainstem page. Each draws some structures highlighted (`key`) and others faintly for orientation
@@ -45,8 +45,8 @@ export const BS_GROUPS: BsGroup[] = [
   },
   {
     id: 'tracts', kind: 'inside', name: 'Tracts and deep nuclei', camera: 'sagittal', radius: 55, surface: 'ghost',
-    description: 'The long tracts and cerebellar peduncles of the brainstem from the white-matter section (HCP-1065 tractography), with the red nucleus, substantia nigra, subthalamic nucleus and dentate nucleus from the DBS section’s atlases.',
-    key: [...TRACTS, ...DBS_NUCLEI.filter((x) => x !== 'thal')], context: ['thal'],
+    description: 'The long tracts and cerebellar peduncles of the brainstem from the white-matter section (HCP-1065 tractography, drawn as streamlines), with the red nucleus, substantia nigra, subthalamic nucleus and dentate nucleus from the DBS section’s atlases. Four tracts that atlas lacks are drawn as surfaces from an earlier atlas of the same group (HCP-YA): the medial longitudinal fasciculus, the central tegmental tract, the spinothalamic tract and the lateral lemniscus. That atlas ends at z = −50 mm, about where the pons meets the medulla, so none of the four is drawn in the medulla; each one’s card says how it sits on this template.',
+    key: [...TRACTS, ...OWN_TRACTS, ...DBS_NUCLEI.filter((x) => x !== 'thal')], context: ['thal'],
   },
   {
     id: 'arteries', kind: 'overview', name: 'Arteries', camera: 'coronal', radius: 50, surface: 'solid',
@@ -70,8 +70,8 @@ export const BS_GROUPS: BsGroup[] = [
   },
   {
     id: 'sez_floor', kind: 'zones', name: 'Floor of the fourth ventricle', camera: 'posterior', radius: 30, surface: 'solid', region: 'floor',
-    description: 'Entry zones on the floor of the fourth ventricle, around the facial colliculus. The ventricle itself is hidden in this view.',
-    key: zonesIn('floor'), context: [...FEATURES, ...ofKind('cnNucleus').filter((id) => /abducens|facial|hypoglossal/.test(id))],
+    description: 'Entry zones on the floor of the fourth ventricle, around the facial colliculus. The ventricle itself is hidden in this view. Under the floor lie the abducens, facial and hypoglossal nuclei and, beside the midline, the medial longitudinal fasciculus, the medial border of the suprafacial and infrafacial triangles (from the HCP-YA atlas, which ends at z = −50 mm: it is not drawn under the lower, medullary part of the floor). Choose one in this view’s card to see it through the floor; the fasciculus is drawn only then, with the others.',
+    key: zonesIn('floor'), context: [...FEATURES, ...ofKind('cnNucleus').filter((id) => /abducens|facial|hypoglossal/.test(id)), 'bs_t_mlf'],
   },
   {
     id: 'sez_medulla', kind: 'zones', name: 'Medulla', camera: 'posteriorOblique', radius: 32, surface: 'solid', region: 'medulla',

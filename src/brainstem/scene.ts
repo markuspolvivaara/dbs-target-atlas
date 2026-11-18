@@ -1,12 +1,14 @@
 import type { Look } from '../viewer/materials';
 import { makeCatalog, type SceneSource, type ScenePlan, type TractRole } from '../viewer/scene';
 import { BS_GROUP } from './groups';
-import { ALL, BS, kindOf, ofKind, VOLUMES } from './index';
+import { ALL, BS, kindOf, ofKind, OWN_TRACTS, VOLUMES } from './index';
 import type { BsState } from './state';
 
 export interface BsPlan extends ScenePlan { group: string }
 
 const SURFACE = ofKind('surface');
+/** whether a structure lies inside the brainstem, where a solid surface hides it: a nucleus, or one of the section's own tracts */
+export const liesInside = (id: string): boolean => ['cnNucleus', 'aan'].includes(kindOf(id)) || OWN_TRACTS.includes(id);
 const SURFACE_LOOK = { solid: 'primary', shell: 'shell', ghost: 'ghost' } as const;
 
 export function bsPlan(grpId: string, sel: string | null): BsPlan {
@@ -27,7 +29,12 @@ export function bsPlan(grpId: string, sel: string | null): BsPlan {
     role(st.id, 'key');
     // an entry zone sits on the surface: make the surface solid when one is selected from another view
     if (kindOf(st.id) === 'sez' && g.surface !== 'solid') for (const id of SURFACE) looks.set(id, 'primary');
+    // and one that lies inside it, selected in a view of the solid surface, is seen through the surface
+    if (liesInside(st.id) && g.surface === 'solid') for (const id of SURFACE) looks.set(id, 'shell');
   }
+  // one of the section's own tracts lies partly outside the fitted surface (its card says how far): under a solid
+  // surface only those parts would show, as patches on it, so it is drawn only where the surface is seen through
+  if (looks.get(SURFACE[0]!) === 'primary') for (const id of OWN_TRACTS) if (looks.has(id)) looks.set(id, 'hidden');
   return {
     title: g.name, accent: 'bsSez', looks, tracts, parcels: new Map(), markers: [],
     camera: g.camera, focusIds: g.kind === 'zones' ? g.key : SURFACE,

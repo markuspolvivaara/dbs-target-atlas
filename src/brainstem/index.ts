@@ -5,14 +5,15 @@ import bsZones from '../data/generated/bs-zones.json';
 import manifestJson from '../data/generated/manifest.json';
 import wmManifestJson from '../data/generated/wm-manifest.json';
 import { BsManifestSchema, ManifestSchema, WmManifestSchema, type ManifestStructure } from '../data/schema';
-import { AAN_GENERAL, AAN_TRANSMITTER, NERVE_COMPONENTS, NOT_DRAWN, SEZ_GENERAL, ZONES } from './content';
+import { AAN_GENERAL, AAN_TRANSMITTER, HCP_ATLAS, NERVE_COMPONENTS, NOT_DRAWN, NUCLEI_NOT_MODELLED, SEZ_GENERAL, SHARED_NUCLEI, TRACT_TEXT, ZONES } from './content';
 import { BS_REFERENCES } from './references';
 import { BsReferenceSchema, ClaimSchema, ZoneContentSchema, type Claim } from './schema';
 
 /**
  * Brainstem section data. Its own structures (pipeline/brainstem_build.py) are in MNI space like the DBS and
  * white-matter sections, so it also shows a few of their structures: the red nucleus, substantia nigra,
- * subthalamic nucleus, thalamus and dentate nucleus (DBS atlases) and the brainstem tracts (HCP-1065).
+ * subthalamic nucleus, thalamus and dentate nucleus (DBS atlases) and the brainstem tracts (HCP-1065). Four tracts
+ * the HCP-1065 atlas lacks are its own structures, surfaces from the HCP-YA atlas (`category: 'tract'`).
  */
 export const BS_MANIFEST = BsManifestSchema.parse(bsManifestJson);
 const DBS = ManifestSchema.parse(manifestJson);
@@ -30,6 +31,14 @@ export const VOLUMES = DBS.volumes;
 export const ALL: ManifestStructure[] = [...BS_MANIFEST.structures, ...CONTEXT];
 export const BS = new Map(ALL.map((s) => [s.id, s]));
 export const OWN = new Set(BS_MANIFEST.structures.map((s) => s.id));
+/** the section's own tracts: surfaces of the HCP-YA atlas's tract volumes (the others are the white-matter section's streamlines) */
+export const OWN_TRACTS = BS_MANIFEST.structures.filter((s) => s.category === 'tract').map((s) => s.id);
+/** how each of them sits on this section's template, by side (measured by the build) */
+export const TRACT_FIT = BS_MANIFEST.fit.tracts;
+/** every cranial nerve a nucleus or nerve belongs to: a nucleus may serve several */
+export const nervesOf = (s: ManifestStructure): number[] => s.cranialNerves ?? (s.cranialNerve ? [s.cranialNerve] : []);
+/** the model's nuclei of a cranial nerve, those it shares with other nerves among them */
+export const nucleiOf = (cn: number): ManifestStructure[] => BS_MANIFEST.structures.filter((s) => s.category === 'cnNucleus' && nervesOf(s).includes(cn));
 
 const V3 = z.tuple([z.number(), z.number(), z.number()]);
 const ZoneGeomSchema = z.object({
@@ -87,6 +96,27 @@ export function crossCheckBs(): string[] {
   for (const s of BS_MANIFEST.structures.filter((x) => x.category === 'aan')) if (!AAN_TRANSMITTER[s.abbr ?? '']) errs.push(`${s.id}: no transmitter claim`);
   for (const [cn, cl] of Object.entries(NERVE_COMPONENTS)) ref(`nerve ${cn}`, cl);
   for (const s of BS_MANIFEST.structures.filter((x) => x.category === 'nerve')) if (!NERVE_COMPONENTS[s.cranialNerve ?? 0]) errs.push(`${s.id}: no components`);
+  // a nerve has nuclei in the model, or sourced text saying which it has that the model lacks: never neither, never both
+  for (const s of BS_MANIFEST.structures.filter((x) => x.category === 'nerve')) {
+    const cn = s.cranialNerve ?? 0;
+    if ((nucleiOf(cn).length > 0) === !!NUCLEI_NOT_MODELLED[cn]) errs.push(`${s.id}: nuclei in the model ${nucleiOf(cn).length}, 'not modelled' text ${!!NUCLEI_NOT_MODELLED[cn]}`);
+  }
+  for (const [cn, t] of Object.entries(NUCLEI_NOT_MODELLED)) t.claims.forEach((cl) => ref(`nuclei of nerve ${cn}`, cl));
+  // a nucleus that serves several nerves says, from a source, what each has in it
+  for (const s of BS_MANIFEST.structures.filter((x) => x.category === 'cnNucleus')) {
+    if (!!s.cranialNerves !== !!SHARED_NUCLEI[s.id]) errs.push(`${s.id}: serves ${nervesOf(s).join(', ')}, shared-nucleus text ${!!SHARED_NUCLEI[s.id]}`);
+    if (s.cranialNerves && !s.cranialNerves.includes(s.cranialNerve ?? 0)) errs.push(`${s.id}: listed under a nerve it does not serve`);
+  }
+  for (const [id, cl] of Object.entries(SHARED_NUCLEI)) cl.forEach((x) => ref(`shared nucleus ${id}`, x));
+  // the HCP-YA tracts: each has its text and its measured fit
+  HCP_ATLAS.forEach((cl) => ref('HCP-YA atlas', cl));
+  for (const id of OWN_TRACTS) {
+    const t = TRACT_TEXT[id];
+    if (!t) { errs.push(`tract ${id}: no content`); continue; }
+    [...t.claims, ...t.measures].forEach((cl) => ref(`tract ${id}`, cl));
+    if (!TRACT_FIT[id]) errs.push(`tract ${id}: not measured against the template`);
+  }
+  for (const id of Object.keys(TRACT_TEXT)) if (!OWN_TRACTS.includes(id)) errs.push(`tract content ${id}: no structure`);
   for (const id of [...DBS_NUCLEI, ...TRACTS]) if (!BS.has(id)) errs.push(`context structure ${id} missing from its manifest`);
   for (const r of BS_REFS) if (!used.has(r.id)) errs.push(`reference ${r.id} is never cited`);
   const ids = BS_REFS.map((r) => r.id);

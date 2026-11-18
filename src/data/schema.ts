@@ -183,6 +183,9 @@ export const ManifestStructureSchema = z.object({
   atOpening: z.object({ stretchMm: z.number(), routedId: z.string(), R: atOpeningSide, L: atOpeningSide }).optional(),
   /** skull-base section: the cranial nerve (1-12) a nerve or nerve branch belongs to */
   cranialNerve: z.number().int().min(1).max(12).optional(),
+  /** brainstem section: every cranial nerve a nucleus serves, where it serves more than one (`cranialNerve` is the
+   * one it is listed under) */
+  cranialNerves: z.array(z.number().int().min(1).max(12)).min(2).optional(),
   /** skull-base section: the arterial system an artery is listed under (its trunk's name) */
   system: z.string().optional(),
   /** layer the structure belongs to when its type alone does not say (spine section) */
@@ -314,7 +317,22 @@ export const VaManifestSchema = z.object({
 });
 export type VaManifest = z.infer<typeof VaManifestSchema>;
 
-/** bs-manifest.json: the brainstem section's structures in MNI space (Z-Anatomy fitted to the template; AAN 2.0). */
+/** How one side of a tract of the HCP-YA atlas sits on this section's template (brainstem_build.py tract_fit): the
+ * atlas is in another ICBM-152 space and is drawn without a shift, so this is measured. Of the volume's voxels: how
+ * many lie at the fitted brainstem's levels, the share of those inside the fitted brainstem, more than 1 mm outside
+ * it, the farthest outside (mm) and the share in the model's fourth ventricle or aqueduct; the share of all of them
+ * that are fluid on the T2 template; the volume's extent along z (mm), its cross-section by level (mm2: smallest,
+ * median, largest) and the share of its volume that the smoothed surface encloses. */
+const TractFitSchema = z.object({
+  voxels: z.number().int().positive(), zMm: z.tuple([z.number(), z.number()]), sectionMm2: z.tuple([z.number(), z.number(), z.number()]),
+  atBrainstemLevels: z.number().int().positive(), insideShare: z.number().min(0).max(1), outsideOver1mmShare: z.number().min(0).max(1),
+  outsideMaxMm: z.number().min(0), inVentricleShare: z.number().min(0).max(1), fluidShare: z.number().min(0).max(1),
+  surfaceVolumeShare: z.number().min(0),
+});
+export type TractFit = z.infer<typeof TractFitSchema>;
+
+/** bs-manifest.json: the brainstem section's structures in MNI space (Z-Anatomy fitted to the template; AAN 2.0; four
+ * tracts of the HCP-YA tractography atlas). */
 export const BsManifestSchema = z.object({
   space: z.string(),
   generatedBy: z.string(),
@@ -334,6 +352,8 @@ export const BsManifestSchema = z.object({
     surfaceInFluidShare: z.number(), solidFluidShare: z.number(), ventricleFluidShare: z.number(),
     aanInVentricleMaxShare: z.number(), aanInVentricleWorst: z.string(),
     widths: z.array(z.object({ part: z.string(), z: z.number(), modelMm: z.number(), templateMm: z.number().nullable() })).min(1),
+    /** the tracts of the HCP-YA atlas, by structure id and side */
+    tracts: z.record(z.string(), z.object({ L: TractFitSchema, R: TractFitSchema })),
   }),
   datasets: z.record(z.string(), DatasetInfoSchema),
   dataset: DatasetInfoSchema,

@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import type { CameraPreset, ManifestStructure } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
-import { BS, BS_MANIFEST, BS_REF, DEFINITIONS, kindOf, KIND_LABEL, MEASURED, OWN, ZONE_GEOM, ZONE_TEXT, type Kind } from '../brainstem';
-import { AAN_GENERAL, AAN_TRANSMITTER, NERVE_COMPONENTS, NOT_DRAWN, SEZ_GENERAL } from '../brainstem/content';
+import { BS, BS_MANIFEST, BS_REF, DEFINITIONS, kindOf, KIND_LABEL, MEASURED, nervesOf, nucleiOf, OWN, TRACT_FIT, ZONE_GEOM, ZONE_TEXT, type Kind } from '../brainstem';
+import { AAN_GENERAL, AAN_TRANSMITTER, HCP_ATLAS, NERVE_COMPONENTS, NOT_DRAWN, NUCLEI_NOT_MODELLED, SEZ_GENERAL, SHARED_NUCLEI, TRACT_TEXT } from '../brainstem/content';
 import { BS_GROUP, BS_GROUPS, type BsGroup } from '../brainstem/groups';
-import { bsScene, type BsPlan } from '../brainstem/scene';
+import { bsScene, liesInside, type BsPlan } from '../brainstem/scene';
 import type { Claim } from '../brainstem/schema';
 import type { BsState } from '../brainstem/state';
 import { SITE_ROOT } from '../brand';
@@ -40,6 +40,10 @@ const refs = (ids: string[]) => refLinksFrom(BS_REF, ids);
 const claimList = (cl: Claim[]) => h('ul', { class: 'evidence' }, ...cl.map((c) => h('li', {}, c.text, ' ', refs(c.refIds))));
 const section = (title: string, cl: Claim[]) => (cl.length ? [h('dt', {}, title), h('dd', {}, claimList(cl))] : null);
 const pos = (v: unknown) => (Array.isArray(v) ? `${v.map((x) => fmtMm(Number(x))).join(', ')} mm` : String(v));
+const pct = (share: number) => `${Math.round(share * 100)} %`;
+const romans = (cns: number[]) => cns.map((n) => ROMAN[n]).join(', ');
+/** 'IX and XI', 'VII, IX and X' */
+const romanList = (cns: number[]) => (cns.length < 2 ? romans(cns) : `${romans(cns.slice(0, -1))} and ${ROMAN[cns[cns.length - 1]]}`);
 
 /** The 3D page of the brainstem section: views, structure and entry-zone cards, layers and slices. */
 export class BrainstemAtlasPage {
@@ -233,6 +237,8 @@ export class BrainstemAtlasPage {
       h('div', { class: 'chips wrap sb-list' }, ...ids.map(entry)));
     }
     if (s.sel && BS.has(s.sel)) pane.append(this.card(s.sel));
+    // a view of the surface can carry structures that lie under it: drawn faintly, seen once the surface is see-through
+    const under = g.surface === 'solid' ? g.context.filter(liesInside) : [];
     const groupCard = h('article', { class: 'card' },
       h('p', { class: 'eyebrow' }, GROUP_ROWS.find(([k]) => k === g.kind)![1]),
       h('h2', {}, g.name),
@@ -243,7 +249,10 @@ export class BrainstemAtlasPage {
           ...NOT_DRAWN.flatMap((n, i) => [i ? '; ' : '', n.name, ' ', refs(n.refIds)]), '.') : null,
         h('p', { class: 'aside' }, 'Each zone is drawn by rule on the brainstem of a model fitted to the MNI template, from the published definition; how is stated on its card. Zones are for orientation and teaching, not for planning an entry.'),
       ] : null,
+      under.length ? h('p', { class: 'aside under-surface' }, 'Under the surface here (choose one to see it through the surface): ',
+        ...under.flatMap((id, i) => [i ? ', ' : '', h('button', { type: 'button', class: 'linklike', 'data-id': id, onclick: () => this.update((st) => { st.sel = id; }) }, nameOf(id))]), '.') : null,
       g.id === 'arousal' ? [h('h3', {}, 'The network'), claimList(AAN_GENERAL)] : null,
+      g.id === 'tracts' ? [h('h3', {}, 'The four tracts drawn as surfaces'), claimList(HCP_ATLAS)] : null,
       g.kind === 'overview' && g.id === 'overview' ? h('p', { class: 'aside' },
         `Model fitted to the ICBM 2009b template’s brainstem: the surface lies within ${fmtMm(BS_MANIFEST.fit.warpedMedianMm)} mm (median; 90 % within ${fmtMm(BS_MANIFEST.fit.warpedP90Mm)} mm) of the template’s tissue–fluid boundary where both are matched. Nerves, arteries and the model’s nuclei are carried along: approximate.`) : null);
     if (s.sel) pane.append(h('details', { class: 'more' }, h('summary', {}, `About ${g.name}`), groupCard));
@@ -284,18 +293,52 @@ export class BrainstemAtlasPage {
     }
     if (k === 'cnNucleus' || k === 'nerve') {
       const cn = st.cranialNerve ?? 0;
+      // a nucleus may serve several nerves (the nucleus ambiguus, the nucleus of the solitary tract)
+      const cns = nervesOf(st);
       const comp = NERVE_COMPONENTS[cn];
-      const nerve = BS_MANIFEST.structures.find((x) => x.category === 'nerve' && x.cranialNerve === cn);
-      const nuclei = BS_MANIFEST.structures.filter((x) => x.category === 'cnNucleus' && x.cranialNerve === cn);
-      const link = (x: ManifestStructure) => h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.sel = x.id; }) }, x.name);
-      return h('article', { class: 'card sel', style }, ...head(`${KIND_LABEL[k]} · ${ROMAN[cn]}`),
+      const nerves = cns.map((n) => BS_MANIFEST.structures.find((x) => x.category === 'nerve' && x.cranialNerve === n)).filter((x): x is ManifestStructure => !!x);
+      const nuclei = nucleiOf(cn);
+      const shared = SHARED_NUCLEI[id];
+      const missing = NUCLEI_NOT_MODELLED[cn];
+      const link = (x: ManifestStructure) => h('button', { type: 'button', class: 'linklike', 'data-id': x.id, onclick: () => this.update((s) => { s.sel = x.id; }) }, x.name);
+      // on a nerve's card, a nucleus it shares says with which nerves
+      const nucleus = (x: ManifestStructure) => {
+        const others = nervesOf(x).filter((n) => n !== cn);
+        return [link(x), others.length ? ` (shared with ${romanList(others)})` : ''];
+      };
+      return h('article', { class: 'card sel', style }, ...head(`${KIND_LABEL[k]} · ${romans(cns)}`),
         h('p', { class: 'aside schematic-note' }, k === 'nerve'
           ? 'The model’s nerve fitted to the template with the brainstem: its exit point and course are approximate.'
           : 'The model’s nucleus is a simple shape for its position and extent, fitted to the template with the brainstem: approximate.'),
-        h('dl', {}, comp ? [h('dt', {}, `Cranial nerve ${ROMAN[cn]}: functional components`), h('dd', {}, comp.text, ' ', refs(comp.refIds))] : null,
-          k === 'cnNucleus' && nerve ? [h('dt', {}, 'Nerve'), h('dd', {}, link(nerve))] : null,
-          k === 'nerve' ? [h('dt', {}, 'Nuclei in this model'), h('dd', {}, ...(nuclei.length ? nuclei.flatMap((x, i) => [i ? ', ' : '', link(x)]) : ['The model has none for this nerve.']))] : null,
+        h('dl', {},
+          shared ? [h('dt', {}, `Serves cranial nerves ${romanList(cns)}`), h('dd', {}, claimList(shared))]
+            : comp ? [h('dt', {}, `Cranial nerve ${ROMAN[cn]}: functional components`), h('dd', {}, comp.text, ' ', refs(comp.refIds))] : null,
+          k === 'cnNucleus' && nerves.length ? [h('dt', {}, nerves.length > 1 ? 'Nerves' : 'Nerve'), h('dd', {}, ...nerves.flatMap((x, i) => [i ? ', ' : '', link(x)]))] : null,
+          k === 'nerve' && nuclei.length ? [h('dt', {}, 'Nuclei in this model'), h('dd', {}, ...nuclei.flatMap((x, i) => [i ? ', ' : '', ...nucleus(x)]))] : null,
+          k === 'nerve' && !nuclei.length ? [h('dt', {}, 'Nuclei'), h('dd', { class: 'not-modelled' }, missing ? [h('p', {}, missing.lead), claimList(missing.claims)] : 'The model has none for this nerve.')] : null,
           ...(defBlock ?? []), ...this.measuredRows(id), ...geometry));
+    }
+    if (k === 'tract' && OWN.has(id)) {
+      // a tract drawn as the surface of the HCP-YA atlas's volume: what it is, and how it sits on this template
+      const t = TRACT_TEXT[id];
+      const f = TRACT_FIT[id];
+      const both = (fn: (x: (typeof f)['L']) => string) => `${fn(f.L)} (left) and ${fn(f.R)} (right)`;
+      const rows = [
+        `Drawn from z = ${fmtMm(f.L.zMm[0])} mm, the atlas’s lower edge, up to z = ${both((x) => `${fmtMm(x.zMm[1])} mm`)}.`,
+        `Inside the fitted brainstem: ${both((x) => pct(x.insideShare))} of its voxels at the brainstem’s levels; the farthest lies ${both((x) => `${fmtMm(x.outsideMaxMm)} mm`)} outside it.`,
+        `Fluid on the T2 template: ${both((x) => pct(x.fluidShare))} of its voxels; in the model’s fourth ventricle or aqueduct: ${both((x) => pct(x.inVentricleShare))}.`,
+        `Cross-section in the atlas, by level: a median ${both((x) => `${fmtMm(x.sectionMm2[1])} mm² (${fmtMm(x.sectionMm2[0])} to ${fmtMm(x.sectionMm2[2])})`)}.`,
+        `The smoothed surface encloses ${both((x) => pct(x.surfaceVolumeShare))} of the atlas’s volume for the tract.`,
+      ];
+      return h('article', { class: 'card sel', style }, ...head('Tract · HCP-YA atlas'),
+        h('p', { class: 'aside schematic-note' }, 'The surface of a tractography atlas’s region for this tract, drawn where that atlas has it: a guide to where the tract runs, not its outline. It stops at z = −50 mm because the atlas does; the tract itself runs on.'),
+        h('p', {}, t.summary),
+        h('dl', {}, ...(section('What the sources say', t.claims) ?? []), ...(section('Published measurements', t.measures) ?? []),
+          h('dt', {}, 'How it sits on this template (measured)'),
+          h('dd', { class: 'tract-fit' }, h('ul', { class: 'plain' }, ...rows.map((r) => h('li', {}, r))),
+            h('p', { class: 'aside' }, 'The atlas is in ICBM-152 space as FSL’s fractional anisotropy template has it; this section is drawn on the ICBM 2009b template. The tract is drawn without a shift, so these figures say how well the two agree here.')),
+          h('dt', {}, 'The atlas'), h('dd', {}, claimList(HCP_ATLAS)),
+          ...geometry));
     }
     if (!OWN.has(id)) {
       const wm = st.type === 'tract';
@@ -361,7 +404,8 @@ export class BrainstemAtlasPage {
     for (const k of LIST_ORDER) {
       const ids = shown.get(k);
       if (!ids?.length) continue;
-      if (k === 'tract' || k === 'dbs') { for (const id of ids) this.legend.append(row(k === 'tract' ? 'line' : 'solid', tokenOf(id), nameOf(id), [id])); continue; }
+      // (the white-matter section's tracts are streamlines; the section's own are surfaces)
+      if (k === 'tract' || k === 'dbs') { for (const id of ids) this.legend.append(row(k === 'tract' && !OWN.has(id) ? 'line' : 'solid', tokenOf(id), nameOf(id), [id])); continue; }
       this.legend.append(row(k === 'sez' || k === 'feature' || k === 'csf' ? 'patch' : 'solid', tokenOf(ids[0]), `${LIST_LABEL[k]} (${ids.length})`, ids));
     }
     if (this.s.hidden.length) this.legend.append(h('li', { class: 'lg-actions' }, h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.hidden = []; }) }, `Show all (${this.s.hidden.length} hidden)`)));

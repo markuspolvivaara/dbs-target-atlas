@@ -125,12 +125,14 @@ def main() -> int:
     verse = fetch_verse()
     verse_ccj = fetch_verse(VERSE_CCJ_SUBJECT, VERSE_CCJ_FILES)
     aan = fetch_aan()
+    hcpya = fetch_hcpya()
     lock = {"archive": LEADDBS_DATA_ZIP, "files": record,
             "hcp1065": {"release": C.HCP1065_RELEASE, "files": hcp},
             "zanatomy": {"source": ZANATOMY_URL, "files": zan},
             "verse": {"subject": VERSE_SUBJECT, "files": verse},
             "verseCcj": {"subject": VERSE_CCJ_SUBJECT, "files": verse_ccj},
-            "aan": {"source": AAN_URL.format(""), "files": aan}}
+            "aan": {"source": AAN_URL.format(""), "files": aan},
+            "hcpya": {"source": HCPYA_URL.format(""), "files": hcpya}}
     (RAW / "sources.lock.json").write_text(json.dumps(lock, indent=1))
     # the inputs pinned in the repository: every file fetched must match its recorded SHA-256 (--relock records them anew,
     # on purpose, after a source changes)
@@ -228,6 +230,39 @@ AAN_FILES = {
     "AAN_Brainstem_v2p0_Color_LUT_FreeSurfer.txt": "b6cc5d69748965de155bd68065ff9b0160083318d071d7ae301032eef7770b88",
     "README.md": "9c170b938deaa02571e4869225e52cd2ac271b7023cace1a7035abead46e4007",
 }
+
+
+# Brainstem section: four tracts of the HCP-YA tractography atlas (Yeh 2018; "HCP-YA Tractography Atlas (NIFTI Files)",
+# Zenodo doi:10.5281/zenodo.3627772, CC BY-SA 4.0), pinned by SHA-256 as downloaded 2026-11-17 (the build also checks
+# each against the md5 the record lists: brainstem_build.py HCP_MD5)
+HCPYA_URL = "https://zenodo.org/records/3627772/files/{}?download=1"
+HCPYA_FILES = {
+    "Medial_Longitudinal_Fasciculus_L.nii.gz": "3bc815415c53f395ab22100566e9c6198c5fafbbb25c768f777fc8c8113f85a5",
+    "Medial_Longitudinal_Fasciculus_R.nii.gz": "a3ec974748fd1e3a341b48716438e635c7ed6dbc20ee9acccfdfd02cefe5c16c",
+    "Central_Tegmental_Tract_L.nii.gz": "d09df02db2e3e69d854362c111bbdc1c14866e9d1c523ed35ca178ab85ee91c3",
+    "Central_Tegmental_Tract_R.nii.gz": "2116e6ab7afe7806fd6c798bbaf0af1ede9e7e3ccd884654825e8e35743be73a",
+    "Spinothalamic_Tract_L.nii.gz": "509fa1d29a40fcc9a26ca1e778c55a3b31cffdeb3b39a41087902aa76dc86b4f",
+    "Spinothalamic_Tract_R.nii.gz": "f42b72a27f2b8d9e9d9c8ec3a0aee4b8190214fc0139ff59d22746d1cec4c973",
+    "Lateral_Lemniscus_L.nii.gz": "99138df05095ac08d70d1fd59b84c059a77cc1913df3144fba9772445e53b173",
+    "Lateral_Lemniscus_R.nii.gz": "e59a32da55d43915ff698490594121e0b1a25c8e4c5fb26f7beb8ee2b8231964",
+}
+
+
+def fetch_hcpya() -> dict[str, str]:
+    out = RAW / "hcp842"
+    out.mkdir(parents=True, exist_ok=True)
+    record = {}
+    for name, sha in HCPYA_FILES.items():
+        dest = out / name
+        if not dest.exists():
+            print(f"fetch {name}")
+            urllib.request.urlretrieve(HCPYA_URL.format(name), dest)
+        digest = hashlib.sha256(dest.read_bytes()).hexdigest()
+        if digest != sha:
+            print(f"{name}: SHA-256 {digest} does not match the pinned {sha}", file=sys.stderr)
+            raise SystemExit(1)
+        record[name] = digest
+    return record
 
 
 def fetch_aan() -> dict[str, str]:

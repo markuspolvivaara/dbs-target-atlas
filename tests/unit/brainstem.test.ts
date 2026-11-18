@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { BS, BS_MANIFEST, BS_REFS, crossCheckBs, kindOf, MEASURED, ofKind, ZONE_GEOM, ZONE_TEXT } from '../../src/brainstem';
-import { NOT_DRAWN } from '../../src/brainstem/content';
+import { BS, BS_MANIFEST, BS_REF, BS_REFS, crossCheckBs, kindOf, MEASURED, nervesOf, nucleiOf, ofKind, OWN_TRACTS, TRACT_FIT, ZONE_GEOM, ZONE_TEXT } from '../../src/brainstem';
+import { HCP_ATLAS, NOT_DRAWN, NUCLEI_NOT_MODELLED, SHARED_NUCLEI, TRACT_TEXT } from '../../src/brainstem/content';
 import { BS_GROUPS } from '../../src/brainstem/groups';
-import { bsPlan, bsScene } from '../../src/brainstem/scene';
+import { bsPlan, bsScene, liesInside } from '../../src/brainstem/scene';
 import { decodeBs, defaultBsState, encodeBs } from '../../src/brainstem/state';
 import { SECTIONS } from '../../src/brand';
 import { nodeMeans } from './glb';
@@ -82,6 +82,79 @@ describe('brainstem data', () => {
       expect(r.url, r.id).toMatch(/^https:\/\/doi\.org\//);
     }
   });
+  // the audit's D-008 (November 2026)
+  it('a nucleus that serves several nerves lists them all, and each of those nerves lists the nucleus', () => {
+    const amb = BS.get('bs_n_ambiguus')!, sol = BS.get('bs_n_solitary')!;
+    expect(nervesOf(amb)).toEqual([9, 10, 11]);
+    expect(nervesOf(sol)).toEqual([7, 9, 10]);
+    // the others still serve the one nerve they are listed under
+    for (const s of BS_MANIFEST.structures.filter((x) => x.category === 'cnNucleus' && !SHARED_NUCLEI[x.id])) expect(nervesOf(s), s.id).toEqual([s.cranialNerve]);
+    const ids = (cn: number) => nucleiOf(cn).map((s) => s.id).sort();
+    expect(ids(7)).toEqual(['bs_n_facial', 'bs_n_solitary', 'bs_n_sup_salivatory']);
+    expect(ids(9)).toEqual(['bs_n_ambiguus', 'bs_n_inf_salivatory', 'bs_n_solitary']);
+    expect(ids(10)).toEqual(['bs_n_ambiguus', 'bs_n_dorsal_vagal', 'bs_n_solitary']);
+    expect(ids(11)).toEqual(['bs_n_accessory', 'bs_n_ambiguus']);
+    // what each nerve has in the nucleus, each sentence from a source read in full
+    for (const [id, claims] of Object.entries(SHARED_NUCLEI)) {
+      expect(claims.length, id).toBe(3);
+      for (const cl of claims) for (const r of cl.refIds) expect(BS_REF.get(r)?.pmcid, `${id}: ${r}`).toMatch(/^PMC\d+$/);
+    }
+    expect(SHARED_NUCLEI.bs_n_ambiguus.map((c) => c.text).join(' ')).toMatch(/stylopharyngeus[\s\S]*cranial part/);
+    expect(SHARED_NUCLEI.bs_n_solitary[0].text).toMatch(/chorda tympani/);
+  });
+  it('the trigeminal nerve says its four nuclei are not modelled, with what the sources say of each', () => {
+    expect(nucleiOf(5)).toEqual([]);
+    expect(Object.keys(NUCLEI_NOT_MODELLED)).toEqual(['5']);
+    const t = NUCLEI_NOT_MODELLED[5];
+    expect(t.lead).toMatch(/^Not modelled/);
+    const text = t.claims.map((c) => c.text).join(' ');
+    for (const name of ['Principal sensory nucleus', 'Motor nucleus', 'Mesencephalic nucleus', 'Spinal nucleus']) expect(text, name).toContain(name);
+    for (const cl of t.claims) for (const r of cl.refIds) expect(BS_REF.get(r)?.pmcid, r).toMatch(/^PMC\d+$/);
+  });
+  it('four tracts of the HCP-YA atlas are drawn as surfaces where the atlas has them, each measured against this template', () => {
+    expect(OWN_TRACTS).toEqual(['bs_t_mlf', 'bs_t_ctt', 'bs_t_stt', 'bs_t_ll']);
+    expect(BS_MANIFEST.datasets.hcp842.licence).toMatch(/^CC BY-SA 4\.0/);
+    expect(BS_MANIFEST.datasets.hcp842.url).toBe('https://doi.org/10.5281/zenodo.3627772');
+    expect(HCP_ATLAS.every((c) => c.refIds.includes('yeh2018'))).toBe(true);
+    for (const id of OWN_TRACTS) {
+      const s = BS.get(id)!, t = TRACT_TEXT[id];
+      expect([s.type, s.category, s.layer, s.dataset], id).toEqual(['soft', 'tract', 'tracts', 'hcp842']);
+      expect(kindOf(id), id).toBe('tract');
+      expect(s.derivation, id).toMatch(/without a shift[\s\S]*z = -50 mm/);
+      expect(t.claims.length, id).toBeGreaterThan(1);
+      for (const cl of [...t.claims, ...t.measures]) for (const r of cl.refIds) expect(BS_REF.get(r)?.pmcid, `${id}: ${r}`).toMatch(/^PMC\d+$/);
+      for (const side of ['L', 'R'] as const) {
+        const f = TRACT_FIT[id][side];
+        const where = `${id} ${side}`;
+        // the atlas's lower edge; the tract runs up to the top of the midbrain or just past it
+        expect(f.zMm[0], where).toBe(-50);
+        expect(f.zMm[1], where).toBeGreaterThan(-10);
+        expect(f.zMm[1], where).toBeLessThan(5);
+        // drawn without a shift from another ICBM-152 space: most of it lies inside the fitted brainstem, none of it far
+        // outside, little of it in the model's ventricle (the bounds are what the build measured, with room)
+        expect(f.insideShare, where).toBeGreaterThan(0.65);
+        expect(f.outsideMaxMm, where).toBeLessThan(5);
+        expect(f.inVentricleShare, where).toBeLessThan(0.1);
+        expect(f.fluidShare, where).toBeLessThan(0.45);
+        expect(f.surfaceVolumeShare, where).toBeGreaterThan(0.6);
+        expect(f.surfaceVolumeShare, where).toBeLessThan(1.05);
+        expect(f.sectionMm2[0], where).toBeLessThanOrEqual(f.sectionMm2[1]);
+        expect(f.sectionMm2[1], where).toBeLessThanOrEqual(f.sectionMm2[2]);
+      }
+      // left of the midline on the left
+      expect(s.centroid!.L[0], id).toBeLessThan(0);
+      expect(s.centroid!.R[0], id).toBeGreaterThan(0);
+    }
+    // the fasciculus lies beside the midline, the spinothalamic tract and the lateral lemniscus further out
+    const x = (id: string) => BS.get(id)!.centroid!.R[0];
+    expect(x('bs_t_mlf')).toBeLessThan(x('bs_t_ctt'));
+    expect(x('bs_t_ctt')).toBeLessThan(x('bs_t_ll'));
+    expect(x('bs_t_mlf')).toBeLessThan(5);
+    // and behind the medial lemniscus's level in the tegmentum: dorsal to the pons's centre
+    expect(BS.get('bs_t_mlf')!.centroid!.R[1]).toBeLessThan(BS.get('bs_pons')!.centroid!.R[1]);
+    // Li 2021's distances are the published ones
+    expect(TRACT_TEXT.bs_t_mlf.measures[0].text).toMatch(/0\.50 mm \(left\) and 0\.48 mm \(right\) from the median sulcus and 1\.41 mm and 1\.51 mm from the floor/);
+  });
   it('is listed as a section, after the skull base', () => {
     const ids = SECTIONS.map((s) => s.id);
     expect(ids.indexOf('brainstem')).toBe(ids.indexOf('skullbase') + 1);
@@ -105,6 +178,24 @@ describe('brainstem scene and URL state', () => {
     expect(inside.looks.get('bs_n_abducens')).toBe('primary');
     const tracts = bsPlan('tracts', null);
     expect(tracts.tracts.get('wm_cst')).toBe('key');
+    // the section's own tracts are surfaces: drawn as meshes, not as streamlines
+    for (const id of OWN_TRACTS) {
+      expect(tracts.looks.get(id), id).toBe('primary');
+      expect(tracts.tracts.has(id), id).toBe(false);
+    }
+    // the fasciculus lies under the floor, and partly outside the fitted surface: under the solid floor it is not
+    // drawn (only patches of it would show); it is seen through the surface once it (or a nucleus under the floor)
+    // is chosen; an entry zone chosen there leaves the surface solid
+    expect(floor.looks.get('bs_t_mlf')).toBe('hidden');
+    expect(floor.looks.get('bs_n_abducens')).toBe('context');
+    expect(bsPlan('sez_floor', 'bs_n_abducens').looks.get('bs_t_mlf')).toBe('context');
+    expect(bsPlan('sez_floor', 'sez_suprafacial').looks.get('bs_t_mlf')).toBe('hidden');
+    expect(liesInside('bs_t_mlf') && liesInside('bs_n_abducens') && liesInside('bs_aan_lc')).toBe(true);
+    expect(liesInside('sez_suprafacial') || liesInside('bs_cn_facial_nerve') || liesInside('wm_cst') || liesInside('bs_olive')).toBe(false);
+    expect(bsPlan('sez_floor', 'bs_t_mlf').looks.get('bs_pons')).toBe('shell');
+    expect(bsPlan('sez_floor', 'bs_t_mlf').looks.get('bs_t_mlf')).toBe('primary');
+    expect(bsPlan('sez_floor', 'bs_n_abducens').looks.get('bs_pons')).toBe('shell');
+    expect(bsPlan('sez_floor', 'sez_suprafacial').looks.get('bs_pons')).toBe('primary');
     // a zone selected from an inside view still sits on a solid surface
     expect(bsPlan('cn_nuclei', 'sez_suprafacial').looks.get('bs_pons')).toBe('primary');
   });
@@ -124,7 +215,7 @@ describe('brainstem scene and URL state', () => {
 });
 
 describe('shipped brainstem GLBs', () => {
-  it.each(['bs_pons', 'bs_n_hypoglossal', 'bs_aan_lc', 'sez_peritrigeminal', 'bs_cn_trigeminal_nerve'].map((id) => [id, BS.get(id)!]))('%s decodes, on the right sides', async (_id, s) => {
+  it.each(['bs_pons', 'bs_n_hypoglossal', 'bs_aan_lc', 'sez_peritrigeminal', 'bs_cn_trigeminal_nerve', 'bs_t_mlf', 'bs_t_ctt', 'bs_t_stt', 'bs_t_ll'].map((id) => [id, BS.get(id)!]))('%s decodes, on the right sides', async (_id, s) => {
     const means = await nodeMeans(s.file);
     for (const side of ['L', 'R'] as const) {
       expect(means[side], side).toBeDefined();

@@ -638,7 +638,11 @@ entry zones for brainstem surgery.
 
 - **Anatomy**: the Z-Anatomy model's brainstem (its surface features: crus, colliculi, olive, pyramid, medial
   geniculate body), the aqueduct and fourth ventricle, the cranial nerve nuclei the model has (all but the trigeminal
-  nuclei), cranial nerves III–XII and the vertebrobasilar arteries next to the brainstem. Fitted into MNI space by
+  nuclei: the trigeminal nerve's card says they are not modelled and gives, from sources, where the four lie and what
+  each serves), cranial nerves III–XII and the vertebrobasilar arteries next to the brainstem. A nucleus that serves
+  several nerves lists them all (`cranialNerves` in the manifest: the nucleus ambiguus IX, X and XI, the nucleus of
+  the solitary tract VII, IX and X), with a sourced sentence on what each nerve has in it, and each of those nerves'
+  cards lists the nucleus. Fitted into MNI space by
   `pipeline/brainstem_fit.py`: the ICBM 2009b T2 template, averaged with its mirror image, gives the tissue–fluid
   boundary (cisterns, aqueduct, fourth ventricle); the model's brainstem and ventricle walls are matched to it where
   their normals agree, by a similarity transform kept on the midline (pitch, shift, one scale) and then a smooth,
@@ -648,7 +652,20 @@ entry zones for brainstem surgery.
   them approximate; the model's red nucleus, for one, sits about 5 mm below the Lead-DBS one, so the red nucleus,
   substantia nigra, STN, thalamus and dentate nucleus come from the DBS section's atlases instead.
 - **Ascending arousal network**: the ten brainstem nuclei of the Harvard AAN atlas 2.0 (CC0; MNI-native).
-- **Tracts**: the brainstem tracts of the white-matter section (HCP-1065).
+- **Tracts**: the brainstem tracts of the white-matter section (HCP-1065), drawn as streamlines. Four tracts that
+  atlas lacks are the section's own (`bs_t_*.glb`): the medial longitudinal fasciculus, the central tegmental tract,
+  the spinothalamic tract and the lateral lemniscus, drawn as the surfaces of their volumes in the HCP-YA tractography
+  atlas (Yeh 2018; NIfTI files, Zenodo 10.5281/zenodo.3627772, CC BY-SA 4.0; `pipeline/data/raw/hcp842/`, pinned in
+  `fetch_sources.py`). Z-Anatomy has none of the four. That atlas is in ICBM-152 space as FSL's FA template has it,
+  not on the ICBM 2009b template, and its volumes end at z = −50 mm (about where this model's pons meets its
+  medulla), so the tracts are drawn where the atlas has them, without a shift, and not in the medulla; the build
+  measures each side against the fitted brainstem and the T2 template (`tract_fit`: `fit.tracts` in the manifest) and
+  each tract's card and the Sources page state the result. Inside the fitted brainstem, of the voxels at its levels:
+  fasciculus 97 % (left) and 93 % (right), central tegmental tract 93 % and 94 %, spinothalamic tract 91 % and 86 %,
+  lateral lemniscus 82 % and 73 %; fluid on the T2 template: 2 % and 16 %, 5 % and 0 %, 3 % and 10 %, 21 % and 38 %.
+  The fasciculus is also in the view of the fourth ventricle's floor: choosing it (or a nucleus under the floor) from
+  that view's card draws the surface see-through. Under a solid surface none of the four is drawn (`bsPlan`): the
+  parts that lie outside the fitted surface would show on it as patches.
 - **Safe entry zones** (15): perioculomotor (anterior mesencephalic), lateral mesencephalic sulcus, supra- and
   infracollicular; supratrigeminal and peritrigeminal; suprafacial and infrafacial triangles and the median sulcus
   on the floor of the fourth ventricle; anterolateral (preolivary) sulcus, olivary zone, postolivary sulcus, and the
@@ -661,11 +678,14 @@ entry zones for brainstem surgery.
   (Cavalheiro 2015, Rajagopal 2019, Cavalcanti 2026, Erginoglu 2026, Olchanyi 2025, Kim 2020) and abstracts
   (Cavalcanti 2016, Yagmurlu 2014, Yang 2019, Guberinic 2022, Edlow 2024). Nerve cards give each nerve's functional
   components (Kim 2020, Table 1); the model's structures also show the Wikipedia definition Z-Anatomy ships,
-  labelled as such. The Brainstem Navigator atlas was not used: its licence forbids redistributing information
+  labelled as such. The trigeminal nuclei, the shared nuclei and the four HCP-YA tracts (November 2026) are each
+  sourced from an open-access full text: Turnbull 2025, Kaya 2023, Henssen 2019a and 2019b, García Santos 2018,
+  Stephani 2011, Li 2021, Donatelli 2023, Sitek 2019 and Yeh 2018 (its author manuscript). The Brainstem Navigator atlas was not used: its licence forbids redistributing information
   derived from it.
 - Pipeline: `pipeline/brainstem_export.py` (in Blender), then `pipeline/brainstem_build.py` (fit, meshes, zones,
   manifest), `node pipeline/compress.mjs brainstem`, `pipeline/brainstem_build.py finalize` (checks sides, positions,
-  the fit and the zones).
+  the fit, the zones, the tracts and the shared nuclei). `pipeline/brainstem_build.py tracts` redoes only the four
+  HCP-YA tracts and the shared nuclei's lists in the manifest as built, leaving every other file as it is.
 
 ## Ventricles
 
@@ -1237,7 +1257,8 @@ Wikipedia definitions 3.0), not GPL. The skull base's detailed model (`public/as
 is derived from TopBrain 2025 data (University Hospital Zurich: open use with the source given, **non-commercial**;
 commercial use needs the data owner's permission) and from Z-Anatomy (CC BY-SA). The brainstem section's files (`public/assets/brainstem/`, `bs-*.json`) are **CC BY-SA**
 (Z-Anatomy, fitted into MNI space), except its arousal network nuclei (`bs_aan_*.glb`), which come from the Harvard
-Ascending Arousal Network atlas 2.0 (**CC0**). The cortex section's meshes (`public/assets/cortex/`, `ctx-*.json`) are
+Ascending Arousal Network atlas 2.0 (**CC0**), and its four tracts of the HCP-YA tractography atlas (`bs_t_*.glb`:
+**CC BY-SA 4.0**, with the WU-Minn HCP data use terms). The cortex section's meshes (`public/assets/cortex/`, `ctx-*.json`) are
 GPL-3.0, non-commercial like the other Lead-DBS-derived assets; the spine section's files (`public/assets/spine/`,
 `spine-*.json`) are **CC BY-SA 4.0** (VerSe); their labels were made with FreeSurfer (MGH
 licence, research use) and the definition texts in `ctx-labels.json` are CC BY-SA 3.0.

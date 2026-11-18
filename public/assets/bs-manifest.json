@@ -913,7 +913,12 @@
    "category": "cnNucleus",
    "cranialNerve": 10,
    "fitted": true,
-   "layer": "nuclei"
+   "layer": "nuclei",
+   "cranialNerves": [
+    9,
+    10,
+    11
+   ]
   },
   {
    "id": "bs_n_dorsal_vagal",
@@ -997,7 +1002,12 @@
    "category": "cnNucleus",
    "cranialNerve": 10,
    "fitted": true,
-   "layer": "nuclei"
+   "layer": "nuclei",
+   "cranialNerves": [
+    7,
+    9,
+    10
+   ]
   },
   {
    "id": "bs_n_accessory",
@@ -1512,6 +1522,178 @@
    "category": "aan",
    "abbr": "PTg",
    "layer": "nuclei"
+  },
+  {
+   "id": "bs_t_mlf",
+   "name": "Medial longitudinal fasciculus",
+   "aliases": [
+    "MLF"
+   ],
+   "type": "soft",
+   "file": "assets/brainstem/bs_t_mlf.glb",
+   "bytes": 29712,
+   "colour": {
+    "token": "bsMlf",
+    "light": "#131386",
+    "dark": "#4D4DE6"
+   },
+   "dataset": "hcp842",
+   "source": "HCP-YA tractography atlas (Yeh 2018), NIfTI files",
+   "licence": "CC BY-SA 4.0 (Zenodo record 10.5281/zenodo.3627772); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+   "citation": [
+    "Yeh FC. HCP-YA Tractography Atlas (NIFTI Files) [dataset]. Zenodo; 2018. doi:10.5281/zenodo.3627772.",
+    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.5281/zenodo.3627772",
+    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
+   ],
+   "refIds": [],
+   "derivation": "Surface of the atlas's volume of this tract (binary, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm). Drawn where the atlas has it, in its own ICBM-152 space, without a shift onto this section's ICBM 2009b template. The volume ends at z = -50 mm, the atlas's lower edge, so the tract is not drawn in the medulla.",
+   "centroid": {
+    "L": [
+     -2.12,
+     -32.39,
+     -24.73
+    ],
+    "R": [
+     2.72,
+     -33.54,
+     -25.44
+    ]
+   },
+   "category": "tract",
+   "abbr": "MLF",
+   "layer": "tracts"
+  },
+  {
+   "id": "bs_t_ctt",
+   "name": "Central tegmental tract",
+   "aliases": [
+    "CTT"
+   ],
+   "type": "soft",
+   "file": "assets/brainstem/bs_t_ctt.glb",
+   "bytes": 30072,
+   "colour": {
+    "token": "bsCtt",
+    "light": "#E12B86",
+    "dark": "#DF2080"
+   },
+   "dataset": "hcp842",
+   "source": "HCP-YA tractography atlas (Yeh 2018), NIfTI files",
+   "licence": "CC BY-SA 4.0 (Zenodo record 10.5281/zenodo.3627772); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+   "citation": [
+    "Yeh FC. HCP-YA Tractography Atlas (NIFTI Files) [dataset]. Zenodo; 2018. doi:10.5281/zenodo.3627772.",
+    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.5281/zenodo.3627772",
+    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
+   ],
+   "refIds": [],
+   "derivation": "Surface of the atlas's volume of this tract (binary, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm). Drawn where the atlas has it, in its own ICBM-152 space, without a shift onto this section's ICBM 2009b template. The volume ends at z = -50 mm, the atlas's lower edge, so the tract is not drawn in the medulla.",
+   "centroid": {
+    "L": [
+     -3.28,
+     -32.33,
+     -24.55
+    ],
+    "R": [
+     4.55,
+     -33.09,
+     -25.73
+    ]
+   },
+   "category": "tract",
+   "abbr": "CTT",
+   "layer": "tracts"
+  },
+  {
+   "id": "bs_t_stt",
+   "name": "Spinothalamic tract",
+   "aliases": [
+    "STT"
+   ],
+   "type": "soft",
+   "file": "assets/brainstem/bs_t_stt.glb",
+   "bytes": 30508,
+   "colour": {
+    "token": "bsStt",
+    "light": "#422428",
+    "dark": "#95505A"
+   },
+   "dataset": "hcp842",
+   "source": "HCP-YA tractography atlas (Yeh 2018), NIfTI files",
+   "licence": "CC BY-SA 4.0 (Zenodo record 10.5281/zenodo.3627772); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+   "citation": [
+    "Yeh FC. HCP-YA Tractography Atlas (NIFTI Files) [dataset]. Zenodo; 2018. doi:10.5281/zenodo.3627772.",
+    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.5281/zenodo.3627772",
+    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
+   ],
+   "refIds": [],
+   "derivation": "Surface of the atlas's volume of this tract (binary, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm). Drawn where the atlas has it, in its own ICBM-152 space, without a shift onto this section's ICBM 2009b template. The volume ends at z = -50 mm, the atlas's lower edge, so the tract is not drawn in the medulla.",
+   "centroid": {
+    "L": [
+     -9.49,
+     -30.21,
+     -20.94
+    ],
+    "R": [
+     10.0,
+     -30.24,
+     -22.21
+    ]
+   },
+   "category": "tract",
+   "abbr": "STT",
+   "layer": "tracts"
+  },
+  {
+   "id": "bs_t_ll",
+   "name": "Lateral lemniscus",
+   "aliases": [
+    "LL"
+   ],
+   "type": "soft",
+   "file": "assets/brainstem/bs_t_ll.glb",
+   "bytes": 30008,
+   "colour": {
+    "token": "bsLl",
+    "light": "#FF1A3C",
+    "dark": "#FF0026"
+   },
+   "dataset": "hcp842",
+   "source": "HCP-YA tractography atlas (Yeh 2018), NIfTI files",
+   "licence": "CC BY-SA 4.0 (Zenodo record 10.5281/zenodo.3627772); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+   "citation": [
+    "Yeh FC. HCP-YA Tractography Atlas (NIFTI Files) [dataset]. Zenodo; 2018. doi:10.5281/zenodo.3627772.",
+    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.5281/zenodo.3627772",
+    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
+   ],
+   "refIds": [],
+   "derivation": "Surface of the atlas's volume of this tract (binary, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm). Drawn where the atlas has it, in its own ICBM-152 space, without a shift onto this section's ICBM 2009b template. The volume ends at z = -50 mm, the atlas's lower edge, so the tract is not drawn in the medulla.",
+   "centroid": {
+    "L": [
+     -8.16,
+     -37.53,
+     -25.73
+    ],
+    "R": [
+     8.97,
+     -36.75,
+     -24.9
+    ]
+   },
+   "category": "tract",
+   "abbr": "LL",
+   "layer": "tracts"
   },
   {
    "id": "bs_cn_oculomotor_nerve",
@@ -2880,7 +3062,169 @@
     "modelMm": 20.4,
     "templateMm": 17.0
    }
-  ]
+  ],
+  "tracts": {
+   "bs_t_mlf": {
+    "L": {
+     "voxels": 228,
+     "zMm": [
+      -50.0,
+      -7.0
+     ],
+     "sectionMm2": [
+      3.0,
+      4.0,
+      15.0
+     ],
+     "atBrainstemLevels": 228,
+     "insideShare": 0.969,
+     "outsideOver1mmShare": 0.004,
+     "outsideMaxMm": 1.5,
+     "inVentricleShare": 0.0,
+     "fluidShare": 0.018,
+     "surfaceVolumeShare": 0.72
+    },
+    "R": {
+     "voxels": 301,
+     "zMm": [
+      -50.0,
+      -7.0
+     ],
+     "sectionMm2": [
+      2.0,
+      5.0,
+      29.0
+     ],
+     "atBrainstemLevels": 301,
+     "insideShare": 0.93,
+     "outsideOver1mmShare": 0.017,
+     "outsideMaxMm": 1.5,
+     "inVentricleShare": 0.04,
+     "fluidShare": 0.159,
+     "surfaceVolumeShare": 0.771
+    }
+   },
+   "bs_t_ctt": {
+    "L": {
+     "voxels": 401,
+     "zMm": [
+      -50.0,
+      -5.0
+     ],
+     "sectionMm2": [
+      3.0,
+      7.5,
+      23.0
+     ],
+     "atBrainstemLevels": 382,
+     "insideShare": 0.932,
+     "outsideOver1mmShare": 0.024,
+     "outsideMaxMm": 1.5,
+     "inVentricleShare": 0.005,
+     "fluidShare": 0.05,
+     "surfaceVolumeShare": 0.825
+    },
+    "R": {
+     "voxels": 592,
+     "zMm": [
+      -50.0,
+      -5.0
+     ],
+     "sectionMm2": [
+      4.0,
+      12.0,
+      30.0
+     ],
+     "atBrainstemLevels": 564,
+     "insideShare": 0.943,
+     "outsideOver1mmShare": 0.023,
+     "outsideMaxMm": 1.5,
+     "inVentricleShare": 0.0,
+     "fluidShare": 0.003,
+     "surfaceVolumeShare": 0.882
+    }
+   },
+   "bs_t_stt": {
+    "L": {
+     "voxels": 2781,
+     "zMm": [
+      -50.0,
+      1.0
+     ],
+     "sectionMm2": [
+      29.0,
+      48.0,
+      108.0
+     ],
+     "atBrainstemLevels": 2032,
+     "insideShare": 0.909,
+     "outsideOver1mmShare": 0.035,
+     "outsideMaxMm": 3.2,
+     "inVentricleShare": 0.005,
+     "fluidShare": 0.033,
+     "surfaceVolumeShare": 0.962
+    },
+    "R": {
+     "voxels": 2983,
+     "zMm": [
+      -50.0,
+      1.0
+     ],
+     "sectionMm2": [
+      1.0,
+      49.5,
+      112.0
+     ],
+     "atBrainstemLevels": 2267,
+     "insideShare": 0.861,
+     "outsideOver1mmShare": 0.067,
+     "outsideMaxMm": 3.8,
+     "inVentricleShare": 0.001,
+     "fluidShare": 0.096,
+     "surfaceVolumeShare": 0.966
+    }
+   },
+   "bs_t_ll": {
+    "L": {
+     "voxels": 403,
+     "zMm": [
+      -50.0,
+      -1.0
+     ],
+     "sectionMm2": [
+      2.0,
+      9.0,
+      16.0
+     ],
+     "atBrainstemLevels": 385,
+     "insideShare": 0.816,
+     "outsideOver1mmShare": 0.068,
+     "outsideMaxMm": 1.8,
+     "inVentricleShare": 0.0,
+     "fluidShare": 0.208,
+     "surfaceVolumeShare": 0.827
+    },
+    "R": {
+     "voxels": 430,
+     "zMm": [
+      -50.0,
+      -5.0
+     ],
+     "sectionMm2": [
+      3.0,
+      9.0,
+      15.0
+     ],
+     "atBrainstemLevels": 418,
+     "insideShare": 0.725,
+     "outsideOver1mmShare": 0.132,
+     "outsideMaxMm": 2.4,
+     "inVentricleShare": 0.0,
+     "fluidShare": 0.381,
+     "surfaceVolumeShare": 0.851
+    }
+   }
+  }
  },
  "datasets": {
   "zanatomy": {
@@ -2917,6 +3261,23 @@
    "citationUrls": [
     "https://doi.org/10.5061/dryad.zw3r228d2",
     "https://doi.org/10.1002/hbm.70357"
+   ]
+  },
+  "hcp842": {
+   "name": "HCP-YA tractography atlas (Yeh 2018), NIfTI files",
+   "licence": "CC BY-SA 4.0 (Zenodo record 10.5281/zenodo.3627772); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms",
+   "url": "https://doi.org/10.5281/zenodo.3627772",
+   "note": "One binary volume per tract and side at 1 mm, from tractography on the averaged diffusion MRI of 842 Human Connectome Project participants, the streamlines labelled by neuroanatomists. Space: ICBM-152 as FSL's fractional anisotropy template has it (Yeh 2018), not the ICBM 2009b template this section is drawn on; the volumes are drawn where the atlas has them, without a shift, and each tract's card states how it sits in the fitted brainstem and on the T2 template. The volumes end at z = -50 mm, the atlas's lower edge: about where this model's pons meets its medulla, so no tract of the atlas is drawn in the medulla.",
+   "attribution": [
+    "Yeh FC (2018). HCP-YA Tractography Atlas (NIFTI Files). Zenodo. CC BY-SA 4.0"
+   ],
+   "citation": [
+    "Yeh FC. HCP-YA Tractography Atlas (NIFTI Files) [dataset]. Zenodo; 2018. doi:10.5281/zenodo.3627772.",
+    "Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.5281/zenodo.3627772",
+    "https://doi.org/10.1016/j.neuroimage.2018.05.027"
    ]
   }
  },

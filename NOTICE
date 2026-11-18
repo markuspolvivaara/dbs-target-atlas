@@ -138,14 +138,21 @@ What is covered by which terms
    src/data/generated/bs-*.json). The arousal network nuclei (bs_aan_*.glb) are
    derived from the Harvard Ascending Arousal Network Atlas 2.0 (Edlow BL, Kinney
    HC, 2023, Dryad, doi:10.5061/dryad.zw3r228d2), dedicated to the public domain
-   (CC0 1.0). Everything else is derived from Z-Anatomy (as in section 7) and is
+   (CC0 1.0). Four tracts (bs_t_*.glb: the medial longitudinal fasciculus, the
+   central tegmental tract, the spinothalamic tract and the lateral lemniscus) are
+   derived from the HCP-YA Tractography Atlas, NIFTI files (Yeh FC, 2018, Zenodo,
+   doi:10.5281/zenodo.3627772; Yeh FC et al., NeuroImage 2018;178:57-68), under
+   CC BY-SA 4.0; the atlas is built from Human Connectome Project data, so the HCP
+   terms and acknowledgement in section 5 apply to these files as well. Everything
+   else is derived from Z-Anatomy (as in section 7) and is
    distributed under CC BY-SA 4.0 (Z-Anatomy), CC BY-SA 2.1 Japan (BodyParts3D) and
    CC BY-SA 3.0 (Wikipedia definitions); these files are not GPL-licensed. Changes
    made: brainstem structures, cranial nerves and arteries exported from the
    Z-Anatomy Blender file and fitted into MNI space onto the ICBM 2009b T2 template
    (a similarity transform and a smooth deformation); nerves and arteries rebuilt as
    tubes; safe entry zones drawn by rule on the fitted surface; the AAN labels'
-   surfaces taken after resampling; converted to compressed glTF. The section also
+   surfaces taken after resampling; the four tract volumes turned into surfaces
+   after resampling and light smoothing; converted to compressed glTF. The section also
    shows the white-matter section's tracts (section 6) and the DBS section's deep
    nuclei (section 2) from their own files, under their own terms.
 

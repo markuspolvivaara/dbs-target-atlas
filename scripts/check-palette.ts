@@ -157,7 +157,11 @@ for (const [view, list] of [['skull base v3: ear', ['sbBone', 'sbArtery', 'sbNer
   ['ventricles: ventriculostomy', ['sbBone', 'sbCsf', 'electrode']],
   // the endoscopic view's 3D view: the structures around the ventricles (see-through), the vessels and the endoscope
   ['ventricles: endoscopic third ventriculostomy', ['sbBone', 'sbCsf', 'electrode', 'fx', 'mb', 'ot', 'sbArtery', 'sbBrain', 'sbBrainstem',
-    'sbMedialWall', 'sbNerve', 'sbVein', 'str', 'thal', 'veChoroid']]] as const) {
+    'sbMedialWall', 'sbNerve', 'sbVein', 'str', 'thal', 'veChoroid']],
+  // the brainstem section's tracts view: the white-matter section's brainstem tracts (streamlines) with the four tracts
+  // drawn as surfaces from the HCP-YA atlas; and its floor view, where the fasciculus lies under the entry zones
+  ['brainstem: tracts', ['wmCST', 'wmCBT', 'wmML', 'wmSCP', 'wmMCP', 'wmICP', 'wmRST', 'wmDRTT', 'bsMlf', 'bsStt', 'bsCtt', 'bsLl']],
+  ['brainstem: floor of the fourth ventricle', ['bsSez', 'bsNucleus', 'bsMlf']]] as const) {
   for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
     const k = `${list[i]}|${list[j]}`;
     if (!pairs.has(k)) pairs.set(k, new Set());

@@ -239,13 +239,14 @@ def brainstem_attribution() -> list[str]:
     if not p.exists():
         return []
     ds = json.loads(p.read_text())["datasets"]
-    za, aan = ds["zanatomy"], ds["aan"]
+    za, aan, hcp = ds["zanatomy"], ds["aan"], ds["hcp842"]
     return [
-        "## Brainstem section (Z-Anatomy fitted into MNI space; Harvard Ascending Arousal Network atlas 2.0)",
+        "## Brainstem section (Z-Anatomy fitted into MNI space; Harvard Ascending Arousal Network atlas 2.0; HCP-YA tractography atlas)",
         "",
         "The meshes in `public/assets/brainstem/` and the files `bs-manifest.json`, `bs-zones.json` and `bs-definitions.json`",
         "are **not** GPL-licensed. The arousal network nuclei (`bs_aan_*.glb`) are derived from the Harvard Ascending Arousal",
-        f"Network atlas 2.0 ({aan['licence']}); everything else from Z-Anatomy, itself based on BodyParts3D ({za['licence']}).",
+        f"Network atlas 2.0 ({aan['licence']}); four tracts (`bs_t_*.glb`) from the HCP-YA tractography atlas ({hcp['licence']});",
+        f"everything else from Z-Anatomy, itself based on BodyParts3D ({za['licence']}).",
         "The section also shows the white-matter section's tracts and the DBS section's deep nuclei, under their licences above.",
         "",
         f"- Source: {za['url']}",
@@ -256,12 +257,18 @@ def brainstem_attribution() -> list[str]:
         f"- Note: {aan['note']}",
         *[f"- Attribution: {a}" for a in aan["attribution"]],
         *[f"- Cite: {c}" for c in aan["citation"]],
+        f"- Source: {hcp['url']}",
+        f"- Note: {hcp['note']}",
+        *[f"- Attribution: {a}" for a in hcp["attribution"]],
+        *[f"- Cite: {c}" for c in hcp["citation"]],
         "- Changes made: the brainstem, its surface features, ventricles, cranial nerve nuclei, cranial nerves III-XII and the",
         "  arteries around it exported from the Z-Anatomy Blender file (pipeline/brainstem_export.py) and fitted into MNI space",
         "  onto the ICBM 2009b T2 template (pipeline/brainstem_fit.py); nerves and arteries rebuilt as tubes and kept near the",
         "  brainstem; safe entry zones drawn by rule on the fitted surface; the AAN labels' surfaces taken after resampling to",
-        "  0.5 mm; midline structures cut at x = 0; files converted to compressed glTF; definitions shortened to their lead",
-        "  section.",
+        "  0.5 mm; of the HCP-YA atlas, the volumes of four tracts (the medial longitudinal fasciculus, the central tegmental",
+        "  tract, the spinothalamic tract and the lateral lemniscus, both sides) turned into surfaces after resampling to 0.5 mm",
+        "  and light smoothing, drawn where the atlas has them; midline structures cut at x = 0; files converted to compressed",
+        "  glTF; definitions shortened to their lead section.",
         "",
     ]
 
