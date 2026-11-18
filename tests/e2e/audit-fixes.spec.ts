@@ -1143,6 +1143,8 @@ test('brainstem: the HCP-YA tracts, the nuclei shared between nerves and the tri
     await expect(page.locator(`.sb-item[data-id="${id}"]`)).toBeVisible();
   }
   await expect(page.locator('.legend3d .sw.line')).toHaveCount(12);
+  const opacityOf = (id: string) => page.evaluate((sid) => (window as unknown as { __atlas: { viewer: { items: Map<string, { mat: { opacity: number } }> } } }).__atlas.viewer.items.get(sid)!.mat.opacity, id);
+  const unchosen = { ml: await opacityOf('wm_ml'), stt: await opacityOf('bs_t_stt') };
   await expect(page.locator('.pane:not([hidden]) article.card').first()).toContainText('That atlas ends near z = −50 mm');
   // a tract's card: what it is from sources, the published distances, and how it sits on this template, measured
   await page.locator('.sb-item[data-id="bs_t_mlf"]').click();
@@ -1165,6 +1167,18 @@ test('brainstem: the HCP-YA tracts, the nuclei shared between nerves and the tri
   await expect(card.locator('h2')).toHaveText('Lateral lemniscus (LL)');
   await expect(card).toContainText('inferior colliculus');
   await expect(card.locator('a.src', { hasText: 'Sitek 2019' }).first()).toHaveAttribute('href', 'https://doi.org/10.7554/elife.48932');
+  // a chosen tract is seen among the eleven others: they fade back (with the viewer's setting off, as it is by
+  // default), the deep nuclei stay as they are; with the card closed the tracts are drawn as before
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('atlas-view-prefs') ?? '{}').fadeOthers ?? false)).toBe(false);
+  expect(await opacityOf('bs_t_ll')).toBe(1);
+  expect(await opacityOf('wm_ml')).toBeLessThan(unchosen.ml * 0.5);
+  expect(await opacityOf('bs_t_stt')).toBeLessThan(unchosen.stt * 0.5);
+  expect(await page.evaluate(() => (window as unknown as { __atlas: { viewer: { items: Map<string, { look: string; faded?: boolean }> } } }).__atlas.viewer.items.get('rn')!.faded ?? false)).toBe(false);
+  expect(await lookOf('rn')).toBe('primary');
+  await card.locator('button.close').click();
+  await settle(page);
+  expect(await opacityOf('wm_ml')).toBe(unchosen.ml);
+  expect(await opacityOf('bs_t_stt')).toBe(unchosen.stt);
   // the floor view: the fasciculus lies under the solid floor and is not drawn there (parts of it lie outside the
   // fitted surface and would show as stray lines); chosen from the view's card it is seen through the surface
   await open(page, './brainstem/#/atlas?g=sez_floor');

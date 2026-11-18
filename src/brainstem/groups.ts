@@ -45,7 +45,7 @@ export const BS_GROUPS: BsGroup[] = [
   },
   {
     id: 'tracts', kind: 'inside', name: 'Tracts and deep nuclei', camera: 'sagittal', radius: 55, surface: 'ghost',
-    description: 'The long tracts and cerebellar peduncles of the brainstem from the white-matter section (HCP-1065 tractography, drawn as streamlines), with the red nucleus, substantia nigra, subthalamic nucleus and dentate nucleus from the DBS section’s atlases. Four tracts that atlas lacks are drawn from an earlier atlas of the same group (HCP-YA), every streamline it has for them: the medial longitudinal fasciculus, the central tegmental tract, the spinothalamic tract and the lateral lemniscus. That atlas ends near z = −50 mm, about where the pons meets the medulla, so none of the four is drawn through the medulla; each one’s card says how it sits on this template.',
+    description: 'The long tracts and cerebellar peduncles of the brainstem from the white-matter section (HCP-1065 tractography, drawn as streamlines), with the red nucleus, substantia nigra, subthalamic nucleus and dentate nucleus from the DBS section’s atlases. Four tracts that atlas lacks are drawn from an earlier atlas of the same group (HCP-YA), every streamline it has for them: the medial longitudinal fasciculus, the central tegmental tract, the spinothalamic tract and the lateral lemniscus. That atlas ends near z = −50 mm, about where the pons meets the medulla, so none of the four is drawn through the medulla; each one’s card says how it sits on this template. Choose a tract and the others fade back, so that it can be seen among them.',
     key: [...TRACTS, ...OWN_TRACTS, ...DBS_NUCLEI.filter((x) => x !== 'thal')], context: ['thal'],
   },
   {

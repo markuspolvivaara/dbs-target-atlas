@@ -368,6 +368,11 @@ commit and push it.
     atlas's fasciculus outside the fitted floor showed on it. The floor view's card lists what lies under the
     surface; choosing one (a nucleus too) draws the surface as a shell (`liesInside`; the user: "See through is
     great"), and an entry zone chosen there puts the solid surface back.
+  - A chosen tract fades the other tracts to a quarter of their opacity in this section, whatever the viewer's
+    "Fade the rest" setting (the user's request on seeing the lateral lemniscus among the others, 18 November): a
+    new `fadeOtherTracts` on `ScenePlan`, set by `bsPlan` only. The DBS and white-matter sections are as before
+    (`smoke.spec.ts`, which the user's uncommitted work touches, tests that there a chosen tract leaves the others
+    as they are); the flag could be set there too.
   - Cards: a tract card has sourced text, published measurements (Li 2021 for the fasciculus) and the measured fit;
     the trigeminal nerve's card has `NUCLEI_NOT_MODELLED`; the nucleus ambiguus (IX, X, XI) and the nucleus of the
     solitary tract (VII, IX, X) carry `cranialNerves` in the manifest and a sourced sentence per nerve
