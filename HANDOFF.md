@@ -68,30 +68,49 @@ come from the user's palette, the skull base nerve/tumour and AVM pairs are the 
   MA-11 (which PPN), MA-19 (left dentate on T2), MB-09, MB-14, MB-15, MB-20, MC-19 (v1 at life size?), AP-13 (keyhole
   placement), AP-14 (an operative-line camera option?).
 
-**Can be done without a decision.** P2 first.
-- Text, P2: A-017 (abstract-only marking on the 48 original DBS and 14 epilepsy references), B-011 (tracts References
-  claim; lead texts unreferenced), B-012 (area caveat), B-013 (boundary labels in both lobes), B-014 (occipital lobe
-  text; cingulate card; 15 labels empty), B-016 (23 doubtful cortex definitions, 3 for a clinician), MA-06 (cards of
-  the tracts that run in the ventricles; a general 2–4 mm line), MA-08 (the crossed DRTT "to M1": `symptoms.ts:93`,
-  `structures.ts:17`), MA-10 (the generalized dystonia map below the pallidum, into the optic tract).
-- Text, P3: A-020, A-022 (Coordinates page rounding), A-023, A-024, A-025, B-017..B-019, B-021..B-024, C-013..C-017,
-  D-012, D-016, D-017, D-020..D-022, D-024, D-029, MA-15 (template millimetres beside the measure tool), AP-07 (v1
-  pterional names the carotid), AP-12 (fitted PICA), MB-10 (no card says the left hemisphere is not fitted to its
-  vessels), MB-15, MC-19.
-- Models, P2: MB-07 (two different fourth ventricles in v3 and the ventricles section), MB-09 (vessels through the
-  tumours), MB-10 (left vessels inside the brain), MA-12 (arousal nuclei: LDTg 0.1 mm³, unequal halves), MA-13 (the
-  right MCP in stubs), AP-06 (v1 Kawase margins), MC-18 (above).
-- Models, P3: MA-16, MA-17, MA-18, MA-20, MB-11..MB-13, MB-16..MB-19, MC-12..MC-17, D-028 (trochlear nucleus in the
-  pons mesh), AP-11, AP-15 and MC-16 (v1 endonasal: wait for the user's rework in the main checkout).
-- Interface, P2: UI-10 (short and landscape windows), UI-13 (links that miss the camera after a flick, tablet labels,
-  the endoscope pose, measurements, Back), UI-14 (the legend over the model; the ETV legend over the toolbar),
-  UI-16 (swatch borders), UI-19 (two "Settings"), UI-22 (panel order and outline).
-- Interface, P3: UI-23, UI-24, UI-25 (damping ignores reduced motion: one line, `Viewer.ts:251`), UI-26, UI-27.
-- Code, P2: P1-08 (nothing is released), P1-11 (a byte-size test for every manifest), P1-14 (one section shell).
-- Code and security, P3: P1-17 (the endoscope views throw without WebGL), P1-19, P1-21 (stale docs), P1-22,
-  P1-23..P1-25, P1-27 (`preserveDrawingBuffer`, undisposed materials, no 404 page, `dist/` tracked), P1-28 (the
-  ventricles' line overlays leak), P2S-12 (`c=constructor`), P2S-13 (unbounded camera numbers in links), P2S-14,
-  P2S-15, P2S-16, P2S-19 (three, TypeScript, meshoptimizer, vite majors; CI on Node 22), P2S-20.
+**Done without a decision (2026-11-19, the user: "Lets do the ones that can be done without decisions").** On
+`fix/audit-leftovers` (off this handoff's `17ac00e`), six local commits, not pushed:
+- `379bd0f`: links (P2S-12 `c=constructor`, P2S-13 camera numbers: `okCamera`), reduced motion (UI-25) and the
+  camera reported where a flick ends (UI-13), overlays, markers and the drill free their materials and lines (P1-28,
+  P1-27), the page without WebGL (P1-17, UI-24).
+- `84513b7`: BodyParts3D's and Wikipedia's terms today (P2S-15, `UPSTREAM_NOTE`), the meshoptimizer notice and zod
+  4.6.7, the home pictures' licence (P2S-16), the served spine manifest resynced and a test that every served
+  manifest is its generated file, with byte counts and shared entries checked (P1-11), stale docs (P1-21).
+- `06624b2`: a note under the header when a link names something the section lacks (P1-24, `src/ui/linknote.ts`;
+  v2's `#/grading` opens the atlas), the skull base help from the views' own keys (P1-19), name-keyed notes checked
+  both ways (P1-25, `NOT_IN_MODEL`), dead code (P1-23).
+- `be2f643`: the palette check fails on a warning or close pair not in `scripts/palette-accepted.json` and covers
+  the views it skipped (P1-22, UI-26); styles through the CSS object model, palette variables as a constructed
+  stylesheet, the redirect out of the inline script (P2S-20); no referrer (P2S-14); a 404 page; "View options" and
+  "Indications shown" (UI-19); swatch edges (UI-16); the legend's height cap applies (UI-14); a phone held sideways
+  (UI-10); panel order (UI-22); cortex label chips (UI-23); touch wording, the home disclaimer, the ventricles' help
+  (UI-27); label modes stated absolutely in links, a copied link announced (UI-13).
+- `6776313`: card texts against their sources: DBS A-020 (Horn 2022 46 of 80; Wiggerts 2026 matched controls;
+  Wang 2020; Andrade-Souza 2005), A-022, A-023 (abbreviations), A-024, A-025, MA-08, MA-10, MA-15; tracts and
+  cortex B-011, B-012, B-013, B-017, B-018, B-021 to B-023; skull base C-012 to C-017 (Signoretti 2025's table,
+  Nguyen HD and MQ 2026, definitions cleaned in every model); brainstem, ventricles and vascular D-012, D-016,
+  D-017 (each against its full text), D-020 (an edit table for the brainstem's definitions), D-021, D-022 in part,
+  D-024.
+- `fa43d6c`: midline structures stay with Side = Left (MC-17); tumour views draw the untouched left half beside the
+  moved copies (MC-18); DBS and epilepsy citations say when Europe PMC records the full text as not open access
+  (A-017); texts where the model differs: MB-09, MB-10, MB-12, MC-14, MC-19, AP-07, AP-12, MA-06, MA-07.
+- Checks at `fa43d6c`: tsc, lint, 540 unit tests, build, palette; 209 browser tests (`CI=1`). **On the MacBook**:
+  stage baselines change again (cortex label chips, swatch edges, the legend's cap, "View options").
+
+**Still left without a decision, and why not done this round:**
+- Need a pipeline rebuild (do one section at a time, keep only the intended files: see the memory note on rebuild
+  noise): MA-12 (arousal nuclei), MA-13 (midline-split tracts), MA-16 to MA-18, MA-20 (mesh hygiene, sweet spots,
+  the PSA), MB-07 (one fourth ventricle for two sections: which one is a choice), MB-09 and MB-11 (vessels and roots
+  through tumours and the brainstem), MB-13, MB-16, MB-19, MC-12, MC-13, MC-15, D-028, AP-06 (v1's Kawase cut: its
+  margins, and the right cochlear nerve inside the drilled piece). AP-11, AP-15, MC-16: v1 endonasal, in the user's
+  rework.
+- Need new sourced text (research): B-014 (the occipital lobe's text), B-016 (23 cortex definitions), B-019
+  (denominators, "in the macaque"), B-020, B-024 (the IFOF dispute), D-029 (seven clauses to re-read in full).
+- Engineering left: P1-08 (release memory: the audit says only if phones still struggle, unmeasured), P1-14 (one
+  section shell), P2S-19 (dependency majors, through Dependabot one at a time), P1-27's `preserveDrawingBuffer`
+  (the browser tests read the canvas) and `dist/` in git (a workflow choice), UI-13's Back history, endoscope pose
+  and measurements in links, UI-14's docked legend or camera offset, UI-22's jump row, UI-27's shorter phone
+  disclaimer, an ARCHITECTURE.md.
 
 **From the audit's roadmap (`audit/07-roadmap.md`), not started:** teaching tours, approach comparison, side-by-side
 targets, sourced lead trajectories (no source yet), a changelog page, a coordinate readout relative to a chosen
