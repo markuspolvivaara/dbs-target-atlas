@@ -12,6 +12,7 @@ import { skullScene, type SkullPlan } from '../skullbase/scene';
 import type { SkullState } from '../skullbase/state';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
+import { citationPanel } from './citations';
 import { figureControl } from './figure';
 import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
@@ -326,6 +327,7 @@ export class SkullbaseAtlasPage {
       this.tabs[id] = h('div', { class: 'pane', role: 'tabpanel', id: `pane-${id}`, 'aria-labelledby': `ptab-${id}`, hidden: id !== 'overview' });
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
+    citationPanel(this.panel);
     scrollHint(tablist);
   }
 

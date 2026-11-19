@@ -10,6 +10,7 @@ import { CONTEXT_STRUCTURES, ORIENTATION_NUCLEI, tractsScene, type TractPlan } f
 import type { TractsState } from '../tracts/state';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
+import { citationPanel } from './citations';
 import { figureControl } from './figure';
 import { refLinksFrom } from './reflinks';
 import { bindSheetDrag, buildSlicesPane, drawGizmo, layoutLabels, syncSlicesPane, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
@@ -156,6 +157,7 @@ export class TractsAtlasPage {
       this.tabs[id] = h('div', { class: 'pane', role: 'tabpanel', id: `pane-${id}`, 'aria-labelledby': `ptab-${id}`, hidden: id !== 'overview' });
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
+    citationPanel(this.panel);
     scrollHint(tablist);
   }
 

@@ -503,6 +503,13 @@ commit and push it.
     `audit-fixes.spec.ts` (the dialog, a PNG's size, every section including the endoscopic view and slices),
     `tests/unit/figure.test.ts`. The toolbar has one more button: **the macOS picture baselines of the stages
     (`*-desktop-darwin.png`) all change** and need retaking on the MacBook.
+  - 2, citation panel (the user's choices: at the foot of the panel; an option in Save image; a Copy all button):
+    `src/ui/citations.ts`. `citationPanel(panel)` in every atlas page keeps a folded "Sources for this view (n)" as
+    the last child of the panel's visible tab: a MutationObserver on the panel redraws it after the page redraws its
+    cards (a timeout, not a frame), from the tab's `a.src` links (`refLinksFrom` gives each the full citation as its
+    title). `citedInView()` serves Save image's new "References cited in the cards" option (off by default).
+    Tests: one browser test (count, sort, Copy all through the clipboard, a change of tract, the Layers tab, the DBS
+    section, the Save image option), a unit test of the caption's reference lines.
   - Found: in the ventricles' endoscopic view, at a narrow stage, the open legend box covers the toolbar's left end
     (Measure, Copy link and Save image under it). Not fixed here.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in

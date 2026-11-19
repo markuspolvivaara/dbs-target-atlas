@@ -1173,6 +1173,11 @@ on or another sequence is picked.
   drawn with its licence as the Credits page gives it (the default), or the sources with a link to the section's
   Credits page. The caption also gives the view's name, the date and its link; over MRI slices, the templates'
   copyright notice, which their licence asks for in all copies. The choices are kept in the browser.
+- **Sources for this view** (every section; `src/ui/citations.ts`): folded at the foot of the panel's open tab, every
+  reference the cards there cite (the view's card and the selected structure's), once each, sorted by author, with
+  its link and a "Copy all" button (the citations, one to a line). It follows the cards as they change. It reads
+  the cards' citation links, which carry the full citation, so every section has it the same way. "Save image" can
+  list these references in its caption (off by default).
 
 Keyboard: `1`–`5` camera presets, `H` hemisphere, `[` `]` indication, `,` `.` symptom,
 `N` name labels, `L` lead, `S` axial slice, `M` measure, `Esc` close, `?` help.

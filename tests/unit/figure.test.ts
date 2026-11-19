@@ -28,6 +28,11 @@ describe('the saved image’s caption', () => {
     expect(captionText({ ...credits, templateSlices: true }, 'full', 't', 'h', 'c', date).lines.at(-1)).toMatch(/^MRI slices:/);
     expect(captionText(credits, 'full', 't', 'h', 'c', date).lines.some((l) => /MRI slices/.test(l))).toBe(false);
   });
+  it('lists the cards’ references last, a reference to a line, when asked', () => {
+    const c = captionText(credits, 'full', 't', 'h', 'c', date, ['Catani M. One. 2005.', 'Yeh FC. Two. 2022.']);
+    expect(c.lines.at(-1)).toBe('References cited in the cards:\nCatani M. One. 2005.\nYeh FC. Two. 2022.');
+    expect(captionText(credits, 'full', 't', 'h', 'c', date).lines.some((l) => /References/.test(l))).toBe(false);
+  });
   it('breaks lines between words, a word longer than the line on its own', () => {
     const ctx = { measureText: (t: string) => ({ width: t.length }) as TextMetrics };
     expect(wrap(ctx, 'one two three four', 9)).toEqual(['one two', 'three', 'four']);

@@ -13,6 +13,7 @@ import { LEAD } from '../viewer/lead';
 import { dbsScene, LANDMARKS, plan, STN_ZONES, type Plan } from '../viewer/selection';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { chips, clear, fmtMm, h, refLinks } from './dom';
+import { citationPanel } from './citations';
 import { figureControl } from './figure';
 import { eyeIcon } from './widgets';
 import { clearAllLeadPrefs, clearLeadPref, isHidden, leadPrefFor, saveLeadDefault, saveLeadPref, visibleIndications } from './prefs';
@@ -154,6 +155,7 @@ export class AtlasPage {
       this.tabs[id] = h('div', { class: 'pane', role: 'tabpanel', id: `pane-${id}`, 'aria-labelledby': `ptab-${id}`, hidden: id !== 'overview' });
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
+    citationPanel(this.panel);
     scrollHint(tablist);
   }
 

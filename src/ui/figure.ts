@@ -1,4 +1,5 @@
 import { BRAND } from '../brand';
+import { citedInView } from './citations';
 import { h } from './h';
 
 /**
@@ -26,9 +27,9 @@ export interface FigureParts {
 }
 
 type Size = '1x' | '2x' | '4k';
-interface FigurePrefs { labels: boolean; compass: boolean; legend: boolean; caption: boolean; size: Size; licences: 'full' | 'short' }
+interface FigurePrefs { labels: boolean; compass: boolean; legend: boolean; caption: boolean; refs: boolean; size: Size; licences: 'full' | 'short' }
 const KEY = 'atlas-figure-prefs';
-const DEFAULTS: FigurePrefs = { labels: true, compass: true, legend: false, caption: true, size: '2x', licences: 'full' };
+const DEFAULTS: FigurePrefs = { labels: true, compass: true, legend: false, caption: true, refs: false, size: '2x', licences: 'full' };
 
 function loadPrefs(): FigurePrefs {
   try {
@@ -57,7 +58,7 @@ function scaleFor(size: Size, w: number): number {
  * toolbar is made before the viewer). */
 export function figureControl(get: () => FigureParts): HTMLElement {
   let prefs = loadPrefs();
-  const box = (k: 'labels' | 'compass' | 'legend' | 'caption', label: string, note?: string) => {
+  const box = (k: 'labels' | 'compass' | 'legend' | 'caption' | 'refs', label: string, note?: string) => {
     const input = h('input', { type: 'checkbox', 'data-k': k }) as HTMLInputElement;
     input.checked = prefs[k];
     input.addEventListener('change', () => { prefs = { ...prefs, [k]: input.checked }; savePrefs(prefs); sync(); });
@@ -83,7 +84,8 @@ export function figureControl(get: () => FigureParts): HTMLElement {
       box('labels', 'Name labels', 'As on screen: with Labels set to Off there are none.'),
       box('compass', 'Orientation compass'),
       box('legend', 'Legend'),
-      box('caption', 'Caption', 'The view’s name, the date, its link, and the sources and licences of what is drawn.')),
+      box('caption', 'Caption', 'The view’s name, the date, its link, and the sources and licences of what is drawn.'),
+      box('refs', 'References cited in the cards', 'In the caption, after the licences: those of the panel’s open tab.')),
     captionNote, licenceSet,
     h('fieldset', { class: 'fig-set' }, h('legend', {}, 'Size'),
       radio('size', '1x', h('span', {}, 'As on screen', dims['1x'])),
@@ -106,6 +108,7 @@ export function figureControl(get: () => FigureParts): HTMLElement {
 
   function sync(): void {
     for (const el of licenceSet.querySelectorAll('input')) (el as HTMLInputElement).disabled = !prefs.caption;
+    (panel.querySelector('input[data-k="refs"]') as HTMLInputElement).disabled = !prefs.caption;
     licenceSet.classList.toggle('off', !prefs.caption);
     captionNote.hidden = prefs.caption;
     const parts = get();
@@ -188,7 +191,7 @@ export function wrap(ctx: Pick<CanvasRenderingContext2D, 'measureText'>, text: s
 }
 
 /** The caption's paragraphs: the view, the site, the date and the link; then the sources and licences of what is drawn. */
-export function captionText(credits: { items: { source: string; licence: string }[]; templateSlices: boolean }, licences: 'full' | 'short', title: string, href: string, creditsHref: string, date: Date): { title: string; lines: string[] } {
+export function captionText(credits: { items: { source: string; licence: string }[]; templateSlices: boolean }, licences: 'full' | 'short', title: string, href: string, creditsHref: string, date: Date, refs: string[] = []): { title: string; lines: string[] } {
   const day = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
   const lines = [`${BRAND.name}, saved ${day}. This view: ${href}`];
   if (licences === 'full') {
@@ -200,6 +203,8 @@ export function captionText(credits: { items: { source: string; licence: string 
     lines.push(`Sources: ${[...new Set(credits.items.map((c) => c.source))].join('; ')}. Licences and attribution: ${creditsHref}`);
   }
   if (credits.templateSlices) lines.push(TEMPLATE_NOTICE);
+  // (one paragraph, a reference to a line)
+  if (refs.length) lines.push(['References cited in the cards:', ...refs].join('\n'));
   return { title, lines };
 }
 
@@ -231,10 +236,10 @@ export function composeFigure(parts: FigureParts, prefs: FigurePrefs): HTMLCanva
   const capW = view.width + legendW - 2 * pad;
   const cap = prefs.caption
     ? captionText(parts.viewer.drawnCredits(), prefs.licences, document.title.replace(` · ${BRAND.name}`, ''), location.href,
-      `${location.origin}${location.pathname}#/credits`, new Date())
+      `${location.origin}${location.pathname}#/credits`, new Date(), prefs.refs ? citedInView().map((r) => r.citation) : [])
     : null;
   probe.font = capFont;
-  const capLines = cap ? cap.lines.flatMap((l, i) => [...wrap(probe, l, capW), ...(i < cap.lines.length - 1 ? [''] : [])]) : [];
+  const capLines = cap ? cap.lines.flatMap((l, i) => [...l.split('\n').flatMap((x) => wrap(probe, x, capW)), ...(i < cap.lines.length - 1 ? [''] : [])]) : [];
   const lineH = Math.round(17 * k);
   const capH = cap ? pad * 2 + Math.round(22 * k) + capLines.length * lineH : 0;
   const W = view.width + legendW;

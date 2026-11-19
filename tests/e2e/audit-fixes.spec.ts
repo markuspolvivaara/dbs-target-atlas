@@ -1393,3 +1393,48 @@ test('save image: a PNG from every kind of view', async ({ page }) => {
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// the roadmap's citation panel (the owner's choices of 19 November 2026): a folded "Sources for this view" at the foot
+// of the panel's open tab, every reference its cards cite once each, with a button that copies them all
+test('sources for this view: the references the cards cite, following the view, copied as text', async ({ page }) => {
+  const g = guard(page);
+  await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+  await open(page, './tracts/#/atlas?g=language&sel=wm_af');
+  const pane = page.locator('.panel .pane:not([hidden])');
+  const block = pane.locator('.view-sources');
+  // as many as the distinct citations of the tab's links, at its foot, folded
+  const distinct = () => pane.evaluate((el) => new Set([...el.querySelectorAll('a.src')].filter((a) => !a.closest('.view-sources')).map((a) => (a as HTMLAnchorElement).title)).size);
+  const n = await distinct();
+  expect(n).toBeGreaterThan(5);
+  await expect(block.locator('summary')).toHaveText(`Sources for this view (${n})`);
+  expect(await pane.evaluate((el) => el.lastElementChild?.classList.contains('view-sources'))).toBe(true);
+  expect(await block.evaluate((d) => (d as HTMLDetailsElement).open)).toBe(false);
+  await block.locator('summary').click();
+  await expect(block.locator('li')).toHaveCount(n);
+  // sorted by citation, each with its link
+  const cites = await block.locator('li').evaluateAll((lis) => lis.map((li) => li.firstChild!.textContent!.trim()));
+  expect(cites).toEqual([...cites].sort((a, b) => a.localeCompare(b, 'en')));
+  await expect(block.locator('li a').first()).toHaveAttribute('href', /^https:\/\/doi\.org\//);
+  // Copy all: the citations, one to a line
+  await block.locator('button', { hasText: 'Copy all' }).click();
+  expect((await page.evaluate(() => navigator.clipboard.readText())).split('\n')).toEqual(cites);
+  // another tract: the list follows
+  await page.locator('.sb-item, .chip, button', { hasText: /^IFOF/ }).first().click();
+  await settle(page);
+  await expect(page.locator('.card.sel h2')).toContainText('Inferior fronto-occipital');
+  await expect(block.locator('summary')).toHaveText(`Sources for this view (${await distinct()})`);
+  // a tab without citations has none
+  await page.locator('[role="tab"]', { hasText: 'Layers' }).click();
+  await expect(page.locator('.panel .pane:not([hidden]) .view-sources')).toHaveCount(0);
+  // the DBS section too
+  await open(page, './dbs/#/atlas?i=pd');
+  await expect(page.locator('.panel .pane:not([hidden]) .view-sources summary')).toContainText(/^Sources for this view \(\d+\)$/);
+  // and Save image can list them in its caption (off by default, and only with the caption)
+  await page.locator('.tbtn', { hasText: 'Save image' }).click();
+  const refs = page.locator('.fig-panel input[data-k="refs"]');
+  await expect(refs).not.toBeChecked();
+  await page.locator('.fig-panel input[data-k="caption"]').uncheck();
+  await expect(refs).toBeDisabled();
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
