@@ -529,6 +529,13 @@ commit and push it.
     from `config.py` (the tracts otherwise declared as before, checked field by field). The dataset note
     (config.py and the four manifest copies, ATTRIBUTION.md, by hand: no rebuild), NOTICE, README and comments no
     longer name the table. No shipped asset changes.
+  - 6, seeded sampling in the v1 scripts: trimesh 5 samples a surface with its own generator (`seed=None` is a
+    fresh one), so `skullbase_v1_brain.py`'s `np.random.seed(0)` did nothing (checked: two samples after the same
+    global seed differ; after `seed=0` they are equal). Both of its `m.sample` calls now pass `seed=0` and the global
+    seed is gone; the same for `skullbase_v1_cavernous.py` (two calls) and `skullbase_v1_skull.py` (one). Code only,
+    no rebuild: the shipped files came from unseeded runs, so the next run of these steps may differ from them by a
+    voxel here and there, once, and is then the same every run. Left alone: `skullbase_v1_endonasal.py` (line 79,
+    and one more call the user's uncommitted rework in the main checkout adds): seed them there, `seed=0`.
   - Found: in the ventricles' endoscopic view, at a narrow stage, the open legend box covers the toolbar's left end
     (Measure, Copy link and Save image under it). Not fixed here.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in

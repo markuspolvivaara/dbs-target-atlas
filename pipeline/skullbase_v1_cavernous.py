@@ -90,7 +90,7 @@ def main() -> int:
         sv = np.array(ex["soft"][f"Cavernous sinus.{side.lower()}"]["verts"], float)
         st = np.array(ex["soft"][f"Cavernous sinus.{side.lower()}"]["tris"], int)
         sm = trimesh.Trimesh(sv, st, process=True)
-        tree_cs = cKDTree(np.vstack([sm.vertices, sm.sample(20000)]))
+        tree_cs = cKDTree(np.vstack([sm.vertices, sm.sample(20000, seed=0)]))
         # the trigeminal nerve: its first run to the ganglion (the point V1, V2 and V3 leave it from), its second V3
         V_root = run(ex, "Trigeminal nerve (V)", side, 0)
         gang = V_root[-1]
@@ -126,7 +126,7 @@ def main() -> int:
         m_in = fill(np.asarray(sm.vertices), np.asarray(sm.faces), lo, shape, GRID) if sm.is_watertight else None
         if m_in is None or not m_in.any():
             sh = np.zeros(shape, bool)
-            P_ = np.vstack([sm.vertices, sm.sample(int(sm.area / (0.25 * GRID ** 2)))])
+            P_ = np.vstack([sm.vertices, sm.sample(int(sm.area / (0.25 * GRID ** 2)), seed=0)])
             sh[tuple(np.rint((P_ - lo) / GRID).astype(int).T)] = True
             m_in = ndimage.binary_fill_holes(ndimage.binary_dilation(sh))
         dist_out = ndimage.distance_transform_edt(~m_in, sampling=GRID)
