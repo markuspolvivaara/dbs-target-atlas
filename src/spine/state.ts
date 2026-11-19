@@ -57,7 +57,6 @@ export const DRILL_MODES: Record<DrillMode, { code: string; region: 'cervical' |
   overTheTop: { code: 'o', region: 'lumbar', sided: true },
   spSplit: { code: 's', region: 'lumbar', spread: [12, 1] },
 };
-export const DISTRACT_MAX_MM = DRILL_MODES.acdf.spread![0];
 
 export interface ScrewState {
   tech: TechniqueId;

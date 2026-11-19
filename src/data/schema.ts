@@ -259,7 +259,6 @@ export const ManifestSchema = z.object({
     refIds: z.array(z.string()).optional(),
   })),
 });
-export type Manifest = z.infer<typeof ManifestSchema>;
 
 /** wm-manifest.json: the white-matter section's tracts (HCP-1065), separate from the DBS assets. */
 export const WmManifestSchema = z.object({
@@ -272,7 +271,6 @@ export const WmManifestSchema = z.object({
   }),
   hcpAcknowledgement: z.string(),
 });
-export type WmManifest = z.infer<typeof WmManifestSchema>;
 
 /** One end of a white-matter bundle (pipeline/wm_ends.py): the share of its streamlines' ends at the cerebral cortex and
  * at the medial wall (which is not cortex), and of those at the cortex, the share on each Destrieux label holding at
@@ -323,7 +321,6 @@ export const SbManifestSchema = z.object({
     citation: z.array(z.string()), citationUrls: z.array(z.string()),
   }),
 });
-export type SbManifest = z.infer<typeof SbManifestSchema>;
 
 const DatasetInfoSchema = z.object({
   name: z.string(), licence: z.string(), url: z.string().url(), note: z.string(), attribution: z.array(z.string()),
@@ -338,7 +335,6 @@ export const VeManifestSchema = z.object({
   structures: z.array(ManifestStructureSchema),
   dataset: DatasetInfoSchema,
 });
-export type VeManifest = z.infer<typeof VeManifestSchema>;
 
 /** va-manifest.json: the vascular section (pipeline/vascular_build.py): this CT angiogram's vessels and the lesions drawn
  * on them, each with its timing in the schematic angiogram (per vertex, in its GLB), and that angiogram's phases. */
@@ -352,7 +348,6 @@ export const VaManifestSchema = z.object({
     arterialS: z.tuple([z.number(), z.number()]), venousS: z.tuple([z.number(), z.number()]),
   }),
 });
-export type VaManifest = z.infer<typeof VaManifestSchema>;
 
 /** How one side of a tract of the HCP-YA atlas sits on this section's template (brainstem_build.py tract_fit): the
  * atlas is in another ICBM-152 space and its streamlines are drawn without a shift, so this is measured. The
@@ -399,7 +394,6 @@ export const BsManifestSchema = z.object({
   datasets: z.record(z.string(), DatasetInfoSchema),
   dataset: DatasetInfoSchema,
 });
-export type BsManifest = z.infer<typeof BsManifestSchema>;
 
 /** ctx-manifest.json: the cortex section's labels (Destrieux on the Lead-DBS template surface), in MNI space. */
 export const CtxManifestSchema = z.object({
@@ -411,7 +405,6 @@ export const CtxManifestSchema = z.object({
     citation: z.array(z.string()), citationUrls: z.array(z.string()),
   }),
 });
-export type CtxManifest = z.infer<typeof CtxManifestSchema>;
 
 /** spine-manifest.json: the spine section's structures (one CT, VerSe + TotalSegmentator), in their own space. */
 export const SpineManifestSchema = z.object({
@@ -425,7 +418,6 @@ export const SpineManifestSchema = z.object({
     citation: z.array(z.string()), citationUrls: z.array(z.string()),
   }),
 });
-export type SpineManifest = z.infer<typeof SpineManifestSchema>;
 
 export const CoordinateSchema = z.object({ L: Vec3, R: Vec3, method: z.string(), dataset: z.string() });
 export const AcpcSchema = z.object({ AC: Vec3, PC: Vec3, MSP: Vec3, source: z.string(), url: z.string().url() });

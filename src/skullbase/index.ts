@@ -251,6 +251,28 @@ export function definitionFor(name: string): { text: string; url: string | null;
 }
 
 /** Cross-checks between the generated files. Returns a list of problems (empty = consistent). */
+/** Names the notes (FORAMEN_CONTENTS, TB_NOTES, PASSAGES) are keyed by that a model does not draw or label, by model. */
+const NOT_IN_MODEL: Record<SbModel, Set<string>> = {
+  // the default model: three openings Z-Anatomy's notes name that this CT's landmarks do not (its openings' cards read
+  // PASSAGES and TB_NOTES)
+  v3: new Set(['Stylomastoid foramen', 'Internal opening of carotid canal', 'Cribriform plate']),
+  // v2: the CT's own openings and floor landmarks only (no ear, no brainstem floor)
+  ct: new Set([
+    'Superior orbital fissure', 'Internal acoustic meatus', 'Stylomastoid foramen', 'Jugular foramen',
+    'External opening of carotid canal', 'Internal opening of carotid canal', 'Foramen lacerum', 'Cribriform plate',
+    'Facial colliculus', 'Hypoglossal trigone', 'Vagal trigone', 'Vestibular area', 'Obex',
+    'Median sulcus of fourth ventricle', 'Trigeminal ganglion',
+    'Internal carotid artery (petrous and lacerum parts)', 'Chorda tympani',
+    'Nerves in the internal acoustic meatus (VII, VIII)', 'Greater petrosal nerve', 'Geniculate ganglion',
+    'Second genu of facial nerve', 'Fundus of internal acoustic meatus', 'Bone over the superior semicircular canal',
+  ]),
+  // v1: Z-Anatomy's temporal bone has none of these as structures of their own
+  zanatomy: new Set([
+    'Trigeminal ganglion', 'Internal carotid artery (petrous and lacerum parts)', 'Chorda tympani',
+    'Nerves in the internal acoustic meatus (VII, VIII)',
+  ]),
+};
+
 export function crossCheckSb(): string[] {
   const errs: string[] = [];
   const ids = new Set(SB_MANIFEST.structures.map((s) => s.id));
@@ -269,6 +291,13 @@ export function crossCheckSb(): string[] {
   const recess = new Set(['Meckel\'s cave']);
   for (const l of LANDMARKS) if (l.how && !recess.has(l.name) && !sourced(l.name)) errs.push(`located foramen ${l.name} (${l.side}): no sourced contents`);
   for (const cl of Object.values(FORAMEN_CONTENTS).flat()) for (const r of cl.refIds) if (!FORAMEN_REF.has(r)) errs.push(`foramen claim: unknown refId ${r}`);
+  // the notes keyed by name: a key that names nothing in this model is used nowhere, and passed silently (the audit's
+  // P1-25); the ones each model is known not to have are listed in NOT_IN_MODEL
+  const named = new Set([...LANDMARKS.map((l) => l.name), ...SB_MANIFEST.structures.map((s) => s.name)]);
+  const absent = NOT_IN_MODEL[SB_MODEL];
+  for (const [what, table] of [['FORAMEN_CONTENTS', FORAMEN_CONTENTS], ['TB_NOTES', TB_NOTES], ['PASSAGES', PASSAGES]] as const)
+    for (const k of Object.keys(table)) if (!named.has(k) && !absent.has(k)) errs.push(`${what}: "${k}" names nothing in this model`);
+  for (const k of absent) if (named.has(k)) errs.push(`"${k}" is in this model now: remove it from NOT_IN_MODEL`);
   for (const [aid, g] of Object.entries(APPROACH_GEOM)) {
     const c = APPROACH.get(aid);
     if (!c) { errs.push(`approach ${aid}: no sourced content`); continue; }

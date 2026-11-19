@@ -53,3 +53,15 @@ describe('links that name no real view', () => {
     expect(okCamera([0, 0, 0, 0, 0.5, 0])).toBe(false);
   });
 });
+
+describe('what a link named that the section does not have (P1-24)', async () => {
+  const { lostFromLink } = await import('../../src/ui/linknote');
+  it('names the page, the view and the structure it did not find, and nothing when all were found', () => {
+    expect(lostFromLink('#/grading', { page: 'atlas' }, { g: 'grp' })).toEqual(['the page “grading”']);
+    expect(lostFromLink('#/atlas?g=knosp_3b&sel=sb_vomer', { page: 'atlas', grp: 'pterional', sel: 'sb_vomer' }, { g: 'grp', sel: 'sel' }))
+      .toEqual(['the view “knosp_3b”']);
+    expect(lostFromLink('#/atlas?r=lumbar&lv=T5', { page: 'atlas', region: 'lumbar', level: null }, { r: 'region', lv: 'level' })).toEqual(['the level “T5”']);
+    expect(lostFromLink('#/atlas?g=pterional&sel=sb_vomer', { page: 'atlas', grp: 'pterional', sel: 'sb_vomer' }, { g: 'grp', sel: 'sel' })).toEqual([]);
+    expect(lostFromLink('', { page: 'atlas' }, { g: 'grp' })).toEqual([]);
+  });
+});

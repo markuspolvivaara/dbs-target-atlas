@@ -51,4 +51,3 @@ export const STRUCTURES: Structure[] = MANIFEST.structures.map((m) => ({
   refIds: [...(DESCRIPTIONS[m.id]?.refIds ?? []), ...m.refIds].filter((v, i, a) => a.indexOf(v) === i),
 }));
 
-export const DESCRIPTION_IDS = Object.keys(DESCRIPTIONS);

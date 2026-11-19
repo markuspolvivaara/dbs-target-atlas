@@ -118,6 +118,20 @@ const MORPH_UI: Record<string, { label: string; key: string; toggle?: boolean; n
     },
   },
 };
+
+/** The help's rows for the surgical views, from MORPH_UI (the audit's P1-19: the help listed five of the keys, and only
+ * on the default model): each key once, with what it does in each view that has it. */
+export function surgicalKeyRows(): [string, string][] {
+  const by = new Map<string, string[]>();
+  for (const m of Object.values(MORPH_UI)) {
+    const k = m.key.toUpperCase();
+    by.set(k, [...new Set([...(by.get(k) ?? []), m.label.charAt(0).toLowerCase() + m.label.slice(1)])]);
+  }
+  return [
+    ...[...by].sort(([a], [b]) => a.localeCompare(b)).map(([k, labels]): [string, string] => [k, `Surgical view: ${labels.join('; ')} (on / off)`]),
+    ['[  ]', 'Surgical view: its first shape by a tenth'],
+  ];
+}
 /** a list of sourced notes */
 const notesList = (name: string) => (TB_NOTES[name] ?? []).length
   ? h('ul', { class: 'evidence' }, ...TB_NOTES[name].map((c) => h('li', {}, c.text, ' ', refLinksFrom(TB_REF, c.refIds))))

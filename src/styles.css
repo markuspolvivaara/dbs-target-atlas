@@ -587,3 +587,8 @@ body[data-webgl="off"] .stage .toolbar, body[data-webgl="off"] .stage .sbar { di
   .card .close { width: 44px; height: 44px; }
   .sheet-handle { height: 34px; }
 }
+
+/* a link that named something this section does not have (src/ui/linknote.ts) */
+.link-note { box-sizing: border-box; width: calc(100% - 32px); max-width: 1200px; margin: 8px auto; padding: 8px 12px; border: 1px solid var(--line);
+  border-radius: 10px; background: var(--soft); color: var(--ink); font-size: 14px; line-height: 1.45; }
+.link-note .linklike { margin-left: 6px; }

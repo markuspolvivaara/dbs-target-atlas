@@ -1559,3 +1559,36 @@ test('without WebGL: the note is a card above the legend, the 3D controls are hi
   expect(g.external).toEqual([]);
   expect(g.errors.filter((e) => !/WebGL/i.test(e))).toEqual([]);
 });
+
+// P1-24: a link naming a view, structure, level or page the section does not have opened the default without a word
+test('links: what a link names and the section does not have is said under the header; good links say nothing', async ({ page }) => {
+  const g = guard(page);
+  const bad: [string, RegExp][] = [
+    ['./skullbase-v1/#/atlas?g=knosp_3b', /the view “knosp_3b”/],
+    ['./skullbase-ct/#/grading', /the page “grading”/],
+    ['./spine/#/atlas?r=lumbar&lv=T5', /the level “T5”/],
+    ['./brainstem/#/atlas?g=overview&sel=bs_nothing', /the structure “bs_nothing”/],
+    ['./#/atlas?i=nonsense', /the indication “nonsense”/],
+  ];
+  for (const [url, what] of bad) {
+    await open(page, url);
+    const note = page.locator('.link-note');
+    await expect(note, url).toBeVisible();
+    await expect(note, url).toContainText(what);
+    await note.getByRole('button', { name: 'Dismiss' }).click();
+    await expect(note, url).toBeHidden();
+  }
+  // a link the site itself makes says nothing
+  for (const url of ['./skullbase/#/atlas?g=transsylvian', './skullbase-ct/#/credits', './spine/#/atlas?r=lumbar&lv=L4', './cortex/#/atlas?sel=ctx_g_postcentral',
+    './tracts/#/atlas?g=language&sel=wm_af', './ventricles/#/atlas?g=etv', './vascular/#/grading', './#/atlas?i=pd']) {
+    await open(page, url);
+    await expect(page.locator('.link-note'), url).toHaveCount(0);
+  }
+  // a link followed later replaces the note
+  await open(page, './brainstem/#/atlas?g=nowhere');
+  await expect(page.locator('.link-note')).toContainText('the view “nowhere”');
+  await page.evaluate(() => { location.hash = '#/atlas?g=overview'; });
+  await expect(page.locator('.link-note')).toHaveCount(0);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

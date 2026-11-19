@@ -15,6 +15,7 @@ import { SpineAtlasPage } from './ui/spine-atlas';
 import { spineCreditsPage, spineSourcesPage } from './ui/spine-pages';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
 import { addressSync } from './ui/address';
+import { lostFromLink, showLinkNote } from './ui/linknote';
 
 const SECTION = SECTIONS.find((s) => s.id === 'spine')!;
 
@@ -97,11 +98,15 @@ function render(pageChanged = false): void {
   if (pageChanged) window.scrollTo(0, 0);
 }
 
+const LINK_FIELDS = { r: 'region', lv: 'level', sel: 'sel' };
+showLinkNote(header, lostFromLink(location.hash, state, LINK_FIELDS));
+
 window.addEventListener('hashchange', () => {
   address.read();
   if (location.hash === encodeSpine(state)) return;
   const bare = !location.hash.includes('?');
   const next = bare ? { ...structuredClone(state), page: decodeSpine(location.hash).page } : sanitize(decodeSpine(location.hash));
+  showLinkNote(header, lostFromLink(location.hash, next, LINK_FIELDS));
   setState(next, { camera: !bare || next.page !== state.page });
 });
 
