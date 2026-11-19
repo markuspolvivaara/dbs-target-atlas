@@ -165,8 +165,8 @@ def mismatches(pinned: dict, now: dict, path: str = "") -> list[str]:
 
 
 def fetch_hcp1065() -> dict[str, str]:
-    """White-matter section: the listed .trk.gz members of the HCP-1065 release, plus its connectome table and its
-    volumes of the tracts (a 3.4 MB zip, hash-checked, kept whole).
+    """White-matter section: the listed .trk.gz members of the HCP-1065 release, plus its volumes of the tracts (a
+    3.4 MB zip, hash-checked, kept whole).
 
     The release CDN rejects the suffix byte ranges remotezip needs, so the zip is downloaded once
     (590 MB), checked against its pinned SHA-256 and only the listed members are extracted.
@@ -196,10 +196,6 @@ def fetch_hcp1065() -> dict[str, str]:
                 dest.write_bytes(z.read(m))
     for m in members:
         record[f"{C.HCP1065_TRK_ZIP}:{m}"] = hashlib.sha256((out / "tracts" / m).read_bytes()).hexdigest()
-    dest = out / C.HCP1065_CONNECTOME
-    if not dest.exists():
-        urllib.request.urlretrieve(C.HCP1065_RELEASE + C.HCP1065_CONNECTOME, dest)
-    record[C.HCP1065_CONNECTOME] = hashlib.sha256(dest.read_bytes()).hexdigest()
     # the atlas's own volumes of the tracts: read in place by validate.py, which checks the streamlines against them
     vz = out / C.HCP1065_NIFTI_ZIP
     if not vz.exists():

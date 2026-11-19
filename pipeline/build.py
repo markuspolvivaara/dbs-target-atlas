@@ -478,46 +478,8 @@ def line_nodes(per_side: dict[str, list[np.ndarray]], budget: int, rng: np.rando
     return nodes, rep
 
 
-def read_connectome(path: Path) -> dict[str, dict[str, dict[str, float]]]:
-    """Brodmann block of the HCP-1065 tract-to-region table: column -> side -> {area: probability}.
-
-    The sheet holds two blocks: 'a' (Brodmann areas) then 'b' (Kleist areas). Each block has a
-    header row of tract names, the left-hemisphere columns first, then the right-hemisphere ones.
-    """
-    import re
-    import xml.etree.ElementTree as ET
-    import zipfile
-    ns = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
-    z = zipfile.ZipFile(path)
-    shared = [''.join(t.itertext()) for t in ET.fromstring(z.read("xl/sharedStrings.xml")).iter(ns + "si")]
-    rows: list[dict[int, str]] = []
-    for row in ET.fromstring(z.read("xl/worksheets/sheet1.xml")).iter(ns + "row"):
-        cells: dict[int, str] = {}
-        for c in row.iter(ns + "c"):
-            col = 0
-            for ch in re.match(r"[A-Z]+", c.get("r")).group(0):
-                col = col * 26 + ord(ch) - 64
-            v = c.find(ns + "v")
-            if v is not None:
-                cells[col - 1] = shared[int(v.text)] if c.get("t") == "s" else v.text
-        rows.append(cells)
-    start = next(i for i, r in enumerate(rows) if r.get(0) == "a")
-    end = next(i for i, r in enumerate(rows) if r.get(0) == "b")
-    header = rows[start + 1]
-    ncol = max(header) // 2  # left block then right block
-    out: dict[str, dict[str, dict[str, float]]] = {}
-    for col in range(1, max(header) + 1):
-        name, side = header[col], ("L" if col <= ncol else "R")
-        out.setdefault(name, {"L": {}, "R": {}})
-        for r in rows[start + 2:end]:
-            area = r.get(0)
-            if area and col in r:
-                out[name][side][area] = float(r[col])
-    return out
-
-
-def build_wm(report: dict) -> dict:
-    """Tier-1 tracts of the white-matter section, plus their cortical connections."""
+def build_wm(report: dict) -> None:
+    """Tier-1 tracts of the white-matter section."""
     rng = np.random.default_rng(C.RANDOM_SEED)
     base = RAW / "hcp1065" / "tracts"
     for t in C.WM_TRACTS:
@@ -540,14 +502,6 @@ def build_wm(report: dict) -> dict:
         write_glb(BUILD / "wm" / f"{t.id}.glb", nodes, {"id": t.id})
         report[t.id] = rep
         print(f"wm {t.id:11s} L {rep['L']['streamlines']}/{rep['L']['sourceStreamlines']}  R {rep['R']['streamlines']}/{rep['R']['sourceStreamlines']}")
-    table = read_connectome(RAW / "hcp1065" / C.HCP1065_CONNECTOME)
-    conn = {}
-    for t in C.WM_SHOWN:
-        if not t.connectome:
-            continue
-        col = table[t.connectome]
-        conn[t.id] = {s: {a: round(p, 3) for a, p in col[s].items() if p > 0} for s in ("L", "R")}
-    return conn
 
 
 # ---------------------------------------------------------------- T1
@@ -604,10 +558,7 @@ def main() -> int:
         build_tracts(report)
     t1 = build_t1() if (not only or "t1" in only) else None
     if not only or "wm" in only:
-        conn = build_wm(report)
-        (GENERATED / "wm-connectome.json").write_text(json.dumps(
-            {"source": C.HCP1065_CONNECTOME, "parcellation": "Brodmann areas (Kleist-Brodmann table, block 'a')",
-             "min": C.CONNECTOME_MIN, "tracts": conn}, indent=1))
+        build_wm(report)
 
     rp = BUILD / "report.json"
     old = json.loads(rp.read_text()) if rp.exists() and only else {}

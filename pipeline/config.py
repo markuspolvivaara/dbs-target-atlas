@@ -370,8 +370,8 @@ DATASETS["hcp1065"] = {
     "cite": ["yeh2022", "yeh2018"],
     "licence": HCP1065_LICENCE,
     "url": "https://brain.labsolver.org/hcp_trk_atlas.html",
-    "note": "Files from the 'hcp1065' release of github.com/data-others/atlas (hcp1065_avg_tracts_trk.zip; "
-            "tract_to_region_connectome_BM_KL.xlsx). Space: ICBM 2009a nonlinear asymmetric (atlas page), shown here on the "
+    "note": "Files from the 'hcp1065' release of github.com/data-others/atlas (hcp1065_avg_tracts_trk.zip). "
+            "Space: ICBM 2009a nonlinear asymmetric (atlas page), shown here on the "
             "2009b templates after an alignment check: along every tract but the fornix the 2009b T1 is white-matter "
             "bright, and no shift of up to 2 mm in any direction raises it by more than 5%; the fornix, thin and beside "
             "the ventricle, is held instead to the fornix label of the Neudorfer 2020 hypothalamus atlas (median distance "
@@ -388,7 +388,6 @@ HCP1065_TRK_SHA256 = "344aad4394f18b8926ed5e1bda911ad56e328c6cf75faa45e1302512ad
 # against (build.read_trk's half voxel).
 HCP1065_NIFTI_ZIP = "hcp1065_avg_tracts_nifti.zip"
 HCP1065_NIFTI_SHA256 = "81e0ad75add35c96a5bfd9dc6ede10e5482a8dd180eafcdf2d79249926194510"  # as downloaded 2026-11-18
-HCP1065_CONNECTOME = "tract_to_region_connectome_BM_KL.xlsx"
 WM_BUDGET = 300  # streamlines per hemisphere, the same on both sides
 
 
@@ -402,7 +401,6 @@ class WmTract:
     colour: str
     group: str  # association | projection | commissural | cerebellar (the atlas folder)
     files: dict[str, str]  # side -> path inside the zip, or {"midline": path} (split at x = 0)
-    connectome: str | None = None  # column in the tract-to-region table (Brodmann sheet)
     tier: str = "core"  # core | extended | fossa (posterior fossa); shown separately in the app
     # Only the streamlines that cross the midline ("crossed": upper and lower ends on opposite sides) or that do not
     # ("uncrossed"): the DRTT shown as two tracts, as the DBS section does (the site audit's B4, the owner's choice).
@@ -421,54 +419,51 @@ def _lr(folder: str, stem: str) -> dict[str, str]:
 
 
 WM_TRACTS: list[WmTract] = [
-    WmTract("wm_af", "Arcuate fasciculus", "AF", "wmAF", "association", _lr("association", "AF"), "AF"),
-    WmTract("wm_slf1", "Superior longitudinal fasciculus I", "SLF I", "wmSLF1", "association", _lr("association", "SLF1"), "SLF_I"),
-    WmTract("wm_slf2", "Superior longitudinal fasciculus II", "SLF II", "wmSLF2", "association", _lr("association", "SLF2"), "SLF_II"),
-    WmTract("wm_slf3", "Superior longitudinal fasciculus III", "SLF III", "wmSLF3", "association", _lr("association", "SLF3"), "SLF_III"),
-    WmTract("wm_ifof", "Inferior fronto-occipital fasciculus", "IFOF", "wmIFOF", "association", _lr("association", "IFOF"), "IFOF"),
-    WmTract("wm_ilf", "Inferior longitudinal fasciculus", "ILF", "wmILF", "association", _lr("association", "ILF"), "ILF"),
-    WmTract("wm_uf", "Uncinate fasciculus", "UF", "wmUF", "association", _lr("association", "UF"), "UF"),
-    WmTract("wm_fat", "Frontal aslant tract", "FAT", "wmFAT", "association", _lr("association", "FAT"), "FAT"),
-    WmTract("wm_cing_fp", "Cingulum, frontal–parietal (dorsal) segment", "Cingulum (dorsal)", "wmCingD", "association", _lr("association", "C_FP"), "C_FP"),
-    WmTract("wm_cing_ph", "Cingulum, parahippocampal segment", "Cingulum (parahippocampal)", "wmCingPH", "association", _lr("association", "C_PH"), "C_PH"),
-    WmTract("wm_or", "Optic radiation", "OR", "wmOR", "projection", _lr("projection", "OR"), "OR"),
-    WmTract("wm_cst", "Corticospinal tract", "CST", "wmCST", "projection", _lr("projection", "CST"), "CST"),
-    WmTract("wm_cbt", "Corticobulbar tract", "CBT", "wmCBT", "projection", _lr("projection", "CBT"), "CBT"),
+    WmTract("wm_af", "Arcuate fasciculus", "AF", "wmAF", "association", _lr("association", "AF")),
+    WmTract("wm_slf1", "Superior longitudinal fasciculus I", "SLF I", "wmSLF1", "association", _lr("association", "SLF1")),
+    WmTract("wm_slf2", "Superior longitudinal fasciculus II", "SLF II", "wmSLF2", "association", _lr("association", "SLF2")),
+    WmTract("wm_slf3", "Superior longitudinal fasciculus III", "SLF III", "wmSLF3", "association", _lr("association", "SLF3")),
+    WmTract("wm_ifof", "Inferior fronto-occipital fasciculus", "IFOF", "wmIFOF", "association", _lr("association", "IFOF")),
+    WmTract("wm_ilf", "Inferior longitudinal fasciculus", "ILF", "wmILF", "association", _lr("association", "ILF")),
+    WmTract("wm_uf", "Uncinate fasciculus", "UF", "wmUF", "association", _lr("association", "UF")),
+    WmTract("wm_fat", "Frontal aslant tract", "FAT", "wmFAT", "association", _lr("association", "FAT")),
+    WmTract("wm_cing_fp", "Cingulum, frontal–parietal (dorsal) segment", "Cingulum (dorsal)", "wmCingD", "association", _lr("association", "C_FP")),
+    WmTract("wm_cing_ph", "Cingulum, parahippocampal segment", "Cingulum (parahippocampal)", "wmCingPH", "association", _lr("association", "C_PH")),
+    WmTract("wm_or", "Optic radiation", "OR", "wmOR", "projection", _lr("projection", "OR")),
+    WmTract("wm_cst", "Corticospinal tract", "CST", "wmCST", "projection", _lr("projection", "CST")),
+    WmTract("wm_cbt", "Corticobulbar tract", "CBT", "wmCBT", "projection", _lr("projection", "CBT")),
     WmTract("wm_cc", "Corpus callosum", "CC", "wmCC", "commissural", {"midline": "commissural/CC.trk.gz"}),
-    WmTract("wm_fx", "Fornix", "Fornix", "wmFX", "projection", _lr("projection", "F"), "F"),
+    WmTract("wm_fx", "Fornix", "Fornix", "wmFX", "projection", _lr("projection", "F")),
     # extended tier
-    WmTract("wm_mdlf", "Middle longitudinal fasciculus", "MdLF", "wmMdLF", "association", _lr("association", "MdLF"), "MdLF", "extended"),
-    WmTract("wm_tpat", "Temporo-parietal aslant tract", "TPAT", "wmTPAT", "association", _lr("association", "PAT"), "PTAT", "extended"),
-    WmTract("wm_vof", "Vertical occipital fasciculus", "VOF", "wmVOF", "association", _lr("association", "VOF"), "VOF", "extended"),
-    WmTract("wm_emc", "Extreme capsule fasciculus", "EmC", "wmEMC", "association", _lr("association", "EMC"), None, "extended"),
-    WmTract("wm_ac", "Anterior commissure", "AC", "wmAC", "commissural", {"midline": "commissural/AC.trk.gz"}, None, "extended"),
-    WmTract("wm_atr", "Anterior thalamic radiation", "ATR", "wmATR", "projection", _lr("projection", "TR_A"), "CTh_A", "extended"),
-    WmTract("wm_str", "Superior thalamic radiation", "STR", "wmSTR", "projection", _lr("projection", "TR_S"), "CTh_S", "extended"),
-    WmTract("wm_ptr", "Posterior thalamic radiation", "PTR", "wmPTR", "projection", _lr("projection", "TR_P"), "CTh_P", "extended"),
-    WmTract("wm_ar", "Acoustic radiation", "AR", "wmAR", "projection", _lr("projection", "AR"), None, "extended", withdrawn=True),
-    WmTract("wm_cs_a", "Corticostriatal tract, anterior", "CStr-A", "wmCSA", "projection", _lr("projection", "CS_A"), "CStr_A", "extended"),
-    WmTract("wm_cs_s", "Corticostriatal tract, superior", "CStr-S", "wmCSS", "projection", _lr("projection", "CS_S"), "CStr_S", "extended"),
-    WmTract("wm_cs_p", "Corticostriatal tract, posterior", "CStr-P", "wmCSP", "projection", _lr("projection", "CS_P"), "CStr_P", "extended"),
+    WmTract("wm_mdlf", "Middle longitudinal fasciculus", "MdLF", "wmMdLF", "association", _lr("association", "MdLF"), "extended"),
+    WmTract("wm_tpat", "Temporo-parietal aslant tract", "TPAT", "wmTPAT", "association", _lr("association", "PAT"), "extended"),
+    WmTract("wm_vof", "Vertical occipital fasciculus", "VOF", "wmVOF", "association", _lr("association", "VOF"), "extended"),
+    WmTract("wm_emc", "Extreme capsule fasciculus", "EmC", "wmEMC", "association", _lr("association", "EMC"), "extended"),
+    WmTract("wm_ac", "Anterior commissure", "AC", "wmAC", "commissural", {"midline": "commissural/AC.trk.gz"}, "extended"),
+    WmTract("wm_atr", "Anterior thalamic radiation", "ATR", "wmATR", "projection", _lr("projection", "TR_A"), "extended"),
+    WmTract("wm_str", "Superior thalamic radiation", "STR", "wmSTR", "projection", _lr("projection", "TR_S"), "extended"),
+    WmTract("wm_ptr", "Posterior thalamic radiation", "PTR", "wmPTR", "projection", _lr("projection", "TR_P"), "extended"),
+    WmTract("wm_ar", "Acoustic radiation", "AR", "wmAR", "projection", _lr("projection", "AR"), "extended", withdrawn=True),
+    WmTract("wm_cs_a", "Corticostriatal tract, anterior", "CStr-A", "wmCSA", "projection", _lr("projection", "CS_A"), "extended"),
+    WmTract("wm_cs_s", "Corticostriatal tract, superior", "CStr-S", "wmCSS", "projection", _lr("projection", "CS_S"), "extended"),
+    WmTract("wm_cs_p", "Corticostriatal tract, posterior", "CStr-P", "wmCSP", "projection", _lr("projection", "CS_P"), "extended"),
     # posterior fossa tier
-    WmTract("wm_scp", "Superior cerebellar peduncle", "SCP", "wmSCP", "cerebellar", {"midline": "cerebellum/SCP.trk.gz"}, None, "fossa"),
-    WmTract("wm_mcp", "Middle cerebellar peduncle", "MCP", "wmMCP", "cerebellar", {"midline": "cerebellum/MCP.trk.gz"}, None, "fossa"),
-    WmTract("wm_icp", "Inferior cerebellar peduncle", "ICP", "wmICP", "cerebellar", _lr("cerebellum", "ICP"), None, "fossa"),
-    WmTract("wm_drtt", "Dentato-rubro-thalamic tract, decussating", "DRTT", "wmDRTT", "projection", _lr("projection", "DRTT"), None, "fossa",
+    WmTract("wm_scp", "Superior cerebellar peduncle", "SCP", "wmSCP", "cerebellar", {"midline": "cerebellum/SCP.trk.gz"}, "fossa"),
+    WmTract("wm_mcp", "Middle cerebellar peduncle", "MCP", "wmMCP", "cerebellar", {"midline": "cerebellum/MCP.trk.gz"}, "fossa"),
+    WmTract("wm_icp", "Inferior cerebellar peduncle", "ICP", "wmICP", "cerebellar", _lr("cerebellum", "ICP"), "fossa"),
+    WmTract("wm_drtt", "Dentato-rubro-thalamic tract, decussating", "DRTT", "wmDRTT", "projection", _lr("projection", "DRTT"), "fossa",
             keep="crossed", replays=True),
-    WmTract("wm_ndrtt", "Dentato-rubro-thalamic tract, non-decussating", "nDRTT", "wmNDRTT", "projection", _lr("projection", "DRTT"), None, "fossa",
+    WmTract("wm_ndrtt", "Dentato-rubro-thalamic tract, non-decussating", "nDRTT", "wmNDRTT", "projection", _lr("projection", "DRTT"), "fossa",
             keep="uncrossed"),
-    WmTract("wm_ml", "Medial lemniscus", "ML", "wmML", "projection", _lr("projection", "ML"), None, "fossa"),
-    WmTract("wm_rst", "Reticulospinal tract", "RST", "wmRST", "projection", _lr("projection", "RST"), None, "fossa"),
-    WmTract("wm_cpt_f", "Corticopontine tract, frontal", "CPT-F", "wmCPTF", "projection", _lr("projection", "CPT_F"), None, "fossa"),
-    WmTract("wm_cpt_p", "Corticopontine tract, parietal", "CPT-P", "wmCPTP", "projection", _lr("projection", "CPT_P"), None, "fossa"),
-    WmTract("wm_cpt_o", "Corticopontine tract, occipital", "CPT-O", "wmCPTO", "projection", _lr("projection", "CPT_O"), None, "fossa"),
+    WmTract("wm_ml", "Medial lemniscus", "ML", "wmML", "projection", _lr("projection", "ML"), "fossa"),
+    WmTract("wm_rst", "Reticulospinal tract", "RST", "wmRST", "projection", _lr("projection", "RST"), "fossa"),
+    WmTract("wm_cpt_f", "Corticopontine tract, frontal", "CPT-F", "wmCPTF", "projection", _lr("projection", "CPT_F"), "fossa"),
+    WmTract("wm_cpt_p", "Corticopontine tract, parietal", "CPT-P", "wmCPTP", "projection", _lr("projection", "CPT_P"), "fossa"),
+    WmTract("wm_cpt_o", "Corticopontine tract, occipital", "CPT-O", "wmCPTO", "projection", _lr("projection", "CPT_O"), "fossa"),
 ]
 
 # the tracts written and listed (the withdrawn one is only replayed)
 WM_SHOWN: list[WmTract] = [t for t in WM_TRACTS if not t.withdrawn]
-# a connectome entry counts as a connection of the tract when at least this fraction of the
-# 1065 individuals showed it (Yeh 2022: ~85% of entries are >95% or <5%)
-CONNECTOME_MIN = 0.95
 
 # T1 slice textures
 T1_FILE = "t1.nii"

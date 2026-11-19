@@ -481,8 +481,8 @@ commit and push it.
     chosen tract (a parcel of the plan, its colour the tract's); the cortex label card's "Tracts whose streamlines
     end here (measured)". A tracts link with a tract but no group opens a group that holds it; a cortex link with a
     label but no view opens a view that shows it.
-  - `src/data/generated/wm-connectome.json` (the published table) is still written by `build.py` and listed in
-    NOTICE and ATTRIBUTION.md, but the front end no longer reads it. Removing it would need a `build.py` change.
+  - `src/data/generated/wm-connectome.json` (the published table) was still written by `build.py` then; removed
+    with roadmap item 5 below.
   - `tests/e2e/smoke.spec.ts`: two lines of the tract-card test changed (near line 455); the
     user's uncommitted work in the main checkout adds a test near line 639 of that file.
   - Licence of the patches, as written (the user to confirm): GPL-3.0, non-commercial, like the cortex surface they
@@ -523,6 +523,12 @@ commit and push it.
     volumes (`src/cortex/scene.ts`); the cortex links keep `ax`/`co`/`sa`/`seq`; `Viewer.updateClip` draws no slice
     plane while `inflate` > 0 (only the cortex section sets it); the cortex Credits page has the templates' notice.
     Test: one browser test (a plane on, the link, the inflated surface, back).
+  - 5, the unused tract-to-region table removed: `wm-connectome.json` deleted; `build.py` no longer reads the
+    spreadsheet (`read_connectome` gone, `build_wm` returns nothing), `fetch_sources.py` no longer fetches it and
+    its hash is out of `sources.lock.json`; `WmTract.connectome`, `HCP1065_CONNECTOME` and `CONNECTOME_MIN` gone
+    from `config.py` (the tracts otherwise declared as before, checked field by field). The dataset note
+    (config.py and the four manifest copies, ATTRIBUTION.md, by hand: no rebuild), NOTICE, README and comments no
+    longer name the table. No shipped asset changes.
   - Found: in the ventricles' endoscopic view, at a narrow stage, the open legend box covers the toolbar's left end
     (Measure, Copy link and Save image under it). Not fixed here.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in

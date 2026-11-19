@@ -78,8 +78,8 @@ Tracts from the HCP-1065 population-averaged tractography atlas (Yeh 2022), in t
   not connections: streamlines end preferentially on gyral crowns (Schilling 2018), terminations in grey
   matter are inaccurate (Maier-Hein 2017), tractography cannot confirm innervation (Yeh 2022). This
   replaces the published tract-to-region table (Brodmann areas a bundle overlaps in 95% of subjects),
-  which listed areas a bundle only passes, the insula for the IFOF among them; `wm-connectome.json` is
-  still written by `build.py` but no longer shown.
+  which listed areas a bundle only passes, the insula for the IFOF among them; the table is no longer
+  fetched or built.
 - Same viewer as the DBS section: slices (T1/T2/PD), cut-away, labels, legend highlight, measure,
   shareable links. Camera presets: lateral and medial (relative to the shown hemisphere), coronal,
   axial, posterior-oblique.
@@ -1243,8 +1243,8 @@ npm run pipeline
    (an 8.5 GB zip) with HTTP range requests into `pipeline/data/raw/` (git-ignored), and records
    SHA-256 hashes in `sources.lock.json`. For the white-matter section it downloads the HCP-1065
    tract archive once (590 MB, checked against a pinned SHA-256), extracts the 69 needed files
-   and fetches the tract-to-region table and the atlas's volumes of its tracts (3.4 MB, pinned too:
-   only what the streamline files are checked against).
+   and fetches the atlas's volumes of its tracts (3.4 MB, pinned too: only what the streamline
+   files are checked against).
 2. `build.py`:
    - label volumes → Gaussian pre-smoothing → marching cubes → affine to MNI mm → Taubin
      smoothing → quadric decimation (one GLB per structure, nodes `L` and `R`)
@@ -1260,9 +1260,8 @@ npm run pipeline
      +0.5) mm (the files, written by DSI Studio, give their points from the centre of the first
      voxel, not from its corner as the TrackVis format and nibabel have it: `read_trk`) → the same
      subsample of 300 streamlines per hemisphere on both sides (the corpus callosum and the other
-     one-file tracts cut at x = 0) → `public/assets/wm/`; the Brodmann block of the tract-to-region
-     table → `src/data/generated/wm-connectome.json` (no longer shown; the tract cards show where
-     the streamlines end instead: `wm_ends.py`, under the cortex section)
+     one-file tracts cut at x = 0) → `public/assets/wm/` (the tract cards show where the
+     streamlines end, not the atlas's tract-to-region table: `wm_ends.py`, under the cortex section)
    - `wm_measure.py` (run after it): what the white-matter cards say of the atlas bundles
      themselves (the optic radiation's loop, where four bundles end, the fornix against the
      Neudorfer 2020 label), measured from the atlas's files → `src/data/generated/wm-measured.json`
@@ -1315,7 +1314,7 @@ software licences are in `public/THIRD_PARTY_LICENSES.txt` (also published with 
 Tracts generated from Human Connectome Project data are additionally subject to the WU-Minn HCP
 Open Access Data Use Terms; the required acknowledgement is in `NOTICE`, `ATTRIBUTION.md` and on
 the Credits page. The white-matter section's tract files (`public/assets/wm/`, `wm-manifest.json`,
-`wm-connectome.json`) are **CC BY-SA 4.0** (HCP-1065 atlas) plus the HCP terms, not GPL. The skull-base
+`wm-measured.json`) are **CC BY-SA 4.0** (HCP-1065 atlas) plus the HCP terms, not GPL. The skull-base
 files (`public/assets/skullbase/`, `sb-*.json`) are **CC BY-SA** (Z-Anatomy 4.0, BodyParts3D 2.1 Japan,
 Wikipedia definitions 3.0), not GPL. The skull base's detailed model (`public/assets/skullbase-ct/`, `sbct-*.json`)
 is derived from TopBrain 2025 data (University Hospital Zurich: open use with the source given, **non-commercial**;
