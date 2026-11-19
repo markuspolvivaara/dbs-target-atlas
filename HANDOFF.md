@@ -518,6 +518,11 @@ commit and push it.
     (meshes, lines and markers drawn), `nameOf`, `onApply` (the bar follows each applied state). The pages clear
     the opacities where they clear the hidden list (a change of view). Tests: a unit test of the link (three
     sections), a browser test (slider, reload, Show only this and back, Fade the rest, a view change, the tracts).
+  - 4, MRI slices in the cortex section (the user's choices: hidden over the inflated surface; all off by default):
+    a Slices tab (`buildSlicesPane`, as in the white-matter section); the cortex catalogue gets the DBS section's
+    volumes (`src/cortex/scene.ts`); the cortex links keep `ax`/`co`/`sa`/`seq`; `Viewer.updateClip` draws no slice
+    plane while `inflate` > 0 (only the cortex section sets it); the cortex Credits page has the templates' notice.
+    Test: one browser test (a plane on, the link, the inflated surface, back).
   - Found: in the ventricles' endoscopic view, at a narrow stage, the open legend box covers the toolbar's left end
     (Measure, Copy link and Save image under it). Not fixed here.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in

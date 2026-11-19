@@ -1495,3 +1495,37 @@ test('the selected structure’s bar: show only this, fade the rest, its own opa
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// the roadmap's slices under every MNI section (the owner's choices of 19 November 2026): the cortex section's Slices
+// tab, the MRI templates under the pial surface, none over the inflated one, all off unless the link has them
+test('cortex: MRI slices under the pial surface, kept in the link, not drawn over the inflated surface', async ({ page }) => {
+  const g = guard(page);
+  const planes = () => page.evaluate(() => (window as unknown as { __atlas: { viewer: { slices: { group: { children: { name: string; visible: boolean }[] } } } } }).__atlas.viewer.slices.group.children.filter((c) => c.visible).map((c) => c.name));
+  await open(page, './cortex/#/atlas?v=lateral');
+  expect(await planes()).toEqual([]);
+  await page.locator('.ptab', { hasText: 'Slices' }).click();
+  const pane = page.locator('.panel .pane:not([hidden])');
+  await pane.locator('[data-axis="coronal"] input[data-k="on"]').check();
+  await settle(page);
+  expect(await planes()).toEqual(['slice-coronal']);
+  await pane.locator('input[name="sliceseq"][value="t2"]').check();
+  await settle(page);
+  const hash = new URL(page.url()).hash;
+  expect(hash).toMatch(/[?&]co=/);
+  expect(hash).toContain('seq=t2');
+  // the link reopens them
+  await open(page, `./cortex/${hash}`);
+  expect(await planes()).toEqual(['slice-coronal']);
+  // over the inflated surface, none, and the tab says why; back on the pial surface, there again
+  await page.locator('.tbtn', { hasText: 'Inflated' }).click();
+  await settle(page);
+  expect(await planes()).toEqual([]);
+  await page.locator('.ptab', { hasText: 'Slices' }).click();
+  await expect(page.locator('.panel .pane:not([hidden]) .inflated-note')).toBeVisible();
+  await page.locator('.tbtn', { hasText: 'Pial' }).click();
+  await settle(page);
+  expect(await planes()).toEqual(['slice-coronal']);
+  await expect(page.locator('.panel .pane:not([hidden]) .inflated-note')).toBeHidden();
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

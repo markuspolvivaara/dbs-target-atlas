@@ -981,10 +981,12 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     const s = this.state!;
     const planes: THREE.Plane[] = [];
     let anyOn = false;
+    // (the cortex section's inflated surface has left the template's positions: no slice lines up with it)
+    const inflated = (s.inflate ?? 0) > 0.001;
     for (const axis of ['axial', 'coronal', 'sagittal'] as Axis[]) {
       const c = s.clip[axis];
-      this.slices.update(axis, c.on, c.mm);
-      if (c.on) anyOn = true;
+      this.slices.update(axis, c.on && !inflated, c.mm);
+      if (c.on && !inflated) anyOn = true;
     }
     // cut at the midline (x = 0): clipPlane(flip=false) keeps x <= 0, i.e. removes the patient's right half.
     // Only structures are cut; the slice images stay whole so that half shows the slice unobstructed.

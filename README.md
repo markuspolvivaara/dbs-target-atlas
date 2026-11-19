@@ -890,6 +890,9 @@ The 74 gyri and sulci of FreeSurfer's Destrieux 2009 parcellation (Destrieux et 
 - **Views**: lateral, medial, basal and insular. Each highlights the labels Destrieux et al. 2010 (Table 1)
   list as visible on that view; the insular view lists the insula and its circular sulcus and, on the pial
   surface, cuts away everything lateral of the insula over its outline (the opercula).
+- **Slices** (a tab of its own, November 2026): the MRI templates (T1, T2, PD; the DBS section's files) on axial,
+  coronal and sagittal planes, as in the white-matter section, kept in the link (`ax`, `co`, `sa`, `seq`). They line
+  up with the pial surface only, so they are not drawn over the inflated one (the tab says why). All off by default.
 - **Pial and inflated surface**: the inflated surface is computed by smoothing the pial one, so every vertex has
   both positions and the viewer morphs between them. Shading is sulcal depth (light = crown, dark = depth).
 - **Colours** by lobe (Okabe-Ito colours, checked for colour-vision deficiency), by the Destrieux atlas colours,
