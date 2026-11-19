@@ -13,6 +13,7 @@ import { bootFailed } from './ui/stage';
 import { disclaimerNote, siteHeader } from './ui/shell';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
 import { addressSync } from './ui/address';
+import { lostFromLink, showLinkNote } from './ui/linknote';
 
 const SECTION = SECTIONS.find((s) => s.id === 'ventricles')!;
 
@@ -85,11 +86,15 @@ function render(pageChanged = false): void {
   if (pageChanged) window.scrollTo(0, 0);
 }
 
+const LINK_FIELDS = { g: 'grp', sel: 'sel' };
+showLinkNote(header, lostFromLink(location.hash, state, LINK_FIELDS));
+
 window.addEventListener('hashchange', () => {
   address.read();
   if (location.hash === encodeVe(state)) return;
   const bare = !location.hash.includes('?');
   const next = bare ? { ...structuredClone(state), page: decodeVe(location.hash).page } : sanitize(decodeVe(location.hash));
+  showLinkNote(header, lostFromLink(location.hash, next, LINK_FIELDS));
   setState(next, { camera: !bare || next.page !== state.page });
 });
 
@@ -111,7 +116,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () 
 function buildHelp(): HTMLDialogElement {
   const rows: [string, string][] = [
     ['1 – 5', 'Camera: front, side, from above, front oblique, over the forehead'],
-    ['H', 'Side: both → left → right'], ['T', 'Ventriculostomy: next aim'], ['S', 'Ventriculostomy: the other side'],
+    ['H', 'Side: both → left → right'], ['T', 'In the ventriculostomy view: the next aim'], ['S', 'In the ventriculostomy view: the other side'],
     ['N', 'Name labels: hover → all → off'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
   ];
   return h('dialog', { class: 'help', 'aria-labelledby': 'help-title' },

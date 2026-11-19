@@ -17,7 +17,9 @@ import { Slices } from './slices';
 type Side = 'L' | 'R';
 type Palette = Record<string, string>;
 
-interface MeshItem { kind: 'mesh'; meta: ManifestStructure; nodes: Partial<Record<Side, THREE.Mesh>>; mats: MeshMaterials; look: Look; layer: LayerKey | ExtraLayerKey; surface: boolean; faded?: boolean }
+interface MeshItem { kind: 'mesh'; meta: ManifestStructure; nodes: Partial<Record<Side, THREE.Mesh>>; mats: MeshMaterials; look: Look; layer: LayerKey | ExtraLayerKey; surface: boolean; faded?: boolean;
+  /** one node, R, lying across the midline: a midline structure kept whole, drawn whichever side is shown */
+  midline?: boolean }
 interface LineItem { kind: 'lines'; meta: ManifestStructure; nodes: Partial<Record<Side, LineSegments2>>; mat: LineMaterial; role: TractRole | null; centroid: Partial<Record<Side, THREE.Vector3>> }
 type Item = MeshItem | LineItem;
 
@@ -119,6 +121,17 @@ export function webglAvailable(): boolean {
 
 /** The WebGL renderer, or, where WebGL cannot start (disabled, blocked or lost), an inert stand-in with the same surface
  * the viewer uses, and a note in the stage: the rest of the page (cards, lists, sources, credits) works without it. */
+/** Free the GPU buffers of an object taken out of the scene for good: the geometry and materials of every mesh, line
+ * and point cloud under it (the markers, the measure and the overlays are made anew on each redraw). */
+function disposeTree(root: THREE.Object3D): void {
+  root.traverse((o) => {
+    const g = o as THREE.Mesh | THREE.Line | THREE.Points;
+    if (!('geometry' in g) || !g.geometry) return;
+    g.geometry.dispose();
+    for (const mt of [g.material].flat()) mt?.dispose();
+  });
+}
+
 function makeRenderer(host: HTMLElement): THREE.WebGLRenderer {
   if (webglAvailable()) {
     try {
@@ -129,7 +142,7 @@ function makeRenderer(host: HTMLElement): THREE.WebGLRenderer {
   const note = document.createElement('div');
   note.className = 'no-webgl';
   note.setAttribute('role', 'note');
-  note.textContent = 'The 3D view needs WebGL, which this browser could not start (it may be turned off, blocked or not supported). The lists, cards, sources and credits still work.';
+  note.textContent = 'The 3D view needs WebGL, which this browser could not start (it may be turned off, blocked or not supported). The lists, cards, sources and credits still work. Turning on hardware acceleration in the browser’s settings usually brings WebGL back.';
   host.appendChild(note);
   document.body.dataset.webgl = 'off';
   const noop = () => undefined;
@@ -137,6 +150,9 @@ function makeRenderer(host: HTMLElement): THREE.WebGLRenderer {
     domElement: el, autoClear: true, localClippingEnabled: false,
     setPixelRatio: noop, getPixelRatio: () => 1, setSize: noop, setViewport: noop, setScissor: noop, setScissorTest: noop,
     render: noop, clear: noop, dispose: noop, setClearColor: noop, setAnimationLoop: noop, compile: noop,
+    // (what the endoscope views call: the audit's P1-17)
+    getClearColor: (c: THREE.Color) => c.set(0xffffff), getClearAlpha: () => 1, setClearAlpha: noop,
+    setRenderTarget: noop, getRenderTarget: () => null,
     getDrawingBufferSize: (v: THREE.Vector2) => v.set(1, 1),
   };
   return stub as unknown as THREE.WebGLRenderer;
@@ -248,19 +264,33 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.watchContext();
     this.camera = new THREE.PerspectiveCamera(35, 1, 0.5, 2000);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.enableDamping = true;
+    // (the glide after a drag is motion: off for readers who ask for reduced motion)
+    this.controls.enableDamping = !this.reducedMotion;
     this.controls.dampingFactor = 0.12;
     this.controls.screenSpacePanning = true;
     this.controls.minDistance = 15;
     this.controls.maxDistance = 900;
-    this.controls.addEventListener('change', () => this.invalidate());
-    this.controls.addEventListener('end', () => {
-      this.ev.cameraChanged(this.toRas(this.camera.position), this.toRas(this.controls.target));
-      // damping keeps the view drifting briefly after release
+    // damping keeps the view drifting after release: the camera is reported at release and again where it comes to
+    // rest, so that a link copied after a flick holds the view the reader sees
+    let gliding = false;
+    const report = () => this.ev.cameraChanged(this.toRas(this.camera.position), this.toRas(this.controls.target));
+    const settle = () => {
       clearTimeout(this.moveTimer);
-      this.moveTimer = window.setTimeout(() => this.ev.moving(false), 300);
+      this.moveTimer = window.setTimeout(() => {
+        if (gliding) { gliding = false; report(); }
+        this.ev.moving(false);
+      }, 300);
+    };
+    this.controls.addEventListener('change', () => {
+      this.invalidate();
+      if (gliding) settle();
     });
-    this.controls.addEventListener('start', () => { clearTimeout(this.moveTimer); this.ev.moving(true); });
+    this.controls.addEventListener('end', () => {
+      report();
+      gliding = this.controls.enableDamping;
+      settle();
+    });
+    this.controls.addEventListener('start', () => { gliding = false; clearTimeout(this.moveTimer); this.ev.moving(true); });
 
     this.root.matrixAutoUpdate = false;
     this.root.matrix.copy(RAS_TO_WORLD);
@@ -382,13 +412,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   /** Replace the section's own objects (in the scene's RAS millimetres). A mesh whose userData.token names a palette
    * token takes that colour, now and on theme changes. */
   setOverlay(objects: THREE.Object3D[]): void {
-    for (const c of [...this.overlayGroup.children]) {
-      this.overlayGroup.remove(c);
-      c.traverse((o) => {
-        const m = o as THREE.Mesh;
-        if (m.isMesh) { m.geometry.dispose(); for (const mt of [m.material].flat()) mt.dispose(); }
-      });
-    }
+    // (lines too: the ventricles' catheter and endoscope draw THREE.Line overlays, the audit's P1-28)
+    for (const c of [...this.overlayGroup.children]) { this.overlayGroup.remove(c); disposeTree(c); }
     for (const o of objects) this.overlayGroup.add(o);
     this.recolourOverlay();
     this.clipOverlay();
@@ -526,7 +551,17 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     // 'tracts' layer (skull-base section); cortical labels (cortex section) use the 'cortex' layer
     const layer: LayerKey | ExtraLayerKey = meta.layer ?? (meta.type === 'cortex' || meta.type === 'soft' || surface ? 'cortex'
       : meta.type === 'tube' ? 'tracts' : meta.type === 'target' ? 'targets' : 'nuclei');
-    return { kind: 'mesh', meta, nodes, mats, look: 'hidden', layer, surface };
+    // (a midline structure kept whole in its R node, a sinus or the basilar artery: hidden with Side = Left until the
+    // site audit's MC-17)
+    let midline = false;
+    if (nodes.R && !nodes.L) {
+      const r = nodes.R;
+      r.updateMatrix();
+      r.geometry.computeBoundingBox();
+      const b = r.geometry.boundingBox!.clone().applyMatrix4(r.matrix);
+      midline = b.min.x < -1 && b.max.x > 1;
+    }
+    return { kind: 'mesh', meta, nodes, mats, look: 'hidden', layer, surface, midline };
   }
 
   /** The angiogram's fade on a mesh's material (see `dsa`): off, the material is as it was. */
@@ -781,7 +816,9 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
           const m = it.nodes[side];
           if (!m) continue;
           applyLook(m, it.mats, look, op, it.meta.id === 'cortex' ? new THREE.Color(this.palette.cortex ?? '#c4cbd3') : this.ghost, c);
-          if (!this.sideVisible(side)) m.visible = false;
+          if (!this.sideVisible(side) && !it.midline) m.visible = false;
+          const only = p.onlySide?.get(it.meta.id);
+          if (only && only !== side) m.visible = false;
         }
         it.look = look;
         it.mats.solid.emissive.copy(focused ? c.clone().multiplyScalar(0.45) : new THREE.Color(0x000000));
@@ -835,7 +872,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
 
   // ---------------------------------------------------------------- markers
   private updateMarkers(): void {
-    for (const c of [...this.markerGroup.children]) { this.markerGroup.remove(c); (c as THREE.Mesh).geometry.dispose(); }
+    for (const c of [...this.markerGroup.children]) { this.markerGroup.remove(c); disposeTree(c); }
     this.markerTargets.clear();
     const p = this.plan!;
     const accent = new THREE.Color(this.palette[p.accent] ?? '#14253a');
@@ -1395,7 +1432,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   private endDrag(): void { this.drag = null; this.controls.enabled = true; }
 
   private drawMeasure(): void {
-    for (const c of [...this.measureGroup.children]) { this.measureGroup.remove(c); (c as THREE.Mesh).geometry?.dispose(); }
+    for (const c of [...this.measureGroup.children]) { this.measureGroup.remove(c); disposeTree(c); }
     const col = new THREE.Color(this.palette.ctx ?? '#14253a');
     for (const p of this.measurePts) {
       const m = new THREE.Mesh(new THREE.SphereGeometry(0.45, 16, 12), new THREE.MeshBasicMaterial({ color: col, depthTest: false }));
@@ -1658,6 +1695,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   }
 
   private renderEndoscope(): void {
+    if (document.body.dataset.webgl === 'off') return;
     if (this.endoDirty) {
       this.endoDirty = false;
       const was = this.endoInside;

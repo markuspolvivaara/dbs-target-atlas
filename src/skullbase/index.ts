@@ -49,6 +49,8 @@ export const LandmarkSchema = z.object({
 });
 export type Landmark = z.infer<typeof LandmarkSchema>;
 export const LANDMARKS = z.array(LandmarkSchema).parse(landmarksJson);
+// (Z-Anatomy spells it "Supercilliary arch": shown corrected, and its definition found under the corrected name)
+for (const l of LANDMARKS) if (l.name === 'Supercilliary arch') l.name = 'Superciliary arch';
 export const LM = new Map(LANDMARKS.map((l) => [l.id, l]));
 
 const DefinitionSchema = z.object({ text: z.string().min(1), url: z.string().url().nullable() });
@@ -56,19 +58,42 @@ const DefinitionSchema = z.object({ text: z.string().min(1), url: z.string().url
  * Shipped definitions that are wrong on their face, corrected here for every model (the site audit's C-009): the words
  * replaced, or the text withdrawn, and why. The texts are CC BY-SA, so the card says what was changed.
  */
-export const DEFINITION_EDITS: Record<string, { old?: string; new?: string; withdraw?: boolean; why: string }> = {
+export const DEFINITION_EDITS: Record<string, { old?: string; new?: string; replace?: [string, string][]; withdraw?: boolean; why: string }> = {
   'Facial nerve (VII)': { old: 'The facial nerve (the labyrinthine segment) is', new: 'The facial nerve is',
     why: '“(the labyrinthine segment)” removed after “The facial nerve”: that is one of the three segments of the nerve’s bony canal, not the nerve.' },
   'Callosomarginal artery': { withdraw: true,
     why: 'The text shipped for this artery described the A2 segment of the anterior cerebral artery, not the callosomarginal artery; it is not shown.' },
+  // (the audit's C-017: sinuses called "areas beneath the brain"; the meatus's text shown for the nerves in it)
+  'Inferior sagittal sinus': { old: 'is an area beneath the brain which allows', new: 'is a dural venous sinus, which allows',
+    why: '“an area beneath the brain” replaced by “a dural venous sinus”: it runs in the lower edge of the falx, above the corpus callosum.' },
+  'Straight sinus': { old: 'is an area within the skull beneath the brain.', new: 'is a dural venous sinus.',
+    why: '“an area within the skull beneath the brain” replaced by “a dural venous sinus”.' },
+  'Transverse sinus': { old: 'are two areas beneath the brain which allow', new: 'are two dural venous sinuses, which allow',
+    why: '“two areas beneath the brain” replaced by “two dural venous sinuses”.' },
+  'Superior petrosal sinus': { old: 'one of the dural venous sinuses located beneath the brain.', new: 'one of the dural venous sinuses.',
+    why: '“located beneath the brain” removed.' },
+  'Jugular foramen': { old: 'and sigmoid sinus vein pass', new: 'and sigmoid sinus pass', why: '“sigmoid sinus vein” corrected to “sigmoid sinus”.' },
+  'Nerves in the internal acoustic meatus (VII, VIII)': { withdraw: true,
+    why: 'The text shipped for these nerves was the internal acoustic meatus’s, which defines the canal; it is shown on the meatus’s card only.' },
 };
+/** Artefacts of the export, cleaned in every text (the audit's C-017): empty brackets where a pronunciation was,
+ * reference marks ("[1]") and figure references ("[Fig. 1]"), section headings in capitals run into the text
+ * ("… bone. STRUCTURE The …"), a dropped letter. */
+export function tidyDefinition(t: string): string {
+  return t.replace(/ \(\)/g, '').replace(/\[\d+\]/g, '').replace(/ ?\[Fig\.? ?\d*\]/g, '')
+    .replace(/(^|[.:] )(?:[A-Z]{3,}[ :]+)+(?=[A-Z][a-z])/g, '$1').replace(/\bbeneath th /g, 'beneath the ');
+}
 /** Wikipedia-derived definitions shipped in Z-Anatomy (CC BY-SA 3.0), keyed by structure name, with DEFINITION_EDITS applied. */
 export const DEFINITIONS: Record<string, { text: string; url: string | null; edited?: string }> = Object.fromEntries(
   Object.entries(z.record(z.string(), DefinitionSchema).parse(definitionsJson)).flatMap(([name, d]) => {
+    // (Z-Anatomy's misspelt name, found under the corrected one: the audit's C-016)
+    const key = name === 'Supercilliary arch' ? 'Superciliary arch' : name;
+    const t = { ...d, text: tidyDefinition(d.text) };
     const e = DEFINITION_EDITS[name];
-    if (!e) return [[name, d]];
+    if (!e) return [[key, t]];
     if (e.withdraw) return [];
-    return d.text.includes(e.old!) ? [[name, { ...d, text: d.text.replace(e.old!, e.new!), edited: e.why }]] : [[name, d]];
+    const pairs: [string, string][] = e.replace ?? (e.old ? [[e.old, e.new!]] : []);
+    return pairs.some(([a]) => t.text.includes(a)) ? [[key, { ...t, text: pairs.reduce((x, [a, b]) => x.replace(a, b), t.text), edited: e.why }]] : [[key, t]];
   }));
 
 const RegionSchema = z.object({
@@ -251,6 +276,28 @@ export function definitionFor(name: string): { text: string; url: string | null;
 }
 
 /** Cross-checks between the generated files. Returns a list of problems (empty = consistent). */
+/** Names the notes (FORAMEN_CONTENTS, TB_NOTES, PASSAGES) are keyed by that a model does not draw or label, by model. */
+const NOT_IN_MODEL: Record<SbModel, Set<string>> = {
+  // the default model: three openings Z-Anatomy's notes name that this CT's landmarks do not (its openings' cards read
+  // PASSAGES and TB_NOTES)
+  v3: new Set(['Stylomastoid foramen', 'Internal opening of carotid canal', 'Cribriform plate']),
+  // v2: the CT's own openings and floor landmarks only (no ear, no brainstem floor)
+  ct: new Set([
+    'Superior orbital fissure', 'Internal acoustic meatus', 'Stylomastoid foramen', 'Jugular foramen',
+    'External opening of carotid canal', 'Internal opening of carotid canal', 'Foramen lacerum', 'Cribriform plate',
+    'Facial colliculus', 'Hypoglossal trigone', 'Vagal trigone', 'Vestibular area', 'Obex',
+    'Median sulcus of fourth ventricle', 'Trigeminal ganglion',
+    'Internal carotid artery (petrous and lacerum parts)', 'Chorda tympani',
+    'Nerves in the internal acoustic meatus (VII, VIII)', 'Greater petrosal nerve', 'Geniculate ganglion',
+    'Second genu of facial nerve', 'Fundus of internal acoustic meatus', 'Bone over the superior semicircular canal',
+  ]),
+  // v1: Z-Anatomy's temporal bone has none of these as structures of their own
+  zanatomy: new Set([
+    'Trigeminal ganglion', 'Internal carotid artery (petrous and lacerum parts)', 'Chorda tympani',
+    'Nerves in the internal acoustic meatus (VII, VIII)',
+  ]),
+};
+
 export function crossCheckSb(): string[] {
   const errs: string[] = [];
   const ids = new Set(SB_MANIFEST.structures.map((s) => s.id));
@@ -269,6 +316,13 @@ export function crossCheckSb(): string[] {
   const recess = new Set(['Meckel\'s cave']);
   for (const l of LANDMARKS) if (l.how && !recess.has(l.name) && !sourced(l.name)) errs.push(`located foramen ${l.name} (${l.side}): no sourced contents`);
   for (const cl of Object.values(FORAMEN_CONTENTS).flat()) for (const r of cl.refIds) if (!FORAMEN_REF.has(r)) errs.push(`foramen claim: unknown refId ${r}`);
+  // the notes keyed by name: a key that names nothing in this model is used nowhere, and passed silently (the audit's
+  // P1-25); the ones each model is known not to have are listed in NOT_IN_MODEL
+  const named = new Set([...LANDMARKS.map((l) => l.name), ...SB_MANIFEST.structures.map((s) => s.name)]);
+  const absent = NOT_IN_MODEL[SB_MODEL];
+  for (const [what, table] of [['FORAMEN_CONTENTS', FORAMEN_CONTENTS], ['TB_NOTES', TB_NOTES], ['PASSAGES', PASSAGES]] as const)
+    for (const k of Object.keys(table)) if (!named.has(k) && !absent.has(k)) errs.push(`${what}: "${k}" names nothing in this model`);
+  for (const k of absent) if (named.has(k)) errs.push(`"${k}" is in this model now: remove it from NOT_IN_MODEL`);
   for (const [aid, g] of Object.entries(APPROACH_GEOM)) {
     const c = APPROACH.get(aid);
     if (!c) { errs.push(`approach ${aid}: no sourced content`); continue; }

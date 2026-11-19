@@ -31,7 +31,7 @@ export const SECTIONS: Section[] = [
   },
   {
     id: 'skullbase', name: 'Skull base', path: 'skullbase/', status: 'live',
-    summary: 'The skull base of one adult CT: its foramina with the cranial nerves through them, its own vessels, a real ear in each temporal bone, and surgical views (pterional, lateral supraorbital, interhemispheric, telovelar) with the brain moved by sliders.',
+    summary: 'The skull base of one adult CT: its foramina with the cranial nerves through them, its own vessels, a real ear in each temporal bone, surgical views (pterional, orbitozygomatic, lateral supraorbital, interhemispheric, Kawase, subtemporal, retrosigmoid, far lateral, telovelar, endonasal) with the brain moved by sliders, and tumours graded on them.',
   },
   {
     id: 'brainstem', name: 'Brainstem', path: 'brainstem/', status: 'live',

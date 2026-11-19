@@ -107,7 +107,7 @@ export const PRACTICE: Claim[] = [
   c('About 25 000 external ventricular drains are placed a year in the United States; a survey estimated 1.4 to 2.4 passes per placement.', 'chen2025'),
   c('With no cerebrospinal fluid at a depth beyond 65 mm the catheter should be withdrawn and re-aimed; fluid beyond 60 mm may come from the contralateral ventricle.', 'chen2025'),
   c('Kakarla grades: 1, optimal, in the ipsilateral frontal horn or the third ventricle; 2, functional but not ideal, in the contralateral ventricle or non-eloquent cortex; 3, in eloquent cortex or non-target spaces.', 'charcos2025'),
-  c('Of 44 bedside drains (after trauma or haemorrhage), all placed with electromagnetic image guidance were optimal (Kakarla grade 1) in one pass; freehand, 88.2 % were optimal and 73.5 % took one pass.', 'charcos2025'),
+  c('Of 44 bedside drains (after trauma or haemorrhage), all 10 placed with electromagnetic image guidance were optimal (Kakarla grade 1) in one pass; of the 34 placed freehand, 88.2 % were optimal and 73.5 % took one pass.', 'charcos2025'),
 ];
 
 export const TARGET_NAME: Record<string, string> = {

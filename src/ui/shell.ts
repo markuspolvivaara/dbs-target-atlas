@@ -26,14 +26,16 @@ function viewSettings(): HTMLElement {
   const fade = h('input', { type: 'checkbox', id: 'set-fade-others' }) as HTMLInputElement;
   fade.checked = viewPrefs().fadeOthers;
   fade.addEventListener('change', () => setViewPrefs({ fadeOthers: fade.checked }));
-  const panel = h('div', { class: 'view-settings-panel', id: 'view-settings', role: 'dialog', 'aria-label': 'Viewer settings', hidden: true },
+  const panel = h('div', { class: 'view-settings-panel', id: 'view-settings', role: 'dialog', 'aria-label': 'View options', hidden: true },
     h('label', { class: 'view-setting', for: 'set-fade-others' }, fade,
       h('span', {}, h('strong', {}, 'Fade the rest when a structure is selected'),
         h('span', { class: 'view-setting-note' }, 'Off: the selected structure (or the spine’s chosen level) is outlined, and shown through whatever covers it. A selected tract fades the other tracts either way.'))));
   const btn = h('button', {
     type: 'button', class: 'view-settings-btn', 'aria-haspopup': 'dialog', 'aria-expanded': 'false', 'aria-controls': 'view-settings',
-    title: 'Viewer settings',
-  }, h('span', { class: 'gear', 'aria-hidden': 'true' }, '⚙'), h('span', { class: 'view-settings-label' }, 'Settings')) as HTMLButtonElement;
+    // ("View options": the DBS section has a page of settings of its own, and two "Settings" in one header confused: the
+    // audit's UI-19)
+    title: 'View options: how the 3D view shows a selected structure',
+  }, h('span', { class: 'gear', 'aria-hidden': 'true' }, '⚙'), h('span', { class: 'view-settings-label' }, 'View options')) as HTMLButtonElement;
   const wrap = h('div', { class: 'view-settings' }, btn, panel);
   const close = (refocus = false) => {
     if (panel.hidden) return;

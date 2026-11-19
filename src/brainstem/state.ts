@@ -1,7 +1,7 @@
 import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type Axis, type LayerKey, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
-import { decodeOpacity, encodeOpacity } from '../viewer/scene';
+import { decodeOpacity, encodeOpacity, okCamera } from '../viewer/scene';
 import { BS_GROUP } from './groups';
 import { defaultLabels, labelsFrom, labelsParam } from '../labels';
 
@@ -76,7 +76,7 @@ export function decodeBs(hash: string): BsState {
   const c = p.get('c');
   if (c) {
     const parts = c.split(',').map(Number);
-    if (parts.length === 6 && parts.every(Number.isFinite)) s.cam = { preset: null, pos: parts.slice(0, 3) as V3, tgt: parts.slice(3) as V3 };
+    if (okCamera(parts)) s.cam = { preset: null, pos: parts.slice(0, 3) as V3, tgt: parts.slice(3) as V3 };
     else if ((BS_PRESETS as string[]).includes(c)) s.cam = { preset: c as CameraPreset };
   }
   const ly = p.get('ly');

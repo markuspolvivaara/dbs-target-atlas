@@ -14,6 +14,7 @@ import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEW
 import { BRAND, SECTIONS } from './brand';
 import { disclaimerNote, siteHeader } from './ui/shell';
 import { addressSync } from './ui/address';
+import { lostFromLink, showLinkNote } from './ui/linknote';
 
 const SECTION = SECTIONS.find((s) => s.id === 'dbs')!;
 
@@ -38,7 +39,7 @@ function sanitize(s: AppState): AppState {
 }
 
 // ---------------------------------------------------------------- shell
-const NAV: [Page, string][] = [['atlas', 'Atlas'], ['imaging', 'Imaging'], ['coords', 'Coordinates'], ['refs', 'References'], ['credits', 'Credits'], ['settings', 'Settings']];
+const NAV: [Page, string][] = [['atlas', 'Atlas'], ['imaging', 'Imaging'], ['coords', 'Coordinates'], ['refs', 'References'], ['credits', 'Credits'], ['settings', 'Indications shown']];
 const app = document.getElementById('app')!;
 const navLinks = NAV.map(([p, label]) => h('a', { href: `#/${p}`, class: 'navlink', 'data-page': p }, label));
 const themeBtn = h('button', { type: 'button', class: 'theme-btn', onclick: () => cycleTheme() });
@@ -95,10 +96,13 @@ function render(pageChanged = false): void {
   document.body.dataset.page = state.page;
   pages[state.page].render(state);
   if (state.page === 'atlas') atlas.onShow();
-  const titles: Record<Page, string> = { atlas: IND.get(state.ind)!.name, imaging: 'Imaging', coords: 'Coordinates', refs: 'References', credits: 'Credits', settings: 'Settings' };
+  const titles: Record<Page, string> = { atlas: IND.get(state.ind)!.name, imaging: 'Imaging', coords: 'Coordinates', refs: 'References', credits: 'Credits', settings: 'Indications shown' };
   document.title = `${titles[state.page]} · ${SECTION.name} · ${BRAND.name}`;
   if (pageChanged) window.scrollTo(0, 0);
 }
+
+const LINK_FIELDS = { i: 'ind', s: 'sym', sel: 'sel' };
+showLinkNote(header, lostFromLink(location.hash, state, LINK_FIELDS));
 
 window.addEventListener('hashchange', () => {
   address.read();
@@ -106,6 +110,7 @@ window.addEventListener('hashchange', () => {
   // A link with parameters is a complete view description; a bare page link (#/atlas) keeps the current view.
   const bare = !location.hash.includes('?');
   const next = sanitize(bare ? { ...structuredClone(state), page: decode(location.hash).page } : decode(location.hash, defaultState()));
+  showLinkNote(header, lostFromLink(location.hash, next, LINK_FIELDS));
   if (!bare && !new URLSearchParams(location.hash.split('?')[1] ?? '').has('lead')) applyLeadPref(next);
   setState(next, { camera: !bare || next.page !== state.page });
 });

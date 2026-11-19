@@ -17,8 +17,9 @@ export interface CalcRow {
 }
 
 export function fmt(n: number): string {
-  const s = (Math.round(n * 10) / 10).toFixed(1);
-  return s.replace('-', '−');
+  // (the size rounded, then the sign: Math.round gave −6.2 for −6.25 beside 6.3 for 6.25, the audit's A-022)
+  const s = (Math.round(Math.abs(n) * 10) / 10).toFixed(1);
+  return n < 0 && s !== '0.0' ? '−' + s : s;
 }
 
 export function validate(acpcLength: number, v3Width: number): string | null {
@@ -54,7 +55,7 @@ export function signed(t: CalcRow, side: Side): [number, number, number] {
 export const CALC_NOTE = {
   pre: 'Ranges follow standard teaching coordinates',
   preRefs: ['calgary', 'sammartino2016'],
-  mid: '. The Vim point is the anterior end of its range (3/12 of the AC–PC length in front of the PC), and the fraction is approximate. Atrophy, ventricle size and AC–PC length shift where the STN really lies',
+  mid: '. Only the Vim uses the two measurements: the STN and GPi rows are fixed offsets from the MCP. The Vim point is the anterior end of its range (3/12 of the AC–PC length in front of the PC), and the fraction is approximate. Atrophy, ventricle size and AC–PC length shift where the STN really lies',
   midRefs: ['stnanat2025'],
   post: ', so confirm every target on direct imaging and with physiology.',
 };

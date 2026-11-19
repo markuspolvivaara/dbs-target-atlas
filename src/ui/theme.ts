@@ -39,6 +39,14 @@ export function injectPaletteCss(): void {
   const css = `:root{${decl(P.light)}}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){${decl(P.dark)}}}
 :root[data-theme="dark"]{${decl(P.dark)}}`;
+  // (as a constructed stylesheet where the browser has them, which a strict content security policy allows without the
+  // hash of a <style> element that changes with the palette: the audit's P2S-20)
+  if ('adoptedStyleSheets' in Document.prototype && 'replaceSync' in CSSStyleSheet.prototype) {
+    const sheet = new CSSStyleSheet();
+    sheet.replaceSync(css);
+    document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+    return;
+  }
   const s = document.createElement('style');
   s.id = 'palette-vars';
   s.textContent = css;

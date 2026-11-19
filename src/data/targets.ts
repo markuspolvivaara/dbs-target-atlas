@@ -43,7 +43,7 @@ const DEFS: Def[] = [
   { id: 't-pub-vim', label: 'Vim, indirect target (Guiot)', structureId: 'vim', kind: 'publishedTarget', refId: 'sammartino2016', acpc: [15, -0.25 * L, 0],
     method: `Guiot’s indirect Vim target as Sammartino 2016 gives it: between the second and third twelfths of the AC–PC length in front of the posterior commissure (here three twelfths, as the site’s calculator uses), 15 mm from the midline (or 11.5 mm from the third ventricle’s wall), in the AC–PC plane. ${PLACED}`,
     note: 'Here it lies about 1 mm outside the Vim drawn (DISTAL), at its lower back edge. The centroid of the drawn Vim, 6 mm away and higher, is on its card.' },
-  { id: 't-atlas-psa', label: 'Caudal ZI / PSA (centroid)', structureId: 'psa', coordKey: 'atlas:psa', kind: 'atlasCoordinate', refId: 'lau2020' },
+  { id: 't-atlas-psa', label: 'PSA, caudal zona incerta (centroid)', structureId: 'psa', coordKey: 'atlas:psa', kind: 'atlasCoordinate', refId: 'lau2020' },
   { id: 't-atlas-vo', label: 'VLa (Morel) centroid', structureId: 'vo', coordKey: 'atlas:vo', kind: 'atlasCoordinate', refId: 'krauth2010' },
   { id: 't-pub-vo', label: 'Voa–Vop junction', structureId: 'vo', kind: 'publishedTarget', refId: 'shimizu2018', moreRefIds: ['horisawa2019'], acpc: [13.5, -2, 1],
     method: `The Voa–Vop junction as Shimizu 2018 and Horisawa 2019 target it for Vo thalamotomy in focal hand dystonia (from the Schaltenbrand–Wahren atlas; both full text): 13.5 mm lateral (Horisawa: 13.5 to 15), 2 mm behind the mid-commissural point, 1 mm above the AC–PC line. ${PLACED}`,

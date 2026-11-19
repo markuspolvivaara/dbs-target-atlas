@@ -13,6 +13,7 @@ import { bootFailed } from './ui/stage';
 import { disclaimerNote, siteHeader } from './ui/shell';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
 import { addressSync } from './ui/address';
+import { lostFromLink, showLinkNote } from './ui/linknote';
 
 const SECTION = SECTIONS.find((s) => s.id === 'vascular')!;
 
@@ -89,11 +90,15 @@ function render(pageChanged = false): void {
   if (to) document.getElementById(to)?.scrollIntoView();
 }
 
+const LINK_FIELDS = { g: 'grp', sel: 'sel' };
+showLinkNote(header, lostFromLink(location.hash, state, LINK_FIELDS));
+
 window.addEventListener('hashchange', () => {
   address.read();
   if (location.hash === encodeVa(state)) return;
   const bare = !location.hash.includes('?');
   const next = bare ? { ...structuredClone(state), page: decodeVa(location.hash).page } : sanitize(decodeVa(location.hash));
+  showLinkNote(header, lostFromLink(location.hash, next, LINK_FIELDS));
   setState(next, { camera: !bare || next.page !== state.page });
 });
 

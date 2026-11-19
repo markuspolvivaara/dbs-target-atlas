@@ -430,7 +430,7 @@
   "side": "R",
   "boneFrom": "located on this CT",
   "distanceToBoneMm": 0.0,
-  "how": "The middle of the trigeminal ganglion as drawn on this CT: each division leaving it its mean intracranial length before its foramen (Chaware 2023: V1 27.4 mm to the superior orbital fissure, V2 11.2 mm to the foramen rotundum, V3 4.5 mm to the foramen ovale).",
+  "how": "The middle of the trigeminal ganglion as drawn on this CT: each division leaving it the published mean distance from Meckel’s cave to its foramen (Chaware 2023, its table: V1 27.4 mm to the superior orbital fissure, V2 11.2 mm to the foramen rotundum, V3 4.5 mm to the foramen ovale).",
   "from": []
  },
  {
@@ -446,7 +446,7 @@
   "side": "L",
   "boneFrom": "located on this CT",
   "distanceToBoneMm": 0.0,
-  "how": "The middle of the trigeminal ganglion as drawn on this CT: each division leaving it its mean intracranial length before its foramen (Chaware 2023: V1 27.4 mm to the superior orbital fissure, V2 11.2 mm to the foramen rotundum, V3 4.5 mm to the foramen ovale).",
+  "how": "The middle of the trigeminal ganglion as drawn on this CT: each division leaving it the published mean distance from Meckel’s cave to its foramen (Chaware 2023, its table: V1 27.4 mm to the superior orbital fissure, V2 11.2 mm to the foramen rotundum, V3 4.5 mm to the foramen ovale).",
   "from": []
  },
  {

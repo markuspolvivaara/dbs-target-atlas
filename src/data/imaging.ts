@@ -11,7 +11,7 @@ export const IMAGING: Imaging[] = [
       { name: 'QSM', note: 'Rated highest for STN' },
       { name: 'T2-FLAIR', note: 'Rated highest for STN' },
     ],
-    tract: 'The hyperdirect pathway to M1 and SMA defines the motor STN. Patient-specific 7T tractography of it improved outcomes prospectively.',
+    tract: 'The hyperdirect pathway to M1 and SMA defines the motor STN. Patient-specific 7T tractography of it improved motor outcome against matched controls (102 against 118 patients; not randomised).',
     note: 'Atrophy, ventricle size and AC–PC length shift where the STN lies, so check indirect coordinates against the images.',
     refIds: ['protocol2025', 'imgreview2025', 'akram2017', 'npj2026', 'stnanat2025'],
   },

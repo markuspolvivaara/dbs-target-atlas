@@ -1,7 +1,7 @@
 import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
-import { decodeOpacity, encodeOpacity } from '../viewer/scene';
+import { decodeOpacity, encodeOpacity, okCamera } from '../viewer/scene';
 import { VE_GROUP } from './groups';
 import { ETV, TARGETS, TRAJ, type Target } from './index';
 import { defaultLabels, labelsFrom, labelsParam } from '../labels';
@@ -130,7 +130,7 @@ export function decodeVe(hash: string): VeState {
   const c = p.get('c');
   if (c) {
     const parts = c.split(',').map(Number);
-    if (parts.length === 6 && parts.every(Number.isFinite)) s.cam = { preset: null, pos: parts.slice(0, 3) as V3, tgt: parts.slice(3) as V3 };
+    if (okCamera(parts)) s.cam = { preset: null, pos: parts.slice(0, 3) as V3, tgt: parts.slice(3) as V3 };
     else if ((VE_PRESETS as string[]).includes(c)) s.cam = { preset: c as CameraPreset };
   }
   const cs = p.get('cs');

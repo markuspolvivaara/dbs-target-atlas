@@ -1321,7 +1321,15 @@ describe('v3 tumours drawn by rule: Knosp, Koos and meningioma sites', async () 
     expect(rs.structures.some((id) => byId.get(id)?.pushedFrom)).toBe(false);
     const plan = S3.skullPlan('koos_iv', null);
     expect(plan.looks.get('tm_koos_4')).toBe('primary');
-    expect(plan.looks.get('pf_cerebellar_hemisphere')).toBe('hidden');
+    // the part is drawn on the left only, beside its moved copy, which holds the right half (the audit's MC-18: Side = Both
+    // had no left cerebellum)
+    expect(plan.looks.get('pf_cerebellar_hemisphere')).toBe(plan.looks.get('pf_cerebellar_hemisphere__koos_4'));
+    expect(plan.onlySide?.get('pf_cerebellar_hemisphere')).toBe('L');
+    expect(plan.onlySide?.has('pf_cerebellar_hemisphere__koos_4')).toBe(false);
+    for (const g of G3.SB_GROUPS.filter((x) => x.kind === 'tumour' && x.keepLeft?.length)) {
+      const p = S3.skullPlan(g.id, null);
+      for (const [part, copy] of g.keepLeft!) if (p.looks.get(copy) !== 'hidden') expect(p.onlySide?.get(part), `${g.id} ${part}`).toBe('L');
+    }
   });
   it('Koos grades by the drawing: II off the brainstem and under 2 cm outside the meatus, IV over 3 cm', () => {
     expect(TUMOUR_FIT.koos['2'].toBrainstemMm!).toBeGreaterThan(0);
@@ -1462,5 +1470,21 @@ describe('the site audit’s B5: the skull base texts against their sources', as
     const all = APPROACHES.flatMap((a) => a.sections.flatMap((s) => s.claims)).concat(ENDONASAL_INFO.sections.flatMap((s) => s.claims));
     expect(all.find((c) => c.refIds.includes('mosteiro2026') && /bifurcation/.test(c.text))!.text).toMatch(/about the same through the LSO and the minipterional/);
     expect(all.find((c) => c.refIds.includes('nguyen2026') && /sphenoid sinus had a single natural ostium/.test(c.text))!.text).toMatch(/smaller, the authors note, than the 3–4 mm/);
+  });
+});
+
+describe('skull-base definitions, cleaned (the audit’s C-016, C-017)', () => {
+  it('no export artefacts are left, the sinus texts say what a sinus is, and the misspelt name is shown corrected', async () => {
+    for (const model of ['zanatomy', 'ct', 'v3'] as const) {
+      const index = model === 'zanatomy' ? await import('../../src/skullbase') : (await modelModules(model)).index;
+      for (const [name, d] of Object.entries(index.DEFINITIONS)) {
+        expect(d.text, `${model} ${name}`).not.toMatch(/ \(\)|\[\d+\]|\[Fig|\b(STRUCTURE|FUNCTION|SURFACES|CONTENTS)\b|beneath th |areas? (within the skull )?beneath the brain|sigmoid sinus vein/);
+      }
+      expect(index.DEFINITIONS['Supercilliary arch'], model).toBeUndefined();
+    }
+    const { tidyDefinition } = await import('../../src/skullbase');
+    expect(tidyDefinition('of the temporal bone. STRUCTURE The opening')).toBe('of the temporal bone. The opening');
+    expect(tidyDefinition('EXTERNAL SURFACE: The external surface [Fig. 1] is convex')).toBe('The external surface is convex');
+    expect(tidyDefinition('the CSF flows. MRI shows')).toBe('the CSF flows. MRI shows');
   });
 });

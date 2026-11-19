@@ -1088,7 +1088,7 @@ def safe_entry_zones(ex, F, surf: Surface, fm: dict[str, np.ndarray], nerve_exit
         per[sd] = line_zone([p + 3 * up, p - 3 * up], ant + 0.6 * lat, midbrain)
         measured[f"oculomotorExit{sd}"] = e3.round(1).tolist()
     zone("sez_perioculomotor", "Perioculomotor zone (anterior mesencephalic zone)", "midbrain", per,
-         "A vertical line 6 mm long on the front of the midbrain, 2 mm lateral to where the model's oculomotor nerve leaves it "
+         "A vertical line 6 mm long on the front of the midbrain, 2 mm lateral to where the model's oculomotor nerve leaves it (both values illustrative) "
          "(an incision parallel and lateral to the nerve, medial to the corticospinal fibres of the crus).", "line")
 
     per = {}
@@ -1160,7 +1160,7 @@ def safe_entry_zones(ex, F, surf: Surface, fm: dict[str, np.ndarray], nerve_exit
         if e7 is not None:
             measured[f"facialExit{sd}"] = e7.round(1).tolist()
     zone("sez_peritrigeminal", "Peritrigeminal zone", "pons", per,
-         "A vertical line on the anterolateral pons, 3.5 mm medial to where the model's trigeminal nerve enters it, from that "
+         "A vertical line on the anterolateral pons, 3.5 mm medial to where the model's trigeminal nerve enters it (illustrative), from that "
          "level halfway down towards the facial nerve's exit (between the nerve and the corticospinal fibres).", "line")
 
     # ---- floor of the fourth ventricle
@@ -1202,7 +1202,7 @@ def safe_entry_zones(ex, F, surf: Surface, fm: dict[str, np.ndarray], nerve_exit
         zones_floor["med"][sd] = {"patch": patch, "anchor": surf.cast(np.array([sg * 0.4, floor_y, (fc_top + z_aq) / 2]), back, floor_sel)[0]}
     zone("sez_suprafacial", "Suprafacial triangle", "floor", zones_floor["sup"],
          "On the floor of the fourth ventricle: a triangle with its base on the rostral margin of the facial colliculus, from "
-         f"{FLOOR_MLF_MM} mm off the median sulcus (the medial longitudinal fasciculus) to the sulcus limitans, and its apex at the "
+         f"{FLOOR_MLF_MM} mm off the median sulcus (the medial longitudinal fasciculus; the {FLOOR_MLF_MM} mm is illustrative) to the sulcus limitans, and its apex at the "
          "top of the floor. The facial colliculus is placed by the proportions measured in 40 cadavers (Erginoglu 2026): its "
          "rostral margin 43.6 % of the floor's length below the aqueduct, its caudal margin 43.3 % above the obex; the sulcus "
          "limitans 3.1 mm (right) and 3.0 mm (left) from the median sulcus (the same study).", "area")
@@ -1211,7 +1211,7 @@ def safe_entry_zones(ex, F, surf: Surface, fm: dict[str, np.ndarray], nerve_exit
          "sulcus to sulcus limitans, placed as for the suprafacial triangle) and its apex next to the median sulcus at the top "
          "of the model's hypoglossal nucleus (the hypoglossal trigone).", "area")
     zone("sez_median_sulcus", "Median sulcus above the facial colliculus", "floor", zones_floor["med"],
-         "On the floor of the fourth ventricle: a strip 0.8 mm to each side of the median sulcus, from the rostral margin of the "
+         "On the floor of the fourth ventricle: a strip 0.8 mm to each side of the median sulcus (illustrative), from the rostral margin of the "
          "facial colliculus to the top of the floor.", "area")
 
     # ---- medulla

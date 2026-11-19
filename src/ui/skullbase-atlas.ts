@@ -11,7 +11,7 @@ import { combinedCut, FLOOR_CUT_MM, SB_GROUP, SB_GROUPS, viewGroup, type SbGroup
 import { skullScene, type SkullPlan } from '../skullbase/scene';
 import type { SkullState } from '../skullbase/state';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
-import { h } from './h';
+import { announce, h, pointAt, touch } from './h';
 import { citationPanel } from './citations';
 import { figureControl } from './figure';
 import { structureBar } from './structurebar';
@@ -118,6 +118,20 @@ const MORPH_UI: Record<string, { label: string; key: string; toggle?: boolean; n
     },
   },
 };
+
+/** The help's rows for the surgical views, from MORPH_UI (the audit's P1-19: the help listed five of the keys, and only
+ * on the default model): each key once, with what it does in each view that has it. */
+export function surgicalKeyRows(): [string, string][] {
+  const by = new Map<string, string[]>();
+  for (const m of Object.values(MORPH_UI)) {
+    const k = m.key.toUpperCase();
+    by.set(k, [...new Set([...(by.get(k) ?? []), m.label.charAt(0).toLowerCase() + m.label.slice(1)])]);
+  }
+  return [
+    ...[...by].sort(([a], [b]) => a.localeCompare(b)).map(([k, labels]): [string, string] => [k, `Surgical view: ${labels.join('; ')} (on / off)`]),
+    ['[  ]', 'Surgical view: its first shape by a tenth'],
+  ];
+}
 /** a list of sourced notes */
 const notesList = (name: string) => (TB_NOTES[name] ?? []).length
   ? h('ul', { class: 'evidence' }, ...TB_NOTES[name].map((c) => h('li', {}, c.text, ' ', refLinksFrom(TB_REF, c.refIds))))
@@ -278,7 +292,7 @@ export class SkullbaseAtlasPage {
     this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
     scrollHint(toolbar);
     rovingToolbar(toolbar);
-    this.readout.textContent = 'Point at a structure for its position';
+    this.readout.textContent = `${pointAt()} a structure for its position`;
 
     this.viewer = new Viewer<SkullState, SkullPlan>(host, {
       hover: (info, x, y) => this.showTip(info, x, y),
@@ -413,17 +427,18 @@ export class SkullbaseAtlasPage {
     // the two models: the same view in the other one (its page, this link)
     // v1 and v2 share their views; the temporal-bone model has its own (a view one does not have opens the default)
     const other = (dir: string) => `../${dir}/${encodeSkull({ ...s, sel: null })}`;
-    pane.append(h('p', { class: 'chips-label' }, 'Model'),
+    // (at the foot of the panel, after the view and its card: on a phone the sheet opened on the chooser and its note,
+    // with no anatomy in sight: the audit's UI-22; the model shown is no link, the others are: P1-27)
+    const modelBlock = [h('p', { class: 'chips-label' }, 'Model'),
       h('div', { class: 'chips model-chips', role: 'group', 'aria-label': 'Model' },
-        ...MODELS.map(([m, dir, label]) => h('a', {
-          class: 'chip', href: m === SB_MODEL ? '#' : other(dir), 'aria-pressed': String(m === SB_MODEL), 'data-v': m,
-          onclick: m === SB_MODEL ? (e: Event) => e.preventDefault() : undefined,
-        }, label))),
+        ...MODELS.map(([m, dir, label]) => m === SB_MODEL
+          ? h('span', { class: 'chip', 'aria-pressed': 'true', 'aria-current': 'page', 'data-v': m }, label)
+          : h('a', { class: 'chip', href: other(dir), 'aria-pressed': 'false', 'data-v': m }, label))),
       h('p', { class: 'aside model-note' }, SB_MODEL === 'v3'
         ? 'The CT of v2 with its anatomy made to fit it: cranial nerves routed through its own foramina, sinuses traced in it, and a real ear’s structures (OpenEar specimen ALPHA) registered into each temporal bone.'
         : SB_MODEL === 'ct'
         ? 'Bone and the labelled vessels from one head CT angiogram; the cranial nerves, the other vessels and the landmark names fitted onto it from the Z-Anatomy model (approximate).'
-        : 'The Z-Anatomy model (BodyParts3D). The detailed model shows a real CT’s bone and vessels.'));
+        : 'The Z-Anatomy model (BodyParts3D). The detailed model shows a real CT’s bone and vessels.')];
     const g = viewGroup(s.grp, s.also);
     const shownSystems = SB_GROUP.get(s.grp)?.kind === 'system' ? [s.grp, ...s.also] : [];
     for (const [kind, label] of GROUP_ROWS) {
@@ -454,7 +469,7 @@ export class SkullbaseAtlasPage {
       const items = SB_GROUPS.filter((x) => x.kind === kind).map((x): [string, string] => [x.id, x.name]);
       if (!items.length) continue;
       pane.append(kind === 'system'
-        ? h('p', { class: 'chips-label' }, label, h('span', { class: 'chips-hint' }, ' · tap to combine'))
+        ? h('p', { class: 'chips-label' }, label, h('span', { class: 'chips-hint' }, touch() ? ' · tap to combine' : ' · click to combine'))
         : h('p', { class: 'chips-label' }, label),
       kind === 'system'
         ? chips(items, shownSystems, (v) => this.toggleSystem(v), { label, cls: 'grp-chips' })
@@ -517,10 +532,11 @@ export class SkullbaseAtlasPage {
         SB_MODEL === 'ct'
           ? h('p', { class: 'aside' }, 'Not yet shown in this model (Z-Anatomy does not label these; the first model locates the foramina from what passes through them): ', NOT_YET_SHOWN.join(', '), '.')
           : h('p', { class: 'aside' }, 'Z-Anatomy does not label the superior orbital fissure, internal acoustic meatus, stylomastoid and jugular foramina, carotid canal, foramen lacerum or cribriform plate: they are located here from where the nerves and vessels that pass through them cross the bone (each card says how). Not yet shown: ', NOT_YET_SHOWN.join(', '), '.'),
-        h('p', { class: 'aside' }, 'One adult male model (BodyParts3D), simplified by Z-Anatomy. Positions are millimetres from the model’s hypophysial fossa landmark; this is not MNI space and does not match the DBS and white-matter sections. Vessels and nerves are drawn with the calibre Z-Anatomy models, which is not measured.'),
+        h('p', { class: 'aside' }, `One adult male model (BodyParts3D), simplified by Z-Anatomy. Its head is larger than the CT head of the other two models: its cranial cavity, as measured here, holds ${V1_FIT.brain.cavityMl.toLocaleString('en')} ml. Positions are millimetres from the model’s hypophysial fossa landmark; this is not MNI space and does not match the DBS and white-matter sections. Vessels and nerves are drawn with the calibre Z-Anatomy models, which is not measured.`),
       ] : null);
     if (s.sel) pane.append(h('details', { class: 'more' }, h('summary', {}, `About ${g.name}`), groupCard));
     else pane.append(groupCard);
+    pane.append(...modelBlock);
   }
 
   private card(id: string): HTMLElement {
@@ -864,7 +880,7 @@ export class SkullbaseAtlasPage {
   }
 
   private async copyLink(btn: HTMLElement): Promise<void> {
-    try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; }
+    try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; announce('Link to this view copied'); }
     catch { window.prompt('Copy this link', location.href); }
     setTimeout(() => { btn.textContent = 'Copy link'; }, 1600);
   }

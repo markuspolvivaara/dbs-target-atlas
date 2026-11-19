@@ -16,6 +16,10 @@ const LICENCES: [RegExp, string][] = [
   [/Apache-2\.0/, 'https://www.apache.org/licenses/LICENSE-2.0'],
   [/WU-Minn HCP Open Access Data Use Terms/, 'https://www.humanconnectome.org/study/hcp-young-adult/document/wu-minn-hcp-consortium-open-access-data-use-terms'],
 ];
+/** BodyParts3D's and Wikipedia's terms today, beside those this project received them under through Z-Anatomy (the
+ * site audit's P2S-15; the publishers' pages as read on 11 November 2026). */
+export const UPSTREAM_NOTE = 'BodyParts3D is offered today by its publisher under CC BY 4.0; this project received it through Z-Anatomy, under CC BY-SA 2.1 Japan, and gives the attribution Z-Anatomy asks for. Wikipedia’s texts are CC BY-SA 4.0 today; the definitions here are the versions shipped with Z-Anatomy, under CC BY-SA 3.0.';
+
 const URL = /https?:\/\/[^\s,;)]+[^\s,;).]/;
 
 /** `text` as it is, with every licence name linked to the licence's text and every web address made a link. */

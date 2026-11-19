@@ -8,7 +8,7 @@ import { cortexScene, viewLabels, type CortexPlan } from '../cortex/scene';
 import type { ColourMode, CortexState } from '../cortex/state';
 import { VIEW, VIEWS, type ViewId } from '../cortex/views';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
-import { h } from './h';
+import { announce, h } from './h';
 import { citationPanel } from './citations';
 import { figureControl } from './figure';
 import { structureBar } from './structurebar';
@@ -228,7 +228,7 @@ export class CortexAtlasPage {
       h('p', { class: 'eyebrow' }, 'View'),
       h('h2', {}, `${v.name} view`),
       h('p', {}, v.description),
-      h('p', { class: 'aside' }, 'Labels: the Destrieux 2009 parcellation of FreeSurfer, run on the MNI 2009b template brain shipped with Lead-DBS. One template, not an individual brain: the pattern of sulci varies between people.'));
+      h('p', { class: 'aside' }, 'Labels: the Destrieux parcellation of FreeSurfer (its file aparc.a2009s; the paper is Destrieux et al. 2010), run on the MNI 2009b template brain shipped with Lead-DBS. One template, not an individual brain: the pattern of sulci varies between people.'));
     const lobeCard = s.lobe ? this.lobeCard(s.lobe) : null;
     if (s.sel) pane.append(h('details', { class: 'more' }, h('summary', {}, `About the ${v.name.toLowerCase()} view`), viewCard, lobeCard));
     else pane.append(...(lobeCard ? [lobeCard] : []), viewCard);
@@ -277,7 +277,7 @@ export class CortexAtlasPage {
           ...l.parcels.map((p) => h('li', {}, `${DBS_PARCEL.get(p.id)!.name}: ${pct(p.labelInParcel)} of this label lies in it; ${pct(p.parcelInLabel)} of that area lies here`))),
           h('p', { class: 'aside' }, 'Overlap only: the DBS section’s motor areas come from HMAT (Mayka 2006), the cingulate and orbitofrontal ones from Desikan-Killiany; neither is the same thing as a Destrieux gyrus or sulcus.'))] : null,
         ...this.tractEnds(id),
-        h('dt', {}, 'Surface area'), h('dd', {}, `Left ${fmtMm(l.areaCm2.L)} cm², right ${fmtMm(l.areaCm2.R)} cm² on this template; mean left ${fmtMm(l.paperAreaCm2.L)}, right ${fmtMm(l.paperAreaCm2.R)} cm² in the 12 manually labelled brains of Destrieux et al. 2010 (Table 1).`),
+        h('dt', {}, 'Surface area'), h('dd', {}, `Left ${fmtMm(l.areaCm2.L)} cm², right ${fmtMm(l.areaCm2.R)} cm² on this template; mean left ${fmtMm(l.paperAreaCm2.L)}, right ${fmtMm(l.paperAreaCm2.R)} cm² in the 12 manually labelled brains of Destrieux et al. 2010 (Table 1). The two are not directly comparable: this template’s surface is simplified, and on it the gyri come out larger and the sulci smaller than the paper’s means.`),
         h('dt', {}, 'Source'), h('dd', {}, 'Destrieux et al. 2010 parcellation (FreeSurfer aparc.a2009s) on the Lead-DBS template surface. ', h('a', { href: '#/credits' }, 'Licence and attribution'))));
   }
 
@@ -379,7 +379,7 @@ export class CortexAtlasPage {
       const boxes: { x0: number; x1: number; y0: number; y1: number }[] = [];
       for (const p of pts) {
         const text = shortName(p.id);
-        const w = Math.min(160, text.length * 6.2 + 8), hh = 16;
+        const w = Math.min(170, text.length * 6.8 + 10), hh = 16;
         const b = { x0: p.x - w / 2, x1: p.x + w / 2, y0: p.y - hh / 2, y1: p.y + hh / 2 };
         if (b.x0 < 0 || b.x1 > W || b.y0 < 44) continue;
         if (boxes.some((q) => b.x0 < q.x1 && b.x1 > q.x0 && b.y0 < q.y1 && b.y1 > q.y0)) continue;
@@ -427,11 +427,11 @@ export class CortexAtlasPage {
     const [a, b] = this.measurePts;
     this.measureOut.hidden = false;
     if (!b) { this.measureOut.textContent = `Point A: ${[a.x, a.y, a.z].map(fmtMm).join(', ')}. Pick point B.`; return; }
-    this.measureOut.textContent = `Distance ${fmtMm(a.distanceTo(b))} mm (straight line, template brain)`;
+    this.measureOut.textContent = `Distance ${fmtMm(a.distanceTo(b))} mm (straight line, template brain: about 5 to 12 % longer than in an average adult brain)`;
   }
 
   private async copyLink(btn: HTMLElement): Promise<void> {
-    try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; }
+    try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; announce('Link to this view copied'); }
     catch { window.prompt('Copy this link', location.href); }
     setTimeout(() => { btn.textContent = 'Copy link'; }, 1600);
   }

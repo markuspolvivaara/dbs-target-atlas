@@ -9,7 +9,7 @@ export const ANEURYSM_SITES: Claim[] = [
 ];
 export const FUSIFORM: Claim[] = [
   c('A fusiform aneurysm widens more than half of the vessel’s circumference and has no distinct neck.', 'xu2022'),
-  c('Fusiform aneurysms make up 3–13 % of intracranial aneurysms: in the anterior circulation usually on the internal carotid and middle cerebral arteries, in the posterior circulation on the vertebral and basilar arteries. In one registry of 71, 62 % were in the posterior circulation.', 'xu2022'),
+  c('Fusiform aneurysms make up 3–13 % of intracranial aneurysms: in the anterior circulation usually on the internal carotid and middle cerebral arteries, in the posterior circulation on the vertebral and basilar arteries. In one registry of 71 treated with a flow diverter, 45 (63 %) were in the posterior circulation.', 'xu2022'),
 ];
 export const BLISTER: Claim[] = [
   c('Dissecting and blood blister-like aneurysms have a fragile wall, an indistinct neck and a longitudinal shape, which make clipping and coiling difficult; their re-rupture rate in the first day has been estimated as high as 40 % to 71.4 %.', 'wroe2025'),

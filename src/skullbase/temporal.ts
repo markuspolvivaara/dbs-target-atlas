@@ -20,7 +20,7 @@ export const TB_REFS: TbRef[] = [
     citation: 'Gupta S, Mends F, Hagiwara M, Fatterpekar G, Roehm PC. Imaging the facial nerve: a contemporary review. Radiol Res Pract. 2013;2013:248039. doi:10.1155/2013/248039.' },
   { id: 'kalaiarasi2018', pmid: '30324041', pmcid: 'PMC6171777', shortLabel: 'Kalaiarasi 2018', url: doi('10.7759/cureus.3085'),
     citation: 'Kalaiarasi R, Kiran AS, Vijayakumar C, Venkataramanan R, Manusrut M, Prabhu R. Anatomical features of intratemporal course of facial nerve and its variations. Cureus. 2018;10(8):e3085. doi:10.7759/cureus.3085.' },
-  { id: 'nguyen2026', pmid: '42416242', pmcid: 'PMC13337827', shortLabel: 'Nguyen 2026', url: doi('10.3389/fsurg.2026.1780349'),
+  { id: 'nguyen2026', pmid: '42416242', pmcid: 'PMC13337827', shortLabel: 'Nguyen HD 2026', url: doi('10.3389/fsurg.2026.1780349'),
     citation: 'Nguyen HD, Le TQ, Ngo HM, Kieu HD. Morphometric anatomy of the middle cranial fossa via the anterior petrosal (Kawase) approach: a bilateral cadaveric study. Front Surg. 2026;13:1780349. doi:10.3389/fsurg.2026.1780349.' },
   { id: 'romano2019', pmid: '30877408', pmcid: 'PMC6420596', shortLabel: 'Romano 2019', url: doi('10.1186/s13244-019-0719-5'),
     citation: 'Romano N, Federici M, Castaldi A. Imaging of cranial nerves: a pictorial overview. Insights Imaging. 2019;10(1):33. doi:10.1186/s13244-019-0719-5.' },

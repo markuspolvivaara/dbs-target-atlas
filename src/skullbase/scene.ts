@@ -38,8 +38,16 @@ export function skullPlan(grpId: string, sel: string | null, also: readonly stri
     // (not a tumour view's moved copy outside its view, nor the part a copy stands in for)
     for (const x of SB_MANIFEST.structures) if (x.cranialNerve === st.cranialNerve && (!x.pushedFrom || inGroup.has(x.id)) && !replaced.has(x.id)) looks.set(x.id, 'primary');
   }
+  // a tumour view: the untouched left half of each part whose moved copy holds the right half only
+  const onlySide = new Map<string, 'L' | 'R'>();
+  for (const [part, copy] of g.keepLeft ?? []) {
+    const look = looks.get(copy);
+    if (!look || look === 'hidden') continue;
+    looks.set(part, look);
+    onlySide.set(part, 'L');
+  }
   return {
-    title: g.name, accent: 'ctx', looks, tracts, parcels: new Map(),
+    title: g.name, accent: 'ctx', looks, tracts, parcels: new Map(), onlySide,
     markers: [...lmIds].map((id) => ({ targetId: id, primary: true })),
     camera: g.camera,
     focusIds: g.focusIds ?? (g.focus ? [] : g.structures.filter((id) => SB.get(id)?.type === 'bone')),

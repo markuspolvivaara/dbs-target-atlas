@@ -13,9 +13,11 @@ export function defaultLabels(): 'all' | 'hover' {
   }
 }
 
-/** The labels' URL value (none when it is the default here). */
+/** The labels' URL value: "all" and "off" always, "hover" when it is not the default here. (Relative to each device's
+ * default, a link made on a tablet, where every name is the default, opened with names on hover on a desktop: the
+ * audit's UI-13. Hover is the default wherever there is a pointer, so a link without the key means it there.) */
 export function labelsParam(v: 'all' | 'hover' | 'off'): string | null {
-  return v === defaultLabels() ? null : v === 'all' ? 'a' : v === 'off' ? '0' : 'h';
+  return v === 'all' ? 'a' : v === 'off' ? '0' : defaultLabels() === 'hover' ? null : 'h';
 }
 
 export function labelsFrom(lb: string | null): 'all' | 'hover' | 'off' {

@@ -84,7 +84,7 @@ export const TOPICS: TractTopicInput[] = [
       c('In 58 patients with right middle cerebral artery stroke, damage to SLF II was the best predictor of left spatial neglect among the parietal–frontal pathways.', 'thiebaut2014'),
     ],
     surgery: [
-      c('During awake surgery, stimulation of the right inferior parietal lobule or caudal superior temporal gyrus shifted line bisection to the right; the strongest shifts came from subcortical stimulation of a parietal–frontal pathway (named the superior occipitofrontal fasciculus in that study).', 'thiebaut2005'),
+      c('During awake surgery, stimulation of the right inferior parietal lobule or caudal superior temporal gyrus shifted line bisection to the right; the strongest shifts came from subcortical stimulation of a parietal–frontal pathway (named the superior occipitofrontal fasciculus in that study, which does not say which branch of the SLF it is).', 'thiebaut2005'),
     ],
     atlas: [],
   },
@@ -200,7 +200,7 @@ export const TOPICS: TractTopicInput[] = [
     ],
   },
   {
-    id: 'wm_cing_fp', name: 'Cingulum, dorsal (frontal–parietal) segment', abbr: 'Cingulum (dorsal)', aliases: ['cingulum bundle'], type: 'association', tier: 'core',
+    id: 'wm_cing_fp', name: 'Cingulum, frontal–parietal (dorsal) segment', abbr: 'Cingulum (dorsal)', aliases: ['cingulum bundle'], type: 'association', tier: 'core',
     summary: 'Medial association bundle in the cingulate white matter linking frontal and parietal cortex; lesions usually cause only mild deficits.',
     course: [
       c('Its composition changes along its length as fibres join and leave, despite its apparent continuity.', 'bubb2018'),
@@ -331,6 +331,9 @@ export const TOPICS: TractTopicInput[] = [
       c('Corpus callosotomy for drug-resistant epilepsy (1644 patients, 49 series): complete seizure freedom 12%, complete freedom from drop attacks 62%. Total callosotomy freed more patients from drop attacks than anterior callosotomy (72% vs 57%).', 'wu2023'),
     ],
     atlas: [],
+    measured: [
+      'Some of its streamlines run 2 mm or more inside this template’s ventricles: the bundle is an average of young adults laid on a template whose ventricles are wider (measured in the site’s audit, November 2026).',
+    ],
   },
   {
     id: 'wm_fx', name: 'Fornix', abbr: 'Fornix', aliases: [], type: 'projection', tier: 'core',
@@ -359,6 +362,7 @@ export const TOPICS: TractTopicInput[] = [
     ],
     atlas: [],
     measured: [
+      'The atlas’s fornix stops short of the mammillary body as the DBS section draws it: its front ends lie several millimetres from it, further on the right than on the left (measured in the site’s audit, November 2026).',
       'Near the hypothalamus this atlas’s fornix lies a median 3.1 mm (left) and 3.9 mm (right) from the fornix label of the Neudorfer 2020 hypothalamus atlas shown in the DBS section; the whole-millimetre shift that brings them closest (up to 2 mm tried on each axis) is 1 mm to the right, 2 mm anterior and 2 mm superior on the left, and 2 mm to the left, 2 mm anterior and 2 mm superior on the right. No other tract showed such an offset. The T1 sampled along it is darker than along the other tracts (cerebrospinal fluid next to a thin tract). For millimetre questions near the fornix columns, use the DBS section’s fornix.',
     ],
   },
@@ -459,7 +463,7 @@ export const TOPICS: TractTopicInput[] = [
   },
   {
     id: 'wm_atr', name: 'Anterior thalamic radiation', abbr: 'ATR', aliases: ['anterior corticothalamic tract'], type: 'projection', tier: 'extended',
-    summary: 'Thalamo-frontal projection through the anterior limb of the internal capsule; the shared territory of historical lesion surgery for depression.',
+    summary: 'Thalamo-frontal projection through the anterior limb of the internal capsule; among the fibres that several historical lesion operations for depression had in common.',
     course: [
       c('Converges with the superolateral branch of the medial forebrain bundle in the anterior limb of the internal capsule and in medial prefrontal cortex.', 'coenen2012'),
       c('Visualized directly with 7 T track-density imaging.', 'cho2015'),
@@ -486,7 +490,7 @@ export const TOPICS: TractTopicInput[] = [
       c('Thalamus to cortex; thalamic subregions defined by their cortical connections correspond to histological nuclei.', 'behrens2003'),
     ],
     functions: [
-      c('Carries somatosensory input: subcortical stimulation of thalamocortical pathways gave somatosensory responses during inferior parietal glioma surgery.', 'maldonado2011a'),
+      c('Subcortical stimulation of thalamocortical pathways gave somatosensory responses during inferior parietal glioma surgery.', 'maldonado2011a'),
     ],
     deficits: [
       c('Its increased mean diffusivity, together with ventricular volume, separated normal pressure hydrocephalus from Alzheimer’s disease and healthy elderly people.', 'younes2019'),
@@ -528,6 +532,9 @@ export const TOPICS: TractTopicInput[] = [
     deficits: [],
     surgery: [],
     atlas: [],
+    measured: [
+      'Some of its streamlines run 2 mm or more inside this template’s ventricles: the bundle is an average of young adults laid on a template whose ventricles are wider (measured in the site’s audit, November 2026).',
+    ],
   },
   {
     id: 'wm_cs_s', name: 'Corticostriatal tract, superior', abbr: 'CStr-S', aliases: [], type: 'projection', tier: 'extended',
@@ -582,7 +589,8 @@ export const TOPICS: TractTopicInput[] = [
       c('Damage to the dentato-rubro-thalamo-cortical pathway is implicated in cerebellar mutism syndrome, seen in up to 25% of children after cerebellar tumour resection.', 'toescu2021'),
     ],
     atlas: [],
-    measured: ['The atlas stores both peduncles in one file; the viewer cuts its streamlines at the midline (x = 0), so each side includes the crossing fibres up to the midline.'],
+    measured: [
+      'Some of its streamlines run 2 mm or more inside this template’s ventricles: the bundle is an average of young adults laid on a template whose ventricles are wider (measured in the site’s audit, November 2026).','The atlas stores both peduncles in one file; the viewer cuts its streamlines at the midline (x = 0), so each side includes the crossing fibres up to the midline.'],
   },
   {
     id: 'wm_mcp', name: 'Middle cerebellar peduncle', abbr: 'MCP', aliases: ['brachium pontis'], type: 'cerebellar', tier: 'fossa',
@@ -695,7 +703,8 @@ export const TOPICS: TractTopicInput[] = [
     deficits: [],
     surgery: [],
     atlas: [],
-    measured: ['In this atlas the tract’s streamlines run up to the cerebral cortex (mean length about 140 mm), so it includes the cortical (corticoreticular) limb: their upper ends lie in prefrontal cortex (superior and middle frontal gyri; on the right also orbital), not in the motor cortex.'],
+    measured: [
+      'Some of its streamlines run 2 mm or more inside this template’s ventricles: the bundle is an average of young adults laid on a template whose ventricles are wider (measured in the site’s audit, November 2026).','In this atlas the tract’s streamlines run up to the cerebral cortex (mean length about 140 mm), so it includes the cortical (corticoreticular) limb: their upper ends lie in prefrontal cortex (superior and middle frontal gyri; on the right also orbital), not in the motor cortex.'],
   },
   {
     id: 'wm_cpt_f', name: 'Corticopontine tract, frontal', abbr: 'CPT-F', aliases: ['frontopontine tract'], type: 'projection', tier: 'fossa',

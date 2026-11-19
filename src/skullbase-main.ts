@@ -9,10 +9,11 @@ import { h } from './ui/h';
 import { bindHelp, viewHelp } from './ui/help';
 import { bootFailed } from './ui/stage';
 import { disclaimerNote, siteHeader } from './ui/shell';
-import { SkullbaseAtlasPage } from './ui/skullbase-atlas';
+import { SkullbaseAtlasPage, surgicalKeyRows } from './ui/skullbase-atlas';
 import { skullCreditsPage, skullGradingPage, skullSourcesPage } from './ui/skullbase-pages';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
 import { addressSync } from './ui/address';
+import { lostFromLink, showLinkNote } from './ui/linknote';
 
 const SECTION = SECTIONS.find((s) => s.id === (SB_MODEL === 'v3' ? 'skullbase' : SB_MODEL === 'ct' ? 'skullbase-ct' : 'skullbase-v1'))!;
 
@@ -21,6 +22,8 @@ let theme: ThemePref = storedTheme();
 let resolved = applyTheme(theme);
 
 function sanitize(s: SkullState): SkullState {
+  // (v2 has no tumour views, so no Grading page: the audit's P1-24)
+  if (SB_MODEL === 'ct' && s.page === 'grading') s.page = 'atlas';
   if (!SB_GROUP.has(s.grp)) s.grp = DEFAULT_GROUP;
   s.also = SB_GROUP.get(s.grp)!.kind === 'system' ? s.also.filter((id) => id !== s.grp && SB_GROUP.get(id)?.kind === 'system') : [];
   if (s.sel && !SB.has(s.sel) && !LM.has(s.sel)) s.sel = null;
@@ -96,11 +99,15 @@ function render(pageChanged = false): void {
   if (pageChanged) window.scrollTo(0, 0);
 }
 
+const LINK_FIELDS = { g: 'grp', sel: 'sel' };
+showLinkNote(header, lostFromLink(location.hash, state, LINK_FIELDS));
+
 window.addEventListener('hashchange', () => {
   address.read();
   if (location.hash === encodeSkull(state)) return;
   const bare = !location.hash.includes('?');
-  const next = bare ? { ...structuredClone(state), page: decodeSkull(location.hash).page } : sanitize(decodeSkull(location.hash));
+  const next = sanitize(bare ? { ...structuredClone(state), page: decodeSkull(location.hash).page } : decodeSkull(location.hash));
+  showLinkNote(header, lostFromLink(location.hash, next, LINK_FIELDS));
   setState(next, { camera: !bare || next.page !== state.page });
 });
 
@@ -124,9 +131,8 @@ function buildHelp(): HTMLDialogElement {
     SB_MODEL === 'v3' ? ['1 – 6', 'Camera: from above, from below, lateral, anterior, posterior-oblique, surgical (anterolateral)'] : ['1 – 5', 'Camera: from above, from below, lateral, anterior, posterior-oblique'],
     ['H', 'Side: both → left → right'], ['C', 'Cut away above the cranial floor: on / off'],
     ['N', 'Name labels: hover → all → off'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
-    ...(SB_MODEL === 'v3' ? [['O', 'Surgical view: open / close the Sylvian fissure'], ['[  ]', 'Surgical view: its first shape by a tenth'],
-      ['L', 'Surgical view: lift / lower the frontal lobe'], ['I', 'Interhemispheric view: hold the right hemisphere off the falx / let go'],
-      ['T', 'Telovelar view: draw the tonsils apart / let go']] as [string, string][] : []),
+    // (the surgical views' keys, on v1 as on the default model; v2 has no surgical views)
+    ...(SB_MODEL !== 'ct' ? surgicalKeyRows() : []),
   ];
   return h('dialog', { class: 'help', 'aria-labelledby': 'help-title' },
     h('h2', { id: 'help-title' }, 'Keys, mouse and touch'),

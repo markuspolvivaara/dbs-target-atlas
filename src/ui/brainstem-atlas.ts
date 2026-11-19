@@ -9,7 +9,7 @@ import type { Claim } from '../brainstem/schema';
 import type { BsState } from '../brainstem/state';
 import { SITE_ROOT } from '../brand';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
-import { h } from './h';
+import { announce, h, pointAt } from './h';
 import { citationPanel } from './citations';
 import { figureControl } from './figure';
 import { structureBar } from './structurebar';
@@ -116,7 +116,7 @@ export class BrainstemAtlasPage {
     this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
     scrollHint(toolbar);
     rovingToolbar(toolbar);
-    this.readout.textContent = 'Point at a structure for its MNI position';
+    this.readout.textContent = `${pointAt()} a structure for its MNI position`;
 
     this.viewer = new Viewer<BsState, BsPlan>(host, {
       hover: (info, x, y) => this.showTip(info, x, y),
@@ -275,6 +275,7 @@ export class BrainstemAtlasPage {
     const def = DEFINITIONS[st.name];
     const defBlock = def
       ? [h('dt', {}, 'Definition'), h('dd', {}, h('p', {}, def.text), h('p', { class: 'aside' }, 'From Wikipedia (CC BY-SA 3.0), as shipped with Z-Anatomy; not checked against the literature. ',
+        def.edited ? `Changed here: ${def.edited} ` : null,
         def.url ? h('a', { href: def.url, target: '_blank', rel: 'noopener' }, 'Source page') : null))]
       : null;
     const style = `--accent: var(--c-${st.colour.token})`;
@@ -348,7 +349,7 @@ export class BrainstemAtlasPage {
     if (!OWN.has(id)) {
       const wm = st.type === 'tract';
       return h('article', { class: 'card sel', style }, ...head(KIND_LABEL[k]),
-        h('dl', {}, h('dt', {}, 'From'), h('dd', {}, wm ? 'The white-matter section (HCP-1065 tractography atlas, Yeh 2018). ' : 'The DBS section’s atlases. ',
+        h('dl', {}, h('dt', {}, 'From'), h('dd', {}, wm ? 'The white-matter section (HCP-1065 tractography atlas, Yeh 2022). ' : 'The DBS section’s atlases. ',
           h('a', { href: `${SITE_ROOT}${wm ? 'tracts' : 'dbs'}/` }, wm ? 'Open the white-matter section' : 'Open the DBS section'), ' for its card with sources.'),
           h('dt', {}, 'Licence'), h('dd', {}, st.licence)));
     }
@@ -460,11 +461,11 @@ export class BrainstemAtlasPage {
     const [a, b] = this.measurePts;
     this.measureOut.hidden = false;
     if (!b) { this.measureOut.textContent = `Point A: ${[a.x, a.y, a.z].map(fmtMm).join(', ')}. Pick point B.`; return; }
-    this.measureOut.textContent = `Distance ${fmtMm(a.distanceTo(b))} mm (on the template)`;
+    this.measureOut.textContent = `Distance ${fmtMm(a.distanceTo(b))} mm (on the template: about 5 to 12 % longer than in an average adult brain)`;
   }
 
   private async copyLink(btn: HTMLElement): Promise<void> {
-    try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; }
+    try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; announce('Link to this view copied'); }
     catch { window.prompt('Copy this link', location.href); }
     setTimeout(() => { btn.textContent = 'Copy link'; }, 1600);
   }

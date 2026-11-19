@@ -48,6 +48,9 @@ export interface SbGroup {
   morphDefault?: Record<string, number>;
   /** a section the view is cut at (everything on the normal's side of the point removed), while the reader keeps it on */
   section?: { normal: V3; point: V3 };
+  /** a tumour view's parts moved by the tumour: [the part, its moved copy]; the copies hold the right half only, so
+   * the part's left half is drawn beside them (the site audit's MC-18) */
+  keepLeft?: [string, string][];
 }
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
@@ -161,7 +164,7 @@ function temporalGroups(): SbGroup[] {
     },
     {
       ...base, id: 'middle_ear', kind: 'system', name: 'Middle ear', camera: 'lateral', hemi: 'R', focus: gen('R') ?? null, radius: 26,
-      description: 'The tympanic membrane and the ossicles, with the facial nerve’s tympanic segment above the oval window and the chorda tympani crossing the middle ear.',
+      description: 'The tympanic membrane and the ossicles, with the facial nerve’s tympanic segment above the oval window and the chorda tympani crossing the middle ear. The middle ear’s air space is not hollowed out of this CT’s bone as drawn, so the ossicles lie inside the drawn temporal bone.',
       structures: byName('Malleus', 'Incus', 'Stapes', 'Tympanic membrane', 'Chorda tympani', 'Facial nerve (VII)'), landmarks: lm('Oval window', 'Round window', 'Second genu of facial nerve'),
     },
     {
@@ -235,6 +238,7 @@ function tumourGroups(surgical: SbGroup[]): SbGroup[] {
       ...host, id, kind: 'tumour', name: t.family === 'koos' ? `Vestibular schwannoma, Koos ${gr.id}` : `${gr.label} meningioma`,
       description: t.summary, focusIds: [...inView(gr.view), ...(host.focusIds ?? []).slice(0, 1)], radius: Math.max(host.radius, 55),
       structures: [...host.structures.map((x) => swap.get(x) ?? x), gr.structure], tumour: { family: t.family, grade: gr.id },
+      keepLeft: host.structures.filter((x) => swap.has(x)).map((x): [string, string] => [x, swap.get(x)!]),
       // (opened onto the tumour: the cerebellum retracted, the frontal lobe lifted)
       morphDefault: { ...host.morphDefault },
     };

@@ -66,6 +66,19 @@ const FileSchema = z.object({
   report: z.record(z.string(), z.unknown()),
 });
 const FILE = FileSchema.parse(labelsJson);
+/** Labels on a lobe boundary that the 25 % rule files under one lobe only, listed under both by rule, as the lobe card
+ * says (the site audit's B-013): the paracentral lobule, a fronto-parietal pli de passage, and the parieto-occipital
+ * sulcus, the limit between the two lobes (Destrieux 2010, sections 2.4.3 and 2.3.1); the subcentral gyrus and sulci,
+ * where the precentral and postcentral gyri join. Their own cards keep the measured shares. */
+const ON_BOUNDARY: Record<string, LobeId[]> = {
+  ctx_g_and_s_paracentral: ['frontal', 'parietal'],
+  ctx_g_and_s_subcentral: ['frontal', 'parietal'],
+  ctx_s_parieto_occipital: ['parietal', 'occipital'],
+};
+// (the lingual gyrus's name as Destrieux 2010's Table 1 prints it, misprint included: corrected, the audit's B-021)
+for (const l of FILE.labels) l.name = l.name.replace('ligual part', 'lingual part');
+for (const [id, lobes] of Object.entries(ON_BOUNDARY))
+  for (const lb of FILE.lobes) if (lobes.includes(lb.id) && !lb.labels.includes(id)) lb.labels.push(id);
 export const LABELS = FILE.labels;
 export const LABEL = new Map(LABELS.map((l) => [l.id, l]));
 export const LOBES = FILE.lobes;

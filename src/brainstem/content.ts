@@ -122,7 +122,7 @@ export const ZONES: ZoneContentInput[] = [
     approach: [FLOOR_APPROACH],
     risks: [
       FLOOR_SURFACE,
-      c('In a paediatric series, 45 tumours of the upper posterior pons were approached this way; in six of the patients the medial longitudinal fasciculus was injured, and three had facial paresis.', 'cavalheiro2015'),
+      c('In a paediatric series, 45 tumours of the upper posterior pons were approached this way; in six of the patients the medial longitudinal fasciculus was injured, three had facial paresis, and one died of acute hydrocephalus three days after surgery.', 'cavalheiro2015'),
     ],
     measures: [c('The sulcus limitans lies 3.09 ± 0.76 mm (right) and 3.03 ± 0.67 mm (left) from the median sulcus; the corridor between both sulci is about 31 % of the floor’s width (40 cadavers).', 'erginoglu2026')],
   },
@@ -136,7 +136,7 @@ export const ZONES: ZoneContentInput[] = [
     approach: [FLOOR_APPROACH],
     risks: [
       FLOOR_SURFACE,
-      c('Of 13 children with lower pontine tumours operated through this triangle, eight had facial paralysis afterwards, permanent in five.', 'cavalheiro2015'),
+      c('Of 13 children with lower pontine tumours operated through this triangle, eight had facial paralysis afterwards, permanent in five (the paper’s summary table gives nine with facial paresis).', 'cavalheiro2015'),
     ],
     measures: [c('The facial colliculus’s caudal margin lies 14.5 ± 1.68 mm above the obex (40 cadavers).', 'erginoglu2026')],
   },

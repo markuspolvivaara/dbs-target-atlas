@@ -4,8 +4,10 @@
  *
  * CVD simulation: Machado, Oliveira & Fernandes 2009 (IEEE TVCG 15:1291),
  * severity 1.0 matrices, applied in linear RGB. Distance: CIEDE2000.
- * Run: npm run check:palette   (exit 1 on contrast failures)
+ * Run: npm run check:palette   (exit 1 on a text contrast failure, or on a graphic warning or close pair that is not in
+ * scripts/palette-accepted.json; `-- --accept` writes today's list after a deliberate palette decision)
  */
+import { readFileSync, writeFileSync } from 'node:fs';
 import palette from '../src/data/palette.json';
 import { CONTENT, MAN, TGT } from '../src/data';
 import { plan } from '../src/viewer/selection';
@@ -70,6 +72,7 @@ const BASE = {
 const TEXT_TOKENS = ['stn', 'gpi', 'vim', 'psa', 'snr', 'cm', 'vo', 'str', 'den', 'ppn']; // .seq strong, .err, accents
 let fail = 0;
 const rows: string[] = [];
+const warned: string[] = [];
 for (const t of ['light', 'dark'] as const) {
   const b = BASE[t];
   const checks: [string, string, string, number][] = [
@@ -83,6 +86,7 @@ for (const t of ['light', 'dark'] as const) {
     const c = contrast(fg, bg);
     const ok = c >= min;
     if (!ok && min === 4.5) fail++;
+    if (!ok && min !== 4.5) warned.push(`${t} ${name}`);
     rows.push(`${ok ? 'ok  ' : min === 4.5 ? 'FAIL' : 'warn'} ${t.padEnd(5)} ${name.padEnd(28)} ${c.toFixed(2)} (min ${min})`);
   }
 }
@@ -106,7 +110,8 @@ for (const p of views) {
   }
 }
 // white-matter section: the tracts of each group appear together
-for (const g of WM.groups.filter((x) => x.kind !== 'all')) {
+// (the "all" groups too: every tract of a tier drawn together, the audit's UI-26)
+for (const g of WM.groups) {
   const list = [...new Set(g.tractIds.map((id) => WM_MAN.get(id)!.colour.token))].sort();
   for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
     const k = `${list[i]}|${list[j]}`;
@@ -162,7 +167,16 @@ for (const [view, list] of [['skull base v3: ear', ['sbBone', 'sbArtery', 'sbNer
   // atlas (all streamlines; no white-matter group draws the corticospinal tract with the cerebellar peduncles, so
   // those pairs are only met here); and its floor view, where the fasciculus lies under the entry zones
   ['brainstem: tracts', ['wmCST', 'wmCBT', 'wmML', 'wmSCP', 'wmMCP', 'wmICP', 'wmRST', 'wmDRTT', 'bsMlf', 'bsStt', 'bsCtt', 'bsLl']],
-  ['brainstem: floor of the fourth ventricle', ['bsSez', 'bsNucleus', 'bsMlf']]] as const) {
+  ['brainstem: floor of the fourth ventricle', ['bsSez', 'bsNucleus', 'bsMlf']],
+  // views the check did not look at until the audit (UI-26): the tumours in their surgical views; the cavernous sinus
+  // with its triangles; the other craniotomies (retrosigmoid, far lateral, orbitozygomatic, Kawase, subtemporal); the
+  // endonasal view; the vascular lesions on this CT's vessels; the cortex's function overlay on the cortex
+  ['skull base v3: tumours', ['sbBone', 'sbArtery', 'sbVein', 'sbNerve', 'sbBrain', 'sbBrainstem', 'sbTonsil', 'sbCsf', 'sbTumour']],
+  ['skull base v3: cavernous sinus', ['sbBone', 'sbArtery', 'sbVein', 'sbNerve', 'sbTriMedial', 'sbTriLateral', 'sbTriPosterior']],
+  ['skull base v3: other craniotomies', ['sbBone', 'sbArtery', 'sbVein', 'sbNerve', 'sbBrain', 'sbBrainstem', 'sbTonsil', 'sbGuide']],
+  ['skull base v3: endonasal', ['sbBone', 'sbArtery', 'sbVein', 'sbNerve', 'sbSoft']],
+  ['vascular: lesions', ['sbBone', 'sbArtery', 'sbVein', 'sbBrain', 'sbInsula', 'sbMedialWall', 'vaAneurysm', 'vaNidus', 'vaDevice']],
+  ['cortex: functions', ['ctx', 'ctxA1', 'ctxACC', 'ctxBroca', 'ctxM1', 'ctxPM', 'ctxPMv', 'ctxPreSMA', 'ctxS1', 'ctxSMA', 'ctxV1', 'ctxVMPFC', 'ctxWernicke']]] as const) {
   for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
     const k = `${list[i]}|${list[j]}`;
     if (!pairs.has(k)) pairs.set(k, new Set());
@@ -170,6 +184,7 @@ for (const [view, list] of [['skull base v3: ear', ['sbBone', 'sbArtery', 'sbNer
   }
 }
 const cvd: string[] = [];
+const close: string[] = [];
 const MIN_DE = 10;
 for (const t of ['light', 'dark'] as const) {
   for (const [kind, m] of [['normal', null], ...Object.entries(MACHADO)] as [string, number[][] | null][]) {
@@ -177,6 +192,7 @@ for (const t of ['light', 'dark'] as const) {
       const [a, b] = k.split('|');
       const d = de2000(lab(simulate(hex(P[t][a]), m)), lab(simulate(hex(P[t][b]), m)));
       if (d < MIN_DE) cvd.push(`${t.padEnd(5)} ${kind.padEnd(12)} ${a}/${b}: ΔE00 ${d.toFixed(1)}  (${[...where].slice(0, 2).join('; ')}${where.size > 2 ? '…' : ''})`);
+      if (d < MIN_DE) close.push(`${t} ${kind} ${a}/${b}`);
     }
   }
 }
@@ -186,4 +202,22 @@ rows.forEach((r) => console.log('  ' + r));
 console.log(`\nCVD separation: ${pairs.size} colour pairs co-occur in a view; pairs below ΔE00 ${MIN_DE}:`);
 console.log(cvd.length ? cvd.map((c) => '  ' + c).join('\n') : '  none');
 console.log('\nPairs below threshold are also told apart by look (solid / outline / line / dashed) and labels.');
+
+// ---- 3. what was accepted (the audit's P1-22): the graphic warnings and close pairs above passed whatever they were;
+// now each must be in scripts/palette-accepted.json, and one listed there that no longer occurs must be removed, so the
+// list can only shrink unless a palette decision adds to it (`--accept` writes today's list)
+const ACCEPTED = new URL('./palette-accepted.json', import.meta.url);
+const now = { graphic: [...new Set(warned)].sort(), cvd: [...new Set(close)].sort() };
+if (process.argv.includes('--accept')) {
+  writeFileSync(ACCEPTED, JSON.stringify(now, null, 1) + '\n');
+  console.log(`\nAccepted today's ${now.graphic.length} graphic warnings and ${now.cvd.length} close pairs (scripts/palette-accepted.json).`);
+} else {
+  const acc = JSON.parse(readFileSync(ACCEPTED, 'utf8')) as { graphic: string[]; cvd: string[] };
+  for (const k of ['graphic', 'cvd'] as const) {
+    const was = new Set(acc[k]), is = new Set(now[k]);
+    const fresh = now[k].filter((x) => !was.has(x)), gone = acc[k].filter((x) => !is.has(x));
+    for (const x of fresh) { fail++; console.log(`FAIL new ${k === 'graphic' ? 'graphic warning' : 'close pair'}, not accepted: ${x}`); }
+    for (const x of gone) { fail++; console.log(`FAIL accepted ${k === 'graphic' ? 'graphic warning' : 'close pair'} no longer occurs: remove it from scripts/palette-accepted.json: ${x}`); }
+  }
+}
 process.exit(fail ? 1 : 0);

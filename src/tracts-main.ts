@@ -12,6 +12,7 @@ import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEW
 import { TractsAtlasPage } from './ui/tracts-atlas';
 import { tractCreditsPage, tractRefsPage } from './ui/tracts-pages';
 import { addressSync } from './ui/address';
+import { lostFromLink, showLinkNote } from './ui/linknote';
 
 const SECTION = SECTIONS.find((s) => s.id === 'tracts')!;
 
@@ -97,12 +98,16 @@ function render(pageChanged = false): void {
   if (pageChanged) window.scrollTo(0, 0);
 }
 
+const LINK_FIELDS = { g: 'grp', sel: 'sel' };
+showLinkNote(header, lostFromLink(location.hash, state, LINK_FIELDS));
+
 window.addEventListener('hashchange', () => {
   address.read();
   if (location.hash === encodeTracts(state)) return;
   // A link with parameters is a complete view description; a bare page link (#/atlas) keeps the current view.
   const bare = !location.hash.includes('?');
   const next = bare ? { ...structuredClone(state), page: decodeTracts(location.hash).state.page } : fromHash(location.hash, defaultTractsState());
+  showLinkNote(header, lostFromLink(location.hash, next, LINK_FIELDS));
   setState(next, { camera: !bare || next.page !== state.page });
 });
 

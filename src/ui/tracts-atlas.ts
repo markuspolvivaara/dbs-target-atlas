@@ -9,7 +9,7 @@ import type { Claim, TractTopic } from '../tracts/schema';
 import { CONTEXT_STRUCTURES, ORIENTATION_NUCLEI, tractsScene, type TractPlan } from '../tracts/scene';
 import type { TractsState } from '../tracts/state';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
-import { h } from './h';
+import { announce, h } from './h';
 import { citationPanel } from './citations';
 import { figureControl } from './figure';
 import { structureBar } from './structurebar';
@@ -241,7 +241,7 @@ export class TractsAtlasPage {
     const groups = WM.groups.filter((g) => g.kind !== 'all' && g.tractIds.includes(t.id));
     return h('article', { class: 'card sel', style: `--accent: var(--c-${m.colour.token})` }, close,
       h('p', { class: 'eyebrow' }, `${TYPE_LABEL[t.type]} · ${TIER_LABEL[t.tier]}`),
-      h('h2', {}, h('span', { class: 'swatch', style: `--c: var(--c-${m.colour.token})` }), `${t.name} (${t.abbr})`),
+      h('h2', {}, h('span', { class: 'swatch', style: `--c: var(--c-${m.colour.token})` }), t.abbr && t.abbr !== t.name ? `${t.name} (${t.abbr})` : t.name),
       t.aliases.length ? h('p', { class: 'aside' }, 'Also: ', t.aliases.join(', ')) : null,
       h('p', { class: 'lead-text' }, t.summary),
       h('dl', {},
@@ -379,11 +379,13 @@ export class TractsAtlasPage {
     const [a, b] = this.measurePts;
     this.measureOut.hidden = false;
     if (!b) { this.measureOut.textContent = `Point A: ${[a.x, a.y, a.z].map(fmtMm).join(', ')}. Pick point B.`; return; }
-    this.measureOut.textContent = `Distance ${fmtMm(a.distanceTo(b))} mm  (A ${[a.x, a.y, a.z].map(fmtMm).join(', ')} → B ${[b.x, b.y, b.z].map(fmtMm).join(', ')})`;
+    // (the MNI template is larger than an average brain: the review measured its nuclei 5 to 12 % longer than published
+    // series, the audit's MA-15)
+    this.measureOut.textContent = `Distance ${fmtMm(a.distanceTo(b))} mm  (A ${[a.x, a.y, a.z].map(fmtMm).join(', ')} → B ${[b.x, b.y, b.z].map(fmtMm).join(', ')}). Template millimetres: about 5 to 12 % longer than the same distance in an average adult brain.`;
   }
 
   private async copyLink(btn: HTMLElement): Promise<void> {
-    try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; }
+    try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; announce('Link to this view copied'); }
     catch { window.prompt('Copy this link', location.href); }
     setTimeout(() => { btn.textContent = 'Copy link'; }, 1600);
   }

@@ -119,16 +119,6 @@ export function herniaShape(spec: HerniaSpec, anchor: THREE.Vector3, toward: THR
   return { sdf, lo, hi, anchor, dir, core: [neckIn, neckOut, frag] };
 }
 
-/** The gradient of a signed distance (unit, + outwards). */
-export function gradient(sdf: (p: THREE.Vector3) => number, p: THREE.Vector3, h = 0.2): THREE.Vector3 {
-  const g = new THREE.Vector3(
-    sdf(new THREE.Vector3(p.x + h, p.y, p.z)) - sdf(new THREE.Vector3(p.x - h, p.y, p.z)),
-    sdf(new THREE.Vector3(p.x, p.y + h, p.z)) - sdf(new THREE.Vector3(p.x, p.y - h, p.z)),
-    sdf(new THREE.Vector3(p.x, p.y, p.z + h)) - sdf(new THREE.Vector3(p.x, p.y, p.z - h)));
-  const l = g.length();
-  return l > 1e-9 ? g.divideScalar(l) : new THREE.Vector3(0, 0, 1);
-}
-
 /** A signed distance's surface as a mesh (surface nets on a grid of `step` mm over the box). */
 export function meshSdf(sdf: (p: THREE.Vector3) => number, lo: THREE.Vector3, hi: THREE.Vector3, step = 0.4): THREE.BufferGeometry {
   const n = [0, 1, 2].map((a) => Math.max(2, Math.ceil((hi.getComponent(a) - lo.getComponent(a)) / step) + 1));

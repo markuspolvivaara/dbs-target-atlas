@@ -2,16 +2,21 @@ import { EPILEPSY_INDICATION } from './epilepsy';
 import type { IndicationInput } from './schema';
 
 /**
- * Indications, ported from the `IND` array of the attached dbs-targets.html.
- * Text fields (target, alternatives, why, howToChoose, imaging, caveat,
- * evidence) are verbatim. The structure / tract mapping translates the
- * schematic circuit nodes into 3D assets:
- *   stn -> stn, stn_motor   gpi -> gpi, gpi_sm   snr -> snr   ppn ("Brainstem") -> ppn (left out of the Parkinson's
- *   views by their `omit`, so the axial-signs note says the brainstem side is not drawn)
+ * Indications, ported from the `IND` array of the attached dbs-targets.html, plus epilepsy (epilepsy.ts, researched
+ * for the site). The text fields (target, alternatives, why, howToChoose, imaging, caveat, evidence) are the original's,
+ * except where the site's review corrected them against their sources: each correction is recorded in
+ * tests/unit/content.test.ts (CORRECTED), which checks every other field against the original. The structure / tract
+ * mapping translates the schematic circuit nodes into 3D assets:
+ *   stn -> stn, stn_motor   gpi -> gpi (gpi, gpi_sm in generalized dystonia; the dyskinesia views draw the GPe too)
+ *   snr -> snr (context in Parkinson's: investigational)   ppn ("Brainstem") -> ppn, left out of the Parkinson's views
+ *   by their `omit` (the axial-signs note says the brainstem side is not drawn)
  *   vim -> vim   psa -> psa   vo -> vo   cm -> cm, pf   den -> dentate   str -> putamen, caudate
  *   premotor -> pmd, pmv   sma -> sma   m1 -> m1   s1 ("Sensorimotor") -> s1
  *   hyper -> hdp   pallthal -> al, lf   strpall -> rt_cerv   drtt -> drtt, ndrtt
- * Circuit edges with no distributed tract file are listed in missingTracts.
+ * Added beyond the original's nodes: the published maps and tracts sw_pd (Parkinson's), rt_gen and sw_dyt
+ * (generalized dystonia), sw_ts (Tourette syndrome), and the volumes ss_dyt and ss_ts (Hollunder 2024, from subthalamic
+ * DBS: see A-002 in the review). Circuit edges with no distributed tract file are listed in missingTracts.
+ * (The comment was out of date until the site's audit, A-025.)
  */
 export const INDICATIONS: IndicationInput[] = [
   {
@@ -30,7 +35,7 @@ export const INDICATIONS: IndicationInput[] = [
     // (A-014: "hyperdirect" defined where first used)
     why: 'Benefit follows the hyperdirect pathway (cortex straight to the STN) from SMA and M1 into the supero-lateral STN. Each cardinal sign maps to its own tracts: tremor to M1 and cerebellum, bradykinesia to SMA, rigidity to premotor cortex, axial signs to SMA and brainstem.',
     howToChoose: 'STN and GPi give similar motor benefit. STN allows more levodopa reduction and longer battery life; GPi carries less risk to speech and mood and is favoured when only one side will be implanted.',
-    imaging: 'STN on T2w, SWI, QSM or T2-FLAIR; GPi on FGATIR or PDw. Patient-specific 7T tractography of the motor STN improved outcomes in a prospective study.',
+    imaging: 'STN on T2w, SWI, QSM or T2-FLAIR; GPi on FGATIR or PDw. Patient-specific 7T tractography of the motor STN improved motor outcome against matched controls (102 against 118 patients; not randomised).',
     evidence: [
       { claim: 'Supero-lateral STN was the most effective site; hyperdirect connectivity predicted improvement', refIds: ['akram2017'] },
       { claim: 'Symptom-specific tracts mapped in 237 patients from five centres', refIds: ['rajamani2024'] },
@@ -84,7 +89,8 @@ export const INDICATIONS: IndicationInput[] = [
     keyTracts: ['drtt', 'ndrtt'], alternativeTracts: ['al', 'lf'],
     corticalAreas: ['m1'],
     targetMarkers: ['t-pub-vim', 't-atlas-psa'], alternativeMarkers: ['t-atlas-gpi-sm', 't-atlas-vo'],
-    target: 'Vim plus PSA, or GPi.',
+    // (A-020: the Vim and the GPi were the targets of most published cases, 57.8 % and 32.8 % of 64, Wang 2020)
+    target: 'Vim, or GPi; Vim with PSA in a few cases.',
     alternatives: 'Dual leads in Vo and Vim.',
     why: 'Holmes tremor involves both cerebellothalamic and pallidothalamic circuits, so dual targets aim to cover both.',
     howToChoose: 'No consensus. In pooled cases GPi did better for rest tremor and overall; PSA plus Vim did better than PSA alone in small numbers.',
@@ -135,7 +141,7 @@ export const INDICATIONS: IndicationInput[] = [
     howToChoose: 'GPi is the default. A 2025 study mapped sweet spots and connectomes for both GPi and STN in cervical dystonia.',
     imaging: 'FGATIR or PDw for the GPi borders.',
     evidence: [
-      { claim: 'Striatopallidofugal axis linked to optimal cervical outcomes in 80 patients', refIds: ['horn2022'] },
+      { claim: 'Striatopallidofugal axis linked to optimal cervical outcomes (46 patients with cervical dystonia, in a cohort of 80)', refIds: ['horn2022'] },
       { claim: 'Ventral, lateral and posterior GPi represent face and neck', refIds: ['thieme2021'] },
       { claim: 'Sweet spots and connectomes for GPi and STN in cervical dystonia', refIds: ['cd2025'] },
     ],

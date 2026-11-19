@@ -1,17 +1,19 @@
 # Open Neuroanatomy Atlas
 
-Interactive 3D neuroanatomy for teaching, built from published atlases in MNI space. Sections:
+Interactive 3D neuroanatomy for teaching, built from published atlases and open data: the brain atlases in MNI space,
+the skull base, ventricles, vessels and spine from single CT scans. Sections:
 
 - **Cortical anatomy** (`cortex/`): described below.
 - **White-matter tracts** (`tracts/`): described below.
 - **Skull base** (`skullbase/`), with its earlier versions **Skull base v1** (`skullbase-v1/`) and **Skull base v2** (`skullbase-ct/`) under Alternative versions: described below.
 - **Brainstem** (`brainstem/`): described below.
 - **Ventricles** (`ventricles/`): described below.
+- **Vascular** (`vascular/`): described below.
 - **DBS targets** (`dbs/`): described below.
 - **Spine** (`spine/`): described below.
 
 The home page (`index.html`) links the sections; they share the viewer, the anatomy pipeline,
-the design and the Settings. The project name and section list live in `src/brand.ts`.
+the design and the view options. The project name and section list live in `src/brand.ts`.
 
 ## DBS targets
 
@@ -123,7 +125,7 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
 - **Registration** (`pipeline/skullbase_v3.py`): each specimen's bone, blurred to the CT's resolution, is matched to
   the CT's bone within 14 mm of the labyrinth by a similarity transform (1500 rotations, as is and mirrored, then a
   local optimisation of the best twelve), started from the labyrinth picked by hand on the CT's slices. Specimen ALPHA
-  fits both ears best (bone correlation 0.72 right, 0.66 left, scale 0.99 and 0.95; the left is ALPHA mirrored), and
+  fits both ears best (bone correlation 0.72 right, 0.66 left, scale 0.985 and 0.95; the left is ALPHA mirrored), and
   its structures follow the transform: facial nerve, chorda tympani, the contents of the internal acoustic meatus,
   scala tympani, scala vestibuli with the vestibule and semicircular canals, ossicles, tympanic membrane and petrous
   carotid. Checks independent of the fit: on the CT, the meatus' contents fall on fluid (about 60 HU) and the carotid on
@@ -1113,7 +1115,7 @@ Server notes:
 
 - Serve `.glb` as `model/gltf-binary` (most servers default to `application/octet-stream`,
   which also works).
-- The T1 slice volumes (`assets/t1/*.u8.gz`) are gzip files the app decompresses itself. If your
+- The MRI slice volumes (`assets/mri/*.u8.gz`: T1, T2 and PD) are gzip files the app decompresses itself. If your
   server adds `Content-Encoding: gzip` for `.gz` files, that works too: the app detects
   already-decoded data.
 - WebGL 2 is required (all current desktop and mobile browsers).
@@ -1156,14 +1158,14 @@ on or another sequence is picked.
   structures solid and glowing, outlined, and shown faintly through whatever covers them) and
   opens its card. Click again or press Esc to clear. Hidden items and the highlight are part of
   the shareable link.
-- **Settings** (header, every section): "Fade the rest when a structure is selected" fades
+- **View options** (the gear in the header, every section): "Fade the rest when a structure is selected" fades
   everything else back as well (off by default; remembered in this browser). A click goes to
   what is drawn solid before anything faded, and through faded bone to what it encloses.
 - **Click or tap** any structure, tract or marker for its card: role in the source content,
   indications that use it, imaging, data source, licence, centroid.
 - **Readout**: MNI coordinates under the pointer plus approximate AC–PC coordinates (see below).
 - **Measure**: pick two points for a distance in mm.
-- **Settings** page: show or hide individual indications (for example to keep only the common
+- **Indications shown** page (DBS): show or hide individual indications (for example to keep only the common
   ones for a teaching session) and pick the colour theme. Saved in the browser's local storage on
   that device; a shared link to a hidden indication still opens it. By default Holmes tremor,
   myoclonus-dystonia, tardive syndromes, Tourette syndrome and chorea are hidden ("Reset to
@@ -1219,7 +1221,8 @@ tests/unit/                 schema, verbatim-port, manifest, GLB-decoding, AC-PC
                             shipped GLBs (mesh-checks.test.ts: clean arrays, nodes named for their side, each
                             section inside its frame, the brainstem fit on T2, skull-base nerves against bone;
                             winding.test.ts: nothing inside out)
-tests/e2e/                  Playwright visual smoke tests (one screenshot per indication and per tract group)
+tests/e2e/                  Playwright tests: a screenshot of every view of every section (smoke.spec.ts) and the
+                            behaviour the audit's fixes added (audit-fixes.spec.ts)
 scripts/check-palette.ts    WCAG contrast + colour-vision-deficiency check
 ```
 
@@ -1301,10 +1304,15 @@ npm run check:palette
   symptom references exists in the manifest and on disk, verbatim comparison with
   `source/dbs-targets.html`, shipped GLBs decoded and checked against the pipeline meshes,
   AC–PC maths and URL round-trips.
-- `npm run test:e2e`: one screenshot per indication and per tract group, a tools view, a mobile layout, all pages,
-  plus assertions that no request leaves the local server and no console errors occur.
+- `npm run test:e2e`: a screenshot of every view of every section, the tools, a mobile layout and all pages
+  (`smoke.spec.ts`), the behaviour the audit's fixes added (`audit-fixes.spec.ts`), plus assertions that no request leaves the local server and no console errors occur.
   Baselines were recorded on macOS with SwiftShader. On another platform, regenerate them with
   `npx playwright test --update-snapshots`.
+- `npm run check:palette`: text contrast (a failure fails it), structure colours against the viewer background (3:1)
+  and colour pairs drawn together that are close under normal and simulated colour-blind vision (ΔE00 under 10). The
+  warnings and close pairs accepted today are listed in `scripts/palette-accepted.json`: a new one fails the check, and
+  so does a listed one that no longer occurs, so the list only shrinks. After a deliberate palette decision,
+  `npm run check:palette -- --accept` writes the new list.
 - CI (`.github/workflows/checks.yml`) also runs the typecheck, the linter (errors only), the palette check and
   `npm audit --omit=dev --audit-level=high`: a known advisory in a dependency that ships to readers fails it.
 

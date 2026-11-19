@@ -218,6 +218,11 @@ The meshes and lines in `public/assets/skullbase/` and the files `sb-manifest.js
 `sb-regions.json` and `sb-definitions.json` are derived from Z-Anatomy, itself based on BodyParts3D. They are
 **not** GPL-licensed: CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0.
 
+BodyParts3D is offered today by its publisher under CC BY 4.0; this project received it through Z-Anatomy, under
+CC BY-SA 2.1 Japan, and gives the attribution Z-Anatomy asks for. Wikipedia's texts are CC BY-SA 4.0 today; the
+definitions here (and in every section below that uses Z-Anatomy) are the versions shipped with Z-Anatomy, under
+CC BY-SA 3.0.
+
 - Source: https://github.com/Z-Anatomy/Models-of-human-anatomy
 - Note: One adult male model (BodyParts3D), not a population average, and not in MNI space. Coordinates are millimetres from Z-Anatomy's hypophysial fossa landmark. Bones were simplified (retopologized) by Z-Anatomy and are smoothed here by one subdivision level; vessels and nerves are drawn as tubes with the calibre Z-Anatomy models (not measured).
 - Attribution: BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan
@@ -408,6 +413,11 @@ one CT of the VerSe 2020 dataset. They are **not** GPL-licensed: CC BY-SA 4.0 (V
 `spine-published.json` holds published pedicle values read from the tables of three open-access papers (cited
 on the cards and the Sources page): Wang 2023 (J Orthop Surg Res, CC BY 4.0), Moncada-Habib 2025 (Cureus,
 CC BY 4.0) and Nkwerem 2024 (J West Afr Coll Surg, CC BY-NC-SA 4.0); numbers only, no text or figures.
+
+## Home page pictures
+
+The pictures in `public/assets/home/` are screenshots of the site's own sections, made by the project. Each carries the
+licences of the data it shows: those of its section above.
 
 ## Datasets considered and not used
 

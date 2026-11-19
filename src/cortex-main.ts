@@ -13,6 +13,7 @@ import { CortexAtlasPage } from './ui/cortex-atlas';
 import { cortexCreditsPage, cortexSourcesPage } from './ui/cortex-pages';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
 import { addressSync } from './ui/address';
+import { lostFromLink, showLinkNote } from './ui/linknote';
 
 const SECTION = SECTIONS.find((s) => s.id === 'cortex')!;
 
@@ -87,11 +88,15 @@ function render(pageChanged = false): void {
   if (pageChanged) window.scrollTo(0, 0);
 }
 
+const LINK_FIELDS = { v: 'view', sel: 'sel' };
+showLinkNote(header, lostFromLink(location.hash, state, LINK_FIELDS));
+
 window.addEventListener('hashchange', () => {
   address.read();
   if (location.hash === encodeCortex(state)) return;
   const bare = !location.hash.includes('?');
   const next = bare ? { ...structuredClone(state), page: decodeCortex(location.hash).page } : sanitize(decodeCortex(location.hash), location.hash);
+  showLinkNote(header, lostFromLink(location.hash, next, LINK_FIELDS));
   setState(next, { camera: !bare || next.page !== state.page });
 });
 

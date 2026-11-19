@@ -1529,3 +1529,141 @@ test('cortex: MRI slices under the pial surface, kept in the link, not drawn ove
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// P1-17, UI-24: without WebGL the endoscope views threw "getClearColor is not a function", and the note sat under the
+// legend with the 3D view's buttons still live
+test('without WebGL: the note is a card above the legend, the 3D controls are hidden, the endoscope views do not throw', async ({ page }) => {
+  const g = guard(page);
+  await page.addInitScript(() => {
+    const get = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, kind: string, ...rest: unknown[]) {
+      return /webgl/.test(kind) ? null : (get as (...a: unknown[]) => unknown).call(this, kind, ...rest);
+    } as typeof HTMLCanvasElement.prototype.getContext;
+  });
+  for (const url of ['./ventricles/#/atlas?g=etv', './skullbase/#/atlas?g=endonasal', './#/atlas']) {
+    await page.goto('about:blank');
+    await page.goto(url);
+    const note = page.locator('.no-webgl');
+    await expect(note, url).toBeVisible();
+    await expect(note, url).toContainText('hardware acceleration');
+    await expect(page.locator('body'), url).toHaveAttribute('data-webgl', 'off');
+    await expect(page.locator('.stage .toolbar'), url).toBeHidden();
+    // the note is drawn over everything in the stage, the legend included: what is at its centre is the note
+    const box = (await note.boundingBox())!;
+    const top = await page.evaluate(([x, y]) => document.elementFromPoint(x, y)?.closest('.no-webgl') !== null, [box.x + box.width / 2, box.y + box.height / 2]);
+    expect(top, url).toBe(true);
+    // the panel still works: a card is shown
+    await expect(page.locator('.panel .pane:not([hidden]) .card').first(), url).toBeVisible();
+    await page.waitForTimeout(1500);
+  }
+  expect(g.external).toEqual([]);
+  expect(g.errors.filter((e) => !/WebGL/i.test(e))).toEqual([]);
+});
+
+// P1-24: a link naming a view, structure, level or page the section does not have opened the default without a word
+test('links: what a link names and the section does not have is said under the header; good links say nothing', async ({ page }) => {
+  const g = guard(page);
+  const bad: [string, RegExp][] = [
+    ['./skullbase-v1/#/atlas?g=knosp_3b', /the view “knosp_3b”/],
+    ['./skullbase-ct/#/grading', /the page “grading”/],
+    ['./spine/#/atlas?r=lumbar&lv=T5', /the level “T5”/],
+    ['./brainstem/#/atlas?g=overview&sel=bs_nothing', /the structure “bs_nothing”/],
+    ['./#/atlas?i=nonsense', /the indication “nonsense”/],
+  ];
+  for (const [url, what] of bad) {
+    await open(page, url);
+    const note = page.locator('.link-note');
+    await expect(note, url).toBeVisible();
+    await expect(note, url).toContainText(what);
+    await note.getByRole('button', { name: 'Dismiss' }).click();
+    await expect(note, url).toBeHidden();
+  }
+  // a link the site itself makes says nothing
+  for (const url of ['./skullbase/#/atlas?g=transsylvian', './skullbase-ct/#/credits', './spine/#/atlas?r=lumbar&lv=L4', './cortex/#/atlas?sel=ctx_g_postcentral',
+    './tracts/#/atlas?g=language&sel=wm_af', './ventricles/#/atlas?g=etv', './vascular/#/grading', './#/atlas?i=pd']) {
+    await open(page, url);
+    await expect(page.locator('.link-note'), url).toHaveCount(0);
+  }
+  // a link followed later replaces the note
+  await open(page, './brainstem/#/atlas?g=nowhere');
+  await expect(page.locator('.link-note')).toContainText('the view “nowhere”');
+  await page.evaluate(() => { location.hash = '#/atlas?g=overview'; });
+  await expect(page.locator('.link-note')).toHaveCount(0);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// UI-10, UI-14, UI-16, UI-19, UI-22, UI-23, UI-27, P2S-20: the interface's smaller findings
+test('interface: view options, swatch edges, the legend capped, panels in order, old links, styles without attributes', async ({ page }) => {
+  const g = guard(page);
+  // a link from before the sections still lands in the DBS section (the redirect moved out of an inline script)
+  await page.goto('about:blank');
+  await page.goto('./#/atlas?i=pd');
+  await expect(page).toHaveURL(/\/dbs\/#\/atlas\?i=pd/);
+  await settle(page);
+  // one "Settings" no more: the gear is "View options", the DBS page "Indications shown"
+  await expect(page.locator('.view-settings-btn')).toContainText('View options');
+  await expect(page.locator('a.navlink[data-page="settings"]')).toHaveText('Indications shown');
+  // a swatch's colour reaches it without a style attribute (the CSS object model), with its ink edge
+  const sw = page.locator('.legend-box .sw.solid').first();
+  await expect(sw).toBeVisible();
+  const look = await sw.evaluate((el) => ({ attr: el.getAttribute('style'), bg: getComputedStyle(el).backgroundColor, edge: getComputedStyle(el).boxShadow }));
+  expect(look.bg).not.toBe('rgba(0, 0, 0, 0)');
+  expect(look.edge).toContain('inset');
+  // the legend's height is capped (it was a percentage of nothing)
+  await open(page, './skullbase/#/atlas');
+  const [lg, st] = await Promise.all([page.locator('.legend-box').boundingBox(), page.locator('.stage').boundingBox()]);
+  expect(lg!.height).toBeLessThanOrEqual(st!.height * 0.5);
+  // the skull base's model chooser is at the foot of the panel, after the view's card
+  const order = await page.locator('.panel .pane:not([hidden])').evaluate((p) => {
+    const kids = [...p.children];
+    return { model: kids.findIndex((k) => k.classList.contains('model-chips')), card: kids.findIndex((k) => k.matches('article.card')) };
+  });
+  expect(order.model).toBeGreaterThan(order.card);
+  await expect(page.locator('.model-chips .chip[aria-pressed="true"]')).not.toHaveAttribute('href');
+  // the ventricles' anatomy view: its description before the shape slider
+  await open(page, './ventricles/#/atlas?g=ventricles');
+  const v = await page.locator('.panel .pane:not([hidden])').evaluate((p) => {
+    const kids = [...p.children];
+    return { shape: kids.findIndex((k) => k.matches('section.scope')), card: kids.findIndex((k) => k.matches('article.card')) };
+  });
+  expect(v.shape).toBeGreaterThan(v.card);
+  // the home page says not every section is the MNI template
+  await page.goto('about:blank');
+  await page.goto('./');
+  await expect(page.locator('.disclaimer')).toContainText('single-patient CT');
+  await expect(page.locator('header a.navlink')).toHaveCount(0);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('interface: a phone held sideways shows the stage beside the panel at full height', async ({ browser }) => {
+  const ctx = await browser.newContext({ viewport: { width: 844, height: 390 }, hasTouch: true, isMobile: true });
+  const page = await ctx.newPage();
+  await page.goto('./skullbase/#/atlas');
+  await expect(page.locator('.stage canvas')).toBeVisible();
+  const [st, pn] = await Promise.all([page.locator('.stage').boundingBox(), page.locator('.panel').boundingBox()]);
+  expect(st!.height).toBeGreaterThan(200);
+  expect(pn!.x).toBeGreaterThanOrEqual(st!.x + st!.width - 2);
+  await expect(page.locator('.stage .readout-box, .stage .readout').first()).toContainText(/Tap a structure/);
+  await ctx.close();
+});
+
+// MC-17, MC-18: a midline structure kept whole in its R node vanished with Side = Left; a tumour view's moved copies
+// hold the right half only, and the parts they stand in for were hidden whole, so Side = Both had no left hindbrain
+test('skull base: midline structures stay with Side = Left; a tumour view draws the untouched left half beside the moved copies', async ({ page }) => {
+  const g = guard(page);
+  type V = { items: Map<string, { nodes: Record<string, { visible: boolean } | undefined> }> };
+  const visible = (id: string, side: 'L' | 'R') => page.evaluate(([i, s]) => {
+    const v = (window as unknown as { __atlas: { viewer: V } }).__atlas.viewer;
+    return v.items.get(i)?.nodes[s]?.visible ?? null;
+  }, [id, side] as const);
+  await open(page, './skullbase-v1/#/atlas?g=veins&h=L');
+  await expect.poll(() => visible('sb_superior_sagittal_sinus', 'R'), { timeout: SETTLED }).toBe(true);
+  await open(page, './skullbase/#/atlas?g=koos_iii&h=B');
+  await expect.poll(() => visible('pf_cerebellar_hemisphere__koos_3', 'R'), { timeout: SETTLED }).toBe(true);
+  await expect.poll(() => visible('pf_cerebellar_hemisphere', 'L'), { timeout: SETTLED }).toBe(true);
+  expect(await visible('pf_cerebellar_hemisphere', 'R')).toBe(false);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

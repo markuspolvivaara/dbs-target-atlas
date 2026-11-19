@@ -251,3 +251,18 @@ describe('the site audit’s B6: the supratrigeminal zone drawn is Cavalheiro’
     expect(refs).toContain('alafif2026');
   });
 });
+
+describe('the brainstem cards’ definitions (the audit’s D-020)', async () => {
+  const { BS_DEFINITION_EDITS, DEFINITIONS } = await import('../../src/brainstem');
+  it('every edit applies to the shipped text, and the defects are gone', async () => {
+    const raw = (await import('../../src/data/generated/bs-definitions.json')).default as Record<string, { text: string }>;
+    for (const [name, e] of Object.entries(BS_DEFINITION_EDITS)) {
+      expect(raw[name], name).toBeTruthy();
+      for (const [a] of e.replace ?? []) expect(raw[name].text, name).toContain(a);
+    }
+    expect(DEFINITIONS['Accessory nucleus of oculomotor nerve']).toBeUndefined();
+    for (const d of Object.values(DEFINITIONS)) {
+      expect(d.text).not.toMatch(/\(\)|diagram at right|preserving dentition|labyrinthine segment\) is|six in number/);
+    }
+  });
+});

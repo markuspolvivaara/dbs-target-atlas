@@ -852,7 +852,7 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
         "file": f"assets/{KIND}/tb_trigeminal_ganglion.glb", "bytes": 0, "colour": colour("sbNerve"), "dataset": "rule", "source": "Drawn by rule",
         "licence": "GPL-3.0 (the project's own drawing)", "citation": [], "citationUrls": [], "refIds": ["chaware2023"], "category": "nerve",
         "layer": "tracts", "cranialNerve": 5, "schematic": True,
-        "derivation": "Drawn by rule on this CT: each division leaves the ganglion's convex margin its mean intracranial length before "
+        "derivation": "Drawn by rule on this CT: each division leaves the ganglion's convex margin the published mean distance from Meckel’s cave to "
                       "its foramen (Chaware 2023, 80 sides: the ophthalmic nerve 27.4 mm before the superior orbital fissure, the "
                       "maxillary 11.2 mm before the foramen rotundum, the mandibular 4.5 mm before the foramen ovale), each found along its "
                       "route through this CT's own foramen; the ganglion is the crescent through those three points, set back half its "
@@ -1183,7 +1183,7 @@ def brain_items(items: list, ex2: dict, v2: dict) -> None:
                           "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by "
                           "its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth "
                           f"deformation: its hull {rep['params']['tableGapMm']} mm inside the cranial cavity (median error "
-                          f"{fit['tableMedianMm']} mm), this patient's arteries outside the cortex, each hemisphere on its own side of the falx, the M2 segments on the insula "
+                          f"{fit['tableMedianMm']} mm), this patient's arteries outside the cortex on the right (the left hemisphere was not fitted to its vessels, so part of the left middle cerebral artery lies inside it), each hemisphere on its own side of the falx, the M2 segments on the insula "
                           f"(median {fit['m2InsulaMedianMmR']} mm on the right) and the M3 segments in the Sylvian fissure (median "
                           f"{fit['m3FissureMedianMmR']} mm). Its sulci and gyri are the template's. The right hemisphere opens at the "
                           f"Sylvian fissure (the first slider): the lips moved apart {rep['params']['openFrontalMm']:.0f} mm up and "

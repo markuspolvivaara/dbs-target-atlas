@@ -3,7 +3,7 @@ import { DSA, LESIONS, VA_MANIFEST, VA_REF, VA_REFS } from '../vascular';
 import { AVM_TABLES, DAVF_TABLES, SAH_TABLES, UNRUPTURED_ANEURYSM_TABLES, UNRUPTURED_AVM_TABLES, type GradeTable } from '../vascular/grading';
 import { VA_GROUP } from '../vascular/groups';
 import { h } from './h';
-import { linkLicences } from './licences';
+import { linkLicences, UPSTREAM_NOTE } from './licences';
 import { refLinksFrom } from './reflinks';
 
 /** Sources and Credits of the vascular section. */
@@ -54,7 +54,7 @@ export function vaSourcesPage() {
     h('h1', {}, 'Sources'),
     h('section', { class: 'card' },
       h('h2', {}, 'References'),
-      h('p', {}, 'Every statement on the cards cites its source, checked against the open-access full text (PMC). A source that has none says so in its citation and was checked against its abstract.'),
+      h('p', {}, 'Every sourced statement on the cards cites its source, checked against the open-access full text (PMC). A source that has none says so in its citation and was checked against its abstract.'),
       h('ul', { class: 'refs' }, ...VA_REFS.map((r) => h('li', {}, r.citation, ' ', link(r.url, 'DOI'), ' · ',
         link(`https://pubmed.ncbi.nlm.nih.gov/${r.pmid}/`, 'PubMed'),
         r.pmcid ? [' · ', link(`https://pmc.ncbi.nlm.nih.gov/articles/${r.pmcid}/`, 'full text')] : null)))),
@@ -77,6 +77,7 @@ export function vaCreditsPage() {
       h('h2', {}, d.name),
       h('p', {}, h('strong', {}, 'Licence: '), d.licence, '. The vessels (public/assets/vascular/) are Skull base v3’s meshes with the angiogram’s timing added; the lesions are this project’s drawings on them (GPL-3.0), and their fit uses the TopBrain data (non-commercial). The bone and the fitted brain are Skull base v3’s files: see its credits.'),
       h('ul', {}, ...d.attribution.map((a) => h('li', {}, a))),
+      h('p', { class: 'aside' }, UPSTREAM_NOTE),
       ...d.citation.map((c, i) => h('p', { class: 'cite' }, c, ' ', link(d.citationUrls[i], 'DOI')))),
     h('section', { class: 'card' },
       h('h2', {}, 'From the other sections'),

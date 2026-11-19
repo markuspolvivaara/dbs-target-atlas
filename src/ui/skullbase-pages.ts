@@ -6,7 +6,7 @@ import { refLinksFrom } from './reflinks';
 import { FORAMEN_REFS } from '../skullbase/foramina';
 import { TB_REFS } from '../skullbase/temporal';
 import { h } from './h';
-import { linkLicences } from './licences';
+import { linkLicences, UPSTREAM_NOTE } from './licences';
 
 /** Grading, Sources and Credits of the skull-base section. */
 
@@ -95,7 +95,7 @@ function temporalSourcesPage() {
       h('p', {}, 'Cross-check: two other ears, registered the same way, put the same landmarks this far from ALPHA’s:'),
       h('ul', {}, ...sides.flatMap((sd) => Object.entries(f.crossCheck[sd] ?? {}).map(([spec, r]) => h('li', {}, `${sideName[sd]}, ${spec}: `,
         r.failed || !r.distanceMm ? `registration failed (correlation ${r.correlation}); not compared` : Object.entries(r.distanceMm).map(([k, v]) => `${k.toLowerCase()} ${v} mm`).join(', '))))),
-      h('p', {}, 'The greater petrosal nerve, which no specimen segments, is drawn by rule from the carried-over geniculate ganglion forwards and medially along this CT’s middle fossa floor, for its published mean length (Nguyen 2026). The bone over the superior semicircular canal is the CT’s bone surface directly above the carried-over canal’s top.')),
+      h('p', {}, 'The greater petrosal nerve, which no specimen segments, is drawn by rule from the carried-over geniculate ganglion forwards and medially along this CT’s middle fossa floor, for its published mean length (Nguyen HD 2026, Front Surg, in the list below). The bone over the superior semicircular canal is the CT’s bone surface directly above the carried-over canal’s top.')),
     h('section', { class: 'card' },
       h('h2', {}, 'Cranial nerves, foramina and sinuses'),
       h('p', {}, 'The cranial nerves are routed through this CT (pipeline/skullbase_v3_base.py, skullbase_nerves.py). The Z-Anatomy model fitted onto the CT (Skull base v2) gives each nerve’s course: where it leaves the brainstem and which way it runs. The path drawn is the least-cost path near that course through the CT, where bone costs sixty times more than soft tissue, and air and the vessels’ lumens twenty-five times more. So a nerve keeps to its fitted course in the cisterns, and crosses the skull base through this CT’s own opening nearest to it. Its cisternal course stays approximate (the brainstem is not in the CT). The optic nerves follow TotalSegmentator’s segmentation of them; VII and VIII run to the registered ear’s internal acoustic meatus.'),
@@ -107,7 +107,7 @@ function temporalSourcesPage() {
           h('td', {}, `${r.R.maxFromFittedMm} / ${r.L.maxFromFittedMm} mm`))))),
       h('p', { class: 'aside' }, '“Bone crossed”: where the 0.5 mm bone mask closes a small canal with a voxel of blurred bone (the right foramen rotundum here), the path may cross it rather than detour through another opening.'
         + (f.drawnBone ? ' “Under the bone as drawn”: the share of the nerve’s surface that lies more than 0.25 mm inside the skull as shown, and the greatest depth. That surface is smoothed from the mask and fuller than it, so a nerve shows under it where it passes a narrow foramen or runs along the bone; the routing does not see the drawn surface. The skull is carved round V2 and VI, so they lie clear of it.' : '')),
-      f.trigeminal ? h('p', {}, 'The trigeminal complex is drawn on this CT by rule from published means (Chaware 2023, 80 sides), not traced: each division leaves the ganglion its mean intracranial length before its foramen as located here (V1 27.4 mm to the superior orbital fissure, V2 11.2 mm to the foramen rotundum, V3 4.5 mm to the foramen ovale); the ganglion is the crescent through those three origins, as wide as the published mean, kept off bone; the sensory root runs from where it leaves the side of the fitted pons to the ganglion’s concave margin. ',
+      f.trigeminal ? h('p', {}, 'The trigeminal complex is drawn on this CT by rule from published means (Chaware 2023, 80 sides), not traced: each division leaves the ganglion the published mean distance from Meckel’s cave to its foramen as located here (V1 27.4 mm to the superior orbital fissure, V2 11.2 mm to the foramen rotundum, V3 4.5 mm to the foramen ovale); the ganglion is the crescent through those three origins, as wide as the published mean, kept off bone; the sensory root runs from where it leaves the side of the fitted pons to the ganglion’s concave margin. ',
         `Meckel’s cave so placed lies ${f.trigeminal.R.movedFromFittedMm} mm (right) and ${f.trigeminal.L.movedFromFittedMm} mm (left) from where the fitted model’s divisions begin; the origins of V1 and V3 lie ${f.trigeminal.R.spanMm} / ${f.trigeminal.L.spanMm} mm apart. `,
         'Near the brainstem, the nerves’ fitted courses and the fitted anterior inferior and superior cerebellar arteries follow the posterior fossa fit (the deformation that fits the cerebellum and brainstem into this skull, in full within 6 mm of them, none beyond 16 mm), and the two arteries are then kept just outside the fitted cerebellum and brainstem.') : null,
       h('p', {}, 'Foramina are located from the routes: where a nerve first passes between bone on most sides; the superior orbital fissure where III, IV, V1 and VI run closest together; the jugular foramen from IX, X and XI. The foramen lacerum and the foramen magnum are the cranial floor’s through-holes seen from above; the carotid canal’s outer opening is the top of TotalSegmentator’s internal carotid artery. Independent checks: ',
@@ -165,8 +165,8 @@ function temporalSourcesPage() {
       h('p', {}, 'The middle cerebral artery’s M2 and M3 branches stay where the CT shows them, except where they lie on cortex that is moved: they rise with the frontal and parietal opercula as the fissure opens, and with the frontal lobe and insula as these are lifted (each point the mean movement of that cortex within 3 mm of it, other cortex counted as still).'))] : []),
     h('section', { class: 'card' },
       h('h2', {}, 'References'),
-      h('p', {}, 'Every note on the cards cites its source; each was checked against the open-access full text.'),
-      h('ul', { class: 'refs' }, ...[...TB_REFS, ...APPROACH_REFS].map((r) => h('li', {}, r.citation, ' ', link(r.url, r.url.includes('doi.org') ? 'DOI' : 'Article'), ' · ',
+      h('p', {}, 'Every sourced note on the cards cites its source; each was checked against the open-access full text where the paper has one, and otherwise against its abstract. (The views’ descriptions and the notes on how something is drawn are the site’s own and cite nothing.)'),
+      h('ul', { class: 'refs' }, ...[...new Map([...TB_REFS, ...APPROACH_REFS].map((r) => [r.citation, r])).values()].map((r) => h('li', {}, r.citation, ' ', link(r.url, r.url.includes('doi.org') ? 'DOI' : 'Article'), ' · ',
         link(`https://pubmed.ncbi.nlm.nih.gov/${r.pmid}/`, 'PubMed'), ' · ', link(`https://pmc.ncbi.nlm.nih.gov/articles/${r.pmcid}/`, 'full text'))))),
     h('section', { class: 'card' },
       h('h2', {}, 'Definitions'),
@@ -203,6 +203,7 @@ function temporalCreditsPage() {
       h('h2', {}, 'TopBrain 2025 CT angiogram'),
       h('p', {}, h('strong', {}, 'Licence: '), 'open use with the source given, non-commercial (commercial use needs the data owner’s permission; University Hospital Zurich). The bone and vessel meshes are Skull base v2’s: see its credits.'),
       h('ul', {}, ...d.attribution.map((a) => h('li', {}, a))),
+      h('p', { class: 'aside' }, UPSTREAM_NOTE),
       ...d.citation.map((c, i) => h('p', { class: 'cite' }, c, ' ', link(d.citationUrls[i], 'DOI')))),
     h('section', { class: 'card' },
       h('h2', {}, 'Software'),
@@ -258,6 +259,7 @@ export function skullCreditsPage() {
         : '. These files are not under the GPL like the project’s code: adapted versions must stay under CC BY-SA with attribution.'),
       h('p', {}, 'Attribution, as the authors ask:'),
       h('ul', {}, ...d.attribution.map((a) => h('li', {}, a))),
+      h('p', { class: 'aside' }, UPSTREAM_NOTE),
       h('p', { class: 'aside' }, 'Authors of the original model: Kousaku Okubo (BodyParts3D); Gauthier Kervyn (Z-Anatomy design, 3D, anatomy); Marcin Zielinski (Blender add-on); Lluis Vinent (Unity development).'),
       SB_MODEL === 'ct' ? h('p', { class: 'aside' }, 'Detailed model, changes made: the bone surface taken from the TopBrain CT angiogram (case 011) at 400 HU (thin bone down to 170 HU where it adjoins that bone, so partial volume does not open holes in it) within TotalSegmentator’s skull mask, with the walls of the air sinuses added as a thin shell (bone thinner than a voxel next to air, such as the sellar floor, falls below any threshold), the facial bones (cut off by the scan) left out, smoothed, decimated and named bone by bone after the fitted Z-Anatomy model; the TopBrain vessel labels meshed; the CT turned rigidly into the Z-Anatomy model’s frame; the Z-Anatomy nerves, the vessels TopBrain does not label, the soft tissue and the landmarks scaled and smoothly deformed onto this skull. Data source: TopBrain 2025 challenge, University Hospital Zurich (https://zenodo.org/records/16878417).') : '',
       h('p', { class: 'aside' }, 'Changes made: bones, soft tissue, vessels and cranial nerves of the head exported from the Z-Anatomy Blender file; coordinates converted to millimetres from the hypophysial fossa landmark (patient right, anterior, superior); midline structures cut at the midline; bones smoothed by one subdivision level, decimated and shaded with baked ambient occlusion; vessels and nerves rebuilt as tubes around their centre lines with Z-Anatomy’s modelled radius (at least 0.3 mm) and cropped to the head; files converted to compressed glTF; definitions shortened to their lead section.'),

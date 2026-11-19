@@ -84,6 +84,10 @@ What is covered by which terms
      "BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan"
      "Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0"
      Definitions: Wikipedia - CC-BY-SA 3.0 (each links its source page).
+   BodyParts3D is offered today by its publisher under CC BY 4.0; this project
+   received it through Z-Anatomy, under CC BY-SA 2.1 Japan, and gives the
+   attribution Z-Anatomy asks for. Wikipedia's texts are CC BY-SA 4.0 today; the
+   definitions here are the versions shipped with Z-Anatomy, under CC BY-SA 3.0.
    Changes made: bones, soft tissue, vessels and cranial nerves of the head exported
    from the Z-Anatomy Blender file; coordinates converted to millimetres from the
    hypophysial fossa landmark; midline structures cut at the midline; bones
@@ -219,6 +223,10 @@ What is covered by which terms
    pipeline/vascular_build.py and pipeline/vascular_lesions.py; files converted
    to compressed glTF.
 
-15. Bundled third-party software (three.js and zod, MIT licence; Atkinson
-   Hyperlegible font, SIL Open Font Licence 1.1): see
+15. Bundled third-party software (three.js with the meshoptimizer decoder, and
+   zod, MIT licence; Atkinson Hyperlegible font, SIL Open Font Licence 1.1): see
    public/THIRD_PARTY_LICENSES.txt, which is also published with the site.
+
+16. Home page pictures (public/assets/home/): screenshots of the site's own
+   sections, made by the project. Each carries the licences of the data it
+   shows (the section of the same name above).

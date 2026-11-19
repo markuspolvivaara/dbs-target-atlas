@@ -1,7 +1,7 @@
 {
   "name": "open-neuroanatomy-atlas",
   "version": "0.1.0",
-  "description": "Open Neuroanatomy Atlas: interactive 3D neuroanatomy for teaching (DBS targets, white-matter tracts, skull base). MNI ICBM 2009b. Not for planning.",
+  "description": "Open Neuroanatomy Atlas: interactive 3D neuroanatomy for teaching (cortex, white-matter tracts, skull base, brainstem, ventricles, vessels, DBS targets, spine), from published atlases and open data. Not for planning.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
