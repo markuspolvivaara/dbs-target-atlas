@@ -1595,5 +1595,7 @@ if __name__ == "__main__":
         man = json.loads(mp.read_text())
         man["references"] = references()
         mp.write_text(json.dumps(man, indent=1, ensure_ascii=False))
+        # (and the copy the site serves, as finalize makes it: refs alone had left it behind, the audit's check of 2026-11-19)
+        shutil.copy(mp, PUBLIC / "spine-manifest.json")
         sys.exit(0)
     sys.exit(main())

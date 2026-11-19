@@ -7,8 +7,8 @@ const read = (p: string) => readFileSync(new URL(p, root), 'utf8');
 describe('licence records', () => {
   it('NOTICE has an entry for every folder of shipped assets', () => {
     const notice = read('NOTICE');
-    // (home/ holds the home page's pictures of the sections: the project's own renders of the models listed here)
-    const folders = readdirSync(new URL('public/assets/', root)).filter((d) => d !== 'home' && statSync(new URL(`public/assets/${d}`, root)).isDirectory());
+    // (home/ too: the home page's pictures of the sections, the audit's P2S-16)
+    const folders = readdirSync(new URL('public/assets/', root)).filter((d) => statSync(new URL(`public/assets/${d}`, root)).isDirectory());
     expect(folders.length).toBeGreaterThan(10);
     // (the vascular section's 138 files had none)
     for (const d of folders) expect(notice, d).toContain(`public/assets/${d}/`);

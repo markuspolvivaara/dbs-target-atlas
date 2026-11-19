@@ -1,6 +1,6 @@
 import { BS, BS_MANIFEST, BS_REFS, CONTEXT, DEFINITIONS, OWN_TRACTS, TRACT_FIT } from '../brainstem';
 import { h } from './h';
-import { linkLicences } from './licences';
+import { linkLicences, UPSTREAM_NOTE } from './licences';
 
 /** Sources and Credits of the brainstem section. */
 
@@ -64,6 +64,7 @@ export function bsCreditsPage() {
       h('p', {}, h('strong', {}, 'Licence: '), za.licence, '. These files (public/assets/brainstem/ except the arousal network nuclei and the four tracts of the HCP-YA atlas, bs-*.json) are not under the GPL like the project’s code: adapted versions must stay under CC BY-SA with attribution.'),
       h('p', {}, 'Attribution, as the authors ask:'),
       h('ul', {}, ...za.attribution.map((a) => h('li', {}, a))),
+      h('p', { class: 'aside' }, UPSTREAM_NOTE),
       h('p', { class: 'aside' }, 'Authors of the original model: Kousaku Okubo (BodyParts3D); Gauthier Kervyn (Z-Anatomy design, 3D, anatomy); Marcin Zielinski (Blender add-on); Lluis Vinent (Unity development).'),
       h('p', { class: 'aside' }, 'Changes made: the brainstem, its surface features, ventricles, cranial nerve nuclei, cranial nerves III–XII and the arteries around the brainstem exported from the Z-Anatomy Blender file; fitted into MNI space (a similarity transform and a smooth deformation onto the ICBM 2009b template); midline structures cut at the midline; nerves and arteries rebuilt as tubes around their centre lines with the modelled radius and kept near the brainstem; safe entry zones drawn on the fitted surface; files converted to compressed glTF; definitions shortened to their lead section.'),
       ...za.citation.map((c, i) => h('p', { class: 'cite' }, c, ' ', h('a', { href: za.citationUrls[i], target: '_blank', rel: 'noopener' }, 'DOI'))),

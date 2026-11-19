@@ -1,12 +1,14 @@
 # Open Neuroanatomy Atlas
 
-Interactive 3D neuroanatomy for teaching, built from published atlases in MNI space. Sections:
+Interactive 3D neuroanatomy for teaching, built from published atlases and open data: the brain atlases in MNI space,
+the skull base, ventricles, vessels and spine from single CT scans. Sections:
 
 - **Cortical anatomy** (`cortex/`): described below.
 - **White-matter tracts** (`tracts/`): described below.
 - **Skull base** (`skullbase/`), with its earlier versions **Skull base v1** (`skullbase-v1/`) and **Skull base v2** (`skullbase-ct/`) under Alternative versions: described below.
 - **Brainstem** (`brainstem/`): described below.
 - **Ventricles** (`ventricles/`): described below.
+- **Vascular** (`vascular/`): described below.
 - **DBS targets** (`dbs/`): described below.
 - **Spine** (`spine/`): described below.
 
@@ -1113,7 +1115,7 @@ Server notes:
 
 - Serve `.glb` as `model/gltf-binary` (most servers default to `application/octet-stream`,
   which also works).
-- The T1 slice volumes (`assets/t1/*.u8.gz`) are gzip files the app decompresses itself. If your
+- The MRI slice volumes (`assets/mri/*.u8.gz`: T1, T2 and PD) are gzip files the app decompresses itself. If your
   server adds `Content-Encoding: gzip` for `.gz` files, that works too: the app detects
   already-decoded data.
 - WebGL 2 is required (all current desktop and mobile browsers).
@@ -1219,7 +1221,8 @@ tests/unit/                 schema, verbatim-port, manifest, GLB-decoding, AC-PC
                             shipped GLBs (mesh-checks.test.ts: clean arrays, nodes named for their side, each
                             section inside its frame, the brainstem fit on T2, skull-base nerves against bone;
                             winding.test.ts: nothing inside out)
-tests/e2e/                  Playwright visual smoke tests (one screenshot per indication and per tract group)
+tests/e2e/                  Playwright tests: a screenshot of every view of every section (smoke.spec.ts) and the
+                            behaviour the audit's fixes added (audit-fixes.spec.ts)
 scripts/check-palette.ts    WCAG contrast + colour-vision-deficiency check
 ```
 
@@ -1301,8 +1304,8 @@ npm run check:palette
   symptom references exists in the manifest and on disk, verbatim comparison with
   `source/dbs-targets.html`, shipped GLBs decoded and checked against the pipeline meshes,
   AC–PC maths and URL round-trips.
-- `npm run test:e2e`: one screenshot per indication and per tract group, a tools view, a mobile layout, all pages,
-  plus assertions that no request leaves the local server and no console errors occur.
+- `npm run test:e2e`: a screenshot of every view of every section, the tools, a mobile layout and all pages
+  (`smoke.spec.ts`), the behaviour the audit's fixes added (`audit-fixes.spec.ts`), plus assertions that no request leaves the local server and no console errors occur.
   Baselines were recorded on macOS with SwiftShader. On another platform, regenerate them with
   `npx playwright test --update-snapshots`.
 - CI (`.github/workflows/checks.yml`) also runs the typecheck, the linter (errors only), the palette check and

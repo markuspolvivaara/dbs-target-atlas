@@ -6,7 +6,7 @@ import { refLinksFrom } from './reflinks';
 import { FORAMEN_REFS } from '../skullbase/foramina';
 import { TB_REFS } from '../skullbase/temporal';
 import { h } from './h';
-import { linkLicences } from './licences';
+import { linkLicences, UPSTREAM_NOTE } from './licences';
 
 /** Grading, Sources and Credits of the skull-base section. */
 
@@ -203,6 +203,7 @@ function temporalCreditsPage() {
       h('h2', {}, 'TopBrain 2025 CT angiogram'),
       h('p', {}, h('strong', {}, 'Licence: '), 'open use with the source given, non-commercial (commercial use needs the data owner’s permission; University Hospital Zurich). The bone and vessel meshes are Skull base v2’s: see its credits.'),
       h('ul', {}, ...d.attribution.map((a) => h('li', {}, a))),
+      h('p', { class: 'aside' }, UPSTREAM_NOTE),
       ...d.citation.map((c, i) => h('p', { class: 'cite' }, c, ' ', link(d.citationUrls[i], 'DOI')))),
     h('section', { class: 'card' },
       h('h2', {}, 'Software'),
@@ -258,6 +259,7 @@ export function skullCreditsPage() {
         : '. These files are not under the GPL like the project’s code: adapted versions must stay under CC BY-SA with attribution.'),
       h('p', {}, 'Attribution, as the authors ask:'),
       h('ul', {}, ...d.attribution.map((a) => h('li', {}, a))),
+      h('p', { class: 'aside' }, UPSTREAM_NOTE),
       h('p', { class: 'aside' }, 'Authors of the original model: Kousaku Okubo (BodyParts3D); Gauthier Kervyn (Z-Anatomy design, 3D, anatomy); Marcin Zielinski (Blender add-on); Lluis Vinent (Unity development).'),
       SB_MODEL === 'ct' ? h('p', { class: 'aside' }, 'Detailed model, changes made: the bone surface taken from the TopBrain CT angiogram (case 011) at 400 HU (thin bone down to 170 HU where it adjoins that bone, so partial volume does not open holes in it) within TotalSegmentator’s skull mask, with the walls of the air sinuses added as a thin shell (bone thinner than a voxel next to air, such as the sellar floor, falls below any threshold), the facial bones (cut off by the scan) left out, smoothed, decimated and named bone by bone after the fitted Z-Anatomy model; the TopBrain vessel labels meshed; the CT turned rigidly into the Z-Anatomy model’s frame; the Z-Anatomy nerves, the vessels TopBrain does not label, the soft tissue and the landmarks scaled and smoothly deformed onto this skull. Data source: TopBrain 2025 challenge, University Hospital Zurich (https://zenodo.org/records/16878417).') : '',
       h('p', { class: 'aside' }, 'Changes made: bones, soft tissue, vessels and cranial nerves of the head exported from the Z-Anatomy Blender file; coordinates converted to millimetres from the hypophysial fossa landmark (patient right, anterior, superior); midline structures cut at the midline; bones smoothed by one subdivision level, decimated and shaded with baked ambient occlusion; vessels and nerves rebuilt as tubes around their centre lines with Z-Anatomy’s modelled radius (at least 0.3 mm) and cropped to the head; files converted to compressed glTF; definitions shortened to their lead section.'),

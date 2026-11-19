@@ -1,6 +1,6 @@
 import { ETV, LM, TRAJ, VE_MANIFEST, VE_REFS } from '../ventricles';
 import { h } from './h';
-import { linkLicences } from './licences';
+import { linkLicences, UPSTREAM_NOTE } from './licences';
 
 /** Sources and Credits of the ventricles section. */
 
@@ -46,6 +46,7 @@ export function veCreditsPage() {
       h('h2', {}, d.name),
       h('p', {}, h('strong', {}, 'Licence: '), d.licence, '. The ventricles (public/assets/ventricles/) are segmented here from this CT and completed by the Z-Anatomy model fitted onto them; adapted from Z-Anatomy, they stay under CC BY-SA 4.0, and their fit uses the TopBrain data (non-commercial). The bone and the fitted brain are Skull base v2’s and v3’s files: see their credits.'),
       h('ul', {}, ...d.attribution.map((a) => h('li', {}, a))),
+      h('p', { class: 'aside' }, UPSTREAM_NOTE),
       ...d.citation.map((c, i) => h('p', { class: 'cite' }, c, ' ', link(d.citationUrls[i], 'DOI')))),
     h('section', { class: 'card' },
       h('h2', {}, 'From the other sections'),
