@@ -1,0 +1,161 @@
+import { readdirSync, readFileSync } from 'node:fs';
+import { describe, expect, it } from 'vitest';
+import { pointsInside } from './glb';
+import { across, joined, nodeStats, PUBLIC, sideProblems, soup, volume, widthAt, type NodeStats } from './meshcheck';
+
+/**
+ * The site audit's geometry checks (audit/07-roadmap.md, "Geometry checks in CI"; the findings in audit/04-models.md),
+ * run on the files as they are served, so that they run where the pipeline does not and measure what the site draws,
+ * not what the pipeline reported: the pipeline's own checks had passed while the result was wrong. Each check here
+ * fails on the files the audit found wrong (checked against them, from git, when it was written: the seven lesion
+ * parts of MB-01, the brainstem of MA-01, the skull of MB-06).
+ *
+ * Elsewhere, also on the shipped files: meshes inside out (winding.test.ts); vertebrae in each other, the roots and
+ * the vertebral artery in bone (spine.test.ts); the v1 hypoglossal nerve, arteries and sinuses in bone
+ * (skullbase.test.ts); cerebrum and cerebellum through the tentorium (tentorium.test.ts).
+ */
+
+/**
+ * Each section's frame, as a box: the head (or the spine and pelvis) the frame is measured in, with about 10 mm to
+ * spare. A file in another frame's millimetres, in centimetres, or with its quantization offset lost lies outside it.
+ * `span`: what the section's files together reach across, front to back and top to bottom, at least (about 85 % of
+ * what they reach in November 2026): a section shrunk, or in the wrong units, falls short of it.
+ */
+type Box = [[number, number], [number, number], [number, number]];
+const MNI: Box = [[-85, 85], [-120, 88], [-85, 95]];                // ICBM 2009b (and the 2009a tracts drawn on it)
+const ZANATOMY: Box = [[-90, 90], [-130, 95], [-115, 125]];         // v1: from the Z-Anatomy model's hypophysial fossa
+const CT: Box = [[-85, 85], [-120, 75], [-105, 115]];               // v2, v3, ventricles, vascular: from the CT's fitted fossa
+const SPINE: Box = [[-160, 160], [-100, 110], [-215, 560]];         // one CT, from the centre of the L5 body
+const SECTIONS: { dir: string; box: Box; span: [number, number, number]; midlineAtZero: boolean }[] = [
+  { dir: 'meshes', box: MNI, span: [125, 160, 115], midlineAtZero: true },
+  { dir: 'tracts', box: MNI, span: [105, 125, 130], midlineAtZero: true },
+  { dir: 'cortex', box: MNI, span: [125, 160, 115], midlineAtZero: true },
+  { dir: 'brainstem', box: MNI, span: [65, 55, 65], midlineAtZero: true },
+  { dir: 'wm', box: MNI, span: [120, 155, 115], midlineAtZero: true },
+  { dir: 'wm-ends', box: MNI, span: [120, 155, 105], midlineAtZero: true },
+  { dir: 'skullbase', box: ZANATOMY, span: [135, 175, 185], midlineAtZero: true },
+  { dir: 'skullbase-ct', box: CT, span: [125, 150, 170], midlineAtZero: true },
+  { dir: 'skullbase-v3', box: CT, span: [120, 145, 140], midlineAtZero: true },
+  { dir: 'ventricles', box: CT, span: [55, 85, 60], midlineAtZero: true },
+  { dir: 'vascular', box: CT, span: [110, 130, 130], midlineAtZero: true },
+  // (the CT's midline is the patient's own, up to 12 mm off x = 0 along the thoracic spine: L and R are compared)
+  { dir: 'spine', box: SPINE, span: [260, 160, 650], midlineAtZero: false },
+];
+const TRIANGLES = 4, LINES = 1;
+
+interface Volume { file: string; dims: number[]; origin: number[]; spacing: number }
+interface SbStructure { name: string; file: string; type: string; category?: string; inBone?: { share: number }; approach?: unknown; pushedFrom?: unknown; tumourView?: unknown; replaces?: unknown; forView?: unknown }
+// (the manifests as served)
+const served = <T>(name: string): T => JSON.parse(readFileSync(new URL(`assets/${name}`, PUBLIC), 'utf8')) as T;
+const manifest = served<{ volumes: Record<string, Volume> }>('manifest.json');
+const bsManifest = served<{ structures: { id: string; file: string }[]; fit: { widths: { part: string; z: number; modelMm: number; templateMm: number }[] } }>('bs-manifest.json');
+const sbManifest = served<{ structures: SbStructure[] }>('sb-manifest.json');
+const sbv3Manifest = served<{ structures: SbStructure[] }>('sbv3-manifest.json');
+
+describe('every shipped mesh', () => {
+  it.each(SECTIONS.map((s) => [s.dir, s] as const))('%s: clean arrays, named for its side, inside its frame', async (dir, sec) => {
+    const files = readdirSync(new URL(`assets/${dir}/`, PUBLIC)).filter((f) => f.endsWith('.glb')).sort();
+    expect(files.length).toBeGreaterThan(5);
+    const bad: string[] = [];
+    const lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity];
+    for (const f of files) {
+      const nodes: NodeStats[] = await nodeStats(`assets/${dir}/${f}`);
+      if (!nodes.length) bad.push(`${dir}/${f}: no mesh`);
+      for (const n of nodes) {
+        const at = `${dir}/${f}:${n.node}`;
+        if (n.modes.some((m) => m !== TRIANGLES && m !== LINES)) bad.push(`${at}: drawn as mode ${n.modes.join(', ')}, not triangles or lines`);
+        if (n.nonFinite) bad.push(`${at}: ${n.nonFinite} positions not finite`);
+        if (n.badIndices) bad.push(`${at}: ${n.badIndices} indices past its vertices`);
+        if (n.badNormals) bad.push(`${at}: ${n.badNormals} of ${n.normals} normals not of unit length`);
+        // (decimation leaves the odd collapsed triangle: a few in a thousand)
+        if (n.degenerate > 0.01 * n.triangles) bad.push(`${at}: ${n.degenerate} of ${n.triangles} triangles collapsed`);
+        for (let k = 0; k < 3; k++) {
+          if (n.lo[k] < sec.box[k][0] || n.hi[k] > sec.box[k][1]) bad.push(`${at}: ${'xyz'[k]} from ${n.lo[k].toFixed(1)} to ${n.hi[k].toFixed(1)} mm, outside the frame's ${sec.box[k].join(' to ')}`);
+          lo[k] = Math.min(lo[k], n.lo[k]); hi[k] = Math.max(hi[k], n.hi[k]);
+        }
+      }
+      if (nodes.length) bad.push(...sideProblems(nodes, sec.midlineAtZero));
+    }
+    for (let k = 0; k < 3; k++) if (hi[k] - lo[k] < sec.span[k]) bad.push(`${dir}: its files reach ${(hi[k] - lo[k]).toFixed(1)} mm along ${'xyz'[k]}, less than ${sec.span[k]}`);
+    expect(bad).toEqual([]);
+  }, 180_000);
+});
+
+describe('the brainstem section’s fitted brainstem (the audit’s MA-01: fitted to the far wall of the cisterns)', () => {
+  const parts = ['bs_midbrain', 'bs_pons', 'bs_medulla'].map((id) => bsManifest.structures.find((s) => s.id === id)!.file);
+  const surface = async () => {
+    const S = await Promise.all(parts.map((f) => soup(f)));
+    return { ...joined(S), N: Float64Array.from(S.flatMap((s) => [...s.N])) };
+  };
+
+  it('has the template’s fluid outside it and its tissue inside (T2: bright outside, dark inside)', async () => {
+    const crop = volume(manifest.volumes.t2_crop_05mm), whole = volume(manifest.volumes.t2_15mm);
+    const t2 = (x: number, y: number, z: number) => { const v = crop(x, y, z); return Number.isNaN(v) ? whole(x, y, z) : v; };
+    const r = across(await surface(), t2);
+    expect(r.n).toBeGreaterThan(10_000);
+    // November 2026: median 47, 62 % with a clear step out, 11 % in. The surface before the refit: −15, 13 %, 47 %;
+    // the same surface 10 % larger: 10, 39 %, 19 %; 20 % smaller: 4, 27 %, 8 %
+    expect(r.median).toBeGreaterThan(25);
+    expect(r.outShare).toBeGreaterThan(0.5);
+    expect(r.inShare).toBeLessThan(0.2);
+  }, 60_000);
+
+  it('is as wide as the template’s brainstem at four levels, as its manifest says', async () => {
+    const S = await surface();
+    expect(bsManifest.fit.widths).toHaveLength(4);
+    for (const w of bsManifest.fit.widths) {
+      const mm = widthAt(S, w.z);
+      expect(Math.abs(mm - w.modelMm), `${w.part} at z ${w.z}`).toBeLessThan(0.5);
+      // (the build's own bounds: before the refit the medulla was 1.6 times the template's width)
+      expect(mm / w.templateMm, `${w.part} at z ${w.z}`).toBeGreaterThan(0.8);
+      expect(mm / w.templateMm, `${w.part} at z ${w.z}`).toBeLessThan(1.25);
+    }
+  }, 60_000);
+});
+
+const plain = (s: SbStructure) => !s.approach && !s.pushedFrom && !s.tumourView && !s.replaces && !s.forView;
+const bonesOf = (ss: SbStructure[]) => ss.filter((s) => s.category === 'bone' && plain(s) && !s.name.startsWith('Sinus of'));
+
+describe('nerves and vessels against the skull-base bone they are drawn with', () => {
+  it('v3 (the default model): the nerves that run in the open lie outside the bone (the audit’s MB-06)', async () => {
+    const ss = sbv3Manifest.structures;
+    // the CT's bones are pieces of one surface: closed only together
+    const bone = joined(await Promise.all(bonesOf(ss).map((s) => soup(s.file))));
+    // in a bony canal or groove, so in the drawn bone: the facial nerve, the chorda tympani, the nerves in the
+    // internal acoustic meatus, the greater petrosal nerve
+    const inCanal = new Set(['Facial nerve (VII)', 'Chorda tympani', 'Nerves in the internal acoustic meatus (VII, VIII)', 'Greater petrosal nerve']);
+    // in the cisterns, the cavernous sinus and the orbit's fissure: V2 and VI ran 14 to 21 mm under the bone surface
+    // (60 % and 27 % of their surface in bone) until the skull was carved round them
+    const open = new Set(['Oculomotor nerve (III)', 'Trochlear nerve (IV)', 'Trigeminal nerve (V)', 'Ophthalmic nerve (V1)', 'Maxillary nerve (V2)',
+      'Abducens nerve (VI)', 'Vestibulocochlear nerve (VIII)', 'Optic chiasm', 'Optic tract']);
+    const nerves = ss.filter((s) => s.category === 'nerve' && plain(s));
+    for (const n of open) expect(nerves.map((s) => s.name), n).toContain(n);
+    const bad: string[] = [];
+    for (const s of nerves) {
+      if (inCanal.has(s.name)) continue;
+      const t = await soup(s.file);
+      const share = pointsInside(t.P, bone.P, bone.T) / (t.P.length / 3);
+      // (the rest pass through a foramen narrower than the drawn nerve: up to 17 % of their surface)
+      if (share > (open.has(s.name) ? 0.05 : 0.25)) bad.push(`${s.name}: ${(100 * share).toFixed(1)} % of its surface in bone`);
+    }
+    expect(bad).toEqual([]);
+  }, 120_000);
+
+  it('v1 (Z-Anatomy): a nerve or vessel drawn through bone says so on its card', async () => {
+    const ss = sbManifest.structures;
+    // (Z-Anatomy's bones are each closed: each is counted on its own)
+    const bones = await Promise.all(bonesOf(ss).map((s) => soup(s.file)));
+    const bad: string[] = [];
+    let n = 0;
+    for (const s of ss.filter((s) => s.type === 'tube' && ['nerve', 'artery', 'vein'].includes(s.category ?? '') && plain(s))) {
+      const t = await soup(s.file);
+      const share = bones.reduce((a, b) => a + pointsInside(t.P, b.P, b.T), 0) / (t.P.length / 3);
+      n++;
+      // (the card's note counts what lies over 0.5 mm deep: pipeline/skullbase_v1_inbone.py; a tube on the bone has
+      // part of its surface under it, up to 14 % here without a note)
+      if (share > 0.2 && !s.inBone) bad.push(`${s.name}: ${(100 * share).toFixed(1)} % of its surface in bone, and no note`);
+    }
+    expect(n).toBeGreaterThan(60);
+    expect(bad).toEqual([]);
+  }, 120_000);
+});

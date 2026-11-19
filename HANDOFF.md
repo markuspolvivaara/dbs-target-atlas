@@ -536,6 +536,22 @@ commit and push it.
     no rebuild: the shipped files came from unseeded runs, so the next run of these steps may differ from them by a
     voxel here and there, once, and is then the same every run. Left alone: `skullbase_v1_endonasal.py` (line 79,
     and one more call the user's uncommitted rework in the main checkout adds): seed them there, `seed=0`.
+  - 7, the audit's geometry checks on the shipped files (audit/07-roadmap.md, "Geometry checks in CI"):
+    `tests/unit/mesh-checks.test.ts`, its measurements in `tests/unit/meshcheck.ts` (each reader takes the folder
+    that holds `assets/`, so the checks can be run on older files). Every GLB of all twelve folders: triangles or
+    lines only, finite positions, indices in range, unit normals, at most 1 % collapsed triangles; every node named L
+    or R, and for its side (two halves: L left of R, and each on its own side of x = 0 except in the spine, whose CT
+    midline is up to 12 mm off it; one node: L on the left, R on the right or the midline); every node inside its
+    frame's box (MNI, Z-Anatomy's fossa frame, the CT's fossa frame, the spine CT), each section reaching at least
+    about 85 % of today's extent. The brainstem: T2 across its surface (fluid out, tissue in) and its width at the
+    four levels against the manifest. Skull base v3: the nerves in the open (III, IV, V, V1, V2, VI, VIII, chiasm,
+    tract) at most 5 % of their surface in the joined bone, the others 25 %, the four in bony canals exempt; v1: a
+    tube with over 20 % of its surface in bone has an in-bone note. Checked on the files the audit found wrong (from
+    git): the seven lesion parts before `deb4780` (7 failures), the brainstem before `0974d74` (T2 median −15
+    against 47 now; medulla 1.58 × the template), v3 before `de3b6b5` (V2 60 %, VI 27 % in bone; now 1.4 % and
+    0.1 %). Already elsewhere: inside out (`winding.test.ts`), vertebrae in each other and roots in bone
+    (`spine.test.ts`), v1 XII and vessels in bone (`skullbase.test.ts`). Not added: skull base v2's fitted nerves
+    against its CT (the audit's MC-10, a stated limit). 16 tests, 4 s.
   - Found: in the ventricles' endoscopic view, at a narrow stage, the open legend box covers the toolbar's left end
     (Measure, Copy link and Save image under it). Not fixed here.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in

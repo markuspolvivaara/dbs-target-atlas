@@ -1215,7 +1215,10 @@ src/viewer/                 three.js scene, loaders, materials, slices, lead, se
 src/ui/                     atlas pages of both sections, shared stage pieces, other pages, theme
 pipeline/                   offline Python pipeline (see below)
 public/assets/              compressed GLBs (wm/: white-matter tracts), T1 volumes, manifests
-tests/unit/                 schema, verbatim-port, manifest, GLB-decoding, AC-PC, URL tests
+tests/unit/                 schema, verbatim-port, manifest, GLB-decoding, AC-PC, URL tests; the geometry of the
+                            shipped GLBs (mesh-checks.test.ts: clean arrays, nodes named for their side, each
+                            section inside its frame, the brainstem fit on T2, skull-base nerves against bone;
+                            winding.test.ts: nothing inside out)
 tests/e2e/                  Playwright visual smoke tests (one screenshot per indication and per tract group)
 scripts/check-palette.ts    WCAG contrast + colour-vision-deficiency check
 ```
