@@ -1592,3 +1592,59 @@ test('links: what a link names and the section does not have is said under the h
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// UI-10, UI-14, UI-16, UI-19, UI-22, UI-23, UI-27, P2S-20: the interface's smaller findings
+test('interface: view options, swatch edges, the legend capped, panels in order, old links, styles without attributes', async ({ page }) => {
+  const g = guard(page);
+  // a link from before the sections still lands in the DBS section (the redirect moved out of an inline script)
+  await page.goto('about:blank');
+  await page.goto('./#/atlas?i=pd');
+  await expect(page).toHaveURL(/\/dbs\/#\/atlas\?i=pd/);
+  await settle(page);
+  // one "Settings" no more: the gear is "View options", the DBS page "Indications shown"
+  await expect(page.locator('.view-settings-btn')).toContainText('View options');
+  await expect(page.locator('a.navlink[data-page="settings"]')).toHaveText('Indications shown');
+  // a swatch's colour reaches it without a style attribute (the CSS object model), with its ink edge
+  const sw = page.locator('.legend-box .sw.solid').first();
+  await expect(sw).toBeVisible();
+  const look = await sw.evaluate((el) => ({ attr: el.getAttribute('style'), bg: getComputedStyle(el).backgroundColor, edge: getComputedStyle(el).boxShadow }));
+  expect(look.bg).not.toBe('rgba(0, 0, 0, 0)');
+  expect(look.edge).toContain('inset');
+  // the legend's height is capped (it was a percentage of nothing)
+  await open(page, './skullbase/#/atlas');
+  const [lg, st] = await Promise.all([page.locator('.legend-box').boundingBox(), page.locator('.stage').boundingBox()]);
+  expect(lg!.height).toBeLessThanOrEqual(st!.height * 0.5);
+  // the skull base's model chooser is at the foot of the panel, after the view's card
+  const order = await page.locator('.panel .pane:not([hidden])').evaluate((p) => {
+    const kids = [...p.children];
+    return { model: kids.findIndex((k) => k.classList.contains('model-chips')), card: kids.findIndex((k) => k.matches('article.card')) };
+  });
+  expect(order.model).toBeGreaterThan(order.card);
+  await expect(page.locator('.model-chips .chip[aria-pressed="true"]')).not.toHaveAttribute('href');
+  // the ventricles' anatomy view: its description before the shape slider
+  await open(page, './ventricles/#/atlas?g=ventricles');
+  const v = await page.locator('.panel .pane:not([hidden])').evaluate((p) => {
+    const kids = [...p.children];
+    return { shape: kids.findIndex((k) => k.matches('section.scope')), card: kids.findIndex((k) => k.matches('article.card')) };
+  });
+  expect(v.shape).toBeGreaterThan(v.card);
+  // the home page says not every section is the MNI template
+  await page.goto('about:blank');
+  await page.goto('./');
+  await expect(page.locator('.disclaimer')).toContainText('single-patient CT');
+  await expect(page.locator('header a.navlink')).toHaveCount(0);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('interface: a phone held sideways shows the stage beside the panel at full height', async ({ browser }) => {
+  const ctx = await browser.newContext({ viewport: { width: 844, height: 390 }, hasTouch: true, isMobile: true });
+  const page = await ctx.newPage();
+  await page.goto('./skullbase/#/atlas');
+  await expect(page.locator('.stage canvas')).toBeVisible();
+  const [st, pn] = await Promise.all([page.locator('.stage').boundingBox(), page.locator('.panel').boundingBox()]);
+  expect(st!.height).toBeGreaterThan(200);
+  expect(pn!.x).toBeGreaterThanOrEqual(st!.x + st!.width - 2);
+  await expect(page.locator('.stage .readout-box, .stage .readout').first()).toContainText(/Tap a structure/);
+  await ctx.close();
+});

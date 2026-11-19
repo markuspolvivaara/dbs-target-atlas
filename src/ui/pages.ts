@@ -225,8 +225,8 @@ export function settingsPage(update: Update, theme: { get(): 'system' | 'light' 
     ...([['system', 'Follow the device'], ['light', 'Light'], ['dark', 'Dark']] as const).map(([v, label]) =>
       h('label', { class: 'radio' }, h('input', { type: 'radio', name: 'theme', value: v, onchange: () => theme.set(v) }), label)));
   el.append(
-    h('h1', {}, 'Settings'),
-    h('p', { class: 'lede' }, 'Choose which indications appear in the atlas. Settings are saved in this browser on this device.'),
+    h('h1', {}, 'Indications shown'),
+    h('p', { class: 'lede' }, 'Choose which indications appear in the atlas, and the colour theme. Both are saved in this browser on this device.'),
     h('section', { class: 'card' },
       h('h2', { id: 'set-ind-title' }, 'Indications'),
       h('p', { class: 'aside' }, 'Hidden indications disappear from the indication chips and from keyboard cycling. A shared link to a hidden indication still opens it. At least one indication stays visible. By default the less common ones (Holmes tremor, myoclonus-dystonia, tardive syndromes, Tourette syndrome, chorea) are hidden.'),

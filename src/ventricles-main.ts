@@ -116,7 +116,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () 
 function buildHelp(): HTMLDialogElement {
   const rows: [string, string][] = [
     ['1 – 5', 'Camera: front, side, from above, front oblique, over the forehead'],
-    ['H', 'Side: both → left → right'], ['T', 'Ventriculostomy: next aim'], ['S', 'Ventriculostomy: the other side'],
+    ['H', 'Side: both → left → right'], ['T', 'In the ventriculostomy view: the next aim'], ['S', 'In the ventriculostomy view: the other side'],
     ['N', 'Name labels: hover → all → off'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
   ];
   return h('dialog', { class: 'help', 'aria-labelledby': 'help-title' },

@@ -8,10 +8,13 @@ import { applyTheme, injectPaletteCss, resolvedTheme, storeTheme, storedTheme, t
 
 /** Home page of the Open Neuroanatomy Atlas: introduction and the sections. Light: no 3D code. */
 
-// Links shared before the site had sections (…/#/atlas?…) belong to the DBS section. The inline
-// script in index.html handles fresh loads; this also covers a hash change on an open home page.
+// Links shared before the site had sections (…/#/atlas?…) belong to the DBS section: on a fresh load, and on a hash
+// change on an open home page. (An inline script in index.html did the first; a strict content security policy forbids
+// it: the audit's P2S-20.)
 const LEGACY = /^#\/(atlas|imaging|coords|refs|credits|settings)\b/;
-window.addEventListener('hashchange', () => { if (LEGACY.test(location.hash)) location.replace(`${SITE_ROOT}dbs/${location.hash}`); });
+const toDbs = () => { if (LEGACY.test(location.hash)) location.replace(`${SITE_ROOT}dbs/${location.hash}`); };
+toDbs();
+window.addEventListener('hashchange', toDbs);
 
 injectPaletteCss();
 let theme: ThemePref = storedTheme();
@@ -28,10 +31,9 @@ function label() {
 }
 label();
 
-const dbs = SECTIONS.find((s) => s.id === 'dbs')!;
-const nav = [
-  h('a', { href: `${SITE_ROOT}${dbs.path}#/settings`, class: 'navlink' }, 'Settings'),
-];
+// (no Settings link: it opened the DBS section's page of indications, not settings of the site; the theme button is in
+// the header: the audit's UI-19)
+const nav: HTMLElement[] = [];
 
 // each module's card: the whole card is the link, over a view of the module itself (public/assets/home/<id>.webp)
 const card = (s: (typeof SECTIONS)[number]) => {
@@ -74,7 +76,8 @@ const footer = h('footer', { class: 'site-footer' },
 document.getElementById('app')!.append(
   h('a', { class: 'skip', href: '#main' }, 'Skip to content'),
   siteHeader({ section: null, nav, themeBtn }),
-  disclaimerNote(),
+  // (most sections are one person's CT, not the MNI template: the audit's UI-27)
+  disclaimerNote('Atlas-based group anatomy (MNI 2009b) and single-patient CT anatomy; individual anatomy varies. Not for surgical planning.'),
   main,
   footer,
 );

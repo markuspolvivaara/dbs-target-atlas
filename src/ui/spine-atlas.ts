@@ -18,7 +18,7 @@ import { REGION, REGIONS } from '../spine/regions';
 import { spineScene, type SpinePlan } from '../spine/scene';
 import type { SpineState } from '../spine/state';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
-import { h } from './h';
+import { announce, h, pointAt } from './h';
 import { citationPanel } from './citations';
 import { figureControl } from './figure';
 import { structureBar } from './structurebar';
@@ -227,7 +227,7 @@ export class SpineAtlasPage {
     this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
     scrollHint(toolbar);
     rovingToolbar(toolbar);
-    this.readout.textContent = 'Point at a structure for its position';
+    this.readout.textContent = `${pointAt()} a structure for its position`;
 
     this.viewer = new Viewer<SpineState, SpinePlan>(host, {
       hover: (info, x, y) => this.showTip(info, x, y),
@@ -909,7 +909,7 @@ export class SpineAtlasPage {
   }
 
   private async copyLink(btn: HTMLElement): Promise<void> {
-    try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; }
+    try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; announce('Link to this view copied'); }
     catch { window.prompt('Copy this link', location.href); }
     setTimeout(() => { btn.textContent = 'Copy link'; }, 1600);
   }

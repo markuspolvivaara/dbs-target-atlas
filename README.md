@@ -13,7 +13,7 @@ the skull base, ventricles, vessels and spine from single CT scans. Sections:
 - **Spine** (`spine/`): described below.
 
 The home page (`index.html`) links the sections; they share the viewer, the anatomy pipeline,
-the design and the Settings. The project name and section list live in `src/brand.ts`.
+the design and the view options. The project name and section list live in `src/brand.ts`.
 
 ## DBS targets
 
@@ -1158,14 +1158,14 @@ on or another sequence is picked.
   structures solid and glowing, outlined, and shown faintly through whatever covers them) and
   opens its card. Click again or press Esc to clear. Hidden items and the highlight are part of
   the shareable link.
-- **Settings** (header, every section): "Fade the rest when a structure is selected" fades
+- **View options** (the gear in the header, every section): "Fade the rest when a structure is selected" fades
   everything else back as well (off by default; remembered in this browser). A click goes to
   what is drawn solid before anything faded, and through faded bone to what it encloses.
 - **Click or tap** any structure, tract or marker for its card: role in the source content,
   indications that use it, imaging, data source, licence, centroid.
 - **Readout**: MNI coordinates under the pointer plus approximate AC–PC coordinates (see below).
 - **Measure**: pick two points for a distance in mm.
-- **Settings** page: show or hide individual indications (for example to keep only the common
+- **Indications shown** page (DBS): show or hide individual indications (for example to keep only the common
   ones for a teaching session) and pick the colour theme. Saved in the browser's local storage on
   that device; a shared link to a hidden indication still opens it. By default Holmes tremor,
   myoclonus-dystonia, tardive syndromes, Tourette syndrome and chorea are hidden ("Reset to
@@ -1308,6 +1308,11 @@ npm run check:palette
   (`smoke.spec.ts`), the behaviour the audit's fixes added (`audit-fixes.spec.ts`), plus assertions that no request leaves the local server and no console errors occur.
   Baselines were recorded on macOS with SwiftShader. On another platform, regenerate them with
   `npx playwright test --update-snapshots`.
+- `npm run check:palette`: text contrast (a failure fails it), structure colours against the viewer background (3:1)
+  and colour pairs drawn together that are close under normal and simulated colour-blind vision (ΔE00 under 10). The
+  warnings and close pairs accepted today are listed in `scripts/palette-accepted.json`: a new one fails the check, and
+  so does a listed one that no longer occurs, so the list only shrinks. After a deliberate palette decision,
+  `npm run check:palette -- --accept` writes the new list.
 - CI (`.github/workflows/checks.yml`) also runs the typecheck, the linter (errors only), the palette check and
   `npm audit --omit=dev --audit-level=high`: a known advisory in a dependency that ships to readers fails it.
 

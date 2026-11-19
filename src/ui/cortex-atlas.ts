@@ -8,7 +8,7 @@ import { cortexScene, viewLabels, type CortexPlan } from '../cortex/scene';
 import type { ColourMode, CortexState } from '../cortex/state';
 import { VIEW, VIEWS, type ViewId } from '../cortex/views';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
-import { h } from './h';
+import { announce, h } from './h';
 import { citationPanel } from './citations';
 import { figureControl } from './figure';
 import { structureBar } from './structurebar';
@@ -379,7 +379,7 @@ export class CortexAtlasPage {
       const boxes: { x0: number; x1: number; y0: number; y1: number }[] = [];
       for (const p of pts) {
         const text = shortName(p.id);
-        const w = Math.min(160, text.length * 6.2 + 8), hh = 16;
+        const w = Math.min(170, text.length * 6.8 + 10), hh = 16;
         const b = { x0: p.x - w / 2, x1: p.x + w / 2, y0: p.y - hh / 2, y1: p.y + hh / 2 };
         if (b.x0 < 0 || b.x1 > W || b.y0 < 44) continue;
         if (boxes.some((q) => b.x0 < q.x1 && b.x1 > q.x0 && b.y0 < q.y1 && b.y1 > q.y0)) continue;
@@ -431,7 +431,7 @@ export class CortexAtlasPage {
   }
 
   private async copyLink(btn: HTMLElement): Promise<void> {
-    try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; }
+    try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; announce('Link to this view copied'); }
     catch { window.prompt('Copy this link', location.href); }
     setTimeout(() => { btn.textContent = 'Copy link'; }, 1600);
   }

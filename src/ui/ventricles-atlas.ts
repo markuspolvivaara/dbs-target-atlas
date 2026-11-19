@@ -9,7 +9,7 @@ import { veScene, type VePlan } from '../ventricles/scene';
 import { defaultScope, defaultScopeDepth, ETV_DEFAULT, etvLine, SCOPE_ENTRY_MAX, SCOPE_TILT_MAX, scopeMaxDepth, type Catheter, type Scope, type VeState } from '../ventricles/state';
 import { Viewer, type EndoscopeConfig, type PickInfo } from '../viewer/Viewer';
 import { ENDO_FOV_DEG, FLOOR_LAMBDA_MM } from '../viewer/endoscope';
-import { h } from './h';
+import { announce, h, pointAt } from './h';
 import { citationPanel } from './citations';
 import { figureControl } from './figure';
 import { structureBar } from './structurebar';
@@ -273,7 +273,7 @@ export class VentriclesAtlasPage {
     scrollHint(toolbar);
     rovingToolbar(toolbar);
     this.bindSteering(host);
-    this.readout.textContent = 'Point at a structure for its position';
+    this.readout.textContent = `${pointAt()} a structure for its position`;
 
     this.viewer = new Viewer<VeState, VePlan>(host, {
       hover: (info, x, y) => this.showTip(info, x, y),
@@ -523,7 +523,6 @@ export class VentriclesAtlasPage {
     }
     if (g.catheter) pane.append(this.catheterPanel());
     if (g.endoscope) pane.append(this.scopePanel());
-    else if (g.kind === 'anatomy') pane.append(h('section', { class: 'card scope', 'aria-label': 'Shape' }, h('h3', {}, 'Shape'), this.hydroControl()));
     const hidden = new Set(s.hidden);
     const show = (ids: string[], on: boolean) => this.update((st) => { st.hidden = on ? st.hidden.filter((x) => !ids.includes(x)) : [...new Set([...st.hidden, ...ids])]; });
     const entry = (id: string) => {
@@ -570,6 +569,9 @@ export class VentriclesAtlasPage {
       h('p', { class: 'aside schematic-note' }, 'One young adult’s CT: the ventricles are this patient’s and narrow, completed by a fitted model where the CT cannot show them; the brain around them is a template fitted into the skull. For teaching, not for planning.'));
     if (s.sel) pane.append(h('details', { class: 'more' }, h('summary', {}, `About ${g.name}`), groupCard));
     else pane.append(groupCard);
+    // the anatomy views' shape slider after what the view shows, not before it (it opened the panel, ahead of 800 words:
+    // the audit's UI-22)
+    if (!g.catheter && !g.endoscope && g.kind === 'anatomy') pane.append(h('section', { class: 'card scope', 'aria-label': 'Shape' }, h('h3', {}, 'Shape'), this.hydroControl()));
   }
 
   /** How the endoscopic view's anatomy is placed on this CT, and how it compares with the published measurements. */
@@ -771,7 +773,7 @@ export class VentriclesAtlasPage {
   }
 
   private async copyLink(btn: HTMLElement): Promise<void> {
-    try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; }
+    try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; announce('Link to this view copied'); }
     catch { window.prompt('Copy this link', location.href); }
     setTimeout(() => { btn.textContent = 'Copy link'; }, 1600);
   }

@@ -39,7 +39,7 @@ function sanitize(s: AppState): AppState {
 }
 
 // ---------------------------------------------------------------- shell
-const NAV: [Page, string][] = [['atlas', 'Atlas'], ['imaging', 'Imaging'], ['coords', 'Coordinates'], ['refs', 'References'], ['credits', 'Credits'], ['settings', 'Settings']];
+const NAV: [Page, string][] = [['atlas', 'Atlas'], ['imaging', 'Imaging'], ['coords', 'Coordinates'], ['refs', 'References'], ['credits', 'Credits'], ['settings', 'Indications shown']];
 const app = document.getElementById('app')!;
 const navLinks = NAV.map(([p, label]) => h('a', { href: `#/${p}`, class: 'navlink', 'data-page': p }, label));
 const themeBtn = h('button', { type: 'button', class: 'theme-btn', onclick: () => cycleTheme() });
@@ -96,7 +96,7 @@ function render(pageChanged = false): void {
   document.body.dataset.page = state.page;
   pages[state.page].render(state);
   if (state.page === 'atlas') atlas.onShow();
-  const titles: Record<Page, string> = { atlas: IND.get(state.ind)!.name, imaging: 'Imaging', coords: 'Coordinates', refs: 'References', credits: 'Credits', settings: 'Settings' };
+  const titles: Record<Page, string> = { atlas: IND.get(state.ind)!.name, imaging: 'Imaging', coords: 'Coordinates', refs: 'References', credits: 'Credits', settings: 'Indications shown' };
   document.title = `${titles[state.page]} · ${SECTION.name} · ${BRAND.name}`;
   if (pageChanged) window.scrollTo(0, 0);
 }

@@ -20,6 +20,7 @@ import { eyeIcon } from './widgets';
 import { clearAllLeadPrefs, clearLeadPref, isHidden, leadPrefFor, saveLeadDefault, saveLeadPref, visibleIndications } from './prefs';
 import { primaryTargetId } from '../viewer/selection';
 import { bindSheetDrag, buildSlicesPane, drawGizmo, layoutLabels, syncSlicesPane, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
+import { announce, pointAt } from './h';
 
 type Update = (fn: (s: AppState) => void, opts?: { camera?: boolean }) => void;
 
@@ -107,7 +108,7 @@ export class AtlasPage {
     this.stage.append(host, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
     scrollHint(toolbar);
     rovingToolbar(toolbar);
-    this.readout.textContent = 'Point at a structure for MNI coordinates';
+    this.readout.textContent = `${pointAt()} a structure for MNI coordinates`;
 
     this.viewer = new Viewer<AppState, Plan>(host, {
       hover: (info, x, y) => this.showTip(info, x, y),
@@ -550,7 +551,7 @@ export class AtlasPage {
   }
 
   private async copyLink(btn: HTMLElement): Promise<void> {
-    try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; }
+    try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; announce('Link to this view copied'); }
     catch { window.prompt('Copy this link', location.href); }
     setTimeout(() => { btn.textContent = 'Copy link'; }, 1600);
   }

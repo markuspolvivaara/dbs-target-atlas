@@ -9,7 +9,7 @@ import type { Claim, TractTopic } from '../tracts/schema';
 import { CONTEXT_STRUCTURES, ORIENTATION_NUCLEI, tractsScene, type TractPlan } from '../tracts/scene';
 import type { TractsState } from '../tracts/state';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
-import { h } from './h';
+import { announce, h } from './h';
 import { citationPanel } from './citations';
 import { figureControl } from './figure';
 import { structureBar } from './structurebar';
@@ -383,7 +383,7 @@ export class TractsAtlasPage {
   }
 
   private async copyLink(btn: HTMLElement): Promise<void> {
-    try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; }
+    try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; announce('Link to this view copied'); }
     catch { window.prompt('Copy this link', location.href); }
     setTimeout(() => { btn.textContent = 'Copy link'; }, 1600);
   }
