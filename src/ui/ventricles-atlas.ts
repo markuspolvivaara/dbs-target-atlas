@@ -12,6 +12,7 @@ import { ENDO_FOV_DEG, FLOOR_LAMBDA_MM } from '../viewer/endoscope';
 import { h } from './h';
 import { citationPanel } from './citations';
 import { figureControl } from './figure';
+import { structureBar } from './structurebar';
 import { refLinksFrom } from './reflinks';
 import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
@@ -323,6 +324,7 @@ export class VentriclesAtlasPage {
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
     citationPanel(this.panel);
+    structureBar(this.viewer, this.stage, (fn) => this.update(fn));
     scrollHint(tablist);
   }
 
@@ -492,7 +494,7 @@ export class VentriclesAtlasPage {
 
   private pickGroup(id: string): void {
     this.update((st) => {
-      st.grp = id; st.cam = { preset: null }; st.hidden = []; st.sel = null;
+      st.grp = id; st.cam = { preset: null }; st.hidden = []; delete st.opacity; st.sel = null;
       // the catheter's trajectories are this patient's: drawn on the ventricles as they are
       if (VE_GROUP.get(id)?.catheter) st.morphs = {};
       // the ventriculostomy view opens as ETV_DEFAULT says (the scope's side kept)

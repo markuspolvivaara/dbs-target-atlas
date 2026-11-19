@@ -510,6 +510,14 @@ commit and push it.
     title). `citedInView()` serves Save image's new "References cited in the cards" option (off by default).
     Tests: one browser test (count, sort, Copy all through the clipboard, a change of tract, the Layers tab, the DBS
     section, the Save image option), a unit test of the caption's reference lines.
+  - 3, isolate and per-structure opacity (the user's choices: a bar on the 3D view; "Show only this" hides all but
+    the structure; the opacity in the link): `src/ui/structurebar.ts`, installed by every page after its viewer.
+    `ViewState.opacity` (a structure's own 0..1), applied in `Viewer.restyle` after the selection's own look (a
+    selected structure can be made see-through), to markers too; `encodeOpacity` / `decodeOpacity` in
+    `src/viewer/scene.ts`, called beside the hidden list in all eight state modules (`sop`). `Viewer.shownIds`
+    (meshes, lines and markers drawn), `nameOf`, `onApply` (the bar follows each applied state). The pages clear
+    the opacities where they clear the hidden list (a change of view). Tests: a unit test of the link (three
+    sections), a browser test (slider, reload, Show only this and back, Fade the rest, a view change, the tracts).
   - Found: in the ventricles' endoscopic view, at a narrow stage, the open legend box covers the toolbar's left end
     (Measure, Copy link and Save image under it). Not fixed here.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in

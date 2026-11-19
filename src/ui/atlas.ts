@@ -15,6 +15,7 @@ import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { chips, clear, fmtMm, h, refLinks } from './dom';
 import { citationPanel } from './citations';
 import { figureControl } from './figure';
+import { structureBar } from './structurebar';
 import { eyeIcon } from './widgets';
 import { clearAllLeadPrefs, clearLeadPref, isHidden, leadPrefFor, saveLeadDefault, saveLeadPref, visibleIndications } from './prefs';
 import { primaryTargetId } from '../viewer/selection';
@@ -156,6 +157,7 @@ export class AtlasPage {
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
     citationPanel(this.panel);
+    structureBar(this.viewer, this.stage, (fn) => this.update(fn));
     scrollHint(tablist);
   }
 

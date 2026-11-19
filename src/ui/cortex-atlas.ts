@@ -11,6 +11,7 @@ import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
 import { citationPanel } from './citations';
 import { figureControl } from './figure';
+import { structureBar } from './structurebar';
 import { refLinksFrom } from './reflinks';
 import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
@@ -154,6 +155,7 @@ export class CortexAtlasPage {
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
     citationPanel(this.panel);
+    structureBar(this.viewer, this.stage, (fn) => this.update(fn));
     scrollHint(tablist);
   }
 
@@ -193,7 +195,7 @@ export class CortexAtlasPage {
   private pickView(id: ViewId): void {
     this.update((st) => {
       const v = VIEW.get(id)!;
-      st.view = id; st.hemi = v.hemi; st.cam = { preset: null }; st.sel = null; st.hidden = [];
+      st.view = id; st.hemi = v.hemi; st.cam = { preset: null }; st.sel = null; st.hidden = []; delete st.opacity;
     }, { camera: true });
   }
 

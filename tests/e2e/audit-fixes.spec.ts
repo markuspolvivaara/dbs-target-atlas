@@ -1438,3 +1438,60 @@ test('sources for this view: the references the cards cite, following the view, 
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// the roadmap's isolate and per-structure transparency (the audit's UI-21; the owner's choices of 19 November 2026):
+// a bar on the 3D view for the selected structure: "Show only this", "Fade the rest", and its own opacity, kept in
+// the link
+test('the selected structure’s bar: show only this, fade the rest, its own opacity in the link', async ({ page }) => {
+  const g = guard(page);
+  type V = { __atlas: { viewer: { shownIds(): string[]; items: Map<string, { nodes: Record<string, { material: { opacity: number } } | undefined> }> } } };
+  const shown = () => page.evaluate(() => (window as unknown as V).__atlas.viewer.shownIds());
+  const opacityOf = (id: string) => page.evaluate((sid) => Object.values((window as unknown as V).__atlas.viewer.items.get(sid)!.nodes).find(Boolean)!.material.opacity, id);
+  const bar = page.locator('.sbar');
+  // nothing selected: no bar
+  await open(page, './skullbase/#/atlas?g=floor&hid=sb_vomer');
+  await expect(bar).toBeHidden();
+  await open(page, './skullbase/#/atlas?g=floor&sel=sb_temporal_bone&hid=sb_vomer');
+  await expect(bar).toBeVisible();
+  await expect(bar.locator('.sbar-name')).toHaveText('Temporal bone');
+  // its own opacity: drawn so, in the link, and back from it
+  const range = bar.locator('input[type="range"]');
+  await range.fill('30');
+  await settle(page);
+  expect(await opacityOf('sb_temporal_bone')).toBeCloseTo(0.3, 2);
+  expect(new URL(page.url()).hash).toContain('sop=sb_temporal_bone%3A0.30');
+  await expect(bar.locator('output')).toHaveText('30%');
+  await page.reload();
+  await settle(page);
+  expect(await opacityOf('sb_temporal_bone')).toBeCloseTo(0.3, 2);
+  await expect(bar.locator('input[type="range"]')).toHaveValue('30');
+  // show only this: every other structure drawn is hidden; pressed again, what it hid comes back, not what the reader
+  // had hidden before (the vomer)
+  const before = await shown();
+  expect(before.length).toBeGreaterThan(10);
+  expect(before).not.toContain('sb_vomer');
+  await bar.locator('button', { hasText: 'Show only this' }).click();
+  await settle(page);
+  expect(await shown()).toEqual(['sb_temporal_bone']);
+  await expect(bar.locator('button', { hasText: 'Show all again' })).toHaveAttribute('aria-pressed', 'true');
+  await bar.locator('button', { hasText: 'Show all again' }).click();
+  await settle(page);
+  expect((await shown()).sort()).toEqual([...before].sort());
+  expect(new URL(page.url()).hash).toContain('hid=sb_vomer');
+  // fade the rest: the viewer's setting, on and off
+  const fade = bar.locator('button', { hasText: 'Fade the rest' });
+  await fade.click();
+  await expect(fade).toHaveAttribute('aria-pressed', 'true');
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('atlas-view-prefs') ?? '{}').fadeOthers)).toBe(true);
+  await fade.click();
+  await expect(fade).toHaveAttribute('aria-pressed', 'false');
+  // another view: the structure's own opacity goes, as the hidden list does
+  await page.locator('.chip', { hasText: 'Temporal bones' }).first().click();
+  await settle(page);
+  expect(new URL(page.url()).hash).not.toContain('sop=');
+  // the same bar in another section, for a tract
+  await open(page, './tracts/#/atlas?g=language&sel=wm_af');
+  await expect(bar.locator('.sbar-name')).toHaveText('Arcuate fasciculus');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

@@ -660,6 +660,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.updateClip();
     this.restyle();
     this.updateLead();
+    for (const f of this.applyListeners) f(this.state);
     const initial = !prev;
     const want: Record<string, number> = { '0': s.inflate ?? 0, ...(s.morphs ?? {}) };
     for (const name of Object.keys(this.morph)) if (!(name in want)) want[name] = 0;
@@ -743,7 +744,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         else if (fade && focus && look === 'primary') look = 'muted';
         if (hidden.has(it.meta.id)) look = 'hidden';
         const layer = s.layers[it.layer] ?? SHOWN;
-        const op = layer.on ? layer.opacity : 0;
+        const op = (layer.on ? layer.opacity : 0) * (s.opacity?.[it.meta.id] ?? 1);
         const hex = p.colours?.get(it.meta.id);
         const c = hex ? new THREE.Color(hex) : this.colour(it.meta);
         const neutral = new THREE.Color(this.palette.cortex ?? '#c4cbd3');
@@ -773,6 +774,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         if (it.meta.type === 'cortex' && it.meta.id !== 'cortex' && look === 'context') op = Math.min(1, op * 1.6);
         it.faded = fade && !!focus && !focused && look !== 'ghost' && look !== 'hidden';
         if (it.faded) op *= 0.3;
+        // (the structure's own opacity: also on a selected one, which is drawn whole otherwise)
+        op *= s.opacity?.[it.meta.id] ?? 1;
         const c = this.colour(it.meta);
         for (const side of ['L', 'R'] as Side[]) {
           const m = it.nodes[side];
@@ -804,6 +807,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         it.mat.linewidth = role === 'border' ? 1 : role === 'alt' ? 1.2 : response ? 1 : 1.4;
         if (focused) { it.mat.opacity = 1; it.mat.linewidth = 3; }
         else if (focus && fadeTracts) it.mat.opacity *= 0.25;
+        it.mat.opacity *= s.opacity?.[it.meta.id] ?? 1;
         const dashed = role === 'alt';
         if (it.mat.dashed !== dashed) { it.mat.dashed = dashed; it.mat.needsUpdate = true; }
         it.mat.clippingPlanes = this.clipPlanes;
@@ -823,7 +827,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       m.visible = this.sideShown(side) && !hidden.has(m.userData.marker);
       m.scale.setScalar(s.sel === m.userData.marker ? 1.8 : 1);
       const mat = (m as THREE.Mesh).material as THREE.Material;
-      mat.opacity = (m.userData.primary ? 1 : 0.9) * s.layers.targets.opacity;
+      mat.opacity = (m.userData.primary ? 1 : 0.9) * s.layers.targets.opacity * (s.opacity?.[m.userData.marker as string] ?? 1);
       mat.transparent = mat.opacity < 1 || !m.userData.primary;
     }
     this.invalidate();
@@ -1471,6 +1475,20 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   }
 
   currentPlan(): P | null { return this.plan; }
+
+  /** The structures drawn now (any of their halves visible): what "Show only this" hides but one of. */
+  shownIds(): string[] {
+    const items = [...this.items.values()].filter((it) => Object.values(it.nodes).some((n) => n?.visible)).map((it) => it.meta.id);
+    const marks = this.markerGroup.visible ? this.markerGroup.children.filter((m) => m.visible).map((m) => m.userData.marker as string) : [];
+    return [...new Set([...items, ...marks])];
+  }
+
+  /** A structure's name, for the structure bar (null when the catalogue does not have it). */
+  nameOf(id: string): string | null { return this.cat.byId.get(id)?.name ?? this.cat.markers.get(id)?.label ?? null; }
+
+  /** Call `f` after every state the page applies (the structure bar follows the selection with it). */
+  onApply(f: (s: ViewState) => void): void { this.applyListeners.push(f); }
+  private applyListeners: ((s: ViewState) => void)[] = [];
 
   snapshot(): string { this.renderer.render(this.scene, this.camera); return this.renderer.domElement.toDataURL('image/png'); }
 

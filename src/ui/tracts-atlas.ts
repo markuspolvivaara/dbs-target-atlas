@@ -12,6 +12,7 @@ import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
 import { citationPanel } from './citations';
 import { figureControl } from './figure';
+import { structureBar } from './structurebar';
 import { refLinksFrom } from './reflinks';
 import { bindSheetDrag, buildSlicesPane, drawGizmo, layoutLabels, syncSlicesPane, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
@@ -158,6 +159,7 @@ export class TractsAtlasPage {
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
     citationPanel(this.panel);
+    structureBar(this.viewer, this.stage, (fn) => this.update(fn));
     scrollHint(tablist);
   }
 
@@ -200,7 +202,7 @@ export class TractsAtlasPage {
     const g = GROUP.get(s.grp)!;
     const pick = (v: string) => this.update((st) => {
       const ng = GROUP.get(v)!;
-      st.grp = v; st.hemi = ng.hemi; st.cam = { preset: null }; st.hidden = [];
+      st.grp = v; st.hemi = ng.hemi; st.cam = { preset: null }; st.hidden = []; delete st.opacity;
       if (st.sel && !ng.tractIds.includes(st.sel)) st.sel = null;
     }, { camera: true });
     const inTier = WM.groups.filter((x) => x.tier === g.tier);

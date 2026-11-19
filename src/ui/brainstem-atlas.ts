@@ -12,6 +12,7 @@ import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
 import { citationPanel } from './citations';
 import { figureControl } from './figure';
+import { structureBar } from './structurebar';
 import { refLinksFrom } from './reflinks';
 import { bindSheetDrag, buildSlicesPane, drawGizmo, layoutLabels, syncSlicesPane, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
@@ -165,6 +166,7 @@ export class BrainstemAtlasPage {
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
     citationPanel(this.panel);
+    structureBar(this.viewer, this.stage, (fn) => this.update(fn));
     scrollHint(tablist);
   }
 
@@ -201,7 +203,7 @@ export class BrainstemAtlasPage {
   }
 
   private pickGroup(id: string): void {
-    this.update((st) => { st.grp = id; st.cam = { preset: null }; st.hidden = []; st.sel = null; }, { camera: true });
+    this.update((st) => { st.grp = id; st.cam = { preset: null }; st.hidden = []; delete st.opacity; st.sel = null; }, { camera: true });
   }
 
   private renderOverview(): void {

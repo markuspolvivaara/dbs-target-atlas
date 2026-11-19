@@ -1,6 +1,7 @@
 import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type Axis, type LayerKey, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
+import { decodeOpacity, encodeOpacity } from '../viewer/scene';
 
 export type TractsPage = 'atlas' | 'refs' | 'credits';
 
@@ -62,6 +63,7 @@ export function encodeTracts(s: TractsState): string {
     if (s.cutSide !== 'none') p.set('cut', s.cutSide);
     if (s.sliceSeq !== 't1') p.set('seq', s.sliceSeq);
     if (s.hidden.length) p.set('hid', s.hidden.join(','));
+    encodeOpacity(p, s.opacity);
   }
   const q = p.toString();
   return `#/${s.page}${q ? '?' + q : ''}`;
@@ -103,5 +105,6 @@ export function decodeTracts(hash: string, base: TractsState = defaultTractsStat
   const seq = p.get('seq');
   s.sliceSeq = seq === 't2' || seq === 'pd' ? seq : 't1';
   s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
+  decodeOpacity(p, s);
   return { state: s, hasHemi: h !== null, hasGroup: p.has('g') };
 }

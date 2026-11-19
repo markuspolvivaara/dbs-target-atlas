@@ -1178,6 +1178,11 @@ on or another sequence is picked.
   its link and a "Copy all" button (the citations, one to a line). It follows the cards as they change. It reads
   the cards' citation links, which carry the full citation, so every section has it the same way. "Save image" can
   list these references in its caption (off by default).
+- **The selected structure's bar** (every section; `src/ui/structurebar.ts`; the audit's UI-21): while a structure is
+  selected, a bar at the foot of the 3D view gives "Show only this" (every other structure drawn is hidden; pressed
+  again, it shows what it hid and nothing the reader had hidden before), "Fade the rest" (the viewer setting of
+  that name) and the structure's own opacity, which the link keeps (`sop=id:0.30`). A change of view clears the
+  opacities as it clears the hidden list.
 
 Keyboard: `1`–`5` camera presets, `H` hemisphere, `[` `]` indication, `,` `.` symptom,
 `N` name labels, `L` lead, `S` axial slice, `M` measure, `Esc` close, `?` help.

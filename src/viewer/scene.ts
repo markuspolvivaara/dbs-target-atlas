@@ -86,6 +86,26 @@ export interface ViewState {
   inflate?: number;
   /** named morph targets (a glTF mesh's extras.targetNames), 0..1 each: skull base v3's surgical shapes */
   morphs?: Record<string, number>;
+  /** a structure's own opacity, 0..1, on top of its look and its layer's opacity (the structure bar's slider) */
+  opacity?: Record<string, number>;
+}
+
+/** A structure's own opacities in a link: `sop=id:0.40,id2:0.25` (1 is left out). */
+export function encodeOpacity(p: URLSearchParams, op: Record<string, number> | undefined): void {
+  const e = Object.entries(op ?? {}).filter(([, v]) => v < 0.995);
+  if (e.length) p.set('sop', e.map(([id, v]) => `${id}:${v.toFixed(2)}`).join(','));
+}
+
+/** ... read back into the state: set when the link has them, removed when it has none. */
+export function decodeOpacity(p: URLSearchParams, s: ViewState): void {
+  const out: Record<string, number> = {};
+  for (const tok of (p.get('sop') ?? '').split(',')) {
+    const m = /^([a-z0-9_:-]+):([0-9.]+)$/.exec(tok);
+    const v = m ? Number(m[2]) : NaN;
+    if (m && Number.isFinite(v)) out[m[1]] = Math.min(1, Math.max(0, v));
+  }
+  if (Object.keys(out).length) s.opacity = out;
+  else delete s.opacity;
 }
 
 export interface SceneSource<S extends ViewState, P extends ScenePlan = ScenePlan> {

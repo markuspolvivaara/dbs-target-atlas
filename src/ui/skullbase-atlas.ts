@@ -14,6 +14,7 @@ import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
 import { citationPanel } from './citations';
 import { figureControl } from './figure';
+import { structureBar } from './structurebar';
 import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 import { refLinksFrom } from './reflinks';
@@ -328,6 +329,7 @@ export class SkullbaseAtlasPage {
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
     citationPanel(this.panel);
+    structureBar(this.viewer, this.stage, (fn) => this.update(fn));
     scrollHint(tablist);
   }
 
@@ -378,7 +380,7 @@ export class SkullbaseAtlasPage {
     // tumours of a view are framed alike: groups.ts)
     const keep = !!(from?.tumour && g.tumour && from.approach === g.approach);
     this.update((st) => {
-      st.grp = id; st.also = []; st.hemi = g.hemi; st.cutAbove = g.cutAbove; st.hidden = []; st.sel = null;
+      st.grp = id; st.also = []; st.hemi = g.hemi; st.cutAbove = g.cutAbove; st.hidden = []; delete st.opacity; st.sel = null;
       if (!keep) { st.cam = { preset: null }; st.morphs = { ...(g.morphDefault ?? {}) }; }
     }, keep ? {} : { camera: true });
   }

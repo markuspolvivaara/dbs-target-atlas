@@ -52,7 +52,7 @@ const update = (fn: (s: AppState) => void, opts: { camera?: boolean } = {}) => {
   // moving to a view with a different target marker restores that target's remembered lead placement
   if (primaryTargetId(next.ind, next.sym) !== primaryTargetId(state.ind, state.sym)) applyLeadPref(next);
   // structures hidden from the legend belong to one view
-  if (next.ind !== state.ind || next.sym !== state.sym) next.hidden = [];
+  if (next.ind !== state.ind || next.sym !== state.sym) { next.hidden = []; delete next.opacity; }
   setState(sanitize(next), { camera: opts.camera ?? false, fromCamera: opts.camera === false });
 };
 const atlas = new AtlasPage(update);

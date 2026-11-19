@@ -1,5 +1,6 @@
 import type { CameraPreset } from './data/schema';
 import type { ViewState } from './viewer/scene';
+import { decodeOpacity, encodeOpacity } from './viewer/scene';
 import { defaultLabels, labelsFrom, labelsParam } from './labels';
 
 export type Page = 'atlas' | 'imaging' | 'coords' | 'refs' | 'credits' | 'settings';
@@ -111,6 +112,7 @@ export function encode(s: AppState): string {
     }
     if (s.sel) p.set('sel', s.sel);
     if (s.hidden.length) p.set('hid', s.hidden.join(','));
+    encodeOpacity(p, s.opacity);
   } else if (s.page === 'imaging') {
     p.set('t', s.img);
   }
@@ -174,6 +176,7 @@ export function decode(hash: string, base: AppState = defaultState()): AppState 
   }
   s.sel = p.get('sel');
   s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
+  decodeOpacity(p, s);
   if (p.has('t')) s.img = p.get('t')!;
   return s;
 }

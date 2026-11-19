@@ -1,6 +1,7 @@
 import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
+import { decodeOpacity, encodeOpacity } from '../viewer/scene';
 import type { FnGroupId, LobeId } from './index';
 import { FN_GROUPS, LOBE } from './index';
 import { VIEW, type ViewId } from './views';
@@ -59,6 +60,7 @@ export function encodeCortex(s: CortexState): string {
     if (s.cutSide !== 'none') p.set('cut', s.cutSide);
     if (s.layers.cortex.opacity !== 1) p.set('op', s.layers.cortex.opacity.toFixed(2));
     if (s.hidden.length) p.set('hid', s.hidden.join(','));
+    encodeOpacity(p, s.opacity);
   }
   const q = p.toString();
   return `#/${s.page}${q ? '?' + q : ''}`;
@@ -95,5 +97,6 @@ export function decodeCortex(hash: string): CortexState {
   const op = parseFloat(p.get('op') ?? '');
   if (Number.isFinite(op)) s.layers.cortex.opacity = Math.min(1, Math.max(0.1, op));
   s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
+  decodeOpacity(p, s);
   return s;
 }
