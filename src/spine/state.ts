@@ -3,7 +3,7 @@ import { HERNIA_MIGRATE, HERNIA_SIZE, HERNIA_ZONES, type HerniaSpec } from './he
 import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
-import { decodeOpacity, encodeOpacity } from '../viewer/scene';
+import { decodeOpacity, encodeOpacity, okCamera } from '../viewer/scene';
 import type { RegionId } from './index';
 import { APPROACHES, CCJ_MEASURES, discRegion, GEOM_BY_PAIR, herniaZones, TECHNIQUES, type ApproachId, type CcjMeasureId, type HerniaZone } from './content';
 import type { TechniqueId } from './screw';
@@ -158,7 +158,7 @@ export function decodeSpine(hash: string): SpineState {
   const c = p.get('c');
   if (c) {
     const parts = c.split(',').map(Number);
-    if (parts.length === 6 && parts.every(Number.isFinite)) s.cam = { preset: null, pos: parts.slice(0, 3) as V3, tgt: parts.slice(3) as V3 };
+    if (okCamera(parts)) s.cam = { preset: null, pos: parts.slice(0, 3) as V3, tgt: parts.slice(3) as V3 };
     else if ((SPINE_PRESETS as string[]).includes(c)) s.cam = { preset: c as CameraPreset };
   }
   const ly = p.get('ly');

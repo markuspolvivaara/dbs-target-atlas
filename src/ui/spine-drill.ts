@@ -380,7 +380,12 @@ export class DrillPanel implements PointerTool {
     this.viewer.setPointerTool(null);
     this.clearMeshes();
     for (const g of this.origGroups) for (const m of [...g.children] as THREE.Mesh[]) { m.removeFromParent(); m.geometry.dispose(); }
+    // (the bone left beside the tool shares the loaded mesh's geometry: only its material is this tool's; a new
+    // material for the bone as it was is made on each start: the audit's P1-27)
+    for (const c of this.rest.children) for (const mt of [(c as THREE.Mesh).material].flat()) mt.dispose();
     this.rest.clear();
+    this.origMat?.dispose();
+    this.origMat = null;
     this.burr.visible = false;
     this.viewer.toolGroup.remove(this.group);
     this.vol = null;

@@ -1,7 +1,7 @@
 import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type Axis, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
-import { decodeOpacity, encodeOpacity } from '../viewer/scene';
+import { decodeOpacity, encodeOpacity, okCamera } from '../viewer/scene';
 import type { FnGroupId, LobeId } from './index';
 import { FN_GROUPS, LOBE } from './index';
 import { VIEW, type ViewId } from './views';
@@ -87,7 +87,7 @@ export function decodeCortex(hash: string): CortexState {
   const c = p.get('c');
   if (c) {
     const parts = c.split(',').map(Number);
-    if (parts.length === 6 && parts.every(Number.isFinite)) s.cam = { preset: null, pos: parts.slice(0, 3) as V3, tgt: parts.slice(3) as V3 };
+    if (okCamera(parts)) s.cam = { preset: null, pos: parts.slice(0, 3) as V3, tgt: parts.slice(3) as V3 };
     else if ((CTX_PRESETS as string[]).includes(c)) s.cam = { preset: c as CameraPreset };
   }
   s.inflate = p.get('inf') === '1' ? 1 : 0;

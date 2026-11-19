@@ -97,13 +97,26 @@ export function encodeOpacity(p: URLSearchParams, op: Record<string, number> | u
 }
 
 /** ... read back into the state: set when the link has them, removed when it has none. */
+/** The farthest a camera or its target may lie from the origin in a link (mm): the scenes are heads and a spine, and
+ * the viewer zooms out to 900 mm at most. */
+export const CAMERA_LIMIT_MM = 3000;
+
+/** Six numbers from a link's `c=` (position, then target): finite, within CAMERA_LIMIT_MM, and the two apart (a link
+ * with `c=1e308,…` or a camera on its own target left the viewer drawing NaN: the audit's P2S-13). */
+export function okCamera(v: number[]): boolean {
+  if (v.length !== 6 || !v.every((x) => Number.isFinite(x) && Math.abs(x) <= CAMERA_LIMIT_MM)) return false;
+  return Math.hypot(v[0] - v[3], v[1] - v[4], v[2] - v[5]) >= 1;
+}
+
 export function decodeOpacity(p: URLSearchParams, s: ViewState): void {
-  const out: Record<string, number> = {};
+  const pairs: [string, number][] = [];
   for (const tok of (p.get('sop') ?? '').split(',')) {
     const m = /^([a-z0-9_:-]+):([0-9.]+)$/.exec(tok);
     const v = m ? Number(m[2]) : NaN;
-    if (m && Number.isFinite(v)) out[m[1]] = Math.min(1, Math.max(0, v));
+    if (m && Number.isFinite(v)) pairs.push([m[1], Math.min(1, Math.max(0, v))]);
   }
+  // (own properties whatever the name a link gives, `__proto__` included)
+  const out: Record<string, number> = Object.fromEntries(pairs);
   if (Object.keys(out).length) s.opacity = out;
   else delete s.opacity;
 }

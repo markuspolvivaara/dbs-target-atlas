@@ -1,6 +1,6 @@
 import type { CameraPreset } from './data/schema';
 import type { ViewState } from './viewer/scene';
-import { decodeOpacity, encodeOpacity } from './viewer/scene';
+import { decodeOpacity, encodeOpacity, okCamera } from './viewer/scene';
 import { defaultLabels, labelsFrom, labelsParam } from './labels';
 
 export type Page = 'atlas' | 'imaging' | 'coords' | 'refs' | 'credits' | 'settings';
@@ -134,9 +134,9 @@ export function decode(hash: string, base: AppState = defaultState()): AppState 
   const c = p.get('c');
   if (c) {
     const parts = c.split(',').map(Number);
-    if (parts.length === 6 && parts.every(Number.isFinite)) s.cam = { preset: null, pos: parts.slice(0, 3) as V3, tgt: parts.slice(3) as V3 };
+    if (okCamera(parts)) s.cam = { preset: null, pos: parts.slice(0, 3) as V3, tgt: parts.slice(3) as V3 };
     else if (['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon'].includes(c)) s.cam = { preset: c as CameraPreset };
-    else if (c in LEGACY_PRESETS) s.cam = { preset: LEGACY_PRESETS[c] }; // links shared before the rename
+    else if (Object.hasOwn(LEGACY_PRESETS, c)) s.cam = { preset: LEGACY_PRESETS[c] }; // links shared before the rename
   }
   const ly = p.get('ly');
   if (ly) for (const tok of ly.split(',')) {

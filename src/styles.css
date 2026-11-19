@@ -567,6 +567,12 @@ kbd { font: inherit; font-size: 0.9em; border: 1px solid var(--line); border-bot
 
 /* the 3D view without WebGL: a note in its place (the page works without it) */
 .no-webgl { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; color: var(--muted, inherit); font-size: 15px; line-height: 1.5; }
+/* with no WebGL at all: the note as a card above the legend, and the 3D view's own controls hidden (the audit's
+   UI-24, P1-17); the legend stays, since it opens the cards */
+body[data-webgl="off"] .no-webgl { inset: auto; top: 16px; left: 50%; transform: translateX(-50%); width: min(520px, calc(100% - 32px));
+  box-sizing: border-box; display: block; padding: 14px 18px; color: var(--ink); background: var(--bg); border: 1px solid var(--line);
+  border-radius: 12px; z-index: 6; }
+body[data-webgl="off"] .stage .toolbar, body[data-webgl="off"] .stage .sbar { display: none; }
 /* while a lost WebGL context is away: over the canvas, which keeps its last picture */
 .webgl-lost { background: color-mix(in srgb, var(--bg) 82%, transparent); color: var(--ink); z-index: 5; align-content: center; gap: 12px; }
 

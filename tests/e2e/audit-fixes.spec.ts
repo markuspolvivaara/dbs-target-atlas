@@ -1529,3 +1529,33 @@ test('cortex: MRI slices under the pial surface, kept in the link, not drawn ove
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// P1-17, UI-24: without WebGL the endoscope views threw "getClearColor is not a function", and the note sat under the
+// legend with the 3D view's buttons still live
+test('without WebGL: the note is a card above the legend, the 3D controls are hidden, the endoscope views do not throw', async ({ page }) => {
+  const g = guard(page);
+  await page.addInitScript(() => {
+    const get = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, kind: string, ...rest: unknown[]) {
+      return /webgl/.test(kind) ? null : (get as (...a: unknown[]) => unknown).call(this, kind, ...rest);
+    } as typeof HTMLCanvasElement.prototype.getContext;
+  });
+  for (const url of ['./ventricles/#/atlas?g=etv', './skullbase/#/atlas?g=endonasal', './#/atlas']) {
+    await page.goto('about:blank');
+    await page.goto(url);
+    const note = page.locator('.no-webgl');
+    await expect(note, url).toBeVisible();
+    await expect(note, url).toContainText('hardware acceleration');
+    await expect(page.locator('body'), url).toHaveAttribute('data-webgl', 'off');
+    await expect(page.locator('.stage .toolbar'), url).toBeHidden();
+    // the note is drawn over everything in the stage, the legend included: what is at its centre is the note
+    const box = (await note.boundingBox())!;
+    const top = await page.evaluate(([x, y]) => document.elementFromPoint(x, y)?.closest('.no-webgl') !== null, [box.x + box.width / 2, box.y + box.height / 2]);
+    expect(top, url).toBe(true);
+    // the panel still works: a card is shown
+    await expect(page.locator('.panel .pane:not([hidden]) .card').first(), url).toBeVisible();
+    await page.waitForTimeout(1500);
+  }
+  expect(g.external).toEqual([]);
+  expect(g.errors.filter((e) => !/WebGL/i.test(e))).toEqual([]);
+});
