@@ -5,7 +5,7 @@ import type { BsReference } from '../brainstem/schema';
 const doi = (d: string) => `https://doi.org/${d}`;
 export const VE_REFERENCES: BsReference[] = [
   { id: 'chen2025', pmid: '39627172', pmcid: 'PMC12333769', shortLabel: 'Chen 2025', url: doi('10.1227/ons.0000000000001467'),
-    citation: 'Chen X, Chen T, Xie Z, Xu L, Qi Z, Guo X. Evaluation of the accuracy of 4 conventional freehand frontal ventriculostomy methods in the Chinese population. Oper Neurosurg. 2025;29(3):351. doi:10.1227/ons.0000000000001467.' },
+    citation: 'Chen X, Chen T, Xie Z, Xu L, Qi Z, Guo X. Evaluation of the accuracy of 4 conventional freehand frontal ventriculostomy methods in the Chinese population. Oper Neurosurg. 2025;29(3):351–360. doi:10.1227/ons.0000000000001467.' },
   { id: 'park2020', pmid: '32295983', pmcid: 'PMC7246224', shortLabel: 'Park 2020', url: doi('10.2176/nmc.oa.2019-0304'),
     citation: 'Park B, Han S, Byoun HS, Han S, Choi SW, Lim J. The assessment of geometric reliability of conventional trajectory of ventriculostomy in a three dimensional virtual model and proposal of a new trajectory. Neurol Med Chir (Tokyo). 2020;60(5):264–270. doi:10.2176/nmc.oa.2019-0304.' },
   { id: 'charcos2025', pmid: '41163747', pmcid: 'PMC12560684', shortLabel: 'Charcos 2025', url: doi('10.1227/neuprac.0000000000000173'),

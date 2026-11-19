@@ -2852,7 +2852,7 @@
    "layer": "tracts",
    "cranialNerve": 5,
    "schematic": true,
-   "derivation": "Drawn by rule on this CT: each division leaves the ganglion's convex margin its mean intracranial length before its foramen (Chaware 2023, 80 sides: the ophthalmic nerve 27.4 mm before the superior orbital fissure, the maxillary 11.2 mm before the foramen rotundum, the mandibular 4.5 mm before the foramen ovale), each found along its route through this CT's own foramen; the ganglion is the crescent through those three points, set back half its width (4.39 mm, Chaware 2023) towards the root and kept off bone, the root joining its concave margin. Its span between the ophthalmic and mandibular origins: right 17.2 mm, left 19.9 mm (Chaware 2023: the ganglion 15.39 mm long).",
+   "derivation": "Drawn by rule on this CT: each division leaves the ganglion's convex margin the published mean distance from Meckel’s cave to its foramen (Chaware 2023, 80 sides: the ophthalmic nerve 27.4 mm before the superior orbital fissure, the maxillary 11.2 mm before the foramen rotundum, the mandibular 4.5 mm before the foramen ovale), each found along its route through this CT's own foramen; the ganglion is the crescent through those three points, set back half its width (4.39 mm, Chaware 2023) towards the root and kept off bone, the root joining its concave margin. Its span between the ophthalmic and mandibular origins: right 17.2 mm, left 19.9 mm (Chaware 2023: the ganglion 15.39 mm long).",
    "centroid": {
     "L": [
      -16.81,

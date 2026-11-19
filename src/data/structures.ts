@@ -12,7 +12,7 @@ export const MANIFEST = ManifestSchema.parse(manifestJson);
  */
 const DESCRIPTIONS: Record<string, { text: string; refIds: string[] }> = {
   stn: { text: 'Benefit follows the hyperdirect pathway from SMA and M1 into the supero-lateral STN. Atrophy, ventricle size and AC–PC length shift where the STN lies, so check indirect coordinates against the images.', refIds: ['akram2017', 'stnanat2025'] },
-  stn_motor: { text: 'Dorsolateral (motor) STN. The hyperdirect pathway to M1 and SMA defines the motor STN. Patient-specific 7T tractography of it improved outcomes prospectively.', refIds: ['akram2017', 'npj2026'] },
+  stn_motor: { text: 'Dorsolateral (motor) STN. The hyperdirect pathway to M1 and SMA defines the motor STN. Patient-specific 7T tractography of it improved motor outcome against matched controls (102 against 118 patients; not randomised).', refIds: ['akram2017', 'npj2026'] },
   gpi: { text: 'Face and neck lie in the ventral, lateral and posterior GPi.', refIds: ['thieme2021'] },
   vim: { text: 'The Vim relays the DRTT from the contralateral dentate nucleus to M1.', refIds: [] },
   psa: { text: 'Often reached by extending a Vim trajectory, so one lead can cover both.', refIds: ['nma2025'] },
@@ -25,7 +25,7 @@ const DESCRIPTIONS: Record<string, { text: string; refIds: string[] }> = {
   pmd: { text: 'Each cardinal sign maps to its own tracts: tremor to M1 and cerebellum, bradykinesia to SMA, rigidity to premotor cortex, axial signs to SMA and brainstem.', refIds: ['rajamani2024'] },
   pmv: { text: 'Each cardinal sign maps to its own tracts: tremor to M1 and cerebellum, bradykinesia to SMA, rigidity to premotor cortex, axial signs to SMA and brainstem.', refIds: ['rajamani2024'] },
   hdp: { text: 'Benefit follows the hyperdirect pathway from SMA and M1 into the supero-lateral STN.', refIds: ['akram2017', 'peeters2024'] },
-  drtt: { text: 'Efficacy at both Vim and PSA tracks how close the active contact is to the DRTT.', refIds: ['poster'] },
+  drtt: { text: 'Efficacy at both Vim and PSA tracks how close the active contact is to the DRTT. The crossed tract drawn here (Lead-DBS’s atlas) reaches the cortex mostly in the pre-SMA, in front of M1, and enters the thalamus through VLa (Vo) more than through the Vim (measured on the file in the site’s audit); the uncrossed tract ends mostly in M1.', refIds: ['poster'] },
   ndrtt: { text: 'Efficacy at both Vim and PSA tracks how close the active contact is to the DRTT.', refIds: ['poster'] },
   rt_gen: { text: 'In generalized dystonia, benefit followed the pallidothalamic bundles.', refIds: ['horn2022'] },
   rt_cerv: { text: 'Cervical dystonia responded best to modulation of the striatopallidofugal axis.', refIds: ['horn2022'] },
@@ -34,8 +34,8 @@ const DESCRIPTIONS: Record<string, { text: string; refIds: string[] }> = {
   sw_pd_sma: { text: 'Bradykinesia maps to SMA; axial signs to SMA and brainstem.', refIds: ['rajamani2024'] },
   sw_pd_pm: { text: 'Rigidity maps to premotor cortex.', refIds: ['rajamani2024'] },
   ss_pd: { text: 'Supero-lateral STN was the most effective site; hyperdirect connectivity predicted improvement.', refIds: ['akram2017', 'hollunder2024'] },
-  ss_gen: { text: 'Generalized dystonia responded to the pallidothalamic bundles.', refIds: ['horn2022'] },
-  ss_cerv: { text: 'Striatopallidofugal axis linked to optimal cervical outcomes in 80 patients.', refIds: ['horn2022'] },
+  ss_gen: { text: 'Generalized dystonia responded to the pallidothalamic bundles. Part of the published map lies below the pallidum: a fifth to a quarter of it is inside the optic tract as drawn here.', refIds: ['horn2022'] },
+  ss_cerv: { text: 'Striatopallidofugal axis linked to optimal cervical outcomes (46 patients with cervical dystonia, in a cohort of 80).', refIds: ['horn2022'] },
 };
 
 Object.assign(DESCRIPTIONS, EPILEPSY_DESCRIPTIONS, ADDITION_DESCRIPTIONS);

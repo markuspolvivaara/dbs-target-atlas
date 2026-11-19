@@ -2,7 +2,7 @@ import { SECTIONS, SITE_ROOT } from '../brand';
 import { END_PATCHES, WM_ENDS } from '../data/ends';
 import { WM, WM_MANIFEST } from '../tracts';
 import { CONTEXT_STRUCTURES } from '../tracts/scene';
-import { h } from './h';
+import { abbreviationList, h } from './h';
 import { linkLicences } from './licences';
 import { clear } from './widgets';
 
@@ -23,8 +23,17 @@ export function tractRefsPage() {
   }
   // (cited on every tract card, under where its streamlines end)
   for (const c of WM.endsCaveats) for (const r of c.refIds) { if (!citedBy.has(r)) citedBy.set(r, new Set()); citedBy.get(r)!.add('streamline ends'); }
-  el.append(h('h1', {}, 'References'), h('label', { class: 'search' }, 'Search references', q), count, list, empty,
-    h('p', { class: 'aside' }, 'Every statement on the tract cards cites one of these papers. Each record was retrieved from PubMed and the statements were checked against its abstract (or open-access full text).'));
+  // (abbreviations the cards use without spelling out: the audit's B-022)
+  const abbr: [string, string][] = [
+    ['ADHD', 'attention deficit hyperactivity disorder'], ['DBS', 'deep brain stimulation'], ['DTI', 'diffusion tensor imaging'],
+    ['HCP', 'the Human Connectome Project'], ['OCD', 'obsessive–compulsive disorder'], ['PET', 'positron emission tomography'],
+    ['PTSD', 'post-traumatic stress disorder'], ['SMA', 'the supplementary motor area'],
+    ...WM.topics.filter((t) => t.abbr && t.abbr !== t.name && /^[A-Z][A-Za-z0-9 ()-]*$/.test(t.abbr) && t.abbr.length <= 8).map((t): [string, string] => [t.abbr, t.name]),
+  ];
+  abbr.sort(([a], [b]) => a.localeCompare(b));
+  el.append(h('h1', {}, 'References'), abbreviationList(abbr), h('label', { class: 'search' }, 'Search references', q), count, list, empty,
+    // (what was read, said as it is: the audit's B-011)
+    h('p', { class: 'aside' }, 'The statements on the tract cards cite these papers. Each record was retrieved from PubMed, and the statements were checked against its abstract; against the full text for the open-access papers read in full (Yeh 2018, Yeh 2022, Coenen 2021, Schilling 2018, Maier-Hein 2017). The summary at the top of each card restates what the card’s cited statements say and cites nothing itself; the figures marked measured come from the atlas’s files.'));
   function render() {
     const s = q.value.trim().toLowerCase();
     const tags = (id: string) => [...(citedBy.get(id) ?? [])].join(', ');

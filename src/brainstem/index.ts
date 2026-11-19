@@ -55,8 +55,39 @@ export const BS_REF = new Map(BS_REFS.map((r) => [r.id, r]));
 export const ZONE_TEXT = new Map(z.array(ZoneContentSchema).parse(ZONES).map((t) => [t.id, t]));
 
 const DefinitionSchema = z.object({ text: z.string().min(1), url: z.string().url().nullable() });
-/** Wikipedia-derived definitions shipped in Z-Anatomy (CC BY-SA 3.0), by structure name. */
-export const DEFINITIONS = z.record(z.string(), DefinitionSchema).parse(bsDefinitions);
+/**
+ * Shipped definitions that are wrong on their face, corrected here (the site audit's D-020; the facial nerve's as the
+ * skull base corrects it, C-009): the words replaced, or the text withdrawn, and why. The texts are CC BY-SA, so the
+ * card says what was changed.
+ */
+export const BS_DEFINITION_EDITS: Record<string, { replace?: [string, string][]; withdraw?: boolean; why: string }> = {
+  'Accessory nucleus of oculomotor nerve': { withdraw: true,
+    why: 'The text shipped for the Edinger–Westphal nucleus was the oculomotor nucleus’s, which never mentions it; it is not shown.' },
+  'Nucleus of oculomotor nerve': {
+    replace: [[' Those of the posterior group are six in number, five of which are symmetrical on the two sides of the middle line, while the sixth is centrally placed and is common to the nerves of both sides.', '']],
+    why: 'the last sentence, Gray’s Anatomy of 1918 on the number of its cell groups, removed.' },
+  'Nucleus of trochlear nerve': {
+    replace: [['The nucleus of the trochlear nerve () is', 'The nucleus of the trochlear nerve is'], [' (see diagram at right)', ''],
+      [', which has a midbrain nucleus called the mesencephalic nucleus of trigeminal nerve, which functions in preserving dentition.', ', which has a midbrain nucleus, the mesencephalic nucleus of the trigeminal nerve.']],
+    why: 'empty brackets, a reference to a diagram that is not here, and “which functions in preserving dentition” removed.' },
+  'Trochlear nerve (IV)': { replace: [['The trochlear nerve (), also', 'The trochlear nerve, also']], why: 'empty brackets removed.' },
+  'Basilar artery': { replace: [['The basilar artery () is', 'The basilar artery is']], why: 'empty brackets removed.' },
+  'Facial nerve (VII)': { replace: [['The facial nerve (the labyrinthine segment) is', 'The facial nerve is']],
+    why: '“(the labyrinthine segment)” removed after “The facial nerve”: that is one of the three segments of the nerve’s bony canal, not the nerve.' },
+  'Superior salivatory nucleus': { replace: [[' They are located in the pontine tegmentum in the brainstem.', ' They are located in the brainstem.']],
+    why: '“in the pontine tegmentum” removed: it holds for the superior nucleus only, and the model draws the inferior one in the medulla.' },
+  'Inferior salivatory nucleus': { replace: [[' They are located in the pontine tegmentum in the brainstem.', ' They are located in the brainstem.']],
+    why: '“in the pontine tegmentum” removed: it holds for the superior nucleus only, and the model draws the inferior one in the medulla.' },
+};
+/** Wikipedia-derived definitions shipped in Z-Anatomy (CC BY-SA 3.0), by structure name, with BS_DEFINITION_EDITS applied. */
+export const DEFINITIONS: Record<string, { text: string; url: string | null; edited?: string }> = Object.fromEntries(
+  Object.entries(z.record(z.string(), DefinitionSchema).parse(bsDefinitions)).flatMap(([name, d]) => {
+    const e = BS_DEFINITION_EDITS[name];
+    if (!e) return [[name, d]];
+    if (e.withdraw) return [];
+    const text = (e.replace ?? []).reduce((t, [a, b]) => t.replace(a, b), d.text);
+    return [[name, { ...d, text, edited: e.why }]];
+  }));
 
 export type Kind = 'surface' | 'feature' | 'csf' | 'cnNucleus' | 'aan' | 'nerve' | 'artery' | 'sez' | 'dbs' | 'tract';
 export function kindOf(id: string): Kind {

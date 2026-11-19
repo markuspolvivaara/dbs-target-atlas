@@ -201,8 +201,11 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
   // A-002: Hollunder 2024's dystonia and Tourette maps come from subthalamic DBS (full text), not the views' targets;
   // B2: statements their citation did not support (A-004, A-006 to A-011), each checked against its source
   type Ev = { claim: string; refIds: string[] };
-  const CORRECTED: Record<string, { caveat?: string; caveatRefIds?: string[]; addEvidence?: Ev[]; replaceEvidence?: Record<string, Ev>; alternatives?: string; why?: string; howToChoose?: string }> = {
+  // the audit's A-020: four statements stronger than their sources (Wiggerts 2026: matched, not randomised controls;
+  // Horn 2022, full text: 46 of its 80 patients had cervical dystonia; Wang 2020: the Vim and the GPi most often)
+  const CORRECTED: Record<string, { caveat?: string; caveatRefIds?: string[]; addEvidence?: Ev[]; replaceEvidence?: Record<string, Ev>; alternatives?: string; why?: string; howToChoose?: string; target?: string; imaging?: string }> = {
     pd: {
+      imaging: 'STN on T2w, SWI, QSM or T2-FLAIR; GPi on FGATIR or PDw. Patient-specific 7T tractography of the motor STN improved motor outcome against matched controls (102 against 118 patients; not randomised).',
       // (A-014: the hyperdirect pathway defined where it is first named)
       why: 'Benefit follows the hyperdirect pathway (cortex straight to the STN) from SMA and M1 into the supero-lateral STN. Each cardinal sign maps to its own tracts: tremor to M1 and cerebellum, bradykinesia to SMA, rigidity to premotor cortex, axial signs to SMA and brainstem.',
       alternatives: 'Posterolateral GPi. Combined STN and SNr stimulation for freezing of gait is investigational: its trials were negative on their primary outcomes.',
@@ -213,6 +216,13 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
           { claim: 'Combined STN and SNr stimulation for freezing of gait is investigational: the trials were negative on their primary outcomes', refIds: ['weiss2013', 'artusi2025', 'mds2024'] },
         'Stimulation-induced dyskinesia from GPi linked to lenticular-fasciculus connectivity':
           { claim: 'Stimulation-induced dyskinesia after pallidal DBS arose from contacts in the dorsal GPi and GPe (20 of 68 patients)', refIds: ['tsuboi2021'] },
+      },
+    },
+    holmes: { target: 'Vim, or GPi; Vim with PSA in a few cases.' },
+    cdys: {
+      replaceEvidence: {
+        'Striatopallidofugal axis linked to optimal cervical outcomes in 80 patients':
+          { claim: 'Striatopallidofugal axis linked to optimal cervical outcomes (46 patients with cervical dystonia, in a cohort of 80)', refIds: ['horn2022'] },
       },
     },
     et: {
@@ -256,13 +266,13 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
       expect(n.label).toBe(o.label);
       expect(n.name).toBe(o.title);
       expect(n.accent).toBe(o.accent);
-      expect(n.target).toBe(o.target);
+      expect(n.target).toBe(CORRECTED[o.id]?.target ?? o.target);
       // (corrected after review, each against its source: the original's wording no longer holds)
       const fx = CORRECTED[o.id];
       expect(n.alternatives).toBe(fx?.alternatives ?? o.alt);
       expect(n.why).toBe(fx?.why ?? o.why);
       expect(n.howToChoose).toBe(fx?.howToChoose ?? o.choose);
-      expect(n.imaging).toBe(o.imaging);
+      expect(n.imaging).toBe(CORRECTED[o.id]?.imaging ?? o.imaging);
       // (corrected after review, each against its source: the original's wording no longer holds)
       const fix = CORRECTED[o.id];
       expect(n.caveat).toBe(fix?.caveat ?? o.caveat);
@@ -295,7 +305,9 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
     // (B2, A-008/A-009: SWI's note to what the protocol study rated; the pyramidal tract and lemniscus as the Vim's
     // borders, Sammartino 2016; Voa pallidal, most of Vop cerebellar, Ilinsky 2018)
     const IMG_FIX: Record<string, { tract?: string; refIds?: string[]; seq?: Record<string, string> }> = {
-      stn: { seq: { SWI: 'Most versions rated highest for STN; near-isotropic voxels rated better' } },
+      // (A-020: Wiggerts 2026's controls were matched, not randomised)
+      stn: { seq: { SWI: 'Most versions rated highest for STN; near-isotropic voxels rated better' },
+        tract: 'The hyperdirect pathway to M1 and SMA defines the motor STN. Patient-specific 7T tractography of it improved motor outcome against matched controls (102 against 118 patients; not randomised).' },
       vim: { tract: 'DRTT, with the pyramidal tract and medial lemniscus as the Vim’s lateral and posterior borders.', refIds: ['protocol2025', 'jns2021', 'sammartino2016', 'vimma2026', 'barrow'] },
       vo: { tract: 'Voa receives pallidal output through the pallidothalamic bundles; most of Vop receives cerebellar input.', refIds: ['vocoords', 'ilinsky2018', 'shimizu2018'] },
     };
@@ -315,6 +327,8 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
     // views rebuilt or added in the site audit's review, each claim checked against these sources (A-001: Tsuboi 2021,
     // D'Souza 2026, Krack 1998 and Katayama 2006 as their abstracts, the conference abstract, Fan 2020 and Aquino 2019 in full)
     const REVIEWED: Record<string, string[]> = {
+      // (A-020: the cervical claim to Horn 2022's full text, 46 of 80 with cervical dystonia)
+      'cdys-cervical': ['horn2022'],
       // (B2, A-011: the SNr's claim reworded as investigational, the same three sources)
       'pd-axial': ['rajamani2024', 'weiss2013', 'artusi2025', 'mds2024'],
       'pd-dyskinesia': ['tsuboi2021', 'sid', 'dsouza2026'],
@@ -322,7 +336,7 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
     };
     for (const s of CONTENT.symptoms) for (const e of s.evidence) {
       const ok = s.indicationId === 'epi' ? epiClaims.has(e.claim)
-        : REVIEWED[s.id] ? e.refIds.every((r) => REVIEWED[s.id].includes(r)) : corpus.includes(e.claim);
+        : corpus.includes(e.claim) || (!!REVIEWED[s.id] && e.refIds.every((r) => REVIEWED[s.id].includes(r)));
       expect(ok, `${s.id}: ${e.claim}`).toBe(true);
     }
   });
@@ -424,7 +438,12 @@ describe('ported verbatim from the attached dbs-targets.html', () => {
     expect(words(r[0], 'Left')).toBe('12.0 mm left of midline, 3.5 mm behind the MCP, 4.5 mm below the AC–PC plane.');
     expect(signed(r[1], 'Left')).toEqual([-20, 2.5, -4.5]);
     expect(fmt(-3.26)).toBe('−3.3');
-    expect(fmt(-3.25)).toBe('−3.2'); // Math.round rounds halves up, as in the original
+    // (the size rounded, then signed: the original's Math.round gave −3.2 for −3.25 beside 3.3 for 3.25, and the Vim −6.2
+    // beside 6.3 at the defaults: the audit's A-022)
+    expect(fmt(-3.25)).toBe('−3.3');
+    expect(fmt(3.25)).toBe('3.3');
+    expect(fmt(-0.04)).toBe('0.0');
+    expect(fmt(r[2].ap)).toBe('−6.3');
   });
 });
 

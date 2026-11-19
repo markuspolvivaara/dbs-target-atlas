@@ -76,8 +76,10 @@ export const EPILEPSY_INDICATION: IndicationInput = {
 export const EPILEPSY_SYMPTOMS: SymptomInput[] = [
   {
     id: 'epi-focal', indicationId: 'epi', name: 'Focal seizures',
-    summary: 'For focal epilepsy that is multifocal or poorly localized, the ANT is the target with randomized evidence. Stimulation at the junction of the ANT and the mammillothalamic tract correlated with better seizure control.',
-    structures: ['ant', 'mtt'], contextStructures: ['mamm', 'fornix'], tracts: [], corticalAreas: [], targetId: 't-pub-ant-mtt',
+    // (B2 took "multifocal or poorly localized" out of the indication: none of the abstracts says it)
+    summary: 'For drug-resistant focal epilepsy, the ANT is the target with randomized evidence. Stimulation at the junction of the ANT and the mammillothalamic tract correlated with better seizure control.',
+    // (the mammillothalamic tract as context, as in the indication's view: the audit's A-024)
+    structures: ['ant'], contextStructures: ['mtt', 'mamm', 'fornix'], tracts: [], corticalAreas: [], targetId: 't-pub-ant-mtt',
     evidence: [EVIDENCE.sante, EVIDENCE.sante10, EVIDENCE.schaper, EVIDENCE.ilyas, EVIDENCE.lehtimaki],
     note: 'Marker: the ANT–MTT junction at the coordinates Schaper 2020 gives for indirect targeting (means of 20 patients), not a published sweet spot. No ANT outcome map is distributed as a file.',
     noteRefIds: ['schaper2020'],

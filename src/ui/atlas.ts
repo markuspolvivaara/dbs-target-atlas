@@ -530,7 +530,7 @@ export class AtlasPage {
     clear(this.readout);
     this.readout.append(
       h('span', { class: 'k' }, 'MNI'), ` x ${fmtMm(ras.x)}  y ${fmtMm(ras.y)}  z ${fmtMm(ras.z)} mm`,
-      h('br'), h('span', { class: 'k' }, 'AC–PC ≈'), ` ${fmtMm(a[0])}, ${fmtMm(a[1])}, ${fmtMm(a[2])} mm from MCP (approximate, template)`,
+      h('br'), h('span', { class: 'k' }, 'AC–PC ≈'), ` ${fmtMm(a[0])}, ${fmtMm(a[1])}, ${fmtMm(a[2])} mm from MCP (approximate; template millimetres, about 5 to 12 % longer than in an average brain)`,
     );
   }
 
@@ -547,7 +547,9 @@ export class AtlasPage {
     const [a, b] = this.measurePts;
     this.measureOut.hidden = false;
     if (!b) { this.measureOut.textContent = `Point A: ${[a.x, a.y, a.z].map(fmtMm).join(', ')}. Pick point B.`; return; }
-    this.measureOut.textContent = `Distance ${fmtMm(a.distanceTo(b))} mm  (A ${[a.x, a.y, a.z].map(fmtMm).join(', ')} → B ${[b.x, b.y, b.z].map(fmtMm).join(', ')})`;
+    // (the MNI template is larger than an average brain: the review measured its nuclei 5 to 12 % longer than published
+    // series, the audit's MA-15)
+    this.measureOut.textContent = `Distance ${fmtMm(a.distanceTo(b))} mm  (A ${[a.x, a.y, a.z].map(fmtMm).join(', ')} → B ${[b.x, b.y, b.z].map(fmtMm).join(', ')}). Template millimetres: about 5 to 12 % longer than the same distance in an average adult brain.`;
   }
 
   private async copyLink(btn: HTMLElement): Promise<void> {

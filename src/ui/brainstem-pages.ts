@@ -18,7 +18,7 @@ export function bsSourcesPage() {
     h('h1', {}, 'Sources'),
     h('section', { class: 'card' },
       h('h2', {}, 'References'),
-      h('p', {}, 'Every statement on the cards cites its source. Statements citing a reference with an open-access full text (PMC) were checked against that text; the others against their abstracts.'),
+      h('p', {}, 'Every sourced statement on the cards cites its source. (The views’ descriptions and the notes on how something is drawn are the site’s own and cite nothing.) Statements citing a reference with an open-access full text (PMC) were checked against that text; the others against their abstracts.'),
       h('ul', { class: 'refs' }, ...BS_REFS.map((r) => h('li', {}, r.citation, ' ',
         h('a', { href: r.url, target: '_blank', rel: 'noopener' }, 'DOI'), ' · ',
         h('a', { href: `https://pubmed.ncbi.nlm.nih.gov/${r.pmid}/`, target: '_blank', rel: 'noopener' }, 'PubMed'),

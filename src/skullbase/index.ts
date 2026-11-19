@@ -49,6 +49,8 @@ export const LandmarkSchema = z.object({
 });
 export type Landmark = z.infer<typeof LandmarkSchema>;
 export const LANDMARKS = z.array(LandmarkSchema).parse(landmarksJson);
+// (Z-Anatomy spells it "Supercilliary arch": shown corrected, and its definition found under the corrected name)
+for (const l of LANDMARKS) if (l.name === 'Supercilliary arch') l.name = 'Superciliary arch';
 export const LM = new Map(LANDMARKS.map((l) => [l.id, l]));
 
 const DefinitionSchema = z.object({ text: z.string().min(1), url: z.string().url().nullable() });
@@ -56,19 +58,42 @@ const DefinitionSchema = z.object({ text: z.string().min(1), url: z.string().url
  * Shipped definitions that are wrong on their face, corrected here for every model (the site audit's C-009): the words
  * replaced, or the text withdrawn, and why. The texts are CC BY-SA, so the card says what was changed.
  */
-export const DEFINITION_EDITS: Record<string, { old?: string; new?: string; withdraw?: boolean; why: string }> = {
+export const DEFINITION_EDITS: Record<string, { old?: string; new?: string; replace?: [string, string][]; withdraw?: boolean; why: string }> = {
   'Facial nerve (VII)': { old: 'The facial nerve (the labyrinthine segment) is', new: 'The facial nerve is',
     why: '“(the labyrinthine segment)” removed after “The facial nerve”: that is one of the three segments of the nerve’s bony canal, not the nerve.' },
   'Callosomarginal artery': { withdraw: true,
     why: 'The text shipped for this artery described the A2 segment of the anterior cerebral artery, not the callosomarginal artery; it is not shown.' },
+  // (the audit's C-017: sinuses called "areas beneath the brain"; the meatus's text shown for the nerves in it)
+  'Inferior sagittal sinus': { old: 'is an area beneath the brain which allows', new: 'is a dural venous sinus, which allows',
+    why: '“an area beneath the brain” replaced by “a dural venous sinus”: it runs in the lower edge of the falx, above the corpus callosum.' },
+  'Straight sinus': { old: 'is an area within the skull beneath the brain.', new: 'is a dural venous sinus.',
+    why: '“an area within the skull beneath the brain” replaced by “a dural venous sinus”.' },
+  'Transverse sinus': { old: 'are two areas beneath the brain which allow', new: 'are two dural venous sinuses, which allow',
+    why: '“two areas beneath the brain” replaced by “two dural venous sinuses”.' },
+  'Superior petrosal sinus': { old: 'one of the dural venous sinuses located beneath the brain.', new: 'one of the dural venous sinuses.',
+    why: '“located beneath the brain” removed.' },
+  'Jugular foramen': { old: 'and sigmoid sinus vein pass', new: 'and sigmoid sinus pass', why: '“sigmoid sinus vein” corrected to “sigmoid sinus”.' },
+  'Nerves in the internal acoustic meatus (VII, VIII)': { withdraw: true,
+    why: 'The text shipped for these nerves was the internal acoustic meatus’s, which defines the canal; it is shown on the meatus’s card only.' },
 };
+/** Artefacts of the export, cleaned in every text (the audit's C-017): empty brackets where a pronunciation was,
+ * reference marks ("[1]") and figure references ("[Fig. 1]"), section headings in capitals run into the text
+ * ("… bone. STRUCTURE The …"), a dropped letter. */
+export function tidyDefinition(t: string): string {
+  return t.replace(/ \(\)/g, '').replace(/\[\d+\]/g, '').replace(/ ?\[Fig\.? ?\d*\]/g, '')
+    .replace(/(^|[.:] )(?:[A-Z]{3,}[ :]+)+(?=[A-Z][a-z])/g, '$1').replace(/\bbeneath th /g, 'beneath the ');
+}
 /** Wikipedia-derived definitions shipped in Z-Anatomy (CC BY-SA 3.0), keyed by structure name, with DEFINITION_EDITS applied. */
 export const DEFINITIONS: Record<string, { text: string; url: string | null; edited?: string }> = Object.fromEntries(
   Object.entries(z.record(z.string(), DefinitionSchema).parse(definitionsJson)).flatMap(([name, d]) => {
+    // (Z-Anatomy's misspelt name, found under the corrected one: the audit's C-016)
+    const key = name === 'Supercilliary arch' ? 'Superciliary arch' : name;
+    const t = { ...d, text: tidyDefinition(d.text) };
     const e = DEFINITION_EDITS[name];
-    if (!e) return [[name, d]];
+    if (!e) return [[key, t]];
     if (e.withdraw) return [];
-    return d.text.includes(e.old!) ? [[name, { ...d, text: d.text.replace(e.old!, e.new!), edited: e.why }]] : [[name, d]];
+    const pairs: [string, string][] = e.replace ?? (e.old ? [[e.old, e.new!]] : []);
+    return pairs.some(([a]) => t.text.includes(a)) ? [[key, { ...t, text: pairs.reduce((x, [a, b]) => x.replace(a, b), t.text), edited: e.why }]] : [[key, t]];
   }));
 
 const RegionSchema = z.object({

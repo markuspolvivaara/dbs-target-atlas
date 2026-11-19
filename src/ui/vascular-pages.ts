@@ -54,7 +54,7 @@ export function vaSourcesPage() {
     h('h1', {}, 'Sources'),
     h('section', { class: 'card' },
       h('h2', {}, 'References'),
-      h('p', {}, 'Every statement on the cards cites its source, checked against the open-access full text (PMC). A source that has none says so in its citation and was checked against its abstract.'),
+      h('p', {}, 'Every sourced statement on the cards cites its source, checked against the open-access full text (PMC). A source that has none says so in its citation and was checked against its abstract.'),
       h('ul', { class: 'refs' }, ...VA_REFS.map((r) => h('li', {}, r.citation, ' ', link(r.url, 'DOI'), ' · ',
         link(`https://pubmed.ncbi.nlm.nih.gov/${r.pmid}/`, 'PubMed'),
         r.pmcid ? [' · ', link(`https://pmc.ncbi.nlm.nih.gov/articles/${r.pmcid}/`, 'full text')] : null)))),

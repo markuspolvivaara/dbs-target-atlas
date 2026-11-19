@@ -91,7 +91,8 @@ export const SYMPTOMS: SymptomInput[] = [
   {
     id: 'et-limb', indicationId: 'et', name: 'Limb tremor',
     summary: 'The Vim relays the DRTT from the contralateral dentate nucleus to M1. Efficacy at both Vim and PSA tracks how close the active contact is to the DRTT.',
-    structures: ['vim', 'dentate'], tracts: ['drtt', 'ndrtt'], corticalAreas: ['m1'], targetId: 't-ss-tremor',
+    // (the dentate nucleus as context, as in the indication's views: the audit's A-024)
+    structures: ['vim'], contextStructures: ['dentate'], tracts: ['drtt', 'ndrtt'], corticalAreas: ['m1'], targetId: 't-ss-tremor',
     evidence: [
       { claim: 'Efficiency tracks distance to the DRTT', refIds: ['poster'] },
       { claim: 'The dentate-connected zone lies ventrolateral within the M1-connected thalamus', refIds: ['akram2018'] },
@@ -127,7 +128,7 @@ export const SYMPTOMS: SymptomInput[] = [
     summary: 'Cervical dystonia responded best to modulation of the striatopallidofugal axis. Face and neck lie in the ventral, lateral and posterior GPi.',
     structures: ['gpi'], contextStructures: ['putamen'], tracts: ['rt_cerv'], corticalAreas: ['s1'], targetId: 't-ss-cerv',
     evidence: [
-      { claim: 'Striatopallidofugal axis linked to optimal cervical outcomes in 80 patients', refIds: ['horn2022'] },
+      { claim: 'Striatopallidofugal axis linked to optimal cervical outcomes (46 patients with cervical dystonia, in a cohort of 80)', refIds: ['horn2022'] },
       { claim: 'Ventral, lateral and posterior GPi represent face and neck', refIds: ['thieme2021'] },
     ],
     note: 'The thresholded cervical tract file contains six positively weighted streamlines per hemisphere; all are shown.',

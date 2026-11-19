@@ -84,7 +84,7 @@ export const TOPICS: TractTopicInput[] = [
       c('In 58 patients with right middle cerebral artery stroke, damage to SLF II was the best predictor of left spatial neglect among the parietal–frontal pathways.', 'thiebaut2014'),
     ],
     surgery: [
-      c('During awake surgery, stimulation of the right inferior parietal lobule or caudal superior temporal gyrus shifted line bisection to the right; the strongest shifts came from subcortical stimulation of a parietal–frontal pathway (named the superior occipitofrontal fasciculus in that study).', 'thiebaut2005'),
+      c('During awake surgery, stimulation of the right inferior parietal lobule or caudal superior temporal gyrus shifted line bisection to the right; the strongest shifts came from subcortical stimulation of a parietal–frontal pathway (named the superior occipitofrontal fasciculus in that study, which does not say which branch of the SLF it is).', 'thiebaut2005'),
     ],
     atlas: [],
   },
@@ -200,7 +200,7 @@ export const TOPICS: TractTopicInput[] = [
     ],
   },
   {
-    id: 'wm_cing_fp', name: 'Cingulum, dorsal (frontal–parietal) segment', abbr: 'Cingulum (dorsal)', aliases: ['cingulum bundle'], type: 'association', tier: 'core',
+    id: 'wm_cing_fp', name: 'Cingulum, frontal–parietal (dorsal) segment', abbr: 'Cingulum (dorsal)', aliases: ['cingulum bundle'], type: 'association', tier: 'core',
     summary: 'Medial association bundle in the cingulate white matter linking frontal and parietal cortex; lesions usually cause only mild deficits.',
     course: [
       c('Its composition changes along its length as fibres join and leave, despite its apparent continuity.', 'bubb2018'),
@@ -459,7 +459,7 @@ export const TOPICS: TractTopicInput[] = [
   },
   {
     id: 'wm_atr', name: 'Anterior thalamic radiation', abbr: 'ATR', aliases: ['anterior corticothalamic tract'], type: 'projection', tier: 'extended',
-    summary: 'Thalamo-frontal projection through the anterior limb of the internal capsule; the shared territory of historical lesion surgery for depression.',
+    summary: 'Thalamo-frontal projection through the anterior limb of the internal capsule; among the fibres that several historical lesion operations for depression had in common.',
     course: [
       c('Converges with the superolateral branch of the medial forebrain bundle in the anterior limb of the internal capsule and in medial prefrontal cortex.', 'coenen2012'),
       c('Visualized directly with 7 T track-density imaging.', 'cho2015'),
@@ -486,7 +486,7 @@ export const TOPICS: TractTopicInput[] = [
       c('Thalamus to cortex; thalamic subregions defined by their cortical connections correspond to histological nuclei.', 'behrens2003'),
     ],
     functions: [
-      c('Carries somatosensory input: subcortical stimulation of thalamocortical pathways gave somatosensory responses during inferior parietal glioma surgery.', 'maldonado2011a'),
+      c('Subcortical stimulation of thalamocortical pathways gave somatosensory responses during inferior parietal glioma surgery.', 'maldonado2011a'),
     ],
     deficits: [
       c('Its increased mean diffusivity, together with ventricular volume, separated normal pressure hydrocephalus from Alzheimer’s disease and healthy elderly people.', 'younes2019'),

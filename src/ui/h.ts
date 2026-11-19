@@ -37,3 +37,9 @@ export function announce(text: string): void {
   live.textContent = '';
   setTimeout(() => { live!.textContent = text; }, 50);
 }
+
+/** A folded list of abbreviations and what they stand for (the site audit's A-023, B-022). */
+export function abbreviationList(entries: [string, string][]): HTMLElement {
+  return h('details', { class: 'more abbreviations' }, h('summary', {}, 'Abbreviations'),
+    h('dl', {}, ...entries.flatMap(([a, what]) => [h('dt', {}, h('abbr', {}, a)), h('dd', {}, what)])));
+}

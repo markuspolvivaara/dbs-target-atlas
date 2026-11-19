@@ -56,7 +56,7 @@ export const SM_GRADES: GradeTable = {
     c('As one review summarises practice: in grades I and II surgery offers immediate decompression, faster recovery and a shorter hospital stay; grade III is the hardest to decide (some operate, others choose radiosurgery or several treatments combined); grades IV and V are considered by most inoperable, and other measures are taken to reduce re-bleeding and morbidity.', 'assker2025'),
     c('In one simplified algorithm, Spetzler–Ponce class A patients may be offered surgery if they are good surgical candidates; class B, if the nidus is compact or the patient younger than 40 (for the rest of class B conservative management may be preferred); class C is generally not treated, unless the patient is young or has poorly controlled seizures and accepts the risk of a permanent deficit.', 'naranbhai2023'),
     c('In grades I to III radiosurgery has outcomes similar to surgery apart from the time to obliteration; in grade IV, staged-dose radiosurgery obliterated the AVM in only 50 % of cases.', 'assker2025'),
-    c('Grade III is a mixed group: an eloquent AVM of 3–6 cm (S2E1V0) carries a high surgical risk and is managed conservatively, like grades IV and V, while one of that size with deep drainage (S2E0V1) is sometimes operated on.', 'assker2025'),
+    c('Grade III is a mixed group: an eloquent AVM of 3–6 cm without deep drainage (S2E1V0: size 2, eloquent 1, venous drainage 0) carries a high surgical risk and is managed conservatively, like grades IV and V, while one of that size in non-eloquent brain with deep drainage (S2E0V1) is sometimes operated on.', 'assker2025'),
     c('Most surgical morbidity came with eloquence rather than deep venous drainage: in one series 0.6 % in non-eloquent areas against 9.5 % in eloquent ones.', 'assker2025'),
   ],
 };
@@ -80,7 +80,7 @@ export const SUPP_POINTS: GradeTable = {
     c('The scale was derived from 300 patients operated on by one surgeon, by the change in the Modified Rankin Scale score from before surgery to the last follow-up: 76 % were unchanged or improved, 18 % worse, and 6 % died. It predicted that change better than the Spetzler–Martin grade did (area under the ROC curve 0.73 against 0.65).', 'lawton2010'),
     c('It adds the patient’s age, a history of haemorrhage and the type of nidus to the Spetzler–Martin factors; grade 6 is taken as the cut-off for acceptable surgical risk. Age and rupture change with time, and embolisation or radiosurgery can change the nidus, so the grade can change too.', 'hafez2019'),
     c('An unruptured AVM scores higher because those patients usually have no deficit before surgery, so they are more likely to gain a new one than patients already left with a deficit by a haemorrhage.', 'hafez2019'),
-    c('It predicted the outcome after surgery better than the Spetzler–Martin grade: area under the ROC curve 0.70 against 0.63 at the last follow-up.', 'hafez2019'),
+    c('It predicted the outcome after surgery better than the Spetzler–Martin grade: area under the receiver operating characteristic (ROC) curve 0.70 against 0.63 at the last follow-up.', 'hafez2019'),
   ],
 };
 

@@ -15,7 +15,7 @@ export function veSourcesPage() {
     h('h1', {}, 'Sources'),
     h('section', { class: 'card' },
       h('h2', {}, 'References'),
-      h('p', {}, 'Every statement on the cards cites its source, checked against the open-access full text (PMC); Jean 2019 and Kulkarni 2009, which have none, against their abstracts.'),
+      h('p', {}, 'Every sourced statement on the cards cites its source, checked against the open-access full text (PMC); Jean 2019 and Kulkarni 2009, which have none, against their abstracts. (The views’ descriptions and the notes on how something is drawn are the site’s own and cite nothing.)'),
       h('ul', { class: 'refs' }, ...VE_REFS.map((r) => h('li', {}, r.citation, ' ', link(r.url, 'DOI'), ' · ',
         link(`https://pubmed.ncbi.nlm.nih.gov/${r.pmid}/`, 'PubMed'),
         r.pmcid ? [' · ', link(`https://pmc.ncbi.nlm.nih.gov/articles/${r.pmcid}/`, 'full text')] : null)))),

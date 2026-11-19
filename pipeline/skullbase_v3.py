@@ -852,7 +852,7 @@ def write_outputs(ct: CT, ears: dict, fits: dict, cross: dict) -> None:
         "file": f"assets/{KIND}/tb_trigeminal_ganglion.glb", "bytes": 0, "colour": colour("sbNerve"), "dataset": "rule", "source": "Drawn by rule",
         "licence": "GPL-3.0 (the project's own drawing)", "citation": [], "citationUrls": [], "refIds": ["chaware2023"], "category": "nerve",
         "layer": "tracts", "cranialNerve": 5, "schematic": True,
-        "derivation": "Drawn by rule on this CT: each division leaves the ganglion's convex margin its mean intracranial length before "
+        "derivation": "Drawn by rule on this CT: each division leaves the ganglion's convex margin the published mean distance from Meckel’s cave to "
                       "its foramen (Chaware 2023, 80 sides: the ophthalmic nerve 27.4 mm before the superior orbital fissure, the "
                       "maxillary 11.2 mm before the foramen rotundum, the mandibular 4.5 mm before the foramen ovale), each found along its "
                       "route through this CT's own foramen; the ganglion is the crescent through those three points, set back half its "

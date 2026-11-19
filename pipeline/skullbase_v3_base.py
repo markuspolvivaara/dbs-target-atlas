@@ -64,7 +64,7 @@ FORAMEN_OF = {
 JUGULAR_NERVES = ("Glossopharyngeal nerve (IX)", "Vagus nerve (X)", "Accessory nerve (XI)")
 # the trigeminal complex, placed on this CT: the fitted model's ganglion lies medial of where this skull's foramina put
 # it, and its root runs in front of the fitted pons rather than out of its side. Each division leaves the ganglion's convex
-# margin its mean intracranial length before its foramen (Chaware 2023, 80 sides, mm), the foramina as located on this CT
+# margin the published mean distance from Meckel’s cave to its foramen (Chaware 2023, 80 sides, mm; its abstract and its Table 1 disagree on the nerves' and the foramen spinosum's distances: Table 1 is used), the foramina as located on this CT
 TG_BRANCHES = {"Ophthalmic nerve (V1)": ("Superior orbital fissure", 27.38), "Maxillary nerve (V2)": ("Foramen rotundum", 11.23),
                "Mandibular nerve (V3)": ("Foramen ovale", 4.54)}
 TG_LENGTH_MM, TG_WIDTH_MM, TG_THICK_MM = 15.39, 4.39, 2.54   # the ganglion (Chaware 2023)
@@ -287,8 +287,8 @@ def build(ex: dict, ct_fossa: np.ndarray, ct_R: np.ndarray, porus: dict, carotid
             report[name][side].update({"lengthMm": round(float(np.linalg.norm(np.diff(P, axis=0), axis=1).sum()), 1),
                                        "boneCrossedMm": round(NV.bone_crossed_mm(g, P), 1)})
         landmarks.append({"name": "Meckel's cave", "side": side, "ras": tri[side]["meckel"], "from": [],
-                          "how": "The middle of the trigeminal ganglion as drawn on this CT: each division leaving it its mean "
-                                 "intracranial length before its foramen (Chaware 2023: V1 27.4 mm to the superior orbital fissure, V2 11.2 mm "
+                          "how": "The middle of the trigeminal ganglion as drawn on this CT: each division leaving it the published "
+                                 "mean distance from Meckel’s cave to its foramen (Chaware 2023, its table: V1 27.4 mm to the superior orbital fissure, V2 11.2 mm "
                                  "to the foramen rotundum, V3 4.5 mm to the foramen ovale)."})
     for side in ("R", "L"):
         pts = []

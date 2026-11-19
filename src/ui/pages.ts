@@ -9,8 +9,13 @@ import type { Topic } from '../data/schema';
 import type { AppState } from '../state';
 import { chips, clear, fmtMm, h, refLinks } from './dom';
 import { DEFAULT_HIDDEN, getPrefs, onPrefsChange, setHidden, storageAvailable, visibleIndications } from './prefs';
+import { DBS_ABBREVIATIONS } from '../data/abbreviations';
+import { abbreviationList } from './h';
 
 type Update = (fn: (s: AppState) => void) => void;
+
+/** The abbreviations the cards use, folded (the site audit's A-023). */
+const abbreviations = () => abbreviationList(DBS_ABBREVIATIONS);
 
 // ---------------------------------------------------------------- imaging
 export function imagingPage(update: Update) {
@@ -19,7 +24,7 @@ export function imagingPage(update: Update) {
   const card = h('article', { class: 'card', 'aria-live': 'polite' });
   const aside = h('p', { class: 'aside' });
   IMAGING_ASIDE.forEach((a, i) => { aside.append(i ? ' ' : '', a.text, ' ', refLinks(a.refIds), '.'); });
-  el.append(h('h1', {}, 'Imaging'), h('p', { class: 'lede' }, 'Sequences and tractography per target structure.'), chipsHost, card, aside);
+  el.append(h('h1', {}, 'Imaging'), h('p', { class: 'lede' }, 'Sequences and tractography per target structure.'), chipsHost, card, aside, abbreviations());
   return {
     el,
     render(s: AppState) {
@@ -115,7 +120,7 @@ export function refsPage() {
     chipRow.querySelectorAll('.chip').forEach((c) => c.setAttribute('aria-pressed', String((c as HTMLElement).dataset.v === v)));
     render();
   }, { label: 'Topic' });
-  el.append(h('h1', {}, 'References'), regulatoryTable(), h('h2', {}, 'Literature and records'), h('label', { class: 'search' }, 'Search references', q), chipRow, count, list, empty,
+  el.append(h('h1', {}, 'References'), abbreviations(), regulatoryTable(), h('h2', {}, 'Literature and records'), h('label', { class: 'search' }, 'Search references', q), chipRow, count, list, empty,
     // (the site audit's A-016: the note had said every non-epilepsy reference came from the original page)
     h('p', { class: 'aside' }, '"Atlases and datasets" lists the sources of this section’s 3D geometry; their citations are Crossref records for each DOI. The original teaching page’s references are given from each paper’s Europe PMC record, linked by DOI; meeting abstracts, preprints and the slides say what they are. References added later, after checking against PubMed or Europe PMC: epilepsy; dystonia (Gruber 2018, Ilinsky 2018, Horisawa 2021); the optic-tract and red-nucleus landmarks; Parkinson’s dyskinesia (Tsuboi 2021, Fan 2020, Krack 1998, D’Souza 2026, Aquino 2019, Katayama 2006) and Liu 2014; Sammartino 2016; stimulation side effects (Koeglsperger 2019, Kim 2021); the circuits (Galvan 2015, Chiken 2016, Gallay 2008, Coenen 2020, Senova 2020, Piper 2022); the regulatory status (the FDA’s records, Amon 2017, Frey 2022, Wu 2021, Sun 2014). Where a paper is not open access, its citation says that only its abstract was checked.'));
   function render() {

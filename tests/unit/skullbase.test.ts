@@ -1464,3 +1464,19 @@ describe('the site audit’s B5: the skull base texts against their sources', as
     expect(all.find((c) => c.refIds.includes('nguyen2026') && /sphenoid sinus had a single natural ostium/.test(c.text))!.text).toMatch(/smaller, the authors note, than the 3–4 mm/);
   });
 });
+
+describe('skull-base definitions, cleaned (the audit’s C-016, C-017)', () => {
+  it('no export artefacts are left, the sinus texts say what a sinus is, and the misspelt name is shown corrected', async () => {
+    for (const model of ['zanatomy', 'ct', 'v3'] as const) {
+      const index = model === 'zanatomy' ? await import('../../src/skullbase') : (await modelModules(model)).index;
+      for (const [name, d] of Object.entries(index.DEFINITIONS)) {
+        expect(d.text, `${model} ${name}`).not.toMatch(/ \(\)|\[\d+\]|\[Fig|\b(STRUCTURE|FUNCTION|SURFACES|CONTENTS)\b|beneath th |areas? (within the skull )?beneath the brain|sigmoid sinus vein/);
+      }
+      expect(index.DEFINITIONS['Supercilliary arch'], model).toBeUndefined();
+    }
+    const { tidyDefinition } = await import('../../src/skullbase');
+    expect(tidyDefinition('of the temporal bone. STRUCTURE The opening')).toBe('of the temporal bone. The opening');
+    expect(tidyDefinition('EXTERNAL SURFACE: The external surface [Fig. 1] is convex')).toBe('The external surface is convex');
+    expect(tidyDefinition('the CSF flows. MRI shows')).toBe('the CSF flows. MRI shows');
+  });
+});

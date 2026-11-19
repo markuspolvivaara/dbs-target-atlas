@@ -112,7 +112,7 @@ const MENINGIOMA_NOTES: Record<string, ApproachClaim[]> = {
     c('For tuberculum sellae meningiomas the same meta-analysis found gross total resection about equal (endonasal 83.0 %, transcranial 85.8 %), visual improvement more often after the endonasal approach, but cerebrospinal fluid leaks (19.3 % against 5.81 %) and intraoperative arterial injury (4.89 % against 1.86 %) more often.', 'muskens2018'),
   ],
   petroclival: [
-    c('The retrosigmoid approach suits most petroclival meningiomas: it allows a Simpson grade II excision when the tumour lies mainly in the posterior fossa (the cerebellopontine angle and lower clivus) with only a minor part in the middle fossa or on the cavernous sinus’s back wall; incising the tentorium or a suprameatal extension reaches more of the middle fossa part.', 'singh2019'),
+    c('The retrosigmoid approach suits most petroclival meningiomas: it allows a Simpson grade II excision (the tumour removed and its dural attachment coagulated; Simpson grades the extent of a meningioma’s removal, I to V) when the tumour lies mainly in the posterior fossa (the cerebellopontine angle and lower clivus) with only a minor part in the middle fossa or on the cavernous sinus’s back wall; incising the tentorium or a suprameatal extension reaches more of the middle fossa part.', 'singh2019'),
     c('Of 17 patients (2009–2015), 9 were operated through it: Simpson grade II in 6, grade III in 3; 2 had new or worse deficits; none died (mean follow-up 24 months).', 'singh2019'),
   ],
   foramen_magnum: [
@@ -140,7 +140,7 @@ export const TUMOURS: TumourFamilyContent[] = [
       ]),
       sec('What they predict', [
         c('In 228 patients after a first endoscopic endonasal operation (2009–2020), surgical cure fell from 86.5 % at grade 0 and 88.6 % at grade 1 to 14.0 % at grade 4, and major complications rose from 0 % to 18.6 % (the Grading page has each grade). That series took grades 3–4 as invasive.', 'araujocastro2021'),
-        c('Grade 3B tended to be cured less often than 3A (30.0 % against 56.0 %, p = 0.164). The Knosp scale gave the best accuracy for predicting surgical cure (AUC 0.820), its best cut-off at grade 3.', 'araujocastro2021'),
+        c('Grade 3B tended to be cured less often than 3A (30.0 % against 56.0 %, p = 0.164). The Knosp scale gave the best accuracy for predicting surgical cure (area under the ROC curve, AUC, 0.820), its best cut-off at grade 3.', 'araujocastro2021'),
       ]),
     ],
     notShown: V1
@@ -165,7 +165,7 @@ export const TUMOURS: TumourFamilyContent[] = [
         c('Observation (“watch and rescan”), surgery and radiotherapy are the options; in a systematic review of 41 papers tumours grew a mean 1–2 mm a year, and up to 75 % did not grow further.', 'gupta2020'),
         c('The middle fossa approach has been used for small intrameatal tumours, larger medially placed tumours through a retrosigmoid craniotomy; with serviceable hearing the middle fossa or retrosigmoid approach, without it the retrosigmoid or translabyrinthine. Class III evidence has not shown one approach better than another for hearing.', 'starnoni2020'),
         c('In a systematic review of 35 studies (5064 patients), facial nerve dysfunction was less likely after the retrosigmoid than after the translabyrinthine approach for tumours over 1.5 cm.', 'gupta2020'),
-        c('Pooled data on large tumours removed through a retrosigmoid craniotomy: gross total resection in 79.1 %, a good facial nerve outcome (House–Brackmann I–II) in 62.9 %.', 'starnoni2020'),
+        c('Pooled data on large tumours removed through a retrosigmoid craniotomy: gross total resection in 79.1 %, a good facial nerve outcome (House–Brackmann grade I–II, on its scale of facial function from I, normal, to VI, total paralysis) in 62.9 %.', 'starnoni2020'),
       ]),
     ],
     notShown: V1
