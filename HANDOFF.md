@@ -488,6 +488,23 @@ commit and push it.
   - Licence of the patches, as written (the user to confirm): GPL-3.0, non-commercial, like the cortex surface they
     are cut from; where they lie comes from the HCP-1065 atlas (CC BY-SA 4.0, HCP terms).
   - On the MacBook: no picture baseline shows a selected tract, so none should change.
+- B-007 was merged with its own pull request (PR 27) at the user's word (2026-11-18).
+- Roadmap features (19 November 2026; the user: "Let's do the first seven, start with first"): figure export, a
+  citation panel, isolate and per-structure opacity, MRI slices in the cortex section, removing the unused
+  `wm-connectome.json`, seeding `skullbase_v1_brain.py`, the mesh checks in the unit tests. On
+  `feat/figure-export` (off `1772aed`), one commit each. **Local commits only: not pushed, no pull request.**
+  - 1, figure export: "Save image" in every section's toolbar opens a dialog (`src/ui/figure.ts`; the user's
+    choices: a box to choose what to show, the size each time, the licences in full by default or short). The view
+    is drawn again at the chosen scale (`Viewer.capture`, `maxCaptureScale`; the selection outline scaled with it,
+    tract lines keep their thickness relative to the view), then the labels, their leaders and the compass are drawn
+    from where they are on screen, the legend beside it and the caption under it. `Viewer.drawnCredits` lists the
+    source and licence of every structure drawn; over MRI slices the McGill notice is added. The dialog floats over
+    the page (inside the stage it was cut by the stage's edge and drawn under the compass). Tests: two in
+    `audit-fixes.spec.ts` (the dialog, a PNG's size, every section including the endoscopic view and slices),
+    `tests/unit/figure.test.ts`. The toolbar has one more button: **the macOS picture baselines of the stages
+    (`*-desktop-darwin.png`) all change** and need retaking on the MacBook.
+  - Found: in the ventricles' endoscopic view, at a narrow stage, the open legend box covers the toolbar's left end
+    (Measure, Copy link and Save image under it). Not fixed here.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).

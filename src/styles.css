@@ -82,6 +82,19 @@ body:not([data-page="atlas"]) .skip-panel { display: none; }
 .view-setting { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--ink); cursor: pointer; }
 .view-setting input { margin-top: 3px; flex: none; width: 16px; height: 16px; }
 .view-setting-note { display: block; margin-top: 3px; font-size: 13px; color: var(--muted); }
+/* "Save image": a dialog under the toolbar's button (src/ui/figure.ts) */
+.fig-control { position: relative; display: flex; }
+.fig-panel { position: fixed; z-index: 60; right: auto; width: min(330px, calc(100vw - 16px)); max-height: calc(100vh - 120px); overflow: auto; }
+.fig-title { margin: 0 0 8px; font-weight: 700; font-size: 14px; color: var(--ink); }
+.fig-set { border: 0; margin: 0 0 10px; padding: 0; display: grid; gap: 7px; }
+.fig-set legend { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 4px; padding: 0; }
+.fig-set.off { opacity: 0.5; }
+.fig-dims { color: var(--muted); font-size: 13px; }
+.fig-warn { margin: -4px 0 10px; color: var(--warn-ink); background: var(--warn-bg); padding: 6px 8px; border-radius: 6px; }
+.fig-warn[hidden] { display: none; }
+.fig-actions { display: flex; gap: 12px; align-items: center; margin-top: 4px; }
+.fig-save { font: inherit; font-size: 14px; font-weight: 700; color: var(--on); background: var(--link); border: 0; border-radius: 8px; padding: 8px 14px; cursor: pointer; min-height: 36px; }
+.fig-save:disabled { opacity: 0.5; cursor: default; }
 @media (max-width: 899px) { .brand-name { display: none; } }
 @media (max-width: 599px) { .brand { font-size: 0; gap: 0; } .section-chip { font-size: 12px; padding: 3px 8px; } .brand-mark { margin-right: 14px; } .theme-btn { font-size: 0; width: 36px; } .theme-btn::before { content: "◐"; font-size: 16px; } .view-settings-label { display: none; } }
 .disclaimer p { margin: 0; }

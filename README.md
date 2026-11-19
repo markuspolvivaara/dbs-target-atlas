@@ -1167,6 +1167,12 @@ on or another sequence is picked.
   default" restores this).
 - **Copy link**: the URL hash holds indication, symptom, hemisphere, camera, layers, slices, lead
   and the open card, so teaching links reopen the exact view.
+- **Save image** (every section; `src/ui/figure.ts`): the 3D view as a PNG for slides and handouts. A dialog
+  chooses what it holds (the name labels and the orientation compass as on screen, the legend, a caption), its size
+  (as on screen, twice that, or 3840 pixels wide) and how the caption names the licences: in full, each dataset
+  drawn with its licence as the Credits page gives it (the default), or the sources with a link to the section's
+  Credits page. The caption also gives the view's name, the date and its link; over MRI slices, the templates'
+  copyright notice, which their licence asks for in all copies. The choices are kept in the browser.
 
 Keyboard: `1`–`5` camera presets, `H` hemisphere, `[` `]` indication, `,` `.` symptom,
 `N` name labels, `L` lead, `S` axial slice, `M` measure, `Esc` close, `?` help.

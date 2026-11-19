@@ -1313,3 +1313,83 @@ test('tracts: where the streamlines end, on the card, in 3D and on the cortex ca
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// the roadmap's figure export (the owner's choices of 19 November 2026): "Save image" opens a dialog to choose what the
+// image holds (labels, compass, legend, caption), its size, and how the caption names the licences; the PNG is saved
+// with the view's name and the date
+test('save image: the dialog, its choices kept, and a PNG of the chosen size with its caption', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './tracts/#/atlas?g=language&sel=wm_af');
+  const btn = page.locator('.tbtn', { hasText: 'Save image' });
+  const panel = page.locator('.fig-panel');
+  await btn.click();
+  await expect(panel).toBeVisible();
+  await expect(btn).toHaveAttribute('aria-expanded', 'true');
+  // the defaults: labels, compass and caption; licences in full; twice the screen
+  await expect(panel.locator('input[data-k="labels"]')).toBeChecked();
+  await expect(panel.locator('input[data-k="legend"]')).not.toBeChecked();
+  await expect(panel.locator('input[name="fig-licences"][value="full"]')).toBeChecked();
+  await expect(panel.locator('input[name="fig-size"][value="2x"]')).toBeChecked();
+  const canvas = await page.locator('.stage canvas').boundingBox();
+  await expect(panel).toContainText(`Twice the screen ${Math.round(canvas!.width * 2)} × ${Math.round(canvas!.height * 2)} pixels`);
+  // without the caption, the licence choice is off and the dialog says what that means
+  await panel.locator('input[data-k="caption"]').uncheck();
+  await expect(panel.locator('input[name="fig-licences"][value="short"]')).toBeDisabled();
+  await expect(panel.locator('.fig-warn')).toBeVisible();
+  await panel.locator('input[data-k="caption"]').check();
+  await panel.locator('input[data-k="legend"]').check();
+  await panel.locator('input[name="fig-size"][value="1x"]').check();
+  // Escape closes it; the choices are kept
+  await page.keyboard.press('Escape');
+  await expect(panel).toBeHidden();
+  await btn.click();
+  await expect(panel.locator('input[data-k="legend"]')).toBeChecked();
+  await expect(panel.locator('input[name="fig-size"][value="1x"]')).toBeChecked();
+  // the PNG: named for the view and the date, as large as the view (as on screen) with the legend beside it and the
+  // caption under it
+  const [download] = await Promise.all([page.waitForEvent('download'), panel.locator('.fig-save').click()]);
+  expect(download.suggestedFilename()).toMatch(/^open-neuroanatomy-atlas-arcuate-fasciculus-white-matter-tracts-\d{4}-\d\d-\d\d\.png$/);
+  const file = await download.path();
+  const { readFileSync } = await import('node:fs');
+  const png = readFileSync(file);
+  expect(png.subarray(1, 4).toString()).toBe('PNG');
+  const w = png.readUInt32BE(16), hgt = png.readUInt32BE(20);
+  expect(w).toBe(Math.round(canvas!.width) + 280);
+  expect(hgt).toBeGreaterThan(Math.round(canvas!.height) + 60);
+  await expect(panel.locator('[role="status"]')).toContainText(`(${w} × ${hgt} pixels)`);
+  if (process.env.FIGURE_OUT) (await import('node:fs')).copyFileSync(file, process.env.FIGURE_OUT);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// every section's "Save image" makes a PNG, also over MRI slices and in the ventricles' endoscopic view (drawn in two
+// parts), with the licences in short, in the dark theme
+test('save image: a PNG from every kind of view', async ({ page }) => {
+  test.setTimeout(300_000);
+  const g = guard(page);
+  await page.addInitScript(() => {
+    try {
+      localStorage.setItem('atlas-figure-prefs', JSON.stringify({ labels: true, compass: true, legend: true, caption: true, size: '1x', licences: 'short' }));
+      localStorage.setItem('dbs-atlas-theme', 'dark');
+    } catch { /* about:blank has no storage */ }
+  });
+  for (const [name, url] of [
+    ['dbs-slices', './dbs/#/atlas?i=pd&ax=-4'], ['skullbase', './skullbase/#/atlas?g=pterional'], ['ventricles-etv', './ventricles/#/atlas?g=etv'],
+    ['cortex', './cortex/#/atlas?v=lateral'], ['spine', './spine/#/atlas'], ['brainstem', './brainstem/#/atlas?g=tracts'], ['vascular', './vascular/#/atlas'],
+  ] as const) {
+    await open(page, url);
+    // (the legend box closed: in the endoscopic view, open, it covers the toolbar's left end; it is still drawn)
+    await page.evaluate(() => { (document.querySelector('.legend-box') as HTMLDetailsElement).open = false; });
+    await page.locator('.tbtn', { hasText: 'Save image' }).click();
+    const panel = page.locator('.fig-panel');
+    await expect(panel.locator('input[name="fig-licences"][value="short"]'), name).toBeChecked();
+    const [download] = await Promise.all([page.waitForEvent('download'), panel.locator('.fig-save').click()]);
+    const png = (await import('node:fs')).readFileSync(await download.path());
+    const canvas = await page.locator('.stage canvas').boundingBox();
+    expect(png.readUInt32BE(16), name).toBe(Math.round(canvas!.width) + 280);
+    if (process.env.FIGURE_DIR) (await import('node:fs')).copyFileSync(await download.path(), `${process.env.FIGURE_DIR}/${name}.png`);
+    await page.keyboard.press('Escape');
+  }
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

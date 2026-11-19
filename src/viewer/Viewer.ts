@@ -1474,6 +1474,59 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
 
   snapshot(): string { this.renderer.render(this.scene, this.camera); return this.renderer.domElement.toDataURL('image/png'); }
 
+  /** The largest scale the view can be drawn at for "Save image": the GPU's largest drawing area over the view's size
+   * on screen (0 without WebGL). */
+  maxCaptureScale(): number {
+    if (document.body.dataset.webgl === 'off') return 0;
+    const w = Math.max(1, this.host.clientWidth), h = Math.max(1, this.host.clientHeight);
+    const gl = this.renderer.getContext();
+    const dims = gl.getParameter(gl.MAX_VIEWPORT_DIMS) as Int32Array;
+    const rb = gl.getParameter(gl.MAX_RENDERBUFFER_SIZE) as number;
+    return Math.min(Math.min(dims[0], rb) / w, Math.min(dims[1], rb) / h);
+  }
+
+  /** The view as it is now, drawn at `scale` times its size on screen (CSS pixels), on a canvas of its own, for "Save
+   * image"; the view on screen is drawn again at its own size afterwards. Lines (tracts) keep their thickness relative
+   * to the view; the outline of a selection is scaled with it. Null without WebGL. */
+  capture(scale: number): HTMLCanvasElement | null {
+    const max = this.maxCaptureScale();
+    if (!max) return null;
+    const k = Math.min(scale, max);
+    const pr = this.renderer.getPixelRatio();
+    const w = Math.max(1, this.host.clientWidth), h = Math.max(1, this.host.clientHeight);
+    this.renderer.setPixelRatio(k);
+    this.renderer.setSize(w, h, false);
+    this.renderer.getDrawingBufferSize(this.outlineU.uResolution.value);
+    this.outlineU.uOutlinePx.value = 1.5 * k;
+    if (this.endoCfg) this.renderEndoscope();
+    else this.renderer.render(this.scene, this.camera);
+    const src = this.renderer.domElement;
+    const out = document.createElement('canvas');
+    out.width = src.width;
+    out.height = src.height;
+    out.getContext('2d')!.drawImage(src, 0, 0);
+    this.renderer.setPixelRatio(pr);
+    this.resize();
+    return out;
+  }
+
+  /** What the view draws now, for an image's caption: the source and licence of every structure shown (each pair once,
+   * in the catalogue's order), and whether MRI template slices are shown. */
+  drawnCredits(): { items: { source: string; licence: string }[]; templateSlices: boolean } {
+    const seen = new Set<string>();
+    const items: { source: string; licence: string }[] = [];
+    for (const it of this.items.values()) {
+      const on = Object.values(it.nodes).some((n) => n?.visible);
+      if (!on) continue;
+      const key = `${it.meta.source}\u0000${it.meta.licence}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      items.push({ source: it.meta.source, licence: it.meta.licence });
+    }
+    const templateSlices = Object.keys(this.cat.volumes).length > 0 && this.slices.group.children.some((c) => c.visible);
+    return { items, templateSlices };
+  }
+
   isIdle(): boolean { return this.loadingCount === 0 && !this.anim && !this.morphAnim.size && this.slices.status !== 'loading'; }
 
   dispose(): void { this.disposed = true; this.unsubPrefs(); this.endo?.dispose(); this.renderer.dispose(); }
