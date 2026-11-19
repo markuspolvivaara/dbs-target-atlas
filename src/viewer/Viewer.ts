@@ -17,7 +17,9 @@ import { Slices } from './slices';
 type Side = 'L' | 'R';
 type Palette = Record<string, string>;
 
-interface MeshItem { kind: 'mesh'; meta: ManifestStructure; nodes: Partial<Record<Side, THREE.Mesh>>; mats: MeshMaterials; look: Look; layer: LayerKey | ExtraLayerKey; surface: boolean; faded?: boolean }
+interface MeshItem { kind: 'mesh'; meta: ManifestStructure; nodes: Partial<Record<Side, THREE.Mesh>>; mats: MeshMaterials; look: Look; layer: LayerKey | ExtraLayerKey; surface: boolean; faded?: boolean;
+  /** one node, R, lying across the midline: a midline structure kept whole, drawn whichever side is shown */
+  midline?: boolean }
 interface LineItem { kind: 'lines'; meta: ManifestStructure; nodes: Partial<Record<Side, LineSegments2>>; mat: LineMaterial; role: TractRole | null; centroid: Partial<Record<Side, THREE.Vector3>> }
 type Item = MeshItem | LineItem;
 
@@ -549,7 +551,17 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     // 'tracts' layer (skull-base section); cortical labels (cortex section) use the 'cortex' layer
     const layer: LayerKey | ExtraLayerKey = meta.layer ?? (meta.type === 'cortex' || meta.type === 'soft' || surface ? 'cortex'
       : meta.type === 'tube' ? 'tracts' : meta.type === 'target' ? 'targets' : 'nuclei');
-    return { kind: 'mesh', meta, nodes, mats, look: 'hidden', layer, surface };
+    // (a midline structure kept whole in its R node, a sinus or the basilar artery: hidden with Side = Left until the
+    // site audit's MC-17)
+    let midline = false;
+    if (nodes.R && !nodes.L) {
+      const r = nodes.R;
+      r.updateMatrix();
+      r.geometry.computeBoundingBox();
+      const b = r.geometry.boundingBox!.clone().applyMatrix4(r.matrix);
+      midline = b.min.x < -1 && b.max.x > 1;
+    }
+    return { kind: 'mesh', meta, nodes, mats, look: 'hidden', layer, surface, midline };
   }
 
   /** The angiogram's fade on a mesh's material (see `dsa`): off, the material is as it was. */
@@ -804,7 +816,9 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
           const m = it.nodes[side];
           if (!m) continue;
           applyLook(m, it.mats, look, op, it.meta.id === 'cortex' ? new THREE.Color(this.palette.cortex ?? '#c4cbd3') : this.ghost, c);
-          if (!this.sideVisible(side)) m.visible = false;
+          if (!this.sideVisible(side) && !it.midline) m.visible = false;
+          const only = p.onlySide?.get(it.meta.id);
+          if (only && only !== side) m.visible = false;
         }
         it.look = look;
         it.mats.solid.emissive.copy(focused ? c.clone().multiplyScalar(0.45) : new THREE.Color(0x000000));

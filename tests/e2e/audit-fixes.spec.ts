@@ -1648,3 +1648,22 @@ test('interface: a phone held sideways shows the stage beside the panel at full 
   await expect(page.locator('.stage .readout-box, .stage .readout').first()).toContainText(/Tap a structure/);
   await ctx.close();
 });
+
+// MC-17, MC-18: a midline structure kept whole in its R node vanished with Side = Left; a tumour view's moved copies
+// hold the right half only, and the parts they stand in for were hidden whole, so Side = Both had no left hindbrain
+test('skull base: midline structures stay with Side = Left; a tumour view draws the untouched left half beside the moved copies', async ({ page }) => {
+  const g = guard(page);
+  type V = { items: Map<string, { nodes: Record<string, { visible: boolean } | undefined> }> };
+  const visible = (id: string, side: 'L' | 'R') => page.evaluate(([i, s]) => {
+    const v = (window as unknown as { __atlas: { viewer: V } }).__atlas.viewer;
+    return v.items.get(i)?.nodes[s]?.visible ?? null;
+  }, [id, side] as const);
+  await open(page, './skullbase-v1/#/atlas?g=veins&h=L');
+  await expect.poll(() => visible('sb_superior_sagittal_sinus', 'R'), { timeout: SETTLED }).toBe(true);
+  await open(page, './skullbase/#/atlas?g=koos_iii&h=B');
+  await expect.poll(() => visible('pf_cerebellar_hemisphere__koos_3', 'R'), { timeout: SETTLED }).toBe(true);
+  await expect.poll(() => visible('pf_cerebellar_hemisphere', 'L'), { timeout: SETTLED }).toBe(true);
+  expect(await visible('pf_cerebellar_hemisphere', 'R')).toBe(false);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

@@ -532,7 +532,7 @@ export class SkullbaseAtlasPage {
         SB_MODEL === 'ct'
           ? h('p', { class: 'aside' }, 'Not yet shown in this model (Z-Anatomy does not label these; the first model locates the foramina from what passes through them): ', NOT_YET_SHOWN.join(', '), '.')
           : h('p', { class: 'aside' }, 'Z-Anatomy does not label the superior orbital fissure, internal acoustic meatus, stylomastoid and jugular foramina, carotid canal, foramen lacerum or cribriform plate: they are located here from where the nerves and vessels that pass through them cross the bone (each card says how). Not yet shown: ', NOT_YET_SHOWN.join(', '), '.'),
-        h('p', { class: 'aside' }, 'One adult male model (BodyParts3D), simplified by Z-Anatomy. Positions are millimetres from the model’s hypophysial fossa landmark; this is not MNI space and does not match the DBS and white-matter sections. Vessels and nerves are drawn with the calibre Z-Anatomy models, which is not measured.'),
+        h('p', { class: 'aside' }, `One adult male model (BodyParts3D), simplified by Z-Anatomy. Its head is larger than the CT head of the other two models: its cranial cavity, as measured here, holds ${V1_FIT.brain.cavityMl.toLocaleString('en')} ml. Positions are millimetres from the model’s hypophysial fossa landmark; this is not MNI space and does not match the DBS and white-matter sections. Vessels and nerves are drawn with the calibre Z-Anatomy models, which is not measured.`),
       ] : null);
     if (s.sel) pane.append(h('details', { class: 'more' }, h('summary', {}, `About ${g.name}`), groupCard));
     else pane.append(groupCard);

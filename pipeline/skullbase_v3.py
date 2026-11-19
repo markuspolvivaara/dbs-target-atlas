@@ -1183,7 +1183,7 @@ def brain_items(items: list, ex2: dict, v2: dict) -> None:
                           "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by "
                           "its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth "
                           f"deformation: its hull {rep['params']['tableGapMm']} mm inside the cranial cavity (median error "
-                          f"{fit['tableMedianMm']} mm), this patient's arteries outside the cortex, each hemisphere on its own side of the falx, the M2 segments on the insula "
+                          f"{fit['tableMedianMm']} mm), this patient's arteries outside the cortex on the right (the left hemisphere was not fitted to its vessels, so part of the left middle cerebral artery lies inside it), each hemisphere on its own side of the falx, the M2 segments on the insula "
                           f"(median {fit['m2InsulaMedianMmR']} mm on the right) and the M3 segments in the Sylvian fissure (median "
                           f"{fit['m3FissureMedianMmR']} mm). Its sulci and gyri are the template's. The right hemisphere opens at the "
                           f"Sylvian fissure (the first slider): the lips moved apart {rep['params']['openFrontalMm']:.0f} mm up and "

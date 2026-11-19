@@ -125,7 +125,7 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
 - **Registration** (`pipeline/skullbase_v3.py`): each specimen's bone, blurred to the CT's resolution, is matched to
   the CT's bone within 14 mm of the labyrinth by a similarity transform (1500 rotations, as is and mirrored, then a
   local optimisation of the best twelve), started from the labyrinth picked by hand on the CT's slices. Specimen ALPHA
-  fits both ears best (bone correlation 0.72 right, 0.66 left, scale 0.99 and 0.95; the left is ALPHA mirrored), and
+  fits both ears best (bone correlation 0.72 right, 0.66 left, scale 0.985 and 0.95; the left is ALPHA mirrored), and
   its structures follow the transform: facial nerve, chorda tympani, the contents of the internal acoustic meatus,
   scala tympani, scala vestibuli with the vestibule and semicircular canals, ossicles, tympanic membrane and petrous
   carotid. Checks independent of the fit: on the CT, the meatus' contents fall on fluid (about 60 HU) and the carotid on

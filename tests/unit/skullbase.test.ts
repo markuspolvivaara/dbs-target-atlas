@@ -1321,7 +1321,15 @@ describe('v3 tumours drawn by rule: Knosp, Koos and meningioma sites', async () 
     expect(rs.structures.some((id) => byId.get(id)?.pushedFrom)).toBe(false);
     const plan = S3.skullPlan('koos_iv', null);
     expect(plan.looks.get('tm_koos_4')).toBe('primary');
-    expect(plan.looks.get('pf_cerebellar_hemisphere')).toBe('hidden');
+    // the part is drawn on the left only, beside its moved copy, which holds the right half (the audit's MC-18: Side = Both
+    // had no left cerebellum)
+    expect(plan.looks.get('pf_cerebellar_hemisphere')).toBe(plan.looks.get('pf_cerebellar_hemisphere__koos_4'));
+    expect(plan.onlySide?.get('pf_cerebellar_hemisphere')).toBe('L');
+    expect(plan.onlySide?.has('pf_cerebellar_hemisphere__koos_4')).toBe(false);
+    for (const g of G3.SB_GROUPS.filter((x) => x.kind === 'tumour' && x.keepLeft?.length)) {
+      const p = S3.skullPlan(g.id, null);
+      for (const [part, copy] of g.keepLeft!) if (p.looks.get(copy) !== 'hidden') expect(p.onlySide?.get(part), `${g.id} ${part}`).toBe('L');
+    }
   });
   it('Koos grades by the drawing: II off the brainstem and under 2 cm outside the meatus, IV over 3 cm', () => {
     expect(TUMOUR_FIT.koos['2'].toBrainstemMm!).toBeGreaterThan(0);

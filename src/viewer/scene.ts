@@ -36,6 +36,9 @@ export interface ScenePlan {
   /** structures outlined as a selected one is, while nothing is selected (a section's focus, when the viewer's
    * setting leaves the rest unfaded) */
   outline?: string[];
+  /** structures drawn on one side only: a skull base tumour view's untouched half of a part whose moved copy holds the
+   * other half (the site audit's MC-18) */
+  onlySide?: Map<string, 'L' | 'R'>;
 }
 
 /** Where to put a label on a cortical surface, on the pial and on the inflated surface (RAS mm, unit normals). */
