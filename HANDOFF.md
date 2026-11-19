@@ -3,6 +3,106 @@
 Read this first when continuing on another computer. Before handing back, overwrite this file with a new handoff, then
 commit and push it.
 
+## The site audit: what is left (checked 2026-11-19)
+
+The audit of 10–11 November (branch `audit/2026-11-10`, commit `bcb8038`: `audit/README.md`, the findings as data in
+`audit/findings/`) has 275 items: 266 findings and 9 design decisions. On 2026-11-19 every one was checked against
+`main` at `d85092d` (after PR 28). The 141 that a fix record names (`.claude/audit-fixes-PROGRESS.md`, commit messages,
+pull requests) were read from those records. The 134 that no record names were checked against the code, data and
+shipped files, and many were re-measured (scratch scripts in the session's scratchpad, not kept). Line numbers below
+are as of `d85092d`.
+
+**Done: 124 items.** Both P0s and every P1 except four (below). B1–B7, the DBS additions (A-001..A-016), the
+cortex text fixes, the tract cards (B-006..B-010, MA-02..MA-04, MA-14), the tract ends (B-007), the skull base text
+(C-001..C-011, C-019), the vascular, brainstem and ventricle additions (D-001..D-010), the spine (E-001..E-018,
+MC-01..MC-08), the default skull base's geometry (MB-01..MB-06, MB-08), v1 and v2 (MC-03, MC-04, MC-09..MC-11), the
+approaches (AP-01..AP-05, AP-08..AP-10), loading, picking, phones and keyboard (P1-01, P1-02, P1-04..P1-07, P1-09,
+P1-10, P1-12, P1-13, P1-16, P1-20, UI-01..UI-06, UI-08, UI-09, UI-11, UI-12, UI-17, UI-18, UI-21), CI and
+dependencies (P2S-06..P2S-09). Partly done: P1-15 (versioned addresses; the cache rule waits on hosting), UI-20
+(7d10e29, in part), D-002 (largely resolved by the brainstem refit), B-001 (the occipital labels still show under
+the Parietal filter by the 25 % rule: taking lobes wholly from Destrieux is the user's call), B-015 (no sentence on
+the paracentral lobule). Left as it is, by the user's choice: P1-03 (per-view copies).
+
+**The four P1s still open all wait on the user:** P2S-01 (Enforce HTTPS is off: `http://openneuroatlas.net/` answers
+200 with no redirect; the Pages certificate state is still `dns_changed`), P2S-02 (licence terms of meshes that
+combine Z-Anatomy or Lead-DBS shapes with the non-commercial TopBrain CT: write to University Hospital Zurich, or take
+legal advice), MA-05 (the motor template's "M1" covers a third to a half of the postcentral gyrus: clip it, or use
+gyral labels; no card says so meanwhile), UI-07 (pairs red-green colour-blind readers cannot tell apart; the DBS pairs
+come from the user's palette, the skull base nerve/tumour and AVM pairs are the project's own).
+
+**Found on 2026-11-19, not in the audit or worse than it said** (from the files and code; not looked at in the app):
+- Skull base tumour views (MC-18, worse): all 75 tumour-view copies (33 in v3, 42 in v1) have a right node only, and
+  the parts they stand in for are hidden, so with Side = Both the left pons, medulla, cerebellum, fourth ventricle and
+  nerves (and the left frontal lobe in the olfactory and tuberculum views) are not drawn. The views open on the right.
+- v1 Kawase: 66 % of the right cochlear nerve (mirrored in after the audit, `82bd5bf`) lies inside the drilled piece.
+- Single-node midline files named R (v1's basilar artery, sagittal, straight and occipital sinuses, the meningiomas:
+  MC-17) vanish with Side = Left. `tests/unit/mesh-checks.test.ts` accepts that convention; the viewer does not.
+- The Koos card says the small arteries are moved onto the tumour (`src/skullbase/tumours.ts:173`), but v3 ships no
+  artery copies for the tumour views; the Koos III AICA overlap rose from 30 % to 61 % as the tumour shrank (MB-09).
+- v3's manifest centroids are stale for the inferior petrosal sinus (about 10 mm off its mesh) and the PICA origin.
+- `public/assets/spine-manifest.json` has drifted from `src/data/generated/spine-manifest.json` (9 references
+  missing, 15 citations differ): `spine_build.py refs` refreshes only the generated one.
+- `public/THIRD_PARTY_LICENSES.txt` says zod 3.23.8; zod 4.6.7 ships.
+- Horn 2022's printed-peak markers (`src/data/targets.ts:34-37`) lie 0.2–0.9 mm outside their own sweet-spot meshes.
+- After the half-voxel shift the reticulospinal tract runs more in CSF (left 25 → 42 %, right 0 → 14 %; T2 > 225 as
+  the CSF mask), the left SCP less (25 → 10 %); the fornix is now held to the Neudorfer label only.
+- The facial nerve definition fix (C-009) is in the skull base's `DEFINITION_EDITS` only; the brainstem card still
+  shows the old text. The epilepsy "Focal seizures" view still opens with "multifocal or poorly localized", which B2
+  removed elsewhere. The References pages of the DBS, brainstem, ventricles, vascular and skull base sections claim
+  more about sourcing than holds (A-017, D-024, B-011).
+- The skull base help lists v3's keys only, and not D, A, R, F, B (P1-19, worse); the palette check now reports 153
+  near pairs (P1-22, UI-26).
+
+**Waiting on the user (decisions, settings, outside contacts)**
+- Hosting and settings: P2S-01, P2S-03 (`www` certificate), P2S-05 (verify the domain with GitHub), P2S-04 and the
+  cache half of P1-15 (choose Cloudflare's proxy or another host), P2S-18 (CAA, DNSSEC, `security.txt`, private
+  vulnerability reporting).
+- Licences and privacy: P2S-02, P2S-10 (Morel atlas terms), P2S-11 (privacy note: wording and controller), P2S-17 (a
+  private e-mail address and the laptop's host name appear in this file).
+- Design system: DS-01..DS-09 (`audit/08-design/`); they also settle UI-07 and UI-15.
+- Content questions (each finding holds its question): A-019, A-021 (the lead's insulated tip), B-020, B-025, B-026,
+  C-012 (table), C-018, D-011 (angle), D-013, D-014, D-015, D-018 (second source), D-019, D-023, D-025, D-026, D-027
+  (the skull base already names the vessel: `approaches.ts:362`), P1-18 (keep the manifest copies as a data
+  interface?), P1-26 / A-018 (three uncited references).
+- Model questions: MA-05, MA-07 (the right fornix's front end), MA-08 (tremor view), MA-09 (DISTAL Vim against Morel),
+  MA-11 (which PPN), MA-19 (left dentate on T2), MB-09, MB-14, MB-15, MB-20, MC-19 (v1 at life size?), AP-13 (keyhole
+  placement), AP-14 (an operative-line camera option?).
+
+**Can be done without a decision.** P2 first.
+- Text, P2: A-017 (abstract-only marking on the 48 original DBS and 14 epilepsy references), B-011 (tracts References
+  claim; lead texts unreferenced), B-012 (area caveat), B-013 (boundary labels in both lobes), B-014 (occipital lobe
+  text; cingulate card; 15 labels empty), B-016 (23 doubtful cortex definitions, 3 for a clinician), MA-06 (cards of
+  the tracts that run in the ventricles; a general 2–4 mm line), MA-08 (the crossed DRTT "to M1": `symptoms.ts:93`,
+  `structures.ts:17`), MA-10 (the generalized dystonia map below the pallidum, into the optic tract).
+- Text, P3: A-020, A-022 (Coordinates page rounding), A-023, A-024, A-025, B-017..B-019, B-021..B-024, C-013..C-017,
+  D-012, D-016, D-017, D-020..D-022, D-024, D-029, MA-15 (template millimetres beside the measure tool), AP-07 (v1
+  pterional names the carotid), AP-12 (fitted PICA), MB-10 (no card says the left hemisphere is not fitted to its
+  vessels), MB-15, MC-19.
+- Models, P2: MB-07 (two different fourth ventricles in v3 and the ventricles section), MB-09 (vessels through the
+  tumours), MB-10 (left vessels inside the brain), MA-12 (arousal nuclei: LDTg 0.1 mm³, unequal halves), MA-13 (the
+  right MCP in stubs), AP-06 (v1 Kawase margins), MC-18 (above).
+- Models, P3: MA-16, MA-17, MA-18, MA-20, MB-11..MB-13, MB-16..MB-19, MC-12..MC-17, D-028 (trochlear nucleus in the
+  pons mesh), AP-11, AP-15 and MC-16 (v1 endonasal: wait for the user's rework in the main checkout).
+- Interface, P2: UI-10 (short and landscape windows), UI-13 (links that miss the camera after a flick, tablet labels,
+  the endoscope pose, measurements, Back), UI-14 (the legend over the model; the ETV legend over the toolbar),
+  UI-16 (swatch borders), UI-19 (two "Settings"), UI-22 (panel order and outline).
+- Interface, P3: UI-23, UI-24, UI-25 (damping ignores reduced motion: one line, `Viewer.ts:251`), UI-26, UI-27.
+- Code, P2: P1-08 (nothing is released), P1-11 (a byte-size test for every manifest), P1-14 (one section shell).
+- Code and security, P3: P1-17 (the endoscope views throw without WebGL), P1-19, P1-21 (stale docs), P1-22,
+  P1-23..P1-25, P1-27 (`preserveDrawingBuffer`, undisposed materials, no 404 page, `dist/` tracked), P1-28 (the
+  ventricles' line overlays leak), P2S-12 (`c=constructor`), P2S-13 (unbounded camera numbers in links), P2S-14,
+  P2S-15, P2S-16, P2S-19 (three, TypeScript, meshoptimizer, vite majors; CI on Node 22), P2S-20.
+
+**From the audit's roadmap (`audit/07-roadmap.md`), not started:** teaching tours, approach comparison, side-by-side
+targets, sourced lead trajectories (no source yet), a changelog page, a coordinate readout relative to a chosen
+landmark, a text alternative to the 3D view; one claim schema with review dates and a reference-check script
+(section 4); surface anatomy, one landmark schema and a frame registry (section 5); one asset contract in the
+pipeline, preview deployments, `dist/` out of git, fit checks that fail both ways beyond the brainstem (section 6).
+The tract data (open files with Meyer's loop, an acoustic radiation reaching Heschl's gyrus, a crossed DRTT: section
+2) waits for Fable usage. Done from it: help and reset, cards into view, "what this bundle shows", surgical views,
+loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
+per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
+
 ## White-matter tracts moved by half a voxel (desktop, 2026-11-18)
 
 - Branch `fix/wm-half-voxel` (off `main` at `8ca4552`, after PR 25), in the worktree
@@ -94,8 +194,9 @@ commit and push it.
   Delete each old PNG, run its test with `-u`, and look at the new image. The Linux copies of the same five are stale
   too and were left as they are.
 
-## Audit fixes in progress (desktop, updated 2026-11-18)
+## Audit fixes in progress (desktop, updated 2026-11-19)
 
+- What is left of the audit, checked item by item on 2026-11-19: "The site audit: what is left" at the top of this file.
 - The site audit of 10–11 Nov is on branch `audit/2026-11-10` (`audit/README.md`: findings, questions for an expert,
   a fix order). Batches 1–6 of its fixes are merged (`main` = `95b0b09`, 2026-11-13).
 - The audit's decisions on the models were made one at a time with the user on branch `fix/surgical-views` and are
@@ -492,7 +593,7 @@ commit and push it.
 - Roadmap features (19 November 2026; the user: "Let's do the first seven, start with first"): figure export, a
   citation panel, isolate and per-structure opacity, MRI slices in the cortex section, removing the unused
   `wm-connectome.json`, seeding `skullbase_v1_brain.py`, the mesh checks in the unit tests. On
-  `feat/figure-export` (off `1772aed`), one commit each. **Local commits only: not pushed, no pull request.**
+  `feat/figure-export` (off `1772aed`), one commit each. Merged as PR 28 at the user's word (2026-11-19, `d85092d`).
   - 1, figure export: "Save image" in every section's toolbar opens a dialog (`src/ui/figure.ts`; the user's
     choices: a box to choose what to show, the size each time, the licences in full by default or short). The view
     is drawn again at the chosen scale (`Viewer.capture`, `maxCaptureScale`; the selection outline scaled with it,
