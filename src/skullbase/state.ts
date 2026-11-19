@@ -1,6 +1,7 @@
 import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type LayerKey, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
+import { decodeOpacity, encodeOpacity } from '../viewer/scene';
 import { combinedCut, DEFAULT_GROUP, SB_GROUP } from './groups';
 import { defaultLabels, labelsFrom, labelsParam } from '../labels';
 
@@ -65,6 +66,7 @@ export function encodeSkull(s: SkullState): string {
     if (s.cutSide !== 'none') p.set('cut', s.cutSide);
     { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
     if (s.hidden.length) p.set('hid', s.hidden.join(','));
+    encodeOpacity(p, s.opacity);
     const dflt = SB_GROUP.get(s.grp)?.morphDefault ?? {};
     for (const [name, key] of Object.entries(MORPH_PARAMS)) {
       const v = s.morphs[name] ?? 0;
@@ -112,6 +114,7 @@ export function decodeSkull(hash: string): SkullState {
   const lb = p.get('lb');
   s.labels = labelsFrom(lb);
   s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
+  decodeOpacity(p, s);
   s.section = p.get('sec') !== '0';
   s.morphs = {};
   for (const name of g.morphs ?? []) {     // only the shapes this view has (a view's own default where the link leaves one out)

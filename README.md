@@ -78,8 +78,8 @@ Tracts from the HCP-1065 population-averaged tractography atlas (Yeh 2022), in t
   not connections: streamlines end preferentially on gyral crowns (Schilling 2018), terminations in grey
   matter are inaccurate (Maier-Hein 2017), tractography cannot confirm innervation (Yeh 2022). This
   replaces the published tract-to-region table (Brodmann areas a bundle overlaps in 95% of subjects),
-  which listed areas a bundle only passes, the insula for the IFOF among them; `wm-connectome.json` is
-  still written by `build.py` but no longer shown.
+  which listed areas a bundle only passes, the insula for the IFOF among them; the table is no longer
+  fetched or built.
 - Same viewer as the DBS section: slices (T1/T2/PD), cut-away, labels, legend highlight, measure,
   shareable links. Camera presets: lateral and medial (relative to the shown hemisphere), coronal,
   axial, posterior-oblique.
@@ -890,6 +890,9 @@ The 74 gyri and sulci of FreeSurfer's Destrieux 2009 parcellation (Destrieux et 
 - **Views**: lateral, medial, basal and insular. Each highlights the labels Destrieux et al. 2010 (Table 1)
   list as visible on that view; the insular view lists the insula and its circular sulcus and, on the pial
   surface, cuts away everything lateral of the insula over its outline (the opercula).
+- **Slices** (a tab of its own, November 2026): the MRI templates (T1, T2, PD; the DBS section's files) on axial,
+  coronal and sagittal planes, as in the white-matter section, kept in the link (`ax`, `co`, `sa`, `seq`). They line
+  up with the pial surface only, so they are not drawn over the inflated one (the tab says why). All off by default.
 - **Pial and inflated surface**: the inflated surface is computed by smoothing the pial one, so every vertex has
   both positions and the viewer morphs between them. Shading is sulcal depth (light = crown, dark = depth).
 - **Colours** by lobe (Okabe-Ito colours, checked for colour-vision deficiency), by the Destrieux atlas colours,
@@ -1167,6 +1170,22 @@ on or another sequence is picked.
   default" restores this).
 - **Copy link**: the URL hash holds indication, symptom, hemisphere, camera, layers, slices, lead
   and the open card, so teaching links reopen the exact view.
+- **Save image** (every section; `src/ui/figure.ts`): the 3D view as a PNG for slides and handouts. A dialog
+  chooses what it holds (the name labels and the orientation compass as on screen, the legend, a caption), its size
+  (as on screen, twice that, or 3840 pixels wide) and how the caption names the licences: in full, each dataset
+  drawn with its licence as the Credits page gives it (the default), or the sources with a link to the section's
+  Credits page. The caption also gives the view's name, the date and its link; over MRI slices, the templates'
+  copyright notice, which their licence asks for in all copies. The choices are kept in the browser.
+- **Sources for this view** (every section; `src/ui/citations.ts`): folded at the foot of the panel's open tab, every
+  reference the cards there cite (the view's card and the selected structure's), once each, sorted by author, with
+  its link and a "Copy all" button (the citations, one to a line). It follows the cards as they change. It reads
+  the cards' citation links, which carry the full citation, so every section has it the same way. "Save image" can
+  list these references in its caption (off by default).
+- **The selected structure's bar** (every section; `src/ui/structurebar.ts`; the audit's UI-21): while a structure is
+  selected, a bar at the foot of the 3D view gives "Show only this" (every other structure drawn is hidden; pressed
+  again, it shows what it hid and nothing the reader had hidden before), "Fade the rest" (the viewer setting of
+  that name) and the structure's own opacity, which the link keeps (`sop=id:0.30`). A change of view clears the
+  opacities as it clears the hidden list.
 
 Keyboard: `1`–`5` camera presets, `H` hemisphere, `[` `]` indication, `,` `.` symptom,
 `N` name labels, `L` lead, `S` axial slice, `M` measure, `Esc` close, `?` help.
@@ -1196,7 +1215,10 @@ src/viewer/                 three.js scene, loaders, materials, slices, lead, se
 src/ui/                     atlas pages of both sections, shared stage pieces, other pages, theme
 pipeline/                   offline Python pipeline (see below)
 public/assets/              compressed GLBs (wm/: white-matter tracts), T1 volumes, manifests
-tests/unit/                 schema, verbatim-port, manifest, GLB-decoding, AC-PC, URL tests
+tests/unit/                 schema, verbatim-port, manifest, GLB-decoding, AC-PC, URL tests; the geometry of the
+                            shipped GLBs (mesh-checks.test.ts: clean arrays, nodes named for their side, each
+                            section inside its frame, the brainstem fit on T2, skull-base nerves against bone;
+                            winding.test.ts: nothing inside out)
 tests/e2e/                  Playwright visual smoke tests (one screenshot per indication and per tract group)
 scripts/check-palette.ts    WCAG contrast + colour-vision-deficiency check
 ```
@@ -1224,8 +1246,8 @@ npm run pipeline
    (an 8.5 GB zip) with HTTP range requests into `pipeline/data/raw/` (git-ignored), and records
    SHA-256 hashes in `sources.lock.json`. For the white-matter section it downloads the HCP-1065
    tract archive once (590 MB, checked against a pinned SHA-256), extracts the 69 needed files
-   and fetches the tract-to-region table and the atlas's volumes of its tracts (3.4 MB, pinned too:
-   only what the streamline files are checked against).
+   and fetches the atlas's volumes of its tracts (3.4 MB, pinned too: only what the streamline
+   files are checked against).
 2. `build.py`:
    - label volumes → Gaussian pre-smoothing → marching cubes → affine to MNI mm → Taubin
      smoothing → quadric decimation (one GLB per structure, nodes `L` and `R`)
@@ -1241,9 +1263,8 @@ npm run pipeline
      +0.5) mm (the files, written by DSI Studio, give their points from the centre of the first
      voxel, not from its corner as the TrackVis format and nibabel have it: `read_trk`) → the same
      subsample of 300 streamlines per hemisphere on both sides (the corpus callosum and the other
-     one-file tracts cut at x = 0) → `public/assets/wm/`; the Brodmann block of the tract-to-region
-     table → `src/data/generated/wm-connectome.json` (no longer shown; the tract cards show where
-     the streamlines end instead: `wm_ends.py`, under the cortex section)
+     one-file tracts cut at x = 0) → `public/assets/wm/` (the tract cards show where the
+     streamlines end, not the atlas's tract-to-region table: `wm_ends.py`, under the cortex section)
    - `wm_measure.py` (run after it): what the white-matter cards say of the atlas bundles
      themselves (the optic radiation's loop, where four bundles end, the fornix against the
      Neudorfer 2020 label), measured from the atlas's files → `src/data/generated/wm-measured.json`
@@ -1296,7 +1317,7 @@ software licences are in `public/THIRD_PARTY_LICENSES.txt` (also published with 
 Tracts generated from Human Connectome Project data are additionally subject to the WU-Minn HCP
 Open Access Data Use Terms; the required acknowledgement is in `NOTICE`, `ATTRIBUTION.md` and on
 the Credits page. The white-matter section's tract files (`public/assets/wm/`, `wm-manifest.json`,
-`wm-connectome.json`) are **CC BY-SA 4.0** (HCP-1065 atlas) plus the HCP terms, not GPL. The skull-base
+`wm-measured.json`) are **CC BY-SA 4.0** (HCP-1065 atlas) plus the HCP terms, not GPL. The skull-base
 files (`public/assets/skullbase/`, `sb-*.json`) are **CC BY-SA** (Z-Anatomy 4.0, BodyParts3D 2.1 Japan,
 Wikipedia definitions 3.0), not GPL. The skull base's detailed model (`public/assets/skullbase-ct/`, `sbct-*.json`)
 is derived from TopBrain 2025 data (University Hospital Zurich: open use with the source given, **non-commercial**;

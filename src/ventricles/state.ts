@@ -1,6 +1,7 @@
 import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
+import { decodeOpacity, encodeOpacity } from '../viewer/scene';
 import { VE_GROUP } from './groups';
 import { ETV, TARGETS, TRAJ, type Target } from './index';
 import { defaultLabels, labelsFrom, labelsParam } from '../labels';
@@ -109,6 +110,7 @@ export function encodeVe(s: VeState): string {
     }
     { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
     if (s.hidden.length) p.set('hid', s.hidden.join(','));
+    encodeOpacity(p, s.opacity);
   }
   const q = p.toString();
   return `#/${s.page}${q ? '?' + q : ''}`;
@@ -162,5 +164,6 @@ export function decodeVe(hash: string): VeState {
   const lb = p.get('lb');
   s.labels = labelsFrom(lb);
   s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
+  decodeOpacity(p, s);
   return s;
 }

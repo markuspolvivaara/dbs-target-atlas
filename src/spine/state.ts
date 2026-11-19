@@ -3,6 +3,7 @@ import { HERNIA_MIGRATE, HERNIA_SIZE, HERNIA_ZONES, type HerniaSpec } from './he
 import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
+import { decodeOpacity, encodeOpacity } from '../viewer/scene';
 import type { RegionId } from './index';
 import { APPROACHES, CCJ_MEASURES, discRegion, GEOM_BY_PAIR, herniaZones, TECHNIQUES, type ApproachId, type CcjMeasureId, type HerniaZone } from './content';
 import type { TechniqueId } from './screw';
@@ -120,6 +121,7 @@ export function encodeSpine(s: SpineState): string {
     if (s.cutSide !== 'none') p.set('cut', s.cutSide);
     { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
     if (s.hidden.length) p.set('hid', s.hidden.join(','));
+    encodeOpacity(p, s.opacity);
     if (s.cut !== 'none' && s.level) p.set('x', s.cut === 'disc' ? 'd' : 's');
     if (s.screw && s.level) {
       const c = s.screw;
@@ -172,6 +174,7 @@ export function decodeSpine(hash: string): SpineState {
   const lb = p.get('lb');
   s.labels = labelsFrom(lb);
   s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
+  decodeOpacity(p, s);
   const les = /^([CLT]\d{1,2})-([CLST]\d{1,2})\.(central|paracentral|foraminal|farlateral)\.([LR])$/.exec(p.get('les') ?? '');
   s.screw = decodeScrew(p.get('scr'), s.level);
   const x = p.get('x');

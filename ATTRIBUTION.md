@@ -192,8 +192,7 @@ HCP methods to cite:
 
 ## White-matter tracts section (HCP-1065)
 
-The tracts in `public/assets/wm/` and `wm-manifest.json`, the tract-to-region probabilities in
-`src/data/generated/wm-connectome.json` and the figures measured on the bundles in
+The tracts in `public/assets/wm/` and `wm-manifest.json` and the figures measured on the bundles in
 `src/data/generated/wm-measured.json` are derived from the HCP-1065 population-averaged
 tractography atlas. They are **not** GPL-licensed Lead-DBS material: they carry the atlas licence,
 CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms.
@@ -201,14 +200,14 @@ Share-alike: adapted versions of these files must be released under CC BY-SA 4.0
 licence) with attribution.
 
 - Source: https://brain.labsolver.org/hcp_trk_atlas.html
-- Note: Files from the 'hcp1065' release of github.com/data-others/atlas (hcp1065_avg_tracts_trk.zip; tract_to_region_connectome_BM_KL.xlsx). Space: ICBM 2009a nonlinear asymmetric (atlas page), shown here on the 2009b templates after an alignment check: along every tract but the fornix the 2009b T1 is white-matter bright, and no shift of up to 2 mm in any direction raises it by more than 5%; the fornix, thin and beside the ventricle, is held instead to the fornix label of the Neudorfer 2020 hypothalamus atlas (median distance under 4 mm) (pipeline/validate.py). The streamline files give their points from the centre of the first voxel, not from its corner as the TrackVis format has it, so every point is moved by half a voxel (0.5 mm on each axis); the same check holds each file to at least 97% of its points inside the atlas's own volume of the tract (hcp1065_avg_tracts_nifti.zip of the same release, used for this check only).
+- Note: Files from the 'hcp1065' release of github.com/data-others/atlas (hcp1065_avg_tracts_trk.zip). Space: ICBM 2009a nonlinear asymmetric (atlas page), shown here on the 2009b templates after an alignment check: along every tract but the fornix the 2009b T1 is white-matter bright, and no shift of up to 2 mm in any direction raises it by more than 5%; the fornix, thin and beside the ventricle, is held instead to the fornix label of the Neudorfer 2020 hypothalamus atlas (median distance under 4 mm) (pipeline/validate.py). The streamline files give their points from the centre of the first voxel, not from its corner as the TrackVis format has it, so every point is moved by half a voxel (0.5 mm on each axis); the same check holds each file to at least 97% of its points inside the atlas's own volume of the tract (hcp1065_avg_tracts_nifti.zip of the same release, used for this check only).
 - Cite: Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun. 2022;13(1):4933. doi:10.1038/s41467-022-32595-4.
 - Cite: Yeh FC, Panesar S, Fernandes D, Meola A, Yoshino M, Fernandez-Miranda JC, et al. Population-averaged atlas of the macroscale human structural connectome and its network topology. NeuroImage. 2018;178:57-68. doi:10.1016/j.neuroimage.2018.05.027.
 - Assets: wm_af, wm_slf1, wm_slf2, wm_slf3, wm_ifof, wm_ilf, wm_uf, wm_fat, wm_cing_fp, wm_cing_ph, wm_or, wm_cst, wm_cbt, wm_cc, wm_fx, wm_mdlf, wm_tpat, wm_vof, wm_emc, wm_ac, wm_atr, wm_str, wm_ptr, wm_cs_a, wm_cs_s, wm_cs_p, wm_scp, wm_mcp, wm_icp, wm_drtt, wm_ndrtt, wm_ml, wm_rst, wm_cpt_f, wm_cpt_p, wm_cpt_o
 - Changes made: the streamlines' points moved by half a voxel (the files give them from the first voxel's
   centre), streamlines subsampled and resampled, the tracts stored as one file across the midline (the corpus
   callosum, the anterior commissure, the superior and middle cerebellar peduncles) cut at the midline, files
-  converted to compressed glTF; connection probabilities kept as published (Brodmann block).
+  converted to compressed glTF.
 - HCP acknowledgement (required, as above):
 
 > Data were provided [in part] by the Human Connectome Project, WU-Minn Consortium (Principal Investigators: David Van Essen and Kamil Ugurbil; 1U54MH091657) funded by the 16 NIH Institutes and Centers that support the NIH Blueprint for Neuroscience Research; and by the McDonnell Center for Systems Neuroscience at Washington University.

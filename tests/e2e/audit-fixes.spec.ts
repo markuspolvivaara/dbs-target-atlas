@@ -1313,3 +1313,219 @@ test('tracts: where the streamlines end, on the card, in 3D and on the cortex ca
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// the roadmap's figure export (the owner's choices of 19 November 2026): "Save image" opens a dialog to choose what the
+// image holds (labels, compass, legend, caption), its size, and how the caption names the licences; the PNG is saved
+// with the view's name and the date
+test('save image: the dialog, its choices kept, and a PNG of the chosen size with its caption', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './tracts/#/atlas?g=language&sel=wm_af');
+  const btn = page.locator('.tbtn', { hasText: 'Save image' });
+  const panel = page.locator('.fig-panel');
+  await btn.click();
+  await expect(panel).toBeVisible();
+  await expect(btn).toHaveAttribute('aria-expanded', 'true');
+  // the defaults: labels, compass and caption; licences in full; twice the screen
+  await expect(panel.locator('input[data-k="labels"]')).toBeChecked();
+  await expect(panel.locator('input[data-k="legend"]')).not.toBeChecked();
+  await expect(panel.locator('input[name="fig-licences"][value="full"]')).toBeChecked();
+  await expect(panel.locator('input[name="fig-size"][value="2x"]')).toBeChecked();
+  const canvas = await page.locator('.stage canvas').boundingBox();
+  await expect(panel).toContainText(`Twice the screen ${Math.round(canvas!.width * 2)} × ${Math.round(canvas!.height * 2)} pixels`);
+  // without the caption, the licence choice is off and the dialog says what that means
+  await panel.locator('input[data-k="caption"]').uncheck();
+  await expect(panel.locator('input[name="fig-licences"][value="short"]')).toBeDisabled();
+  await expect(panel.locator('.fig-warn')).toBeVisible();
+  await panel.locator('input[data-k="caption"]').check();
+  await panel.locator('input[data-k="legend"]').check();
+  await panel.locator('input[name="fig-size"][value="1x"]').check();
+  // Escape closes it; the choices are kept
+  await page.keyboard.press('Escape');
+  await expect(panel).toBeHidden();
+  await btn.click();
+  await expect(panel.locator('input[data-k="legend"]')).toBeChecked();
+  await expect(panel.locator('input[name="fig-size"][value="1x"]')).toBeChecked();
+  // the PNG: named for the view and the date, as large as the view (as on screen) with the legend beside it and the
+  // caption under it
+  const [download] = await Promise.all([page.waitForEvent('download'), panel.locator('.fig-save').click()]);
+  expect(download.suggestedFilename()).toMatch(/^open-neuroanatomy-atlas-arcuate-fasciculus-white-matter-tracts-\d{4}-\d\d-\d\d\.png$/);
+  const file = await download.path();
+  const { readFileSync } = await import('node:fs');
+  const png = readFileSync(file);
+  expect(png.subarray(1, 4).toString()).toBe('PNG');
+  const w = png.readUInt32BE(16), hgt = png.readUInt32BE(20);
+  expect(w).toBe(Math.round(canvas!.width) + 280);
+  expect(hgt).toBeGreaterThan(Math.round(canvas!.height) + 60);
+  await expect(panel.locator('[role="status"]')).toContainText(`(${w} × ${hgt} pixels)`);
+  if (process.env.FIGURE_OUT) (await import('node:fs')).copyFileSync(file, process.env.FIGURE_OUT);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// every section's "Save image" makes a PNG, also over MRI slices and in the ventricles' endoscopic view (drawn in two
+// parts), with the licences in short, in the dark theme
+test('save image: a PNG from every kind of view', async ({ page }) => {
+  test.setTimeout(300_000);
+  const g = guard(page);
+  await page.addInitScript(() => {
+    try {
+      localStorage.setItem('atlas-figure-prefs', JSON.stringify({ labels: true, compass: true, legend: true, caption: true, size: '1x', licences: 'short' }));
+      localStorage.setItem('dbs-atlas-theme', 'dark');
+    } catch { /* about:blank has no storage */ }
+  });
+  for (const [name, url] of [
+    ['dbs-slices', './dbs/#/atlas?i=pd&ax=-4'], ['skullbase', './skullbase/#/atlas?g=pterional'], ['ventricles-etv', './ventricles/#/atlas?g=etv'],
+    ['cortex', './cortex/#/atlas?v=lateral'], ['spine', './spine/#/atlas'], ['brainstem', './brainstem/#/atlas?g=tracts'], ['vascular', './vascular/#/atlas'],
+  ] as const) {
+    await open(page, url);
+    // (the legend box closed: in the endoscopic view, open, it covers the toolbar's left end; it is still drawn)
+    await page.evaluate(() => { (document.querySelector('.legend-box') as HTMLDetailsElement).open = false; });
+    await page.locator('.tbtn', { hasText: 'Save image' }).click();
+    const panel = page.locator('.fig-panel');
+    await expect(panel.locator('input[name="fig-licences"][value="short"]'), name).toBeChecked();
+    const [download] = await Promise.all([page.waitForEvent('download'), panel.locator('.fig-save').click()]);
+    const png = (await import('node:fs')).readFileSync(await download.path());
+    const canvas = await page.locator('.stage canvas').boundingBox();
+    expect(png.readUInt32BE(16), name).toBe(Math.round(canvas!.width) + 280);
+    if (process.env.FIGURE_DIR) (await import('node:fs')).copyFileSync(await download.path(), `${process.env.FIGURE_DIR}/${name}.png`);
+    await page.keyboard.press('Escape');
+  }
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// the roadmap's citation panel (the owner's choices of 19 November 2026): a folded "Sources for this view" at the foot
+// of the panel's open tab, every reference its cards cite once each, with a button that copies them all
+test('sources for this view: the references the cards cite, following the view, copied as text', async ({ page }) => {
+  const g = guard(page);
+  await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+  await open(page, './tracts/#/atlas?g=language&sel=wm_af');
+  const pane = page.locator('.panel .pane:not([hidden])');
+  const block = pane.locator('.view-sources');
+  // as many as the distinct citations of the tab's links, at its foot, folded
+  const distinct = () => pane.evaluate((el) => new Set([...el.querySelectorAll('a.src')].filter((a) => !a.closest('.view-sources')).map((a) => (a as HTMLAnchorElement).title)).size);
+  const n = await distinct();
+  expect(n).toBeGreaterThan(5);
+  await expect(block.locator('summary')).toHaveText(`Sources for this view (${n})`);
+  expect(await pane.evaluate((el) => el.lastElementChild?.classList.contains('view-sources'))).toBe(true);
+  expect(await block.evaluate((d) => (d as HTMLDetailsElement).open)).toBe(false);
+  await block.locator('summary').click();
+  await expect(block.locator('li')).toHaveCount(n);
+  // sorted by citation, each with its link
+  const cites = await block.locator('li').evaluateAll((lis) => lis.map((li) => li.firstChild!.textContent!.trim()));
+  expect(cites).toEqual([...cites].sort((a, b) => a.localeCompare(b, 'en')));
+  await expect(block.locator('li a').first()).toHaveAttribute('href', /^https:\/\/doi\.org\//);
+  // Copy all: the citations, one to a line
+  await block.locator('button', { hasText: 'Copy all' }).click();
+  expect((await page.evaluate(() => navigator.clipboard.readText())).split('\n')).toEqual(cites);
+  // another tract: the list follows
+  await page.locator('.sb-item, .chip, button', { hasText: /^IFOF/ }).first().click();
+  await settle(page);
+  await expect(page.locator('.card.sel h2')).toContainText('Inferior fronto-occipital');
+  await expect(block.locator('summary')).toHaveText(`Sources for this view (${await distinct()})`);
+  // a tab without citations has none
+  await page.locator('[role="tab"]', { hasText: 'Layers' }).click();
+  await expect(page.locator('.panel .pane:not([hidden]) .view-sources')).toHaveCount(0);
+  // the DBS section too
+  await open(page, './dbs/#/atlas?i=pd');
+  await expect(page.locator('.panel .pane:not([hidden]) .view-sources summary')).toContainText(/^Sources for this view \(\d+\)$/);
+  // and Save image can list them in its caption (off by default, and only with the caption)
+  await page.locator('.tbtn', { hasText: 'Save image' }).click();
+  const refs = page.locator('.fig-panel input[data-k="refs"]');
+  await expect(refs).not.toBeChecked();
+  await page.locator('.fig-panel input[data-k="caption"]').uncheck();
+  await expect(refs).toBeDisabled();
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// the roadmap's isolate and per-structure transparency (the audit's UI-21; the owner's choices of 19 November 2026):
+// a bar on the 3D view for the selected structure: "Show only this", "Fade the rest", and its own opacity, kept in
+// the link
+test('the selected structure’s bar: show only this, fade the rest, its own opacity in the link', async ({ page }) => {
+  const g = guard(page);
+  type V = { __atlas: { viewer: { shownIds(): string[]; items: Map<string, { nodes: Record<string, { material: { opacity: number } } | undefined> }> } } };
+  const shown = () => page.evaluate(() => (window as unknown as V).__atlas.viewer.shownIds());
+  const opacityOf = (id: string) => page.evaluate((sid) => Object.values((window as unknown as V).__atlas.viewer.items.get(sid)!.nodes).find(Boolean)!.material.opacity, id);
+  const bar = page.locator('.sbar');
+  // nothing selected: no bar
+  await open(page, './skullbase/#/atlas?g=floor&hid=sb_vomer');
+  await expect(bar).toBeHidden();
+  await open(page, './skullbase/#/atlas?g=floor&sel=sb_temporal_bone&hid=sb_vomer');
+  await expect(bar).toBeVisible();
+  await expect(bar.locator('.sbar-name')).toHaveText('Temporal bone');
+  // its own opacity: drawn so, in the link, and back from it
+  const range = bar.locator('input[type="range"]');
+  await range.fill('30');
+  await settle(page);
+  expect(await opacityOf('sb_temporal_bone')).toBeCloseTo(0.3, 2);
+  expect(new URL(page.url()).hash).toContain('sop=sb_temporal_bone%3A0.30');
+  await expect(bar.locator('output')).toHaveText('30%');
+  await page.reload();
+  await settle(page);
+  expect(await opacityOf('sb_temporal_bone')).toBeCloseTo(0.3, 2);
+  await expect(bar.locator('input[type="range"]')).toHaveValue('30');
+  // show only this: every other structure drawn is hidden; pressed again, what it hid comes back, not what the reader
+  // had hidden before (the vomer)
+  const before = await shown();
+  expect(before.length).toBeGreaterThan(10);
+  expect(before).not.toContain('sb_vomer');
+  await bar.locator('button', { hasText: 'Show only this' }).click();
+  await settle(page);
+  expect(await shown()).toEqual(['sb_temporal_bone']);
+  await expect(bar.locator('button', { hasText: 'Show all again' })).toHaveAttribute('aria-pressed', 'true');
+  await bar.locator('button', { hasText: 'Show all again' }).click();
+  await settle(page);
+  expect((await shown()).sort()).toEqual([...before].sort());
+  expect(new URL(page.url()).hash).toContain('hid=sb_vomer');
+  // fade the rest: the viewer's setting, on and off
+  const fade = bar.locator('button', { hasText: 'Fade the rest' });
+  await fade.click();
+  await expect(fade).toHaveAttribute('aria-pressed', 'true');
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('atlas-view-prefs') ?? '{}').fadeOthers)).toBe(true);
+  await fade.click();
+  await expect(fade).toHaveAttribute('aria-pressed', 'false');
+  // another view: the structure's own opacity goes, as the hidden list does
+  await page.locator('.chip', { hasText: 'Temporal bones' }).first().click();
+  await settle(page);
+  expect(new URL(page.url()).hash).not.toContain('sop=');
+  // the same bar in another section, for a tract
+  await open(page, './tracts/#/atlas?g=language&sel=wm_af');
+  await expect(bar.locator('.sbar-name')).toHaveText('Arcuate fasciculus');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// the roadmap's slices under every MNI section (the owner's choices of 19 November 2026): the cortex section's Slices
+// tab, the MRI templates under the pial surface, none over the inflated one, all off unless the link has them
+test('cortex: MRI slices under the pial surface, kept in the link, not drawn over the inflated surface', async ({ page }) => {
+  const g = guard(page);
+  const planes = () => page.evaluate(() => (window as unknown as { __atlas: { viewer: { slices: { group: { children: { name: string; visible: boolean }[] } } } } }).__atlas.viewer.slices.group.children.filter((c) => c.visible).map((c) => c.name));
+  await open(page, './cortex/#/atlas?v=lateral');
+  expect(await planes()).toEqual([]);
+  await page.locator('.ptab', { hasText: 'Slices' }).click();
+  const pane = page.locator('.panel .pane:not([hidden])');
+  await pane.locator('[data-axis="coronal"] input[data-k="on"]').check();
+  await settle(page);
+  expect(await planes()).toEqual(['slice-coronal']);
+  await pane.locator('input[name="sliceseq"][value="t2"]').check();
+  await settle(page);
+  const hash = new URL(page.url()).hash;
+  expect(hash).toMatch(/[?&]co=/);
+  expect(hash).toContain('seq=t2');
+  // the link reopens them
+  await open(page, `./cortex/${hash}`);
+  expect(await planes()).toEqual(['slice-coronal']);
+  // over the inflated surface, none, and the tab says why; back on the pial surface, there again
+  await page.locator('.tbtn', { hasText: 'Inflated' }).click();
+  await settle(page);
+  expect(await planes()).toEqual([]);
+  await page.locator('.ptab', { hasText: 'Slices' }).click();
+  await expect(page.locator('.panel .pane:not([hidden]) .inflated-note')).toBeVisible();
+  await page.locator('.tbtn', { hasText: 'Pial' }).click();
+  await settle(page);
+  expect(await planes()).toEqual(['slice-coronal']);
+  await expect(page.locator('.panel .pane:not([hidden]) .inflated-note')).toBeHidden();
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

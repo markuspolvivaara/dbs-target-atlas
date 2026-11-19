@@ -1,6 +1,7 @@
 import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type Axis, type LayerKey, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
+import { decodeOpacity, encodeOpacity } from '../viewer/scene';
 import { BS_GROUP } from './groups';
 import { defaultLabels, labelsFrom, labelsParam } from '../labels';
 
@@ -54,6 +55,7 @@ export function encodeBs(s: BsState): string {
     if (s.sliceSeq !== 't1') p.set('seq', s.sliceSeq);
     { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
     if (s.hidden.length) p.set('hid', s.hidden.join(','));
+    encodeOpacity(p, s.opacity);
   }
   const q = p.toString();
   return `#/${s.page}${q ? '?' + q : ''}`;
@@ -95,5 +97,6 @@ export function decodeBs(hash: string): BsState {
   const lb = p.get('lb');
   s.labels = labelsFrom(lb);
   s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
+  decodeOpacity(p, s);
   return s;
 }

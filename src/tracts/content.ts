@@ -6,8 +6,8 @@ import type { Claim, TractGroup, TractTopicInput } from './schema';
  * open-access full texts (PMC6921501, PMC9395399). Nothing is added from memory; where the
  * sources say nothing (for example the course of SLF I in detail) the card says less.
  *
- * Cortical connections measured in the atlas population are not written here: they come
- * from the published tract-to-region table (src/data/generated/wm-connectome.json).
+ * Where each tract's streamlines end on the cortex is not written here: it is measured by
+ * pipeline/wm_ends.py (src/data/generated/wm-ends.json, read through src/data/ends.ts).
  *
  * What the cards say of the atlas bundles' own shape (`measured`) is measured by pipeline/wm_measure.py
  * (src/data/generated/wm-measured.json). The figures are written out here, because the browser tests

@@ -1,6 +1,7 @@
 import type { CameraPreset } from '../data/schema';
-import { DEFAULT_LEAD, type V3 } from '../state';
+import { DEFAULT_LEAD, type Axis, type V3 } from '../state';
 import type { ViewState } from '../viewer/scene';
+import { decodeOpacity, encodeOpacity } from '../viewer/scene';
 import type { FnGroupId, LobeId } from './index';
 import { FN_GROUPS, LOBE } from './index';
 import { VIEW, type ViewId } from './views';
@@ -39,8 +40,9 @@ export function defaultCortexState(): CortexState {
   };
 }
 
-// #/atlas?v=lateral&lobe=frontal&sel=ctx_g_precentral&h=B&c=lateral&inf=1&col=a&lb=a
+// #/atlas?v=lateral&lobe=frontal&sel=ctx_g_precentral&h=B&c=lateral&inf=1&col=a&lb=a&co=-12&seq=t2
 const PAGES: CortexPage[] = ['atlas', 'sources', 'credits'];
+const AXES: [Axis, string][] = [['axial', 'ax'], ['coronal', 'co'], ['sagittal', 'sa']];
 const r1 = (n: number) => Math.round(n * 10) / 10;
 
 export function encodeCortex(s: CortexState): string {
@@ -57,8 +59,11 @@ export function encodeCortex(s: CortexState): string {
     if (s.colour !== 'lobe') p.set('col', s.colour === 'atlas' ? 'a' : 'p');
     { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
     if (s.cutSide !== 'none') p.set('cut', s.cutSide);
+    for (const [a, code] of AXES) if (s.clip[a].on) p.set(code, `${r1(s.clip[a].mm)}`);
+    if (s.sliceSeq !== 't1') p.set('seq', s.sliceSeq);
     if (s.layers.cortex.opacity !== 1) p.set('op', s.layers.cortex.opacity.toFixed(2));
     if (s.hidden.length) p.set('hid', s.hidden.join(','));
+    encodeOpacity(p, s.opacity);
   }
   const q = p.toString();
   return `#/${s.page}${q ? '?' + q : ''}`;
@@ -92,8 +97,15 @@ export function decodeCortex(hash: string): CortexState {
   s.labels = labelsFrom(lb);
   const cut = p.get('cut');
   s.cutSide = cut === 'L' || cut === 'R' ? cut : 'none';
+  for (const [a, code] of AXES) {
+    const v = parseFloat(p.get(code) ?? '');
+    if (Number.isFinite(v)) s.clip[a] = { on: true, mm: v };
+  }
+  const seq = p.get('seq');
+  s.sliceSeq = seq === 't2' || seq === 'pd' ? seq : 't1';
   const op = parseFloat(p.get('op') ?? '');
   if (Number.isFinite(op)) s.layers.cortex.opacity = Math.min(1, Math.max(0.1, op));
   s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
+  decodeOpacity(p, s);
   return s;
 }

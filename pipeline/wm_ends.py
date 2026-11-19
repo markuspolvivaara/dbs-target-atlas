@@ -36,7 +36,7 @@ What it is not
   The ends of an averaged bundle's streamlines, not connections: tractography ends preferentially on the crowns of
   gyri, not on the banks of sulci (Schilling 2018), its terminations in grey matter are inaccurate (Maier-Hein 2017),
   and it cannot confirm that a bundle innervates an area (Yeh 2022). src/tracts/content.ts carries these with their
-  sources. The published tract-to-region table (wm-connectome.json, build.py) counts overlap instead, on purpose.
+  sources. The atlas's published tract-to-region table (Yeh 2022; no longer fetched) counts overlap instead, on purpose.
 """
 from __future__ import annotations
 

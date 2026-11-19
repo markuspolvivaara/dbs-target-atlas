@@ -9,8 +9,11 @@ import type { ColourMode, CortexState } from '../cortex/state';
 import { VIEW, VIEWS, type ViewId } from '../cortex/views';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
+import { citationPanel } from './citations';
+import { figureControl } from './figure';
+import { structureBar } from './structurebar';
 import { refLinksFrom } from './reflinks';
-import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
+import { bindSheetDrag, buildSlicesPane, syncSlicesPane, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: CortexState) => void, opts?: { camera?: boolean }) => void;
@@ -84,7 +87,8 @@ export class CortexAtlasPage {
       h('span', { class: 'tlabel' }, 'Labels'),
       ...([['all', 'All', 'Name every highlighted label that faces you'], ['hover', 'Hover', 'Name only what you point at, select or hover in the list'], ['off', 'Off', 'No name labels']] as const)
         .map(([v, label, title]) => h('button', { type: 'button', class: 'tbtn', 'data-labels': v, 'aria-pressed': 'false', title: `${title} (N cycles)`, onclick: () => this.update((s) => { s.labels = v; }) }, label)));
-    toolbar.append(presetGroup, hemiGroup, surfGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share), viewButtons(() => this.resetView()));
+    toolbar.append(presetGroup, hemiGroup, surfGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share,
+      figureControl(() => ({ viewer: this.viewer, stage: this.stage, labels: this.labels, leaders: this.leaders, gizmo: this.gizmo, legend: this.legend }))), viewButtons(() => this.resetView()));
     this.gizmo.setAttribute('viewBox', '-40 -40 80 80');
     this.gizmo.setAttribute('class', 'gizmo');
     this.gizmo.setAttribute('aria-hidden', 'true');
@@ -131,7 +135,7 @@ export class CortexAtlasPage {
     }, h('span', { class: 'grip' }));
     bindSheetDrag(handle, (st) => this.setSheet(st));
     const tablist = h('div', { class: 'ptabs', role: 'tablist', 'aria-label': 'Panel' });
-    const names: [string, string][] = [['overview', 'Anatomy'], ['display', 'Display']];
+    const names: [string, string][] = [['overview', 'Anatomy'], ['display', 'Display'], ['slices', 'Slices']];
     for (const [id, label] of names) {
       const b = h('button', {
         type: 'button', role: 'tab', class: 'ptab', id: `ptab-${id}`, 'aria-controls': `pane-${id}`,
@@ -150,6 +154,8 @@ export class CortexAtlasPage {
       this.tabs[id] = h('div', { class: 'pane', role: 'tabpanel', id: `pane-${id}`, 'aria-labelledby': `ptab-${id}`, hidden: id !== 'overview' });
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
+    citationPanel(this.panel);
+    structureBar(this.viewer, this.stage, (fn) => this.update(fn));
     scrollHint(tablist);
   }
 
@@ -181,6 +187,7 @@ export class CortexAtlasPage {
     const key = `${s.view}|${s.lobe}|${s.fn}|${s.sel}|${s.colour}`;
     if (key !== this.lastKey || !prev) { this.lastKey = key; this.renderOverview(); }
     this.renderDisplay();
+    this.renderSlices();
     if (prev && prev.sel !== s.sel && s.sel) this.selectTab('overview', false);
     // the card of what was just selected (or of a link's selection) is brought to the top of the panel
     if (s.sel && prev?.sel !== s.sel) revealCard(this.panel);
@@ -189,7 +196,7 @@ export class CortexAtlasPage {
   private pickView(id: ViewId): void {
     this.update((st) => {
       const v = VIEW.get(id)!;
-      st.view = id; st.hemi = v.hemi; st.cam = { preset: null }; st.sel = null; st.hidden = [];
+      st.view = id; st.hemi = v.hemi; st.cam = { preset: null }; st.sel = null; st.hidden = []; delete st.opacity;
     }, { camera: true });
   }
 
@@ -430,6 +437,21 @@ export class CortexAtlasPage {
   }
 
   // ---------------------------------------------------------------- display
+  /** MRI template slices (the roadmap: slices under every MNI section), drawn over the pial surface only. */
+  private renderSlices(): void {
+    const pane = this.tabs.slices;
+    if (!pane.childElementCount) {
+      buildSlicesPane<CortexState>(pane, this.update, {
+        cut: 'Removes the cortex on that side of the midline (x = 0), as the Display tab’s cut-away does. The slices stay whole.',
+        seq: 'ICBM 2009b nonlinear asymmetric templates, the template whose pial surface this section shows. Each sequence loads the first time it is chosen.',
+        footer: 'Slices show the ICBM 2009b nonlinear asymmetric templates: 0.5 mm inside a subcortical box, 1.5 mm elsewhere.',
+      });
+      pane.prepend(h('p', { class: 'aside inflated-note', hidden: true }, 'The slices are not drawn over the inflated surface: its points have left the template’s positions, so no slice lines up with it. Switch to the pial surface to see them.'));
+    }
+    syncSlicesPane(pane, this.s);
+    (pane.querySelector('.inflated-note') as HTMLElement).hidden = !(this.s.inflate > 0.001);
+  }
+
   private renderDisplay(): void {
     const pane = this.tabs.display;
     const s = this.s;

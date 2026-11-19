@@ -10,6 +10,9 @@ import { CONTEXT_STRUCTURES, ORIENTATION_NUCLEI, tractsScene, type TractPlan } f
 import type { TractsState } from '../tracts/state';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { h } from './h';
+import { citationPanel } from './citations';
+import { figureControl } from './figure';
+import { structureBar } from './structurebar';
 import { refLinksFrom } from './reflinks';
 import { bindSheetDrag, buildSlicesPane, drawGizmo, layoutLabels, syncSlicesPane, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
@@ -92,7 +95,8 @@ export class TractsAtlasPage {
       h('span', { class: 'tlabel' }, 'Labels'),
       ...([['all', 'All', 'Label every tract in the group'], ['hover', 'Hover', 'Label only what you point at, select or hover in the legend'], ['off', 'Off', 'No name labels (clean images)']] as const)
         .map(([v, label, title]) => h('button', { type: 'button', class: 'tbtn', 'data-labels': v, 'aria-pressed': 'false', title: `${title} (N cycles)`, onclick: () => this.update((s) => { s.labels = v; }) }, label)));
-    toolbar.append(presetGroup, hemiGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share), viewButtons(() => this.resetView()));
+    toolbar.append(presetGroup, hemiGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share,
+      figureControl(() => ({ viewer: this.viewer, stage: this.stage, labels: this.labels, leaders: this.leaders, gizmo: this.gizmo, legend: this.legend }))), viewButtons(() => this.resetView()));
     this.gizmo.setAttribute('viewBox', '-40 -40 80 80');
     this.gizmo.setAttribute('class', 'gizmo');
     this.gizmo.setAttribute('aria-hidden', 'true');
@@ -154,6 +158,8 @@ export class TractsAtlasPage {
       this.tabs[id] = h('div', { class: 'pane', role: 'tabpanel', id: `pane-${id}`, 'aria-labelledby': `ptab-${id}`, hidden: id !== 'overview' });
     }
     this.panel.append(handle, tablist, ...Object.values(this.tabs));
+    citationPanel(this.panel);
+    structureBar(this.viewer, this.stage, (fn) => this.update(fn));
     scrollHint(tablist);
   }
 
@@ -196,7 +202,7 @@ export class TractsAtlasPage {
     const g = GROUP.get(s.grp)!;
     const pick = (v: string) => this.update((st) => {
       const ng = GROUP.get(v)!;
-      st.grp = v; st.hemi = ng.hemi; st.cam = { preset: null }; st.hidden = [];
+      st.grp = v; st.hemi = ng.hemi; st.cam = { preset: null }; st.hidden = []; delete st.opacity;
       if (st.sel && !ng.tractIds.includes(st.sel)) st.sel = null;
     }, { camera: true });
     const inTier = WM.groups.filter((x) => x.tier === g.tier);

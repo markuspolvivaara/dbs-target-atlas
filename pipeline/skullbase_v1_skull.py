@@ -60,7 +60,7 @@ def main() -> int:
             # two of the three agree (a ray through a small hole miscounts along one axis only), with the voxels its
             # surface passes through, so a thin sheet stays whole; the grid's surface then lies on Z-Anatomy's own
             # (a cut bone's new faces meet the faces it keeps)
-            P = np.vstack([V, m.sample(int(m.area / (0.25 * STEP * STEP)))])
+            P = np.vstack([V, m.sample(int(m.area / (0.25 * STEP * STEP)), seed=0)])
             ijk = np.rint((P - lo) / STEP).astype(int)
             surf = np.zeros(shape, bool)
             surf[tuple(ijk.T)] = True

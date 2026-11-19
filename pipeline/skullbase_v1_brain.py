@@ -208,7 +208,8 @@ def remesh(V: np.ndarray, F: np.ndarray, faces: int = 0) -> trimesh.Trimesh:
     that shell encloses, its surface (build.isosurface: smoothed, at most REMESH_FACES faces), the largest piece only."""
     from build import isosurface
     m = trimesh.Trimesh(V, F, process=False)
-    P = np.vstack([V, m.sample(int(m.area / (0.25 * REMESH_STEP ** 2)))])
+    # (seeded here: trimesh samples with its own generator, not numpy's global one, so a run gives the same files)
+    P = np.vstack([V, m.sample(int(m.area / (0.25 * REMESH_STEP ** 2)), seed=0)])
     lo = P.min(0) - 4
     shape = tuple(np.ceil((P.max(0) + 4 - lo) / REMESH_STEP).astype(int) + 1)
     M = np.zeros(shape, bool)
@@ -374,7 +375,7 @@ def hull_field(hemis: dict) -> BD.Field:
     M = np.zeros(shape, bool)
     for h in hemis.values():
         m = trimesh.Trimesh(h["V"], h["F"], process=False)
-        P = np.vstack([h["V"], m.sample(int(m.area / 0.5))])
+        P = np.vstack([h["V"], m.sample(int(m.area / 0.5), seed=0)])
         M[tuple(np.rint((P - lo) / 1.0).astype(int).T)] = True
     pad = SBB.HULL_CLOSE_MM + 2
     hull = ndimage.binary_fill_holes(ndimage.binary_closing(np.pad(M, pad), SBB.ball(SBB.HULL_CLOSE_MM))[pad:-pad, pad:-pad, pad:-pad])
@@ -382,7 +383,6 @@ def hull_field(hemis: dict) -> BD.Field:
 
 
 def main() -> int:
-    np.random.seed(0)        # (trimesh samples surfaces at random: seeded, so a run gives the same files)
     t0 = time.time()
     ex = json.loads((BUILD / "export.json").read_text())
     be = json.loads((BUILD / "brain_export.json").read_text())

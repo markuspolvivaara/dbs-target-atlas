@@ -481,13 +481,79 @@ commit and push it.
     chosen tract (a parcel of the plan, its colour the tract's); the cortex label card's "Tracts whose streamlines
     end here (measured)". A tracts link with a tract but no group opens a group that holds it; a cortex link with a
     label but no view opens a view that shows it.
-  - `src/data/generated/wm-connectome.json` (the published table) is still written by `build.py` and listed in
-    NOTICE and ATTRIBUTION.md, but the front end no longer reads it. Removing it would need a `build.py` change.
+  - `src/data/generated/wm-connectome.json` (the published table) was still written by `build.py` then; removed
+    with roadmap item 5 below.
   - `tests/e2e/smoke.spec.ts`: two lines of the tract-card test changed (near line 455); the
     user's uncommitted work in the main checkout adds a test near line 639 of that file.
   - Licence of the patches, as written (the user to confirm): GPL-3.0, non-commercial, like the cortex surface they
     are cut from; where they lie comes from the HCP-1065 atlas (CC BY-SA 4.0, HCP terms).
   - On the MacBook: no picture baseline shows a selected tract, so none should change.
+- B-007 was merged with its own pull request (PR 27) at the user's word (2026-11-18).
+- Roadmap features (19 November 2026; the user: "Let's do the first seven, start with first"): figure export, a
+  citation panel, isolate and per-structure opacity, MRI slices in the cortex section, removing the unused
+  `wm-connectome.json`, seeding `skullbase_v1_brain.py`, the mesh checks in the unit tests. On
+  `feat/figure-export` (off `1772aed`), one commit each. **Local commits only: not pushed, no pull request.**
+  - 1, figure export: "Save image" in every section's toolbar opens a dialog (`src/ui/figure.ts`; the user's
+    choices: a box to choose what to show, the size each time, the licences in full by default or short). The view
+    is drawn again at the chosen scale (`Viewer.capture`, `maxCaptureScale`; the selection outline scaled with it,
+    tract lines keep their thickness relative to the view), then the labels, their leaders and the compass are drawn
+    from where they are on screen, the legend beside it and the caption under it. `Viewer.drawnCredits` lists the
+    source and licence of every structure drawn; over MRI slices the McGill notice is added. The dialog floats over
+    the page (inside the stage it was cut by the stage's edge and drawn under the compass). Tests: two in
+    `audit-fixes.spec.ts` (the dialog, a PNG's size, every section including the endoscopic view and slices),
+    `tests/unit/figure.test.ts`. The toolbar has one more button: **the macOS picture baselines of the stages
+    (`*-desktop-darwin.png`) all change** and need retaking on the MacBook.
+  - 2, citation panel (the user's choices: at the foot of the panel; an option in Save image; a Copy all button):
+    `src/ui/citations.ts`. `citationPanel(panel)` in every atlas page keeps a folded "Sources for this view (n)" as
+    the last child of the panel's visible tab: a MutationObserver on the panel redraws it after the page redraws its
+    cards (a timeout, not a frame), from the tab's `a.src` links (`refLinksFrom` gives each the full citation as its
+    title). `citedInView()` serves Save image's new "References cited in the cards" option (off by default).
+    Tests: one browser test (count, sort, Copy all through the clipboard, a change of tract, the Layers tab, the DBS
+    section, the Save image option), a unit test of the caption's reference lines.
+  - 3, isolate and per-structure opacity (the user's choices: a bar on the 3D view; "Show only this" hides all but
+    the structure; the opacity in the link): `src/ui/structurebar.ts`, installed by every page after its viewer.
+    `ViewState.opacity` (a structure's own 0..1), applied in `Viewer.restyle` after the selection's own look (a
+    selected structure can be made see-through), to markers too; `encodeOpacity` / `decodeOpacity` in
+    `src/viewer/scene.ts`, called beside the hidden list in all eight state modules (`sop`). `Viewer.shownIds`
+    (meshes, lines and markers drawn), `nameOf`, `onApply` (the bar follows each applied state). The pages clear
+    the opacities where they clear the hidden list (a change of view). Tests: a unit test of the link (three
+    sections), a browser test (slider, reload, Show only this and back, Fade the rest, a view change, the tracts).
+  - 4, MRI slices in the cortex section (the user's choices: hidden over the inflated surface; all off by default):
+    a Slices tab (`buildSlicesPane`, as in the white-matter section); the cortex catalogue gets the DBS section's
+    volumes (`src/cortex/scene.ts`); the cortex links keep `ax`/`co`/`sa`/`seq`; `Viewer.updateClip` draws no slice
+    plane while `inflate` > 0 (only the cortex section sets it); the cortex Credits page has the templates' notice.
+    Test: one browser test (a plane on, the link, the inflated surface, back).
+  - 5, the unused tract-to-region table removed: `wm-connectome.json` deleted; `build.py` no longer reads the
+    spreadsheet (`read_connectome` gone, `build_wm` returns nothing), `fetch_sources.py` no longer fetches it and
+    its hash is out of `sources.lock.json`; `WmTract.connectome`, `HCP1065_CONNECTOME` and `CONNECTOME_MIN` gone
+    from `config.py` (the tracts otherwise declared as before, checked field by field). The dataset note
+    (config.py and the four manifest copies, ATTRIBUTION.md, by hand: no rebuild), NOTICE, README and comments no
+    longer name the table. No shipped asset changes.
+  - 6, seeded sampling in the v1 scripts: trimesh 5 samples a surface with its own generator (`seed=None` is a
+    fresh one), so `skullbase_v1_brain.py`'s `np.random.seed(0)` did nothing (checked: two samples after the same
+    global seed differ; after `seed=0` they are equal). Both of its `m.sample` calls now pass `seed=0` and the global
+    seed is gone; the same for `skullbase_v1_cavernous.py` (two calls) and `skullbase_v1_skull.py` (one). Code only,
+    no rebuild: the shipped files came from unseeded runs, so the next run of these steps may differ from them by a
+    voxel here and there, once, and is then the same every run. Left alone: `skullbase_v1_endonasal.py` (line 79,
+    and one more call the user's uncommitted rework in the main checkout adds): seed them there, `seed=0`.
+  - 7, the audit's geometry checks on the shipped files (audit/07-roadmap.md, "Geometry checks in CI"):
+    `tests/unit/mesh-checks.test.ts`, its measurements in `tests/unit/meshcheck.ts` (each reader takes the folder
+    that holds `assets/`, so the checks can be run on older files). Every GLB of all twelve folders: triangles or
+    lines only, finite positions, indices in range, unit normals, at most 1 % collapsed triangles; every node named L
+    or R, and for its side (two halves: L left of R, and each on its own side of x = 0 except in the spine, whose CT
+    midline is up to 12 mm off it; one node: L on the left, R on the right or the midline); every node inside its
+    frame's box (MNI, Z-Anatomy's fossa frame, the CT's fossa frame, the spine CT), each section reaching at least
+    about 85 % of today's extent. The brainstem: T2 across its surface (fluid out, tissue in) and its width at the
+    four levels against the manifest. Skull base v3: the nerves in the open (III, IV, V, V1, V2, VI, VIII, chiasm,
+    tract) at most 5 % of their surface in the joined bone, the others 25 %, the four in bony canals exempt; v1: a
+    tube with over 20 % of its surface in bone has an in-bone note. Checked on the files the audit found wrong (from
+    git): the seven lesion parts before `deb4780` (7 failures), the brainstem before `0974d74` (T2 median −15
+    against 47 now; medulla 1.58 × the template), v3 before `de3b6b5` (V2 60 %, VI 27 % in bone; now 1.4 % and
+    0.1 %). Already elsewhere: inside out (`winding.test.ts`), vertebrae in each other and roots in bone
+    (`spine.test.ts`), v1 XII and vessels in bone (`skullbase.test.ts`). Not added: skull base v2's fitted nerves
+    against its CT (the audit's MC-10, a stated limit). 16 tests, 4 s.
+  - Found: in the ventricles' endoscopic view, at a narrow stage, the open legend box covers the toolbar's left end
+    (Measure, Copy link and Save image under it). Not fixed here.
 - The step-by-step state (each decision, its scripts and backups, what is still to tell the user) is in
   `.claude/audit-fixes-PROGRESS.md`, and the figures shown to the user in `.claude/audit-fixes-figures/`. Both are on
   the desktop only (`.claude/` is ignored by git).

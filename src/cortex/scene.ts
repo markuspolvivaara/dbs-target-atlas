@@ -1,3 +1,6 @@
+import { z } from '../zod';
+import dbsManifestJson from '../data/generated/manifest.json';
+import { VolumeSchema } from '../data/schema';
 import type { Look } from '../viewer/materials';
 import { makeCatalog, type SceneSource, type ScenePlan } from '../viewer/scene';
 import { CTX_MANIFEST, FUNCTIONS, LABEL, LABELS, LOBE, MEDIAL_WALL } from './index';
@@ -31,7 +34,10 @@ export function cortexPlan(s: Pick<CortexState, 'view' | 'lobe' | 'colour' | 'in
   };
 }
 
-const catalog = makeCatalog(CTX_MANIFEST.structures, {}, []);
+// the MRI templates' slice volumes (the DBS section's: the surface is the same template's, so they line up with the pial
+// surface, not with the inflated one)
+const VOLUMES = z.record(z.string(), VolumeSchema).parse((dbsManifestJson as { volumes: unknown }).volumes);
+const catalog = makeCatalog(CTX_MANIFEST.structures, VOLUMES, []);
 catalog.anchors = new Map(LABELS.map((l) => [l.id, l.anchor]));
 
 export const cortexScene: SceneSource<CortexState, CortexPlan> = {

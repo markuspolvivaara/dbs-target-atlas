@@ -82,6 +82,19 @@ body:not([data-page="atlas"]) .skip-panel { display: none; }
 .view-setting { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--ink); cursor: pointer; }
 .view-setting input { margin-top: 3px; flex: none; width: 16px; height: 16px; }
 .view-setting-note { display: block; margin-top: 3px; font-size: 13px; color: var(--muted); }
+/* "Save image": a dialog under the toolbar's button (src/ui/figure.ts) */
+.fig-control { position: relative; display: flex; }
+.fig-panel { position: fixed; z-index: 60; right: auto; width: min(330px, calc(100vw - 16px)); max-height: calc(100vh - 120px); overflow: auto; }
+.fig-title { margin: 0 0 8px; font-weight: 700; font-size: 14px; color: var(--ink); }
+.fig-set { border: 0; margin: 0 0 10px; padding: 0; display: grid; gap: 7px; }
+.fig-set legend { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 4px; padding: 0; }
+.fig-set.off { opacity: 0.5; }
+.fig-dims { color: var(--muted); font-size: 13px; }
+.fig-warn { margin: -4px 0 10px; color: var(--warn-ink); background: var(--warn-bg); padding: 6px 8px; border-radius: 6px; }
+.fig-warn[hidden] { display: none; }
+.fig-actions { display: flex; gap: 12px; align-items: center; margin-top: 4px; }
+.fig-save { font: inherit; font-size: 14px; font-weight: 700; color: var(--on); background: var(--link); border: 0; border-radius: 8px; padding: 8px 14px; cursor: pointer; min-height: 36px; }
+.fig-save:disabled { opacity: 0.5; cursor: default; }
 @media (max-width: 899px) { .brand-name { display: none; } }
 @media (max-width: 599px) { .brand { font-size: 0; gap: 0; } .section-chip { font-size: 12px; padding: 3px 8px; } .brand-mark { margin-right: 14px; } .theme-btn { font-size: 0; width: 36px; } .theme-btn::before { content: "◐"; font-size: 16px; } .view-settings-label { display: none; } }
 .disclaimer p { margin: 0; }
@@ -190,8 +203,17 @@ ul.plain { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
 .btn-small { font-size: 13.5px; padding: 4px 12px; min-height: 32px; flex: none; }
 .stage-bottom {
   position: absolute; left: 8px; right: 8px; bottom: 8px; display: flex; gap: 8px; align-items: flex-end;
-  pointer-events: none; justify-content: space-between;
+  pointer-events: none; justify-content: space-between; flex-wrap: wrap;
 }
+/* the selected structure's bar (src/ui/structurebar.ts): a row of its own above the legend and the readout */
+.sbar { order: -1; flex: 1 0 100%; display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; pointer-events: none; }
+.sbar[hidden] { display: none; }
+.sbar-name, .sbar-tools { pointer-events: auto; background: var(--overlay); border: 1px solid var(--line); border-radius: 10px; backdrop-filter: blur(6px); }
+.sbar-name { font-weight: 700; font-size: 13px; padding: 6px 10px; max-width: 40ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sbar-tools { display: flex; align-items: center; gap: 2px; padding: 2px; flex-wrap: wrap; }
+.sbar-op { display: inline-flex; align-items: center; gap: 6px; padding: 0 8px; font-size: 13px; color: var(--muted); }
+.sbar-op input { width: 110px; }
+.sbar-val { min-width: 3.2em; text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
 .legend-box, .readout-box { pointer-events: auto; background: var(--overlay); border: 1px solid var(--line); border-radius: 10px; backdrop-filter: blur(6px); }
 .legend-box { max-width: min(380px, 60%); max-height: 38%; overflow: auto; padding: 4px 10px; font-size: 13px; }
 .legend-box summary { cursor: pointer; font-weight: 700; padding: 3px 0; }
@@ -289,6 +311,10 @@ body[data-page="atlas"] .page { display: none; }
 .badge.sweetSpot, .badge.publishedTarget { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .swatch { display: inline-block; width: 14px; height: 14px; border-radius: 4px; background: var(--c); margin-right: 8px; vertical-align: -1px; }
 .more, .shown { margin: 8px 0; }
+/* "Sources for this view" at the foot of the panel's tab (src/ui/citations.ts) */
+.view-sources { margin-top: 18px; padding-top: 6px; border-top: 1px solid var(--line); }
+.view-sources-list { padding-left: 1.4em; font-size: 13.5px; }
+.view-sources-list li { margin: 4px 0; }
 .more > summary, .shown > summary, .index summary { cursor: pointer; font-weight: 700; padding: 6px 0; }
 /* the spine's virtual screw, in a box of its own under the level chips */
 .screw-box { border: 1px solid var(--line); border-radius: 10px; padding: 4px 12px; margin: 10px 0; background: var(--surface); }

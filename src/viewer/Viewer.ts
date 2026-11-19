@@ -660,6 +660,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.updateClip();
     this.restyle();
     this.updateLead();
+    for (const f of this.applyListeners) f(this.state);
     const initial = !prev;
     const want: Record<string, number> = { '0': s.inflate ?? 0, ...(s.morphs ?? {}) };
     for (const name of Object.keys(this.morph)) if (!(name in want)) want[name] = 0;
@@ -743,7 +744,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         else if (fade && focus && look === 'primary') look = 'muted';
         if (hidden.has(it.meta.id)) look = 'hidden';
         const layer = s.layers[it.layer] ?? SHOWN;
-        const op = layer.on ? layer.opacity : 0;
+        const op = (layer.on ? layer.opacity : 0) * (s.opacity?.[it.meta.id] ?? 1);
         const hex = p.colours?.get(it.meta.id);
         const c = hex ? new THREE.Color(hex) : this.colour(it.meta);
         const neutral = new THREE.Color(this.palette.cortex ?? '#c4cbd3');
@@ -773,6 +774,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         if (it.meta.type === 'cortex' && it.meta.id !== 'cortex' && look === 'context') op = Math.min(1, op * 1.6);
         it.faded = fade && !!focus && !focused && look !== 'ghost' && look !== 'hidden';
         if (it.faded) op *= 0.3;
+        // (the structure's own opacity: also on a selected one, which is drawn whole otherwise)
+        op *= s.opacity?.[it.meta.id] ?? 1;
         const c = this.colour(it.meta);
         for (const side of ['L', 'R'] as Side[]) {
           const m = it.nodes[side];
@@ -804,6 +807,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         it.mat.linewidth = role === 'border' ? 1 : role === 'alt' ? 1.2 : response ? 1 : 1.4;
         if (focused) { it.mat.opacity = 1; it.mat.linewidth = 3; }
         else if (focus && fadeTracts) it.mat.opacity *= 0.25;
+        it.mat.opacity *= s.opacity?.[it.meta.id] ?? 1;
         const dashed = role === 'alt';
         if (it.mat.dashed !== dashed) { it.mat.dashed = dashed; it.mat.needsUpdate = true; }
         it.mat.clippingPlanes = this.clipPlanes;
@@ -823,7 +827,7 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       m.visible = this.sideShown(side) && !hidden.has(m.userData.marker);
       m.scale.setScalar(s.sel === m.userData.marker ? 1.8 : 1);
       const mat = (m as THREE.Mesh).material as THREE.Material;
-      mat.opacity = (m.userData.primary ? 1 : 0.9) * s.layers.targets.opacity;
+      mat.opacity = (m.userData.primary ? 1 : 0.9) * s.layers.targets.opacity * (s.opacity?.[m.userData.marker as string] ?? 1);
       mat.transparent = mat.opacity < 1 || !m.userData.primary;
     }
     this.invalidate();
@@ -977,10 +981,12 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     const s = this.state!;
     const planes: THREE.Plane[] = [];
     let anyOn = false;
+    // (the cortex section's inflated surface has left the template's positions: no slice lines up with it)
+    const inflated = (s.inflate ?? 0) > 0.001;
     for (const axis of ['axial', 'coronal', 'sagittal'] as Axis[]) {
       const c = s.clip[axis];
-      this.slices.update(axis, c.on, c.mm);
-      if (c.on) anyOn = true;
+      this.slices.update(axis, c.on && !inflated, c.mm);
+      if (c.on && !inflated) anyOn = true;
     }
     // cut at the midline (x = 0): clipPlane(flip=false) keeps x <= 0, i.e. removes the patient's right half.
     // Only structures are cut; the slice images stay whole so that half shows the slice unobstructed.
@@ -1472,7 +1478,74 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
 
   currentPlan(): P | null { return this.plan; }
 
+  /** The structures drawn now (any of their halves visible): what "Show only this" hides but one of. */
+  shownIds(): string[] {
+    const items = [...this.items.values()].filter((it) => Object.values(it.nodes).some((n) => n?.visible)).map((it) => it.meta.id);
+    const marks = this.markerGroup.visible ? this.markerGroup.children.filter((m) => m.visible).map((m) => m.userData.marker as string) : [];
+    return [...new Set([...items, ...marks])];
+  }
+
+  /** A structure's name, for the structure bar (null when the catalogue does not have it). */
+  nameOf(id: string): string | null { return this.cat.byId.get(id)?.name ?? this.cat.markers.get(id)?.label ?? null; }
+
+  /** Call `f` after every state the page applies (the structure bar follows the selection with it). */
+  onApply(f: (s: ViewState) => void): void { this.applyListeners.push(f); }
+  private applyListeners: ((s: ViewState) => void)[] = [];
+
   snapshot(): string { this.renderer.render(this.scene, this.camera); return this.renderer.domElement.toDataURL('image/png'); }
+
+  /** The largest scale the view can be drawn at for "Save image": the GPU's largest drawing area over the view's size
+   * on screen (0 without WebGL). */
+  maxCaptureScale(): number {
+    if (document.body.dataset.webgl === 'off') return 0;
+    const w = Math.max(1, this.host.clientWidth), h = Math.max(1, this.host.clientHeight);
+    const gl = this.renderer.getContext();
+    const dims = gl.getParameter(gl.MAX_VIEWPORT_DIMS) as Int32Array;
+    const rb = gl.getParameter(gl.MAX_RENDERBUFFER_SIZE) as number;
+    return Math.min(Math.min(dims[0], rb) / w, Math.min(dims[1], rb) / h);
+  }
+
+  /** The view as it is now, drawn at `scale` times its size on screen (CSS pixels), on a canvas of its own, for "Save
+   * image"; the view on screen is drawn again at its own size afterwards. Lines (tracts) keep their thickness relative
+   * to the view; the outline of a selection is scaled with it. Null without WebGL. */
+  capture(scale: number): HTMLCanvasElement | null {
+    const max = this.maxCaptureScale();
+    if (!max) return null;
+    const k = Math.min(scale, max);
+    const pr = this.renderer.getPixelRatio();
+    const w = Math.max(1, this.host.clientWidth), h = Math.max(1, this.host.clientHeight);
+    this.renderer.setPixelRatio(k);
+    this.renderer.setSize(w, h, false);
+    this.renderer.getDrawingBufferSize(this.outlineU.uResolution.value);
+    this.outlineU.uOutlinePx.value = 1.5 * k;
+    if (this.endoCfg) this.renderEndoscope();
+    else this.renderer.render(this.scene, this.camera);
+    const src = this.renderer.domElement;
+    const out = document.createElement('canvas');
+    out.width = src.width;
+    out.height = src.height;
+    out.getContext('2d')!.drawImage(src, 0, 0);
+    this.renderer.setPixelRatio(pr);
+    this.resize();
+    return out;
+  }
+
+  /** What the view draws now, for an image's caption: the source and licence of every structure shown (each pair once,
+   * in the catalogue's order), and whether MRI template slices are shown. */
+  drawnCredits(): { items: { source: string; licence: string }[]; templateSlices: boolean } {
+    const seen = new Set<string>();
+    const items: { source: string; licence: string }[] = [];
+    for (const it of this.items.values()) {
+      const on = Object.values(it.nodes).some((n) => n?.visible);
+      if (!on) continue;
+      const key = `${it.meta.source}\u0000${it.meta.licence}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      items.push({ source: it.meta.source, licence: it.meta.licence });
+    }
+    const templateSlices = Object.keys(this.cat.volumes).length > 0 && this.slices.group.children.some((c) => c.visible);
+    return { items, templateSlices };
+  }
 
   isIdle(): boolean { return this.loadingCount === 0 && !this.anim && !this.morphAnim.size && this.slices.status !== 'loading'; }
 
