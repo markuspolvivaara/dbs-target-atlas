@@ -31,8 +31,8 @@ routes where it says so.
     reaches the largest ball's radius and KOOS_PAD_MM past that, so that no ball is cut by its edge. This model's
     fitted pons lies about 4 mm from the porus, closer than in life, which is why II is small and III moulded. The
     nerves of the angle are moved round it (displaced_nerves): the facial nerve forwards onto its anterior surface
-    (Choi 2014), thinned and flattened over grades III and IV (Starnoni 2020), the others and the fitted small arteries
-    the shortest way out; the vestibulocochlear nerve, from which it grows, runs into it.
+    (Choi 2014), thinned and flattened over grades III and IV (Starnoni 2020), the others the shortest way out, and the
+    fitted small arteries it reaches (displaced_vessels); the vestibulocochlear nerve, from which it grows, runs into it.
   * Meningiomas (sites and approaches from Ius 2021's table of skull base meningiomas): a ball of MENINGIOMA_MM
     diameter on the dura of each site (its centre MENINGIOMA_RISE of its radius off the bone along the way out of it, so
     the bone cuts it to a broad base), kept inside the dura (within MENINGIOMA_INTRADURAL_MM of the fitted brain, on the
@@ -43,8 +43,10 @@ mass would push it: each point inside it moved to the nearest open space (not bo
 PUSH_GAP_MM beyond it (pushed on the way the tumour grows: from the meatus, or off its dural base, through its far side),
 the push spread over the part's neighbouring points with a normalised Gaussian (PUSH_SIGMA_MM),
 for up to PUSH_ROUNDS rounds; the pushed parts are written as copies for that view ("replaces" the part), their
-surgical shapes (morph targets) kept. A shape, not a simulation of the tissue. The nerves and the fitted small arteries
-are not moved round the tumours.
+surgical shapes (morph targets) kept. A shape, not a simulation of the tissue. The fitted small arteries a tumour reaches
+(not in this CT's labels, which the tumours keep off) are moved the shortest way out of it onto its surface
+(displaced_vessels); the meningiomas' cranial nerves, and the pituitary stalk the tuberculum sellae meningioma
+surrounds, run through them.
 
 Writes v3's build (tm_*.glb, the pushed copies, tumour_items.json) and src/data/generated/sbv3-tumours.json (the Knosp
 plane and lines, each tumour's measures and its grade checked from the drawing).
@@ -1067,6 +1069,112 @@ def displaced_meshes(g: str, tumour: np.ndarray, gr: Grid, man: list, porus: np.
     return items, rep
 
 
+VESSEL_INSIDE_SHARE = 0.0            # a fitted artery with more than this share of its vertices in a tumour (any) is moved out
+#                                      of it in that tumour's view (the site audit's MB-09: on v3 the Koos IV AICA lay 65 %
+#                                      inside its tumour, the foramen magnum meningioma's anterior spinal artery 45 %). Not
+#                                      this CT's own arteries, which the tumours are drawn to keep VESSEL_KEEP_MM off (where
+#                                      one of them touches a tumour it is the voxels' edge: at most 0.7 mm in), nor v1's,
+#                                      all of which they keep off; nor the pituitary stalk, which the tuberculum sellae
+#                                      meningioma surrounds whole (moved out it would come away from the hypothalamus and the
+#                                      gland)
+OWN_ARTERY_MM = 1.0                  # an artery whose vertices lie (median) this near this CT's own arteries is one of them
+VESSEL_SIGMA_MM = 2.5                # the push spread along the vessel (Gaussian), as NERVE_SIGMA_MM
+VESSEL_ROUNDS = 40
+VESSEL_CROSS_MM = 2.5                # each vertex is pushed the way the vessel's middle there is (the mean of its vertices
+#                                      this near), so that a vessel's cross-section moves as one and is not torn apart
+
+
+def displaced_vessels(tag: str, what: str, tumour: np.ndarray, gr: Grid, man: list, skip: set) -> tuple[list, dict]:
+    """The fitted arteries a tumour reaches (more than VESSEL_INSIDE_SHARE of a vessel's vertices in it; v3 only: v1's
+    tumours keep off its arteries, and its Koos views move the cerebellar ones, displaced_meshes) moved the shortest way
+    out of it, onto its surface, for its view: each vertex inside it or within NERVE_GAP_MM of it pushed out, the way
+    out from the vessel's middle there (VESSEL_CROSS_MM), the push spread over the mesh (a normalised Gaussian,
+    VESSEL_SIGMA_MM), for up to VESSEL_ROUNDS rounds, as displaced_meshes moves v1's nerves. The right half only, as the other copies; both halves where the
+    tumour reaches the vessel's left half too (a midline tumour; the copy says so: copySides). Its surgical shapes
+    (morph targets) kept."""
+    if V1:
+        return [], {}
+    sd = ENDO.signed(tumour, STEP).astype(np.float32)
+    grad = [ndimage.gaussian_filter(x, 1.0) for x in np.gradient(sd, STEP)]
+    own = gr.dist(gr.arteries()).astype(np.float32)
+
+    def sample(F, X):
+        return ndimage.map_coordinates(F, ((X - gr.lo) / STEP).T, order=1, mode="nearest")
+    items, rep = [], {}
+    for it in man:
+        if it.get("category") != "artery" or it["id"] in skip:
+            continue
+        if it.get("pushedFrom") or it.get("replaces") or it.get("tumourView") or it.get("approach") or it.get("forView"):
+            continue
+        nodes = read_glb_full(file_of(it))
+        inside = {sd_: float((sample(sd, nd_["positions"]) < 0).mean()) for sd_, nd_ in nodes.items() if sd_ in ("L", "R")}
+        if not inside or max(inside.values()) <= VESSEL_INSIDE_SHARE:
+            continue
+        if float(np.median(sample(own, np.vstack([nd_["positions"] for nd_ in nodes.values()])))) <= OWN_ARTERY_MM:
+            continue
+        both = inside.get("L", 0.0) > VESSEL_INSIDE_SHARE
+        sides = ("L", "R") if both else ("R",)
+        out_nodes, most, left = [], 0.0, 0
+        for side in ("L", "R"):
+            nd = nodes.get(side)
+            if nd is None or side not in sides:
+                continue
+            V0 = nd["positions"]
+            X = V0.copy()
+            if side in sides:
+                nb = cKDTree(V0).query_ball_point(V0, 3 * VESSEL_SIGMA_MM)
+                rows = np.repeat(np.arange(len(V0)), [len(n) for n in nb])
+                cols = np.concatenate([np.asarray(n, int) for n in nb])
+                w = np.exp(-((V0[rows] - V0[cols]) ** 2).sum(1) / (2 * VESSEL_SIGMA_MM ** 2))
+                near = cKDTree(V0).query_ball_point(V0, VESSEL_CROSS_MM)
+                mr = np.repeat(np.arange(len(V0)), [len(n) for n in near])
+                mc = np.concatenate([np.asarray(n, int) for n in near])
+                mcount = np.bincount(mr, minlength=len(V0)).astype(float)
+
+                def middle(Y):
+                    out = np.zeros_like(Y)
+                    np.add.at(out, mr, Y[mc])
+                    return out / mcount[:, None]
+                for _ in range(VESSEL_ROUNDS):
+                    depth = NERVE_GAP_MM - sample(sd, X)
+                    need = depth > 0
+                    if not need.any():
+                        break
+                    D = np.zeros_like(X)
+                    idx = np.nonzero(need)[0]
+                    gv = np.stack([sample(gg, middle(X)[idx]) for gg in grad], 1)
+                    D[idx] = gv / (np.linalg.norm(gv, axis=1, keepdims=True) + 1e-9) * (depth[idx] + 0.1)[:, None]
+                    src = need[cols]
+                    num = np.zeros_like(X)
+                    np.add.at(num, rows[src], w[src][:, None] * D[cols[src]])
+                    den = np.bincount(rows[src], w[src], len(X))
+                    X = X + num / np.maximum(den, 1.0)[:, None]
+                most = max(most, float(np.linalg.norm(X - V0, axis=1).max()))
+                left += int((NERVE_GAP_MM - sample(sd, X) > 0.05).sum())
+            node = {"name": side, "positions": X, "normals": trimesh.Trimesh(X, nd["indices"], process=False).vertex_normals,
+                    "indices": nd["indices"], "mode": TRIANGLES}
+            if nd.get("targets"):
+                node["targets"] = [{"name": t["name"], "positions": t["positions"],
+                                    "normals": t["normals"] if t["normals"] is not None else np.zeros_like(X)} for t in nd["targets"]]
+            out_nodes.append(node)
+        if most < 0.2:
+            continue
+        nid = f"{it['id']}__{tag}"
+        write_glb(V3_BUILD / f"{nid}.glb", out_nodes, {"id": nid})
+        cent = dict(it["centroid"])
+        for nd_ in out_nodes:
+            cent[nd_["name"]] = nd_["positions"].mean(0).round(2).tolist()
+        items.append({**{k: v_ for k, v_ in it.items() if k not in ("clearedFrom", "joinedFrom")}, "id": nid,
+                      "file": f"assets/{KIND}/{nid}.glb", "bytes": 0, "replaces": it["id"], "pushedFrom": it["file"],
+                      "tumourView": tag, "centroid": cent, **({"copySides": ["L", "R"]} if both else {}),
+                      "derivation": it["derivation"].rstrip() + f" In this view, where it ran through {what} drawn here it is moved the "
+                      f"shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most {most:.1f} mm): a shape, not a simulation."})
+        rep[it["name"]] = {"insideShare": {k: round(v, 3) for k, v in inside.items()}, "maxMovedMm": round(most, 1),
+                           "leftInside": left, **({"sides": "both"} if both else {})}
+    print("  vessels", tag, rep)
+    return items, rep
+
+
 def main() -> int:
     import skullbase_v3 as V3
     man = json.loads((GEN / f"{PREFIX}-manifest.json").read_text())["structures"]
@@ -1129,6 +1237,9 @@ def main() -> int:
             dn, rn = (displaced_meshes if V1 else displaced_nerves)(g, mask, gr, man, Q["porus"], Q["axis"])
             items += dn
             Q["report"][g]["nerves"] = rn
+            dv, rv = displaced_vessels(f"koos_{g}", "the vestibular schwannoma", mask, gr, man, {it["replaces"] for it in dn + cp})
+            items += dv
+            Q["report"][g]["vessels"] = rv
 
     # ---- meningiomas
     report["meningioma"] = {}
@@ -1147,6 +1258,9 @@ def main() -> int:
         cp, rp = pushed_copies(site, f"men_{site}", M["mask"], gr, man, kinds, None, moving, M["way"])
         items += cp
         M["report"]["push"] = rp
+        dv, rv = displaced_vessels(f"men_{site}", "the meningioma", M["mask"], gr, man, {it["replaces"] for it in cp})
+        items += dv
+        M["report"]["vessels"] = rv
         report["meningioma"][site] = M["report"]
 
     TM_ITEMS.write_text(json.dumps(items, indent=1, ensure_ascii=False))

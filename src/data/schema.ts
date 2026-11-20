@@ -217,6 +217,9 @@ export const ManifestStructureSchema = z.object({
   forView: z.string().optional(),
   /** a copy's source: the structure's own file it was made from (shipped) */
   pushedFrom: z.string().optional(),
+  /** skull base: the halves a tumour view's moved copy holds, where it holds both (a midline tumour's vessels); without
+   *  it a copy holds the right half only and the part's own left half is drawn beside it (SbGroup.keepLeft) */
+  copySides: z.array(z.enum(['L', 'R'])).optional(),
   /** skull base v3: the pipeline's own input for this structure before it was joined to its neighbour
    *  (skullbase_v3_junctions.py) or cleared of the brainstem (skullbase_v3_clearance.py), which a re-run starts from. A
    *  file in pipeline/data/build, not shipped (the shipped file is `file`) */

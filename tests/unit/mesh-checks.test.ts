@@ -44,7 +44,7 @@ const SECTIONS: { dir: string; box: Box; span: [number, number, number]; midline
 const TRIANGLES = 4, LINES = 1;
 
 interface Volume { file: string; dims: number[]; origin: number[]; spacing: number }
-interface SbStructure { name: string; file: string; type: string; category?: string; inBone?: { share: number }; approach?: unknown; pushedFrom?: unknown; tumourView?: unknown; replaces?: unknown; forView?: unknown }
+interface SbStructure { id: string; name: string; file: string; type: string; category?: string; inBone?: { share: number }; approach?: unknown; pushedFrom?: unknown; tumourView?: string; replaces?: string; forView?: unknown }
 // (the manifests as served)
 const served = <T>(name: string): T => JSON.parse(readFileSync(new URL(`assets/${name}`, PUBLIC), 'utf8')) as T;
 const manifest = served<{ volumes: Record<string, Volume> }>('manifest.json');
@@ -187,6 +187,27 @@ describe('skull base v1: the Kawase drilling keeps off what it must not open (th
       // (0.5 mm: the grid the cut is made on)
       if (inside > 0 || nearest < mm - 0.5) bad.push(`${name}: ${inside} points inside, nearest ${nearest.toFixed(2)} mm (margin ${mm})`);
     }
+    expect(bad).toEqual([]);
+  }, 120_000);
+});
+
+describe('skull base v3: the tumours move the fitted small arteries they reach (the audit’s MB-09)', () => {
+  it('each moved artery lies outside its tumour, where it ran through it before', async () => {
+    const ss = sbv3Manifest.structures;
+    const copies = ss.filter((s) => s.tumourView && s.replaces && s.category === 'artery');
+    // (the Koos IV AICA ran 65 % inside its tumour, the foramen magnum meningioma's anterior spinal artery 45 %)
+    for (const [view, name] of [['koos_4', 'Anterior inferior cerebellar artery'], ['men_foramen_magnum', 'Anterior spinal artery']])
+      expect(copies.some((s) => s.tumourView === view && s.name === name), `${name} in ${view}`).toBe(true);
+    const bad: string[] = [];
+    for (const c of copies) {
+      const tumour = await soup(ss.find((s) => s.id === `tm_${c.tumourView}`)!.file);
+      const share = async (file: string) => { const t = await soup(file); return pointsInside(t.P, tumour.P, tumour.T) / (t.P.length / 3); };
+      const before = await share(ss.find((s) => s.id === c.replaces)!.file), after = await share(c.file);
+      // (a few points stay inside, near its surface: the Koos III lateral pontine branches and the petroclival
+      // AICA's loop keep 2.5 and 2.7 % of theirs, from 12.7 and 20.4 %; more rounds of the push do not free them)
+      if (after > 0.03 || after >= before) bad.push(`${c.id}: ${(100 * before).toFixed(1)} % inside before, ${(100 * after).toFixed(1)} % after`);
+    }
+    expect(copies.length).toBeGreaterThan(5);
     expect(bad).toEqual([]);
   }, 120_000);
 });
