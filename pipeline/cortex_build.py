@@ -246,20 +246,51 @@ def smooth_mask(m: np.ndarray, F: np.ndarray, keep: np.ndarray, steps: int = 3) 
     return m & ~keep
 
 
+def _edited(what: str, d: dict, eds: list[tuple[str, str, str]]) -> list[dict]:
+    """Apply corrections to a shipped text in place; returns them as listed on the card."""
+    edits = []
+    for old, new, why in eds:
+        if d["text"].count(old) != 1:
+            raise SystemExit(f"{what}: the words to correct are not in its text (once): {old!r}")
+        d["text"] = d["text"].replace(old, new)
+        edits.append({"from": old, "to": new, "why": why})
+    return edits
+
+
+def _own(text_sections: tuple[str, str]) -> dict:
+    """A text written for this atlas from Destrieux et al. 2010 (cortex_labels.OWN_TEXTS): no Wikipedia page, the paper's
+    reference and the sections it comes from instead."""
+    text, sections = text_sections
+    return {"text": text, "url": None, "source": f"Destrieux et al. 2010, {sections}", "scope": None, "refIds": [CL.OWN_TEXT_REF]}
+
+
 def label_definition(s: str, ztexts: dict) -> dict | None:
     """A label's definition as the card shows it: the lead of the Z-Anatomy text chosen for it (cortex_labels.ZTEXT), what
-    that text is about where it is not the label itself (scope), and any correction made to it (ZTEXT_EDITS), listed."""
+    that text is about where it is not the label itself (scope), and any correction made to it (ZTEXT_EDITS), listed; or,
+    where Z-Anatomy ships none, the text written for this atlas (OWN_TEXTS)."""
     zt = CL.ZTEXT[s]
     d = definition(ztexts[zt[0]]) if zt else None
     if not d:
-        return None
-    edits = []
-    for old, new, why in CL.ZTEXT_EDITS.get(s, []):
-        if d["text"].count(old) != 1:
-            raise SystemExit(f"{s}: the words to correct are not in its text (once): {old!r}")
-        d["text"] = d["text"].replace(old, new)
-        edits.append({"from": old, "to": new, "why": why})
+        return _own(CL.OWN_TEXTS[s]) if s in CL.OWN_TEXTS else None
+    edits = _edited(s, d, CL.ZTEXT_EDITS.get(s, []))
     return {**d, "source": zt[0], "scope": zt[1], **({"edits": edits} if edits else {})}
+
+
+def references(functions: list[dict], labels: list[dict], lobes: list[dict]) -> dict:
+    """The content references the cards cite: the functional areas' sources and those of the texts written here."""
+    ids = {r for f in functions for r in f["refIds"]}
+    ids |= {r for x in labels + lobes for r in (x["definition"] or {}).get("refIds", [])}
+    return {k: {"citation": CITES[k]["citation"], "url": CITES[k]["url"]} for k in sorted(ids)}
+
+
+def lobe_definition(lb: str, ztexts: dict) -> dict | None:
+    """A lobe card's definition, as label_definition does it (ZTEXT_LOBES, ZTEXT_LOBE_SCOPE, ZTEXT_LOBE_EDITS, OWN_LOBE_TEXTS)."""
+    zt = CL.ZTEXT_LOBES[lb]
+    d = definition(ztexts[zt]) if zt else None
+    if not d:
+        return _own(CL.OWN_LOBE_TEXTS[lb]) if lb in CL.OWN_LOBE_TEXTS else None
+    edits = _edited(f"lobe {lb}", d, CL.ZTEXT_LOBE_EDITS.get(lb, []))
+    return {**d, "source": zt, "scope": CL.ZTEXT_LOBE_SCOPE.get(lb), **({"edits": edits} if edits else {})}
 
 
 def main() -> int:
@@ -494,10 +525,8 @@ def main() -> int:
                           "basis": rule[0], "labels": [ids[x] for x in labels_of], "refIds": refs})
     lobes = []
     for lb in CL.LOBES:
-        zt = CL.ZTEXT_LOBES[lb]
-        d = definition(ztexts[zt]) if zt else None
         lobes.append({"id": lb, "name": CL.LOBE_NAME[lb], "token": LOBE_TOKEN[lb],
-                      "definition": ({**d, "source": zt} if d else None),
+                      "definition": lobe_definition(lb, ztexts),
                       "labels": [x["id"] for x in labels if any(y["lobe"] == lb for y in x["lobes"])]})
     GEN.mkdir(parents=True, exist_ok=True)
     manifest = {
@@ -510,7 +539,7 @@ def main() -> int:
     (GEN / "ctx-manifest.json").write_text(json.dumps(manifest, indent=1, ensure_ascii=False))
     (GEN / "ctx-labels.json").write_text(json.dumps({
         "labels": labels, "lobes": lobes, "functions": functions,
-        "references": {k: {"citation": CITES[k]["citation"], "url": CITES[k]["url"]} for k in sorted({r for f in functions for r in f["refIds"]})},
+        "references": references(functions, labels, lobes),
         "method": {"faces": FACES, "inflateIterations": INFLATE_ITER, "inflateStep": INFLATE_STEP, "midlineGapMm": MIDLINE_GAP_MM,
                    "operMarginMm": OPER_MARGIN_MM, "operLateralMm": OPER_LATERAL_MM, "hmatMaxDistMm": C.HMAT_MAX_DIST_MM},
         "report": {k: v for k, v in report.items() if k != "dkSize"},
@@ -559,11 +588,19 @@ def validate() -> int:
         if re.search(r"\boccipital\b", x["name"], re.I) and x["short"] != "S_parieto_occipital":
             check(x["lobe"] == "occipital", f"{x['short']}: named occipital, coloured {x['lobe']}")
     # every correction to a shipped text is in the text shown and listed with it
-    for s, eds in CL.ZTEXT_EDITS.items():
-        d = by[s]["definition"]
-        for old, new, _ in eds:
-            check(bool(d) and new in d["text"] and old not in d["text"] and any(e["from"] == old and e["to"] == new for e in d.get("edits", [])),
-                  f"{s}: correction not applied or not listed")
+    lobe_by = {x["id"]: x for x in lab["lobes"]}
+    for what, eds_by, of in (("label", CL.ZTEXT_EDITS, by), ("lobe", CL.ZTEXT_LOBE_EDITS, lobe_by)):
+        for s, eds in eds_by.items():
+            d = of[s]["definition"]
+            for old, new, _ in eds:
+                check(bool(d) and new in d["text"] and old not in d["text"] and any(e["from"] == old and e["to"] == new for e in d.get("edits", [])),
+                      f"{what} {s}: correction not applied or not listed")
+    # every label and lobe has a text: Z-Anatomy's, or one written here from a reference the file lists (the audit's B-014)
+    for x in lab["labels"] + lab["lobes"]:
+        d = x["definition"]
+        check(bool(d), f"{x['id']}: no definition")
+        check(all(r in lab["references"] for r in (d or {}).get("refIds", [])), f"{x['id']}: definition reference not listed")
+    check(lobe_by["cingulate"]["definition"]["scope"] == "the limbic lobe", "the cingulate card's text is not headed as the limbic lobe's")
     # the central sulcus borders the pre- and postcentral gyri
     cs = {b["id"] for b in by["S_central"]["borders"]}
     check({slug("G_precentral"), slug("G_postcentral")} <= cs, "central sulcus borders")

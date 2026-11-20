@@ -19,6 +19,8 @@ export const BLISTER: Claim[] = [
 // ---------------------------------------------------------------- treatment of aneurysms
 export const CLIPPING: Claim[] = [
   c('Clipping reaches the aneurysm through a craniotomy, dissects it free and shows its neck; its aim is to close the neck permanently and completely with a metal clip while keeping the parent and perforating arteries open.', 'lee2022'),
+  // (the site audit's D-029: the hidden neck is in “Endovascular therapy post-microsurgical treatment”: in complex
+  // aneurysms, through a limited corridor)
   c('In the series this review summarises, clipping closed the aneurysm completely in about 95 % and left a residual neck in about 5 % (bleeding from it in under 1 %); 1–5 % were treated again; mortality was under 1 % and morbidity 3–5 %. In complex aneurysms part of the neck can be hidden from view and the aneurysm still fill after clipping.', 'lee2022'),
 ];
 export const COILING: Claim[] = [
@@ -26,10 +28,13 @@ export const COILING: Claim[] = [
 ];
 export const ISAT: Claim[] = [
   c('In the International Subarachnoid Aneurysm Trial (ruptured aneurysms suitable for either treatment), 83 % of the patients allocated coiling and 79 % of those allocated clipping were alive at 10 years; patients in the coiling group were more likely to be alive and independent (odds ratio 1.34).', 'molyneux2015'),
+  // (the site audit's D-029: the risk up to 18 years is in the Research in context panel, Interpretation)
   c('Rebleeding was more likely after coiling than after clipping, but the risk was small; in both groups the risk of death and rebleeding from the treated aneurysm up to 18 years was very small.', 'molyneux2015'),
 ];
 export const FLOW_DIVERSION: Claim[] = [
   c('Flow diverters are stent-like devices placed in the parent artery: they change the inflow and outflow at the neck, so that the aneurysm thromboses over time; neointima then grows over the device and rebuilds the parent artery, usually sparing the origins of perforators.', 'alderazi2014'),
+  // (the site audit's D-029: the smooth channel in fusiform aneurysms is in section 2, Flow Diversion and Mechanism of
+  // Action)
   c('They have made previously untreatable wide-necked and giant aneurysms treatable, and in fusiform aneurysms they rebuild a smooth channel continuous with the parent artery. Antiplatelet therapy is mandatory; the risks include in-stent thrombosis, perianeurysmal oedema, distant and delayed haemorrhages and perforator occlusion.', 'alderazi2014'),
 ];
 
@@ -88,6 +93,7 @@ export const CCF: Claim[] = [
 ];
 export const CCF_VEINS: Claim[] = [
   c('Normally the cavernous sinus receives the superior and inferior ophthalmic veins in front and the sphenoparietal sinus and Sylvian and cortical veins at the side, and drains back through the superior and inferior petrosal sinuses to the jugular bulb, down through emissary veins to the pterygoid and parapharyngeal plexuses, and across to the other side.', 'mishra2022'),
+  // (the site audit's D-029: in the Discussion's first paragraph)
   c('The raised pressure of a fistula redirects its drainage: forwards into the ophthalmic veins, backwards or down into the petrosal sinuses or the pterygoid and parapharyngeal plexuses, or sideways into the sphenoparietal sinus and middle cortical veins; most often it runs several ways at once.', 'mishra2022'),
   c('The Thomas classification sorts them by venous drainage: type 1 posterior and/or inferior; type 2 posterior or inferior and anterior (the ophthalmic veins); type 3 anterior only; type 4 retrograde into cortical veins, with or without other routes; type 5 a high-flow direct shunt (Barrow type A), with or without several routes.', 'mishra2022'),
   c('In 28 fistulas at a trauma centre, 24 were Barrow type A; the opposite cavernous sinus filled in 10 and cortical venous efflux was seen in 16.', 'mishra2022'),

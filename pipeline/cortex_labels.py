@@ -8,7 +8,8 @@ paper's own spelling).
 
 ZTEXT: the Z-Anatomy definition text (a Wikipedia lead, CC BY-SA 3.0) used for each label, by Z-Anatomy
 text name, with the scope it describes when that is broader than the label (e.g. the whole cingulate cortex).
-None = Z-Anatomy ships no text that describes the label.
+None = Z-Anatomy ships no text that describes the label; such a label (and the occipital lobe) has a short text
+written for this atlas from the full text of Destrieux et al. 2010 instead (OWN_TEXTS, OWN_LOBE_TEXTS).
 
 DK_LOBE: lobe of each Desikan-Killiany region, as grouped in Table 2 of Klein & Tourville 2012
 (Front Neurosci 6:171, PMID 23227001, CC BY 3.0); the insula is listed on its own there (Table 4).
@@ -188,12 +189,25 @@ _OCCIPITAL_EDITS = [
      "The short transverse occipital sulcus crosses the superior occipital sulcus at right angles and reaches into the "
      "superior and middle occipital gyri (Destrieux et al. 2010, section 2.3.3)"),
 ]
+# (the three parts of the superior temporal gyrus share Wikipedia's "Superior temporal gyrus" text: the audit's B-016)
+_STG_EDITS = [
+    (" (not always present or visible)", "",
+     "Destrieux et al. 2010 (section 2.3.3) found the superior temporal sulcus in each of the 24 hemispheres they "
+     "describe: continuous, briefly interrupted near the temporal pole, or (in 3) made of separate segments"),
+]
+_NO_SOURCE = "Given with no source"
 ZTEXT_EDITS: dict[str, list[tuple[str, str, str]]] = {
     "G_pariet_inf-Angular": [(
         "lying mainly in the anterolateral region of parietal lobe, that lies near",
         "lying in the posterior part of the inferior parietal lobule, near",
         "The sulcus intermedius primus divides the inferior parietal lobule into the supramarginal gyrus in front and "
         "the angular gyrus behind (Destrieux et al. 2010, section 2.4.1.4)",
+    ), (
+        # (the audit's B-016, as are all the corrections below)
+        " Its significance is in transferring visual information to Wernicke's area, in order to make meaning out of "
+        "visually perceived words.", "",
+        f"{_NO_SOURCE}: one account of reading stated as the gyrus's significance; the next sentence names its part in "
+        "language among its other roles",
     )],
     # (the audit's finding B-003: the gyri are in front of the planum temporale, not above it)
     "G_temp_sup-G_T_transv": [(
@@ -206,10 +220,184 @@ ZTEXT_EDITS: dict[str, list[tuple[str, str, str]]] = {
     "G_and_S_occipital_inf": _OCCIPITAL_EDITS,
     "G_occipital_middle": _OCCIPITAL_EDITS,
     "G_occipital_sup": _OCCIPITAL_EDITS,
+    "G_temp_sup-Lateral": _STG_EDITS,
+    "G_temp_sup-Plan_polar": _STG_EDITS,
+    "G_temp_sup-Plan_tempo": _STG_EDITS,
+    "G_cuneus": [(
+        "is a smaller lobe in the occipital lobe of the brain",
+        "is a triangular gyrus on the medial aspect of the occipital lobe",
+        "Destrieux et al. 2010 (section 2.3.5) describe the cuneus on the medial aspect of the occipital lobe as a "
+        "triangle limited by the calcarine sulcus, the parieto-occipital sulcus and the superior edge of the "
+        "hemisphere: a gyrus, not a lobe",
+    )],
+    "G_front_inf-Opercular": [(
+        " and may be associated with recognizing a tone of voice in spoken native languages. This expands on previous "
+        "work indicating that comprehension of inflectional morpheme processing is associated with the inferior frontal "
+        "gyrus.",
+        ". In the left hemisphere it makes up Broca’s area with the triangular part, and it has been associated with "
+        "syntax in particular.",
+        "Two single findings, with no source, stood as the area's only functions. Broca's area is the pars opercularis "
+        "and pars triangularis of the left inferior frontal gyrus, and the pars opercularis has been associated with "
+        "syntactic functions (Bulut 2023, introduction; full text)",
+    )],
+    "G_front_inf-Triangul": [(
+        "It may be associated with the ability to translate from a secondary or tertiary language back to one's native "
+        "language.",
+        "In the left hemisphere it makes up Broca’s area with the opercular part, and it has been associated with "
+        "semantics in particular.",
+        "A single finding, with no source, stood as the area's only function. Broca's area is the pars opercularis and "
+        "pars triangularis of the left inferior frontal gyrus, and the pars triangularis has been associated with "
+        "semantic functions (Bulut 2023, introduction; full text)",
+    )],
+    "G_front_middle": [(
+        " (A gyrus is one of the prominent \"bumps\" or \"ridges\" on the surface of the human brain.) The middle "
+        "frontal gyrus, like the inferior frontal gyrus and the superior frontal gyrus, is more of a region in the "
+        "frontal gyrus than a true gyrus.", "",
+        f"{_NO_SOURCE}, and garbled (“a region in the frontal gyrus”). Destrieux et al. 2010 (section 2.1.2.1) describe "
+        "the middle frontal gyrus as a gyrus limited by the superior frontal sulcus above, the inferior frontal and "
+        "lateral orbital sulci below and the precentral sulcus behind",
+    )],
+    "G_rectus": [(
+        "; however, in males, greater activation of the straight gyrus within the medial orbitofrontal cortex while "
+        "observing sexually visual pictures has been strongly linked to HSDD (hypoactive sexual desire disorder)", "",
+        f"{_NO_SOURCE}: a single imaging finding",
+    )],
+    "G_temporal_middle": [(
+        " Some studies indicate that lesions of the posterior region of the middle temporal gyrus, in the left cerebral "
+        "hemisphere, may result in alexia and agraphia for kanji characters (characters of Chinese origin used in "
+        "Japanese writing). The left middle temporal gyrus is also activated during poem composition.", "",
+        f"{_NO_SOURCE}: single findings",
+    )],
+    "S_central": [
+        (" in the brains of vertebrates", "", f"{_NO_SOURCE}; these cards describe the human brain"),
+        (" It is sometimes confused with the longitudinal fissure.", "", _NO_SOURCE),
+    ],
+    # (the sentence before these, on the lunate sulcus as the border of V1 and V2, waits for a clinician's review)
+    "S_oc_middle_and_Lunatus": [(
+        " The evolutionary expansion of the frontal areas of the lunate sulcus would have caused a shift in the "
+        "particular location of the fissure. It has been hypothesized that evolutionary pressures resulted in the human "
+        "brain undergoing internal reorganization to develop the capability of human language.", "",
+        f"{_NO_SOURCE}, and garbled: remarks on evolution",
+    )],
+    "S_parieto_occipital": [(
+        " The lateral part of the parieto-occipital sulcus is situated about 5 cm in front of the occipital pole of the "
+        "hemisphere, and measures about 1.25 cm. in length.", "",
+        f"{_NO_SOURCE}: measurements",
+    )],
+    "S_temporal_inf": [(
+        "The inferior surface of the temporal lobe is concave, and is continuous posteriorly with the tentorial surface "
+        "of the occipital lobe. It is traversed by the inferior temporal sulcus, which extends from near the occipital "
+        "pole behind, to within a short distance of the temporal pole in front, but is frequently subdivided by bridging "
+        "gyri.",
+        "The inferior temporal sulcus runs from the temporal pole towards the occipital pole, in line with the inferior "
+        "occipital sulcus, at the limit between the lateral and ventral aspects of the temporal lobe. It separates the "
+        "middle temporal gyrus, on the lateral aspect, from the inferior temporal gyrus, on the ventral aspect, and is "
+        "broken into segments (2 to 7 in Destrieux et al. 2010).",
+        "The shipped text put the sulcus on the inferior surface of the temporal lobe. Destrieux et al. 2010 (sections "
+        "2.3.3 and 2.3.4) put it, in line with the inferior occipital sulcus, at the limit between the lateral and "
+        "ventral aspects, between the middle and inferior temporal gyri, and found it made of 2 to 7 segments",
+    )],
 }
+# (the audit's B-016: the frontal lobe's text)
+ZTEXT_LOBE_EDITS: dict[str, list[tuple[str, str, str]]] = {
+    "frontal": [(" The front part of the frontal cortex is covered by the prefrontal cortex.", "",
+                 f"{_NO_SOURCE}, and garbled")],
+}
+# Texts written for this atlas where Z-Anatomy ships none (the site audit's B-014), each from the full text of Destrieux
+# et al. 2010 (PMC2937159; reference destrieux2010), by label or lobe: (the text, the sections it comes from). The card
+# says so and links the paper.
+OWN_TEXTS: dict[str, tuple[str, str]] = {
+    "G_and_S_subcentral": (
+        "The subcentral gyrus (central operculum) joins the lower ends of the precentral and postcentral gyri, turning "
+        "around the lower end of the central sulcus on the lateral aspect of the hemisphere. The superior segment of the "
+        "circular sulcus of the insula limits it below, and the anterior and posterior subcentral sulci in front and "
+        "behind; these small sulci vary, and the label includes them.", "sections 2.1.2.1 and 2.4.3"),
+    "G_and_S_transv_frontopol": (
+        "At the frontal pole the superior, middle and inferior frontal gyri give way to transverse gyri and sulci. The "
+        "transverse frontopolar gyri lie between the transverse frontopolar sulci above and the fronto-marginal sulcus "
+        "below; there are one or two transverse frontopolar sulci, running at right angles to the superior frontal "
+        "sulcus. Because their number varies, the sulci and gyri share this label.", "section 2.1.2.3"),
+    "G_oc-temp_med-Lingual": (
+        "The lingual gyrus is the occipital part of the medial occipito-temporal gyrus; the parahippocampal gyrus, its "
+        "temporal part, continues it forwards. The calcarine sulcus lies above it, and behind the parieto-occipital sulcus "
+        "separates it from the cuneus; the medial occipito-temporal (collateral) sulcus separates it from the fusiform "
+        "gyrus, and the lingual sulcus, a branch of the collateral sulcus, runs into it.", "sections 2.3.4 and 2.3.5"),
+    "Lat_Fis-ant-Horizont": (
+        "The horizontal ramus of the lateral sulcus arises near the junction of the anterior and superior segments of "
+        "the circular sulcus of the insula and runs forwards in the inferior frontal gyrus, between its triangular part "
+        "above and its orbital part below. It continued the superior segment of the circular sulcus in 23 of 24 "
+        "hemispheres.", "sections 2.1.2.1 and 2.2"),
+    "Lat_Fis-ant-Vertical": (
+        "The vertical ramus of the lateral sulcus arises, with the horizontal ramus, near the junction of the anterior "
+        "and superior segments of the circular sulcus of the insula and ascends in the inferior frontal gyrus, between "
+        "its opercular part behind and its triangular part in front. On the inflated surface it joined the circular "
+        "sulcus in 15 of 24 hemispheres; in the others it ran the same course on its own.", "sections 2.1.2.1 and 2.2"),
+    "Lat_Fis-post": (
+        "The posterior segment of the lateral sulcus begins where the superior and inferior segments of the circular "
+        "sulcus of the insula meet behind the insula, and curves upwards into the inferior parietal lobule, where the "
+        "supramarginal gyrus curves around its end. It is the medial limit of the planum temporale.",
+        "sections 2.2, 2.3.2 and 2.4.1.4"),
+    "S_collat_transv_ant": (
+        "Close to the temporal and occipital poles the medial occipito-temporal (collateral) sulcus gives off the "
+        "anterior and posterior transverse collateral sulci. The anterior one limits the fusiform gyrus in front and "
+        "laterally.", "section 2.3.4"),
+    "S_collat_transv_post": (
+        "Close to the temporal and occipital poles the medial occipito-temporal (collateral) sulcus gives off the "
+        "anterior and posterior transverse collateral sulci. The posterior one limits the fusiform gyrus behind and "
+        "laterally; a line from its medial end to the posterior end of the calcarine sulcus separates the lingual gyrus "
+        "from the occipital pole.", "section 2.3.4"),
+    "S_front_middle": (
+        "The middle frontal sulcus runs within the middle frontal gyrus. It lies further forward than the superior and "
+        "inferior frontal sulci and reaches the frontal pole, but does not join the precentral sulcus. Discontinuous and "
+        "of variable length, it was present in 23 of 24 hemispheres; it may join the superior or inferior frontal "
+        "sulcus, and is sometimes hard to tell from them.", "section 2.1.2.1"),
+    "S_interm_prim-Jensen": (
+        "The sulcus intermedius primus (of Jensen) is a small sulcus that runs down from the intraparietal sulcus, at "
+        "right angles to it, towards the temporal lobe, which it does not reach. It divides the inferior parietal "
+        "lobule into the supramarginal gyrus in front and the angular gyrus behind.", "section 2.4.1.4"),
+    "S_occipital_ant": (
+        "The temporo-occipital incisure (preoccipital notch) is a small groove at the inferior edge of the hemisphere, "
+        "sometimes continued on the lateral aspect by the anterior occipital sulcus; the label holds both. With the "
+        "parieto-occipital sulcus it is one of the two sulci that partly limit the occipital lobe. It may join the "
+        "superior temporal, inferior temporal, lateral occipito-temporal, inferior occipital or middle occipital "
+        "sulcus.", "section 2.3.1"),
+    "S_oc-temp_lat": (
+        "The lateral occipito-temporal sulcus runs from front to back on the ventral aspect of the occipital and "
+        "temporal lobes, between the fusiform gyrus medially and the inferior temporal and inferior occipital gyri "
+        "laterally. It is discontinuous and hard to tell from its neighbours; it begins near the inferior occipital "
+        "gyrus and stays in the occipital lobe and the back of the temporal lobe, short of the temporal pole.",
+        "section 2.3.4"),
+    "S_pericallosal": (
+        "The pericallosal sulcus (sulcus of the corpus callosum) separates the cingulate gyrus from the corpus "
+        "callosum.", "section 2.5.2"),
+    "S_suborbital": (
+        "The suborbital sulcus is a small sulcus on the medial aspect of the frontal lobe, running towards the frontal "
+        "pole parallel to the anterior part of the cingulate sulcus. It lies above and medial to the gyrus rectus. A "
+        "smaller, inconstant groove sometimes runs above it (the superior suborbital sulcus); it is included in the "
+        "label of the anterior cingulate gyrus and sulcus.", "section 2.1.2.2"),
+    "S_temporal_transverse": (
+        "The transverse temporal sulcus, on the superior aspect of the temporal lobe, divides the transverse temporal "
+        "(Heschl’s) gyrus, which holds the primary auditory cortex, in front from the planum temporale behind. It "
+        "starts at the posterior segment of the lateral sulcus and runs forwards and laterally to the lateral aspect of "
+        "the temporal lobe.", "section 2.3.2"),
+}
+OWN_LOBE_TEXTS: dict[str, tuple[str, str]] = {
+    "occipital": (
+        "The occipital lobe is limited by sulci only in part: on the medial aspect the parieto-occipital sulcus "
+        "separates it from the parietal lobe, and at the inferior edge of the hemisphere the temporo-occipital incisure "
+        "(preoccipital notch) marks its limit. Elsewhere its limits are lines drawn between such landmarks, and on the "
+        "ventral aspect its sulci and gyri continue into those of the temporal lobe. On the lateral aspect the superior "
+        "occipital sulcus divides the superior from the middle occipital gyrus. On the medial aspect the calcarine "
+        "sulcus runs back to the occipital pole, with the cuneus above it and the lingual gyrus below.",
+        "sections 2.3.1 and 2.3.3 to 2.3.5"),
+}
+OWN_TEXT_REF = "destrieux2010"
 # lobe-level texts for the group cards
 ZTEXT_LOBES = {"frontal": "Frontal lobe", "parietal": "Parietal lobe", "temporal": "Temporal lobe",
                "occipital": None, "cingulate": "Limbic lobe", "insula": "Insula"}
+# what a lobe's text is about where that is not the lobe the card is named for (the audit's B-014: the cingulate cortex's
+# card shows the text on the limbic lobe)
+ZTEXT_LOBE_SCOPE = {"cingulate": "the limbic lobe"}
 
 LOBES = ["frontal", "parietal", "temporal", "occipital", "cingulate", "insula"]
 LOBE_NAME = {"frontal": "Frontal lobe", "parietal": "Parietal lobe", "temporal": "Temporal lobe",

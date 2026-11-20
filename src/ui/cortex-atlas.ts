@@ -3,7 +3,7 @@ import { SITE_ROOT } from '../brand';
 import { endsOn, type EndHere } from '../data/ends';
 import type { CameraPreset } from '../data/schema';
 import type { Hemi } from '../state';
-import { CTX, CTX_REFS, DBS_PARCEL, DK_NAMES, FN_GROUPS, FUNCTIONS, LABEL, LOBE, LOBES, MEDIAL_WALL, METHOD, shortName, type CtxLabel, type FnGroupId, type LobeId } from '../cortex';
+import { CTX, CTX_REFS, DBS_PARCEL, DK_NAMES, FN_GROUPS, FUNCTIONS, LABEL, LOBE, LOBES, MEDIAL_WALL, METHOD, shortName, type CtxDefinition, type CtxLabel, type FnGroupId, type LobeId } from '../cortex';
 import { cortexScene, viewLabels, type CortexPlan } from '../cortex/scene';
 import type { ColourMode, CortexState } from '../cortex/state';
 import { VIEW, VIEWS, type ViewId } from '../cortex/views';
@@ -239,16 +239,19 @@ export class CortexAtlasPage {
     return this.s.colour === 'atlas' && l ? `--c: ${l.atlasColour}` : `--c: var(--c-${tokenOf(id)})`;
   }
 
-  private defBlock(def: { text: string; url: string | null; scope?: string | null; edits?: { from: string; to: string; why: string }[] } | null, what: string): HTMLElement[] {
+  private defBlock(def: CtxDefinition | null, what: string): HTMLElement[] {
     if (!def) return [h('dt', {}, 'Definition'), h('dd', {}, `Z-Anatomy ships no definition for ${what}.`)];
     const edits = def.edits ?? [];
+    // a text written here where Z-Anatomy ships none, from the paper it cites (the site audit's B-014)
+    if (def.refIds) return [h('dt', {}, 'Definition'), h('dd', {}, h('p', {}, def.text),
+      h('p', { class: 'aside def-own' }, `Written for this atlas from ${def.source} (full text): Z-Anatomy ships no definition for ${what}. `, refLinksFrom(CTX_REFS, def.refIds)))];
     return [h('dt', {}, def.scope ? `About ${def.scope}` : 'Definition'), h('dd', {}, h('p', {}, def.text),
       h('p', { class: 'aside' }, `From Wikipedia (CC BY-SA 3.0), as shipped with Z-Anatomy; not checked against the literature${edits.length ? ', except as corrected below' : ''}. `,
         def.url ? h('a', { href: def.url, target: '_blank', rel: 'noopener' }, 'Source page') : null),
       // a text changed here says so, with what it said before and why (the licence asks for changes to be indicated)
       ...edits.map((e) => h('p', { class: 'aside def-edit' }, e.to
         ? `Corrected here: “${e.from.trim()}” now reads “${e.to}”. ${e.why}.`
-        : `Corrected here: “${e.from.replace(/^[\s,]+/, '')}” is left out. ${e.why}.`)))];
+        : `Corrected here: “${e.from.replace(/^[\s,;]+/, '')}” is left out. ${e.why}.`)))];
   }
 
   private card(id: string): HTMLElement {

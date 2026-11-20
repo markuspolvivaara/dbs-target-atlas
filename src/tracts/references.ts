@@ -50,12 +50,20 @@ export const WM_REFERENCES: WmReference[] = [
     citation: 'Martino J, Brogna C, Robles SG, Vergani F, Duffau H. Anatomic dissection of the inferior fronto-occipital fasciculus revisited in the lights of brain stimulation data. Cortex. 2010;46(5):691–699. doi:10.1016/j.cortex.2009.07.015.' },
   { id: 'sarubbo2013', pmid: '22200882', shortLabel: 'Sarubbo 2013', url: doi('10.1007/s00429-011-0372-3'),
     citation: 'Sarubbo S, De Benedictis A, Maldonado IL, Basso G, Duffau H. Frontal terminations for the inferior fronto-occipital fascicle: anatomical dissection, DTI study and functional considerations on a multi-component bundle. Brain Struct Funct. 2013;218(1):21–37. doi:10.1007/s00429-011-0372-3.' },
+  // whether the IFOF is peculiar to man (the site audit's B-024): both read in their abstracts
+  { id: 'forkel2014', pmid: '23137651', shortLabel: 'Forkel 2014', url: doi('10.1016/j.cortex.2012.09.005'),
+    citation: 'Forkel SJ, Thiebaut de Schotten M, Kawadler JM, Dell’Acqua F, Danek A, Catani M. The anatomy of fronto-occipital connections from early blunt dissections to contemporary tractography. Cortex. 2014;56:73–84. doi:10.1016/j.cortex.2012.09.005.' },
+  { id: 'sarubbo2019', pmid: '30847641', shortLabel: 'Sarubbo 2019', url: doi('10.1007/s00429-019-01856-2'),
+    citation: 'Sarubbo S, Petit L, De Benedictis A, Chioffi F, Ptito M, Dyrby TB. Uncovering the inferior fronto-occipital fascicle and its topological organization in non-human primates: the missing connection for language evolution. Brain Struct Funct. 2019;224(4):1553–1567. doi:10.1007/s00429-019-01856-2.' },
   { id: 'wu2016', pmid: '27721745', shortLabel: 'Wu 2016', url: doi('10.3389/fnana.2016.00088'),
     citation: 'Wu Y, Sun D, Wang Y, Wang Y. Subcomponents and connectivity of the inferior fronto-occipital fasciculus revealed by diffusion spectrum imaging fiber tracking. Front Neuroanat. 2016;10:88. doi:10.3389/fnana.2016.00088.' },
   { id: 'kier2004', pmid: '15140705', shortLabel: 'Kier 2004', url: 'https://pubmed.ncbi.nlm.nih.gov/15140705/',
     citation: 'Kier EL, Staib LH, Davis LM, Bronen RA. MR imaging of the temporal stem: anatomic dissection tractography of the uncinate fasciculus, inferior occipitofrontal fasciculus, and Meyer’s loop of the optic radiation. AJNR Am J Neuroradiol. 2004;25(5):677–691. PMID 15140705.' },
   { id: 'debenedictis2012', pmid: '22998058', shortLabel: 'De Benedictis 2012', url: doi('10.3171/2012.7.JNS12628'),
     citation: 'De Benedictis A, Sarubbo S, Duffau H. Subcortical surgical anatomy of the lateral frontal region: human white matter dissection and correlations with functional insights provided by intraoperative direct brain stimulation. J Neurosurg. 2012;117(6):1053–1069. doi:10.3171/2012.7.JNS12628.' },
+  // (the site audit's B-020: the uncinate as hook-shaped; read in full text, PMC4877506)
+  { id: 'hau2016', pmid: '27252628', shortLabel: 'Hau 2016', url: doi('10.3389/fnana.2016.00058'),
+    citation: 'Hau J, Sarubbo S, Perchey G, Crivello F, Zago L, Mellet E, et al. Cortical terminations of the inferior fronto-occipital and uncinate fasciculi: anatomical stem-based virtual dissection. Front Neuroanat. 2016;10:58. doi:10.3389/fnana.2016.00058.' },
   { id: 'mandonnet2007', pmid: '17264096', shortLabel: 'Mandonnet 2007', url: doi('10.1093/brain/awl361'),
     citation: 'Mandonnet E, Nouet A, Gatignol P, Capelle L, Duffau H. Does the left inferior longitudinal fasciculus play a role in language? A brain stimulation study. Brain. 2007;130(Pt 3):623–629. doi:10.1093/brain/awl361.' },
   { id: 'herbet2018', pmid: '30283306', shortLabel: 'Herbet 2018', url: doi('10.3389/fnana.2018.00077'),
@@ -146,6 +154,12 @@ export const WM_REFERENCES: WmReference[] = [
     citation: 'Leh SE, Ptito A, Chakravarty MM, Strafella AP. Fronto-striatal connections in the human brain: a probabilistic diffusion tractography study. Neurosci Lett. 2007;419(2):113–118. doi:10.1016/j.neulet.2007.04.049.' },
   { id: 'draganski2008', pmid: '18614684', shortLabel: 'Draganski 2008', url: doi('10.1523/JNEUROSCI.1486-08.2008'),
     citation: 'Draganski B, Kherif F, Klöppel S, Cook PA, Alexander DC, Parker GJ, et al. Evidence for segregated and integrative connectivity patterns in the human basal ganglia. J Neurosci. 2008;28(28):7143–7152. doi:10.1523/JNEUROSCI.1486-08.2008.' },
+  // (the site audit's B-020: the peduncles' and corticopontine tracts' other names; read in full text, PMC4389543 and
+  // PMC7028272)
+  { id: 'keser2015', pmid: '25904851', shortLabel: 'Keser 2015', url: doi('10.3389/fnana.2015.00041'),
+    citation: 'Keser Z, Hasan KM, Mwangi BI, Kamali A, Ucisik-Keser FE, Riascos RF, et al. Diffusion tensor imaging of the human cerebellar pathways and their interplay with cerebral macrostructure. Front Neuroanat. 2015;9:41. doi:10.3389/fnana.2015.00041.' },
+  { id: 'zhang2020', pmid: '32069284', shortLabel: 'Zhang 2020', url: doi('10.1371/journal.pone.0213952'),
+    citation: 'Zhang Y, Vakhtin AA, Jennings JS, Massaband P, Wintermark M, Craig PL, et al. Diffusion tensor tractography of brainstem fibers and its application in pain. PLoS One. 2020;15(2):e0213952. doi:10.1371/journal.pone.0213952.' },
   { id: 'perrini2013', pmid: '22933248', shortLabel: 'Perrini 2013', url: doi('10.1007/s10143-012-0417-y'),
     citation: 'Perrini P, Tiezzi G, Castagna M, Vannozzi R. Three-dimensional microsurgical anatomy of cerebellar peduncles. Neurosurg Rev. 2013;36(2):215–224. doi:10.1007/s10143-012-0417-y.' },
   { id: 'palesi2015', pmid: '25134682', shortLabel: 'Palesi 2015', url: doi('10.1007/s00429-014-0861-2'),
