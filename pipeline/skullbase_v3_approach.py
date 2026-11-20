@@ -169,6 +169,9 @@ if PROFILE == "v1":         # (v1's names for them: Z-Anatomy draws the carotid 
         "Internal carotid artery": 1.5, "Cochlea": 1.5, "Vestibule and semicircular canals": 1.5,
         "Vestibulocochlear nerve (VIII)": 1.0, "Facial nerve (VII)": 1.5, "Mandibular nerve (V3)": 1.0, "Trigeminal nerve (V)": 1.0,
         "Greater petrosal nerve": 0.5, "Abducens nerve (VI)": 1.0,
+        # (the right cochlear nerve was mirrored in after the cut was made, and the drilling ran through it: the site
+        # audit's check of 2026-11-19; the vestibular nerve beside it)
+        "Cochlear nerve": 1.0, "Vestibular nerve": 1.0,
     }
 KW_V1_SOFT_MM = 1.0
 ST_FLAP_MM = (50.0, 50.0)   # the subtemporal approach's temporal flap: this long (front to back) and high, centred front to
@@ -1447,6 +1450,16 @@ def kawase(S: Skull) -> dict:
         return inside
     radius = float(np.linalg.norm(quad - c, axis=1).max()) + 25.0
     drill = S.region(drill_pred, c, radius)
+    # on v1 the cut's edge is smoothed after the margins were kept, and the smoothing took them (0.04 to 0.4 mm left of
+    # 1 to 1.5: the site audit's AP-06): the bone within each margin is protected from the smoothing and from the
+    # thin-bone pass (main: `protect`)
+    def near_kept(P):
+        near = np.zeros(len(P), bool)
+        for n_, mm in KW_KEEP_MM.items():
+            if n_ in trees:
+                near |= trees[n_].query(P)[0] < mm
+        return near
+    protect = S.region(near_kept, c, radius) if PROFILE == "v1" else None
     area = outline_area(outline, lat)
     dist = lambda a_, b_: float(np.linalg.norm(a_ - b_))   # noqa: E731
     measured = {"aeToGgMm": round(dist(ae, gg), 1), "ggToMeetMm": round(dist(gg, meet), 1), "meetToApexMm": round(dist(meet, apex), 1),
@@ -1474,7 +1487,7 @@ def kawase(S: Skull) -> dict:
     if PROFILE == "v1":       # (on v1 the drilled edge smoothed as the flaps' are: unsmoothed it shows the grid's steps)
         how += f" The cut's edge smoothed over {KW_V1_SOFT_MM:g} mm (illustrative)."
     return {"id": "kawase", "name": "Anterior petrosectomy (Kawase)", "cut": m | drill, "how": how, "burrHoles": [],
-            **({"softMm": KW_V1_SOFT_MM} if PROFILE == "v1" else {}),
+            **({"softMm": KW_V1_SOFT_MM, "protect": protect} if PROFILE == "v1" else {}),
             "areaMm2": round(area), "measured": measured,
             "measure": lambda M: {"<<side>>": f"{M.seen(lat):.0f}", "sideMm2": round(M.seen(lat))},
             "corners": np.round(quad, 2).tolist(),
@@ -1635,8 +1648,11 @@ def main(only: list[str] | None = None) -> int:
     makers = MAKERS
     for ap in (makers[k](S) for k in makers if not only or k in only):
         cut, soft, guard = ap["cut"], ap.get("softMm", 0.0), ap.get("guard")
+        protect = ap.get("protect")
         if PROFILE == "v1":
             cut = cut | thin_by_cut(S, cut)
+            if protect is not None:
+                cut &= ~protect
             ap["cut"] = cut
         # (a view with a clinoidectomy switch: its bones are cut round the clinoid process too, which is a piece of its own)
         cl = ap.get("clinoid")
@@ -1646,6 +1662,8 @@ def main(only: list[str] | None = None) -> int:
         # meet on one surface rather than at a seam between two meshings
         touched = cutb | S.near_bones(cut_all, cutb)
         keep = S.whole_bones(cut_all, cutb) if soft else None
+        if protect is not None and keep is not None:
+            keep = keep | protect      # (the smoothing takes nothing within a margin: soft())
         bones = S.cut_bones(cut_all, only=touched, soft_mm=soft, guard=guard, keep=keep)
         # the bone removed: where the cut takes more than half of the bone (its smoothed edge, as the cut bones have it)
         removed = isosurface(np.minimum(S.b, S.soft(cut, soft, guard, keep)) if soft else cut.astype(np.float32), S.a,

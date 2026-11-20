@@ -159,3 +159,34 @@ describe('nerves and vessels against the skull-base bone they are drawn with', (
     expect(bad).toEqual([]);
   }, 120_000);
 });
+
+describe('skull base v1: the Kawase drilling keeps off what it must not open (the audit’s AP-06)', () => {
+  it('no protected structure lies in the bone removed, and none is nearer to it than its margin, less the grid', async () => {
+    // (the margins as pipeline/skullbase_v3_approach.py KW_KEEP_MM states them for v1; the right cochlear and
+    // vestibular nerves were added after the drilling had run through two-thirds of the cochlear nerve)
+    const MARGIN: Record<string, number> = {
+      'Internal carotid artery': 1.5, Cochlea: 1.5, 'Vestibule and semicircular canals': 1.5, 'Vestibulocochlear nerve (VIII)': 1.0,
+      'Facial nerve (VII)': 1.5, 'Cochlear nerve': 1.0, 'Vestibular nerve': 1.0,
+    };
+    const removed = await soup(sbManifest.structures.find((s) => s.file.endsWith('sb_appr_kawase__removed.glb'))!.file);
+    const bad: string[] = [];
+    for (const [name, mm] of Object.entries(MARGIN)) {
+      const st = sbManifest.structures.find((s) => s.name === name && !s.approach && !s.pushedFrom && !s.tumourView && !s.replaces && !s.forView);
+      expect(st, name).toBeTruthy();
+      const t = await soup(st!.file);
+      // (the right side only: the drilling is on the right)
+      const R: number[] = [];
+      for (let i = 0; i < t.P.length; i += 3) if (t.P[i] > 0) R.push(t.P[i], t.P[i + 1], t.P[i + 2]);
+      const Q = Float64Array.from(R);
+      const inside = pointsInside(Q, removed.P, removed.T);
+      let nearest = Infinity;
+      for (let i = 0; i < Q.length; i += 3) for (let j = 0; j < removed.P.length; j += 3) {
+        const d = Math.hypot(Q[i] - removed.P[j], Q[i + 1] - removed.P[j + 1], Q[i + 2] - removed.P[j + 2]);
+        if (d < nearest) nearest = d;
+      }
+      // (0.5 mm: the grid the cut is made on)
+      if (inside > 0 || nearest < mm - 0.5) bad.push(`${name}: ${inside} points inside, nearest ${nearest.toFixed(2)} mm (margin ${mm})`);
+    }
+    expect(bad).toEqual([]);
+  }, 120_000);
+});

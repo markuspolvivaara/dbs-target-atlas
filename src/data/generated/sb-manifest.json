@@ -6289,7 +6289,7 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_kawase__occipital_bone.glb",
-   "bytes": 120724,
+   "bytes": 120780,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -6302,8 +6302,8 @@
      -3.66
     ],
     "R": [
-     25.77,
-     -61.44,
+     25.78,
+     -61.45,
      -6.57
     ]
    }
@@ -6328,7 +6328,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_kawase__parietal_bone.glb",
-   "bytes": 223040,
+   "bytes": 223316,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -6341,9 +6341,9 @@
      68.47
     ],
     "R": [
-     39.05,
+     39.07,
      -40.0,
-     56.4
+     56.39
     ]
    }
   },
@@ -6367,7 +6367,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_kawase__sphenoid_bone.glb",
-   "bytes": 124580,
+   "bytes": 124484,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -6381,8 +6381,8 @@
     ],
     "R": [
      21.9,
-     7.92,
-     -6.65
+     7.91,
+     -6.63
     ]
    }
   },
@@ -6406,7 +6406,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase/sb_appr_kawase__temporal_bone.glb",
-   "bytes": 459792,
+   "bytes": 462348,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -6419,9 +6419,9 @@
      -14.03
     ],
     "R": [
-     45.02,
-     -22.88,
-     -12.91
+     44.92,
+     -22.86,
+     -12.93
     ]
    }
   },
@@ -6431,7 +6431,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_appr_kawase__removed.glb",
-   "bytes": 246252,
+   "bytes": 245824,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -6446,17 +6446,17 @@
    "category": "removed",
    "approach": "kawase",
    "layer": "nuclei",
-   "derivation": "The bone the anterior petrosectomy (kawase) removes: 8.2 ml. A right temporal flap drawn 40 × 32 mm (1280 mm² seen from the side as drawn; Signoretti 2025 measured a mean 1272 mm²; the bone removed, the drilled apex with it, covers about 1646 mm² seen from the side), its base at the middle fossa floor's level (the tegmen, as located on this model), two thirds of it in front of the external auditory canal and one third behind (Flores-Justa 2021; the canal's line taken from Z-Anatomy's ear's tympanic membrane), cut down flush with the floor. Then the petrous apex drilled within the rhomboid of four landmarks (Signoretti 2025): the petrous apex, where the greater petrosal nerve meets V3 (seen from above), the geniculate ganglion and the arcuate eminence (the bone over the superior semicircular canal, from Z-Anatomy's ear), seen from above and drilled straight down to the level of the inferior petrosal sinus, the ridge and the pyramid behind it taken through to the posterior fossa's dura (up to 12 mm behind the line from the apex to the eminence, from the apex to the porus: not medial to the apex, not behind the internal acoustic canal), kept 1.5 mm off the internal carotid artery, 1.5 mm off the cochlea, 1.5 mm off the vestibule and semicircular canals, 1 mm off the vestibulocochlear nerve (VIII), 1.5 mm off the facial nerve (VII), 1 mm off the mandibular nerve (V3), 1 mm off the trigeminal nerve (V), 0.5 mm off the greater petrosal nerve, 1 mm off the abducens nerve (VI) (the margins illustrative): 1.69 ml (Signoretti 2025: 2.83 ± 0.28 cm³). On this model the arcuate eminence lies 10.8 mm from the geniculate ganglion, that 12.6 mm from the nerves' meeting, that 18.6 mm from the petrous apex, and the apex 31.6 mm (straight) from the eminence. The cut's edge smoothed over 1 mm (illustrative).",
+   "derivation": "The bone the anterior petrosectomy (kawase) removes: 7.8 ml. A right temporal flap drawn 40 × 32 mm (1280 mm² seen from the side as drawn; Signoretti 2025 measured a mean 1272 mm²; the bone removed, the drilled apex with it, covers about 1641 mm² seen from the side), its base at the middle fossa floor's level (the tegmen, as located on this model), two thirds of it in front of the external auditory canal and one third behind (Flores-Justa 2021; the canal's line taken from Z-Anatomy's ear's tympanic membrane), cut down flush with the floor. Then the petrous apex drilled within the rhomboid of four landmarks (Signoretti 2025): the petrous apex, where the greater petrosal nerve meets V3 (seen from above), the geniculate ganglion and the arcuate eminence (the bone over the superior semicircular canal, from Z-Anatomy's ear), seen from above and drilled straight down to the level of the inferior petrosal sinus, the ridge and the pyramid behind it taken through to the posterior fossa's dura (up to 12 mm behind the line from the apex to the eminence, from the apex to the porus: not medial to the apex, not behind the internal acoustic canal), kept 1.5 mm off the internal carotid artery, 1.5 mm off the cochlea, 1.5 mm off the vestibule and semicircular canals, 1 mm off the vestibulocochlear nerve (VIII), 1.5 mm off the facial nerve (VII), 1 mm off the mandibular nerve (V3), 1 mm off the trigeminal nerve (V), 0.5 mm off the greater petrosal nerve, 1 mm off the abducens nerve (VI), 1 mm off the cochlear nerve, 1 mm off the vestibular nerve (the margins illustrative): 1.58 ml (Signoretti 2025: 2.83 ± 0.28 cm³). On this model the arcuate eminence lies 10.8 mm from the geniculate ganglion, that 12.6 mm from the nerves' meeting, that 18.6 mm from the petrous apex, and the apex 31.6 mm (straight) from the eminence. The cut's edge smoothed over 1 mm (illustrative).",
    "centroid": {
     "L": [
-     50.84,
-     -15.08,
-     1.9
+     51.27,
+     -14.86,
+     2.25
     ],
     "R": [
-     50.84,
-     -15.08,
-     1.9
+     51.27,
+     -14.86,
+     2.25
     ]
    }
   },
