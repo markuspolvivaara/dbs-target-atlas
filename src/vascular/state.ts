@@ -1,7 +1,8 @@
 import type { CameraPreset } from '../data/schema';
-import { DEFAULT_LEAD, type V3 } from '../state';
+import { DEFAULT_LEAD } from '../state';
 import type { ViewState } from '../viewer/scene';
-import { decodeOpacity, encodeOpacity, okCamera } from '../viewer/scene';
+import { decodeOpacity, encodeOpacity } from '../viewer/scene';
+import { decodeCamera, decodeHemi, decodeHidden, encodeCamera, encodeHemi, encodeHidden, hashOf, r1, readHash } from '../viewlink';
 import { VA_GROUP } from './groups';
 import { DSA, TREATMENTS } from './index';
 import { defaultLabels, labelsFrom, labelsParam } from '../labels';
@@ -47,46 +48,36 @@ export function defaultVaState(): VaState {
 
 // #/atlas?g=avm3&sel=va_avm3__nidus&h=B&c=axial&dsa=1&t=1.4&ly=b0,c40
 const PAGES: VaPage[] = ['atlas', 'grading', 'sources', 'credits'];
-const r1 = (n: number) => Math.round(n * 10) / 10;
 
 export function encodeVa(s: VaState): string {
   const p = new URLSearchParams();
   if (s.page === 'atlas') {
     p.set('g', s.grp);
     if (s.sel) p.set('sel', s.sel);
-    p.set('h', s.hemi === 'both' ? 'B' : s.hemi);
-    if (s.cam.pos && s.cam.tgt) p.set('c', [...s.cam.pos, ...s.cam.tgt].map(r1).join(','));
-    else if (s.cam.preset) p.set('c', s.cam.preset);
+    encodeHemi(p, s.hemi);
+    encodeCamera(p, s.cam);
     if (s.dsa.on) { p.set('dsa', '1'); p.set('t', String(r1(s.dsa.t))); }
     if (s.treat) p.set('tr', s.treat);
     const ly = CODES.filter(([k]) => { const l = s.layers[k]!; return !l.on || l.opacity !== DEFAULT_OPACITY[k]; })
       .map(([k, c]) => { const l = s.layers[k]!; return `${c}${l.on ? Math.round(l.opacity * 100) : 0}`; });
     if (ly.length) p.set('ly', ly.join(','));
     { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
-    if (s.hidden.length) p.set('hid', s.hidden.join(','));
+    encodeHidden(p, s.hidden);
     encodeOpacity(p, s.opacity);
   }
-  const q = p.toString();
-  return `#/${s.page}${q ? '?' + q : ''}`;
+  return hashOf(s.page, p);
 }
 
 /** Decode a hash; settings a link leaves out come from the defaults. */
 export function decodeVa(hash: string): VaState {
   const s = defaultVaState();
-  const m = hash.replace(/^#\/?/, '').split('?');
-  s.page = PAGES.includes(m[0] as VaPage) ? (m[0] as VaPage) : 'atlas';
-  const p = new URLSearchParams(m[1] ?? '');
+  const { page, p } = readHash(hash, PAGES);
+  s.page = page;
   const g = VA_GROUP.get(p.get('g') ?? '');
   if (g) s.grp = g.id;
   s.sel = p.get('sel');
-  const h = p.get('h');
-  if (h === 'L' || h === 'R') s.hemi = h; else if (h === 'B') s.hemi = 'both';
-  const c = p.get('c');
-  if (c) {
-    const parts = c.split(',').map(Number);
-    if (okCamera(parts)) s.cam = { preset: null, pos: parts.slice(0, 3) as V3, tgt: parts.slice(3) as V3 };
-    else if ((VA_PRESETS as string[]).includes(c)) s.cam = { preset: c as CameraPreset };
-  }
+  decodeHemi(p, s);
+  decodeCamera(p, s, VA_PRESETS);
   s.dsa.on = p.get('dsa') === '1';
   const tr = p.get('tr') ?? '';
   s.treat = TREATMENTS.some((x) => x.id === tr) ? tr : '';
@@ -99,7 +90,7 @@ export function decodeVa(hash: string): VaState {
   }
   const lb = p.get('lb');
   s.labels = labelsFrom(lb);
-  s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
+  s.hidden = decodeHidden(p);
   decodeOpacity(p, s);
   return s;
 }

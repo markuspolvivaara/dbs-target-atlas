@@ -1,25 +1,15 @@
 import '@fontsource/atkinson-hyperlegible/latin-400.css';
 import '@fontsource/atkinson-hyperlegible/latin-700.css';
 import './styles.css';
-import { BRAND, SECTIONS } from './brand';
+import { SECTIONS } from './brand';
 import { LM, SB, SB_MODEL } from './skullbase';
 import { DEFAULT_GROUP, SB_GROUP, viewGroup } from './skullbase/groups';
-import { decodeSkull, encodeSkull, type SkullPage, type SkullState } from './skullbase/state';
-import { h } from './ui/h';
-import { bindHelp, viewHelp } from './ui/help';
-import { bootFailed } from './ui/stage';
-import { disclaimerNote, siteHeader } from './ui/shell';
+import { decodeSkull, encodeSkull, type SkullState } from './skullbase/state';
 import { SkullbaseAtlasPage, surgicalKeyRows } from './ui/skullbase-atlas';
 import { skullCreditsPage, skullGradingPage, skullSourcesPage } from './ui/skullbase-pages';
-import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
-import { addressSync } from './ui/address';
-import { lostFromLink, showLinkNote } from './ui/linknote';
+import { bootSection } from './ui/section';
 
-const SECTION = SECTIONS.find((s) => s.id === (SB_MODEL === 'v3' ? 'skullbase' : SB_MODEL === 'ct' ? 'skullbase-ct' : 'skullbase-v1'))!;
-
-injectPaletteCss();
-let theme: ThemePref = storedTheme();
-let resolved = applyTheme(theme);
+// (one entry script for the three models: the default (v3), v1 on Z-Anatomy's model and v2 on a CT angiogram)
 
 function sanitize(s: SkullState): SkullState {
   // (v2 has no tumour views, so no Grading page: the audit's P1-24)
@@ -33,132 +23,33 @@ function sanitize(s: SkullState): SkullState {
   return s;
 }
 
-let state: SkullState = sanitize(decodeSkull(location.hash));
-
-// ---------------------------------------------------------------- shell
-const NAV: [SkullPage, string][] = SB_MODEL === 'v3' || SB_MODEL === 'zanatomy'
-  ? [['atlas', 'Atlas'], ['grading', 'Grading'], ['sources', 'Sources'], ['credits', 'Credits']]
-  : [['atlas', 'Atlas'], ['sources', 'Sources'], ['credits', 'Credits']];
-const app = document.getElementById('app')!;
-const navLinks = NAV.map(([p, label]) => h('a', { href: `#/${p}`, class: 'navlink', 'data-page': p }, label));
-const themeBtn = h('button', { type: 'button', class: 'theme-btn', onclick: () => cycleTheme() });
-const header = siteHeader({ section: SECTION, nav: navLinks, themeBtn });
-const disclaimer = disclaimerNote(SB_MODEL === 'v3'
-  ? 'One adult’s CT with another person’s ear (a cadaver specimen) registered into it: positions are approximate to a millimetre or two. Individual anatomy varies. Not for surgical planning.'
-  : SB_MODEL === 'ct'
-  ? 'One adult’s CT angiogram; nerves and landmarks fitted from a model (approximate). Individual anatomy varies. Not for surgical planning.'
-  : 'Single-model anatomy (Z-Anatomy / BodyParts3D, one adult); individual anatomy varies. Not for surgical planning.');
-
-const update = (fn: (s: SkullState) => void, opts: { camera?: boolean } = {}) => {
-  const next = structuredClone(state);
-  fn(next);
-  setState(sanitize(next), { camera: opts.camera ?? false, fromCamera: opts.camera === false });
-};
-const atlas = new SkullbaseAtlasPage(update);
-const pages: Record<SkullPage, { el: HTMLElement; render(s: SkullState): void }> = {
-  atlas: { el: atlas.el, render: (s) => atlas.render(s, { camera: pendingCamera }) },
-  grading: skullGradingPage(),
-  sources: skullSourcesPage(),
-  credits: skullCreditsPage(),
-};
-
-const main = h('main', { id: 'main' }, ...Object.values(pages).map((p) => p.el));
-new ResizeObserver(() => document.documentElement.style.setProperty('--disc-h', `${disclaimer.offsetHeight}px`)).observe(disclaimer);
-const help = buildHelp();
-bindHelp(help);
-// the atlas page's heading, for screen readers and outlines (its other pages have their own)
-atlas.el.prepend(h('h1', { class: 'vh' }, `${SECTION.name}: 3D atlas`));
-app.append(h('a', { class: 'skip', href: '#main' }, 'Skip to content'), h('a', { class: 'skip skip-panel', href: '#panel', onclick: (e: Event) => { e.preventDefault(); document.getElementById('panel')?.focus(); } }, 'Skip to the panel'), header, disclaimer, main, help);
-
-let pendingCamera = true;
-let hashTimer = 0;
-const address = addressSync();   // (the address is written only over the hash this page last wrote or read)
-
-function setState(next: SkullState, opts: { camera: boolean; fromCamera?: boolean }): void {
-  const pageChanged = next.page !== state.page;
-  state = next;
-  pendingCamera = opts.camera;
-  // the address follows a change at once, and the camera, which moves in bursts, a moment after its last move (with a
-  // timer for every change, the camera's moves put off another change's while the view was still settling)
-  clearTimeout(hashTimer);
-  if (opts.fromCamera) hashTimer = window.setTimeout(() => address.write(encodeSkull(state)), 400);
-  else address.write(encodeSkull(state));
-  if (opts.fromCamera) return;
-  render(pageChanged);
-}
-
-function render(pageChanged = false): void {
-  for (const [p, v] of Object.entries(pages)) v.el.hidden = p !== state.page;
-  navLinks.forEach((a) => (a.dataset.page === state.page ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
-  document.body.dataset.page = state.page;
-  pages[state.page].render(state);
-  if (state.page === 'atlas') atlas.onShow();
-  const atlasTitle = state.sel ? (SB.get(state.sel)?.name ?? LM.get(state.sel)?.name ?? '') : viewGroup(state.grp, state.also).name;
-  const titles: Record<SkullPage, string> = { atlas: atlasTitle, grading: 'Grading', sources: 'Sources', credits: 'Credits' };
-  document.title = `${titles[state.page]} · ${SECTION.name} · ${BRAND.name}`;
-  if (pageChanged) window.scrollTo(0, 0);
-}
-
-const LINK_FIELDS = { g: 'grp', sel: 'sel' };
-showLinkNote(header, lostFromLink(location.hash, state, LINK_FIELDS));
-
-window.addEventListener('hashchange', () => {
-  address.read();
-  if (location.hash === encodeSkull(state)) return;
-  const bare = !location.hash.includes('?');
-  const next = sanitize(bare ? { ...structuredClone(state), page: decodeSkull(location.hash).page } : decodeSkull(location.hash));
-  showLinkNote(header, lostFromLink(location.hash, next, LINK_FIELDS));
-  setState(next, { camera: !bare || next.page !== state.page });
+bootSection({
+  section: SECTIONS.find((s) => s.id === (SB_MODEL === 'v3' ? 'skullbase' : SB_MODEL === 'ct' ? 'skullbase-ct' : 'skullbase-v1'))!,
+  nav: SB_MODEL === 'v3' || SB_MODEL === 'zanatomy'
+    ? [['atlas', 'Atlas'], ['grading', 'Grading'], ['sources', 'Sources'], ['credits', 'Credits']]
+    : [['atlas', 'Atlas'], ['sources', 'Sources'], ['credits', 'Credits']],
+  disclaimer: SB_MODEL === 'v3'
+    ? 'One adult’s CT with another person’s ear (a cadaver specimen) registered into it: positions are approximate to a millimetre or two. Individual anatomy varies. Not for surgical planning.'
+    : SB_MODEL === 'ct'
+    ? 'One adult’s CT angiogram; nerves and landmarks fitted from a model (approximate). Individual anatomy varies. Not for surgical planning.'
+    : 'Single-model anatomy (Z-Anatomy / BodyParts3D, one adult); individual anatomy varies. Not for surgical planning.',
+  fromLink: (hash) => sanitize(decodeSkull(hash)),
+  pageOf: (hash) => decodeSkull(hash).page,
+  encode: encodeSkull,
+  sanitize,
+  linkFields: { g: 'grp', sel: 'sel' },
+  atlas: (update) => new SkullbaseAtlasPage(update),
+  // (the Grading page is built on v2 too, where no tab leads to it and sanitize turns it back to the atlas)
+  pages: () => ({ grading: skullGradingPage(), sources: skullSourcesPage(), credits: skullCreditsPage() }),
+  atlasTitle: (s) => (s.sel ? (SB.get(s.sel)?.name ?? LM.get(s.sel)?.name ?? '') : viewGroup(s.grp, s.also).name),
+  help: {
+    rows: [
+      SB_MODEL === 'v3' ? ['1 – 6', 'Camera: from above, from below, lateral, anterior, posterior-oblique, surgical (anterolateral)'] : ['1 – 5', 'Camera: from above, from below, lateral, anterior, posterior-oblique'],
+      ['H', 'Side: both → left → right'], ['C', 'Cut away above the cranial floor: on / off'],
+      ['N', 'Name labels: hover → all → off'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
+      // (the surgical views' keys, on v1 as on the default model; v2 has no surgical views)
+      ...(SB_MODEL !== 'ct' ? surgicalKeyRows() : []),
+    ],
+    tap: 'a structure or landmark',
+  },
 });
-
-// ---------------------------------------------------------------- theme
-function cycleTheme(): void {
-  theme = theme === 'system' ? (resolved === 'dark' ? 'light' : 'dark') : theme === 'light' ? 'dark' : 'system';
-  storeTheme(theme);
-  resolved = applyTheme(theme);
-  syncTheme();
-}
-function syncTheme(): void {
-  themeBtn.textContent = theme === 'system' ? 'Theme: auto' : theme === 'light' ? 'Theme: light' : 'Theme: dark';
-  themeBtn.setAttribute('aria-label', `Colour theme: ${theme}. Change theme`);
-  atlas.viewer.setTheme(paletteFor(resolved), VIEWER[resolved].bg, VIEWER[resolved].ghost);
-}
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { resolved = applyTheme(theme); syncTheme(); });
-
-// ---------------------------------------------------------------- keyboard
-function buildHelp(): HTMLDialogElement {
-  const rows: [string, string][] = [
-    SB_MODEL === 'v3' ? ['1 – 6', 'Camera: from above, from below, lateral, anterior, posterior-oblique, surgical (anterolateral)'] : ['1 – 5', 'Camera: from above, from below, lateral, anterior, posterior-oblique'],
-    ['H', 'Side: both → left → right'], ['C', 'Cut away above the cranial floor: on / off'],
-    ['N', 'Name labels: hover → all → off'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
-    // (the surgical views' keys, on v1 as on the default model; v2 has no surgical views)
-    ...(SB_MODEL !== 'ct' ? surgicalKeyRows() : []),
-  ];
-  return h('dialog', { class: 'help', 'aria-labelledby': 'help-title' },
-    h('h2', { id: 'help-title' }, 'Keys, mouse and touch'),
-    h('dl', {}, ...rows.flatMap(([k, v]) => [h('dt', {}, h('kbd', {}, k)), h('dd', {}, v)])),
-    ...viewHelp('a structure or landmark'),
-    h('form', { method: 'dialog' }, h('button', { class: 'btn' }, 'Close'))) as HTMLDialogElement;
-}
-
-window.addEventListener('keydown', (e) => {
-  const t = e.target as HTMLElement;
-  if (e.metaKey || e.ctrlKey || e.altKey) return;
-  if (t.closest('input, select, textarea, [contenteditable]')) return;
-  if (e.key === '?') { help.open ? help.close() : help.showModal(); e.preventDefault(); return; }
-  if (state.page !== 'atlas' || help.open) return;
-  // the section's own keys first; then, with the 3D view in focus, the viewer's (arrows turn it, + and - zoom)
-  if (atlas.handleKey(e) || (document.activeElement === atlas.viewer.renderer.domElement && atlas.viewer.handleKey(e))) e.preventDefault();
-});
-
-// ---------------------------------------------------------------- boot
-syncTheme();
-render(true);
-history.replaceState(null, '', encodeSkull(state));
-address.read();
-atlas.viewer.preload().then(() => {
-  pendingCamera = !state.cam.pos;
-  pages.atlas.render(state);
-  document.body.dataset.ready = '1';
-}).catch(bootFailed);
-(window as unknown as { __atlas: unknown }).__atlas = { viewer: atlas.viewer, state: () => state };

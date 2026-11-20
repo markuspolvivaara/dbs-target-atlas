@@ -1,9 +1,10 @@
 import { drillPairFor } from './drill';
 import { HERNIA_MIGRATE, HERNIA_SIZE, HERNIA_ZONES, type HerniaSpec } from './herniation';
 import type { CameraPreset } from '../data/schema';
-import { DEFAULT_LEAD, type V3 } from '../state';
+import { DEFAULT_LEAD } from '../state';
 import type { ViewState } from '../viewer/scene';
-import { decodeOpacity, encodeOpacity, okCamera } from '../viewer/scene';
+import { decodeOpacity, encodeOpacity } from '../viewer/scene';
+import { decodeCamera, decodeHemi, decodeHidden, decodeLayers, encodeCamera, encodeHemi, encodeHidden, encodeLayers, hashOf, r1, readHash } from '../viewlink';
 import type { RegionId } from './index';
 import { APPROACHES, CCJ_MEASURES, discRegion, GEOM_BY_PAIR, herniaZones, TECHNIQUES, type ApproachId, type CcjMeasureId, type HerniaZone } from './content';
 import type { TechniqueId } from './screw';
@@ -103,7 +104,6 @@ export function defaultSpineState(): SpineState {
 // #/atlas?r=lumbar&lv=L4&sel=sp_l4&h=B&c=lateral&ly=b1,d1,n1,v1,o0.5&cut=R&lb=a
 const PAGES: SpinePage[] = ['atlas', 'sources', 'credits'];
 const LAYER_CODES: [keyof SpineState['layers'], string][] = [['nuclei', 'b'], ['discs', 'd'], ['tracts', 'n'], ['vessels', 'v'], ['viscera', 'o']];
-const r1 = (n: number) => Math.round(n * 10) / 10;
 
 export function encodeSpine(s: SpineState): string {
   const p = new URLSearchParams();
@@ -111,15 +111,12 @@ export function encodeSpine(s: SpineState): string {
     p.set('r', s.region);
     if (s.level) p.set('lv', s.level);
     if (s.sel) p.set('sel', s.sel);
-    p.set('h', s.hemi === 'both' ? 'B' : s.hemi);
-    if (s.cam.pos && s.cam.tgt) p.set('c', [...s.cam.pos, ...s.cam.tgt].map(r1).join(','));
-    else if (s.cam.preset) p.set('c', s.cam.preset);
-    const d = defaultSpineState();
-    const code = (st: SpineState) => LAYER_CODES.map(([k, c]) => `${c}${st.layers[k]!.on ? 1 : 0}${st.layers[k]!.opacity !== 1 ? ':' + st.layers[k]!.opacity.toFixed(2) : ''}`).join(',');
-    if (code(s) !== code(d)) p.set('ly', code(s));
+    encodeHemi(p, s.hemi);
+    encodeCamera(p, s.cam);
+    encodeLayers(p, s.layers, defaultSpineState().layers, LAYER_CODES);
     if (s.cutSide !== 'none') p.set('cut', s.cutSide);
     { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
-    if (s.hidden.length) p.set('hid', s.hidden.join(','));
+    encodeHidden(p, s.hidden);
     encodeOpacity(p, s.opacity);
     if (s.cut !== 'none' && s.level) p.set('x', s.cut === 'disc' ? 'd' : 's');
     if (s.screw && s.level) {
@@ -138,41 +135,26 @@ export function encodeSpine(s: SpineState): string {
       if (hz) p.set('hz', [hz.zone, hz.side, hz.type === 'extrusion' ? 'e' : 'p', hz.sizeMm, hz.migrateMm].join('.'));
     }
   }
-  const q = p.toString();
-  return `#/${s.page}${q ? '?' + q : ''}`;
+  return hashOf(s.page, p);
 }
 
 export function decodeSpine(hash: string): SpineState {
   const s = defaultSpineState();
-  const m = hash.replace(/^#\/?/, '').split('?');
-  s.page = PAGES.includes(m[0] as SpinePage) ? (m[0] as SpinePage) : 'atlas';
-  const p = new URLSearchParams(m[1] ?? '');
+  const { page, p } = readHash(hash, PAGES);
+  s.page = page;
   const r = REGION.get(p.get('r') as RegionId);
   s.region = r && r.ready ? r.id : 'cervical';   // the spine opens on the cervical region
   const lv = p.get('lv');
   s.level = lv && REGION.get(s.region)!.levels.includes(lv) ? lv : null;
   s.sel = p.get('sel');
-  const h = p.get('h');
-  if (h === 'L' || h === 'R') s.hemi = h; else if (h === 'B') s.hemi = 'both';
-  const c = p.get('c');
-  if (c) {
-    const parts = c.split(',').map(Number);
-    if (okCamera(parts)) s.cam = { preset: null, pos: parts.slice(0, 3) as V3, tgt: parts.slice(3) as V3 };
-    else if ((SPINE_PRESETS as string[]).includes(c)) s.cam = { preset: c as CameraPreset };
-  }
-  const ly = p.get('ly');
-  if (ly) for (const tok of ly.split(',')) {
-    const e = LAYER_CODES.find(([, code]) => code === tok[0]);
-    if (!e) continue;
-    const [on, op] = tok.slice(1).split(':');
-    const o = op !== undefined && Number.isFinite(parseFloat(op)) ? parseFloat(op) : 1;
-    s.layers[e[0]] = { on: on === '1', opacity: Math.min(1, Math.max(0, o)) };
-  }
+  decodeHemi(p, s);
+  decodeCamera(p, s, SPINE_PRESETS);
+  decodeLayers(p, s.layers, LAYER_CODES);
   const cut = p.get('cut');
   s.cutSide = cut === 'L' || cut === 'R' ? cut : 'none';
   const lb = p.get('lb');
   s.labels = labelsFrom(lb);
-  s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
+  s.hidden = decodeHidden(p);
   decodeOpacity(p, s);
   const les = /^([CLT]\d{1,2})-([CLST]\d{1,2})\.(central|paracentral|foraminal|farlateral)\.([LR])$/.exec(p.get('les') ?? '');
   s.screw = decodeScrew(p.get('scr'), s.level);

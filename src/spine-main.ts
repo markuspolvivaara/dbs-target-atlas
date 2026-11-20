@@ -1,27 +1,15 @@
 import '@fontsource/atkinson-hyperlegible/latin-400.css';
 import '@fontsource/atkinson-hyperlegible/latin-700.css';
 import './styles.css';
-import { BRAND, SECTIONS } from './brand';
+import { SECTIONS } from './brand';
 import { SP } from './spine';
 import { GEOM_BY_LEVEL, TECHNIQUES } from './spine/content';
 import { screwCut } from './spine/screw';
 import { REGION } from './spine/regions';
-import { decodeSpine, encodeSpine, type SpinePage, type SpineState } from './spine/state';
-import { h } from './ui/h';
-import { bindHelp, viewHelp } from './ui/help';
-import { bootFailed } from './ui/stage';
-import { disclaimerNote, siteHeader } from './ui/shell';
+import { decodeSpine, encodeSpine, type SpineState } from './spine/state';
 import { SpineAtlasPage } from './ui/spine-atlas';
 import { spineCreditsPage, spineSourcesPage } from './ui/spine-pages';
-import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
-import { addressSync } from './ui/address';
-import { lostFromLink, showLinkNote } from './ui/linknote';
-
-const SECTION = SECTIONS.find((s) => s.id === 'spine')!;
-
-injectPaletteCss();
-let theme: ThemePref = storedTheme();
-let resolved = applyTheme(theme);
+import { bootSection } from './ui/section';
 
 function sanitize(s: SpineState): SpineState {
   if (!REGION.get(s.region)?.ready) s.region = 'cervical';
@@ -39,123 +27,24 @@ function sanitize(s: SpineState): SpineState {
   return s;
 }
 
-let state: SpineState = sanitize(decodeSpine(location.hash));
-
-// ---------------------------------------------------------------- shell
-const NAV: [SpinePage, string][] = [['atlas', 'Atlas'], ['sources', 'Sources'], ['credits', 'Credits']];
-const app = document.getElementById('app')!;
-const navLinks = NAV.map(([p, label]) => h('a', { href: `#/${p}`, class: 'navlink', 'data-page': p }, label));
-const themeBtn = h('button', { type: 'button', class: 'theme-btn', onclick: () => cycleTheme() });
-const header = siteHeader({ section: SECTION, nav: navLinks, themeBtn });
-const disclaimer = disclaimerNote('One adult CT (VerSe); anatomy, pedicle sizes and vessel positions vary between people and with deformity. Illustrative, not for surgical planning.');
-
-const update = (fn: (s: SpineState) => void, opts: { camera?: boolean } = {}) => {
-  const next = structuredClone(state);
-  fn(next);
-  setState(sanitize(next), { camera: opts.camera ?? false, fromCamera: opts.camera === false });
-};
-const atlas = new SpineAtlasPage(update);
-const pages: Record<SpinePage, { el: HTMLElement; render(s: SpineState): void }> = {
-  atlas: { el: atlas.el, render: (s) => atlas.render(s, { camera: pendingCamera }) },
-  sources: spineSourcesPage(),
-  credits: spineCreditsPage(),
-};
-
-const main = h('main', { id: 'main' }, ...Object.values(pages).map((p) => p.el));
-new ResizeObserver(() => document.documentElement.style.setProperty('--disc-h', `${disclaimer.offsetHeight}px`)).observe(disclaimer);
-const help = buildHelp();
-bindHelp(help);
-// the atlas page's heading, for screen readers and outlines (its other pages have their own)
-atlas.el.prepend(h('h1', { class: 'vh' }, `${SECTION.name}: 3D atlas`));
-app.append(h('a', { class: 'skip', href: '#main' }, 'Skip to content'), h('a', { class: 'skip skip-panel', href: '#panel', onclick: (e: Event) => { e.preventDefault(); document.getElementById('panel')?.focus(); } }, 'Skip to the panel'), header, disclaimer, main, help);
-
-let pendingCamera = true;
-let hashTimer = 0;
-const address = addressSync();   // (the address is written only over the hash this page last wrote or read)
-
-function setState(next: SpineState, opts: { camera: boolean; fromCamera?: boolean }): void {
-  const pageChanged = next.page !== state.page;
-  state = next;
-  pendingCamera = opts.camera;
-  // the address follows a change at once, and the camera, which moves in bursts, a moment after its last move (with a
-  // timer for every change, the camera's moves put off another change's while the view was still settling)
-  clearTimeout(hashTimer);
-  if (opts.fromCamera) hashTimer = window.setTimeout(() => address.write(encodeSpine(state)), 400);
-  else address.write(encodeSpine(state));
-  if (opts.fromCamera) return;
-  render(pageChanged);
-}
-
-function render(pageChanged = false): void {
-  for (const [p, v] of Object.entries(pages)) v.el.hidden = p !== state.page;
-  navLinks.forEach((a) => (a.dataset.page === state.page ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
-  document.body.dataset.page = state.page;
-  pages[state.page].render(state);
-  if (state.page === 'atlas') atlas.onShow();
-  const atlasTitle = state.sel ? (SP.get(state.sel)?.name ?? '') : state.level ? state.level : REGION.get(state.region)!.title;
-  const titles: Record<SpinePage, string> = { atlas: atlasTitle, sources: 'Sources', credits: 'Credits' };
-  document.title = `${titles[state.page]} · ${SECTION.name} · ${BRAND.name}`;
-  if (pageChanged) window.scrollTo(0, 0);
-}
-
-const LINK_FIELDS = { r: 'region', lv: 'level', sel: 'sel' };
-showLinkNote(header, lostFromLink(location.hash, state, LINK_FIELDS));
-
-window.addEventListener('hashchange', () => {
-  address.read();
-  if (location.hash === encodeSpine(state)) return;
-  const bare = !location.hash.includes('?');
-  const next = bare ? { ...structuredClone(state), page: decodeSpine(location.hash).page } : sanitize(decodeSpine(location.hash));
-  showLinkNote(header, lostFromLink(location.hash, next, LINK_FIELDS));
-  setState(next, { camera: !bare || next.page !== state.page });
+bootSection({
+  section: SECTIONS.find((s) => s.id === 'spine')!,
+  nav: [['atlas', 'Atlas'], ['sources', 'Sources'], ['credits', 'Credits']],
+  disclaimer: 'One adult CT (VerSe); anatomy, pedicle sizes and vessel positions vary between people and with deformity. Illustrative, not for surgical planning.',
+  fromLink: (hash) => sanitize(decodeSpine(hash)),
+  pageOf: (hash) => decodeSpine(hash).page,
+  encode: encodeSpine,
+  sanitize,
+  linkFields: { r: 'region', lv: 'level', sel: 'sel' },
+  atlas: (update) => new SpineAtlasPage(update),
+  pages: () => ({ sources: spineSourcesPage(), credits: spineCreditsPage() }),
+  atlasTitle: (s) => (s.sel ? (SP.get(s.sel)?.name ?? '') : s.level ? s.level : REGION.get(s.region)!.title),
+  help: {
+    rows: [
+      ['1 – 5', 'Camera: lateral, posterior-oblique, anterior, from above, from below'],
+      ['↑ ↓', 'Previous / next level'], ['H', 'Side: both → left → right'],
+      ['N', 'Name labels: hover → all → off'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
+    ],
+    tap: 'a structure',
+  },
 });
-
-// ---------------------------------------------------------------- theme
-function cycleTheme(): void {
-  theme = theme === 'system' ? (resolved === 'dark' ? 'light' : 'dark') : theme === 'light' ? 'dark' : 'system';
-  storeTheme(theme);
-  resolved = applyTheme(theme);
-  syncTheme();
-}
-function syncTheme(): void {
-  themeBtn.textContent = theme === 'system' ? 'Theme: auto' : theme === 'light' ? 'Theme: light' : 'Theme: dark';
-  themeBtn.setAttribute('aria-label', `Colour theme: ${theme}. Change theme`);
-  atlas.viewer.setTheme(paletteFor(resolved), VIEWER[resolved].bg, VIEWER[resolved].ghost);
-}
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { resolved = applyTheme(theme); syncTheme(); });
-
-// ---------------------------------------------------------------- keyboard
-function buildHelp(): HTMLDialogElement {
-  const rows: [string, string][] = [
-    ['1 – 5', 'Camera: lateral, posterior-oblique, anterior, from above, from below'],
-    ['↑ ↓', 'Previous / next level'], ['H', 'Side: both → left → right'],
-    ['N', 'Name labels: hover → all → off'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
-  ];
-  return h('dialog', { class: 'help', 'aria-labelledby': 'help-title' },
-    h('h2', { id: 'help-title' }, 'Keys, mouse and touch'),
-    h('dl', {}, ...rows.flatMap(([k, v]) => [h('dt', {}, h('kbd', {}, k)), h('dd', {}, v)])),
-    ...viewHelp('a structure'),
-    h('form', { method: 'dialog' }, h('button', { class: 'btn' }, 'Close'))) as HTMLDialogElement;
-}
-
-window.addEventListener('keydown', (e) => {
-  const t = e.target as HTMLElement;
-  if (e.metaKey || e.ctrlKey || e.altKey) return;
-  if (t.closest('input, select, textarea, [contenteditable]')) return;
-  if (e.key === '?') { help.open ? help.close() : help.showModal(); e.preventDefault(); return; }
-  if (state.page !== 'atlas' || help.open) return;
-  // the section's own keys first; then, with the 3D view in focus, the viewer's (arrows turn it, + and - zoom)
-  if (atlas.handleKey(e) || (document.activeElement === atlas.viewer.renderer.domElement && atlas.viewer.handleKey(e))) e.preventDefault();
-});
-
-// ---------------------------------------------------------------- boot
-syncTheme();
-render(true);
-history.replaceState(null, '', encodeSpine(state));
-address.read();
-atlas.viewer.preload().then(() => {
-  pendingCamera = !state.cam.pos;
-  pages.atlas.render(state);
-  document.body.dataset.ready = '1';
-}).catch(bootFailed);
-(window as unknown as { __atlas: unknown }).__atlas = { viewer: atlas.viewer, state: () => state };

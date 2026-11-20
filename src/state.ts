@@ -1,7 +1,8 @@
 import type { CameraPreset } from './data/schema';
 import type { ViewState } from './viewer/scene';
-import { decodeOpacity, encodeOpacity, okCamera } from './viewer/scene';
+import { decodeOpacity, encodeOpacity } from './viewer/scene';
 import { defaultLabels, labelsFrom, labelsParam } from './labels';
+import { decodeCamera, decodeClip, decodeHidden, decodeLayers, encodeCamera, encodeClip, encodeHidden, encodeLayers, hashOf, r1, readHash } from './viewlink';
 
 export type Page = 'atlas' | 'imaging' | 'coords' | 'refs' | 'credits' | 'settings';
 export type Hemi = 'L' | 'R' | 'both';
@@ -81,8 +82,6 @@ export function defaultState(): AppState {
 const LEGACY_PRESETS: Record<string, CameraPreset> = { anterior: 'coronal', lateral: 'sagittal', superior: 'axial' };
 const PAGES: Page[] = ['atlas', 'imaging', 'coords', 'refs', 'credits', 'settings'];
 const LAYER_CODES: [LayerKey, string][] = [['nuclei', 'n'], ['tracts', 't'], ['cortex', 'c'], ['targets', 'g'], ['electrode', 'e']];
-const AXES: [Axis, string][] = [['axial', 'ax'], ['coronal', 'co'], ['sagittal', 'sa']];
-const r1 = (n: number) => Math.round(n * 10) / 10;
 
 export function encode(s: AppState): string {
   const p = new URLSearchParams();
@@ -90,19 +89,12 @@ export function encode(s: AppState): string {
     p.set('i', s.ind);
     if (s.sym) p.set('s', s.sym);
     if (s.hemi !== 'both') p.set('h', s.hemi);
-    if (s.cam.pos && s.cam.tgt) p.set('c', [...s.cam.pos, ...s.cam.tgt].map(r1).join(','));
-    else if (s.cam.preset) p.set('c', s.cam.preset);
-    const d = defaultState();
-    const ly = LAYER_CODES.map(([k, c]) => `${c}${s.layers[k].on ? 1 : 0}${s.layers[k].opacity !== 1 ? ':' + s.layers[k].opacity.toFixed(2) : ''}`).join(',');
-    const dly = LAYER_CODES.map(([k, c]) => `${c}${d.layers[k].on ? 1 : 0}`).join(',');
-    if (ly !== dly) p.set('ly', ly);
+    encodeCamera(p, s.cam);
+    encodeLayers(p, s.layers, defaultState().layers, LAYER_CODES);
     if (!s.borders) p.set('b', '0');
     if (s.stn === 'zones') p.set('stn', 'z');
     { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
-    for (const [a, code] of AXES) {
-      const c = s.clip[a];
-      if (c.on) p.set(code, `${r1(c.mm)}`);
-    }
+    encodeClip(p, s.clip);
     if (s.cutSide !== 'none') p.set('cut', s.cutSide);
     if (s.sliceSeq !== 't1') p.set('seq', s.sliceSeq);
     if (s.layers.electrode.on) {
@@ -111,40 +103,27 @@ export function encode(s: AppState): string {
       if (l.stim) p.set('stim', [l.contact, r1(l.radius)].join(','));
     }
     if (s.sel) p.set('sel', s.sel);
-    if (s.hidden.length) p.set('hid', s.hidden.join(','));
+    encodeHidden(p, s.hidden);
     encodeOpacity(p, s.opacity);
   } else if (s.page === 'imaging') {
     p.set('t', s.img);
   }
-  const q = p.toString();
-  return `#/${s.page}${q ? '?' + q : ''}`;
+  return hashOf(s.page, p);
 }
 
 export function decode(hash: string, base: AppState = defaultState()): AppState {
   const s: AppState = structuredClone(base);
-  const m = hash.replace(/^#\/?/, '').split('?');
-  const page = m[0] as Page;
-  s.page = PAGES.includes(page) ? page : 'atlas';
-  const p = new URLSearchParams(m[1] ?? '');
+  const { page, p } = readHash(hash, PAGES);
+  s.page = page;
   const num = (v: string | null, d: number) => (v !== null && Number.isFinite(parseFloat(v)) ? parseFloat(v) : d);
   if (p.has('i')) s.ind = p.get('i')!;
   s.sym = p.get('s');
   const h = p.get('h');
   s.hemi = h === 'L' || h === 'R' ? h : 'both';
+  decodeCamera(p, s, ['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon']);
   const c = p.get('c');
-  if (c) {
-    const parts = c.split(',').map(Number);
-    if (okCamera(parts)) s.cam = { preset: null, pos: parts.slice(0, 3) as V3, tgt: parts.slice(3) as V3 };
-    else if (['coronal', 'sagittal', 'axial', 'posteriorOblique', 'surgeon'].includes(c)) s.cam = { preset: c as CameraPreset };
-    else if (Object.hasOwn(LEGACY_PRESETS, c)) s.cam = { preset: LEGACY_PRESETS[c] }; // links shared before the rename
-  }
-  const ly = p.get('ly');
-  if (ly) for (const tok of ly.split(',')) {
-    const e = LAYER_CODES.find(([, code]) => code === tok[0]);
-    if (!e) continue;
-    const [on, op] = tok.slice(1).split(':');
-    s.layers[e[0]] = { on: on === '1', opacity: Math.min(1, Math.max(0, num(op ?? null, 1))) };
-  }
+  if (c && Object.hasOwn(LEGACY_PRESETS, c)) s.cam = { preset: LEGACY_PRESETS[c] }; // links shared before the rename
+  decodeLayers(p, s.layers, LAYER_CODES);
   s.borders = p.get('b') !== '0';
   // ('w', for whole, is what links wrote while the zones were the default)
   s.stn = p.get('stn') === 'z' ? 'zones' : 'whole';
@@ -154,11 +133,8 @@ export function decode(hash: string, base: AppState = defaultState()): AppState 
   s.sliceSeq = seq === 't2' || seq === 'pd' ? seq : 't1';
   const lb = p.get('lb');
   s.labels = labelsFrom(lb);
-  for (const [a, code] of AXES) {
-    const v = p.get(code);
-    // older links may carry per-plane cut flags ('c', 'f'); those cuts are no longer offered and are ignored
-    if (v !== null) s.clip[a] = { on: true, mm: num(v, s.clip[a].mm) };
-  }
+  // (older links may carry per-plane cut flags ('c', 'f'); those cuts are no longer offered and are ignored)
+  decodeClip(p, s.clip);
   const lead = p.get('lead');
   if (lead) {
     const parts = lead.split(',');
@@ -175,7 +151,7 @@ export function decode(hash: string, base: AppState = defaultState()): AppState 
     s.lead.radius = Math.min(6, Math.max(0.5, num(String(r), 2)));
   }
   s.sel = p.get('sel');
-  s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
+  s.hidden = decodeHidden(p);
   decodeOpacity(p, s);
   if (p.has('t')) s.img = p.get('t')!;
   return s;
