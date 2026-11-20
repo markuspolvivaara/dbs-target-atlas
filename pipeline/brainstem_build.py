@@ -169,6 +169,15 @@ AAN_PAIRED = {1: ("Locus coeruleus", "LC"), 2: ("Laterodorsal tegmental nucleus"
               4: ("Parabrachial complex", "PBC"), 5: ("Pontine reticular formation (pontis oralis)", "PnO"),
               6: ("Pedunculotegmental nucleus", "PTg")}
 AAN_STEP_MM = 0.5         # the 1 mm labels are resampled (linearly) to this grid before their surface is taken
+# every AAN 2.0 label is mirror-symmetric about x = +0.5 mm, its midline nuclei and its paired ones alike (measured:
+# the mean x of each midline label and the midpoint of each pair's mean x are +0.50 mm): the atlas lies half a voxel off
+# the template's midline, so the midline nuclei cut at x = 0 had unequal halves (the median raphe 33 against 111 mm³).
+# It is moved back by this (the site audit's MA-12).
+AAN_X_SHIFT_MM = -0.5
+# a surface must hold at least this share of its label's volume: the thin labels lost most of it to the smoothing (the
+# laterodorsal tegmental nucleus 0.1 of 17 mm³); they are surfaced with less smoothing instead, and the build fails if
+# even that loses them
+AAN_MIN_VOLUME_SHARE = 0.7
 
 # fourth-ventricle floor (Erginoglu 2026, 40 cadavers): the sulcus limitans 3.09 mm (right) and 3.03 mm (left) from
 # the median sulcus; the aqueduct-to-facial-colliculus and facial-colliculus-to-obex segments 43.57 % and 43.34 % of
@@ -509,8 +518,17 @@ def exits(runs: list[np.ndarray], surf: Surface, min_out: float = 8.0) -> list[n
 
 
 # ---------------------------------------------------------------- AAN
+def aan_affine(img) -> np.ndarray:
+    """The AAN 2.0 file's affine, moved by AAN_X_SHIFT_MM along x."""
+    a = np.array(img.affine, float)
+    a[0, 3] += AAN_X_SHIFT_MM
+    return a
+
+
 def label_surface(mask: np.ndarray, aff: np.ndarray, faces: int = 3000):
-    """Surface of a 1 mm label, resampled linearly to AAN_STEP_MM first (small nuclei keep their shape)."""
+    """Surface of a 1 mm label, resampled linearly to AAN_STEP_MM first (small nuclei keep their shape), smoothed
+    lightly; a thin label that the smoothing would shrink below AAN_MIN_VOLUME_SHARE of its volume is surfaced
+    unsmoothed, or at a lower level, and the build stops if it is lost even so."""
     ijk = np.argwhere(mask)
     lo = nib.affines.apply_affine(aff, ijk.min(0) - 2)
     hi = nib.affines.apply_affine(aff, ijk.max(0) + 2)
@@ -521,7 +539,13 @@ def label_surface(mask: np.ndarray, aff: np.ndarray, faces: int = 3000):
     vol = ndimage.map_coordinates(mask.astype(np.float32), src, order=1).reshape(G.shape[:3])
     a2 = np.diag([AAN_STEP_MM] * 3 + [1.0])
     a2[:3, 3] = lo
-    m = isosurface(vol, a2, 0.5, 0.8, faces)
+    want = len(ijk) * abs(float(np.linalg.det(aff[:3, :3])))
+    for sigma, level in ((0.8, 0.5), (0.0, 0.5), (0.0, 0.35)):
+        m = isosurface(vol, a2, level, sigma, faces)
+        if abs(float(m.volume)) >= AAN_MIN_VOLUME_SHARE * want:
+            break
+    else:
+        raise SystemExit(f"AAN label of {want:.0f} mm³: its surface holds {abs(float(m.volume)):.1f} mm³ at best")
     return np.asarray(m.vertices), np.asarray(m.faces)
 
 
@@ -667,6 +691,79 @@ def hcp_tracts(surf: Surface, csf_meshes: dict[str, tuple[np.ndarray, np.ndarray
     return items, report
 
 
+def aan_structures() -> list[tuple[tuple, dict]]:
+    """The arousal network's nuclei (AAN 2.0) as arguments for structure(): surfaces of its labels, moved by
+    AAN_X_SHIFT_MM, the midline ones cut at x = 0."""
+    img = nib.load(AAN_FILE)
+    lab = np.asarray(img.dataobj).astype(int)
+    aff = aan_affine(img)
+    aan_d = ("Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm; "
+             f"a thin label less, so that its surface keeps at least {AAN_MIN_VOLUME_SHARE:.0%} of its volume), moved "
+             f"{abs(AAN_X_SHIFT_MM):g} mm to the {'left' if AAN_X_SHIFT_MM < 0 else 'right'}: every label of the atlas is "
+             "mirror-symmetric about x = +0.5 mm, half a voxel off the template's midline.")
+    out = []
+    for code, (name, abbr) in AAN_MIDLINE.items():
+        v, t = label_surface(lab == code, aff)
+        out.append(((f"bs_aan_{abbr.lower()}", name, "nucleus", "bsAan", split_nodes(v, t),
+                     "Cut at the midline (x = 0) into left and right halves. " + aan_d),
+                    {"dataset": "aan", "category": "aan", "abbr": abbr, "aliases": [abbr], "layer": "nuclei"}))
+    for k, (name, abbr) in AAN_PAIRED.items():
+        nodes = [node(sd, *label_surface(lab == code, aff)) for sd, code in (("L", 7300 + k), ("R", 7400 + k))]
+        out.append(((f"bs_aan_{abbr.lower()}", name, "nucleus", "bsAan", nodes, aan_d),
+                    {"dataset": "aan", "category": "aan", "abbr": abbr, "aliases": [abbr], "layer": "nuclei"}))
+    return out
+
+
+def aan_in_ventricle(ventricle: tuple[np.ndarray, np.ndarray]) -> dict:
+    """How much of each arousal network nucleus (placed as aan_affine places it) lies inside the model's fourth
+    ventricle: the largest share and whose."""
+    vent = Surface({"Fourth ventricle": ventricle})
+    vmask, vlo, vstep = vent._solid_mask()
+    vent._solid = (vmask, vlo, vstep)
+    aimg = nib.load(AAN_FILE)
+    lab = np.asarray(aimg.dataobj).astype(int)
+    aff = aan_affine(aimg)
+    in_vent = {}
+    for abbr, codes in [(a, [c]) for c, (_, a) in AAN_MIDLINE.items()] + [(a, [7300 + k, 7400 + k]) for k, (_, a) in AAN_PAIRED.items()]:
+        P = nib.affines.apply_affine(aff, np.argwhere(np.isin(lab, codes)))
+        in_vent[abbr] = round(float(vent.inside(P).mean()), 3) if len(P) else 0.0
+    worst = max(in_vent, key=lambda k: in_vent[k])
+    return {"aanInVentricleMaxShare": in_vent[worst], "aanInVentricleWorst": worst}
+
+
+def aan_only() -> int:
+    """Redo the arousal network's nuclei (aan_structures) and their share in the fourth ventricle in the manifest as
+    built, leaving every other structure and file as it is (a full build rewrites other surfaces with small differences).
+
+      pipeline/.venv/bin/python -I -W ignore pipeline/brainstem_build.py aan
+      node pipeline/compress.mjs brainstem bs_aan_dr.glb bs_aan_mnr.glb bs_aan_pag.glb bs_aan_vta.glb bs_aan_lc.glb \
+        bs_aan_ldtg.glb bs_aan_mrt.glb bs_aan_pbc.glb bs_aan_pno.glb bs_aan_ptg.glb
+      pipeline/.venv/bin/python -I -W ignore pipeline/brainstem_build.py finalize
+    """
+    ex = json.loads(EXPORT.read_text())
+    F = Fitted(ex)
+    BUILD.mkdir(parents=True, exist_ok=True)
+    built = {}
+    for args, kw in aan_structures():
+        it = structure(*args, **kw)
+        built[it["id"]] = it
+    p = GEN / "bs-manifest.json"
+    m = json.loads(p.read_text())
+    n = 0
+    for i, it in enumerate(m["structures"]):
+        if it["id"] in built:
+            m["structures"][i] = built[it["id"]]
+            n += 1
+    if n != len(built):
+        raise SystemExit(f"aan: {n} of {len(built)} nuclei found in the manifest")
+    vm = ex["meshes"]["Fourth ventricle"]
+    v = F(vm["verts"])
+    m["fit"].update(aan_in_ventricle((v, orient(v, np.array(vm["tris"])))))
+    p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
+    print(f"brainstem: {n} arousal network nuclei redone; in the fourth ventricle at most {m['fit']['aanInVentricleMaxShare']} ({m['fit']['aanInVentricleWorst']})")
+    return 0
+
+
 def tracts_only() -> int:
     """Add (or redo) the HCP-YA tracts and the shared nuclei's lists of nerves in the manifest as built, leaving every
     other structure and file as it is: what a full build would write for them, without redoing the rest (a full build
@@ -786,18 +883,8 @@ def main() -> int:
             "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the "
             "brainstem: approximate.", category="cnNucleus", cranialNerve=cn, fitted=True, layer="nuclei", **shared)
     # ascending arousal network (AAN 2.0)
-    img = nib.load(AAN_FILE)
-    lab = np.asarray(img.dataobj).astype(int)
-    aan_d = "Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm)."
-    for code, (name, abbr) in AAN_MIDLINE.items():
-        v, t = label_surface(lab == code, img.affine)
-        add(f"bs_aan_{abbr.lower()}", name, "nucleus", "bsAan", split_nodes(v, t),
-            "Cut at the midline (x = 0) into left and right halves. " + aan_d, dataset="aan", category="aan", abbr=abbr,
-            aliases=[abbr], layer="nuclei")
-    for k, (name, abbr) in AAN_PAIRED.items():
-        nodes = [node(sd, *label_surface(lab == code, img.affine)) for sd, code in (("L", 7300 + k), ("R", 7400 + k))]
-        add(f"bs_aan_{abbr.lower()}", name, "nucleus", "bsAan", nodes, aan_d, dataset="aan", category="aan", abbr=abbr,
-            aliases=[abbr], layer="nuclei")
+    for args, kw in aan_structures():
+        add(*args, **kw)
     # four tracts of the HCP-YA tractography atlas
     tract_items, tract_report = hcp_tracts(surf, {b: (fitted_meshes[b], np.array(ex["meshes"][b]["tris"])) for b in CSF})
     items += tract_items
@@ -1021,16 +1108,9 @@ def wall_check(surf: Surface, ventricle: tuple[np.ndarray, np.ndarray]) -> dict:
     vmask, vlo, vstep = vent._solid_mask()
     vent._solid = (vmask, vlo, vstep)
     vcells = vlo + vstep * np.argwhere(vmask)
-    aimg = nib.load(AAN_FILE)
-    lab = np.asarray(aimg.dataobj).astype(int)
-    in_vent = {}
-    for abbr, codes in [(a, [c]) for c, (_, a) in AAN_MIDLINE.items()] + [(a, [7300 + k, 7400 + k]) for k, (_, a) in AAN_PAIRED.items()]:
-        P = nib.affines.apply_affine(aimg.affine, np.argwhere(np.isin(lab, codes)))
-        in_vent[abbr] = round(float(vent.inside(P).mean()), 3) if len(P) else 0.0
-    worst = max(in_vent, key=lambda k: in_vent[k])
     return {
         "ventricleFluidShare": round(float((t2(vcells) >= FLUID_LEVEL).mean()), 3),
-        "aanInVentricleMaxShare": in_vent[worst], "aanInVentricleWorst": worst,
+        **aan_in_ventricle(ventricle),
         "ownWallWithin1mmShare": round(float((np.abs(own[has_own]) <= 1).sum() / len(V)), 3),
         "farWallWithin1mmShare": round(float((np.abs(far[~np.isnan(far)]) <= 1).sum() / len(V)), 3),
         "ownWallSignedMedianMm": round(float(np.median(own[has_own])), 2),
@@ -1378,6 +1458,8 @@ if __name__ == "__main__":
         sys.exit(validate())
     if sys.argv[1:] == ["tracts"]:
         sys.exit(tracts_only())
+    if sys.argv[1:] == ["aan"]:
+        sys.exit(aan_only())
     if sys.argv[1:] == ["cst"]:
         sys.exit(cst_only())
     sys.exit(main())
