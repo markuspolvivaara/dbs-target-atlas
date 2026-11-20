@@ -2,29 +2,13 @@ import '@fontsource/atkinson-hyperlegible/latin-400.css';
 import '@fontsource/atkinson-hyperlegible/latin-700.css';
 import './styles.css';
 import { IND, SYM } from './data';
-import { decode, defaultState, encode, type AppState, type Page } from './state';
+import { decode, defaultState, encode, type AppState } from './state';
 import { AtlasPage } from './ui/atlas';
-import { h } from './ui/dom';
-import { bindHelp, viewHelp } from './ui/help';
-import { bootFailed } from './ui/stage';
 import { coordsPage, creditsPage, imagingPage, refsPage, settingsPage } from './ui/pages';
 import { leadPrefFor, onPrefsChange, visibleIndications } from './ui/prefs';
 import { primaryTargetId } from './viewer/selection';
-import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
-import { BRAND, SECTIONS } from './brand';
-import { disclaimerNote, siteHeader } from './ui/shell';
-import { addressSync } from './ui/address';
-import { lostFromLink, showLinkNote } from './ui/linknote';
-
-const SECTION = SECTIONS.find((s) => s.id === 'dbs')!;
-
-injectPaletteCss();
-let theme: ThemePref = storedTheme();
-let resolved = applyTheme(theme);
-
-let state: AppState = sanitize(decode(location.hash, defaultState()));
-// a link without an explicit lead position uses the remembered placement for its target
-if (!new URLSearchParams(location.hash.split('?')[1] ?? '').has('lead')) applyLeadPref(state);
+import { SECTIONS } from './brand';
+import { bootSection } from './ui/section';
 
 /** Put the remembered anchor / depth / spacing for the view's target into the state. */
 function applyLeadPref(s: AppState): void {
@@ -38,137 +22,42 @@ function sanitize(s: AppState): AppState {
   return s;
 }
 
-// ---------------------------------------------------------------- shell
-const NAV: [Page, string][] = [['atlas', 'Atlas'], ['imaging', 'Imaging'], ['coords', 'Coordinates'], ['refs', 'References'], ['credits', 'Credits'], ['settings', 'Indications shown']];
-const app = document.getElementById('app')!;
-const navLinks = NAV.map(([p, label]) => h('a', { href: `#/${p}`, class: 'navlink', 'data-page': p }, label));
-const themeBtn = h('button', { type: 'button', class: 'theme-btn', onclick: () => cycleTheme() });
-const header = siteHeader({ section: SECTION, nav: navLinks, themeBtn });
-const disclaimer = disclaimerNote();
-
-const pages: Record<Page, { el: HTMLElement; render(s: AppState): void }> = {} as never;
-const update = (fn: (s: AppState) => void, opts: { camera?: boolean } = {}) => {
-  const next = structuredClone(state);
-  fn(next);
-  // moving to a view with a different target marker restores that target's remembered lead placement
-  if (primaryTargetId(next.ind, next.sym) !== primaryTargetId(state.ind, state.sym)) applyLeadPref(next);
-  // structures hidden from the legend belong to one view
-  if (next.ind !== state.ind || next.sym !== state.sym) { next.hidden = []; delete next.opacity; }
-  setState(sanitize(next), { camera: opts.camera ?? false, fromCamera: opts.camera === false });
-};
-const atlas = new AtlasPage(update);
-pages.atlas = { el: atlas.el, render: (s) => atlas.render(s, { camera: pendingCamera }) };
-pages.imaging = imagingPage(update);
-pages.coords = coordsPage();
-pages.refs = refsPage();
-pages.credits = creditsPage();
-pages.settings = settingsPage(update, { get: () => theme, set: (t) => setThemePref(t) });
-
-const main = h('main', { id: 'main' }, ...Object.values(pages).map((p) => p.el));
-// the stage height depends on the (wrapping) disclaimer height
-new ResizeObserver(() => document.documentElement.style.setProperty('--disc-h', `${disclaimer.offsetHeight}px`)).observe(disclaimer);
-const help = buildHelp();
-bindHelp(help);
-// the atlas page's heading, for screen readers and outlines (its other pages have their own)
-atlas.el.prepend(h('h1', { class: 'vh' }, `${SECTION.name}: 3D atlas`));
-app.append(h('a', { class: 'skip', href: '#main' }, 'Skip to content'), h('a', { class: 'skip skip-panel', href: '#panel', onclick: (e: Event) => { e.preventDefault(); document.getElementById('panel')?.focus(); } }, 'Skip to the panel'), header, disclaimer, main, help);
-
-let pendingCamera = true;
-let hashTimer = 0;
-const address = addressSync();   // (the address is written only over the hash this page last wrote or read)
-
-function setState(next: AppState, opts: { camera: boolean; fromCamera?: boolean }): void {
-  const pageChanged = next.page !== state.page;
-  state = next;
-  pendingCamera = opts.camera;
-  // the address follows a change at once, and the camera, which moves in bursts, a moment after its last move (with a
-  // timer for every change, the camera's moves put off another change's while the view was still settling)
-  clearTimeout(hashTimer);
-  if (opts.fromCamera) hashTimer = window.setTimeout(() => address.write(encode(state)), 400);
-  else address.write(encode(state));
-  if (opts.fromCamera) return;
-  render(pageChanged);
+function fromLink(hash: string): AppState {
+  const s = sanitize(decode(hash, defaultState()));
+  // a link without an explicit lead position uses the remembered placement for its target
+  if (!new URLSearchParams(hash.split('?')[1] ?? '').has('lead')) applyLeadPref(s);
+  return s;
 }
 
-function render(pageChanged = false): void {
-  for (const [p, v] of Object.entries(pages)) v.el.hidden = p !== state.page;
-  navLinks.forEach((a) => (a.dataset.page === state.page ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
-  document.body.dataset.page = state.page;
-  pages[state.page].render(state);
-  if (state.page === 'atlas') atlas.onShow();
-  const titles: Record<Page, string> = { atlas: IND.get(state.ind)!.name, imaging: 'Imaging', coords: 'Coordinates', refs: 'References', credits: 'Credits', settings: 'Indications shown' };
-  document.title = `${titles[state.page]} · ${SECTION.name} · ${BRAND.name}`;
-  if (pageChanged) window.scrollTo(0, 0);
-}
-
-const LINK_FIELDS = { i: 'ind', s: 'sym', sel: 'sel' };
-showLinkNote(header, lostFromLink(location.hash, state, LINK_FIELDS));
-
-window.addEventListener('hashchange', () => {
-  address.read();
-  if (location.hash === encode(state)) return;
-  // A link with parameters is a complete view description; a bare page link (#/atlas) keeps the current view.
-  const bare = !location.hash.includes('?');
-  const next = sanitize(bare ? { ...structuredClone(state), page: decode(location.hash).page } : decode(location.hash, defaultState()));
-  showLinkNote(header, lostFromLink(location.hash, next, LINK_FIELDS));
-  if (!bare && !new URLSearchParams(location.hash.split('?')[1] ?? '').has('lead')) applyLeadPref(next);
-  setState(next, { camera: !bare || next.page !== state.page });
+const { atlas } = bootSection({
+  section: SECTIONS.find((s) => s.id === 'dbs')!,
+  nav: [['atlas', 'Atlas'], ['imaging', 'Imaging'], ['coords', 'Coordinates'], ['refs', 'References'], ['credits', 'Credits'], ['settings', 'Indications shown']],
+  fromLink,
+  pageOf: (hash) => decode(hash).page,
+  encode,
+  sanitize,
+  linkFields: { i: 'ind', s: 'sym', sel: 'sel' },
+  atlas: (update) => new AtlasPage(update),
+  pages: (update, theme) => ({
+    imaging: imagingPage(update), coords: coordsPage(), refs: refsPage(), credits: creditsPage(),
+    settings: { ...settingsPage(update, theme), showsTheme: true },
+  }),
+  atlasTitle: (s) => IND.get(s.ind)!.name,
+  help: {
+    rows: [
+      ['1 – 5', 'Camera: coronal (from the front), sagittal (anterior left), axial (anterior up), posterior-oblique, surgeon’s view'],
+      ['H', 'Hemisphere: both → left → right'], ['[ / ]', 'Previous / next indication'], [', / .', 'Previous / next symptom'],
+      ['L', 'Show or hide the lead'], ['N', 'Name labels: hover → all → off'], ['S', 'Toggle axial slice'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
+    ],
+    tap: 'a structure',
+  },
+  onChange: (next, prev) => {
+    // moving to a view with a different target marker restores that target's remembered lead placement
+    if (primaryTargetId(next.ind, next.sym) !== primaryTargetId(prev.ind, prev.sym)) applyLeadPref(next);
+    // structures hidden from the legend belong to one view
+    if (next.ind !== prev.ind || next.sym !== prev.sym) { next.hidden = []; delete next.opacity; }
+  },
 });
 
 // a change of visible indications refreshes the atlas chips
 onPrefsChange((kind) => { if (kind === 'indications') atlas.refreshChips(); else atlas.refreshLead(); });
-
-// ---------------------------------------------------------------- theme
-function cycleTheme(): void {
-  setThemePref(theme === 'system' ? (resolved === 'dark' ? 'light' : 'dark') : theme === 'light' ? 'dark' : 'system');
-}
-function setThemePref(t: ThemePref): void {
-  theme = t;
-  storeTheme(theme);
-  resolved = applyTheme(theme);
-  syncTheme();
-  if (state.page === 'settings') pages.settings.render(state);
-}
-function syncTheme(): void {
-  themeBtn.textContent = theme === 'system' ? 'Theme: auto' : theme === 'light' ? 'Theme: light' : 'Theme: dark';
-  themeBtn.setAttribute('aria-label', `Colour theme: ${theme}. Change theme`);
-  atlas.viewer.setTheme(paletteFor(resolved), VIEWER[resolved].bg, VIEWER[resolved].ghost);
-}
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { resolved = applyTheme(theme); syncTheme(); });
-
-// ---------------------------------------------------------------- keyboard
-function buildHelp(): HTMLDialogElement {
-  const rows: [string, string][] = [
-    ['1 – 5', 'Camera: coronal (from the front), sagittal (anterior left), axial (anterior up), posterior-oblique, surgeon’s view'],
-    ['H', 'Hemisphere: both → left → right'], ['[ / ]', 'Previous / next indication'], [', / .', 'Previous / next symptom'],
-    ['L', 'Show or hide the lead'], ['N', 'Name labels: hover → all → off'], ['S', 'Toggle axial slice'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
-  ];
-  const d = h('dialog', { class: 'help', 'aria-labelledby': 'help-title' },
-    h('h2', { id: 'help-title' }, 'Keys, mouse and touch'),
-    h('dl', {}, ...rows.flatMap(([k, v]) => [h('dt', {}, h('kbd', {}, k)), h('dd', {}, v)])),
-    ...viewHelp('a structure'),
-    h('form', { method: 'dialog' }, h('button', { class: 'btn' }, 'Close')));
-  return d as HTMLDialogElement;
-}
-
-window.addEventListener('keydown', (e) => {
-  const t = e.target as HTMLElement;
-  if (e.metaKey || e.ctrlKey || e.altKey) return;
-  if (t.closest('input, select, textarea, [contenteditable]')) return;
-  if (e.key === '?') { help.open ? help.close() : help.showModal(); e.preventDefault(); return; }
-  if (state.page !== 'atlas' || help.open) return;
-  // the section's own keys first; then, with the 3D view in focus, the viewer's (arrows turn it, + and - zoom)
-  if (atlas.handleKey(e) || (document.activeElement === atlas.viewer.renderer.domElement && atlas.viewer.handleKey(e))) e.preventDefault();
-});
-
-// ---------------------------------------------------------------- boot
-syncTheme();
-render(true);
-history.replaceState(null, '', encode(state));
-address.read();
-atlas.viewer.preload().then(() => {
-  pendingCamera = !state.cam.pos;
-  pages.atlas.render(state);
-  document.body.dataset.ready = '1';
-}).catch(bootFailed);
-(window as unknown as { __atlas: unknown }).__atlas = { viewer: atlas.viewer, state: () => state };

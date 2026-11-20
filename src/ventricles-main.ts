@@ -1,25 +1,13 @@
 import '@fontsource/atkinson-hyperlegible/latin-400.css';
 import '@fontsource/atkinson-hyperlegible/latin-700.css';
 import './styles.css';
-import { BRAND, SECTIONS } from './brand';
+import { SECTIONS } from './brand';
 import { LM, VE } from './ventricles';
 import { VE_GROUP } from './ventricles/groups';
-import { decodeVe, encodeVe, type VePage, type VeState } from './ventricles/state';
+import { decodeVe, encodeVe, type VeState } from './ventricles/state';
 import { VentriclesAtlasPage } from './ui/ventricles-atlas';
 import { veCreditsPage, veSourcesPage } from './ui/ventricles-pages';
-import { h } from './ui/h';
-import { bindHelp, viewHelp } from './ui/help';
-import { bootFailed } from './ui/stage';
-import { disclaimerNote, siteHeader } from './ui/shell';
-import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './ui/theme';
-import { addressSync } from './ui/address';
-import { lostFromLink, showLinkNote } from './ui/linknote';
-
-const SECTION = SECTIONS.find((s) => s.id === 'ventricles')!;
-
-injectPaletteCss();
-let theme: ThemePref = storedTheme();
-let resolved = applyTheme(theme);
+import { bootSection } from './ui/section';
 
 function sanitize(s: VeState): VeState {
   if (!VE_GROUP.has(s.grp)) s.grp = 'ventricles';
@@ -27,123 +15,24 @@ function sanitize(s: VeState): VeState {
   return s;
 }
 
-let state: VeState = sanitize(decodeVe(location.hash));
-
-// ---------------------------------------------------------------- shell
-const NAV: [VePage, string][] = [['atlas', 'Atlas'], ['sources', 'Sources'], ['credits', 'Credits']];
-const app = document.getElementById('app')!;
-const navLinks = NAV.map(([p, label]) => h('a', { href: `#/${p}`, class: 'navlink', 'data-page': p }, label));
-const themeBtn = h('button', { type: 'button', class: 'theme-btn', onclick: () => cycleTheme() });
-const header = siteHeader({ section: SECTION, nav: navLinks, themeBtn });
-const disclaimer = disclaimerNote('One young adult’s CT: the ventricles are this patient’s where the CT shows them (narrow, approximate to about a millimetre) and a fitted model where it cannot; trajectories are simulated on it. Not for surgical planning.');
-
-const update = (fn: (s: VeState) => void, opts: { camera?: boolean } = {}) => {
-  const next = structuredClone(state);
-  fn(next);
-  setState(sanitize(next), { camera: opts.camera ?? false, fromCamera: opts.camera === false });
-};
-const atlas = new VentriclesAtlasPage(update);
-const pages: Record<VePage, { el: HTMLElement; render(s: VeState): void }> = {
-  atlas: { el: atlas.el, render: (s) => atlas.render(s, { camera: pendingCamera }) },
-  sources: veSourcesPage(),
-  credits: veCreditsPage(),
-};
-
-const main = h('main', { id: 'main' }, ...Object.values(pages).map((p) => p.el));
-new ResizeObserver(() => document.documentElement.style.setProperty('--disc-h', `${disclaimer.offsetHeight}px`)).observe(disclaimer);
-const help = buildHelp();
-bindHelp(help);
-// the atlas page's heading, for screen readers and outlines (its other pages have their own)
-atlas.el.prepend(h('h1', { class: 'vh' }, `${SECTION.name}: 3D atlas`));
-app.append(h('a', { class: 'skip', href: '#main' }, 'Skip to content'), h('a', { class: 'skip skip-panel', href: '#panel', onclick: (e: Event) => { e.preventDefault(); document.getElementById('panel')?.focus(); } }, 'Skip to the panel'), header, disclaimer, main, help);
-
-let pendingCamera = true;
-let hashTimer = 0;
-const address = addressSync();   // (the address is written only over the hash this page last wrote or read)
-
-function setState(next: VeState, opts: { camera: boolean; fromCamera?: boolean }): void {
-  const pageChanged = next.page !== state.page;
-  state = next;
-  pendingCamera = opts.camera;
-  // the address follows a change at once, and the camera, which moves in bursts, a moment after its last move (with a
-  // timer for every change, the camera's moves put off another change's while the view was still settling)
-  clearTimeout(hashTimer);
-  if (opts.fromCamera) hashTimer = window.setTimeout(() => address.write(encodeVe(state)), 400);
-  else address.write(encodeVe(state));
-  if (opts.fromCamera) return;
-  render(pageChanged);
-}
-
-function render(pageChanged = false): void {
-  for (const [p, v] of Object.entries(pages)) v.el.hidden = p !== state.page;
-  navLinks.forEach((a) => (a.dataset.page === state.page ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
-  document.body.dataset.page = state.page;
-  pages[state.page].render(state);
-  if (state.page === 'atlas') atlas.onShow();
-  const atlasTitle = state.sel ? (VE.get(state.sel)?.name ?? LM.get(state.sel)?.name ?? '') : VE_GROUP.get(state.grp)!.name;
-  const titles: Record<VePage, string> = { atlas: atlasTitle, sources: 'Sources', credits: 'Credits' };
-  document.title = `${titles[state.page]} · ${SECTION.name} · ${BRAND.name}`;
-  if (pageChanged) window.scrollTo(0, 0);
-}
-
-const LINK_FIELDS = { g: 'grp', sel: 'sel' };
-showLinkNote(header, lostFromLink(location.hash, state, LINK_FIELDS));
-
-window.addEventListener('hashchange', () => {
-  address.read();
-  if (location.hash === encodeVe(state)) return;
-  const bare = !location.hash.includes('?');
-  const next = bare ? { ...structuredClone(state), page: decodeVe(location.hash).page } : sanitize(decodeVe(location.hash));
-  showLinkNote(header, lostFromLink(location.hash, next, LINK_FIELDS));
-  setState(next, { camera: !bare || next.page !== state.page });
+bootSection({
+  section: SECTIONS.find((s) => s.id === 'ventricles')!,
+  nav: [['atlas', 'Atlas'], ['sources', 'Sources'], ['credits', 'Credits']],
+  disclaimer: 'One young adult’s CT: the ventricles are this patient’s where the CT shows them (narrow, approximate to about a millimetre) and a fitted model where it cannot; trajectories are simulated on it. Not for surgical planning.',
+  fromLink: (hash) => sanitize(decodeVe(hash)),
+  pageOf: (hash) => decodeVe(hash).page,
+  encode: encodeVe,
+  sanitize,
+  linkFields: { g: 'grp', sel: 'sel' },
+  atlas: (update) => new VentriclesAtlasPage(update),
+  pages: () => ({ sources: veSourcesPage(), credits: veCreditsPage() }),
+  atlasTitle: (s) => (s.sel ? (VE.get(s.sel)?.name ?? LM.get(s.sel)?.name ?? '') : VE_GROUP.get(s.grp)!.name),
+  help: {
+    rows: [
+      ['1 – 5', 'Camera: front, side, from above, front oblique, over the forehead'],
+      ['H', 'Side: both → left → right'], ['T', 'In the ventriculostomy view: the next aim'], ['S', 'In the ventriculostomy view: the other side'],
+      ['N', 'Name labels: hover → all → off'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
+    ],
+    tap: 'a structure',
+  },
 });
-
-// ---------------------------------------------------------------- theme
-function cycleTheme(): void {
-  theme = theme === 'system' ? (resolved === 'dark' ? 'light' : 'dark') : theme === 'light' ? 'dark' : 'system';
-  storeTheme(theme);
-  resolved = applyTheme(theme);
-  syncTheme();
-}
-function syncTheme(): void {
-  themeBtn.textContent = theme === 'system' ? 'Theme: auto' : theme === 'light' ? 'Theme: light' : 'Theme: dark';
-  themeBtn.setAttribute('aria-label', `Colour theme: ${theme}. Change theme`);
-  atlas.viewer.setTheme(paletteFor(resolved), VIEWER[resolved].bg, VIEWER[resolved].ghost);
-}
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { resolved = applyTheme(theme); syncTheme(); });
-
-// ---------------------------------------------------------------- keyboard
-function buildHelp(): HTMLDialogElement {
-  const rows: [string, string][] = [
-    ['1 – 5', 'Camera: front, side, from above, front oblique, over the forehead'],
-    ['H', 'Side: both → left → right'], ['T', 'In the ventriculostomy view: the next aim'], ['S', 'In the ventriculostomy view: the other side'],
-    ['N', 'Name labels: hover → all → off'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
-  ];
-  return h('dialog', { class: 'help', 'aria-labelledby': 'help-title' },
-    h('h2', { id: 'help-title' }, 'Keys, mouse and touch'),
-    h('dl', {}, ...rows.flatMap(([k, v]) => [h('dt', {}, h('kbd', {}, k)), h('dd', {}, v)])),
-    ...viewHelp('a structure'),
-    h('form', { method: 'dialog' }, h('button', { class: 'btn' }, 'Close'))) as HTMLDialogElement;
-}
-
-window.addEventListener('keydown', (e) => {
-  const t = e.target as HTMLElement;
-  if (e.metaKey || e.ctrlKey || e.altKey) return;
-  if (t.closest('input, select, textarea, [contenteditable]')) return;
-  if (e.key === '?') { help.open ? help.close() : help.showModal(); e.preventDefault(); return; }
-  if (state.page !== 'atlas' || help.open) return;
-  // the section's own keys first; then, with the 3D view in focus, the viewer's (arrows turn it, + and - zoom)
-  if (atlas.handleKey(e) || (document.activeElement === atlas.viewer.renderer.domElement && atlas.viewer.handleKey(e))) e.preventDefault();
-});
-
-// ---------------------------------------------------------------- boot
-syncTheme();
-render(true);
-history.replaceState(null, '', encodeVe(state));
-address.read();
-atlas.viewer.preload().then(() => {
-  pendingCamera = !state.cam.pos;
-  pages.atlas.render(state);
-  document.body.dataset.ready = '1';
-}).catch(bootFailed);
-(window as unknown as { __atlas: unknown }).__atlas = { viewer: atlas.viewer, state: () => state };
