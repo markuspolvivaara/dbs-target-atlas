@@ -416,10 +416,32 @@ test('cortex: cards name their own lobe first, say what a text is about and list
   const shown = card.locator('dd p').first();
   await expect(shown).toContainText('lying in the posterior part of the inferior parietal lobule');
   await expect(shown).not.toContainText('anterolateral');
-  await expect(card.locator('.def-edit')).toContainText('Corrected here');
-  await expect(card.locator('.def-edit')).toContainText('Destrieux et al. 2010');
+  // (two corrections since the audit's B-016: the first is this one)
+  await expect(card.locator('.def-edit').first()).toContainText('Corrected here');
+  await expect(card.locator('.def-edit').first()).toContainText('Destrieux et al. 2010');
+  await expect(card.locator('.def-edit').nth(1)).toContainText('is left out');
   await open(page, './cortex/#/atlas?v=inferior&sel=ctx_s_orbital_med_olfact');
   await expect(card.locator('dt').first()).toHaveText('About the olfactory tract, which lies just below this sulcus');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// B-014: a label and a lobe Z-Anatomy ships no text for have one written from Destrieux 2010; the cingulate cortex's
+// card heads its text as the limbic lobe's
+test('cortex: texts written from Destrieux 2010 where Z-Anatomy ships none; the limbic lobe’s text headed so', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './cortex/#/atlas?v=lateral&sel=ctx_lat_fis_post');
+  const card = page.locator('.card.sel');
+  await expect(card).toContainText('curves upwards into the inferior parietal lobule');
+  await expect(card.locator('.def-own')).toContainText('Written for this atlas from Destrieux et al. 2010');
+  await expect(card.locator('.def-own a.src')).toHaveText('Destrieux 2010');
+  await expect(card.locator('dd p').first()).toHaveText(/^The posterior segment of the lateral sulcus begins/);
+  await open(page, './cortex/#/atlas?v=medial&lobe=occipital');
+  const lobe = page.locator('.panel .pane:not([hidden]) .card', { has: page.locator('.eyebrow', { hasText: 'Lobe' }) });
+  await expect(lobe).toContainText('The occipital lobe is limited by sulci only in part');
+  await expect(lobe.locator('.def-own')).toContainText('Destrieux et al. 2010');
+  await open(page, './cortex/#/atlas?v=medial&lobe=cingulate');
+  await expect(lobe.locator('dt').first()).toHaveText('About the limbic lobe');
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });

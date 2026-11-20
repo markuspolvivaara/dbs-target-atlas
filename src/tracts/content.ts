@@ -2,9 +2,12 @@ import type { Claim, TractGroup, TractTopicInput } from './schema';
 
 /**
  * White-matter section content (October 2026). Every sentence paraphrases the cited abstract
- * (PubMed), except claims citing yeh2018 / yeh2022, which were checked against their
- * open-access full texts (PMC6921501, PMC9395399). Nothing is added from memory; where the
- * sources say nothing (for example the course of SLF I in detail) the card says less.
+ * (PubMed), except claims citing the papers read in their open-access full texts, which the
+ * References page lists (src/ui/tracts-pages.ts): yeh2018 / yeh2022 (PMC6921501, PMC9395399)
+ * among them, and since the site audit's B-019 and B-020 jiang2020 (PMC7559600), morecraft2018
+ * (PMC6107685), keser2015 (PMC4389543), hau2016 (PMC4877506) and zhang2020 (PMC7028272).
+ * Nothing is added from memory; where the sources say nothing (for example the course of
+ * SLF I in detail) the card says less.
  *
  * Where each tract's streamlines end on the cortex is not written here: it is measured by
  * pipeline/wm_ends.py (src/data/generated/wm-ends.json, read through src/data/ends.ts).
@@ -116,6 +119,8 @@ export const TOPICS: TractTopicInput[] = [
     course: [
       c('Passes from the temporal lobe through the temporal stem into the extreme and external capsules, together with the uncinate fasciculus.', 'kier2004'),
       c('Its subcomponents pass through the anterior floor of the external capsule and then fan out to their posterior terminations.', 'wu2016'),
+      // (the site audit's B-024)
+      c('Whether it is peculiar to man is disputed: a tractography study with a review of two centuries of post-mortem and imaging work found that no equivalent of the human IFOF had been demonstrated in the monkey, and left open whether it is a uniquely human pathway; tractography and Klingler dissection in vervet monkeys then found fronto-occipital fibres that closely resemble it in course, organization and terminations, distinct from the neighbouring bundles.', 'forkel2014', 'sarubbo2019'),
     ],
     connections: [
       c('Two posterior components: a superficial, dorsal one to the superior parietal lobe and posterior superior and middle occipital gyri, and a deep, ventral one to the posterior inferior occipital gyrus and temporo-basal area.', 'martino2010'),
@@ -160,6 +165,8 @@ export const TOPICS: TractTopicInput[] = [
     summary: 'Hook-shaped tract between the anterior temporal lobe and orbitofrontal cortex through the temporal stem; its resection impairs proper-name retrieval.',
     course: [
       c('Runs from the temporal lobe through the temporal stem into the extreme and external capsules; Meyer’s loop of the optic radiation lies next to it at the level of the amygdala.', 'kier2004'),
+      // (the site audit's B-020: the summary's “hook-shaped”)
+      c('Reil described it in 1809 as the hook-shaped fibres behind the insula; it connects fronto-orbital cortex with the temporal pole.', 'hau2016'),
     ],
     connections: [
       c('A bidirectional, long-range tract between the lateral orbitofrontal cortex and Brodmann area 10, and the anterior temporal lobes.', 'vonderheide2013'),
@@ -171,7 +178,7 @@ export const TOPICS: TractTopicInput[] = [
       c('Abnormalities of the tract have been linked to several psychiatric disorders.', 'vonderheide2013'),
     ],
     surgery: [
-      c('In 44 awake resections of left frontal or temporal glioma, removing the frontal or temporal part of the uncinate fasciculus left a lasting deficit in naming famous faces three months later; conceptual knowledge was intact.', 'papagno2011'),
+      c('Of 44 patients operated on awake for a left frontal or temporal glioma, 18 had the uncinate fasciculus removed; three months later they named famous faces and objects worse than those without removal, and removing its frontal or its temporal part had lasting consequences for naming famous faces. Conceptual knowledge was intact.', 'papagno2011'),
     ],
     atlas: [],
   },
@@ -356,7 +363,7 @@ export const TOPICS: TractTopicInput[] = [
       c('Forniceal atrophy can help in the assessment of mesial temporal sclerosis.', 'thomas2011'),
     ],
     surgery: [
-      c('After removal of third-ventricle colloid cysts, bilateral interruption of the fornix was the only consistent MRI predictor of poor memory; learning and recall suffered more than recognition.', 'aggleton2000'),
+      c('In 12 patients after removal of a third-ventricle colloid cyst, bilateral interruption of the fornix, seen in 3, was the only consistent MRI predictor of poor memory; those 3 were poor at learning and recall, and less impaired in recognition.', 'aggleton2000'),
       c('Fornix/hypothalamus DBS was tested in a phase I trial in six patients with mild Alzheimer’s disease: it drove activity in the memory circuit and reversed impaired temporal and parietal glucose metabolism on PET, with no serious adverse events.', 'laxton2010'),
       c('Optimal targets and stimulation parameters for forniceal DBS for memory have yet to be determined.', 'senova2020'),
     ],
@@ -493,7 +500,7 @@ export const TOPICS: TractTopicInput[] = [
       c('Subcortical stimulation of thalamocortical pathways gave somatosensory responses during inferior parietal glioma surgery.', 'maldonado2011a'),
     ],
     deficits: [
-      c('Its increased mean diffusivity, together with ventricular volume, separated normal pressure hydrocephalus from Alzheimer’s disease and healthy elderly people.', 'younes2019'),
+      c('In 9 patients with idiopathic normal pressure hydrocephalus, its increased mean diffusivity, together with ventricular volume, separated them clearly from 13 with Alzheimer’s disease and 20 healthy elderly people.', 'younes2019'),
     ],
     surgery: [
       c('In left inferior parietal gliomas, thalamocortical somatosensory responses were among the subcortical limits of resection.', 'maldonado2011a'),
@@ -577,6 +584,8 @@ export const TOPICS: TractTopicInput[] = [
     ],
     connections: [
       c('Classical anatomy: neocerebellum to contralateral cerebral cortex through the dentate nucleus, superior cerebellar peduncle, red nucleus and ventrolateral thalamus. Tractography suggests most streamlines through the peduncle reach contralateral associative cortex.', 'palesi2015'),
+      // (the site audit's B-020: the alias)
+      c('Also named the brachium conjunctivum: it connects the cerebellum with the midbrain and carries mostly efferent fibres from the cerebellar nuclei, with one afferent tract, the anterior spinocerebellar tract.', 'keser2015'),
     ],
     functions: [
       c('Carries the cerebellum’s contribution to cognition as well as motor function, through its connections with associative cortex.', 'palesi2015'),
@@ -594,11 +603,13 @@ export const TOPICS: TractTopicInput[] = [
   },
   {
     id: 'wm_mcp', name: 'Middle cerebellar peduncle', abbr: 'MCP', aliases: ['brachium pontis'], type: 'cerebellar', tier: 'fossa',
-    summary: 'The largest peduncle, carrying pontocerebellar fibres from the pontine nuclei into the cerebellum.',
+    summary: 'The cerebellum’s largest afferent system, carrying pontocerebellar fibres from the contralateral pontine nuclei into the cerebellum.',
     course: [
       c('Dissection divides it into cisternal and intracerebellar segments; its pontocerebellar fibres pass over and lateral to the inferior and superior peduncles.', 'perrini2013'),
     ],
     connections: [
+      // (the site audit's B-020: the alias and the summary's “largest”)
+      c('Also called the brachium pontis, it is the largest afferent system of the cerebellum, made of pontocerebellar fibres from the contralateral pontine nuclei.', 'jiang2020'),
       c('Pontocerebellar fibres: the second stage of the cortico-ponto-cerebellar pathway, whose first stage is the massive corticopontine projection to the pontine nuclei.', 'perrini2013', 'morecraft2018'),
     ],
     functions: [
@@ -710,17 +721,19 @@ export const TOPICS: TractTopicInput[] = [
     id: 'wm_cpt_f', name: 'Corticopontine tract, frontal', abbr: 'CPT-F', aliases: ['frontopontine tract'], type: 'projection', tier: 'fossa',
     summary: 'Frontal cortex to the pontine nuclei: the first stage of the cortico-ponto-cerebellar pathway.',
     course: [
-      c('Ipsilateral corticopontine projections form a massive descending system ending in the pontine nuclei; motor and premotor cortex also send weaker contralateral projections.', 'morecraft2018'),
+      // (the site audit's B-020: the alias)
+      c('The frontopontine tract runs from the frontal lobe through the anterior limb of the internal capsule to the pontine nuclei; tractography follows it from the medial third of the cerebral peduncle to the middle and superior frontal gyri.', 'zhang2020'),
+      c('Ipsilateral corticopontine projections form a massive descending system ending in the pontine nuclei; tract tracing in the macaque shows that motor and premotor cortex also send weaker contralateral projections.', 'morecraft2018'),
     ],
     connections: [
       c('Frontal association areas, not only motor areas, contribute to the cortico-cerebellar system; the claim that lateral prefrontal cortex sends little input to it has been challenged.', 'ramnani2012'),
     ],
     functions: [
-      c('Through the cerebro-cerebellar circuit, motor corticopontine projections influence contralateral upper limb movement.', 'morecraft2018'),
+      c('In the primate, motor corticopontine projections influence contralateral upper limb movement through the cerebro-cerebellar circuit.', 'morecraft2018'),
       c('The cortico-cerebellar system also serves higher cognitive functions.', 'ramnani2012'),
     ],
     deficits: [
-      c('Contralateral corticopontine projections from the uninjured hemisphere may influence upper limb recovery after unilateral cortical damage.', 'morecraft2018'),
+      c('From their findings in the macaque, the authors suggest that contralateral corticopontine projections from the uninjured hemisphere may influence upper limb recovery after unilateral cortical damage.', 'morecraft2018'),
     ],
     surgery: [],
     atlas: [],
@@ -729,6 +742,8 @@ export const TOPICS: TractTopicInput[] = [
     id: 'wm_cpt_p', name: 'Corticopontine tract, parietal', abbr: 'CPT-P', aliases: ['parietopontine tract'], type: 'projection', tier: 'fossa',
     summary: 'Posterior parietal cortex to the pontine nuclei.',
     course: [
+      // (the site audit's B-020: the alias)
+      c('In tractography the parietopontine and occipitopontine tracts, followed from the laterocaudal third of the cerebral peduncle, pass through the posterior limb and the retrolenticular part of the internal capsule and by the dorsal thalamus.', 'zhang2020'),
       c('Corticopontine tracts are among the brainstem pathways reconstructed in a population tractography atlas and validated with histology.', 'meola2016'),
     ],
     connections: [
@@ -745,6 +760,8 @@ export const TOPICS: TractTopicInput[] = [
     id: 'wm_cpt_o', name: 'Corticopontine tract, occipital', abbr: 'CPT-O', aliases: ['occipitopontine tract'], type: 'projection', tier: 'fossa',
     summary: 'Occipital cortex to the pontine nuclei.',
     course: [
+      // (the site audit's B-020: the alias)
+      c('In tractography the parietopontine and occipitopontine tracts, followed from the laterocaudal third of the cerebral peduncle, pass through the posterior limb and the retrolenticular part of the internal capsule and by the dorsal thalamus.', 'zhang2020'),
       c('The temporal and occipital connections of the corticopontine tract had to be tracked separately to complete it in the atlas.', 'yeh2018'),
     ],
     connections: [
@@ -763,7 +780,7 @@ export const TOPICS: TractTopicInput[] = [
 export const GENERAL: Claim[] = [
   c('The tracts are a population average of 1065 healthy young adults (Human Connectome Project). About 85% of tract-to-region entries are the same (connected, or not) in more than 95% of people; about 15% vary substantially between individuals and need individual mapping.', 'yeh2022'),
   c('Tractography can still contain errors, such as deviating trajectories, early termination and wrong routing.', 'yeh2022'),
-  c('Compared with intraoperative subcortical stimulation, 81% of positive language sites lay within 6 mm of a DTI fibre tract. A tract missing on tractography may still be there, especially when tumour invades it.', 'leclercq2010'),
+  c('Compared with intraoperative subcortical stimulation in 10 patients, 17 of 21 positive language sites (81%) lay within 6 mm of a DTI fibre tract. A tract missing on tractography may still be there, especially when tumour invades it.', 'leclercq2010'),
   c('Glioma resection with intraoperative stimulation mapping was associated with fewer late severe deficits (3.4% vs 8.2%) and more gross-total resections (75% vs 58%).', 'dewitthamer2012'),
   c('Direct electrical stimulation of white matter in awake patients maps the connectivity behind sensorimotor, visuospatial, language and social-cognitive function in real time.', 'duffau2015'),
 ];

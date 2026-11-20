@@ -13,6 +13,8 @@ export const LATERAL_WALLS: Claim[] = [
   c('Frontal horn: fibres of the rostrum contribute to its floor and the forceps minor to its anterior and medial walls; fibres of the genu form its lateral wall together with the head of the caudate nucleus.', 'gangal2026'),
   c('Body: transverse fibres of the body of the corpus callosum form its roof; its medial wall is the septum dorsally and the body of the fornix ventrally; the thalamus forms its floor, and the caudate nucleus contributes to its lateral wall.', 'gangal2026'),
   c('Atrium and occipital horn: the tail of the caudate nucleus forms the front of the atrium’s lateral wall; the forceps major forms the medial wall of the atrium and occipital horn.', 'gangal2026'),
+  // (the site audit's D-029: in the full text, section “Anatomy of the corpus callosum and the lateral ventricles”, on
+  // the caudate nucleus and thalamus)
   c('The caudate nucleus follows the lateral ventricle from the frontal horn into the temporal horn: superolateral to the thalamus in the body, posterolateral to it in the atrium and inferolateral to it in the temporal horn.', 'gangal2026'),
 ];
 
@@ -86,6 +88,8 @@ export const ACCURACY: Record<string, Claim[]> = {
     c('In 132 virtual ventriculostomies from a point 30 mm from the midline none reached the ipsilateral ventricle: 77.3 % ended in the putamen and 22.7 % in the internal capsule.', 'park2020'),
   ],
   MAM: [
+    // (the site audit's D-029: “The accuracy in the IMC and MAM trajectories increased with increasing frontal horn
+    // width”, Results, by frontal horn width)
     c('74.5 % reached the ipsilateral frontal horn, at a depth of 43.6 ± 4.3 mm; its accuracy rose with the width of the frontal horns.', 'chen2025'),
   ],
   CMC: [
@@ -117,6 +121,8 @@ export const TARGET_NAME: Record<string, string> = {
 /** the endoscopic third ventriculostomy: what the endoscope passes and what lies around the stoma */
 export const ETV_ANATOMY: Claim[] = [
   c('Seen from above, the column of the fornix passes in front of the foramen of Monro; the thalamostriate, caudate, choroidal and septal veins of each lateral ventricle converge and drain through its posterior border; the choroid plexus lies on the choroidal fissure.', 'dasilva2024'),
+  // (the site audit's D-029: the anterior wall, the optic chiasm and infundibular recess, and the columns of the fornix
+  // are in the Discussion's first paragraph)
   c('The floor is fenestrated behind the infundibular recess and in front of the basilar artery and the mammillary bodies. The anterior wall near the lamina terminalis is avoided (the optic chiasm and the infundibular recess), and so is the column of the fornix.', 'dasilva2024'),
   c('The basilar artery is not always visible through the semi-translucent floor; its injury risks fatal blood loss.', 'dasilva2024'),
   c('The mammillary bodies grow until about 15 years of age: in 250 MRIs from 6 to 24 years, the two bodies’ total volume followed 68.61 + 6.53 × age − 0.19 × age² mm³ (age in years), with no difference between the sexes.', 'vann2022'),

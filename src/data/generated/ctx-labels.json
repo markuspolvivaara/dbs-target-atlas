@@ -544,7 +544,15 @@
     }
    ],
    "insula": false,
-   "definition": null
+   "definition": {
+    "text": "The subcentral gyrus (central operculum) joins the lower ends of the precentral and postcentral gyri, turning around the lower end of the central sulcus on the lateral aspect of the hemisphere. The superior segment of the circular sulcus of the insula limits it below, and the anterior and posterior subcentral sulci in front and behind; these small sulci vary, and the label includes them.",
+    "url": null,
+    "source": "Destrieux et al. 2010, sections 2.1.2.1 and 2.4.3",
+    "scope": null,
+    "refIds": [
+     "destrieux2010"
+    ]
+   }
   },
   {
    "id": "ctx_g_and_s_transv_frontopol",
@@ -663,7 +671,15 @@
    ],
    "parcels": [],
    "insula": false,
-   "definition": null
+   "definition": {
+    "text": "At the frontal pole the superior, middle and inferior frontal gyri give way to transverse gyri and sulci. The transverse frontopolar gyri lie between the transverse frontopolar sulci above and the fronto-marginal sulcus below; there are one or two transverse frontopolar sulci, running at right angles to the superior frontal sulcus. Because their number varies, the sulci and gyri share this label.",
+    "url": null,
+    "source": "Destrieux et al. 2010, section 2.1.2.3",
+    "scope": null,
+    "refIds": [
+     "destrieux2010"
+    ]
+   }
   },
   {
    "id": "ctx_g_and_s_cingul_ant",
@@ -1426,10 +1442,17 @@
    "parcels": [],
    "insula": false,
    "definition": {
-    "text": "The cuneus (Latin for \"wedge\"; plural, cunei) is a smaller lobe in the occipital lobe of the brain. The cuneus is bounded anteriorly by the parieto-occipital sulcus, inferiorly by the calcarine sulcus.",
+    "text": "The cuneus (Latin for \"wedge\"; plural, cunei) is a triangular gyrus on the medial aspect of the occipital lobe. The cuneus is bounded anteriorly by the parieto-occipital sulcus, inferiorly by the calcarine sulcus.",
     "url": "https://en.wikipedia.org/wiki/Cuneus",
     "source": "Cuneus",
-    "scope": null
+    "scope": null,
+    "edits": [
+     {
+      "from": "is a smaller lobe in the occipital lobe of the brain",
+      "to": "is a triangular gyrus on the medial aspect of the occipital lobe",
+      "why": "Destrieux et al. 2010 (section 2.3.5) describe the cuneus on the medial aspect of the occipital lobe as a triangle limited by the calcarine sulcus, the parieto-occipital sulcus and the superior edge of the hemisphere: a gyrus, not a lobe"
+     }
+    ]
    }
   },
   {
@@ -1557,10 +1580,17 @@
    ],
    "insula": false,
    "definition": {
-    "text": "The inferior frontal gyrus is highly convoluted and has three cytoarchitecturally diverse regions. The three subdivisions are an opercular part, a triangular part, and an orbital part. These divisions are marked by two rami arising from the lateral sulcus. The ascending ramus separates the opercular and triangular parts. The anterior (horizontal) ramus separates the triangular and orbital parts. Opercular part of inferior frontal gyrus (pars opercularis), (cortex posterior to the ascending ramus of the lateral sulcus), is the part of frontal lobe that overlies the insular cortex and may be associated with recognizing a tone of voice in spoken native languages. This expands on previous work indicating that comprehension of inflectional morpheme processing is associated with the inferior frontal gyrus.",
+    "text": "The inferior frontal gyrus is highly convoluted and has three cytoarchitecturally diverse regions. The three subdivisions are an opercular part, a triangular part, and an orbital part. These divisions are marked by two rami arising from the lateral sulcus. The ascending ramus separates the opercular and triangular parts. The anterior (horizontal) ramus separates the triangular and orbital parts. Opercular part of inferior frontal gyrus (pars opercularis), (cortex posterior to the ascending ramus of the lateral sulcus), is the part of frontal lobe that overlies the insular cortex. In the left hemisphere it makes up Broca’s area with the triangular part, and it has been associated with syntax in particular.",
     "url": null,
     "source": "Opercular part of inferior frontal gyrus",
-    "scope": null
+    "scope": null,
+    "edits": [
+     {
+      "from": " and may be associated with recognizing a tone of voice in spoken native languages. This expands on previous work indicating that comprehension of inflectional morpheme processing is associated with the inferior frontal gyrus.",
+      "to": ". In the left hemisphere it makes up Broca’s area with the triangular part, and it has been associated with syntax in particular.",
+      "why": "Two single findings, with no source, stood as the area's only functions. Broca's area is the pars opercularis and pars triangularis of the left inferior frontal gyrus, and the pars opercularis has been associated with syntactic functions (Bulut 2023, introduction; full text)"
+     }
+    ]
    }
   },
   {
@@ -1804,10 +1834,17 @@
    "parcels": [],
    "insula": false,
    "definition": {
-    "text": "Triangular part of inferior frontal gyrus (pars triangularis), (cortex between the ascending ramus and the horizontal ramus of the lateral sulcus). It may be associated with the ability to translate from a secondary or tertiary language back to one's native language. The triangular part of the inferior frontal gyrus is known as Brodmann area 45 (BA45), and the orbital part of the inferior frontal gyrus is known as Brodmann area 47.",
+    "text": "Triangular part of inferior frontal gyrus (pars triangularis), (cortex between the ascending ramus and the horizontal ramus of the lateral sulcus). In the left hemisphere it makes up Broca’s area with the opercular part, and it has been associated with semantics in particular. The triangular part of the inferior frontal gyrus is known as Brodmann area 45 (BA45), and the orbital part of the inferior frontal gyrus is known as Brodmann area 47.",
     "url": "https://en.wikipedia.org/wiki/Inferior_frontal_gyrus",
     "source": "Triangular part of inferior frontal gyrus",
-    "scope": null
+    "scope": null,
+    "edits": [
+     {
+      "from": "It may be associated with the ability to translate from a secondary or tertiary language back to one's native language.",
+      "to": "In the left hemisphere it makes up Broca’s area with the opercular part, and it has been associated with semantics in particular.",
+      "why": "A single finding, with no source, stood as the area's only function. Broca's area is the pars opercularis and pars triangularis of the left inferior frontal gyrus, and the pars triangularis has been associated with semantic functions (Bulut 2023, introduction; full text)"
+     }
+    ]
    }
   },
   {
@@ -1945,10 +1982,17 @@
    ],
    "insula": false,
    "definition": {
-    "text": "The middle frontal gyrus makes up about one-third of the frontal lobe of the human brain. (A gyrus is one of the prominent \"bumps\" or \"ridges\" on the surface of the human brain.) The middle frontal gyrus, like the inferior frontal gyrus and the superior frontal gyrus, is more of a region in the frontal gyrus than a true gyrus. The borders of the middle frontal gyrus are the inferior frontal sulcus below; the superior frontal sulcus above; and the precentral sulcus behind.",
+    "text": "The middle frontal gyrus makes up about one-third of the frontal lobe of the human brain. The borders of the middle frontal gyrus are the inferior frontal sulcus below; the superior frontal sulcus above; and the precentral sulcus behind.",
     "url": "https://en.wikipedia.org/wiki/Middle_frontal_gyrus",
     "source": "Middle frontal gyrus",
-    "scope": null
+    "scope": null,
+    "edits": [
+     {
+      "from": " (A gyrus is one of the prominent \"bumps\" or \"ridges\" on the surface of the human brain.) The middle frontal gyrus, like the inferior frontal gyrus and the superior frontal gyrus, is more of a region in the frontal gyrus than a true gyrus.",
+      "to": "",
+      "why": "Given with no source, and garbled (“a region in the frontal gyrus”). Destrieux et al. 2010 (section 2.1.2.1) describe the middle frontal gyrus as a gyrus limited by the superior frontal sulcus above, the inferior frontal and lateral orbital sulci below and the precentral sulcus behind"
+     }
+    ]
    }
   },
   {
@@ -2839,7 +2883,15 @@
    ],
    "parcels": [],
    "insula": false,
-   "definition": null
+   "definition": {
+    "text": "The lingual gyrus is the occipital part of the medial occipito-temporal gyrus; the parahippocampal gyrus, its temporal part, continues it forwards. The calcarine sulcus lies above it, and behind the parieto-occipital sulcus separates it from the cuneus; the medial occipito-temporal (collateral) sulcus separates it from the fusiform gyrus, and the lingual sulcus, a branch of the collateral sulcus, runs into it.",
+    "url": null,
+    "source": "Destrieux et al. 2010, sections 2.3.4 and 2.3.5",
+    "scope": null,
+    "refIds": [
+     "destrieux2010"
+    ]
+   }
   },
   {
    "id": "ctx_g_oc_temp_med_parahip",
@@ -3227,7 +3279,7 @@
    "parcels": [],
    "insula": false,
    "definition": {
-    "text": "The angular gyrus is a region of the brain lying in the posterior part of the inferior parietal lobule, near the superior edge of the temporal lobe, and immediately posterior to the supramarginal gyrus. Its significance is in transferring visual information to Wernicke's area, in order to make meaning out of visually perceived words. It is also involved in a number of processes related to language, number processing and spatial cognition, memory retrieval, attention, and theory of mind. It is Brodmann area 39 of the human brain.",
+    "text": "The angular gyrus is a region of the brain lying in the posterior part of the inferior parietal lobule, near the superior edge of the temporal lobe, and immediately posterior to the supramarginal gyrus. It is also involved in a number of processes related to language, number processing and spatial cognition, memory retrieval, attention, and theory of mind. It is Brodmann area 39 of the human brain.",
     "url": "https://en.wikipedia.org/wiki/Angular_gyrus",
     "source": "Angular gyrus",
     "scope": null,
@@ -3236,6 +3288,11 @@
       "from": "lying mainly in the anterolateral region of parietal lobe, that lies near",
       "to": "lying in the posterior part of the inferior parietal lobule, near",
       "why": "The sulcus intermedius primus divides the inferior parietal lobule into the supramarginal gyrus in front and the angular gyrus behind (Destrieux et al. 2010, section 2.4.1.4)"
+     },
+     {
+      "from": " Its significance is in transferring visual information to Wernicke's area, in order to make meaning out of visually perceived words.",
+      "to": "",
+      "why": "Given with no source: one account of reading stated as the gyrus's significance; the next sentence names its part in language among its other roles"
      }
     ]
    }
@@ -3979,10 +4036,17 @@
    ],
    "insula": false,
    "definition": {
-    "text": "The portion of the inferior frontal lobe immediately adjacent to the longitudinal fissure (and medial to the medial orbital gyrus and olfactory tract) is named the straight gyrus,(or gyrus rectus) and is continuous with the superior frontal gyrus on the medial surface. A specific function for the straight gyrus has not yet been brought to light; however, in males, greater activation of the straight gyrus within the medial orbitofrontal cortex while observing sexually visual pictures has been strongly linked to HSDD (hypoactive sexual desire disorder).",
+    "text": "The portion of the inferior frontal lobe immediately adjacent to the longitudinal fissure (and medial to the medial orbital gyrus and olfactory tract) is named the straight gyrus,(or gyrus rectus) and is continuous with the superior frontal gyrus on the medial surface. A specific function for the straight gyrus has not yet been brought to light.",
     "url": "https://en.wikipedia.org/wiki/Straight_gyrus",
     "source": "Straight gyrus (Gyrus rectus)",
-    "scope": null
+    "scope": null,
+    "edits": [
+     {
+      "from": "; however, in males, greater activation of the straight gyrus within the medial orbitofrontal cortex while observing sexually visual pictures has been strongly linked to HSDD (hypoactive sexual desire disorder)",
+      "to": "",
+      "why": "Given with no source: a single imaging finding"
+     }
+    ]
    }
   },
   {
@@ -4368,10 +4432,17 @@
    "parcels": [],
    "insula": false,
    "definition": {
-    "text": "The superior temporal gyrus (STG) is one of three (sometimes two) gyri in the temporal lobe of the human brain, which is located laterally to the head, situated somewhat above the external ear. The superior temporal gyrus is bounded by: the lateral sulcus above;\nthe superior temporal sulcus (not always present or visible) below;\nan imaginary line drawn from the preoccipital notch to the lateral sulcus posteriorly. The superior temporal gyrus contains several important structures of the brain, including: Brodmann areas 41 and 42, marking the location of the auditory cortex, the cortical region responsible for the sensation of sound;\nWernicke's area, Brodmann 22p, an important region for the processing of speech so that it can be understood as language. The superior temporal gyrus contains the auditory cortex, which is responsible for processing sounds.",
+    "text": "The superior temporal gyrus (STG) is one of three (sometimes two) gyri in the temporal lobe of the human brain, which is located laterally to the head, situated somewhat above the external ear. The superior temporal gyrus is bounded by: the lateral sulcus above;\nthe superior temporal sulcus below;\nan imaginary line drawn from the preoccipital notch to the lateral sulcus posteriorly. The superior temporal gyrus contains several important structures of the brain, including: Brodmann areas 41 and 42, marking the location of the auditory cortex, the cortical region responsible for the sensation of sound;\nWernicke's area, Brodmann 22p, an important region for the processing of speech so that it can be understood as language. The superior temporal gyrus contains the auditory cortex, which is responsible for processing sounds.",
     "url": "https://en.wikipedia.org/wiki/Superior_temporal_gyrus",
     "source": "Superior temporal gyrus (Lateral part)",
-    "scope": null
+    "scope": null,
+    "edits": [
+     {
+      "from": " (not always present or visible)",
+      "to": "",
+      "why": "Destrieux et al. 2010 (section 2.3.3) found the superior temporal sulcus in each of the 24 hemispheres they describe: continuous, briefly interrupted near the temporal pole, or (in 3) made of separate segments"
+     }
+    ]
    }
   },
   {
@@ -4495,10 +4566,17 @@
    "parcels": [],
    "insula": false,
    "definition": {
-    "text": "The superior temporal gyrus (STG) is one of three (sometimes two) gyri in the temporal lobe of the human brain, which is located laterally to the head, situated somewhat above the external ear. The superior temporal gyrus is bounded by: the lateral sulcus above;\nthe superior temporal sulcus (not always present or visible) below;\nan imaginary line drawn from the preoccipital notch to the lateral sulcus posteriorly. The superior temporal gyrus contains several important structures of the brain, including: Brodmann areas 41 and 42, marking the location of the auditory cortex, the cortical region responsible for the sensation of sound;\nWernicke's area, Brodmann 22p, an important region for the processing of speech so that it can be understood as language. The superior temporal gyrus contains the auditory cortex, which is responsible for processing sounds.",
+    "text": "The superior temporal gyrus (STG) is one of three (sometimes two) gyri in the temporal lobe of the human brain, which is located laterally to the head, situated somewhat above the external ear. The superior temporal gyrus is bounded by: the lateral sulcus above;\nthe superior temporal sulcus below;\nan imaginary line drawn from the preoccipital notch to the lateral sulcus posteriorly. The superior temporal gyrus contains several important structures of the brain, including: Brodmann areas 41 and 42, marking the location of the auditory cortex, the cortical region responsible for the sensation of sound;\nWernicke's area, Brodmann 22p, an important region for the processing of speech so that it can be understood as language. The superior temporal gyrus contains the auditory cortex, which is responsible for processing sounds.",
     "url": "https://en.wikipedia.org/wiki/Superior_temporal_gyrus",
     "source": "Superior temporal gyrus (Lateral part)",
-    "scope": "the superior temporal gyrus"
+    "scope": "the superior temporal gyrus",
+    "edits": [
+     {
+      "from": " (not always present or visible)",
+      "to": "",
+      "why": "Destrieux et al. 2010 (section 2.3.3) found the superior temporal sulcus in each of the 24 hemispheres they describe: continuous, briefly interrupted near the temporal pole, or (in 3) made of separate segments"
+     }
+    ]
    }
   },
   {
@@ -4612,10 +4690,17 @@
    "parcels": [],
    "insula": false,
    "definition": {
-    "text": "The superior temporal gyrus (STG) is one of three (sometimes two) gyri in the temporal lobe of the human brain, which is located laterally to the head, situated somewhat above the external ear. The superior temporal gyrus is bounded by: the lateral sulcus above;\nthe superior temporal sulcus (not always present or visible) below;\nan imaginary line drawn from the preoccipital notch to the lateral sulcus posteriorly. The superior temporal gyrus contains several important structures of the brain, including: Brodmann areas 41 and 42, marking the location of the auditory cortex, the cortical region responsible for the sensation of sound;\nWernicke's area, Brodmann 22p, an important region for the processing of speech so that it can be understood as language. The superior temporal gyrus contains the auditory cortex, which is responsible for processing sounds.",
+    "text": "The superior temporal gyrus (STG) is one of three (sometimes two) gyri in the temporal lobe of the human brain, which is located laterally to the head, situated somewhat above the external ear. The superior temporal gyrus is bounded by: the lateral sulcus above;\nthe superior temporal sulcus below;\nan imaginary line drawn from the preoccipital notch to the lateral sulcus posteriorly. The superior temporal gyrus contains several important structures of the brain, including: Brodmann areas 41 and 42, marking the location of the auditory cortex, the cortical region responsible for the sensation of sound;\nWernicke's area, Brodmann 22p, an important region for the processing of speech so that it can be understood as language. The superior temporal gyrus contains the auditory cortex, which is responsible for processing sounds.",
     "url": "https://en.wikipedia.org/wiki/Superior_temporal_gyrus",
     "source": "Superior temporal gyrus (Lateral part)",
-    "scope": "the superior temporal gyrus"
+    "scope": "the superior temporal gyrus",
+    "edits": [
+     {
+      "from": " (not always present or visible)",
+      "to": "",
+      "why": "Destrieux et al. 2010 (section 2.3.3) found the superior temporal sulcus in each of the 24 hemispheres they describe: continuous, briefly interrupted near the temporal pole, or (in 3) made of separate segments"
+     }
+    ]
    }
   },
   {
@@ -4850,10 +4935,17 @@
    "parcels": [],
    "insula": false,
    "definition": {
-    "text": "Middle temporal gyrus is a gyrus in the brain on the temporal lobe. It is located between the superior temporal gyrus and inferior temporal gyrus. It corresponds largely to Brodmann area 21.\nThe middle temporal gyrus is bounded by: the superior temporal sulcus above;\nthe inferior temporal sulcus below;\nan imaginary line drawn from the preoccipital notch to the lateral sulcus posteriorly. It has been connected with processes as different as contemplating distance, recognition of known faces, audio-visual emotional recognition, and accessing word meaning while reading. Some studies indicate that lesions of the posterior region of the middle temporal gyrus, in the left cerebral hemisphere, may result in alexia and agraphia for kanji characters (characters of Chinese origin used in Japanese writing). The left middle temporal gyrus is also activated during poem composition.",
+    "text": "Middle temporal gyrus is a gyrus in the brain on the temporal lobe. It is located between the superior temporal gyrus and inferior temporal gyrus. It corresponds largely to Brodmann area 21.\nThe middle temporal gyrus is bounded by: the superior temporal sulcus above;\nthe inferior temporal sulcus below;\nan imaginary line drawn from the preoccipital notch to the lateral sulcus posteriorly. It has been connected with processes as different as contemplating distance, recognition of known faces, audio-visual emotional recognition, and accessing word meaning while reading.",
     "url": "https://en.wikipedia.org/wiki/Middle_temporal_gyrus",
     "source": "Middle temporal gyrus",
-    "scope": null
+    "scope": null,
+    "edits": [
+     {
+      "from": " Some studies indicate that lesions of the posterior region of the middle temporal gyrus, in the left cerebral hemisphere, may result in alexia and agraphia for kanji characters (characters of Chinese origin used in Japanese writing). The left middle temporal gyrus is also activated during poem composition.",
+      "to": "",
+      "why": "Given with no source: single findings"
+     }
+    ]
    }
   },
   {
@@ -4961,7 +5053,15 @@
    ],
    "parcels": [],
    "insula": false,
-   "definition": null
+   "definition": {
+    "text": "The horizontal ramus of the lateral sulcus arises near the junction of the anterior and superior segments of the circular sulcus of the insula and runs forwards in the inferior frontal gyrus, between its triangular part above and its orbital part below. It continued the superior segment of the circular sulcus in 23 of 24 hemispheres.",
+    "url": null,
+    "source": "Destrieux et al. 2010, sections 2.1.2.1 and 2.2",
+    "scope": null,
+    "refIds": [
+     "destrieux2010"
+    ]
+   }
   },
   {
    "id": "ctx_lat_fis_ant_vertical",
@@ -5069,7 +5169,15 @@
    ],
    "parcels": [],
    "insula": false,
-   "definition": null
+   "definition": {
+    "text": "The vertical ramus of the lateral sulcus arises, with the horizontal ramus, near the junction of the anterior and superior segments of the circular sulcus of the insula and ascends in the inferior frontal gyrus, between its opercular part behind and its triangular part in front. On the inflated surface it joined the circular sulcus in 15 of 24 hemispheres; in the others it ran the same course on its own.",
+    "url": null,
+    "source": "Destrieux et al. 2010, sections 2.1.2.1 and 2.2",
+    "scope": null,
+    "refIds": [
+     "destrieux2010"
+    ]
+   }
   },
   {
    "id": "ctx_lat_fis_post",
@@ -5202,7 +5310,15 @@
    ],
    "parcels": [],
    "insula": false,
-   "definition": null
+   "definition": {
+    "text": "The posterior segment of the lateral sulcus begins where the superior and inferior segments of the circular sulcus of the insula meet behind the insula, and curves upwards into the inferior parietal lobule, where the supramarginal gyrus curves around its end. It is the medial limit of the planum temporale.",
+    "url": null,
+    "source": "Destrieux et al. 2010, sections 2.2, 2.3.2 and 2.4.1.4",
+    "scope": null,
+    "refIds": [
+     "destrieux2010"
+    ]
+   }
   },
   {
    "id": "ctx_pole_occipital",
@@ -5741,10 +5857,22 @@
    ],
    "insula": false,
    "definition": {
-    "text": "The central sulcus is a sulcus, or groove, in the cerebral cortex in the brains of vertebrates. Also called the central fissure, or the fissure of Rolando or the Rolandic fissure, after Luigi Rolando. It is sometimes confused with the longitudinal fissure. The central sulcus is a prominent landmark of the brain, separating the parietal lobe from the frontal lobe and the primary motor cortex from the primary somatosensory cortex.",
+    "text": "The central sulcus is a sulcus, or groove, in the cerebral cortex. Also called the central fissure, or the fissure of Rolando or the Rolandic fissure, after Luigi Rolando. The central sulcus is a prominent landmark of the brain, separating the parietal lobe from the frontal lobe and the primary motor cortex from the primary somatosensory cortex.",
     "url": "https://en.wikipedia.org/wiki/Central_sulcus",
     "source": "Central sulcus",
-    "scope": null
+    "scope": null,
+    "edits": [
+     {
+      "from": " in the brains of vertebrates",
+      "to": "",
+      "why": "Given with no source; these cards describe the human brain"
+     },
+     {
+      "from": " It is sometimes confused with the longitudinal fissure.",
+      "to": "",
+      "why": "Given with no source"
+     }
+    ]
    }
   },
   {
@@ -6388,7 +6516,15 @@
    ],
    "parcels": [],
    "insula": false,
-   "definition": null
+   "definition": {
+    "text": "Close to the temporal and occipital poles the medial occipito-temporal (collateral) sulcus gives off the anterior and posterior transverse collateral sulci. The anterior one limits the fusiform gyrus in front and laterally.",
+    "url": null,
+    "source": "Destrieux et al. 2010, section 2.3.4",
+    "scope": null,
+    "refIds": [
+     "destrieux2010"
+    ]
+   }
   },
   {
    "id": "ctx_s_collat_transv_post",
@@ -6508,7 +6644,15 @@
    ],
    "parcels": [],
    "insula": false,
-   "definition": null
+   "definition": {
+    "text": "Close to the temporal and occipital poles the medial occipito-temporal (collateral) sulcus gives off the anterior and posterior transverse collateral sulci. The posterior one limits the fusiform gyrus behind and laterally; a line from its medial end to the posterior end of the calcarine sulcus separates the lingual gyrus from the occipital pole.",
+    "url": null,
+    "source": "Destrieux et al. 2010, section 2.3.4",
+    "scope": null,
+    "refIds": [
+     "destrieux2010"
+    ]
+   }
   },
   {
    "id": "ctx_s_front_inf",
@@ -6746,7 +6890,15 @@
    ],
    "parcels": [],
    "insula": false,
-   "definition": null
+   "definition": {
+    "text": "The middle frontal sulcus runs within the middle frontal gyrus. It lies further forward than the superior and inferior frontal sulci and reaches the frontal pole, but does not join the precentral sulcus. Discontinuous and of variable length, it was present in 23 of 24 hemispheres; it may join the superior or inferior frontal sulcus, and is sometimes hard to tell from them.",
+    "url": null,
+    "source": "Destrieux et al. 2010, section 2.1.2.1",
+    "scope": null,
+    "refIds": [
+     "destrieux2010"
+    ]
+   }
   },
   {
    "id": "ctx_s_front_sup",
@@ -6980,7 +7132,15 @@
    ],
    "parcels": [],
    "insula": false,
-   "definition": null
+   "definition": {
+    "text": "The sulcus intermedius primus (of Jensen) is a small sulcus that runs down from the intraparietal sulcus, at right angles to it, towards the temporal lobe, which it does not reach. It divides the inferior parietal lobule into the supramarginal gyrus in front and the angular gyrus behind.",
+    "url": null,
+    "source": "Destrieux et al. 2010, section 2.4.1.4",
+    "scope": null,
+    "refIds": [
+     "destrieux2010"
+    ]
+   }
   },
   {
    "id": "ctx_s_intrapariet_and_p_trans",
@@ -7205,10 +7365,17 @@
    "parcels": [],
    "insula": false,
    "definition": {
-    "text": "In brain anatomy, the lunate sulcus or simian sulcus also known as the sulcus lunatus is a fissure in the occipital lobe variably found in humans and more often larger when present in apes and monkeys. The lunate sulcus marks the transition between V1 and V2.The lunate sulcus lies further back in human brains but has a more forward location in chimpanzees. The evolutionary expansion of the frontal areas of the lunate sulcus would have caused a shift in the particular location of the fissure. It has been hypothesized that evolutionary pressures resulted in the human brain undergoing internal reorganization to develop the capability of human language.",
+    "text": "In brain anatomy, the lunate sulcus or simian sulcus also known as the sulcus lunatus is a fissure in the occipital lobe variably found in humans and more often larger when present in apes and monkeys. The lunate sulcus marks the transition between V1 and V2.The lunate sulcus lies further back in human brains but has a more forward location in chimpanzees.",
     "url": "https://en.wikipedia.org/wiki/Lunate_sulcus",
     "source": "Lunate sulcus",
-    "scope": "the lunate sulcus"
+    "scope": "the lunate sulcus",
+    "edits": [
+     {
+      "from": " The evolutionary expansion of the frontal areas of the lunate sulcus would have caused a shift in the particular location of the fissure. It has been hypothesized that evolutionary pressures resulted in the human brain undergoing internal reorganization to develop the capability of human language.",
+      "to": "",
+      "why": "Given with no source, and garbled: remarks on evolution"
+     }
+    ]
    }
   },
   {
@@ -7458,7 +7625,15 @@
    ],
    "parcels": [],
    "insula": false,
-   "definition": null
+   "definition": {
+    "text": "The temporo-occipital incisure (preoccipital notch) is a small groove at the inferior edge of the hemisphere, sometimes continued on the lateral aspect by the anterior occipital sulcus; the label holds both. With the parieto-occipital sulcus it is one of the two sulci that partly limit the occipital lobe. It may join the superior temporal, inferior temporal, lateral occipito-temporal, inferior occipital or middle occipital sulcus.",
+    "url": null,
+    "source": "Destrieux et al. 2010, section 2.3.1",
+    "scope": null,
+    "refIds": [
+     "destrieux2010"
+    ]
+   }
   },
   {
    "id": "ctx_s_oc_temp_lat",
@@ -7569,7 +7744,15 @@
    ],
    "parcels": [],
    "insula": false,
-   "definition": null
+   "definition": {
+    "text": "The lateral occipito-temporal sulcus runs from front to back on the ventral aspect of the occipital and temporal lobes, between the fusiform gyrus medially and the inferior temporal and inferior occipital gyri laterally. It is discontinuous and hard to tell from its neighbours; it begins near the inferior occipital gyrus and stays in the occipital lobe and the back of the temporal lobe, short of the temporal pole.",
+    "url": null,
+    "source": "Destrieux et al. 2010, section 2.3.4",
+    "scope": null,
+    "refIds": [
+     "destrieux2010"
+    ]
+   }
   },
   {
    "id": "ctx_s_oc_temp_med_and_lingual",
@@ -8161,10 +8344,17 @@
    "parcels": [],
    "insula": false,
    "definition": {
-    "text": "The parieto-occipital sulcus (also called the parieto-occipital fissure) is a deep sulcus in the cerebral cortex that marks the boundary between the cuneus and precuneus, and also between the parietal and occipital lobes. Only a small part can be seen on the lateral surface of the hemisphere, its chief part being on the medial surface. The lateral part of the parieto-occipital sulcus is situated about 5 cm in front of the occipital pole of the hemisphere, and measures about 1.25 cm. in length. The medial part of the parieto-occipital sulcus runs downward and forward as a deep cleft on the medial surface of the hemisphere, and joins the calcarine fissure below and behind the posterior end of the corpus callosum. In most cases, it contains a submerged gyrus.",
+    "text": "The parieto-occipital sulcus (also called the parieto-occipital fissure) is a deep sulcus in the cerebral cortex that marks the boundary between the cuneus and precuneus, and also between the parietal and occipital lobes. Only a small part can be seen on the lateral surface of the hemisphere, its chief part being on the medial surface. The medial part of the parieto-occipital sulcus runs downward and forward as a deep cleft on the medial surface of the hemisphere, and joins the calcarine fissure below and behind the posterior end of the corpus callosum. In most cases, it contains a submerged gyrus.",
     "url": "https://en.wikipedia.org/wiki/Parieto-occipital_sulcus",
     "source": "Parieto-occipital sulcus",
-    "scope": null
+    "scope": null,
+    "edits": [
+     {
+      "from": " The lateral part of the parieto-occipital sulcus is situated about 5 cm in front of the occipital pole of the hemisphere, and measures about 1.25 cm. in length.",
+      "to": "",
+      "why": "Given with no source: measurements"
+     }
+    ]
    }
   },
   {
@@ -8300,7 +8490,15 @@
     }
    ],
    "insula": false,
-   "definition": null
+   "definition": {
+    "text": "The pericallosal sulcus (sulcus of the corpus callosum) separates the cingulate gyrus from the corpus callosum.",
+    "url": null,
+    "source": "Destrieux et al. 2010, section 2.5.2",
+    "scope": null,
+    "refIds": [
+     "destrieux2010"
+    ]
+   }
   },
   {
    "id": "ctx_s_postcentral",
@@ -8806,7 +9004,15 @@
     }
    ],
    "insula": false,
-   "definition": null
+   "definition": {
+    "text": "The suborbital sulcus is a small sulcus on the medial aspect of the frontal lobe, running towards the frontal pole parallel to the anterior part of the cingulate sulcus. It lies above and medial to the gyrus rectus. A smaller, inconstant groove sometimes runs above it (the superior suborbital sulcus); it is included in the label of the anterior cingulate gyrus and sulcus.",
+    "url": null,
+    "source": "Destrieux et al. 2010, section 2.1.2.2",
+    "scope": null,
+    "refIds": [
+     "destrieux2010"
+    ]
+   }
   },
   {
    "id": "ctx_s_subparietal",
@@ -9016,10 +9222,17 @@
    "parcels": [],
    "insula": false,
    "definition": {
-    "text": "The inferior surface of the temporal lobe is concave, and is continuous posteriorly with the tentorial surface of the occipital lobe. It is traversed by the inferior temporal sulcus, which extends from near the occipital pole behind, to within a short distance of the temporal pole in front, but is frequently subdivided by bridging gyri.",
+    "text": "The inferior temporal sulcus runs from the temporal pole towards the occipital pole, in line with the inferior occipital sulcus, at the limit between the lateral and ventral aspects of the temporal lobe. It separates the middle temporal gyrus, on the lateral aspect, from the inferior temporal gyrus, on the ventral aspect, and is broken into segments (2 to 7 in Destrieux et al. 2010).",
     "url": "https://en.wikipedia.org/wiki/Inferior_temporal_sulcus",
     "source": "Inferior temporal sulcus",
-    "scope": null
+    "scope": null,
+    "edits": [
+     {
+      "from": "The inferior surface of the temporal lobe is concave, and is continuous posteriorly with the tentorial surface of the occipital lobe. It is traversed by the inferior temporal sulcus, which extends from near the occipital pole behind, to within a short distance of the temporal pole in front, but is frequently subdivided by bridging gyri.",
+      "to": "The inferior temporal sulcus runs from the temporal pole towards the occipital pole, in line with the inferior occipital sulcus, at the limit between the lateral and ventral aspects of the temporal lobe. It separates the middle temporal gyrus, on the lateral aspect, from the inferior temporal gyrus, on the ventral aspect, and is broken into segments (2 to 7 in Destrieux et al. 2010).",
+      "why": "The shipped text put the sulcus on the inferior surface of the temporal lobe. Destrieux et al. 2010 (sections 2.3.3 and 2.3.4) put it, in line with the inferior occipital sulcus, at the limit between the lateral and ventral aspects, between the middle and inferior temporal gyri, and found it made of 2 to 7 segments"
+     }
+    ]
    }
   },
   {
@@ -9261,7 +9474,15 @@
    ],
    "parcels": [],
    "insula": false,
-   "definition": null
+   "definition": {
+    "text": "The transverse temporal sulcus, on the superior aspect of the temporal lobe, divides the transverse temporal (Heschl’s) gyrus, which holds the primary auditory cortex, in front from the planum temporale behind. It starts at the posterior segment of the lateral sulcus and runs forwards and laterally to the lateral aspect of the temporal lobe.",
+    "url": null,
+    "source": "Destrieux et al. 2010, section 2.3.2",
+    "scope": null,
+    "refIds": [
+     "destrieux2010"
+    ]
+   }
   }
  ],
  "lobes": [
@@ -9270,9 +9491,17 @@
    "name": "Frontal lobe",
    "token": "lobeFrontal",
    "definition": {
-    "text": "The frontal lobe is the largest of the four major lobes of the brain in mammals, and is located at the front of each cerebral hemisphere (in front of the parietal lobe and the temporal lobe). It is parted from the parietal lobe by a groove between tissues called the central sulcus and from the temporal lobe by a deeper groove called the lateral sulcus (Sylvian fissure). The most anterior rounded part of the frontal lobe (though not well-defined) is known as the frontal pole, one of the three poles of the cerebrum. The frontal lobe is covered by the frontal cortex. The frontal cortex includes the premotor cortex, and the primary motor cortex – parts of the motor cortex. The front part of the frontal cortex is covered by the prefrontal cortex. There are four principal gyri in the frontal lobe.",
+    "text": "The frontal lobe is the largest of the four major lobes of the brain in mammals, and is located at the front of each cerebral hemisphere (in front of the parietal lobe and the temporal lobe). It is parted from the parietal lobe by a groove between tissues called the central sulcus and from the temporal lobe by a deeper groove called the lateral sulcus (Sylvian fissure). The most anterior rounded part of the frontal lobe (though not well-defined) is known as the frontal pole, one of the three poles of the cerebrum. The frontal lobe is covered by the frontal cortex. The frontal cortex includes the premotor cortex, and the primary motor cortex – parts of the motor cortex. There are four principal gyri in the frontal lobe.",
     "url": "https://en.wikipedia.org/wiki/Frontal_lobe",
-    "source": "Frontal lobe"
+    "source": "Frontal lobe",
+    "scope": null,
+    "edits": [
+     {
+      "from": " The front part of the frontal cortex is covered by the prefrontal cortex.",
+      "to": "",
+      "why": "Given with no source, and garbled"
+     }
+    ]
    },
    "labels": [
     "ctx_g_and_s_frontomargin",
@@ -9314,7 +9543,8 @@
    "definition": {
     "text": "The parietal lobe is one of the four major lobes of the cerebral cortex in the brain of mammals. The parietal lobe is positioned above the temporal lobe and behind the frontal lobe and central sulcus.\nThe parietal lobe integrates sensory information among various modalities, including spatial sense and navigation (proprioception), the main sensory receptive area for the sense of touch in the somatosensory cortex which is just posterior to the central sulcus in the postcentral gyrus, and the dorsal stream of the visual system. The major sensory inputs from the skin (touch, temperature, and pain receptors), relay through the thalamus to the parietal lobe.\nSeveral areas of the parietal lobe are important in language processing.",
     "url": "https://en.wikipedia.org/wiki/Parietal_lobe",
-    "source": "Parietal lobe"
+    "source": "Parietal lobe",
+    "scope": null
    },
    "labels": [
     "ctx_g_and_s_subcentral",
@@ -9345,7 +9575,8 @@
    "definition": {
     "text": "The temporal lobe is one of the four major lobes of the cerebral cortex in the brain of mammals. The temporal lobe is located beneath the lateral fissure on both cerebral hemispheres of the mammalian brain. The temporal lobe is involved in processing sensory input into derived meanings for the appropriate retention of visual memory, language comprehension, and emotion association.:\nTemporal refers to the head's temples.",
     "url": "https://en.wikipedia.org/wiki/Temporal_lobe",
-    "source": "Temporal lobe"
+    "source": "Temporal lobe",
+    "scope": null
    },
    "labels": [
     "ctx_g_oc_temp_lat_fusifor",
@@ -9372,7 +9603,15 @@
    "id": "occipital",
    "name": "Occipital lobe",
    "token": "lobeOccipital",
-   "definition": null,
+   "definition": {
+    "text": "The occipital lobe is limited by sulci only in part: on the medial aspect the parieto-occipital sulcus separates it from the parietal lobe, and at the inferior edge of the hemisphere the temporo-occipital incisure (preoccipital notch) marks its limit. Elsewhere its limits are lines drawn between such landmarks, and on the ventral aspect its sulci and gyri continue into those of the temporal lobe. On the lateral aspect the superior occipital sulcus divides the superior from the middle occipital gyrus. On the medial aspect the calcarine sulcus runs back to the occipital pole, with the cuneus above it and the lingual gyrus below.",
+    "url": null,
+    "source": "Destrieux et al. 2010, sections 2.3.1 and 2.3.3 to 2.3.5",
+    "scope": null,
+    "refIds": [
+     "destrieux2010"
+    ]
+   },
    "labels": [
     "ctx_g_and_s_occipital_inf",
     "ctx_g_cuneus",
@@ -9395,7 +9634,8 @@
    "definition": {
     "text": "The limbic lobe is an arc-shaped region of cortex on the medial surface of each cerebral hemisphere of the mammalian brain, consisting of parts of the frontal, parietal and temporal lobes. The term is ambiguous, with some authors including the paraterminal gyrus, the subcallosal area, the cingulate gyrus, the parahippocampal gyrus, the dentate gyrus, the hippocampus and the subiculum; while the Terminologia Anatomica includes the cingulate sulcus, the cingulate gyrus, the isthmus of cingulate gyrus, the fasciolar gyrus, the parahippocampal gyrus, the parahippocampal sulcus, the dentate gyrus, the fimbrodentate sulcus, the fimbria of hippocampus, the collateral sulcus, and the rhinal sulcus, and omits the hippocampus.",
     "url": "https://en.wikipedia.org/wiki/Limbic_lobe",
-    "source": "Limbic lobe"
+    "source": "Limbic lobe",
+    "scope": "the limbic lobe"
    },
    "labels": [
     "ctx_g_and_s_cingul_ant",
@@ -9414,7 +9654,8 @@
    "definition": {
     "text": "The insular cortex (also insula and insular lobe) is a portion of the cerebral cortex folded deep within the lateral sulcus (the fissure separating the temporal lobe from the parietal and frontal lobes) within each hemisphere of the mammalian brain. The insulae are believed to be involved in consciousness and play a role in diverse functions usually linked to emotion or the regulation of the body's homeostasis. These functions include compassion, empathy, taste, perception, motor control, self-awareness, cognitive functioning, interpersonal experience, and awareness of homeostatic emotions such as hunger, pain and fatigue. In relation to these, it is involved in psychopathology. The insular cortex is divided into two parts: the anterior insula and the posterior insula in which more than a dozen field areas have been identified.",
     "url": "https://en.wikipedia.org/wiki/Insular_cortex",
-    "source": "Insula"
+    "source": "Insula",
+    "scope": null
    },
    "labels": [
     "ctx_g_ins_lg_and_s_cent_ins",
@@ -9598,6 +9839,10 @@
   "bulut2023": {
    "citation": "Bulut T. Domain-general and domain-specific functional networks of Broca's area underlying language processing. Brain Behav. 2023;13(7):e3046. doi:10.1002/brb3.3046.",
    "url": "https://doi.org/10.1002/brb3.3046"
+  },
+  "destrieux2010": {
+   "citation": "Destrieux C, Fischl B, Dale A, Halgren E. Automatic parcellation of human cortical gyri and sulci using standard anatomical nomenclature. NeuroImage. 2010;53(1):1–15. doi:10.1016/j.neuroimage.2010.06.010.",
+   "url": "https://doi.org/10.1016/j.neuroimage.2010.06.010"
   },
   "kiernan2012": {
    "citation": "Kiernan JA. Anatomy of the temporal lobe. Epilepsy Res Treat. 2012;2012:176157. doi:10.1155/2012/176157.",
