@@ -1,7 +1,8 @@
 import type { CameraPreset } from '../data/schema';
-import { DEFAULT_LEAD, type Axis, type LayerKey, type V3 } from '../state';
+import { DEFAULT_LEAD, type LayerKey } from '../state';
 import type { ViewState } from '../viewer/scene';
-import { decodeOpacity, encodeOpacity, okCamera } from '../viewer/scene';
+import { decodeOpacity, encodeOpacity } from '../viewer/scene';
+import { decodeCamera, decodeClip, decodeHemi, decodeHidden, decodeLayers, encodeCamera, encodeClip, encodeHemi, encodeHidden, encodeLayers, hashOf, readHash } from '../viewlink';
 import { BS_GROUP } from './groups';
 import { defaultLabels, labelsFrom, labelsParam } from '../labels';
 
@@ -36,67 +37,44 @@ export function defaultBsState(): BsState {
 // #/atlas?g=sez_floor&sel=sez_suprafacial&h=B&c=posterior&ly=n1,t1,c1:0.50,z1&ax=-30&cut=L&seq=t2&lb=a
 const PAGES: BsPage[] = ['atlas', 'sources', 'credits'];
 const LAYER_CODES: [LayerKey, string][] = [['nuclei', 'n'], ['tracts', 't'], ['cortex', 'c'], ['targets', 'z']];
-const AXES: [Axis, string][] = [['axial', 'ax'], ['coronal', 'co'], ['sagittal', 'sa']];
-const r1 = (n: number) => Math.round(n * 10) / 10;
 
 export function encodeBs(s: BsState): string {
   const p = new URLSearchParams();
   if (s.page === 'atlas') {
     p.set('g', s.grp);
     if (s.sel) p.set('sel', s.sel);
-    p.set('h', s.hemi === 'both' ? 'B' : s.hemi);
-    if (s.cam.pos && s.cam.tgt) p.set('c', [...s.cam.pos, ...s.cam.tgt].map(r1).join(','));
-    else if (s.cam.preset) p.set('c', s.cam.preset);
-    const d = defaultBsState();
-    const ly = LAYER_CODES.map(([k, c]) => `${c}${s.layers[k].on ? 1 : 0}${s.layers[k].opacity !== 1 ? ':' + s.layers[k].opacity.toFixed(2) : ''}`).join(',');
-    if (ly !== LAYER_CODES.map(([k, c]) => `${c}${d.layers[k].on ? 1 : 0}`).join(',')) p.set('ly', ly);
-    for (const [a, code] of AXES) if (s.clip[a].on) p.set(code, `${r1(s.clip[a].mm)}`);
+    encodeHemi(p, s.hemi);
+    encodeCamera(p, s.cam);
+    encodeLayers(p, s.layers, defaultBsState().layers, LAYER_CODES);
+    encodeClip(p, s.clip);
     if (s.cutSide !== 'none') p.set('cut', s.cutSide);
     if (s.sliceSeq !== 't1') p.set('seq', s.sliceSeq);
     { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
-    if (s.hidden.length) p.set('hid', s.hidden.join(','));
+    encodeHidden(p, s.hidden);
     encodeOpacity(p, s.opacity);
   }
-  const q = p.toString();
-  return `#/${s.page}${q ? '?' + q : ''}`;
+  return hashOf(s.page, p);
 }
 
 /** Decode a hash; settings a link leaves out come from the defaults. */
 export function decodeBs(hash: string): BsState {
   const s = defaultBsState();
-  const m = hash.replace(/^#\/?/, '').split('?');
-  s.page = PAGES.includes(m[0] as BsPage) ? (m[0] as BsPage) : 'atlas';
-  const p = new URLSearchParams(m[1] ?? '');
-  const num = (v: string | null, d: number) => (v !== null && Number.isFinite(parseFloat(v)) ? parseFloat(v) : d);
+  const { page, p } = readHash(hash, PAGES);
+  s.page = page;
   const g = BS_GROUP.get(p.get('g') ?? '');
   if (g) s.grp = g.id;
   s.sel = p.get('sel');
-  const h = p.get('h');
-  if (h === 'L' || h === 'R') s.hemi = h; else if (h === 'B') s.hemi = 'both';
-  const c = p.get('c');
-  if (c) {
-    const parts = c.split(',').map(Number);
-    if (okCamera(parts)) s.cam = { preset: null, pos: parts.slice(0, 3) as V3, tgt: parts.slice(3) as V3 };
-    else if ((BS_PRESETS as string[]).includes(c)) s.cam = { preset: c as CameraPreset };
-  }
-  const ly = p.get('ly');
-  if (ly) for (const tok of ly.split(',')) {
-    const e = LAYER_CODES.find(([, code]) => code === tok[0]);
-    if (!e) continue;
-    const [on, op] = tok.slice(1).split(':');
-    s.layers[e[0]] = { on: on === '1', opacity: Math.min(1, Math.max(0, num(op ?? null, 1))) };
-  }
-  for (const [a, code] of AXES) {
-    const v = p.get(code);
-    if (v !== null) s.clip[a] = { on: true, mm: num(v, s.clip[a].mm) };
-  }
+  decodeHemi(p, s);
+  decodeCamera(p, s, BS_PRESETS);
+  decodeLayers(p, s.layers, LAYER_CODES);
+  decodeClip(p, s.clip);
   const cut = p.get('cut');
   s.cutSide = cut === 'L' || cut === 'R' ? cut : 'none';
   const seq = p.get('seq');
   s.sliceSeq = seq === 't2' || seq === 'pd' ? seq : 't1';
   const lb = p.get('lb');
   s.labels = labelsFrom(lb);
-  s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
+  s.hidden = decodeHidden(p);
   decodeOpacity(p, s);
   return s;
 }

@@ -1,7 +1,8 @@
 import type { CameraPreset } from '../data/schema';
-import { DEFAULT_LEAD, type V3 } from '../state';
+import { DEFAULT_LEAD } from '../state';
 import type { ViewState } from '../viewer/scene';
-import { decodeOpacity, encodeOpacity, okCamera } from '../viewer/scene';
+import { decodeOpacity, encodeOpacity } from '../viewer/scene';
+import { decodeCamera, decodeHemi, decodeHidden, encodeCamera, encodeHemi, encodeHidden, hashOf, readHash } from '../viewlink';
 import { VE_GROUP } from './groups';
 import { ETV, TARGETS, TRAJ, type Target } from './index';
 import { defaultLabels, labelsFrom, labelsParam } from '../labels';
@@ -79,16 +80,14 @@ export function defaultVeState(): VeState {
 
 // #/atlas?g=evd&sel=ve_lateral_ventricle&h=B&c=coronal&cs=R&ck=chen&co=0&ct=CMC&lb=a
 const PAGES: VePage[] = ['atlas', 'sources', 'credits'];
-const r1 = (n: number) => Math.round(n * 10) / 10;
 
 export function encodeVe(s: VeState): string {
   const p = new URLSearchParams();
   if (s.page === 'atlas') {
     p.set('g', s.grp);
     if (s.sel) p.set('sel', s.sel);
-    p.set('h', s.hemi === 'both' ? 'B' : s.hemi);
-    if (s.cam.pos && s.cam.tgt) p.set('c', [...s.cam.pos, ...s.cam.tgt].map(r1).join(','));
-    else if (s.cam.preset) p.set('c', s.cam.preset);
+    encodeHemi(p, s.hemi);
+    encodeCamera(p, s.cam);
     if (VE_GROUP.get(s.grp)?.catheter) {
       const c = s.cath;
       if (c.side !== DEFAULT_CATHETER.side) p.set('cs', c.side);
@@ -109,30 +108,22 @@ export function encodeVe(s: VeState): string {
       if (!e.big) p.set('ev', '3d');
     }
     { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
-    if (s.hidden.length) p.set('hid', s.hidden.join(','));
+    encodeHidden(p, s.hidden);
     encodeOpacity(p, s.opacity);
   }
-  const q = p.toString();
-  return `#/${s.page}${q ? '?' + q : ''}`;
+  return hashOf(s.page, p);
 }
 
 /** Decode a hash; settings a link leaves out come from the defaults. */
 export function decodeVe(hash: string): VeState {
   const s = defaultVeState();
-  const m = hash.replace(/^#\/?/, '').split('?');
-  s.page = PAGES.includes(m[0] as VePage) ? (m[0] as VePage) : 'atlas';
-  const p = new URLSearchParams(m[1] ?? '');
+  const { page, p } = readHash(hash, PAGES);
+  s.page = page;
   const g = VE_GROUP.get(p.get('g') ?? '');
   if (g) s.grp = g.id;
   s.sel = p.get('sel');
-  const h = p.get('h');
-  if (h === 'L' || h === 'R') s.hemi = h; else if (h === 'B') s.hemi = 'both';
-  const c = p.get('c');
-  if (c) {
-    const parts = c.split(',').map(Number);
-    if (okCamera(parts)) s.cam = { preset: null, pos: parts.slice(0, 3) as V3, tgt: parts.slice(3) as V3 };
-    else if ((VE_PRESETS as string[]).includes(c)) s.cam = { preset: c as CameraPreset };
-  }
+  decodeHemi(p, s);
+  decodeCamera(p, s, VE_PRESETS);
   const cs = p.get('cs');
   if (cs === 'L' || cs === 'R') s.cath.side = cs;
   const ck = p.get('ck');
@@ -163,7 +154,7 @@ export function decodeVe(hash: string): VeState {
   s.scope.big = p.get('ev') !== '3d';
   const lb = p.get('lb');
   s.labels = labelsFrom(lb);
-  s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
+  s.hidden = decodeHidden(p);
   decodeOpacity(p, s);
   return s;
 }
