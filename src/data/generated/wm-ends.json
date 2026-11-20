@@ -231,7 +231,7 @@
    "patch": {
     "id": "wm_af__ends",
     "file": "assets/wm-ends/wm_af__ends.glb",
-    "bytes": 18328,
+    "bytes": 18216,
     "colour": {
      "token": "wmAF",
      "light": "#A8246A",
@@ -358,7 +358,7 @@
    "patch": {
     "id": "wm_slf1__ends",
     "file": "assets/wm-ends/wm_slf1__ends.glb",
-    "bytes": 9292,
+    "bytes": 9280,
     "colour": {
      "token": "wmSLF1",
      "light": "#7E6430",
@@ -515,7 +515,7 @@
    "patch": {
     "id": "wm_slf2__ends",
     "file": "assets/wm-ends/wm_slf2__ends.glb",
-    "bytes": 24484,
+    "bytes": 24392,
     "colour": {
      "token": "wmSLF2",
      "light": "#7C24A8",
@@ -662,7 +662,7 @@
    "patch": {
     "id": "wm_slf3__ends",
     "file": "assets/wm-ends/wm_slf3__ends.glb",
-    "bytes": 10156,
+    "bytes": 10084,
     "colour": {
      "token": "wmSLF3",
      "light": "#348961",
@@ -864,7 +864,7 @@
    "patch": {
     "id": "wm_ifof__ends",
     "file": "assets/wm-ends/wm_ifof__ends.glb",
-    "bytes": 21224,
+    "bytes": 21124,
     "colour": {
      "token": "wmIFOF",
      "light": "#687D12",
@@ -1021,7 +1021,7 @@
    "patch": {
     "id": "wm_ilf__ends",
     "file": "assets/wm-ends/wm_ilf__ends.glb",
-    "bytes": 23136,
+    "bytes": 23064,
     "colour": {
      "token": "wmILF",
      "light": "#705010",
@@ -1163,7 +1163,7 @@
    "patch": {
     "id": "wm_uf__ends",
     "file": "assets/wm-ends/wm_uf__ends.glb",
-    "bytes": 7048,
+    "bytes": 6960,
     "colour": {
      "token": "wmUF",
      "light": "#B51FDB",
@@ -1290,7 +1290,7 @@
    "patch": {
     "id": "wm_fat__ends",
     "file": "assets/wm-ends/wm_fat__ends.glb",
-    "bytes": 11776,
+    "bytes": 11748,
     "colour": {
      "token": "wmFAT",
      "light": "#195742",
@@ -1442,7 +1442,7 @@
    "patch": {
     "id": "wm_cing_fp__ends",
     "file": "assets/wm-ends/wm_cing_fp__ends.glb",
-    "bytes": 14628,
+    "bytes": 14568,
     "colour": {
      "token": "wmCingD",
      "light": "#535719",
@@ -1579,7 +1579,7 @@
    "patch": {
     "id": "wm_cing_ph__ends",
     "file": "assets/wm-ends/wm_cing_ph__ends.glb",
-    "bytes": 5816,
+    "bytes": 5796,
     "colour": {
      "token": "wmCingPH",
      "light": "#1D5E63",
@@ -1689,7 +1689,7 @@
    "patch": {
     "id": "wm_or__ends",
     "file": "assets/wm-ends/wm_or__ends.glb",
-    "bytes": 7212,
+    "bytes": 7196,
     "colour": {
      "token": "wmOR",
      "light": "#1F4FA8",
@@ -1804,7 +1804,7 @@
    "patch": {
     "id": "wm_cst__ends",
     "file": "assets/wm-ends/wm_cst__ends.glb",
-    "bytes": 10684,
+    "bytes": 10652,
     "colour": {
      "token": "wmCST",
      "light": "#0B847C",
@@ -1919,7 +1919,7 @@
    "patch": {
     "id": "wm_cbt__ends",
     "file": "assets/wm-ends/wm_cbt__ends.glb",
-    "bytes": 6372,
+    "bytes": 6336,
     "colour": {
      "token": "wmCBT",
      "light": "#847C0B",
@@ -2032,7 +2032,7 @@
    "patch": {
     "id": "wm_cc__ends",
     "file": "assets/wm-ends/wm_cc__ends.glb",
-    "bytes": 141496,
+    "bytes": 141188,
     "colour": {
      "token": "wmCC",
      "light": "#4581B5",
@@ -2194,7 +2194,7 @@
    "patch": {
     "id": "wm_mdlf__ends",
     "file": "assets/wm-ends/wm_mdlf__ends.glb",
-    "bytes": 6568,
+    "bytes": 6524,
     "colour": {
      "token": "wmMdLF",
      "light": "#893456",
@@ -2351,7 +2351,7 @@
    "patch": {
     "id": "wm_tpat__ends",
     "file": "assets/wm-ends/wm_tpat__ends.glb",
-    "bytes": 14732,
+    "bytes": 14708,
     "colour": {
      "token": "wmTPAT",
      "light": "#1F38DB",
@@ -2493,7 +2493,7 @@
    "patch": {
     "id": "wm_vof__ends",
     "file": "assets/wm-ends/wm_vof__ends.glb",
-    "bytes": 10136,
+    "bytes": 10120,
     "colour": {
      "token": "wmVOF",
      "light": "#616808",
@@ -2620,7 +2620,7 @@
    "patch": {
     "id": "wm_emc__ends",
     "file": "assets/wm-ends/wm_emc__ends.glb",
-    "bytes": 6672,
+    "bytes": 6644,
     "colour": {
      "token": "wmEMC",
      "light": "#0D83A0",
@@ -2718,7 +2718,7 @@
    "patch": {
     "id": "wm_ac__ends",
     "file": "assets/wm-ends/wm_ac__ends.glb",
-    "bytes": 8000,
+    "bytes": 7908,
     "colour": {
      "token": "wmAC",
      "light": "#A57618",
@@ -2868,7 +2868,7 @@
    "patch": {
     "id": "wm_atr__ends",
     "file": "assets/wm-ends/wm_atr__ends.glb",
-    "bytes": 40872,
+    "bytes": 40856,
     "colour": {
      "token": "wmATR",
      "light": "#514E1F",
@@ -3023,7 +3023,7 @@
    "patch": {
     "id": "wm_str__ends",
     "file": "assets/wm-ends/wm_str__ends.glb",
-    "bytes": 50184,
+    "bytes": 50016,
     "colour": {
      "token": "wmSTR",
      "light": "#12767D",
@@ -3153,7 +3153,7 @@
    "patch": {
     "id": "wm_ptr__ends",
     "file": "assets/wm-ends/wm_ptr__ends.glb",
-    "bytes": 10056,
+    "bytes": 9992,
     "colour": {
      "token": "wmPTR",
      "light": "#412CCE",
@@ -3315,7 +3315,7 @@
    "patch": {
     "id": "wm_cs_a__ends",
     "file": "assets/wm-ends/wm_cs_a__ends.glb",
-    "bytes": 45424,
+    "bytes": 45220,
     "colour": {
      "token": "wmCSA",
      "light": "#5C5123",
@@ -3460,7 +3460,7 @@
    "patch": {
     "id": "wm_cs_s__ends",
     "file": "assets/wm-ends/wm_cs_s__ends.glb",
-    "bytes": 46836,
+    "bytes": 46776,
     "colour": {
      "token": "wmCSS",
      "light": "#A06F0D",
@@ -3600,7 +3600,7 @@
    "patch": {
     "id": "wm_cs_p__ends",
     "file": "assets/wm-ends/wm_cs_p__ends.glb",
-    "bytes": 13568,
+    "bytes": 13452,
     "colour": {
      "token": "wmCSP",
      "light": "#105BCB",
@@ -3791,7 +3791,7 @@
    "patch": {
     "id": "wm_drtt__ends",
     "file": "assets/wm-ends/wm_drtt__ends.glb",
-    "bytes": 4948,
+    "bytes": 4952,
     "colour": {
      "token": "wmDRTT",
      "light": "#235C42",
@@ -3901,7 +3901,7 @@
    "patch": {
     "id": "wm_ndrtt__ends",
     "file": "assets/wm-ends/wm_ndrtt__ends.glb",
-    "bytes": 6496,
+    "bytes": 6460,
     "colour": {
      "token": "wmNDRTT",
      "light": "#C2384B",
@@ -4041,7 +4041,7 @@
    "patch": {
     "id": "wm_ml__ends",
     "file": "assets/wm-ends/wm_ml__ends.glb",
-    "bytes": 7236,
+    "bytes": 7204,
     "colour": {
      "token": "wmML",
      "light": "#6231AA",
@@ -4161,7 +4161,7 @@
    "patch": {
     "id": "wm_rst__ends",
     "file": "assets/wm-ends/wm_rst__ends.glb",
-    "bytes": 10148,
+    "bytes": 10116,
     "colour": {
      "token": "wmRST",
      "light": "#8978A9",
@@ -4271,7 +4271,7 @@
    "patch": {
     "id": "wm_cpt_f__ends",
     "file": "assets/wm-ends/wm_cpt_f__ends.glb",
-    "bytes": 18196,
+    "bytes": 18212,
     "colour": {
      "token": "wmCPTF",
      "light": "#C2385D",
@@ -4396,7 +4396,7 @@
    "patch": {
     "id": "wm_cpt_p__ends",
     "file": "assets/wm-ends/wm_cpt_p__ends.glb",
-    "bytes": 14096,
+    "bytes": 14032,
     "colour": {
      "token": "wmCPTP",
      "light": "#8413E7",
@@ -4526,7 +4526,7 @@
    "patch": {
     "id": "wm_cpt_o__ends",
     "file": "assets/wm-ends/wm_cpt_o__ends.glb",
-    "bytes": 9652,
+    "bytes": 9640,
     "colour": {
      "token": "wmCPTO",
      "light": "#7C840B",

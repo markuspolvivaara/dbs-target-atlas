@@ -15,6 +15,7 @@ import { readdirSync, mkdirSync, statSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mendNormals } from './normals.mjs';
+import { cleanTriangles } from './triangles.mjs';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const repo = join(root, '..');
@@ -37,6 +38,7 @@ for (const kind of (process.argv[2] ? [process.argv[2]] : ['meshes', 'tracts', '
     await doc.transform(
       dedup(),
       prune({ keepExtras: true }),
+      cleanTriangles(),
       mendNormals(),
       // 14-bit positions: < 0.02 mm error over the largest (cortex) bounding box
       quantize({ quantizePosition: 14, quantizeNormal: 10 }),

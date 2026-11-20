@@ -2915,7 +2915,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_confluence_of_sinuses.glb",
-   "bytes": 86548,
+   "bytes": 87144,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -3478,7 +3478,7 @@
    "id": "tb_posterior_inferior_cerebellar_artery_fitted_course",
    "name": "Posterior inferior cerebellar artery (fitted course)",
    "file": "assets/skullbase-v3/tb_posterior_inferior_cerebellar_artery_fitted_course.cleared.glb",
-   "bytes": 347664,
+   "bytes": 348456,
    "system": "Vertebral artery",
    "morph": true,
    "derivation": "The model's typical course on from this CT's PICA origin: a run drawn from the end of the labelled origin round the outside of the brainstem (11.4 mm on the right, 12.7 mm on the left) to the start of the Z-Anatomy PICA's trunk, then that trunk (lateral to the medulla, round the tonsil) and the branches that start on it, fitted onto this CT (the whole-skull fit, then the posterior fossa's) and kept clear of the fitted cerebellum and brainstem. It moves with the cerebellum in the telovelar and retrosigmoid views. Its course is approximate, not this patient's: this CT's own PICAs loop medially from long, tortuous vertebral arteries. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py).",
@@ -3623,7 +3623,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_frontal_lobe.glb",
-   "bytes": 485300,
+   "bytes": 484772,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -3881,7 +3881,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_medial_wall.glb",
-   "bytes": 89176,
+   "bytes": 89212,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -8744,7 +8744,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_frontal_lobe__men_olfactory.glb",
-   "bytes": 292192,
+   "bytes": 292132,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8836,7 +8836,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_medial_wall__men_olfactory.glb",
-   "bytes": 52972,
+   "bytes": 53084,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -8920,7 +8920,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_frontal_lobe__men_tuberculum.glb",
-   "bytes": 293328,
+   "bytes": 292820,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -9058,7 +9058,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_medial_wall__men_tuberculum.glb",
-   "bytes": 51016,
+   "bytes": 51052,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
