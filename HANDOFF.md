@@ -34,11 +34,13 @@ come from the user's palette, the skull base nerve/tumour and AVM pairs are the 
 - Skull base tumour views (MC-18, worse): all 75 tumour-view copies (33 in v3, 42 in v1) have a right node only, and
   the parts they stand in for are hidden, so with Side = Both the left pons, medulla, cerebellum, fourth ventricle and
   nerves (and the left frontal lobe in the olfactory and tuberculum views) are not drawn. The views open on the right.
-- v1 Kawase: 66 % of the right cochlear nerve (mirrored in after the audit, `82bd5bf`) lies inside the drilled piece.
+- v1 Kawase: 66 % of the right cochlear nerve (mirrored in after the audit, `82bd5bf`) lies inside the drilled piece
+  (fixed: `2c7f462`, below).
 - Single-node midline files named R (v1's basilar artery, sagittal, straight and occipital sinuses, the meningiomas:
   MC-17) vanish with Side = Left. `tests/unit/mesh-checks.test.ts` accepts that convention; the viewer does not.
 - The Koos card says the small arteries are moved onto the tumour (`src/skullbase/tumours.ts:173`), but v3 ships no
-  artery copies for the tumour views; the Koos III AICA overlap rose from 30 % to 61 % as the tumour shrank (MB-09).
+  artery copies for the tumour views; the Koos III AICA overlap rose from 30 % to 61 % as the tumour shrank (MB-09;
+  fixed: `60f0e34`, below).
 - v3's manifest centroids are stale for the inferior petrosal sinus (about 10 mm off its mesh) and the PICA origin.
 - `public/assets/spine-manifest.json` has drifted from `src/data/generated/spine-manifest.json` (9 references
   missing, 15 citations differ): `spine_build.py refs` refreshes only the generated one.
@@ -65,7 +67,7 @@ come from the user's palette, the skull base nerve/tumour and AVM pairs are the 
   (the skull base already names the vessel: `approaches.ts:362`), P1-18 (keep the manifest copies as a data
   interface?), P1-26 / A-018 (three uncited references).
 - Model questions: MA-05, MA-07 (the right fornix's front end), MA-08 (tremor view), MA-09 (DISTAL Vim against Morel),
-  MA-11 (which PPN), MA-19 (left dentate on T2), MB-09, MB-14, MB-15, MB-20, MC-19 (v1 at life size?), AP-13 (keyhole
+  MA-11 (which PPN), MA-19 (left dentate on T2), MB-14, MB-15, MB-20, MC-19 (v1 at life size?), AP-13 (keyhole
   placement), AP-14 (an operative-line camera option?).
 
 **Done without a decision (2026-11-19, the user: "Lets do the ones that can be done without decisions").** On
@@ -97,20 +99,45 @@ come from the user's palette, the skull base nerve/tumour and AVM pairs are the 
 - Checks at `fa43d6c`: tsc, lint, 540 unit tests, build, palette; 209 browser tests (`CI=1`). **On the MacBook**:
   stage baselines change again (cortex label chips, swatch edges, the legend's cap, "View options").
 
+**Done next (2026-11-20/21, the user: "Please do 1-5"; MB-09 by the user's choice "Move them off").** On
+`fix/audit-rebuilds` (off `f1d867e`, PR 29's merge), local commits, not pushed:
+- `2c7f462` AP-06: v1's Kawase drilling keeps its margins (the drilled piece is cut round the protected structures)
+  and keeps 1 mm off the right cochlear and vestibular nerves (63 % of the cochlear nerve was inside); a unit test.
+- `5cb8f24` MA-12: the arousal network's labels sit 0.5 mm right of the midline in their own file; shifted back
+  (the raphe halves 72.1 and 72.0 mm³, were 32.8 and 111.2), the thin nuclei kept (the LDTg 19.1 mm³ a side, was 0.1).
+- `60f0e34` MB-09: v3's tumours move the fitted small arteries they reach onto their surface, 12 copies (the Koos IV
+  AICA was 65 % inside, the foramen magnum meningioma's anterior spinal artery 45 %); copies a midline tumour needs
+  hold both halves (`copySides`). Not moved: the CT's own arteries (the tumours keep 0.4 mm off them already; pushed
+  out of their channels they tore), v1's (its tumours keep off all of them), the pituitary stalk (the tuberculum
+  meningioma surrounds it whole). Two copies keep 2.5 and 2.7 % inside, near the surface.
+- `9a9052a` MB-16, MC-12: triangles that draw nothing (a corner repeated, no area in any morph shape, the same
+  triangle twice) are taken out by `pipeline/triangles.mjs` in `compress.mjs`, and from 101 shipped files by
+  `recompress.mjs --cleaned` (6312 triangles; reordered for size as compress does, so no file grows). Left: back-to-back
+  pairs, triangles that gain area in a morph target, non-manifold edges that are the meshes' own shape (cavernous
+  sinus, falx, vertebrae), the coarse transverse sinus.
+- Merged `refactor/section-shell` (`1ea3a6c`, `4db106c`: P1-14, the eight entry scripts are configurations of
+  `src/ui/section.ts`; link helpers in `src/viewlink.ts`; 10,370 links decoded and encoded the same before and after)
+  and `fix/audit-text` (`2385139`: B-014, B-016 but three sentences, B-019, B-020 but "restiform body", B-024, D-029).
+- **MA-13 is not committed**: the white-matter midline cut keeps no stubs (`pipeline/build.py` `midline_pieces`,
+  `config.py` `WM_MIDLINE_MIN_PIECE_MM`; the MCP's right stubs 49 % → 0, the SCP's left 37 % → 0; `wm_ac`, `wm_cc`,
+  `wm_mcp`, `wm_scp` rebuilt), uncommitted in the worktree. `pipeline/manifest.py` has to be run to refresh the
+  white-matter manifest's centroids (four unit tests fail until then); the session's permission check stopped it.
+
 **Still left without a decision, and why not done this round:**
 - Need a pipeline rebuild (do one section at a time, keep only the intended files: see the memory note on rebuild
-  noise): MA-12 (arousal nuclei), MA-13 (midline-split tracts), MA-16 to MA-18, MA-20 (mesh hygiene, sweet spots,
-  the PSA), MB-07 (one fourth ventricle for two sections: which one is a choice), MB-09 and MB-11 (vessels and roots
-  through tumours and the brainstem), MB-13, MB-16, MB-19, MC-12, MC-13, MC-15, D-028, AP-06 (v1's Kawase cut: its
-  margins, and the right cochlear nerve inside the drilled piece). AP-11, AP-15, MC-16: v1 endonasal, in the user's
-  rework.
-- Need new sourced text (research): B-014 (the occipital lobe's text), B-016 (23 cortex definitions), B-019
-  (denominators, "in the macaque"), B-020, B-024 (the IFOF dispute), D-029 (seven clauses to re-read in full).
-- Engineering left: P1-08 (release memory: the audit says only if phones still struggle, unmeasured), P1-14 (one
-  section shell), P2S-19 (dependency majors, through Dependabot one at a time), P1-27's `preserveDrawingBuffer`
-  (the browser tests read the canvas) and `dist/` in git (a workflow choice), UI-13's Back history, endoscope pose
-  and measurements in links, UI-14's docked legend or camera offset, UI-22's jump row, UI-27's shorter phone
-  disclaimer, an ARCHITECTURE.md.
+  noise): MA-16 to MA-18, MA-20 (mesh hygiene, sweet spots, the PSA), MB-07 (one fourth ventricle for two sections:
+  which one is a choice), MB-11 (roots through the brainstem), MB-13, MB-19, MC-13, MC-15, D-028. AP-11, AP-15,
+  MC-16: v1 endonasal, in the user's rework.
+- Text for the owner: B-016's three cortex sentences a clinician should judge (the lunate sulcus as the V1/V2 border,
+  receptive aphasia from supramarginal lesions, the inferior temporal gyrus "underneath the central temporal
+  sulcus"); B-020's "restiform body" (Keser 2015, PMC4389543, calls the inferior peduncles "also known as restiform
+  bodies" and describes a smaller juxtarestiform body).
+- Engineering left: P1-08 (release memory: the audit says only if phones still struggle, unmeasured), P2S-19
+  (dependency majors, through Dependabot one at a time), P1-27's `preserveDrawingBuffer` (the browser tests read the
+  canvas) and `dist/` in git (a workflow choice), UI-13's Back history, endoscope pose and measurements in links,
+  UI-14's docked legend or camera offset, UI-22's jump row, UI-27's shorter phone disclaimer, an ARCHITECTURE.md.
+  Found in the shell refactor: the cortex reads a slice-plane value that is not a number (`ax=abc`) as plane off, the
+  other sections as the default plane; the ventricles' help does not list the endoscope's keys (W/S, Q/E, V, arrows).
 
 **From the audit's roadmap (`audit/07-roadmap.md`), not started:** teaching tours, approach comparison, side-by-side
 targets, sourced lead trajectories (no source yet), a changelog page, a coordinate readout relative to a chosen
