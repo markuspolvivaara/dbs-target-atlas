@@ -1551,7 +1551,7 @@ def validate() -> int:
     check(any(it["name"] == "Falx cerebri" for it in m["structures"]), "the falx is missing")
     check(all(it.get("morph") for it in m["structures"] if it["name"] in ("Middle cerebral artery (M2 segment)", "Middle cerebral artery (M3 segment)")),
           "M2 and M3 carry the opening")
-    pica = [it for it in m["structures"] if it["name"].startswith("Posterior inferior cerebellar artery")]
+    pica = [it for it in m["structures"] if it["name"].startswith("Posterior inferior cerebellar artery") and not it.get("tumourView")]
     check(len(pica) == 2 and all(it.get("morph") for it in pica), "the PICA and its carried-on course move with the cerebellum")
     sv = [it for it in m["structures"] if it.get("category") == "vein" and it.get("morph")]
     check(len(sv) == 5 and all(it.get("schematic") for it in sv), f"{len(sv)} veins drawn on the brain (the Sylvian veins, "

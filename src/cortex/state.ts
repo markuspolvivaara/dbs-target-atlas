@@ -1,7 +1,8 @@
 import type { CameraPreset } from '../data/schema';
-import { DEFAULT_LEAD, type Axis, type V3 } from '../state';
+import { DEFAULT_LEAD } from '../state';
 import type { ViewState } from '../viewer/scene';
-import { decodeOpacity, encodeOpacity, okCamera } from '../viewer/scene';
+import { decodeOpacity, encodeOpacity } from '../viewer/scene';
+import { CLIP_PARAMS, decodeCamera, decodeHemi, decodeHidden, encodeCamera, encodeClip, encodeHemi, encodeHidden, hashOf, readHash } from '../viewlink';
 import type { FnGroupId, LobeId } from './index';
 import { FN_GROUPS, LOBE } from './index';
 import { VIEW, type ViewId } from './views';
@@ -42,8 +43,6 @@ export function defaultCortexState(): CortexState {
 
 // #/atlas?v=lateral&lobe=frontal&sel=ctx_g_precentral&h=B&c=lateral&inf=1&col=a&lb=a&co=-12&seq=t2
 const PAGES: CortexPage[] = ['atlas', 'sources', 'credits'];
-const AXES: [Axis, string][] = [['axial', 'ax'], ['coronal', 'co'], ['sagittal', 'sa']];
-const r1 = (n: number) => Math.round(n * 10) / 10;
 
 export function encodeCortex(s: CortexState): string {
   const p = new URLSearchParams();
@@ -52,29 +51,26 @@ export function encodeCortex(s: CortexState): string {
     if (s.lobe) p.set('lobe', s.lobe);
     if (s.fn) p.set('f', s.fn);
     if (s.sel) p.set('sel', s.sel);
-    p.set('h', s.hemi === 'both' ? 'B' : s.hemi);
-    if (s.cam.pos && s.cam.tgt) p.set('c', [...s.cam.pos, ...s.cam.tgt].map(r1).join(','));
-    else if (s.cam.preset) p.set('c', s.cam.preset);
+    encodeHemi(p, s.hemi);
+    encodeCamera(p, s.cam);
     if (s.inflate) p.set('inf', '1');
     if (s.colour !== 'lobe') p.set('col', s.colour === 'atlas' ? 'a' : 'p');
     { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
     if (s.cutSide !== 'none') p.set('cut', s.cutSide);
-    for (const [a, code] of AXES) if (s.clip[a].on) p.set(code, `${r1(s.clip[a].mm)}`);
+    encodeClip(p, s.clip);
     if (s.sliceSeq !== 't1') p.set('seq', s.sliceSeq);
     if (s.layers.cortex.opacity !== 1) p.set('op', s.layers.cortex.opacity.toFixed(2));
-    if (s.hidden.length) p.set('hid', s.hidden.join(','));
+    encodeHidden(p, s.hidden);
     encodeOpacity(p, s.opacity);
   }
-  const q = p.toString();
-  return `#/${s.page}${q ? '?' + q : ''}`;
+  return hashOf(s.page, p);
 }
 
 /** Decode a hash; settings a link leaves out come from its view's defaults. */
 export function decodeCortex(hash: string): CortexState {
   const s = defaultCortexState();
-  const m = hash.replace(/^#\/?/, '').split('?');
-  s.page = PAGES.includes(m[0] as CortexPage) ? (m[0] as CortexPage) : 'atlas';
-  const p = new URLSearchParams(m[1] ?? '');
+  const { page, p } = readHash(hash, PAGES);
+  s.page = page;
   const v = VIEW.get(p.get('v') as ViewId) ?? VIEW.get('lateral')!;
   s.view = v.id; s.hemi = v.hemi;
   const lobe = p.get('lobe');
@@ -82,14 +78,8 @@ export function decodeCortex(hash: string): CortexState {
   const fn = p.get('f');
   s.fn = FN_GROUPS.some((g) => g.id === fn) ? (fn as FnGroupId) : null;
   s.sel = p.get('sel');
-  const h = p.get('h');
-  if (h === 'L' || h === 'R') s.hemi = h; else if (h === 'B') s.hemi = 'both';
-  const c = p.get('c');
-  if (c) {
-    const parts = c.split(',').map(Number);
-    if (okCamera(parts)) s.cam = { preset: null, pos: parts.slice(0, 3) as V3, tgt: parts.slice(3) as V3 };
-    else if ((CTX_PRESETS as string[]).includes(c)) s.cam = { preset: c as CameraPreset };
-  }
+  decodeHemi(p, s);
+  decodeCamera(p, s, CTX_PRESETS);
   s.inflate = p.get('inf') === '1' ? 1 : 0;
   const col = p.get('col');
   s.colour = col === 'a' ? 'atlas' : col === 'p' ? 'plain' : 'lobe';
@@ -97,7 +87,8 @@ export function decodeCortex(hash: string): CortexState {
   s.labels = labelsFrom(lb);
   const cut = p.get('cut');
   s.cutSide = cut === 'L' || cut === 'R' ? cut : 'none';
-  for (const [a, code] of AXES) {
+  // (a plane whose value is not a number stays off)
+  for (const [a, code] of CLIP_PARAMS) {
     const v = parseFloat(p.get(code) ?? '');
     if (Number.isFinite(v)) s.clip[a] = { on: true, mm: v };
   }
@@ -105,7 +96,7 @@ export function decodeCortex(hash: string): CortexState {
   s.sliceSeq = seq === 't2' || seq === 'pd' ? seq : 't1';
   const op = parseFloat(p.get('op') ?? '');
   if (Number.isFinite(op)) s.layers.cortex.opacity = Math.min(1, Math.max(0.1, op));
-  s.hidden = (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
+  s.hidden = decodeHidden(p);
   decodeOpacity(p, s);
   return s;
 }

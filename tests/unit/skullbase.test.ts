@@ -1330,6 +1330,19 @@ describe('v3 tumours drawn by rule: Knosp, Koos and meningioma sites', async () 
       const p = S3.skullPlan(g.id, null);
       for (const [part, copy] of g.keepLeft!) if (p.looks.get(copy) !== 'hidden') expect(p.onlySide?.get(part), `${g.id} ${part}`).toBe('L');
     }
+    // a copy that holds both halves (an artery a midline tumour reaches on both sides: copySides) stands in for the
+    // whole part, whose left half is not drawn beside it (the audit's MB-09)
+    const both = v3.structures.filter((s) => s.copySides?.includes('L'));
+    const shown = G3.SB_GROUPS.filter((g) => g.kind === 'tumour' && both.some((c) => g.structures.includes(c.id)));
+    expect(shown.length).toBeGreaterThan(0);
+    for (const g of shown) {
+      const p = S3.skullPlan(g.id, null);
+      for (const c of both.filter((c) => g.structures.includes(c.id))) {
+        expect(g.keepLeft?.some(([, copy]) => copy === c.id), `${g.id} ${c.id}`).toBe(false);
+        expect(p.looks.get(c.replaces!), `${g.id} ${c.replaces}`).toBe('hidden');
+        expect(p.onlySide?.has(c.replaces!)).toBe(false);
+      }
+    }
   });
   it('Koos grades by the drawing: II off the brainstem and under 2 cm outside the meatus, IV over 3 cm', () => {
     expect(TUMOUR_FIT.koos['2'].toBrainstemMm!).toBeGreaterThan(0);

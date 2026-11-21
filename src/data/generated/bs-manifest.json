@@ -1101,7 +1101,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_dr.glb",
-   "bytes": 17364,
+   "bytes": 17300,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1119,17 +1119,17 @@
     "https://doi.org/10.1002/hbm.70357"
    ],
    "refIds": [],
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm).",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm; a thin label less, so that its surface keeps at least 70% of its volume), moved 0.5 mm to the left: every label of the atlas is mirror-symmetric about x = +0.5 mm, half a voxel off the template's midline.",
    "centroid": {
     "L": [
-     -1.25,
-     -34.23,
-     -20.47
+     -1.54,
+     -34.18,
+     -20.61
     ],
     "R": [
-     1.8,
-     -34.2,
-     -20.84
+     1.56,
+     -34.23,
+     -20.69
     ]
    },
    "category": "aan",
@@ -1144,7 +1144,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_mnr.glb",
-   "bytes": 11188,
+   "bytes": 11516,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1162,17 +1162,17 @@
     "https://doi.org/10.1002/hbm.70357"
    ],
    "refIds": [],
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm).",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm; a thin label less, so that its surface keeps at least 70% of its volume), moved 0.5 mm to the left: every label of the atlas is mirror-symmetric about x = +0.5 mm, half a voxel off the template's midline.",
    "centroid": {
     "L": [
-     -0.35,
-     -32.86,
-     -27.79
+     -0.69,
+     -32.84,
+     -27.77
     ],
     "R": [
-     0.99,
-     -32.83,
-     -27.77
+     0.69,
+     -32.84,
+     -27.78
     ]
    },
    "category": "aan",
@@ -1187,7 +1187,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_pag.glb",
-   "bytes": 17816,
+   "bytes": 17764,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1205,17 +1205,17 @@
     "https://doi.org/10.1002/hbm.70357"
    ],
    "refIds": [],
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm).",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm; a thin label less, so that its surface keeps at least 70% of its volume), moved 0.5 mm to the left: every label of the atlas is mirror-symmetric about x = +0.5 mm, half a voxel off the template's midline.",
    "centroid": {
     "L": [
-     -1.59,
-     -33.1,
-     -11.67
+     -1.92,
+     -33.03,
+     -11.53
     ],
     "R": [
-     2.17,
-     -33.03,
-     -11.52
+     1.91,
+     -33.12,
+     -11.67
     ]
    },
    "category": "aan",
@@ -1230,7 +1230,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_vta.glb",
-   "bytes": 18108,
+   "bytes": 18092,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1248,17 +1248,17 @@
     "https://doi.org/10.1002/hbm.70357"
    ],
    "refIds": [],
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm).",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm; a thin label less, so that its surface keeps at least 70% of its volume), moved 0.5 mm to the left: every label of the atlas is mirror-symmetric about x = +0.5 mm, half a voxel off the template's midline.",
    "centroid": {
     "L": [
-     -3.34,
+     -3.71,
      -19.89,
-     -14.27
+     -14.12
     ],
     "R": [
-     3.91,
+     3.59,
      -19.93,
-     -13.92
+     -14.04
     ]
    },
    "category": "aan",
@@ -1273,7 +1273,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_lc.glb",
-   "bytes": 10348,
+   "bytes": 9532,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1291,17 +1291,17 @@
     "https://doi.org/10.1002/hbm.70357"
    ],
    "refIds": [],
-   "derivation": "Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm).",
+   "derivation": "Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm; a thin label less, so that its surface keeps at least 70% of its volume), moved 0.5 mm to the left: every label of the atlas is mirror-symmetric about x = +0.5 mm, half a voxel off the template's midline.",
    "centroid": {
     "L": [
-     -4.76,
-     -37.38,
-     -28.16
+     -5.24,
+     -37.36,
+     -28.04
     ],
     "R": [
-     5.76,
-     -37.38,
-     -28.16
+     5.24,
+     -37.36,
+     -28.04
     ]
    },
    "category": "aan",
@@ -1316,7 +1316,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_ldtg.glb",
-   "bytes": 4208,
+   "bytes": 10652,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1334,17 +1334,17 @@
     "https://doi.org/10.1002/hbm.70357"
    ],
    "refIds": [],
-   "derivation": "Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm).",
+   "derivation": "Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm; a thin label less, so that its surface keeps at least 70% of its volume), moved 0.5 mm to the left: every label of the atlas is mirror-symmetric about x = +0.5 mm, half a voxel off the template's midline.",
    "centroid": {
     "L": [
-     -2.89,
-     -35.5,
-     -24.86
+     -3.59,
+     -35.83,
+     -25.94
     ],
     "R": [
-     3.89,
-     -35.5,
-     -24.86
+     3.59,
+     -35.83,
+     -25.94
     ]
    },
    "category": "aan",
@@ -1359,7 +1359,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_mrt.glb",
-   "bytes": 30280,
+   "bytes": 30348,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1377,15 +1377,15 @@
     "https://doi.org/10.1002/hbm.70357"
    ],
    "refIds": [],
-   "derivation": "Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm).",
+   "derivation": "Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm; a thin label less, so that its surface keeps at least 70% of its volume), moved 0.5 mm to the left: every label of the atlas is mirror-symmetric about x = +0.5 mm, half a voxel off the template's midline.",
    "centroid": {
     "L": [
-     -4.64,
-     -30.76,
+     -5.14,
+     -30.77,
      -13.56
     ],
     "R": [
-     5.59,
+     5.09,
      -30.83,
      -13.65
     ]
@@ -1402,7 +1402,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_pbc.glb",
-   "bytes": 11664,
+   "bytes": 31672,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1420,17 +1420,17 @@
     "https://doi.org/10.1002/hbm.70357"
    ],
    "refIds": [],
-   "derivation": "Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm).",
+   "derivation": "Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm; a thin label less, so that its surface keeps at least 70% of its volume), moved 0.5 mm to the left: every label of the atlas is mirror-symmetric about x = +0.5 mm, half a voxel off the template's midline.",
    "centroid": {
     "L": [
-     -6.97,
-     -34.77,
-     -27.51
+     -7.42,
+     -34.04,
+     -26.7
     ],
     "R": [
-     7.97,
-     -34.77,
-     -27.51
+     7.42,
+     -34.04,
+     -26.7
     ]
    },
    "category": "aan",
@@ -1445,7 +1445,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_pno.glb",
-   "bytes": 17068,
+   "bytes": 17064,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1463,15 +1463,15 @@
     "https://doi.org/10.1002/hbm.70357"
    ],
    "refIds": [],
-   "derivation": "Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm).",
+   "derivation": "Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm; a thin label less, so that its surface keeps at least 70% of its volume), moved 0.5 mm to the left: every label of the atlas is mirror-symmetric about x = +0.5 mm, half a voxel off the template's midline.",
    "centroid": {
     "L": [
-     -1.82,
+     -2.32,
      -32.93,
      -27.9
     ],
     "R": [
-     2.82,
+     2.32,
      -32.93,
      -27.91
     ]
@@ -1488,7 +1488,7 @@
    ],
    "type": "nucleus",
    "file": "assets/brainstem/bs_aan_ptg.glb",
-   "bytes": 16624,
+   "bytes": 16672,
    "colour": {
     "token": "bsAan",
     "light": "#0F8A7E",
@@ -1506,15 +1506,15 @@
     "https://doi.org/10.1002/hbm.70357"
    ],
    "refIds": [],
-   "derivation": "Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm).",
+   "derivation": "Surface of the AAN 2.0 label (MNI152, 1 mm), resampled linearly to 0.5 mm and smoothed lightly (sigma 0.4 mm; a thin label less, so that its surface keeps at least 70% of its volume), moved 0.5 mm to the left: every label of the atlas is mirror-symmetric about x = +0.5 mm, half a voxel off the template's midline.",
    "centroid": {
     "L": [
-     -7.38,
+     -7.88,
      -26.46,
      -17.96
     ],
     "R": [
-     8.38,
+     7.88,
      -26.46,
      -17.96
     ]
@@ -3070,7 +3070,7 @@
    -30.0
   ],
   "ventricleFluidShare": 0.856,
-  "aanInVentricleMaxShare": 0.04,
+  "aanInVentricleMaxShare": 0.043,
   "aanInVentricleWorst": "DR",
   "ownWallWithin1mmShare": 0.505,
   "farWallWithin1mmShare": 0.076,

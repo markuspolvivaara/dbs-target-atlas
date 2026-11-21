@@ -44,7 +44,7 @@ const SECTIONS: { dir: string; box: Box; span: [number, number, number]; midline
 const TRIANGLES = 4, LINES = 1;
 
 interface Volume { file: string; dims: number[]; origin: number[]; spacing: number }
-interface SbStructure { name: string; file: string; type: string; category?: string; inBone?: { share: number }; approach?: unknown; pushedFrom?: unknown; tumourView?: unknown; replaces?: unknown; forView?: unknown }
+interface SbStructure { id: string; name: string; file: string; type: string; category?: string; inBone?: { share: number }; approach?: unknown; pushedFrom?: unknown; tumourView?: string; replaces?: string; forView?: unknown }
 // (the manifests as served)
 const served = <T>(name: string): T => JSON.parse(readFileSync(new URL(`assets/${name}`, PUBLIC), 'utf8')) as T;
 const manifest = served<{ volumes: Record<string, Volume> }>('manifest.json');
@@ -67,8 +67,9 @@ describe('every shipped mesh', () => {
         if (n.nonFinite) bad.push(`${at}: ${n.nonFinite} positions not finite`);
         if (n.badIndices) bad.push(`${at}: ${n.badIndices} indices past its vertices`);
         if (n.badNormals) bad.push(`${at}: ${n.badNormals} of ${n.normals} normals not of unit length`);
-        // (decimation leaves the odd collapsed triangle: a few in a thousand)
-        if (n.degenerate > 0.01 * n.triangles) bad.push(`${at}: ${n.degenerate} of ${n.triangles} triangles collapsed`);
+        // (triangles that draw nothing: taken out before a mesh is encoded, pipeline/triangles.mjs; the site audit's MB-16
+        // and MC-12 found 3 with a corner repeated, 7982 without area and 2 drawn twice)
+        if (n.degenerate || n.flat || n.twice) bad.push(`${at}: of ${n.triangles} triangles ${n.degenerate} with a corner repeated, ${n.flat} without area, ${n.twice} drawn twice`);
         for (let k = 0; k < 3; k++) {
           if (n.lo[k] < sec.box[k][0] || n.hi[k] > sec.box[k][1]) bad.push(`${at}: ${'xyz'[k]} from ${n.lo[k].toFixed(1)} to ${n.hi[k].toFixed(1)} mm, outside the frame's ${sec.box[k].join(' to ')}`);
           lo[k] = Math.min(lo[k], n.lo[k]); hi[k] = Math.max(hi[k], n.hi[k]);
@@ -156,6 +157,58 @@ describe('nerves and vessels against the skull-base bone they are drawn with', (
       if (share > 0.2 && !s.inBone) bad.push(`${s.name}: ${(100 * share).toFixed(1)} % of its surface in bone, and no note`);
     }
     expect(n).toBeGreaterThan(60);
+    expect(bad).toEqual([]);
+  }, 120_000);
+});
+
+describe('skull base v1: the Kawase drilling keeps off what it must not open (the audit’s AP-06)', () => {
+  it('no protected structure lies in the bone removed, and none is nearer to it than its margin, less the grid', async () => {
+    // (the margins as pipeline/skullbase_v3_approach.py KW_KEEP_MM states them for v1; the right cochlear and
+    // vestibular nerves were added after the drilling had run through two-thirds of the cochlear nerve)
+    const MARGIN: Record<string, number> = {
+      'Internal carotid artery': 1.5, Cochlea: 1.5, 'Vestibule and semicircular canals': 1.5, 'Vestibulocochlear nerve (VIII)': 1.0,
+      'Facial nerve (VII)': 1.5, 'Cochlear nerve': 1.0, 'Vestibular nerve': 1.0,
+    };
+    const removed = await soup(sbManifest.structures.find((s) => s.file.endsWith('sb_appr_kawase__removed.glb'))!.file);
+    const bad: string[] = [];
+    for (const [name, mm] of Object.entries(MARGIN)) {
+      const st = sbManifest.structures.find((s) => s.name === name && !s.approach && !s.pushedFrom && !s.tumourView && !s.replaces && !s.forView);
+      expect(st, name).toBeTruthy();
+      const t = await soup(st!.file);
+      // (the right side only: the drilling is on the right)
+      const R: number[] = [];
+      for (let i = 0; i < t.P.length; i += 3) if (t.P[i] > 0) R.push(t.P[i], t.P[i + 1], t.P[i + 2]);
+      const Q = Float64Array.from(R);
+      const inside = pointsInside(Q, removed.P, removed.T);
+      let nearest = Infinity;
+      for (let i = 0; i < Q.length; i += 3) for (let j = 0; j < removed.P.length; j += 3) {
+        const d = Math.hypot(Q[i] - removed.P[j], Q[i + 1] - removed.P[j + 1], Q[i + 2] - removed.P[j + 2]);
+        if (d < nearest) nearest = d;
+      }
+      // (0.5 mm: the grid the cut is made on)
+      if (inside > 0 || nearest < mm - 0.5) bad.push(`${name}: ${inside} points inside, nearest ${nearest.toFixed(2)} mm (margin ${mm})`);
+    }
+    expect(bad).toEqual([]);
+  }, 120_000);
+});
+
+describe('skull base v3: the tumours move the fitted small arteries they reach (the audit’s MB-09)', () => {
+  it('each moved artery lies outside its tumour, where it ran through it before', async () => {
+    const ss = sbv3Manifest.structures;
+    const copies = ss.filter((s) => s.tumourView && s.replaces && s.category === 'artery');
+    // (the Koos IV AICA ran 65 % inside its tumour, the foramen magnum meningioma's anterior spinal artery 45 %)
+    for (const [view, name] of [['koos_4', 'Anterior inferior cerebellar artery'], ['men_foramen_magnum', 'Anterior spinal artery']])
+      expect(copies.some((s) => s.tumourView === view && s.name === name), `${name} in ${view}`).toBe(true);
+    const bad: string[] = [];
+    for (const c of copies) {
+      const tumour = await soup(ss.find((s) => s.id === `tm_${c.tumourView}`)!.file);
+      const share = async (file: string) => { const t = await soup(file); return pointsInside(t.P, tumour.P, tumour.T) / (t.P.length / 3); };
+      const before = await share(ss.find((s) => s.id === c.replaces)!.file), after = await share(c.file);
+      // (a few points stay inside, near its surface: the Koos III lateral pontine branches and the petroclival
+      // AICA's loop keep 2.5 and 2.7 % of theirs, from 12.7 and 20.4 %; more rounds of the push do not free them)
+      if (after > 0.03 || after >= before) bad.push(`${c.id}: ${(100 * before).toFixed(1)} % inside before, ${(100 * after).toFixed(1)} % after`);
+    }
+    expect(copies.length).toBeGreaterThan(5);
     expect(bad).toEqual([]);
   }, 120_000);
 });

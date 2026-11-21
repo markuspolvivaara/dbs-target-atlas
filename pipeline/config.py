@@ -389,6 +389,10 @@ HCP1065_TRK_SHA256 = "344aad4394f18b8926ed5e1bda911ad56e328c6cf75faa45e1302512ad
 HCP1065_NIFTI_ZIP = "hcp1065_avg_tracts_nifti.zip"
 HCP1065_NIFTI_SHA256 = "81e0ad75add35c96a5bfd9dc6ede10e5482a8dd180eafcdf2d79249926194510"  # as downloaded 2026-11-18
 WM_BUDGET = 300  # streamlines per hemisphere, the same on both sides
+# a tract stored as one file (the corpus callosum, the anterior commissure, the cerebellar peduncles) is cut at x = 0;
+# a piece of a streamline shorter than this on one side, a stub left where it barely crosses, is dropped, and pieces
+# repeated point for point are kept once (the site audit's MA-13: half the right MCP's pieces were stubs)
+WM_MIDLINE_MIN_PIECE_MM = 20.0
 
 
 @dataclass

@@ -33,7 +33,7 @@ export function tractRefsPage() {
   abbr.sort(([a], [b]) => a.localeCompare(b));
   el.append(h('h1', {}, 'References'), abbreviationList(abbr), h('label', { class: 'search' }, 'Search references', q), count, list, empty,
     // (what was read, said as it is: the audit's B-011)
-    h('p', { class: 'aside' }, 'The statements on the tract cards cite these papers. Each record was retrieved from PubMed, and the statements were checked against its abstract; against the full text for the open-access papers read in full (Yeh 2018, Yeh 2022, Coenen 2021, Schilling 2018, Maier-Hein 2017). The summary at the top of each card restates what the card’s cited statements say and cites nothing itself; the figures marked measured come from the atlas’s files.'));
+    h('p', { class: 'aside' }, 'The statements on the tract cards cite these papers. Each record was retrieved from PubMed, and the statements were checked against its abstract; against the full text for the open-access papers read in full (Yeh 2018, Yeh 2022, Coenen 2021, Schilling 2018, Maier-Hein 2017, Morecraft 2018, Jiang 2020, Keser 2015, Hau 2016, Zhang 2020). The summary at the top of each card restates what the card’s cited statements say and cites nothing itself; the figures marked measured come from the atlas’s files.'));
   function render() {
     const s = q.value.trim().toLowerCase();
     const tags = (id: string) => [...(citedBy.get(id) ?? [])].join(', ');

@@ -29,7 +29,12 @@ export interface NodeStats {
   nonFinite: number;
   badIndices: number;
   triangles: number;
+  /** triangles with a corner repeated */
   degenerate: number;
+  /** triangles without area, in the mesh and in every shape it morphs to (pipeline/triangles.mjs takes them out) */
+  flat: number;
+  /** triangles drawn a second time over the same corners in the same order */
+  twice: number;
   normals: number;
   badNormals: number;
 }
@@ -44,7 +49,7 @@ export async function nodeStats(file: string, root: URL = PUBLIC): Promise<NodeS
     if (!mesh) continue;
     const m = node.getWorldMatrix();
     const s: NodeStats = { file, node: node.getName(), modes: [], verts: 0, meanX: 0, lo: [Infinity, Infinity, Infinity], hi: [-Infinity, -Infinity, -Infinity],
-      nonFinite: 0, badIndices: 0, triangles: 0, degenerate: 0, normals: 0, badNormals: 0 };
+      nonFinite: 0, badIndices: 0, triangles: 0, degenerate: 0, flat: 0, twice: 0, normals: 0, badNormals: 0 };
     let sx = 0;
     for (const prim of mesh.listPrimitives()) {
       s.modes.push(prim.getMode());
@@ -68,9 +73,23 @@ export async function nodeStats(file: string, root: URL = PUBLIC): Promise<NodeS
       if (!idx) continue;
       for (const i of idx) if (i >= n) s.badIndices++;
       if (prim.getMode() !== 4) continue;
+      const targets = prim.listTargets().map((t) => t.getAttribute('POSITION')).filter((t) => t !== null);
+      const a: number[] = [], b: number[] = [], c: number[] = [], d: number[] = [], e: number[] = [], f: number[] = [];
+      const area = (i0: number, i1: number, i2: number, T?: NonNullable<typeof pos>) => {
+        pos!.getElement(i0, a); pos!.getElement(i1, b); pos!.getElement(i2, c);
+        if (T) { T.getElement(i0, d); T.getElement(i1, e); T.getElement(i2, f); for (let k = 0; k < 3; k++) { a[k] += d[k]; b[k] += e[k]; c[k] += f[k]; } }
+        const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2], wx = c[0] - a[0], wy = c[1] - a[1], wz = c[2] - a[2];
+        return Math.hypot(uy * wz - uz * wy, uz * wx - ux * wz, ux * wy - uy * wx);
+      };
+      const seen = new Set<string>();
       for (let t = 0; t + 2 < idx.length; t += 3) {
         s.triangles++;
-        if (idx[t] === idx[t + 1] || idx[t + 1] === idx[t + 2] || idx[t] === idx[t + 2]) s.degenerate++;
+        const i0 = idx[t], i1 = idx[t + 1], i2 = idx[t + 2];
+        if (i0 === i1 || i1 === i2 || i0 === i2) { s.degenerate++; continue; }
+        if (area(i0, i1, i2) === 0 && targets.every((T) => area(i0, i1, i2, T!) === 0)) s.flat++;
+        const r = i0 < i1 && i0 < i2 ? [i0, i1, i2] : i1 < i2 ? [i1, i2, i0] : [i2, i0, i1];
+        const key = r.join(',');
+        if (seen.has(key)) s.twice++; else seen.add(key);
       }
     }
     s.meanX = s.verts ? sx / s.verts : NaN;

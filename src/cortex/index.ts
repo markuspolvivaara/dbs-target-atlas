@@ -17,10 +17,17 @@ const V3 = z.tuple([z.number(), z.number(), z.number()]);
 const Anchor = z.object({ pial: V3, inflated: V3, nPial: V3, nInflated: V3 });
 const LobeId = z.enum(['frontal', 'parietal', 'temporal', 'occipital', 'cingulate', 'insula']);
 export type LobeId = z.infer<typeof LobeId>;
-const Definition = z.object({ text: z.string().min(1), url: z.string().url().nullable(), source: z.string() });
-/** A correction made to a shipped text: the words as shipped, the words shown instead, and why (with its source). */
 /** a correction to a shipped text: the words as shipped, the words shown instead ('' when they are left out), and why */
 const DefinitionEdit = z.object({ from: z.string().min(1), to: z.string(), why: z.string().min(1) });
+/** A card's text: the Wikipedia lead Z-Anatomy ships (source: its name there; url: its page), or, where Z-Anatomy ships
+ * none, a text written for this atlas (refIds: the paper it comes from; source: which paper and sections; the site
+ * audit's B-014). scope: what the text is about, where that is not the label or lobe itself; edits: corrections made to
+ * a shipped text, each listed on the card. */
+const Definition = z.object({
+  text: z.string().min(1), url: z.string().url().nullable(), source: z.string(), scope: z.string().nullable(),
+  edits: z.array(DefinitionEdit).min(1).optional(), refIds: z.array(z.string()).min(1).optional(),
+});
+export type CtxDefinition = z.infer<typeof Definition>;
 export const LabelSchema = z.object({
   id: z.string().regex(/^ctx_[a-z0-9_]+$/),
   short: z.string(),
@@ -42,8 +49,7 @@ export const LabelSchema = z.object({
   dk: z.array(z.object({ region: z.string(), labelInRegion: z.number(), regionInLabel: z.number() })),
   parcels: z.array(z.object({ id: z.string(), labelInParcel: z.number(), parcelInLabel: z.number() })),
   insula: z.boolean(),
-  /** scope: what the text is about, where that is not the label itself; edits: corrections made to it, each listed on the card */
-  definition: Definition.extend({ scope: z.string().nullable(), edits: z.array(DefinitionEdit).min(1).optional() }).nullable(),
+  definition: Definition.nullable(),
 });
 export type CtxLabel = z.infer<typeof LabelSchema>;
 /** A functional area drawn over the labels: HMAT's (motor, somatosensory) or the Destrieux labels its definition names. */
@@ -153,10 +159,13 @@ export function crossCheckCtx(): string[] {
     for (const p of l.parcels) if (!DBS_PARCEL.has(p.id)) errs.push(`${l.id}: DBS parcel ${p.id} unknown`);
     for (const r of l.dk) if (!DK_NAMES[r.region]) errs.push(`${l.id}: Desikan-Killiany region ${r.region} unnamed`);
     if (!l.lobes.some((x) => x.lobe === l.lobe)) errs.push(`${l.id}: main lobe not among its lobes`);
-    // a correction is in the text shown, and the words it replaced are not
-    for (const e of l.definition?.edits ?? []) if (!l.definition!.text.includes(e.to) || l.definition!.text.includes(e.from)) errs.push(`${l.id}: a listed correction is not in its text`);
   }
   for (const lb of LOBES) for (const id of lb.labels) if (!LABEL.has(id)) errs.push(`lobe ${lb.id}: unknown label ${id}`);
+  for (const x of [...LABELS, ...LOBES]) {
+    // a correction is in the text shown, and the words it replaced are not; a text written here cites a known reference
+    for (const e of x.definition?.edits ?? []) if (!x.definition!.text.includes(e.to) || x.definition!.text.includes(e.from)) errs.push(`${x.id}: a listed correction is not in its text`);
+    for (const r of x.definition?.refIds ?? []) if (!CTX_REFS.has(r)) errs.push(`${x.id}: definition reference ${r} unknown`);
+  }
   const fns = new Set(FUNCTIONS.map((f) => f.id));
   for (const s of CTX_MANIFEST.structures) if (s.id !== MEDIAL_WALL && !LABEL.has(s.id) && !fns.has(s.id)) errs.push(`${s.id}: no label facts`);
   for (const f of FUNCTIONS) {

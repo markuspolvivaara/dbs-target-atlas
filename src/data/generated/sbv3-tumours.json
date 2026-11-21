@@ -170,7 +170,8 @@
      "leftInside": 0,
      "maxMovedMm": 2.0
     }
-   }
+   },
+   "vessels": {}
   },
   "3": {
    "centre": [
@@ -204,6 +205,32 @@
      "pointsInside": 10,
      "leftInside": 0,
      "maxMovedMm": 3.3
+    }
+   },
+   "vessels": {
+    "Anterior inferior cerebellar artery": {
+     "insideShare": {
+      "L": 0.0,
+      "R": 0.622
+     },
+     "maxMovedMm": 9.9,
+     "leftInside": 24
+    },
+    "Lateral pontine branches of basilar artery": {
+     "insideShare": {
+      "L": 0.0,
+      "R": 0.271
+     },
+     "maxMovedMm": 5.3,
+     "leftInside": 36
+    },
+    "Posterior inferior cerebellar artery (fitted course)": {
+     "insideShare": {
+      "L": 0.0,
+      "R": 0.009
+     },
+     "maxMovedMm": 1.8,
+     "leftInside": 0
     }
    }
   },
@@ -245,6 +272,40 @@
      "leftInside": 0,
      "maxMovedMm": 0.7
     }
+   },
+   "vessels": {
+    "Anterior inferior cerebellar artery": {
+     "insideShare": {
+      "L": 0.0,
+      "R": 0.647
+     },
+     "maxMovedMm": 7.9,
+     "leftInside": 0
+    },
+    "Lateral pontine branches of basilar artery": {
+     "insideShare": {
+      "L": 0.0,
+      "R": 0.595
+     },
+     "maxMovedMm": 8.0,
+     "leftInside": 0
+    },
+    "Medial pontine branches of basilar artery": {
+     "insideShare": {
+      "L": 0.0,
+      "R": 0.079
+     },
+     "maxMovedMm": 0.8,
+     "leftInside": 0
+    },
+    "Superior cerebellar artery (fitted course)": {
+     "insideShare": {
+      "L": 0.0,
+      "R": 0.321
+     },
+     "maxMovedMm": 7.1,
+     "leftInside": 0
+    }
    }
   }
  },
@@ -272,7 +333,8 @@
     "leftInside": 0,
     "rounds": 4,
     "maxMovedMm": 22.41
-   }
+   },
+   "vessels": {}
   },
   "tuberculum": {
    "site": [
@@ -297,7 +359,8 @@
     "leftInside": 0,
     "rounds": 6,
     "maxMovedMm": 16.05
-   }
+   },
+   "vessels": {}
   },
   "petroclival": {
    "site": [
@@ -322,6 +385,43 @@
     "leftInside": 0,
     "rounds": 5,
     "maxMovedMm": 18.32
+   },
+   "vessels": {
+    "Anterior inferior cerebellar artery": {
+     "insideShare": {
+      "L": 0.092,
+      "R": 0.356
+     },
+     "maxMovedMm": 14.1,
+     "leftInside": 35,
+     "sides": "both"
+    },
+    "Lateral pontine branches of basilar artery": {
+     "insideShare": {
+      "L": 0.196,
+      "R": 0.746
+     },
+     "maxMovedMm": 7.9,
+     "leftInside": 0,
+     "sides": "both"
+    },
+    "Medial pontine branches of basilar artery": {
+     "insideShare": {
+      "L": 0.061,
+      "R": 0.694
+     },
+     "maxMovedMm": 6.1,
+     "leftInside": 0,
+     "sides": "both"
+    },
+    "Posterior inferior cerebellar artery (fitted course)": {
+     "insideShare": {
+      "L": 0.0,
+      "R": 0.004
+     },
+     "maxMovedMm": 0.9,
+     "leftInside": 0
+    }
    }
   },
   "foramen_magnum": {
@@ -347,6 +447,17 @@
     "leftInside": 0,
     "rounds": 1,
     "maxMovedMm": 0.0
+   },
+   "vessels": {
+    "Anterior spinal artery": {
+     "insideShare": {
+      "L": 0.466,
+      "R": 0.418
+     },
+     "maxMovedMm": 4.3,
+     "leftInside": 0,
+     "sides": "both"
+    }
    }
   }
  }

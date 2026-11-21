@@ -3,7 +3,7 @@ import { NodeIO } from '@gltf-transform/core';
 import { EXTMeshoptCompression, KHRMeshQuantization } from '@gltf-transform/extensions';
 import { MeshoptDecoder } from 'meshoptimizer';
 import { readFileSync } from 'node:fs';
-import { crossCheckCtx, CTX, CTX_MANIFEST, FUNCTIONS, LABEL, LABELS, LOBE, LOBES, MEDIAL_WALL, shortName } from '../../src/cortex';
+import { crossCheckCtx, CTX, CTX_MANIFEST, CTX_REFS, FUNCTIONS, LABEL, LABELS, LOBE, LOBES, MEDIAL_WALL, shortName } from '../../src/cortex';
 import { cortexPlan, cortexScene, viewLabels } from '../../src/cortex/scene';
 import { decodeCortex, defaultCortexState, encodeCortex } from '../../src/cortex/state';
 import { VIEW, VIEWS } from '../../src/cortex/views';
@@ -81,9 +81,11 @@ describe('cortex data (Destrieux on the Lead-DBS template surface)', () => {
     const ang = def('G_pariet_inf-Angular');
     expect(ang.text).not.toMatch(/anterolateral/);
     expect(ang.text).toContain('posterior part of the inferior parietal lobule');
-    expect(ang.edits).toHaveLength(1);
+    expect(ang.edits).toHaveLength(2);
     expect(ang.edits![0].from).toContain('anterolateral');
     expect(ang.edits![0].why).toContain('Destrieux et al. 2010');
+    // ... and without the unsourced account of reading (the audit's B-016)
+    expect(ang.text).not.toMatch(/Its significance/);
     // Heschl's gyri in front of the planum temporale, not above it (Destrieux 2010, 2.3.2), without the unsourced
     // "language production" (the audit's B-003)
     const hg = def('G_temp_sup-G_T_transv');
@@ -99,7 +101,56 @@ describe('cortex data (Destrieux on the Lead-DBS template surface)', () => {
       expect(d.edits!.map((e) => e.to), s).toEqual(['', '']);
     }
     expect(LABELS.filter((l) => l.definition?.edits).map((l) => l.short).sort())
-      .toEqual(['G_and_S_occipital_inf', 'G_occipital_middle', 'G_occipital_sup', 'G_pariet_inf-Angular', 'G_temp_sup-G_T_transv']);
+      .toEqual(['G_and_S_occipital_inf', 'G_cuneus', 'G_front_inf-Opercular', 'G_front_inf-Triangul', 'G_front_middle',
+        'G_occipital_middle', 'G_occipital_sup', 'G_pariet_inf-Angular', 'G_rectus', 'G_temp_sup-G_T_transv',
+        'G_temp_sup-Lateral', 'G_temp_sup-Plan_polar', 'G_temp_sup-Plan_tempo', 'G_temporal_middle', 'S_central',
+        'S_oc_middle_and_Lunatus', 'S_parieto_occipital', 'S_temporal_inf']);
+  });
+  it('the doubtful, garbled and misplaced sentences of the shipped texts are corrected or left out (the audit’s B-016)', () => {
+    const def = (s: string) => byShort.get(s)!.definition!;
+    const gone: [string, RegExp][] = [
+      ['G_cuneus', /smaller lobe/], ['G_front_inf-Opercular', /tone of voice|inflectional morpheme/],
+      ['G_front_inf-Triangul', /translate from a secondary/], ['G_front_middle', /true gyrus|"bumps"/],
+      ['G_rectus', /HSDD|sexually/], ['G_temporal_middle', /kanji|poem/], ['S_central', /vertebrates|confused with/],
+      ['S_oc_middle_and_Lunatus', /evolutionary/], ['S_parieto_occipital', /5 cm|1\.25 cm/],
+      ['S_temporal_inf', /concave|bridging gyri/],
+    ];
+    for (const [s, re] of gone) expect(def(s).text, s).not.toMatch(re);
+    for (const s of ['G_temp_sup-Lateral', 'G_temp_sup-Plan_polar', 'G_temp_sup-Plan_tempo']) expect(def(s).text, s).not.toMatch(/not always present/);
+    // Broca's area: the opercular and triangular parts of the left inferior frontal gyrus (Bulut 2023)
+    for (const s of ['G_front_inf-Opercular', 'G_front_inf-Triangul']) {
+      expect(def(s).text, s).toContain('Broca’s area');
+      expect(def(s).edits![0].why, s).toContain('Bulut 2023');
+    }
+    // the inferior temporal sulcus between the lateral and ventral aspects (Destrieux 2010, 2.3.3 and 2.3.4)
+    expect(def('S_temporal_inf').text).toContain('at the limit between the lateral and ventral aspects of the temporal lobe');
+    // the frontal lobe's text loses its garbled sentence; the three sentences awaiting a clinician are still there
+    const frontal = LOBE.get('frontal')!.definition!;
+    expect(frontal.text).not.toMatch(/covered by the prefrontal cortex/);
+    expect(frontal.edits).toHaveLength(1);
+    expect(def('S_oc_middle_and_Lunatus').text).toContain('marks the transition between V1 and V2');
+    expect(def('G_pariet_inf-Supramar').text).toContain('receptive aphasia');
+    expect(def('G_temporal_inf').text).toContain('central temporal sulcus');
+  });
+  it('every label and lobe has a text; where Z-Anatomy ships none, one written from Destrieux 2010 (the audit’s B-014)', () => {
+    const own = LABELS.filter((l) => l.definition?.refIds).map((l) => l.short);
+    expect(LABELS.filter((l) => !l.definition)).toEqual([]);
+    expect(own).toHaveLength(15);
+    for (const x of [...LABELS, ...LOBES]) {
+      const d = x.definition!;
+      if (!d.refIds) continue;
+      expect(d.refIds, x.id).toEqual(['destrieux2010']);
+      expect(d.url, x.id).toBeNull();
+      expect(d.source, x.id).toMatch(/^Destrieux et al\. 2010, sections? 2\./);
+      expect(d.edits, x.id).toBeUndefined();
+    }
+    expect(CTX_REFS.get('destrieux2010')!.url).toBe('https://doi.org/10.1016/j.neuroimage.2010.06.010');
+    expect(LOBE.get('occipital')!.definition!.text).toMatch(/^The occipital lobe/);
+    expect(LOBE.get('occipital')!.definition!.refIds).toEqual(['destrieux2010']);
+    // the cingulate cortex's card shows the text on the limbic lobe, headed so
+    expect(LOBE.get('cingulate')!.definition!.text).toMatch(/^The limbic lobe/);
+    expect(LOBE.get('cingulate')!.definition!.scope).toBe('the limbic lobe');
+    expect(byShort.get('S_temporal_transverse')!.definition!.text).toContain('divides the transverse temporal (Heschl’s) gyrus');
   });
   it('relates the DBS section’s motor areas to the central region, not the occipital lobe', () => {
     const m1 = (s: string) => byShort.get(s)!.parcels.find((p) => p.id === 'm1')?.parcelInLabel ?? 0;

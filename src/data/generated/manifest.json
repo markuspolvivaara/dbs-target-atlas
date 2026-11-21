@@ -257,7 +257,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/gpi_sm.glb",
-   "bytes": 22452,
+   "bytes": 22380,
    "colour": {
     "token": "gpi",
     "light": "#1F7F5A",
@@ -1459,7 +1459,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/meshes/ss_ts.glb",
-   "bytes": 17916,
+   "bytes": 17904,
    "colour": {
     "token": "stn",
     "light": "#946609",

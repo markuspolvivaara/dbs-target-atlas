@@ -1,4 +1,4 @@
-import { CTX_MANIFEST, LABELS, LOBES, METHOD } from '../cortex';
+import { CTX_MANIFEST, LABELS, LOBES, METHOD, shortName } from '../cortex';
 import { abbreviationList, h } from './h';
 import { linkLicences, UPSTREAM_NOTE } from './licences';
 
@@ -9,8 +9,12 @@ const a = (href: string, text: string) => h('a', { href, target: '_blank', rel: 
 export function cortexSourcesPage() {
   const el = h('div', { class: 'page wrap' });
   const d = CTX_MANIFEST.dataset;
-  const defs = LABELS.filter((l) => l.definition).length;
-  const edited = LABELS.filter((l) => l.definition?.edits?.length);
+  const defs = LABELS.filter((l) => l.definition && !l.definition.refIds).length;
+  // texts written for this atlas where Z-Anatomy ships none (the site audit's B-014)
+  const own = LABELS.filter((l) => l.definition?.refIds).length;
+  const ownLobes = LOBES.filter((l) => l.definition?.refIds).map((l) => l.name.toLowerCase());
+  const edited = [...LABELS.filter((l) => l.definition?.edits?.length).map((l) => shortName(l.id)),
+    ...LOBES.filter((l) => l.definition?.edits?.length).map((l) => l.name)].map((n) => n.toLowerCase());
   const urls = [...new Set([...LABELS.map((l) => l.definition?.url), ...LOBES.map((l) => l.definition?.url)].filter((u): u is string => !!u))].sort();
   el.append(
     h('h1', {}, 'Sources'),
@@ -36,7 +40,8 @@ export function cortexSourcesPage() {
         h('li', {}, `Inflated surface: ${METHOD.inflateIterations} smoothing steps of the decimated pial surface, rescaled to its size; the shading is how far the pial surface lies inside it (sulcal depth).`))),
     h('section', { class: 'card' },
       h('h2', {}, 'Definitions'),
-      h('p', {}, `${defs} of the ${LABELS.length} labels have a definition: the Wikipedia text Z-Anatomy ships for the matching structure (CC BY-SA 3.0), shortened to its lead. Where the text describes a larger structure (the whole cingulate cortex, the insula, the superior temporal gyrus) or a neighbouring one (the olfactory tract under the olfactory sulcus), the card says so. They have not been checked against the literature yet${edited.length ? `, except for ${edited.length === 1 ? 'one passage' : `${edited.length} passages`} found to be wrong and corrected (${edited.map((l) => l.name.toLowerCase()).join(', ')}): the card shows the corrected text and says what was changed and why` : ''}.`),
+      h('p', {}, `${defs} of the ${LABELS.length} labels have a definition from the Wikipedia text Z-Anatomy ships for the matching structure (CC BY-SA 3.0), shortened to its lead. Where the text describes a larger structure (the whole cingulate cortex, the limbic lobe, the insula, the superior temporal gyrus) or a neighbouring one (the olfactory tract under the olfactory sulcus), the card says so. They have not been checked against the literature as a whole${edited.length ? `; passages found to be wrong, garbled or without a source were corrected or left out in ${edited.length === 1 ? 'one text' : `${edited.length} texts`} (${edited.join(', ')}), and the card shows the corrected text and says what was changed and why` : ''}.`),
+      own ? h('p', {}, `Z-Anatomy ships no text for the other ${own} labels${ownLobes.length ? ` or for the ${ownLobes.join(' and the ')}` : ''}: their cards have a short text written for this atlas from the full text of Destrieux et al. 2010, and say which sections it comes from.`) : null,
       h('details', { class: 'more' }, h('summary', {}, `Wikipedia source pages (${urls.length})`),
         h('ul', { class: 'refs' }, ...urls.map((u) => h('li', {}, a(u, decodeURIComponent(u.replace(/^https?:\/\/en\.wikipedia\.org\/wiki\//, '')).replace(/_/g, ' '))))))),
   );
@@ -59,7 +64,7 @@ export function cortexCreditsPage() {
       h('p', {}, 'The Slices tab shows the ICBM 2009b nonlinear asymmetric templates (T1, T2, PD), the DBS section’s files. Copyright (C) 1993–2004 Louis Collins, McConnell Brain Imaging Centre, Montreal Neurological Institute, McGill University. Permission to use, copy, modify, and distribute this software and its documentation for any purpose and without fee is hereby granted, provided that the above copyright notice appear in all copies. The authors and McGill University make no representations about the suitability of this software for any purpose. It is provided “as is” without express or implied warranty.')),
     h('section', { class: 'card' },
       h('h2', {}, 'Definitions'),
-      h('p', {}, 'Wikipedia - CC BY-SA 3.0, as shipped with Z-Anatomy (CC BY-SA 4.0); the source page is linked on each definition that has one (four do not: those of the inferior frontal gyrus’s opercular and orbital parts, the occipital pole and the temporal pole).'),
+      h('p', {}, 'Wikipedia - CC BY-SA 3.0, as shipped with Z-Anatomy (CC BY-SA 4.0); the source page is linked on each definition that has one (four do not: those of the inferior frontal gyrus’s opercular and orbital parts, the occipital pole and the temporal pole). The texts written for this atlas where Z-Anatomy ships none are not Wikipedia’s: they come from Destrieux et al. 2010, which their cards cite.'),
       h('p', { class: 'aside' }, UPSTREAM_NOTE)),
     h('section', { class: 'card' },
       h('h2', {}, 'Lobe grouping'),

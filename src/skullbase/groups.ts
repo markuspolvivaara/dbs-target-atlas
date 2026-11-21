@@ -49,7 +49,7 @@ export interface SbGroup {
   /** a section the view is cut at (everything on the normal's side of the point removed), while the reader keeps it on */
   section?: { normal: V3; point: V3 };
   /** a tumour view's parts moved by the tumour: [the part, its moved copy]; the copies hold the right half only, so
-   * the part's left half is drawn beside them (the site audit's MC-18) */
+   * the part's left half is drawn beside them (the site audit's MC-18); not a copy that holds both (copySides) */
   keepLeft?: [string, string][];
 }
 
@@ -78,6 +78,7 @@ const FLOOR_POINTS = ['Foramen caecum of frontal bone', 'Sphenoidal yoke', 'Limb
 /** the structures the views list: not the parts of the fitted brain pushed aside by a tumour (for its view only) */
 const OWN = SB_MANIFEST.structures.filter((s) => !s.pushedFrom);
 const PUSHED = SB_MANIFEST.structures.filter((s) => s.pushedFrom);
+const HOLDS_LEFT = new Set(PUSHED.filter((s) => s.copySides?.includes('L')).map((s) => s.id));
 
 /** v1 (Z-Anatomy) calls some of v3's structures by other names */
 const ownName = (n: string) => (SB_MODEL === 'zanatomy' ? V1_NAMES[n] ?? n : n);
@@ -238,7 +239,7 @@ function tumourGroups(surgical: SbGroup[]): SbGroup[] {
       ...host, id, kind: 'tumour', name: t.family === 'koos' ? `Vestibular schwannoma, Koos ${gr.id}` : `${gr.label} meningioma`,
       description: t.summary, focusIds: [...inView(gr.view), ...(host.focusIds ?? []).slice(0, 1)], radius: Math.max(host.radius, 55),
       structures: [...host.structures.map((x) => swap.get(x) ?? x), gr.structure], tumour: { family: t.family, grade: gr.id },
-      keepLeft: host.structures.filter((x) => swap.has(x)).map((x): [string, string] => [x, swap.get(x)!]),
+      keepLeft: host.structures.filter((x) => swap.has(x) && !HOLDS_LEFT.has(swap.get(x)!)).map((x): [string, string] => [x, swap.get(x)!]),
       // (opened onto the tumour: the cerebellum retracted, the frontal lobe lifted)
       morphDefault: { ...host.morphDefault },
     };

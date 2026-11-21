@@ -718,7 +718,11 @@ entry zones for brainstem surgery.
 - Pipeline: `pipeline/brainstem_export.py` (in Blender), then `pipeline/brainstem_build.py` (fit, meshes, zones,
   manifest), `node pipeline/compress.mjs brainstem`, `pipeline/brainstem_build.py finalize` (checks sides, positions,
   the fit, the zones, the tracts and the shared nuclei). `pipeline/brainstem_build.py tracts` redoes only the four
-  HCP-YA tracts and the shared nuclei's lists in the manifest as built, leaving every other file as it is.
+  HCP-YA tracts and the shared nuclei's lists in the manifest as built, leaving every other file as it is;
+  `pipeline/brainstem_build.py aan` likewise the arousal network's nuclei. Those are moved 0.5 mm to the left: every
+  label of the AAN 2.0 atlas is mirror-symmetric about x = +0.5 mm, half a voxel off the template's midline, so the
+  midline nuclei cut at x = 0 had unequal halves; and a thin label is surfaced with less smoothing so that its surface
+  keeps at least 70 % of its volume (the laterodorsal tegmental nucleus had 0.1 of its 17 mm³).
 
 ## Ventricles
 
