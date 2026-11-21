@@ -455,6 +455,21 @@ def split_midline(sl: np.ndarray) -> dict[str, list[np.ndarray]]:
     return out
 
 
+def midline_pieces(pieces: list[np.ndarray]) -> list[np.ndarray]:
+    """The pieces of one side of a tract cut at x = 0 worth drawing: none shorter than C.WM_MIDLINE_MIN_PIECE_MM, and
+    each once (the source files repeat some streamlines point for point)."""
+    out, seen = [], set()
+    for p in pieces:
+        if float(np.linalg.norm(np.diff(p, axis=0), axis=1).sum()) < C.WM_MIDLINE_MIN_PIECE_MM:
+            continue
+        key = np.round(p, 2).tobytes()
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(p)
+    return out
+
+
 def line_nodes(per_side: dict[str, list[np.ndarray]], budget: int, rng: np.random.Generator) -> tuple[list[dict], dict]:
     """Fixed-seed subsample + resample per hemisphere -> glTF line nodes and a report."""
     nodes, rep = [], {}
@@ -494,7 +509,13 @@ def build_wm(report: dict) -> None:
             line_nodes(per_side, C.WM_BUDGET, rng)  # the draw as before the split or withdrawal (C.WmTract.replays)
         if t.withdrawn:
             continue
-        if t.keep:
+        if "midline" in t.files:
+            # stubs and repeats left out, the draw from the tract's own stream; the shared stream replays the draw as it
+            # was, so that every other tract's file stays as it is
+            line_nodes(per_side, C.WM_BUDGET, rng)
+            per_side = {s: midline_pieces(v) for s, v in per_side.items()}
+            nodes, rep = line_nodes(per_side, C.WM_BUDGET, np.random.default_rng([C.RANDOM_SEED, zlib.crc32(t.id.encode())]))
+        elif t.keep:
             per_side = {s: [sl for sl in v if crossed(sl) == (t.keep == "crossed")] for s, v in per_side.items()}
             nodes, rep = line_nodes(per_side, C.WM_BUDGET, np.random.default_rng([C.RANDOM_SEED, zlib.crc32(t.id.encode())]))
         else:

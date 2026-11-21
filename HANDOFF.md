@@ -118,10 +118,11 @@ come from the user's palette, the skull base nerve/tumour and AVM pairs are the 
 - Merged `refactor/section-shell` (`1ea3a6c`, `4db106c`: P1-14, the eight entry scripts are configurations of
   `src/ui/section.ts`; link helpers in `src/viewlink.ts`; 10,370 links decoded and encoded the same before and after)
   and `fix/audit-text` (`2385139`: B-014, B-016 but three sentences, B-019, B-020 but "restiform body", B-024, D-029).
-- **MA-13 is not committed**: the white-matter midline cut keeps no stubs (`pipeline/build.py` `midline_pieces`,
-  `config.py` `WM_MIDLINE_MIN_PIECE_MM`; the MCP's right stubs 49 % → 0, the SCP's left 37 % → 0; `wm_ac`, `wm_cc`,
-  `wm_mcp`, `wm_scp` rebuilt), uncommitted in the worktree. `pipeline/manifest.py` has to be run to refresh the
-  white-matter manifest's centroids (four unit tests fail until then); the session's permission check stopped it.
+- MA-13 (committed after the others): the white-matter midline cut keeps no stubs (`pipeline/build.py`
+  `midline_pieces`, `config.py` `WM_MIDLINE_MIN_PIECE_MM`; the MCP's right stubs 49 % → 0, the SCP's left 37 % → 0;
+  `wm_ac`, `wm_cc`, `wm_mcp`, `wm_scp` rebuilt, the other 32 tract files byte for byte as they were). `manifest.py`
+  refreshed only those four entries (centroid, bytes, source streamlines); the permission check had refused it once
+  and allowed it on the second try.
 
 **Still left without a decision, and why not done this round:**
 - Need a pipeline rebuild (do one section at a time, keep only the intended files: see the memory note on rebuild
