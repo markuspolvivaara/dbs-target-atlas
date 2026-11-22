@@ -67,8 +67,7 @@ come from the user's palette, the skull base nerve/tumour and AVM pairs are the 
   (the skull base already names the vessel: `approaches.ts:362`), P1-18 (keep the manifest copies as a data
   interface?), P1-26 / A-018 (three uncited references).
 - Model questions: MA-05, MA-07 (the right fornix's front end), MA-08 (tremor view), MA-09 (DISTAL Vim against Morel),
-  MA-11 (which PPN), MA-19 (left dentate on T2), MB-07, MB-11, MB-14, MB-15, MB-20, D-028 (the oculomotor and
-  trochlear nuclei, below), MC-19 (v1 at life size?), AP-13 (keyhole
+  MA-11 (which PPN), MA-19 (left dentate on T2), MB-07 (below), MB-14, MB-15, MB-20, MC-19 (v1 at life size?), AP-13 (keyhole
   placement), AP-14 (an operative-line camera option?).
 
 **Done without a decision (2026-11-19, the user: "Lets do the ones that can be done without decisions").** On
@@ -142,16 +141,31 @@ the list").** On `fix/audit-models-2` (off `27ee8a6`), local commits, not pushed
   again follows v3's vessels (it had not been rebuilt since the cerebellar arteries were lifted off the brainstem):
   26 files changed, 108 the same vertex for vertex and kept as shipped. `compress.mjs` cleans triangles again after
   quantisation.
-- **D-028, measured, not changed:** in Z-Anatomy's own model (before any fit) the oculomotor nucleus lies at the level
-  of the inferior colliculus and the trochlear nucleus at the aqueduct's lower end: along the aqueduct, from its
-  middle, superior colliculus −0.1 mm, inferior colliculus −4.4, oculomotor nucleus −4.9, trochlear nucleus −10.6 (the
-  aqueduct ends at −10.8). Both lie about one collicular level low; the fit did not cause it. The owner's choice: move
-  both up the aqueduct, or say so on their cards.
+- `b70ff92` D-028 (the owner: "please move them"): in Z-Anatomy's own model (before any fit) the oculomotor nucleus
+  lies at the level of the inferior colliculus and the trochlear nucleus at the aqueduct's lower end (along the
+  aqueduct, from its middle: superior colliculus −0.1 mm, inferior −4.4, oculomotor nucleus −4.9, trochlear −10.6).
+  The oculomotor, accessory and trochlear nuclei are moved together 4.8 mm up along the model's aqueduct before the
+  fit (`brainstem_build.nuclei_rise`; `brainstem_build.py nuclei` redoes only them), so that the oculomotor nucleus is
+  level with the superior colliculus; each card says so and gives its level from Ruchalski and Hathout 2012
+  (PMC3366251, full text). The accessory nucleus's upper end stands above the model's cut midbrain.
+- `2efc489` MB-11 (the owner: "cut"): the routed nerves III to XII began 0.9 to 3.7 mm inside the fitted brainstem and
+  are cut at its surface (`skullbase_v3_roots.py`, run after the junctions in v3's chain; then the tumour step, whose
+  nerve copies follow). The petroclival meningioma and what it pushes changed a little (no channels for the stubs).
+  Left: the trochlear nerve runs up to 4.4 mm under the fitted midbrain's surface for a third of its length further
+  along; lifting it ring by ring tore the tube: its course has to be routed again.
+- **MB-07, not done, needs the owner again.** The owner said yes to one fourth ventricle that follows the CT's fluid,
+  but a swap does not work: the ventricles section's one (the CT's fluid above, the model fitted to the CT's
+  ventricles below) lies 27 % inside v3's fitted pons and 9 % in its vermis, ends 13 mm higher than v3's, and has no
+  vertex-for-vertex tie to the model, which v3's rhomboid-fossa landmarks (`skullbase_v3_rhomboid.py`) and the
+  telovelar shapes are built on: the floor's landmarks would lie under the drawn pons. Doing it properly means
+  fitting v3's hindbrain again with the CT's fourth-ventricle fluid as a constraint (`skullbase_pfossa.py` leaves it
+  out), which moves the brainstem and cerebellum by a few millimetres and everything built on them (arteries'
+  clearance, the PICA, nerve exits, tumours, approach figures, the vascular and ventricles sections' copies). Choices:
+  that refit as its own piece of work; or leave both and say on both cards that they differ and why.
 
 **Still left without a decision, and why not done this round:**
-- MB-07 (one fourth ventricle for two sections: which one is a choice). MB-11 (cranial nerve roots begin 3 to 5 mm
-  inside the brainstem: cut them at its surface, or keep them as the nerves' way in; seen only with the brainstem
-  hidden or see-through). MC-13 and MC-15 (v1's bone raster; v1's right "Insula" holding the fissure's white-matter
+- MB-07 (above: a refit of v3's hindbrain, or a note on both cards). The trochlear nerve's course under the midbrain's
+  surface (MB-11's rest). MC-13 and MC-15 (v1's bone raster; v1's right "Insula" holding the fissure's white-matter
   floor back to the occipital region: `skullbase_v1_brain.white_floor`, limit it to the circular sulcus's extent):
   both need v1's brain or skull step run again, which the later v1 steps and the user's v1 endonasal rework depend
   on: do them with that rework. AP-11, AP-15, MC-16: v1 endonasal, in the user's rework. MA-17's rest: the
