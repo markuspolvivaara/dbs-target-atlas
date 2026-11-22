@@ -71,7 +71,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_frontal_bone.glb",
-   "bytes": 512600,
+   "bytes": 511848,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 47 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
@@ -114,7 +114,7 @@
    "name": "Inferior nasal concha bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_inferior_nasal_concha_bone.glb",
-   "bytes": 41672,
+   "bytes": 41576,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
@@ -329,7 +329,7 @@
    "name": "Palatine bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_palatine_bone.glb",
-   "bytes": 81020,
+   "bytes": 80848,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
@@ -458,7 +458,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_temporal_bone.glb",
-   "bytes": 717000,
+   "bytes": 715092,
    "refIds": [],
    "category": "bone",
    "derivation": "The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 31 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
@@ -1061,7 +1061,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-v3/sb_ophthalmic_artery.joined.glb",
-   "bytes": 30016,
+   "bytes": 33328,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1084,7 +1084,7 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. Joined to the internal carotid artery by a drawn segment across a 7.2 mm gap; to the internal carotid artery by a drawn segment across a 6.7 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py).",
+   "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. Joined to the internal carotid artery by a drawn segment across a 7.2 mm gap; to the internal carotid artery by a drawn segment across a 6.7 mm gap; to its own next piece by a drawn segment across a 1.9 mm gap; to its own next piece by a drawn segment across a 3.1 mm gap; to its own next piece by a drawn segment across a 0.4 mm gap; to its own next piece by a drawn segment across a 0.9 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py).",
    "centroid": {
     "L": [
      -19.15,
@@ -2099,7 +2099,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_stapes.glb",
-   "bytes": 22408,
+   "bytes": 22308,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -2137,7 +2137,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_tympanic_membrane.glb",
-   "bytes": 40820,
+   "bytes": 40824,
    "colour": {
     "token": "sbMembrane",
     "light": "#7B3FA0",
@@ -3031,8 +3031,8 @@
    "name": "Accessory branch of middle meningeal artery",
    "aliases": [],
    "type": "soft",
-   "file": "assets/skullbase-v3/tb_accessory_branch_of_middle_meningeal_artery.glb",
-   "bytes": 9304,
+   "file": "assets/skullbase-v3/tb_accessory_branch_of_middle_meningeal_artery.joined.glb",
+   "bytes": 12284,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3054,7 +3054,7 @@
    "layer": "tracts",
    "system": "Middle meningeal artery",
    "fitted": true,
-   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), routed through the CT near its fitted course, crossing bone only through an opening (a median 5.1 mm on the right, 5.6 mm on the left). Its course is approximate.",
+   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), routed through the CT near its fitted course, crossing bone only through an opening (a median 5.1 mm on the right, 5.6 mm on the left). Its course is approximate. Joined to the middle meningeal artery by a drawn segment across a 2.8 mm gap; to the middle meningeal artery by a drawn segment across a 2.9 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py).",
    "centroid": {
     "L": [
      -22.37,
@@ -3066,7 +3066,8 @@
      -2.37,
      -16.8
     ]
-   }
+   },
+   "joinedFrom": "assets/skullbase-v3/tb_accessory_branch_of_middle_meningeal_artery.glb"
   },
   {
    "id": "tb_anterior_ethmoidal_artery",
@@ -3580,7 +3581,7 @@
    "type": "soft",
    "fitted": true,
    "file": "assets/skullbase-ct/sb_falx_cerebri.glb",
-   "bytes": 69340,
+   "bytes": 68904,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -3623,7 +3624,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_frontal_lobe.glb",
-   "bytes": 484772,
+   "bytes": 485196,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -3666,7 +3667,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_parietal_lobe.glb",
-   "bytes": 227120,
+   "bytes": 227320,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -3709,7 +3710,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_temporal_lobe.glb",
-   "bytes": 182060,
+   "bytes": 182360,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -3752,7 +3753,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_occipital_lobe.glb",
-   "bytes": 109684,
+   "bytes": 109828,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -3795,7 +3796,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_insula.glb",
-   "bytes": 64392,
+   "bytes": 64448,
    "colour": {
     "token": "sbInsula",
     "light": "#4A3DA8",
@@ -3838,7 +3839,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_cingulate_gyrus.glb",
-   "bytes": 68716,
+   "bytes": 68576,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -3881,7 +3882,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_medial_wall.glb",
-   "bytes": 89212,
+   "bytes": 89160,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -4036,8 +4037,8 @@
     "Vein of Trolard"
    ],
    "type": "tube",
-   "file": "assets/skullbase-v3/sb_vein_of_trolard.glb",
-   "bytes": 25228,
+   "file": "assets/skullbase-v3/sb_vein_of_trolard.joined.glb",
+   "bytes": 26512,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -4052,7 +4053,7 @@
    "refIds": [],
    "category": "vein",
    "morph": true,
-   "derivation": "Drawn by rule on the fitted template brain, not traced (this angiogram labels no cortical vein): from the superficial Sylvian vein's back end up over the gyral crowns (the shortest way over them, bridging the sulci) to this CT's superior sagittal sinus, where the template's frontal lobe meets its parietal at the top: the central sulcus, near which the vein joins the sinus (Tomasi 2021); 2 mm across (illustrative). Which of the anastomotic veins dominates varies. It moves with the brain in the surgical shapes (with the frontal and parietal cortex it lies on), carried by cross-sections along its line.",
+   "derivation": "Drawn by rule on the fitted template brain, not traced (this angiogram labels no cortical vein): from the superficial Sylvian vein's back end up over the gyral crowns (the shortest way over them, bridging the sulci) to this CT's superior sagittal sinus, where the template's frontal lobe meets its parietal at the top: the central sulcus, near which the vein joins the sinus (Tomasi 2021); 2 mm across (illustrative). Which of the anastomotic veins dominates varies. It moves with the brain in the surgical shapes (with the frontal and parietal cortex it lies on), carried by cross-sections along its line. Joined to the superficial middle cerebral vein by a drawn segment across a 1.5 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py).",
    "centroid": {
     "L": [
      -37.59,
@@ -4064,7 +4065,8 @@
      -48.7,
      66.82
     ]
-   }
+   },
+   "joinedFrom": "assets/skullbase-v3/sb_vein_of_trolard.glb"
   },
   {
    "id": "sb_vein_of_labbe",
@@ -4073,8 +4075,8 @@
     "Vein of Labbé"
    ],
    "type": "tube",
-   "file": "assets/skullbase-v3/sb_vein_of_labbe.glb",
-   "bytes": 18988,
+   "file": "assets/skullbase-v3/sb_vein_of_labbe.joined.glb",
+   "bytes": 20276,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -4089,7 +4091,7 @@
    "refIds": [],
    "category": "vein",
    "morph": true,
-   "derivation": "Drawn by rule on the fitted template brain, not traced: from the superficial Sylvian vein's back end back and down over the temporal lobe's gyral crowns to this CT's traced transverse sinus, where it lies about 9.8 cm over the cortex from the temporal pole (the mean distance Tomasi 2021 measured: 9.9 and 9.7 cm); 2 mm across (illustrative). Which of the anastomotic veins dominates varies. It moves with the brain in the surgical shapes (with the temporal and occipital cortex it lies on), carried by cross-sections along its line.",
+   "derivation": "Drawn by rule on the fitted template brain, not traced: from the superficial Sylvian vein's back end back and down over the temporal lobe's gyral crowns to this CT's traced transverse sinus, where it lies about 9.8 cm over the cortex from the temporal pole (the mean distance Tomasi 2021 measured: 9.9 and 9.7 cm); 2 mm across (illustrative). Which of the anastomotic veins dominates varies. It moves with the brain in the surgical shapes (with the temporal and occipital cortex it lies on), carried by cross-sections along its line. Joined to the superficial middle cerebral vein by a drawn segment across a 1.2 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py).",
    "centroid": {
     "L": [
      -57.41,
@@ -4101,7 +4103,8 @@
      -57.26,
      18.7
     ]
-   }
+   },
+   "joinedFrom": "assets/skullbase-v3/sb_vein_of_labbe.glb"
   },
   {
    "id": "pf_cerebellar_hemisphere",
@@ -5184,7 +5187,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__frontal_bone.glb",
-   "bytes": 528892,
+   "bytes": 527876,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -5319,7 +5322,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__temporal_bone.glb",
-   "bytes": 716056,
+   "bytes": 715544,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -5534,7 +5537,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_lso__frontal_bone.glb",
-   "bytes": 548644,
+   "bytes": 547116,
    "refIds": [],
    "category": "bone",
    "approach": "lso",
@@ -5704,7 +5707,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_interhemispheric__frontal_bone.glb",
-   "bytes": 528860,
+   "bytes": 527604,
    "refIds": [],
    "category": "bone",
    "approach": "interhemispheric",
@@ -5954,7 +5957,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_retrosigmoid__temporal_bone.glb",
-   "bytes": 732444,
+   "bytes": 731408,
    "refIds": [],
    "category": "bone",
    "approach": "retrosigmoid",
@@ -6214,7 +6217,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__temporal_bone.glb",
-   "bytes": 718012,
+   "bytes": 716928,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -6429,7 +6432,7 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_far_lateral__occipital_bone.glb",
-   "bytes": 511348,
+   "bytes": 510704,
    "refIds": [],
    "category": "bone",
    "approach": "far_lateral",
@@ -6474,7 +6477,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_far_lateral__temporal_bone.glb",
-   "bytes": 728780,
+   "bytes": 727396,
    "refIds": [],
    "category": "bone",
    "approach": "far_lateral",
@@ -6689,7 +6692,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_kawase__temporal_bone.glb",
-   "bytes": 789768,
+   "bytes": 788464,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -6784,7 +6787,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_temporal_lobe__kawase.glb",
-   "bytes": 142600,
+   "bytes": 142656,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -6849,7 +6852,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_subtemporal__frontal_bone.glb",
-   "bytes": 544616,
+   "bytes": 543640,
    "refIds": [],
    "category": "bone",
    "approach": "subtemporal",
@@ -6984,7 +6987,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_subtemporal__temporal_bone.glb",
-   "bytes": 725020,
+   "bytes": 724368,
    "refIds": [],
    "category": "bone",
    "approach": "subtemporal",
@@ -7044,7 +7047,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_temporal_lobe__subtemporal.glb",
-   "bytes": 167684,
+   "bytes": 167960,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8744,7 +8747,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_frontal_lobe__men_olfactory.glb",
-   "bytes": 292132,
+   "bytes": 292260,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8790,7 +8793,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_cingulate_gyrus__men_olfactory.glb",
-   "bytes": 37784,
+   "bytes": 37700,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8836,7 +8839,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_medial_wall__men_olfactory.glb",
-   "bytes": 53084,
+   "bytes": 53028,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -8920,7 +8923,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_frontal_lobe__men_tuberculum.glb",
-   "bytes": 292820,
+   "bytes": 292932,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8966,7 +8969,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_insula__men_tuberculum.glb",
-   "bytes": 39164,
+   "bytes": 39268,
    "colour": {
     "token": "sbInsula",
     "light": "#4A3DA8",
@@ -9012,7 +9015,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_cingulate_gyrus__men_tuberculum.glb",
-   "bytes": 38504,
+   "bytes": 38492,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -9058,7 +9061,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_medial_wall__men_tuberculum.glb",
-   "bytes": 51052,
+   "bytes": 51076,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
