@@ -5,7 +5,7 @@ import bsZones from '../data/generated/bs-zones.json';
 import manifestJson from '../data/generated/manifest.json';
 import wmManifestJson from '../data/generated/wm-manifest.json';
 import { BsManifestSchema, ManifestSchema, WmManifestSchema, type ManifestStructure } from '../data/schema';
-import { AAN_GENERAL, AAN_TRANSMITTER, HCP_ATLAS, NERVE_COMPONENTS, NOT_DRAWN, NUCLEI_NOT_MODELLED, SEZ_GENERAL, SHARED_NUCLEI, TRACT_TEXT, ZONES } from './content';
+import { AAN_GENERAL, AAN_TRANSMITTER, HCP_ATLAS, NERVE_COMPONENTS, NOT_DRAWN, NUCLEI_LEVEL, NUCLEI_NOT_MODELLED, SEZ_GENERAL, SHARED_NUCLEI, TRACT_TEXT, ZONES } from './content';
 import { BS_REFERENCES } from './references';
 import { BsReferenceSchema, ClaimSchema, ZoneContentSchema, type Claim } from './schema';
 
@@ -139,6 +139,9 @@ export function crossCheckBs(): string[] {
     if (s.cranialNerves && !s.cranialNerves.includes(s.cranialNerve ?? 0)) errs.push(`${s.id}: listed under a nerve it does not serve`);
   }
   for (const [id, cl] of Object.entries(SHARED_NUCLEI)) cl.forEach((x) => ref(`shared nucleus ${id}`, x));
+  // a nucleus moved in the source model says, from a source, at what level it lies
+  for (const s of BS_MANIFEST.structures) if (!!s.movedMm !== !!NUCLEI_LEVEL[s.id]) errs.push(`${s.id}: moved ${s.movedMm ?? 0} mm, level text ${!!NUCLEI_LEVEL[s.id]}`);
+  for (const [id, cl] of Object.entries(NUCLEI_LEVEL)) ref(`moved nucleus ${id}`, cl);
   // the HCP-YA tracts: each has its text and its measured fit
   HCP_ATLAS.forEach((cl) => ref('HCP-YA atlas', cl));
   for (const id of OWN_TRACTS) {

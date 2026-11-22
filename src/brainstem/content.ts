@@ -276,6 +276,17 @@ export const SHARED_NUCLEI: Record<string, Claim[]> = {
   ],
 };
 
+/**
+ * Nuclei moved in the source model before the fit (the manifest's `movedMm`, pipeline/brainstem_build.py
+ * RAISED_NUCLEI; the site audit's D-028): the level each lies at, from a source. How far and why is the pipeline's
+ * note on the card.
+ */
+export const NUCLEI_LEVEL: Record<string, Claim> = {
+  bs_n_oculomotor: c('The oculomotor nuclear complex lies at the level of the superior colliculus, in the medial tegmentum in front of the periaqueductal grey.', 'ruchalski2012'),
+  bs_n_edinger_westphal: c('The Edinger–Westphal nucleus lies in the oculomotor complex’s visceral cell column, dorsal to its somatic part; the complex lies at the level of the superior colliculus.', 'ruchalski2012'),
+  bs_n_trochlear: c('The trochlear nucleus lies at the level of the inferior colliculus, on the midline in front of the aqueduct.', 'ruchalski2012'),
+};
+
 /** The HCP-YA tractography atlas the four tracts are drawn from: how it was made, and what its authors say of its limits. */
 export const HCP_ATLAS: Claim[] = [
   c('The atlas was made from the diffusion MRI of 842 participants of the Human Connectome Project, reconstructed in ICBM-152 space (FSL’s fractional anisotropy template standing for that space) and averaged at 1 mm. Fibre tracking on the average gave clusters of streamlines, which neuroanatomists labelled and checked for false connections.', 'yeh2018'),

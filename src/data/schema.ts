@@ -197,6 +197,9 @@ export const ManifestStructureSchema = z.object({
   schematic: z.boolean().optional(),
   /** skull base, detailed model: carried over from the Z-Anatomy model fitted onto the CT, so its position is approximate */
   fitted: z.boolean().optional(),
+  /** brainstem: how far (mm) a nucleus was moved in the source model before the fit, where the model has it out of place
+   *  (the nuclei of the third and fourth nerves; its card says why) */
+  movedMm: z.number().optional(),
   /** skull base v3: the surgical approach this structure belongs to (a cut bone, or the bone removed) */
   approach: z.string().optional(),
   /** skull base v3: the bone a cut bone replaces in its approach's view */

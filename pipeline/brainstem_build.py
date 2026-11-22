@@ -127,6 +127,18 @@ CN_NUCLEI = [
     ("Nucleus of accessory nerve", "bs_n_accessory", 11),
     ("Nucleus of hypoglossal nerve", "bs_n_hypoglossal", 12),
 ]
+# The oculomotor nuclei and the trochlear nucleus lie one collicular level low in Z-Anatomy's model itself (the site
+# audit's D-028): along its aqueduct, from the aqueduct's middle, the superior colliculus lies at -0.1 mm, the inferior
+# at -4.4, the oculomotor nucleus at -4.9 and the trochlear nucleus at -10.6, where the aqueduct ends (-10.8), in the
+# pons as drawn. The oculomotor complex lies at the level of the superior colliculus and the trochlear nucleus at that
+# of the inferior, in front of the aqueduct (Ruchalski and Hathout 2012, PMC3366251, full text). The three are moved
+# together up along the model's aqueduct, before the fit, by what brings the oculomotor nucleus's centre level with the
+# superior colliculus's (nuclei_rise): they keep their places relative to one another and to the aqueduct.
+RAISED_NUCLEI = ("Nucleus of oculomotor nerve", "Accessory nucleus of oculomotor nerve", "Nucleus of trochlear nerve")
+RAISED_NOTE = (" Moved {mm:g} mm up along the model's aqueduct before the fit, with the other nuclei of the third and fourth "
+               "nerves: Z-Anatomy draws them one collicular level low (the oculomotor nucleus at the inferior colliculus, the "
+               "trochlear nucleus where the aqueduct ends); so moved, the oculomotor nucleus's centre is level with the superior "
+               "colliculus's (brainstem_build.py nuclei_rise).")
 # nuclei that serve more than one cranial nerve (the audit's D-008): every nerve, in order. The sources are with the
 # claims in src/brainstem/content.ts (SHARED_NUCLEI); `cranialNerve` above stays the one the list is sorted by
 SHARED_NUCLEI = {"bs_n_ambiguus": [9, 10, 11], "bs_n_solitary": [7, 9, 10]}
@@ -731,6 +743,71 @@ def aan_in_ventricle(ventricle: tuple[np.ndarray, np.ndarray]) -> dict:
     return {"aanInVentricleMaxShare": in_vent[worst], "aanInVentricleWorst": worst}
 
 
+def aqueduct_axis(ex: dict) -> tuple[np.ndarray, np.ndarray]:
+    """The model's aqueduct, in its own coordinates: its middle and its long axis (pointing up)."""
+    A = np.array(ex["meshes"]["Aqueduct of midbrain"]["verts"], float)
+    c = A.mean(0)
+    ax = np.linalg.svd(A - c, full_matrices=False)[2][0]
+    return c, (ax if ax[2] > 0 else -ax)
+
+
+def nuclei_rise(ex: dict) -> np.ndarray:
+    """How far RAISED_NUCLEI are moved, in the model's own coordinates: along its aqueduct, by what brings the oculomotor
+    nucleus's centre level with the superior colliculus's (both sides' meshes together)."""
+    _, ax = aqueduct_axis(ex)
+    centre = lambda base: np.vstack([np.array(ex["meshes"][base + suf]["verts"], float) for suf in (".l", ".r")]).mean(0)
+    return float((centre("Superior colliculus") - centre("Nucleus of oculomotor nerve")) @ ax) * ax
+
+
+def cn_nucleus(ex: dict, F, base: str, sid: str, cn: int) -> tuple[dict, dict]:
+    """A cranial nerve nucleus's item (its file written) and its fitted vertices by mesh name."""
+    rise = nuclei_rise(ex) if base in RAISED_NUCLEI else None
+    nodes, fitted = [], {}
+    for sd, suf in (("L", ".l"), ("R", ".r")):
+        m = ex["meshes"][base + suf]
+        v = F(np.array(m["verts"], float) + rise) if rise is not None else F(m["verts"])
+        fitted[base + suf] = v
+        t = orient(v, np.array(m["tris"]))
+        if len(t) < 4:
+            continue
+        nodes.append(node(sd, v, t))
+    shared = {"cranialNerves": SHARED_NUCLEI[sid]} if sid in SHARED_NUCLEI else {}
+    note = RAISED_NOTE.format(mm=round(float(np.linalg.norm(rise)), 1)) if rise is not None else ""
+    return structure(sid, base, "nucleus", "bsNucleus", nodes,
+                     "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space "
+                     "with the brainstem: approximate." + note, category="cnNucleus", cranialNerve=cn, fitted=True, layer="nuclei",
+                     **({"movedMm": round(float(np.linalg.norm(rise)), 1)} if rise is not None else {}), **shared), fitted
+
+
+def nuclei_only() -> int:
+    """Redo the nuclei of the third and fourth nerves (RAISED_NUCLEI) in the manifest as built, leaving every other
+    structure and file as it is (a full build rewrites other surfaces with small differences).
+
+      pipeline/.venv/bin/python -I -W ignore pipeline/brainstem_build.py nuclei
+      node pipeline/compress.mjs brainstem bs_n_oculomotor.glb bs_n_edinger_westphal.glb bs_n_trochlear.glb
+      pipeline/.venv/bin/python -I -W ignore pipeline/brainstem_build.py finalize
+    """
+    ex = json.loads(EXPORT.read_text())
+    F = Fitted(ex)
+    BUILD.mkdir(parents=True, exist_ok=True)
+    built = {}
+    for base, sid, cn in CN_NUCLEI:
+        if base in RAISED_NUCLEI:
+            built[sid], _ = cn_nucleus(ex, F, base, sid, cn)
+    p = GEN / "bs-manifest.json"
+    m = json.loads(p.read_text())
+    n = 0
+    for i, it in enumerate(m["structures"]):
+        if it["id"] in built:
+            m["structures"][i] = built[it["id"]]
+            n += 1
+    if n != len(built):
+        raise SystemExit(f"nuclei: {n} of {len(built)} found in the manifest")
+    p.write_text(json.dumps(m, indent=1, ensure_ascii=False))
+    print(f"brainstem: {n} nuclei redone, moved {np.round(nuclei_rise(ex), 2).tolist()} mm in the model's own frame")
+    return 0
+
+
 def aan_only() -> int:
     """Redo the arousal network's nuclei (aan_structures) and their share in the fourth ventricle in the manifest as
     built, leaving every other structure and file as it is (a full build rewrites other surfaces with small differences).
@@ -872,16 +949,9 @@ def main() -> int:
             "Cut at the midline (x = 0) into left and right halves. " + fit_note, category="csf", fitted=True, layer="cortex")
     # cranial nerve nuclei
     for base, sid, cn in CN_NUCLEI:
-        nodes = []
-        for sd, suf in (("L", ".l"), ("R", ".r")):
-            v, t = mesh_of(base + suf)
-            if len(t) < 4:
-                continue
-            nodes.append(node(sd, v, t))
-        shared = {"cranialNerves": SHARED_NUCLEI[sid]} if sid in SHARED_NUCLEI else {}
-        add(sid, base, "nucleus", "bsNucleus", nodes,
-            "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the "
-            "brainstem: approximate.", category="cnNucleus", cranialNerve=cn, fitted=True, layer="nuclei", **shared)
+        it, fitted = cn_nucleus(ex, F, base, sid, cn)
+        fitted_meshes.update(fitted)
+        items.append(it)
     # ascending arousal network (AAN 2.0)
     for args, kw in aan_structures():
         add(*args, **kw)
@@ -1458,6 +1528,8 @@ if __name__ == "__main__":
         sys.exit(validate())
     if sys.argv[1:] == ["tracts"]:
         sys.exit(tracts_only())
+    if sys.argv[1:] == ["nuclei"]:
+        sys.exit(nuclei_only())
     if sys.argv[1:] == ["aan"]:
         sys.exit(aan_only())
     if sys.argv[1:] == ["cst"]:

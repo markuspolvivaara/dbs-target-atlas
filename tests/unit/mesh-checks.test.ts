@@ -228,3 +228,18 @@ describe('vascular section: lesions drawn by rule keep out of this CT’s bone (
     expect(bad).toEqual([]);
   }, 120_000);
 });
+
+describe('brainstem: the nuclei of the third and fourth nerves lie in the midbrain (the audit’s D-028)', () => {
+  it('the trochlear nucleus is in the midbrain mesh, not the pons; the oculomotor nucleus level with the superior colliculus', async () => {
+    const file = (id: string) => bsManifest.structures.find((s) => s.id === id)!.file;
+    const [midbrain, pons, iv, iii, sc] = await Promise.all(['bs_midbrain', 'bs_pons', 'bs_n_trochlear', 'bs_n_oculomotor', 'bs_superior_colliculus'].map((id) => soup(file(id))));
+    const share = (t: { P: Float64Array }, m: { P: Float64Array; T: Uint32Array }) => pointsInside(t.P, m.P, m.T) / (t.P.length / 3);
+    // (Z-Anatomy's model has it where the aqueduct ends: 94 % of it lay in the pons mesh and none in the midbrain's)
+    expect(share(iv, midbrain)).toBeGreaterThan(0.8);
+    expect(share(iv, pons)).toBeLessThan(0.1);
+    expect(share(iii, midbrain)).toBeGreaterThan(0.95);
+    const meanZ = (t: { P: Float64Array }) => { let z = 0; for (let i = 2; i < t.P.length; i += 3) z += t.P[i]; return z / (t.P.length / 3); };
+    // (level with the superior colliculus along the oblique aqueduct: 3 mm lower, being 7 mm further forward; it was 8 mm lower)
+    expect(Math.abs(meanZ(iii) - meanZ(sc))).toBeLessThan(4.5);
+  }, 60_000);
+});

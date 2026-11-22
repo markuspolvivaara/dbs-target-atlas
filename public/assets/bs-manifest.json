@@ -459,7 +459,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_oculomotor.glb",
-   "bytes": 10420,
+   "bytes": 10400,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -477,23 +477,24 @@
     "https://doi.org/10.1016/j.neuroimage.2010.07.033"
    ],
    "refIds": [],
-   "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate.",
+   "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate. Moved 4.8 mm up along the model's aqueduct before the fit, with the other nuclei of the third and fourth nerves: Z-Anatomy draws them one collicular level low (the oculomotor nucleus at the inferior colliculus, the trochlear nucleus where the aqueduct ends); so moved, the oculomotor nucleus's centre is level with the superior colliculus's (brainstem_build.py nuclei_rise).",
    "centroid": {
     "L": [
      -1.98,
-     -29.78,
-     -17.66
+     -27.29,
+     -12.98
     ],
     "R": [
      1.98,
-     -29.78,
-     -17.66
+     -27.29,
+     -12.98
     ]
    },
    "category": "cnNucleus",
    "cranialNerve": 3,
    "fitted": true,
-   "layer": "nuclei"
+   "layer": "nuclei",
+   "movedMm": 4.8
   },
   {
    "id": "bs_n_edinger_westphal",
@@ -501,7 +502,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_edinger_westphal.glb",
-   "bytes": 10392,
+   "bytes": 10348,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -519,23 +520,24 @@
     "https://doi.org/10.1016/j.neuroimage.2010.07.033"
    ],
    "refIds": [],
-   "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate.",
+   "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate. Moved 4.8 mm up along the model's aqueduct before the fit, with the other nuclei of the third and fourth nerves: Z-Anatomy draws them one collicular level low (the oculomotor nucleus at the inferior colliculus, the trochlear nucleus where the aqueduct ends); so moved, the oculomotor nucleus's centre is level with the superior colliculus's (brainstem_build.py nuclei_rise).",
    "centroid": {
     "L": [
      -0.78,
-     -28.63,
-     -14.45
+     -26.2,
+     -9.61
     ],
     "R": [
      0.78,
-     -28.63,
-     -14.45
+     -26.2,
+     -9.61
     ]
    },
    "category": "cnNucleus",
    "cranialNerve": 3,
    "fitted": true,
-   "layer": "nuclei"
+   "layer": "nuclei",
+   "movedMm": 4.8
   },
   {
    "id": "bs_n_trochlear",
@@ -543,7 +545,7 @@
    "aliases": [],
    "type": "nucleus",
    "file": "assets/brainstem/bs_n_trochlear.glb",
-   "bytes": 10844,
+   "bytes": 10824,
    "colour": {
     "token": "bsNucleus",
     "light": "#C2410C",
@@ -561,23 +563,24 @@
     "https://doi.org/10.1016/j.neuroimage.2010.07.033"
    ],
    "refIds": [],
-   "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate.",
+   "derivation": "The Z-Anatomy model's nucleus (a simple shape standing for its position and extent), fitted into MNI space with the brainstem: approximate. Moved 4.8 mm up along the model's aqueduct before the fit, with the other nuclei of the third and fourth nerves: Z-Anatomy draws them one collicular level low (the oculomotor nucleus at the inferior colliculus, the trochlear nucleus where the aqueduct ends); so moved, the oculomotor nucleus's centre is level with the superior colliculus's (brainstem_build.py nuclei_rise).",
    "centroid": {
     "L": [
      -1.33,
-     -31.59,
-     -23.52
+     -29.18,
+     -19.18
     ],
     "R": [
      1.33,
-     -31.59,
-     -23.52
+     -29.18,
+     -19.18
     ]
    },
    "category": "cnNucleus",
    "cranialNerve": 4,
    "fitted": true,
-   "layer": "nuclei"
+   "layer": "nuclei",
+   "movedMm": 4.8
   },
   {
    "id": "bs_n_abducens",
