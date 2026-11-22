@@ -42,6 +42,8 @@ for (const kind of (process.argv[2] ? [process.argv[2]] : ['meshes', 'tracts', '
       mendNormals(),
       // 14-bit positions: < 0.02 mm error over the largest (cortex) bounding box
       quantize({ quantizePosition: 14, quantizeNormal: 10 }),
+      // (again on the stored positions: rounding to them leaves a few more triangles without area)
+      cleanTriangles(),
       meshopt({ encoder: MeshoptEncoder, level: 'high' }),
     );
     await io.write(join(dst, f), doc);

@@ -212,3 +212,19 @@ describe('skull base v3: the tumours move the fitted small arteries they reach (
     expect(bad).toEqual([]);
   }, 120_000);
 });
+
+describe('vascular section: lesions drawn by rule keep out of this CT’s bone (the audit’s MB-19)', () => {
+  it('the ophthalmic aneurysm’s dome, the flow-diverted one and the AVMs’ nidi', async () => {
+    // (the CT's bones are pieces of one surface: closed only together)
+    const bone = joined(await Promise.all(bonesOf(sbv3Manifest.structures).map((s) => soup(s.file))));
+    const bad: string[] = [];
+    // (the ophthalmic dome lay 41 % in the bone over it, the grade III nidus 19 %; a dome's neck meets its artery at
+    // the bone's edge: 4 % now)
+    for (const [f, most] of [['va_ophthalmic__sac', 0.06], ['va_fd__sac', 0.06], ['va_avm1__nidus', 0.01], ['va_avm3__nidus', 0.01], ['va_avm5__nidus', 0.01]] as const) {
+      const t = await soup(`assets/vascular/${f}.glb`);
+      const share = pointsInside(t.P, bone.P, bone.T) / (t.P.length / 3);
+      if (share > most) bad.push(`${f}: ${(100 * share).toFixed(1)} % of its surface in bone`);
+    }
+    expect(bad).toEqual([]);
+  }, 120_000);
+});
