@@ -1829,8 +1829,8 @@
    "name": "Facial nerve (VII)",
    "aliases": [],
    "type": "soft",
-   "file": "assets/skullbase-v3/tb_facial_nerve_vii.glb",
-   "bytes": 106372,
+   "file": "assets/skullbase-v3/tb_facial_nerve_vii.cleared.glb",
+   "bytes": 106480,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1849,19 +1849,20 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 7,
-   "derivation": "Segmented in OpenEar specimen ALPHA (cone-beam CT and micro-slicing, 0.125 mm) and carried onto each temporal bone of this CT by the specimen's registration (the left ear mirrored). Its cisternal part, from the brainstem to the internal acoustic meatus, is routed through this CT from the fitted Z-Anatomy course (approximate).",
+   "derivation": "Segmented in OpenEar specimen ALPHA (cone-beam CT and micro-slicing, 0.125 mm) and carried onto each temporal bone of this CT by the specimen's registration (the left ear mirrored). Its cisternal part, from the brainstem to the internal acoustic meatus, is routed through this CT from the fitted Z-Anatomy course (approximate). Cut at the brainstem's surface: its routed course began 3.7 mm inside the fitted brainstem (skullbase_v3_roots.py).",
    "centroid": {
     "L": [
-     -39.49,
-     -22.89,
-     -15.94
+     -39.85,
+     -22.83,
+     -16.02
     ],
     "R": [
-     38.33,
-     -23.6,
-     -18.96
+     38.7,
+     -23.54,
+     -19.05
     ]
-   }
+   },
+   "clearedFrom": "assets/skullbase-v3/tb_facial_nerve_vii.glb"
   },
   {
    "id": "tb_chorda_tympani",
@@ -2297,8 +2298,8 @@
    "name": "Oculomotor nerve (III)",
    "aliases": [],
    "type": "soft",
-   "file": "assets/skullbase-v3/tb_oculomotor_nerve_iii.glb",
-   "bytes": 13900,
+   "file": "assets/skullbase-v3/tb_oculomotor_nerve_iii.cleared.glb",
+   "bytes": 11884,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2319,27 +2320,28 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 3,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 55.4 mm drawn, at most 1.4 mm from the fitted course, 0.0 mm through bone the mask closes; left: 54.8 mm drawn, at most 0.9 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): into the roof at the oculomotor triangle's centre, then forward in the top of the sinus's lateral wall to the superior orbital fissure.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 55.4 mm drawn, at most 1.4 mm from the fitted course, 0.0 mm through bone the mask closes; left: 54.8 mm drawn, at most 0.9 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): into the roof at the oculomotor triangle's centre, then forward in the top of the sinus's lateral wall to the superior orbital fissure. Cut at the brainstem's surface: its routed course began 3 mm inside the fitted brainstem (skullbase_v3_roots.py).",
    "centroid": {
     "L": [
-     -8.47,
-     -3.55,
-     10.21
+     -11.19,
+     0.15,
+     9.15
     ],
     "R": [
-     10.9,
-     -2.93,
-     9.41
+     13.23,
+     1.05,
+     8.09
     ]
-   }
+   },
+   "clearedFrom": "assets/skullbase-v3/tb_oculomotor_nerve_iii.glb"
   },
   {
    "id": "tb_trochlear_nerve_iv",
    "name": "Trochlear nerve (IV)",
    "aliases": [],
    "type": "soft",
-   "file": "assets/skullbase-v3/tb_trochlear_nerve_iv.glb",
-   "bytes": 11764,
+   "file": "assets/skullbase-v3/tb_trochlear_nerve_iv.cleared.glb",
+   "bytes": 11592,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2360,27 +2362,28 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 4,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 56.0 mm drawn, at most 5.4 mm from the fitted course, 0.0 mm through bone the mask closes; left: 53.3 mm drawn, at most 4.9 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): into the roof at the back of the oculomotor triangle's lateral side, then forward in the lateral wall below the oculomotor nerve to the superior orbital fissure.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 56.0 mm drawn, at most 5.4 mm from the fitted course, 0.0 mm through bone the mask closes; left: 53.3 mm drawn, at most 4.9 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): into the roof at the back of the oculomotor triangle's lateral side, then forward in the lateral wall below the oculomotor nerve to the superior orbital fissure. Cut at the brainstem's surface: its routed course began 1.4 mm inside the fitted brainstem (skullbase_v3_roots.py).",
    "centroid": {
     "L": [
-     -8.76,
-     -6.01,
-     5.0
+     -8.65,
+     -7.98,
+     5.56
     ],
     "R": [
-     11.48,
-     -4.67,
+     11.42,
+     -6.97,
      4.18
     ]
-   }
+   },
+   "clearedFrom": "assets/skullbase-v3/tb_trochlear_nerve_iv.glb"
   },
   {
    "id": "tb_trigeminal_nerve_v",
    "name": "Trigeminal nerve (V)",
    "aliases": [],
    "type": "soft",
-   "file": "assets/skullbase-v3/tb_trigeminal_nerve_v.glb",
-   "bytes": 7376,
+   "file": "assets/skullbase-v3/tb_trigeminal_nerve_v.cleared.glb",
+   "bytes": 6332,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2401,19 +2404,20 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 5,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 29.3 mm drawn, at most 5.0 mm from the fitted course, 0.0 mm through bone the mask closes; left: 35.4 mm drawn, at most 5.1 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. The fitted model's trigeminal root runs in front of the fitted pons, its ganglion medial of where this skull's foramina put Meckel's cave: so here the nerve starts where the fitted course leaves the pons (that pons as fitted into the posterior fossa: skullbase_pfossa.py) and is routed through this CT to the concave margin of the trigeminal ganglion, drawn in Meckel's cave as placed on this CT (Chaware 2023).",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 29.3 mm drawn, at most 5.0 mm from the fitted course, 0.0 mm through bone the mask closes; left: 35.4 mm drawn, at most 5.1 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. The fitted model's trigeminal root runs in front of the fitted pons, its ganglion medial of where this skull's foramina put Meckel's cave: so here the nerve starts where the fitted course leaves the pons (that pons as fitted into the posterior fossa: skullbase_pfossa.py) and is routed through this CT to the concave margin of the trigeminal ganglion, drawn in Meckel's cave as placed on this CT (Chaware 2023). Cut at the brainstem's surface: its routed course began 1.9 mm inside the fitted brainstem (skullbase_v3_roots.py).",
    "centroid": {
     "L": [
-     -14.63,
-     -15.31,
-     2.99
+     -15.35,
+     -11.84,
+     1.65
     ],
     "R": [
-     17.38,
-     -13.9,
-     -1.28
+     17.64,
+     -9.15,
+     -2.11
     ]
-   }
+   },
+   "clearedFrom": "assets/skullbase-v3/tb_trigeminal_nerve_v.glb"
   },
   {
    "id": "tb_ophthalmic_nerve_v1",
@@ -2543,8 +2547,8 @@
    "name": "Abducens nerve (VI)",
    "aliases": [],
    "type": "soft",
-   "file": "assets/skullbase-v3/tb_abducens_nerve_vi.glb",
-   "bytes": 15344,
+   "file": "assets/skullbase-v3/tb_abducens_nerve_vi.cleared.glb",
+   "bytes": 13388,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2565,27 +2569,28 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 6,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 64.2 mm drawn, at most 2.1 mm from the fitted course, 0.0 mm through bone the mask closes; left: 64.4 mm drawn, at most 2.5 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): under Gruber's ligament at the petrous apex (Dorello's canal), against the carotid's posterior vertical segment, then forward inside the sinus, lateral to the carotid and medial to the ophthalmic nerve, to the superior orbital fissure (Wysiadecki 2021, Corvino 2023). The skull is carved round it (0.5 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 16 % of its surface on the right and 21 % on the left lay under the bone shown; now none of it does. Where the bone is thick it runs in a canal of its own, where it is thin in a groove.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 64.2 mm drawn, at most 2.1 mm from the fitted course, 0.0 mm through bone the mask closes; left: 64.4 mm drawn, at most 2.5 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): under Gruber's ligament at the petrous apex (Dorello's canal), against the carotid's posterior vertical segment, then forward inside the sinus, lateral to the carotid and medial to the ophthalmic nerve, to the superior orbital fissure (Wysiadecki 2021, Corvino 2023). The skull is carved round it (0.5 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 16 % of its surface on the right and 21 % on the left lay under the bone shown; now none of it does. Where the bone is thick it runs in a canal of its own, where it is thin in a groove. Cut at the brainstem's surface: its routed course began 1.5 mm inside the fitted brainstem (skullbase_v3_roots.py).",
    "centroid": {
     "L": [
-     -9.92,
-     -6.33,
-     -4.01
+     -11.85,
+     -0.89,
+     -2.01
     ],
     "R": [
-     10.1,
-     -6.65,
-     -5.15
+     11.59,
+     -2.32,
+     -3.42
     ]
-   }
+   },
+   "clearedFrom": "assets/skullbase-v3/tb_abducens_nerve_vi.glb"
   },
   {
    "id": "tb_vestibulocochlear_nerve_viii",
    "name": "Vestibulocochlear nerve (VIII)",
    "aliases": [],
    "type": "soft",
-   "file": "assets/skullbase-v3/tb_vestibulocochlear_nerve_viii.glb",
-   "bytes": 6676,
+   "file": "assets/skullbase-v3/tb_vestibulocochlear_nerve_viii.cleared.glb",
+   "bytes": 6436,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2606,27 +2611,28 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 8,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 19.6 mm drawn, at most 4.5 mm from the fitted course, 0.0 mm through bone the mask closes; left: 17.5 mm drawn, at most 4.6 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 19.6 mm drawn, at most 4.5 mm from the fitted course, 0.0 mm through bone the mask closes; left: 17.5 mm drawn, at most 4.6 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. Cut at the brainstem's surface: its routed course began 1.3 mm inside the fitted brainstem (skullbase_v3_roots.py).",
    "centroid": {
     "L": [
-     -14.7,
-     -27.43,
-     -10.2
+     -15.03,
+     -27.06,
+     -10.07
     ],
     "R": [
-     15.5,
-     -26.76,
-     -13.22
+     15.82,
+     -26.43,
+     -13.01
     ]
-   }
+   },
+   "clearedFrom": "assets/skullbase-v3/tb_vestibulocochlear_nerve_viii.glb"
   },
   {
    "id": "tb_glossopharyngeal_nerve_ix",
    "name": "Glossopharyngeal nerve (IX)",
    "aliases": [],
    "type": "soft",
-   "file": "assets/skullbase-v3/tb_glossopharyngeal_nerve_ix.glb",
-   "bytes": 11552,
+   "file": "assets/skullbase-v3/tb_glossopharyngeal_nerve_ix.cleared.glb",
+   "bytes": 10256,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2647,27 +2653,28 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 9,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 44.0 mm drawn, at most 1.2 mm from the fitted course, 0.0 mm through bone the mask closes; left: 47.3 mm drawn, at most 3.5 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 44.0 mm drawn, at most 1.2 mm from the fitted course, 0.0 mm through bone the mask closes; left: 47.3 mm drawn, at most 3.5 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. Cut at the brainstem's surface: its routed course began 2.4 mm inside the fitted brainstem (skullbase_v3_roots.py).",
    "centroid": {
     "L": [
-     -21.68,
-     -26.25,
-     -26.14
+     -24.38,
+     -25.55,
+     -27.27
     ],
     "R": [
-     19.56,
-     -27.6,
-     -26.66
+     22.28,
+     -27.01,
+     -27.7
     ]
-   }
+   },
+   "clearedFrom": "assets/skullbase-v3/tb_glossopharyngeal_nerve_ix.glb"
   },
   {
    "id": "tb_vagus_nerve_x",
    "name": "Vagus nerve (X)",
    "aliases": [],
    "type": "soft",
-   "file": "assets/skullbase-v3/tb_vagus_nerve_x.glb",
-   "bytes": 10248,
+   "file": "assets/skullbase-v3/tb_vagus_nerve_x.cleared.glb",
+   "bytes": 9004,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2688,27 +2695,28 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 10,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 40.8 mm drawn, at most 1.7 mm from the fitted course, 0.0 mm through bone the mask closes; left: 41.0 mm drawn, at most 2.4 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 40.8 mm drawn, at most 1.7 mm from the fitted course, 0.0 mm through bone the mask closes; left: 41.0 mm drawn, at most 2.4 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. Cut at the brainstem's surface: its routed course began 3.5 mm inside the fitted brainstem (skullbase_v3_roots.py).",
    "centroid": {
     "L": [
-     -18.93,
-     -24.37,
-     -24.48
+     -21.41,
+     -23.27,
+     -26.11
     ],
     "R": [
-     17.88,
-     -24.63,
-     -25.91
+     20.35,
+     -23.54,
+     -27.5
     ]
-   }
+   },
+   "clearedFrom": "assets/skullbase-v3/tb_vagus_nerve_x.glb"
   },
   {
    "id": "tb_accessory_nerve_xi",
    "name": "Accessory nerve (XI)",
    "aliases": [],
    "type": "soft",
-   "file": "assets/skullbase-v3/tb_accessory_nerve_xi.glb",
-   "bytes": 11884,
+   "file": "assets/skullbase-v3/tb_accessory_nerve_xi.cleared.glb",
+   "bytes": 10660,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2729,27 +2737,28 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 11,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 46.9 mm drawn, at most 1.5 mm from the fitted course, 0.0 mm through bone the mask closes; left: 48.4 mm drawn, at most 4.7 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 46.9 mm drawn, at most 1.5 mm from the fitted course, 0.0 mm through bone the mask closes; left: 48.4 mm drawn, at most 4.7 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. Cut at the brainstem's surface: its routed course began 3.5 mm inside the fitted brainstem (skullbase_v3_roots.py).",
    "centroid": {
     "L": [
-     -22.12,
-     -26.14,
-     -27.84
+     -24.84,
+     -25.54,
+     -28.97
     ],
     "R": [
-     20.33,
-     -27.85,
-     -29.25
+     22.69,
+     -27.55,
+     -30.24
     ]
-   }
+   },
+   "clearedFrom": "assets/skullbase-v3/tb_accessory_nerve_xi.glb"
   },
   {
    "id": "tb_hypoglossal_nerve_xii",
    "name": "Hypoglossal nerve (XII)",
    "aliases": [],
    "type": "soft",
-   "file": "assets/skullbase-v3/tb_hypoglossal_nerve_xii.glb",
-   "bytes": 8416,
+   "file": "assets/skullbase-v3/tb_hypoglossal_nerve_xii.cleared.glb",
+   "bytes": 6448,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2770,19 +2779,20 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 12,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 27.8 mm drawn, at most 4.2 mm from the fitted course, 0.0 mm through bone the mask closes; left: 29.0 mm drawn, at most 4.3 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 27.8 mm drawn, at most 4.2 mm from the fitted course, 0.0 mm through bone the mask closes; left: 29.0 mm drawn, at most 4.3 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. Cut at the brainstem's surface: its routed course began 1.4 mm inside the fitted brainstem (skullbase_v3_roots.py).",
    "centroid": {
     "L": [
-     -10.3,
-     -24.43,
-     -23.76
+     -12.8,
+     -23.15,
+     -26.43
     ],
     "R": [
-     8.59,
-     -25.09,
-     -24.92
+     10.67,
+     -24.09,
+     -27.36
     ]
-   }
+   },
+   "clearedFrom": "assets/skullbase-v3/tb_hypoglossal_nerve_xii.glb"
   },
   {
    "id": "tb_middle_meningeal_artery",
@@ -7431,7 +7441,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_facial_nerve_vii__koos_2.glb",
-   "bytes": 53712,
+   "bytes": 53704,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -7450,21 +7460,21 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 7,
-   "derivation": "Segmented in OpenEar specimen ALPHA (cone-beam CT and micro-slicing, 0.125 mm) and carried onto each temporal bone of this CT by the specimen's registration (the left ear mirrored). Its cisternal part, from the brainstem to the internal acoustic meatus, is routed through this CT from the fitted Z-Anatomy course (approximate). In this view, where it ran through the vestibular schwannoma drawn here it is moved forwards round it onto its anterior surface (Choi 2014: there in 5 of 11 tumours at surgery, anteroinferior in 3, anterosuperior in 2, posteroinferior in 1) (skullbase_v3_tumours.py; at most 2.0 mm), its course in the meatus kept: a shape, not a simulation.",
+   "derivation": "Segmented in OpenEar specimen ALPHA (cone-beam CT and micro-slicing, 0.125 mm) and carried onto each temporal bone of this CT by the specimen's registration (the left ear mirrored). Its cisternal part, from the brainstem to the internal acoustic meatus, is routed through this CT from the fitted Z-Anatomy course (approximate). Cut at the brainstem's surface: its routed course began 3.7 mm inside the fitted brainstem (skullbase_v3_roots.py). In this view, where it ran through the vestibular schwannoma drawn here it is moved forwards round it onto its anterior surface (Choi 2014: there in 5 of 11 tumours at surgery, anteroinferior in 3, anterosuperior in 2, posteroinferior in 1) (skullbase_v3_tumours.py; at most 2.0 mm), its course in the meatus kept: a shape, not a simulation.",
    "centroid": {
     "L": [
-     -39.49,
-     -22.89,
-     -15.94
+     -39.85,
+     -22.83,
+     -16.02
     ],
     "R": [
-     38.33,
-     -23.58,
-     -18.96
+     38.7,
+     -23.52,
+     -19.05
     ]
    },
    "replaces": "tb_facial_nerve_vii",
-   "pushedFrom": "assets/skullbase-v3/tb_facial_nerve_vii.glb",
+   "pushedFrom": "assets/skullbase-v3/tb_facial_nerve_vii.cleared.glb",
    "tumourView": "koos_2"
   },
   {
@@ -7691,7 +7701,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_facial_nerve_vii__koos_3.glb",
-   "bytes": 53452,
+   "bytes": 53568,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -7710,21 +7720,21 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 7,
-   "derivation": "Segmented in OpenEar specimen ALPHA (cone-beam CT and micro-slicing, 0.125 mm) and carried onto each temporal bone of this CT by the specimen's registration (the left ear mirrored). Its cisternal part, from the brainstem to the internal acoustic meatus, is routed through this CT from the fitted Z-Anatomy course (approximate). In this view, where it ran through the vestibular schwannoma drawn here it is moved forwards round it onto its anterior surface (Choi 2014: there in 5 of 11 tumours at surgery, anteroinferior in 3, anterosuperior in 2, posteroinferior in 1), drawn thinned and flattened where it lies on it (Starnoni 2020: the nerve thins over large tumours; the band's shape illustrative) (skullbase_v3_tumours.py; at most 10.1 mm), its course in the meatus kept: a shape, not a simulation.",
+   "derivation": "Segmented in OpenEar specimen ALPHA (cone-beam CT and micro-slicing, 0.125 mm) and carried onto each temporal bone of this CT by the specimen's registration (the left ear mirrored). Its cisternal part, from the brainstem to the internal acoustic meatus, is routed through this CT from the fitted Z-Anatomy course (approximate). Cut at the brainstem's surface: its routed course began 3.7 mm inside the fitted brainstem (skullbase_v3_roots.py). In this view, where it ran through the vestibular schwannoma drawn here it is moved forwards round it onto its anterior surface (Choi 2014: there in 5 of 11 tumours at surgery, anteroinferior in 3, anterosuperior in 2, posteroinferior in 1), drawn thinned and flattened where it lies on it (Starnoni 2020: the nerve thins over large tumours; the band's shape illustrative) (skullbase_v3_tumours.py; at most 10.6 mm), its course in the meatus kept: a shape, not a simulation.",
    "centroid": {
     "L": [
-     -39.49,
-     -22.89,
-     -15.94
+     -39.85,
+     -22.83,
+     -16.02
     ],
     "R": [
-     38.44,
-     -23.39,
-     -18.98
+     38.78,
+     -23.4,
+     -19.05
     ]
    },
    "replaces": "tb_facial_nerve_vii",
-   "pushedFrom": "assets/skullbase-v3/tb_facial_nerve_vii.glb",
+   "pushedFrom": "assets/skullbase-v3/tb_facial_nerve_vii.cleared.glb",
    "tumourView": "koos_3"
   },
   {
@@ -7733,7 +7743,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_glossopharyngeal_nerve_ix__koos_3.glb",
-   "bytes": 5928,
+   "bytes": 5400,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -7754,21 +7764,21 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 9,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 44.0 mm drawn, at most 1.2 mm from the fitted course, 0.0 mm through bone the mask closes; left: 47.3 mm drawn, at most 3.5 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 3.1 mm), its course in the meatus kept: a shape, not a simulation.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 44.0 mm drawn, at most 1.2 mm from the fitted course, 0.0 mm through bone the mask closes; left: 47.3 mm drawn, at most 3.5 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. Cut at the brainstem's surface: its routed course began 2.4 mm inside the fitted brainstem (skullbase_v3_roots.py). In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 3.1 mm), its course in the meatus kept: a shape, not a simulation.",
    "centroid": {
     "L": [
-     -21.68,
-     -26.25,
-     -26.14
+     -24.38,
+     -25.55,
+     -27.27
     ],
     "R": [
-     19.53,
-     -27.3,
-     -27.45
+     21.95,
+     -26.95,
+     -28.23
     ]
    },
    "replaces": "tb_glossopharyngeal_nerve_ix",
-   "pushedFrom": "assets/skullbase-v3/tb_glossopharyngeal_nerve_ix.glb",
+   "pushedFrom": "assets/skullbase-v3/tb_glossopharyngeal_nerve_ix.cleared.glb",
    "tumourView": "koos_3"
   },
   {
@@ -7777,7 +7787,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_vagus_nerve_x__koos_3.glb",
-   "bytes": 5344,
+   "bytes": 4888,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -7798,21 +7808,21 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 10,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 40.8 mm drawn, at most 1.7 mm from the fitted course, 0.0 mm through bone the mask closes; left: 41.0 mm drawn, at most 2.4 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 3.3 mm), its course in the meatus kept: a shape, not a simulation.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 40.8 mm drawn, at most 1.7 mm from the fitted course, 0.0 mm through bone the mask closes; left: 41.0 mm drawn, at most 2.4 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. Cut at the brainstem's surface: its routed course began 3.5 mm inside the fitted brainstem (skullbase_v3_roots.py). In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 3.3 mm), its course in the meatus kept: a shape, not a simulation.",
    "centroid": {
     "L": [
-     -18.93,
-     -24.37,
-     -24.48
+     -21.41,
+     -23.27,
+     -26.11
     ],
     "R": [
-     17.89,
-     -23.91,
-     -26.93
+     20.04,
+     -23.1,
+     -28.16
     ]
    },
    "replaces": "tb_vagus_nerve_x",
-   "pushedFrom": "assets/skullbase-v3/tb_vagus_nerve_x.glb",
+   "pushedFrom": "assets/skullbase-v3/tb_vagus_nerve_x.cleared.glb",
    "tumourView": "koos_3"
   },
   {
@@ -8355,7 +8365,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_facial_nerve_vii__koos_4.glb",
-   "bytes": 53216,
+   "bytes": 53508,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -8374,21 +8384,21 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 7,
-   "derivation": "Segmented in OpenEar specimen ALPHA (cone-beam CT and micro-slicing, 0.125 mm) and carried onto each temporal bone of this CT by the specimen's registration (the left ear mirrored). Its cisternal part, from the brainstem to the internal acoustic meatus, is routed through this CT from the fitted Z-Anatomy course (approximate). In this view, where it ran through the vestibular schwannoma drawn here it is moved forwards round it onto its anterior surface (Choi 2014: there in 5 of 11 tumours at surgery, anteroinferior in 3, anterosuperior in 2, posteroinferior in 1), drawn thinned and flattened where it lies on it (Starnoni 2020: the nerve thins over large tumours; the band's shape illustrative) (skullbase_v3_tumours.py; at most 11.0 mm), its course in the meatus kept: a shape, not a simulation.",
+   "derivation": "Segmented in OpenEar specimen ALPHA (cone-beam CT and micro-slicing, 0.125 mm) and carried onto each temporal bone of this CT by the specimen's registration (the left ear mirrored). Its cisternal part, from the brainstem to the internal acoustic meatus, is routed through this CT from the fitted Z-Anatomy course (approximate). Cut at the brainstem's surface: its routed course began 3.7 mm inside the fitted brainstem (skullbase_v3_roots.py). In this view, where it ran through the vestibular schwannoma drawn here it is moved forwards round it onto its anterior surface (Choi 2014: there in 5 of 11 tumours at surgery, anteroinferior in 3, anterosuperior in 2, posteroinferior in 1), drawn thinned and flattened where it lies on it (Starnoni 2020: the nerve thins over large tumours; the band's shape illustrative) (skullbase_v3_tumours.py; at most 11.2 mm), its course in the meatus kept: a shape, not a simulation.",
    "centroid": {
     "L": [
-     -39.49,
-     -22.89,
-     -15.94
+     -39.85,
+     -22.83,
+     -16.02
     ],
     "R": [
-     38.55,
-     -23.37,
-     -19.0
+     38.81,
+     -23.4,
+     -19.06
     ]
    },
    "replaces": "tb_facial_nerve_vii",
-   "pushedFrom": "assets/skullbase-v3/tb_facial_nerve_vii.glb",
+   "pushedFrom": "assets/skullbase-v3/tb_facial_nerve_vii.cleared.glb",
    "tumourView": "koos_4"
   },
   {
@@ -8397,7 +8407,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_trigeminal_nerve_v__koos_4.glb",
-   "bytes": 3672,
+   "bytes": 3052,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -8418,65 +8428,21 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 5,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 29.3 mm drawn, at most 5.0 mm from the fitted course, 0.0 mm through bone the mask closes; left: 35.4 mm drawn, at most 5.1 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. The fitted model's trigeminal root runs in front of the fitted pons, its ganglion medial of where this skull's foramina put Meckel's cave: so here the nerve starts where the fitted course leaves the pons (that pons as fitted into the posterior fossa: skullbase_pfossa.py) and is routed through this CT to the concave margin of the trigeminal ganglion, drawn in Meckel's cave as placed on this CT (Chaware 2023). In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 18.5 mm), its course in the meatus kept: a shape, not a simulation.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 29.3 mm drawn, at most 5.0 mm from the fitted course, 0.0 mm through bone the mask closes; left: 35.4 mm drawn, at most 5.1 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. The fitted model's trigeminal root runs in front of the fitted pons, its ganglion medial of where this skull's foramina put Meckel's cave: so here the nerve starts where the fitted course leaves the pons (that pons as fitted into the posterior fossa: skullbase_pfossa.py) and is routed through this CT to the concave margin of the trigeminal ganglion, drawn in Meckel's cave as placed on this CT (Chaware 2023). Cut at the brainstem's surface: its routed course began 1.9 mm inside the fitted brainstem (skullbase_v3_roots.py). In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 3.2 mm), its course in the meatus kept: a shape, not a simulation.",
    "centroid": {
     "L": [
-     -14.63,
-     -15.31,
-     2.99
+     -15.35,
+     -11.84,
+     1.65
     ],
     "R": [
-     14.54,
-     -10.62,
-     -1.32
+     17.85,
+     -7.34,
+     -2.12
     ]
    },
    "replaces": "tb_trigeminal_nerve_v",
-   "pushedFrom": "assets/skullbase-v3/tb_trigeminal_nerve_v.glb",
-   "tumourView": "koos_4"
-  },
-  {
-   "id": "tb_abducens_nerve_vi__koos_4",
-   "name": "Abducens nerve (VI)",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase-v3/tb_abducens_nerve_vi__koos_4.glb",
-   "bytes": 7600,
-   "colour": {
-    "token": "sbNerve",
-    "light": "#B08A00",
-    "dark": "#E8C547"
-   },
-   "dataset": "routed",
-   "source": "Routed through the TopBrain CT from the fitted Z-Anatomy course",
-   "licence": "TopBrain data: open use with attribution, non-commercial (University Hospital Zurich); Z-Anatomy CC BY-SA 4.0",
-   "citation": [
-    "Yang K, Shi P, Huang H, Musio F, Baazaoui H, Aydin OU, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv. 2026. doi:10.64898/2026.05.28.26354312. Data: TopBrain 2025 challenge release, University Hospital Zurich, https://zenodo.org/records/16878417.",
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.64898/2026.05.28.26354312",
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "refIds": [],
-   "category": "nerve",
-   "layer": "tracts",
-   "cranialNerve": 6,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 64.2 mm drawn, at most 2.1 mm from the fitted course, 0.0 mm through bone the mask closes; left: 64.4 mm drawn, at most 2.5 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): under Gruber's ligament at the petrous apex (Dorello's canal), against the carotid's posterior vertical segment, then forward inside the sinus, lateral to the carotid and medial to the ophthalmic nerve, to the superior orbital fissure (Wysiadecki 2021, Corvino 2023). The skull is carved round it (0.5 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 16 % of its surface on the right and 21 % on the left lay under the bone shown; now none of it does. Where the bone is thick it runs in a canal of its own, where it is thin in a groove. In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 3.8 mm), its course in the meatus kept: a shape, not a simulation.",
-   "centroid": {
-    "L": [
-     -9.92,
-     -6.33,
-     -4.01
-    ],
-    "R": [
-     9.54,
-     -6.65,
-     -5.11
-    ]
-   },
-   "replaces": "tb_abducens_nerve_vi",
-   "pushedFrom": "assets/skullbase-v3/tb_abducens_nerve_vi.glb",
+   "pushedFrom": "assets/skullbase-v3/tb_trigeminal_nerve_v.cleared.glb",
    "tumourView": "koos_4"
   },
   {
@@ -8485,7 +8451,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_vagus_nerve_x__koos_4.glb",
-   "bytes": 5492,
+   "bytes": 4832,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -8506,21 +8472,21 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 10,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 40.8 mm drawn, at most 1.7 mm from the fitted course, 0.0 mm through bone the mask closes; left: 41.0 mm drawn, at most 2.4 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 0.7 mm), its course in the meatus kept: a shape, not a simulation.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 40.8 mm drawn, at most 1.7 mm from the fitted course, 0.0 mm through bone the mask closes; left: 41.0 mm drawn, at most 2.4 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. Cut at the brainstem's surface: its routed course began 3.5 mm inside the fitted brainstem (skullbase_v3_roots.py). In this view, where it ran through the vestibular schwannoma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 0.6 mm), its course in the meatus kept: a shape, not a simulation.",
    "centroid": {
     "L": [
-     -18.93,
-     -24.37,
-     -24.48
+     -21.41,
+     -23.27,
+     -26.11
     ],
     "R": [
-     17.53,
-     -24.55,
-     -26.1
+     20.42,
+     -23.45,
+     -27.69
     ]
    },
    "replaces": "tb_vagus_nerve_x",
-   "pushedFrom": "assets/skullbase-v3/tb_vagus_nerve_x.glb",
+   "pushedFrom": "assets/skullbase-v3/tb_vagus_nerve_x.cleared.glb",
    "tumourView": "koos_4"
   },
   {
@@ -9107,7 +9073,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_men_petroclival.glb",
-   "bytes": 138692,
+   "bytes": 130056,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -9121,17 +9087,17 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule (skullbase_v3_tumours.py), not a patient's tumour: on the dura of the petroclival junction on the right, a third of the way from the petrous apex to the jugular foramen. A ball 28 mm across (an illustrative size), its centre 0.55 of its radius off the bone, so that the bone cuts it to a broad base on the dura; kept 0.4 mm off this CT's arteries and 0.3 mm off the cranial nerves' routes, which run through it in channels. 8.02 ml.",
+   "derivation": "Drawn by rule (skullbase_v3_tumours.py), not a patient's tumour: on the dura of the petroclival junction on the right, a third of the way from the petrous apex to the jugular foramen. A ball 28 mm across (an illustrative size), its centre 0.55 of its radius off the bone, so that the bone cuts it to a broad base on the dura; kept 0.4 mm off this CT's arteries and 0.3 mm off the cranial nerves' routes, which run through it in channels. 8.08 ml.",
    "centroid": {
     "R": [
-     7.06,
-     -22.41,
-     -10.12
+     7.32,
+     -22.08,
+     -9.87
     ],
     "L": [
-     7.06,
-     -22.41,
-     -10.12
+     7.32,
+     -22.08,
+     -9.87
     ]
    },
    "tumour": {
@@ -9167,7 +9133,7 @@
    "category": "hindbrain",
    "layer": "cortex",
    "morph": true,
-   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.49 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 0 % after), the tentorium above; then the 789 vertices still in an artery's way and the 827 in bone's pushed clear. The telovelar slider draws the tonsils 6 mm apart (laterally, a little up) and lifts the nodule and uvula 5 mm up and back, the rest of the cerebellum following; the retrosigmoid slider draws the right hemisphere up to 12 mm away from the corridor along the back of the petrous bone; the far lateral slider lifts the right tonsil and biventral lobule 8 mm up and 4 mm towards the midline, and its second slider draws them 8 mm straight back; shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 18.32 mm): a shape, not a simulation of the tissue.",
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.49 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 0 % after), the tentorium above; then the 789 vertices still in an artery's way and the 827 in bone's pushed clear. The telovelar slider draws the tonsils 6 mm apart (laterally, a little up) and lifts the nodule and uvula 5 mm up and back, the rest of the cerebellum following; the retrosigmoid slider draws the right hemisphere up to 12 mm away from the corridor along the back of the petrous bone; the far lateral slider lifts the right tonsil and biventral lobule 8 mm up and 4 mm towards the midline, and its second slider draws them 8 mm straight back; shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.89 mm): a shape, not a simulation of the tissue.",
    "centroid": {
     "L": [
      -18.62,
@@ -9212,7 +9178,7 @@
    "category": "hindbrain",
    "layer": "cortex",
    "morph": true,
-   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: tonsil of cerebellum), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.49 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 0 % after), the tentorium above; then the 789 vertices still in an artery's way and the 827 in bone's pushed clear. The telovelar slider draws the tonsils 6 mm apart (laterally, a little up) and lifts the nodule and uvula 5 mm up and back, the rest of the cerebellum following; the retrosigmoid slider draws the right hemisphere up to 12 mm away from the corridor along the back of the petrous bone; the far lateral slider lifts the right tonsil and biventral lobule 8 mm up and 4 mm towards the midline, and its second slider draws them 8 mm straight back; shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 18.32 mm): a shape, not a simulation of the tissue.",
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: tonsil of cerebellum), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.49 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 0 % after), the tentorium above; then the 789 vertices still in an artery's way and the 827 in bone's pushed clear. The telovelar slider draws the tonsils 6 mm apart (laterally, a little up) and lifts the nodule and uvula 5 mm up and back, the rest of the cerebellum following; the retrosigmoid slider draws the right hemisphere up to 12 mm away from the corridor along the back of the petrous bone; the far lateral slider lifts the right tonsil and biventral lobule 8 mm up and 4 mm towards the midline, and its second slider draws them 8 mm straight back; shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.89 mm): a shape, not a simulation of the tissue.",
    "centroid": {
     "L": [
      -11.12,
@@ -9257,7 +9223,7 @@
    "category": "hindbrain",
    "layer": "cortex",
    "morph": false,
-   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: midbrain), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.49 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 0 % after), the tentorium above; then the 789 vertices still in an artery's way and the 827 in bone's pushed clear. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 18.32 mm): a shape, not a simulation of the tissue.",
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: midbrain), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.49 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 0 % after), the tentorium above; then the 789 vertices still in an artery's way and the 827 in bone's pushed clear. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.89 mm): a shape, not a simulation of the tissue.",
    "centroid": {
     "L": [
      -2.19,
@@ -9280,7 +9246,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_pons__men_petroclival.glb",
-   "bytes": 47604,
+   "bytes": 47596,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -9302,7 +9268,7 @@
    "category": "hindbrain",
    "layer": "cortex",
    "morph": false,
-   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: pons), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.49 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 0 % after), the tentorium above; then the 789 vertices still in an artery's way and the 827 in bone's pushed clear. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 18.32 mm): a shape, not a simulation of the tissue.",
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: pons), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.49 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 0 % after), the tentorium above; then the 789 vertices still in an artery's way and the 827 in bone's pushed clear. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.89 mm): a shape, not a simulation of the tissue.",
    "centroid": {
     "L": [
      -6.43,
@@ -9310,9 +9276,9 @@
      -1.32
     ],
     "R": [
-     2.76,
-     -32.24,
-     -2.92
+     2.95,
+     -32.07,
+     -2.98
     ]
    },
    "replaces": "pf_pons",
@@ -9325,7 +9291,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_medulla__men_petroclival.glb",
-   "bytes": 100512,
+   "bytes": 100400,
    "colour": {
     "token": "sbBrainstem",
     "light": "#51474C",
@@ -9347,7 +9313,7 @@
    "category": "hindbrain",
    "layer": "cortex",
    "morph": false,
-   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: medulla oblongata), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.49 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 0 % after), the tentorium above; then the 789 vertices still in an artery's way and the 827 in bone's pushed clear. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 18.32 mm): a shape, not a simulation of the tissue.",
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: medulla oblongata), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.49 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 0 % after), the tentorium above; then the 789 vertices still in an artery's way and the 827 in bone's pushed clear. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.89 mm): a shape, not a simulation of the tissue.",
    "centroid": {
     "L": [
      -5.89,
@@ -9355,9 +9321,9 @@
      -24.01
     ],
     "R": [
-     -0.57,
-     -32.86,
-     -24.08
+     -0.34,
+     -32.66,
+     -24.16
     ]
    },
    "replaces": "pf_medulla",
@@ -9370,7 +9336,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/pf_fourth_ventricle__men_petroclival.glb",
-   "bytes": 16492,
+   "bytes": 16532,
    "colour": {
     "token": "sbCsf",
     "light": "#0B8D9D",
@@ -9392,7 +9358,7 @@
    "category": "ventricle",
    "layer": "cortex",
    "morph": false,
-   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: fourth ventricle), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.49 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 0 % after), the tentorium above; then the 789 vertices still in an artery's way and the 827 in bone's pushed clear. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 18.32 mm): a shape, not a simulation of the tissue.",
+   "derivation": "One adult's (Z-Anatomy, from BodyParts3D: fourth ventricle), not this patient's: carried onto this CT by the fit of the Z-Anatomy model to its bones, then fitted into its posterior fossa by a smooth deformation: the contents' hull 1.5 mm inside the cavity behind the petrous bones (median error 0.49 mm), this patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside them (47 % of their centre-line points inside before, 0 % after), the tentorium above; then the 789 vertices still in an artery's way and the 827 in bone's pushed clear. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.89 mm): a shape, not a simulation of the tissue.",
    "centroid": {
     "L": [
      -3.39,
@@ -9400,9 +9366,9 @@
      -11.2
     ],
     "R": [
-     1.0,
-     -39.68,
-     -12.04
+     1.14,
+     -39.56,
+     -12.09
     ]
    },
    "replaces": "pf_fourth_ventricle",
@@ -9415,7 +9381,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_anterior_inferior_cerebellar_artery__men_petroclival.glb",
-   "bytes": 22156,
+   "bytes": 22152,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -9437,7 +9403,7 @@
    "layer": "tracts",
    "system": "Basilar artery",
    "fitted": true,
-   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), its origin moved onto this patient's basilar artery (TopBrain's label), the move fading out over its first 15 mm, the rest where the fit puts it; its corners rounded (a median 6.4 mm on the right, 6.5 mm on the left). Its course is approximate. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py). In this view, where it ran through the meningioma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 14.1 mm): a shape, not a simulation.",
+   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), its origin moved onto this patient's basilar artery (TopBrain's label), the move fading out over its first 15 mm, the rest where the fit puts it; its corners rounded (a median 6.4 mm on the right, 6.5 mm on the left). Its course is approximate. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py). In this view, where it ran through the meningioma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 16.8 mm): a shape, not a simulation.",
    "centroid": {
     "L": [
      -15.94,
@@ -9445,9 +9411,9 @@
      -8.18
     ],
     "R": [
-     18.15,
-     -31.44,
-     -14.0
+     18.05,
+     -31.12,
+     -14.37
     ]
    },
    "replaces": "tb_anterior_inferior_cerebellar_artery",
@@ -9464,7 +9430,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_lateral_pontine_branches_of_basilar_artery__men_petroclival.glb",
-   "bytes": 11796,
+   "bytes": 11816,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -9486,7 +9452,7 @@
    "layer": "tracts",
    "system": "Basilar artery",
    "fitted": true,
-   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), each branch moved to start on this patient's basilar artery (TopBrain's label), then laid onto the fitted brainstem's surface (drawn onto it from up to 12 mm away, none of it left inside) and smoothed (a median 2.1 mm on the right, 1.6 mm on the left). Its course is approximate. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py). In this view, where it ran through the meningioma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 7.9 mm): a shape, not a simulation.",
+   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), each branch moved to start on this patient's basilar artery (TopBrain's label), then laid onto the fitted brainstem's surface (drawn onto it from up to 12 mm away, none of it left inside) and smoothed (a median 2.1 mm on the right, 1.6 mm on the left). Its course is approximate. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py). In this view, where it ran through the meningioma drawn here it is moved the shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most 8.0 mm): a shape, not a simulation.",
    "centroid": {
     "L": [
      -8.63,
@@ -9494,9 +9460,9 @@
      -4.11
     ],
     "R": [
-     13.08,
-     -16.44,
-     -7.39
+     13.06,
+     -16.42,
+     -7.42
     ]
    },
    "replaces": "tb_lateral_pontine_branches_of_basilar_artery",

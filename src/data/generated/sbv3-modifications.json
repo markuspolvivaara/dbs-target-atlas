@@ -345,6 +345,193 @@
    },
    "revision": "466367b",
    "date": "2026-11-22"
+  },
+  {
+   "step": "skullbase_v3_roots",
+   "operation": "the routed cranial nerves cut at the brainstem's surface (their courses began inside the fitted brainstem)",
+   "structures": [
+    "Abducens nerve (VI)",
+    "Accessory nerve (XI)",
+    "Facial nerve (VII)",
+    "Glossopharyngeal nerve (IX)",
+    "Hypoglossal nerve (XII)",
+    "Oculomotor nerve (III)",
+    "Trigeminal nerve (V)",
+    "Trochlear nerve (IV)",
+    "Vagus nerve (X)",
+    "Vestibulocochlear nerve (VIII)"
+   ],
+   "parameters": {
+    "rootInMm": 0.5,
+    "gridMm": 0.25
+   },
+   "metrics": {
+    "Facial nerve (VII)": {
+     "L": {
+      "ringsCut": 11,
+      "lengthCutMm": 6.5,
+      "deepestMm": 3.7,
+      "wasInsideMm": 3.7,
+      "nowInsideMm": -0.02
+     },
+     "R": {
+      "ringsCut": 12,
+      "lengthCutMm": 6.9,
+      "deepestMm": 3.2,
+      "wasInsideMm": 3.2,
+      "nowInsideMm": 0.38
+     }
+    },
+    "Oculomotor nerve (III)": {
+     "L": {
+      "ringsCut": 20,
+      "lengthCutMm": 11.2,
+      "deepestMm": 3.7,
+      "wasInsideMm": 3.0,
+      "nowInsideMm": 0.28
+     },
+     "R": {
+      "ringsCut": 22,
+      "lengthCutMm": 12.1,
+      "deepestMm": 3.3,
+      "wasInsideMm": 2.7,
+      "nowInsideMm": 0.14
+     }
+    },
+    "Trochlear nerve (IV)": {
+     "L": {
+      "ringsCut": 1,
+      "lengthCutMm": 0.6,
+      "deepestMm": 4.4,
+      "wasInsideMm": 0.9,
+      "nowInsideMm": 0.35
+     },
+     "R": {
+      "ringsCut": 2,
+      "lengthCutMm": 1.4,
+      "deepestMm": 4.1,
+      "wasInsideMm": 1.4,
+      "nowInsideMm": 0.19
+     }
+    },
+    "Trigeminal nerve (V)": {
+     "L": {
+      "ringsCut": 9,
+      "lengthCutMm": 7.4,
+      "deepestMm": 1.9,
+      "wasInsideMm": 1.9,
+      "nowInsideMm": 0.4
+     },
+     "R": {
+      "ringsCut": 12,
+      "lengthCutMm": 9.7,
+      "deepestMm": 2.4,
+      "wasInsideMm": 1.8,
+      "nowInsideMm": 0.34
+     }
+    },
+    "Abducens nerve (VI)": {
+     "L": {
+      "ringsCut": 22,
+      "lengthCutMm": 12.1,
+      "deepestMm": 2.3,
+      "wasInsideMm": 1.5,
+      "nowInsideMm": 0.37
+     },
+     "R": {
+      "ringsCut": 20,
+      "lengthCutMm": 11.3,
+      "deepestMm": 2.5,
+      "wasInsideMm": 1.2,
+      "nowInsideMm": 0.41
+     }
+    },
+    "Vestibulocochlear nerve (VIII)": {
+     "L": {
+      "ringsCut": 2,
+      "lengthCutMm": 1.2,
+      "deepestMm": 1.2,
+      "wasInsideMm": 1.2,
+      "nowInsideMm": 0.46
+     },
+     "R": {
+      "ringsCut": 2,
+      "lengthCutMm": 1.2,
+      "deepestMm": 1.3,
+      "wasInsideMm": 1.3,
+      "nowInsideMm": 0.12
+     }
+    },
+    "Glossopharyngeal nerve (IX)": {
+     "L": {
+      "ringsCut": 13,
+      "lengthCutMm": 7.4,
+      "deepestMm": 4.2,
+      "wasInsideMm": 2.4,
+      "nowInsideMm": 0.35
+     },
+     "R": {
+      "ringsCut": 12,
+      "lengthCutMm": 6.7,
+      "deepestMm": 3.8,
+      "wasInsideMm": 2.2,
+      "nowInsideMm": 0.37
+     }
+    },
+    "Vagus nerve (X)": {
+     "L": {
+      "ringsCut": 12,
+      "lengthCutMm": 7.6,
+      "deepestMm": 4.3,
+      "wasInsideMm": 3.5,
+      "nowInsideMm": 0.27
+     },
+     "R": {
+      "ringsCut": 13,
+      "lengthCutMm": 7.4,
+      "deepestMm": 4.2,
+      "wasInsideMm": 3.3,
+      "nowInsideMm": 0.35
+     }
+    },
+    "Accessory nerve (XI)": {
+     "L": {
+      "ringsCut": 13,
+      "lengthCutMm": 7.4,
+      "deepestMm": 3.8,
+      "wasInsideMm": 3.5,
+      "nowInsideMm": 0.49
+     },
+     "R": {
+      "ringsCut": 11,
+      "lengthCutMm": 6.5,
+      "deepestMm": 3.8,
+      "wasInsideMm": 3.3,
+      "nowInsideMm": -0.12
+     }
+    },
+    "Hypoglossal nerve (XII)": {
+     "L": {
+      "ringsCut": 15,
+      "lengthCutMm": 8.8,
+      "deepestMm": 3.8,
+      "wasInsideMm": 1.4,
+      "nowInsideMm": 0.33
+     },
+     "R": {
+      "ringsCut": 13,
+      "lengthCutMm": 7.7,
+      "deepestMm": 3.5,
+      "wasInsideMm": 1.3,
+      "nowInsideMm": 0.28
+     }
+    }
+   },
+   "validation": {
+    "failed": []
+   },
+   "revision": "b70ff92",
+   "date": "2026-11-22"
   }
  ]
 }

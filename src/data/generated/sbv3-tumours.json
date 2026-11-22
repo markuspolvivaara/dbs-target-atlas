@@ -192,9 +192,9 @@
    },
    "nerves": {
     "Facial nerve (VII)": {
-     "pointsInside": 29,
+     "pointsInside": 25,
      "leftInside": 0,
-     "maxMovedMm": 10.1
+     "maxMovedMm": 10.6
     },
     "Glossopharyngeal nerve (IX)": {
      "pointsInside": 13,
@@ -253,24 +253,19 @@
    },
    "nerves": {
     "Facial nerve (VII)": {
-     "pointsInside": 37,
+     "pointsInside": 25,
      "leftInside": 0,
-     "maxMovedMm": 11.0
+     "maxMovedMm": 11.2
     },
     "Trigeminal nerve (V)": {
-     "pointsInside": 17,
-     "leftInside": 2,
-     "maxMovedMm": 18.5
-    },
-    "Abducens nerve (VI)": {
-     "pointsInside": 14,
+     "pointsInside": 5,
      "leftInside": 0,
-     "maxMovedMm": 3.8
+     "maxMovedMm": 3.2
     },
     "Vagus nerve (X)": {
-     "pointsInside": 11,
+     "pointsInside": 4,
      "leftInside": 0,
-     "maxMovedMm": 0.7
+     "maxMovedMm": 0.6
     }
    },
    "vessels": {
@@ -374,26 +369,26 @@
     -10.95
    ],
    "diameterRuleMm": 28.0,
-   "ml": 8.02,
+   "ml": 8.08,
    "normal": [
     -0.73,
     -0.64,
     0.25
    ],
    "push": {
-    "pointsInside": 6976,
+    "pointsInside": 7177,
     "leftInside": 0,
-    "rounds": 5,
-    "maxMovedMm": 18.32
+    "rounds": 4,
+    "maxMovedMm": 16.89
    },
    "vessels": {
     "Anterior inferior cerebellar artery": {
      "insideShare": {
-      "L": 0.092,
+      "L": 0.09,
       "R": 0.356
      },
-     "maxMovedMm": 14.1,
-     "leftInside": 35,
+     "maxMovedMm": 16.8,
+     "leftInside": 43,
      "sides": "both"
     },
     "Lateral pontine branches of basilar artery": {
@@ -401,7 +396,7 @@
       "L": 0.196,
       "R": 0.746
      },
-     "maxMovedMm": 7.9,
+     "maxMovedMm": 8.0,
      "leftInside": 0,
      "sides": "both"
     },
