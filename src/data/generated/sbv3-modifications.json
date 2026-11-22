@@ -175,12 +175,15 @@
    "step": "skullbase_v3_junctions",
    "operation": "vessels joined where their sources stop short (drawn segments); the confluence of the sinuses drawn",
    "structures": [
+    "Accessory branch of middle meningeal artery",
     "Anterior intercavernous sinus",
     "Basilar venous plexus",
     "Confluence of sinuses",
+    "Inferior anastomotic vein (of Labbé)",
     "Inferior petrosal sinus",
     "Ophthalmic artery",
     "Posterior intercavernous sinus",
+    "Superior anastomotic vein (of Trolard)",
     "Superior cerebellar artery (fitted course)",
     "Superior petrosal sinus"
    ],
@@ -272,6 +275,22 @@
       [
        "Internal carotid artery",
        6.7
+      ],
+      [
+       "its own next piece",
+       1.9
+      ],
+      [
+       "its own next piece",
+       3.1
+      ],
+      [
+       "its own next piece",
+       0.4
+      ],
+      [
+       "its own next piece",
+       0.9
       ]
      ]
     },
@@ -279,6 +298,34 @@
      "gapsMm": [
       [
        "Superior cerebellar artery",
+       1.5
+      ]
+     ]
+    },
+    "Accessory branch of middle meningeal artery": {
+     "gapsMm": [
+      [
+       "Middle meningeal artery",
+       2.8
+      ],
+      [
+       "Middle meningeal artery",
+       2.9
+      ]
+     ]
+    },
+    "Inferior anastomotic vein (of Labbé)": {
+     "gapsMm": [
+      [
+       "Superficial middle cerebral vein",
+       1.2
+      ]
+     ]
+    },
+    "Superior anastomotic vein (of Trolard)": {
+     "gapsMm": [
+      [
+       "Superficial middle cerebral vein",
        1.5
       ]
      ]
@@ -293,11 +340,11 @@
     }
    },
    "validation": {
-    "checks": 24,
+    "checks": 30,
     "failed": []
    },
-   "revision": "c269048",
-   "date": "2026-11-15"
+   "revision": "466367b",
+   "date": "2026-11-22"
   }
  ]
 }

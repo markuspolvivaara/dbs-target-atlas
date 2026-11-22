@@ -1061,7 +1061,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase-v3/sb_ophthalmic_artery.joined.glb",
-   "bytes": 30016,
+   "bytes": 33328,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1084,7 +1084,7 @@
    ],
    "refIds": [],
    "category": "artery",
-   "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. Joined to the internal carotid artery by a drawn segment across a 7.2 mm gap; to the internal carotid artery by a drawn segment across a 6.7 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py).",
+   "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. Joined to the internal carotid artery by a drawn segment across a 7.2 mm gap; to the internal carotid artery by a drawn segment across a 6.7 mm gap; to its own next piece by a drawn segment across a 1.9 mm gap; to its own next piece by a drawn segment across a 3.1 mm gap; to its own next piece by a drawn segment across a 0.4 mm gap; to its own next piece by a drawn segment across a 0.9 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py).",
    "centroid": {
     "L": [
      -19.15,
@@ -3031,8 +3031,8 @@
    "name": "Accessory branch of middle meningeal artery",
    "aliases": [],
    "type": "soft",
-   "file": "assets/skullbase-v3/tb_accessory_branch_of_middle_meningeal_artery.glb",
-   "bytes": 9304,
+   "file": "assets/skullbase-v3/tb_accessory_branch_of_middle_meningeal_artery.joined.glb",
+   "bytes": 12284,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3054,7 +3054,7 @@
    "layer": "tracts",
    "system": "Middle meningeal artery",
    "fitted": true,
-   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), routed through the CT near its fitted course, crossing bone only through an opening (a median 5.1 mm on the right, 5.6 mm on the left). Its course is approximate.",
+   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), routed through the CT near its fitted course, crossing bone only through an opening (a median 5.1 mm on the right, 5.6 mm on the left). Its course is approximate. Joined to the middle meningeal artery by a drawn segment across a 2.8 mm gap; to the middle meningeal artery by a drawn segment across a 2.9 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py).",
    "centroid": {
     "L": [
      -22.37,
@@ -3066,7 +3066,8 @@
      -2.37,
      -16.8
     ]
-   }
+   },
+   "joinedFrom": "assets/skullbase-v3/tb_accessory_branch_of_middle_meningeal_artery.glb"
   },
   {
    "id": "tb_anterior_ethmoidal_artery",
@@ -4036,8 +4037,8 @@
     "Vein of Trolard"
    ],
    "type": "tube",
-   "file": "assets/skullbase-v3/sb_vein_of_trolard.glb",
-   "bytes": 25228,
+   "file": "assets/skullbase-v3/sb_vein_of_trolard.joined.glb",
+   "bytes": 26512,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -4052,7 +4053,7 @@
    "refIds": [],
    "category": "vein",
    "morph": true,
-   "derivation": "Drawn by rule on the fitted template brain, not traced (this angiogram labels no cortical vein): from the superficial Sylvian vein's back end up over the gyral crowns (the shortest way over them, bridging the sulci) to this CT's superior sagittal sinus, where the template's frontal lobe meets its parietal at the top: the central sulcus, near which the vein joins the sinus (Tomasi 2021); 2 mm across (illustrative). Which of the anastomotic veins dominates varies. It moves with the brain in the surgical shapes (with the frontal and parietal cortex it lies on), carried by cross-sections along its line.",
+   "derivation": "Drawn by rule on the fitted template brain, not traced (this angiogram labels no cortical vein): from the superficial Sylvian vein's back end up over the gyral crowns (the shortest way over them, bridging the sulci) to this CT's superior sagittal sinus, where the template's frontal lobe meets its parietal at the top: the central sulcus, near which the vein joins the sinus (Tomasi 2021); 2 mm across (illustrative). Which of the anastomotic veins dominates varies. It moves with the brain in the surgical shapes (with the frontal and parietal cortex it lies on), carried by cross-sections along its line. Joined to the superficial middle cerebral vein by a drawn segment across a 1.5 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py).",
    "centroid": {
     "L": [
      -37.59,
@@ -4064,7 +4065,8 @@
      -48.7,
      66.82
     ]
-   }
+   },
+   "joinedFrom": "assets/skullbase-v3/sb_vein_of_trolard.glb"
   },
   {
    "id": "sb_vein_of_labbe",
@@ -4073,8 +4075,8 @@
     "Vein of Labbé"
    ],
    "type": "tube",
-   "file": "assets/skullbase-v3/sb_vein_of_labbe.glb",
-   "bytes": 18988,
+   "file": "assets/skullbase-v3/sb_vein_of_labbe.joined.glb",
+   "bytes": 20276,
    "colour": {
     "token": "sbVein",
     "light": "#2E5FB0",
@@ -4089,7 +4091,7 @@
    "refIds": [],
    "category": "vein",
    "morph": true,
-   "derivation": "Drawn by rule on the fitted template brain, not traced: from the superficial Sylvian vein's back end back and down over the temporal lobe's gyral crowns to this CT's traced transverse sinus, where it lies about 9.8 cm over the cortex from the temporal pole (the mean distance Tomasi 2021 measured: 9.9 and 9.7 cm); 2 mm across (illustrative). Which of the anastomotic veins dominates varies. It moves with the brain in the surgical shapes (with the temporal and occipital cortex it lies on), carried by cross-sections along its line.",
+   "derivation": "Drawn by rule on the fitted template brain, not traced: from the superficial Sylvian vein's back end back and down over the temporal lobe's gyral crowns to this CT's traced transverse sinus, where it lies about 9.8 cm over the cortex from the temporal pole (the mean distance Tomasi 2021 measured: 9.9 and 9.7 cm); 2 mm across (illustrative). Which of the anastomotic veins dominates varies. It moves with the brain in the surgical shapes (with the temporal and occipital cortex it lies on), carried by cross-sections along its line. Joined to the superficial middle cerebral vein by a drawn segment across a 1.2 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py).",
    "centroid": {
     "L": [
      -57.41,
@@ -4101,7 +4103,8 @@
      -57.26,
      18.7
     ]
-   }
+   },
+   "joinedFrom": "assets/skullbase-v3/sb_vein_of_labbe.glb"
   },
   {
    "id": "pf_cerebellar_hemisphere",
