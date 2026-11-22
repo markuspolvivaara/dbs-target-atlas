@@ -231,7 +231,7 @@
    "patch": {
     "id": "wm_af__ends",
     "file": "assets/wm-ends/wm_af__ends.glb",
-    "bytes": 18216,
+    "bytes": 18212,
     "colour": {
      "token": "wmAF",
      "light": "#A8246A",
@@ -864,7 +864,7 @@
    "patch": {
     "id": "wm_ifof__ends",
     "file": "assets/wm-ends/wm_ifof__ends.glb",
-    "bytes": 21124,
+    "bytes": 21120,
     "colour": {
      "token": "wmIFOF",
      "light": "#687D12",
@@ -2032,7 +2032,7 @@
    "patch": {
     "id": "wm_cc__ends",
     "file": "assets/wm-ends/wm_cc__ends.glb",
-    "bytes": 141188,
+    "bytes": 141120,
     "colour": {
      "token": "wmCC",
      "light": "#4581B5",
@@ -3315,7 +3315,7 @@
    "patch": {
     "id": "wm_cs_a__ends",
     "file": "assets/wm-ends/wm_cs_a__ends.glb",
-    "bytes": 45220,
+    "bytes": 45232,
     "colour": {
      "token": "wmCSA",
      "light": "#5C5123",

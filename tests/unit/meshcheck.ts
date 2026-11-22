@@ -35,6 +35,9 @@ export interface NodeStats {
   flat: number;
   /** triangles drawn a second time over the same corners in the same order */
   twice: number;
+  /** pairs of triangles over the same corners facing opposite ways, with an edge no other triangle shares: flaps
+   *  without thickness */
+  fins: number;
   normals: number;
   badNormals: number;
 }
@@ -49,7 +52,7 @@ export async function nodeStats(file: string, root: URL = PUBLIC): Promise<NodeS
     if (!mesh) continue;
     const m = node.getWorldMatrix();
     const s: NodeStats = { file, node: node.getName(), modes: [], verts: 0, meanX: 0, lo: [Infinity, Infinity, Infinity], hi: [-Infinity, -Infinity, -Infinity],
-      nonFinite: 0, badIndices: 0, triangles: 0, degenerate: 0, flat: 0, twice: 0, normals: 0, badNormals: 0 };
+      nonFinite: 0, badIndices: 0, triangles: 0, degenerate: 0, flat: 0, twice: 0, fins: 0, normals: 0, badNormals: 0 };
     let sx = 0;
     for (const prim of mesh.listPrimitives()) {
       s.modes.push(prim.getMode());
@@ -82,6 +85,7 @@ export async function nodeStats(file: string, root: URL = PUBLIC): Promise<NodeS
         return Math.hypot(uy * wz - uz * wy, uz * wx - ux * wz, ux * wy - uy * wx);
       };
       const seen = new Set<string>();
+      const edgeCount = new Map<string, number>(), bySet = new Map<string, number[][]>();
       for (let t = 0; t + 2 < idx.length; t += 3) {
         s.triangles++;
         const i0 = idx[t], i1 = idx[t + 1], i2 = idx[t + 2];
@@ -90,6 +94,15 @@ export async function nodeStats(file: string, root: URL = PUBLIC): Promise<NodeS
         const r = i0 < i1 && i0 < i2 ? [i0, i1, i2] : i1 < i2 ? [i1, i2, i0] : [i2, i0, i1];
         const key = r.join(',');
         if (seen.has(key)) s.twice++; else seen.add(key);
+        for (const [x, y] of [[i0, i1], [i1, i2], [i2, i0]]) { const e = x < y ? `${x},${y}` : `${y},${x}`; edgeCount.set(e, (edgeCount.get(e) ?? 0) + 1); }
+        const set = [i0, i1, i2].sort((x, y) => x - y).join(',');
+        const at = bySet.get(set);
+        if (at) at.push([i0, i1, i2]); else bySet.set(set, [[i0, i1, i2]]);
+      }
+      for (const ts of bySet.values()) {
+        if (ts.length !== 2) continue;
+        const [x, y, z] = ts[0];
+        if ([[x, y], [y, z], [z, x]].some(([p, q]) => edgeCount.get(p < q ? `${p},${q}` : `${q},${p}`) === 2)) s.fins++;
       }
     }
     s.meanX = s.verts ? sx / s.verts : NaN;

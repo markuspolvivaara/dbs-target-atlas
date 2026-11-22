@@ -959,7 +959,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_occipital_bone.glb",
-   "bytes": 439844,
+   "bytes": 439256,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -1088,7 +1088,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_temporal_bone.glb",
-   "bytes": 733916,
+   "bytes": 731964,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -1661,7 +1661,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_frontal_lobe.glb",
-   "bytes": 484772,
+   "bytes": 485196,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -1704,7 +1704,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_parietal_lobe.glb",
-   "bytes": 227120,
+   "bytes": 227320,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -1747,7 +1747,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_temporal_lobe.glb",
-   "bytes": 182060,
+   "bytes": 182360,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -1790,7 +1790,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_occipital_lobe.glb",
-   "bytes": 109684,
+   "bytes": 109828,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -1833,7 +1833,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_insula.glb",
-   "bytes": 64392,
+   "bytes": 64448,
    "colour": {
     "token": "sbInsula",
     "light": "#4A3DA8",
@@ -1876,7 +1876,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_cingulate_gyrus.glb",
-   "bytes": 68716,
+   "bytes": 68576,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -1919,7 +1919,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_medial_wall.glb",
-   "bytes": 89212,
+   "bytes": 89160,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",

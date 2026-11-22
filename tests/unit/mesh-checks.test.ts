@@ -69,7 +69,7 @@ describe('every shipped mesh', () => {
         if (n.badNormals) bad.push(`${at}: ${n.badNormals} of ${n.normals} normals not of unit length`);
         // (triangles that draw nothing: taken out before a mesh is encoded, pipeline/triangles.mjs; the site audit's MB-16
         // and MC-12 found 3 with a corner repeated, 7982 without area and 2 drawn twice)
-        if (n.degenerate || n.flat || n.twice) bad.push(`${at}: of ${n.triangles} triangles ${n.degenerate} with a corner repeated, ${n.flat} without area, ${n.twice} drawn twice`);
+        if (n.degenerate || n.flat || n.twice || n.fins) bad.push(`${at}: of ${n.triangles} triangles ${n.degenerate} with a corner repeated, ${n.flat} without area, ${n.twice} drawn twice, ${n.fins} fins`);
         for (let k = 0; k < 3; k++) {
           if (n.lo[k] < sec.box[k][0] || n.hi[k] > sec.box[k][1]) bad.push(`${at}: ${'xyz'[k]} from ${n.lo[k].toFixed(1)} to ${n.hi[k].toFixed(1)} mm, outside the frame's ${sec.box[k].join(' to ')}`);
           lo[k] = Math.min(lo[k], n.lo[k]); hi[k] = Math.max(hi[k], n.hi[k]);

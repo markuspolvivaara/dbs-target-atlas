@@ -1111,7 +1111,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_falx_cerebri.glb",
-   "bytes": 69580,
+   "bytes": 67472,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -5515,7 +5515,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_appr_interhemispheric__removed.glb",
-   "bytes": 247208,
+   "bytes": 247176,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",

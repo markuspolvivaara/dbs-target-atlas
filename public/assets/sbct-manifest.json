@@ -1035,7 +1035,7 @@
    "type": "soft",
    "fitted": true,
    "file": "assets/skullbase-ct/sb_falx_cerebri.glb",
-   "bytes": 69340,
+   "bytes": 68904,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -2135,7 +2135,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_occipital_bone.glb",
-   "bytes": 439844,
+   "bytes": 439256,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",
@@ -3622,7 +3622,7 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-ct/sb_temporal_bone.glb",
-   "bytes": 733916,
+   "bytes": 731964,
    "colour": {
     "token": "sbBone",
     "light": "#B9AE96",

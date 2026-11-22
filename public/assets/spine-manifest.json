@@ -594,7 +594,7 @@
   },
   {
    "aliases": [],
-   "bytes": 53388,
+   "bytes": 53244,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -644,7 +644,7 @@
   },
   {
    "aliases": [],
-   "bytes": 53068,
+   "bytes": 52852,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -894,7 +894,7 @@
   },
   {
    "aliases": [],
-   "bytes": 63956,
+   "bytes": 64084,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -994,7 +994,7 @@
   },
   {
    "aliases": [],
-   "bytes": 65736,
+   "bytes": 65900,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1094,7 +1094,7 @@
   },
   {
    "aliases": [],
-   "bytes": 67092,
+   "bytes": 67076,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1144,7 +1144,7 @@
   },
   {
    "aliases": [],
-   "bytes": 66172,
+   "bytes": 66180,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1194,7 +1194,7 @@
   },
   {
    "aliases": [],
-   "bytes": 66092,
+   "bytes": 65932,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1244,7 +1244,7 @@
   },
   {
    "aliases": [],
-   "bytes": 66576,
+   "bytes": 66572,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1294,7 +1294,7 @@
   },
   {
    "aliases": [],
-   "bytes": 66808,
+   "bytes": 66676,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1344,7 +1344,7 @@
   },
   {
    "aliases": [],
-   "bytes": 82136,
+   "bytes": 81780,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1394,7 +1394,7 @@
   },
   {
    "aliases": [],
-   "bytes": 80000,
+   "bytes": 79800,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1444,7 +1444,7 @@
   },
   {
    "aliases": [],
-   "bytes": 79532,
+   "bytes": 79608,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1494,7 +1494,7 @@
   },
   {
    "aliases": [],
-   "bytes": 80872,
+   "bytes": 80608,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -1692,7 +1692,7 @@
   },
   {
    "aliases": [],
-   "bytes": 64092,
+   "bytes": 63948,
    "dataset": "verse",
    "source": "VerSe whole-spine CT (sub-verse823) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",
@@ -5014,7 +5014,7 @@
   },
   {
    "aliases": [],
-   "bytes": 138496,
+   "bytes": 138408,
    "dataset": "verse",
    "source": "VerSe cervical CT (sub-gl090) with TotalSegmentator segmentations",
    "licence": "CC BY-SA 4.0 (VerSe); segmentations made here with TotalSegmentator (Apache-2.0 models) from the same CT",

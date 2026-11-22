@@ -257,7 +257,7 @@
    ],
    "type": "nucleus",
    "file": "assets/meshes/gpi_sm.glb",
-   "bytes": 22380,
+   "bytes": 22352,
    "colour": {
     "token": "gpi",
     "light": "#1F7F5A",
@@ -1409,7 +1409,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/meshes/ss_dyt.glb",
-   "bytes": 61924,
+   "bytes": 61856,
    "colour": {
     "token": "stn",
     "light": "#946609",
@@ -1561,7 +1561,7 @@
    "aliases": [],
    "type": "target",
    "file": "assets/meshes/ss_cerv.glb",
-   "bytes": 34332,
+   "bytes": 34364,
    "colour": {
     "token": "gpi",
     "light": "#1F7F5A",
@@ -1661,7 +1661,7 @@
    "aliases": [],
    "type": "cortex",
    "file": "assets/meshes/cortex.glb",
-   "bytes": 541072,
+   "bytes": 540928,
    "colour": {
     "token": "cortex",
     "light": "#C4CBD3",
@@ -2037,7 +2037,7 @@
    "aliases": [],
    "type": "cortex",
    "file": "assets/meshes/vmpfc.glb",
-   "bytes": 16512,
+   "bytes": 16544,
    "colour": {
     "token": "ctxVMPFC",
     "light": "#E7A8C9",
