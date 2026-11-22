@@ -626,7 +626,7 @@
    ],
    "type": "surface",
    "file": "assets/cortex/ctx_g_front_middle.glb",
-   "bytes": 121140,
+   "bytes": 120948,
    "colour": {
     "token": "lobeFrontal",
     "light": "#56B4E9",
@@ -670,7 +670,7 @@
    ],
    "type": "surface",
    "file": "assets/cortex/ctx_g_front_sup.glb",
-   "bytes": 131092,
+   "bytes": 130988,
    "colour": {
     "token": "lobeFrontal",
     "light": "#56B4E9",
@@ -890,7 +890,7 @@
    ],
    "type": "surface",
    "file": "assets/cortex/ctx_g_oc_temp_lat_fusifor.glb",
-   "bytes": 46496,
+   "bytes": 46428,
    "colour": {
     "token": "lobeTemporal",
     "light": "#009E73",
@@ -978,7 +978,7 @@
    ],
    "type": "surface",
    "file": "assets/cortex/ctx_g_oc_temp_med_parahip.glb",
-   "bytes": 42888,
+   "bytes": 42932,
    "colour": {
     "token": "lobeTemporal",
     "light": "#009E73",
@@ -1022,7 +1022,7 @@
    ],
    "type": "surface",
    "file": "assets/cortex/ctx_g_orbital.glb",
-   "bytes": 59092,
+   "bytes": 59028,
    "colour": {
     "token": "lobeFrontal",
     "light": "#56B4E9",
@@ -1374,7 +1374,7 @@
    ],
    "type": "surface",
    "file": "assets/cortex/ctx_g_subcallosal.glb",
-   "bytes": 16728,
+   "bytes": 16660,
    "colour": {
     "token": "lobeFrontal",
     "light": "#56B4E9",
@@ -1506,7 +1506,7 @@
    ],
    "type": "surface",
    "file": "assets/cortex/ctx_g_temp_sup_plan_polar.glb",
-   "bytes": 19772,
+   "bytes": 19748,
    "colour": {
     "token": "lobeTemporal",
     "light": "#009E73",
@@ -1594,7 +1594,7 @@
    ],
    "type": "surface",
    "file": "assets/cortex/ctx_g_temporal_inf.glb",
-   "bytes": 65572,
+   "bytes": 65292,
    "colour": {
     "token": "lobeTemporal",
     "light": "#009E73",
@@ -2078,7 +2078,7 @@
    ],
    "type": "surface",
    "file": "assets/cortex/ctx_s_circular_insula_inf.glb",
-   "bytes": 26200,
+   "bytes": 26236,
    "colour": {
     "token": "lobeInsula",
     "light": "#F0E442",
@@ -2474,7 +2474,7 @@
    ],
    "type": "surface",
    "file": "assets/cortex/ctx_s_oc_middle_and_lunatus.glb",
-   "bytes": 25588,
+   "bytes": 25528,
    "colour": {
     "token": "lobeOccipital",
     "light": "#CC79A7",
@@ -2518,7 +2518,7 @@
    ],
    "type": "surface",
    "file": "assets/cortex/ctx_s_oc_sup_and_transversal.glb",
-   "bytes": 28892,
+   "bytes": 28800,
    "colour": {
     "token": "lobeOccipital",
     "light": "#CC79A7",
@@ -2694,7 +2694,7 @@
    ],
    "type": "surface",
    "file": "assets/cortex/ctx_s_orbital_lateral.glb",
-   "bytes": 15660,
+   "bytes": 15712,
    "colour": {
     "token": "lobeFrontal",
     "light": "#56B4E9",
@@ -3134,7 +3134,7 @@
    ],
    "type": "surface",
    "file": "assets/cortex/ctx_s_temporal_inf.glb",
-   "bytes": 37988,
+   "bytes": 37992,
    "colour": {
     "token": "lobeTemporal",
     "light": "#009E73",
@@ -3264,7 +3264,7 @@
    "aliases": [],
    "type": "surface",
    "file": "assets/cortex/ctx_medial_wall.glb",
-   "bytes": 124904,
+   "bytes": 124896,
    "colour": {
     "token": "cortex",
     "light": "#C4CBD3",

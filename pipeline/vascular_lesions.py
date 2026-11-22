@@ -152,6 +152,86 @@ class Vessels:
         return np.linalg.svd(Q - Q.mean(0), full_matrices=False)[2][0]
 
 
+# ---------------------------------------------------------------- this CT's bone round a lesion
+BONE_FREE_SHARE = 0.10    # a dome with more than this share of its surface in this CT's bone is sited afresh:
+SITE_REACH_MM = 5.0       # on its artery's wall within this of the site, where a dome drawn the same way has the least
+#                           of its surface in bone (the nearest such point)
+NIDUS_BONE_MM = 2.5       # a nidus's junctions are kept this far inside the cranial cavity (a junction's knot and its
+#                           vessels' bends reach about 2 mm from it)
+NIDUS_SPREAD_MM = 6.0     # ... a junction's move shared with its neighbours (a Gaussian), so that the network keeps its
+#                           spacing and is not flattened against the bone
+NIDUS_ROUNDS = 60
+
+
+class Bone:
+    """This CT's bone over a box (skullbase_v3_endonasal.ct_grid, as Skull base v3 draws it), for a lesion drawn by rule
+    to keep out of (the site audit's MB-19: the ophthalmic aneurysm's dome lay 41 % in the bone over it, the grade III
+    AVM's nidus 19 %, up to 6.6 mm deep)."""
+
+    def __init__(self, lo: np.ndarray, hi: np.ndarray):
+        import skullbase_v3_endonasal as ENDO
+        from scipy import ndimage
+        self.nd = ndimage
+        g = ENDO.ct_grid(tuple((float(a), float(b)) for a, b in zip(lo, hi)))
+        self.lo, self.step = np.asarray(lo, float), float(ENDO.GRID_MM)
+        self.bone = g["bone"].reshape(g["shape"]) >= ENDO.FIELD_ISO
+
+    def at(self, F: np.ndarray, P: np.ndarray) -> np.ndarray:
+        return self.nd.map_coordinates(F, ((P - self.lo) / self.step).T, order=1, mode="nearest")
+
+    def share(self, P: np.ndarray) -> float:
+        """The share of points that lie in bone."""
+        return float((self.at(self.bone.astype(np.float32), P) > 0.5).mean())
+
+    def into_cavity(self, P: np.ndarray, inside: np.ndarray, margin: float) -> tuple[np.ndarray, int]:
+        """Points moved to lie `margin` inside the space that holds `inside` (the cranial cavity: the part of the box
+        outside bone that is joined to that point): each one short of it is pushed the shortest way in, its neighbours
+        with it (a normalised Gaussian, NIDUS_SPREAD_MM), in rounds. Returns the points and how many were short."""
+        lab, _ = self.nd.label(~self.bone)
+        k = lab[tuple(np.clip(np.rint((inside - self.lo) / self.step).astype(int), 0, np.array(self.bone.shape) - 1))]
+        cav = lab == k if k else ~self.bone
+        depth = (self.nd.distance_transform_edt(cav, sampling=self.step) - self.nd.distance_transform_edt(~cav, sampling=self.step)).astype(np.float32)
+        grad = [self.nd.gaussian_filter(x, 1.0) for x in np.gradient(depth, self.step)]
+        X = P.copy()
+        first = self.at(depth, X) < margin
+        w = np.exp(-((P[:, None] - P[None]) ** 2).sum(2) / (2 * NIDUS_SPREAD_MM ** 2))
+        for _ in range(NIDUS_ROUNDS):
+            short = margin - self.at(depth, X)
+            need = short > 0
+            if not need.any():
+                break
+            g = np.stack([self.at(gg, X[need]) for gg in grad], 1)
+            D = np.zeros_like(X)
+            D[need] = g / (np.linalg.norm(g, axis=1, keepdims=True) + 1e-9) * (short[need] + 0.1)[:, None]
+            X = X + (w[:, need] @ D[need]) / np.maximum(w[:, need].sum(1), 1.0)[:, None]
+        return X, int(first.sum())
+
+
+def sphere_points(n: int = 300) -> np.ndarray:
+    """Points spread evenly over the unit sphere (a Fibonacci lattice)."""
+    i = np.arange(n) + 0.5
+    ph, th = np.arccos(1 - 2 * i / n), np.pi * (1 + 5 ** 0.5) * i
+    return np.c_[np.cos(th) * np.sin(ph), np.sin(th) * np.sin(ph), np.cos(ph)]
+
+
+def clear_of_bone(Pp: np.ndarray, Np: np.ndarray, i: int, direction, R: float, rn: float) -> tuple[int, dict]:
+    """Where on its artery's wall a dome is drawn, kept out of this CT's bone: at vertex i itself where at most
+    BONE_FREE_SHARE of the dome's surface lies in bone; otherwise at the wall vertex within SITE_REACH_MM of it where
+    the dome, pointing as `direction` gives it there, has the least of its surface in bone (the nearest of those that
+    do equally). The ophthalmic aneurysm's site lay under the anterior clinoid process, 46 % of its dome in it."""
+    base = Pp[i]
+    bone = Bone(base - SITE_REACH_MM - 2 * R - rn - 4, base + SITE_REACH_MM + 2 * R + rn + 4)
+    U = sphere_points()
+    share = lambda j: bone.share(Pp[j] + direction(Pp[j], Np[j]) * (R + 0.6 * rn) + R * U)
+    s0 = share(i)
+    if s0 <= BONE_FREE_SHARE:
+        return i, {}
+    dist = np.linalg.norm(Pp - base, axis=1)
+    near = np.nonzero(dist < SITE_REACH_MM)[0]
+    j = int(min(near, key=lambda k: (round(share(k), 2), dist[k])))
+    return j, {"movedFromBoneMm": round(float(dist[j]), 1), "inBoneBefore": round(s0, 2), "inBone": round(share(j), 2)}
+
+
 # ---------------------------------------------------------------- aneurysms
 ANEURYSMS = [  # id, name, parent, branch (None: its tip), side, dome radius, neck radius, how the dome points
     ("acom", "Anterior communicating artery aneurysm", "Anterior communicating artery", None, "R", 3.0, 1.6, "anterior"),
@@ -172,18 +252,21 @@ def saccular(V: Vessels, parent, branch, side, R, rn, how) -> tuple[np.ndarray, 
     else:
         site = Pp.mean(0)
     i = int(np.argmin(np.linalg.norm(Pp - site, axis=1)))
-    base, n0 = Pp[i], VB.normals(Pp, Tp)[i]
-    ax = V.axis(parent, side, base)
-    if how == "along":                  # on the line of the inflow: from the parent 8-15 mm back, on through the site
-        dd = np.linalg.norm(Pp - base, axis=1)
-        back = Pp[(dd > 8) & (dd < 15)]
-        d = unit(base - (back.mean(0) if len(back) else Pp.mean(0)))
-    elif how == "anterior":
-        d = unit(np.array([0.0, 1.0, 0.4]))
-    elif how == "up":
-        d = unit(n0 + np.array([0, 0, 1.0]))
-    else:
-        d = unit(n0 - (n0 @ ax) * ax)
+    Np = VB.normals(Pp, Tp)
+
+    def direction(base, n0):
+        if how == "along":              # on the line of the inflow: from the parent 8-15 mm back, on through the site
+            dd = np.linalg.norm(Pp - base, axis=1)
+            back = Pp[(dd > 8) & (dd < 15)]
+            return unit(base - (back.mean(0) if len(back) else Pp.mean(0)))
+        if how == "anterior":
+            return unit(np.array([0.0, 1.0, 0.4]))
+        if how == "up":
+            return unit(n0 + np.array([0, 0, 1.0]))
+        ax = V.axis(parent, side, base)
+        return unit(n0 - (n0 @ ax) * ax)
+    i, moved = clear_of_bone(Pp, Np, i, direction, R, rn)
+    base, d = Pp[i], direction(Pp[i], Np[i])
     centre = base + d * (R + 0.6 * rn)
 
     def sdf(P):
@@ -193,7 +276,7 @@ def saccular(V: Vessels, parent, branch, side, R, rn, how) -> tuple[np.ndarray, 
     t0 = float(tp[i])
     arr = t0 + 0.05 + np.clip((v - base) @ d, 0, None) / 200.0
     return v, f, arr, t0, {"siteMm": np.round(base, 1).tolist(), "domeDiameterMm": 2 * R, "neckMm": round(2 * rn, 1),
-                           "direction": np.round(d, 2).tolist()}
+                           "direction": np.round(d, 2).tolist(), **moved}
 
 
 def fusiform(V: Vessels) -> tuple:
@@ -472,7 +555,8 @@ class Nidus:
 
     def facts(self) -> dict:
         return {"junctions": len(self.J), "plexiform": len(self.edges), "fistulous": len(self.fistulas),
-                "measuredMm": round(extent(self.J), 1), "compact": not self.diffuse}
+                "measuredMm": round(extent(self.J), 1), "compact": not self.diffuse,
+                **({"movedOutOfBone": self.moved} if getattr(self, "moved", 0) else {})}
 
 
 def route(a: np.ndarray, b: np.ndarray, push: np.ndarray, amount: float) -> np.ndarray:
@@ -579,7 +663,9 @@ def build_aneurysms(o: Out) -> None:
         pid = o.part(aid, "sac", name, "aneurysm", "vaAneurysm", [(v, f, arr)], VB.DWELL_ART_S + 0.8,
                      f"Drawn by rule, not this patient's: a saccular aneurysm {2 * R:g} mm across on a {2 * rn:g} mm neck (illustrative "
                      f"sizes), where this CT's {parent.lower()}" + (f" meets its {branch.lower()}" if branch else "") +
-                     ", its dome and neck joined smoothly (an implicit surface).")
+                     ", its dome and neck joined smoothly (an implicit surface)." +
+                     (f" Sited {facts['movedFromBoneMm']:g} mm from that point round the artery's wall, where the dome clears this CT's "
+                      "bone." if facts.get("movedFromBoneMm") else ""))
         o.info.append({"id": aid, "kind": "aneurysm", "type": "saccular", "name": name, "parts": [pid], "parent": parent,
                        "branch": branch, "side": side, **facts})
         o.aneu[aid] = {"v": v, "f": f, "arr": arr, "t0": t0, "R": R, "rn": rn, "parent": parent, "side": side, "name": name,
@@ -626,6 +712,19 @@ def build_avms(o: Out, brain: Brain) -> None:
             used.setdefault(vname, []).append(P[i])
             starts.append((P[i], float(t[i])))
         nid = Nidus(centre, dia, side, [A - centre for A, _ in starts], kind == "diffuse", surface, axis)
+        # out of this CT's bone: the junctions in it, or nearer it than NIDUS_BONE_MM, moved the shortest way back into
+        # the cranial cavity (the envelope is drawn on the fitted brain, which the skull's curve cuts across)
+        # (and drawn out again about its centre where that left it over 1 % short of its diameter, then moved in again)
+        bone, nid.moved = Bone(nid.J.min(0) - 10, nid.J.max(0) + 10), 0
+        for _ in range(4):
+            nid.J, k = bone.into_cavity(nid.J, centre, NIDUS_BONE_MM)
+            nid.moved = max(nid.moved, k)
+            f = dia / extent(nid.J)
+            if abs(f - 1) <= 0.01:
+                break
+            nid.J = centre + (nid.J - centre) * f
+        else:
+            nid.J, _ = bone.into_cavity(nid.J, centre, NIDUS_BONE_MM)
         # feeders: to the nearest junction of their own compartment, branching there into two more of its junctions
         fparts, seeds, entries = [], [], []
         for k, (A, tA) in enumerate(starts):
@@ -685,7 +784,9 @@ def build_avms(o: Out, brain: Brain) -> None:
                       f"{f['fistulous']} fistulous channel{'s' if f['fistulous'] > 1 else ''} ({2 * FISTULA_R_MM:g} mm wide) straight "
                       "from a feeder to a draining vein (vessel sizes after Jain 2019's theoretical model)"
                       + ("; pockets of brain left between its vessels and stray vessels off its margins." if kind == "diffuse" else
-                         "; its margins clear.")),
+                         "; its margins clear.")
+                      + (f" Where the envelope reached this CT's bone its junctions ({f['movedOutOfBone']} of them) are moved back, "
+                         f"{NIDUS_BONE_MM:g} mm inside the skull." if f.get("movedOutOfBone") else "")),
                o.part(lid, "drainers", f"{name}: draining veins", "drainer", "sbVein", dparts, VB.DWELL_VEN_S,
                       "Drawn by rule: from the nidus to this CT's " + ", ".join(sorted({x[0].lower() for x in drains})) +
                       ", dilated and tortuous (illustrative); they fill straight from the nidus, in the arterial phase.")]

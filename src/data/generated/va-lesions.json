@@ -108,17 +108,20 @@
    "branch": "Ophthalmic artery",
    "side": "L",
    "siteMm": [
-    -12.9,
-    8.3,
-    9.3
+    -9.6,
+    5.8,
+    8.3
    ],
    "domeDiameterMm": 7.0,
    "neckMm": 4.0,
    "direction": [
-    -0.4,
-    0.31,
-    0.86
-   ]
+    0.4,
+    -0.72,
+    0.57
+   ],
+   "movedFromBoneMm": 4.3,
+   "inBoneBefore": 0.46,
+   "inBone": 0.0
   },
   {
    "id": "pica",
@@ -199,8 +202,9 @@
     "junctions": 247,
     "plexiform": 456,
     "fistulous": 1,
-    "measuredMm": 21.4,
+    "measuredMm": 22.0,
     "compact": true,
+    "movedOutOfBone": 1,
     "type": "compact"
    },
    "sm": {
@@ -247,8 +251,9 @@
     "junctions": 241,
     "plexiform": 428,
     "fistulous": 1,
-    "measuredMm": 41.8,
+    "measuredMm": 41.7,
     "compact": true,
+    "movedOutOfBone": 93,
     "type": "compact"
    },
    "sm": {
@@ -302,8 +307,9 @@
     "junctions": 247,
     "plexiform": 432,
     "fistulous": 2,
-    "measuredMm": 64.0,
+    "measuredMm": 63.6,
     "compact": false,
+    "movedOutOfBone": 11,
     "type": "diffuse"
    },
    "sm": {

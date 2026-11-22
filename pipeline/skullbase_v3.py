@@ -1472,6 +1472,10 @@ def validate() -> int:
     import skullbase_v3_clearance as CLEAR
     for ok, msg in CLEAR.check(base):
         check(ok, msg)
+    # the routed nerves cut at the brainstem's surface (skullbase_v3_roots.py)
+    import skullbase_v3_roots as ROOTS
+    for ok, msg in ROOTS.check(base):
+        check(ok, msg)
     import skullbase_v3_tumours as TM
     for ok, msg in TM.check(m["structures"]):
         check(ok, msg)

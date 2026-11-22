@@ -9,6 +9,11 @@ millimetres short of one another at some junctions, so that a sinus or artery se
   than JOIN_MAX_MM), a short straight segment is drawn from that end, as wide as it, into the other vessel's wall. It is
   added to the first vessel's mesh, and its card says so.
 
+  A vessel's own pieces (OWN_PIECES): TopBrain's label of a thin vessel is broken in places (the ophthalmic artery:
+  four pieces a side, 0.4 to 3.1 mm apart), so that the vessel is drawn as fragments. Each piece is joined to the
+  nearest other piece of the same vessel by a short straight segment, as wide as the thinner of the two there, where
+  they lie between OWN_MIN_MM and OWN_MAX_MM apart (the site audit's MB-13).
+
 A joined vessel is written as a file of its own (assets/skullbase-v3/<id>.joined.glb) and v3's item points to it; the
 file its source wrote (v2's or v3's) is never changed, so v2 keeps its own and running this twice changes nothing.
 skullbase_v3_endonasal.py, the last of v3's steps to write its manifest, runs it (after skullbase_v3_clearance.py).
@@ -36,6 +41,10 @@ INTO_MM = 1.5          # how far a joining segment runs on into the other vessel
 PATCH_MM = 5.0         # an end's centre and width: from the vessel's surface within this of where it comes closest
 CONFLUENCE_GAIN = 1.25  # the confluence's swelling: this times the widest sinus joining it
 CONFLUENCE_ID = "tb_confluence_of_sinuses"
+OWN_PIECES = ["Ophthalmic artery"]     # vessels whose label is broken into pieces along its course
+OWN_MIN_MM = 0.3       # two pieces nearer than this touch as drawn
+OWN_MAX_MM = 4.0       # ... and further apart than this are not taken for the same run
+OWN_PATCH_MM = 1.5     # a piece's centre and width where it comes nearest the next: from its surface within this
 
 # (vessel whose end stops short, the vessel it joins (or several: the nearest), paired?)
 JOINS = [
@@ -50,6 +59,11 @@ JOINS = [
     ("Ophthalmic artery", ["Internal carotid artery"], True),
     ("Superior cerebellar artery (fitted course)", ["Superior cerebellar artery"], True),
     ("Vertebral artery", ["Basilar artery"], False),
+    # (the site audit's MB-13: the accessory branch's fitted course began 2.8 mm off the artery it leaves; the drawn
+    # anastomotic veins began 1.2 and 1.5 mm off the left superficial middle cerebral vein they are drawn from)
+    ("Accessory branch of middle meningeal artery", ["Middle meningeal artery"], True),
+    ("Inferior anastomotic vein (of Labbé)", ["Superficial middle cerebral vein"], True),
+    ("Superior anastomotic vein (of Trolard)", ["Superficial middle cerebral vein"], True),
 ]
 
 
@@ -163,7 +177,42 @@ def connectors(items: dict) -> tuple[dict, dict]:
             end = pb - (nb if nb is not None else (pb - ca) / (np.linalg.norm(pb - ca) + 1e-9)) * min(INTO_MM + ra, 4.0)
             add.setdefault(a, {}).setdefault(sa, []).append(tube(ca, end, ra))
             notes.setdefault(a, []).append((b, gap))
+    for a in OWN_PIECES:
+        if a not in items:
+            continue
+        for sa, (P, T) in nodes_of(items[a]).items():
+            parts = pieces(P, T)
+            done = set()
+            for i, A in enumerate(parts):
+                near = [(float(d.min()), j, A[int(np.argmin(d))], parts[j][k[int(np.argmin(d))]])
+                        for j in range(len(parts)) if j != i for d, k in [cKDTree(parts[j]).query(A)]]
+                if not near:
+                    continue
+                gap, j, pa, pb = min(near, key=lambda x: x[0])
+                if not OWN_MIN_MM < gap < OWN_MAX_MM or (min(i, j), max(i, j)) in done:
+                    continue
+                done.add((min(i, j), max(i, j)))
+                (ca, ra), (cb, rb) = patch(A, pa), patch(parts[j], pb)
+                add.setdefault(a, {}).setdefault(sa, []).append(tube(ca, cb, min(ra, rb)))
+                notes.setdefault(a, []).append(("its own next piece", gap))
     return add, notes
+
+
+def pieces(P: np.ndarray, T: np.ndarray) -> list[np.ndarray]:
+    """A surface's connected pieces (their vertices), the largest first."""
+    import scipy.sparse as sp
+    from scipy.sparse.csgraph import connected_components
+    E = np.vstack([T[:, [0, 1]], T[:, [1, 2]]])
+    k, lab = connected_components(sp.coo_matrix((np.ones(len(E)), (E[:, 0], E[:, 1])), shape=(len(P), len(P))), directed=False)
+    return [P[lab == i] for i in np.argsort(-np.bincount(lab, minlength=k), kind="stable")]
+
+
+def patch(P: np.ndarray, near: np.ndarray) -> tuple[np.ndarray, float]:
+    """A piece's centre and radius where it comes nearest a point (its surface within OWN_PATCH_MM there)."""
+    Q = P[np.linalg.norm(P - near, axis=1) < OWN_PATCH_MM]
+    Q = Q if len(Q) >= 6 else P[np.argsort(np.linalg.norm(P - near, axis=1))[:6]]
+    c = Q.mean(0)
+    return c, float(np.clip(np.linalg.norm(Q - c, axis=1).mean(), 0.3, 2.0))
 
 
 def confluence(items: dict):
@@ -220,7 +269,8 @@ def split_midline(v: np.ndarray, f: np.ndarray) -> dict:
 def join(items_list: list) -> dict:
     """Join the vessels in v3's item list (changed in place): returns a report."""
     sys.path.insert(0, str(ROOT))
-    items = {it["name"]: it for it in items_list if it.get("category") in ("artery", "vein")}
+    # (not a view's own copy of a vessel, which bears the vessel's name: a tumour view's moved artery)
+    items = {it["name"]: it for it in items_list if it.get("category") in ("artery", "vein") and not it.get("pushedFrom")}
     add, notes = connectors(items)
     report = {}
     for name, per_side in add.items():
@@ -247,7 +297,7 @@ def join(items_list: list) -> dict:
         it["file"] = f"assets/skullbase-v3/{vid}.joined.glb"
         write_glb(V3_BUILD / f"{vid}.joined.glb", out, {"id": vid})
         base = it["derivation"].split(" Joined ")[0]
-        joined = "; ".join(f"to the {b.lower()} by a drawn segment across a {g:.1f} mm gap" for b, g in notes[name])
+        joined = "; ".join(f"to {b if b.startswith('its') else 'the ' + b.lower()} by a drawn segment across a {g:.1f} mm gap" for b, g in notes[name])
         it["derivation"] = base + f" Joined {joined}, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py)."
         report[name] = [(b, round(g, 1)) for b, g in notes[name]]
     # the confluence of the sinuses
@@ -279,7 +329,8 @@ def join(items_list: list) -> dict:
 def gaps(items_list: list) -> list[tuple[bool, str]]:
     """For skullbase_v3.py's validation: each junction JOINS lists closed (or its source's gap out of range), and the
     confluence touching the sinuses it joins."""
-    items = {it["name"]: it for it in items_list if it.get("category") in ("artery", "vein")}
+    # (not a view's own copy of a vessel, which bears the vessel's name: a tumour view's moved artery)
+    items = {it["name"]: it for it in items_list if it.get("category") in ("artery", "vein") and not it.get("pushedFrom")}
     out = []
 
     def gap(pa: dict, pb: dict, s) -> float:

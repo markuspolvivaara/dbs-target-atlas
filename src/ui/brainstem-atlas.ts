@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { CameraPreset, ManifestStructure } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
 import { BS, BS_MANIFEST, BS_REF, DEFINITIONS, kindOf, KIND_LABEL, MEASURED, nervesOf, nucleiOf, OWN, TRACT_FIT, ZONE_GEOM, ZONE_TEXT, type Kind } from '../brainstem';
-import { AAN_GENERAL, AAN_TRANSMITTER, HCP_ATLAS, NERVE_COMPONENTS, NOT_DRAWN, NUCLEI_NOT_MODELLED, SEZ_GENERAL, SHARED_NUCLEI, TRACT_TEXT } from '../brainstem/content';
+import { AAN_GENERAL, AAN_TRANSMITTER, HCP_ATLAS, NERVE_COMPONENTS, NOT_DRAWN, NUCLEI_LEVEL, NUCLEI_NOT_MODELLED, SEZ_GENERAL, SHARED_NUCLEI, TRACT_TEXT } from '../brainstem/content';
 import { BS_GROUP, BS_GROUPS, type BsGroup } from '../brainstem/groups';
 import { bsScene, liesInside, type BsPlan } from '../brainstem/scene';
 import type { Claim } from '../brainstem/schema';
@@ -321,6 +321,8 @@ export class BrainstemAtlasPage {
           shared ? [h('dt', {}, `Serves cranial nerves ${romanList(cns)}`), h('dd', {}, claimList(shared))]
             : comp ? [h('dt', {}, `Cranial nerve ${ROMAN[cn]}: functional components`), h('dd', {}, comp.text, ' ', refs(comp.refIds))] : null,
           k === 'cnNucleus' && nerves.length ? [h('dt', {}, nerves.length > 1 ? 'Nerves' : 'Nerve'), h('dd', {}, ...nerves.flatMap((x, i) => [i ? ', ' : '', link(x)]))] : null,
+          // a nucleus the model has out of place, moved before the fit: its level from a source (how far is under Geometry)
+          st.movedMm && NUCLEI_LEVEL[id] ? [h('dt', {}, `Level (moved ${fmtMm(st.movedMm)} mm in the model)`), h('dd', { class: 'nucleus-level' }, NUCLEI_LEVEL[id].text, ' ', refs(NUCLEI_LEVEL[id].refIds))] : null,
           k === 'nerve' && nuclei.length ? [h('dt', {}, 'Nuclei in this model'), h('dd', {}, ...nuclei.flatMap((x, i) => [i ? ', ' : '', ...nucleus(x)]))] : null,
           k === 'nerve' && !nuclei.length ? [h('dt', {}, 'Nuclei'), h('dd', { class: 'not-modelled' }, missing ? [h('p', {}, missing.lead), claimList(missing.claims)] : 'The model has none for this nerve.')] : null,
           ...(defBlock ?? []), ...this.measuredRows(id), ...geometry));

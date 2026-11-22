@@ -576,10 +576,12 @@ def main() -> int:
            "sinus": sinus, "intercarotid": icd, "pieces": pieces, "hypophysis": hypo["summary"]}
     OUT_JSON.write_text(json.dumps(out, indent=1))
     carry_sellar()
-    # the last of v3's steps to write its manifest: then its arteries kept out of the brainstem, and its vessels joined
-    # where their sources stop short of one another (the confluence of the sinuses drawn)
+    # the last of v3's steps to write its manifest: then its arteries kept out of the brainstem, its vessels joined
+    # where their sources stop short of one another (the confluence of the sinuses drawn), and its routed nerves cut at
+    # the brainstem's surface
     import skullbase_v3_clearance as CLEAR
     import skullbase_v3_junctions as JUNC
+    import skullbase_v3_roots as ROOTS
     # (each step's failure is this step's: the chain run with set -e stops on it)
     rc = CLEAR.main()
     if rc:
@@ -588,6 +590,10 @@ def main() -> int:
     rc = JUNC.main()
     if rc:
         print("junctions failed")
+        return rc
+    rc = ROOTS.main()
+    if rc:
+        print("roots failed: a nerve still begins inside the brainstem")
         return rc
     print(json.dumps({k: out[k] for k in ("entry", "sinus", "intercarotid")}, indent=0)[:1500])
     return 0

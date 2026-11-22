@@ -165,7 +165,9 @@ class Volume:
     label: dict[str, int] | None = None  # side -> integer label in a label volume
     union: list[dict[str, str]] | None = None  # more per-side label files OR-ed into the mask (resampled to a common grid)
     faces: int = 4000  # target faces per hemisphere after decimation
-    sigma: float = 0.6  # pre-isosurface Gaussian, in voxels
+    # pre-isosurface Gaussian, in voxels. Thin structures get less: at the usual 0.6 to 0.8 their meshes held 86 to 90 %
+    # of their labels' volume (the site audit's MA-18; now 94 to 96 %)
+    sigma: float = 0.6
     aliases: list[str] = field(default_factory=list)
     derivation: str = ""
     category: str | None = None  # card eyebrow when "Nucleus" would be wrong
@@ -184,7 +186,8 @@ NUCLEI: list[Volume] = [
     Volume("stn_motor", "STN, sensorimotor zone", "nucleus", "stn", "distal", lr(DM, "STN_motor"),
            faces=2000, aliases=["dorsolateral STN", "motor STN"]),
     Volume("stn_assoc", "STN, associative zone", "nucleus", "stnAssoc", "distal", lr(DM, "STN_associative"), faces=2000),
-    Volume("stn_limbic", "STN, limbic zone", "nucleus", "stnLimbic", "distal", lr(DM, "STN_limbic"), faces=2000),
+    Volume("stn_limbic", "STN, limbic zone", "nucleus", "stnLimbic", "distal", lr(DM, "STN_limbic"),
+           faces=4000, sigma=0.4),  # (at 2000 the left one had 27 edges shared by more than two triangles: MA-17)
     Volume("gpi", "Globus pallidus internus", "nucleus", "gpi", "distal", lr(DM, "GPi"), aliases=["GPi"]),
     Volume("gpi_sm", "GPi, sensorimotor zone", "nucleus", "gpi", "distal", lr(DM, "GPi_sensorimotor"),
            faces=2000, aliases=["posteroventral GPi"]),
@@ -200,16 +203,16 @@ NUCLEI: list[Volume] = [
     Volume("cm", "Centromedian nucleus (CM)", "nucleus", "cm", "morel", lr(MOREL, "CM"), aliases=["CM"]),
     Volume("pf", "Parafascicular nucleus (Pf)", "nucleus", "cm", "morel", lr(MOREL, "Pf"), aliases=["Pf"]),
     Volume("psa", "Caudal zona incerta (PSA)", "nucleus", "psa", "lau2020", lr("Zona Incerta Atlas (Lau 2020)", "cZI"),
-           aliases=["cZi", "PSA"], sigma=0.8),
+           aliases=["cZi", "PSA"], sigma=0.5),
     Volume("snr", "Substantia nigra pars reticulata", "nucleus", "snr", "cit168",
            {"mixed": f"{A}{CIT}/mixed/SNr.nii.gz"}, aliases=["SNr"]),
     Volume("snc", "Substantia nigra pars compacta", "nucleus", "snc", "cit168",
-           {"mixed": f"{A}{CIT}/mixed/SNc.nii.gz"}, aliases=["SNc"]),
+           {"mixed": f"{A}{CIT}/mixed/SNc.nii.gz"}, aliases=["SNc"], sigma=0.4),
     Volume("putamen", "Putamen", "nucleus", "str", "cit168", {"mixed": f"{A}{CIT}/mixed/Pu.nii.gz"}, faces=6000),
     Volume("caudate", "Caudate nucleus", "nucleus", "str", "cit168", {"mixed": f"{A}{CIT}/mixed/Ca.nii.gz"}, faces=6000),
     Volume("nacc", "Nucleus accumbens", "nucleus", "str", "cit168", {"mixed": f"{A}{CIT}/mixed/NAC.nii.gz"}, faces=2000),
     Volume("ppn", "Pedunculopontine nucleus", "nucleus", "ppn", "snijders2016", lr("PPN (Snijders 2016)", "PPN", ".nii"),
-           faces=1500, sigma=0.8, aliases=["PPN"]),
+           faces=1500, sigma=0.5, aliases=["PPN"]),
     # ---- epilepsy (researched addition, not part of the original teaching page)
     Volume("ant", "Anterior nucleus of the thalamus (ANT)", "nucleus", "ant", "morel", lr(MOREL, "AV"),
            union=[lr(MOREL, "AM"), lr(MOREL, "AD")], faces=3000, aliases=["ANT", "AV/AM/AD"],
@@ -236,6 +239,11 @@ NUCLEI: list[Volume] = [
 # maximum and the marker is the value-weighted centroid of that region.
 # (Hollunder 2024's maps all come from subthalamic DBS, the dystonia and Tourette ones too: named so and drawn in the
 # STN's colour; the site audit's finding A-002)
+# the sweet spots' meshes (build.level_surface): a piece of a map's level surface keeps at least this many triangles,
+# and is reduced with this aggression (fast-simplification's; its default 7 folds the maps' thin plates flat)
+LEVEL_MIN_FACES = 150
+LEVEL_DECIMATION_AGGRESSION = 3
+
 SWEETSPOTS: list[Volume] = [
     Volume("ss_pd", "PD sweet spot (Hollunder 2024)", "target", "stn", "hollunder2024",
            lr("Human Dysfunctome Atlas (Hollunder 2024)", "Sweet_Spot_PD"), faces=1500),

@@ -32,6 +32,9 @@ export const BS_REFERENCES: BsReference[] = [
     citation: 'Kim HJ, Seong M, Kim Y. Normal anatomy of cranial nerves III–XII on magnetic resonance imaging. Taehan Yongsang Uihakhoe Chi (J Korean Soc Radiol). 2020;81(3):501–529. doi:10.3348/jksr.2020.81.3.501.' },
   { id: 'alafif2026', pmid: '42776330', pmcid: 'PMC13601307', shortLabel: 'Al-Afif 2026', url: doi('10.1007/s00701-026-07043-7'),
     citation: "Al-Afif S, Hermann EJ, Früh A, Oltmanns J, Woitzik J, Vajkoczy P, et al. The retrosigmoid trans-middle cerebellar peduncle approach for pontine cavernous malformations: multicenter experience. Acta Neurochir (Wien). 2026;168(1):219. doi:10.1007/s00701-026-07043-7." },
+  // November 2026 (the audit's D-028): the levels of the oculomotor and trochlear nuclei (read in full)
+  { id: 'ruchalski2012', pmid: '22693668', pmcid: 'PMC3366251', shortLabel: 'Ruchalski 2012', url: doi('10.1155/2012/258524'),
+    citation: 'Ruchalski K, Hathout GM. A medley of midbrain maladies: a brief review of midbrain anatomy and syndromology for radiologists. Radiol Res Pract. 2012;2012:258524. doi:10.1155/2012/258524.' },
   // November 2026 (the audit's D-008): the trigeminal nuclei, the nuclei shared between nerves, the HCP-YA tracts
   { id: 'turnbull2025', pmid: '41594782', pmcid: 'PMC12838919', shortLabel: 'Turnbull 2025', url: doi('10.3390/brainsci16010061'),
     citation: 'Turnbull OH. Feeding, emotion, and the brain stem: the interesting case of the mesencephalic trigeminal nucleus. Brain Sci. 2025;16(1):61. doi:10.3390/brainsci16010061.' },
