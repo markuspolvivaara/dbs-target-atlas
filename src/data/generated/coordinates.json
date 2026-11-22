@@ -407,7 +407,7 @@
    -10.36,
    5.154
   ],
-  "method": "Centroid of Morel thalamus atlas in MNI space (Lead-DBS: 'Morel Atlas (Jakab 2008)') label 'Ventral oral complex (Vo)' (voxels >= 0.5).",
+  "method": "Centroid of Morel thalamus atlas in MNI space (Lead-DBS: 'Morel Atlas (Jakab 2008)') label 'VLa (Morel), approximately Voa' (voxels >= 0.5).",
   "dataset": "morel"
  },
  "ss_cerv": {

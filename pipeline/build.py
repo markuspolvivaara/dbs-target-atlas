@@ -121,13 +121,61 @@ def isosurface(data: np.ndarray, aff: np.ndarray, level: float, sigma: float, fa
     elif len(parts) > 1:
         total = sum(p.area for p in parts)
         m = trimesh.util.concatenate([p for p in parts if p.area >= min_area_frac * total])
+    return finish_surface(m, faces)
+
+
+def level_surface(data: np.ndarray, keep: np.ndarray, aff: np.ndarray, level: float, faces: int) -> trimesh.Trimesh:
+    """The surface on which a published map itself equals `level`, round the regions in `keep` (voxels at or above the
+    level): the pieces of the map's own level surface that lie on those regions. The map is not smoothed first and
+    not cut to the regions first: a Gaussian lowers a small peak, and zeros outside the regions pull the surface in to
+    the regions' outermost voxel centres, and the two together left the sweet-spot meshes with about half the volume
+    of the regions they stand for (the site audit's MA-16: 0.36 to 0.67; drawn this way 0.67 to 0.97, the coarse
+    tremor map the least). Each piece is smoothed (Taubin) and reduced towards its share of `faces` on its own, gently
+    (LEVEL_DECIMATION_AGGRESSION): a thin plate of the map reduced further folds flat and leaves edges shared by more
+    than two triangles (MA-17), so a piece keeps more triangles than its share where it needs them. Pinholes inside a
+    piece (closed pockets where the map dips under the level, under 0.03 mm3 in all) are not drawn."""
+    vol = np.pad(data, 2)
+    verts, tris, _, _ = measure.marching_cubes(vol, level=level)
+    if np.linalg.det(aff[:3, :3]) < 0:
+        tris = tris[:, ::-1]
+    m = trimesh.Trimesh(nib.affines.apply_affine(aff, verts - 2.0), tris, process=True)
+    near = ndimage.binary_dilation(keep)
+    inv, top = np.linalg.inv(aff), np.array(data.shape) - 1
+    parts = []
+    for part in m.split(only_watertight=False):
+        ijk = np.clip(np.rint(nib.affines.apply_affine(inv, part.vertices)).astype(int), 0, top)
+        if near[ijk[:, 0], ijk[:, 1], ijk[:, 2]].mean() > 0.5:
+            parts.append(part)
+    # (marching cubes winds every piece alike, so the largest one tells which way is out; a piece wound the other way
+    # is a pocket inside one)
+    out_sign = np.sign(max((part.volume for part in parts), key=abs))
+    parts = [part for part in parts if part.volume * out_sign > 0]
+    total = sum(part.area for part in parts)
+    done = []
+    for part in parts:
+        trimesh.smoothing.filter_taubin(part, lamb=0.5, nu=0.53, iterations=12)
+        want = max(C.LEVEL_MIN_FACES, int(round(faces * part.area / total)))
+        if len(part.faces) > want:
+            part = part.simplify_quadric_decimation(face_count=want, aggression=C.LEVEL_DECIMATION_AGGRESSION)
+        done.append(part)
+    m = trimesh.util.concatenate(done) if len(done) > 1 else done[0]
+    m.fix_normals()
+    return wound_outward(m)
+
+
+def finish_surface(m: trimesh.Trimesh, faces: int) -> trimesh.Trimesh:
+    """A marching-cubes surface smoothed (Taubin), reduced to `faces` triangles and wound outward."""
     trimesh.smoothing.filter_taubin(m, lamb=0.5, nu=0.53, iterations=12)
     if len(m.faces) > faces:
         m = m.simplify_quadric_decimation(face_count=faces)
     m.fix_normals()
-    # fix_normals orients only a watertight mesh, and decimation can leave a few non-manifold edges: orient each
-    # connected piece by the volume it encloses as well, or the viewer draws the far wall of an inside-out surface
-    # instead of the near one
+    return wound_outward(m)
+
+
+def wound_outward(m: trimesh.Trimesh) -> trimesh.Trimesh:
+    """fix_normals orients only a watertight mesh, and decimation can leave a few non-manifold edges: orient each
+    connected piece by the volume it encloses as well, or the viewer draws the far wall of an inside-out surface
+    instead of the near one."""
     labels = trimesh.graph.connected_component_labels(m.face_adjacency, node_count=len(m.faces))
     faces = m.faces.copy()
     for k in np.unique(labels):
@@ -225,14 +273,15 @@ def build_sweetspots(report: dict, coords: dict) -> None:
             keep = np.isin(lab, [int(i) + 1 for i in order if sums[i] >= 0.01 * sums.sum()])
             pidx = np.unravel_index(np.argmax(np.where(region, pos, 0)), pos.shape)
             peak_mm = nib.affines.apply_affine(aff, np.array(pidx, float))
-            m = isosurface(np.where(keep, pos, 0), aff, level, 0.0 if v.dataset == "elias2021" else 0.5,
-                           v.faces, min_area_frac=0.0)
+            m = level_surface(pos, keep, aff, level, v.faces)
             rep[side] = {
                 "sourceCentroid": source_centroid(region, aff, pos),
                 "mapCentroid": source_centroid(keep, aff, pos),
                 "peak": peak_mm.round(3).tolist(), "peakValue": round(float(peak), 4),
                 "meshCentroid": m.centroid.round(3).tolist(), "surfaceCentroid": m.centroid.round(3).tolist(),
                 "faces": int(len(m.faces)), "regionVoxels": int(region.sum()),
+                # (what the mesh encloses over the voxels it stands for, each counted as a whole voxel)
+                "meshOverRegions": round(float(abs(m.volume) / (keep.sum() * abs(np.linalg.det(aff[:3, :3])))), 2),
                 "regions": int(n), "regionsShown": int(len(np.unique(lab[keep]))),
                 "dominantFraction": round(float(sums[order[0]] / sums.sum()), 3),
             }
