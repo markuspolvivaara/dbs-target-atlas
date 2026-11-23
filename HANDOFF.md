@@ -303,8 +303,8 @@ per-structure opacity, slices under the cortex, the citation panel, keyboard con
   Tractfinder (Zenodo 10149873: optic radiation streamlines of 16 subjects, CC BY-NC 4.0, 1.5 GB), the TractSeg
   reference tracts (44 GB, native space), Shan 2019 (atlas not public), Fun With Tracts on OSF (heat maps only).
 - **In `pipeline/data/raw/pandora/`:** `Xtract.nii.gz` and `Xtract_info.csv` (pinned in `config.PANDORA_FILES`,
-  fetched by `fetch_sources.fetch_pandora`), and `TractSeg.nii.gz` with its table, downloaded for the comparison of
-  the optic radiation and **not used** (delete them or keep them: nothing reads them).
+  fetched by `fetch_sources.fetch_pandora`). `TractSeg.nii.gz` and its table, downloaded for the comparison of the
+  optic radiation and read by nothing, were deleted on the user's word (2026-11-23).
 - **What was measured before building** (scratch `tracts/measure.py`, gone with the scratchpad): the two atlases
   are in one space (HCP-1065's corticospinal streamlines in Pandora's corticospinal map: mean share 0.80, 95 to 97 %
   of their points at 0.1 or more; the best shift of up to 2 mm gains 0.03; `wm_shell.py` prints it and `validate.py`
