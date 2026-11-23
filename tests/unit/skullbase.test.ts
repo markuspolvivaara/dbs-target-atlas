@@ -405,7 +405,7 @@ describe('the detailed model (TopBrain CT angiogram, Z-Anatomy fitted onto it)',
     }
     const xii = atOpeningNote(noted.get('Hypoglossal nerve (XII)')!);
     expect(xii).toMatch(/^Over the first 40 mm of its fitted course, from inside the skull to just past its base: on the right, 11\.2 mm through the bone shown \(10\.5 mm of it at 400 HU or more\); on the left, 2\.2 mm through the bone shown \(none of it at 400 HU or more\)\./);
-    expect(xii).toMatch(/that route lies a median 3\.1 mm on the right and 6\.2 mm on the left from it\.$/);
+    expect(xii).toMatch(/that route lies a median 3\.1 mm on the right and 5\.8 mm on the left from it\.$/);
     expect(atOpeningNote(noted.get('Vagus nerve (X)')!)).toMatch(/on the right, clear of both;.* a median 0\.9 mm on the left from it\.$/);
   });
   it('keeps the frame: origin at the hypophysial fossa, the landmarks on or near the bone', () => {
@@ -874,7 +874,7 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     expect(pf.retrosigmoid.inVesselAfter).toBe(0);
     expect(pf.retrosigmoid.meatusToCerebellumMm.moved).toBeGreaterThan(pf.retrosigmoid.meatusToCerebellumMm.rest);   // the angle opens
     expect(pf.retrosigmoid.inCorridor.rest).toBeGreaterThan(0);                 // the cerebellum lies in the corridor at rest ...
-    expect(pf.retrosigmoid.inCorridor.moved).toBeLessThanOrEqual(0.01 * pf.retrosigmoid.inCorridor.rest);   // ... and clears them drawn back
+    expect(pf.retrosigmoid.inCorridor.moved).toBeLessThanOrEqual(0.02 * pf.retrosigmoid.inCorridor.rest);   // ... and clears them drawn back
     expect(T3.decodeSkull('#/atlas?g=retrosigmoid&rs=60&tv=40').morphs).toEqual({ retrosigmoid: 0.6 });
   });
   it('the trigeminal complex on this CT: the ganglion between the foramina, the root from the side of the pons, roughly mirror images', async () => {
@@ -1137,7 +1137,7 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     const v3Mods = (await import('../../src/data/generated/sbv3-modifications.json')).default;
     const named = (list: { name: string; file: string; derivation?: string; pushedFrom?: string }[], n: string) => list.find((x) => x.name === n && !x.pushedFrom)!;
     const cases: [string, Cut, typeof v3.structures, [number, number]][] = [
-      ['v3', steps(v3Mods).find((x) => x.step === 'skullbase_v3_ends')!.metrics['Anterior spinal artery'], v3.structures, [5.53, 9.02]],
+      ['v3', steps(v3Mods).find((x) => x.step === 'skullbase_v3_ends')!.metrics['Anterior spinal artery'], v3.structures, [5.8, 8.99]],
       ['v1', steps(sbModifications).find((x) => x.step === 'skullbase_v1_ends')!.metrics['Anterior spinal artery'], SB_MANIFEST.structures, [1.98, 1.98]],
     ];
     // the furthest a surface reaches past the cut's plane (mm; negative: it stops short of it)

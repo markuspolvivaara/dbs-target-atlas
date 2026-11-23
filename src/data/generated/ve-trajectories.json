@@ -29,8 +29,8 @@
    "R": 8.27,
    "L": 9.15,
    "third": 1.58,
-   "fourth": 1.6,
-   "aqueduct": 0.1,
+   "fourth": 2.64,
+   "aqueduct": 0.11,
    "monroR": 0.03,
    "monroL": 0.03
   },
@@ -49,10 +49,11 @@
     "R": 6.7,
     "third": 1.1,
     "aqueduct": 0.03,
-    "fourth": 1.12
+    "fourth": 2.1
    },
    "fourthCtMl": 0.47,
-   "fourthFitMedianMm": 0.72,
+   "fourthFitMedianMm": 1.03,
+   "fourthOwnFitApartMm": 1.27,
    "monro": {
     "R": {
      "gapMm": 2.24,
@@ -72,8 +73,8 @@
    "aqueduct": {
     "modelLengthMm": 15.0,
     "gapToThirdMm": 0.76,
-    "gapToFourthMm": 0.97,
-    "courseMm": 18.7
+    "gapToFourthMm": 2.47,
+    "courseMm": 20.2
    },
    "temporalHorn": {
     "R": {
@@ -97,12 +98,12 @@
    },
    "monroRadiusMm": 1.29,
    "aqueductCt": {
-    "insideHu": 37.9,
-    "aroundHu": 40.0
+    "insideHu": 38.0,
+    "aroundHu": 39.6
    },
    "fourthCt": {
-    "insideHu": 43.3,
-    "aroundHu": 46.8
+    "insideHu": 44.3,
+    "aroundHu": 48.2
    },
    "drawnPieces": 1,
    "drawnLargestShare": 1.0
@@ -305,7 +306,7 @@
    ],
    "direction": [
     -0.0679,
-    -0.2685,
+    -0.2684,
     -0.9609
    ],
    "aim": [
@@ -356,7 +357,7 @@
     93.09
    ],
    "direction": [
-    -0.333,
+    -0.3331,
     -0.2549,
     -0.9078
    ],
@@ -408,12 +409,12 @@
    "offsetMm": 10.0,
    "target": "IMC",
    "entry": [
-    23.81,
+    23.82,
     23.95,
     90.37
    ],
    "direction": [
-    -0.0596,
+    -0.0597,
     -0.3478,
     -0.9357
    ],
@@ -434,12 +435,12 @@
    "offsetMm": 10.0,
    "target": "MAM",
    "entry": [
-    23.81,
+    23.82,
     23.95,
     90.37
    ],
    "direction": [
-    -0.1973,
+    -0.1974,
     -0.3425,
     -0.9186
    ],
@@ -460,12 +461,12 @@
    "offsetMm": 10.0,
    "target": "CMC",
    "entry": [
-    23.81,
+    23.82,
     23.95,
     90.37
    ],
    "direction": [
-    -0.3253,
+    -0.3254,
     -0.3313,
     -0.8857
    ],
@@ -491,7 +492,7 @@
    "offsetMm": 10.0,
    "target": "P",
    "entry": [
-    23.81,
+    23.82,
     23.95,
     90.37
    ],
@@ -735,7 +736,7 @@
    "offsetMm": 10.0,
    "target": "IMC",
    "entry": [
-    -22.68,
+    -22.69,
     23.88,
     88.62
    ],
@@ -761,7 +762,7 @@
    "offsetMm": 10.0,
    "target": "MAM",
    "entry": [
-    -22.68,
+    -22.69,
     23.88,
     88.62
    ],
@@ -787,7 +788,7 @@
    "offsetMm": 10.0,
    "target": "CMC",
    "entry": [
-    -22.68,
+    -22.69,
     23.88,
     88.62
    ],
@@ -818,7 +819,7 @@
    "offsetMm": 10.0,
    "target": "P",
    "entry": [
-    -22.68,
+    -22.69,
     23.88,
     88.62
    ],
@@ -1067,9 +1068,9 @@
     86.91
    ],
    "direction": [
-    -0.1,
+    -0.1001,
     -0.3788,
-    -0.9201
+    -0.92
    ],
    "aim": [
     16.87,
@@ -1093,7 +1094,7 @@
     86.91
    ],
    "direction": [
-    -0.2379,
+    -0.238,
     -0.3709,
     -0.8977
    ],
@@ -1121,7 +1122,7 @@
    "direction": [
     -0.3639,
     -0.3567,
-    -0.8605
+    -0.8604
    ],
    "aim": [
     -15.83,
@@ -1391,7 +1392,7 @@
    "direction": [
     0.1026,
     -0.366,
-    -0.925
+    -0.9249
    ],
    "aim": [
     -15.83,

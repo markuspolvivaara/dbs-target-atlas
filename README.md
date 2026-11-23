@@ -242,7 +242,8 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   (`skullbase_ct.py` writes them) and fitted again into its posterior fossa (`pipeline/skullbase_pfossa.py`: the hull
   inside the cavity behind the petrous bones and under the tentorium, nowhere less than 1 mm from its walls, this
   patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside, and the cisterns this CT
-  shows along the bone (fluid within 8 mm of it) outside too, no folding; then what
+  shows along the bone (fluid within 8 mm of it) outside too, the fourth ventricle's fluid this CT shows (its upper
+  part) inside the model's fourth ventricle, which the ventricles section draws as its own, no folding; then what
   still touches an artery, bone or, of the cerebellum, the tentorium pushed clear). Its slider draws both tonsils 6 mm apart and lifts the nodule and uvula 5 mm up and back (illustrative), the
   rest of the cerebellum following less with distance (each shift under 1 mm per mm together, so nothing folds),
   opening the cerebellomedullary fissure onto the fourth ventricle; sources: Pettersson 2023, Wang 2023, Liu 2014,
@@ -347,6 +348,23 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   own file (`<id>.joined.glb`, `<id>.cleared.glb`), its source's untouched; its card says what was drawn. Validation
   checks every junction closed, no artery inside the brainstem in any shape of the brain, and no fitted course more
   than 3 % (more than 0.3 mm in) or deeper than 1 mm inside the cerebellum in any pose.
+- **Nerves at the brainstem's surface** (`pipeline/skullbase_v3_roots.py`, run after the junctions). The routed
+  nerves start at the fitted model's root points, 1 to 4 mm inside the fitted brainstem: nerves III and V to XII are
+  cut at its surface (the tube's rings deeper than 0.5 mm removed, a new cap). The trochlear nerve is laid round the
+  brainstem instead. In Z-Anatomy's own model its course lies 1 to 3 mm inside the pons mesh's upper rim, and routed
+  through the CT (which knows bone, not the brain) it took a chord through the fitted brainstem, 17 to 18 mm long
+  once the hindbrain was fitted round the fourth ventricle. It is drawn from where the fitted course runs furthest
+  back, moved straight back onto the surface, then over the surface (the least-cost path outside the midbrain, pons,
+  medulla, superior cerebellar peduncle and the drawn vessels, as near the fitted course as they allow) to where the
+  routed tube has left the brainstem; from there on the routed tube keeps its vertices. So drawn it leaves the back
+  of the pons below the inferior colliculus, 6 to 8 mm from the midline, runs forwards in the groove between the
+  pons and the midbrain, for most of the way between the posterior cerebral artery above and the superior cerebellar
+  artery below, and comes down in front of the pons to the routed course (74 mm long on the left, 67 mm on the
+  right). Where the fitted cerebellum lies against the brainstem (the first 7 to 9 mm) the nerve runs inside the
+  cerebellum's mesh: the model has no fissure there. Left as it was: the double corner where the nerve reaches the
+  cavernous sinus's roof (two turns of 60 to 75 degrees within 3 mm, from the splice in
+  `pipeline/skullbase_v3_cavernous.py`). Validation checks that no nerve begins more than 0.75 mm inside the
+  brainstem and that the trochlear nerve's centre line nowhere runs that deep.
 - **How a surgical view opens**: with its shapes full on (the fissure opened and the frontal lobe lifted, the hemisphere
   held off the falx, the tonsils drawn apart, the cerebellum drawn back or lifted), the anatomy its text describes; the sliders
   take it back to the brain at rest. The pterional, orbitozygomatic, interhemispheric, retrosigmoid and far lateral views

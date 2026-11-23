@@ -513,6 +513,9 @@ COURSE_SMOOTH_MM = 1.5     # ... and it is smoothed along its length with a Gaus
                            # radius of a few tube radii), its ends held over COURSE_ENDS_MM, in COURSE_ROUNDS rounds, each
 COURSE_ENDS_MM = 3.0       # followed by the clearance (smoothing can cut a corner back into the hindbrain)
 COURSE_ROUNDS = 3
+CORNER_MAX_DEG = 95.0      # a corner the last clearing leaves sharper than this is rounded again where it lies (round_corners)
+CORNER_REACH_MM = 4.0      # ... the course smoothed within this of it, fading to none at twice that
+CORNER_ROUNDS = 30
 KINK_SPAN_MM = 2.0         # a corner: the turn between a course's directions this far before and after a point ...
 KINK_DEG = 70.0            # ... of more than this
 SPUR_DEG = 140.0           # a spur: a turn of more than this, where the line doubles back ...
@@ -573,6 +576,32 @@ def smooth_course(P: np.ndarray, r: np.ndarray, clear=None) -> tuple[np.ndarray,
     arc = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
     w = np.clip(np.minimum(arc, arc[-1] - arc) / COURSE_ENDS_MM, 0, 1)[:, None]
     P = w * ndimage.gaussian_filter1d(P, 0.5 * COURSE_SMOOTH_MM / COURSE_STEP_MM, axis=0, mode="nearest") + (1 - w) * P
+    return round_corners(P, r)
+
+
+def round_corners(P: np.ndarray, r: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """A course's sharpest corners rounded where they lie: while it turns by more than CORNER_MAX_DEG at a point (over
+    KINK_SPAN_MM before and after, as kinks measures), the course is smoothed along its length (a Gaussian of
+    COURSE_SMOOTH_MM) within CORNER_REACH_MM of that point, fading to none at twice that, its ends held; up to
+    CORNER_ROUNDS times. The clearing after each smoothing round can leave one sharp corner where the course crosses a
+    groove of the hindbrain (the left anterior inferior cerebellar artery turned by 119 deg once the hindbrain was fitted
+    round the fourth ventricle); the course is not cleared again after this (skullbase_v3_clearance.py lifts its tube's
+    surface out where it then touches)."""
+    k = int(round(KINK_SPAN_MM / COURSE_STEP_MM))
+    for _ in range(CORNER_ROUNDS):
+        P, r = dense(P, r)                  # (evenly spaced, as kinks measures it)
+        if len(P) < 2 * k + 1:
+            break
+        a, b = P[k:-k] - P[:-2 * k], P[2 * k:] - P[k:-k]
+        c = (a * b).sum(1) / np.maximum(np.linalg.norm(a, axis=1) * np.linalg.norm(b, axis=1), 1e-9)
+        ang = np.degrees(np.arccos(np.clip(c, -1, 1)))
+        if ang.max() <= CORNER_MAX_DEG:
+            break
+        arc = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
+        at = arc[k + int(np.argmax(ang))]
+        w = np.clip(2 - np.abs(arc - at) / CORNER_REACH_MM, 0, 1) * np.clip(np.minimum(arc, arc[-1] - arc) / COURSE_ENDS_MM, 0, 1)
+        S = ndimage.gaussian_filter1d(P, COURSE_SMOOTH_MM / COURSE_STEP_MM, axis=0, mode="nearest")
+        P = w[:, None] * S + (1 - w[:, None]) * P
     return P, r
 
 

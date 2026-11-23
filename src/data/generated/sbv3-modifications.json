@@ -7,7 +7,7 @@
     "Anterior inferior cerebellar artery",
     "Anterior spinal artery",
     "Lateral pontine branches of basilar artery",
-    "Medial pontine branches of basilar artery",
+    "Midbrain",
     "Posterior inferior cerebellar artery (fitted course)",
     "Superior cerebellar artery (fitted course)"
    ],
@@ -26,23 +26,24 @@
    },
    "metrics": {
     "Anterior inferior cerebellar artery": {
-     "insidePoints": 13,
+     "insidePoints": 0,
      "insideHindbrainPoints": {
-      "rest": 108,
-      "telovelar": 88,
-      "retrosigmoid": 0,
-      "farLateral": 253,
-      "farLateralBack": 57
+      "rest": 119,
+      "telovelar": 79,
+      "retrosigmoid": 38,
+      "farLateral": 338,
+      "farLateralBack": 73
      },
-     "movedMm": 2.71,
+     "movedMm": 2.79,
      "shapes": [
       "farLateral",
       "farLateralBack",
+      "retrosigmoid",
       "telovelar"
      ]
     },
     "Anterior spinal artery": {
-     "insidePoints": 1,
+     "insidePoints": 0,
      "insideHindbrainPoints": {
       "rest": 0,
       "telovelar": 0,
@@ -50,13 +51,45 @@
       "farLateral": 0,
       "farLateralBack": 0
      },
-     "movedMm": 0.5,
+     "movedMm": 0.17,
      "shapes": [
       "farLateralBack"
-     ]
+     ],
+     "endsWithMedulla": {
+      "cut": {
+       "point": [
+        -2.69,
+        -29.55,
+        -54.76
+       ],
+       "normal": [
+        -0.0583,
+        0.59,
+        -0.8053
+       ],
+       "areaMm2": 119.7,
+       "rmsMm": 0.14
+      },
+      "L": {
+       "pastMm": 5.8,
+       "pointsPast": 78,
+       "points": 298,
+       "loops": 1,
+       "pointsAfter": 239,
+       "pastAfterMm": 0.0
+      },
+      "R": {
+       "pastMm": 8.99,
+       "pointsPast": 108,
+       "points": 322,
+       "loops": 1,
+       "pointsAfter": 233,
+       "pastAfterMm": 0.0
+      }
+     }
     },
     "Lateral pontine branches of basilar artery": {
-     "insidePoints": 9,
+     "insidePoints": 7,
      "insideHindbrainPoints": {
       "rest": 0,
       "telovelar": 0,
@@ -67,57 +100,50 @@
      "movedMm": 0.99,
      "shapes": []
     },
-    "Medial pontine branches of basilar artery": {
-     "insidePoints": 0,
-     "insideHindbrainPoints": {
-      "rest": 0,
-      "telovelar": 0,
-      "retrosigmoid": 0,
-      "farLateral": 0,
-      "farLateralBack": 0
-     },
-     "movedMm": 0.15,
-     "shapes": []
-    },
     "Superior cerebellar artery (fitted course)": {
-     "insidePoints": 0,
+     "insidePoints": 1,
      "insideHindbrainPoints": {
       "rest": 70,
       "telovelar": 0,
       "retrosigmoid": 0,
       "farLateral": 0,
-      "farLateralBack": 9
+      "farLateralBack": 10
      },
-     "movedMm": 5.68,
+     "movedMm": 5.54,
      "shapes": [
-      "farLateral",
       "farLateralBack"
      ]
     },
     "Posterior inferior cerebellar artery (fitted course)": {
-     "insidePoints": 96,
+     "insidePoints": 118,
      "insideHindbrainPoints": {
-      "rest": 3636,
-      "telovelar": 779,
-      "retrosigmoid": 663,
-      "farLateral": 1309,
-      "farLateralBack": 3110
+      "rest": 3707,
+      "telovelar": 881,
+      "retrosigmoid": 833,
+      "farLateral": 1111,
+      "farLateralBack": 3222
      },
-     "movedMm": 10.66,
+     "movedMm": 10.1,
      "shapes": [
       "farLateral",
       "farLateralBack",
       "retrosigmoid",
       "telovelar"
      ]
+    },
+    "Midbrain": {
+     "carvedFor": [
+      "Posterior cerebral artery (P3–P4)"
+     ],
+     "points": 6098
     }
    },
    "validation": {
-    "checks": 62,
+    "checks": 63,
     "failed": []
    },
-   "revision": "c269048",
-   "date": "2026-11-15"
+   "revision": "c60ad63",
+   "date": "2026-11-23"
   },
   {
    "step": "skullbase_v3_ends",
@@ -135,32 +161,32 @@
     "Anterior spinal artery": {
      "cut": {
       "point": [
-       -2.63,
-       -29.76,
-       -54.86
+       -2.69,
+       -29.55,
+       -54.76
       ],
       "normal": [
-       -0.0621,
-       0.5881,
-       -0.8064
+       -0.0583,
+       0.59,
+       -0.8053
       ],
-      "areaMm2": 120.6,
+      "areaMm2": 119.7,
       "rmsMm": 0.14
      },
      "L": {
-      "pastMm": 5.53,
-      "pointsPast": 74,
-      "points": 306,
+      "pastMm": 5.8,
+      "pointsPast": 78,
+      "points": 298,
       "loops": 1,
-      "pointsAfter": 253,
+      "pointsAfter": 239,
       "pastAfterMm": 0.0
      },
      "R": {
-      "pastMm": 9.02,
-      "pointsPast": 110,
-      "points": 330,
+      "pastMm": 8.99,
+      "pointsPast": 108,
+      "points": 322,
       "loops": 1,
-      "pointsAfter": 239,
+      "pointsAfter": 233,
       "pastAfterMm": 0.0
      }
     }
@@ -168,8 +194,8 @@
    "validation": {
     "check": "skullbase_v3_clearance.check: none of it past the medulla's cut end"
    },
-   "revision": "0d0159f",
-   "date": "2026-11-17"
+   "revision": "c60ad63",
+   "date": "2026-11-23"
   },
   {
    "step": "skullbase_v3_junctions",
@@ -202,11 +228,11 @@
       ],
       [
        "Cavernous sinus",
-       7.8
+       7.7
       ],
       [
        "Cavernous sinus",
-       7.3
+       7.4
       ]
      ]
     },
@@ -214,7 +240,7 @@
      "gapsMm": [
       [
        "Cavernous sinus",
-       6.5
+       6.4
       ],
       [
        "Cavernous sinus",
@@ -298,7 +324,7 @@
      "gapsMm": [
       [
        "Superior cerebellar artery",
-       1.5
+       1.3
       ]
      ]
     },
@@ -343,8 +369,8 @@
     "checks": 30,
     "failed": []
    },
-   "revision": "466367b",
-   "date": "2026-11-22"
+   "revision": "c60ad63",
+   "date": "2026-11-23"
   },
   {
    "step": "skullbase_v3_roots",
@@ -357,7 +383,6 @@
     "Hypoglossal nerve (XII)",
     "Oculomotor nerve (III)",
     "Trigeminal nerve (V)",
-    "Trochlear nerve (IV)",
     "Vagus nerve (X)",
     "Vestibulocochlear nerve (VIII)"
    ],
@@ -368,15 +393,15 @@
    "metrics": {
     "Facial nerve (VII)": {
      "L": {
-      "ringsCut": 11,
-      "lengthCutMm": 6.5,
-      "deepestMm": 3.7,
-      "wasInsideMm": 3.7,
-      "nowInsideMm": -0.02
+      "ringsCut": 9,
+      "lengthCutMm": 5.4,
+      "deepestMm": 4.3,
+      "wasInsideMm": 4.3,
+      "nowInsideMm": 0.26
      },
      "R": {
-      "ringsCut": 12,
-      "lengthCutMm": 6.9,
+      "ringsCut": 13,
+      "lengthCutMm": 7.6,
       "deepestMm": 3.2,
       "wasInsideMm": 3.2,
       "nowInsideMm": 0.38
@@ -384,154 +409,198 @@
     },
     "Oculomotor nerve (III)": {
      "L": {
-      "ringsCut": 20,
-      "lengthCutMm": 11.2,
-      "deepestMm": 3.7,
-      "wasInsideMm": 3.0,
-      "nowInsideMm": 0.28
+      "ringsCut": 19,
+      "lengthCutMm": 11.0,
+      "deepestMm": 3.4,
+      "wasInsideMm": 3.4,
+      "nowInsideMm": 0.48
      },
      "R": {
-      "ringsCut": 22,
-      "lengthCutMm": 12.1,
-      "deepestMm": 3.3,
-      "wasInsideMm": 2.7,
-      "nowInsideMm": 0.14
-     }
-    },
-    "Trochlear nerve (IV)": {
-     "L": {
-      "ringsCut": 1,
-      "lengthCutMm": 0.6,
-      "deepestMm": 4.4,
-      "wasInsideMm": 0.9,
-      "nowInsideMm": 0.35
-     },
-     "R": {
-      "ringsCut": 2,
-      "lengthCutMm": 1.4,
-      "deepestMm": 4.1,
-      "wasInsideMm": 1.4,
-      "nowInsideMm": 0.19
+      "ringsCut": 19,
+      "lengthCutMm": 10.6,
+      "deepestMm": 3.5,
+      "wasInsideMm": 3.5,
+      "nowInsideMm": 0.49
      }
     },
     "Trigeminal nerve (V)": {
      "L": {
-      "ringsCut": 9,
-      "lengthCutMm": 7.4,
-      "deepestMm": 1.9,
-      "wasInsideMm": 1.9,
-      "nowInsideMm": 0.4
+      "ringsCut": 8,
+      "lengthCutMm": 6.6,
+      "deepestMm": 2.0,
+      "wasInsideMm": 1.8,
+      "nowInsideMm": 0.28
      },
      "R": {
-      "ringsCut": 12,
-      "lengthCutMm": 9.7,
-      "deepestMm": 2.4,
+      "ringsCut": 13,
+      "lengthCutMm": 10.5,
+      "deepestMm": 2.9,
       "wasInsideMm": 1.8,
-      "nowInsideMm": 0.34
+      "nowInsideMm": 0.36
      }
     },
     "Abducens nerve (VI)": {
      "L": {
-      "ringsCut": 22,
-      "lengthCutMm": 12.1,
-      "deepestMm": 2.3,
-      "wasInsideMm": 1.5,
-      "nowInsideMm": 0.37
+      "ringsCut": 23,
+      "lengthCutMm": 13.0,
+      "deepestMm": 2.6,
+      "wasInsideMm": 1.4,
+      "nowInsideMm": 0.34
      },
      "R": {
-      "ringsCut": 20,
-      "lengthCutMm": 11.3,
-      "deepestMm": 2.5,
+      "ringsCut": 22,
+      "lengthCutMm": 12.2,
+      "deepestMm": 2.1,
       "wasInsideMm": 1.2,
-      "nowInsideMm": 0.41
+      "nowInsideMm": 0.32
      }
     },
     "Vestibulocochlear nerve (VIII)": {
      "L": {
-      "ringsCut": 2,
-      "lengthCutMm": 1.2,
-      "deepestMm": 1.2,
-      "wasInsideMm": 1.2,
-      "nowInsideMm": 0.46
+      "ringsCut": 3,
+      "lengthCutMm": 1.8,
+      "deepestMm": 1.5,
+      "wasInsideMm": 1.5,
+      "nowInsideMm": 0.22
      },
      "R": {
       "ringsCut": 2,
       "lengthCutMm": 1.2,
-      "deepestMm": 1.3,
-      "wasInsideMm": 1.3,
-      "nowInsideMm": 0.12
+      "deepestMm": 1.1,
+      "wasInsideMm": 1.1,
+      "nowInsideMm": 0.45
      }
     },
     "Glossopharyngeal nerve (IX)": {
      "L": {
-      "ringsCut": 13,
-      "lengthCutMm": 7.4,
-      "deepestMm": 4.2,
-      "wasInsideMm": 2.4,
-      "nowInsideMm": 0.35
+      "ringsCut": 12,
+      "lengthCutMm": 7.1,
+      "deepestMm": 4.0,
+      "wasInsideMm": 2.0,
+      "nowInsideMm": -0.05
      },
      "R": {
-      "ringsCut": 12,
-      "lengthCutMm": 6.7,
-      "deepestMm": 3.8,
-      "wasInsideMm": 2.2,
-      "nowInsideMm": 0.37
+      "ringsCut": 11,
+      "lengthCutMm": 6.2,
+      "deepestMm": 3.4,
+      "wasInsideMm": 2.4,
+      "nowInsideMm": 0.36
      }
     },
     "Vagus nerve (X)": {
      "L": {
       "ringsCut": 12,
-      "lengthCutMm": 7.6,
+      "lengthCutMm": 7.3,
       "deepestMm": 4.3,
-      "wasInsideMm": 3.5,
-      "nowInsideMm": 0.27
+      "wasInsideMm": 2.8,
+      "nowInsideMm": 0.38
      },
      "R": {
-      "ringsCut": 13,
-      "lengthCutMm": 7.4,
-      "deepestMm": 4.2,
-      "wasInsideMm": 3.3,
-      "nowInsideMm": 0.35
+      "ringsCut": 14,
+      "lengthCutMm": 8.1,
+      "deepestMm": 4.4,
+      "wasInsideMm": 3.2,
+      "nowInsideMm": 0.12
      }
     },
     "Accessory nerve (XI)": {
      "L": {
       "ringsCut": 13,
-      "lengthCutMm": 7.4,
-      "deepestMm": 3.8,
-      "wasInsideMm": 3.5,
-      "nowInsideMm": 0.49
+      "lengthCutMm": 7.6,
+      "deepestMm": 3.3,
+      "wasInsideMm": 2.9,
+      "nowInsideMm": 0.37
      },
      "R": {
       "ringsCut": 11,
       "lengthCutMm": 6.5,
-      "deepestMm": 3.8,
+      "deepestMm": 3.7,
       "wasInsideMm": 3.3,
-      "nowInsideMm": -0.12
+      "nowInsideMm": -0.13
      }
     },
     "Hypoglossal nerve (XII)": {
      "L": {
-      "ringsCut": 15,
-      "lengthCutMm": 8.8,
-      "deepestMm": 3.8,
-      "wasInsideMm": 1.4,
-      "nowInsideMm": 0.33
+      "ringsCut": 14,
+      "lengthCutMm": 8.1,
+      "deepestMm": 3.5,
+      "wasInsideMm": 1.5,
+      "nowInsideMm": 0.39
      },
      "R": {
-      "ringsCut": 13,
-      "lengthCutMm": 7.7,
-      "deepestMm": 3.5,
-      "wasInsideMm": 1.3,
-      "nowInsideMm": 0.28
+      "ringsCut": 12,
+      "lengthCutMm": 7.1,
+      "deepestMm": 3.7,
+      "wasInsideMm": 1.5,
+      "nowInsideMm": 0.43
      }
     }
    },
    "validation": {
     "failed": []
    },
-   "revision": "b70ff92",
-   "date": "2026-11-22"
+   "revision": "3c7924f",
+   "date": "2026-11-23"
+  },
+  {
+   "step": "skullbase_v3_roots_round",
+   "operation": "the trochlear nerve laid round the brainstem on its surface (its routed course ran through the fitted brainstem)",
+   "structures": [
+    "Trochlear nerve (IV)"
+   ],
+   "parameters": {
+    "offMm": 0.25,
+    "joinMm": 3.0,
+    "sigmaMm": 4.0,
+    "smoothMm": 2.0,
+    "blendMm": 3.0,
+    "gridMm": 0.25
+   },
+   "metrics": {
+    "Trochlear nerve (IV)": {
+     "L": {
+      "ringsReplaced": 45,
+      "ringsLaid": 65,
+      "laidMm": 39.0,
+      "sharpestTurnDeg": 31.9,
+      "routedInsideMm": 18.2,
+      "routedDeepestMm": 4.5,
+      "fromFittedMaxMm": 4.9,
+      "rootInsideMm": 0.28,
+      "deepestMm": 0.28,
+      "nearestVesselMm": 0.17,
+      "start": [
+       -6.3,
+       -40.5,
+       7.5
+      ],
+      "lengthMm": 73.7
+     },
+     "R": {
+      "ringsReplaced": 37,
+      "ringsLaid": 46,
+      "laidMm": 35.6,
+      "sharpestTurnDeg": 24.1,
+      "routedInsideMm": 16.5,
+      "routedDeepestMm": 3.6,
+      "fromFittedMaxMm": 4.6,
+      "rootInsideMm": 0.14,
+      "deepestMm": 0.14,
+      "nearestVesselMm": 0.07,
+      "start": [
+       8.3,
+       -40.1,
+       3.2
+      ],
+      "lengthMm": 67.1
+     }
+    }
+   },
+   "validation": {
+    "failed": []
+   },
+   "revision": "3c7924f",
+   "date": "2026-11-23"
   }
  ]
 }

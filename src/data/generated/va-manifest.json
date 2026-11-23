@@ -10,7 +10,7 @@
   "dwellVenS": 3.0,
   "arterialS": [
    0.0,
-   1.71
+   1.73
   ],
   "venousS": [
    3.4,
@@ -1121,18 +1121,18 @@
    "id": "va_inferior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_inferior_petrosal_sinus.glb",
-   "bytes": 16028,
+   "bytes": 16020,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then moved onto the bone's intracranial surface along the fitted course (the petroclival fissure's side of the cranial cavity), and from there on to this CT's jugular bulb by the shortest way out of the bone (the jugular foramen), its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 28.3 mm (right) and 24.7 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 3 % of its surface on each side lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the cavernous sinus by a drawn segment across a 6.5 mm gap; to the cavernous sinus by a drawn segment across a 5.9 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). In the angiogram it fills in the venous phase.",
+   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then moved onto the bone's intracranial surface along the fitted course (the petroclival fissure's side of the cranial cavity), and from there on to this CT's jugular bulb by the shortest way out of the bone (the jugular foramen), its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 28.3 mm (right) and 24.7 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 3 % of its surface on each side lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the cavernous sinus by a drawn segment across a 6.4 mm gap; to the cavernous sinus by a drawn segment across a 5.9 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). In the angiogram it fills in the venous phase.",
    "centroid": {
     "L": [
-     -13.2,
-     -12.71,
-     -9.95
+     -13.28,
+     -12.73,
+     -9.96
     ],
     "R": [
-     13.55,
+     13.54,
      -14.14,
      -10.79
     ]
@@ -1256,20 +1256,20 @@
    "id": "va_superior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_superior_petrosal_sinus.glb",
-   "bytes": 21140,
+   "bytes": 21412,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then laid along the crest of this CT's petrous ridge (the summit of the cranial floor near the fitted course), in the tentorium's attached margin, and on over the bone to this CT's sigmoid-transverse junction, its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 35.6 mm (right) and 33 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 6 % of its surface on the right and 8 % on the left lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the sigmoid sinus by a drawn segment across a 1.4 mm gap; to the cavernous sinus by a drawn segment across a 7.8 mm gap; to the cavernous sinus by a drawn segment across a 7.3 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). In the angiogram it fills in the venous phase.",
+   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then laid along the crest of this CT's petrous ridge (the summit of the cranial floor near the fitted course), in the tentorium's attached margin, and on over the bone to this CT's sigmoid-transverse junction, its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 35.6 mm (right) and 33 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 6 % of its surface on the right and 8 % on the left lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the sigmoid sinus by a drawn segment across a 1.4 mm gap; to the cavernous sinus by a drawn segment across a 7.7 mm gap; to the cavernous sinus by a drawn segment across a 7.4 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). In the angiogram it fills in the venous phase.",
    "centroid": {
     "L": [
-     -26.19,
-     -20.11,
-     -2.63
+     -25.92,
+     -19.88,
+     -2.78
     ],
     "R": [
-     29.74,
-     -24.66,
-     -6.22
+     29.53,
+     -24.43,
+     -6.21
     ]
    }
   },
@@ -1583,21 +1583,21 @@
    "id": "va_anterior_inferior_cerebellar_artery",
    "type": "tube",
    "file": "assets/vascular/va_anterior_inferior_cerebellar_artery.glb",
-   "bytes": 14768,
+   "bytes": 15136,
    "system": "Basilar artery",
    "fitted": true,
    "layer": "tracts",
-   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), its origin moved onto this patient's basilar artery (TopBrain's label), the move fading out over its first 15 mm, the rest where the fit puts it; its corners rounded (a median 6.4 mm on the right, 6.5 mm on the left). Its course is approximate. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py). In the angiogram it fills in the arterial phase.",
+   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), its origin moved onto this patient's basilar artery (TopBrain's label), the move fading out over its first 15 mm, the rest where the fit puts it; its corners rounded (a median 6.0 mm on the right, 6.0 mm on the left). Its course is approximate. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py). In the angiogram it fills in the arterial phase.",
    "centroid": {
     "L": [
-     -15.64,
-     -33.39,
-     -8.0
+     -15.54,
+     -32.94,
+     -8.55
     ],
     "R": [
-     16.12,
-     -31.96,
-     -13.9
+     15.6,
+     -33.63,
+     -14.1
     ]
    }
   },
@@ -1667,21 +1667,21 @@
    "id": "va_lateral_pontine_branches_of_basilar_artery",
    "type": "tube",
    "file": "assets/vascular/va_lateral_pontine_branches_of_basilar_artery.glb",
-   "bytes": 14212,
+   "bytes": 14048,
    "system": "Basilar artery",
    "fitted": true,
    "layer": "tracts",
-   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), each branch moved to start on this patient's basilar artery (TopBrain's label), then laid onto the fitted brainstem's surface (drawn onto it from up to 12 mm away, none of it left inside) and smoothed (a median 2.1 mm on the right, 1.6 mm on the left). Its course is approximate. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py). In the angiogram it fills in the arterial phase.",
+   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), each branch moved to start on this patient's basilar artery (TopBrain's label), then laid onto the fitted brainstem's surface (drawn onto it from up to 12 mm away, none of it left inside) and smoothed (a median 2.3 mm on the right, 1.8 mm on the left). Its course is approximate. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py). In the angiogram it fills in the arterial phase.",
    "centroid": {
     "L": [
-     -8.14,
-     -20.76,
-     -4.72
+     -8.29,
+     -20.09,
+     -4.78
     ],
     "R": [
-     11.11,
-     -19.08,
-     -6.16
+     10.86,
+     -19.68,
+     -5.85
     ]
    }
   },
@@ -1709,21 +1709,21 @@
    "id": "va_medial_pontine_branches_of_basilar_artery",
    "type": "tube",
    "file": "assets/vascular/va_medial_pontine_branches_of_basilar_artery.glb",
-   "bytes": 9048,
+   "bytes": 8876,
    "system": "Basilar artery",
    "fitted": true,
    "layer": "tracts",
-   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), each branch moved to start on this patient's basilar artery (TopBrain's label), then laid onto the fitted brainstem's surface (drawn onto it from up to 12 mm away, none of it left inside) and smoothed (a median 2.6 mm on the right, 2.5 mm on the left). Its course is approximate. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py). In the angiogram it fills in the arterial phase.",
+   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), each branch moved to start on this patient's basilar artery (TopBrain's label), then laid onto the fitted brainstem's surface (drawn onto it from up to 12 mm away, none of it left inside) and smoothed (a median 2.7 mm on the right, 2.7 mm on the left). Its course is approximate. In the angiogram it fills in the arterial phase.",
    "centroid": {
     "L": [
-     -2.26,
-     -13.19,
-     -1.42
+     -2.61,
+     -13.22,
+     -1.49
     ],
     "R": [
-     6.69,
-     -13.55,
-     -1.97
+     6.16,
+     -14.31,
+     -2.06
     ]
    }
   },
@@ -1835,21 +1835,21 @@
    "id": "va_superior_cerebellar_artery_fitted_course",
    "type": "tube",
    "file": "assets/vascular/va_superior_cerebellar_artery_fitted_course.glb",
-   "bytes": 19420,
+   "bytes": 19452,
    "system": "Basilar artery",
    "fitted": true,
    "layer": "tracts",
-   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), carried on from the far end of this patient's superior cerebellar artery as TopBrain labels it (its first part), the start moved there and the move fading out over 15 mm; its corners rounded (a median 4.1 mm on the right, 10.9 mm on the left). Its course is approximate. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py). Joined to the superior cerebellar artery by a drawn segment across a 1.5 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). In the angiogram it fills in the arterial phase.",
+   "derivation": "Too small for this angiogram to show: the Z-Anatomy branch fitted onto this CT (Skull base v2), carried on from the far end of this patient's superior cerebellar artery as TopBrain labels it (its first part), the start moved there and the move fading out over 15 mm; its corners rounded (a median 1.6 mm on the right, 11.1 mm on the left). Its course is approximate. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py). Joined to the superior cerebellar artery by a drawn segment across a 1.3 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). In the angiogram it fills in the arterial phase.",
    "centroid": {
     "L": [
-     -28.59,
+     -28.6,
      -57.67,
-     1.36
+     0.92
     ],
     "R": [
-     24.25,
-     -43.2,
-     0.98
+     24.07,
+     -43.78,
+     1.09
     ]
    }
   },
@@ -1877,21 +1877,21 @@
    "id": "va_posterior_inferior_cerebellar_artery_fitted_course",
    "type": "tube",
    "file": "assets/vascular/va_posterior_inferior_cerebellar_artery_fitted_course.glb",
-   "bytes": 156404,
+   "bytes": 154836,
    "system": "Vertebral artery",
    "fitted": true,
    "layer": "tracts",
-   "derivation": "The model's typical course on from this CT's PICA origin: a run drawn from the end of the labelled origin round the outside of the brainstem (11.4 mm on the right, 12.7 mm on the left) to the start of the Z-Anatomy PICA's trunk, then that trunk (lateral to the medulla, round the tonsil) and the branches that start on it, fitted onto this CT (the whole-skull fit, then the posterior fossa's) and kept clear of the fitted cerebellum and brainstem. It moves with the cerebellum in the telovelar and retrosigmoid views. Its course is approximate, not this patient's: this CT's own PICAs loop medially from long, tortuous vertebral arteries. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py). In the angiogram it fills in the arterial phase.",
+   "derivation": "The model's typical course on from this CT's PICA origin: a run drawn from the end of the labelled origin round the outside of the brainstem (11.3 mm on the right, 12.0 mm on the left) to the start of the Z-Anatomy PICA's trunk, then that trunk (lateral to the medulla, round the tonsil) and the branches that start on it, fitted onto this CT (the whole-skull fit, then the posterior fossa's) and kept clear of the fitted cerebellum and brainstem. It moves with the cerebellum in the telovelar and retrosigmoid views. Its course is approximate, not this patient's: this CT's own PICAs loop medially from long, tortuous vertebral arteries. Lifted out of the fitted brainstem and cerebellum where this course ran into them, onto their surface (skullbase_v3_clearance.py). In the angiogram it fills in the arterial phase.",
    "centroid": {
     "L": [
-     -24.04,
-     -55.65,
-     -28.86
+     -24.11,
+     -55.82,
+     -29.2
     ],
     "R": [
-     21.29,
+     21.14,
      -56.39,
-     -30.65
+     -30.93
     ]
    }
   },
@@ -2177,19 +2177,19 @@
    "id": "va_cavernous_sinus",
    "type": "tube",
    "file": "assets/vascular/va_cavernous_sinus.glb",
-   "bytes": 75000,
+   "bytes": 74904,
    "schematic": true,
    "layer": "vessels",
-   "derivation": "Modelled on this CT (skullbase_v3_cavernous.py), between the borders Chotai 2018 gives: medially the sella and the sphenoid body (0.4 mm off the bone and the hypophysis modelled in its fossa), laterally its lateral wall (a plane through the superior orbital fissure, the foramen rotundum, the trigeminal ganglion's medial margin and the petrous apex: a drawing choice), under its roof (the plane of the oculomotor triangle: the anterior and posterior clinoids and the petrous apex), from the petrous apex back to the carotid's anterior bend, and within 5.5 mm of the carotid it contains (this CT's own, TopBrain's label). A CT does not show its walls: its shape is drawn by rule round what the CT does show. Right 967 mm³, left 974 mm³. In the angiogram it fills in the venous phase.",
+   "derivation": "Modelled on this CT (skullbase_v3_cavernous.py), between the borders Chotai 2018 gives: medially the sella and the sphenoid body (0.4 mm off the bone and the hypophysis modelled in its fossa), laterally its lateral wall (a plane through the superior orbital fissure, the foramen rotundum, the trigeminal ganglion's medial margin and the petrous apex: a drawing choice), under its roof (the plane of the oculomotor triangle: the anterior and posterior clinoids and the petrous apex), from the petrous apex back to the carotid's anterior bend, and within 5.5 mm of the carotid it contains (this CT's own, TopBrain's label). A CT does not show its walls: its shape is drawn by rule round what the CT does show. Right 950 mm³, left 987 mm³. In the angiogram it fills in the venous phase.",
    "centroid": {
     "L": [
-     -11.32,
-     1.68,
-     3.65
+     -11.34,
+     1.65,
+     3.64
     ],
     "R": [
-     11.8,
-     2.29,
+     11.77,
+     2.33,
      3.45
     ]
    }
@@ -2771,18 +2771,18 @@
    "id": "va_avm1__inferior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_avm1__inferior_petrosal_sinus.glb",
-   "bytes": 16052,
+   "bytes": 16044,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then moved onto the bone's intracranial surface along the fitted course (the petroclival fissure's side of the cranial cavity), and from there on to this CT's jugular bulb by the shortest way out of the bone (the jugular foramen), its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 28.3 mm (right) and 24.7 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 3 % of its surface on each side lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the cavernous sinus by a drawn segment across a 6.5 mm gap; to the cavernous sinus by a drawn segment across a 5.9 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
+   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then moved onto the bone's intracranial surface along the fitted course (the petroclival fissure's side of the cranial cavity), and from there on to this CT's jugular bulb by the shortest way out of the bone (the jugular foramen), its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 28.3 mm (right) and 24.7 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 3 % of its surface on each side lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the cavernous sinus by a drawn segment across a 6.4 mm gap; to the cavernous sinus by a drawn segment across a 5.9 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -13.2,
-     -12.71,
-     -9.95
+     -13.28,
+     -12.73,
+     -9.96
     ],
     "R": [
-     13.55,
+     13.54,
      -14.14,
      -10.79
     ]
@@ -2900,20 +2900,20 @@
    "id": "va_avm1__superior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_avm1__superior_petrosal_sinus.glb",
-   "bytes": 21188,
+   "bytes": 21468,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then laid along the crest of this CT's petrous ridge (the summit of the cranial floor near the fitted course), in the tentorium's attached margin, and on over the bone to this CT's sigmoid-transverse junction, its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 35.6 mm (right) and 33 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 6 % of its surface on the right and 8 % on the left lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the sigmoid sinus by a drawn segment across a 1.4 mm gap; to the cavernous sinus by a drawn segment across a 7.8 mm gap; to the cavernous sinus by a drawn segment across a 7.3 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
+   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then laid along the crest of this CT's petrous ridge (the summit of the cranial floor near the fitted course), in the tentorium's attached margin, and on over the bone to this CT's sigmoid-transverse junction, its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 35.6 mm (right) and 33 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 6 % of its surface on the right and 8 % on the left lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the sigmoid sinus by a drawn segment across a 1.4 mm gap; to the cavernous sinus by a drawn segment across a 7.7 mm gap; to the cavernous sinus by a drawn segment across a 7.4 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -26.19,
-     -20.11,
-     -2.63
+     -25.92,
+     -19.88,
+     -2.78
     ],
     "R": [
-     29.74,
-     -24.66,
-     -6.22
+     29.53,
+     -24.43,
+     -6.21
     ]
    },
    "lesion": "avm1",
@@ -3222,18 +3222,18 @@
    "id": "va_avm3__inferior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_avm3__inferior_petrosal_sinus.glb",
-   "bytes": 16052,
+   "bytes": 16048,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then moved onto the bone's intracranial surface along the fitted course (the petroclival fissure's side of the cranial cavity), and from there on to this CT's jugular bulb by the shortest way out of the bone (the jugular foramen), its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 28.3 mm (right) and 24.7 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 3 % of its surface on each side lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the cavernous sinus by a drawn segment across a 6.5 mm gap; to the cavernous sinus by a drawn segment across a 5.9 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
+   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then moved onto the bone's intracranial surface along the fitted course (the petroclival fissure's side of the cranial cavity), and from there on to this CT's jugular bulb by the shortest way out of the bone (the jugular foramen), its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 28.3 mm (right) and 24.7 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 3 % of its surface on each side lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the cavernous sinus by a drawn segment across a 6.4 mm gap; to the cavernous sinus by a drawn segment across a 5.9 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -13.2,
-     -12.71,
-     -9.95
+     -13.28,
+     -12.73,
+     -9.96
     ],
     "R": [
-     13.55,
+     13.54,
      -14.14,
      -10.79
     ]
@@ -3351,20 +3351,20 @@
    "id": "va_avm3__superior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_avm3__superior_petrosal_sinus.glb",
-   "bytes": 21200,
+   "bytes": 21464,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then laid along the crest of this CT's petrous ridge (the summit of the cranial floor near the fitted course), in the tentorium's attached margin, and on over the bone to this CT's sigmoid-transverse junction, its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 35.6 mm (right) and 33 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 6 % of its surface on the right and 8 % on the left lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the sigmoid sinus by a drawn segment across a 1.4 mm gap; to the cavernous sinus by a drawn segment across a 7.8 mm gap; to the cavernous sinus by a drawn segment across a 7.3 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
+   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then laid along the crest of this CT's petrous ridge (the summit of the cranial floor near the fitted course), in the tentorium's attached margin, and on over the bone to this CT's sigmoid-transverse junction, its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 35.6 mm (right) and 33 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 6 % of its surface on the right and 8 % on the left lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the sigmoid sinus by a drawn segment across a 1.4 mm gap; to the cavernous sinus by a drawn segment across a 7.7 mm gap; to the cavernous sinus by a drawn segment across a 7.4 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -26.19,
-     -20.11,
-     -2.63
+     -25.92,
+     -19.88,
+     -2.78
     ],
     "R": [
-     29.74,
-     -24.66,
-     -6.22
+     29.53,
+     -24.43,
+     -6.21
     ]
    },
    "lesion": "avm3",
@@ -3719,18 +3719,18 @@
    "id": "va_avm5__inferior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_avm5__inferior_petrosal_sinus.glb",
-   "bytes": 16052,
+   "bytes": 16044,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then moved onto the bone's intracranial surface along the fitted course (the petroclival fissure's side of the cranial cavity), and from there on to this CT's jugular bulb by the shortest way out of the bone (the jugular foramen), its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 28.3 mm (right) and 24.7 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 3 % of its surface on each side lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the cavernous sinus by a drawn segment across a 6.5 mm gap; to the cavernous sinus by a drawn segment across a 5.9 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
+   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then moved onto the bone's intracranial surface along the fitted course (the petroclival fissure's side of the cranial cavity), and from there on to this CT's jugular bulb by the shortest way out of the bone (the jugular foramen), its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 28.3 mm (right) and 24.7 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 3 % of its surface on each side lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the cavernous sinus by a drawn segment across a 6.4 mm gap; to the cavernous sinus by a drawn segment across a 5.9 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -13.2,
-     -12.71,
-     -9.95
+     -13.28,
+     -12.73,
+     -9.96
     ],
     "R": [
-     13.55,
+     13.54,
      -14.14,
      -10.79
     ]
@@ -3894,20 +3894,20 @@
    "id": "va_avm5__superior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_avm5__superior_petrosal_sinus.glb",
-   "bytes": 21192,
+   "bytes": 21464,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then laid along the crest of this CT's petrous ridge (the summit of the cranial floor near the fitted course), in the tentorium's attached margin, and on over the bone to this CT's sigmoid-transverse junction, its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 35.6 mm (right) and 33 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 6 % of its surface on the right and 8 % on the left lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the sigmoid sinus by a drawn segment across a 1.4 mm gap; to the cavernous sinus by a drawn segment across a 7.8 mm gap; to the cavernous sinus by a drawn segment across a 7.3 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
+   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then laid along the crest of this CT's petrous ridge (the summit of the cranial floor near the fitted course), in the tentorium's attached margin, and on over the bone to this CT's sigmoid-transverse junction, its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 35.6 mm (right) and 33 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 6 % of its surface on the right and 8 % on the left lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the sigmoid sinus by a drawn segment across a 1.4 mm gap; to the cavernous sinus by a drawn segment across a 7.7 mm gap; to the cavernous sinus by a drawn segment across a 7.4 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -26.19,
-     -20.11,
-     -2.63
+     -25.92,
+     -19.88,
+     -2.78
     ],
     "R": [
-     29.74,
-     -24.66,
-     -6.22
+     29.53,
+     -24.43,
+     -6.21
     ]
    },
    "lesion": "avm5",
@@ -4378,19 +4378,19 @@
    "id": "va_ccfa__cavernous_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfa__cavernous_sinus.glb",
-   "bytes": 75480,
+   "bytes": 75224,
    "schematic": true,
    "layer": "vessels",
-   "derivation": "Modelled on this CT (skullbase_v3_cavernous.py), between the borders Chotai 2018 gives: medially the sella and the sphenoid body (0.4 mm off the bone and the hypophysis modelled in its fossa), laterally its lateral wall (a plane through the superior orbital fissure, the foramen rotundum, the trigeminal ganglion's medial margin and the petrous apex: a drawing choice), under its roof (the plane of the oculomotor triangle: the anterior and posterior clinoids and the petrous apex), from the petrous apex back to the carotid's anterior bend, and within 5.5 mm of the carotid it contains (this CT's own, TopBrain's label). A CT does not show its walls: its shape is drawn by rule round what the CT does show. Right 967 mm³, left 974 mm³. Here filled early by the lesion's shunt.",
+   "derivation": "Modelled on this CT (skullbase_v3_cavernous.py), between the borders Chotai 2018 gives: medially the sella and the sphenoid body (0.4 mm off the bone and the hypophysis modelled in its fossa), laterally its lateral wall (a plane through the superior orbital fissure, the foramen rotundum, the trigeminal ganglion's medial margin and the petrous apex: a drawing choice), under its roof (the plane of the oculomotor triangle: the anterior and posterior clinoids and the petrous apex), from the petrous apex back to the carotid's anterior bend, and within 5.5 mm of the carotid it contains (this CT's own, TopBrain's label). A CT does not show its walls: its shape is drawn by rule round what the CT does show. Right 950 mm³, left 987 mm³. Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -11.32,
-     1.68,
-     3.65
+     -11.34,
+     1.65,
+     3.64
     ],
     "R": [
-     11.8,
-     2.29,
+     11.77,
+     2.33,
      3.45
     ]
    },
@@ -4472,18 +4472,18 @@
    "id": "va_ccfa__inferior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfa__inferior_petrosal_sinus.glb",
-   "bytes": 16156,
+   "bytes": 16192,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then moved onto the bone's intracranial surface along the fitted course (the petroclival fissure's side of the cranial cavity), and from there on to this CT's jugular bulb by the shortest way out of the bone (the jugular foramen), its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 28.3 mm (right) and 24.7 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 3 % of its surface on each side lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the cavernous sinus by a drawn segment across a 6.5 mm gap; to the cavernous sinus by a drawn segment across a 5.9 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
+   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then moved onto the bone's intracranial surface along the fitted course (the petroclival fissure's side of the cranial cavity), and from there on to this CT's jugular bulb by the shortest way out of the bone (the jugular foramen), its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 28.3 mm (right) and 24.7 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 3 % of its surface on each side lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the cavernous sinus by a drawn segment across a 6.4 mm gap; to the cavernous sinus by a drawn segment across a 5.9 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -13.2,
-     -12.71,
-     -9.95
+     -13.28,
+     -12.73,
+     -9.96
     ],
     "R": [
-     13.55,
+     13.54,
      -14.14,
      -10.79
     ]
@@ -4513,7 +4513,7 @@
    "id": "va_ccfa__internal_jugular_vein",
    "type": "tube",
    "file": "assets/vascular/va_ccfa__internal_jugular_vein.glb",
-   "bytes": 36492,
+   "bytes": 36504,
    "layer": "vessels",
    "derivation": "Segmented in this CT by TotalSegmentator's headneck_bones_vessels task, up to the skull base. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -4602,7 +4602,7 @@
    "id": "va_ccfa__sigmoid_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfa__sigmoid_sinus.glb",
-   "bytes": 8924,
+   "bytes": 8928,
    "layer": "vessels",
    "derivation": "Traced through this CT's own contrast-filled lumen, from the jugular bulb (the top of TotalSegmentator's internal jugular vein) to the transverse sinus near the midline, near the fitted Z-Anatomy course and along the middle of the enhanced channel; drawn as thick as the lumen is deep. right: 92 % of the trace at least 1.5 mm inside the lumen, median radius 2.1 mm; left: 84 % of the trace at least 1.5 mm inside the lumen, median radius 1.9 mm. Split from the transverse sinus at the fitted junction of the two. Here filled early by the lesion's shunt.",
    "centroid": {
@@ -4773,20 +4773,20 @@
    "id": "va_ccfa__superior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfa__superior_petrosal_sinus.glb",
-   "bytes": 21048,
+   "bytes": 21324,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then laid along the crest of this CT's petrous ridge (the summit of the cranial floor near the fitted course), in the tentorium's attached margin, and on over the bone to this CT's sigmoid-transverse junction, its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 35.6 mm (right) and 33 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 6 % of its surface on the right and 8 % on the left lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the sigmoid sinus by a drawn segment across a 1.4 mm gap; to the cavernous sinus by a drawn segment across a 7.8 mm gap; to the cavernous sinus by a drawn segment across a 7.3 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
+   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then laid along the crest of this CT's petrous ridge (the summit of the cranial floor near the fitted course), in the tentorium's attached margin, and on over the bone to this CT's sigmoid-transverse junction, its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 35.6 mm (right) and 33 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 6 % of its surface on the right and 8 % on the left lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the sigmoid sinus by a drawn segment across a 1.4 mm gap; to the cavernous sinus by a drawn segment across a 7.7 mm gap; to the cavernous sinus by a drawn segment across a 7.4 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -26.19,
-     -20.11,
-     -2.63
+     -25.92,
+     -19.88,
+     -2.78
     ],
     "R": [
-     29.74,
-     -24.66,
-     -6.22
+     29.53,
+     -24.43,
+     -6.21
     ]
    },
    "lesion": "ccfa",
@@ -4816,14 +4816,14 @@
    "derivation": "Drawn by rule: a small dural branch of this CT's right cavernous carotid (as the meningohypophyseal trunk runs), and external carotid branches through the foramen ovale and spinosum (this angiogram does not show them), to the sinus's wall.",
    "centroid": {
     "L": [
-     18.97,
+     18.96,
      -1.96,
-     -9.78
+     -9.77
     ],
     "R": [
-     18.97,
+     18.96,
      -1.96,
-     -9.78
+     -9.77
     ]
    },
    "layer": "tracts"
@@ -4895,7 +4895,7 @@
    "id": "va_ccfd__basilar_venous_plexus",
    "type": "tube",
    "file": "assets/vascular/va_ccfd__basilar_venous_plexus.glb",
-   "bytes": 13856,
+   "bytes": 13852,
    "schematic": true,
    "layer": "vessels",
    "derivation": "Cut at the midline (x = 0) into left and right halves. Drawn by rule on this CT: a sheet on the back of the clivus (its bone surface), from just below the dorsum 14 mm down and 8 mm either side of the midline, 1 mm thick: the plexus joins both cavernous sinuses and inferior petrosal sinuses (Tanoue 2020); its channels are not drawn. Joined to the cavernous sinus by a drawn segment across a 1.1 mm gap; to the cavernous sinus by a drawn segment across a 3.1 mm gap; to the inferior petrosal sinus by a drawn segment across a 1.9 mm gap; to the inferior petrosal sinus by a drawn segment across a 1.7 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
@@ -4934,19 +4934,19 @@
    "id": "va_ccfd__cavernous_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfd__cavernous_sinus.glb",
-   "bytes": 76752,
+   "bytes": 76572,
    "schematic": true,
    "layer": "vessels",
-   "derivation": "Modelled on this CT (skullbase_v3_cavernous.py), between the borders Chotai 2018 gives: medially the sella and the sphenoid body (0.4 mm off the bone and the hypophysis modelled in its fossa), laterally its lateral wall (a plane through the superior orbital fissure, the foramen rotundum, the trigeminal ganglion's medial margin and the petrous apex: a drawing choice), under its roof (the plane of the oculomotor triangle: the anterior and posterior clinoids and the petrous apex), from the petrous apex back to the carotid's anterior bend, and within 5.5 mm of the carotid it contains (this CT's own, TopBrain's label). A CT does not show its walls: its shape is drawn by rule round what the CT does show. Right 967 mm³, left 974 mm³. Here filled early by the lesion's shunt.",
+   "derivation": "Modelled on this CT (skullbase_v3_cavernous.py), between the borders Chotai 2018 gives: medially the sella and the sphenoid body (0.4 mm off the bone and the hypophysis modelled in its fossa), laterally its lateral wall (a plane through the superior orbital fissure, the foramen rotundum, the trigeminal ganglion's medial margin and the petrous apex: a drawing choice), under its roof (the plane of the oculomotor triangle: the anterior and posterior clinoids and the petrous apex), from the petrous apex back to the carotid's anterior bend, and within 5.5 mm of the carotid it contains (this CT's own, TopBrain's label). A CT does not show its walls: its shape is drawn by rule round what the CT does show. Right 950 mm³, left 987 mm³. Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -11.32,
-     1.68,
-     3.65
+     -11.34,
+     1.65,
+     3.64
     ],
     "R": [
-     11.8,
-     2.29,
+     11.77,
+     2.33,
      3.45
     ]
    },
@@ -5028,18 +5028,18 @@
    "id": "va_ccfd__inferior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfd__inferior_petrosal_sinus.glb",
-   "bytes": 16544,
+   "bytes": 16564,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then moved onto the bone's intracranial surface along the fitted course (the petroclival fissure's side of the cranial cavity), and from there on to this CT's jugular bulb by the shortest way out of the bone (the jugular foramen), its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 28.3 mm (right) and 24.7 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 3 % of its surface on each side lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the cavernous sinus by a drawn segment across a 6.5 mm gap; to the cavernous sinus by a drawn segment across a 5.9 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
+   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then moved onto the bone's intracranial surface along the fitted course (the petroclival fissure's side of the cranial cavity), and from there on to this CT's jugular bulb by the shortest way out of the bone (the jugular foramen), its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 28.3 mm (right) and 24.7 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 3 % of its surface on each side lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the cavernous sinus by a drawn segment across a 6.4 mm gap; to the cavernous sinus by a drawn segment across a 5.9 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -13.2,
-     -12.71,
-     -9.95
+     -13.28,
+     -12.73,
+     -9.96
     ],
     "R": [
-     13.55,
+     13.54,
      -14.14,
      -10.79
     ]
@@ -5290,20 +5290,20 @@
    "id": "va_ccfd__superior_petrosal_sinus",
    "type": "tube",
    "file": "assets/vascular/va_ccfd__superior_petrosal_sinus.glb",
-   "bytes": 21340,
+   "bytes": 21620,
    "fitted": true,
    "layer": "vessels",
-   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then laid along the crest of this CT's petrous ridge (the summit of the cranial floor near the fitted course), in the tentorium's attached margin, and on over the bone to this CT's sigmoid-transverse junction, its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 35.6 mm (right) and 33 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 6 % of its surface on the right and 8 % on the left lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the sigmoid sinus by a drawn segment across a 1.4 mm gap; to the cavernous sinus by a drawn segment across a 7.8 mm gap; to the cavernous sinus by a drawn segment across a 7.3 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
+   "derivation": "Z-Anatomy's, fitted onto this CT's skull (Skull base v2), then laid along the crest of this CT's petrous ridge (the summit of the cranial floor near the fitted course), in the tentorium's attached margin, and on over the bone to this CT's sigmoid-transverse junction, its surface 0.3 mm off the bone (skullbase_v3_petrosal.py): a CT angiogram does not show it, and as fitted 35.6 mm (right) and 33 mm (left) of it lay inside the bone the model draws (now 0 and 0 mm). A tube with the radius Z-Anatomy models, at least 0.3 mm. Its position is approximate: the bone is this patient's, the course along it a model's. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 6 % of its surface on the right and 8 % on the left lay under the bone shown; now none of it does. It lies on the bone, in a shallow groove of it. Joined to the sigmoid sinus by a drawn segment across a 1.4 mm gap; to the cavernous sinus by a drawn segment across a 7.7 mm gap; to the cavernous sinus by a drawn segment across a 7.4 mm gap, where its source's end stops short (drawn by rule, skullbase_v3_junctions.py). Here filled early by the lesion's shunt.",
    "centroid": {
     "L": [
-     -26.19,
-     -20.11,
-     -2.63
+     -25.92,
+     -19.88,
+     -2.78
     ],
     "R": [
-     29.74,
-     -24.66,
-     -6.22
+     29.53,
+     -24.43,
+     -6.21
     ]
    },
    "lesion": "ccfd",
@@ -5706,7 +5706,7 @@
    "name": "Ethmoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_ethmoid_bone.glb",
-   "bytes": 124368,
+   "bytes": 124308,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 19 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
@@ -5714,12 +5714,12 @@
     "L": [
      -7.02,
      21.82,
-     -7.79
+     -7.82
     ],
     "R": [
-     7.74,
-     22.21,
-     -8.23
+     7.78,
+     22.2,
+     -8.24
     ]
    },
    "layer": "nuclei"
@@ -5750,20 +5750,20 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_frontal_bone.glb",
-   "bytes": 511848,
+   "bytes": 512456,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 47 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -24.16,
-     32.5,
-     41.99
+     -24.15,
+     32.49,
+     41.97
     ],
     "R": [
-     24.34,
+     24.33,
      35.86,
-     40.97
+     40.95
     ]
    },
    "layer": "nuclei"
@@ -5794,20 +5794,20 @@
    "name": "Inferior nasal concha bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_inferior_nasal_concha_bone.glb",
-   "bytes": 41576,
+   "bytes": 41940,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -6.59,
-     30.03,
-     -24.9
+     -6.6,
+     30.02,
+     -24.93
     ],
     "R": [
-     8.81,
+     8.8,
      30.29,
-     -26.84
+     -26.87
     ]
    },
    "layer": "nuclei"
@@ -5838,20 +5838,20 @@
    "name": "Lacrimal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_lacrimal_bone.glb",
-   "bytes": 25220,
+   "bytes": 25248,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -8.15,
-     32.42,
+     -8.12,
+     32.43,
      -9.62
     ],
     "R": [
-     9.17,
+     9.19,
      30.81,
-     -5.98
+     -5.94
     ]
    },
    "layer": "nuclei"
@@ -5882,20 +5882,20 @@
    "name": "Maxilla",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_maxilla.glb",
-   "bytes": 250616,
+   "bytes": 249880,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -14.43,
-     36.83,
-     -27.95
+     -14.42,
+     36.85,
+     -28.0
     ],
     "R": [
-     15.61,
+     15.62,
      36.48,
-     -29.56
+     -29.51
     ]
    },
    "layer": "nuclei"
@@ -5926,20 +5926,20 @@
    "name": "Nasal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_nasal_bone.glb",
-   "bytes": 41128,
+   "bytes": 41196,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
      -2.48,
-     48.66,
+     48.68,
      -5.73
     ],
     "R": [
-     2.98,
-     47.4,
-     -6.87
+     2.97,
+     47.41,
+     -6.91
     ]
    },
    "layer": "nuclei"
@@ -5970,20 +5970,20 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_occipital_bone.glb",
-   "bytes": 496732,
+   "bytes": 496868,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 21 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -23.69,
-     -61.18,
-     -20.65
+     -23.76,
+     -61.1,
+     -20.71
     ],
     "R": [
-     22.28,
+     22.26,
      -58.22,
-     -21.38
+     -21.4
     ]
    },
    "layer": "nuclei"
@@ -6014,20 +6014,20 @@
    "name": "Palatine bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_palatine_bone.glb",
-   "bytes": 80848,
+   "bytes": 81304,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -10.74,
-     18.35,
-     -25.74
+     -10.73,
+     18.3,
+     -25.72
     ],
     "R": [
      11.51,
-     17.95,
-     -24.3
+     17.92,
+     -24.28
     ]
    },
    "layer": "nuclei"
@@ -6058,20 +6058,20 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_parietal_bone.glb",
-   "bytes": 584612,
+   "bytes": 585688,
    "refIds": [],
    "category": "bone",
    "derivation": "The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 25 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
      -41.63,
-     -43.72,
-     53.66
+     -43.73,
+     53.64
     ],
     "R": [
-     40.36,
-     -42.4,
-     58.27
+     40.34,
+     -42.39,
+     58.26
     ]
    },
    "layer": "nuclei"
@@ -6102,20 +6102,20 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_sphenoid_bone.glb",
-   "bytes": 423168,
+   "bytes": 422388,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 4 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
      -18.4,
-     7.12,
-     -5.67
+     7.1,
+     -5.65
     ],
     "R": [
-     20.46,
-     9.06,
-     -5.02
+     20.44,
+     9.03,
+     -5.0
     ]
    },
    "layer": "nuclei"
@@ -6146,20 +6146,20 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_temporal_bone.glb",
-   "bytes": 715092,
+   "bytes": 717268,
    "refIds": [],
    "category": "bone",
    "derivation": "The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 31 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -48.96,
+     -48.97,
      -23.28,
      -12.58
     ],
     "R": [
      47.35,
-     -22.26,
-     -16.11
+     -22.27,
+     -16.1
     ]
    },
    "layer": "nuclei"
@@ -6190,20 +6190,20 @@
    "name": "Vomer",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_vomer.glb",
-   "bytes": 71132,
+   "bytes": 71456,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -2.07,
-     17.21,
-     -21.43
+     -2.06,
+     17.28,
+     -21.4
     ],
     "R": [
-     2.65,
-     19.42,
-     -20.96
+     2.66,
+     19.43,
+     -20.97
     ]
    },
    "layer": "nuclei"
@@ -6234,20 +6234,20 @@
    "name": "Zygomatic bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_zygomatic_bone.glb",
-   "bytes": 104008,
+   "bytes": 103644,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -42.17,
-     23.08,
-     -6.51
+     -42.16,
+     23.07,
+     -6.5
     ],
     "R": [
      44.73,
-     28.79,
-     -7.99
+     28.78,
+     -7.96
     ]
    },
    "layer": "nuclei"
