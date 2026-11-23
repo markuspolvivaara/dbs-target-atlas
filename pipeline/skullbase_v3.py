@@ -1529,7 +1529,8 @@ def validate() -> int:
     for nerve, sides in fit["nerves"].items():
         for s, r in sides.items():
             check(r["boneCrossedMm"] <= 2.0, f"{nerve} {s}: crosses {r['boneCrossedMm']} mm of bone")
-            check(r["maxFromFittedMm"] <= 8.0, f"{nerve} {s}: {r['maxFromFittedMm']} mm from its fitted course")
+            # (the accessory nerve is led along the vagus nerve's route at the jugular foramen: measured from that guide)
+            check(r.get("maxFromGuideMm", r["maxFromFittedMm"]) <= 8.0, f"{nerve} {s}: {r.get('maxFromGuideMm', r['maxFromFittedMm'])} mm from its fitted course")
     ck = fit["nerveChecks"]
     systems = {"Middle meningeal artery": "Middle meningeal artery", "Proximal lateral striate branches": "Middle cerebral artery",
                "Medial pontine branches of basilar artery": "Basilar artery", "Anterior spinal artery": "Vertebral artery",
@@ -1621,6 +1622,18 @@ def validate() -> int:
                     P, T = np.asarray(mesh[s_]["positions"], float).reshape(-1, 3), np.asarray(mesh[s_]["indices"]).reshape(-1, 3)
                     inside = points_inside(CAV.resample(lines[s_][0], 0.25), P, T)
                     check(not inside.any(), f"{nm} {s_}: {0.25 * inside.sum():.1f} mm of its centre line inside the {art.lower()}")
+        # ... nor the nerves of the jugular foramen through the veins there (skullbase_v3_base.jugular_lumen: routed
+        # without them, 7 to 21 % of IX's and XI's tubes lay in the sigmoid sinus and 11 % of the left X's in the
+        # inferior petrosal sinus)
+        import skullbase_v3_base as BASE
+        for vein in ("Sigmoid sinus", "Inferior petrosal sinus", "Internal jugular vein"):
+            mesh = read_glb_full(REPO / "pipeline" / "data" / "build" / by_name[vein]["file"].replace("assets/", ""))
+            for nm in BASE.JUGULAR_NERVES:
+                lines = CAV.centre_lines(BUILD / f"{SB.slug(nm).replace('sb_', 'tb_', 1)}.glb")
+                for s_ in ("L", "R"):
+                    P, T = np.asarray(mesh[s_]["positions"], float).reshape(-1, 3), np.asarray(mesh[s_]["indices"]).reshape(-1, 3)
+                    inside = points_inside(CAV.resample(lines[s_][0], 0.25), P, T)
+                    check(not inside.any(), f"{nm} {s_}: {0.25 * inside.sum():.1f} mm of its centre line inside the {vein.lower()}")
     sv = [it for it in m["structures"] if it.get("category") == "vein" and it.get("morph")]
     check(len(sv) == 5 and all(it.get("schematic") for it in sv), f"{len(sv)} veins drawn on the brain (the Sylvian veins, "
           "Trolard's and Labbé's), with the surgical shapes")

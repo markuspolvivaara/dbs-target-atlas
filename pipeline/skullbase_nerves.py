@@ -71,9 +71,10 @@ class Grid:
 
 
 def route(g: Grid, fitted: np.ndarray, start: np.ndarray, end: np.ndarray, corridor: float = CORRIDOR_MM,
-          sigma: float = SIGMA_MM) -> np.ndarray | None:
+          sigma: float = SIGMA_MM, avoid: np.ndarray | None = None) -> np.ndarray | None:
     """The least-cost path from start to end (frame mm) near the fitted course `fitted` (frame mm, any number of points).
-    Returns the path in frame mm (start to end), or None when bone closes every way within the corridor."""
+    Returns the path in frame mm (start to end), or None when bone closes every way within the corridor. `avoid`: more
+    of the grid to count as vessel lumen (a sinus traced on this CT, which TopBrain does not label)."""
     F = np.vstack([fitted, start, end])
     lo = np.floor(g.to_ijk(F).min(0) - corridor / g.step - 2).astype(int)
     hi = np.ceil(g.to_ijk(F).max(0) + corridor / g.step + 2).astype(int)
@@ -91,7 +92,7 @@ def route(g: Grid, fitted: np.ndarray, start: np.ndarray, end: np.ndarray, corri
     dist = ndimage.distance_transform_edt(~seed) * g.step
     free = dist <= corridor
     cost = 1.0 + (dist / sigma) ** 2
-    cost = np.where(g.air[sub] | g.vessel[sub], cost * COST_AVOID, cost)
+    cost = np.where(g.air[sub] | g.vessel[sub] | (avoid[sub] if avoid is not None else False), cost * COST_AVOID, cost)
     cost = np.where(g.bone[sub], cost * COST_BONE, cost)
     idx = -np.ones(shape, np.int64)
     nodes = np.argwhere(free)

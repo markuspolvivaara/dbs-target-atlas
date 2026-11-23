@@ -224,14 +224,14 @@
   },
   "Glossopharyngeal nerve (IX)": {
    "R": {
-    "lengthMm": 43.5,
+    "lengthMm": 42.3,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 1.3
+    "maxFromFittedMm": 2.6
    },
    "L": {
-    "lengthMm": 46.3,
+    "lengthMm": 48.8,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 3.4
+    "maxFromFittedMm": 6.4
    }
   },
   "Vagus nerve (X)": {
@@ -241,21 +241,23 @@
     "maxFromFittedMm": 1.8
    },
    "L": {
-    "lengthMm": 41.5,
+    "lengthMm": 42.3,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 2.4
+    "maxFromFittedMm": 3.6
    }
   },
   "Accessory nerve (XI)": {
    "R": {
-    "lengthMm": 46.8,
+    "lengthMm": 46.5,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 1.7
+    "maxFromFittedMm": 7.9,
+    "maxFromGuideMm": 4.9
    },
    "L": {
-    "lengthMm": 48.2,
+    "lengthMm": 45.7,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 4.7
+    "maxFromFittedMm": 11.1,
+    "maxFromGuideMm": 4.1
    }
   },
   "Hypoglossal nerve (XII)": {
@@ -290,14 +292,14 @@
   },
   "jugularNervesToBulbMm": {
    "R": {
-    "Glossopharyngeal nerve (IX)": 2.6,
+    "Glossopharyngeal nerve (IX)": 3.9,
     "Vagus nerve (X)": 4.6,
-    "Accessory nerve (XI)": 4.3
+    "Accessory nerve (XI)": 3.7
    },
    "L": {
-    "Glossopharyngeal nerve (IX)": 3.1,
-    "Vagus nerve (X)": 5.5,
-    "Accessory nerve (XI)": 3.1
+    "Glossopharyngeal nerve (IX)": 3.5,
+    "Vagus nerve (X)": 5.8,
+    "Accessory nerve (XI)": 4.1
    }
   },
   "mandibularNerveToOvaleHoleMm": {
@@ -1474,18 +1476,18 @@
   },
   "Glossopharyngeal nerve (IX)": {
    "L": {
-    "share": 0.19,
-    "deepestMm": 0.8
+    "share": 0.116,
+    "deepestMm": 0.7
    },
    "R": {
-    "share": 0.029,
+    "share": 0.038,
     "deepestMm": 0.6
    }
   },
   "Vagus nerve (X)": {
    "L": {
-    "share": 0.137,
-    "deepestMm": 0.7
+    "share": 0.168,
+    "deepestMm": 0.9
    },
    "R": {
     "share": 0.032,
@@ -1494,11 +1496,11 @@
   },
   "Accessory nerve (XI)": {
    "L": {
-    "share": 0.216,
-    "deepestMm": 0.9
+    "share": 0.105,
+    "deepestMm": 0.8
    },
    "R": {
-    "share": 0.113,
+    "share": 0.214,
     "deepestMm": 0.8
    }
   },

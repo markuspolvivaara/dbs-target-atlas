@@ -406,7 +406,7 @@ describe('the detailed model (TopBrain CT angiogram, Z-Anatomy fitted onto it)',
     const xii = atOpeningNote(noted.get('Hypoglossal nerve (XII)')!);
     expect(xii).toMatch(/^Over the first 40 mm of its fitted course, from inside the skull to just past its base: on the right, 11\.2 mm through the bone shown \(10\.5 mm of it at 400 HU or more\); on the left, 2\.2 mm through the bone shown \(none of it at 400 HU or more\)\./);
     expect(xii).toMatch(/that route lies a median 3\.1 mm on the right and 5\.8 mm on the left from it\.$/);
-    expect(atOpeningNote(noted.get('Vagus nerve (X)')!)).toMatch(/on the right, clear of both;.* a median 0\.9 mm on the left from it\.$/);
+    expect(atOpeningNote(noted.get('Vagus nerve (X)')!)).toMatch(/on the right, clear of both;.* a median 1\.7 mm on the left from it\.$/);   // (0.9 mm before v3's vagus nerve was routed round the veins of the jugular foramen)
   });
   it('keeps the frame: origin at the hypophysial fossa, the landmarks on or near the bone', () => {
     expect(lms.find((l) => l.name === 'Hypophysial fossa')!.ras).toEqual([0, 0, 0]);
@@ -488,13 +488,15 @@ describe('the temporal-bone model (v3: OpenEar specimen registered onto the CT)'
   });
   it('routes the cranial nerves I–XII through this CT: hardly through bone, near their fitted course, out by the right foramina', async () => {
     const f = (await import('../../src/data/generated/sbv3-fit.json')).default as unknown as {
-      nerves: Record<string, Record<string, { boneCrossedMm: number; maxFromFittedMm: number }>>;
+      nerves: Record<string, Record<string, { boneCrossedMm: number; maxFromFittedMm: number; maxFromGuideMm?: number }>>;
       nerveChecks: { mandibularNerveToOvaleHoleMm: Record<string, number>; opticNerveToSegmentationMm: Record<string, number>; jugularNervesToBulbMm: Record<string, Record<string, number>> };
     };
     expect(new Set(v3.structures.map((s) => s.cranialNerve).filter(Boolean))).toEqual(new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]));
     for (const [n, sides] of Object.entries(f.nerves)) for (const [side, r] of Object.entries(sides)) {
       expect(r.boneCrossedMm, `${n} ${side}`).toBeLessThanOrEqual(2);
-      expect(r.maxFromFittedMm, `${n} ${side}`).toBeLessThanOrEqual(8);
+      // (the accessory nerve is led along the vagus nerve's route at the jugular foramen, up to 11 mm from where the
+      // fitted model has it on the left: it is held to that guide)
+      expect(r.maxFromGuideMm ?? r.maxFromFittedMm, `${n} ${side}`).toBeLessThanOrEqual(8);
     }
     for (const side of ['R', 'L']) {
       expect(f.nerveChecks.mandibularNerveToOvaleHoleMm[side], side).toBeLessThanOrEqual(2.5);   // the floor's own foramen ovale

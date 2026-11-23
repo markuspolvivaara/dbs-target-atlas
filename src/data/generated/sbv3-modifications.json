@@ -142,8 +142,8 @@
     "checks": 65,
     "failed": []
    },
-   "revision": "0f3c2fe",
-   "date": "2026-11-23"
+   "revision": "acfda0b",
+   "date": "2026-11-24"
   },
   {
    "step": "skullbase_v3_ends",
@@ -194,8 +194,8 @@
    "validation": {
     "check": "skullbase_v3_clearance.check: none of it past the medulla's cut end"
    },
-   "revision": "0f3c2fe",
-   "date": "2026-11-23"
+   "revision": "acfda0b",
+   "date": "2026-11-24"
   },
   {
    "step": "skullbase_v3_junctions",
@@ -369,8 +369,8 @@
     "checks": 30,
     "failed": []
    },
-   "revision": "0f3c2fe",
-   "date": "2026-11-23"
+   "revision": "acfda0b",
+   "date": "2026-11-24"
   },
   {
    "step": "skullbase_v3_roots",
@@ -474,10 +474,10 @@
     "Glossopharyngeal nerve (IX)": {
      "L": {
       "ringsCut": 12,
-      "lengthCutMm": 7.1,
+      "lengthCutMm": 6.9,
       "deepestMm": 4.0,
       "wasInsideMm": 2.0,
-      "nowInsideMm": -0.05
+      "nowInsideMm": 0.35
      },
      "R": {
       "ringsCut": 11,
@@ -505,18 +505,18 @@
     },
     "Accessory nerve (XI)": {
      "L": {
-      "ringsCut": 13,
-      "lengthCutMm": 7.6,
-      "deepestMm": 3.3,
+      "ringsCut": 10,
+      "lengthCutMm": 6.2,
+      "deepestMm": 3.2,
       "wasInsideMm": 2.9,
-      "nowInsideMm": 0.37
+      "nowInsideMm": 0.07
      },
      "R": {
-      "ringsCut": 11,
-      "lengthCutMm": 6.5,
+      "ringsCut": 10,
+      "lengthCutMm": 6.0,
       "deepestMm": 3.7,
       "wasInsideMm": 3.3,
-      "nowInsideMm": -0.13
+      "nowInsideMm": 0.42
      }
     },
     "Hypoglossal nerve (XII)": {
@@ -539,8 +539,8 @@
    "validation": {
     "failed": []
    },
-   "revision": "0f3c2fe",
-   "date": "2026-11-23"
+   "revision": "acfda0b",
+   "date": "2026-11-24"
   },
   {
    "step": "skullbase_v3_roots_round",
@@ -599,8 +599,8 @@
    "validation": {
     "failed": []
    },
-   "revision": "0f3c2fe",
-   "date": "2026-11-23"
+   "revision": "acfda0b",
+   "date": "2026-11-24"
   }
  ]
 }

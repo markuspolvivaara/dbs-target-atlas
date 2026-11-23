@@ -159,11 +159,19 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   opening (bone costs 60 times more, so a canal the 0.5 mm mask closes with a voxel of blurred bone can still be
   passed; at most 1.2 mm is). Each nerve thus leaves the skull through this CT's own foramen; VII and VIII run to the
   registered ear's internal acoustic meatus. The optic nerves follow TotalSegmentator's segmentation of them
-  (`head_glands_cavities`, 0.2 mm apart). Foramina are located from the routes (the first stretch where a nerve is
+  (`head_glands_cavities`, 0.2 mm apart). At the jugular foramen IX, X and XI are routed together
+  (`jugular_routes`): the sigmoid sinus as traced, the inferior petrosal sinus as laid and TotalSegmentator's jugular
+  vein count as vessel lumen for them, and so does each nerve's tube for those routed after it (1.2 mm round its
+  centre line); the accessory nerve is led beside the vagus nerve through the foramen (Ayeni 1995: X and XI pass one
+  opening of the dura; Rubinstein 1995: they could not be told apart on CT; abstracts only); the order is X, IX, XI,
+  which on this CT gives each a way without a detour. Routed like the other nerves, 7–21 % of IX's and XI's tubes
+  lay in the sigmoid sinus, 11 % of the left X's in the inferior petrosal sinus, and the left IX and XI ran through
+  each other. Foramina are located from the routes (the first stretch where a nerve is
   mostly surrounded by bone; the superior orbital fissure where III, IV, V1 and VI run closest together; the jugular
-  foramen from IX–XI), from the cranial floor's through-holes seen from above (foramen lacerum, foramen magnum) and
+  foramen from IX–XI's least-cost paths through the whole opening, before they are led round its veins), from the
+  cranial floor's through-holes seen from above (foramen lacerum, foramen magnum) and
   from TotalSegmentator's carotid (`headneck_bones_vessels`: the carotid canal's outer opening). Checks: the mandibular
-  nerve's foramen lies 1.2–1.4 mm from the floor's own foramen ovale holes; IX–XI pass 3–5.5 mm from the jugular bulb.
+  nerve's foramen lies 1.2–1.4 mm from the floor's own foramen ovale holes; IX–XI pass 3.5–5.8 mm from the jugular bulb.
   The sigmoid and transverse sinuses are traced through the CT's enhanced lumen (84–92 % of the trace at least 1.5 mm
   inside it), the middle meningeal artery routed through the foramen spinosum; the cervical carotids and jugular veins
   are TotalSegmentator's. The nerves' cisternal courses stay approximate (the brainstem is not in the CT); near the

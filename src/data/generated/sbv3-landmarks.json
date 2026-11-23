@@ -462,7 +462,7 @@
   "side": "R",
   "boneFrom": "located on this CT",
   "distanceToBoneMm": 0.0,
-  "how": "The middle of where the glossopharyngeal, vagus and accessory nerves, routed through this CT, are most closely surrounded by bone.",
+  "how": "The middle of where the least-cost paths of the glossopharyngeal, vagus and accessory nerves through this CT are most closely surrounded by bone (the nerves as drawn are then led round the veins of the foramen, in its medial part).",
   "from": [
    "Glossopharyngeal nerve (IX)",
    "Vagus nerve (X)",
@@ -518,7 +518,7 @@
   "side": "L",
   "boneFrom": "located on this CT",
   "distanceToBoneMm": 0.0,
-  "how": "The middle of where the glossopharyngeal, vagus and accessory nerves, routed through this CT, are most closely surrounded by bone.",
+  "how": "The middle of where the least-cost paths of the glossopharyngeal, vagus and accessory nerves through this CT are most closely surrounded by bone (the nerves as drawn are then led round the veins of the foramen, in its medial part).",
   "from": [
    "Glossopharyngeal nerve (IX)",
    "Vagus nerve (X)",

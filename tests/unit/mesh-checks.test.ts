@@ -143,6 +143,28 @@ describe('nerves and vessels against the skull-base bone they are drawn with', (
     expect(bad).toEqual([]);
   }, 120_000);
 
+  it('v3: the nerves of the jugular foramen and of the cavernous sinus do not run through the veins and arteries beside them', async () => {
+    const ss = sbv3Manifest.structures;
+    const of = (name: string) => soup(ss.find((s) => s.name === name && plain(s))!.file);
+    // (routed like the other nerves, 7 to 21 % of IX's and XI's tubes lay in the sigmoid sinus and 11 % of the left X's
+    // in the inferior petrosal sinus; the abducens nerve's centre line ran 3 mm through the carotid's traced part and
+    // the left oculomotor nerve's 2.5 mm through its label. A vertex or two may graze a neighbour's surface)
+    const pairs: [string[], string[]][] = [
+      [['Glossopharyngeal nerve (IX)', 'Vagus nerve (X)', 'Accessory nerve (XI)'], ['Sigmoid sinus', 'Inferior petrosal sinus', 'Internal jugular vein']],
+      [['Oculomotor nerve (III)', 'Trochlear nerve (IV)', 'Abducens nerve (VI)'], ['Internal carotid artery', 'Internal carotid artery (petrous and lacerum parts)']],
+    ];
+    const bad: string[] = [];
+    for (const [nerves, vessels] of pairs) for (const v of vessels) {
+      const V = await of(v);
+      for (const n of nerves) {
+        const N = await of(n);
+        const share = pointsInside(N.P, V.P, V.T) / (N.P.length / 3);
+        if (share > 0.01) bad.push(`${n}: ${(100 * share).toFixed(1)} % of its surface inside the ${v.toLowerCase()}`);
+      }
+    }
+    expect(bad).toEqual([]);
+  }, 120_000);
+
   it('v1 (Z-Anatomy): a nerve or vessel drawn through bone says so on its card', async () => {
     const ss = sbManifest.structures;
     // (Z-Anatomy's bones are each closed: each is counted on its own)

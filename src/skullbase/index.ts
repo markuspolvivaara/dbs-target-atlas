@@ -162,7 +162,8 @@ export const V3_FIT = z.object({
   facialSegmentsMm: z.record(z.string(), z.object({ labyrinthine: z.number(), tympanic: z.number(), mastoid: z.number(), secondGenuAngle: z.number() })),
   relationsMm: z.record(z.string(), z.object({ geniculateToCochlea: z.number(), geniculateToSuperiorCanal: z.number(), gspnLength: z.number(), gspnToCarotid: z.number() })),
   /** the cranial nerves routed through the CT: length drawn, bone crossed, distance from the fitted course, per side */
-  nerves: z.record(z.string(), z.record(z.string(), z.object({ lengthMm: z.number(), boneCrossedMm: z.number(), maxFromFittedMm: z.number() }))),
+  // (maxFromGuideMm: a nerve led along another's route, the accessory beside the vagus at the jugular foramen: from that guide)
+  nerves: z.record(z.string(), z.record(z.string(), z.object({ lengthMm: z.number(), boneCrossedMm: z.number(), maxFromFittedMm: z.number(), maxFromGuideMm: z.number().optional() }))),
   nerveChecks: z.object({
     mandibularNerveToOvaleHoleMm: z.record(z.string(), z.number().nullable()),
     opticNerveToSegmentationMm: z.record(z.string(), z.number()),
