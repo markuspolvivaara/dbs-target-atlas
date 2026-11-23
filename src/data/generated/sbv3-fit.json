@@ -992,14 +992,14 @@
    "tb_abducens_nerve_vi": {
     "L": {
      "marginMm": 0.5,
-     "insideBefore": 0.121,
-     "carvedMl": 0.017,
+     "insideBefore": 0.137,
+     "carvedMl": 0.019,
      "keptOffAirVoxels": 0,
      "insideAfter": 0.0
     },
     "R": {
      "marginMm": 0.5,
-     "insideBefore": 0.099,
+     "insideBefore": 0.091,
      "carvedMl": 0.014,
      "keptOffAirVoxels": 0,
      "insideAfter": 0.0
@@ -1284,7 +1284,7 @@
   },
   "Inferior ophthalmic vein": {
    "L": {
-    "share": 0.301,
+    "share": 0.284,
     "deepestMm": 1.6
    },
    "R": {
