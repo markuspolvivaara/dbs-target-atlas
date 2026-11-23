@@ -67,7 +67,7 @@ come from the user's palette, the skull base nerve/tumour and AVM pairs are the 
   (the skull base already names the vessel: `approaches.ts:362`), P1-18 (keep the manifest copies as a data
   interface?), P1-26 / A-018 (three uncited references).
 - Model questions: MA-05, MA-07 (the right fornix's front end), MA-08 (tremor view), MA-09 (DISTAL Vim against Morel),
-  MA-11 (which PPN), MA-19 (left dentate on T2), MB-07 (below), MB-14, MB-15, MB-20, MC-19 (v1 at life size?), AP-13 (keyhole
+  MA-11 (which PPN), MA-19 (left dentate on T2), MB-14, MB-15, MB-20, MC-19 (v1 at life size?), AP-13 (keyhole
   placement), AP-14 (an operative-line camera option?).
 
 **Done without a decision (2026-11-19, the user: "Lets do the ones that can be done without decisions").** On
@@ -153,19 +153,42 @@ the list").** On `fix/audit-models-2` (off `27ee8a6`), local commits, not pushed
   nerve copies follow). The petroclival meningioma and what it pushes changed a little (no channels for the stubs).
   Left: the trochlear nerve runs up to 4.4 mm under the fitted midbrain's surface for a third of its length further
   along; lifting it ring by ring tore the tube: its course has to be routed again.
-- **MB-07, not done, needs the owner again.** The owner said yes to one fourth ventricle that follows the CT's fluid,
-  but a swap does not work: the ventricles section's one (the CT's fluid above, the model fitted to the CT's
-  ventricles below) lies 27 % inside v3's fitted pons and 9 % in its vermis, ends 13 mm higher than v3's, and has no
-  vertex-for-vertex tie to the model, which v3's rhomboid-fossa landmarks (`skullbase_v3_rhomboid.py`) and the
-  telovelar shapes are built on: the floor's landmarks would lie under the drawn pons. Doing it properly means
-  fitting v3's hindbrain again with the CT's fourth-ventricle fluid as a constraint (`skullbase_pfossa.py` leaves it
-  out), which moves the brainstem and cerebellum by a few millimetres and everything built on them (arteries'
-  clearance, the PICA, nerve exits, tumours, approach figures, the vascular and ventricles sections' copies). Choices:
-  that refit as its own piece of work; or leave both and say on both cards that they differ and why.
+- **MB-07 done as a refit (the owner, 22 November: "I think a refit would be good").** On `fix/hindbrain-refit` (off
+  PR 31's branch), local, not pushed:
+  - `skullbase_pfossa.py` has a new fit term, "v4": this CT's fourth-ventricle fluid (deep fluid further than 8 mm
+    from bone, within 8 mm of the carried model's ventricle: 0.5 ml, its upper part) inside the model's fourth
+    ventricle. In the RBF stages only: in the affine stage it moved the whole model (midbrain 6 mm) and folded the
+    carried courses. The CT's fluid outside the fitted ventricle falls from 48 % (worst 4.9 mm) to 16 % (1.2 mm); the
+    other terms are as they were. The parts move: pons a median 2.0 mm, midbrain 4.0 (2 mm of it to the left: the old
+    ventricle's top lay 2.5 mm right of the CT's), culmen 3.9, medulla 0.5.
+  - The ventricles section takes that ventricle as its fourth (`ventricles_build.v3_fourth`): its drawn fourth
+    ventricle is the skull base's, softened and joined to the aqueduct as before. The two overlapped 52 % and 40 %;
+    now the section's holds 94 % of the skull base's, and none of it lies in the drawn cerebellum.
+  - What followed in v3: the nerves' roots, the trigeminal ganglion and its divisions and the cavernous triangles
+    move with the carried courses (about 1 mm), so the skull was carved again round V2 and VI
+    (`skullbase_v3_skull.py`) and the approaches cut again: every bone and approach bone copy is re-meshed (the same
+    surfaces). Koos IV sits lower (15.8 ml, was 18.4).
+  - Rules changed on the way: `PUSH_ROUNDS` 40 → 120 in the clearance (the AICA under the lifted far-lateral
+    cerebellum); a fitted course's last sharp corner is rounded where it lies (`skullbase_v3_base.round_corners`: the
+    left AICA turned 119°); the far lateral shape's bone correction repeats; a tumour view's moved arteries go away
+    from the tumour's middle, not the shortest way out (most of the AICA lies in Koos IV, and the shortest ways tore
+    it); the retrosigmoid corridor check allows 2 % (22 of 1904 points; was 1 %); `skullbase_v3_roots.py` skips the
+    chiasm's files in a full rebuild.
+  - **The chain's order that settles** (routes, the cavernous constraints and the skull's carve feed one another):
+    `skullbase_pfossa.py`, then `skullbase_v3.py`, `skullbase_v3_cavernous.py`, `skullbase_v3_skull.py`,
+    `skullbase_v3_approach.py`, `skullbase_v3.py`, `skullbase_v3_cavernous.py`, `skullbase_v3_endonasal.py`,
+    `skullbase_v3_chiasm.py`, `skullbase_v3_tumours.py`, compress, finalize; then `skullbase_ct_openings.py` and
+    `skullbase_build.py ct finalize`, `vascular_build.py`, `ventricles_build.py` (15 minutes). The skull fit's cache
+    key hashes `skullbase_ct.py`, which `b57bce7` refactored without touching the fit: the cache was copied to the new
+    key (`skull_fit_c47edd211b32f64a.npz`).
+  - Shipped files kept as they were where the refit did not touch them: a file is restored when its build file is byte
+    for byte as before, or its vertices and shapes match the shipped one's.
+  - **Seen on the CT, not acted on:** about 1.6 ml of fluid above and behind the ventricle (the supracerebellar and
+    quadrigeminal cisterns, joined to the ventricle's fluid at this resolution) lies about 80 % inside the model's
+    culmen and tectum, before and after. Fitting to it would lower the superior vermis; the owner's call.
 
 **Still left without a decision, and why not done this round:**
-- MB-07 (above: a refit of v3's hindbrain, or a note on both cards). The trochlear nerve's course under the midbrain's
-  surface (MB-11's rest). MC-13 and MC-15 (v1's bone raster; v1's right "Insula" holding the fissure's white-matter
+- The trochlear nerve's course under the midbrain's surface (MB-11's rest). The supracerebellar cistern (above). MC-13 and MC-15 (v1's bone raster; v1's right "Insula" holding the fissure's white-matter
   floor back to the occipital region: `skullbase_v1_brain.white_floor`, limit it to the circular sulcus's extent):
   both need v1's brain or skull step run again, which the later v1 steps and the user's v1 endonasal rework depend
   on: do them with that rework. AP-11, AP-15, MC-16: v1 endonasal, in the user's rework. MA-17's rest: the
