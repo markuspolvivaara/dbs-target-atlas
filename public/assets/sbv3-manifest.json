@@ -2341,7 +2341,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_trochlear_nerve_iv.cleared.glb",
-   "bytes": 8720,
+   "bytes": 13120,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2362,17 +2362,17 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 4,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 50.5 mm drawn, at most 5.0 mm from the fitted course, 0.0 mm through bone the mask closes; left: 54.8 mm drawn, at most 5.0 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): into the roof at the back of the oculomotor triangle's lateral side, then forward in the lateral wall below the oculomotor nerve to the superior orbital fissure. Cut at the brainstem's surface: its routed course began 1.2 mm inside the fitted brainstem (skullbase_v3_roots.py).",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 50.5 mm drawn, at most 5.0 mm from the fitted course, 0.0 mm through bone the mask closes; left: 54.8 mm drawn, at most 5.0 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): into the roof at the back of the oculomotor triangle's lateral side, then forward in the lateral wall below the oculomotor nerve to the superior orbital fissure. Round the brainstem it is laid on the surface (skullbase_v3_roots.py): the routed course ran through the fitted brainstem there (for 18.2 mm, up to 4.5 mm deep). Its first 39 mm are drawn from where the fitted course runs furthest back, moved straight back onto the brainstem's surface, then over the surface as near the fitted course as the brainstem and the drawn vessels allow (at most 4.9 mm from it), to where the routed course has left the brainstem; so drawn it is 67.1 mm long on the right and 73.7 mm on the left. The fitted course's way through the brainstem to that point is not drawn.",
    "centroid": {
     "L": [
-     -12.14,
-     -0.64,
-     5.22
+     -10.45,
+     -13.24,
+     8.31
     ],
     "R": [
-     12.6,
-     -2.18,
-     3.88
+     11.95,
+     -13.29,
+     5.21
     ]
    },
    "clearedFrom": "assets/skullbase-v3/tb_trochlear_nerve_iv.glb"

@@ -245,22 +245,34 @@ describe('brainstem: the nuclei of the third and fourth nerves lie in the midbra
 });
 
 describe('skull base v3: the routed cranial nerves begin at the brainstem’s surface (the audit’s MB-11)', () => {
-  it('no nerve from III to XII but the fourth has more than a little of its surface inside the brainstem', async () => {
+  it('no nerve from III to XII has more than a little of its surface inside the brainstem', async () => {
     const ss = sbv3Manifest.structures;
     const stem = await Promise.all(['Midbrain', 'Pons', 'Medulla oblongata'].map((n) => soup(ss.find((s) => s.name === n && plain(s))!.file)));
     const bad: string[] = [];
     let n = 0;
-    // (the trochlear nerve runs round the midbrain just under its fitted surface further along: not its root, and not cut)
-    for (const s of ss.filter((s) => s.category === 'nerve' && /\((III|V|VI|VII|VIII|IX|X|XI|XII)\)$/.test(s.name) && !s.approach && !s.tumourView && !s.forView)) {
+    for (const s of ss.filter((s) => s.category === 'nerve' && /\((III|IV|V|VI|VII|VIII|IX|X|XI|XII)\)$/.test(s.name) && !s.approach && !s.tumourView && !s.forView)) {
       const t = await soup(s.file);
       const share = stem.reduce((a, b) => a + pointsInside(t.P, b.P, b.T), 0) / (t.P.length / 3);
       n++;
       // (their roots began 1 to 4 mm inside it: 11 to 34 % of each nerve's surface; a tube that ends in the surface
       // has its last ring and cap under it. The short eighth nerve leaves at the pontomedullary junction, where the
-      // pons and the medulla as drawn overlap and its points count twice: 11 %)
+      // pons and the medulla as drawn overlap and its points count twice: 11 %. The trochlear nerve is laid round the
+      // brainstem on its surface: cut like the others, after the hindbrain was fitted round the fourth ventricle, it
+      // had lost its first 17 mm and began at the front of the pons)
       if (share > (s.name.startsWith('Vestibulocochlear') ? 0.12 : 0.08)) bad.push(`${s.name}: ${(100 * share).toFixed(1)} % of its surface inside the brainstem`);
     }
-    expect(n).toBe(9);
+    expect(n).toBe(10);
     expect(bad).toEqual([]);
   }, 120_000);
+
+  it('the trochlear nerve begins at the back of the brainstem, on each side', async () => {
+    const ss = sbv3Manifest.structures;
+    const mid = await nodeStats(ss.find((s) => s.name === 'Midbrain' && plain(s))!.file);
+    const iv = await nodeStats(ss.find((s) => s.name === 'Trochlear nerve (IV)' && plain(s))!.file);
+    // (y runs forwards: the nerve reaches further back than the midbrain's middle, front to back. Routed through the
+    // brainstem it began 2 mm in front of that middle; cut at the surface, at the front of the pons, 17 mm in front)
+    const middle = (Math.min(...mid.map((m) => m.lo[1])) + Math.max(...mid.map((m) => m.hi[1]))) / 2;
+    expect(iv.map((n) => n.node).sort()).toEqual(['L', 'R']);
+    for (const n of iv) expect(n.lo[1], n.node).toBeLessThan(middle - 5);
+  }, 60_000);
 });
