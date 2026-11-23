@@ -233,13 +233,16 @@ export const V3_FIT = z.object({
       tentoriumMedianMm: z.number().optional(),
       /** the share of this CT's cistern points (fluid along the posterior fossa's bone) that lie inside the model */
       cisternInsideShare: z.number().optional(),
+      /** this CT's fourth-ventricle fluid outside the fitted fourth ventricle (share of its points; the furthest, mm) */
+      ventricleFluidOutsideShare: z.number().optional(), ventricleFluidOutsideMaxMm: z.number().optional(),
       minRelativeVolume: z.number(), affineScale: z.array(z.number()),
-      before: z.object({ tableMedianMm: z.number(), vesselInsideShare: z.number(), cisternInsideShare: z.number().optional() }),
+      before: z.object({ tableMedianMm: z.number(), vesselInsideShare: z.number(), cisternInsideShare: z.number().optional(), ventricleFluidOutsideShare: z.number().optional() }),
     }),
     clear: z.object({ inVesselBefore: z.number(), inBoneBefore: z.number(), inVesselAfter: z.number(), inBoneAfter: z.number(), maxMovedMm: z.number() }),
     modelMl: z.number(),
     /** the fluid this CT shows within 8 mm of the posterior fossa's bone (its cisterns), ml */
     cisternMl: z.number().optional(),
+    ventricleFluidMl: z.number().optional(),
     telovelar: z.object({ maxMovedMm: z.number(), inBoneAfter: z.number(), inVesselAfter: z.number(),
       tonsilToMedullaMm: z.object({ rest: z.number(), moved: z.number() }), vermisLiftMm: z.number(),
       uvulaToMedullaMm: z.object({ rest: z.number(), moved: z.number() }), inVentricle: z.object({ rest: z.number(), moved: z.number() }) }),

@@ -162,7 +162,7 @@
      "boneMm": 11.5,
      "solidMm": 5.0,
      "airMm": 0.0,
-     "apartMm": 0.9
+     "apartMm": 1.0
     },
     "L": {
      "boneMm": 7.8,
@@ -1167,13 +1167,13 @@
      "boneMm": 0.2,
      "solidMm": 0.0,
      "airMm": 0.0,
-     "apartMm": 0.3
+     "apartMm": 0.4
     },
     "L": {
      "boneMm": 9.5,
      "solidMm": 6.8,
      "airMm": 0.0,
-     "apartMm": 1.9
+     "apartMm": 2.0
     }
    }
   },
@@ -1279,7 +1279,7 @@
      "boneMm": 2.2,
      "solidMm": 0.0,
      "airMm": 0.0,
-     "apartMm": 6.2
+     "apartMm": 5.8
     }
    }
   },
@@ -1809,7 +1809,7 @@
      "boneMm": 10.8,
      "solidMm": 0.0,
      "airMm": 6.8,
-     "apartMm": 2.7
+     "apartMm": 2.8
     }
    }
   },
@@ -2314,13 +2314,13 @@
      "boneMm": 6.0,
      "solidMm": 1.8,
      "airMm": 0.0,
-     "apartMm": 4.5
+     "apartMm": 4.4
     },
     "L": {
      "boneMm": 7.8,
      "solidMm": 4.0,
      "airMm": 0.0,
-     "apartMm": 4.0
+     "apartMm": 5.1
     }
    }
   },

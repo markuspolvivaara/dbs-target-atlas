@@ -143,6 +143,8 @@ def check(items: list) -> list[tuple[bool, str]]:
     stem = Stem(items)
     out = []
     for it in nerves(items):
+        if not CL.shown(it).exists():
+            continue
         for side, nd in read_glb_full(CL.shown(it)).items():
             tp = tube_part(np.asarray(nd["positions"], float))
             if tp is None:
@@ -158,6 +160,8 @@ def main() -> int:
     stem = Stem(m["structures"])
     rep = {}
     for it in nerves(m["structures"]):
+        if not CL.shown(it).exists():        # (the chiasm and optic tracts: skullbase_v3_chiasm.py draws them after this)
+            continue
         nodes = read_glb_full(CL.shown(it))
         cuts = {side: c for side, nd in nodes.items() if (c := cut_node(nd, stem))}
         if not cuts:

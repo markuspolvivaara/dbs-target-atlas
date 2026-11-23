@@ -312,6 +312,19 @@ def fit_model(g: Grid, ct: np.ndarray, scale: float) -> tuple[dict, np.ndarray, 
     return parts, ct4, rep, lambda X: warp(inv(scale * np.asarray(X, float)))
 
 
+def v3_fourth() -> tuple[np.ndarray, np.ndarray]:
+    """Skull base v3's fitted fourth ventricle (pf_fourth_ventricle.glb as skullbase_pfossa.py writes it: its two
+    halves, joined again where their vertices coincide), in the frame: (verts, tris)."""
+    from winding_check import read_nodes
+    Vs, Ts, off = [], [], 0
+    for _name, P, _n, T in read_nodes(V3_BUILD / "pf_fourth_ventricle.glb"):
+        Vs.append(np.asarray(P, float)); Ts.append(np.asarray(T, int).reshape(-1, 3) + off)
+        off += len(P)
+    m = trimesh.Trimesh(np.vstack(Vs), np.vstack(Ts), process=False)
+    m.merge_vertices()
+    return np.asarray(m.vertices), np.asarray(m.faces)
+
+
 def monro(parts: dict) -> dict:
     """Each foramen: the points where the fitted lateral ventricle comes closest to the fitted third ventricle, the tube
     between them run on MONRO_INTO_MM into each."""
@@ -604,6 +617,16 @@ def main() -> int:
     # the model fitted onto the CT's ventricles, and the foramina between its lateral and third ventricles
     parts, fourth, fit, carry = fit_model(g, mask | third, float(ex2["fit"]["scale"]))
     vrep["volumeMl"]["fourth"] = fit["fourthCtMl"]
+    # one fourth ventricle for this section and the skull base (the site audit's MB-07): where this CT does not show
+    # it, it is Skull base v3's, the model's fitted into the posterior fossa with the brainstem and cerebellum so that
+    # it holds the fluid this CT shows (skullbase_pfossa.py), not this fit's own (the two lay 2.6 mm apart, and this
+    # one partly in the skull base's pons)
+    own4 = parts["fourth"][0]
+    parts["fourth"] = v3_fourth()
+    d4 = cKDTree(parts["fourth"][0]).query(boundary_points(fourth))[0] if fourth.any() else np.zeros(1)
+    fit["fourthFitMedianMm"] = round(float(np.median(d4)), 2)
+    fit["fourthOwnFitApartMm"] = round(float(np.median(cKDTree(parts["fourth"][0]).query(own4)[0])), 2)
+    fit["modelMl"]["fourth"] = round(abs(trimesh.Trimesh(*parts["fourth"], process=False).volume) / 1000, 2)
     fm = monro(parts)
     fit["monro"] = {s: {k: v for k, v in f.items() if k in ("gapMm", "onThird")} for s, f in fm.items()}
     print("model fitted", fit, flush=True)
@@ -915,7 +938,9 @@ def write_manifest(cent: dict, vrep: dict, etv: dict) -> None:
     }, {
         **base, "id": "ve_fourth_ventricle", "name": "Fourth ventricle", "file": f"assets/{KIND}/ve_fourth_ventricle.glb",
         "derivation": (f"This CT's own where it shows it: the fluid darker than {CSF_HU:.0f} HU within {FOURTH_NEAR_MM:.0f} mm of the model's fourth "
-                       f"ventricle ({v['fourth']} ml: its upper part; lower down this CT does not show it). {model_how} "
+                       f"ventricle ({v['fourth']} ml: its upper part; lower down this CT does not show it). Where the CT does not show it, "
+                       "the skull base section's fourth ventricle: the Z-Anatomy model's (one adult, BodyParts3D), fitted into this CT's "
+                       "posterior fossa with the brainstem and cerebellum so that it holds that fluid (skullbase_pfossa.py). "
                        f"The CT's part lies a median {fit['fourthFitMedianMm']} mm from the fitted model's; along the rest of the model the CT is "
                        f"{fit['fourthCt']['insideHu']} HU, against {fit['fourthCt']['aroundHu']} HU around. Its lateral recesses and the foramina of "
                        f"Luschka and Magendie are not modelled. {drawn_how} As drawn: {d['fourth']} ml."),

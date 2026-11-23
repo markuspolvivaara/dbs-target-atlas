@@ -162,7 +162,7 @@
  },
  "hydrocephalus": {
   "vesselIntrusionMaxMm": 0.05,
-  "correctedPoints": 412,
+  "correctedPoints": 411,
   "rest": {
    "evansIndex": 0.215,
    "frontalHornsMm": 25.8,
@@ -171,14 +171,14 @@
   },
   "hydrocephalus": {
    "evansIndex": 0.42,
-   "frontalHornsMm": 50.3,
+   "frontalHornsMm": 50.4,
    "thirdWidthMm": 23.5,
    "floorToApexMm": 3.35
   },
   "amplitudeMm": {
-   "lateral": 31.13,
+   "lateral": 31.09,
    "third": 7.85,
-   "floor": 82.93
+   "floor": 82.97
   },
   "goal": {
    "evansIndex": 0.42,
@@ -189,7 +189,7 @@
   "mammillary": {
    "placedAcpcMm": [
     -11.3,
-    -2.61
+    -2.62
    ],
    "daSilvaHydroAcpcMm": [
     -11.3,
@@ -198,49 +198,49 @@
    "protrudeMm": 4.0,
    "movedMm": 3.89
   },
-  "stoppedPoints": 1934,
+  "stoppedPoints": 1945,
   "mammillaryWrap": {
-   "wrappedPoints": 383,
+   "wrappedPoints": 384,
    "maxMoveMm": 2.22,
-   "minGapMm": -0.32
+   "minGapMm": -0.33
   },
   "wallsPushedMm": {
    "ve_fornix": 0.69,
-   "ve_septum_pellucidum": 1.08,
+   "ve_septum_pellucidum": 1.09,
    "ve_thalamus": 0.47,
    "ve_caudate_nucleus": 1.22,
-   "ve_stria_terminalis": 0.7,
-   "ve_hypothalamus": 2.08,
-   "ve_optic_chiasm": 0.31,
+   "ve_stria_terminalis": 0.71,
+   "ve_hypothalamus": 2.11,
+   "ve_optic_chiasm": 0.47,
    "ve_optic_tract": 0.0,
-   "ve_anterior_commissure": 0.52,
+   "ve_anterior_commissure": 0.51,
    "ve_posterior_commissure": 0.5,
    "ve_habenula": 0.42,
    "ve_pineal_gland": 0.35,
-   "ve_corpus_callosum": 1.02
+   "ve_corpus_callosum": 0.84
   },
   "plexusAtMonro": {
    "R": {
     "shiftMm": 2.5,
     "thalamusMedianMm": [
-     4.43,
-     2.23
+     4.44,
+     2.26
     ]
    },
    "L": {
     "shiftMm": 2.0,
     "thalamusMedianMm": [
-     4.06,
+     4.07,
      2.29
     ]
    }
   },
-  "jacobianMinAround": 0.069,
+  "jacobianMinAround": 0.062,
   "points": {
    "target": [
     -0.9,
     -8.87,
-    12.64
+    12.63
    ],
    "monro": {
     "R": [
@@ -249,33 +249,33 @@
      28.82
     ],
     "L": [
-     -7.7,
+     -7.71,
      -8.98,
      28.25
     ]
    },
    "mammillaryBodies": [
     0.7,
-    -17.28,
-    15.99
+    -17.29,
+    16.0
    ]
   },
   "trajectories": {
    "R": {
     "entry": [
-     38.95,
-     -6.32,
-     89.63
+     38.96,
+     -6.31,
+     89.62
     ],
     "direction": [
-     0.4595,
-     0.0293,
-     0.8877
+     0.4596,
+     0.0295,
+     0.8876
     ],
     "target": [
      -0.9,
      -8.87,
-     12.64
+     12.63
     ],
     "monro": [
      7.48,
@@ -285,28 +285,28 @@
     "depthMm": 86.7,
     "depthToMonroMm": 68.5,
     "fromMidlineMm": 38.4,
-    "fromCoronalSutureMm": -14.7,
+    "fromCoronalSutureMm": -14.6,
     "sagittalAngleDeg": 12.6,
     "coronalAngleDeg": 27.9
    },
    "L": {
     "entry": [
-     -35.17,
-     -9.46,
-     91.28
+     -35.19,
+     -9.45,
+     91.27
     ],
     "direction": [
-     -0.3995,
-     -0.0069,
+     -0.3996,
+     -0.0068,
      0.9167
     ],
     "target": [
      -0.9,
      -8.87,
-     12.64
+     12.63
     ],
     "monro": [
-     -7.7,
+     -7.71,
      -8.98,
      28.25
     ],

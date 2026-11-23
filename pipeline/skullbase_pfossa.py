@@ -17,6 +17,10 @@ Gaussian radial basis functions; phi: frame -> the carried model), found by mini
   P1-P2, superior and posterior inferior cerebellar) outside the brainstem and cerebellum;
   this CT's cisterns (the fluid it shows within CISTERN_WALL_MM of the posterior fossa's bone, darker than CISTERN_HU)
   outside them too;
+  this CT's fourth ventricle (the fluid it shows deep in the fossa, further than CISTERN_WALL_MM from bone, within
+  V4_NEAR_MM of the carried model's fourth ventricle: its upper part, which is all this CT resolves) inside the model's
+  fourth ventricle: without it the fit had the pons where the CT shows that fluid (the site audit's MB-07: the fitted
+  ventricle held a quarter of it), and the ventricles section drew a fourth ventricle of its own;
   the tentorium over the cerebellum: this CT's own (the surface through its transverse sinuses, straight sinus and
   petrous ridges, skullbase_v3_tentorium.py), its points with the wall's;
   a penalty wherever the local volume would shrink below JAC_MIN of the overall scale, so that it never folds.
@@ -125,6 +129,9 @@ CISTERN_WALL_MM = 8.0      # the cisterns: fluid within this of the posterior fo
                            # prepontine cistern, the cisterna magna); the fourth ventricle, deep in the model, is not among them
 CISTERN_MIN_MM3 = 30       # a patch of fluid smaller than this is taken for noise
 CISTERN_MARGIN_MM = 0.3    # the model keeps this far out of a point of fluid
+V4_NEAR_MM = 8.0           # this CT's fourth ventricle: its fluid within this of the carried model's fourth ventricle ...
+V4_MIN_MM3 = 100           # ... in patches of at least this size (the ventricle's own body; smaller ones are noise)
+V4_MARGIN_MM = 0.3         # the model's fourth ventricle holds each point of that fluid by this much
 JAC_MIN = 0.45
 JAC_WEIGHT = 20.0
 HULL_CLOSE_MM = 3
@@ -133,11 +140,14 @@ STAGES = [  # (control grid spacing = Gaussian width in mm, or 'affine'; ridge; 
     # ("tent": the hull TABLE_GAP_MM under the tentorium, from both sides, as "table" is for the inner table. Not in the
     # affine stage: there it sent the whole model 10 mm from where the bones' fit had carried it; the affine stage has
     # the tentorium as a wall only, and the stages after it draw the cerebellum's tentorial surface up to it)
-    ("affine", 0, dict(table=1.0, wall=1.0, bone=0.5, out=1.0, dura=0.2, tent=0.0, csf=0.5)),
-    (14.0, 1e-4, dict(table=1.0, wall=1.0, bone=1.0, out=2.0, dura=0.5, tent=1.0, csf=1.0)),
-    (9.0, 1e-4, dict(table=1.0, wall=2.0, bone=2.0, out=4.0, dura=0.5, tent=1.0, csf=2.0)),
-    (6.0, 3e-4, dict(table=1.0, wall=2.0, bone=2.0, out=4.0, dura=0.5, tent=1.0, csf=2.0)),
-    (4.0, 1e-3, dict(table=1.0, wall=2.0, bone=2.0, out=8.0, dura=0.5, tent=1.0, csf=2.0)),
+    # ("v4": this CT's fourth-ventricle fluid inside the model's fourth ventricle. Not in the affine stage: there it moved
+    # the whole model to seat one small cavity (the midbrain 6 mm, the culmen 7 mm; the nerves' courses carried with it
+    # folded); the stages after it open the ventricle where it lies)
+    ("affine", 0, dict(table=1.0, wall=1.0, bone=0.5, out=1.0, dura=0.2, tent=0.0, csf=0.5, v4=0.0)),
+    (14.0, 1e-4, dict(table=1.0, wall=1.0, bone=1.0, out=2.0, dura=0.5, tent=1.0, csf=1.0, v4=1.0)),
+    (9.0, 1e-4, dict(table=1.0, wall=2.0, bone=2.0, out=4.0, dura=0.5, tent=1.0, csf=2.0, v4=2.0)),
+    (6.0, 3e-4, dict(table=1.0, wall=2.0, bone=2.0, out=4.0, dura=0.5, tent=1.0, csf=2.0, v4=2.0)),
+    (4.0, 1e-3, dict(table=1.0, wall=2.0, bone=2.0, out=8.0, dura=0.5, tent=1.0, csf=2.0, v4=2.0)),
 ]
 TV_MM = 6.0                # illustrative: how far each tonsil is drawn aside
 TV_UP = 0.4                # ... laterally, and up by this share of it
@@ -273,6 +283,24 @@ class Fossa:
         C = GRID_LO + np.argwhere(fluid) * st
         self.cistern_ml = float(fluid.sum() * st ** 3 / 1000)
         self.cistern = C[rng.choice(len(C), min(6000, len(C)), replace=False)]
+        # this CT's fourth ventricle: the fluid it shows deep in the fossa (not against the bone: those are the cisterns),
+        # near where v2's fit carried the model's fourth ventricle. Its upper part is all this CT resolves
+        v4m = np.array(json.loads((CT_BUILD / "pfossa.json").read_text())["meshes"]["Fourth ventricle"]["verts"], float)
+        near = np.ones(B.shape, bool)
+        near[tuple(np.clip(np.rint((v4m - GRID_LO) / st).astype(int), 0, np.array(B.shape) - 1).T)] = False
+        deep = cav & (hu < CISTERN_HU) & (hu > -200) & (ndimage.distance_transform_edt(~B) * st > CISTERN_WALL_MM) \
+            & (ndimage.distance_transform_edt(near) * st <= V4_NEAR_MM)
+        idx = np.argwhere(deep)
+        keep = infratentorial(GRID_LO + idx * st)
+        deep[tuple(idx[~keep].T)] = False
+        lab, n = ndimage.label(deep)
+        if n:
+            size = ndimage.sum(deep, lab, np.arange(1, n + 1))
+            deep &= np.isin(lab, 1 + np.nonzero(size * st ** 3 >= V4_MIN_MM3)[0])
+        self.v4 = GRID_LO + np.argwhere(deep) * st
+        self.v4_ml = float(deep.sum() * st ** 3 / 1000)
+        if not len(self.v4):
+            raise SystemExit("the CT shows no fluid near the model's fourth ventricle")
         # TopBrain's arteries around the brainstem and cerebellum, as centre lines with radius
         img = nib.load(LABELS)
         L = np.asarray(img.dataobj)
@@ -323,6 +351,11 @@ class Model:
         for v, t in self.meshes.values():
             solid |= fill(v, t, self.lo, shape, st)
         self.solid = BD.Field(sdf(solid, st), self.lo, st, 30.0)
+        vent = np.zeros(shape, bool)
+        for n, (v, t) in self.meshes.items():
+            if n.startswith("Fourth ventricle"):
+                vent |= fill(v, t, self.lo, shape, st)
+        self.vent = BD.Field(sdf(vent, st), self.lo, st, 30.0)       # the fourth ventricle alone: negative inside
         r = int(round(HULL_CLOSE_MM / st))
         pad = r + 2
         hull = ndimage.binary_fill_holes(ndimage.binary_closing(np.pad(solid, pad), ball(r))[pad:-pad, pad:-pad, pad:-pad])
@@ -337,7 +370,8 @@ def fit(md: Model, fs: Fossa, cache: Path) -> tuple:
         return z["A"], z["b"], rbfs, [z[f"W{i}"] for i in range(len(rbfs))], json.loads(str(z["report"]))
     OUT = np.vstack(list(fs.lines.values()))
     r_out = np.maximum(OUT[:, 3], fs.vessel_tree.query(OUT[:, :3])[0])     # the drawn surface's radius there
-    groups = {"table": fs.table, "wall": fs.wall, "shell": fs.shell, "out": OUT[:, :3], "dura": fs.dura, "tent": fs.under, "csf": fs.cistern}
+    groups = {"table": fs.table, "wall": fs.wall, "shell": fs.shell, "out": OUT[:, :3], "dura": fs.dura, "tent": fs.under, "csf": fs.cistern,
+              "v4": fs.v4}
     wts = dict(STAGES[-1][2])
 
     def energy(Q):
@@ -376,6 +410,11 @@ def fit(md: Model, fs: Fossa, cache: Path) -> tuple:
         v = np.maximum(0, CISTERN_MARGIN_MM - s)
         add("csf", wts["csf"] * (v ** 2).mean(), wts["csf"] * (-2 * v / len(s))[:, None] * gs)
         rep["cisternInsideShare"] = float((s < 0).mean())
+        s, gs = md.vent(Q["v4"])
+        v = np.maximum(0, s + V4_MARGIN_MM)
+        add("v4", wts["v4"] * (v ** 2).mean(), wts["v4"] * (2 * v / len(s))[:, None] * gs)
+        rep["ventricleFluidOutsideShare"] = float((s > 0).mean())
+        rep["ventricleFluidOutsideMaxMm"] = float(max(s.max(), 0.0))
         return E, G, rep
 
     _, _, rep0 = energy(groups)
@@ -730,7 +769,7 @@ def far_lateral(parts: dict, fs) -> dict:
                 w = np.clip(1 - tree.query(v[m])[0] / FL_REACH_MM, 0, 1)
                 D[m] = FL_MM * w[:, None] * dirn
             moved = np.abs(D).sum(1) > 0
-            if moved.any():
+            for _ in range(3 if moved.any() else 0):      # (a second pass where the first left a point in bone)
                 sb, gb = fs.roof(v[moved] + D[moved])     # (the bone and the tentorium)
                 near = sb < BONE_GAP_MM
                 gbn = gb / np.maximum(np.linalg.norm(gb, axis=1, keepdims=True), 1e-9)
@@ -738,6 +777,8 @@ def far_lateral(parts: dict, fs) -> dict:
                 sv, nv = fs.vessel_sdf(v[moved] + D[moved])
                 hit = sv < VESSEL_MARGIN_MM
                 D[np.nonzero(moved)[0][hit]] += (VESSEL_MARGIN_MM + 0.1 - sv[hit])[:, None] * nv[hit]
+                if not (near.any() or hit.any()):
+                    break
         out[n] = D
     return out
 
@@ -986,6 +1027,7 @@ def main() -> int:
     inferior = [n for n in parts if n in INFERIOR_VERMIS]
     report = {"fit": rep, "inverseResidualMm": round(residual, 4), "carry": carry_rep, "clear": rc,
               "modelMl": round(md.solid_ml, 1), "cisternMl": round(fs.cistern_ml, 1),
+              "ventricleFluidMl": round(fs.v4_ml, 2),
               "telovelar": {"maxMovedMm": round(float(np.linalg.norm(mv, axis=1).max()), 2), "moved": int(moved.sum()),
                             "inBoneAfter": int((fs.bone(Xm[moved], grad=False) < 0).sum()),
                             "inVesselAfter": int((fs.vessel_sdf(Xm[moved])[0] < 0).sum()),

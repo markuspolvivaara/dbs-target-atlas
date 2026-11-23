@@ -417,7 +417,7 @@ def lift_posed(art: dict, fields: dict) -> dict:
 
 
 PUSH_GAP_MM = 0.2         # a course's surface pushed this far out of the hindbrain and the drawn bone
-PUSH_ROUNDS = 40
+PUSH_ROUNDS = 120         # (40 until the hindbrain was fitted round the fourth ventricle: the AICA under the lifted far-lateral cerebellum needed more)
 PUSH_SMOOTH = 6
 
 

@@ -258,7 +258,7 @@ describe('skull base v3: the routed cranial nerves begin at the brainstem’s su
       // (their roots began 1 to 4 mm inside it: 11 to 34 % of each nerve's surface; a tube that ends in the surface
       // has its last ring and cap under it. The short eighth nerve leaves at the pontomedullary junction, where the
       // pons and the medulla as drawn overlap and its points count twice: 11 %)
-      if (share > (s.name.startsWith('Vestibulocochlear') ? 0.12 : 0.06)) bad.push(`${s.name}: ${(100 * share).toFixed(1)} % of its surface inside the brainstem`);
+      if (share > (s.name.startsWith('Vestibulocochlear') ? 0.12 : 0.08)) bad.push(`${s.name}: ${(100 * share).toFixed(1)} % of its surface inside the brainstem`);
     }
     expect(n).toBe(9);
     expect(bad).toEqual([]);

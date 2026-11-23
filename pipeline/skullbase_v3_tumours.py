@@ -29,7 +29,7 @@ routes where it says so.
     surface, up to KOOS_MOULD_MM in), IV reaching KOOS_INTO_MM into where it lies (the brainstem pushed aside); of the
     centres allowed (searched within KOOS_SEARCH_MM of the meatus), the one furthest off the brainstem; on v1 the grid
     reaches the largest ball's radius and KOOS_PAD_MM past that, so that no ball is cut by its edge. This model's
-    fitted pons lies about 4 mm from the porus, closer than in life, which is why II is small and III moulded. The
+    fitted pons lies about 5 mm from the porus, closer than in life, which is why II is small and III moulded. The
     nerves of the angle are moved round it (displaced_nerves): the facial nerve forwards onto its anterior surface
     (Choi 2014), thinned and flattened over grades III and IV (Starnoni 2020), the others the shortest way out, and the
     fitted small arteries it reaches (displaced_vessels); the vestibulocochlear nerve, from which it grows, runs into it.
@@ -44,7 +44,7 @@ PUSH_GAP_MM beyond it (pushed on the way the tumour grows: from the meatus, or o
 the push spread over the part's neighbouring points with a normalised Gaussian (PUSH_SIGMA_MM),
 for up to PUSH_ROUNDS rounds; the pushed parts are written as copies for that view ("replaces" the part), their
 surgical shapes (morph targets) kept. A shape, not a simulation of the tissue. The fitted small arteries a tumour reaches
-(not in this CT's labels, which the tumours keep off) are moved the shortest way out of it onto its surface
+(not in this CT's labels, which the tumours keep off) are moved out of it, away from its middle, onto its surface
 (displaced_vessels); the meningiomas' cranial nerves, and the pituitary stalk the tuberculum sellae meningioma
 surrounds, run through them.
 
@@ -1086,16 +1086,18 @@ VESSEL_CROSS_MM = 2.5                # each vertex is pushed the way the vessel'
 
 def displaced_vessels(tag: str, what: str, tumour: np.ndarray, gr: Grid, man: list, skip: set) -> tuple[list, dict]:
     """The fitted arteries a tumour reaches (more than VESSEL_INSIDE_SHARE of a vessel's vertices in it; v3 only: v1's
-    tumours keep off its arteries, and its Koos views move the cerebellar ones, displaced_meshes) moved the shortest way
-    out of it, onto its surface, for its view: each vertex inside it or within NERVE_GAP_MM of it pushed out, the way
-    out from the vessel's middle there (VESSEL_CROSS_MM), the push spread over the mesh (a normalised Gaussian,
+    tumours keep off its arteries, and its Koos views move the cerebellar ones, displaced_meshes) moved out of it, onto
+    its surface, for its view: each vertex inside it or within NERVE_GAP_MM of it pushed out, away from the tumour's
+    middle as seen from the vessel's middle there (VESSEL_CROSS_MM: a cross-section moves as one; away from the middle,
+    not the shortest way out: with most of an artery inside a large tumour, the shortest ways out of neighbouring
+    stretches part at the tumour's core and tore the tube), the push spread over the mesh (a normalised Gaussian,
     VESSEL_SIGMA_MM), for up to VESSEL_ROUNDS rounds, as displaced_meshes moves v1's nerves. The right half only, as the other copies; both halves where the
     tumour reaches the vessel's left half too (a midline tumour; the copy says so: copySides). Its surgical shapes
     (morph targets) kept."""
     if V1:
         return [], {}
     sd = ENDO.signed(tumour, STEP).astype(np.float32)
-    grad = [ndimage.gaussian_filter(x, 1.0) for x in np.gradient(sd, STEP)]
+    core = gr.P[tumour].mean(0)                 # the tumour's middle
     own = gr.dist(gr.arteries()).astype(np.float32)
 
     def sample(F, X):
@@ -1142,7 +1144,7 @@ def displaced_vessels(tag: str, what: str, tumour: np.ndarray, gr: Grid, man: li
                         break
                     D = np.zeros_like(X)
                     idx = np.nonzero(need)[0]
-                    gv = np.stack([sample(gg, middle(X)[idx]) for gg in grad], 1)
+                    gv = middle(X)[idx] - core
                     D[idx] = gv / (np.linalg.norm(gv, axis=1, keepdims=True) + 1e-9) * (depth[idx] + 0.1)[:, None]
                     src = need[cols]
                     num = np.zeros_like(X)
@@ -1167,8 +1169,8 @@ def displaced_vessels(tag: str, what: str, tumour: np.ndarray, gr: Grid, man: li
         items.append({**{k: v_ for k, v_ in it.items() if k not in ("clearedFrom", "joinedFrom")}, "id": nid,
                       "file": f"assets/{KIND}/{nid}.glb", "bytes": 0, "replaces": it["id"], "pushedFrom": it["file"],
                       "tumourView": tag, "centroid": cent, **({"copySides": ["L", "R"]} if both else {}),
-                      "derivation": it["derivation"].rstrip() + f" In this view, where it ran through {what} drawn here it is moved the "
-                      f"shortest way out of it, onto its surface (skullbase_v3_tumours.py; at most {most:.1f} mm): a shape, not a simulation."})
+                      "derivation": it["derivation"].rstrip() + f" In this view, where it ran through {what} drawn here it is moved out "
+                      f"of it, away from its middle, onto its surface (skullbase_v3_tumours.py; at most {most:.1f} mm): a shape, not a simulation."})
         rep[it["name"]] = {"insideShare": {k: round(v, 3) for k, v in inside.items()}, "maxMovedMm": round(most, 1),
                            "leftInside": left, **({"sides": "both"} if both else {})}
     print("  vessels", tag, rep)
@@ -1326,7 +1328,7 @@ KOOS_HOW = {
     "1": f"the internal acoustic meatus's lumen as this CT's bone leaves it, within {CANAL_MM:g} mm of its axis, from the fundus to the porus.",
     "2": "the meatus's lumen and a ball in the cerebellopontine angle, its surface at the porus and a neck joining them, kept "
          f"{KOOS_CLEAR_MM:g} mm off the brainstem (a drawing choice, to keep it apart from grade III, which occupies the angle): {{d}} mm "
-         "across, as large as this model's narrow angle allows (its fitted pons lies about 4 mm from the porus; a real angle is wider).",
+         "across, as large as this model's narrow angle allows (its fitted pons lies {p} mm from the porus; a real angle is wider).",
     "3": "the meatus's lumen and a ball {d} mm across in the angle, its surface at the porus and a neck joining them, reaching the "
          f"brainstem and moulded against it (cut at its surface where it would reach up to {KOOS_MOULD_MM:g} mm in: touching it, not "
          "moving it; this model's fitted pons fills the angle more than a real one, leaving no room for a ball this size that only "

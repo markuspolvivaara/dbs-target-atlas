@@ -116,62 +116,62 @@
   },
   "Oculomotor nerve (III)": {
    "R": {
-    "lengthMm": 55.4,
+    "lengthMm": 54.5,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 1.4
+    "maxFromFittedMm": 1.3
    },
    "L": {
     "lengthMm": 54.8,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 0.9
+    "maxFromFittedMm": 0.8
    }
   },
   "Trochlear nerve (IV)": {
    "R": {
-    "lengthMm": 56.0,
-    "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 5.4
-   },
-   "L": {
-    "lengthMm": 53.3,
-    "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 4.9
-   }
-  },
-  "Trigeminal nerve (V)": {
-   "R": {
-    "lengthMm": 29.3,
+    "lengthMm": 50.5,
     "boneCrossedMm": 0.0,
     "maxFromFittedMm": 5.0
    },
    "L": {
-    "lengthMm": 35.4,
+    "lengthMm": 54.8,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 5.1
+    "maxFromFittedMm": 5.0
+   }
+  },
+  "Trigeminal nerve (V)": {
+   "R": {
+    "lengthMm": 32.6,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 6.6
+   },
+   "L": {
+    "lengthMm": 33.2,
+    "boneCrossedMm": 0.0,
+    "maxFromFittedMm": 5.4
    }
   },
   "Ophthalmic nerve (V1)": {
    "R": {
-    "lengthMm": 39.2,
+    "lengthMm": 41.2,
     "boneCrossedMm": 0.0,
     "maxFromFittedMm": 0.7
    },
    "L": {
-    "lengthMm": 40.3,
+    "lengthMm": 39.6,
     "boneCrossedMm": 0.0,
     "maxFromFittedMm": 0.8
    }
   },
   "Maxillary nerve (V2)": {
    "R": {
-    "lengthMm": 24.4,
+    "lengthMm": 21.5,
     "boneCrossedMm": 0.0,
     "maxFromFittedMm": 5.0
    },
    "L": {
-    "lengthMm": 22.9,
+    "lengthMm": 22.0,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 5.4
+    "maxFromFittedMm": 5.5
    }
   },
   "Mandibular nerve (V3)": {
@@ -181,9 +181,9 @@
     "maxFromFittedMm": 2.6
    },
    "L": {
-    "lengthMm": 39.1,
+    "lengthMm": 39.2,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 4.0
+    "maxFromFittedMm": 4.1
    }
   },
   "Abducens nerve (VI)": {
@@ -193,81 +193,81 @@
     "maxFromFittedMm": 2.1
    },
    "L": {
-    "lengthMm": 64.4,
+    "lengthMm": 64.3,
     "boneCrossedMm": 0.0,
     "maxFromFittedMm": 2.5
    }
   },
   "Facial nerve (VII)": {
    "R": {
-    "lengthMm": 21.9,
+    "lengthMm": 23.0,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 3.5
+    "maxFromFittedMm": 3.6
    },
    "L": {
-    "lengthMm": 19.0,
+    "lengthMm": 16.2,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 4.0
+    "maxFromFittedMm": 3.8
    }
   },
   "Vestibulocochlear nerve (VIII)": {
    "R": {
-    "lengthMm": 19.6,
+    "lengthMm": 21.0,
     "boneCrossedMm": 0.0,
     "maxFromFittedMm": 4.5
    },
    "L": {
-    "lengthMm": 17.5,
+    "lengthMm": 16.9,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 4.6
+    "maxFromFittedMm": 4.4
    }
   },
   "Glossopharyngeal nerve (IX)": {
    "R": {
-    "lengthMm": 44.0,
+    "lengthMm": 43.5,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 1.2
+    "maxFromFittedMm": 1.3
    },
    "L": {
-    "lengthMm": 47.3,
+    "lengthMm": 46.3,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 3.5
+    "maxFromFittedMm": 3.4
    }
   },
   "Vagus nerve (X)": {
    "R": {
-    "lengthMm": 40.8,
+    "lengthMm": 41.4,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 1.7
+    "maxFromFittedMm": 1.8
    },
    "L": {
-    "lengthMm": 41.0,
+    "lengthMm": 41.5,
     "boneCrossedMm": 0.0,
     "maxFromFittedMm": 2.4
    }
   },
   "Accessory nerve (XI)": {
    "R": {
-    "lengthMm": 46.9,
+    "lengthMm": 46.8,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 1.5
+    "maxFromFittedMm": 1.7
    },
    "L": {
-    "lengthMm": 48.4,
+    "lengthMm": 48.2,
     "boneCrossedMm": 0.0,
     "maxFromFittedMm": 4.7
    }
   },
   "Hypoglossal nerve (XII)": {
    "R": {
-    "lengthMm": 27.8,
+    "lengthMm": 27.5,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 4.2
+    "maxFromFittedMm": 4.1
    },
    "L": {
-    "lengthMm": 29.0,
+    "lengthMm": 28.6,
     "boneCrossedMm": 0.0,
-    "maxFromFittedMm": 4.3
+    "maxFromFittedMm": 3.9
    }
   },
   "Middle meningeal artery": {
@@ -290,7 +290,7 @@
   },
   "jugularNervesToBulbMm": {
    "R": {
-    "Glossopharyngeal nerve (IX)": 2.7,
+    "Glossopharyngeal nerve (IX)": 2.6,
     "Vagus nerve (X)": 4.6,
     "Accessory nerve (XI)": 4.3
    },
@@ -302,7 +302,7 @@
   },
   "mandibularNerveToOvaleHoleMm": {
    "R": 1.2,
-   "L": 1.5
+   "L": 1.4
   }
  },
  "sinuses": {
@@ -369,71 +369,71 @@
   "Medial pontine branches of basilar artery": {
    "R": {
     "cornersOver70": 0,
-    "sharpestDeg": 15.0,
-    "lengthMm": 22.4
+    "sharpestDeg": 13.0,
+    "lengthMm": 22.3
    },
    "L": {
     "cornersOver70": 0,
-    "sharpestDeg": 15.0,
-    "lengthMm": 19.5
+    "sharpestDeg": 12.0,
+    "lengthMm": 19.3
    }
   },
   "Lateral pontine branches of basilar artery": {
    "R": {
     "cornersOver70": 0,
-    "sharpestDeg": 16.0,
-    "lengthMm": 50.9
+    "sharpestDeg": 22.0,
+    "lengthMm": 51.9
    },
    "L": {
     "cornersOver70": 0,
-    "sharpestDeg": 23.0,
-    "lengthMm": 59.5
+    "sharpestDeg": 22.0,
+    "lengthMm": 59.1
    }
   },
   "Anterior spinal artery": {
    "R": {
     "cornersOver70": 0,
-    "sharpestDeg": 21.0,
-    "lengthMm": 37.1
+    "sharpestDeg": 20.0,
+    "lengthMm": 36.6
    },
    "L": {
     "cornersOver70": 0,
-    "sharpestDeg": 39.0,
-    "lengthMm": 34.0
+    "sharpestDeg": 44.0,
+    "lengthMm": 33.0
    }
   },
   "Anterior inferior cerebellar artery": {
    "R": {
-    "cornersOver70": 1,
-    "sharpestDeg": 74.0,
-    "lengthMm": 53.4
+    "cornersOver70": 3,
+    "sharpestDeg": 82.0,
+    "lengthMm": 65.8
    },
    "L": {
-    "cornersOver70": 4,
-    "sharpestDeg": 89.0,
-    "lengthMm": 70.7
+    "cornersOver70": 1,
+    "sharpestDeg": 90.0,
+    "lengthMm": 69.8
    }
   },
   "Superior cerebellar artery (fitted course)": {
    "R": {
     "cornersOver70": 0,
-    "sharpestDeg": 37.0,
-    "lengthMm": 87.1
+    "sharpestDeg": 41.0,
+    "lengthMm": 87.9
    },
    "L": {
     "cornersOver70": 0,
-    "sharpestDeg": 50.0,
-    "lengthMm": 78.5
+    "sharpestDeg": 70.0,
+    "lengthMm": 79.9
    }
   },
   "Posterior inferior cerebellar artery (fitted course)": {
    "L": {
-    "cornersOver70": 1,
-    "sharpestDeg": 112.0
+    "cornersOver70": 2,
+    "sharpestDeg": 102.0
    },
    "R": {
     "cornersOver70": 1,
-    "sharpestDeg": 86.0
+    "sharpestDeg": 130.0
    }
   }
  },
@@ -732,13 +732,15 @@
  },
  "pfossa": {
   "fit": {
-   "tableMedianMm": 0.49,
-   "wallWithinMinShare": 0.122,
-   "boneInsideHullShare": 0.003,
-   "vesselInsideShare": 0.005,
-   "tentoriumInsideShare": 0.005,
-   "tentoriumMedianMm": 0.44,
-   "cisternInsideShare": 0.009,
+   "tableMedianMm": 0.496,
+   "wallWithinMinShare": 0.123,
+   "boneInsideHullShare": 0.002,
+   "vesselInsideShare": 0.003,
+   "tentoriumInsideShare": 0.01,
+   "tentoriumMedianMm": 0.488,
+   "cisternInsideShare": 0.004,
+   "ventricleFluidOutsideShare": 0.158,
+   "ventricleFluidOutsideMaxMm": 1.22,
    "before": {
     "tableMedianMm": 1.912,
     "wallWithinMinShare": 0.279,
@@ -746,117 +748,120 @@
     "vesselInsideShare": 0.466,
     "tentoriumInsideShare": 0.332,
     "tentoriumMedianMm": 4.752,
-    "cisternInsideShare": 0.576
+    "cisternInsideShare": 0.576,
+    "ventricleFluidOutsideShare": 0.73,
+    "ventricleFluidOutsideMaxMm": 8.451
    },
    "affineScale": [
     1.14,
     1.072,
     1.028
    ],
-   "minRelativeVolume": 0.415
+   "minRelativeVolume": 0.397
   },
   "inverseResidualMm": 0.0,
   "carry": {
-   "medianMm": 9.1,
-   "maxMm": 24.22,
-   "notInverted": 19,
-   "boundMm": 31.9,
-   "notInvertedNearestMm": 11.1
+   "medianMm": 9.27,
+   "maxMm": 24.32,
+   "notInverted": 13,
+   "boundMm": 31.6,
+   "notInvertedNearestMm": 52.0
   },
   "clear": {
-   "containedPushed": 75,
-   "inVesselBefore": 789,
-   "inBoneBefore": 827,
-   "inVesselAfter": 10,
+   "containedPushed": 32,
+   "inVesselBefore": 751,
+   "inBoneBefore": 818,
+   "inVesselAfter": 0,
    "inBoneAfter": 0,
-   "maxMovedMm": 6.83,
+   "maxMovedMm": 8.44,
    "dent": {
-    "arteryPointsInsideBefore": 5,
+    "arteryPointsInsideBefore": 6,
     "arteryPointsInsideAfter": 0
    }
   },
   "modelMl": 155.1,
   "cisternMl": 3.4,
+  "ventricleFluidMl": 0.5,
   "telovelar": {
    "maxMovedMm": 8.75,
-   "moved": 33007,
+   "moved": 32218,
    "inBoneAfter": 0,
    "inVesselAfter": 0,
    "tonsilToMedullaMm": {
-    "rest": 1.8,
-    "moved": 5.55
+    "rest": 1.73,
+    "moved": 5.62
    },
    "vermisLiftMm": 5.0,
    "uvulaToMedullaMm": {
-    "rest": 5.06,
-    "moved": 8.1
+    "rest": 5.21,
+    "moved": 8.38
    },
    "inVentricle": {
-    "rest": 47,
+    "rest": 54,
     "moved": 0
    }
   },
   "retrosigmoid": {
-   "maxMovedMm": 11.82,
-   "moved": 24790,
+   "maxMovedMm": 11.75,
+   "moved": 24830,
    "inBoneAfter": 0,
    "inVesselAfter": 0,
    "meatusToCerebellumMm": {
-    "rest": 10.64,
-    "moved": 15.64
+    "rest": 11.1,
+    "moved": 14.12
    },
    "inCorridor": {
-    "rest": 2400,
-    "moved": 6
+    "rest": 1904,
+    "moved": 22
    },
    "trigeminalRoot": [
-    16.6,
-    -28.3,
-    1.2
+    15.8,
+    -30.8,
+    2.8
    ]
   },
   "farLateral": {
-   "maxMovedMm": 9.79,
-   "moved": 21406,
+   "maxMovedMm": 9.66,
+   "moved": 21447,
    "inBoneAfter": 0,
    "inVesselAfter": 0,
    "tonsilLowestZMm": {
-    "rest": -42.3,
-    "lifted": -34.3
+    "rest": -42.1,
+    "lifted": -34.1
    },
    "vertebralGapMm": {
     "rest": 8.2,
-    "lifted": 12.4
+    "lifted": 12.5
    }
   },
   "farLateralBack": {
    "maxMovedMm": 8.0,
-   "moved": 24962,
+   "moved": 24975,
    "inBoneAfter": 0,
    "inVesselAfter": 0,
    "tonsilFrontYMm": {
-    "rest": -34.4,
-    "back": -42.4
+    "rest": -34.1,
+    "back": -42.1
    },
    "medullaGapMm": {
-    "rest": 2.2,
-    "back": 8.7
+    "rest": 2.1,
+    "back": 8.3
    },
    "vertebralGapMm": {
     "rest": 8.2,
-    "back": 12.4
+    "back": 12.8
    }
   },
   "trigeminalRoots": {
    "R": [
-    16.59,
-    -28.3,
-    1.22
+    15.81,
+    -30.82,
+    2.83
    ],
    "L": [
-    -11.29,
-    -31.3,
-    9.18
+    -11.4,
+    -29.11,
+    9.75
    ]
   },
   "params": {
@@ -881,7 +886,7 @@
  "tentorium": {
   "gridMm": 1.0,
   "cerebrumMl": 527.4,
-  "cerebellumMl": 104.1,
+  "cerebellumMl": 102.3,
   "overlapMl": 0.0,
   "cerebrumUnderSheetMl": 0.0,
   "cerebrumDeepestUnderMm": 0.0,
@@ -894,21 +899,21 @@
  "trigeminal": {
   "R": {
    "meckel": [
-    17.4,
-    -0.8,
-    -3.5
+    17.2,
+    -1.3,
+    -3.3
    ],
-   "spanMm": 17.2,
-   "movedFromFittedMm": 18.2
+   "spanMm": 20.5,
+   "movedFromFittedMm": 20.7
   },
   "L": {
    "meckel": [
-    -16.8,
-    -0.9,
-    -2.6
+    -16.9,
+    -1.0,
+    -2.5
    ],
-   "spanMm": 19.9,
-   "movedFromFittedMm": 21.5
+   "spanMm": 20.4,
+   "movedFromFittedMm": 21.9
   }
  },
  "skull": {
@@ -971,15 +976,15 @@
    "tb_maxillary_nerve_v2": {
     "L": {
      "marginMm": 0.5,
-     "insideBefore": 0.705,
-     "carvedMl": 0.03,
-     "keptOffAirVoxels": 12,
-     "insideAfter": 0.032
+     "insideBefore": 0.695,
+     "carvedMl": 0.029,
+     "keptOffAirVoxels": 0,
+     "insideAfter": 0.0
     },
     "R": {
      "marginMm": 0.5,
-     "insideBefore": 0.5,
-     "carvedMl": 0.022,
+     "insideBefore": 0.635,
+     "carvedMl": 0.024,
      "keptOffAirVoxels": 0,
      "insideAfter": 0.0
     }
@@ -987,15 +992,15 @@
    "tb_abducens_nerve_vi": {
     "L": {
      "marginMm": 0.5,
-     "insideBefore": 0.208,
+     "insideBefore": 0.223,
      "carvedMl": 0.03,
      "keptOffAirVoxels": 0,
      "insideAfter": 0.0
     },
     "R": {
      "marginMm": 0.5,
-     "insideBefore": 0.165,
-     "carvedMl": 0.023,
+     "insideBefore": 0.152,
+     "carvedMl": 0.026,
      "keptOffAirVoxels": 0,
      "insideAfter": 0.0
     }
@@ -1313,11 +1318,11 @@
   },
   "Facial nerve (VII)": {
    "L": {
-    "share": 0.965,
+    "share": 0.97,
     "deepestMm": 4.0
    },
    "R": {
-    "share": 0.944,
+    "share": 0.942,
     "deepestMm": 3.9
    }
   },
@@ -1363,32 +1368,32 @@
   },
   "Optic nerve (II)": {
    "L": {
-    "share": 0.117,
+    "share": 0.152,
     "deepestMm": 1.4
    },
    "R": {
-    "share": 0.16,
-    "deepestMm": 1.9
+    "share": 0.165,
+    "deepestMm": 1.8
    }
   },
   "Oculomotor nerve (III)": {
    "L": {
-    "share": 0.026,
-    "deepestMm": 0.7
+    "share": 0.009,
+    "deepestMm": 0.4
    },
    "R": {
-    "share": 0.025,
-    "deepestMm": 0.5
+    "share": 0.018,
+    "deepestMm": 0.4
    }
   },
   "Trochlear nerve (IV)": {
    "L": {
-    "share": 0.004,
-    "deepestMm": 0.4
+    "share": 0.002,
+    "deepestMm": 0.3
    },
    "R": {
-    "share": 0.004,
-    "deepestMm": 0.3
+    "share": 0.0,
+    "deepestMm": 0.0
    }
   },
   "Trigeminal nerve (V)": {
@@ -1403,18 +1408,18 @@
   },
   "Ophthalmic nerve (V1)": {
    "L": {
-    "share": 0.012,
-    "deepestMm": 0.5
+    "share": 0.0,
+    "deepestMm": 0.2
    },
    "R": {
-    "share": 0.01,
+    "share": 0.013,
     "deepestMm": 0.4
    }
   },
   "Maxillary nerve (V2)": {
    "L": {
-    "share": 0.032,
-    "deepestMm": 0.4
+    "share": 0.0,
+    "deepestMm": 0.1
    },
    "R": {
     "share": 0.0,
@@ -1423,11 +1428,11 @@
   },
   "Mandibular nerve (V3)": {
    "L": {
-    "share": 0.138,
-    "deepestMm": 0.7
+    "share": 0.15,
+    "deepestMm": 0.8
    },
    "R": {
-    "share": 0.114,
+    "share": 0.111,
     "deepestMm": 0.8
    }
   },
@@ -1453,42 +1458,42 @@
   },
   "Glossopharyngeal nerve (IX)": {
    "L": {
-    "share": 0.182,
+    "share": 0.19,
     "deepestMm": 0.8
    },
    "R": {
-    "share": 0.027,
-    "deepestMm": 0.5
+    "share": 0.029,
+    "deepestMm": 0.6
    }
   },
   "Vagus nerve (X)": {
    "L": {
-    "share": 0.132,
+    "share": 0.137,
     "deepestMm": 0.7
    },
    "R": {
-    "share": 0.03,
+    "share": 0.032,
     "deepestMm": 0.6
    }
   },
   "Accessory nerve (XI)": {
    "L": {
-    "share": 0.208,
+    "share": 0.216,
     "deepestMm": 0.9
    },
    "R": {
-    "share": 0.126,
+    "share": 0.113,
     "deepestMm": 0.8
    }
   },
   "Hypoglossal nerve (XII)": {
    "L": {
-    "share": 0.041,
-    "deepestMm": 0.6
+    "share": 0.045,
+    "deepestMm": 0.5
    },
    "R": {
-    "share": 0.055,
-    "deepestMm": 0.7
+    "share": 0.043,
+    "deepestMm": 0.8
    }
   },
   "Middle meningeal artery": {
@@ -1503,12 +1508,12 @@
   },
   "Trigeminal ganglion": {
    "L": {
-    "share": 0.167,
+    "share": 0.179,
     "deepestMm": 1.4
    },
    "R": {
-    "share": 0.179,
-    "deepestMm": 1.3
+    "share": 0.158,
+    "deepestMm": 1.1
    }
   },
   "Sigmoid sinus": {
@@ -1519,16 +1524,6 @@
    "R": {
     "share": 0.112,
     "deepestMm": 0.8
-   }
-  },
-  "Confluence of sinuses": {
-   "L": {
-    "share": 0.162,
-    "deepestMm": 3.7
-   },
-   "R": {
-    "share": 0.197,
-    "deepestMm": 3.7
    }
   },
   "Transverse sinus": {
@@ -1737,7 +1732,7 @@
     "deepestMm": 0.9
    },
    "R": {
-    "share": 0.052,
+    "share": 0.053,
     "deepestMm": 0.7
    }
   },
@@ -1747,7 +1742,7 @@
     "deepestMm": 1.1
    },
    "R": {
-    "share": 0.212,
+    "share": 0.219,
     "deepestMm": 1.1
    }
   },
@@ -1759,26 +1754,6 @@
    "R": {
     "share": 0.452,
     "deepestMm": 0.8
-   }
-  },
-  "Optic chiasm": {
-   "L": {
-    "share": 0.0,
-    "deepestMm": 0.0
-   },
-   "R": {
-    "share": 0.0,
-    "deepestMm": 0.0
-   }
-  },
-  "Optic tract": {
-   "R": {
-    "share": 0.0,
-    "deepestMm": 0.0
-   },
-   "L": {
-    "share": 0.0,
-    "deepestMm": 0.0
    }
   }
  }

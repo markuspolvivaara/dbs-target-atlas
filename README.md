@@ -242,7 +242,8 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   (`skullbase_ct.py` writes them) and fitted again into its posterior fossa (`pipeline/skullbase_pfossa.py`: the hull
   inside the cavity behind the petrous bones and under the tentorium, nowhere less than 1 mm from its walls, this
   patient's basilar, vertebral, superior and posterior inferior cerebellar arteries outside, and the cisterns this CT
-  shows along the bone (fluid within 8 mm of it) outside too, no folding; then what
+  shows along the bone (fluid within 8 mm of it) outside too, the fourth ventricle's fluid this CT shows (its upper
+  part) inside the model's fourth ventricle, which the ventricles section draws as its own, no folding; then what
   still touches an artery, bone or, of the cerebellum, the tentorium pushed clear). Its slider draws both tonsils 6 mm apart and lifts the nodule and uvula 5 mm up and back (illustrative), the
   rest of the cerebellum following less with distance (each shift under 1 mm per mm together, so nothing folds),
   opening the cerebellomedullary fissure onto the fourth ventricle; sources: Pettersson 2023, Wang 2023, Liu 2014,
