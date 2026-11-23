@@ -150,6 +150,7 @@ export type Imaging = z.infer<typeof ImagingSchema>;
 
 // ---- generated pipeline output
 /** one side of a v2 nerve's skull-base measure (ManifestStructureSchema.atOpening), mm */
+const BySide = z.object({ L: z.number(), R: z.number() });
 const atOpeningSide = z.object({ boneMm: z.number().min(0), solidMm: z.number().min(0), airMm: z.number().min(0), apartMm: z.number().nullable() });
 export const ManifestStructureSchema = z.object({
   id: Id,
@@ -240,6 +241,16 @@ export const ManifestStructureSchema = z.object({
   surfaceCentroid: z.object({ L: Vec3, R: Vec3 }).optional(),
   streamlines: z.object({ L: z.number(), R: z.number() }).optional(),
   sourceStreamlines: z.object({ L: z.number(), R: z.number() }).optional(),
+  /** white-matter section: a tract drawn as a shell, not as streamlines (pipeline/wm_shell.py): the surface round the
+   * voxels of a population atlas's map where the bundle passed in at least `level` of the people in whom it was found
+   * (`subjects`). Measured on it, by side: its volume, its greatest thickness, how far from the midline it ends, how
+   * near it comes to the medial geniculate body (the brainstem section's) and to Heschl's gyrus (the cortex section's
+   * label), and how far from the gyrus the lateral ends of
+   * HCP-1065's withdrawn bundle lay (their median) */
+  shell: z.object({
+    level: z.number().gt(0).lt(1), subjects: BySide, volumeMl: BySide, thickestMm: BySide, medialEndMm: BySide,
+    mgbNearestMm: BySide, heschlNearestMm: BySide, hcp1065EndsMm: BySide,
+  }).optional(),
 });
 export type ManifestStructure = z.infer<typeof ManifestStructureSchema>;
 
@@ -266,12 +277,17 @@ export const ManifestSchema = z.object({
   })),
 });
 
-/** wm-manifest.json: the white-matter section's tracts (HCP-1065), separate from the DBS assets. */
+/** wm-manifest.json: the white-matter section's tracts (HCP-1065's streamlines; `shellDataset`: the atlas a tract drawn
+ * as a shell comes from), separate from the DBS assets. */
 export const WmManifestSchema = z.object({
   space: z.string(),
   generatedBy: z.string(),
   structures: z.array(ManifestStructureSchema),
   dataset: z.object({
+    name: z.string(), licence: z.string(), url: z.string().url(), note: z.string(),
+    citation: z.array(z.string()), citationUrls: z.array(z.string()),
+  }),
+  shellDataset: z.object({
     name: z.string(), licence: z.string(), url: z.string().url(), note: z.string(),
     citation: z.array(z.string()), citationUrls: z.array(z.string()),
   }),

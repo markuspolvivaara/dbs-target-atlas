@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import MEASURED from '../../src/data/generated/wm-measured.json';
 import { areaName, END_PATCH, endsOn, patchOf, WM_ENDS } from '../../src/data/ends';
-import { crossCheckWm, GROUP, parseWmContent, TOPIC, WM, WM_MANIFEST } from '../../src/tracts';
+import { crossCheckWm, GROUP, hiddenAtFirst, isShell, parseWmContent, TOPIC, WM, WM_MANIFEST } from '../../src/tracts';
 import { CONTEXT_STRUCTURES, tractPlan, tractsScene } from '../../src/tracts/scene';
 import { decodeTracts, defaultTractsState, encodeTracts } from '../../src/tracts/state';
 import { nodeMeans } from './glb';
@@ -22,8 +22,8 @@ describe('white-matter content', () => {
     const abbr = (tier: string) => WM.topics.filter((t) => t.tier === tier).map((t) => t.abbr).sort();
     expect(abbr('core')).toEqual(
       ['AF', 'CBT', 'CC', 'CST', 'Cingulum (dorsal)', 'Cingulum (parahippocampal)', 'FAT', 'Fornix', 'IFOF', 'ILF', 'OR', 'SLF I', 'SLF II', 'SLF III', 'UF'].sort());
-    // (B4: the acoustic radiation withdrawn; the DRTT as two tracts, crossed and uncrossed)
-    expect(abbr('extended')).toEqual(['AC', 'ATR', 'CStr-A', 'CStr-P', 'CStr-S', 'EmC', 'MdLF', 'PTR', 'STR', 'TPAT', 'VOF'].sort());
+    // (B4: the DRTT as two tracts, crossed and uncrossed; the acoustic radiation withdrawn then, back as a shell)
+    expect(abbr('extended')).toEqual(['AC', 'AR', 'ATR', 'CStr-A', 'CStr-P', 'CStr-S', 'EmC', 'MdLF', 'PTR', 'STR', 'TPAT', 'VOF'].sort());
     expect(abbr('fossa')).toEqual(['CPT-F', 'CPT-O', 'CPT-P', 'DRTT', 'ICP', 'MCP', 'ML', 'RST', 'SCP', 'nDRTT'].sort());
   });
   it('every group stays within one tier, and each tier opens on a function group', () => {
@@ -37,10 +37,11 @@ describe('white-matter content', () => {
 });
 
 describe('the site audit\u2019s B4: what each atlas bundle shows', () => {
-  it('splits the DRTT into crossed and uncrossed tracts and withdraws the acoustic radiation', () => {
+  it('splits the DRTT into crossed and uncrossed tracts; the acoustic radiation is no HCP-1065 bundle', () => {
     const man = (id: string) => WM_MANIFEST.structures.find((s) => s.id === id);
-    expect(man('wm_ar')).toBeUndefined();
-    expect(TOPIC.has('wm_ar')).toBe(false);
+    // (withdrawn in B4: its streamlines ended 22 mm from Heschl's gyrus; since 23 November 2026 a shell from Pandora)
+    expect(man('wm_ar')!.dataset).toBe('pandora');
+    expect(man('wm_ar')!.streamlines).toBeUndefined();
     // every streamline of the atlas file is in one of the two (counted from the source by the build)
     expect(man('wm_drtt')!.sourceStreamlines).toEqual({ L: 1727, R: 652 });
     expect(man('wm_ndrtt')!.sourceStreamlines).toEqual({ L: 1971, R: 6332 });
@@ -135,7 +136,8 @@ describe('where the bundles end on the cortex', () => {
   };
   const share = (e: { areas: { id: string; share: number }[] }, id: string) => e.areas.filter((a) => a.id === id).reduce((x, a) => x + a.share, 0);
   it('every tract is measured, both its ends, with shares that add up', () => {
-    expect(Object.keys(WM_ENDS.tracts).sort()).toEqual(WM_MANIFEST.structures.map((s) => s.id).sort());
+    // (a tract drawn as a shell has no streamlines, so no ends)
+    expect(Object.keys(WM_ENDS.tracts).sort()).toEqual(WM_MANIFEST.structures.filter((s) => !s.shell).map((s) => s.id).sort());
     for (const [id, t] of Object.entries(WM_ENDS.tracts)) {
       const keys = Object.keys(t.bundles);
       expect(keys.length === 1 ? keys : keys.sort(), id).toEqual(keys.length === 1 ? ['M'] : ['L', 'R']);
@@ -194,8 +196,12 @@ describe('white-matter scene and URL state', () => {
     for (const g of WM.groups) {
       const p = tractPlan(g.id, null);
       for (const id of [...p.looks.keys(), ...p.tracts.keys(), ...p.parcels.keys(), ...p.focusIds]) expect(tractsScene.catalog.byId.has(id), `${g.id}: ${id}`).toBe(true);
-      expect([...p.tracts.keys()]).toEqual(g.tractIds);
+      // (streamline tracts as tracts, a tract drawn as a shell as a see-through mesh)
+      expect([...p.tracts.keys()]).toEqual(g.tractIds.filter((id) => !isShell(id)));
+      for (const id of g.tractIds.filter(isShell)) expect(p.looks.get(id), `${g.id}: ${id}`).toBe('context');
     }
+    expect(tractPlan('language', 'wm_ar').looks.get('wm_ar')).toBe('context');
+    expect(tractPlan('language', 'wm_ar').tracts.has('wm_ar')).toBe(false);
     const p = tractPlan('visual', 'wm_fat');
     expect(p.tracts.get('wm_fat')).toBe('key');
     // (the HMAT areas its card names, and the patch where its streamlines end)
@@ -209,6 +215,38 @@ describe('white-matter scene and URL state', () => {
     s.hidden = ['wm_af'];
     const back = decodeTracts(encodeTracts(s)).state;
     expect(back).toEqual(s);
+  });
+  it('the acoustic radiation is a shell, hidden until asked for', () => {
+    const m = WM_MANIFEST.structures.find((s) => s.id === 'wm_ar')!;
+    expect(m.type).toBe('soft');
+    expect(m.layer).toBe('tracts');
+    expect(m.shell!.level).toBe(0.9);
+    expect(m.licence).toMatch(/^CC BY 4\.0/);
+    // it reaches Heschl's gyrus and the medial geniculate body, which HCP-1065's bundle did not
+    for (const side of ['L', 'R'] as const) {
+      expect(m.shell!.heschlNearestMm[side]).toBeLessThanOrEqual(4);
+      expect(m.shell!.mgbNearestMm[side]).toBeLessThanOrEqual(3);
+      expect(m.shell!.hcp1065EndsMm[side]).toBeGreaterThan(20);
+    }
+    expect(isShell('wm_ar')).toBe(true);
+    expect(WM_MANIFEST.structures.filter((s) => s.shell).map((s) => s.id)).toEqual(['wm_ar']);
+    expect(WM.topics.filter((t) => t.offAtFirst).map((t) => t.id)).toEqual(['wm_ar']);
+    // hidden in every group that holds it, but for the view that opens its card
+    for (const g of WM.groups) expect(hiddenAtFirst(g.id, null), g.id).toEqual(g.tractIds.includes('wm_ar') ? ['wm_ar'] : []);
+    expect(GROUP.get('ext_all')!.tractIds).toContain('wm_ar');
+    expect(hiddenAtFirst('ext_all', 'wm_ar')).toEqual([]);
+    // a link that names no hidden tracts hides it; one that shows it says "nothing hidden"; both come back as they went
+    expect(decodeTracts('#/atlas?g=ext_all').state.hidden).toEqual(['wm_ar']);
+    expect(decodeTracts('#/atlas?g=ext_all').hasHidden).toBe(false);
+    expect(decodeTracts('#/atlas?g=ext_all&sel=wm_ar').state.hidden).toEqual([]);
+    const off = { ...defaultTractsState(), grp: 'ext_all', hidden: ['wm_ar'] };
+    expect(encodeTracts(off)).not.toContain('hid=');
+    expect(decodeTracts(encodeTracts(off)).state).toEqual(off);
+    const on = { ...defaultTractsState(), grp: 'ext_all', hidden: [] as string[] };
+    expect(encodeTracts(on)).toMatch(/[?&]hid=(&|$)/);
+    expect(decodeTracts(encodeTracts(on)).state).toEqual(on);
+    const both = { ...defaultTractsState(), grp: 'ext_all', hidden: ['wm_ar', 'wm_vof'] };
+    expect(decodeTracts(encodeTracts(both)).state).toEqual(both);
   });
   it('a link without a hemisphere says so (the group decides)', () => {
     expect(decodeTracts('#/atlas?g=slf').hasHemi).toBe(false);
@@ -225,7 +263,8 @@ describe('shipped white-matter GLBs', () => {
     const means = await nodeMeans(s.file);
     for (const side of ['L', 'R'] as const) {
       const d = Math.hypot(...means[side].map((v, i) => v - s.centroid![side][i]));
-      expect(d, `${s.id}/${side}`).toBeLessThan(0.1);
+      // (a shell's vertices are welded and thinned by the compressor, which moves their mean a little)
+      expect(d, `${s.id}/${side}`).toBeLessThan(s.shell ? 0.3 : 0.1);
       expect(Math.sign(means[side][0])).toBe(side === 'L' ? -1 : 1);
     }
     expect(TOPIC.has(s.id)).toBe(true);

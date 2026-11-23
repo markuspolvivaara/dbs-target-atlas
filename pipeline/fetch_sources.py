@@ -127,6 +127,7 @@ def main() -> int:
     aan = fetch_aan()
     hcpya = fetch_hcpya()
     hcpya_trk = fetch_hcpya_tracks()
+    pandora = fetch_pandora()
     lock = {"archive": LEADDBS_DATA_ZIP, "files": record,
             "hcp1065": {"release": C.HCP1065_RELEASE, "files": hcp},
             "zanatomy": {"source": ZANATOMY_URL, "files": zan},
@@ -134,7 +135,8 @@ def main() -> int:
             "verseCcj": {"subject": VERSE_CCJ_SUBJECT, "files": verse_ccj},
             "aan": {"source": AAN_URL.format(""), "files": aan},
             "hcpya": {"source": HCPYA_URL.format(""), "files": hcpya},
-            "hcpyaTracks": {"source": HCPYA_TRK_SHARE, "files": hcpya_trk}}
+            "hcpyaTracks": {"source": HCPYA_TRK_SHARE, "files": hcpya_trk},
+            "pandora": {"source": C.PANDORA_URL.format(""), "files": pandora}}
     (RAW / "sources.lock.json").write_text(json.dumps(lock, indent=1))
     # the inputs pinned in the repository: every file fetched must match its recorded SHA-256 (--relock records them anew,
     # on purpose, after a source changes)
@@ -307,6 +309,25 @@ def fetch_hcpya() -> dict[str, str]:
         if not dest.exists():
             print(f"fetch {name}")
             urllib.request.urlretrieve(HCPYA_URL.format(name), dest)
+        digest = hashlib.sha256(dest.read_bytes()).hexdigest()
+        if digest != sha:
+            print(f"{name}: SHA-256 {digest} does not match the pinned {sha}", file=sys.stderr)
+            raise SystemExit(1)
+        record[name] = digest
+    return record
+
+
+def fetch_pandora() -> dict[str, str]:
+    """The Pandora atlases' Xtract atlas (C.DATASETS["pandora"]): the white-matter section's acoustic radiation is a
+    shell of its map (wm_shell.py). From the repository at one commit, each file held to its SHA-256."""
+    out = RAW / "pandora"
+    out.mkdir(parents=True, exist_ok=True)
+    record = {}
+    for name, sha in C.PANDORA_FILES.items():
+        dest = out / Path(name).name
+        if not dest.exists():
+            print(f"fetch {name}")
+            urllib.request.urlretrieve(C.PANDORA_URL.format(name), dest)
         digest = hashlib.sha256(dest.read_bytes()).hexdigest()
         if digest != sha:
             print(f"{name}: SHA-256 {digest} does not match the pinned {sha}", file=sys.stderr)

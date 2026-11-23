@@ -525,6 +525,30 @@ export const TOPICS: TractTopicInput[] = [
     measured: ['The atlas file holds only 84 (left) and 94 (right) streamlines, all shown; its shape is less certain than that of the other tracts.'],
   },
   {
+    // drawn as a shell from the Pandora atlas, not as HCP-1065 streamlines (which ended 22 mm short of Heschl's gyrus and
+    // were withdrawn in the site audit's B4); hidden until asked for (the owner's choices, 23 November 2026). Its card's
+    // measured figures come from wm-manifest.json (`shell`), written by pipeline/wm_shell.py
+    id: 'wm_ar', name: 'Acoustic radiation', abbr: 'AR', aliases: ['auditory radiation'], type: 'projection', tier: 'extended',
+    summary: 'Auditory thalamocortical projection from the medial geniculate nucleus to Heschl’s gyrus, running transversely across the temporal lobe. Drawn as a see-through solid, not as fibres.',
+    course: [
+      c('A compact bundle running transversely from the midline to the lateral convexity of the posterior temporal lobe; dissection divides it into a genu, stem and fan, each closely related to neighbouring association and projection pathways.', 'maffei2018'),
+    ],
+    connections: [
+      c('Medial geniculate nucleus of the thalamus to the transverse temporal (Heschl’s) gyrus.', 'maffei2019'),
+    ],
+    functions: [
+      c('The thalamocortical projection of the auditory system, relevant to audition and language perception.', 'maffei2019'),
+    ],
+    deficits: [],
+    surgery: [],
+    atlas: [
+      c('Reconstructing this bundle in vivo with diffusion tractography remains challenging.', 'maffei2019'),
+      c('The shell comes from the Pandora atlases: population maps of 216 white-matter bundles from six automated tractography methods, built from 2,443 people.', 'hansen2021'),
+      c('The method behind this map, XTRACT, seeds the acoustic radiation in the transverse temporal gyrus with a target covering the medial geniculate nucleus.', 'warrington2020'),
+    ],
+    offAtFirst: true,
+  },
+  {
     id: 'wm_cs_a', name: 'Corticostriatal tract, anterior', abbr: 'CStr-A', aliases: ['fronto-striatal fibres'], type: 'projection', tier: 'extended',
     summary: 'Prefrontal projections to the caudate nucleus and anterior striatum.',
     course: [
@@ -861,7 +885,7 @@ export const GROUPS: TractGroup[] = [
   // ---------------------------------------------------------------- extended tier
   {
     id: 'ext_language', kind: 'function', tier: 'extended', name: 'Language and hearing', hemi: 'L', camera: 'lateral',
-    tractIds: ['wm_emc', 'wm_mdlf', 'wm_tpat'],
+    tractIds: ['wm_emc', 'wm_mdlf', 'wm_tpat', 'wm_ar'],
     rationale: [
       c('The extreme capsule and middle longitudinal fasciculus are among the pathways proposed to support language; their roles are debated.', 'dick2012'),
       c('Stimulating and resecting the left MdLF did not disturb language, so it is not essential for it.', 'dewitthamer2011'),
@@ -878,7 +902,7 @@ export const GROUPS: TractGroup[] = [
   },
   {
     id: 'ext_thalamic', kind: 'anatomy', tier: 'extended', name: 'Thalamic radiations', hemi: 'L', camera: 'lateral',
-    tractIds: ['wm_atr', 'wm_str', 'wm_ptr'],
+    tractIds: ['wm_atr', 'wm_str', 'wm_ptr', 'wm_ar'],
     rationale: [
       c('Diffusion tractography maps the connections between thalamus and cortex, reproducibly between individuals.', 'behrens2003'),
       c('The acoustic radiation is the auditory thalamocortical projection, from the medial geniculate nucleus.', 'maffei2019'),
@@ -900,7 +924,7 @@ export const GROUPS: TractGroup[] = [
   },
   {
     id: 'ext_all', kind: 'all', tier: 'extended', name: 'All extended tracts', hemi: 'L', camera: 'lateral',
-    tractIds: ['wm_mdlf', 'wm_tpat', 'wm_vof', 'wm_emc', 'wm_ac', 'wm_atr', 'wm_str', 'wm_ptr', 'wm_cs_a', 'wm_cs_s', 'wm_cs_p'],
+    tractIds: ['wm_mdlf', 'wm_tpat', 'wm_vof', 'wm_emc', 'wm_ac', 'wm_atr', 'wm_str', 'wm_ptr', 'wm_ar', 'wm_cs_a', 'wm_cs_s', 'wm_cs_p'],
     rationale: [],
   },
   // ---------------------------------------------------------------- posterior fossa tier

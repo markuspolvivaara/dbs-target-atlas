@@ -57,18 +57,28 @@ export function tractRefsPage() {
 export function tractCreditsPage() {
   const el = h('div', { class: 'page wrap' });
   const d = WM_MANIFEST.dataset;
+  const sd = WM_MANIFEST.shellDataset;
+  const shells = WM_MANIFEST.structures.filter((s) => s.shell);
   const dbs = SECTIONS.find((s) => s.id === 'dbs')!;
   el.append(
     h('h1', {}, 'Credits and licences'),
     h('section', { class: 'card', id: 'hcp1065' },
       h('h2', {}, d.name),
-      h('p', {}, 'Every tract in this section comes from this population-averaged tractography atlas, built from diffusion MRI of 1065 Human Connectome Project young adults. Nothing is hand-modelled.'),
+      h('p', {}, 'Every tract drawn as streamlines in this section comes from this population-averaged tractography atlas, built from diffusion MRI of 1065 Human Connectome Project young adults. Nothing is hand-modelled.'),
       h('p', {}, h('strong', {}, 'Licence: '), d.licence, '. These files are not under the GPL like the rest of the project: adapted versions must stay under CC BY-SA 4.0 with attribution.'),
       h('p', { class: 'aside' }, d.note),
       ...d.citation.map((c, i) => h('p', { class: 'cite' }, c, ' ', h('a', { href: d.citationUrls[i], target: '_blank', rel: 'noopener' }, 'DOI'))),
       h('p', { class: 'aside' }, 'Changes made: the streamlines’ points moved by half a voxel (the files give them from the first voxel’s centre), streamlines subsampled (the same number per hemisphere) and resampled to 2 mm, the tracts stored as one file across the midline (the corpus callosum, the anterior commissure, the superior and middle cerebellar peduncles) cut at the midline, files converted to compressed glTF. The atlas’s volumes of the same tracts were used only to check the streamline files. Where each bundle’s streamlines end on the cortex (the tract cards, and the patches below) is measured by this project’s pipeline on all streamlines of each bundle (pipeline/wm_ends.py).'),
       h('p', {}, h('a', { href: d.url, target: '_blank', rel: 'noopener' }, 'Atlas page')),
     ),
+    h('section', { class: 'card', id: 'pandora' },
+      h('h2', {}, sd.name),
+      h('p', {}, `One tract is drawn as a shell, not as streamlines: the ${shells.map((s) => s.name.toLowerCase()).join(', ')}. The HCP-1065 atlas’s bundle of it ends short of Heschl’s gyrus, and this atlas holds, per cubic millimetre, the share of its subjects in whom the tract passed. The shell is the surface round the places where that share is at least ${shells.map((s) => `${Math.round(s.shell!.level * 100)}%`).join(', ')}.`),
+      h('p', {}, h('strong', {}, 'Licence: '), sd.licence, '. Free to share and adapt with attribution.'),
+      h('p', { class: 'aside' }, sd.note),
+      ...sd.citation.map((c, i) => h('p', { class: 'cite' }, c, ' ', h('a', { href: sd.citationUrls[i], target: '_blank', rel: 'noopener' }, 'DOI'))),
+      h('p', { class: 'aside' }, 'Changes made: one bundle’s map taken from the atlas (left and right), smoothed by 0.7 mm, and the surface round the voxels at or above the chosen share drawn as a mesh; converted to meshopt-compressed glTF. The file is public/assets/wm/wm_ar.glb.'),
+      h('p', {}, h('a', { href: sd.url, target: '_blank', rel: 'noopener' }, 'Atlas repository'))),
     h('section', { class: 'card', id: 'wm-ends' },
       h('h2', {}, 'Where the tracts end: the patches of cortex'),
       h('p', {}, `Choosing a tract draws the patch of cortex where its streamlines end (${END_PATCHES.length} tracts have one). `, WM_ENDS.patches.derivation),

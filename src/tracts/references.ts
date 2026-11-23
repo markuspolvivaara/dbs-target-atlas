@@ -149,6 +149,14 @@ export const WM_REFERENCES: WmReference[] = [
     citation: 'Menegaux A, Meng C, Neitzel J, Bäuml JG, Müller HJ, Bartmann P, et al. Impaired visual short-term memory capacity is distinctively associated with structural connectivity of the posterior thalamic radiation and the splenium of the corpus callosum in preterm-born adults. NeuroImage. 2017;150:68–76. doi:10.1016/j.neuroimage.2017.02.017.' },
   { id: 'maffei2019', pmid: '30899216', shortLabel: 'Maffei 2019', url: doi('10.3389/fnana.2019.00027'),
     citation: 'Maffei C, Sarubbo S, Jovicich J. A missing connection: a review of the macrostructural anatomy and tractography of the acoustic radiation. Front Neuroanat. 2019;13:27. doi:10.3389/fnana.2019.00027.' },
+  // the acoustic radiation as a shell (23 November 2026): Maffei 2018 and Hansen 2021 read in their abstracts (PubMed),
+  // Warrington 2020 in full text (the protocol's seed and target)
+  { id: 'maffei2018', pmid: '28866840', shortLabel: 'Maffei 2018', url: doi('10.1007/s00429-017-1471-6'),
+    citation: 'Maffei C, Jovicich J, De Benedictis A, Corsini F, Barbareschi M, Chioffi F, et al. Topography of the human acoustic radiation as revealed by ex vivo fibers micro-dissection and in vivo diffusion-based tractography. Brain Struct Funct. 2018;223(1):449–459. doi:10.1007/s00429-017-1471-6.' },
+  { id: 'hansen2021', pmid: '33196967', shortLabel: 'Hansen 2021', url: doi('10.1007/s12021-020-09497-1'),
+    citation: 'Hansen CB, Yang Q, Lyu I, Rheault F, Kerley C, Chandio BQ, et al. Pandora: 4-D white matter bundle population-based atlases derived from diffusion MRI fiber tractography. Neuroinformatics. 2021;19(3):447–460. doi:10.1007/s12021-020-09497-1.' },
+  { id: 'warrington2020', pmid: '32407993', shortLabel: 'Warrington 2020', url: doi('10.1016/j.neuroimage.2020.116923'),
+    citation: 'Warrington S, Bryant KL, Khrapitchev AA, Sallet J, Charquero-Ballester M, Douaud G, et al. XTRACT – standardised protocols for automated tractography in the human and macaque brain. NeuroImage. 2020;217:116923. doi:10.1016/j.neuroimage.2020.116923.' },
   // corticostriatal (extended) and posterior fossa tracts
   { id: 'leh2007', pmid: '17485168', shortLabel: 'Leh 2007', url: doi('10.1016/j.neulet.2007.04.049'),
     citation: 'Leh SE, Ptito A, Chakravarty MM, Strafella AP. Fronto-striatal connections in the human brain: a probabilistic diffusion tractography study. Neurosci Lett. 2007;419(2):113–118. doi:10.1016/j.neulet.2007.04.049.' },

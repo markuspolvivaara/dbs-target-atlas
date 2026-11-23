@@ -1689,3 +1689,55 @@ test('skull base: midline structures stay with Side = Left; a tumour view draws 
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// The acoustic radiation (the owner's choices of 23 November 2026): HCP-1065's bundle ended 22 mm from Heschl's gyrus and
+// was withdrawn; it is back as a shell from the Pandora atlas, a see-through solid among the streamlines, and is not
+// drawn until its eye in the legend is clicked or its card is opened
+test('tracts: the acoustic radiation is a shell, hidden until its eye is clicked', async ({ page }) => {
+  const g = guard(page);
+  type Items = { __atlas: { viewer: { items: Map<string, { kind: string; nodes?: Record<string, { visible: boolean } | undefined> }> } } };
+  const drawn = (id: string) => page.evaluate((sid) => {
+    const it = (window as unknown as Items).__atlas.viewer.items.get(sid);
+    return it?.nodes ? Object.values(it.nodes).some((n) => n?.visible) : false;
+  }, id);
+  const row = page.locator('.legend3d li', { hasText: 'Acoustic radiation (a shell)' });
+  await open(page, './tracts/#/atlas?g=ext_thalamic');
+  // listed with the group's tracts, its eye off, nothing drawn; the link names no hidden tract
+  await expect(page.locator('.tract-btn')).toHaveCount(4);
+  await expect(row.locator('.eye')).toHaveAttribute('aria-pressed', 'false');
+  await expect(row.locator('.sw')).toHaveClass(/patch/);
+  expect(await drawn('wm_ar')).toBe(false);
+  expect(new URL(page.url()).hash).not.toContain('hid=');
+  // the eye shows it: a mesh, not lines; the link then says "nothing hidden", and opens the same view again
+  await row.locator('.eye').click();
+  await settle(page);
+  await expect.poll(() => drawn('wm_ar')).toBe(true);
+  expect(await page.evaluate(() => (window as unknown as Items).__atlas.viewer.items.get('wm_ar')!.kind)).toBe('mesh');
+  await expect(row.locator('.eye')).toHaveAttribute('aria-pressed', 'true');
+  expect(new URL(page.url()).hash).toMatch(/[?&]hid=(&|$)/);
+  await open(page, page.url());
+  await expect.poll(() => drawn('wm_ar')).toBe(true);
+  // another group that holds it starts with it hidden again
+  await page.locator('.grp-chips .chip', { hasText: 'Language and hearing' }).click();
+  await settle(page);
+  await expect(row.locator('.eye')).toHaveAttribute('aria-pressed', 'false');
+  expect(await drawn('wm_ar')).toBe(false);
+  // its card opens it: what the shell is, measured, with its sources and licence
+  await page.locator('.tract-btn[data-tract="wm_ar"]').click();
+  await settle(page);
+  await expect.poll(() => drawn('wm_ar')).toBe(true);
+  const card = page.locator('.card.sel');
+  await expect(card.locator('h2')).toContainText('Acoustic radiation (AR)');
+  await expect(card.locator('dt', { hasText: 'What the shell shows (measured)' })).toBeVisible();
+  await expect(card.locator('dt', { hasText: 'Where its streamlines end' })).toHaveCount(0);
+  await expect(card).toContainText('at least 90% of the people');
+  await expect(card.locator('a.area', { hasText: 'Heschl’s gyrus' })).toHaveAttribute('href', '../cortex/#/atlas?sel=ctx_g_temp_sup_g_t_transv&h=L');
+  await expect(card.locator('a.src', { hasText: 'Hansen 2021' }).first()).toHaveAttribute('href', 'https://doi.org/10.1007/s12021-020-09497-1');
+  await expect(card).toContainText('Licence (CC BY 4.0) and source');
+  // the credits name the atlas and its licence
+  await open(page, './tracts/#/credits');
+  await expect(page.locator('#pandora')).toContainText('CC BY 4.0');
+  await expect(page.locator('#pandora')).toContainText('Hansen CB');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

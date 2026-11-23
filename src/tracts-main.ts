@@ -2,7 +2,7 @@ import '@fontsource/atkinson-hyperlegible/latin-400.css';
 import '@fontsource/atkinson-hyperlegible/latin-700.css';
 import './styles.css';
 import { SECTIONS } from './brand';
-import { GROUP, TOPIC, WM } from './tracts';
+import { GROUP, hiddenAtFirst, TOPIC, WM } from './tracts';
 import { decodeTracts, encodeTracts, type TractsState } from './tracts/state';
 import { TractsAtlasPage } from './ui/tracts-atlas';
 import { tractCreditsPage, tractRefsPage } from './ui/tracts-pages';
@@ -11,13 +11,14 @@ import { bootSection } from './ui/section';
 /** A link without `h` uses the group's own hemisphere (language: left, SLF complex: right ...); one that names a tract
  * but no group (from the cortex section's cards) opens a group that holds the tract, the "all" group of its tier last. */
 function fromLink(hash: string): TractsState {
-  const { state, hasHemi, hasGroup } = decodeTracts(hash);
+  const { state, hasHemi, hasGroup, hasHidden } = decodeTracts(hash);
   const s = sanitize(state);
   if (!hasGroup && s.sel && !GROUP.get(s.grp)!.tractIds.includes(s.sel)) {
     const holds = WM.groups.filter((g) => g.tractIds.includes(s.sel!));
     s.grp = (holds.find((g) => g.kind !== 'all') ?? holds[0] ?? GROUP.get(s.grp)!).id;
   }
   if (!hasHemi) s.hemi = GROUP.get(s.grp)!.hemi;
+  if (!hasHidden) s.hidden = hiddenAtFirst(s.grp, s.sel);
   return s;
 }
 
