@@ -317,8 +317,13 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   level below (drawing choices). The oculomotor, trochlear, ophthalmic and maxillary nerves are re-routed through its
   lateral wall in their order from above (Corvino 2023), the abducens nerve from under Gruber's ligament against the
   carotid's posterior vertical segment and on medial to V1 (Wysiadecki 2021): their v3 meshes are spliced (kept in
-  `cavernous.json`, which `skullbase_v3.py` applies again when it routes them). The ten triangles of Chung 2016 are
-  drawn as flat patches between those structures; each triangle's card and the view's text say what it holds
+  `cavernous.json`, which `skullbase_v3.py` applies again when it routes them). The oculomotor and trochlear nerves'
+  splices begin 12 and 10 mm back along their routes, so each comes to its dural entry in one bend (spliced from the
+  route's nearest point, 2 to 4 mm from the entry, each ran past it and hooked back); the oculomotor nerve's way is
+  led round the posterior clinoid, 1 mm off the CT's bone where there is room, and the trochlear nerve climbs to its
+  level in the wall over 9 mm past its entry (it was 5 mm). The ten triangles of Chung 2016 are
+  drawn as flat patches between those structures (the middle triangle's front corner where the oculomotor and
+  trochlear nerves, side by side in the wall, reach the superior orbital fissure); each triangle's card and the view's text say what it holds
   (Chavez-Herrera 2023, Drazin 2017) and, for the five anterior ones, what a transcranial, a transorbital and an
   endonasal route show through it (Corvino 2023): `TRIANGLES` in `src/skullbase/approaches.ts`. The sinus's walls are
   drawn as a translucent shell of dura round it (1.2 mm
@@ -359,11 +364,9 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   routed tube has left the brainstem; from there on the routed tube keeps its vertices. So drawn it leaves the back
   of the pons below the inferior colliculus, 6 to 8 mm from the midline, runs forwards in the groove between the
   pons and the midbrain, for most of the way between the posterior cerebral artery above and the superior cerebellar
-  artery below, and comes down in front of the pons to the routed course (74 mm long on the left, 67 mm on the
+  artery below, and comes down in front of the pons to the routed course (70 mm long on the left, 63 mm on the
   right). Where the fitted cerebellum lies against the brainstem (the first 7 to 9 mm) the nerve runs inside the
-  cerebellum's mesh: the model has no fissure there. Left as it was: the double corner where the nerve reaches the
-  cavernous sinus's roof (two turns of 60 to 75 degrees within 3 mm, from the splice in
-  `pipeline/skullbase_v3_cavernous.py`). Validation checks that no nerve begins more than 0.75 mm inside the
+  cerebellum's mesh: the model has no fissure there. Validation checks that no nerve begins more than 0.75 mm inside the
   brainstem and that the trochlear nerve's centre line nowhere runs that deep.
 - **How a surgical view opens**: with its shapes full on (the fissure opened and the frontal lobe lifted, the hemisphere
   held off the falx, the tonsils drawn apart, the cerebellum drawn back or lifted), the anatomy its text describes; the sliders

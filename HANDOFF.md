@@ -207,7 +207,8 @@ the list").** On `fix/audit-models-2` (off `27ee8a6`), local commits, not pushed
     orbital fissure and the tumours are as they were (the tumour step rerun: no file changed). The nerve leaves the
     back of the pons 6 to 8 mm from the midline, below the inferior colliculus, runs in the groove between the pons
     and the midbrain, for most of the way between the posterior cerebral artery above and the superior cerebellar
-    artery below, and comes down in front of the pons; 74 mm (left) and 67 mm (right) long. Its first 7 to 9 mm run
+    artery below, and comes down in front of the pons; 74 mm (left) and 67 mm (right) long (70 and 63 mm since the
+    hook at the cavernous sinus went, below). Its first 7 to 9 mm run
     inside the cerebellum's mesh, which lies against the brainstem there (the model has no fissure).
   - The step now takes each nerve from the file its source wrote, so it can be run again on its own
     (`pipeline/.venv/bin/python -I -W ignore pipeline/skullbase_v3_roots.py`, then `compress.mjs skullbase-v3
@@ -215,13 +216,54 @@ the list").** On `fix/audit-models-2` (off `27ee8a6`), local commits, not pushed
     for byte as before. Only the trochlear nerve's file and card, the manifest and the modification record changed.
   - Validation 923/923 (two new checks: the trochlear nerve's centre line nowhere more than 0.75 mm inside the
     brainstem); a unit test that the nerve begins behind the midbrain's middle on each side.
-  - **Left as it was:** where the nerve reaches the cavernous sinus's roof the routed tube has a double corner (two
-    turns of 60 to 75° within 3 mm), from the splice in `skullbase_v3_cavernous.py`; it was there before the refit.
-    Smoothing it means running the cavernous step, the triangles and what follows them. The brainstem section's own
-    trochlear nerve (the MNI model) is another file and was not looked at.
+  - **Left as it was:** the brainstem section's own trochlear nerve (the MNI model) is another file and was not
+    looked at.
+- **III and IV come to the cavernous sinus in one bend (the owner, 23 November: "Yes on both").** On
+  `fix/trochlear-corner` (off PR 32's head `cbdeaeb`), local:
+  - **What was wrong:** `skullbase_v3_cavernous.py` spliced each nerve from its route's point nearest the dural
+    entry drawn there. The routes pass 2.3 to 4.4 mm from those entries, so each nerve ran past its entry and hooked
+    back to it (turns of 108 to 155° within 3 mm); the trochlear nerve then climbed 4 mm to its level in the wall
+    within 5 mm. It was so before the refit.
+  - **The rule now** (`ENTRY_LEAD_MM`, `lead_in`, `ENTRY_GAP_MM`, `ENTRY_STEP_MM`): the oculomotor nerve's splice
+    begins 12 mm and the trochlear nerve's 10 mm back along the route. The oculomotor nerve's straight way to its
+    entry cuts the posterior clinoid (its route runs over that process's top, its entry lies below and beside it),
+    so its lead-in is relaxed off the CT's bone (1 mm where there is room; the centre line keeps 0.46 mm off on the
+    left, 0.90 mm on the right; before 0.66 and 0.41 mm). The trochlear nerve's first point in the wall lies at least
+    5 mm in front of its entry, so it climbs to its level over 9 mm. Both curves' points lie 0.3 mm apart, so their
+    tubes' rings are 0.6 mm apart as on the routes (the spline's own steps gave rings up to 1.6 mm apart).
+    Sharpest turn between 0.5 mm steps: III 38° and 41° before, 15° and 11° now; IV 55° and 48° before, 11° and 7°.
+  - **The middle (supratrochlear) triangle changed with it.** Its front corner was "where III and IV come closest
+    in front of their entries". In the wall the two run side by side 1.6 to 1.9 mm apart, so that place was decided
+    by the search's starting point: 4 mm in front of the entries on both sides, because the trochlear nerve climbed
+    steeply there. With the gentler climb it fell 7 mm in front of them on the right and at the fissure on the left. The
+    corner is now the furthest-forward point within 0.1 mm of their least distance, behind the fissure
+    (`front_most`, `SIDE_BY_SIDE_MM`): at the superior orbital fissure on both sides, as the inferior triangle's
+    already was. The triangle is 22 mm long and 48 mm² on each side (was 13 and 15 mm²). v1 keeps the old rule
+    (`triangles(..., side_by_side=0)`). The inferior and superior triangles' front corners moved 0.1 to 0.4 mm.
+    **The owner has not seen this change yet: it is in the report of 23 November.**
+  - **What changed with them:** the tumour copies that keep a channel for these nerves (Knosp 3A, 3B, 4, the
+    tuberculum sellae meningioma), the endonasal grid (the sinus's medial-wall steps, 3 and 5 mm³ larger), the trochlear
+    nerve's laid part (it blends into the new curve: 70 mm on the left, 63 mm on the right; sharpest turn 22° and
+    20°). No artery, vein or other nerve file changed; clearances from vessels, brain and other nerves are within
+    0.1 mm of before.
+  - **Chain run:** `skullbase_v3_cavernous.py`, `skullbase_v3_endonasal.py` (clearance, junctions, roots),
+    `skullbase_v3_chiasm.py`, `skullbase_v3_tumours.py`, `compress.mjs skullbase-v3` for the nine changed shipped files,
+    `skullbase_v3.py finalize` (923/923), `skullbase_ct_openings.py` and `skullbase_build.py ct finalize` (228/228,
+    no file changed). `sbv3-fit.json`'s `drawnBone` keeps the full rebuild's values but for these two nerves (run
+    after the chiasm step, the clearance also measures the chiasm, the tracts and the confluence, which a full
+    rebuild does not).
+  - **Left as they were:** the abducens nerve has the same hook at Dorello's canal (turns up to 80° between 0.5 mm
+    steps on the left); the skull is carved round that nerve, so smoothing it means the skull step and every bone
+    and approach copy again. **Found on the way, not fixed:** `skullbase_v3_cavernous.centre_lines` tries 8-sided
+    rings first, and a 6-sided tube whose vertex count also fits 8 sides is read wrongly (17 of v3's tubes now). Of
+    those it reads the right abducens nerve (the skull's carve round it), the greater petrosal nerve on both sides
+    (its seat on the skull, the posterolateral and posteromedial triangles, the Kawase cut) and the right mandibular
+    nerve (the Kawase cut). The centres it returns stay within the tube, so the error is under the tube's radius
+    (0.3 to 0.5 mm); `skullbase_v3_roots.tube_part` reads the same tubes rightly. Mending it changes the skull's
+    carve, so every bone copy again.
 
 **Still left without a decision, and why not done this round:**
-- The trochlear nerve's double corner at the cavernous sinus's roof (above). MC-13 and MC-15 (v1's bone raster; v1's right "Insula" holding the fissure's white-matter
+- The abducens nerve's hook at Dorello's canal and the tube reader's misreading (both above). MC-13 and MC-15 (v1's bone raster; v1's right "Insula" holding the fissure's white-matter
   floor back to the occipital region: `skullbase_v1_brain.white_floor`, limit it to the circular sulcus's extent):
   both need v1's brain or skull step run again, which the later v1 steps and the user's v1 endonasal rework depend
   on: do them with that rework. AP-11, AP-15, MC-16: v1 endonasal, in the user's rework. MA-17's rest: the

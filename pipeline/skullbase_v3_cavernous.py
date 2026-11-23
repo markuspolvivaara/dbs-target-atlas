@@ -20,7 +20,8 @@ model's frame: x right, y forwards, z up, origin at the fitted hypophysial fossa
     in front, within CS_AROUND_MM of the carotid; the lateral wall a plane fitted through the superior orbital fissure,
     the foramen rotundum, the trigeminal ganglion's medial margin and the petrous apex (a drawing choice);
   * the nerves of the lateral wall re-routed through it, in their order from above (III, IV, V1, V2), each spliced into
-    its v3 route from where it reaches the sinus to the superior orbital fissure (V2: the foramen rotundum); VI from
+    its v3 route from where it reaches the sinus to the superior orbital fissure (V2: the foramen rotundum), III and
+    IV from 12 and 10 mm before their dural entries, so that each comes to its entry in one bend (ENTRY_LEAD_MM); VI from
     beneath Gruber's ligament at the petrous apex, against the carotid's posterior vertical segment, then forward
     inside the sinus, lateral to the carotid and medial to V1, to the fissure (Wysiadecki 2021, Corvino 2023);
   * the ten triangles of Chung 2016 (their vertices and borders as that paper defines them), each a flat patch;
@@ -71,6 +72,22 @@ CS_AIR_MAX_SHARE = 0.01              # at most this share of the sinus's volume 
 CS_THIN_WALL_MM = 0.3                # the walls drawn round it: this thick medially, above and below (a drawing choice), and
                                      # CS_WALL_MM at the lateral wall (its two layers, the nerves between them)            # the lateral wall at least this far outside the carotid (the lateral venous space, VI in it)
 NERVE_DEPTH = {"Oculomotor nerve (III)": 0.18, "Trochlear nerve (IV)": 0.36, "Ophthalmic nerve (V1)": 0.6, "Maxillary nerve (V2)": 0.9}
+# III and IV come to their dural entries in one bend. Their routed courses pass 2.3 to 4.4 mm from the entries drawn
+# here: spliced from its nearest point, each ran past its entry and hooked back to it (turns of 108 to 155 degrees
+# within 3 mm; IV then climbed to its level in the wall within 5 mm). Now a splice begins ENTRY_LEAD_MM back along the
+# route, so the curve comes to the entry from there; where it would come within ENTRY_OFF_BONE_MM of the CT's bone it
+# is led round it (lead_in: III's straight way cuts the posterior clinoid, over whose top its route runs). IV's first point
+# in the wall lies at least ENTRY_GAP_MM in front of its entry (1.5 mm for a nerve not named). Both curves' points lie
+# ENTRY_STEP_MM apart (their tubes' rings 0.6 mm, as on their routes).
+ENTRY_LEAD_MM = {"Oculomotor nerve (III)": 12.0, "Trochlear nerve (IV)": 10.0}
+ENTRY_GAP_MM = {"Trochlear nerve (IV)": 5.0}
+ENTRY_STEP_MM = 0.3
+ENTRY_OFF_BONE_MM = 1.0
+LEAD_SMOOTH_MM = 1.5                 # a lead-in led round bone: smoothed over this (Gaussian of arc length) each round ...
+LEAD_ROUNDS = 60                     # ... of this many ...
+LEAD_HELD_MM = 2.0                   # ... its ends held over this length
+LEAD_WAY_MM = 1.5                    # its way points for the splice: this far apart
+SIDE_BY_SIDE_MM = 0.1                # the middle triangle's front corner: see triangles (front_most)
 CARRIED_VEINS = ["sb_superior_petrosal_sinus", "sb_inferior_petrosal_sinus", "sb_superior_ophthalmic_vein", "sb_inferior_ophthalmic_vein"]
 # what the nerves' descriptions add (skullbase_v3.py and the manifest merge append it)
 REROUTE_NOTE = {
@@ -123,16 +140,51 @@ def spline(points: list[np.ndarray], step: float = 0.5) -> np.ndarray:
     return cs(np.r_[np.arange(0, s[-1], step), s[-1]])
 
 
-def splice(path: np.ndarray, i0: int, i1: int, middle: list[np.ndarray]) -> np.ndarray:
+def splice(path: np.ndarray, i0: int, i1: int, middle: list[np.ndarray], step: float | None = None) -> np.ndarray:
     """A route with its run from point i0 to i1 replaced by a smooth curve through `middle`, joined tangentially (the
-    curve also passes a point either side of the joins)."""
+    curve also passes a point either side of the joins). `step` (mm): the curve's points this far apart along it; not
+    given, as spline leaves them (0.5 to 0.8 mm, which skullbase_build.tube thins to rings 1 to 1.6 mm apart)."""
     a, b = path[max(i0 - 2, 0)], path[min(i1 + 2, len(path) - 1)]
-    mid = spline([a, path[i0], *middle, path[i1], b])
+    pts = [a, path[i0], *middle, path[i1], b]
+    mid = resample(spline(pts, 0.05), step) if step else spline(pts)
     return np.vstack([path[:max(i0 - 2, 0)], mid, path[min(i1 + 3, len(path)):]])
 
 
 def nearest_index(path: np.ndarray, p: np.ndarray) -> int:
     return int(np.argmin(np.linalg.norm(path - p, axis=1)))
+
+
+def back_along(path: np.ndarray, i: int, mm: float) -> int:
+    """The route's point `mm` before point i along it (its third point at the earliest: a splice reads two before)."""
+    s = np.r_[0, np.cumsum(np.linalg.norm(np.diff(path, axis=0), axis=1))]
+    return max(int(np.searchsorted(s, s[i] - mm)), min(2, i))
+
+
+def lead_in(path: np.ndarray, i0: int, i1: int, middle: list[np.ndarray], bone_sd) -> list[np.ndarray]:
+    """Way points for a splice (path, i0, i1, middle) between the route's point i0 and the nerve's dural entry
+    (middle's first point), where the splice's curve would come nearer the CT's bone than ENTRY_OFF_BONE_MM; none where
+    it keeps clear. `bone_sd(points)`: their distance to the bone (mm, negative inside it). That part of the curve is
+    relaxed: each round it is smoothed, and its points too near the bone are pushed out along the distance's gradient,
+    the pushes spread along the line; its ends are held. Where the way is narrower than twice that distance the line
+    settles between its sides."""
+    step = 0.25
+    L0 = resample(spline([path[max(i0 - 2, 0)], path[i0], *middle, path[i1], path[min(i1 + 2, len(path) - 1)]], 0.05), step)
+    L0 = L0[nearest_index(L0, path[i0]):nearest_index(L0, middle[0]) + 1]
+    k = int(LEAD_WAY_MM / step)
+    if len(L0) < 4 * k or bone_sd(L0).min() >= ENTRY_OFF_BONE_MM:
+        return []
+    s = np.r_[0, np.cumsum(np.linalg.norm(np.diff(L0, axis=0), axis=1))]
+    w = np.clip(np.minimum(s, s[-1] - s) / LEAD_HELD_MM, 0, 1)[:, None]
+    L, sig = L0.copy(), LEAD_SMOOTH_MM / step
+    size = lambda A: np.linalg.norm(A, axis=1, keepdims=True)
+    for _ in range(LEAD_ROUNDS):
+        L = w * ndimage.gaussian_filter1d(L, sig, axis=0, mode="nearest") + (1 - w) * L0
+        g = np.stack([bone_sd(L + e) - bone_sd(L - e) for e in np.eye(3) * 0.5], 1)
+        D = np.clip(ENTRY_OFF_BONE_MM - bone_sd(L), 0, None)[:, None] * g / (size(g) + 1e-9) * w
+        Ds = w * ndimage.gaussian_filter1d(D, sig, axis=0, mode="nearest")
+        L = L + np.where(size(Ds) > size(D), Ds, D)
+    L = w * ndimage.gaussian_filter1d(L, 0.6 / step, axis=0, mode="nearest") + (1 - w) * L0
+    return [L[i] for i in range(k, len(L) - 1, k) if s[-1] - s[i] >= 0.6 * LEAD_WAY_MM]
 
 
 def patch(points: list[np.ndarray], n: int = 6) -> tuple[np.ndarray, np.ndarray]:
@@ -305,9 +357,10 @@ def wall_point(wall: np.ndarray, ica: np.ndarray, ica_r: np.ndarray, side: str, 
     return np.array([s * (float(wall_x(wall, ica, ica_r, side, y, z)) + CS_WALL_MM / 2), y, z])
 
 
-def reroute(routes: dict, side: str, lm: dict, ica: np.ndarray, ica_r: np.ndarray, wall: np.ndarray, off_bone) -> dict:
+def reroute(routes: dict, side: str, lm: dict, ica: np.ndarray, ica_r: np.ndarray, wall: np.ndarray, off_bone, bone_sd) -> dict:
     """The nerves of the lateral wall and VI re-routed through the sinus (see the module's text): their new centre
-    lines, and for skullbase_v3.py the splices (where on each route, and the points between)."""
+    lines, and for skullbase_v3.py the splices (where on each route, and the points between). `off_bone(point)`: its
+    distance to the CT's bone (0 inside it); `bone_sd(points)`: the same for many, negative inside the bone."""
     ac, pc, pa, sof, fr = (lm[k] for k in ("anteriorClinoid", "posteriorClinoid", "petrousApex", "orbitalFissure", "rotundum"))
     s = 1 if side == "R" else -1
     # the sinus's lateral wall from its top (under the roof) to its bottom (the foramen rotundum's level), along its length
@@ -333,10 +386,10 @@ def reroute(routes: dict, side: str, lm: dict, ica: np.ndarray, ica_r: np.ndarra
     entry["Trochlear nerve (IV)"] = ac + 0.72 * (pa - ac)
     for name in ("Oculomotor nerve (III)", "Trochlear nerve (IV)"):
         P = routes[name]
-        i0 = nearest_index(P, entry[name])
+        i0 = back_along(P, nearest_index(P, entry[name]), ENTRY_LEAD_MM[name])
         i1 = nearest_index(P, sof)
-        mid = [entry[name]] + [in_wall(name, y_) for y_ in ys if y_ > entry[name][1] + 1.5]
-        out[name] = {"i0": i0, "i1": i1, "middle": mid}
+        mid = [entry[name]] + [in_wall(name, y_) for y_ in ys if y_ > entry[name][1] + ENTRY_GAP_MM.get(name, 1.5)]
+        out[name] = {"i0": i0, "i1": i1, "middle": lead_in(P, i0, i1, mid, bone_sd) + mid, "step": ENTRY_STEP_MM}
     # V1 and V2: from the ganglion's margin forward in the wall's lower part, V1 to the fissure, V2 to the rotundum
     for name, exit_ in (("Ophthalmic nerve (V1)", sof), ("Maxillary nerve (V2)", fr)):
         P = routes[name]
@@ -363,7 +416,7 @@ def reroute(routes: dict, side: str, lm: dict, ica: np.ndarray, ica_r: np.ndarra
 def apply(routes: dict, splices: dict) -> dict:
     out = dict(routes)
     for name, sp in splices.items():
-        out[name] = splice(routes[name], sp["i0"], sp["i1"], [np.asarray(m) for m in sp["middle"]])
+        out[name] = splice(routes[name], sp["i0"], sp["i1"], [np.asarray(m) for m in sp["middle"]], sp.get("step"))
     return out
 
 
@@ -399,13 +452,27 @@ def closest_between(A: np.ndarray, B: np.ndarray) -> tuple[np.ndarray, np.ndarra
     return A[i], B[k[i]]
 
 
-def triangles(routes: dict, lm: dict, entry: dict, ganglion: np.ndarray, gspn: np.ndarray, ii: np.ndarray, bone_tree: cKDTree, bone_pts: np.ndarray) -> dict:
-    """Each triangle's three vertices on this side, from the re-routed nerves and the landmarks (Chung 2016)."""
+def triangles(routes: dict, lm: dict, entry: dict, ganglion: np.ndarray, gspn: np.ndarray, ii: np.ndarray, bone_tree: cKDTree, bone_pts: np.ndarray,
+              side_by_side: float = 0.0) -> dict:
+    """Each triangle's three vertices on this side, from the re-routed nerves and the landmarks (Chung 2016).
+    `side_by_side` (mm, v3: SIDE_BY_SIDE_MM): the middle triangle's front corner by front_most; 0 (v1, whose nerves are
+    Z-Anatomy's own): by their closest points, as the inferior triangle's."""
     III, IV, V1, V2, V3 = (routes[k] for k in ("Oculomotor nerve (III)", "Trochlear nerve (IV)", "Ophthalmic nerve (V1)",
                                                 "Maxillary nerve (V2)", "Mandibular nerve (V3)"))
     sof, fr, fo, pa = lm["orbitalFissure"], lm["rotundum"], lm["ovale"], lm["petrousApex"]
     # where two nerves come together in front (their closest points, in front of their entries)
-    front = lambda A, B: closest_between(A[A[:, 1] > entry["Oculomotor nerve (III)"][1] + 3], B)[0]
+    ahead = lambda A: A[A[:, 1] > entry["Oculomotor nerve (III)"][1] + 3]
+    front = lambda A, B: closest_between(ahead(A), B)[0]
+
+    def front_most(A: np.ndarray, B: np.ndarray) -> np.ndarray:
+        """As `front` for two nerves that run side by side (III and IV in the wall, 1.6 to 1.9 mm apart for 12 mm):
+        their least distance is then no one place, so of A's points within `side_by_side` of it, behind the superior
+        orbital fissure, the one furthest forward."""
+        A = ahead(A)
+        A = A[A[:, 1] <= sof[1]] if (A[:, 1] <= sof[1]).any() else A
+        d = cKDTree(B).query(A)[0]
+        near = np.flatnonzero(d <= d.min() + side_by_side)
+        return A[near[np.argmax(A[near, 1])]]
     # the greater petrosal nerve's hiatus: where it leaves the bone onto the middle fossa (its first point clear of bone)
     clear = bone_tree.query(gspn)[0] > 0.8
     hiatus = gspn[int(np.argmax(clear))] if clear.any() else gspn[-1]
@@ -416,7 +483,7 @@ def triangles(routes: dict, lm: dict, entry: dict, ganglion: np.ndarray, gspn: n
     t = {
         "superoposterior": [lm["anteriorClinoid"], lm["posteriorClinoid"], pa],
         "superior": [ii_entry, III[nearest_index(III, sof)], entry["Oculomotor nerve (III)"]],
-        "middle": [entry["Oculomotor nerve (III)"], entry["Trochlear nerve (IV)"], front(IV, III)],
+        "middle": [entry["Oculomotor nerve (III)"], entry["Trochlear nerve (IV)"], (front_most if side_by_side else front)(IV, III)],
         "inferior": [entry["Trochlear nerve (IV)"], V1[0], front(IV, V1)],
         "anteromedial": [V1[nearest_index(V1, sof)], V2[nearest_index(V2, fr)], v12],
         "anterolateral": [V2[nearest_index(V2, fr)], V3[nearest_index(V3, fo)], v23],
@@ -559,12 +626,16 @@ def main() -> int:
         routes = {n: tubes[n][side][0] for n in names}
         ob = ndimage.distance_transform_edt(g["bone"] < ENDO.FIELD_ISO, sampling=ENDO.GRID_MM)
         off_bone = lambda p, ob=ob: float(ndimage.map_coordinates(ob, nib.affines.apply_affine(np.linalg.inv(a_crop), p)[:, None], order=1)[0])
-        rr = reroute(routes, side, L, ica, ica_r, wall, off_bone)
+        sd = (ob - ndimage.distance_transform_edt(g["bone"] >= ENDO.FIELD_ISO, sampling=ENDO.GRID_MM)).astype(np.float32)
+        bone_sd = lambda X, sd=sd: ndimage.map_coordinates(sd, nib.affines.apply_affine(np.linalg.inv(a_crop), X).T, order=1, mode="nearest")
+        rr = reroute(routes, side, L, ica, ica_r, wall, off_bone, bone_sd)
         new = apply(routes, rr["splices"])
         nerve_paths[side] = new
-        splices_all[side] = {n: {"i0": sp["i0"], "i1": sp["i1"], "n": len(routes[n]), "middle": [np.round(m, 3).tolist() for m in sp["middle"]]}
+        splices_all[side] = {n: {"i0": sp["i0"], "i1": sp["i1"], "n": len(routes[n]), "middle": [np.round(m, 3).tolist() for m in sp["middle"]],
+                                 **({"step": sp["step"]} if "step" in sp else {})}
                              for n, sp in rr["splices"].items()}
-        tri_pts[side] = triangles(new, L, rr["entry"], ganglion[side], routes["Greater petrosal nerve"], routes["Optic nerve (II)"], bone_tree, bone_pts)
+        tri_pts[side] = triangles(new, L, rr["entry"], ganglion[side], routes["Greater petrosal nerve"], routes["Optic nerve (II)"], bone_tree, bone_pts,
+                                   side_by_side=SIDE_BY_SIDE_MM)
         spp[side] = sphenoparietal(g, side, L)
         vol = float((cs <= 0).sum()) * ENDO.GRID_MM ** 3
         out_json["landmarks"][side] = {k: np.round(v, 2).tolist() for k, v in L.items()}

@@ -1620,7 +1620,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_oculomotor_nerve_iii.cleared.glb",
-   "bytes": 12044,
+   "bytes": 11644,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
