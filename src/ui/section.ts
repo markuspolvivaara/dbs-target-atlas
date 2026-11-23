@@ -17,6 +17,9 @@ import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEW
  * read and write, its help, and whatever else is its own.
  */
 
+/** the link keys whose change is another view (indication, group, view, region): a new history entry (see setState) */
+const VIEW_KEYS = ['i', 'g', 'v', 'r'];
+
 /** A change to the view. `camera: false` marks the camera's own moves (the address follows them a moment later),
  * `camera: true` a change that moves the camera to the new view; left out, the camera stays where it is. */
 export type Update<S> = (fn: (s: S) => void, opts?: { camera?: boolean }) => void;
@@ -96,7 +99,7 @@ export function bootSection<P extends string, S extends ViewState & { page: P },
     const next = structuredClone(state);
     fn(next);
     cfg.onChange?.(next, state);
-    setState(cfg.sanitize(next), { camera: opts.camera ?? false, fromCamera: opts.camera === false });
+    setState(cfg.sanitize(next), { camera: opts.camera ?? false, fromCamera: opts.camera === false, fromPage: true });
   };
   const atlas = cfg.atlas(update);
   const atlasPage: SectionPage<S> = { el: atlas.el, render: (s) => atlas.render(s, { camera: pendingCamera }) };
@@ -113,15 +116,24 @@ export function bootSection<P extends string, S extends ViewState & { page: P },
 
   const address = addressSync();   // (the address is written only over the hash this page last wrote or read)
 
-  function setState(next: S, opts: { camera: boolean; fromCamera?: boolean }): void {
+  /** What a history entry stands for: the page and the view on it (its indication, group or region: the link keys
+   * VIEW_KEYS, by the section's linkFields), not the camera, a slider or a selection. */
+  const viewOf = (s: S): string => [s.page, ...VIEW_KEYS.map((k) => cfg.linkFields[k]).filter(Boolean).map((f) => String((s as Record<string, unknown>)[f]))].join('\n');
+
+  function setState(next: S, opts: { camera: boolean; fromCamera?: boolean; fromPage?: boolean }): void {
     const pageChanged = next.page !== state.page;
+    // another view chosen on the page is a new history entry, so that Back returns to the one left (a link, Back
+    // itself and the address bar have made their own). The entry left first takes the view as it was left: its camera
+    // may still be waiting for its timer.
+    const push = !!opts.fromPage && viewOf(next) !== viewOf(state);
+    if (push) address.write(cfg.encode(state));
     state = next;
     pendingCamera = opts.camera;
     // the address follows a change at once, and the camera, which moves in bursts, a moment after its last move (with a
     // timer for every change, the camera's moves put off another change's while the view was still settling)
     clearTimeout(hashTimer);
     if (opts.fromCamera) hashTimer = window.setTimeout(() => address.write(cfg.encode(state)), 400);
-    else address.write(cfg.encode(state));
+    else address.write(cfg.encode(state), push);
     if (opts.fromCamera) return;
     render(pageChanged);
   }

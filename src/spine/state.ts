@@ -4,7 +4,7 @@ import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD } from '../state';
 import type { ViewState } from '../viewer/scene';
 import { decodeOpacity, encodeOpacity } from '../viewer/scene';
-import { decodeCamera, decodeHemi, decodeHidden, decodeLayers, encodeCamera, encodeHemi, encodeHidden, encodeLayers, hashOf, r1, readHash } from '../viewlink';
+import { decodeCamera, decodeMeasure, encodeMeasure, decodeHemi, decodeHidden, decodeLayers, encodeCamera, encodeHemi, encodeHidden, encodeLayers, hashOf, r1, readHash } from '../viewlink';
 import type { RegionId } from './index';
 import { APPROACHES, CCJ_MEASURES, discRegion, GEOM_BY_PAIR, herniaZones, TECHNIQUES, type ApproachId, type CcjMeasureId, type HerniaZone } from './content';
 import type { TechniqueId } from './screw';
@@ -118,6 +118,7 @@ export function encodeSpine(s: SpineState): string {
     { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
     encodeHidden(p, s.hidden);
     encodeOpacity(p, s.opacity);
+    encodeMeasure(p, s.measured);
     if (s.cut !== 'none' && s.level) p.set('x', s.cut === 'disc' ? 'd' : 's');
     if (s.screw && s.level) {
       const c = s.screw;
@@ -156,6 +157,7 @@ export function decodeSpine(hash: string): SpineState {
   s.labels = labelsFrom(lb);
   s.hidden = decodeHidden(p);
   decodeOpacity(p, s);
+  decodeMeasure(p, s);
   const les = /^([CLT]\d{1,2})-([CLST]\d{1,2})\.(central|paracentral|foraminal|farlateral)\.([LR])$/.exec(p.get('les') ?? '');
   s.screw = decodeScrew(p.get('scr'), s.level);
   const x = p.get('x');

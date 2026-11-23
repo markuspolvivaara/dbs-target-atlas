@@ -2,7 +2,7 @@ import type { CameraPreset } from './data/schema';
 import type { ViewState } from './viewer/scene';
 import { decodeOpacity, encodeOpacity } from './viewer/scene';
 import { defaultLabels, labelsFrom, labelsParam } from './labels';
-import { decodeCamera, decodeClip, decodeHidden, decodeLayers, encodeCamera, encodeClip, encodeHidden, encodeLayers, hashOf, r1, readHash } from './viewlink';
+import { decodeCamera, decodeMeasure, encodeMeasure, decodeClip, decodeHidden, decodeLayers, encodeCamera, encodeClip, encodeHidden, encodeLayers, hashOf, r1, readHash } from './viewlink';
 
 export type Page = 'atlas' | 'imaging' | 'coords' | 'refs' | 'credits' | 'settings';
 export type Hemi = 'L' | 'R' | 'both';
@@ -105,6 +105,7 @@ export function encode(s: AppState): string {
     if (s.sel) p.set('sel', s.sel);
     encodeHidden(p, s.hidden);
     encodeOpacity(p, s.opacity);
+    encodeMeasure(p, s.measured);
   } else if (s.page === 'imaging') {
     p.set('t', s.img);
   }
@@ -153,6 +154,7 @@ export function decode(hash: string, base: AppState = defaultState()): AppState 
   s.sel = p.get('sel');
   s.hidden = decodeHidden(p);
   decodeOpacity(p, s);
+  decodeMeasure(p, s);
   if (p.has('t')) s.img = p.get('t')!;
   return s;
 }

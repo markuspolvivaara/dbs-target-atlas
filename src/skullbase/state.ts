@@ -2,7 +2,7 @@ import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type LayerKey } from '../state';
 import type { ViewState } from '../viewer/scene';
 import { decodeOpacity, encodeOpacity } from '../viewer/scene';
-import { decodeCamera, decodeHemi, decodeHidden, decodeLayers, encodeCamera, encodeHemi, encodeHidden, encodeLayers, hashOf, r1, readHash } from '../viewlink';
+import { decodeCamera, decodeMeasure, encodeMeasure, decodeHemi, decodeHidden, decodeLayers, encodeCamera, encodeHemi, encodeHidden, encodeLayers, hashOf, r1, readHash } from '../viewlink';
 import { combinedCut, DEFAULT_GROUP, SB_GROUP } from './groups';
 import { defaultLabels, labelsFrom, labelsParam } from '../labels';
 
@@ -64,6 +64,7 @@ export function encodeSkull(s: SkullState): string {
     { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
     encodeHidden(p, s.hidden);
     encodeOpacity(p, s.opacity);
+    encodeMeasure(p, s.measured);
     const dflt = SB_GROUP.get(s.grp)?.morphDefault ?? {};
     for (const [name, key] of Object.entries(MORPH_PARAMS)) {
       const v = s.morphs[name] ?? 0;
@@ -97,6 +98,7 @@ export function decodeSkull(hash: string): SkullState {
   s.labels = labelsFrom(lb);
   s.hidden = decodeHidden(p);
   decodeOpacity(p, s);
+  decodeMeasure(p, s);
   s.section = p.get('sec') !== '0';
   s.morphs = {};
   for (const name of g.morphs ?? []) {     // only the shapes this view has (a view's own default where the link leaves one out)

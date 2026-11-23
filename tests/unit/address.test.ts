@@ -5,7 +5,11 @@ import { addressSync } from '../../src/ui/address';
 function fakeWindow(hash: string) {
   const location = { hash };
   const written: string[] = [];
-  return { location, written, history: { replaceState: (_d: unknown, _u: string, url: string) => { location.hash = url; written.push(url); } } };
+  const pushed: string[] = [];
+  return { location, written, pushed, history: {
+    replaceState: (_d: unknown, _u: string, url: string) => { location.hash = url; written.push(url); },
+    pushState: (_d: unknown, _u: string, url: string) => { location.hash = url; pushed.push(url); },
+  } };
 }
 
 describe('a section page’s address', () => {
@@ -16,6 +20,19 @@ describe('a section page’s address', () => {
     expect(w.location.hash).toBe('#/atlas?g=b');
     a.write('#/atlas?g=b');
     expect(w.written).toEqual(['#/atlas?g=b']);
+  });
+  it('adds a history entry when asked to (another view), and replaces otherwise', () => {
+    const w = fakeWindow('#/atlas?g=a');
+    const a = addressSync(w);
+    a.write('#/atlas?g=a&c=1,2,3,0,0,0');
+    a.write('#/atlas?g=b', true);
+    a.write('#/atlas?g=b&sel=x');
+    expect(w.written).toEqual(['#/atlas?g=a&c=1,2,3,0,0,0', '#/atlas?g=b&sel=x']);
+    expect(w.pushed).toEqual(['#/atlas?g=b']);
+    // (nor is an entry added over a link the page has not read)
+    w.location.hash = '#/sources';
+    a.write('#/atlas?g=c', true);
+    expect(w.pushed).toEqual(['#/atlas?g=b']);
   });
   it('is not written over a hash the page has not read yet: a link followed just before a write was due is not undone', () => {
     const w = fakeWindow('#/imaging?t=vim');
