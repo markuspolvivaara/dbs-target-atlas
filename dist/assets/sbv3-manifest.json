@@ -2299,7 +2299,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_oculomotor_nerve_iii.cleared.glb",
-   "bytes": 12044,
+   "bytes": 11644,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2323,14 +2323,14 @@
    "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 54.5 mm drawn, at most 1.3 mm from the fitted course, 0.0 mm through bone the mask closes; left: 54.8 mm drawn, at most 0.8 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): into the roof at the oculomotor triangle's centre, then forward in the top of the sinus's lateral wall to the superior orbital fissure. Cut at the brainstem's surface: its routed course began 3.5 mm inside the fitted brainstem (skullbase_v3_roots.py).",
    "centroid": {
     "L": [
-     -11.13,
-     -0.94,
-     9.68
+     -11.38,
+     -0.41,
+     9.47
     ],
     "R": [
-     11.86,
-     -1.3,
-     8.72
+     12.3,
+     -1.26,
+     8.02
     ]
    },
    "clearedFrom": "assets/skullbase-v3/tb_oculomotor_nerve_iii.glb"
@@ -2341,7 +2341,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_trochlear_nerve_iv.cleared.glb",
-   "bytes": 13120,
+   "bytes": 14668,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2362,17 +2362,17 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 4,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 50.5 mm drawn, at most 5.0 mm from the fitted course, 0.0 mm through bone the mask closes; left: 54.8 mm drawn, at most 5.0 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): into the roof at the back of the oculomotor triangle's lateral side, then forward in the lateral wall below the oculomotor nerve to the superior orbital fissure. Round the brainstem it is laid on the surface (skullbase_v3_roots.py): the routed course ran through the fitted brainstem there (for 18.2 mm, up to 4.5 mm deep). Its first 39 mm are drawn from where the fitted course runs furthest back, moved straight back onto the brainstem's surface, then over the surface as near the fitted course as the brainstem and the drawn vessels allow (at most 4.9 mm from it), to where the routed course has left the brainstem; so drawn it is 67.1 mm long on the right and 73.7 mm on the left. The fitted course's way through the brainstem to that point is not drawn.",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 50.5 mm drawn, at most 5.0 mm from the fitted course, 0.0 mm through bone the mask closes; left: 54.8 mm drawn, at most 5.0 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): into the roof at the back of the oculomotor triangle's lateral side, then forward in the lateral wall below the oculomotor nerve to the superior orbital fissure. Round the brainstem it is laid on the surface (skullbase_v3_roots.py): the routed course ran through the fitted brainstem there (for 18.2 mm, up to 4.5 mm deep). Its first 38.9 mm are drawn from where the fitted course runs furthest back, moved straight back onto the brainstem's surface, then over the surface as near the fitted course as the brainstem and the drawn vessels allow (at most 5 mm from it), to where the routed course has left the brainstem; so drawn it is 63.4 mm long on the right and 70 mm on the left. The fitted course's way through the brainstem to that point is not drawn.",
    "centroid": {
     "L": [
-     -10.45,
-     -13.24,
-     8.31
+     -11.19,
+     -11.57,
+     7.98
     ],
     "R": [
-     11.95,
-     -13.29,
-     5.21
+     12.42,
+     -12.68,
+     5.01
     ]
    },
    "clearedFrom": "assets/skullbase-v3/tb_trochlear_nerve_iv.glb"
@@ -6624,14 +6624,14 @@
    "derivation": "One of the ten triangles round the cavernous sinus as Chung 2016 defines them (medial group): optic nerve, oculomotor nerve before the superior orbital fissure, dural fold between the two nerves' dural entries (borders). Drawn here as the flat triangle between those structures as they are drawn in this model (the nerves re-routed through the sinus's wall, the landmarks found on this CT): where they lie follows from them, not from a dissection.",
    "centroid": {
     "L": [
-     -13.42,
-     9.6,
+     -13.43,
+     9.62,
      9.32
     ],
     "R": [
-     14.06,
-     8.91,
-     8.46
+     14.1,
+     9.02,
+     8.48
     ]
    },
    "triangle": {
@@ -6646,7 +6646,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_triangle_middle.glb",
-   "bytes": 3636,
+   "bytes": 3616,
    "colour": {
     "token": "sbTriMedial",
     "light": "#B8467A",
@@ -6663,14 +6663,14 @@
    "derivation": "One of the ten triangles round the cavernous sinus as Chung 2016 defines them (medial group): oculomotor nerve, trochlear nerve, dural fold between their dural entries (borders). Drawn here as the flat triangle between those structures as they are drawn in this model (the nerves re-routed through the sinus's wall, the landmarks found on this CT): where they lie follows from them, not from a dissection.",
    "centroid": {
     "L": [
-     -12.01,
-     -2.63,
-     4.8
+     -13.1,
+     2.93,
+     4.99
     ],
     "R": [
-     11.9,
-     -3.39,
-     3.63
+     13.27,
+     1.65,
+     4.1
     ]
    },
    "triangle": {
@@ -6685,7 +6685,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_triangle_inferior.glb",
-   "bytes": 3612,
+   "bytes": 3616,
    "colour": {
     "token": "sbTriMedial",
     "light": "#B8467A",
@@ -6702,13 +6702,13 @@
    "derivation": "One of the ten triangles round the cavernous sinus as Chung 2016 defines them (medial group): trochlear nerve, ophthalmic nerve, dural fold between their dural entries (borders). Drawn here as the flat triangle between those structures as they are drawn in this model (the nerves re-routed through the sinus's wall, the landmarks found on this CT): where they lie follows from them, not from a dissection.",
    "centroid": {
     "L": [
-     -12.34,
-     -0.09,
-     4.44
+     -12.37,
+     0.04,
+     4.46
     ],
     "R": [
-     12.99,
-     -1.03,
+     12.98,
+     -1.06,
      3.56
     ]
    },
@@ -7217,7 +7217,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_knosp_3a.glb",
-   "bytes": 43228,
+   "bytes": 43376,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7239,9 +7239,9 @@
      10.04
     ],
     "R": [
-     6.66,
-     1.83,
-     8.91
+     6.68,
+     1.81,
+     8.9
     ]
    },
    "tumour": {
@@ -7255,7 +7255,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_knosp_3b.glb",
-   "bytes": 57800,
+   "bytes": 57960,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7277,8 +7277,8 @@
      10.04
     ],
     "R": [
-     8.41,
-     1.7,
+     8.42,
+     1.68,
      6.46
     ]
    },
@@ -7293,7 +7293,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_knosp_4.glb",
-   "bytes": 57988,
+   "bytes": 58220,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7307,7 +7307,7 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule to show Knosp grade 4 on the right (skullbase_v3_tumours.py), not a patient's tumour: grade 2's shape with the whole right cavernous sinus as modelled here added within 5 mm of the section, so that it surrounds the cavernous carotid. 1.47 ml.",
+   "derivation": "Drawn by rule to show Knosp grade 4 on the right (skullbase_v3_tumours.py), not a patient's tumour: grade 2's shape with the whole right cavernous sinus as modelled here added within 5 mm of the section, so that it surrounds the cavernous carotid. 1.46 ml.",
    "centroid": {
     "L": [
      -2.9,
@@ -7315,8 +7315,8 @@
      10.04
     ],
     "R": [
-     8.47,
-     1.69,
+     8.48,
+     1.67,
      6.51
     ]
    },
@@ -8851,7 +8851,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_men_tuberculum.glb",
-   "bytes": 86936,
+   "bytes": 87052,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
