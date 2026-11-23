@@ -1,5 +1,6 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { TARGETS } from '../../src/data/targets';
 import { pointsInside } from './glb';
 import { across, joined, nodeStats, PUBLIC, sideProblems, soup, volume, widthAt, type NodeStats } from './meshcheck';
 
@@ -274,5 +275,23 @@ describe('skull base v3: the routed cranial nerves begin at the brainstem’s su
     const middle = (Math.min(...mid.map((m) => m.lo[1])) + Math.max(...mid.map((m) => m.hi[1]))) / 2;
     expect(iv.map((n) => n.node).sort()).toEqual(['L', 'R']);
     for (const n of iv) expect(n.lo[1], n.node).toBeLessThan(middle - 5);
+  }, 60_000);
+});
+
+describe('Horn 2022\'s printed peaks and the volumes drawn for them', () => {
+  // (the peaks the paper prints lie at the edge of the maps it distributes, which the volumes are drawn from at half
+  // their maximum: at most 0.8 mm outside the volume, which the markers' notes say. A marker further off than that
+  // would be a peak or a volume in another place)
+  it.each(['t-ss-gen', 't-ss-cerv'])('%s lies within a millimetre of its volume, each side', async (id) => {
+    const t = TARGETS.find((x) => x.id === id)!;
+    const { P } = await soup(`assets/meshes/${t.structureId}.glb`);
+    for (const side of ['left', 'right'] as const) {
+      const [x, y, z] = t.mni[side];
+      let near = Infinity;
+      for (let i = 0; i < P.length; i += 3) near = Math.min(near, Math.hypot(P[i] - x, P[i + 1] - y, P[i + 2] - z));
+      // (to the nearest vertex: the surface's triangles are about 0.25 mm across)
+      expect(near, `${id} ${side}`).toBeLessThan(1);
+      expect(t.note, id).toMatch(/volume drawn here/);
+    }
   }, 60_000);
 });
