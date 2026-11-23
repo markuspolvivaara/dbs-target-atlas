@@ -79,7 +79,7 @@ NERVE_DEPTH = {"Oculomotor nerve (III)": 0.18, "Trochlear nerve (IV)": 0.36, "Op
 # is led round it (lead_in: III's straight way cuts the posterior clinoid, over whose top its route runs). IV's first point
 # in the wall lies at least ENTRY_GAP_MM in front of its entry (1.5 mm for a nerve not named). Both curves' points lie
 # ENTRY_STEP_MM apart (their tubes' rings 0.6 mm, as on their routes).
-ENTRY_LEAD_MM = {"Oculomotor nerve (III)": 12.0, "Trochlear nerve (IV)": 10.0}
+ENTRY_LEAD_MM = {"Oculomotor nerve (III)": 12.0, "Trochlear nerve (IV)": 10.0, "Abducens nerve (VI)": 8.0}
 ENTRY_GAP_MM = {"Trochlear nerve (IV)": 5.0}
 ENTRY_STEP_MM = 0.3
 ENTRY_OFF_BONE_MM = 1.0
@@ -88,6 +88,13 @@ LEAD_ROUNDS = 60                     # ... of this many ...
 LEAD_HELD_MM = 2.0                   # ... its ends held over this length
 LEAD_WAY_MM = 1.5                    # its way points for the splice: this far apart
 SIDE_BY_SIDE_MM = 0.1                # the middle triangle's front corner: see triangles (front_most)
+VI_ON_CAROTID_MM = (4.0, 2.0)        # the abducens nerve meets the carotid's posterior vertical segment this far up the
+                                     # segment, and no lower than this far above its own entry at Dorello's canal
+OFF_CAROTID_MM = 0.8                 # a nerve re-routed here keeps its centre line this far off the carotid as drawn (its tube
+                                     # is 0.3 mm in radius)
+ENTRY_OFF_CAROTID_MM = 1.2           # and its entry into the sinus this far (room for its tube to come in beside the artery)
+VI_WAY_MM = 1.0                      # the abducens nerve is led round the artery by way points this far apart
+RING_ROUND = 0.05                    # centre_lines: a tube's rings are round to this share of its radius
 CARRIED_VEINS = ["sb_superior_petrosal_sinus", "sb_inferior_petrosal_sinus", "sb_superior_ophthalmic_vein", "sb_inferior_ophthalmic_vein"]
 # what the nerves' descriptions add (skullbase_v3.py and the manifest merge append it)
 REROUTE_NOTE = {
@@ -114,13 +121,19 @@ def centre_lines(path: Path) -> dict:
     out = {}
     for name, geom in sc.geometry.items():
         v = np.asarray(geom.vertices)
+        fits = []
         for sides in (8, 6):
             n = (len(v) - 2 * (sides + 1)) / sides
             if n == int(n) and n >= 2:
                 ring = v[:int(n) * sides].reshape(int(n), sides, 3)
                 c = ring.mean(1)
-                out[name] = (c, np.linalg.norm(ring - c[:, None], axis=2).mean(1))
-                break
+                rr = np.linalg.norm(ring - c[:, None], axis=2)
+                fits.append((float(rr.std(1).max()) <= RING_ROUND * max(float(rr.mean()), 0.1), c, rr.mean(1)))
+        # a 6-sided tube whose vertex count also fits 8 sides (one in six does): the fit whose rings are round. Read
+        # with 8, its "rings" were six corners of one ring and two of the next, their centres up to 0.7 mm off the line
+        # (17 of v3's tubes in November 2026: the right abducens nerve the skull is carved round among them)
+        if fits:
+            out[name] = next((f for f in fits if f[0]), fits[0])[1:]
     return out
 
 
@@ -185,6 +198,53 @@ def lead_in(path: np.ndarray, i0: int, i1: int, middle: list[np.ndarray], bone_s
         L = L + np.where(size(Ds) > size(D), Ds, D)
     L = w * ndimage.gaussian_filter1d(L, 0.6 / step, axis=0, mode="nearest") + (1 - w) * L0
     return [L[i] for i in range(k, len(L) - 1, k) if s[-1] - s[i] >= 0.6 * LEAD_WAY_MM]
+
+
+def off_carotid(p: np.ndarray, art_sd, mm: float) -> np.ndarray:
+    """A point moved straight away from the carotid as drawn until it is `mm` from it (as it is, where it already is)."""
+    p = np.array(p, float)
+    for _ in range(40):
+        if art_sd(p[None])[0] >= mm:
+            break
+        g = np.array([art_sd((p + e)[None])[0] - art_sd((p - e)[None])[0] for e in np.eye(3) * 0.5])
+        p = p + 0.1 * g / (np.linalg.norm(g) + 1e-9)
+    return p
+
+
+def round_carotid(path: np.ndarray, i0: int, i1: int, middle: list[np.ndarray], art_sd) -> list[np.ndarray]:
+    """Way points for the abducens nerve's splice (path, i0, i1, middle) between its entry at Dorello's canal (middle's
+    first point) and its place beside the carotid's horizontal segment (its third), in place of the point against the
+    posterior vertical segment (its second), which the curve is drawn through first. `art_sd(points)`: their distance to
+    the carotid as drawn (mm, negative inside it). The entry lies behind the artery and a little medial of it, the
+    place beside it lateral: the straight way between them cuts through the artery (3 mm of the nerve's centre line
+    lay inside it). That part of the curve is relaxed as lead_in relaxes a lead-in off the bone, here off the artery,
+    so it passes round the artery's back and side; the aim is raised until the curve drawn through the way points
+    keeps OFF_CAROTID_MM off the artery."""
+    step = 0.25
+    ends = lambda mid: [path[max(i0 - 2, 0)], path[i0], *mid, path[i1], path[min(i1 + 2, len(path) - 1)]]
+    L0 = resample(spline(ends(middle), 0.05), step)
+    L0 = L0[nearest_index(L0, middle[0]):nearest_index(L0, middle[2]) + 1]
+    s = np.r_[0, np.cumsum(np.linalg.norm(np.diff(L0, axis=0), axis=1))]
+    w = np.clip(np.minimum(s, s[-1] - s) / LEAD_HELD_MM, 0, 1)[:, None]
+    sig, k = LEAD_SMOOTH_MM / step, int(VI_WAY_MM / step)
+    size = lambda A: np.linalg.norm(A, axis=1, keepdims=True)
+    way = [middle[1]]
+    for aim in np.arange(OFF_CAROTID_MM, OFF_CAROTID_MM + 1.55, 0.1):
+        L = L0.copy()
+        for _ in range(LEAD_ROUNDS):
+            L = w * ndimage.gaussian_filter1d(L, sig, axis=0, mode="nearest") + (1 - w) * L0
+            g = np.stack([art_sd(L + e) - art_sd(L - e) for e in np.eye(3) * 0.5], 1)
+            D = np.clip(aim - art_sd(L), 0, None)[:, None] * g / (size(g) + 1e-9) * w
+            Ds = w * ndimage.gaussian_filter1d(D, sig, axis=0, mode="nearest")
+            L = L + np.where(size(Ds) > size(D), Ds, D)
+        L = w * ndimage.gaussian_filter1d(L, 0.6 / step, axis=0, mode="nearest") + (1 - w) * L0
+        way = [L[i] for i in range(k, len(L) - 1, k) if s[-1] - s[i] >= 0.6 * VI_WAY_MM]
+        # the curve as it will be drawn, between the entry and the place beside the artery
+        C = resample(spline(ends([middle[0], *way, *middle[2:]]), 0.05), 0.1)
+        C = C[nearest_index(C, middle[0]):nearest_index(C, middle[2]) + 1]
+        if art_sd(C).min() >= OFF_CAROTID_MM:
+            break
+    return way
 
 
 def patch(points: list[np.ndarray], n: int = 6) -> tuple[np.ndarray, np.ndarray]:
@@ -357,10 +417,11 @@ def wall_point(wall: np.ndarray, ica: np.ndarray, ica_r: np.ndarray, side: str, 
     return np.array([s * (float(wall_x(wall, ica, ica_r, side, y, z)) + CS_WALL_MM / 2), y, z])
 
 
-def reroute(routes: dict, side: str, lm: dict, ica: np.ndarray, ica_r: np.ndarray, wall: np.ndarray, off_bone, bone_sd) -> dict:
+def reroute(routes: dict, side: str, lm: dict, ica: np.ndarray, ica_r: np.ndarray, wall: np.ndarray, off_bone, bone_sd, art_sd) -> dict:
     """The nerves of the lateral wall and VI re-routed through the sinus (see the module's text): their new centre
     lines, and for skullbase_v3.py the splices (where on each route, and the points between). `off_bone(point)`: its
-    distance to the CT's bone (0 inside it); `bone_sd(points)`: the same for many, negative inside the bone."""
+    distance to the CT's bone (0 inside it); `bone_sd(points)`: the same for many, negative inside the bone;
+    `art_sd(points)`: their distance to this side's carotid as drawn, negative inside it."""
     ac, pc, pa, sof, fr = (lm[k] for k in ("anteriorClinoid", "posteriorClinoid", "petrousApex", "orbitalFissure", "rotundum"))
     s = 1 if side == "R" else -1
     # the sinus's lateral wall from its top (under the roof) to its bottom (the foramen rotundum's level), along its length
@@ -386,10 +447,18 @@ def reroute(routes: dict, side: str, lm: dict, ica: np.ndarray, ica_r: np.ndarra
     entry["Trochlear nerve (IV)"] = ac + 0.72 * (pa - ac)
     for name in ("Oculomotor nerve (III)", "Trochlear nerve (IV)"):
         P = routes[name]
+        # (an entry nearer the carotid as drawn than ENTRY_OFF_CAROTID_MM is moved straight away from it: the left
+        # oculomotor nerve's lay 0.8 mm from the back of the artery's label, which left its tube no way in beside it)
+        entry[name] = off_carotid(np.array(entry[name], float), art_sd, ENTRY_OFF_CAROTID_MM)
         i0 = back_along(P, nearest_index(P, entry[name]), ENTRY_LEAD_MM[name])
         i1 = nearest_index(P, sof)
         mid = [entry[name]] + [in_wall(name, y_) for y_ in ys if y_ > entry[name][1] + ENTRY_GAP_MM.get(name, 1.5)]
-        out[name] = {"i0": i0, "i1": i1, "middle": lead_in(P, i0, i1, mid, bone_sd) + mid, "step": ENTRY_STEP_MM}
+        # (led off the bone, and off the carotid as drawn: the left oculomotor nerve's centre line ran 2.5 mm through the
+        # back of the artery's label just before its entry)
+        # (a lead-in's ends are held to the curve it began as: a way point left nearer the artery than a nerve may come is
+        # moved off it)
+        way = [off_carotid(q, art_sd, OFF_CAROTID_MM) for q in lead_in(P, i0, i1, mid, lambda X: np.minimum(bone_sd(X), art_sd(X)))]
+        out[name] = {"i0": i0, "i1": i1, "middle": way + mid, "step": ENTRY_STEP_MM}
     # V1 and V2: from the ganglion's margin forward in the wall's lower part, V1 to the fissure, V2 to the rotundum
     for name, exit_ in (("Ophthalmic nerve (V1)", sof), ("Maxillary nerve (V2)", fr)):
         P = routes[name]
@@ -400,15 +469,35 @@ def reroute(routes: dict, side: str, lm: dict, ica: np.ndarray, ica_r: np.ndarra
     # segment, then forward inside the sinus, lateral to the carotid and medial to V1, to the fissure
     P = routes["Abducens nerve (VI)"]
     dorello = pa + np.array([-s * 1.0, 1.0, 1.5])
-    i0 = nearest_index(P, dorello)
+    # (as for III and IV: the route passes 2.2 to 2.5 mm from the entry, so spliced from its nearest point the nerve ran
+    # past the canal and hooked back to it, turning up to 80 degrees between points 0.5 mm apart. It runs on the clivus's
+    # dura there, so it is not led off the bone as they are: the skull is carved round it, skullbase_v3_skull.py)
+    i0 = back_along(P, nearest_index(P, dorello), ENTRY_LEAD_MM["Abducens nerve (VI)"])
     i1 = nearest_index(P, sof)
-    k_post = int(np.argmin(np.abs(ica[:, 2] - (ica[:, 2].min() + 4.0))))     # ~4 mm up the posterior vertical segment
+    # where it meets the carotid: about 4 mm up the posterior vertical segment, and no lower than 2 mm above its own
+    # entry. The segment is drawn from the foramen lacerum, which lies 2.5 mm lower on this CT's left than on its right:
+    # by the first rule alone the left nerve met the carotid 3 mm below its entry, dipping through 6 mm of the CT's
+    # bone, then climbed 8 mm; the right one met it 2 mm above its entry
+    up, above = VI_ON_CAROTID_MM
+    k_post = int(np.argmin(np.abs(ica[:, 2] - (ica[:, 2].min() + up))))
+    higher = np.where(ica[:, 2] >= dorello[2] + above)[0]
+    k_post = max(k_post, int(higher[0]) if len(higher) else k_post)
     against = ica[k_post] + np.array([s * (ica_r[k_post] + 0.7), 0.0, 0.0])
     k_h = int(np.argmin(np.abs(ica[:, 1] - (ica[:, 1].min() + ica[:, 1].max()) / 2)))
     lateral = ica[k_h] + np.array([s * (ica_r[k_h] + 1.6), 0.0, -0.5])
+    # (both by the carotid line's radius, which is smaller than the artery as drawn where the traced part and the
+    # label meet: moved out until they are off the artery itself)
+    for p_, off in ((against, OFF_CAROTID_MM), (lateral, OFF_CAROTID_MM + 0.4)):
+        for _ in range(60):
+            if art_sd(p_[None])[0] >= off:
+                break
+            p_ += np.array([s * 0.1, 0.0, 0.0])
     # then on forward medial to V1 (just below and inside it) until near the fissure, where they all converge
     along_v1 = [in_wall("Ophthalmic nerve (V1)", y_) + np.array([-s * 1.8, 0.0, -0.8]) for y_ in ys if lateral[1] + 1.5 < y_ < sof[1] - 3.0]
-    out["Abducens nerve (VI)"] = {"i0": i0, "i1": i1, "middle": [dorello, against, lateral, *along_v1]}
+    mid = [dorello, against, lateral, *along_v1]
+    # round the artery's back and side, not through it
+    mid = [dorello, *round_carotid(P, i0, i1, mid, art_sd), lateral, *along_v1]
+    out["Abducens nerve (VI)"] = {"i0": i0, "i1": i1, "middle": mid, "step": ENTRY_STEP_MM}
     entry["Abducens nerve (VI)"] = dorello
     return {"splices": out, "entry": entry}
 
@@ -628,7 +717,19 @@ def main() -> int:
         off_bone = lambda p, ob=ob: float(ndimage.map_coordinates(ob, nib.affines.apply_affine(np.linalg.inv(a_crop), p)[:, None], order=1)[0])
         sd = (ob - ndimage.distance_transform_edt(g["bone"] >= ENDO.FIELD_ISO, sampling=ENDO.GRID_MM)).astype(np.float32)
         bone_sd = lambda X, sd=sd: ndimage.map_coordinates(sd, nib.affines.apply_affine(np.linalg.inv(a_crop), X).T, order=1, mode="nearest")
-        rr = reroute(routes, side, L, ica, ica_r, wall, off_bone, bone_sd)
+        # the carotid as drawn: TopBrain's label and the traced part below it (its tube: centre line and radius), as the
+        # distance to their surfaces (negative inside)
+        lumen = g["lab"] == ICA_LABEL[side]
+        lab_sd = (ndimage.distance_transform_edt(~lumen, sampling=ENDO.GRID_MM) - ndimage.distance_transform_edt(lumen, sampling=ENDO.GRID_MM)).astype(np.float32)
+        ls = np.r_[0, np.cumsum(np.linalg.norm(np.diff(low, axis=0), axis=1))]
+        lt = np.r_[np.arange(0, ls[-1], 0.25), ls[-1]]
+        low_d, low_r = np.stack([np.interp(lt, ls, low[:, i]) for i in range(3)], 1), np.interp(lt, ls, ica_low[side][1])
+        low_tree = cKDTree(low_d)
+
+        def art_sd(X, lab_sd=lab_sd, low_tree=low_tree, low_r=low_r):
+            d, j = low_tree.query(X)
+            return np.minimum(ndimage.map_coordinates(lab_sd, nib.affines.apply_affine(np.linalg.inv(a_crop), X).T, order=1, mode="nearest"), d - low_r[j])
+        rr = reroute(routes, side, L, ica, ica_r, wall, off_bone, bone_sd, art_sd)
         new = apply(routes, rr["splices"])
         nerve_paths[side] = new
         splices_all[side] = {n: {"i0": sp["i0"], "i1": sp["i1"], "n": len(routes[n]), "middle": [np.round(m, 3).tolist() for m in sp["middle"]],

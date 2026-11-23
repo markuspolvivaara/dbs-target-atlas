@@ -550,6 +550,8 @@ CARRIED = ("Anterior inferior cerebellar artery", "Superior cerebellar artery", 
 HINDBRAIN_CLEAR_MM = 0.3   # the carried arteries' surfaces kept this far outside the fitted cerebellum and brainstem
 MIDLINE_PAIRS = ("Anterior spinal artery",)   # left and right halves that lie together on the midline of the medulla
 COURSE_TURN_MAX_DEG = 100.0   # a smoothed fitted course turns by no more than this over 4 mm (it does not fold back on itself)
+ENTRY_TURN_MAX_DEG = 30.0     # a nerve re-routed into the cavernous sinus (III, IV, VI) turns by no more than this between
+                              # points 0.5 mm apart (as built: 7 to 24)
 PICA_CORNERS_MAX = 6       # the PICA's carried-on course (some 670 mm of branches a side): at most this many corners over 70 deg a side
 CLEAR_PASSES = 40
 CARRY_FADE_MM = 12.0       # the carried deformation fades out over this much inside its grid's edge (none beyond it)
@@ -1442,6 +1444,29 @@ def finalize() -> int:
     return validate()
 
 
+def points_inside(Q: np.ndarray, P: np.ndarray, T: np.ndarray) -> np.ndarray:
+    """Which of the points Q lie inside the closed mesh (vertices P, triangles T): the parity of a ray's crossings (the
+    ray a little off the x axis, so that it does not run along the grid's edges)."""
+    d = np.array([1.0, 0.0137, 0.0071])
+    d /= np.linalg.norm(d)
+    a, e1, e2 = P[T[:, 0]], P[T[:, 1]] - P[T[:, 0]], P[T[:, 2]] - P[T[:, 0]]
+    h = np.cross(d, e2)
+    det = (e1 * h).sum(1)
+    ok = np.abs(det) > 1e-12
+    inv = np.where(ok, 1.0 / np.where(ok, det, 1.0), 0.0)
+    lo, hi = P.min(0), P.max(0)
+    out = np.zeros(len(Q), bool)
+    for i, q in enumerate(Q):
+        if (q < lo).any() or (q > hi).any():
+            continue
+        s = q - a
+        u = (s * h).sum(1) * inv
+        qq = np.cross(s, e1)
+        v, t = (qq @ d) * inv, (e2 * qq).sum(1) * inv
+        out[i] = int((ok & (u >= 0) & (v >= 0) & (u + v <= 1) & (t > 1e-9)).sum()) % 2 == 1
+    return out
+
+
 def validate() -> int:
     m = json.loads((GEN / f"{PREFIX}-manifest.json").read_text())
     fit = json.loads((GEN / f"{PREFIX}-fit.json").read_text())
@@ -1569,6 +1594,33 @@ def validate() -> int:
             P = np.asarray(nd["positions"], float).reshape(-1, 3)
             off = float(np.linalg.norm(P - np.asarray(it["centroid"][s_], float), axis=1).min())
             check(off <= max(3.0, 0.25 * float(np.linalg.norm(P.max(0) - P.min(0)))), f"{it['id']} {s_}: its centroid lies {off:.1f} mm from its mesh")
+    # III, IV and VI come to their entries into the cavernous sinus in one bend (skullbase_v3_cavernous.ENTRY_LEAD_MM):
+    # spliced from the route's point nearest the entry they ran past it and hooked back, turning 40 to 155 degrees
+    # within a few millimetres (VI at Dorello's canal: 80 and 43 degrees between two steps)
+    import skullbase_v3_cavernous as CAV
+    cj, cr = BUILD / "cavernous.json", BUILD / "cavernous_routes.npz"
+    if cj.exists() and cr.exists():
+        splices, routes = json.loads(cj.read_text())["splices"], np.load(cr)
+        for s_ in ("L", "R"):
+            for nm in CAV.ENTRY_LEAD_MM:
+                sp = splices[s_][nm]
+                Q = CAV.resample(CAV.splice(routes[f"{nm}|{s_}|P"], sp["i0"], sp["i1"], [np.asarray(q) for q in sp["middle"]], sp.get("step")), 0.5)
+                d = np.diff(Q, axis=0)
+                d /= np.linalg.norm(d, axis=1, keepdims=True)
+                turn = float(np.degrees(np.arccos(np.clip((d[:-1] * d[1:]).sum(1), -1, 1))).max())
+                check(turn <= ENTRY_TURN_MAX_DEG, f"{nm} {s_}: a turn of {turn:.0f} deg between points 0.5 mm apart")
+        # ... and none of the nerves re-routed there runs through the carotid as drawn (the abducens nerve's centre line
+        # lay 3 mm inside its traced part: the straight way from Dorello's canal to its place beside the artery)
+        import skullbase_build as SB
+        by_name = {it["name"]: it for it in base}
+        for art in ("Internal carotid artery", "Internal carotid artery (petrous and lacerum parts)"):
+            mesh = read_glb_full(REPO / "pipeline" / "data" / "build" / by_name[art]["file"].replace("assets/", ""))
+            for nm in splices["R"]:
+                lines = CAV.centre_lines(BUILD / f"{SB.slug(nm).replace('sb_', 'tb_', 1)}.glb")
+                for s_ in ("L", "R"):
+                    P, T = np.asarray(mesh[s_]["positions"], float).reshape(-1, 3), np.asarray(mesh[s_]["indices"]).reshape(-1, 3)
+                    inside = points_inside(CAV.resample(lines[s_][0], 0.25), P, T)
+                    check(not inside.any(), f"{nm} {s_}: {0.25 * inside.sum():.1f} mm of its centre line inside the {art.lower()}")
     sv = [it for it in m["structures"] if it.get("category") == "vein" and it.get("morph")]
     check(len(sv) == 5 and all(it.get("schematic") for it in sv), f"{len(sv)} veins drawn on the brain (the Sylvian veins, "
           "Trolard's and Labbé's), with the surgical shapes")

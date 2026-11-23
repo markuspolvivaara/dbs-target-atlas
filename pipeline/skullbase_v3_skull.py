@@ -39,8 +39,9 @@ How:
        inside the cavernous sinuses (as skullbase_v3_cavernous.py draws them, grown THIN_SINUS_GROW_MM) the CT's
        thin-bone rule (skullbase_ct.bone_mask: 170 to 400 HU next to bone counts as bone) is dropped: there those
        voxels are the contrast-filled venous blood (about 220 HU here), not bone;
-       the courses that must lie clear of the bone drawn here (CLEAR_COURSES: V2 and VI, and the petrosal sinuses,
-       which skullbase_v3_petrosal.py seats off v2's thinner bone) are carved out of the field, each tube with a
+       the courses that must lie clear of the bone drawn here (CLEAR_COURSES: V2, VI and, since it is kept off the
+       carotid, III; and the petrosal sinuses, which skullbase_v3_petrosal.py seats off v2's thinner bone) are carved
+       out of the field, each tube with a
        margin, but never within CLEAR_AIR_MM of air the bone encloses (a sinus they pass keeps its wall). Where the bone
        is thick the nerve then runs in a canal (V2 in the foramen rotundum), where it is thin in a groove.
      Both read those structures from the cavernous and petrosal steps' last run (skullbase_v3.py,
@@ -107,6 +108,10 @@ THIN_SINUS = "tb_cavernous_sinus"   # inside these (skullbase_v3_cavernous.py), 
 THIN_SINUS_GROW_MM = 1.5    # ... this, the CT's thin-bone rule does not make bone (the venous blood's contrast)
 # the courses kept clear of the bone drawn here (their files as the v3 chain wrote them): a margin (mm) round each tube
 CLEAR_COURSES = {"tb_maxillary_nerve_v2": 0.5, "tb_abducens_nerve_vi": 0.5,
+                 # (the oculomotor nerve: on this CT's left it passes between the back of the carotid's label and the
+                 # posterior clinoid, where the skull drawn here is thicker than the CT's bone; kept off the artery, 4 %
+                 # of its tube lay up to 1 mm under the clinoid's surface)
+                 "tb_oculomotor_nerve_iii": 0.3,
                  "sb_superior_petrosal_sinus": 0.3, "sb_inferior_petrosal_sinus": 0.3}   # (skullbase_v3_petrosal.GAP_MM)
 CLEAR_AIR_MM = 1.0          # ... never carved within this of air the bone encloses (else the maxillary sinus opens)
 CLEAR_NOTE_START = "The skull is carved round it"

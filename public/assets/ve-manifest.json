@@ -1620,7 +1620,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_oculomotor_nerve_iii.cleared.glb",
-   "bytes": 11644,
+   "bytes": 10520,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -1641,17 +1641,17 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 3,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 54.5 mm drawn, at most 1.3 mm from the fitted course, 0.0 mm through bone the mask closes; left: 54.8 mm drawn, at most 0.8 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): into the roof at the oculomotor triangle's centre, then forward in the top of the sinus's lateral wall to the superior orbital fissure. Cut at the brainstem's surface: its routed course began 3.5 mm inside the fitted brainstem (skullbase_v3_roots.py).",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 54.5 mm drawn, at most 1.3 mm from the fitted course, 0.0 mm through bone the mask closes; left: 54.8 mm drawn, at most 0.8 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): into the roof at the oculomotor triangle's centre, then forward in the top of the sinus's lateral wall to the superior orbital fissure. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 0 % of its surface on the right and 5 % on the left lay under the bone shown; now none of it does. Where the bone is thick it runs in a canal of its own, where it is thin in a groove. Cut at the brainstem's surface: its routed course began 3.5 mm inside the fitted brainstem (skullbase_v3_roots.py).",
    "centroid": {
     "L": [
-     -11.13,
-     -0.94,
-     9.68
+     -11.51,
+     -0.47,
+     9.26
     ],
     "R": [
-     11.86,
-     -1.3,
-     8.72
+     12.3,
+     -1.26,
+     8.02
     ]
    },
    "clearedFrom": "assets/skullbase-v3/tb_oculomotor_nerve_iii.glb"

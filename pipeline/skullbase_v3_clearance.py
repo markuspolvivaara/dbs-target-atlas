@@ -87,7 +87,7 @@ OFF_BONE = ("Anterior inferior cerebellar artery", "Superior cerebellar artery (
             "Posterior inferior cerebellar artery (fitted course)", "Medial pontine branches of basilar artery",
             "Lateral pontine branches of basilar artery", "Anterior spinal artery", "Superior petrosal sinus", "Inferior petrosal sinus")
 # the nerves the skull is carved round (skullbase_v3_skull.CLEAR_COURSES, with the petrosal sinuses above): out of it too
-CARVED = ("Maxillary nerve (V2)", "Abducens nerve (VI)")
+CARVED = ("Maxillary nerve (V2)", "Abducens nerve (VI)", "Oculomotor nerve (III)")
 
 
 class DrawnBone:
