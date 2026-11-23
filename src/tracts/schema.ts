@@ -53,6 +53,9 @@ export const TractTopicSchema = z.object({
   parcels: z.array(Id).default([]),
   /** measurements made by this project's pipeline (no literature claim, so no reference) */
   measured: z.array(z.string()).default([]),
+  /** not drawn until its eye in the legend is clicked or its card is opened (the acoustic radiation, a shell among
+   * streamlines: the owner's choice, 23 November 2026) */
+  offAtFirst: z.boolean().default(false),
 });
 export type TractTopic = z.output<typeof TractTopicSchema>;
 export type TractTopicInput = z.input<typeof TractTopicSchema>;

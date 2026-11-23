@@ -2,7 +2,8 @@ import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type LayerKey } from '../state';
 import type { ViewState } from '../viewer/scene';
 import { decodeOpacity, encodeOpacity } from '../viewer/scene';
-import { decodeCamera, decodeClip, decodeHemi, decodeHidden, decodeLayers, encodeCamera, encodeClip, encodeHemi, encodeHidden, encodeLayers, hashOf, readHash } from '../viewlink';
+import { decodeCamera, decodeClip, decodeHemi, decodeHidden, decodeLayers, encodeCamera, encodeClip, encodeHemi, encodeLayers, hashOf, readHash } from '../viewlink';
+import { hiddenAtFirst } from './index';
 
 export type TractsPage = 'atlas' | 'refs' | 'credits';
 
@@ -42,6 +43,8 @@ export function defaultTractsState(): TractsState {
 
 // ---------------------------------------------------------------- URL hash
 // #/atlas?g=language&sel=wm_af&h=L&c=lateral&ly=n1,t1,c1:0.50&ax=10.0&cut=L&seq=t2&lb=h
+// `hid` is written when the hidden tracts are not the view's own (hiddenAtFirst: a tract not drawn until asked for), so
+// it may be empty: "nothing hidden", where the view would hide one. Without it a link hides the view's own.
 const PAGES: TractsPage[] = ['atlas', 'refs', 'credits'];
 const LAYER_CODES: [LayerKey, string][] = [['nuclei', 'n'], ['tracts', 't'], ['cortex', 'c']];
 
@@ -57,15 +60,17 @@ export function encodeTracts(s: TractsState): string {
     encodeClip(p, s.clip);
     if (s.cutSide !== 'none') p.set('cut', s.cutSide);
     if (s.sliceSeq !== 't1') p.set('seq', s.sliceSeq);
-    encodeHidden(p, s.hidden);
+    const own = hiddenAtFirst(s.grp, s.sel);
+    if (s.hidden.length !== own.length || s.hidden.some((id) => !own.includes(id))) p.set('hid', s.hidden.join(','));
     encodeOpacity(p, s.opacity);
   }
   return hashOf(s.page, p);
 }
 
 /** Decode a hash. A missing `h` means "use the group's own hemisphere", and a missing `g` with a tract named "a group
- * that holds the tract" (a link from another section): both are left to the caller. */
-export function decodeTracts(hash: string, base: TractsState = defaultTractsState()): { state: TractsState; hasHemi: boolean; hasGroup: boolean } {
+ * that holds the tract" (a link from another section): both are left to the caller, who then sets the hidden tracts
+ * again where the link names none (`hasHidden` false: hiddenAtFirst of the group it settled on). */
+export function decodeTracts(hash: string, base: TractsState = defaultTractsState()): { state: TractsState; hasHemi: boolean; hasGroup: boolean; hasHidden: boolean } {
   const s: TractsState = structuredClone(base);
   const { page, p } = readHash(hash, PAGES);
   s.page = page;
@@ -81,7 +86,7 @@ export function decodeTracts(hash: string, base: TractsState = defaultTractsStat
   s.cutSide = cut === 'L' || cut === 'R' ? cut : 'none';
   const seq = p.get('seq');
   s.sliceSeq = seq === 't2' || seq === 'pd' ? seq : 't1';
-  s.hidden = decodeHidden(p);
+  s.hidden = p.has('hid') ? decodeHidden(p) : hiddenAtFirst(s.grp, s.sel);
   decodeOpacity(p, s);
-  return { state: s, hasHemi: p.has('h'), hasGroup: p.has('g') };
+  return { state: s, hasHemi: p.has('h'), hasGroup: p.has('g'), hasHidden: p.has('hid') };
 }

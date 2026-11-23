@@ -67,8 +67,10 @@ export function crossCheckWm(c: WmContent): string[] {
   c.general.forEach((cl) => ref('general', cl));
   c.endsCaveats.forEach((cl) => ref('ends', cl));
   for (const r of c.references) if (!used.has(r.id)) errs.push(`reference ${r.id} is never cited`);
-  // every tract's ends are measured (pipeline/wm_ends.py), and no other's
-  for (const id of tracts) if (!WM_ENDS.tracts[id]) errs.push(`tract ${id}: its ends are not measured (wm-ends.json)`);
+  // every tract's ends are measured (pipeline/wm_ends.py), and no other's; a shell has no streamlines, so no ends
+  const shells = new Set(WM_MANIFEST.structures.filter((s) => s.shell).map((s) => s.id));
+  for (const s of WM_MANIFEST.structures) if ((s.type === 'tract') === !!s.shell) errs.push(`tract ${s.id}: streamlines or a shell, one of the two`);
+  for (const id of tracts) if (!shells.has(id) && !WM_ENDS.tracts[id]) errs.push(`tract ${id}: its ends are not measured (wm-ends.json)`);
   for (const id of Object.keys(WM_ENDS.tracts)) if (!tracts.has(id)) errs.push(`wm-ends.json: unknown tract '${id}'`);
   return errs;
 }
@@ -81,4 +83,12 @@ export const WM_REF = new Map(WM.references.map((r) => [r.id, r]));
 export const TOPIC = new Map(WM.topics.map((t) => [t.id, t]));
 export const GROUP = new Map(WM.groups.map((g) => [g.id, g]));
 export const WM_MAN = new Map(WM_MANIFEST.structures.map((s) => [s.id, s]));
+/** a tract drawn as a shell (a mesh), not as streamlines */
+export const isShell = (id: string): boolean => !!WM_MAN.get(id)?.shell;
+
+/** The tracts of a group that are not drawn until asked for (TractTopic.offAtFirst), but for the one whose card is
+ * open: what a view's hidden list holds before the reader has touched an eye. */
+export function hiddenAtFirst(grpId: string, sel: string | null): string[] {
+  return (GROUP.get(grpId)?.tractIds ?? []).filter((id) => TOPIC.get(id)?.offAtFirst && id !== sel);
+}
 

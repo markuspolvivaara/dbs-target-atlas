@@ -192,8 +192,8 @@ HCP methods to cite:
 
 ## White-matter tracts section (HCP-1065)
 
-The tracts in `public/assets/wm/` and `wm-manifest.json` and the figures measured on the bundles in
-`src/data/generated/wm-measured.json` are derived from the HCP-1065 population-averaged
+The tracts drawn as streamlines in `public/assets/wm/` and `wm-manifest.json` and the figures measured on the
+bundles in `src/data/generated/wm-measured.json` are derived from the HCP-1065 population-averaged
 tractography atlas. They are **not** GPL-licensed Lead-DBS material: they carry the atlas licence,
 CC BY-SA 4.0 (brain.labsolver.org/hcp_trk_atlas.html); derived from Human Connectome Project data, so also subject to the WU-Minn HCP Open Access Data Use Terms.
 Share-alike: adapted versions of these files must be released under CC BY-SA 4.0 (or a compatible
@@ -211,6 +211,19 @@ licence) with attribution.
 - HCP acknowledgement (required, as above):
 
 > Data were provided [in part] by the Human Connectome Project, WU-Minn Consortium (Principal Investigators: David Van Essen and Kamil Ugurbil; 1U54MH091657) funded by the 16 NIH Institutes and Centers that support the NIH Blueprint for Neuroscience Research; and by the McDonnell Center for Systems Neuroscience at Washington University.
+
+### The acoustic radiation: a shell from the Pandora atlas
+
+`public/assets/wm/wm_ar.glb` is derived from the
+Pandora white-matter bundle atlases (Hansen 2021), the Xtract atlas. Licence: CC BY 4.0 (github.com/MASILab/Pandora-WhiteMatterAtlas): free to share and adapt with attribution.
+
+- Source: https://github.com/MASILab/Pandora-WhiteMatterAtlas
+- Note: Xtract/Xtract.nii.gz of the repository at commit 2caf442 (also on NITRC, doi 10.25790/bml0cm.63): per bundle, the share of the atlas's subjects (2,443 from the HCP, the BLSA and Vanderbilt University) in whom the bundle, made with FSL's XTRACT and binarised, covers a voxel of the MNI ICBM 152 asymmetric template at 1 mm. The acoustic radiation's values reach 0.99, more than the share of all subjects in whom it was found (2,183 left, 2,247 right), so they are read as shares of those.
+- Cite: Hansen CB, Yang Q, Lyu I, Rheault F, Kerley C, Chandio BQ, et al. Pandora: 4-D white matter bundle population-based atlases derived from diffusion MRI fiber tractography. Neuroinformatics. 2021;19(3):447–460. doi:10.1007/s12021-020-09497-1.
+- Cite: Warrington S, Bryant KL, Khrapitchev AA, Sallet J, Charquero-Ballester M, Douaud G, et al. XTRACT – standardised protocols for automated tractography in the human and macaque brain. NeuroImage. 2020;217:116923. doi:10.1016/j.neuroimage.2020.116923.
+- Changes made: one bundle's map (the acoustic radiation, left and right) taken from the atlas, smoothed, and the
+  surface round the voxels at or above the chosen share drawn as a mesh (pipeline/wm_shell.py); converted to
+  compressed glTF.
 
 ## Skull base v1 (Z-Anatomy / BodyParts3D)
 

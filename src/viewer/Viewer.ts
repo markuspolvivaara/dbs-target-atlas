@@ -807,6 +807,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         // landmark volumes (optic tract) must read clearly next to the target
         if (this.cat.landmarks.has(it.meta.id) && look === 'context') op = Math.min(1, op * 2.2);
         if (it.meta.type === 'cortex' && it.meta.id !== 'cortex' && look === 'context') op = Math.min(1, op * 1.6);
+        // a tract drawn as a shell (white-matter section) must hold its own among the streamlines round it
+        if (it.meta.shell && look === 'context') op = Math.min(1, op * 1.6);
         it.faded = fade && !!focus && !focused && look !== 'ghost' && look !== 'hidden';
         if (it.faded) op *= 0.3;
         // (the structure's own opacity: also on a selected one, which is drawn whole otherwise)
@@ -933,17 +935,19 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
       }
     }
     for (const [id, look] of this.plan.looks) {
-      if (look !== 'primary' && look !== 'alt') continue;
+      // (a tract drawn as a shell is named as the streamline tracts are)
+      const shell = look === 'context' && this.plan.labelTracts && !!this.cat.byId.get(id)?.shell;
+      if (look !== 'primary' && look !== 'alt' && !shell) continue;
       if (this.state.hidden.includes(id)) continue;
       const it = this.items.get(id);
       if (!(this.state.layers[it?.kind === 'mesh' ? it.layer : 'nuclei'] ?? SHOWN).on) continue;
       const m = this.cat.byId.get(id);
       if (!m || m.type === 'cortex' || m.type === 'tract' || !m.centroid) continue;
-      const side: Side = this.sideShown('R') ? 'R' : 'L';
+      const side: Side = shell ? (this.sideShown('L') ? 'L' : 'R') : this.sideShown('R') ? 'R' : 'L';
       if (!this.sideShown(side)) continue;
       const v = this.toWorld(new THREE.Vector3(...m.centroid[side])).project(this.camera);
       if (v.z > 1 || Math.abs(v.x) > 1.1 || Math.abs(v.y) > 1.1) continue;
-      out.push({ id, x: (v.x + 1) / 2 * w, y: (1 - v.y) / 2 * h, look });
+      out.push({ id, x: (v.x + 1) / 2 * w, y: (1 - v.y) / 2 * h, look: shell ? 'primary' : look });
     }
     return out;
   }

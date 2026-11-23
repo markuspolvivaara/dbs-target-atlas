@@ -189,6 +189,29 @@ def main() -> int:
         check("alignment", base >= wm_ref and best <= base * 1.05,
               f"wm {t.id}: mean T1 along tract {base:.0f} (head p75 {wm_ref:.0f}); best 2 mm shift {best:.0f}")
 
+    # the tracts drawn as shells (wm_shell.py): on the right side, the two sides alike, one piece, the two atlases in one
+    # space, and the acoustic radiation from the medial geniculate body to Heschl's gyrus
+    for t in C.WM_SHELLS:
+        r = rep[t.id]
+        for side in ("L", "R"):
+            s = r[side]
+            check("orientation", (s["meanX"] < 0) == (side == "L"), f"wm {t.id}/{side} mean x={s['meanX']:.1f}")
+            check("shell", s["droppedVoxels"] == 0, f"wm {t.id}/{side}: {s['pieces']} piece(s) at the level, {s['droppedVoxels']} voxels outside the largest")
+            check("shell", abs(s["volumeMl"] - s["voxelsAtLevel"] / 1000.0) <= 0.1 * s["voxelsAtLevel"] / 1000.0,
+                  f"wm {t.id}/{side}: the shell holds {s['volumeMl']} ml, the map's voxels at the level {s['voxelsAtLevel'] / 1000.0:.2f} ml")
+            lo, hi = C.WM_SHELL_MEDIAL_MM
+            check("shell", lo <= s["medialEndMm"] <= hi, f"wm {t.id}/{side}: medial end {s['medialEndMm']} mm from the midline (expected {lo} to {hi}: the medial geniculate body)")
+            check("shell", s["heschlNearestMm"] <= C.WM_SHELL_HESCHL_MM,
+                  f"wm {t.id}/{side}: {s['heschlNearestMm']} mm from Heschl's gyrus at its nearest (max {C.WM_SHELL_HESCHL_MM})")
+            check("shell", s["mgbNearestMm"] <= C.WM_SHELL_MGB_MM,
+                  f"wm {t.id}/{side}: {s['mgbNearestMm']} mm from the brainstem section's medial geniculate body at its nearest (max {C.WM_SHELL_MGB_MM})")
+            sp = r["space"][side]
+            check("alignment", sp["atLeastTenth"] >= 0.9 and sp["bestMeanShare"] - sp["meanShare"] <= 0.05,
+                  f"wm {t.id}: HCP-1065's corticospinal tract ({side}) in Pandora's map: mean share {sp['meanShare']}, "
+                  f"{sp['atLeastTenth']:.0%} of its points at 0.1 or more; best shift {sp['bestShiftMm']} mm gives {sp['bestMeanShare']}")
+        a_, b_ = r["L"]["centroid"], r["R"]["centroid"]
+        check("symmetry", abs(a_[0] + b_[0]) <= WM_SYM_X_MM, f"wm {t.id}: centroid x L {a_[0]} R {b_[0]}")
+
     # cortex: compare surface parcels against the Mindboggle-101 volume (independent labels)
     mb = nib.load(RAW / "labeling/Mindboggle 101 - Desikan protocol (Klein 2012).nii")
     lab = np.asanyarray(mb.dataobj).astype(int)

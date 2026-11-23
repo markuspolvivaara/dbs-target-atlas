@@ -3162,6 +3162,20 @@
     "https://doi.org/10.1038/s41467-022-32595-4",
     "https://doi.org/10.1016/j.neuroimage.2018.05.027"
    ]
+  },
+  "pandora": {
+   "name": "Pandora white-matter bundle atlases (Hansen 2021), the Xtract atlas",
+   "licence": "CC BY 4.0 (github.com/MASILab/Pandora-WhiteMatterAtlas)",
+   "url": "https://github.com/MASILab/Pandora-WhiteMatterAtlas",
+   "note": "Xtract/Xtract.nii.gz of the repository at commit 2caf442 (also on NITRC, doi 10.25790/bml0cm.63): per bundle, the share of the atlas's subjects (2,443 from the HCP, the BLSA and Vanderbilt University) in whom the bundle, made with FSL's XTRACT and binarised, covers a voxel of the MNI ICBM 152 asymmetric template at 1 mm. The acoustic radiation's values reach 0.99, more than the share of all subjects in whom it was found (2,183 left, 2,247 right), so they are read as shares of those.",
+   "citation": [
+    "Hansen CB, Yang Q, Lyu I, Rheault F, Kerley C, Chandio BQ, et al. Pandora: 4-D white matter bundle population-based atlases derived from diffusion MRI fiber tractography. Neuroinformatics. 2021;19(3):447–460. doi:10.1007/s12021-020-09497-1.",
+    "Warrington S, Bryant KL, Khrapitchev AA, Sallet J, Charquero-Ballester M, Douaud G, et al. XTRACT – standardised protocols for automated tractography in the human and macaque brain. NeuroImage. 2020;217:116923. doi:10.1016/j.neuroimage.2020.116923."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1007/s12021-020-09497-1",
+    "https://doi.org/10.1016/j.neuroimage.2020.116923"
+   ]
   }
  }
 }

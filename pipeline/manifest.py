@@ -113,10 +113,38 @@ def main() -> int:
     return 0
 
 
+def wm_shell_item(t: C.WmShell, r: dict) -> dict:
+    """A tract drawn as a shell (pipeline/wm_shell.py): a mesh of the tracts layer, with what was measured on it."""
+    f = f"assets/wm/{t.id}.glb"
+    per = lambda k: {s: r[s][k] for s in ("L", "R")}  # noqa: E731
+    pct = f"{100 * t.level:g} %"
+    return {
+        "id": t.id, "name": t.name, "aliases": [t.abbr], "type": "soft", "layer": "tracts", "file": f,
+        "bytes": size(f), "colour": colour(t.colour), "dataset": "pandora", **dataset_block("pandora"),
+        "derivation": f"A shell, not streamlines: the surface round the voxels of the atlas's map of this bundle where it passed in at "
+                      f"least {pct} of the people in whom the method found it ({r['L']['subjects']:,} left, {r['R']['subjects']:,} right). "
+                      f"The map is smoothed by {t.smooth_mm:g} mm so the surface is not stepped at its 1 mm voxels, and the surface is "
+                      "taken at the smoothed map's level that keeps the volume. "
+                      f"The map is cut {t.medial_cut_mm:g} mm from the midline, at the medial edge of the brainstem section's medial "
+                      f"geniculate body; at this level it ends there by itself ({r['L']['medialEndMm']:g} mm left, {r['R']['medialEndMm']:g} mm right).",
+        "category": t.group, "tier": t.tier,
+        "shell": {"level": t.level, "subjects": per("subjects"), "volumeMl": per("volumeMl"), "thickestMm": per("thickestMm"),
+                  "medialEndMm": per("medialEndMm"), "mgbNearestMm": per("mgbNearestMm"), "heschlNearestMm": per("heschlNearestMm"),
+                  "hcp1065EndsMm": per("hcp1065EndsMm")},
+        "centroid": {s: r[s]["centroid"] for s in ("L", "R")},
+    }
+
+
 def write_wm_manifest(rep: dict) -> dict:
-    """wm-manifest.json: the white-matter section's tracts (HCP-1065), kept apart from the DBS assets."""
+    """wm-manifest.json: the white-matter section's tracts (HCP-1065's streamlines; the acoustic radiation a shell from
+    the Pandora atlas), kept apart from the DBS assets. A shell stands where the withdrawn tract of its id stood."""
     items = []
-    for t in C.WM_SHOWN:
+    shells = {s.id: s for s in C.WM_SHELLS}
+    for t in C.WM_TRACTS:
+        if t.withdrawn:
+            if t.id in shells:
+                items.append(wm_shell_item(shells.pop(t.id), rep[t.id]))
+            continue
         f = f"assets/wm/{t.id}.glb"
         r = rep[t.id]
         items.append({
@@ -130,13 +158,17 @@ def write_wm_manifest(rep: dict) -> dict:
             "sourceStreamlines": {s: r[s]["sourceStreamlines"] for s in ("L", "R")},
             "centroid": {s: r[s]["centroid"] for s in ("L", "R")},
         })
+    items += [wm_shell_item(s, rep[s.id]) for s in shells.values()]
     d = C.DATASETS["hcp1065"]
+    sd = C.DATASETS["pandora"]
     wm = {
         "space": "MNI ICBM 2009a nonlinear asymmetric (RAS, mm), shown on the ICBM 2009b templates",
         "generatedBy": "pipeline/build.py (wm) + pipeline/compress.mjs + pipeline/manifest.py",
         "structures": items,
         "dataset": {"name": d["name"], "licence": d["licence"], "url": d["url"], "note": d["note"],
                     "citation": [CITES[c]["citation"] for c in d["cite"]], "citationUrls": [CITES[c]["url"] for c in d["cite"]]},
+        "shellDataset": {"name": sd["name"], "licence": sd["licence"], "url": sd["url"], "note": sd["note"],
+                         "citation": [CITES[c]["citation"] for c in sd["cite"]], "citationUrls": [CITES[c]["url"] for c in sd["cite"]]},
         "hcpAcknowledgement": HCP_ACK,
     }
     (GEN / "wm-manifest.json").write_text(json.dumps(wm, indent=1, ensure_ascii=False))
@@ -472,8 +504,8 @@ def write_attribution(m: dict, wm: dict) -> None:
         "",
         "## White-matter tracts section (HCP-1065)",
         "",
-        "The tracts in `public/assets/wm/` and `wm-manifest.json` and the figures measured on the bundles in",
-        "`src/data/generated/wm-measured.json` are derived from the HCP-1065 population-averaged",
+        "The tracts drawn as streamlines in `public/assets/wm/` and `wm-manifest.json` and the figures measured on the",
+        "bundles in `src/data/generated/wm-measured.json` are derived from the HCP-1065 population-averaged",
         "tractography atlas. They are **not** GPL-licensed Lead-DBS material: they carry the atlas licence,",
         f"{wm['dataset']['licence']}.",
         "Share-alike: adapted versions of these files must be released under CC BY-SA 4.0 (or a compatible",
@@ -482,7 +514,7 @@ def write_attribution(m: dict, wm: dict) -> None:
         f"- Source: {wm['dataset']['url']}",
         f"- Note: {wm['dataset']['note']}",
         *[f"- Cite: {c}" for c in wm["dataset"]["citation"]],
-        f"- Assets: {', '.join(s['id'] for s in wm['structures'])}",
+        f"- Assets: {', '.join(s['id'] for s in wm['structures'] if s['dataset'] == 'hcp1065')}",
         "- Changes made: the streamlines' points moved by half a voxel (the files give them from the first voxel's",
         "  centre), streamlines subsampled and resampled, the tracts stored as one file across the midline (the corpus",
         "  callosum, the anterior commissure, the superior and middle cerebellar peduncles) cut at the midline, files",
@@ -490,6 +522,18 @@ def write_attribution(m: dict, wm: dict) -> None:
         "- HCP acknowledgement (required, as above):",
         "",
         "> " + HCP_ACK,
+        "",
+        "### The acoustic radiation: a shell from the Pandora atlas",
+        "",
+        f"`{', '.join(s['file'].replace('assets/', 'public/assets/') for s in wm['structures'] if s['dataset'] == 'pandora')}` is derived from the",
+        f"{wm['shellDataset']['name']}. Licence: {wm['shellDataset']['licence']}: free to share and adapt with attribution.",
+        "",
+        f"- Source: {wm['shellDataset']['url']}",
+        f"- Note: {wm['shellDataset']['note']}",
+        *[f"- Cite: {c}" for c in wm["shellDataset"]["citation"]],
+        "- Changes made: one bundle's map (the acoustic radiation, left and right) taken from the atlas, smoothed, and the",
+        "  surface round the voxels at or above the chosen share drawn as a mesh (pipeline/wm_shell.py); converted to",
+        "  compressed glTF.",
         "",
         *skull_base_attribution(),
         *skull_base_ct_attribution(),

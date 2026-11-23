@@ -477,6 +477,63 @@ WM_TRACTS: list[WmTract] = [
 # the tracts written and listed (the withdrawn one is only replayed)
 WM_SHOWN: list[WmTract] = [t for t in WM_TRACTS if not t.withdrawn]
 
+
+# The acoustic radiation is drawn as a shell, not as streamlines: HCP-1065's bundle ends beside the atrium, about 22 mm
+# from Heschl's gyrus (withdrawn above), and no open atlas was found that gives the tract's streamlines to the gyrus.
+# The Pandora atlases (Hansen 2021) give, per voxel of the MNI ICBM 152 asymmetric template at 1 mm, the share of their
+# subjects in whom a bundle passed; their Xtract atlas follows the XTRACT protocol (Warrington 2020), which seeds the
+# acoustic radiation in the transverse temporal gyrus with the medial geniculate nucleus as its target. The shell is the
+# surface round the voxels where the share is at least `level` (the owner's choice, 23 November 2026: 0.9, the slim
+# one; at 0.5 it is 10 ml and covers the gyrus). Shown on the 2009b templates as the tracts are: HCP-1065's
+# corticospinal streamlines lie in Pandora's corticospinal map (mean share 0.80, 95 to 97 % of their points at 0.1 or
+# more), and no shift of up to 2 mm raises that by more than 0.03 (pipeline/wm_shell.py prints it).
+DATASETS["pandora"] = {
+    "name": "Pandora white-matter bundle atlases (Hansen 2021), the Xtract atlas",
+    "cite": ["hansen2021", "warrington2020"],
+    "licence": "CC BY 4.0 (github.com/MASILab/Pandora-WhiteMatterAtlas)",
+    "url": "https://github.com/MASILab/Pandora-WhiteMatterAtlas",
+    "note": "Xtract/Xtract.nii.gz of the repository at commit 2caf442 (also on NITRC, doi 10.25790/bml0cm.63): per bundle, "
+            "the share of the atlas's subjects (2,443 from the HCP, the BLSA and Vanderbilt University) in whom the "
+            "bundle, made with FSL's XTRACT and binarised, covers a voxel of the MNI ICBM 152 asymmetric template at "
+            "1 mm. The acoustic radiation's values reach 0.99, more than the share of all subjects in whom it was "
+            "found (2,183 left, 2,247 right), so they are read as shares of those.",
+}
+PANDORA_COMMIT = "2caf44296666c13aa5c4d7d1c88d14fe553d9553"
+PANDORA_URL = "https://raw.githubusercontent.com/MASILab/Pandora-WhiteMatterAtlas/" + PANDORA_COMMIT + "/{}"
+PANDORA_FILES = {   # as downloaded 2026-11-23
+    "Xtract/Xtract.nii.gz": "0cd04c6a41910fe1a25bf0e28a9ae3f18c912819bc51025aecd648d430fd11aa",
+    "Xtract/Xtract_info.csv": "4c113b30ecea7df2905fa56d43ae95f492b38fe505104acb77bf2287630bf314",
+}
+
+
+@dataclass
+class WmShell:
+    """A tract of the white-matter section drawn as a shell: the surface round the voxels of a Pandora bundle's map
+    where the share of subjects is at least `level`."""
+
+    id: str
+    name: str
+    abbr: str
+    colour: str
+    group: str
+    tier: str
+    bundles: dict[str, str]   # side -> the bundle's file name in Xtract_info.csv
+    level: float
+    # the map is cut this far from the midline (mm): the medial edge of the brainstem section's medial geniculate body
+    # (bs_mgb, 10.5 mm) for the acoustic radiation, medial of which the map runs on towards the midline at lower shares
+    medial_cut_mm: float
+    smooth_mm: float = 0.7    # the map smoothed by this (Gaussian) before the surface is taken, so it is not stepped
+
+
+WM_SHELLS: list[WmShell] = [
+    WmShell("wm_ar", "Acoustic radiation", "AR", "wmAR", "projection", "extended", {"L": "ar_l", "R": "ar_r"}, 0.9, 10.5),
+]
+# checks (pipeline/validate.py): the shell's nearest point to Heschl's gyrus (the cortex section's Destrieux label
+# G_temp_sup-G_T_transv), its medial end from the midline
+WM_SHELL_HESCHL_MM = 4.0
+WM_SHELL_MGB_MM = 3.0     # ... and to the brainstem section's medial geniculate body
+WM_SHELL_MEDIAL_MM = (10.0, 15.0)
+
 # T1 slice textures
 T1_FILE = "t1.nii"
 # Slice images: ICBM 2009b templates shipped with Lead-DBS (same grid, same McGill/MNI licence)

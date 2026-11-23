@@ -3,11 +3,12 @@ import manifestJson from '../data/generated/manifest.json';
 import { ManifestSchema } from '../data/schema';
 import type { Look } from '../viewer/materials';
 import { makeCatalog, type SceneSource, type ScenePlan, type TractRole } from '../viewer/scene';
-import { GROUP, TOPIC, WM, WM_MANIFEST } from './index';
+import { GROUP, isShell, TOPIC, WM, WM_MANIFEST } from './index';
 import type { TractsState } from './state';
 
 /**
- * The white-matter section as a scene source for the shared viewer: the HCP-1065 tracts,
+ * The white-matter section as a scene source for the shared viewer: the HCP-1065 tracts (and the acoustic radiation, a
+ * shell from the Pandora atlas),
  * plus from the DBS assets the cortex (ghost), the HMAT motor parcels named in the cards,
  * and a few deep nuclei as faint orientation landmarks; and, with a tract chosen, the patch of cortex where its
  * streamlines end (pipeline/wm_ends.py).
@@ -25,11 +26,14 @@ export interface TractPlan extends ScenePlan {
 export function tractPlan(grpId: string, sel: string | null): TractPlan {
   const g = GROUP.get(grpId) ?? GROUP.get('language')!;
   const looks = new Map<string, Look>(ORIENTATION_NUCLEI.map((id) => [id, 'ghost']));
-  const tracts = new Map<string, TractRole>(g.tractIds.map((id) => [id, 'key']));
+  // a tract drawn as a shell is a mesh: see-through among the streamlines (the viewer draws it whole when selected)
+  const tracts = new Map<string, TractRole>(g.tractIds.filter((id) => !isShell(id)).map((id) => [id, 'key']));
+  for (const id of g.tractIds) if (isShell(id)) looks.set(id, 'context');
   const parcels = new Map<string, 'key' | 'context'>();
   const t = sel ? TOPIC.get(sel) : undefined;
   if (t) {
-    if (!tracts.has(t.id)) tracts.set(t.id, 'key');
+    if (isShell(t.id)) looks.set(t.id, 'context');
+    else if (!tracts.has(t.id)) tracts.set(t.id, 'key');
     for (const p of t.parcels) parcels.set(p, 'key');
     const ends = patchOf(t.id);
     if (ends) parcels.set(ends, 'key');

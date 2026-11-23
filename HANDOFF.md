@@ -284,10 +284,55 @@ targets, sourced lead trajectories (no source yet), a changelog page, a coordina
 landmark, a text alternative to the 3D view; one claim schema with review dates and a reference-check script
 (section 4); surface anatomy, one landmark schema and a frame registry (section 5); one asset contract in the
 pipeline, preview deployments, `dist/` out of git, fit checks that fail both ways beyond the brainstem (section 6).
-The tract data (open files with Meyer's loop, an acoustic radiation reaching Heschl's gyrus, a crossed DRTT: section
-2) waits for Fable usage. Done from it: help and reset, cards into view, "what this bundle shows", surgical views,
+The tract data (section 2) is done as far as open data go: the acoustic radiation is a shell from the Pandora atlas
+(below), the DRTT has been crossed and uncrossed since B4, and the optic radiation keeps HCP-1065's streamlines (Pandora's
+starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm further forward). Done from it: help and reset, cards into view, "what this bundle shows", surgical views,
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
+
+## The acoustic radiation as a shell (desktop, 2026-11-23)
+
+- Branch `feat/acoustic-radiation-shell` (off `fix/trochlear-corner`, PR 33's head), in the worktree
+  `.claude/worktrees/audit-fixes`. Local until the owner says push.
+- **What the owner chose (23 November):** bring the acoustic radiation back as the slim shell (the surface round the
+  voxels where the tract passed in at least 90 % of people), cut at the medial geniculate body, and "leave it hidden
+  as a default so the user need to click on the eye to show it".
+- **Sources looked at** (nothing but Pandora downloaded): Pandora (Hansen 2021, CC BY 4.0,
+  github.com/MASILab/Pandora-WhiteMatterAtlas; population maps, no streamlines) is used. Not used: XTRACT's own
+  atlases (SPMIC-UoN/XTRACT_atlases: no licence file), Maffei 2019's NeuroVault collection (could not be read),
+  Tractfinder (Zenodo 10149873: optic radiation streamlines of 16 subjects, CC BY-NC 4.0, 1.5 GB), the TractSeg
+  reference tracts (44 GB, native space), Shan 2019 (atlas not public), Fun With Tracts on OSF (heat maps only).
+- **In `pipeline/data/raw/pandora/`:** `Xtract.nii.gz` and `Xtract_info.csv` (pinned in `config.PANDORA_FILES`,
+  fetched by `fetch_sources.fetch_pandora`). `TractSeg.nii.gz` and its table, downloaded for the comparison of the
+  optic radiation and read by nothing, were deleted on the user's word (2026-11-23).
+- **What was measured before building** (scratch `tracts/measure.py`, gone with the scratchpad): the two atlases
+  are in one space (HCP-1065's corticospinal streamlines in Pandora's corticospinal map: mean share 0.80, 95 to 97 %
+  of their points at 0.1 or more; the best shift of up to 2 mm gains 0.03; `wm_shell.py` prints it and `validate.py`
+  holds it). The acoustic radiation at half of the people: 10 ml, 11 to 12 mm thick; at 90 %: 2.3 ml, 6 to 7 mm
+  thick. The optic radiation's front: Pandora y −14 to −15 (39 to 42 mm behind the temporal pole), HCP-1065 y −19
+  (44 to 46 mm).
+- **How it is built** (`pipeline/wm_shell.py`, `config.WM_SHELLS`): the largest piece of the map at or above 0.9,
+  smoothed by 0.7 mm, the surface taken by marching cubes at the smoothed map's level that keeps the volume. The cut
+  10.5 mm from the midline (the medial edge of the brainstem section's medial geniculate body) removes nothing at
+  this level: the map ends there by itself (11.8 mm). `manifest.py` writes its entry (type `soft`, layer `tracts`,
+  a `shell` block with what was measured) where the withdrawn tract stood, and `shellDataset`; `validate.py` has
+  ten `shell` checks and two `alignment` checks for it (582/582).
+- **In the app:** `isShell`, `hiddenAtFirst` (`src/tracts/index.ts`); the plan gives a shell the look `context`
+  (the viewer draws it a little stronger, labels it, and draws it whole when selected); the legend lists it with a
+  solid swatch and "(a shell)"; its card has "What the shell shows (measured)" from the manifest in place of
+  "Where its streamlines end". `TractTopic.offAtFirst` hides it in every group that holds it (Language and
+  hearing, Thalamic radiations, All extended) until its eye is clicked, its card opened, or `]` steps onto it. A
+  link without `hid` hides the view's own; a link that shows it carries `hid=` (empty).
+- **Colour:** `wmAR` is back in the palette (`#BF4059` light, `#FA2E57` dark), chosen so that no pair with the other
+  extended tracts falls under ΔE 10 in any of the four vision modes; no pair was added to the accepted list.
+- **References added:** Hansen 2021 and Maffei 2018 (abstracts, PubMed), Warrington 2020 (full text: the protocol's
+  seed and target). Europe PMC was down that evening; the records are PubMed's.
+- **MacBook baselines:** `tracts-ext_language`, `tracts-ext_thalamic` and `tracts-ext_all` (the legend has a row
+  more and "Show all (1 hidden)").
+- **Rerun:** `wm_shell.py`, `node pipeline/compress.mjs wm wm_ar.glb`, `manifest.py`, `validate.py`. It reads the
+  cortex build's Heschl's gyrus and the brainstem build's medial geniculate body, so after those builds.
+  `validate.py` needs `hcp1065_avg_tracts_nifti.zip` in the shared raw folder: it was only in another worktree's
+  and was copied over (same pinned hash).
 
 ## White-matter tracts moved by half a voxel (desktop, 2026-11-18)
 

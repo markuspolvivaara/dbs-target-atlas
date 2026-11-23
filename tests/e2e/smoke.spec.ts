@@ -513,8 +513,8 @@ test('core and extended tracts stay separate; the switch moves between them', as
   await page.locator('.tier-btn[data-tier="extended"]').click();
   await settle(page);
   expect(new URL(page.url()).hash).toContain('g=ext_language');
-  // (three since the acoustic radiation was withdrawn: the site audit's B4)
-  await expect(page.locator('.tract-btn')).toHaveCount(3);
+  // (four: the acoustic radiation, withdrawn in the site audit's B4, is back as a shell)
+  await expect(page.locator('.tract-btn')).toHaveCount(4);
   // only extended groups are offered while the extended set is open
   await expect(page.locator('.grp-chips .chip', { hasText: 'Vision' })).toHaveCount(0);
   // "All" is offered first in the function row of each set

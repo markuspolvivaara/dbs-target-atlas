@@ -37,7 +37,8 @@ in MNI ICBM 2009b nonlinear asymmetric space. Individual anatomy varies.
 
 ## White-matter tracts
 
-Tracts from the HCP-1065 population-averaged tractography atlas (Yeh 2022), in two separate sets:
+Tracts from the HCP-1065 population-averaged tractography atlas (Yeh 2022), drawn as streamlines, in three
+separate sets; one tract, the acoustic radiation, is a shell from the Pandora atlas (Hansen 2021):
 
 - **Core** (15): the tracts that matter most in tumour and epilepsy surgery: arcuate fasciculus,
   SLF I–III, IFOF, ILF, uncinate fasciculus, frontal aslant tract, cingulum (dorsal and
@@ -46,9 +47,23 @@ Tracts from the HCP-1065 population-averaged tractography atlas (Yeh 2022), in t
   occipital fasciculus, extreme capsule fasciculus, anterior commissure, anterior / superior /
   posterior thalamic radiations, acoustic radiation, corticostriatal tracts (anterior, superior,
   posterior). Their cards are shorter where the literature is thin.
-- **Posterior fossa** (9): superior, middle and inferior cerebellar peduncles, dentato-rubro-thalamic
-  tract, medial lemniscus, reticulospinal tract, frontal / parietal / occipital corticopontine
-  tracts. Cranial nerves are left for a future skull-base section.
+- **Posterior fossa** (10): superior, middle and inferior cerebellar peduncles, dentato-rubro-thalamic
+  tract (decussating and non-decussating), medial lemniscus, reticulospinal tract, frontal / parietal /
+  occipital corticopontine tracts.
+
+- **The acoustic radiation is a shell, not streamlines** (`pipeline/wm_shell.py`; the owner's choices of
+  23 November 2026). HCP-1065's bundle ends beside the atrium, 22 mm (left) and 24 mm (right) from Heschl's
+  gyrus, and was withdrawn on 15 November. No open atlas was found that gives the tract's streamlines to the
+  gyrus. The Pandora atlases (CC BY 4.0) give, per voxel, the share of their subjects in whom a bundle passed;
+  their Xtract atlas follows the XTRACT protocol (Warrington 2020), which seeds the acoustic radiation in the
+  transverse temporal gyrus with the medial geniculate nucleus as its target. The shell is the surface round the
+  voxels where the tract passed in at least 90 % of the people in whom the method found it (2,183 left, 2,247
+  right): 2.2 ml a side, at most 6.3 and 6.6 mm thick, 2.6 and 2.7 mm under Heschl's gyrus at its nearest, its
+  medial end 11.8 mm from the midline and 1.1 and 1.7 mm from the brainstem section's medial geniculate body.
+  At half of the people the map is 10 ml and 11 to 12 mm thick, so the slim shell was chosen. Streamlines drawn
+  inside it would be invented. It is a mesh of the tracts layer, see-through among the streamlines, and **not
+  drawn until its eye in the legend is clicked or its card is opened** (`TractTopic.offAtFirst`; a link then
+  carries `hid=`, "nothing hidden"). Its card's figures come from `wm-manifest.json` (`shell`).
 
 - A switch at the top of the panel picks Core, Extended or Posterior fossa; each set has its own
   groups **by function** ("All" first; core: language, vision, motor and speech initiation,
@@ -1275,7 +1290,8 @@ npm run pipeline
    SHA-256 hashes in `sources.lock.json`. For the white-matter section it downloads the HCP-1065
    tract archive once (590 MB, checked against a pinned SHA-256), extracts the 69 needed files
    and fetches the atlas's volumes of its tracts (3.4 MB, pinned too: only what the streamline
-   files are checked against).
+   files are checked against); and two files of the Pandora atlas's Xtract atlas (32 MB, pinned, from the
+   repository at one commit) for the acoustic radiation's shell.
 2. `build.py`:
    - label volumes → Gaussian pre-smoothing → marching cubes → affine to MNI mm → Taubin
      smoothing → quadric decimation (one GLB per structure, nodes `L` and `R`)
@@ -1296,6 +1312,11 @@ npm run pipeline
    - `wm_measure.py` (run after it): what the white-matter cards say of the atlas bundles
      themselves (the optic radiation's loop, where four bundles end, the fornix against the
      Neudorfer 2020 label), measured from the atlas's files → `src/data/generated/wm-measured.json`
+   - `wm_shell.py`: the acoustic radiation's shell from the Pandora map (the largest piece at or above
+     the level, smoothed by 0.7 mm, its surface by marching cubes at the level that keeps the volume) →
+     `public/assets/wm/wm_ar.glb` (after `compress.mjs wm wm_ar.glb`), with what it measured in
+     `report.json` for `manifest.py` and `validate.py`. It reads the cortex section's Heschl's gyrus and
+     the brainstem section's medial geniculate body as built, so it runs after those builds
 3. `compress.mjs`: quantization plus meshopt compression (glTF-Transform).
 4. `manifest.py`: `manifest.json` (id, name, type, file, colour, source, licence, citation,
    derivation, centroids), `wm-manifest.json` for the white-matter tracts, and `ATTRIBUTION.md`.
@@ -1350,7 +1371,8 @@ software licences are in `public/THIRD_PARTY_LICENSES.txt` (also published with 
 Tracts generated from Human Connectome Project data are additionally subject to the WU-Minn HCP
 Open Access Data Use Terms; the required acknowledgement is in `NOTICE`, `ATTRIBUTION.md` and on
 the Credits page. The white-matter section's tract files (`public/assets/wm/`, `wm-manifest.json`,
-`wm-measured.json`) are **CC BY-SA 4.0** (HCP-1065 atlas) plus the HCP terms, not GPL. The skull-base
+`wm-measured.json`) are **CC BY-SA 4.0** (HCP-1065 atlas) plus the HCP terms, not GPL; one of them, the
+acoustic radiation's shell (`public/assets/wm/wm_ar.glb`), is **CC BY 4.0** (Pandora atlas). The skull-base
 files (`public/assets/skullbase/`, `sb-*.json`) are **CC BY-SA** (Z-Anatomy 4.0, BodyParts3D 2.1 Japan,
 Wikipedia definitions 3.0), not GPL. The skull base's detailed model (`public/assets/skullbase-ct/`, `sbct-*.json`)
 is derived from TopBrain 2025 data (University Hospital Zurich: open use with the source given, **non-commercial**;

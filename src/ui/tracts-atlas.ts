@@ -4,7 +4,7 @@ import type { Hemi, LayerKey } from '../state';
 import { SITE_ROOT } from '../brand';
 import { areaName, END_PATCH, WM_ENDS, type BundleKey } from '../data/ends';
 import type { BundleEnd } from '../data/schema';
-import { GROUP, TOPIC, WM, WM_MAN, WM_REF } from '../tracts';
+import { GROUP, hiddenAtFirst, isShell, TOPIC, WM, WM_MAN, WM_REF } from '../tracts';
 import type { Claim, TractTopic } from '../tracts/schema';
 import { CONTEXT_STRUCTURES, ORIENTATION_NUCLEI, tractsScene, type TractPlan } from '../tracts/scene';
 import type { TractsState } from '../tracts/state';
@@ -202,8 +202,10 @@ export class TractsAtlasPage {
     const g = GROUP.get(s.grp)!;
     const pick = (v: string) => this.update((st) => {
       const ng = GROUP.get(v)!;
-      st.grp = v; st.hemi = ng.hemi; st.cam = { preset: null }; st.hidden = []; delete st.opacity;
+      st.grp = v; st.hemi = ng.hemi; st.cam = { preset: null }; delete st.opacity;
       if (st.sel && !ng.tractIds.includes(st.sel)) st.sel = null;
+      // (a tract not drawn until asked for starts hidden in every group that holds it)
+      st.hidden = hiddenAtFirst(v, st.sel);
     }, { camera: true });
     const inTier = WM.groups.filter((x) => x.tier === g.tier);
     pane.append(
@@ -237,7 +239,7 @@ export class TractsAtlasPage {
     const m = WM_MAN.get(t.id)!;
     const close = h('button', { type: 'button', class: 'close', 'aria-label': 'Close', onclick: () => this.update((s) => { s.sel = null; }) }, '×');
     const section = (title: string, cl: Claim[]) => (cl.length ? [h('dt', {}, title), h('dd', {}, claimList(cl))] : null);
-    const measured = this.endsBlock(t.id);
+    const measured = m.shell ? this.shellBlock(t.id) : this.endsBlock(t.id);
     const groups = WM.groups.filter((g) => g.kind !== 'all' && g.tractIds.includes(t.id));
     return h('article', { class: 'card sel', style: `--accent: var(--c-${m.colour.token})` }, close,
       h('p', { class: 'eyebrow' }, `${TYPE_LABEL[t.type]} · ${TIER_LABEL[t.tier]}`),
@@ -255,12 +257,31 @@ export class TractsAtlasPage {
         t.measured.length ? [h('dt', {}, 'Checked by this project’s pipeline'), h('dd', {}, ...t.measured.map((m) => h('p', {}, m)))] : null,
         t.parcels.length ? [h('dt', {}, 'Cortex highlighted'), h('dd', {}, t.parcels.map(nameOf).join(', '), ' (HMAT, Mayka 2006; ', h('a', { href: '#/credits' }, 'credits'), ').')] : null,
         h('dt', {}, 'Geometry'),
-        h('dd', {}, `${m.source}. ${m.derivation} Shown: ${m.streamlines!.L} of ${m.sourceStreamlines!.L} streamlines (left), ${m.streamlines!.R} of ${m.sourceStreamlines!.R} (right). `,
-          h('a', { href: '#/credits' }, 'Licence (CC BY-SA 4.0) and HCP acknowledgement')),
+        m.shell
+          ? h('dd', {}, `${m.source}. ${m.derivation} `, h('a', { href: '#/credits' }, 'Licence (CC BY 4.0) and source'))
+          : h('dd', {}, `${m.source}. ${m.derivation} Shown: ${m.streamlines!.L} of ${m.sourceStreamlines!.L} streamlines (left), ${m.streamlines!.R} of ${m.sourceStreamlines!.R} (right). `,
+            h('a', { href: '#/credits' }, 'Licence (CC BY-SA 4.0) and HCP acknowledgement')),
         groups.length ? [h('dt', {}, 'In groups'), h('dd', {}, ...groups.flatMap((g, i) => [i ? ', ' : '',
           h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.grp = g.id; s.hemi = g.hemi; s.cam = { preset: null }; }, { camera: true }) }, g.name)]))] : null,
       ),
     );
+  }
+
+  /** A tract drawn as a shell: what the shell is and what this project's pipeline measured on it (pipeline/wm_shell.py),
+   * from the manifest, so the card's figures are the build's. */
+  private shellBlock(id: string): HTMLElement[] {
+    const sh = WM_MAN.get(id)!.shell!;
+    const both = (v: { L: number; R: number }, unit: string, digits = 1) => `${v.L.toFixed(digits)} ${unit} (left) and ${v.R.toFixed(digits)} ${unit} (right)`;
+    const n = (v: number) => v.toLocaleString('en-GB');
+    return [h('dt', {}, 'What the shell shows (measured)'),
+      h('dd', { class: 'tract-ends' },
+        h('p', {}, `A see-through solid, not streamlines: the surface round the places where the tract ran in at least ${percent(sh.level)} of the people in whom the atlas’s method found it (${n(sh.subjects.L)} left, ${n(sh.subjects.R)} right). It is the part of the tract’s course that most people share. The atlas holds no fibres to draw.`),
+        h('ul', { class: 'plain' },
+          h('li', {}, `Size: ${both(sh.volumeMl, 'ml')}, at most ${both(sh.thickestMm, 'mm')} thick.`),
+          h('li', {}, 'Lateral end: under ', h('a', { href: `${SITE_ROOT}cortex/#/atlas?sel=ctx_g_temp_sup_g_t_transv&h=L`, class: 'area' }, 'Heschl’s gyrus'), `, ${both(sh.heschlNearestMm, 'mm')} from its surface at the nearest.`),
+          h('li', {}, `Medial end: ${both(sh.medialEndMm, 'mm')} from the midline, above and in front of the brainstem section’s medial geniculate body, ${both(sh.mgbNearestMm, 'mm')} from it.`),
+          h('li', {}, `The HCP-1065 atlas’s streamlines of this tract, shown here until 15 November 2026, ended ${both(sh.hcp1065EndsMm, 'mm')} from the gyrus.`)),
+        h('p', { class: 'aside' }, 'Not drawn until its eye in the legend is clicked or this card is opened: it is the section’s one tract drawn as a solid.'))];
   }
 
   /** Where the bundle's streamlines end on the cortex (pipeline/wm_ends.py; the site audit's B-007, replacing the
@@ -323,7 +344,12 @@ export class TractsAtlasPage {
           onclick: () => this.update((s) => { s.sel = s.sel === id ? null : id; if (s.sel) s.hidden = s.hidden.filter((x) => x !== id); }),
         }, text));
     };
-    if (this.s.layers.tracts.on) for (const id of p.tracts.keys()) this.legend.append(li('line key', id, `${TOPIC.get(id)?.abbr ?? ''} · ${nameOf(id)}`));
+    // the group's tracts in its order (a tract drawn as a shell among them, its swatch a solid), then a selected tract
+    // from outside the group
+    const g = GROUP.get(p.group);
+    const drawn = (id: string) => (isShell(id) ? p.looks.has(id) : p.tracts.has(id));
+    const order = [...(g?.tractIds ?? []), ...p.tracts.keys(), ...(this.s.sel ? [this.s.sel] : [])].filter((id, i, a) => a.indexOf(id) === i && drawn(id));
+    if (this.s.layers.tracts.on) for (const id of order) this.legend.append(li(isShell(id) ? 'patch' : 'line key', id, `${TOPIC.get(id)?.abbr ?? ''} · ${nameOf(id)}${isShell(id) ? ' (a shell)' : ''}`));
     if (this.s.layers.cortex.on) for (const id of p.parcels.keys()) {
       const ends = END_PATCH.get(id);
       this.legend.append(li('patch', id, ends ? `${TOPIC.get(id.replace(/__ends$/, ''))?.abbr ?? ''}: where its streamlines end` : nameOf(id)));
@@ -443,7 +469,7 @@ export class TractsAtlasPage {
       const ids = GROUP.get(this.s.grp)!.tractIds;
       const i = this.s.sel ? ids.indexOf(this.s.sel) : -1;
       const n = ids[(i + (k === ']' ? 1 : -1) + ids.length) % ids.length];
-      this.update((s) => { s.sel = n; });
+      this.update((s) => { s.sel = n; s.hidden = s.hidden.filter((x) => x !== n); });
       return true;
     }
     if (k === 'Escape') {

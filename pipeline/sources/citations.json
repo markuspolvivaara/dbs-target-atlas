@@ -864,5 +864,15 @@
   "url": "https://doi.org/10.1097/md.0000000000006365",
   "pmid": "28328822",
   "pmcid": "PMC5371459"
+ },
+ "hansen2021": {
+  "citation": "Hansen CB, Yang Q, Lyu I, Rheault F, Kerley C, Chandio BQ, et al. Pandora: 4-D white matter bundle population-based atlases derived from diffusion MRI fiber tractography. Neuroinformatics. 2021;19(3):447–460. doi:10.1007/s12021-020-09497-1.",
+  "doi": "10.1007/s12021-020-09497-1",
+  "url": "https://doi.org/10.1007/s12021-020-09497-1"
+ },
+ "warrington2020": {
+  "citation": "Warrington S, Bryant KL, Khrapitchev AA, Sallet J, Charquero-Ballester M, Douaud G, et al. XTRACT – standardised protocols for automated tractography in the human and macaque brain. NeuroImage. 2020;217:116923. doi:10.1016/j.neuroimage.2020.116923.",
+  "doi": "10.1016/j.neuroimage.2020.116923",
+  "url": "https://doi.org/10.1016/j.neuroimage.2020.116923"
  }
 }
