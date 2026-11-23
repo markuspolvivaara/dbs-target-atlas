@@ -1794,5 +1794,48 @@ test('help: the ventricles and the skull base list their endoscopes\' keys', asy
   expect(await keys()).toEqual(expect.arrayContaining(['W  S', '← → ↑ ↓', 'Q  E', 'V']));
   await open(page, './skullbase/#/atlas?g=endonasal');
   expect(await keys()).toEqual(expect.arrayContaining(['← → ↑ ↓', 'W  S', 'Q  E']));
-  await expect(page.locator('#panel p.aside', { hasText: 'A copied link opens this view at its start' })).toHaveCount(1);
 });
+
+// UI-13: the endonasal view's endoscope and the pieces taken away were in no link (57 % of the picture differed)
+for (const model of ['skullbase', 'skullbase-v1']) {
+  test(`links (${model}): the endonasal view's endoscope and the pieces taken away are in the link`, async ({ page }) => {
+    const g = guard(page);
+    type Endo = { side: string; depth: number; yaw: number; pitch: number; roll: number; big: boolean; removed: string[] };
+    const endo = () => page.evaluate(() => (window as unknown as { __atlas: { state(): { endo?: Endo } } }).__atlas.state().endo ?? null);
+    const param = (k: string) => new URL(page.url()).hash.split('?')[1]?.split('&').map((kv) => kv.split('=')).find(([key]) => key === k)?.[1] ?? null;
+    const sliders = page.locator('.endonasal .scope-range span');
+    const taken = page.locator('.endonasal .chip', { hasText: 'taken away' });
+    // opened plain, the view's own start goes into the link once the sinus is loaded
+    await open(page, `./${model}/#/atlas?g=endonasal`);
+    await expect.poll(endo, { timeout: 30_000 }).toEqual({ side: 'R', depth: 2, yaw: 0, pitch: 0, roll: 0, big: true, removed: [] });
+    await expect.poll(() => param('sc')).toBe('R%2C2%2C0%2C0%2C0');
+    expect(param('rm')).toBeNull();
+    // a link's: the other nostril, further in, turned and rolled, its picture the inset, two pieces gone (and an id
+    // that is no piece dropped)
+    await open(page, `./${model}/#/atlas?g=endonasal&sc=L,9,6,-4,20&ev=3d&rm=face,septa,nothing`);
+    await expect(taken).toHaveCount(2, { timeout: 30_000 });
+    await expect(page.locator('.endonasal .chip[aria-pressed="true"]', { hasText: 'Left nostril' })).toHaveCount(1);
+    await expect(sliders).toHaveText([/^In 9\.0 mm/, /^Turned to the side 6°/, /^Up or down -4°/, /^View rotated 20°/]);
+    await expect.poll(endo).toEqual({ side: 'L', depth: 9, yaw: 6, pitch: -4, roll: 20, big: false, removed: ['face', 'septa'] });
+    await expect.poll(() => param('rm')).toBe('face%2Csepta');
+    expect(param('ev')).toBe('3d');
+    // moving the scope and putting a piece back change the link, without the page being drawn again for the scope
+    await page.locator('.viewer-host canvas').focus();
+    await page.keyboard.press('s');
+    await expect.poll(() => param('sc')).toBe('L%2C8%2C6%2C-4%2C20');
+    await taken.nth(1).click();
+    await expect.poll(() => param('rm')).toBe('face');
+    // another view and Back: the scope and the piece as they were left
+    const left = page.url();
+    await page.locator('.grp-chips .chip', { hasText: 'Cranial floor' }).click();
+    await settle(page);
+    expect(await endo()).toBeNull();
+    expect(param('sc')).toBeNull();
+    await page.goBack();
+    await expect.poll(() => page.url()).toBe(left);
+    await expect(taken).toHaveCount(1);
+    await expect(sliders.first()).toHaveText(/^In 8\.0 mm/);
+    expect(g.external).toEqual([]);
+    expect(g.errors).toEqual([]);
+  });
+}

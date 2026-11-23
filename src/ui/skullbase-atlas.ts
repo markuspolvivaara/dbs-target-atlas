@@ -309,7 +309,8 @@ export class SkullbaseAtlasPage {
       moving: (on) => this.stage.classList.toggle('moving', on),
       endoscope: () => this.endonasal?.scopeMoved(),
     }, skullScene);
-    this.endonasal = new EndonasalPanel(this.viewer);
+    // (the scope and the pieces go into the view's state as the camera does: the address follows, the page is not drawn again)
+    this.endonasal = new EndonasalPanel(this.viewer, (e) => this.update((s) => { s.endo = e; }, { camera: false }));
     const origRender = this.viewer.renderer.render.bind(this.viewer.renderer);
     this.viewer.renderer.render = (sc, cam) => { origRender(sc, cam); this.placeLabels(); };
     watchOverlays(this.stage, () => this.viewer.invalidate());
@@ -477,8 +478,9 @@ export class SkullbaseAtlasPage {
         : chips(items, s.grp, (v) => this.pickGroup(v), { label, cls: 'grp-chips' }));
     }
     if ((g.kind === 'approach' && !g.endonasal && g.morphs?.length) || (g.kind === 'tumour' && g.morphs?.length)) pane.append(this.openingSliders(g));
-    // (the audit's UI-13: the endoscope's place, the pieces taken away and the bone drilled are not in the view's state)
-    if (g.endonasal) pane.append(this.endonasal.el, h('p', { class: 'aside' }, 'A copied link opens this view at its start: it does not keep where the endoscope is, the pieces taken away or the bone drilled.'));
+    // (the audit's UI-13: the endoscope's place and the pieces taken away are in the view's state, SkullState.endo; the
+    // bone drilled away is voxels, which no link can hold)
+    if (g.endonasal) pane.append(this.endonasal.el, h('p', { class: 'aside' }, 'A copied link keeps where the endoscope is and the pieces taken away, not the bone drilled away with the burr.'));
     const boneIds = g.structures.filter((id) => SB.get(id)?.type === 'bone');
     const hidden = new Set(s.hidden);
     const btn = (id: string, extra = '') => h('button', {

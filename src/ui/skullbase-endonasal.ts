@@ -3,7 +3,7 @@ import { SB } from '../skullbase';
 import { SB_MODEL } from '../skullbase';
 import { ENDO_BURR_MM, ENDO_SCOPE_ROOM_MM, ENDO_STANDOFF_MM, ENDO_STEP_MM, ENDO_STOP_MM, ENDO_STOPS, ENDONASAL, ScopePath, SinusVolume, type EndoLayer, type EndoPiece, type EndoSide, type EndoStop } from '../skullbase/endonasal';
 import { SB_GROUP } from '../skullbase/groups';
-import type { SkullState } from '../skullbase/state';
+import type { EndoView, SkullState } from '../skullbase/state';
 import type { EndoMesh } from '../viewer/endoscope';
 import type { EndoscopeConfig, PointerTool, Viewer } from '../viewer/Viewer';
 import { h } from './h';
@@ -82,6 +82,8 @@ export class EndonasalPanel implements PointerTool {
   private centre: THREE.Vector3 | null = null;
   private stopped: EndoStop | null = null;
   private undo: ReturnType<SinusVolume['snapshot']>[] = [];
+  /** a link's scope and pieces, waiting for the sinus to load */
+  private linked: EndoView | null = null;
   private colour = {
     bone: new THREE.Color('#e6dccb'), lining: new THREE.Color('#c97a70'), liningBone: new THREE.Color('#e3c2b2'),
     cancellous: new THREE.Color('#d99a86'), cortex: new THREE.Color('#efe7d4'), pointed: new THREE.Color('#8cc4ee'),
@@ -94,7 +96,8 @@ export class EndonasalPanel implements PointerTool {
     artery: new THREE.Color('#c04a44'),
   };
 
-  constructor(private viewer: Viewer) {
+  /** `store`: the scope and the pieces taken away into the view's state, for its link (SkullState.endo) */
+  constructor(private viewer: Viewer, private store: (e: EndoView) => void = () => undefined) {
     this.burr = new THREE.Group();
     const steel = new THREE.MeshStandardMaterial({ color: 0xc9ccd1, roughness: 0.3, metalness: 0.7 });
     const head = new THREE.Mesh(new THREE.SphereGeometry(ENDO_BURR_MM / 2, 28, 18), steel);
@@ -112,8 +115,42 @@ export class EndonasalPanel implements PointerTool {
   // ---------------------------------------------------------------- entering and leaving the view
   render(s: SkullState): void {
     const on = !!SB_GROUP.get(s.grp)?.endonasal;
+    // the scope and the pieces a link names (or Back): taken up at once, or when the sinus is loaded. A view without
+    // them (the page's own way into this view) leaves the scope and the pieces as they were.
+    if (on && s.endo && !sameView(s.endo, this.view())) {
+      if (this.active && this.vol) this.applyView(s.endo);
+      else {
+        const e = this.linked = s.endo;
+        Object.assign(this.scope, { side: e.side, depth: Math.min(e.depth, this.paths[e.side].length), yaw: e.yaw, pitch: e.pitch, roll: e.roll, big: e.big });
+      }
+    } else if (on && !s.endo) queueMicrotask(() => this.report());   // (... and they go into the view's state from here)
     if (on && !this.active) void this.enter();
     else if (!on && this.active) this.leave();
+  }
+
+  /** The scope and the pieces taken away, as the view's link holds them (angles to a tenth of a degree). */
+  private view(): EndoView {
+    const s = this.scope, tenth = (v: number) => Math.round(v * 10) / 10;
+    return { side: s.side, depth: s.depth, yaw: tenth(s.yaw), pitch: tenth(s.pitch), roll: tenth(s.roll), big: s.big, removed: [...(this.linked?.removed ?? this.vol?.removed ?? [])] };
+  }
+
+  /** ... into the view's state, once the sinus is loaded and a link's own have been taken up. */
+  private report(): void {
+    if (this.active && this.vol && !this.linked) this.store(this.view());
+  }
+
+  /** A link's scope and pieces: the pieces first (the scope goes only where the way is open), then the scope, held to
+   * its way and to what is open. What the burr had drilled stays as it is. */
+  private applyView(e: EndoView): void {
+    const vol = this.vol!;
+    const want = new Set(e.removed.filter((id) => ENDONASAL.pieces.some((pc) => pc.id === id)));
+    for (const id of [...vol.removed]) if (!want.has(id)) vol.putBack(id);
+    for (const id of want) vol.removePiece(id);
+    if (!this.drillOffered()) this.setDrilling(false);
+    this.remeshAll();
+    Object.assign(this.scope, { side: e.side, depth: e.depth, yaw: e.yaw, pitch: e.pitch, roll: e.roll, big: e.big });
+    this.setScope(() => undefined);
+    this.build();
   }
 
   private async enter(): Promise<void> {
@@ -130,6 +167,9 @@ export class EndonasalPanel implements PointerTool {
     this.remeshAll();
     this.applyScope();
     this.build();   // (the steps can be taken now)
+    const linked = this.linked;
+    this.linked = null;
+    if (linked) this.applyView(linked); else this.report();
   }
 
   private leave(): void {
@@ -190,6 +230,7 @@ export class EndonasalPanel implements PointerTool {
     this.viewer.setEndoscope(this.config());
     this.renderScope();
     this.scopeMoved();
+    this.report();
   }
 
   /** The readout again (the viewer reports when the tip goes in or out of the air). */
@@ -574,6 +615,7 @@ export class EndonasalPanel implements PointerTool {
     for (const [i, j, k] of chunks.values()) { this.remesh('bone', i, j, k); this.remesh('solid', i, j, k); }
     this.viewer.setEndoscope(this.config());
     this.build();
+    this.report();
   }
 
   private startBurr(): void {
@@ -616,4 +658,10 @@ export class EndonasalPanel implements PointerTool {
     this.setScope(() => undefined);   // (back out of what closed again)
     this.build();
   }
+}
+
+/** Two views of the scope and the pieces the same (the pieces in any order). */
+function sameView(a: EndoView, b: EndoView): boolean {
+  return a.side === b.side && a.depth === b.depth && a.yaw === b.yaw && a.pitch === b.pitch && a.roll === b.roll && a.big === b.big
+    && a.removed.length === b.removed.length && a.removed.every((id) => b.removed.includes(id));
 }

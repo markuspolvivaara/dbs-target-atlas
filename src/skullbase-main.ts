@@ -17,6 +17,8 @@ function sanitize(s: SkullState): SkullState {
   if (!SB_GROUP.has(s.grp)) s.grp = DEFAULT_GROUP;
   s.also = SB_GROUP.get(s.grp)!.kind === 'system' ? s.also.filter((id) => id !== s.grp && SB_GROUP.get(id)?.kind === 'system') : [];
   if (s.sel && !SB.has(s.sel) && !LM.has(s.sel)) s.sel = null;
+  // (the endoscope's place and pieces belong to the endonasal view: its panel keeps them while another view is shown)
+  if (!SB_GROUP.get(s.grp)!.endonasal) delete s.endo;
   // a view with a section (the Knosp grades) is cut at it while the reader keeps the cut on
   const sec = SB_GROUP.get(s.grp)!.section;
   s.cutPlane = sec && s.section ? { normal: sec.normal, point: sec.point } : null;

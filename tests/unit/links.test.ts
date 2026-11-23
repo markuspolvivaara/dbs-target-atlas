@@ -89,6 +89,23 @@ describe('a slice plane whose value is not a number', () => {
     });
 });
 
+describe('the endonasal view\'s endoscope and pieces in a link (the audit\'s UI-13)', () => {
+  const q = (hash: string) => new URLSearchParams(hash.split('?')[1] ?? '');
+  it('the nostril, the depth, the turns, the picture and the pieces taken away survive the link', () => {
+    const out = q(encodeSkull(decodeSkull('#/atlas?g=endonasal&sc=L,14.25,6,-4.5,20&ev=3d&rm=face,septa')));
+    expect([out.get('sc'), out.get('ev'), out.get('rm')]).toEqual(['L,14.25,6,-4.5,20', '3d', 'face,septa']);
+    expect(decodeSkull('#/atlas?g=endonasal&sc=R,2,0,0,0').endo).toEqual({ side: 'R', depth: 2, yaw: 0, pitch: 0, roll: 0, big: true, removed: [] });
+  });
+  it('only in that view, and only a scope a link could mean; its numbers are held, its pieces are ids, once each', () => {
+    expect(decodeSkull('#/atlas?sc=L,14,6,-4,20&rm=face').endo).toBeUndefined();
+    expect(decodeSkull('#/atlas?g=endonasal').endo).toBeUndefined();
+    for (const bad of ['X,1,2,3,4', 'L,1,2,3', 'L,a,2,3,4', 'L,1,2,3,4,5', 'L,,2,3,4', 'L,1e3,2,3,4', 'constructor,1,2,3,4'])
+      expect(decodeSkull(`#/atlas?g=endonasal&sc=${bad}`).endo, bad).toBeUndefined();
+    expect(decodeSkull('#/atlas?g=endonasal&sc=R,900,200,-200,999&rm=face,face,cs_R,a-b,__proto__,')).toEqual(expect.objectContaining({
+      endo: { side: 'R', depth: 300, yaw: 90, pitch: -90, roll: 180, big: true, removed: ['face', 'cs_R', '__proto__'] } }));
+  });
+});
+
 describe('what a link named that the section does not have (P1-24)', async () => {
   const { lostFromLink } = await import('../../src/ui/linknote');
   it('names the page, the view and the structure it did not find, and nothing when all were found', () => {

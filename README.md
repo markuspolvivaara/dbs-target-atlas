@@ -1212,9 +1212,10 @@ on or another sequence is picked.
   myoclonus-dystonia, tardive syndromes, Tourette syndrome and chorea are hidden ("Reset to
   default" restores this).
 - **Copy link**: the URL hash holds indication, symptom, hemisphere, camera, layers, slices, lead,
-  a measured distance and the open card, so teaching links reopen the exact view. Not in a link: the bone drilled
-  away in the spine's and the endonasal view's drilling, and the endonasal view's endoscope and the pieces taken
-  away (their panels say so); the ventricles' endoscope is.
+  a measured distance and the open card, so teaching links reopen the exact view. The endoscopes are in
+  their links too: the ventricles' (`es`, `ed`, `ea`, `eo`, `er`, `ev`) and the endonasal view's, with the pieces
+  taken away (`sc=R,12.5,4,-2,0`: nostril, mm in, degrees to the side, up or down, rolled; `ev=3d`; `rm=face,septa`).
+  Not in a link: the bone drilled away with a burr, in the spine and in the endonasal view (their panels say so).
 - **Back** (every section): going to another view (an indication, a group, a region) adds a history entry, so the
   browser's Back and Forward step through the views looked at; the camera, sliders and selections do not.
 - **Save image** (every section; `src/ui/figure.ts`): the 3D view as a PNG for slides and handouts. A dialog

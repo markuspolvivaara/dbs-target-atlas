@@ -8,6 +8,11 @@ import { defaultLabels, labelsFrom, labelsParam } from '../labels';
 
 export type SkullPage = 'atlas' | 'grading' | 'sources' | 'credits';
 
+/** The endonasal view's endoscope and the pieces taken away, as a link holds them: the nostril, how far in the scope is
+ * (mm along its way), how it is turned (degrees: to the side, up or down, its picture rolled), whether its picture is
+ * the big one, and the ids of the pieces taken away. What the burr drilled is not held (voxels do not fit a link). */
+export interface EndoView { side: 'L' | 'R'; depth: number; yaw: number; pitch: number; roll: number; big: boolean; removed: string[] }
+
 /** Skull-base section state; the viewer reads the ViewState part (including cutAbove). */
 export interface SkullState extends ViewState {
   page: SkullPage;
@@ -20,6 +25,9 @@ export interface SkullState extends ViewState {
   morphs: Record<string, number>;
   /** a view with a section (the Knosp grades): cut at it (default) or whole; in the URL as sec=0 when whole */
   section: boolean;
+  /** the endonasal view's endoscope and pieces (from its panel once the sinus is loaded, or from a link; none in other
+   * views). In the URL as sc=R,12.5,4,-2,0 (ev=3d: its picture as the inset) and rm=septa,floor */
+  endo?: EndoView;
 }
 
 /** the surgical shapes and their URL parameters (op=0..100 and so on) */
@@ -71,6 +79,12 @@ export function encodeSkull(s: SkullState): string {
       if (v > 0 || (dflt[name] ?? 0) > 0) p.set(key, String(Math.round(v * 100)));
     }
     if (!s.section && SB_GROUP.get(s.grp)?.section) p.set('sec', '0');
+    if (s.endo && SB_GROUP.get(s.grp)?.endonasal) {
+      const e = s.endo;
+      p.set('sc', [e.side, e.depth, e.yaw, e.pitch, e.roll].join(','));
+      if (!e.big) p.set('ev', '3d');
+      if (e.removed.length) p.set('rm', e.removed.join(','));
+    }
   }
   return hashOf(s.page, p);
 }
@@ -104,6 +118,16 @@ export function decodeSkull(hash: string): SkullState {
   for (const name of g.morphs ?? []) {     // only the shapes this view has (a view's own default where the link leaves one out)
     const v = parseFloat(p.get(MORPH_PARAMS[name]) ?? '');
     if (Number.isFinite(v)) { if (v > 0) s.morphs[name] = Math.min(1, v / 100); } else if (g.morphDefault?.[name]) s.morphs[name] = g.morphDefault[name];
+  }
+  // the endonasal view's scope: its side and four plain numbers (held here to what any scope could be; the panel holds
+  // them to this model's way and to what is open), and the pieces by their ids
+  const sc = (p.get('sc') ?? '').split(',');
+  const side = sc[0];
+  if (g.endonasal && sc.length === 5 && (side === 'L' || side === 'R') && sc.slice(1).every((t) => /^-?\d+(\.\d+)?$/.test(t))) {
+    const [depth, yaw, pitch, roll] = sc.slice(1).map(Number);
+    const held = (v: number, lim: number) => Math.max(-lim, Math.min(lim, v));
+    s.endo = { side, depth: Math.max(0, Math.min(300, depth)), yaw: held(yaw, 90), pitch: held(pitch, 90), roll: held(roll, 180),
+      big: p.get('ev') !== '3d', removed: [...new Set((p.get('rm') ?? '').split(',').filter((x) => /^[A-Za-z0-9_]+$/.test(x)))] };
   }
   return s;
 }
