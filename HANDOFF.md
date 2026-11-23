@@ -41,11 +41,13 @@ come from the user's palette, the skull base nerve/tumour and AVM pairs are the 
 - The Koos card says the small arteries are moved onto the tumour (`src/skullbase/tumours.ts:173`), but v3 ships no
   artery copies for the tumour views; the Koos III AICA overlap rose from 30 % to 61 % as the tumour shrank (MB-09;
   fixed: `60f0e34`, below).
-- v3's manifest centroids are stale for the inferior petrosal sinus (about 10 mm off its mesh) and the PICA origin.
+- v3's manifest centroids are stale for the inferior petrosal sinus (about 10 mm off its mesh) and the PICA origin
+  (rechecked 2026-11-23, below: the PICA origin's was, and is fixed; the petrosal sinuses' are not stale).
 - `public/assets/spine-manifest.json` has drifted from `src/data/generated/spine-manifest.json` (9 references
   missing, 15 citations differ): `spine_build.py refs` refreshes only the generated one.
 - `public/THIRD_PARTY_LICENSES.txt` says zod 3.23.8; zod 4.6.7 ships.
-- Horn 2022's printed-peak markers (`src/data/targets.ts:34-37`) lie 0.2–0.9 mm outside their own sweet-spot meshes.
+- Horn 2022's printed-peak markers (`src/data/targets.ts:34-37`) lie 0.2–0.9 mm outside their own sweet-spot meshes
+  (rechecked 2026-11-23, below: the maps as distributed end at the printed peaks; the markers now say so).
 - After the half-voxel shift the reticulospinal tract runs more in CSF (left 25 → 42 %, right 0 → 14 %; T2 > 225 as
   the CSF mask), the left SCP less (25 → 10 %); the fornix is now held to the Neudorfer label only.
 - The facial nerve definition fix (C-009) is in the skull base's `DEFINITION_EDITS` only; the brainstem card still
@@ -274,10 +276,10 @@ the list").** On `fix/audit-models-2` (off `27ee8a6`), local commits, not pushed
   bodies" and describes a smaller juxtarestiform body).
 - Engineering left: P1-08 (release memory: the audit says only if phones still struggle, unmeasured), P2S-19
   (dependency majors, through Dependabot one at a time), P1-27's `preserveDrawingBuffer` (the browser tests read the
-  canvas) and `dist/` in git (a workflow choice), UI-13's Back history, endoscope pose and measurements in links,
-  UI-14's docked legend or camera offset, UI-22's jump row, UI-27's shorter phone disclaimer, an ARCHITECTURE.md.
-  Found in the shell refactor: the cortex reads a slice-plane value that is not a number (`ax=abc`) as plane off, the
-  other sections as the default plane; the ventricles' help does not list the endoscope's keys (W/S, Q/E, V, arrows).
+  canvas) and `dist/` in git (a workflow choice), UI-13's endonasal endoscope and pieces in links (the rest of UI-13
+  is done, below), UI-14's docked legend or camera offset, UI-22's jump row, UI-27's shorter phone disclaimer.
+  Done on 2026-11-23 (below): Back history, measurements in links, the ARCHITECTURE.md, the cortex's `ax=abc`, the
+  endoscopes' keys in the help.
 
 **From the audit's roadmap (`audit/07-roadmap.md`), not started:** teaching tours, approach comparison, side-by-side
 targets, sourced lead trajectories (no source yet), a changelog page, a coordinate readout relative to a chosen
@@ -289,6 +291,57 @@ The tract data (section 2) is done as far as open data go: the acoustic radiatio
 starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm further forward). Done from it: help and reset, cards into view, "what this bundle shows", surgical views,
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
+
+## Rechecks and small engineering leftovers (desktop, 2026-11-23)
+
+- Branch `fix/audit-leftovers-2` (off `feat/acoustic-radiation-shell`, pull request 34's head), in the worktree
+  `.claude/worktrees/audit-fixes`. Local until the owner says push. The owner: "Please do 1 and 2" (the two findings
+  of 19 November to recheck, and the small engineering leftovers).
+- **v3's centroids, rechecked.** A centroid is where a structure's label stands and what the camera frames.
+  - The petrosal sinuses' are **not stale**: each is the mean of the vessel's own vertices before
+    `skullbase_v3_junctions.py` joins it to its neighbours, and lies 1 to 3 mm from the tube. The 10 mm of the
+    19 November finding was the distance to the mean of the *joined* file's vertices, which the junction's dense
+    drawn surface pulls towards the junction. Left as they are (as are the other joined vessels', for the same reason).
+  - The PICA's origin **was stale**: the item came from v2's manifest with the centroid of the whole labelled
+    artery, 4.5 mm (left) and 8.8 mm (right) from the first 6 mm that v3 draws of it. `skullbase_v3_pica.items()` now
+    sets it from the built stub (`stub_centroid()`). Applied to the manifest with that function, not by a rebuild.
+  - `skullbase_v3.validate()` holds every centroid to its mesh: no further from it than 3 mm or a quarter of the
+    mesh's extent, whichever is more (1225/1225; it failed on exactly the two PICA sides before the fix).
+- **Found with the same rule: the spine's nerve roots** had one point for both sides, the right foramen's, so with
+  Side = Left the left root's label stood 15 to 39 mm from it (24 roots; S1's stood 20 mm from both sides).
+  `spine_build.side_centroids()` gives each side the mean of its own vertices; `manifest_entries` takes a centroid by
+  side; `validate()` has the rule (595/595). Applied to the manifest with that function. The other sections pass the
+  rule as they are (v1 414 centroids, v2 173, brainstem 137, ventricles 105, vascular 285, cortex 170; files of
+  lines, the tracts, were not read).
+- **Horn 2022's printed peaks, rechecked.** The maps as the authors distribute them end at the peaks the paper prints:
+  the generalized map's top is at z −0.1 mm (left) and −0.4 mm (right), the printed peak at −0.14; the cervical
+  map's back edge on the right is 0.9 mm in front of the printed peak. So the markers lie 0.1 and 0.5 mm above the
+  generalized volume (drawn at half the map's maximum), just inside the cervical one on the left and 0.8 mm behind
+  it on the right. Each marker's note now says this, the cervical method gives the maximum's distance per side (1.6
+  and 2.5 mm; it said "within 2.5 mm", and the right is 2.51), and `mesh-checks.test.ts` holds the markers within
+  1 mm of their volumes. The markers stay at the printed peaks (the owner's choice of 15 November).
+- **Back** (UI-13): going to another view (the link keys `i`, `g`, `v`, `r`: indication, group, view, region, or
+  another page) adds a history entry (`ui/section.ts` `viewOf`, `ui/address.ts` `write(hash, push)`); the camera,
+  sliders, selections and levels still replace the entry. The entry being left first takes the view as it was left
+  (its camera may still be waiting for its timer), so Back returns to exactly that.
+- **A measured distance in the link** (UI-13): `m=x,y,z,x,y,z`, to a hundredth of a millimetre, in every section
+  (`ViewState.measured`; `viewlink.encodeMeasure`). The eight copies of the Measure tool are one class,
+  `ui/measure.ts`: its finished measurement goes into the state, and `sync()` shows a link's with the tool on.
+  The cortex drops a link's measurement on the inflated surface, which has no Measure tool. (The field is `measured`
+  because the spine's state already has `measure`, its craniocervical lines.)
+- **Not done: the endonasal view's endoscope and pieces in the link** (UI-13). It needs changes in
+  `src/ui/skullbase-endonasal.ts`. The main checkout holds the owner's uncommitted work on that file (the v1
+  endonasal view), and the edit was refused here by the permission check: ask the owner. The design, ready to apply: `SkullState.endo`
+  (`sc=R,12.5,4,-2,0`, `ev=3d`, `rm=septa,floor`), the panel reporting through `update(..., { camera: false })` and
+  taking a link's pieces first and then its scope once the sinus is loaded. Until then the panel says that a copied
+  link opens the view at its start; the spine's drilling panel says that a link does not keep the bone drilled.
+  (The ventricles' endoscope has been in its link all along: `es`, `ed`, `ea`, `eo`, `er`, `ev`.)
+- **Small ones:** the cortex reads a slice plane whose value is not a number as the other sections do (shown at its
+  own position; it had left it off); the ventricles' help lists the endoscope's keys and the skull base's the
+  endonasal endoscope's; `ARCHITECTURE.md` is new (the audit's P1-21 asked for one; there was none).
+- **Tests:** unit tests for the address writer's push, measurements and slice planes in links, the Horn markers; two
+  browser tests (a measurement through a link, Back and Forward through three views, what adds no entry; the
+  endoscopes' keys in the help).
 
 ## The acoustic radiation as a shell (desktop, 2026-11-23)
 
