@@ -29,7 +29,7 @@
   ]
  },
  "file": "assets/skullbase-v3/endonasal.bin.gz",
- "bytes": 2802154,
+ "bytes": 2801299,
  "dims": [
   105,
   127,
@@ -398,7 +398,7 @@
    "id": "cs_R",
    "name": "Medial wall of the right cavernous sinus",
    "label": 5,
-   "mm3": 1323.5,
+   "mm3": 1326.1,
    "boneMm3": 579.2,
    "centre": [
     12.0,
@@ -410,12 +410,12 @@
    "id": "cs_L",
    "name": "Medial wall of the left cavernous sinus",
    "label": 6,
-   "mm3": 1432.0,
+   "mm3": 1437.4,
    "boneMm3": 788.9,
    "centre": [
     -11.4,
     2.4,
-    1.9
+    2.0
    ]
   },
   {

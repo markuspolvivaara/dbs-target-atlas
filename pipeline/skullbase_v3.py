@@ -501,7 +501,7 @@ def cavernous_splice(name: str, side: str, P: np.ndarray) -> np.ndarray:
     if not sp or sp["n"] != len(P):
         return P
     import skullbase_v3_cavernous as CAV
-    return CAV.splice(P, sp["i0"], sp["i1"], [np.asarray(m) for m in sp["middle"]])
+    return CAV.splice(P, sp["i0"], sp["i1"], [np.asarray(m) for m in sp["middle"]], sp.get("step"))
 
 
 def tube_mesh(P: np.ndarray, r: float):

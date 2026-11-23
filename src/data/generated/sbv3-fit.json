@@ -1378,18 +1378,18 @@
   },
   "Oculomotor nerve (III)": {
    "L": {
-    "share": 0.009,
+    "share": 0.014,
     "deepestMm": 0.4
    },
    "R": {
-    "share": 0.018,
-    "deepestMm": 0.4
+    "share": 0.0,
+    "deepestMm": 0.0
    }
   },
   "Trochlear nerve (IV)": {
    "L": {
     "share": 0.002,
-    "deepestMm": 0.3
+    "deepestMm": 0.4
    },
    "R": {
     "share": 0.0,
