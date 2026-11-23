@@ -151,10 +151,10 @@ the list").** On `fix/audit-models-2` (off `27ee8a6`), local commits, not pushed
 - `2efc489` MB-11 (the owner: "cut"): the routed nerves III to XII began 0.9 to 3.7 mm inside the fitted brainstem and
   are cut at its surface (`skullbase_v3_roots.py`, run after the junctions in v3's chain; then the tumour step, whose
   nerve copies follow). The petroclival meningioma and what it pushes changed a little (no channels for the stubs).
-  Left: the trochlear nerve runs up to 4.4 mm under the fitted midbrain's surface for a third of its length further
-  along; lifting it ring by ring tore the tube: its course has to be routed again.
+  Left then: the trochlear nerve ran up to 4.4 mm under the fitted midbrain's surface for a third of its length
+  further along; lifting it ring by ring tore the tube (done since: the trochlear entry below).
 - **MB-07 done as a refit (the owner, 22 November: "I think a refit would be good").** On `fix/hindbrain-refit` (off
-  PR 31's branch), local, not pushed:
+  PR 31's branch), pushed as PR 32 on 23 November at the owner's word:
   - `skullbase_pfossa.py` has a new fit term, "v4": this CT's fourth-ventricle fluid (deep fluid further than 8 mm
     from bone, within 8 mm of the carried model's ventricle: 0.5 ml, its upper part) inside the model's fourth
     ventricle. In the RBF stages only: in the affine stage it moved the whole model (midbrain 6 mm) and folded the
@@ -185,10 +185,43 @@ the list").** On `fix/audit-models-2` (off `27ee8a6`), local commits, not pushed
     for byte as before, or its vertices and shapes match the shipped one's.
   - **Seen on the CT, not acted on:** about 1.6 ml of fluid above and behind the ventricle (the supracerebellar and
     quadrigeminal cisterns, joined to the ventricle's fluid at this resolution) lies about 80 % inside the model's
-    culmen and tectum, before and after. Fitting to it would lower the superior vermis; the owner's call.
+    culmen and tectum, before and after. Fitting to it would lower the superior vermis. **The owner's decision
+    (23 November): the cisterns stay as they are.**
+- **The trochlear nerve laid round the brainstem (the owner, 23 November: "Let's go with trochlear").** On
+  `fix/trochlear-course` (off `fix/hindbrain-refit`), local:
+  - **What the refit had done, unnoticed when PR 32 was pushed:** with the hindbrain moved, the routed trochlear
+    course lay inside the fitted brainstem from its start for 18.2 mm (left) and 16.5 mm (right), and the root cut
+    (MB-11) took all of that off: the nerve in PR 32 begins at the front of the pons. No other nerve's cut changed by
+    more than 1.5 mm. PR 32's auto-merge was paused for this fix.
+  - **Why the course is wrong at its source:** in Z-Anatomy's own model, before any fit, the trochlear nerve's line
+    lies 1 to 3 mm inside the pons mesh's upper rim, under the midbrain, for its first 38 mm; its first centimetre is
+    the way through the brainstem (from in front of the aqueduct across the midline behind it). The posterior fossa
+    fit carries it faithfully (the carry's weight is 1 there), and `skullbase_nerves.route`, which knows bone but not
+    the brain, then cuts the loop off as a chord through the brainstem.
+  - **What is drawn now** (`skullbase_v3_roots.py`, `ROUND`): from where the fitted course runs furthest back, moved
+    straight back onto the surface, the least-cost path over the surface (outside the midbrain, pons, medulla,
+    superior cerebellar peduncle and fourth ventricle, and off the drawn arteries and veins; each step costs more the
+    further it is from the fitted course) to where the routed tube has left the brainstem; smoothed, the pushes back
+    out spread along the line so it turns wider than the brainstem's edges, and blended into the routed line over its
+    next 3 mm. From there on the routed tube keeps its vertices, so the cavernous sinus, its triangles, the superior
+    orbital fissure and the tumours are as they were (the tumour step rerun: no file changed). The nerve leaves the
+    back of the pons 6 to 8 mm from the midline, below the inferior colliculus, runs in the groove between the pons
+    and the midbrain, for most of the way between the posterior cerebral artery above and the superior cerebellar
+    artery below, and comes down in front of the pons; 74 mm (left) and 67 mm (right) long. Its first 7 to 9 mm run
+    inside the cerebellum's mesh, which lies against the brainstem there (the model has no fissure).
+  - The step now takes each nerve from the file its source wrote, so it can be run again on its own
+    (`pipeline/.venv/bin/python -I -W ignore pipeline/skullbase_v3_roots.py`, then `compress.mjs skullbase-v3
+    tb_trochlear_nerve_iv.cleared.glb` and `skullbase_v3.py finalize`); the other nine nerves' files come out byte
+    for byte as before. Only the trochlear nerve's file and card, the manifest and the modification record changed.
+  - Validation 923/923 (two new checks: the trochlear nerve's centre line nowhere more than 0.75 mm inside the
+    brainstem); a unit test that the nerve begins behind the midbrain's middle on each side.
+  - **Left as it was:** where the nerve reaches the cavernous sinus's roof the routed tube has a double corner (two
+    turns of 60 to 75° within 3 mm), from the splice in `skullbase_v3_cavernous.py`; it was there before the refit.
+    Smoothing it means running the cavernous step, the triangles and what follows them. The brainstem section's own
+    trochlear nerve (the MNI model) is another file and was not looked at.
 
 **Still left without a decision, and why not done this round:**
-- The trochlear nerve's course under the midbrain's surface (MB-11's rest). The supracerebellar cistern (above). MC-13 and MC-15 (v1's bone raster; v1's right "Insula" holding the fissure's white-matter
+- The trochlear nerve's double corner at the cavernous sinus's roof (above). MC-13 and MC-15 (v1's bone raster; v1's right "Insula" holding the fissure's white-matter
   floor back to the occipital region: `skullbase_v1_brain.white_floor`, limit it to the circular sulcus's extent):
   both need v1's brain or skull step run again, which the later v1 steps and the user's v1 endonasal rework depend
   on: do them with that rework. AP-11, AP-15, MC-16: v1 endonasal, in the user's rework. MA-17's rest: the
