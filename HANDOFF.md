@@ -276,10 +276,10 @@ the list").** On `fix/audit-models-2` (off `27ee8a6`), local commits, not pushed
   bodies" and describes a smaller juxtarestiform body).
 - Engineering left: P1-08 (release memory: the audit says only if phones still struggle, unmeasured), P2S-19
   (dependency majors, through Dependabot one at a time), P1-27's `preserveDrawingBuffer` (the browser tests read the
-  canvas) and `dist/` in git (a workflow choice), UI-13's endonasal endoscope and pieces in links (the rest of UI-13
-  is done, below), UI-14's docked legend or camera offset, UI-22's jump row, UI-27's shorter phone disclaimer.
-  Done on 2026-11-23 (below): Back history, measurements in links, the ARCHITECTURE.md, the cortex's `ax=abc`, the
-  endoscopes' keys in the help.
+  canvas) and `dist/` in git (a workflow choice), UI-14's docked legend or camera offset, UI-22's jump row, UI-27's
+  shorter phone disclaimer.
+  Done on 2026-11-23 (below): UI-13 (Back history, measurements and the endonasal endoscope in links), the
+  ARCHITECTURE.md, the cortex's `ax=abc`, the endoscopes' keys in the help.
 
 **From the audit's roadmap (`audit/07-roadmap.md`), not started:** teaching tours, approach comparison, side-by-side
 targets, sourced lead trajectories (no source yet), a changelog page, a coordinate readout relative to a chosen
@@ -295,7 +295,7 @@ per-structure opacity, slices under the cortex, the citation panel, keyboard con
 ## Rechecks and small engineering leftovers (desktop, 2026-11-23)
 
 - Branch `fix/audit-leftovers-2` (off `feat/acoustic-radiation-shell`, pull request 34's head), in the worktree
-  `.claude/worktrees/audit-fixes`. Local until the owner says push. The owner: "Please do 1 and 2" (the two findings
+  `.claude/worktrees/audit-fixes`; pull request 35, with auto-merge. The owner: "Please do 1 and 2" (the two findings
   of 19 November to recheck, and the small engineering leftovers).
 - **v3's centroids, rechecked.** A centroid is where a structure's label stands and what the camera frames.
   - The petrosal sinuses' are **not stale**: each is the mean of the vessel's own vertices before
@@ -329,19 +329,32 @@ per-structure opacity, slices under the cortex, the citation panel, keyboard con
   `ui/measure.ts`: its finished measurement goes into the state, and `sync()` shows a link's with the tool on.
   The cortex drops a link's measurement on the inflated surface, which has no Measure tool. (The field is `measured`
   because the spine's state already has `measure`, its craniocervical lines.)
-- **Not done: the endonasal view's endoscope and pieces in the link** (UI-13). It needs changes in
-  `src/ui/skullbase-endonasal.ts`. The main checkout holds the owner's uncommitted work on that file (the v1
-  endonasal view), and the edit was refused here by the permission check: ask the owner. The design, ready to apply: `SkullState.endo`
-  (`sc=R,12.5,4,-2,0`, `ev=3d`, `rm=septa,floor`), the panel reporting through `update(..., { camera: false })` and
-  taking a link's pieces first and then its scope once the sinus is loaded. Until then the panel says that a copied
-  link opens the view at its start; the spine's drilling panel says that a link does not keep the bone drilled.
-  (The ventricles' endoscope has been in its link all along: `es`, `ed`, `ea`, `eo`, `er`, `ev`.)
+- **The endonasal view's endoscope and pieces in the link** (UI-13; its own branch, `feat/endonasal-link`, off this
+  one, at the owner's "we should just do 2 next"). `SkullState.endo`: `sc=R,12.5,4,-2,0` (nostril, mm in, degrees to
+  the side, up or down, rolled), `ev=3d` (its picture as the inset), `rm=face,septa` (the pieces taken away), on v3
+  and v1.
+  - The panel (`src/ui/skullbase-endonasal.ts`) reports its scope and pieces into the state as the camera does
+    (`update(..., { camera: false })`: the address follows 0.4 s after the last move, the page is not drawn again).
+  - A link's are taken up once the sinus is loaded: the pieces first, then the scope, which is held to its way and to
+    what is open (`applyView`). The bone drilled with the burr is voxels and is not in a link; a scope a link puts
+    behind bone that only the burr had opened stops where the way ends, and the panel says so. Both drilling
+    panels say what a link keeps.
+  - The state holds them only in the endonasal view (`sanitize`); the panel keeps its own while another view is
+    shown, as before, and gives them back to the state on return. Back to an endonasal entry opens that entry's.
+  - **The main checkout holds the owner's uncommitted work on that same file** (the v1 endonasal view). The changes
+    here are kept away from its hunks (one import, one field, the constructor's argument, `render`, three new
+    methods after it, a line each at the ends of `enter`, `applyScope` and `takeAway`, a function at the end of the
+    file). The owner's diff as it stood on 2026-11-23 applies on top of this change without a conflict
+    (`git apply --check`, nothing written).
+  - (The ventricles' endoscope has been in its link all along: `es`, `ed`, `ea`, `eo`, `er`, `ev`.)
 - **Small ones:** the cortex reads a slice plane whose value is not a number as the other sections do (shown at its
   own position; it had left it off); the ventricles' help lists the endoscope's keys and the skull base's the
   endonasal endoscope's; `ARCHITECTURE.md` is new (the audit's P1-21 asked for one; there was none).
-- **Tests:** unit tests for the address writer's push, measurements and slice planes in links, the Horn markers; two
-  browser tests (a measurement through a link, Back and Forward through three views, what adds no entry; the
-  endoscopes' keys in the help).
+- **Tests:** unit tests for the address writer's push, measurements, slice planes and the endonasal scope in links,
+  the Horn markers; browser tests (a measurement through a link, Back and Forward through three views, what adds no
+  entry; the endoscopes' keys in the help; the endonasal scope and pieces through a link, on v3 and v1).
+- The three build backups (`skullbase-v3.before-refit`, `ventricles.before-refit`, `skullbase-v3.before-corner`,
+  709 MB together) were deleted on the owner's word.
 
 ## The acoustic radiation as a shell (desktop, 2026-11-23)
 
