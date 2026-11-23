@@ -28,18 +28,18 @@
    "name": "Ethmoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_ethmoid_bone.glb",
-   "bytes": 124308,
+   "bytes": 124640,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 19 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -7.02,
+     -7.01,
      21.82,
-     -7.82
+     -7.73
     ],
     "R": [
-     7.78,
+     7.76,
      22.2,
      -8.24
     ]
@@ -71,20 +71,20 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_frontal_bone.glb",
-   "bytes": 512456,
+   "bytes": 512412,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 47 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -24.15,
-     32.49,
-     41.97
+     -24.19,
+     32.51,
+     41.93
     ],
     "R": [
      24.33,
-     35.86,
-     40.95
+     35.88,
+     40.92
     ]
    }
   },
@@ -114,20 +114,20 @@
    "name": "Inferior nasal concha bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_inferior_nasal_concha_bone.glb",
-   "bytes": 41940,
+   "bytes": 41756,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -6.6,
-     30.02,
-     -24.93
+     -6.56,
+     30.08,
+     -24.87
     ],
     "R": [
      8.8,
-     30.29,
-     -26.87
+     30.28,
+     -26.85
     ]
    }
   },
@@ -157,20 +157,20 @@
    "name": "Lacrimal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_lacrimal_bone.glb",
-   "bytes": 25248,
+   "bytes": 25076,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
      -8.12,
-     32.43,
-     -9.62
+     32.37,
+     -9.76
     ],
     "R": [
-     9.19,
-     30.81,
-     -5.94
+     9.17,
+     30.8,
+     -5.96
     ]
    }
   },
@@ -200,20 +200,20 @@
    "name": "Maxilla",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_maxilla.glb",
-   "bytes": 249880,
+   "bytes": 249824,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -14.42,
-     36.85,
-     -28.0
+     -14.43,
+     36.83,
+     -27.98
     ],
     "R": [
      15.62,
-     36.48,
-     -29.51
+     36.49,
+     -29.56
     ]
    }
   },
@@ -243,19 +243,19 @@
    "name": "Nasal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_nasal_bone.glb",
-   "bytes": 41196,
+   "bytes": 40892,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -2.48,
-     48.68,
-     -5.73
+     -2.5,
+     48.63,
+     -5.66
     ],
     "R": [
-     2.97,
-     47.41,
+     2.96,
+     47.39,
      -6.91
     ]
    }
@@ -286,19 +286,19 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_occipital_bone.glb",
-   "bytes": 496868,
+   "bytes": 497296,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 21 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -23.76,
-     -61.1,
-     -20.71
+     -23.72,
+     -61.18,
+     -20.62
     ],
     "R": [
      22.26,
-     -58.22,
+     -58.24,
      -21.4
     ]
    }
@@ -329,20 +329,20 @@
    "name": "Palatine bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_palatine_bone.glb",
-   "bytes": 81304,
+   "bytes": 80748,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -10.73,
-     18.3,
-     -25.72
+     -10.74,
+     18.34,
+     -25.7
     ],
     "R": [
-     11.51,
-     17.92,
-     -24.28
+     11.49,
+     17.94,
+     -24.3
     ]
    }
   },
@@ -372,20 +372,20 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_parietal_bone.glb",
-   "bytes": 585688,
+   "bytes": 584740,
    "refIds": [],
    "category": "bone",
    "derivation": "The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 25 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -41.63,
-     -43.73,
-     53.64
+     -41.72,
+     -43.75,
+     53.57
     ],
     "R": [
-     40.34,
-     -42.39,
-     58.26
+     40.33,
+     -42.49,
+     58.23
     ]
    }
   },
@@ -415,20 +415,20 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_sphenoid_bone.glb",
-   "bytes": 422388,
+   "bytes": 422548,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 4 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -18.4,
-     7.1,
-     -5.65
+     -18.43,
+     7.16,
+     -5.61
     ],
     "R": [
-     20.44,
-     9.03,
-     -5.0
+     20.45,
+     9.07,
+     -5.03
     ]
    }
   },
@@ -458,20 +458,20 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_temporal_bone.glb",
-   "bytes": 717268,
+   "bytes": 717336,
    "refIds": [],
    "category": "bone",
    "derivation": "The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 31 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -48.97,
-     -23.28,
-     -12.58
+     -49.0,
+     -23.3,
+     -12.59
     ],
     "R": [
-     47.35,
-     -22.27,
-     -16.1
+     47.34,
+     -22.26,
+     -16.12
     ]
    }
   },
@@ -501,20 +501,20 @@
    "name": "Vomer",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_vomer.glb",
-   "bytes": 71456,
+   "bytes": 71292,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -2.06,
+     -2.05,
      17.28,
-     -21.4
+     -21.39
     ],
     "R": [
      2.66,
-     19.43,
-     -20.97
+     19.39,
+     -20.96
     ]
    }
   },
@@ -544,20 +544,20 @@
    "name": "Zygomatic bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_zygomatic_bone.glb",
-   "bytes": 103644,
+   "bytes": 103380,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -42.16,
-     23.07,
-     -6.5
+     -42.13,
+     23.08,
+     -6.53
     ],
     "R": [
-     44.73,
-     28.78,
-     -7.96
+     44.72,
+     28.76,
+     -7.99
     ]
    }
   },
@@ -2299,7 +2299,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_oculomotor_nerve_iii.cleared.glb",
-   "bytes": 11644,
+   "bytes": 10520,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2320,12 +2320,12 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 3,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 54.5 mm drawn, at most 1.3 mm from the fitted course, 0.0 mm through bone the mask closes; left: 54.8 mm drawn, at most 0.8 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): into the roof at the oculomotor triangle's centre, then forward in the top of the sinus's lateral wall to the superior orbital fissure. Cut at the brainstem's surface: its routed course began 3.5 mm inside the fitted brainstem (skullbase_v3_roots.py).",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 54.5 mm drawn, at most 1.3 mm from the fitted course, 0.0 mm through bone the mask closes; left: 54.8 mm drawn, at most 0.8 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): into the roof at the oculomotor triangle's centre, then forward in the top of the sinus's lateral wall to the superior orbital fissure. The skull is carved round it (0.3 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 0 % of its surface on the right and 5 % on the left lay under the bone shown; now none of it does. Where the bone is thick it runs in a canal of its own, where it is thin in a groove. Cut at the brainstem's surface: its routed course began 3.5 mm inside the fitted brainstem (skullbase_v3_roots.py).",
    "centroid": {
     "L": [
-     -11.38,
-     -0.41,
-     9.47
+     -11.51,
+     -0.47,
+     9.26
     ],
     "R": [
      12.3,
@@ -2548,7 +2548,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_abducens_nerve_vi.cleared.glb",
-   "bytes": 13264,
+   "bytes": 12672,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2569,17 +2569,17 @@
    "category": "nerve",
    "layer": "tracts",
    "cranialNerve": 6,
-   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 64.2 mm drawn, at most 2.1 mm from the fitted course, 0.0 mm through bone the mask closes; left: 64.3 mm drawn, at most 2.5 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): under Gruber's ligament at the petrous apex (Dorello's canal), against the carotid's posterior vertical segment, then forward inside the sinus, lateral to the carotid and medial to the ophthalmic nerve, to the superior orbital fissure (Wysiadecki 2021, Corvino 2023). The skull is carved round it (0.5 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 15 % of its surface on the right and 22 % on the left lay under the bone shown; now none of it does. Where the bone is thick it runs in a canal of its own, where it is thin in a groove. Cut at the brainstem's surface: its routed course began 1.4 mm inside the fitted brainstem (skullbase_v3_roots.py).",
+   "derivation": "Its course from the Z-Anatomy model fitted onto this CT (Skull base v2), routed through the CT: the least-cost path near that course that cannot cross bone except through an opening, so it passes the skull base where this CT has its foramen. right: 64.2 mm drawn, at most 2.1 mm from the fitted course, 0.0 mm through bone the mask closes; left: 64.3 mm drawn, at most 2.5 mm from the fitted course, 0.0 mm through bone the mask closes. Its cisternal course is approximate (the brainstem is not in the CT); drawn to just past the skull base. In the cavernous sinus it is re-routed by rule (skullbase_v3_cavernous.py): under Gruber's ligament at the petrous apex (Dorello's canal), against the carotid's posterior vertical segment, then forward inside the sinus, lateral to the carotid and medial to the ophthalmic nerve, to the superior orbital fissure (Wysiadecki 2021, Corvino 2023). The skull is carved round it (0.5 mm beyond its surface; skullbase_v3_skull.py): before it was carved, 10 % of its surface on the right and 12 % on the left lay under the bone shown; now none of it does. Where the bone is thick it runs in a canal of its own, where it is thin in a groove. Cut at the brainstem's surface: its routed course began 1.4 mm inside the fitted brainstem (skullbase_v3_roots.py).",
    "centroid": {
     "L": [
-     -12.14,
-     -0.17,
-     -1.59
+     -11.79,
+     -0.37,
+     -0.89
     ],
     "R": [
-     11.58,
-     -2.1,
-     -3.03
+     11.83,
+     -1.83,
+     -2.65
     ]
    },
    "clearedFrom": "assets/skullbase-v3/tb_abducens_nerve_vi.glb"
@@ -4478,7 +4478,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__frontal_bone.glb",
-   "bytes": 534924,
+   "bytes": 532128,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -4486,14 +4486,14 @@
    "derivation": "The CT's frontal bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -24.06,
-     32.55,
-     42.05
+     -24.11,
+     32.57,
+     42.0
     ],
     "R": [
-     23.99,
-     36.45,
-     40.32
+     23.93,
+     36.46,
+     40.34
     ]
    }
   },
@@ -4523,7 +4523,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__parietal_bone.glb",
-   "bytes": 585680,
+   "bytes": 586068,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -4531,14 +4531,14 @@
    "derivation": "The CT's parietal bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -41.63,
-     -43.73,
-     53.64
+     -41.72,
+     -43.75,
+     53.57
     ],
     "R": [
-     40.74,
-     -45.05,
-     58.59
+     40.81,
+     -45.13,
+     58.47
     ]
    }
   },
@@ -4568,7 +4568,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__sphenoid_bone.glb",
-   "bytes": 435504,
+   "bytes": 433988,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -4576,14 +4576,14 @@
    "derivation": "The CT's sphenoid bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -18.4,
-     7.1,
-     -5.65
+     -18.43,
+     7.16,
+     -5.61
     ],
     "R": [
-     20.02,
-     9.33,
-     -4.55
+     20.09,
+     9.35,
+     -4.68
     ]
    }
   },
@@ -4613,7 +4613,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__temporal_bone.glb",
-   "bytes": 717400,
+   "bytes": 717948,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -4621,14 +4621,14 @@
    "derivation": "The CT's temporal bone with the bone of the pterional (frontotemporal) craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -48.97,
-     -23.28,
-     -12.58
+     -49.0,
+     -23.3,
+     -12.59
     ],
     "R": [
-     47.43,
-     -22.79,
-     -16.59
+     47.45,
+     -22.74,
+     -16.56
     ]
    }
   },
@@ -4658,7 +4658,7 @@
    "name": "Zygomatic bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__zygomatic_bone.glb",
-   "bytes": 104536,
+   "bytes": 104548,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
@@ -4666,14 +4666,14 @@
    "derivation": "The CT's zygomatic bone, which the pterional (frontotemporal) craniotomy does not cut, remeshed within a few millimetres of the cut so that it meets the cut bone on one surface (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -42.16,
-     23.07,
-     -6.5
+     -42.13,
+     23.08,
+     -6.53
     ],
     "R": [
-     44.66,
-     28.8,
-     -7.63
+     44.64,
+     28.78,
+     -7.56
     ]
    }
   },
@@ -4683,7 +4683,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_pterional__removed.glb",
-   "bytes": 243488,
+   "bytes": 244288,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -4698,17 +4698,17 @@
    "category": "removed",
    "approach": "pterional",
    "layer": "nuclei",
-   "derivation": "The bone the pterional (frontotemporal) craniotomy removes: 12.8 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; placed from the model's zygomatic process of the frontal bone, 6 mm up and 3 mm back, then onto the bone's surface: 11 mm from that landmark); a frontal hole near the superior orbital rim (Yilmaz 2025; placed 20 mm above, 10 mm lateral to and 8 mm behind the supraorbital notch, then onto the bone's surface: 29 mm from the notch, 28 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral two-thirds of the sphenoid ridge drilled, as in Yasargil's modification (Yilmaz 2025): the ridge between the anterior and middle fossae as found on this skull, and the bone within 6 mm of a line from the pterion towards the anterior clinoid process, each to two-thirds of the way from the pterion to the process's tip (31 of 47 mm); and, over the first half of that, the opening's edge where the ridge starts taken back towards the cavity, as the basal drilling takes the residual sphenoid wing and temporal squama (Yilmaz 2025; here the sphenoid, frontal and temporal bone within 6 mm of both the opening and the cavity and 14 mm of the line, illustrative, keeping 1.5 mm of bone over the orbit). As cut, the bone removed ends 17 mm from the process (Yilmaz 2025 limits this resection at the meningo-orbital artery, at the superior orbital fissure's superolateral corner, which the model does not show). The drilled bone is a piece of its own: with the switch for the ridge off it is drawn back, the ridge intact (1.1 ml). With the anterior clinoidectomy switched on, the anterior clinoid process is taken too (0.2 ml, drawn by rule): the rest of the ridge between the fossae, from where the drilling stops to the process's tip, and the bone within 5 mm of the tip as found on this CT; the optic canal's roof and the optic strut, which are drilled to free it, are not drawn taken. The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone (which stays), leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (46, 39, 30) mm, (36, 54, 52) mm, (62, -7, -1) mm, (66, -10, 40) mm.",
+   "derivation": "The bone the pterional (frontotemporal) craniotomy removes: 12.8 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; placed from the model's zygomatic process of the frontal bone, 6 mm up and 3 mm back, then onto the bone's surface: 11 mm from that landmark); a frontal hole near the superior orbital rim (Yilmaz 2025; placed 20 mm above, 10 mm lateral to and 8 mm behind the supraorbital notch, then onto the bone's surface: 29 mm from the notch, 28 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral two-thirds of the sphenoid ridge drilled, as in Yasargil's modification (Yilmaz 2025): the ridge between the anterior and middle fossae as found on this skull, and the bone within 6 mm of a line from the pterion towards the anterior clinoid process, each to two-thirds of the way from the pterion to the process's tip (31 of 47 mm); and, over the first half of that, the opening's edge where the ridge starts taken back towards the cavity, as the basal drilling takes the residual sphenoid wing and temporal squama (Yilmaz 2025; here the sphenoid, frontal and temporal bone within 6 mm of both the opening and the cavity and 14 mm of the line, illustrative, keeping 1.5 mm of bone over the orbit). As cut, the bone removed ends 17 mm from the process (Yilmaz 2025 limits this resection at the meningo-orbital artery, at the superior orbital fissure's superolateral corner, which the model does not show). The drilled bone is a piece of its own: with the switch for the ridge off it is drawn back, the ridge intact (1.2 ml). With the anterior clinoidectomy switched on, the anterior clinoid process is taken too (0.2 ml, drawn by rule): the rest of the ridge between the fossae, from where the drilling stops to the process's tip, and the bone within 5 mm of the tip as found on this CT; the optic canal's roof and the optic strut, which are drilled to free it, are not drawn taken. The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone (which stays), leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (46, 39, 30) mm, (36, 54, 52) mm, (62, -7, -1) mm, (66, -10, 40) mm.",
    "centroid": {
     "L": [
      53.83,
-     14.91,
-     30.35
+     14.94,
+     30.38
     ],
     "R": [
      53.83,
-     14.91,
-     30.35
+     14.94,
+     30.38
     ]
    }
   },
@@ -4783,21 +4783,21 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_pterional__ridge.glb",
-   "bytes": 65072,
+   "bytes": 64752,
    "refIds": [],
    "category": "bone",
    "approach": "pterional",
    "ridge": true,
-   "derivation": "The bone the pterional (frontotemporal) craniotomy's drilling of the lateral sphenoid ridge takes, as a piece of its own (1.1 ml): drawn as the bone removed, or as bone with the view's switch for the ridge off. The ridge between the anterior and middle fossae and the bone round the line from the pterion towards the anterior clinoid process, to two-thirds of the way, and the opening's edge where the ridge starts, drawn by rule (pipeline/skullbase_v3_approach.py).",
+   "derivation": "The bone the pterional (frontotemporal) craniotomy's drilling of the lateral sphenoid ridge takes, as a piece of its own (1.2 ml): drawn as the bone removed, or as bone with the view's switch for the ridge off. The ridge between the anterior and middle fossae and the bone round the line from the pterion towards the anterior clinoid process, to two-thirds of the way, and the opening's edge where the ridge starts, drawn by rule (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     47.76,
-     13.99,
+     47.86,
+     13.9,
      18.48
     ],
     "R": [
-     47.76,
-     13.99,
+     47.86,
+     13.9,
      18.48
     ]
    }
@@ -4828,7 +4828,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_lso__frontal_bone.glb",
-   "bytes": 548812,
+   "bytes": 545632,
    "refIds": [],
    "category": "bone",
    "approach": "lso",
@@ -4836,14 +4836,14 @@
    "derivation": "The CT's frontal bone with the bone of the lateral supraorbital craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -24.15,
-     32.49,
-     41.97
+     -24.19,
+     32.51,
+     41.93
     ],
     "R": [
-     25.39,
-     35.97,
-     40.68
+     25.47,
+     35.89,
+     40.74
     ]
    }
   },
@@ -4873,7 +4873,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_lso__parietal_bone.glb",
-   "bytes": 592332,
+   "bytes": 590280,
    "refIds": [],
    "category": "bone",
    "approach": "lso",
@@ -4881,14 +4881,14 @@
    "derivation": "The CT's parietal bone, which the lateral supraorbital craniotomy does not cut, remeshed within a few millimetres of the cut so that it meets the cut bone on one surface (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -41.63,
-     -43.73,
-     53.64
+     -41.72,
+     -43.75,
+     53.57
     ],
     "R": [
-     40.72,
-     -41.06,
-     57.87
+     40.66,
+     -41.33,
+     57.89
     ]
    }
   },
@@ -4918,7 +4918,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_lso__sphenoid_bone.glb",
-   "bytes": 423612,
+   "bytes": 423752,
    "refIds": [],
    "category": "bone",
    "approach": "lso",
@@ -4926,14 +4926,14 @@
    "derivation": "The CT's sphenoid bone, which the lateral supraorbital craniotomy does not cut, remeshed within a few millimetres of the cut so that it meets the cut bone on one surface (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -18.4,
-     7.1,
-     -5.65
+     -18.43,
+     7.16,
+     -5.61
     ],
     "R": [
-     20.6,
-     9.09,
-     -4.85
+     20.58,
+     9.11,
+     -4.89
     ]
    }
   },
@@ -4943,7 +4943,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_lso__removed.glb",
-   "bytes": 144260,
+   "bytes": 140220,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -4958,17 +4958,17 @@
    "category": "removed",
    "approach": "lso",
    "layer": "nuclei",
-   "derivation": "The bone the lateral supraorbital craniotomy removes: 6.7 ml. A frontolateral flap over the orbital roof, with one burr hole posteriorly just below the temporal line (Cha 2012, Choque-Velasquez 2018), cut down to the anterior fossa floor (the basal part drilled off, Cha 2012); the sphenoid ridge is not drilled. Its outline is placed by hand on this skull (1481 mm² seen face on as drawn), its basal edge at the level of the orbital roof; the cut keeps to the frontal bone and stops at the floor, and the bone removed covers about 1180 mm² seen face on, 7 % smaller than the mean LSO craniotomy of 1275 mm² (Cha 2012) (illustrative). The outline is a smooth curve through those points and the cut's edge is smoothed over 1 mm (illustrative). Burr hole: (61, 8, 37) mm.",
+   "derivation": "The bone the lateral supraorbital craniotomy removes: 6.6 ml. A frontolateral flap over the orbital roof, with one burr hole posteriorly just below the temporal line (Cha 2012, Choque-Velasquez 2018), cut down to the anterior fossa floor (the basal part drilled off, Cha 2012); the sphenoid ridge is not drilled. Its outline is placed by hand on this skull (1481 mm² seen face on as drawn), its basal edge at the level of the orbital roof; the cut keeps to the frontal bone and stops at the floor, and the bone removed covers about 1166 mm² seen face on, 9 % smaller than the mean LSO craniotomy of 1275 mm² (Cha 2012) (illustrative). The outline is a smooth curve through those points and the cut's edge is smoothed over 1 mm (illustrative). Burr hole: (61, 8, 37) mm.",
    "centroid": {
     "L": [
-     47.61,
-     32.36,
-     53.89
+     47.36,
+     32.68,
+     54.12
     ],
     "R": [
-     47.61,
-     32.36,
-     53.89
+     47.36,
+     32.68,
+     54.12
     ]
    }
   },
@@ -4998,7 +4998,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_interhemispheric__frontal_bone.glb",
-   "bytes": 528180,
+   "bytes": 528348,
    "refIds": [],
    "category": "bone",
    "approach": "interhemispheric",
@@ -5006,14 +5006,14 @@
    "derivation": "The CT's frontal bone with the bone of the right parasagittal craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -22.58,
-     32.15,
-     45.31
+     -22.59,
+     32.17,
+     45.32
     ],
     "R": [
-     25.44,
+     25.45,
      37.15,
-     39.37
+     39.35
     ]
    }
   },
@@ -5043,7 +5043,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_interhemispheric__parietal_bone.glb",
-   "bytes": 601108,
+   "bytes": 596440,
    "refIds": [],
    "category": "bone",
    "approach": "interhemispheric",
@@ -5051,14 +5051,14 @@
    "derivation": "The CT's parietal bone with the bone of the right parasagittal craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -40.97,
-     -43.12,
-     54.39
+     -41.12,
+     -43.18,
+     54.26
     ],
     "R": [
-     40.38,
-     -41.66,
-     59.19
+     40.46,
+     -42.03,
+     58.91
     ]
    }
   },
@@ -5068,7 +5068,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_interhemispheric__removed.glb",
-   "bytes": 249064,
+   "bytes": 249104,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -5083,17 +5083,17 @@
    "category": "removed",
    "approach": "interhemispheric",
    "layer": "nuclei",
-   "derivation": "The bone the right parasagittal craniotomy removes: 16.8 ml. A right parasagittal flap at the coronal suture, its medial edge on the midline (over the superior sagittal sinus): from 40 mm in front of bregma to 20 mm behind it and 40 mm wide; the bone removed covers about 2356 mm² seen face on (illustrative: the sources describe a right precoronal parasagittal or frontoparietal midline craniotomy without giving its size). Bregma here: (0, 6, 100) mm, where this skull's frontal and parietal bones meet at the midline.",
+   "derivation": "The bone the right parasagittal craniotomy removes: 16.8 ml. A right parasagittal flap at the coronal suture, its medial edge on the midline (over the superior sagittal sinus): from 40 mm in front of bregma to 20 mm behind it and 40 mm wide; the bone removed covers about 2355 mm² seen face on (illustrative: the sources describe a right precoronal parasagittal or frontoparietal midline craniotomy without giving its size). Bregma here: (0, 6, 100) mm, where this skull's frontal and parietal bones meet at the midline.",
    "centroid": {
     "L": [
-     18.1,
-     14.22,
-     88.0
+     18.06,
+     14.26,
+     87.99
     ],
     "R": [
-     18.1,
-     14.22,
-     88.0
+     18.06,
+     14.26,
+     87.99
     ]
    }
   },
@@ -5123,7 +5123,7 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_suboccipital__occipital_bone.glb",
-   "bytes": 504436,
+   "bytes": 505308,
    "refIds": [],
    "category": "bone",
    "approach": "suboccipital",
@@ -5131,14 +5131,14 @@
    "derivation": "The CT's occipital bone with the bone of the midline suboccipital craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -24.54,
-     -61.51,
-     -20.78
+     -24.49,
+     -61.58,
+     -20.71
     ],
     "R": [
-     22.85,
-     -58.54,
-     -21.58
+     22.86,
+     -58.56,
+     -21.59
     ]
    }
   },
@@ -5148,7 +5148,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_suboccipital__removed.glb",
-   "bytes": 245076,
+   "bytes": 244256,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -5167,12 +5167,12 @@
    "centroid": {
     "L": [
      -0.37,
-     -68.98,
+     -68.97,
      -39.83
     ],
     "R": [
      -0.37,
-     -68.98,
+     -68.97,
      -39.83
     ]
    }
@@ -5203,7 +5203,7 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_retrosigmoid__occipital_bone.glb",
-   "bytes": 507944,
+   "bytes": 509604,
    "refIds": [],
    "category": "bone",
    "approach": "retrosigmoid",
@@ -5211,14 +5211,14 @@
    "derivation": "The CT's occipital bone with the bone of the retrosigmoid craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -23.76,
-     -61.1,
-     -20.71
+     -23.72,
+     -61.18,
+     -20.62
     ],
     "R": [
-     22.72,
-     -58.1,
-     -21.72
+     22.78,
+     -58.11,
+     -21.77
     ]
    }
   },
@@ -5248,7 +5248,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_retrosigmoid__temporal_bone.glb",
-   "bytes": 730756,
+   "bytes": 730372,
    "refIds": [],
    "category": "bone",
    "approach": "retrosigmoid",
@@ -5256,14 +5256,14 @@
    "derivation": "The CT's temporal bone with the bone of the retrosigmoid craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -48.97,
-     -23.28,
-     -12.58
+     -49.0,
+     -23.3,
+     -12.59
     ],
     "R": [
      47.43,
-     -23.21,
-     -16.53
+     -23.19,
+     -16.54
     ]
    }
   },
@@ -5273,7 +5273,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_retrosigmoid__removed.glb",
-   "bytes": 110120,
+   "bytes": 110076,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -5288,17 +5288,17 @@
    "category": "removed",
    "approach": "retrosigmoid",
    "layer": "nuclei",
-   "derivation": "The bone the retrosigmoid craniotomy removes: 4.1 ml. A right retrosigmoid craniotomy: its upper edge along the transverse sinus' lower margin for 28 mm and its front edge along the sigmoid sinus' posterior margin for 35 mm (Jian 2021: the window's upper and front margins against the two sinuses), closed behind and below by straight edges, its corners rounded; larger than Jian 2021's keyhole (18-20 x 20-25 mm), about the size of the craniotomies in Tang 2025 (a mean 3.8 cm across), the shape drawn by hand (illustrative). The sinuses are this CT's own (traced through its lumen), the edges drawn on their margins on the inner table and carried out through the bone; as cut, the bone removed comes within 2.0 mm of the transverse sinus and 1.5 mm of the sigmoid. The keypoint is where the two margins meet (Jian 2021, 2022, 2024); the burr hole 3.5 mm behind and below it (Jian 2021). The bone removed covers about 728 mm² seen face on; its edge smoothed over 1 mm (illustrative). Keypoint: (55, -57, -25) mm; burr hole: (53, -59, -26) mm.",
+   "derivation": "The bone the retrosigmoid craniotomy removes: 4.1 ml. A right retrosigmoid craniotomy: its upper edge along the transverse sinus' lower margin for 28 mm and its front edge along the sigmoid sinus' posterior margin for 35 mm (Jian 2021: the window's upper and front margins against the two sinuses), closed behind and below by straight edges, its corners rounded; larger than Jian 2021's keyhole (18-20 x 20-25 mm), about the size of the craniotomies in Tang 2025 (a mean 3.8 cm across), the shape drawn by hand (illustrative). The sinuses are this CT's own (traced through its lumen), the edges drawn on their margins on the inner table and carried out through the bone; as cut, the bone removed comes within 2.0 mm of the transverse sinus and 1.5 mm of the sigmoid. The keypoint is where the two margins meet (Jian 2021, 2022, 2024); the burr hole 3.5 mm behind and below it (Jian 2021). The bone removed covers about 727 mm² seen face on; its edge smoothed over 1 mm (illustrative). Keypoint: (55, -57, -25) mm; burr hole: (53, -59, -26) mm.",
    "centroid": {
     "L": [
      43.2,
-     -57.21,
-     -30.2
+     -57.23,
+     -30.19
     ],
     "R": [
      43.2,
-     -57.21,
-     -30.2
+     -57.23,
+     -30.19
     ]
    }
   },
@@ -5328,7 +5328,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__frontal_bone.glb",
-   "bytes": 482736,
+   "bytes": 480408,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -5336,14 +5336,14 @@
    "derivation": "The CT's frontal bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -24.07,
-     32.55,
-     42.04
+     -24.11,
+     32.57,
+     42.0
     ],
     "R": [
      20.28,
-     37.28,
-     43.45
+     37.27,
+     43.43
     ]
    }
   },
@@ -5373,7 +5373,7 @@
    "name": "Maxilla",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__maxilla.glb",
-   "bytes": 253784,
+   "bytes": 252424,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -5381,14 +5381,14 @@
    "derivation": "The CT's maxilla with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -14.42,
-     36.85,
-     -28.0
+     -14.43,
+     36.83,
+     -27.98
     ],
     "R": [
-     16.27,
-     36.16,
-     -29.31
+     16.13,
+     36.25,
+     -29.41
     ]
    }
   },
@@ -5418,7 +5418,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__parietal_bone.glb",
-   "bytes": 585848,
+   "bytes": 585860,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -5426,14 +5426,14 @@
    "derivation": "The CT's parietal bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -41.63,
-     -43.73,
-     53.64
+     -41.72,
+     -43.75,
+     53.57
     ],
     "R": [
-     40.76,
-     -45.02,
-     58.59
+     40.8,
+     -45.11,
+     58.49
     ]
    }
   },
@@ -5463,7 +5463,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__sphenoid_bone.glb",
-   "bytes": 432212,
+   "bytes": 433308,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -5471,14 +5471,14 @@
    "derivation": "The CT's sphenoid bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -18.4,
-     7.1,
-     -5.65
+     -18.43,
+     7.16,
+     -5.61
     ],
     "R": [
-     20.15,
+     20.13,
      9.33,
-     -5.14
+     -5.16
     ]
    }
   },
@@ -5508,7 +5508,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__temporal_bone.glb",
-   "bytes": 719100,
+   "bytes": 719820,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -5516,14 +5516,14 @@
    "derivation": "The CT's temporal bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -48.97,
-     -23.28,
-     -12.58
+     -49.0,
+     -23.3,
+     -12.59
     ],
     "R": [
-     47.2,
-     -23.03,
-     -16.59
+     47.21,
+     -23.0,
+     -16.57
     ]
    }
   },
@@ -5553,7 +5553,7 @@
    "name": "Zygomatic bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__zygomatic_bone.glb",
-   "bytes": 73324,
+   "bytes": 73864,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
@@ -5561,14 +5561,14 @@
    "derivation": "The CT's zygomatic bone with the bone of the orbitozygomatic craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -42.16,
-     23.07,
-     -6.5
+     -42.13,
+     23.08,
+     -6.53
     ],
     "R": [
-     37.03,
-     27.26,
-     -17.21
+     36.88,
+     27.12,
+     -16.47
     ]
    }
   },
@@ -5578,7 +5578,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__removed.glb",
-   "bytes": 254736,
+   "bytes": 255028,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -5593,17 +5593,17 @@
    "category": "removed",
    "approach": "orbitozygomatic",
    "layer": "nuclei",
-   "derivation": "The bone the orbitozygomatic craniotomy removes: 19.8 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; placed from the model's zygomatic process of the frontal bone, 6 mm up and 3 mm back, then onto the bone's surface: 11 mm from that landmark); a frontal hole near the superior orbital rim (Yilmaz 2025; placed 20 mm above, 10 mm lateral to and 8 mm behind the supraorbital notch, then onto the bone's surface: 29 mm from the notch, 28 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral two-thirds of the sphenoid ridge drilled, as in Yasargil's modification (Yilmaz 2025): the ridge between the anterior and middle fossae as found on this skull, and the bone within 6 mm of a line from the pterion towards the anterior clinoid process, each to two-thirds of the way from the pterion to the process's tip (31 of 47 mm); and, over the first half of that, the opening's edge where the ridge starts taken back towards the cavity, as the basal drilling takes the residual sphenoid wing and temporal squama (Yilmaz 2025; here the sphenoid, frontal and temporal bone within 6 mm of both the opening and the cavity and 14 mm of the line, illustrative, keeping 1.5 mm of bone over the orbit). As cut, the bone removed ends 17 mm from the process (Yilmaz 2025 limits this resection at the meningo-orbital artery, at the superior orbital fissure's superolateral corner, which the model does not show). The drilled bone is a piece of its own: with the switch for the ridge off it is drawn back, the ridge intact (0.6 ml). With the anterior clinoidectomy switched on, the anterior clinoid process is taken too (0.2 ml, drawn by rule): the rest of the ridge between the fossae, from where the drilling stops to the process's tip, and the bone within 5 mm of the tip as found on this CT; the optic canal's roof and the optic strut, which are drilled to free it, are not drawn taken. The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone, leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (46, 39, 30) mm, (36, 54, 52) mm, (62, -7, -1) mm, (66, -10, 40) mm. Then the orbitozygomatic piece (the two-piece craniotomy, Yilmaz 2025): the superolateral orbital rim from 4 mm lateral to the supraorbital notch to 5 mm lateral to the frontozygomatic suture (the model's zygomatic process of the frontal bone), with the orbital roof 25 mm back from the rim (illustrative), the zygoma's frontal process and its body down to 5 mm below the arch's level (Yilmaz 2025: the cut from the zygomatic body to the inferior orbital fissure about 1 cm below its frontal and temporal processes; its medial part with the infraorbital rim, medial of x = 33 mm, kept; illustrative), and the zygomatic arch from 8 mm in front of the zygomatic bone's back end back to its root in front of the articular tubercle (y = 0 mm here; illustrative).",
+   "derivation": "The bone the orbitozygomatic craniotomy removes: 19.8 ml. A flap through the skull joining four burr holes on this skull: the keyhole just above the frontozygomatic suture (Yilmaz 2025, Sevgi 2026; placed from the model's zygomatic process of the frontal bone, 6 mm up and 3 mm back, then onto the bone's surface: 11 mm from that landmark); a frontal hole near the superior orbital rim (Yilmaz 2025; placed 20 mm above, 10 mm lateral to and 8 mm behind the supraorbital notch, then onto the bone's surface: 29 mm from the notch, 28 mm from the keyhole); a temporal hole on the squama near the zygomatic root (Sevgi 2026; here 14 mm above the level of the foramen spinosum); and a posterior hole below the superior temporal line (Yilmaz 2025: near the coronal suture; here 30 mm behind and 18 mm above the pterion, illustrative). Then the lateral two-thirds of the sphenoid ridge drilled, as in Yasargil's modification (Yilmaz 2025): the ridge between the anterior and middle fossae as found on this skull, and the bone within 6 mm of a line from the pterion towards the anterior clinoid process, each to two-thirds of the way from the pterion to the process's tip (31 of 47 mm); and, over the first half of that, the opening's edge where the ridge starts taken back towards the cavity, as the basal drilling takes the residual sphenoid wing and temporal squama (Yilmaz 2025; here the sphenoid, frontal and temporal bone within 6 mm of both the opening and the cavity and 14 mm of the line, illustrative, keeping 1.5 mm of bone over the orbit). As cut, the bone removed ends 17 mm from the process (Yilmaz 2025 limits this resection at the meningo-orbital artery, at the superior orbital fissure's superolateral corner, which the model does not show). The drilled bone is a piece of its own: with the switch for the ridge off it is drawn back, the ridge intact (0.7 ml). With the anterior clinoidectomy switched on, the anterior clinoid process is taken too (0.2 ml, drawn by rule): the rest of the ridge between the fossae, from where the drilling stops to the process's tip, and the bone within 5 mm of the tip as found on this CT; the optic canal's roof and the optic strut, which are drilled to free it, are not drawn taken. The flap is the oval round the four holes (seen face on, they lie on its margin), a smooth curve as a craniotome cuts it, behind the zygomatic bone, leaving no slot under bone it keeps narrower than 3 mm, the corners where the cranial floor is kept rounded over 2.5 mm and its edge smoothed over 1 mm (illustrative). Burr holes: (46, 39, 30) mm, (36, 54, 52) mm, (62, -7, -1) mm, (66, -10, 40) mm. Then the orbitozygomatic piece (the two-piece craniotomy, Yilmaz 2025): the superolateral orbital rim from 4 mm lateral to the supraorbital notch to 5 mm lateral to the frontozygomatic suture (the model's zygomatic process of the frontal bone), with the orbital roof 25 mm back from the rim (illustrative), the zygoma's frontal process and its body down to 5 mm below the arch's level (Yilmaz 2025: the cut from the zygomatic body to the inferior orbital fissure about 1 cm below its frontal and temporal processes; its medial part with the infraorbital rim, medial of x = 33 mm, kept; illustrative), and the zygomatic arch from 8 mm in front of the zygomatic bone's back end back to its root in front of the articular tubercle (y = 0 mm here; illustrative).",
    "centroid": {
     "L": [
-     47.65,
-     20.86,
-     19.85
+     47.66,
+     20.88,
+     19.88
     ],
     "R": [
-     47.65,
-     20.86,
-     19.85
+     47.66,
+     20.88,
+     19.88
     ]
    }
   },
@@ -5678,22 +5678,22 @@
    "aliases": [],
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_orbitozygomatic__ridge.glb",
-   "bytes": 48156,
+   "bytes": 48380,
    "refIds": [],
    "category": "bone",
    "approach": "orbitozygomatic",
    "ridge": true,
-   "derivation": "The bone the orbitozygomatic craniotomy's drilling of the lateral sphenoid ridge takes, as a piece of its own (0.6 ml): drawn as the bone removed, or as bone with the view's switch for the ridge off. The ridge between the anterior and middle fossae and the bone round the line from the pterion towards the anterior clinoid process, to two-thirds of the way, and the opening's edge where the ridge starts, drawn by rule (pipeline/skullbase_v3_approach.py).",
+   "derivation": "The bone the orbitozygomatic craniotomy's drilling of the lateral sphenoid ridge takes, as a piece of its own (0.7 ml): drawn as the bone removed, or as bone with the view's switch for the ridge off. The ridge between the anterior and middle fossae and the bone round the line from the pterion towards the anterior clinoid process, to two-thirds of the way, and the opening's edge where the ridge starts, drawn by rule (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     51.2,
-     11.05,
-     18.17
+     51.32,
+     10.97,
+     18.24
     ],
     "R": [
-     51.2,
-     11.05,
-     18.17
+     51.32,
+     10.97,
+     18.24
     ]
    }
   },
@@ -5723,7 +5723,7 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_far_lateral__occipital_bone.glb",
-   "bytes": 510424,
+   "bytes": 514040,
    "refIds": [],
    "category": "bone",
    "approach": "far_lateral",
@@ -5731,14 +5731,14 @@
    "derivation": "The CT's occipital bone with the bone of the far lateral craniectomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -23.61,
-     -61.05,
-     -20.86
+     -23.55,
+     -61.12,
+     -20.8
     ],
     "R": [
-     22.58,
-     -57.47,
-     -21.23
+     22.65,
+     -57.36,
+     -21.37
     ]
    }
   },
@@ -5768,7 +5768,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_far_lateral__temporal_bone.glb",
-   "bytes": 729332,
+   "bytes": 728164,
    "refIds": [],
    "category": "bone",
    "approach": "far_lateral",
@@ -5776,13 +5776,13 @@
    "derivation": "The CT's temporal bone with the bone of the far lateral craniectomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -48.97,
-     -23.28,
-     -12.58
+     -49.0,
+     -23.3,
+     -12.59
     ],
     "R": [
-     47.32,
-     -23.03,
+     47.31,
+     -23.0,
      -16.56
     ]
    }
@@ -5793,7 +5793,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_far_lateral__removed.glb",
-   "bytes": 217488,
+   "bytes": 217424,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -5808,16 +5808,16 @@
    "category": "removed",
    "approach": "far_lateral",
    "layer": "nuclei",
-   "derivation": "The bone the far lateral craniectomy removes: 7.7 ml. A right lateral suboccipital craniectomy (Pai 2018: lateral suboccipital, reaching the sigmoid sinus, the foramen magnum's rim taken), its outline following this CT's own sinuses (traced through their lumen): its upper edge along the transverse sinus' lower margin for 30 mm from the junction, its lateral edge along the sigmoid sinus' posterior margin for 35 mm down towards the jugular bulb, and below, the foramen magnum's posterior rim taken from x = 3 to 16 mm, so that the opening runs into the foramen; its medial edge bowed outwards and its corners rounded (the extents and shape illustrative); the bone removed, the condyle's part with it, covers about 1585 mm² seen face on. Then the posterior third of the right occipital condyle drilled (Pai 2018: the posterior 30-40 %; here the third of the condyle's bone within 11 mm of its fitted landmark that lies furthest back). The hemilaminectomy of C1 that goes with it is not shown: the atlas is not part of this model.",
+   "derivation": "The bone the far lateral craniectomy removes: 7.7 ml. A right lateral suboccipital craniectomy (Pai 2018: lateral suboccipital, reaching the sigmoid sinus, the foramen magnum's rim taken), its outline following this CT's own sinuses (traced through their lumen): its upper edge along the transverse sinus' lower margin for 30 mm from the junction, its lateral edge along the sigmoid sinus' posterior margin for 35 mm down towards the jugular bulb, and below, the foramen magnum's posterior rim taken from x = 3 to 16 mm, so that the opening runs into the foramen; its medial edge bowed outwards and its corners rounded (the extents and shape illustrative); the bone removed, the condyle's part with it, covers about 1586 mm² seen face on. Then the posterior third of the right occipital condyle drilled (Pai 2018: the posterior 30-40 %; here the third of the condyle's bone within 11 mm of its fitted landmark that lies furthest back). The hemilaminectomy of C1 that goes with it is not shown: the atlas is not part of this model.",
    "centroid": {
     "L": [
      27.82,
-     -54.82,
+     -54.83,
      -38.83
     ],
     "R": [
      27.82,
-     -54.82,
+     -54.83,
      -38.83
     ]
    }
@@ -5848,7 +5848,7 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_kawase__occipital_bone.glb",
-   "bytes": 505856,
+   "bytes": 504052,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -5856,13 +5856,13 @@
    "derivation": "The CT's occipital bone with the bone of the anterior petrosectomy (kawase) removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -23.76,
-     -61.1,
-     -20.71
+     -23.72,
+     -61.18,
+     -20.62
     ],
     "R": [
-     22.22,
-     -57.02,
+     22.26,
+     -57.34,
      -21.47
     ]
    }
@@ -5893,7 +5893,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_kawase__parietal_bone.glb",
-   "bytes": 592924,
+   "bytes": 592024,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -5901,14 +5901,14 @@
    "derivation": "The CT's parietal bone with the bone of the anterior petrosectomy (kawase) removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -41.63,
-     -43.73,
-     53.64
+     -41.72,
+     -43.75,
+     53.57
     ],
     "R": [
      40.88,
-     -41.71,
-     57.45
+     -41.8,
+     57.4
     ]
    }
   },
@@ -5938,7 +5938,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_kawase__sphenoid_bone.glb",
-   "bytes": 440796,
+   "bytes": 439004,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -5946,14 +5946,14 @@
    "derivation": "The CT's sphenoid bone with the bone of the anterior petrosectomy (kawase) removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -18.4,
-     7.1,
-     -5.65
+     -18.43,
+     7.16,
+     -5.61
     ],
     "R": [
-     20.46,
-     7.86,
-     -5.59
+     20.45,
+     7.99,
+     -5.57
     ]
    }
   },
@@ -5983,7 +5983,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_kawase__temporal_bone.glb",
-   "bytes": 793072,
+   "bytes": 792248,
    "refIds": [],
    "category": "bone",
    "approach": "kawase",
@@ -5991,14 +5991,14 @@
    "derivation": "The CT's temporal bone with the bone of the anterior petrosectomy (kawase) removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -48.97,
-     -23.28,
-     -12.58
+     -49.0,
+     -23.3,
+     -12.59
     ],
     "R": [
-     45.04,
-     -21.53,
-     -16.85
+     45.05,
+     -21.51,
+     -16.82
     ]
    }
   },
@@ -6008,7 +6008,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_kawase__removed.glb",
-   "bytes": 253008,
+   "bytes": 253328,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -6023,17 +6023,17 @@
    "category": "removed",
    "approach": "kawase",
    "layer": "nuclei",
-   "derivation": "The bone the anterior petrosectomy (kawase) removes: 8.4 ml. A right temporal flap drawn 40 × 32 mm (1280 mm² seen from the side as drawn; Signoretti 2025 measured a mean 1272 mm²; the bone removed, the drilled apex with it, covers about 1564 mm² seen from the side), its base at the middle fossa floor's level (the tegmen, as located on this CT), two thirds of it in front of the external auditory canal and one third behind (Flores-Justa 2021; the canal's line taken from the registered ear's tympanic membrane), cut down flush with the floor. Then the petrous apex drilled within the rhomboid of four landmarks (Signoretti 2025): the petrous apex, where the greater petrosal nerve meets V3 (seen from above), the geniculate ganglion and the arcuate eminence (the bone over the superior semicircular canal, from the registered ear), seen from above and drilled straight down to the level of the inferior petrosal sinus, the ridge and the pyramid behind it taken through to the posterior fossa's dura (up to 12 mm behind the line from the apex to the eminence, from the apex to the porus: not medial to the apex, not behind the internal acoustic canal), kept 1.5 mm off the internal carotid artery (petrous and lacerum parts), 1.5 mm off the scala tympani, 1.5 mm off the scala vestibuli, vestibule and semicircular canals, 1 mm off the nerves in the internal acoustic meatus (VII, VIII), 1.5 mm off the facial nerve (VII), 1 mm off the mandibular nerve (V3), 1 mm off the trigeminal ganglion, 0.5 mm off the greater petrosal nerve, 1 mm off the abducens nerve (VI) (the margins illustrative): 2.6 ml (Signoretti 2025: 2.83 ± 0.28 cm³). On this model the arcuate eminence lies 10.5 mm from the geniculate ganglion, that 13.9 mm from the nerves' meeting, that 17.8 mm from the petrous apex, and the apex 35.1 mm (straight) from the eminence.",
+   "derivation": "The bone the anterior petrosectomy (kawase) removes: 8.4 ml. A right temporal flap drawn 40 × 32 mm (1280 mm² seen from the side as drawn; Signoretti 2025 measured a mean 1272 mm²; the bone removed, the drilled apex with it, covers about 1566 mm² seen from the side), its base at the middle fossa floor's level (the tegmen, as located on this CT), two thirds of it in front of the external auditory canal and one third behind (Flores-Justa 2021; the canal's line taken from the registered ear's tympanic membrane), cut down flush with the floor. Then the petrous apex drilled within the rhomboid of four landmarks (Signoretti 2025): the petrous apex, where the greater petrosal nerve meets V3 (seen from above), the geniculate ganglion and the arcuate eminence (the bone over the superior semicircular canal, from the registered ear), seen from above and drilled straight down to the level of the inferior petrosal sinus, the ridge and the pyramid behind it taken through to the posterior fossa's dura (up to 12 mm behind the line from the apex to the eminence, from the apex to the porus: not medial to the apex, not behind the internal acoustic canal), kept 1.5 mm off the internal carotid artery (petrous and lacerum parts), 1.5 mm off the scala tympani, 1.5 mm off the scala vestibuli, vestibule and semicircular canals, 1 mm off the nerves in the internal acoustic meatus (VII, VIII), 1.5 mm off the facial nerve (VII), 1 mm off the mandibular nerve (V3), 1 mm off the trigeminal ganglion, 0.5 mm off the greater petrosal nerve, 1 mm off the abducens nerve (VI) (the margins illustrative): 2.58 ml (Signoretti 2025: 2.83 ± 0.28 cm³). On this model the arcuate eminence lies 10.5 mm from the geniculate ganglion, that 14.5 mm from the nerves' meeting, that 16.3 mm from the petrous apex, and the apex 34.1 mm (straight) from the eminence.",
    "centroid": {
     "L": [
-     47.1,
-     -12.74,
-     -2.45
+     47.15,
+     -12.72,
+     -2.46
     ],
     "R": [
-     47.1,
-     -12.74,
-     -2.45
+     47.15,
+     -12.72,
+     -2.46
     ]
    }
   },
@@ -6060,14 +6060,14 @@
    "schematic": true,
    "centroid": {
     "L": [
-     26.58,
-     -15.08,
-     -4.35
+     26.81,
+     -15.12,
+     -5.44
     ],
     "R": [
-     26.58,
-     -15.08,
-     -4.35
+     26.81,
+     -15.12,
+     -5.44
     ]
    },
    "derivation": "The rhomboid drawn on the middle fossa floor between its four landmarks on this model (Signoretti 2025): the petrous apex, where the greater petrosal nerve meets V3 seen from above, the geniculate ganglion and the arcuate eminence (the bone over the superior semicircular canal)."
@@ -6143,7 +6143,7 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_subtemporal__frontal_bone.glb",
-   "bytes": 531032,
+   "bytes": 537816,
    "refIds": [],
    "category": "bone",
    "approach": "subtemporal",
@@ -6151,14 +6151,14 @@
    "derivation": "The CT's frontal bone, which the subtemporal craniotomy does not cut, remeshed within a few millimetres of the cut so that it meets the cut bone on one surface (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -24.15,
-     32.49,
-     41.97
+     -24.19,
+     32.51,
+     41.93
     ],
     "R": [
-     25.73,
-     35.06,
-     40.31
+     26.16,
+     34.85,
+     40.07
     ]
    }
   },
@@ -6188,7 +6188,7 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_subtemporal__parietal_bone.glb",
-   "bytes": 598548,
+   "bytes": 597764,
    "refIds": [],
    "category": "bone",
    "approach": "subtemporal",
@@ -6196,14 +6196,14 @@
    "derivation": "The CT's parietal bone with the bone of the subtemporal craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -41.63,
-     -43.73,
-     53.64
+     -41.72,
+     -43.75,
+     53.57
     ],
     "R": [
-     41.12,
-     -40.77,
-     57.58
+     41.1,
+     -40.91,
+     57.59
     ]
    }
   },
@@ -6233,7 +6233,7 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_subtemporal__sphenoid_bone.glb",
-   "bytes": 440616,
+   "bytes": 440976,
    "refIds": [],
    "category": "bone",
    "approach": "subtemporal",
@@ -6241,14 +6241,14 @@
    "derivation": "The CT's sphenoid bone with the bone of the subtemporal craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -18.4,
-     7.1,
-     -5.65
+     -18.43,
+     7.16,
+     -5.61
     ],
     "R": [
      21.78,
-     9.71,
-     -4.18
+     9.73,
+     -4.24
     ]
    }
   },
@@ -6278,7 +6278,7 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_appr_subtemporal__temporal_bone.glb",
-   "bytes": 728100,
+   "bytes": 720908,
    "refIds": [],
    "category": "bone",
    "approach": "subtemporal",
@@ -6286,14 +6286,14 @@
    "derivation": "The CT's temporal bone with the bone of the subtemporal craniotomy removed (pipeline/skullbase_v3_approach.py).",
    "centroid": {
     "L": [
-     -48.97,
-     -23.28,
-     -12.58
+     -49.0,
+     -23.3,
+     -12.59
     ],
     "R": [
-     46.86,
-     -22.5,
-     -17.3
+     46.8,
+     -22.69,
+     -17.46
     ]
    }
   },
@@ -6303,7 +6303,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/sb_appr_subtemporal__removed.glb",
-   "bytes": 256588,
+   "bytes": 257108,
    "colour": {
     "token": "sbRemoved",
     "light": "#5F81DD",
@@ -6318,17 +6318,17 @@
    "category": "removed",
    "approach": "subtemporal",
    "layer": "nuclei",
-   "derivation": "The bone the subtemporal craniotomy removes: 9.9 ml. A right temporal flap drawn 50 × 50 mm (2500 mm² seen from the side as drawn; Nakov 2017: 5 × 5 cm, below the superior temporal line and centred above the root of the zygoma; the bone removed covers about 2137 mm² seen from the side), centred front to back over the zygomatic arch's root as found on this skull (where, going back, the arch last stands free of the squama: 2.0 mm in front of the frame's origin; its upper surface there lies 2.6 mm above the level of the middle fossa floor, taken at the tegmen as located on this CT; Nakov 2017: the floor is level with the root's upper surface), its base at that level, cut down flush with the floor. Only the wall of the cranial cavity is taken, of the temporal, sphenoid and parietal bones: the zygoma, its arch and the orbit's lateral wall stay. The petrous apex is not drilled.",
+   "derivation": "The bone the subtemporal craniotomy removes: 9.9 ml. A right temporal flap drawn 50 × 50 mm (2500 mm² seen from the side as drawn; Nakov 2017: 5 × 5 cm, below the superior temporal line and centred above the root of the zygoma; the bone removed covers about 2164 mm² seen from the side), centred front to back over the zygomatic arch's root as found on this skull (where, going back, the arch last stands free of the squama: 2.0 mm in front of the frame's origin; its upper surface there lies 2.6 mm above the level of the middle fossa floor, taken at the tegmen as located on this CT; Nakov 2017: the floor is level with the root's upper surface), its base at that level, cut down flush with the floor. Only the wall of the cranial cavity is taken, of the temporal, sphenoid and parietal bones: the zygoma, its arch and the orbit's lateral wall stay. The petrous apex is not drilled.",
    "centroid": {
     "L": [
-     57.07,
-     0.71,
-     14.34
+     56.98,
+     0.98,
+     14.44
     ],
     "R": [
-     57.07,
-     0.71,
-     14.34
+     56.98,
+     0.98,
+     14.44
     ]
    }
   },
@@ -6607,7 +6607,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_triangle_superior.glb",
-   "bytes": 3636,
+   "bytes": 3640,
    "colour": {
     "token": "sbTriMedial",
     "light": "#B8467A",
@@ -6624,9 +6624,9 @@
    "derivation": "One of the ten triangles round the cavernous sinus as Chung 2016 defines them (medial group): optic nerve, oculomotor nerve before the superior orbital fissure, dural fold between the two nerves' dural entries (borders). Drawn here as the flat triangle between those structures as they are drawn in this model (the nerves re-routed through the sinus's wall, the landmarks found on this CT): where they lie follows from them, not from a dissection.",
    "centroid": {
     "L": [
-     -13.43,
-     9.62,
-     9.32
+     -13.58,
+     9.66,
+     9.23
     ],
     "R": [
      14.1,
@@ -6663,9 +6663,9 @@
    "derivation": "One of the ten triangles round the cavernous sinus as Chung 2016 defines them (medial group): oculomotor nerve, trochlear nerve, dural fold between their dural entries (borders). Drawn here as the flat triangle between those structures as they are drawn in this model (the nerves re-routed through the sinus's wall, the landmarks found on this CT): where they lie follows from them, not from a dissection.",
    "centroid": {
     "L": [
-     -13.1,
-     2.93,
-     4.99
+     -13.24,
+     2.9,
+     4.9
     ],
     "R": [
      13.27,
@@ -6802,7 +6802,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_triangle_posterolateral.glb",
-   "bytes": 3628,
+   "bytes": 3624,
    "colour": {
     "token": "sbTriLateral",
     "light": "#2C8F62",
@@ -6819,14 +6819,14 @@
    "derivation": "One of the ten triangles round the cavernous sinus as Chung 2016 defines them (lateral group): mandibular nerve, greater petrosal nerve, between the foramen ovale and the hiatus of the greater petrosal nerve (borders). Drawn here as the flat triangle between those structures as they are drawn in this model (the nerves re-routed through the sinus's wall, the landmarks found on this CT): where they lie follows from them, not from a dissection.",
    "centroid": {
     "L": [
-     -27.02,
-     -6.31,
+     -27.06,
+     -6.38,
      -9.94
     ],
     "R": [
      27.01,
-     -6.76,
-     -11.39
+     -6.83,
+     -11.34
     ]
    },
    "triangle": {
@@ -6841,7 +6841,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_triangle_posteromedial.glb",
-   "bytes": 3648,
+   "bytes": 3640,
    "colour": {
     "token": "sbTriLateral",
     "light": "#2C8F62",
@@ -6858,14 +6858,14 @@
    "derivation": "One of the ten triangles round the cavernous sinus as Chung 2016 defines them (lateral group): trigeminal ganglion, greater petrosal nerve, between the hiatus and the apex of the petrous part (borders). Drawn here as the flat triangle between those structures as they are drawn in this model (the nerves re-routed through the sinus's wall, the landmarks found on this CT): where they lie follows from them, not from a dissection.",
    "centroid": {
     "L": [
-     -24.18,
-     -11.65,
-     -5.59
+     -24.11,
+     -11.66,
+     -5.46
     ],
     "R": [
-     24.47,
-     -11.97,
-     -6.72
+     24.4,
+     -11.92,
+     -6.67
     ]
    },
    "triangle": {
@@ -7255,7 +7255,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_knosp_3b.glb",
-   "bytes": 57960,
+   "bytes": 58292,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7269,7 +7269,7 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule to show Knosp grade 3B on the right (skullbase_v3_tumours.py), not a patient's tumour: grade 2's shape with the right cavernous sinus as modelled here added below the cavernous carotid (its inferior compartment), within 5 mm of the section: lateral to the lateral tangent, below the artery. 1.4 ml.",
+   "derivation": "Drawn by rule to show Knosp grade 3B on the right (skullbase_v3_tumours.py), not a patient's tumour: grade 2's shape with the right cavernous sinus as modelled here added below the cavernous carotid (its inferior compartment), within 5 mm of the section: lateral to the lateral tangent, below the artery. 1.39 ml.",
    "centroid": {
     "L": [
      -2.9,
@@ -7277,9 +7277,9 @@
      10.04
     ],
     "R": [
-     8.42,
-     1.68,
-     6.46
+     8.43,
+     1.65,
+     6.44
     ]
    },
    "tumour": {
@@ -7293,7 +7293,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_knosp_4.glb",
-   "bytes": 58220,
+   "bytes": 58564,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7315,9 +7315,9 @@
      10.04
     ],
     "R": [
-     8.48,
-     1.67,
-     6.51
+     8.49,
+     1.64,
+     6.49
     ]
    },
    "tumour": {
@@ -8851,7 +8851,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_men_tuberculum.glb",
-   "bytes": 87052,
+   "bytes": 86892,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -9073,7 +9073,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_men_petroclival.glb",
-   "bytes": 133444,
+   "bytes": 133588,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -9090,12 +9090,12 @@
    "derivation": "Drawn by rule (skullbase_v3_tumours.py), not a patient's tumour: on the dura of the petroclival junction on the right, a third of the way from the petrous apex to the jugular foramen. A ball 28 mm across (an illustrative size), its centre 0.55 of its radius off the bone, so that the bone cuts it to a broad base on the dura; kept 0.4 mm off this CT's arteries and 0.3 mm off the cranial nerves' routes, which run through it in channels. 8.09 ml.",
    "centroid": {
     "R": [
-     7.56,
+     7.55,
      -22.67,
      -9.94
     ],
     "L": [
-     7.56,
+     7.55,
      -22.67,
      -9.94
     ]
