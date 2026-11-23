@@ -373,10 +373,22 @@ per-structure opacity, slices under the cortex, the citation panel, keyboard con
   apart along their spliced courses (`ENTRY_TURN_MAX_DEG`; it fails on the abducens nerve as it was); none of the
   five re-routed nerves' centre lines lies inside either carotid mesh (`points_inside`, a ray's parity; it fails on
   the abducens nerve and the left oculomotor nerve as they were).
-- **Left:** the bend where the abducens nerve turns forward inside the sinus (17° and 21° between steps, about 50°
-  over 1.5 mm; as before). It lies inside the sinus, not in bone, so changing it needs only the cavernous step and
-  what follows it, not the skull. The check covers the carotid only: other nerves against other arteries' meshes
-  were not looked at.
+- **The bend inside the sinus** (the owner: "Please do"; branch `fix/abducens-in-sinus`, off this one). Beside the
+  carotid's horizontal segment the nerve was set half a millimetre below the artery's centre line, so it climbed to
+  the artery's side and came down 2.5 mm to its place under V1 within 4 mm: 42° (left) and 48° (right) over 1.5 mm.
+  It now lies no higher there than it then runs under V1 (`under_v1`, `lateral[2] = min(...)`), so it climbs
+  steadily from the canal (z 0 to 2.9 mm on the left, −1.0 to 1.1 on the right). Past its entry the sharpest turn
+  between 0.5 mm steps is 8° (left) and 15° (right), and the most over 1.5 mm 22° and 34°; along the whole nerve
+  17° and 18°, on its route through the cistern. 66.0 mm long on the left, 64.4 mm on the right; 0.8 mm off the
+  carotid as before.
+  - It was thought to need the cavernous step only. It did not: against the skull as carved for the old course,
+    1.3 % of the left nerve's tube lay up to 0.5 mm under the bone near the fissure (the limit is 5 %, but its card
+    would have said 0 %). So the skull chain ran again (`skull appr v3 appr v3 cav endo chiasm tumours`), and the
+    bones are re-meshed once more: 59 of v3's meshes and the endonasal grid changed (the nerve, the 13 bones, their
+    42 approach files, the Knosp 3B and 4 tumours and the petroclival meningioma). The carve round the nerve now
+    takes 0.019 ml (left) and 0.014 ml (right); 14 % and 9 % of its tube lay under the bone before it.
+    Validation 1251/1251; v2's openings, vascular and ventricles followed as above.
+- **Left:** the check covers the carotid only: other nerves against other arteries' meshes were not looked at.
 - The build backup made for this work (`pipeline/data/build/skullbase-v3.before-dorello`) was deleted on the owner's
   word once the picture had been seen.
 

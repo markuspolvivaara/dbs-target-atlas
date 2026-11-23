@@ -5706,20 +5706,20 @@
    "name": "Ethmoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_ethmoid_bone.glb",
-   "bytes": 124640,
+   "bytes": 124772,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 19 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -7.01,
-     21.82,
-     -7.73
+     -7.02,
+     21.83,
+     -7.77
     ],
     "R": [
-     7.76,
-     22.2,
-     -8.24
+     7.75,
+     22.21,
+     -8.29
     ]
    },
    "layer": "nuclei"
@@ -5750,20 +5750,20 @@
    "name": "Frontal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_frontal_bone.glb",
-   "bytes": 512412,
+   "bytes": 512284,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 47 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -24.19,
-     32.51,
-     41.93
+     -24.16,
+     32.53,
+     41.98
     ],
     "R": [
      24.33,
-     35.88,
-     40.92
+     35.87,
+     40.93
     ]
    },
    "layer": "nuclei"
@@ -5794,20 +5794,20 @@
    "name": "Inferior nasal concha bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_inferior_nasal_concha_bone.glb",
-   "bytes": 41756,
+   "bytes": 41744,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -6.56,
-     30.08,
-     -24.87
+     -6.58,
+     30.06,
+     -24.9
     ],
     "R": [
-     8.8,
-     30.28,
-     -26.85
+     8.81,
+     30.26,
+     -26.86
     ]
    },
    "layer": "nuclei"
@@ -5838,20 +5838,20 @@
    "name": "Lacrimal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_lacrimal_bone.glb",
-   "bytes": 25076,
+   "bytes": 25068,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -8.12,
-     32.37,
-     -9.76
+     -8.11,
+     32.41,
+     -9.78
     ],
     "R": [
-     9.17,
-     30.8,
-     -5.96
+     9.18,
+     30.81,
+     -5.9
     ]
    },
    "layer": "nuclei"
@@ -5882,20 +5882,20 @@
    "name": "Maxilla",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_maxilla.glb",
-   "bytes": 249824,
+   "bytes": 250448,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -14.43,
-     36.83,
-     -27.98
+     -14.41,
+     36.86,
+     -27.99
     ],
     "R": [
-     15.62,
-     36.49,
-     -29.56
+     15.63,
+     36.48,
+     -29.55
     ]
    },
    "layer": "nuclei"
@@ -5926,20 +5926,20 @@
    "name": "Nasal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_nasal_bone.glb",
-   "bytes": 40892,
+   "bytes": 40876,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -2.5,
-     48.63,
+     -2.48,
+     48.62,
      -5.66
     ],
     "R": [
      2.96,
-     47.39,
-     -6.91
+     47.4,
+     -6.9
     ]
    },
    "layer": "nuclei"
@@ -5970,20 +5970,20 @@
    "name": "Occipital bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_occipital_bone.glb",
-   "bytes": 497296,
+   "bytes": 498068,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 21 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -23.72,
-     -61.18,
-     -20.62
+     -23.73,
+     -61.12,
+     -20.71
     ],
     "R": [
-     22.26,
-     -58.24,
-     -21.4
+     22.27,
+     -58.29,
+     -21.35
     ]
    },
    "layer": "nuclei"
@@ -6014,20 +6014,20 @@
    "name": "Palatine bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_palatine_bone.glb",
-   "bytes": 80748,
+   "bytes": 80744,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -10.74,
-     18.34,
-     -25.7
+     -10.75,
+     18.36,
+     -25.73
     ],
     "R": [
-     11.49,
-     17.94,
-     -24.3
+     11.51,
+     17.93,
+     -24.31
     ]
    },
    "layer": "nuclei"
@@ -6058,20 +6058,20 @@
    "name": "Parietal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_parietal_bone.glb",
-   "bytes": 584740,
+   "bytes": 585020,
    "refIds": [],
    "category": "bone",
    "derivation": "The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 25 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -41.72,
-     -43.75,
-     53.57
+     -41.66,
+     -43.73,
+     53.64
     ],
     "R": [
      40.33,
-     -42.49,
-     58.23
+     -42.42,
+     58.29
     ]
    },
    "layer": "nuclei"
@@ -6102,20 +6102,20 @@
    "name": "Sphenoid bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_sphenoid_bone.glb",
-   "bytes": 422548,
+   "bytes": 421776,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 4 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -18.43,
-     7.16,
-     -5.61
+     -18.41,
+     7.15,
+     -5.65
     ],
     "R": [
      20.45,
      9.07,
-     -5.03
+     -5.04
     ]
    },
    "layer": "nuclei"
@@ -6146,20 +6146,20 @@
    "name": "Temporal bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_temporal_bone.glb",
-   "bytes": 717336,
+   "bytes": 716748,
    "refIds": [],
    "category": "bone",
    "derivation": "The CT angiogram's bone surface where the scan reaches (as in Skull base v2: 400 HU, thin bone down to 170 HU next to it and the walls of the air sinuses, outside the labelled vessels; holes in the thin orbital roofs closed by rule), the part nearest this bone of the Z-Anatomy model fitted onto it. Beyond the scan's edge, and on the skull's outer surface where v2 drew walls around enclosed air by rule (about 31 % of its surface in all), it is the Z-Anatomy model itself, fitted onto this CT and fitted again onto the CT's bone within 25 mm of the edge (median distance 1.06 mm before, 0.83 mm after), the CT giving way to it over the last 6 mm inside the edge, so the two make one surface (a fitted model, another person's anatomy, not this patient's). Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -49.0,
-     -23.3,
-     -12.59
+     -48.99,
+     -23.28,
+     -12.57
     ],
     "R": [
-     47.34,
-     -22.26,
-     -16.12
+     47.35,
+     -22.25,
+     -16.1
     ]
    },
    "layer": "nuclei"
@@ -6190,20 +6190,20 @@
    "name": "Vomer",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_vomer.glb",
-   "bytes": 71292,
+   "bytes": 71572,
    "refIds": [],
    "category": "bone",
    "derivation": "Cut at the midline (x = 0) into left and right halves. The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -2.05,
-     17.28,
-     -21.39
+     -2.06,
+     17.27,
+     -21.43
     ],
     "R": [
      2.66,
-     19.39,
-     -20.96
+     19.38,
+     -20.95
     ]
    },
    "layer": "nuclei"
@@ -6234,20 +6234,20 @@
    "name": "Zygomatic bone",
    "type": "bone",
    "file": "assets/skullbase-v3/sb_zygomatic_bone.glb",
-   "bytes": 103380,
+   "bytes": 103584,
    "refIds": [],
    "category": "bone",
    "derivation": "The face is the Z-Anatomy model fitted onto this CT throughout (another person's anatomy, not this patient's): this CT resolves the thin facial bones only in pieces. The model's face was fitted again on its own onto the CT's facial bone (median distance 1.24 mm before, 1.17 mm after) and blended into the CT's cranium across the sutures over 1.5 mm. Shading darkened where neighbouring bone encloses it.",
    "centroid": {
     "L": [
-     -42.13,
+     -42.17,
      23.08,
-     -6.53
+     -6.48
     ],
     "R": [
      44.72,
-     28.76,
-     -7.99
+     28.77,
+     -8.03
     ]
    },
    "layer": "nuclei"

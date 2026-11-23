@@ -134,7 +134,7 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   CT's thin-bone rule (170–400 HU next to bone) is left out: there it took the contrast-filled venous blood for bone.
   The skull is carved round the maxillary and abducens nerves (their tube plus 0.5 mm), the oculomotor nerve and the
   petrosal sinuses (plus 0.3 mm), which are routed or laid on the CT's thinner bone and lay partly under it (V2
-  64–70 %, VI 10–12 %, the left III 5 % of the tube's surface as measured at the last build; audit finding MB-06); the carving keeps 1 mm off the air sinuses. Those structures come from the cavernous and petrosal
+  64–70 %, VI 9–14 %, the left III 5 % of the tube's surface as measured at the last build; audit finding MB-06); the carving keeps 1 mm off the air sinuses. Those structures come from the cavernous and petrosal
   steps' last run, so after a change that moves them this step runs again; the clearance step's check against the skull
   as shown fails until it has. The craniotomies are cut out of it. Each bone's card says how much of it is the model. No mandible.
 - **Registration** (`pipeline/skullbase_v3.py`): each specimen's bone, blurred to the CT's resolution, is matched to
@@ -342,7 +342,9 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   the segment and no lower than 2 mm above its own entry (the segment is drawn from the foramen lacerum, 2.5 mm
   lower on this CT's left: by the first rule alone the left nerve dipped 3 mm below its entry, through bone), and it
   is led round the artery's back and side, its centre line 0.8 mm off the artery as drawn (the straight way from the
-  canal, which lies behind the artery, to the artery's lateral side ran 3 mm through it). The oculomotor and trochlear
+  canal, which lies behind the artery, to the artery's lateral side ran 3 mm through it). Beside the artery's horizontal
+  segment it lies no higher than it then runs under V1 (set by the artery's centre line, it climbed to the artery's
+  side and came down 2.5 mm within 4 mm). The oculomotor and trochlear
   nerves' lead-ins keep off the carotid as they keep off the bone, and an entry nearer than 1.2 mm to the artery is
   moved off it (the left oculomotor nerve's, by 0.5 mm: its centre line ran 2.5 mm through the back of the artery's
   label). `skullbase_v3.py finalize` holds all five re-routed nerves' centre lines out of the carotid's meshes. The ten triangles of Chung 2016 are

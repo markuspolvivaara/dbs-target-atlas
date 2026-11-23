@@ -485,6 +485,10 @@ def reroute(routes: dict, side: str, lm: dict, ica: np.ndarray, ica_r: np.ndarra
     against = ica[k_post] + np.array([s * (ica_r[k_post] + 0.7), 0.0, 0.0])
     k_h = int(np.argmin(np.abs(ica[:, 1] - (ica[:, 1].min() + ica[:, 1].max()) / 2)))
     lateral = ica[k_h] + np.array([s * (ica_r[k_h] + 1.6), 0.0, -0.5])
+    # ... and no higher there than it then runs under V1 (half a millimetre below the artery's centre line, it climbed
+    # to the artery's side and came down 2.5 mm to its place under V1 within 4 mm: a bend of about 50 degrees)
+    under_v1 = lambda y_: in_wall("Ophthalmic nerve (V1)", y_) + np.array([-s * 1.8, 0.0, -0.8])
+    lateral[2] = min(lateral[2], under_v1(lateral[1])[2])
     # (both by the carotid line's radius, which is smaller than the artery as drawn where the traced part and the
     # label meet: moved out until they are off the artery itself)
     for p_, off in ((against, OFF_CAROTID_MM), (lateral, OFF_CAROTID_MM + 0.4)):
@@ -493,7 +497,7 @@ def reroute(routes: dict, side: str, lm: dict, ica: np.ndarray, ica_r: np.ndarra
                 break
             p_ += np.array([s * 0.1, 0.0, 0.0])
     # then on forward medial to V1 (just below and inside it) until near the fissure, where they all converge
-    along_v1 = [in_wall("Ophthalmic nerve (V1)", y_) + np.array([-s * 1.8, 0.0, -0.8]) for y_ in ys if lateral[1] + 1.5 < y_ < sof[1] - 3.0]
+    along_v1 = [under_v1(y_) for y_ in ys if lateral[1] + 1.5 < y_ < sof[1] - 3.0]
     mid = [dorello, against, lateral, *along_v1]
     # round the artery's back and side, not through it
     mid = [dorello, *round_carotid(P, i0, i1, mid, art_sd), lateral, *along_v1]

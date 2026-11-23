@@ -54,13 +54,13 @@
      "boneMm": 18.2,
      "solidMm": 4.5,
      "airMm": 0.0,
-     "apartMm": 2.2
+     "apartMm": 1.6
     },
     "L": {
      "boneMm": 24.2,
      "solidMm": 5.2,
      "airMm": 0.0,
-     "apartMm": 2.3
+     "apartMm": 2.0
     }
    }
   },
