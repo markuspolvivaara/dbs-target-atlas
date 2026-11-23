@@ -254,7 +254,8 @@ the list").** On `fix/audit-models-2` (off `27ee8a6`), local commits, not pushed
     no file changed). `sbv3-fit.json`'s `drawnBone` keeps the full rebuild's values but for these two nerves (run
     after the chiasm step, the clearance also measures the chiasm, the tracts and the confluence, which a full
     rebuild does not).
-  - **Left as they were:** the abducens nerve has the same hook at Dorello's canal (turns up to 80° between 0.5 mm
+  - **Left as they were then (both done on 2026-11-23, see "The abducens nerve at Dorello's canal" below):** the
+    abducens nerve has the same hook at Dorello's canal (turns up to 80° between 0.5 mm
     steps on the left); the skull is carved round that nerve, so smoothing it means the skull step and every bone
     and approach copy again. **Found on the way, not fixed:** `skullbase_v3_cavernous.centre_lines` tries 8-sided
     rings first, and a 6-sided tube whose vertex count also fits 8 sides is read wrongly (17 of v3's tubes now). Of
@@ -265,10 +266,11 @@ the list").** On `fix/audit-models-2` (off `27ee8a6`), local commits, not pushed
     carve, so every bone copy again.
 
 **Still left without a decision, and why not done this round:**
-- The abducens nerve's hook at Dorello's canal and the tube reader's misreading (both above). MC-13 and MC-15 (v1's bone raster; v1's right "Insula" holding the fissure's white-matter
+- MC-13 and MC-15 (v1's bone raster; v1's right "Insula" holding the fissure's white-matter
   floor back to the occipital region: `skullbase_v1_brain.white_floor`, limit it to the circular sulcus's extent):
-  both need v1's brain or skull step run again, which the later v1 steps and the user's v1 endonasal rework depend
-  on: do them with that rework. AP-11, AP-15, MC-16: v1 endonasal, in the user's rework. MA-17's rest: the
+  both need v1's brain or skull step run again, which the later v1 steps depend on. AP-11, AP-15, MC-16: v1
+  endonasal. (These were waiting for the owner's v1 endonasal rework, uncommitted in the main checkout; the owner
+  called that work useless on 2026-11-23 and it was discarded, see below: they are open again on their own.) MA-17's rest: the
   sensorimotor GPi's 18 edges shared by more than two triangles (in the label's own shape).
 - Text for the owner: B-016's three cortex sentences a clinician should judge (the lunate sulcus as the V1/V2 border,
   receptive aphasia from supramarginal lesions, the inferior temporal gyrus "underneath the central temporal
@@ -291,6 +293,92 @@ The tract data (section 2) is done as far as open data go: the acoustic radiatio
 starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm further forward). Done from it: help and reset, cards into view, "what this bundle shows", surgical views,
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
+
+## The abducens nerve at Dorello's canal, and the nerves through the carotid (desktop, 2026-11-23)
+
+- Branch `fix/abducens-dorello` (off `feat/endonasal-link`, pull request 36's head), in the worktree
+  `.claude/worktrees/audit-fixes`. Local until the owner says push. The owner: "Let's go with 2" (the abducens
+  nerve's hook, with the tube reader in the same pass); then, on seeing the first result: "It looks like the nerve
+  goes into the artery".
+- **Three faults in the abducens nerve's 15 mm from the clivus to the carotid.**
+  1. *The hook.* As for III and IV, `skullbase_v3_cavernous.py` spliced the nerve from its route's point nearest the
+     entry drawn at Dorello's canal. The route passes 2.5 mm (left) and 2.2 mm (right) from that entry, so the nerve
+     ran past it and hooked back: 80° (left) and 43° (right) between points 0.5 mm apart.
+  2. *The dip on the left.* After the canal the nerve is led against the carotid's posterior vertical segment, "4 mm
+     up the segment". The segment is drawn from the foramen lacerum, which lies 2.5 mm lower on this CT's left. So
+     on the left the nerve met the carotid 3 mm *below* its entry, dipping through 6 mm of the CT's bone, and then
+     climbed 8 mm; on the right it met it 2 mm above its entry.
+  3. *Through the artery* (the owner saw it). The entry lies behind the artery and a little medial of it, the nerve's
+     place beside the artery lateral: the straight way between them cut through the artery. And the point beside it
+     was set by the carotid line's radius (1.7 mm there), which is smaller than the traced part's tube as drawn
+     (2.4 mm). The nerve's centre line ran 2.5 mm (left) and 3.8 mm (right) inside the traced part's tube. It was so
+     before this work.
+- **The rules now** (`skullbase_v3_cavernous.py`).
+  - `ENTRY_LEAD_MM["Abducens nerve (VI)"] = 8.0`: the splice begins 8 mm back along the route. No relaxation off the
+    bone: the nerve runs on the clivus's dura there, and the skull is carved round it.
+  - `VI_ON_CAROTID_MM = (4.0, 2.0)`: beside the carotid 4 mm up the segment, and no lower than 2 mm above the
+    nerve's own entry.
+  - `art_sd`: the distance to the carotid as drawn (TopBrain's label, and the traced part's tube by its centre line
+    and radius). `round_carotid()` relaxes the curve between the entry and the place beside the horizontal segment
+    off the artery, as `lead_in` relaxes a lead-in off the bone, and gives way points 1 mm apart (`VI_WAY_MM`); the
+    aim is raised until the curve drawn through them keeps `OFF_CAROTID_MM` (0.8 mm) off the artery.
+  - Its splice's points lie 0.3 mm apart (`ENTRY_STEP_MM`), as III's and IV's.
+- **Result for the abducens nerve.** Sharpest turn between 0.5 mm steps: 17° (left) and 21° (right), where it turns
+  forward inside the sinus, not at the canal. 67.4 mm long on the left (was 74.8), 66.0 mm on the right (68.5).
+  Centre line and tube outside both carotid meshes on both sides; the centre line at least 0.9 mm from the artery's
+  vertices. Its tube lay 22 % (left) and 15 % (right) under the drawn bone before the carve; now 12 % and 10 %, and
+  the carve takes 0.017 and 0.014 ml (0.030 and 0.026).
+- **The left oculomotor nerve ran through the carotid too** (found by the new check, below): 2.5 mm of its centre
+  line inside the back of the artery's label, just before its entry (3.0 mm before pull request 33). Now: the
+  lead-ins of III and IV keep off the carotid as they keep off the bone (`lead_in` is given the lesser of the two
+  distances), their way points are moved to `OFF_CAROTID_MM` from it, and an entry nearer the artery than
+  `ENTRY_OFF_CAROTID_MM` (1.2 mm) is moved straight away from it. Only the left oculomotor nerve changed: its entry
+  moved 0.5 mm (it lay 0.8 mm from the artery), its centre line now keeps 0.7 mm off the artery; sharpest turn 17°
+  (was 15°). The right oculomotor nerve and both trochlear nerves are as they were.
+  - Kept off the artery, it is squeezed against the posterior clinoid, where the drawn skull is thicker than the
+    CT's bone: 5 % of its tube lay up to 1 mm under the bone. So the skull is carved round it as round V2 and VI
+    (`skullbase_v3_skull.CLEAR_COURSES`, 0.3 mm beyond its surface: 0.004 ml on the left, nothing on the right;
+    `skullbase_v3_clearance.CARVED`; the Sources page's sentence on the carve names it).
+- **The tube reader.** `centre_lines` takes the fit whose rings are round (`RING_ROUND`), so a 6-sided tube whose
+  vertex count also fits 8 sides is read rightly: 17 of v3's tubes were not (the right abducens nerve, the greater
+  petrosal nerve on both sides, the right mandibular nerve among them). With it the posterolateral and posteromedial
+  triangles' corners moved 0.2 to 0.6 mm, the Kawase rhomboid's corner on the greater petrosal nerve 0.5 mm, and
+  six of v2's `apartMm` figures (its nerves against v3's) by 0.1 to 1.0 mm.
+  **v1 and v2 were not rebuilt.** The reader misread 12 of v1's tubes and 4 of v2's. Of those v1's steps read only the
+  greater petrosal nerve (`skullbase_v1_cavernous.py`, for its triangles: up to 0.7 mm): v1's shipped triangles
+  are as the old reader gave them, and its next rebuild will move those corners by that much.
+- **Found: the Kawase corner ran one build behind.** The landmark "Apex of petrous part" is found on the *drawn*
+  skull by `skullbase_v3.py`, and the carve round the abducens nerve is at that apex: it moved 0.7 mm (right) and
+  0.5 mm (left). `skullbase_v3_approach.py` reads it from the landmarks file of the build before for the Kawase
+  rhomboid's corner, so that corner lagged (it already did in the commit before this work: 9.67 against 10.17).
+  **After any change to the skull's carve, run the approaches twice:** `skull appr v3 appr v3 cav endo chiasm
+  tumours` (the chain script's step names; 21 minutes here). Corner and landmark now agree.
+- **Chain run** (four times in all, as the faults came to light; the last with every rule above):
+  `skullbase_v3_cavernous.py` (the new courses, which the skull step reads), then `skull appr v3 appr v3 cav endo
+  chiasm tumours`; `compress.mjs skullbase-v3`; shipped files put back where the build file is byte for byte as
+  before or every vertex lies within 0.06 mm of an old one (54 files); `skullbase_v3.py finalize` (1251/1251);
+  `skullbase_ct_openings.py` and `skullbase_build.py ct finalize` (228/228); `vascular_build.py` and its finalize
+  (it shows v3's bones: no file of its own changed); `ventricles_build.py refresh` (215/215).
+- **What changed in the shipped files (66 of v3's meshes, and the endonasal grid).** The abducens and oculomotor
+  nerves; the 13 bones and the 43 approach files made from them (bone copies, removed pieces, the Kawase guide); the
+  superior, middle, posterolateral and posteromedial triangles (corners moved 0.2 to 0.6 mm; the first two on the
+  left only, with the oculomotor nerve); the Knosp 3B and 4 tumours, the tuberculum sellae and petroclival
+  meningiomas (they keep channels for these nerves or lie on the carved bone). The bones' surfaces are where they
+  were, apart from the carves: in the first of the four runs half of every bone's vertices lay within 0.002 mm of
+  the old surface and 99 % within 0.4 mm (`surfcmp.py` in the scratchpad). The rest is the skull's mesh coming out
+  differently decimated in places and seam triangles falling to the neighbouring bone (single vertices up to 5 mm
+  from the old surface). As in the refit, the bones are shipped as they come: they are pieces of one surface and
+  must match at their seams.
+- **New checks in `skullbase_v3.validate()`** (26 in all): III, IV and VI turn at most 30° between points 0.5 mm
+  apart along their spliced courses (`ENTRY_TURN_MAX_DEG`; it fails on the abducens nerve as it was); none of the
+  five re-routed nerves' centre lines lies inside either carotid mesh (`points_inside`, a ray's parity; it fails on
+  the abducens nerve and the left oculomotor nerve as they were).
+- **Left:** the bend where the abducens nerve turns forward inside the sinus (17° and 21° between steps, about 50°
+  over 1.5 mm; as before). It lies inside the sinus, not in bone, so changing it needs only the cavernous step and
+  what follows it, not the skull. The check covers the carotid only: other nerves against other arteries' meshes
+  were not looked at.
+- The build backup made for this work (`pipeline/data/build/skullbase-v3.before-dorello`) was deleted on the owner's
+  word once the picture had been seen.
 
 ## Rechecks and small engineering leftovers (desktop, 2026-11-23)
 
@@ -341,11 +429,12 @@ per-structure opacity, slices under the cortex, the citation panel, keyboard con
     panels say what a link keeps.
   - The state holds them only in the endonasal view (`sanitize`); the panel keeps its own while another view is
     shown, as before, and gives them back to the state on return. Back to an endonasal entry opens that entry's.
-  - **The main checkout holds the owner's uncommitted work on that same file** (the v1 endonasal view). The changes
-    here are kept away from its hunks (one import, one field, the constructor's argument, `render`, three new
-    methods after it, a line each at the ends of `enter`, `applyScope` and `takeAway`, a function at the end of the
-    file). The owner's diff as it stood on 2026-11-23 applies on top of this change without a conflict
-    (`git apply --check`, nothing written).
+  - The main checkout held the owner's uncommitted work on that same file (the v1 endonasal view: the nose's drawn
+    mucosa, cleft and septal cartilage; 15 files). **It was discarded on 2026-11-23 at the owner's word** ("it's
+    useless now"; asked which was meant, the owner chose it). Before that it was saved, outside git, in the main
+    checkout's `.claude/discarded/v1-endonasal-uncommitted-2026-11-23/` (`changes.patch`, a binary patch against
+    `bcb8038`, and the built script it had left untracked): delete the folder when it is surely not wanted. The main
+    checkout is clean, still on `audit/2026-11-10`.
   - (The ventricles' endoscope has been in its link all along: `es`, `ed`, `ea`, `eo`, `er`, `ev`.)
 - **Small ones:** the cortex reads a slice plane whose value is not a number as the other sections do (shown at its
   own position; it had left it off); the ventricles' help lists the endoscope's keys and the skull base's the

@@ -54,13 +54,13 @@
      "boneMm": 18.2,
      "solidMm": 4.5,
      "airMm": 0.0,
-     "apartMm": 1.8
+     "apartMm": 2.2
     },
     "L": {
      "boneMm": 24.2,
      "solidMm": 5.2,
      "airMm": 0.0,
-     "apartMm": 1.2
+     "apartMm": 2.3
     }
    }
   },
@@ -1167,7 +1167,7 @@
      "boneMm": 0.2,
      "solidMm": 0.0,
      "airMm": 0.0,
-     "apartMm": 0.4
+     "apartMm": 0.3
     },
     "L": {
      "boneMm": 9.5,
@@ -1695,7 +1695,7 @@
      "boneMm": 5.0,
      "solidMm": 4.0,
      "airMm": 0.0,
-     "apartMm": 2.3
+     "apartMm": 2.2
     },
     "L": {
      "boneMm": 6.8,
@@ -2314,13 +2314,13 @@
      "boneMm": 6.0,
      "solidMm": 1.8,
      "airMm": 0.0,
-     "apartMm": 4.4
+     "apartMm": 4.9
     },
     "L": {
      "boneMm": 7.8,
      "solidMm": 4.0,
      "airMm": 0.0,
-     "apartMm": 5.1
+     "apartMm": 5.2
     }
    }
   },

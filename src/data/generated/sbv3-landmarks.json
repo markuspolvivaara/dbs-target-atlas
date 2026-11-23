@@ -675,9 +675,9 @@
   "bone": "Temporal bone",
   "part": null,
   "ras": [
-   10.17,
-   -7.0,
-   -2.8
+   10.73,
+   -7.42,
+   -2.83
   ],
   "side": "R",
   "boneFrom": "located on this CT",
@@ -690,9 +690,9 @@
   "bone": "Temporal bone",
   "part": null,
   "ras": [
-   -9.61,
-   -7.51,
-   -1.68
+   -10.1,
+   -7.57,
+   -1.72
   ],
   "side": "L",
   "boneFrom": "located on this CT",

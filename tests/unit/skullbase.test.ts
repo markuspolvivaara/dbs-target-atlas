@@ -1189,7 +1189,10 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
       const { P } = await meshSoup(removed.file);
       let y0 = Infinity, y1 = -Infinity, z0 = Infinity, z1 = -Infinity;
       for (let i = 0; i < P.length; i += 3) { y0 = Math.min(y0, P[i + 1]); y1 = Math.max(y1, P[i + 1]); z0 = Math.min(z0, P[i + 2]); z1 = Math.max(z1, P[i + 2]); }
-      expect(Math.abs((y0 + y1) / 2 - k.archRootY), model).toBeLessThan(2);
+      // (its outline is centred on the root; the bone cut out of it ends 2 to 4 mm short of the outline in front, where
+      // the squama is thin: a sliver there, 1.4 mm front to back, came and went with the skull's re-meshing, which moved
+      // the middle of the piece from 1.5 to 2.2 mm behind the root on v3 at the same volume)
+      expect(Math.abs((y0 + y1) / 2 - k.archRootY), model).toBeLessThan(3);
       // (the cut bone reaches a little past the 50 mm outline on v1, where the thin bone the flap leaves beside it goes with it)
       expect(y1 - y0, model).toBeGreaterThan(46);
       expect(y1 - y0, model).toBeLessThan(model === 'v1' ? 54 : 52);

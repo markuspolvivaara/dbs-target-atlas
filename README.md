@@ -132,9 +132,9 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   splits it. On the skull's outer surface, v2's rule-drawn walls around enclosed air (they made ridges and a shelf over
   the frontal sinus) and the CT's bone within 5 mm of them give way to the model too. Inside the cavernous sinuses the
   CT's thin-bone rule (170–400 HU next to bone) is left out: there it took the contrast-filled venous blood for bone.
-  The skull is carved round the maxillary and abducens nerves (their tube plus 0.5 mm) and the petrosal sinuses (plus
-  0.3 mm), which are routed or laid on the CT's thinner bone and lay partly under it (V2 50–70 %, VI 25–30 %; audit
-  finding MB-06); the carving keeps 1 mm off the air sinuses. Those structures come from the cavernous and petrosal
+  The skull is carved round the maxillary and abducens nerves (their tube plus 0.5 mm), the oculomotor nerve and the
+  petrosal sinuses (plus 0.3 mm), which are routed or laid on the CT's thinner bone and lay partly under it (V2
+  64–70 %, VI 10–12 %, the left III 5 % of the tube's surface as measured at the last build; audit finding MB-06); the carving keeps 1 mm off the air sinuses. Those structures come from the cavernous and petrosal
   steps' last run, so after a change that moves them this step runs again; the clearance step's check against the skull
   as shown fails until it has. The craniotomies are cut out of it. Each bone's card says how much of it is the model. No mandible.
 - **Registration** (`pipeline/skullbase_v3.py`): each specimen's bone, blurred to the CT's resolution, is matched to
@@ -336,7 +336,16 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   splices begin 12 and 10 mm back along their routes, so each comes to its dural entry in one bend (spliced from the
   route's nearest point, 2 to 4 mm from the entry, each ran past it and hooked back); the oculomotor nerve's way is
   led round the posterior clinoid, 1 mm off the CT's bone where there is room, and the trochlear nerve climbs to its
-  level in the wall over 9 mm past its entry (it was 5 mm). The ten triangles of Chung 2016 are
+  level in the wall over 9 mm past its entry (it was 5 mm). The abducens nerve's splice begins 8 mm back in the same
+  way (it had hooked back to Dorello's canal, turning 80° on the left); it is not led off the bone, as it runs on the
+  clivus's dura there and the skull is carved round it. It meets the carotid's posterior vertical segment 4 mm up
+  the segment and no lower than 2 mm above its own entry (the segment is drawn from the foramen lacerum, 2.5 mm
+  lower on this CT's left: by the first rule alone the left nerve dipped 3 mm below its entry, through bone), and it
+  is led round the artery's back and side, its centre line 0.8 mm off the artery as drawn (the straight way from the
+  canal, which lies behind the artery, to the artery's lateral side ran 3 mm through it). The oculomotor and trochlear
+  nerves' lead-ins keep off the carotid as they keep off the bone, and an entry nearer than 1.2 mm to the artery is
+  moved off it (the left oculomotor nerve's, by 0.5 mm: its centre line ran 2.5 mm through the back of the artery's
+  label). `skullbase_v3.py finalize` holds all five re-routed nerves' centre lines out of the carotid's meshes. The ten triangles of Chung 2016 are
   drawn as flat patches between those structures (the middle triangle's front corner where the oculomotor and
   trochlear nerves, side by side in the wall, reach the superior orbital fissure); each triangle's card and the view's text say what it holds
   (Chavez-Herrera 2023, Drazin 2017) and, for the five anterior ones, what a transcranial, a transorbital and an

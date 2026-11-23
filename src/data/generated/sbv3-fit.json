@@ -992,15 +992,31 @@
    "tb_abducens_nerve_vi": {
     "L": {
      "marginMm": 0.5,
-     "insideBefore": 0.223,
-     "carvedMl": 0.03,
+     "insideBefore": 0.121,
+     "carvedMl": 0.017,
      "keptOffAirVoxels": 0,
      "insideAfter": 0.0
     },
     "R": {
      "marginMm": 0.5,
-     "insideBefore": 0.152,
-     "carvedMl": 0.026,
+     "insideBefore": 0.099,
+     "carvedMl": 0.014,
+     "keptOffAirVoxels": 0,
+     "insideAfter": 0.0
+    }
+   },
+   "tb_oculomotor_nerve_iii": {
+    "L": {
+     "marginMm": 0.3,
+     "insideBefore": 0.053,
+     "carvedMl": 0.004,
+     "keptOffAirVoxels": 0,
+     "insideAfter": 0.0
+    },
+    "R": {
+     "marginMm": 0.3,
+     "insideBefore": 0.0,
+     "carvedMl": 0.0,
      "keptOffAirVoxels": 0,
      "insideAfter": 0.0
     }
@@ -1268,7 +1284,7 @@
   },
   "Inferior ophthalmic vein": {
    "L": {
-    "share": 0.284,
+    "share": 0.301,
     "deepestMm": 1.6
    },
    "R": {
@@ -1378,8 +1394,8 @@
   },
   "Oculomotor nerve (III)": {
    "L": {
-    "share": 0.014,
-    "deepestMm": 0.4
+    "share": 0.0,
+    "deepestMm": 0.2
    },
    "R": {
     "share": 0.0,

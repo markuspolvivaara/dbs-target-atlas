@@ -139,10 +139,10 @@
     }
    },
    "validation": {
-    "checks": 63,
+    "checks": 65,
     "failed": []
    },
-   "revision": "cbdeaeb",
+   "revision": "bb460e1",
    "date": "2026-11-23"
   },
   {
@@ -194,7 +194,7 @@
    "validation": {
     "check": "skullbase_v3_clearance.check: none of it past the medulla's cut end"
    },
-   "revision": "cbdeaeb",
+   "revision": "bb460e1",
    "date": "2026-11-23"
   },
   {
@@ -369,7 +369,7 @@
     "checks": 30,
     "failed": []
    },
-   "revision": "cbdeaeb",
+   "revision": "bb460e1",
    "date": "2026-11-23"
   },
   {
@@ -539,7 +539,7 @@
    "validation": {
     "failed": []
    },
-   "revision": "cbdeaeb",
+   "revision": "bb460e1",
    "date": "2026-11-23"
   },
   {
@@ -599,7 +599,7 @@
    "validation": {
     "failed": []
    },
-   "revision": "cbdeaeb",
+   "revision": "bb460e1",
    "date": "2026-11-23"
   }
  ]
