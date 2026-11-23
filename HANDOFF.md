@@ -377,8 +377,8 @@ per-structure opacity, slices under the cortex, the citation panel, keyboard con
   over 1.5 mm; as before). It lies inside the sinus, not in bone, so changing it needs only the cavernous step and
   what follows it, not the skull. The check covers the carotid only: other nerves against other arteries' meshes
   were not looked at.
-- A build backup is in `pipeline/data/build/skullbase-v3.before-dorello` (352 MB): delete it when the owner is
-  happy with the result.
+- The build backup made for this work (`pipeline/data/build/skullbase-v3.before-dorello`) was deleted on the owner's
+  word once the picture had been seen.
 
 ## Rechecks and small engineering leftovers (desktop, 2026-11-23)
 
