@@ -294,6 +294,78 @@ starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm furth
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
 
+## Structures through each other: the sweep, and the jugular foramen (desktop, night of 2026-11-24)
+
+- Branch `fix/nerves-through-vessels` (off `fix/abducens-in-sinus`, pull request 38's head), in the worktree
+  `.claude/worktrees/audit-fixes`. **Local, not pushed: the owner checks it first** ("I would like to check them in
+  the morning"). The owner had seen the abducens nerve run into the carotid; asked what to run overnight, they chose
+  a sweep of the models for more of the same, fixing what has a clear rule.
+- **The sweep** (`sweep.py` in the scratchpad's `sweep/`; read-only): every nerve, artery and vein as shown, its
+  vertices tested against every artery, vein and brain part that is a closed mesh (a ray's parity), in v3, v1 and
+  v2. 239 pairs with something inside in v3, 308 in v1, 161 in v2; most are by design (a branch at its parent
+  artery, a vein at its sinus, the carotid and the nerves in the cavernous sinus, the abducens nerve in the inferior
+  petrosal sinus at Dorello's canal). Not tested: the brain parts, whose halves are not closed meshes on their own;
+  the artery-artery, vein-vein and artery-vein pairs were not read one by one.
+- **Fixed: the jugular foramen (v3).** Routed like the other nerves, 17 to 21 % of the glossopharyngeal nerve's tube
+  and 7 to 19 % of the accessory nerve's lay in the sigmoid sinus (up to 1.7 mm deep), 11 % of the left vagus
+  nerve's in the inferior petrosal sinus, and the left IX and XI ran through each other. TopBrain does not label
+  these veins, so the routing did not know them. Now (`skullbase_v3_base.jugular_routes`, `skullbase_nerves.route`'s
+  `avoid`):
+  - the sigmoid sinus as traced, the inferior petrosal sinus as laid and TotalSegmentator's jugular vein count as
+    vessel lumen for IX, X and XI (0.8 mm round the sinuses' tubes), as TopBrain's labels do for every nerve;
+  - each of the three keeps 1.2 mm from the centre lines of those routed before it;
+  - the accessory nerve is led beside the vagus nerve through the foramen (`beside_vagus`);
+  - the order is X, IX, XI. **This order is tuned to this CT**: with IX first the left XI went the long way round
+    the sinus (55 mm against 46, 100° within 3 mm); with IX last it went the long way (52 mm against 49).
+  - Sources (PubMed abstracts only, full texts not read): Ayeni 1995 (PMID 7472562): IX through a smaller
+    anteromedial opening of the dura, X and XI through one larger opening; all three anteromedial to the jugular
+    bulb. Rubinstein 1995 (PMID 7900591, PMC8337704): X and XI could not be separated on CT. Katsuta and Rhoton
+    1997 (PMID 9218307): the neural part lies between the sigmoid and petrosal parts of the foramen. **They are in
+    the code's comments and the README, not on a card or in the reference list: the owner to say if they belong there.**
+  - Result: none of the three touches a vein or an artery; they pass 1.2 to 2.9 mm from each other. Lengths and
+    sharpest turns (between 0.5 mm steps; over 3 mm): left IX 48.6 mm, 27°, 73° (was 46.2, 41°, 82°); left X 42.1,
+    19°, 64° (41.4, 34°, 60°); left XI 45.6, 21°, 67° (48.1, 20°, 61°); right IX 42.3, 14°, 52°; X as it was;
+    XI 46.4, 18°, 76°. The accessory nerve lies up to 11 mm (left) and 8 mm (right) from where the fitted model has
+    it; the check of that distance takes the nearer of its fitted course and the vagus nerve's route
+    (`maxFromGuideMm`: 4.1 and 4.9 mm).
+  - **The landmark "Jugular foramen" stays where it was.** It was taken from the three nerves as drawn (where they
+    are most enclosed by bone); with the nerves in the medial part of the opening it moved 4 to 6 mm, which moved the
+    petroclival meningioma (its site lies a third of the way from the petrous apex to this landmark) and dropped
+    three of that view's copies. It is now taken from the three nerves' plain least-cost paths through the whole
+    opening (`through` in `build`), as before; the landmark's text says so.
+  - Not the sinus that gives way: the inferior petrosal sinus is one of the courses the skull is carved round, so
+    moving it means the skull chain. **Each skull chain re-meshes every bone and its approach copies: about 25 MB of
+    binary files in git, twice with `dist/`.** Three ran on 23 November.
+  - Chain: `v3 cav endo chiasm tumours` (8 minutes; six times, as the faults came to light), `compress.mjs`, the
+    unchanged files put back, `skullbase_v3.py finalize` (1269/1269, with 18 new checks: the three nerves' centre
+    lines inside none of the three veins' meshes), v2's openings (228/228), vascular, ventricles refresh. Six shipped
+    files changed: the three nerves and their copies for the Koos III and IV views. A unit test on the shipped meshes
+    holds IX, X, XI out of the three veins and III, IV, VI out of the carotid.
+  - Still so, as before: 4 to 21 % of these nerves' tubes lie up to 0.9 mm under the *drawn* bone of the foramen (the
+    skull as drawn is thicker than the CT's bone there; the right XI rose from 11 to 21 %, the left fell from 22 to
+    11 %); in the Koos IV view three points each of IX's and XI's copies are left within the tumour's margin.
+- **For the owner to judge: the optic chiasm and the anterior cerebral arteries (v3).** This CT's A1 segments run
+  through the middle of the chiasm as drawn: 13 to 14 % of its surface lies up to 1 mm inside them, and a few
+  vertices of the drawn optic tracts. The chiasm is drawn where the fitted model puts it (its centre 17.8 mm above
+  the fossa, tilted 33°). Tried, and taken out again (`chiasm_scan.py`, `chiasm_probe.py` in the scratchpad's
+  `night/`): lowering it along its own normal or straight down clears the arteries only at 5 mm, and from 2 to
+  3 mm its front corners meet the supraclinoid carotids; the tracts as drawn (tubes 1.7 mm in radius, 12 mm long)
+  meet the artery at every position tried. The whole fitted optic apparatus sits about 4 to 5 mm high against this
+  patient's arteries; where it should lie is a judgement, not a rule found.
+- **Small contacts left in v3** (a few vertices each, under 0.5 mm unless said): the left trigeminal nerve and the
+  superior cerebellar artery's fitted course (5 vertices); the left trigeminal ganglion and the petrous carotid
+  (2 vertices, 1.6 mm from the artery's surface); the right mandibular nerve and the accessory meningeal artery at
+  the foramen ovale (7); the left hypoglossal nerve and the vertebral artery (3); the left optic nerve and the
+  ophthalmic artery (1); III, IV and VI and the ophthalmic veins at the superior orbital fissure (0.7 to 2.2 % of
+  each nerve, up to 1 mm).
+- **v1 (Z-Anatomy's own courses), not changed:** the glossopharyngeal nerve through the internal carotid artery in
+  the neck (2.5 % of its tube, 1.9 mm deep, both sides); the abducens nerve in the inferior petrosal sinus (3.5 %)
+  and in the carotid (1.2 %, 1.3 mm); the trochlear nerve in the superior ophthalmic vein (3.2 %); the hypoglossal
+  nerve in the carotid, the accessory and vagus nerves in the vertebral artery, the oculomotor nerve in the
+  posterior cerebral artery (each under 1 %). 27 nerve-artery pairs in all, most under 0.5 %.
+- **v2**, whose nerves are kept as fitted and say so on their cards: the left glossopharyngeal nerve in the
+  vertebral artery (3.9 %), the left oculomotor nerve in the posterior cerebral artery (2.4 %), and smaller ones.
+
 ## The abducens nerve at Dorello's canal, and the nerves through the carotid (desktop, 2026-11-23)
 
 - Branch `fix/abducens-dorello` (off `feat/endonasal-link`, pull request 36's head), in the worktree
