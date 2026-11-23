@@ -2,7 +2,7 @@ import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type LayerKey } from '../state';
 import type { ViewState } from '../viewer/scene';
 import { decodeOpacity, encodeOpacity } from '../viewer/scene';
-import { decodeCamera, decodeClip, decodeHemi, decodeHidden, decodeLayers, encodeCamera, encodeClip, encodeHemi, encodeHidden, encodeLayers, hashOf, readHash } from '../viewlink';
+import { decodeCamera, decodeMeasure, encodeMeasure, decodeClip, decodeHemi, decodeHidden, decodeLayers, encodeCamera, encodeClip, encodeHemi, encodeHidden, encodeLayers, hashOf, readHash } from '../viewlink';
 import { BS_GROUP } from './groups';
 import { defaultLabels, labelsFrom, labelsParam } from '../labels';
 
@@ -52,6 +52,7 @@ export function encodeBs(s: BsState): string {
     { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
     encodeHidden(p, s.hidden);
     encodeOpacity(p, s.opacity);
+    encodeMeasure(p, s.measured);
   }
   return hashOf(s.page, p);
 }
@@ -76,5 +77,6 @@ export function decodeBs(hash: string): BsState {
   s.labels = labelsFrom(lb);
   s.hidden = decodeHidden(p);
   decodeOpacity(p, s);
+  decodeMeasure(p, s);
   return s;
 }

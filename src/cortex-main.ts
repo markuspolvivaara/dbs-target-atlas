@@ -12,6 +12,8 @@ import { bootSection } from './ui/section';
 function sanitize(s: CortexState): CortexState {
   if (!VIEW.has(s.view)) s.view = 'lateral';
   if (s.sel && !CTX.has(s.sel)) s.sel = null;
+  // (distances are measured on the pial surface: the inflated one has no Measure tool, so a link's measurement goes)
+  if (s.inflate) delete s.measured;
   return s;
 }
 

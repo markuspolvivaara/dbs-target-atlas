@@ -49,6 +49,8 @@ bootSection({
       ['N', 'Name labels: hover → all → off'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
       // (the surgical views' keys, on v1 as on the default model; v2 has no surgical views)
       ...(SB_MODEL !== 'ct' ? surgicalKeyRows() : []),
+      // (the endonasal view's endoscope: EndonasalPanel.onKey; said in its panel, and here with the other keys)
+      ...(SB_GROUP.has('endonasal') ? [['← → ↑ ↓', 'Endonasal view: turn the endoscope'], ['W  S', 'Endonasal view: the endoscope in and out'], ['Q  E', 'Endonasal view: rotate its picture']] as [string, string][] : []),
     ],
     tap: 'a structure or landmark',
   },

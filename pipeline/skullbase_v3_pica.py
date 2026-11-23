@@ -292,6 +292,15 @@ def build(ex2: dict) -> dict:
     return rep
 
 
+def stub_centroid() -> dict:
+    """The labelled origin as built: each side's centroid (the mean of its vertices). The item came from v2's manifest
+    with the centroid of the whole labelled artery, 6 and 10 mm from the origin that is all v3 draws of it: its label
+    stood off it by that much."""
+    from glb import read_glb_full
+    nodes = read_glb_full(BUILD / "sb_posterior_inferior_cerebellar_artery.glb")
+    return {s: np.asarray(nodes[s]["positions"], float).reshape(-1, 3).mean(0).round(2).tolist() for s in ("L", "R")}
+
+
 def items(items: list) -> None:
     """The manifest's PICA (this build's file, with the shapes) and its carried-on course (pica.json's)."""
     p = BUILD / "pica.json"
@@ -302,6 +311,7 @@ def items(items: list) -> None:
     it = next(i for i in items if i["name"] == NAME)
     it["file"] = "assets/skullbase-v3/sb_posterior_inferior_cerebellar_artery.glb"
     it["morph"] = True
+    it["centroid"] = stub_centroid()
     base = it.get("derivation", "").split(" This angiogram labels only")[0].split(" Only its origin")[0]
     it["derivation"] = (base + f" Only its origin is shown: its first {STUB_MM:g} mm from the vertebral artery. This angiogram labels "
                         "only the PICA's first part, and this patient's vertebral arteries are long and tortuous: the labelled PICAs leave "

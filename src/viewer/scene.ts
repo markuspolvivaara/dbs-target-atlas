@@ -91,6 +91,9 @@ export interface ViewState {
   morphs?: Record<string, number>;
   /** a structure's own opacity, 0..1, on top of its look and its layer's opacity (the structure bar's slider) */
   opacity?: Record<string, number>;
+  /** a finished measurement: its two points (frame mm, to a hundredth); the Measure tool is on while there is one
+   * (ui/measure.ts) */
+  measured?: [V3, V3];
 }
 
 /** A structure's own opacities in a link: `sop=id:0.40,id2:0.25` (1 is left out). */

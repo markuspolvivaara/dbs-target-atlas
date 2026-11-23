@@ -1237,6 +1237,12 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     this.renderer.domElement.style.cursor = on ? 'crosshair' : '';
   }
 
+  /** A measurement's points from the view's state (a link's, or none), drawn as picked ones are (ui/measure.ts). */
+  setMeasure(pts: THREE.Vector3[]): void {
+    this.measurePts = pts.map((q) => q.clone());
+    this.drawMeasure();
+  }
+
   private pickables(): THREE.Object3D[] {
     const out: THREE.Object3D[] = [];
     for (const it of this.items.values()) {

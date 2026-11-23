@@ -1741,3 +1741,58 @@ test('tracts: the acoustic radiation is a shell, hidden until its eye is clicked
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// UI-13: a measured distance was in no link, and Back left the section instead of returning to the view before
+test('links: a measured distance is in the link and opens again; Back steps through the views looked at', async ({ page }) => {
+  const g = guard(page);
+  const grp = () => page.evaluate(() => (window as unknown as { __atlas: { state(): { grp: string } } }).__atlas.state().grp);
+  const out = page.locator('.measure-out'), tool = page.locator('.tbtn', { hasText: 'Measure' });
+  await open(page, './brainstem/#/atlas?g=overview');
+  const box = (await page.locator('.viewer-host canvas').boundingBox())!;
+  await page.keyboard.press('m');
+  await page.mouse.click(box.x + box.width * 0.45, box.y + box.height * 0.45);
+  await page.mouse.click(box.x + box.width * 0.55, box.y + box.height * 0.62);
+  await expect(out).toContainText(/Distance \d/);
+  const text = (await out.textContent())!;
+  await expect.poll(() => new URL(page.url()).hash).toMatch(/[?&]m=(-?[\d.]+%2C){5}-?[\d.]+(&|$)/);
+  // the link opens the same distance again, with the tool on
+  await open(page, page.url());
+  await expect(out).toHaveText(text);
+  await expect(tool).toHaveAttribute('aria-pressed', 'true');
+  // two other views, then Back twice and Forward once: each view again, and the first with its measurement
+  const first = page.url();
+  await page.locator('.grp-chips .chip', { hasText: 'Arteries' }).click();
+  await settle(page);
+  await page.locator('.grp-chips .chip', { hasText: 'Midbrain' }).click();
+  await settle(page);
+  expect(await grp()).toBe('sez_midbrain');
+  await page.goBack();
+  await expect.poll(grp).toBe('arteries');
+  await page.goBack();
+  await expect.poll(grp).toBe('overview');
+  await settle(page);
+  expect(page.url()).toBe(first);
+  await expect(out).toHaveText(text);
+  await page.goForward();
+  await expect.poll(grp).toBe('arteries');
+  // the camera, a selection and the tool itself add no entry: Back from here is still the first view
+  await settle(page);
+  await page.keyboard.press('h');
+  await page.keyboard.press('m');
+  await expect(tool).toHaveAttribute('aria-pressed', 'false');
+  await expect.poll(() => new URL(page.url()).hash).not.toMatch(/[?&]m=/);
+  await page.goBack();
+  await expect.poll(grp).toBe('overview');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// (found in the shell refactor) the endoscopes' keys were in no help
+test('help: the ventricles and the skull base list their endoscopes\' keys', async ({ page }) => {
+  await open(page, './ventricles/#/atlas?g=etv');
+  const keys = () => page.locator('dialog.help dl').first().locator('dt').allTextContents();
+  expect(await keys()).toEqual(expect.arrayContaining(['W  S', '← → ↑ ↓', 'Q  E', 'V']));
+  await open(page, './skullbase/#/atlas?g=endonasal');
+  expect(await keys()).toEqual(expect.arrayContaining(['← → ↑ ↓', 'W  S', 'Q  E']));
+  await expect(page.locator('#panel p.aside', { hasText: 'A copied link opens this view at its start' })).toHaveCount(1);
+});

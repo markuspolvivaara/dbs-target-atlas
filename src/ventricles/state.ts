@@ -2,7 +2,7 @@ import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD } from '../state';
 import type { ViewState } from '../viewer/scene';
 import { decodeOpacity, encodeOpacity } from '../viewer/scene';
-import { decodeCamera, decodeHemi, decodeHidden, encodeCamera, encodeHemi, encodeHidden, hashOf, readHash } from '../viewlink';
+import { decodeCamera, decodeMeasure, encodeMeasure, decodeHemi, decodeHidden, encodeCamera, encodeHemi, encodeHidden, hashOf, readHash } from '../viewlink';
 import { VE_GROUP } from './groups';
 import { ETV, TARGETS, TRAJ, type Target } from './index';
 import { defaultLabels, labelsFrom, labelsParam } from '../labels';
@@ -110,6 +110,7 @@ export function encodeVe(s: VeState): string {
     { const lbv = labelsParam(s.labels); if (lbv) p.set('lb', lbv); }
     encodeHidden(p, s.hidden);
     encodeOpacity(p, s.opacity);
+    encodeMeasure(p, s.measured);
   }
   return hashOf(s.page, p);
 }
@@ -156,5 +157,6 @@ export function decodeVe(hash: string): VeState {
   s.labels = labelsFrom(lb);
   s.hidden = decodeHidden(p);
   decodeOpacity(p, s);
+  decodeMeasure(p, s);
   return s;
 }

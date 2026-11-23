@@ -15,6 +15,7 @@ import { figureControl } from './figure';
 import { structureBar } from './structurebar';
 import { refLinksFrom } from './reflinks';
 import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
+import { MeasureTool } from './measure';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: VeState) => void, opts?: { camera?: boolean }) => void;
@@ -203,15 +204,15 @@ export class VentriclesAtlasPage {
   private tabBtns: Record<string, HTMLButtonElement> = {};
   private tip = h('div', { class: 'tip', role: 'tooltip', hidden: true });
   private readout = h('div', { class: 'readout', 'aria-live': 'off' });
-  private measureOut = h('div', { class: 'measure-out', 'aria-live': 'polite', hidden: true });
   private legend = h('ul', { class: 'legend3d' });
   private labels = h('div', { class: 'labels', 'aria-hidden': 'true' });
   private leaders = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   private gizmo = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   private status = stageStatus(() => { void this.viewer.retryFailed(); });
-  private measureBtn!: HTMLButtonElement;
   private sheetState: 'peek' | 'full' = 'peek';
-  private measurePts: THREE.Vector3[] = [];
+  /** the toolbar's Measure tool (ui/measure.ts): its finished measurement is part of the view's state */
+  private measure = new MeasureTool(() => this.viewer, { prompt: 'Click or tap two points on any structure.', distance: (mm) => `Distance ${mm} mm (on this CT)` },
+    (m) => this.update((s) => { if (m) s.measured = m; else delete s.measured; }));
   private lastKey = '';
   private lastCath = '';
   private lastScope = '';
@@ -252,13 +253,12 @@ export class VentriclesAtlasPage {
         onclick: () => this.update((s) => { s.hemi = v; }),
       }, h('span', { class: 'long' }, label), h('span', { class: 'short', 'aria-hidden': 'true' }, short)));
     }
-    this.measureBtn = h('button', { type: 'button', class: 'tbtn', 'aria-pressed': 'false', title: 'Measure distance between two points (M)', onclick: () => this.toggleMeasure() }, 'Measure');
     const share = h('button', { type: 'button', class: 'tbtn', title: 'Copy a link to this exact view', onclick: () => { void this.copyLink(share); } }, 'Copy link');
     const labelGroup = h('div', { class: 'tgroup seg', role: 'group', 'aria-label': 'Name labels' },
       h('span', { class: 'tlabel' }, 'Labels'),
       ...([['all', 'All', 'Label everything highlighted in this view'], ['hover', 'Hover', 'Label only what you point at or select'], ['off', 'Off', 'No name labels']] as const)
         .map(([v, label, title]) => h('button', { type: 'button', class: 'tbtn', 'data-labels': v, 'aria-pressed': 'false', title: `${title} (N cycles)`, onclick: () => this.update((s) => { s.labels = v; }) }, label)));
-    toolbar.append(presetGroup, hemiGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share,
+    toolbar.append(presetGroup, hemiGroup, labelGroup, h('div', { class: 'tgroup' }, this.measure.btn, share,
       figureControl(() => ({ viewer: this.viewer, stage: this.stage, labels: this.labels, leaders: this.leaders, gizmo: this.gizmo, legend: this.legend }))), viewButtons(() => this.resetView()));
     this.gizmo.setAttribute('viewBox', '-40 -40 80 80');
     this.gizmo.setAttribute('class', 'gizmo');
@@ -266,7 +266,7 @@ export class VentriclesAtlasPage {
     const legendOpen = window.matchMedia('(min-width: 900px) and (min-height: 700px)').matches;
     const bottom = h('div', { class: 'stage-bottom' },
       h('details', { class: 'legend-box', open: legendOpen }, h('summary', {}, 'Legend'), this.legend),
-      h('div', { class: 'readout-box' }, this.measureOut, this.readout));
+      h('div', { class: 'readout-box' }, this.measure.out, this.readout));
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
     this.stage.append(host, this.endoMask, this.endoCompass.a, this.endoCompass.p, this.insetFrame, toolbar, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
@@ -279,7 +279,7 @@ export class VentriclesAtlasPage {
       hover: (info, x, y) => this.showTip(info, x, y),
       pick: (info) => { if (info.id && info.kind === 'structure') this.update((s) => { s.sel = info.id; }); },
       readout: (ras) => this.showReadout(ras),
-      measure: (pts) => { this.measurePts = pts; this.showMeasure(); },
+      measure: (pts) => this.measure.picked(pts),
       cameraChanged: (p, t) => this.update((s) => {
         s.cam = { preset: s.cam.preset, pos: [p.x, p.y, p.z], tgt: [t.x, t.y, t.z] };
       }, { camera: false }),
@@ -347,6 +347,7 @@ export class VentriclesAtlasPage {
   render(s: VeState, opts: { camera: boolean }): void {
     const prev = this.s;
     this.s = s;
+    this.measure.sync(s.measured);
     this.viewer.apply(s, { animateCamera: opts.camera }).then(() => {
       this.renderLegend();
       // the meshes are loaded now: whether the tip is in the ventricles can be told
@@ -756,22 +757,6 @@ export class VentriclesAtlasPage {
     this.readout.append(h('span', { class: 'k' }, 'mm'), ` x ${fmtMm(ras.x)}  y ${fmtMm(ras.y)}  z ${fmtMm(ras.z)} from the hypophysial fossa`);
   }
 
-  private toggleMeasure(): void {
-    const on = this.measureBtn.getAttribute('aria-pressed') !== 'true';
-    this.measureBtn.setAttribute('aria-pressed', String(on));
-    this.viewer.setMeasuring(on);
-    this.measurePts = [];
-    this.measureOut.hidden = !on;
-    this.measureOut.textContent = on ? 'Click or tap two points on any structure.' : '';
-  }
-
-  private showMeasure(): void {
-    const [a, b] = this.measurePts;
-    this.measureOut.hidden = false;
-    if (!b) { this.measureOut.textContent = `Point A: ${[a.x, a.y, a.z].map(fmtMm).join(', ')}. Pick point B.`; return; }
-    this.measureOut.textContent = `Distance ${fmtMm(a.distanceTo(b))} mm (on this CT)`;
-  }
-
   private async copyLink(btn: HTMLElement): Promise<void> {
     try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; announce('Link to this view copied'); }
     catch { window.prompt('Copy this link', location.href); }
@@ -808,7 +793,7 @@ export class VentriclesAtlasPage {
     const preset = PRESETS.find((p) => p[2] === k);
     if (preset) { this.update((s) => { s.cam = { preset: preset[0] }; }, { camera: true }); return true; }
     if (k === 'h' || k === 'H') { this.update((s) => { s.hemi = s.hemi === 'both' ? 'L' : s.hemi === 'L' ? 'R' : 'both'; }); return true; }
-    if (k === 'm' || k === 'M') { this.toggleMeasure(); return true; }
+    if (k === 'm' || k === 'M') { this.measure.toggle(); return true; }
     if (k === 'n' || k === 'N') { this.update((s) => { s.labels = s.labels === 'hover' ? 'all' : s.labels === 'all' ? 'off' : 'hover'; }); return true; }
     if (VE_GROUP.get(this.s.grp)?.catheter) {
       // T cycles the aim, S the side
@@ -834,7 +819,7 @@ export class VentriclesAtlasPage {
       if (k === 'e' || k === 'E') { roll(5); return true; }
     }
     if (k === 'Escape') {
-      if (this.measureBtn.getAttribute('aria-pressed') === 'true') { this.toggleMeasure(); return true; }
+      if (this.measure.on) { this.measure.toggle(); return true; }
       if (this.s.sel) { this.update((s) => { s.sel = null; }); return true; }
     }
     return false;

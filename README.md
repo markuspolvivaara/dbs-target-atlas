@@ -1204,14 +1204,19 @@ on or another sequence is picked.
 - **Click or tap** any structure, tract or marker for its card: role in the source content,
   indications that use it, imaging, data source, licence, centroid.
 - **Readout**: MNI coordinates under the pointer plus approximate AC–PC coordinates (see below).
-- **Measure**: pick two points for a distance in mm.
+- **Measure** (every section; `src/ui/measure.ts`): pick two points for a distance in mm. A finished measurement is
+  part of the link (`m=x,y,z,x,y,z`, to a hundredth of a millimetre), which opens it again with the tool on.
 - **Indications shown** page (DBS): show or hide individual indications (for example to keep only the common
   ones for a teaching session) and pick the colour theme. Saved in the browser's local storage on
   that device; a shared link to a hidden indication still opens it. By default Holmes tremor,
   myoclonus-dystonia, tardive syndromes, Tourette syndrome and chorea are hidden ("Reset to
   default" restores this).
-- **Copy link**: the URL hash holds indication, symptom, hemisphere, camera, layers, slices, lead
-  and the open card, so teaching links reopen the exact view.
+- **Copy link**: the URL hash holds indication, symptom, hemisphere, camera, layers, slices, lead,
+  a measured distance and the open card, so teaching links reopen the exact view. Not in a link: the bone drilled
+  away in the spine's and the endonasal view's drilling, and the endonasal view's endoscope and the pieces taken
+  away (their panels say so); the ventricles' endoscope is.
+- **Back** (every section): going to another view (an indication, a group, a region) adds a history entry, so the
+  browser's Back and Forward step through the views looked at; the camera, sliders and selections do not.
 - **Save image** (every section; `src/ui/figure.ts`): the 3D view as a PNG for slides and handouts. A dialog
   chooses what it holds (the name labels and the orientation compass as on screen, the legend, a caption), its size
   (as on screen, twice that, or 3840 pixels wide) and how the caption names the licences: in full, each dataset
@@ -1241,6 +1246,9 @@ Lead-DBS warps these into each patient; this app does not, so the values describ
 brain and are labelled approximate everywhere they appear.
 
 ## Project layout
+
+How the parts work together (a section's five parts, what the sections share, the pipeline, the tests) is in
+[ARCHITECTURE.md](ARCHITECTURE.md).
 
 ```
 source/dbs-targets.html     original teaching page (content source)

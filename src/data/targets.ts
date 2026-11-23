@@ -32,9 +32,11 @@ const DEFS: Def[] = [
   { id: 't-ss-pd', label: 'PD sweet spot', structureId: 'ss_pd', coordKey: 'ss_pd', kind: 'sweetSpot', refId: 'hollunder2024' },
   // (the peaks Horn 2022 prints, full text; the largest region's centroid had been 4 to 5 mm off for generalized dystonia)
   { id: 't-ss-gen', label: 'Generalized dystonia sweet spot', structureId: 'ss_gen', kind: 'sweetSpot', refId: 'horn2022', mniRight: [21.1, -9.1, -0.14],
-    method: 'The peak Horn 2022 prints (full text): ±21.1, −9.1, −0.14 mm in MNI space (R = 0.67). The distributed map’s own maximum lies within 1 mm of it. The 3D volume shows the map at 50 % of its maximum; its largest region holds only about a third of the map.' },
+    method: 'The peak Horn 2022 prints (full text): ±21.1, −9.1, −0.14 mm in MNI space (R = 0.67). The distributed map’s own maximum lies within 1 mm of it. The 3D volume shows the map at 50 % of its maximum; its largest region holds only about a third of the map.',
+    note: 'The peak lies at the upper edge of the map as it is distributed: 0.1 mm above the volume drawn here on the left and 0.5 mm above it on the right, where the map ends 0.4 mm below the peak.' },
   { id: 't-ss-cerv', label: 'Cervical dystonia sweet spot', structureId: 'ss_cerv', kind: 'sweetSpot', refId: 'horn2022', mniRight: [20.4, -12.4, -5.2],
-    method: 'The peak Horn 2022 prints (full text): ±20.4, −12.4, −5.2 mm in MNI space (R = 0.58), at the medial pallidal border. The distributed map’s own maximum lies within 2.5 mm of it. The 3D volume shows the map at 50 % of its maximum.' },
+    method: 'The peak Horn 2022 prints (full text): ±20.4, −12.4, −5.2 mm in MNI space (R = 0.58), at the medial pallidal border. The distributed map’s own maximum lies 1.6 mm (left) and 2.5 mm (right) from it. The 3D volume shows the map at 50 % of its maximum.',
+    note: 'On the left the peak lies just inside the volume drawn here, at its back edge; on the right 0.8 mm behind it, where the map as it is distributed ends 0.9 mm in front of the peak.' },
   { id: 't-ss-tremor', label: 'Thalamic tremor hotspot', structureId: 'ss_tremor', coordKey: 'ss_tremor', kind: 'sweetSpot', refId: 'elias2021',
     note: 'Near where the distributed map peaks: on the surface of the Vim drawn here (DISTAL) on the left and 1.5 mm outside it on the right, inside the drawn VLa (Morel), and 8 to 9 mm from the indirect Vim target (Guiot). Elias 2021’s full text is not open, so its own coordinates could not be compared.' },
   { id: 't-atlas-gpi-sm', label: 'Sensorimotor GPi (centroid)', structureId: 'gpi_sm', coordKey: 'atlas:gpi_sm', kind: 'atlasCoordinate', refId: 'ewert2018' },

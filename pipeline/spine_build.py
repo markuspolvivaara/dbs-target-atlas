@@ -628,6 +628,14 @@ def mesh_nodes(parts: dict[str, tuple]) -> list[dict]:
     return [{"name": side, "positions": p, "normals": n, "indices": t, "mode": 4} for side, (p, n, t) in parts.items() if len(t)]
 
 
+def side_centroids(parts: dict[str, tuple]) -> dict:
+    """A paired structure's centroid, each side: the mean of that side's vertices (where a label stands). A side with no
+    mesh takes the other's. The roots had one point for both sides, the right foramen's: with Side = Left the left
+    root's label stood on the right, about 20 mm from it."""
+    c = {side: np.asarray(p, float).mean(0).round(2).tolist() for side, (p, _, t) in parts.items() if len(t)}
+    return {"L": c.get("L", c.get("R")), "R": c.get("R", c.get("L"))}
+
+
 def merge(meshes: list[tuple]) -> tuple:
     ps, ns, ts, off = [], [], [], 0
     for p, n, t in meshes:
@@ -893,7 +901,8 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
                 depth[f"{rname}{sd}"] = {"root": deepest(parts[sd]), "ganglion": deepest(drgs[sd])}
             # the root and its dorsal root ganglion are one structure
             rid = f"sp_root_{rname.lower()}"
-            write_glb(BUILD / f"{rid}.glb", mesh_nodes({sd: merge([parts[sd], drgs[sd]]) for sd in parts}), {"id": rid})
+            whole = {sd: merge([parts[sd], drgs[sd]]) for sd in parts}
+            write_glb(BUILD / f"{rid}.glb", mesh_nodes(whole), {"id": rid})
             where = "the lower part of " if cervical else ""
             exit_note = (f"exits through {where}the {up}-{down} foramen (measured position)" if not any(estimated.values())
                          else f"exits through {where}the {up}-{down} foramen, whose position is estimated on "
@@ -907,7 +916,7 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
                              f"leaves the lateral wall of the dural sac level with the upper part of its foramen and {exit_note}{after}")
             roots.append({"id": rid, "name": f"{rname} nerve root", "level": rname, "token": "spRoot", "layer": "tracts", "category": "root",
                           "region": region, "schematic": True, "estimated": [k for k, v in estimated.items() if v],
-                          "centroid": (p2 - o).round(2).tolist(),
+                          "centroid": side_centroids(whole),
                           "source": f"Schematic: {path_note}; kept out of the bone as it is drawn; drawn {2 * ROOT_RADIUS:g} mm "
                                     f"thick, with its dorsal root ganglion {'just outside' if cervical else 'in the upper part of'} "
                                     f"the foramen{smaller(rname)} (not to scale)"})
@@ -982,9 +991,10 @@ def segment_geometry(report: dict, region: str) -> tuple[list[dict], list[dict]]
         drgs[sd], drg_scale[f"S1{sd}"] = ganglion(curve_ras, (p1 + p2) / 2, Fs[1])
         intrusion[f"S1{sd}"] = round(left, 2)
         depth[f"S1{sd}"] = {"root": deepest(parts[sd]), "ganglion": deepest(drgs[sd])}
-    write_glb(BUILD / "sp_root_s1.glb", mesh_nodes({sd: merge([parts[sd], drgs[sd]]) for sd in parts}), {"id": "sp_root_s1"})
+    whole = {sd: merge([parts[sd], drgs[sd]]) for sd in parts}
+    write_glb(BUILD / "sp_root_s1.glb", mesh_nodes(whole), {"id": "sp_root_s1"})
     roots.append({"id": "sp_root_s1", "name": "S1 nerve root", "level": "S1", "token": "spRoot", "layer": "tracts", "category": "root",
-                  "region": region, "schematic": True, "estimated": ["L", "R"], "centroid": (cs1 - o).round(2).tolist(),
+                  "region": region, "schematic": True, "estimated": ["L", "R"], "centroid": side_centroids(whole),
                   "source": "Schematic: leaves the lateral wall of the dural sac at the L5-S1 disc, runs in the lateral recess "
                             "of S1 and leaves through the first sacral foramen, whose position is estimated (not captured by "
                             f"the measurement); kept out of the bone as it is drawn; drawn {2 * ROOT_RADIUS:g} mm thick, with its "
@@ -1376,7 +1386,7 @@ def manifest_entries(items: list[dict], junction: bool = False) -> list[dict]:
              "derivation": (t["source"] + (". " + t["derivation"] if t.get("derivation") else "." if t.get("schematic")
                                                    else ", surface of the segmentation.")
                             + (" " + t["after"] if t.get("after") else "")),
-             "centroid": {"L": t["centroid"], "R": t["centroid"]}} for t in items]
+             "centroid": t["centroid"] if isinstance(t["centroid"], dict) else {"L": t["centroid"], "R": t["centroid"]}} for t in items]
 
 
 def write_manifest(verts: list[dict], ts: list[dict], dsc: list[dict]) -> None:
@@ -1538,6 +1548,17 @@ def validate() -> int:
         check(mm["densBelowMcRae"] > 0, "ccj: the dens tip above McRae's line")
         check(L["basion"][1] > L["opisthion"][1] and L["basion"][2] > L["densTip"][2], "ccj: basion not in front of the opisthion and above the dens")
         check(lv["axialPoints"] >= 8 and lv["clivusMm"] >= 10, "ccj: too little of the C2 body or the clivus for its lines")
+    # a centroid is where a structure's label stands: no further from its mesh, each side, than a quarter of the mesh's
+    # extent (3 mm for a small one)
+    from glb import read_glb_full
+    for it in m["structures"]:
+        f = BUILD / Path(it["file"]).name
+        if not f.exists():
+            continue
+        for side, nd in read_glb_full(f).items():
+            P = np.asarray(nd["positions"], float).reshape(-1, 3)
+            off = float(np.linalg.norm(P - np.asarray(it["centroid"][side], float), axis=1).min())
+            check(off <= max(3.0, 0.25 * float(np.linalg.norm(P.max(0) - P.min(0)))), f"{it['id']} {side}: its centroid lies {off:.1f} mm from its mesh")
     print(f"spine validation: {n - len(fails)}/{n} checks passed")
     for f in fails:
         print("FAIL", f)

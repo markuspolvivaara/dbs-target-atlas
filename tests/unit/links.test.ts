@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { decode } from '../../src/state';
-import { decodeBs } from '../../src/brainstem/state';
-import { decodeCortex } from '../../src/cortex/state';
-import { decodeSkull } from '../../src/skullbase/state';
-import { decodeSpine } from '../../src/spine/state';
-import { decodeTracts } from '../../src/tracts/state';
-import { decodeVa } from '../../src/vascular/state';
-import { decodeVe } from '../../src/ventricles/state';
+import { decode, encode } from '../../src/state';
+import { decodeBs, encodeBs } from '../../src/brainstem/state';
+import { decodeCortex, encodeCortex } from '../../src/cortex/state';
+import { decodeSkull, encodeSkull } from '../../src/skullbase/state';
+import { decodeSpine, encodeSpine } from '../../src/spine/state';
+import { decodeTracts, encodeTracts } from '../../src/tracts/state';
+import { decodeVa, encodeVa } from '../../src/vascular/state';
+import { decodeVe, encodeVe } from '../../src/ventricles/state';
 import { okCamera } from '../../src/viewer/scene';
 
 /**
@@ -52,6 +52,41 @@ describe('links that name no real view', () => {
     expect(okCamera([3001, 0, 0, 0, 0, 0])).toBe(false);
     expect(okCamera([0, 0, 0, 0, 0.5, 0])).toBe(false);
   });
+});
+
+describe('a measured distance in a link (the audit\'s UI-13)', () => {
+  // (each section's decode and encode, as its page uses them)
+  const ROUND: [string, (h: string) => string][] = [
+    ['dbs', (h) => encode(decode(h))],
+    ['tracts', (h) => encodeTracts(decodeTracts(h).state)],
+    ['cortex', (h) => encodeCortex(decodeCortex(h))],
+    ['brainstem', (h) => encodeBs(decodeBs(h))],
+    ['ventricles', (h) => encodeVe(decodeVe(h))],
+    ['vascular', (h) => encodeVa(decodeVa(h))],
+    ['skull base', (h) => encodeSkull(decodeSkull(h))],
+    ['spine', (h) => encodeSpine(decodeSpine(h))],
+  ];
+  const m = (hash: string) => new URLSearchParams(hash.split('?')[1] ?? '').get('m');
+  it.each(ROUND)('%s: its two points survive the link, to a hundredth of a millimetre', (_name, round) => {
+    expect(m(round('#/atlas?m=12.34,-5.6,7,-20.01,3,0.5'))).toBe('12.34,-5.6,7,-20.01,3,0.5');
+    expect(m(round('#/atlas'))).toBeNull();
+  });
+  it.each(ROUND)('%s: five numbers, a word, an empty place or a point outside every scene is no measurement', (_name, round) => {
+    for (const bad of ['1,2,3,4,5', '1,2,3,4,5,x', '1,2,,4,5,6', '1,2,3,4,5,1e9', '1,2,3,4,5,6,7', 'NaN,0,0,0,0,0', '']) expect(m(round(`#/atlas?m=${bad}`)), bad).toBeNull();
+  });
+  it('the sections read it into the view\'s state as two points', () => {
+    for (const [, dec] of SECTIONS) expect((dec('#/atlas?m=1,2,3,4,5,6') as { measured?: number[][] }).measured).toEqual([[1, 2, 3], [4, 5, 6]]);
+  });
+});
+
+describe('a slice plane whose value is not a number', () => {
+  // (the cortex had left such a plane off, the others showed it where it stands by default: one rule now)
+  it.each<[string, (h: string) => { clip: Record<string, { on: boolean; mm: number }> }]>([['dbs', decode], ['tracts', (h) => decodeTracts(h).state], ['cortex', decodeCortex], ['brainstem', decodeBs]])(
+    '%s: is shown at its own position', (_name, dec) => {
+      const plain = dec('#/atlas').clip.axial.mm;
+      expect(dec('#/atlas?ax=abc').clip.axial).toEqual({ on: true, mm: plain });
+      expect(dec('#/atlas?ax=-4.5').clip.axial).toEqual({ on: true, mm: -4.5 });
+    });
 });
 
 describe('what a link named that the section does not have (P1-24)', async () => {

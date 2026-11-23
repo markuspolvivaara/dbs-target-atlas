@@ -3054,14 +3054,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac at the T12-L1 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at L1 and exits through the L1-L2 foramen (measured position); kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
-     8.68,
-     -28.23,
-     123.82
+     -24.51,
+     -24.24,
+     125.33
     ],
     "R": [
-     8.68,
-     -28.23,
-     123.82
+     14.55,
+     -23.16,
+     122.21
     ]
    }
   },
@@ -3106,14 +3106,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac at the L1-L2 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at L2 and exits through the L2-L3 foramen (measured position); kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
-     8.04,
-     -22.08,
-     93.41
+     -25.17,
+     -15.43,
+     89.7
     ],
     "R": [
-     8.04,
-     -22.08,
-     93.41
+     14.22,
+     -17.37,
+     92.47
     ]
    }
   },
@@ -3158,14 +3158,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac at the L2-L3 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at L3 and exits through the L3-L4 foramen (measured position); kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on the left to fit the opening as drawn (to 90 % at the least) (not to scale).",
    "centroid": {
     "L": [
-     9.12,
-     -15.61,
-     60.82
+     -23.15,
+     -10.81,
+     58.72
     ],
     "R": [
-     9.12,
-     -15.61,
-     60.82
+     15.39,
+     -12.24,
+     60.42
     ]
    }
   },
@@ -3210,14 +3210,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac at the L3-L4 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at L4 and exits through the L4-L5 foramen (measured position); kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
-     12.18,
-     -14.61,
-     30.17
+     -22.34,
+     -10.56,
+     24.72
     ],
     "R": [
-     12.18,
-     -14.61,
-     30.17
+     19.07,
+     -11.37,
+     27.02
     ]
    }
   },
@@ -3262,14 +3262,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac at the L4-L5 disc, down and out at 55 deg to the sac (Silverstein 2015), runs in the lateral recess at L5 and exits through the L5-S1 foramen, whose position is estimated on L and R (not captured by the measurement); kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
-     24.82,
-     -23.98,
-     -10.17
+     -29.21,
+     -14.08,
+     -14.73
     ],
     "R": [
-     24.82,
-     -23.98,
-     -10.17
+     28.13,
+     -16.02,
+     -7.72
     ]
    }
   },
@@ -3314,14 +3314,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac at the L5-S1 disc, runs in the lateral recess of S1 and leaves through the first sacral foramen, whose position is estimated (not captured by the measurement); kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion inside the canal, where the S1 ganglion more often lies (Hasegawa 1996), drawn smaller on the left to fit the opening as drawn (to 95 % at the least) (not to scale).",
    "centroid": {
     "L": [
-     2.49,
-     -1.83,
-     -36.97
+     -16.09,
+     -16.96,
+     -44.66
     ],
     "R": [
-     2.49,
-     -1.83,
-     -36.97
+     19.87,
+     -17.63,
+     -41.97
     ]
    }
   },
@@ -3366,14 +3366,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T1-T2 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on the left to fit the opening as drawn (to 85 % at the least) (not to scale).",
    "centroid": {
     "L": [
-     -0.65,
-     1.48,
-     410.79
+     -35.16,
+     0.32,
+     412.29
     ],
     "R": [
-     -0.65,
-     1.48,
-     410.79
+     7.91,
+     -1.47,
+     407.58
     ]
    }
   },
@@ -3418,14 +3418,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T2-T3 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on the left to fit the opening as drawn (to 90 % at the least) (not to scale).",
    "centroid": {
     "L": [
-     -1.52,
-     -13.76,
-     397.32
+     -35.68,
+     -14.89,
+     397.57
     ],
     "R": [
-     -1.52,
-     -13.76,
-     397.32
+     6.34,
+     -16.01,
+     393.33
     ]
    }
   },
@@ -3470,14 +3470,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T3-T4 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on both sides to fit the opening as drawn (to 90 % at the least) (not to scale).",
    "centroid": {
     "L": [
-     -6.35,
-     -27.99,
-     380.1
+     -38.69,
+     -29.42,
+     375.74
     ],
     "R": [
-     -6.35,
-     -27.99,
-     380.1
+     2.82,
+     -29.09,
+     377.2
     ]
    }
   },
@@ -3522,14 +3522,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T4-T5 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on the right to fit the opening as drawn (to 80 % at the least) (not to scale).",
    "centroid": {
     "L": [
-     -5.35,
-     -37.45,
-     358.27
+     -38.54,
+     -39.95,
+     353.74
     ],
     "R": [
-     -5.35,
-     -37.45,
-     358.27
+     3.91,
+     -38.12,
+     357.27
     ]
    }
   },
@@ -3574,14 +3574,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T5-T6 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
-     -6.55,
-     -47.89,
-     336.89
+     -33.76,
+     -47.74,
+     332.39
     ],
     "R": [
-     -6.55,
-     -47.89,
-     336.89
+     2.73,
+     -48.77,
+     334.04
     ]
    }
   },
@@ -3626,14 +3626,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T6-T7 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on the right to fit the opening as drawn (to 90 % at the least) (not to scale).",
    "centroid": {
     "L": [
-     -3.46,
-     -52.48,
-     311.98
+     -34.13,
+     -51.45,
+     307.96
     ],
     "R": [
-     -3.46,
-     -52.48,
-     311.98
+     5.48,
+     -52.83,
+     309.28
     ]
    }
   },
@@ -3678,14 +3678,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T7-T8 foramen, whose position is estimated on L (not captured by the measurement), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on both sides to fit the opening as drawn (to 75 % at the least) (not to scale).",
    "centroid": {
     "L": [
-     -4.05,
-     -52.36,
-     286.56
+     -31.41,
+     -52.4,
+     284.57
     ],
     "R": [
-     -4.05,
-     -52.36,
-     286.56
+     3.64,
+     -52.56,
+     282.9
     ]
    }
   },
@@ -3730,14 +3730,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T8-T9 foramen, whose position is estimated on R (not captured by the measurement), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on the right to fit the opening as drawn (to 95 % at the least) (not to scale).",
    "centroid": {
     "L": [
-     0.57,
-     -46.06,
-     258.97
+     -37.58,
+     -46.7,
+     255.24
     ],
     "R": [
-     0.57,
-     -46.06,
-     258.97
+     9.16,
+     -47.34,
+     256.57
     ]
    }
   },
@@ -3782,14 +3782,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T9-T10 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on both sides to fit the opening as drawn (to 60 % at the least) (not to scale).",
    "centroid": {
     "L": [
-     -2.0,
-     -48.52,
-     238.81
+     -30.57,
+     -47.14,
+     232.21
     ],
     "R": [
-     -2.0,
-     -48.52,
-     238.81
+     6.08,
+     -48.33,
+     236.44
     ]
    }
   },
@@ -3834,14 +3834,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T10-T11 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on both sides to fit the opening as drawn (to 80 % at the least) (not to scale).",
    "centroid": {
     "L": [
-     1.98,
-     -44.87,
-     214.02
+     -28.4,
+     -43.85,
+     206.89
     ],
     "R": [
-     1.98,
-     -44.87,
-     214.02
+     12.13,
+     -44.8,
+     211.88
     ]
    }
   },
@@ -3886,14 +3886,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T11-T12 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen, drawn smaller on the left to fit the opening as drawn (to 90 % at the least) (not to scale).",
    "centroid": {
     "L": [
-     3.42,
-     -38.96,
-     185.02
+     -24.21,
+     -38.52,
+     182.92
     ],
     "R": [
-     3.42,
-     -38.96,
-     185.02
+     11.58,
+     -39.05,
+     182.04
     ]
    }
   },
@@ -3938,14 +3938,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac level with the upper part of its foramen and exits through the T12-L1 foramen (measured position), then a short way along its intercostal course; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion in the upper part of the foramen (not to scale).",
    "centroid": {
     "L": [
-     6.35,
-     -34.27,
-     156.32
+     -24.79,
+     -34.06,
+     154.33
     ],
     "R": [
-     6.35,
-     -34.27,
-     156.32
+     14.33,
+     -33.97,
+     152.41
     ]
    }
   },
@@ -3990,14 +3990,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac level with its foramen's entrance and exits through the lower part of the C2-C3 foramen (measured position), then runs a short way forwards and out along the transverse process; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen, drawn smaller on the left to fit the opening as drawn (to 85 % at the least) (not to scale).",
    "centroid": {
     "L": [
-     4.41,
-     52.82,
-     496.53
+     -27.85,
+     56.7,
+     494.18
     ],
     "R": [
-     4.41,
-     52.82,
-     496.53
+     9.86,
+     56.3,
+     494.59
     ]
    }
   },
@@ -4042,14 +4042,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac level with its foramen's entrance and exits through the lower part of the C3-C4 foramen (measured position), then runs a short way forwards and out along the transverse process; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen, drawn smaller on the left to fit the opening as drawn (to 95 % at the least) (not to scale).",
    "centroid": {
     "L": [
-     5.13,
-     46.2,
-     480.29
+     -28.81,
+     51.71,
+     478.2
     ],
     "R": [
-     5.13,
-     46.2,
-     480.29
+     10.08,
+     50.25,
+     476.82
     ]
    }
   },
@@ -4094,14 +4094,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac level with its foramen's entrance and exits through the lower part of the C4-C5 foramen (measured position), then runs a short way forwards and out along the transverse process; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen, drawn smaller on the right to fit the opening as drawn (to 95 % at the least) (not to scale).",
    "centroid": {
     "L": [
-     5.32,
-     39.04,
-     464.81
+     -28.2,
+     43.83,
+     461.78
     ],
     "R": [
-     5.32,
-     39.04,
-     464.81
+     9.7,
+     42.88,
+     461.45
     ]
    }
   },
@@ -4146,14 +4146,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac level with its foramen's entrance and exits through the lower part of the C5-C6 foramen (measured position), then runs a short way forwards and out along the transverse process; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen (not to scale).",
    "centroid": {
     "L": [
-     5.03,
-     31.16,
-     449.61
+     -29.62,
+     35.83,
+     448.04
     ],
     "R": [
-     5.03,
-     31.16,
-     449.61
+     9.18,
+     34.03,
+     446.02
     ]
    }
   },
@@ -4198,14 +4198,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac level with its foramen's entrance and exits through the lower part of the C6-C7 foramen (measured position), then runs a short way forwards and out along the transverse process; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen (not to scale).",
    "centroid": {
     "L": [
-     4.93,
-     22.77,
-     437.5
+     -30.09,
+     25.57,
+     433.56
     ],
     "R": [
-     4.93,
-     22.77,
-     437.5
+     9.46,
+     24.97,
+     433.01
     ]
    }
   },
@@ -4250,14 +4250,14 @@
    "derivation": "Schematic: leaves the lateral wall of the dural sac level with its foramen's entrance and exits through the lower part of the C7-T1 foramen (measured position), then runs a short way forwards and out along the transverse process; kept out of the bone as it is drawn; drawn 3 mm thick, with its dorsal root ganglion just outside the foramen (not to scale).",
    "centroid": {
     "L": [
-     1.43,
-     10.15,
-     422.53
+     -32.22,
+     15.2,
+     421.74
     ],
     "R": [
-     1.43,
-     10.15,
-     422.53
+     6.97,
+     12.69,
+     418.3
     ]
    }
   },

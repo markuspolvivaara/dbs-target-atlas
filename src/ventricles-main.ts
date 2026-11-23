@@ -30,7 +30,10 @@ bootSection({
   help: {
     rows: [
       ['1 – 5', 'Camera: front, side, from above, front oblique, over the forehead'],
-      ['H', 'Side: both → left → right'], ['T', 'In the ventriculostomy view: the next aim'], ['S', 'In the ventriculostomy view: the other side'],
+      ['H', 'Side: both → left → right'], ['T', 'In the frontal ventriculostomy view: the next aim'], ['S', 'In the frontal ventriculostomy view: the other side'],
+      // (the endoscope's keys: VentriclesAtlasPage.handleKey. They were in no help; the audit's shell refactor found it)
+      ['W  S', 'In the endoscopic view: the endoscope in and out'], ['← → ↑ ↓', 'In the endoscopic view: tilt the endoscope'],
+      ['Q  E', 'In the endoscopic view: rotate its picture'], ['V', 'In the endoscopic view: its picture big, or as an inset'],
       ['N', 'Name labels: hover → all → off'], ['M', 'Measure distance'], ['Esc', 'Close card or stop measuring'], ['?', 'This help'],
     ],
     tap: 'a structure',

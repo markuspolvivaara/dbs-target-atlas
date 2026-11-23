@@ -1557,6 +1557,18 @@ def validate() -> int:
           "M2 and M3 carry the opening")
     pica = [it for it in m["structures"] if it["name"].startswith("Posterior inferior cerebellar artery") and not it.get("tumourView")]
     check(len(pica) == 2 and all(it.get("morph") for it in pica), "the PICA and its carried-on course move with the cerebellum")
+    # a centroid is where an item's label stands: no further from the mesh it ships than a quarter of the mesh's extent
+    # (3 mm for a small one). A curved vessel's lies off it by a few millimetres; one carried over from another file's
+    # mesh lies further (the PICA's origin had the whole labelled artery's, 9 mm from it).
+    from glb import read_glb_full
+    for it in base:
+        f = BUILD / Path(it["file"]).name
+        if not it.get("centroid") or not it["file"].startswith(f"assets/{KIND}/") or not f.exists():
+            continue
+        for s_, nd in read_glb_full(f).items():
+            P = np.asarray(nd["positions"], float).reshape(-1, 3)
+            off = float(np.linalg.norm(P - np.asarray(it["centroid"][s_], float), axis=1).min())
+            check(off <= max(3.0, 0.25 * float(np.linalg.norm(P.max(0) - P.min(0)))), f"{it['id']} {s_}: its centroid lies {off:.1f} mm from its mesh")
     sv = [it for it in m["structures"] if it.get("category") == "vein" and it.get("morph")]
     check(len(sv) == 5 and all(it.get("schematic") for it in sv), f"{len(sv)} veins drawn on the brain (the Sylvian veins, "
           "Trolard's and Labbé's), with the surgical shapes")

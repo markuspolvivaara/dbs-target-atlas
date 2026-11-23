@@ -1,6 +1,6 @@
 import type { CameraPreset } from './data/schema';
 import type { Axis, V3 } from './state';
-import { okCamera, type ViewState } from './viewer/scene';
+import { CAMERA_LIMIT_MM, okCamera, type ViewState } from './viewer/scene';
 
 /**
  * The parts of a view's link (`#/atlas?g=…&h=B&c=…&ly=…`) that the sections' state modules write and read the same way:
@@ -80,8 +80,8 @@ export function encodeClip(p: URLSearchParams, clip: ViewState['clip']): void {
   for (const [a, code] of CLIP_PARAMS) if (clip[a].on) p.set(code, `${r1(clip[a].mm)}`);
 }
 
-/** ... read back: a plane the link names is shown, at the state's own position where its value is not a number. (The
- * cortex section reads its own: there a value that is not a number leaves the plane off.) */
+/** ... read back: a plane the link names is shown, at the state's own position where its value is not a number (in
+ * every section: the cortex read its own, and left such a plane off). */
 export function decodeClip(p: URLSearchParams, clip: ViewState['clip']): void {
   for (const [a, code] of CLIP_PARAMS) {
     const v = p.get(code);
@@ -97,4 +97,18 @@ export function encodeHidden(p: URLSearchParams, hidden: string[]): void {
 /** ... read back: only ids made of lower-case letters, digits and `_:-`. */
 export function decodeHidden(p: URLSearchParams): string[] {
   return (p.get('hid') ?? '').split(',').filter((x) => /^[a-z0-9_:-]+$/.test(x));
+}
+
+/** A finished measurement (the toolbar's Measure tool, ui/measure.ts): `m=x,y,z,x,y,z`, its two points in mm to a
+ * hundredth (as the tool keeps them, so that the receiver reads the distance the sender read). */
+export function encodeMeasure(p: URLSearchParams, m: ViewState['measured']): void {
+  if (m) p.set('m', m.flat().join(','));
+}
+
+/** ... read back: six plain numbers no further out than a camera may lie; anything else is no measurement. */
+export function decodeMeasure(p: URLSearchParams, s: ViewState): void {
+  const tok = (p.get('m') ?? '').split(',');
+  const v = tok.map(Number);
+  if (tok.length === 6 && tok.every((t) => /^-?\d+(\.\d+)?$/.test(t)) && v.every((x) => Math.abs(x) <= CAMERA_LIMIT_MM)) s.measured = [v.slice(0, 3) as V3, v.slice(3) as V3];
+  else delete s.measured;
 }

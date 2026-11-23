@@ -14,6 +14,7 @@ import { figureControl } from './figure';
 import { structureBar } from './structurebar';
 import { refLinksFrom } from './reflinks';
 import { bindSheetDrag, buildSlicesPane, syncSlicesPane, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
+import { MeasureTool } from './measure';
 import { chips, clear, eyeIcon, fmtMm } from './widgets';
 
 type Update = (fn: (s: CortexState) => void, opts?: { camera?: boolean }) => void;
@@ -39,7 +40,6 @@ export class CortexAtlasPage {
   private tabBtns: Record<string, HTMLButtonElement> = {};
   private tip = h('div', { class: 'tip', role: 'tooltip', hidden: true });
   private readout = h('div', { class: 'readout', 'aria-live': 'off' });
-  private measureOut = h('div', { class: 'measure-out', 'aria-live': 'polite', hidden: true });
   private legend = h('ul', { class: 'legend3d' });
   private labels = h('div', { class: 'labels', 'aria-hidden': 'true' });
   private surfLabels = h('div', { class: 'labels surf-labels', 'aria-hidden': 'true' });
@@ -47,9 +47,10 @@ export class CortexAtlasPage {
   private legendHover: string | null = null;
   private gizmo = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   private status = stageStatus(() => { void this.viewer.retryFailed(); });
-  private measureBtn!: HTMLButtonElement;
   private sheetState: 'peek' | 'full' = 'peek';
-  private measurePts: THREE.Vector3[] = [];
+  /** the toolbar's Measure tool (ui/measure.ts): its finished measurement is part of the view's state */
+  private measure = new MeasureTool(() => this.viewer, { title: 'Measure distance between two points on the pial surface (M)', prompt: 'Click or tap two points on the pial surface (straight-line distance).', distance: (mm) => `Distance ${mm} mm (straight line, template brain: about 5 to 12 % longer than in an average adult brain)` },
+    (m) => this.update((s) => { if (m) s.measured = m; else delete s.measured; }));
   private lastKey = '';
 
   constructor(private update: Update) {
@@ -81,13 +82,12 @@ export class CortexAtlasPage {
     const surfGroup = h('div', { class: 'tgroup seg', role: 'group', 'aria-label': 'Surface' },
       ...([[0, 'Pial', 'The brain surface as it is (pial surface)'], [1, 'Inflated', 'Smoothed so the sulci open up; light = gyral crown, dark = sulcal depth']] as const)
         .map(([v, label, title]) => h('button', { type: 'button', class: 'tbtn', 'data-inflate': String(v), 'aria-pressed': 'false', title: `${title} (I toggles)`, onclick: () => this.setInflate(v) }, label)));
-    this.measureBtn = h('button', { type: 'button', class: 'tbtn', 'aria-pressed': 'false', title: 'Measure distance between two points on the pial surface (M)', onclick: () => this.toggleMeasure() }, 'Measure');
     const share = h('button', { type: 'button', class: 'tbtn', title: 'Copy a link to this exact view', onclick: () => { void this.copyLink(share); } }, 'Copy link');
     const labelGroup = h('div', { class: 'tgroup seg', role: 'group', 'aria-label': 'Name labels' },
       h('span', { class: 'tlabel' }, 'Labels'),
       ...([['all', 'All', 'Name every highlighted label that faces you'], ['hover', 'Hover', 'Name only what you point at, select or hover in the list'], ['off', 'Off', 'No name labels']] as const)
         .map(([v, label, title]) => h('button', { type: 'button', class: 'tbtn', 'data-labels': v, 'aria-pressed': 'false', title: `${title} (N cycles)`, onclick: () => this.update((s) => { s.labels = v; }) }, label)));
-    toolbar.append(presetGroup, hemiGroup, surfGroup, labelGroup, h('div', { class: 'tgroup' }, this.measureBtn, share,
+    toolbar.append(presetGroup, hemiGroup, surfGroup, labelGroup, h('div', { class: 'tgroup' }, this.measure.btn, share,
       figureControl(() => ({ viewer: this.viewer, stage: this.stage, labels: this.labels, leaders: this.leaders, gizmo: this.gizmo, legend: this.legend }))), viewButtons(() => this.resetView()));
     this.gizmo.setAttribute('viewBox', '-40 -40 80 80');
     this.gizmo.setAttribute('class', 'gizmo');
@@ -95,7 +95,7 @@ export class CortexAtlasPage {
     const legendOpen = window.matchMedia('(min-width: 900px) and (min-height: 700px)').matches;
     const bottom = h('div', { class: 'stage-bottom' },
       h('details', { class: 'legend-box', open: legendOpen }, h('summary', {}, 'Legend'), this.legend),
-      h('div', { class: 'readout-box' }, this.measureOut, this.readout));
+      h('div', { class: 'readout-box' }, this.measure.out, this.readout));
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
     this.stage.append(host, toolbar, this.surfLabels, this.leaders, this.labels, this.gizmo, bottom, this.tip, this.status.el);
@@ -107,7 +107,7 @@ export class CortexAtlasPage {
       hover: (info, x, y) => this.showTip(info, x, y),
       pick: (info) => { if (info.id && info.kind === 'structure') this.update((s) => { s.sel = s.sel === info.id ? null : info.id; }); },
       readout: (ras) => this.showReadout(ras),
-      measure: (pts) => { this.measurePts = pts; this.showMeasure(); },
+      measure: (pts) => this.measure.picked(pts),
       cameraChanged: (pos, tgt) => this.update((s) => {
         s.cam = { preset: s.cam.preset, pos: [pos.x, pos.y, pos.z], tgt: [tgt.x, tgt.y, tgt.z] };
       }, { camera: false }),
@@ -123,7 +123,7 @@ export class CortexAtlasPage {
   }
 
   private setInflate(v: number): void {
-    if (v && this.measureBtn.getAttribute('aria-pressed') === 'true') this.toggleMeasure();
+    if (v && this.measure.on) this.measure.toggle();
     this.update((s) => { s.inflate = v; });
   }
 
@@ -178,12 +178,13 @@ export class CortexAtlasPage {
   render(s: CortexState, opts: { camera: boolean }): void {
     const prev = this.s;
     this.s = s;
+    this.measure.sync(s.measured);
     this.viewer.apply(s, { animateCamera: opts.camera }).then(() => this.renderLegend()).catch((e: unknown) => viewFailed(this.status, e));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-hemi]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.hemi === s.hemi)));
     this.stage.querySelectorAll<HTMLButtonElement>('.toolbar [data-labels]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.labels === s.labels)));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-inflate]').forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.inflate) === s.inflate)));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((b) => b.toggleAttribute('data-active', b.dataset.preset === s.cam.preset));
-    this.measureBtn.disabled = s.inflate > 0;
+    this.measure.btn.disabled = s.inflate > 0;
     const key = `${s.view}|${s.lobe}|${s.fn}|${s.sel}|${s.colour}`;
     if (key !== this.lastKey || !prev) { this.lastKey = key; this.renderOverview(); }
     this.renderDisplay();
@@ -417,22 +418,6 @@ export class CortexAtlasPage {
     this.readout.append(h('span', { class: 'k' }, 'MNI'), ` x ${fmtMm(ras.x)}  y ${fmtMm(ras.y)}  z ${fmtMm(ras.z)} mm`);
   }
 
-  private toggleMeasure(): void {
-    const on = this.measureBtn.getAttribute('aria-pressed') !== 'true';
-    this.measureBtn.setAttribute('aria-pressed', String(on));
-    this.viewer.setMeasuring(on);
-    this.measurePts = [];
-    this.measureOut.hidden = !on;
-    this.measureOut.textContent = on ? 'Click or tap two points on the pial surface (straight-line distance).' : '';
-  }
-
-  private showMeasure(): void {
-    const [a, b] = this.measurePts;
-    this.measureOut.hidden = false;
-    if (!b) { this.measureOut.textContent = `Point A: ${[a.x, a.y, a.z].map(fmtMm).join(', ')}. Pick point B.`; return; }
-    this.measureOut.textContent = `Distance ${fmtMm(a.distanceTo(b))} mm (straight line, template brain: about 5 to 12 % longer than in an average adult brain)`;
-  }
-
   private async copyLink(btn: HTMLElement): Promise<void> {
     try { await navigator.clipboard.writeText(location.href); btn.textContent = 'Link copied'; announce('Link to this view copied'); }
     catch { window.prompt('Copy this link', location.href); }
@@ -498,10 +483,10 @@ export class CortexAtlasPage {
     if (preset) { this.update((s) => { s.cam = { preset: preset[0] }; if (preset[0] === 'medial' && s.hemi === 'both') s.hemi = 'L'; }, { camera: true }); return true; }
     if (k === 'h' || k === 'H') { this.update((s) => { s.hemi = s.hemi === 'both' ? 'L' : s.hemi === 'L' ? 'R' : 'both'; }); return true; }
     if (k === 'i' || k === 'I') { this.setInflate(this.s.inflate ? 0 : 1); return true; }
-    if ((k === 'm' || k === 'M') && !this.s.inflate) { this.toggleMeasure(); return true; }
+    if ((k === 'm' || k === 'M') && !this.s.inflate) { this.measure.toggle(); return true; }
     if (k === 'n' || k === 'N') { this.update((s) => { s.labels = s.labels === 'hover' ? 'all' : s.labels === 'all' ? 'off' : 'hover'; }); return true; }
     if (k === 'Escape') {
-      if (this.measureBtn.getAttribute('aria-pressed') === 'true') { this.toggleMeasure(); return true; }
+      if (this.measure.on) { this.measure.toggle(); return true; }
       if (this.s.sel) { this.update((s) => { s.sel = null; }); return true; }
     }
     return false;

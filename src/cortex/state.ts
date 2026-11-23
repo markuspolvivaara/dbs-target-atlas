@@ -2,7 +2,7 @@ import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD } from '../state';
 import type { ViewState } from '../viewer/scene';
 import { decodeOpacity, encodeOpacity } from '../viewer/scene';
-import { CLIP_PARAMS, decodeCamera, decodeHemi, decodeHidden, encodeCamera, encodeClip, encodeHemi, encodeHidden, hashOf, readHash } from '../viewlink';
+import { decodeCamera, decodeMeasure, encodeMeasure, decodeClip, decodeHemi, decodeHidden, encodeCamera, encodeClip, encodeHemi, encodeHidden, hashOf, readHash } from '../viewlink';
 import type { FnGroupId, LobeId } from './index';
 import { FN_GROUPS, LOBE } from './index';
 import { VIEW, type ViewId } from './views';
@@ -62,6 +62,7 @@ export function encodeCortex(s: CortexState): string {
     if (s.layers.cortex.opacity !== 1) p.set('op', s.layers.cortex.opacity.toFixed(2));
     encodeHidden(p, s.hidden);
     encodeOpacity(p, s.opacity);
+    encodeMeasure(p, s.measured);
   }
   return hashOf(s.page, p);
 }
@@ -87,16 +88,13 @@ export function decodeCortex(hash: string): CortexState {
   s.labels = labelsFrom(lb);
   const cut = p.get('cut');
   s.cutSide = cut === 'L' || cut === 'R' ? cut : 'none';
-  // (a plane whose value is not a number stays off)
-  for (const [a, code] of CLIP_PARAMS) {
-    const v = parseFloat(p.get(code) ?? '');
-    if (Number.isFinite(v)) s.clip[a] = { on: true, mm: v };
-  }
+  decodeClip(p, s.clip);
   const seq = p.get('seq');
   s.sliceSeq = seq === 't2' || seq === 'pd' ? seq : 't1';
   const op = parseFloat(p.get('op') ?? '');
   if (Number.isFinite(op)) s.layers.cortex.opacity = Math.min(1, Math.max(0.1, op));
   s.hidden = decodeHidden(p);
   decodeOpacity(p, s);
+  decodeMeasure(p, s);
   return s;
 }

@@ -2,7 +2,7 @@ import type { CameraPreset } from '../data/schema';
 import { DEFAULT_LEAD, type LayerKey } from '../state';
 import type { ViewState } from '../viewer/scene';
 import { decodeOpacity, encodeOpacity } from '../viewer/scene';
-import { decodeCamera, decodeClip, decodeHemi, decodeHidden, decodeLayers, encodeCamera, encodeClip, encodeHemi, encodeLayers, hashOf, readHash } from '../viewlink';
+import { decodeCamera, decodeMeasure, encodeMeasure, decodeClip, decodeHemi, decodeHidden, decodeLayers, encodeCamera, encodeClip, encodeHemi, encodeLayers, hashOf, readHash } from '../viewlink';
 import { hiddenAtFirst } from './index';
 
 export type TractsPage = 'atlas' | 'refs' | 'credits';
@@ -63,6 +63,7 @@ export function encodeTracts(s: TractsState): string {
     const own = hiddenAtFirst(s.grp, s.sel);
     if (s.hidden.length !== own.length || s.hidden.some((id) => !own.includes(id))) p.set('hid', s.hidden.join(','));
     encodeOpacity(p, s.opacity);
+    encodeMeasure(p, s.measured);
   }
   return hashOf(s.page, p);
 }
@@ -88,5 +89,6 @@ export function decodeTracts(hash: string, base: TractsState = defaultTractsStat
   s.sliceSeq = seq === 't2' || seq === 'pd' ? seq : 't1';
   s.hidden = p.has('hid') ? decodeHidden(p) : hiddenAtFirst(s.grp, s.sel);
   decodeOpacity(p, s);
+  decodeMeasure(p, s);
   return { state: s, hasHemi: p.has('h'), hasGroup: p.has('g'), hasHidden: p.has('hid') };
 }

@@ -1268,14 +1268,14 @@
    "derivation": "Surface of TopBrain's expert label of this vessel on the CT angiogram. Only its origin is shown: its first 6 mm from the vertebral artery. This angiogram labels only the PICA's first part, and this patient's vertebral arteries are long and tortuous: the labelled PICAs leave them near the midline and loop onto the back of the medulla, through where the fitted model's medulla lies; its course on from the origin is the model's typical one (Posterior inferior cerebellar artery (fitted course)). In the telovelar and retrosigmoid views it moves with the cerebellum it lies against, carried by cross-sections along its centre line.",
    "centroid": {
     "L": [
-     -6.97,
-     -33.51,
-     -29.39
+     -9.54,
+     -27.87,
+     -29.88
     ],
     "R": [
-     5.55,
-     -31.61,
-     -28.62
+     1.78,
+     -22.63,
+     -26.54
     ]
    },
    "system": "Vertebral artery",
