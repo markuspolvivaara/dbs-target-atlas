@@ -81,12 +81,12 @@
    "0": {
     "grade": "0",
     "pastMm": {
-     "medial": -4.4,
-     "intercarotid": -6.4,
-     "lateral": -8.5
+     "medial": -3.9,
+     "intercarotid": -5.9,
+     "lateral": -8.0
     },
     "encasedShare": 0.0,
-    "ml": 1.11
+    "ml": 1.06
    },
    "1": {
     "grade": "1",
@@ -96,7 +96,7 @@
      "lateral": -2.9
     },
     "encasedShare": 0.0,
-    "ml": 1.2
+    "ml": 1.12
    },
    "2": {
     "grade": "2",
@@ -106,17 +106,17 @@
      "lateral": -1.0
     },
     "encasedShare": 0.0,
-    "ml": 1.24
+    "ml": 1.16
    },
    "3A": {
     "grade": "3A",
     "pastMm": {
-     "medial": 8.1,
-     "intercarotid": 6.2,
-     "lateral": 4.3
+     "medial": 7.5,
+     "intercarotid": 5.6,
+     "lateral": 3.7
     },
     "encasedShare": 0.0,
-    "ml": 1.5
+    "ml": 1.35
    }
   },
   "carotidRadiusMm": 1.5

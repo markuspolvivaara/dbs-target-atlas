@@ -78,10 +78,23 @@ def grid() -> dict:
 
 
 def mesh_inside(V: np.ndarray, T: np.ndarray, a_crop: np.ndarray, shape: tuple) -> np.ndarray:
+    """What a Z-Anatomy mesh encloses, on the grid."""
     m = trimesh.Trimesh(V, T, process=True)
     lo = a_crop[:3, 3]
     if m.is_watertight:
         return fill(np.asarray(m.vertices), np.asarray(m.faces), lo, shape, ENDO.GRID_MM)
+    # a closed shell with loose faces beside it (Z-Anatomy's cavernous sinuses: a closed surface of 512 triangles, and
+    # 9 216 more in pairs that enclose nothing, a ribbon from the sinus's top towards the posterior intercavernous
+    # sinus): what the shell encloses. (Taken as below, by its widened surface, each sinus was a voxel too large all
+    # round: 1 795 mm3 on the grid for a shell that encloses 1 270 mm3)
+    closed = [p_ for p_ in m.split(only_watertight=True) if abs(p_.volume) > 1.0]
+    if closed and sum(abs(p_.volume) for p_ in closed) >= 0.95 * abs(m.volume):
+        out = np.zeros(shape, bool)
+        for p_ in closed:
+            if p_.volume < 0:
+                p_.invert()
+            out |= fill(np.asarray(p_.vertices), np.asarray(p_.faces), lo, shape, ENDO.GRID_MM)
+        return out
     sh = np.zeros(shape, bool)
     # (sampled with a seed of its own: trimesh draws from its own generator, which numpy's seed in main does not set, so
     # two runs gave Z-Anatomy's lobes and the pieces round them volumes 1 % apart)
@@ -267,8 +280,7 @@ def main() -> int:
     for sd in ("R", "L"):
         m_ = ex["soft"][f"Cavernous sinus.{sd.lower()}"]
         cm = mesh_inside(np.array(m_["verts"], float), np.array(m_["tris"], int), a_crop, shape)
-        print("cavernous sinus", sd, round(float(cm.sum()) * vox ** 3), "mm3 on the grid; its mesh encloses",
-              round(abs(float(trimesh.Trimesh(np.array(m_["verts"], float), np.array(m_["tris"], int), process=True).volume))), "mm3")
+        print("cavernous sinus", sd, round(float(cm.sum()) * vox ** 3), "mm3 on the grid")
         cs[sd] = ENDO.signed(cm, vox).astype(np.float16)
     np.savez_compressed(BUILD / "cavernous_cond.npz", **cs)
     ENDO.CS_COND = BUILD / "cavernous_cond.npz"

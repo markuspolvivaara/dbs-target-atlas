@@ -672,8 +672,8 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
       neck is named apart: both shells are cut level where the hypophysis is first narrower than a third of its
       greatest width (10.4 mm above the fossa; 11.9 mm across at its widest, under 4 mm from there up), and what lies
       above is the item "Pituitary stalk" (3.9 mm high). No vertex is moved. The views that show v3's stalk show it
-      (cavernous, endonasal, pterional, supraorbital, orbitozygomatic). The adenomas stay placed by Z-Anatomy's whole
-      anterior lobe, as before.
+      (cavernous, endonasal, pterional, supraorbital, orbitozygomatic). The adenomas are placed by the anterior lobe
+      without it.
     - The clivus step is absent: Z-Anatomy's sinus does not reach behind the sella.
     - The scope's way: the turbinates pushed aside to 4 mm across where the nose's own space allows, and a core
       3.5 mm across (`WAY_CORE_MM`) opened round the way whatever lies there. Under Z-Anatomy's nasal bones the space
@@ -688,12 +688,17 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
       is 25 mm³. The panel states these. (Until 2026-11-24 the step took each shell alone, which encloses nothing:
       the "gland" was a hollow skin a voxel thick and a voxel too large all round, and the figures given for it,
       14.5 mm high and 526 mm³, were that skin's.)
+    - Z-Anatomy's cavernous sinus meshes are a closed shell with loose faces beside it (a ribbon towards the
+      posterior intercavernous sinus): the sinus is what the shell encloses, 1 270 mm³ (`mesh_inside`). Taken by its
+      widened surface, as until 2026-11-24, it was a voxel too large all round (1 795 mm³).
     - The step gives the same files on every run: the surface sampling has a seed of its own (trimesh's sampler
       does not follow numpy's seed, and two runs differed by about 1 % in the gland's and the pieces' volumes).
     - The "In" slider says how far the way is open (both models): the scope stops in front of the sinus's front
       wall until that is taken away.
   - The tumours and the Grading page (`SB_PROFILE=v1 pipeline/skullbase_v3_tumours.py`): v3's rules on Z-Anatomy's
     bone, carotids, cavernous sinus and brain.
+    - The adenoma's ellipsoid is centred 2.5 mm above the middle of Z-Anatomy's anterior lobe without its stalk
+      (`skullbase_v1_stalk.py`); with the stalk counted in, as until 2026-11-24, it sat 1.95 mm higher.
     - Knosp 0–3A only: Z-Anatomy's cavernous carotid runs in the sphenoid's body below its cavernous sinus, so there is
       bone, not sinus, below and round it (3B and 4). The section is taken where both of its segments show.
     - Koos: Z-Anatomy's meatus has no lumen, so the canal is drawn by rule (2 mm round the fundus–porus line,

@@ -404,9 +404,8 @@ def knosp(man: list) -> dict:
     sinus = {s: np.load(cs_cond)[s].astype(np.float32) <= 0 for s in ("R", "L")}
     P = gr.P
     secs = {s: sections(gr, s) for s in ("R", "L")}
-    if V1:      # (Z-Anatomy's anterior lobe whole, as before skullbase_v1_stalk.py named its upper part the stalk)
-        import skullbase_v1_stalk as ST
-        hyp = ST.whole_lobe("Adenohypophysis")
+    if V1:      # (Z-Anatomy's anterior lobe without the stalk that skullbase_v1_stalk.py names apart: as built)
+        hyp = np.vstack([nd["positions"] for nd in read_glb_full(V3_BUILD / "sb_adenohypophysis.glb").values()])
     else:
         hyp = np.vstack([nd["positions"] for nd in read_glb_full(V3_BUILD / "tb_adenohypophysis.glb").values()])
     gc = (hyp.min(0) + hyp.max(0)) / 2
