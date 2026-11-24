@@ -16,7 +16,7 @@ import { structureBar } from './structurebar';
 import { refLinksFrom } from './reflinks';
 import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 import { MeasureTool } from './measure';
-import { chips, clear, eyeIcon, fmtMm } from './widgets';
+import { chips, clear, eyeIcon, fmtMm, jumpRow } from './widgets';
 
 type Update = (fn: (s: VeState) => void, opts?: { camera?: boolean }) => void;
 
@@ -518,12 +518,15 @@ export class VentriclesAtlasPage {
     requestAnimationFrame(() => { pane.scrollTop = keep[0]; this.panel.scrollTop = keep[1]; });
     clear(pane);
     const g = VE_GROUP.get(s.grp)!;
+    // the parts the jump row at the top leads to (the audit's UI-22: this panel opens with nearly 900 words)
+    const jumps: Record<string, HTMLElement | null> = { views: null, tool: null, list: null, selected: null, about: null, shape: null };
     for (const [kind, label] of GROUP_ROWS) {
       pane.append(h('p', { class: 'chips-label' }, label),
         chips(VE_GROUPS.filter((x) => x.kind === kind).map((x) => [x.id, x.name]), g.id, (v) => this.pickGroup(v), { label, cls: 'grp-chips' }));
     }
-    if (g.catheter) pane.append(this.catheterPanel());
-    if (g.endoscope) pane.append(this.scopePanel());
+    jumps.views = pane.firstElementChild as HTMLElement | null;
+    if (g.catheter) pane.append(jumps.tool = this.catheterPanel());
+    if (g.endoscope) pane.append(jumps.tool = this.scopePanel());
     const hidden = new Set(s.hidden);
     const show = (ids: string[], on: boolean) => this.update((st) => { st.hidden = on ? st.hidden.filter((x) => !ids.includes(x)) : [...new Set([...st.hidden, ...ids])]; });
     const entry = (id: string) => {
@@ -535,8 +538,8 @@ export class VentriclesAtlasPage {
           onclick: () => this.update((st) => { st.sel = st.sel === id ? null : id; }),
         }, h('span', { class: 'swatch', style: `--c: var(--c-${tokenOf(id)})` }), nameOf(id)));
     };
-    pane.append(h('p', { class: 'chips-label' }, `Ventricles (${g.key.length})`), h('div', { class: 'chips wrap sb-list' }, ...g.key.map(entry)));
-    if (s.sel && VE.has(s.sel)) pane.append(this.card(s.sel));
+    pane.append(jumps.list = h('p', { class: 'chips-label' }, `Ventricles (${g.key.length})`), h('div', { class: 'chips wrap sb-list' }, ...g.key.map(entry)));
+    if (s.sel && VE.has(s.sel)) pane.append(jumps.selected = this.card(s.sel));
     const groupCard = h('article', { class: 'card' },
       h('p', { class: 'eyebrow' }, GROUP_ROWS.find(([k]) => k === g.kind)![1]),
       h('h2', {}, g.name),
@@ -568,11 +571,14 @@ export class VentriclesAtlasPage {
         h('dt', {}, 'The aqueduct'), h('dd', {}, claimList(AQUEDUCT)),
         h('dt', {}, 'The fourth ventricle'), h('dd', {}, claimList(FOURTH))) : null,
       h('p', { class: 'aside schematic-note' }, 'One young adult’s CT: the ventricles are this patient’s and narrow, completed by a fitted model where the CT cannot show them; the brain around them is a template fitted into the skull. For teaching, not for planning.'));
-    if (s.sel) pane.append(h('details', { class: 'more' }, h('summary', {}, `About ${g.name}`), groupCard));
-    else pane.append(groupCard);
+    if (s.sel) pane.append(jumps.about = h('details', { class: 'more' }, h('summary', {}, `About ${g.name}`), groupCard));
+    else pane.append(jumps.about = groupCard);
     // the anatomy views' shape slider after what the view shows, not before it (it opened the panel, ahead of 800 words:
     // the audit's UI-22)
-    if (!g.catheter && !g.endoscope && g.kind === 'anatomy') pane.append(h('section', { class: 'card scope', 'aria-label': 'Shape' }, h('h3', {}, 'Shape'), this.hydroControl()));
+    if (!g.catheter && !g.endoscope && g.kind === 'anatomy') pane.append(jumps.shape = h('section', { class: 'card scope', 'aria-label': 'Shape' }, h('h3', {}, 'Shape'), this.hydroControl()));
+    const row = jumpRow([['Views', jumps.views], [g.catheter ? 'Catheter' : 'Endoscope', jumps.tool], ['Ventricles', jumps.list], ['Selected', jumps.selected],
+      ['About this view', jumps.about], ['Shape', jumps.shape]]);
+    if (row) pane.prepend(row);
   }
 
   /** How the endoscopic view's anatomy is placed on this CT, and how it compares with the published measurements. */

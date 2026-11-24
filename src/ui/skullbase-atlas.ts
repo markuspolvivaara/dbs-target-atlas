@@ -17,7 +17,7 @@ import { figureControl } from './figure';
 import { structureBar } from './structurebar';
 import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 import { MeasureTool } from './measure';
-import { chips, clear, eyeIcon, fmtMm } from './widgets';
+import { chips, clear, eyeIcon, fmtMm, jumpRow } from './widgets';
 import { refLinksFrom } from './reflinks';
 import { FORAMEN_CONTENTS, FORAMEN_REF, PASSAGES } from '../skullbase/foramina';
 import { EndonasalPanel } from './skullbase-endonasal';
@@ -443,6 +443,9 @@ export class SkullbaseAtlasPage {
         : 'The Z-Anatomy model (BodyParts3D). The detailed model shows a real CT’s bone and vessels.')];
     const g = viewGroup(s.grp, s.also);
     const shownSystems = SB_GROUP.get(s.grp)?.kind === 'system' ? [s.grp, ...s.also] : [];
+    // the parts the jump row at the top leads to (the audit's UI-22), noted as they are made
+    const jumps: Record<string, HTMLElement | null> = { views: null, opening: null, endoscope: null, shown: null, selected: null, about: null };
+    const firstChild = pane.childElementCount;
     for (const [kind, label] of GROUP_ROWS) {
       if (kind === 'tumour') {     // one chip per kind of tumour; its grades (or sites) in a row of their own
         const fams = TUMOURS.filter((t) => SB_GROUPS.some((x) => x.tumour?.family === t.family));
@@ -477,10 +480,11 @@ export class SkullbaseAtlasPage {
         ? chips(items, shownSystems, (v) => this.toggleSystem(v), { label, cls: 'grp-chips' })
         : chips(items, s.grp, (v) => this.pickGroup(v), { label, cls: 'grp-chips' }));
     }
-    if ((g.kind === 'approach' && !g.endonasal && g.morphs?.length) || (g.kind === 'tumour' && g.morphs?.length)) pane.append(this.openingSliders(g));
+    jumps.views = pane.children[firstChild] as HTMLElement ?? null;
+    if ((g.kind === 'approach' && !g.endonasal && g.morphs?.length) || (g.kind === 'tumour' && g.morphs?.length)) pane.append(jumps.opening = this.openingSliders(g));
     // (the audit's UI-13: the endoscope's place and the pieces taken away are in the view's state, SkullState.endo; the
     // bone drilled away is voxels, which no link can hold)
-    if (g.endonasal) pane.append(this.endonasal.el, h('p', { class: 'aside' }, 'A copied link keeps where the endoscope is and the pieces taken away, not the bone drilled away with the burr.'));
+    if (g.endonasal) pane.append(jumps.endoscope = this.endonasal.el, h('p', { class: 'aside' }, 'A copied link keeps where the endoscope is and the pieces taken away, not the bone drilled away with the burr.'));
     const boneIds = g.structures.filter((id) => SB.get(id)?.type === 'bone');
     const hidden = new Set(s.hidden);
     const btn = (id: string, extra = '') => h('button', {
@@ -505,6 +509,7 @@ export class SkullbaseAtlasPage {
         h('button', { type: 'button', class: 'linklike', onclick: () => show(ids, false) }, 'Hide all')));
     // vessels, nerves and soft tissue: one list per kind; cranial nerves (I-XII) and artery systems each under
     // their own heading
+    const beforeLists = pane.childElementCount;
     for (const k of ['tumour', 'guide', 'brain', 'removed', 'nerve', 'labyrinth', 'ossicle', 'membrane', 'artery', 'vein', 'triangle', 'soft'] as const) {
       const ids = g.structures.filter((id) => { const st = SB.get(id); return st && st.type !== 'bone' && kindOf(st) === k; });
       if (!ids.length) continue;
@@ -523,7 +528,8 @@ export class SkullbaseAtlasPage {
     }
     if (boneIds.length && g.kind !== 'overview') pane.append(h('p', { class: 'chips-label' }, 'Bones'), h('div', { class: 'chips wrap sb-list' }, ...boneIds.map((id) => btn(id))));
     if (g.landmarks.length) pane.append(h('p', { class: 'chips-label' }, `Landmarks (${g.landmarks.length})`), h('div', { class: 'chips wrap sb-list' }, ...g.landmarks.map((id) => btn(id))));
-    if (s.sel) pane.append(this.card(s.sel));
+    jumps.shown = pane.children[beforeLists] as HTMLElement ?? null;
+    if (s.sel) pane.append(jumps.selected = this.card(s.sel));
     const groupCard = h('article', { class: 'card' },
       h('p', { class: 'eyebrow' }, GROUP_ROWS.find(([k]) => k === g.kind)![1]),
       h('h2', {}, g.name),
@@ -538,9 +544,12 @@ export class SkullbaseAtlasPage {
           : h('p', { class: 'aside' }, 'Z-Anatomy does not label the superior orbital fissure, internal acoustic meatus, stylomastoid and jugular foramina, carotid canal, foramen lacerum or cribriform plate: they are located here from where the nerves and vessels that pass through them cross the bone (each card says how). Not yet shown: ', NOT_YET_SHOWN.join(', '), '.'),
         h('p', { class: 'aside' }, `One adult male model (BodyParts3D), simplified by Z-Anatomy. Its head is larger than the CT head of the other two models: its cranial cavity, as measured here, holds ${V1_FIT.brain.cavityMl.toLocaleString('en')} ml. Positions are millimetres from the model’s hypophysial fossa landmark; this is not MNI space and does not match the DBS and white-matter sections. Vessels and nerves are drawn with the calibre Z-Anatomy models, which is not measured.`),
       ] : null);
-    if (s.sel) pane.append(h('details', { class: 'more' }, h('summary', {}, `About ${g.name}`), groupCard));
-    else pane.append(groupCard);
+    if (s.sel) pane.append(jumps.about = h('details', { class: 'more' }, h('summary', {}, `About ${g.name}`), groupCard));
+    else pane.append(jumps.about = groupCard);
     pane.append(...modelBlock);
+    const row = jumpRow([['Views', jumps.views], ['Opening', jumps.opening], ['Endoscope', jumps.endoscope], ['Shown in this view', jumps.shown],
+      ['Selected', jumps.selected], ['About this view', jumps.about], ['Model', modelBlock[0]]]);
+    if (row) pane.prepend(row);
   }
 
   private card(id: string): HTMLElement {

@@ -700,6 +700,49 @@ test('phone: names by tap, rows that show they scroll, targets a finger can hit,
 });
 
 // UI-01: the section's page tabs on a phone
+// UI-22: the skull base and ventricles panels open with 550 to 880 words and up to 145 tab stops; a row of jumps at
+// their top leads to each part, and the part takes the focus, so a keyboard user lands there too
+async function jumpsWork(page: Page, want: string[]) {
+  const pane = page.locator('.panel .pane:not([hidden])');
+  const row = pane.locator('nav.jump-row');
+  await expect(row).toHaveAttribute('aria-label', 'In this panel');
+  expect(await row.getByRole('button').allInnerTexts()).toEqual(want);
+  // (the row comes before the panel's first control)
+  expect(await pane.evaluate((p) => p.querySelector('button, a[href], input, select')?.closest('nav.jump-row') !== null)).toBe(true);
+  for (const label of want) {
+    await row.getByRole('button', { name: label, exact: true }).click();
+    const at = page.locator(':focus');
+    await expect(at).not.toHaveClass(/jump/);
+    expect(await at.evaluate((el) => !!el.closest('.panel .pane'))).toBe(true);
+    // (its top edge in sight, inside the pane and the window: a card can be far taller than the screen; on a phone the
+    // sheet opens to show it)
+    await expect.poll(() => at.evaluate((el) => {
+      const r = el.getBoundingClientRect(), p = el.closest('.pane')!.getBoundingClientRect();
+      return r.top >= p.top - 1 && r.top < Math.min(p.bottom, window.innerHeight) - 10;
+    }), { message: label }).toBe(true);
+  }
+}
+
+test('long panels: a row of jumps to their parts, each taking the focus', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './skullbase/#/atlas?g=transsylvian');
+  await jumpsWork(page, ['Views', 'Opening', 'Shown in this view', 'About this view', 'Model']);
+  await open(page, './ventricles/#/atlas?g=ventricles');
+  await jumpsWork(page, ['Views', 'Ventricles', 'About this view', 'Shape']);
+  // a short panel has no row
+  await open(page, './dbs/');
+  await expect(page.locator('nav.jump-row')).toHaveCount(0);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('phone: the long panel’s jumps work in the sheet @mobile', async ({ page }) => {
+  await open(page, './skullbase/#/atlas?g=transsylvian');
+  await expect(page.locator('.panel')).toHaveAttribute('data-sheet', 'peek');
+  await jumpsWork(page, ['Views', 'Opening', 'Shown in this view', 'About this view', 'Model']);
+  await expect(page.locator('.panel')).toHaveAttribute('data-sheet', 'full');
+});
+
 // UI-27: on a phone the notice is "Teaching tool." and its own last sentence, the rest a tap away; it took two to four
 // lines of the first screen from the 3D stage. The full text is still there, word for word
 test('phone: the notice folded to one line, the full text a tap away @mobile', async ({ page }) => {
