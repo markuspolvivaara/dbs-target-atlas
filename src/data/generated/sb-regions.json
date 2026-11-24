@@ -45,6 +45,10 @@
     "distanceMm": 10.3
    },
    {
+    "id": "sb_pituitary_stalk",
+    "distanceMm": 10.5
+   },
+   {
     "id": "sb_trochlear_nerve_iv",
     "distanceMm": 10.9
    },

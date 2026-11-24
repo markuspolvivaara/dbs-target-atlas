@@ -140,7 +140,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_adenohypophysis.glb",
-   "bytes": 6860,
+   "bytes": 6644,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -157,17 +157,17 @@
    ],
    "refIds": [],
    "category": "soft",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Mesh exported unchanged from Z-Anatomy.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Mesh from Z-Anatomy, its vertices unchanged, less its upper part: the narrow neck above 10.36 mm over the fossa is shown apart as the Pituitary stalk (skullbase_v1_stalk.py: cut level where the hypophysis is first narrower than a third of its greatest width).",
    "centroid": {
     "L": [
-     -2.78,
-     2.65,
-     7.59
+     -2.88,
+     2.88,
+     7.23
     ],
     "R": [
-     2.78,
-     2.65,
-     7.59
+     2.88,
+     2.88,
+     7.23
     ]
    }
   },
@@ -2137,7 +2137,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/sb_neurohypophysis.glb",
-   "bytes": 6316,
+   "bytes": 6256,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -2154,17 +2154,57 @@
    ],
    "refIds": [],
    "category": "soft",
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Mesh exported unchanged from Z-Anatomy.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Mesh from Z-Anatomy, its vertices unchanged, less its upper part: the narrow neck above 10.36 mm over the fossa is shown apart as the Pituitary stalk (skullbase_v1_stalk.py: cut level where the hypophysis is first narrower than a third of its greatest width).",
    "centroid": {
     "L": [
-     -2.76,
-     -1.03,
-     6.12
+     -2.8,
+     -0.95,
+     5.83
     ],
     "R": [
-     2.76,
-     -1.03,
-     6.12
+     2.8,
+     -0.95,
+     5.83
+    ]
+   }
+  },
+  {
+   "id": "sb_pituitary_stalk",
+   "name": "Pituitary stalk",
+   "aliases": [
+    "Infundibulum",
+    "Hypophyseal stalk"
+   ],
+   "type": "soft",
+   "file": "assets/skullbase/sb_pituitary_stalk.glb",
+   "bytes": 4396,
+   "colour": {
+    "token": "sbSoft",
+    "light": "#8A6FA8",
+    "dark": "#B9A3D6"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "refIds": [],
+   "category": "soft",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. The upper parts of Z-Anatomy's two meshes of the hypophysis (its Adenohypophysis and Neurohypophysis, which both go on above the gland), where they form a narrow neck: what lies above 10.36 mm over the fossa, the level at which the hypophysis is first narrower than a third of its greatest width (11.9 mm across at its widest, 3.9 mm there). Z-Anatomy does not name it apart; no vertex is moved (skullbase_v1_stalk.py).",
+   "centroid": {
+    "L": [
+     -1.13,
+     -0.79,
+     11.45
+    ],
+    "R": [
+     1.13,
+     -0.79,
+     11.45
     ]
    }
   },

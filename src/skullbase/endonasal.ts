@@ -17,6 +17,8 @@ import { meshChunk, CHUNK_VOX, type Colour, type FieldGrid } from '../viewer/sur
  * what the burr reaches is simply taken away.
  */
 const V3 = z.tuple([z.number(), z.number(), z.number()]);
+const CORRIDOR = z.object({ points: z.array(V3).min(2), lengthMm: z.number(), openedMm: z.number(), recess: V3,
+  freeMm: z.object({ least: z.number(), median: z.number(), underShare: z.number() }).optional() });
 export const ENDONASAL = z.object({
   params: z.object({ fieldIso: z.number(), airHu: z.number(), pieceStepMm: z.number(), pieceClearMm: z.record(z.string(), z.number()), densityMinHu: z.number(), densityStepHu: z.number(), distStepMm: z.number(), fields: z.array(z.string()) }),
   file: z.string(), bytes: z.number(), dims: V3, affine: z.array(z.array(z.number()).length(4)).length(4),
@@ -25,8 +27,11 @@ export const ENDONASAL = z.object({
   entry: z.object({ L: V3, R: V3 }),
   /** the scope's way through each side of the nose, 1 mm apart, from the entry to the last air before the sphenoid sinus
    * (at its opening), the turbinates pushed aside to `corridorMm` across */
-  corridor: z.object({ L: z.object({ points: z.array(V3).min(2), lengthMm: z.number(), openedMm: z.number(), recess: V3 }), R: z.object({ points: z.array(V3).min(2), lengthMm: z.number(), openedMm: z.number(), recess: V3 }) }),
+  /** freeMm (v1): the way's width as drawn along its opened part: its least, its median, and the share of it narrower than corridorMm */
+  corridor: z.object({ L: CORRIDOR, R: CORRIDOR }),
   corridorMm: z.number(),
+  /** (v1) the way is opened at least this far across round its line whatever lies there: room for the scope's clear core */
+  corridorCoreMm: z.number().optional(),
   sinus: z.object({ centre: V3, volumeMl: z.number(), lo: V3, hi: V3, backMm: z.number(), opensToNose: z.boolean() }).partial(),
   /** the carotids' least distance, at heights through the sella (mm above the fossa) */
   intercarotid: z.array(z.object({ z: z.number(), mm: z.number() })),
@@ -36,8 +41,15 @@ export const ENDONASAL = z.object({
   /** the hypophysis modelled in this CT's fossa: the diaphragma's points, the gland's size, its parts' volumes */
   hypophysis: z.object({
     diaphragma: z.object({ tuberculum: V3, dorsum: V3 }),
-    gland: z.object({ widthMm: z.number(), lengthMm: z.number(), heightMm: z.number(), mm3: z.number() }),
+    /** the gland without its stalk. aboveDiaphragmaMm, belowDiaphragma (v1): how far Z-Anatomy's gland reaches above the
+     * diaphragma's level, and what of it lies below it */
+    gland: z.object({ widthMm: z.number(), lengthMm: z.number(), heightMm: z.number(), mm3: z.number(),
+      aboveDiaphragmaMm: z.number().optional(), belowDiaphragma: z.object({ heightMm: z.number(), mm3: z.number() }).optional() }),
     adenoMm3: z.number(), neuroMm3: z.number(), stalkMm3: z.number(),
+    /** v1: the stalk as named on Z-Anatomy's meshes (the neck above fromZ, where the hypophysis is first narrower than
+     * widthShare of the gland's greatest width); v3: the drawn tube's ends */
+    stalk: z.object({ fromZ: z.number(), heightMm: z.number(), widthMm: z.number(), glandWidestMm: z.number(), widthShare: z.number() })
+      .or(z.object({ from: V3, to: V3 })).optional(),
   }),
 }).parse(SB_MODEL === 'v3' ? v3data : v1data);
 export type EndoPiece = (typeof ENDONASAL)['pieces'][number];

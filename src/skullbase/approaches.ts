@@ -595,7 +595,6 @@ export const V1_ABSENT = new Set([
   'Anterior cerebral artery (A3)', 'Third anterior cerebral artery (A2)', 'Third anterior cerebral artery (A3)',
   'Superficial middle cerebral vein', 'Sphenoparietal sinus', 'Insular veins', 'Deep middle cerebral vein', 'Basal vein (of Rosenthal)',
   'Internal cerebral veins', 'Trigeminal ganglion',
-  'Pituitary stalk',   // (Z-Anatomy has the two lobes of the gland, no stalk)
   'Inferior anastomotic vein (of Labbé)',
 ]);
 

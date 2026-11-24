@@ -654,7 +654,31 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
     - Nose: the air its bones enclose (outside that closed, as tissue would).
     - Sphenoid sinus: Z-Anatomy's own.
     - Hypophysis, cavernous sinuses, vessels and nerves: Z-Anatomy's own; the brain is v1's.
+    - The pituitary stalk (`pipeline/skullbase_v1_stalk.py`): Z-Anatomy draws the hypophysis as two meshes, each an
+      open shell (they share one flat rim and close each other), and both go on above the gland as a narrow neck. The
+      neck is named apart: both shells are cut level where the hypophysis is first narrower than a third of its
+      greatest width (10.4 mm above the fossa; 11.9 mm across at its widest, under 4 mm from there up), and what lies
+      above is the item "Pituitary stalk" (3.9 mm high). No vertex is moved. The views that show v3's stalk show it
+      (cavernous, endonasal, pterional, supraorbital, orbitozygomatic). The adenomas stay placed by Z-Anatomy's whole
+      anterior lobe, as before.
     - The clivus step is absent: Z-Anatomy's sinus does not reach behind the sella.
+    - The scope's way: the turbinates pushed aside to 4 mm across where the nose's own space allows, and a core
+      3.5 mm across (`WAY_CORE_MM`) opened round the way whatever lies there. Under Z-Anatomy's nasal bones the space
+      the bones enclose is a slit 2–3 mm high, less than the clear core the scope needs (2.5 mm), and the scope
+      stopped 26 mm in on both sides, never reaching the sinus. It now goes 83 mm, to the sinus (which it meets from
+      below and beside, not at the front wall: the burr opens its way in, taking the front wall away does not). The
+      way's width as drawn is measured (`corridor.*.freeMm`) and stated in the panel.
+    - The hypophysis is what Z-Anatomy's two shells enclose together, the lobes parted at the plane of their common
+      rim (flat within 0.1 mm). Measured on the meshes: the gland without its stalk is 11.9 mm across, 9.2 mm front
+      to back and 8.7 mm high (541 mm³; the posterior lobe 245 mm³), and reaches 2.6 mm above the diaphragma's level
+      (the plane through the tuberculum and dorsum sellae); below that level it is 6.0 mm high and 409 mm³. The stalk
+      is 25 mm³. The panel states these. (Until 2026-11-24 the step took each shell alone, which encloses nothing:
+      the "gland" was a hollow skin a voxel thick and a voxel too large all round, and the figures given for it,
+      14.5 mm high and 526 mm³, were that skin's.)
+    - The step gives the same files on every run: the surface sampling has a seed of its own (trimesh's sampler
+      does not follow numpy's seed, and two runs differed by about 1 % in the gland's and the pieces' volumes).
+    - The "In" slider says how far the way is open (both models): the scope stops in front of the sinus's front
+      wall until that is taken away.
   - The tumours and the Grading page (`SB_PROFILE=v1 pipeline/skullbase_v3_tumours.py`): v3's rules on Z-Anatomy's
     bone, carotids, cavernous sinus and brain.
     - Knosp 0–3A only: Z-Anatomy's cavernous carotid runs in the sphenoid's body below its cavernous sinus, so there is

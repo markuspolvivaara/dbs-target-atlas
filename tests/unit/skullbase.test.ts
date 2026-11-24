@@ -1113,9 +1113,10 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     // P1 and the superior cerebellar artery are not in the pterional and supraorbital views (5 and 2 % of P1 reachable)
     for (const view of ['transsylvian', 'lso']) for (const n of ['Posterior cerebral artery (P1–P2)', 'Superior cerebellar artery'])
       expect(G3.SB_GROUP.get(view)!.structures, `${view}: ${n}`).not.toContain(v3.structures.find((x) => x.name === n)!.id);
-    // v1 (Z-Anatomy): the same under its own names; it has no pituitary stalk and draws the posterior cerebral artery whole
-    const own: Record<string, string | null> = { 'Pituitary stalk': null, 'Posterior cerebral artery (P1–P2)': 'Posterior cerebral artery' };
-    expect(SB_MANIFEST.structures.some((x) => x.name === 'Pituitary stalk')).toBe(false);
+    // v1 (Z-Anatomy): the same under its own names; it draws the posterior cerebral artery whole (its pituitary stalk is
+    // the narrow upper part of its two lobes, named apart by skullbase_v1_stalk.py)
+    const own: Record<string, string | null> = { 'Posterior cerebral artery (P1–P2)': 'Posterior cerebral artery' };
+    expect(SB_MANIFEST.structures.filter((x) => x.name === 'Pituitary stalk')).toHaveLength(1);
     for (const [view, names] of Object.entries(want)) {
       const g = SB_GROUPS.find((x) => x.id === view)!, plan = skullPlan(view, null);
       for (const n of names) {

@@ -268,9 +268,8 @@ the list").** On `fix/audit-models-2` (off `27ee8a6`), local commits, not pushed
 **Still left without a decision, and why not done this round:**
 - MC-13 and MC-15 (v1's bone raster; v1's right "Insula" holding the fissure's white-matter
   floor back to the occipital region: `skullbase_v1_brain.white_floor`, limit it to the circular sulcus's extent):
-  both need v1's brain or skull step run again, which the later v1 steps depend on. AP-11, AP-15, MC-16: v1
-  endonasal. (These were waiting for the owner's v1 endonasal rework, uncommitted in the main checkout; the owner
-  called that work useless on 2026-11-23 and it was discarded, see below: they are open again on their own.) MA-17's rest: the
+  both need v1's brain or skull step run again, which the later v1 steps depend on: see "v1's endonasal view" below
+  for what each needs. (AP-11, AP-15 and MC-16 were done on the night of 2026-11-24, same section.) MA-17's rest: the
   sensorimotor GPi's 18 edges shared by more than two triangles (in the label's own shape).
 - Text for the owner: B-016's three cortex sentences a clinician should judge (the lunate sulcus as the V1/V2 border,
   receptive aphasia from supramarginal lesions, the inferior temporal gyrus "underneath the central temporal
@@ -293,6 +292,113 @@ The tract data (section 2) is done as far as open data go: the acoustic radiatio
 starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm further forward). Done from it: help and reset, cards into view, "what this bundle shows", surgical views,
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
+
+## v1's pituitary stalk, and the gland measured as a closed body (desktop, 2026-11-24)
+
+Branch `fix/v1-items` (pull request 40). The owner's word of 24 November: the upper part of Z-Anatomy's hypophysis is
+drawn as the stalk.
+
+- **The stalk** (`pipeline/skullbase_v1_stalk.py`, a new step after `skullbase_build.py`): Z-Anatomy's
+  "Adenohypophysis" and "Neurohypophysis" are each an open shell; they share one rim of 56 vertices (flat within
+  0.07 mm) and close each other. Both go on above the gland as a narrow neck. Both shells are cut level where the
+  hypophysis, going up from its widest level, is first narrower than a third of its greatest width
+  (`STALK_WIDTH_SHARE`): 10.36 mm above the fossa (11.9 mm across at 6.4 mm; 3.9 mm at the cut; 3.3 to 3.9 mm from
+  there up). What lies above is the new item `sb_pituitary_stalk` "Pituitary stalk", 3.9 mm high; the lobes keep the
+  rest. No vertex is moved, and like Z-Anatomy's lobes the three parts are open towards each other.
+  - **A third, not a half:** at a half the cut falls on the gland's shoulder (5.7 mm across, 4.6 mm front to back);
+    at a third it falls where the shoulder ends. A drawing choice; the panel and the item say so.
+  - It writes the three GLBs, the manifest items, the three items' entries in `sb-regions.json` and its record in
+    `sb-modifications.json`. Run `compress.mjs skullbase sb_adenohypophysis.glb sb_neurohypophysis.glb
+    sb_pituitary_stalk.glb` and `skullbase_build.py finalize` after it (the manifest does not parse while the new
+    item's size is 0).
+  - Front end: `V1_ABSENT` no longer lists the stalk, so v1's pterional, supraorbital and orbitozygomatic views draw
+    it as v3's do (AP-08); v1's cavernous and endonasal views list it.
+  - **The tumours are not moved:** `SB_PROFILE=v1 skullbase_v3_tumours.py` places the adenoma by the anterior lobe's
+    box, and now reads Z-Anatomy's whole lobe from the export (`skullbase_v1_stalk.whole_lobe`), stalk part included,
+    as it did before. With the cut lobe the adenoma would sit 2 mm lower. The step was not run again. For the owner
+    to say whether the adenoma should follow the gland without its stalk.
+- **Found on the way and fixed: the endonasal step measured the gland as a hollow skin.** `mesh_inside` took each
+  shell alone; an open shell encloses nothing, so each lobe was only its surface, a voxel thick and a voxel too
+  large all round, and the "gland" their union. The figures of the night before (14.5 mm high, 526 mm³, 7.5 mm above
+  the diaphragma, 321 mm³ below it) were that skin's. Now the hypophysis is what the two shells enclose together
+  (`skullbase_v1_stalk.closed`, filled on the grid), the lobes parted at the plane of their common rim, the stalk
+  above the neck (label 3 in the `gland` field, as v3's).
+  - **Figures, from the meshes** (`volume_within`: exact; the 0.5 mm grid holds 6 % less than the closed mesh): the
+    gland without its stalk 11.9 × 9.2 × 8.7 mm, 541.0 mm³ (anterior lobe 296.4, posterior 244.6); 2.6 mm of it above
+    the diaphragma's level, 6.0 mm and 408.5 mm³ below; the stalk 24.6 mm³. The whole, 565.6 mm³, is 12.6 mm high.
+  - **What moved with it:** the sellar floor's piece 157 → 198 mm³ and the dura's 125 → 71 mm³ (the gland's surface
+    is half a millimetre further in); the other pieces, the way and the scope's reach are as they were.
+- **Found on the way and fixed:** the "Hypophysis" see-through group in the endonasal panel listed v3's names for the
+  lobes only, so it lit nothing on v1. It lists Z-Anatomy's names too; a unit test asks that every group lights
+  something on v1.
+- **Found, not fixed: v1's cavernous sinuses are a voxel too large in the endonasal step.** Z-Anatomy's sinus meshes
+  are not watertight either, so `mesh_inside` takes their surface widened by a voxel and filled: 1795 mm³ on the
+  grid against 1273 mm³ in the mesh. `cavernous_cond.npz` holds this, and the Knosp section and the sinus's
+  medial-wall steps (1786 mm³ each) are made on it. Mending it changes v1's tumours and those two steps, so it wants
+  the tumours' step run again and the grades looked at.
+- **Checks:** `skullbase_build.py finalize` has four new checks (the three meshes together span Z-Anatomy's two; they
+  meet at the cut's level; the stalk is under half the gland's width; no vertex off the source surface).
+  `tests/unit/endonasal-v1.test.ts`: the lobes fill the gland, the stalk lies above them and is narrow, every
+  see-through group lights something.
+
+## v1's endonasal view: the scope's way, the slider's note, the gland (desktop, night of 2026-11-24)
+
+Branch `fix/v1-items`, on top of `fix/nerves-through-vessels`. Pushed on 2026-11-24 on the owner's word (pull request 40).
+The audit's AP-15, AP-11 and MC-16; MC-13 and MC-15 are not done (below).
+
+- **Found on the way: on v1 the scope never reached the sphenoid sinus.** It stopped 26 mm in, on both sides, with
+  the committed data too. The scope needs a clear core 2.5 mm across (`ScopePath.room`, `ENDO_SCOPE_ROOM_MM`); under
+  Z-Anatomy's nasal bones the space the bones enclose is a slit 2–3 mm high against the closure of the outside, and
+  from 28 to 38 mm along the way there was 1.5–2 mm. No test asked how far v1's scope goes (v3's asks only for more
+  than 3 mm). The audit's figures for v1 (52 of 78 mm) were measured on the live site, an older build of v1.
+  - **The rule now** (`WAY_CORE_MM = 1.75` in `pipeline/skullbase_v1_endonasal.py`): the way keeps its course, and
+    within 1.75 mm of its line it is opened whatever lies there, bone or closure. The scope goes 83.25 mm on both
+    sides, to the sinus, and the burr opens its way in (three rounds, 84 mm³ of bone). The panel says so
+    (`corridorCoreMm` in `sb-endonasal.json`).
+  - **Tried and dropped:** letting the way run through the closure of the outside. With all of it allowed the way
+    took another course (along x = 4 mm, low, then up into the sinus from behind and below; 99 mm); with only the
+    closure within 3 mm of the nose it still had 1.5–2.5 mm in three places under the nasal bones.
+  - **Found once the scope got through, not fixed: the way comes to the sinus from below and beside it, not at its
+    front wall.** The scope rests at (±9, 16, −11) mm, under the sinus's floor (z −9.5 mm), looking up, back and
+    towards the midline. Taking away step 1, "Front wall of the sphenoid sinus" (centre (0, 20.5, −1.8) mm), opens
+    nothing in its line; only the burr does. The way takes "the thinnest wall" between the nose and the sinus, and
+    the air Z-Anatomy's bones enclose lies below and beside the sphenoid's body. Tried: the wall crossed only in
+    front of the sinus (nearest sinus air within 45° of straight back), and the way forbidden within 4 mm of the
+    sinus anywhere else. The way then ended under the sinus's floor near the midline (±2.5, 14.5, −11.5): the model
+    has no air in front of the sinus's face for it to follow. Left as it was, by the owner's word of 24 November
+    ("current is fine").
+  - **For the owner to judge too:** the way starts under the nasal bones (the front-most air the bones enclose),
+    high for a nostril; Z-Anatomy has no soft nose. The course is as it was; only its width changed.
+- **AP-15 (both models):** the "In" slider's read-out says how far the way is open: "In 26.0 mm (the way is open to
+  83.3 of 106 mm)" (`openTo()` in `src/ui/skullbase-endonasal.ts`; recomputed only when the scope's side or turn or
+  what is taken away changes). On v3 the right side reads 9.0 of 37 mm until the front wall is taken away.
+- **MC-16:** the step measures the way's width as drawn (`corridor.L/R.freeMm`: least, median, share under 3.5 mm;
+  twice the distance from the opened way to the nearest lining, on the 0.5 mm grid). After the fix: least 2.8 mm
+  (right) and 3.0 mm (left), median 3.7 mm. The panel states it beside the 4 mm the turbinates are pushed aside to.
+- **AP-11:** Z-Anatomy's hypophysis is 14.5 mm high because its two lobes reach 7.5 mm above the diaphragma's level
+  (the plane through its tuberculum and dorsum sellae). Below that level it is 7.0 mm high and 321 mm³. The panel
+  states both (`gland.aboveDiaphragmaMm`, `gland.belowDiaphragma`). **These figures were wrong (a hollow, widened
+  skin was measured) and are replaced: see "v1's pituitary stalk" above.** The owner's word of 24 November: the
+  upper part is drawn as the stalk.
+- **The step was not reproducible:** trimesh's surface sampler does not follow numpy's seed, so the gland's and the
+  pieces' volumes differed by about 1 % between runs. `mesh_inside` now samples with `seed=0`; two runs give
+  byte-identical files. The data also differs from the committed files because `centre_lines` (mended on
+  2026-11-23) now reads v1's nerve tubes rightly, which moves the nerve distance field a little (pieces by under
+  2 mm³).
+- **Not done, and what each needs:**
+  - **MC-13** (v1's bone raster 0.5–0.9 mm fatter than the bone meshes): `SURF_MM = 0.5` in
+    `pipeline/skullbase_v1_skull.py` thickens the nearly closed bones by design. Changing it redoes v1's skull
+    field, hence every v1 approach copy, the endonasal fields and the brain's cavity. A full v1 rebuild, and a
+    decision on the value.
+  - **MC-15** (v1's right "Insula" holds the fissure's white-matter floor back to the occipital region):
+    `skullbase_v1_brain.white_floor` is part of the hemisphere mesh that the approaches clear and open.
+    `skullbase_v1_brain.py` does not reproduce its files on this desktop (every v1 brain file changes by noise), so
+    it wants the MacBook, or the step made reproducible first.
+- **Tests:** `tests/unit/endonasal-v1.test.ts` (the scope reaches the sinus and the burr opens its way in;
+  the way's width and the gland below the diaphragma are stated), `tests/e2e/audit-fixes.spec.ts` (the slider's
+  note on both models).
+- **MacBook baselines:** v1's endonasal pictures change in the front 40 mm of the way (wider under the nasal bones).
+- **v1 has not been rebuilt** after the tube-reader fix, except this step.
 
 ## Structures through each other: the sweep, and the jugular foramen (desktop, night of 2026-11-24)
 
@@ -321,7 +427,8 @@ per-structure opacity, slices under the cortex, the citation panel, keyboard con
     anteromedial opening of the dura, X and XI through one larger opening; all three anteromedial to the jugular
     bulb. Rubinstein 1995 (PMID 7900591, PMC8337704): X and XI could not be separated on CT. Katsuta and Rhoton
     1997 (PMID 9218307): the neural part lies between the sigmoid and petrosal parts of the foramen. **They are in
-    the code's comments and the README, not on a card or in the reference list: the owner to say if they belong there.**
+    the code's comments and the README, not on a card or in the reference list** (the owner, 24 November: no need to
+    put them on the cards).
   - Result: none of the three touches a vein or an artery; they pass 1.2 to 2.9 mm from each other. Lengths and
     sharpest turns (between 0.5 mm steps; over 3 mm): left IX 48.6 mm, 27°, 73° (was 46.2, 41°, 82°); left X 42.1,
     19°, 64° (41.4, 34°, 60°); left XI 45.6, 21°, 67° (48.1, 20°, 61°); right IX 42.3, 14°, 52°; X as it was;
@@ -1273,7 +1380,7 @@ per-structure opacity, slices under the cortex, the citation panel, keyboard con
       condyle, at the rim's level (`FM_RIM_IN_MM`); v3's walk passes through Z-Anatomy's wider foramen.
     - Front end: `tumourGroups()` serves both models; `TUMOUR_FIT_V1`/`_V3`; the Grading page is in v1's nav.
       `ofKind` and the nerve highlight skip the tumour views' copies (the highlight bug was in v3 too).
-  - v1 chain (updated 2026-11-15): `skullbase_build.py`, `skullbase_v1_xii.py`, `skullbase_v1_nerves.py`,
+  - v1 chain (updated 2026-11-24): `skullbase_build.py`, `skullbase_v1_stalk.py`, `skullbase_v1_xii.py`, `skullbase_v1_nerves.py`,
     `skullbase_v1_skull.py`, `skullbase_v1_ear.py`, `skullbase_v1.py ear`,
     `SB_PROFILE=v1 skullbase_v3_approach.py only pterional lso interhemispheric suboccipital retrosigmoid
     orbitozygomatic far_lateral kawase subtemporal`, `skullbase_v1.py approaches`, `skullbase_v1_brain.py`,

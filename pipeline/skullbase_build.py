@@ -710,6 +710,25 @@ def validate() -> int:
         for it in m["structures"]:
             if it.get("category") in ("tumour", "guide"):
                 check(it["centroid"]["R"][0] > -5, f"{it['id']}: not on the right {it['centroid']}")
+    if not CT and any(it["id"] == "sb_pituitary_stalk" for it in m["structures"]):
+        # the pituitary stalk named apart (skullbase_v1_stalk.py): above the two lobes, the three meshes together as
+        # high and as wide as Z-Anatomy's hypophysis, meeting at the cut's level; narrow
+        import skullbase_v1_stalk as ST
+        from glb import read_glb_full
+        ex = json.loads((BUILD / "export.json").read_text())
+        lv = ST.neck_level(ex)
+        src = np.vstack([v for v, _t in ST.lobes(ex).values()])
+        got = {sid: np.vstack([np.asarray(nd["positions"], float).reshape(-1, 3) for nd in read_glb_full(BUILD / f"{sid}.glb").values()])
+               for sid in ("sb_adenohypophysis", "sb_neurohypophysis", "sb_pituitary_stalk")}
+        both = np.vstack(list(got.values()))
+        check(np.allclose(both.min(0), src.min(0), atol=1e-3) and np.allclose(both.max(0), src.max(0), atol=1e-3),
+              f"hypophysis: the lobes and the stalk span {both.min(0).round(2)}..{both.max(0).round(2)}, Z-Anatomy's meshes {src.min(0).round(2)}..{src.max(0).round(2)}")
+        check(abs(got["sb_pituitary_stalk"][:, 2].min() - lv["z"]) < 1e-3
+              and all(abs(got[s][:, 2].max() - lv["z"]) < 1e-3 for s in ("sb_adenohypophysis", "sb_neurohypophysis")),
+              f"hypophysis: the lobes and the stalk do not meet at the cut's level {lv['z']}")
+        check(np.ptp(got["sb_pituitary_stalk"][:, 0]) < 0.5 * lv["widestMm"],
+              f"pituitary stalk: {np.ptp(got['sb_pituitary_stalk'][:, 0]):.1f} mm across beside a gland {lv['widestMm']} mm across")
+        check(cKDTree(src).query(both)[0].max() < 1.0, "hypophysis: a vertex of the cut meshes lies off Z-Anatomy's surface")
     print(f"skull base validation: {n - len(fails)}/{n} checks passed")
     for f in fails:
         print("FAIL", f)

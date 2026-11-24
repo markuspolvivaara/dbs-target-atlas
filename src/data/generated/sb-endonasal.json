@@ -29,7 +29,7 @@
   ]
  },
  "file": "assets/skullbase/endonasal.bin.gz",
- "bytes": 3826078,
+ "bytes": 3834181,
  "dims": [
   97,
   213,
@@ -543,7 +543,12 @@
     18.0,
     -7.0
    ],
-   "openedMm3": 101.4
+   "openedMm3": 159.8,
+   "freeMm": {
+    "least": 3.0,
+    "median": 3.7,
+    "underShare": 0.25
+   }
   },
   "R": {
    "points": [
@@ -1005,10 +1010,16 @@
     18.0,
     -7.0
    ],
-   "openedMm3": 105.5
+   "openedMm3": 123.0,
+   "freeMm": {
+    "least": 2.8,
+    "median": 3.7,
+    "underShare": 0.17
+   }
   }
  },
  "corridorMm": 4.0,
+ "corridorCoreMm": 3.5,
  "sinus": {
   "seed": [
    1.0,
@@ -1057,8 +1068,8 @@
    "id": "face",
    "name": "Front wall of the sphenoid sinus",
    "label": 1,
-   "mm3": 1121.4,
-   "boneMm3": 1121.2,
+   "mm3": 1119.1,
+   "boneMm3": 1119.0,
    "centre": [
     -0.0,
     20.5,
@@ -1081,11 +1092,11 @@
    "id": "floor",
    "name": "Sellar floor",
    "label": 3,
-   "mm3": 157.2,
-   "boneMm3": 157.2,
+   "mm3": 198.2,
+   "boneMm3": 198.2,
    "centre": [
     -0.0,
-    7.4,
+    7.2,
     5.1
    ]
   },
@@ -1093,20 +1104,20 @@
    "id": "dura",
    "name": "Dura over the sella",
    "label": 4,
-   "mm3": 126.0,
-   "boneMm3": 66.6,
+   "mm3": 71.4,
+   "boneMm3": 35.5,
    "centre": [
     0.0,
-    5.4,
-    5.9
+    5.3,
+    6.2
    ]
   },
   {
    "id": "cs_R",
    "name": "Medial wall of the right cavernous sinus",
    "label": 5,
-   "mm3": 1785.9,
-   "boneMm3": 326.6,
+   "mm3": 1786.0,
+   "boneMm3": 325.5,
    "centre": [
     13.5,
     -2.1,
@@ -1117,11 +1128,11 @@
    "id": "cs_L",
    "name": "Medial wall of the left cavernous sinus",
    "label": 6,
-   "mm3": 1784.4,
-   "boneMm3": 325.8,
+   "mm3": 1785.2,
+   "boneMm3": 324.6,
    "centre": [
     -13.5,
-    -2.0,
+    -2.1,
     1.5
    ]
   },
@@ -1152,13 +1163,25 @@
    ]
   },
   "gland": {
-   "widthMm": 13.5,
-   "lengthMm": 11.0,
-   "heightMm": 14.5,
-   "mm3": 522.4
+   "widthMm": 11.9,
+   "lengthMm": 9.2,
+   "heightMm": 8.7,
+   "mm3": 541.0,
+   "aboveDiaphragmaMm": 2.6,
+   "belowDiaphragma": {
+    "heightMm": 6.0,
+    "mm3": 408.5
+   }
   },
-  "adenoMm3": 302.0,
-  "neuroMm3": 272.0,
-  "stalkMm3": 0.0
+  "adenoMm3": 296.4,
+  "neuroMm3": 244.6,
+  "stalkMm3": 24.6,
+  "stalk": {
+   "fromZ": 10.36,
+   "heightMm": 3.9,
+   "widthMm": 4.0,
+   "glandWidestMm": 11.9,
+   "widthShare": 0.333
+  }
  }
 }
