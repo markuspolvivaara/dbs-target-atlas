@@ -266,10 +266,9 @@ the list").** On `fix/audit-models-2` (off `27ee8a6`), local commits, not pushed
     carve, so every bone copy again.
 
 **Still left without a decision, and why not done this round:**
-- MC-13 and MC-15 (v1's bone raster; v1's right "Insula" holding the fissure's white-matter
-  floor back to the occipital region: `skullbase_v1_brain.white_floor`, limit it to the circular sulcus's extent):
-  both need v1's brain or skull step run again, which the later v1 steps depend on: see "v1's endonasal view" below
-  for what each needs. (AP-11, AP-15 and MC-16 were done on the night of 2026-11-24, same section.) MA-17's rest: the
+- MC-13 (v1's bone raster): it needs v1's skull step run again, which the later v1 steps depend on: see "v1's
+  endonasal view" below for what it needs. MC-15 (v1's right "Insula") was done on 2026-11-24 with the brain step
+  made reproducible: see "v1's brain step gives the same files every time". (AP-11, AP-15 and MC-16 were done on the night of 2026-11-24, same section.) MA-17's rest: the
   sensorimotor GPi's 18 edges shared by more than two triangles (in the label's own shape).
 - Text for the owner: B-016's three cortex sentences a clinician should judge (the lunate sulcus as the V1/V2 border,
   receptive aphasia from supramarginal lesions, the inferior temporal gyrus "underneath the central temporal
@@ -292,6 +291,62 @@ The tract data (section 2) is done as far as open data go: the acoustic radiatio
 starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm further forward). Done from it: help and reset, cards into view, "what this bundle shows", surgical views,
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
+
+## v1's brain step gives the same files every time; its halves mirror each other (desktop, 2026-11-24)
+
+Branch `fix/v1-brain-reproducible`, on top of `fix/v1-adenoma-sinus`. **Local only: not pushed.** The owner's word of
+24 November: make the step reproducible on the desktop first. The audit's MC-15 is done with it.
+
+- **Why it differed from run to run:** in `hemisphere`, a face whose three corners lie in three different lobes took
+  `max(set(lobes), key=count)`: one of the three by the set's order, which follows Python's string hashing and
+  changes with every run. Twenty faces a side; twelve of them touch the temporal lobe or the insula, which are
+  remade apart from the rest, so two faces went to the insula's group or not. The surface sampling then drew other
+  points everywhere, and every surface, shape and carried artery came out a little different. Now the first by name
+  (`sorted`). Two runs give byte-identical files (all 304 in v1's build).
+- **Found on the way: a piece of cortex was missing on one side.** Reducing each remade surface to its share of
+  90 000 triangles pinches thin sheets off it; the largest of the three surfaces (all but the temporal lobe and the
+  insula) comes out in 81 pieces on the right and 57 on the left, nearly all flaps of two triangles, and `remesh`
+  kept "the largest piece only". One of the pieces is 32.6 cm² of the medial parietal
+  surface. It was dropped on the left in the build shipped until now, and on the left or the right as a run went.
+  - Now every piece of `REMESH_KEEP_MM2` (25 mm²) or more is kept: of that surface seven on the right and four on
+    the left here; 1.5 to 1.8 cm² of flaps a side are dropped.
+  - A piece with no held point drifts in the as-rigid-as-possible solve (one went 86 mm in the lift). So the
+    opening and the lifts are solved on the surface without the pinched-off pieces, and each of their points then
+    moves as the nearest point of that surface.
+- **MC-15 (the right "Insula" twice the left, reaching the occipital region):** Z-Anatomy names the left artery
+  "Middle cerebral artery (M3 segment)" and the right one "(M3-segment)". `fissure_course` read the second form
+  only, so the left course had M1 and M2 and the right one all 80 mm of M3 too, which runs back to 70 mm behind
+  the fossa.
+  - `segment_name` reads both forms.
+  - The course ends where Z-Anatomy's own lateral fissure ends (`fissure_span`: its fissure patches and the
+    circular sulcus, from 54.2 mm behind the fossa to 26.2 mm in front). M3's last 16 mm run on the cortex.
+  - The white-matter floor is kept within the same span.
+  - Result: both floors 31 565 triangles (were 39 406 right, 18 932 left). The opercula are 2 427 vertices on the
+    right (were 2 758): the opening no longer parts cortex behind the fissure's end.
+- **The halves now mirror each other** (areas in cm², and the surface more than 2 mm from the other side's mirror
+  image):
+
+  | | Before, R / L | Now, R / L | Unmatched before | Unmatched now |
+  |---|---|---|---|---|
+  | Cortex without the insula | 2028 / 1992 | 2030 / 2022 | 1.5 | 0.1 |
+  | Insula with its floor | 271 / 147 | 222 / 222 | 116 | 0.1 |
+
+- **Shapes on the new surface:** the opening moves 7 122 vertices, at most 6.65 mm (5 733 and 6.26 before); the lifts
+  8.15 and 13.05 mm at most (8.19 and 12.28); the interhemispheric shape 8.23 mm (8.25).
+- **Chain run after the brain step** (`chain.sh` in the scratchpad's `v1brain/`): `skullbase_v1.py brain`,
+  `skullbase_v1_endonasal.py`, `skullbase_v1_vessels.py`, `skullbase_v1_ends.py`,
+  `SB_PROFILE=v1 skullbase_v3_tumours.py`, `skullbase_v1_inbone.py`, `compress.mjs skullbase` for the 31 changed
+  files, `skullbase_build.py finalize` (675/675, six new checks: each brain piece's halves mirror each other).
+  - Changed: the six brain pieces, the 16 cortical arteries carried with the cortex, the temporal lobe's two
+    lifted copies, the olfactory groove and tuberculum sellae meningiomas with their four brain copies, Koos IV.
+  - The manifest's five subtemporal approach items now come before the brain's, as a full rebuild orders them.
+  - The tumours' report takes this run's figures throughout (the foramen magnum meningioma's by one point and
+    0.01 mm, as found on 24 November).
+- **Not rebuilt:** the steps before the brain step (skull, ear, approaches) and the posterior fossa step, which do
+  not read the cerebrum.
+- **Tests:** `tests/unit/skullbase.test.ts` asks that each v1 brain piece's halves mirror each other within 1 mm (the
+  insula's centres lay 23 mm apart front to back, the frontal lobe's 2 mm).
+- **MacBook baselines:** every v1 picture that shows the brain.
 
 ## v1's adenomas by the gland without its stalk; v1's cavernous sinus exact (desktop, 2026-11-24)
 
@@ -480,10 +535,9 @@ The audit's AP-15, AP-11 and MC-16; MC-13 and MC-15 are not done (below).
     `pipeline/skullbase_v1_skull.py` thickens the nearly closed bones by design. Changing it redoes v1's skull
     field, hence every v1 approach copy, the endonasal fields and the brain's cavity. A full v1 rebuild, and a
     decision on the value.
-  - **MC-15** (v1's right "Insula" holds the fissure's white-matter floor back to the occipital region):
-    `skullbase_v1_brain.white_floor` is part of the hemisphere mesh that the approaches clear and open.
-    `skullbase_v1_brain.py` does not reproduce its files on this desktop (every v1 brain file changes by noise), so
-    it wants the MacBook, or the step made reproducible first.
+  - **MC-15** (v1's right "Insula" holds the fissure's white-matter floor back to the occipital region): done on
+    2026-11-24, with the brain step made reproducible (the section "v1's brain step gives the same files every
+    time" above).
 - **Tests:** `tests/unit/endonasal-v1.test.ts` (the scope reaches the sinus and the burr opens its way in;
   the way's width and the gland below the diaphragma are stated), `tests/e2e/audit-fixes.spec.ts` (the slider's
   note on both models).

@@ -557,7 +557,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_anterior_temporal_branch.glb",
-   "bytes": 32216,
+   "bytes": 32312,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -578,12 +578,12 @@
    "centroid": {
     "L": [
      -58.18,
-     -5.42,
-     20.99
+     -5.43,
+     21.02
     ],
     "R": [
-     58.27,
-     -5.44,
+     58.22,
+     -5.43,
      21.02
     ]
    },
@@ -596,7 +596,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_artery_of_central_sulcus.glb",
-   "bytes": 22016,
+   "bytes": 22004,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -616,13 +616,13 @@
    "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -48.43,
-     -23.61,
-     70.68
+     -48.44,
+     -23.62,
+     70.66
     ],
     "R": [
-     48.43,
-     -23.6,
+     48.46,
+     -23.59,
      70.7
     ]
    },
@@ -635,7 +635,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_artery_of_precentral_sulcus.glb",
-   "bytes": 35344,
+   "bytes": 35240,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -655,13 +655,13 @@
    "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -43.87,
-     0.16,
-     73.84
+     -43.86,
+     0.17,
+     73.8
     ],
     "R": [
-     43.95,
-     0.22,
+     43.91,
+     0.19,
      73.87
     ]
    },
@@ -752,7 +752,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_branch_to_angular_gyrus.glb",
-   "bytes": 5048,
+   "bytes": 5296,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -772,14 +772,14 @@
    "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -57.82,
-     -77.26,
-     35.29
+     -57.85,
+     -77.21,
+     35.26
     ],
     "R": [
-     57.91,
-     -77.23,
-     35.24
+     57.93,
+     -77.21,
+     35.18
     ]
    },
    "system": "Middle cerebral artery",
@@ -791,7 +791,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_callosomarginal_artery.glb",
-   "bytes": 32884,
+   "bytes": 32916,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -812,13 +812,13 @@
    "centroid": {
     "L": [
      -3.35,
-     21.64,
-     74.83
+     21.65,
+     74.82
     ],
     "R": [
      3.36,
      21.63,
-     74.84
+     74.83
     ]
    },
    "system": "Anterior cerebral artery",
@@ -1185,7 +1185,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_frontal_branches_of_callosomarginal_artery.glb",
-   "bytes": 7680,
+   "bytes": 7612,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1205,14 +1205,14 @@
    "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -5.62,
-     36.4,
-     75.3
+     -5.63,
+     36.36,
+     75.27
     ],
     "R": [
-     5.63,
-     36.39,
-     75.28
+     5.64,
+     36.37,
+     75.3
     ]
    },
    "system": "Anterior cerebral artery",
@@ -1622,7 +1622,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_lateral_frontobasal_artery.glb",
-   "bytes": 17508,
+   "bytes": 19632,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -1642,14 +1642,14 @@
    "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -35.9,
-     41.0,
+     -35.96,
+     41.01,
      43.92
     ],
     "R": [
-     35.95,
-     40.97,
-     43.85
+     35.84,
+     41.02,
+     43.86
     ]
    },
    "system": "Middle cerebral artery",
@@ -2529,7 +2529,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_orbitofrontal_branches_of_anterior_cerebral_artery.glb",
-   "bytes": 11064,
+   "bytes": 11072,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2549,14 +2549,14 @@
    "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -5.27,
+     -5.31,
      47.64,
-     23.65
+     23.7
     ],
     "R": [
-     5.3,
-     47.64,
-     23.69
+     5.32,
+     47.62,
+     23.72
     ]
    },
    "system": "Anterior cerebral artery",
@@ -2642,7 +2642,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_parietal_branches_of_middle_cerebral_artery.glb",
-   "bytes": 14408,
+   "bytes": 13048,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2662,14 +2662,14 @@
    "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -58.33,
-     -52.88,
-     64.76
+     -58.37,
+     -52.86,
+     64.73
     ],
     "R": [
-     58.5,
-     -52.91,
-     64.81
+     58.49,
+     -52.88,
+     64.82
     ]
    },
    "system": "Middle cerebral artery",
@@ -2681,7 +2681,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_pericallosal_artery.glb",
-   "bytes": 61648,
+   "bytes": 61624,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2707,7 +2707,7 @@
     ],
     "R": [
      5.19,
-     -29.67,
+     -29.68,
      72.21
     ]
    },
@@ -2720,7 +2720,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_postcentral_arterial_branch.glb",
-   "bytes": 16028,
+   "bytes": 14476,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -2740,14 +2740,14 @@
    "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -55.18,
-     -38.94,
-     69.16
+     -55.19,
+     -38.93,
+     69.12
     ],
     "R": [
-     55.26,
-     -38.93,
-     69.26
+     55.25,
+     -38.95,
+     69.23
     ]
    },
    "system": "Middle cerebral artery",
@@ -3093,7 +3093,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_parietal_artery.glb",
-   "bytes": 22780,
+   "bytes": 25364,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3113,14 +3113,14 @@
    "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -51.33,
-     -75.06,
-     56.91
+     -51.3,
+     -75.08,
+     56.9
     ],
     "R": [
-     51.41,
-     -75.16,
-     56.92
+     51.44,
+     -75.12,
+     56.94
     ]
    },
    "system": "Middle cerebral artery",
@@ -3178,7 +3178,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_posterior_temporal_branch.glb",
-   "bytes": 14652,
+   "bytes": 14656,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3198,14 +3198,14 @@
    "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -57.16,
+     -57.13,
      -70.02,
-     19.66
+     19.62
     ],
     "R": [
-     57.23,
-     -69.94,
-     19.62
+     57.22,
+     -69.98,
+     19.6
     ]
    },
    "system": "Middle cerebral artery",
@@ -3217,7 +3217,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_prefrontal_artery.glb",
-   "bytes": 18024,
+   "bytes": 17948,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3237,13 +3237,13 @@
    "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -44.44,
-     21.7,
-     62.02
+     -44.41,
+     21.74,
+     62.04
     ],
     "R": [
-     44.53,
-     21.65,
+     44.41,
+     21.67,
      62.07
     ]
    },
@@ -3856,7 +3856,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_temporal_branches_of_middle_cerebral_artery.glb",
-   "bytes": 16000,
+   "bytes": 16008,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3876,14 +3876,14 @@
    "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -61.94,
-     -37.37,
+     -61.91,
+     -37.41,
      22.41
     ],
     "R": [
-     61.93,
-     -37.43,
-     22.43
+     61.89,
+     -37.4,
+     22.49
     ]
    },
    "system": "Middle cerebral artery",
@@ -3895,7 +3895,7 @@
    "aliases": [],
    "type": "tube",
    "file": "assets/skullbase/sb_temporo_occipital_branch.glb",
-   "bytes": 26620,
+   "bytes": 26688,
    "colour": {
     "token": "sbArtery",
     "light": "#C0392B",
@@ -3915,14 +3915,14 @@
    "derivation": "Tube around the Z-Anatomy curve's centre line, with the radius Z-Anatomy models at each point (its curve bevel: modelled, not measured), at least 0.3 mm; cropped to the head. Z-Anatomy draws it on its cortex, which reaches into the model's own bone in places: it is moved with that cortex as the cortex is pushed back inside the cranial cavity, and kept inside the cavity itself (skullbase_v1_brain.py).",
    "centroid": {
     "L": [
-     -37.71,
-     -96.15,
-     30.59
+     -37.7,
+     -96.11,
+     30.57
     ],
     "R": [
      37.73,
      -96.16,
-     30.61
+     30.56
     ]
    },
    "system": "Middle cerebral artery",
@@ -6536,12 +6536,203 @@
    "derivation": "The rhomboid drawn on the middle fossa floor between its four landmarks on this model (Signoretti 2025): the petrous apex, where the greater petrosal nerve meets V3 seen from above, the geniculate ganglion and the arcuate eminence (the bone over the superior semicircular canal)."
   },
   {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_subtemporal__frontal_bone",
+   "name": "Frontal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_subtemporal__frontal_bone.glb",
+   "bytes": 136404,
+   "refIds": [],
+   "category": "bone",
+   "approach": "subtemporal",
+   "replaces": "sb_frontal_bone",
+   "derivation": "Z-Anatomy's frontal bone with the bone of the subtemporal craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -27.7,
+     34.9,
+     39.9
+    ],
+    "R": [
+     34.91,
+     32.47,
+     37.42
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_subtemporal__parietal_bone",
+   "name": "Parietal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_subtemporal__parietal_bone.glb",
+   "bytes": 225016,
+   "refIds": [],
+   "category": "bone",
+   "approach": "subtemporal",
+   "replaces": "sb_parietal_bone",
+   "derivation": "Z-Anatomy's parietal bone with the bone of the subtemporal craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -25.92,
+     -50.8,
+     68.47
+    ],
+    "R": [
+     40.35,
+     -39.86,
+     60.84
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_subtemporal__sphenoid_bone",
+   "name": "Sphenoid bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_subtemporal__sphenoid_bone.glb",
+   "bytes": 133436,
+   "refIds": [],
+   "category": "bone",
+   "approach": "subtemporal",
+   "replaces": "sb_sphenoid_bone",
+   "derivation": "Z-Anatomy's sphenoid bone with the bone of the subtemporal craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -21.9,
+     11.57,
+     -4.62
+    ],
+    "R": [
+     28.32,
+     14.76,
+     -0.18
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "colour": {
+    "token": "sbBone",
+    "light": "#B9AE96",
+    "dark": "#CFC6B1"
+   },
+   "dataset": "zanatomy",
+   "source": "Z-Anatomy (based on BodyParts3D)",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
+   "citation": [
+    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
+   ],
+   "citationUrls": [
+    "https://doi.org/10.1093/nar/gkn613"
+   ],
+   "id": "sb_appr_subtemporal__temporal_bone",
+   "name": "Temporal bone",
+   "type": "bone",
+   "file": "assets/skullbase/sb_appr_subtemporal__temporal_bone.glb",
+   "bytes": 412648,
+   "refIds": [],
+   "category": "bone",
+   "approach": "subtemporal",
+   "replaces": "sb_temporal_bone",
+   "derivation": "Z-Anatomy's temporal bone with the bone of the subtemporal craniotomy removed (pipeline/skullbase_v3_approach.py).",
+   "centroid": {
+    "L": [
+     -44.43,
+     -25.12,
+     -14.03
+    ],
+    "R": [
+     45.56,
+     -23.95,
+     -13.52
+    ]
+   }
+  },
+  {
+   "id": "sb_appr_subtemporal__removed",
+   "name": "Bone removed",
+   "aliases": [],
+   "type": "soft",
+   "file": "assets/skullbase/sb_appr_subtemporal__removed.glb",
+   "bytes": 245940,
+   "colour": {
+    "token": "sbRemoved",
+    "light": "#5F81DD",
+    "dark": "#9ABEF4"
+   },
+   "dataset": "rule",
+   "source": "Cut out of Z-Anatomy's bone by rule",
+   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "removed",
+   "approach": "subtemporal",
+   "layer": "nuclei",
+   "derivation": "The bone the subtemporal craniotomy removes: 11.0 ml. A right temporal flap drawn 50 × 50 mm (2500 mm² seen from the side as drawn; Nakov 2017: 5 × 5 cm, below the superior temporal line and centred above the root of the zygoma; the bone removed covers about 2491 mm² seen from the side), centred front to back over the zygomatic arch's root as found on this skull (where, going back, the arch last stands free of the squama: 1.0 mm in front of the frame's origin; its upper surface there lies 1.5 mm below the level of the middle fossa floor, taken at the tegmen as located on this model; Nakov 2017: the floor is level with the root's upper surface), its base at that level, cut down flush with the floor. Only the wall of the cranial cavity is taken, of the temporal, sphenoid and parietal bones: the zygoma, its arch and the orbit's lateral wall stay. The petrous apex is not drilled. On this model the thin bone the flap leaves beside it goes with it, as at its other flaps: a rim of the frontal bone at the pterion among it. The cut's edge smoothed over 1 mm (illustrative).",
+   "centroid": {
+    "L": [
+     59.11,
+     0.06,
+     19.77
+    ],
+    "R": [
+     59.11,
+     0.06,
+     19.77
+    ]
+   }
+  },
+  {
    "id": "br_frontal_lobe",
    "name": "Frontal lobe",
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_frontal_lobe.glb",
-   "bytes": 533000,
+   "bytes": 446564,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -6563,14 +6754,14 @@
    "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
    "centroid": {
     "L": [
-     -30.12,
-     5.15,
-     60.89
+     -29.32,
+     2.84,
+     62.23
     ],
     "R": [
-     29.28,
-     2.95,
-     62.14
+     29.3,
+     2.99,
+     62.19
     ]
    }
   },
@@ -6580,7 +6771,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_parietal_lobe.glb",
-   "bytes": 288864,
+   "bytes": 259092,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -6602,13 +6793,13 @@
    "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
    "centroid": {
     "L": [
-     -36.67,
-     -62.88,
-     64.9
+     -36.48,
+     -62.82,
+     65.09
     ],
     "R": [
-     36.48,
-     -63.01,
+     36.46,
+     -62.81,
      65.18
     ]
    }
@@ -6619,7 +6810,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_temporal_lobe.glb",
-   "bytes": 261076,
+   "bytes": 242480,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -6641,14 +6832,14 @@
    "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
    "centroid": {
     "L": [
-     -42.9,
-     -40.36,
-     21.24
+     -42.88,
+     -40.39,
+     21.31
     ],
     "R": [
-     42.86,
-     -40.3,
-     21.16
+     42.77,
+     -40.4,
+     21.24
     ]
    }
   },
@@ -6658,7 +6849,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_occipital_lobe.glb",
-   "bytes": 185724,
+   "bytes": 184072,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -6680,14 +6871,14 @@
    "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
    "centroid": {
     "L": [
-     -21.65,
-     -86.72,
+     -21.52,
+     -86.71,
      23.01
     ],
     "R": [
-     21.47,
-     -86.84,
-     23.12
+     21.37,
+     -86.71,
+     23.04
     ]
    }
   },
@@ -6697,7 +6888,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_insula.glb",
-   "bytes": 447068,
+   "bytes": 391264,
    "colour": {
     "token": "sbInsula",
     "light": "#4A3DA8",
@@ -6716,17 +6907,17 @@
    "category": "brain",
    "layer": "cortex",
    "morph": true,
-   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Z-Anatomy has no insular cortex: this is its circular sulcus of the insula, with its white matter of the telencephalon under the Sylvian fissure as the floor of the opened fissure. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
+   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Z-Anatomy has no insular cortex: this is its circular sulcus of the insula, with its white matter of the telencephalon under the Sylvian fissure as the floor of the opened fissure, as far back and forward as Z-Anatomy's lateral fissure reaches. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
    "centroid": {
     "L": [
-     -39.59,
-     0.75,
-     33.23
+     -44.08,
+     -12.91,
+     37.41
     ],
     "R": [
-     44.59,
-     -21.98,
-     37.29
+     44.07,
+     -12.95,
+     37.41
     ]
    }
   },
@@ -6736,7 +6927,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_cingulate_gyrus.glb",
-   "bytes": 41884,
+   "bytes": 39224,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -6758,14 +6949,14 @@
    "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue.",
    "centroid": {
     "L": [
-     -7.58,
-     -32.76,
-     57.29
+     -7.67,
+     -32.62,
+     57.21
     ],
     "R": [
-     7.48,
-     -32.49,
-     57.51
+     7.57,
+     -32.46,
+     57.54
     ]
    }
   },
@@ -7087,7 +7278,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_temporal_lobe__kawase.glb",
-   "bytes": 191476,
+   "bytes": 193104,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -7108,14 +7299,14 @@
    "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue. In the Kawase view held up off the middle fossa floor (extradurally, with its dura) by up to 14 mm over the petrous apex (skullbase_v3.py: lift_temporal_lobe; illustrative): a shape, not a simulation.",
    "centroid": {
     "L": [
-     -42.9,
-     -40.36,
-     21.24
+     -42.88,
+     -40.39,
+     21.31
     ],
     "R": [
-     42.86,
-     -40.3,
-     23.16
+     42.77,
+     -40.4,
+     23.24
     ]
    },
    "replaces": "br_temporal_lobe",
@@ -7123,203 +7314,12 @@
    "forView": "kawase"
   },
   {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "id": "sb_appr_subtemporal__frontal_bone",
-   "name": "Frontal bone",
-   "type": "bone",
-   "file": "assets/skullbase/sb_appr_subtemporal__frontal_bone.glb",
-   "bytes": 136404,
-   "refIds": [],
-   "category": "bone",
-   "approach": "subtemporal",
-   "replaces": "sb_frontal_bone",
-   "derivation": "Z-Anatomy's frontal bone with the bone of the subtemporal craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -27.7,
-     34.9,
-     39.9
-    ],
-    "R": [
-     34.91,
-     32.47,
-     37.42
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "id": "sb_appr_subtemporal__parietal_bone",
-   "name": "Parietal bone",
-   "type": "bone",
-   "file": "assets/skullbase/sb_appr_subtemporal__parietal_bone.glb",
-   "bytes": 225016,
-   "refIds": [],
-   "category": "bone",
-   "approach": "subtemporal",
-   "replaces": "sb_parietal_bone",
-   "derivation": "Z-Anatomy's parietal bone with the bone of the subtemporal craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -25.92,
-     -50.8,
-     68.47
-    ],
-    "R": [
-     40.35,
-     -39.86,
-     60.84
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "id": "sb_appr_subtemporal__sphenoid_bone",
-   "name": "Sphenoid bone",
-   "type": "bone",
-   "file": "assets/skullbase/sb_appr_subtemporal__sphenoid_bone.glb",
-   "bytes": 133436,
-   "refIds": [],
-   "category": "bone",
-   "approach": "subtemporal",
-   "replaces": "sb_sphenoid_bone",
-   "derivation": "Z-Anatomy's sphenoid bone with the bone of the subtemporal craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -21.9,
-     11.57,
-     -4.62
-    ],
-    "R": [
-     28.32,
-     14.76,
-     -0.18
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "colour": {
-    "token": "sbBone",
-    "light": "#B9AE96",
-    "dark": "#CFC6B1"
-   },
-   "dataset": "zanatomy",
-   "source": "Z-Anatomy (based on BodyParts3D)",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0",
-   "citation": [
-    "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(Database issue):D782-D785. doi:10.1093/nar/gkn613."
-   ],
-   "citationUrls": [
-    "https://doi.org/10.1093/nar/gkn613"
-   ],
-   "id": "sb_appr_subtemporal__temporal_bone",
-   "name": "Temporal bone",
-   "type": "bone",
-   "file": "assets/skullbase/sb_appr_subtemporal__temporal_bone.glb",
-   "bytes": 412648,
-   "refIds": [],
-   "category": "bone",
-   "approach": "subtemporal",
-   "replaces": "sb_temporal_bone",
-   "derivation": "Z-Anatomy's temporal bone with the bone of the subtemporal craniotomy removed (pipeline/skullbase_v3_approach.py).",
-   "centroid": {
-    "L": [
-     -44.43,
-     -25.12,
-     -14.03
-    ],
-    "R": [
-     45.56,
-     -23.95,
-     -13.52
-    ]
-   }
-  },
-  {
-   "id": "sb_appr_subtemporal__removed",
-   "name": "Bone removed",
-   "aliases": [],
-   "type": "soft",
-   "file": "assets/skullbase/sb_appr_subtemporal__removed.glb",
-   "bytes": 245940,
-   "colour": {
-    "token": "sbRemoved",
-    "light": "#5F81DD",
-    "dark": "#9ABEF4"
-   },
-   "dataset": "rule",
-   "source": "Cut out of Z-Anatomy's bone by rule",
-   "licence": "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan",
-   "citation": [],
-   "citationUrls": [],
-   "refIds": [],
-   "category": "removed",
-   "approach": "subtemporal",
-   "layer": "nuclei",
-   "derivation": "The bone the subtemporal craniotomy removes: 11.0 ml. A right temporal flap drawn 50 × 50 mm (2500 mm² seen from the side as drawn; Nakov 2017: 5 × 5 cm, below the superior temporal line and centred above the root of the zygoma; the bone removed covers about 2491 mm² seen from the side), centred front to back over the zygomatic arch's root as found on this skull (where, going back, the arch last stands free of the squama: 1.0 mm in front of the frame's origin; its upper surface there lies 1.5 mm below the level of the middle fossa floor, taken at the tegmen as located on this model; Nakov 2017: the floor is level with the root's upper surface), its base at that level, cut down flush with the floor. Only the wall of the cranial cavity is taken, of the temporal, sphenoid and parietal bones: the zygoma, its arch and the orbit's lateral wall stay. The petrous apex is not drilled. On this model the thin bone the flap leaves beside it goes with it, as at its other flaps: a rim of the frontal bone at the pterion among it. The cut's edge smoothed over 1 mm (illustrative).",
-   "centroid": {
-    "L": [
-     59.11,
-     0.06,
-     19.77
-    ],
-    "R": [
-     59.11,
-     0.06,
-     19.77
-    ]
-   }
-  },
-  {
    "id": "br_temporal_lobe__subtemporal",
    "name": "Temporal lobe",
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_temporal_lobe__subtemporal.glb",
-   "bytes": 214224,
+   "bytes": 216012,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -7340,14 +7340,14 @@
    "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue. In the subtemporal view its slider lifts it off the middle fossa floor by up to 15 mm at the flap's middle, less front and back of it, towards the midline and with height above the floor (skullbase_v3.py: temporal_lobe_shape; illustrative): a shape, not a simulation.",
    "centroid": {
     "L": [
-     -42.9,
-     -40.36,
-     21.24
+     -42.88,
+     -40.39,
+     21.31
     ],
     "R": [
-     42.86,
-     -40.3,
-     21.16
+     42.77,
+     -40.4,
+     21.24
     ]
    },
    "replaces": "br_temporal_lobe",
@@ -8251,7 +8251,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_koos_4.glb",
-   "bytes": 193292,
+   "bytes": 193268,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -8795,7 +8795,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_men_olfactory.glb",
-   "bytes": 178688,
+   "bytes": 179112,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -8809,12 +8809,12 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule (skullbase_v3_tumours.py), not a patient's tumour: on the dura of the olfactory groove, at the midline between the foramen caecum and the sphenoidal yoke as located on Z-Anatomy's model. A ball 30 mm across (an illustrative size), its centre 0.55 of its radius off the bone, so that the bone cuts it to a broad base on the dura; kept 0.4 mm off Z-Anatomy's arteries and 0.3 mm off the cranial nerves' routes, which run through it in channels. 9.69 ml.",
+   "derivation": "Drawn by rule (skullbase_v3_tumours.py), not a patient's tumour: on the dura of the olfactory groove, at the midline between the foramen caecum and the sphenoidal yoke as located on Z-Anatomy's model. A ball 30 mm across (an illustrative size), its centre 0.55 of its radius off the bone, so that the bone cuts it to a broad base on the dura; kept 0.4 mm off Z-Anatomy's arteries and 0.3 mm off the cranial nerves' routes, which run through it in channels. 9.7 ml.",
    "centroid": {
     "L": [
      -6.13,
-     27.75,
-     21.17
+     27.76,
+     21.16
     ],
     "R": [
      6.14,
@@ -8833,7 +8833,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_frontal_lobe__men_olfactory.glb",
-   "bytes": 228260,
+   "bytes": 228884,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8852,17 +8852,17 @@
    "category": "brain",
    "layer": "cortex",
    "morph": true,
-   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 18.13 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 18.5 mm): a shape, not a simulation of the tissue.",
    "centroid": {
     "L": [
-     -30.12,
-     5.15,
-     60.89
+     -29.32,
+     2.84,
+     62.23
     ],
     "R": [
-     29.28,
-     2.86,
-     62.4
+     29.3,
+     2.9,
+     62.45
     ]
    },
    "replaces": "br_frontal_lobe",
@@ -8875,7 +8875,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_insula__men_olfactory.glb",
-   "bytes": 241472,
+   "bytes": 203176,
    "colour": {
     "token": "sbInsula",
     "light": "#4A3DA8",
@@ -8894,17 +8894,17 @@
    "category": "brain",
    "layer": "cortex",
    "morph": true,
-   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Z-Anatomy has no insular cortex: this is its circular sulcus of the insula, with its white matter of the telencephalon under the Sylvian fissure as the floor of the opened fissure. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 18.13 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Z-Anatomy has no insular cortex: this is its circular sulcus of the insula, with its white matter of the telencephalon under the Sylvian fissure as the floor of the opened fissure, as far back and forward as Z-Anatomy's lateral fissure reaches. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 18.5 mm): a shape, not a simulation of the tissue.",
    "centroid": {
     "L": [
-     -39.59,
-     0.75,
-     33.23
+     -44.08,
+     -12.91,
+     37.41
     ],
     "R": [
-     44.59,
-     -22.02,
-     37.43
+     44.07,
+     -12.99,
+     37.52
     ]
    },
    "replaces": "br_insula",
@@ -8917,7 +8917,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_men_tuberculum.glb",
-   "bytes": 77504,
+   "bytes": 77304,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -8931,16 +8931,16 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule (skullbase_v3_tumours.py), not a patient's tumour: on the dura of the tuberculum sellae as located on Z-Anatomy's model, the optic nerves and chiasm pushed aside. A ball 20 mm across (an illustrative size), its centre 0.55 of its radius off the bone, so that the bone cuts it to a broad base on the dura; kept 0.4 mm off Z-Anatomy's arteries and 0.3 mm off the cranial nerves' routes, which run through it in channels. 1.6 ml.",
+   "derivation": "Drawn by rule (skullbase_v3_tumours.py), not a patient's tumour: on the dura of the tuberculum sellae as located on Z-Anatomy's model, the optic nerves and chiasm pushed aside. A ball 20 mm across (an illustrative size), its centre 0.55 of its radius off the bone, so that the bone cuts it to a broad base on the dura; kept 0.4 mm off Z-Anatomy's arteries and 0.3 mm off the cranial nerves' routes, which run through it in channels. 1.59 ml.",
    "centroid": {
     "L": [
      -4.11,
-     2.09,
-     14.92
+     2.08,
+     14.93
     ],
     "R": [
-     4.12,
-     2.11,
+     4.11,
+     2.1,
      14.93
     ]
    },
@@ -8955,7 +8955,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_frontal_lobe__men_tuberculum.glb",
-   "bytes": 226620,
+   "bytes": 227672,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8974,17 +8974,17 @@
    "category": "brain",
    "layer": "cortex",
    "morph": true,
-   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 4.75 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 4.7 mm): a shape, not a simulation of the tissue.",
    "centroid": {
     "L": [
-     -30.12,
-     5.15,
-     60.89
+     -29.32,
+     2.84,
+     62.23
     ],
     "R": [
-     29.28,
-     2.94,
-     62.14
+     29.3,
+     2.98,
+     62.2
     ]
    },
    "replaces": "br_frontal_lobe",
@@ -8997,7 +8997,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/br_insula__men_tuberculum.glb",
-   "bytes": 227472,
+   "bytes": 191060,
    "colour": {
     "token": "sbInsula",
     "light": "#4A3DA8",
@@ -9016,17 +9016,17 @@
    "category": "brain",
    "layer": "cortex",
    "morph": true,
-   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Z-Anatomy has no insular cortex: this is its circular sulcus of the insula, with its white matter of the telencephalon under the Sylvian fissure as the floor of the opened fissure. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 4.75 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's cortex (BodyParts3D: its gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them, the temporal lobe apart from the rest), by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the cranial cavity. Z-Anatomy has no insular cortex: this is its circular sulcus of the insula, with its white matter of the telencephalon under the Sylvian fissure as the floor of the opened fissure, as far back and forward as Z-Anatomy's lateral fissure reaches. Its shapes for the surgical views (the right Sylvian fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity (skullbase_v1_brain.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 4.7 mm): a shape, not a simulation of the tissue.",
    "centroid": {
     "L": [
-     -39.59,
-     0.75,
-     33.23
+     -44.08,
+     -12.91,
+     37.41
     ],
     "R": [
-     44.59,
-     -21.98,
-     37.3
+     44.07,
+     -12.95,
+     37.41
     ]
    },
    "replaces": "br_insula",
@@ -9388,13 +9388,13 @@
    "derivation": "Drawn by rule (skullbase_v3_tumours.py), not a patient's tumour: on the dura of the foramen magnum's rim on the right, where the way from its centre towards the right occipital condyle meets the bone ({FM_RIM_IN_MM:g} mm above the rim's lowest edge: its anterolateral rim); the medulla and the cerebellum pushed aside. A ball 30 mm across (an illustrative size), its centre 0.55 of its radius off the bone, so that the bone cuts it to a broad base on the dura; kept 0.4 mm off Z-Anatomy's arteries and 0.3 mm off the cranial nerves' routes, which run through it in channels. 11.44 ml.",
    "centroid": {
     "R": [
-     7.21,
-     -39.85,
+     7.2,
+     -39.84,
      -39.88
     ],
     "L": [
-     7.21,
-     -39.85,
+     7.2,
+     -39.84,
      -39.88
     ]
    },
@@ -9440,7 +9440,7 @@
      -9.9
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 15.75 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: anterior quadrangular lobule, posterior quadrangular lobule, superior semilunar lobule, inferior semilunar lobule, gracile lobule, biventral lobule, flocculus, peduncle of flocculus, wing of central lobule); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 15.74 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_cerebellar_hemisphere",
    "pushedFrom": "assets/skullbase/pf_cerebellar_hemisphere.glb",
    "tumourView": "men_foramen_magnum"
@@ -9482,7 +9482,7 @@
      -21.79
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: tonsil of cerebellum); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 15.75 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: tonsil of cerebellum); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 15.74 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_tonsil",
    "pushedFrom": "assets/skullbase/pf_tonsil.glb",
    "tumourView": "men_foramen_magnum"
@@ -9524,7 +9524,7 @@
      -4.44
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: lingula of cerebellum, central lobule, culmen, declive, folium of vermis, tuber of vermis, pyramis of vermis, uvula of vermis, nodule of vermis); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 15.75 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: lingula of cerebellum, central lobule, culmen, declive, folium of vermis, tuber of vermis, pyramis of vermis, uvula of vermis, nodule of vermis); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Its shapes for the surgical views (the tonsils drawn apart and the inferior vermis lifted; the right hemisphere drawn back from the petrous bone; the right tonsil and biventral lobule lifted) are Skull base v3's rules, run on this model (skullbase_v1_pfossa.py): shapes, not simulations of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 15.74 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_vermis",
    "pushedFrom": "assets/skullbase/pf_vermis.glb",
    "tumourView": "men_foramen_magnum"
@@ -9561,12 +9561,12 @@
      -26.66
     ],
     "R": [
-     1.76,
+     1.77,
      -36.72,
      -26.66
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: medulla oblongata); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 15.75 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: medulla oblongata); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 15.74 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_medulla",
    "pushedFrom": "assets/skullbase/pf_medulla.glb",
    "tumourView": "men_foramen_magnum"
@@ -9603,12 +9603,12 @@
      -13.18
     ],
     "R": [
-     2.58,
+     2.59,
      -40.93,
      -13.2
     ]
    },
-   "derivation": "Z-Anatomy's (BodyParts3D: fourth ventricle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 15.75 mm): a shape, not a simulation of the tissue.",
+   "derivation": "Z-Anatomy's (BodyParts3D: fourth ventricle); where it reached into or through this model's bone (out of its cranial cavity) or into an artery it draws, pushed clear (1 mm inside the cavity). Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 15.74 mm): a shape, not a simulation of the tissue.",
    "replaces": "pf_fourth_ventricle",
    "pushedFrom": "assets/skullbase/pf_fourth_ventricle.glb",
    "tumourView": "men_foramen_magnum"
