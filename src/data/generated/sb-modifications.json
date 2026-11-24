@@ -1050,6 +1050,55 @@
    "date": "2026-11-15"
   },
   {
+   "step": "skullbase_v1_stalk",
+   "operation": "the narrow upper part of Z-Anatomy's two meshes of the hypophysis named apart as the pituitary stalk (both cut along one level; no vertex moved)",
+   "structures": [
+    "Adenohypophysis",
+    "Neurohypophysis",
+    "Pituitary stalk"
+   ],
+   "parameters": {
+    "widthShare": 0.333,
+    "levelStepMm": 0.05
+   },
+   "metrics": {
+    "level": {
+     "z": 10.36,
+     "widestMm": 11.9,
+     "widestZ": 6.41,
+     "widthAtMm": 3.9,
+     "topZ": 14.27,
+     "bottomZ": 1.71
+    },
+    "Adenohypophysis": {
+     "heightMm": 8.1,
+     "widthMm": 11.9,
+     "lengthMm": 6.7,
+     "vertices": 367,
+     "triangles": 600
+    },
+    "Neurohypophysis": {
+     "heightMm": 8.7,
+     "widthMm": 11.7,
+     "lengthMm": 5.8,
+     "vertices": 327,
+     "triangles": 550
+    },
+    "Pituitary stalk": {
+     "heightMm": 3.9,
+     "widthMm": 4.0,
+     "lengthMm": 4.6,
+     "vertices": 137,
+     "triangles": 222
+    }
+   },
+   "validation": {
+    "check": "skullbase_build.py finalize: the stalk above the lobes, the three together as high as Z-Anatomy's hypophysis"
+   },
+   "revision": "66ee6ef",
+   "date": "2026-11-24"
+  },
+  {
    "step": "skullbase_v1_vessels",
    "operation": "the straight and occipital sinuses moved back to the confluence (Z-Anatomy's file has them in front of it), the occipital sinus laid onto the internal occipital crest; the basilar artery moved off the clivus with the arteries joined to it; the middle meningeal artery led through the model's own foramen spinosum",
    "structures": [

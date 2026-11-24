@@ -29,7 +29,7 @@
   ]
  },
  "file": "assets/skullbase/endonasal.bin.gz",
- "bytes": 3834966,
+ "bytes": 3834181,
  "dims": [
   97,
   213,
@@ -1092,11 +1092,11 @@
    "id": "floor",
    "name": "Sellar floor",
    "label": 3,
-   "mm3": 156.8,
-   "boneMm3": 156.8,
+   "mm3": 198.2,
+   "boneMm3": 198.2,
    "centre": [
     -0.0,
-    7.4,
+    7.2,
     5.1
    ]
   },
@@ -1104,12 +1104,12 @@
    "id": "dura",
    "name": "Dura over the sella",
    "label": 4,
-   "mm3": 124.8,
-   "boneMm3": 65.4,
+   "mm3": 71.4,
+   "boneMm3": 35.5,
    "centre": [
     0.0,
-    5.4,
-    5.9
+    5.3,
+    6.2
    ]
   },
   {
@@ -1163,18 +1163,25 @@
    ]
   },
   "gland": {
-   "widthMm": 13.5,
-   "lengthMm": 11.0,
-   "heightMm": 14.5,
-   "mm3": 526.0,
-   "aboveDiaphragmaMm": 7.5,
+   "widthMm": 11.9,
+   "lengthMm": 9.2,
+   "heightMm": 8.7,
+   "mm3": 541.0,
+   "aboveDiaphragmaMm": 2.6,
    "belowDiaphragma": {
-    "heightMm": 7.0,
-    "mm3": 321.1
+    "heightMm": 6.0,
+    "mm3": 408.5
    }
   },
-  "adenoMm3": 306.9,
-  "neuroMm3": 271.1,
-  "stalkMm3": 0.0
+  "adenoMm3": 296.4,
+  "neuroMm3": 244.6,
+  "stalkMm3": 24.6,
+  "stalk": {
+   "fromZ": 10.36,
+   "heightMm": 3.9,
+   "widthMm": 4.0,
+   "glandWidestMm": 11.9,
+   "widthShare": 0.333
+  }
  }
 }

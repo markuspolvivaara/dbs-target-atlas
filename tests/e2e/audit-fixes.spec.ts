@@ -1054,7 +1054,7 @@ test('pterional: the anterior clinoidectomy and sphenoid ridge switches, by key 
 });
 
 // AP-08 (the owner's choices of 17 November 2026): what a surgical view's text names and its opening reaches is drawn in
-// it, on both models (Z-Anatomy has no pituitary stalk and draws the posterior cerebral artery whole)
+// it, on both models (Z-Anatomy draws the posterior cerebral artery whole)
 test('skull base: the surgical views draw what their texts name beyond the opening', async ({ page }) => {
   const g = guard(page);
   const drawn = async (id: string) => Object.values((await drawnSides(page, id)) ?? {}).some(Boolean);
@@ -1066,9 +1066,9 @@ test('skull base: the surgical views draw what their texts name beyond the openi
     ['skullbase', 'retrosigmoid', ['tb_hypoglossal_nerve_xii', 'sb_superior_petrosal_sinus', 'tb_trochlear_nerve_iv'], []],
     ['skullbase', 'kawase', ['tb_oculomotor_nerve_iii', 'tb_trochlear_nerve_iv'], []],
     ['skullbase', 'far_lateral', ['tb_anterior_spinal_artery'], []],
-    ['skullbase-v1', 'orbitozygomatic', ['sb_optic_chiasm', 'sb_anterior_communicating_artery', 'sb_posterior_communicating_artery', 'sb_basilar_artery', 'sb_posterior_cerebral_artery',
+    ['skullbase-v1', 'orbitozygomatic', ['sb_optic_chiasm', 'sb_pituitary_stalk', 'sb_anterior_communicating_artery', 'sb_posterior_communicating_artery', 'sb_basilar_artery', 'sb_posterior_cerebral_artery',
       'sb_superior_cerebellar_artery', 'sb_trochlear_nerve_iv'], []],
-    ['skullbase-v1', 'lso', ['sb_optic_chiasm', 'sb_anterior_communicating_artery', 'sb_posterior_communicating_artery', 'sb_basilar_artery'], ['sb_posterior_cerebral_artery']],
+    ['skullbase-v1', 'lso', ['sb_optic_chiasm', 'sb_pituitary_stalk', 'sb_anterior_communicating_artery', 'sb_posterior_communicating_artery', 'sb_basilar_artery'], ['sb_posterior_cerebral_artery']],
   ];
   for (const [model, view, ids, absent] of views) {
     await open(page, `./${model}/#/atlas?g=${view}`);

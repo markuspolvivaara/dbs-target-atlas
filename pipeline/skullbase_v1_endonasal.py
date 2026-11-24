@@ -12,14 +12,16 @@ CT, on a grid over BOX:
            there: v3's CT has tissue), so the scope sees the nose and the sinus, not past them;
   * density the bone field as a CT-like value (air to bone), to colour the cut;
   * the distances to the arteries (Z-Anatomy's centre lines with the radius it draws), the nerves (the optic nerves and
-    chiasm as v1 draws them, III to VI), the sellar contents (Z-Anatomy's adeno- and neurohypophysis, the
-    intercavernous sinuses) and the brain (v1's frontal and temporal lobes, midbrain, pons, medulla);
+    chiasm as v1 draws them, III to VI), the sellar contents (Z-Anatomy's adeno- and neurohypophysis and their stalk,
+    the intercavernous sinuses) and the brain (v1's frontal and temporal lobes, midbrain, pons, medulla);
   * the sphenoid sinus: the air inside Z-Anatomy's "Sinus of sphenoid bone" (both halves, either side of its septum;
     each side's scope aimed at its own half); the nose: the air the bones enclose (the
     bone closed by NASAL_CLOSE_MM), in front of the sinus and below the anterior fossa, split at the midline (the
     septum's cartilage is not part of the model);
-  * the hypophysis: Z-Anatomy's own (no gland is modelled in the fossa, as v3 must); the diaphragma from its tuberculum
-    and dorsum sellae; its cavernous sinuses' medial walls from its own sinuses.
+  * the hypophysis: Z-Anatomy's own (no gland is modelled in the fossa, as v3 must): what its two meshes enclose
+    together, the lobes parted at the plane of their common rim, the narrow neck above the gland as the stalk
+    (skullbase_v1_stalk.py); the diaphragma from its tuberculum and dorsum sellae; its cavernous sinuses' medial walls
+    from its own sinuses.
 Writes public/assets/skullbase/endonasal.bin.gz and src/data/generated/sb-endonasal.json.
 """
 from __future__ import annotations
@@ -59,7 +61,7 @@ LINE_MM = 6.0
 WAY_CORE_MM = 1.75
 FAKE_HU = (-1000.0, 1000.0)     # (the bone field 0..1 as a CT-like value, to colour the cut)
 NERVES = ["sb_optic_nerve_ii", "sb_optic_chiasm", "sb_oculomotor_nerve_iii", "sb_trochlear_nerve_iv", "sb_trigeminal_nerve_v", "sb_abducens_nerve_vi"]
-SELLAR = ["sb_adenohypophysis", "sb_neurohypophysis", "sb_anterior_intercavernous_sinus", "sb_posterior_intercavernous_sinus"]
+SELLAR = ["sb_adenohypophysis", "sb_neurohypophysis", "sb_pituitary_stalk", "sb_anterior_intercavernous_sinus", "sb_posterior_intercavernous_sinus"]
 BRAIN = ["br_frontal_lobe", "br_temporal_lobe", "pf_midbrain", "pf_pons", "pf_medulla"]
 
 
@@ -222,39 +224,59 @@ def main() -> int:
         corridor[sd]["freeMm"] = {"least": round(float(w.min()), 1), "median": round(float(np.median(w)), 1),
                                   "underShare": round(float((w < ENDO.CORRIDOR_MM - vox).mean()), 2)}
         print(sd, "the way's free width", corridor[sd]["freeMm"])
-    # the hypophysis: Z-Anatomy's own; its parts' conditions (mm, <= 0 inside)
-    parts = {}
-    for pid, n in (("adeno", "Adenohypophysis"), ("neuro", "Neurohypophysis")):
-        m = mesh_inside(np.array(ex["soft"][n]["verts"], float), np.array(ex["soft"][n]["tris"], int), a_crop, shape)
-        parts[pid] = ENDO.signed(m, vox).astype(np.float32)
-    gland = (parts["adeno"] <= 0) | (parts["neuro"] <= 0)
-    off_gland = ENDO.signed(gland, vox)
-    gx = Pg[gland]
+    # the hypophysis: Z-Anatomy's own. Its two meshes are open shells that close each other along one flat rim, so the
+    # hypophysis is what the two enclose together (each alone encloses nothing: taken one by one, as this step did, each
+    # was only its surface a voxel thick, and the "gland" a hollow skin). The lobes meet at the rim's plane, and the
+    # narrow neck above skullbase_v1_stalk.neck_level is the stalk. Its parts' conditions (mm, <= 0 inside)
+    import skullbase_v1_stalk as ST
+    whole = ST.closed(ex)
+    hyp_mask = fill(np.asarray(whole.vertices), np.asarray(whole.faces), a_crop[:3, 3], shape, ENDO.GRID_MM)
+    rim_c, rim_n, rim_off = ST.rim_plane(ex)
+    assert rim_off < 0.25, f"the lobes' common rim is not flat ({rim_off:.2f} mm)"
+    neck = ST.neck_level(ex)
+    front = (Pg - rim_c) @ rim_n > 0
+    masks = {"stalk": hyp_mask & (Pg[..., 2] > neck["z"])}
+    masks["adeno"] = hyp_mask & ~masks["stalk"] & front
+    masks["neuro"] = hyp_mask & ~masks["stalk"] & ~front
+    parts = {pid: ENDO.signed(m, vox).astype(np.float32) for pid, m in masks.items()}
+    off_gland = ENDO.signed(hyp_mask, vox)        # (the pieces keep off all of it, the stalk too)
     tub, dors = lms[("Tuberculum sellae", "M")], lms[("Dorsum sellae", "M")]
-    # (the audit's AP-11: Z-Anatomy's two lobes reach far above the sella, as they include the stalk; so also what of
-    # them lies below the diaphragma, the plane through its tuberculum and dorsum sellae, level from side to side)
-    z_d = tub[2] + (dors[2] - tub[2]) * (Pg[..., 1] - tub[1]) / (dors[1] - tub[1])
-    below = gland & (Pg[..., 2] <= z_d)
-    bx = Pg[below]
+    # (the audit's AP-11: Z-Anatomy's gland is high, and reaches above the sella; so also what of it lies below the
+    # diaphragma, the plane through its tuberculum and dorsum sellae, level from side to side.) Sizes and volumes from
+    # the meshes as cut (exact: the 0.5 mm grid holds 6 % less than the closed mesh does)
+    cut, _ = ST.split(ex)
+    gv = np.vstack([cut[n][0] for n in ST.LOBES])
+    sv_ = cut[ST.STALK][0]
+    z_dv = tub[2] + (dors[2] - tub[2]) * (gv[:, 1] - tub[1]) / (dors[1] - tub[1])
+    up, at_neck = np.array([0.0, 0.0, 1.0]), np.array([0.0, 0.0, neck["z"]])
+    dia_n = np.array([0.0, -(dors[2] - tub[2]), dors[1] - tub[1]])
+    dia_n = dia_n / np.linalg.norm(dia_n) * (1.0 if dia_n[2] > 0 else -1.0)      # (the diaphragma's plane, its normal up)
+    vol = lambda planes: round(ST.volume_within(whole, planes), 1)   # noqa: E731
     hypo = {"diaphragma": {"tuberculum": tub.round(1).tolist(), "dorsum": dors.round(1).tolist()},
-            "gland": {"widthMm": round(float(np.ptp(gx[:, 0])) + vox, 1), "lengthMm": round(float(np.ptp(gx[:, 1])) + vox, 1),
-                      "heightMm": round(float(np.ptp(gx[:, 2])) + vox, 1), "mm3": round(float(gland.sum()) * vox ** 3, 1),
-                      "aboveDiaphragmaMm": round(float((Pg[..., 2] - z_d)[gland].max()) + vox / 2, 1),
-                      "belowDiaphragma": {"heightMm": round(float(np.ptp(bx[:, 2])) + vox, 1), "mm3": round(float(below.sum()) * vox ** 3, 1)}},
-            "adenoMm3": round(float((parts["adeno"] <= 0).sum()) * vox ** 3, 1), "neuroMm3": round(float((parts["neuro"] <= 0).sum()) * vox ** 3, 1),
-            "stalkMm3": 0.0}
+            "gland": {"widthMm": round(float(np.ptp(gv[:, 0])), 1), "lengthMm": round(float(np.ptp(gv[:, 1])), 1),
+                      "heightMm": round(float(np.ptp(gv[:, 2])), 1), "mm3": vol([(at_neck, -up)]),
+                      "aboveDiaphragmaMm": round(float((gv[:, 2] - z_dv).max()), 1),
+                      "belowDiaphragma": {"heightMm": round(float(-(gv[:, 2] - z_dv).min()), 1), "mm3": vol([(tub, -dia_n)])}},
+            "adenoMm3": vol([(at_neck, -up), (rim_c, rim_n)]), "neuroMm3": vol([(at_neck, -up), (rim_c, -rim_n)]),
+            "stalkMm3": vol([(at_neck, up)]),
+            "stalk": {"fromZ": neck["z"], "heightMm": round(float(np.ptp(sv_[:, 2])), 1), "widthMm": round(float(np.ptp(sv_[:, 0])), 1),
+                      "glandWidestMm": neck["widestMm"], "widthShare": round(ST.STALK_WIDTH_SHARE, 3)}}
+    print("hypophysis", json.dumps(hypo), "the rim's plane", rim_c.round(2).tolist(), rim_n.round(3).tolist(), "flat within", round(rim_off, 2), "mm")
     # its cavernous sinuses (Z-Anatomy's), for their medial walls as a step
     cs = {}
     for sd in ("R", "L"):
         m_ = ex["soft"][f"Cavernous sinus.{sd.lower()}"]
-        cs[sd] = ENDO.signed(mesh_inside(np.array(m_["verts"], float), np.array(m_["tris"], int), a_crop, shape), vox).astype(np.float16)
+        cm = mesh_inside(np.array(m_["verts"], float), np.array(m_["tris"], int), a_crop, shape)
+        print("cavernous sinus", sd, round(float(cm.sum()) * vox ** 3), "mm3 on the grid; its mesh encloses",
+              round(abs(float(trimesh.Trimesh(np.array(m_["verts"], float), np.array(m_["tris"], int), process=True).volume))), "mm3")
+        cs[sd] = ENDO.signed(cm, vox).astype(np.float16)
     np.savez_compressed(BUILD / "cavernous_cond.npz", **cs)
     ENDO.CS_COND = BUILD / "cavernous_cond.npz"
     piece, piece_level, pieces = ENDO.build_pieces(bone, solid, s_mask, nasal_side["L"], nasal_side["R"],
                                                    {"vessel": d_art, "nerve": d_nerve, "sellar": d_sellar, "brain": d_brain}, Pg, vox, off_gland)
     gland_label = np.zeros(shape, np.uint8)
-    gland_label[parts["adeno"] <= 0.2] = 1
-    gland_label[parts["neuro"] <= 0.2] = 2
+    for i_, k_ in ((3, "stalk"), (1, "adeno"), (2, "neuro")):      # (as v3 labels them: its surface, 0.2 mm off, with it)
+        gland_label[parts[k_] <= 0.2] = i_
     near = ndimage.binary_dilation(((solid > 64) & (solid < 192)) | ((bone > 64) & (bone < 192)), iterations=ENDO.DENSITY_REACH_VOX)
     density = np.clip(np.round((hu - ENDO.DENSITY_MIN_HU) / ENDO.DENSITY_STEP_HU), 0, 255).astype(np.uint8)
     density[~near] = 0

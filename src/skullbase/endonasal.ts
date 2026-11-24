@@ -41,10 +41,15 @@ export const ENDONASAL = z.object({
   /** the hypophysis modelled in this CT's fossa: the diaphragma's points, the gland's size, its parts' volumes */
   hypophysis: z.object({
     diaphragma: z.object({ tuberculum: V3, dorsum: V3 }),
-    /** aboveDiaphragmaMm, belowDiaphragma (v1): how far Z-Anatomy's lobes reach above the diaphragma, and what of them lies below it */
+    /** the gland without its stalk. aboveDiaphragmaMm, belowDiaphragma (v1): how far Z-Anatomy's gland reaches above the
+     * diaphragma's level, and what of it lies below it */
     gland: z.object({ widthMm: z.number(), lengthMm: z.number(), heightMm: z.number(), mm3: z.number(),
       aboveDiaphragmaMm: z.number().optional(), belowDiaphragma: z.object({ heightMm: z.number(), mm3: z.number() }).optional() }),
     adenoMm3: z.number(), neuroMm3: z.number(), stalkMm3: z.number(),
+    /** v1: the stalk as named on Z-Anatomy's meshes (the neck above fromZ, where the hypophysis is first narrower than
+     * widthShare of the gland's greatest width); v3: the drawn tube's ends */
+    stalk: z.object({ fromZ: z.number(), heightMm: z.number(), widthMm: z.number(), glandWidestMm: z.number(), widthShare: z.number() })
+      .or(z.object({ from: V3, to: V3 })).optional(),
   }),
 }).parse(SB_MODEL === 'v3' ? v3data : v1data);
 export type EndoPiece = (typeof ENDONASAL)['pieces'][number];
