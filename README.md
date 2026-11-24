@@ -579,7 +579,11 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
   ear. How each part is made:
   - The bones are rasterised at 0.5 mm (`pipeline/skullbase_v1_skull.py`). A closed mesh is filled; a nearly closed one
     (frontal, occipital, sphenoid, ethmoid: a few dozen open edges) is filled where crossings along two of the three axes
-    agree, with 0.5 mm round its surface, so thin sheets stay whole and the grid lies on Z-Anatomy's own surface. The
+    agree. Where such a bone is thinner than the grid fills, the voxels within 0.5 mm of its surface are bone too, so
+    thin sheets stay whole (`nearly_closed`: thin is not within 1.5 mm of what is left of the inside with 0.5 mm
+    taken off it; the band is put back at any point of the mesh left without bone within 0.5 mm). So thick bone has
+    its surface on Z-Anatomy's own (median 0.00 to 0.04 mm off the mesh). Until 2026-11-24 the band lay round the
+    whole surface and these four bones were 0.7 mm fatter in the field than their meshes (the audit's MC-13). The
     paranasal sinuses' air is taken out; the gaps Z-Anatomy's meshes leave between neighbouring bones are bridged.
   - The cuts are v3's rules (`SB_PROFILE=v1 pipeline/skullbase_v3_approach.py`), with v1's own adjustments:
     - The pterional floor rule needs bone flatter than about 32°, with the cranial cavity straight above it and none

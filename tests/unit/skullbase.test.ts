@@ -30,12 +30,13 @@ describe('skull-base data (Z-Anatomy export)', () => {
     expect(lm('Second genu of facial nerve')[1]).toBeLessThan(lm('Geniculate ganglion')[1]);
   });
   it('the cerebral arteries’ cortical branches are moved with the cortex out of the bone, and the shipped tubes are the moved ones', async () => {
-    // Z-Anatomy draws them on a cortex that reaches into its own bone: 982 mm of their centre lines lay inside it
+    // Z-Anatomy draws them on a cortex that reaches into its own bone: 897 mm of their centre lines lay inside it
+    // (982 mm while the bone field was 0.7 mm fatter than the bone meshes, the audit's MC-13)
     const fit = (await import('../../src/data/generated/sb-v1fit.json')).default as unknown as
       { brain: { arteries: Record<string, { lengthMm: number; inBoneBeforeMm: number; inBoneAfterMm: number; maxMovedMm: number; centroid: Record<'L' | 'R', number[]>; box: Record<'L' | 'R', number[][]> }> } };
     const moved = Object.entries(fit.brain.arteries);
     expect(moved.length).toBe(16);
-    expect(moved.reduce((a, [, r]) => a + r.inBoneBeforeMm, 0)).toBeGreaterThan(900);
+    expect(moved.reduce((a, [, r]) => a + r.inBoneBeforeMm, 0)).toBeGreaterThan(800);
     expect(moved.reduce((a, [, r]) => a + r.inBoneAfterMm, 0)).toBeLessThan(2);
     for (const [name, r] of moved) {
       expect(r.inBoneAfterMm, name).toBeLessThanOrEqual(Math.max(1, 0.02 * r.lengthMm));
@@ -1185,10 +1186,11 @@ describe('v3 surgical view: the pterional craniotomy and the template brain fitt
     for (const [model, ge, list, groups] of models) {
       const ap = ge.subtemporal as unknown as { how: string; removedMl: number; cutBones: string[]; burrHoles: number[][]; measured: Record<string, number> };
       const k = ap.measured;
-      // the flap: 50 x 50 mm as drawn, a little less as cut (it keeps to the cavity's wall and the floor); nothing drilled
+      // the flap: 50 x 50 mm as drawn, a little less as cut (it keeps to the cavity's wall and the floor); nothing drilled.
+      // (As cut it is measured on a 0.5 mm grid from the side: within 1 % of the drawing, 2514 mm² on v1)
       expect(k.flapMm2, model).toBe(2500);
       expect(k.sideMm2, model).toBeGreaterThan(2000);
-      expect(k.sideMm2, model).toBeLessThanOrEqual(2500);
+      expect(k.sideMm2, model).toBeLessThanOrEqual(2525);
       expect(ap.removedMl, model).toBeGreaterThan(8);
       expect(ap.removedMl, model).toBeLessThan(13);
       expect(ap.how, model).toMatch(/Nakov 2017: 5 × 5 cm, below the superior temporal line and centred above the root of the zygoma/);

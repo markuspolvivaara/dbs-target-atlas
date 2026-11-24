@@ -115,9 +115,11 @@ export async function nodeStats(file: string, root: URL = PUBLIC): Promise<NodeS
  * What is wrong with a file's node names for the side they lie on. The viewer shows and hides the halves by these
  * names (a node `L` with "Left", `R` with "Right"); a structure on the midline is kept whole in `R`, or cut into its two
  * halves. Two halves: L lies left of R, and where the frame's midline is x = 0 (all but the spine, whose midline is
- * the patient's own), each on its own side of it. One node: L lies left; R lies right or on the midline.
+ * the patient's own), each on its own side of it. One node: L lies left; R lies right or on the midline. `pushed`: a
+ * tumour view's copy of a right half, which the tumour may carry a few millimetres across the midline (the medulla's
+ * right half by the petroclival meningioma on Skull base v1: its mean 1.3 mm left of it).
  */
-export function sideProblems(nodes: NodeStats[], midlineAtZero: boolean): string[] {
+export function sideProblems(nodes: NodeStats[], midlineAtZero: boolean, pushed = false): string[] {
   const bad: string[] = [];
   const by = new Map(nodes.map((n) => [n.node, n]));
   const where = (n: NodeStats) => `${n.file}: node ${n.node}, mean x ${n.meanX.toFixed(1)} mm`;
@@ -131,7 +133,7 @@ export function sideProblems(nodes: NodeStats[], midlineAtZero: boolean): string
   } else if (L) {
     if (!(L.meanX < 0)) bad.push(`${where(L)}: the only node, named L, not on the left`);
   } else if (R) {
-    if (!(R.meanX > -1)) bad.push(`${where(R)}: the only node, named R, lies on the left`);
+    if (!(R.meanX > (pushed ? -5 : -1))) bad.push(`${where(R)}: the only node, named R, lies on the left`);
   }
   return bad;
 }

@@ -76,7 +76,7 @@ describe('every shipped mesh', () => {
           lo[k] = Math.min(lo[k], n.lo[k]); hi[k] = Math.max(hi[k], n.hi[k]);
         }
       }
-      if (nodes.length) bad.push(...sideProblems(nodes, sec.midlineAtZero));
+      if (nodes.length) bad.push(...sideProblems(nodes, sec.midlineAtZero, /__(men|koos|knosp)_/.test(f)));
     }
     for (let k = 0; k < 3; k++) if (hi[k] - lo[k] < sec.span[k]) bad.push(`${dir}: its files reach ${(hi[k] - lo[k]).toFixed(1)} mm along ${'xyz'[k]}, less than ${sec.span[k]}`);
     expect(bad).toEqual([]);
