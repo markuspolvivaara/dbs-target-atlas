@@ -86,7 +86,7 @@
      "lateral": -4.4
     },
     "encasedShare": 0.0,
-    "ml": 1.02
+    "ml": 0.96
    },
    "1": {
     "grade": "1",
@@ -96,7 +96,7 @@
      "lateral": -3.3
     },
     "encasedShare": 0.0,
-    "ml": 1.08
+    "ml": 1.02
    },
    "2": {
     "grade": "2",
@@ -106,7 +106,7 @@
      "lateral": -0.8
     },
     "encasedShare": 0.0,
-    "ml": 1.12
+    "ml": 1.05
    },
    "3A": {
     "grade": "3A",
@@ -116,7 +116,7 @@
      "lateral": 4.6
     },
     "encasedShare": 0.0,
-    "ml": 1.25
+    "ml": 1.18
    },
    "3B": {
     "grade": "3B",
@@ -126,7 +126,7 @@
      "lateral": 4.1
     },
     "encasedShare": 0.69,
-    "ml": 1.4
+    "ml": 1.33
    },
    "4": {
     "grade": "4",
@@ -136,7 +136,7 @@
      "lateral": 4.6
     },
     "encasedShare": 1.0,
-    "ml": 1.46
+    "ml": 1.4
    }
   },
   "carotidRadiusMm": 1.74
@@ -340,17 +340,17 @@
     13.54
    ],
    "diameterRuleMm": 20.0,
-   "ml": 2.52,
+   "ml": 2.49,
    "normal": [
     0.0,
     -0.94,
     0.34
    ],
    "push": {
-    "pointsInside": 170,
+    "pointsInside": 136,
     "leftInside": 0,
-    "rounds": 6,
-    "maxMovedMm": 16.05
+    "rounds": 5,
+    "maxMovedMm": 16.52
    },
    "vessels": {}
   },

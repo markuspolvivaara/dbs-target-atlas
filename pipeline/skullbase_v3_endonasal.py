@@ -227,7 +227,8 @@ HYPO_ITEMS = V3_BUILD / "hypophysis.json"     # the modelled pituitary's manifes
 # top, found on the CT), its upper surface HYPO_CONCAVE_MM lower in the middle (concave, the commonest shape), at most
 # HYPO_HALF_WIDTH_MM from the midline and HYPO_CAROTID_MM off the carotids (the cavernous sinuses' medial walls, which the
 # CT does not show either). The posterior lobe is drawn by rule: an ellipsoid (HYPO_NEURO_RADII) at the back of the gland
-# in the midline; the stalk too: a tube from the top of the gland where the lobes meet up and back to behind the chiasm.
+# in the midline. The stalk is traced on the CT, where it takes up contrast (stalk_on_ct): from the top of the gland where
+# the lobes meet, up and back to where it fades under the floor of the third ventricle, behind the chiasm.
 HYPO_DURA_MM = 1.0
 HYPO_HALF_WIDTH_MM = 6.2
 HYPO_CAROTID_MM = 1.5
@@ -235,12 +236,43 @@ HYPO_CONCAVE_MM = 0.5
 HYPO_SEED = (0.0, 0.0, 6.5)
 HYPO_NEURO_RADII = (3.5, 2.8, 2.5)
 HYPO_STALK_MM = (1.0, 1.4)       # its radius where it joins the gland, and at the hypothalamus
-HYPO_STALK_RISE_MM = 5.0         # how far above the diaphragma it reaches, and how far back (mm)
-HYPO_STALK_BACK_MM = 2.5
+STALK_HU = (45.0, 150.0)         # the stalk on the CT: brighter than the first (the fluid and nerve tissue round it stay under
+#                                  it here), under the second (bone, arteries)
+STALK_TRACE_MM = (2.0, 0.25)     # traced upward level by level, within this far of the level below's centre, in these steps
+STALK_FADES = 0.25               # ... to where less than this share of that disc is as bright
+STALK_UP_MM = 8.0                # (looked for no further up than this)
+STALK_CHIASM_MM = 0.3            # it keeps this far off the chiasm as drawn (skullbase_v3_chiasm.on_ct)
 
 
-def build_hypophysis(bone, d_art, Pg, vox: float, a_crop) -> dict:
-    """The pituitary in this CT's fossa (HYPO_*): its parts' conditions (mm, <= 0 inside), masks, meshes and a summary."""
+def stalk_on_ct(ins: np.ndarray) -> np.ndarray:
+    """The pituitary stalk's course as this CT shows it, from ins (the top of the gland where its lobes meet): at each
+    level the centre (weighted by the brightness over STALK_HU[0]) of what is as bright as the stalk within
+    STALK_TRACE_MM[0] of the level below's centre, up to where it fades. Points (frame mm), ins first."""
+    import skullbase_canals as CC
+    ctf = CC.CTFrame()
+    reach, step = STALK_TRACE_MM
+    g = np.arange(-reach, reach + 1e-6, 0.25)
+    gx, gy = np.meshgrid(g, g, indexing="ij")
+    disc = gx ** 2 + gy ** 2 <= reach ** 2
+    c, out = ins[:2].astype(float), [ins.astype(float)]
+    for z in np.arange(ins[2] + step, ins[2] + STALK_UP_MM, step):
+        pts = np.c_[c[0] + gx[disc], c[1] + gy[disc], np.full(int(disc.sum()), z)]
+        hu = np.mean([ctf.sample(pts + np.array([0.0, 0.0, o])) for o in (-0.1, 0.0, 0.1)], axis=0)
+        w = np.where(hu > STALK_HU[1], 0.0, np.clip(hu - STALK_HU[0], 0.0, None))
+        if (w > 0).mean() < STALK_FADES:
+            break
+        c = (pts[:, :2] * w[:, None]).sum(0) / w.sum()
+        out.append(np.array([c[0], c[1], z]))
+    out = np.array(out)
+    if len(out) < 8:
+        raise SystemExit(f"the pituitary stalk is seen on the CT for {len(out) * step:.1f} mm only")
+    out[1:-1] = (out[:-2] + out[1:-1] + out[2:]) / 3      # (the trace smoothed a little; its ends stay)
+    return out
+
+
+def build_hypophysis(bone, d_art, Pg, vox: float, a_crop, off_chiasm=None) -> dict:
+    """The pituitary in this CT's fossa (HYPO_*): its parts' conditions (mm, <= 0 inside), masks, meshes and a summary.
+    off_chiasm: the distance to the chiasm as drawn (mm, negative inside it), which the stalk keeps off."""
     from skimage import measure
     x, y, z = Pg[..., 0], Pg[..., 1], Pg[..., 2]
     bm = bone >= FIELD_ISO
@@ -268,14 +300,21 @@ def build_hypophysis(bone, d_art, Pg, vox: float, a_crop) -> dict:
     ell = (np.sqrt((((Pg - centre) / np.array(HYPO_NEURO_RADII)) ** 2).sum(-1)) - 1) * min(HYPO_NEURO_RADII)
     neuro_c = np.maximum(c, ell)
     adeno_c = np.maximum(c, -ell)
-    # the stalk: from the top of the gland where the lobes meet, up and back
+    # the stalk: from the top of the gland where the lobes meet, up and back as the CT shows it; its top flat where it
+    # fades (the floor of the third ventricle it joins is not drawn), and off the chiasm
     ins_y = centre[1] + HYPO_NEURO_RADII[1] * 0.6
     ins = np.array([0.0, ins_y, float(dorsum[2] + (ins_y - dorsum[1]) * slope) - HYPO_CONCAVE_MM - 0.5])
-    tip = ins + np.array([0.0, -HYPO_STALK_BACK_MM, HYPO_STALK_RISE_MM + 0.5])
-    ax = tip - ins
-    t = np.clip(((Pg - ins) @ ax) / (ax @ ax), 0, 1)
-    rad = HYPO_STALK_MM[0] + (HYPO_STALK_MM[1] - HYPO_STALK_MM[0]) * t
-    stalk_c = (np.linalg.norm(Pg - (ins + t[..., None] * ax), axis=-1) - rad).astype(np.float32)
+    line = stalk_on_ct(ins)
+    tip = line[-1]
+    along = np.r_[0.0, np.cumsum(np.linalg.norm(np.diff(line, axis=0), axis=1))]
+    near = (np.abs(Pg[..., 0] - line[:, 0].mean()) < 6) & (Pg[..., 1] > line[:, 1].min() - 4) & (Pg[..., 1] < line[:, 1].max() + 4) \
+        & (Pg[..., 2] > ins[2] - 3) & (Pg[..., 2] < tip[2] + 1)
+    d_line, k_line = cKDTree(np.vstack([np.linspace(a, b, 6)[:-1] for a, b in zip(line[:-1], line[1:])] + [line[-1:]])).query(Pg[near])
+    t_line = np.minimum(k_line / (5.0 * (len(line) - 1)), 1.0)        # (how far along the trace, by its points: evenly spaced in height)
+    stalk_c = np.full(Pg.shape[:-1], 9.0, np.float32)
+    stalk_c[near] = np.maximum(d_line - (HYPO_STALK_MM[0] + (HYPO_STALK_MM[1] - HYPO_STALK_MM[0]) * t_line), Pg[near][:, 2] - tip[2])
+    if off_chiasm is not None:
+        stalk_c = np.maximum(stalk_c, STALK_CHIASM_MM - off_chiasm).astype(np.float32)
     parts = {}
     for pid, cc in (("adeno", adeno_c), ("neuro", neuro_c), ("stalk", stalk_c)):
         f = ndimage.gaussian_filter(cc, 0.6)
@@ -294,7 +333,7 @@ def build_hypophysis(bone, d_art, Pg, vox: float, a_crop) -> dict:
                "gland": {"widthMm": round(float(np.ptp(gx[:, 0])) + vox, 1), "lengthMm": round(float(np.ptp(gx[np.abs(gx[:, 0]) < 1.5][:, 1])) + vox, 1),
                          "heightMm": round(float(top_mid - floor_mid) + vox, 1), "mm3": round(float(gland.sum()) * vox ** 3, 1)},
                "adenoMm3": parts["adeno"]["mm3"], "neuroMm3": parts["neuro"]["mm3"], "stalkMm3": parts["stalk"]["mm3"],
-               "stalk": {"from": ins.round(1).tolist(), "to": tip.round(1).tolist()}}
+               "stalk": {"from": ins.round(1).tolist(), "to": tip.round(1).tolist(), "lengthMm": round(float(along[-1]), 1)}}
     print("hypophysis", json.dumps(summary))
     return {"gland": gland, "parts": parts, "summary": summary}
 
@@ -321,9 +360,12 @@ def write_hypophysis(parts: dict, summary: dict) -> list[dict]:
                   common + "The posterior lobe is drawn by rule (no measured source here): an ellipsoid "
                   f"{2 * HYPO_NEURO_RADII[0]:g} × {2 * HYPO_NEURO_RADII[1]:g} × {2 * HYPO_NEURO_RADII[2]:g} mm at the back of the gland in the midline.", True),
         "stalk": ("tb_pituitary_stalk", "Pituitary stalk", ["Infundibulum", "Hypophyseal stalk"],
-                  "Drawn by rule (no measured source here): a tube from the top of the gland modelled in this CT's fossa, where its lobes "
-                  f"meet, {HYPO_STALK_RISE_MM:g} mm up and {HYPO_STALK_BACK_MM:g} mm back to behind the (fitted) optic chiasm, "
-                  f"{2 * HYPO_STALK_MM[0]:g} mm thick at the gland and {2 * HYPO_STALK_MM[1]:g} mm above.", True),
+                  "Traced on this CT, on which the stalk takes up contrast (pipeline/skullbase_v3_endonasal.py, stalk_on_ct): from the top of "
+                  "the gland modelled in the fossa, where its lobes meet, level by level along the centre of what is brighter than "
+                  f"{STALK_HU[0]:g} HU, {summary['stalk']['to'][2] - summary['stalk']['from'][2]:.1f} mm up and "
+                  f"{summary['stalk']['from'][1] - summary['stalk']['to'][1]:.1f} mm back to where it fades under the floor of the third "
+                  f"ventricle, behind the optic chiasm. Its thickness is drawn by rule: {2 * HYPO_STALK_MM[0]:g} mm at the gland and "
+                  f"{2 * HYPO_STALK_MM[1]:g} mm above.", True),
     }
     items = []
     for pid, (sid, name, aliases, deriv, schematic) in spec.items():
@@ -457,7 +499,18 @@ def main() -> int:
         tsa = nib.load(TS / "head_glands_cavities" / f"optic_nerve_{side}.nii.gz").affine
         edge = m & ~ndimage.binary_erosion(m)
         optic.append((nib.affines.apply_affine(tsa, np.argwhere(edge)) - fossa) @ R)
-    nerves = optic + [surface_points(CT_BUILD / "sb_optic_chiasm.glb")] + [surface_points(V3_BUILD / f"{n}.glb") for n in NERVES_V3]
+    # the chiasm as it is drawn (skullbase_v3_chiasm.py, which runs after this step: at the height this CT shows it),
+    # not v2's fitted block, which lay 2.4 mm higher
+    sys.path.insert(0, str(ROOT))
+    import skullbase_v3_chiasm as CH
+    import skullbase_v3_cavernous as CAVL
+    from skullbase_brain import fill
+    optic_lines = CAVL.centre_lines(V3_BUILD / "tb_optic_nerve_ii.glb")
+    ch_frame, ch_placed = CH.on_ct(nerves=optic_lines)
+    ch_mesh = CH.chiasm_mesh(ch_frame, CH.nerve_radius(optic_lines))[0]
+    print("chiasm", json.dumps(ch_placed))
+    off_chiasm = signed(fill(np.asarray(ch_mesh.vertices), np.asarray(ch_mesh.faces), a_crop[:3, 3], shape, vox), vox)
+    nerves = optic + [np.asarray(ch_mesh.vertices)] + [surface_points(V3_BUILD / f"{n}.glb") for n in NERVES_V3]
     d_nerve = dist_to(nerves)
     def in_soft(pts: np.ndarray | None) -> np.ndarray | None:
         """A fitted structure's points where the CT shows soft tissue: those it puts in bone or in air (the fit is
@@ -469,7 +522,7 @@ def main() -> int:
         keep = (bone[tuple(q.T)] < FIELD_ISO) & (solid[tuple(q.T)] >= FIELD_ISO)
         return pts[keep]
 
-    hypo = build_hypophysis(bone, d_art, P.reshape(shape + (3,)), vox, a_crop)
+    hypo = build_hypophysis(bone, d_art, P.reshape(shape + (3,)), vox, a_crop, off_chiasm)
     gland_pts = np.vstack([np.asarray(hypo["parts"][k]["mesh"].vertices) for k in ("adeno", "neuro")])
     # (not the cavernous sinus: the burr may go through its venous space down onto the carotid, an exercise in anatomy)
     d_sellar = dist_to([gland_pts] + [in_soft(surface_points(CT_BUILD / f"{n}.glb")) for n in SELLAR if n not in REPLACED])

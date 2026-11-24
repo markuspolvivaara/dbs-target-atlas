@@ -1634,6 +1634,28 @@ def validate() -> int:
                     P, T = np.asarray(mesh[s_]["positions"], float).reshape(-1, 3), np.asarray(mesh[s_]["indices"]).reshape(-1, 3)
                     inside = points_inside(CAV.resample(lines[s_][0], 0.25), P, T)
                     check(not inside.any(), f"{nm} {s_}: {0.25 * inside.sum():.1f} mm of its centre line inside the {vein.lower()}")
+    # the optic chiasm and tracts lie at the height this CT shows the chiasm, under the anterior cerebral arteries: no
+    # point of their surfaces inside an artery as drawn (fitted from Z-Anatomy, 14 % of the chiasm's surface lay in the
+    # A1 segments), nor inside the pituitary stalk, which passes behind and under the chiasm
+    import skullbase_v3_chiasm as CH
+    if CH.CH_ITEMS.exists():
+        placed = json.loads(CH.CH_ITEMS.read_text())["measured"].get("placed")
+        check(placed is not None and placed["ct"]["columns"] >= CH.CT_MIN_COLUMNS and placed["loweredMm"] <= CH.ARTERY_LOWER_MM[1],
+              f"the chiasm's height was not read from the CT: {placed}")
+        arteries = CH.artery_meshes(m)
+        stalk = [nd for nd in read_glb_full(BUILD / "tb_pituitary_stalk.glb").values()]
+        off_, vs_, ts_ = 0, [], []
+        for nd in stalk:
+            v_ = np.asarray(nd["positions"], float).reshape(-1, 3)
+            vs_.append(v_); ts_.append(np.asarray(nd["indices"]).reshape(-1, 3) + off_); off_ += len(v_)
+        for f_, nm in (("tb_optic_chiasm.glb", "Optic chiasm"), ("tb_optic_tract.glb", "Optic tract")):
+            V_ = np.vstack([np.asarray(nd["positions"], float).reshape(-1, 3) for nd in read_glb_full(BUILD / f_).values()])
+            hit = CH.near_arteries(V_, arteries, 0.0)
+            check(not hit, f"{nm}: its surface inside {hit}")
+            check(not points_inside(V_, np.vstack(vs_), np.vstack(ts_)).any(), f"{nm}: its surface inside the pituitary stalk")
+        if placed is not None:
+            ch_z = np.vstack([np.asarray(nd["positions"], float).reshape(-1, 3) for nd in read_glb_full(BUILD / "tb_optic_chiasm.glb").values()])[:, 2]
+            check(abs((ch_z.min() + ch_z.max()) / 2 - placed["z"]) < 0.1, f"the chiasm's middle at {(ch_z.min() + ch_z.max()) / 2:.2f} mm, placed at {placed['z']}")
     sv = [it for it in m["structures"] if it.get("category") == "vein" and it.get("morph")]
     check(len(sv) == 5 and all(it.get("schematic") for it in sv), f"{len(sv)} veins drawn on the brain (the Sylvian veins, "
           "Trolard's and Labbé's), with the surgical shapes")

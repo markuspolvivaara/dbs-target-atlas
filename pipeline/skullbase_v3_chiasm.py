@@ -1,4 +1,4 @@
-"""Skull base v3's optic chiasm, drawn by rule where the fitted model puts it, with the optic nerves joining it and the
+"""Skull base v3's optic chiasm, drawn by rule at the height this CT shows it, with the optic nerves joining it and the
 optic tracts leaving it.
 
   pipeline/.venv/bin/python -I -W ignore pipeline/skullbase_v3_chiasm.py
@@ -8,8 +8,13 @@ Skull base v2 carries the Z-Anatomy chiasm onto this CT as a rounded block, and 
 midline in front of it, so that the two nerves met at a point and the block sat behind them. Here the chiasm is drawn
 instead as one flat crossing:
 
-  * where: the fitted block's centre, its plane (the block's least axis is the plane's normal) and its length front to
-    back along the plane (the fitted model's);
+  * where: across and front to back at the fitted block's centre, with its length front to back (the fitted model's).
+    Its height is read from this CT (on_ct, ct_height): the fitted block lay 2.4 mm higher, among the anterior cerebral
+    arteries, where the CT shows the fluid of the third ventricle's recess. The CT shows the chiasm as a band of soft
+    tissue between the suprasellar cistern below and that recess above; its middle height is taken in the columns
+    where both are seen, and it is drawn level (no tilt can be read from so short a band). It is then lowered, if need
+    be, until its surface is ARTERY_CLEAR_MM off the arteries' meshes (v1, the Z-Anatomy model, keeps the block's own
+    centre and plane: skullbase_v1_nerves.py);
   * how big: CHIASM_WIDTH_MM across and CHIASM_HEIGHT_MM thick (Mncube 2019: the mean width and height on coronal MRI
     in 80 adults);
   * its shape: two bands crossing in the plane, each from where one optic nerve reaches the chiasm's front edge to the
@@ -22,7 +27,9 @@ width from the midline, then joins the chiasm's front corner in a short curve, e
 edge, its radius tapering along the curve to the chiasm's half-height, instead of running on to the midline (written as
 tb_optic_nerve_ii.chiasm.glb, the route's own file untouched). The optic tracts'
 first TRACT_MM (illustrative) leave the back corners backwards and outwards at TRACT_ANGLE_DEG from the midline in the
-plane (illustrative), as wide as the nerves.
+plane (illustrative), as wide as the nerves. In v3 they are flat, as thick as the chiasm, and bend up or down out of
+its plane where an artery's mesh lies in their way (clear_tract): they pass under the anterior cerebral arteries'
+first part and over the posterior communicating and posterior cerebral arteries.
 
 Writes v3's build (tb_optic_chiasm.glb, tb_optic_tract.glb, tb_optic_nerve_ii.chiasm.glb, chiasm_items.json) and merges
 the items into v3's manifest (the fitted block, sb_optic_chiasm, then left out).
@@ -60,6 +67,20 @@ TRACT_MM = 12.0             # the optic tracts' first part drawn (illustrative)
 TRACT_ANGLE_DEG = 40.0      # ... backwards and outwards at this angle from the midline, in the chiasm's plane (illustrative)
 GRID = 0.2
 REPLACED = "sb_optic_chiasm"
+# v3: the chiasm's height read from the CT (ct_height)
+CT_WINDOW_MM = 2.5          # columns up to this far from the fitted centre, across and front to back ...
+CT_STEP_MM = (0.25, 0.1)    # ... this far apart, sampled this finely along each
+CT_BLUR_MM = 0.3            # the CT blurred by this much (Gaussian sigma) against its noise
+CT_CSF_HU = 17.0            # a column counts where the cistern below is seen: the blurred CT under this ...
+CT_TISSUE_HU = 25.0         # ... and the band's surfaces are where it crosses this (fluid about 10 HU here, the tissue about 38)
+CT_VESSEL_HU = 90.0         # a column with an artery or the enhancing stalk in the band is left out
+CT_SPAN_MM = (7.0, 3.0)     # the cistern is looked for down to this far below the fitted centre (to the gland's top), the
+#                             band up to this far above it
+CT_MIN_COLUMNS = 50
+ARTERY_CLEAR_MM = 0.1       # the chiasm's and the tracts' surfaces keep this far off the arteries' meshes
+ARTERY_LOWER_MM = (0.05, 1.0)   # the chiasm lowered in these steps, at most this far, until it does
+TRACT_SIDES = 12            # the flat tracts' rings
+TRACT_TAPER_MM = 4.0        # a flat tract reaches its full thickness this far from the chiasm
 
 
 def frame(V: np.ndarray | None = None) -> dict:
@@ -93,30 +114,237 @@ def seg_d2(Q, a, b):
     return np.linalg.norm(Q - (a + t[:, None] * ab), axis=1)
 
 
+def ct_height(F: dict) -> dict:
+    """Where this CT shows the chiasm: the middle height (mm above the fossa) of the band of soft tissue between the
+    suprasellar cistern and the third ventricle's recess, the median over the columns round the fitted centre in which
+    the fluid below, the band and the fluid above it are all seen and no vessel lies in the band. {z, thicknessMm (as the blurred CT shows it), columns, of, quartiles}."""
+    import skullbase_canals as CC
+    ctf = CC.CTFrame()
+    c = F["c"]
+    xs = c[0] + np.arange(-CT_WINDOW_MM, CT_WINDOW_MM + 1e-6, CT_STEP_MM[0])
+    ys = c[1] + np.arange(-CT_WINDOW_MM, CT_WINDOW_MM + 1e-6, CT_STEP_MM[0])
+    zs = np.arange(c[2] - CT_SPAN_MM[0], c[2] + CT_SPAN_MM[1], CT_STEP_MM[1])
+    X, Y, Z = np.meshgrid(xs, ys, zs, indexing="ij")
+    H = ctf.sample(np.c_[X.ravel(), Y.ravel(), Z.ravel()]).reshape(X.shape)
+    H = ndimage.gaussian_filter(H, (CT_BLUR_MM / CT_STEP_MM[0], CT_BLUR_MM / CT_STEP_MM[0], CT_BLUR_MM / CT_STEP_MM[1]))
+    below = zs <= c[2]
+    mids, thick = [], []
+    for col in H.reshape(-1, len(zs)):
+        k0 = int(np.argmin(col[below]))                 # the cistern: the darkest point under the fitted centre
+        if col[k0] >= CT_CSF_HU:
+            continue
+        up = np.nonzero(col[k0:] >= CT_TISSUE_HU)[0]
+        if not len(up):
+            continue
+        b = k0 + int(up[0])
+        dn = np.nonzero(col[b:] < CT_TISSUE_HU)[0]
+        if not len(dn):
+            continue
+        t = b + int(dn[0])
+        if col[b:t].max() > CT_VESSEL_HU:
+            continue
+        mids.append((zs[b] + zs[t]) / 2)
+        thick.append(zs[t] - zs[b])
+    if len(mids) < CT_MIN_COLUMNS:
+        raise SystemExit(f"the chiasm is seen in {len(mids)} columns of the CT only")
+    return {"z": round(float(np.median(mids)), 2), "thicknessMm": round(float(np.median(thick)), 1), "columns": len(mids),
+            "of": int(len(xs) * len(ys)), "quartiles": [round(float(np.percentile(mids, q)), 2) for q in (25, 75)]}
+
+
+def artery_meshes(man: dict | None = None) -> list[tuple[str, np.ndarray, np.ndarray]]:
+    """v3's arteries as drawn (not the views' copies): (name, vertices, triangles)."""
+    man = man or json.loads((GEN / "sbv3-manifest.json").read_text())
+    out = []
+    for it in man["structures"]:
+        if it.get("category") != "artery" or any(it.get(k) for k in ("approach", "pushedFrom", "tumourView", "replaces", "forView")):
+            continue
+        f = DATA / it["file"].replace("assets/", "")
+        if not f.exists():
+            continue
+        nodes = list(read_glb_full(f).values())
+        off, vs, ts = 0, [], []
+        for nd in nodes:
+            v = np.asarray(nd["positions"], float).reshape(-1, 3)
+            vs.append(v); ts.append(np.asarray(nd["indices"]).reshape(-1, 3) + off); off += len(v)
+        out.append((it["name"], np.vstack(vs), np.vstack(ts)))
+    return out
+
+
+def near_arteries(V: np.ndarray, arteries: list, clear: float) -> list[str]:
+    """The arteries whose mesh a point of V lies in, or nearer than clear to."""
+    import skullbase_v3 as V3
+    from scipy.spatial import cKDTree
+    lo, hi = V.min(0) - clear - 1, V.max(0) + clear + 1
+    hit = []
+    for name, P, T in arteries:
+        if (P.max(0) < lo).any() or (P.min(0) > hi).any():
+            continue
+        # (the inside test's ray runs along x, a little off it: only the triangles level with the points count)
+        tri = P[T]
+        level = np.all((tri[:, :, 1:].max(1) > lo[1:] - 2) & (tri[:, :, 1:].min(1) < hi[1:] + 2), axis=1)
+        if cKDTree(P).query(V)[0].min() < clear or (level.any() and V3.points_inside(V, P, T[level]).any()):
+            hit.append(name)
+    return hit
+
+
+def nerve_radius(nerves: dict) -> float:
+    return float(np.median(np.r_[nerves["R"][1], nerves["L"][1]]))
+
+
+def on_ct(F: dict | None = None, nerves: dict | None = None) -> tuple[dict, dict]:
+    """v3's frame for the chiasm: the fitted block's centre across and front to back and its length, at the height this
+    CT shows the chiasm (ct_height), level, lowered until its surface is ARTERY_CLEAR_MM off the arteries. Returns the
+    frame and what was measured. (skullbase_v3_endonasal.py asks for it too: the stalk it draws ends under the chiasm.)"""
+    F = frame() if F is None else F
+    nerves = CAV.centre_lines(V3_BUILD / "tb_optic_nerve_ii.glb") if nerves is None else nerves
+    ct = ct_height(F)
+    c = np.array([F["c"][0], F["c"][1], ct["z"]])
+    G = {"c": c, "x": np.array([1.0, 0.0, 0.0]), "f": np.array([0.0, 1.0, 0.0]), "n": np.array([0.0, 0.0, 1.0]),
+         "front": F["front"], "back": F["back"]}
+    arteries = artery_meshes()
+    V = np.asarray(chiasm_mesh(G, nerve_radius(nerves))[0].vertices)
+    lowered, hit = 0.0, near_arteries(V, arteries, ARTERY_CLEAR_MM)
+    first = list(hit)
+    while hit:
+        lowered = round(lowered + ARTERY_LOWER_MM[0], 2)
+        if lowered > ARTERY_LOWER_MM[1]:
+            raise SystemExit(f"the chiasm does not come clear of {hit} within {ARTERY_LOWER_MM[1]} mm below the height the CT shows")
+        hit = near_arteries(V - np.array([0.0, 0.0, lowered]), arteries, ARTERY_CLEAR_MM)
+    G["c"] = c - np.array([0.0, 0.0, lowered])
+    info = {"fittedZ": round(float(F["c"][2]), 2), "fittedTiltDeg": round(float(np.degrees(np.arcsin(abs(F["f"][2])))), 0),
+            "ct": ct, "loweredMm": lowered, "loweredOff": first, "z": round(float(G["c"][2]), 2)}
+    return G, info
+
+
 def main() -> int:
-    items, meas = draw(frame(), CAV.centre_lines(V3_BUILD / "tb_optic_nerve_ii.glb"), V3_BUILD,
+    F, placed = on_ct()
+    arteries = artery_meshes()
+    items, meas = draw(F, CAV.centre_lines(V3_BUILD / "tb_optic_nerve_ii.glb"), V3_BUILD,
                        {"chiasm": "tb_optic_chiasm", "tract": "tb_optic_tract", "nerve": "tb_optic_nerve_ii", "nerveFile": "tb_optic_nerve_ii.chiasm.glb"},
                        "assets/skullbase-v3", "Drawn by rule on the TopBrain CT", "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
-                       "where the fitted Z-Anatomy chiasm lies")
+                       "where the fitted Z-Anatomy chiasm lies", placed=placed, arteries=arteries)
+    meas["placed"] = placed
     CH_ITEMS.write_text(json.dumps({"items": items, "measured": meas}, indent=1, ensure_ascii=False))
     merge()
     print("chiasm", meas)
     return 0
 
 
-def draw(F: dict, nerves: dict, out: Path, ids: dict, assets: str, source: str, licence: str, where: str) -> tuple[list, dict]:
+def chiasm_mesh(F: dict, r_n: float) -> tuple[trimesh.Trimesh, np.ndarray, dict, dict]:
+    """The chiasm's shape in a frame, for optic nerves of radius r_n: its mesh, its vertices in the frame's own
+    coordinates, and its front and back corners there (by side)."""
+    half_w = CHIASM_WIDTH_MM / 2
+    band = r_n * CHIASM_BAND
+    u_join = half_w - band                    # a nerve joins the chiasm's front corner, a band's half-width in from its side
+    front = {s: np.array([sg * u_join, F["front"] - band, 0.0]) for s, sg in (("R", 1.0), ("L", -1.0))}   # (the band's end rounds out to the edge)
+    back = {s: np.array([sg * u_join, F["back"] + band, 0.0]) for s, sg in (("R", 1.0), ("L", -1.0))}
+    # the chiasm on a grid in its own frame
+    lo = np.array([-half_w - 2, F["back"] - 3, -CHIASM_HEIGHT_MM])
+    hi = np.array([half_w + 2, F["front"] + 3, CHIASM_HEIGHT_MM])
+    axes = [np.arange(l, h + GRID, GRID) for l, h in zip(lo, hi)]
+    U, Vv, W = np.meshgrid(*axes, indexing="ij")
+    Q = np.c_[U.ravel(), Vv.ravel()]
+    d_band = np.minimum(seg_d2(Q, front["R"][:2], back["L"][:2]), seg_d2(Q, front["L"][:2], back["R"][:2])) / band
+    length = F["front"] - F["back"]
+    mid_v = (F["front"] + F["back"]) / 2
+    d_body = np.sqrt((Q[:, 0] / (CHIASM_BODY[0] * half_w)) ** 2 + ((Q[:, 1] - mid_v) / (CHIASM_BODY[1] * length / 2)) ** 2)
+    d_plane = np.minimum(d_band, d_body).reshape(U.shape)
+    f = np.sqrt(d_plane ** 2 + (W / (CHIASM_HEIGHT_MM / 2)) ** 2)
+    f = ndimage.gaussian_filter(f, 1.0)
+    v, tri, _, _ = measure.marching_cubes(f, 1.0, spacing=(GRID,) * 3)
+    v = v + lo
+    world = F["c"] + v[:, :1] * F["x"] + v[:, 1:2] * F["f"] + v[:, 2:3] * F["n"]
+    m = trimesh.Trimesh(world, tri, process=True)
+    trimesh.smoothing.filter_taubin(m, iterations=10)
+    if m.volume < 0:
+        m.invert()
+    return m, v, front, back
+
+
+def clear_tract(Pl: np.ndarray, A: np.ndarray, half_w: float, half_t: float, fixed: int = 2) -> tuple[np.ndarray, dict]:
+    """A flat tract's centre line (frame coordinates, in the chiasm's plane) bent up or down out of the plane where an
+    artery's surface (A: the arteries' vertices in the frame) lies within its width: at each point the tract keeps
+    ARTERY_CLEAR_MM under what lies above its middle and over what lies below it (between the two where both are
+    nearer than it is thick), the bend smoothed along it and none at its first points (fixed: those in the chiasm).
+    Returns the line and
+    {maxBentMm, squeezedMm: the most its surface still lies in an artery's}."""
+    d = Pl[-1, :2] - Pl[0, :2]
+    d /= np.linalg.norm(d)
+    side = np.array([-d[1], d[0]])
+    step = float(np.linalg.norm(Pl[1, :2] - Pl[0, :2]))
+    lo, hi = np.full(len(Pl), -np.inf), np.full(len(Pl), np.inf)
+    for i, p in enumerate(Pl):
+        rel = A[:, :2] - p[:2]
+        along, across = rel @ d, rel @ side
+        sel = (np.abs(along) <= step / 2) & (np.abs(across) < half_w + ARTERY_CLEAR_MM)
+        if not sel.any():
+            continue
+        h = half_t * np.sqrt(np.clip(1 - (across[sel] / (half_w + ARTERY_CLEAR_MM)) ** 2, 0, 1))   # the tract's half-thickness there
+        w = A[sel, 2]
+        if (w > 0).any():
+            hi[i] = float((w - ARTERY_CLEAR_MM - h)[w > 0].min())
+        if (w <= 0).any():
+            lo[i] = float((w + ARTERY_CLEAR_MM + h)[w <= 0].max())
+    want = np.where(lo > hi, (lo + hi) / 2, np.clip(0.0, lo, hi))
+    want[np.isnan(want)] = 0.0
+    bend = want.copy()
+    for _ in range(40):                       # smoothed, then held to what each point allows
+        bend = ndimage.uniform_filter1d(bend, 3, mode="nearest")
+        bend = np.where(lo > hi, want, np.clip(bend, lo, hi))
+        bend[:fixed] = 0.0
+    out = Pl.copy()
+    out[:, 2] = Pl[:, 2] + bend
+    squeezed = float(np.clip(lo - hi, 0, None).max()) / 2
+    return out, {"maxBentMm": round(float(np.abs(bend).max()), 2), "squeezedMm": round(squeezed, 2)}
+
+
+def flat_tube(Pw: np.ndarray, across: np.ndarray, up: np.ndarray, half_w: float, half_t: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """A flat tube round a centre line: rings of TRACT_SIDES points on an ellipse half_w wide (along across) and half_t
+    thick at each point (along up, made square to the line there), closed by flat caps. Positions, normals, triangles."""
+    import skullbase_build as SB
+    T = np.gradient(Pw, axis=0)
+    T /= np.linalg.norm(T, axis=1, keepdims=True)
+    ang = np.linspace(0, 2 * np.pi, TRACT_SIDES, endpoint=False)
+    pos = []
+    for p, t, h in zip(Pw, T, half_t):
+        a = across - (across @ t) * t
+        a /= np.linalg.norm(a)
+        b = np.cross(t, a)
+        b = b if b @ up > 0 else -b
+        pos.append(p + half_w * np.cos(ang)[:, None] * a + h * np.sin(ang)[:, None] * b)
+    pos = np.vstack(pos)
+    n, k = len(Pw), TRACT_SIDES
+    tris = []
+    for i in range(n - 1):
+        for j in range(k):
+            a0, a1 = i * k + j, i * k + (j + 1) % k
+            tris += [[a0, a1, a0 + k], [a1, a1 + k, a0 + k]]
+    pos = np.vstack([pos, Pw[0], Pw[-1]])
+    for j in range(k):
+        tris.append([n * k, (j + 1) % k, j])
+        tris.append([n * k + 1, (n - 1) * k + j, (n - 1) * k + (j + 1) % k])
+    tris = np.array(tris)
+    m = trimesh.Trimesh(pos, tris, process=False)
+    if m.volume < 0:
+        tris = tris[:, ::-1]
+    return pos, SB.normals(pos, tris), tris
+
+
+def draw(F: dict, nerves: dict, out: Path, ids: dict, assets: str, source: str, licence: str, where: str,
+         placed: dict | None = None, arteries: list | None = None) -> tuple[list, dict]:
     """The chiasm, the tracts' first part and the optic nerves ending in it, written to out (ids: the files' and items'
-    names); returns the items and the measurements."""
+    names); returns the items and the measurements. placed: what on_ct measured, when the frame is its (v3); arteries:
+    the artery meshes the tracts keep clear of, drawn flat (v3; without them the tracts are round tubes in the plane)."""
     import skullbase_build as SB
     import skullbase_v3 as V3
-    r_n = float(np.median(np.r_[nerves["R"][1], nerves["L"][1]]))
+    r_n = nerve_radius(nerves)
     half_w = CHIASM_WIDTH_MM / 2
     u_join = half_w - r_n * CHIASM_BAND       # a nerve joins the chiasm's front corner, a band's half-width in from its side
-    corner, keep = {}, {}
+    m, v, corner, back = chiasm_mesh(F, r_n)
+    keep = {}
     for s, (P, r) in nerves.items():
         L = local(P, F)
         sg = 1.0 if s == "R" else -1.0
-        corner[s] = np.array([sg * u_join, F["front"] - r_n * CHIASM_BAND, 0.0])     # (the band's end rounds out to the edge)
         # the route kept from JOIN_OUT_MM further out than the corner to the canal; from there a smooth curve (a cubic
         # leaving along the route's own direction, arriving straight back along the chiasm's plane) runs in to
         # CHIASM_INTO_MM inside the corner
@@ -132,29 +360,7 @@ def draw(F: dict, nerves: dict, out: Path, ids: dict, assets: str, source: str, 
         # (its radius tapering along the curve to just under the chiasm's half-height, where it joins it)
         taper = CHIASM_HEIGHT_MM / 2 - 0.15 + (r[j] - CHIASM_HEIGHT_MM / 2 + 0.15) * t[:, 0] ** 0.7
         keep[s] = (np.vstack([Pw, P[j:]]), np.r_[taper, r[j:]])
-    back = {"R": np.array([u_join, F["back"] + r_n * CHIASM_BAND, 0.0]), "L": np.array([-u_join, F["back"] + r_n * CHIASM_BAND, 0.0])}
-    front = corner
-    # the chiasm on a grid in its own frame
-    lo = np.array([-half_w - 2, F["back"] - 3, -CHIASM_HEIGHT_MM])
-    hi = np.array([half_w + 2, F["front"] + 3, CHIASM_HEIGHT_MM])
-    axes = [np.arange(l, h + GRID, GRID) for l, h in zip(lo, hi)]
-    U, Vv, W = np.meshgrid(*axes, indexing="ij")
-    Q = np.c_[U.ravel(), Vv.ravel()]
     band = r_n * CHIASM_BAND
-    d_band = np.minimum(seg_d2(Q, front["R"][:2], back["L"][:2]), seg_d2(Q, front["L"][:2], back["R"][:2])) / band
-    length = F["front"] - F["back"]
-    mid_v = (F["front"] + F["back"]) / 2
-    d_body = np.sqrt((Q[:, 0] / (CHIASM_BODY[0] * half_w)) ** 2 + ((Q[:, 1] - mid_v) / (CHIASM_BODY[1] * length / 2)) ** 2)
-    d_plane = np.minimum(d_band, d_body).reshape(U.shape)
-    f = np.sqrt(d_plane ** 2 + (W / (CHIASM_HEIGHT_MM / 2)) ** 2)
-    f = ndimage.gaussian_filter(f, 1.0)
-    v, tri, _, _ = measure.marching_cubes(f, 1.0, spacing=(GRID,) * 3)
-    v = v + lo
-    world = F["c"] + v[:, :1] * F["x"] + v[:, 1:2] * F["f"] + v[:, 2:3] * F["n"]
-    m = trimesh.Trimesh(world, tri, process=True)
-    trimesh.smoothing.filter_taubin(m, iterations=10)
-    if m.volume < 0:
-        m.invert()
     items = []
     col_n = V3.colour("sbNerve")
     halves = SB.mesh_split(np.asarray(m.vertices), np.asarray(m.faces), np.ones(len(m.vertices)))
@@ -168,9 +374,19 @@ def draw(F: dict, nerves: dict, out: Path, ids: dict, assets: str, source: str, 
     base = {"aliases": [], "type": "soft", "bytes": 0, "colour": col_n, "dataset": "rule", "source": source,
             "licence": licence, "citation": [], "citationUrls": [], "refIds": [],
             "category": "nerve", "layer": "tracts", "cranialNerve": 2, "schematic": True}
+    if placed is None:
+        lies = (f"Drawn by rule (skullbase_v3_chiasm.py) {where}: its centre, its plane (tilted "
+                f"{meas['tiltDeg']:.0f}° from the horizontal) and its length front to back ({meas['lengthMm']} mm here). ")
+    else:       # (v3: on_ct)
+        low = (f", lowered {placed['loweredMm']:g} mm more to lie {ARTERY_CLEAR_MM:g} mm clear of the arteries' surfaces" if placed["loweredMm"] else "")
+        lies = (f"Drawn by rule (skullbase_v3_chiasm.py). Across and front to back it lies {where}, with that model's length "
+                f"({meas['lengthMm']} mm here). Its height is read from this CT: {placed['ct']['z']:g} mm above the fossa, the middle of the band of "
+                "soft tissue the CT shows between the suprasellar cistern below and the third ventricle's recess above (the median of "
+                f"{placed['ct']['columns']} columns in which both are seen){low}. It is drawn level: no tilt can be read from so short a band. "
+                f"(The fitted model put it {placed['fittedZ'] - placed['z']:.1f} mm higher and tilted {placed['fittedTiltDeg']:.0f}°, among the "
+                "anterior cerebral arteries, where the CT shows fluid.) ")
     items.append({**base, "id": ids["chiasm"], "name": "Optic chiasm", "aliases": ["Chiasma opticum"], "file": f"{assets}/{ids['chiasm']}.glb",
-                  "derivation": (f"Drawn by rule (skullbase_v3_chiasm.py) {where}: its centre, its plane (tilted "
-                                 f"{meas['tiltDeg']:.0f}° from the horizontal) and its length front to back ({meas['lengthMm']} mm here). Its width "
+                  "derivation": (lies + "Its width "
                                  f"({CHIASM_WIDTH_MM} mm) and height ({CHIASM_HEIGHT_MM} mm) are the means Mncube 2019 measured on coronal MRI in 80 adults. "
                                  "Its shape is two bands crossing, each from where one optic nerve joins its front edge to the other side's back corner, "
                                  "where the optic tract leaves, with a central body joining them (illustrative: what crosses where inside the chiasm is "
@@ -179,19 +395,40 @@ def draw(F: dict, nerves: dict, out: Path, ids: dict, assets: str, source: str, 
     # the tracts' first part
     ang = np.radians(TRACT_ANGLE_DEG)
     nodes, cent = [], {}
+    A_loc = local(np.vstack([P_ for _n, P_, _t in arteries]), F) if arteries else None
     for s, sg in (("R", 1.0), ("L", -1.0)):
         p0 = back[s] + np.array([0.0, band * 0.5, 0.0])
         d = np.array([sg * np.sin(ang), -np.cos(ang), 0.0])
-        Pl = np.array([p0 + t * d for t in np.linspace(0, TRACT_MM, 13)])
-        Pw = F["c"] + Pl[:, :1] * F["x"] + Pl[:, 1:2] * F["f"] + Pl[:, 2:3] * F["n"]
-        vv, nn, tt = CAV.tube(Pw, r_n)
+        if A_loc is None:
+            Pl = np.array([p0 + t * d for t in np.linspace(0, TRACT_MM, 13)])
+            Pw = F["c"] + Pl[:, :1] * F["x"] + Pl[:, 1:2] * F["f"] + Pl[:, 2:3] * F["n"]
+            vv, nn, tt = CAV.tube(Pw, r_n)
+        else:   # (v3: flat, as thick as the chiasm, bent out of the plane clear of the arteries)
+            # (it starts CHIASM_INTO_MM inside the chiasm, as the nerves end there: its flat end does not show)
+            ts = np.arange(-CHIASM_INTO_MM, TRACT_MM + 1e-6, 0.5)
+            Pl = np.array([p0 + t * d for t in ts])
+            Pl, bent = clear_tract(Pl, A_loc, r_n, CHIASM_HEIGHT_MM / 2, fixed=int((ts <= 0.5).sum()))
+            meas.setdefault("tracts", {})[s] = bent
+            Pw = F["c"] + Pl[:, :1] * F["x"] + Pl[:, 1:2] * F["f"] + Pl[:, 2:3] * F["n"]
+            across = np.cross(F["n"], d[0] * F["x"] + d[1] * F["f"])
+            # (just under the chiasm's half-height where it leaves it, as the nerves are where they join it: its start
+            # stays inside the chiasm's rounded edge)
+            thick = CHIASM_HEIGHT_MM / 2 - 0.15 * np.clip(1 - ts / TRACT_TAPER_MM, 0, 1)
+            vv, nn, tt = flat_tube(Pw, across, F["n"], r_n, thick)
         nodes.append({"name": s, "positions": vv, "normals": nn, "indices": tt, "mode": TRIANGLES})
         cent[s] = Pw.mean(0).round(2).tolist()
     write_glb(out / f"{ids['tract']}.glb", nodes, {"id": ids["tract"]})
+    if arteries:
+        shape = (f"flat, as wide as the optic nerves drawn here and as thick as the chiasm ({CHIASM_HEIGHT_MM} mm), and bent up to "
+                 f"{max(b_['maxBentMm'] for b_ in meas['tracts'].values()):g} mm out of that plane where an artery lies in their way, so that they "
+                 "pass under the anterior cerebral arteries' first part and over the posterior communicating and posterior cerebral arteries "
+                 "(illustrative)")
+    else:
+        shape = "as wide as the optic nerves drawn here (illustrative)"
     items.append({**base, "id": ids["tract"], "name": "Optic tract", "file": f"{assets}/{ids['tract']}.glb",
                   "derivation": (f"Drawn by rule (skullbase_v3_chiasm.py): the tracts' first {TRACT_MM:g} mm from the chiasm's back corners, backwards and "
-                                 f"outwards at {TRACT_ANGLE_DEG:g}° from the midline in the chiasm's plane, as wide as the optic nerves drawn here "
-                                 "(illustrative); the rest of their course round the cerebral peduncles is not drawn."),
+                                 f"outwards at {TRACT_ANGLE_DEG:g}° from the midline in the chiasm's plane, {shape}; the rest of their course round the "
+                                 "cerebral peduncles is not drawn."),
                   "centroid": cent})
     # the nerves, ending in the chiasm
     nodes = []

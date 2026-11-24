@@ -143,7 +143,7 @@ describe('nerves and vessels against the skull-base bone they are drawn with', (
     expect(bad).toEqual([]);
   }, 120_000);
 
-  it('v3: the nerves of the jugular foramen and of the cavernous sinus do not run through the veins and arteries beside them', async () => {
+  it('v3: the nerves of the jugular foramen and of the cavernous sinus, the chiasm and the stalk do not run through the veins and arteries beside them', async () => {
     const ss = sbv3Manifest.structures;
     const of = (name: string) => soup(ss.find((s) => s.name === name && plain(s))!.file);
     // (routed like the other nerves, 7 to 21 % of IX's and XI's tubes lay in the sigmoid sinus and 11 % of the left X's
@@ -152,6 +152,12 @@ describe('nerves and vessels against the skull-base bone they are drawn with', (
     const pairs: [string[], string[]][] = [
       [['Glossopharyngeal nerve (IX)', 'Vagus nerve (X)', 'Accessory nerve (XI)'], ['Sigmoid sinus', 'Inferior petrosal sinus', 'Internal jugular vein']],
       [['Oculomotor nerve (III)', 'Trochlear nerve (IV)', 'Abducens nerve (VI)'], ['Internal carotid artery', 'Internal carotid artery (petrous and lacerum parts)']],
+      // (fitted from Z-Anatomy, the chiasm lay 2.4 mm too high: 14 % of its surface in the anterior cerebral arteries'
+      // first segments, where the CT shows the third ventricle's fluid. It is drawn at the height the CT shows it, the
+      // tracts flat and clear of the arteries, the stalk traced on the CT behind and under it)
+      [['Optic chiasm', 'Optic tract', 'Pituitary stalk'], ['Anterior cerebral artery (A1–A2)', 'Anterior communicating artery', 'Third anterior cerebral artery (A2)',
+        'Internal carotid artery', 'Posterior communicating artery', 'Posterior cerebral artery (P1–P2)']],
+      [['Optic chiasm', 'Optic tract'], ['Pituitary stalk']],
     ];
     const bad: string[] = [];
     for (const [nerves, vessels] of pairs) for (const v of vessels) {
