@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { CameraPreset } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
 import type { Claim } from '../brainstem/schema';
-import { ETV, KIND_LABEL, kindOf, LM, TARGETS, TRAJ, trajectoryFor, VE, VE_REF, type Trajectory } from '../ventricles';
+import { ETV, KIND_LABEL, kindOf, LANDMARKS, LM, TARGETS, TRAJ, trajectoryFor, VE, VE_REF, type Trajectory } from '../ventricles';
 import { ACCURACY, AQUEDUCT, CHEN_COHORT, ETV_ANATOMY, ETV_SCORE, ETV_TRAJECTORY, FOURTH, FRAZIER, HYDRO, IDEAL, KOCHER, LATERAL_WALLS, MONRO, PRACTICE, TARGET_NAME, TEMPORAL_HORN, THIRD_FLOOR, THIRD_WALLS } from '../ventricles/content';
 import { VE_GROUP, VE_GROUPS, type VeGroup } from '../ventricles/groups';
 import { veScene, type VePlan } from '../ventricles/scene';
@@ -16,7 +16,8 @@ import { structureBar } from './structurebar';
 import { refLinksFrom } from './reflinks';
 import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 import { MeasureTool } from './measure';
-import { chips, clear, eyeIcon, fmtMm } from './widgets';
+import { chips, clear, eyeIcon, fmtMm, jumpRow } from './widgets';
+import { landmarkLabel, offsetWords } from './relative';
 
 type Update = (fn: (s: VeState) => void, opts?: { camera?: boolean }) => void;
 
@@ -518,12 +519,15 @@ export class VentriclesAtlasPage {
     requestAnimationFrame(() => { pane.scrollTop = keep[0]; this.panel.scrollTop = keep[1]; });
     clear(pane);
     const g = VE_GROUP.get(s.grp)!;
+    // the parts the jump row at the top leads to (the audit's UI-22: this panel opens with nearly 900 words)
+    const jumps: Record<string, HTMLElement | null> = { views: null, tool: null, list: null, selected: null, about: null, shape: null };
     for (const [kind, label] of GROUP_ROWS) {
       pane.append(h('p', { class: 'chips-label' }, label),
         chips(VE_GROUPS.filter((x) => x.kind === kind).map((x) => [x.id, x.name]), g.id, (v) => this.pickGroup(v), { label, cls: 'grp-chips' }));
     }
-    if (g.catheter) pane.append(this.catheterPanel());
-    if (g.endoscope) pane.append(this.scopePanel());
+    jumps.views = pane.firstElementChild as HTMLElement | null;
+    if (g.catheter) pane.append(jumps.tool = this.catheterPanel());
+    if (g.endoscope) pane.append(jumps.tool = this.scopePanel());
     const hidden = new Set(s.hidden);
     const show = (ids: string[], on: boolean) => this.update((st) => { st.hidden = on ? st.hidden.filter((x) => !ids.includes(x)) : [...new Set([...st.hidden, ...ids])]; });
     const entry = (id: string) => {
@@ -535,8 +539,8 @@ export class VentriclesAtlasPage {
           onclick: () => this.update((st) => { st.sel = st.sel === id ? null : id; }),
         }, h('span', { class: 'swatch', style: `--c: var(--c-${tokenOf(id)})` }), nameOf(id)));
     };
-    pane.append(h('p', { class: 'chips-label' }, `Ventricles (${g.key.length})`), h('div', { class: 'chips wrap sb-list' }, ...g.key.map(entry)));
-    if (s.sel && VE.has(s.sel)) pane.append(this.card(s.sel));
+    pane.append(jumps.list = h('p', { class: 'chips-label' }, `Ventricles (${g.key.length})`), h('div', { class: 'chips wrap sb-list' }, ...g.key.map(entry)));
+    if (s.sel && VE.has(s.sel)) pane.append(jumps.selected = this.card(s.sel));
     const groupCard = h('article', { class: 'card' },
       h('p', { class: 'eyebrow' }, GROUP_ROWS.find(([k]) => k === g.kind)![1]),
       h('h2', {}, g.name),
@@ -568,11 +572,14 @@ export class VentriclesAtlasPage {
         h('dt', {}, 'The aqueduct'), h('dd', {}, claimList(AQUEDUCT)),
         h('dt', {}, 'The fourth ventricle'), h('dd', {}, claimList(FOURTH))) : null,
       h('p', { class: 'aside schematic-note' }, 'One young adult’s CT: the ventricles are this patient’s and narrow, completed by a fitted model where the CT cannot show them; the brain around them is a template fitted into the skull. For teaching, not for planning.'));
-    if (s.sel) pane.append(h('details', { class: 'more' }, h('summary', {}, `About ${g.name}`), groupCard));
-    else pane.append(groupCard);
+    if (s.sel) pane.append(jumps.about = h('details', { class: 'more' }, h('summary', {}, `About ${g.name}`), groupCard));
+    else pane.append(jumps.about = groupCard);
     // the anatomy views' shape slider after what the view shows, not before it (it opened the panel, ahead of 800 words:
     // the audit's UI-22)
-    if (!g.catheter && !g.endoscope && g.kind === 'anatomy') pane.append(h('section', { class: 'card scope', 'aria-label': 'Shape' }, h('h3', {}, 'Shape'), this.hydroControl()));
+    if (!g.catheter && !g.endoscope && g.kind === 'anatomy') pane.append(jumps.shape = h('section', { class: 'card scope', 'aria-label': 'Shape' }, h('h3', {}, 'Shape'), this.hydroControl()));
+    const row = jumpRow([['Views', jumps.views], [g.catheter ? 'Catheter' : 'Endoscope', jumps.tool], ['Ventricles', jumps.list], ['Selected', jumps.selected],
+      ['About this view', jumps.about], ['Shape', jumps.shape]]);
+    if (row) pane.prepend(row);
   }
 
   /** How the endoscopic view's anatomy is placed on this CT, and how it compares with the published measurements. */
@@ -754,7 +761,9 @@ export class VentriclesAtlasPage {
   private showReadout(ras: THREE.Vector3 | null): void {
     if (!ras) return;
     clear(this.readout);
-    this.readout.append(h('span', { class: 'k' }, 'mm'), ` x ${fmtMm(ras.x)}  y ${fmtMm(ras.y)}  z ${fmtMm(ras.z)} from the hypophysial fossa`);
+    const from = this.s.from ? LM.get(this.s.from) : undefined;
+    if (from) this.readout.append(h('span', { class: 'k' }, `From ${landmarkLabel(from)}`), ` ${offsetWords(ras, from.ras as [number, number, number])}`);
+    else this.readout.append(h('span', { class: 'k' }, 'mm'), ` x ${fmtMm(ras.x)}  y ${fmtMm(ras.y)}  z ${fmtMm(ras.z)} from the hypophysial fossa`);
   }
 
   private async copyLink(btn: HTMLElement): Promise<void> {
@@ -772,13 +781,20 @@ export class VentriclesAtlasPage {
         h('label', { class: 'check' }, h('input', { type: 'checkbox', onchange: (e: Event) => this.update((st) => { st.layers[k].on = (e.target as HTMLInputElement).checked; }) }), label),
         h('label', { class: 'range' }, h('span', { class: 'vh' }, `${label} opacity`),
           h('input', { type: 'range', min: 0, max: 1, step: 0.05, oninput: (e: Event) => this.update((st) => { st.layers[k].opacity = parseFloat((e.target as HTMLInputElement).value); }) }))));
-      pane.append(h('h3', {}, 'Layers'), ...rows);
+      pane.append(h('h3', {}, 'Layers'), ...rows,
+        h('h3', {}, 'Position read-out'),
+        h('label', { class: 'select' }, h('span', {}, 'Measure positions from '),
+          h('select', { 'data-k': 'from', onchange: (e: Event) => { const v = (e.target as HTMLSelectElement).value; this.update((st) => { st.from = v || null; }); } },
+            h('option', { value: '' }, 'The hypophysial fossa (the model’s origin)'),
+            ...[...LANDMARKS].sort((a, b) => landmarkLabel(a).localeCompare(landmarkLabel(b))).map((l) => h('option', { value: l.id }, landmarkLabel(l))))),
+        h('p', { class: 'aside' }, 'Point at a structure: the read-out gives its distance from the landmark, right or left, in front or behind, above or below (the patient’s directions), and in a straight line.'));
     }
     for (const [k] of LAYERS) {
       const row = pane.querySelector(`[data-layer="${k}"]`)!;
       (row.querySelector('input[type=checkbox]') as HTMLInputElement).checked = s.layers[k].on;
       (row.querySelector('input[type=range]') as HTMLInputElement).value = String(s.layers[k].opacity);
     }
+    (pane.querySelector('[data-k=from]') as HTMLSelectElement).value = s.from ?? '';
   }
 
   // ---------------------------------------------------------------- keyboard

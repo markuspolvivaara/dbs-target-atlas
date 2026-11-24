@@ -39,3 +39,25 @@ export function eyeIcon(shown: boolean): SVGSVGElement {
   if (!shown) add('line', { x1: '4', y1: '20', x2: '20', y2: '4', class: 'slash' });
   return svg;
 }
+
+/** A row of buttons that move the reader to a part of a long panel: the part is scrolled to the top of its pane and
+ * takes the focus, so a keyboard or screen-reader user lands there too (the audit's UI-22: the skull base and ventricles
+ * panels open with 550 to 880 words and up to 145 tab stops, with no outline). Parts not present are left out. On a
+ * phone the panel's sheet is opened first (its handle pressed), or a part near the panel's end stays below the screen. */
+export function jumpRow(targets: [string, HTMLElement | null | undefined][]): HTMLElement | null {
+  const there = targets.filter((t): t is [string, HTMLElement] => !!t[1]);
+  if (there.length < 2) return null;
+  return h('nav', { class: 'jump-row', 'aria-label': 'In this panel' },
+    h('span', { class: 'jump-label' }, 'Jump to'),
+    ...there.map(([label, el]) => h('button', {
+      type: 'button', class: 'linklike jump',
+      onclick: () => {
+        const panel = el.closest('.panel');
+        const handle = panel?.querySelector<HTMLElement>('.sheet-handle');
+        if (panel?.getAttribute('data-sheet') === 'peek' && handle && getComputedStyle(handle).display !== 'none') handle.click();
+        if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
+        el.scrollIntoView({ block: 'start', behavior: 'auto' });
+        el.focus({ preventScroll: true });
+      },
+    }, label)));
+}

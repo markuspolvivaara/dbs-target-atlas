@@ -55,9 +55,35 @@ function viewSettings(): HTMLElement {
   return wrap;
 }
 
+/** A notice's last sentence: the one that says what the site is not for ("Not for surgical planning."). */
+export function lastSentence(text: string): string {
+  const parts = text.trim().split(/(?<=[.!?])\s+(?=\S)/);
+  return parts[parts.length - 1];
+}
+
+let noticeId = 0;
+
 export function disclaimerNote(text = 'Atlas-based (MNI 2009b) group anatomy; individual anatomy varies. Not for surgical planning.'): HTMLElement {
   // (a landmark of its own: it sat outside every landmark, which screen readers' landmark lists skip)
-  return h('aside', { class: 'disclaimer', 'aria-label': 'Notice' }, h('p', {}, h('strong', {}, 'Teaching tool. '), text));
+  // On a phone the notice is "Teaching tool." and its own last sentence, with the rest a tap away: in full it took two to
+  // four lines of an 844 px screen from the 3D stage (the audit's UI-27). The text is the same, only folded; the stage's
+  // height follows the notice's (--disc-h). The short line and the full one are each hidden by the styles where the
+  // other shows, so a screen reader reads one of them.
+  const id = `notice-full-${++noticeId}`;
+  const aside = h('aside', { class: 'disclaimer', 'aria-label': 'Notice' });
+  const toggle = (open: boolean) => () => {
+    aside.classList.toggle('open', open);
+    (open ? less : more).focus();
+  };
+  const more = h('button', { type: 'button', class: 'disc-toggle', 'aria-expanded': 'false', 'aria-controls': id, onclick: toggle(true) }, 'More');
+  // (each button shows in one state only, so each says its own: More folded, Less unfolded)
+  const less = h('button', { type: 'button', class: 'disc-toggle', 'aria-expanded': 'true', 'aria-controls': id, onclick: toggle(false) }, 'Less');
+  const short = lastSentence(text);
+  aside.append(h('p', { class: 'disc-full', id }, h('strong', {}, 'Teaching tool. '), text, ' ', less));
+  // (the full text when it is one sentence: nothing to fold)
+  if (short === text.trim()) aside.classList.add('single');
+  else aside.append(h('p', { class: 'disc-short' }, h('strong', {}, 'Teaching tool. '), short, ' ', more));
+  return aside;
 }
 
 /** The current section as a menu button: switch to another section or go to the home page. */

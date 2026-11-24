@@ -33,6 +33,9 @@ function assetVersions(): Record<string, string> {
 export default defineConfig({
   base: './',
   define: { __ASSET_VERSIONS__: JSON.stringify(assetVersions()) },
+  // Vite 7 drops licence comments ("legal comments") by default; keep them in the bundles as Vite 6 did, so that
+  // three.js's MIT notice travels with its code
+  esbuild: { legalComments: 'inline' },
   build: {
     target: 'es2022',
     assetsInlineLimit: 0,

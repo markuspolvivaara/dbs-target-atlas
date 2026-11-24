@@ -55,6 +55,8 @@ export interface VeState extends ViewState {
   scope: Scope;
   /** the shapes drawn: hydrocephalus (0 to 1: this patient's ventricles to the hydrocephalic ones) */
   morphs: Record<string, number>;
+  /** the landmark the position read-out measures from (its id), or null: the hypophysial fossa. In the URL as fr=id */
+  from: string | null;
 }
 
 export const VE_PRESETS: CameraPreset[] = ['coronal', 'sagittal', 'axial', 'anterolateral', 'frontolateral'];
@@ -74,7 +76,7 @@ export function defaultVeState(): VeState {
     clip: { axial: { on: false, mm: 30 }, coronal: { on: false, mm: 0 }, sagittal: { on: false, mm: 0 } },
     cutSide: 'none', sliceSeq: 't1', lead: { ...DEFAULT_LEAD },
     sel: null, hidden: [], cath: { ...DEFAULT_CATHETER },
-    scope: defaultScope(), morphs: {},
+    scope: defaultScope(), morphs: {}, from: null,
   };
 }
 
@@ -86,6 +88,7 @@ export function encodeVe(s: VeState): string {
   if (s.page === 'atlas') {
     p.set('g', s.grp);
     if (s.sel) p.set('sel', s.sel);
+    if (s.from) p.set('fr', s.from);
     encodeHemi(p, s.hemi);
     encodeCamera(p, s.cam);
     if (VE_GROUP.get(s.grp)?.catheter) {
@@ -123,6 +126,7 @@ export function decodeVe(hash: string): VeState {
   const g = VE_GROUP.get(p.get('g') ?? '');
   if (g) s.grp = g.id;
   s.sel = p.get('sel');
+  { const fr = p.get('fr'); s.from = fr && /^[a-z0-9_]+$/.test(fr) ? fr : null; }
   decodeHemi(p, s);
   decodeCamera(p, s, VE_PRESETS);
   const cs = p.get('cs');

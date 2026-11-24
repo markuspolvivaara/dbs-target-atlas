@@ -275,8 +275,9 @@ the list").** On `fix/audit-models-2` (off `27ee8a6`), local commits, not pushed
   bodies" and describes a smaller juxtarestiform body).
 - Engineering left: P1-08 (release memory: the audit says only if phones still struggle, unmeasured), P2S-19
   (dependency majors, through Dependabot one at a time), P1-27's `preserveDrawingBuffer` (the browser tests read the
-  canvas) and `dist/` in git (a workflow choice), UI-14's docked legend or camera offset, UI-22's jump row, UI-27's
-  shorter phone disclaimer.
+  canvas) and `dist/` in git (a workflow choice), UI-14's docked legend or camera offset. UI-27's shorter phone
+  disclaimer and UI-22's jump row were done on 2026-11-24 ("The notice folded on a phone" and "A row of jumps in the
+  long panels" below).
   Done on 2026-11-23 (below): UI-13 (Back history, measurements and the endonasal endoscope in links), the
   ARCHITECTURE.md, the cortex's `ax=abc`, the endoscopes' keys in the help.
 
@@ -290,6 +291,140 @@ The tract data (section 2) is done as far as open data go: the acoustic radiatio
 starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm further forward). Done from it: help and reset, cards into view, "what this bundle shows", surgical views,
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
+
+## Dependencies brought up to date, one at a time (desktop, 2026-11-24)
+
+Branches `chore/deps-patch` → `chore/deps-typescript-6` → `chore/deps-meshoptimizer` → `chore/deps-vite-7`, each on
+the one before, on top of `feat/landmark-readout`. **Local only: not pushed.** Item 8 of
+`.claude/opus-plan-2026-11-24.md`; the audit's P2S-19.
+
+- **Patch and minor updates** (`chore/deps-patch`): eslint 10.15, typescript-eslint 8.74, vitest 5.1.1. The built
+  site byte for byte the same.
+- **TypeScript 6.0** (`chore/deps-typescript-6`): 6.0.3, no code changes needed; the built site the same.
+- **meshoptimizer 0.21 → 1.3** (`chore/deps-meshoptimizer`): used only by the pipeline's compressor
+  (`pipeline/compress.mjs`, `recompress.mjs`) and the unit tests' decoder; the site decodes with three's own. Five
+  shipped meshes were compressed again with 1.3 (frontal lobe, the pterional frontal bone, a Knosp grade, v3's chiasm
+  and stalk): the same sizes, other bytes, and once decoded every vertex attribute is identical and the triangles are
+  the same set. The shipped files were not recompressed. The unit tests decode every shipped GLB with 1.3's decoder.
+- **Vite 6 → 7** (`chore/deps-vite-7`): 7.3.8, with esbuild 0.28. The bundles differ only by the newer minifier
+  (a `switch` written as a conditional; constructor parameter properties also declared as class fields, as
+  TypeScript does for ES2022, with the constructor's assignments in the same order). **Vite 7 drops licence
+  comments by default**, three.js's MIT notice among them: `esbuild: { legalComments: 'inline' }` in
+  `vite.config.ts` keeps them as Vite 6 did. The build target was already set (`es2022`), so Vite 7's new default
+  target does not apply. The full browser suite passed on this build (CI=1).
+  - npm on this machine blocks esbuild 0.28's install script (`npm install-scripts ls`); the build works without
+    it (the binary comes in `@esbuild/linux-x64`), and CI's npm on Node 22 runs it as before.
+- **Not updated, and why:**
+  - `@types/node` stays 22: CI runs Node 22.
+  - TypeScript 7 (the native compiler): typescript-eslint 8.74 accepts TypeScript below 6.1 only.
+  - Vite 8: it bundles with Rolldown in place of Rollup and esbuild; a larger change, for its own branch.
+  - three 0.169 → 0.187 (and its types): many releases of renderer and loader changes; every picture baseline
+    would need retaking. Its own piece of work, already listed as not for this plan.
+  - Playwright stays 1.65.0 (`~1.65.0`): the picture baselines and this machine's Chromium setup are tied to it.
+
+## Positions measured from a chosen landmark (desktop, 2026-11-24)
+
+Branch `feat/landmark-readout`, on top of `feat/reference-checks`. **Local only: not pushed.** Item 6 of
+`.claude/opus-plan-2026-11-24.md`; the audit's roadmap, section 3 ("coordinate readout in the skull base and spine").
+
+- **What:** the read-out under the pointer gives the position from a landmark the reader picks: "From Foramen ovale
+  (right): 15.2 mm left · 20.0 mm in front · 29.8 mm above · 39.0 mm in a straight line" (the patient's directions;
+  the frames are right-anterior-superior in mm). Without a choice it is as before (millimetres from the hypophysial
+  fossa).
+- **Where to pick:** the skull base (all three models): a landmark's card ("Measure positions from here"; pressed,
+  "Positions are measured from here (from the fossa again)") and a list in the Layers tab. The ventricles: the list
+  in the Layers tab (their landmarks have no card).
+- **The link:** `fr=<landmark id>`; a value that names no landmark is dropped (`sanitize` in `skullbase-main.ts` and
+  `ventricles-main.ts`).
+- **The spine is not done:** it has no landmarks to measure from. The DBS, cortex and brainstem sections use MNI
+  coordinates and were not asked for.
+- **Code:** `src/ui/relative.ts` (`landmarkLabel`, `offsetWords`), `from` in `SkullState` and `VeState`, the
+  skull base panel redrawn when the choice changes.
+- **Tests:** `tests/unit/relative.test.ts` (the wording, the side, the link on both sections);
+  `tests/e2e/audit-fixes.spec.ts` "the position read-out measured from a chosen landmark".
+
+## Reference checks: a unit test and a hand-run script (desktop, 2026-11-24)
+
+Branch `feat/reference-checks`, on top of `feat/panel-jump-row`. **Local only: not pushed.** Item 3 of
+`.claude/opus-plan-2026-11-24.md` in the main checkout; the first slice of the audit's roadmap, section 4.
+
+- **One list of all references** (`src/data/all-references.ts`, not used by the site): the twelve lists the sections
+  keep (the DBS list with its epilepsy and additions lists, brainstem, tracts, ventricles, vascular, the skull base's
+  foramina, temporal bone and approaches, spine, cortex), 565 references in one form, with `doiOf` and `yearOf`.
+- **Unit test** (`tests/unit/references.test.ts`, no network, in CI): each id, DOI and PMID once in its list; a
+  journal article has a DOI or a PMID, and the 26 references without either are named with why (FDA records, a trial
+  registry, society and guideline pages, the ISNCSCI worksheet, the AO Surgery Reference); a year in every citation,
+  and the short label's year is the citation's; the DOI in the address is the one in the citation; a paper cited in
+  several lists has the same year and PMID in each. Whether each cited reference resolves, and whether each is used,
+  was already tested section by section.
+- **Found: Luzzi 2022 was in the skull base's approach list twice**, the two entries differing only in the DOI's case
+  (one lookup by id kept the second). The second is removed.
+- **Script** (`scripts/check-references.ts`, `npm run check:references -- <out.md>`, by hand): every reference
+  compared with its record in Europe PMC (by PMID, else DOI) or Crossref (DOI): first author, year, title, DOI, PMID,
+  PMCID. It writes a table of differences and of what was not found. It sends only the identifiers, under a generic
+  client name (`OpenNeuroAtlas-reference-check/1.0`).
+  - **Europe PMC was slow on 24 November** (8 to 50 s for some answers, others 0.4 s): the first run stopped after
+    150 lookups with nothing written. So each request has 60 s, an error is printed, and each record found is kept in
+    `scripts/.cache/references.json` (in `.gitignore`): a run that stops continues where it stopped.
+  - **The first full run (24 November, 477 papers):** one real error, mended: **Jian 2024**'s title lacked
+    "technique nuances," ("…micro-anatomical study, technique nuances, and clinical application"). Two differences
+    are the records' own and the site's citations are right: Symss 2014's record has a typo ("ventriclen"), and
+    De Benedictis 2012's record adds J Neurosurg's tag "laboratory investigation" to the title. Four records give a
+    year one before the citation's, the online date of a paper whose print issue came the next year (Perrini 2013,
+    Palesi 2015, Toescu 2021, Chen 2025); the citations give the issue's year, as they should, and the script now
+    lists these apart. Nothing not found.
+  - **The script's own slips, fixed after that run:** `yearOf` took the first year in a citation, so "Spine (Phila
+    Pa 1976)" gave five spine papers 1976 and Rupp's "Revised 2019" its year (it now takes the year after the
+    journal's name); "da Silva" was cut to "da" (surnames are now read up to the initials); `&amp;` in a record's
+    title; Morel 1997's old Wiley DOI has angle brackets, at which `doiOf` stopped; Crossref's year is now the print
+    issue's where it has one.
+
+## A row of jumps in the long panels (UI-22) (desktop, 2026-11-24)
+
+Branch `feat/panel-jump-row`, on top of `feat/phone-disclaimer`. **Local only: not pushed.** Item 2 of
+`.claude/opus-plan-2026-11-24.md` in the main checkout.
+
+- **What:** at the top of the skull base's and the ventricles' anatomy panel, a row "Jump to" with a button for each
+  part the panel holds at the moment:
+  - skull base: Views, Opening (the sliders, in a surgical or tumour view), Endoscope (the endonasal view), Shown in
+    this view (the first list), Selected (a structure's card), About this view (the view's card), Model;
+  - ventricles: Views, Catheter or Endoscope, Ventricles (the list), Selected, About this view, Shape.
+  Parts a view does not have are left out; a panel with fewer than two parts gets no row.
+- **How a jump works:** the part is scrolled to the top of its pane (or into view, at the panel's end) and takes the
+  focus (`tabindex="-1"`), so a keyboard or screen-reader user lands there too. On a phone the sheet is opened first
+  (its handle is pressed): half-open, the panel's end lay below the screen. The row is a `<nav aria-label="In this
+  panel">` and comes before the panel's first control. `jumpRow` in `src/ui/widgets.ts`.
+- **Why:** the skull base panel opens with 553 words and 145 tab stops, the ventricles' with 877 words; the order of
+  the panels was fixed earlier, but there was no outline. The other sections' panels are short and get no row.
+- **Not changed:** the panels' order and wording.
+- **Tests:** `tests/e2e/audit-fixes.spec.ts` "long panels: a row of jumps…" (every jump in the pterional view and the
+  ventricles' overview: the focus lands on the part, its top in sight; the row first; no row on the DBS page) and
+  "phone: the long panel's jumps work in the sheet" (the sheet opens; the panel's last part comes into sight).
+- **MacBook baselines:** none change (the picture tests take the 3D stage only, and the one full-page picture is of
+  the DBS page on a phone, which has no row).
+
+## The notice folded on a phone (UI-27) (desktop, 2026-11-24)
+
+Branch `feat/phone-disclaimer`, on top of `fix/v1-bone-raster`. **Local only: not pushed.** Item 1 of
+`.claude/opus-plan-2026-11-24.md` in the main checkout (the plan for Opus 5.5 sessions).
+
+- **What:** on a phone (under 600 px) every section's notice is "Teaching tool." and the notice's own last sentence,
+  with a **More** button that shows the full text and a **Less** button that folds it again. On a desktop or tablet
+  nothing changes. The text is not reworded: the short line is the section's own last sentence ("Not for surgical
+  planning."; the spine's "Illustrative, not for surgical planning."; the vascular section's "For teaching, not for
+  diagnosis or planning.").
+- **Why:** the notice took two to four lines of an 844 px phone screen from the 3D stage. On the skull base the
+  stage gains 51 px (379 px folded, 328 px with the notice open, measured at 375 × 812).
+- **How:** `disclaimerNote` in `src/ui/shell.ts` writes both lines; the styles (`.disc-short`, `.disc-full`,
+  `.disc-toggle` in `src/styles.css`) show one of them, so a screen reader reads one. Each button has
+  `aria-expanded` and `aria-controls`; focus moves to the button that appears. The stage's height already follows the
+  notice's (`--disc-h`). `lastSentence` splits at a full stop followed by a space, so "0.5 mm" is not an end.
+- **Tests:** `tests/unit/disclaimer.test.ts` (each section's last sentence, word for word); `tests/e2e/audit-fixes.spec.ts`
+  "phone: the notice folded…" (skull base, spine, vascular, home: the short line, More, the full text, the stage
+  taller when folded, Less, focus) and "the notice in full on a desktop".
+- **A slip, mended before the commit:** writing the unit test I first overwrote `tests/unit/notice.test.ts` (the
+  licence records' test); it was restored from git and the new test given a file of its own.
+- **MacBook baselines:** none change (desktop pictures; the phone tests compare no pictures).
 
 ## v1's bone field on its meshes (MC-13) (desktop, 2026-11-24)
 

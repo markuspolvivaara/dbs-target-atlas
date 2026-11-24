@@ -12,6 +12,7 @@ import { bootSection } from './ui/section';
 function sanitize(s: VeState): VeState {
   if (!VE_GROUP.has(s.grp)) s.grp = 'ventricles';
   if (s.sel && !VE.has(s.sel)) s.sel = null;
+  if (s.from && !LM.has(s.from)) s.from = null;
   return s;
 }
 

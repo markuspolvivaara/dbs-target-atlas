@@ -700,6 +700,131 @@ test('phone: names by tap, rows that show they scroll, targets a finger can hit,
 });
 
 // UI-01: the section's page tabs on a phone
+// the roadmap's "coordinate readout relative to a chosen landmark": the read-out gives a pointed position from a
+// landmark the reader picks (in its card, or in the Layers tab), and a link keeps the choice
+test('the position read-out measured from a chosen landmark', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './skullbase/#/atlas?g=floor&sel=lm_foramen_ovale_r');
+  const btn = page.getByRole('button', { name: 'Measure positions from here' });
+  await btn.click();
+  await expect.poll(() => page.url()).toContain('fr=lm_foramen_ovale_r');
+  await expect(page.locator('.from-here')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('select[data-k="from"]')).toHaveValue('lm_foramen_ovale_r');
+  // pointing at the skull: the read-out says where from the landmark
+  const box = (await page.locator('.viewer-host canvas').boundingBox())!;
+  await expect.poll(async () => {
+    for (const [fx, fy] of [[0.5, 0.5], [0.45, 0.55], [0.55, 0.45], [0.5, 0.6]]) {
+      await page.mouse.move(box.x + box.width * fx, box.y + box.height * fy);
+      const t = await page.locator('.readout').innerText();
+      if (t.startsWith('From Foramen ovale (right)')) return t;
+    }
+    return '';
+  }).toMatch(/^From Foramen ovale \(right\)\s+[\d.]+ mm (right|left) · [\d.]+ mm (in front|behind) · [\d.]+ mm (above|below) · [\d.]+ mm in a straight line$/);
+  // and back to the fossa
+  await page.locator('.from-here').click();
+  await expect.poll(() => page.url()).not.toContain('fr=');
+  // the ventricles: from a link
+  await open(page, './ventricles/#/atlas?g=ventricles&fr=lm_bregma');
+  await expect(page.locator('select[data-k="from"]')).toHaveValue('lm_bregma');
+  // (a link naming no landmark is put right)
+  await open(page, './skullbase/#/atlas?g=floor&fr=lm_nothing_here');
+  await expect.poll(() => page.url()).not.toContain('fr=');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// UI-22: the skull base and ventricles panels open with 550 to 880 words and up to 145 tab stops; a row of jumps at
+// their top leads to each part, and the part takes the focus, so a keyboard user lands there too
+async function jumpsWork(page: Page, want: string[]) {
+  const pane = page.locator('.panel .pane:not([hidden])');
+  const row = pane.locator('nav.jump-row');
+  await expect(row).toHaveAttribute('aria-label', 'In this panel');
+  expect(await row.getByRole('button').allInnerTexts()).toEqual(want);
+  // (the row comes before the panel's first control)
+  expect(await pane.evaluate((p) => p.querySelector('button, a[href], input, select')?.closest('nav.jump-row') !== null)).toBe(true);
+  for (const label of want) {
+    await row.getByRole('button', { name: label, exact: true }).click();
+    const at = page.locator(':focus');
+    await expect(at).not.toHaveClass(/jump/);
+    expect(await at.evaluate((el) => !!el.closest('.panel .pane'))).toBe(true);
+    // (its top edge in sight, inside the pane and the window: a card can be far taller than the screen; on a phone the
+    // sheet opens to show it)
+    await expect.poll(() => at.evaluate((el) => {
+      const r = el.getBoundingClientRect(), p = el.closest('.pane')!.getBoundingClientRect();
+      return r.top >= p.top - 1 && r.top < Math.min(p.bottom, window.innerHeight) - 10;
+    }), { message: label }).toBe(true);
+  }
+}
+
+test('long panels: a row of jumps to their parts, each taking the focus', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './skullbase/#/atlas?g=transsylvian');
+  await jumpsWork(page, ['Views', 'Opening', 'Shown in this view', 'About this view', 'Model']);
+  await open(page, './ventricles/#/atlas?g=ventricles');
+  await jumpsWork(page, ['Views', 'Ventricles', 'About this view', 'Shape']);
+  // a short panel has no row
+  await open(page, './dbs/');
+  await expect(page.locator('nav.jump-row')).toHaveCount(0);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('phone: the long panel’s jumps work in the sheet @mobile', async ({ page }) => {
+  await open(page, './skullbase/#/atlas?g=transsylvian');
+  await expect(page.locator('.panel')).toHaveAttribute('data-sheet', 'peek');
+  await jumpsWork(page, ['Views', 'Opening', 'Shown in this view', 'About this view', 'Model']);
+  await expect(page.locator('.panel')).toHaveAttribute('data-sheet', 'full');
+});
+
+// UI-27: on a phone the notice is "Teaching tool." and its own last sentence, the rest a tap away; it took two to four
+// lines of the first screen from the 3D stage. The full text is still there, word for word
+test('phone: the notice folded to one line, the full text a tap away @mobile', async ({ page }) => {
+  const g = guard(page);
+  const sections: [string, RegExp, RegExp][] = [
+    ['./skullbase/', /^Teaching tool\. Not for surgical planning\.\s*More$/, /registered into it: positions are approximate to a millimetre or two\. Individual anatomy varies\. Not for surgical planning\./],
+    ['./spine/', /^Teaching tool\. Illustrative, not for surgical planning\.\s*More$/, /pedicle sizes and vessel positions vary between people/],
+    ['./vascular/', /^Teaching tool\. For teaching, not for diagnosis or planning\.\s*More$/, /every aneurysm, malformation and fistula is drawn onto them by rule/],
+    ['./', /^Teaching tool\. Not for surgical planning\.\s*More$/, /single-patient CT anatomy/],
+  ];
+  for (const [url, short, full] of sections) {
+    await page.goto('about:blank');
+    // (the home page has no 3D view to wait for)
+    if (url === './') await page.goto(url); else await open(page, url);
+    const notice = page.locator('aside.disclaimer[aria-label="Notice"]');
+    await expect(notice.locator('.disc-short')).toBeVisible();
+    await expect(notice.locator('.disc-full')).toBeHidden();
+    expect((await notice.locator('.disc-short').innerText()).trim(), url).toMatch(short);
+    const stage = url === './' ? null : page.locator('.stage');
+    const folded = stage ? (await stage.boundingBox())!.height : 0;
+    const more = notice.getByRole('button', { name: 'More' });
+    await expect(more).toHaveAttribute('aria-expanded', 'false');
+    await more.click();
+    await expect(notice.locator('.disc-full')).toBeVisible();
+    await expect(notice.locator('.disc-short')).toBeHidden();
+    await expect(notice.locator('.disc-full'), url).toContainText(full);
+    // the stage gives the room back when the notice is folded: on the skull base the notice is four lines in full
+    if (stage && url === './skullbase/') await expect.poll(async () => folded - (await stage.boundingBox())!.height).toBeGreaterThan(25);
+    const less = notice.getByRole('button', { name: 'Less' });
+    await expect(less).toHaveAttribute('aria-expanded', 'true');
+    await expect(less).toBeFocused();
+    await less.click();
+    await expect(notice.locator('.disc-short')).toBeVisible();
+    await expect(more).toBeFocused();
+  }
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// UI-27: on a desktop the notice is shown whole, with nothing to unfold
+test('the notice in full on a desktop', async ({ page }) => {
+  await open(page, './skullbase/');
+  const notice = page.locator('aside.disclaimer[aria-label="Notice"]');
+  await expect(notice.locator('.disc-full')).toBeVisible();
+  await expect(notice.locator('.disc-short')).toBeHidden();
+  await expect(notice.getByRole('button')).toHaveCount(0);
+  await expect(notice).toContainText('Teaching tool. One adult’s CT with another person’s ear');
+});
+
 test('phone: the page tabs fade where more lie @mobile', async ({ page }) => {
   await open(page, './dbs/');
   const nav = page.locator('header .nav');

@@ -28,6 +28,9 @@ export interface SkullState extends ViewState {
   /** the endonasal view's endoscope and pieces (from its panel once the sinus is loaded, or from a link; none in other
    * views). In the URL as sc=R,12.5,4,-2,0 (ev=3d: its picture as the inset) and rm=septa,floor */
   endo?: EndoView;
+  /** the landmark the position read-out measures from (its id), or null: the frame's origin, the hypophysial fossa. In
+   * the URL as fr=id */
+  from: string | null;
 }
 
 /** the surgical shapes and their URL parameters (op=0..100 and so on) */
@@ -50,7 +53,7 @@ export function defaultSkullState(): SkullState {
     labels: defaultLabels(),
     clip: { axial: { on: false, mm: 0 }, coronal: { on: false, mm: 0 }, sagittal: { on: false, mm: 0 } },
     cutSide: 'none', sliceSeq: 't1', lead: { ...DEFAULT_LEAD },
-    sel: null, hidden: [], cutAbove: g.cutAbove, morphs: {}, section: true,
+    sel: null, hidden: [], cutAbove: g.cutAbove, morphs: {}, section: true, from: null,
   };
 }
 
@@ -64,6 +67,7 @@ export function encodeSkull(s: SkullState): string {
     p.set('g', s.grp);
     if (s.also.length) p.set('with', s.also.join(','));
     if (s.sel) p.set('sel', s.sel);
+    if (s.from) p.set('fr', s.from);
     encodeHemi(p, s.hemi);
     encodeCamera(p, s.cam);
     encodeLayers(p, s.layers, defaultSkullState().layers, LAYER_CODES);
@@ -100,6 +104,7 @@ export function decodeSkull(hash: string): SkullState {
     .filter((id) => id !== g.id && SB_GROUP.get(id)?.kind === 'system');
   if (s.also.length) s.cutAbove = combinedCut([g.id, ...s.also]);
   s.sel = p.get('sel');
+  { const fr = p.get('fr'); s.from = fr && /^[a-z0-9_]+$/.test(fr) ? fr : null; }
   decodeHemi(p, s);
   decodeCamera(p, s, SKULL_PRESETS);
   decodeLayers(p, s.layers, LAYER_CODES);
