@@ -1277,7 +1277,10 @@ on or another sequence is picked.
   what is drawn solid before anything faded, and through faded bone to what it encloses.
 - **Click or tap** any structure, tract or marker for its card: role in the source content,
   indications that use it, imaging, data source, licence, centroid.
-- **Readout**: MNI coordinates under the pointer plus approximate AC–PC coordinates (see below).
+- **Readout**: MNI coordinates under the pointer plus approximate AC–PC coordinates (see below). In the skull base
+  and the ventricles the position is in millimetres from the hypophysial fossa, or from a landmark the reader picks
+  ("Measure positions from here" in a landmark's card, or the list in the Layers tab): then right or left, in front
+  or behind, above or below, and in a straight line (`src/ui/relative.ts`). The choice is part of the link (`fr=`).
 - **Measure** (every section; `src/ui/measure.ts`): pick two points for a distance in mm. A finished measurement is
   part of the link (`m=x,y,z,x,y,z`, to a hundredth of a millimetre), which opens it again with the tool on.
 - **Indications shown** page (DBS): show or hide individual indications (for example to keep only the common

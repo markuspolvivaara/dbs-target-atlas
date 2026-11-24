@@ -18,6 +18,7 @@ import { structureBar } from './structurebar';
 import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 import { MeasureTool } from './measure';
 import { chips, clear, eyeIcon, fmtMm, jumpRow } from './widgets';
+import { landmarkLabel, offsetWords } from './relative';
 import { refLinksFrom } from './reflinks';
 import { FORAMEN_CONTENTS, FORAMEN_REF, PASSAGES } from '../skullbase/foramina';
 import { EndonasalPanel } from './skullbase-endonasal';
@@ -373,7 +374,7 @@ export class SkullbaseAtlasPage {
     this.stage.querySelectorAll<HTMLButtonElement>('[data-hemi]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.hemi === s.hemi)));
     this.stage.querySelectorAll<HTMLButtonElement>('.toolbar [data-labels]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.labels === s.labels)));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((b) => b.toggleAttribute('data-active', b.dataset.preset === s.cam.preset));
-    const key = `${s.grp}|${s.also.join(',')}|${s.sel}|${s.hidden.join(',')}`;
+    const key = `${s.grp}|${s.also.join(',')}|${s.sel}|${s.hidden.join(',')}|${s.from}`;
     if (key !== this.lastKey || !prev) { this.lastKey = key; this.renderOverview(); }
     // the surgical view's sliders follow the state (keys move them too)
     for (const slider of this.tabs.overview.querySelectorAll<HTMLInputElement>('input[data-morph]')) {
@@ -750,7 +751,7 @@ export class SkullbaseAtlasPage {
         h('dt', {}, bone && bone.type !== 'bone' ? 'On' : 'Bone'), h('dd', {}, bone ? h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.sel = bone.id; }) }, lm.bone) : lm.bone, lm.part ? ` · ${lm.part}` : ''),
         ...(defBlock as HTMLElement[]),
         regions.length ? [h('dt', {}, 'In regions'), h('dd', {}, regions.join('; '))] : null,
-        h('dt', {}, 'Position'), h('dd', {}, `${lm.ras.map(fmtMm).join(', ')} mm (right, anterior, superior of the hypophysial fossa)${SB_MODEL === 'v3' ? '' : `; ${fmtMm(lm.distanceToBoneMm)} mm from the bone surface`}.`),
+        h('dt', {}, 'Position'), h('dd', {}, this.fromButton(lm), ' ', `${lm.ras.map(fmtMm).join(', ')} mm (right, anterior, superior of the hypophysial fossa)${SB_MODEL === 'v3' ? '' : `; ${fmtMm(lm.distanceToBoneMm)} mm from the bone surface`}.`),
         lm.how && SB_MODEL !== 'v3' ? [
           h('dt', {}, 'What passes through'), h('dd', {}, h('ul', { class: 'evidence' }, ...(FORAMEN_CONTENTS[lm.name] ?? []).map((c) => h('li', {}, c.text, ' ', refLinksFrom(FORAMEN_REF, c.refIds))))),
           h('dt', {}, 'How it was located'), h('dd', {}, lm.how, ' Nerves, vessels and bone are all the Z-Anatomy model’s.'),
@@ -766,6 +767,14 @@ export class SkullbaseAtlasPage {
           : SB_MODEL === 'ct'
           ? 'Z-Anatomy label point, fitted onto this CT’s skull with the model (approximate) and moved onto its bone where it lay on it.'
           : 'Z-Anatomy label point, anchored to the bone in the model.')));
+  }
+
+  /** The read-out measured from this landmark, or from the fossa again. */
+  private fromButton(lm: Landmark): HTMLElement {
+    const on = this.s.from === lm.id;
+    return h('button', { type: 'button', class: 'linklike from-here', 'aria-pressed': String(on),
+      onclick: () => this.update((s) => { s.from = on ? null : lm.id; }) },
+    on ? 'Positions are measured from here (from the fossa again)' : 'Measure positions from here');
   }
 
   /** v3: what this model measures for a structure or landmark, next to the published values on its notes. */
@@ -873,7 +882,11 @@ export class SkullbaseAtlasPage {
   private showReadout(ras: THREE.Vector3 | null): void {
     if (!ras) return;
     clear(this.readout);
-    this.readout.append(h('span', { class: 'k' }, 'From the hypophysial fossa'), ` x ${fmtMm(ras.x)}  y ${fmtMm(ras.y)}  z ${fmtMm(ras.z)} mm`);
+    // (from a landmark the reader chose: in its card or in the Layers tab; the roadmap's "coordinate readout relative to a
+    // chosen landmark")
+    const from = this.s.from ? LM.get(this.s.from) : undefined;
+    if (from) this.readout.append(h('span', { class: 'k' }, `From ${landmarkLabel(from)}`), ` ${offsetWords(ras, from.ras as [number, number, number])}`);
+    else this.readout.append(h('span', { class: 'k' }, 'From the hypophysial fossa'), ` x ${fmtMm(ras.x)}  y ${fmtMm(ras.y)}  z ${fmtMm(ras.z)} mm`);
   }
 
   private async copyLink(btn: HTMLElement): Promise<void> {
@@ -900,7 +913,13 @@ export class SkullbaseAtlasPage {
           h('input', { type: 'range', min: -60, max: 90, step: 1, 'data-k': 'cz', oninput: (e: Event) => this.update((st) => { st.cutAbove = parseFloat((e.target as HTMLInputElement).value); }) })),
         h('fieldset', { class: 'seg-field' }, h('legend', {}, 'Cut away a side'),
           ...([['none', 'Nothing'], ['L', 'Left half'], ['R', 'Right half']] as const).map(([v, label]) =>
-            h('label', { class: 'radio' }, h('input', { type: 'radio', name: 'sbcut', value: v, onchange: () => this.update((st) => { st.cutSide = v; }) }), label))));
+            h('label', { class: 'radio' }, h('input', { type: 'radio', name: 'sbcut', value: v, onchange: () => this.update((st) => { st.cutSide = v; }) }), label))),
+        h('h3', {}, 'Position read-out'),
+        h('label', { class: 'select' }, h('span', {}, 'Measure positions from '),
+          h('select', { 'data-k': 'from', onchange: (e: Event) => { const v = (e.target as HTMLSelectElement).value; this.update((st) => { st.from = v || null; }); } },
+            h('option', { value: '' }, 'The hypophysial fossa (the model’s origin)'),
+            ...[...LANDMARKS].sort((a, b) => landmarkLabel(a).localeCompare(landmarkLabel(b))).map((l) => h('option', { value: l.id }, landmarkLabel(l))))),
+        h('p', { class: 'aside' }, 'Point at a structure: the read-out gives its distance from the landmark, right or left, in front or behind, above or below (the patient’s directions), and in a straight line.'));
     }
     for (const [k] of LAYERS) {
       const row = pane.querySelector(`[data-layer="${k}"]`)!;
@@ -913,6 +932,7 @@ export class SkullbaseAtlasPage {
     cz.value = String(s.cutAbove ?? FLOOR_CUT_MM);
     (pane.querySelector('[data-k=cz-out]') as HTMLOutputElement).textContent = s.cutAbove === null ? 'off' : `${fmtMm(s.cutAbove)} mm`;
     pane.querySelectorAll<HTMLInputElement>('input[name=sbcut]').forEach((r) => { r.checked = r.value === s.cutSide; });
+    (pane.querySelector('[data-k=from]') as HTMLSelectElement).value = s.from ?? '';
   }
 
   // ---------------------------------------------------------------- keyboard

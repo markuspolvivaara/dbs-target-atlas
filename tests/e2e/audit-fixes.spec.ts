@@ -700,6 +700,39 @@ test('phone: names by tap, rows that show they scroll, targets a finger can hit,
 });
 
 // UI-01: the section's page tabs on a phone
+// the roadmap's "coordinate readout relative to a chosen landmark": the read-out gives a pointed position from a
+// landmark the reader picks (in its card, or in the Layers tab), and a link keeps the choice
+test('the position read-out measured from a chosen landmark', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './skullbase/#/atlas?g=floor&sel=lm_foramen_ovale_r');
+  const btn = page.getByRole('button', { name: 'Measure positions from here' });
+  await btn.click();
+  await expect.poll(() => page.url()).toContain('fr=lm_foramen_ovale_r');
+  await expect(page.locator('.from-here')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('select[data-k="from"]')).toHaveValue('lm_foramen_ovale_r');
+  // pointing at the skull: the read-out says where from the landmark
+  const box = (await page.locator('.viewer-host canvas').boundingBox())!;
+  await expect.poll(async () => {
+    for (const [fx, fy] of [[0.5, 0.5], [0.45, 0.55], [0.55, 0.45], [0.5, 0.6]]) {
+      await page.mouse.move(box.x + box.width * fx, box.y + box.height * fy);
+      const t = await page.locator('.readout').innerText();
+      if (t.startsWith('From Foramen ovale (right)')) return t;
+    }
+    return '';
+  }).toMatch(/^From Foramen ovale \(right\)\s+[\d.]+ mm (right|left) · [\d.]+ mm (in front|behind) · [\d.]+ mm (above|below) · [\d.]+ mm in a straight line$/);
+  // and back to the fossa
+  await page.locator('.from-here').click();
+  await expect.poll(() => page.url()).not.toContain('fr=');
+  // the ventricles: from a link
+  await open(page, './ventricles/#/atlas?g=ventricles&fr=lm_bregma');
+  await expect(page.locator('select[data-k="from"]')).toHaveValue('lm_bregma');
+  // (a link naming no landmark is put right)
+  await open(page, './skullbase/#/atlas?g=floor&fr=lm_nothing_here');
+  await expect.poll(() => page.url()).not.toContain('fr=');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
 // UI-22: the skull base and ventricles panels open with 550 to 880 words and up to 145 tab stops; a row of jumps at
 // their top leads to each part, and the part takes the focus, so a keyboard user lands there too
 async function jumpsWork(page: Page, want: string[]) {

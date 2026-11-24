@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { CameraPreset } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
 import type { Claim } from '../brainstem/schema';
-import { ETV, KIND_LABEL, kindOf, LM, TARGETS, TRAJ, trajectoryFor, VE, VE_REF, type Trajectory } from '../ventricles';
+import { ETV, KIND_LABEL, kindOf, LANDMARKS, LM, TARGETS, TRAJ, trajectoryFor, VE, VE_REF, type Trajectory } from '../ventricles';
 import { ACCURACY, AQUEDUCT, CHEN_COHORT, ETV_ANATOMY, ETV_SCORE, ETV_TRAJECTORY, FOURTH, FRAZIER, HYDRO, IDEAL, KOCHER, LATERAL_WALLS, MONRO, PRACTICE, TARGET_NAME, TEMPORAL_HORN, THIRD_FLOOR, THIRD_WALLS } from '../ventricles/content';
 import { VE_GROUP, VE_GROUPS, type VeGroup } from '../ventricles/groups';
 import { veScene, type VePlan } from '../ventricles/scene';
@@ -17,6 +17,7 @@ import { refLinksFrom } from './reflinks';
 import { bindSheetDrag, drawGizmo, layoutLabels, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 import { MeasureTool } from './measure';
 import { chips, clear, eyeIcon, fmtMm, jumpRow } from './widgets';
+import { landmarkLabel, offsetWords } from './relative';
 
 type Update = (fn: (s: VeState) => void, opts?: { camera?: boolean }) => void;
 
@@ -760,7 +761,9 @@ export class VentriclesAtlasPage {
   private showReadout(ras: THREE.Vector3 | null): void {
     if (!ras) return;
     clear(this.readout);
-    this.readout.append(h('span', { class: 'k' }, 'mm'), ` x ${fmtMm(ras.x)}  y ${fmtMm(ras.y)}  z ${fmtMm(ras.z)} from the hypophysial fossa`);
+    const from = this.s.from ? LM.get(this.s.from) : undefined;
+    if (from) this.readout.append(h('span', { class: 'k' }, `From ${landmarkLabel(from)}`), ` ${offsetWords(ras, from.ras as [number, number, number])}`);
+    else this.readout.append(h('span', { class: 'k' }, 'mm'), ` x ${fmtMm(ras.x)}  y ${fmtMm(ras.y)}  z ${fmtMm(ras.z)} from the hypophysial fossa`);
   }
 
   private async copyLink(btn: HTMLElement): Promise<void> {
@@ -778,13 +781,20 @@ export class VentriclesAtlasPage {
         h('label', { class: 'check' }, h('input', { type: 'checkbox', onchange: (e: Event) => this.update((st) => { st.layers[k].on = (e.target as HTMLInputElement).checked; }) }), label),
         h('label', { class: 'range' }, h('span', { class: 'vh' }, `${label} opacity`),
           h('input', { type: 'range', min: 0, max: 1, step: 0.05, oninput: (e: Event) => this.update((st) => { st.layers[k].opacity = parseFloat((e.target as HTMLInputElement).value); }) }))));
-      pane.append(h('h3', {}, 'Layers'), ...rows);
+      pane.append(h('h3', {}, 'Layers'), ...rows,
+        h('h3', {}, 'Position read-out'),
+        h('label', { class: 'select' }, h('span', {}, 'Measure positions from '),
+          h('select', { 'data-k': 'from', onchange: (e: Event) => { const v = (e.target as HTMLSelectElement).value; this.update((st) => { st.from = v || null; }); } },
+            h('option', { value: '' }, 'The hypophysial fossa (the model’s origin)'),
+            ...[...LANDMARKS].sort((a, b) => landmarkLabel(a).localeCompare(landmarkLabel(b))).map((l) => h('option', { value: l.id }, landmarkLabel(l))))),
+        h('p', { class: 'aside' }, 'Point at a structure: the read-out gives its distance from the landmark, right or left, in front or behind, above or below (the patient’s directions), and in a straight line.'));
     }
     for (const [k] of LAYERS) {
       const row = pane.querySelector(`[data-layer="${k}"]`)!;
       (row.querySelector('input[type=checkbox]') as HTMLInputElement).checked = s.layers[k].on;
       (row.querySelector('input[type=range]') as HTMLInputElement).value = String(s.layers[k].opacity);
     }
+    (pane.querySelector('[data-k=from]') as HTMLSelectElement).value = s.from ?? '';
   }
 
   // ---------------------------------------------------------------- keyboard
