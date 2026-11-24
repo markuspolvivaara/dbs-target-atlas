@@ -52,6 +52,11 @@ NASAL_CLOSE_MM = 5.0
 WALL_CROSS_MM = 4.0
 NOSE_HALF_MM = 12.0
 LINE_MM = 6.0
+# the way is opened at least this far round its line whatever lies there (bone, or the closure of the outside): the
+# scope's clear core (2.5 mm across: ENDO_SCOPE_ROOM_MM in src/skullbase/endonasal.ts) and a voxel. Under Z-Anatomy's
+# nasal bones the space the bones enclose is a slit 2-3 mm high, where the scope stopped 26 mm in on both sides and
+# never came to the sinus
+WAY_CORE_MM = 1.75
 FAKE_HU = (-1000.0, 1000.0)     # (the bone field 0..1 as a CT-like value, to colour the cut)
 NERVES = ["sb_optic_nerve_ii", "sb_optic_chiasm", "sb_oculomotor_nerve_iii", "sb_trochlear_nerve_iv", "sb_trigeminal_nerve_v", "sb_abducens_nerve_vi"]
 SELLAR = ["sb_adenohypophysis", "sb_neurohypophysis", "sb_anterior_intercavernous_sinus", "sb_posterior_intercavernous_sinus"]
@@ -76,7 +81,9 @@ def mesh_inside(V: np.ndarray, T: np.ndarray, a_crop: np.ndarray, shape: tuple) 
     if m.is_watertight:
         return fill(np.asarray(m.vertices), np.asarray(m.faces), lo, shape, ENDO.GRID_MM)
     sh = np.zeros(shape, bool)
-    P = np.vstack([m.vertices, m.sample(int(m.area / (0.25 * ENDO.GRID_MM ** 2)))])
+    # (sampled with a seed of its own: trimesh draws from its own generator, which numpy's seed in main does not set, so
+    # two runs gave Z-Anatomy's lobes and the pieces round them volumes 1 % apart)
+    P = np.vstack([m.vertices, trimesh.sample.sample_surface(m, int(m.area / (0.25 * ENDO.GRID_MM ** 2)), seed=0)[0]])
     ijk = np.rint((P - lo) / ENDO.GRID_MM).astype(int)
     ok = np.all((ijk >= 0) & (ijk < np.array(shape)), 1)
     sh[tuple(ijk[ok].T)] = True
@@ -167,9 +174,9 @@ def main() -> int:
              "lo": sp.min(0).round(1).tolist(), "hi": sp.max(0).round(1).tolist(), "backMm": round(float(sp[:, 1].min()), 1),
              "opensToNose": bool((ndimage.binary_dilation(s_mask, iterations=3) & nose).any())}
     # the corridor, as v3's (skullbase_v3_endonasal.main)
-    clr = ndimage.distance_transform_edt(air, sampling=vox)
     to_sinus = ndimage.distance_transform_edt(~s_mask, sampling=vox)
     corridor = {}
+    clr = ndimage.distance_transform_edt(air, sampling=vox)
     for sd in ("L", "R"):
         nasal = ndimage.binary_dilation(nasal_side[sd], iterations=ENDO.NASAL_PAD_VOX)
         cost = np.where(air, 1 + 30 * np.clip(ENDO.CORRIDOR_ROOM_MM - clr, 0, None), np.where(bone >= ENDO.FIELD_ISO, 300.0, 60.0))
@@ -196,7 +203,7 @@ def main() -> int:
         opened = opened[np.r_[0, np.cumsum(np.linalg.norm(np.diff(opened, axis=0), axis=1))] <= length - ENDO.CORRIDOR_SHORT_MM]
         dd = cKDTree(opened).query(P, distance_upper_bound=ENDO.CORRIDOR_MM)[0].reshape(shape)
         inside_nasal = ndimage.distance_transform_edt(nasal, sampling=vox) - ndimage.distance_transform_edt(~nasal, sampling=vox)
-        level = np.maximum.reduce([(dd - ENDO.CORRIDOR_MM / 2), (0.5 - inside_nasal), (ENDO.CORRIDOR_FACE_MM - to_sinus)])
+        level = np.maximum.reduce([(dd - ENDO.CORRIDOR_MM / 2), np.minimum(0.5 - inside_nasal, dd - WAY_CORE_MM), (ENDO.CORRIDOR_FACE_MM - to_sinus)])
         wall = np.clip(np.round(ENDO.FIELD_ISO + level * ENDO.CORRIDOR_RAMP), 0, 255).astype(np.uint8)
         open_ = dd < ENDO.CORRIDOR_MM
         before = int(((solid >= ENDO.FIELD_ISO) & open_ & (wall < ENDO.FIELD_ISO)).sum())
@@ -205,6 +212,16 @@ def main() -> int:
         corridor[sd] = {"points": C.round(2).tolist(), "lengthMm": round(length, 1), "openedMm": round(length - ENDO.CORRIDOR_SHORT_MM, 1),
                         "recess": C[-1].round(2).tolist(), "openedMm3": round(before * vox ** 3, 1)}
         print(sd, "corridor", round(length, 1), "mm; opened", round(before * vox ** 3), "mm3")
+        corridor[sd]["_opened"] = opened
+    # how wide the way is as drawn (the audit's MC-16: tighter against the septum than the CORRIDOR_MM it is opened to):
+    # along its opened part, twice the distance from the way to the nearest lining, on the grid (so in steps of a voxel)
+    room = ndimage.distance_transform_edt(solid < ENDO.FIELD_ISO, sampling=vox)
+    for sd in ("L", "R"):
+        q = np.round(nib.affines.apply_affine(np.linalg.inv(a_crop), corridor[sd].pop("_opened"))).astype(int)
+        w = 2 * room[tuple(q.T)]
+        corridor[sd]["freeMm"] = {"least": round(float(w.min()), 1), "median": round(float(np.median(w)), 1),
+                                  "underShare": round(float((w < ENDO.CORRIDOR_MM - vox).mean()), 2)}
+        print(sd, "the way's free width", corridor[sd]["freeMm"])
     # the hypophysis: Z-Anatomy's own; its parts' conditions (mm, <= 0 inside)
     parts = {}
     for pid, n in (("adeno", "Adenohypophysis"), ("neuro", "Neurohypophysis")):
@@ -214,9 +231,16 @@ def main() -> int:
     off_gland = ENDO.signed(gland, vox)
     gx = Pg[gland]
     tub, dors = lms[("Tuberculum sellae", "M")], lms[("Dorsum sellae", "M")]
+    # (the audit's AP-11: Z-Anatomy's two lobes reach far above the sella, as they include the stalk; so also what of
+    # them lies below the diaphragma, the plane through its tuberculum and dorsum sellae, level from side to side)
+    z_d = tub[2] + (dors[2] - tub[2]) * (Pg[..., 1] - tub[1]) / (dors[1] - tub[1])
+    below = gland & (Pg[..., 2] <= z_d)
+    bx = Pg[below]
     hypo = {"diaphragma": {"tuberculum": tub.round(1).tolist(), "dorsum": dors.round(1).tolist()},
             "gland": {"widthMm": round(float(np.ptp(gx[:, 0])) + vox, 1), "lengthMm": round(float(np.ptp(gx[:, 1])) + vox, 1),
-                      "heightMm": round(float(np.ptp(gx[:, 2])) + vox, 1), "mm3": round(float(gland.sum()) * vox ** 3, 1)},
+                      "heightMm": round(float(np.ptp(gx[:, 2])) + vox, 1), "mm3": round(float(gland.sum()) * vox ** 3, 1),
+                      "aboveDiaphragmaMm": round(float((Pg[..., 2] - z_d)[gland].max()) + vox / 2, 1),
+                      "belowDiaphragma": {"heightMm": round(float(np.ptp(bx[:, 2])) + vox, 1), "mm3": round(float(below.sum()) * vox ** 3, 1)}},
             "adenoMm3": round(float((parts["adeno"] <= 0).sum()) * vox ** 3, 1), "neuroMm3": round(float((parts["neuro"] <= 0).sum()) * vox ** 3, 1),
             "stalkMm3": 0.0}
     # its cavernous sinuses (Z-Anatomy's), for their medial walls as a step
@@ -251,7 +275,7 @@ def main() -> int:
                       "distStepMm": ENDO.DIST_STEP_MM, "pieceStepMm": ENDO.PIECE_STEP_MM, "pieceClearMm": ENDO.PIECE_CLEAR_MM,
                       "fields": ["bone", "solid", "density", "vessel", "nerve", "sellar", "brain", "piece", "pieceLevel", "gland"]},
            "file": "assets/skullbase/endonasal.bin.gz", "bytes": len(data), "dims": list(shape), "affine": np.round(a_crop, 5).tolist(),
-           "box": [list(b_) for b_ in BOX], "entry": entry, "corridor": corridor, "corridorMm": ENDO.CORRIDOR_MM,
+           "box": [list(b_) for b_ in BOX], "entry": entry, "corridor": corridor, "corridorMm": ENDO.CORRIDOR_MM, "corridorCoreMm": 2 * WAY_CORE_MM,
            # (a piece with nothing in it on this model is not a step: the clivus when the sinus does not reach behind the sella)
            "sinus": sinus, "intercarotid": icd, "pieces": [p_ for p_ in pieces if p_["mm3"] > 0], "hypophysis": hypo}
     OUT_JSON.write_text(json.dumps(out, indent=1))

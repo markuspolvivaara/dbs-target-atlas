@@ -1796,6 +1796,41 @@ test('help: the ventricles and the skull base list their endoscopes\' keys', asy
   expect(await keys()).toEqual(expect.arrayContaining(['← → ↑ ↓', 'W  S', 'Q  E']));
 });
 
+// AP-15: the "In" slider runs to the end of the scope's way, but the scope stops where it has no room (in front of the
+// sphenoid's front wall until that is taken away), and the slider sprang back with no word: it now says how far the
+// way is open. On v1 the scope stopped 26 mm in, under the nasal bones, and never came to the sinus.
+// (on v1 the way comes to the sinus from below and beside it: taking the front wall away opens nothing in the scope's
+// line there, the burr does)
+for (const [model, least, wallOpens] of [['skullbase', 3, true], ['skullbase-v1', 70, false]] as const) {
+  test(`endonasal (${model}): the In slider says how far the way is open${wallOpens ? ', and further once the front wall is taken away' : ''}`, async ({ page }) => {
+    const g = guard(page);
+    const first = page.locator('.endonasal .scope-range span').first();
+    const note = /^In (\d+\.\d) mm \(the way is open to (\d+\.\d) of (\d+) mm\)$/;
+    const read = async () => {
+      await expect(first).toHaveText(note, { timeout: 30_000 });
+      const m = note.exec((await first.textContent())!)!;
+      return { at: Number(m[1]), open: Number(m[2]), of: Number(m[3]) };
+    };
+    // asked for more than the way's length: the scope goes as far as it has room, and the slider says so
+    await open(page, `./${model}/#/atlas?g=endonasal&sc=R,200,0,0,0`);
+    const shut = await read();
+    expect(shut.at).toBe(shut.open);
+    expect(shut.open).toBeGreaterThan(least);
+    expect(shut.open).toBeLessThan(shut.of - 5);
+    await open(page, `./${model}/#/atlas?g=endonasal&sc=R,200,0,0,0&rm=face`);
+    await expect(page.locator('.endonasal .chip', { hasText: 'taken away' })).toHaveCount(1, { timeout: 30_000 });
+    const opened = await read();
+    expect(opened.of).toBe(shut.of);
+    if (wallOpens) expect(opened.open).toBeGreaterThan(shut.open + 3);
+    else expect(opened.open).toBeGreaterThanOrEqual(shut.open);
+    // at the start the note is there too: it is about the way, not about where the scope is
+    await page.locator('.endonasal .chip', { hasText: 'Back to the start' }).click();
+    await expect(first).toHaveText(new RegExp(`^In 2\\.0 mm \\(the way is open to ${opened.open.toFixed(1).replace('.', '\\.')} of ${opened.of} mm\\)$`));
+    expect(g.external).toEqual([]);
+    expect(g.errors).toEqual([]);
+  });
+}
+
 // UI-13: the endonasal view's endoscope and the pieces taken away were in no link (57 % of the picture differed)
 for (const model of ['skullbase', 'skullbase-v1']) {
   test(`links (${model}): the endonasal view's endoscope and the pieces taken away are in the link`, async ({ page }) => {

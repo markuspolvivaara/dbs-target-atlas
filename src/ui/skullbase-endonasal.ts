@@ -82,6 +82,9 @@ export class EndonasalPanel implements PointerTool {
   private centre: THREE.Vector3 | null = null;
   private stopped: EndoStop | null = null;
   private undo: ReturnType<SinusVolume['snapshot']>[] = [];
+  /** how far along its way the scope can go as things stand, and what that was found for (openTo) */
+  private reachMm = 0;
+  private reachKey = '';
   /** a link's scope and pieces, waiting for the sinus to load */
   private linked: EndoView | null = null;
   private colour = {
@@ -340,8 +343,20 @@ export class EndonasalPanel implements PointerTool {
     for (const [k, v] of Object.entries(this.sliders) as [keyof Scope, { input: HTMLInputElement; out: HTMLElement }][]) {
       const val = this.scope[k] as number;
       if (document.activeElement !== v.input) v.input.value = String(val);
-      v.out.textContent = `${k === 'depth' ? fmtMm(val) : Math.round(val)}${v.out.dataset.unit}`;
+      v.out.textContent = `${k === 'depth' ? fmtMm(val) : Math.round(val)}${v.out.dataset.unit}${k === 'depth' ? this.openTo() : ''}`;
     }
+  }
+
+  /** Beside the "In" slider, how far the way is open while that is short of the slider's end (the audit's AP-15: the
+   * slider runs to the sella, the scope stops at the next wall, and the slider sprang back without a word). */
+  private openTo(): string {
+    if (!this.vol) return '';
+    const s = this.scope, path = this.paths[s.side];
+    // (the way changes when a piece goes or comes back and as the burr cuts: found again only then)
+    const key = [s.side, s.yaw, s.pitch, this.vol.removed.size, this.vol.removedMm3.bone, this.vol.removedMm3.soft].join('|');
+    if (key !== this.reachKey) { this.reachKey = key; this.reachMm = path.reach(this.vol, s.yaw, s.pitch); }
+    const end = Math.floor(path.length);
+    return this.reachMm < end - 0.25 ? ` (the way is open to ${fmtMm(this.reachMm)} of ${end} mm)` : '';
   }
 
   /** What is measured on this CT: the sinus, the carotids' distance through the sella. */
@@ -368,16 +383,27 @@ export class EndonasalPanel implements PointerTool {
   /** v1's: the Z-Anatomy model's own sinus, hypophysis, vessels and nerves. */
   private measuredV1(narrow: { z: number; mm: number } | null): Node {
     const s = ENDONASAL.sinus, icd = ENDONASAL.intercarotid, g = ENDONASAL.hypophysis;
+    const below = g.gland.belowDiaphragma, free = { R: ENDONASAL.corridor.R.freeMm, L: ENDONASAL.corridor.L.freeMm };
+    // (the audit's MC-16: the way is tighter than the width it is opened to, against the septum: its width as drawn)
+    const freeNote = free.R && free.L
+      ? `; as drawn the way is ${fmtMm(Math.min(free.R.median, free.L.median))} mm across for half its length or more, and ${fmtMm(free.R.least)} mm (right) and ${fmtMm(free.L.least)} mm (left) at its narrowest, measured on the 0.5 mm grid`
+      : '';
+    // (under Z-Anatomy's nasal bones the space was a slit the scope could not pass: it stopped 26 mm in)
+    const core = ENDONASAL.corridorCoreMm !== undefined
+      ? ` Where the bones leave less than the scope needs, as under the nasal bones, a core ${fmtMm(ENDONASAL.corridorCoreMm)} mm across is opened round the way whatever lies there (a drawing choice too).`
+      : '';
     return h('div', { class: 'aside' },
       h('h4', {}, 'Measured on this model'),
       h('ul', { class: 'plain' },
         s.volumeMl !== undefined ? h('li', {}, `Sphenoid sinus: ${fmtMm(s.volumeMl)} ml of air (Z-Anatomy’s sinus)${s.backMm !== undefined && s.backMm < 0 ? `, reaching ${fmtMm(-s.backMm)} mm behind the front of the sella` : ''}.`) : '',
-        h('li', {}, `Z-Anatomy’s hypophysis: ${fmtMm(g.gland.widthMm)} mm across, ${fmtMm(g.gland.lengthMm)} mm front to back, ${fmtMm(g.gland.heightMm)} mm high (${Math.round(g.gland.mm3)} mm³), the posterior lobe ${Math.round(g.neuroMm3)} mm³ of it.`),
+        // (the audit's AP-11: 14.5 mm high beside a cited norm of about 5 mm: the lobes as drawn reach well above the sella)
+        h('li', {}, `Z-Anatomy’s hypophysis: ${fmtMm(g.gland.widthMm)} mm across, ${fmtMm(g.gland.lengthMm)} mm front to back, ${fmtMm(g.gland.heightMm)} mm high (${Math.round(g.gland.mm3)} mm³), the posterior lobe ${Math.round(g.neuroMm3)} mm³ of it.`
+          + (below && g.gland.aboveDiaphragmaMm !== undefined ? ` Its two lobes as Z-Anatomy draws them reach ${fmtMm(g.gland.aboveDiaphragmaMm)} mm above the diaphragma’s level, where the stalk is; what lies below it is ${fmtMm(below.heightMm)} mm high and ${Math.round(below.mm3)} mm³.` : '')),
         narrow ? h('li', {}, `Its carotids are ${fmtMm(narrow.mm)} mm apart at their nearest through the sella (${fmtMm(narrow.z)} mm above the fossa), ${icd.map((x) => fmtMm(x.mm)).join(', ')} mm at heights ${icd[0].z} to ${icd[icd.length - 1].z} mm.`) : ''),
       h('h4', {}, 'How it is drawn'),
       h('ul', { class: 'plain' },
         h('li', {}, 'The Z-Anatomy model has bone but no mucosa or other soft tissue in the nose: the lining the scope sees is the bone’s surface, the sinus’s and the nose’s walls bare.'),
-        h('li', {}, `The scope starts at the front of the model’s nasal cavity (the air its bones enclose, split at the midline: the septum’s cartilage is not part of it). Its way is the path with the most room to the sinus’s opening; the turbinates are pushed aside to ${fmtMm(ENDONASAL.corridorMm)} mm across along it (a drawing choice), the sinus’s front wall left for the burr. From near its end the scope goes straight on the way it looks, where it has a clear core ${fmtMm(2 * ENDO_SCOPE_ROOM_MM)} mm across, and stops ${fmtMm(ENDO_STANDOFF_MM)} mm short of the bone ahead.`),
+        h('li', {}, `The scope starts at the front of the model’s nasal cavity (the air its bones enclose, split at the midline: the septum’s cartilage is not part of it). Its way is the path with the most room to the sinus’s opening; the turbinates are pushed aside to ${fmtMm(ENDONASAL.corridorMm)} mm across along it (a drawing choice${freeNote}), the sinus’s front wall left for the burr.${core} From near its end the scope goes straight on the way it looks, where it has a clear core ${fmtMm(2 * ENDO_SCOPE_ROOM_MM)} mm across, and stops ${fmtMm(ENDO_STANDOFF_MM)} mm short of the bone ahead.`),
         h('li', {}, 'The hypophysis is Z-Anatomy’s own (its anterior and posterior lobes); the diaphragma is taken from its tuberculum and dorsum sellae, and the cavernous sinuses’ medial walls from its own sinuses.'),
         h('li', {}, `The pieces taken away step by step are regions drawn by rule, as on Skull base v3’s CT (distances to the air spaces, the hypophysis and the midline); each keeps ${fmtMm(ENDONASAL.params.pieceClearMm.vessel ?? 0.8)} mm off the carotids and ${fmtMm(ENDONASAL.params.pieceClearMm.nerve ?? 0.6)} mm off the nerves. Where they end is a drawing choice, not a measured extent of the operation.`),
         h('li', {}, `The burr is a round one ${ENDO_BURR_MM} mm across that takes away whatever it reaches. It goes right down onto the wall of Z-Anatomy’s arteries, never into them (an exercise in anatomy), and stops ${fmtMm(ENDO_STOP_MM)} mm from its optic nerves and chiasm (as Skull base v1 draws them), nerves III–VI, its hypophysis and intercavernous sinuses and the brain.`),
