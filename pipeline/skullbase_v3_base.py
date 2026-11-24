@@ -62,6 +62,10 @@ FORAMEN_OF = {
     "Hypoglossal canal": ("Hypoglossal nerve (XII)", None),
 }
 JUGULAR_NERVES = ("Glossopharyngeal nerve (IX)", "Vagus nerve (X)", "Accessory nerve (XI)")
+JUGULAR_ORDER = ("Vagus nerve (X)", "Glossopharyngeal nerve (IX)", "Accessory nerve (XI)")   # see jugular_routes
+XI_BESIDE_X_MM = 16.0      # the accessory nerve follows the vagus nerve's route within this of the jugular foramen
+NERVE_OFF_NERVE_MM = 1.2   # the foramen's nerves keep this far from each other's centre lines (their tubes are 0.4 to 0.5 mm in radius)
+JUGULAR_OFF_MM = 0.8       # their routes keep this far outside the traced sigmoid sinus's lumen (their tubes are 0.3 to 0.5 mm in radius)
 # the trigeminal complex, placed on this CT: the fitted model's ganglion lies medial of where this skull's foramina put
 # it, and its root runs in front of the fitted pons rather than out of its side. Each division leaves the ganglion's convex
 # margin the published mean distance from Meckel’s cave to its foramen (Chaware 2023, 80 sides, mm; its abstract and its Table 1 disagree on the nerves' and the foramen spinosum's distances: Table 1 is used), the foramina as located on this CT
@@ -215,6 +219,16 @@ def build(ex: dict, ct_fossa: np.ndarray, ct_R: np.ndarray, porus: dict, carotid
     continued arteries' final courses moved out of the fitted hindbrain."""
     g = NV.Grid()
     routes, report = {}, {}
+    # the sigmoid and transverse sinuses first: the nerves of the jugular foramen are routed round the sigmoid sinus
+    lum = Lumen(g)
+    sinuses = traced_sinuses(ex, ct_fossa, ct_R, g, lum)
+    # (and round the inferior petrosal sinus, which is laid onto this CT's bone and carried to the jugular bulb by
+    # skullbase_v3_petrosal.py: its course follows from the bone and the bulb, not from the nerves, so it is found here
+    # as skullbase_v3.py lays it afterwards)
+    import skullbase_v3_petrosal as PET
+    ips = PET.courses(ex, {s: np.asarray(sinuses[s]["sigmoid"][0][0], float) for s in ("R", "L")})[0]["sb_inferior_petrosal_sinus"]
+    jugular_veins = {s: jugular_lumen(g, [sinuses[s]["sigmoid"], ips[s]], ct_fossa, ct_R, s) for s in ("R", "L")}
+    jugular, through = {}, {}
     optic_ts = {s: ts_points("head_glands_cavities/optic_nerve_" + ("right" if s == "R" else "left"), ct_fossa, ct_R) for s in ("R", "L")}
     for name, cn, sources, max_mm in NERVES + [(a, None, s, m) for a, s, m in ARTERIES]:
         for side in ("R", "L"):
@@ -228,7 +242,16 @@ def build(ex: dict, ct_fossa: np.ndarray, ct_R: np.ndarray, porus: dict, carotid
                 end = porus[side]
                 k = int(np.argmin(np.linalg.norm(F[:, :3] - end, axis=1)))
                 F = F[: k + 1]
-            P = NV.route(g, F[:, :3], start, end)
+            if name in JUGULAR_NERVES:
+                # (IX, X and XI together, on the first of them: see jugular_routes)
+                if side not in jugular:
+                    jugular[side] = jugular_routes(g, ex, side, jugular_veins[side])
+                P, near_x = jugular[side][name]
+                # (its least-cost path as every other nerve's is found, through the venous part of the foramen: where the
+                # foramen's landmark is taken from, below)
+                through[(name, side)] = NV.route(g, F[:, :3], start, end)
+            else:
+                P, near_x = NV.route(g, F[:, :3], start, end), None
             if P is None:
                 raise SystemExit(f"{name} {side}: no route")
             dev = cKDTree(F[:, :3]).query(P)[0]
@@ -237,6 +260,10 @@ def build(ex: dict, ct_fossa: np.ndarray, ct_R: np.ndarray, porus: dict, carotid
             report.setdefault(name, {})[side] = {"lengthMm": round(float(np.linalg.norm(np.diff(P, axis=0), axis=1).sum()), 1),
                                                  "boneCrossedMm": round(NV.bone_crossed_mm(g, P), 1),
                                                  "maxFromFittedMm": round(float(dev.max()), 1)}
+            if near_x is not None:
+                # (the accessory nerve, led beside the vagus nerve: how far it lies from its own fitted course or, where
+                # that is nearer, from the vagus nerve's route)
+                report[name][side]["maxFromGuideMm"] = round(float(np.minimum(dev, cKDTree(near_x).query(P)[0]).max()), 1)
     # the optic nerve: drawn as thick as TotalSegmentator's segmentation of it (its volume over its length)
     landmarks, checks = [], {}
     for side, rel in (("R", "head_glands_cavities/optic_nerve_right"), ("L", "head_glands_cavities/optic_nerve_left")):
@@ -293,11 +320,14 @@ def build(ex: dict, ct_fossa: np.ndarray, ct_R: np.ndarray, porus: dict, carotid
     for side in ("R", "L"):
         pts = []
         for n in JUGULAR_NERVES:
-            P = routes[(n, side)]["path"]
+            # (the paths through the whole opening, not the nerves as drawn, which are led round the veins in its medial
+            # part: taken from those the landmark lay 4 to 6 mm further in and up, at the opening's inner edge)
+            P = through[(n, side)]
             pts.append(P[first_enclosed(enclosure(g, P))])
         landmarks.append({"name": "Jugular foramen", "side": side, "ras": np.mean(pts, 0), "from": list(JUGULAR_NERVES),
-                          "how": "The middle of where the glossopharyngeal, vagus and accessory nerves, routed through this CT, are most "
-                                 "closely surrounded by bone."})
+                          "how": "The middle of where the least-cost paths of the glossopharyngeal, vagus and accessory nerves through "
+                                 "this CT are most closely surrounded by bone (the nerves as drawn are then led round the veins of the "
+                                 "foramen, in its medial part)."})
         bulb = ts_points("headneck_bones_vessels/internal_jugular_vein_" + ("right" if side == "R" else "left"), ct_fossa, ct_R)
         top = bulb[bulb[:, 2] > bulb[:, 2].max() - 2].mean(0)
         checks.setdefault("jugularNervesToBulbMm", {})[side] = {n: round(float(cKDTree(routes[(n, side)]["path"]).query(top)[0]), 1)
@@ -326,8 +356,6 @@ def build(ex: dict, ct_fossa: np.ndarray, ct_R: np.ndarray, porus: dict, carotid
             landmarks.append({"name": "Foramen lacerum", "side": side, "ras": h["centre"], "from": [],
                               "how": f"The opening of the cranial floor beside the sella, medial to the foramen ovale, seen from above "
                                      f"({h['area']:.0f} mm²), at its rim's height."})
-    lum = Lumen(g)
-    sinuses = traced_sinuses(ex, ct_fossa, ct_R, g, lum)
     # this patient's carotid between the cervical segment (TotalSegmentator) and the cavernous one (TopBrain)
     cstart, cend = {}, {}
     for side in ("R", "L"):
@@ -424,6 +452,82 @@ def trace_lumen(g: NV.Grid, depth: np.ndarray, guide: np.ndarray, start, end, si
     rep = {"lengthMm": round(length, 1), "inLumenShare": round(float((dd >= CORE_MM).mean()), 2),
            "medianRadiusMm": round(float(np.median(rad)), 1), "boneCrossedMm": round(float(g.bone[sub][tuple(V.T)].mean() * length), 1)}
     return P, rad, rep
+
+
+def tube_mask(g: NV.Grid, C: np.ndarray, r) -> np.ndarray:
+    """The grid's voxels within r (one value, or one for each point) of the line C (frame mm)."""
+    C = np.asarray(C, float)
+    r = np.broadcast_to(np.asarray(r, float), (len(C),))
+    L = np.r_[0, np.cumsum(np.linalg.norm(np.diff(C, axis=0), axis=1))]
+    t = np.r_[np.arange(0, L[-1], 0.2), L[-1]]
+    D, R = np.stack([np.interp(t, L, C[:, k]) for k in range(3)], 1), np.interp(t, L, r)
+    q = g.to_ijk(D)
+    pad = int(np.ceil(R.max() / g.step)) + 2
+    lo = np.maximum(np.floor(q.min(0)).astype(int) - pad, 0)
+    hi = np.minimum(np.ceil(q.max(0)).astype(int) + pad + 1, g.bone.shape)
+    sub = np.indices(tuple(hi - lo)).reshape(3, -1).T + lo
+    d, j = cKDTree(D).query(g.to_frame(sub))
+    m = np.zeros(g.bone.shape, bool)
+    m[tuple(sub[d < R[j]].T)] = True
+    return m
+
+
+def jugular_routes(g: NV.Grid, ex: dict, side: str, veins: np.ndarray) -> dict:
+    """The three nerves of a jugular foramen routed together: {name: (path, the vagus nerve's route for the accessory
+    nerve, else None)}.
+
+    Routed like the other nerves, 7 to 21 % of IX's and XI's tubes lay in the sigmoid sinus, 11 % of the left X's in the
+    inferior petrosal sinus, and the left IX and XI ran through each other. So here:
+      * the venous lumen at the foramen (`veins`: jugular_lumen) counts as vessel lumen, as TopBrain's labelled vessels
+        do for every nerve (Ayeni 1995 and Katsuta 1997, abstracts: the three nerves lie anteromedial to the jugular
+        bulb, between the sigmoid and petrosal parts of the foramen);
+      * so does the tube of each of the three routed before (NERVE_OFF_NERVE_MM round its centre line);
+      * the accessory nerve is led beside the vagus nerve through the foramen (beside_vagus; Ayeni 1995: X and XI pass
+        one opening of the dura; Rubinstein 1995: they could not be told apart on CT). Kept off the veins alone, the
+        left one went the long way round the sigmoid sinus, 9 mm longer and turning 124 degrees within 3 mm;
+      * in the order JUGULAR_ORDER: the vagus nerve, the glossopharyngeal, the accessory. With the glossopharyngeal
+        nerve first, the left accessory nerve again went the long way round (55 mm against 46); with it last, it did
+        (52 mm against 49, and 89 degrees within 3 mm against 81). An order found for this CT, not a rule of anatomy."""
+    by_name = {name: (sources, max_mm) for name, _, sources, max_mm in NERVES}
+    out, avoid = {}, veins
+    for name in JUGULAR_ORDER:
+        F = fitted_course(ex, by_name[name][0], side, by_name[name][1])[:, :3]
+        x = out["Vagus nerve (X)"][0] if name == "Accessory nerve (XI)" else None
+        P = NV.route(g, F if x is None else beside_vagus(g, F, x), F[0], F[-1], avoid=avoid)
+        if P is None:
+            raise SystemExit(f"{name} {side}: no route")
+        out[name] = (P, x)
+        avoid = avoid | tube_mask(g, P, NERVE_OFF_NERVE_MM)
+    return out
+
+
+def beside_vagus(g: NV.Grid, F: np.ndarray, X: np.ndarray) -> np.ndarray:
+    """The accessory nerve's guide, for it to pass the jugular foramen beside the vagus nerve: within XI_BESIDE_X_MM of
+    the foramen (the vagus nerve's point most enclosed by bone) its fitted course F gives way to the vagus nerve's
+    route X. (X's own tube counts as vessel lumen for it, as the foramen's other nerve's does: they run side by side.)"""
+    c = X[first_enclosed(enclosure(g, X))]
+    near = np.nonzero(np.linalg.norm(F - c, axis=1) < XI_BESIDE_X_MM)[0]
+    if not len(near):
+        return F
+    i0, i1 = int(near[0]), int(near[-1])
+    j0, j1 = sorted((int(np.argmin(np.linalg.norm(X - F[i0], axis=1))), int(np.argmin(np.linalg.norm(X - F[i1], axis=1)))))
+    return np.vstack([F[:i0], X[j0:j1 + 1], F[i1 + 1:]])
+
+
+def jugular_lumen(g: NV.Grid, sinuses: list, ct_fossa, ct_R, side: str) -> np.ndarray:
+    """The venous lumen at a jugular foramen, on the grid: the sinuses drawn as tubes there (`sinuses`: each its centre
+    line and radius: the traced sigmoid sinus and the inferior petrosal sinus as laid; within the radius and
+    JUGULAR_OFF_MM of the line) and TotalSegmentator's internal jugular vein (grown one voxel). The nerves of the
+    foramen are routed with it counted as vessel lumen (NV.route's `avoid`)."""
+    m = np.zeros(g.bone.shape, bool)
+    for C, r in sinuses:
+        m |= tube_mask(g, C, np.asarray(r, float) + JUGULAR_OFF_MM)
+    V = ts_points("headneck_bones_vessels/internal_jugular_vein_" + ("right" if side == "R" else "left"), ct_fossa, ct_R)
+    v = np.rint(g.to_ijk(V)).astype(int)
+    v = v[(v >= 0).all(1) & (v < np.array(g.bone.shape)).all(1)]
+    vein = np.zeros(g.bone.shape, bool)
+    vein[tuple(v.T)] = True
+    return m | ndimage.binary_dilation(vein)
 
 
 def traced_sinuses(ex: dict, ct_fossa: np.ndarray, ct_R: np.ndarray, g: NV.Grid | None = None, lum: Lumen | None = None) -> dict:

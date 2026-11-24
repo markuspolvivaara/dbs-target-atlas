@@ -162,13 +162,13 @@
      "boneMm": 11.5,
      "solidMm": 5.0,
      "airMm": 0.0,
-     "apartMm": 1.0
+     "apartMm": 6.4
     },
     "L": {
      "boneMm": 7.8,
      "solidMm": 5.2,
      "airMm": 0.0,
-     "apartMm": 3.6
+     "apartMm": 9.1
     }
    }
   },
@@ -1173,7 +1173,7 @@
      "boneMm": 9.5,
      "solidMm": 6.8,
      "airMm": 0.0,
-     "apartMm": 2.0
+     "apartMm": 4.3
     }
    }
   },
@@ -3988,7 +3988,7 @@
      "boneMm": 10.2,
      "solidMm": 5.2,
      "airMm": 0.0,
-     "apartMm": 0.9
+     "apartMm": 1.7
     }
    }
   },
