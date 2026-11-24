@@ -292,6 +292,36 @@ starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm furth
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
 
+## Dependencies brought up to date, one at a time (desktop, 2026-11-24)
+
+Branches `chore/deps-patch` → `chore/deps-typescript-6` → `chore/deps-meshoptimizer` → `chore/deps-vite-7`, each on
+the one before, on top of `feat/landmark-readout`. **Local only: not pushed.** Item 8 of
+`.claude/opus-plan-2026-11-24.md`; the audit's P2S-19.
+
+- **Patch and minor updates** (`chore/deps-patch`): eslint 10.15, typescript-eslint 8.74, vitest 5.1.1. The built
+  site byte for byte the same.
+- **TypeScript 6.0** (`chore/deps-typescript-6`): 6.0.3, no code changes needed; the built site the same.
+- **meshoptimizer 0.21 → 1.3** (`chore/deps-meshoptimizer`): used only by the pipeline's compressor
+  (`pipeline/compress.mjs`, `recompress.mjs`) and the unit tests' decoder; the site decodes with three's own. Five
+  shipped meshes were compressed again with 1.3 (frontal lobe, the pterional frontal bone, a Knosp grade, v3's chiasm
+  and stalk): the same sizes, other bytes, and once decoded every vertex attribute is identical and the triangles are
+  the same set. The shipped files were not recompressed. The unit tests decode every shipped GLB with 1.3's decoder.
+- **Vite 6 → 7** (`chore/deps-vite-7`): 7.3.8, with esbuild 0.28. The bundles differ only by the newer minifier
+  (a `switch` written as a conditional; constructor parameter properties also declared as class fields, as
+  TypeScript does for ES2022, with the constructor's assignments in the same order). **Vite 7 drops licence
+  comments by default**, three.js's MIT notice among them: `esbuild: { legalComments: 'inline' }` in
+  `vite.config.ts` keeps them as Vite 6 did. The build target was already set (`es2022`), so Vite 7's new default
+  target does not apply. The full browser suite passed on this build (CI=1).
+  - npm on this machine blocks esbuild 0.28's install script (`npm install-scripts ls`); the build works without
+    it (the binary comes in `@esbuild/linux-x64`), and CI's npm on Node 22 runs it as before.
+- **Not updated, and why:**
+  - `@types/node` stays 22: CI runs Node 22.
+  - TypeScript 7 (the native compiler): typescript-eslint 8.74 accepts TypeScript below 6.1 only.
+  - Vite 8: it bundles with Rolldown in place of Rollup and esbuild; a larger change, for its own branch.
+  - three 0.169 → 0.187 (and its types): many releases of renderer and loader changes; every picture baseline
+    would need retaking. Its own piece of work, already listed as not for this plan.
+  - Playwright stays 1.65.0 (`~1.65.0`): the picture baselines and this machine's Chromium setup are tied to it.
+
 ## Positions measured from a chosen landmark (desktop, 2026-11-24)
 
 Branch `feat/landmark-readout`, on top of `feat/reference-checks`. **Local only: not pushed.** Item 6 of
