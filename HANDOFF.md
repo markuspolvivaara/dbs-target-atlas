@@ -275,8 +275,9 @@ the list").** On `fix/audit-models-2` (off `27ee8a6`), local commits, not pushed
   bodies" and describes a smaller juxtarestiform body).
 - Engineering left: P1-08 (release memory: the audit says only if phones still struggle, unmeasured), P2S-19
   (dependency majors, through Dependabot one at a time), P1-27's `preserveDrawingBuffer` (the browser tests read the
-  canvas) and `dist/` in git (a workflow choice), UI-14's docked legend or camera offset, UI-22's jump row. UI-27's
-  shorter phone disclaimer was done on 2026-11-24 ("The notice folded on a phone" below).
+  canvas) and `dist/` in git (a workflow choice), UI-14's docked legend or camera offset. UI-27's shorter phone
+  disclaimer and UI-22's jump row were done on 2026-11-24 ("The notice folded on a phone" and "A row of jumps in the
+  long panels" below).
   Done on 2026-11-23 (below): UI-13 (Back history, measurements and the endonasal endoscope in links), the
   ARCHITECTURE.md, the cortex's `ax=abc`, the endoscopes' keys in the help.
 
@@ -290,6 +291,30 @@ The tract data (section 2) is done as far as open data go: the acoustic radiatio
 starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm further forward). Done from it: help and reset, cards into view, "what this bundle shows", surgical views,
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
+
+## A row of jumps in the long panels (UI-22) (desktop, 2026-11-24)
+
+Branch `feat/panel-jump-row`, on top of `feat/phone-disclaimer`. **Local only: not pushed.** Item 2 of
+`.claude/opus-plan-2026-11-24.md` in the main checkout.
+
+- **What:** at the top of the skull base's and the ventricles' anatomy panel, a row "Jump to" with a button for each
+  part the panel holds at the moment:
+  - skull base: Views, Opening (the sliders, in a surgical or tumour view), Endoscope (the endonasal view), Shown in
+    this view (the first list), Selected (a structure's card), About this view (the view's card), Model;
+  - ventricles: Views, Catheter or Endoscope, Ventricles (the list), Selected, About this view, Shape.
+  Parts a view does not have are left out; a panel with fewer than two parts gets no row.
+- **How a jump works:** the part is scrolled to the top of its pane (or into view, at the panel's end) and takes the
+  focus (`tabindex="-1"`), so a keyboard or screen-reader user lands there too. On a phone the sheet is opened first
+  (its handle is pressed): half-open, the panel's end lay below the screen. The row is a `<nav aria-label="In this
+  panel">` and comes before the panel's first control. `jumpRow` in `src/ui/widgets.ts`.
+- **Why:** the skull base panel opens with 553 words and 145 tab stops, the ventricles' with 877 words; the order of
+  the panels was fixed earlier, but there was no outline. The other sections' panels are short and get no row.
+- **Not changed:** the panels' order and wording.
+- **Tests:** `tests/e2e/audit-fixes.spec.ts` "long panels: a row of jumps…" (every jump in the pterional view and the
+  ventricles' overview: the focus lands on the part, its top in sight; the row first; no row on the DBS page) and
+  "phone: the long panel's jumps work in the sheet" (the sheet opens; the panel's last part comes into sight).
+- **MacBook baselines:** none change (the picture tests take the 3D stage only, and the one full-page picture is of
+  the DBS page on a phone, which has no row).
 
 ## The notice folded on a phone (UI-27) (desktop, 2026-11-24)
 
