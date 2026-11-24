@@ -217,6 +217,16 @@ describe('skull-base data (Z-Anatomy export)', () => {
     expect(brain.length).toBe(6);
     expect(SB_MANIFEST.structures.filter((s) => s.forView === 'kawase').map((s) => s.replaces)).toEqual(['br_temporal_lobe']);
     for (const b of brain) { expect(b.morph, b.name).toBe(true); expect(b.dataset).toBe('zanatomy'); }
+    // Z-Anatomy's brain is the same on both sides, so each piece's halves mirror each other. (They did not: the right
+    // insula's floor reached 48 mm further back than the left's, the audit's MC-15, as the left M3 segment's name was
+    // not read; and a piece of the left frontal and parietal surface, pinched off when the faces were reduced, was
+    // dropped: the insula's centres lay 23 mm apart front to back, the frontal lobe's 2 mm)
+    for (const b of brain) {
+      const { L, R } = b.centroid!;
+      expect(Math.abs(L[0] + R[0]), b.name).toBeLessThan(1);
+      expect(Math.abs(L[1] - R[1]), b.name).toBeLessThan(1);
+      expect(Math.abs(L[2] - R[2]), b.name).toBeLessThan(1);
+    }
     for (const n of ['Superior cerebellar artery', 'Anterior inferior cerebellar artery', 'Posterior inferior cerebellar artery']) expect(by(n)?.morph, n).toBe(true);
     // (the trunks and the posterior cerebral artery, above the tentorium, stay)
     for (const n of ['Vertebral artery', 'Basilar artery', 'Posterior cerebral artery']) expect(by(n)?.morph, n).toBeFalsy();

@@ -91,8 +91,17 @@ class V1Patient:
         return np.full(len(P), 30.0), np.zeros_like(P)
 
 
+def fissure_span(patches: list, side: str) -> tuple[float, float]:
+    """How far back and forward Z-Anatomy's lateral fissure reaches on a side (y, mm): over its fissure patches (FISSURE)
+    and the circular sulcus of the insula."""
+    y = np.concatenate([np.array(p["verts"], float)[:, 1] for p in patches
+                        if p["side"] == side and (p["name"] in FISSURE or p["name"] == "Circular sulcus of insula")])
+    return float(y.min()), float(y.max())
+
+
 def hemisphere(patches: list, side: str, mca: np.ndarray, wm: dict) -> dict:
-    """One hemisphere's cortex: its patches welded (for their labels), remade as one closed surface with those labels."""
+    """One hemisphere's cortex: its patches welded (for their labels), remade as one closed surface with those labels.
+    mca: the middle cerebral artery's course in the fissure (fissure_course)."""
     ps = [p for p in patches if p["side"] == side]
     V, T, lab, name = [], [], [], []
     off = 0
@@ -133,23 +142,28 @@ def hemisphere(patches: list, side: str, mca: np.ndarray, wm: dict) -> dict:
     # vertices taking the labels of the nearest patch vertex
     # remade apart for the banks of the Sylvian fissure (the temporal lobe; the insula; the rest), or one surface would
     # bridge the fissure where its banks lie closer than the grid and the opening would stretch that bridge over the insula
-    fl = np.array([max(set(r), key=list(r).count) for r in lobe[F]], dtype=object)
+    # (a face's lobe is its corners' commonest; where all three differ, the first by name. Taken from a set, as it was,
+    # the choice between three followed Python's string hashing, which changes from run to run: two faces a side went
+    # to the insula or not, and every surface, shape and carried artery came out a little different each time)
+    fl = np.array([max(sorted(set(r)), key=list(r).count) for r in lobe[F]], dtype=object)
     group = np.where(fl == "temporal", 0, np.where(fl == "insula", 1, 2))
-    Vs, Fs, J, off = [], [], [], 0
+    Vs, Fs, J, Off, off = [], [], [], [], 0
     area = trimesh.Trimesh(Vw, F, process=False).area_faces
     for g in range(3):
         Fg = F[group == g]
         if not len(Fg):
             continue
         used = np.unique(Fg)
-        m = remesh(Vw, Fg, max(2000, int(REMESH_FACES * area[group == g].sum() / area.sum())))
+        m, pinched = remesh(Vw, Fg, max(2000, int(REMESH_FACES * area[group == g].sum() / area.sum())))
         _, jj = cKDTree(Vw[used]).query(m.vertices)
         Vs.append(np.asarray(m.vertices))
         Fs.append(np.asarray(m.faces) + off)
         J.append(used[jj])
+        Off.append(pinched)
         off += len(m.vertices)
     j = np.concatenate(J)
     Vw, F = np.vstack(Vs), np.vstack(Fs)
+    pinched = np.concatenate(Off)
     lobe, ins, fis, pname = lobe[j], ins[j], fis[j], pname[j]
     # the opercula: the frontal, parietal and temporal surface within OPER_MCA_MM of the middle cerebral artery's course
     # in the fissure (Z-Anatomy's own M1 in its stem, insular M2 and opercular M3: the Sylvian fissure is where they run). Its
@@ -157,25 +171,28 @@ def hemisphere(patches: list, side: str, mca: np.ndarray, wm: dict) -> dict:
     # reach the fissure's stem in front poorly, so they do not place the opercula here.
     oper = np.isin(lobe, ["frontal", "parietal", "temporal"]) & (cKDTree(mca).query(Vw)[0] <= OPER_MCA_MM)
     # the fissure's floor: Z-Anatomy's own white matter under it (it has no insular cortex under its M2 branches)
-    Vi, Fi = white_floor(wm, mca)
+    Vi, Fi = white_floor(wm, mca, fissure_span(patches, side))
     n0 = len(Vw)
     Vw, F = np.vstack([Vw, Vi]), np.vstack([F, Fi + n0])
     lobe = np.r_[lobe, np.full(len(Vi), "insula", dtype=object)]
     ins, oper = np.r_[ins, np.ones(len(Vi), bool)], np.r_[oper, np.zeros(len(Vi), bool)]
     pname = np.r_[pname, np.full(len(Vi), INSULA_FLOOR, dtype=object)]
-    return {"V": Vw, "F": F, "lobe": lobe, "ins": ins, "oper": oper, "patch": pname, "insulaFloor": len(Fi)}
+    return {"V": Vw, "F": F, "lobe": lobe, "ins": ins, "oper": oper, "patch": pname, "insulaFloor": len(Fi),
+            "pinched": np.r_[pinched, np.zeros(len(Vi), bool)]}
 
 
-def white_floor(wm: dict, course: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+def white_floor(wm: dict, course: np.ndarray, span: tuple[float, float]) -> tuple[np.ndarray, np.ndarray]:
     """Z-Anatomy's white matter of the telencephalon within INSULA_REACH_MM of the middle cerebral artery's course in
-    the fissure, not more than INSULA_BELOW_MM below it: the floor of the opened fissure (the model has no insular cortex over it). Elsewhere the lobes' own
-    surfaces hide it. (verts, tris)"""
+    the fissure, not more than INSULA_BELOW_MM below it and no further back or forward than the fissure itself reaches
+    (span: fissure_span): the floor of the opened fissure (the model has no insular cortex over it). Elsewhere the
+    lobes' own surfaces hide it. (verts, tris)"""
     V, T = np.array(wm["verts"], float), np.array(wm["tris"], int)
     m = trimesh.Trimesh(V, T, process=False)
     if m.volume < 0:
         T = T[:, ::-1]
     C = V[T].mean(1)
-    keep = (cKDTree(course).query(C)[0] <= INSULA_REACH_MM) & (C[:, 2] >= course[:, 2].min() - INSULA_BELOW_MM)
+    keep = (cKDTree(course).query(C)[0] <= INSULA_REACH_MM) & (C[:, 2] >= course[:, 2].min() - INSULA_BELOW_MM) \
+        & (C[:, 1] >= span[0]) & (C[:, 1] <= span[1])
     part = trimesh.Trimesh(V, T[keep], process=False)
     part.remove_unreferenced_vertices()
     return np.asarray(part.vertices), np.asarray(part.faces)
@@ -186,26 +203,36 @@ INSULA_REACH_MM = 25.0    # (the white matter shown with the insula within this 
 INSULA_BELOW_MM = 5.0     # ... and not more than this below its lowest point: none under the temporal lobe)
 
 
-def fissure_course(ex: dict, side: str, names: tuple = ()) -> np.ndarray:
-    """Z-Anatomy's middle cerebral artery in the Sylvian fissure (its insular M2 and opercular M3 segments), points
-    every OPER_STEP_MM."""
+def segment_name(name: str) -> str:
+    """A middle cerebral segment's name without its "segment": Z-Anatomy names a side's "(M2)" or "(M2-segment)", and
+    the left M3 "(M3 segment)". (Read without the last, the left side's course had no M3 and the right side's all of
+    it: the audit's MC-15, the right insula's floor twice the left's.)"""
+    return name.replace("-segment", "").replace(" segment", "")
+
+
+def fissure_course(ex: dict, side: str, names: tuple = (), back_y: float | None = None) -> np.ndarray:
+    """Z-Anatomy's middle cerebral artery in the Sylvian fissure (its M1 in the stem, insular M2 and opercular M3
+    segments), points every OPER_STEP_MM; with back_y, no further back than that (Z-Anatomy's M3 runs on 16 mm past
+    the end of its lateral fissure, on the cortex)."""
     pts = []
-    want = {n.replace("-segment", "") for n in names or FISSURE_ARTERIES}     # (Z-Anatomy names a side's segment "(M2)"
-    for key, ln in ex["lines"].items():                                        # or "(M2-segment)")
+    want = {segment_name(n) for n in names or FISSURE_ARTERIES}
+    for key, ln in ex["lines"].items():
         base, _, sfx = key.rpartition(".")
-        if sfx != side.lower() or base.replace("-segment", "") not in want:
+        if sfx != side.lower() or segment_name(base) not in want:
             continue
         for run in ln.get("runs", []):
             P = np.array(run, float)[:, :3]
             for a, b in zip(P[:-1], P[1:]):
                 k = max(1, int(np.ceil(np.linalg.norm(b - a) / OPER_STEP_MM)))
                 pts.append(a + np.linspace(0, 1, k, endpoint=False)[:, None] * (b - a))
-    return np.vstack(pts)
+    P = np.vstack(pts)
+    return P if back_y is None else P[P[:, 1] >= back_y]
 
 
-def remesh(V: np.ndarray, F: np.ndarray, faces: int = 0) -> trimesh.Trimesh:
+def remesh(V: np.ndarray, F: np.ndarray, faces: int = 0) -> tuple[trimesh.Trimesh, np.ndarray]:
     """The patches' surface remade as one: the grid (REMESH_STEP) within REMESH_SHELL_MM of any patch, with what
-    that shell encloses, its surface (build.isosurface: smoothed, at most REMESH_FACES faces), the largest piece only."""
+    that shell encloses, its surface (build.isosurface: smoothed, at most REMESH_FACES faces). Returns it and which of
+    its vertices belong to pieces the reduction pinched off its largest one."""
     from build import isosurface
     m = trimesh.Trimesh(V, F, process=False)
     # (seeded here: trimesh samples with its own generator, not numpy's global one, so a run gives the same files)
@@ -218,13 +245,26 @@ def remesh(V: np.ndarray, F: np.ndarray, faces: int = 0) -> trimesh.Trimesh:
     a = np.diag([REMESH_STEP] * 3 + [1.0])
     a[:3, 3] = lo
     out = isosurface(M.astype(np.float32), a, 0.5, 0.6, faces or REMESH_FACES)
+    # the reduction to `faces` triangles pinches thin sheets of the surface off (a sulcus's two banks lie about half a
+    # millimetre apart here): the surface comes out of it in pieces, most of them flaps of two triangles. Every piece
+    # of REMESH_KEEP_MM2 or more is kept. ("The largest piece only", as it was, dropped 33 cm2 of the medial parietal
+    # surface on one side: on the left in the build of November 2026, on the right or the left as a run went)
     parts = out.split(only_watertight=False)
-    return max(parts, key=lambda p: p.area) if len(parts) > 1 else out
+    off = np.zeros(len(out.vertices), bool)
+    if len(parts) > 1:
+        keep = sorted([p for p in parts if p.area >= REMESH_KEEP_MM2], key=lambda p: -p.area)
+        print(f"    remade in {len(parts)} pieces: {len(keep)} kept ({', '.join(f'{p.area / 100:.1f}' for p in keep)} cm2), "
+              f"{(sum(p.area for p in parts) - sum(p.area for p in keep)) / 100:.2f} cm2 of flaps dropped")
+        out = trimesh.Trimesh(np.vstack([p.vertices for p in keep]),
+                              np.vstack([p.faces + n for p, n in zip(keep, np.r_[0, np.cumsum([len(p.vertices) for p in keep])[:-1]])]), process=False)
+        off = np.arange(len(out.vertices)) >= len(keep[0].vertices)
+    return out, off
 
 
 REMESH_STEP = 0.25
 REMESH_SHELL_MM = 0.25   # (the surface lies about this far outside Z-Anatomy's patches)
 REMESH_FACES = 90_000
+REMESH_KEEP_MM2 = 25.0   # a piece the reduction pinches off is kept from this area on (smaller: flaps of a few triangles)
 
 
 def clear_smooth(V: np.ndarray, pt: V1Patient, riders: np.ndarray | None = None) -> tuple[np.ndarray, dict, np.ndarray | None]:
@@ -386,7 +426,8 @@ def main() -> int:
     t0 = time.time()
     ex = json.loads((BUILD / "export.json").read_text())
     be = json.loads((BUILD / "brain_export.json").read_text())
-    hemis = {s: hemisphere(be["patches"], s, fissure_course(ex, s), be["whiteMatter"][s]) for s in "RL"}
+    hemis = {s: hemisphere(be["patches"], s, fissure_course(ex, s, back_y=fissure_span(be["patches"], s)[0]), be["whiteMatter"][s])
+             for s in "RL"}
     for s, h in hemis.items():
         print(s, "white matter floor", h["insulaFloor"], "faces;", len(h["V"]), "verts", len(h["F"]), "faces; opercula", int(h["oper"].sum()), "insula", int(h["ins"].sum()),
               {k: int((h["lobe"] == k).sum()) for k in sorted(set(h["lobe"]))})
@@ -412,10 +453,25 @@ def main() -> int:
         print(s, "cleared", rc, round(time.time() - t0), "s")
     report["arteries"] = carry_arteries(art0, art1, pt)
     print("cortical arteries carried:", {k: (v["inBoneBeforeMm"], v["inBoneAfterMm"], v["maxMovedMm"]) for k, v in report["arteries"].items()})
-    d = hemis["R"]
-    V = d["V"]
+    # the opening and the lifts are solved on the surface without the pieces the reduction pinched off (free of the rest,
+    # a piece with no held point drifts: one went 86 mm); each of their points then moves as the nearest point of the
+    # surface it was pinched off
+    full = hemis["R"]
+    Vf = full["V"]
+    on = ~full["pinched"]
+    renum = np.cumsum(on) - 1
+    d = {**{k: full[k][on] for k in ("lobe", "ins", "oper", "patch")}, "F": renum[full["F"][on[full["F"]].all(1)]]}
+    V = Vf[on]
+    near = cKDTree(V).query(Vf[~on])[1] if (~on).any() else np.zeros(0, int)
+
+    def whole(Xs: np.ndarray) -> np.ndarray:
+        out = Vf.copy()
+        out[on] = Xs
+        out[~on] = Vf[~on] + (Xs - V)[near]
+        return out
     X, ro = SBB.open_fissure(d, V, hull(V, grad=False), pt)
     report["open"] = ro
+    report["pinchedOff"] = {s_: int(hemis[s_]["pinched"].sum()) for s_ in "RL"}
     print("opened", ro, round(time.time() - t0), "s")
 
     def landmark_r(name, off):
@@ -436,6 +492,7 @@ def main() -> int:
     XI = XI_all[:len(V)]
     report["interhemispheric"] = ri
     print("retracted", ri["maxMovedMm"], round(time.time() - t0), "s")
+    X, XL, XS, XI, V = whole(X), whole(XL), whole(XS), whole(XI), Vf
     shapes = [("open", X, V), ("lift", XL, X), ("interhemispheric", XI, V), ("lsoLift", XS, X)]
     items = []
     lic = "CC BY-SA 4.0 (Z-Anatomy); BodyParts3D CC BY-SA 2.1 Japan; definitions from Wikipedia, CC BY-SA 3.0"
@@ -463,7 +520,8 @@ def main() -> int:
                                      "by the lobe of each patch's Z-Anatomy collection; where it reached into this model's bone, pushed 1 mm inside the "
                                      "cranial cavity. "
                                      + ("Z-Anatomy has no insular cortex: this is its circular sulcus of the insula, with its white matter of the "
-                                        "telencephalon under the Sylvian fissure as the floor of the opened fissure. " if pid == "br_insula" else "")
+                                        "telencephalon under the Sylvian fissure as the floor of the opened fissure, as far back and forward "
+                                        "as Z-Anatomy's lateral fissure reaches. " if pid == "br_insula" else "")
                                      + "Its shapes for the surgical views (the right Sylvian "
                                      "fissure opened, the frontal lobe lifted along the pterional and the lateral supraorbital corridors, the "
                                      "right hemisphere held off the falx) are Skull base v3's rules, run in this model's own cranial cavity "

@@ -150,7 +150,8 @@
      "leftInside": 0,
      "maxMovedMm": 2.8
     }
-   }
+   },
+   "vessels": {}
   },
   "3": {
    "centre": [
@@ -200,7 +201,8 @@
      "leftInside": 0,
      "maxMovedMm": 3.4
     }
-   }
+   },
+   "vessels": {}
   },
   "4": {
    "centre": [
@@ -250,7 +252,8 @@
      "leftInside": 0,
      "maxMovedMm": 2.5
     }
-   }
+   },
+   "vessels": {}
   }
  },
  "meningioma": {
@@ -266,18 +269,19 @@
     19.0
    ],
    "diameterRuleMm": 30.0,
-   "ml": 9.69,
+   "ml": 9.7,
    "normal": [
     0.0,
     -0.32,
     0.95
    ],
    "push": {
-    "pointsInside": 398,
+    "pointsInside": 326,
     "leftInside": 0,
     "rounds": 5,
-    "maxMovedMm": 18.13
-   }
+    "maxMovedMm": 18.5
+   },
+   "vessels": {}
   },
   "tuberculum": {
    "site": [
@@ -291,18 +295,19 @@
     11.7
    ],
    "diameterRuleMm": 20.0,
-   "ml": 1.6,
+   "ml": 1.59,
    "normal": [
     0.0,
     -0.76,
     0.65
    ],
    "push": {
-    "pointsInside": 7,
+    "pointsInside": 6,
     "leftInside": 0,
     "rounds": 3,
-    "maxMovedMm": 4.75
-   }
+    "maxMovedMm": 4.7
+   },
+   "vessels": {}
   },
   "petroclival": {
    "site": [
@@ -327,7 +332,8 @@
     "leftInside": 0,
     "rounds": 5,
     "maxMovedMm": 22.59
-   }
+   },
+   "vessels": {}
   },
   "foramen_magnum": {
    "site": [
@@ -348,11 +354,12 @@
     0.0
    ],
    "push": {
-    "pointsInside": 854,
+    "pointsInside": 853,
     "leftInside": 0,
     "rounds": 5,
-    "maxMovedMm": 15.75
-   }
+    "maxMovedMm": 15.74
+   },
+   "vessels": {}
   }
  }
 }

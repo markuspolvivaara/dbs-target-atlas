@@ -603,6 +603,11 @@ def validate() -> int:
                 check(ids.get(ids[b].get("replaces", ""), {}).get("type") == "bone", f"{aid}: {b} replaces no bone")
         brain = [it for it in m["structures"] if it.get("category") == "brain" and not it.get("pushedFrom") and not it.get("forView")]
         check(len(brain) == 6 and all(it.get("morph") for it in brain), f"{len(brain)} brain pieces with the surgical shapes")
+        # Z-Anatomy's brain is the same on both sides: each piece's halves mirror each other (the right insula's floor
+        # reached 48 mm further back than the left's, and a pinched-off piece of the left cortex was dropped)
+        for it in brain:
+            cl, cr = np.array(it["centroid"]["L"]), np.array(it["centroid"]["R"])
+            check(float(np.abs(cl * [-1, 1, 1] - cr).max()) < 1.0, f"{it['id']}: its halves do not mirror each other ({cl.tolist()} / {cr.tolist()})")
         pf = [it for it in m["structures"] if it.get("category") in ("hindbrain", "ventricle") and not it.get("pushedFrom")]
         check(len(pf) == 8, f"{len(pf)} posterior fossa pieces")
         fit = json.loads((GEN / f"{PREFIX}-v1fit.json").read_text())

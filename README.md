@@ -592,10 +592,19 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
   - The cortex is Z-Anatomy's gyrus and sulcus patches, remade as closed surfaces about 0.25 mm outside them (the
     patches overlap and cut through one another), each part keeping its lobe (`pipeline/skullbase_v1_brain.py`). The
     temporal lobe, the insula and the rest are remade apart, so the banks of the Sylvian fissure stay apart.
+    - Reducing each surface to its share of 90 000 triangles pinches thin sheets off it (a sulcus's banks lie half
+      a millimetre apart). Every piece of 25 mm² or more is kept; the shapes are solved without the pinched-off
+      pieces, which then move as the nearest point of the surface beside them. (Until 2026-11-24 only the largest
+      piece was kept: 33 cm² of the medial parietal surface was missing on one side.)
+    - The step gives the same files on every run. (It did not: a face whose corners lie in three lobes took one of
+      them by Python's set order, which changes from run to run.)
   - The opercula that the opening moves are the cortex within 10 mm of Z-Anatomy's middle cerebral artery in the
-    fissure (M1, insular M2, opercular M3). Its own fissure patches and insula lie about 10 mm above the arteries.
-    Z-Anatomy has no insular cortex: the floor of the opened fissure is its white matter of the telencephalon there,
-    shown with the insula.
+    fissure (M1, insular M2, opercular M3), as far back as its lateral fissure reaches (54 mm behind the fossa: its
+    M3 runs on 16 mm past that, on the cortex). Its own fissure patches and insula lie about 10 mm above the
+    arteries. Z-Anatomy has no insular cortex: the floor of the opened fissure is its white matter of the
+    telencephalon there, no further back or forward than the fissure, shown with the insula. Both sides are alike.
+    (The left M3 is named "(M3 segment)", the right "(M3-segment)": read by the second form only, the right
+    floor reached 48 mm further back than the left, the audit's MC-15.)
   - Where the cortex reaches into its own bone (up to about 7 mm), it is pushed 1 mm inside the cavity by a smooth
     field in small steps. Then v3's shape rules run: the Sylvian fissure opened, the frontal lobe lifted, the
     hemisphere held off the falx.
