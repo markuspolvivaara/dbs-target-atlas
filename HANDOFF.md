@@ -266,9 +266,8 @@ the list").** On `fix/audit-models-2` (off `27ee8a6`), local commits, not pushed
     carve, so every bone copy again.
 
 **Still left without a decision, and why not done this round:**
-- MC-13 (v1's bone raster): it needs v1's skull step run again, which the later v1 steps depend on: see "v1's
-  endonasal view" below for what it needs. MC-15 (v1's right "Insula") was done on 2026-11-24 with the brain step
-  made reproducible: see "v1's brain step gives the same files every time". (AP-11, AP-15 and MC-16 were done on the night of 2026-11-24, same section.) MA-17's rest: the
+- MC-13 (v1's bone raster) and MC-15 (v1's right "Insula") were done on 2026-11-24: see "v1's bone field on its
+  meshes" and "v1's brain step gives the same files every time". (AP-11, AP-15 and MC-16 were done on the night of 2026-11-24, same section.) MA-17's rest: the
   sensorimotor GPi's 18 edges shared by more than two triangles (in the label's own shape).
 - Text for the owner: B-016's three cortex sentences a clinician should judge (the lunate sulcus as the V1/V2 border,
   receptive aphasia from supramarginal lesions, the inferior temporal gyrus "underneath the central temporal
@@ -291,6 +290,71 @@ The tract data (section 2) is done as far as open data go: the acoustic radiatio
 starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm further forward). Done from it: help and reset, cards into view, "what this bundle shows", surgical views,
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
+
+## v1's bone field on its meshes (MC-13) (desktop, 2026-11-24)
+
+Branch `fix/v1-bone-raster`, on top of `fix/v1-brain-reproducible`. **Local only: not pushed.** The owner's word of
+24 November: go ahead by this rule.
+
+- **What was wrong:** v1's bone field (the 0.5 mm raster the craniotomies cut, the brain's cavity is taken from and
+  the endonasal view draws) took, for the four bones whose meshes are not closed, their inside by parity and all the
+  voxels within 0.5 mm of their surface. So the frontal, occipital, sphenoid and ethmoid bones were 0.7 mm fatter in
+  the field than their meshes (measured: median 0.71 to 0.77 mm). A cut copy of one of them grew on entering an
+  approach view, and the endonasal view's sphenoid walls were thicker than the mesh the other views show.
+- **The rule now** (`nearly_closed` in `pipeline/skullbase_v1_skull.py`):
+  - The inside by parity, as before.
+  - The surface's band only where the bone is thin: not within 1.5 mm of what is left of the inside when 0.5 mm is
+    taken off it all round (`THICK_MM`).
+  - Then, wherever a point of the mesh has no bone of the softened field within 0.5 mm along its normal (`BARE_MM`:
+    the seam between thick and thin), the band is put back at it. 48 to 306 points a bone, of 150 000 to 630 000;
+    none left after one round.
+- **Result, the field's surface against the mesh** (median; 95th percentile):
+
+  | Bone | Before | Now |
+  |---|---|---|
+  | Frontal | +0.71; +0.84 mm | 0.00; +0.10 mm |
+  | Occipital | +0.71; +0.86 mm | 0.00; +0.11 mm |
+  | Sphenoid | +0.72; +0.93 mm | +0.01; +0.21 mm |
+  | Ethmoid | +0.77; +1.12 mm | +0.04; +0.79 mm (its thin cell walls keep the band) |
+
+  The bones' volumes in the field: frontal 115.9 → 88.0 ml, occipital 102.5 → 78.6, sphenoid 58.0 → 45.0, ethmoid
+  17.6 → 11.7. Sutures bridged: 7.1 → 10.6 ml.
+- **The audit's own measure** (a cut bone's vertices more than 0.5 mm outside the whole bone): pterional frontal
+  27.5 → 2.7 %, pterional sphenoid 28.0 → 2.5 %, supraorbital frontal 34.2 → 2.1 %, suboccipital occipital
+  41.1 → 0.0 %, far lateral occipital 51.4 → 1.3 %.
+- **v1 run again from the skull step on** (`chain.sh` in the scratchpad's `v1bone/`): skull, ear, the nine
+  craniotomies (8 minutes), brain, posterior fossa, cavernous sinus, endonasal fields, vessels, ends, tumours, the
+  in-bone measure; 131 shipped files changed; `skullbase_build.py finalize` 676/676.
+  - **Craniotomies remove less bone**, the flaps now as thick as the meshes: pterional 18.2 → 15.7 ml, supraorbital
+    7.2 → 5.5, interhemispheric 13.6 → 11.3, suboccipital 7.1 → 4.8, retrosigmoid 4.9 → 4.4, orbitozygomatic
+    30.4 → 26.9, far lateral 13.5 → 10.5, Kawase 7.8 → 7.8, subtemporal 11.0 → 10.8. The supraorbital view now
+    remeshes the sphenoid bone along its cut too (a new item, `sb_appr_lso__sphenoid_bone`).
+  - **The cranial cavity** is 1 763 ml (1 736); less of the cortex and hindbrain lies in bone before they are pushed
+    clear (2 924 and 3 062 cortex vertices, were 3 485 and 3 622; the cortical arteries 897 mm, were 982).
+  - **The endonasal view:** the nose is wider (the way's median width 4.0 mm, was 3.7; its narrowest 3.0 mm on both
+    sides, was 2.8 and 3.0). The front wall's step is 2 045 mm³ (was 1 119: with the ethmoid's cells no longer
+    filled, more of its walls lie between the nose's air and the sinus's; v3's is 2 099). The planum's step is
+    157 mm³ (220), the floor's 175 (198), the dura's 80 with 2 mm³ of bone in it (71 with 36).
+  - **Tumours:** the adenomas 1.11, 1.21, 1.24 and 1.45 ml (1.06, 1.12, 1.16, 1.35), all graded as meant. The
+    petroclival meningioma sits 1.4 mm nearer the midline (the clivus's surface, and so its normal there, moved);
+    the medulla's right half, as it pushes it, now has its middle 1.3 mm past the midline (0.2 mm before). Two pushed copies are no longer made (the
+    vermis by the petroclival meningioma, the posterior inferior cerebellar artery by Koos III) and one is new
+    (the pons by the foramen magnum meningioma).
+- **Found on the way: the subtemporal view's arch finder worked on v1 only because the bone was too fat.**
+  `zygomatic_root` (shared with v3) looks from the side for a bar of bone at least `ARCH_BAR_MM` high with bone
+  again behind a gap. On v1 the last level counted was the middle fossa floor's fattened underside.
+  - `ARCH_BAR_MM` is 3 mm on v1 (4 mm on v3): the root is found at the same place as before, 1.0 mm in front of the
+    fossa, so the flap does not move.
+  - Of two bars as tall, the upper one's top is now reported (the root's upper surface: 8.7 mm below the fossa,
+    2.5 mm under the middle fossa floor's level; was 7.7). v3's result is unchanged (checked: 2.0 mm, −6.6 mm).
+- **Tests changed to the true bone:**
+  - the cortical arteries' length in bone before they are moved: over 800 mm (was over 900);
+  - the subtemporal flap's area as cut may be 1 % over the drawing (2 514 mm² on v1: it is measured on a 0.5 mm grid);
+  - a tumour view's pushed copy of a right half may lie up to 5 mm past the midline (`sideProblems`).
+- **Looked at:** the pterional, supraorbital, orbitozygomatic, far lateral and endonasal views. No hole in a cut
+  bone or a sinus wall seen. The jagged edge in the far lateral view with only the right side shown is the bones'
+  midline cut, as before.
+- **MacBook baselines:** every v1 picture.
 
 ## v1's brain step gives the same files every time; its halves mirror each other (desktop, 2026-11-24)
 
@@ -531,10 +595,8 @@ The audit's AP-15, AP-11 and MC-16; MC-13 and MC-15 are not done (below).
   2026-11-23) now reads v1's nerve tubes rightly, which moves the nerve distance field a little (pieces by under
   2 mm³).
 - **Not done, and what each needs:**
-  - **MC-13** (v1's bone raster 0.5–0.9 mm fatter than the bone meshes): `SURF_MM = 0.5` in
-    `pipeline/skullbase_v1_skull.py` thickens the nearly closed bones by design. Changing it redoes v1's skull
-    field, hence every v1 approach copy, the endonasal fields and the brain's cavity. A full v1 rebuild, and a
-    decision on the value.
+  - **MC-13** (v1's bone raster 0.5–0.9 mm fatter than the bone meshes): done on 2026-11-24 (the section "v1's bone
+    field on its meshes" above).
   - **MC-15** (v1's right "Insula" holds the fissure's white-matter floor back to the occipital region): done on
     2026-11-24, with the brain step made reproducible (the section "v1's brain step gives the same files every
     time" above).

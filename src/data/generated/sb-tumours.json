@@ -86,17 +86,17 @@
      "lateral": -8.0
     },
     "encasedShare": 0.0,
-    "ml": 1.06
+    "ml": 1.11
    },
    "1": {
     "grade": "1",
     "pastMm": {
-     "medial": 1.0,
-     "intercarotid": -1.0,
-     "lateral": -2.9
+     "medial": 1.1,
+     "intercarotid": -0.8,
+     "lateral": -2.7
     },
     "encasedShare": 0.0,
-    "ml": 1.12
+    "ml": 1.21
    },
    "2": {
     "grade": "2",
@@ -106,7 +106,7 @@
      "lateral": -1.0
     },
     "encasedShare": 0.0,
-    "ml": 1.16
+    "ml": 1.24
    },
    "3A": {
     "grade": "3A",
@@ -116,7 +116,7 @@
      "lateral": 3.7
     },
     "encasedShare": 0.0,
-    "ml": 1.35
+    "ml": 1.45
    }
   },
   "carotidRadiusMm": 1.5
@@ -125,7 +125,7 @@
   "1": {
    "ml": 0.15,
    "canalMm": 13.3,
-   "porusToBrainstemMm": 4.0
+   "porusToBrainstemMm": 4.1
   },
   "2": {
    "centre": [
@@ -135,14 +135,14 @@
    ],
    "diameterMm": 9.0,
    "extrameatalMaxMm": 11.0,
-   "toBrainstemMm": 0.8,
+   "toBrainstemMm": 0.9,
    "fromBoneMm": 0.5,
    "ml": 0.36,
    "push": {
     "pointsInside": 168,
     "leftInside": 0,
-    "rounds": 41,
-    "maxMovedMm": 21.7
+    "rounds": 46,
+    "maxMovedMm": 23.1
    },
    "nerves": {
     "Facial nerve (VII)": {
@@ -155,102 +155,97 @@
   },
   "3": {
    "centre": [
-    24.5,
-    -29.5,
+    25.5,
+    -32.5,
     -16.5
    ],
    "diameterMm": 25.0,
-   "extrameatalMaxMm": 24.1,
+   "extrameatalMaxMm": 26.8,
    "toBrainstemMm": -5.0,
-   "fromBoneMm": 0.9,
-   "ml": 4.54,
+   "fromBoneMm": 2.3,
+   "ml": 5.65,
    "push": {
-    "pointsInside": 3264,
+    "pointsInside": 4186,
     "leftInside": 0,
-    "rounds": 38,
-    "maxMovedMm": 30.6
+    "rounds": 56,
+    "maxMovedMm": 30.55
    },
    "nerves": {
     "Accessory nerve (XI)": {
-     "pointsInside": 34,
+     "pointsInside": 50,
      "leftInside": 0,
-     "maxMovedMm": 1.8
+     "maxMovedMm": 2.7
     },
     "Anterior inferior cerebellar artery": {
-     "pointsInside": 47,
-     "leftInside": 26,
-     "maxMovedMm": 2.4
+     "pointsInside": 48,
+     "leftInside": 8,
+     "maxMovedMm": 2.1
     },
     "Facial nerve (VII)": {
-     "pointsInside": 84,
-     "leftInside": 0,
-     "maxMovedMm": 7.3
-    },
-    "Glossopharyngeal nerve (IX)": {
      "pointsInside": 78,
      "leftInside": 0,
-     "maxMovedMm": 3.9
+     "maxMovedMm": 4.0
     },
-    "Posterior inferior cerebellar artery": {
-     "pointsInside": 2,
+    "Glossopharyngeal nerve (IX)": {
+     "pointsInside": 82,
      "leftInside": 0,
-     "maxMovedMm": 0.2
+     "maxMovedMm": 4.0
     },
     "Vagus nerve (X)": {
      "pointsInside": 138,
      "leftInside": 0,
-     "maxMovedMm": 3.4
+     "maxMovedMm": 2.3
     }
    },
    "vessels": {}
   },
   "4": {
    "centre": [
-    27.5,
-    -36.5,
-    -13.5
+    26.5,
+    -34.5,
+    -16.5
    ],
    "diameterMm": 34.0,
-   "extrameatalMaxMm": 33.9,
+   "extrameatalMaxMm": 33.2,
    "toBrainstemMm": -9.0,
-   "fromBoneMm": 5.0,
-   "ml": 15.73,
+   "fromBoneMm": 3.4,
+   "ml": 13.74,
    "push": {
-    "pointsInside": 8557,
+    "pointsInside": 8401,
     "leftInside": 0,
-    "rounds": 8,
-    "maxMovedMm": 43.76
+    "rounds": 15,
+    "maxMovedMm": 44.29
    },
    "nerves": {
     "Accessory nerve (XI)": {
-     "pointsInside": 62,
+     "pointsInside": 100,
      "leftInside": 0,
-     "maxMovedMm": 2.0
+     "maxMovedMm": 2.7
     },
     "Anterior inferior cerebellar artery": {
-     "pointsInside": 48,
-     "leftInside": 13,
-     "maxMovedMm": 1.8
+     "pointsInside": 54,
+     "leftInside": 12,
+     "maxMovedMm": 0.6
     },
     "Facial nerve (VII)": {
-     "pointsInside": 94,
+     "pointsInside": 106,
      "leftInside": 0,
-     "maxMovedMm": 4.4
+     "maxMovedMm": 6.9
     },
     "Glossopharyngeal nerve (IX)": {
-     "pointsInside": 167,
-     "leftInside": 0,
-     "maxMovedMm": 4.3
+     "pointsInside": 296,
+     "leftInside": 18,
+     "maxMovedMm": 13.5
     },
     "Posterior inferior cerebellar artery": {
-     "pointsInside": 9,
-     "leftInside": 0,
-     "maxMovedMm": 0.3
+     "pointsInside": 26,
+     "leftInside": 6,
+     "maxMovedMm": 1.8
     },
     "Vagus nerve (X)": {
-     "pointsInside": 149,
-     "leftInside": 0,
-     "maxMovedMm": 2.5
+     "pointsInside": 272,
+     "leftInside": 40,
+     "maxMovedMm": 11.8
     }
    },
    "vessels": {}
@@ -261,51 +256,51 @@
    "site": [
     0.0,
     34.29,
-    1.24
+    0.24
    ],
    "centre": [
     0.0,
-    28.29,
-    19.0
+    26.96,
+    18.04
    ],
    "diameterRuleMm": 30.0,
-   "ml": 9.7,
+   "ml": 9.57,
    "normal": [
     0.0,
-    -0.32,
-    0.95
+    -0.38,
+    0.92
    ],
    "push": {
-    "pointsInside": 326,
+    "pointsInside": 316,
     "leftInside": 0,
     "rounds": 5,
-    "maxMovedMm": 18.5
+    "maxMovedMm": 17.25
    },
    "vessels": {}
   },
   "tuberculum": {
    "site": [
     0.0,
-    6.77,
-    8.15
+    6.89,
+    7.67
    ],
    "centre": [
     0.0,
-    2.57,
-    11.7
+    2.39,
+    10.84
    ],
    "diameterRuleMm": 20.0,
-   "ml": 1.59,
+   "ml": 1.42,
    "normal": [
     0.0,
-    -0.76,
-    0.65
+    -0.82,
+    0.58
    ],
    "push": {
     "pointsInside": 6,
     "leftInside": 0,
-    "rounds": 3,
-    "maxMovedMm": 4.7
+    "rounds": 4,
+    "maxMovedMm": 4.23
    },
    "vessels": {}
   },
@@ -316,48 +311,48 @@
     -16.42
    ],
    "centre": [
-    7.07,
-    -25.48,
-    -14.46
+    5.72,
+    -24.75,
+    -14.79
    ],
    "diameterRuleMm": 28.0,
-   "ml": 8.24,
+   "ml": 8.28,
    "normal": [
-    -0.71,
-    -0.68,
-    0.19
+    -0.8,
+    -0.58,
+    0.15
    ],
    "push": {
-    "pointsInside": 4198,
+    "pointsInside": 3731,
     "leftInside": 0,
     "rounds": 5,
-    "maxMovedMm": 22.59
+    "maxMovedMm": 23.27
    },
    "vessels": {}
   },
   "foramen_magnum": {
    "site": [
-    15.88,
-    -36.24,
-    -40.42
+    16.33,
+    -36.01,
+    -39.92
    ],
    "centre": [
-    8.42,
-    -39.76,
-    -40.42
+    8.95,
+    -39.66,
+    -39.35
    ],
    "diameterRuleMm": 30.0,
-   "ml": 11.44,
+   "ml": 11.43,
    "normal": [
-    -0.9,
-    -0.43,
-    0.0
+    -0.89,
+    -0.44,
+    0.07
    ],
    "push": {
-    "pointsInside": 853,
+    "pointsInside": 906,
     "leftInside": 0,
-    "rounds": 5,
-    "maxMovedMm": 15.74
+    "rounds": 4,
+    "maxMovedMm": 15.44
    },
    "vessels": {}
   }

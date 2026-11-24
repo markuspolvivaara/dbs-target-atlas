@@ -4,10 +4,10 @@ brain's shapes that v3 cuts and fits on its CT (skullbase_v3_approach.py, skullb
   pipeline/.venv/bin/python -I -W ignore pipeline/skullbase_v1_skull.py      (after skullbase_export.py)
 
 v1 draws Z-Anatomy's own bone meshes (pipeline/data/build/skullbase/export.json, millimetres from the hypophysial fossa
-landmark). Each is rasterised on one grid in that frame: a closed mesh filled (its inside by the parity of crossings), an
+landmark). Each is rasterised on one grid in that frame: a closed mesh filled (its inside by the parity of crossings), a
 nearly closed one (the frontal, occipital, sphenoid and ethmoid bones have a few dozen open edges) by the parity of
-crossings along each axis, where two of the three agree, with the voxels within SURF_MM of its surface (so its thin
-sheets stay whole). The paranasal sinuses' own meshes (Sinus of frontal bone, Sinus of sphenoid bone) are air,
+crossings along each axis, where two of the three agree, with the voxels within SURF_MM of its surface where the bone
+is thin (nearly_closed: so its thin sheets stay whole, and its thick parts keep the mesh's own surface). The paranasal sinuses' own meshes (Sinus of frontal bone, Sinus of sphenoid bone) are air,
 taken out of the bone (their insides by the same parity vote; the sutures' bridging does not refill them). Gaps the meshes leave between neighbouring bones (close_sutures) are bridged. The field is that mask softened by a Gaussian of SOFT_MM, its surface at skullbase_ct.SURFACE_LEVEL
 as v2's and v3's are, so the same craniotomy code meshes the cut edge the same way.
 
@@ -32,7 +32,10 @@ from skullbase_brain import fill  # noqa: E402
 
 BUILD = ROOT / "data" / "build" / "skullbase"
 STEP = 0.5
-SURF_MM = 0.5        # a nearly closed bone's surface counts as bone this far round it (thin sheets stay whole)
+SURF_MM = 0.5        # a nearly closed bone's surface counts as bone this far round it where the bone is thin (sheets stay whole)
+THICK_MM = (0.5, 1.5)   # ... thin: not within the second of what is left of its inside with the first taken off all round
+BARE_MM = 0.5        # the band is put back wherever a point of the mesh has no bone of the field within this, along its normal
+BARE_ROUNDS = 3
 SOFT_MM = 0.35       # the mask softened by this (Gaussian), so the surface taken from it shows no grid steps
 AIR = ("Sinus of frontal bone", "Sinus of sphenoid bone")
 MARGIN_MM = 6.0
@@ -56,21 +59,10 @@ def main() -> int:
             got = fill(np.asarray(m.vertices), np.asarray(m.faces), lo, shape, STEP)
             how = "filled"
         else:
-            # nearly closed (a few dozen open edges): the inside by the parity of crossings along each axis, kept where
-            # two of the three agree (a ray through a small hole miscounts along one axis only), with the voxels its
-            # surface passes through, so a thin sheet stays whole; the grid's surface then lies on Z-Anatomy's own
-            # (a cut bone's new faces meet the faces it keeps)
-            P = np.vstack([V, m.sample(int(m.area / (0.25 * STEP * STEP)), seed=0)])
-            ijk = np.rint((P - lo) / STEP).astype(int)
-            surf = np.zeros(shape, bool)
-            surf[tuple(ijk.T)] = True
-            # (a sheet one voxel thick would fall below the surface level where the smoothing meets it obliquely, leaving
-            # holes: the surface's voxels taken SURF_MM thick)
-            surf = ndimage.binary_dilation(surf, iterations=max(1, int(round(SURF_MM / STEP))))
-            got = parity_inside(m, lo, shape) | surf
-            how = "parity (3 axes, majority)"
+            got, more = nearly_closed(m, V, lo, shape)
+            how = "parity (3 axes, majority), its surface's band where it is thin"
         mask |= got
-        rep[n] = {"how": how, "ml": round(float(got.sum()) * STEP ** 3 / 1000, 1)}
+        rep[n] = {"how": how, "ml": round(float(got.sum()) * STEP ** 3 / 1000, 1), **(more if how != "filled" else {})}
         print(n, rep[n])
     for n in AIR:                # the sinuses' air: their insides (not closed meshes: by the parity vote, as the bones)
         if n in ex["bones"]:
@@ -93,6 +85,43 @@ def main() -> int:
     print("grid", shape, "bone", round(float(mask.sum()) * STEP ** 3 / 1000, 1), "ml")
     (BUILD / "sinuses.json").write_text(json.dumps(sinuses(ex)))
     return 0
+
+
+def nearly_closed(m: trimesh.Trimesh, V: np.ndarray, lo: np.ndarray, shape: tuple) -> tuple[np.ndarray, dict]:
+    """A nearly closed bone (a few dozen open edges) on the grid. Its inside by the parity of crossings along each axis,
+    kept where two of the three agree (a ray through a small hole miscounts along one axis only): thick bone so filled
+    has its surface on Z-Anatomy's own. Where the bone is thinner than the grid fills, a sheet would break up, so there
+    the voxels within SURF_MM of its surface are bone too (a sheet one voxel thick would fall below the surface level
+    where the smoothing meets it obliquely). Thin is: not within THICK_MM[1] of what is left of the inside when
+    THICK_MM[0] is taken off it all round. Last, wherever a point of the mesh still has no bone of the softened field
+    within BARE_MM along its normal (the seam between thick and thin), the band is put back at it.
+
+    (Until November 2026 the band lay round the whole surface: the frontal, occipital, sphenoid and ethmoid bones were
+    0.7 mm fatter in this field than their meshes, and a cut bone or the endonasal view's sphenoid grew by that on
+    entering the view: the audit's MC-13.)"""
+    P, fi = m.sample(int(m.area / (0.25 * STEP * STEP)), seed=0, return_index=True)
+    N = m.face_normals[fi]
+    surf = np.zeros(shape, bool)
+    surf[tuple(np.rint((np.vstack([V, P]) - lo) / STEP).astype(int).T)] = True
+    band = ndimage.binary_dilation(surf, iterations=max(1, int(round(SURF_MM / STEP))))
+    inside = parity_inside(m, lo, shape)
+    thick = ndimage.binary_dilation(ndimage.binary_erosion(inside, iterations=max(1, int(round(THICK_MM[0] / STEP)))),
+                                    iterations=int(round(THICK_MM[1] / STEP)))
+    got = inside | (band & ~thick)
+    reach = np.arange(-BARE_MM, BARE_MM + 1e-6, STEP / 4)
+    bare_by_round = []
+    for _ in range(BARE_ROUNDS):
+        f = ndimage.gaussian_filter(got.astype(np.float32), SOFT_MM / STEP)
+        best = np.max(np.stack([ndimage.map_coordinates(f, ((P + t * N - lo) / STEP).T, order=1) for t in reach]), axis=0)
+        bare = best < 0.5
+        bare_by_round.append(int(bare.sum()))
+        if not bare.any():
+            break
+        add = np.zeros(shape, bool)
+        add[tuple(np.rint((P[bare] - lo) / STEP).astype(int).T)] = True
+        got |= ndimage.binary_dilation(add, iterations=max(1, int(round(SURF_MM / STEP))))
+    return got, {"bandMl": round(float((got & ~inside).sum()) * STEP ** 3 / 1000, 1), "barePointsByRound": bare_by_round,
+                 "surfacePoints": int(len(P))}
 
 
 def parity_inside(m: trimesh.Trimesh, lo: np.ndarray, shape: tuple) -> np.ndarray:

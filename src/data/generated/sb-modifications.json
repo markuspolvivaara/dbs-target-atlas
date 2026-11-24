@@ -59,125 +59,125 @@
     "arterySmoothMm": 2.0
    },
    "metrics": {
-    "cavityMl": 1736,
+    "cavityMl": 1763,
     "clear": {
      "R": {
-      "inBoneWayBefore": 3485,
-      "inBoneWayAfter": 0,
-      "rounds": 17,
-      "maxMovedMm": 6.74
-     },
-     "L": {
-      "inBoneWayBefore": 3622,
+      "inBoneWayBefore": 2924,
       "inBoneWayAfter": 0,
       "rounds": 15,
-      "maxMovedMm": 6.18
+      "maxMovedMm": 5.97
+     },
+     "L": {
+      "inBoneWayBefore": 3062,
+      "inBoneWayAfter": 0,
+      "rounds": 14,
+      "maxMovedMm": 6.04
      }
     },
     "arteries": {
      "Anterior temporal branch": {
-      "lengthMm": 347.3,
+      "lengthMm": 347.7,
       "inBoneBeforeMm": 219.5,
       "inBoneAfterMm": 0.0,
-      "maxMovedMm": 5.5,
+      "maxMovedMm": 5.8,
       "centroid": {
        "L": [
-        -58.18,
+        -58.13,
         -5.43,
-        21.02
+        21.04
        ],
        "R": [
-        58.22,
-        -5.43,
-        21.02
+        58.15,
+        -5.41,
+        21.06
        ]
       },
       "box": {
        "L": [
         [
-         -65.77,
+         -65.75,
          -30.11,
-         2.22
+         2.45
         ],
         [
-         -44.78,
-         11.64,
-         34.17
+         -44.45,
+         11.59,
+         34.16
         ]
        ],
        "R": [
         [
-         44.76,
-         -30.11,
-         1.85
+         44.36,
+         -30.1,
+         2.22
         ],
         [
-         65.78,
-         11.91,
-         34.18
+         65.76,
+         11.78,
+         34.16
         ]
        ]
       }
      },
      "Artery of central sulcus": {
-      "lengthMm": 262.7,
+      "lengthMm": 262.2,
       "inBoneBeforeMm": 51.2,
       "inBoneAfterMm": 0.0,
-      "maxMovedMm": 1.7,
+      "maxMovedMm": 1.8,
       "centroid": {
        "L": [
-        -48.44,
+        -48.41,
         -23.62,
-        70.66
+        70.62
        ],
        "R": [
-        48.46,
+        48.43,
         -23.59,
-        70.7
+        70.67
        ]
       },
       "box": {
        "L": [
         [
          -63.22,
-         -50.55,
+         -50.47,
          27.88
         ],
         [
-         -14.57,
+         -14.55,
          1.42,
-         101.07
+         100.76
         ]
        ],
        "R": [
         [
-         14.54,
-         -50.73,
+         14.55,
+         -50.65,
          27.88
         ],
         [
          63.22,
          1.42,
-         101.42
+         101.18
         ]
        ]
       }
      },
      "Artery of precentral sulcus": {
-      "lengthMm": 416.1,
-      "inBoneBeforeMm": 65.1,
+      "lengthMm": 415.3,
+      "inBoneBeforeMm": 60.7,
       "inBoneAfterMm": 0.0,
-      "maxMovedMm": 5.3,
+      "maxMovedMm": 4.2,
       "centroid": {
        "L": [
-        -43.86,
-        0.17,
-        73.8
+        -43.9,
+        0.26,
+        73.83
        ],
        "R": [
-        43.91,
-        0.19,
-        73.87
+        43.96,
+        0.29,
+        73.91
        ]
       },
       "box": {
@@ -185,144 +185,144 @@
         [
          -61.28,
          -17.03,
-         31.23
+         31.22
         ],
         [
-         -22.7,
-         16.6,
-         102.0
+         -22.65,
+         17.0,
+         101.89
         ]
        ],
        "R": [
         [
-         22.64,
-         -16.95,
-         31.22
+         22.58,
+         -16.96,
+         31.21
         ],
         [
          61.34,
-         16.72,
-         101.97
+         17.05,
+         101.84
         ]
        ]
       }
      },
      "Branch to angular gyrus": {
-      "lengthMm": 28.6,
+      "lengthMm": 28.7,
       "inBoneBeforeMm": 29.0,
       "inBoneAfterMm": 0.5,
-      "maxMovedMm": 3.1,
+      "maxMovedMm": 3.2,
       "centroid": {
        "L": [
-        -57.85,
-        -77.21,
+        -57.8,
+        -77.19,
         35.26
        ],
        "R": [
-        57.93,
+        57.89,
         -77.21,
-        35.18
+        35.17
        ]
       },
       "box": {
        "L": [
         [
          -59.03,
-         -79.44,
-         28.31
+         -79.43,
+         28.32
         ],
         [
-         -56.78,
-         -73.81,
+         -56.7,
+         -73.8,
          40.16
         ]
        ],
        "R": [
         [
-         56.68,
+         56.65,
          -79.67,
          28.5
         ],
         [
-         59.03,
-         -73.76,
+         59.04,
+         -73.73,
          39.99
         ]
        ]
       }
      },
      "Callosomarginal artery": {
-      "lengthMm": 400.8,
-      "inBoneBeforeMm": 30.8,
+      "lengthMm": 403.3,
+      "inBoneBeforeMm": 24.6,
       "inBoneAfterMm": 0.0,
-      "maxMovedMm": 5.4,
+      "maxMovedMm": 4.5,
       "centroid": {
        "L": [
         -3.35,
-        21.65,
-        74.82
+        21.69,
+        74.93
        ],
        "R": [
-        3.36,
-        21.63,
-        74.83
+        3.35,
+        21.69,
+        74.93
        ]
       },
       "box": {
        "L": [
         [
-         -21.09,
-         -1.54,
+         -21.07,
+         -1.53,
          25.03
         ],
         [
-         -0.02,
-         51.56,
-         102.62
+         -0.03,
+         51.59,
+         102.6
         ]
        ],
        "R": [
         [
-         0.02,
-         -1.56,
+         0.03,
+         -1.53,
          25.03
         ],
         [
-         21.14,
-         51.56,
-         102.7
+         21.1,
+         51.59,
+         102.67
         ]
        ]
       }
      },
      "Frontal branches of callosomarginal artery": {
-      "lengthMm": 68.3,
-      "inBoneBeforeMm": 3.6,
+      "lengthMm": 69.4,
+      "inBoneBeforeMm": 0.0,
       "inBoneAfterMm": 0.0,
-      "maxMovedMm": 1.3,
+      "maxMovedMm": 0.6,
       "centroid": {
        "L": [
-        -5.63,
-        36.36,
-        75.27
+        -5.69,
+        36.53,
+        75.5
        ],
        "R": [
-        5.64,
-        36.37,
-        75.3
+        5.69,
+        36.54,
+        75.5
        ]
       },
       "box": {
        "L": [
         [
-         -14.39,
+         -14.54,
          29.52,
          65.22
         ],
         [
          -0.69,
-         40.29,
-         87.69
+         40.34,
+         88.19
         ]
        ],
        "R": [
@@ -332,159 +332,159 @@
          65.22
         ],
         [
-         14.38,
-         40.29,
-         87.69
+         14.55,
+         40.34,
+         88.17
         ]
        ]
       }
      },
      "Lateral frontobasal artery": {
-      "lengthMm": 251.1,
-      "inBoneBeforeMm": 115.3,
+      "lengthMm": 254.2,
+      "inBoneBeforeMm": 113.4,
       "inBoneAfterMm": 0.0,
-      "maxMovedMm": 6.7,
+      "maxMovedMm": 6.0,
       "centroid": {
        "L": [
-        -35.96,
-        41.01,
-        43.92
+        -36.3,
+        41.24,
+        43.9
        ],
        "R": [
-        35.84,
-        41.02,
-        43.86
+        36.26,
+        41.25,
+        43.89
        ]
       },
       "box": {
        "L": [
         [
-         -50.44,
+         -51.24,
          2.14,
          21.97
         ],
         [
-         -11.04,
-         59.72,
-         61.66
+         -11.21,
+         60.47,
+         61.89
         ]
        ],
        "R": [
         [
-         11.1,
+         11.31,
          2.14,
          21.97
         ],
         [
-         50.27,
-         59.74,
-         61.68
+         51.14,
+         60.38,
+         62.02
         ]
        ]
       }
      },
      "Orbitofrontal branches of anterior cerebral artery": {
-      "lengthMm": 140.3,
-      "inBoneBeforeMm": 4.3,
+      "lengthMm": 141.1,
+      "inBoneBeforeMm": 1.3,
       "inBoneAfterMm": 0.0,
-      "maxMovedMm": 1.2,
+      "maxMovedMm": 0.6,
       "centroid": {
        "L": [
         -5.31,
-        47.64,
-        23.7
+        47.78,
+        23.51
        ],
        "R": [
         5.32,
-        47.62,
-        23.72
+        47.77,
+        23.5
        ]
       },
       "box": {
        "L": [
         [
-         -14.82,
+         -15.17,
          19.17,
-         14.24
+         14.23
         ],
         [
-         -0.79,
-         62.04,
-         35.52
+         -0.82,
+         62.62,
+         35.29
         ]
        ],
        "R": [
         [
-         0.79,
+         0.82,
          19.17,
-         14.24
+         14.23
         ],
         [
-         14.84,
-         62.05,
-         35.54
+         15.13,
+         62.61,
+         35.29
         ]
        ]
       }
      },
      "Parietal branches of middle cerebral artery": {
-      "lengthMm": 173.2,
+      "lengthMm": 172.9,
       "inBoneBeforeMm": 41.5,
       "inBoneAfterMm": 0.0,
       "maxMovedMm": 2.9,
       "centroid": {
        "L": [
-        -58.37,
-        -52.86,
-        64.73
+        -58.32,
+        -52.83,
+        64.7
        ],
        "R": [
-        58.49,
-        -52.88,
-        64.82
+        58.41,
+        -52.84,
+        64.78
        ]
       },
       "box": {
        "L": [
         [
-         -68.21,
+         -68.2,
          -68.78,
          42.89
         ],
         [
          -37.45,
          -37.16,
-         83.58
+         83.48
         ]
        ],
        "R": [
         [
-         37.47,
+         37.45,
          -68.79,
          42.9
         ],
         [
-         68.3,
+         68.32,
          -37.16,
-         83.59
+         83.56
         ]
        ]
       }
      },
      "Pericallosal artery": {
-      "lengthMm": 968.6,
+      "lengthMm": 968.5,
       "inBoneBeforeMm": 19.0,
       "inBoneAfterMm": 0.0,
-      "maxMovedMm": 1.7,
+      "maxMovedMm": 1.6,
       "centroid": {
        "L": [
         -5.19,
-        -29.68,
+        -29.67,
         72.21
        ],
        "R": [
         5.19,
-        -29.68,
+        -29.67,
         72.21
        ]
       },
@@ -492,7 +492,7 @@
        "L": [
         [
          -29.71,
-         -80.61,
+         -80.59,
          22.7
         ],
         [
@@ -504,11 +504,11 @@
        "R": [
         [
          -0.89,
-         -80.61,
+         -80.6,
          22.7
         ],
         [
-         29.65,
+         29.66,
          25.8,
          107.18
         ]
@@ -516,128 +516,128 @@
       }
      },
      "Postcentral arterial branch": {
-      "lengthMm": 231.9,
+      "lengthMm": 231.8,
       "inBoneBeforeMm": 18.0,
       "inBoneAfterMm": 0.0,
-      "maxMovedMm": 1.6,
+      "maxMovedMm": 2.0,
       "centroid": {
        "L": [
-        -55.19,
+        -55.14,
         -38.93,
-        69.12
+        69.06
        ],
        "R": [
-        55.25,
-        -38.95,
-        69.23
+        55.21,
+        -38.96,
+        69.19
        ]
       },
       "box": {
        "L": [
         [
-         -67.16,
-         -65.35,
+         -67.21,
+         -65.26,
          38.53
         ],
         [
-         -21.68,
+         -21.62,
          -16.43,
-         93.59
+         93.4
         ]
        ],
        "R": [
         [
-         21.75,
-         -65.5,
+         21.72,
+         -65.4,
          38.53
         ],
         [
          67.11,
          -16.43,
-         93.88
+         93.74
         ]
        ]
       }
      },
      "Posterior parietal artery": {
-      "lengthMm": 280.7,
+      "lengthMm": 280.3,
       "inBoneBeforeMm": 12.3,
       "inBoneAfterMm": 0.0,
-      "maxMovedMm": 2.4,
+      "maxMovedMm": 2.5,
       "centroid": {
        "L": [
-        -51.3,
-        -75.08,
-        56.9
+        -51.2,
+        -75.03,
+        56.86
        ],
        "R": [
-        51.44,
-        -75.12,
-        56.94
+        51.36,
+        -75.06,
+        56.91
        ]
       },
       "box": {
        "L": [
         [
-         -63.69,
-         -90.08,
+         -63.46,
+         -90.05,
          39.01
         ],
         [
-         -37.59,
+         -37.51,
          -46.91,
-         75.88
+         75.87
         ]
        ],
        "R": [
         [
-         37.66,
-         -90.23,
-         39.02
+         37.58,
+         -90.17,
+         39.01
         ],
         [
-         63.8,
+         63.64,
          -46.91,
-         76.08
+         75.97
         ]
        ]
       }
      },
      "Posterior temporal branch": {
-      "lengthMm": 167.3,
+      "lengthMm": 166.4,
       "inBoneBeforeMm": 57.4,
       "inBoneAfterMm": 0.0,
-      "maxMovedMm": 7.7,
+      "maxMovedMm": 7.4,
       "centroid": {
        "L": [
-        -57.13,
-        -70.02,
-        19.62
+        -57.08,
+        -70.07,
+        19.7
        ],
        "R": [
-        57.22,
-        -69.98,
-        19.6
+        57.19,
+        -70.03,
+        19.67
        ]
       },
       "box": {
        "L": [
         [
          -68.05,
-         -85.22,
-         4.02
+         -85.21,
+         3.76
         ],
         [
-         -45.04,
+         -45.95,
          -46.79,
          42.66
         ]
        ],
        "R": [
         [
-         45.2,
+         45.71,
          -85.24,
-         3.79
+         3.81
         ],
         [
          68.05,
@@ -648,145 +648,145 @@
       }
      },
      "Prefrontal artery": {
-      "lengthMm": 235.9,
-      "inBoneBeforeMm": 213.6,
+      "lengthMm": 237.5,
+      "inBoneBeforeMm": 166.5,
       "inBoneAfterMm": 0.0,
-      "maxMovedMm": 5.9,
+      "maxMovedMm": 5.0,
       "centroid": {
        "L": [
-        -44.41,
-        21.74,
-        62.04
+        -44.91,
+        21.98,
+        62.31
        ],
        "R": [
-        44.41,
-        21.67,
-        62.07
+        44.92,
+        21.96,
+        62.29
        ]
       },
       "box": {
        "L": [
         [
-         -57.92,
+         -58.09,
          3.15,
          32.02
         ],
         [
-         -31.33,
-         33.63,
-         86.04
+         -31.47,
+         33.81,
+         86.27
         ]
        ],
        "R": [
         [
-         31.36,
+         31.53,
          3.15,
          32.02
         ],
         [
-         57.89,
-         33.61,
-         86.15
+         57.85,
+         33.88,
+         86.36
         ]
        ]
       }
      },
      "Temporal branches of middle cerebral artery": {
-      "lengthMm": 189.3,
+      "lengthMm": 189.6,
       "inBoneBeforeMm": 14.8,
       "inBoneAfterMm": 0.0,
-      "maxMovedMm": 5.0,
+      "maxMovedMm": 5.1,
       "centroid": {
        "L": [
-        -61.91,
+        -61.84,
         -37.41,
-        22.41
+        22.5
        ],
        "R": [
-        61.89,
+        61.81,
         -37.4,
-        22.49
+        22.59
        ]
       },
       "box": {
        "L": [
         [
          -70.22,
-         -58.09,
-         -0.18
+         -58.15,
+         -0.11
         ],
         [
-         -51.09,
+         -51.03,
          -12.55,
-         44.37
+         44.36
         ]
        ],
        "R": [
         [
-         51.11,
-         -58.06,
-         -0.03
+         51.08,
+         -58.11,
+         0.09
         ],
         [
          70.04,
          -12.54,
-         44.35
+         44.34
         ]
        ]
       }
      },
      "Temporo-occipital branch": {
-      "lengthMm": 304.2,
-      "inBoneBeforeMm": 86.7,
+      "lengthMm": 305.2,
+      "inBoneBeforeMm": 67.4,
       "inBoneAfterMm": 0.0,
-      "maxMovedMm": 4.7,
+      "maxMovedMm": 3.9,
       "centroid": {
        "L": [
-        -37.7,
-        -96.11,
-        30.57
+        -37.79,
+        -96.32,
+        30.52
        ],
        "R": [
-        37.73,
-        -96.16,
-        30.56
+        37.84,
+        -96.36,
+        30.5
        ]
       },
       "box": {
        "L": [
         [
-         -59.2,
-         -107.93,
-         2.35
+         -59.02,
+         -108.7,
+         2.19
         ],
         [
-         -14.47,
-         -69.77,
-         47.03
+         -14.67,
+         -69.71,
+         46.97
         ]
        ],
        "R": [
         [
-         14.53,
-         -107.98,
-         2.37
+         14.61,
+         -108.71,
+         2.15
         ],
         [
-         59.32,
-         -69.84,
-         47.01
+         59.17,
+         -69.81,
+         46.93
         ]
        ]
       }
      }
     },
     "open": {
-     "lipsFrontal": 281,
-     "lipsTemporal": 150,
-     "heldBySkull": 1805,
-     "moved": 7122,
+     "lipsFrontal": 283,
+     "lipsTemporal": 153,
+     "heldBySkull": 1672,
+     "moved": 7358,
      "maxMovedMm": 6.65,
-     "heldAtCavity": 153,
+     "heldAtCavity": 157,
      "outsideCavityAfter": 62
     },
     "pinchedOff": {
@@ -794,11 +794,11 @@
      "L": 73
     },
     "lift": {
-     "orbitalHandles": 866,
+     "orbitalHandles": 863,
      "insulaHandles": 8158,
-     "moved": 17860,
+     "moved": 17927,
      "maxMovedMm": 8.15,
-     "heldAtCavity": 30,
+     "heldAtCavity": 27,
      "outsideCavityAfter": 32,
      "line": [
       [
@@ -819,11 +819,11 @@
      ]
     },
     "lsoLift": {
-     "orbitalHandles": 764,
+     "orbitalHandles": 773,
      "insulaHandles": 8158,
-     "moved": 17538,
-     "maxMovedMm": 13.05,
-     "heldAtCavity": 14,
+     "moved": 17677,
+     "maxMovedMm": 12.95,
+     "heldAtCavity": 12,
      "outsideCavityAfter": 32,
      "line": [
       [
@@ -839,10 +839,10 @@
      ]
     },
     "interhemispheric": {
-     "moved": 3716,
-     "fullyMoved": 445,
-     "maxMovedMm": 8.23,
-     "heldAtCavity": 133,
+     "moved": 3711,
+     "fullyMoved": 444,
+     "maxMovedMm": 8.22,
+     "heldAtCavity": 109,
      "outsideCavityAfter": 0,
      "span": [
       -11.8,
@@ -863,11 +863,11 @@
      "inBoneWayAfter": 0
     },
     "arteries": {
-     "inBoneBeforeMm": 982.1,
+     "inBoneBeforeMm": 896.6,
      "inBoneAfterMm": 0.5
     }
    },
-   "revision": "faec91f",
+   "revision": "a296dfe",
    "date": "2026-11-24"
   },
   {
@@ -1035,23 +1035,23 @@
     "clear": {
      "containedPushed": 0,
      "inVesselBefore": 4994,
-     "inBoneBefore": 5016,
-     "inVesselAfter": 34,
+     "inBoneBefore": 3511,
+     "inVesselAfter": 41,
      "inBoneAfter": 16,
      "maxMovedMm": 6.47
     },
     "carried": {
-     "Anterior inferior cerebellar artery": 16.82,
-     "Posterior inferior cerebellar artery": 16.76,
-     "Superior cerebellar artery": 12.49
+     "Anterior inferior cerebellar artery": 16.81,
+     "Posterior inferior cerebellar artery": 16.54,
+     "Superior cerebellar artery": 12.77
     }
    },
    "validation": {
     "inBoneAfter": 16,
-    "inVesselAfter": 34
+    "inVesselAfter": 41
    },
-   "revision": "5d4e8f4",
-   "date": "2026-11-15"
+   "revision": "a296dfe",
+   "date": "2026-11-24"
   },
   {
    "step": "skullbase_v1_stalk",
@@ -1170,8 +1170,8 @@
       "inBoneAfterMm": 0.0,
       "deepestAfterMm": 0.0,
       "wallAfterMm": -0.04,
-      "toBrainstemBeforeMm": 1.09,
-      "toBrainstemAfterMm": 0.47,
+      "toBrainstemBeforeMm": 1.08,
+      "toBrainstemAfterMm": -0.04,
       "lengthMm": 26.2,
       "radiusMm": 1.1,
       "maxMovedMm": 2.35,
@@ -1341,7 +1341,7 @@
      "sb_superior_cerebellar_artery": {
       "maxMovedMm": 1.26,
       "vertsMoved": 167,
-      "verts": 4204,
+      "verts": 4210,
       "deepInBone": [
        83,
        36
@@ -1417,7 +1417,7 @@
    "validation": {
     "check": "skullbase_build.py finalize: the sinuses at the confluence, the basilar artery and the middle meningeal artery out of the bone, the latter through its foramen, every junction with the basilar kept"
    },
-   "revision": "faec91f",
+   "revision": "a296dfe",
    "date": "2026-11-24"
   },
   {

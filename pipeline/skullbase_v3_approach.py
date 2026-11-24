@@ -182,7 +182,10 @@ ST_BONES = ("Temporal bone", "Sphenoid bone", "Parietal bone")   # ... and of th
 # the zygomatic arch's root, found on the skull from the side: going back from the front, the arch is a bar of bone at
 # least ARCH_BAR_MM high (within ARCH_BAND_MM below and above the middle fossa floor's level), ARCH_THICK_MM thick,
 # standing ARCH_GAP_MM or more off the skull's wall; its root is where that bar ends, joined to the squama
-ARCH_BAR_MM = 4.0
+ARCH_BAR_MM = 3.0 if PROFILE == "v1" else 4.0
+#                             (v1, Z-Anatomy's skull: 3 mm. Its bar is 3 to 5 levels high where it stands free, and with
+#                             its bone field 0.7 mm fatter than its meshes, as until November 2026, 4 mm found the root
+#                             by the squama's levels beside it; the root comes out at the same place, y = 1.0 mm)
 ARCH_BAND_MM = (12.0, 4.0)
 ARCH_THICK_MM = (1.5, 14.0)
 ARCH_GAP_MM = 3.0
@@ -1517,7 +1520,7 @@ def zygomatic_root(S: Skull, floor_z: float) -> dict:
         best, top, run = 0, float("nan"), 0
         for z, ok in zip(zs, free):
             run = run + 1 if ok else 0
-            if run > best:
+            if run and run >= best:      # (of two bars as tall, the upper: the root's upper surface is what is asked)
                 best, top = run, float(z)
         return float(best), top
     ys = np.arange(ARCH_Y_MM[0], ARCH_Y_MM[1] - 0.25, -0.5)
