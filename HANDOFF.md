@@ -275,8 +275,8 @@ the list").** On `fix/audit-models-2` (off `27ee8a6`), local commits, not pushed
   bodies" and describes a smaller juxtarestiform body).
 - Engineering left: P1-08 (release memory: the audit says only if phones still struggle, unmeasured), P2S-19
   (dependency majors, through Dependabot one at a time), P1-27's `preserveDrawingBuffer` (the browser tests read the
-  canvas) and `dist/` in git (a workflow choice), UI-14's docked legend or camera offset, UI-22's jump row, UI-27's
-  shorter phone disclaimer.
+  canvas) and `dist/` in git (a workflow choice), UI-14's docked legend or camera offset, UI-22's jump row. UI-27's
+  shorter phone disclaimer was done on 2026-11-24 ("The notice folded on a phone" below).
   Done on 2026-11-23 (below): UI-13 (Back history, measurements and the endonasal endoscope in links), the
   ARCHITECTURE.md, the cortex's `ax=abc`, the endoscopes' keys in the help.
 
@@ -290,6 +290,29 @@ The tract data (section 2) is done as far as open data go: the acoustic radiatio
 starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm further forward). Done from it: help and reset, cards into view, "what this bundle shows", surgical views,
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
+
+## The notice folded on a phone (UI-27) (desktop, 2026-11-24)
+
+Branch `feat/phone-disclaimer`, on top of `fix/v1-bone-raster`. **Local only: not pushed.** Item 1 of
+`.claude/opus-plan-2026-11-24.md` in the main checkout (the plan for Opus 5.5 sessions).
+
+- **What:** on a phone (under 600 px) every section's notice is "Teaching tool." and the notice's own last sentence,
+  with a **More** button that shows the full text and a **Less** button that folds it again. On a desktop or tablet
+  nothing changes. The text is not reworded: the short line is the section's own last sentence ("Not for surgical
+  planning."; the spine's "Illustrative, not for surgical planning."; the vascular section's "For teaching, not for
+  diagnosis or planning.").
+- **Why:** the notice took two to four lines of an 844 px phone screen from the 3D stage. On the skull base the
+  stage gains 51 px (379 px folded, 328 px with the notice open, measured at 375 × 812).
+- **How:** `disclaimerNote` in `src/ui/shell.ts` writes both lines; the styles (`.disc-short`, `.disc-full`,
+  `.disc-toggle` in `src/styles.css`) show one of them, so a screen reader reads one. Each button has
+  `aria-expanded` and `aria-controls`; focus moves to the button that appears. The stage's height already follows the
+  notice's (`--disc-h`). `lastSentence` splits at a full stop followed by a space, so "0.5 mm" is not an end.
+- **Tests:** `tests/unit/disclaimer.test.ts` (each section's last sentence, word for word); `tests/e2e/audit-fixes.spec.ts`
+  "phone: the notice folded…" (skull base, spine, vascular, home: the short line, More, the full text, the stage
+  taller when folded, Less, focus) and "the notice in full on a desktop".
+- **A slip, mended before the commit:** writing the unit test I first overwrote `tests/unit/notice.test.ts` (the
+  licence records' test); it was restored from git and the new test given a file of its own.
+- **MacBook baselines:** none change (desktop pictures; the phone tests compare no pictures).
 
 ## v1's bone field on its meshes (MC-13) (desktop, 2026-11-24)
 
