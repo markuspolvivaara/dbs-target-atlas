@@ -1,21 +1,35 @@
 /**
  * Viewer preferences shared by every section of the atlas, per browser: whether selecting a structure fades the
- * others back (off: the selected structure is outlined and shown through what covers it, the rest left as it is).
+ * others back (off: the selected structure is outlined and shown through what covers it, the rest left as it is);
+ * where the legend sits on a wide screen (on the view, or in a column beside it); and whether the legend on the view
+ * is minimised (a desktop's; a phone's legend starts closed regardless).
  * Stored in localStorage; without storage the defaults apply and a change lasts until the page is left.
  */
 const KEY = 'atlas-view-prefs';
 
-export interface ViewPrefs { fadeOthers: boolean }
+export type LegendPlace = 'float' | 'dock';
+export interface ViewPrefs { fadeOthers: boolean; legend: LegendPlace; legendShut: boolean }
+
+const DEFAULTS: ViewPrefs = { fadeOthers: false, legend: 'float', legendShut: false };
 
 let prefs: ViewPrefs = load();
 const listeners = new Set<(p: ViewPrefs) => void>();
 
+/** Stored values read back, anything unknown replaced by its default. */
+export function parsePrefs(raw: unknown): ViewPrefs {
+  const r = (raw && typeof raw === 'object' ? raw : {}) as Record<string, unknown>;
+  return {
+    fadeOthers: r.fadeOthers === true,
+    legend: r.legend === 'dock' ? 'dock' : DEFAULTS.legend,
+    legendShut: r.legendShut === true,
+  };
+}
+
 function load(): ViewPrefs {
   try {
-    const raw = JSON.parse(localStorage.getItem(KEY) ?? '{}');
-    return { fadeOthers: raw?.fadeOthers === true };
+    return parsePrefs(JSON.parse(localStorage.getItem(KEY) ?? '{}'));
   } catch {
-    return { fadeOthers: false };
+    return { ...DEFAULTS };
   }
 }
 

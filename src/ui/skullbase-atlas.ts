@@ -12,6 +12,7 @@ import { skullScene, type SkullPlan } from '../skullbase/scene';
 import type { SkullState } from '../skullbase/state';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { announce, h, pointAt, touch } from './h';
+import { legendBox } from './legendbox';
 import { citationPanel } from './citations';
 import { figureControl } from './figure';
 import { structureBar } from './structurebar';
@@ -238,6 +239,8 @@ export class SkullbaseAtlasPage {
   private labels = h('div', { class: 'labels', 'aria-hidden': 'true' });
   private leaders = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   private legendHover: string | null = null;
+  /** The legend's groups shown row by row (nerves, arteries); the others are folded (not part of the link). */
+  private legendUnfolded = new Set<string>();
   private gizmo = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   private status = stageStatus(() => { void this.viewer.retryFailed(); });
   private sheetState: 'peek' | 'full' = 'peek';
@@ -284,9 +287,8 @@ export class SkullbaseAtlasPage {
     this.gizmo.setAttribute('viewBox', '-40 -40 80 80');
     this.gizmo.setAttribute('class', 'gizmo');
     this.gizmo.setAttribute('aria-hidden', 'true');
-    const legendOpen = window.matchMedia('(min-width: 900px) and (min-height: 700px)').matches;
     const bottom = h('div', { class: 'stage-bottom' },
-      h('details', { class: 'legend-box', open: legendOpen }, h('summary', {}, 'Legend'), this.legend),
+      legendBox(this.legend, this.stage, () => this.viewer),
       h('div', { class: 'readout-box' }, this.measure.out, this.readout));
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
@@ -839,10 +841,21 @@ export class SkullbaseAtlasPage {
     const bones = [...p.looks].filter(([id, l]) => l !== 'hidden' && SB.get(id)?.type === 'bone').map(([id]) => id);
     if (this.s.layers.nuclei.on && bones.length) this.legend.append(row('solid', 'sbBone', `Bones (${bones.length})`, bones));
     for (const [k, ids] of kinds) {
-      this.legend.append(row(k === 'Soft tissue' ? 'patch' : 'solid', tokenOf(ids[0]), `${KIND_PLURAL[k] ?? k} (${ids.length})`, ids));
+      const top = row(k === 'Soft tissue' ? 'patch' : 'solid', tokenOf(ids[0]), `${KIND_PLURAL[k] ?? k} (${ids.length})`, ids);
+      this.legend.append(top);
       if (k !== KIND_LABEL.nerve && k !== KIND_LABEL.artery) continue;
-      // each cranial nerve (I-XII) and each artery system on its own row, with its branches
-      for (const sg of subgroups(k === KIND_LABEL.nerve ? 'nerve' : 'artery', ids)) {
+      // each cranial nerve (I-XII) and each artery system on its own row, with its branches: folded under the group
+      // until asked for, so that the legend starts short (the audit's UI-14)
+      const subs = subgroups(k === KIND_LABEL.nerve ? 'nerve' : 'artery', ids);
+      const open = this.legendUnfolded.has(k);
+      const what = k === KIND_LABEL.nerve ? `${subs.length} nerves` : `${subs.length} artery systems`;
+      top.append(h('button', {
+        type: 'button', class: 'lg-fold', 'aria-expanded': String(open),
+        'aria-label': open ? `Fold the ${what}` : `Show the ${what} one by one`, title: open ? `Fold the ${what}` : `Show the ${what} one by one`,
+        onclick: () => { if (open) this.legendUnfolded.delete(k); else this.legendUnfolded.add(k); this.renderLegend(); },
+      }, open ? '▾' : '▸'));
+      if (!open) continue;
+      for (const sg of subs) {
         const r = row('solid', tokenOf(sg.members[0]), subLabel(sg), sg.members);
         r.classList.add('lg-sub');
         this.legend.append(r);

@@ -9,6 +9,7 @@ import { lesionParts, vaScene, type VaPlan } from '../vascular/scene';
 import type { VaState } from '../vascular/state';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { announce, h, pointAt } from './h';
+import { legendBox } from './legendbox';
 import { citationPanel } from './citations';
 import { figureControl } from './figure';
 import { structureBar } from './structurebar';
@@ -117,9 +118,8 @@ export class VascularAtlasPage {
       oninput: (e: Event) => { this.playing = false; this.syncPlay(); this.playT = parseFloat((e.target as HTMLInputElement).value); this.showTime(); this.viewer.setDsa(true, this.playT, DSA.tMaxS); },
       onchange: () => this.update((s) => { s.dsa.on = true; s.dsa.t = this.playT; }) }) as HTMLInputElement;
     const dsaBar = h('div', { class: 'dsa-bar', role: 'group', 'aria-label': 'Angiogram' }, this.dsaToggle, this.playBtn, this.scrub, this.timeOut);
-    const legendOpen = window.matchMedia('(min-width: 900px) and (min-height: 700px)').matches;
     const bottom = h('div', { class: 'stage-bottom' },
-      h('details', { class: 'legend-box', open: legendOpen }, h('summary', {}, 'Legend'), this.legend),
+      legendBox(this.legend, this.stage, () => this.viewer),
       h('div', { class: 'readout-box' }, this.measure.out, this.readout));
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');

@@ -22,6 +22,7 @@ import { clearAllLeadPrefs, clearLeadPref, isHidden, leadPrefFor, saveLeadDefaul
 import { primaryTargetId } from '../viewer/selection';
 import { bindSheetDrag, buildSlicesPane, drawGizmo, layoutLabels, syncSlicesPane, type LabelItem, stageStatus, revealCard, viewButtons, scrollHint, watchOverlays, keepFocus, rovingToolbar, viewFailed } from './stage';
 import { announce, pointAt } from './h';
+import { legendBox } from './legendbox';
 
 type Update = (fn: (s: AppState) => void, opts?: { camera?: boolean }) => void;
 
@@ -96,9 +97,8 @@ export class AtlasPage {
     this.gizmo.setAttribute('viewBox', '-40 -40 80 80');
     this.gizmo.setAttribute('class', 'gizmo');
     this.gizmo.setAttribute('aria-hidden', 'true');
-    const legendOpen = window.matchMedia('(min-width: 900px) and (min-height: 700px)').matches;
     const bottom = h('div', { class: 'stage-bottom' },
-      h('details', { class: 'legend-box', open: legendOpen }, h('summary', {}, 'Legend'), this.legend),
+      legendBox(this.legend, this.stage, () => this.viewer),
       h('div', { class: 'readout-box' }, this.measure.out, this.readout));
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');

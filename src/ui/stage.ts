@@ -250,16 +250,31 @@ export function watchOverlays(stage: HTMLElement, redraw: () => void): void {
  * still finds no free place is left out rather than drawn over another (on a phone most of a crowded view's labels),
  * except those of `keep` (the selected and the pointed-at structure), which are placed first and always drawn.
  */
+let measureCtx: CanvasRenderingContext2D | null | undefined;
+/**
+ * A label's width as drawn (.mlabel, .slabel in styles.css: 12.5 px, its weight, 6 px padding and a 1 px border each
+ * side), measured in the page's font; where a canvas cannot measure, an estimate from the number of characters.
+ */
+function labelWidth(it: LabelItem, family: string): number {
+  if (measureCtx === undefined) measureCtx = document.createElement('canvas').getContext('2d');
+  if (!measureCtx) return it.text.length * 7.2 + 14;
+  const cls = ` ${it.cls} `;
+  const weight = cls.includes(' mlabel ') ? 700 : cls.includes(' alt ') ? 400 : 600;
+  measureCtx.font = `${cls.includes(' alt ') ? 'italic ' : ''}${weight} 12.5px ${family}`;
+  return Math.ceil(measureCtx.measureText(it.text).width) + 15;
+}
+
 export function layoutLabels(items: LabelItem[], W: number, H: number, labels: HTMLElement, leaders: SVGSVGElement, keep: (string | null | undefined)[] = []): void {
   const kept = new Set(keep.filter((x): x is string => !!x));
   const blocked = overlayBoxes(labels.parentElement);
+  const family = items.length ? getComputedStyle(labels).fontFamily : '';
   const placed: { it: LabelItem; x: number; y: number; w: number; h: number; left: boolean }[] = [];
   const over = (b: { x0: number; x1: number; y0: number; y1: number }, q: Box) => b.x0 < q.x + q.w && b.x1 > q.x && b.y0 < q.y + q.h && b.y1 > q.y;
   for (const it of [...items.filter((i) => kept.has(i.id)), ...items.filter((i) => !kept.has(i.id))]) {
     let dx = it.ax - W / 2, dy = it.ay - H / 2;
     const len = Math.hypot(dx, dy);
     if (len < 24) { dx = 0.7; dy = -0.7; } else { dx /= len; dy /= len; }
-    const w = Math.min(220, it.text.length * 7.2 + 14, Math.max(60, W - 8)), hgt = 21;
+    const w = Math.min(220, labelWidth(it, family), Math.max(60, W - 8)), hgt = 21;
     // one try: the label on one side of its attach point, stepping down or up past what it meets
     const attempt = (flip: boolean, down: boolean) => {
       const sx = flip ? -dx : dx;
@@ -297,7 +312,9 @@ export function layoutLabels(items: LabelItem[], W: number, H: number, labels: H
     e.className = q.it.cls;
     e.textContent = q.it.text;
     e.style.transform = `translate(${Math.round(q.x)}px, ${Math.round(q.y)}px)`;
-    e.style.maxWidth = `${q.w + 20}px`;
+    // (the width the layout kept free, no more: a wider label reached into its neighbour's; a longer name ends in an
+    // ellipsis)
+    e.style.maxWidth = `${Math.ceil(q.w)}px`;
   });
   while (leaders.firstChild) leaders.removeChild(leaders.firstChild);
   placed.forEach((q) => {
