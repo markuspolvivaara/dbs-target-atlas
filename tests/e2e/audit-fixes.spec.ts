@@ -700,6 +700,55 @@ test('phone: names by tap, rows that show they scroll, targets a finger can hit,
 });
 
 // UI-01: the section's page tabs on a phone
+// UI-27: on a phone the notice is "Teaching tool." and its own last sentence, the rest a tap away; it took two to four
+// lines of the first screen from the 3D stage. The full text is still there, word for word
+test('phone: the notice folded to one line, the full text a tap away @mobile', async ({ page }) => {
+  const g = guard(page);
+  const sections: [string, RegExp, RegExp][] = [
+    ['./skullbase/', /^Teaching tool\. Not for surgical planning\.\s*More$/, /registered into it: positions are approximate to a millimetre or two\. Individual anatomy varies\. Not for surgical planning\./],
+    ['./spine/', /^Teaching tool\. Illustrative, not for surgical planning\.\s*More$/, /pedicle sizes and vessel positions vary between people/],
+    ['./vascular/', /^Teaching tool\. For teaching, not for diagnosis or planning\.\s*More$/, /every aneurysm, malformation and fistula is drawn onto them by rule/],
+    ['./', /^Teaching tool\. Not for surgical planning\.\s*More$/, /single-patient CT anatomy/],
+  ];
+  for (const [url, short, full] of sections) {
+    await page.goto('about:blank');
+    // (the home page has no 3D view to wait for)
+    if (url === './') await page.goto(url); else await open(page, url);
+    const notice = page.locator('aside.disclaimer[aria-label="Notice"]');
+    await expect(notice.locator('.disc-short')).toBeVisible();
+    await expect(notice.locator('.disc-full')).toBeHidden();
+    expect((await notice.locator('.disc-short').innerText()).trim(), url).toMatch(short);
+    const stage = url === './' ? null : page.locator('.stage');
+    const folded = stage ? (await stage.boundingBox())!.height : 0;
+    const more = notice.getByRole('button', { name: 'More' });
+    await expect(more).toHaveAttribute('aria-expanded', 'false');
+    await more.click();
+    await expect(notice.locator('.disc-full')).toBeVisible();
+    await expect(notice.locator('.disc-short')).toBeHidden();
+    await expect(notice.locator('.disc-full'), url).toContainText(full);
+    // the stage gives the room back when the notice is folded: on the skull base the notice is four lines in full
+    if (stage && url === './skullbase/') await expect.poll(async () => folded - (await stage.boundingBox())!.height).toBeGreaterThan(25);
+    const less = notice.getByRole('button', { name: 'Less' });
+    await expect(less).toHaveAttribute('aria-expanded', 'true');
+    await expect(less).toBeFocused();
+    await less.click();
+    await expect(notice.locator('.disc-short')).toBeVisible();
+    await expect(more).toBeFocused();
+  }
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+// UI-27: on a desktop the notice is shown whole, with nothing to unfold
+test('the notice in full on a desktop', async ({ page }) => {
+  await open(page, './skullbase/');
+  const notice = page.locator('aside.disclaimer[aria-label="Notice"]');
+  await expect(notice.locator('.disc-full')).toBeVisible();
+  await expect(notice.locator('.disc-short')).toBeHidden();
+  await expect(notice.getByRole('button')).toHaveCount(0);
+  await expect(notice).toContainText('Teaching tool. One adult’s CT with another person’s ear');
+});
+
 test('phone: the page tabs fade where more lie @mobile', async ({ page }) => {
   await open(page, './dbs/');
   const nav = page.locator('header .nav');

@@ -102,6 +102,17 @@ body:not([data-page="atlas"]) .skip-panel { display: none; }
   margin: 0; padding: 6px 12px; font-size: 0.84rem; line-height: 1.35; background: var(--warn-bg); color: var(--warn-ink);
   border-bottom: 1px solid var(--line);
 }
+/* on a phone: "Teaching tool." and the notice's last sentence, the rest a tap away (the audit's UI-27) */
+.disc-short, .disc-toggle { display: none; }
+.disc-toggle {
+  font: inherit; font-weight: 600; color: inherit; background: none; border: 0; padding: 0 2px; margin-left: 2px;
+  text-decoration: underline; text-underline-offset: 2px; cursor: pointer; min-height: 24px;
+}
+@media (max-width: 599px) {
+  .disclaimer:not(.single):not(.open) .disc-full { display: none; }
+  .disclaimer:not(.single):not(.open) .disc-short { display: block; }
+  .disclaimer:not(.single) .disc-toggle { display: inline; }
+}
 
 /* ---------------------------------------------------------------- chips, buttons */
 .chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 2px 0 10px; }
