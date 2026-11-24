@@ -2,7 +2,7 @@ import '@fontsource/atkinson-hyperlegible/latin-400.css';
 import '@fontsource/atkinson-hyperlegible/latin-700.css';
 import './styles.css';
 import { SECTIONS } from './brand';
-import { CTX, shortName } from './cortex';
+import { CTX, LABEL, shortName } from './cortex';
 import { VIEW, VIEWS } from './cortex/views';
 import { decodeCortex, encodeCortex, type CortexState } from './cortex/state';
 import { CortexAtlasPage } from './ui/cortex-atlas';
@@ -36,6 +36,8 @@ bootSection({
   atlas: (update) => new CortexAtlasPage(update),
   pages: () => ({ sources: cortexSourcesPage(), credits: cortexCreditsPage() }),
   atlasTitle: (s) => (s.sel ? shortName(s.sel) : `${VIEW.get(s.view)!.name} view`),
+  // (the text version of the view: each label's definition)
+  define: (id) => LABEL.get(id)?.definition?.text,
   help: {
     rows: [
       ['1 – 5', 'Camera: lateral, medial, basal, superior, anterior'],

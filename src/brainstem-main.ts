@@ -2,7 +2,7 @@ import '@fontsource/atkinson-hyperlegible/latin-400.css';
 import '@fontsource/atkinson-hyperlegible/latin-700.css';
 import './styles.css';
 import { SECTIONS } from './brand';
-import { BS } from './brainstem';
+import { BS, DEFINITIONS } from './brainstem';
 import { BS_GROUP } from './brainstem/groups';
 import { decodeBs, encodeBs, type BsState } from './brainstem/state';
 import { BrainstemAtlasPage } from './ui/brainstem-atlas';
@@ -27,6 +27,8 @@ bootSection({
   atlas: (update) => new BrainstemAtlasPage(update),
   pages: () => ({ sources: bsSourcesPage(), credits: bsCreditsPage() }),
   atlasTitle: (s) => (s.sel ? (BS.get(s.sel)?.name ?? '') : BS_GROUP.get(s.grp)!.name),
+  // (the text version of the view: each structure's definition, by name, as on its card)
+  define: (_id, name) => DEFINITIONS[name]?.text,
   help: {
     rows: [
       ['1 – 5', 'Camera: front, back, side, back-oblique, from above'],
