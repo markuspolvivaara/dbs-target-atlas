@@ -292,6 +292,32 @@ starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm furth
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
 
+## Reference checks: a unit test and a hand-run script (desktop, 2026-11-24)
+
+Branch `feat/reference-checks`, on top of `feat/panel-jump-row`. **Local only: not pushed.** Item 3 of
+`.claude/opus-plan-2026-11-24.md` in the main checkout; the first slice of the audit's roadmap, section 4.
+
+- **One list of all references** (`src/data/all-references.ts`, not used by the site): the twelve lists the sections
+  keep (the DBS list with its epilepsy and additions lists, brainstem, tracts, ventricles, vascular, the skull base's
+  foramina, temporal bone and approaches, spine, cortex), 565 references in one form, with `doiOf` and `yearOf`.
+- **Unit test** (`tests/unit/references.test.ts`, no network, in CI): each id, DOI and PMID once in its list; a
+  journal article has a DOI or a PMID, and the 26 references without either are named with why (FDA records, a trial
+  registry, society and guideline pages, the ISNCSCI worksheet, the AO Surgery Reference); a year in every citation,
+  and the short label's year is the citation's; the DOI in the address is the one in the citation; a paper cited in
+  several lists has the same year and PMID in each. Whether each cited reference resolves, and whether each is used,
+  was already tested section by section.
+- **Found: Luzzi 2022 was in the skull base's approach list twice**, the two entries differing only in the DOI's case
+  (one lookup by id kept the second). The second is removed.
+- **Script** (`scripts/check-references.ts`, `npm run check:references -- <out.md>`, by hand): every reference
+  compared with its record in Europe PMC (by PMID, else DOI) or Crossref (DOI): first author, year, title, DOI, PMID,
+  PMCID. It writes a table of differences and of what was not found. It sends only the identifiers, under a generic
+  client name (`OpenNeuroAtlas-reference-check/1.0`).
+  - **Europe PMC was slow on 24 November** (8 to 50 s for some answers, others 0.4 s): the first run stopped after
+    150 lookups with nothing written. So each request has 60 s, an error is printed, and each record found is kept in
+    `scripts/.cache/references.json` (in `.gitignore`): a run that stops continues where it stopped.
+  - **The first run's table** is added below when the run has finished. Only plain typing slips are mended; the rest
+    are listed for the owner.
+
 ## A row of jumps in the long panels (UI-22) (desktop, 2026-11-24)
 
 Branch `feat/panel-jump-row`, on top of `feat/phone-disclaimer`. **Local only: not pushed.** Item 2 of
