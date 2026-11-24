@@ -381,11 +381,33 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     }
   };
 
+  private viewShift = 0;
+  /**
+   * Move the picture's centre `px` pixels to the right (0: centred), so that the model's middle sits in the middle
+   * of what an overlay on the left (the legend) leaves free. The camera, its target and the link are unchanged; only
+   * the projection is offset, so picking and the labels follow it.
+   */
+  setViewShift(px: number): void {
+    const v = Math.round(px);
+    if (v === this.viewShift) return;
+    this.viewShift = v;
+    this.applyViewShift();
+    this.invalidate();
+  }
+
+  private applyViewShift(): void {
+    const w = Math.max(1, this.host.clientWidth), h = Math.max(1, this.host.clientHeight);
+    // (not with an endoscope: the 3D view is then drawn in a rectangle of its own, with its own aspect)
+    if (this.viewShift && !this.endoCfg) this.camera.setViewOffset(w, h, -this.viewShift, 0, w, h);
+    else this.camera.clearViewOffset();
+    this.camera.updateProjectionMatrix();
+  }
+
   private resize(): void {
     const w = Math.max(1, this.host.clientWidth), h = Math.max(1, this.host.clientHeight);
     this.renderer.setSize(w, h, false);
     this.camera.aspect = w / h;
-    this.camera.updateProjectionMatrix();
+    this.applyViewShift();
     for (const it of this.items.values()) if (it.kind === 'lines') it.mat.resolution.set(w, h);
     this.renderer.getDrawingBufferSize(this.outlineU.uResolution.value);
     this.outlineU.uOutlinePx.value = 1.5 * this.renderer.getPixelRatio();
@@ -1602,7 +1624,9 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
   /** Show an endoscope's view (null: the ordinary 3D view only). While its view is the big one, dragging does not turn
    * the 3D view (the page steers the scope instead). */
   setEndoscope(cfg: EndoscopeConfig | null): void {
+    const had = !!this.endoCfg;
     this.endoCfg = cfg;
+    if (had !== !!cfg) this.applyViewShift();   // (no shift while the 3D view is drawn in a rectangle of its own)
     if (cfg && !this.endo) this.endo = new Endoscope();
     this.controls.enabled = !cfg?.big;
     if (cfg) {

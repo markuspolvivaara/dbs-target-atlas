@@ -1,5 +1,5 @@
 import { BRAND, SECTIONS, SITE_ROOT, type Section } from '../brand';
-import { setViewPrefs, viewPrefs } from '../viewer/viewprefs';
+import { setViewPrefs, viewPrefs, type LegendPlace } from '../viewer/viewprefs';
 import { h } from './h';
 import { scrollHint } from './stage';
 
@@ -26,15 +26,28 @@ function viewSettings(): HTMLElement {
   const fade = h('input', { type: 'checkbox', id: 'set-fade-others' }) as HTMLInputElement;
   fade.checked = viewPrefs().fadeOthers;
   fade.addEventListener('change', () => setViewPrefs({ fadeOthers: fade.checked }));
+  // where the legend sits (src/ui/legendbox.ts; the audit's UI-14)
+  const place = (value: LegendPlace, title: string, note: string) => {
+    const r = h('input', { type: 'radio', name: 'set-legend', id: `set-legend-${value}`, value }) as HTMLInputElement;
+    r.addEventListener('change', () => { if (r.checked) setViewPrefs({ legend: value }); });
+    return h('label', { class: 'view-setting', for: `set-legend-${value}` }, r,
+      h('span', {}, h('strong', {}, title), h('span', { class: 'view-setting-note' }, note)));
+  };
+  const legendSet = h('fieldset', { class: 'view-setting-group' }, h('legend', {}, 'Legend'),
+    place('float', 'On the view', 'At the lower left of the 3D view; its title minimises it. While it is open the picture moves right to leave it room.'),
+    place('dock', 'Beside the view', 'In a column left of the 3D view, outside the picture, on a screen 1200 px wide or more; narrower windows keep it on the view.'));
+  const syncLegend = () => legendSet.querySelectorAll<HTMLInputElement>('input').forEach((r) => { r.checked = r.value === viewPrefs().legend; });
+  syncLegend();
   const panel = h('div', { class: 'view-settings-panel', id: 'view-settings', role: 'dialog', 'aria-label': 'View options', hidden: true },
     h('label', { class: 'view-setting', for: 'set-fade-others' }, fade,
       h('span', {}, h('strong', {}, 'Fade the rest when a structure is selected'),
-        h('span', { class: 'view-setting-note' }, 'Off: the selected structure (or the spine’s chosen level) is outlined, and shown through whatever covers it. A selected tract fades the other tracts either way.'))));
+        h('span', { class: 'view-setting-note' }, 'Off: the selected structure (or the spine’s chosen level) is outlined, and shown through whatever covers it. A selected tract fades the other tracts either way.'))),
+    legendSet);
   const btn = h('button', {
     type: 'button', class: 'view-settings-btn', 'aria-haspopup': 'dialog', 'aria-expanded': 'false', 'aria-controls': 'view-settings',
     // ("View options": the DBS section has a page of settings of its own, and two "Settings" in one header confused: the
     // audit's UI-19)
-    title: 'View options: how the 3D view shows a selected structure',
+    title: 'View options: how the 3D view shows a selected structure, and where the legend sits',
   }, h('span', { class: 'gear', 'aria-hidden': 'true' }, '⚙'), h('span', { class: 'view-settings-label' }, 'View options')) as HTMLButtonElement;
   const wrap = h('div', { class: 'view-settings' }, btn, panel);
   const close = (refocus = false) => {
@@ -46,6 +59,7 @@ function viewSettings(): HTMLElement {
   btn.addEventListener('click', () => {
     if (!panel.hidden) { close(); return; }
     fade.checked = viewPrefs().fadeOthers;
+    syncLegend();
     panel.hidden = false;
     btn.setAttribute('aria-expanded', 'true');
     fade.focus();

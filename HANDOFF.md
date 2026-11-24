@@ -272,7 +272,7 @@ the list").** On `fix/audit-models-2` (off `27ee8a6`), local commits, not pushed
 - Text for the owner: done on 2026-11-25 ("The four text questions answered" below).
 - Engineering left: P1-08 (release memory: the audit says only if phones still struggle, unmeasured), P2S-19
   (dependency majors, through Dependabot one at a time), P1-27's `preserveDrawingBuffer` (the browser tests read the
-  canvas) and `dist/` in git (a workflow choice), UI-14's docked legend or camera offset. UI-27's shorter phone
+  canvas) and `dist/` in git (a workflow choice). UI-14's legend was done on 2026-11-25 ("The legend on the view or beside it" below). UI-27's shorter phone
   disclaimer and UI-22's jump row were done on 2026-11-24 ("The notice folded on a phone" and "A row of jumps in the
   long panels" below).
   Done on 2026-11-23 (below): UI-13 (Back history, measurements and the endonasal endoscope in links), the
@@ -288,6 +288,33 @@ The tract data (section 2) is done as far as open data go: the acoustic radiatio
 starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm further forward). Done from it: help and reset, cards into view, "what this bundle shows", surgical views,
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
+
+## The legend on the view or beside it (UI-14) (desktop, 2026-11-25)
+
+Branch `feat/legend-place`, on top of `fix/text-answers`. Item 7 of `.claude/opus-plan-2026-11-24.md`; the owner chose
+on 25 November: on the view by default, beside it as a choice for wide screens, and a way to minimise it.
+
+- **One legend box for every section** (`src/ui/legendbox.ts`, replacing eight copies), two places:
+  - **On the view (default):** at the stage's lower left as before. Its title says "Minimise" while open and folds
+    it; the choice is remembered on a desktop. While it is open on a desktop the picture's centre moves right by half
+    the legend's width (`Viewer.setViewShift`: a view offset on the camera, so the camera, its target and the link are
+    unchanged, and picking and labels follow; none while an endoscope view is shown).
+  - **Beside the view:** View options → Legend → "Beside the view": a column of the page's grid left of the stage
+    (250 px; narrow when minimised), on a screen 1200 px wide or more. Narrower windows and phones keep it on the view.
+- **The skull base's nerves and arteries** fold under their group row ("Show the 12 nerves one by one"), so its legend
+  starts with 6 rows, not 18. The unfolded groups are not part of the link.
+- **Preferences** (`src/viewer/viewprefs.ts`, localStorage `atlas-view-prefs`): `legend` (`float` | `dock`) and
+  `legendShut`, beside `fadeOthers`; unknown values fall back to the defaults (`parsePrefs`).
+- **Measured** (the plan's done-when): at 1440 × 900 the open legend covers under 1 % of the model in nine sections'
+  opening views and 8 % in the DBS section's (whose faint whole brain fills the stage; counted as model: what differs
+  clearly from the background). Centred, as before, the DBS view was 12 % and the others up to 4 %.
+- **Tests:** `tests/unit/viewprefs.test.ts`; `tests/e2e/audit-fixes.spec.ts` "legend on the view…", "legend beside
+  the view…", "phone: the legend starts closed…", "the open legend covers under a tenth of the model…".
+- **Labels drawn at the width the layout keeps free** (`layoutLabels` in `src/ui/stage.ts`): the layout guessed a
+  label's width from its characters (7.2 px each) but drew it up to 20 px wider, so a long name could reach into its
+  neighbour; with the picture moved, two did in the right ear's view with all names on. Each label is now measured in
+  its own font and weight, and drawn no wider than the space kept for it (a name over 220 px ends in an ellipsis).
+- **Pictures:** every desktop view's picture moves (the shift), so the macOS baselines need retaking with the rest.
 
 ## The four text questions answered (B-016, B-020) (desktop, 2026-11-25)
 

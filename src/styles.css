@@ -82,6 +82,8 @@ body:not([data-page="atlas"]) .skip-panel { display: none; }
 .view-setting { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--ink); cursor: pointer; }
 .view-setting input { margin-top: 3px; flex: none; width: 16px; height: 16px; }
 .view-setting-note { display: block; margin-top: 3px; font-size: 13px; color: var(--muted); }
+.view-setting-group { border: 0; border-top: 1px solid var(--line); margin: 12px 0 0; padding: 10px 0 0; display: grid; gap: 10px; }
+.view-setting-group legend { font-weight: 700; font-size: 14px; padding: 0; float: left; width: 100%; margin-bottom: 2px; }
 /* "Save image": a dialog under the toolbar's button (src/ui/figure.ts) */
 .fig-control { position: relative; display: flex; }
 .fig-panel { position: fixed; z-index: 60; right: auto; width: min(330px, calc(100vw - 16px)); max-height: calc(100vh - 120px); overflow: auto; }
@@ -184,6 +186,8 @@ body:not([data-page="atlas"]) .skip-panel { display: none; }
 .legend3d .lg-note { color: var(--muted); font-size: 12px; }
 .legend3d li.lg-sub { padding-left: 18px; font-size: 12.5px; }
 .legend3d li.lg-sub .sw { width: 14px; }
+.legend3d .lg-fold { font: inherit; font-size: 12px; line-height: 1; color: var(--muted); background: none; border: 1px solid var(--line); border-radius: 6px; padding: 2px 6px; margin-left: auto; cursor: pointer; min-width: 26px; min-height: 22px; }
+.legend3d .lg-fold:hover { color: var(--ink); background: var(--soft); }
 .legend3d .eye-space { width: 22px; flex: none; }
 ul.plain { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
 .sb-entry { display: inline-flex; align-items: center; gap: 4px; max-width: 100%; }
@@ -231,6 +235,17 @@ ul.plain { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
    nothing, and the skull base's legend covered 62 % of the stage's height: the audit's UI-14) */
 .legend-box { max-width: min(380px, 60%); max-height: 20svh; overflow: auto; padding: 4px 10px; font-size: 13px; }
 .legend-box summary { cursor: pointer; font-weight: 700; padding: 3px 0; }
+/* the title minimises the legend (src/ui/legendbox.ts); the word says so while it is open */
+.legend-box .lg-min { font-weight: 400; font-size: 12px; color: var(--muted); margin-left: 10px; }
+.legend-box:not([open]) .lg-min { display: none; }
+/* the legend beside the view on a wide screen (View options): a column of the page's grid, left of the stage */
+.legend-dock { display: none; }
+@media (min-width: 1200px) {
+  .atlas.legend-docked { grid-template-columns: auto 1fr var(--panel-w); }
+  .legend-dock { display: block; width: 250px; min-height: 0; overflow: auto; background: var(--surface); border-right: 1px solid var(--line); }
+  .legend-dock.shut { width: auto; }
+  .legend-dock .legend-box { max-width: none; max-height: none; border: 0; border-radius: 0; background: none; backdrop-filter: none; padding: 8px 12px; }
+}
 .legend3d { list-style: none; margin: 4px 0 6px; padding: 0; display: grid; gap: 4px; }
 .legend3d li { display: flex; align-items: center; gap: 8px; line-height: 1.25; }
 .legend3d .none { color: var(--muted); }

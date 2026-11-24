@@ -1203,6 +1203,8 @@ test('skull base: the surgical views draw what their texts name beyond the openi
   // the summary says they are there to find, and the legend lists them
   await open(page, './skullbase/#/atlas?g=orbitozygomatic');
   await expect(page.locator('.pane:not([hidden]) article.card').first()).toContainText('turn the view to find them');
+  // (the nerves and arteries fold under their groups: open them)
+  for (let i = 0; i < 2; i++) await page.locator('.legend3d .lg-fold[aria-expanded="false"]').first().click();
   await expect(page.locator('.legend-box')).toContainText('Basilar artery');
   await expect(page.locator('.legend-box')).toContainText('Trochlear nerve');
   expect(g.external).toEqual([]);
@@ -1999,3 +2001,123 @@ for (const model of ['skullbase', 'skullbase-v1']) {
     expect(g.errors).toEqual([]);
   });
 }
+
+// UI-14: the open legend lay on the model. On the view (the default) it can be minimised from its title, the skull
+// base's nerves and arteries fold under their group, and the picture moves right by half the legend's width; beside the
+// view (View options) it is a column left of the stage on a wide screen (src/ui/legendbox.ts)
+const viewShift = (page: Page) => page.evaluate(() => {
+  const c = (window as unknown as { __atlas: { viewer: { camera: { view: { enabled: boolean; offsetX: number } | null } } } }).__atlas.viewer.camera;
+  return c.view?.enabled ? -c.view.offsetX : 0;
+});
+const legendPrefs = (page: Page) => page.evaluate(() => JSON.parse(localStorage.getItem('atlas-view-prefs') ?? '{}'));
+
+test('legend on the view: minimised from its title and remembered, groups folded, the picture moved to leave it room', async ({ page }) => {
+  const g = guard(page);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await open(page, './skullbase/#/atlas?g=floor');
+  const box = page.locator('.stage .legend-box');
+  await expect(box).toHaveJSProperty('open', true);
+  await expect(page.locator('.legend-dock')).toHaveCount(0);
+  // six group rows; the twelve nerves one button away, and the focus stays on it
+  await expect(page.locator('.legend3d li')).toHaveCount(6);
+  const fold = page.locator('.legend3d .lg-fold');
+  await expect(fold).toHaveAttribute('aria-label', 'Show the 12 nerves one by one');
+  await fold.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('.legend3d li.lg-sub')).toHaveCount(12);
+  await expect(page.locator('.legend3d .lg-fold')).toHaveAttribute('aria-expanded', 'true');
+  expect(await page.evaluate(() => document.activeElement?.classList.contains('lg-fold'))).toBe(true);
+  // the picture's centre is moved right by half the legend's width
+  await expect.poll(async () => Math.abs(await viewShift(page) - (await box.boundingBox())!.width / 2)).toBeLessThan(1.5);
+  // minimised from its title: no shift, and remembered after a reload
+  await box.locator('summary').click();
+  await expect(box).toHaveJSProperty('open', false);
+  await expect.poll(() => viewShift(page)).toBe(0);
+  await expect.poll(async () => (await legendPrefs(page)).legendShut).toBe(true);   // (saved on the toggle event, a moment later)
+  await open(page, './skullbase/#/atlas?g=floor');
+  await expect(page.locator('.stage .legend-box')).toHaveJSProperty('open', false);
+  await page.locator('.stage .legend-box summary').click();
+  await expect(page.locator('.stage .legend-box')).toHaveJSProperty('open', true);
+  await expect.poll(async () => (await legendPrefs(page)).legendShut).toBe(false);   // (saved on the toggle event, a moment later)
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('legend beside the view: chosen in View options, on a wide screen only, remembered', async ({ page }) => {
+  const g = guard(page);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await open(page, './tracts/');
+  await page.locator('.view-settings-btn').click();
+  await expect(page.locator('#set-legend-float')).toBeChecked();
+  await page.locator('#set-legend-dock').check();
+  await page.keyboard.press('Escape');
+  const docked = async () => {
+    await expect(page.locator('.atlas')).toHaveClass(/legend-docked/);
+    await expect(page.locator('.legend-dock .legend-box')).toHaveCount(1);
+    const [d, s] = await Promise.all([page.locator('.legend-dock').boundingBox(), page.locator('.stage').boundingBox()]);
+    expect(Math.abs(d!.x + d!.width - s!.x)).toBeLessThan(2);    // the stage starts where the column ends
+    await expect.poll(() => viewShift(page)).toBe(0);
+  };
+  await docked();
+  await expect.poll(async () => (await legendPrefs(page)).legend).toBe('dock');
+  await open(page, './skullbase/#/atlas?g=floor');
+  await docked();
+  // a narrower window keeps the legend on the view, and the choice comes back when it is wide again
+  await page.setViewportSize({ width: 1100, height: 800 });
+  await expect(page.locator('.legend-dock')).toHaveCount(0);
+  await expect(page.locator('.stage .stage-bottom .legend-box')).toHaveCount(1);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await docked();
+  // back on the view
+  await page.locator('.view-settings-btn').click();
+  await page.locator('#set-legend-float').check();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.legend-dock')).toHaveCount(0);
+  await expect(page.locator('.atlas')).not.toHaveClass(/legend-docked/);
+  await expect(page.locator('.stage .stage-bottom .legend-box')).toHaveCount(1);
+  await expect.poll(() => viewShift(page)).toBeGreaterThan(50);
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
+test('phone: the legend starts closed on the view, whatever a desktop chose @mobile', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('atlas-view-prefs', JSON.stringify({ legend: 'dock', legendShut: false })));
+  await open(page, './skullbase/#/atlas?g=floor');
+  await expect(page.locator('.legend-dock')).toHaveCount(0);
+  await expect(page.locator('.stage .legend-box')).toHaveJSProperty('open', false);
+  expect(await viewShift(page)).toBe(0);
+});
+
+test('the open legend covers under a tenth of the model in each section’s opening view (1440 × 900)', async ({ page }) => {
+  test.setTimeout(600_000);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const shares: Record<string, number> = {};
+  for (const p of ['dbs/', 'tracts/', 'skullbase/', 'skullbase-v1/', 'skullbase-ct/', 'cortex/', 'spine/', 'brainstem/', 'ventricles/', 'vascular/']) {
+    await open(page, `./${p}`);
+    await expect(page.locator('.stage .legend-box')).toHaveJSProperty('open', true);
+    await page.waitForTimeout(500);   // (the shift follows the legend's width once its rows are in)
+    shares[p] = await page.evaluate(() => {
+      const v = (window as unknown as { __atlas: { viewer: { scene: { background: { getHexString(): string } } } } }).__atlas.viewer;
+      const cv = document.querySelector<HTMLCanvasElement>('.viewer-host canvas')!;
+      const W = cv.width, H = cv.height, k = W / cv.clientWidth;
+      const c2 = document.createElement('canvas'); c2.width = W; c2.height = H;
+      const g2 = c2.getContext('2d')!; g2.drawImage(cv, 0, 0);
+      const d = g2.getImageData(0, 0, W, H).data;
+      const hex = v.scene.background.getHexString();
+      const bg = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16));
+      const cr = cv.getBoundingClientRect(), lr = document.querySelector('.legend-box')!.getBoundingClientRect();
+      const x0 = (lr.left - cr.left) * k, x1 = (lr.right - cr.left) * k, y0 = (lr.top - cr.top) * k, y1 = (lr.bottom - cr.top) * k;
+      // the model: what differs clearly from the background (the faint shells drawn for context, as the DBS
+      // section's whole brain, are left out: they fill the stage, and any box would lie on them)
+      let model = 0, under = 0;
+      for (let y = 0; y < H; y += 2) for (let x = 0; x < W; x += 2) {
+        const i = (y * W + x) * 4;
+        if (Math.abs(d[i] - bg[0]) + Math.abs(d[i + 1] - bg[1]) + Math.abs(d[i + 2] - bg[2]) < 60) continue;
+        model++;
+        if (x >= x0 && x < x1 && y >= y0 && y < y1) under++;
+      }
+      return model ? under / model : 0;
+    });
+  }
+  for (const [p, s] of Object.entries(shares)) expect(s, `${p}: the share of the model under the legend`).toBeLessThan(0.1);
+});

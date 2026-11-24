@@ -9,6 +9,7 @@ import type { ColourMode, CortexState } from '../cortex/state';
 import { VIEW, VIEWS, type ViewId } from '../cortex/views';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { announce, h } from './h';
+import { legendBox } from './legendbox';
 import { citationPanel } from './citations';
 import { figureControl } from './figure';
 import { structureBar } from './structurebar';
@@ -92,9 +93,8 @@ export class CortexAtlasPage {
     this.gizmo.setAttribute('viewBox', '-40 -40 80 80');
     this.gizmo.setAttribute('class', 'gizmo');
     this.gizmo.setAttribute('aria-hidden', 'true');
-    const legendOpen = window.matchMedia('(min-width: 900px) and (min-height: 700px)').matches;
     const bottom = h('div', { class: 'stage-bottom' },
-      h('details', { class: 'legend-box', open: legendOpen }, h('summary', {}, 'Legend'), this.legend),
+      legendBox(this.legend, this.stage, () => this.viewer),
       h('div', { class: 'readout-box' }, this.measure.out, this.readout));
     this.leaders.setAttribute('class', 'leaders');
     this.leaders.setAttribute('aria-hidden', 'true');
