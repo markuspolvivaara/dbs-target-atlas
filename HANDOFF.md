@@ -293,6 +293,34 @@ starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm furth
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
 
+## v1's adenomas by the gland without its stalk; v1's cavernous sinus exact (desktop, 2026-11-24)
+
+Branch `fix/v1-adenoma-sinus`, on top of `fix/chiasm-under-aca`. **Local only: not pushed.** The owner's word of
+24 November: both mended together, after the chiasm.
+
+- **The adenomas** (`SB_PROFILE=v1 skullbase_v3_tumours.py`): the ellipsoid is centred 2.5 mm above the middle of the
+  anterior lobe as built, that is, without the stalk `skullbase_v1_stalk.py` names apart. Its centre is 1.95 mm lower
+  and 0.7 mm further forward than with the whole lobe.
+- **The cavernous sinus** (`mesh_inside` in `skullbase_v1_endonasal.py`): Z-Anatomy's sinus mesh is a closed shell of
+  512 triangles and 9 216 more that enclose nothing (in pairs: a ribbon from the sinus's top towards the posterior
+  intercavernous sinus). The sinus is now what the shell encloses: 1 270 mm³ on the grid (the shell: 1 269.8 mm³).
+  Before, the whole mesh's surface was widened by a voxel and filled: 1 795 mm³, the ribbon with it.
+- **What changed:**
+  - The four adenomas, all still graded as meant: 1.06, 1.12, 1.16 and 1.35 ml (were 1.11, 1.20, 1.24, 1.50).
+  - The endonasal view's two medial-wall steps: 1 249 and 1 248 mm³ (were 1 786 and 1 785), 159 and 158 mm³ of them
+    bone (were 326 and 325). No other piece, the way or the scope's reach changed.
+  - `cavernous_cond.npz` in v1's build.
+- **Run alone and unchanged first, the tumours' step gave the committed files** but for two things, neither from this
+  change: Knosp 3A moved by 0.01 mm (its nerves' tubes are read rightly since 2026-11-23), and the foramen magnum
+  meningioma's report by one point and 0.01 mm (its files byte for byte the same). The items that only moved by
+  that are put back from git; `sb-tumours.json` keeps the committed Koos and meningioma parts.
+- **Chain run:** `skullbase_v1_endonasal.py`, `SB_PROFILE=v1 skullbase_v3_tumours.py`, `skullbase_v1_inbone.py`,
+  `compress.mjs skullbase` for the four adenomas, `skullbase_build.py finalize` (669/669).
+- **The tumours' step also cleared four stale files** from the desktop's v1 build folder (copies no run makes any
+  more: the callosomarginal artery's for the olfactory groove meningioma, the lateral pontine branches' for Koos
+  2 to 4). None was shipped.
+- **MacBook baselines:** v1's Knosp pictures and the endonasal view with a cavernous sinus's wall taken away.
+
 ## v3's optic chiasm at the height the CT shows it; the stalk traced on the CT (desktop, 2026-11-24)
 
 Branch `fix/chiasm-under-aca`, from main after pull requests 39 and 40 were merged. **Local only: not pushed.** The
@@ -376,10 +404,8 @@ drawn as the stalk.
     item's size is 0).
   - Front end: `V1_ABSENT` no longer lists the stalk, so v1's pterional, supraorbital and orbitozygomatic views draw
     it as v3's do (AP-08); v1's cavernous and endonasal views list it.
-  - **The tumours are not moved:** `SB_PROFILE=v1 skullbase_v3_tumours.py` places the adenoma by the anterior lobe's
-    box, and now reads Z-Anatomy's whole lobe from the export (`skullbase_v1_stalk.whole_lobe`), stalk part included,
-    as it did before. With the cut lobe the adenoma would sit 2 mm lower. The step was not run again. For the owner
-    to say whether the adenoma should follow the gland without its stalk.
+  - **The tumours were not moved in that commit** (the step read Z-Anatomy's whole lobe, stalk part included). Since
+    the owner's word of 24 November the adenomas follow the gland without its stalk: see "v1's adenomas" above.
 - **Found on the way and fixed: the endonasal step measured the gland as a hollow skin.** `mesh_inside` took each
   shell alone; an open shell encloses nothing, so each lobe was only its surface, a voxel thick and a voxel too
   large all round, and the "gland" their union. The figures of the night before (14.5 mm high, 526 mm³, 7.5 mm above
@@ -394,7 +420,8 @@ drawn as the stalk.
 - **Found on the way and fixed:** the "Hypophysis" see-through group in the endonasal panel listed v3's names for the
   lobes only, so it lit nothing on v1. It lists Z-Anatomy's names too; a unit test asks that every group lights
   something on v1.
-- **Found, not fixed: v1's cavernous sinuses are a voxel too large in the endonasal step.** Z-Anatomy's sinus meshes
+- **Found then, mended since (see "v1's adenomas" above): v1's cavernous sinuses are a voxel too large in the
+  endonasal step.** Z-Anatomy's sinus meshes
   are not watertight either, so `mesh_inside` takes their surface widened by a voxel and filled: 1795 mm³ on the
   grid against 1273 mm³ in the mesh. `cavernous_cond.npz` holds this, and the Knosp section and the sinus's
   medial-wall steps (1786 mm³ each) are made on it. Mending it changes v1's tumours and those two steps, so it wants
