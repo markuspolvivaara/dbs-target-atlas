@@ -29,7 +29,7 @@
   ]
  },
  "file": "assets/skullbase-v3/endonasal.bin.gz",
- "bytes": 2797389,
+ "bytes": 2791456,
  "dims": [
   105,
   127,
@@ -464,7 +464,7 @@
   },
   "adenoMm3": 351.2,
   "neuroMm3": 99.2,
-  "stalkMm3": 36.2,
+  "stalkMm3": 37.0,
   "stalk": {
    "from": [
     0.0,
@@ -472,10 +472,11 @@
     9.1
    ],
    "to": [
-    0.0,
-    -1.7,
-    14.6
-   ]
+    0.4,
+    -3.8,
+    14.9
+   ],
+   "lengthMm": 8.2
   }
  }
 }

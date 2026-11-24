@@ -1578,7 +1578,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_optic_nerve_ii.chiasm.glb",
-   "bytes": 6216,
+   "bytes": 6060,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -2277,7 +2277,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_frontal_lobe__men_tuberculum.glb",
-   "bytes": 292932,
+   "bytes": 293220,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -2300,7 +2300,7 @@
    "category": "brain",
    "layer": "cortex",
    "morph": true,
-   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.703 mm), this patient's arteries outside the cortex on the right (the left hemisphere was not fitted to its vessels, so part of the left middle cerebral artery lies inside it), each hemisphere on its own side of the falx, the M2 segments on the insula (median 1.051 mm on the right) and the M3 segments in the Sylvian fissure (median 1.096 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital view 12 mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.05 mm): a shape, not a simulation of the tissue.",
+   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.703 mm), this patient's arteries outside the cortex on the right (the left hemisphere was not fitted to its vessels, so part of the left middle cerebral artery lies inside it), each hemisphere on its own side of the falx, the M2 segments on the insula (median 1.051 mm on the right) and the M3 segments in the Sylvian fissure (median 1.096 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital view 12 mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.52 mm): a shape, not a simulation of the tissue.",
    "centroid": {
     "L": [
      -21.12,
@@ -2309,7 +2309,7 @@
     ],
     "R": [
      25.86,
-     5.73,
+     5.72,
      57.74
     ]
    },
@@ -2323,7 +2323,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_insula__men_tuberculum.glb",
-   "bytes": 39268,
+   "bytes": 39172,
    "colour": {
     "token": "sbInsula",
     "light": "#4A3DA8",
@@ -2346,7 +2346,7 @@
    "category": "brain",
    "layer": "cortex",
    "morph": true,
-   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.703 mm), this patient's arteries outside the cortex on the right (the left hemisphere was not fitted to its vessels, so part of the left middle cerebral artery lies inside it), each hemisphere on its own side of the falx, the M2 segments on the insula (median 1.051 mm on the right) and the M3 segments in the Sylvian fissure (median 1.096 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital view 12 mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.05 mm): a shape, not a simulation of the tissue.",
+   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.703 mm), this patient's arteries outside the cortex on the right (the left hemisphere was not fitted to its vessels, so part of the left middle cerebral artery lies inside it), each hemisphere on its own side of the falx, the M2 segments on the insula (median 1.051 mm on the right) and the M3 segments in the Sylvian fissure (median 1.096 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital view 12 mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.52 mm): a shape, not a simulation of the tissue.",
    "centroid": {
     "L": [
      -31.63,
@@ -2355,8 +2355,8 @@
     ],
     "R": [
      33.05,
-     -7.72,
-     26.12
+     -7.74,
+     26.13
     ]
    },
    "replaces": "br_insula",
@@ -2369,7 +2369,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_cingulate_gyrus__men_tuberculum.glb",
-   "bytes": 38492,
+   "bytes": 38516,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -2392,7 +2392,7 @@
    "category": "brain",
    "layer": "cortex",
    "morph": true,
-   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.703 mm), this patient's arteries outside the cortex on the right (the left hemisphere was not fitted to its vessels, so part of the left middle cerebral artery lies inside it), each hemisphere on its own side of the falx, the M2 segments on the insula (median 1.051 mm on the right) and the M3 segments in the Sylvian fissure (median 1.096 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital view 12 mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.05 mm): a shape, not a simulation of the tissue.",
+   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.703 mm), this patient's arteries outside the cortex on the right (the left hemisphere was not fitted to its vessels, so part of the left middle cerebral artery lies inside it), each hemisphere on its own side of the falx, the M2 segments on the insula (median 1.051 mm on the right) and the M3 segments in the Sylvian fissure (median 1.096 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital view 12 mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.52 mm): a shape, not a simulation of the tissue.",
    "centroid": {
     "L": [
      -3.86,
@@ -2415,7 +2415,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_medial_wall__men_tuberculum.glb",
-   "bytes": 51076,
+   "bytes": 51016,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -2438,7 +2438,7 @@
    "category": "brain",
    "layer": "cortex",
    "morph": true,
-   "derivation": "The template's medial wall: where its pial surface is cut at the midline, through the corpus callosum and the diencephalon (a cut, not a surface of the brain). A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.703 mm), this patient's arteries outside the cortex on the right (the left hemisphere was not fitted to its vessels, so part of the left middle cerebral artery lies inside it), each hemisphere on its own side of the falx, the M2 segments on the insula (median 1.051 mm on the right) and the M3 segments in the Sylvian fissure (median 1.096 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital view 12 mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.05 mm): a shape, not a simulation of the tissue.",
+   "derivation": "The template's medial wall: where its pial surface is cut at the midline, through the corpus callosum and the diencephalon (a cut, not a surface of the brain). A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.703 mm), this patient's arteries outside the cortex on the right (the left hemisphere was not fitted to its vessels, so part of the left middle cerebral artery lies inside it), each hemisphere on its own side of the falx, the M2 segments on the insula (median 1.051 mm on the right) and the M3 segments in the Sylvian fissure (median 1.096 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital view 12 mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.52 mm): a shape, not a simulation of the tissue.",
    "centroid": {
     "L": [
      -15.1,
@@ -2447,8 +2447,8 @@
     ],
     "R": [
      15.42,
-     -24.95,
-     19.64
+     -24.97,
+     19.65
     ]
    },
    "replaces": "br_medial_wall",

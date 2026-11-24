@@ -7361,7 +7361,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_knosp_0.glb",
-   "bytes": 35292,
+   "bytes": 32184,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7375,17 +7375,17 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule to show Knosp grade 0 on the right (skullbase_v3_tumours.py), not a patient's tumour: an ellipsoid over the sella, kept medial to the medial tangent. 1.11 ml.",
+   "derivation": "Drawn by rule to show Knosp grade 0 on the right (skullbase_v3_tumours.py), not a patient's tumour: an ellipsoid over the sella, kept medial to the medial tangent. 1.06 ml.",
    "centroid": {
     "L": [
-     -3.17,
-     1.89,
-     11.0
+     -3.29,
+     2.22,
+     9.03
     ],
     "R": [
-     3.18,
-     1.89,
-     10.98
+     3.29,
+     2.23,
+     9.05
     ]
    },
    "tumour": {
@@ -7399,7 +7399,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_knosp_1.glb",
-   "bytes": 40240,
+   "bytes": 36088,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7413,17 +7413,17 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule to show Knosp grade 1 on the right (skullbase_v3_tumours.py), not a patient's tumour: an ellipsoid over the sella and a lobe towards the right cavernous sinus level with the gland's lower part (Z-Anatomy's cavernous carotid runs in the sphenoid's body below its cavernous sinus, so the level between the two arteries is bone), cut back past the medial tangent but short of the intercarotid line. 1.2 ml.",
+   "derivation": "Drawn by rule to show Knosp grade 1 on the right (skullbase_v3_tumours.py), not a patient's tumour: an ellipsoid over the sella and a lobe towards the right cavernous sinus level with the gland's lower part (Z-Anatomy's cavernous carotid runs in the sphenoid's body below its cavernous sinus, so the level between the two arteries is bone), cut back past the medial tangent but short of the intercarotid line. 1.12 ml.",
    "centroid": {
     "L": [
-     -3.16,
-     1.9,
-     10.98
+     -3.29,
+     2.22,
+     9.03
     ],
     "R": [
-     4.33,
-     2.49,
-     9.72
+     4.45,
+     2.72,
+     8.38
     ]
    },
    "tumour": {
@@ -7437,7 +7437,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_knosp_2.glb",
-   "bytes": 41952,
+   "bytes": 37860,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7451,17 +7451,17 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule to show Knosp grade 2 on the right (skullbase_v3_tumours.py), not a patient's tumour: an ellipsoid over the sella and a lobe towards the right cavernous sinus level with the gland's lower part (Z-Anatomy's cavernous carotid runs in the sphenoid's body below its cavernous sinus, so the level between the two arteries is bone), cut back past the intercarotid line but short of the lateral tangent. 1.24 ml.",
+   "derivation": "Drawn by rule to show Knosp grade 2 on the right (skullbase_v3_tumours.py), not a patient's tumour: an ellipsoid over the sella and a lobe towards the right cavernous sinus level with the gland's lower part (Z-Anatomy's cavernous carotid runs in the sphenoid's body below its cavernous sinus, so the level between the two arteries is bone), cut back past the intercarotid line but short of the lateral tangent. 1.16 ml.",
    "centroid": {
     "L": [
-     -3.16,
-     1.9,
-     10.98
+     -3.29,
+     2.22,
+     9.03
     ],
     "R": [
-     4.94,
-     2.69,
-     9.34
+     5.13,
+     2.92,
+     8.08
     ]
    },
    "tumour": {
@@ -7475,7 +7475,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase/tm_knosp_3a.glb",
-   "bytes": 53352,
+   "bytes": 47360,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7489,17 +7489,17 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule to show Knosp grade 3A on the right (skullbase_v3_tumours.py), not a patient's tumour: grade 2's shape with the right cavernous sinus as modelled here added above the cavernous carotid (its superior compartment), within 5 mm of the section: lateral to the lateral tangent, above the artery. (Grades 3B and 4 are not drawn on this model: below the cavernous carotid, and round it, lies the sphenoid's bone, not the sinus.) 1.5 ml.",
+   "derivation": "Drawn by rule to show Knosp grade 3A on the right (skullbase_v3_tumours.py), not a patient's tumour: grade 2's shape with the right cavernous sinus as modelled here added above the cavernous carotid (its superior compartment), within 5 mm of the section: lateral to the lateral tangent, above the artery. (Grades 3B and 4 are not drawn on this model: below the cavernous carotid, and round it, lies the sphenoid's bone, not the sinus.) 1.35 ml.",
    "centroid": {
     "L": [
-     -3.16,
-     1.9,
-     10.98
+     -3.29,
+     2.22,
+     9.03
     ],
     "R": [
-     8.66,
-     3.14,
-     7.02
+     8.51,
+     3.22,
+     6.26
     ]
    },
    "tumour": {

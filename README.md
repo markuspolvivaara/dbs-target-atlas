@@ -322,8 +322,8 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
   The hypophysis is modelled in this CT's own fossa (it replaces v2's fitted pituitary in v3): what is not bone there,
   1 mm inside the bone (the dura), under the diaphragma sellae taken as the plane from the tuberculum's back to the
   dorsum's top, its upper surface slightly concave, within about 6 mm of the midline and clear of the carotids; on this
-  CT 12.5 x 10 x 5.5 mm (Paudel 2025: 12.3 x 9.4 x 5.4 mm at 21-30 years). Its posterior lobe and stalk are drawn by
-  rule. Opening the dura shows it to the scope, coloured as the lobes look (rendering choices). Sources added: Paudel
+  CT 12.5 x 10 x 5.5 mm (Paudel 2025: 12.3 x 9.4 x 5.4 mm at 21-30 years). Its posterior lobe is drawn by rule; its
+  stalk is traced on the CT (below, under the optic chiasm). Opening the dura shows it to the scope, coloured as the lobes look (rendering choices). Sources added: Paudel
   2025, Singh 2018, Yohannan 2015. The view is the ventricles'
   endoscope (`src/viewer/endoscope.ts`), its walls meshed by surface nets in chunks (`src/viewer/surfacenets.ts`,
   shared with the spine's drilling). Measured on this CT: the sinus's volume and how far back it reaches, the
@@ -452,10 +452,23 @@ volumes from the 4–14 GB Zenodo zips (HTTP ranges) and pins their hashes.
 - **Greater petrosal nerve** seated on the drawn skull past the facial hiatus (`seat_on_skull` in `skullbase_v3.py`;
   `skullbase_v3.py gspn` re-seats it alone): it was lifted onto the CT's bone, which lies up to a millimetre below the
   completed skull the viewer draws, so it ran inside the drawn bone.
-- **Optic chiasm** (`pipeline/skullbase_v3_chiasm.py`, after `skullbase_v3_endonasal.py`). Drawn by rule where the
-  fitted Z-Anatomy chiasm lies (its centre, plane and length): a flat crossing 13.6 mm wide and 2.3 mm thick (the MRI
-  means of Mncube 2019), each optic nerve turning in to its front corner and tapering to it, and the optic tracts' first
-  12 mm leaving its back corners (illustrative).
+- **Optic chiasm** (`pipeline/skullbase_v3_chiasm.py`, after `skullbase_v3_endonasal.py`). Drawn by rule: a flat
+  crossing 13.6 mm wide and 2.3 mm thick (the MRI means of Mncube 2019), each optic nerve turning in to its front
+  corner and tapering to it, and the optic tracts' first 12 mm leaving its back corners (illustrative).
+  - **Where:** across and front to back at the fitted Z-Anatomy chiasm's centre, with its length. Its height is read
+    from this CT (`on_ct`, `ct_height`): the CT shows the chiasm as a band of soft tissue between the suprasellar
+    cistern below and the third ventricle's recess above, and its middle height is the median over the columns
+    round the fitted centre in which both are seen (15.5 mm above the fossa, in 157 columns). It is drawn level (no
+    tilt can be read from so short a band) and lowered until its surface is 0.1 mm off the arteries' meshes (0.1 mm
+    here). The fitted block lay 2.4 mm higher and tilted 33°, among the anterior cerebral arteries (14 % of its
+    surface inside their first segments), where the CT shows fluid.
+  - **The tracts** are flat (as wide as the nerves, as thick as the chiasm) and bend out of the chiasm's plane where
+    an artery's mesh lies in their way (`clear_tract`; 0.6 mm down on the right, under the A1 segment's origin).
+  - **The pituitary stalk** (`stalk_on_ct` in `skullbase_v3_endonasal.py`) is traced on the CT, on which it takes up
+    contrast: from the gland's top level by level along the centre of what is brighter than 45 HU, to where it
+    fades (5.8 mm up, 4.6 mm back), kept 0.3 mm off the chiasm. Its thickness is by rule. The endonasal fields'
+    distance to the nerves takes the chiasm as drawn (it took v2's fitted block).
+  - v1 keeps the Z-Anatomy chiasm's own centre and plane (`skullbase_v1_nerves.py` calls the same `draw`).
 - **Tumours graded on the model** (`pipeline/skullbase_v3_tumours.py`, `src/skullbase/tumours.ts`; run after
   `skullbase_v3_endonasal.py`, then compress and finalize). Drawn by rule on this CT, none a patient's tumour; the
   Tumours row of the panel has each kind with its grades, and a Grading page has the tables:
@@ -659,8 +672,8 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
       neck is named apart: both shells are cut level where the hypophysis is first narrower than a third of its
       greatest width (10.4 mm above the fossa; 11.9 mm across at its widest, under 4 mm from there up), and what lies
       above is the item "Pituitary stalk" (3.9 mm high). No vertex is moved. The views that show v3's stalk show it
-      (cavernous, endonasal, pterional, supraorbital, orbitozygomatic). The adenomas stay placed by Z-Anatomy's whole
-      anterior lobe, as before.
+      (cavernous, endonasal, pterional, supraorbital, orbitozygomatic). The adenomas are placed by the anterior lobe
+      without it.
     - The clivus step is absent: Z-Anatomy's sinus does not reach behind the sella.
     - The scope's way: the turbinates pushed aside to 4 mm across where the nose's own space allows, and a core
       3.5 mm across (`WAY_CORE_MM`) opened round the way whatever lies there. Under Z-Anatomy's nasal bones the space
@@ -675,12 +688,17 @@ model's hypophysial fossa landmark. Not MNI and not registered to the other sect
       is 25 mm³. The panel states these. (Until 2026-11-24 the step took each shell alone, which encloses nothing:
       the "gland" was a hollow skin a voxel thick and a voxel too large all round, and the figures given for it,
       14.5 mm high and 526 mm³, were that skin's.)
+    - Z-Anatomy's cavernous sinus meshes are a closed shell with loose faces beside it (a ribbon towards the
+      posterior intercavernous sinus): the sinus is what the shell encloses, 1 270 mm³ (`mesh_inside`). Taken by its
+      widened surface, as until 2026-11-24, it was a voxel too large all round (1 795 mm³).
     - The step gives the same files on every run: the surface sampling has a seed of its own (trimesh's sampler
       does not follow numpy's seed, and two runs differed by about 1 % in the gland's and the pieces' volumes).
     - The "In" slider says how far the way is open (both models): the scope stops in front of the sinus's front
       wall until that is taken away.
   - The tumours and the Grading page (`SB_PROFILE=v1 pipeline/skullbase_v3_tumours.py`): v3's rules on Z-Anatomy's
     bone, carotids, cavernous sinus and brain.
+    - The adenoma's ellipsoid is centred 2.5 mm above the middle of Z-Anatomy's anterior lobe without its stalk
+      (`skullbase_v1_stalk.py`); with the stalk counted in, as until 2026-11-24, it sat 1.95 mm higher.
     - Knosp 0–3A only: Z-Anatomy's cavernous carotid runs in the sphenoid's body below its cavernous sinus, so there is
       bone, not sinus, below and round it (3B and 4). The section is taken where both of its segments show.
     - Koos: Z-Anatomy's meatus has no lumen, so the canal is drawn by rule (2 mm round the fundus–porus line,

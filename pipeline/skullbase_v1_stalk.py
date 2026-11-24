@@ -18,7 +18,7 @@ towards each other.
 Writes pipeline/data/build/skullbase/sb_adenohypophysis.glb, sb_neurohypophysis.glb and sb_pituitary_stalk.glb, the
 three items into v1's manifest, their entries in sb-regions.json and the step's record (sb-modifications.json).
 skullbase_v1_endonasal.py takes the level from here for the gland's parts; the tumours' step (SB_PROFILE=v1
-skullbase_v3_tumours.py) places the adenomas by Z-Anatomy's whole anterior lobe as before (whole_lobe).
+skullbase_v3_tumours.py) places the adenomas by the anterior lobe as cut here, without its part of the stalk.
 """
 from __future__ import annotations
 
@@ -53,12 +53,6 @@ LOBE_NOTE = ("Mesh from Z-Anatomy, its vertices unchanged, less its upper part: 
 def lobes(ex: dict) -> dict:
     """Z-Anatomy's two shells as exported: {name: (verts, tris)}."""
     return {n: (np.array(ex["soft"][n]["verts"], float), np.array(ex["soft"][n]["tris"], int)) for n in LOBES}
-
-
-def whole_lobe(name: str = "Adenohypophysis") -> np.ndarray:
-    """A lobe's vertices as Z-Anatomy draws it, its part of the stalk included."""
-    ex = json.loads((BUILD / "export.json").read_text())
-    return np.array(ex["soft"][name]["verts"], float)
 
 
 def width_at(shells: dict, z: float) -> float:

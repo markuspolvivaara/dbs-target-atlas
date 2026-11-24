@@ -293,6 +293,97 @@ starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm furth
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
 
+## v1's adenomas by the gland without its stalk; v1's cavernous sinus exact (desktop, 2026-11-24)
+
+Branch `fix/v1-adenoma-sinus`, on top of `fix/chiasm-under-aca`. **Local only: not pushed.** The owner's word of
+24 November: both mended together, after the chiasm.
+
+- **The adenomas** (`SB_PROFILE=v1 skullbase_v3_tumours.py`): the ellipsoid is centred 2.5 mm above the middle of the
+  anterior lobe as built, that is, without the stalk `skullbase_v1_stalk.py` names apart. Its centre is 1.95 mm lower
+  and 0.7 mm further forward than with the whole lobe.
+- **The cavernous sinus** (`mesh_inside` in `skullbase_v1_endonasal.py`): Z-Anatomy's sinus mesh is a closed shell of
+  512 triangles and 9 216 more that enclose nothing (in pairs: a ribbon from the sinus's top towards the posterior
+  intercavernous sinus). The sinus is now what the shell encloses: 1 270 mm³ on the grid (the shell: 1 269.8 mm³).
+  Before, the whole mesh's surface was widened by a voxel and filled: 1 795 mm³, the ribbon with it.
+- **What changed:**
+  - The four adenomas, all still graded as meant: 1.06, 1.12, 1.16 and 1.35 ml (were 1.11, 1.20, 1.24, 1.50).
+  - The endonasal view's two medial-wall steps: 1 249 and 1 248 mm³ (were 1 786 and 1 785), 159 and 158 mm³ of them
+    bone (were 326 and 325). No other piece, the way or the scope's reach changed.
+  - `cavernous_cond.npz` in v1's build.
+- **Run alone and unchanged first, the tumours' step gave the committed files** but for two things, neither from this
+  change: Knosp 3A moved by 0.01 mm (its nerves' tubes are read rightly since 2026-11-23), and the foramen magnum
+  meningioma's report by one point and 0.01 mm (its files byte for byte the same). The items that only moved by
+  that are put back from git; `sb-tumours.json` keeps the committed Koos and meningioma parts.
+- **Chain run:** `skullbase_v1_endonasal.py`, `SB_PROFILE=v1 skullbase_v3_tumours.py`, `skullbase_v1_inbone.py`,
+  `compress.mjs skullbase` for the four adenomas, `skullbase_build.py finalize` (669/669).
+- **The tumours' step also cleared four stale files** from the desktop's v1 build folder (copies no run makes any
+  more: the callosomarginal artery's for the olfactory groove meningioma, the lateral pontine branches' for Koos
+  2 to 4). None was shipped.
+- **MacBook baselines:** v1's Knosp pictures and the endonasal view with a cavernous sinus's wall taken away.
+
+## v3's optic chiasm at the height the CT shows it; the stalk traced on the CT (desktop, 2026-11-24)
+
+Branch `fix/chiasm-under-aca`, from main after pull requests 39 and 40 were merged. **Local only: not pushed.** The
+owner's word of 24 November: try to mend the chiasm running through the anterior cerebral arteries.
+
+- **What was wrong:** the chiasm was drawn where the fitted Z-Anatomy block lies, 17.8 mm above the fossa and tilted
+  33°. This CT's A1 segments run at 17 to 20 mm, so they pierced it (14 % of its surface up to 1 mm inside them).
+  Lowering the tilted slab clear of them took 5 mm and ran its front corners into the carotids (the night's finding).
+- **What the CT shows:** the chiasm itself. Between the suprasellar cistern (fluid, about 10 HU) and the third
+  ventricle's recess above (fluid again) lies a band of soft tissue (about 38 HU) 2.5 mm thick, directly under the
+  two A1 segments. The fitted block lay in the recess's fluid. The stalk shows too: it takes up contrast (60 to
+  100 HU), from the gland up and back to the floor behind the chiasm.
+- **The rule now** (`pipeline/skullbase_v3_chiasm.py`, `on_ct`):
+  - Across and front to back the chiasm stays at the fitted block's centre, with its length.
+  - Its height is `ct_height`: columns every 0.25 mm within 2.5 mm of the fitted centre, the CT blurred by 0.3 mm; a
+    column counts where the cistern below falls under 17 HU, the band rises over 25 HU and falls under it again
+    above, with nothing over 90 HU in it (an artery, the stalk). The height is the median of the bands' middles:
+    15.48 mm, from 157 of 441 columns (quartiles 15.03 and 15.73 mm; with other windows and blurs 15.45 to 15.65).
+  - It is drawn level. The band is too short and too noisy to read a tilt from.
+  - It is then lowered in steps of 0.05 mm until no point of its surface is in or within 0.1 mm of an artery's mesh:
+    0.1 mm here, off the A1 segments. So its middle is at 15.38 mm.
+- **The tracts** are flat now (as wide as the nerves, as thick as the chiasm), start 1.5 mm inside the chiasm and
+  bend out of its plane where an artery lies within their width (`clear_tract`): the right one 0.58 mm down under
+  the A1 segment's origin, the left one not at all. The round tubes, 3.5 mm thick, could not pass between the A1
+  origin above and the posterior cerebral and posterior communicating arteries below (the night's finding).
+- **The stalk** (`stalk_on_ct` in `pipeline/skullbase_v3_endonasal.py`): from the gland's top, level by level
+  (0.25 mm), the brightness-weighted centre of what is between 45 and 150 HU within 2 mm of the level below's
+  centre, to where less than a quarter of that disc is as bright. From (0, 0.8, 9.1) to (0.4, −3.8, 14.9) mm: 5.8 mm
+  up and 4.6 mm back (the rule before: 5.5 up and 2.5 back, which now ran 1.2 mm into the chiasm). Its top is flat
+  where it fades, and it keeps 0.3 mm off the chiasm as drawn. Its thickness is still by rule (2 mm at the gland,
+  2.8 mm above).
+- **The endonasal fields:** the distance to the nerves takes the chiasm as drawn (it took v2's fitted block, 2.4 mm
+  too high). No piece's volume changed. The step asks `skullbase_v3_chiasm.on_ct` for the frame, so it needs v3's
+  manifest and the optic nerves' routes first, as before.
+- **What changed with it:** the six Knosp adenomas are 0.06 ml smaller each (they keep off the nerves, and the chiasm
+  is lower: 1.02 → 0.96 ml for grade 0; every grade is still drawn and graded as meant); the tuberculum sellae
+  meningioma (2.52 → 2.49 ml) and the four brain copies of its view. Nothing else in v3's build changed (md5 of all
+  299 build files before and after).
+- **Checked against everything round it** (a scratch sweep over v3's 97 plain structures): the chiasm, the tracts,
+  the nerves' ends and the stalk lie in no artery, vein, nerve or gland; they touch only each other where they join.
+- **Chain run:** `skullbase_v3_endonasal.py` (3 min), `skullbase_v3_chiasm.py`, `skullbase_v3_tumours.py`,
+  `compress.mjs skullbase-v3` for the 15 changed files, `skullbase_v3.py finalize` (1275/1275, six new checks: the
+  height read from the CT; the chiasm's and the tracts' surfaces in no artery and not in the stalk; the chiasm's
+  middle where it was placed), `ventricles_build.py refresh` (the ventricles section shows four of the changed
+  copies by reference). `sbv3-fit.json` is put back from git: run alone, the endonasal step also measures the
+  chiasm, the tracts and the confluence against the bone, which a full rebuild does not. One centroid that moved by
+  0.01 mm in an untouched item (rounding) is put back too.
+- **v1 is unchanged:** `skullbase_v1_nerves.py` calls the same `draw` with Z-Anatomy's own frame (checked: with the
+  old frame and no arteries the three files come out byte for byte as before).
+- **Tests:** `tests/unit/mesh-checks.test.ts` holds the chiasm, the tracts and the stalk out of six arteries and the
+  chiasm and tracts out of the stalk, on the shipped meshes.
+- **For the owner to judge:**
+  - The chiasm is level. The CT gives no slope here, and with the fitted model's 33° it cannot pass under the A1
+    segments; whether it should slope a little is the owner's to say.
+  - The height's uncertainty is about 0.2 mm (which columns count), and the last 0.1 mm is set by the arteries'
+    meshes, not by the CT.
+  - The adenomas' tops now stop under the lower chiasm. A real adenoma that size lifts the chiasm; the cards say the
+    adenoma is a shape drawn by rule.
+  - The intracranial optic nerves are not in the endonasal fields' distance to the nerves (only TotalSegmentator's
+    orbital part and the chiasm are): the burr is not stopped by them. As before; not changed here.
+- **MacBook baselines:** every v3 picture that shows the chiasm, the tracts or the stalk (the nerves, cavernous,
+  endonasal and anterolateral views, the Knosp grades, the tuberculum sellae meningioma).
+
 ## v1's pituitary stalk, and the gland measured as a closed body (desktop, 2026-11-24)
 
 Branch `fix/v1-items` (pull request 40). The owner's word of 24 November: the upper part of Z-Anatomy's hypophysis is
@@ -313,10 +404,8 @@ drawn as the stalk.
     item's size is 0).
   - Front end: `V1_ABSENT` no longer lists the stalk, so v1's pterional, supraorbital and orbitozygomatic views draw
     it as v3's do (AP-08); v1's cavernous and endonasal views list it.
-  - **The tumours are not moved:** `SB_PROFILE=v1 skullbase_v3_tumours.py` places the adenoma by the anterior lobe's
-    box, and now reads Z-Anatomy's whole lobe from the export (`skullbase_v1_stalk.whole_lobe`), stalk part included,
-    as it did before. With the cut lobe the adenoma would sit 2 mm lower. The step was not run again. For the owner
-    to say whether the adenoma should follow the gland without its stalk.
+  - **The tumours were not moved in that commit** (the step read Z-Anatomy's whole lobe, stalk part included). Since
+    the owner's word of 24 November the adenomas follow the gland without its stalk: see "v1's adenomas" above.
 - **Found on the way and fixed: the endonasal step measured the gland as a hollow skin.** `mesh_inside` took each
   shell alone; an open shell encloses nothing, so each lobe was only its surface, a voxel thick and a voxel too
   large all round, and the "gland" their union. The figures of the night before (14.5 mm high, 526 mm³, 7.5 mm above
@@ -331,7 +420,8 @@ drawn as the stalk.
 - **Found on the way and fixed:** the "Hypophysis" see-through group in the endonasal panel listed v3's names for the
   lobes only, so it lit nothing on v1. It lists Z-Anatomy's names too; a unit test asks that every group lights
   something on v1.
-- **Found, not fixed: v1's cavernous sinuses are a voxel too large in the endonasal step.** Z-Anatomy's sinus meshes
+- **Found then, mended since (see "v1's adenomas" above): v1's cavernous sinuses are a voxel too large in the
+  endonasal step.** Z-Anatomy's sinus meshes
   are not watertight either, so `mesh_inside` takes their surface widened by a voxel and filled: 1795 mm³ on the
   grid against 1273 mm³ in the mesh. `cavernous_cond.npz` holds this, and the Knosp section and the sinus's
   medial-wall steps (1786 mm³ each) are made on it. Mending it changes v1's tumours and those two steps, so it wants
@@ -451,7 +541,8 @@ The audit's AP-15, AP-11 and MC-16; MC-13 and MC-15 are not done (below).
   - Still so, as before: 4 to 21 % of these nerves' tubes lie up to 0.9 mm under the *drawn* bone of the foramen (the
     skull as drawn is thicker than the CT's bone there; the right XI rose from 11 to 21 %, the left fell from 22 to
     11 %); in the Koos IV view three points each of IX's and XI's copies are left within the tumour's margin.
-- **For the owner to judge: the optic chiasm and the anterior cerebral arteries (v3).** This CT's A1 segments run
+- **Mended on 2026-11-24 (see "v3's optic chiasm at the height the CT shows it" above): the optic chiasm and the
+  anterior cerebral arteries (v3).** As found that night: this CT's A1 segments run
   through the middle of the chiasm as drawn: 13 to 14 % of its surface lies up to 1 mm inside them, and a few
   vertices of the drawn optic tracts. The chiasm is drawn where the fitted model puts it (its centre 17.8 mm above
   the fossa, tilted 33°). Tried, and taken out again (`chiasm_scan.py`, `chiasm_probe.py` in the scratchpad's
