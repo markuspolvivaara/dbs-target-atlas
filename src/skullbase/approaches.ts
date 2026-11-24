@@ -116,7 +116,7 @@ export const APPROACH_REFS: ApproachRef[] = [
   { id: 'jian2022', pmid: '35495767', pmcid: 'PMC9046933', shortLabel: 'Jian 2022', url: doi('10.3389/fsurg.2022.809098'),
     citation: 'Jian ZH, Sheng MF, Li JY, Li Y, Weng ZJ, Chen G. Precise localization in craniotomy with a retrosigmoid keyhole approach: microsurgical anatomy and clinical study. Front Surg. 2022;9:809098. doi:10.3389/fsurg.2022.809098.' },
   { id: 'jian2024', pmid: '39008189', pmcid: 'PMC11249418', shortLabel: 'Jian 2024', url: doi('10.1007/s10143-024-02583-x'),
-    citation: 'Jian ZH, Sheng MF, Liao CC, Weng ZJ, Li JY, Yi XF, et al. A novel theory for rapid localization of the transverse-sigmoid sinus junction and “keyhole” in the retrosigmoid keyhole approach: micro-anatomical study and clinical application. Neurosurg Rev. 2024;47(1):331. doi:10.1007/s10143-024-02583-x.' },
+    citation: 'Jian ZH, Sheng MF, Liao CC, Weng ZJ, Li JY, Yi XF, et al. A novel theory for rapid localization of the transverse-sigmoid sinus junction and “keyhole” in the retrosigmoid keyhole approach: micro-anatomical study, technique nuances, and clinical application. Neurosurg Rev. 2024;47(1):331. doi:10.1007/s10143-024-02583-x.' },
   { id: 'hu2023', pmid: '36908299', pmcid: 'PMC9995208', shortLabel: 'Hu 2023', url: doi('10.1155/2023/5407912'),
     citation: 'Hu W, Zhou J, Liu ZM, Li Y, Cai QF, Hu XM, et al. Computed tomography study of the retrosigmoid craniotomy keyhole approach using surface landmarks. Int J Clin Pract. 2023;2023:5407912. doi:10.1155/2023/5407912.' },
   { id: 'choquevelasquez2018rs', pmid: '30186664', pmcid: 'PMC6108164', shortLabel: 'Choque-Velasquez 2018b', url: doi('10.4103/sni.sni_186_18'),

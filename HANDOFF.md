@@ -366,8 +366,18 @@ Branch `feat/reference-checks`, on top of `feat/panel-jump-row`. **Local only: n
   - **Europe PMC was slow on 24 November** (8 to 50 s for some answers, others 0.4 s): the first run stopped after
     150 lookups with nothing written. So each request has 60 s, an error is printed, and each record found is kept in
     `scripts/.cache/references.json` (in `.gitignore`): a run that stops continues where it stopped.
-  - **The first run's table** is added below when the run has finished. Only plain typing slips are mended; the rest
-    are listed for the owner.
+  - **The first full run (24 November, 477 papers):** one real error, mended: **Jian 2024**'s title lacked
+    "technique nuances," ("…micro-anatomical study, technique nuances, and clinical application"). Two differences
+    are the records' own and the site's citations are right: Symss 2014's record has a typo ("ventriclen"), and
+    De Benedictis 2012's record adds J Neurosurg's tag "laboratory investigation" to the title. Four records give a
+    year one before the citation's, the online date of a paper whose print issue came the next year (Perrini 2013,
+    Palesi 2015, Toescu 2021, Chen 2025); the citations give the issue's year, as they should, and the script now
+    lists these apart. Nothing not found.
+  - **The script's own slips, fixed after that run:** `yearOf` took the first year in a citation, so "Spine (Phila
+    Pa 1976)" gave five spine papers 1976 and Rupp's "Revised 2019" its year (it now takes the year after the
+    journal's name); "da Silva" was cut to "da" (surnames are now read up to the initials); `&amp;` in a record's
+    title; Morel 1997's old Wiley DOI has angle brackets, at which `doiOf` stopped; Crossref's year is now the print
+    issue's where it has one.
 
 ## A row of jumps in the long panels (UI-22) (desktop, 2026-11-24)
 

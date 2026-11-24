@@ -45,14 +45,21 @@ export const REFERENCE_LISTS: Record<string, AnyReference[]> = {
   cortex: from('cortex', [...CTX_REFS].map(([id, r]) => ({ id, ...r }))),
 };
 
-/** A reference's DOI, from its address or its citation, lower case (DOIs are case-insensitive). */
+/**
+ * A reference's DOI, from its address or its citation, lower case (DOIs are case-insensitive). Old Wiley DOIs (SICI)
+ * have angle brackets in them, as Morel 1997's: 10.1002/(sici)1096-9861(19971103)387:4<588::aid-cne8>3.0.co;2-z.
+ */
 export function doiOf(r: Pick<AnyReference, 'url' | 'citation'>): string | null {
-  const m = /10\.\d{4,9}\/[^\s"<>]+/.exec(`${r.url} ${r.citation}`);
+  const m = /10\.\d{4,9}\/[^\s"]+/.exec(`${r.url} ${r.citation}`);
   return m ? m[0].replace(/[.,;)]+$/, '').toLowerCase() : null;
 }
 
-/** The year a citation gives: the first four-digit year after the authors (19xx or 20xx). */
+/**
+ * The year a citation gives: the year that follows the journal's name ("… Neurosurg Rev. 2013;36(2)…"), else the first
+ * four-digit year in it (19xx or 20xx). Not simply the first: a title can hold one ("… Revised 2019."), and so can a
+ * journal's name ("Spine (Phila Pa 1976). 1990;…").
+ */
 export function yearOf(citation: string): string | null {
-  const m = /\b(19|20)\d\d\b/.exec(citation);
-  return m ? m[0] : null;
+  const m = /\.\s+((?:19|20)\d\d)\b(?=[;:.,\s]|$)/.exec(citation) ?? /\b((?:19|20)\d\d)\b/.exec(citation);
+  return m ? m[1] : null;
 }
