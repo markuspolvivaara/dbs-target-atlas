@@ -2257,7 +2257,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_optic_nerve_ii.chiasm.glb",
-   "bytes": 6216,
+   "bytes": 6060,
    "colour": {
     "token": "sbNerve",
     "light": "#B08A00",
@@ -6460,7 +6460,7 @@
    ],
    "type": "soft",
    "file": "assets/skullbase-v3/tb_pituitary_stalk.glb",
-   "bytes": 7004,
+   "bytes": 7320,
    "colour": {
     "token": "sbSoft",
     "light": "#8A6FA8",
@@ -6474,17 +6474,17 @@
    "refIds": [],
    "category": "soft",
    "schematic": true,
-   "derivation": "Cut at the midline (x = 0) into left and right halves. Drawn by rule (no measured source here): a tube from the top of the gland modelled in this CT's fossa, where its lobes meet, 5 mm up and 2.5 mm back to behind the (fitted) optic chiasm, 2 mm thick at the gland and 2.8 mm above.",
+   "derivation": "Cut at the midline (x = 0) into left and right halves. Traced on this CT, on which the stalk takes up contrast (pipeline/skullbase_v3_endonasal.py, stalk_on_ct): from the top of the gland modelled in the fossa, where its lobes meet, level by level along the centre of what is brighter than 45 HU, 5.8 mm up and 4.6 mm back to where it fades under the floor of the third ventricle, behind the optic chiasm. Its thickness is drawn by rule: 2 mm at the gland and 2.8 mm above.",
    "centroid": {
     "L": [
-     -0.59,
-     -0.66,
-     12.25
+     -0.46,
+     -1.27,
+     11.45
     ],
     "R": [
-     0.59,
-     -0.66,
-     12.25
+     0.76,
+     -1.82,
+     11.93
     ]
    }
   },
@@ -7024,86 +7024,12 @@
    "joinedFrom": "assets/skullbase-v3/tb_basilar_plexus.glb"
   },
   {
-   "aliases": [
-    "Chiasma opticum"
-   ],
-   "type": "soft",
-   "bytes": 67828,
-   "colour": {
-    "token": "sbNerve",
-    "light": "#B08A00",
-    "dark": "#E8C547"
-   },
-   "dataset": "rule",
-   "source": "Drawn by rule on the TopBrain CT",
-   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
-   "citation": [],
-   "citationUrls": [],
-   "refIds": [],
-   "category": "nerve",
-   "layer": "tracts",
-   "cranialNerve": 2,
-   "schematic": true,
-   "id": "tb_optic_chiasm",
-   "name": "Optic chiasm",
-   "file": "assets/skullbase-v3/tb_optic_chiasm.glb",
-   "derivation": "Drawn by rule (skullbase_v3_chiasm.py) where the fitted Z-Anatomy chiasm lies: its centre, its plane (tilted 33° from the horizontal) and its length front to back (9.2 mm here). Its width (13.63 mm) and height (2.26 mm) are the means Mncube 2019 measured on coronal MRI in 80 adults. Its shape is two bands crossing, each from where one optic nerve joins its front edge to the other side's back corner, where the optic tract leaves, with a central body joining them (illustrative: what crosses where inside the chiasm is not settled). The optic nerves join it 10.2 mm apart.",
-   "centroid": {
-    "L": [
-     -3.56,
-     0.24,
-     17.9
-    ],
-    "R": [
-     3.76,
-     0.23,
-     17.88
-    ]
-   }
-  },
-  {
-   "aliases": [],
-   "type": "soft",
-   "bytes": 3828,
-   "colour": {
-    "token": "sbNerve",
-    "light": "#B08A00",
-    "dark": "#E8C547"
-   },
-   "dataset": "rule",
-   "source": "Drawn by rule on the TopBrain CT",
-   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
-   "citation": [],
-   "citationUrls": [],
-   "refIds": [],
-   "category": "nerve",
-   "layer": "tracts",
-   "cranialNerve": 2,
-   "schematic": true,
-   "id": "tb_optic_tract",
-   "name": "Optic tract",
-   "file": "assets/skullbase-v3/tb_optic_tract.glb",
-   "derivation": "Drawn by rule (skullbase_v3_chiasm.py): the tracts' first 12 mm from the chiasm's back corners, backwards and outwards at 40° from the midline in the chiasm's plane, as wide as the optic nerves drawn here (illustrative); the rest of their course round the cerebral peduncles is not drawn.",
-   "centroid": {
-    "R": [
-     9.11,
-     -5.31,
-     21.53
-    ],
-    "L": [
-     -8.78,
-     -5.27,
-     21.59
-    ]
-   }
-  },
-  {
    "id": "tm_knosp_0",
    "name": "Pituitary adenoma (Knosp 0)",
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_knosp_0.glb",
-   "bytes": 31144,
+   "bytes": 30308,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7117,17 +7043,17 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule to show Knosp grade 0 on the right (skullbase_v3_tumours.py), not a patient's tumour: an ellipsoid over the sella, kept medial to the medial tangent. 1.02 ml.",
+   "derivation": "Drawn by rule to show Knosp grade 0 on the right (skullbase_v3_tumours.py), not a patient's tumour: an ellipsoid over the sella, kept medial to the medial tangent. 0.96 ml.",
    "centroid": {
     "L": [
-     -2.9,
-     1.56,
-     10.04
+     -2.89,
+     1.65,
+     9.76
     ],
     "R": [
-     3.03,
-     1.5,
-     10.22
+     3.02,
+     1.58,
+     9.97
     ]
    },
    "tumour": {
@@ -7141,7 +7067,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_knosp_1.glb",
-   "bytes": 33152,
+   "bytes": 32472,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7155,17 +7081,17 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule to show Knosp grade 1 on the right (skullbase_v3_tumours.py), not a patient's tumour: an ellipsoid over the sella and a lobe towards the right cavernous sinus at the level between the two arteries, cut back past the medial tangent but short of the intercarotid line. 1.08 ml.",
+   "derivation": "Drawn by rule to show Knosp grade 1 on the right (skullbase_v3_tumours.py), not a patient's tumour: an ellipsoid over the sella and a lobe towards the right cavernous sinus at the level between the two arteries, cut back past the medial tangent but short of the intercarotid line. 1.02 ml.",
    "centroid": {
     "L": [
-     -2.9,
-     1.56,
-     10.04
+     -2.89,
+     1.65,
+     9.76
     ],
     "R": [
      3.58,
-     1.5,
-     10.03
+     1.57,
+     9.81
     ]
    },
    "tumour": {
@@ -7179,7 +7105,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_knosp_2.glb",
-   "bytes": 36252,
+   "bytes": 35376,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7193,17 +7119,17 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule to show Knosp grade 2 on the right (skullbase_v3_tumours.py), not a patient's tumour: an ellipsoid over the sella and a lobe towards the right cavernous sinus, cut back past the intercarotid line but short of the lateral tangent. 1.12 ml.",
+   "derivation": "Drawn by rule to show Knosp grade 2 on the right (skullbase_v3_tumours.py), not a patient's tumour: an ellipsoid over the sella and a lobe towards the right cavernous sinus, cut back past the intercarotid line but short of the lateral tangent. 1.05 ml.",
    "centroid": {
     "L": [
-     -2.9,
-     1.56,
-     10.04
+     -2.89,
+     1.65,
+     9.76
     ],
     "R": [
-     4.35,
-     1.57,
-     9.77
+     4.36,
+     1.63,
+     9.57
     ]
    },
    "tumour": {
@@ -7217,7 +7143,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_knosp_3a.glb",
-   "bytes": 43376,
+   "bytes": 42592,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7231,17 +7157,17 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule to show Knosp grade 3A on the right (skullbase_v3_tumours.py), not a patient's tumour: grade 2's shape with the right cavernous sinus as modelled here added above the cavernous carotid (its superior compartment), within 5 mm of the section: lateral to the lateral tangent, above the artery. 1.25 ml.",
+   "derivation": "Drawn by rule to show Knosp grade 3A on the right (skullbase_v3_tumours.py), not a patient's tumour: grade 2's shape with the right cavernous sinus as modelled here added above the cavernous carotid (its superior compartment), within 5 mm of the section: lateral to the lateral tangent, above the artery. 1.18 ml.",
    "centroid": {
     "L": [
-     -2.9,
-     1.56,
-     10.04
+     -2.89,
+     1.65,
+     9.76
     ],
     "R": [
-     6.68,
-     1.81,
-     8.9
+     6.72,
+     1.86,
+     8.75
     ]
    },
    "tumour": {
@@ -7255,7 +7181,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_knosp_3b.glb",
-   "bytes": 57340,
+   "bytes": 56560,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7269,17 +7195,17 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule to show Knosp grade 3B on the right (skullbase_v3_tumours.py), not a patient's tumour: grade 2's shape with the right cavernous sinus as modelled here added below the cavernous carotid (its inferior compartment), within 5 mm of the section: lateral to the lateral tangent, below the artery. 1.4 ml.",
+   "derivation": "Drawn by rule to show Knosp grade 3B on the right (skullbase_v3_tumours.py), not a patient's tumour: grade 2's shape with the right cavernous sinus as modelled here added below the cavernous carotid (its inferior compartment), within 5 mm of the section: lateral to the lateral tangent, below the artery. 1.33 ml.",
    "centroid": {
     "L": [
-     -2.9,
-     1.56,
-     10.04
+     -2.89,
+     1.65,
+     9.76
     ],
     "R": [
-     8.32,
-     1.66,
-     6.5
+     8.37,
+     1.69,
+     6.38
     ]
    },
    "tumour": {
@@ -7293,7 +7219,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_knosp_4.glb",
-   "bytes": 57472,
+   "bytes": 56740,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -7307,17 +7233,17 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule to show Knosp grade 4 on the right (skullbase_v3_tumours.py), not a patient's tumour: grade 2's shape with the whole right cavernous sinus as modelled here added within 5 mm of the section, so that it surrounds the cavernous carotid. 1.46 ml.",
+   "derivation": "Drawn by rule to show Knosp grade 4 on the right (skullbase_v3_tumours.py), not a patient's tumour: grade 2's shape with the whole right cavernous sinus as modelled here added within 5 mm of the section, so that it surrounds the cavernous carotid. 1.4 ml.",
    "centroid": {
     "L": [
-     -2.9,
-     1.56,
-     10.04
+     -2.89,
+     1.65,
+     9.76
     ],
     "R": [
-     8.38,
-     1.64,
-     6.55
+     8.43,
+     1.67,
+     6.43
     ]
    },
    "tumour": {
@@ -8851,7 +8777,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/tm_men_tuberculum.glb",
-   "bytes": 86892,
+   "bytes": 92604,
    "colour": {
     "token": "sbTumour",
     "light": "#7A9A01",
@@ -8865,17 +8791,17 @@
    "refIds": [],
    "category": "tumour",
    "schematic": true,
-   "derivation": "Drawn by rule (skullbase_v3_tumours.py), not a patient's tumour: on the dura of the tuberculum sellae as located on this CT, the optic nerves and chiasm pushed aside. A ball 20 mm across (an illustrative size), its centre 0.55 of its radius off the bone, so that the bone cuts it to a broad base on the dura; kept 0.4 mm off this CT's arteries and 0.3 mm off the cranial nerves' routes, which run through it in channels. 2.52 ml.",
+   "derivation": "Drawn by rule (skullbase_v3_tumours.py), not a patient's tumour: on the dura of the tuberculum sellae as located on this CT, the optic nerves and chiasm pushed aside. A ball 20 mm across (an illustrative size), its centre 0.55 of its radius off the bone, so that the bone cuts it to a broad base on the dura; kept 0.4 mm off this CT's arteries and 0.3 mm off the cranial nerves' routes, which run through it in channels. 2.49 ml.",
    "centroid": {
     "L": [
-     -4.47,
-     0.37,
-     15.76
+     -4.46,
+     0.16,
+     15.61
     ],
     "R": [
-     4.64,
-     0.43,
-     15.35
+     4.66,
+     0.25,
+     15.23
     ]
    },
    "tumour": {
@@ -8889,7 +8815,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_frontal_lobe__men_tuberculum.glb",
-   "bytes": 292932,
+   "bytes": 293220,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -8912,7 +8838,7 @@
    "category": "brain",
    "layer": "cortex",
    "morph": true,
-   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.703 mm), this patient's arteries outside the cortex on the right (the left hemisphere was not fitted to its vessels, so part of the left middle cerebral artery lies inside it), each hemisphere on its own side of the falx, the M2 segments on the insula (median 1.051 mm on the right) and the M3 segments in the Sylvian fissure (median 1.096 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital view 12 mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.05 mm): a shape, not a simulation of the tissue.",
+   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.703 mm), this patient's arteries outside the cortex on the right (the left hemisphere was not fitted to its vessels, so part of the left middle cerebral artery lies inside it), each hemisphere on its own side of the falx, the M2 segments on the insula (median 1.051 mm on the right) and the M3 segments in the Sylvian fissure (median 1.096 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital view 12 mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.52 mm): a shape, not a simulation of the tissue.",
    "centroid": {
     "L": [
      -21.12,
@@ -8921,7 +8847,7 @@
     ],
     "R": [
      25.86,
-     5.73,
+     5.72,
      57.74
     ]
    },
@@ -8935,7 +8861,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_insula__men_tuberculum.glb",
-   "bytes": 39268,
+   "bytes": 39172,
    "colour": {
     "token": "sbInsula",
     "light": "#4A3DA8",
@@ -8958,7 +8884,7 @@
    "category": "brain",
    "layer": "cortex",
    "morph": true,
-   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.703 mm), this patient's arteries outside the cortex on the right (the left hemisphere was not fitted to its vessels, so part of the left middle cerebral artery lies inside it), each hemisphere on its own side of the falx, the M2 segments on the insula (median 1.051 mm on the right) and the M3 segments in the Sylvian fissure (median 1.096 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital view 12 mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.05 mm): a shape, not a simulation of the tissue.",
+   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.703 mm), this patient's arteries outside the cortex on the right (the left hemisphere was not fitted to its vessels, so part of the left middle cerebral artery lies inside it), each hemisphere on its own side of the falx, the M2 segments on the insula (median 1.051 mm on the right) and the M3 segments in the Sylvian fissure (median 1.096 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital view 12 mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.52 mm): a shape, not a simulation of the tissue.",
    "centroid": {
     "L": [
      -31.63,
@@ -8967,8 +8893,8 @@
     ],
     "R": [
      33.05,
-     -7.72,
-     26.12
+     -7.74,
+     26.13
     ]
    },
    "replaces": "br_insula",
@@ -8981,7 +8907,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_cingulate_gyrus__men_tuberculum.glb",
-   "bytes": 38492,
+   "bytes": 38516,
    "colour": {
     "token": "sbBrain",
     "light": "#9E625E",
@@ -9004,7 +8930,7 @@
    "category": "brain",
    "layer": "cortex",
    "morph": true,
-   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.703 mm), this patient's arteries outside the cortex on the right (the left hemisphere was not fitted to its vessels, so part of the left middle cerebral artery lies inside it), each hemisphere on its own side of the falx, the M2 segments on the insula (median 1.051 mm on the right) and the M3 segments in the Sylvian fissure (median 1.096 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital view 12 mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.05 mm): a shape, not a simulation of the tissue.",
+   "derivation": "A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.703 mm), this patient's arteries outside the cortex on the right (the left hemisphere was not fitted to its vessels, so part of the left middle cerebral artery lies inside it), each hemisphere on its own side of the falx, the M2 segments on the insula (median 1.051 mm on the right) and the M3 segments in the Sylvian fissure (median 1.096 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital view 12 mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.52 mm): a shape, not a simulation of the tissue.",
    "centroid": {
     "L": [
      -3.86,
@@ -9027,7 +8953,7 @@
    "aliases": [],
    "type": "soft",
    "file": "assets/skullbase-v3/br_medial_wall__men_tuberculum.glb",
-   "bytes": 51076,
+   "bytes": 51016,
    "colour": {
     "token": "sbMedialWall",
     "light": "#5A5A69",
@@ -9050,7 +8976,7 @@
    "category": "brain",
    "layer": "cortex",
    "morph": true,
-   "derivation": "The template's medial wall: where its pial surface is cut at the midline, through the corpus callosum and the diencephalon (a cut, not a surface of the brain). A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.703 mm), this patient's arteries outside the cortex on the right (the left hemisphere was not fitted to its vessels, so part of the left middle cerebral artery lies inside it), each hemisphere on its own side of the falx, the M2 segments on the insula (median 1.051 mm on the right) and the M3 segments in the Sylvian fissure (median 1.096 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital view 12 mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.05 mm): a shape, not a simulation of the tissue.",
+   "derivation": "The template's medial wall: where its pial surface is cut at the midline, through the corpus callosum and the diencephalon (a cut, not a surface of the brain). A template brain, not this patient's: the Lead-DBS MNI 2009b pial surface (decimated), split into lobes by its Desikan-Killiany labels (the insula by its Destrieux labels), fitted into this CT by a smooth deformation: its hull 2.0 mm inside the cranial cavity (median error 0.703 mm), this patient's arteries outside the cortex on the right (the left hemisphere was not fitted to its vessels, so part of the left middle cerebral artery lies inside it), each hemisphere on its own side of the falx, the M2 segments on the insula (median 1.051 mm on the right) and the M3 segments in the Sylvian fissure (median 1.096 mm). Its sulci and gyri are the template's. The right hemisphere opens at the Sylvian fissure (the first slider): the lips moved apart 6 mm up and 6 mm down, the rest following as rigidly as possible; and its frontal lobe lifts off the orbital roof (the second slider: 8 mm along a corridor from the anterior clinoid process forward to the frontal pole, the front of the insula with it; in the lateral supraorbital view 12 mm along that approach's corridor, out over the lateral orbital roof). In the interhemispheric view its medial surface is held 8 mm off the falx over the craniotomy's length, the medial wall and the callosum staying. Shapes, not a simulation of the tissue. Pushed aside by the tumour drawn in this view (skullbase_v3_tumours.py; at most 16.52 mm): a shape, not a simulation of the tissue.",
    "centroid": {
     "L": [
      -15.1,
@@ -9059,8 +8985,8 @@
     ],
     "R": [
      15.42,
-     -24.95,
-     19.64
+     -24.97,
+     19.65
     ]
    },
    "replaces": "br_medial_wall",
@@ -9654,6 +9580,80 @@
     "L",
     "R"
    ]
+  },
+  {
+   "aliases": [
+    "Chiasma opticum"
+   ],
+   "type": "soft",
+   "bytes": 66936,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "rule",
+   "source": "Drawn by rule on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "nerve",
+   "layer": "tracts",
+   "cranialNerve": 2,
+   "schematic": true,
+   "id": "tb_optic_chiasm",
+   "name": "Optic chiasm",
+   "file": "assets/skullbase-v3/tb_optic_chiasm.glb",
+   "derivation": "Drawn by rule (skullbase_v3_chiasm.py). Across and front to back it lies where the fitted Z-Anatomy chiasm lies, with that model's length (9.2 mm here). Its height is read from this CT: 15.48 mm above the fossa, the middle of the band of soft tissue the CT shows between the suprasellar cistern below and the third ventricle's recess above (the median of 157 columns in which both are seen), lowered 0.1 mm more to lie 0.1 mm clear of the arteries' surfaces. It is drawn level: no tilt can be read from so short a band. (The fitted model put it 2.4 mm higher and tilted 33°, among the anterior cerebral arteries, where the CT shows fluid.) Its width (13.63 mm) and height (2.26 mm) are the means Mncube 2019 measured on coronal MRI in 80 adults. Its shape is two bands crossing, each from where one optic nerve joins its front edge to the other side's back corner, where the optic tract leaves, with a central body joining them (illustrative: what crosses where inside the chiasm is not settled). The optic nerves join it 10.2 mm apart.",
+   "centroid": {
+    "L": [
+     -3.56,
+     0.23,
+     15.35
+    ],
+    "R": [
+     3.76,
+     0.22,
+     15.35
+    ]
+   }
+  },
+  {
+   "aliases": [],
+   "type": "soft",
+   "bytes": 9092,
+   "colour": {
+    "token": "sbNerve",
+    "light": "#B08A00",
+    "dark": "#E8C547"
+   },
+   "dataset": "rule",
+   "source": "Drawn by rule on the TopBrain CT",
+   "licence": "GPL-3.0 (the project's own drawing, on the TopBrain CT)",
+   "citation": [],
+   "citationUrls": [],
+   "refIds": [],
+   "category": "nerve",
+   "layer": "tracts",
+   "cranialNerve": 2,
+   "schematic": true,
+   "id": "tb_optic_tract",
+   "name": "Optic tract",
+   "file": "assets/skullbase-v3/tb_optic_tract.glb",
+   "derivation": "Drawn by rule (skullbase_v3_chiasm.py): the tracts' first 12 mm from the chiasm's back corners, backwards and outwards at 40° from the midline in the chiasm's plane, flat, as wide as the optic nerves drawn here and as thick as the chiasm (2.26 mm), and bent up to 0.58 mm out of that plane where an artery lies in their way, so that they pass under the anterior cerebral arteries' first part and over the posterior communicating and posterior cerebral arteries (illustrative); the rest of their course round the cerebral peduncles is not drawn.",
+   "centroid": {
+    "R": [
+     8.63,
+     -5.83,
+     15.16
+    ],
+    "L": [
+     -8.29,
+     -5.83,
+     15.38
+    ]
+   }
   }
  ],
  "arterySystems": [
