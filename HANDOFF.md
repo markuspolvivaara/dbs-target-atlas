@@ -292,6 +292,27 @@ starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm furth
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
 
+## Positions measured from a chosen landmark (desktop, 2026-11-24)
+
+Branch `feat/landmark-readout`, on top of `feat/reference-checks`. **Local only: not pushed.** Item 6 of
+`.claude/opus-plan-2026-11-24.md`; the audit's roadmap, section 3 ("coordinate readout in the skull base and spine").
+
+- **What:** the read-out under the pointer gives the position from a landmark the reader picks: "From Foramen ovale
+  (right): 15.2 mm left · 20.0 mm in front · 29.8 mm above · 39.0 mm in a straight line" (the patient's directions;
+  the frames are right-anterior-superior in mm). Without a choice it is as before (millimetres from the hypophysial
+  fossa).
+- **Where to pick:** the skull base (all three models): a landmark's card ("Measure positions from here"; pressed,
+  "Positions are measured from here (from the fossa again)") and a list in the Layers tab. The ventricles: the list
+  in the Layers tab (their landmarks have no card).
+- **The link:** `fr=<landmark id>`; a value that names no landmark is dropped (`sanitize` in `skullbase-main.ts` and
+  `ventricles-main.ts`).
+- **The spine is not done:** it has no landmarks to measure from. The DBS, cortex and brainstem sections use MNI
+  coordinates and were not asked for.
+- **Code:** `src/ui/relative.ts` (`landmarkLabel`, `offsetWords`), `from` in `SkullState` and `VeState`, the
+  skull base panel redrawn when the choice changes.
+- **Tests:** `tests/unit/relative.test.ts` (the wording, the side, the link on both sections);
+  `tests/e2e/audit-fixes.spec.ts` "the position read-out measured from a chosen landmark".
+
 ## Reference checks: a unit test and a hand-run script (desktop, 2026-11-24)
 
 Branch `feat/reference-checks`, on top of `feat/panel-jump-row`. **Local only: not pushed.** Item 3 of
