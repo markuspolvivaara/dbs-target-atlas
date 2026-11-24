@@ -195,8 +195,6 @@ export const APPROACH_REFS: ApproachRef[] = [
     citation: 'Sulaimanov U, An J, Erginoglu U, Ataoglu C, Serikkanov Y, Keles A, et al. Microsurgical resection of a diaphragma sellae meningioma via extradural clinoidectomy with preservation of superior hypophyseal arteries. J Neurol Surg Rep. 2025;86(4):e260–e262. doi:10.1055/a-2765-5582.' },
   { id: 'pai2018', pmid: '30283520', pmcid: 'PMC6159062', shortLabel: 'Pai 2018', url: doi('10.4103/ajns.ajns_273_16'),
     citation: 'Pai SB, Raghuram G, Keshav GC, Rodrigues E. Far-lateral transcondylar approach to anterior foramen magnum lesions—our experience. Asian J Neurosurg. 2018;13(3):651–655. doi:10.4103/ajns.ajns_273_16.' },
-  { id: 'luzzi2022', pmid: '35441601', pmcid: 'PMC9179055', shortLabel: 'Luzzi 2022', url: doi('10.23750/abm.v92is4.12823'),
-    citation: 'Luzzi S, Giotta Lucifero A, Bruno N, Baldoncini M, Campero A, Galzio R. Far lateral approach. Acta Biomed. 2022;92(S4):e2021352. doi:10.23750/abm.v92is4.12823.' },
   { id: 'payman2022', pmid: '36514632', pmcid: 'PMC9733796', shortLabel: 'Payman 2022', url: doi('10.7759/cureus.31257'),
     citation: 'Payman A, Rios Zermeno J, Hirpara A, El-Sayed IH, Abla A, Rodriguez Rubio R. Immersive surgical anatomy of the far-lateral approach. Cureus. 2022;14(11):e31257. doi:10.7759/cureus.31257.' },
   { id: 'floresjusta2021', pmid: '33921434', pmcid: 'PMC8069204', shortLabel: 'Flores-Justa 2021', url: doi('10.3390/brainsci11040488'),

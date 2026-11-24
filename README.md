@@ -1429,10 +1429,16 @@ npm run build && npm run test:e2e
 npm run check:palette
 ```
 
+```bash
+npm run check:references -- references-check.md
+```
+
 - `npm test`: content schemas, every refId resolves, every structure or tract an indication or
   symptom references exists in the manifest and on disk, verbatim comparison with
   `source/dbs-targets.html`, shipped GLBs decoded and checked against the pipeline meshes,
-  AC–PC maths and URL round-trips.
+  AC–PC maths and URL round-trips. `tests/unit/references.test.ts` checks every section's reference list: each id, DOI
+  and PMID once in its list, a DOI or PMID for every journal article (the others named, with why), a year in every
+  citation that matches the short label's, and the same year and PMID for a paper cited in several lists.
 - `npm run test:e2e`: a screenshot of every view of every section, the tools, a mobile layout and all pages
   (`smoke.spec.ts`), the behaviour the audit's fixes added (`audit-fixes.spec.ts`), plus assertions that no request leaves the local server and no console errors occur.
   Baselines were recorded on macOS with SwiftShader. On another platform, regenerate them with
@@ -1442,6 +1448,11 @@ npm run check:palette
   warnings and close pairs accepted today are listed in `scripts/palette-accepted.json`: a new one fails the check, and
   so does a listed one that no longer occurs, so the list only shrinks. After a deliberate palette decision,
   `npm run check:palette -- --accept` writes the new list.
+- `npm run check:references` (by hand: it needs the network): every reference compared with its record in Europe PMC
+  (by PMID or DOI) or Crossref (by DOI): first author, year, title, DOI, PMID and PMCID. It writes a table of what
+  differs and what was not found, to the file named or to the screen. It sends only the identifiers, under a
+  generic client name. Each record found is kept in `scripts/.cache/references.json` (not in git), so a run that
+  stops (Europe PMC can take 20 s or more to answer) continues where it stopped; delete the file to start afresh.
 - CI (`.github/workflows/checks.yml`) also runs the typecheck, the linter (errors only), the palette check and
   `npm audit --omit=dev --audit-level=high`: a known advisory in a dependency that ships to readers fails it.
 

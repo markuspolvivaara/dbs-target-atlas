@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "pipeline": "bash pipeline/run_all.sh",
-    "check:palette": "node scripts/run-ts.mjs scripts/check-palette.ts"
+    "check:palette": "node scripts/run-ts.mjs scripts/check-palette.ts",
+    "check:references": "node scripts/run-ts.mjs scripts/check-references.ts"
   },
   "license": "GPL-3.0-only",
   "devDependencies": {
