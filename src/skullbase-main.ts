@@ -4,6 +4,7 @@ import './styles.css';
 import { SECTIONS } from './brand';
 import { definitionFor, LM, SB, SB_MODEL } from './skullbase';
 import { DEFAULT_GROUP, SB_GROUP, viewGroup } from './skullbase/groups';
+import { TOUR } from './skullbase/tours';
 import { decodeSkull, encodeSkull, type SkullState } from './skullbase/state';
 import { SkullbaseAtlasPage, surgicalKeyRows } from './ui/skullbase-atlas';
 import { skullCreditsPage, skullGradingPage, skullSourcesPage } from './ui/skullbase-pages';
@@ -18,6 +19,9 @@ function sanitize(s: SkullState): SkullState {
   s.also = SB_GROUP.get(s.grp)!.kind === 'system' ? s.also.filter((id) => id !== s.grp && SB_GROUP.get(id)?.kind === 'system') : [];
   if (s.sel && !SB.has(s.sel) && !LM.has(s.sel)) s.sel = null;
   if (s.from && !LM.has(s.from)) s.from = null;
+  // a tour this model has, at one of its steps (its views are the default model's)
+  const tour = s.tour ? TOUR.get(s.tour) : undefined;
+  if (!tour || tour.model !== SB_MODEL) { s.tour = null; s.ts = 1; } else s.ts = Math.min(Math.max(1, Math.round(s.ts)), tour.steps.length);
   // (the endoscope's place and pieces belong to the endonasal view: its panel keeps them while another view is shown)
   if (!SB_GROUP.get(s.grp)!.endonasal) delete s.endo;
   // a view with a section (the Knosp grades) is cut at it while the reader keeps the cut on

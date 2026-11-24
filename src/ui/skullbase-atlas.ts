@@ -6,7 +6,8 @@ import { APPROACH, APPROACH_REF, CAVERNOUS_INFO, ENDONASAL_INFO, INSULA, triangl
 import { measuredOn, TUMOUR_FAMILY, TUMOURS, tumourGroupId, type TumourFamily } from '../skullbase/tumours';
 import { CAVERNOUS } from '../skullbase/cavernous';
 import { TB_NOTES, TB_REF } from '../skullbase/temporal';
-import { encodeSkull } from '../skullbase/state';
+import { decodeSkull, encodeSkull } from '../skullbase/state';
+import { TOUR, TOURS, type Tour } from '../skullbase/tours';
 import { combinedCut, FLOOR_CUT_MM, SB_GROUP, SB_GROUPS, viewGroup, type SbGroup } from '../skullbase/groups';
 import { skullScene, type SkullPlan } from '../skullbase/scene';
 import type { SkullState } from '../skullbase/state';
@@ -376,7 +377,10 @@ export class SkullbaseAtlasPage {
     this.stage.querySelectorAll<HTMLButtonElement>('[data-hemi]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.hemi === s.hemi)));
     this.stage.querySelectorAll<HTMLButtonElement>('.toolbar [data-labels]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.labels === s.labels)));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((b) => b.toggleAttribute('data-active', b.dataset.preset === s.cam.preset));
-    const key = `${s.grp}|${s.also.join(',')}|${s.sel}|${s.hidden.join(',')}|${s.from}`;
+    const key = `${s.grp}|${s.also.join(',')}|${s.sel}|${s.hidden.join(',')}|${s.from}|${s.tour}|${s.ts}`;
+    // a tour's new step: the panel back at its top, where the tour's card is (not at the step's selected card)
+    const tourStep = !!s.tour && (!prev || prev.tour !== s.tour || prev.ts !== s.ts);
+    if (tourStep) this.tourTop = true;
     if (key !== this.lastKey || !prev) { this.lastKey = key; this.renderOverview(); }
     // the surgical view's sliders follow the state (keys move them too)
     for (const slider of this.tabs.overview.querySelectorAll<HTMLInputElement>('input[data-morph]')) {
@@ -390,8 +394,11 @@ export class SkullbaseAtlasPage {
     this.renderLayers();
     if (prev && prev.sel !== s.sel && s.sel) this.selectTab('overview', false);
     // the card of what was just selected (or of a link's selection) is brought to the top of the panel
-    if (s.sel && prev?.sel !== s.sel) revealCard(this.panel);
+    if (s.sel && prev?.sel !== s.sel && !tourStep) revealCard(this.panel);
   }
+
+  /** The overview is drawn at its top once (a tour's step), not where the reader had scrolled it. */
+  private tourTop = false;
 
   private pickGroup(id: string): void {
     const from = SB_GROUP.get(this.s.grp), g = SB_GROUP.get(id)!;
@@ -426,7 +433,8 @@ export class SkullbaseAtlasPage {
     const s = this.s;
     const pane = this.tabs.overview;
     // the lists re-render on every toggle: keep the reader's place
-    const keep = [pane.scrollTop, this.panel.scrollTop];
+    const keep = this.tourTop ? [0, 0] : [pane.scrollTop, this.panel.scrollTop];
+    this.tourTop = false;
     requestAnimationFrame(() => { pane.scrollTop = keep[0]; this.panel.scrollTop = keep[1]; });
     clear(pane);
     // the two models: the same view in the other one (its page, this link)
@@ -553,6 +561,43 @@ export class SkullbaseAtlasPage {
     const row = jumpRow([['Views', jumps.views], ['Opening', jumps.opening], ['Endoscope', jumps.endoscope], ['Shown in this view', jumps.shown],
       ['Selected', jumps.selected], ['About this view', jumps.about], ['Model', modelBlock[0]]]);
     if (row) pane.prepend(row);
+    const tc = this.tourCard();
+    if (tc) {
+      pane.prepend(tc);
+      // (after a step the panel is drawn again: the focus back on the button pressed)
+      if (this.tourFocus) { const b = tc.querySelector<HTMLElement>(`[data-tour="${this.tourFocus}"]:not([disabled])`) ?? tc.querySelector<HTMLElement>('[data-tour="next"]'); this.tourFocus = null; b?.focus(); }
+    }
+  }
+
+  /** Where the focus goes after a step: the tour's button just pressed (it is drawn again). */
+  private tourFocus: string | null = null;
+
+  /** Show a tour's step: the view its link holds, the tour kept in the link (the camera moves to the view's). */
+  private goStep(tour: Tour, n: number): void {
+    const step = tour.steps[n - 1];
+    if (!step) return;
+    const v = decodeSkull(`#/atlas?${step.link}`);
+    this.update((s) => { Object.assign(s, v, { page: 'atlas', tour: tour.id, ts: n }); }, { camera: true });
+  }
+
+  /** The tour being played: its title, the step and its sentence with sources, Previous and Next, and a way out. */
+  private tourCard(): HTMLElement | null {
+    const tour = this.s.tour ? TOUR.get(this.s.tour) : undefined;
+    if (!tour) return null;
+    const n = this.s.ts, m = tour.steps.length, step = tour.steps[n - 1];
+    const leave = () => this.update((s) => { s.tour = null; s.ts = 1; });
+    const go = (k: number, which: string) => { this.tourFocus = which; this.goStep(tour, k); };
+    return h('section', { class: 'card tour-card', 'aria-label': `Tour: ${tour.title}` },
+      h('p', { class: 'eyebrow' }, 'Tour'),
+      h('h2', {}, tour.title),
+      h('p', { class: 'tour-step', 'aria-live': 'polite' }, h('strong', {}, `Step ${n} of ${m}: ${step.title}`)),
+      h('p', {}, step.text, ' ', refLinksFrom(APPROACH_REF, step.refIds)),
+      h('div', { class: 'tour-nav' },
+        h('button', { type: 'button', class: 'btn', 'data-tour': 'prev', disabled: n <= 1, onclick: () => go(n - 1, 'prev') }, 'Previous'),
+        n < m
+          ? h('button', { type: 'button', class: 'btn', 'data-tour': 'next', onclick: () => go(n + 1, 'next') }, 'Next')
+          : h('button', { type: 'button', class: 'btn', 'data-tour': 'next', onclick: () => leave() }, 'Finish'),
+        h('button', { type: 'button', class: 'linklike', 'data-tour': 'leave', title: 'Leave the tour (Esc); the view stays', onclick: () => leave() }, 'Leave the tour')));
   }
 
   private card(id: string): HTMLElement {
@@ -692,7 +737,10 @@ export class SkullbaseAtlasPage {
       const sides = b.aca.a3.filter((x) => x !== 'third').map((x) => (x === 'R' ? 'the right' : 'the left'));
       return h('p', { class: 'aside' }, `On this CT TopBrain labels an A3 segment on ${sides.join(' and ') || 'neither side'}${third ? `, and a third anterior cerebral artery (A2 and A3) between the two, ${b.aca.thirdA2ToAcomMm === 0 ? 'its A2 starting at the anterior communicating artery (the labels touch), as the accessory (median) artery the sources describe does' : `its A2 starting ${fmtMm(b.aca.thirdA2ToAcomMm ?? 0)} mm from the anterior communicating artery`}` : ''}. The labels stop at A3, so the callosomarginal and cortical branches are not shown.`);
     };
+    // a teaching tour through this approach's views, where there is one for this model
+    const tour = TOURS.find((t) => t.approach === aid && t.model === SB_MODEL);
     return [
+      ...(tour && this.s.tour !== tour.id ? [h('p', {}, h('button', { type: 'button', class: 'btn tour-start', onclick: () => this.goStep(tour, 1) }, `Take the tour: ${tour.title}`))] : []),
       h('dl', {},
         ...ap.sections.map((x) => [h('dt', {}, x.title), h('dd', {}, this.claims(x.claims), measured(x.measured))]),
         h('dt', {}, 'How the craniotomy is drawn'), h('dd', {}, geom.how, ` Bone removed: ${geom.removedMl} ml (right side), drawn see-through.`),
@@ -974,6 +1022,7 @@ export class SkullbaseAtlasPage {
     }
     if (k === 'Escape') {
       if (this.measure.on) { this.measure.toggle(); return true; }
+      if (this.s.tour) { this.update((s) => { s.tour = null; s.ts = 1; }); return true; }
       if (this.s.sel) { this.update((s) => { s.sel = null; }); return true; }
     }
     return false;
