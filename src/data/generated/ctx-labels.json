@@ -3418,10 +3418,17 @@
    ],
    "insula": false,
    "definition": {
-    "text": "The supramarginal gyrus is a portion of the parietal lobe. This area of the brain is also known as Brodmann area 40 based on the brain map created by Korbinian Brodmann to define the structures in the cerebral cortex. It is probably involved with language perception and processing, and lesions in it may cause receptive aphasia.",
+    "text": "The supramarginal gyrus is a portion of the parietal lobe. This area of the brain is also known as Brodmann area 40 based on the brain map created by Korbinian Brodmann to define the structures in the cerebral cortex. It is probably involved with language perception and processing, and lesions in it are associated with conduction aphasia rather than with impaired comprehension.",
     "url": "https://en.wikipedia.org/wiki/Supramarginal_gyrus",
     "source": "Supramarginal gyrus",
-    "scope": null
+    "scope": null,
+    "edits": [
+     {
+      "from": "lesions in it may cause receptive aphasia",
+      "to": "lesions in it are associated with conduction aphasia rather than with impaired comprehension",
+      "why": "Lesions of the supramarginal and superior temporal gyri are the commonest cause of conduction aphasia, in which auditory comprehension is relatively preserved and repetition impaired (Buchsbaum et al. 2011, PMC3090694); in 99 people with aphasia after stroke, speech production mapped to the supramarginal gyrus and speech recognition to the superior temporal gyrus (Mirman et al. 2015, PMC4400840)"
+     }
+    ]
    }
   },
   {
@@ -4817,10 +4824,17 @@
    "parcels": [],
    "insula": false,
    "definition": {
-    "text": "The inferior temporal gyrus is one of three gyri of the temporal lobe and is located below the middle temporal gyrus, connected behind with the inferior occipital gyrus; it also extends around the infero-lateral border on to the inferior surface of the temporal lobe, where it is limited by the inferior sulcus. This region is one of the higher levels of the ventral stream of visual processing, associated with the representation of objects, places, faces, and colors. It may also be involved in face perception, and in the recognition of numbers. The inferior temporal gyrus is the anterior region of the temporal lobe located underneath the central temporal sulcus.",
+    "text": "The inferior temporal gyrus is one of three gyri of the temporal lobe and is located below the middle temporal gyrus, connected behind with the inferior occipital gyrus; it also extends around the infero-lateral border on to the inferior surface of the temporal lobe, where it is limited by the inferior sulcus. This region is one of the higher levels of the ventral stream of visual processing, associated with the representation of objects, places, faces, and colors. It may also be involved in face perception, and in the recognition of numbers.",
     "url": "https://en.wikipedia.org/wiki/Inferior_temporal_gyrus",
     "source": "Inferior temporal gyrus",
-    "scope": null
+    "scope": null,
+    "edits": [
+     {
+      "from": " The inferior temporal gyrus is the anterior region of the temporal lobe located underneath the central temporal sulcus.",
+      "to": "",
+      "why": "There is no central temporal sulcus in the nomenclature (Destrieux et al. 2010), and the gyrus runs nearly the whole length of the lobe, below the inferior temporal sulcus (Kiernan 2012, PMC3420617); the first sentence already places it"
+     }
+    ]
    }
   },
   {
@@ -7365,7 +7379,7 @@
    "parcels": [],
    "insula": false,
    "definition": {
-    "text": "In brain anatomy, the lunate sulcus or simian sulcus also known as the sulcus lunatus is a fissure in the occipital lobe variably found in humans and more often larger when present in apes and monkeys. The lunate sulcus marks the transition between V1 and V2.The lunate sulcus lies further back in human brains but has a more forward location in chimpanzees.",
+    "text": "In brain anatomy, the lunate sulcus or simian sulcus also known as the sulcus lunatus is a fissure in the occipital lobe variably found in humans and more often larger when present in apes and monkeys. The lunate sulcus lies further back in human brains but has a more forward location in chimpanzees.",
     "url": "https://en.wikipedia.org/wiki/Lunate_sulcus",
     "source": "Lunate sulcus",
     "scope": "the lunate sulcus",
@@ -7374,6 +7388,11 @@
       "from": " The evolutionary expansion of the frontal areas of the lunate sulcus would have caused a shift in the particular location of the fissure. It has been hypothesized that evolutionary pressures resulted in the human brain undergoing internal reorganization to develop the capability of human language.",
       "to": "",
       "why": "Given with no source, and garbled: remarks on evolution"
+     },
+     {
+      "from": "The lunate sulcus marks the transition between V1 and V2.",
+      "to": "",
+      "why": "True of apes, not of humans: in 220 human hemispheres an ape-like lunate sulcus was found in 3, and where present it did not mark a functional border (Allen et al. 2006, PMID 16835937); Destrieux et al. 2010 (section 2.3.5) call it small and inconstant. Human V1 is predicted by the folds round the calcarine sulcus (Hinds et al. 2008, PMID 18055222)"
      }
     ]
    }

@@ -166,6 +166,12 @@ export const WM_REFERENCES: WmReference[] = [
   // PMC7028272)
   { id: 'keser2015', pmid: '25904851', shortLabel: 'Keser 2015', url: doi('10.3389/fnana.2015.00041'),
     citation: 'Keser Z, Hasan KM, Mwangi BI, Kamali A, Ucisik-Keser FE, Riascos RF, et al. Diffusion tensor imaging of the human cerebellar pathways and their interplay with cerebral macrostructure. Front Neuroanat. 2015;9:41. doi:10.3389/fnana.2015.00041.' },
+  // (the inferior peduncle's two parts, the owner's choice of 25 November 2026; read in full text, PMC6301254 and
+  // PMC12072475)
+  { id: 'baud2018', pmid: '30618650', shortLabel: 'Baud 2018', url: doi('10.3389/fnana.2018.00102'),
+    citation: 'Baud R, Sprumont P, ten Donkelaar HJ. The representation of white matter in the central nervous system. Front Neuroanat. 2018;12:102. doi:10.3389/fnana.2018.00102.' },
+  { id: 'paracuellos2025', pmid: '40362640', shortLabel: 'Paracuellos-Ayala 2025', url: doi('10.3390/ijms26094402'),
+    citation: 'Paracuellos-Ayala I, Caruana G, Reyes Ortega MM, Hagerman RJ, Wang JY, Rodriguez-Revenga L, et al. Involvement of the cerebellar peduncles in FMR1 premutation carriers: a pictorial review of their anatomy, imaging, and pathology. Int J Mol Sci. 2025;26(9):4402. doi:10.3390/ijms26094402.' },
   { id: 'zhang2020', pmid: '32069284', shortLabel: 'Zhang 2020', url: doi('10.1371/journal.pone.0213952'),
     citation: 'Zhang Y, Vakhtin AA, Jennings JS, Massaband P, Wintermark M, Craig PL, et al. Diffusion tensor tractography of brainstem fibers and its application in pain. PLoS One. 2020;15(2):e0213952. doi:10.1371/journal.pone.0213952.' },
   { id: 'perrini2013', pmid: '22933248', shortLabel: 'Perrini 2013', url: doi('10.1007/s10143-012-0417-y'),

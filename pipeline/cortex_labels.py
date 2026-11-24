@@ -272,12 +272,33 @@ ZTEXT_EDITS: dict[str, list[tuple[str, str, str]]] = {
         (" in the brains of vertebrates", "", f"{_NO_SOURCE}; these cards describe the human brain"),
         (" It is sometimes confused with the longitudinal fissure.", "", _NO_SOURCE),
     ],
-    # (the sentence before these, on the lunate sulcus as the border of V1 and V2, waits for a clinician's review)
     "S_oc_middle_and_Lunatus": [(
         " The evolutionary expansion of the frontal areas of the lunate sulcus would have caused a shift in the "
         "particular location of the fissure. It has been hypothesized that evolutionary pressures resulted in the human "
         "brain undergoing internal reorganization to develop the capability of human language.", "",
         f"{_NO_SOURCE}, and garbled: remarks on evolution",
+    ), (
+        # (the owner's choice of 25 November 2026, after the evidence in .claude/text-questions-2026-11.md)
+        "The lunate sulcus marks the transition between V1 and V2.", "",
+        "True of apes, not of humans: in 220 human hemispheres an ape-like lunate sulcus was found in 3, and where "
+        "present it did not mark a functional border (Allen et al. 2006, PMID 16835937); Destrieux et al. 2010 (section "
+        "2.3.5) call it small and inconstant. Human V1 is predicted by the folds round the calcarine sulcus (Hinds et "
+        "al. 2008, PMID 18055222)",
+    )],
+    "G_pariet_inf-Supramar": [(
+        "lesions in it may cause receptive aphasia",
+        "lesions in it are associated with conduction aphasia rather than with impaired comprehension",
+        "Lesions of the supramarginal and superior temporal gyri are the commonest cause of conduction aphasia, in which "
+        "auditory comprehension is relatively preserved and repetition impaired (Buchsbaum et al. 2011, PMC3090694); in "
+        "99 people with aphasia after stroke, speech production mapped to the supramarginal gyrus and speech recognition "
+        "to the superior temporal gyrus (Mirman et al. 2015, PMC4400840)",
+    )],
+    "G_temporal_inf": [(
+        " The inferior temporal gyrus is the anterior region of the temporal lobe located underneath the central "
+        "temporal sulcus.", "",
+        "There is no central temporal sulcus in the nomenclature (Destrieux et al. 2010), and the gyrus runs nearly the "
+        "whole length of the lobe, below the inferior temporal sulcus (Kiernan 2012, PMC3420617); the first sentence "
+        "already places it",
     )],
     "S_parieto_occipital": [(
         " The lateral part of the parieto-occipital sulcus is situated about 5 cm in front of the occipital pole of the "

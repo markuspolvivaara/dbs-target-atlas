@@ -269,10 +269,7 @@ the list").** On `fix/audit-models-2` (off `27ee8a6`), local commits, not pushed
 - MC-13 (v1's bone raster) and MC-15 (v1's right "Insula") were done on 2026-11-24: see "v1's bone field on its
   meshes" and "v1's brain step gives the same files every time". (AP-11, AP-15 and MC-16 were done on the night of 2026-11-24, same section.) MA-17's rest: the
   sensorimotor GPi's 18 edges shared by more than two triangles (in the label's own shape).
-- Text for the owner: B-016's three cortex sentences a clinician should judge (the lunate sulcus as the V1/V2 border,
-  receptive aphasia from supramarginal lesions, the inferior temporal gyrus "underneath the central temporal
-  sulcus"); B-020's "restiform body" (Keser 2015, PMC4389543, calls the inferior peduncles "also known as restiform
-  bodies" and describes a smaller juxtarestiform body).
+- Text for the owner: done on 2026-11-25 ("The four text questions answered" below).
 - Engineering left: P1-08 (release memory: the audit says only if phones still struggle, unmeasured), P2S-19
   (dependency majors, through Dependabot one at a time), P1-27's `preserveDrawingBuffer` (the browser tests read the
   canvas) and `dist/` in git (a workflow choice), UI-14's docked legend or camera offset. UI-27's shorter phone
@@ -291,6 +288,26 @@ The tract data (section 2) is done as far as open data go: the acoustic radiatio
 starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm further forward). Done from it: help and reset, cards into view, "what this bundle shows", surgical views,
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
+
+## The four text questions answered (B-016, B-020) (desktop, 2026-11-25)
+
+Branch `fix/text-answers`, on top of `chore/deps-vite-7`. The evidence and the options were in
+`.claude/text-questions-2026-11.md` (main checkout, not in git); the owner chose on 25 November:
+
+- **Lunate sulcus** (cortex): "The lunate sulcus marks the transition between V1 and V2." cut (true of apes; in
+  humans inconstant and no functional border: Allen 2006, Destrieux 2010, Hinds 2008).
+- **Supramarginal gyrus** (cortex): "lesions in it may cause receptive aphasia" now "lesions in it are associated
+  with conduction aphasia rather than with impaired comprehension" (Buchsbaum 2011; Mirman 2015).
+- **Inferior temporal gyrus** (cortex): the sentence on the "central temporal sulcus" cut (no such sulcus in
+  Destrieux 2010; the gyrus runs nearly the whole lobe, Kiernan 2012).
+- **Inferior cerebellar peduncle** (tracts): "restiform body" kept as another name; the card's course now begins
+  "Its larger, lateral part is the restiform body; a smaller juxtarestiform body beside it carries the fibres between
+  the cerebellum and the vestibular nuclei" (Baud 2018, Keser 2015, Paracuellos-Ayala 2025; the first and last added
+  to the tracts' references).
+- **How:** the cortex corrections are entries in `ZTEXT_EDITS` (`pipeline/cortex_labels.py`), each with its reason
+  and sources, which the card lists. They were applied to `src/data/generated/ctx-labels.json` with the build's own
+  `_edited`, not by rebuilding the cortex (that needs the raw surfaces and rewrites the meshes); the build's
+  `validate()` passes (1040 checks), and a rebuild gives the same texts.
 
 ## Dependencies brought up to date, one at a time (desktop, 2026-11-24)
 

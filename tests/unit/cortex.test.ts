@@ -102,8 +102,9 @@ describe('cortex data (Destrieux on the Lead-DBS template surface)', () => {
     }
     expect(LABELS.filter((l) => l.definition?.edits).map((l) => l.short).sort())
       .toEqual(['G_and_S_occipital_inf', 'G_cuneus', 'G_front_inf-Opercular', 'G_front_inf-Triangul', 'G_front_middle',
-        'G_occipital_middle', 'G_occipital_sup', 'G_pariet_inf-Angular', 'G_rectus', 'G_temp_sup-G_T_transv',
-        'G_temp_sup-Lateral', 'G_temp_sup-Plan_polar', 'G_temp_sup-Plan_tempo', 'G_temporal_middle', 'S_central',
+        'G_occipital_middle', 'G_occipital_sup', 'G_pariet_inf-Angular', 'G_pariet_inf-Supramar', 'G_rectus',
+        'G_temp_sup-G_T_transv', 'G_temp_sup-Lateral', 'G_temp_sup-Plan_polar', 'G_temp_sup-Plan_tempo',
+        'G_temporal_inf', 'G_temporal_middle', 'S_central',
         'S_oc_middle_and_Lunatus', 'S_parieto_occipital', 'S_temporal_inf']);
   });
   it('the doubtful, garbled and misplaced sentences of the shipped texts are corrected or left out (the audit’s B-016)', () => {
@@ -124,13 +125,18 @@ describe('cortex data (Destrieux on the Lead-DBS template surface)', () => {
     }
     // the inferior temporal sulcus between the lateral and ventral aspects (Destrieux 2010, 2.3.3 and 2.3.4)
     expect(def('S_temporal_inf').text).toContain('at the limit between the lateral and ventral aspects of the temporal lobe');
-    // the frontal lobe's text loses its garbled sentence; the three sentences awaiting a clinician are still there
+    // the frontal lobe's text loses its garbled sentence
     const frontal = LOBE.get('frontal')!.definition!;
     expect(frontal.text).not.toMatch(/covered by the prefrontal cortex/);
     expect(frontal.edits).toHaveLength(1);
-    expect(def('S_oc_middle_and_Lunatus').text).toContain('marks the transition between V1 and V2');
-    expect(def('G_pariet_inf-Supramar').text).toContain('receptive aphasia');
-    expect(def('G_temporal_inf').text).toContain('central temporal sulcus');
+    // the three sentences a clinician was asked about, as the owner chose on 25 November 2026: the lunate sulcus as
+    // the V1/V2 border and the "central temporal sulcus" cut, the supramarginal gyrus's lesions reworded
+    expect(def('S_oc_middle_and_Lunatus').text).not.toMatch(/V1 and V2/);
+    expect(def('S_oc_middle_and_Lunatus').edits!.at(-1)!.why).toContain('Allen et al. 2006');
+    expect(def('G_pariet_inf-Supramar').text).toContain('lesions in it are associated with conduction aphasia rather than with impaired comprehension.');
+    expect(def('G_pariet_inf-Supramar').text).not.toMatch(/receptive aphasia/);
+    expect(def('G_temporal_inf').text).not.toMatch(/central temporal sulcus/);
+    expect(def('G_temporal_inf').text).toMatch(/recognition of numbers\.$/);
   });
   it('every label and lobe has a text; where Z-Anatomy ships none, one written from Destrieux 2010 (the audit’s B-014)', () => {
     const own = LABELS.filter((l) => l.definition?.refIds).map((l) => l.short);

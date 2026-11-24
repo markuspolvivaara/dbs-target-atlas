@@ -58,6 +58,12 @@ describe('the site audit\u2019s B4: what each atlas bundle shows', () => {
     expect(TOPIC.get('wm_slf1')!.aliases).toEqual([]);                      // "dorsal SLF" names SLF II elsewhere
     expect(TOPIC.get('wm_slf1')!.connections.flatMap((c) => c.refIds)).toEqual(expect.arrayContaining(['wang2016', 'komaitis2020']));
     expect(TOPIC.get('wm_cs_p')!.summary).not.toMatch(/temporal/);
+    // "restiform body" kept as another name, and the card says it is the larger part (the audit's B-020; the owner's
+    // choice of 25 November 2026)
+    const icp = TOPIC.get('wm_icp')!;
+    expect(icp.aliases).toEqual(['restiform body']);
+    expect(icp.course[0].text).toMatch(/^Its larger, lateral part is the restiform body; a smaller juxtarestiform body/);
+    expect(icp.course[0].refIds).toEqual(['baud2018', 'keser2015', 'paracuellos2025']);
   });
   it('holds what those sentences say to the pipeline’s measurements (wm-measured.json, pipeline/wm_measure.py)', () => {
     const text = (id: string) => TOPIC.get(id)!.measured.join(' ');

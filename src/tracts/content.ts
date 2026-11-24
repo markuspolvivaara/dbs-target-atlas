@@ -650,6 +650,7 @@ export const TOPICS: TractTopicInput[] = [
     id: 'wm_icp', name: 'Inferior cerebellar peduncle', abbr: 'ICP', aliases: ['restiform body'], type: 'cerebellar', tier: 'fossa',
     summary: 'Afferent peduncle into the cerebellum, important for coordination and proprioception.',
     course: [
+      c('Its larger, lateral part is the restiform body; a smaller juxtarestiform body beside it carries the fibres between the cerebellum and the vestibular nuclei.', 'baud2018', 'keser2015', 'paracuellos2025'),
       c('Dissection divides it into cisternal, ventricular and intracerebellar segments; its centripetal fibres wrap around the radiation of the superior peduncle and the dentate nucleus towards the cortex of the vermis.', 'perrini2013'),
     ],
     connections: [
