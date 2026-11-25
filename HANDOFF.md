@@ -289,6 +289,52 @@ starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm furth
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
 
+## Syndromes in the cortex section (module plans, Part A, addition 1) (desktop, 2026-11-25)
+
+Branch `feat/cognitive-map`, from `main` after PR 56. Addition 1 of `.claude/module-plans-2026-11-24.md` (not in git):
+syndromes as a way into the cortex. The owner chose the first set on 2026-11-25: the aphasias and alexia, attention and
+praxis, vision; **no dementia group**. **The cards' text is for the owner to read before the PR is merged.**
+
+- **Data** (`src/cortex/syndromes.ts`): 12 syndromes in three groups. Aphasias and alexia: Broca's, Wernicke's,
+  conduction, transcortical motor, transcortical sensory, alexia without agraphia. Attention and praxis: hemispatial
+  neglect, Gerstmann, Bálint, limb apraxia (ideomotor). Vision: prosopagnosia, homonymous field defects (occipital).
+  Each has a side, a camera, the Destrieux labels drawn (each with a reason), the white-matter tracts its sources name
+  (linked to the tracts section by id), and sentences under "What it is", "Where" and "How firm the tie is", every
+  one citing its sources.
+- **Sources:** 23 papers (`SYN_REFS`), all open full text on Europe PMC or PMC. Three subagents found and read them and
+  returned every sentence with a verbatim supporting quote; each quote was then checked against the paper's full
+  text by a script (all found). Horton 2021 (macular sparing's mechanism) was dropped: PMC showed a browser check and
+  Europe PMC has no full text, so its quotes could not be checked; the macular sparing sentences rest on Goodwin 2014.
+  Where the sources name the superior longitudinal fasciculus as one, all three of the tracts section's parts are
+  linked.
+- **Labels are approximations**, and the card says so: the nearest Destrieux labels to the regions the sources name.
+  Transcortical sensory aphasia draws the middle temporal and angular gyri from Binder's semantic network.
+- **The owner's review of PR 57 (2026-11-25)**, done on the same branch:
+  - Broca's aphasia draws only Broca's area (the opercular and triangular parts); the sentence on the wider damage of
+    chronic Broca's aphasia moved to "How firm the tie is". Tract links now have their own "Tracts named" line.
+  - "The premotor areas are the SMA and pre-SMA, draw those": a syndrome can now draw HMAT's areas (`fns`, Mayka
+    2006, the Function selector's meshes) as well as Destrieux labels, in their own colours, listed in the card and the
+    legend. Limb apraxia draws the SMA and pre-SMA instead of the inferior precentral sulcus and opens from above;
+    transcortical motor aphasia draws them instead of the superior frontal gyrus, opens on the medial surface and links
+    the frontal aslant tract. The lesion evidence is for the SMA (Watson 1986 as reported by Chang 2015 and Kübel 2018);
+    for the pre-SMA in apraxia there is only imaging in healthy people (Króliczak 2009), and the card says so. For
+    transcortical motor aphasia Levy 2025 ties the self-generated speech deficit to the pre-SMA.
+  - Prosopagnosia, "posterior areas can affect it too": now draws the inferior occipital gyrus (occipital face area),
+    the fusiform gyrus, the lingual gyrus and the temporal pole, links the ILF and IFOF, and cites a clinical series
+    (Josephs 2024), Gainotti 2011, three right posterior cases (Barton 2009), the patient PS (Prieto 2011, Rossion
+    2011), stimulation (Jonas 2014), lesion network mapping (Cohen 2019) and a stroke series (Robotham 2023).
+  - 15 papers added (38 in all), found by a research workflow with an independent verifier per topic; every new quote
+    was checked again by the quote script (58 of 58 found). Not used, no open text: Watson 1986, Meadows 1974,
+    Damasio 1982, Rossion 2003, Jonas 2012 and 2015, Pinson 2022.
+- **Front end:** a "Syndrome" chip group under "Function", one row per group. Choosing one draws its labels in colour
+  (whatever the colour mode) and the rest grey, on its side, from its camera, with no function, lobe or selection;
+  the field defects open on the medial surface of the left hemisphere ("either hemisphere"). Its card comes into view
+  (`revealCard` now takes the card's selector). A label in "Drawn here" opens the label's card with the syndrome
+  kept; the card's × or a view or lobe or function ends it. The link holds it (`syn=…`; a syndrome wins over
+  `f=`). The Sources page lists the papers.
+- **Tests:** `tests/unit/syndromes.test.ts` (the groups; labels, sources and their labels; tract ids and names; the
+  plan; the link); `tests/e2e/smoke.spec.ts` "cortex: a syndrome draws its areas…".
+
 ## A teaching tour: the pterional approach in six steps (desktop, 2026-11-25)
 
 Branch `feat/tour`, on top of `feat/text-version`. Item 10 of `.claude/opus-plan-2026-11-24.md`; the audit's roadmap,

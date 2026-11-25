@@ -1067,6 +1067,50 @@ test('cortex: the Function selector draws the areas with their sources and keeps
   expect(g.errors).toEqual([]);
 });
 
+test('cortex: a syndrome draws its areas on its side, with a sourced card, kept in the link', async ({ page }) => {
+  const g = guard(page);
+  await page.goto('./cortex/#/atlas?v=lateral&f=language');
+  await settle(page);
+  // a syndrome replaces the function group, opens on its side, and its card cites its sources
+  await page.locator('.syn-chips .chip[data-v="neglect"]').click();
+  await expect.poll(() => new URL(page.url()).hash).toContain('syn=neglect');
+  expect(new URL(page.url()).hash).not.toContain('f=language');
+  await expect(page.locator('.fn-card')).toHaveCount(0);
+  const card = page.locator('.syn-card');
+  await expect(card.locator('h2')).toHaveText('Hemispatial neglect');
+  await expect(card).toContainText('Molenberghs 2012');
+  await expect(card).toContainText('On the right hemisphere');
+  await expect(page.locator('[data-hemi="R"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('.legend3d')).toContainText('Hemispatial neglect: its areas in colour');
+  // the areas drawn are listed, and one opens its label card with the syndrome kept
+  await expect(page.locator('.sb-list .sb-item')).toHaveCount(6);
+  await card.getByRole('button', { name: 'Angular gyrus' }).click();
+  await expect.poll(() => new URL(page.url()).hash).toContain('sel=ctx_g_pariet_inf_angular');
+  expect(new URL(page.url()).hash).toContain('syn=neglect');
+  // held over a reload; a field defect opens on the medial surface, the left one shown
+  await page.reload();
+  await settle(page);
+  await expect(page.locator('.syn-card h2')).toHaveText('Hemispatial neglect');
+  await page.locator('.syn-chips .chip[data-v="hemianopia"]').click();
+  await expect.poll(() => new URL(page.url()).hash).toContain('v=medial');
+  await expect(page.locator('.syn-card')).toContainText('either hemisphere (the left is shown)');
+  await expect(page.locator('.syn-card a[href*="tracts/#/atlas?sel=wm_or"]')).toHaveText('Optic radiation');
+  // limb apraxia draws HMAT's supplementary motor areas (the owner: the premotor areas are the SMA and pre-SMA), from
+  // above, where they show beside the parietal areas; in the legend and the card, with HMAT's source
+  await page.locator('.syn-chips .chip[data-v="apraxia"]').click();
+  await expect(page.locator('[data-preset="axial"]')).toHaveAttribute('data-active', '');
+  await expect(page.locator('.legend3d')).toContainText('Supplementary motor area (SMA)');
+  await expect(page.locator('.legend3d')).toContainText('Pre-SMA');
+  await expect(page.locator('.syn-card .syn-labels')).toContainText('Pre-SMA');
+  await expect(page.locator('.syn-card')).toContainText('Mayka 2006');
+  // closing the card ends the syndrome
+  await page.locator('.syn-card .close').click();
+  await expect(page.locator('.syn-card')).toHaveCount(0);
+  expect(new URL(page.url()).hash).not.toContain('syn=');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
 test('dbs: the STN as one nucleus or as its zones; the Parkinson\'s view without the PPN and the optic tract', async ({ page }) => {
   const g = guard(page);
   await page.goto('./dbs/#/atlas?i=pd');

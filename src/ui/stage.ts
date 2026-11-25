@@ -154,13 +154,14 @@ const revealing = new WeakMap<HTMLElement, () => void>();
  * does not always say when it has ended (no scrollend). A second alignment 900 ms after the first, as there was,
  * landed inside the smooth scroll there, and the card's heading stayed up to 426 px above the pane's top with nothing
  * to put it right (measured with the browser held to one core; the browser test of this failed that way in CI).
- * The reader's own wheel, touch, press or key in the pane stops the steps, as does a newer selection.
+ * The reader's own wheel, touch, press or key in the pane stops the steps, as does a newer selection. `which`: the card
+ * to bring up, when it is not the selected structure's (the cortex section's syndrome card).
  */
-export function revealCard(panel: HTMLElement): void {
+export function revealCard(panel: HTMLElement, which = '.card.sel'): void {
   revealing.get(panel)?.();
   // where the pane has to be scrolled for the card's top to lie at its top; null when there is no card to show
   const aim = (): { pane: HTMLElement; top: number } | null => {
-    const card = panel.querySelector<HTMLElement>('.card.sel');
+    const card = panel.querySelector<HTMLElement>(which);
     const pane = card?.closest<HTMLElement>('.pane');
     if (!card || !pane || pane.hidden) return null;
     const top = card.getBoundingClientRect().top - pane.getBoundingClientRect().top + pane.scrollTop - 8;
@@ -179,7 +180,7 @@ export function revealCard(panel: HTMLElement): void {
     if (!first) { end(); return; }
     const pane = first.pane, from = pane.scrollTop;
     // said too, for who cannot see the panel change
-    const name = panel.querySelector('.card.sel h2')?.textContent?.trim();
+    const name = panel.querySelector(`${which} h2`)?.textContent?.trim();
     if (name) announce(`${name}: its card is shown in the panel.`);
     for (const ev of ['wheel', 'touchstart', 'pointerdown', 'keydown']) pane.addEventListener(ev, end, { passive: true, signal: watch.signal });
     // (about as long as the browser's own smooth scroll takes: a third of a second for 600 px, a second at most)
