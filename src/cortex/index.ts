@@ -3,6 +3,7 @@ import dbsManifestJson from '../data/generated/manifest.json';
 import labelsJson from '../data/generated/ctx-labels.json';
 import manifestJson from '../data/generated/ctx-manifest.json';
 import { CtxManifestSchema } from '../data/schema';
+import { REG_REFS, REGION_TRACT, REGION_TRACTS, REGIONS } from './regions';
 import { SYN_REFS, SYNDROMES } from './syndromes';
 
 /**
@@ -92,9 +93,10 @@ export const LOBES = FILE.lobes;
 export const LOBE = new Map(LOBES.map((l) => [l.id, l]));
 export const METHOD = FILE.method;
 export const FUNCTIONS = FILE.functions;
-/** The cortex section's content references ('mayka2006' -> 'Mayka 2006'), for the function and syndrome cards' source
- * links: the generated file's, and the syndrome cards' (src/cortex/syndromes.ts). */
-export const CTX_REFS = new Map(Object.entries<{ citation: string; url: string; short?: string }>({ ...FILE.references, ...SYN_REFS }).map(([k, r]) => {
+/** The cortex section's content references ('mayka2006' -> 'Mayka 2006'), for the function, syndrome and region cards'
+ * source links: the generated file's, the syndrome cards' (src/cortex/syndromes.ts) and the surgical regions'
+ * (src/cortex/regions.ts). */
+export const CTX_REFS = new Map(Object.entries<{ citation: string; url: string; short?: string }>({ ...FILE.references, ...SYN_REFS, ...REG_REFS }).map(([k, r]) => {
   const m = /^([a-z]+)(\d{4})$/.exec(k);
   return [k, { citation: r.citation, url: r.url, shortLabel: r.short ?? (m ? `${m[1][0].toUpperCase()}${m[1].slice(1)} ${m[2]}` : k) }];
 }));
@@ -131,7 +133,7 @@ export const FN_GROUPS: { id: FnGroupId; name: string; text: string; refIds: str
 export function shortName(id: string): string {
   if (id === MEDIAL_WALL) return 'Medial wall';
   const l = LABEL.get(id);
-  if (!l) return CTX.get(id)?.name ?? id;
+  if (!l) return CTX.get(id)?.name ?? REGION_TRACT.get(id)?.name ?? id;
   return l.name.replace(/\s*\([^)]*\)/g, '').split(',')[0].replace(/\s+/g, ' ').trim();
 }
 
@@ -185,6 +187,23 @@ export function crossCheckCtx(): string[] {
     for (const c of claims) {
       if (!c.refIds.length) errs.push(`syndrome ${sy.id}: a sentence without a source`);
       for (const r of c.refIds) if (!CTX_REFS.has(r)) errs.push(`syndrome ${sy.id}: reference ${r} unknown`);
+    }
+  }
+  // surgical regions: what they draw exists (tracts: in the white-matter section's manifest, by its names), every
+  // sentence has a known source, and none of the four parts is empty
+  const tracts = new Map(REGION_TRACTS.map((s) => [s.id, s.name]));
+  for (const rg of REGIONS) {
+    for (const l of rg.labels) if (!LABEL.has(l.id)) errs.push(`region ${rg.id}: label ${l.id} unknown`);
+    for (const f of rg.fns) if (!FUNCTIONS.some((x) => x.id === f.id)) errs.push(`region ${rg.id}: ${f.id} is not a functional area`);
+    for (const t of rg.tracts) if (tracts.get(t.id) !== t.name) errs.push(`region ${rg.id}: tract ${t.id} unknown or misnamed`);
+    if (!rg.labels.length && !rg.fns.length) errs.push(`region ${rg.id}: no area drawn`);
+    if (!rg.tracts.length) errs.push(`region ${rg.id}: no tract drawn`);
+    for (const [part, cs] of Object.entries({ mapped: rg.mapped, deficits: rg.deficits, course: rg.course, limits: rg.limits })) {
+      if (!cs.length) errs.push(`region ${rg.id}: no ${part}`);
+      for (const c of cs) {
+        if (!c.refIds.length) errs.push(`region ${rg.id}: a sentence without a source`);
+        for (const r of c.refIds) if (!CTX_REFS.has(r)) errs.push(`region ${rg.id}: reference ${r} unknown`);
+      }
     }
   }
   return errs;

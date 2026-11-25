@@ -5,6 +5,7 @@ import { SECTIONS } from './brand';
 import { CTX, LABEL, shortName } from './cortex';
 import { VIEW, VIEWS } from './cortex/views';
 import { decodeCortex, encodeCortex, type CortexState } from './cortex/state';
+import { REGION, regionTract } from './cortex/regions';
 import { SYNDROME } from './cortex/syndromes';
 import { CortexAtlasPage } from './ui/cortex-atlas';
 import { cortexCreditsPage, cortexSourcesPage } from './ui/cortex-pages';
@@ -12,7 +13,9 @@ import { bootSection } from './ui/section';
 
 function sanitize(s: CortexState): CortexState {
   if (!VIEW.has(s.view)) s.view = 'lateral';
-  if (s.sel && !CTX.has(s.sel)) s.sel = null;
+  // (a selection is a label, or a tract the surgical region draws)
+  if (s.sel && !CTX.has(s.sel) && !regionTract(s.region, s.sel)) s.sel = null;
+  if (s.region) s.inflate = 0;
   // (distances are measured on the pial surface: the inflated one has no Measure tool, so a link's measurement goes)
   if (s.inflate) delete s.measured;
   return s;
@@ -33,11 +36,11 @@ bootSection({
   pageOf: (hash) => decodeCortex(hash).page,
   encode: encodeCortex,
   sanitize,
-  linkFields: { v: 'view', sel: 'sel' },
+  linkFields: { v: 'view', r: 'region', sel: 'sel' },
   atlas: (update) => new CortexAtlasPage(update),
   pages: () => ({ sources: cortexSourcesPage(), credits: cortexCreditsPage() }),
-  atlasTitle: (s) => (s.sel ? shortName(s.sel) : s.syn ? SYNDROME.get(s.syn)!.name : `${VIEW.get(s.view)!.name} view`),
-  // (the text version of the view: each label's definition)
+  atlasTitle: (s) => (s.sel ? shortName(s.sel) : s.region ? REGION.get(s.region)!.name : s.syn ? SYNDROME.get(s.syn)!.name : `${VIEW.get(s.view)!.name} view`),
+  // (the text version of the view: each label's definition; a surgical region's tracts are listed by name)
   define: (id) => LABEL.get(id)?.definition?.text,
   help: {
     rows: [

@@ -1,4 +1,5 @@
-import { CTX_MANIFEST, LABELS, LOBES, METHOD, shortName } from '../cortex';
+import { CTX_MANIFEST, CTX_REFS, LABELS, LOBES, METHOD, shortName } from '../cortex';
+import { REGIONS } from '../cortex/regions';
 import { SYN_REFS, SYNDROMES } from '../cortex/syndromes';
 import { abbreviationList, h } from './h';
 import { linkLicences, UPSTREAM_NOTE } from './licences';
@@ -48,10 +49,23 @@ export function cortexSourcesPage() {
     // the syndrome cards (src/cortex/syndromes.ts)
     h('section', { class: 'card' },
       h('h2', {}, 'Syndromes'),
-      h('p', {}, `The ${SYNDROMES.length} syndrome cards are written for this atlas: every sentence comes from one of the papers below, each read in open full text, and cites it. The areas drawn for a syndrome are the Destrieux labels nearest to the regions those papers name; each card lists them with the reason, and says that they approximate a region, not the extent of a lesion.`),
-      h('ul', { class: 'refs' }, ...Object.values(SYN_REFS).sort((x, y) => x.citation.localeCompare(y.citation)).map((r) => h('li', {}, r.citation, ' ', a(r.url, 'DOI'))))),
+      h('p', {}, `The ${SYNDROMES.length} syndrome cards are written for this atlas: every sentence comes from one of the papers below, each read in open full text, and cites it. The areas drawn for a syndrome are the motor template’s areas where the papers name one (the supplementary motor areas), else the Destrieux labels nearest to the regions those papers name; each card lists them with the reason, and says that they approximate a region, not the extent of a lesion.`),
+      h('ul', { class: 'refs' }, ...Object.values(SYN_REFS).sort((x, y) => x.citation.localeCompare(y.citation)).map((r) => h('li', {}, r.citation, ' ', a(r.url, linkWord(r.url)))))),
+    // the surgical regions (src/cortex/regions.ts)
+    h('section', { class: 'card' },
+      h('h2', {}, 'Surgical regions'),
+      h('p', {}, `The ${REGIONS.length} surgical-region cards are written for this atlas in the same way, from the papers below (some also cited by the syndrome cards). The tracts drawn with them are the white-matter section’s, from the HCP-1065 atlas, whose sources are on that section’s Sources page.`),
+      h('ul', { class: 'refs' }, ...regionRefs().map((r) => h('li', {}, r.citation, ' ', a(r.url, linkWord(r.url)))))),
   );
   return { el, render() { /* stateless */ } };
+}
+
+const linkWord = (url: string) => (url.includes('doi.org') ? 'DOI' : 'Full text');
+
+/** every paper the region cards cite, once, by citation */
+function regionRefs() {
+  const ids = new Set(REGIONS.flatMap((r) => [...r.mapped, ...r.deficits, ...r.course, ...r.limits, ...r.labels, ...r.fns, ...r.tracts].flatMap((c) => c.refIds ?? [])));
+  return [...ids].map((id) => CTX_REFS.get(id)!).sort((x, y) => x.citation.localeCompare(y.citation));
 }
 
 export function cortexCreditsPage() {

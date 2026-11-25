@@ -33,6 +33,10 @@ export interface ScenePlan {
   colours?: Map<string, string>;
   /** cortical surfaces: leave out the faces flagged as opercular (the insular view) */
   cutOpercula?: boolean;
+  /** cortical surfaces: an opacity for the coloured (not ghosted) ones, so that tracts beneath them show through; below
+   * 1 the surfaces are drawn front faces only (their insides would show through otherwise). The cortex section's
+   * surgical regions. */
+  surfaceOpacity?: number;
   /** structures outlined as a selected one is, while nothing is selected (a section's focus, when the viewer's
    * setting leaves the rest unfaded) */
   outline?: string[];

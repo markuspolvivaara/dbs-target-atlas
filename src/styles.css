@@ -363,6 +363,8 @@ body[data-page="atlas"] .page { display: none; }
 .screw-box-tech { font-weight: 400; color: var(--muted); }
 /* the cortex's functional areas */
 .syn-labels li { margin: 2px 0; }
+/* a surgical region's tracts in its card and a tract's card: the legend's line swatch, inline */
+.syn-labels .sw, .tract-card h2 .sw { display: inline-block; vertical-align: middle; width: 18px; margin-right: 4px; }
 .fn-areas { list-style: none; padding: 0; margin: 6px 0 10px; display: grid; gap: 6px; }
 .prov { padding-left: 1.1em; font-size: 0.92rem; margin: 4px 0; }
 .prov li { margin: 4px 0; }
