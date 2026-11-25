@@ -39,6 +39,8 @@ bootSection({
   atlas: (update) => new TractsAtlasPage(update),
   pages: () => ({ refs: tractRefsPage(), credits: tractCreditsPage() }),
   atlasTitle: (s) => (s.sel ? TOPIC.get(s.sel)!.name : GROUP.get(s.grp)!.name),
+  // (the text version of the view: each tract's summary)
+  define: (id) => TOPIC.get(id)?.summary,
   help: {
     rows: [
       ['1 – 5', 'Camera: lateral (from outside the shown hemisphere), medial (from the midline), coronal, axial (anterior up), posterior-oblique'],

@@ -7,6 +7,7 @@ import { bindHelp, viewHelp } from './help';
 import { lostFromLink, showLinkNote } from './linknote';
 import { disclaimerNote, siteHeader } from './shell';
 import { bootFailed } from './stage';
+import { textGroups, textViewContent } from './textview';
 import { applyTheme, injectPaletteCss, paletteFor, storeTheme, storedTheme, VIEWER, type ThemePref } from './theme';
 
 /**
@@ -36,7 +37,7 @@ export interface SectionPage<S> {
 /** What the frame uses of a section's atlas page. */
 export interface SectionAtlas<S> {
   el: HTMLElement;
-  viewer: Pick<Viewer, 'renderer' | 'setTheme' | 'handleKey' | 'preload'>;
+  viewer: Pick<Viewer, 'renderer' | 'setTheme' | 'handleKey' | 'preload' | 'currentPlan' | 'catalogue' | 'shownIds'>;
   render(s: S, opts: { camera: boolean }): void;
   onShow(): void;
   /** the section's own keys; true when the key was used */
@@ -74,6 +75,8 @@ export interface SectionConfig<P extends string, S extends ViewState & { page: P
   onChange?(next: S, prev: S): void;
   /** after every render */
   afterRender?(s: S): void;
+  /** a structure's definition, for the text version of the view (its first sentence is shown); left out: names only */
+  define?(id: string, name: string): string | null | undefined;
 }
 
 /** Build the section's page from its configuration and start it. Returns the atlas page, for what else the section
@@ -108,11 +111,22 @@ export function bootSection<P extends string, S extends ViewState & { page: P },
   const main = h('main', { id: 'main' }, ...Object.values<SectionPage<S>>(pages).map((p) => p.el));
   // the stage height depends on the (wrapping) disclaimer height
   new ResizeObserver(() => document.documentElement.style.setProperty('--disc-h', `${disclaimer.offsetHeight}px`)).observe(disclaimer);
-  const help = helpDialog(cfg.help.rows, cfg.help.tap);
+  // the text version of the 3D view (the audit's UI-20): filled from the view each time it is opened
+  const textBody = h('div', { class: 'textview-body' });
+  const textDialog = h('dialog', { class: 'textview', 'aria-labelledby': 'textview-title' },
+    textBody, h('form', { method: 'dialog' }, h('button', { class: 'btn' }, 'Close'))) as HTMLDialogElement;
+  const openText = () => {
+    const v = atlas.viewer, p = v.currentPlan();
+    textBody.replaceChildren(...textViewContent(p?.title ?? cfg.section.name,
+      p ? textGroups(p, v.catalogue(), new Set(v.shownIds()), cfg.define?.bind(cfg)) : []));
+    if (!textDialog.open) textDialog.showModal();
+    textDialog.querySelector<HTMLElement>('h2')?.focus();
+  };
+  const help = helpDialog(cfg.help.rows, cfg.help.tap, () => { help.close(); openText(); });
   bindHelp(help);
   // the atlas page's heading, for screen readers and outlines (its other pages have their own)
   atlas.el.prepend(h('h1', { class: 'vh' }, `${cfg.section.name}: 3D atlas`));
-  app.append(...skipLinks(), header, disclaimer, main, help);
+  app.append(...skipLinks(openText), header, disclaimer, main, help, textDialog);
 
   const address = addressSync();   // (the address is written only over the hash this page last wrote or read)
 
@@ -204,19 +218,22 @@ export function bootSection<P extends string, S extends ViewState & { page: P },
   return { atlas };
 }
 
-/** The two skip links: to the content, and to the atlas page's panel. */
-function skipLinks(): HTMLElement[] {
+/** The skip links: to the content, to the atlas page's panel, and the text version of its 3D view. */
+function skipLinks(openText: () => void): HTMLElement[] {
   return [
     h('a', { class: 'skip', href: '#main' }, 'Skip to content'),
     h('a', { class: 'skip skip-panel', href: '#panel', onclick: (e: Event) => { e.preventDefault(); document.getElementById('panel')?.focus(); } }, 'Skip to the panel'),
+    h('a', { class: 'skip skip-text', href: '#textview', 'aria-haspopup': 'dialog', onclick: (e: Event) => { e.preventDefault(); openText(); } }, 'Text version of this view'),
   ];
 }
 
 /** The help dialog: the section's keys, then what the mouse, touch and keyboard do in the 3D view. */
-function helpDialog(rows: [string, string][], tap: string): HTMLDialogElement {
+function helpDialog(rows: [string, string][], tap: string, openText: () => void): HTMLDialogElement {
   return h('dialog', { class: 'help', 'aria-labelledby': 'help-title' },
     h('h2', { id: 'help-title' }, 'Keys, mouse and touch'),
     h('dl', {}, ...rows.flatMap(([k, v]) => [h('dt', {}, h('kbd', {}, k)), h('dd', {}, v)])),
     ...viewHelp(tap),
+    h('p', {}, 'Without the 3D view: ', h('button', { type: 'button', class: 'linklike', 'aria-haspopup': 'dialog', onclick: () => openText() }, 'a text version of this view'),
+      ' lists what it draws, as do the legend and the panel.'),
     h('form', { method: 'dialog' }, h('button', { class: 'btn' }, 'Close'))) as HTMLDialogElement;
 }

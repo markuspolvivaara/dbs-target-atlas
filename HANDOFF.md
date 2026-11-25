@@ -289,6 +289,27 @@ starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm furth
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
 
+## A text version of the 3D view (UI-20) (desktop, 2026-11-25)
+
+Branch `feat/text-version`, on top of `feat/legend-place`. Item 9 of `.claude/opus-plan-2026-11-24.md`; the audit's
+UI-20 and its roadmap, section 3.
+
+- **What:** a dialog, "Text version: <the view>", listing what the 3D view draws now, by the part each structure plays
+  (highlighted, alternatives, tracts, cortical areas, marked points, shown for context), each with the first sentence
+  of its definition where the section has one: DBS (the structure's description), tracts (its summary), cortex (the
+  label's definition), skull base and brainstem (the definition on the card, by name). Ventricles, vascular and spine
+  have no per-structure definition: names only. A landmark on each side under one name is one line with a count.
+- **Built from the view itself** (`src/ui/textview.ts`: `textGroups` over the plan, the catalogue and the viewer's
+  `shownIds()`), so it lists what is drawn, the reader's hidden structures left out; what is drawn without a part in
+  the plan (the tracts' whole-cortex shell) goes under "shown for context". No "what touches what": the site has no
+  data for it.
+- **Reached by:** a third skip link at the top of every atlas page, "Text version of this view" (shown on focus), and
+  a button in the Help dialog. The canvas's label now ends "All are listed in the text version of this view (a link at
+  the top of the page) and in the panel." Sections pass their definitions as `define` in their `SectionConfig`.
+- **Tests:** `tests/unit/textview.test.ts` (grouping, what is drawn only, the merged names, first sentences);
+  `tests/e2e/audit-fixes.spec.ts` "the text version of the view…" (reached by Tab, its heading focused, and it names
+  exactly what the viewer draws in the tracts, skull base and DBS sections).
+
 ## The legend on the view or beside it (UI-14) (desktop, 2026-11-25)
 
 Branch `feat/legend-place`, on top of `fix/text-answers`. Item 7 of `.claude/opus-plan-2026-11-24.md`; the owner chose

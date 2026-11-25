@@ -1,7 +1,7 @@
 import '@fontsource/atkinson-hyperlegible/latin-400.css';
 import '@fontsource/atkinson-hyperlegible/latin-700.css';
 import './styles.css';
-import { IND, SYM } from './data';
+import { IND, STRUCT, SYM } from './data';
 import { decode, defaultState, encode, type AppState } from './state';
 import { AtlasPage } from './ui/atlas';
 import { coordsPage, creditsPage, imagingPage, refsPage, settingsPage } from './ui/pages';
@@ -43,6 +43,8 @@ const { atlas } = bootSection({
     settings: { ...settingsPage(update, theme), showsTheme: true },
   }),
   atlasTitle: (s) => IND.get(s.ind)!.name,
+  // (the text version of the view: each structure's description)
+  define: (id) => STRUCT.get(id)?.description,
   help: {
     rows: [
       ['1 – 5', 'Camera: coronal (from the front), sagittal (anterior left), axial (anterior up), posterior-oblique, surgeon’s view'],

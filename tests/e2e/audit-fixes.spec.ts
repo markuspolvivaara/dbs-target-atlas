@@ -2121,3 +2121,41 @@ test('the open legend covers under a tenth of the model in each section’s open
   }
   for (const [p, s] of Object.entries(shares)) expect(s, `${p}: the share of the model under the legend`).toBeLessThan(0.1);
 });
+
+// UI-20 and the roadmap's section 3: a text version of the 3D view, for a reader who cannot use the canvas
+test('the text version of the view: reached from the keyboard, it names exactly what the view draws, under headings', async ({ page }) => {
+  const g = guard(page);
+  for (const url of ['./tracts/', './skullbase/#/atlas?g=floor', './dbs/']) {
+    await open(page, url);
+    // the third stop from the top of the page, a link that opens it
+    await page.locator('body').focus();
+    for (let i = 0; i < 3; i++) await page.keyboard.press('Tab');
+    await expect(page.locator(':focus')).toHaveText('Text version of this view');
+    await page.keyboard.press('Enter');
+    const dlg = page.locator('dialog.textview');
+    await expect(dlg).toHaveJSProperty('open', true);
+    await expect(dlg.locator('h2')).toBeFocused();
+    await expect(dlg.locator('h2')).toHaveText(/^Text version: .+/);
+    expect(await dlg.locator('h3').count(), url).toBeGreaterThan(0);
+    // exactly the structures drawn: the viewer's own list, by name
+    const [listed, drawn] = await Promise.all([
+      dlg.locator('.textview-list > li > strong').allTextContents(),
+      page.evaluate(() => {
+        const v = (window as unknown as { __atlas: { viewer: { shownIds(): string[]; nameOf(id: string): string | null } } }).__atlas.viewer;
+        return v.shownIds().map((id) => v.nameOf(id) ?? id);
+      }),
+    ]);
+    // (a name shared by a landmark on each side is one line with a count: "Apex of petrous part (2)")
+    expect([...new Set(listed.map((n) => n.replace(/ \(\d+\)$/, '')))].sort(), url).toEqual([...new Set(drawn)].sort());
+    await page.keyboard.press('Escape');
+    await expect(dlg).toHaveJSProperty('open', false);
+  }
+  // definitions where the section has them (the tracts' summaries), and from the help dialog too
+  await open(page, './tracts/');
+  await page.locator('.help-btn').click();
+  await page.locator('dialog.help button', { hasText: 'a text version of this view' }).click();
+  await expect(page.locator('dialog.textview')).toHaveJSProperty('open', true);
+  await expect(page.locator('dialog.textview .textview-list > li').first()).toContainText(': ');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

@@ -2,7 +2,7 @@ import '@fontsource/atkinson-hyperlegible/latin-400.css';
 import '@fontsource/atkinson-hyperlegible/latin-700.css';
 import './styles.css';
 import { SECTIONS } from './brand';
-import { LM, SB, SB_MODEL } from './skullbase';
+import { definitionFor, LM, SB, SB_MODEL } from './skullbase';
 import { DEFAULT_GROUP, SB_GROUP, viewGroup } from './skullbase/groups';
 import { decodeSkull, encodeSkull, type SkullState } from './skullbase/state';
 import { SkullbaseAtlasPage, surgicalKeyRows } from './ui/skullbase-atlas';
@@ -45,6 +45,8 @@ bootSection({
   // (the Grading page is built on v2 too, where no tab leads to it and sanitize turns it back to the atlas)
   pages: () => ({ grading: skullGradingPage(), sources: skullSourcesPage(), credits: skullCreditsPage() }),
   atlasTitle: (s) => (s.sel ? (SB.get(s.sel)?.name ?? LM.get(s.sel)?.name ?? '') : viewGroup(s.grp, s.also).name),
+  // (the text version of the view: each structure's or landmark's definition, by name, as on its card)
+  define: (_id, name) => definitionFor(name)?.text,
   help: {
     rows: [
       SB_MODEL === 'v3' ? ['1 – 6', 'Camera: from above, from below, lateral, anterior, posterior-oblique, surgical (anterolateral)'] : ['1 – 5', 'Camera: from above, from below, lateral, anterior, posterior-oblique'],

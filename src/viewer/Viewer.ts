@@ -11,7 +11,7 @@ import { onViewPrefs, viewPrefs } from './viewprefs';
 import { geometryOf, RayGridCache, type RayHit } from './endoray';
 import { fastRaycast } from './pickbvh';
 import { Endoscope, type EndoMesh } from './endoscope';
-import type { SceneSource, ScenePlan, TractRole, ViewState } from './scene';
+import type { Catalog, SceneSource, ScenePlan, TractRole, ViewState } from './scene';
 import { Slices } from './slices';
 
 type Side = 'L' | 'R';
@@ -1542,10 +1542,14 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
     return `3D atlas, ${p.title}. Highlighted: ${names(prim)}.` +
       (alt.length ? ` Alternatives: ${names(alt)}.` : '') +
       (p.tracts.size ? ` Tracts: ${names([...p.tracts.keys()])}.` : '') +
-      (p.parcels.size ? ` Cortex: ${names([...p.parcels.keys()])}.` : '');
+      (p.parcels.size ? ` Cortex: ${names([...p.parcels.keys()])}.` : '') +
+      ' All are listed in the text version of this view (a link at the top of the page) and in the panel.';
   }
 
   currentPlan(): P | null { return this.plan; }
+
+  /** The structures and markers this viewer can draw (names, for the text version of the view). */
+  catalogue(): Catalog { return this.cat; }
 
   /** The structures drawn now (any of their halves visible): what "Show only this" hides but one of. */
   shownIds(): string[] {
