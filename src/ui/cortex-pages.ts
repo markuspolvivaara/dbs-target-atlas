@@ -1,4 +1,5 @@
 import { CTX_MANIFEST, LABELS, LOBES, METHOD, shortName } from '../cortex';
+import { SYN_REFS, SYNDROMES } from '../cortex/syndromes';
 import { abbreviationList, h } from './h';
 import { linkLicences, UPSTREAM_NOTE } from './licences';
 
@@ -44,6 +45,11 @@ export function cortexSourcesPage() {
       own ? h('p', {}, `Z-Anatomy ships no text for the other ${own} labels${ownLobes.length ? ` or for the ${ownLobes.join(' and the ')}` : ''}: their cards have a short text written for this atlas from the full text of Destrieux et al. 2010, and say which sections it comes from.`) : null,
       h('details', { class: 'more' }, h('summary', {}, `Wikipedia source pages (${urls.length})`),
         h('ul', { class: 'refs' }, ...urls.map((u) => h('li', {}, a(u, decodeURIComponent(u.replace(/^https?:\/\/en\.wikipedia\.org\/wiki\//, '')).replace(/_/g, ' '))))))),
+    // the syndrome cards (src/cortex/syndromes.ts)
+    h('section', { class: 'card' },
+      h('h2', {}, 'Syndromes'),
+      h('p', {}, `The ${SYNDROMES.length} syndrome cards are written for this atlas: every sentence comes from one of the papers below, each read in open full text, and cites it. The areas drawn for a syndrome are the Destrieux labels nearest to the regions those papers name; each card lists them with the reason, and says that they approximate a region, not the extent of a lesion.`),
+      h('ul', { class: 'refs' }, ...Object.values(SYN_REFS).sort((x, y) => x.citation.localeCompare(y.citation)).map((r) => h('li', {}, r.citation, ' ', a(r.url, 'DOI'))))),
   );
   return { el, render() { /* stateless */ } };
 }

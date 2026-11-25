@@ -5,6 +5,7 @@ import { SECTIONS } from './brand';
 import { CTX, LABEL, shortName } from './cortex';
 import { VIEW, VIEWS } from './cortex/views';
 import { decodeCortex, encodeCortex, type CortexState } from './cortex/state';
+import { SYNDROME } from './cortex/syndromes';
 import { CortexAtlasPage } from './ui/cortex-atlas';
 import { cortexCreditsPage, cortexSourcesPage } from './ui/cortex-pages';
 import { bootSection } from './ui/section';
@@ -35,7 +36,7 @@ bootSection({
   linkFields: { v: 'view', sel: 'sel' },
   atlas: (update) => new CortexAtlasPage(update),
   pages: () => ({ sources: cortexSourcesPage(), credits: cortexCreditsPage() }),
-  atlasTitle: (s) => (s.sel ? shortName(s.sel) : `${VIEW.get(s.view)!.name} view`),
+  atlasTitle: (s) => (s.sel ? shortName(s.sel) : s.syn ? SYNDROME.get(s.syn)!.name : `${VIEW.get(s.view)!.name} view`),
   // (the text version of the view: each label's definition)
   define: (id) => LABEL.get(id)?.definition?.text,
   help: {

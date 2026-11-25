@@ -6,6 +6,7 @@ import { decodeCamera, decodeMeasure, encodeMeasure, decodeClip, decodeHemi, dec
 import type { FnGroupId, LobeId } from './index';
 import { FN_GROUPS, LOBE } from './index';
 import { VIEW, type ViewId } from './views';
+import { SYNDROME } from './syndromes';
 import { defaultLabels, labelsFrom, labelsParam } from '../labels';
 
 export type CortexPage = 'atlas' | 'sources' | 'credits';
@@ -19,6 +20,8 @@ export interface CortexState extends ViewState {
   lobe: LobeId | null;
   /** functional areas drawn over the labels (motor, language...), or none */
   fn: FnGroupId | null;
+  /** a syndrome whose usual cortex is drawn instead of the view's labels (src/cortex/syndromes.ts), or none */
+  syn: string | null;
   colour: ColourMode;
   labels: 'all' | 'hover' | 'off';
   inflate: number;
@@ -28,7 +31,7 @@ export const CTX_PRESETS: CameraPreset[] = ['lateral', 'medial', 'inferior', 'ax
 
 export function defaultCortexState(): CortexState {
   return {
-    page: 'atlas', view: 'lateral', lobe: null, fn: null, colour: 'lobe', hemi: 'both', cam: { preset: null },
+    page: 'atlas', view: 'lateral', lobe: null, fn: null, syn: null, colour: 'lobe', hemi: 'both', cam: { preset: null },
     layers: {
       nuclei: { on: false, opacity: 1 }, tracts: { on: false, opacity: 1 },
       cortex: { on: true, opacity: 1 },
@@ -41,7 +44,7 @@ export function defaultCortexState(): CortexState {
   };
 }
 
-// #/atlas?v=lateral&lobe=frontal&sel=ctx_g_precentral&h=B&c=lateral&inf=1&col=a&lb=a&co=-12&seq=t2
+// #/atlas?v=lateral&lobe=frontal&syn=neglect&sel=ctx_g_precentral&h=B&c=lateral&inf=1&col=a&lb=a&co=-12&seq=t2
 const PAGES: CortexPage[] = ['atlas', 'sources', 'credits'];
 
 export function encodeCortex(s: CortexState): string {
@@ -50,6 +53,7 @@ export function encodeCortex(s: CortexState): string {
     p.set('v', s.view);
     if (s.lobe) p.set('lobe', s.lobe);
     if (s.fn) p.set('f', s.fn);
+    if (s.syn) p.set('syn', s.syn);
     if (s.sel) p.set('sel', s.sel);
     encodeHemi(p, s.hemi);
     encodeCamera(p, s.cam);
@@ -78,6 +82,10 @@ export function decodeCortex(hash: string): CortexState {
   s.lobe = lobe && LOBE.has(lobe as LobeId) ? (lobe as LobeId) : null;
   const fn = p.get('f');
   s.fn = FN_GROUPS.some((g) => g.id === fn) ? (fn as FnGroupId) : null;
+  const syn = p.get('syn');
+  // (a syndrome and a function group are not drawn together: the syndrome wins)
+  s.syn = syn && SYNDROME.has(syn) ? syn : null;
+  if (s.syn) s.fn = null;
   s.sel = p.get('sel');
   decodeHemi(p, s);
   decodeCamera(p, s, CTX_PRESETS);

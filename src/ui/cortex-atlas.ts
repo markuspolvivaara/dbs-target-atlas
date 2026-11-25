@@ -7,6 +7,7 @@ import { CTX, CTX_REFS, DBS_PARCEL, DK_NAMES, FN_GROUPS, FUNCTIONS, LABEL, LOBE,
 import { cortexScene, viewLabels, type CortexPlan } from '../cortex/scene';
 import type { ColourMode, CortexState } from '../cortex/state';
 import { VIEW, VIEWS, type ViewId } from '../cortex/views';
+import { SYN_GROUPS, SYNDROME, SYNDROMES, type Claim, type Syndrome } from '../cortex/syndromes';
 import { Viewer, type PickInfo } from '../viewer/Viewer';
 import { announce, h } from './h';
 import { legendBox } from './legendbox';
@@ -185,19 +186,21 @@ export class CortexAtlasPage {
     this.stage.querySelectorAll<HTMLButtonElement>('[data-inflate]').forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.inflate) === s.inflate)));
     this.stage.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((b) => b.toggleAttribute('data-active', b.dataset.preset === s.cam.preset));
     this.measure.btn.disabled = s.inflate > 0;
-    const key = `${s.view}|${s.lobe}|${s.fn}|${s.sel}|${s.colour}`;
+    const key = `${s.view}|${s.lobe}|${s.fn}|${s.syn}|${s.sel}|${s.colour}`;
     if (key !== this.lastKey || !prev) { this.lastKey = key; this.renderOverview(); }
     this.renderDisplay();
     this.renderSlices();
     if (prev && prev.sel !== s.sel && s.sel) this.selectTab('overview', false);
     // the card of what was just selected (or of a link's selection) is brought to the top of the panel
     if (s.sel && prev?.sel !== s.sel) revealCard(this.panel);
+    // (and a syndrome's card, when one is chosen)
+    else if (s.syn && prev?.syn !== s.syn) revealCard(this.panel, '.syn-card');
   }
 
   private pickView(id: ViewId): void {
     this.update((st) => {
       const v = VIEW.get(id)!;
-      st.view = id; st.hemi = v.hemi; st.cam = { preset: null }; st.sel = null; st.hidden = []; delete st.opacity;
+      st.view = id; st.hemi = v.hemi; st.cam = { preset: null }; st.sel = null; st.syn = null; st.hidden = []; delete st.opacity;
     }, { camera: true });
   }
 
@@ -210,11 +213,21 @@ export class CortexAtlasPage {
       chips(VIEWS.map((x) => [x.id, x.name]), v.id, (id) => this.pickView(id), { label: 'View', cls: 'grp-chips' }));
     pane.append(h('p', { class: 'chips-label' }, 'Lobe'),
       chips<string>([['all', 'All'], ...LOBES.map((l): [string, string] => [l.id, l.name])], s.lobe ?? 'all',
-        (id) => this.update((st) => { st.lobe = id === 'all' ? null : (id as LobeId); st.sel = null; }), { label: 'Lobe', cls: 'grp-chips lobe-chips' }));
+        (id) => this.update((st) => { st.lobe = id === 'all' ? null : (id as LobeId); st.sel = null; st.syn = null; }), { label: 'Lobe', cls: 'grp-chips lobe-chips' }));
     pane.append(h('p', { class: 'chips-label' }, 'Function'),
       chips<string>([['none', 'None'], ...FN_GROUPS.map((g): [string, string] => [g.id, g.name])], s.fn ?? 'none',
-        (id) => this.update((st) => { st.fn = id === 'none' ? null : (id as FnGroupId); st.sel = null; }), { label: 'Function', cls: 'grp-chips fn-chips' }));
+        (id) => this.update((st) => { st.fn = id === 'none' ? null : (id as FnGroupId); st.sel = null; st.syn = null; }), { label: 'Function', cls: 'grp-chips fn-chips' }));
     if (s.fn) pane.append(this.fnCard(s.fn));
+    // syndromes, by group: choosing one draws its usual cortex on the side the sources give, from its camera
+    pane.append(h('p', { class: 'chips-label' }, 'Syndrome'));
+    for (const g of SYN_GROUPS) {
+      const of = SYNDROMES.filter((x) => x.group === g.id);
+      if (!of.length) continue;
+      pane.append(h('p', { class: 'chips-sublabel' }, g.name),
+        chips<string>(of.map((x): [string, string] => [x.id, x.name]), s.syn, (id) => this.pickSyndrome(id), { label: g.name, cls: 'grp-chips syn-chips' }));
+    }
+    const sy = s.syn ? SYNDROME.get(s.syn) : undefined;
+    if (sy) pane.append(this.synCard(sy));
     const ids = viewLabels(s);
     const btn = (id: string) => h('button', {
       type: 'button', class: 'chip sb-item', 'aria-pressed': String(s.sel === id), 'data-id': id,
@@ -222,7 +235,7 @@ export class CortexAtlasPage {
       onmouseenter: () => { this.legendHover = id; this.viewer.invalidate(); },
       onmouseleave: () => { this.legendHover = null; this.viewer.invalidate(); },
     }, h('span', { class: 'swatch', style: this.swatchStyle(id) }), shortName(id));
-    pane.append(h('p', { class: 'chips-label' }, `Gyri and sulci in this view (${ids.length})`),
+    pane.append(h('p', { class: 'chips-label' }, sy ? `Gyri and sulci drawn for this syndrome (${ids.length})` : `Gyri and sulci in this view (${ids.length})`),
       h('div', { class: 'chips wrap sb-list' }, ...ids.map(btn)));
     if (s.sel) pane.append(s.sel === MEDIAL_WALL ? this.medialWallCard() : this.card(s.sel));
     const viewCard = h('article', { class: 'card' },
@@ -311,6 +324,36 @@ export class CortexAtlasPage {
       h('p', {}, 'The part of the medial surface the Destrieux parcellation leaves unlabelled. In Destrieux et al. 2010 this “Medial_wall” groups non-cortical structures on the midline, including the hippocampus, thalamus, ventricles and corpus callosum, and is left out of their measurements.'));
   }
 
+  /** A syndrome (again: none): its areas, on its side, from its camera; the view that camera belongs to (for the opercula
+   * and the view card), no lobe, function or selection. */
+  private pickSyndrome(id: string): void {
+    this.update((st) => {
+      if (st.syn === id) { st.syn = null; return; }
+      const sy = SYNDROME.get(id)!;
+      st.syn = id; st.fn = null; st.lobe = null; st.sel = null; st.hidden = []; delete st.opacity;
+      st.view = sy.camera === 'medial' ? 'medial' : sy.camera === 'inferior' ? 'basal' : 'lateral';
+      // (the medial camera shows one hemisphere: a syndrome of either side is shown on the left)
+      st.hemi = sy.camera === 'medial' && sy.side === 'both' ? 'L' : sy.side; st.cam = { preset: sy.camera };
+    }, { camera: true });
+  }
+
+  private synCard(sy: Syndrome): HTMLElement {
+    const close = h('button', { type: 'button', class: 'close', 'aria-label': 'Close', onclick: () => this.update((s) => { s.syn = null; }) }, '×');
+    const claims = (cs: Claim[]) => cs.map((c, i) => [i ? ' ' : '', c.text, ' ', refLinksFrom(CTX_REFS, c.refIds)]).flat();
+    const pick = (to: string) => h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.sel = to; }) }, shortName(to));
+    const side = sy.side === 'L' ? 'the left hemisphere' : sy.side === 'R' ? 'the right hemisphere' : sy.camera === 'medial' ? 'either hemisphere (the left is shown)' : 'both hemispheres';
+    return h('article', { class: 'card syn-card' }, close,
+      h('p', { class: 'eyebrow' }, `Syndrome · ${SYN_GROUPS.find((g) => g.id === sy.group)!.name}`),
+      h('h2', {}, sy.name),
+      h('dl', {},
+        h('dt', {}, 'What it is'), h('dd', {}, h('p', {}, ...claims(sy.signs))),
+        h('dt', {}, 'Where'), h('dd', {}, h('p', {}, ...claims(sy.areas)),
+          sy.tracts.length ? h('p', {}, 'Tracts named: ', ...sy.tracts.map((t, i) => [i ? ', ' : '', h('a', { href: `${SITE_ROOT}tracts/#/atlas?sel=${t.id}` }, t.name)]).flat(), ' (white-matter section).') : null),
+        sy.firmness.length ? [h('dt', {}, 'How firm the tie is'), h('dd', {}, h('p', {}, ...claims(sy.firmness)))] : null,
+        h('dt', {}, 'Drawn here'), h('dd', {}, h('ul', { class: 'plain syn-labels' }, ...sy.labels.map((l) => h('li', {}, pick(l.id), ` · ${l.why}`))),
+          h('p', { class: 'aside' }, `On ${side}. The Destrieux labels nearest to the areas the sources name: an approximation, not the extent of a lesion. Lesions that cause a syndrome differ in size and place from patient to patient, and one template brain is not anyone’s map.`))));
+  }
+
   private fnCard(id: FnGroupId): HTMLElement {
     const g = FN_GROUPS.find((x) => x.id === id)!;
     const areas = FUNCTIONS.filter((f) => f.group === id);
@@ -366,6 +409,7 @@ export class CortexAtlasPage {
     } else {
       this.legend.append(row('--c: var(--c-cortex)', 'Plain: only the selected label is coloured', []));
     }
+    if (s.syn) this.legend.append(h('li', { class: 'lg-note' }, `${SYNDROME.get(s.syn)!.name}: its areas in colour, the rest grey`));
     this.legend.append(row('--c: var(--c-cortex)', 'Medial wall (unlabelled)', [MEDIAL_WALL]));
     this.legend.append(h('li', { class: 'lg-note' }, 'Shading: light = gyral crown, dark = sulcal depth'));
     if (s.hidden.length) this.legend.append(h('li', { class: 'lg-actions' }, h('button', { type: 'button', class: 'linklike', onclick: () => this.update((st) => { st.hidden = []; }) }, `Show all (${s.hidden.length} hidden)`)));
