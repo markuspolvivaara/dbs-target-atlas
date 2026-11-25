@@ -308,11 +308,24 @@ praxis, vision; **no dementia group**. **The cards' text is for the owner to rea
   Where the sources name the superior longitudinal fasciculus as one, all three of the tracts section's parts are
   linked.
 - **Labels are approximations**, and the card says so: the nearest Destrieux labels to the regions the sources name.
-  Choices to look at: Broca's draws the whole precentral gyrus (the sources name its lower part); limb apraxia draws
-  the inferior precentral sulcus for "premotor areas"; transcortical motor aphasia draws only the superior frontal
-  gyrus (the supplementary motor area), as the sources name no lateral gyrus; prosopagnosia draws the temporal pole for
-  "anterior temporal" lesions; transcortical sensory aphasia draws the middle temporal and angular gyri from Binder's
-  semantic network.
+  Transcortical sensory aphasia draws the middle temporal and angular gyri from Binder's semantic network.
+- **The owner's review of PR 57 (2026-11-25)**, done on the same branch:
+  - Broca's aphasia draws only Broca's area (the opercular and triangular parts); the sentence on the wider damage of
+    chronic Broca's aphasia moved to "How firm the tie is". Tract links now have their own "Tracts named" line.
+  - "The premotor areas are the SMA and pre-SMA, draw those": a syndrome can now draw HMAT's areas (`fns`, Mayka
+    2006, the Function selector's meshes) as well as Destrieux labels, in their own colours, listed in the card and the
+    legend. Limb apraxia draws the SMA and pre-SMA instead of the inferior precentral sulcus and opens from above;
+    transcortical motor aphasia draws them instead of the superior frontal gyrus, opens on the medial surface and links
+    the frontal aslant tract. The lesion evidence is for the SMA (Watson 1986 as reported by Chang 2015 and Kübel 2018);
+    for the pre-SMA in apraxia there is only imaging in healthy people (Króliczak 2009), and the card says so. For
+    transcortical motor aphasia Levy 2025 ties the self-generated speech deficit to the pre-SMA.
+  - Prosopagnosia, "posterior areas can affect it too": now draws the inferior occipital gyrus (occipital face area),
+    the fusiform gyrus, the lingual gyrus and the temporal pole, links the ILF and IFOF, and cites a clinical series
+    (Josephs 2024), Gainotti 2011, three right posterior cases (Barton 2009), the patient PS (Prieto 2011, Rossion
+    2011), stimulation (Jonas 2014), lesion network mapping (Cohen 2019) and a stroke series (Robotham 2023).
+  - 15 papers added (38 in all), found by a research workflow with an independent verifier per topic; every new quote
+    was checked again by the quote script (58 of 58 found). Not used, no open text: Watson 1986, Meadows 1974,
+    Damasio 1982, Rossion 2003, Jonas 2012 and 2015, Pinson 2022.
 - **Front end:** a "Syndrome" chip group under "Function", one row per group. Choosing one draws its labels in colour
   (whatever the colour mode) and the rest grey, on its side, from its camera, with no function, lobe or selection;
   the field defects open on the medial surface of the left hemisphere ("either hemisphere"). Its card comes into view
