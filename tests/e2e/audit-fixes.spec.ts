@@ -2159,3 +2159,41 @@ test('the text version of the view: reached from the keyboard, it names exactly 
   expect(g.external).toEqual([]);
   expect(g.errors).toEqual([]);
 });
+
+// the audit's roadmap, section 3: a teaching tour, an ordered list of the site's own views with a sentence each
+test('a teaching tour: started from its approach, played through with Next and Previous, held in the link, left with Escape', async ({ page }) => {
+  const g = guard(page);
+  await open(page, './skullbase/#/atlas?g=transsylvian');
+  await page.locator('.tour-start').click();
+  const card = page.locator('.tour-card');
+  await expect(card).toContainText('The pterional approach in six steps');
+  await expect(card.locator('.tour-step')).toHaveText('Step 1 of 6: The craniotomy');
+  await expect.poll(() => new URL(page.url()).hash).toMatch(/tour=pterional&ts=1/);
+  // each step: its view (the selection in the link) and its sentence, with its source
+  const sels = ['sb_appr_pterional__removed', 'sb_appr_pterional__ridge', 'br_insula', 'sb_middle_cerebral_artery_m2_segment', 'tb_optic_nerve_ii', 'sb_superficial_middle_cerebral_vein'];
+  for (let i = 0; i < 6; i++) {
+    await expect(card.locator('.tour-step')).toContainText(`Step ${i + 1} of 6`);
+    await expect.poll(() => new URL(page.url()).hash).toContain(`sel=${sels[i]}`);
+    expect(new URL(page.url()).hash).toContain(`ts=${i + 1}`);
+    await expect(card.locator('a').first()).toBeVisible();     // its source
+    if (i < 5) {
+      await card.locator('[data-tour="next"]').click();
+      await expect(card.locator('[data-tour="next"]')).toBeFocused();
+    }
+  }
+  // the fifth step lifted the frontal lobe: the sliders came with it
+  expect(new URL(page.url()).hash).toContain('lf=100');
+  await card.locator('[data-tour="prev"]').click();
+  await expect(card.locator('.tour-step')).toHaveText('Step 5 of 6: Lifting the frontal lobe');
+  // a link opens the tour at its step, after a reload too
+  await open(page, `./skullbase/${new URL(page.url()).hash}`);
+  await expect(page.locator('.tour-card .tour-step')).toHaveText('Step 5 of 6: Lifting the frontal lobe');
+  // Escape leaves it, the view stays
+  await page.locator('.tour-card [data-tour="next"]').focus();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.tour-card')).toHaveCount(0);
+  await expect.poll(() => new URL(page.url()).hash).not.toContain('tour=');
+  expect(new URL(page.url()).hash).toContain('sel=tb_optic_nerve_ii');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});

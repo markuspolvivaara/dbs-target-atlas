@@ -471,6 +471,10 @@ legend { font-weight: 700; padding: 0 4px; }
 /* the text version of the 3D view (src/ui/textview.ts): a long list in a dialog of its own */
 .textview { max-width: 680px; max-height: min(85vh, 900px); }
 .textview h2:focus { outline: none; }
+/* a teaching tour's player at the top of the skull base panel (src/skullbase/tours.ts) */
+.tour-card { border-left-color: var(--link); }
+.tour-nav { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 8px 0 6px; }
+.tour-nav .linklike { margin-left: auto; }
 .textview-note { color: var(--muted); font-size: 14px; }
 .textview-list { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 14.5px; line-height: 1.4; }
 kbd { font: inherit; font-size: 0.9em; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 6px; padding: 1px 6px; background: var(--bg); }

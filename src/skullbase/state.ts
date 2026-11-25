@@ -31,6 +31,9 @@ export interface SkullState extends ViewState {
   /** the landmark the position read-out measures from (its id), or null: the frame's origin, the hypophysial fossa. In
    * the URL as fr=id */
   from: string | null;
+  /** a teaching tour being played (src/skullbase/tours.ts), and its step (1 = the first); in the URL as tour=id&ts=n */
+  tour: string | null;
+  ts: number;
 }
 
 /** the surgical shapes and their URL parameters (op=0..100 and so on) */
@@ -53,7 +56,7 @@ export function defaultSkullState(): SkullState {
     labels: defaultLabels(),
     clip: { axial: { on: false, mm: 0 }, coronal: { on: false, mm: 0 }, sagittal: { on: false, mm: 0 } },
     cutSide: 'none', sliceSeq: 't1', lead: { ...DEFAULT_LEAD },
-    sel: null, hidden: [], cutAbove: g.cutAbove, morphs: {}, section: true, from: null,
+    sel: null, hidden: [], cutAbove: g.cutAbove, morphs: {}, section: true, from: null, tour: null, ts: 1,
   };
 }
 
@@ -68,6 +71,7 @@ export function encodeSkull(s: SkullState): string {
     if (s.also.length) p.set('with', s.also.join(','));
     if (s.sel) p.set('sel', s.sel);
     if (s.from) p.set('fr', s.from);
+    if (s.tour) { p.set('tour', s.tour); p.set('ts', String(s.ts)); }
     encodeHemi(p, s.hemi);
     encodeCamera(p, s.cam);
     encodeLayers(p, s.layers, defaultSkullState().layers, LAYER_CODES);
@@ -105,6 +109,8 @@ export function decodeSkull(hash: string): SkullState {
   if (s.also.length) s.cutAbove = combinedCut([g.id, ...s.also]);
   s.sel = p.get('sel');
   { const fr = p.get('fr'); s.from = fr && /^[a-z0-9_]+$/.test(fr) ? fr : null; }
+  { const t = p.get('tour'); s.tour = t && /^[a-z0-9_-]+$/.test(t) ? t : null; }
+  { const n = parseInt(p.get('ts') ?? '', 10); s.ts = Number.isFinite(n) && n >= 1 ? n : 1; }
   decodeHemi(p, s);
   decodeCamera(p, s, SKULL_PRESETS);
   decodeLayers(p, s.layers, LAYER_CODES);
