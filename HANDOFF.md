@@ -289,16 +289,16 @@ starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm furth
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
 
-## A teaching tour: the pterional approach in six steps (DRAFT, desktop, 2026-11-25)
+## A teaching tour: the pterional approach in six steps (desktop, 2026-11-25)
 
 Branch `feat/tour`, on top of `feat/text-version`. Item 10 of `.claude/opus-plan-2026-11-24.md`; the audit's roadmap,
-section 3. **The tour's text is a draft for the owner to read and correct before it is pushed.**
+section 3. The owner read the tour's text and approved it as it is (2026-11-25).
 
 - **A tour is data** (`src/skullbase/tours.ts`): a title, the approach card it draws on, and steps, each a link to one
   of the site's own views (`g=transsylvian&op=…&lf=…&sr=…&sel=…`) with a sentence and its sources. Every sentence is
   one already on the pterional card, word for word, with the same sources (`tests/unit/tours.test.ts` fails
   otherwise); no new statement, no scoring, nothing recorded.
-- **The draft tour**, "The pterional approach in six steps": the craniotomy (the bone removed; Yilmaz 2025's four
+- **The tour**, "The pterional approach in six steps": the craniotomy (the bone removed; Yilmaz 2025's four
   burr holes), the sphenoid wing (drilled; Yaşargil's 1975 modification), the Sylvian fissure (opened, the insula;
   where its dissection begins), a natural plane (the M2 segment; Ngando 2013), lifting the frontal lobe (the optic
   nerve; what retraction exposes), the veins (the superficial middle cerebral vein; which veins are kept).

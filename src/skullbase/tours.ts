@@ -2,9 +2,8 @@
  * Teaching tours (the audit's roadmap, section 3): an ordered list of the site's own views, each with a sentence or two.
  * A step is a link (the skull base's atlas parameters, as `#/atlas?…` holds them) and a text that must already be on
  * the site with the same sources: the pterional tour's sentences are its approach card's, word for word
- * (tests/unit/tours.test.ts holds them to it). No scoring, nothing recorded.
- *
- * DRAFT: the owner reads and corrects the tour's text before it is published.
+ * (tests/unit/tours.test.ts holds them to it). No scoring, nothing recorded. The owner reads a tour's text before it
+ * is published (the pterional tour's on 2026-11-25).
  */
 
 export interface TourStep {
