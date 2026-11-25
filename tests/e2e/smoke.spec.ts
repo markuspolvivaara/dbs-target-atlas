@@ -1095,6 +1095,14 @@ test('cortex: a syndrome draws its areas on its side, with a sourced card, kept 
   await expect.poll(() => new URL(page.url()).hash).toContain('v=medial');
   await expect(page.locator('.syn-card')).toContainText('either hemisphere (the left is shown)');
   await expect(page.locator('.syn-card a[href*="tracts/#/atlas?sel=wm_or"]')).toHaveText('Optic radiation');
+  // limb apraxia draws HMAT's supplementary motor areas (the owner: the premotor areas are the SMA and pre-SMA), from
+  // above, where they show beside the parietal areas; in the legend and the card, with HMAT's source
+  await page.locator('.syn-chips .chip[data-v="apraxia"]').click();
+  await expect(page.locator('[data-preset="axial"]')).toHaveAttribute('data-active', '');
+  await expect(page.locator('.legend3d')).toContainText('Supplementary motor area (SMA)');
+  await expect(page.locator('.legend3d')).toContainText('Pre-SMA');
+  await expect(page.locator('.syn-card .syn-labels')).toContainText('Pre-SMA');
+  await expect(page.locator('.syn-card')).toContainText('Mayka 2006');
   // closing the card ends the syndrome
   await page.locator('.syn-card .close').click();
   await expect(page.locator('.syn-card')).toHaveCount(0);

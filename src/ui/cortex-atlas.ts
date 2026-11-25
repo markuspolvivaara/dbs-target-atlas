@@ -235,7 +235,8 @@ export class CortexAtlasPage {
       onmouseenter: () => { this.legendHover = id; this.viewer.invalidate(); },
       onmouseleave: () => { this.legendHover = null; this.viewer.invalidate(); },
     }, h('span', { class: 'swatch', style: this.swatchStyle(id) }), shortName(id));
-    pane.append(h('p', { class: 'chips-label' }, sy ? `Gyri and sulci drawn for this syndrome (${ids.length})` : `Gyri and sulci in this view (${ids.length})`),
+    // (a syndrome drawn only by HMAT areas lists no gyri: its card lists what is drawn)
+    if (ids.length || !sy) pane.append(h('p', { class: 'chips-label' }, sy ? `Gyri and sulci drawn for this syndrome (${ids.length})` : `Gyri and sulci in this view (${ids.length})`),
       h('div', { class: 'chips wrap sb-list' }, ...ids.map(btn)));
     if (s.sel) pane.append(s.sel === MEDIAL_WALL ? this.medialWallCard() : this.card(s.sel));
     const viewCard = h('article', { class: 'card' },
@@ -342,16 +343,23 @@ export class CortexAtlasPage {
     const claims = (cs: Claim[]) => cs.map((c, i) => [i ? ' ' : '', c.text, ' ', refLinksFrom(CTX_REFS, c.refIds)]).flat();
     const pick = (to: string) => h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.sel = to; }) }, shortName(to));
     const side = sy.side === 'L' ? 'the left hemisphere' : sy.side === 'R' ? 'the right hemisphere' : sy.camera === 'medial' ? 'either hemisphere (the left is shown)' : 'both hemispheres';
+    const fns = (sy.fns ?? []).map((x) => ({ f: FUNCTIONS.find((f) => f.id === x.id)!, why: x.why }));
     return h('article', { class: 'card syn-card' }, close,
       h('p', { class: 'eyebrow' }, `Syndrome · ${SYN_GROUPS.find((g) => g.id === sy.group)!.name}`),
       h('h2', {}, sy.name),
       h('dl', {},
         h('dt', {}, 'What it is'), h('dd', {}, h('p', {}, ...claims(sy.signs))),
-        h('dt', {}, 'Where'), h('dd', {}, h('p', {}, ...claims(sy.areas)),
-          sy.tracts.length ? h('p', {}, 'Tracts named: ', ...sy.tracts.map((t, i) => [i ? ', ' : '', h('a', { href: `${SITE_ROOT}tracts/#/atlas?sel=${t.id}` }, t.name)]).flat(), ' (white-matter section).') : null),
+        h('dt', {}, 'Where'), h('dd', {}, h('p', {}, ...claims(sy.areas))),
         sy.firmness.length ? [h('dt', {}, 'How firm the tie is'), h('dd', {}, h('p', {}, ...claims(sy.firmness)))] : null,
-        h('dt', {}, 'Drawn here'), h('dd', {}, h('ul', { class: 'plain syn-labels' }, ...sy.labels.map((l) => h('li', {}, pick(l.id), ` · ${l.why}`))),
-          h('p', { class: 'aside' }, `On ${side}. The Destrieux labels nearest to the areas the sources name: an approximation, not the extent of a lesion. Lesions that cause a syndrome differ in size and place from patient to patient, and one template brain is not anyone’s map.`))));
+        sy.tracts.length ? [h('dt', {}, 'Tracts named'), h('dd', {}, h('p', {}, ...sy.tracts.map((t, i) => [i ? ', ' : '', h('a', { href: `${SITE_ROOT}tracts/#/atlas?sel=${t.id}` }, t.name)]).flat(), ' (white-matter section).'))] : null,
+        h('dt', {}, 'Drawn here'), h('dd', {}, h('ul', { class: 'plain syn-labels' },
+          ...sy.labels.map((l) => h('li', {}, pick(l.id), ` · ${l.why}`)),
+          // the HMAT areas: drawn in their own colours, as in the Function selector (no card of their own)
+          ...fns.map(({ f, why }) => h('li', {}, h('span', { class: 'swatch', style: `--c: var(--c-${f.token})` }), h('strong', {}, f.name), ` · ${why}`))),
+          h('p', { class: 'aside' }, `On ${side}. `, sy.labels.length ? 'The Destrieux labels nearest to the areas the sources name: an approximation, not the extent of a lesion. ' : '',
+            fns.length ? ['The ', fns.map(({ f }) => f.name.replace(/ \(.*\)$/, '').replace(/^./, (c) => c.toLowerCase())).join(' and the '),
+              ` ${fns.length > 1 ? 'are' : 'is'} drawn as the Human Motor Area Template maps ${fns.length > 1 ? 'them' : 'it'}, a group-level map from functional imaging `, refLinksFrom(CTX_REFS, ['mayka2006']), '. '] : '',
+            'Lesions that cause a syndrome differ in size and place from patient to patient, and one template brain is not anyone’s map.'))));
   }
 
   private fnCard(id: FnGroupId): HTMLElement {
@@ -409,7 +417,15 @@ export class CortexAtlasPage {
     } else {
       this.legend.append(row('--c: var(--c-cortex)', 'Plain: only the selected label is coloured', []));
     }
-    if (s.syn) this.legend.append(h('li', { class: 'lg-note' }, `${SYNDROME.get(s.syn)!.name}: its areas in colour, the rest grey`));
+    if (s.syn) {
+      const sy = SYNDROME.get(s.syn)!;
+      // (its HMAT areas in their own colours, as in the Function selector)
+      for (const x of sy.fns ?? []) {
+        const f = FUNCTIONS.find((g) => g.id === x.id)!;
+        this.legend.append(row(`--c: var(--c-${f.token})`, f.name, [f.id]));
+      }
+      this.legend.append(h('li', { class: 'lg-note' }, `${sy.name}: its areas in colour, the rest grey`));
+    }
     this.legend.append(row('--c: var(--c-cortex)', 'Medial wall (unlabelled)', [MEDIAL_WALL]));
     this.legend.append(h('li', { class: 'lg-note' }, 'Shading: light = gyral crown, dark = sulcal depth'));
     if (s.hidden.length) this.legend.append(h('li', { class: 'lg-actions' }, h('button', { type: 'button', class: 'linklike', onclick: () => this.update((st) => { st.hidden = []; }) }, `Show all (${s.hidden.length} hidden)`)));

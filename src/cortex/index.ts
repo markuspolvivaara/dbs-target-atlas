@@ -178,6 +178,8 @@ export function crossCheckCtx(): string[] {
   for (const g of FN_GROUPS) for (const r of g.refIds) if (!CTX_REFS.has(r)) errs.push(`group ${g.id}: reference ${r} unknown`);
   for (const sy of SYNDROMES) {
     for (const l of sy.labels) if (!LABEL.has(l.id)) errs.push(`syndrome ${sy.id}: label ${l.id} unknown`);
+    for (const f of sy.fns ?? []) if (FUNCTIONS.find((x) => x.id === f.id)?.basis !== 'hmat') errs.push(`syndrome ${sy.id}: ${f.id} is not an HMAT area`);
+    if (!sy.labels.length && !sy.fns?.length) errs.push(`syndrome ${sy.id}: nothing drawn`);
     const claims = [...sy.signs, ...sy.areas, ...sy.firmness];
     if (!sy.signs.length || !sy.areas.length) errs.push(`syndrome ${sy.id}: no signs or no areas`);
     for (const c of claims) {

@@ -27,8 +27,9 @@ export function cortexPlan(s: Pick<CortexState, 'view' | 'lobe' | 'colour' | 'in
   // (a syndrome's areas are drawn whatever the colour mode: they are the point of the view)
   for (const l of LABELS) looks.set(l.id, (s.colour !== 'plain' || sy) && shown.has(l.id) ? 'primary' : 'muted');
   looks.set(MEDIAL_WALL, 'muted');
-  // functional areas: the group's drawn over the labels, which step back
-  for (const f of FUNCTIONS) looks.set(f.id, !sy && s.fn === f.group ? 'primary' : 'hidden');
+  // functional areas: the group's drawn over the labels, which step back; with a syndrome, the HMAT areas it names
+  const synFns = new Set(sy?.fns?.map((f) => f.id));
+  for (const f of FUNCTIONS) looks.set(f.id, (sy ? synFns.has(f.id) : s.fn === f.group) ? 'primary' : 'hidden');
   if (s.fn && !sy) for (const l of LABELS) looks.set(l.id, 'muted');
   const colours = s.colour === 'atlas' ? new Map(LABELS.map((l) => [l.id, l.atlasColour])) : undefined;
   return {

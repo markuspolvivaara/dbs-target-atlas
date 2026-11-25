@@ -28,6 +28,9 @@ export interface Syndrome {
   camera: CameraPreset;
   /** the Destrieux labels drawn for it, and why each (from the sources' wording) */
   labels: { id: string; why: string }[];
+  /** HMAT motor areas drawn for it (the Function selector's, vertex by vertex: Mayka 2006), and why each; where the sources
+   * name an area HMAT draws, such as the supplementary motor area, it is drawn rather than a gyrus approximating it */
+  fns?: { id: string; why: string }[];
   /** white-matter tracts the sources tie it to, by the white-matter section's ids and names (a unit test holds them to it) */
   tracts: { id: string; name: string }[];
   /** what the syndrome is */
@@ -63,8 +66,27 @@ export const SYN_REFS: Record<string, { citation: string; url: string; short?: s
   pisella2015: { citation: 'Pisella L, Biotti D, Vighetto A. Combination of attentional and spatial working memory deficits in Bálint-Holmes syndrome. Ann N Y Acad Sci. 2015;1339(1):165-75. doi:10.1111/nyas.12731.', url: 'https://doi.org/10.1111/nyas.12731' },
   park2017: { citation: 'Park JE. Apraxia: review and update. J Clin Neurol. 2017;13(4):317-24. doi:10.3988/jcn.2017.13.4.317.', url: 'https://doi.org/10.3988/jcn.2017.13.4.317' },
   rosenzopf2022: { citation: 'Rosenzopf H, Wiesen D, Basilakos A, Yourganov G, Bonilha L, Rorden C, et al. Mapping the human praxis network: an investigation of white matter disconnection in limb apraxia of gesture production. Brain Commun. 2022;4(1):fcac004. doi:10.1093/braincomms/fcac004.', url: 'https://doi.org/10.1093/braincomms/fcac004' },
+  // the supplementary motor areas in apraxia and in transcortical motor aphasia (the owner: the premotor areas are the SMA and
+  // pre-SMA, drawn as such; 2026-11-25)
+  chang2015: { citation: 'Chang MC, Chun MH. Right lower limb apraxia in a patient with left supplementary motor area infarction: intactness of the corticospinal tract confirmed by transcranial magnetic stimulation. Neural Regen Res. 2015;10(2):325-7. doi:10.4103/1673-5374.152389.', url: 'https://doi.org/10.4103/1673-5374.152389' },
+  kubel2018: { short: 'Kübel 2018', citation: 'Kübel S, Stegmayer K, Vanbellingen T, Walther S, Bohlhalter S. Deficient supplementary motor area at rest: neural basis of limb kinetic deficits in Parkinson’s disease. Hum Brain Mapp. 2018;39(9):3691-700. doi:10.1002/hbm.24204.', url: 'https://doi.org/10.1002/hbm.24204' },
+  peigneux2004: { citation: 'Peigneux P, Van der Linden M, Garraux G, Laureys S, Degueldre C, Aerts J, et al. Imaging a cognitive model of apraxia: the neural substrate of gesture-specific cognitive processes. Hum Brain Mapp. 2004;21(3):119-42. doi:10.1002/hbm.10161.', url: 'https://doi.org/10.1002/hbm.10161' },
+  kroliczak2009: { short: 'Króliczak 2009', citation: 'Króliczak G, Frey SH. A common network in the left cerebral hemisphere represents planning of tool use pantomimes and familiar intransitive gestures at the hand-independent level. Cereb Cortex. 2009;19(10):2396-410. doi:10.1093/cercor/bhn261.', url: 'https://doi.org/10.1093/cercor/bhn261' },
+  niessen2014: { citation: 'Niessen E, Fink GR, Weiss PH. Apraxia, pantomime and the parietal cortex. Neuroimage Clin. 2014;5:42-52. doi:10.1016/j.nicl.2014.05.017.', url: 'https://doi.org/10.1016/j.nicl.2014.05.017' },
+  levy2025: { citation: 'Levy D, Greicius Q, Wang C, Ko E, Xu D, Andrews J, et al. Role for left dorsomedial prefrontal cortex in self-generated, but not externally cued, language production. Neurobiol Lang (Camb). 2025;6:nol_a_00166. doi:10.1162/nol_a_00166.', url: 'https://doi.org/10.1162/nol_a_00166' },
+  potgieser2014: { citation: 'Potgieser AR, de Jong BM, Wagemakers M, Hoving EW, Groen RJ. Insights from the supplementary motor area syndrome in balancing movement initiation and inhibition. Front Hum Neurosci. 2014;8:960. doi:10.3389/fnhum.2014.00960.', url: 'https://doi.org/10.3389/fnhum.2014.00960' },
+  dick2019: { citation: 'Dick AS, Garic D, Graziano P, Tremblay P. The frontal aslant tract (FAT) and its role in speech, language and executive function. Cortex. 2019;111:148-63. doi:10.1016/j.cortex.2018.10.015.', url: 'https://doi.org/10.1016/j.cortex.2018.10.015' },
   // vision
   corrow2016: { citation: 'Corrow SL, Dalrymple KA, Barton JJ. Prosopagnosia: current perspectives. Eye Brain. 2016;8:165-75. doi:10.2147/EB.S92838.', url: 'https://doi.org/10.2147/EB.S92838' },
+  // prosopagnosia's lesion sites, the posterior ones among them (the owner asked for them, 2026-11-25)
+  josephs2024: { citation: 'Josephs KA, Josephs KA Jr. Prosopagnosia: face blindness and its association with neurological disorders. Brain Commun. 2024;6(1):fcae002. doi:10.1093/braincomms/fcae002.', url: 'https://doi.org/10.1093/braincomms/fcae002' },
+  gainotti2011: { citation: 'Gainotti G, Marra C. Differential contribution of right and left temporo-occipital and anterior temporal lesions to face recognition disorders. Front Hum Neurosci. 2011;5:55. doi:10.3389/fnhum.2011.00055.', url: 'https://doi.org/10.3389/fnhum.2011.00055' },
+  robotham2023: { citation: 'Robotham RJ, Rice GE, Leff AP, Lambon Ralph MA, Starrfelt R. Systematic evaluation of high-level visual deficits and lesions in posterior cerebral artery stroke. Brain Commun. 2023;5(2):fcad050. doi:10.1093/braincomms/fcad050.', url: 'https://doi.org/10.1093/braincomms/fcad050' },
+  barton2009: { citation: 'Barton JJ, Hanif H, Ashraf S. Relating visual to verbal semantic knowledge: the evaluation of object recognition in prosopagnosia. Brain. 2009;132(Pt 12):3456-66. doi:10.1093/brain/awp252.', url: 'https://doi.org/10.1093/brain/awp252' },
+  prieto2011: { citation: 'Prieto EA, Caharel S, Henson R, Rossion B. Early (N170/M170) face-sensitivity despite right lateral occipital brain damage in acquired prosopagnosia. Front Hum Neurosci. 2011;5:138. doi:10.3389/fnhum.2011.00138.', url: 'https://doi.org/10.3389/fnhum.2011.00138' },
+  rossion2011: { citation: 'Rossion B, Dricot L, Goebel R, Busigny T. Holistic face categorization in higher order visual areas of the normal and prosopagnosic brain: toward a non-hierarchical view of face perception. Front Hum Neurosci. 2011;4:225. doi:10.3389/fnhum.2010.00225.', url: 'https://doi.org/10.3389/fnhum.2010.00225' },
+  jonas2014: { citation: 'Jonas J, Frismand S, Vignal JP, Colnat-Coulbois S, Koessler L, Vespignani H, et al. Right hemispheric dominance of visual phenomena evoked by intracerebral stimulation of the human visual cortex. Hum Brain Mapp. 2014;35(7):3360-71. doi:10.1002/hbm.22407.', url: 'https://doi.org/10.1002/hbm.22407' },
+  cohen2019: { citation: 'Cohen AL, Soussand L, Corrow SL, Martinaud O, Barton JJS, Fox MD. Looking beyond the face area: lesion network mapping of prosopagnosia. Brain. 2019;142(12):3975-90. doi:10.1093/brain/awz332.', url: 'https://doi.org/10.1093/brain/awz332' },
   goodwin2014: { citation: 'Goodwin D. Homonymous hemianopia: challenges and solutions. Clin Ophthalmol. 2014;8:1919-27. doi:10.2147/OPTH.S59452.', url: 'https://doi.org/10.2147/OPTH.S59452' },
   thirugnanachandran2026: { citation: 'Thirugnanachandran T, Vuong J, Kong Y, Chen J, Chen C, Clissold B, et al. The anatomy of infarcts causing hemianopia and quadrantanopia in posterior cerebral artery stroke. Cerebrovasc Dis. 2026;55(3):311-7. doi:10.1159/000547444.', url: 'https://doi.org/10.1159/000547444' },
 };
@@ -82,8 +104,6 @@ export const SYNDROMES: Syndrome[] = [
     labels: [
       { id: 'ctx_g_front_inf_opercular', why: 'pars opercularis (area 44), part of Broca’s area' },
       { id: 'ctx_g_front_inf_triangul', why: 'pars triangularis (area 45), part of Broca’s area' },
-      { id: 'ctx_g_insular_short', why: 'the anterior superior insula' },
-      { id: 'ctx_g_precentral', why: 'its lower part: the motor cortex of the tongue and larynx' },
     ],
     tracts: [{ id: 'wm_af', name: 'Arcuate fasciculus' }, { id: 'wm_emc', name: 'Extreme capsule fasciculus' }, { id: 'wm_mdlf', name: 'Middle longitudinal fasciculus' }],
     signs: [
@@ -91,10 +111,10 @@ export const SYNDROMES: Syndrome[] = [
     ],
     areas: [
       { text: 'Classically tied to Broca’s area, areas 44 (pars opercularis) and 45 (pars triangularis) in the posterior half of the left inferior frontal gyrus.', refIds: ['gajardovidal2021', 'pracar2025'] },
-      { text: 'Chronic Broca’s aphasia needs wider damage: to the dorsolateral prefrontal cortex, the supramarginal gyrus, the anterior superior temporal gyrus and the white matter beneath them; in a lesion analysis the left insula came out as most critical, with the motor cortex of the tongue and larynx, and complete disconnections of the arcuate fasciculus, extreme capsule and middle longitudinal fasciculus.', refIds: ['pracar2025'] },
     ],
     firmness: [
       { text: 'Lesions of Broca’s area alone are thought to cause a transient Broca’s aphasia rather than a chronic one, and localised damage rarely gives the complete syndrome.', refIds: ['pracar2025', 'fridriksson2018'] },
+      { text: 'Chronic Broca’s aphasia needs wider damage: to the dorsolateral prefrontal cortex, the supramarginal gyrus, the anterior superior temporal gyrus and the white matter beneath them; in a lesion analysis the left insula came out as most critical, with the motor cortex of the tongue and larynx, and complete disconnections of the arcuate fasciculus, extreme capsule and middle longitudinal fasciculus.', refIds: ['pracar2025'] },
       { text: 'Long-lasting speech production impairment after stroke has been accounted for by damage to the white matter above the insula, near the arcuate fasciculus, rather than by damage to Broca’s area.', refIds: ['gajardovidal2021'] },
     ],
   },
@@ -141,20 +161,27 @@ export const SYNDROMES: Syndrome[] = [
     ],
   },
   {
-    id: 'tcmotor', name: 'Transcortical motor aphasia', group: 'aphasia', side: 'L', camera: 'lateral',
-    labels: [
-      { id: 'ctx_g_front_sup', why: 'the supplementary motor area, on the medial part of the superior frontal gyrus' },
+    // (on the medial surface, where the supplementary motor areas lie)
+    id: 'tcmotor', name: 'Transcortical motor aphasia', group: 'aphasia', side: 'L', camera: 'medial',
+    labels: [],
+    fns: [
+      { id: 'ctx_fn_presma', why: 'the pre-supplementary motor area: in a series of left-sided resections, of the medial frontal regions compared, the one whose damage went with a deficit of self-generated speech' },
+      { id: 'ctx_fn_sma', why: 'the supplementary motor area proper, behind it: its resection can give the SMA syndrome, a transient akinesia with, on the dominant side, mutism' },
     ],
-    tracts: [],
+    tracts: [{ id: 'wm_fat', name: 'Frontal aslant tract' }],
     signs: [
       { text: 'Dysfluency and agrammatism in spontaneous speech, which is hard to initiate, with relative sparing of repetition.', refIds: ['osullivan2019', 'canas2018'] },
     ],
     areas: [
       { text: 'The lesions are often anterior or superior to Broca’s area, though in many cases part of Broca’s area is involved.', refIds: ['osullivan2019'] },
-      { text: 'Lesions of the supplementary motor area of the dominant hemisphere can cause it too, typically after their resection.', refIds: ['canas2018', 'lacorte2021'] },
+      { text: 'Lesions of the supplementary motor area of the dominant hemisphere can give varying degrees of it too, typically after their resection.', refIds: ['canas2018', 'lacorte2021'] },
+      { text: 'In 307 left-hemisphere resections, a deficit of self-generated but not externally cued speech was tied to damage in the left medial prefrontal cortex; among the 18 patients with resections there, only damage to the pre-SMA set apart those with the deficit. The authors liken it to transcortical motor aphasia; it came without the hemiparesis or akinetic mutism of the SMA syndrome that damage to the SMA proper gives.', refIds: ['levy2025'] },
+      { text: 'An anterior part of the frontal aslant tract has been described joining the pre-SMA to area 44, and a posterior part joining the SMA to area 6; disorders of self-initiated speech, hesitancy and pauses have been reported straight after surgery involving it.', refIds: ['lacorte2021'] },
     ],
     firmness: [
-      { text: 'There is some controversy about the transcortical syndromes; the sparing of repetition is the feature to recognise.', refIds: ['osullivan2019'] },
+      { text: 'There is some controversy about the transcortical syndromes; the sparing of repetition is an important feature to recognise, as it may be put to use in speech and language therapy.', refIds: ['osullivan2019'] },
+      { text: 'Lesions confined to the SMA most often give no specific class of aphasia: the transcortical motor aphasias described more plausibly reflect wider damage to the white matter beneath.', refIds: ['potgieser2014'] },
+      { text: 'Reduced spontaneous speech may follow resection of the SMA, described mainly on the dominant side though not only there; in most cases it resolves within weeks to months.', refIds: ['potgieser2014', 'dick2019'] },
     ],
   },
   {
@@ -172,7 +199,7 @@ export const SYNDROMES: Syndrome[] = [
       { text: 'Binder attributes it to damage confined to the semantic network, which includes the angular gyrus and middle temporal gyrus; comprehension impairment is associated with damage there, not with damage to the posterior superior temporal or supramarginal gyrus.', refIds: ['binder2015'] },
     ],
     firmness: [
-      { text: 'There is some controversy about the transcortical syndromes; the sparing of repetition is the feature to recognise.', refIds: ['osullivan2019'] },
+      { text: 'There is some controversy about the transcortical syndromes; the sparing of repetition is an important feature to recognise, as it may be put to use in speech and language therapy.', refIds: ['osullivan2019'] },
     ],
   },
   {
@@ -264,12 +291,16 @@ export const SYNDROMES: Syndrome[] = [
     ],
   },
   {
-    id: 'apraxia', name: 'Limb apraxia (ideomotor)', group: 'attention', side: 'L', camera: 'lateral',
+    // (from above: the supplementary motor areas lie on the medial surface, the parietal and temporal areas on the lateral)
+    id: 'apraxia', name: 'Limb apraxia (ideomotor)', group: 'attention', side: 'L', camera: 'axial',
     labels: [
       { id: 'ctx_g_pariet_inf_supramar', why: 'supramarginal gyrus, inferior parietal lobe' },
       { id: 'ctx_g_pariet_inf_angular', why: 'angular gyrus' },
       { id: 'ctx_g_temporal_middle', why: 'middle temporal gyrus' },
-      { id: 'ctx_s_precentral_inf_part', why: 'premotor cortex, approximately: the Destrieux labels have no premotor area' },
+    ],
+    fns: [
+      { id: 'ctx_fn_sma', why: 'the supplementary motor area: ideomotor apraxia has been found with damage to it (the lesion reports do not separate it from the pre-SMA)' },
+      { id: 'ctx_fn_presma', why: 'the pre-supplementary motor area, in front of it: more active when healthy people plan a tool-use pantomime with the right hand (imaging, not lesions)' },
     ],
     tracts: SLF,
     signs: [
@@ -279,31 +310,44 @@ export const SYNDROMES: Syndrome[] = [
     areas: [
       { text: 'It follows mainly damage to the left hemisphere, which is held to be the one relevant for praxis.', refIds: ['park2017', 'rosenzopf2022'] },
       { text: 'Lesion studies tie it to left parietal, temporal and frontal cortex: the angular and supramarginal gyri, the middle and superior temporal gyri, the inferior frontal gyrus, the insula and premotor areas; ideomotor apraxia has also been found with damage to the supplementary motor cortex or the corpus callosum.', refIds: ['rosenzopf2022', 'park2017'] },
+      { text: 'Patients with lesions of the supplementary motor area have shown ideomotor apraxia, reportedly of both hands after a left-sided lesion; in one case report an infarct mainly of the left one seemed to cause apraxia of the right leg.', refIds: ['chang2015', 'kubel2018'] },
+      { text: 'In 12 healthy people, planning a tool-use pantomime with the right hand raised activity more than an intransitive gesture did in the left pre-SMA, dorsal premotor, cingulate, parietal and primary motor areas; with the left hand there was no such difference.', refIds: ['kroliczak2009'] },
       { text: 'In the white matter, Geschwind proposed a disconnection through the superior longitudinal fasciculus; a disconnection study also implicated the uncinate, inferior fronto-occipital and inferior longitudinal fasciculi.', refIds: ['park2017', 'rosenzopf2022'] },
     ],
     firmness: [
       { text: 'The lesion studies’ results differ markedly, and apraxia is now seen as damage to a network rather than to one area.', refIds: ['rosenzopf2022', 'park2017'] },
+      { text: 'Few studies have reported clear apraxia with lesions confined to the supplementary motor area, perhaps because the other hemisphere makes up for a one-sided lesion.', refIds: ['peigneux2004'] },
+      { text: 'The supplementary motor and premotor activity seen in imaging of pantomime has been read as the general motor work of a complex task rather than as pantomime itself.', refIds: ['niessen2014'] },
     ],
   },
   // ---------------------------------------------------------------- vision
   {
     id: 'prosopagnosia', name: 'Prosopagnosia', group: 'visual', side: 'R', camera: 'inferior',
     labels: [
-      { id: 'ctx_g_oc_temp_lat_fusifor', why: 'fusiform gyrus (occipitotemporal damage: the perceptual form)' },
-      { id: 'ctx_pole_temporal', why: 'anterior temporal lobe, approximately (the memory-linked form)' },
+      { id: 'ctx_g_and_s_occipital_inf', why: 'the inferior occipital gyrus, where the occipital face area lies' },
+      { id: 'ctx_g_oc_temp_lat_fusifor', why: 'the fusiform gyrus, with the fusiform face area in its posterior and middle part' },
+      { id: 'ctx_g_oc_temp_med_lingual', why: 'the lingual gyrus: with the fusiform gyrus, where the search for its anatomy first centred' },
+      { id: 'ctx_pole_temporal', why: 'the anterior temporal lobe, approximately (more often the associative form)' },
     ],
-    tracts: [],
+    tracts: [{ id: 'wm_ilf', name: 'Inferior longitudinal fasciculus' }, { id: 'wm_ifof', name: 'Inferior fronto-occipital fasciculus' }],
     signs: [
       { text: 'A selective visual agnosia: the inability to recognise the identity of faces, not due to more general problems with vision, object recognition or memory.', refIds: ['corrow2016'] },
       { text: 'Acquired prosopagnosia follows brain injury, among others stroke, trauma, encephalitis, tumours or temporal lobe resection.', refIds: ['corrow2016'] },
+      { text: 'With occipitotemporal lesions the classic companions are upper visual field defects, impaired colour vision (almost always only when the lesions are on both sides) and topographic disorientation.', refIds: ['corrow2016'] },
     ],
     areas: [
-      { text: 'Lesions may be on both sides or on one; when on one, far more often on the right.', refIds: ['corrow2016'] },
-      { text: 'Patients with fusiform lesions more often have the apperceptive form, a failure to encode the face; those with anterior temporal lesions the associative form.', refIds: ['corrow2016'] },
-      { text: 'Occipitotemporal lesions often add upper field defects, impaired colour vision and topographic disorientation.', refIds: ['corrow2016'] },
+      { text: 'Lesions may be on both sides or on one; when on one, far more often on the right. In a clinical series, all but 5 of 66 patients whose prosopagnosia was not degenerative (for most a reported complaint, not confirmed by testing) and whose imaging showed a lesion had one involving the right temporal or right occipital lobe: with infarcts the right occipital lobe was the commonest site, with tumours and epilepsy the right temporal lobe.', refIds: ['corrow2016', 'josephs2024'] },
+      { text: 'For its first century the search for its anatomy centred on the lingual and fusiform gyri of the medial occipitotemporal cortex.', refIds: ['josephs2024'] },
+      { text: 'The most specific forms follow lesions of a right posterior network that includes the occipital face area, in the inferior occipital gyrus, and the fusiform face area, in the posterior and middle fusiform gyrus; damage there impairs visual perception and tends to give the apperceptive form, a failure to encode the face.', refIds: ['gainotti2011', 'robotham2023', 'corrow2016'] },
+      { text: 'Three patients with right posterior medial occipitotemporal infarcts or haemorrhage had lost the right fusiform face area, one the occipital face area too; in the patient PS the main lesion, thought to cause her prosopagnosia, takes in the right occipital face area, with a second lesion in the left fusiform face area.', refIds: ['barton2009', 'prieto2011', 'rossion2011'] },
+      { text: 'Electrical stimulation of the right inferior occipital gyrus in one patient and of the right middle fusiform gyrus in another caused a prosopagnosia that ended with the stimulation; in that series no stimulation of the left hemisphere did.', refIds: ['jonas2014'] },
+      { text: 'Patients with anterior temporal lesions more often have the associative form. With right anterior temporal lesions the defect has been held usually to be part of a wider, multimodal disorder of person recognition, though in one study voices were impaired only when the anterior temporal lesions were on both sides.', refIds: ['corrow2016', 'gainotti2011'] },
+      { text: 'After posterior cerebral artery stroke, face recognition correlated with a right-hemisphere cluster mainly in the white matter of the inferior fronto-occipital and inferior longitudinal fasciculi.', refIds: ['robotham2023'] },
     ],
     firmness: [
       { text: 'Many different lesions can cause it: acquired prosopagnosia is a family of disorders with different mechanisms and lesions that lead to the same impaired face recognition.', refIds: ['corrow2016'] },
+      { text: 'No single area is damaged in every case: of 44 published lesions causing it, only 29 involved the right fusiform face area, but all 44 lay in a network defined by their connectivity to that area in healthy brains.', refIds: ['cohen2019'] },
+      { text: 'A deficit for faces alone is rare after posterior cerebral artery stroke: in a series of 64 patients none had one, faces suffered after right, left and bilateral lesions, lesion volume mattered most, and taking it into account removed most of the clusters found for faces.', refIds: ['robotham2023'] },
     ],
   },
   {

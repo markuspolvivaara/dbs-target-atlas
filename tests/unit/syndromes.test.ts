@@ -16,11 +16,17 @@ describe('cortex syndromes', () => {
   it('every label is a Destrieux label, every sentence has a source, every source is listed', () => {
     expect(crossCheckCtx()).toEqual([]);
     for (const s of SYNDROMES) {
-      expect(s.labels.length, s.id).toBeGreaterThan(0);
+      expect(s.labels.length + (s.fns?.length ?? 0), s.id).toBeGreaterThan(0);
       expect(new Set(s.labels.map((l) => l.id)).size, `${s.id}: a label twice`).toBe(s.labels.length);
       for (const l of s.labels) {
         expect(LABEL.has(l.id), `${s.id}: ${l.id}`).toBe(true);
         expect(l.why.length, `${s.id}: ${l.id} without a reason`).toBeGreaterThan(3);
+      }
+      // HMAT's areas, drawn vertex by vertex, where the sources name one (the owner: the premotor areas are the SMA and
+      // pre-SMA, drawn as such)
+      for (const f of s.fns ?? []) {
+        expect(FUNCTIONS.find((x) => x.id === f.id)?.basis, `${s.id}: ${f.id}`).toBe('hmat');
+        expect(f.why.length, `${s.id}: ${f.id} without a reason`).toBeGreaterThan(3);
       }
       for (const c of [...s.signs, ...s.areas, ...s.firmness]) {
         expect(c.refIds.length, `${s.id}: “${c.text}”`).toBeGreaterThan(0);
@@ -45,13 +51,14 @@ describe('cortex syndromes', () => {
     for (const s of SYNDROMES) for (const t of s.tracts) expect(topic.get(t.id), `${s.id}: ${t.id}`).toBe(t.name);
   });
 
-  it('a syndrome draws its labels and nothing else in colour, whatever the colour mode, without the functions', () => {
+  it('a syndrome draws its labels and HMAT areas and nothing else in colour, whatever the colour mode', () => {
     for (const s of SYNDROMES) {
+      const fns = new Set(s.fns?.map((f) => f.id));
       for (const colour of ['lobe', 'plain'] as const) {
         const p = cortexPlan({ view: 'lateral', lobe: null, colour, inflate: 0, fn: 'language', syn: s.id });
         const primary = [...p.looks].filter(([, l]) => l === 'primary').map(([id]) => id).sort();
-        expect(primary, `${s.id} ${colour}`).toEqual(s.labels.map((l) => l.id).sort());
-        expect(FUNCTIONS.every((f) => p.looks.get(f.id) === 'hidden')).toBe(true);
+        expect(primary, `${s.id} ${colour}`).toEqual([...s.labels.map((l) => l.id), ...fns].sort());
+        expect(FUNCTIONS.every((f) => p.looks.get(f.id) === (fns.has(f.id) ? 'primary' : 'hidden'))).toBe(true);
         expect(p.title).toBe(s.name);
       }
       expect(viewLabels({ view: 'medial', lobe: 'frontal', syn: s.id }).sort()).toEqual(s.labels.map((l) => l.id).sort());
