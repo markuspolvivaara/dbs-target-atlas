@@ -1111,6 +1111,53 @@ test('cortex: a syndrome draws its areas on its side, with a sourced card, kept 
   expect(g.errors).toEqual([]);
 });
 
+// the module plan's addition 2: surgical regions (glioma surgery); the region ids are written out (the browser tests do not
+// import the region data, which imports a JSON manifest)
+test('cortex: a surgical region draws its areas see-through with its tracts, a sourced card, a tract card, kept in the link', async ({ page }) => {
+  const g = guard(page);
+  const atlas = () => page.evaluate(() => {
+    const v = (window as unknown as { __atlas: { viewer: { plan: { tracts: Map<string, string>; surfaceOpacity?: number }; items: Map<string, { kind: string; role?: string | null; nodes: Record<string, { visible: boolean } | undefined> }> } } }).__atlas.viewer;
+    const tracts = [...v.plan.tracts.keys()];
+    return {
+      see: v.plan.surfaceOpacity ?? 1,
+      tracts: tracts.map((id) => { const it = v.items.get(id); return [id, it ? `${it.kind} ${it.role ?? null} ${Object.values(it.nodes).some((n) => n?.visible)}` : null]; }),
+    };
+  });
+  for (const id of ['sma', 'insula', 'operculum', 'temporal', 'parietal']) {
+    await page.goto(`./cortex/#/atlas?r=${id}`);
+    await settle(page);
+    const a = await atlas();
+    expect(a.see, id).toBeLessThan(1);
+    expect(a.tracts.length, id).toBeGreaterThan(0);
+    // every tract the region names is drawn, as streamlines, on the side shown
+    for (const [tid, line] of a.tracts) expect(line, `${id} ${tid}`).toMatch(/^lines (key|alt) true$/);
+    await expect(page.locator('.legend3d .sw.line')).toHaveCount(a.tracts.length);
+    await expect(page.locator('.region-card dt')).toHaveText(['Mapped there', 'After resection', 'Transient or lasting', 'How firm the evidence is', 'Drawn here']);
+    await expect(page.locator('.region-card a.src').first()).toBeVisible();
+  }
+  // chosen from the chips: the link keeps it, the inflated surface is off (the tracts do not follow it)
+  await page.goto('./cortex/#/atlas?v=lateral&inf=1');
+  await settle(page);
+  await page.locator('.region-chips .chip[data-v="parietal"]').click();
+  await expect.poll(() => new URL(page.url()).hash).toContain('r=parietal');
+  expect(new URL(page.url()).hash).not.toContain('inf=1');
+  await expect(page.locator('[data-inflate="1"]')).toBeDisabled();
+  await expect(page.locator('.region-card h2')).toHaveText('Parietal lobe');
+  // a tract opens its card, which links to the white-matter section's; held over a reload
+  await page.locator('.region-card').getByRole('button', { name: 'Arcuate fasciculus' }).click();
+  await expect.poll(() => new URL(page.url()).hash).toContain('sel=wm_af');
+  await expect(page.locator('.tract-card h2')).toContainText('Arcuate fasciculus');
+  await page.reload();
+  await settle(page);
+  await expect(page.locator('.tract-card a[href*="tracts/#/atlas?sel=wm_af"]')).toBeVisible();
+  // a syndrome ends the region
+  await page.locator('.syn-chips .chip[data-v="neglect"]').click();
+  await expect(page.locator('.region-card')).toHaveCount(0);
+  expect(new URL(page.url()).hash).not.toContain('r=');
+  expect(g.external).toEqual([]);
+  expect(g.errors).toEqual([]);
+});
+
 test('dbs: the STN as one nucleus or as its zones; the Parkinson\'s view without the PPN and the optic tract', async ({ page }) => {
   const g = guard(page);
   await page.goto('./dbs/#/atlas?i=pd');

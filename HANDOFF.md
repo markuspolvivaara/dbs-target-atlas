@@ -289,6 +289,48 @@ starts at the lateral geniculate body, but its loop reaches only 4 to 5 mm furth
 loading per view, side effects, geometry checks and browser tests in CI, a linter, figure export, isolate and
 per-structure opacity, slices under the cortex, the citation panel, keyboard control of the 3D view.
 
+## Surgical regions in the cortex section (module plans, Part A, addition 2) (desktop, 2026-11-25)
+
+Branch `feat/glioma-regions`, from `main` after PR 57. Addition 2 of `.claude/module-plans-2026-11-24.md`: for a
+region where gliomas are operated on, the cortex to spare and the tracts under it, drawn together. The owner chose all
+five regions. **The cards' text is for the owner to read before the PR is merged.**
+
+- **Data** (`src/cortex/regions.ts`): the supplementary motor area, the insula, the dominant frontal operculum, the
+  dominant temporal lobe and the parietal lobe, all drawn on the left. Each has its view and camera, the areas drawn
+  (Destrieux labels, or the Function selector's areas where the sources name one: HMAT's SMA, pre-SMA, M1, S1 and ventral
+  premotor cortex, and Broca's area), the white-matter section's tracts with the reason for each, and four parts:
+  "Mapped there", "After resection", "Transient or lasting", "How firm the evidence is". 116 sentences, each citing
+  its sources.
+- **Sources:** 51 new papers (`REG_REFS`), plus three the syndrome cards already cite (Potgieser 2014, La Corte 2021, Levy 2025). A research workflow found them
+  (one searcher and one independent verifier per region), a second wrote the cards (one drafter and one checker per
+  region, re-reading the full texts), and the quote script found all 692 supporting quotes. Some are free in PMC
+  without an open licence (author manuscripts); Al-Adli 2024 is a conference abstract, and the card says so.
+- **Drawing:** the region's areas at half opacity, front faces only, drawn after the tracts so that they veil them; the
+  rest of the cortex as a ghost; the tracts as the white-matter section draws them (`ScenePlan.surfaceOpacity`, one
+  new branch in `Viewer.restyle`). The tracts are that section's files, by reference: the cortex page now loads the
+  shared `wm-manifest` chunk (about 6 KB gzipped), as the brainstem page does. The insula opens in the insular view
+  (opercula cut away). The inflated surface is off while a region is shown (the tracts do not follow it).
+- **Front end:** a "Surgical region" chip group under "Syndrome"; a region's card (one paragraph a finding); a tract
+  picked in the view or the card opens a small card linking to its card in the white-matter section; the legend lists
+  the areas and the tracts as lines, each with an eye. The link holds it (`r=…`; a region wins over a syndrome, a
+  function group and a lobe, and opens its view and side). The Sources page lists the papers.
+- **Not drawn, the owner's decision (2026-11-26):** the Berger–Sanai zone lines on the insula and the temporal
+  resection limits as planes; both are in the cards' text.
+- **Colours (the owner: "fix the colours to be more clear", 2026-11-26):** a region's gyri and sulci are drawn in one
+  region colour, `ctxRegion` (light `#7C80AC`, dark `#AEB1B4`), instead of their lobe's, chosen by a search over the
+  palette check's own measure to stand at least ΔE00 11.2 from every tract a region draws and from S1, in light and
+  dark and for the three colour-vision deficiencies (the insula's yellow was too close to the IFOF's lines in dark
+  mode). Its functional areas keep their own colours (`ScenePlan.tokens` carries the override). S1 is drawn again in
+  the parietal region; its dark colour moved from `#B5785F` to `#AE7B63` (ΔE00 2.4, unchanged against every other
+  functional area) to clear the arcuate fasciculus for tritanopia. Two tract pairs the palette check already accepts
+  for the tracts section are close for red–green colour vision when a region draws them together, so one of each is
+  drawn dashed: the optic radiation in the parietal region (against SLF II), the corticospinal tract in the insula
+  (against the arcuate fasciculus). `check:palette` passes with no new pair.
+- **Tests:** `tests/unit/regions.test.ts` (the five; areas, tracts, reasons and sources; the references; the plan:
+  areas primary, the rest ghost, never opaque muted, the tracts, the catalogue; the link); `tests/e2e/smoke.spec.ts`
+  "cortex: a surgical region draws…" (every region's tracts drawn as streamlines on the side shown, the card's parts,
+  the chips, the inflated surface off, a tract's card, the link, a syndrome ending it).
+
 ## Syndromes in the cortex section (module plans, Part A, addition 1) (desktop, 2026-11-25)
 
 Branch `feat/cognitive-map`, from `main` after PR 56. Addition 1 of `.claude/module-plans-2026-11-24.md` (not in git):

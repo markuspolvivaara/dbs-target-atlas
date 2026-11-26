@@ -5,13 +5,17 @@ import type { Look } from '../viewer/materials';
 import { makeCatalog, type SceneSource, type ScenePlan } from '../viewer/scene';
 import { CTX_MANIFEST, FUNCTIONS, LABEL, LABELS, LOBE, MEDIAL_WALL } from './index';
 import type { CortexState } from './state';
+import { REGION, REGION_TRACTS } from './regions';
 import { SYNDROME } from './syndromes';
 import { VIEW } from './views';
 
 export interface CortexPlan extends ScenePlan { view: string }
 
-/** The labels a view highlights: a chosen syndrome's; else the view's labels, narrowed to one lobe when a lobe is picked. */
-export function viewLabels(s: Pick<CortexState, 'view' | 'lobe'> & Partial<Pick<CortexState, 'syn'>>): string[] {
+/** The labels a view highlights: a chosen surgical region's or syndrome's; else the view's labels, narrowed to one lobe
+ * when a lobe is picked. */
+export function viewLabels(s: Pick<CortexState, 'view' | 'lobe'> & Partial<Pick<CortexState, 'syn' | 'region'>>): string[] {
+  const rg = s.region ? REGION.get(s.region) : undefined;
+  if (rg) return rg.labels.map((l) => l.id);
   const sy = s.syn ? SYNDROME.get(s.syn) : undefined;
   if (sy) return sy.labels.map((l) => l.id);
   const v = VIEW.get(s.view) ?? VIEW.get('lateral')!;
@@ -19,7 +23,14 @@ export function viewLabels(s: Pick<CortexState, 'view' | 'lobe'> & Partial<Pick<
   return v.labels.filter((id) => !inLobe || inLobe.has(id));
 }
 
-export function cortexPlan(s: Pick<CortexState, 'view' | 'lobe' | 'colour' | 'inflate'> & Partial<Pick<CortexState, 'fn' | 'syn'>>): CortexPlan {
+/** the palette token a surgical region's gyri and sulci are drawn in */
+export const REGION_TOKEN = 'ctxRegion';
+/** how opaque a surgical region's own areas are drawn, so that its tracts show through them */
+export const REGION_SURFACE_OPACITY = 0.5;
+
+export function cortexPlan(s: Pick<CortexState, 'view' | 'lobe' | 'colour' | 'inflate'> & Partial<Pick<CortexState, 'fn' | 'syn' | 'region'>>): CortexPlan {
+  const rg = s.region ? REGION.get(s.region) : undefined;
+  if (rg) return regionPlan(rg, s.inflate);
   const v = VIEW.get(s.view) ?? VIEW.get('lateral')!;
   const shown = new Set(viewLabels(s));
   const looks = new Map<string, Look>();
@@ -40,14 +51,35 @@ export function cortexPlan(s: Pick<CortexState, 'view' | 'lobe' | 'colour' | 'in
   };
 }
 
+/** A surgical region: its areas in colour and see-through, the rest of the cortex a ghost, its tracts drawn through
+ * them (on the pial surface: the tracts do not follow the inflated one). Its gyri and sulci are drawn in one region
+ * colour (ctxRegion) rather than their lobe's: within a region the lobe colours tell little apart, and the region
+ * colour is chosen to stand clear of every tract a region draws (scripts/check-palette.ts); its functional areas keep
+ * their own colours. */
+function regionPlan(rg: NonNullable<ReturnType<typeof REGION.get>>, inflate: number): CortexPlan {
+  const v = VIEW.get(rg.view)!;
+  const own = new Set([...rg.labels, ...rg.fns].map((x) => x.id));
+  const looks = new Map<string, Look>();
+  for (const l of LABELS) looks.set(l.id, own.has(l.id) ? 'primary' : 'ghost');
+  looks.set(MEDIAL_WALL, 'ghost');
+  for (const f of FUNCTIONS) looks.set(f.id, own.has(f.id) ? 'primary' : 'hidden');
+  return {
+    title: rg.name, accent: 'ctx', looks, tracts: new Map(rg.tracts.map((t) => [t.id, t.dashed ? 'alt' : 'key'])), parcels: new Map(), markers: [],
+    camera: v.camera, focusIds: v.id === 'insular' ? v.labels : [...LABEL.keys()], minRadius: v.id === 'insular' ? 75 : 95,
+    cutOpercula: v.cutOpercula && inflate < 0.5, view: v.id, surfaceOpacity: REGION_SURFACE_OPACITY, labelTracts: true,
+    tokens: new Map(rg.labels.map((l) => [l.id, REGION_TOKEN])),
+  };
+}
+
 // the MRI templates' slice volumes (the DBS section's: the surface is the same template's, so they line up with the pial
 // surface, not with the inflated one)
 const VOLUMES = z.record(z.string(), VolumeSchema).parse((dbsManifestJson as { volumes: unknown }).volumes);
-const catalog = makeCatalog(CTX_MANIFEST.structures, VOLUMES, []);
+// (with the white-matter section's tracts the surgical regions draw: by reference to that section's files)
+const catalog = makeCatalog([...CTX_MANIFEST.structures, ...REGION_TRACTS], VOLUMES, []);
 catalog.anchors = new Map(LABELS.map((l) => [l.id, l.anchor]));
 
 export const cortexScene: SceneSource<CortexState, CortexPlan> = {
   catalog,
   plan: (s) => cortexPlan(s),
-  planKey: (s) => `${s.view}|${s.lobe}|${s.fn}|${s.syn}|${s.colour}|${s.inflate < 0.5 ? 'p' : 'i'}`,
+  planKey: (s) => `${s.view}|${s.lobe}|${s.fn}|${s.syn}|${s.region}|${s.colour}|${s.inflate < 0.5 ? 'p' : 'i'}`,
 };

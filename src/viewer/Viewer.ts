@@ -803,12 +803,21 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         const layer = s.layers[it.layer] ?? SHOWN;
         const op = (layer.on ? layer.opacity : 0) * (s.opacity?.[it.meta.id] ?? 1);
         const hex = p.colours?.get(it.meta.id);
-        const c = hex ? new THREE.Color(hex) : this.colour(it.meta);
+        const tok = p.tokens?.get(it.meta.id);
+        const c = hex ? new THREE.Color(hex) : tok && this.palette[tok] ? new THREE.Color(this.palette[tok]) : this.colour(it.meta);
         const neutral = new THREE.Color(this.palette.cortex ?? '#c4cbd3');
+        // see-through surfaces (a plan's surfaceOpacity): the coloured ones fade by it, and all are drawn front faces
+        // only, so that what lies beneath shows rather than the surfaces' insides
+        const see = p.surfaceOpacity ?? 1;
+        const side3 = see < 1 ? THREE.FrontSide : THREE.DoubleSide;
+        if (it.mats.solid.side !== side3) it.mats.solid.side = side3;
         for (const side of ['L', 'R'] as Side[]) {
           const m = it.nodes[side];
           if (!m) continue;
-          applyLook(m, it.mats, look, op, neutral, c);
+          applyLook(m, it.mats, look, look === 'ghost' || focused ? op : op * see, neutral, c);
+          // (drawn after the tracts, at order 4, so that a see-through area veils the tracts beneath it rather than the
+          // tracts being drawn over it)
+          if (see < 1 && look === 'primary' && !focused) m.renderOrder = 5;
           this.setOpercula(m, !!p.cutOpercula);
           if (!this.sideVisible(side)) m.visible = false;
         }

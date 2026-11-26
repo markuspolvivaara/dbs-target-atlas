@@ -6,6 +6,7 @@ import { decodeCamera, decodeMeasure, encodeMeasure, decodeClip, decodeHemi, dec
 import type { FnGroupId, LobeId } from './index';
 import { FN_GROUPS, LOBE } from './index';
 import { VIEW, type ViewId } from './views';
+import { REGION } from './regions';
 import { SYNDROME } from './syndromes';
 import { defaultLabels, labelsFrom, labelsParam } from '../labels';
 
@@ -22,6 +23,8 @@ export interface CortexState extends ViewState {
   fn: FnGroupId | null;
   /** a syndrome whose usual cortex is drawn instead of the view's labels (src/cortex/syndromes.ts), or none */
   syn: string | null;
+  /** a surgical region whose cortex and tracts are drawn together (src/cortex/regions.ts), or none */
+  region: string | null;
   colour: ColourMode;
   labels: 'all' | 'hover' | 'off';
   inflate: number;
@@ -31,9 +34,10 @@ export const CTX_PRESETS: CameraPreset[] = ['lateral', 'medial', 'inferior', 'ax
 
 export function defaultCortexState(): CortexState {
   return {
-    page: 'atlas', view: 'lateral', lobe: null, fn: null, syn: null, colour: 'lobe', hemi: 'both', cam: { preset: null },
+    page: 'atlas', view: 'lateral', lobe: null, fn: null, syn: null, region: null, colour: 'lobe', hemi: 'both', cam: { preset: null },
     layers: {
-      nuclei: { on: false, opacity: 1 }, tracts: { on: false, opacity: 1 },
+      // (tracts: only a surgical region draws any)
+      nuclei: { on: false, opacity: 1 }, tracts: { on: true, opacity: 1 },
       cortex: { on: true, opacity: 1 },
       targets: { on: false, opacity: 1 }, electrode: { on: false, opacity: 1 },
     },
@@ -45,6 +49,7 @@ export function defaultCortexState(): CortexState {
 }
 
 // #/atlas?v=lateral&lobe=frontal&syn=neglect&sel=ctx_g_precentral&h=B&c=lateral&inf=1&col=a&lb=a&co=-12&seq=t2
+// #/atlas?v=insular&r=insula&sel=wm_uf&h=L&c=lateral
 const PAGES: CortexPage[] = ['atlas', 'sources', 'credits'];
 
 export function encodeCortex(s: CortexState): string {
@@ -54,6 +59,7 @@ export function encodeCortex(s: CortexState): string {
     if (s.lobe) p.set('lobe', s.lobe);
     if (s.fn) p.set('f', s.fn);
     if (s.syn) p.set('syn', s.syn);
+    if (s.region) p.set('r', s.region);
     if (s.sel) p.set('sel', s.sel);
     encodeHemi(p, s.hemi);
     encodeCamera(p, s.cam);
@@ -86,10 +92,19 @@ export function decodeCortex(hash: string): CortexState {
   // (a syndrome and a function group are not drawn together: the syndrome wins)
   s.syn = syn && SYNDROME.has(syn) ? syn : null;
   if (s.syn) s.fn = null;
+  // (a surgical region is drawn alone: it wins over a syndrome, a function group and a lobe; a link without a view or a
+  // side opens the region's, and its tracts are drawn on the pial surface only)
+  const rg = REGION.get(p.get('r') ?? '');
+  s.region = rg ? rg.id : null;
+  if (rg) {
+    s.syn = null; s.fn = null; s.lobe = null;
+    if (!p.has('v')) s.view = rg.view;
+    s.hemi = rg.side;
+  }
   s.sel = p.get('sel');
   decodeHemi(p, s);
   decodeCamera(p, s, CTX_PRESETS);
-  s.inflate = p.get('inf') === '1' ? 1 : 0;
+  s.inflate = p.get('inf') === '1' && !rg ? 1 : 0;
   const col = p.get('col');
   s.colour = col === 'a' ? 'atlas' : col === 'p' ? 'plain' : 'lobe';
   const lb = p.get('lb');
