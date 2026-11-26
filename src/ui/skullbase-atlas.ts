@@ -1,7 +1,10 @@
 import * as THREE from 'three';
 import type { CameraPreset, ManifestStructure } from '../data/schema';
 import type { Hemi, LayerKey } from '../state';
-import { APPROACH_GEOM, definitionFor, isApproachPart, kindOf, LANDMARKS, LM, NOT_YET_SHOWN, REGIONS, SB, SB_MANIFEST, SB_MODEL, V1_FIT, V3_FIT, type Landmark, type SbModel } from '../skullbase';
+import { APPROACH_GEOM, definitionFor, geomOf, isApproachPart, kindOf, LANDMARKS, LM, NOT_YET_SHOWN, REGIONS, SB, SB_MANIFEST, SB_MODEL, V1_FIT, V3_FIT, type Landmark, type SbModel } from '../skullbase';
+import { NEEDLE_ID, NEEDLE_NAME, TRIGEMINAL } from '../skullbase/trigeminal';
+import { PERC_NOT_SHOWN, PERC_SECTIONS, V1_NO_MVD } from '../skullbase/trigeminal-text';
+import { NEEDLE_TOKEN, needleObjects } from './skullbase-needle';
 import { APPROACH, APPROACH_REF, CAVERNOUS_INFO, ENDONASAL_INFO, INSULA, triangleClaims, V1_CAVERNOUS_NOT_SHOWN, V1_ENDONASAL_NOT_SHOWN, V1_TEXT, type ApproachClaim, type ApproachSection } from '../skullbase/approaches';
 import { measuredOn, TUMOUR_FAMILY, TUMOURS, tumourGroupId, type TumourFamily } from '../skullbase/tumours';
 import { CAVERNOUS } from '../skullbase/cavernous';
@@ -51,13 +54,13 @@ const SIDE_NAME = { R: 'right', L: 'left' } as const;
 const MORPH_UI: Record<string, { label: string; key: string; toggle?: boolean; note: (g?: SbGroup) => string | null }> = {
   ridge: {
     label: 'Sphenoid ridge drilled', key: 'd', toggle: true, note: (g) => {
-      const geom = g?.approach ? APPROACH_GEOM[g.approach] : undefined;
+      const geom = g?.approach ? geomOf(g.approach) : undefined;
       return geom?.ridgeMl ? `On (as the view opens), the lateral sphenoid ridge is drawn drilled: the ridge between the anterior and middle fossae to two-thirds of the way to the anterior clinoid process, and the opening’s edge where the ridge starts (${fmtMm(geom.ridgeMl)} ml on this model, drawn by rule). Off, that bone is drawn back, the ridge intact.` : null;
     },
   },
   clinoid: {
     label: 'Anterior clinoidectomy (extradural)', key: 'a', toggle: true, note: (g) => {
-      const geom = g?.approach ? APPROACH_GEOM[g.approach] : undefined;
+      const geom = g?.approach ? geomOf(g.approach) : undefined;
       return geom?.clinoidMl ? `When on, the anterior clinoid process is drawn taken: the rest of the sphenoid ridge from where this view’s drilling stops to the process’s tip, and the bone round the tip (${fmtMm(geom.clinoidMl)} ml on this model, drawn by rule). The optic canal’s roof and the optic strut, which are drilled to free it, are not drawn taken.` : null;
     },
   },
@@ -111,7 +114,7 @@ const MORPH_UI: Record<string, { label: string; key: string; toggle?: boolean; n
   subtemporal: {
     // (its numbers come with the craniotomy, on either model: skullbase_v3.py, temporal_lobe_shape)
     label: 'Lift the temporal lobe', key: 'l', note: (g) => {
-      const k = g?.approach ? APPROACH_GEOM[g.approach]?.measured : undefined;
+      const k = g?.approach ? geomOf(g.approach)?.measured : undefined;
       return k?.liftedMaxMm ? `At 100 % the temporal lobe’s under surface is ${fmtMm(k.liftedMaxMm)} mm higher under the middle of the flap: less in front of and behind it (about 60 % of that ${fmtMm(k.liftSpanMm)} mm away), less higher up (about a third of it ${fmtMm(k.liftFallMm)} mm above the middle fossa floor), and none within 8 mm of the midline. The arteries and nerves at the tentorial edge stay where they are.` : null;
     },
   },
@@ -249,6 +252,8 @@ export class SkullbaseAtlasPage {
   private measure = new MeasureTool(() => this.viewer, { prompt: 'Click or tap two points on any bone, vessel or nerve.', distance: (mm) => `Distance ${mm} mm (in this model)` },
     (m) => this.update((s) => { if (m) s.measured = m; else delete s.measured; }));
   private lastKey = '';
+  /** the view and whether its needle is hidden, as last drawn */
+  private needleKey = '';
   /** the endoscopic endonasal view's scope and drilling (Skull base v3) */
   private endonasal!: EndonasalPanel;
 
@@ -372,6 +377,14 @@ export class SkullbaseAtlasPage {
     const prev = this.s;
     this.s = s;
     this.measure.sync(s.measured);
+    // the percutaneous route's needle, drawn by rule over the view (hid=tn_needle hides it), on its own side only
+    const ng = SB_GROUP.get(s.grp)?.needle;
+    const showNeedle = !!ng && !s.hidden.includes(NEEDLE_ID) && (s.hemi === 'both' || s.hemi === ng.side);
+    const nk = `${s.grp}|${showNeedle}`;
+    if (nk !== this.needleKey) {
+      this.needleKey = nk;
+      this.viewer.setOverlay(ng && showNeedle ? needleObjects(ng) : []);
+    }
     this.viewer.apply(s, { animateCamera: opts.camera }).then(() => this.renderLegend()).catch((e: unknown) => viewFailed(this.status, e));
     this.endonasal.render(s);
     this.stage.querySelectorAll<HTMLButtonElement>('[data-hemi]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.hemi === s.hemi)));
@@ -521,6 +534,9 @@ export class SkullbaseAtlasPage {
     // vessels, nerves and soft tissue: one list per kind; cranial nerves (I-XII) and artery systems each under
     // their own heading
     const beforeLists = pane.childElementCount;
+    // what the view is about, listed first (the trigeminal neuralgia views: the nerve, the arteries beside it): also in
+    // the lists by kind below
+    if (g.key?.length) pane.append(h('p', { class: 'chips-label' }, 'In focus'), h('div', { class: 'chips wrap sb-list sb-focus' }, ...g.key.map(entry)));
     for (const k of ['tumour', 'guide', 'brain', 'removed', 'nerve', 'labyrinth', 'ossicle', 'membrane', 'artery', 'vein', 'triangle', 'soft'] as const) {
       const ids = g.structures.filter((id) => { const st = SB.get(id); return st && st.type !== 'bone' && kindOf(st) === k; });
       if (!ids.length) continue;
@@ -691,9 +707,11 @@ export class SkullbaseAtlasPage {
       h('p', { class: 'aside' }, 'Illustrative shapes, not measured retractions. The arteries stay where they are, except on the brain being moved, which they follow.'));
   }
 
-  /** The endoscopic endonasal view's card: what the sources say, and what is not shown (how it is drawn and what is
-   * measured on this CT are in its panel, with the scope). */
-  private infoBody(which: 'endonasal' | 'cavernous'): HTMLElement[] {
+  /** A sourced view's card with no craniotomy (the endonasal, cavernous sinus and percutaneous views): what the sources
+   * say, what is measured on this model, and what is not shown (the endonasal view's drawing and measures are in its
+   * panel, with the scope). */
+  private infoBody(which: 'endonasal' | 'cavernous' | 'percutaneous'): (HTMLElement | null)[] {
+    if (which === 'percutaneous') return this.percutaneousBody();
     const info = which === 'endonasal' ? ENDONASAL_INFO : CAVERNOUS_INFO;
     const c = CAVERNOUS;
     return [
@@ -713,16 +731,75 @@ export class SkullbaseAtlasPage {
     ];
   }
 
-  /** The surgical view's card: the sourced description, what this model measures, and how it was drawn here. */
+  /** What a trigeminal neuralgia card's section asks for, measured on this model (trigeminal.ts): no published figure
+   * (those are in the claims). */
+  private tnMeasured(m: ApproachSection['measured']): HTMLElement | null {
+    const T = TRIGEMINAL;
+    if (!T || (m !== 'tnRoot' && m !== 'tnNeedle' && m !== 'tnOvale')) return null;
+    const items: string[] = [];
+    if (m === 'tnRoot') {
+      const r = T.mvd;
+      if (!r) return null;
+      items.push(`The root’s cisternal course, from where the drawn nerve meets the pons (the root entry zone, marked, at ${r.rootEntry.map(fmtMm).join(', ')} mm from the hypophysial fossa) to the porus trigeminus (taken as the nerve’s point nearest the superior petrosal sinus): ${fmtMm(r.cisternalMm)} mm along the nerve.`);
+      for (const a of [...r.arteries].sort((x, y) => x.toRootMm - y.toRootMm)) items.push(`${a.name}: ${fmtMm(a.toRootMm)} mm from the root, ${a.where}.`);
+      for (const n of r.nerves) items.push(`${n.name}: leaves the brainstem ${fmtMm(n.fromRootMm)} mm from the root entry zone, ${fmtMm(n.belowMm)} mm below it.`);
+      items.push(`The camera sits inside the posterior fossa, ${fmtMm(r.cameraToRootMm)} mm from the root entry zone, looking along the petrous ridge at it; with the cerebellum drawn back it sees ${Math.round(r.rootVisiblePct)} % of the camera-facing surface of the root’s first 10 mm. This model’s craniotomy, cut for the retrosigmoid view, lies lower: its centre ${fmtMm(r.craniotomyBelowRootMm)} mm below the root entry zone.`);
+    } else if (m === 'tnNeedle') {
+      const n = T.needle;
+      const along = (at: number) => (Math.abs(at) < 0.05 ? 'at the crossing' : Math.abs(at + n.tipBeyondCrossingMm) < 0.05 ? 'at the tip'
+        : at < 0 ? `${fmtMm(-at)} mm above the crossing, along the line` : `${fmtMm(at)} mm below the crossing`);
+      items.push(`The line from its tip (${n.tipAt}) to where it crosses the foramen ovale: ${fmtMm(n.tipBeyondCrossingMm)} mm; from there to its outer end: ${fmtMm(n.outerBelowCrossingMm)} mm. It crosses the foramen ${n.crossingFromCentreMm < 0.05 ? 'through its centre' : `${fmtMm(n.crossingFromCentreMm)} mm from its centre`}.`);
+      items.push(`Pointing inward and up, it lies ${fmtMm(n.angles.fromVerticalDeg)}° from the vertical, tilted ${fmtMm(n.angles.medialDeg)}° toward the midline seen from the front and ${fmtMm(n.angles.backwardDeg)}° backward seen from the side (in this model’s own axes, not the Frankfort plane).`);
+      items.push(`Bone crossed from the outer end to the tip: ${fmtMm(n.boneCrossedMm)} mm.`);
+      if (n.nearest.length) items.push(`Within 6 mm of the line: ${[...n.nearest].sort((x, y) => x.atMm - y.atMm).map((x) => `${x.name} ${fmtMm(x.mm)} mm away (${along(x.atMm)})`).join('; ')}.`);
+      items.push(`Seen from the side, the line passes ${fmtMm(n.lateralAim.lineAheadOfMeatusMm)} mm in front of the bony ear canal at the height of the articular eminence, which lies ${fmtMm(n.lateralAim.eminenceAheadOfMeatusMm)} mm in front of it.`);
+      items.push(`Seen along the needle from below, ${fmtMm(n.openingSeenAlongMm2)} mm² of the opening is clear.`);
+    } else {
+      const o = T.ovale;
+      items.push(`The foramen as drawn: ${fmtMm(o.lengthMm)} × ${fmtMm(o.widthMm)} mm, ${fmtMm(o.areaMm2)} mm² (${o.how}).`);
+      if (o.ct) items.push(`As the CT itself shows it: ${fmtMm(o.ct.lengthMm)} × ${fmtMm(o.ct.widthMm)} mm, ${fmtMm(o.ct.areaMm2)} mm² (${o.ct.how}).`);
+    }
+    return h('div', { class: 'aside tn-measured', 'data-measured': m },
+      h('p', {}, h('strong', {}, 'Measured on this model')), h('ul', { class: 'plain' }, ...items.map((t) => h('li', {}, t))));
+  }
+
+  /** The percutaneous route's card: the buttons that move the camera onto the needle and back, what the sources say with
+   * what this model measures, how the needle is drawn and what is not shown. */
+  private percutaneousBody(): (HTMLElement | null)[] {
+    const n = TRIGEMINAL?.needle;
+    const v1 = SB_MODEL === 'zanatomy';
+    const cam = (pose: { position: number[]; target: number[] } | null) => this.update((s) => {
+      s.cam = pose ? { preset: null, pos: pose.position as [number, number, number], tgt: pose.target as [number, number, number] } : { preset: null };
+    }, { camera: true });
+    return [
+      n ? h('p', { class: 'tn-buttons' },
+        h('button', { type: 'button', class: 'btn', 'data-tn': 'along', onclick: () => cam(n.views.along) }, 'Look along the needle'), ' ',
+        h('button', { type: 'button', class: 'btn', 'data-tn': 'overview', onclick: () => cam(null) }, 'Back to the overview')) : null,
+      h('dl', {},
+        ...PERC_SECTIONS.map((x) => [h('dt', {}, x.title), h('dd', {}, this.claims(x.claims), this.tnMeasured(x.measured))]),
+        h('dt', {}, 'How the needle is drawn'), h('dd', {}, v1
+          ? 'By rule (pipeline/skullbase_trigeminal.py): a straight line from its tip on the trigeminal nerve’s run down to the foramen, 12 mm beyond the centre of the right foramen ovale (found in the bone this model is drawn from, near the mirrored label), out through that centre and on 40 mm below it. Drawn over the bone where the bone hides it; the ring marks where it crosses the foramen.'
+          : `By rule (pipeline/skullbase_trigeminal.py): a straight line from its tip at Meckel’s cave (the landmark) out through the right foramen ovale and on 40 mm below it. Of the lines from the cave through the opening as drawn, the one with the most room round it that clears the bone (${fmtMm(n?.clearanceMm ?? 0)} mm, so the needle is drawn that thin here); the line through the centre itself meets the bone below the foramen. Drawn over the bone where the bone hides it; the ring marks where it crosses the foramen.`),
+        h('dt', {}, 'Not shown'), h('dd', {}, v1 ? PERC_NOT_SHOWN.zanatomy : PERC_NOT_SHOWN.v3)),
+      v1 ? h('p', { class: 'aside' }, V1_NO_MVD) : null,
+      h('p', { class: 'aside schematic-note' }, v1
+        ? 'Illustrative: a needle drawn by rule on one anatomical model’s skull (Z-Anatomy) from the published descriptions; not planned for a patient.'
+        : 'Illustrative: a needle drawn by rule on one CT’s skull from the published descriptions; not planned for a patient.'),
+    ];
+  }
+
+  /** The surgical view's card: the sourced description, what this model measures, and how it was drawn here (a view on
+   * another view's craniotomy, the microvascular decompression's, through that one's geometry). */
   private approachBody(aid: string): HTMLElement[] {
     const ap = APPROACH.get(aid);
-    const geom = APPROACH_GEOM[aid];
+    const geom = geomOf(aid);
     const v1 = SB_MODEL === 'zanatomy';
     // (v1: Z-Anatomy's own brain, nothing fitted: none of the CT's measures)
     const b = v1 ? undefined : V3_FIT.brain;
     if (!ap || !geom) return [];
     const pctOf = (x: number) => `${Math.round(x * 100)} %`;
     const measured = (m: ApproachSection['measured']) => {
+      if (m === 'tnRoot' || m === 'tnNeedle' || m === 'tnOvale') return this.tnMeasured(m);
       if (!b || !m) return null;
       if (m === 'm1') return h('p', { class: 'aside' }, `On this CT: the M1 segment as TopBrain labels it measures ${fmtMm(b.m1LengthMm.R)} mm on the right (${fmtMm(b.m1LengthMm.L)} mm on the left), along its centre line. TopBrain’s labels stop at M3, so the cortical (M4) branches are not shown.`);
       if (m === 'kawase') {
@@ -743,7 +820,7 @@ export class SkullbaseAtlasPage {
       ...(tour && this.s.tour !== tour.id ? [h('p', {}, h('button', { type: 'button', class: 'btn tour-start', onclick: () => this.goStep(tour, 1) }, `Take the tour: ${tour.title}`))] : []),
       h('dl', {},
         ...ap.sections.map((x) => [h('dt', {}, x.title), h('dd', {}, this.claims(x.claims), measured(x.measured))]),
-        h('dt', {}, 'How the craniotomy is drawn'), h('dd', {}, geom.how, ` Bone removed: ${geom.removedMl} ml (right side), drawn see-through.`),
+        h('dt', {}, ap.geom && ap.geom !== ap.id ? `How the craniotomy is drawn (the ${APPROACH.get(ap.geom)?.name.toLowerCase() ?? ap.geom}’s)` : 'How the craniotomy is drawn'), h('dd', {}, geom.how, ` Bone removed: ${geom.removedMl} ml (right side), drawn see-through.`),
         v1 ? [h('dt', {}, ap.brain === 'hindbrain' ? 'The cerebellum and brainstem' : 'The brain'), h('dd', {}, ap.brain === 'hindbrain'
           ? `Z-Anatomy’s own (BodyParts3D), nothing fitted: where they reached into or through this model’s bone (out of its cranial cavity) or into the arteries it draws (${V1_FIT.pfossa.clear.inBoneBefore} and ${V1_FIT.pfossa.clear.inVesselBefore} of their points), pushed clear (${V1_FIT.pfossa.clear.inBoneAfter} and ${V1_FIT.pfossa.clear.inVesselAfter} left, at most ${fmtMm(V1_FIT.pfossa.clear.maxMovedMm)} mm moved). Its folia and lobules are the model’s.`
           : `Z-Anatomy’s own cortex (BodyParts3D), nothing fitted: its gyrus and sulcus patches (which overlap and cut through one another) remade as closed surfaces, the temporal lobe apart from the rest, each part keeping its lobe; the opercula are found along its middle cerebral artery’s course in the fissure, and with no insular cortex in the model, the opened fissure’s floor is its white matter; where it reached into this model’s bone (${V1_FIT.brain.clear.R.inBoneWayBefore} points on the right), pushed 1 mm inside the cranial cavity by a smooth field in small steps (${V1_FIT.brain.clear.R.inBoneWayAfter} left, at most ${fmtMm(V1_FIT.brain.clear.R.maxMovedMm)} mm moved). The cavity is this model’s skull, rasterised (${Math.round(V1_FIT.brain.cavityMl)} ml).`)] : null,
@@ -910,6 +987,8 @@ export class SkullbaseAtlasPage {
       }
     }
     if (p.markers.length && this.s.layers.targets.on) this.legend.append(row('dot', 'ctx', `Landmarks (${p.markers.length})`, p.markers.map((m) => m.targetId)));
+    // the percutaneous route's needle (drawn by the page over the view, ui/skullbase-needle.ts)
+    if (grp?.needle) this.legend.append(row('solid', NEEDLE_TOKEN, NEEDLE_NAME, [NEEDLE_ID]));
     if (this.s.hidden.length) this.legend.append(h('li', { class: 'lg-actions' }, h('button', { type: 'button', class: 'linklike', onclick: () => this.update((s) => { s.hidden = []; }) }, `Show all (${this.s.hidden.length} hidden)`)));
   }
 

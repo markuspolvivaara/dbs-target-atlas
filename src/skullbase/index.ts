@@ -4,9 +4,11 @@ import zaApproaches from '../data/generated/sb-approaches.json';
 import zaV1Fit from '../data/generated/sb-v1fit.json';
 import v3Fit from '../data/generated/sbv3-fit.json';
 import { SbManifestSchema, type ManifestStructure } from '../data/schema';
-import { APPROACH, APPROACH_REF, V1_ABSENT, V1_NAMES } from './approaches';
+import { APPROACH, APPROACH_REF, APPROACHES, V1_ABSENT, V1_NAMES } from './approaches';
 import { FORAMEN_CONTENTS, FORAMEN_REF, PASSAGES } from './foramina';
 import { TB_NOTES } from './temporal';
+import { SB_MODEL, type SbModel } from './model';
+import { TRIGEMINAL } from './trigeminal';
 
 /**
  * Skull-base section data. Three models share the section's code: the Z-Anatomy model (BodyParts3D, CC BY-SA;
@@ -15,9 +17,7 @@ import { TB_NOTES } from './temporal';
  * "v3": the same CT with its anatomy made to fit it, pipeline/skullbase_v3.py). v1 is served from skullbase-v1/. A page picks
  * its model with <meta name="sb-model" content="ct"> (or "v3"). Coordinates: mm from the (fitted) hypophysial fossa.
  */
-export type SbModel = 'zanatomy' | 'ct' | 'v3';
-const META = typeof document !== 'undefined' ? document.querySelector<HTMLMetaElement>('meta[name="sb-model"]')?.content : undefined;
-export const SB_MODEL: SbModel = META === 'ct' || META === 'v3' ? META : 'zanatomy';
+export { SB_MODEL, type SbModel } from './model';
 const CT = SB_MODEL === 'ct';
 const V3M = SB_MODEL === 'v3';
 // The page's own model's manifest, landmarks, definitions and regions: a chunk per model, so that a page does not
@@ -48,7 +48,9 @@ export const LandmarkSchema = z.object({
   placed: z.string().optional(),
 });
 export type Landmark = z.infer<typeof LandmarkSchema>;
-export const LANDMARKS = z.array(LandmarkSchema).parse(landmarksJson);
+// (with the points the trigeminal neuralgia views add, src/skullbase/trigeminal.ts: labels, picking, cards, "Measure
+// positions from here" and the text version then work for them as for the model's own)
+export const LANDMARKS = z.array(LandmarkSchema).parse([...(landmarksJson as unknown[]), ...(TRIGEMINAL?.landmarks ?? [])]);
 // (Z-Anatomy spells it "Supercilliary arch": shown corrected, and its definition found under the corrected name)
 for (const l of LANDMARKS) if (l.name === 'Supercilliary arch') l.name = 'Superciliary arch';
 export const LM = new Map(LANDMARKS.map((l) => [l.id, l]));
@@ -139,6 +141,9 @@ export type ApproachGeom = z.infer<typeof ApproachGeomSchema>;
 /** The approaches cut out of this model's bone (Skull base v3 only: pipeline/skullbase_v3_approach.py). */
 export const APPROACH_GEOM: Record<string, ApproachGeom> = V3M ? z.record(z.string(), ApproachGeomSchema).parse(v3Approaches)
   : SB_MODEL === 'zanatomy' ? z.record(z.string(), ApproachGeomSchema).parse(zaApproaches) : {};
+/** The geometry a surgical view is drawn through: its own, or the craniotomy it borrows (the microvascular
+ * decompression's, the retrosigmoid one). */
+export const geomOf = (aid: string): ApproachGeom | undefined => APPROACH_GEOM[APPROACH.get(aid)?.geom ?? aid];
 /** v1's own brain and posterior fossa (pipeline/skullbase_v1_brain.py, skullbase_v1_pfossa.py): what their clearances
  * and shapes moved */
 export const V1_FIT = z.object({
@@ -338,6 +343,38 @@ export function crossCheckSb(): string[] {
       const own = SB_MODEL === 'zanatomy' ? V1_NAMES[n] ?? n : n;
       if (!SB_MANIFEST.structures.some((s) => s.name === own)) errs.push(`approach ${aid}: unknown context structure ${own}`);
     }
+  }
+  // the views drawn through another's craniotomy (the microvascular decompression): that geometry, their references and
+  // context, and the structures they list first; the trigeminal neuralgia views' numbers
+  const ownName = (n: string) => (SB_MODEL === 'zanatomy' ? V1_NAMES[n] ?? n : n);
+  for (const a of APPROACHES) {
+    if (!a.geom || a.geom === a.id || (a.models && !a.models.includes(SB_MODEL)) || !Object.keys(APPROACH_GEOM).length) continue;
+    if (!APPROACH_GEOM[a.geom]) { errs.push(`approach ${a.id}: no geometry ${a.geom}`); continue; }
+    for (const cl of a.sections.flatMap((x) => x.claims)) for (const r of cl.refIds) if (!APPROACH_REF.has(r)) errs.push(`approach ${a.id}: unknown refId ${r}`);
+    for (const n of [...a.context, ...(a.key ?? [])]) {
+      if (SB_MODEL === 'zanatomy' && V1_ABSENT.has(n)) continue;
+      if (!SB_MANIFEST.structures.some((s) => s.name === ownName(n))) errs.push(`approach ${a.id}: unknown structure ${ownName(n)}`);
+    }
+    for (const n of a.landmarks ?? []) if (!LANDMARKS.some((l) => l.name === n)) errs.push(`approach ${a.id}: unknown landmark ${n}`);
+  }
+  for (const a of APPROACHES) for (const n of a.key ?? []) if (!a.context.includes(n)) errs.push(`approach ${a.id}: ${n} is listed first but not drawn (context)`);
+  const T = TRIGEMINAL;
+  if (T) {
+    if (T.model !== SB_MODEL) errs.push(`trigeminal: the ${T.model} file on the ${SB_MODEL} page`);
+    const nums: [string, number][] = [];
+    const walk = (path: string, v: unknown) => {
+      if (typeof v === 'number') nums.push([path, v]);
+      else if (Array.isArray(v)) v.forEach((x, i) => walk(`${path}[${i}]`, x));
+      else if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) walk(`${path}.${k}`, x);
+    };
+    walk('needle', T.needle);
+    walk('ovale', T.ovale);
+    if (T.mvd) walk('mvd', T.mvd);
+    for (const [path, v] of nums) if (!Number.isFinite(v)) errs.push(`trigeminal: ${path} is not a finite number`);
+    if (T.needle.boneCrossedMm !== 0) errs.push(`trigeminal: the needle crosses ${T.needle.boneCrossedMm} mm of bone`);
+    for (const x of [...T.needle.nearest, ...(T.mvd?.arteries ?? []), ...(T.mvd?.nerves ?? [])])
+      if (!SB_MANIFEST.structures.some((s) => s.name === x.name)) errs.push(`trigeminal: unknown structure ${x.name}`);
+    if (SB_MODEL === 'zanatomy' && T.mvd) errs.push('trigeminal: v1 has no decompression view (the owner\'s decision of 26 November 2026)');
   }
   return errs;
 }

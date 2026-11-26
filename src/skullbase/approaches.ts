@@ -1,4 +1,6 @@
 import type { CameraPreset } from '../data/schema';
+import type { SbModel } from './model';
+import { MVD_NOT_SHOWN, MVD_SECTIONS, MVD_SUMMARY, TN_REFS } from './trigeminal-text';
 
 /**
  * Skull base v3's surgical views: the right pterional, lateral supraorbital (LSO) and parasagittal (interhemispheric)
@@ -20,12 +22,19 @@ export interface ApproachSection {
   title: string;
   claims: ApproachClaim[];
   /** a measurement on this CT shown under the claims (from sbv3-fit.json): M1's length, or the anterior cerebral
-   * arteries TopBrain labels */
-  measured?: 'm1' | 'aca' | 'tonsils' | 'kawase';
+   * arteries TopBrain labels; the trigeminal neuralgia views' (from sbv3-trigeminal.json, sb-trigeminal.json): the root
+   * entry zone and its neighbours (tnRoot), the needle (tnNeedle), the foramen ovale (tnOvale) */
+  measured?: 'm1' | 'aca' | 'tonsils' | 'kawase' | 'tnRoot' | 'tnNeedle' | 'tnOvale';
 }
 export interface ApproachContent {
-  /** the geometry's id (sbv3-approaches.json) */
+  /** the content's id: the geometry's (sbv3-approaches.json), unless it borrows another's (geom) */
   id: string;
+  /** the craniotomy whose geometry the view is drawn through (default: its own id): a second view on the same opening */
+  geom?: string;
+  /** structures (names) the panel lists first, in this order ("In focus") */
+  key?: string[];
+  /** the models that have the view (default: every model with its geometry) */
+  models?: SbModel[];
   /** the view's group id */
   view: string;
   name: string;
@@ -52,7 +61,7 @@ export interface ApproachContent {
   morphs: string[];
   /** the shapes the view opens with full on (default: all of them) */
   opened?: string[];
-  /** landmarks (names) the view labels */
+  /** landmarks (names) the view labels (a view on another's craniotomy: on its own side only) */
   landmarks?: string[];
 }
 const sec = (title: string, claims: ApproachClaim[], measured?: ApproachSection['measured']): ApproachSection => ({ title, claims, ...(measured ? { measured } : {}) });
@@ -228,10 +237,20 @@ export const APPROACH_REFS: ApproachRef[] = [
     citation: 'Sanchez Correa TE, Ceja DG, Mendez-Rosito D. Subtemporal approach for the resection of a midbrain cavernous malformation: evaluation of safe surgical corridors. Neurosurg Focus Video. 2019;1(1):V1. doi:10.3171/2019.7.FocusVid.19135.' },
   { id: 'minca2022', pmid: '36136879', pmcid: 'PMC9498553', shortLabel: 'Mincă 2022', url: doi('10.3390/tomography8050183'),
     citation: 'Mincă DI, Rusu MC, Rădoi PM, Hostiuc S, Toader C. A new classification of the anatomical variations of Labbé’s inferior anastomotic vein. Tomography. 2022;8(5):2182–2192. doi:10.3390/tomography8050183.' },
+  // the trigeminal neuralgia cards' (trigeminal-text.ts)
+  ...TN_REFS,
 ];
 export const APPROACH_REF = new Map(APPROACH_REFS.map((r) => [r.id, r]));
 
 const c = (text: string, ...refIds: string[]): ApproachClaim => ({ text, refIds });
+
+/** what the retrosigmoid craniotomy's views draw with the posterior fossa's contents (the retrosigmoid view and the
+ * microvascular decompression's) */
+const RETROSIGMOID_CONTEXT = ['Trigeminal nerve (V)', 'Trigeminal ganglion', 'Abducens nerve (VI)', 'Facial nerve (VII)', 'Vestibulocochlear nerve (VIII)', 'Nerves in the internal acoustic meatus (VII, VIII)',
+  'Glossopharyngeal nerve (IX)', 'Vagus nerve (X)', 'Accessory nerve (XI)', 'Anterior inferior cerebellar artery', 'Superior cerebellar artery',
+  'Superior cerebellar artery (fitted course)',
+  'Posterior inferior cerebellar artery', 'Posterior inferior cerebellar artery (fitted course)', 'Basilar artery', 'Vertebral artery', 'Sigmoid sinus', 'Transverse sinus',
+  'Hypoglossal nerve (XII)', 'Superior petrosal sinus', 'Trochlear nerve (IV)'];
 
 /** the middle cerebral artery and the insula: the same anatomy behind either opening */
 const ARTERY: ApproachClaim[] = [
@@ -427,11 +446,7 @@ export const APPROACHES: ApproachContent[] = [
       c('After 130 retrosigmoid craniotomies, imaging showed venous sinus thrombosis on the operated side in 46.9 %, mostly in the transverse sinus, and more often when that side’s sinus was the dominant one; it was diagnosed clinically in 3.1 %.', 'przepiorka2023'),
       c('In 540 retrosigmoid procedures (517 patients, 2007–2020) the overall complication rate was 21.1 %: cerebrospinal fluid leaks or fistulas in 7.5 %, meningitis in 5.0 % and wound infections in 4.6 %.', 'aftahy2024'),
     ])],
-    context: ['Trigeminal nerve (V)', 'Trigeminal ganglion', 'Abducens nerve (VI)', 'Facial nerve (VII)', 'Vestibulocochlear nerve (VIII)', 'Nerves in the internal acoustic meatus (VII, VIII)',
-      'Glossopharyngeal nerve (IX)', 'Vagus nerve (X)', 'Accessory nerve (XI)', 'Anterior inferior cerebellar artery', 'Superior cerebellar artery',
-      'Superior cerebellar artery (fitted course)',
-      'Posterior inferior cerebellar artery', 'Posterior inferior cerebellar artery (fitted course)', 'Basilar artery', 'Vertebral artery', 'Sigmoid sinus', 'Transverse sinus',
-      'Hypoglossal nerve (XII)', 'Superior petrosal sinus', 'Trochlear nerve (IV)'],
+    context: RETROSIGMOID_CONTEXT,
     notShown: 'The craniotomy is drawn larger than a keyhole, its outline placed by hand. The skin, muscles, dura and arachnoid; the superior petrosal vein and its tributaries and the labyrinthine artery (this angiogram labels neither); the nervus intermedius. The anterior inferior cerebellar artery is the fitted model’s (this angiogram does not label it), its origin moved onto this patient’s basilar artery; this angiogram labels only the first part of the superior cerebellar artery, and its course beyond is the fitted model’s, carried on from there: both approximate. The trigeminal nerve’s course from the pons to the ganglion, and the ganglion, are drawn by rule from published measurements, not traced. The cerebellum, brainstem and fourth ventricle are one adult’s anatomical model (Z-Anatomy) fitted into this skull, not this patient’s own, and drawing the hemisphere back is a shape, not a simulation of the tissue.',
     // framed on the cerebellopontine angle (between the trigeminal and the vestibulocochlear nerve), seen along the
     // corridor (the camera preset): the opening around the line of sight
@@ -439,6 +454,22 @@ export const APPROACHES: ApproachContent[] = [
     frameOpening: false,
     radius: 45,
     morphs: ['retrosigmoid'],
+  },
+  // trigeminal neuralgia: the retrosigmoid craniotomy's view turned onto the root entry zone (the owner's decisions of
+  // 26 November 2026: v3 only, the camera inside the posterior fossa at the place pipeline/skullbase_trigeminal.py
+  // measured, groups.ts)
+  {
+    id: 'mvd', geom: 'retrosigmoid', view: 'trigeminal_mvd', name: 'Trigeminal neuralgia: microvascular decompression', camera: 'aim', hemi: 'R', brain: 'hindbrain',
+    models: ['v3'],
+    summary: MVD_SUMMARY,
+    sections: MVD_SECTIONS,
+    context: RETROSIGMOID_CONTEXT,
+    notShown: MVD_NOT_SHOWN,
+    key: ['Trigeminal nerve (V)', 'Superior cerebellar artery (fitted course)', 'Superior cerebellar artery', 'Facial nerve (VII)', 'Vestibulocochlear nerve (VIII)'],
+    focus: ['Trigeminal nerve (V)'],
+    frameOpening: false,
+    morphs: ['retrosigmoid'],
+    landmarks: ['Root entry zone of the trigeminal nerve'],
   },
   {
     id: 'orbitozygomatic', view: 'orbitozygomatic', name: 'Orbitozygomatic approach', camera: 'orbitozygomaticFront',

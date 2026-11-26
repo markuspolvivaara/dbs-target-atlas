@@ -44,6 +44,8 @@ export function textGroups(plan: ScenePlan, cat: Pick<Catalog, 'byId' | 'markers
   for (const id of plan.tracts.keys()) add('Tracts', id, nameOf(id));
   for (const [id] of plan.parcels) add('Cortical areas', id, nameOf(id));
   for (const m of plan.markers) add('Marked points', m.targetId, cat.markers.get(m.targetId)?.label ?? m.targetId);
+  // what the section draws by rule as its own objects (the skull base's needle), while it is drawn
+  for (const d of plan.drawn ?? []) add('Drawn by rule', d.id, d.name);
   // what is drawn without a part in the plan's lists (the whole cortex as a faint shell, `plan.cortex`): context
   for (const id of shown ?? []) add('Shown for context', id, cat.markers.get(id)?.label ?? nameOf(id));
   // (the same name twice in a group, a landmark on each side: one line, with how many)
@@ -52,7 +54,7 @@ export function textGroups(plan: ScenePlan, cat: Pick<Catalog, 'byId' | 'markers
     for (const it of items) by.set(it.name, [...(by.get(it.name) ?? []), it]);
     return [...by.values()].map((xs) => (xs.length === 1 ? xs[0] : { ...xs[0], name: `${xs[0].name} (${xs.length})` }));
   };
-  const order = ['Highlighted', 'Alternatives', 'Tracts', 'Cortical areas', 'Marked points', 'Shown for context'];
+  const order = ['Highlighted', 'Alternatives', 'Tracts', 'Cortical areas', 'Marked points', 'Drawn by rule', 'Shown for context'];
   return order.filter((t) => groups.has(t)).map((title) => ({ title, items: merged(groups.get(title)!) }));
 }
 

@@ -2,13 +2,16 @@ import type { Look } from '../viewer/materials';
 import { makeCatalog, type MarkerDef, type SceneSource, type ScenePlan, type TractRole } from '../viewer/scene';
 import { DEFAULT_GROUP, SB_GROUP, viewGroup } from './groups';
 import { isApproachPart, LANDMARKS, SB, SB_MANIFEST } from './index';
+import { NEEDLE_ID, NEEDLE_NAME } from './trigeminal';
 import type { SkullState } from './state';
 
 export interface SkullPlan extends ScenePlan { group: string }
 
+// (the root entry zone is seen from 3 cm in the decompression view: a smaller point, so that it does not hide the root)
+const SMALL = new Set(['Root entry zone of the trigeminal nerve']);
 const markers: MarkerDef[] = LANDMARKS.map((l) => ({
   id: l.id, label: l.name, structureId: SB_MANIFEST.structures.find((s) => s.name === l.bone && !isApproachPart(s))?.id ?? '',
-  mni: { left: l.ras, right: l.ras }, sides: [l.side === 'L' ? 'L' : 'R'],
+  mni: { left: l.ras, right: l.ras }, sides: [l.side === 'L' ? 'L' : 'R'], ...(SMALL.has(l.name) ? { radius: 0.35 } : {}),
 }));
 
 /** clinoidectomy: the view's anterior clinoidectomy switch is on (its clinoid process drawn as bone removed); ridgeDrilled: its
@@ -52,6 +55,9 @@ export function skullPlan(grpId: string, sel: string | null, also: readonly stri
     camera: g.camera,
     focusIds: g.focusIds ?? (g.focus ? [] : g.structures.filter((id) => SB.get(id)?.type === 'bone')),
     minRadius: g.radius, group: g.id,
+    // camera 'aim': where the view's camera opens (the trigeminal neuralgia views'); the needle, drawn by the page
+    ...(g.aim ? { aim: g.aim } : {}),
+    ...(g.needle ? { drawn: [{ id: NEEDLE_ID, name: NEEDLE_NAME }] } : {}),
   };
 }
 

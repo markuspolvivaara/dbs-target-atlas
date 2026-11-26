@@ -613,7 +613,7 @@ for (const id of SB_V3_GROUPS) {
 }
 
 // the newer views (no visual baselines yet: run with -u on the Mac to add them)
-for (const id of ['orbitozygomatic', 'far_lateral', 'kawase', 'knosp_3b', 'koos_iv', 'meningioma_petroclival']) {
+for (const id of ['orbitozygomatic', 'far_lateral', 'kawase', 'knosp_3b', 'koos_iv', 'meningioma_petroclival', 'trigeminal_mvd', 'trigeminal_percutaneous']) {
   test(`skull base (temporal bone) ${id}: renders`, async ({ page }) => {
     const gd = guard(page);
     await page.goto(`./skullbase/#/atlas?g=${id}`);

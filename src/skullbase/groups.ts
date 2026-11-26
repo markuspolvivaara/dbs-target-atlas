@@ -1,10 +1,12 @@
 import type { CameraPreset } from '../data/schema';
 import type { V3 } from '../state';
 import type { Look } from '../viewer/materials';
-import { APPROACHES, V1_NAMES, V1_TEXT } from './approaches';
+import { APPROACHES, V1_ABSENT, V1_NAMES, V1_TEXT } from './approaches';
 import { CAVERNOUS } from './cavernous';
 import { TUMOUR_FIT, TUMOURS, tumourGroupId, type TumourFamily } from './tumours';
 import { APPROACH_GEOM, isApproachPart, kindOf, LANDMARKS, REGIONS, SB, SB_MANIFEST, SB_MODEL } from './index';
+import { PERC_SUMMARY } from './trigeminal-text';
+import { TRIGEMINAL, type NeedlePath } from './trigeminal';
 
 /**
  * Groups of the skull-base page, all derived from the model itself: measured neighbourhoods of key
@@ -39,8 +41,15 @@ export interface SbGroup {
   /** structures of the group drawn see-through in their colour: a sinus round what it holds (ghost), its walls round it (shell) */
   ghost?: string[];
   shell?: string[];
-  /** the sourced card the view carries (skullbase/approaches.ts) */
-  info?: 'endonasal' | 'cavernous';
+  /** the sourced card the view carries (skullbase/approaches.ts, trigeminal-text.ts) */
+  info?: 'endonasal' | 'cavernous' | 'percutaneous';
+  /** structures (ids) the panel lists first, in order ("In focus") */
+  key?: string[];
+  /** camera 'aim': where the camera opens, exactly (a place measured on the model: the decompression's inside the
+   * posterior fossa, the percutaneous route's overview) */
+  aim?: { position: V3; target: V3 };
+  /** the percutaneous route's needle, drawn by rule (ui/skullbase-needle.ts) */
+  needle?: NeedlePath;
   /** a tumour's view: its family and grade (or site; skullbase/tumours.ts) */
   tumour?: { family: TumourFamily; grade: string };
   /** shapes of the brain the view opens with: a surgical view opens with every shape full on (the anatomy as the approach
@@ -83,23 +92,36 @@ const HOLDS_LEFT = new Set(PUSHED.filter((s) => s.copySides?.includes('L')).map(
 /** v1 (Z-Anatomy) calls some of v3's structures by other names */
 const ownName = (n: string) => (SB_MODEL === 'zanatomy' ? V1_NAMES[n] ?? n : n);
 
+/** the model's own landmarks: the points the trigeminal neuralgia views add (trigeminal.ts: v3's root entry zones, v1's
+ * mirrored right foramen ovale) are labelled in those views only, so that no other view's labels change */
+const TN_LMS = new Set((TRIGEMINAL?.landmarks ?? []).map((l) => l.id));
+const OWN_LMS = LANDMARKS.filter((l) => !TN_LMS.has(l.id));
+
 /** The surgical views (v3, and v1 with v3's craniotomies cut on Z-Anatomy's skull): the craniotomy's cut bones (the
  * other bones whole), the bone removed, the right hemisphere of the brain (v3: the fitted template; v1: Z-Anatomy's own)
  * or the posterior fossa's contents, and the arteries and nerves the approach exposes. */
 function surgicalGroups(): SbGroup[] {
   const byName = (...names: string[]) => OWN.filter((s) => names.map(ownName).includes(s.name)).map((s) => s.id);
-  const lm = (...names: string[]) => LANDMARKS.filter((l) => names.includes(l.name)).map((l) => l.id);
+  // (the points the trigeminal neuralgia views add are labelled in those views only)
+  const lm = (tn: boolean, ...names: string[]) => (tn ? LANDMARKS : OWN_LMS).filter((l) => names.includes(l.name)).map((l) => l.id);
   const bones = OWN.filter((s) => s.type === 'bone' && !isApproachPart(s)).map((s) => s.id);
   const brainOf = (b: 'cerebrum' | 'hindbrain') => OWN
     .filter((s) => (b === 'cerebrum' ? kindOf(s) === 'brain' : ['hindbrain', 'ventricle'].includes(kindOf(s)))).map((s) => s.id);
-  return APPROACHES.filter((a) => APPROACH_GEOM[a.id]).map((a): SbGroup => {
-    const geom = APPROACH_GEOM[a.id];
+  // (a view drawn through another's craniotomy looks its geometry up by that one's id; a view only some models have,
+  // the microvascular decompression, is left out of the others)
+  return APPROACHES.filter((a) => APPROACH_GEOM[a.geom ?? a.id] && (!a.models || a.models.includes(SB_MODEL))).map((a): SbGroup => {
+    const geom = APPROACH_GEOM[a.geom ?? a.id];
     const replaced = new Set(geom.bones.map((id) => SB.get(id)?.replaces));
     // copies for this view only (the Kawase view's lifted temporal lobe) stand in for their parts
     const own = new Map(PUSHED.filter((s) => s.forView === a.view && s.replaces).map((s) => [s.replaces!, s.id]));
     const morphs = (SB_MODEL === 'zanatomy' ? V1_TEXT[a.id]?.morphs : undefined) ?? a.morphs;
+    const hemi = a.hemi ?? (geom.side === 'M' ? 'both' : geom.side);
+    // the decompression's camera: inside the posterior fossa, where the pipeline measured it (trigeminal.ts)
+    const aim = a.camera === 'aim' && a.id === 'mvd' && TRIGEMINAL?.mvd ? TRIGEMINAL.mvd.camera : undefined;
     return {
-      id: a.view, kind: 'approach', name: a.name, camera: (SB_MODEL === 'zanatomy' ? V1_TEXT[a.id]?.camera : undefined) ?? a.camera, hemi: a.hemi ?? (geom.side === 'M' ? 'both' : geom.side), cutAbove: null, boneLook: undefined,
+      id: a.view, kind: 'approach', name: a.name, camera: (SB_MODEL === 'zanatomy' ? V1_TEXT[a.id]?.camera : undefined) ?? a.camera, hemi, cutAbove: null, boneLook: undefined,
+      ...(aim ? { aim: { position: aim.position as V3, target: aim.target as V3 } } : {}),
+      ...(a.key ? { key: [...new Set(a.key.flatMap((n) => byName(n)))] } : {}),
       // framed on the craniotomy and what it is for: the view looks in through the one onto the other
       focus: null, focusIds: [...(a.frameOpening === false ? [] : [geom.removed]), ...byName(...a.focus)], radius: a.radius ?? 60, approach: a.id, morphs,
       morphDefault: Object.fromEntries(morphs.filter((m) => a.opened?.includes(m) ?? true).map((m) => [m, 1])),
@@ -107,9 +129,39 @@ function surgicalGroups(): SbGroup[] {
       structures: [...bones.filter((id) => !replaced.has(id)), ...geom.bones, geom.removed, ...(geom.guides ?? []), ...(geom.clinoid ? [geom.clinoid] : []), ...(geom.ridge ? [geom.ridge] : []),
         ...[...brainOf(a.brain ?? 'cerebrum'), ...byName(...a.context, ...(SB_MODEL === 'zanatomy' ? V1_TEXT[a.id]?.add ?? [] : []))].map((id) => own.get(id) ?? id)]
         .filter((id) => !(SB_MODEL === 'zanatomy' && V1_TEXT[a.id]?.hide?.includes(SB.get(id)?.name ?? ''))),
-      landmarks: lm(...(a.landmarks ?? [])),
+      // (a view on another's craniotomy labels its own side only: the root entry zone is marked on both sides)
+      landmarks: lm(a.id === 'mvd', ...(a.landmarks ?? [])).filter((id) => !a.geom || hemi === 'both' || [hemi, 'M'].includes(LANDMARKS.find((l) => l.id === id)!.side)),
     };
   });
+}
+
+/** Trigeminal neuralgia's percutaneous route (v3, and v1 on Z-Anatomy's model): the skull base seen from below and the
+ * side, the trigeminal nerve, its divisions and ganglion (v3), the carotid, the meningeal arteries and the cavernous
+ * sinus, and the needle along Härtel's trigeminal axis drawn by rule through the right foramen ovale (pipeline/
+ * skullbase_trigeminal.py). Its card is the sourced one in trigeminal-text.ts (info 'percutaneous'). */
+function percutaneousGroup(): SbGroup | null {
+  const T = TRIGEMINAL;
+  if (!T) return null;
+  const names = ['Trigeminal nerve (V)', 'Ophthalmic nerve (V1)', 'Maxillary nerve (V2)', 'Mandibular nerve (V3)', 'Trigeminal ganglion',
+    'Internal carotid artery', 'Internal carotid artery (petrous and lacerum parts)', 'Middle meningeal artery', 'Accessory branch of middle meningeal artery',
+    'Cavernous sinus', 'Walls of the cavernous sinus']
+    // (v1: its walls, drawn by rule round Z-Anatomy's sinus, left out: their grey and the sinus's purple are too close for a
+    // colour-blind reader, scripts/check-palette.ts)
+    .filter((n) => !(SB_MODEL === 'zanatomy' && (V1_ABSENT.has(n) || n === 'Walls of the cavernous sinus'))).map(ownName);
+  const byName = (...ns: string[]) => [...new Set(ns.flatMap((n) => OWN.filter((s) => s.name === n).map((s) => s.id)))];
+  const lms = ['Foramen ovale', 'Meckel\'s cave', 'Foramen spinosum', 'Foramen lacerum'].flatMap((n) => LANDMARKS.filter((l) => l.name === n && l.side === 'R').map((l) => l.id));
+  const bonesAll = OWN.filter((s) => s.type === 'bone' && !isApproachPart(s)).map((s) => s.id);
+  return {
+    id: 'trigeminal_percutaneous', kind: 'approach', name: 'Trigeminal neuralgia: percutaneous route', camera: 'aim', hemi: 'R', cutAbove: null,
+    focus: null, focusIds: byName('Mandibular nerve (V3)'), radius: 40, info: 'percutaneous',
+    description: SB_MODEL === 'zanatomy' ? PERC_SUMMARY.zanatomy : PERC_SUMMARY.v3,
+    structures: [...bonesAll, ...byName(...names)],
+    ghost: byName('Cavernous sinus'), shell: byName('Walls of the cavernous sinus'),
+    landmarks: lms,
+    key: byName('Trigeminal nerve (V)', 'Mandibular nerve (V3)', 'Trigeminal ganglion', ownName('Internal carotid artery (petrous and lacerum parts)')),
+    aim: { position: T.needle.views.overview.position as V3, target: T.needle.views.overview.target as V3 },
+    needle: T.needle,
+  };
 }
 
 function temporalGroups(): SbGroup[] {
@@ -118,9 +170,9 @@ function temporalGroups(): SbGroup[] {
   // so the arteries (TopBrain's trunks, the traced carotid, the anchored small branches) are drawn together in their view
   const ear = OWN.filter((s) => s.dataset === 'openear' || s.name === 'Greater petrosal nerve').map((s) => s.id);
   const earWithCarotid = [...ear, ...byName('Internal carotid artery (petrous and lacerum parts)')];
-  const earLms = LANDMARKS.filter((l) => !FORAMINA.includes(l.name) || l.name === 'Internal acoustic meatus');
-  const lm = (...names: string[]) => LANDMARKS.filter((l) => names.includes(l.name)).map((l) => l.id);
-  const gen = (side: 'L' | 'R') => LANDMARKS.find((l) => l.name === 'Geniculate ganglion' && l.side === side)?.ras as V3 | undefined;
+  const earLms = OWN_LMS.filter((l) => !FORAMINA.includes(l.name) || l.name === 'Internal acoustic meatus');
+  const lm = (...names: string[]) => OWN_LMS.filter((l) => names.includes(l.name)).map((l) => l.id);
+  const gen = (side: 'L' | 'R') => OWN_LMS.find((l) => l.name === 'Geniculate ganglion' && l.side === side)?.ras as V3 | undefined;
   const FACIAL = ['Facial nerve (VII)', 'Chorda tympani', 'Greater petrosal nerve', 'Nerves in the internal acoustic meatus (VII, VIII)'];
   const arteries = OWN.filter((s) => kindOf(s) === 'artery').map((s) => s.id);
   const veins = OWN.filter((s) => kindOf(s) === 'vein').map((s) => s.id);
@@ -129,6 +181,10 @@ function temporalGroups(): SbGroup[] {
   const bonesV3 = OWN.filter((s) => s.type === 'bone' && !isApproachPart(s)).map((s) => s.id);
   const surgical = surgicalGroups();
   const tumours = tumourGroups(surgical);
+  // (the percutaneous route right after the decompression, the two trigeminal neuralgia views together)
+  const perc = percutaneousGroup();
+  const at = surgical.findIndex((x) => x.id === 'trigeminal_mvd');
+  const surgicalViews = perc ? [...surgical.slice(0, at + 1), perc, ...surgical.slice(at + 1)] : surgical;
   return [
     {
       ...base, id: 'floor', kind: 'overview', name: 'Cranial floor', camera: 'axial', cutAbove: FLOOR_CUT_MM, focus: null, radius: 75, boneLook: undefined,
@@ -178,7 +234,7 @@ function temporalGroups(): SbGroup[] {
       description: 'This CT’s own veins: the sigmoid and transverse sinuses traced through their enhanced lumen, the deep veins and the straight and superior sagittal sinuses from TopBrain’s labels, and the internal jugular veins from TotalSegmentator; the confluence of the sinuses is drawn where they meet, and short drawn segments join the vessels whose sources stop just short of one another.',
       structures: veins, landmarks: [],
     },
-    ...surgical,
+    ...surgicalViews,
     {
       ...base, id: 'endonasal', kind: 'approach', name: 'Endoscopic endonasal (transsphenoidal)', camera: 'frontolateral', hemi: 'both', focus: [0, 8, 0], radius: 45,
       boneLook: 'ghost', endonasal: true, info: 'endonasal',
@@ -251,8 +307,8 @@ function tumourGroups(surgical: SbGroup[]): SbGroup[] {
  * the bone over the superior canal and the greater petrosal nerve drawn by rule on it (skullbase_v1_ear.py). */
 function v1EarGroups(): SbGroup[] {
   const byName = (...names: string[]) => OWN.filter((s) => names.includes(s.name)).map((s) => s.id);
-  const lm = (...names: string[]) => LANDMARKS.filter((l) => names.includes(l.name)).map((l) => l.id);
-  const gen = (side: 'L' | 'R') => LANDMARKS.find((l) => l.name === 'Geniculate ganglion' && l.side === side)?.ras as V3 | undefined;
+  const lm = (...names: string[]) => OWN_LMS.filter((l) => names.includes(l.name)).map((l) => l.id);
+  const gen = (side: 'L' | 'R') => OWN_LMS.find((l) => l.name === 'Geniculate ganglion' && l.side === side)?.ras as V3 | undefined;
   const EAR = ['Cochlea', 'Vestibule and semicircular canals', 'Malleus', 'Incus', 'Stapes', 'Tympanic membrane', 'Facial nerve (VII)',
     'Vestibulocochlear nerve (VIII)', 'Cochlear nerve', 'Vestibular nerve', 'Greater petrosal nerve', 'Internal carotid artery'];
   const EAR_LMS = ['Internal acoustic meatus', 'Stylomastoid foramen', 'Geniculate ganglion', 'Second genu of facial nerve', 'Oval window',
@@ -269,7 +325,7 @@ function v1EarGroups(): SbGroup[] {
       ...base, id: `ear_${side.toLowerCase()}`, kind: 'region', name: side === 'R' ? 'Right temporal bone' : 'Left temporal bone',
       camera: 'lateral', hemi: side, focus: gen(side) ?? null, radius: 32,
       description: `The ${side === 'R' ? 'right' : 'left'} temporal bone of the Z-Anatomy model from the side, the bone see-through. ${drawn}`,
-      structures: byName(...EAR), landmarks: LANDMARKS.filter((l) => EAR_LMS.includes(l.name) && l.side === side).map((l) => l.id),
+      structures: byName(...EAR), landmarks: OWN_LMS.filter((l) => EAR_LMS.includes(l.name) && l.side === side).map((l) => l.id),
     })),
     {
       ...base, id: 'facial', kind: 'system', name: 'Facial nerve', camera: 'lateral', hemi: 'R', focus: gen('R') ?? null, radius: 30,
@@ -295,7 +351,7 @@ function v1EarGroups(): SbGroup[] {
  * rule on them (skullbase_v1_cavernous.py). */
 function v1CavernousGroup(): SbGroup {
   const byName = (...names: string[]) => OWN.filter((s) => names.includes(s.name)).map((s) => s.id);
-  const lm = (...names: string[]) => LANDMARKS.filter((l) => names.includes(l.name)).map((l) => l.id);
+  const lm = (...names: string[]) => OWN_LMS.filter((l) => names.includes(l.name)).map((l) => l.id);
   return {
     id: 'cavernous', kind: 'system', name: 'Cavernous sinus', camera: 'anterolateral', hemi: 'R', radius: 40, info: 'cavernous',
     boneLook: 'ghost', cutAbove: 16,
@@ -322,12 +378,13 @@ function v1EndonasalGroup(): SbGroup {
     structures: byName('Internal carotid artery', 'Optic nerve (II)', 'Optic chiasm', 'Adenohypophysis', 'Neurohypophysis', 'Pituitary stalk', 'Cavernous sinus',
       'Anterior intercavernous sinus', 'Posterior intercavernous sinus', 'Oculomotor nerve (III)', 'Trochlear nerve (IV)', 'Abducens nerve (VI)',
       'Trigeminal nerve (V)', 'Ophthalmic artery', 'Basilar artery'),
-    landmarks: LANDMARKS.filter((l) => l.name === 'Optic canal').map((l) => l.id),
+    landmarks: OWN_LMS.filter((l) => l.name === 'Optic canal').map((l) => l.id),
   };
 }
 
 export const SB_GROUPS: SbGroup[] = SB_MODEL === 'v3' ? temporalGroups() : [
-  ...(SB_MODEL === 'zanatomy' ? surgicalGroups() : []),
+  // (v1: no decompression view, Z-Anatomy's root enters the front of the pons; the percutaneous route with the surgical views)
+  ...(SB_MODEL === 'zanatomy' ? [...surgicalGroups(), ...[percutaneousGroup()].filter((x): x is SbGroup => !!x)] : []),
   ...(SB_MODEL === 'zanatomy' ? v1EarGroups() : []),
   ...(SB_MODEL === 'zanatomy' ? [v1CavernousGroup(), v1EndonasalGroup()] : []),
   ...(SB_MODEL === 'zanatomy' ? tumourGroups(surgicalGroups()) : []),
@@ -341,7 +398,7 @@ export const SB_GROUPS: SbGroup[] = SB_MODEL === 'v3' ? temporalGroups() : [
     cutAbove: Math.round(r.ras[2] + 12), focus: r.ras as V3, radius: Math.max(45, r.radiusMm + 25),
     description: `Every structure of the model that comes within ${r.radiusMm} mm of the ${r.landmark.toLowerCase()} landmark, measured from the model (nearest point of each bone, vessel or nerve). Distances are listed on each card.`,
     structures: r.structures.map((s) => s.id),
-    landmarks: LANDMARKS.filter((l) => r.landmarks.includes(l.name)).map((l) => l.id),
+    landmarks: OWN_LMS.filter((l) => r.landmarks.includes(l.name)).map((l) => l.id),
   })),
   {
     id: 'nerves', kind: 'system', name: 'Cranial nerves', camera: 'axial', hemi: 'both', cutAbove: FLOOR_CUT_MM, focus: null, radius: 75,
@@ -364,7 +421,7 @@ export const SB_GROUPS: SbGroup[] = SB_MODEL === 'v3' ? temporalGroups() : [
       ? 'Every bone of the model with all its landmarks at once. Choose a single bone for fewer labels, or set Labels to Hover.'
       : `${members.join(' and ')} with the landmarks Z-Anatomy labels on ${members.length > 1 ? 'them' : 'it'}. The landmark list follows Z-Anatomy’s anatomical hierarchy (Terminologia Anatomica names).`,
     structures: bones.filter((b) => members.includes(b.name)).map((b) => b.id),
-    landmarks: (name === 'All bones' ? LANDMARKS : LANDMARKS.filter((l) => members.includes(l.bone))).map((l) => l.id),
+    landmarks: (name === 'All bones' ? OWN_LMS : OWN_LMS.filter((l) => members.includes(l.bone))).map((l) => l.id),
   })),
 ];
 export const SB_GROUP = new Map(SB_GROUPS.map((g) => [g.id, g]));
@@ -374,10 +431,17 @@ export const SB_GROUP = new Map(SB_GROUPS.map((g) => [g.id, g]));
 export function crossCheckGroups(): string[] {
   const errs: string[] = [];
   for (const g of SB_GROUPS) {
-    for (const [what, ids] of [['structure', g.structures], ['landmark', g.landmarks]] as const) {
+    for (const [what, ids] of [['structure', g.structures], ['landmark', g.landmarks], ['structure listed first', g.key ?? []]] as const) {
       const twice = [...new Set(ids.filter((id, i) => ids.indexOf(id) !== i))];
       if (twice.length) errs.push(`view ${g.id}: ${what} listed twice: ${twice.join(', ')}`);
     }
+    // what a view lists first, it draws
+    for (const id of g.key ?? []) if (!g.structures.includes(id)) errs.push(`view ${g.id}: ${id} is listed first but not drawn`);
+    // a view whose camera is placed by its data has that place
+    if (g.camera === 'aim' && !g.aim) errs.push(`view ${g.id}: camera 'aim' without a place for it`);
+    // what the needle's read-out names as near it, the view draws
+    const drawn = new Set(g.structures.map((id) => SB.get(id)?.name));
+    for (const n of g.needle?.nearest ?? []) if (!drawn.has(n.name)) errs.push(`view ${g.id}: the needle's read-out names ${n.name}, which the view does not draw`);
   }
   return errs;
 }

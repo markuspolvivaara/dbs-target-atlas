@@ -32,6 +32,14 @@ describe('the text version of the 3D view', () => {
     // drawn without a part in the plan (a section's whole-cortex shell): for context
     expect(textGroups(plan([['a', 'primary']]), cat, new Set(['a', 'p']))[1]).toEqual({ title: 'Shown for context', items: [{ id: 'p', name: 'A gyrus', note: null }] });
   });
+  it('what a section draws by rule (the skull base\u2019s needle) under its own heading, while it is drawn', () => {
+    const p = plan([['a', 'primary']], { markers: [{ targetId: 'm', primary: true }], drawn: [{ id: 'tn_needle', name: 'Needle path (drawn by rule)' }] });
+    expect(textGroups(p, cat, null).map((x) => [x.title, x.items.map((i) => i.name)])).toEqual([
+      ['Highlighted', ['Alpha']], ['Marked points', ['A point']], ['Drawn by rule', ['Needle path (drawn by rule)']],
+    ]);
+    // hidden (hid=tn_needle): the viewer no longer draws it, so it is not listed
+    expect(textGroups(p, cat, new Set(['a', 'm'])).map((x) => x.title)).toEqual(['Highlighted', 'Marked points']);
+  });
   it('one line for a name shown twice in a group (a landmark on each side), with how many', () => {
     const two = { byId: cat.byId, markers: new Map([['m1', { label: 'Apex' } as never], ['m2', { label: 'Apex' } as never]]) };
     const g = textGroups(plan([], { markers: [{ targetId: 'm1', primary: true }, { targetId: 'm2', primary: true }] }), two, null);

@@ -1,0 +1,131 @@
+{
+ "model": "zanatomy",
+ "landmarks": [
+  {
+   "id": "lm_foramen_ovale_r",
+   "name": "Foramen ovale",
+   "bone": "Sphenoid bone",
+   "part": "Greater wing",
+   "ras": [
+    24.0,
+    -2.32,
+    -15.11
+   ],
+   "side": "R",
+   "boneFrom": "drawn by rule",
+   "distanceToBoneMm": 2.26,
+   "placed": "Drawn by rule: the left foramen ovale's label point mirrored across the midline (Z-Anatomy labels the foramen on the left only; its skull is mirror-symmetric there)."
+  }
+ ],
+ "mvd": null,
+ "needle": {
+  "side": "R",
+  "outer": [
+   42.87,
+   0.05,
+   -48.72
+  ],
+  "crossing": [
+   23.62,
+   -3.14,
+   -13.8
+  ],
+  "tip": [
+   17.76,
+   -4.11,
+   -3.16
+  ],
+  "tipAt": "the trigeminal nerve",
+  "ovaleCentre": [
+   23.62,
+   -3.14,
+   -13.8
+  ],
+  "crossingFromCentreMm": 0.0,
+  "tipBeyondCrossingMm": 12.18,
+  "outerBelowCrossingMm": 40,
+  "angles": {
+   "fromVerticalDeg": 29.2,
+   "medialDeg": 28.9,
+   "backwardDeg": 5.2
+  },
+  "boneCrossedMm": 0.0,
+  "clearanceMm": 0.7,
+  "nearest": [
+   {
+    "name": "Cavernous sinus",
+    "mm": 0.68,
+    "atMm": -12.18
+   },
+   {
+    "name": "Trigeminal nerve (V)",
+    "mm": 0.0,
+    "atMm": -12.18
+   },
+   {
+    "name": "Internal carotid artery",
+    "mm": 4.71,
+    "atMm": -2.18
+   },
+   {
+    "name": "Maxillary nerve (V2)",
+    "mm": 0.24,
+    "atMm": 12.82
+   },
+   {
+    "name": "Accessory branch of middle meningeal artery",
+    "mm": 0.69,
+    "atMm": 14.07
+   },
+   {
+    "name": "Mandibular nerve (V3)",
+    "mm": 2.45,
+    "atMm": 15.07
+   },
+   {
+    "name": "Middle meningeal artery",
+    "mm": 3.8,
+    "atMm": 15.32
+   }
+  ],
+  "lateralAim": {
+   "lineAheadOfMeatusMm": 16.89,
+   "eminenceAheadOfMeatusMm": 18.5
+  },
+  "views": {
+   "along": {
+    "position": [
+     66.92,
+     4.02,
+     -92.37
+    ],
+    "target": [
+     23.62,
+     -3.14,
+     -13.8
+    ]
+   },
+   "overview": {
+    "position": [
+     151.02,
+     99.25,
+     -53.72
+    ],
+    "target": [
+     30.31,
+     -2.03,
+     -25.94
+    ]
+   }
+  },
+  "openingSeenAlongMm2": 8.06
+ },
+ "ovale": {
+  "side": "R",
+  "lengthMm": 6.2,
+  "widthMm": 5.0,
+  "areaMm2": 22.92,
+  "how": "the narrowest section square to the canal (the axis that makes it narrowest), in the bone field the skull is drawn from",
+  "ct": null
+ }
+}
