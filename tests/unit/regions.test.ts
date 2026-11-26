@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import wmManifestJson from '../../src/data/generated/wm-manifest.json';
 import { crossCheckCtx, CTX_REFS, FUNCTIONS, LABEL, LABELS, MEDIAL_WALL, shortName } from '../../src/cortex';
 import { REG_REFS, REGION, REGIONS, regionTract } from '../../src/cortex/regions';
-import { cortexPlan, cortexScene, REGION_SURFACE_OPACITY, viewLabels } from '../../src/cortex/scene';
+import { cortexPlan, cortexScene, REGION_SURFACE_OPACITY, REGION_TOKEN, viewLabels } from '../../src/cortex/scene';
 import { decodeCortex, defaultCortexState, encodeCortex } from '../../src/cortex/state';
 import { SYN_REFS, SYNDROMES } from '../../src/cortex/syndromes';
 
@@ -63,7 +63,9 @@ describe('cortex surgical regions', () => {
       for (const l of LABELS) if (!own.includes(l.id)) expect(p.looks.get(l.id), `${r.id}: ${l.id}`).toBe('ghost');
       expect(p.looks.get(MEDIAL_WALL)).toBe('ghost');
       expect([...p.looks.values()]).not.toContain('muted');
-      expect([...p.tracts]).toEqual(r.tracts.map((t) => [t.id, 'key']));
+      expect([...p.tracts]).toEqual(r.tracts.map((t) => [t.id, t.dashed ? 'alt' : 'key']));
+      // its gyri and sulci in the region colour, chosen clear of every tract a region draws (the palette check)
+      expect([...(p.tokens ?? new Map())]).toEqual(r.labels.map((l) => [l.id, REGION_TOKEN]));
       expect(p.surfaceOpacity).toBe(REGION_SURFACE_OPACITY);
       expect(p.title).toBe(r.name);
       // everything the plan names is in the section's catalogue (the tracts by reference to the white-matter section's files)

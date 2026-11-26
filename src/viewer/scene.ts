@@ -31,6 +31,8 @@ export interface ScenePlan {
   labelTracts?: boolean;
   /** colour per structure (hex), overriding its palette token (cortex section: atlas colours) */
   colours?: Map<string, string>;
+  /** palette token per structure, overriding its own (cortex section: a surgical region's labels in the region colour) */
+  tokens?: Map<string, string>;
   /** cortical surfaces: leave out the faces flagged as opercular (the insular view) */
   cutOpercula?: boolean;
   /** cortical surfaces: an opacity for the coloured (not ghosted) ones, so that tracts beneath them show through; below

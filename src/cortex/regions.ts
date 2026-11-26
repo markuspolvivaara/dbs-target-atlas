@@ -27,8 +27,10 @@ export interface SurgicalRegion {
   labels: RegionPart[];
   /** the Function selector's areas: HMAT's motor areas (Mayka 2006), and Broca's area as that selector draws it */
   fns: RegionPart[];
-  /** the white-matter section's tracts, by its ids and names (a unit test holds them to its manifest) */
-  tracts: (RegionPart & { name: string })[];
+  /** the white-matter section's tracts, by its ids and names (a unit test holds them to its manifest); `dashed`: drawn
+   * dashed, where its colour is close to another tract's of the region for some colour vision (the palette check's
+   * accepted pairs wmOR/wmSLF2 and wmAF/wmCST), so the two are told apart by look */
+  tracts: (RegionPart & { name: string; dashed?: boolean })[];
   /** what is mapped there */
   mapped: Claim[];
   /** the usual deficits after resection */
@@ -160,7 +162,7 @@ export const REGIONS: SurgicalRegion[] = [
       { id: 'wm_uf', name: 'Uncinate fasciculus', why: 'runs beneath the insula, below and in front of it, and with the inferior fronto-occipital fasciculus is most compact around the limen; a deficit from damage to it is described as one that can be compensated, even in the dominant hemisphere', refIds: ['przybylowski2021', 'rossi2021', 'dziedzic2022'] },
       { id: 'wm_ifof', name: 'Inferior fronto-occipital fasciculus', why: 'runs in the external capsule beneath the insula; for left posterior insular gliomas, Duffau describes it as the lower and anterior limit of the resection, where stimulating it can give semantic paraphasias; damage to it on either side is described as leaving a permanent semantic deficit', refIds: ['duffau2021', 'dziedzic2022'] },
       { id: 'wm_af', name: 'Arcuate fasciculus', why: 'arches round the posterior insula, deeper than the lateral superior longitudinal fasciculus, and the arcuate and superior longitudinal complex lies just above the superior limiting sulcus; for left posterior insular gliomas, Duffau describes it as the deep posterosuperior limit of the resection, where stimulating it gives phonological paraphasias, and stimulation found it in four of the five cases of his series', refIds: ['duffau2021', 'dziedzic2022'] },
-      { id: 'wm_cst', name: 'Corticospinal tract', why: 'runs in the corona radiata and the posterior limb of the internal capsule, medial to the insula, and is supplied by long M2 perforators; the superior-posterior insula, where the putamen does not cover the corona radiata, is described as the critical region for direct injury to it, and subcortical motor stimulation is used to estimate how near it is', refIds: ['przybylowski2021', 'dziedzic2022', 'plans2026'] },
+      { id: 'wm_cst', name: 'Corticospinal tract', why: 'runs in the corona radiata and the posterior limb of the internal capsule, medial to the insula, and is supplied by long M2 perforators; the superior-posterior insula, where the putamen does not cover the corona radiata, is described as the critical region for direct injury to it, and subcortical motor stimulation is used to estimate how near it is', dashed: true, refIds: ['przybylowski2021', 'dziedzic2022', 'plans2026'] },
     ],
     mapped: [
       { text: 'The Berger–Sanai classification divides the insula, on a side view, into four zones by a line along the Sylvian fissure and a line perpendicular to it through the foramen of Monro: zone I is anterosuperior, II posterosuperior, III posteroinferior and IV anteroinferior, and a tumour involving all four is called giant.', refIds: ['przybylowski2021', 'rossi2021', 'simon2024'] },
@@ -295,12 +297,14 @@ export const REGIONS: SurgicalRegion[] = [
       { id: 'ctx_g_pariet_inf_angular', why: 'the angular gyrus (zone 3): an anatomy study ties tumours here closely to permanent visual deficits and describes testing finger recognition, writing and calculation in the posterior inferior parietal lobule to avoid a Gerstmann syndrome, typically tied to this gyrus; on the right, stimulating it caused a rightward line-bisection error, a sign of left neglect, in one of five patients', refIds: ['dziedzic2021', 'vallar2014'] },
       { id: 'ctx_g_parietal_sup', why: 'the superior parietal lobule (zone 2): an anatomy study says resection above the intraparietal sulcus is usually negative on mapping, though damage to this lobule during surgery may give apraxic dysgraphia; on the right, stimulating it (area 7) caused a rightward line-bisection error, a sign of left neglect, in all six patients assessed; on the left, its resection with the precuneus went with poorer reaching and grasping a week after surgery', refIds: ['dziedzic2021', 'vallar2014', 'fornia2024'] },
     ],
-    fns: [],
+    fns: [
+      { id: 'ctx_fn_s1', why: 'the primary somatosensory cortex, just behind the motor cortex: stimulating it awake gives paraesthesia, dysaesthesia or proprioceptive responses, and pooled stimulation sites for somatosensation centre on the postcentral gyrus on both sides', refIds: ['dziedzic2021', 'alexandratou2025'] },
+    ],
     tracts: [
       { id: 'wm_af', name: 'Arcuate fasciculus', why: 'the arcuate fasciculus, medial to SLF II and III and hard to separate from them: under the supramarginal gyrus this complex marks the deep border of resection, its genu at a depth of 22.6 mm (range 21 to 24) in five cadaver brains; on the dominant side, stimulating the arcuate gives phonemic paraphasias and repetition disorders', refIds: ['dziedzic2021'] },
       { id: 'wm_slf2', name: 'Superior longitudinal fasciculus II', why: 'the superior longitudinal fasciculus II, from the angular gyrus to the middle frontal gyrus: on the right, stimulating it caused a rightward line-bisection error, a sign of left neglect, in all six right-sided patients of a seven-patient series', refIds: ['dziedzic2021', 'vallar2014'] },
       { id: 'wm_slf3', name: 'Superior longitudinal fasciculus III', why: 'the superior longitudinal fasciculus III, from the supramarginal gyrus to the inferior frontal gyrus: on the dominant side, stimulating it gives articulation errors; in the seven-patient neglect series, six of them right-sided, stimulating it was ineffective on line bisection', refIds: ['dziedzic2021', 'kinoshita2016', 'vallar2014'] },
-      { id: 'wm_or', name: 'Optic radiation', why: 'the optic radiation, the deepest layer of the sagittal stratum and the deep limit of resection: stimulating it may give flashes, blurring or loss of vision in the opposite field', refIds: ['dziedzic2021', 'kinoshita2016'] },
+      { id: 'wm_or', name: 'Optic radiation', why: 'the optic radiation, the deepest layer of the sagittal stratum and the deep limit of resection: stimulating it may give flashes, blurring or loss of vision in the opposite field', dashed: true, refIds: ['dziedzic2021', 'kinoshita2016'] },
     ],
     mapped: [
       { text: 'On the dominant side, an anatomy study, citing others, describes mapping the supramarginal gyrus with picture naming and reading, a site counting as positive when anomia, alexia or phonemic paraphasias appear, and testing finger recognition, writing and calculation in the posterior inferior parietal lobule to avoid a Gerstmann syndrome, which is typically tied to the angular gyrus.', refIds: ['dziedzic2021'] },

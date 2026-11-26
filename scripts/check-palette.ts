@@ -14,6 +14,7 @@ import { plan } from '../src/viewer/selection';
 import { WM, WM_MAN } from '../src/tracts';
 import { CTX } from '../src/cortex';
 import { REGION_TRACT, REGIONS } from '../src/cortex/regions';
+import { REGION_TOKEN } from '../src/cortex/scene';
 
 type RGB = [number, number, number];
 const P = palette as unknown as Record<'light' | 'dark', Record<string, string>>;
@@ -123,7 +124,8 @@ for (const g of WM.groups) {
 }
 // cortex section: each surgical region's areas and tracts appear together
 for (const rg of REGIONS) {
-  const list = [...new Set([...[...rg.labels, ...rg.fns].map((x) => CTX.get(x.id)!.colour.token), ...rg.tracts.map((x) => REGION_TRACT.get(x.id)!.colour.token)])].sort();
+  // (its gyri and sulci in the region colour, its functional areas in their own)
+  const list = [...new Set([...(rg.labels.length ? [REGION_TOKEN] : []), ...rg.fns.map((x) => CTX.get(x.id)!.colour.token), ...rg.tracts.map((x) => REGION_TRACT.get(x.id)!.colour.token)])].sort();
   for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
     const k = `${list[i]}|${list[j]}`;
     if (!pairs.has(k)) pairs.set(k, new Set());

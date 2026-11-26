@@ -803,7 +803,8 @@ export class Viewer<S extends ViewState = ViewState, P extends ScenePlan = Scene
         const layer = s.layers[it.layer] ?? SHOWN;
         const op = (layer.on ? layer.opacity : 0) * (s.opacity?.[it.meta.id] ?? 1);
         const hex = p.colours?.get(it.meta.id);
-        const c = hex ? new THREE.Color(hex) : this.colour(it.meta);
+        const tok = p.tokens?.get(it.meta.id);
+        const c = hex ? new THREE.Color(hex) : tok && this.palette[tok] ? new THREE.Color(this.palette[tok]) : this.colour(it.meta);
         const neutral = new THREE.Color(this.palette.cortex ?? '#c4cbd3');
         // see-through surfaces (a plan's surfaceOpacity): the coloured ones fade by it, and all are drawn front faces
         // only, so that what lies beneath shows rather than the surfaces' insides

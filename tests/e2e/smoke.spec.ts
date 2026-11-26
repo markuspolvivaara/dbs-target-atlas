@@ -1130,7 +1130,7 @@ test('cortex: a surgical region draws its areas see-through with its tracts, a s
     expect(a.see, id).toBeLessThan(1);
     expect(a.tracts.length, id).toBeGreaterThan(0);
     // every tract the region names is drawn, as streamlines, on the side shown
-    for (const [tid, line] of a.tracts) expect(line, `${id} ${tid}`).toBe('lines key true');
+    for (const [tid, line] of a.tracts) expect(line, `${id} ${tid}`).toMatch(/^lines (key|alt) true$/);
     await expect(page.locator('.legend3d .sw.line')).toHaveCount(a.tracts.length);
     await expect(page.locator('.region-card dt')).toHaveText(['Mapped there', 'After resection', 'Transient or lasting', 'How firm the evidence is', 'Drawn here']);
     await expect(page.locator('.region-card a.src').first()).toBeVisible();

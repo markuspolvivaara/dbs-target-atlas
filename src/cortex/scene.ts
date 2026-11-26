@@ -23,6 +23,8 @@ export function viewLabels(s: Pick<CortexState, 'view' | 'lobe'> & Partial<Pick<
   return v.labels.filter((id) => !inLobe || inLobe.has(id));
 }
 
+/** the palette token a surgical region's gyri and sulci are drawn in */
+export const REGION_TOKEN = 'ctxRegion';
 /** how opaque a surgical region's own areas are drawn, so that its tracts show through them */
 export const REGION_SURFACE_OPACITY = 0.5;
 
@@ -50,7 +52,10 @@ export function cortexPlan(s: Pick<CortexState, 'view' | 'lobe' | 'colour' | 'in
 }
 
 /** A surgical region: its areas in colour and see-through, the rest of the cortex a ghost, its tracts drawn through
- * them (on the pial surface: the tracts do not follow the inflated one). */
+ * them (on the pial surface: the tracts do not follow the inflated one). Its gyri and sulci are drawn in one region
+ * colour (ctxRegion) rather than their lobe's: within a region the lobe colours tell little apart, and the region
+ * colour is chosen to stand clear of every tract a region draws (scripts/check-palette.ts); its functional areas keep
+ * their own colours. */
 function regionPlan(rg: NonNullable<ReturnType<typeof REGION.get>>, inflate: number): CortexPlan {
   const v = VIEW.get(rg.view)!;
   const own = new Set([...rg.labels, ...rg.fns].map((x) => x.id));
@@ -59,9 +64,10 @@ function regionPlan(rg: NonNullable<ReturnType<typeof REGION.get>>, inflate: num
   looks.set(MEDIAL_WALL, 'ghost');
   for (const f of FUNCTIONS) looks.set(f.id, own.has(f.id) ? 'primary' : 'hidden');
   return {
-    title: rg.name, accent: 'ctx', looks, tracts: new Map(rg.tracts.map((t) => [t.id, 'key'])), parcels: new Map(), markers: [],
+    title: rg.name, accent: 'ctx', looks, tracts: new Map(rg.tracts.map((t) => [t.id, t.dashed ? 'alt' : 'key'])), parcels: new Map(), markers: [],
     camera: v.camera, focusIds: v.id === 'insular' ? v.labels : [...LABEL.keys()], minRadius: v.id === 'insular' ? 75 : 95,
     cutOpercula: v.cutOpercula && inflate < 0.5, view: v.id, surfaceOpacity: REGION_SURFACE_OPACITY, labelTracts: true,
+    tokens: new Map(rg.labels.map((l) => [l.id, REGION_TOKEN])),
   };
 }
 

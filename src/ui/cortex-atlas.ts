@@ -4,7 +4,7 @@ import { endsOn, type EndHere } from '../data/ends';
 import type { CameraPreset } from '../data/schema';
 import type { Hemi } from '../state';
 import { CTX, CTX_REFS, DBS_PARCEL, DK_NAMES, FN_GROUPS, FUNCTIONS, LABEL, LOBE, LOBES, MEDIAL_WALL, METHOD, shortName, type CtxDefinition, type CtxLabel, type FnGroupId, type LobeId } from '../cortex';
-import { cortexScene, viewLabels, type CortexPlan } from '../cortex/scene';
+import { cortexScene, REGION_TOKEN, viewLabels, type CortexPlan } from '../cortex/scene';
 import type { ColourMode, CortexState } from '../cortex/state';
 import { VIEW, VIEWS, type ViewId } from '../cortex/views';
 import { REGION, REGION_TRACT, REGIONS, regionTract, type RegionPart, type SurgicalRegion } from '../cortex/regions';
@@ -402,7 +402,7 @@ export class CortexAtlasPage {
         h('dt', {}, 'Drawn here'), h('dd', {}, h('ul', { class: 'plain syn-labels' },
           ...rg.labels.map((l) => h('li', {}, pick(l.id, shortName(l.id)), ...why(l))),
           ...rg.fns.map((x) => { const f = FUNCTIONS.find((g) => g.id === x.id)!; return h('li', {}, h('span', { class: 'swatch', style: `--c: var(--c-${f.token})` }), h('strong', {}, f.name), ...why(x)); }),
-          ...rg.tracts.map((t) => h('li', {}, h('span', { class: 'sw line', style: `--c: var(--c-${REGION_TRACT.get(t.id)!.colour.token})` }), pick(t.id, t.name), ...why(t)))),
+          ...rg.tracts.map((t) => h('li', {}, h('span', { class: t.dashed ? 'sw line alt' : 'sw line', style: `--c: var(--c-${REGION_TRACT.get(t.id)!.colour.token})` }), pick(t.id, t.name), ...why(t)))),
           h('p', { class: 'aside' }, `On ${side}. Its areas are drawn see-through and the rest of the cortex as a ghost, so that the tracts beneath show. `,
             rg.labels.length ? 'The gyri and sulci are the Destrieux labels nearest to what the sources name, whole labels where the sources often mean a part of one. ' : '',
             rg.fns.some((x) => FUNCTIONS.find((f) => f.id === x.id)!.basis === 'hmat') ? ['The motor areas are the Human Motor Area Template’s, a group-level map from functional imaging ', refLinksFrom(CTX_REFS, ['mayka2006']), '. '] : '',
@@ -463,7 +463,7 @@ export class CortexAtlasPage {
     clear(this.legend);
     const s = this.s;
     const hidden = new Set(s.hidden);
-    const row = (style: string, text: string, ids: string[], kind: 'patch' | 'line' = 'patch') => {
+    const row = (style: string, text: string, ids: string[], kind: 'patch' | 'line' | 'line alt' = 'patch') => {
       const off = ids.length > 0 && ids.every((x) => hidden.has(x));
       return h('li', { class: off ? 'off' : '' },
         ids.length ? h('button', {
@@ -475,9 +475,9 @@ export class CortexAtlasPage {
     const rg = s.region ? REGION.get(s.region) : undefined;
     if (rg) {
       // a surgical region: its areas (see-through), its tracts, and the ghosted rest
-      for (const l of rg.labels) this.legend.append(row(this.swatchStyle(l.id), shortName(l.id), [l.id]));
+      for (const l of rg.labels) this.legend.append(row(`--c: var(--c-${REGION_TOKEN})`, shortName(l.id), [l.id]));
       for (const x of rg.fns) { const f = FUNCTIONS.find((g) => g.id === x.id)!; this.legend.append(row(`--c: var(--c-${f.token})`, f.name, [f.id])); }
-      for (const t of rg.tracts) this.legend.append(row(`--c: var(--c-${REGION_TRACT.get(t.id)!.colour.token})`, t.name, [t.id], 'line'));
+      for (const t of rg.tracts) this.legend.append(row(`--c: var(--c-${REGION_TRACT.get(t.id)!.colour.token})`, t.name, [t.id], t.dashed ? 'line alt' : 'line'));
       this.legend.append(h('li', { class: 'lg-note' }, `${rg.name}: its areas see-through, the rest of the cortex a ghost, the tracts drawn through them`));
       if (s.hidden.length) this.legend.append(h('li', { class: 'lg-actions' }, h('button', { type: 'button', class: 'linklike', onclick: () => this.update((st) => { st.hidden = []; }) }, `Show all (${s.hidden.length} hidden)`)));
       return;
